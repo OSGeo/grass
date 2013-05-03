@@ -1,19 +1,19 @@
 # translation of grasslibs_de.po to Deutsch
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2004, 2008, 2010, 2011, 2012 GRASS Development Team
+# Copyright (C) 2004-2013 GRASS Development Team
 #
 # Markus Neteler <neteler itc.it>, 2004.
 # Stephan Holl <holl gdf-hannover.de>, 2004, 2005, 2006.
 # Stephan Holl <stephan.holl intevation.de>, 2007.
 # Markus Neteler <neteler osgeo.org>, 2008.
-# Robert Nuske <robert.nuske nw-fva.de>, 2009, 2010, 2011, 2012.
+# Robert Nuske <robert.nuske nw-fva.de>, 2009, 2010, 2011, 2012, 2013.
 # Helmut Kudrnovsky <hellik web.de>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-26 14:45+0100\n"
-"PO-Revision-Date: 2012-11-09 17:21+0100\n"
+"PO-Revision-Date: 2013-05-03 14:40+0200\n"
 "Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
 "Language-Team: German <grass-translations@lists.osgeo.org>\n"
 "Language: de\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../lib/nviz/render.c:105
 msgid "Bad server connection"
@@ -398,9 +398,8 @@ msgid "Unable to open <%s>"
 msgstr "Kann <%s> nicht öffnen."
 
 #: ../lib/ogsf/gsd_img_mpeg.c:389
-#, fuzzy
 msgid "OGSF library has not been built with MPEG output support"
-msgstr "NVIZ wurde nicht mit MPEG-Unterstützung kompiliert."
+msgstr "OGSF Bibliothek wurde nicht mit MPEG-Unterstützung kompiliert."
 
 #: ../lib/ogsf/GP2.c:705
 msgid "Unknown icon marker, using \"sphere\""
@@ -4792,25 +4791,25 @@ msgstr "%d neue Flächengrenzen"
 
 #: ../lib/vector/Vlib/snap.c:213
 msgid "Snap vertices Pass 1: select points"
-msgstr ""
+msgstr "Fang Vertices Durchgang 1: Selektiere Punkte"
 
 #: ../lib/vector/Vlib/snap.c:267
 msgid "Snap vertices Pass 2: assign anchor vertices"
-msgstr ""
+msgstr "Fang Vertices Durchgang 2: Weise Anker-Vertices zu"
 
 #: ../lib/vector/Vlib/snap.c:336
 msgid "Snap vertices Pass 3: snap to assigned points"
-msgstr ""
+msgstr "Fang Vertices Durchgang 3: Fange zugewiesene Punkte"
 
 #: ../lib/vector/Vlib/snap.c:518
 #, c-format
 msgid "Snapped vertices: %d"
-msgstr ""
+msgstr "Gefangene Vertices: %d"
 
 #: ../lib/vector/Vlib/snap.c:519
-#, fuzzy, c-format
+#, c-format
 msgid "New vertices: %d"
-msgstr "Anzahl der Primitive: %d"
+msgstr "Neue Vertices: %d"
 
 #: ../lib/vector/Vlib/snap.c:546
 #, fuzzy
@@ -7132,9 +7131,9 @@ msgid "MAPSET %s - permission denied"
 msgstr "MAPSET %s - Zugriff verweigert."
 
 #: ../lib/gis/gisinit.c:64
-#, fuzzy, c-format
+#, c-format
 msgid "MAPSET %s not found at %s"
-msgstr "MAPSET %s nicht gefunden."
+msgstr "MAPSET %s nicht gefunden in %s"
 
 #: ../lib/gis/gisinit.c:97
 msgid "System not initialized. Programmer forgot to call G_gisinit()."

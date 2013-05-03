@@ -1,16 +1,16 @@
 # translation of grassmods_de.po to Deutsch
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2004, 2008, 2010, 2011, 2012 GRASS Development Team
+# Copyright (C) 2004-2013 GRASS Development Team
 #
 # Markus Neteler <neteler itc.it>, 2004.
 # Stephan Holl <holl gdf-hannover.de>, 2004, 2005, 2006.
-# Robert Nuske <robert.nuske nw-fva.de>, 2006, 2007, 2008, 2009, 2010, 2011, 2012.
+# Robert Nuske <robert.nuske nw-fva.de>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-26 14:45+0100\n"
-"PO-Revision-Date: 2012-11-26 16:00+0100\n"
+"PO-Revision-Date: 2013-05-03 15:33+0200\n"
 "Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
 "Language-Team: German <grass-translations@lists.osgeo.org>\n"
 "Language: de\n"
@@ -1937,9 +1937,8 @@ msgid "End of file reached while still loading data."
 msgstr "Ende der Datei erreicht während des Ladens der Daten."
 
 #: ../raster3d/r3.in.ascii/main.c:272
-#, fuzzy
 msgid "Invalid value detected"
-msgstr "Ungültiger Wert für theta."
+msgstr "Ungültiger Wert entdeckt"
 
 #: ../raster3d/r3.in.ascii/main.c:289
 #, c-format
@@ -8453,14 +8452,12 @@ msgid "Name of input raster map containing longitudes [decimal degrees]"
 msgstr "Name der Eingabe-Rasterkarte mit Längengraden [Dezimalgrad]."
 
 #: ../raster/r.sun/main.c:350
-#, fuzzy
 msgid "Name of real-sky beam radiation coefficient (thick cloud) input raster map [0-1]"
-msgstr "Eingabe-Rasterkarte mit dem Koeffizient der direkten 'real-sky' Sonneneinstrahlung [-]."
+msgstr "Eingabe-Rasterkarte mit Koeffizient der direkten 'real-sky' Sonneneinstrahlung (dicke Wolken) [0-1]"
 
 #: ../raster/r.sun/main.c:359
-#, fuzzy
 msgid "Name of real-sky diffuse radiation coefficient (haze) input raster map [0-1]"
-msgstr "Eingabe-Rasterkarte mit dem Koeffizient der diffusen 'real-sky' Sonneneinstrahlung [-]."
+msgstr "Eingabe-Rasterkarte mit dem Koeffizient der diffusen 'real-sky' Sonneneinstrahlung (Dunst) [0-1]."
 
 #: ../raster/r.sun/main.c:367
 msgid "The horizon information input map prefix"
@@ -8896,9 +8893,8 @@ msgstr "Wenn nicht gegeben, lese von der Standardeingabe"
 #: ../vector/v.out.postgis/options.c:59 ../vector/v.out.postgis/options.c:65
 #: ../locale/scriptstrings/r.unpack_to_translate.c:7
 #: ../locale/scriptstrings/r.unpack_to_translate.c:9
-#, fuzzy
 msgid "Output settings"
-msgstr "Wolkeneinstellungen"
+msgstr "Einstellungen für Ausgabe"
 
 #: ../raster/r.kappa/main.c:96
 msgid "Title for error matrix and kappa"
@@ -15292,7 +15288,6 @@ msgid "Image acquisition date (yyyy-mm-dd)"
 msgstr "Aufnahmedatum (yyyy-mm-dd)"
 
 #: ../imagery/i.landsat.toar/main.c:140
-#, fuzzy
 msgid "Sun elevation in degrees"
 msgstr "Sonnenhöhe in Grad"
 
@@ -18514,9 +18509,8 @@ msgid "illegal maploc request"
 msgstr "Ungültige Löschanfrage."
 
 #: ../ps/ps.map/r_instructions.c:129 ../ps/ps.map/main.c:220
-#, fuzzy
 msgid "illegal copies request"
-msgstr "Ungültige Spalten-Anfrage."
+msgstr "Ungültige Anfrage Kopien"
 
 #: ../ps/ps.map/r_instructions.c:144 ../ps/ps.map/r_instructions.c:340
 #, fuzzy
@@ -18569,9 +18563,8 @@ msgid "illegal comments request"
 msgstr "Ungültige Löschanfrage."
 
 #: ../ps/ps.map/r_instructions.c:309
-#, fuzzy
 msgid "illegal scale request"
-msgstr "Ungültige Wertebereichs-Anfrage."
+msgstr "Ungültige Anfrage Maßstab"
 
 #: ../ps/ps.map/r_instructions.c:369
 #, fuzzy
@@ -18649,9 +18642,8 @@ msgid "illegal width request"
 msgstr "Ungültige Weiten-Anfrage."
 
 #: ../ps/ps.map/ps_outline.c:107
-#, fuzzy
 msgid "illegal outline sub-request"
-msgstr "Ungültige colortabe sub-request"
+msgstr "Ungültige Unteranfrage Umrandung"
 
 #: ../ps/ps.map/r_group.c:29
 msgid "Can't get group information"
@@ -18730,24 +18722,20 @@ msgid "Colorbar x location beyond page margins. Adjusting."
 msgstr "Die X-Position der Farbtabelle liegt außerhalb der Seitenränder. Korrigiere dies."
 
 #: ../ps/ps.map/getgrid.c:95 ../ps/ps.map/getgrid.c:206
-#, fuzzy
 msgid "illegal numbers request"
-msgstr "Ungültige Spalten-Anfrage."
+msgstr "Ungültige Zahlen-Anfrage."
 
 #: ../ps/ps.map/getgrid.c:126 ../ps/ps.map/getgrid.c:234
-#, fuzzy
 msgid "illegal grid width request"
-msgstr "Ungültige Weiten-Anfrage."
+msgstr "Ungültige Gitterweiten Anfrage."
 
 #: ../ps/ps.map/getgrid.c:132
-#, fuzzy
 msgid "illegal request (grid)"
-msgstr "Ungültige Wertebereichs-Anfrage."
+msgstr "Ungültige Anfrage (Gitter)"
 
 #: ../ps/ps.map/getgrid.c:240
-#, fuzzy
 msgid "illegal request (geogrid)"
-msgstr "Ungültige Farb-Anfrage (Farbtabelle)."
+msgstr "Ungültige Anfrage (Geogitter)."
 
 #: ../ps/ps.map/r_plt.c:173
 msgid "Can't open eps file"
@@ -18769,9 +18757,8 @@ msgid "Reading vector points file <%s in %s> ..."
 msgstr "Lese Datei mit Vektorpunkten <%s in %s> ..."
 
 #: ../ps/ps.map/r_header.c:77
-#, fuzzy
 msgid "illegal header sub-request"
-msgstr "Ungültiges vlegend sub-request"
+msgstr "Ungültige Unteranfrage Header"
 
 #: ../ps/ps.map/do_labels.c:44
 #, c-format
@@ -18821,7 +18808,7 @@ msgstr "Gebe Liste der Papierformate aus (Name Breite Höhe links rechts oben un
 
 #: ../ps/ps.map/main.c:107 ../ps/ps.map/main.c:120
 msgid "Utility"
-msgstr ""
+msgstr "Hilfsprogramm"
 
 #: ../ps/ps.map/main.c:112
 msgid "Create EPS (Encapsulated PostScript) instead of PostScript file"
@@ -18832,9 +18819,8 @@ msgid "Describe map-box's position on the page and exit (inches from top-left of
 msgstr "Beschreibe die Position der Kartenrechtecks auf dem Papier und beendet sich (Inch von der linken-oberen Ecke). "
 
 #: ../ps/ps.map/main.c:123
-#, fuzzy
 msgid "File containing mapping instructions"
-msgstr "Datei die Gewichte enthält."
+msgstr "Datei mit Kartographie-Anweisungen"
 
 #: ../ps/ps.map/main.c:124
 msgid "Use '-' to enter instructions from keyboard)"
@@ -18866,9 +18852,9 @@ msgstr ""
 "\t(%s)"
 
 #: ../ps/ps.map/main.c:273
-#, fuzzy, c-format
+#, c-format
 msgid "PostScript file '%s' successfully written."
-msgstr "Die PostScript Datei [%s] wurde erfolgreich geschrieben."
+msgstr "PostScript Datei '%s' erfolgreich geschrieben."
 
 #: ../ps/ps.map/do_masking.c:23
 msgid "Can't open temporary PostScript mask file."
@@ -19386,7 +19372,7 @@ msgstr "Spalte mit Farbwerten nicht spezifiziert."
 #: ../display/d.vect/shape.c:68
 #, c-format
 msgid "Color definition column ('%s') not a string. Column must be of form 'RRR:GGG:BBB' where RGB values range 0-255. You can use '%s' module to define color rules. Unable to colorize features."
-msgstr "Farbdefinitionsspalte ('%s') ist keine Zeichenkette. Die Spalte muss die Form 'RRR:GGG:BBB' haben. Die RGB-Werte müssen zwischen 0 und 255 liegen. Sie können das Modul '%s' verwenden um Farbregeln zu definieren. Kann die Feature nicht einfärben."
+msgstr "Farbdefinitionsspalte ('%s') ist keine Zeichenkette. Die Spalte muss die Form 'RRR:GGG:BBB' haben. Die RGB-Werte müssen zwischen 0 und 255 liegen. Sie können das Modul '%s' verwenden um Farbregeln zu definieren. Kann die Objekte nicht einfärben."
 
 #: ../display/d.vect/shape.c:75 ../display/d.vect/shape.c:98
 #: ../display/d.vect/shape.c:129 ../display/d.vect/shape.c:160
@@ -20038,9 +20024,8 @@ msgid "The screen coordinates for top-left corner of label ([0,0] is lower-left 
 msgstr "Die Bildschirmkoordinaten für die linke obere Ecke des Labels ([0,0] ist oben links)."
 
 #: ../display/d.barscale/main.c:100
-#, fuzzy
 msgid "Font size"
-msgstr "Symbolgröße"
+msgstr "Schriftgröße"
 
 #: ../display/d.barscale/main.c:108
 #, c-format
@@ -20259,9 +20244,8 @@ msgid "Lines of the grid pass through this coordinate"
 msgstr "Linien des Gitters verlaufen durch diese Koordinate."
 
 #: ../display/d.grid/main.c:76
-#, fuzzy
 msgid "Grid line width"
-msgstr "Linienbreite"
+msgstr "Gitterlinienbreite"
 
 #: ../display/d.grid/main.c:80
 msgid "Grid color"
@@ -20303,12 +20287,11 @@ msgstr "Zeichne geographisches Gitter (basierend auf dem WGS84-Ellipsoid)."
 
 #: ../display/d.grid/main.c:120
 msgid "Draw '+' marks instead of grid lines"
-msgstr "Zeichne '+'-Zeichen an Stelle eines Gitternetzes."
+msgstr "Zeichne '+' an Stelle eines Gitternetzes."
 
 #: ../display/d.grid/main.c:125
-#, fuzzy
 msgid "Draw '.' marks instead of grid lines"
-msgstr "Zeichne '+'-Zeichen an Stelle eines Gitternetzes."
+msgstr "Zeichne '.' an Stelle eines Gitternetzes"
 
 #: ../display/d.grid/main.c:130
 msgid "Draw fiducial marks instead of grid lines"
@@ -20618,7 +20601,7 @@ msgstr "Anzahl Spalten, die in der Farbtabelle erscheinen sollen"
 
 #: ../display/d.colortable/main.c:92
 msgid "Don't draw a collar showing the NULL color in FP maps"
-msgstr ""
+msgstr "Zeichne nicht den Rahmen mit NULL-Werten in Fließkomma-Karten"
 
 #: ../display/d.colortable/main.c:114
 #, c-format
@@ -21184,9 +21167,8 @@ msgid "Gradient"
 msgstr "Strahlung"
 
 #: ../display/d.legend/main.c:131
-#, fuzzy
 msgid "Size and placement as percentage of screen coordinates (0,0 is lower left)"
-msgstr "Platzierung als Prozentsatz der Bildschirmkoordinaten (0,0 ist links unten)."
+msgstr "Größe und Platzierung als Prozentsatz der Bildschirmkoordinaten (0,0 ist links unten)"
 
 #: ../display/d.legend/main.c:140
 msgid "List of discrete category numbers/values for legend"
@@ -21288,7 +21270,7 @@ msgstr "Nichts zu zeichnen! Evtl. keine Kategorien mit Labeln?"
 
 #: ../display/d.measure/main.c:49
 msgid "Measures the lengths and areas of features drawn by the user in the active display frame on the graphics monitor."
-msgstr "Misst die Länge und Fläche von Features, gezeichnet vom Benutzer, im aktiven Grafikfenster."
+msgstr "Misst die Länge und Fläche von Objekten, gezeichnet vom Benutzer, im aktiven Grafikfenster."
 
 #: ../display/d.measure/main.c:55
 msgid "Line color 1"
@@ -23157,7 +23139,7 @@ msgstr "vollständig"
 #: ../general/g.copy/main.c:67
 #, c-format
 msgid "<%s> not found"
-msgstr "<%s> nicht gefunden werden."
+msgstr "<%s> nicht gefunden"
 
 #: ../general/g.copy/main.c:72
 #, c-format
@@ -23442,11 +23424,11 @@ msgstr "Ändere den Typ von losen Enden von Grenzen"
 
 #: ../vector/v.type/main.c:53
 msgid "Feature type to convert from"
-msgstr "Zukonvertierender Feature-Typ."
+msgstr "Zukonvertierender Objekt-Typ"
 
 #: ../vector/v.type/main.c:60
 msgid "Feature type to convert to"
-msgstr "Feature-Typ in den konvertiert wird."
+msgstr "Objekt-Typ in den konvertiert wird."
 
 #: ../vector/v.type/main.c:115
 msgid "Incompatible types"
@@ -23499,7 +23481,7 @@ msgstr "Keine Schrift ausgewählt."
 #: ../vector/v.colors/scan_cats.c:19 ../vector/v.to.db/query.c:23
 #: ../vector/v.to.db/lines.c:75 ../vector/v.to.rast/do_lines.c:36
 msgid "Reading features..."
-msgstr "Lese Feature..."
+msgstr "Lese Objekte..."
 
 #: ../vector/v.colors.out/main.c:53
 #, fuzzy
@@ -23553,7 +23535,7 @@ msgstr "Voronoi Triangulation..."
 
 #: ../vector/v.voronoi/main.c:267 ../vector/v.in.db/main.c:184
 msgid "Writing features..."
-msgstr "Schreibe Feature..."
+msgstr "Schreibe Objekte..."
 
 #: ../vector/v.voronoi/main.c:328 ../vector/v.extract/copy_tab.c:53
 #: ../vector/v.select/copy_tabs.c:17 ../vector/v.generalize/misc.c:124
@@ -23653,14 +23635,14 @@ msgid "No Steiner point found -> leaving cycle"
 msgstr "Keine Steiner-Punkte gefunden -> verlasse die Schleife"
 
 #: ../vector/v.overlay/area_area.c:51
-#, fuzzy, c-format
+#, c-format
 msgid "Snapping boundaries with %g ..."
-msgstr "Snapping der Grenzen..."
+msgstr "Grenzen ausrichten mit %g ..."
 
 #: ../vector/v.overlay/area_area.c:99
-#, fuzzy, c-format
+#, c-format
 msgid "%d boundaries snapped"
-msgstr "%d Grenzen geschlossen"
+msgstr "%d Grenzen ausgerichtet"
 
 #: ../vector/v.overlay/area_area.c:107 ../vector/v.overlay/line_area.c:70
 msgid "Breaking lines..."
@@ -23677,9 +23659,8 @@ msgid "Cleaning boundaries at nodes..."
 msgstr "Säubere Grenzen an den Knoten..."
 
 #: ../vector/v.overlay/area_area.c:152 ../vector/v.overlay/line_area.c:72
-#, fuzzy
 msgid "Merging lines..."
-msgstr "Buffere Linien..."
+msgstr "Verschmelze Linien..."
 
 #: ../vector/v.overlay/area_area.c:156 ../vector/v.buffer/main.c:746
 msgid "Attaching islands..."
@@ -23724,7 +23705,7 @@ msgstr "Layer-Nummer (Vektorkarte A)."
 
 #: ../vector/v.overlay/main.c:75 ../vector/v.select/args.c:21
 msgid "Feature type (vector map A)"
-msgstr "Feature-Typ (Vektorkarte A)"
+msgstr "Objekt-Typ (Vektorkarte A)"
 
 #: ../vector/v.overlay/main.c:81 ../vector/v.select/args.c:26
 msgid "Name of input vector map (B)"
@@ -23737,15 +23718,15 @@ msgstr "Layer-Nummer (Vektorkarte B)."
 
 #: ../vector/v.overlay/main.c:89 ../vector/v.select/args.c:35
 msgid "Feature type (vector map B)"
-msgstr "Feature-Typ (Vektorkarte B)"
+msgstr "Objekt-Typ (Vektorkarte B)"
 
 #: ../vector/v.overlay/main.c:100
 msgid "Operator defines features written to output vector map"
-msgstr "Operator bestimmt, welche Feature in die Ausgabe-Vektorkarte geschrieben werden."
+msgstr "Operator bestimmt, welche Objekte in die Ausgabe-Vektorkarte geschrieben werden."
 
 #: ../vector/v.overlay/main.c:103
 msgid "Feature is written to output if the result of operation 'ainput operator binput' is true. Input feature is considered to be true, if category of given layer is defined."
-msgstr "Ein Feature wird in die Ausgabekarte geschrieben, wenn das Ergebnis der Operation 'ainput operator binput' wahr ist. Ein Eingabe-Feature wird als wahr erachtet, wenn die Kategorie des gegebenen Layers definiert ist."
+msgstr "Ein Objekt wird in die Ausgabekarte geschrieben, wenn das Ergebnis der Operation 'ainput operator binput' wahr ist. Ein Eingabe-Objekt wird als wahr erachtet, wenn die Kategorie des gegebenen Layers definiert ist."
 
 #: ../vector/v.overlay/main.c:110
 msgid "also known as 'intersection' in GIS"
@@ -23773,16 +23754,16 @@ msgstr "Wenn 0 oder nicht spezifiziert, wird die Kategorie nicht geschrieben"
 
 #: ../vector/v.overlay/main.c:132 ../vector/v.in.ogr/main.c:196
 msgid "Snapping threshold for boundaries"
-msgstr "Schwellenwert für Snapping der Grenzen."
+msgstr "Fangtoleranz für Grenzen"
 
 #: ../vector/v.overlay/main.c:133
 msgid "Disable snapping with snap <= 0"
-msgstr ""
+msgstr "Fangen ausschalten mit snap <= 0"
 
 #: ../vector/v.overlay/main.c:165 ../vector/v.select/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown operator '%s'"
-msgstr "Unbekannte Operater"
+msgstr "Unbekannter Operator '%s'"
 
 #: ../vector/v.overlay/main.c:170
 #, c-format
@@ -23809,9 +23790,9 @@ msgid "Unable to select attributes"
 msgstr "Kann Attribute nicht selektieren."
 
 #: ../vector/v.overlay/main.c:420
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown column type '%s' of column '%s'"
-msgstr "Unbekannter Spalten-Typ '%s', Werte verloren"
+msgstr "Unbekannter Spalten-Typ '%s' der Spalte '%s'"
 
 #: ../vector/v.overlay/main.c:433 ../vector/v.lrs/v.lrs.label/main.c:348
 #: ../vector/v.out.svg/main.c:370 ../vector/v.out.ogr/attrb.c:53
@@ -23820,9 +23801,9 @@ msgid "Unable to fetch data from table"
 msgstr "Kann Daten nicht aus der Tabelle ziehen."
 
 #: ../vector/v.overlay/main.c:485
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown column type '%s' of column '%s', values lost"
-msgstr "Unbekannter Spalten-Typ '%s', Werte verloren"
+msgstr "Unbekannter Spalten-Typ '%s' der Spalte '%s', Werte verloren"
 
 #: ../vector/v.overlay/main.c:562
 #, fuzzy
@@ -23830,9 +23811,8 @@ msgid "Building topology..."
 msgstr "Baue Topologie neu auf..."
 
 #: ../vector/v.overlay/line_area.c:84
-#, fuzzy
 msgid "Selecting lines..."
-msgstr "Selektiere Feature..."
+msgstr "Selektiere Linien..."
 
 #: ../vector/v.kernel/main.c:68
 #, c-format
@@ -24109,7 +24089,7 @@ msgstr "Entferne doppelte Zentroide"
 
 #: ../vector/v.in.ogr/main.c:197
 msgid "'-1' for no snap"
-msgstr "'-1' für kein snapping"
+msgstr "'-1' für kein Ausrichten"
 
 #: ../vector/v.in.ogr/main.c:212
 msgid "List of column names to be used instead of original names, first is used for category column"
@@ -24800,7 +24780,7 @@ msgstr "Berechne Geometriedistanzen an Stelle der Tabellenwerte."
 
 #: ../vector/v.univar/main.c:161
 msgid "Incompatible vector type(s) specified, only number of features, minimum, maximum and range can be calculated"
-msgstr "Inkompatible Vektortypen angeben. Es kann nur die Anzahl der Feature, das Minimum, das Maximum und die Spanne berechnet werden."
+msgstr "Inkompatible Vektortypen angeben. Es kann nur die Anzahl der Objekte, das Minimum, das Maximum und der Wertebereich berechnet werden."
 
 #: ../vector/v.univar/main.c:166
 msgid "Extended statistics is currently supported only for points/centroids"
@@ -25895,7 +25875,7 @@ msgstr "Differenz in x,y Richtung für das Verschieben eines Features oder Verte
 
 #: ../vector/v.edit/args.c:106
 msgid "Threshold distance (coords,snap,query)"
-msgstr "Schwellwerte (coords,snap,query)."
+msgstr "Schwellwert (coords,snap,query)."
 
 #: ../vector/v.edit/args.c:108
 msgid "'-1' for threshold based on the current resolution settings"
@@ -25907,11 +25887,11 @@ msgstr "Liste der Punkt-Koordinaten"
 
 #: ../vector/v.edit/args.c:133
 msgid "Bounding box for selecting features"
-msgstr "Bounding box zur Auswahl von Features."
+msgstr "Bounding box zur Auswahl von Objekte."
 
 #: ../vector/v.edit/args.c:142
 msgid "Polygon for selecting features"
-msgstr "Polygon zur Auswahl von Features."
+msgstr "Polygon zur Auswahl von Objekten."
 
 #: ../vector/v.edit/args.c:152
 msgid "Query tool"
@@ -25936,7 +25916,7 @@ msgstr "Name der Hintergrund-Vektorkarte(n)."
 
 #: ../vector/v.edit/args.c:176
 msgid "Snap added or modified features in the given threshold to the nearest existing feature"
-msgstr "Snap hinzugefügte oder veränderte Features innerhalb des angegebenen Schwellwertes auf das nächste existierende Feature."
+msgstr "Richte hinzugefügte oder veränderte Objekte, innerhalb des gegebenen Schwellwertes, am nächsten Objekt aus."
 
 #: ../vector/v.edit/args.c:182
 msgid "Not apply snapping"
@@ -25973,7 +25953,7 @@ msgstr "Erwarte keinen Header in den Inputdaten."
 
 #: ../vector/v.edit/args.c:216
 msgid "Modify only first found feature in bounding box"
-msgstr "Verändere nur das zuerst gefundene Feature in der Bouding Box."
+msgstr "Verändere nur das zuerst gefundene Objekt in der Bouding Box."
 
 #: ../vector/v.edit/args.c:228
 msgid "Polygon must have at least 3 coordinate pairs"
@@ -26009,7 +25989,7 @@ msgstr "Einstellungen"
 
 #: ../vector/v.edit/main.c:58
 msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
-msgstr "Editiert eine Vektorkarte, ermöglicht das Hinzufügen, Löschen und Ändern ausgewählter Vektor Feature."
+msgstr "Editiert eine Vektorkarte, ermöglicht das Hinzufügen, Löschen und Ändern ausgewählter Vektorobjekte."
 
 #: ../vector/v.edit/main.c:67
 #, c-format
@@ -26042,11 +26022,11 @@ msgstr ""
 
 #: ../vector/v.edit/main.c:211
 msgid "Selecting features..."
-msgstr "Selektiere Feature..."
+msgstr "Selektiere Objekte..."
 
 #: ../vector/v.edit/main.c:223
 msgid "No features selected, nothing to edit"
-msgstr "Keine Feature selektiert, nix zu editieren."
+msgstr "Keine Objekte selektiert, nix zu editieren."
 
 #: ../vector/v.edit/main.c:231
 #, c-format
@@ -26056,14 +26036,14 @@ msgstr "Die Vektorkarte <%s> ist nicht 3D. Das Werkzeug '%s' benötigt eine 3D-V
 #: ../vector/v.edit/main.c:271
 #, c-format
 msgid "%d features added"
-msgstr "%d Feature hinzugefügt"
+msgstr "%d Objekte hinzugefügt"
 
 #: ../vector/v.edit/main.c:277 ../vector/v.edit/main.c:302
 #: ../vector/v.edit/main.c:311 ../vector/v.edit/main.c:335
 #: ../vector/v.edit/main.c:371
 #, c-format
 msgid "Threshold value for snapping is %.2f"
-msgstr "Schwellwert für Snapping ist %.2f."
+msgstr "Schwellwert für Ausrichten ist %.2f."
 
 #: ../vector/v.edit/main.c:289
 #, c-format
@@ -26073,12 +26053,12 @@ msgstr "%d Grenzen geschlossen"
 #: ../vector/v.edit/main.c:296
 #, c-format
 msgid "%d features deleted"
-msgstr "%d Feature gelöscht"
+msgstr "%d Objekte gelöscht"
 
 #: ../vector/v.edit/main.c:305
 #, c-format
 msgid "%d features moved"
-msgstr "%d Feature verschoben"
+msgstr "%d Objekte verschoben"
 
 #: ../vector/v.edit/main.c:314
 #, c-format
@@ -26113,17 +26093,17 @@ msgstr "%d Linien zusammengefasst"
 #: ../vector/v.edit/main.c:349 ../vector/v.edit/main.c:353
 #, c-format
 msgid "%d features modified"
-msgstr "%d Feature verändert"
+msgstr "%d Objekte verändert"
 
 #: ../vector/v.edit/main.c:358
 #, c-format
 msgid "Multiple background maps were given. Selected features will be copied only from vector map <%s>."
-msgstr "Mehrere Hintergrundkarten wurden angegeben. Selektierte Feature werden nur von der Vektorkarte <%s> kopiert."
+msgstr "Mehrere Hintergrundkarten wurden angegeben. Selektierte Objekte werden nur von der Vektorkarte <%s> kopiert."
 
 #: ../vector/v.edit/main.c:368
 #, c-format
 msgid "%d features copied"
-msgstr "%d Feature kopiert"
+msgstr "%d Objekte kopiert"
 
 #: ../vector/v.edit/main.c:377
 #, c-format
@@ -26138,11 +26118,11 @@ msgstr "%d Linien beschriftet"
 #: ../vector/v.edit/main.c:403
 #, c-format
 msgid "%d features converted"
-msgstr "%d Feature konvertiert."
+msgstr "%d Objekte konvertiert"
 
 #: ../vector/v.edit/main.c:406
 msgid "No feature modified"
-msgstr "Keine Feature verändert"
+msgstr "Keine Objekte verändert"
 
 #: ../vector/v.edit/main.c:413
 #, c-format
@@ -26521,7 +26501,7 @@ msgstr "Bitte geben Sie eine Zufallszahl größer als 0 an."
 #: ../vector/v.extract/main.c:290
 #, c-format
 msgid "Random category count must be smaller than feature count. There are only %d features of type(s): %s"
-msgstr "Die Zahl der zufälligen Kategorien muss kleiner sein, als die Zahl der Feature. Es gibt nur %d Feature des Typs: %s"
+msgstr "Die Zahl der zufälligen Kategorien muss kleiner sein, als die Zahl der Objekte. Es gibt nur %d Objekte des Typs: %s"
 
 #: ../vector/v.extract/main.c:313
 #, fuzzy, c-format
@@ -26534,7 +26514,7 @@ msgstr ""
 
 #: ../vector/v.extract/main.c:349
 msgid "Extracting features..."
-msgstr "Extrahiere Feature..."
+msgstr "Extrahiere Objekte..."
 
 #: ../vector/v.extract/main.c:373
 msgid "Removing duplicate centroids..."
@@ -27336,7 +27316,7 @@ msgstr "Minimale Distanz oder -1 für unbegrenzt."
 
 #: ../vector/v.distance/main.c:155
 msgid "Values describing the relation between two nearest features"
-msgstr "Werte, die die Verbindung zwischen zwei nächstgelegenen Featuren beschreiben. "
+msgstr "Werte, die die Verbindung zwischen zwei nächstgelegenen Objekte beschreiben"
 
 #: ../vector/v.distance/main.c:165
 #, fuzzy
@@ -27376,7 +27356,7 @@ msgstr "Name(n) der Spalte(n) in denen, durch die 'upload'-Option bestimmte, Wer
 
 #: ../vector/v.distance/main.c:193
 msgid "Column name of nearest feature (used with upload=to_attr)"
-msgstr "Spaltenname der nächstgelegenen Feature (verwendet mit upload=to_attr)."
+msgstr "Spaltenname der nächstgelegenen Objekte (verwendet mit upload=to_attr)."
 
 #: ../vector/v.distance/main.c:199
 #, fuzzy
@@ -27389,11 +27369,11 @@ msgstr "Gebe die Ausgabe auf stdout aus und verändere die Attributtabelle nicht
 
 #: ../vector/v.distance/main.c:206
 msgid "First column is always category of 'from' feature called from_cat"
-msgstr "Die erste Spalte ist immer die Kategorie der 'from'-Feature und 'from_cat' benannt."
+msgstr "Die erste Spalte ist immer die Kategorie der 'from'-Objekte und 'from_cat' benannt."
 
 #: ../vector/v.distance/main.c:211
 msgid "Calculate distances to all features within the threshold"
-msgstr "Berechne Distanzen zu allen Features innerhalb des Schwellwertes."
+msgstr "Berechne Distanzen zu allen Objekten innerhalb des Schwellwertes."
 
 #: ../vector/v.distance/main.c:213
 msgid "Output is written to stdout but may be uploaded to a new table created by this module; multiple 'upload' options may be used."
@@ -27460,12 +27440,12 @@ msgstr "Kann die Standard-Datenbank nicht öffnen."
 #: ../vector/v.distance/main.c:1559
 #, c-format
 msgid "%d categories with more than 1 feature in vector map <%s>"
-msgstr "%d Kategorien mit mehr als einem Feature in der Vektorkarte <%s>."
+msgstr "%d Kategorien mit mehr als einem Objekt in der Vektorkarte <%s>."
 
 #: ../vector/v.distance/main.c:1562
 #, c-format
 msgid "%d categories - no nearest feature found"
-msgstr "%d Kategorien - kein nächstes Feature gefunden."
+msgstr "%d Kategorien - kein nächstes Objekt gefunden."
 
 #: ../vector/v.distance/main.c:1571
 #, c-format
@@ -28002,7 +27982,7 @@ msgstr "Füge hinzu, Lösche oder Berichte Vektorkategorien einer Kartengeometri
 
 #: ../vector/v.category/main.c:90
 msgid "Feature ids (by default all features are processed)"
-msgstr "ID der Feature (standardmäßig werden alle Feature bearbeitet)."
+msgstr "ID der Objekte (standardmäßig werden alle Objekte bearbeitet)."
 
 #: ../vector/v.category/main.c:102
 msgid "Action to be done"
@@ -28089,7 +28069,7 @@ msgstr "%d Kategorien gelesen von der Vektorkarte (Layer %d)."
 
 #: ../vector/v.category/main.c:325 ../vector/v.select/select.c:40
 msgid "Processing features..."
-msgstr "Verarbeite Feature..."
+msgstr "Verarbeite Objekte..."
 
 #: ../vector/v.category/main.c:371
 #, c-format
@@ -28158,7 +28138,7 @@ msgstr "%d Kategorien gelesen von der Vektorkarte (Layer %d)."
 #: ../vector/v.category/main.c:758
 #, c-format
 msgid "%d features modified."
-msgstr "%d Feature verändert."
+msgstr "%d Objekte verändert."
 
 #: ../vector/v.net.flow/main.c:60
 msgid "flow"
@@ -28383,7 +28363,7 @@ msgstr "Erstelle Teile der Topologie..."
 
 #: ../vector/v.buffer/main.c:716
 msgid "Snapping boundaries..."
-msgstr "Snapping der Grenzen..."
+msgstr "Richte Grenzen aus..."
 
 #: ../vector/v.buffer/main.c:732
 msgid "Cleaning boundaries at nodes"
@@ -28837,7 +28817,7 @@ msgstr "Unvollständige Regel"
 #: ../vector/v.reclass/main.c:452
 #, c-format
 msgid "%d features reclassed."
-msgstr "%d Feature reklassifiziert."
+msgstr "%d Objekte reklassifiziert."
 
 #: ../vector/v.neighbors/main.c:54
 #, fuzzy
@@ -28931,7 +28911,7 @@ msgstr "Typ der Ausgabe"
 
 #: ../vector/v.out.svg/main.c:91
 msgid "Defines which feature-type will be extracted"
-msgstr "Bestimmt welcher Feature-Typ extrahiert wird."
+msgstr "Bestimmt welcher Objekt-Typ extrahiert wird."
 
 #: ../vector/v.out.svg/main.c:99
 msgid "Coordinate precision"
@@ -29429,7 +29409,7 @@ msgstr "Kann den Rasterzelltyp nicht bestimmen."
 
 #: ../vector/v.out.ogr/main.c:228
 msgid "The combination of types is not supported by all formats."
-msgstr "Die Die Kombination von Typen wird nicht von allen Formaten unterstützt."
+msgstr "Die Kombination von Typen wird nicht von allen Formaten unterstützt."
 
 #: ../vector/v.out.ogr/main.c:257
 #, c-format
@@ -29632,7 +29612,7 @@ msgstr "%d Punkte ohne Kategorie geschrieben."
 #: ../vector/v.out.ogr/main.c:957
 #, c-format
 msgid "%d features without attributes were written"
-msgstr "%d Feature ohne Attribute geschrieben."
+msgstr "%d Objekte ohne Attribute geschrieben."
 
 #: ../vector/v.out.ogr/main.c:959
 #, c-format
@@ -29724,7 +29704,7 @@ msgstr "Erstelle Topologie für die Vektorkarte <%s>..."
 
 #: ../vector/v.patch/main.c:375
 msgid "Intersections at borders will have to be snapped"
-msgstr "Überschneidungen an den Grenzen müssen ge-snapped werden"
+msgstr "Überschneidungen an den Grenzen müssen ausgerichtet werden"
 
 #: ../vector/v.patch/main.c:376
 msgid "Lines common between files will have to be edited"
@@ -29823,11 +29803,11 @@ msgstr "Layer-Nummer (Vektorkarte B)"
 
 #: ../vector/v.select/args.c:47
 msgid "Operator defines required relation between features"
-msgstr "Operator bestimmt das erforderte Verhältnis zwischen den Features"
+msgstr "Operator bestimmt das erforderte Verhältnis zwischen den Objekten"
 
 #: ../vector/v.select/args.c:49
 msgid "A feature is written to output if the result of operation 'ainput operator binput' is true. An input feature is considered to be true, if category of given layer is defined."
-msgstr "Ein Feature wird in die Ausgabe geschrieben, wenn das Ergebnis der Operation 'ainput operator binput' wahr ist. Ein Eingabe-Feature wird als wahr aufgefasst, wenn die Kategorie des gegebenen Layers definiert ist."
+msgstr "Ein Objekt wird in die Ausgabe geschrieben, wenn das Ergebnis der Operation 'ainput operator binput' wahr ist. Ein Eingabe-Objekt wird als wahr aufgefasst, wenn die Kategorie des gegebenen Layers definiert ist."
 
 #: ../vector/v.select/args.c:57 ../vector/v.select/args.c:73
 #, fuzzy
@@ -29890,7 +29870,7 @@ msgstr "Kann die Tabelle <%s> nicht kopieren."
 
 #: ../vector/v.select/main.c:51
 msgid "Selects features from vector map (A) by features from other vector map (B)."
-msgstr "Selektiert Feature der Vektorkarte (A) durch Feature von eine anderen Vektorkarte (B)."
+msgstr "Selektiert Objekte der Vektorkarte (A) durch Objekte einer anderen Vektorkarte (B)."
 
 #: ../vector/v.select/main.c:93
 msgid "Operator can only be 'overlap'"
@@ -30393,7 +30373,7 @@ msgstr "Ändere den Typ von Brücken"
 
 #: ../vector/v.clean/main.c:242
 msgid "Snap vertices"
-msgstr "Snap Vertices"
+msgstr "Fange Vertices"
 
 #: ../vector/v.clean/main.c:245
 msgid "Remove duplicate area centroids"
@@ -30478,7 +30458,7 @@ msgstr "Werkzeug: Entferne doppelte Zentroide"
 
 #: ../vector/v.clean/main.c:390
 msgid "Tool: Snap line to vertex in threshold"
-msgstr "Werkzeug: Snap Linie auf Vertices innerhalb des Schwellwertes"
+msgstr "Werkzeug: Richte Linie an Vertices innerhalb des Schwellwertes aus"
 
 #: ../vector/v.clean/main.c:404 ../vector/v.clean/main.c:432
 #: ../vector/v.clean/main.c:451
@@ -30627,67 +30607,56 @@ msgid "Count points in areas, calculate statistics from point attributes."
 msgstr "Berechnet univariate Statistiken einer GRASS Rasterkarte."
 
 #: ../vector/v.vect.stats/main.c:135
-#, fuzzy
 msgid "Name of existing vector map with points"
-msgstr "Name einer existierenden Vektorkarte (to)."
+msgstr "Name existierender Vektorkarte mit Punkten"
 
 #: ../vector/v.vect.stats/main.c:140
-#, fuzzy
 msgid "Name of existing vector map with areas"
-msgstr "Name einer existierenden Vektorkarte."
+msgstr "Name existierender Vektorkarte mit Flächen"
 
 #: ../vector/v.vect.stats/main.c:152
-#, fuzzy
 msgid "Layer number for points map"
-msgstr "Layer-Nummer (from)."
+msgstr "Layer-Nummer für Punkt-Karte"
 
 #: ../vector/v.vect.stats/main.c:156
-#, fuzzy
 msgid "Layer number for area map"
-msgstr "Layer-Nummer (Vektorkarte A)"
+msgstr "Layer-Nummer für Flächen-Karte"
 
 #: ../vector/v.vect.stats/main.c:172
-#, fuzzy
 msgid "Method for aggregate statistics"
-msgstr "Vektor, Raster, Statistik"
+msgstr "Methode für aggregierende Statistik"
 
 #: ../vector/v.vect.stats/main.c:179
-#, fuzzy
 msgid "Column name of points map to use for statistics"
-msgstr "Name der Rasterkarte für die Statistiken berechnet werden sollen."
+msgstr "Name der Spalte der Punkt-Karte, welche für die Statistik verwendet werden soll"
 
 #: ../vector/v.vect.stats/main.c:180
-#, fuzzy
 msgid "Column of points map must be numeric"
-msgstr "Spalte muss numerisch sein."
+msgstr "Spalte der Punkt-Karte muss numerisch sein"
 
 #: ../vector/v.vect.stats/main.c:187
-#, fuzzy
 msgid "Column name to upload points count"
-msgstr "Spaltennamen oder Ausdruck"
+msgstr "name der Spalte, in die Punktsummen gespeichert werden sollen"
 
 #: ../vector/v.vect.stats/main.c:189
 msgid "Column to hold points count, must be of type integer, will be created if not existing"
-msgstr ""
+msgstr "Spalte, in die die Punktsummen geschrieben werden sollen, muss vom Typ 'integer' sein. Spalte wird angelegt, wenn sie noch nicht existiert."
 
 #: ../vector/v.vect.stats/main.c:196
-#, fuzzy
 msgid "Column name to upload statistics"
-msgstr "Spaltennamen oder Ausdruck"
+msgstr "Name der Spalte, in die die Statistiken geschrieben werden"
 
 #: ../vector/v.vect.stats/main.c:198
 msgid "Column to hold statistics, must be of type double, will be created if not existing"
-msgstr ""
+msgstr "Spalte, in die die Statistiken geschrieben werden sollen, muss vom Typ 'double' sein. Spalte wird angelegt, wenn sie noch nicht existiert."
 
 #: ../vector/v.vect.stats/main.c:205
-#, fuzzy
 msgid "Print output to stdout, do not update attribute table"
 msgstr "Gebe die Ausgabe auf stdout aus und verändere die Attributtabelle nicht."
 
 #: ../vector/v.vect.stats/main.c:206
-#, fuzzy
 msgid "First column is always area category"
-msgstr "Die erste Spalte ist immer die Kategorie der 'from'-Feature und 'from_cat' benannt."
+msgstr "Die erste Spalte ist immer die Kategorie der Fläche"
 
 #: ../vector/v.vect.stats/main.c:260
 #, c-format
@@ -30695,54 +30664,47 @@ msgid "Vector map <%s> is not in user mapset and cannot be updated"
 msgstr "Vektorkarte <%s> ist nicht im Mapset des Benutzers und kann nicht aktualisiert werden."
 
 #: ../vector/v.vect.stats/main.c:307 ../vector/v.vect.stats/main.c:383
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open database <%s> with driver <%s>"
 msgstr "Kann Datenbank <%s> nicht mit dem Treiber <%s> öffnen."
 
 #: ../vector/v.vect.stats/main.c:311
-#, fuzzy
 msgid "ccolumn is required to upload point counts"
-msgstr "vals-argument wird für Fließkomma-Karte benötigt."
+msgstr "Spalte ccolumn ist für Punktsummen erforderlich"
 
 #: ../vector/v.vect.stats/main.c:320
-#, fuzzy
 msgid "ccolumn must be of type integer"
-msgstr "Schlüssel-Spalte (key column) muss vom Typ integer sein."
+msgstr "Spalte ccolumn muss vom Typ integer sein."
 
 #: ../vector/v.vect.stats/main.c:333 ../vector/v.vect.stats/main.c:363
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to add column <%s>"
-msgstr "Kann die Spalte <%s> nicht verwenden."
+msgstr "Kann Spalte <%s> nicht hinzufügen."
 
 #: ../vector/v.vect.stats/main.c:339
-#, fuzzy
 msgid "scolumn is required to upload point stats"
-msgstr "vals-argument wird für Fließkomma-Karte benötigt."
+msgstr "Spalte scolumn ist erforderlich für Punkt-Statistiken"
 
 #: ../vector/v.vect.stats/main.c:350
-#, fuzzy
 msgid "scolumn must be of type double"
-msgstr "x/y/z-Spalten müssen vom Typ integer oder double sein."
+msgstr "Spalte scolumn muss vom Typ double sein."
 
 #: ../vector/v.vect.stats/main.c:374
-#, fuzzy
 msgid "collecting attributes from points vector..."
-msgstr "Sammle Input-Attribute..."
+msgstr "Sammle Attribute der Punkt-Vektorkarte..."
 
 #: ../vector/v.vect.stats/main.c:406
-#, fuzzy
 msgid "column for points vector must be numeric"
-msgstr "Der Typ der Spalte mit den Größen muss numerisch sein.."
+msgstr "Spalte für Punkt-Vektor muss numerisch sein."
 
 #: ../vector/v.vect.stats/main.c:479
-#, fuzzy
 msgid "Selecting points for each area..."
-msgstr "Selektiere Feature..."
+msgstr "Selektiere Punkte für jede Fläche..."
 
 #: ../vector/v.vect.stats/main.c:576
-#, fuzzy, c-format
+#, c-format
 msgid "could not find area category %d"
-msgstr "Kein Eintrag für Kategorie [%d]."
+msgstr "Konnte die Flächen-Kategorie %d nicht finden."
 
 #: ../vector/v.vect.stats/main.c:704
 #, c-format
@@ -31166,7 +31128,7 @@ msgstr "Korrektur und Erstellung des Gelände-Vektorkarte"
 
 #: ../vector/v.to.3d/args.c:11
 msgid "Reverse transformation; 3D vector features to 2D"
-msgstr "Umgekehrte Transformation; 3D Vektorfeature nach 2D."
+msgstr "Umgekehrte Transformation; 3D Vektorobjekte nach 2D"
 
 #: ../vector/v.to.3d/args.c:15
 msgid "Do not copy table"
@@ -31186,7 +31148,7 @@ msgstr "Höhe"
 
 #: ../vector/v.to.3d/args.c:40
 msgid "Fixed height for 3D vector features"
-msgstr "Bestimmte Höhe für 3D Vektorfeature."
+msgstr "Bestimmte Höhe für 3D Vektorobjekte"
 
 #: ../vector/v.to.3d/trans3.c:69 ../vector/v.to.3d/trans2.c:67
 msgid "Column must be numeric"
@@ -31195,25 +31157,25 @@ msgstr "Spalte muss numerisch sein."
 #: ../vector/v.to.3d/trans3.c:103
 #, c-format
 msgid "Feature id %d has no category - skipping"
-msgstr "Feature mit ID %d hat keine Kategorie - überspringen es."
+msgstr "Objekt mit ID %d hat keine Kategorie - überspringe es"
 
 #: ../vector/v.to.3d/trans3.c:106
 #, c-format
 msgid "Feature id %d has more categories. Using category %d."
-msgstr "Feature mit ID %d hat mehrere Kategorien. Verwende Kategorie %d."
+msgstr "Objekt mit ID %d hat mehrere Kategorien. Verwende Kategorie %d."
 
 #: ../vector/v.to.3d/trans2.c:103
 msgid "Skipping feature without category"
-msgstr "Überspringe Feature ohne Kategorie."
+msgstr "Überspringe Objekte ohne Kategorie."
 
 #: ../vector/v.to.3d/trans2.c:118
 #, c-format
 msgid "Unable to get height for feature category %d"
-msgstr "Kann die Höhe des Feature der Kategorie %d nicht erhalten."
+msgstr "Kann die Höhe des Objektes der Kategorie %d nicht erhalten."
 
 #: ../vector/v.to.3d/main.c:41
 msgid "Performs transformation of 2D vector features to 3D."
-msgstr "Führt die Transformation von 2D Vektorfeature nach 3D durch."
+msgstr "Führt die Transformation von 2D Vektorobjekten nach 3D durch."
 
 #: ../vector/v.to.3d/main.c:53
 #, c-format
@@ -31245,7 +31207,7 @@ msgstr "Kann die Attribute nicht kopieren."
 
 #: ../vector/v.to.3d/main.c:104
 msgid "Transforming features..."
-msgstr "Transformiere Feature..."
+msgstr "Transformiere Objekte..."
 
 #: ../vector/v.to.3d/main.c:124
 #, c-format
@@ -31271,7 +31233,7 @@ msgstr "NULL-Wert-Indikator"
 
 #: ../vector/v.db.select/main.c:91
 msgid "Print minimal region extent of selected vector features instead of attributes"
-msgstr "Gebe anstelle der Attribute die minimale Ausdehnung der Region der selektierten Vektorfeatures aus."
+msgstr "Gebe anstelle der Attribute die minimale Ausdehnung der Region der selektierten Vektorobjekte aus."
 
 #: ../vector/v.db.select/main.c:92
 #, fuzzy
@@ -32357,7 +32319,7 @@ msgstr "Name des TrueType Fonts (so wie er in der fontcap steht)."
 
 #: ../vector/v.label.sa/main.c:84
 msgid "Icon size of point features (in map-units)"
-msgstr "Symbolgröße von Punktfeaturen (in Karteneinheiten)."
+msgstr "Symbolgröße von Punktobjekten (in Karteneinheiten)."
 
 #: ../vector/v.label.sa/main.c:154
 msgid "Border width (only for ps.map output)"
@@ -32535,7 +32497,7 @@ msgstr "Name der Ausgabedatei"
 #: ../vector/v.out.dxf/main.c:91
 #, c-format
 msgid "%d features written to '%s'."
-msgstr "%d Feature geschrieben nach '%s'."
+msgstr "%d Objekte geschrieben nach '%s'."
 
 #: ../vector/v.out.dxf/write_dxf.c:21
 #, c-format
@@ -32592,7 +32554,7 @@ msgstr "Werde Z auf diesen Wert setzen, wenn der Wert der Rasterkarte nicht gele
 
 #: ../vector/v.drape/main.c:267
 msgid "No features match Your query"
-msgstr "Keine Feature passen zu Ihrer Abfrage."
+msgstr "Keine Objekte passen zu Ihrer Abfrage."
 
 #: ../vector/v.drape/main.c:368 ../vector/v.drape/main.c:378
 msgid "Due to error attribute data to new map are not transferred"
@@ -37242,6 +37204,21 @@ msgstr "Unbekannter Spalten-Typ '%s', Werte verloren"
 msgid "add;add a new category;del;delete all categories of given layer;chlayer;change layer number (e.g. layer=3,1 changes layer 3 to layer 1);sum;add the value specified by cat option to the current category value;report;print report (statistics), in shell style: layer type count min max;print;print category values, more cats in the same layer are separated by '/'"
 msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines gegebenen Layers;chlayer;Ändere die Layer-Nummer (z.B. layer=3,1 ändert von Layer 3 auf Layer 1);sum;Addiert den Wert spezifiziert in der Option 'cat' zu dem aktuellen Kategoriewert;report;Gebe einen Bericht (Statistiken ) im Shell-Skript-Stil: Layer Typ Anzahl Min Max;print;Gebe Kategoriewerte aus, mehere cats im selben Layer werden durch '/' getrennt"
 
+msgid "Name of real-sky beam radiation coefficient input raster map [-]"
+msgstr "Eingabe-Rasterkarte mit dem Koeffizient der direkten 'real-sky' Sonneneinstrahlung [-]."
+
+msgid "Name of real-sky diffuse radiation coefficient input raster map [-]"
+msgstr "Eingabe-Rasterkarte mit dem Koeffizient der diffusen 'real-sky' Sonneneinstrahlung [-]."
+
+msgid "mss1;Landsat-1 MSS;mss2;Landsat-2 MSS;mss3;Landsat-3 MSS;mss4;Landsat-4 MSS;mss5;Landsat-5 MSS;tm4;Landsat-4 TM;tm5;Landsat-5 TM;tm7;Landsat-7 ETM+"
+msgstr "mss1;Landsat-1 MSS;mss2;Landsat-2 MSS;mss3;Landsat-3 MSS;mss4;Landsat-4 MSS;mss5;Landsat-5 MSS;tm4;Landsat-4 TM;tm5;Landsat-5 TM;tm7;Landsat-7 ETM+"
+
+msgid "Placement as percentage of screen coordinates (0,0 is lower left)"
+msgstr "Platzierung als Prozentsatz der Bildschirmkoordinaten (0,0 ist links unten)."
+
+msgid "Solar elevation in degrees"
+msgstr "Sonnenhöhe in Grad"
+
 #~ msgid "Input_maps"
 #~ msgstr "Eingabekarten"
 
@@ -37561,7 +37538,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Name(n) existierender Mapset(s), die zum Suchpfad hinzugefügt werden sollen."
 
 #~ msgid "and;also known as 'intersection' in GIS;or;also known as 'union' in GIS (only for atype=area);not;features from ainput not overlayed by features from binput;xor;features from either ainput or binput but not those from ainput overlayed by binput (only for atype=area)"
-#~ msgstr "and;auch als 'intersection' im GIS bekannt;or;auch als 'union' im GIS bekannt (nur für atype=area);not;Feature von ainput nicht überlagert von Featuren von binput;xor;Feature von ainput oder binput, aber nicht solche von ainput die von binput überlagert werden(nur für atype=area)"
+#~ msgstr "and;auch als 'intersection' im GIS bekannt;or;auch als 'union' im GIS bekannt (nur für atype=area);not;Objekt von ainput nicht überlagert von Objekten von binput;xor;Objekt von ainput oder binput, aber nicht solche von ainput die von binput überlagert werden(nur für atype=area)"
 
 #~ msgid "point;import area centroids as points;line;import area boundaries as lines;boundary;import lines as area boundaries;centroid;import points as centroids"
 #~ msgstr "point;Importiere Zentroide als Punkte;line;Importiere Grenzen als Linien;boundary;Importiere Linien als Grenzen;centroid;Importiere Punkte als Zentroide"
@@ -37576,13 +37553,13 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "length; Selektiere nur Linien oder Grenzen kürzer/länger als der Schwellwert; dangle; Selektiere Überstände (dangles) kürzer/länger als der Schwellwert"
 
 #~ msgid "no;Not apply snapping;node;Snap only to node;vertex;Allow snapping also to vertex"
-#~ msgstr "no; Kein Snapping; node; Snap nur auf Nodes; vertex; Erlaube auch ein Snap auf Vertices"
+#~ msgstr "no; Kein Ausrichten; node; nur an Knoten Ausrichten; vertex; Erlaube Ausrichten auch an Vertices"
 
 #~ msgid "point;simple x,y[,z] list;standard;GRASS vector ASCII format"
 #~ msgstr "point;einfache x,y[,z] Liste;standard;GRASS Vektor-ASCII-Format"
 
 #~ msgid "cat;category of the nearest feature;dist;minimum distance to nearest feature;to_x;x coordinate of the nearest point on the 'to' feature;to_y;y coordinate of the nearest point on the 'to' feature;to_along;distance to the nearest point on the 'to' feature along that linear feature;to_angle;angle along the nearest linear feature in the 'to' map, measured CCW from the +x axis, in radians, between -Pi and Pi inclusive;to_attr;attribute of nearest feature given by to_column option"
-#~ msgstr "cat;Kategorie des nächsten Features;dist;Minimumdistanz zum nächsten Feature;to_x;X Koordinate des nächsten Punkts des 'to'-Features;to_y;Y Koordinate des nächsten Punktes des 'to'-Feature;to_along;Distanz zum nächsten Punkt des 'to'-Features entlang des linearen Features;to_angle;Winkel entlang des nächsten linearen Features der 'to'-Karte, gemessen gegen den Uhrzeigersinn von der positiven X-Achse im Bogenmaß (zwischen -Pi und Pi);to_attr;Attribut des nächsten Features gegeben durch die Option to_column"
+#~ msgstr "cat;Kategorie des nächsten Objektes;dist;Minimumdistanz zum nächsten Objekt;to_x;X Koordinate des nächsten Punkts des 'to'-Objektes;to_y;Y Koordinate des nächsten Punktes des 'to'-Objektes;to_along;Distanz zum nächsten Punkt des 'to'-Objektes entlang des linearen Objektes;to_angle;Winkel entlang des nächsten linearen Objektes der 'to'-Karte, gemessen gegen den Uhrzeigersinn von der positiven X-Achse im Bogenmaß (zwischen -Pi und Pi);to_attr;Attribut des nächsten Objektes gegeben durch die Option to_column"
 
 #~ msgid "bridge;Finds bridges;articulation;Finds articulation points;"
 #~ msgstr "bridge;Findet Brücken;articulation;Findet Artikulationspunkte;"
@@ -37943,12 +37920,6 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 
 #~ msgid "raster, sun energy"
 #~ msgstr "Raster, Sonnenenergie"
-
-#~ msgid "Name of real-sky beam radiation coefficient input raster map [-]"
-#~ msgstr "Eingabe-Rasterkarte mit dem Koeffizient der direkten 'real-sky' Sonneneinstrahlung [-]."
-
-#~ msgid "Name of real-sky diffuse radiation coefficient input raster map [-]"
-#~ msgstr "Eingabe-Rasterkarte mit dem Koeffizient der diffusen 'real-sky' Sonneneinstrahlung [-]."
 
 #~ msgid "This does nothing. It is retained for backwards compatibility"
 #~ msgstr "Dies tut nichts. Es wurde nur für die Rückwärtskompatibilität erhalten"
@@ -38941,7 +38912,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Name der Ausgabe-Rasterkarte, die Höheninformationen enthält."
 
 #~ msgid "Unused; retained for compatibility purposes, will be removed in future"
-#~ msgstr "Unbenutzt; nur noch zu Kompatibilitätszwecken vorhanden. Diese Feature wird in der Zukunft entfernt."
+#~ msgstr "Unbenutzt; nur noch zu Kompatibilitätszwecken vorhanden. Dieses Feature wird in der Zukunft entfernt."
 
 #~ msgid "Invoke slow, but memory frugal operation (generally not needed, will be removed in future)"
 #~ msgstr "Rufe langsame aber speicherschonende Operation auf (im Allgemeinen nicht benötigt, wird in Zukunft entfernt)."
@@ -39028,7 +38999,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Kann den 3D Raster Wertebereich nicht laden."
 
 #~ msgid "Generates a raster map layer of distance to features in input layer."
-#~ msgstr "Erzeugt eine Rasterkarte mit Distanzen zu Featuren in der Eingabekarte."
+#~ msgstr "Erzeugt eine Rasterkarte mit Distanzen zu Objekten in der Eingabekarte."
 
 #~ msgid "Name for distance output map"
 #~ msgstr "Name der Distanz-Ausgabekarte."
@@ -39456,7 +39427,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Bogensekunde"
 
 #~ msgid "Features"
-#~ msgstr "Features"
+#~ msgstr "Objekte"
 
 #~ msgid "Contrast"
 #~ msgstr "Kontrast"
@@ -39779,9 +39750,6 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 
 #~ msgid "imagery, landsat, top-of-atmosphere reflectance, dos-type simple atmospheric correction"
 #~ msgstr "Bildbearbeitung, Landsat, top-of-atmosphere Strahlung, dos-type einfache atmosphärische Korrektion"
-
-#~ msgid "mss1;Landsat-1 MSS;mss2;Landsat-2 MSS;mss3;Landsat-3 MSS;mss4;Landsat-4 MSS;mss5;Landsat-5 MSS;tm4;Landsat-4 TM;tm5;Landsat-5 TM;tm7;Landsat-7 ETM+"
-#~ msgstr "mss1;Landsat-1 MSS;mss2;Landsat-2 MSS;mss3;Landsat-3 MSS;mss4;Landsat-4 MSS;mss5;Landsat-5 MSS;tm4;Landsat-4 TM;tm5;Landsat-5 TM;tm7;Landsat-7 ETM+"
 
 #~ msgid "Unable to open the cell map MASK."
 #~ msgstr "Kann die Maske (MASK) der 'CELL'-Karte nicht öffnen."
@@ -40193,7 +40161,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Render-Methode für gefüllte Polygone."
 
 #~ msgid "g;use the libgis render functions (features: clipping);r;use the raster graphics library functions (features: polylines);d;use the display library basic functions (features: polylines);c;use the display library clipping functions (features: clipping);l;use the display library culling functions (features: culling, polylines)"
-#~ msgstr "g;Verwende die Render-Funktion von libgis (Feature: abschneiden);r;verwende dir Render-Funktion der Rastergrafikbibliothek (Feature: Polylinien);d;Verwende die grundlegenden Funktionen der Displaybibliothek (Feature: Polylinien);c;Verwende die Clipping-Funktion der Displaybibliothek (Feature: abschneiden);l;Verwende die Culling-Funktion der der Displaybibliothek (Feature: Beschneiden, Polylinien)"
+#~ msgstr "g;Verwende Render-Funktion von libgis (Objekte: clippen);r;verwende Render-Funktion der Rastergrafik-Bibliothek (Objekte: Polylinien);d;Verwende grundlegende Funktionen der Displaybibliothek (Objekte: Polylinien);c;Verwende Clipping-Funktion der Displaybibliothek (Objekte: clippen);l;Verwende Culling-Funktion der der Displaybibliothek (Objekte: Beschneiden, Polylinien)"
 
 #~ msgid "Get colors from map table column (of form RRR:GGG:BBB)"
 #~ msgstr "Hole die Farbe aus der Tabellenspalte (RRR:GGG:BBB)."
@@ -40244,16 +40212,16 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Kann das Symbol nicht lesen; kann die Punkte nicht darstellen."
 
 #~ msgid "Error in color definition column '%s', feature id %d with cat %d: colorstring '%s'"
-#~ msgstr "Fehler in der Spalte mit den Farbwerten '%s', Feature ID %d mit cat %d: Farbwert '%s'."
+#~ msgstr "Fehler in der Spalte mit den Farbwerten '%s', Objekt ID %d mit cat %d: Farbwert '%s'."
 
 #~ msgid "Error in color definition column '%s', feature id %d with cat %d"
-#~ msgstr "Fehler in der Spalte mit den Farbwerten '%s', Feature ID %d mit cat %d"
+#~ msgstr "Fehler in der Spalte mit den Farbwerten '%s', Objekt ID %d mit cat %d"
 
 #~ msgid "Error in symbol size column (%s), element %d with cat %d: symbol size [%f]"
 #~ msgstr "Fehler in der Symbolgrößen-Spalte (%s), Element %d mit cat %d: Symbolgröße [%f]."
 
 #~ msgid "Error in color definition column '%s': %d features affected"
-#~ msgstr "Fehler in der Spalte mit den Farbwerten '%s', %d Feature betroffen."
+#~ msgstr "Fehler in der Spalte mit den Farbwerten '%s', %d Objekte betroffen."
 
 #~ msgid "display, cartography"
 #~ msgstr "Darstellung, Kartographie"
@@ -40295,7 +40263,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Darstellung, Distanz"
 
 #~ msgid "Displays the rhumbline joining two user-specified points, in the active frame on the user's graphics monitor."
-#~ msgstr "Stellt im aktiven Grafikfenster eine Linie dar, die zwei vom Benutzer angegebene Punkte verbindet."
+#~ msgstr "Stellt im aktiven Grafikfenster die Kompasslinie dar, die zwei vom Benutzer angegebene Punkte verbindet."
 
 #~ msgid "display, position, querying"
 #~ msgstr "Darstellung, Position, Abfrage"
@@ -40722,7 +40690,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Ignoriere Vallist: Karte ist eine Integerkarte (Bitte benutzen Sie 'cat=')."
 
 #~ msgid "d;use the display library basic functions (features: polylines);c;use the display library clipping functions (features: clipping);l;use the display library culling functions (features: culling, polylines)"
-#~ msgstr "d;Verwende grundlegende Funktion der Displaybibliothek (Feature: Polylinien);c;Verwende die Clipping-Funkton der Displaybibliothek (Feature: abschneiden);l;Verwende die Culling-Funkton der Displaybibliothek (Feature: Beschneiden, Polylinien)"
+#~ msgstr "d;Verwende grundlegende Funktion der Displaybibliothek (Objekte: Polylinien);c;Verwende Clipping-Funktion der Displaybibliothek (Objekte: abschneiden);l;Verwende Culling-Funktion der Displaybibliothek (Objekte: Beschneiden, Polylinien)"
 
 #~ msgid "Invalid rendering method <%s>"
 #~ msgstr "Ungültige Render-Methode <%s>."
@@ -40767,9 +40735,6 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 
 #~ msgid "No raster map exists in the current window"
 #~ msgstr "Es existiert keine Rasterkarte im aktuellen Fenster. "
-
-#~ msgid "Placement as percentage of screen coordinates (0,0 is lower left)"
-#~ msgstr "Platzierung als Prozentsatz der Bildschirmkoordinaten (0,0 ist links unten)."
 
 #~ msgid "Use mouse to size & place legend"
 #~ msgstr "Benutze Maus zum Plazieren und zur Größeneinstellung der Legende."
@@ -40937,7 +40902,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Kopiert die vorhandenen Daten in die aktuelle Mapset/Location."
 
 #~ msgid "%s file(s) to be copied"
-#~ msgstr "%s Dateien müssen kopiert werden."
+#~ msgstr "Zu kopierende %s Dateien"
 
 #~ msgid "Set region to match this 3D raster map (both 2D and 3D values)"
 #~ msgstr "Setze Region auf die Werte dieser 3D-Rasterkarte (sowohl 2D- als auch 3D-Parameter)"
@@ -41114,7 +41079,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Konvertiere OGR Vektorlayer in das GRASS Vektorkarten."
 
 #~ msgid "Min-area & snap"
-#~ msgstr "Min-Fläche & snap"
+#~ msgstr "Min-Fläche & Ausrichten"
 
 #~ msgid "Data source contains %d layers:"
 #~ msgstr "Datenquelle enthält %d Layer:"
@@ -41129,7 +41094,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Importiere %d Objekte der Karte..."
 
 #~ msgid "Snap boundaries (threshold = %.3e):"
-#~ msgstr "Snappe Grenzen (Schwellwert = %.3e):"
+#~ msgstr "Grenzen ausrichten (Schwellwert = %.3e):"
 
 #~ msgid "Break polygons:"
 #~ msgstr "Zerlege Polygone:"
@@ -41165,7 +41130,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Schreibe Zentroide:"
 
 #~ msgid "Input data contains 3D features. Created vector is 2D only, use -z flag to import 3D vector"
-#~ msgstr "Eingabekarte enthält 3D-Feature. Erstellte Vektorkarte ist allerdings nur 2D, verwenden Sie den Schalter '-z', um 3D-Vektordaten zu importieren."
+#~ msgstr "Eingabekarte enthält 3D-Objekte. Erstellte Vektorkarte ist allerdings nur 2D, verwenden Sie den Schalter '-z', um 3D-Vektordaten zu importieren."
 
 #~ msgid "Cannot read part of geometry"
 #~ msgstr "Kann Teil der Geometrie nicht lesen."
@@ -41213,7 +41178,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Vektor, Buffer"
 
 #~ msgid "Creates a buffer around features of given type (areas must contain centroid)."
-#~ msgstr "Erzeugt einen Buffer um die Feature mit gegebenen Typ (Flächen müssen Zentroide enthalten)."
+#~ msgstr "Erzeugt einen Buffer um die Objekte mit gegebenen Typ (Flächen müssen Zentroide enthalten)."
 
 #~ msgid "This is an alias to the distance option. It is retained for backwards compatibility"
 #~ msgstr "Dies ist ein Alias für die Distanz-Option. Es wurde nur für rückwärts Kompatibilität erhalten"
@@ -41252,7 +41217,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "habe Typ '%d' erhalten."
 
 #~ msgid "Feature has more categories. Only first category (%d) is exported."
-#~ msgstr "Feature hat mehrere Kategorien. Nur die erste Kategorie (%d) wurde exportiert."
+#~ msgstr "Objekt hat mehrere Kategorien. Nur die erste Kategorie (%d) wurde exportiert."
 
 #~ msgid "Unable to select record from table <%s> (key %s, column %s)"
 #~ msgstr "Kann Daten nicht aus der Tabelle selektieren<%s> (key %s, column %s)."
@@ -41291,10 +41256,10 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Erzeugt Topologie für GRASS Vektorkarten."
 
 #~ msgid "Name for vector map where erroneous vector features are written to"
-#~ msgstr "Name der Vektorkarte, in die fehlerhafte Vektor-Features geschrieben werden sollen."
+#~ msgstr "Name der Vektorkarte, in die fehlerhafte Vektor-Objekte geschrieben werden sollen."
 
 #~ msgid "create;Create new (empty) vector map;add;Add new features to existing vector map;delete;Delete selected features from vector map;move;Move selected features in vector map;vertexmove;Move vertex of selected vector lines;vertexdel;Remove vertex from selected vector lines;vertexadd;Add new vertex to selected vector lines;merge;Merge selected vector lines;break;Break/split vector lines;select;Select lines and print their ID's;catadd;Set new categories to selected vector features for defined layer;catdel;Delete categories from selected vector features for defined layer;copy;Copy selected features;snap;Snap vector features in given threshold;flip;Flip direction of selected vector lines;connect;Connect two lines;zbulk;Z bulk-labeling (automated assignment of z coordinate to vector lines);chtype;Change feature type (point<->centroid, line<->boundary)"
-#~ msgstr "create;Erzeuge ein neue (leere) Vektorkarte;add;Fügt neue Feature zu einer existierenden Vektorkarte hinzu;delete;Entfernt selektierte Feature von einer Vektorkarte;move;Verschiebt selektierte Feature in einer Vektorkarte;vertexmove;Verschiebt einen Vertex selektierter Vektorlinien;vertexdel;Entfernt einen Vertex aus selektierten Vektorlinien;vertexadd;Fügt einen neuen Vertex zu selektierten Vektorlinien hinzu;merge;Vereinigt selektierte Vektorlinien;break;Teilt Vektorlinien;select;Selektiert Linien und gibt ihre ID aus;catadd;Vergiebt neue Kategorien für selektierte Vektorfeature eines bestimmten Layers;catdel;Löscht Kategorien von selektierten Vektorfeatures eines bestimmten Layers;copy;Kopiert selektierte Feature;snap;Snap Vektorfeature innerhalb des angegebenen Schwellwertes;flip;Drehe die Richtung selektierter Vektorlinien um;connect;Verbinde zwei Linien;zbulk;Z-Massen-Beschriftung (automatisierte Zuweisung der Z Koordinate zu Vektorlinien);chtype;Ändere den Typ des Features(Punkt<->Zentroid, Linie<->Grenze)"
+#~ msgstr "create;Erzeuge ein neue (leere) Vektorkarte;add;Fügt neue Objekte zu einer existierenden Vektorkarte hinzu;delete;Entfernt selektierte Objekte von einer Vektorkarte;move;Verschiebt selektierte Objekte in einer Vektorkarte;vertexmove;Verschiebt einen Vertex selektierter Vektorlinien;vertexdel;Entfernt einen Vertex aus selektierten Vektorlinien;vertexadd;Fügt einen neuen Vertex zu selektierten Vektorlinien hinzu;merge;Vereinigt selektierte Vektorlinien;break;Teilt Vektorlinien;select;Selektiert Linien und gibt ihre ID aus;catadd;Vergibt neue Kategorien für selektierte Vektorobjekte eines bestimmten Layers;catdel;Löscht Kategorien von selektierten Vektorobjekten eines bestimmten Layers;copy;Kopiert selektierte Feature;snap;Fange Vektorobjekt innerhalb des angegebenen Schwellwertes;flip;Drehe die Richtung selektierter Vektorlinien um;connect;Verbinde zwei Linien;zbulk;Z-Massen-Beschriftung (automatisierte Zuweisung der Z Koordinate zu Vektorlinien);chtype;Ändere den Typ des Features(Punkt<->Zentroid, Linie<->Grenze)"
 
 #~ msgid "ASCII file to be converted to binary vector map"
 #~ msgstr "ASCII-Datei, die in eine Vektorkarte konvertiert werden soll."
@@ -41303,7 +41268,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Lese von der Standardeingabe, wenn nicht angegeben (oder \"-\")."
 
 #~ msgid "Difference in x,y direction for moving feature or vertex"
-#~ msgstr "Differenz in x,y Richtung für das Verschieben eines Features oder Vertex."
+#~ msgstr "Differenz in x,y Richtung für das Verschieben eines Objektes oder Vertex."
 
 #~ msgid "vector, editing, geometry"
 #~ msgstr "Vektor, Editieren, Geometrie"
@@ -41612,7 +41577,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Kopiere die Attributtabelle nicht mit (bitte Parameter 'new' beachten)."
 
 #~ msgid "Layer number (if -1, all features in all layers of given type are extracted)"
-#~ msgstr "Layernummer (wenn -1, dann werden alle Feature in allen Layern des angegebenen Typs extrahiert)."
+#~ msgstr "Layernummer (wenn -1, dann werden alle Objekte in allen Layern des angegebenen Typs extrahiert)."
 
 #~ msgid "Enter -1 to keep original categories or the desired NEW category value"
 #~ msgstr "Geben Sie -1 ein, um die originalen Kategorien beizubehalten oder der erwünschte NEUE Kategoriewert."
@@ -41633,7 +41598,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "%d Kategorien von der Tabelle <%s> geladen."
 
 #~ msgid "Random category count is larger or equal to uniq \"%s\" feature category count %d"
-#~ msgstr "Die Zahl der zufälligen Kategorien ist größer oder gleich der Zahl der eindeutigen \"%s\" Feature Kategorien %d."
+#~ msgstr "Die Zahl der zufälligen Kategorien ist größer oder gleich der Zahl der eindeutigen \"%s\" Objekt-Kategorien %d."
 
 #~ msgid "vector, database, attribute table"
 #~ msgstr "Vektor, Datenbank, Attributtabelle"
@@ -42023,13 +41988,13 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Konvertiert eine GRASS Vektorkarte in ein OGR unterstütztes Vektorformat."
 
 #~ msgid "Feature type(s). Combinations not supported by all output formats. Default: first type found in input."
-#~ msgstr "Feature-Typ(en): Kombinationen der Typen wird nicht von allen Formaten unterstützt. Standard: der erste in der Eingabe gefundene Typ."
+#~ msgstr "Objekt-Typ(en): Kombinationen der Typen wird nicht von allen Formaten unterstützt. Standard: der erste in der Eingabe gefundene Typ."
 
 #~ msgid "OGR format"
 #~ msgstr "OGR-Format."
 
 #~ msgid "Export features with category (labeled) only. Otherwise all features are exported"
-#~ msgstr "Exportiert Vektorfeatures nur mit Kategoriewerten (Labeln). Ansonsten werden alle Objekte exportiert."
+#~ msgstr "Exportiert Vektorobjekte nur mit Kategoriewerten (Labeln). Ansonsten werden alle Objekte exportiert."
 
 #~ msgid "Skipping all boundaries that are not part of an area."
 #~ msgstr "Überspringe alle Grenzen, die nicht zu einer Fläche gehören."
@@ -42101,10 +42066,10 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Spaltenname mit den Arc-Kosten"
 
 #~ msgid "%d features written"
-#~ msgstr "%d Feature geschrieben."
+#~ msgstr "%d Objekte geschrieben."
 
 #~ msgid "overlap;features partially or completely overlap"
-#~ msgstr "overlap; Feature überlappen sich teilweise oder vollständig"
+#~ msgstr "overlap; Objekte überlappen sich teilweise oder vollständig"
 
 #~ msgid "vector, spatial query"
 #~ msgstr "Vektor, räumliche Abfrage"
@@ -42129,7 +42094,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ "%d Vertices aus der Eingabe %d (Vertices des angegebenen Typs) entfernt, z.B. %.2f %%"
 
 #~ msgid "break;break lines at each intersection;rmdupl;remove duplicate geometry features (pay attention to categories!);rmdangle;remove dangles, threshold ignored if < 0;chdangle;change the type of boundary dangle to line, threshold ignored if < 0, input line type is ignored;rmbridge;remove bridges connecting area and island or 2 islands;chbridge;change the type of bridges connecting area and island or 2 islands from boundary to line;snap;snap lines to vertex in threshold;rmdac;remove duplicate area centroids ('type' option ignored);bpol;break (topologically clean) polygons (imported from non topological format, like ShapeFile). Boundaries are broken on each point shared between 2 and more polygons where angles of segments are different;prune;remove vertices in threshold from lines and boundaries, boundary is pruned only if topology is not damaged (new intersection, changed attachement of centroid), first and last segment of the boundary is never changed;rmarea;remove small areas, the longest boundary with adjacent area is removed;rmline;remove all lines or boundaries of zero length, threshold is ignored;rmsa;remove small angles between lines at nodes"
-#~ msgstr "break;Teilt Linien an jeder Überschneidung;rmdupl;Entfernt doppelte Geometrie-Feature (Achten Sie auf die Kategorien!);rmdangle;Entfernt Überstände (dangles), Schwellwert wird ignoriert, wenn <0;chdangle;Ändert den Typ eines Überstands (dangle) zu einer Linie, Schwellwert wird ignoriert, wenn <0, Eingabe-Linien-Typ wird ignoriert;rmbridge;Entfernt Brücken, die eine Fläche und eine Insel oder 2 Inseln verbindet;chbridge;Ändert den Typ einer Brücke, die eine Fläche und eine Insel oder 2 Inseln verbindet von Grenze zu Linie;snap;Snapped Linien auf Vertices innerhalb des Schwellwertes;rmdac;Entfernt doppelte Zentroide (Option 'type' wird ignoriert);bpol;Teilt (topologisch sauber) Polygone (importiert aus nicht topologischen Formaten, wie z.B. ShapeFile). Grenzen werden an jedem Punkt geteilt, der 2 oder mehr Polygonen gemeinsam ist und die Winkel der Segmente verschieden sind.;prune;Entfernt Vertices innerhalb des Schwellwertes von Linien und Grenzen. Grenzen werden nur gesäubert, wenn die Topologie nicht beschädigt wird (neue Überschneidungen, veränderte Zuordnung von Zentroiden), das erste und letzte Segment einer Grenze wird nie geändert;rmarea;Entfernt kleine Flächen, die längste Grenze mit einer benachbarten Fläche wird entfernt;rmline;Entfernt alle Linien und Grenzen mit der Länge null, Schwellwert wird ignoriert;rmsa;Entfernt spitze Winkel zwischen Linien an einem Knoten"
+#~ msgstr "break;Teilt Linien an jeder Überschneidung;rmdupl;Entfernt doppelte Geometrie-Feature (Achten Sie auf die Kategorien!);rmdangle;Entfernt Überstände (dangles), Schwellwert wird ignoriert, wenn <0;chdangle;Ändert den Typ eines Überstands (dangle) zu einer Linie, Schwellwert wird ignoriert, wenn <0, Eingabe-Linien-Typ wird ignoriert;rmbridge;Entfernt Brücken, die eine Fläche und eine Insel oder 2 Inseln verbindet;chbridge;Ändert den Typ einer Brücke, die eine Fläche und eine Insel oder 2 Inseln verbindet von Grenze zu Linie;snap;Richtet Linien an Vertices innerhalb des Schwellwertes aus;rmdac;Entfernt doppelte Zentroide (Option 'type' wird ignoriert);bpol;Teilt (topologisch sauber) Polygone (importiert aus nicht topologischen Formaten, wie z.B. ShapeFile). Grenzen werden an jedem Punkt geteilt, der 2 oder mehr Polygonen gemeinsam ist und die Winkel der Segmente verschieden sind.;prune;Entfernt Vertices innerhalb des Schwellwertes von Linien und Grenzen. Grenzen werden nur gesäubert, wenn die Topologie nicht beschädigt wird (neue Überschneidungen, veränderte Zuordnung von Zentroiden), das erste und letzte Segment einer Grenze wird nie geändert;rmarea;Entfernt kleine Flächen, die längste Grenze mit einer benachbarten Fläche wird entfernt;rmline;Entfernt alle Linien und Grenzen mit der Länge null, Schwellwert wird ignoriert;rmsa;Entfernt spitze Winkel zwischen Linien an einem Knoten"
 
 #~ msgid "Threshold in map units, one value for each tool (default: 0.0[,0.0,...])"
 #~ msgstr "Schwellenwert in Karteneinheiten, einen Wert für jedes Werkzeug (Standard: 0.0[,0.0,...])."
@@ -42387,7 +42352,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Layer wird nur für WHERE SQL Ausdrücke verwendet."
 
 #~ msgid "No features drapped. Check Your computational region and input raster map."
-#~ msgstr "Keine Feature wurden drapiert. Überprüfen Sie die aktuelle Region und die Eingabe-Rasterkarte."
+#~ msgstr "Keine Objekte wurden drapiert. Überprüfen Sie die aktuelle Region und die Eingabe-Rasterkarte."
 
 #~ msgid "vector, network, connectivity"
 #~ msgstr "Vektor, Netzwerk, Konnektivität"
@@ -43005,7 +42970,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "GRASS Tabellenname"
 
 #~ msgid "Set color rules for features in a vector using a numeric attribute column."
-#~ msgstr "Bestimme Farbregeln für Feature einer Vektorkarte unter Verwendung einer numerischen Spalte der Attributtabelle."
+#~ msgstr "Bestimme Farbregeln für die Objekte einer Vektorkarte unter Verwendung einer numerischen Spalte der Attributtabelle."
 
 #~ msgid "vector, color table"
 #~ msgstr "Vektor, Farbtabellen"
@@ -44088,9 +44053,8 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgid "wtrshed pass %d"
 #~ msgstr "Einzugsgebiet Durchgang %d"
 
-#, fuzzy
 #~ msgid "Name for output ARC-GRID map (use out=- for stdout)"
-#~ msgstr "Name der Ausgabe ARCGRID-Datei (verwende out=- für stdout)"
+#~ msgstr "Name der Ausgabe ARC-GRID-Datei (verwende out=- für stdout)"
 
 #~ msgid "Creates/modifies the color table associated with a raster map layer."
 #~ msgstr "Erzeugt/verändert die Farbtabelle einer Rasterkarte."
@@ -44163,9 +44127,6 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 
 #~ msgid "Name for raster map holding reject threshold results"
 #~ msgstr "Rasterkarte mit den aufgrund des Schwellwertes ausgemusterten Resultaten."
-
-#~ msgid "Solar elevation in degrees"
-#~ msgstr "Sonnenhöhe in Grad"
 
 #~ msgid "Remove selected files from specified group"
 #~ msgstr "Lösche die ausgewählten Dateien aus der angegebenen Gruppe."
@@ -44291,7 +44252,7 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgstr "Nicht interpretierbarer Breitengrad in Spalte <%d>: %s"
 
 #~ msgid "Populates database values from vector features."
-#~ msgstr "Füllt die Datenbank mit Werten der Vektor-Feature."
+#~ msgstr "Füllt die Datenbank mit Werten der Vektorobjekte."
 
 #~ msgid "In print mode prints totals for options: length,area,count"
 #~ msgstr "Im Print-Modus werden die Optionen Länge, Fläche und Anzahl ausgegeben."
@@ -44302,9 +44263,8 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgid "%d polylines stored in vector map <%s@%s>"
 #~ msgstr "%d Polylinien in der Vektorkarte <%s@%s> gespeichert."
 
-#, fuzzy
 #~ msgid "add;add a new category;del;delete all categories of given layer;chlayer;change layer number (e.g. layer=3,1 changes layer 3 to layer 1);sum;add the value specified by cat option to the current category value;report;print report (statistics), in shell style: layer type count min max;print;print category values, more cats in the same layer are separated by '/';layers;print only layer numbers"
-#~ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines gegebenen Layers;chlayer;Ändere die Layer-Nummer (z.B. layer=3,1 ändert von Layer 3 auf Layer 1);sum;Addiert den Wert spezifiziert in der Option 'cat' zu dem aktuellen Kategoriewert;report;Gebe einen Bericht (Statistiken ) im Shell-Skript-Stil: Layer Typ Anzahl Min Max;print;Gebe Kategoriewerte aus, mehere cats im selben Layer werden durch '/' getrennt"
+#~ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines gegebenen Layers;chlayer;Ändere die Layer-Nummer (z.B. layer=3,1 ändert von Layer 3 auf Layer 1);sum;Addiert den in 'cat' angegeben Wert zu dem aktuellen Kategoriewert;report;Gebe einen Bericht  im Shellskript-Stil aus (Statistiken ): Layer Typ Anzahl Min Max;print;Gebe Kategoriewerte aus, mehrere cats im selben Layer werden durch '/' getrennt;layers;gebe nur Layer Nummern aus"
 
 #~ msgid "Name of the raster map used as mask"
 #~ msgstr "Name der Rasterkarte, die als Maske benutzt werden soll"
@@ -44318,13 +44278,11 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 #~ msgid "vector, import, conversion"
 #~ msgstr "Vektor, Import, Konvertierung"
 
-#, fuzzy
 #~ msgid "Count points in areas, calculate statistics."
-#~ msgstr "Spalte, für die Statistiken berechnet werden sollen (muss numerisch sein)."
+#~ msgstr "Zähle Punkte in Flächen, berechne Statistiken."
 
-#, fuzzy
 #~ msgid "creating spatial index"
-#~ msgstr "Erzeuge räumlichen Index..."
+#~ msgstr "Erzeuge räumlichen Index"
 
 #~ msgid "Name of input vector map containing lines"
 #~ msgstr "Namde der Eingabe-Vektorkarte mit Linien."
@@ -44406,3 +44364,42 @@ msgstr "add;Füge eine neue Kategorie hinzu;del;Lösche alle Kategorien eines ge
 
 #~ msgid "Name of input vector points map"
 #~ msgstr "Name der Eingabe-Vektorkarte mit Punkten."
+
+#~ msgid "Required only if 'metfile' not given (recommended by sanity)"
+#~ msgstr "Nur notwendig, wenn 'metfile' nicht angegeben (vernünftigerweise)"
+
+#~ msgid "mss1;Landsat_1 MSS;mss2;Landsat_2 MSS;mss3;Landsat_3 MSS;mss4;Landsat_4 MSS;mss5;Landsat_5 MSS;tm4;Landsat_4 TM;tm5;Landsat_5 TM;tm7;Landsat_7 ETM+;ot8;Landsat_8 OLI/TIRS"
+#~ msgstr "mss1;Landsat_1 MSS;mss2;Landsat_2 MSS;mss3;Landsat_3 MSS;mss4;Landsat_4 MSS;mss5;Landsat_5 MSS;tm4;Landsat_4 TM;tm5;Landsat_5 TM;tm7;Landsat_7 ETM+;ot8;Landsat_8 OLI/TIRS"
+
+#~ msgid "Required only if 'method' is any DOS"
+#~ msgstr "Nur notwendig, wenn 'method' ist irgendwas mit DOS"
+
+#~ msgid "Required only if 'method' is DOS3"
+#~ msgstr "Nur notwendig, wenn 'method' ist DOS3"
+
+#~ msgid "Output at-sensor radiance instead reflectance for all bands"
+#~ msgstr "Ausgabe der Strahlung am Sensor anstatt der Reflexion für alle Kanäle"
+
+#~ msgid "Input raster maps use as extension the number of the band instead the code"
+#~ msgstr "Eingabe-Rasterkarten verwenden die Nummer des Kanals anstatt des Codes"
+
+#~ msgid "Lacking '%s' and/or '%s' for this satellite"
+#~ msgstr "Vermisse '%s' und/oder '%s' für diesen Satelliten"
+
+#~ msgid "Use '-' to enter instructions from keyboard"
+#~ msgstr "Verwenden Sie '-' für eine Eingabe über die Tastatur"
+
+#~ msgid "Only possible from the PERMANENT mapset"
+#~ msgstr "Nur möglich aus im Mapset PERMANENT"
+
+#~ msgid "Errors were encountered during the import"
+#~ msgstr "Es sind während des Imports Fehler aufgetreten"
+
+#~ msgid "Try to import again, snapping with at least %g: 'snap=%g'"
+#~ msgstr "Versuchen Sie den Import nochmals, Fangtoleranz mindestens %g: 'snap=%g'"
+
+#~ msgid "Joins a database table to a vector map table."
+#~ msgstr "Verbindet Datenbanktabelle mit der Attributtabelle einer Vektorkarte."
+
+#~ msgid "Updates a column in the attribute table connected to a vector map."
+#~ msgstr "Aktualisiert eine Spalte der Attributtabelle einer Vektorkarte."
