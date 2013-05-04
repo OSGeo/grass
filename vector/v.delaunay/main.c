@@ -182,6 +182,7 @@ int main(int argc, char *argv[])
 	    Vect_write_line(&Out, GV_CENTROID, Points, Cats);
 	}
     }
+    Vect_build_partial(&Out, GV_BUILD_NONE); /* build topo from scratch */
     Vect_build(&Out);
     Vect_close(&Out);
 
