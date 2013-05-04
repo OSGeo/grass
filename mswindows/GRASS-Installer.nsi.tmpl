@@ -584,8 +584,14 @@ Section "GRASS" SecGRASS
 	
 	;Install demolocation into the GIS_DATABASE directory
 	SetOutPath "$GIS_DATABASE\demolocation"
-	File /r ${DEMOLOCATION_PATH}\*.*
-	
+	File /r "$DEMOLOCATION_PATH"\*.*
+	RMDir /r "$GIS_DATABASE\demolocation\.svn"
+	RMDir /r "$GIS_DATABASE\demolocation\PERMANENT\.svn"
+	RMDir /r "$GIS_DATABASE\demolocation\PERMANENT\vector\.svn"
+	RMDir /r "$GIS_DATABASE\demolocation\PERMANENT\vector\mysites\.svn"
+	RMDir /r "$GIS_DATABASE\demolocation\PERMANENT\vector\point\.svn"
+	RMDir /r "$GIS_DATABASE\demolocation\PERMANENT\dbf\.svn"
+
 	;add msys.bat into the INSTALL_DIR\msys directory
 	SetOutPath "$INSTALL_DIR\msys"
 	File /r ${MSYS_BATCH}	
