@@ -2247,8 +2247,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 volumes.append(item)
             elif self.tree.GetLayerInfo(item, key = 'type') == 'vector':
                 vectors.append(item)
-        if not rasters and not self.constants:
-            return _("At least one raster map required")
+        ### if not rasters and not self.constants:
+        ###     return _("At least one raster map required")
         # elevation_map/elevation_value
         if self.constants:
             subcmd = "elevation_value="
@@ -2513,7 +2513,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
     def OnNvizCmd(self):
         """!Generate and write command to command output"""
-        self.log.WriteLog(self.NvizCmdCommand(), switchPage = True)
+        self.log.WriteLog(self.NvizCmdCommand(), priority = 3)
         
     def SaveToFile(self, FileName, FileType, width, height):
         """!This draws the DC to a buffer that can be saved to a file.
