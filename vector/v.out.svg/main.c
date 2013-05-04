@@ -33,6 +33,10 @@
 #define G_Lines  "G_Lines"
 #define G_Points "G_Points"
 
+#define TYPE_POINT    1
+#define TYPE_LINE     2
+#define TYPE_POLY     3
+
 FILE *fpsvg;
 
 static int mk_path(struct line_pnts *Points, int precision);
@@ -43,7 +47,7 @@ static int print_escaped_for_xml(char *str);
 
 int main(int argc, char *argv[])
 {
-    int i, j, precision, field;
+    int i, j, precision, field, type, nlines;
     int do_attr = 0, attr_cols[8], attr_size = 0, db_open = 0, cnt = 0;
 
     double width, radius;
@@ -110,6 +114,16 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
+    if (type_opt->answer[0] == 'l') {
+        type = TYPE_LINE;
+    }
+    else {
+        if (type_opt->answer[2] == 'l')
+            type = TYPE_POLY;
+        else
+            type = TYPE_POINT;
+    }
+            
     /* override coordinate precision if any */
     precision = atof(prec_opt->answer);
     if (precision < 0) {
@@ -195,23 +209,29 @@ int main(int argc, char *argv[])
     fprintf(fpsvg, "<title>v.out.svg %s %s</title>\n", in_opt->answer,
 	    out_opt->answer);
 
+    nlines = Vect_get_num_lines(&In);
+    
     /* extract areas if any or requested */
-    if (G_strcasecmp(type_opt->answer, "poly") == 0) {
+    if (type == TYPE_POLY) {
 	if (Vect_get_num_areas(&In) == 0) {
-	    G_warning(_("No areas found, skipping type=poly"));
+	    G_warning(_("No areas found, skipping %"), "type=poly");
 	}
 	else {
+            int nareas;
+            
+            nareas = Vect_get_num_areas(&In);
 	    /* extract area as paths */
 	    fprintf(fpsvg,
 		    " <g id=\"%s\" fill=\"#CCC\" stroke=\"#000\" stroke-width=\"%.*f\" >\n",
 		    G_Areas, precision, width);
-	    for (i = 1; i <= Vect_get_num_areas(&In); i++) {
+	    for (i = 1; i <= nareas; i++) {
+		G_percent(i, nareas, 5);
+
 		/* skip areas without centroid */
 		if (Vect_get_area_centroid(&In, i) == 0) {
 		    G_warning(_("Skipping area %d without centroid"), i);
 		    continue;
 		}
-		G_percent(i, Vect_get_num_areas(&In), 10);
 
 		/* extract attribs, parse area */
 		Vect_get_area_cats(&In, i, Cats);
@@ -235,23 +255,28 @@ int main(int argc, char *argv[])
 		cnt += 1;
 	    }
 	    fprintf(fpsvg, " </g>\n");
-	    G_message(_("Extracted %d areas"), cnt);
+	    G_message(_("%d areas extracted"), cnt);
 	}
     }
+    
     /* extract points if requested */
-    if (G_strcasecmp(type_opt->answer, "point") == 0) {
+    if (type == TYPE_POINT) {
 	if (Vect_get_num_primitives(&In, GV_POINTS) == 0) {
-	    G_warning(_("No points found, skipping type=point"));
+	    G_warning(_("No points found, skipping %s"), "type=point");
 	}
 	else {
 	    /* extract points as circles */
 	    fprintf(fpsvg, " <g id=\"%s\" fill=\"#FC0\" stroke=\"#000\" "
 		    "stroke-width=\"%.*f\" >\n", G_Points, precision, width);
-	    for (i = 1; i <= Vect_get_num_primitives(&In, GV_POINTS); i++) {
-		G_percent(i, Vect_get_num_primitives(&In, GV_POINTS), 10);
-		Vect_read_line(&In, Points, Cats, i);
+	    for (i = 1; i <= nlines; i++) {
+		G_percent(i, nlines, 5);
+                
+		if (!(Vect_read_line(&In, Points, Cats, i) & GV_POINTS))
+                    continue;
+                
 		if (field != -1 && !Vect_cat_get(Cats, field, NULL))
 		    continue;
+                
 		for (j = 0; j < Points->n_points; j++) {
 		    fprintf(fpsvg, "  <circle ");
 		    if (Cats->n_cats > 0) {
@@ -266,21 +291,28 @@ int main(int argc, char *argv[])
 
 	    }
 	    fprintf(fpsvg, " </g>\n");
-	    G_message(_("Extracted %d points"), cnt);
+	    G_message(_("%d points extracted"), cnt);
 	}
     }
+    
     /* extract lines if requested */
-    if (G_strcasecmp(type_opt->answer, "line") == 0) {
+    if (type == TYPE_LINE) {
 	if (Vect_get_num_primitives(&In, GV_LINES) == 0) {
-	    G_warning(_("No lines found, skipping type=line"));
+	    G_warning(_("No lines found, skipping %s"), "type=line");
 	}
 	else {
 	    /* extract lines as paths */
 	    fprintf(fpsvg, " <g id=\"%s\" fill=\"none\" stroke=\"#000\" "
 		    "stroke-width=\"%.*f\" >\n", G_Lines, precision, width);
-	    for (i = 1; i <= Vect_get_num_primitives(&In, GV_LINES); i++) {
-		G_percent(i, Vect_get_num_primitives(&In, GV_LINES), 10);
-		Vect_read_line(&In, Points, Cats, i);
+	    for (i = 1; i <= nlines; i++) {
+		G_percent(i, nlines, 5);
+                
+		if (!(Vect_read_line(&In, Points, Cats, i) & GV_LINES))
+                    continue;
+                
+                if (field != -1 && !Vect_cat_get(Cats, field, NULL))
+		    continue;
+                
 		fprintf(fpsvg, "  <path ");
 		if (Cats->n_cats > 0) {
 		    mk_attribs(Cats->cat[0], Fi, Driver, Table,
@@ -293,7 +325,7 @@ int main(int argc, char *argv[])
 		cnt += 1;
 	    }
 	    fprintf(fpsvg, " </g>\n");
-	    G_message(_("Extracted %d lines"), cnt);
+	    G_message(_("%d lines extracted"), cnt);
 	}
     }
     /* finish code */
@@ -307,8 +339,6 @@ int main(int argc, char *argv[])
 
     /* close SVG-file */
     fclose(fpsvg);
-
-    G_done_msg(" ");
     
     exit(EXIT_SUCCESS);
 }
@@ -344,7 +374,6 @@ static int mk_attribs(int cat, struct field_info *Fi, dbDriver * Driver,
     dbString dbstring;
     dbColumn *Column;
     dbCursor cursor;
-    dbValue *Value;
 
     /* include cat in any case */
     fprintf(fpsvg, "gg:cat=\"%d\" ", cat);
@@ -375,7 +404,6 @@ static int mk_attribs(int cat, struct field_info *Fi, dbDriver * Driver,
 
 	for (i = 0; i < attr_size; i++) {
 	    Column = db_get_table_column(Table, attr_cols[i]);
-	    Value = db_get_column_value(Column);
 	    db_convert_column_value_to_string(Column, &dbstring);
 	    strcpy(buf, db_get_column_name(Column));
 	    fprintf(fpsvg, "gg:%s=\"", G_tolcase(buf));
