@@ -163,10 +163,10 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnCmdAbort.SetToolTipString(_("Abort running command"))
         self.btnCmdAbort.Enable(False)
         self.btnCmdProtocol = wx.ToggleButton(parent = self.panelOutput, id = wx.ID_ANY,
-                                              label = _("&Protocol"),
+                                              label = _("&Log file"),
                                               size = self.btnCmdClear.GetSize())
-        self.btnCmdProtocol.SetToolTipString(_("Toggle to save list of executed commands into file; "
-                                               "content saved when switching off."))
+        self.btnCmdProtocol.SetToolTipString(_("Toggle to save list of executed commands into "
+                                               "a file; content saved when switching off."))
         
         if not self._gcstyle & GC_PROMPT:
             self.btnCmdClear.Hide()
@@ -392,7 +392,7 @@ class GConsoleWindow(wx.SplitterWindow):
                 GError(_("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {'path': path, 'error': e})
             finally:
                 output.close()
-            message = _("Commands output saved into '%s'") % path
+            message = _("Command output saved into '%s'") % path
             self.showNotification.emit(message = message)
         
         dlg.Destroy()
@@ -429,12 +429,12 @@ class GConsoleWindow(wx.SplitterWindow):
         event.Skip()
 
     def CmdProtocolSave(self):
-        """Save commands protocol into the file"""
+        """Save list of manually entered commands into a text log file"""
         if not hasattr(self, 'cmdFileProtocol'):
             return # it should not happen
         
         try:
-            output = open(self.cmdFileProtocol, "w")
+            output = open(self.cmdFileProtocol, "a")
             cmds = self.cmdPrompt.GetCommands()
             output.write('\n'.join(cmds))
             if len(cmds) > 0:
@@ -445,7 +445,7 @@ class GConsoleWindow(wx.SplitterWindow):
         finally:
             output.close()
         
-        message = _("Commands protocol saved into '%s'") % self.cmdFileProtocol
+        message = _("Command log saved to '%s'") % self.cmdFileProtocol
         self.showNotification.emit(message = message)
         del self.cmdFileProtocol
         
@@ -460,10 +460,10 @@ class GConsoleWindow(wx.SplitterWindow):
             self.cmdPrompt.ClearCommands()
             # ask for the file
             dlg = wx.FileDialog(self, message = _("Save file as..."),
-                                defaultFile = "grass_cmd_protocol.txt",
+                                defaultFile = "grass_cmd_log.txt",
                                 wildcard = _("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") % 
                                             {'txt': _("Text files"), 'files': _("Files")},
-                                style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+                                style = wx.SAVE)
             if dlg.ShowModal() == wx.ID_OK:
                 self.cmdFileProtocol = dlg.GetPath()
             else:
