@@ -584,7 +584,7 @@ Section "GRASS" SecGRASS
 	
 	;Install demolocation into the GIS_DATABASE directory
 	SetOutPath "$GIS_DATABASE\demolocation"
-	File /r "$DEMOLOCATION_PATH"\*.*
+	File /r ${DEMOLOCATION_PATH}\*.*
 	RMDir /r "$GIS_DATABASE\demolocation\.svn"
 	RMDir /r "$GIS_DATABASE\demolocation\PERMANENT\.svn"
 	RMDir /r "$GIS_DATABASE\demolocation\PERMANENT\vector\.svn"
