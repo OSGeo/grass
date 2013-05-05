@@ -712,8 +712,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
     if (Vect_legal_filename(name) < 0) {
-        G_warning(_("Unable to create vector map <%s>: name is not SQL compliant"),
-            name);
+        G_fatal_error(_("Unable to create vector map <%s>. Name is not SQL compliant."),
+                      name);
         return -1;
     }
 
