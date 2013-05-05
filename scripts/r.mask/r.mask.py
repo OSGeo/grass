@@ -8,7 +8,7 @@
 #               Converted to Python by Glynn Clements
 #               Markus Metz
 # PURPOSE:      Facilitates creation of raster MASK
-# COPYRIGHT:	(C) 2005-2012 by the GRASS Development Team
+# COPYRIGHT:	(C) 2005-2013 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -31,7 +31,8 @@
 #%option
 #% key: maskcats
 #% type: string
-#% description: Raster values to use for mask (format: 1 2 3 thru 7 *)
+#% label: Raster values to use for mask
+#% description: format: 1 2 3 thru 7 *
 #% answer: *
 #% guisection: Raster
 #%end
@@ -115,7 +116,8 @@ def main():
 
             if maskcats != '*' and not remove:
                 if grass.raster_info(raster)['datatype'] != "CELL":
-                    grass.fatal(_("Raster map %s must be integer for maskcats parameter") % raster)
+                    grass.fatal(_("The raster map <%s> must be integer (CELL type) "
+                                  " in order to use the 'maskcats' parameter") % raster)
 
             p = grass.feed_command('r.reclass', input = raster, output = 'MASK', overwrite = True, rules = '-')
             p.stdin.write("%s = 1" % maskcats)
@@ -158,18 +160,17 @@ def main():
 	    tmp = "r_mask_%d" % os.getpid()
 	    grass.run_command('g.rename', rast = ('MASK', tmp), quiet = True)
             grass.message(_("Creating inverted raster MASK..."))
-	    grass.mapcalc("MASK=if(isnull($tmp),1,null())", tmp = tmp)
+	    grass.mapcalc("MASK = if(isnull($tmp), 1, null())", tmp = tmp)
 	    grass.verbose(_("Inverted raster MASK created"))
 	else:
 	    grass.verbose(_("Raster MASK created"))
 
-        grass.message(_("All subsequent raster operations will be limited to MASK area. ") +
-                      "Removing or renaming raster map named MASK will " +
-                      "restore raster operations to normal.")
+        grass.message(_("All subsequent raster operations will be limited to "
+                        "the MASK area. Removing or renaming raster map named "
+                        "'MASK' will restore raster operations to normal."))
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     tmp = tmp_hull = None
     atexit.register(cleanup)
     main()
-
