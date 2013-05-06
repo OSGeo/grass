@@ -91,8 +91,11 @@ class Info(object):
         self.layer = layer
 
     def __enter__(self):
-        self.open('r')
-        return self
+        if self.exist():
+            self.open('r')
+            return self
+        else:
+            raise ValueError('Vector not found.')
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
@@ -263,12 +266,12 @@ class Info(object):
 
     def exist(self):
         """Return if the Vector exists or not"""
-        if self._name:
-            self.mapset = functions.get_mapset_vector(self._name, self.mapset)
-        else:
-            return False
-        if self.mapset:
-            return True
+        if self.name:
+            if self.mapset == '':
+                mapset = functions.get_mapset_vector(self.name, self.mapset)
+                self.mapset = mapset if mapset else ''
+                return True if mapset else False
+            return bool(functions.get_mapset_vector(self.name, self.mapset))
         else:
             return False
 

@@ -188,8 +188,11 @@ class RasterAbstractBase(object):
             self.info = Info(self.name, self.mapset)
 
     def __enter__(self):
-        self.open('r')
-        return self
+        if self.exist():
+            self.open('r')
+            return self
+        else:
+            raise ValueError("Raster not found.")
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
@@ -303,8 +306,8 @@ class RasterAbstractBase(object):
         if self.name:
             if self.mapset == '':
                 mapset = functions.get_mapset_raster(self.name, self.mapset)
-                self.mapset = mapset
-                return True
+                self.mapset = mapset if mapset else ''
+                return True if mapset else False
             return bool(functions.get_mapset_raster(self.name, self.mapset))
         else:
             return False
