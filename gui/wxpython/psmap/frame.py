@@ -2018,6 +2018,11 @@ class PsMapBufferedWindow(wx.Window):
     def DrawBitmap(self, pdc, filePath, rotation, bbox):
         """!Draw bitmap using PIL"""
         pImg = PILImage.open(filePath)
+        if sys.platform == 'win32' and \
+           'eps' in os.path.splitext(filePath)[1].lower():
+               import types
+               pImg.load = types.MethodType(loadPSForWindows, pImg)
+        
         if rotation:
             # get rid of black background
             pImg = pImg.convert("RGBA")
@@ -2226,60 +2231,4 @@ class PsMapBufferedWindow(wx.Window):
         """! Scale rectangle"""
         return wx.Rect(rect.GetLeft()*scale, rect.GetTop()*scale,
                        rect.GetSize()[0]*scale, rect.GetSize()[1]*scale)   
-    
 
-# hack for Windows, loading EPS works only on Unix
-# these functions are taken from EpsImagePlugin.py
-def loadPSForWindows(self):
-    # Load EPS via Ghostscript
-    if not self.tile:
-        return
-    self.im = GhostscriptForWindows(self.tile, self.size, self.fp)
-    self.mode = self.im.mode
-    self.size = self.im.size
-    self.tile = []
-
-def GhostscriptForWindows(tile, size, fp):
-    """Render an image using Ghostscript (Windows only)"""
-    # Unpack decoder tile
-    decoder, tile, offset, data = tile[0]
-    length, bbox = data
-
-    import tempfile, os
-
-    file = tempfile.mkstemp()[1]
-
-    # Build ghostscript command - for Windows
-    command = ["gswin32c",
-               "-q",                    # quite mode
-               "-g%dx%d" % size,        # set output geometry (pixels)
-               "-dNOPAUSE -dSAFER",     # don't pause between pages, safe mode
-               "-sDEVICE=ppmraw",       # ppm driver
-               "-sOutputFile=%s" % file # output file
-              ]
-
-    command = string.join(command)
-
-    # push data through ghostscript
-    try:
-        gs = os.popen(command, "w")
-        # adjust for image origin
-        if bbox[0] != 0 or bbox[1] != 0:
-            gs.write("%d %d translate\n" % (-bbox[0], -bbox[1]))
-        fp.seek(offset)
-        while length > 0:
-            s = fp.read(8192)
-            if not s:
-                break
-            length = length - len(s)
-            gs.write(s)
-        status = gs.close()
-        if status:
-            raise IOError("gs failed (status %d)" % status)
-        im = PILImage.core.open_ppm(file)
-
-    finally:
-        try: os.unlink(file)
-        except: pass
-
-    return im

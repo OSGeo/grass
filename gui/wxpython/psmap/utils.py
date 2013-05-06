@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 """
 import os
 import wx
+import string
 from math import ceil, floor, sin, cos, pi
 
 try:
@@ -420,3 +421,59 @@ def BBoxAfterRotation(w, h, angle):
     width = int(ceil(abs(x_max) + abs(x_min)))
     height = int(ceil(abs(y_max) + abs(y_min)))
     return width, height
+
+# hack for Windows, loading EPS works only on Unix
+# these functions are taken from EpsImagePlugin.py
+def loadPSForWindows(self):
+    # Load EPS via Ghostscript
+    if not self.tile:
+        return
+    self.im = GhostscriptForWindows(self.tile, self.size, self.fp)
+    self.mode = self.im.mode
+    self.size = self.im.size
+    self.tile = []
+
+def GhostscriptForWindows(tile, size, fp):
+    """Render an image using Ghostscript (Windows only)"""
+    # Unpack decoder tile
+    decoder, tile, offset, data = tile[0]
+    length, bbox = data
+
+    import tempfile, os
+
+    file = tempfile.mkstemp()[1]
+
+    # Build ghostscript command - for Windows
+    command = ["gswin32c",
+               "-q",                    # quite mode
+               "-g%dx%d" % size,        # set output geometry (pixels)
+               "-dNOPAUSE -dSAFER",     # don't pause between pages, safe mode
+               "-sDEVICE=ppmraw",       # ppm driver
+               "-sOutputFile=%s" % file # output file
+              ]
+
+    command = string.join(command)
+
+    # push data through ghostscript
+    try:
+        gs = os.popen(command, "w")
+        # adjust for image origin
+        if bbox[0] != 0 or bbox[1] != 0:
+            gs.write("%d %d translate\n" % (-bbox[0], -bbox[1]))
+        fp.seek(offset)
+        while length > 0:
+            s = fp.read(8192)
+            if not s:
+                break
+            length = length - len(s)
+            gs.write(s)
+        status = gs.close()
+        if status:
+            raise IOError("gs failed (status %d)" % status)
+        im = PILImage.core.open_ppm(file)
+
+    finally:
+        try: os.unlink(file)
+        except: pass
+
+    return im
