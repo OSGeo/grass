@@ -4311,6 +4311,9 @@ class ImageDialog(PsmapDialog):
         if os.path.splitext(file)[1].lower() == '.eps':
             try:
                 pImg = PILImage.open(file)
+                if sys.platform == 'win32':
+                    import types
+                    pImg.load = types.MethodType(loadPSForWindows, pImg)
                 img = PilImageToWxImage(pImg)
             except IOError, e:
                 GError(message = _("Unable to read file %s") % file)
@@ -4368,6 +4371,7 @@ class ImageDialog(PsmapDialog):
             dc.SelectObject(wx.NullBitmap)
         else:
             self.imagePanel.image['preview'].SetBitmap(bitmap)
+        self.imagePanel.Refresh()
             
     def SetSizeInfoLabel(self, image):
         """!Update image size label"""
@@ -4383,10 +4387,10 @@ class ImageDialog(PsmapDialog):
         dc.SelectObject(buffer)
         dc.SetBrush(wx.WHITE_BRUSH)
         dc.Clear()
+        dc.SelectObject(wx.NullBitmap)
         mask = wx.Mask(buffer, wx.WHITE)
         buffer.SetMask(mask)
         self.imagePanel.image['preview'].SetBitmap(buffer)
-        dc.SelectObject(wx.NullBitmap)
         
     def update(self): 
         # epsfile
