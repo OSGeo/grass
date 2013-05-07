@@ -1522,9 +1522,6 @@
       <module-item name="i.latlong">
         <label>LatLong map</label>
       </module-item>
-      <module-item name="i.sunhours">
-        <label>Sunshine hours</label>
-      </module-item>
     </items>
   </toolbox>
   <toolbox name="SatelliteImagesProducts">
