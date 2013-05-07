@@ -218,7 +218,7 @@ class PsmapDialog(wx.Dialog):
         """!Add widgets for setting position relative to paper and to map"""
         panel.position = dict()
         positionLabel = wx.StaticText(panel, id = wx.ID_ANY, label = _("Position is given:"))
-        panel.position['toPaper'] = wx.RadioButton(panel, id = wx.ID_ANY, label = _("relatively to paper"), style = wx.RB_GROUP)
+        panel.position['toPaper'] = wx.RadioButton(panel, id = wx.ID_ANY, label = _("relative to paper"), style = wx.RB_GROUP)
         panel.position['toMap'] = wx.RadioButton(panel, id = wx.ID_ANY, label = _("by map coordinates"))
         panel.position['toPaper'].SetValue(dialogDict['XY'])
         panel.position['toMap'].SetValue(not dialogDict['XY'])
