@@ -1,0 +1,42 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.sunhours</em> calculates sun elevation and sun azimuth angles for
+the given time of day and each grid cell in the current region. 
+Additionally, the photoperiod (sunshine hours) can be calculated.
+
+<p>
+Sun elevation, height, height angle, or solar altitude angle is the
+angle in degrees between the horizon and a line that points from the
+site towards the centre of the sun.
+<p>
+The sun azimuth angle is here defined as the azimuth angle in degrees
+of the sun from due north in a clockwise direction.
+<p>
+The time used here is defined such that 12:00 (high noon) is the time
+when the sun has reached its highest point in the sky at the current site,
+unless the <em>-t</em> flag is used in which case time is interpreted as 
+Greenwich standard time.
+<p>
+If a <em>sunhour</em> output map is specified, the module calculates 
+sunshine hours for the given day. This option requires both Greenwhich 
+standard time (<em>-t</em> flag) and the solpos algorithm of NREL 
+(<em>-s</em> flag).
+
+<h2>EXAMPLES</h2>
+
+Calculate sun's elevation angle map for 2010-10-11 at 14:00h solar time:
+<div class="code"><pre>
+r.sunhours elevation=sun_elev year=2010 month=10 day=11 hour=14 minute=00
+</pre></div>
+<p>
+
+Calculate photoperiod of day of year 1 (1st January) 2012
+<div class="code"><pre>
+r.sunhours -s sunhour=photoperiod_doy_001 year=2012 day=1
+</pre></div>
+
+<h2>AUTHOR</h2>
+
+Markus Metz
+
+<p><i>Last changed: $Date$</i>
