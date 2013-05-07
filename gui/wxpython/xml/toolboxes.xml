@@ -736,7 +736,10 @@
       <module-item name="r.sunmask">
         <label>Shadows map</label>
       </module-item>
-    </items>
+      <module-item name="r.sunhours">
+        <label>Sunshine hours and solar angles</label>
+      </module-item>
+   </items>
   </toolbox>
   <toolbox name="TerrainAnalysis">
     <label>Terrain analysis</label>
