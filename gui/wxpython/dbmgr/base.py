@@ -827,7 +827,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
                 else:
                     sqlFile.write(sql + ';')
                 sqlFile.write(os.linesep)
-                sqlFile.close()
+            sqlFile.close()
 
             driver   = self.dbMgrData['mapDBInfo'].layers[self.selLayer]["driver"]
             database = self.dbMgrData['mapDBInfo'].layers[self.selLayer]["database"]
