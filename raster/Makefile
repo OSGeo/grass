@@ -97,6 +97,7 @@ SUBDIRS = \
 	r.statistics3 \
 	r.stats \
 	r.sun \
+	r.sunhours \
 	r.sunmask \
 	r.support \
 	r.support.stats \
