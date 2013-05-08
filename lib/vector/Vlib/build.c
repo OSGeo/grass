@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2010, 2012 by the GRASS Development Team
+   (C) 2001-2010, 2012-2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -25,7 +25,12 @@
 
 #include "local_proto.h"
 
+#ifdef HAVE_POSTGRES
+#include "pg_local_proto.h"
+#endif
+
 #define SEP "-----------------------------------\n"
+
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
 static int format()
@@ -51,6 +56,16 @@ static int (*Build_array[]) () = {
 #endif
 };
 
+/* for qsort */
+
+typedef struct {
+    int i;
+    double size;
+    struct bound_box box;
+} BOX_SIZE;
+
+static int sort_by_size(const void *, const void *);
+
 /*!
    \brief Build area on given side of line (GV_LEFT or GV_RIGHT)
 
@@ -64,12 +79,11 @@ static int (*Build_array[]) () = {
  */
 int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 {
-    int j, area, isle, n_lines, line, direction;
-    static int first = TRUE;
+    int area, isle, n_lines;
+
     struct Plus_head *plus;
-    struct P_line *BLine;
-    static struct line_pnts *Points, *APoints;
     struct bound_box box;
+    static struct line_pnts *APoints = NULL;
     plus_t *lines;
     double area_size;
 
@@ -77,42 +91,29 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 
     G_debug(3, "Vect_build_line_area() line = %d, side = %d", iline, side);
 
-    if (first) {
-	Points = Vect_new_line_struct();
+    if (!APoints)
 	APoints = Vect_new_line_struct();
-	first = FALSE;
-    }
-
+    
+    /* get area */
     area = dig_line_get_area(plus, iline, side);
     if (area != 0) {
+        /* -> areas already exists, skip */
         G_debug(3, "  area/isle = %d -> skip", area);
         return 0;
     }
     
+    /* get lines which forms the area */
     n_lines = dig_build_area_with_line(plus, iline, side, &lines);
     G_debug(3, "  n_lines = %d", n_lines);
     if (n_lines < 1) {
 	return 0;
     }				/* area was not built */
 
-    /* Area or island ? */
-    Vect_reset_line(APoints);
-    for (j = 0; j < n_lines; j++) {
-	line = abs(lines[j]);
-	BLine = plus->Line[line];
-	G_debug(3, "  line[%d] = %d, offset = %lu", j, line,
-		(unsigned long) BLine->offset);
-	Vect_read_line(Map, Points, NULL, line);
-	if (lines[j] > 0)
-	    direction = GV_FORWARD;
-	else
-	    direction = GV_BACKWARD;
-	Vect_append_points(APoints, Points, direction);
-	APoints->n_points--;	/* skip last point, avoids duplicates */
-    }
+    /* get line points which forms a boundary of an area */
+    Vect__get_area_points(Map, lines, n_lines, APoints);
     dig_line_box(APoints, &box);
-    APoints->n_points++;	/* close polygon */
 
+    /* Area or island ? */
     dig_find_area_poly(APoints, &area_size);
 
     /* area_size = dig_find_poly_orientation(APoints); */
@@ -148,27 +149,6 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     }
     return 0;
 }
-
-
-/* for qsort */
-
-typedef struct {
-    int i;
-    double size;
-    struct bound_box box;
-} BOX_SIZE;
-
-static int sort_by_size(const void *a, const void *b)
-{
-    BOX_SIZE *as = (BOX_SIZE *)a;
-    BOX_SIZE *bs = (BOX_SIZE *)b;
-    
-    if (as->size < bs->size)
-	return -1;
-
-    return (as->size > bs->size);
-}
-
 
 /*!
    \brief Find area outside island
@@ -415,18 +395,15 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
 int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
 {
     int i, isle;
-    static int first = TRUE;
-    static struct boxlist *List;
+    static struct boxlist *List = NULL;
     struct Plus_head *plus;
 
     G_debug(3, "Vect_attach_isles()");
       
     plus = &(Map->plus);
 
-    if (first) {
+    if (!List)
 	List = Vect_new_boxlist(FALSE);
-	first = FALSE;
-    }
 
     Vect_select_isles_by_box(Map, box, List);
     G_debug(3, "  number of isles to attach = %d", List->n_values);
@@ -1300,3 +1277,15 @@ int Vect_sidx_dump(const struct Map_info *Map, FILE * out)
 
     return 1;
 }
+
+int sort_by_size(const void *a, const void *b)
+{
+    BOX_SIZE *as = (BOX_SIZE *)a;
+    BOX_SIZE *bs = (BOX_SIZE *)b;
+    
+    if (as->size < bs->size)
+	return -1;
+
+    return (as->size > bs->size);
+}
+

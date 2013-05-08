@@ -53,20 +53,29 @@ struct feat_parts
     int            *idx;     /* index in cache where to start */
 };
 
-/* functions used in *_pg.c files */
-int Vect__execute_pg(PGconn *, const char *);
-int Vect__execute_get_value_pg(PGconn *, const char *);
+/* build_pg.c */
+int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int, struct line_pnts *);
+
+/* read_pg.c */
 SF_FeatureType Vect__cache_feature_pg(const char *, int, int,
                                       struct Format_info_cache *,
                                       struct feat_parts *);
-int Vect__set_initial_query_pg(struct Format_info_pg *, int);
-int Vect__load_plus_pg(struct Map_info *, int);
+int Vect__open_cursor_next_line_pg(struct Format_info_pg *, int);
+int Vect__open_cursor_line_pg(struct Format_info_pg *, int, int);
+int Vect__close_cursor_pg(struct Format_info_pg *);
+int Vect__select_line_pg(struct Format_info_pg *, int, int);
+int Vect__execute_pg(PGconn *, const char *);
+int Vect__execute_get_value_pg(PGconn *, const char *);
 
+/* write_pg.c */
 off_t V2__write_node_pg(struct Map_info *, const struct line_pnts *);
 off_t V2__write_area_pg(struct Map_info *, const struct line_pnts **, int,
                         const struct line_cats *);
-
 int Vect__insert_face_pg(struct Map_info *, int);
+
+/* open_pg.c */
+int Vect__load_plus_pg(struct Map_info *, int);
+int Vect__open_new_pg(struct Map_info *, int);
 
 #endif /* HAVE_POSTGRES */
 

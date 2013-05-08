@@ -3,7 +3,7 @@
 
    \brief Vector library - Building topology for native format
 
-   (C) 2001-2012 by the GRASS Development Team
+   (C) 2001-2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -18,6 +18,8 @@
 #include <sys/types.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
+
+static struct line_pnts *Points;
 
 /*!
    \brief Build topology 
@@ -34,7 +36,6 @@ int Vect_build_nat(struct Map_info *Map, int build)
     int i, s, type, line;
     off_t offset;
     int side, area;
-    struct line_pnts *Points;
     struct line_cats *Cats;
     struct P_line *Line;
     struct P_area *Area;
@@ -55,7 +56,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
     }
 
     /* -> upgrade */
-    Points = Vect_new_line_struct();
+    if (!Points)
+        Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     
     if (plus->built < GV_BUILD_BASE) {
@@ -227,5 +229,51 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	    dig_cidx_add_cat(plus, 0, 0, i, GV_AREA);
     }
 
+    Vect_destroy_cats_struct(Cats);
+    
     return 1;
 }
+
+/*!
+  \brief Get area boundary points (native format)
+  
+  Used by Vect_build_line_area().
+  
+  \param Map pointer to Map_info struct
+  \param lines array of boundary lines
+  \param n_lines number of lines in array
+  \param[out] APoints pointer to output line_pnts struct
+
+  \return number of points
+  \return -1 on error
+*/
+int Vect__get_area_points_nat(struct Map_info *Map, plus_t *lines, int n_lines,
+                              struct line_pnts *APoints)
+{
+    int j, line, direction;
+    struct Plus_head *plus;
+    struct P_line *BLine;
+
+    plus = &(Map->plus);
+    
+    if (!Points)
+        Points = Vect_new_line_struct();
+    
+    Vect_reset_line(APoints);
+    for (j = 0; j < n_lines; j++) {
+	line = abs(lines[j]);
+	BLine = plus->Line[line];
+	G_debug(5, "  line[%d] = %d, offset = %lu", j, line,
+		(unsigned long) BLine->offset);
+	if (0 > Vect_read_line(Map, Points, NULL, line))
+            return -1;
+        
+        direction = lines[j] > 0 ? GV_FORWARD : GV_BACKWARD;
+	Vect_append_points(APoints, Points, direction);
+	APoints->n_points--;	/* skip last point, avoids duplicates */
+    }
+    APoints->n_points++;	/* close polygon */
+
+    return APoints->n_points;
+}
+

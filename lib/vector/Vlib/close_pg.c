@@ -50,20 +50,24 @@ int V1_close_pg(struct Map_info *Map)
         Vect_save_frmt(Map);
     }
 
-    /* close connection */
+    /* clear result */
     if (pg_info->res) {
-        char stmt[DB_SQL_MAX];
-
         PQclear(pg_info->res);
         pg_info->res = NULL;
+    }
 
-        sprintf(stmt, "CLOSE %s_%s%p",
-                pg_info->schema_name, pg_info->table_name, pg_info->conn);
+    /* close open cursor */
+    if (pg_info->cursor_name) {
+        char stmt[DB_SQL_MAX];
+        
+        sprintf(stmt, "CLOSE %s", pg_info->cursor_name);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
-            G_warning(_("Unable to close cursor"));
+            G_warning(_("Unable to close cursor %s"), pg_info->cursor_name);
             return -1;
         }
         Vect__execute_pg(pg_info->conn, "COMMIT");
+        G_free(pg_info->cursor_name);
+        pg_info->cursor_name = NULL;
     }
 
     PQfinish(pg_info->conn);

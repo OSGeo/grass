@@ -46,22 +46,7 @@ int V1_rewind_pg(struct Map_info *Map)
     pg_info->cache.fid = -1;
 
     /* close DB cursor if necessary */
-    if (pg_info->res) {
-        char stmt[DB_SQL_MAX];
-
-        PQclear(pg_info->res);
-        pg_info->res = NULL;
-
-        sprintf(stmt, "CLOSE %s_%s%p",
-                pg_info->schema_name, pg_info->table_name, pg_info->conn);
-        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
-            G_warning(_("Unable to close cursor"));
-            return -1;
-        }
-        Vect__execute_pg(pg_info->conn, "COMMIT");
-    }
-
-    return 0;
+    return Vect__close_cursor_pg(pg_info);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;

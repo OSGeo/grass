@@ -6,6 +6,12 @@
 /* Internal vector library subroutines which are not part of public
    API*/
 
+/* area.c */
+int Vect__get_area_points(const struct Map_info *, const plus_t *, int, struct line_pnts *);
+
+/* build_nat.c */
+int Vect__get_area_points_nat(const struct Map_info *, const plus_t *, int, struct line_pnts *);
+
 /* map.c */
 int Vect__delete(const char *, int);
 
