@@ -21,14 +21,15 @@ Classes:
  - wizard::LocationWizard
  - wizard::WizardWithHelpButton
 
-(C) 2007-2012 by the GRASS Development Team
+(C) 2007-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton
 @author Jachym Cepicky
-@author Martin Landa <landa.martin gmail.com>   
+@author Martin Landa <landa.martin gmail.com>
+@author Hamish Bowman (planetary ellipsoids)
 """
 import os
 import locale
@@ -746,7 +747,7 @@ class ProjParamsPage(TitledPage):
             paramSBSizer.Fit(self.panel)
             self.panel.SetSizer(self.prjParamSizer)
                     
-        if event.GetDirection(): 
+        if event.GetDirection():
             self.prjParamSizer.Clear(True)
             self.paramSBox.SetLabel(_(" Enter parameters for %s projection ") % self.projdesc)
             self.pparam = dict()
@@ -761,7 +762,7 @@ class ProjParamsPage(TitledPage):
                 # default values
                 if param['type'] == 'bool':
                     param['value'] = 0
-                elif param['type'] == 'zone': 
+                elif param['type'] == 'zone':
                     param['value'] = 30 
                     param['desc'] += ' (1-60)'
                 else:
@@ -1081,6 +1082,8 @@ class EllipsePage(TitledPage):
           and self.ellipse not in self.parent.planetary_ellipsoids:
             event.Veto()
 
+        #print self.ellipse, self.ellipsedesc, self.ellipseparams
+
         self.proj4params = ''
         self.GetNext().SetPrev(self)
         self.parent.datumpage.datumparams = ''
@@ -1106,6 +1109,7 @@ class EllipsePage(TitledPage):
             self.ellipsedesc = self.parent.planetary_ellipsoids[self.ellipse][0]
             self.ellipseparams = self.parent.planetary_ellipsoids[self.ellipse][1]
             nextButton.Enable(True)
+        #print self.ellipse, self.ellipsedesc, self.ellipseparams
 
     def OnSearch(self, event):
         """!Search ellipsoid by desc"""
@@ -1386,7 +1390,7 @@ class EPSGPage(TitledPage):
             if not self.epsgcode:
                 event.Veto()
                 return
-            else:              
+            else:
                 # check for datum transforms
                 ret = RunCommand('g.proj',
                                  read = True,
@@ -1441,7 +1445,7 @@ class EPSGPage(TitledPage):
             self.tcode.SetValue('')
             self.searchb.SetValue('')
             self.OnBrowseCodes(None)
-        else:    
+        else:
             try:
                 self.epsgcode, self.epsgdesc, self.epsgparams = \
                         self.epsglist.Search(index=[0,1,2], pattern=value)
@@ -1559,7 +1563,7 @@ class CustomPage(TitledPage):
                 
                 if dlg.ShowModal() == wx.ID_OK:
                     dtrans = dlg.GetTransform()
-                    if len(dtrans) == 0:
+                    if dtrans == '':
                         dlg.Destroy()
                         event.Veto()
                         return _('Datum transform is required.')
@@ -1674,18 +1678,23 @@ class SummaryPage(TitledPage):
         epsgcode = self.parent.epsgpage.epsgcode
         datum = self.parent.datumpage.datum
         dtrans = self.parent.datum_trans
-        
         global coordsys
+
+        #print coordsys,proj4string
         if coordsys in ('proj', 'epsg'):
             if coordsys == 'proj':
+                addl_opts = {}
+                if len(datum) > 0:
+                    addl_opts['datum'] = '%s' % datum
+                    addl_opts['datumtrans'] = dtrans
+
                 ret, projlabel, err = RunCommand('g.proj',
                                                  flags = 'jf',
                                                  proj4 = proj4string,
-                                                 datum = datum,
-                                                 datum_trans = dtrans,
                                                  location = location,
                                                  getErrorMsg = True,
-                                                 read = True)
+                                                 read = True,
+                                                 **addl_opts)
             elif coordsys == 'epsg':
                 ret, projlabel, err = RunCommand('g.proj',
                                                  flags = 'jf',
@@ -1709,6 +1718,7 @@ class SummaryPage(TitledPage):
         projdesc = self.parent.projpage.projdesc
         ellipsedesc = self.parent.ellipsepage.ellipsedesc
         datumdesc = self.parent.datumpage.datumdesc
+        #print projdesc,ellipsedesc,datumdesc
         self.ldatabase.SetLabel(database)
         self.llocation.SetLabel(location)
         self.llocTitle.SetLabel(self.parent.startpage.locTitle)
@@ -1865,7 +1875,7 @@ class LocationWizard(wx.Object):
                 self.grassdatabase = self.startpage.grassdatabase
                 self.georeffile = self.filepage.georeffile
                 # FIXME here was code for setting default region, what for is this if:
-                # if self.altdb == False: 
+                # if self.altdb == False:
                     
             else: # -> error
                 self.wizard.Destroy()
