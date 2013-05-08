@@ -194,8 +194,10 @@ int build_topo(struct Map_info *Map, int build)
         
         /* 4) insert faces & update nodes (containing_face) based on
          * GRASS topology */
+        G_message(_("Updating faces..."));
         nareas = Vect_get_num_areas(Map);
         for (area = 1; area <= nareas; area++) {
+            G_percent(area, nareas, 5);
             if (0 == Vect__insert_face_pg(Map, area)) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return 0;
@@ -224,7 +226,9 @@ int build_topo(struct Map_info *Map, int build)
         }
 
         /* 5) update edges (left and right face) */ 
+        G_message(_("Updating edges..."));
         for (line = 1; line <= plus->n_lines; line++) {
+            G_percent(line, plus->n_lines, 5);
             type = Vect_read_line(Map, NULL, NULL, line); 
             if (type != GV_BOUNDARY)
                 continue;
@@ -274,8 +278,8 @@ int build_topo(struct Map_info *Map, int build)
         int centroid;
         
         G_message(_("Updating TopoGeometry data..."));
-
         for (area = 1; area <= plus->n_areas; area++) {
+            G_percent(area, plus->n_areas, 5);
             centroid = Vect_get_area_centroid(Map, area);
             if (centroid < 1)
                 continue;
@@ -473,4 +477,81 @@ int has_topo_grass(const struct Format_info_pg *pg_info)
     return has_topo;
 }
 
+/*!
+  \brief Get area boundary points (PostGIS Topology)
+  
+  Used by Vect_build_line_area().
+
+  \param Map pointer to Map_info struct
+  \param lines array of boundary lines
+  \param n_lines number of lines in array
+  \param[out] APoints pointer to output line_pnts struct
+
+  \return number of points
+  \return -1 on error
+*/
+int Vect__get_area_points_pg(const struct Map_info *Map, const plus_t *lines, int n_lines,
+                             struct line_pnts *APoints)
+{
+
+    int i, line, direction;
+    size_t stmt_id_size;
+    char *stmt, *stmt_id, buf_id[128];
+    
+    const struct Plus_head *plus;
+    struct Format_info_pg *pg_info;
+    struct P_line *BLine;
+    
+    PGresult *res;
+    
+    plus = &(Map->plus);
+    pg_info = (struct Format_info_pg *)&(Map->fInfo.pg);
+    
+    stmt = NULL;
+    stmt_id_size = DB_SQL_MAX;
+    stmt_id = (char *) G_malloc(stmt_id_size);
+    stmt_id[0] = '\0';
+    
+    Vect_reset_line(APoints);
+
+    for (i = 0; i < n_lines; i++) {
+        if (strlen(stmt_id) + 100 > stmt_id_size) {
+            stmt_id_size = strlen(stmt_id) + DB_SQL_MAX;
+            stmt_id = (char *) G_realloc(stmt_id, stmt_id_size);
+        }
+	line = abs(lines[i]);
+        BLine = plus->Line[line];
+        if (i > 0)
+            strcat(stmt_id, ",");
+        sprintf(buf_id, "%d", (int) BLine->offset);
+        strcat(stmt_id, buf_id);
+    }
+    G_asprintf(&stmt, "SELECT geom FROM \"%s\".edge_data WHERE edge_id IN (%s) "
+               "ORDER BY POSITION(edge_id::text in '%s')", pg_info->toposchema_name,
+               stmt_id, stmt_id);
+    G_free(stmt_id);
+    
+    G_debug(2, "SQL: %s", stmt);
+    res = PQexec(pg_info->conn, stmt);
+    G_free(stmt);
+
+    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
+        PQntuples(res) != n_lines) {
+        if (res)
+            PQclear(res);
+        
+        return -1;
+    }
+    
+    for (i = 0; i < n_lines; i++) {
+        Vect__cache_feature_pg(PQgetvalue(res, i, 0), FALSE, FALSE,
+                               &(pg_info->cache), NULL); /* do caching in readable way */
+	direction = lines[i] > 0 ? GV_FORWARD : GV_BACKWARD;
+	Vect_append_points(APoints, pg_info->cache.lines[0], direction);
+	APoints->n_points--;	/* skip last point, avoids duplicates */
+    }
+    APoints->n_points++;	/* close polygon */
+
+    return APoints->n_points;
+}
 #endif

@@ -568,7 +568,7 @@ struct Format_info_ogr
 struct Format_info_pg
 {
     /*!
-      \brief Connection info string
+      \brief Connection string
     */
     char    *conninfo;
     /*!
@@ -588,19 +588,20 @@ struct Format_info_pg
     */
     char    *fid_column;        
     /*!
-      \brief Geometry column
+      \brief Geometry column (simple feature access)
     */
     char    *geom_column;
     /*!
-      \brief Feature type
+      \brief Feature type (simple feature access)
     */
     SF_FeatureType feature_type;
     /*!
-      \brief Coordinates dimension
+      \brief Coordinates dimension (2D or 3D)
     */
     int      coor_dim;
     /*!
-      \brief SRS ID
+      \brief Spatial reference system id (see spatial_ref_sys
+      table)
     */
     int      srid;
 
@@ -626,9 +627,14 @@ struct Format_info_pg
     void     *conn;
     void     *res;
 #endif
-  
     /*!
-      \brief Next line to be read for sequential access
+      \brief Open cursor
+    */
+    char     *cursor_name;
+    int       cursor_fid;
+    
+    /*!
+      \brief Next line to be read
     */
     int next_line;
 
@@ -637,8 +643,9 @@ struct Format_info_pg
     */
     struct Format_info_cache cache;
     
-    /*!
-      \brief Offset list used for building pseudo-topology
+    /*! 
+      \brief Offset list used for building pseudo-topology (simple
+      features acccess)
     */
     struct Format_info_offset offset;
 

@@ -1027,6 +1027,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     G_debug(3, "load_plus(): n_nodes = %d", plus->n_nodes);
     dig_alloc_nodes(plus, plus->n_nodes);
     for (i = 0; i < plus->n_nodes; i++) {
+        G_debug(5, "node: %d", i);
         id = atoi(PQgetvalue(res, i, 0));
         read_p_node(plus, i + 1, /* node index starts at 1 */
                     id, (const char *) PQgetvalue(res, i, 1), pg_info);

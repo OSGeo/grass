@@ -80,13 +80,13 @@
   Don't change GV_FORMAT_* values, this order is hardcoded in lib
 */
 /*! \brief GRASS native format */
-#define GV_FORMAT_NATIVE     0
-/*! \brief OGR format (for layers linked via v.external) */
-#define GV_FORMAT_OGR        1
+#define GV_FORMAT_NATIVE           0
+/*! \brief OGR format */
+#define GV_FORMAT_OGR              1
 /*! \brief OGR format (direct access) */
-#define GV_FORMAT_OGR_DIRECT 2
-/*! \brief PostGIS format (for layers linked via v.external) */
-#define GV_FORMAT_POSTGIS    3
+#define GV_FORMAT_OGR_DIRECT       2
+/*! \brief PostGIS format */
+#define GV_FORMAT_POSTGIS          3
 
 /*! \brief One table linked to vector map */
 #define GV_1TABLE  0

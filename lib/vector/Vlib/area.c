@@ -18,6 +18,12 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#ifdef HAVE_POSTGRES
+#include "pg_local_proto.h"
+#endif
+
+#include "local_proto.h"
+
 /*!
    \brief Returns polygon array of points (outer ring) of given area
 
@@ -31,11 +37,8 @@
 int Vect_get_area_points(const struct Map_info *Map,
 			 int area, struct line_pnts *BPoints)
 {
-    int i, line, aline, dir;
     const struct Plus_head *Plus;
     struct P_area *Area;
-    static int first_time = 1;
-    static struct line_pnts *Points;
 
     G_debug(3, "Vect_get_area_points(): area = %d", area);
     BPoints->n_points = 0;
@@ -48,35 +51,8 @@ int Vect_get_area_points(const struct Map_info *Map,
 	return -1;		/* error , because we should not read dead areas */
     }
 
-    if (first_time == 1) {
-	Points = Vect_new_line_struct();
-	first_time = 0;
-    }
-
     G_debug(3, "  n_lines = %d", Area->n_lines);
-    for (i = 0; i < Area->n_lines; i++) {
-	line = Area->lines[i];
-	aline = abs(line);
-	G_debug(3, "  append line(%d) = %d", i, line);
-
-	if (0 > Vect_read_line(Map, Points, NULL, aline)) {
-	    G_fatal_error(_("Unable to read line %d"), aline);
-	}
-
-	G_debug(3, "  line n_points = %d", Points->n_points);
-
-	if (line > 0)
-	    dir = GV_FORWARD;
-	else
-	    dir = GV_BACKWARD;
-
-	Vect_append_points(BPoints, Points, dir);
-	if (i != (Area->n_lines - 1))	/* all but not last */
-	    BPoints->n_points--;
-	G_debug(3, "  area n_points = %d", BPoints->n_points);
-    }
-
-    return BPoints->n_points;
+    return Vect__get_area_points(Map, Area->lines, Area->n_lines, BPoints);
 }
 
 /*!
@@ -474,4 +450,20 @@ int Vect_get_area_cat(const struct Map_info *Map, int area, int field)
     }
 
     return -1;
+}
+
+int Vect__get_area_points(const struct Map_info *Map, const plus_t *lines, int n_lines,
+                          struct line_pnts *BPoints)
+{
+    if (Map->format == GV_FORMAT_POSTGIS &&
+        Map->fInfo.pg.toposchema_name) {
+#ifdef HAVE_POSTGRES
+        /* PostGIS Topology */
+        return Vect__get_area_points_pg(Map, lines, n_lines, BPoints);
+#else
+        G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+#endif
+    }
+    /* native format */
+    return Vect__get_area_points_nat(Map, lines, n_lines, BPoints);
 }

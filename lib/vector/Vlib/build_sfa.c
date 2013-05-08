@@ -329,7 +329,7 @@ void build_pg(struct Map_info *Map, int build)
     G_zero(&fparts, sizeof(struct feat_parts));
     
     /* get all features */
-    if (Vect__set_initial_query_pg(pg_info, TRUE) != 0)
+    if (Vect__open_cursor_next_line_pg(pg_info, TRUE) != 0)
         return;
     
     /* scan records */
@@ -340,6 +340,10 @@ void build_pg(struct Map_info *Map, int build)
     for (iFeature = 0; iFeature < nrecords; iFeature++) {
 	/* get feature id */
 	fid  = atoi(PQgetvalue(pg_info->res, iFeature, 1));
+        if (fid < 1)
+            continue; /* PostGIS Topology: skip features with negative
+                       * fid (isles, universal face, ...) */
+
 	wkb_data = PQgetvalue(pg_info->res, iFeature, 0);
 	
 	G_progress(iFeature + 1, 1e4);

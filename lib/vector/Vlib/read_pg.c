@@ -32,6 +32,8 @@
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 
+/* #define USE_CURSOR_RND */
+
 static unsigned char *wkb_data;
 static unsigned int wkb_data_length;
 
@@ -52,6 +54,7 @@ static int error_corrupted_data(const char *);
 static void reallocate_cache(struct Format_info_cache *, int);
 static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
 static int get_centroid(struct Map_info *, int, struct line_pnts *);
+static void error_tuples(struct Format_info_pg *);
 #endif
 
 /*!
@@ -492,76 +495,40 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
     int seq_type;
     int force_type; /* force type (GV_BOUNDARY or GV_CENTROID) for topo access only */
     char *data;
-    char stmt[DB_SQL_MAX];
     
     if (!pg_info->geom_column && !pg_info->topogeom_column) {
         G_warning(_("No geometry or topo geometry column defined"));
         return -1;
     }
-    if (fid < 1) {
-        /* next (read n features) */
-        if (!pg_info->res) {
-            if (Vect__set_initial_query_pg(pg_info, FALSE) == -1)
-                return -1;
-        }
+    if (fid < 1) { /* sequantial access */
+        if (pg_info->cursor_name == NULL &&
+            Vect__open_cursor_next_line_pg(pg_info, FALSE) != 0)
+        return -1;
     }
-    else {
-        /* random access */
+    else {         /* random access */
         if (!pg_info->fid_column && !pg_info->toposchema_name) {
             G_warning(_("Random access not supported. "
                         "Primary key not defined."));
             return -1;
         }
 
-        if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1)
+#ifdef USE_CURSOR_RND
+        if (pg_info->cursor_fid > 0)
+            pg_info->next_line = fid - pg_info->cursor_fid;
+        else
+            pg_info->next_line = 0;
+        
+        if (pg_info->next_line < 0 || pg_info->next_line > CURSOR_PAGE)
+            Vect__close_cursor_pg(pg_info);
+        
+        if (pg_info->cursor_name == NULL &&
+            Vect__open_cursor_line_pg(pg_info, fid, type) != 0)
             return -1;
-
-        if (!pg_info->toposchema_name) {
-            /* simple feature access */
-            sprintf(stmt,
-                    "DECLARE %s_%s%p CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
-                    "WHERE %s = %d", pg_info->schema_name, pg_info->table_name,
-                    pg_info->conn, pg_info->geom_column,
-                    pg_info->schema_name, pg_info->table_name,
-                    pg_info->fid_column, fid);
-        }
-        else {
-            if (!(type & (GV_POINTS | GV_LINES))) {
-                G_warning(_("Unsupported feature type %d"), type);
-                Vect__execute_pg(pg_info->conn, "ROLLBACK");
-                return -1;
-            }
-            
-            if (type & GV_POINTS) {
-                sprintf(stmt,
-                        "DECLARE %s_%s%p CURSOR FOR SELECT geom,containing_face "
-                        " FROM \"%s\".node WHERE node_id = %d",
-                        pg_info->schema_name, pg_info->table_name, pg_info->conn,
-                        pg_info->toposchema_name, fid);
-            }
-            else {
-                sprintf(stmt,
-                        "DECLARE %s_%s%p CURSOR FOR SELECT geom,left_face,right_face "
-                        " FROM \"%s\".edge WHERE edge_id = %d",
-                        pg_info->schema_name, pg_info->table_name, pg_info->conn,
-                        pg_info->toposchema_name, fid);
-            }
-        }
-        G_debug(3, "SQL: %s", stmt);
-        if (Vect__execute_pg(pg_info->conn, stmt) == -1)
-            return -1;
-
-        sprintf(stmt, "FETCH ALL in %s_%s%p",
-                pg_info->schema_name, pg_info->table_name, pg_info->conn);
-        pg_info->res = PQexec(pg_info->conn, stmt);
+#else
         pg_info->next_line = 0;
-    }
-
-    if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
-        PQclear(pg_info->res);
-        G_warning(_("Reading failed: %s"), PQerrorMessage(pg_info->conn));
-        pg_info->res = NULL;
-        return -1;              /* reading failed */
+        if (Vect__select_line_pg(pg_info, fid, type) != 0)
+            return -1;
+#endif
     }
 
     /* do we need to fetch more records ? */
@@ -571,32 +538,24 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
 
         PQclear(pg_info->res);
 
-        sprintf(stmt, "FETCH %d in %s_%s%p", CURSOR_PAGE,
-                pg_info->schema_name, pg_info->table_name, pg_info->conn);
+        sprintf(stmt, "FETCH %d in %s", CURSOR_PAGE, pg_info->cursor_name);
+        G_debug(3, "SQL: %s", stmt);
         pg_info->res = PQexec(pg_info->conn, stmt);
-        if (!pg_info->res) {
-            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
+            error_tuples(pg_info);
             return -1;
         }
         pg_info->next_line = 0;
     }
 
+    G_debug(3, "get_feature(): next_line = %d", pg_info->next_line);
+    
     /* out of results ? */
     if (PQntuples(pg_info->res) == pg_info->next_line) {
-        if (pg_info->res) {
-            PQclear(pg_info->res);
-            pg_info->res = NULL;
-
-            sprintf(stmt, "CLOSE %s_%s%p",
-                    pg_info->schema_name, pg_info->table_name, pg_info->conn);
-            if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
-                Vect__execute_pg(pg_info->conn, "ROLLBACK");
-                G_warning(_("Unable to close cursor"));
-                return -1;
-            }
-            Vect__execute_pg(pg_info->conn, "COMMIT");
-        }
-        return -2;
+        if (Vect__close_cursor_pg(pg_info) != 0)
+            return -1; /* failure */
+        else 
+            return -2; /* nothing to read */
     }
 
     force_type = -1;
@@ -646,19 +605,6 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
     }
     else {
         pg_info->cache.fid = fid;
-
-        PQclear(pg_info->res);
-        pg_info->res = NULL;
-
-        sprintf(stmt, "CLOSE %s_%s%p",
-                pg_info->schema_name, pg_info->table_name, pg_info->conn);
-        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
-            G_warning(_("Unable to close cursor"));
-            return -1;
-        }
-
-        if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
-            return -1;
     }
     
     return pg_info->cache.sf_type;
@@ -1173,33 +1119,41 @@ int error_corrupted_data(const char *msg)
 }
 
 /*!
-   \brief Set initial SQL query for sequential access
-
-   \param pg_info pointer to Format_info_pg struct
-
-   \return 0 on success
-   \return -1 on error
- */
-int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
+  \brief Create select cursor for sequential access (internal use only)
+  
+  Allocated cursor name should be freed by G_free().
+  
+  \param pg_info pointer to Format_info_pg struct
+  \param fetch_all TRUE to fetch all records
+  \param[out] cursor name
+  
+  \return 0 on success
+  \return -1 on failure
+*/
+int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all)
 {
     char stmt[DB_SQL_MAX];
-
+    
     if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1)
         return -1;
-
+    
+    /* set cursor name */
+    G_asprintf(&(pg_info->cursor_name),
+               "%s_%s_%p",  pg_info->schema_name, pg_info->table_name, pg_info->conn);
+    
     if (!pg_info->toposchema_name) {
-        /* simple feature access */
+        /* simple feature access (geom, fid) */
+        /* TODO: start_fid */
         sprintf(stmt,
-                "DECLARE %s_%s%p CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\" ORDER BY %s",
-                pg_info->schema_name, pg_info->table_name, pg_info->conn,
-                pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
+                "DECLARE %s CURSOR FOR SELECT %s,%s FROM \"%s\".\"%s\" ORDER BY %s",
+                pg_info->cursor_name, pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
                 pg_info->table_name, pg_info->fid_column);
     }
     else {
-        /* topology access */
+        /* topology access (geom,fid,type) */
         /* TODO: optimize SQL statement (for points/centroids) */
         sprintf(stmt,
-                "DECLARE %s_%s%p CURSOR FOR "
+                "DECLARE %s CURSOR FOR "
                 "SELECT geom,fid,type FROM ("
                 "SELECT node_id AS fid,geom, %d AS type FROM \"%s\".node WHERE "
                 "containing_face IS NULL AND node_id NOT IN "
@@ -1214,12 +1168,11 @@ int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
                 "UNION ALL SELECT edge_id AS fid, geom, %d AS type FROM \"%s\".edge WHERE "
                 "left_face = 0 AND right_face = 0 UNION ALL SELECT edge_id AS fid, geom, %d AS type FROM "
                 "\"%s\".edge WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY type,fid",
-                pg_info->schema_name, pg_info->table_name, pg_info->conn, GV_POINT,
+                pg_info->cursor_name, GV_POINT,
                 pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name,
                 GV_CENTROID, pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name,
-                GV_LINE, pg_info->toposchema_name, GV_BOUNDARY, pg_info->toposchema_name); 
+                GV_LINE, pg_info->toposchema_name, GV_BOUNDARY, pg_info->toposchema_name);
     }
-    G_debug(2, "SQL: %s", stmt);
     
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -1227,19 +1180,178 @@ int Vect__set_initial_query_pg(struct Format_info_pg *pg_info, int fetch_all)
     }
 
     if (fetch_all)
-        sprintf(stmt, "FETCH ALL in %s_%s%p",
-                pg_info->schema_name, pg_info->table_name, pg_info->conn);
+        sprintf(stmt, "FETCH ALL in %s", pg_info->cursor_name);
     else
-        sprintf(stmt, "FETCH %d in %s_%s%p", CURSOR_PAGE,
-                pg_info->schema_name, pg_info->table_name, pg_info->conn);
-    pg_info->res = PQexec(pg_info->conn, stmt);
-    if (!pg_info->res) {
-        Vect__execute_pg(pg_info->conn, "ROLLBACK");
-        G_warning(_("Unable to get features"));
+        sprintf(stmt, "FETCH %d in %s", CURSOR_PAGE, pg_info->cursor_name);
+    G_debug(3, "SQL: %s", stmt);
+    pg_info->res = PQexec(pg_info->conn, stmt); /* fetch records from select cursor */
+    if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
+        error_tuples(pg_info);
         return -1;
     }
     pg_info->next_line = 0;
 
+    return 0;
+}
+
+/*!
+  \brief Open select cursor for random access (internal use only)
+
+  Fetch number of feature (given by CURSOR_PAGE) starting with
+  <em>fid</em>.
+
+  Allocated cursor name should be freed by G_free().
+
+  \param pg_info pointer to Format_info_pg struct
+  \param fid feature id to get
+  \param type feature type
+
+  \return 0 on success
+  \return -1 on failure
+*/
+int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
+{
+    char stmt[DB_SQL_MAX];
+    
+    G_debug(3, "Vect__open_cursor_line_pg(): fid range = %d-%d, type = %d",
+            fid, fid + CURSOR_PAGE, type);
+
+    if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1)
+        return -1;
+
+    pg_info->cursor_fid = fid;
+    G_asprintf(&(pg_info->cursor_name),
+               "%s_%s_%d_%p",  pg_info->schema_name, pg_info->table_name, fid, pg_info->conn);
+    
+    if (!pg_info->toposchema_name) {
+        /* simple feature access (geom) */
+        sprintf(stmt,
+                "DECLARE %s CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
+                "WHERE %s BETWEEN %d AND %d ORDER BY %s", pg_info->cursor_name,
+                pg_info->geom_column, pg_info->schema_name, pg_info->table_name,
+                pg_info->fid_column, fid, fid + CURSOR_PAGE, pg_info->fid_column);
+    }
+    else {
+        /* topological access */
+        if (!(type & (GV_POINTS | GV_LINES))) {
+            G_warning(_("Unsupported feature type %d"), type);
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+        
+        if (type & GV_POINTS) {
+            /* points (geom,containing_face) */
+            sprintf(stmt,
+                    "DECLARE %s CURSOR FOR SELECT geom,containing_face "
+                    " FROM \"%s\".node WHERE node_id BETWEEN %d AND %d ORDER BY node_id",
+                    pg_info->cursor_name,
+                    pg_info->toposchema_name, fid, fid + CURSOR_PAGE);
+        }
+        else {
+            /* edges (geom,left_face,right_face) */
+            sprintf(stmt,
+                    "DECLARE %s CURSOR FOR SELECT geom,left_face,right_face "
+                    " FROM \"%s\".edge WHERE edge_id BETWEEN %d AND %d ORDER BY edge_id",
+                    pg_info->cursor_name,
+                    pg_info->toposchema_name, fid, fid + CURSOR_PAGE);
+        }
+    }
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+    pg_info->next_line = 0;
+
+    sprintf(stmt, "FETCH ALL in %s", pg_info->cursor_name);
+    pg_info->res = PQexec(pg_info->conn, stmt);
+    if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
+        error_tuples(pg_info);
+        return -1;
+    }
+    
+    return 0;
+}
+
+/*!
+  \brief Close select cursor
+
+  \param pg_info pointer to Format_info_pg struct
+
+  \return 0 on success
+  \return -1 on failure
+*/ 
+int Vect__close_cursor_pg(struct Format_info_pg *pg_info)
+{
+    if (pg_info->res) {
+        PQclear(pg_info->res);
+        pg_info->res = NULL;
+    }
+    
+    if (pg_info->cursor_name) {
+        char stmt[DB_SQL_MAX];
+        
+        sprintf(stmt, "CLOSE %s", pg_info->cursor_name);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            G_warning(_("Unable to close cursor %s"), pg_info->cursor_name);
+            return -1;
+        }
+        Vect__execute_pg(pg_info->conn, "COMMIT");
+        G_free(pg_info->cursor_name);
+        pg_info->cursor_name = NULL;
+    }
+    
+    return 0;
+}
+
+/*!
+  \brief Select feature (internal use only)
+
+  \param pg_info pointer to Format_info_pg struct
+  \param fid feature id to get
+  \param type feature type
+
+  \return 0 on success
+  \return -1 on failure
+*/
+int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
+{
+    char stmt[DB_SQL_MAX];
+    
+    if (!pg_info->toposchema_name) {
+        /* simple feature access */
+        sprintf(stmt,
+                "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
+                pg_info->geom_column, pg_info->schema_name, pg_info->table_name,
+                pg_info->fid_column, fid);
+    }
+    else {
+        /* topological access */
+        if (!(type & (GV_POINTS | GV_LINES))) {
+            G_warning(_("Unsupported feature type %d"), type);
+            return -1;
+        }
+        
+        if (type & GV_POINTS) {
+            sprintf(stmt,
+                    "SELECT geom,containing_face FROM \"%s\".node WHERE node_id = %d",
+                    pg_info->toposchema_name, fid);
+        }
+        else {
+            sprintf(stmt,
+                    "SELECT geom,left_face,right_face FROM \"%s\".edge WHERE edge_id = %d",
+                    pg_info->toposchema_name, fid);
+        }
+    }
+    G_debug(3, "SQL: %s", stmt);
+    
+    pg_info->next_line = 0;
+    
+    pg_info->res = PQexec(pg_info->conn, stmt);
+    if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
+        error_tuples(pg_info);
+        return -1;
+    }
+    
     return 0;
 }
 
@@ -1264,7 +1376,7 @@ int Vect__execute_pg(PGconn * conn, const char *stmt)
     result = PQexec(conn, stmt);
     if (!result || PQresultStatus(result) != PGRES_COMMAND_OK) {
         PQclear(result);
-
+        
         G_warning(_("Execution failed: %s"), PQerrorMessage(conn));
         return -1;
     }
@@ -1414,5 +1526,17 @@ int get_centroid(struct Map_info *Map, int centroid,
     }
     
     return GV_CENTROID;
+}
+
+void error_tuples(struct Format_info_pg *pg_info)
+{
+    if (pg_info->res) {
+        PQclear(pg_info->res);
+        pg_info->res = NULL;
+    }
+    
+    Vect__execute_pg(pg_info->conn, "ROLLBACK");
+    G_warning(_("Unable to read PostGIS features\n%s"),
+              PQresultErrorMessage(pg_info->res));
 }
 #endif
