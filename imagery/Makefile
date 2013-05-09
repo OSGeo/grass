@@ -32,7 +32,6 @@ SUBDIRS = \
 	i.rgb.his \
 	i.segment \
 	i.smap \
-	i.sunhours \
 	i.target \
 	i.topo.corr \
 	i.pca \
