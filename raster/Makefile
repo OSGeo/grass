@@ -75,6 +75,7 @@ SUBDIRS = \
 	r.recode \
 	r.region \
 	r.regression.line \
+	r.regression.multi \
 	r.report \
 	r.resamp.bspline \
 	r.resamp.filter \
