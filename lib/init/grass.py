@@ -769,6 +769,9 @@ def check_shell():
         os.environ['OSTYPE'] = "cygwin"
     else:
         sh = os.path.basename(os.getenv('SHELL'))
+        if windows and sh:
+            sh = os.path.splitext(sh)[0]
+        
         if sh == "ksh":
             shellname = "Korn Shell"
         elif sh == "csh":
@@ -781,18 +784,18 @@ def check_shell():
             shellname = "Bourne Shell"
         elif sh == "zsh":
             shellname = "Z Shell"
-        elif sh == "cmd.exe":
+        elif sh == "cmd":
             shellname = "Command Shell"
         else:
             shellname = "shell"
     
     if sh in ['csh', 'tcsh']:
         grass_env_file = os.path.join(grass_config_dir, 'cshrc')
-    elif sh in ['bash', 'msh', 'cygwin']:
+    elif sh in ['bash', 'msh', 'cygwin', 'sh']:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
     elif sh == 'zsh':
         grass_env_file = os.path.join(grass_config_dir, 'zshrc')
-    elif sh == 'cmd.exe':
+    elif sh == 'cmd':
         grass_env_file = os.path.join(grass_config_dir, 'env.bat')
     else:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
