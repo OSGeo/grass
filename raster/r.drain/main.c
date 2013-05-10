@@ -50,7 +50,7 @@
 #include "local.h"
 
 /* should probably be updated to a pointer array & malloc/realloc as needed */
-#define MAX_POINTS 1024
+#define POINTS_INCREMENT 1024
 
 /* define a data structure to hold the point data */
 struct point
@@ -67,7 +67,9 @@ int main(int argc, char **argv)
     int fe, fd, dir_fd;
     int i, have_points = 0;
     int new_id;
-    int nrows, ncols, points_row[MAX_POINTS], points_col[MAX_POINTS], npoints;
+    int nrows, ncols;
+    int *points_row = NULL, *points_col = NULL, npoints;
+    int increment_count;
     int cell_open(), cell_open_new();
     int map_id, dir_id;
     char map_name[GNAME_MAX], new_map_name[GNAME_MAX], dir_name[GNAME_MAX];
@@ -220,10 +222,11 @@ int main(int argc, char **argv)
     ncols = Rast_window_cols();
 
     /* calculate true cell resolution */
-    m = (struct metrics *)G_malloc(nrows * sizeof(struct metrics));
-
-    if (m == NULL)
-	G_fatal_error(_("Metrics allocation"));
+    m = (struct metrics *)G_malloc(nrows * sizeof(struct metrics));    
+    points_row = (int*)G_calloc(POINTS_INCREMENT, sizeof(int));
+    points_col = (int*)G_calloc(POINTS_INCREMENT, sizeof(int));
+    
+    increment_count = 1;
     npoints = 0;
     if (coordopt->answer) {
 	for (i = 0; coordopt->answers[i] != NULL; i += 2) {
@@ -241,8 +244,12 @@ int main(int argc, char **argv)
 	    points_row[npoints] = start_row;
 	    points_col[npoints] = start_col;
 	    npoints++;
-	    if (npoints >= MAX_POINTS)
-		G_fatal_error(_("Too many start points"));
+	    if (npoints == POINTS_INCREMENT * increment_count)
+	    {
+		increment_count++;
+		points_row = (int*)G_realloc(points_row, POINTS_INCREMENT * increment_count * sizeof(int));
+		points_col = (int*)G_realloc(points_col, POINTS_INCREMENT * increment_count * sizeof(int));
+	    }
 	    have_points = 1;
 	}
     }
@@ -293,8 +300,12 @@ int main(int argc, char **argv)
 		points_row[npoints] = start_row;
 		points_col[npoints] = start_col;
 		npoints++;
-		if (npoints >= MAX_POINTS)
-		    G_fatal_error(_("Too many start points"));
+		if (npoints == POINTS_INCREMENT * increment_count)
+		{
+		    increment_count++;
+		    points_row = (int*)G_realloc(points_row, POINTS_INCREMENT * increment_count * sizeof(int));
+		    points_col = (int*)G_realloc(points_col, POINTS_INCREMENT * increment_count * sizeof(int));
+		}
 		have_points = 1;
 	    }
 	    Vect_close(&In);
@@ -572,6 +583,10 @@ int main(int argc, char **argv)
     unlink(tempfile2);
     G_free(in_buf);
     G_free(out_buf);
+    if(points_row)
+	G_free(points_row);
+    if(points_col)
+	G_free(points_col);
 
     if (costmode == 1) {
 	close(dir_fd);
