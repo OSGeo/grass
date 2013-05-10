@@ -374,6 +374,14 @@ def import_stds(
 
         temporal_type = init["temporal_type"]
         semantic_type = init["semantic_type"]
+        relative_time_unit = None
+        
+        if temporal_type == "relative":        
+            if "relative_time_unit" not in init:
+                core.fatal(_("Key word %s not found in init file.") %("relative_time_unit"))
+            relative_time_unit = init["relative_time_unit"]
+            sp.set_relative_time_unit(relative_time_unit)
+        
         core.verbose(_("Create space time %s dataset.") %
                      sp.get_new_map_instance(None).get_type())
 
@@ -387,7 +395,7 @@ def import_stds(
         register_maps_in_space_time_dataset(
             type=sp.get_new_map_instance(None).get_type(),
             name=output, file=list_file_name, start="file", 
-            end="file", dbif=None, fs=fs)
+            end="file", unit=relative_time_unit, dbif=None, fs=fs)
 
         os.chdir(old_cwd)
     except:

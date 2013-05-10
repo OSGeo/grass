@@ -317,6 +317,8 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     string += "%s=%s\n" % ("format", format_) 
     string += "%s=%s\n" % ("temporal_type", sp.get_temporal_type())
     string += "%s=%s\n" % ("semantic_type", sp.get_semantic_type())
+    if sp.is_time_relative():
+	string += "%s=%s\n" % ("relative_time_unit", sp.get_relative_time_unit())
     string += "%s=%s\n" % ("number_of_maps", sp.metadata.get_number_of_maps())
     north, south, east, west, top, bottom = sp.get_spatial_extent()
     string += "%s=%s\n" % ("north", north)
