@@ -1,6 +1,8 @@
 #!/bin/sh
 # Test the import of space time raster datasets
 
+export GRASS_OVERWRITE=1
+
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
 # raster with r.mapcalc and create a space time raster datasets
@@ -9,12 +11,12 @@ g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 mkdir test
 
-r.mapcalc --o expr="prec_1 = rand(0, 550)"
-r.mapcalc --o expr="prec_2 = rand(0, 450)"
-r.mapcalc --o expr="prec_3 = rand(0, 320)"
-r.mapcalc --o expr="prec_4 = rand(0, 510)"
-r.mapcalc --o expr="prec_5 = rand(0, 300)"
-r.mapcalc --o expr="prec_6 = rand(0, 650)"
+r.mapcalc expr="prec_1 = rand(0, 550)"
+r.mapcalc expr="prec_2 = rand(0, 450)"
+r.mapcalc expr="prec_3 = rand(0, 320)"
+r.mapcalc expr="prec_4 = rand(0, 510)"
+r.mapcalc expr="prec_5 = rand(0, 300)"
+r.mapcalc expr="prec_6 = rand(0, 650)"
 
 n1=`g.tempfile pid=1 -d` 
 
@@ -29,10 +31,10 @@ EOF
 
 eval `g.gisenv`
 
-t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
+t.create type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register -i type=rast input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
+t.register -i type=rast input=precip_abs1 file="${n1}"
 
 t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 format=GTiff workdir=test
 t.rast.export input=precip_abs1 output=strds_export.tar.gz compression=gzip format=GTiff workdir=test
