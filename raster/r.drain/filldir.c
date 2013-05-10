@@ -120,7 +120,7 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd, struct metrics *m)
     }
     G_percent(1, 1, 1);
     advance_band3(fe, bnd);
-    build_one_row(i, nl, bnd->ns, bnd, dir, m[i]);
+    build_one_row(nl - 1, nl, bnd->ns, bnd, dir, m[nl - 1]);
     write(fd, dir, bufsz);
 
     G_free(dir);
