@@ -29,7 +29,6 @@ int main(int argc, char **argv)
     struct Map_info In, Out;
     struct bound_box box;
     int type;
-    int ret;
     
     G_gisinit(argv[0]);
 
@@ -100,10 +99,9 @@ int main(int argc, char **argv)
 	}
     }
 
-    ret = 0;
     if (opt.reverse->answer) {
 	/* 3d -> 2d */
-	ret = trans3d(&In, &Out, type, opt.field->answer, opt.column->answer);
+        trans3d(&In, &Out, type, opt.field->answer, opt.column->answer);
     }
     else {
 	/* 2d -> 3d */
@@ -112,11 +110,7 @@ int main(int argc, char **argv)
 	if (opt.height->answer) {
 	    height = atof(opt.height->answer);
 	}
-	ret = trans2d(&In, &Out, type, height, opt.field->answer, opt.column->answer);
-    }
-
-    if (ret < 0) {
-	G_fatal_error(_("%s failed"), G_program_name());
+	trans2d(&In, &Out, type, height, opt.field->answer, opt.column->answer);
     }
 
     if (!opt.reverse->answer && !opt.table->answer) {
