@@ -44,6 +44,11 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
     field = Vect_get_field_number(In, field_name);
 
     if (zcolumn) {
+        if (field == -1) {
+            G_warning(_("Invalid layer number %d, assuming 1"), field);
+            field = 1;
+        }
+
 	Fi = Vect_get_field(Out, field);
 	if (!Fi) {
 	    G_warning(_("Database connection not defined for layer <%s>"),
@@ -73,10 +78,12 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 	db_begin_transaction(driver);
 
 	/* select existing categories (layer) to array (array is sorted) */
+        G_message(_("Reading categories..."));
 	ncats = db_select_int(driver, Fi->table, Fi->key, NULL, &cats);
 	G_debug(3, "Existing categories: %d", ncats);
     }
 
+    G_message(_("Transforming features..."));
     line = 1;
     while (1) {
 	ltype = Vect_read_next_line(In, Points, Cats);
@@ -88,9 +95,7 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 	    break;
 	}
 
-	if (G_verbose() > G_verbose_min() && (line - 1) % 1000 == 0) {
-	    fprintf(stderr, "%7d\b\b\b\b\b\b\b", (line - 1));
-	}
+        G_progress(line, 1000);
 
 	if (!(ltype & type))
 	    continue;
@@ -137,9 +142,7 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 	Vect_write_line(Out, ltype, Points, Cats);
 	line++;
     }
-
-    if (G_verbose() > G_verbose_min())
-	fprintf(stderr, "\r");
+    G_progress(1, 1);
 
     if (zcolumn) {
 	db_commit_transaction(driver);
