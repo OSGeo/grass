@@ -15,7 +15,7 @@ i.e. the geographic extent of the map is described by the outer bounds of
 all cells within the map.
 
 <p>
-As a general rule in GRASS:
+As a general rule in GRASS GIS:
 <ol>
 <li> Raster output maps have their bounds and resolution equal to those
 of the current computational region.
@@ -204,7 +204,14 @@ algebra methods.
 The <a href="r.resamp.stats.html">r.resamp.stats</a> command resamples raster
 map layers using various aggregation methods, the <a href="r.statistics.html">r.statistics</a>
 command aggregates one map based on a second map. 
-<a href="r.resamp.interp.html">r.resamp.interp</a> resamples raster map layers using interpolation.
+<a href="r.resamp.interp.html">r.resamp.interp</a> resamples raster map 
+layers using interpolation.
+
+<h3>Regression analysis</h3>
+
+Both linear (<a href="r.regression.line.html">r.regression.line</a>) and
+multiple regression (<a href="r.regression.multi.html">r.regression.multi</a>)
+are supported.
 
 <h3>Hydrologic modeling toolbox</h3>
 
@@ -243,7 +250,7 @@ names like "RASTER3D", "voxel", "volume", "GRID3D" or "3d cell" are common.
 double-precision one "double".
 
 <p>
-GRASS raster format is architecture independent and portable between
+The GRASS GIS raster format is architecture independent and portable between
 32bit and 64bit machines.
 
 <p>
