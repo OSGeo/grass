@@ -1,11 +1,13 @@
 <h2>DESCRIPTION</h2>
 
-<p><em>v.extrude</em> creates faces, kernels, volumes or 3D lines based
+<p>
+<em>v.extrude</em> creates faces, kernels, volumes or 3D lines based
 on 2D vector objects, i.e. points become 3D vertical lines, lines to
 3D lines, boundaries to faces and areas to volumes (composition of
 faces and kernel).
 
-<p>If the flag <b>-t</b> is used then 3D vector objects follow the
+<p>
+If the flag <b>-t</b> is used then 3D vector objects follow the
 elevation model by using individual elevation values for the vertices
 and nodes. This can be useful for models of large objects (forest
 stands).
@@ -25,6 +27,7 @@ v.extrude input=houses output=houses3D elevation=dem hcolumn=height type=area
 </pre></div>
 
 <h3>Convert 2D lines to 3D with fixed height</h3>
+
 <div class="code"><pre>
 v.extrude input=lines output=lines3D elevation=dem height=0 type=line
 </pre></div>
@@ -32,10 +35,17 @@ v.extrude input=lines output=lines3D elevation=dem height=0 type=line
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.transform.html">v.transform</a>,
+<a href="v.extrude.html">v.extrude</a>,
+<a href="v.drape.html">v.drape</a>
+</em>
+
+<p>
+<em>
 <a href="wxGUI.nviz.html">wxGUI 3D viewer</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Jachym Cepicky,<br>
 Updated by Martin Landa, FBK-irst, Italy
