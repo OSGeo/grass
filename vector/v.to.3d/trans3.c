@@ -16,11 +16,8 @@ static int srch(const void *, const void *);
    \param type feature type to be transformed
    \param field layer number
    \param zcolumn attribute column where to store height
-
-   \return number of writen features
-   \return -1 on error
  */
-int trans3d(struct Map_info *In, struct Map_info *Out, int type,
+void trans3d(struct Map_info *In, struct Map_info *Out, int type,
 	    const char *field_name, const char *zcolumn)
 {
     int ltype, line;
@@ -51,28 +48,25 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 
 	Fi = Vect_get_field(Out, field);
 	if (!Fi) {
-	    G_warning(_("Database connection not defined for layer <%s>"),
-		      field_name);
-	    return -1;
+	    G_fatal_error(_("Database connection not defined for layer <%s>"),
+                          field_name);
 	}
 
 	driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	if (!driver) {
-	    G_warning(_("Unable to open database <%s> by driver <%s>"),
-		      Fi->database, Fi->driver);
-	    return -1;
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                          Fi->database, Fi->driver);
 	}
-
+        db_set_error_handler_driver(driver);
+        
 	/* column type must numeric */
 	ctype = db_column_Ctype(driver, Fi->table, zcolumn);
 	if (ctype == -1) {
-	    G_warning(_("Column <%s> not found in table <%s>"),
-		      zcolumn, Fi->table);
-	    return -1;
+	    G_fatal_error(_("Column <%s> not found in table <%s>"),
+                          zcolumn, Fi->table);
 	}
 	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
-	    G_warning(_("Column must be numeric"));
-	    return -1;
+	    G_fatal_error(_("Column must be numeric"));
 	}
 
 	db_begin_transaction(driver);
@@ -88,8 +82,7 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
     while (1) {
 	ltype = Vect_read_next_line(In, Points, Cats);
 	if (ltype == -1) {
-	    G_warning(_("Unable to read vector map"));
-	    return -1;
+	    G_fatal_error(_("Unable to read vector map"));
 	}
 	if (ltype == -2) {	/* EOF */
 	    break;
@@ -155,8 +148,6 @@ int trans3d(struct Map_info *In, struct Map_info *Out, int type,
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
-
-    return line - 1;
 }
 
 int srch(const void *pa, const void *pb)
