@@ -71,14 +71,13 @@ int main(int argc, char **argv)
     Vect_set_open_level(1);
     if (Vect_open_old2(&In, opt.input->answer, "", opt.field->answer) < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), opt.input->answer);
+    Vect_set_error_handler_io(&In, &Out);
     
     if (opt.reverse->answer && !Vect_is_3d(&In)) {
-	Vect_close(&In);
 	G_fatal_error(_("Vector map <%s> is 2D"), opt.input->answer);
     }
 
     if (!opt.reverse->answer && Vect_is_3d(&In)) {
-	Vect_close(&In);
 	G_fatal_error(_("Vector map <%s> is 3D"), opt.input->answer);
     }
 
@@ -101,7 +100,6 @@ int main(int argc, char **argv)
 	}
     }
 
-    G_message(_("Transforming features..."));
     ret = 0;
     if (opt.reverse->answer) {
 	/* 3d -> 2d */
@@ -118,9 +116,6 @@ int main(int argc, char **argv)
     }
 
     if (ret < 0) {
-	Vect_close(&In);
-	Vect_close(&Out);
-	Vect_delete(opt.output->answer);
 	G_fatal_error(_("%s failed"), G_program_name());
     }
 

@@ -42,6 +42,11 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 
 	dbDriver *driver;
 
+        if (field == -1) {
+            G_warning(_("Invalid layer number %d, assuming 1"), field);
+            field = 1;
+        }
+
 	Fi = Vect_get_field(In, field);
 	if (!Fi) {
 	    G_warning(_("Database connection not defined for layer <%s>"),
@@ -68,6 +73,7 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 	    return -1;
 	}
 
+        G_message(_("Fetching height from <%s> column..."), column);
 	db_select_CatValArray(driver, Fi->table, Fi->key,
 			      column, NULL, &cvarr);
 
@@ -76,6 +82,7 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 	db_close_database_shutdown_driver(driver);
     }
 
+    G_message(_("Transforming features..."));
     line = 1;
     while (1) {
 	ltype = Vect_read_next_line(In, Points, Cats);
@@ -87,10 +94,8 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 	    break;
 	}
 
-	if (G_verbose() > G_verbose_min() && (line - 1) % 1000 == 0) {
-	    fprintf(stderr, "%7d\b\b\b\b\b\b\b", (line - 1));
-	}
-
+        G_progress(line, 1000);
+        
 	if (!(ltype & type))
 	    continue;
 
@@ -127,11 +132,8 @@ int trans2d(struct Map_info *In, struct Map_info *Out, int type,
 
 	line++;
     }
-
-    if (G_verbose() > G_verbose_min())
-	fprintf(stderr, "\r");
-
-
+    G_progress(1, 1);
+    
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 
