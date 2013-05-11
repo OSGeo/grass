@@ -331,6 +331,7 @@ void db_set_cursor_type_update(dbCursor *);
 int db_set_default_connection(void);
 void db_set_error_who(const char *);
 int db_set_handle(dbHandle *, const char *, const char *);
+void db_set_error_handler_driver(dbDriver *);
 int db_set_index_column_name(dbIndex *, int,
 			     const char *);
 int db_set_index_name(dbIndex *, const char *);
