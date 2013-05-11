@@ -4,8 +4,9 @@
 of a specified location (different from current) with projection of input
 location to the vector map in a current mapset of current location with
 projection of current location (both projections are defined by
-corresponding PROJ_INFO files).
-
+corresponding PROJ_INFO files). The projection information is taken from the
+current PROJ_INFO files, as set and viewed with
+<em><a href="g.proj.html">g.proj</a></em>.
 
 <h2>NOTES</h2>
 
@@ -43,7 +44,7 @@ v.proj in=mymap location=latlong mapset=user1
 
 <p><b>Further reading</b>
 <ul>
-<li> <a href="http://www.asprs.org/persjournals/PE-RS-Journals/Grids-Datums.html">ASPRS Grids and Datum</a>
+<li> <a href="http://www.asprs.org/Grids-Datums.html">ASPRS Grids and Datum</a>
 <li> <a href="http://www.mapref.org">MapRef - The Collection of Map Projections and Reference Systems for Europe</a>
 <li> <a href="http://www.remotesensing.org/geotiff/proj_list/">Projections Transform List</a> (PROJ4)
 </ul>
@@ -53,7 +54,6 @@ v.proj in=mymap location=latlong mapset=user1
 <em>
 <a href="r.proj.html">r.proj</a>,
 <a href="g.proj.html">g.proj</a>,
-<a href="g.setproj.html">g.setproj</a>,
 <a href="i.rectify.html">i.rectify</a>,  
 <a href="r.stats.html">r.stats</a>,  
 <a href="v.sample.html">v.sample</a>,
