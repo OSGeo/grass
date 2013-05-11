@@ -10,8 +10,7 @@ void parse_args(struct opts *opt)
     opt->reverse->description =
 	_("Reverse transformation; 3D vector features to 2D");
 
-    opt->table = G_define_flag();
-    opt->table->key = 't';
+    opt->table = G_define_standard_flag(G_FLG_V_TABLE);
     opt->table->description = _("Do not copy table");
 
     opt->input = G_define_standard_option(G_OPT_V_INPUT);
