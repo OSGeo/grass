@@ -111,42 +111,35 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (shell->answer) {
+    if (print->answer || shell->answer) {
 	/* get and print connection in shell style */
 	if (db_get_connection(&conn) == DB_OK) {
-	    fprintf(stdout, "driver=%s\n",
-		    conn.driverName ? conn.driverName : "");
-	    fprintf(stdout, "database=%s\n",
-		    conn.databaseName ? conn.databaseName : "");
-	    fprintf(stdout, "schema=%s\n",
-		    conn.schemaName ? conn.schemaName : "");
-	    fprintf(stdout, "group=%s\n", conn.group ? conn.group : "");
-	}
+            if (shell->answer) {
+                fprintf(stdout, "driver=%s\n",
+                        conn.driverName ? conn.driverName : "");
+                fprintf(stdout, "database=%s\n",
+                        conn.databaseName ? conn.databaseName : "");
+                fprintf(stdout, "schema=%s\n",
+                        conn.schemaName ? conn.schemaName : "");
+                fprintf(stdout, "group=%s\n", conn.group ? conn.group : "");
+            }
+            else {
+                fprintf(stdout, "driver: %s\n",
+                        conn.driverName ? conn.driverName : "");
+                fprintf(stdout, "database: %s\n",
+                        conn.databaseName ? conn.databaseName : "");
+                fprintf(stdout, "schema: %s\n",
+                        conn.schemaName ? conn.schemaName : "");
+                fprintf(stdout, "group: %s\n", conn.group ? conn.group : "");
+            }
+        }
 	else
 	    G_fatal_error(_("Database connection not defined. "
 			    "Run db.connect."));
-
+        
 	exit(EXIT_SUCCESS);
     }
-
-    if (print->answer) {
-	/* get and print connection */
-	if (db_get_connection(&conn) == DB_OK) {
-	    fprintf(stdout, "driver: %s\n",
-		    conn.driverName ? conn.driverName : "");
-	    fprintf(stdout, "database: %s\n",
-		    conn.databaseName ? conn.databaseName : "");
-	    fprintf(stdout, "schema: %s\n",
-		    conn.schemaName ? conn.schemaName : "");
-	    fprintf(stdout, "group: %s\n", conn.group ? conn.group : "");
-	}
-	else
-	    G_fatal_error(_("Database connection not defined. "
-			    "Run db.connect."));
-
-	exit(EXIT_SUCCESS);
-    }
-
+    
     if (check_set_default->answer) {
 	/* check connection and set to system-wide default in required */
 	/*
