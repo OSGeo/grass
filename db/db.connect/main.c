@@ -49,7 +49,8 @@ int main(int argc, char *argv[])
 
     print = G_define_flag();
     print->key = 'p';
-    print->description = _("Print current connection parameters and exit");
+    print->label = _("Print current connection parameters and exit");
+    print->description = _("Substitute variables in database settings");
     print->guisection = _("Print");
 
     shell = G_define_flag();
@@ -124,10 +125,42 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "group=%s\n", conn.group ? conn.group : "");
             }
             else {
+                char database[GPATH_MAX];
+                
+                if (conn.databaseName) {
+                    char *c, buf[GPATH_MAX];
+                    
+                    strcpy(database, conn.databaseName);
+                    
+                    strcpy(buf, database);
+                    c = (char *)strstr(buf, "$GISDBASE");
+                    if (c != NULL) {
+                        *c = '\0';
+                        sprintf(database, "%s%s%s", buf, G_gisdbase(), c + 9);
+                    }
+                    
+                    strcpy(buf, database);
+                    c = (char *)strstr(buf, "$LOCATION_NAME");
+                    if (c != NULL) {
+                        *c = '\0';
+                        sprintf(database, "%s%s%s", buf, G_location(), c + 14);
+                    }
+
+                    strcpy(buf, database);
+                    c = (char *)strstr(buf, "$MAPSET");
+                    if (c != NULL) {
+                        *c = '\0';
+                        sprintf(database, "%s%s%s", buf, G_mapset(), c + 7);
+                    }
+                }
+                else {
+                    database[0] = '\0';
+                }
+                    
                 fprintf(stdout, "driver: %s\n",
                         conn.driverName ? conn.driverName : "");
-                fprintf(stdout, "database: %s\n",
-                        conn.databaseName ? conn.databaseName : "");
+                /* substitute variables */
+                fprintf(stdout, "database: %s\n", database);
                 fprintf(stdout, "schema: %s\n",
                         conn.schemaName ? conn.schemaName : "");
                 fprintf(stdout, "group: %s\n", conn.group ? conn.group : "");
