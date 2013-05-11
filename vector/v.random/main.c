@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 
     output = parm.output->answer;
     n = atoi(parm.nsites->answer);
-    b = (flag.drand48->answer == '\0') ? 0 : 1;
+    b = flag.drand48->answer ? TRUE : FALSE;
     
     if(parm.seed->answer)
         seed = atoi(parm.seed->answer);
@@ -165,6 +165,7 @@ int main(int argc, char *argv[])
     /* create new vector map */
     if (-1 == Vect_open_new(&Out, output, flag.z->answer ? WITH_Z : WITHOUT_Z))
         G_fatal_error(_("Unable to create vector map <%s>"), output);
+    Vect_set_error_handler_io(NULL, &Out);
 
     /* Do we need to write random values into attribute table? */
     if (parm.zcol->answer) {
@@ -173,14 +174,15 @@ int main(int argc, char *argv[])
 	    db_start_driver_open_database(Fi->driver,
 					  Vect_subst_var(Fi->database, &Out));
 	if (driver == NULL) {
-	    Vect_delete(parm.output->answer);
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Vect_subst_var(Fi->database, &Out), Fi->driver);
 	}
+        db_set_error_handler_driver(driver);
+        
 	db_begin_transaction(driver);
 
 	db_init_string(&sql);
-	sprintf(buf, "create table %s (cat integer, %s %s)", Fi->table,
+	sprintf(buf, "create table %s (%s integer, %s %s)", Fi->table, GV_KEY_COLUMN,
 		parm.zcol->answer, parm.ztype->answer);
 	db_set_string(&sql, buf);
 	Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
@@ -189,9 +191,6 @@ int main(int argc, char *argv[])
 	/* Create table */
 	G_debug(3, db_get_string(&sql));
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
-	    Vect_delete(parm.output->answer);
 	    G_fatal_error(_("Unable to create table: %s"),
 			  db_get_string(&sql));
 	}
@@ -200,9 +199,6 @@ int main(int argc, char *argv[])
 	if (db_grant_on_table
 	    (driver, Fi->table, DB_PRIV_SELECT,
 	     DB_GROUP | DB_PUBLIC) != DB_OK) {
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
-	    Vect_delete(parm.output->answer);
 	    G_fatal_error(_("Unable to grant privileges on table <%s>"),
 			  Fi->table);
 	}
@@ -210,16 +206,10 @@ int main(int argc, char *argv[])
 	/* OK. Let's check what type of column user has created */
 	db_set_string(&sql, Fi->table);
 	if (db_describe_table(driver, &sql, &table) != DB_OK) {
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
-	    Vect_delete(parm.output->answer);
 	    G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
 	}
 
 	if (db_get_table_number_of_columns(table) != 2) {
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
-	    Vect_delete(parm.output->answer);
 	    G_fatal_error(_("Table should contain only two columns"));
 	}
 
@@ -230,9 +220,6 @@ int main(int argc, char *argv[])
 	if (type == DB_SQL_TYPE_REAL || type == DB_SQL_TYPE_DOUBLE_PRECISION)
 	    usefloat = 1;
 	if (usefloat < 0) {
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
-	    Vect_delete(parm.output->answer);
 	    G_fatal_error(_("You have created unsupported column type. This module supports only INTEGER"
 			   " and DOUBLE PRECISION column types."));
 	}
@@ -299,9 +286,6 @@ int main(int argc, char *argv[])
 
 	    G_debug(3, db_get_string(&sql));
 	    if (db_execute_immediate(driver, &sql) != DB_OK) {
-		db_close_database(driver);
-		db_shutdown_driver(driver);
-		Vect_delete(parm.output->answer);
 		G_fatal_error(_("Cannot insert new row: %s"),
 			      db_get_string(&sql));
 	    }
