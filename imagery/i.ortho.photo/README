@@ -1,18 +1,18 @@
 STATUS:
-	The i.ortho.photo suite of modules has been temporarily removed
+	The i.ortho.photo suite of modules has been temporarily disabled 
 	from GRASS 7 as they are heavily dependent on the text-based
 	Vask libary and interactive XDRIVER monitors, both of which
 	have been removed. As the modules are rewritten to run in non-
 	interactive mode or with a wxPython frontend, they will be
 	added back into GRASS 7. This work will be undertaken in the
-	develbranch6 SVN.
+	trunk SVN.
 
 AUTHORS:
 	The orthophoto rectification programs went out under alpha in 4.0.
 	It has since had bug fixes performed by OGI (Shapiro?) and also by
 	the original programmer - Mike Baba of DBA Systems, Fairfax, VA.
 
-COPYRIGHT:    (C) 1999 by the GRASS Development Team
+COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
 
                This program is free software under the GNU General Public
                License (>=v2). Read the file COPYING that comes with GRASS
@@ -27,8 +27,24 @@ Elements of Photogrammetry, With Air Photo Interpretation and Remote Sensing
 by Paul R. Wolf, 562 pages
 Publisher: McGraw Hill Text; 2nd edition (January 1983)
 
+GRASS GIS 7
+
+     G6                  G7
+frontend:
+ i.ortho.photo  -> i.ortho.rectify + TODO wxGUI
+
+internal:
+ libes/         -> lib/
+ menu/          -> TODO (wxGUI)
+ photo.elev/    -> i.ortho.elev/
+ photo.2target/ -> ? i.ortho.transform/
+ photo.camera/  -> i.ortho.camera/
+ photo.2image/  -> ?
+ photo.init/    -> i.ortho.init/
+ photo.rectify/ -> ? i.ortho.rectify/
 
 ######################################################################
+GRASS GIS 4 to 6
 
 The main program is i.ortho.photo which is just a menu driver for the 
 following programs:
@@ -42,9 +58,7 @@ following programs:
 7 photo.2target
 8 photo.rectify
 
-
-
-The following directories contain the source code:
+The following GRASS 6 directories contain the source code:
 
 	./menu:			main menu code       (-> menu/menu.c)
 
