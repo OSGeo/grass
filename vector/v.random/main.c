@@ -56,7 +56,7 @@ double drand48()
 
 int main(int argc, char *argv[])
 {
-    char *output, buf[2000];
+    char *output, buf[DB_SQL_MAX];
     double (*rng) ();
     double max, zmin, zmax;
     int seed;
