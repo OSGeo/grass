@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     only_type = Vect_option_to_types(opt.type);
     interp_method = Rast_option_to_interp_type(opt.interp);
 
-    trace = (flag.trace->answer) ? TRUE : FALSE;
+    trace = flag.trace->answer ? TRUE : FALSE;
     
     /* set input vector map name and mapset */
     Vect_check_input_output_name(opt.input->answer, opt.output->answer, G_FATAL_EXIT);
