@@ -656,7 +656,8 @@ class TaskFrame(wx.Frame):
             add = True
         else:
             add = False
-        self._giface.mapCreated.emit(name=name, ltype=ltype, add=add)
+        if self._giface:
+            self._giface.mapCreated.emit(name=name, ltype=ltype, add=add)
     
     def OnOK(self, event):
         """!OK button pressed"""
