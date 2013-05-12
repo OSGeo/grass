@@ -54,8 +54,7 @@ int main(int argc, char *argv[])
     
     int field;
     int only_type, cat;
-    int fdrast, interp_method;
-    int process_area, trace;
+    int fdrast, interp_method, trace;
     double objheight, objheight_default, voffset;
     
     struct field_info *Fi;
@@ -87,8 +86,8 @@ int main(int argc, char *argv[])
     opt.where->guisection = _("Selection");
 
     opt.type = G_define_standard_option(G_OPT_V_TYPE);
-    opt.type->answer = "point,boundary,area";
-    opt.type->options = "point,boundary,area";
+    opt.type->answer = "point,line,area";
+    opt.type->options = "point,line,area";
     opt.type->guisection = _("Selection");
 
     opt.output = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -149,15 +148,7 @@ int main(int argc, char *argv[])
     interp_method = Rast_option_to_interp_type(opt.interp);
 
     trace = (flag.trace->answer) ? TRUE : FALSE;
-    process_area = (only_type & GV_AREA) ? TRUE : FALSE;
-    if (process_area) {
-	if (only_type & GV_BOUNDARY) {
-	    /* do not write wall twice -> disable boundary type */
-	    only_type &= ~GV_BOUNDARY;
-	}
-	only_type &= ~GV_AREA;
-    }
-
+    
     /* set input vector map name and mapset */
     Vect_check_input_output_name(opt.input->answer, opt.output->answer, G_FATAL_EXIT);
 
@@ -232,7 +223,7 @@ int main(int argc, char *argv[])
     }
 
     /* if area */
-    if (process_area) {
+    if (only_type & GV_AREA) {
         int area, nareas, centroid;
         
         nareas = Vect_get_num_areas(&In);

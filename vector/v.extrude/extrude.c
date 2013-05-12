@@ -9,8 +9,8 @@ static struct line_cats *Cats_roof;
   \brief Extrude 2D vector feature to 3D
 
   - point -> 3d line (vertical)
-  - boundary -> faces
-  - area -> faces + kernel
+  - line  -> set of faces (each segment defines one face)
+  - area  -> set of faces + kernel
 
   \param In input vector map
   \param[in,out] Out output vector map
@@ -42,7 +42,7 @@ int extrude(struct Map_info *In, struct Map_info *Out,
     nlines = 0;
 
     if (type != GV_POINT && Points->n_points < 2)
-	return nlines;
+	return nlines; /* not enough points to face */
 
     if (!Points_wall) {
         Points_wall  = Vect_new_line_struct();
@@ -77,7 +77,6 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 	}
     }
 
-    
     /* build walls, roof and floor */
     for (k = 0; ; k++) {
 	voffset_curr = voffset_next = 0.0;
@@ -104,7 +103,7 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 		if (k >= Points->n_points - 1)
 		    break;
 	    }
-	    else if (type & (GV_BOUNDARY | GV_AREA)) {
+	    else if (type == GV_AREA) {
 		if (k >= Points->n_points - 2)
 		    break;
 	    }
@@ -128,14 +127,8 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 			      Points->z[k] + objheight + voffset_curr);
 	    break;
 	}
-	else if (type == GV_LINE) {
-	    /* line -> 3d line (currently disabled) */
-	    Vect_append_point(Points_wall, Points->x[k], Points->y[k],
-			      Points->z[k] + objheight + voffset_curr);
-	    if (k >= Points->n_points - 1)
-		break;
-	}
-	else if (type & (GV_BOUNDARY | GV_AREA)) {
+	
+        if (type & (GV_LINE | GV_AREA)) {
 	    /* reset */
 	    Vect_reset_line(Points_wall);
 
@@ -168,11 +161,12 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 	}
     }
 
-    if (type & (GV_POINT | GV_LINE)) {
+    if (type == GV_POINT) {
 	Vect_write_line(Out, GV_LINE, Points_wall, Cats);
-	nlines++;
+	return 1;
     }
-    else if (type == GV_AREA && Points_roof->n_points > 3) {
+
+    if (type == GV_AREA && Points_roof->n_points > 3) {
         /* close roof and floor */
 	Vect_append_point(Points_roof,
 			  Points_roof->x[0], Points_roof->y[0],

@@ -1,29 +1,33 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.extrude</em> creates faces, kernels or 3D lines based on 2D
-vector features. Points are converted to 3D vertical lines, boundaries
-to faces and areas to volumes (composition of faces and kernel).
+<em>v.extrude</em> creates faces, kernels or 3D lines based on input
+2D vector features. Points are converted to 3D vertical lines, lines
+to faces and areas to volumes (composition of closed set of faces and
+kernel).
 
 <p>
-If the flag <b>-t</b> and <b>elevation</b> parameter is used then 3D
-vector features follow the elevation model by using individual
-elevation values for the vertices and nodes. Height is interpolated
-from elevation model using given interpolation <b>method</b>. This can
-be useful for models of large objects (eg. forest stands).
+If <b>elevation</b> parameter is used then 3D vector features follow
+the elevation model by using individual elevation values for the
+vertices. Height for vertices is interpolated from elevation raster
+map using given interpolation <b>method</b>.
 
 <h2>NOTES</h2>
 
 <em>v.extrude</em> extrudes vector features which means that points
-are converted to vertical lines. Lines are not supported by this
-module.
+are converted to vertical lines. Lines and area boundaries are
+extruded to a set of faces, each segment defines one face. Area
+centroids are written as kernels. Area as a composition of boundaries
+and centroid is stored as a closed set of faces and kernel which
+define a volume.
 
 <p>
 For conversion of 2D points or lines to 3D can be also
-used <em><a href="v.to.3d.html">v.to.3d</a></em>. In opposite
+used <em><a href="v.to.3d.html">v.to.3d</a></em> module. In opposite
 to <em>v.extrude</em>, <em><a href="v.to.3d.html">v.to.3d</a></em>
-doesn't extrude vector features, it just defines z-coordinate for the
-feature geometry. It means that no feature type conversion is applied,
-points remains still points. Same applies for the lines.
+doesn't extrude vector features, it just defines z-coordinate in the
+features geometry. It means that no feature type conversion is
+applied, points remain still points in the output vector map. Same
+applies for the lines.
 
 <p>
 <em>v.extrude</em> modifies only features geometry, attribute data
