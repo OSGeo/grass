@@ -393,6 +393,7 @@ DCELL Rast_interp_bicubic_bspline(double, double,
 		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
 		       DCELL, DCELL, DCELL, DCELL, DCELL, DCELL, DCELL,
 		       DCELL);
+int Rast_option_to_interp_type(const struct Option *);
 
 /* mask_info.c */
 char *Rast_mask_info(void);

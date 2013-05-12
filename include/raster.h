@@ -12,7 +12,12 @@
 #define FCELL_TYPE 1
 #define DCELL_TYPE 2
 
-/* for G_get_raster_sample(), INTERP_TYPE */
+/*! \brief Interpolation methods
+
+  For G_get_raster_sample(), INTERP_TYPE
+
+  \todo Rename to use prefix INTERP_
+*/
 #define UNKNOWN	  0
 #define NEAREST   1		/* nearest neighbor interpolation  */
 #define BILINEAR  2		/* bilinear interpolation          */
