@@ -1,19 +1,22 @@
 /*!
- * \file raster/interp.c
- *
- * \brief Raster Library - Interpolation
- *
- * (C) 2001-2009 GRASS Development Team
- *
- * This program is free software under the GNU General Public License 
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author Original author CERL
- */
+  \file lib/raster/interp.c
+  
+  \brief Raster Library - Interpolation methods
+  
+  (C) 2001-2009,2013 GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
 
 #include <math.h>
+#include <string.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 
 DCELL Rast_interp_linear(double u, DCELL c0, DCELL c1)
 {
@@ -159,4 +162,53 @@ DCELL Rast_interp_bicubic_bspline(double u, double v,
     DCELL c3 = Rast_interp_cubic_bspline(u, c30, c31, c32, c33);
 
     return Rast_interp_cubic_bspline(v, c0, c1, c2, c3);
+}
+
+/*!
+  \brief Get interpolation method from the option.
+
+  Calls G_fatal_error() on unknown interpolation method.
+  
+  Supported methods:
+   - NEAREST
+   - BILINEAR
+   - CUBIC
+
+  \code
+  int interp_method
+  struct Option *opt_method;
+  
+  opt_method = G_define_standard_option(G_OPT_R_INTERP_TYPE);
+  
+  if (G_parser(argc, argv))
+      exit(EXIT_FAILURE);
+      
+  interp_method = G_option_to_interp_type(opt_method);
+  \endcode
+
+  \param option pointer to interpolation option
+  
+  \return interpolation method code
+*/
+int Rast_option_to_interp_type(const struct Option *option)
+{
+    int interp_type;
+    
+    interp_type = UNKNOWN;
+    if (option->answer) {
+        if (strcmp(option->answer, "nearest") == 0) {
+            interp_type = NEAREST;
+        }
+        else if (strcmp(option->answer, "bilinear") == 0) {
+            interp_type = BILINEAR;
+        }
+        else if (strcmp(option->answer, "bicubic") == 0) {
+            interp_type = CUBIC;
+        }
+    }
+
+    if (interp_type == UNKNOWN)
+        G_fatal_error(_("Unknown interpolation method: %s"), option->answer);
+
+    return interp_type;
 }
