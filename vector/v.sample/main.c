@@ -95,12 +95,7 @@ int main(int argc, char **argv)
     parm.rast->key = "raster";
     parm.rast->description = _("Name of raster map to be sampled");
 
-    parm.method = G_define_option();
-    parm.method->key = "method";
-    parm.method->type = TYPE_STRING;
-    parm.method->required = NO;
-    parm.method->description = _("Interpolation method");
-    parm.method->options = "nearest,bilinear,bicubic";
+    parm.method = G_define_standard_option(G_OPT_R_INTERP_TYPE);
     parm.method->answer = "nearest";
 
     parm.z = G_define_option();
@@ -118,12 +113,7 @@ int main(int argc, char **argv)
 
     sscanf(parm.z->answer, "%lf", &scale);
 
-    if (parm.method->answer[0] == 'c')
-	method = CUBIC;
-    else if (parm.method->answer[0] == 'b')
-	method = BILINEAR;
-    else
-	method = NEAREST;
+    method = Rast_option_to_interp_type(parm.method);
     
     G_get_window(&window);
 
