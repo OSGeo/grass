@@ -54,7 +54,8 @@
    - G_OPT_R_COVER
    - G_OPT_R_ELEV
    - G_OPT_R_ELEVS
-   
+   - G_OPT_R_INTERP_TYPE
+
   - raster3d:
    - G_OPT_R3_INPUT
    - G_OPT_R3_INPUTS
@@ -302,6 +303,13 @@ struct Option *G_define_standard_option(int opt)
 	Opt->gisprompt = "old,cell,raster";
 	Opt->description = _("Name of input elevation raster map(s)");
 	break;
+    case G_OPT_R_INTERP_TYPE:
+        Opt->key = "method";
+        Opt->type = TYPE_STRING;
+        Opt->required = NO;
+        Opt->description = _("Interpolation method");
+        Opt->options = "nearest,bilinear,bicubic";
+        break;
 
 	/*g3d maps */
     case G_OPT_R3_INPUT:

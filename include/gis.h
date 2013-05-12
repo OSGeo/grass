@@ -198,6 +198,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_R_COVER,		/* old input cover raster map */
     G_OPT_R_ELEV,		/* old input elevation raster map */
     G_OPT_R_ELEVS,		/* old input elevation raster maps */
+    G_OPT_R_INTERP_TYPE,        /* interpolation type */
 
     G_OPT_R3_INPUT,		/* old input raster3d map */
     G_OPT_R3_INPUTS,		/* old input raster3d maps */
