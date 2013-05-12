@@ -114,8 +114,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *rast_opt, *method_opt,
 	*scale_opt, *where_opt, *layer_opt, *null_opt;
-    char *desc;
-
+    
     struct Map_info In, Out;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -159,20 +158,8 @@ int main(int argc, char *argv[])
     
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    method_opt = G_define_option();
-    method_opt->key = "method";
-    method_opt->type = TYPE_STRING;
-    method_opt->required = NO;
-    method_opt->multiple = NO;
-    method_opt->options = "nearest,bilinear,cubic";
+    method_opt = G_define_standard_option(G_OPT_R_INTERP_TYPE);
     method_opt->answer = "nearest";
-    desc = NULL;
-    G_asprintf(&desc,
-	       "nearest;%s;bilinear;%s;cubic;%s",
-	       _("nearest neighbor"),
-	       _("bilinear interpolation"),
-	       _("cubic convolution interpolation"));
-    method_opt->descriptions = desc;
     method_opt->description = _("Sampling method");
     
     scale_opt = G_define_option();
@@ -197,14 +184,8 @@ int main(int argc, char *argv[])
 	null_val = atof(null_opt->answer);
 
     /* which interpolation method should we use */
-    if (method_opt->answer[0] == 'b')
-	method = BILINEAR;
-    else if (method_opt->answer[0] == 'c')
-	method = CUBIC;
-    else {
-	method = NEAREST;
-    }
-
+    method = Rast_option_to_interp_type(method_opt);
+    
     /* setup the region */
     G_get_window(&window);
 
