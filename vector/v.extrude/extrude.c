@@ -2,15 +2,15 @@
 #include <grass/raster.h>
 #include <grass/vector.h>
 
-struct line_pnts *Points_wall, *Points_roof;
-struct line_cats *Cats_roof;
+static struct line_pnts *Points_wall, *Points_roof, *Points_floor;
+static struct line_cats *Cats_roof;
 
 /**
-  \brief Extrude vector object
+  \brief Extrude 2D vector feature to 3D
 
   - point -> 3d line (vertical)
-  - boundary -> face
-  - area -> face + kernel
+  - boundary -> faces
+  - area -> faces + kernel
 
   \param In input vector map
   \param[in,out] Out output vector map
@@ -45,13 +45,15 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 	return nlines;
 
     if (!Points_wall) {
-        Points_wall = Vect_new_line_struct();
-        Points_roof = Vect_new_line_struct();
-        Cats_roof = Vect_new_cats_struct();
+        Points_wall  = Vect_new_line_struct();
+        Points_roof  = Vect_new_line_struct();
+        Points_floor = Vect_new_line_struct();
+        Cats_roof    = Vect_new_cats_struct();
     }
     else {
         Vect_reset_line(Points_wall);
-        Vect_reset_line(Points_roof);        
+        Vect_reset_line(Points_roof);
+        Vect_reset_line(Points_floor);
         Vect_reset_cats(Cats_roof);
     }
 
@@ -63,7 +65,7 @@ int extrude(struct Map_info *In, struct Map_info *Out,
                                            Points->y[k], Points->x[k], 0, /* north, east */
                                            interp_method);
 	    if (Rast_is_d_null_value(&voffset_curr))
-		continue;
+		continue; /* skip null values */
 
 	    if (k == 0) {
 		voffset_dem = voffset_curr;
@@ -76,7 +78,7 @@ int extrude(struct Map_info *In, struct Map_info *Out,
     }
 
     
-    /* walls */
+    /* build walls, roof and floor */
     for (k = 0; ; k++) {
 	voffset_curr = voffset_next = 0.0;
 
@@ -137,7 +139,7 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 	    /* reset */
 	    Vect_reset_line(Points_wall);
 
-	    /* boudary -> face */
+	    /* boundary -> face */
 	    Vect_append_point(Points_wall, Points->x[k], Points->y[k],
 			      Points->z[k] + voffset_curr);
 	    Vect_append_point(Points_wall, Points->x[k + 1], Points->y[k + 1],
@@ -156,6 +158,9 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 		/* roof */
 		Vect_append_point(Points_roof, Points->x[k], Points->y[k],
 				  Points->z[k] + objheight + voffset_curr);
+                /* floor */
+		Vect_append_point(Points_floor, Points->x[k], Points->y[k],
+				  Points->z[k] + voffset_curr);
 	    }
 
 	    if (k >= Points->n_points - 2)
@@ -168,16 +173,23 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 	nlines++;
     }
     else if (type == GV_AREA && Points_roof->n_points > 3) {
+        /* close roof and floor */
 	Vect_append_point(Points_roof,
 			  Points_roof->x[0], Points_roof->y[0],
 			  Points_roof->z[0]);
-	Vect_write_line(Out, GV_FACE, Points_roof, Cats);
+	Vect_append_point(Points_floor,
+			  Points_floor->x[0], Points_floor->y[0],
+			  Points_floor->z[0]);
+        /* write roof and floor */
+        Vect_write_line(Out, GV_FACE, Points_roof, Cats);
+        Vect_write_line(Out, GV_FACE, Points_floor, Cats);
+
 	nlines++;
 
 	if (centroid > 0) {
 	    /* centroid -> kernel */
             Vect_read_line(In, Points_roof, Cats_roof, centroid);
-	    Points->z[0] = Points_roof->z[0] / 2.0;
+	    Points->z[0] = Points_roof->z[0] / 2.0; /* TODO: do it better */
 	    Vect_write_line(Out, GV_KERNEL, Points_roof, Cats_roof);
 	    nlines++;
 	}
