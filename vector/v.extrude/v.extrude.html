@@ -1,16 +1,39 @@
 <h2>DESCRIPTION</h2>
 
-<p>
-<em>v.extrude</em> creates faces, kernels, volumes or 3D lines based
-on 2D vector objects, i.e. points become 3D vertical lines, lines to
-3D lines, boundaries to faces and areas to volumes (composition of
-faces and kernel).
+<em>v.extrude</em> creates faces, kernels or 3D lines based on 2D
+vector features. Points are converted to 3D vertical lines, boundaries
+to faces and areas to volumes (composition of faces and kernel).
 
 <p>
-If the flag <b>-t</b> is used then 3D vector objects follow the
-elevation model by using individual elevation values for the vertices
-and nodes. This can be useful for models of large objects (forest
-stands).
+If the flag <b>-t</b> and <b>elevation</b> parameter is used then 3D
+vector features follow the elevation model by using individual
+elevation values for the vertices and nodes. Height is interpolated
+from elevation model using given interpolation <b>method</b>. This can
+be useful for models of large objects (eg. forest stands).
+
+<h2>NOTES</h2>
+
+<em>v.extrude</em> extrudes vector features which means that points
+are converted to vertical lines. Lines are not supported by this
+module.
+
+<p>
+For conversion of 2D points or lines to 3D can be also
+used <em><a href="v.to.3d.html">v.to.3d</a></em>. In opposite
+to <em>v.extrude</em>, <em><a href="v.to.3d.html">v.to.3d</a></em>
+doesn't extrude vector features, it just defines z-coordinate for the
+feature geometry. It means that no feature type conversion is applied,
+points remains still points. Same applies for the lines.
+
+<p>
+<em>v.extrude</em> modifies only features geometry, attribute data
+remain untouched.
+
+<p>
+By default, all features (including features without category) from
+input vector map are processed (<b>layer=-1</b>). Feature selection
+can be applied by <b>layer</b>, <b>cats</b> or <b>where</b>
+parameter.
 
 <h2>EXAMPLES</h2>
 
@@ -26,10 +49,10 @@ v.extrude input=houses output=houses3D height=5 type=area
 v.extrude input=houses output=houses3D elevation=dem hcolumn=height type=area
 </pre></div>
 
-<h3>Convert 2D lines to 3D with fixed height</h3>
+<h3>Convert 2D points to 3D vertical lines with fixed height</h3>
 
 <div class="code"><pre>
-v.extrude input=lines output=lines3D elevation=dem height=0 type=line
+v.extrude input=geodetic_pts output=points3D height=200 type=point
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -37,7 +60,8 @@ v.extrude input=lines output=lines3D elevation=dem height=0 type=line
 <em>
 <a href="v.transform.html">v.transform</a>,
 <a href="v.extrude.html">v.extrude</a>,
-<a href="v.drape.html">v.drape</a>
+<a href="v.drape.html">v.drape</a>,
+<a href="v.to.3d.html">v.to.3d</a>
 </em>
 
 <p>
@@ -48,7 +72,8 @@ v.extrude input=lines output=lines3D elevation=dem height=0 type=line
 <h2>AUTHORS</h2>
 
 Jachym Cepicky,<br>
-Updated by Martin Landa, FBK-irst, Italy
+Updated for GRASS 7 by Martin Landa, FBK-irst,
+Italy and Czech Technical University in Prague, Czech Republic
 
 <p>
 <i>Last changed: $Date$</i>
