@@ -1973,7 +1973,7 @@ msgstr "Wollen Sie die aktuellen Einstellungen in einer Projektdatei speichern?"
 #: ../gui/wxpython/lmgr/frame.py:553
 #, python-format
 msgid "Close Map Display %s"
-msgstr "Schließe Kartenfenster %d"
+msgstr "Schließe Kartenfenster %s"
 
 #: ../gui/wxpython/lmgr/frame.py:613
 #, python-format
