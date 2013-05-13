@@ -314,7 +314,7 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *typ
  
     /* skip categories */
     if (do_cats) {
-	if (Map->plus.version.coor.minor == 1) {	/* coor format 5.1 */
+	if (Map->head.coor_version.minor == 1) {	/* coor format 5.1 */
 	    if (0 >= dig__fread_port_I(&n_cats, 1, &(Map->dig_fp)))
 		return NULL;
 	}
@@ -325,7 +325,7 @@ GEOSCoordSequence *V1_read_line_geos(struct Map_info *Map, long offset, int *typ
 	}
 	G_debug(3, "    n_cats = %d", n_cats);
 
-	if (Map->plus.version.coor.minor == 1) {	/* coor format 5.1 */
+	if (Map->head.coor_version.minor == 1) {	/* coor format 5.1 */
 	    size = (2 * PORT_INT) * n_cats;
 	}
 	else {		                /* coor format 5.0 */

@@ -277,6 +277,18 @@ struct recycle
     char dummy;
 };
 
+/*! \brief Backward compatibility version info */
+struct Version_info {
+    /*! \brief Current version (major) */
+    int major;
+    /*! \brief Current version (minor) */
+    int minor;
+    /*! \brief Earliest version that can use this data format (major) */
+    int back_major;
+    /*! \brief Earliest version that can use this data format (minor) */
+    int back_minor;
+};
+
 /*!
   \brief Vector map header data
 
@@ -325,6 +337,9 @@ struct dig_head
 
     /* Programmers should NOT touch any thing below here */
     /* Library takes care of everything for you          */
+
+    /*! \brief Version info for coor file */
+    struct Version_info coor_version;
 
     /*!
       \brief 2D/3D vector data
@@ -727,18 +742,6 @@ struct Cat_index
     off_t offset;
 };
 
-/*! \brief Backward compatibility version info */
-struct Version_info {
-    /*! \brief Current version (major) */
-    int major;
-    /*! \brief Current version (minor) */
-    int minor;
-    /*! \brief Earliest version that can use this data format (major) */
-    int back_major;
-    /*! \brief Earliest version that can use this data format (minor) */
-    int back_minor;
-};
-
 /*!
   \brief Basic topology-related info
 
@@ -748,8 +751,6 @@ struct Plus_head
 {
     /*! \brief Backward compatibility version info */
     struct {
-        /*! \brief Version info for coor file */
-        struct Version_info coor;
         /*! \brief Version info for topology file */
         struct Version_info topo;
         /*! \brief Version info for spatial index file */

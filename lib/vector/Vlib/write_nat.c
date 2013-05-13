@@ -435,7 +435,7 @@ off_t V1__rewrite_line_nat(struct Map_info *Map,
     }
 
     if (cats->n_cats > 0) {
-	if (Map->plus.version.coor.minor == 1) {	/* coor format 5.1 */
+	if (Map->head.coor_version.minor == 1) {	/* coor format 5.1 */
 	    if (0 >= dig__fwrite_port_I(&(cats->n_cats), 1, dig_fp))
 		return -1;
 	}
@@ -446,7 +446,7 @@ off_t V1__rewrite_line_nat(struct Map_info *Map,
 	}
 
 	if (cats->n_cats > 0) {
-	    if (Map->plus.version.coor.minor == 1) {	/* coor format 5.1 */
+	    if (Map->head.coor_version.minor == 1) {	/* coor format 5.1 */
 		if (0 >=
 		    dig__fwrite_port_I(cats->field, cats->n_cats, dig_fp))
 		    return -1;
