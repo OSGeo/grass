@@ -746,6 +746,9 @@ struct Cat_index
   \brief Basic topology-related info
 
   Holds basic topology-related information about vector map
+
+  Important note: you should NOT store non-topological information in
+  topological structures.
 */
 struct Plus_head
 {
