@@ -326,6 +326,13 @@ int main(int argc, char *argv[])
 	db_shutdown_driver(driver);
     }
 
+    G_important_message(_("Copying attribute table..."));
+    if (field < 0)
+        Vect_copy_tables(&In, &Out, 0);
+    else 
+        Vect_copy_table_by_cat_list(&In, &Out, field, field, NULL,
+                                    GV_1TABLE, cat_list);
+    
     Vect_build(&Out);
 
     /* header */
