@@ -566,7 +566,7 @@ int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out,
    \param[out] Out output vector map
    \param field_in input layer number
    \param field_out output layer number
-   \param field_name layer name
+   \param field_name layer name (can be NULL)
    \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE
 
    \return 0 on success
@@ -581,13 +581,54 @@ int Vect_copy_table(const struct Map_info *In, struct Map_info *Out, int field_i
 
 /*!
    \brief Copy attribute table linked to vector map based on category
+   list.
+
+   If <em>cat_list</em> is NULL, then Vect_copy_table() is called.
+
+   \param In input vector map
+   \param[out] Out output vector map
+   \param field_in input layer number
+   \param field_out output layer number
+   \param field_name layer name (can be NULL)
+   \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE
+   \param cat_list pointer to cat_list struct (can be NULL)
+
+   \return 0 on success
+   \return -1 on error
+*/
+int Vect_copy_table_by_cat_list(const struct Map_info *In, struct Map_info *Out,
+                                int field_in, int field_out, const char *field_name,
+                                int type, const struct cat_list *cat_list)
+{
+    int *cats;
+    int ncats, ret;
+
+    if (cat_list) {
+        if (Vect_cat_list_to_array(cat_list, &cats, &ncats) != 0)
+            return -1;
+        
+        ret = Vect_copy_table_by_cats(In, Out, field_in, field_out, field_name,
+                                      type, cats, ncats);
+        
+        G_free(cats);
+    }
+    else {
+        ret = Vect_copy_table(In, Out, field_in, field_out, field_name,
+                              type);
+    }
+
+    return ret;
+}
+
+/*!
+   \brief Copy attribute table linked to vector map based on category
    numbers.
 
    \param In input vector map
    \param[out] Out output vector map
    \param field_in input layer number
    \param field_out output layer number
-   \param field_name layer name
+   \param field_name layer name (can be NULL)
    \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE
    \param cats pointer to array of cats or NULL
    \param ncats number of cats in 'cats'
