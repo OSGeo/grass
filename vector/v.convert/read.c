@@ -80,12 +80,12 @@ int read_dig(FILE * Digin, struct Map_info *Mapout,
 	return -1;
 
     if (buf[0] != '%' || buf[1] != '%') {	/* Version3.0 */
-	In_plus->version.coor.major = 3;
+	In_head.coor_version.major = 3;
 	portable = 0;		/* input vector is not portable format */
 	G_message(_("Input file is version 3."));
     }
     else {
-	In_plus->version.coor.major = 4;
+	In_head.coor_version.major = 4;
 	G_message(_("Input file is version 4."));
 	/* determine if in portable format or not */
 	if (buf[6] == 1 && (~buf[6] & 0xff) == (buf[7] & 0xff)) {	/* portable ? */
