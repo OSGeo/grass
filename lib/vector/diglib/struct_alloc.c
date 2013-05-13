@@ -1,7 +1,7 @@
 /*!
-  \file lib/vector/diglib/plus_node.c
+  \file lib/vector/diglib/struct_alloc.c
  
-  \brief Vector library - update topo for nodes (lower level functions)
+  \brief Vector library - allocate and zero array space (lower level functions)
   
   Lower level functions for reading/writing/manipulating vectors.
 
