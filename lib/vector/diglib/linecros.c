@@ -137,6 +137,26 @@ dig_find_intersection(double ax1, double ay1,
     register double d, r1, r2;
     double t;
 
+    if (ax1 > ax2 || (ax1 == ax2 && ay1 > ay2)) {
+	t = ax1;
+	ax1 = ax2;
+	ax2 = t;
+
+	t = ay1;
+	ay1 = ay2;
+	ay2 = t;
+    }
+
+    if (bx1 > bx2 || (bx1 == bx2 && by1 > by2)) {
+	t = bx1;
+	bx1 = bx2;
+	bx2 = t;
+
+	t = by1;
+	by1 = by2;
+	by2 = t;
+    }
+
     d = D;
 
     if (d) {
@@ -160,16 +180,6 @@ dig_find_intersection(double ax1, double ay1,
 
     /* Collinear vertical */
     if (ax1 == ax2) {
-	if (ay1 > ay2) {
-	    t = ay1;
-	    ay1 = ay2;
-	    ay2 = t;
-	}
-	if (by1 > by2) {
-	    t = by1;
-	    by1 = by2;
-	    by2 = t;
-	}
 	if (ay1 > by2)
 	    return 0;
 	if (ay2 < by1)
@@ -200,26 +210,6 @@ dig_find_intersection(double ax1, double ay1,
 	return -1;
     }
     else {
-	if (ax1 > ax2) {
-	    /* need to swap both coords */
-	    t = ax1;
-	    ax1 = ax2;
-	    ax2 = t;
-
-	    t = ay1;
-	    ay1 = ay2;
-	    ay2 = t;
-	}
-	if (bx1 > bx2) {
-	    /* need to swap both coords */
-	    t = bx1;
-	    bx1 = bx2;
-	    bx2 = t;
-
-	    t = by1;
-	    by1 = by2;
-	    by2 = t;
-	}
 	if (ax1 > bx2)
 	    return 0;
 	if (ax2 < bx1)
