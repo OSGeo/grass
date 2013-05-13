@@ -252,13 +252,17 @@ void dig_spidx_free(struct Plus_head *Plus)
     
     /* destroy tree structures */
     /* Node spidx */
-    RTreeDestroyTree(Plus->Node_spidx);
+    if (Plus->Node_spidx)
+	RTreeDestroyTree(Plus->Node_spidx);
     /* Line spidx */
-    RTreeDestroyTree(Plus->Line_spidx);
+    if (Plus->Line_spidx)
+	RTreeDestroyTree(Plus->Line_spidx);
     /* Area spidx */
-    RTreeDestroyTree(Plus->Area_spidx);
+    if (Plus->Area_spidx)
+	RTreeDestroyTree(Plus->Area_spidx);
     /* Isle spidx */
-    RTreeDestroyTree(Plus->Isle_spidx);
+    if (Plus->Isle_spidx)
+	RTreeDestroyTree(Plus->Isle_spidx);
 
     /* 3D future : */
     /* Face spidx */
