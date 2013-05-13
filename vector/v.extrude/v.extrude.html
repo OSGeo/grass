@@ -21,13 +21,14 @@ and centroid is stored as a closed set of faces and kernel which
 define a volume.
 
 <p>
-For conversion of 2D points or lines to 3D can be also
-used <em><a href="v.to.3d.html">v.to.3d</a></em> module. In opposite
-to <em>v.extrude</em>, <em><a href="v.to.3d.html">v.to.3d</a></em>
-doesn't extrude vector features, it just defines z-coordinate in the
-features geometry. It means that no feature type conversion is
-applied, points remain still points in the output vector map. Same
-applies for the lines.
+For conversion of 2D points or lines to 3D can be
+used <em><a href="v.to.3d.html">v.to.3d</a></em>
+or <em><a href="v.drape.html">v.drape</a></em>. In opposite
+to <em>v.extrude</em>, these modules do not extrude vector features,
+they defines z-coordinate for the features from given parameters or by
+sampling elevation raster map values. It means that no feature type
+conversion is applied, points remain still points in the output vector
+map. Same applies for the lines.
 
 <p>
 <em>v.extrude</em> modifies only features geometry. Feature categories
