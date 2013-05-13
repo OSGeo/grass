@@ -311,14 +311,9 @@ struct cat_list *Vect_new_cat_list()
     p = (struct cat_list *)G_malloc(sizeof(struct cat_list));
 
     /* n_ranges MUST be initialized to zero */
-    if (p) {
-	p->n_ranges = 0;
-	p->alloc_ranges = 0;
-	p->field = 0;
-	p->min = NULL;
-	p->max = NULL;
-    }
-
+    if (p)
+        G_zero(p, sizeof(struct cat_list));
+    
     return p;
 }
 
@@ -361,9 +356,10 @@ void Vect_destroy_cat_list(struct cat_list *p)
    cat_list->field = 0
    cat_list->n_ranges = 4
    cat_list->min = {2, 3, 5, 20}
-   cat_list->max = {2, 3, 9, 20}\endverbatim
+   cat_list->max = {2, 3, 9, 20}
+   \endverbatim
 
-   \param[in] str category list as a string
+   \param str category list as a string
    \param[in,out] list pointer to cat_list structure
 
    \return number of errors in ranges
@@ -474,6 +470,66 @@ int Vect_array_to_cat_list(const int *vals, int nvals, struct cat_list *list)
     list->n_ranges = range + 1;
 
     return (list->n_ranges);
+}
+
+/*!
+   \brief Convert cat_list struct to ordered array of unique integers.
+   
+   Output array do not contain duplicate items.
+
+   Allocated array should be freed by G_free().
+   
+   \param cat_list pointer to cat_list struct
+   \param[out] vals array of integers
+   \param[out] nvals number of values
+
+   \return 0 on success
+   \return -1 on failure
+ */
+int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
+{
+    int i, j, k, n, n_cats, n_ucats, last_cat;
+    int *cats, *ucats;
+    
+    G_debug(1, "Vect_cat_list_to_array()");
+
+    *nvals = n_cats = 0;
+    cats = NULL;
+    for (i = 0; i < list->n_ranges; i++) {
+        n = list->max[i] - list->min[i] + 1;
+        if (n < 1)
+            return -1;
+        
+        /* realloc array */
+        cats = (int *) G_realloc(cats, sizeof(int) * (n_cats + n));
+
+        for (j = n_cats, k = 0; j < n_cats + n; j++, k++) {
+            cats[j] = list->min[i] + k;
+        }
+        n_cats += n;
+    }
+
+    /* sort array */
+    qsort(cats, n_cats, sizeof(int), cmp);
+
+    /* skip duplicated values */
+    ucats = G_malloc(sizeof(int) * n_cats);
+    last_cat = ucats[0] = cats[0];
+    n_ucats = 1;
+    for (i = 1; i < n_cats; i++) {
+        if (last_cat == cats[i])
+            continue;
+        last_cat = ucats[n_ucats++] = cats[i];
+    }
+    G_free(cats);
+    
+    /* reallocate array for unique values */
+    ucats = (int *) G_realloc(ucats, sizeof(int) * n_ucats);
+    
+    *nvals = n_ucats;
+    *vals = ucats;
+    
+    return 0;
 }
 
 /*!

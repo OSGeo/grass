@@ -73,6 +73,7 @@ int Vect_cats_in_constraint(struct line_cats *, int, struct cat_list *);
 struct cat_list *Vect_new_cat_list(void);
 int Vect_str_to_cat_list(const char *, struct cat_list *);
 int Vect_array_to_cat_list(const int *, int, struct cat_list *);
+int Vect_cat_list_to_array(const struct cat_list *, int **, int *);
 int Vect_cat_in_cat_list(int, const struct cat_list *);
 void Vect_destroy_cat_list(struct cat_list *);
 
@@ -416,6 +417,8 @@ int Vect_copy(const char *, const char *, const char *);
 int Vect_rename(const char *, const char *);
 int Vect_copy_table(const struct Map_info *, struct Map_info *, int, int,
                     const char *, int);
+int Vect_copy_table_by_cat_list(const struct Map_info *, struct Map_info *, int, int,
+                                const char *, int, const struct cat_list *);
 int Vect_copy_table_by_cats(const struct Map_info *, struct Map_info *, int, int,
                             const char *, int, int *, int);
 int Vect_copy_tables(const struct Map_info *, struct Map_info *, int);
