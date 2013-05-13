@@ -77,33 +77,8 @@ dig_test_for_intersection(double ax1, double ay1,
 
     /* segments are colinear. check for overlap */
 
-    if (ax1 != ax2) {
-	/* segments are not parallel to y axis, can use x values */
-    
-	if (ax1 > ax2) {
-	    t = ax1;
-	    ax1 = ax2;
-	    ax2 = t;
-	}
-	if (bx1 > bx2) {
-	    t = bx1;
-	    bx1 = bx2;
-	    bx2 = t;
-	}
-	if (ax1 > bx2)
-	    return 0;
-	if (ax2 < bx1)
-	    return 0;
-
-	/* there is overlap */
-
-	if (ax1 == bx2 || ax2 == bx1)
-	    return 1;		/* endpoints only */
-
-	return -1;			/* true overlap   */
-    }
-    else {
-	/* segments are parallel to y axis, use y values */
+    /* Collinear vertical */
+    if (ax1 == ax2) {
 	if (ay1 > ay2) {
 	    t = ay1;
 	    ay1 = ay2;
@@ -126,7 +101,29 @@ dig_test_for_intersection(double ax1, double ay1,
 
 	return -1;			/* true overlap   */
     }
-    
+    else {
+	if (ax1 > ax2) {
+	    t = ax1;
+	    ax1 = ax2;
+	    ax2 = t;
+	}
+	if (bx1 > bx2) {
+	    t = bx1;
+	    bx1 = bx2;
+	    bx2 = t;
+	}
+	if (ax1 > bx2)
+	    return 0;
+	if (ax2 < bx1)
+	    return 0;
+
+	/* there is overlap */
+
+	if (ax1 == bx2 || ax2 == bx1)
+	    return 1;		/* endpoints only */
+
+	return -1;			/* true overlap   */
+    }    
     return 0; /* should not be reached */
 }
 
@@ -161,8 +158,48 @@ dig_find_intersection(double ax1, double ay1,
 
     /* segments are colinear. check for overlap */
 
-    if (ax1 != ax2) {
-	/* segments are not parallel to y axis, can use x values */
+    /* Collinear vertical */
+    if (ax1 == ax2) {
+	if (ay1 > ay2) {
+	    t = ay1;
+	    ay1 = ay2;
+	    ay2 = t;
+	}
+	if (by1 > by2) {
+	    t = by1;
+	    by1 = by2;
+	    by2 = t;
+	}
+	if (ay1 > by2)
+	    return 0;
+	if (ay2 < by1)
+	    return 0;
+
+	/* there is overlap */
+
+	if (ay1 == by2) {
+	    *x = ax1;
+	    *y = ay1;
+	    return 1;		/* endpoints only */
+	}
+	if (ay2 == by1) {
+	    *x = ax2;
+	    *y = ay2;
+	    return 1;		/* endpoints only */
+	}
+
+	/* overlap, no single intersection point */
+	if (ay1 > by1 && ay1 < by2) {
+	    *x = ax1;
+	    *y = ay1;
+	}
+	else {
+	    *x = ax2;
+	    *y = ay2;
+	}
+	return -1;
+    }
+    else {
 	if (ax1 > ax2) {
 	    /* need to swap both coords */
 	    t = ax1;
@@ -203,57 +240,6 @@ dig_find_intersection(double ax1, double ay1,
 	
 	/* overlap, no single intersection point */
 	if (ax1 > bx1 && ax1 < bx2) {
-	    *x = ax1;
-	    *y = ay1;
-	}
-	else {
-	    *x = ax2;
-	    *y = ay2;
-	}
-	return -1;
-    }
-    else {
-	/* segments are parallel to y axis, use y values */
-	if (ay1 > ay2) {
-	    /* need to swap both coords */
-	    t = ay1;
-	    ay1 = ay2;
-	    ay2 = t;
-
-	    t = ax1;
-	    ax1 = ax2;
-	    ax2 = t;
-	}
-	if (by1 > by2) {
-	    /* need to swap both coords */
-	    t = by1;
-	    by1 = by2;
-	    by2 = t;
-
-	    t = by1;
-	    by1 = by2;
-	    by2 = t;
-	}
-	if (ay1 > by2)
-	    return 0;
-	if (ay2 < by1)
-	    return 0;
-
-	/* there is overlap */
-
-	if (ay1 == by2) {
-	    *x = ax1;
-	    *y = ay1;
-	    return 1;		/* endpoints only */
-	}
-	if (ay2 == by1) {
-	    *x = ax2;
-	    *y = ay2;
-	    return 1;		/* endpoints only */
-	}
-
-	/* overlap, no single intersection point */
-	if (ay1 > by1 && ay1 < by2) {
 	    *x = ax1;
 	    *y = ay1;
 	}
