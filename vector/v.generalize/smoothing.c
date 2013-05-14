@@ -25,6 +25,8 @@
 #include "point.h"
 #include "matrix.h"
 
+/* TODO: add loop support where possible */
+
 /* boyle's forward looking algorithm
  * return the number of points in the result = Points->n_points
  */
@@ -70,18 +72,31 @@ int boyle(struct line_pnts *Points, int look_ahead, int with_z)
 /* mcmaster's sliding averaging algorithm. Return the number of points
  * in the output line. This equals to the number of points in the
  * input line */
-int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead,
-		      int with_z)
+
+int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead, 
+                      int loop_support, int with_z)
 {
 
     int n, half, i;
     double sc;
     POINT p, tmp, s;
     POINT *res;
+    int is_loop, count;
 
+    is_loop=0;
     n = Points->n_points;
     half = look_ahead / 2;
+    
+    count = n - half;
 
+    /* is it loop ?*/
+    if (Points->x[0] == Points->x[n-1] 
+        && Points->y[0] == Points->y[n-1] 
+        && (Points->z[0] == Points->z[n-1] || with_z == 0) && loop_support){
+        is_loop = 1;
+        count = n + half;
+    }
+     
     if (look_ahead % 2 == 0) {
 	G_fatal_error(_("Look ahead parameter must be odd"));
 	return n;
@@ -90,7 +105,7 @@ int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead,
     if (look_ahead >= n || look_ahead == 1)
 	return n;
 
-    res = G_malloc(sizeof(POINT) * n);
+    res = G_malloc(sizeof(POINT) * (n + half));
     if (!res) {
 	G_fatal_error(_("Out of memory"));
 	return n;
@@ -105,29 +120,37 @@ int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead,
     }
 
     /* and calculate the average of remaining points */
-    for (i = half; i + half < n; i++) {
-	point_assign(Points, i, with_z, &s);
+    for (i = half; i < count; i++) {
+	point_assign_loop(Points, i, with_z, &s);
 	point_scalar(s, 1.0 - slide, &s);
 	point_scalar(p, sc * slide, &tmp);
 	point_add(tmp, s, &res[i]);
-	if (i + half + 1 < n) {
-	    point_assign(Points, i - half, with_z, &tmp);
+	if ((i + half + 1 < n) || is_loop ) {
+	    point_assign_loop(Points, i - half, with_z, &tmp);
 	    point_subtract(p, tmp, &p);
-	    point_assign(Points, i + half + 1, with_z, &tmp);
+	    point_assign_loop(Points, i + half + 1, with_z, &tmp);
 	    point_add(p, tmp, &p);
 	}
     }
 
 
-    for (i = half; i + half < n; i++) {
+    for (i = half; i < count; i++) {
 	Points->x[i] = res[i].x;
 	Points->y[i] = res[i].y;
 	Points->z[i] = res[i].z;
     }
 
-    G_free(res);
-    return Points->n_points;
+    if (is_loop) {
+        for (i = 0; i < half; i++) {
+        Points->x[i] = res[n + i - 1].x;
+        Points->y[i] = res[n + i - 1].y;
+        Points->z[i] = res[n + i - 1].z;
+        }
+    }
 
+    G_free(res);
+
+    return Points->n_points;
 }
 
 /* mcmaster's distance weighting algorithm. Return the number

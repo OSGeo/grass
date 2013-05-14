@@ -50,6 +50,12 @@ extern inline double point_dist2(POINT a);
  */
 extern inline void point_assign(struct line_pnts *Points, int index,
 				int with_z, POINT * res);
+/* assign point Points[index] to the res
+ * if with z = 0 then res.z = 0  
+ * loop to infinite
+ */
+extern inline void point_assign_loop(struct line_pnts *Points, int index,
+				int with_z, POINT * res);
 /* res = k * a */
 extern inline void point_scalar(POINT a, double k, POINT * res);
 
