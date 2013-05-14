@@ -169,7 +169,7 @@ areas. The geometry type GV_LINE cannot form an area.
 \verbatim
 One point (nodes: 0, lines: 1, areas: 0, isles: 0)
 
-    + N1/L1
+    + L1
 \endverbatim
 
 Line L1 (see \ref P_line)
