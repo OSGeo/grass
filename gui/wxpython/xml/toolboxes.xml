@@ -1075,6 +1075,9 @@
       <module-item name="r.regression.line">
         <label>Linear regression</label>
       </module-item>
+      <module-item name="r.regression.multi">
+        <label>Multiple regression</label>
+      </module-item>
       <module-item name="r.coin">
         <label>Mutual category occurrences</label>
       </module-item>
