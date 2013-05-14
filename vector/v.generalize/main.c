@@ -54,13 +54,14 @@ int main(int argc, char *argv[])
     struct Option *angle_thresh_opt, *degree_thresh_opt,
 	*closeness_thresh_opt;
     struct Option *betweeness_thresh_opt;
-    struct Flag *notab_flag;
+    struct Flag *notab_flag, *loop_support_flag;
     int with_z;
     int total_input, total_output;	/* Number of points in the input/output map respectively */
     double thresh, alpha, beta, reduction, slide, angle_thresh;
     double degree_thresh, closeness_thresh, betweeness_thresh;
     int method;
     int look_ahead, iterations;
+    int loop_support;
     int layer;
     int n_lines;
     int simplification, mask_type;
@@ -224,6 +225,10 @@ int main(int argc, char *argv[])
     
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Selection");
+
+    loop_support_flag = G_define_flag();
+    loop_support_flag->key = 'l';
+    loop_support_flag->description = _("Loop support");
 
     notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
     notab_flag->description = _("Do not copy attributes");
@@ -447,6 +452,20 @@ int main(int argc, char *argv[])
 	    /* copy points */
 	    Vect_reset_line(Points);
 	    Vect_append_points(Points, APoints, GV_FORWARD);
+	    
+	    loop_support = 0;
+	    if (loop_support_flag->answer) {
+		int n1, n2;
+
+		Vect_get_line_nodes(&Out, i, &n1, &n2);
+		if (n1 == n2) {
+		    if (Vect_get_node_n_lines(&Out, n1) == 2) {
+			if (abs(Vect_get_node_line(&Out, n1, 0)) == i &&
+			    abs(Vect_get_node_line(&Out, n1, 1)) == i)
+			    loop_support = 1;
+		    }
+		}
+	    }
 		
 	    for (iter = 0; iter < iterations; iter++) {
 		switch (method) {
@@ -470,7 +489,7 @@ int main(int argc, char *argv[])
 		    boyle(Points, look_ahead, with_z);
 		    break;
 		case SLIDING_AVERAGING:
-		    sliding_averaging(Points, slide, look_ahead, with_z);
+		    sliding_averaging(Points, slide, look_ahead, loop_support, with_z);
 		    break;
 		case DISTANCE_WEIGHTING:
 		    distance_weighting(Points, slide, look_ahead, with_z);
@@ -487,6 +506,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    
+        if (method != SLIDING_AVERAGING || loop_support == 0){ 
 	    /* safety check, BUG in method if not passed */
 	    if (APoints->x[0] != Points->x[0] || 
 		APoints->y[0] != Points->y[0] ||
@@ -497,6 +517,8 @@ int main(int argc, char *argv[])
 		APoints->y[APoints->n_points - 1] != Points->y[Points->n_points - 1] ||
 		APoints->z[APoints->n_points - 1] != Points->z[Points->n_points - 1])
 		G_fatal_error(_("Method '%s' did not preserve last point"), method_opt->answer);
+
+        }
 
 	    Vect_line_prune(Points);
 

@@ -63,6 +63,21 @@ inline void point_assign(struct line_pnts *Points, int index, int with_z,
     return;
 }
 
+inline void point_assign_loop(struct line_pnts *Points, int index, int with_z,
+			 POINT * res)
+{
+    index = index % Points->n_points;
+    res->x = Points->x[index];
+    res->y = Points->y[index];
+    if (with_z) {
+	res->z = Points->z[index];
+    }
+    else {
+	res->z = 0;
+    }
+    return;
+}
+
 inline void point_scalar(POINT a, double k, POINT * res)
 {
     res->x = a.x * k;
