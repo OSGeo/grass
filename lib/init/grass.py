@@ -175,7 +175,6 @@ Geographic Resources Analysis Support System (GRASS GIS).
 
 %s:
   GRASS_GUI                      %s
-  GRASS_WISH                     %s
   GRASS_HTML_BROWSER             %s
   GRASS_ADDON_PATH               %s
   GRASS_ADDON_BASE               %s
@@ -200,7 +199,6 @@ Geographic Resources Analysis Support System (GRASS GIS).
        _("fully qualified initial mapset directory"),
        _("Environment variables relevant for startup"),
        _("select GUI (text, gui)"),
-       _("set wish shell name to override 'wish'"),
        _("set html web browser for help pages"),
        _("set additional path(s) to local GRASS modules or user scripts"),
        _("set additional GISBASE for locally installed GRASS Addons"),
@@ -396,10 +394,6 @@ def set_defaults():
         else:
             pager = "cat"
         os.environ['GRASS_PAGER'] = pager
-    
-    # GRASS_WISH
-    if not os.getenv('GRASS_WISH'):
-        os.environ['GRASS_WISH'] = "wish"
     
     # GRASS_PYTHON
     if not os.getenv('GRASS_PYTHON'):
@@ -1164,7 +1158,7 @@ set_paths()
 # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
 path_prepend(gfile("lib"), ld_library_path_var)
 
-# Set GRASS_PAGER, GRASS_WISH, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
+# Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
 set_defaults()
 
 # Set GRASS_HTML_BROWSER

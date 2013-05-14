@@ -1,6 +1,5 @@
 rem Environmental variables for GRASS stand-alone installer
 
-set GRASS_WISH=%GISBASE%\extrabin\wish.exe
 set GRASS_PYTHON=python
 set GRASS_PROJSHARE=%GISBASE%\proj
 set GRASS_HTML_BROWSER=explorer
