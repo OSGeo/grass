@@ -29,7 +29,8 @@ static struct line_cats *Cats_floor;
 */
 int extrude(struct Map_info *In, struct Map_info *Out,
             const struct line_cats *Cats, const struct line_pnts *Points,
-            int fdrast, int trace, int interp_method, double objheight, double voffset,
+            int fdrast, int trace, int interp_method, double scale, int null_defined,
+            double null_val, double objheight, double voffset,
             const struct Cell_head *window, int type, int centroid)
 {
     int k;			/* Points->n_points */
@@ -61,11 +62,15 @@ int extrude(struct Map_info *In, struct Map_info *Out,
     /* do not trace -> calculate minimum dem offset */
     if (fdrast >= 0 && !trace) {
 	for (k = 0; k < Points->n_points; k++) {
-	    voffset_curr = Rast_get_sample(fdrast, window, NULL,
-                                           Points->y[k], Points->x[k], 0, /* north, east */
-                                           interp_method);
-	    if (Rast_is_d_null_value(&voffset_curr))
-		continue; /* skip null values */
+            voffset_curr = scale * Rast_get_sample(fdrast, window, NULL,
+                                                   Points->y[k], Points->x[k], /* north, east */
+                                                   0, interp_method);
+	    if (Rast_is_d_null_value(&voffset_curr)) {
+                if (null_defined)
+                    voffset_curr = null_val;
+                else
+                    voffset_curr = 0.;
+            }
 
 	    if (k == 0) {
 		voffset_dem = voffset_curr;
@@ -82,25 +87,30 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 	voffset_curr = voffset_next = 0.0;
 
 	if (fdrast >= 0 && trace) {
-	    voffset_curr = Rast_get_sample(fdrast, window, NULL,
-                                           Points->y[k], Points->x[k], 0, /* north, east */
-                                           interp_method);
+	    voffset_curr = scale * Rast_get_sample(fdrast, window, NULL,
+                                                   Points->y[k], Points->x[k], /* north, east */
+                                                   0, interp_method);
 
 	    if (type != GV_POINT) {
-		voffset_next = Rast_get_sample(fdrast, window, NULL,
-                                               Points->y[k + 1],         /* north, east */
-                                               Points->x[k + 1], 0,
-                                               interp_method);
+		voffset_next = scale * Rast_get_sample(fdrast, window, NULL,
+                                                       Points->y[k + 1],         /* north, east */
+                                                       Points->x[k + 1], 0,
+                                                       interp_method);
 	    }
 	}
 
-	if (Rast_is_d_null_value(&voffset_curr) ||
-	    Rast_is_d_null_value(&voffset_next)) {
-            if (k >= Points->n_points - 2)
-                break;
+	if (Rast_is_d_null_value(&voffset_curr)) {
+            if (null_defined)
+                voffset_curr = null_val;
             else
-                continue;
+                voffset_curr = 0.;
 	}
+        if (Rast_is_d_null_value(&voffset_next)) {
+            if (null_defined)
+                voffset_next = null_val;
+            else
+                voffset_next = 0.;
+        }
 
         if (trace) {
             voffset_curr += voffset;
@@ -147,6 +157,7 @@ int extrude(struct Map_info *In, struct Map_info *Out,
 				  Points->z[k] + voffset_curr);
 	    }
 	}
+        
         if (k >= Points->n_points - 2)
             break;
     }
