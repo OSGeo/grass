@@ -61,6 +61,11 @@ def main():
 	grass.run_command('v.extract', flags = 'd', input = input,
 			  output = output, type = 'area', layer = layer)
     else:
+        if int(layer) == -1:
+            grass.warning(_("Invalid layer number (%d). "
+                            "Parameter '%s' specified, assuming layer '1'.") % 
+                          (int(layer), 'column'))
+            layer = '1'
         try:
             coltype = grass.vector_columns(input, layer)[column]
         except KeyError:
