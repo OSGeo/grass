@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct {
         struct Option *input, *output, *zshift, *height, *elevation, *hcolumn,
-            *type, *field, *cats, *where, *interp;
+            *type, *field, *cats, *where, *interp, *scale, *null;
     } opt;
     struct {
         struct Flag *trace;
@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     int only_type, cat;
     int fdrast, interp_method, trace;
     double objheight, objheight_default, voffset;
+    double scale, null_val;
     
     struct field_info *Fi;
     dbDriver *driver = NULL;
@@ -65,10 +66,13 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("sampling"));
     G_add_keyword(_("3D"));
-    module->description =
-	_("Extrudes flat vector features to 3D with defined height.");
-
+    module->label =
+	_("Extrudes flat vector features to 3D vector features with defined height.");
+    module->description = 
+        _("Optionally the height can be derived from sampling of elevation raster map.");
+    
     flag.trace = G_define_flag();
     flag.trace->key = 't';
     flag.trace->description = _("Trace elevation");
@@ -124,6 +128,20 @@ int main(int argc, char *argv[])
     opt.interp->answer = "nearest";
     opt.interp->guisection = _("Elevation");
 
+    opt.scale = G_define_option();
+    opt.scale->key = "scale";
+    opt.scale->type = TYPE_DOUBLE;
+    opt.scale->description = _("Scale factor sampled raster values");
+    opt.scale->answer = "1.0";
+    opt.scale->guisection = _("Elevation");
+
+    opt.null = G_define_option();
+    opt.null->key = "null_value";
+    opt.null->type = TYPE_DOUBLE;
+    opt.null->description =
+	_("Height for sampled raster NULL values");
+    opt.null->guisection = _("Elevation");
+
     G_gisinit(argv[0]);
 
     if (G_parser(argc, argv))
@@ -145,8 +163,18 @@ int main(int argc, char *argv[])
     objheight_default = objheight;
 
     only_type = Vect_option_to_types(opt.type);
+
+    /* sampling method */
     interp_method = Rast_option_to_interp_type(opt.interp);
 
+    /* used to scale sampled raster values */
+    scale = atof(opt.scale->answer);
+
+    /* is null value defined */
+    if (opt.null->answer)
+	null_val = atof(opt.null->answer);
+
+    /* trace elevation */
     trace = flag.trace->answer ? TRUE : FALSE;
     
     /* set input vector map name and mapset */
@@ -268,7 +296,8 @@ int main(int argc, char *argv[])
 	    G_debug(3, "area: %d height: %f", area, objheight);
 
 	    extrude(&In, &Out, Cats, Points,
-		    fdrast, trace, interp_method,
+		    fdrast, trace, interp_method, scale,
+                    opt.null->answer ? TRUE : FALSE, null_val,
                     objheight, voffset, &window, GV_AREA,
 		    centroid);
 	} /* foreach area */
@@ -316,7 +345,8 @@ int main(int argc, char *argv[])
 	    } /* if opt.hcolumn->answer */
             
 	    extrude(&In, &Out, Cats, Points,
-		    fdrast, trace, interp_method,
+		    fdrast, trace, interp_method, scale,
+                    opt.null->answer ? TRUE : FALSE, null_val,
                     objheight, voffset, &window, type, -1);
 	} /* for each line */
     }	  /* else if area */
