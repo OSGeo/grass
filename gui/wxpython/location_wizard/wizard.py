@@ -135,7 +135,7 @@ class DatabasePage(TitledPage):
                        wx.ALL, border = 5,
                        pos = (2, 2))
 
-        self.sizer.Add(item = self.MakeLabel("%s:" % _("Optional Location Title"),
+        self.sizer.Add(item = self.MakeLabel("%s:" % _("Location Title"),
                                              tooltip = _("Optional location title, "
                                                          "you can leave this field blank.")),
                        flag = wx.ALIGN_RIGHT |
@@ -891,7 +891,7 @@ class DatumPage(TitledPage):
     def OnPageChanging(self, event):
         self.proj4params = ''
         proj = self.parent.projpage.p4proj
-                
+        
         if event.GetDirection():
             if self.datum not in self.parent.datums:
                 event.Veto()
@@ -902,7 +902,8 @@ class DatumPage(TitledPage):
                                  read = True,
                                  proj4 = '%s' % proj,
                                  datum = '%s' % self.datum, 
-                                 datum_trans = '-1')
+                                 datum_trans = '-1',
+                                 flags = 't')
 #                wx.Messagebox('here')
                 if ret != '':
                     dtrans = ''
@@ -1286,9 +1287,12 @@ class WKTPage(TitledPage):
 
     def OnBrowse(self, event):
         """!Choose file"""
-        dlg = wx.FileDialog(parent = self, message = _("Select WKT or PRJ file"),
-                            defaultDir = os.getcwd(), 
-                            wildcard = "PRJ files (*.prj)|*.prj|Files (*.*)|*.*", style = wx.OPEN)
+        dlg = wx.FileDialog(parent = self,
+                            message = _("Select WKT or PRJ file"),
+                            defaultDir = os.getcwd(),
+                            wildcard = "PRJ files (*.prj)|*.prj|Files (*.*)|*.*",
+                            style = wx.OPEN)
+
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             self.tfile.SetValue(path)
@@ -1395,7 +1399,8 @@ class EPSGPage(TitledPage):
                 ret = RunCommand('g.proj',
                                  read = True,
                                  epsg = self.epsgcode,
-                                 datum_trans = '-1')
+                                 datum_trans = '-1',
+                                 flags = 't')
                 
                 if ret != '':
                     dtrans = ''
@@ -1543,11 +1548,19 @@ class CustomPage(TitledPage):
 
     def OnPageChanging(self, event):
         if event.GetDirection():
-        # check for datum tranforms            
+            self.custom_dtrans_string = ''
+
+            if self.customstring.find('+datum=') < 0:
+                self.GetNext().SetPrev(self)
+                return
+
+            # check for datum tranforms
+            # FIXME: -t flag is a hack-around for trac bug #1849
             ret, out, err = RunCommand('g.proj',
                                        read = True, getErrorMsg = True,
                                        proj4 = self.customstring, 
-                                       datum_trans = '-1')
+                                       datum_trans = '-1',
+                                       flags = 't')
             if ret != 0:
                 wx.MessageBox(parent = self,
                               message = err,
@@ -1573,7 +1586,20 @@ class CustomPage(TitledPage):
                     return _('Datum transform is required.')
                 
                 self.parent.datum_trans = dtrans
-        
+
+                # prepare +nadgrids or +towgs84 terms for Summary page. first convert them:
+                ret, projlabel, err = RunCommand('g.proj',
+                                                 flags = 'jft',
+                                                 proj4 = self.customstring,
+                                                 datum_trans = dtrans,
+                                                 getErrorMsg = True,
+                                                 read = True)
+                # splitting on space alone would break for grid files with space in pathname
+                for projterm in projlabel.split(' +'):
+                    if projterm.find("towgs84=") != -1 or projterm.find("nadgrids=") != -1:
+                        self.custom_dtrans_string = ' +%s' % projterm
+                        break
+
         self.GetNext().SetPrev(self)
             
     def GetProjstring(self, event):
@@ -1686,7 +1712,7 @@ class SummaryPage(TitledPage):
                 addl_opts = {}
                 if len(datum) > 0:
                     addl_opts['datum'] = '%s' % datum
-                    addl_opts['datumtrans'] = dtrans
+                    addl_opts['datum_trans'] = dtrans
 
                 ret, projlabel, err = RunCommand('g.proj',
                                                  flags = 'jf',
@@ -1697,7 +1723,7 @@ class SummaryPage(TitledPage):
                                                  **addl_opts)
             elif coordsys == 'epsg':
                 ret, projlabel, err = RunCommand('g.proj',
-                                                 flags = 'jf',
+                                                 flags = 'jft',
                                                  epsg = epsgcode,
                                                  datum_trans = dtrans,
                                                  location = location,
@@ -1707,8 +1733,8 @@ class SummaryPage(TitledPage):
             finishButton = wx.FindWindowById(wx.ID_FORWARD)
             if ret == 0:
                 if datum != '':
-                    projlabel = projlabel + ' ' + 'datum=%s' % datum
-                self.lproj4string.SetLabel(projlabel.replace(' ', os.linesep))
+                    projlabel = projlabel + '+datum=%s' % datum
+                self.lproj4string.SetLabel(projlabel.replace(' +', os.linesep + '+'))
                 finishButton.Enable(True)
             else:
                 GError(err, parent = self)
@@ -1739,7 +1765,8 @@ class SummaryPage(TitledPage):
             self.lproj4string.SetLabel("")
         elif coordsys == 'custom':
             label = _("custom")
-            self.lproj4string.SetLabel(('%s' % self.parent.custompage.customstring.replace(' ', os.linesep)))
+            combo_str = self.parent.custompage.customstring + self.parent.custompage.custom_dtrans_string
+            self.lproj4string.SetLabel(('%s' % combo_str.replace(' +', os.linesep + '+')))
         self.lprojection.SetLabel(label)
         
     def OnFinish(self, event):
@@ -2055,10 +2082,15 @@ class LocationWizard(wx.Object):
                                       datum_trans = self.datum_trans,
                                       desc = self.startpage.locTitle)
             elif coordsys == 'custom':
+                addl_opts = {}
+                if self.datum_trans is not None:
+                    addl_opts['datum_trans'] = self.datum_trans
+
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
                                       proj4 = self.custompage.customstring,
-                                      desc = self.startpage.locTitle)
+                                      desc = self.startpage.locTitle,
+                                      **addl_opts)
             elif coordsys == "epsg":
                 if not self.epsgpage.epsgcode:
                     return _('EPSG code missing.')
@@ -2109,12 +2141,12 @@ class LocationWizard(wx.Object):
         ellipse = self.ellipsepage.ellipse
         ellipsedesc = self.ellipsepage.ellipsedesc
         ellipseparams = self.ellipsepage.ellipseparams
-                
+        
         #
         # creating PROJ.4 string
         #
         proj4string = '%s %s' % (proj, proj4params)
-                            
+        
         # set ellipsoid parameters
         if ellipse != '':
             proj4string = '%s +ellps=%s' % (proj4string, ellipse)
@@ -2124,7 +2156,7 @@ class LocationWizard(wx.Object):
             else:
                 item = ' +' + item
             proj4string = '%s %s' % (proj4string, item)
-            
+        
         # set datum transform parameters if relevant
         if datumparams:
             for item in datumparams:

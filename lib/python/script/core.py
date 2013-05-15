@@ -1257,6 +1257,7 @@ def create_location(dbase, location,
     """
     gisdbase = None
     if epsg or proj4 or filename or wkt:
+        # FIXME: changing GISDBASE mid-session is not background-job safe
         gisdbase = gisenv()['GISDBASE']
         run_command('g.gisenv',
                     set = 'GISDBASE=%s' % dbase)
@@ -1272,6 +1273,7 @@ def create_location(dbase, location,
     if epsg:
         ps = pipe_command('g.proj',
                           quiet = True,
+                          flags = 't',
                           epsg = epsg,
                           location = location,
                           stderr = PIPE,
@@ -1279,6 +1281,7 @@ def create_location(dbase, location,
     elif proj4:
         ps = pipe_command('g.proj',
                           quiet = True,
+                          flags = 't',
                           proj4 = proj4,
                           location = location,
                           stderr = PIPE,
