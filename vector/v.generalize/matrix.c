@@ -22,7 +22,7 @@
 #include <grass/glocale.h>
 #include "matrix.h"
 
-int matrix_init(int rows, int cols, MATRIX * res)
+int matrix_init(int rows, int cols, MATRIX *res)
 {
 
     int i, j;
@@ -46,19 +46,19 @@ int matrix_init(int rows, int cols, MATRIX * res)
     return 1;
 }
 
-void matrix_free(MATRIX m)
+void matrix_free(MATRIX *m)
 {
     int i;
 
-    for (i = 0; i < m.rows; i++)
-	G_free(m.a[i]);
-    G_free(m.a);
+    for (i = 0; i < m->rows; i++)
+	G_free(m->a[i]);
+    G_free(m->a);
     return;
 }
 
-int matrix_mult(MATRIX a, MATRIX b, MATRIX * res)
+int matrix_mult(MATRIX *a, MATRIX *b, MATRIX *res)
 {
-    if (a.cols != b.rows)
+    if (a->cols != b->rows)
 	return 0;
 
     /*if (!matrix_init(a.rows, b.cols, res))
@@ -67,17 +67,17 @@ int matrix_mult(MATRIX a, MATRIX b, MATRIX * res)
 
     int i, j, k;
 
-    for (i = 0; i < a.rows; i++)
-	for (j = 0; j < b.cols; j++) {
+    for (i = 0; i < a->rows; i++)
+	for (j = 0; j < b->cols; j++) {
 	    res->a[i][j] = 0;
-	    for (k = 0; k < a.cols; k++)
-		res->a[i][j] += a.a[i][k] * b.a[k][j];
+	    for (k = 0; k < a->cols; k++)
+		res->a[i][j] += a->a[i][k] * b->a[k][j];
 	}
 
     return 1;
 }
 
-int matrix_add_identity(double s, MATRIX * m)
+int matrix_add_identity(double s, MATRIX *m)
 {
     if (m->rows != m->cols)
 	return 0;
@@ -92,7 +92,7 @@ int matrix_add_identity(double s, MATRIX * m)
 /* three following functions implements elementary row operations on matrices */
 
 /* auxialiry function for matrix_inverse, swaps two rows of given matrix */
-void matrix_swap_rows(int x, int y, MATRIX * m)
+void matrix_swap_rows(int x, int y, MATRIX *m)
 {
     int i;
 
@@ -108,7 +108,7 @@ void matrix_swap_rows(int x, int y, MATRIX * m)
 
 /* auxiliary function for matrix_inverse, multiplies row of a matrix by
  * a scalar */
-void matrix_row_scalar(int row, double s, MATRIX * m)
+void matrix_row_scalar(int row, double s, MATRIX *m)
 {
     int i;
 
@@ -121,7 +121,7 @@ void matrix_row_scalar(int row, double s, MATRIX * m)
  * one row to another.
  * i.e row[ra] = row[ra] + row[rb] * s;
  */
-void matrix_row_add_multiple(int ra, int rb, double s, MATRIX * m)
+void matrix_row_add_multiple(int ra, int rb, double s, MATRIX *m)
 {
     int i;
 
@@ -131,25 +131,23 @@ void matrix_row_add_multiple(int ra, int rb, double s, MATRIX * m)
 }
 
 /* TODO: don't test directly equality to zero */
-int matrix_inverse(MATRIX a, MATRIX * res, int percents)
-{;
-
-    /* not a square matrix */
-    if (a.rows != a.cols)
-	return 0;
-
+int matrix_inverse(MATRIX *a, MATRIX *res, int percents)
+{
     int i, j;
 
+    /* not a square matrix */
+    if (a->rows != a->cols)
+	return 0;
+
     /* initialize output matrix to the identity matrix */
-    if (!matrix_init(a.rows, a.rows, res)) {
+    if (!matrix_init(a->rows, a->rows, res)) {
 	G_fatal_error(_("Out of memory"));
 	return 0;
     }
-    for (i = 0; i < a.rows; i++) {
-	memset(res->a[i], 0, sizeof(double) * a.cols);
+    for (i = 0; i < a->rows; i++) {
+	memset(res->a[i], 0, sizeof(double) * a->cols);
 	res->a[i][i] = 1;
     }
-
 
     /* in order to obtain the inverse of a matrix, we run
      * gauss elimination on the matrix and each time we apply
@@ -159,7 +157,7 @@ int matrix_inverse(MATRIX a, MATRIX * res, int percents)
      * is row equivalent to the identity matrix.
      */
 
-    int n = a.rows;
+    int n = a->rows;
 
     if (percents)
 	G_percent_reset();
@@ -170,27 +168,27 @@ int matrix_inverse(MATRIX a, MATRIX * res, int percents)
 	if (percents)
 	    G_percent(i, n, 1);
 	for (j = i; j < n; j++) {
-	    if (a.a[j][i] != 0) {	/* need to change this row to something */
+	    if (a->a[j][i] != 0) {	/* need to change this row to something */
 		found = 1;	/* more sensible */
-		matrix_swap_rows(i, j, &a);
+		matrix_swap_rows(i, j, a);
 		matrix_swap_rows(i, j, res);
 		break;
 	    }
 	}
 	if (!found)
 	    return 0;
-	double c = (double)1.0 / a.a[i][i];
+	double c = (double)1.0 / a->a[i][i];
 
-	matrix_row_scalar(i, c, &a);
+	matrix_row_scalar(i, c, a);
 	matrix_row_scalar(i, c, res);
 	for (j = 0; j < n; j++) {
 	    if (i == j)
 		continue;
-	    double c = -a.a[j][i];
+	    double c = -a->a[j][i];
 
 	    if (c == 0.0)
 		continue;
-	    matrix_row_add_multiple(j, i, c, &a);
+	    matrix_row_add_multiple(j, i, c, a);
 	    matrix_row_add_multiple(j, i, c, res);
 	}
     }
@@ -198,7 +196,7 @@ int matrix_inverse(MATRIX a, MATRIX * res, int percents)
     return 1;
 }
 
-void matrix_mult_scalar(double s, MATRIX * m)
+void matrix_mult_scalar(double s, MATRIX *m)
 {
     int i, j;
 
@@ -207,25 +205,25 @@ void matrix_mult_scalar(double s, MATRIX * m)
 	    m->a[i][j] *= s;
 }
 
-void matrix_add(MATRIX a, MATRIX b, MATRIX * res)
+void matrix_add(MATRIX *a, MATRIX *b, MATRIX *res)
 {
     int i, j;
 
     for (i = 0; i < res->rows; i++)
 	for (j = 0; j < res->cols; j++)
-	    res->a[i][j] = a.a[i][j] + b.a[i][j];
+	    res->a[i][j] = a->a[i][j] + b->a[i][j];
 }
 
-void matrix_print(MATRIX a)
+void matrix_print(MATRIX *a)
 {
     int i, j;
 
-    for (i = 0; i < a.rows; i++) {
+    for (i = 0; i < a->rows; i++) {
 	double s = 0;
 
-	for (j = 0; j < a.cols; j++) {
-	    printf("%.3lf ", a.a[i][j]);
-	    s += a.a[i][j];
+	for (j = 0; j < a->cols; j++) {
+	    printf("%.3lf ", a->a[i][j]);
+	    s += a->a[i][j];
 	}
 	printf("|%.5lf\n", s);
     }

@@ -228,7 +228,8 @@ int main(int argc, char *argv[])
 
     loop_support_flag = G_define_flag();
     loop_support_flag->key = 'l';
-    loop_support_flag->description = _("Loop support");
+    loop_support_flag->label = _("Loop support");
+    loop_support_flag->description = _("Modify end points of lines forming a closed loop");
 
     notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
     notab_flag->description = _("Do not copy attributes");
@@ -486,39 +487,45 @@ int main(int argc, char *argv[])
 		    reumann_witkam(Points, thresh, with_z);
 		    break;
 		case BOYLE:
-		    boyle(Points, look_ahead, with_z);
+		    boyle(Points, look_ahead, loop_support, with_z);
 		    break;
 		case SLIDING_AVERAGING:
 		    sliding_averaging(Points, slide, look_ahead, loop_support, with_z);
 		    break;
 		case DISTANCE_WEIGHTING:
-		    distance_weighting(Points, slide, look_ahead, with_z);
+		    distance_weighting(Points, slide, look_ahead, loop_support, with_z);
 		    break;
 		case CHAIKEN:
-		    chaiken(Points, thresh, with_z);
+		    chaiken(Points, thresh, loop_support, with_z);
 		    break;
 		case HERMITE:
-		    hermite(Points, thresh, angle_thresh, with_z);
+		    hermite(Points, thresh, angle_thresh, loop_support, with_z);
 		    break;
 		case SNAKES:
-		    snakes(Points, alpha, beta, with_z);
+		    snakes(Points, alpha, beta, loop_support, with_z);
 		    break;
 		}
 	    }
-	    
-        if (method != SLIDING_AVERAGING || loop_support == 0){ 
-	    /* safety check, BUG in method if not passed */
-	    if (APoints->x[0] != Points->x[0] || 
-		APoints->y[0] != Points->y[0] ||
-		APoints->z[0] != Points->z[0])
-		G_fatal_error(_("Method '%s' did not preserve first point"), method_opt->answer);
-		
-	    if (APoints->x[APoints->n_points - 1] != Points->x[Points->n_points - 1] || 
-		APoints->y[APoints->n_points - 1] != Points->y[Points->n_points - 1] ||
-		APoints->z[APoints->n_points - 1] != Points->z[Points->n_points - 1])
-		G_fatal_error(_("Method '%s' did not preserve last point"), method_opt->answer);
 
-        }
+	    if (loop_support == 0) { 
+		/* safety check, BUG in method if not passed */
+		if (APoints->x[0] != Points->x[0] || 
+		    APoints->y[0] != Points->y[0] ||
+		    APoints->z[0] != Points->z[0])
+		    G_fatal_error(_("Method '%s' did not preserve first point"), method_opt->answer);
+		    
+		if (APoints->x[APoints->n_points - 1] != Points->x[Points->n_points - 1] || 
+		    APoints->y[APoints->n_points - 1] != Points->y[Points->n_points - 1] ||
+		    APoints->z[APoints->n_points - 1] != Points->z[Points->n_points - 1])
+		    G_fatal_error(_("Method '%s' did not preserve last point"), method_opt->answer);
+	    }
+	    else {
+		/* safety check, BUG in method if not passed */
+		if (Points->x[0] != Points->x[Points->n_points - 1] || 
+		    Points->y[0] != Points->y[Points->n_points - 1] ||
+		    Points->z[0] != Points->z[Points->n_points - 1])
+		    G_fatal_error(_("Method '%s' did not preserve loop"), method_opt->answer);
+	    }
 
 	    Vect_line_prune(Points);
 
