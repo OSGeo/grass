@@ -37,8 +37,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("surface"));
     G_add_keyword(_("random"));
     module->description =
-	_("Produces a raster map of uniform random "
-	  "deviates whose range can be expressed by the user.");
+        _("Produces a raster surface map of uniform random deviates with defined range.");
 
     out = G_define_standard_option(G_OPT_R_OUTPUT);
 
