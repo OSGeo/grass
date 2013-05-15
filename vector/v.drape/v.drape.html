@@ -1,40 +1,48 @@
 <h2>DESCRIPTION</h2>
 
-<p><em>v.drape</em> converts 2D/3D vector data into 3D vector format via
+<em>v.drape</em> converts 2D/3D vector data into 3D vector format via
 sampling of an elevation surface. Three sampling algorithms adapted
-from <a href="v.sample.html">v.sample</a> were incorporated into this
-module: nearest neighbor, bilinear, and cubic convultion.
+from <em><a href="v.sample.html">v.sample</a></em> were incorporated
+into this module: nearest neighbor, bilinear, and cubic convultion.
 
-<p>v.drape will skip vector features outside of current computational region or
-where raster map has NULL value. It's possible to include all vector features
-by specifying height value that will be assigned to verticles whose values
-can not be determined from raster map.
+<p>
+<em>v.drape</em> will skip vector features outside of current
+computational region or where raster map has NULL value. It's possible
+to include all vector features by specifying height value that will be
+assigned to verticles whose values can not be determined from raster
+map.
 
 <h2>NOTES</h2>
-<p>Additional vertices can be added to the input 2D vector map
-with <a href="v.split.html">v.split</a>.
 
-<p>The module can be used in conjunction
-with <a href="v.out.pov.html">v.out.pov</a> and
-<a href="r.out.pov.html">r.out.pov</a> to export a complete set of
-vector and raster data for display in POVRAY.
+Additional vertices can be added to the input 2D vector map
+with <em><a href="v.split.html">v.split</a></em>.
+
+<p>
+The module can be used in conjunction
+with <em><a href="v.out.pov.html">v.out.pov</a></em> and
+<em><a href="r.out.pov.html">r.out.pov</a></em> to export a complete
+set of vector and raster data for display
+in <a href="http://www.povray.org/">POVRAY</a>.
 
 <h2>EXAMPLES</h2>
 
-<p>Spearfish example:
+Spearfish example:
+
 <div class="code"><pre>
 v.drape in=roads rast=elevation.10m method=bilinear out=roads3d
 v.info roads3d
 </pre></div>
 
-<p>Create 3D vector roads map containing only "unimproved" roads.
-Set road height to 1000 m for all parts without height information.
+<p>
+Create 3D vector roads map containing only "unimproved" roads. Set
+road height to 1000 m for all parts without height information.
+
 <div class="code"><pre>
 v.drape input=roads type=line rast=elevation.dem output=roads_3d \
-method=nearest scale=1.0 where='cat=5' layer=1 null_value=1000
+        method=nearest scale=1.0 where='cat=5' layer=1 null_value=1000
 </pre></div>
 
-<h2>POVRAY EXAMPLE</h2>
+<h3>POVRAY example</h3>
 
 <div class="code"><pre>
 #export the vector data
@@ -50,17 +58,21 @@ r.out.png landcover.30m out=landcover30m.png
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.extrude.html">v.extrude</a>,
+<a href="v.to.3d.html">v.to.3d</a>,
 <a href="r.out.pov.html">r.out.pov</a>,
 <a href="v.in.region.html">v.in.region</a>,
 <a href="v.out.pov.html">v.out.pov</a>,
 <a href="v.overlay.html">v.overlay</a>,
 <a href="v.split.html">v.split</a>,
-<a href="v.what.rast.html">v.what.rast</a>,
-<a href="v.extrude.html">v.extrude</a>
+<a href="v.what.rast.html">v.what.rast</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Dylan Beaudette, University of California at Davis.
+Dylan Beaudette, University of California at Davis.<br>
+Updated for GRASS 7 by Martin Landa, Czech Technical University in
+Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
