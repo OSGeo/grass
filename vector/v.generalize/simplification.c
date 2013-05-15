@@ -239,15 +239,15 @@ int reumann_witkam(struct line_pnts *Points, double thresh, int with_z)
 
     count = 1;
 
-    point_assign(Points, 0, with_z, &x1);
-    point_assign(Points, 1, with_z, &x2);
+    point_assign(Points, 0, with_z, &x1, 0);
+    point_assign(Points, 1, with_z, &x2, 0);
     point_subtract(x2, x1, &sub);
     subd = point_dist2(sub);
 
 
     for (i = 2; i < n; i++) {
 
-	point_assign(Points, i, with_z, &x0);
+	point_assign(Points, i, with_z, &x0, 0);
 	point_subtract(x1, x0, &diff);
 	diffd = point_dist2(diff);
 	sp = point_dot(diff, sub);
@@ -256,8 +256,8 @@ int reumann_witkam(struct line_pnts *Points, double thresh, int with_z)
 	 * all variables which do not change for each line-point calculation */
 	if (dist > thresh) {
 
-	    point_assign(Points, i - 1, with_z, &x1);
-	    point_assign(Points, i, with_z, &x2);
+	    point_assign(Points, i - 1, with_z, &x1, 0);
+	    point_assign(Points, i, with_z, &x2, 0);
 	    point_subtract(x2, x1, &sub);
 	    subd = point_dist2(sub);
 

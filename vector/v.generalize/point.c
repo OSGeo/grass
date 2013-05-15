@@ -50,23 +50,12 @@ inline double point_dist2(POINT a)
 }
 
 inline void point_assign(struct line_pnts *Points, int index, int with_z,
-			 POINT * res)
+			 POINT * res, int is_loop)
 {
-    res->x = Points->x[index];
-    res->y = Points->y[index];
-    if (with_z) {
-	res->z = Points->z[index];
+    if (is_loop) {
+	while (index >= Points->n_points - 1)
+	    index -= Points->n_points - 1;
     }
-    else {
-	res->z = 0;
-    }
-    return;
-}
-
-inline void point_assign_loop(struct line_pnts *Points, int index, int with_z,
-			 POINT * res)
-{
-    index = index % Points->n_points;
     res->x = Points->x[index];
     res->y = Points->y[index];
     if (with_z) {

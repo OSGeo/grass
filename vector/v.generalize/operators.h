@@ -10,15 +10,15 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
 			      double reduction, int with_z);
 
 /* smoothing.c */
-int boyle(struct line_pnts *Points, int look_ahead, int with_z);
+int boyle(struct line_pnts *Points, int look_ahead, int loop_support, int with_z);
 int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead,
 		      int loop_support, int with_z);
 int distance_weighting(struct line_pnts *Points, double slide, int look_ahead,
-		       int with_z);
-int chaiken(struct line_pnts *Points, double thresh, int with_z);
+		       int loop_support, int with_z);
+int chaiken(struct line_pnts *Points, double thresh, int loop_support, int with_z);
 int hermite(struct line_pnts *Points, double step, double angle_thresh,
-	    int with_z);
-int snakes(struct line_pnts *Points, double alpha, double beta, int with_z);
+	    int loop_support, int with_z);
+int snakes(struct line_pnts *Points, double alpha, double beta, int loop_support, int with_z);
 
 /* network.c */
 int graph_generalization(struct Map_info *In, struct Map_info *Out, 

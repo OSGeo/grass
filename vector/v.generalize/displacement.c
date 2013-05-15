@@ -90,7 +90,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 	    int q, findex;
 	    POINT cur;
 
-	    point_assign(Points, j, with_z, &cur);
+	    point_assign(Points, j, with_z, &cur, 0);
 	    /* check whether we alerady have point with the same
 	     * coordinates */
 	    findex = pindex;
@@ -102,12 +102,12 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 
 	    point_index[index] = findex;
 	    if (findex == pindex) {
-		point_assign(Points, j, with_z, &pset[pindex]);
+		point_assign(Points, j, with_z, &pset[pindex], 0);
 		pindex++;
 	    }
 	    first[index] = (j == 0);
 	    line_index[index] = i;
-	    point_assign(Points, j, with_z, &parray[index]);
+	    point_assign(Points, j, with_z, &parray[index], 0);
 	    index++;
 	}
     }
@@ -197,7 +197,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 
     /*calculate the inverse */
     G_message(_("Inverting matrix..."));
-    if (!matrix_inverse(k, &kinv, 1))
+    if (!matrix_inverse(&k, &kinv, 1))
 	G_fatal_error(_("Unable to calculate the inverse matrix"));
 
     G_percent_reset();
@@ -213,8 +213,8 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 	matrix_mult_scalar(0.0, &dx_old);
 	matrix_mult_scalar(0.0, &dy_old);
 
-	matrix_add(dx_old, dx, &dx_old);
-	matrix_add(dy_old, dy, &dy_old);
+	matrix_add(&dx_old, &dx, &dx_old);
+	matrix_add(&dy_old, &dy, &dy_old);
 
 	/* calculate force vectors */
 	for (i = 0; i < index; i++) {
@@ -271,11 +271,11 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 	matrix_mult_scalar(gama, &dx);
 	matrix_mult_scalar(gama, &dy);
 
-	matrix_add(dx, fx, &fx);
-	matrix_add(dy, fy, &fy);
+	matrix_add(&dx, &fx, &fx);
+	matrix_add(&dy, &fy, &fy);
 
-	matrix_mult(kinv, fx, &dx);
-	matrix_mult(kinv, fy, &dy);
+	matrix_mult(&kinv, &fx, &dx);
+	matrix_mult(&kinv, &fy, &dy);
 
 	for (i = 0; i < index; i++) {
 	    if (point_index[i] == -1)
@@ -285,7 +285,6 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 	    parray[i].y +=
 		dy.a[point_index[i]][0] - dy_old.a[point_index[i]][0];
 	}
-
 
     }
     index = 0;
@@ -313,14 +312,14 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     G_free(need);
     G_free(sel);
     G_free(tmp_index);
-    matrix_free(k);
-    matrix_free(kinv);
-    matrix_free(dx);
-    matrix_free(dy);
-    matrix_free(fx);
-    matrix_free(fy);
-    matrix_free(dx_old);
-    matrix_free(dy_old);
+    matrix_free(&k);
+    matrix_free(&kinv);
+    matrix_free(&dx);
+    matrix_free(&dy);
+    matrix_free(&fx);
+    matrix_free(&fy);
+    matrix_free(&dx_old);
+    matrix_free(&dy_old);
 
     return 0;
 }

@@ -29,32 +29,32 @@ typedef struct
 } MATRIX;
 
 /* return 1 on success, 0 on error (out of memory) */
-extern int matrix_init(int rows, int cols, MATRIX * res);
+extern int matrix_init(int rows, int cols, MATRIX *res);
 
 /* free the memory occupied by the values of m */
-extern void matrix_free(MATRIX m);
+extern void matrix_free(MATRIX *m);
 
 /* multiply two matrices, Return 1 on success, 0 on failure.
  * return value 0 means - bad dimensions  */
-extern int matrix_mult(MATRIX a, MATRIX b, MATRIX * res);
+extern int matrix_mult(MATRIX *a, MATRIX *b, MATRIX *res);
 
 /* adds a multiple of the identity matrix to the given matrix
  * M = M + s * Id. Returns 1 on success, 0 otherwise */
-extern int matrix_add_identity(double s, MATRIX * m);
+extern int matrix_add_identity(double s, MATRIX *m);
 
 /* calculate the inverse of given (square) matrix. Returns 0 if
  * the matrix is not invertible or if an error occurs.
  * percents indicates whether we want to show the progress of
  * computation
  * Otherwise it returns 1 */
-extern int matrix_inverse(MATRIX a, MATRIX * res, int percents);
+extern int matrix_inverse(MATRIX *a, MATRIX *res, int percents);
 
 /* multiplies matrix by a scalar */
-extern void matrix_mult_scalar(double s, MATRIX * m);
+extern void matrix_mult_scalar(double s, MATRIX *m);
 
 /* res = a + b. Does not cheack the dimensions */
-extern void matrix_add(MATRIX a, MATRIX b, MATRIX * res);
+extern void matrix_add(MATRIX *a, MATRIX *b, MATRIX *res);
 
 /* debug function */
-extern void matrix_print(MATRIX a);
+extern void matrix_print(MATRIX *a);
 #endif
