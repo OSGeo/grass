@@ -23,14 +23,13 @@ int update_hist(const char *raster_name, const char *vector_name, long scale)
     if (raster_name == NULL)
 	return (-1);
 
-    if (Rast_read_history(raster_name, G_mapset(), &hist) < 0)
-	return -1;
-
-    Rast_set_history(&hist, HIST_TITLE, raster_name);
+    Rast_short_history(raster_name, "raster", &hist);
 
     /* store information from digit file into history */
-    Rast_format_history(&hist, HIST_DATSRC_1, "Vector Map: %s", vector_name);
-    Rast_format_history(&hist, HIST_DATSRC_2, "Original scale from vector map: 1:%ld", scale);	/* 4.0 */
+    Rast_format_history(&hist, HIST_DATSRC_1,
+			"Vector Map: %s", vector_name);
+    Rast_format_history(&hist, HIST_DATSRC_2,
+			"Original scale from vector map: 1:%ld", scale);	/* 4.0 */
 
     /* store command line options */
     Rast_command_history(&hist);
@@ -274,7 +273,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		break;
 	    }
 
-	    Rast_set_cats_title("Labels", &rast_cats);
+	    Rast_set_cats_title("Rasterized vector map from labels", &rast_cats);
 
 	    /* open vector map and database driver */
 	    Vect_set_open_level(1);
@@ -389,7 +388,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    struct Range range;
 
 	    map_type = Rast_map_type(rast_name, G_mapset());
-	    Rast_set_cats_title("Values", &rast_cats);
+	    Rast_set_cats_title("Rasterized vector map from values", &rast_cats);
 
 	    if (map_type == CELL_TYPE) {
 		CELL min, max;
@@ -425,7 +424,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 
 	    if (label_column) {
 
-		Rast_set_cats_title("Labels", &rast_cats);
+		Rast_set_cats_title("Rasterized vector map from labels", &rast_cats);
 
 		/* open vector map and database driver */
 		Vect_set_open_level(1);
@@ -513,7 +512,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		rowbuf = Rast_allocate_buf(map_type);
 
 		Rast_init_cell_stats(&stats);
-		Rast_set_cats_title("Categories", &rast_cats);
+		Rast_set_cats_title("Rasterized vector map from categories", &rast_cats);
 
 		rows = Rast_window_rows();
 
@@ -544,7 +543,8 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	    char msg[64];
 
 	    map_type = Rast_map_type(rast_name, G_mapset());
-	    Rast_set_cats_title("Degrees", &rast_cats);
+	    Rast_set_cats_title("Rasterized vector map from line direction", &rast_cats);
+	    Rast_write_units(rast_name, "degrees CCW from +x");
 
 	    for (i = 1; i <= 360; i++) {
 		sprintf(msg, "%d degrees", i);
