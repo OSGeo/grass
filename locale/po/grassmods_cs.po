@@ -8,6 +8,7 @@
 # Jan Trochta <j.trochta@seznam.cz>, 2008.
 # Miroslav Hořejší <miroslav.horejsi@fsv.cvut.cz>, 2009/01.
 # Pavel Valenta <pavel.valenta@fsv.cvut.cz>, 2009/01.
+# Lukáš Bocan <lukas.bocan@fsv.cvut.cz>, 2013.
 #
 msgid ""
 msgstr ""
@@ -13092,17 +13093,17 @@ msgstr "Název vstupní rastrové mapy"
 #: ../vector/v.net.flow/main.c:108 ../vector/v.net.flow/main.c:114
 #, fuzzy
 msgid "Source"
-msgstr "Suma variance"
+msgstr "Zdroj"
 
 #: ../raster/r.proj/main.c:159
 #, fuzzy
 msgid "Location containing input raster map"
-msgstr "Location obsahující vstupní vektorovou vrstvu"
+msgstr "Lokace obsahující vstupní vektorovou vrstvu"
 
 #: ../raster/r.proj/main.c:164
 #, fuzzy
 msgid "Mapset containing input raster map"
-msgstr "Mapset obsahující vstupní vektorové vrstvy"
+msgstr "Mapset obsahující vstupní vektorovou vrstvu"
 
 #: ../raster/r.proj/main.c:165
 #, fuzzy
@@ -22361,16 +22362,16 @@ msgstr "Název rastrové mapy, která má být použita pro <%s>"
 #: ../vector/v.net.visibility/main.c:46
 #, fuzzy
 msgid "network"
-msgstr "vektor, síťování"
+msgstr "síť"
 
 #: ../display/d.path/main.c:50 ../vector/v.net.visibility/main.c:47
 msgid "path"
-msgstr ""
+msgstr "cesta"
 
 #: ../display/d.path/main.c:52
 #, fuzzy
 msgid "Finds shortest path for selected starting and ending node."
-msgstr "Nalézá nejkratší cestu ve vektorové síti."
+msgstr "Nalézá nejkratší cestu ve vektorové síti pro vybraný počáteční a koncový uzel."
 
 #: ../display/d.path/main.c:59 ../vector/v.net.iso/main.c:86
 #: ../vector/v.net.steiner/main.c:361 ../vector/v.net.distance/main.c:86
@@ -22398,23 +22399,23 @@ msgstr "Vrstva hran"
 #: ../vector/v.net.allpairs/main.c:80 ../vector/v.net.components/main.c:89
 #: ../vector/v.net.path/main.c:61 ../vector/v.net.connectivity/main.c:71
 msgid "Node layer"
-msgstr "Vrstva uzlu grafu"
+msgstr "Vrstva uzlů grafu"
 
 #: ../display/d.path/main.c:82 ../vector/v.net.path/main.c:74
 msgid "Arc forward/both direction(s) cost column"
-msgstr "Sloupeček nesoucí cenu pohybu ve směru dopředu nebo i zpět."
+msgstr "Sloupec s cenami pohybu po hranách (ve směru vpřed/obousměrně)."
 
 #: ../display/d.path/main.c:88 ../vector/v.net.path/main.c:80
 msgid "Arc backward direction cost column"
-msgstr "Sloupeček nesoucí cenu pohybu ve směru zpět."
+msgstr "Sloupec s cenami pohybu po hranách (ve směru zpět)."
 
 #: ../display/d.path/main.c:94 ../vector/v.net.path/main.c:86
 msgid "Node cost column"
-msgstr "Sloupec pro ocenění uzlu"
+msgstr "Sloupec cen uzlů"
 
 #: ../display/d.path/main.c:100 ../display/d.extract/main.c:65
 msgid "Original line color"
-msgstr ""
+msgstr "Původní barva linie"
 
 #: ../display/d.path/main.c:102 ../display/d.path/main.c:110
 #: ../display/d.path/main.c:118 ../display/d.path/main.c:128
@@ -22438,7 +22439,7 @@ msgstr "Barva pozadí"
 #: ../vector/v.net.spanningtree/main.c:84 ../vector/v.net.allpairs/main.c:112
 #: ../vector/v.net.salesman/main.c:180 ../vector/v.net.path/main.c:103
 msgid "Use geodesic calculation for longitude-latitude locations"
-msgstr "Použít geodetický výpočet pro location se zeměpisných systémem"
+msgstr "Použít geodetickou kalkulaci pro lokace zadané sférickými souřadnicemi"
 
 #: ../display/d.path/main.c:127
 #, fuzzy
@@ -22459,7 +22460,7 @@ msgstr "%s: neplatná hodnota pro spec"
 #: ../vector/v.net.distance/main.c:189 ../vector/v.net.spanningtree/main.c:113
 #: ../vector/v.net.allpairs/main.c:142 ../vector/v.net.path/main.c:121
 msgid "The current projection is not longitude-latitude"
-msgstr "Současná projekce není longitude-latidude (šířka-délka)"
+msgstr "Současná projekce není ve sférických souřadnicích (šířka-délka)"
 
 #: ../display/d.path/select.c:84 ../display/d.path/select.c:101
 #, fuzzy, c-format
@@ -24825,12 +24826,12 @@ msgstr "Vytvářím body..."
 
 #: ../vector/v.net.iso/main.c:71
 msgid "Splits net by cost isolines."
-msgstr "Rozděl síť podle hodnoty izolinií."
+msgstr "Rozdělí síť podle cenových izolinií."
 
 #: ../vector/v.net.iso/main.c:74
 #, fuzzy
 msgid "isolines"
-msgstr "Linie"
+msgstr "izoinie"
 
 #: ../vector/v.net.iso/main.c:76
 msgid ""
@@ -24838,8 +24839,8 @@ msgid ""
 "node must be opened (costs >= 0). Costs of centre node are used in "
 "calculation."
 msgstr ""
-"Rozděl síť do skupin mezi hodnotami izolinií ( směr ze středu). Středový "
-"uzel musí být otevřen ( hodnota >=0). Hodnota středního bodu bude použita "
+"Rozdělí síť do pásem mezi cenovými izoliniemi (směr ze středu). Středový "
+"uzel musí být otevřen (ceny >=0). Hodnota ceny středového uzlu bude použita "
 "při výpočtu."
 
 #: ../vector/v.net.iso/main.c:100 ../vector/v.net.centrality/main.c:129
@@ -24849,7 +24850,7 @@ msgstr ""
 #: ../vector/v.net.allpairs/main.c:93 ../vector/v.net.components/main.c:96
 #: ../vector/v.net.salesman/main.c:157 ../vector/v.net.connectivity/main.c:78
 msgid "Arc forward/both direction(s) cost column (number)"
-msgstr "Sloupeček nesoucí cenu pohybu ve směru dopředu/oba směry."
+msgstr "Sloupec s cenami hran (pohyb dopředu/obousměrně)."
 
 #: ../vector/v.net.iso/main.c:104 ../vector/v.net.centrality/main.c:135
 #: ../vector/v.net.distance/main.c:144 ../vector/v.net.alloc/main.c:99
@@ -24858,7 +24859,7 @@ msgstr "Sloupeček nesoucí cenu pohybu ve směru dopředu/oba směry."
 #: ../vector/v.net.components/main.c:102
 #: ../vector/v.net.connectivity/main.c:84
 msgid "Arc backward direction cost column (number)"
-msgstr "Sloupeček nesoucí cenu pohybu ve směru zpět."
+msgstr "Sloupec s cenami hran (pohyb ve směru zpět)."
 
 #: ../vector/v.net.iso/main.c:108 ../vector/v.net.centrality/main.c:142
 #: ../vector/v.net.distance/main.c:150 ../vector/v.net.alloc/main.c:105
@@ -24867,67 +24868,67 @@ msgstr "Sloupeček nesoucí cenu pohybu ve směru zpět."
 #: ../vector/v.net.allpairs/main.c:106 ../vector/v.net.components/main.c:109
 #: ../vector/v.net.connectivity/main.c:92
 msgid "Node cost column (number)"
-msgstr "Sloupec pro ocenění uzlu"
+msgstr "Sloupec s cenami uzlů"
 
 #: ../vector/v.net.iso/main.c:114
 msgid ""
 "Categories of centres (points on nodes) to which net will be allocated. "
 "Layer for this categories is given by nlayer option."
 msgstr ""
-"Kategorie středů (body, nebo uzly)  vybrané síťě. Vrstva pro ttuto kategorii "
-"je dána volbou nvrstva."
+"Kategorie středů (body na uzlech), k nimž bude síť alokována. Vrstva pro tuto kategorii "
+"je dána volbou nlayer."
 
 #: ../vector/v.net.iso/main.c:123
 msgid "Costs for isolines"
-msgstr "Hodnota izolinií"
+msgstr "Ceny pro izolinie"
 
 #: ../vector/v.net.iso/main.c:160
 #, c-format
 msgid "Wrong iso cost: %f"
-msgstr "Špatná hodnota izolinií: %f"
+msgstr "Špatná cena izolinie: %f"
 
 #: ../vector/v.net.iso/main.c:163
 #, c-format
 msgid "Iso cost: %f less than previous"
-msgstr "Hodnota izolinií: %f méně než předchozí"
+msgstr "Hodnota izolinie: %f méně než předchozí"
 
 #: ../vector/v.net.iso/main.c:165
 #, c-format
 msgid "Iso cost %d: %f"
-msgstr "Iso hodnota %d: %f"
+msgstr "Hodnota izolinie %d: %f"
 
 #: ../vector/v.net.iso/main.c:172
 msgid "Not enough costs, everything reachable falls to first band"
-msgstr "Nedostatečná hodnota, všechny prvky spadají do sprvní skupiny hodnot."
+msgstr "Nedostatečné ceny, všechny prvky spadají do sprvní skupiny hodnot."
 
 #: ../vector/v.net.iso/main.c:198 ../vector/v.net.steiner/main.c:441
 #: ../vector/v.net.alloc/main.c:163 ../vector/v.net.salesman/main.c:236
 #, fuzzy
 msgid "Point is not connected to the network"
-msgstr "maximální vzdálenost od bodu k síti"
+msgstr "Bod není spojen se sítí"
 
 #: ../vector/v.net.iso/main.c:206
 msgid "Centre at closed node (costs = -1) ignored"
-msgstr "Střed na uzavřeném uzlu (hodnota = -1) ingorováno"
+msgstr "Střed na uzavřeném uzlu (hodnota = -1) ingorován"
 
 #: ../vector/v.net.iso/main.c:224
 #, c-format
 msgid "Number of centres: %d (nlayer %d)"
-msgstr "Počet středů: %d (nvrstva:%d)"
+msgstr "Počet středů (center): %d (nlayer:%d)"
 
 #: ../vector/v.net.iso/main.c:227
 msgid "Not enough centres for selected nlayer. Nothing will be allocated."
-msgstr "Nedostatečný počet středů pro vybranou nvrstvu. nic nebude přiděleno."
+msgstr "Nedostatečný počet středů pro vybranou vrstvu (nlayer). Nic nebude přiděleno."
 
 #: ../vector/v.net.iso/main.c:247
 #, c-format
 msgid "Calculating costs from centre %d..."
-msgstr "Počítám cenu ze středu %d..."
+msgstr "Počítám ceny ze středu %d..."
 
 #: ../vector/v.net.iso/main.c:508 ../vector/v.net.alloc/main.c:343
 #: ../vector/v.net.alloc/main.c:354
 msgid "Cannot get line segment, segment out of line"
-msgstr "Nelze vytvořit segment linie, segment je mimo linii"
+msgstr "Nelze získat segment linie, segment je mimo linii"
 
 #: ../vector/v.net.centrality/main.c:98
 #, fuzzy
@@ -24968,37 +24969,37 @@ msgstr ""
 #: ../vector/v.net.connectivity/main.c:93
 #, fuzzy
 msgid "Cost"
-msgstr "Kontrast"
+msgstr "Cena"
 
 #: ../vector/v.net.centrality/main.c:148
 #, fuzzy
 msgid "Name of degree centrality column"
-msgstr "Počet sloupců"
+msgstr "Název sloupce se stupni centrality"
 
 #: ../vector/v.net.centrality/main.c:149 ../vector/v.net.centrality/main.c:155
 #: ../vector/v.net.centrality/main.c:161 ../vector/v.net.centrality/main.c:167
 msgid "Columns"
-msgstr "sloupec(ce)"
+msgstr "Sloupce"
 
 #: ../vector/v.net.centrality/main.c:154
 #, fuzzy
 msgid "Name of closeness centrality column"
-msgstr "Počet sloupců"
+msgstr ""
 
 #: ../vector/v.net.centrality/main.c:160
 #, fuzzy
 msgid "Name of betweenness centrality column"
-msgstr "Počet sloupců"
+msgstr ""
 
 #: ../vector/v.net.centrality/main.c:166
 #, fuzzy
 msgid "Name of eigenvector centrality column"
-msgstr "Název vstupní vektorové mapy (A)"
+msgstr ""
 
 #: ../vector/v.net.centrality/main.c:175
 #, fuzzy
 msgid "Maximum number of iterations to compute eigenvector centrality"
-msgstr "Maximální počet iterací"
+msgstr "Maximální počet iterací..."
 
 #: ../vector/v.net.centrality/main.c:183
 msgid "Cummulative error tolerance for eigenvector centrality"
@@ -25007,7 +25008,7 @@ msgstr ""
 #: ../vector/v.net.centrality/main.c:192 ../vector/v.net.components/main.c:130
 #, fuzzy
 msgid "Add points on nodes"
-msgstr "%d bodů načteno"
+msgstr "Přidat body na uzly"
 
 #: ../vector/v.net.centrality/main.c:270 ../vector/v.net.distance/main.c:265
 #: ../vector/v.db.connect/main.c:334 ../vector/v.sample/main.c:192
@@ -25042,20 +25043,20 @@ msgstr "Výpočet polohy středu..."
 #: ../vector/v.net.centrality/main.c:337
 #, fuzzy
 msgid "Writing data into the table..."
-msgstr "Zapisuji data..."
+msgstr "Zapisuji data do tabulky..."
 
 #: ../vector/v.type/main.c:41
 #, fuzzy
 msgid "Changes type of vector features."
-msgstr "Změnít typ hranice přívěsků   "
+msgstr "Změní typ vektorových prvků"
 
 #: ../vector/v.type/main.c:53
 msgid "Feature type to convert from"
-msgstr "Typ prvku pro konverzi z"
+msgstr "Typ prvků, z něhož bude probíhat konverze"
 
 #: ../vector/v.type/main.c:60
 msgid "Feature type to convert to"
-msgstr "Typ prvku pro konverzi do "
+msgstr "Typ prvků, do něhož bude probíhat konverze"
 
 #: ../vector/v.type/main.c:115
 msgid "Incompatible types"
@@ -25198,16 +25199,16 @@ msgstr "%d linií nebo hranic nalezeno ve vektorové mapě <%s@%s>"
 #: ../vector/v.net.steiner/main.c:58
 #, c-format
 msgid "Init costs from node %d"
-msgstr "Počáteční cena  z uzlu %d "
+msgstr "Počáteční ceny z uzlu %d "
 
 #: ../vector/v.net.steiner/main.c:347
 #, fuzzy
 msgid "steiner tree"
-msgstr "Prvky"
+msgstr "Steinerův strom"
 
 #: ../vector/v.net.steiner/main.c:349
 msgid "Create Steiner tree for the network and given terminals"
-msgstr "Vytvořit Steinerův strom pro síť a určit koncové body"
+msgstr "Vytvořit Steinerův strom pro síť a dané koncové body"
 
 #: ../vector/v.net.steiner/main.c:351
 msgid ""
@@ -25219,15 +25220,15 @@ msgstr ""
 
 #: ../vector/v.net.steiner/main.c:371
 msgid "Node layer (used for terminals)"
-msgstr "Vrstva uzlů (používáno pro konečné body)"
+msgstr "Vrstva uzlů (používáno pro koncové body)"
 
 #: ../vector/v.net.steiner/main.c:377
 msgid "Arcs' cost column (for both directions)"
-msgstr "Sloupec s cenou oblouku (pro oba smery)"
+msgstr "Sloupec s cenami hran (pro oba smery)"
 
 #: ../vector/v.net.steiner/main.c:383
 msgid "Categories of points on terminals (layer is specified by nlayer)"
-msgstr "Kategorie bodů na koncích ( vrstva je určena pomocí nvrstva)"
+msgstr "Kategorie bodů na koncích (vrstva je dána parametrem nlayer)"
 
 #: ../vector/v.net.steiner/main.c:391
 msgid "Number of steiner points (-1 for all possible)"
@@ -25235,11 +25236,11 @@ msgstr "Počet Steinerových bodů (-1 pro všechny možné)"
 
 #: ../vector/v.net.steiner/main.c:455
 msgid "Not enough terminals (< 2)"
-msgstr "Nedostatek konečných bodů(< 2)"
+msgstr "Nedostatek koncových bodů(< 2)"
 
 #: ../vector/v.net.steiner/main.c:461
 msgid "Requested number of Steiner points > than possible"
-msgstr "Požadované číslo Steinerova bodu >než možné"
+msgstr "Požadovaný počet Steinerových bodů > než je možné"
 
 #: ../vector/v.net.steiner/main.c:513
 #, c-format
@@ -25251,7 +25252,7 @@ msgstr "Konec na uzlu [%d] nemůže být spojen s koncem na uzlu [%d]"
 msgid ""
 "[%d] (not reachable) nodes removed from list of Steiner point candidates"
 msgstr ""
-"[%d] ( nedosažitelné) uzly odstraněny ze seznamu candidátů Steinerových bodů"
+"[%d] (nedosažitelné) uzly odstraněny ze seznamu kandidátů na Steinerovy body"
 
 #: ../vector/v.net.steiner/main.c:534
 #, c-format
@@ -25266,7 +25267,7 @@ msgstr "Hledám [%d]. Steinerův bod"
 #: ../vector/v.net.steiner/main.c:561
 #, c-format
 msgid "Steiner point at node [%d] was added to terminals (MST costs = %f)"
-msgstr "Steinerův bod v uzlu[%d] byl přidán do vývodu (MST cena =%f)"
+msgstr "Steinerův bod na uzlu [%d] byl přidán do koncových bodů (MST cena =%f)"
 
 #: ../vector/v.net.steiner/main.c:573
 msgid "No Steiner point found -> leaving cycle"
@@ -25284,7 +25285,7 @@ msgstr "%d hranic uzavřeno"
 
 #: ../vector/v.overlay/area_area.c:107 ../vector/v.overlay/line_area.c:70
 msgid "Breaking lines..."
-msgstr "Lámu linie ... "
+msgstr "Rozbíjím linie ... "
 
 #: ../vector/v.overlay/area_area.c:111 ../vector/v.in.ogr/main.c:1137
 #: ../vector/v.in.ogr/main.c:1151 ../vector/v.delaunay/main.c:143
@@ -26539,86 +26540,89 @@ msgstr "Nelze seřadit hodnoty klíč/hodnota"
 #: ../vector/v.net.distance/main.c:66 ../vector/v.net.timetable/main.c:262
 #: ../vector/v.net.allpairs/main.c:63 ../vector/v.net.path/main.c:42
 msgid "shortest path"
-msgstr ""
+msgstr "nejkratší cesta"
 
 #: ../vector/v.net.distance/main.c:67
 msgid ""
 "Computes shortest distance via the network between the given sets of "
 "features."
-msgstr ""
+msgstr "Počítá nejkratší vzdálenost po síti mezi danými skupinami prvků"
 
 #: ../vector/v.net.distance/main.c:70
 msgid ""
 "Finds the shortest paths from a point 'from' to every feature 'to' and "
 "various information about this relation are uploaded to the attribute table."
-msgstr ""
+msgstr "Nalezne nejkratší cesty z bodu 'od' ('from') do každého prvku 'do' ('to')"
+"a různé informace o této relaci jsou nahrány do atributové tabulky."
 
 #: ../vector/v.net.distance/main.c:97
 #, fuzzy
 msgid "From layer number or name"
-msgstr "Číslo vrstvy (to)"
+msgstr "Číslo nebo název vrstvy 'od' ('from')"
 
 #: ../vector/v.net.distance/main.c:98 ../vector/v.net.distance/main.c:103
 #: ../vector/v.net.distance/main.c:109 ../vector/v.distance/main.c:97
 #: ../vector/v.distance/main.c:102 ../vector/v.distance/main.c:109
 #: ../vector/v.distance/main.c:188
 msgid "From"
-msgstr "From (z_mapy)"
+msgstr "Od"
 
 #: ../vector/v.net.distance/main.c:102
 #, fuzzy
 msgid "From category values"
-msgstr "Problém při čtení souboru s hodnotami kategorií"
+msgstr "Hodnoty kategorií 'od' ('from')"
 
 #: ../vector/v.net.distance/main.c:108
 msgid "From WHERE conditions of SQL statement without 'where' keyword"
-msgstr ""
+msgstr "WHERE podmínky SQL dotazu pro prvky 'od' ('from') beze slova 'where'"
 
 #: ../vector/v.net.distance/main.c:113
 #, fuzzy
 msgid "To layer number or name"
-msgstr "Číslo vrstvy (to)"
+msgstr "Číslo nebo název vrstvy 'do' ('to')"
 
 #: ../vector/v.net.distance/main.c:114 ../vector/v.net.distance/main.c:121
 #: ../vector/v.net.distance/main.c:126 ../vector/v.net.distance/main.c:132
 #: ../vector/v.distance/main.c:114 ../vector/v.distance/main.c:119
 #: ../vector/v.distance/main.c:126 ../vector/v.distance/main.c:194
 msgid "To"
-msgstr "To (do_mapy)"
+msgstr "Do"
 
 #: ../vector/v.net.distance/main.c:120
 #, fuzzy
 msgid "To feature type"
-msgstr "Typ prvku"
+msgstr "Typ prvků 'do' ('to')"
 
 #: ../vector/v.net.distance/main.c:125
 #, fuzzy
 msgid "To category values"
-msgstr "Problém při čtení souboru s hodnotami kategorií"
+msgstr "Hodnoty kategorií 'do' ('to')"
 
 #: ../vector/v.net.distance/main.c:131
 msgid "To WHERE conditions of SQL statement without 'where' keyword"
-msgstr ""
+msgstr "WHERE podmínky SQL dotazu pro prvky 'do' ('to') beze slova 'where'"
 
 #: ../vector/v.net.distance/main.c:218
 #, c-format
 msgid "No 'from' features selected. Please check options '%s', '%s', '%s'."
-msgstr ""
+msgstr "Nebyly vybrány žádné prvky 'od' ('from'). Prosím, zkontrolujte možnosti"
+"'%s', '%s', '%s'."
 
 #: ../vector/v.net.distance/main.c:225
 #, c-format
 msgid "No 'to' features selected. Please check options '%s', '%s', '%s'."
-msgstr ""
+msgstr "Nebyly vybrány žádné prvky 'do' ('to'). Prosím, zkontrolujte možnosti"
+"'%s', '%s', '%s'."
 
 #: ../vector/v.net.distance/main.c:234
 #, fuzzy
 msgid "No 'to' features"
-msgstr "Zapisuji vybrané prvky..."
+msgstr "Žádné prvky 'do' ('to')"
 
 #: ../vector/v.net.distance/main.c:353
 #, c-format
 msgid "%d 'from' features were not reachable"
-msgstr ""
+msgstr "%d prvky 'od' ('from') nejsou dosažitelné"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:71
 #: ../vector/v.lrs/v.lrs.where/main.c:58
@@ -26626,7 +26630,7 @@ msgstr ""
 #: ../vector/v.lrs/v.lrs.label/main.c:103
 #, fuzzy
 msgid "Linear Reference System"
-msgstr "vytvořit lineární referenční systém"
+msgstr "Lineární referenční systém"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:72
 #: ../vector/v.lrs/v.lrs.where/main.c:59
@@ -26634,7 +26638,7 @@ msgstr "vytvořit lineární referenční systém"
 #: ../vector/v.lrs/v.lrs.label/main.c:104
 #, fuzzy
 msgid "networking"
-msgstr "vektor, síťování"
+msgstr "síťování"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:74
 msgid ""
@@ -26642,7 +26646,7 @@ msgid ""
 "positions read from stdin or a file."
 msgstr ""
 "Vytvoří body/segmenty ze vstupních linií, lineární referenční systém a "
-"umístění jsou čteny ze standartníh vstupu nebo souboru."
+"umístění jsou čteny ze standartního vstupu nebo ze souboru."
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:78
 #: ../vector/v.lrs/v.lrs.where/main.c:66
@@ -28069,12 +28073,12 @@ msgstr "Není definována žádná funkce pro vykonání \"číslo %c číslo\""
 #: ../vector/v.net.alloc/main.c:62
 #, fuzzy
 msgid "allocation"
-msgstr "Location: %s\n"
+msgstr "alokace"
 
 #: ../vector/v.net.alloc/main.c:64
 #, fuzzy
 msgid "Allocate subnets for nearest centers (direction from center)."
-msgstr "Určit podsíťě pro nejbližší stedy (směr ze středu)."
+msgstr "Určit (alokovat) podsíťě pro nejbližší centra (směr ze středu)."
 
 #: ../vector/v.net.alloc/main.c:66
 #, fuzzy
@@ -28082,7 +28086,7 @@ msgid ""
 "center node must be opened (costs >= 0). Costs of center node are used in "
 "calculation"
 msgstr ""
-"Střední uzel musí být otevřen (cena >= 0). cena středního uzlu je použita ve "
+"Střední uzel musí být otevřen (ceny >= 0). Ceny středových uzlů jsou použity ve "
 "výpočtu"
 
 #: ../vector/v.net.alloc/main.c:111
@@ -28091,29 +28095,29 @@ msgid ""
 "Categories of centers (points on nodes) to which net will be allocated, "
 "layer for this categories is given by nlayer option"
 msgstr ""
-"Kategorie středů (body nebo uzly) přidělených sítí, vrstva pro tyto "
-"kategorie je určena pomocí  volby nvrstva"
+"Kategorie středů (body na uzlech), k nimž bude síť alokována, vrstva pro tyto "
+"kategorie je dána parametrem nlayer"
 
 #: ../vector/v.net.alloc/main.c:189
 #, fuzzy, c-format
 msgid "Number of centers: [%d] (nlayer: [%d])"
-msgstr "POčet středů: [%d] (nvrstva:[%d])"
+msgstr "Počet středů: [%d] (nlayer:[%d])"
 
 #: ../vector/v.net.alloc/main.c:192
 #, fuzzy
 msgid "Not enough centers for selected nlayer. Nothing will be allocated."
-msgstr "Nedostatečný počet středů pro vybranou nvrstvu. nic nebude přiděleno."
+msgstr "Nedostatečný počet středů pro vybranou vrstvu (nlayer). Nic nebude alokováno."
 
 #: ../vector/v.net.alloc/main.c:203
 #, fuzzy
 msgid "Calculating costs from centers ..."
-msgstr "Počítám cenu ze středů ..."
+msgstr "Počítám ceny ze středů ..."
 
 #: ../vector/v.kcv/main.c:60 ../vector/v.normal/main.c:76
 #: ../vector/v.in.db/main.c:56
 #, fuzzy
 msgid "points"
-msgstr "Bod"
+msgstr "body"
 
 #: ../vector/v.kcv/main.c:62
 msgid "Randomly partition points into test/train sets."
@@ -29768,25 +29772,25 @@ msgstr "Nelze popsat tabulku <%s>"
 #: ../vector/v.net.bridge/main.c:49
 #, fuzzy
 msgid "articulation points"
-msgstr "GeoTIFF možnosti vytvoření"
+msgstr "artikulační body"
 
 #: ../vector/v.net.bridge/main.c:51
 msgid "Computes bridges and articulation points in the network."
-msgstr ""
+msgstr "Počítá mosty a artikulační body v síti"
 
 #: ../vector/v.net.bridge/main.c:98
 #, fuzzy
 msgid "Finds bridges"
-msgstr "Zapisuji body ..."
+msgstr "Nachází mosty"
 
 #: ../vector/v.net.bridge/main.c:99
 #, fuzzy
 msgid "Finds articulation points"
-msgstr "GeoTIFF možnosti vytvoření"
+msgstr "Nachází artikulační body"
 
 #: ../vector/v.build.polylines/main.c:115
 msgid "Builds polylines from lines or boundaries."
-msgstr "VYtvořit lomené čáry z linií a hranic."
+msgstr "Vytváří polylinie z linií nebo hranic."
 
 #: ../vector/v.build.polylines/main.c:125
 msgid "Category number mode"
@@ -30076,68 +30080,68 @@ msgstr "%d prvků změněno."
 
 #: ../vector/v.net.flow/main.c:60
 msgid "flow"
-msgstr ""
+msgstr "tok"
 
 #: ../vector/v.net.flow/main.c:62
 msgid "Computes the maximum flow between two sets of nodes in the network."
-msgstr ""
+msgstr "Počítá maximální tok mezi dvěma skupinami uzlů v síti."
 
 #: ../vector/v.net.flow/main.c:84
 #, fuzzy
 msgid "Name for output vector map containing a minimum cut"
-msgstr "Vstupní mapa obsahující linie"
+msgstr "Název výstupní vektorové mapy obsahující minimální řez"
 
 #: ../vector/v.net.flow/main.c:107
 #, fuzzy
 msgid "Source category values"
-msgstr "Zdroj hodnot rastrové mapy"
+msgstr "Hodnoty kategorií pro Zdroje"
 
 #: ../vector/v.net.flow/main.c:113
 msgid "Source WHERE conditions of SQL statement without 'where' keyword"
-msgstr ""
+msgstr "WHERE podmínky SQL dotazu  pro Zdroje beze slova 'where'"
 
 #: ../vector/v.net.flow/main.c:118
 #, fuzzy
 msgid "Sink category values"
-msgstr "Vytiskni označení kategorií"
+msgstr "Hodnoty kategorií pro Spotřebiče"
 
 #: ../vector/v.net.flow/main.c:119 ../vector/v.net.flow/main.c:125
 msgid "Sink"
-msgstr ""
+msgstr "Spotřebič"
 
 #: ../vector/v.net.flow/main.c:124
 msgid "Sink WHERE conditions of SQL statement without 'where' keyword"
-msgstr ""
+msgstr "WHERE podmínky SQL dotazu  pro Spotřebiče beze slova 'where'"
 
 #: ../vector/v.net.flow/main.c:198
 #, c-format
 msgid "No source features selected. Please check options '%s', '%s'."
-msgstr ""
+msgstr "Nevybrány žádné zdroje. Zkontrolujte možnosti '%s', '%s'."
 
 #: ../vector/v.net.flow/main.c:205
 #, c-format
 msgid "No sink features selected. Please check options '%s', '%s'."
-msgstr ""
+msgstr "Nevybrány žádné spotřebiče. Zkontrolujte možnosti '%s', '%s'."
 
 #: ../vector/v.net.flow/main.c:214
 #, fuzzy
 msgid "No sources"
-msgstr "Suma variance"
+msgstr "Žádné zdroje"
 
 #: ../vector/v.net.flow/main.c:217
 #, fuzzy
 msgid "No sinks"
-msgstr "Žádné počáteční body"
+msgstr "Žádné spotřebiče"
 
 #: ../vector/v.net.flow/main.c:240
 #, fuzzy
 msgid "Writing the output..."
-msgstr "Zapisuji výstupní vrstvu..."
+msgstr "Zapisuji výstup..."
 
 #: ../vector/v.in.region/main.c:40
 #, fuzzy
 msgid "Creates a vector polygon from the current region extent."
-msgstr "Vytvořit novou vektorovou mapu pokrývající spoučasný region"
+msgstr "Vytvoří vektorový polygon ze současného rozsahu regionu."
 
 #: ../vector/v.in.region/main.c:48
 msgid "Select type: line or area"
@@ -30850,47 +30854,47 @@ msgstr "Žádná bodová data nenalezena"
 #: ../vector/v.net.timetable/main.c:218
 #, c-format
 msgid "Could not find a path between stops %d and %d"
-msgstr ""
+msgstr "Nelze najít cestu mezi zastávkami %d a %d"
 
 #: ../vector/v.net.timetable/main.c:263
 #, fuzzy
 msgid "Finds shortest path using timetables."
-msgstr "Nalézá nejkratší cestu ve vektorové síti."
+msgstr "Nalézá nejkratší cestu s užitím časových harmonogramů."
 
 #: ../vector/v.net.timetable/main.c:309
 msgid "Layer number or name with walking connections or -1"
-msgstr ""
+msgstr "Číslo nebo název vrstvy s pěšími spojeními nebo -1"
 
 #: ../vector/v.net.timetable/main.c:315
 #, fuzzy
 msgid "Name of column with route ids"
-msgstr "Název rastrové mapy která bude zobrazena"
+msgstr "Název sloupce s ID tras"
 
 #: ../vector/v.net.timetable/main.c:322
 #, fuzzy
 msgid "Name of column with stop timestamps"
-msgstr "Název sloupce obsahujícího hodnoty parametru vyhlazení"
+msgstr "Název sloupce s časovými údaji zastávek"
 
 #: ../vector/v.net.timetable/main.c:328
 #, fuzzy
 msgid "Name of column with stop ids"
-msgstr "Název rastrové mapy která bude zobrazena"
+msgstr "Název sloupce s ID zastávek"
 
 #: ../vector/v.net.timetable/main.c:334
 #, fuzzy
 msgid "Name of column with walk lengths"
-msgstr "Počet sloupců se liší."
+msgstr "Název sloupce s pěšími vzdálenostmi"
 
 #: ../vector/v.net.timetable/main.c:382
 #, fuzzy
 msgid "Could not initialize the timetables"
-msgstr "Nemohl jsem uzavřít mapu"
+msgstr "Nelze inicializovat časové harmonogramy (timetables)"
 
 #: ../vector/v.net.timetable/main.c:458 ../vector/v.net.timetable/main.c:489
 #: ../vector/v.net.timetable/main.c:497
 #, fuzzy, c-format
 msgid "No stop with category: %d"
-msgstr "Žádný bod s kategorií [%d]"
+msgstr "Žádná zastávka s kategorií %d"
 
 #: ../vector/v.net.timetable/main.c:481 ../vector/v.net.path/path.c:149
 #, c-format
@@ -30900,16 +30904,16 @@ msgstr "Špatný vstupní formát: %s"
 #: ../vector/v.net.timetable/main.c:504
 #, fuzzy
 msgid "'From' and 'To' stops are the same"
-msgstr "Vstupní a výstupní locations nemohou být stejné."
+msgstr "Zastávky 'od' a 'do' jsou totožné."
 
 #: ../vector/v.net.timetable/main.c:513
 msgid "No path between the stops"
-msgstr ""
+msgstr "Neexistuje cesta mezi zastávkami"
 
 #: ../vector/v.out.svg/main.c:72
 #, fuzzy
 msgid "Exports a vector map to SVG file."
-msgstr "Exportuje GRASS vektory jako soubor SVG."
+msgstr "Exportuje vektorovou mapu do souboru SVG."
 
 #: ../vector/v.out.svg/main.c:81
 msgid "Name for SVG output file"
@@ -30917,7 +30921,7 @@ msgstr "Název výstupního souboru SVG"
 
 #: ../vector/v.out.svg/main.c:90
 msgid "Output type"
-msgstr "Typ výstupní mapy"
+msgstr "Typ výstupu"
 
 #: ../vector/v.out.svg/main.c:91
 msgid "Defines which feature-type will be extracted"
@@ -31844,11 +31848,11 @@ msgstr "Nelze vložit nový záznam: '%s'"
 
 #: ../vector/v.net.spanningtree/main.c:48
 msgid "spanning tree"
-msgstr ""
+msgstr "minimální kostra"
 
 #: ../vector/v.net.spanningtree/main.c:50
 msgid "Computes minimum spanning tree for the network."
-msgstr ""
+msgstr "Počítá minimální kostru sítě"
 
 #: ../vector/v.out.pov/main.c:49
 msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
@@ -32942,32 +32946,32 @@ msgstr ""
 
 #: ../vector/v.net.allpairs/main.c:65
 msgid "Computes the shortest path between all pairs of nodes in the network."
-msgstr ""
+msgstr "Počítá nejkratší cestu mezi všemi páry uzlů v síti"
 
 #: ../vector/v.net.allpairs/main.c:207
 #, fuzzy
 msgid "Writing node points..."
-msgstr "Importuji body ..."
+msgstr "Zapisuji body uzlů ..."
 
 #: ../vector/v.net.allpairs/main.c:241
 #, fuzzy
 msgid "Collecting shortest paths..."
-msgstr "Sbírám statistiky ... "
+msgstr "Shromažďuji nejkratší cesty ... "
 
 #: ../vector/v.net.allpairs/main.c:295
 #, fuzzy
 msgid "Writing shortest paths..."
-msgstr "Zapisuji výstupní vrstvu..."
+msgstr "Zapisuji nejkratší cesty..."
 
 #: ../vector/v.info/main.c:40
 #, fuzzy
 msgid "extent"
-msgstr "obecné"
+msgstr "rozsah"
 
 #: ../vector/v.info/main.c:42
 #, fuzzy
 msgid "attribute columns"
-msgstr "Atributy"
+msgstr "Sloupce atributů"
 
 #: ../vector/v.info/main.c:45
 #, fuzzy
@@ -32977,7 +32981,7 @@ msgstr "Vypíše základní informace o uživatelem vybrané vektorové mapě."
 #: ../vector/v.info/parse.c:24
 #, fuzzy
 msgid "Print history instead of info and exit"
-msgstr "Vypíše historii rastrové mapy namísto infa"
+msgstr "Vypíše historii rastrové mapy namísto infa a exitu"
 
 #: ../vector/v.info/parse.c:30
 #, fuzzy
@@ -32985,17 +32989,17 @@ msgid ""
 "Print types/names of table columns for specified layer instead of info and "
 "exit"
 msgstr ""
-"Vypíše typy/názvy sloupců tabulky pro specifikovanou vrstvu namísto infa"
+"Vypíše typy/názvy sloupců tabulky pro specifikovanou vrstvu namísto infa a exitu"
 
 #: ../vector/v.info/parse.c:35
 #, fuzzy
 msgid "Print region info in shell script style"
-msgstr "Vypiš výsledek ve stylu pro shell skript"
+msgstr "Vypiš info o regionu ve stylu pro shell skript"
 
 #: ../vector/v.info/parse.c:40
 #, fuzzy
 msgid "Print extended metadata info in shell script style"
-msgstr "Vypiš statistiku ve stylu pro shell skript"
+msgstr "Vypiš info o metadatech ve stylu pro shell skript"
 
 #: ../vector/v.info/parse.c:45
 #, fuzzy
@@ -33222,25 +33226,25 @@ msgstr "Poznámky:"
 #: ../vector/v.net.components/main.c:73
 #, fuzzy
 msgid "components"
-msgstr "Hotovo"
+msgstr "komponenty"
 
 #: ../vector/v.net.components/main.c:75
 msgid "Computes strongly and weakly connected components in the network."
-msgstr ""
+msgstr "Počítá silně a slabě souvislé komponenty v síti"
 
 #: ../vector/v.net.components/main.c:123
 #, fuzzy
 msgid "Weakly connected components"
-msgstr "Typ tabulky barev"
+msgstr "Slabě souvislé komponenty"
 
 #: ../vector/v.net.components/main.c:124
 msgid "Strongly connected components"
-msgstr ""
+msgstr "Silně souvislé komponenty"
 
 #: ../vector/v.net.components/main.c:126
 #, fuzzy
 msgid "Type of components"
-msgstr "Typ tabulky barev"
+msgstr "Typ komponent"
 
 #: ../vector/v.lidar.correction/main.c:71
 msgid ""
@@ -33637,91 +33641,90 @@ msgstr ""
 
 #: ../vector/v.net.salesman/main.c:128
 msgid "salesman"
-msgstr ""
+msgstr "obchodní cestující"
 
 #: ../vector/v.net.salesman/main.c:130
 msgid "Creates a cycle connecting given nodes (Traveling salesman problem)."
-msgstr "VYtvoří cyklus spojených uzlů (Problém obchodního cestujícího)"
+msgstr "Vytvoří cyklus spojující dané uzly (Problém obchodního cestujícího)."
 
 #: ../vector/v.net.salesman/main.c:132
 msgid ""
 "Note that TSP is NP-hard, heuristic algorithm is used by this module and "
 "created cycle may be sub optimal"
 msgstr ""
-"TSP je NP-těžká úloha, v tomto modulu je použit heuristický algoritmus, "
-"vytvoření smyčky nemusí být optimální řešení"
+"Problém obchodního cestujícího (TSP) je NP-těžká úloha, v tomto modulu je "
+"použit heuristický algoritmus, vytvoření cyklu nemusí být optimální řešení"
 
 #: ../vector/v.net.salesman/main.c:150
 msgid "Node layer (used for cities)"
-msgstr "Vrstva uzlů (použito pro cities)"
+msgstr "Vrstva uzlů (použito pro města (cities))"
 
 #: ../vector/v.net.salesman/main.c:163
 #, fuzzy
 msgid "EXPERIMENTAL: Arc backward direction cost column (number)"
-msgstr "Sloupeček nesoucí cenu pohybu ve směru zpět."
+msgstr "EXPERIMENTÁLNÍ:Sloupec cen (pohyb ve směru zpět)."
 
 #: ../vector/v.net.salesman/main.c:169
 #, fuzzy
 msgid "Name for output file holding node sequence (\"-\" for stdout)"
-msgstr "Název výstupní mapy (pro standardní výstup použijte \"-\")"
+msgstr "Název výstupního souboru uchovávajícího posloupnost uzlů (pro standardní výstup použijte \"-\")"
 
 #: ../vector/v.net.salesman/main.c:174
 msgid "Categories of points ('cities') on nodes (layer is specified by nlayer)"
-msgstr "Kategorie bodů ('cities') na uzlech (vrstva je určena pomocí nvrstva)"
+msgstr "Kategorie bodů ('cities') na uzlech (vrstva je dána parametrem nlayer)"
 
 #: ../vector/v.net.salesman/main.c:248
 #, c-format
 msgid "Number of cities: [%d]"
-msgstr "Počet cities: [%d]"
+msgstr "Počet měst (cities): [%d]"
 
 #: ../vector/v.net.salesman/main.c:250
 msgid "Not enough cities (< 2)"
-msgstr "Nedostatek cities (<2)"
+msgstr "Nedostatek měst (cities) (<2)"
 
 #: ../vector/v.net.salesman/main.c:286
 #, fuzzy
 msgid "Creating cost cache..."
-msgstr "Vytvářím centroidy..."
+msgstr "Vytvářím cenovou mezipaměť..."
 
 #: ../vector/v.net.salesman/main.c:307 ../vector/v.net.salesman/main.c:317
 #, fuzzy, c-format
 msgid "No point at node %d"
-msgstr "Žádný bod s kategorií [%d]"
+msgstr "Žádný bod na uzlu %d"
 
 #: ../vector/v.net.salesman/main.c:311 ../vector/v.net.salesman/main.c:321
 #, fuzzy, c-format
 msgid "No category for point at node %d"
-msgstr "Pro bod nebyl nalezen záznam (cat = %d)"
+msgstr "Žádná kategorie pro bod na uzlu %d"
 
 #: ../vector/v.net.salesman/main.c:323
 #, fuzzy, c-format
 msgid "Destination node [cat %d] is unreachable from node [cat %d]"
-msgstr "Místo určení [%d] je nedosažitelné z místa [%d]"
+msgstr "Místo určení [kategorie %d] je nedosažitelné z místa [kategorie %d]"
 
 #: ../vector/v.net.salesman/main.c:366
 msgid "Searching for the shortest cycle..."
-msgstr ""
+msgstr "Vyhledávání nejkratšího okruhu..."
 
 #: ../vector/v.net.salesman/main.c:492
 #, c-format
 msgid "Cycle with total cost %.3f"
-msgstr ""
+msgstr "Okruh s celkovou cenou %.3f"
 
 #: ../vector/v.net.salesman/main.c:517 ../vector/v.rectify/main.c:182
 #, fuzzy, c-format
 msgid "Unable to open file '%s' for writing"
-msgstr "Nelze otevřít soubor <%s> pro psaní"
+msgstr "Nelze otevřít soubor '%s' pro zápis"
 
 #: ../vector/v.to.points/main.c:184
 #, fuzzy
 msgid "Creates points along input lines in new vector map with 2 layers."
-msgstr ""
-"Vytvoří body podél vstupních linií a uloží do nového souboru o dvou vrstvách."
+msgstr "Vytvoří body podél vstupních linií v nové vektorové mapě o dvou vrstvách."
 
 #: ../vector/v.to.points/main.c:187
 #, fuzzy
 msgid "Name of vector map containing lines"
-msgstr "Vstupní mapa obsahující linie"
+msgstr "Název vstupní mapy obsahující linie"
 
 #: ../vector/v.to.points/main.c:201
 #, fuzzy
@@ -34795,7 +34798,7 @@ msgstr ""
 #: ../vector/v.net.path/path.c:82
 #, c-format
 msgid "[%d] points without category (nfield: [%d])"
-msgstr "[%d] bodů bez kategorie ( nfield[%d])"
+msgstr "[%d] bodů bez kategorie ( nfield: [%d])"
 
 #: ../vector/v.net.path/path.c:168 ../vector/v.net.path/path.c:188
 #, c-format
@@ -34805,7 +34808,7 @@ msgstr "Žádný bod s kategorií [%d]"
 #: ../vector/v.net.path/path.c:209
 #, c-format
 msgid "Point with category [%d] is not reachable from point with category [%d]"
-msgstr "Bod kategorie [%d] nelze dosáhnout z bodu kategorie [%d]"
+msgstr "Bod s kategorií [%d] nelze dosáhnout z bodu s kategorií [%d]"
 
 #: ../vector/v.net.path/path.c:266
 #, c-format
@@ -34815,7 +34818,7 @@ msgstr "Bod %f,%f je nedosažitelný z bodu %f,%f"
 #: ../vector/v.net.path/path.c:331
 #, c-format
 msgid "[%d] input format errors"
-msgstr "[%d] chyb při vstupu"
+msgstr "[%d] chyb vstupního formátu"
 
 #: ../vector/v.net.path/path.c:333
 #, c-format
@@ -34825,7 +34828,7 @@ msgstr "[%d] bodů dané kategorie chybí"
 #: ../vector/v.net.path/path.c:335
 #, c-format
 msgid "%d destination(s) unreachable (including points out of threshold)"
-msgstr "%d cíl(e) jsou nedosažitelné ( včetně bodů mimo mezní hodnotu)"
+msgstr "%d cíl(e) jsou nedosažitelné (včetně bodů mimo mezní hodnotu)"
 
 #: ../vector/v.net.path/main.c:43
 msgid "Finds shortest path on vector network."
@@ -34834,13 +34837,12 @@ msgstr "Nalézá nejkratší cestu ve vektorové síti."
 #: ../vector/v.net.path/main.c:66
 msgid ""
 "Name of file containing start and end points. If not given, read from stdin"
-msgstr ""
-"Název souboru obsahující začáteční a koncové body. Pokud nezadáno, čte se "
+msgstr "Název souboru obsahujícího počáteční a koncové body. Pokud nezadáno, čte se "
 "standardní vstup"
 
 #: ../vector/v.net.path/main.c:93
 msgid "Maximum distance to the network"
-msgstr "maximální vzdálenost od bodu k síti"
+msgstr "Maximální vzdálenost od bodu k síti"
 
 #: ../vector/v.net.path/main.c:94
 msgid ""
@@ -34848,14 +34850,14 @@ msgid ""
 "threshold, the path is not found and error message is printed. To speed up "
 "the process, keep this value as low as possible."
 msgstr ""
-"Maximální vzdálenost k síti, pokud je počáteční a koncový bod zadán "
-"souřadnicemi. Pokud je počáteční nebo koncový bod mimo prahovou hodnotu, "
-"cesta se nebude hledat a vytiskne se chybová zpráva. Kvůli zrychlení "
-"nastavte tuto hodnotu tak malou jak možno."
+"Pokud jsou počátek/konec zadány souřadnicemi. "
+"Pokud je počátek/konec mimo prahovou hodnotu, "
+"cesta nebude nalezena a vytiskne se chybová zpráva. Pro zrychlení procesu "
+"udržujte tuto hodnotu co nejnižší."
 
 #: ../vector/v.net.path/main.c:107
 msgid "Write output as original input segments, not each path as one line."
-msgstr "Zapiš výstup jako část vstupu, ne každou cestu jako jednu linii."
+msgstr "Zapiš výstup jako části původního vstupu, ne každou cestu jako jednu linii."
 
 #: ../vector/v.rectify/main.c:73
 #, fuzzy
@@ -34956,51 +34958,51 @@ msgstr "Vektorová mapa <%s> nebyla nalezena"
 #: ../vector/v.net.connectivity/main.c:55
 #, fuzzy
 msgid "connectivity"
-msgstr "Spojení"
+msgstr "propojenost (konektivita)"
 
 #: ../vector/v.net.connectivity/main.c:57
 msgid "Computes vertex connectivity between two sets of nodes in the network."
-msgstr ""
+msgstr "Počítá konektivitu vrcholů mezi dvěma skupinami uzlů v síti"
 
 #: ../vector/v.net.connectivity/main.c:97
 #, fuzzy
 msgid "Set1 category values"
-msgstr "Vytiskni označení kategorií"
+msgstr "Hodnoty kategorií pro skupinu 1 (Set1)"
 
 #: ../vector/v.net.connectivity/main.c:98
 #: ../vector/v.net.connectivity/main.c:104
 msgid "Set1"
-msgstr ""
+msgstr "skupina 1 (Set1)"
 
 #: ../vector/v.net.connectivity/main.c:103
 msgid "Set1 WHERE conditions of SQL statement without 'where' keyword"
-msgstr ""
+msgstr "WHERE podmínky SQL dotazu pro skupinu 1 (Set1) beze slova 'where'"
 
 #: ../vector/v.net.connectivity/main.c:108
 #, fuzzy
 msgid "Set2 category values"
-msgstr "Vytiskni označení kategorií"
+msgstr "Hodnoty kategorií pro skupinu 2 (Set2)"
 
 #: ../vector/v.net.connectivity/main.c:109
 #: ../vector/v.net.connectivity/main.c:115
 msgid "Set2"
-msgstr ""
+msgstr "skupina 2 (Set2)"
 
 #: ../vector/v.net.connectivity/main.c:114
 msgid "Set2 WHERE conditions of SQL statement without 'where' keyword"
-msgstr ""
+msgstr "WHERE podmínky SQL dotazu pro skupinu 2 (Set2) beze slova 'where'"
 
 #: ../vector/v.net.connectivity/main.c:148
 #: ../vector/v.net.connectivity/main.c:155
 #, c-format
 msgid "No features for %s selected. Please check options '%s', '%s'."
-msgstr ""
+msgstr "Nebyly vybrány prvky pro %s. Zkontrolujte možnosti '%s', '%s'."
 
 #: ../vector/v.net.connectivity/main.c:170
 #: ../vector/v.net.connectivity/main.c:173
 #, fuzzy, c-format
 msgid "%s is empty"
-msgstr "Starý rozsah dat je prázdný"
+msgstr "%s je prázdný"
 
 #: ../vector/v.surf.bspline/main.c:122
 #, fuzzy
@@ -35536,7 +35538,7 @@ msgstr ""
 
 #: ../vector/v.net.visibility/main.c:48
 msgid "visibility"
-msgstr ""
+msgstr "viditelnost"
 
 #: ../vector/v.net.visibility/main.c:49
 msgid "Visibility graph construction."
@@ -35548,7 +35550,7 @@ msgstr "Jedna nebo více souřadnic"
 
 #: ../vector/v.net.visibility/main.c:67
 msgid "Add points after computing the vis graph"
-msgstr "Přidat body po spočítání vis grafu"
+msgstr "Přidat body po spočítání grafu viditelnosti"
 
 #: ../vector/v.net.visibility/main.c:91
 #, c-format
@@ -37481,7 +37483,7 @@ msgstr "Problém při čtení souboru s hodnotami kategorií"
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:14
 msgid "WHERE conditions of SQL statement without 'where' keyword (vector)"
-msgstr ""
+msgstr "WHERE podmínky SQL dotazu beze slova 'where' (vektor)"
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:16
 #, fuzzy
