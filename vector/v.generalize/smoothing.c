@@ -318,81 +318,64 @@ int chaiken(struct line_pnts *Points, double thresh, int loop_support, int with_
 
     head.next = NULL;
     cur = &head;
-    point_assign(Points, 0, with_z, &p0, 0);
-
     if (!is_loop) {
-	point_list_add(cur, p0); /* always keep first point */
-	cur = cur->next;
+	/* always keep first point */
+	point_assign(Points, 0, with_z, &p0, 0);
+    }
+    else {
+	point_assign(Points, 0, with_z, &p1, 0);
+	point_assign(Points, 1, with_z, &p2, 0);
+	point_add(p1, p2, &tmp);
+	point_scalar(tmp, 0.5, &p0);
+    }
 
-	for (i = 2; i <= n; i++) {
+    point_list_add(cur, p0); 
+    cur = cur->next;
+
+    for (i = 2; i <= n; i++) {
+	if (!is_loop) {
 	    if (i == n)
 		point_assign(Points, i - 1, with_z, &p2, 0);
 	    else
 		point_assign(Points, i, with_z, &p2, 0);
-	    point_assign(Points, i - 1, with_z, &p1, 0);
+	}
+	else
+	    point_assign(Points, i, with_z, &p2, 1);
+	point_assign(Points, i - 1, with_z, &p1, 0);
 
-	    while (1) {
-		point_add(p1, p2, &tmp);
-		point_scalar(tmp, 0.5, &m1);
+	while (1) {
+	    point_add(p1, p2, &tmp);
+	    point_scalar(tmp, 0.5, &m1);
 
-		point_list_add(cur, m1);
+	    point_list_add(cur, m1);
 
-		if (point_dist_square(p0, m1) > thresh) {
-		    point_add(p1, m1, &tmp);	/* need to refine the partition */
-		    point_scalar(tmp, 0.5, &p2);
-		    point_add(p1, p0, &tmp);
-		    point_scalar(tmp, 0.5, &p1);
-		}
-		else {
-		    break;		/* good approximation */
-		}
+	    if (point_dist_square(p0, m1) > thresh) {
+		point_add(p1, m1, &tmp);	/* need to refine the partition */
+		point_scalar(tmp, 0.5, &p2);
+		point_add(p1, p0, &tmp);
+		point_scalar(tmp, 0.5, &p1);
 	    }
-
-	    while (cur->next != NULL)
-		cur = cur->next;
-
-	    p0 = cur->p;
+	    else {
+		break;		/* good approximation */
+	    }
 	}
 
+	while (cur->next != NULL)
+	    cur = cur->next;
+
+	p0 = cur->p;
+    }
+
+    if (!is_loop) {
 	point_assign(Points, n - 1, with_z, &p0, 0);
 	point_list_add(cur, p0); /* always keep last point */
-    }
-    else {
-	for (i = 2; i <= n; i++) {
-	    if (i == n)
-		point_assign(Points, 1, with_z, &p2, 0);
-	    else
-		point_assign(Points, i, with_z, &p2, 0);
-	    point_assign(Points, i - 1, with_z, &p1, 0);
-
-	    while (1) {
-		point_add(p1, p2, &tmp);
-		point_scalar(tmp, 0.5, &m1);
-
-		point_list_add(cur, m1);
-
-		if (point_dist_square(p0, m1) > thresh) {
-		    point_add(p1, m1, &tmp);	/* need to refine the partition */
-		    point_scalar(tmp, 0.5, &p2);
-		    point_add(p1, p0, &tmp);
-		    point_scalar(tmp, 0.5, &p1);
-		}
-		else {
-		    break;		/* good approximation */
-		}
-	    }
-
-	    while (cur->next != NULL)
-		cur = cur->next;
-
-	    p0 = cur->p;
-	}
     }
 
     if (point_list_copy_to_line_pnts(head, Points) == -1) {
 	G_fatal_error(_("Out of memory"));
     }
     point_list_free(head);
+
     return Points->n_points;
 }
 
