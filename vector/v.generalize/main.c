@@ -228,8 +228,8 @@ int main(int argc, char *argv[])
 
     loop_support_flag = G_define_flag();
     loop_support_flag->key = 'l';
-    loop_support_flag->label = _("Loop support");
-    loop_support_flag->description = _("Modify end points of lines forming a closed loop");
+    loop_support_flag->label = _("Disable loop support");
+    loop_support_flag->description = _("Do not modify end points of lines forming a closed loop");
 
     notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
     notab_flag->description = _("Do not copy attributes");
@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
 	    Vect_append_points(Points, APoints, GV_FORWARD);
 	    
 	    loop_support = 0;
-	    if (loop_support_flag->answer) {
+	    if (!loop_support_flag->answer) {
 		int n1, n2;
 
 		Vect_get_line_nodes(&Out, i, &n1, &n2);

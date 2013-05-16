@@ -54,7 +54,7 @@ int boyle(struct line_pnts *Points, int look_ahead, int loop_support, int with_z
         Points->y[0] == Points->y[n - 1] &&
         (Points->z[0] == Points->z[n - 1] || with_z == 0) && loop_support){
         is_loop = 1;
-	count = n + look_ahead;
+	count = n;
     }
 
     res = G_malloc(sizeof(POINT) * n);
@@ -111,7 +111,6 @@ int boyle(struct line_pnts *Points, int look_ahead, int loop_support, int with_z
 int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead, 
                       int loop_support, int with_z)
 {
-
     int n, half, i;
     double sc;
     POINT p, tmp, s;
@@ -219,10 +218,10 @@ int distance_weighting(struct line_pnts *Points, double slide, int look_ahead,
         Points->y[0] == Points->y[n - 1] &&
         (Points->z[0] == Points->z[n - 1] || with_z == 0) && loop_support){
         is_loop = 1;
-        count = n + half;
+        count = n + half - 1;
     }
 
-    if (look_ahead % 2 == 0) {
+    if ((look_ahead & 1) == 0) {
 	G_fatal_error(_("Look ahead parameter must be odd"));
 	return n;
     }
@@ -433,15 +432,10 @@ int hermite(struct line_pnts *Points, double step, double angle_thresh,
     point = last = &head;
 
     if (!is_loop) {
-	/* length of p[0]..p[i+1] */
-	i = 0;
 	point_assign(Points, 0, with_z, &p0, 0);
 	point_assign(Points, 1, with_z, &p1, 0);
-	/* length of line 0..i */
-	length_begin = 0;
 	/* length of line from point 0 to i+1 */
 	length = point_dist(p0, p1);
-	next = 0;
 	/* tangent at p0, p1 */
 	point_subtract(p1, p0, &t0);
 	refine_tangent(&t0);
@@ -450,34 +444,31 @@ int hermite(struct line_pnts *Points, double step, double angle_thresh,
 	refine_tangent(&t1);
     }
     else {
-	/* length of p[0]..p[i+1] */
-	i = 0;
 	point_assign(Points, n - 2, with_z, &p0, 0);
 	point_assign(Points, 0, with_z, &p1, 0);
-	/* length of line 0..i */
-	length_begin = 0;
-	/* length of line from point 0 to i+1 */
+	/* length of line from point n - 2 to 0 = n - 1 */
 	length = point_dist(p0, p1);
-	next = 0;
-	/* tangent at pn-2, p1 */
+	/* tangent at p0, p1 */
 	point_assign(Points, 1, with_z, &tmp, 0);
 	point_subtract(tmp, p0, &t0);
 	refine_tangent(&t0);
 
 	point_assign(Points, 0, with_z, &p0, 0);
 	point_assign(Points, 1, with_z, &p1, 0);
-	/* length of line 0..i */
-	length_begin = 0;
-	/* length of line from point 0 to i+1 */
+	/* length of line from point 0 to 1 */
 	length = point_dist(p0, p1);
-	next = 0;
 	/* tangent at p0, p2 */
 	point_assign(Points, 2, with_z, &tmp, 0);
 	point_subtract(tmp, p0, &t1);
 	refine_tangent(&t1);
     }
+
+    /* length of line 0..i */
+    length_begin = 0;
+    next = 0;
     
     /* we always operate on the segment point[i]..point[i+1] */
+    i = 0;
     while (i < n - 1) {
 	if (next > length || (length - length_begin < GRASS_EPSILON)) {	/* segmet i..i+1 is finished or too short */
 	    i++;
@@ -637,8 +628,8 @@ int snakes(struct line_pnts *Points, double alpha, double beta,
     else {
 	/* loop: point 0 and point n - 1 are identical */
 
-	/* repeat last and first points at the beginning and end
-	 * of each vector respectively */
+	/* repeat last and first points at the beginning and
+	 * end of each vector respectively */
 
 	/* add points from n - plus - 1 to n - 2 */
 	for (i = 0, j = n - plus - 1; i < plus; i++, j++) {
