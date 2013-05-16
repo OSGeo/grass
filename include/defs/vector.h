@@ -389,7 +389,7 @@ int Vect_net_build_graph(struct Map_info *, int, int, int, const char *,
                          const char *, const char *, int, int);
 int Vect_net_shortest_path(struct Map_info *, int, int, struct ilist *,
                            double *);
-dglGraph_s *Vect_net_get_graph(const struct Map_info *);
+dglGraph_s *Vect_net_get_graph(struct Map_info *);
 int Vect_net_get_line_cost(const struct Map_info *, int, int, double *);
 int Vect_net_get_node_cost(const struct Map_info *, int, double *);
 int Vect_net_nearest_nodes(struct Map_info *, double, double, double, int,

@@ -570,7 +570,7 @@ Vect_net_shortest_path(struct Map_info *Map, int from, int to,
 
   \return pointer to dglGraph_s struct or NULL
 */
-dglGraph_s *Vect_net_get_graph(const struct Map_info *Map)
+dglGraph_s *Vect_net_get_graph(struct Map_info *Map)
 {
     return &(Map->dgraph.graph_s);
 }
