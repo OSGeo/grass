@@ -915,7 +915,7 @@ void check_parameters(const struct GParams *params)
 
     int nvlines;
 
-    int nvpoints;
+    int nvpoints, nvpoints_pos, nvpoints_layer;
     
     int nvolumes, nisosurf, nslices;
 
@@ -1068,6 +1068,17 @@ void check_parameters(const struct GParams *params)
      * vector points
      */
     nvpoints = opt_get_num_answers(params->vpoints);
+    nvpoints_pos = opt_get_num_answers(params->vpoint_pos);
+    nvpoints_layer = opt_get_num_answers(params->vpoint_layer);
+
+    if (nvpoints * 3 != nvpoints_pos)
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+		      params->vpoints->key, nvpoints, params->vpoint_pos->key, nvpoints_pos);
+
+    if (nvpoints != nvpoints_layer)
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+		      params->vpoints->key, nvpoints, params->vpoint_layer->key, nvpoints_layer);
+
 
     /* TODO */
     
