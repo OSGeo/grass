@@ -1,4 +1,6 @@
 
+#include <math.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include "globals.h"
@@ -46,14 +48,10 @@ int f_mod(int argc, const int *argt, void **args)
 		if (IS_NULL_F(&arg1[i]) || IS_NULL_F(&arg2[i]))
 		    SET_NULL_F(&res[i]);
 		else {
-		    int k;
-
 		    floating_point_exception = 0;
-		    k = (int)(arg1[i] / arg2[i]);
+		    res[i] = (FCELL) fmod(arg1[i], arg2[i]);
 		    if (floating_point_exception)
 			SET_NULL_F(&res[i]);
-		    else
-			res[i] = arg1[i] - k * arg2[i];
 		}
 	    }
 	    return 0;
@@ -68,14 +66,10 @@ int f_mod(int argc, const int *argt, void **args)
 		if (IS_NULL_D(&arg1[i]) || IS_NULL_D(&arg2[i]))
 		    SET_NULL_D(&res[i]);
 		else {
-		    int k;
-
 		    floating_point_exception = 0;
-		    k = (int)(arg1[i] / arg2[i]);
+		    res[i] = (DCELL) fmod(arg1[i], arg2[i]);
 		    if (floating_point_exception)
 			SET_NULL_D(&res[i]);
-		    else
-			res[i] = arg1[i] - k * arg2[i];
 		}
 	    }
 	    return 0;
