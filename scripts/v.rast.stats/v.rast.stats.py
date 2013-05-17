@@ -191,7 +191,7 @@ def main():
 
     if addcols:
 	grass.verbose(_("Adding columns '%s'") % addcols)
-	if grass.run_command('v.db.addcolumn', map = vector, columns = addcols) != 0:
+	if grass.run_command('v.db.addcolumn', map = vector, columns = addcols, layer=layer) != 0:
 	    grass.fatal(_("Adding columns failed. Exiting."))
 
     # calculate statistics:
