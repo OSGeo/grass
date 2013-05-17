@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
     static struct line_pnts *Points;
-    struct line_cats *Cats;
+    struct line_cats *Cats, *TCats;
     struct field_info *Fi;
     struct cat_list *Clist;
     int i, j, ret, option, otype, type, with_z, step, id;
@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
     field_opt->guisection = _("Selection");
 
     type_opt = G_define_standard_option(G_OPT_V3_TYPE);
+    type_opt->answer = "point,line,area,face";
     type_opt->guisection = _("Selection");
 
     id_opt = G_define_standard_option(G_OPT_V_IDS);
@@ -373,29 +374,40 @@ int main(int argc, char *argv[])
 	break;
 
     case (O_TRANS):
+	TCats = Vect_new_cats_struct();
+
 	/* Lines */
 	while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
+	    Vect_reset_cats(TCats);
 	    id++;
 	    if (type & otype && (!Clist ||
 				 (Clist &&
 				  Vect_cat_in_cat_list(id, Clist) == TRUE))) {
 		int n = Cats->n_cats;
-		
+
+		scat = -1;
 		for (i = 0; i < n; i++) {
 		    if (Cats->field[i] == fields[0]) {
 			scat = Cats->cat[i];
-			break;
+			Vect_cat_set(TCats, 1, scat);
 		    }
 		}
-		for (i = 1; i < nfields; i++) {
-		    if (Vect_cat_set(Cats, fields[i], scat) > 0) {
-			G_debug(4, "Copy cat %i of field %i to into field %i", scat, fields[0], fields[i]);
+		if (scat > -1) {
+		    n = TCats->n_cats;
+		    for (i = 0; i < n; i++) {
+			scat = TCats->cat[i];
+			for (i = 0; i < nfields; i++) {
+			    if (Vect_cat_set(Cats, fields[i], scat) > 0) {
+				G_debug(4, "Copy cat %i of field %i to into field %i", scat, fields[0], fields[i]);
+			    }
+			}
 		    }
+		    Vect_write_line(&Out, type, Points, Cats);
+		    nmodified++;
 		}
-		nmodified++;
 	    }
-	    Vect_write_line(&Out, type, Points, Cats);
 	}
+	Vect_destroy_cats_struct(TCats);
 	break;
 
     case (O_DEL):
@@ -752,7 +764,7 @@ int main(int argc, char *argv[])
 	Vect_close(&Out);
 
 	if (option == O_TRANS && nmodified > 0)
-	    for(i = 0; i < nfields; i++)
+	    for(i = 1; i < nfields; i++)
 		G_important_message(_("Categories copied from layer %d to layer %d"),
 				fields[0], fields[i]);
 	G_done_msg(_("%d features modified."), nmodified);
