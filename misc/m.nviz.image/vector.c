@@ -298,13 +298,14 @@ int check_thematic(const struct GParams *params, int vlines)
 	    if (db_column_Ctype(driver, Fi->table, marker->answers[i]) != DB_C_TYPE_STRING)
 		G_fatal_error(_("Data type of marker column must be character"));
 	}
-        
+
+        G_remove_error_handler(error_handler_db, driver);        
         db_close_database_shutdown_driver(driver);
-        G_remove_error_handler(error_handler_db, driver);
     }
 
     G_remove_error_handler(error_handler_vector, &Map);
-    
+    Vect_close(&Map);
+
     if (Fi) 
 	return Fi->number;
     
