@@ -23,6 +23,8 @@
 
 static int load_vectors(const struct Option *, const struct Option *,
 			const struct Option *, const struct Option *, int, nv_data *);
+static void error_handler_vector(void *);
+static void error_handler_db(void *);
 
 /*!
   \brief Load vector maps (lines)
@@ -244,6 +246,8 @@ int check_thematic(const struct GParams *params, int vlines)
     for (i = 0; map->answers[i]; i++) {
 	if (1 > Vect_open_old(&Map, map->answers[i], ""))
 	    G_fatal_error(_("Unable to open vector map <%s>"), map->answers[i]);
+        G_add_error_handler(error_handler_vector, &Map);
+        
 	Fi = Vect_get_field2(&Map, layer->answers[i]);
 	if (!Fi)
 	    continue;
@@ -251,7 +255,8 @@ int check_thematic(const struct GParams *params, int vlines)
 	if (!driver)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
-	
+	G_add_error_handler(error_handler_db, driver);
+
 	if (color->answers && color->answers[i]) {
 	    db_get_column(driver, Fi->table, color->answers[i], &column);
 	    if (!column)
@@ -292,9 +297,31 @@ int check_thematic(const struct GParams *params, int vlines)
 		G_fatal_error(_("Data type of marker column must be character"));
 	}
     }
+
+    G_remove_error_handler(error_handler_vector, &Map);
+    G_remove_error_handler(error_handler_db, driver);
+    
+    db_close_database_shutdown_driver(driver);
     
     if (Fi) 
 	return Fi->number;
     
     return 1;
+}
+
+void error_handler_vector(void *p)
+{
+    struct Map_info *Map;
+
+    Map = (struct Map_info *)p;
+
+    Vect_close(Map);
+}
+
+void error_handler_db(void *p)
+{
+    dbDriver *driver;
+
+    driver = (dbDriver *)p;
+    db_close_database_shutdown_driver(driver);
 }
