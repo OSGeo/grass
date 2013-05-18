@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("category"));
+    G_add_keyword(_("layer"));
     module->description =
 	_("Attaches, deletes or reports vector categories to map geometry.");
 
