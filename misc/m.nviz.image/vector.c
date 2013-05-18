@@ -243,6 +243,8 @@ int check_thematic(const struct GParams *params, int vlines)
 	width  = params->vpoint_width_column;
 	marker = params->vpoint_marker_column;
     }
+    
+    driver = NULL;
     for (i = 0; map->answers[i]; i++) {
 	if (1 > Vect_open_old(&Map, map->answers[i], ""))
 	    G_fatal_error(_("Unable to open vector map <%s>"), map->answers[i]);
@@ -296,12 +298,12 @@ int check_thematic(const struct GParams *params, int vlines)
 	    if (db_column_Ctype(driver, Fi->table, marker->answers[i]) != DB_C_TYPE_STRING)
 		G_fatal_error(_("Data type of marker column must be character"));
 	}
+        
+        db_close_database_shutdown_driver(driver);
+        G_remove_error_handler(error_handler_db, driver);
     }
 
     G_remove_error_handler(error_handler_vector, &Map);
-    G_remove_error_handler(error_handler_db, driver);
-    
-    db_close_database_shutdown_driver(driver);
     
     if (Fi) 
 	return Fi->number;
@@ -323,5 +325,6 @@ void error_handler_db(void *p)
     dbDriver *driver;
 
     driver = (dbDriver *)p;
-    db_close_database_shutdown_driver(driver);
+    if (driver) 
+        db_close_database_shutdown_driver(driver);
 }
