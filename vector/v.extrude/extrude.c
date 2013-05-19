@@ -165,7 +165,7 @@ int extrude(struct Map_info *In, struct Map_info *Out,
     if (type == GV_POINT) {
 	Vect_write_line(Out, GV_LINE, Points_wall, Cats);
     }
-    else if (type == GV_AREA && Points_roof->n_points > 3) {
+    else if (type == GV_AREA && Points_roof->n_points > 2) {
         /* close roof and floor */
 	Vect_append_point(Points_roof,
 			  Points_roof->x[0], Points_roof->y[0],
