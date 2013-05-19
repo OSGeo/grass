@@ -89,7 +89,7 @@ func_desc func_descs[] = {
     {"ewres", c_double0, f_ewres},
     {"nsres", c_double0, f_nsres},
     {"tbres", c_double0, f_tbres},
-    {NULL}
+    {NULL, NULL, NULL}
 };
 
 void print_function_names(void)

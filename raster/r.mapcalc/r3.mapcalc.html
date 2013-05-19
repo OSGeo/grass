@@ -222,7 +222,8 @@ nmode(x,y[,z...])       mode value of those listed, excluding NULLs     *
 not(x)                  1 if x is zero, 0 otherwise
 pow(x,y)                x to the power y                                *
 rand(a,b)               random value x : a &lt;= x &lt; b
-round(x)                round x to nearest integer                      I
+round(x)                round x to nearest integer                      *
+round(x, y)             round x to y decimal places                     *
 sin(x)                  sine of x (x is in degrees)                     F
 sqrt(x)                 square root of x                                F
 tan(x)                  tangent of x (x is in degrees)                  F
@@ -242,6 +243,9 @@ Internal variables:
  null()                 NULL value
 </pre></div>
 Note, that the row(), col() and depth() indexing starts with 1. 
+<p>
+round(x, y) supports a negative number of decimal places: for example, 
+round(119, -1) results in 120, and round(119, -2) results in 100.
 
 
 <h2>FLOATING POINT VALUES IN THE EXPRESSION</h2>
