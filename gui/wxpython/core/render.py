@@ -404,7 +404,7 @@ class Map(object):
 
         # GRASS environment variable (for rendering)
         self.env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
-               "GRASS_COMPRESSION"     : "0",
+               "GRASS_PNG_COMPRESSION" : "0",
                "GRASS_TRUECOLOR"       : "TRUE",
                "GRASS_TRANSPARENT"     : "TRUE",
                "GRASS_PNG_READ"        : "FALSE",
