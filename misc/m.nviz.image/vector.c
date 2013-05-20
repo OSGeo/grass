@@ -3,7 +3,7 @@
   
   \brief Vector subroutines
   
-  (C) 2008, 2010-2011 by the GRASS Development Team
+  (C) 2008-2013 by the GRASS Development Team
 
   This program is free software under the GNU General Public
   License (>=v2). Read the file COPYING that comes with GRASS
@@ -124,7 +124,7 @@ int vlines_set_attrb(const struct GParams *params)
     vect_list = GV_get_vect_list(&nvects);
 
     for (i = 0; i < nvects; i++) {
-	layer = check_thematic(params, TRUE);
+	check_map(params, i, TRUE, &layer, NULL);
 	
 	color = Nviz_color_from_str(params->vline_color->answers[i]);
 	color_column = params->vline_color_column->answers ?
@@ -170,7 +170,7 @@ int vlines_set_attrb(const struct GParams *params)
 */
 int vpoints_set_attrb(const struct GParams *params)
 {
-    int i, layer, have_colors;
+    int i, layer, have_colors, with_z;
     int *site_list, nsites;
     int marker, color, width;
     float size;
@@ -181,7 +181,7 @@ int vpoints_set_attrb(const struct GParams *params)
     site_list = GP_get_site_list(&nsites);
 
     for (i = 0; i < nsites; i++) {
-	layer = check_thematic(params, FALSE);
+        check_map(params, i, FALSE, &layer, &with_z);
 	color = Nviz_color_from_str(params->vpoint_color->answers[i]);
 	color_column = params->vpoint_color_column->answers ?
 	    params->vpoint_color_column->answers[i] : NULL;
@@ -195,7 +195,10 @@ int vpoints_set_attrb(const struct GParams *params)
 	marker_column = params->vpoint_marker_column->answers ?
 	    params->vpoint_marker_column->answers[i] : NULL;
 	marker = GP_str_to_marker(marker_str);
-	
+
+        if (with_z)
+            GP_set_zmode(site_list[i], TRUE);
+
 	if (GP_set_style(site_list[i], color, width, size, marker) < 0)
 	    return 0;
 
@@ -215,101 +218,123 @@ int vpoints_set_attrb(const struct GParams *params)
     return 1;
 }
 
-int check_thematic(const struct GParams *params, int vlines)
+/*!
+  \brief Check vector map
+
+  \param params parameters
+  \param index answers array index
+  \param vlines TRUE for lines otherwise points
+  \param[out] field number
+  \param[out] WITH_Z for 3D maps
+
+  \return 0 on success otherwise 1
+*/
+int check_map(const struct GParams *params, int index, int vlines,
+                   int *field, int *with_z)
 {
-    int i, type;
+    int type;
     struct Map_info Map;
-    struct Option *map, *layer, *color, *size, *width, *marker;
+    const char *map, *layer, *color, *size, *width, *marker;
     struct field_info *Fi;
 
     dbDriver *driver;
     dbColumn *column;
     
     Fi = NULL;
-    
+    driver = NULL;
+
     if (vlines) {
-	map    = params->vlines;
-	layer  = params->vline_layer;
-	color  = params->vline_color_column;
+	map    = params->vlines->answers[index];
+	layer  = params->vline_layer->answers[index];
+	color  = params->vline_color_column->answers ? 
+            params->vline_color_column->answers[index] : NULL;
 	size   = NULL;
-	width  = params->vline_width_column;
+	width  = params->vline_width_column->answers ?
+            params->vline_width_column->answers[index] : NULL;
 	marker = NULL;
     }
     else {
-	map    = params->vpoints;
-	layer  = params->vpoint_layer;
-	color  = params->vpoint_color_column;
-	size   = params->vpoint_size_column;
-	width  = params->vpoint_width_column;
-	marker = params->vpoint_marker_column;
+	map    = params->vpoints->answers[index];
+	layer  = params->vpoint_layer->answers[index];
+	color  = params->vpoint_color_column->answers ?
+            params->vpoint_color_column->answers[index] : NULL;
+	size   = params->vpoint_size_column->answers ?
+            params->vpoint_size_column->answers[index] : NULL;
+	width  = params->vpoint_width_column->answers ?
+            params->vpoint_width_column->answers[index] : NULL;
+	marker = params->vpoint_marker_column->answers ?
+            params->vpoint_marker_column->answers[index] : NULL;
     }
+
+    if (!map)
+        return 1;
     
-    driver = NULL;
-    for (i = 0; map->answers[i]; i++) {
-	if (1 > Vect_open_old(&Map, map->answers[i], ""))
-	    G_fatal_error(_("Unable to open vector map <%s>"), map->answers[i]);
-        G_add_error_handler(error_handler_vector, &Map);
+    if (1 > Vect_open_old(&Map, map, ""))
+        G_fatal_error(_("Unable to open vector map <%s>"), map);
+    G_add_error_handler(error_handler_vector, &Map);
+
+    if (with_z)
+        *with_z = Vect_is_3d(&Map);
+
+    *field = -1;    
+    Fi = Vect_get_field2(&Map, layer);
+    if (Fi) {
+        *field = Fi->number;
+    
+        driver = db_start_driver_open_database(Fi->driver, Fi->database);
+        if (!driver)
+            G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                          Fi->database, Fi->driver);
+        G_add_error_handler(error_handler_db, driver);
         
-	Fi = Vect_get_field2(&Map, layer->answers[i]);
-	if (!Fi)
-	    continue;
-	driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	if (!driver)
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  Fi->database, Fi->driver);
-	G_add_error_handler(error_handler_db, driver);
-
-	if (color->answers && color->answers[i]) {
-	    db_get_column(driver, Fi->table, color->answers[i], &column);
-	    if (!column)
-		G_fatal_error(_("Column <%s> in table <%s> not found"),
-			      color->answers[i], Fi->table);
-	    
-	    if (db_column_Ctype(driver, Fi->table, color->answers[i]) != DB_C_TYPE_STRING)
-		G_fatal_error(_("Data type of color column must be character"));
-	}
-	if (size && size->answers && size->answers[i]) {
-	    db_get_column(driver, Fi->table, size->answers[i], &column);
-	    if (!column)
-		G_fatal_error(_("Column <%s> in table <%s> not found"),
-			      size->answers[i], Fi->table);
-	    
-	    type = db_column_Ctype(driver, Fi->table, size->answers[i]);
-	    if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
-		G_fatal_error(_("Data type of size column must be numeric"));
-	}
-	if (width->answers && width->answers[i]) {
-	    db_get_column(driver, Fi->table, width->answers[i], &column);
-	    if (!column)
-		G_fatal_error(_("Column <%s> in table <%s> not found"),
-			      width->answers[i], Fi->table);
-	    
-	    type = db_column_Ctype(driver, Fi->table, width->answers[i]);
-	    if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
-		G_fatal_error(_("Data type of width column must be numeric"));
-	}
-	if (marker && marker->answers && marker->answers[i]) {
-	    db_get_column(driver, Fi->table, marker->answers[i], &column);
-	    if (!column)
-		G_fatal_error(_("Column <%s> in table <%s> not found"),
-			      marker->answers[i], Fi->table);
-	  
-	  type = db_column_Ctype(driver, Fi->table, marker->answers[i]);
-	    if (db_column_Ctype(driver, Fi->table, marker->answers[i]) != DB_C_TYPE_STRING)
-		G_fatal_error(_("Data type of marker column must be character"));
-	}
-
+        if (color) {
+            db_get_column(driver, Fi->table, color, &column);
+            if (!column)
+                G_fatal_error(_("Column <%s> in table <%s> not found"),
+                              color, Fi->table);
+            
+            if (db_column_Ctype(driver, Fi->table, color) != DB_C_TYPE_STRING)
+                G_fatal_error(_("Data type of color column must be character"));
+        }
+        if (size) {
+            db_get_column(driver, Fi->table, size, &column);
+            if (!column)
+                G_fatal_error(_("Column <%s> in table <%s> not found"),
+                              size, Fi->table);
+            
+            type = db_column_Ctype(driver, Fi->table, size);
+            if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
+                G_fatal_error(_("Data type of size column must be numeric"));
+        }
+        if (width) {
+            db_get_column(driver, Fi->table, width, &column);
+            if (!column)
+                G_fatal_error(_("Column <%s> in table <%s> not found"),
+                              width, Fi->table);
+            
+            type = db_column_Ctype(driver, Fi->table, width);
+            if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
+                G_fatal_error(_("Data type of width column must be numeric"));
+        }
+        if (marker) {
+            db_get_column(driver, Fi->table, marker, &column);
+            if (!column)
+                G_fatal_error(_("Column <%s> in table <%s> not found"),
+                              marker, Fi->table);
+            
+            type = db_column_Ctype(driver, Fi->table, marker);
+            if (db_column_Ctype(driver, Fi->table, marker) != DB_C_TYPE_STRING)
+                G_fatal_error(_("Data type of marker column must be character"));
+        }
+        
         G_remove_error_handler(error_handler_db, driver);        
         db_close_database_shutdown_driver(driver);
     }
-
+    
     G_remove_error_handler(error_handler_vector, &Map);
     Vect_close(&Map);
 
-    if (Fi) 
-	return Fi->number;
-    
-    return 1;
+    return 0;
 }
 
 void error_handler_vector(void *p)
