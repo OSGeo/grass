@@ -93,7 +93,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.init = False
         self.initView = False
-        
+        self.context = None
+        if CheckWxVersion(version=[2, 9]):
+            self.context = glcanvas.GLContext(self)
+
         # render mode 
         self.render = { 'quick' : False,
                         # do not render vector lines in quick mode
@@ -340,11 +343,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
     def OnSize(self, event):
         size = self.GetClientSize()
+        if CheckWxVersion(version=[2, 9]):
+            context = self.context
+        else:
+            context = self.GetContext()
         if self.size != size \
-            and self.GetContext():
+            and context:
             Debug.msg(3, "GLCanvas.OnSize(): w = %d, h = %d" % \
                       (size.width, size.height))
-            self.SetCurrent()
+            if CheckWxVersion(version=[2, 9]):
+                self.SetCurrent(self.context)
+            else:
+                self.SetCurrent()
             self._display.ResizeWindow(size.width,
                                        size.height)
         
@@ -367,7 +377,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
 
     def DoPaint(self):
-        self.SetCurrent()
+        if CheckWxVersion(version=[2, 9]):
+            self.SetCurrent(self.context)
+        else:
+            self.SetCurrent()
         
         if not self.initView:
             self._display.InitView()
