@@ -115,13 +115,10 @@ int main(int argc, char *argv[])
 	_("Length of each spline step in the north-south direction. Default: 1.5 * nsres.");
     stepN_opt->guisection = _("Settings");
 
-    method_opt = G_define_option();
-    method_opt->key = "method";
-    method_opt->type = TYPE_STRING;
-    method_opt->required = NO;
+    method_opt = G_define_standard_option(G_OPT_R_INTERP_TYPE);
     method_opt->description = _("Spline interpolation algorithm");
-    method_opt->options = "bilinear,bicubic";
-    method_opt->answer = "bicubic";
+    method_opt->options = "linear,cubic";
+    method_opt->answer = "cubic";
     method_opt->guisection = _("Settings");
 
     lambda_f_opt = G_define_option();
@@ -158,7 +155,7 @@ int main(int argc, char *argv[])
     inrast = in_opt->answer;
     outrast = out_opt->answer;
 
-    if (!strcmp(method_opt->answer, "bilinear"))
+    if (!strcmp(method_opt->answer, "linear"))
 	interp_method = P_BILINEAR;
     else
 	interp_method = P_BICUBIC;

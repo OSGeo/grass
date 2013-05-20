@@ -308,12 +308,12 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->description = _("Sampling interpolation method");
-        Opt->options = "nearest,bilinear,bicubic";
+        Opt->options = "nearest,linear,cubic";
         G_asprintf((char **) &(Opt->descriptions),
-                   "nearest;%s;bilinear;%s;bicubic;%s",
+                   "nearest;%s;linear;%s;cubic;%s",
                    _("Nearest-neighbor interpolation"),
-                   _("Bilinear interpolation"),
-                   _("Bicubic interpolation"));
+                   _("Linear interpolation"),
+                   _("Cubic interpolation"));
         break;
 
 	/*g3d maps */

@@ -54,15 +54,15 @@ DCELL Rast_get_sample(int fd,
     double retval;
 
     switch (itype) {
-    case NEAREST:
+    case INTERP_NEAREST:
 	retval =
 	    Rast_get_sample_nearest(fd, window, cats, north, east, usedesc);
 	break;
-    case BILINEAR:
+    case INTERP_LINEAR:
 	retval =
 	    Rast_get_sample_bilinear(fd, window, cats, north, east, usedesc);
 	break;
-    case CUBIC:
+    case INTERP_CUBIC:
 	retval =
 	    Rast_get_sample_cubic(fd, window, cats, north, east, usedesc);
 	break;
