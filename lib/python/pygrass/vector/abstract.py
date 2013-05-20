@@ -102,10 +102,7 @@ class Info(object):
 
     def _get_name(self):
         """Private method to obtain the Vector name"""
-        if self.exist() and self.is_open():
-            return libvect.Vect_get_name(self.c_mapinfo)
-        else:
-            return self._name
+        return self._name
 
     def _set_name(self, newname):
         """Private method to change the Vector name"""
@@ -257,7 +254,10 @@ class Info(object):
     def rename(self, newname):
         """Method to rename the Vector map"""
         if self.exist():
-            functions.rename(self.name, newname, 'vect')
+            if not self.is_open():
+                functions.rename(self.name, newname, 'vect')
+            else:
+                raise GrassError("The map is open, not able to renamed it.")
         self._name = newname
 
     def is_3D(self):
