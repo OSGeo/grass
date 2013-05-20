@@ -129,6 +129,18 @@ class Bbox(object):
                 ('east', self.east), ('west', self.west),
                 ('top', self.top), ('bottom', self.bottom)]
 
+    def nsewtb(self, is3d=False):
+        """Return a list
+
+        If is3d parameter is False return only:
+        north, south, east, west
+        """
+        if is3d:
+            return (self.north, self.south, self.east, self.west,
+                    self.top, self.bottom)
+        else:
+            return (self.north, self.south, self.east, self.west)
+
 
 class BoxList(object):
     """Instantiate a BoxList class to create a list of Bounding Box"""
