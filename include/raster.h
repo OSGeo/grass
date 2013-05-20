@@ -15,13 +15,11 @@
 /*! \brief Interpolation methods
 
   For G_get_raster_sample(), INTERP_TYPE
-
-  \todo Rename to use prefix INTERP_
 */
-#define UNKNOWN	  0
-#define NEAREST   1		/* nearest neighbor interpolation  */
-#define BILINEAR  2		/* bilinear interpolation          */
-#define CUBIC     3		/* cubic interpolation             */
+#define INTERP_UNKNOWN   0
+#define INTERP_NEAREST   1		/* nearest neighbor interpolation  */
+#define INTERP_LINEAR    2		/* linear interpolation            */
+#define INTERP_CUBIC     3		/* cubic interpolation             */
 
 /*** typedefs ***/
 typedef int RASTER_MAP_TYPE;

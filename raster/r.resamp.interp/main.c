@@ -81,22 +81,18 @@ int main(int argc, char *argv[])
     rastin = G_define_standard_option(G_OPT_R_INPUT);
     rastout = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    method = G_define_option();
-    method->key = "method";
-    method->type = TYPE_STRING;
-    method->required = NO;
-    method->description = _("Interpolation method");
-    method->options = "nearest,bilinear,bicubic,lanczos";
-    method->answer = "bilinear";
+    method = G_define_standard_option(G_OPT_R_INTERP_TYPE);
+    method->options = "nearest,linear,cubic,lanczos";
+    method->answer = "linear";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (G_strcasecmp(method->answer, "nearest") == 0)
 	neighbors = 1;
-    else if (G_strcasecmp(method->answer, "bilinear") == 0)
+    else if (G_strcasecmp(method->answer, "linear") == 0)
 	neighbors = 2;
-    else if (G_strcasecmp(method->answer, "bicubic") == 0)
+    else if (G_strcasecmp(method->answer, "cubic") == 0)
 	neighbors = 4;
     else if (G_strcasecmp(method->answer, "lanczos") == 0)
 	neighbors = 5;

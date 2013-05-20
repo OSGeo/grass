@@ -45,7 +45,7 @@
 int main(int argc, char **argv)
 {
     double scale, predicted, actual;
-    INTERP_TYPE method = UNKNOWN;
+    INTERP_TYPE method = INTERP_UNKNOWN;
     int fdrast;			/* file descriptor for raster map is int */
     struct Cell_head window;
     struct GModule *module;

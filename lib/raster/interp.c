@@ -194,20 +194,20 @@ int Rast_option_to_interp_type(const struct Option *option)
 {
     int interp_type;
     
-    interp_type = UNKNOWN;
+    interp_type = INTERP_UNKNOWN;
     if (option->answer) {
         if (strcmp(option->answer, "nearest") == 0) {
-            interp_type = NEAREST;
+            interp_type = INTERP_NEAREST;
         }
-        else if (strcmp(option->answer, "bilinear") == 0) {
-            interp_type = BILINEAR;
+        else if (strcmp(option->answer, "linear") == 0) {
+            interp_type = INTERP_LINEAR;
         }
-        else if (strcmp(option->answer, "bicubic") == 0) {
-            interp_type = CUBIC;
+        else if (strcmp(option->answer, "cubic") == 0) {
+            interp_type = INTERP_CUBIC;
         }
     }
 
-    if (interp_type == UNKNOWN)
+    if (interp_type == INTERP_UNKNOWN)
         G_fatal_error(_("Unknown interpolation method: %s"), option->answer);
 
     return interp_type;

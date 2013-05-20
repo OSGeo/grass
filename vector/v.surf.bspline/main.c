@@ -152,13 +152,10 @@ int main(int argc, char *argv[])
 	_("Length of each spline step in the north-south direction");
     stepN_opt->guisection = _("Settings");
 
-    type_opt = G_define_option();
-    type_opt->key = "method";
-    type_opt->type = TYPE_STRING;
-    type_opt->required = NO;
+    type_opt = G_define_standard_option(G_OPT_R_INTERP_TYPE);
     type_opt->description = _("Spline interpolation algorithm");
-    type_opt->options = "bilinear,bicubic";
-    type_opt->answer = "bilinear";
+    type_opt->options = "linear,cubic";
+    type_opt->answer = "linear";
     type_opt->guisection = _("Settings");
 
     lambda_f_opt = G_define_option();
@@ -206,7 +203,7 @@ int main(int argc, char *argv[])
     if (!vector && !map && !cross_corr_flag->answer)
 	G_fatal_error(_("No raster or vector or cross-validation output"));
 
-    if (!strcmp(type_opt->answer, "bilinear"))
+    if (!strcmp(type_opt->answer, "linear"))
 	bilin = P_BILINEAR;
     else
 	bilin = P_BICUBIC;
