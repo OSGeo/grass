@@ -75,8 +75,8 @@ This program is free software under the GNU General Public License
 #% key: method
 #% type: string
 #% description: Reprojection method to use
-#% options:near,bilinear,cubic,cubicspline
-#% answer:near
+#% options:nearest,linear,cubic,cubicspline
+#% answer:nearest
 #% guisection: Request properties
 #%end
 

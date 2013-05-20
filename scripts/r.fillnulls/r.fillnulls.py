@@ -62,7 +62,7 @@
 #% type: string
 #% description: Interpolation method
 #% required : yes
-#% options : bilinear,bicubic,rst
+#% options : linear,cubic,rst
 #% answer : rst
 #%end
 
