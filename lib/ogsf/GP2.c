@@ -363,13 +363,13 @@ int GP_unset_style_thematic(int id)
 }
 
 /*!
-   \brief Set z-mode
+   \brief Set z mode for point set
 
-   \param id poin set id
-   \param use_z use z ?
+   \param id point set id
+   \param use_z TRUE to use z-coordinaces when vector map is 3D
 
    \return 1 on success
-   \return 0 no z
+   \return 0 vector map is not 3D
    \return -1 on error (invalid point set id)
  */
 /* I don't see who is using it? Why it's required? */
