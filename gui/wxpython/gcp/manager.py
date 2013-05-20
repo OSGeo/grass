@@ -2361,8 +2361,8 @@ class GrSettingsDialog(wx.Dialog):
         self.symbol = {}
         
         self.methods = ["nearest",
-                        "bilinear",
-                        "bilinear_f",
+                        "linear",
+                        "linear_f",
                         "cubic", 
                         "cubic_f",
                         "lanczos",
