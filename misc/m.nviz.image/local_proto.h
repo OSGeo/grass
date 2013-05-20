@@ -56,7 +56,7 @@ int load_vlines(const struct GParams *, nv_data *);
 int load_vpoints(const struct GParams *, nv_data *);
 int vlines_set_attrb(const struct GParams *);
 int vpoints_set_attrb(const struct GParams *);
-int check_thematic(const struct GParams *, int);
+int check_map(const struct GParams *, int, int, int *, int *);
 
 /* volume.c */
 int load_rasters3d(const struct GParams *, nv_data *);
