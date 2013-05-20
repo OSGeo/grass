@@ -141,7 +141,6 @@ class AnimationFrame(wx.Frame):
                               BottomDockable(True).TopDockable(True).
                               CloseButton(False).Layer(2).Row(1).
                               BestSize((self.toolbars['miscToolbar'].GetBestSize())))
-            self.controller.SetAnimationToolbar(self.toolbars['miscToolbar'])
 
     def SetAnimations(self, inputs=None, dataType=None):
         """!Set animation data
