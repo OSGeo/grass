@@ -226,9 +226,10 @@ class WSPanel(wx.Panel):
         labels['method'] = wx.StaticText(parent = adv_setts_panel, id = wx.ID_ANY,
                                          label = _("Reprojection method:"))
 
-        self.reproj_methods = ['near', 'bilinear', 'cubic', 'cubicspline']
+        self.reproj_methods = ['nearest', 'linear', 'cubic', 'cubicspline']
         self.params['method'] = wx.Choice(parent = adv_setts_panel, id = wx.ID_ANY,
-                                          choices = [_('near'), _('bilinear'), _('cubic'), _('cubicspline')])
+                                          choices = [_('Nearest neighbor'), _('Linear interpolation'),
+                                                     _('Cubic interpolation'), _('Cubic spline interpolation')])
 
         labels['maxcols'] = wx.StaticText(parent = adv_setts_panel, id = wx.ID_ANY,
                                           label = _("Maximum columns to request from server at time:"))
