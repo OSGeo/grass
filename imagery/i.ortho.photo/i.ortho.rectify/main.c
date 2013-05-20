@@ -40,10 +40,10 @@ void err_exit(char *, char *);
 /* modify this table to add new methods */
 struct menu menu[] = {
     {p_nearest, "nearest", "nearest neighbor"},
-    {p_bilinear, "bilinear", "bilinear"},
+    {p_bilinear, "linear", "linear interpolation"},
     {p_cubic, "cubic", "cubic convolution"},
     {p_lanczos, "lanczos", "lanczos filter"},
-    {p_bilinear_f, "bilinear_f", "bilinear with fallback"},
+    {p_bilinear_f, "linear_f", "linear interpolation with fallback"},
     {p_cubic_f, "cubic_f", "cubic convolution with fallback"},
     {p_lanczos_f, "lanczos_f", "lanczos filter with fallback"},
     {NULL, NULL, NULL}
