@@ -476,6 +476,10 @@ class TaskFrame(wx.Frame):
         self.btn_cancel.SetToolTipString(_("Close this window without executing the command (Ctrl+Q)"))
         btnsizer.Add(item = self.btn_cancel, proportion = 0, flag = wx.ALL | wx.ALIGN_CENTER, border = 10)
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+        # bind closing to ESC and CTRL+Q
+        self.Bind(wx.EVT_MENU, self.OnCancel, id=wx.ID_CLOSE)
+        accelTableList = [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CLOSE)]
+        accelTableList = [(wx.ACCEL_CTRL, ord('Q'), wx.ID_CLOSE)]
 
         if self.get_dcmd is not None: # A callback has been set up
             btn_apply = wx.Button(parent = self.panel, id = wx.ID_APPLY)
@@ -500,7 +504,7 @@ class TaskFrame(wx.Frame):
             
             # copy
             self.btn_clipboard = wx.Button(parent = self.panel, id = wx.ID_COPY)
-            self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard (Ctrl+C)"))
+            self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
             
             btnsizer.Add(item = self.btn_run, proportion = 0,
                          flag = wx.ALL | wx.ALIGN_CENTER,
@@ -511,11 +515,16 @@ class TaskFrame(wx.Frame):
                          border = 10)
             
             self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
+            self.Bind(wx.EVT_MENU, self.OnRun, id=wx.ID_OK)
+            accelTableList.append((wx.ACCEL_CTRL, ord('R'), wx.ID_OK))
             self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
         # help
         self.btn_help = wx.Button(parent = self.panel, id = wx.ID_HELP)
         self.btn_help.SetToolTipString(_("Show manual page of the command (Ctrl+H)"))
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
+        self.Bind(wx.EVT_MENU, self.OnHelp, id=wx.ID_HELP)
+        accelTableList.append((wx.ACCEL_CTRL, ord('H'), wx.ID_HELP))
+
         if self.notebookpanel.notebook.GetPageIndexByName('manual') < 0:
             self.btn_help.Hide()
         
@@ -524,6 +533,13 @@ class TaskFrame(wx.Frame):
         
         guisizer.Add(item = btnsizer, proportion = 0, flag = wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT,
                      border = 30)
+        # abort key bindings
+        abortId = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.OnAbort, id=abortId)
+        accelTableList.append((wx.ACCEL_CTRL, ord('S'), abortId))
+        # set accelerator table
+        accelTable = wx.AcceleratorTable(accelTableList)
+        self.SetAcceleratorTable(accelTable)
         
         if self.parent and not self.modeler:
             addLayer = False
@@ -559,7 +575,6 @@ class TaskFrame(wx.Frame):
                          border = 5)
         # bindings
         self.Bind(wx.EVT_CLOSE,  self.OnCancel)
-        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         
         # do layout
         # called automatically by SetSizer()
@@ -598,31 +613,6 @@ class TaskFrame(wx.Frame):
         self.SetStatusText(' '.join(self.notebookpanel.createCmd(ignoreErrors = True)))
         if event:
             event.Skip()
-        
-    def OnKeyUp(self, event):
-        """!Key released (check hot-keys)"""
-        try:
-            kc = chr(event.GetKeyCode())
-        except ValueError:
-            event.Skip()
-            return
-        
-        if not event.ControlDown():
-            event.Skip()
-            return
-        
-        if kc == 'Q':
-            self.OnCancel(None)
-        elif kc == 'S':
-            self.OnAbort(None)
-        elif kc == 'H':
-            self.OnHelp(None)
-        elif kc == 'R':
-            self.OnRun(None)
-        elif kc == 'C':
-            self.OnCopy(None)
-        
-        event.Skip()
 
     def OnDone(self, cmd, returncode):
         """!This function is launched from OnRun() when command is
