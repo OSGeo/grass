@@ -444,10 +444,13 @@ class GRASSStartup(wx.Frame):
 
     def SetDefaultRegion(self, location):
         """!Asks to set default region."""
+        caption = _("Location <%s> created") % location
+        message = _("Do you want to set the default "
+                    "region extents and resolution now?")
         dlg = wx.MessageDialog(parent = self,
-                               message = _("Do you want to set the default "
-                                           "region extents and resolution now?"),
-                               caption = _("Location <%s> created") % location,
+                               message = "%(caption)s.\n\n%(extent)s" % ({'caption': caption,
+                                                                          'extent': message}),
+                               caption = caption,
                                style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
         dlg.CenterOnScreen()
         if dlg.ShowModal() == wx.ID_YES:
