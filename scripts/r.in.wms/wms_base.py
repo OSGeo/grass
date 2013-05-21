@@ -339,6 +339,13 @@ class WMSBase:
                 nuldev = file(os.devnull, 'w+')
             else:
                 nuldev = None
+
+            if self.params['method'] == "nearest":
+                gdal_method = "near"
+            elif self.params['method'] == "linear":
+                gdal_method = "bilinear"
+            else:
+                gdal_method = self.params['method']
             
             #"+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs"
             # RGB rasters - alpha layer is added for cropping edges of projected raster
@@ -347,14 +354,14 @@ class WMSBase:
                     ps = grass.Popen(['gdalwarp',
                                       '-s_srs', '%s' % self.proj_srs,
                                       '-t_srs', '%s' % self.proj_location,
-                                      '-r', self.params['method'], '-dstalpha',
+                                      '-r', gdal_method, '-dstalpha',
                                       self.temp_map, self.temp_warpmap], stdout = nuldev)
                 # RGBA rasters
                 else:
                     ps = grass.Popen(['gdalwarp',
                                       '-s_srs', '%s' % self.proj_srs,
                                       '-t_srs', '%s' % self.proj_location,
-                                      '-r', self.params['method'],
+                                      '-r', gdal_method,
                                       self.temp_map, self.temp_warpmap], stdout = nuldev)
                 ps.wait()
             except OSError, e:
