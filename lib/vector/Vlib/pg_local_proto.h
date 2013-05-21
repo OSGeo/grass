@@ -53,7 +53,7 @@ struct feat_parts
     int            *idx;     /* index in cache where to start */
 };
 
-/* build_pg.c */
+/* area_pg.c */
 int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int, struct line_pnts *);
 
 /* read_pg.c */

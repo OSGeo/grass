@@ -61,8 +61,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
     Cats = Vect_new_cats_struct();
     
     if (plus->built < GV_BUILD_BASE) {
-      int npoints, c;
-
+        int npoints, c;
+        
 	/* 
 	 *  We shall go through all primitives in coor file and add
 	 *  new node for each end point to nodes structure if the node
@@ -233,47 +233,3 @@ int Vect_build_nat(struct Map_info *Map, int build)
     
     return 1;
 }
-
-/*!
-  \brief Get area boundary points (native format)
-  
-  Used by Vect_build_line_area().
-  
-  \param Map pointer to Map_info struct
-  \param lines array of boundary lines
-  \param n_lines number of lines in array
-  \param[out] APoints pointer to output line_pnts struct
-
-  \return number of points
-  \return -1 on error
-*/
-int Vect__get_area_points_nat(struct Map_info *Map, plus_t *lines, int n_lines,
-                              struct line_pnts *APoints)
-{
-    int j, line, direction;
-    struct Plus_head *plus;
-    struct P_line *BLine;
-
-    plus = &(Map->plus);
-    
-    if (!Points)
-        Points = Vect_new_line_struct();
-    
-    Vect_reset_line(APoints);
-    for (j = 0; j < n_lines; j++) {
-	line = abs(lines[j]);
-	BLine = plus->Line[line];
-	G_debug(5, "  line[%d] = %d, offset = %lu", j, line,
-		(unsigned long) BLine->offset);
-	if (0 > Vect_read_line(Map, Points, NULL, line))
-            return -1;
-        
-        direction = lines[j] > 0 ? GV_FORWARD : GV_BACKWARD;
-	Vect_append_points(APoints, Points, direction);
-	APoints->n_points--;	/* skip last point, avoids duplicates */
-    }
-    APoints->n_points++;	/* close polygon */
-
-    return APoints->n_points;
-}
-
