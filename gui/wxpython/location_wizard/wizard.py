@@ -1458,7 +1458,6 @@ class EPSGPage(TitledPage):
                 self.epsgcode = None
                 self.epsgdesc = self.epsgparams = ''
                 self.tcode.SetValue('')
-                self.searchb.SetValue('')
 
         event.Skip()
         
