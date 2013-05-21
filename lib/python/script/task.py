@@ -234,7 +234,10 @@ class grassTask:
             elif p.get('value', '') !=  '' and \
                     (p['value'] !=  p.get('default', '') or not ignoreDefault):
                 # output only values that have been set, and different from defaults
-                cmd +=  [ '%s=%s' % (p['name'], p['value']) ]
+                if ' ' in p['value']:
+                    cmd +=  [ '%s="%s"' % (p['name'], p['value']) ]
+                else:
+                    cmd +=  [ '%s=%s' % (p['name'], p['value']) ]
         
         errList = self.get_cmd_error()
         if ignoreErrors is False and errList:
