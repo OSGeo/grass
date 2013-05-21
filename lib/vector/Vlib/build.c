@@ -128,7 +128,6 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 	/* add area structure to plus */
 	area = dig_add_area(plus, n_lines, lines, &box);
 	if (area == -1) {	/* error */
-	    Vect_close(Map);
 	    G_fatal_error(_("Unable to add area (map closed, topo saved)"));
 	}
 	G_debug(3, "  -> area %d", area);
@@ -137,7 +136,6 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
     else if (area_size < 0) {	/* CCW: island */
 	isle = dig_add_isle(plus, n_lines, lines, &box);
 	if (isle == -1) {	/* error */
-	    Vect_close(Map);
 	    G_fatal_error(_("Unable to add isle (map closed, topo saved)"));
 	}
 	G_debug(3, "  -> isle %d", isle);

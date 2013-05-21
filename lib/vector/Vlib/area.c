@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009, 2011-2012 by the GRASS Development Team
+   (C) 2001-2009, 2011-2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -41,14 +41,14 @@ int Vect_get_area_points(const struct Map_info *Map,
     struct P_area *Area;
 
     G_debug(3, "Vect_get_area_points(): area = %d", area);
-    BPoints->n_points = 0;
+    Vect_reset_line(BPoints);
 
     Plus = &(Map->plus);
     Area = Plus->Area[area];
 
     if (Area == NULL) {		/* dead area */
 	G_warning(_("Attempt to read points of nonexistent area"));
-	return -1;		/* error , because we should not read dead areas */
+	return -1;		/* error, because we should not read dead areas */
     }
 
     G_debug(3, "  n_lines = %d", Area->n_lines);
@@ -66,49 +66,35 @@ int Vect_get_area_points(const struct Map_info *Map,
    \return -1 on error
  */
 int Vect_get_isle_points(const struct Map_info *Map,
-			 int isle, struct line_pnts *BPoints)
+                         int isle, struct line_pnts *BPoints)
 {
-    int i, line, aline, dir;
     const struct Plus_head *Plus;
     struct P_isle *Isle;
-    static int first_time = 1;
-    static struct line_pnts *Points;
 
     G_debug(3, "Vect_get_isle_points(): isle = %d", isle);
-    BPoints->n_points = 0;
+    Vect_reset_line(BPoints);
 
     Plus = &(Map->plus);
     Isle = Plus->Isle[isle];
-
-    if (first_time == 1) {
-	Points = Vect_new_line_struct();
-	first_time = 0;
+    
+    if (Isle == NULL) {		/* dead isle */
+	G_warning(_("Attempt to read points of nonexistent isle"));
+	return -1;		/* error, because we should not read dead isles */
     }
 
     G_debug(3, "  n_lines = %d", Isle->n_lines);
-    for (i = 0; i < Isle->n_lines; i++) {
-	line = Isle->lines[i];
-	aline = abs(line);
-	G_debug(3, "  append line(%d) = %d", i, line);
 
-	if (0 > Vect_read_line(Map, Points, NULL, aline)) {
-	    G_fatal_error(_("Unable to read line %d"), aline);
-	}
-
-	G_debug(3, "  line n_points = %d", Points->n_points);
-
-	if (line > 0)
-	    dir = GV_FORWARD;
-	else
-	    dir = GV_BACKWARD;
-
-	Vect_append_points(BPoints, Points, dir);
-	if (i != (Isle->n_lines - 1))	/* all but not last */
-	    BPoints->n_points--;
-	G_debug(3, "  isle n_points = %d", BPoints->n_points);
+    if (Map->format == GV_FORMAT_POSTGIS &&
+        Map->fInfo.pg.toposchema_name) {
+#ifdef HAVE_POSTGRES
+        /* PostGIS Topology */
+        return Vect__get_area_points_pg(Map, Isle->lines, Isle->n_lines, BPoints);
+#else
+        G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+#endif
     }
-
-    return (BPoints->n_points);
+    /* native format */
+    return Vect__get_area_points_nat(Map, Isle->lines, Isle->n_lines, BPoints);
 }
 
 /*!
@@ -452,6 +438,20 @@ int Vect_get_area_cat(const struct Map_info *Map, int area, int field)
     return -1;
 }
 
+/*!
+  \brief Get area boundary points (internal use only)
+  
+  For PostGIS Topology calls Vect__get_area_points_pg() otherwise
+  Vect__get_area_points_nat(),
+  
+  \param Map pointer to Map_info struct
+  \param lines array of boundary lines
+  \param n_lines number of lines in array
+  \param[out] APoints pointer to output line_pnts struct
+
+  \return number of points
+  \return -1 on error
+*/
 int Vect__get_area_points(const struct Map_info *Map, const plus_t *lines, int n_lines,
                           struct line_pnts *BPoints)
 {
@@ -466,4 +466,45 @@ int Vect__get_area_points(const struct Map_info *Map, const plus_t *lines, int n
     }
     /* native format */
     return Vect__get_area_points_nat(Map, lines, n_lines, BPoints);
+}
+
+
+/*!
+  \brief Get area boundary points (native format)
+  
+  Used by Vect_build_line_area() and Vect_get_area_points().
+  
+  \param Map pointer to Map_info struct
+  \param lines array of boundary lines
+  \param n_lines number of lines in array
+  \param[out] APoints pointer to output line_pnts struct
+
+  \return number of points
+  \return -1 on error
+*/
+int Vect__get_area_points_nat(const struct Map_info *Map, const plus_t *lines, int n_lines,
+                              struct line_pnts *BPoints)
+{
+    int i, line, aline, dir;
+    static struct line_pnts *Points;
+    
+    if (!Points)
+        Points = Vect_new_line_struct();
+    
+    Vect_reset_line(BPoints);
+    for (i = 0; i < n_lines; i++) {
+        line = lines[i];
+        aline = abs(line);
+        G_debug(5, "  append line(%d) = %d", i, line);
+        
+        if (0 > Vect_read_line(Map, Points, NULL, aline))
+            return -1;
+        
+        dir = line > 0 ? GV_FORWARD : GV_BACKWARD;
+        Vect_append_points(BPoints, Points, dir);
+        BPoints->n_points--;    /* skip last point, avoids duplicates */
+    }
+    BPoints->n_points++;        /* close polygon */
+
+    return BPoints->n_points;
 }
