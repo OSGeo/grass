@@ -146,10 +146,12 @@ v.out.postgis input=bridges dsn="PG:dbname=grass" olayer=grassout.bridges
 <h3>Export data with creation options</h3>
 
 Example bellow demonstrates how to define name for geometry column and
-disable building spatial index.
+disable building spatial index. Spatial reference system is defined
+by <tt>srid</tt> identifier which corresponds in this case with EPSG
+3358 (North Carolina dataset).
 
 <div class="code"><pre>
-v.out.postgis input=roadsmajor dsn="PG:dbname=grass" options="GEOMETRY_NAME=wkb_geometry,SPATIAL_INDEX=NO"
+v.out.postgis input=roadsmajor dsn="PG:dbname=grass" options="GEOMETRY_NAME=wkb_geometry,SPATIAL_INDEX=NO,SRID=3358"
 </pre></div>
 
 <h3>Link exported data</h3>
