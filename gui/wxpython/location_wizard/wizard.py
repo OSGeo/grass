@@ -351,7 +351,6 @@ class ProjectionsPage(TitledPage):
         self.projlist.resizeLastColumn(30) 
 
         # layout
-        self.sizer.AddGrowableCol(3)
         self.sizer.Add(item = self.MakeLabel(_("Projection code:")),
                        flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -367,11 +366,12 @@ class ProjectionsPage(TitledPage):
                        flag = wx.ALIGN_RIGHT | wx.EXPAND | wx.ALL,
                        border = 5, pos = (2, 2))
         
-        self.sizer.AddGrowableRow(3)
         self.sizer.Add(item = self.projlist,
                        flag = wx.EXPAND |
                        wx.ALIGN_LEFT |
                        wx.ALL, border = 5, pos = (3, 1), span = (1, 3))
+        self.sizer.AddGrowableCol(3)
+        self.sizer.AddGrowableRow(3)
 
         # events
         self.tproj.Bind(wx.EVT_TEXT, self.OnText)
@@ -649,14 +649,13 @@ class ProjParamsPage(TitledPage):
         self.p4projparams = ''
         self.projdesc = ''
 
-        self.sizer.AddGrowableCol(1)
-        self.sizer.AddGrowableRow(1)
 
         radioSBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
                                  label = " %s " % _("Select datum or ellipsoid (next page)"))
         radioSBSizer = wx.StaticBoxSizer(radioSBox)
         self.sizer.Add(item = radioSBSizer, pos = (0, 1),
                        flag = wx.EXPAND | wx.ALIGN_TOP | wx.TOP, border = 10)
+        self.sizer.AddGrowableCol(1)
         
         self.radio1 = wx.RadioButton(parent = self, id = wx.ID_ANY, 
                                      label = _("Datum with associated ellipsoid"),
@@ -741,6 +740,7 @@ class ProjParamsPage(TitledPage):
             
             self.sizer.Add(item = paramSBSizer, pos = (1, 1),
                            flag = wx.EXPAND)
+            self.sizer.AddGrowableRow(1)
             paramSBSizer.Add(item = self.panel, proportion = 1, 
                              flag = wx.ALIGN_CENTER | wx.EXPAND)
             
@@ -852,7 +852,6 @@ class DatumPage(TitledPage):
         self.datumlist.resizeLastColumn(10) 
         
         # layout
-        self.sizer.AddGrowableCol(4)
         self.sizer.Add(item = self.MakeLabel(_("Datum code:")),
                        flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -871,11 +870,12 @@ class DatumPage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5, pos = (2, 2))
 
-        self.sizer.AddGrowableRow(3)
         self.sizer.Add(item = self.datumlist,
                        flag = wx.EXPAND |
                        wx.ALIGN_LEFT |
                        wx.ALL, border = 5, pos = (3, 1), span = (1, 4))
+        self.sizer.AddGrowableCol(4)
+        self.sizer.AddGrowableRow(3)
 
         # events
         self.datumlist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnDatumSelected)
@@ -1024,7 +1024,6 @@ class EllipsePage(TitledPage):
         self.ellipselist.resizeLastColumn(30)                             
 
         # layout
-        self.sizer.AddGrowableCol(4)
 
         self.sizer.Add(item = self.MakeLabel(_("Ellipsoid code:")),
                        flag = wx.ALIGN_RIGHT |
@@ -1050,11 +1049,12 @@ class EllipsePage(TitledPage):
                        flag = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                        border = 25, pos = (2, 3))
 
-        self.sizer.AddGrowableRow(3)
         self.sizer.Add(item = self.ellipselist,
                        flag = wx.EXPAND |
                        wx.ALIGN_LEFT |
                        wx.ALL, border = 5, pos = (3, 1), span = (1, 4))
+        self.sizer.AddGrowableCol(4)
+        self.sizer.AddGrowableRow(3)
 
         # events
         self.ellipselist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
@@ -1167,7 +1167,6 @@ class GeoreferencedFilePage(TitledPage):
         self.bbrowse = self.MakeButton(_("Browse"))
 
         # do layout
-        self.sizer.AddGrowableCol(3)
         self.sizer.Add(item = self.lfile, flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTRE_VERTICAL |
                        wx.ALL, border = 5, pos = (1, 1))
@@ -1176,6 +1175,7 @@ class GeoreferencedFilePage(TitledPage):
                        wx.ALL, border = 5, pos = (1, 2))
         self.sizer.Add(item = self.bbrowse, flag = wx.ALIGN_LEFT |
                        wx.ALL, border = 5, pos = (1, 3))
+        self.sizer.AddGrowableCol(3)
 
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
         self.tfile.Bind(wx.EVT_TEXT, self.OnText)
@@ -1241,7 +1241,6 @@ class WKTPage(TitledPage):
         self.bbrowse = self.MakeButton(_("Browse"))
 
         # do layout
-        self.sizer.AddGrowableCol(3)
         self.sizer.Add(item = self.lfile, flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTRE_VERTICAL |
                        wx.ALL, border = 5, pos = (1, 1))
@@ -1250,6 +1249,7 @@ class WKTPage(TitledPage):
                        wx.ALL, border = 5, pos = (1, 2))
         self.sizer.Add(item = self.bbrowse, flag = wx.ALIGN_LEFT |
                        wx.ALL, border = 5, pos = (1, 3))
+        self.sizer.AddGrowableCol(3)
 
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
         self.tfile.Bind(wx.EVT_TEXT, self.OnText)
@@ -1334,7 +1334,6 @@ class EPSGPage(TitledPage):
                                  columns = [_('Code'), _('Description'), _('Parameters')])
 
         # layout
-        self.sizer.AddGrowableCol(3)
         self.sizer.Add(item = self.lfile,
                        flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
@@ -1360,10 +1359,11 @@ class EPSGPage(TitledPage):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5, pos = (3, 3))
         
-        self.sizer.AddGrowableRow(4)
         self.sizer.Add(item = self.epsglist,
                        flag = wx.ALIGN_LEFT | wx.EXPAND, pos = (4, 1),
                        span = (1, 4))
+        self.sizer.AddGrowableCol(3)
+        self.sizer.AddGrowableRow(4)
 
         # events
         self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
@@ -1525,14 +1525,14 @@ class CustomPage(TitledPage):
         self.label_proj4string = self.MakeLabel(_("Enter PROJ.4 parameters string:"))
 
         # layout
-        self.sizer.AddGrowableCol(2)
         self.sizer.Add(self.label_proj4string,
                        flag = wx.ALIGN_LEFT | wx.ALL,
                        border = 5, pos = (1, 1))
-        self.sizer.AddGrowableRow(2)
         self.sizer.Add(self.text_proj4string,
                        flag = wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, 
                        border = 5, pos = (2, 1), span = (1, 2))
+        self.sizer.AddGrowableRow(2)
+        self.sizer.AddGrowableCol(2)
 
         self.text_proj4string.Bind(wx.EVT_TEXT, self.GetProjstring)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
@@ -1638,10 +1638,6 @@ class SummaryPage(TitledPage):
         
     def _doLayout(self):
         """!Do page layout"""
-        self.sizer.AddGrowableCol(1)
-        self.sizer.AddGrowableRow(3, 1)
-        self.sizer.AddGrowableRow(4, 1)
-        self.sizer.AddGrowableRow(5, 5)
 
         titleSizer = wx.BoxSizer(wx.VERTICAL)
         titleSizer.Add(item = self.llocTitle, proportion = 1,
@@ -1692,6 +1688,10 @@ class SummaryPage(TitledPage):
         self.sizer.Add(item = self.panelProj4string,
                        flag = wx.ALIGN_LEFT | wx.ALL | wx.EXPAND,
                        border = 0, pos = (5, 1))
+        self.sizer.AddGrowableCol(1)
+        self.sizer.AddGrowableRow(3, 1)
+        self.sizer.AddGrowableRow(4, 1)
+        self.sizer.AddGrowableRow(5, 5)
    
     def OnEnterPage(self, event):
         """!Insert values into text controls for summary of location
