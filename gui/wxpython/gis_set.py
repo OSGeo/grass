@@ -414,8 +414,9 @@ class GRASSStartup(wx.Frame):
             self.lbmapsets.SetSelection(0)
             self.SetLocation(self.gisdbase, gWizard.location, 'PERMANENT')
             if gWizard.georeffile:
-                message = _("Do you want to import file <%(name)s> to created location? "
-                            "Default region will be set to match imported map.") % {'name': gWizard.georeffile}
+                message = _("Do you want to import <%(name)s> to the newly created location? "
+                            "The location's default region will be set from this imported "
+                            "map.") % {'name': gWizard.georeffile}
                 dlg = wx.MessageDialog(parent = self,
                                        message = message,
                                        caption = _("Import data?"),
@@ -483,7 +484,7 @@ class GRASSStartup(wx.Frame):
                    message = _("Import of <%(name)s> failed.\n"
                                "Reason: %(msg)s") % ({'name': filePath, 'msg': error}))
         else:
-            GMessage(message = _("Data <%(name)s> imported successfully.") % {'name': filePath},
+            GMessage(message = _("Data file <%(name)s> imported successfully.") % {'name': filePath},
                      parent = self)
             if not grass.find_file(element = 'cell', name = mapName)['fullname'] and \
                     not grass.find_file(element = 'vector', name = mapName)['fullname']:
