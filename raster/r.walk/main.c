@@ -480,40 +480,6 @@ int main(int argc, char *argv[])
     }
     G_debug(1, "COST %d rows, %d cols", cost_cellhd.rows, cost_cellhd.cols);
 
-    if (cost_data_type != dtm_data_type) {
-	switch (cost_data_type) {
-	case (CELL_TYPE):
-	    if (dtm_data_type == FCELL_TYPE)
-		cum_data_type = FCELL_TYPE;
-	    else
-		cum_data_type = DCELL_TYPE;
-	    break;
-	case (FCELL_TYPE):
-	    if (dtm_data_type == DCELL_TYPE)
-		cum_data_type = DCELL_TYPE;
-	    else
-		cum_data_type = FCELL_TYPE;
-	    break;
-	case (DCELL_TYPE):
-	    cum_data_type = DCELL_TYPE;
-	    break;
-	}
-    }
-    else
-	/* Data type are equal, it doesn't matter */
-	cum_data_type = dtm_data_type;
-
-    switch (cum_data_type) {
-    case (CELL_TYPE):
-	G_debug(1, "Output map is: Integer cell type");
-	break;
-    case (FCELL_TYPE):
-	G_debug(1, "Output map is: Floating point (float) cell type");
-	break;
-    case (DCELL_TYPE):
-	G_debug(1, "Output map is: Floating point (double) cell type");
-	break;
-    }
     G_debug(1, " %d rows, %d cols", nrows, ncols);
     G_format_resolution(window.ew_res, buf, window.proj);
     G_debug(1, " EW resolution %s (%lf)", buf, window.ew_res);
