@@ -2069,8 +2069,11 @@ class PsMapBufferedWindow(wx.Window):
         fn = self.parent.makePSFont(textDict)
 
         pdc.SetFont(fn)
-        pdc.SetTextForeground(convertRGB(textDict['color']))        
-        pdc.DrawRotatedText(textDict['text'], coords[0], coords[1], rot)
+        pdc.SetTextForeground(convertRGB(textDict['color']))
+        if rot == 0:
+            pdc.DrawLabel(text = textDict['text'], rect = bounds)
+        else:
+            pdc.DrawRotatedText(textDict['text'], coords[0], coords[1], rot)
         
         pdc.SetIdBounds(drawId, wx.Rect(*bounds))
         self.Refresh()
