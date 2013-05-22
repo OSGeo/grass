@@ -3116,9 +3116,8 @@ class LegendDialog(PsmapDialog):
                 self.vLegendDict['font'] = self.panelVector.font['fontCtrl'].GetStringSelection()
                 self.vLegendDict['fontsize'] = self.panelVector.font['fontSizeCtrl'].GetValue()
                 dc = wx.ClientDC(self)
-                font = dc.GetFont()
-                dc.SetFont(wx.Font(pointSize = self.vLegendDict['fontsize'], family = font.GetFamily(),
-                                   style = font.GetStyle(), weight = wx.FONTWEIGHT_NORMAL))
+                dc.SetFont(wx.Font(pointSize = self.vLegendDict['fontsize'], family = wx.FONTFAMILY_DEFAULT,
+                                   style = wx.FONTSTYLE_NORMAL, weight = wx.FONTWEIGHT_NORMAL))
                 #size
                 width = self.unitConv.convert(value = float(self.panelVector.widthCtrl.GetValue()),
                                               fromUnit = currUnit, toUnit = 'inch')
