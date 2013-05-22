@@ -63,7 +63,8 @@ int main(int argc, char *argv[])
     int nocat, noatt, nocatskip;	/* number of features without cats/atts written/skip */
 
     /* OGR */
-    int drn, ogr_ftype = OFTInteger;
+    int drn;
+    OGRFieldType ogr_ftype = OFTInteger;
     OGRDataSourceH Ogr_ds;
     OGRSFDriverH Ogr_driver;
     OGRLayerH Ogr_layer;
@@ -71,7 +72,7 @@ int main(int argc, char *argv[])
     OGRFeatureH Ogr_feature;
     OGRFeatureDefnH Ogr_featuredefn;
     OGRGeometryH Ogr_geometry;
-    unsigned int wkbtype = wkbUnknown;	/* ?? */
+    OGRwkbGeometryType wkbtype = wkbUnknown;	/* ?? */
     OGRSpatialReferenceH Ogr_projection;
     char **papszDSCO = NULL, **papszLCO = NULL;
     int num_types;
@@ -657,7 +658,7 @@ int main(int argc, char *argv[])
     
     /* Lines (run always to count features of different type) */
     if ((otype & GV_POINTS) || (otype & GV_LINES)) {
-	G_message(_("Exporting %i features..."), Vect_get_num_lines(&In));
+        G_message(_("Exporting %d features..."), Vect_get_num_primitives(&In, otype));
 	for (i = 1; i <= Vect_get_num_lines(&In); i++) {
 
 	    G_percent(i, Vect_get_num_lines(&In), 1);
@@ -967,7 +968,8 @@ int main(int argc, char *argv[])
        G_warning ("%d features of different type skip", fskip);
      */
 
-    G_done_msg(_("%d features written to <%s> (%s)."), fout,
+    G_done_msg(_("%d features (%s) written to <%s> (%s format)."), fout,
+               OGRGeometryTypeToName(wkbtype),
 	       options.layer->answer, options.format->answer);
 
     exit(EXIT_SUCCESS);
