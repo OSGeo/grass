@@ -95,11 +95,12 @@ void parse_args(int argc, char **argv,
 				      "(applies to Shapefile output only)");
     flags->esristyle->guisection = _("Creation");
 
-    flags->shapez = G_define_flag();
-    flags->shapez->key = 'z';
-    flags->shapez->description = _("Create 3D output if input is 3D "
-       			      "(applies to Shapefile output only)");
-    flags->shapez->guisection = _("Creation");
+    flags->force2d = G_define_flag();
+    flags->force2d->key = '2';
+    flags->force2d->label = _("Force 2D output even if input is 3D "
+                              "(applies to Shapefile output only)");
+    flags->force2d->description = _("Useful if input is 3D but all z coordinates are identical");
+    flags->force2d->guisection = _("Creation");
 
     flags->poly = G_define_flag();
     flags->poly->key = 'p';

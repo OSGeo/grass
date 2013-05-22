@@ -462,10 +462,11 @@ int main(int argc, char *argv[])
 	flags.append->answer = FALSE;
     }
     
-    /* Automatically append driver options for 3D output to
-       layer creation options if 'z' is given.*/
-    if ((flags.shapez->answer) && (Vect_is_3d(&In)) && (strcmp(options.format->answer,
-							       "ESRI_Shapefile") == 0)) {
+    /* Automatically append driver options for 3D output to layer
+       creation options if '2' is not given.*/
+    if (!flags.force2d->answer &&
+        Vect_is_3d(&In) && 
+        strcmp(options.format->answer, "ESRI_Shapefile") == 0) {
 	/* find right option */
 	char shape_geom[20];
 	if ((otype & GV_POINTS) || (otype & GV_KERNEL))
