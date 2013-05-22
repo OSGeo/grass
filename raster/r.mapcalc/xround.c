@@ -9,195 +9,197 @@
 #include "func_proto.h"
 
 /**********************************************************************
-round(x) rounds x to nearest integer
-round(x, y) rounds x to y decimal places
+round(x, step, start)
 
-  if input is CELL (which is an integer already)
-  and the number of decimal places is 0
-  the input argument (argv[0]) is simply copied to the output cell.
+  rounds x to nearest value in the sequence
+    y[i] = i * step + start
 
-  if the input is double, the input is rounded by adding .5 to positive
-  numbers, and subtracting .5 from negatives.
 **********************************************************************/
 
-/* d_round(x) rounds x to nearest integer value, handles negative correctly */
+/* i_round(x) rounds x to nearest value, handles negative correctly */
 
-static double d_round(double x)
+static double i_round(double x, double step, double start)
 {
-    if (!IS_NULL_D(&x)) {
-	x = floor(x + 0.5);
-    }
-
+    x -= start;
+    x /= step;
+    x = floor(x + 0.5);
+    x *= step;
+    x += start;
     return x;
 }
 
 /**********************************************************************/
 
-/* d_roundd(x, y) rounds x to y decimal places, handles negative correctly */
-
-static double d_roundd(double x, int y)
-{
-    if (!IS_NULL_D(&x)) {
-	double pow10, intx, sgn = 1.;
-
-	if (x < 0.) {
-	    sgn = -1.;
-	    x = -x;
-	}
-	if (y == 0)
-	    return (double)(sgn * d_round(x));
-	else if (y > 0) {
-	    pow10 = pow(10., y);
-	    intx = floor(x);
-	    return (double)(sgn * (intx + d_round((double)((x - intx) * pow10)) / pow10));
-	}
-	else {
-	    pow10 = pow(10., -y);
-	    return (double)(sgn * d_round((double)(x / pow10)) * pow10);
-	}
-    }
-
-    return x;
-}
-
-/**********************************************************************/
 int f_round(int argc, const int *argt, void **args)
 {
+    const DCELL *arg1 = args[1];
     int i;
 
     if (argc < 1)
 	return E_ARG_LO;
-    if (argc > 2)
+    if (argc > 3)
 	return E_ARG_HI;
 
+    if (argc == 1 && argt[0] != CELL_TYPE)
+	return E_RES_TYPE;
+    if (argt[1] != DCELL_TYPE)
+	return E_ARG_TYPE;
+    if (argc > 1 && argt[2] != DCELL_TYPE)
+	return E_ARG_TYPE;
+    if (argc > 2 && argt[3] != DCELL_TYPE)
+	return E_ARG_TYPE;
+
     if (argc == 1) {
-	switch (argt[1]) {
-	case CELL_TYPE:
-	    {
-		CELL *arg1 = args[1];
-		CELL *res = args[0];
+	CELL *res = args[0];
 
-		for (i = 0; i < columns; i++)
-		    if (IS_NULL_C(&arg1[i]))
-			SET_NULL_C(&res[i]);
-		    else
-			res[i] = arg1[i];
-		return 0;
+	for (i = 0; i < columns; i++) {
+	    if (IS_NULL_D(&arg1[i]))
+		SET_NULL_C(&res[i]);
+	    else {
+		DCELL x = i_round(arg1[i], 1.0, 0.0);
+		if (x > 2147483647.0 || x < -2147483647.0)
+		    SET_NULL_C(&res[i]);
+		else
+		    res[i] = (CELL) x;
 	    }
-	case FCELL_TYPE:
-	    {
-		FCELL *arg1 = args[1];
-		FCELL *res = args[0];
-
-		for (i = 0; i < columns; i++)
-		    if (IS_NULL_F(&arg1[i]))
-			SET_NULL_F(&res[i]);
-		    else
-			res[i] = d_round(arg1[i]);
-		return 0;
-	    }
-	case DCELL_TYPE:
-	    {
-		DCELL *arg1 = args[1];
-		DCELL *res = args[0];
-
-		for (i = 0; i < columns; i++)
-		    if (IS_NULL_D(&arg1[i]))
-			SET_NULL_D(&res[i]);
-		    else
-			res[i] = d_round(arg1[i]);
-		return 0;
-	    }
-	default:
-	    return E_INV_TYPE;
 	}
+	return 0;
     }
-    else {    /* argc == 2 */
-	int digits;
-	DCELL *arg2;
+    else if (argc == 2) {
+	const DCELL *arg2 = args[2];
 
-	switch (argt[1]) {
-	case CELL_TYPE:
-	    {
-		CELL *arg1 = args[1];
-		CELL *res = args[0];
-
-		arg2 = args[2];
-
-		for (i = 0; i < columns; i++)
-		    if (IS_NULL_C(&arg1[i]))
-			SET_NULL_C(&res[i]);
-		    else {
-			if (arg2[i] >= 0)
-			    digits = d_round(arg2[i]) + 0.5;
-			else
-			    digits = d_round(arg2[i]) - 0.5;
-			if (digits >= 0)
-			    res[i] = arg1[i];
-			else {
-			    if (arg1[i] >= 0)
-				res[i] = d_roundd(arg1[i], digits) + 0.5;
-			    else
-				res[i] = d_roundd(arg1[i], digits) - 0.5;
-			}
-		    }
-		return 0;
-	    }
-	case FCELL_TYPE:
-	    {
-		FCELL *arg1 = args[1];
-		FCELL *res = args[0];
-
-		arg2 = args[2];
-
-		for (i = 0; i < columns; i++)
-		    if (IS_NULL_F(&arg1[i]))
-			SET_NULL_F(&res[i]);
-		    else {
-			if (arg2[i] >= 0)
-			    digits = d_round(arg2[i]) + 0.5;
-			else
-			    digits = d_round(arg2[i]) - 0.5;
-			res[i] = d_roundd(arg1[i], digits);
-		    }
-		return 0;
-	    }
-	case DCELL_TYPE:
-	    {
-		DCELL *arg1 = args[1];
-		DCELL *res = args[0];
-
-		arg2 = args[2];
-
-		for (i = 0; i < columns; i++)
-		    if (IS_NULL_D(&arg1[i]))
-			SET_NULL_D(&res[i]);
-		    else {
-			if (arg2[i] >= 0)
-			    digits = d_round(arg2[i]) + 0.5;
-			else
-			    digits = d_round(arg2[i]) - 0.5;
-			res[i] = d_roundd(arg1[i], digits);
-		    }
-		return 0;
-	    }
-	default:
-	    return E_INV_TYPE;
-	}
+	switch (argt[0]) {
+        case CELL_TYPE:
+            {
+                CELL *res = args[0];
+    
+                for (i = 0; i < columns; i++) {
+                    if (IS_NULL_D(&arg1[i]))
+                        SET_NULL_C(&res[i]);
+                    else if (IS_NULL_D(&arg2[i]))
+                        SET_NULL_C(&res[i]);
+                    else {
+                        DCELL x = i_round(arg1[i], arg2[i], 0.0);
+                        if (x > 2147483647.0 || x < -2147483647.0)
+                            SET_NULL_C(&res[i]);
+                        else
+                            res[i] = (CELL) x;
+                    }
+                }
+                return 0;
+            }
+        case FCELL_TYPE:
+            {
+                FCELL *res = args[0];
+    
+                for (i = 0; i < columns; i++)
+                    if (IS_NULL_D(&arg1[i]))
+                        SET_NULL_F(&res[i]);
+                    else if (IS_NULL_D(&arg2[i]))
+                        SET_NULL_F(&res[i]);
+                    else
+                        res[i] = (FCELL) i_round(arg1[i], arg2[i], 0.0);
+                return 0;
+            }
+        case DCELL_TYPE:
+            {
+                DCELL *res = args[0];
+    
+                for (i = 0; i < columns; i++)
+                    if (IS_NULL_D(&arg1[i]))
+                        SET_NULL_D(&res[i]);
+                    else if (IS_NULL_D(&arg2[i]))
+                        SET_NULL_D(&res[i]);
+                    else
+                        res[i] = (DCELL) i_round(arg1[i], arg2[i], 0.0);
+                return 0;
+            }
+        default:
+            return E_INV_TYPE;
+        }
     }
+    else if (argc == 3) {
+	const DCELL *arg2 = args[2];
+	const DCELL *arg3 = args[3];
+
+	switch (argt[0]) {
+        case CELL_TYPE:
+            {
+                CELL *res = args[0];
+    
+                for (i = 0; i < columns; i++) {
+                    if (IS_NULL_D(&arg1[i]))
+                        SET_NULL_C(&res[i]);
+                    else if (IS_NULL_D(&arg2[i]))
+                        SET_NULL_C(&res[i]);
+                    else if (IS_NULL_D(&arg3[i]))
+                        SET_NULL_C(&res[i]);
+                    else {
+                        DCELL x = i_round(arg1[i], arg2[i], arg3[i]);
+                        if (x > 2147483647.0 || x < -2147483647.0)
+                            SET_NULL_C(&res[i]);
+                        else
+                            res[i] = (CELL) x;
+                    }
+                }
+                return 0;
+            }
+        case FCELL_TYPE:
+            {
+                FCELL *res = args[0];
+    
+                for (i = 0; i < columns; i++)
+                    if (IS_NULL_D(&arg1[i]))
+                        SET_NULL_F(&res[i]);
+                    else if (IS_NULL_D(&arg2[i]))
+                        SET_NULL_F(&res[i]);
+                    else if (IS_NULL_D(&arg3[i]))
+                        SET_NULL_F(&res[i]);
+                    else
+                        res[i] = (FCELL) i_round(arg1[i], arg2[i], arg3[i]);
+                return 0;
+            }
+        case DCELL_TYPE:
+            {
+                DCELL *res = args[0];
+    
+                for (i = 0; i < columns; i++)
+                    if (IS_NULL_D(&arg1[i]))
+                        SET_NULL_D(&res[i]);
+                    else if (IS_NULL_D(&arg2[i]))
+                        SET_NULL_D(&res[i]);
+                    else if (IS_NULL_D(&arg3[i]))
+                        SET_NULL_D(&res[i]);
+                    else
+                        res[i] = (DCELL) i_round(arg1[i], arg2[i], arg3[i]);
+                return 0;
+            }
+        default:
+            return E_INV_TYPE;
+        }
+    }
+    else
+	return E_WTF;
 }
 
 int c_round(int argc, int *argt)
 {
     if (argc < 1)
 	return E_ARG_LO;
-    if (argc > 2)
+    if (argc > 3)
 	return E_ARG_HI;
 
-    argt[0] = argt[1];
-    
-    if (argc == 2)
+    argt[0] = CELL_TYPE;
+    if (argc > 1 && argt[0] < argt[2])
+	argt[0] = argt[2];
+    if (argc > 2 && argt[0] < argt[3])
+	argt[0] = argt[3];
+
+    argt[1] = DCELL_TYPE;
+    if (argc > 1)
 	argt[2] = DCELL_TYPE;
+    if (argc > 2)
+	argt[3] = DCELL_TYPE;
 
     return 0;
 }
