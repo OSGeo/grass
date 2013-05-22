@@ -39,6 +39,7 @@ from core.utils import GetSettingsPath
 from core.gcmd import GError
 
 import grass.script.task as gtask
+import grass.script.core as gcore
 from grass.script.core import ScriptError
 
 
@@ -122,14 +123,28 @@ def getMenuFile():
 
 def _setupToolboxes():
     """!Create 'toolboxes' directory if doesn't exist."""
-    path = os.path.join(GetSettingsPath(), 'toolboxes')
+    basePath = GetSettingsPath()
+    path = os.path.join(basePath, 'toolboxes')
+    if not os.path.exists(basePath):
+        return None
+
+    if _createPath(path):
+           return path
+    return None
+
+
+def _createPath(path):
+    """!Creates path (for toolboxes) if it doesn't exist'"""
     if not os.path.exists(path):
         try:
             os.mkdir(path)
-        except:
-            GError(_('Unable to create toolboxes directory.'))
-            return None
-    return path
+        except OSError, e:
+            # we cannot use GError or similar because the gui doesn''t start at all
+            gcore.warning('%(reason)s\n%(detail)s' % 
+                    ({'reason':_('Unable to create toolboxes directory.'),
+                      'detail': str(e)}))
+            return False
+    return True
 
 
 def toolboxes2menudata(userDefined=True):
