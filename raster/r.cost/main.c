@@ -125,7 +125,10 @@ int main(int argc, char *argv[])
     } costs;
 
     void *ptr2;
-    RASTER_MAP_TYPE data_type, dir_data_type = FCELL_TYPE, nearest_data_type = CELL_TYPE;
+    RASTER_MAP_TYPE data_type,			 	/* input cost type */
+                    cum_data_type = DCELL_TYPE, 	/* output cumulative cost type */
+                    dir_data_type = FCELL_TYPE,		/* output direction type */
+		    nearest_data_type = CELL_TYPE;	/* output nearest type */
     struct History history;
     double peak = 0.0;
     int dsize, nearest_size;
@@ -253,7 +256,7 @@ int main(int argc, char *argv[])
 	dir = 1;
 
     /* Get database window parameters */
-    G_get_window(&window);
+    Rast_get_window(&window);
 
     /* Find north-south, east_west and diagonal factors */
     EW_fac = 1.0;
@@ -1022,8 +1025,8 @@ int main(int argc, char *argv[])
     free_heap();
     
     /* Open cumulative cost layer for writing */
-    cum_fd = Rast_open_new(cum_cost_layer, data_type);
-    cell = Rast_allocate_buf(data_type);
+    cum_fd = Rast_open_new(cum_cost_layer, cum_data_type);
+    cell = Rast_allocate_buf(cum_data_type);
 
     /* Open nearest start point layer */
     if (nearest_layer) {
@@ -1047,6 +1050,7 @@ int main(int argc, char *argv[])
 	void *p;
 	void *p2;
 	void *p3;
+	int cum_dsize = Rast_cell_size(cum_data_type);
 
 	Rast_set_null_value(cell2, ncols, data_type);
 
@@ -1061,8 +1065,8 @@ int main(int argc, char *argv[])
 	    for (col = 0; col < ncols; col++) {
 		if (keep_nulls) {
 		    if (Rast_is_null_value(p2, data_type)) {
-			Rast_set_null_value(p, 1, data_type);
-			p = G_incr_void_ptr(p, dsize);
+			Rast_set_null_value(p, 1, cum_data_type);
+			p = G_incr_void_ptr(p, cum_dsize);
 			p2 = G_incr_void_ptr(p2, dsize);
 			if (nearest_layer) {
 			    Rast_set_null_value(p3, 1, nearest_data_type);
@@ -1076,7 +1080,7 @@ int main(int argc, char *argv[])
 		min_cost = costs.cost_out;
 		nearest = costs.nearest;
 		if (Rast_is_d_null_value(&min_cost)) {
-		    Rast_set_null_value(p, 1, data_type);
+		    Rast_set_null_value(p, 1, cum_data_type);
 		    if (nearest_layer)
 			Rast_set_null_value(p3, 1, nearest_data_type);
 		}
@@ -1084,7 +1088,7 @@ int main(int argc, char *argv[])
 		    if (min_cost > peak)
 			peak = min_cost;
 
-		    switch (data_type) {
+		    switch (cum_data_type) {
 		    case CELL_TYPE:
 			*(CELL *)p = (CELL)(min_cost + .5);
 			break;
@@ -1110,12 +1114,12 @@ int main(int argc, char *argv[])
 			}
 		    }
 		}
-		p = G_incr_void_ptr(p, dsize);
+		p = G_incr_void_ptr(p, cum_dsize);
 		p2 = G_incr_void_ptr(p2, dsize);
 		if (nearest_layer)
 		    p3 = G_incr_void_ptr(p3, nearest_size);
 	    }
-	    Rast_put_row(cum_fd, cell, data_type);
+	    Rast_put_row(cum_fd, cell, cum_data_type);
 	    if (nearest_layer)
 		Rast_put_row(nearest_fd, nearest_cell, nearest_data_type);
 	}
