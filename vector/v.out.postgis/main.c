@@ -141,11 +141,15 @@ int main(int argc, char *argv[])
 
     /* close input map */
     Vect_close(&In);
-    
+
     /* build topology for output map */
     if (Vect_build(&Out) != 1)
         G_fatal_error(_("Building %s topology failed"),
                       flags.topo->answer ? "PostGIS" : "pseudo");
+
+    if (Vect_get_num_lines(&Out) < 1)
+        G_fatal_error(_("No features exported. PostGIS layer <%s> not created."),
+                      Vect_get_name(&Out));
 
     G_done_msg(_("%d features (%s) written to <%s>."),
                Vect_get_num_lines(&Out), Vect_get_finfo_geometry_type(&Out),
@@ -194,6 +198,6 @@ void output_handler(void *p)
         if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
             G_warning(_("Unable to drop topology schema <%s>"), pg_info->toposchema_name);
         }
+        PQclear(result);
     }
-    PQclear(result);
 }
