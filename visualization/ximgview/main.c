@@ -294,10 +294,11 @@ int main(int argc, char **argv)
     G_add_keyword(_("visualization"));
     module->description = _("View BMP images from the PNG driver.");
 
-    opt.image = G_define_standard_option(G_OPT_F_OUTPUT);
+    opt.image = G_define_standard_option(G_OPT_F_INPUT);
     opt.image->key = "image";
     opt.image->required = YES;
-    opt.image->description = _("Name for output image file");
+    opt.image->gisprompt = "old_file,file,file";
+    opt.image->description = _("Image file");
 
     opt.percent = G_define_option();
     opt.percent->key = "percent";
