@@ -1,17 +1,18 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.spanningtree</em> finds the minimum spanning tree in a network. 
+<em>v.net.spanningtree</em> finds the minimum spanning tree in a 
+network. 
 
 <h2>NOTES</h2>
 A spanning tree is a minimum cost subnetwork connecting all nodes in a 
-network. Or, if a network is disconnected then the module computes the 
-minimum spanning tree for each (weakly) connected component. So, strictly 
-speaking, <em>v.net.spanningtree</em> does not compute spanning tree but 
-a spanning forest. As the name suggests, a spanning tree is a tree. That 
-is, it contains no cycles and if a component has N nodes then the tree 
-has N-1 edges connecting all nodes. <b>Accol</b> is used to specify the 
-costs of the edges. The <b>output</b> consists of the edges in the 
-spanning tree.  
+network. Or, if a network is disconnected then the module computes 
+the minimum spanning tree for each (weakly) connected component. So, 
+strictly speaking, <em>v.net.spanningtree</em> does not compute spanning tree
+but a spanning forest. As the name suggests, a spanning tree is a tree. That 
+is, it contains no cycles and if a component has N nodes then the 
+tree has N-1 edges connecting all nodes. <b>Accol</b> is used to 
+specify the costs of the edges. The <b>output</b> consists of the 
+edges in the spanning tree.
 
 <h2>EXAMPLES</h2>
 
@@ -19,10 +20,11 @@ Find cheapest set of pipelines connecting all nodes.
 <div class="code"><pre>
 v.net.spanningtree input=projected_pipelines output=spanningtree accol=cost 
 </pre></div>
-<p>
+
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.net.html">v.net</a>,
 <a href="v.net.steiner.html">v.net.steiner</a>
 </em>
 

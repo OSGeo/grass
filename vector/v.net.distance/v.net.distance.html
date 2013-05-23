@@ -1,38 +1,41 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.distance</em> finds the nearast element in set <em>to</em> 
+<em>v.net.distance</em> finds the nearest element in set <em>to</em> 
 for every point in set <em>from</em>. 
 
 <h2>NOTES</h2>
 
-These two sets are given by the respective <b>layer</b>, <b>where</b> 
-and <b>cats</b> parameters. The type of <em>to</em> features is specified 
-by <b>to_type</b> parameter. All <em>from</em> features are <em>points</em>. 
-A table is linked to <b>output</b> map containing various information 
-about the relation. More specifically, the table has three columns: 
-<em>cat</em>, <em>tcat</em> and <em>dist</em> storing category of each 
-<em>from</em> feature, category of the nearest <em>to</em> feature and 
-the distance between them respectively. Furthemore, <b>output</b> map 
-contains the shorest path between each <em>cat</em>, <em>tcat</em> pair. 
-Each path consist of several lines. If a line is on the shorest path 
-from a point then the category of this point is assigned to the line. 
-Note that every line may contain more than one category value since a
-single line may be on the shortest path for more than one <em>from</em> 
-feature. And so the shortest paths can be easily obtained by querying 
-lines with corresponding category number.
-<p>
+These two sets are given by the respective <b>layer</b>, <b>where</b>
+and <b>cats</b> parameters. The type of <em>to</em> features is 
+specified by <b>to_type</b> parameter. All <em>from</em> features 
+are <em>points</em>. A table is linked to <b>output</b> map 
+containing various information about the relation. More 
+specifically, the table has three columns: <em>cat</em>, <em>tcat</em>
+and <em>dist</em> storing category of each <em>from</em> 
+feature, category of the nearest <em>to</em> feature and the 
+distance between them respectively. Furthemore, <b>output</b> map 
+contains the shorest path between each <em>cat</em>, <em>tcat</em> 
+pair. Each path consist of several lines. If a line is on the 
+shorest path from a point then the category of this point is 
+assigned to the line. Note that every line may contain more than one 
+category value since a single line may be on the shortest path for 
+more than one <em>from</em> feature. And so the shortest paths can 
+be easily obtained by querying lines with corresponding category 
+number.
+<br>
 The costs of arcs in forward and backward direction are specified by 
-<b>afcolumn</b> and <b>abcolumn</b> columns respectively. If 
+<b>afcolumn</b> and <b>abcolumn</b> columns respectively. If
 <b>abcolumn</b> is not given, the same cost is used in both directions.  
 <p>
-<em>v.net.distance</em> will not work if you are trying to find the nearest 
-neighbors within a group of nodes, i.e. where <em>to</em> and <em>from</em> 
-are the same set of nodes, as the closest node will be the node itself and 
-the result will be zero-length paths. In order to find nearest neighbors 
-within a group of nodes, you can either loop through each node as <em>to</em> 
-and all other nodes as <em>from</em> or create a complete distance matrix with 
-<a href="v.net.allpairs.html">v.net.allpairs</a> and select the lowest non-zero 
-distance for each node.
+<em>v.net.distance</em> will not work if you are trying to find the 
+nearest neighbors within a group of nodes, i.e. where <em>to</em> 
+and <em>from</em> are the same set of nodes, as the closest node 
+will be the node itself and the result will be zero-length paths. In 
+order to find nearest neighbors within a group of nodes, you can 
+either loop through each node as <em>to</em> and all other nodes as 
+<em>from</em> or create a complete distance matrix with
+<a href="v.net.allpairs.html">v.net.allpairs</a> and select the
+lowest non-zero distance for each node.
 
 <h2>EXAMPLES</h2>
 Find shortest path and distance from every school to the nearest hospital 
