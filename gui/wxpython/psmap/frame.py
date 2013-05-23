@@ -1858,16 +1858,17 @@ class PsMapBufferedWindow(wx.Window):
                     coords = self.instruction[id]['coords']# recalculate coordinates, they are not equal to BB
                     self.instruction[id]['coords'] = coords = [(int(coord) - view[i]) * zoomFactor
                                                                for i, coord in enumerate(coords)]
-                    self.DrawRotText(pdc = self.pdcObj, drawId = id, textDict = self.instruction[id],
-                                     coords = coords, bounds = oRect )
                     extent = self.parent.getTextExtent(textDict = self.instruction[id])
                     if self.instruction[id]['rotate']:
                         rot = float(self.instruction[id]['rotate']) 
                     else:
                         rot = 0
-
                     self.instruction[id]['rect'] = bounds = self.parent.getModifiedTextBounds(coords[0], coords[1], extent, rot)
+                    self.DrawRotText(pdc = self.pdcObj, drawId = id, textDict = self.instruction[id],
+                                     coords = coords, bounds = bounds )
+
                     self.pdcObj.SetIdBounds(id, bounds)
+
                 elif type == 'northArrow':
                     self.Draw(pen = self.pen[type], brush = self.brush[type], pdc = self.pdcObj,
                               drawid = id, pdctype = 'bitmap', bb = oRect)
@@ -2042,7 +2043,6 @@ class PsMapBufferedWindow(wx.Window):
         else:
             rot = 0
 
-        fontsize = textDict['fontsize'] * self.currScale
         if textDict['background'] != 'none':
             background = textDict['background'] 
         else:
@@ -2071,7 +2071,7 @@ class PsMapBufferedWindow(wx.Window):
         pdc.SetFont(fn)
         pdc.SetTextForeground(convertRGB(textDict['color']))
         if rot == 0:
-            pdc.DrawLabel(text = textDict['text'], rect = bounds)
+            pdc.DrawLabel(text=textDict['text'], rect=bounds)
         else:
             pdc.DrawRotatedText(textDict['text'], coords[0], coords[1], rot)
         
