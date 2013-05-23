@@ -848,9 +848,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         self.first = True
         
+        selectedLayer = self.GetSelectedLayer()
         # deselect active item
-        if self.layer_selected:
-            self.SelectItem(self.layer_selected, select = False)
+        if selectedLayer:
+            self.SelectItem(selectedLayer, select=False)
         
         Debug.msg (3, "LayerTree().AddLayer(): ltype=%s" % (ltype))
         
@@ -870,11 +871,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             ctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
         # add layer to the layer tree
-        if self.layer_selected and self.layer_selected != self.GetRootItem():
-            if self.GetLayerInfo(self.layer_selected, key = 'type') == 'group' \
-                and self.IsExpanded(self.layer_selected):
+        if selectedLayer and selectedLayer != self.GetRootItem():
+            if self.GetLayerInfo(selectedLayer, key = 'type') == 'group' \
+                and self.IsExpanded(selectedLayer):
                 # add to group (first child of self.layer_selected) if group expanded
-                layer = self.PrependItem(parent = self.layer_selected,
+                layer = self.PrependItem(parent = selectedLayer,
                                          text = '', ct_type = 1, wnd = ctrl)
             else:
                 # prepend to individual layer or non-expanded group
@@ -891,13 +892,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                             text = '', ct_type = 1, wnd = ctrl)
                 elif lgroup is None:
                     # -> previous sibling of selected layer
-                    parent = self.GetItemParent(self.layer_selected)
+                    parent = self.GetItemParent(selectedLayer)
                     layer = self.InsertItem(parentId = parent,
-                                            input = self.GetPrevSibling(self.layer_selected),
+                                            input = self.GetPrevSibling(selectedLayer),
                                             text = '', ct_type = 1, wnd = ctrl)
         else: # add first layer to the layer tree (first child of root)
             layer = self.PrependItem(parent = self.root, text = '', ct_type = 1, wnd = ctrl)
-        
+
         # layer is initially unchecked as inactive (beside 'command')
         # use predefined value if given
         if lchecked is not None:
