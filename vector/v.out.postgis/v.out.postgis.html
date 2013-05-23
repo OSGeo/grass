@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.out.postgis</em> exports an existing GRASS vector map layer to
-PostGIS feature table.
+PostGIS feature table. Features without category are skipped.
 
 <p>
 By default GRASS topological features are converted into simple
@@ -220,6 +220,9 @@ page</a>.
   <li>Multi-feature export</li>
   <li>Allow mixed features (points, lines) - use
   GeometryCollection</li>
+  <li>Implement missing options
+  from <em><a href="v.out.ogr.html">v.out.ogr</a></em>: <b>-a</b>, <b>-s</b>, <b>-c</b>, <b>-2</b>, <b>-p</b>, <b>-n</b>, <b>type</b></li>
+  <li>Add options: <b>cats</b>, <b>where</b>
 </ul>
 
 <h2>REQUIREMENTS</h2>
