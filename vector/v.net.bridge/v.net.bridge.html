@@ -1,39 +1,41 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.bridge</em> finds bridges and articulation points in a network. 
+<em>v.net.bridge</em> finds bridges and articulation points in a network.
 
 <h2>NOTES</h2>
-Bridge in a network is an edge/line whose removal would disconnect the 
-(sub-)network. A node is an articulation point if its removal would 
-disconnect the (sub-)network. For more information and formal definitions 
-check the wikipedia entries: 
+Bridge in a network is an edge/line whose removal would disconnect 
+the (sub-)network. A node is an articulation point if its removal 
+would disconnect the (sub-)network. For more information and formal 
+definitions check the wikipedia entries:
 <a href="http://en.wikipedia.org/wiki/Bridge_%28graph_theory%29">bridge</a> 
-and <a href="http://en.wikipedia.org/wiki/Cut_vertex">articulation point</a>.<br><br>
-The output of the module contains the selected features. For 
-<b>method=bridge</b>, lines corresponding to bridges are copied from 
-the input map to the output map. On the other hand, for 
-<b>method=articulation</b>, points are created on the positions of 
-articulation points.<br><br>
+and <a href="http://en.wikipedia.org/wiki/Cut_vertex">articulation 
+point</a>.
+<p>
+The output of the module contains the selected 
+features. For <b>method=bridge</b>, lines corresponding to 
+bridges are copied from the input map to the output map. On the 
+other hand, for <b>method=articulation</b>, points are created on 
+the positions of articulation points.
+<p>
 
-
-<br>In GRASS, <em>line</em> is not always a single line segment. It 
-might be, and often is, a sequence of line segments between two 
-intersections. Also, articulation point is a standard graph theoretic 
-terminology which is slightly misleading in GRASS. An articulation point 
-in graph theory is an articulation <em>node</em> in GRASS terminology. 
+<br>In GRASS GIS, <em>line</em> is not always a single line 
+segment. It might be, and often is, a sequence of line segments 
+between two intersections. Also, articulation point is a standard 
+graph theoretic terminology which is slightly misleading in GRASS. 
+An articulation point in graph theory is an articulation
+<em>node</em> in GRASS terminology. 
 
 <h2>EXAMPLES</h2>
 
 <div class="code"><pre>
-</pre></div>
-<p>
-<div class="code"><pre>
+	TBD
 </pre></div>
 
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.net.html">v.net</a>,
 <a href="v.category.html">v.category</a>,
 </em>
 

@@ -1,42 +1,43 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.centrality</em> computes degree, closeness, betweenness and 
-eigenvector centrality measures. 
+<em>v.net.centrality</em> computes degree, closeness, betweenness 
+and eigenvector centrality measures. 
 
 <h2>NOTES</h2>
 
-The module computes various centrality measures for each node and stores 
-them in the given columns of an attribute table, which is created and 
-linked to the output map. For the description of these, please check the 
-following <a href="http://en.wikipedia.org/wiki/Centrality">wikipedia article</a>. 
+The module computes various centrality measures for each node and 
+stores them in the given columns of an attribute table, which is 
+created and linked to the output map. For the description of these, 
+please check the following
+<a href="http://en.wikipedia.org/wiki/Centrality">wikipedia article</a>.
 If the column name is not given for a measure then that measure is not 
-computed. If <b>-a</b> flag is set then points are added on nodes without 
-points. Also, the points for which the output is computed can be specified 
-by <b>cats</b>, <b>layer</b> and <b>where</b> parameters. However, if any 
-of these parameters is present then <b>-a</b> flag is ingored and no new 
-points are added.<br>
+computed. If <b>-a</b> flag is set then points are added on nodes 
+without points. Also, the points for which the output is computed 
+can be specified by <b>cats</b>, <b>layer</b> and <b>where</b> 
+parameters. However, if any of these parameters is present then
+<b>-a</b> flag is ignored and no new points are added.
+<br>
 Betweenness measure is not normalised. In order to get the normalised 
-values (between 0 and 1), each number needs to be divided by 
-<em>N choose 2=N*(N-1)/2</em> where N is the number of nodes in the 
-connected component. Computation of eigenvector measure terminates if 
-the given number of iterations is reached or the cummulative <em>squared</em> 
-error between the successive iterations is less than <b>error</b>.
+values (between 0 and 1), each number needs to be divided by <em>N 
+choose 2=N*(N-1)/2</em> where N is the number of nodes in the 
+connected component. Computation of eigenvector measure terminates 
+if the given number of iterations is reached or the cummulative <em>
+squared</em> error between the successive iterations is less than <b>
+error</b>.
 
 <h2>EXAMPLES</h2>
-Compute closeness and betweenness centrality measures for each node and 
-produce a map containing not only points already present in the input map 
-but a map with point on every node. 
+Compute closeness and betweenness centrality measures for each node 
+and produce a map containing not only points already present in the 
+input map but a map with point on every node.
 <div class="code"><pre>
-v.net.centrality input=roads output=roads_cent closeness=close betweenness=betw -a
+v.net.centrality input=roads output=roads_cent closeness=closeness \
+      betweenness=betweenness -a
 </pre></div>
-<p>
-<div class="code"><pre>
-</pre></div>
-
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.net.html">v.net</a>,
 <a href="v.generalize.html">v.generalize</a>
 </em>
 

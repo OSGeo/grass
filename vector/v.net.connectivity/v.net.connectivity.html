@@ -5,29 +5,33 @@
  given sets. 
 
 <h2>NOTES</h2>
-Two sets (<em>set1</em> and <em>set2</em>) are specified by respective 
-<b>layer</b>, <b>where</b> and <b>cats</b> parameters. Similarly to 
-<a href="v.net.flow.html">v.net.flow</a> module, capacities of nodes can 
-be given by <b>ncolumn</b> option. <em>v.net.connectivity</em> finds the 
-set of nodes of minimum total capacitiy separating the two given sets and 
-outputs map containing points on the positions of these nodes. Default 
+Two sets (<em>set1</em> and <em>set2</em>) are specified by respective
+<b>layer</b>, <b>where</b> and <b>cats</b> parameters. Similarly to
+<a href="v.net.flow.html">v.net.flow</a> module, capacities of nodes can
+be given by <b>ncolumn</b> option. <em>v.net.connectivity</em> finds the
+set of nodes of minimum total capacitiy separating the two given sets and
+outputs map containing points on the positions of these nodes. Default
 capacity, which is used when no column is specified, is one.
 
 <h2>EXAMPLES</h2>
-The following command finds the minimum number of intersections separating 
+The following command finds the minimum number of intersections separating
 roads on the left bank from roads on the right bank. 
 <div class="code"><pre>
-v.net.connectivity input=roads output=roads_conn set1_where="bank=left" set2_where="bank=right"
+v.net.connectivity input=roads output=roads_conn set1_where="bank=left" \
+      set2_where="bank=right"
 </pre></div>
 <p>
+
 <div class="code"><pre>
-v.net.connectivity input=airtraffic output=connectivity set1_where="name=JFK" set2_where="name=Heathrow" ncolumn=capacity
+v.net.connectivity input=airtraffic output=connectivity \
+      set1_where="name=JFK" set2_where="name=Heathrow" ncolumn=capacity
 </pre></div>
 
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.net.html">v.net</a>,
 <a href="v.net.flow.html">v.net.flow</a>,
 <a href="v.net.bridge.html">v.net.bridge</a>
 </em>

@@ -4,20 +4,22 @@
 components in a network.
 
 <h2>NOTES</h2>
-Two nodes, <em>u</em> and <em>v</em> are in the same strongly connected 
-component if there are directed paths from <em>u</em> to <em>v</em> and 
-from <em>v</em> to <em>u</em>. The nodes are in the same weakly connected 
-component if, ignoring orientation of the edges, there is a path between 
-them.<br>
+Two nodes, <em>u</em> and <em>v</em> are in the same strongly 
+connected component if there are directed paths from <em>u</em> to 
+<em>v</em> and from <em>v</em> to <em>u</em>. The nodes are in the 
+same weakly connected component if, ignoring orientation of the 
+edges, there is a path between them.
+<br>
 
 The type of components is specified by <b>method</b> parameter. 
-<em>v.net.components</em> creates a table and links it to the given 
-<b>layer</b>. This table contains only two integer columns: <em>cat</em> 
-and <em>comp</em>. If a point or both endpoints of a line belong to the 
-same component then the point/line is written to the output map and 
-appropriate information is stored in the table. If <b>-a</b> flag is set 
-then new points are added on the nodes without points. These points have 
-category numbers larger than any category used in the input map.    
+<em>v.net.components</em> creates a table and links it to the given <b>layer</b>.
+This table contains only two integer columns: <em>cat</em> and <em>comp
+</em>. If a point or both endpoints of a line belong to the same 
+component then the point/line is written to the output map and 
+appropriate information is stored in the table. If <b>-a</b> flag is 
+set then new points are added on the nodes without points. These 
+points have category numbers larger than any category used in the 
+input map.
 
 <h2>EXAMPLES</h2>
 
@@ -26,14 +28,11 @@ Otherwise, it is impossible to travel between some places.
 <div class="code"><pre>
 v.net.components input=roads output=roads_components method=strong
 </pre></div>
-<p>
-<div class="code"><pre>
-</pre></div>
-
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.net.html">v.net</a>,
 <a href="v.category.html">v.category</a>,
 </em>
 

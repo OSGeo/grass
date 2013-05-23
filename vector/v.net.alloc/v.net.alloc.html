@@ -1,24 +1,29 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.alloc</em> allocates subnets for nearest centers (direction from 
-center). center nodes must be opened (costs &gt;= 0). Costs of center nodes are 
-used in the calculation. 
-<p>Costs may be either line lengths, or attributes saved in a database 
-table. These attribute values are taken as costs of whole segments, not 
-as costs to traverse a length unit (e.g. meter) of the segment. 
-For example, if the speed limit is 100 km / h, the cost to traverse a 
-10 km long road segment must be calculated as 
+<em>v.net.alloc</em> allocates subnets for nearest centers 
+(direction from center). center nodes must be opened (costs &gt;= 0).
+Costs of center nodes are used in the calculation. 
+<p>
+Costs may be either line lengths, or attributes saved in a 
+database table. These attribute values are taken as costs of whole 
+segments, not as costs to traverse a length unit (e.g. meter) of the 
+segment. For example, if the speed limit is 100 km / h, the cost to 
+traverse a 10 km long road segment must be calculated as
+<br>
 length / speed = 10 km / (100 km/h) = 0.1 h.
+<br>
 Supported are cost assignments for both arcs and nodes, 
 and also different costs for both directions of a vector line. 
 For areas, costs will be calculated along boundary lines.
-<p>The input vector needs to be prepared with <em>v.net operation=connect</em> 
+<p>
+The input vector needs to be prepared with <em>v.net operation=connect</em> 
 in order to connect points representing center nodes to the network.
 
 <h2>NOTES</h2>
 
 Nodes and arcs can be closed using cost = -1. 
-<p>Center nodes can also be assigned to vector nodes using 
+<p>
+Center nodes can also be assigned to vector nodes using 
 <em><a href="wxGUI.Vector_Digitizer.html">wxGUI vector digitizer</a></em>. 
 
 <h2>EXAMPLES</h2>

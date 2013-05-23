@@ -11,11 +11,11 @@ vector map from any two points. To do this, first you need to compute
 the visibility graph and from it compute the shortest path using
 <em>v.net.path</em> or <em>d.path</em>.
 
-
-<b>IMPORTANT : the algorithm doesn't work well with intersecting lines
+<b>IMPORTANT: the algorithm doesn't work well with intersecting lines
 (that includes overlapping)</b>
 
-<p>If you compute a shortest path after computing the visibility graph you
+<p>
+If you compute a shortest path after computing the visibility graph you
 will notice that this path might go through a vertix of a line. If this
 is not wanted you might to run the map through <em>v.buffer</em> first
 whith a small value. Example:
@@ -24,26 +24,30 @@ whith a small value. Example:
 v.buffer input=map output=bufferedmap buffer=1 type=point,line,area,boundary
 </pre></div>
 
-<p>The first argument is the input map. It supports lines, boudaries (so areas)
-and points. For the algorithm to work lines and boundaries must not be
-intersecting (that includes overlapping).
+<p>
+The first argument is the input map. It supports lines, boudaries 
+(so areas) and points. For the algorithm to work lines and 
+boundaries must not be intersecting (that includes overlapping).
+<br>
 The result map containing the visibility graph is given in the output map.
 
-If you need to add additional points to compute a shortest path between them
-afterwards you can use the <em>coordinate</em> parameter.
+If you need to add additional points to compute a shortest path 
+between them afterwards you can use the <em>coordinate</em> parameter.
 <div class="code"><pre>
 coordinate=25556200,6686400,25556400,6686600
 </pre></div>
-where 25556200,6686400 are the coordinate of the first point and 25556400,6686600
-are the coordinates of the second point. Of course you can give as many points as
-you want. They will be added to the visibility graph and edges from them will be
-computed. You can always add those points after computing the visibility graph.
-Simply use the <em>vis</em> parameter. The input will be the original vector map,
-the vis will be the computed visibility graph and the output the new visibility
-graph which will be the vis + the new points given with coordinate (edges will
-be computed as well).
+where 25556200,6686400 are the coordinate of the first point and 
+25556400,6686600 are the coordinates of the second point. Of course 
+you can give as many points as you want. They will be added to the 
+visibility graph and edges from them will be computed. You can 
+always add those points after computing the visibility graph. Simply 
+use the <em>vis</em> parameter. The input will be the original 
+vector map, the vis will be the computed visibility graph and the 
+output the new visibility graph which will be the vis + the new 
+points given with coordinate (edges will be computed as well).
 <div class="code"><pre>
-v.net.visibility input=map vis=vis_map output=new_vis_map coordinate=25556200,6686400,25556400,6686600
+v.net.visibility input=map vis=vis_map output=new_vis_map \
+      coordinate=25556200,6686400,25556400,6686600
 </pre></div>
 
 <h2>EXAMPLE 1</h2>
@@ -68,7 +72,7 @@ d.vect lines col=red
 An example on how to use the coordinate parameter. This will compute the
 visibility graph of the vector map lines with the point 2555678,6686343
 <div class="code"><pre>
-v.net.visibility input=lines output=graph coordinate=2555678,6686343<br>
+v.net.visibility input=lines output=graph coordinate=2555678,6686343
 d.vect graph
 d.vect lines col=red
 </pre></div>
@@ -81,7 +85,8 @@ from it with the point 2555678,6686343 extra
 v.net.visibility input=lines output=graph
 d.vect graph
 d.vect lines col=red
-v.net.visibility input=lines vis=graph output=new_graph coordinate=2555678,6686343
+v.net.visibility input=lines vis=graph output=new_graph \
+      coordinate=2555678,6686343
 d.erase
 d.vect new_graph
 d.vect lines col=red
@@ -99,10 +104,10 @@ d.vect archsites col=red
 </pre></div>
 
 <h2>KNOWN BUGS</h2>
-In some cases when 3 points or nodes are collinear, some wrong edges are added.
-This happens only really rarly and shouldn't be a big problem.
-When two points have the exact same x coordinate and are visible, some wrong
-edges are added.
+In some cases when 3 points or nodes are collinear, some wrong edges 
+are added. This happens only really rarly and shouldn't be a big 
+problem. When two points have the exact same x coordinate and are 
+visible, some wrong edges are added.
 
 <h2>SEE ALSO</h2>
 
