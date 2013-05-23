@@ -642,6 +642,9 @@ class GConsole(wx.EvtHandler):
             event.Skip()
             return
 
+        if event.cmd[0] not in globalvar.grassCmd:
+            return
+
         # find which maps were created
         try:
             task = GUI(show=None).ParseCommand(event.cmd)
