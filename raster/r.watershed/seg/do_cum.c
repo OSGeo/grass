@@ -147,7 +147,7 @@ int do_cum(void)
 	    np_side = -1;
 	    r_nbr = dr;
 	    c_nbr = dc;
-#if 0
+
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 		/* get r, c (r_nbr, c_nbr) for neighbours */
 		r_nbr = r + nextdr[ct_dir];
@@ -155,21 +155,11 @@ int do_cum(void)
 
 		if (dr == r_nbr && dc == c_nbr)
 		    np_side = ct_dir;
-
-		/* check that neighbour is within region */
-		if (r_nbr >= 0 && r_nbr < nrows && c_nbr >= 0 &&
-		    c_nbr < ncols) {
-
-		    seg_get(&aspflag, (char *)&afdown, r_nbr, c_nbr);
-		    if (FLAG_GET(afdown.flag, NULLFLAG))
-			break;
-		}
 	    }
-#endif
 	    /* do not distribute flow along edges, this causes artifacts */
 	    if (FLAG_GET(af.flag, EDGEFLAG)) {
 		if (FLAG_GET(af.flag, SWALEFLAG) && af.asp > 0) {
-		    af.asp = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+		    af.asp = -1 * drain[r - dr + 1][c - dc + 1];
 		}
 		seg_put(&aspflag, (char *)&af, r, c);
 		continue;
