@@ -561,7 +561,6 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
         dbString dbtable_name;
         dbHandle handle;
         dbDriver *driver;
-        dbCursor cursor;
         dbTable *table;
         dbColumn *column;
 
@@ -1057,26 +1056,31 @@ off_t write_line_sf(struct Map_info *Map, int type,
     /* determine matching PostGIS feature geometry type */
     if (type & (GV_POINT | GV_KERNEL)) {
         if (sf_type != SF_POINT && sf_type != SF_POINT25D) {
-            G_warning(_("Feature is not a point. Skipping."));
-            return -1;
+            G_warning(_("Point skipped (output feature type: %s)"),
+                      Vect_get_finfo_geometry_type(Map));
+            return 0;
         }
     }
     else if (type & GV_LINE) {
         if (sf_type != SF_LINESTRING && sf_type != SF_LINESTRING25D) {
-            G_warning(_("Feature is not a line. Skipping."));
-            return -1;
+            G_warning(_("Line skipped (output feature type: %s)"),
+                      Vect_get_finfo_geometry_type(Map));
+            return 0;
         }
     }
     else if (type & GV_BOUNDARY || type & GV_CENTROID) {
         if (sf_type != SF_POLYGON) {
+            G_warning(_("Boundary/centroid skipped (output feature type: %s)"),
+                      Vect_get_finfo_geometry_type(Map));
             G_warning(_("Feature is not a polygon. Skipping."));
-            return -1;
+            return 0;
         }
     }
     else if (type & GV_FACE) {
         if (sf_type != SF_POLYGON25D) {
-            G_warning(_("Feature is not a face. Skipping."));
-            return -1;
+            G_warning(_("Face skipped (output feature type: %s)"),
+                      Vect_get_finfo_geometry_type(Map));
+            return 0;
         }
     }
     else {
