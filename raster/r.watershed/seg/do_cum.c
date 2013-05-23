@@ -147,6 +147,7 @@ int do_cum(void)
 	    np_side = -1;
 	    r_nbr = dr;
 	    c_nbr = dc;
+#if 0
 	    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
 		/* get r, c (r_nbr, c_nbr) for neighbours */
 		r_nbr = r + nextdr[ct_dir];
@@ -164,6 +165,7 @@ int do_cum(void)
 			break;
 		}
 	    }
+#endif
 	    /* do not distribute flow along edges, this causes artifacts */
 	    if (FLAG_GET(af.flag, EDGEFLAG)) {
 		if (FLAG_GET(af.flag, SWALEFLAG) && af.asp > 0) {
@@ -214,6 +216,7 @@ int do_cum(void)
 		is_swale = 1;
 	    }
 	    else {
+		seg_get(&aspflag, (char *)&afdown, dr, dc);
 		if (er_flag && !is_swale && !FLAG_GET(afdown.flag, RUSLEBLOCKFLAG))
 		    slope_length(r, c, dr, dc);
 	    }
