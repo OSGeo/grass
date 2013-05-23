@@ -147,8 +147,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Building %s topology failed"),
                       flags.topo->answer ? "PostGIS" : "pseudo");
 
-    G_done_msg(_("Feature table <%s> created in database <%s>."),
-               Vect_get_finfo_layer_name(&Out), Vect_get_finfo_dsn_name(&Out));
+    G_done_msg(_("%d features (%s) written to <%s>."),
+               Vect_get_num_lines(&Out), Vect_get_finfo_geometry_type(&Out),
+               Vect_get_name(&Out));
     
     /* close output map */
     Vect_close(&Out);
