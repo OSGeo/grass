@@ -295,7 +295,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     }
 
     if (nskipped > 0)
-        G_warning(_("%d features without category or from different layer skipped"), nskipped);
+        G_important_message(_("%d features without category or from different layer skipped"), nskipped);
     
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(CPoints);
@@ -407,7 +407,7 @@ int is_isle(const struct Map_info *Map, int area)
 */
 int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
 {
-    int i, area, nareas, cat, isle, nisles, nparts_alloc;
+    int i, area, nareas, cat, isle, nisles, nparts_alloc, nskipped;
     struct line_pnts **Points;
     struct line_cats *Cats;
     
@@ -418,6 +418,7 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
     Cats      = Vect_new_cats_struct();
 
     /* copy areas */
+    nskipped = 0;
     nareas = Vect_get_num_areas(In);
     G_message(_("Exporting areas..."));
     for (area = 1; area <= nareas; area++) {
@@ -428,8 +429,10 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
         Vect_reset_cats(Cats);
         if (field > 0) {
             cat = Vect_get_area_cat(In, area, field);
-            if (cat == -1)
+            if (cat == -1) {
+                nskipped++;
                 continue; /* skip area without category in given layer */
+            }
             
             Vect_cat_set(Cats, field, cat);
         }
@@ -473,6 +476,9 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
             return -1;
         }
     }
+
+    if (nskipped > 0)
+        G_important_message(_("%d areas without category or from different layer skipped"), nskipped);
     
     /* free allocated space for isles */
     for (i = 0; i < nparts_alloc; i++)
