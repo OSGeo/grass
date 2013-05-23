@@ -47,7 +47,7 @@ void Init()
 	    for (row = 0; row < Rs; row++) {
 		Rast_get_c_row_nomask(FD, CellBuffer, row);
 		for (col = 0; col < Cs; col++) {
-		    if (CellBuffer[col]) {
+		    if (CellBuffer[col] && !Rast_is_c_null_value(&CellBuffer[col])) {
 			FLAG_SET(Cells, row, col);
 			CellCount++;
 		    }
