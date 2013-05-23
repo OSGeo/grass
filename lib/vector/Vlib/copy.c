@@ -199,7 +199,7 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
 */
 int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
 {
-    int i, type, nlines;
+  int i, type, nlines, nskipped;
     int ret, left, rite, centroid;
 
     struct line_pnts *Points, *CPoints;
@@ -225,6 +225,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     else
         G_message(_("Copying features..."));    
     
+    nskipped = 0;
     for (i = 1; i <= nlines; i++) {
         if (!Vect_line_alive(In, i))
             continue;
@@ -281,8 +282,10 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
                         continue;
                 }
             }
-            else if (Vect_cat_get(Cats, field, NULL) == 0)
+            else if (Vect_cat_get(Cats, field, NULL) == 0) {
+                nskipped++;
                 continue;   /* different layer */
+            }
         }
         
         if (-1 == Vect_write_line(Out, type, Points, Cats)) {
@@ -291,6 +294,9 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
         }
     }
 
+    if (nskipped > 0)
+        G_warning(_("%d features without category or from different layer skipped"), nskipped);
+    
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(CPoints);
     Vect_destroy_cats_struct(Cats);
