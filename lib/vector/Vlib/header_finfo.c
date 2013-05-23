@@ -16,6 +16,8 @@
    \author Update to GRASS 7 (OGR/PostGIS support) by Martin Landa <landa.martin gmail.com>
 */
 
+#include <string.h>
+
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
@@ -141,6 +143,7 @@ const char *Vect_get_finfo_format_info(const struct Map_info *Map)
 */
 const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
 {
+    int dim;
     char *ftype, *ftype_tmp;
     
     ftype_tmp = ftype = NULL;
@@ -155,6 +158,8 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
     if (!Map->fInfo.ogr.layer)
         return NULL;
 
+    dim = -1;
+    
     Ogr_feature_defn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);
     Ogr_geom_type = wkbFlatten(OGR_FD_GetGeomType(Ogr_feature_defn));
     
@@ -172,7 +177,7 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
         PGresult *res;
                 
         pg_info = &(Map->fInfo.pg);
-        sprintf(stmt, "SELECT type FROM geometry_columns "
+        sprintf(stmt, "SELECT type,coord_dimension FROM geometry_columns "
                 "WHERE f_table_schema = '%s' AND f_table_name = '%s'",
                 pg_info->schema_name, pg_info->table_name);
         G_debug(2, "SQL: %s", stmt);
@@ -185,6 +190,8 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
             return NULL;
         }
         ftype_tmp = G_store(PQgetvalue(res, 0, 0));
+        dim = atoi(PQgetvalue(res, 0, 1));
+
         PQclear(res);
 #endif
     }
@@ -194,7 +201,15 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
 
     ftype = G_str_replace(ftype_tmp, " ", "");
     G_free(ftype_tmp);
+    ftype_tmp = NULL;
     G_str_to_lower(ftype);
+
+    if (dim == 3) {
+        ftype_tmp = (char *) G_malloc(3 + strlen(ftype) + 1);
+        sprintf(ftype_tmp, "3D %s", ftype);
+        G_free(ftype);
+        ftype = ftype_tmp;
+    }
 
     return ftype;
 }
