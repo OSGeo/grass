@@ -47,7 +47,7 @@ header_pgm = """<h2>NAME</h2>
 
 footer_index = string.Template(\
 """<hr>
-<p><a href="index.html">Main index</a> - <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> - <a href="topics.html">Topics index</a> - <a href="full_index.html">Full index</a></p>
+<p><a href="index.html">Main index</a> - <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> - <a href="topics.html">Topics index</a> - <a href="keywords.html">Keywords Index</a> - <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
 </body>
 </html>
@@ -55,7 +55,7 @@ footer_index = string.Template(\
 
 footer_noindex = string.Template(\
 """<hr>
-<p><a href="index.html">Main index</a> - <a href="topics.html">Topics index</a> - <a href="full_index.html">Full index</a></p>
+<p><a href="index.html">Main index</a> - <a href="topics.html">Topics index</a> - <a href="keywords.html">Keywords Index</a> - <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
 </body>
 </html>
