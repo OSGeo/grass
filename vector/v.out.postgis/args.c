@@ -68,5 +68,12 @@ void define_options(struct params *params, struct flags *flags)
     flags->topo->description =
         _("Export PostGIS topology instead of simple features");
     flags->topo->guisection = _("Output settings");
+
+    flags->force2d = G_define_flag();
+    flags->force2d->key = '2';
+    flags->force2d->label = _("Force 2D output even if input is 3D ");
+    flags->force2d->description = _("Useful if input is 3D but all z coordinates are identical");
+    flags->force2d->guisection = _("Output settings");
+
 }
 

@@ -66,7 +66,10 @@ details).
 <em>v.out.postgis</em> currently supports only three basic output
 simple feature types: Points, Linestrings and Polygons. Also 3D
 features of the same type are supported, eg. 3D points are exported
-as <tt>PointZ</tt> simple feature. Faces are exported as 3D polygons.
+as <tt>PointZ</tt> simple feature. Faces are exported as 3D
+polygons. 3D features are written to the output automatically if input
+vector map is 3D. If <b>-2</b> flag is given then the output is always
+2D (z-coordinate is silently ignored for 3D input vector maps).
 
 <p>
 Multigeometries are not currently supported. Features with the same
@@ -231,7 +234,7 @@ page</a>.
   <li>Allow mixed features (points, lines)</li>
   <li>Support other simple feature types like GeometryCollection and others</li>
   <li>Implement missing options
-  from <em><a href="v.out.ogr.html">v.out.ogr</a></em>: <b>-a</b>, <b>-s</b>, <b>-c</b>, <b>-2</b>, <b>-p</b>, <b>-n</b></li>
+  from <em><a href="v.out.ogr.html">v.out.ogr</a></em>: <b>-a</b>, <b>-s</b>, <b>-c</b>, <b>-p</b>, <b>-n</b></li>
   <li>Add options: <b>cats</b>, <b>where</b></li>
 </ul>
 

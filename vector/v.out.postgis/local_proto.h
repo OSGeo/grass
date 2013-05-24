@@ -8,7 +8,7 @@ struct params {
 };
 
 struct flags {
-    struct Flag *table, *topo;
+    struct Flag *table, *topo, *force2d;
 };
 
 /* args.c */

@@ -129,7 +129,8 @@ int main(int argc, char *argv[])
     /* don't use temporary maps, writes vector features immediately to
        the output PostGIS layer */
     putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE=1");
-    if (-1 == Vect_open_new(&Out, olayer, Vect_is_3d(&In)))
+    if (-1 == Vect_open_new(&Out, olayer,
+                            !flags.force2d->answer ? Vect_is_3d(&In) : WITHOUT_Z))
         G_fatal_error(_("Unable to create PostGIS layer <%s>"),
                       olayer);
     G_add_error_handler(output_handler, &Out);
