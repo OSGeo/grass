@@ -648,6 +648,9 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     case (SF_POLYGON):
         geom_type = "POLYGON";
         break;
+    case (SF_POLYGON25D):
+        geom_type = "POLYGONZ";
+        break;
     default:
         G_warning(_("Unsupported feature type %d"), pg_info->feature_type);
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -905,6 +908,9 @@ int create_pg_layer(struct Map_info *Map, int type)
         break;
     case GV_BOUNDARY:
         pg_info->feature_type = SF_POLYGON;
+        break;
+    case GV_FACE:
+        pg_info->feature_type = SF_POLYGON25D;
         break;
     default:
         G_warning(_("Unsupported geometry type (%d)"), type);
@@ -1552,7 +1558,7 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
         wkb_data = point_to_wkb(byte_order, points[0], with_z, &nbytes);
     else if (type == GV_LINE)
         wkb_data = linestring_to_wkb(byte_order, points[0], with_z, &nbytes);
-    else if (type == GV_BOUNDARY) {
+    else if (type & (GV_BOUNDARY | GV_FACE)) {
         if (!pg_info->toposchema_name) {
             /* PostGIS simple feature access */
             wkb_data = polygon_to_wkb(byte_order, points, nparts,
