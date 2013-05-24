@@ -7,6 +7,11 @@ void define_options(struct params *params, struct flags *flags)
 {
     params->input = G_define_standard_option(G_OPT_V_INPUT);
     params->input->description = NULL;
+
+    params->type = G_define_standard_option(G_OPT_V3_TYPE);
+    params->type->options =
+	"point,line,boundary,centroid,area,face,kernel,auto";
+    params->type->answer = "auto";
     
     params->layer = G_define_standard_option(G_OPT_V_FIELD);
     params->layer->description = NULL;

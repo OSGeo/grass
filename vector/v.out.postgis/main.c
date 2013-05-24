@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     struct params params;
     struct flags flags;
     
-    int ret, field;
+    int ret, field, otype;
     char *schema, *olayer, *pg_file;
     char *fid_column, *geom_column;
     
@@ -46,7 +46,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("PostGIS"));
     G_add_keyword(_("simple features"));
     G_add_keyword(_("topology"));
-
+    G_add_keyword(_("3D"));
+    
     module->description =
         _("Exports a vector map layer to PostGIS feature table.");
     module->overwrite = TRUE;
@@ -55,6 +56,9 @@ int main(int argc, char *argv[])
     
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    /* parse parameters */
+    otype = Vect_option_to_types(params.type);
 
     /* if olayer not given, use input as the name */
     schema = NULL;
@@ -130,12 +134,18 @@ int main(int argc, char *argv[])
                       olayer);
     G_add_error_handler(output_handler, &Out);
     
-    /* define attributes */
+    /* check output type */
+    if (otype > 0) { /* type is not 'auto' */
+        if (Vect_write_line(&Out, otype, NULL, NULL) < 0)
+            G_fatal_error(_("Feature type %d is not supported"), otype);
+    }
+
+    /* copy attributes */
     field = Vect_get_field_number(&In, params.layer->answer);
     if (!flags.table->answer)
         Vect_copy_map_dblinks(&In, &Out, TRUE);
 
-    /* copy vector features & create PostGIS table*/
+    /* copy vector features & create PostGIS table */
     if (Vect_copy_map_lines_field(&In, field, &Out) != 0)
         G_fatal_error(_("Copying features failed"));
 
