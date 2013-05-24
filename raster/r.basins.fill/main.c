@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
+    G_add_keyword(_("watershed"));
     module->description =
 	_("Generates watershed subbasins raster map.");
 
