@@ -25,10 +25,13 @@
  */
 int Vect_option_to_types(const struct Option *type_opt)
 {
-    int i = 0;
-    int type = 0;
-
-    while (type_opt->answers[i]) {
+    int i, type;
+    
+    type = 0;
+    for(i = 0; type_opt->answers[i]; i++) {
+        if (strcmp(type_opt->answers[i], "auto") == 0)
+            continue;
+        
 	switch (type_opt->answers[i][0]) {
 	case 'p':
 	    type |= GV_POINT;
@@ -55,7 +58,6 @@ int Vect_option_to_types(const struct Option *type_opt)
 	    type |= GV_VOLUME;
 	    break;
 	}
-	i++;
     }
 
     return type;
