@@ -36,20 +36,16 @@ by <em><a href="v.external.out.html">v.external.out</a></em> are
 ignored by <em>v.out.postgis</em>.
 
 <p>
-<em>v.out.postgis</em> optionally also creates new vector map in the
+<em>v.out.postgis</em> optionally also creates a new vector map in the
 current mapset if <b>olink</b> is defined.
 
 <h2>NOTES</h2>
 
-Currently only 2D vector features (points, lines, boundaries and
-centroids) are supported.
-
-<p>
 By default <em>v.out.postgis</em> exports vector data as <em>simple
 features</em>, ie. boundaries and centroids (forming topological
 areas) become polygons, isles become holes. Geometry of simple feature
-elements is stored in PostGIS feature table as column
-&quot;geom&quot;. Default name of the geometry column can be changed
+elements is stored in PostGIS feature table in the column named
+&quot;geom&quot;. Name of the geometry column can be changed
 by <b>options=</b><tt>GEOMETRY_NAME=&lt;column&gt;</tt>. Note that for
 exporting vector features as simple features can be alternatively
 used <a href="http://gdal.org/ogr/drv_pg.html">PostgreSQL driver</a>
@@ -59,9 +55,22 @@ through <em><a href="v.out.ogr.html">v.out.ogr</a></em> module.
 <p>
 Also note that it's allowed to store in the feature table only
 features of the same type, ie. mixing of points and lines is not
-possible. The feature type is determined for output feature table from
-the first read vector feature when accessing data sequentially. Vector
-features of other types are during export skipped.
+currently possible. The feature type is determined for output feature
+table from the first vector feature accessing data sequentially
+(<b>type=auto</b>). Vector features of other types are during export
+skipped. User can choose preferable feature type by <b>type</b>
+parameter. Only single type is currently allowed (see TODO section for
+details).
+
+<p>
+<em>v.out.postgis</em> currently supports only three basic output
+simple feature types: Points, Linestrings and Polygons. Also 3D
+features of the same type are supported, eg. 3D points are exported
+as <tt>PointZ</tt> simple feature. Faces are exported as 3D polygons.
+
+<p>
+Multigeometries are not currently supported. Features with the same
+category are exported as multiple singe features.
 
 <p>
 <em>v.out.postgis</em> also allows to export vector features as
@@ -86,9 +95,10 @@ table.
 </ul>
 
 Tables <i>node</i>, <i>edge</i> and <i>face</i> are stored in given
-topological schema. By default <em>v.out.postgis</em> defines it's
-name as <tt>topo_&lt;input&gt;</tt>. Name of topology schema can be
-defined by <b>options=</b><tt>TOPOSCHEMA_NAME=&lt;name&gt;</tt>.
+topological schema. By default <em>v.out.postgis</em> defines its name
+as <tt>topo_&lt;input&gt;</tt>. Alternatively, the name for topology
+schema can be defined
+by <b>options=</b><tt>TOPOSCHEMA_NAME=&lt;name&gt;</tt>.
 
 <h2>EXAMPLES</h2>
 
@@ -218,10 +228,10 @@ page</a>.
 
 <ul>
   <li>Multi-feature export</li>
-  <li>Allow mixed features (points, lines) - use
-  GeometryCollection</li>
+  <li>Allow mixed features (points, lines)</li>
+  <li>Support other simple feature types like GeometryCollection and others</li>
   <li>Implement missing options
-  from <em><a href="v.out.ogr.html">v.out.ogr</a></em>: <b>-a</b>, <b>-s</b>, <b>-c</b>, <b>-2</b>, <b>-p</b>, <b>-n</b>, <b>type</b></li>
+  from <em><a href="v.out.ogr.html">v.out.ogr</a></em>: <b>-a</b>, <b>-s</b>, <b>-c</b>, <b>-2</b>, <b>-p</b>, <b>-n</b></li>
   <li>Add options: <b>cats</b>, <b>where</b></li>
 </ul>
 
