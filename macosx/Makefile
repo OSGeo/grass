@@ -98,6 +98,12 @@ install-macosxapp:
 
 install-basic-macosx:
 	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR_TARGET) - 2>/dev/null
+	sed -e 's#^\(GRASS_HOME.[^=]*\).*#\1= $(INST_DIR)#g' \
+		-e 's#$(GISBASE)#$(INST_DIR)#g' \
+		${GISBASE}/include/Make/Platform.make > ${INST_DIR_TARGET}/include/Make/Platform.make
+	sed -e 's#^\(ARCH_DISTDIR.[^=]*\).*#\1= $(INST_DIR)#g' \
+		-e 's#^\(ARCH_BINDIR.[^=]*\).*#\1= $(UNIX_BIN)#g' \
+		${GISBASE}/include/Make/Grass.make > ${INST_DIR_TARGET}/include/Make/Grass.make
 	-sed -e 's#'@GISBASE@'#'$(INST_DIR)'#g' \
 	     -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
 	     -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
