@@ -95,7 +95,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     else if (error)
 	G_fatal_error(_("Font file can not be loaded"));
     p->font->answer = G_store(font_cap->name);
-    free_freetypecap(font_cap);
+    free_fontcap(font_cap);
 
     font_size = atof(p->size->answer);
     buffer = atof(p->isize->answer);
