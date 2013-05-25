@@ -46,24 +46,27 @@ export PATH
 
 # add some OS X style app support paths, and create user one if missing.
 mkdir -p "$GISBASE_USER/Modules/bin"
+mkdir -p "$GISBASE_USER/Modules/scripts"
 if [ ! "$GRASS_ADDON_BASE" ] ; then
 	GRASS_ADDON_BASE="$GISBASE_USER/Modules"
 fi
 export GRASS_ADDON_BASE
 
 mkdir -p "$GISBASE_USER/Modules/etc"
+addpath="$GISBASE_USER/Modules/etc:$GISBASE_SYSTEM/Modules/etc"
 if [ "$GRASS_ADDON_ETC" ] ; then
-	GRASS_ADDON_ETC="$GRASS_ADDON_ETC:$GISBASE_USER/Modules/etc:$GISBASE_SYSTEM/Modules/etc"
+	GRASS_ADDON_ETC="$GRASS_ADDON_ETC:$addpath"
 else
-	GRASS_ADDON_ETC="$GISBASE_USER/Modules/etc:$GISBASE_SYSTEM/Modules/etc"
+	GRASS_ADDON_ETC="$addpath"
 fi
 export GRASS_ADDON_ETC
 
 mkdir -p "$GISBASE_USER/Modules/lib"
+addpath="$GISBASE_USER/Modules/lib:$GISBASE_SYSTEM/Modules/lib"
 if [ "$DYLD_LIBRARY_PATH" ] ; then
-	DYLD_LIBRARY_PATH="$GISBASE_USER/Modules/lib:$GISBASE_SYSTEM/Modules/lib:$DYLD_LIBRARY_PATH"
+	DYLD_LIBRARY_PATH="$addpath:$DYLD_LIBRARY_PATH"
 else
-	DYLD_LIBRARY_PATH="$GISBASE_USER/Modules/lib:$GISBASE_SYSTEM/Modules/lib"
+	DYLD_LIBRARY_PATH="$addpath"
 fi
 export DYLD_LIBRARY_PATH
 
