@@ -36,6 +36,8 @@
 #% description: Performs Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data.
 #% keywords: imagery
 #% keywords: transformation
+#% keywords: Landsat
+#% keywords: Tasseled Cap transformation
 #%end
 #%flag
 #% key: 4
