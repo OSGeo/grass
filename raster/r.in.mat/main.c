@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
     /* Define the different options */
     inputfile = G_define_standard_option(G_OPT_F_INPUT);
     inputfile->required = YES;
+    inputfile->gisprompt = "old,mat,file";
     inputfile->description = _("Name of input MAT-File(v4)");
 
     outputfile = G_define_standard_option(G_OPT_R_OUTPUT);
