@@ -42,6 +42,7 @@
 #%  keywords: sharpen
 #%  keywords: Brovey
 #%  keywords: IHS
+#%  keywords: HIS
 #%  keywords: PCA
 #%  overwrite: yes
 #%End
