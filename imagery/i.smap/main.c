@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("classification"));
     G_add_keyword(_("supervised"));
+    G_add_keyword(_("segmentation"));
     G_add_keyword(_("SMAP"));
     module->description =
 	_("Performs contextual image classification "
