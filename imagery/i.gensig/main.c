@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("classification"));
     G_add_keyword(_("supervised"));
     G_add_keyword(_("MLC"));
+    G_add_keyword(_("signatures"));
     module->description =
 	_("Generates statistics for i.maxlik from raster map.");
 

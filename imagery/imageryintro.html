@@ -61,8 +61,9 @@ GRASS is able to geocode raster and image data of various types:
  defining a certain number of ground control points 
  (<a href="i.group.html">i.group</a>, <a href="i.target.html">i.target</a>,
  <a href="i.points.html">i.points</a>, <a href="i.rectify.html">i.rectify</a>)</li>
+<li>interactive graphical <a href="wxGUI.gcp.html">Ground Control Point (GCP) manager</a></li>
 <!--
-<li>orthophoto based on DEM: <a href="i.ortho.photo.html">i.ortho.photo</a></li>
+<li>orthophoto generation based on DEM: <a href="i.ortho.photo.html">i.ortho.photo</a></li>
 <li>digital handheld camera geocoding: modified procedure for
     <a href="i.ortho.photo.html">i.ortho.photo</a></li>
 -->
@@ -119,12 +120,11 @@ GRASS supports the following methods:
     or <a href="g.gui.iclass.html">g.gui.iclass</a>, <a href="i.maxlik.html">i.maxlik</a>)
    using the Maximum Likelihood classification method</li>
   </ul>
-<li> Combined radiometric/geometric (segmentation based) supervised
-   classification (<a href="i.gensigset.html">i.gensigset</a>,
+<li> Combined radiometric/geometric (segmentation based) classification:
+  <ul>
+  <li> Supervised classification (<a href="i.gensigset.html">i.gensigset</a>,
    <a href="i.smap.html">i.smap</a>)
-</ul>
-
-<ul>
+  </ul>
 <li> Object-oriented classification:
   <ul>
   <li> Unsupervised classification (segmentation based: 
@@ -133,7 +133,8 @@ GRASS supports the following methods:
 </ul>
   
 Kappa statistic can be calculated to validate the results
-(<a href="r.kappa.html">r.kappa</a>).
+(<a href="r.kappa.html">r.kappa</a>). Covariance/correlation matrices can be
+calculated with <a href="r.covar.html">r.covar</a>.
 
 <h3>Image fusion</h3>
 
@@ -142,6 +143,16 @@ can be gained by merging the panchromatic channel with color
 channels. GRASS provides the HIS (<a href="i.rgb.his.html">i.rgb.his</a>,
 <a href="i.his.rgb.html">i.his.rgb</a>) and the Brovey and PCA transform
 (<a href="i.pansharpen.html">i.pansharpen</a>) methods.
+
+<h3>Radiometric corrections</h3>
+
+Atmospheric effects can be removed with <a href="i.atcorr.html">i.atcorr</a>.
+Correction for topographic/terrain effects is offered in <a href="i.topo.corr.html">i.topo.corr</a>.
+Clouds in LANDSAT data can be identified and removed with
+<a href="i.landsat.acca.html">i.landsat.acca</a>.
+Calibrated digital numbers of LANDSAT and ASTER imagery may be converted to
+top-of-atmosphere radiance or reflectance and temperature (<a href="i.aster.toar.html">i.aster.toar</a>,
+<a href="i.landsat.toar.html">i.landsat.toar</a>).
 
 <h3>Time series processing</h3>
 

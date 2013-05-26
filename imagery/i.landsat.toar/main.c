@@ -67,9 +67,11 @@ int main(int argc, char *argv[])
 	_("Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+.");
     G_add_keyword(_("imagery"));
     G_add_keyword(_("radiometric conversion"));
-    G_add_keyword(_("landsat"));
-    G_add_keyword(_("top-of-atmosphere reflectance"));
-    G_add_keyword(_("dos-type simple atmospheric correction"));
+    G_add_keyword(_("radiance"));
+    G_add_keyword(_("reflectance"));
+    G_add_keyword(_("brightness temperature"));
+    G_add_keyword(_("Landsat"));
+    G_add_keyword(_("atmospheric correction"));
     module->overwrite = TRUE;
     
     /* It defines the different parameters */

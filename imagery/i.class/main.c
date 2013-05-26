@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("classification"));
+    G_add_keyword(_("signatures"));
     module->label =
 	_("Generates spectral signatures for an image by allowing the user "
 	  "to outline regions of interest.");
