@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
-    G_add_keyword(_("supporting"));
+    G_add_keyword(_("support"));
     module->label = _("Displays GRASS version info.");
     module->description = _("Optionally also print build or copyright information.");
 

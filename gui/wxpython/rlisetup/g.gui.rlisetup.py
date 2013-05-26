@@ -21,7 +21,7 @@
 #%module
 #% description: Configuration tool for r.li modules.
 #% keywords: general
-#% keywords: gui
+#% keywords: GUI
 #% keywords: raster
 #% keywords: landscape structure analysis
 #%end

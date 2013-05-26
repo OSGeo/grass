@@ -20,6 +20,8 @@
 #% description: Exports a raster map to a text file as x,y,z values based on cell centers.
 #% keywords: raster
 #% keywords: export
+#% keywords: ASCII
+#% keywords: conversion
 #%end
 #%option G_OPT_R_INPUT
 #%end

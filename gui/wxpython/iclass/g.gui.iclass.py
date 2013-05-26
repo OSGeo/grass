@@ -23,9 +23,10 @@
 #% label: Tool for supervised classification of imagery data.
 #% description: Generates spectral signatures for an image by allowing the user to outline regions of interest.
 #% keywords: general
-#% keywords: gui
+#% keywords: GUI
 #% keywords: imagery
 #% keywords: classification
+#% keywords: Maximum Likelihood Classification
 #% keywords: signatures
 #%end
 #%flag

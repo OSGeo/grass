@@ -71,6 +71,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("composite"));
+    G_add_keyword("RGB");
     module->description =
 	_("Combines red, green and blue raster maps into "
 	  "a single composite raster map.");

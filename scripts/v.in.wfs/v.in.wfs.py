@@ -26,7 +26,7 @@
 #% description: Imports GetFeature from a WFS server.
 #% keywords: vector
 #% keywords: import
-#% keywords: wfs
+#% keywords: WFS
 #%end
 #%option
 #% key: url

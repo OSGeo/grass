@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("imagery quality assessment"));
-    G_add_keyword(_("surface reflectance"));
+    G_add_keyword(_("reflectance"));
     G_add_keyword(_("land surface temperature"));
     G_add_keyword(_("vegetation"));
     G_add_keyword(_("MODIS"));

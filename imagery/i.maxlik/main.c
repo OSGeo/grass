@@ -60,7 +60,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("classification"));
-    G_add_keyword(_("MLC"));
+    G_add_keyword(_("Maximum Likelihood Classification"));
+    G_add_keyword("MLC");
     module->label =
 	_("Classifies the cell spectral reflectances in imagery data.");
     module->description =

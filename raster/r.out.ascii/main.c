@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("export"));
+    G_add_keyword("ASCII");
     module->description =
 	_("Converts a raster map layer into a GRASS ASCII text file.");
 

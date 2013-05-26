@@ -83,9 +83,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("statistics"));
-    G_add_keyword(_("CCA"));
+    G_add_keyword("CCA");
     module->description =
-	_("Canonical components analysis (cca) "
+	_("Canonical components analysis (CCA) "
 	  "program for image processing.");
 
     grp_opt = G_define_standard_option(G_OPT_I_GROUP);

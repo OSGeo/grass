@@ -16,7 +16,7 @@ This program is free software under the GNU General Public License
 #% description: Downloads and imports data from WMS server.
 #% keywords: raster
 #% keywords: import
-#% keywords: wms
+#% keywords: WMS
 #%end
 
 #%option

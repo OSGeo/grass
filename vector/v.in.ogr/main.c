@@ -124,6 +124,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
+    G_add_keyword("OGR");
     module->description = _("Imports vector data into a GRASS vector map using OGR library.");
 
     param.dsn = G_define_option();

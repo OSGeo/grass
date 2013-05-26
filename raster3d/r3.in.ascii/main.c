@@ -316,6 +316,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("voxel"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("conversion"));
+    G_add_keyword("ASCII");
     module->description =
         _("Converts a 3D ASCII raster text file into a (binary) 3D raster map.");
 
