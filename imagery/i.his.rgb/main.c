@@ -47,6 +47,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("color transformation"));
     G_add_keyword("RGB");
     G_add_keyword("HIS");
+    G_add_keyword("IHS");
     module->description =
 	_("Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
 	  "RGB (Red-Green-Blue) color space.");

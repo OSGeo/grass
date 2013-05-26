@@ -63,6 +63,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("color transformation"));
     G_add_keyword("RGB");
     G_add_keyword("HIS");
+    G_add_keyword("IHS");
     module->description =
 	_("Generates red, green and blue raster map layers "
 	  "combining hue, intensity and saturation (HIS) "
