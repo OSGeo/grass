@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("classification"));
     G_add_keyword(_("signatures"));
+    G_add_keyword(_("Maximum Likelihood Classification"));
     module->label =
 	_("Generates spectral signatures for an image by allowing the user "
 	  "to outline regions of interest.");

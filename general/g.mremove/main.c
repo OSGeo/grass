@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
     G_add_keyword(_("remove"));
-    G_add_keyword(_("multi"));
     module->description =
 	_("Removes data base element files from "
 	  "the user's current mapset using regular expressions.");

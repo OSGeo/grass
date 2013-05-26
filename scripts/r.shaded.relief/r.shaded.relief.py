@@ -52,6 +52,7 @@
 #% description: Creates shaded relief map from an elevation map (DEM).
 #% keywords: raster
 #% keywords: elevation
+#% keywords: terrain
 #%end
 #%option G_OPT_R_INPUT
 #% description: Name of input elevation raster map

@@ -22,7 +22,7 @@
 #%module
 #% description: Interactively compares two maps by swiping a visibility bar.
 #% keywords: general
-#% keywords: gui
+#% keywords: GUI
 #% keywords: display
 #%end
 #%option G_OPT_R_INPUT

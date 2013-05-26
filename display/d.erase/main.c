@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
     G_add_keyword(_("display"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("monitors"));
-    G_add_keyword(_("CLI"));
     module->description =
 	_("Erases the contents of the active graphics display frame with user defined color.");
 

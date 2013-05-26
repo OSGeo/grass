@@ -130,6 +130,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster3d"));
+    G_add_keyword(_("mask"));
     G_add_keyword(_("voxel"));
     module->description =
 	_("Establishes the current working 3D raster mask.");

@@ -22,7 +22,7 @@
 #% label: Graphical Modeler.
 #% description: Allows to interactively create, edit and manage models.
 #% keywords: general
-#% keywords: gui
+#% keywords: GUI
 #% keywords: graphical modeler
 #% keywords: workflow
 #%end

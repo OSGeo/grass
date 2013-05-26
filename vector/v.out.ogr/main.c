@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("export"));
-    G_add_keyword(_("ogr"));
+    G_add_keyword("OGR");
 
     module->description =
 	_("Converts a vector map to any of the supported OGR vector formats.");

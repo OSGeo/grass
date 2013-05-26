@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 	_("Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).");
     G_add_keyword(_("imagery"));
     G_add_keyword(_("Landsat"));
-    G_add_keyword(_("acca"));
+    G_add_keyword("ACCA");
     
     band_prefix = G_define_option();
     band_prefix->key = "input_prefix";

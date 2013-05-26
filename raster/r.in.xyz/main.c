@@ -159,6 +159,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
+    G_add_keyword(_("conversion"));
+    G_add_keyword("ASCII");
     G_add_keyword(_("LIDAR"));
     module->description =
 	_("Create a raster map from an assemblage of many coordinates using univariate statistics.");

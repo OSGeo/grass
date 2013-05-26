@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("biomass"));
-    G_add_keyword(_("fpar"));
+    G_add_keyword("FPAR");
     G_add_keyword(_("yield"));
     module->description =
 	_("Computes biomass growth, precursor of crop yield calculation.");

@@ -17,7 +17,6 @@
 #% keywords: display
 #% keywords: graphics
 #% keywords: monitors
-#% keywords: CLI
 #%end
 
 import sys

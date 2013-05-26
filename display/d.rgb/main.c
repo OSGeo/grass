@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("raster"));
-    G_add_keyword(_("RGB"));
+    G_add_keyword("RGB");
     module->description =
 	_("Displays three user-specified raster maps "
 	  "as red, green, and blue overlays in the active graphics frame.");

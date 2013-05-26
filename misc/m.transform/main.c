@@ -315,7 +315,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("transformation"));
-    G_add_keyword(_("GCP"));
+    G_add_keyword("GCP");
     module->description =
 	_("Computes a coordinate transformation based on the control points.");
 

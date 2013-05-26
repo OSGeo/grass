@@ -92,6 +92,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("viewshed"));
+    G_add_keyword(_("line of sight"));
     module->description = _("Line-of-sight raster analysis program.");
 
     /* Define the different options */
