@@ -583,8 +583,6 @@ class Raster3DDataset(AbstractMapDataset):
         cols = int(kvp["cols"])
         depths = int(kvp["depths"])
 
-        ncells = cols * rows
-
         ncells = cols * rows * depths
 
         self.metadata.set_cols(cols)
