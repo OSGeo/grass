@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-26 14:45+0100\n"
-"PO-Revision-Date: 2013-05-03 15:33+0200\n"
+"PO-Revision-Date: 2013-05-27 14:15+0200\n"
 "Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
 "Language-Team: German <grass-translations@lists.osgeo.org>\n"
 "Language: de\n"
@@ -11470,7 +11470,7 @@ msgstr ""
 
 #: ../raster/r.to.vect/main.c:93
 msgid "Smooth corners of area features"
-msgstr "Glätte Ecken der flächenhaften Objekte."
+msgstr "Glättet Ecken flächenhafter Objekte"
 
 #: ../raster/r.to.vect/main.c:98
 msgid "Use raster values as categories instead of unique sequence (CELL only)"
@@ -23637,12 +23637,12 @@ msgstr "Keine Steiner-Punkte gefunden -> verlasse die Schleife"
 #: ../vector/v.overlay/area_area.c:51
 #, c-format
 msgid "Snapping boundaries with %g ..."
-msgstr "Grenzen ausrichten mit %g ..."
+msgstr "Fange Grenzen mit %g ..."
 
 #: ../vector/v.overlay/area_area.c:99
 #, c-format
 msgid "%d boundaries snapped"
-msgstr "%d Grenzen ausgerichtet"
+msgstr "%d Grenzen gefangen"
 
 #: ../vector/v.overlay/area_area.c:107 ../vector/v.overlay/line_area.c:70
 msgid "Breaking lines..."
@@ -24089,7 +24089,7 @@ msgstr "Entferne doppelte Zentroide"
 
 #: ../vector/v.in.ogr/main.c:197
 msgid "'-1' for no snap"
-msgstr "'-1' für kein Ausrichten"
+msgstr "'-1' für kein Fangen"
 
 #: ../vector/v.in.ogr/main.c:212
 msgid "List of column names to be used instead of original names, first is used for category column"
@@ -25916,7 +25916,7 @@ msgstr "Name der Hintergrund-Vektorkarte(n)."
 
 #: ../vector/v.edit/args.c:176
 msgid "Snap added or modified features in the given threshold to the nearest existing feature"
-msgstr "Richte hinzugefügte oder veränderte Objekte, innerhalb des gegebenen Schwellwertes, am nächsten Objekt aus."
+msgstr "Hinzugefügte oder veränderte Objekte, innerhalb der Toleranz, am nächsten Objekt fangen"
 
 #: ../vector/v.edit/args.c:182
 msgid "Not apply snapping"
@@ -26043,7 +26043,7 @@ msgstr "%d Objekte hinzugefügt"
 #: ../vector/v.edit/main.c:371
 #, c-format
 msgid "Threshold value for snapping is %.2f"
-msgstr "Schwellwert für Ausrichten ist %.2f."
+msgstr "Fangtoleranz ist %.2f."
 
 #: ../vector/v.edit/main.c:289
 #, c-format
@@ -27555,7 +27555,7 @@ msgstr "Layernummer (schreiben)"
 #: ../vector/v.to.db/parse.c:41 ../vector/v.net.bridge/main.c:101
 #: ../vector/v.vect.stats/main.c:147
 msgid "Feature type"
-msgstr "Art des Vektorobjekts."
+msgstr "Art des Vektorobjekts"
 
 #: ../vector/v.to.db/parse.c:43
 msgid "For coor valid point/centroid, for length valid line/boundary"
@@ -28363,7 +28363,7 @@ msgstr "Erstelle Teile der Topologie..."
 
 #: ../vector/v.buffer/main.c:716
 msgid "Snapping boundaries..."
-msgstr "Richte Grenzen aus..."
+msgstr "Fange Grenzen..."
 
 #: ../vector/v.buffer/main.c:732
 msgid "Cleaning boundaries at nodes"
@@ -29299,7 +29299,7 @@ msgstr "Lösche <%s>"
 
 #: ../vector/v.out.ogr/args.c:15
 msgid "Feature type(s)"
-msgstr "Art des Vektorobjekts."
+msgstr "Art des Vektorobjekts"
 
 #: ../vector/v.out.ogr/args.c:17
 #, fuzzy
@@ -29704,7 +29704,7 @@ msgstr "Erstelle Topologie für die Vektorkarte <%s>..."
 
 #: ../vector/v.patch/main.c:375
 msgid "Intersections at borders will have to be snapped"
-msgstr "Überschneidungen an den Grenzen müssen ausgerichtet werden"
+msgstr "Überschneidungen an den Grenzen müssen gefangen werden"
 
 #: ../vector/v.patch/main.c:376
 msgid "Lines common between files will have to be edited"
@@ -30458,7 +30458,7 @@ msgstr "Werkzeug: Entferne doppelte Zentroide"
 
 #: ../vector/v.clean/main.c:390
 msgid "Tool: Snap line to vertex in threshold"
-msgstr "Werkzeug: Richte Linie an Vertices innerhalb des Schwellwertes aus"
+msgstr "Werkzeug: Fange Linie an Vertices innerhalb der Toleranz"
 
 #: ../vector/v.clean/main.c:404 ../vector/v.clean/main.c:432
 #: ../vector/v.clean/main.c:451
@@ -32554,7 +32554,7 @@ msgstr "Werde Z auf diesen Wert setzen, wenn der Wert der Rasterkarte nicht gele
 
 #: ../vector/v.drape/main.c:267
 msgid "No features match Your query"
-msgstr "Keine Objekte passen zu Ihrer Abfrage."
+msgstr "Zu Ihrer Abfrage passen keine Objekte"
 
 #: ../vector/v.drape/main.c:368 ../vector/v.drape/main.c:378
 msgid "Due to error attribute data to new map are not transferred"
@@ -37553,7 +37553,7 @@ msgstr "Sonnenhöhe in Grad"
 #~ msgstr "length; Selektiere nur Linien oder Grenzen kürzer/länger als der Schwellwert; dangle; Selektiere Überstände (dangles) kürzer/länger als der Schwellwert"
 
 #~ msgid "no;Not apply snapping;node;Snap only to node;vertex;Allow snapping also to vertex"
-#~ msgstr "no; Kein Ausrichten; node; nur an Knoten Ausrichten; vertex; Erlaube Ausrichten auch an Vertices"
+#~ msgstr "no; Kein Fangen; node; Nur an Knoten Fangen; vertex; Erlaube Fangen auch an Vertices"
 
 #~ msgid "point;simple x,y[,z] list;standard;GRASS vector ASCII format"
 #~ msgstr "point;einfache x,y[,z] Liste;standard;GRASS Vektor-ASCII-Format"
@@ -41079,7 +41079,7 @@ msgstr "Sonnenhöhe in Grad"
 #~ msgstr "Konvertiere OGR Vektorlayer in das GRASS Vektorkarten."
 
 #~ msgid "Min-area & snap"
-#~ msgstr "Min-Fläche & Ausrichten"
+#~ msgstr "Min-Fläche & Fangen"
 
 #~ msgid "Data source contains %d layers:"
 #~ msgstr "Datenquelle enthält %d Layer:"
@@ -41094,7 +41094,7 @@ msgstr "Sonnenhöhe in Grad"
 #~ msgstr "Importiere %d Objekte der Karte..."
 
 #~ msgid "Snap boundaries (threshold = %.3e):"
-#~ msgstr "Grenzen ausrichten (Schwellwert = %.3e):"
+#~ msgstr "Grenzen fangen (Schwellwert = %.3e):"
 
 #~ msgid "Break polygons:"
 #~ msgstr "Zerlege Polygone:"
@@ -41259,7 +41259,7 @@ msgstr "Sonnenhöhe in Grad"
 #~ msgstr "Name der Vektorkarte, in die fehlerhafte Vektor-Objekte geschrieben werden sollen."
 
 #~ msgid "create;Create new (empty) vector map;add;Add new features to existing vector map;delete;Delete selected features from vector map;move;Move selected features in vector map;vertexmove;Move vertex of selected vector lines;vertexdel;Remove vertex from selected vector lines;vertexadd;Add new vertex to selected vector lines;merge;Merge selected vector lines;break;Break/split vector lines;select;Select lines and print their ID's;catadd;Set new categories to selected vector features for defined layer;catdel;Delete categories from selected vector features for defined layer;copy;Copy selected features;snap;Snap vector features in given threshold;flip;Flip direction of selected vector lines;connect;Connect two lines;zbulk;Z bulk-labeling (automated assignment of z coordinate to vector lines);chtype;Change feature type (point<->centroid, line<->boundary)"
-#~ msgstr "create;Erzeuge ein neue (leere) Vektorkarte;add;Fügt neue Objekte zu einer existierenden Vektorkarte hinzu;delete;Entfernt selektierte Objekte von einer Vektorkarte;move;Verschiebt selektierte Objekte in einer Vektorkarte;vertexmove;Verschiebt einen Vertex selektierter Vektorlinien;vertexdel;Entfernt einen Vertex aus selektierten Vektorlinien;vertexadd;Fügt einen neuen Vertex zu selektierten Vektorlinien hinzu;merge;Vereinigt selektierte Vektorlinien;break;Teilt Vektorlinien;select;Selektiert Linien und gibt ihre ID aus;catadd;Vergibt neue Kategorien für selektierte Vektorobjekte eines bestimmten Layers;catdel;Löscht Kategorien von selektierten Vektorobjekten eines bestimmten Layers;copy;Kopiert selektierte Feature;snap;Fange Vektorobjekt innerhalb des angegebenen Schwellwertes;flip;Drehe die Richtung selektierter Vektorlinien um;connect;Verbinde zwei Linien;zbulk;Z-Massen-Beschriftung (automatisierte Zuweisung der Z Koordinate zu Vektorlinien);chtype;Ändere den Typ des Features(Punkt<->Zentroid, Linie<->Grenze)"
+#~ msgstr "create;Erzeuge ein neue (leere) Vektorkarte;add;Fügt neue Objekte zu einer existierenden Vektorkarte hinzu;delete;Entfernt selektierte Objekte von einer Vektorkarte;move;Verschiebt selektierte Objekte in einer Vektorkarte;vertexmove;Verschiebt einen Vertex selektierter Vektorlinien;vertexdel;Entfernt einen Vertex aus selektierten Vektorlinien;vertexadd;Fügt einen neuen Vertex zu selektierten Vektorlinien hinzu;merge;Vereinigt selektierte Vektorlinien;break;Teilt Vektorlinien;select;Selektiert Linien und gibt ihre ID aus;catadd;Vergibt neue Kategorien für selektierte Vektorobjekte eines bestimmten Layers;catdel;Löscht Kategorien von selektierten Vektorobjekten eines bestimmten Layers;copy;Kopiert selektierte Feature;snap;Fange Vektorobjekt innerhalb des angegebenen Toleranz;flip;Drehe die Richtung selektierter Vektorlinien um;connect;Verbinde zwei Linien;zbulk;Z-Massen-Beschriftung (automatisierte Zuweisung der Z Koordinate zu Vektorlinien);chtype;Ändere den Typ des Features(Punkt<->Zentroid, Linie<->Grenze)"
 
 #~ msgid "ASCII file to be converted to binary vector map"
 #~ msgstr "ASCII-Datei, die in eine Vektorkarte konvertiert werden soll."
