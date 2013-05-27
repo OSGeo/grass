@@ -13,6 +13,10 @@
 #define TOPO_ID     "topology_id"
 #define TOPO_TABLE  "grass"
 #define TOPO_BBOX   "bbox"
+#define TOPO_TABLE_NUM  3
+#define TOPO_TABLE_NODE "node_grass"
+#define TOPO_TABLE_AREA "area_grass"
+#define TOPO_TABLE_ISLE "isle_grass"
 
 #define SWAP32(x) \
         ((unsigned int)( \

@@ -213,9 +213,11 @@ typedef enum overlay_operator OVERLAY_OPERATOR;
 /*! \brief Maximum category value */
 #define GV_CAT_MAX   PORT_INT_MAX
 
-/*! \brief GRASS ASCII vector format */
+/*! \brief GRASS ASCII vector format - point format */
 #define GV_ASCII_FORMAT_POINT 0
+/*! \brief GRASS ASCII vector format - standard format */
 #define GV_ASCII_FORMAT_STD   1
+/*! \brief GRASS ASCII vector format - well-known-text format */
 #define GV_ASCII_FORMAT_WKT   2
 
 /*! \brief Simple feature types
@@ -250,6 +252,6 @@ typedef enum
 #define HEADSTR	50
 
 /*! \brief GRASS-PostGIS data provider - default fid column */
-#define GV_PG_FID_COLUMN       "fid"
+#define GV_PG_FID_COLUMN      "fid"
 /*! \brief GRASS-PostGIS data provider - default geometry column */
 #define GV_PG_GEOMETRY_COLUMN "geom"

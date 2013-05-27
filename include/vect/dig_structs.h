@@ -433,7 +433,7 @@ struct Format_info_offset
       5	   2	  third part (polygon)
       6	   0	  first ring of polygon
 
-      Topology:
+      GRASS topology:
       
       line idx
       -----------------
@@ -441,6 +441,9 @@ struct Format_info_offset
       2    2      line
       3    4      boundary
       4    1      centroid read from topo (idx == FID)
+
+      In PostGIS Topology mode the offset array is used for mapping
+      nodes.
       \endverbatim
     */
     int *array;
@@ -674,6 +677,13 @@ struct Format_info_pg
     */
     char    *toposchema_name;
     int      toposchema_id;
+    /*!
+      \brief Topology format
+
+      TRUE to store only Topo-Geo data in DB otherwise GRASS-like
+      topology is also maintained in DB
+    */
+    int      topo_geo_only;
 };
 
 /*!

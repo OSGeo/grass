@@ -37,7 +37,11 @@
 
 static int copy_lines_1(struct Map_info *, int, struct Map_info *);
 static int copy_lines_2(struct Map_info *, int, int, struct Map_info *);
+#if 0
 static int copy_nodes(const struct Map_info *, struct Map_info *);
+#endif
+static int copy_line_nodes(const struct Map_info *, int, int, struct line_pnts *,
+                           struct Map_info *);
 static int is_isle(const struct Map_info *, int);
 static int copy_areas(const struct Map_info *, int, struct Map_info *);
 
@@ -109,11 +113,12 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
     ret = 0;
     if (Vect_level(In) >= 2) {
         /* -> copy features on level 2 */
+#if 0
         if (topo == TOPO_POSTGIS) {
             /* PostGIS topology - copy also nodes */
             copy_nodes(In, Out);
         }
-        
+#endif
         /* copy features */
         ret += copy_lines_2(In, field, topo, Out);
 
@@ -199,16 +204,19 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
 */
 int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
 {
-  int i, type, nlines, nskipped;
-    int ret, left, rite, centroid;
+    int i, type, nlines, nskipped;
+    int ret, left, rite, centroid, with_z;
 
-    struct line_pnts *Points, *CPoints;
+    struct line_pnts *Points, *CPoints, *NPoints;
     struct line_cats *Cats, *CCats;
 
     Points  = Vect_new_line_struct();
     CPoints = Vect_new_line_struct();
+    NPoints = Vect_new_line_struct();
     Cats    = Vect_new_cats_struct();
     CCats   = Vect_new_cats_struct();
+    
+    with_z = Vect_is_3d(In);
     
     ret = 0;
     nlines = Vect_get_num_lines(In);
@@ -225,6 +233,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     else
         G_message(_("Copying features..."));    
     
+    Vect_append_point(NPoints, 0., 0., 0.);
     nskipped = 0;
     for (i = 1; i <= nlines; i++) {
         if (!Vect_line_alive(In, i))
@@ -288,6 +297,39 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
             }
         }
         
+        /* copy also nodes connected to the line (PostGIS Topology
+         * mode only) */
+        if (topo == TOPO_POSTGIS && (type & GV_LINES)) {
+            int n1, n2;
+            
+            struct P_line *Line;
+            struct Format_info_offset *offset;
+            
+            offset = &(Out->fInfo.pg.offset);
+            
+            n1 = n2 = -1;
+            Line = In->plus.Line[i];
+            if (Line) {
+                if (type == GV_LINE) {
+                    struct P_topo_l *topo = (struct P_topo_l *)Line->topo;
+                    
+                    n1 = topo->N1;
+                    n2 = topo->N2;
+                }
+                else if (type == GV_BOUNDARY) {
+                    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+                    
+                    n1 = topo->N1;
+                    n2 = topo->N2;
+                }
+            }
+                
+            if (n1 > 0 && (n1 > offset->array_num || offset->array[n1-1] == 0)) 
+                copy_line_nodes(In, n1, with_z, NPoints, Out);
+            if (n2 > 0 && (n2 > offset->array_num || offset->array[n2-1] == 0))
+                copy_line_nodes(In, n2, with_z, NPoints, Out);
+        }
+
         if (-1 == Vect_write_line(Out, type, Points, Cats)) {
             G_warning(_("Writing new feature failed"));
             return 1;
@@ -299,12 +341,14 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(CPoints);
+    Vect_destroy_line_struct(NPoints);
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(CCats);
 
     return ret;
 }
 
+#if 0
 /*!
   \brief Copy nodes as points (PostGIS Topology only)
 
@@ -317,40 +361,50 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
 int copy_nodes(const struct Map_info *In, struct Map_info *Out)
 {
     int nnodes, node, with_z;
-    double x, y, z;
+
     struct line_pnts *Points;
-    
-    Points = Vect_new_line_struct();
+
+    Points  = Vect_new_line_struct();
     
     with_z = Vect_is_3d(In);
     
     nnodes = Vect_get_num_nodes(In);
-    if (nnodes > 0)
-        G_message(_("Exporting nodes..."));
+    G_message(_("Exporting nodes..."));
     Vect_append_point(Points, 0., 0., 0.);
     for (node = 1; node <= nnodes; node++) {
         G_debug(3, "Exporting GRASS node %d", node);
         
         G_percent(node, nnodes, 5);
-        Vect_get_node_coor(In, node, &x, &y, &z);
-        Points->x[0] = x;
-        Points->y[0] = y;
-        if (with_z)
-            Points->z[0] = z;
-        
-#ifdef HAVE_POSTGRES
-        if (-1 == V2__write_node_pg(Out, Points)) {
-            G_warning(_("Writing node %d failed"), node);
-            return 1;
-        }
-#else
-        G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
-        return 1;
-#endif
+        copy_line_nodes(In, node, with_z, Points, Out);
     }
-
-    Vect_destroy_line_struct(Points);
     
+    Vect_destroy_line_struct(Points);
+
+    return 0;
+}
+#endif
+
+int copy_line_nodes(const struct Map_info *In, int node, int with_z,
+                    struct line_pnts *Points, struct Map_info *Out)
+{
+    double x, y, z;
+ 
+    Vect_get_node_coor(In, node, &x, &y, &z);
+    Points->x[0] = x;
+    Points->y[0] = y;
+    if (with_z)
+        Points->z[0] = z;
+    
+#ifdef HAVE_POSTGRES
+    if (-1 == V2__write_node_pg(Out, Points)) {
+        G_warning(_("Writing node %d failed"), node);
+        return 1;
+    }
+#else
+    G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+    return 1;
+#endif
+
     return 0;
 }
 
