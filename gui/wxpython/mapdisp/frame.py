@@ -52,7 +52,7 @@ from gui_core.query     import QueryDialog, PrepareQueryResults
 from mapdisp.mapwindow  import BufferedWindow
 from mapdisp.overlays   import LegendController, BarscaleController
 from modules.histogram  import HistogramFrame
-from wxplot.histogram   import Histogram2Frame
+from wxplot.histogram   import HistogramPlotFrame
 from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
 
@@ -955,7 +955,7 @@ class MapFrame(SingleMapFrame):
             if layer.type == 'raster':
                 rasters.append(layer.maplayer.name)
 
-        win = ProfileFrame(parent = self, rasterList = rasters)
+        win = ProfileFrame(parent = self, mapwindow = self.GetMapWindow(), rasterList = rasters)
         
         win.CentreOnParent()
         win.Show()
@@ -1023,7 +1023,7 @@ class MapFrame(SingleMapFrame):
             if layer.maplayer.GetType() == 'raster':
                 raster.append(layer.maplayer.GetName())
 
-        win = Histogram2Frame(parent = self, rasterList = raster)
+        win = HistogramPlotFrame(parent = self, rasterList = raster)
         win.CentreOnParent()
         win.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)

@@ -42,10 +42,10 @@ from core.gcmd         import RunCommand, GWarning, GError, GMessage
 class ProfileFrame(BasePlotFrame):
     """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
-    def __init__(self, parent, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
+    def __init__(self, parent, mapwindow, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
                  size = wx.Size(700, 400),
                  rasterList = [], **kwargs):
-        BasePlotFrame.__init__(self, parent, size = size, **kwargs)
+        BasePlotFrame.__init__(self, parent, mapwindow = mapwindow, size = size, **kwargs)
 
         self.toolbar = ProfileToolbar(parent = self)
         self.SetToolBar(self.toolbar)
