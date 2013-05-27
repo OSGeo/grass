@@ -57,7 +57,8 @@ class HistogramPlotFrame(BasePlotFrame):
         self._initOpts()
         
         if len(self.rasterList) > 0: # set raster name(s) from layer manager if a map is selected
-            self.InitRasterOpts(self.rasterList, self.plottype)
+            self.raster = self.InitRasterOpts(self.rasterList, self.plottype)
+            wx.CallAfter(self.OnCreateHist, None)
         else:
             self.raster = {}
 
@@ -85,7 +86,7 @@ class HistogramPlotFrame(BasePlotFrame):
         """!Select raster map(s) to profile
         """
         dlg = HistRasterDialog(parent = self)
-
+        
         if dlg.ShowModal() == wx.ID_OK:
             self.rasterList = dlg.rasterList
             self.group = dlg.group
@@ -97,7 +98,7 @@ class HistogramPlotFrame(BasePlotFrame):
             # plot histogram
             if len(self.rasterList) > 0:
                 self.OnCreateHist(event = None)
-
+        
         dlg.Destroy()
 
     def SetupHistogram(self):

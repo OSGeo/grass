@@ -677,8 +677,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         win.CentreOnScreen()
         win.Show()
-        win.OnSelectRaster(None)
-        
+                
     def OnUnivariateStats(self, event):
         """!Univariate raster statistics"""
         name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
