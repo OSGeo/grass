@@ -32,9 +32,9 @@ or <a href="http://www.gdal.org/ogr/drv_pg.html">PostgreSQL/PostGIS</a>
 format (section &quot;Layer Creation Options&quot;).
 
 <p>
-Note that built-in <em>GRASS-PostGIS data provider</em> supports a limited
-number of creation <b>options</b> compared to PostgreSQL/PostGIS
-driver from OGR library:
+Note that built-in <em>GRASS-PostGIS data provider</em>
+(<b>format=PostgreSQL</b>) supports different creation <b>options</b>
+compared to PostgreSQL/PostGIS driver from OGR library:
 <ul>
   <li><tt>SCHEMA=&lt;name&gt;</tt> - name of schema where to create
   feature tables. If schema doesn't exists, it's automatically created
@@ -45,9 +45,29 @@ driver from OGR library:
   be used for storing geometry data in feature table, default: <tt>geom</tt></li>
   <li><tt>SPATIAL_INDEX=YES|NO</tt> - enable/disable spatial index on geometry column, default: YES</li>
   <li><tt>PRIMARY_KEY=YES|NO</tt> - enable/disable primary key on FID column, default: YES</li>
+  <li><tt>SRID=&lt;value&gt;</tt> - spatial reference identifier,
+  default: not defined</li>
   <li><tt>TOPOLOGY=YES|NO</tt> - enable/disable
   native <a href="http://grasswiki.osgeo.org/wiki/PostGIS_Topology">PostGIS
   topology</a>, default: NO</li>
+</ul>
+
+Options relevant only to topological output (<tt>TOPOLOGY=YES</tt>):
+
+<ul>
+  <li><tt>TOPOSCHEMA_NAME=&lt;schema name&gt;</tt> - name of PostGIS
+  Topology schema (relevant only for <tt>TOPOLOGY=YES</tt>),
+  default: <tt>topo_&lt;input&gt;</tt></li>
+  <li><tt>TOPOGEOM_NAME=&lt;column&gt;</tt> - name of column which
+  will be used for storing topogeometry data in feature table,
+  default: <tt>topo</tt></li>
+  <li><tt>TOPO_TOLERANCE=&lt;value&gt;</tt> - tolerance for PostGIS
+  Topology schema,
+  see <a href="http://www.postgis.net/docs/manual-2.0/CreateTopology.html">CreateTopology</a>
+  function for defails, default: <tt>0</tt></li>
+  <li><tt>TOPO_GEO_ONLY=YES|NO</tt> - store in PostGIS Topology schema
+  only data relevant to Topo-Geo data model (relevant only
+  for <tt>TOPOLOGY=YES</tt>), default: <tt>NO</tt></li>
 </ul>
 
 <p>

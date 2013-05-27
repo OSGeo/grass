@@ -24,14 +24,31 @@ Additional creation options can be defined by <b>options</b> parameter:
   index on geometry column, default: <tt>YES</tt></li>
   <li><tt>PRIMARY_KEY=YES|NO</tt> - enable/disable adding primary key
   on FID column, default: <tt>YES</tt></li>
-  <li><tt>TOPOSCHEMA_NAME=&lt;schema name&gt;</tt> - name of PostGIS
-  Topology schema (relevant only for <b>-l</b> flag),
-  default: <tt>topo_&lt;input&gt;</tt></li>
   <li><tt>SRID=&lt;value&gt;</tt> - spatial reference identifier,
   default: not defined</li>
 </ul>
 
-Note that <em>options</em> defined
+PostGIS Topology related options (relevant only for <b>-l</b> flag):
+
+<ul>
+  <li><tt>TOPOSCHEMA_NAME=&lt;schema name&gt;</tt> - name of PostGIS
+  Topology schema, default: <tt>topo_&lt;input&gt;</tt></li>
+  <li><tt>TOPOGEOM_NAME=&lt;column&gt;</tt> - name of column which
+  will be used for storing topogeometry data in feature table,
+  default: <tt>topo</tt></li>
+  <li><tt>TOPO_TOLERANCE=&lt;value&gt;</tt> - tolerance for PostGIS
+  Topology schema,
+  see <a href="http://www.postgis.net/docs/manual-2.0/CreateTopology.html">CreateTopology</a>
+  function for defails, default: <tt>0</tt></li>
+  <li><tt>TOPO_GEO_ONLY=YES|NO</tt> - store in PostGIS Topology schema
+  only data relevant to Topo-Geo data model,
+  default: <tt>NO</tt></li>
+</ul>
+
+<p>
+Creation <b>options</b> are comma-separated pairs
+(<tt>key=value</tt>), the options are case-insensitive. Note
+that <b>options</b> defined
 by <em><a href="v.external.out.html">v.external.out</a></em> are
 ignored by <em>v.out.postgis</em>.
 
