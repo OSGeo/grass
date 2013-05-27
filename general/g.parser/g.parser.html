@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>g.parser</title>
+<title>GRASS GIS manual: g.parser</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
@@ -9,25 +9,33 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
-
 <h2>NAME</h2>
-<em><b>g.parser</b></em>
+<em><b>g.parser</b></em> - provides full parser support for GRASS GIS scripts.
+
+<h2>KEYWORDS</h2>
+general, support, scripts
 
 <h2>SYNOPSIS</h2>
+<div id="name"><b>g.parser</b><br></div>
 <b>g.parser help</b><br>
-<b>g.parser</b> [-<b>s</b>] [-<b>t</b>] <em>filename</em> [<em>argument</em>,...]
+<div id="synopsis"><b>g.parser</b> [-<b>st</b>] <em>filename</em> [<em>argument</em>,...]
+</div>
 
+
+<div id="flags">
 <h3>Flags:</h3>
 <dl>
 <dt><b>-t</b></dt>
 <dd>Print strings for translation</dd>
+
 <dt><b>-s</b></dt>
 <dd>Write option values to stdout instead of reinvoking script</dd>
 </dl>
+</div>
 
 <h2>DESCRIPTION</h2>
 
-The <em>g.parser</em> module provides full parser support for GRASS
+The <em>g.parser</em> module provides full parser support for GRASS GIS
 scripts, including an auto-generated GUI interface, help page
 template, and command line option checking. In this way a simple
 script can very quickly be made into a full-fledged GRASS module.
@@ -417,9 +425,9 @@ to the other examples above.
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="g.filename.html">g.filename</a>,
-  <a href="g.findfile.html">g.findfile</a>,
-  <a href="g.tempfile.html">g.tempfile</a>,
+<a href="g.filename.html">g.filename</a>,
+<a href="g.findfile.html">g.findfile</a>,
+<a href="g.tempfile.html">g.tempfile</a>,
 </em>
 
 and the <tt>SUBMITTING_SCRIPTS</tt> file in the GRASS source code.
@@ -431,5 +439,8 @@ and the <tt>SUBMITTING_SCRIPTS</tt> file in the GRASS source code.
 Glynn Clements
 
 <p><i>Last changed: $Date$</i>
+<hr>
+<p><a href="index.html">Main index</a> - <a href="general.html">General index</a> - <a href="topics.html">Topics index</a> - <a href="keywords.html">Keywords Index</a> - <a href="full_index.html">Full index</a></p>
+<p>&copy; 2003-2013 <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS 7.0.svn Reference Manual</p>
 </body>
 </html>
