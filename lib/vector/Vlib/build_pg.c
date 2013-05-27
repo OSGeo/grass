@@ -28,6 +28,10 @@ static int build_topogeom_stmt(const struct Format_info_pg *, int, int, int, cha
 static int save_map_bbox(const struct Format_info_pg *, const struct bound_box*);
 static int create_topo_grass(const struct Format_info_pg *);
 static int has_topo_grass(const struct Format_info_pg *);
+static int write_nodes(const struct Plus_head *, const struct Format_info_pg *);
+static int write_areas(const struct Plus_head *, const struct Format_info_pg *);
+static int write_isles(const struct Plus_head *, const struct Format_info_pg *);
+static void build_stmt_id(const void *, int, int, const struct Plus_head *, char **, size_t *);
 #endif
 
 /*!
@@ -71,8 +75,8 @@ int Vect_build_pg(struct Map_info *Map, int build)
 
     /* TODO move this init to better place (Vect_open_ ?), because in
        theory build may be reused on level2 */
-    if (build >= plus->built && build > GV_BUILD_BASE) {
-        G_free((void *)pg_info->offset.array);
+    if (!pg_info->toposchema_name && build >= plus->built && build > GV_BUILD_BASE) {
+        G_free(pg_info->offset.array);
         G_zero(&(pg_info->offset), sizeof(struct Format_info_offset));
     }
 
@@ -162,6 +166,11 @@ int build_topo(struct Map_info *Map, int build)
     if (Vect__execute_pg(pg_info->conn, "BEGIN"))
         return 0;
     
+    /* write full node topo info to DB if requested */
+    if (!pg_info->topo_geo_only) {
+        write_nodes(plus, pg_info);
+    }
+
     /* update faces from GRASS Topology */
     if (build >= GV_BUILD_AREAS) {
         /* do clean up (1-3)
@@ -186,7 +195,7 @@ int build_topo(struct Map_info *Map, int build)
             return 0;
         }
 
-        /* 3) delete faces */        
+        /* 3) delete faces (areas/isles) */        
         sprintf(stmt, "DELETE FROM \"%s\".face WHERE "
                 "face_id != 0", pg_info->toposchema_name);
         G_debug(2, "SQL: %s", stmt);
@@ -194,7 +203,22 @@ int build_topo(struct Map_info *Map, int build)
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return 0;
         }
-        
+        if (!pg_info->topo_geo_only) {
+            sprintf(stmt, "DELETE FROM \"%s\".%s", pg_info->toposchema_name, TOPO_TABLE_AREA);
+            G_debug(2, "SQL: %s", stmt);
+            if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return 0;
+            }
+            
+            sprintf(stmt, "DELETE FROM \"%s\".%s", pg_info->toposchema_name, TOPO_TABLE_ISLE);
+            G_debug(2, "SQL: %s", stmt);
+            if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+                Vect__execute_pg(pg_info->conn, "ROLLBACK");
+                return 0;
+            }
+        }
+
         /* 4) insert faces & update nodes (containing_face) based on
          * GRASS topology */
         G_message(_("Updating faces..."));
@@ -266,6 +290,11 @@ int build_topo(struct Map_info *Map, int build)
                 return 0;
             }
         }
+
+        /* write full area topo info to DB if requested */
+        if (!pg_info->topo_geo_only) {
+            write_areas(plus, pg_info);
+        }
     } /* build >= GV_BUILD_AREAS */
     
     if (build >= GV_BUILD_ATTACH_ISLES) {
@@ -274,6 +303,11 @@ int build_topo(struct Map_info *Map, int build)
         for(isle = 1; isle <= nisles; isle++) {
             Isle = plus->Isle[isle];
             Vect__insert_face_pg(Map, -isle);
+        }
+
+        /* write full isles topo info to DB if requested */
+        if (!pg_info->topo_geo_only) {
+            write_isles(plus, pg_info);
         }
     } /* build >= GV_BUILD_ISLES */
 
@@ -479,4 +513,237 @@ int has_topo_grass(const struct Format_info_pg *pg_info)
 
     return has_topo;
 }
+
+/*!
+  \brief Insert node into 'node_grass' table
+  
+  Writes (see P_node struct):
+   - lines
+   - angles
+
+  Already stored in Topo-Geo:
+   - x,y,z (geom)
+   
+  \param plus pointer to Plus_head struct
+  \param pg_info pointer to Format_info_pg struct
+
+  \return 0 on success
+  \return -1 on error
+*/
+int write_nodes(const struct Plus_head *plus,
+                const struct Format_info_pg *pg_info)
+{
+    int i, node_id;
+    size_t stmt_lines_size, stmt_angles_size;
+    char *stmt_lines, *stmt_angles;
+    char stmt[DB_SQL_MAX];
+        
+    const struct P_node *Node;
+    const struct Format_info_offset *offset;
+
+    offset = &(pg_info->offset);
+    if (plus->n_nodes != offset->array_num)
+        return -1;
+    
+    stmt_lines = stmt_angles = NULL;
+    for (i = 1; i <= plus->n_nodes; i++) {
+        Node = plus->Node[i];
+        if (!Node)
+            continue; /* should not happen */
+        
+        node_id = offset->array[i-1]; 
+
+        /* 'lines' array */
+        build_stmt_id(Node->lines, Node->n_lines, TRUE, plus, &stmt_lines, &stmt_lines_size);
+        /* 'angle' array */
+        build_stmt_id(Node->angles, Node->n_lines, FALSE, NULL, &stmt_angles, &stmt_angles_size);
+        
+        /* build SQL statement to add new node into 'node_grass' */
+        sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
+                "%d, '{%s}', '{%s}')", pg_info->toposchema_name, TOPO_TABLE_NODE,
+                node_id, stmt_lines, stmt_angles);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            return -1;
+        }
+    }
+
+    G_free(stmt_lines);
+    G_free(stmt_angles);
+    
+    return 0;
+}
+
+/*!
+  \brief Insert area into 'area_grass' table
+
+  Writes (see P_area struct):
+   - lines
+   - centroid
+   - isles
+
+  \param plus pointer to Plus_head struct
+  \param pg_info pointer to Format_info_pg struct
+
+  \return 0 on success
+  \return -1 on error
+*/
+int write_areas(const struct Plus_head *plus,
+                const struct Format_info_pg *pg_info)
+{
+    int area, centroid;
+    size_t stmt_lines_size, stmt_isles_size;
+    char *stmt_lines, *stmt_isles;
+    char stmt[DB_SQL_MAX];
+        
+    const struct P_line *Line;
+    const struct P_area *Area;
+
+    stmt_lines = stmt_isles = NULL;
+    for (area = 1; area <= plus->n_areas; area++) {
+        Area = plus->Area[area];
+        if (!Area)
+            continue; /* should not happen */
+        
+        /* 'lines' array */
+        build_stmt_id(Area->lines, Area->n_lines, TRUE, NULL, &stmt_lines, &stmt_lines_size);
+        /* 'isles' array */
+        build_stmt_id(Area->isles, Area->n_isles, TRUE, NULL, &stmt_isles, &stmt_isles_size);
+        
+        Line = plus->Line[Area->centroid];
+        if (!Line)
+            return -1;
+        centroid = (int) Line->offset;
+        
+        /* build SQL statement to add new node into 'node_grass' */
+        sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
+                "%d, '{%s}', %d, '{%s}')", pg_info->toposchema_name, TOPO_TABLE_AREA,
+                area, stmt_lines, centroid, stmt_isles);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            return -1;
+        }
+    }
+
+    G_free(stmt_lines);
+    G_free(stmt_isles);
+    
+    return 0;
+}
+
+/*!
+  \brief Insert isle into 'isle_grass' table
+
+  Writes (see P_isle struct):
+   - lines
+   - area
+
+  \param plus pointer to Plus_head struct
+  \param pg_info pointer to Format_info_pg struct
+
+  \return 0 on success
+  \return -1 on error
+*/
+int write_isles(const struct Plus_head *plus,
+                const struct Format_info_pg *pg_info)
+{
+    int isle;
+    size_t stmt_lines_size;
+    char *stmt_lines;
+    char stmt[DB_SQL_MAX];
+        
+    const struct P_isle *Isle;
+
+    stmt_lines = NULL;
+    for (isle = 1; isle <= plus->n_isles; isle++) {
+        Isle = plus->Isle[isle];
+        if (!Isle)
+            continue; /* should not happen */
+        
+        /* 'lines' array */
+        build_stmt_id(Isle->lines, Isle->n_lines, TRUE, NULL, &stmt_lines, &stmt_lines_size);
+        
+        /* build SQL statement to add new node into 'node_grass' */
+        sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
+                "%d, '{%s}', %d)", pg_info->toposchema_name, TOPO_TABLE_ISLE,
+                isle, stmt_lines, Isle->area);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            return -1;
+        }
+    }
+
+    G_free(stmt_lines);
+    
+    return 0;
+}
+
+/*!
+  \brief Create PG-like array for int/float array
+
+  \param array array of items
+  \param nitems number of items in the array
+  \param is_int TRUE for array of integers otherwise floats
+  \param plus pointer to Plus_head struct
+  \param[in,out] output buffer (re-used)
+  \param[in,out] buffer size
+*/
+void build_stmt_id(const void *array, int nitems, int is_int, const struct Plus_head *plus,
+                   char **stmt, size_t *stmt_size)
+{
+    int i, ivalue;
+    int *iarray;
+    float *farray;
+    
+    size_t stmt_id_size;
+    char *stmt_id, buf_id[128];
+
+    struct P_line *Line;
+    
+    if (is_int)
+        iarray = (int *) array;
+    else
+        farray = (float *) array;
+    
+    if (!(*stmt)) {
+        stmt_id_size = DB_SQL_MAX;
+        stmt_id = (char *) G_malloc(stmt_id_size);
+    }
+    else {
+        stmt_id_size = *stmt_size;
+        stmt_id = *stmt;
+    }
+
+    /* reset array */
+    stmt_id[0] = '\0';
+    
+    for (i = 0; i < nitems; i++) {
+        /* realloc array if needed */
+        if (strlen(stmt_id) + 100 > stmt_id_size) {
+            stmt_id_size = strlen(stmt_id) + DB_SQL_MAX;
+            stmt_id = (char *) G_realloc(stmt_id, stmt_id_size);
+        }
+        
+        if (is_int) {
+            if (plus) {
+                Line = plus->Line[abs(iarray[i])];
+                ivalue = (int) Line->offset;
+                if (iarray[i] < 0)
+                    ivalue *= -1;
+            }
+            else {
+                ivalue = iarray[i];
+            }
+            sprintf(buf_id, "%d", ivalue);
+        }
+        else {
+            sprintf(buf_id, "%f", farray[i]);
+        }
+
+        if (i > 0)
+            strcat(stmt_id, ",");
+        strcat(stmt_id, buf_id);
+    }
+
+    *stmt = stmt_id;
+    *stmt_size = stmt_id_size;
+}
+
 #endif

@@ -1316,12 +1316,18 @@ int map_format(struct Map_info *Map)
             /* PostGIS topology enabled ? */
             p = G_find_key_value("topology", key_val);
             if (p && G_strcasecmp(p, "yes") == 0) {
-                /* define topology name
-                   this should be configurable by the user
-                */
-                G_asprintf(&(pg_info->toposchema_name), "topo_%s",
-                           pg_info->table_name);
+                /* define topology name */
+                p = G_find_key_value("toposchema_name", key_val);
+                if (p)
+                    pg_info->toposchema_name = G_store(p);
+                else
+                    G_asprintf(&(pg_info->toposchema_name), "topo_%s",
+                               pg_info->table_name);
+
+                G_debug(1, "PG: topology = yes, schema_name = %s",
+                        pg_info->toposchema_name);
             }
+            G_debug(1, "PG: topology = no");
             
             if (getenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE")) {
                 /* vector features are written directly to PostGIS layer */

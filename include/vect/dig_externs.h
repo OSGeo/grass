@@ -223,7 +223,7 @@ int rtree_search(struct RTree *, struct RTree_Rect *,
                  SearchHitCallback , void *, struct Plus_head *);
 
 /* struct_alloc.c */
-int dig_node_alloc_line(struct P_node *, int add);
+int dig_node_alloc_line(struct P_node *, int);
 int dig_alloc_nodes(struct Plus_head *, int);
 int dig_alloc_lines(struct Plus_head *, int);
 int dig_alloc_areas(struct Plus_head *, int);

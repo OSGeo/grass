@@ -458,6 +458,7 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
    GV_BUILD_BASE. PostGIS Topology schema must be defined.
 
    \param Map pointer to Map_info structure
+   \param node node id (starts at 1)
    \param points pointer to line_pnts structure
    
    \return 0 on success
@@ -764,6 +765,8 @@ int check_schema(const struct Format_info_pg *pg_info)
   - create topology schema
   - add topology column to the feature table
   
+  \todo Add constraints for grass-like tables
+  
   \param pg_info pointer to Format_info_pg
 
   \return 0 on success
@@ -796,16 +799,24 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
         fclose(fp);
 
         /* tolerance */
-        p = G_find_key_value("tolerance", key_val);
+        p = G_find_key_value("topo_tolerance", key_val);
         if (p)
             tolerance = atof(p);
-
+        G_debug(1, "PG: tolerance: %f", tolerance);
+        
         /* topogeom column */
-        p = G_find_key_value("topogeom_column", key_val);
+        p = G_find_key_value("topogeom_name", key_val);
         if (p)
             pg_info->topogeom_column = G_store(p);
         else
             pg_info->topogeom_column = G_store(TOPOGEOM_COLUMN);
+        G_debug(1, "PG: topogeom_column :%s", pg_info->topogeom_column);
+
+        /* topo-geo only (default: no) */
+        p = G_find_key_value("topo_geo_only", key_val);
+        if (p && G_strcasecmp(p, "yes") == 0)
+            pg_info->topo_geo_only = TRUE;
+        G_debug(1, "PG: topo_geo_only :%d", pg_info->topo_geo_only);
     }
 
     /* begin transaction (create topo schema) */
@@ -846,6 +857,53 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
         G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
+    }
+
+    /* create additional tables in topological schema to store
+       GRASS topology in DB */
+    if (!pg_info->topo_geo_only) {
+        /* (1) create 'node_grass' (see P_node struct)
+           
+           todo: add constraints for lines and angles
+        */
+        sprintf(stmt, "CREATE TABLE \"%s\".%s (node_id SERIAL PRIMARY KEY, "
+                "lines integer[], angles float[])", pg_info->toposchema_name, TOPO_TABLE_NODE);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+
+        sprintf(stmt, "ALTER TABLE \"%s\".%s ADD CONSTRAINT node_exists "
+                "FOREIGN KEY (node_id) REFERENCES \"%s\".node (node_id)",
+                pg_info->toposchema_name, TOPO_TABLE_NODE, pg_info->toposchema_name);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+
+        /* (2) create 'area_grass' (see P_area struct)
+           
+           todo: add constraints for lines, centtroid and isles
+        */
+        sprintf(stmt, "CREATE TABLE \"%s\".%s (area_id SERIAL PRIMARY KEY, "
+                "lines integer[], centroid integer, isles integer[])",
+                pg_info->toposchema_name, TOPO_TABLE_AREA);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+
+        /* (3) create 'isle_grass' (see P_isle struct)
+           
+           todo: add constraints for lines and area
+        */
+        sprintf(stmt, "CREATE TABLE \"%s\".%s (isle_id SERIAL PRIMARY KEY, "
+                "lines integer[], area integer)",
+                pg_info->toposchema_name, TOPO_TABLE_ISLE);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
     }
 
     /* close transaction (create topo schema) */
@@ -1148,13 +1206,14 @@ off_t write_line_sf(struct Map_info *Map, int type,
   \param is_node TRUE for nodes (written as points)
   
   \return feature id (build level >= GV_BUILD_BASE otherwise 0)
+  \return 0 for nodes
   \return -1 on error
 */
 off_t write_line_tp(struct Map_info *Map, int type, int is_node,
                     const struct line_pnts *points,
                     const struct line_cats *cats)
 {
-    int line, cat;
+    int line, cat, line_id;
 
     struct field_info *Fi;
     struct Format_info_pg *pg_info;
@@ -1242,9 +1301,28 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
        - feature table for simple features
        - feature table and topo schema for topological access
     */
-    if (-1 == write_feature(Map, line, type, &points, 1, cat, Fi)) {
+    line_id = write_feature(Map, line, type, &points, 1, cat, Fi);
+    if (line_id < 0) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
+    }
+
+    /* update offset array for nodes */    
+    if (is_node) {
+        int node;
+        
+        struct Format_info_offset *offset;
+
+        offset = &(pg_info->offset);
+        
+        node = abs(line);
+        if (node > offset->array_alloc) {
+            offset->array_alloc += 1000;
+            offset->array = (int *) G_realloc (offset->array, offset->array_alloc * sizeof(int));
+        }
+        
+        offset->array_num = node; 
+        offset->array[node-1] = (int) line_id; /* node id starts at 1 */
     }
 
     /* update PostGIS-line topo */
@@ -1638,8 +1716,9 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
    \param cat category number (-1 for no category)
    \param Fi pointer to field_info (attributes to copy, NULL for no attributes)
 
+   \return topo_id for PostGIS Topology 
+   \return 0 for simple features access
    \return -1 on error
-   \retirn 0 on success
  */
 int write_feature(struct Map_info *Map, int line, int type,
                   const struct line_pnts **points, int nparts,
@@ -1708,7 +1787,7 @@ int write_feature(struct Map_info *Map, int line, int type,
     }
     G_free(geom_data);
     
-    return 0;
+    return pg_info->toposchema_name ? topo_id : 0;
 }
 
 /*!
@@ -1954,6 +2033,12 @@ int insert_topo_element(struct Map_info *Map, int id, int type,
                 return -1;
             }
             Line = Map->plus.Line[topo_id];
+
+            if (Line->type & GV_POINTS) {
+                /* set topo_id for points */
+                topo_id = Vect_get_num_primitives(Map, GV_POINTS) + Vect_get_num_nodes(Map);
+            }
+
         }
         else if (id < 0) { /* node */
             topo_id = abs(id);
@@ -1965,6 +2050,10 @@ int insert_topo_element(struct Map_info *Map, int id, int type,
                 G_warning(_("Invalid node %d (%d)"), topo_id, Map->plus.n_nodes);
                 return -1;
             }
+
+            /* increment topo_id - also points and centroids are
+             * stored in 'node' table */
+            topo_id += Vect_get_num_primitives(Map, GV_POINTS);
         }
     }
 
@@ -1997,7 +2086,11 @@ int insert_topo_element(struct Map_info *Map, int id, int type,
                    pg_info->toposchema_name, geom_data);
 #else
         int n1, n2, nle, nre;
-
+        
+        struct Format_info_offset *offset;
+        
+        offset = &(pg_info->offset);
+        
         if (id == 0) {
             /* get edge_id */
             sprintf(stmt_id, "SELECT nextval('\"%s\".edge_data_edge_id_seq')",
@@ -2044,12 +2137,15 @@ int insert_topo_element(struct Map_info *Map, int id, int type,
         G_debug(3, "new edge: id=%d next_left_edge=%d next_right_edge=%d",
                 topo_id, nle, nre);
         
+        if (n1 > offset->array_num || n2 > offset->array_num) /* node id starts at 1 */
+            return -1;
+        
         /* build insert statement */
         G_asprintf(&stmt, "INSERT INTO \"%s\".edge_data (edge_id, start_node, end_node, "
                    "next_left_edge, abs_next_left_edge, next_right_edge, abs_next_right_edge, "
                    "left_face, right_face, geom) VALUES "
                    "(%d, %d, %d, %d, %d, %d, %d, 0, 0, '%s'::GEOMETRY)",
-                   pg_info->toposchema_name, topo_id, n1, n2,
+                   pg_info->toposchema_name, topo_id, offset->array[n1-1], offset->array[n2-1],
                    nle, abs(nle), nre, abs(nre), geom_data);
 #endif
         break;
