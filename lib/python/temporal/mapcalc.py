@@ -303,8 +303,8 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
             if proc_count == nprocs or proc_count == num:
                 proc_count = 0
                 exitcodes = 0
+                proc.join()
                 for proc in proc_list:
-                    proc.join()
                     exitcodes += proc.exitcode
 
                 if exitcodes != 0:
