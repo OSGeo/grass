@@ -1026,9 +1026,6 @@ class MapFrame(SingleMapFrame):
         win = HistogramPlotFrame(parent = self, rasterList = raster)
         win.CentreOnParent()
         win.Show()
-        # Open raster select dialog to make sure that a raster (and the desired raster)
-        # is selected to be histogrammed
-        win.OnSelectRaster(None)
         
     def OnScatterplot(self, event):
         """!Init PyPlot scatterplot display canvas and tools
