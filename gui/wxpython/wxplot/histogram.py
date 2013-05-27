@@ -4,8 +4,8 @@
 @brief Histogramming using PyPlot
 
 Classes:
- - histogram::Histogram2Frame
- - histogram::Histogram2Toolbar
+ - histogram::HistogramPlotFrame
+ - histogram::HistogramPlotToolbar
 
 (C) 2011 by the GRASS Development Team
 
@@ -27,18 +27,17 @@ from wxplot.base       import BasePlotFrame, PlotIcons
 from wxplot.dialogs    import HistRasterDialog, PlotStatsFrame
 from core.gcmd         import RunCommand, GException, GError
 
-class Histogram2Frame(BasePlotFrame):
+class HistogramPlotFrame(BasePlotFrame):
     """!Mainframe for displaying histogram of raster map. Uses wx.lib.plot.
     """
     def __init__(self, parent, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
-                 size = wx.Size(700, 400),
-                 rasterList = [], **kwargs):
+                 size = wx.Size(700, 400), rasterList = [], **kwargs):
         BasePlotFrame.__init__(self, parent, size = size, **kwargs)
         
-        self.toolbar = Histogram2Toolbar(parent = self)
+        self.toolbar = HistogramPlotToolbar(parent = self)
         self.SetToolBar(self.toolbar)
         self.SetTitle(_("GRASS Histogramming Tool"))
-
+        
         #
         # Init variables
         #
@@ -51,12 +50,12 @@ class Histogram2Frame(BasePlotFrame):
         self.maptype = 'raster'                 # default type of histogram to plot
         self.histtype = 'count' 
         self.bins = 255
-        self.colorList = ["blue", "green", "red", "yellow", "magenta", "cyan", \
-                    "aqua", "black", "grey", "orange", "brown", "purple", "violet", \
-                    "indigo"]
+        self.colorList = ["blue", "green", "red", "yellow", "magenta", "cyan", 
+                          "aqua", "black", "grey", "orange", "brown", "purple", "violet",
+                          "indigo"]
         
         self._initOpts()
-
+        
         if len(self.rasterList) > 0: # set raster name(s) from layer manager if a map is selected
             self.InitRasterOpts(self.rasterList, self.plottype)
         else:
@@ -72,7 +71,11 @@ class Histogram2Frame(BasePlotFrame):
         create a list of cell value and count/percent/area pairs. This is passed to
         plot to create a line graph of the histogram.
         """
-        self.SetCursor(self.parent.cursors["default"])
+        try:
+            self.SetCursor(self.parent.cursors["default"])
+        except:
+            pass
+        
         self.SetGraphStyle()
         self.SetupHistogram()
         p = self.CreatePlotList()
@@ -232,7 +235,7 @@ class Histogram2Frame(BasePlotFrame):
         if stats.Show() == wx.ID_CLOSE:
             stats.Destroy()       
 
-class Histogram2Toolbar(BaseToolbar):
+class HistogramPlotToolbar(BaseToolbar):
     """!Toolbar for histogramming raster map
     """ 
     def __init__(self, parent):

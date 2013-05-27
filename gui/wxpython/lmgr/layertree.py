@@ -35,7 +35,7 @@ from gui_core.dialogs     import SqlQueryFrame, SetOpacityDialog
 from gui_core.forms       import GUI
 from mapdisp.frame        import MapFrame
 from core.render          import Map
-from modules.histogram    import HistogramFrame
+from wxplot.histogram     import HistogramPlotFrame
 from core.utils           import GetLayerNameFromCmd, ltype2command
 from wxplot.profile       import ProfileFrame
 from core.debug           import Debug
@@ -646,7 +646,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.profileFrame = self.mapdisplay.profile
 
         if not self.profileFrame:
-            self.profileFrame = ProfileFrame(parent = self.mapdisplay,
+            self.profileFrame = ProfileFrame(parent = self.mapdisplay, mapwindow = self.mapdisplay.GetMapWindow(),
                                              rasterList = [mapLayer.GetName()])
             # show new display
             self.profileFrame.Show()
@@ -673,15 +673,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                "raster map. No map name defined."))
             return
         
-        win = HistogramFrame(parent = self)
+        win = HistogramPlotFrame(parent = self, rasterList = [mapLayer.GetName()])
         
         win.CentreOnScreen()
         win.Show()
-        win.SetHistLayer(mapLayer.GetName())
-        win.HistWindow.UpdateHist()
-        win.Refresh()
-        win.Update()
-
+        win.OnSelectRaster(None)
+        
     def OnUnivariateStats(self, event):
         """!Univariate raster statistics"""
         name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()

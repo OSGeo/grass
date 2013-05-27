@@ -46,13 +46,13 @@ PlotIcons = {
 
 class BasePlotFrame(wx.Frame):
     """!Abstract PyPlot display frame class"""
-    def __init__(self, parent = None, id = wx.ID_ANY, size = wx.Size(700, 400),
+    def __init__(self, parent = None, mapwindow = None, id = wx.ID_ANY, size = wx.Size(700, 400),
                  style = wx.DEFAULT_FRAME_STYLE, rasterList = [],  **kwargs):
 
         wx.Frame.__init__(self, parent, id, size = size, style = style, **kwargs)
         
-        self.parent = parent            # MapFrame for a plot type
-        self.mapwin = self.parent.MapWindow
+        self.parent = parent # MapFrame for a plot type
+        self.mapwin = mapwindow
         self.Map    = Map()             # instance of render.Map to be associated with display
         self.rasterList = rasterList    #list of rasters to plot
         self.raster = {}    # dictionary of raster maps and their plotting parameters
@@ -577,7 +577,8 @@ class BasePlotFrame(wx.Frame):
             self.mapwin.UpdateMap(render = False, renderVector = False)
         except:
             pass
-        
-        self.mapwin.SetCursor(self.Parent.cursors["default"])
+
+        if self.mapwin:
+            self.mapwin.SetCursor(self.Parent.cursors["default"])
         self.Destroy()
         
