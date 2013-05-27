@@ -120,7 +120,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     outband->key = "goodness";
     outband->required = NO;
     outband->description =
-	_("Name for output goodness of fit estimate");
+	_("Name for output goodness of fit estimate map");
 
     diagonal = G_define_flag();
     diagonal->key = 'd';
@@ -131,7 +131,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     weighted = G_define_flag();
     weighted->key = 'w';
     weighted->description =
-	_("Weighted input, don't perform the default scaling of input raster maps");
+	_("Weighted input, do not perform the default scaling of input raster maps");
     weighted->guisection = _("Settings");
 
     if (G_parser(argc, argv))
