@@ -5,16 +5,20 @@ parameters for inclination, azimuth, and the geographic location of a
 point on the plane.<br>
 The angle orientations of the <em>azimuth</em> parameter increase counter-clockwise,
 i.e., 0 degree = N, 45 degree = NW, 90 degree = W etc.
-<p>Increasing values of the <em>dip</em> parameter progressively lower (or dip) the northern
+<p>
+Increasing values of the <em>dip</em> parameter progressively lower (or dip) the northern
 half of the plane, and incline the southern half, assuming the <em>azimuth</em> parameter 
 is held constant at 0 degrees.
 
 
 <h2>NOTES</h2>
+
 <tt>g.region -c</tt> provides the easting and northing coordinates for
 the center of the current region.
-<p><em>int</em> maps take less disk space than <em>float</em>s, which in turn
-take up less space than <em>double</em>s (but can be less exact).
+<p>
+<em>CELL</em> (integer) maps take less disk space than <em>FCELL</em>s (floating point),
+which in turn take up less space than <em>DCELL</em>s (double precision floating point).
+<!-- is that true because of grass's compression? otherwise both int and float are both 4 bytes per cell -->
 
 
 <h2>EXAMPLE</h2>
@@ -25,12 +29,15 @@ A tilted plane in the North Carolina sample dataset region:
 g.region -d
 g.region -c
 r.plane myplane45 dip=45 az=90 east=527500.0 north=165000.0 \
-        elev=1000 type=float
+        elev=1000 type=FCELL
 </pre></div>
+
 
 <h2>AUTHOR</h2>
 
-Unknown<br>
-Updated to GRASS 5.7 by Michael Barton, Arizona State University
+Unknown, presumably CERL<br>
+Updated to GRASS 5.7 by Michael Barton, Arizona State University<br>
+Full rewrite for GRASS 7 by Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
