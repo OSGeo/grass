@@ -152,11 +152,17 @@ int main(int argc, char *argv[])
 	_("Length of each spline step in the north-south direction");
     stepN_opt->guisection = _("Settings");
 
-    type_opt = G_define_standard_option(G_OPT_R_INTERP_TYPE);
+    type_opt = G_define_option();
+    type_opt->key = "method";
     type_opt->description = _("Spline interpolation algorithm");
+    type_opt->type = TYPE_STRING;
     type_opt->options = "linear,cubic";
     type_opt->answer = "linear";
     type_opt->guisection = _("Settings");
+    G_asprintf((char **) &(type_opt->descriptions),
+	       "linear;%s;cubic;%s",
+	       _("Linear interpolation"),
+	       _("Cubic interpolation"));
 
     lambda_f_opt = G_define_option();
     lambda_f_opt->key = "lambda_i";
