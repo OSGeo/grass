@@ -69,17 +69,17 @@ class Layer(object):
         
         # generated file for each layer
         if USE_GPNMCOMP or ltype == 'overlay':
-            tmpfile = tempfile.mkstemp()[1]
-            self.maskfile = tmpfile + '.pgm'
             if ltype == 'overlay':
-                self.mapfile  = tmpfile + '.png'
+                tempfile_sfx = ".png"
             else:
-                self.mapfile  = tmpfile + '.ppm'
-            grass.try_remove(tmpfile)
+                tempfile_sfx = ".ppm"
+
+            self.mapfile = tempfile.mkstemp(suffix = tempfile_sfx)[1]
+            self.maskfile = self.mapfile.rsplit(".",1)[0] + ".pgm"
         else:
             self.mapfile = self.maskfile = None
-        
-        # stores class which manages rendering instead of simple command - e. g. wms
+
+        # stores class which manages rendering instead of simple command - e.g. WMS
         self.renderMgr = None
 
         self.Map = Map
