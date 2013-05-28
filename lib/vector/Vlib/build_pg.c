@@ -534,9 +534,8 @@ int write_nodes(const struct Plus_head *plus,
                 const struct Format_info_pg *pg_info)
 {
     int i, node_id;
-    size_t stmt_lines_size, stmt_angles_size;
-    char *stmt_lines, *stmt_angles;
-    char stmt[DB_SQL_MAX];
+    size_t stmt_lines_size, stmt_angles_size, stmt_size;
+    char *stmt_lines, *stmt_angles, *stmt;
         
     const struct P_node *Node;
     const struct Format_info_offset *offset;
@@ -544,6 +543,9 @@ int write_nodes(const struct Plus_head *plus,
     offset = &(pg_info->offset);
     if (plus->n_nodes != offset->array_num)
         return -1;
+    
+    stmt_size = 2 * DB_SQL_MAX + 512;
+    stmt = (char *) G_malloc(stmt_size);
     
     stmt_lines = stmt_angles = NULL;
     for (i = 1; i <= plus->n_nodes; i++) {
@@ -559,6 +561,10 @@ int write_nodes(const struct Plus_head *plus,
         build_stmt_id(Node->angles, Node->n_lines, FALSE, NULL, &stmt_angles, &stmt_angles_size);
         
         /* build SQL statement to add new node into 'node_grass' */
+        if (stmt_lines_size + stmt_angles_size + 512 > stmt_size) {
+            stmt_size = stmt_lines_size + stmt_angles_size + 512;
+            stmt = (char *) G_realloc(stmt, stmt_size);
+        }
         sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
                 "%d, '{%s}', '{%s}')", pg_info->toposchema_name, TOPO_TABLE_NODE,
                 node_id, stmt_lines, stmt_angles);
@@ -569,6 +575,7 @@ int write_nodes(const struct Plus_head *plus,
 
     G_free(stmt_lines);
     G_free(stmt_angles);
+    G_free(stmt);
     
     return 0;
 }
@@ -591,13 +598,15 @@ int write_areas(const struct Plus_head *plus,
                 const struct Format_info_pg *pg_info)
 {
     int area, centroid;
-    size_t stmt_lines_size, stmt_isles_size;
-    char *stmt_lines, *stmt_isles;
-    char stmt[DB_SQL_MAX];
+    size_t stmt_lines_size, stmt_isles_size, stmt_size;
+    char *stmt_lines, *stmt_isles, *stmt;
         
     const struct P_line *Line;
     const struct P_area *Area;
 
+    stmt_size = 2 * DB_SQL_MAX + 512;
+    stmt = (char *) G_malloc(stmt_size);
+    
     stmt_lines = stmt_isles = NULL;
     for (area = 1; area <= plus->n_areas; area++) {
         Area = plus->Area[area];
@@ -625,6 +634,10 @@ int write_areas(const struct Plus_head *plus,
         }
         
         /* build SQL statement to add new node into 'node_grass' */
+        if (stmt_lines_size + stmt_isles_size + 512 > stmt_size) {
+            stmt_size = stmt_lines_size + stmt_isles_size + 512;
+            stmt = (char *) G_realloc(stmt, stmt_size);
+        }
         sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
                 "%d, '{%s}', %d, '{%s}')", pg_info->toposchema_name, TOPO_TABLE_AREA,
                 area, stmt_lines, centroid, stmt_isles);
@@ -635,6 +648,7 @@ int write_areas(const struct Plus_head *plus,
 
     G_free(stmt_lines);
     G_free(stmt_isles);
+    G_free(stmt);
     
     return 0;
 }
@@ -656,11 +670,13 @@ int write_isles(const struct Plus_head *plus,
                 const struct Format_info_pg *pg_info)
 {
     int isle;
-    size_t stmt_lines_size;
-    char *stmt_lines;
-    char stmt[DB_SQL_MAX];
+    size_t stmt_lines_size, stmt_size;
+    char *stmt_lines, *stmt;
         
     const struct P_isle *Isle;
+
+    stmt_size = DB_SQL_MAX + 512;
+    stmt = (char *) G_malloc(stmt_size);
 
     stmt_lines = NULL;
     for (isle = 1; isle <= plus->n_isles; isle++) {
@@ -672,6 +688,10 @@ int write_isles(const struct Plus_head *plus,
         build_stmt_id(Isle->lines, Isle->n_lines, TRUE, NULL, &stmt_lines, &stmt_lines_size);
         
         /* build SQL statement to add new node into 'node_grass' */
+        if (stmt_lines_size + 512 > stmt_size) {
+            stmt_size = stmt_lines_size + 512;
+            stmt = (char *) G_realloc(stmt, stmt_size);
+        }
         sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
                 "%d, '{%s}', %d)", pg_info->toposchema_name, TOPO_TABLE_ISLE,
                 isle, stmt_lines, Isle->area);
@@ -681,7 +701,8 @@ int write_isles(const struct Plus_head *plus,
     }
 
     G_free(stmt_lines);
-    
+    G_free(stmt);
+
     return 0;
 }
 
