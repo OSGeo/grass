@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     opt5 = G_define_standard_option(G_OPT_R_INPUT);
     opt5->key = "blocking";
     opt5->label =
-	_("IName of input raster map blocking overland surface flow");
+	_("Name of input raster map blocking overland surface flow");
     opt5->description =
 	_("For USLE. All non-NULL and non-zero cells are considered as blocking terrain.");
     opt5->required = NO;
