@@ -277,7 +277,7 @@ def main():
         else:
 	    zrange_max = region['b'] + (region['tbres'] * i)
 
-        # spawn depth layerimport  job in the background
+        # spawn depth layer import job in the background
         #grass.debug("slice %d, <%s>  %% %d" % (band, image[band], band % workers))
         grass.message(_("Processing horizontal slice %d of %d [%.15g,%.15g) ...")
 		        % (i, region['depths'], zrange_min, zrange_max))
