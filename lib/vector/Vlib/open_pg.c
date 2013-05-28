@@ -1421,7 +1421,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     /* attach isles */
     if (pg_info->topo_geo_only) {
         plus->n_isles = 0; /* reset isles */
-        G_warning(_("To be implented: isles not attached in Topo-Geo-only mode"));
+        G_warning(_("To be implemented: isles not attached in Topo-Geo-only mode"));
     }
     else {
         /* read isles from 'isle_grass' table */
