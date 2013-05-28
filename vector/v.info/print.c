@@ -386,8 +386,9 @@ void print_info(const struct Map_info *Map)
                 Vect_get_finfo_geometry_type(Map));
         printline(line);
         if (finfo->pg.toposchema_name) {
-            sprintf(line, "%-17s%s (%s %s)", _("Topology:"), "PostGIS",
-                    _("schema:"), finfo->pg.toposchema_name);
+            sprintf(line, "%-17s%s (%s %s%s)", _("Topology:"), "PostGIS",
+                    _("schema:"), finfo->pg.toposchema_name,
+                    finfo->pg.topo_geo_only ? ", topo-geo-only: yes" : "");
             printline(line);
 
             sprintf(line, "%-17s%s", _("Topology column:"),
