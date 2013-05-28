@@ -601,18 +601,28 @@ int write_areas(const struct Plus_head *plus,
     stmt_lines = stmt_isles = NULL;
     for (area = 1; area <= plus->n_areas; area++) {
         Area = plus->Area[area];
-        if (!Area)
+        if (!Area) {
+            G_debug(3, "Area %d skipped (dead)", area);
             continue; /* should not happen */
+        }
         
         /* 'lines' array */
         build_stmt_id(Area->lines, Area->n_lines, TRUE, NULL, &stmt_lines, &stmt_lines_size);
         /* 'isles' array */
         build_stmt_id(Area->isles, Area->n_isles, TRUE, NULL, &stmt_isles, &stmt_isles_size);
         
-        Line = plus->Line[Area->centroid];
-        if (!Line)
-            return -1;
-        centroid = (int) Line->offset;
+        if (Area->centroid != 0) {
+            Line = plus->Line[Area->centroid];
+            if (!Line) {
+                G_warning(_("Topology for centroid %d not available. Area %d skipped"),
+                          Area->centroid, area);
+                continue;
+            }
+            centroid = (int) Line->offset;
+        }
+        else {
+            centroid = 0;
+        }
         
         /* build SQL statement to add new node into 'node_grass' */
         sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
