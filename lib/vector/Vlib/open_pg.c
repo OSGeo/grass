@@ -1449,9 +1449,10 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     }
     plus->built = GV_BUILD_ATTACH_ISLES;
     
-    /* attach centroids (disabled: centroids are already attached) */
-#if 0
-    if (plus->n_areas > 0) {
+    /* attach centroids */
+    if (pg_info->topo_geo_only && plus->n_areas > 0) {
+        int area;
+        struct P_area   *Area;
         struct P_topo_c *topo;
         
         for (line = 1; line <= plus->n_lines; line++) {
@@ -1467,7 +1468,6 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
             Area->centroid = Line->offset;
         }
     }
-#endif
     plus->built = GV_BUILD_CENTROIDS;
     
     /* done */
