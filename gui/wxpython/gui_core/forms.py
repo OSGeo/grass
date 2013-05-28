@@ -1015,7 +1015,7 @@ class CmdPanel(wx.Panel):
                         # parameter previously set
                         if value:
                             if isinstance(txt2, wx.SpinCtrl):
-                                txt2.SetValue(int(value))
+                                txt2.SetValue(int(value)) 
                             else:
                                 txt2.SetValue(value)
                         
@@ -2039,7 +2039,10 @@ class CmdPanel(wx.Panel):
         elif name == 'ModelParam':
             porf['parameterized'] = me.IsChecked()
         else:
-            porf['value'] = me.GetValue()
+            if isinstance(me, wx.SpinCtrl):
+                porf['value'] = str(me.GetValue())
+            else:
+                porf['value'] = me.GetValue()
         
         self.OnUpdateValues(event)
         
