@@ -1173,7 +1173,7 @@ int load_plus_head(struct Format_info_pg *pg_info, struct Plus_head *plus)
 */
 int Vect__load_plus_pg(struct Map_info *Map, int head_only)
 {
-    int i, side, line, id, ntuples, area;
+    int i, side, line, id, ntuples;
     char stmt[DB_SQL_MAX];
     struct edge_data line_data;
     
@@ -1181,7 +1181,6 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     struct Format_info_offset *offset;
     struct Plus_head *plus;
     struct P_line *Line;
-    struct P_area *Area;
     struct line_pnts *Points;
     struct ilist *List;
     
@@ -1398,7 +1397,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         G_debug(2, "SQL: %s", stmt);
         
         res = PQexec(pg_info->conn, stmt);
-        if (!res || PQresultStatus(res) != PGRES_TUPLES_OK |
+        if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
             plus->n_areas != PQntuples(res)) {
             if (res)
                 PQclear(res);
@@ -1510,8 +1509,9 @@ char **scan_array(const char *sarray)
     int i, len;
     
     /* remove '{}' */
-    buf = (char *)G_malloc(sizeof(sarray) - 2);
-    len = strlen(sarray) - 1;
+    len = strlen(sarray) - 1; /* skip '}' */
+    buf = (char *)G_malloc(len);
+    
     for (i = 1; i < len; i++)
         buf[i-1] = sarray[i];
     buf[len-1] = '\0';
