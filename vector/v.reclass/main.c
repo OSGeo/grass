@@ -254,9 +254,9 @@ int main(int argc, char *argv[])
 		column = db_get_table_column(table, 1);
 		value = db_get_column_value(column);
 
-		if (i == 0 ||
+		if (i == 0 || (!db_test_value_isnull(value) &&
 		    strcmp(db_get_value_string(value),
-			   db_get_string(&lastval)) != 0) {
+			   db_get_string(&lastval)) != 0)) {
 		    newval++;
 		    db_set_string(&lastval, db_get_value_string(value));
 		    G_debug(3, "  newval = %d string = %s", newval,
