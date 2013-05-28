@@ -5,7 +5,7 @@
 # MODULE:       g.extension
 # AUTHOR(S):    Markus Neteler
 #               Pythonized & upgraded for GRASS 7 by Martin Landa <landa.martin gmail.com>
-# PURPOSE:      Tool to download and install extensions from GRASS Addons SVN into 
+# PURPOSE:      Tool to download and install extensions from GRASS Addons SVN into
 #               local GRASS installation
 # COPYRIGHT:    (C) 2009-2013 by Markus Neteler, and the GRASS Development Team
 #
@@ -53,6 +53,27 @@
 #% key_desc: path
 #% description: Prefix where to install extension (ignored when flag -s is given)
 #% answer: $GRASS_ADDON_BASE
+#% required: no
+#%end
+#%option
+#% key: http_proxy
+#% type: string
+#% key_desc: http proxy
+#% description: Set the http proxy
+#% required: no
+#%end
+#%option
+#% key: https_proxy
+#% type: string
+#% key_desc: https proxy
+#% description: Set the https proxy
+#% required: no
+#%end
+#%option
+#% key: ftp_proxy
+#% type: string
+#% key_desc: ftp proxy
+#% description: Set the ftp proxy
 #% required: no
 #%end
 
@@ -114,7 +135,8 @@ import shutil
 import zipfile
 import tempfile
 
-from urllib2 import urlopen, HTTPError
+from urllib2 import HTTPError
+from urllib import urlopen
 
 try:
     import xml.etree.ElementTree as etree
@@ -124,7 +146,8 @@ except ImportError:
 from grass.script import core as grass
 
 # temp dir
-remove_tmpdir = True
+REMOVE_TMPDIR = True
+PROXIES = {}
 
 # check requirements
 def check_progs():
@@ -230,7 +253,7 @@ def list_available_toolboxes(url):
     tdict = dict()
     url = url + "toolboxes.xml"
     try:
-        f = urlopen(url)
+        f = urlopen(url, proxies=PROXIES)
         tree = etree.fromstring(f.read())
         for tnode in tree.findall('toolbox'):
             mlist = list()
@@ -256,7 +279,7 @@ def get_toolbox_modules(url, name):
     url = url + "toolboxes.xml"
 
     try:
-        f = urlopen(url)
+        f = urlopen(url, proxies=PROXIES)
         tree = etree.fromstring(f.read())
         for tnode in tree.findall('toolbox'):
             if name == tnode.get('code'):
@@ -281,7 +304,7 @@ def get_optional_params(mnode):
         keyw = ''
     if keyw is None:
         keyw = ''
-        
+
     return desc, keyw
 
 def list_available_modules(url, mlist = None):
@@ -289,21 +312,21 @@ def list_available_modules(url, mlist = None):
     url = url + "modules.xml"
     grass.debug("url=%s" % url, 1)
     try:
-        f = urlopen(url)
+        f = urlopen(url, proxies=PROXIES)
         try:
             tree = etree.fromstring(f.read())
         except:
             grass.warning(_("Unable to parse '%s'. Trying to scan SVN (may take some time)...") % url)
             list_available_extensions_svn()
             return
-        
+
         for mnode in tree.findall('task'):
             name = mnode.get('name').strip()
             if mlist and name not in mlist:
                 continue
             if flags['c'] or flags['g']:
                 desc, keyw = get_optional_params(mnode)
-            
+
             if flags['g']:
                 print 'name=' + name
                 print 'description=' + desc
@@ -336,7 +359,7 @@ def list_available_extensions_svn():
         url = '%s/%s' % (options['svnurl'], modclass)
         grass.debug("url = %s" % url, debug = 2)
         try:
-            f = urlopen(url)
+            f = urlopen(url, proxies=PROXIES)
         except HTTPError:
             grass.debug(_("Unable to fetch '%s'") % url, debug = 1)
             continue
@@ -361,7 +384,7 @@ def get_wxgui_extensions():
 
     url = '%s/%s' % (options['svnurl'], 'gui/wxpython')
     grass.debug("url = %s" % url, debug = 2)
-    f = urlopen(url)
+    f = urlopen(url, proxies=PROXIES)
     if not f:
         grass.warning(_("Unable to fetch '%s'") % url)
         return
@@ -379,11 +402,11 @@ def get_wxgui_extensions():
 
 
 def cleanup():
-    if remove_tmpdir:
-        grass.try_rmdir(tmpdir)
+    if REMOVE_TMPDIR:
+        grass.try_rmdir(TMPDIR)
     else:
         grass.message(_("Path to the source code:"))
-        sys.stderr.write('%s\n' % os.path.join(tmpdir, options['extension']))
+        sys.stderr.write('%s\n' % os.path.join(TMPDIR, options['extension']))
 
 # write out meta-file
 def write_xml_modules(name, tree = None):
@@ -469,7 +492,7 @@ def install_extension(url):
             ret += install_extension_other(module)
         if len(mlist) > 1:
             print '-' * 60
-    
+
     if flags['d']:
         return
 
@@ -480,9 +503,9 @@ def install_extension(url):
         blist = install_extension_xml(url, mlist)
         for module in blist:
             update_manual_page(module)
-        
+
         grass.message(_("Installation of <%s> successfully finished") % options['extension'])
-    
+
     if not os.getenv('GRASS_ADDON_BASE'):
         grass.warning(_('This add-on module will not function until you set the '
                         'GRASS_ADDON_BASE environment variable (see "g.manual variables")'))
@@ -494,7 +517,7 @@ def install_toolbox_xml(url, name):
 
     data = dict()
     try:
-        f = urlopen(url)
+        f = urlopen(url, proxies=PROXIES)
         tree = etree.fromstring(f.read())
         for tnode in tree.findall('toolbox'):
             clist = list()
@@ -571,7 +594,7 @@ def install_extension_xml(url, mlist):
     data = {}
     bList = []
     try:
-        f = urlopen(url)
+        f = urlopen(url, proxies=PROXIES)
         try:
             tree = etree.fromstring(f.read())
         except:
@@ -598,9 +621,9 @@ def install_extension_xml(url, mlist):
                         if windows:
                             path[-1] += '.py'
                     fList.append(os.path.sep.join(path))
-            
+
             desc, keyw = get_optional_params(mnode)
-            
+
             data[name] = {
                 'desc'  : desc,
                 'keyw'  : keyw,
@@ -683,7 +706,7 @@ def install_extension_win(name):
     grass.debug("url=%s" % url, 1)
 
     try:
-        f = urlopen(url + '/' + name + '.zip')
+        f = urlopen(url + '/' + name + '.zip', proxies=PROXIES)
 
         # create addons dir if not exists
         if not os.path.exists(options['prefix']):
@@ -720,7 +743,7 @@ def install_extension_other(name):
 
     grass.message(_("Fetching <%s> from GRASS-Addons SVN (be patient)...") % name)
 
-    os.chdir(tmpdir)
+    os.chdir(TMPDIR)
     if grass.verbosity() <= 2:
         outdev = open(os.devnull, 'w')
     else:
@@ -730,13 +753,13 @@ def install_extension_other(name):
                    url], stdout = outdev) != 0:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
 
-    dirs = { 'bin'     : os.path.join(tmpdir, name, 'bin'),
-             'docs'    : os.path.join(tmpdir, name, 'docs'),
-             'html'    : os.path.join(tmpdir, name, 'docs', 'html'),
-             'rest'    : os.path.join(tmpdir, name, 'docs', 'rest'),
-             'man'     : os.path.join(tmpdir, name, 'docs', 'man', 'man1'),
-             'scripts' : os.path.join(tmpdir, name, 'scripts'),
-             'etc'     : os.path.join(tmpdir, name, 'etc'),
+    dirs = { 'bin'     : os.path.join(TMPDIR, name, 'bin'),
+             'docs'    : os.path.join(TMPDIR, name, 'docs'),
+             'html'    : os.path.join(TMPDIR, name, 'docs', 'html'),
+             'rest'    : os.path.join(TMPDIR, name, 'docs', 'rest'),
+             'man'     : os.path.join(TMPDIR, name, 'docs', 'man', 'man1'),
+             'scripts' : os.path.join(TMPDIR, name, 'scripts'),
+             'etc'     : os.path.join(TMPDIR, name, 'etc'),
              }
 
     if classchar != 'wx':
@@ -756,7 +779,7 @@ def install_extension_other(name):
 
     installCmd = ['make',
                   'MODULE_TOPDIR=%s' % gisbase,
-                  'ARCH_DISTDIR=%s' % os.path.join(tmpdir, name),
+                  'ARCH_DISTDIR=%s' % os.path.join(TMPDIR, name),
                   'INST_DIR=%s' % options['prefix'],
                   'install'
                   ]
@@ -768,7 +791,7 @@ def install_extension_other(name):
         sys.stderr.write(' '.join(installCmd) + '\n')
         return 0
 
-    os.chdir(os.path.join(tmpdir, name))
+    os.chdir(os.path.join(TMPDIR, name))
 
     grass.message(_("Compiling..."))
     if 0 != grass.call(makeCmd,
@@ -924,19 +947,19 @@ def check_style_files(fil):
     except OSError, e:
         grass.fatal(_("Unable to create '%s': %s") % (addons_file, e))
 
-def create_dir(path):   
-    if os.path.isdir(path):              
-        return                   
+def create_dir(path):
+    if os.path.isdir(path):
+        return
 
-    try:                 
-        os.makedirs(path)                
-    except OSError, e:                   
-        grass.fatal(_("Unable to create '%s': %s") % (path, e))                  
+    try:
+        os.makedirs(path)
+    except OSError, e:
+        grass.fatal(_("Unable to create '%s': %s") % (path, e))
 
     grass.debug("'%s' created" % path)
 
 def check_dirs():
-    create_dir(os.path.join(options['prefix'], 'bin'))           
+    create_dir(os.path.join(options['prefix'], 'bin'))
     create_dir(os.path.join(options['prefix'], 'docs', 'html'))
     create_dir(os.path.join(options['prefix'], 'docs', 'rest'))
     check_style_files('grass_logo.png')
@@ -960,7 +983,7 @@ def update_manual_page(module):
         grass.fatal(_("Unable to read manual page: %s") % e)
     else:
         f.close()
-    
+
     # find URIs
     pattern = r'''<a href="([^"]+)">([^>]+)</a>'''
     addons = get_installed_extensions(force = True)
@@ -995,6 +1018,20 @@ def main():
     # check dependecies
     if sys.platform != "win32":
         check_progs()
+
+    # manage proxies
+    global PROXIES
+    proxy_opts = [options['http_proxy'],
+                  options['https_proxy'],
+                  options['ftp_proxy']]
+    if any(proxy_opts):
+        PROXIES = {}
+    if options['http_proxy']:
+        PROXIES['http'] = options['http_proxy']
+    if options['https_proxy']:
+        PROXIES['https'] = options['https_proxy']
+    if options['ftp_proxy']:
+        PROXIES['ftp'] = options['ftp_proxy']
 
     # define path
     if flags['s']:
@@ -1041,8 +1078,8 @@ def main():
         if options['operation'] != 'add':
             grass.warning(_("Flag 'd' is relevant only to 'operation=add'. Ignoring this flag."))
         else:
-            global remove_tmpdir
-            remove_tmpdir = False
+            global REMOVE_TMPDIR
+            REMOVE_TMPDIR = False
 
     if options['operation'] == 'add':
         check_dirs()
@@ -1054,8 +1091,8 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    global tmpdir
-    tmpdir = grass.tempdir()
+    global TMPDIR
+    TMPDIR = grass.tempdir()
     atexit.register(cleanup)
     version = grass.version()['version'].split('.')
     sys.exit(main())
