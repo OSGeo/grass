@@ -9,7 +9,7 @@
  *
  * PURPOSE:      Import OGR vectors
  *
- * COPYRIGHT:    (C) 2003, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003, 2011-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     double xmin, ymin, xmax, ymax;
     int ncols = 0, type;
     double min_area, snap;
-    char buf[2000], namebuf[2000], tempvect[GNAME_MAX];
+    char buf[2000], namebuf[2000];
     char *separator;
     
     struct Key_Value *loc_proj_info, *loc_proj_units;
@@ -809,9 +809,8 @@ int main(int argc, char *argv[])
 	     * at the end copy alive lines to output vector
 	     * in case of polygons this reduces the coor file size by a factor of 2 to 5
 	     * only needed when cleaning polygons */
-	    sprintf(tempvect, "%s_tmp", output);
-	    G_verbose_message(_("Using temporary vector <%s>"), tempvect);
-	    Vect_open_new(&Tmp, tempvect, with_z);
+	    Vect_open_tmp_new(&Tmp, NULL, with_z);
+	    G_verbose_message(_("Using temporary vector <%s>"), Vect_get_name(&Tmp));
 	    Out = &Tmp;
 	}
     }
@@ -1338,8 +1337,7 @@ int main(int argc, char *argv[])
 	Vect_copy_map_lines(&Tmp, &Map);
 	/* release memory occupied by topo, we may need that memory for main output */
 	Vect_set_release_support(&Tmp);
-	Vect_close(&Tmp);
-	Vect_delete(tempvect);
+	Vect_close(&Tmp); /* temporary map is deleted automatically */
     }
 
     Vect_build(&Map);
