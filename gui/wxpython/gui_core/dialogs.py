@@ -906,7 +906,8 @@ class GroupDialog(wx.Dialog):
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP, border = 10)
         self.groupSelect = Select(parent = self, type = 'group',
                                   mapsets = [grass.gisenv()['MAPSET']],
-                                  size = globalvar.DIALOG_GSELECT_SIZE) # searchpath?
+                                  size = globalvar.DIALOG_GSELECT_SIZE,
+                                  fullyQualified = False) # searchpath?
             
         bodySizer.Add(item = self.groupSelect, flag = wx.TOP | wx.EXPAND, border = 5)
         
@@ -937,10 +938,12 @@ class GroupDialog(wx.Dialog):
         bodySizer.Add(item = self.infoLabel, 
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, border = 5)
         
-        self.subGroup = wx.CheckBox(parent = self, id = wx.ID_ANY,
-                                    label = _("Define also sub-group (same name as group)"))
-        self.subGroup.SetValue(True) # most of imagery modules requires also subgroup
-        bodySizer.Add(item = self.subGroup, flag = wx.BOTTOM | wx.EXPAND, border = 5)
+        # TODO: subgroup can have a different name than the group
+        # self.subGroup must be a text field, not a checkbox
+        #self.subGroup = wx.CheckBox(parent = self, id = wx.ID_ANY,
+        #                            label = _("Define also sub-group (same name as group)"))
+        #self.subGroup.SetValue(True) # most of imagery modules requires also subgroup
+        #bodySizer.Add(item = self.subGroup, flag = wx.BOTTOM | wx.EXPAND, border = 5)
 
         # bindings
         self.groupSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnGroupSelected)
@@ -1027,8 +1030,9 @@ class GroupDialog(wx.Dialog):
                 remove.append(layerOld)
                 
         kwargs = {}
-        if self.subGroup.IsChecked():
-            kwargs['subgroup'] = group
+        # TODO: self.subGroup must be a text field
+        #if self.subGroup.IsChecked():
+        #    kwargs['subgroup'] = group
         
         ret = None
         if remove:
@@ -1057,8 +1061,9 @@ class GroupDialog(wx.Dialog):
             return 1
         
         kwargs = {}
-        if self.subGroup.IsChecked():
-            kwargs['subgroup'] = group
+        # TODO: self.subGroup must be a text field
+        #if self.subGroup.IsChecked():
+        #    kwargs['subgroup'] = group
         
         return RunCommand('i.group',
                           parent = self,
@@ -1097,8 +1102,9 @@ class GroupDialog(wx.Dialog):
         """!Get layers in group"""
         kwargs = dict()
         kwargs['group'] = group
-        if self.subGroup.IsChecked():
-            kwargs['subgroup'] = group
+        # TODO: self.subGroup must be a text field
+        #if self.subGroup.IsChecked():
+        #    kwargs['subgroup'] = group
         
         res = RunCommand('i.group',
                          parent = self,
