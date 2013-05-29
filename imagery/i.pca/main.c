@@ -24,6 +24,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/imagery.h>
 #include <grass/gmath.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -57,6 +58,8 @@ int main(int argc, char *argv[])
     double **eigmat;
     int *inp_fd;
     int scale, scale_max, scale_min;
+    struct Ref ref;
+    const char *mapset;
 
     struct GModule *module;
     struct Option *opt_in, *opt_out, *opt_scale, *opt_filt;
@@ -74,7 +77,7 @@ int main(int argc, char *argv[])
 
     /* Define options */
     opt_in = G_define_standard_option(G_OPT_R_INPUTS);
-    opt_in->description = _("Name of two or more input raster maps");
+    opt_in->description = _("Name of two or more input raster maps or imagery group");
 
     opt_out = G_define_option();
     opt_out->label = _("Prefix for output raster maps");
@@ -125,6 +128,26 @@ int main(int argc, char *argv[])
     /* determine number of bands passed in */
     for (bands = 0; opt_in->answers[bands] != NULL; bands++) ;
 
+    /* input can be either several raster maps or a group */
+    if (bands > 1) {
+	I_init_group_ref(&ref);
+	for (i = 0; opt_in->answers[i] != NULL; i++) {
+	    mapset = G_find_raster2(opt_in->answers[i], "");
+	    if (!mapset)
+		G_fatal_error(_("Raster map <%s> not found"),
+			      opt_in->answers[i]);
+	    /* Add input to group. */
+	    I_add_file_to_group_ref(opt_in->answers[i], mapset, &ref);
+	}
+    }
+    else {
+	/* Maybe input is group. Try to read group file */
+	if (I_get_group_ref(opt_in->answer, &ref) != 1)
+	    G_fatal_error(_("Group <%s> not found"),
+			  opt_in->answer);
+    }
+    bands = ref.nfiles;
+
     if (bands < 2)
 	G_fatal_error(_("Sorry, at least 2 input bands must be provided"));
 
@@ -160,12 +183,12 @@ int main(int argc, char *argv[])
 
     /* open and check input/output files */
     for (i = 0; i < bands; i++) {
-	char tmpbuf[128];
+	char tmpbuf[GNAME_MAX];
 
-	sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
-	G_check_input_output_name(opt_in->answers[i], tmpbuf, G_FATAL_EXIT);
+	sprintf(tmpbuf, "%s.%d", ref.file[i].name, i + 1);
+	G_check_input_output_name(ref.file[i].name, tmpbuf, G_FATAL_EXIT);
 
-	inp_fd[i] = Rast_open_old(opt_in->answers[i], "");
+	inp_fd[i] = Rast_open_old(ref.file[i].name, ref.file[i].mapset);
     }
 
     if (!calc_mu_cov(inp_fd, covar, mu, stddev, bands))
@@ -226,7 +249,7 @@ int main(int argc, char *argv[])
 
 	/* write colors and history to file */
 	if (flag_filt->answer)
-	    write_support(bands, opt_in->answers[i], outname, eigmat, eigval);
+	    write_support(bands, ref.file[i].name, outname, eigmat, eigval);
 	else
 	    write_support(bands, NULL, outname, eigmat, eigval);
     }
