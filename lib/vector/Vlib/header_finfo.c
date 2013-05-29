@@ -49,8 +49,8 @@ const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
         return Map->fInfo.pg.db_name;
     }
     
-    G_warning(_("Native vector format detected for <%s>"),
-              Vect_get_full_name(Map));
+    G_debug(1, "Native vector format detected for <%s>",
+            Vect_get_full_name(Map));
     
     return NULL;
 }
@@ -89,7 +89,7 @@ char *Vect_get_finfo_layer_name(const struct Map_info *Map)
                    Map->fInfo.pg.table_name);
     }
     else {
-        G_warning(_("Native vector format detected for <%s>"),
+        G_debug(1, "Native vector format detected for <%s>",
                   Vect_get_full_name(Map));
     }
     
@@ -217,17 +217,18 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
 /*!
   \brief Get header info for non-native formats
 
-  Prints a warning for native format.
-  
-  \param Map pointer to Ma_info structure
+  \param Map pointer to Map_info structure
   
   \return pointer to Format_info structure
+  \return NULL for native format
 */
 const struct Format_info* Vect_get_finfo(const struct Map_info *Map)
 {
-    if (Map->format == GV_FORMAT_NATIVE)
-        G_warning(_("Native vector format detected for <%s>"),
-                  Vect_get_full_name(Map));
+    /* do not check Map-format which is native (see
+     * GRASS_VECTOR_EXTERNAL_IMMEDIATE) */
     
-    return &(Map->fInfo);
+    if (Map->fInfo.ogr.driver_name || Map->fInfo.pg.conninfo)
+        return &(Map->fInfo);
+
+    return NULL;
 }
