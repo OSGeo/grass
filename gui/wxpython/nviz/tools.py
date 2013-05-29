@@ -4694,43 +4694,20 @@ class NvizToolWindow(FN.FlatNotebook):
 
         # enable/disable res widget + set draw mode
         self.OnSurfaceMode(event = None)
-
-    def VectorInfo(self, layer):
-        """!Get number of points/lines
-        
-        @param layer MapLayer instance
-        
-        @return num of points/features (expect of points)
-        @return None
-        """
-        vInfo = grass.vector_info_topo(layer.GetName())
-        
-        if not vInfo:
-            return None
-        
-        nprimitives = 0
-        for key, value in vInfo.iteritems():
-            if key in ('points',
-                       'lines',
-                       'boundaries',
-                       'centroids',
-                       'faces',
-                       'kernels'):
-                nprimitives += value
-        
-        return (vInfo['points'], vInfo['lines'], nprimitives, vInfo['map3d'])
         
     def UpdateVectorPage(self, layer, data, updateName = True):
         """!Update vector page"""
-        npoints, nlines, nfeatures, mapIs3D = self.VectorInfo(layer)
-        if mapIs3D:
+        vInfo = grass.vector_info_topo(layer.GetName())
+        if not vInfo:
+            return
+        if vInfo['map3d']:
             desc = _("Vector map is 3D")
             enable = False
         else:
             desc = _("Vector map is 2D")
             enable = True
         desc += " - " + _("%(features)d features (%(points)d points)") % \
-            { 'features' : nfeatures, 'points' : npoints }
+            { 'features' : vInfo['primitives'], 'points' : vInfo['points']}
         
         if updateName:
             self.FindWindowById(self.win['vector']['map']).SetValue(layer.name)
@@ -4760,13 +4737,12 @@ class NvizToolWindow(FN.FlatNotebook):
             showLines.SetValue(True)
         else:
             showLines.SetValue(False)
-            if nlines > 0:
-                showLines.Enable(True)
-            else:
-                showLines.Enable(False)
+        if (vInfo['lines'] + vInfo['boundaries']) > 0:
+            showLines.Enable(True)
+        else:
+            showLines.Enable(False)
         
-        self.UpdateVectorShow('lines',
-                              showLines.IsChecked())
+        self.UpdateVectorShow('lines', showLines.IsChecked())
         
         width = self.FindWindowById(self.win['vector']['lines']['width'])
         width.SetValue(data['lines']['width']['value'])
@@ -4807,13 +4783,12 @@ class NvizToolWindow(FN.FlatNotebook):
             showPoints.SetValue(True)
         else:
             showPoints.SetValue(False)
-            if npoints > 0:
-                showPoints.Enable(True)
-            else:
-                showPoints.Enable(False)
+        if (vInfo['points'] + vInfo['centroids']) > 0:
+            showPoints.Enable(True)
+        else:
+            showPoints.Enable(False)
         
-        self.UpdateVectorShow('points',
-                              showPoints.IsChecked())
+        self.UpdateVectorShow('points', showPoints.IsChecked())
         # size, width, marker, color
         for prop in ('size', 'marker', 'color'):
             win = self.FindWindowById(self.win['vector']['points'][prop])
