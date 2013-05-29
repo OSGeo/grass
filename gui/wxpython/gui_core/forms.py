@@ -717,7 +717,13 @@ class TaskFrame(wx.Frame):
         """!Copy the command"""
         cmddata = wx.TextDataObject()
         # list -> string
-        cmdstring = ' '.join(self.createCmd(ignoreErrors = True))
+	cmdlist = self.createCmd(ignoreErrors = True)
+	# TODO: better protect whitespace with quotes
+	for i in range(1, len(cmdlist)):
+	    if ' ' in cmdlist[i]:
+		optname, val =  cmdlist[i].split("=")
+		cmdlist[i] = '%s="%s"' % (optname, val)
+        cmdstring = ' '.join(cmdlist)
         cmddata.SetText(cmdstring)
         if wx.TheClipboard.Open():
 #            wx.TheClipboard.UsePrimarySelection(True)
