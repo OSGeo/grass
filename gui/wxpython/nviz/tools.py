@@ -4477,10 +4477,16 @@ class NvizToolWindow(FN.FlatNotebook):
             zmin = self.mapWindow.view['z-exag']['min']
             zmax = self.mapWindow.view['z-exag']['max']
             zval = self.mapWindow.view['z-exag']['value']
-            
+
             for control in ('slider','text'):
-                self.FindWindowById(self.win['view']['height'][control]).SetRange(
-                                                                        hmin,hmax)
+                try:
+                    self.FindWindowById(self.win['view']['height'][control]).SetRange(
+                                                                             hmin, hmax)
+                except OverflowError:
+                    hmin = self.mapWindow.iview['height']['min'] = 0
+                    hmax = self.mapWindow.iview['height']['max'] = 10000
+                    hval = self.mapWindow.iview['height']['value'] = 5000
+                    self.FindWindowById(self.win['view']['height'][control]).SetRange(hmin, hmax)
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(
                                                                         zmin, zmax) 
                 self.FindWindowById(self.win['view']['height'][control]).SetValue(hval)                                      
