@@ -4561,7 +4561,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                                                     -xyRange/2., xyRange/2.)
                 self.FindWindowById(self.win['cplane']['position']['y']['slider']).SetRange(
                                                                     -xyRange/2., xyRange/2.)
-            if zRange[0] - zRange[1] > 0:
+            if zRange[1] - zRange[0] > 1:
                 self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetRange(zRange[0], zRange[1])
             self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetValue(zRange[0])
             self.FindWindowById(self.win['cplane']['position']['z']['text']).SetValue(zRange[0])
