@@ -725,11 +725,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     Map->temporary = is_tmp;
     
     /* determine output format */
-    if (strcmp(G_program_name(), "v.external") != 0)
-        Map->format = map_format(Map);
-    else
-        Map->format = GV_FORMAT_NATIVE;
-
+    Map->format = map_format(Map);
+    
     if (Map->format != GV_FORMAT_OGR_DIRECT &&
         getenv("GRASS_VECTOR_PGFILE") == NULL) { /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
         char *path;
@@ -1214,7 +1211,7 @@ int map_format(struct Map_info *Map)
     
     format = GV_FORMAT_NATIVE;
     /* temporary maps can be stored only in native format */
-    if (Map->temporary)
+    if (Map->temporary || getenv("GRASS_VECTOR_EXTERNAL_IGNORE"))
         return format;
     
     if (G_find_file2("", "OGR", G_mapset())) {

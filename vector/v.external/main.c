@@ -142,6 +142,7 @@ int main(int argc, char *argv[])
     }
     
     /* create new vector map */
+    putenv("GRASS_VECTOR_EXTERNAL_IGNORE=1");
     Vect_open_new(&Map, output, WITHOUT_Z); /* dimension is set later from data source */
     Vect_set_error_handler_io(NULL, &Map);
     

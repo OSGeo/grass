@@ -474,7 +474,8 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
     /* copy areas */
     nskipped = 0;
     nareas = Vect_get_num_areas(In);
-    G_message(_("Exporting areas..."));
+    if (nareas > 0)
+        G_message(_("Exporting areas..."));
     for (area = 1; area <= nareas; area++) {
         G_debug(3, "area = %d", area);
         G_percent(area, nareas, 3);
