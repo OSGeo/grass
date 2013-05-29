@@ -526,6 +526,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                 unlink(file_path);
         }
     }
+
     G_free(path);
     
     return level;
@@ -809,6 +810,19 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     Vect_set_zone(Map, G_zone());
 
     Map->dblnk = Vect_new_dblinks_struct();
+
+    if (Map->fInfo.ogr.driver_name) {
+        G_verbose_message(_("Using OGR/%s format"), Map->fInfo.ogr.driver_name);
+    }
+    else if (Map->fInfo.pg.conninfo) {
+        if (Map->fInfo.pg.toposchema_name)
+            G_verbose_message(_("Using PostGIS Topology format"));
+        else
+            G_verbose_message(_("Using PostGIS format"));
+    }
+    else {
+        G_verbose_message(_("Using native format"));
+    }
 
     return 1;
 }
