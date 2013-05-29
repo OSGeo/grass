@@ -135,7 +135,8 @@ void args_surface(struct GParams *params)
     params->elev_const->type = TYPE_INTEGER;
     params->elev_const->required = NO;
     params->elev_const->multiple = YES;
-    params->elev_const->description = _("Elevation value(s)");
+    params->elev_const->description =
+	_("Constant elevation value(s) to use instead of a raster DEM");
     params->elev_const->guisection = _("Surfaces");
 
     /* color */
@@ -507,6 +508,7 @@ void args_viewpoint(struct GParams *params)
 	_("Viewpoint position (x,y model coordinates)");
     params->pos->guisection = _("Viewpoint");
     params->pos->answer = "0.84,0.16";
+    params->pos->options = "0.0-1.0";
 
     /* height */
     params->height = G_define_option();
@@ -528,7 +530,7 @@ void args_viewpoint(struct GParams *params)
     params->persp->description = _("Viewpoint field of view (in degrees)");
     params->persp->guisection = _("Viewpoint");
     params->persp->answer = "40";
-    params->persp->options = "1-100";
+    params->persp->options = "1-180";
 
     /* twist */
     params->twist = G_define_option();
