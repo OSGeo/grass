@@ -969,7 +969,7 @@ int main(int argc, char *argv[])
        G_warning ("%d features of different type skip", fskip);
      */
 
-    G_done_msg(_("%d features (%s) written to <%s> (%s format)."), fout,
+    G_done_msg(_("%d features (%s type) written to <%s> (%s format)."), fout,
                OGRGeometryTypeToName(wkbtype),
 	       options.layer->answer, options.format->answer);
 
