@@ -461,6 +461,7 @@ char *Vect_sfa_line_geometry_type(const struct line_pnts *, int);
 int Vect_sfa_line_astext(const struct line_pnts *, int, int, int, FILE *);
 int Vect_sfa_is_line_simple(const struct line_pnts *, int, int);
 int Vect_sfa_is_line_closed(const struct line_pnts *, int, int);
+int Vect_sfa_get_num_features(const struct Map_info *);
 
 /*
  * Internal functions, MUST NOT be used in modules
