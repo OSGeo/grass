@@ -804,8 +804,12 @@ class SearchModuleWidget(wx.Panel):
         self._searchBy.SetSelection(0)
         self._searchBy.Bind(wx.EVT_CHOICE, self.OnSearchModule)
 
-        self._search = wx.SearchCtrl(parent = self, id = wx.ID_ANY,
-                                    size = (-1, 25), style = wx.TE_PROCESS_ENTER)
+        if sys.platform == 'win32':
+            ctrl = wx.TextCtrl
+        else:
+            ctrl = wx.SearchCtrl
+        self._search = ctrl(parent = self, id = wx.ID_ANY,
+                            size = (-1, 25), style = wx.TE_PROCESS_ENTER)
         self._search.Bind(wx.EVT_TEXT, self.OnSearchModule)
         self._search.Bind(wx.EVT_KEY_UP,  self.OnKeyUp)
 
