@@ -1803,7 +1803,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                     subkey = ('z-exag', 'max'))
         if zexagMax <= self.view['z-exag']['value']:
             self.view['z-exag']['max'] = self.view['z-exag']['value'] * 2
-        elif self.view['z-exag']['value'] < 1: 
+        elif self.view['z-exag']['value'] < 1:
+            if self.view['z-exag']['value'] == 0:
+                self.view['z-exag']['value'] = 1
             self.view['z-exag']['max'] = 10 * self.view['z-exag']['value'] 
         else: 
             self.view['z-exag']['max'] = zexagMax
