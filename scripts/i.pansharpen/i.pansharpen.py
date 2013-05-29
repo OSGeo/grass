@@ -214,6 +214,9 @@ def main():
 
         #initial PCA with RGB channels
         pca_out = grass.read_command('i.pca', quiet=True, rescale='0,0', input='%s,%s,%s' % (ms1, ms2, ms3), output_prefix='tmp%s.pca' % pid)
+        if len(pca_out) < 1:
+            grass.fatal(_("Input has no data. Check region settings."))
+
         b1evect = []
         b2evect = []
         b3evect = []
@@ -365,7 +368,10 @@ def matchhist(original, target, matched):
             stats_dict[j] = int(stats_dict[j])
             if j != '*':
                 total_cells += stats_dict[j]        
-                
+ 
+        if total_cells < 1:
+            grass.fatal(_("Input has no data. Check region settings."))
+
         # Make a 2x256 structured array for each image with a 
         #   cumulative distribution function (CDF) for each grey value.
         #   Grey value is the integer (i4) and cdf is float (f4).
