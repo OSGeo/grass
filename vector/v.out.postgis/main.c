@@ -162,9 +162,14 @@ int main(int argc, char *argv[])
         G_fatal_error(_("No features exported. PostGIS layer <%s> not created."),
                       Vect_get_name(&Out));
 
-    G_done_msg(_("%d features (%s) written to <%s>."),
-               Vect_get_num_lines(&Out), Vect_get_finfo_geometry_type(&Out),
-               Vect_get_name(&Out));
+    if (!flags.topo->answer) 
+        G_done_msg(_("%d features (%s type) written to <%s>."),
+                   Vect_sfa_get_num_features(&Out), Vect_get_finfo_geometry_type(&Out),
+                   Vect_get_name(&Out));
+    else
+        G_done_msg(_("%d primitives written to <%s>."),
+                   Vect_get_num_lines(&Out), Vect_get_finfo_geometry_type(&Out),
+                   Vect_get_name(&Out));
     
     /* close output map */
     Vect_close(&Out);
