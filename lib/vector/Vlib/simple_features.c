@@ -20,7 +20,7 @@
 
   Reference: http://www.opengeospatial.org/standards/sfa
 
-  (C) 2009, 2011-2012 by the GRASS Development Team
+  (C) 2009, 2011-2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -32,6 +32,14 @@
 
 #include <grass/vector.h>
 #include <grass/glocale.h>
+
+#ifdef HAVE_POSTGRES
+#include "pg_local_proto.h"
+#endif
+
+#ifdef HAVE_OGR
+#include <ogr_api.h>
+#endif
 
 static int check_sftype(const struct line_pnts *, int, SF_FeatureType, int);
 static int get_sftype(const struct line_pnts *, int, int);
@@ -270,6 +278,72 @@ int Vect_sfa_is_line_closed(const struct line_pnts *Points, int type, int with_z
 	return 0;
     }
     return -1;
+}
+
+/*!
+  \brief Get number of simple features
+
+  For native format or PostGIS Topology returns -1
+
+  \param Map vector map
+
+  \return number of features
+  \return -1 on error
+*/
+int Vect_sfa_get_num_features(const struct Map_info *Map)
+{
+    int nfeat;
+
+    nfeat = 0;
+    if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
+        /* OGR */
+#ifdef HAVE_OGR
+        const struct Format_info_ogr *ogr_info;
+        
+        ogr_info = &(Map->fInfo.ogr);
+        
+        if (!ogr_info->layer)
+            return -1;
+
+        return OGR_L_GetFeatureCount(ogr_info->layer, TRUE);
+#else
+        G_fatal_error(_("GRASS is not compiled with OGR support"));
+        return -1;
+#endif
+    }
+    else if (Map->format == GV_FORMAT_POSTGIS && !Map->fInfo.pg.toposchema_name) {
+#ifdef HAVE_POSTGRES
+        /* PostGIS */
+        char stmt[DB_SQL_MAX];
+        
+        const struct Format_info_pg *pg_info;
+
+        pg_info = &(Map->fInfo.pg);
+        
+        if (!pg_info->conn || !pg_info->table_name) {
+            G_warning(_("No connection defined"));
+            return -1;
+        }
+
+        sprintf(stmt, "SELECT count(*) FROM \"%s\".%s", pg_info->schema_name,
+                pg_info->table_name);
+        nfeat = Vect__execute_get_value_pg(pg_info->conn, stmt);
+        if (nfeat < 0) {
+            G_warning(_("Unable to get number of simple features"));
+            return -1;
+        }
+#else
+        G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
+        return -1;
+#endif
+    }
+    else {
+        G_warning(_("Unable to report simple features for vector map <%s>"),
+                  Vect_get_full_name(Map));
+        return -1;
+    }
+
+    return nfeat;
 }
 
 int check_sftype(const struct line_pnts *points, int type,
