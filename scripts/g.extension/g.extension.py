@@ -56,25 +56,12 @@
 #% required: no
 #%end
 #%option
-#% key: http_proxy
+#% key: proxy
 #% type: string
-#% key_desc: http proxy
-#% description: Set the http proxy
+#% key_desc: proxy
+#% description: Set the proxy with: "http=<value>,ftp=<value>"
 #% required: no
-#%end
-#%option
-#% key: https_proxy
-#% type: string
-#% key_desc: https proxy
-#% description: Set the https proxy
-#% required: no
-#%end
-#%option
-#% key: ftp_proxy
-#% type: string
-#% key_desc: ftp proxy
-#% description: Set the ftp proxy
-#% required: no
+#% multiple: yes
 #%end
 
 #%flag
@@ -1014,6 +1001,7 @@ def update_manual_page(module):
     else:
         f.close()
 
+
 def main():
     # check dependecies
     if sys.platform != "win32":
@@ -1021,17 +1009,10 @@ def main():
 
     # manage proxies
     global PROXIES
-    proxy_opts = [options['http_proxy'],
-                  options['https_proxy'],
-                  options['ftp_proxy']]
-    if any(proxy_opts):
+    if options['proxy']:
         PROXIES = {}
-    if options['http_proxy']:
-        PROXIES['http'] = options['http_proxy']
-    if options['https_proxy']:
-        PROXIES['https'] = options['https_proxy']
-    if options['ftp_proxy']:
-        PROXIES['ftp'] = options['ftp_proxy']
+        for ptype, purl in (p.split('=') for p in options['proxy'].split(',')):
+            PROXIES[ptype] = purl
 
     # define path
     if flags['s']:
