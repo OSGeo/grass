@@ -2314,6 +2314,7 @@ int GS_get_exag_guess(int id, float *exag)
 
     /* if gs is type const return guess = 1.0 */
     if (CONST_ATT == gs_get_att_src(gs, ATT_TOPO)) {
+	*exag = guess;
 	return (1);
     }
 
