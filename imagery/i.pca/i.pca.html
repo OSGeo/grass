@@ -6,11 +6,17 @@ algorithm provided by Vali (1990), that processes n
 raster map layers containing the principal components of
 the input data in decreasing order of variance
 ("contrast").  The output raster map layers are assigned
-names with .1, .2, ... .n suffixes.  The current geographic
-region definition and MASK settings are respected when
-reading the input raster map layers. When the rescale
-option is used, the output files are rescaled to fit the
-min,max range.
+names with .1, .2, ... .n suffixes. The numbers used as suffix 
+correspond to percent importance with .1 being the scores of the 
+principal component with the highest importance.
+
+<p>The current geographic region definition and MASK settings are 
+respected when reading the input raster map layers. When the rescale
+option is used, the output files are rescaled to fit the min,max range.
+
+<p>The order of the input bands does not matter for the output maps 
+(PC scores), but does matter for the vectors (loadings), since each 
+loading refers to a specific input band.
 
 <p>
 If the output is not rescaled (<em>rescale=0,0</em>, the output raster 
