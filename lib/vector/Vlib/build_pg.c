@@ -314,6 +314,8 @@ int build_topo(struct Map_info *Map, int build)
     if (pg_info->feature_type == SF_POLYGON) {
         int centroid;
         
+        struct P_line *Line;
+        
         G_message(_("Updating TopoGeometry data..."));
         for (area = 1; area <= plus->n_areas; area++) {
             G_percent(area, plus->n_areas, 5);
@@ -321,8 +323,12 @@ int build_topo(struct Map_info *Map, int build)
             if (centroid < 1)
                 continue;
         
+            Line = plus->Line[centroid];
+            if (!Line)
+                continue;
+
             /* update topogeometry object: centroid -> face */
-            if (build_topogeom_stmt(pg_info, GV_CENTROID, area, centroid, stmt) &&
+            if (build_topogeom_stmt(pg_info, GV_CENTROID, area, (int) Line->offset, stmt) &&
                 Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return 0;
