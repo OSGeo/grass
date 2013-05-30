@@ -2815,6 +2815,10 @@ class NvizToolWindow(FN.FlatNotebook):
         
         value = self.FindWindowById(event.GetId()).GetValue()
         slider = self.FindWindowById(self.win['view'][winName]['slider'])
+
+        if winName == 'persp' and not (0 <= value <= 180):
+            return
+
         self.AdjustSliderRange(slider = slider, value = value)
         
         if winName == 'height':
