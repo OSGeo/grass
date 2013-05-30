@@ -174,7 +174,8 @@ int vpoints_set_attrb(const struct GParams *params)
     int *site_list, nsites;
     int marker, color, width;
     float size;
-    char *marker_str, *color_column, *size_column, *width_column, *marker_column;
+    char *marker_str, *color_column, *size_column, *width_column,
+	 *marker_column, *placement;
 
     struct Colors colors;
     
@@ -182,6 +183,7 @@ int vpoints_set_attrb(const struct GParams *params)
 
     for (i = 0; i < nsites; i++) {
         check_map(params, i, FALSE, &layer, &with_z);
+
 	color = Nviz_color_from_str(params->vpoint_color->answers[i]);
 	color_column = params->vpoint_color_column->answers ?
 	    params->vpoint_color_column->answers[i] : NULL;
@@ -195,9 +197,15 @@ int vpoints_set_attrb(const struct GParams *params)
 	marker_column = params->vpoint_marker_column->answers ?
 	    params->vpoint_marker_column->answers[i] : NULL;
 	marker = GP_str_to_marker(marker_str);
+	placement = params->vpoint_mode->answers ?
+	    params->vpoint_mode->answers[i] : NULL;
 
-        if (with_z)
-            GP_set_zmode(site_list[i], TRUE);
+        if (with_z) {
+	    if (strcmp(params->vpoint_mode->answers[i], "surface") == 0)
+		GP_set_zmode(site_list[i], FALSE);
+	    else
+		GP_set_zmode(site_list[i], TRUE);
+	}
 
 	if (GP_set_style(site_list[i], color, width, size, marker) < 0)
 	    return 0;
