@@ -24,6 +24,7 @@
 #%option G_OPT_V_MAP
 #%end
 #%option G_OPT_V_FIELD
+#% required: yes
 #%end
 #%option G_OPT_DB_COLUMN
 #% key: column
