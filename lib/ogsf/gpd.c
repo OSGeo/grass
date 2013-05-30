@@ -236,7 +236,6 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
     
     if (src == CONST_ATT) {
 	konst = gs->att[ATT_TOPO].constant;
-	site[Z] = konst;
     }
     else {
 	buf = gs_get_att_typbuff(gs, ATT_TOPO, 0);
@@ -280,7 +279,7 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 	}
 	else if (src == CONST_ATT) {
 	    if (gs_point_in_region(gs, site, NULL)) {
-		site[Z] += gp->z_trans;
+		site[Z] = konst + gp->z_trans;
 		if (gsd_checkpoint(site, window,
 				   viewport, modelMatrix, projMatrix))
 		    continue;
