@@ -174,8 +174,7 @@ int vpoints_set_attrb(const struct GParams *params)
     int *site_list, nsites;
     int marker, color, width;
     float size;
-    char *marker_str, *color_column, *size_column, *width_column,
-	 *marker_column, *placement;
+    char *marker_str, *color_column, *size_column, *width_column, *marker_column;
 
     struct Colors colors;
     
@@ -197,8 +196,6 @@ int vpoints_set_attrb(const struct GParams *params)
 	marker_column = params->vpoint_marker_column->answers ?
 	    params->vpoint_marker_column->answers[i] : NULL;
 	marker = GP_str_to_marker(marker_str);
-	placement = params->vpoint_mode->answers ?
-	    params->vpoint_mode->answers[i] : NULL;
 
         if (with_z) {
 	    if (strcmp(params->vpoint_mode->answers[i], "surface") == 0)
