@@ -34,7 +34,11 @@ connected as network nodes. There are two ways to connect nodes. By
 default, <em>v.net</em> will create new lines connecting each point 
 to the closest line of the network. If you use the <em>-s</em> flag, 
 however, the new nodes will be added on the closest line of the 
-network at the point closest to the point you wish to add.</li>
+network at the point closest to the point you wish to add. When using 
+the <em>connect</em> operation, some lines will share the same 
+category. In Order to assign unique costs to each line, a new layer 
+needs to be created with <em>v.category op=add cat=1 step=1 layer=3</em>, 
+followed by <em>v.db.addtable layer=3.</em></li>
 
 <li>Create nodes and arcs from a vector line/boundary file using the 
 <em>node</em> operation. This is useful if you are mostly interested 
