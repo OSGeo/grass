@@ -193,7 +193,7 @@ class WMSBase:
     def _fetchCapabilities(self, options): 
         """!Download capabilities from WMS server
         """
-        cap_url = options['url']
+        cap_url = options['url'].strip()
 
         if "?" in cap_url:
             cap_url += "&"
@@ -206,7 +206,12 @@ class WMSBase:
             cap_url += "REQUEST=GetTileService"
         else:
             cap_url += "SERVICE=WMS&REQUEST=GetCapabilities&VERSION=" + options['wms_version'] 
+
+        if options['urlparams']:
+            cap_url += "&" + options['urlparams']
+            
         grass.debug('Fetching capabilities file.\n%s' % cap_url)
+
         try:
             cap = self._fetchDataFromServer(cap_url, options['username'], options['password'])
         except (IOError, HTTPException), e:
