@@ -370,6 +370,17 @@ class SQLDatabaseInterfaceConnection():
             self.dbmi = sqlite3
         else:
             self.dbmi = psycopg2
+            
+    def rollback(self):
+        """
+            Roll back the last transaction. This must be called 
+            in case a new query should be performed after a db error.
+            
+            This is only relevant for postgresql database.
+        """
+        if self.dbmi.__name__ == "psycopg2":
+            if self.connected:
+                self.connection.rollback()
 
     def connect(self):
         """!Connect to the DBMI to execute SQL statements

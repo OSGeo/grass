@@ -1017,6 +1017,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 where, order, dbif)
         except:
             try:
+                dbif.rollback()
                 rows = self.get_registered_maps(
                     "id,start_time,end_time", 
                     where, order, dbif)
