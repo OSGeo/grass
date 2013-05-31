@@ -47,6 +47,11 @@ class WMSDrv(WMSBase):
         """ 
         grass.message(_("Downloading data from WMS server..."))
 
+        if "?" in self.params["url"]:
+            self.params["url"] += "&"
+        else:
+            self.params["url"] += "?"
+
         if not self.params['capfile']:
             self.cap_file = self._fetchCapabilities(self.params)
         else:
@@ -307,7 +312,7 @@ class WMSRequestMgr(BaseRequestMgr):
         """
         self.version = params['wms_version']
         proj = params['proj_name'] + "=EPSG:"+ str(params['srs'])
-        self.url = params['url'] + ("?SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&STYLES=%s&BGCOLOR=%s&TRANSPARENT=%s" % \
+        self.url = params['url'] + ("SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&STYLES=%s&BGCOLOR=%s&TRANSPARENT=%s" % \
                   (params['wms_version'], params['layers'], tile_size['cols'], tile_size['rows'], params['styles'], \
                    params['bgcolor'], params['transparent']))
         self.url += "&" +proj+ "&" + "FORMAT=" + params['format']
@@ -617,7 +622,7 @@ class WMTSRequestMgr(BaseRequestMgr):
         self.tile_size['y'] = int(tile_mat.find(self.xml_ns.NsWmts('TileHeight')).text)
         tile_span['y'] = pixel_span * self.tile_size['y']
 
-        self.url = params['url'] + ("?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&" \
+        self.url = params['url'] + ("SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&" \
                                     "LAYER=%s&STYLE=%s&FORMAT=%s&TILEMATRIXSET=%s&TILEMATRIX=%s" % \
                                    (params['layers'], params['styles'], params['format'],
                                     params['tile_matrix_set'], tile_mat.find(self.xml_ns.NsOws('Identifier')).text ))
@@ -659,7 +664,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
         # parse tile service file and get needed data for making tile requests
         url, self.tile_span, t_patt_bbox, self.tile_size = self._parseTileService(root, bbox, region, params)
         self.url = url
-        self.url[0] = params['url'] + '?' + url[0]
+        self.url[0] = params['url'] + url[0]
         # initialize data needed for iteration through tiles
         self._computeRequestData(bbox, t_patt_bbox, self.tile_span, self.tile_size)
 
