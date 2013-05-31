@@ -2718,7 +2718,7 @@ msgid ""
 "The world's leading open source GIS"
 msgstr ""
 "Willkommen in GRASS GIS %s\n"
-"Das weltweit führende OpenSource GIS"
+"Das weltweit führende Open Source GIS"
 
 #: ../gui/wxpython/gis_set.py:106
 msgid ""
