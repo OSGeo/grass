@@ -195,12 +195,17 @@ class WMSBase:
         """
         cap_url = options['url']
 
-        if 'WMTS' in options['driver']:
-            cap_url += "?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0"
-        elif 'OnEarth' in options['driver']:
-            cap_url += "?REQUEST=GetTileService"
+        if "?" in cap_url:
+            cap_url += "&"
         else:
-            cap_url += "?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=" + options['wms_version'] 
+            cap_url += "?"
+
+        if 'WMTS' in options['driver']:
+            cap_url += "SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0"
+        elif 'OnEarth' in options['driver']:
+            cap_url += "REQUEST=GetTileService"
+        else:
+            cap_url += "SERVICE=WMS&REQUEST=GetCapabilities&VERSION=" + options['wms_version'] 
         grass.debug('Fetching capabilities file.\n%s' % cap_url)
         try:
             cap = self._fetchDataFromServer(cap_url, options['username'], options['password'])
