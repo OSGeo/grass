@@ -1,86 +1,116 @@
 <h2>DESCRIPTION</h2>
 
-<p><em>v.to.points</em> creates points along input lines. The output is a vector with 2 layers.
-Layer 1 holds the category and attributes of the input lines; all points created along the
-same line have the same category, equal to the category of that line. In layer 2 each point
-has it's unique category; other attributes stored in layer 2 are <em>lcat</em> - the
-category of the input line and <em>along</em> - the distance from line's start.</p>
+<em>v.to.points</em> creates points along input lines, boundaries and
+faces. Point features including centroids and kernels are copied from
+input vector map to the output. For details see notes
+about <b>type</b> parameter.
+
+<p>
+The output is a vector map with 2 layers. Layer 1 holds the category
+of the input features; all points created along the same line have the
+same category, equal to the category of that line. In layer 2 each
+point has it's unique category; other attributes stored in layer 2
+are <em>lcat</em> - the category of the input line and <em>along</em>
+- the distance from line's start.
+
+<p>
+By default only features with category are processed,
+see <b>llayer</b> parameter for details.
 
 <h2>NOTES</h2>
 
-<p>The <em>dmax</em> parameter is the maximum limit but not an exact
-distance. To place points with exact distance from the beginning
-of the vector line the user should use
-<a href="v.segment.html">v.segment</a>.</p>
+The <b>dmax</b> parameter is the maximum limit but not an exact
+distance. To place points with exact distance from the beginning of
+the vector line the user should use
+<em><a href="v.segment.html">v.segment</a></em>.
 
-<p>Set llayer to -1 to ignore object category values. Objects will be assigned 
-new unique categories at layer 1. llayer -1 should be used to convert boundaries,
-as in most of cases boundaries lack category values.</p>
+<p>
+Set <b>llayer</b> to -1 to process features from all layers including
+features without category. Features will be assigned new unique
+categories at layer 1. Option <b>llayer=-1</b> should be used to
+convert boundaries, as in most of cases boundaries lack category
+values.
 
-<p>The <em>type</em> parameter is used to control which input vector
-geometry types to convert into points. 
-Some caveats to consider about this parameter:
+<p>
+The <b>type</b> parameter is used to control which input vector
+geometry types to convert into points. Some caveats to consider about
+this parameter:
 
 <ul>
-<li>
-Points and centroids can be considered as "lines" with only one
-node. Consequently, the result of selecting <em>point</em> or
-<em>centroid</em> as the type parameter is that all points/centroids
-get written into the output vector. The original category numbers of
-the input points/centroids get written to the '<em><i>lcat</i></em>'
-attribute in layer 2 of the output vector. All values for
-<em>along</em> are zero in the output vector, as only point geometry
-was used for input (there is no linear distance to calculate
-<i>along</i>, as each point/centroid is the start <em><i>and</i></em>
-end of its own "line".</li>
-<li>
-Boundaries are treated as lines, with points getting interpolated
-along the boundary perimeter according to <em>dmax</em>. If two
-adjoining polygons share a topological boundary, the boundary only
-gets converted to points once.</li>
-<li>
-If the <em>type</em> parameter is set to <em>area</em>, the boundary of
-each area is converted to points <i>regardless</i> of whether or not
-there is a topological boundary between adjacent areas. In other
-words, the common boundary of two adjoining areas, for example, gets
-converted to points twice. The centroid is not converted to a point in
-the output vector for <em>type=area</em>.</li>
+  <li>
+    Points and centroids can be considered as "lines" with only one
+    node. Consequently, the result of selecting <em>point</em> or
+    <em>centroid</em> as the type parameter is that all
+    points/centroids get written into the output vector map. The
+    original category numbers of the input points/centroids get
+    written to the '<em>lcat</em>' attribute in layer 2 of the output
+    vector map. All values for <em>along</em> are zero in the output
+    vector map, as only point geometry was used for input (there is no
+    linear distance to calculate
+    <em>along</em>, as each point/centroid is the start <em>and</em>
+    end of its own "line").</li>
+  <li>
+    Boundaries are treated as lines, with points getting interpolated
+    along the boundary perimeter according to <b>dmax</b>. If two
+    adjoining polygons share a topological boundary, the boundary only
+    gets converted to points once.</li>
+  <li>
+    If the <b>type</b> parameter is set to <em>area</em>, the boundary of
+    each area is converted to points <i>regardless</i> of whether or not
+    there is a topological boundary between adjacent areas. In other
+    words, the common boundary of two adjoining areas, for example, gets
+    converted to points twice. The centroid is not converted to a point in
+    the output vector for <em>type=area</em>.</li>
 </ul>
 
-<p>The -v flag is used to digitize points that fall on the line's vertices <em>only</em>.
-<em>dmax</em> is ignored in this case.</p>
-<p>If the -i flag is used in conjunction with the -v flag,
+<p>
+The <b>use=vertex</b> option is used to digitize points that fall on
+the line's vertices <em>only</em>. Parameter <b>dmax</b> is ignored in
+this case. Similarly to <b>use=node</b> when only line's node are
+used.
+
+<p>
+If the <b>-i</b> flag is used in conjunction with
+the <b>use=vertex</b> option,
 <em>v.to.points</em> will digitize points on the line vertices, as
-well as interpolate points between line vertices using <em>dmax</em>
-as the maximum allowable spacing.</p>
-<p>To get points created for the beginning, middle and end only, use
-the -i switch and set <em>dmax</em> so that: <br>
-&nbsp;&nbsp;&nbsp; (length of input line / 2) &lt;= <em>dmax</em> &lt;= length of input line
-So if <em>dmax</em> is between 0.5x and 1.0x the line length, you
-will always get points created at exactly the beginning, middle and
-end of the input line.</p>
+well as interpolate points between line vertices using <b>dmax</b> as
+the maximum allowable spacing.
+
+<p>
+To get points created for the beginning, middle and end only, use
+the <b>-i</b> flag and set <b>dmax</b> so that:
+
+<div class="code"><pre>
+ (length of input line / 2) &lt;= <em>dmax</em> &lt;= length of input line
+</pre></div>
+
+So if <b>dmax</b> is between 0.5x and 1.0x the line length, you will
+always get points created at exactly the beginning, middle and end of
+the input line.
 
 <h2>EXAMPLE</h2>
 
-<p>In this example, the 't_powerlines' vector lines map in the
+In this example, the 't_powerlines' vector lines map in the
 <a href="http://grass.osgeo.org/download/data6.php">Spearfish 6</a>
-location is used to create points along the input lines:</p>
+location is used to create points along the input lines:
 
 <div class="code"><pre>
 v.to.points in=t_powerlines out=t_powerlines_points dmax=120
-d.vect t_powerlines_points
 </pre></div>
-
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="v.segment.html">v.segment</a>,
 <a href="v.to.rast.html">v.to.rast</a>,
-<a href="v.to.db.html">v.to.db</a></em>
+<a href="v.to.db.html">v.to.db</a>
+</em>
 
 <h2>AUTHOR</h2>
 
-Radim Blazek
+Radim Blazek<br>
+Updated to GRASS 7 by Martin Landa, Czech Technical University in
+Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i></p>
+<p>
+<i>Last changed: $Date$</i></p>
