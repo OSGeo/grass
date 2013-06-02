@@ -6,7 +6,6 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 SUBDIRS = \
 	SQL \
 	lib \
-	t.connect
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
