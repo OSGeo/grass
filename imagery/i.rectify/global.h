@@ -48,6 +48,11 @@ struct menu
 extern double E12[10], N12[10];
 extern double E21[10], N21[10];
 
+extern double *E12_t, *N12_t;
+extern double *E21_t, *N21_t;
+
+extern struct Control_Points cp;
+
 /* DELETED WITH CRS MODIFICATIONS
    extern double E12a, E12b, E12c, N12a, N12b, N12c;
    extern double E21a, E21b, E21c, N21a, N21b, N21c;
