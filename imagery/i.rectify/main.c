@@ -44,6 +44,11 @@ func interpolate;
 double E12[10], N12[10];
 double E21[10], N21[10];
 
+double *E12_t, *N12_t;
+double *E21_t, *N21_t;
+
+struct Control_Points cp;
+
 /* DELETED WITH CRS MODIFICATIONS
    double E12a, E12b, E12c, N12a, N12b, N12c;
    double E21a, E21b, E21c, N21a, N21b, N21c;
@@ -85,7 +90,7 @@ int main(int argc, char *argv[])
      *mem,			/* amount of memory for cache */
      *interpol;			/* interpolation method:
 				   nearest neighbor, bilinear, cubic */
-    struct Flag *c, *a;
+    struct Flag *c, *a, *t;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -151,6 +156,10 @@ int main(int argc, char *argv[])
     a->key = 'a';
     a->description = _("Rectify all raster maps in group");
 
+    t = G_define_flag();
+    t->key = 't';
+    t->description = _("Use thin plate spline");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -186,9 +195,11 @@ int main(int argc, char *argv[])
 	k++;
     }
 
-    if (order < 1 || order > 3)  /* MAXORDER in lib/imagery/georef.c */
+    if (!t->answer && (order < 1 || order > 3))  /* MAXORDER in lib/imagery/georef.c */
 	G_fatal_error(_("Invalid order (%d); please enter 1 to %d"), order,
 		      3);
+    if (t->answer)
+	order = 0;
 
     /* determine the number of files in this group */
     if (I_get_group_ref(group, &ref) <= 0) {

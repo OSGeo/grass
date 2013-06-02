@@ -72,7 +72,10 @@ int rectify(char *name, char *mapset, char *result, int order, char *interp_meth
 	    e1 = target_window.west + (col + 0.5) * target_window.ew_res;
 
 	    /* backwards transformation of target cell center */
-	    I_georef(e1, n1, &ex, &nx, E21, N21, order);
+	    if (order == 0)
+		I_georef_tps(e1, n1, &ex, &nx, E21_t, N21_t, &cp, 0);
+	    else
+		I_georef(e1, n1, &ex, &nx, E21, N21, order);
 
 	    /* convert to row/column indices of source raster */
 	    row_idx = (cellhd.north - nx) / cellhd.ns_res;
