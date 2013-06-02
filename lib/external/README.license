@@ -1,32 +1,19 @@
+In the following directories you will find code which was not written
+by the GRASS Development Team.
 
-
-In the following directories you will find code which was not
-written by The GRASS Development Team.
-
-Parts of GRASS are not copyright by The GRASS Development Team.
-The original authors hold the copyrights and you have to abide
-to their licensing terms where noted.
-(Keep in mind that code linking into GRASS can only be distributed
-if compatible with the GPL.)
+Parts of GRASS are not copyright by the GRASS Development Team. The
+original authors hold the copyrights and you have to abide to their
+licensing terms where noted. (Keep in mind that code linking into
+GRASS can only be distributed if compatible with the GPL.)
 
 Specifically the source code below this directory is not necessarily
 licensed under the GPL. Check the READMEs and source code header
 comments carefully.
 
-
-
- * bwidget/ (LGPL 2.1)
-   BWidget Tcl/Tk ToolKit 1.2.1
-   Copyright (c) 1998-1999 UNIFIX.
-
-
  * ccmath/ (LGPL 2.1)
    CCMATH mathematics library version 2.2.1
    Copyright (C) 2000 Daniel A. Atkinson
 
-
  * shapelib/ (MIT/X)
    Shapefile read/write functions.
    Copyright (c) 2007, Frank Warmerdam
-
-
