@@ -1097,6 +1097,7 @@ int Gs_update_attrange(geosurf * gs, int desc)
 
     if (CONST_ATT == gs_get_att_src(gs, desc)) {
 	gs->att[desc].max_nz = gs->att[desc].min_nz = gs->att[desc].constant;
+	min = max = gs->att[desc].constant;
 	gs->att[desc].range_nz = 0.0;
     }
     else if (CF_COLOR_PACKED & gsds_get_changed(gs->att[desc].hdata)) {
