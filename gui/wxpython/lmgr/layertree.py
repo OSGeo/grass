@@ -29,6 +29,7 @@ except ImportError:
     from wx.lib.mixins import treemixin
 
 from grass.script import core as grass
+from grass.script import vector as gvector
 
 from core                 import globalvar
 from gui_core.dialogs     import SqlQueryFrame, SetOpacityDialog
@@ -1199,10 +1200,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 elif mapLayer.type == '3d-raster':
                     self.mapdisplay.MapWindow.LoadRaster3d(item)
                 elif mapLayer.type == 'vector':
-                    npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(mapLayer)
-                    if npoints > 0:
+                    vInfo = gvector.vector_info_topo(mapLayer.GetName())
+                    if (vInfo['points'] + vInfo['centroids']) > 0:
                         self.mapdisplay.MapWindow.LoadVector(item, points = True)
-                    if nlines > 0:
+                    if (vInfo['lines'] + vInfo['boundaries']) > 0:
                         self.mapdisplay.MapWindow.LoadVector(item, points = False)
 
             else: # disable
