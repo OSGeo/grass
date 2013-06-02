@@ -100,7 +100,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 
     if (src == CONST_ATT) {
 	konst = gs->att[ATT_TOPO].constant;
-	bgn[Z] = end[Z] = konst;
+	bgn[Z] = end[Z] = konst + gv->z_trans;
     }
 
     gsd_pushmatrix();
