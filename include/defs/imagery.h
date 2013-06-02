@@ -35,6 +35,12 @@ int I_compute_georef_equations(struct Control_Points *, double *, double *,
 			       double *, double *, int);
 int I_georef(double, double, double *, double *, double *, double *, int);
 
+/* georef_tps.c */
+int I_compute_georef_equations_tps(struct Control_Points *, double **, double **,
+			       double **, double **);
+int I_georef_tps(double, double, double *, double *, double *, double *, 
+                 struct Control_Points *, int);
+
 /* group.c */
 int I_get_group(char *);
 int I_put_group(const char *);
