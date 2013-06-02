@@ -16,7 +16,10 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
+import socket
 import grass.script as grass 
+
+from time      import sleep
 
 try:
     from osgeo import gdal
@@ -71,11 +74,14 @@ class WMSDrv(WMSBase):
         init = True
         temp_map = None
 
+        fetch_try = 0
+
         # iterate through all tiles and download them
         while True:
 
-            # get url for request the tile and information for placing the tile into raster with other tiles
-            tile = req_mgr.GetNextTile()
+            if fetch_try == 0:
+                # get url for request the tile and information for placing the tile into raster with other tiles
+                tile = req_mgr.GetNextTile()
 
             # if last tile has been already downloaded 
             if not tile:
@@ -101,10 +107,28 @@ class WMSDrv(WMSBase):
             try:
                 temp_tile_opened = open(temp_tile, 'w')
                 temp_tile_opened.write(wms_data.read())
-            except IOError:
-                grass.fatal(_("Unable to write data into tempfile"))
+            except IOError, e:
+                # some servers are not happy with many subsequent requests for tiles done immediately,
+                # if immediate request was unsuccessful, try to repeat the request after 5s and 30s breaks
+                # TODO probably servers can return more kinds of errors related to this problem (not only 104)
+                if socket.error == type(e) and e[0] == 104 and fetch_try < 2:
+                    fetch_try += 1
+
+                    if fetch_try == 1:
+                        sleep_time = 5
+                    elif fetch_try == 2:
+                        sleep_time = 30
+
+                    grass.warning(_("Server refused to send data for a tile.\nRequest will be repeated after %d s.") % sleep_time)
+
+                    sleep(sleep_time)
+                    continue
+                else:
+                    grass.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
             finally:
                 temp_tile_opened.close()
+
+            fetch_try = 0
                 
             tile_dataset_info = gdal.Open(temp_tile, gdal.GA_ReadOnly) 
             if tile_dataset_info is None:
@@ -112,8 +136,8 @@ class WMSDrv(WMSBase):
                 try:
                     error_xml_opened = open(temp_tile, 'r')
                     err_str = error_xml_opened.read()     
-                except IOError:
-                    grass.fatal(_("Unable to read data from tempfile"))
+                except IOError, e:
+                    grass.fatal(_("Unable to read data from tempfile.\n%s") % str(e))
                 finally:
                     error_xml_opened.close()
 
@@ -157,7 +181,7 @@ class WMSDrv(WMSBase):
             tile_dataset_info = None
             grass.try_remove(temp_tile)
             grass.try_remove(temp_tile_pct2rgb)    
-        
+
         if not temp_map:
             return temp_map
         # georeferencing and setting projection of temp_map
