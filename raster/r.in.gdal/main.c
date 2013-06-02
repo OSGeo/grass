@@ -604,6 +604,7 @@ int main(int argc, char *argv[])
 
 	    for (iGCP = 0; iGCP < sPoints.count; iGCP++) {
 		sPoints.e1[iGCP] = pasGCPs[iGCP].dfGCPPixel;
+		/* why cellhd.rows - line ? */
 		sPoints.n1[iGCP] = cellhd.rows - pasGCPs[iGCP].dfGCPLine;
 
 		sPoints.e2[iGCP] = pasGCPs[iGCP].dfGCPX;	/* target */
@@ -751,7 +752,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     /*      Select a cell type for the new cell.                            */
     /* -------------------------------------------------------------------- */
     eRawGDT = GDALGetRasterDataType(hBand);
-    
+
     switch (eRawGDT) {
     case GDT_Float32:
 	data_type = FCELL_TYPE;
@@ -905,7 +906,9 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     }				/* end of not AVHRR */
     else {
 	/* AVHRR - read from south to north to match GCPs */
-	for (row = nrows; row > 0; row--) {
+	/* AVHRR - read from north to south to match GCPs */
+	/* because lines are fliped by default (why ?) */
+	for (row = 1; row <= nrows; row++) {
 	    GDALRasterIO(hBand, GF_Read, 0, row - 1, ncols, 1,
 			 cell, ncols, 1, eGDT, 0, 0);
 
@@ -968,7 +971,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	Rast_short_history((char *)output, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history((char *)output, &history);
-	
+
 	G_free(cell);
     }
 
