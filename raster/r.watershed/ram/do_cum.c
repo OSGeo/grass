@@ -522,6 +522,7 @@ int do_cum_mfd(void)
 			swale_cells++;
 		    valued = wat[nbr_index];
 		    ele_nbr = alt[nbr_index];
+		    edge = Rast_is_c_null_value(&ele_nbr);
 		    if ((ABS(valued) + 0.5) >= threshold  &&
 		        ele_nbr > ele)
 			stream_cells++;

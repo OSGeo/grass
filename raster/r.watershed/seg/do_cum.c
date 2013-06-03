@@ -574,6 +574,7 @@ int do_cum_mfd(void)
 
 		    /* check for swale or stream cells */
 		    is_swale = FLAG_GET(flag_nbr[ct_dir], SWALEFLAG);
+		    edge = FLAG_GET(flag_nbr[ct_dir], NULLFLAG);
 		    if (is_swale)
 			swale_cells++;
 		    if ((ABS(wat_nbr[ct_dir]) + 0.5) >= threshold &&
