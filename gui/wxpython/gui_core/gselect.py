@@ -179,6 +179,7 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivated)
         self.seltree.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelected)
         self.seltree.Bind(wx.EVT_TREE_DELETE_ITEM, lambda x: None)
+        self.seltree.Bind(wx.EVT_TREE_BEGIN_DRAG, lambda x: None)
         
     # the following dummy handler are needed to keep tree events from propagating up to
     # the parent GIS Manager layer tree
