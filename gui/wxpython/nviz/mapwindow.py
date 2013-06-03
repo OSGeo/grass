@@ -1264,8 +1264,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if 'object' not in data['surface']:
                 return 0
         elif layer.type ==  'vector':
-            if 'object' not in data['vlines'] and \
-                    'object' not in data['points']:
+            if 'object' not in data['vector']['lines'] and \
+                    'object' not in data['vector']['points']:
                 return 0
         
         return 1
