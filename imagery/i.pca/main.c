@@ -130,14 +130,18 @@ int main(int argc, char *argv[])
 
     /* input can be either several raster maps or a group */
     if (bands > 1) {
+	char name[GNAME_MAX];
+	
 	I_init_group_ref(&ref);
 	for (i = 0; opt_in->answers[i] != NULL; i++) {
-	    mapset = G_find_raster2(opt_in->answers[i], "");
+	    /* strip @mapset, do not modify opt_in->answers */
+	    strcpy(name, opt_in->answers[i]);
+	    mapset = G_find_raster(name, "");
 	    if (!mapset)
 		G_fatal_error(_("Raster map <%s> not found"),
 			      opt_in->answers[i]);
 	    /* Add input to group. */
-	    I_add_file_to_group_ref(opt_in->answers[i], mapset, &ref);
+	    I_add_file_to_group_ref(name, mapset, &ref);
 	}
     }
     else {
@@ -185,7 +189,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < bands; i++) {
 	char tmpbuf[GNAME_MAX];
 
-	sprintf(tmpbuf, "%s.%d", ref.file[i].name, i + 1);
+	sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
 	G_check_input_output_name(ref.file[i].name, tmpbuf, G_FATAL_EXIT);
 
 	inp_fd[i] = Rast_open_old(ref.file[i].name, ref.file[i].mapset);
