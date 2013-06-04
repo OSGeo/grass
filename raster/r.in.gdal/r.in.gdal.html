@@ -99,12 +99,25 @@ parameter.  Upon completion of the command, a new location will have been
 created (with only a PERMANENT mapset), and the raster will have been
 imported with the indicated <b>output</b> name into the PERMANENT mapset.
 
-<p>Support for GCPs: In case the image contains GCPs they are written to a
+<h3>Support for GCPs</h3>
+In case the image contains GCPs they are written to a
 POINTS file within an imagery group. They can directly be used for 
-<a href=i.rectify.html>i.rectify</a>. The <b>target</b> option allows you to
-automatically re-project the GCPs from their own projection into another
-projection read from the PROJ_INFO file of the location name
-<b>target</b>.
+<a href=i.rectify.html>i.rectify</a>.
+<p>
+The <b>target</b> option allows you to automatically re-project the GCPs 
+from their own projection into another projection read from the 
+PROJ_INFO file of the location name <b>target</b>. 
+<p>
+If the <b>target</b> location does not exist, a new location will be 
+created matching the projection definition of the GCPs. The target of 
+the output group will be set to the new location, and 
+<a href=i.rectify.html>i.rectify</a> can now be used without any further 
+preparation. 
+<p>
+Some satellite images (e.g. NOAA/AVHRR, ENVISAT) can contain hundreds 
+or thousands of GCPs. In these cases thin plate spline coordinate 
+transformation is recommended, either before import with 
+<b>gdalwarp -tps</b> or after import with <b>i.rectify -t</b>.
 
 <h2>NOTES</h2>
 

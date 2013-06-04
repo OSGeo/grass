@@ -107,8 +107,9 @@ int main(int argc, char *argv[])
     parm.target->key = "target";
     parm.target->type = TYPE_STRING;
     parm.target->required = NO;
+    parm.target->label = _("Name of GCPs target location");
     parm.target->description =
-	_("Name of location to read projection from for GCPs transformation");
+	_("Name of location to create or to read projection from for GCPs transformation");
     parm.target->key_desc = "name";
 
     parm.title = G_define_option();
@@ -258,9 +259,9 @@ int main(int argc, char *argv[])
 	l1bdriver = 0;
     else {
 	l1bdriver = 1;		/* AVHRR found, needs north south flip */
-	G_warning(_("The polynomial rectification used in i.rectify does "
-		    "not work well with NOAA/AVHRR data. Try using gdalwarp with "
-		    "thin plate spline rectification instead. (-tps)"));
+	G_warning(_("Input seems to be NOAA/AVHRR data which needs to be "
+	            "georeferenced with thin plate spline transformation "
+		    "(%s or %s)."), "i.rectify -t", "gdalwarp -tps");
     }
 
     /* zero cell header */
@@ -344,17 +345,16 @@ int main(int argc, char *argv[])
 			    "format; cannot create new location."));
 	}
 	else {
-            if (0 != G_make_location(parm.outloc->answer, &cellhd,
-                                     proj_info, proj_units)) {
-                G_fatal_error(_("Unable to create new location <%s>"),
-                              parm.outloc->answer);
-            }
+	    if (0 != G_make_location(parm.outloc->answer, &cellhd,
+				     proj_info, proj_units)) {
+		G_fatal_error(_("Unable to create new location <%s>"),
+			      parm.outloc->answer);
+	    }
 	    G_message(_("Location <%s> created"), parm.outloc->answer);
 	}
 
         /* If the c flag is set, clean up? and exit here */
-        if(flag_c->answer)
-        {
+        if (flag_c->answer) {
             exit(EXIT_SUCCESS);
         }
     }
@@ -574,6 +574,11 @@ int main(int argc, char *argv[])
 	    int iGCP;
 	    struct pj_info iproj,	/* input map proj parameters    */
 	      oproj;		/* output map proj parameters   */
+	    int create_target;
+	    struct Cell_head gcpcellhd;
+	    double emin, emax, nmin, nmax;
+	    
+	    G_zero(&gcpcellhd, sizeof(struct Cell_head));
 
 	    sPoints.count = GDALGetGCPCount(hDS);
 	    sPoints.e1 =
@@ -587,12 +592,31 @@ int main(int argc, char *argv[])
 		      sPoints.count, output);
 	    if (GDALGetGCPProjection(hDS) != NULL
 		&& strlen(GDALGetGCPProjection(hDS)) > 0) {
-		G_message("%s:\n%s",
+		G_message("%s\n"
+		          "--------------------------------------------\n"
+			  "%s\n"
+			  "--------------------------------------------",
 			  _("GCPs have the following OpenGIS WKT Coordinate System:"),
 			  GDALGetGCPProjection(hDS));
 	    }
 
+	    create_target = 0;
 	    if (parm.target->answer) {
+		char target_mapset[GMAPSET_MAX];
+		
+		/* does the target location exist? */
+		G__create_alt_env();
+		G__setenv("LOCATION_NAME", parm.target->answer);
+		sprintf(target_mapset, "PERMANENT");	/* must exist */
+
+		if (G__mapset_permissions(target_mapset) == -1) {
+		    /* create target location later */
+		    create_target = 1;
+		}
+		G__switch_env();
+	    }
+
+	    if (parm.target->answer && !create_target) {
 		SetupReprojector(GDALGetGCPProjection(hDS),
 				 parm.target->answer, &iproj, &oproj);
 		G_message(_("Re-projecting GCPs table:"));
@@ -602,9 +626,12 @@ int main(int argc, char *argv[])
 			  oproj.proj);
 	    }
 
+	    emin = emax = pasGCPs[0].dfGCPX;
+	    nmin = nmax = pasGCPs[0].dfGCPY;
+
 	    for (iGCP = 0; iGCP < sPoints.count; iGCP++) {
 		sPoints.e1[iGCP] = pasGCPs[iGCP].dfGCPPixel;
-		/* why cellhd.rows - line ? */
+		/* GDAL lines from N to S -> GRASS Y from S to N */
 		sPoints.n1[iGCP] = cellhd.rows - pasGCPs[iGCP].dfGCPLine;
 
 		sPoints.e2[iGCP] = pasGCPs[iGCP].dfGCPX;	/* target */
@@ -619,9 +646,63 @@ int main(int argc, char *argv[])
 			G_fatal_error(_("Error in pj_do_proj (can't "
 					"re-projection GCP %i)"), iGCP);
 		}
+
+		/* figure out legal e, w, n, s values for new target location */
+		if (create_target) {
+		    if (emin > pasGCPs[iGCP].dfGCPX)
+			emin = pasGCPs[iGCP].dfGCPX;
+		    if (emax < pasGCPs[iGCP].dfGCPX)
+			emax = pasGCPs[iGCP].dfGCPX;
+		    if (nmin > pasGCPs[iGCP].dfGCPY)
+			nmin = pasGCPs[iGCP].dfGCPY;
+		    if (nmax < pasGCPs[iGCP].dfGCPY)
+			nmax = pasGCPs[iGCP].dfGCPY;
+		}
 	    }			/* for all GCPs */
 
 	    I_put_control_points(output, &sPoints);
+	    if (create_target) {
+		/* create target location */
+		if (GPJ_wkt_to_grass(&gcpcellhd, &proj_info,
+				     &proj_units, GDALGetGCPProjection(hDS), 0) < 0) {
+		    G_warning(_("Unable to convert input map projection to GRASS "
+				    "format; cannot create new location."));
+		}
+		else {
+		    gcpcellhd.west = emin;
+		    gcpcellhd.east = emax;
+		    gcpcellhd.south = nmin;
+		    gcpcellhd.north = nmax;
+		    gcpcellhd.rows = GDALGetRasterYSize(hDS);
+		    gcpcellhd.cols = GDALGetRasterXSize(hDS);
+		    gcpcellhd.ns_res = 1.0;
+		    gcpcellhd.ns_res3 = 1.0;
+		    gcpcellhd.ew_res = 1.0;
+		    gcpcellhd.ew_res3 = 1.0;
+		    gcpcellhd.top = 1.;
+		    gcpcellhd.bottom = 0.;
+		    gcpcellhd.tb_res = 1.;
+		    gcpcellhd.depths = 1;
+		    
+		    G_adjust_Cell_head(&gcpcellhd, 1, 1);
+
+		    G__create_alt_env();
+		    if (0 != G_make_location(parm.target->answer, &gcpcellhd,
+					     proj_info, proj_units)) {
+			G_fatal_error(_("Unable to create new location <%s>"),
+				      parm.target->answer);
+		    }
+		    /* switch back to import location */
+		    G__switch_env();
+
+		    G_message(_("Location <%s> created"), parm.target->answer);
+		    /* set the group's target */
+		    I_put_target(output, parm.target->answer, "PERMANENT");
+		    G_message(_("The target for the output group <%s> has been set to "
+				"location <%s>, mapset <PERMANENT>."),
+				output, parm.target->answer);
+		}
+	    }
 
 	    G_free(sPoints.e1);
 	    G_free(sPoints.status);
@@ -713,6 +794,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 	    G_fatal_error(_("Unable to get projection key values of target location"));
     }
     else {			/* can't access target mapset */
+	/* access to mapset PERMANENT in target location is not required */
 	sprintf(errbuf, _("Mapset <%s> in target location <%s> - "),
 		target_mapset, pszDstLoc);
 	strcat(errbuf, permissions == 0 ? _("permission denied")
@@ -906,8 +988,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     }				/* end of not AVHRR */
     else {
 	/* AVHRR - read from south to north to match GCPs */
-	/* AVHRR - read from north to south to match GCPs */
-	/* because lines are fliped by default (why ?) */
+	/* AVHRR - as for other formats, read from north to south to match GCPs 
+	 * MM 2013 with gdal 1.10 */
 	for (row = 1; row <= nrows; row++) {
 	    GDALRasterIO(hBand, GF_Read, 0, row - 1, ncols, 1,
 			 cell, ncols, 1, eGDT, 0, 0);
@@ -980,7 +1062,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
     /* -------------------------------------------------------------------- */
     /*      Transfer colormap, if there is one.                             */
-    /*      prefer color rules over color tables, search:                    */
+    /*      prefer color rules over color tables, search:                   */
     /*      1. GRASS color rules in metadata                                */
     /*      2. Raster attribute table with color rules                      */
     /*      3. Raster color table                                           */
