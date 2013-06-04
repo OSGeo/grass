@@ -1,21 +1,25 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.rectify</em> uses the control
-points identified in the
+<em>i.rectify</em> uses the control points included in the source data 
+or identified with the
 <a href="wxGUI.gcp.html">Ground Control Points Manager</a>
-
-to calculate a transformation matrix based on a first,
-second, or third order polynomial and then converts x,y
+to calculate a transformation matrix and then converts x,y
 cell coordinates to standard map coordinates for each pixel
 in the image. The result is a planimetric image with a
 transformed coordinate system (i.e., a different coordinate
-system than before it was rectified).
+system than before it was rectified). Supported transformation methods 
+are first, second, and third order polynomial and thin plate spline. 
+Thin plate spline is recommended for ungeoreferenced satellite imagery 
+where ground control points (GCPs) are included. Examples are 
+<a href="http://www.gdal.org/frmt_l1b.html">NOAA/AVHRR</a>
+and <a href="http://www.gdal.org/frmt_various.html#Envisat">ENVISAT</a> 
+imagery which include throusands of GCPs.
 
 <p>
-The <a href="wxGUI.gcp.html">Ground Control Points Manager</a>
-must be run before <em>i.rectify</em>, and both programs
-are required to rectify an image. An image must be
-rectified before it can reside in a standard coordinate
+If no ground control points are available, the 
+<a href="wxGUI.gcp.html">Ground Control Points Manager</a>
+must be run before <em>i.rectify</em>. An image must be
+georeferences before it can reside in a standard coordinate
 LOCATION, and therefore be analyzed with the other map
 layers in the standard coordinate LOCATION. Upon
 completion of <em>i.rectify</em>, the rectified image is
@@ -95,6 +99,30 @@ included control points are immediately recalculated when
 the user selects a different transformation order from the
 menu bar. The polynomial equations are performed using a 
 modified Gaussian elimination method.
+
+<h4>Thin plate spline (TPS) transformation</h4>
+TPS transformation is selected with the <b>-t</b> flag. This method of
+coordinate transformation is recommended for satellite imagery where 
+hundreds or thousands of GCPs are included, and for historical printed 
+or scanned maps with unknown georeferencing and/or known localized 
+distortions. 
+<p>
+TPS combines a linear affine transformation with individual 
+transformation coefficients for each GCP, using the radial basis kernel 
+function with the distance <em>dist</em> between any two points:
+
+<dl>
+<dd>dist<sup>2</sup> * log(dist)
+</dl>
+
+As a consequence, localized distortions can be removed with TPS 
+transformation. For example, scan line sensors will have due to the 
+changing viewing angle larger distortions towards the end points of the 
+scan line than at the center of the scan line. Even higher order 
+polynomial transformations are not able to remove these locally 
+different distortions, but TPS transformation can. For best results, 
+TPS requires an even and, for localized distortions, dense spacing of 
+GCPs.
 
 <h3>Resampling method</h3>
 <p>The rectified data is resampled with one of seven different methods: 
