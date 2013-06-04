@@ -128,17 +128,8 @@ int main(int argc, char **argv)
     }
 
     /* the field separator */
-    fs = fs_opt->answer;
-/* FIXME: malloc() or G_store() needed for *fs since the sep can be multiple chars? */
-    if (strcmp(fs, "\\t") == 0)
-        fs = "\t";
-    if (strcmp(fs, "tab") == 0)
-        fs = "\t";
-    if (strcmp(fs, "space") == 0)
-        fs = " ";
-    if (strcmp(fs, "comma") == 0)
-        fs = ",";
-
+    fs = G_option_to_separator(fs_opt);
+    
     db_init_string(&sql);
     db_init_string(&value_string);
 
