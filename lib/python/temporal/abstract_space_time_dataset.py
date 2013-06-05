@@ -1084,17 +1084,107 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             dbif.close()
 
         return rows
+
+    @staticmethod
+    def shift_map_list(maps, gran):
+        """!Temporally shift each map in the list with the provided granularity
+        
+           This method does not perform any temporal database operations.
+           
+           @param maps A list of maps  with initialized temporal extent
+           @param gran The granularity to be used for shifting
+           @return The modified map list, None if nothing to shift or wrong granularity
+           @code
+           
+           >>> import grass.temporal as tgis
+           >>> maps = []
+           >>> for i in range(5):
+           ...   map = tgis.RasterDataset(None)
+           ...   if i%2 == 0:
+           ...       check = map.set_relative_time(i, i + 1, 'years')
+           ...   else:
+           ...       check = map.set_relative_time(i, None, 'years')
+           ...   maps.append(map)
+           >>> for map in maps:
+           ...   map.temporal_extent.print_info()
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 0
+            | End time:................... 1
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 1
+            | End time:................... None
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 2
+            | End time:................... 3
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 3
+            | End time:................... None
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 4
+            | End time:................... 5
+            | Relative time unit:......... years
+           >>> maps = tgis.AbstractSpaceTimeDataset.shift_map_list(maps, 5)
+           >>> for map in maps:
+           ...   map.temporal_extent.print_info()
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 5
+            | End time:................... 6
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 6
+            | End time:................... None
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 7
+            | End time:................... 8
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 8
+            | End time:................... None
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 9
+            | End time:................... 10
+            | Relative time unit:......... years
+
+           @endcode
+        """
+        if maps is None:
+            return None
+
+        if not check_granularity_string(gran, maps[-1].get_temporal_type()):
+            core.error(_("Wrong granularity format: %s"%(gran)))
+            return None
+        
+        for map in maps:
+            start, end = map.get_temporal_extent_as_tuple()
+            if map.is_time_absolute():
+                start = increment_datetime_by_string(start, gran)
+                if end is not None:
+                    end = increment_datetime_by_string(end, gran)
+                map.set_absolute_time(start, end)
+            elif map.is_time_relative():
+                start = start + int(gran)
+                if end is not None:
+                    end = end + int(gran)
+                map.set_relative_time(start, end, map.get_relative_time_unit())
+            
+        return maps
         
     def shift(self, gran, dbif=None):
         """!Temporally shift each registered map with the provided granularity
         
            @param gran The granularity to be used for shifting
            @param dbif The database interface to be used
-           @return True something to shift, False nothing to shift or wrong granularity
+           @return True something to shift, False if nothing to shift or wrong granularity
         
         """
         if not check_granularity_string(gran, self.get_temporal_type()):
-            self.error(_("Wrong granularity format: %s"%(gran)))
+            core.error(_("Wrong granularity format: %s"%(gran)))
             return False
             
         dbif, connected = init_dbif(dbif)
@@ -1128,7 +1218,118 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if connected:
             dbif.close()
             
-        return True
+    @staticmethod
+    def snap_map_list(maps):
+        """!For each map in the list snap the end time to the start time of its 
+           temporal nearest neighbor in the future.
+           
+           Maps with equal time stamps are not snapped.
+           
+           The granularity of the map list will be used to create the end time
+           of the last map in case it has a time instance as timestamp.
+           
+           This method does not perform any temporal database operations.
+           
+           @param maps A list of maps with initialized temporal extent
+           @return The modified map list, None nothing to shift or wrong granularity
+           
+           Usage:
+           
+           @code
+           
+           >>> import grass.temporal as tgis
+           >>> maps = []
+           >>> for i in range(5):
+           ...   map = tgis.RasterDataset(None)
+           ...   if i%2 == 0:
+           ...       check = map.set_relative_time(i, i + 1, 'years')
+           ...   else:
+           ...       check = map.set_relative_time(i, None, 'years')
+           ...   maps.append(map)
+           >>> for map in maps:
+           ...   map.temporal_extent.print_info()
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 0
+            | End time:................... 1
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 1
+            | End time:................... None
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 2
+            | End time:................... 3
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 3
+            | End time:................... None
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 4
+            | End time:................... 5
+            | Relative time unit:......... years
+           >>> maps = tgis.AbstractSpaceTimeDataset.snap_map_list(maps)
+           >>> for map in maps:
+           ...   map.temporal_extent.print_info()
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 0
+            | End time:................... 1
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 1
+            | End time:................... 2
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 2
+            | End time:................... 3
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 3
+            | End time:................... 4
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 4
+            | End time:................... 5
+            | Relative time unit:......... years
+
+           @endcode
+        """
+        if maps is None or len(maps) == 0:
+            return None
+        
+        # We need to sort the maps temporally by start time
+        maps = sorted(maps, key=AbstractDatasetComparisonKeyStartTime)
+
+        for i in range(len(maps) - 1):
+            start, end = maps[i].get_temporal_extent_as_tuple()
+            start_next, end = maps[i + 1].get_temporal_extent_as_tuple()
+            
+            # Maps with equal time stamps can not be snapped
+            if start != start_next:
+                if maps[i].is_time_absolute():
+                    maps[i].set_absolute_time(start, start_next)
+                elif maps[i].is_time_relative():
+                    maps[i].set_relative_time(start, start_next, maps[i].get_relative_time_unit())
+            else:
+                if maps[i].is_time_absolute():
+                    maps[i].set_absolute_time(start, end)
+                elif maps[i].is_time_relative():
+                    maps[i].set_relative_time(start, end, maps[i].get_relative_time_unit())
+        # Last map
+        start, end = maps[-1].get_temporal_extent_as_tuple()
+        # We increment the start time with the dataset 
+        # granularity if the end time is None
+        if end is None:
+            if maps[-1].is_time_absolute():
+                gran = compute_absolute_time_granularity(maps)
+                end =  increment_datetime_by_string(start, gran)
+                maps[-1].set_absolute_time(start, end)
+            elif maps[-1].is_time_relative():
+                gran = compute_relative_time_granularity(maps)
+                end = start + gran
+                maps[-1].set_relative_time(start, end, maps[-1].get_relative_time_unit())
+            
+        return maps
         
     def snap(self, dbif=None):
         """!For each registered map snap the end time to the start time of its 
@@ -1863,3 +2064,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if connected:
             dbif.close()
+
+###############################################################################
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
