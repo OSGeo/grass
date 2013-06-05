@@ -105,12 +105,12 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
 
             if isinstance(maps[0], list):
                 if len(maps[0]) > 0:
-                    first_time, dummy = maps[0][0].get_valid_time()
+                    first_time, dummy = maps[0][0].get_temporal_extent_as_tuple()
                 else:
                     core.warning(_("Empty map list."))
                     return
             else:
-                first_time, dummy = maps[0].get_valid_time()
+                first_time, dummy = maps[0].get_temporal_extent_as_tuple()
 
             for mymap in maps:
 
@@ -122,7 +122,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                 else:
                     map = mymap
 
-                start, end = map.get_valid_time()
+                start, end = map.get_temporal_extent_as_tuple()
                 if end:
                     delta = end - start
                 else:

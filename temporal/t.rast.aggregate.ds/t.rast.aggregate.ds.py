@@ -121,12 +121,7 @@ def main():
                       "the same temporal type"))
 
     # Check if intervals are present
-    if sampler_sp.get_temporal_type() == "absolute":
-        map_time = sampler_sp.absolute_time.get_map_time()
-    else:
-        map_time = sampler_sp.relative_time.get_map_time()
-
-    if map_time != "interval":
+    if sample.temporal_extent.get_map_time() != "interval":
         dbif.close()
         grass.fatal(_("All registered maps of the aggregation dataset "
                       "must have time intervals"))

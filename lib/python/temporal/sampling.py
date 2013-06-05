@@ -122,7 +122,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
             string += "%s" % ("distance_from_begin")
             print string
 
-        first_time, dummy = mapmatrizes[0][0]["granule"].get_valid_time()
+        first_time, dummy = mapmatrizes[0][0]["granule"].get_temporal_extent_as_tuple()
 
         for i in range(len(mapmatrizes[0])):
             mapname_list = []
@@ -141,7 +141,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
             entry = mapmatrizes[0][i]
             map = entry["granule"]
 
-            start, end = map.get_valid_time()
+            start, end = map.get_temporal_extent_as_tuple()
             if end:
                 delta = end - start
             else:

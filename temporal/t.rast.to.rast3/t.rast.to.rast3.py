@@ -80,7 +80,7 @@ def main():
 
     # Compatible temporal units are : days, hours, minutes and seconds
     # Incompatible are years and moths
-    start, end = sp.get_valid_time()
+    start, end = sp.get_temporal_extent_as_tuple()
 
     if sp.is_time_absolute():
         unit = granularity.split(" ")[1]
@@ -164,7 +164,7 @@ def main():
     else:
         id = output + "@" + mapset
 
-    start, end = sp.get_valid_time()
+    start, end = sp.get_temporal_extent_as_tuple()
     r3ds = tgis.Raster3DDataset(id)
 
     if r3ds.is_in_db():

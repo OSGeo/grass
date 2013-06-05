@@ -219,10 +219,7 @@ class AbstractMapDataset(AbstractDataset):
             print " +-------------------- Vector Dataset ----------------------------------------+"
         print " |                                                                            |"
         self.base.print_info()
-        if self.is_time_absolute():
-            self.absolute_time.print_info()
-        if self.is_time_relative():
-            self.relative_time.print_info()
+        self.temporal_extent.print_info()
         if self.is_topology_build():
             self.print_topology_info()
         self.spatial_extent.print_info()
@@ -246,10 +243,7 @@ class AbstractMapDataset(AbstractDataset):
     def print_shell_info(self):
         """!Print information about this object in shell style"""
         self.base.print_shell_info()
-        if self.is_time_absolute():
-            self.absolute_time.print_shell_info()
-        if self.is_time_relative():
-            self.relative_time.print_shell_info()
+        self.temporal_extent.print_shell_info()
         self.spatial_extent.print_shell_info()
         self.metadata.print_shell_info()
         datasets = self.get_registered_datasets()
@@ -494,8 +488,8 @@ class AbstractMapDataset(AbstractDataset):
         self.spatial_extent.set_spatial_extent(
             north, south, east, west, top, bottom)
 
-    def check_valid_time(self):
-        """!Check for correct valid time"""
+    def check_for_correct_time(self):
+        """!Check for correct time"""
         if self.is_time_absolute():
             start, end, tz = self.get_absolute_time()
         else:

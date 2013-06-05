@@ -202,7 +202,7 @@ def compute_relative_time_granularity(maps):
     delta = []
     # First we compute the timedelta of the intervals
     for map in maps:
-        start, end = map.get_valid_time()
+        start, end = map.get_temporal_extent_as_tuple()
         if start and end:
             t = abs(end - start)
             delta.append(int(t))
@@ -212,8 +212,8 @@ def compute_relative_time_granularity(maps):
         if i < len(maps) - 1:
             relation = maps[i + 1].temporal_relation(maps[i])
             if relation == "after":
-                start1, end1 = maps[i].get_valid_time()
-                start2, end2 = maps[i + 1].get_valid_time()
+                start1, end1 = maps[i].get_temporal_extent_as_tuple()
+                start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
                 # Gaps are between intervals, intervals and 
                 # points, points and points
                 if end1 and start2:
@@ -338,7 +338,7 @@ def compute_absolute_time_granularity(maps):
     datetime_delta = []
     # First we compute the timedelta of the intervals
     for map in maps:
-        start, end = map.get_valid_time()
+        start, end = map.get_temporal_extent_as_tuple()
         if start and end:
             delta.append(end - start)
             datetime_delta.append(compute_datetime_delta(start, end))
@@ -348,8 +348,8 @@ def compute_absolute_time_granularity(maps):
         if i < len(maps) - 1:
             relation = maps[i + 1].temporal_relation(maps[i])
             if relation == "after":
-                start1, end1 = maps[i].get_valid_time()
-                start2, end2 = maps[i + 1].get_valid_time()
+                start1, end1 = maps[i].get_temporal_extent_as_tuple()
+                start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
                 # Gaps are between intervals, intervals and 
                 # points, points and points
                 if end1 and start2:

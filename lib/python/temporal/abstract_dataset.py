@@ -170,9 +170,34 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            @param dataset The abstract dataset to check spatial overlapping
            @return True if self and the provided dataset spatial overlap
         """
-
         raise ImplementationError("This method must be implemented in the subclasses")
 
+    def spatial_intersection(self, dataset):
+        """!Return the spatial intersection as spatial_extent 
+           object or None in case no intersection was found.
+           
+           @param dataset The abstract dataset to intersect with
+           @return The intersection spatial extent
+        """
+        raise ImplementationError("This method must be implemented in the subclasses")
+
+    def spatial_union(self, dataset):
+        """!Return the spatial union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent
+        """
+        raise ImplementationError("This method must be implemented in the subclasses")
+    
+    def spatial_disjoint_union(self, dataset):
+        """!Return the spatial union as spatial_extent object.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent
+        """
+        raise ImplementationError("This method must be implemented in the subclasses")
+    
     def spatial_relation(self, dataset):
         """!Return the spatial relationship between self and dataset
         
@@ -196,10 +221,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
     def set_id(self, ident):
         self.base.set_id(ident)
-        if self.is_time_absolute():
-            self.absolute_time.set_id(ident)
-        if self.is_time_relative():
-            self.relative_time.set_id(ident)
+        self.temporal_extent.set_id(ident)
         self.spatial_extent.set_id(ident)
         self.metadata.set_id(ident)
 
@@ -221,7 +243,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         """
         return self.base.get_mapset()
 
-    def get_valid_time(self):
+    def get_temporal_extent_as_tuple(self):
         """!Returns a tuple of the valid start and end time
         
            Start and end time can be either of type datetime or of type integer,
@@ -229,17 +251,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            
            @return A tuple of (start_time, end_time)
         """
-
-        start = None
-        end = None
-
-        if self.is_time_absolute():
-            start = self.absolute_time.get_start_time()
-            end = self.absolute_time.get_end_time()
-        if self.is_time_relative():
-            start = self.relative_time.get_start_time()
-            end = self.relative_time.get_end_time()
-
+        start = self.temporal_extent.get_start_time()
+        end = self.temporal_extent.get_end_time()
         return (start, end)
 
     def get_absolute_time(self):
@@ -309,14 +322,14 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         """
         return self.base.get_ttype()
 
-    def get_spatial_extent(self):
+    def get_spatial_extent_as_tuple(self):
         """!Return the spatial extent as tuple
         
            Top and bottom are set to 0 in case of a two dimensional spatial extent.
            
            @return A the spatial extent as tuple (north, south, east, west, top, bottom) 
         """
-        return self.spatial_extent.get_spatial_extent()
+        return self.spatial_extent.get_spatial_extent_as_tuple()
 
     def select(self, dbif=None):
         """!Select temporal dataset entry from database and fill 
@@ -332,10 +345,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         dbif, connected = init_dbif(dbif)
 
         self.base.select(dbif)
-        if self.is_time_absolute():
-            self.absolute_time.select(dbif)
-        if self.is_time_relative():
-            self.relative_time.select(dbif)
+        self.temporal_extent.select(dbif)
         self.spatial_extent.select(dbif)
         self.metadata.select(dbif)
 
@@ -368,12 +378,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
         # Build the INSERT SQL statement
         statement = self.base.get_insert_statement_mogrified(dbif)
-        if self.is_time_absolute():
-            statement += self.absolute_time.get_insert_statement_mogrified(
-                dbif)
-        if self.is_time_relative():
-            statement += self.relative_time.get_insert_statement_mogrified(
-                dbif)
+        statement += self.temporal_extent.get_insert_statement_mogrified(dbif)
         statement += self.spatial_extent.get_insert_statement_mogrified(dbif)
         statement += self.metadata.get_insert_statement_mogrified(dbif)
         
@@ -403,12 +408,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
         # Build the UPDATE SQL statement
         statement = self.base.get_update_statement_mogrified(dbif, ident)
-        if self.is_time_absolute():
-            statement += self.absolute_time.get_update_statement_mogrified(
-                dbif, ident)
-        if self.is_time_relative():
-            statement += self.relative_time.get_update_statement_mogrified(
-                dbif, ident)
+        statement += self.temporal_extent.get_update_statement_mogrified(dbif, 
+                                                                         ident)
         statement += self.spatial_extent.get_update_statement_mogrified(dbif, 
                                                                         ident)
         statement += self.metadata.get_update_statement_mogrified(dbif, ident)
@@ -439,12 +440,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
         # Build the UPDATE SQL statement
         statement = self.base.get_update_all_statement_mogrified(dbif, ident)
-        if self.is_time_absolute():
-            statement += self.absolute_time.get_update_all_statement_mogrified(
-                dbif, ident)
-        if self.is_time_relative():
-            statement += self.relative_time.get_update_all_statement_mogrified(
-                dbif, ident)
+        statement += self.temporal_extent.get_update_all_statement_mogrified(dbif, 
+                                                                             ident)
         statement += self.spatial_extent.get_update_all_statement_mogrified(
             dbif, ident)
         statement += self.metadata.get_update_all_statement_mogrified(dbif, ident)
@@ -486,31 +483,54 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
             return self.base.get_ttype() == "relative"
         else:
             return None
+    
+    def _get_temporal_extent(self):
+        """!Return the temporal extent of the correct internal type
+        """
+        if self.is_time_absolute():
+            return self.absolute_time
+        if self.is_time_relative():
+            return self.relative_time
+        return None
+    
+    temporal_extent = property(fget=_get_temporal_extent)
 
     def temporal_relation(self, dataset):
         """!Return the temporal relation of self and the provided dataset
         
             @return The temporal relation as string
         """
-        if self.is_time_absolute() and dataset.is_time_absolute():
-            return self.absolute_time.temporal_relation(dataset.absolute_time)
-        if self.is_time_relative() and dataset.is_time_relative():
-            return self.relative_time.temporal_relation(dataset.relative_time)
-        return None
-
+        return self.temporal_extent.temporal_relation(dataset.temporal_extent)
+    
     def temporal_intersection(self, dataset):
-        """!Intersect self with the provided datasetand
+        """!Intersect self with the provided dataset and
            return a new temporal extent with the new start and end time
            
            @param dataset The abstract dataset to temporal intersect with
            @return The new temporal extent with start and end time, 
                    or None in case of no intersection
         """
-        if self.is_time_absolute() and dataset.is_time_absolute():
-            return self.absolute_time.intersect(dataset.absolute_time)
-        if self.is_time_relative() and dataset.is_time_relative():
-            return self.relative_time.intersect(dataset.relative_time)
-        return None
+        return self.temporal_extent.intersect(dataset.temporal_extent)
+        
+    def temporal_union(self, dataset):
+        """!Creates a union with the provided dataset and
+           return a new temporal extent with the new start and end time.
+           
+           @param dataset The abstract dataset to create temporal union with
+           @return The new temporal extent with start and end time, 
+                   or None in case of no intersection
+        """
+        return self.temporal_extent.union(dataset.temporal_extent)
+        
+    def temporal_disjoint_union(self, dataset):
+        """!Creates a union with the provided dataset and
+           return a new temporal extent with the new start and end time.
+           
+           @param dataset The abstract dataset to create temporal union with
+           @return The new temporal extent with start and end time, 
+                   or None in case of no intersection
+        """
+        return self.temporal_extent.disjoint_union(dataset.temporal_extent)
         
 ###############################################################################
 
@@ -531,33 +551,33 @@ class AbstractDatasetComparisonKeyStartTime(object):
         self.obj = obj
 
     def __lt__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return startA < startB
 
     def __gt__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return startA > startB
 
     def __eq__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return startA == startB
 
     def __le__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return startA <= startB
 
     def __ge__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return startA >= startB
 
     def __ne__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return startA != startB
 
 ###############################################################################
@@ -579,33 +599,33 @@ class AbstractDatasetComparisonKeyEndTime(object):
         self.obj = obj
 
     def __lt__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return endA < endB
 
     def __gt__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return endA > endB
 
     def __eq__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return endA == endB
 
     def __le__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return endA <= endB
 
     def __ge__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return endA >= endB
 
     def __ne__(self, other):
-        startA, endA = self.obj.get_valid_time()
-        startB, endB = other.obj.get_valid_time()
+        startA, endA = self.obj.get_temporal_extent_as_tuple()
+        startB, endB = other.obj.get_temporal_extent_as_tuple()
         return endA != endB
 
 ###############################################################################

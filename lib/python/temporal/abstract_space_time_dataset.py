@@ -84,10 +84,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def print_self(self):
         """!Print the content of the internal structure to stdout"""
         self.base.print_self()
-        if self.is_time_absolute():
-            self.absolute_time.print_self()
-        if self.is_time_relative():
-            self.relative_time.print_self()
+        self.temporal_extent.print_self()
         self.spatial_extent.print_self()
         self.metadata.print_self()
 
@@ -108,10 +105,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             print " +-------------------- Space Time Vector Dataset -----------------------------+"
         print " |                                                                            |"
         self.base.print_info()
-        if self.is_time_absolute():
-            self.absolute_time.print_info()
-        if self.is_time_relative():
-            self.relative_time.print_info()
+        self.temporal_extent.print_info()
         self.spatial_extent.print_info()
         self.metadata.print_info()
         print " +----------------------------------------------------------------------------+"
@@ -119,10 +113,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def print_shell_info(self):
         """!Print information about this class in shell style"""
         self.base.print_shell_info()
-        if self.is_time_absolute():
-            self.absolute_time.print_shell_info()
-        if self.is_time_relative():
-            self.relative_time.print_shell_info()
+        self.temporal_extent.print_shell_info()
         self.spatial_extent.print_shell_info()
         self.metadata.print_shell_info()
 
@@ -241,14 +232,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            @return The granularity 
         """
 
-        temporal_type = self.get_temporal_type()
-
-        if temporal_type == "absolute":
-            granularity = self.absolute_time.get_granularity()
-        elif temporal_type == "relative":
-            granularity = self.relative_time.get_granularity()
-
-        return granularity
+        return self.temporal_extent.get_granularity()
 
     def set_granularity(self, granularity):
         """!Set the granularity
@@ -275,12 +259,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if temporal_type == "absolute":
             self.set_time_to_absolute()
-            self.absolute_time.set_granularity(granularity)
         elif temporal_type == "relative":
             self.set_time_to_relative()
-            self.relative_time.set_granularity(granularity)
         else:
             core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
+            
+        self.temporal_extent.set_granularity(granularity)
 
     def set_relative_time_unit(self, unit):
         """!Set the relative time unit which may be of type: 
@@ -305,14 +289,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def get_map_time(self):
         """!Return the type of the map time, interval, point, mixed or invalid"""
 
-        temporal_type = self.get_temporal_type()
-
-        if temporal_type == "absolute":
-            map_time = self.absolute_time.get_map_time()
-        elif temporal_type == "relative":
-            map_time = self.relative_time.get_map_time()
-
-        return map_time
+        return self.temporal_extent.get_map_time()
 
     def count_temporal_types(self, maps=None, dbif=None):
         """!Return the temporal type of the registered maps as dictionary
@@ -666,7 +643,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # Read the spatial extent
             if spatial:
                 granule.spatial_extent.select(dbif)
-            start, end = granule.get_valid_time()
+            start, end = granule.get_temporal_extent_as_tuple()
 
             where = create_temporal_relation_sql_where_statement(
                 start, end, use_start,
@@ -762,7 +739,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not check:
             core.fatal(_("Wrong granularity: \"%s\"") % str(gran))
 
-        start, end = self.get_valid_time()
+        start, end = self.get_temporal_extent_as_tuple()
         
         if start is None or end is None:
             return None
@@ -932,8 +909,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if i < len(maps) - 1:
                     relation = maps[i + 1].temporal_relation(maps[i])
                     if relation == "after":
-                        start1, end1 = maps[i].get_valid_time()
-                        start2, end2 = maps[i + 1].get_valid_time()
+                        start1, end1 = maps[i].get_temporal_extent_as_tuple()
+                        start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
                         end = start2
                         if end1 is not None:
                             start = end1
@@ -1133,7 +1110,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # in the middle of the update process when the increment
         # results in wrong number of days in a month
         for map in maps:
-            start, end = map.get_valid_time()
+            start, end = map.get_temporal_extent_as_tuple()
             
             if self.is_time_absolute():
                 start = increment_datetime_by_string(start, gran)
@@ -1172,8 +1149,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         date_list = []
         
         for i in range(len(maps) - 1):
-            start, end = maps[i].get_valid_time()
-            start_next, end = maps[i + 1].get_valid_time()
+            start, end = maps[i].get_temporal_extent_as_tuple()
+            start_next, end = maps[i + 1].get_temporal_extent_as_tuple()
             
             # Maps with equal time stamps can not be snapped
             if start != start_next:
@@ -1183,7 +1160,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 date_list.append((start, end))
         
         # Last map
-        start, end = maps[-1].get_valid_time()
+        start, end = maps[-1].get_temporal_extent_as_tuple()
         # We increment the start time with the dataset 
         # granularity if the end time is None
         if end is None:
@@ -1391,7 +1368,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # First select all data from the database
         map.select(dbif)
 
-        if not map.check_valid_time():
+        if not map.check_for_correct_time():
             if map.get_layer():
                 core.fatal(_("Map <%s> with layer %s has invalid time")
                            % (map.get_map_id(), map.get_layer()))
@@ -1874,26 +1851,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             gran = None
 
         # Set the map time type and update the time objects
-        if self.is_time_absolute():
-            self.absolute_time.select(dbif)
-            self.metadata.select(dbif)
-            if self.metadata.get_number_of_maps() > 0:
-                self.absolute_time.set_map_time(map_time)
-                self.absolute_time.set_granularity(gran)
-            else:
-                self.absolute_time.set_map_time(None)
-                self.absolute_time.set_granularity(None)
-            self.absolute_time.update_all(dbif)
+        self.temporal_extent.select(dbif)
+        self.metadata.select(dbif)
+        if self.metadata.get_number_of_maps() > 0:
+            self.temporal_extent.set_map_time(map_time)
+            self.temporal_extent.set_granularity(gran)
         else:
-            self.relative_time.select(dbif)
-            self.metadata.select(dbif)
-            if self.metadata.get_number_of_maps() > 0:
-                self.relative_time.set_map_time(map_time)
-                self.relative_time.set_granularity(gran)
-            else:
-                self.relative_time.set_map_time(None)
-                self.relative_time.set_granularity(None)
-            self.relative_time.update_all(dbif)
+            self.temporal_extent.set_map_time(None)
+            self.temporal_extent.set_granularity(None)
+        self.temporal_extent.update_all(dbif)
 
         if connected:
             dbif.close()
