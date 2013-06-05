@@ -27,6 +27,7 @@ from core.gcmd        import RunCommand, GError
 from core             import globalvar
 from gui_core.gselect import Select
 from core.settings    import UserSettings
+from grass.script import core as grass
 
 
 class VectorCleaningFrame(wx.Frame):
@@ -131,6 +132,8 @@ class VectorCleaningFrame(wx.Frame):
                                          label=_('Select output vector map:'))
         self.selectionOutput = Select(parent=self.panel, id=wx.ID_ANY,
                                       size=globalvar.DIALOG_GSELECT_SIZE,
+                                      mapsets=[grass.gisenv()['MAPSET'],],
+                                      fullyQualified = False,
                                       type='vector')
 
         self.overwrite = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
@@ -204,6 +207,8 @@ class VectorCleaningFrame(wx.Frame):
         typeoptSizer = wx.BoxSizer(wx.HORIZONTAL)
         for num in range(0, self.n_ftypes):
             type_box = self.ftype_check[num]
+            if self.ftype[num] in ('point', 'line', 'area'):
+                type_box.SetValue(True);
             typeoptSizer.Add(item=type_box, flag=wx.ALIGN_LEFT, border=1)
 
         self.ftypeSizer.Add(item=typeoptSizer,
@@ -308,9 +313,6 @@ class VectorCleaningFrame(wx.Frame):
     def AddTool(self):
         snum = len(self.toolslines.keys())
         num = snum + 1
-        # tool number
-        tool_no = wx.StaticText(parent=self.ct_panel, id=3000 + num,
-                                label=str(num) + '.')
         # tool
         tool_cbox = wx.ComboBox(parent=self.ct_panel, id=1000 + num,
                                 size=(300, -1), choices=self.tool_desc_list,
@@ -323,20 +325,18 @@ class VectorCleaningFrame(wx.Frame):
                                style=wx.TE_NOHIDESEL)
         self.Bind(wx.EVT_TEXT, self.OnThreshValue, txt_ctrl)
 
-        # select
-        select = wx.CheckBox(parent=self.ct_panel, id=num)
+        # select with tool number
+        select = wx.CheckBox(parent=self.ct_panel, id=num, label=str(num) + '.')
         select.SetValue(False)
         self.Bind(wx.EVT_CHECKBOX, self.OnSelect, select)
 
         # start with row 1 and col 1 for nicer layout
-        self.ct_sizer.Add(item=tool_no, pos=(num, 1),
-                          flag=wx.ALIGN_CENTER_VERTICAL, border=5)
+        self.ct_sizer.Add(item=select, pos=(num, 1),
+                          flag=wx.ALIGN_CENTER | wx.RIGHT)
         self.ct_sizer.Add(item=tool_cbox, pos=(num, 2),
                           flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
         self.ct_sizer.Add(item=txt_ctrl, pos=(num, 3),
                           flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
-        self.ct_sizer.Add(item=select, pos=(num, 4),
-                          flag=wx.ALIGN_CENTER | wx.RIGHT)
 
         self.toolslines[num] = {'tool_desc': '',
                                 'tool': '',
