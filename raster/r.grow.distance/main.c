@@ -37,6 +37,7 @@ static DCELL *old_val_row, *new_val_row;
 static double (*distance) (double dx, double dy);
 static double xres, yres;
 
+#undef MAX
 #define MAX(a, b)	((a) > (b) ? (a) : (b))
 
 static double distance_euclidean_squared(double dx, double dy)
@@ -209,6 +210,12 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unknown metric: '%s'"), opt.met->answer);
 
     if (flag.m->answer) {
+	if (window.proj == PROJECTION_LL && 
+	    strcmp(opt.met->answer, "geodesic") != 0) {
+	    G_fatal_error(_("Output distance in meters for lat/lon is only possible with '%s=%s'"),
+	                  opt.met->key, "geodesic");
+	}
+
 	scale = G_database_units_to_meters_factor();
 	if (strcmp(opt.met->answer, "squared") == 0)
 	    scale *= scale;
@@ -300,7 +307,7 @@ int main(int argc, char **argv)
     Rast_set_c_null_value(old_x_row, ncols);
     Rast_set_c_null_value(old_y_row, ncols);
 
-    G_message(_("Writing output raster maps..."), opt.in->answer);
+    G_message(_("Writing output raster maps..."));
     for (row = 0; row < nrows; row++) {
 	int irow = nrows - 1 - row;
 	off_t offset =
