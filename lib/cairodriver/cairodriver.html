@@ -96,7 +96,7 @@ Several environment variables affect the operation of the Cairo driver:
 
 <h3>Examples</h3>
 
-Example using the driver to generate a PNG file (bash-syntax):
+Example: using the driver to generate a PNG file (bash-syntax):
 
 <div class="code"><pre>
 export GRASS_RENDER_IMMEDIATE=cairo
@@ -111,7 +111,22 @@ d.vect map=streams width=1 color=blue fcolor=aqua type=area,line
 d.vect map=roadsmajor width=2
 </pre></div>
 
-Example using the driver to generate a PDF file (bash-syntax):
+<!-- TODO: why does it generate rasterized output?
+
+Example: using the driver to generate a PDF file with a vector map (bash-syntax):
+
+<div class="code"><pre>
+export GRASS_RENDER_IMMEDIATE=cairo
+export GRASS_PNGFILE=nc_spm.pdf
+export GRASS_WIDTH=800
+export GRASS_HEIGHT=800
+
+g.region vect=roadsmajor
+d.vect map=roadsmajor layer=1 display=shape,attr attrcolumn=ROAD_NAME lcolor=0:90:255
+</pre></div>
+-->
+
+Example: using the driver to generate a PDF file with a raster map (bash-syntax):
 
 <div class="code"><pre>
 export GRASS_RENDER_IMMEDIATE=cairo
