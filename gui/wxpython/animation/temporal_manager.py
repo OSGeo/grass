@@ -242,7 +242,7 @@ class TemporalManager(object):
 
                 series = map.get_id()
 
-                start, end = map.get_valid_time()
+                start, end = map.get_temporal_extent_as_tuple()
                 if end:
                     end = str(end)
                 if end is None:
