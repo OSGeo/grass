@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     struct Map_info Map;
     char query[1024];
     struct ilist *list_lines;
-    char *fs;
+    char *fs, *vs;
     struct bound_box *min_box, *line_box;
     int i, line, area, init_box, cat;
 
@@ -129,6 +129,10 @@ int main(int argc, char **argv)
 
     /* the field separator */
     fs = G_option_to_separator(fs_opt);
+    if (vs_opt->answer)
+        vs = G_option_to_separator(vs_opt);
+    else
+        vs = NULL;
     
     db_init_string(&sql);
     db_init_string(&value_string);
@@ -261,8 +265,8 @@ int main(int argc, char **argv)
 	else {
 	    if (!v_flag->answer)
 		fprintf(stdout, "\n");
-	    else if (vs_opt->answer)
-		fprintf(stdout, "%s\n", vs_opt->answer);
+	    else if (vs)
+		fprintf(stdout, "%s\n", vs);
 	}
     }
 
