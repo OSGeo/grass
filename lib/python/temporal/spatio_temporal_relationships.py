@@ -162,7 +162,7 @@ class SpatioTemporalTopologyBuilder(object):
         """
         rect = vector.RTreeAllocRect(tree)
 
-        start, end = map_.get_valid_time()
+        start, end = map_.get_temporal_extent_as_tuple()
 
         if not end:
             end = start
@@ -174,11 +174,11 @@ class SpatioTemporalTopologyBuilder(object):
         if spatial is None:
             vector.RTreeSetRect1D(rect, tree, float(start), float(end))
         elif spatial == "2D":
-            north, south, east, west, top, bottom = map_.get_spatial_extent()
+            north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
             vector.RTreeSetRect3D(rect, tree, west, east, south, north, 
                                   float(start), float(end))
         elif spatial == "3D":
-            north, south, east, west, top, bottom = map_.get_spatial_extent()
+            north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
             vector.RTreeSetRect4D(rect, tree, west, east, south, north, 
                                   bottom, top, float(start), float(end))
 

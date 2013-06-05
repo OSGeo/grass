@@ -198,10 +198,10 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def intersect_2d(self, extent):
         """!Return the two dimensional intersection as spatial_extent 
-        object or None in case no intersection was found.
+           object or None in case no intersection was found.
        
         @param extent The spatial extent to intersect with
-         @return The intersection spatial extent
+        @return The intersection spatial extent
         """
 
         if not self.overlapping_2d(extent):
@@ -342,7 +342,181 @@ class SpatialExtent(SQLDatabaseInterface):
         new.set_bottom(nB)
 
         return new
+        
+    def union_2d(self, extent):
+        """!Return the two dimensional union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+        @param extent The spatial extent to create a union with
+        @return The union spatial extent
+        """
+        if not self.overlapping_2d(extent) and not self.meet_2d(extent):
+            return None
+        
+        return self.disjoint_union_2d(extent)
+    
+    def disjoint_union_2d(self, extent):
+        """!Return the two dimensional union as spatial_extent.
+       
+        @param extent The spatial extent to create a union with
+        @return The union spatial extent
+        """
+        eN = extent.get_north()
+        eS = extent.get_south()
+        eE = extent.get_east()
+        eW = extent.get_west()
 
+        N = self.get_north()
+        S = self.get_south()
+        E = self.get_east()
+        W = self.get_west()
+
+        # Adjust the east and west in case of LL projection
+        if self.get_projection() == "LL":
+            while eE < W:
+                eE += 360.0
+                eW += 360.0
+
+            while eW > E:
+                eE -= 360.0
+                eW -= 360.0
+
+        # Compute the extent
+        nN = N
+        nS = S
+        nE = E
+        nW = W
+
+        if W > eW:
+            nW = eW
+        if E < eE:
+            nE = eE
+        if N < eN:
+            nN = eN
+        if S > eS:
+            nS = eS
+
+        new = SpatialExtent(north=nN, south=nS, east=nE, west=nW,
+                             top=0, bottom=0, proj=self.get_projection())
+        return new
+
+    def union(self, extent):
+        """!Return the three dimensional union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+        @param extent The spatial extent to create a union with
+        @return The union spatial extent
+        """
+        if not self.overlapping(extent) and not self.meet(extent):
+            return None
+        
+        return self.disjoint_union(extent)
+    
+    def disjoint_union(self, extent):
+        """!Return the three dimensional union as spatial_extent .
+        
+        Usage:
+        
+        @code
+        
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
+        >>> B = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
+        >>> C = A.disjoint_union(B)
+        >>> C.print_info()
+         +-------------------- Spatial extent ----------------------------------------+
+         | North:...................... 80.0
+         | South:...................... 20.0
+         | East:.. .................... 60.0
+         | West:....................... 10.0
+         | Top:........................ 50.0
+         | Bottom:..................... -50.0
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=10, 
+        ... bottom=-50, top=50)
+        >>> C = A.disjoint_union(B)
+        >>> C.print_info()
+         +-------------------- Spatial extent ----------------------------------------+
+         | North:...................... 80.0
+         | South:...................... 20.0
+         | East:.. .................... 60.0
+         | West:....................... 10.0
+         | Top:........................ 50.0
+         | Bottom:..................... -50.0
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, 
+        ... bottom=-50, top=50)
+        >>> C = A.disjoint_union(B)
+        >>> C.print_info()
+         +-------------------- Spatial extent ----------------------------------------+
+         | North:...................... 80.0
+         | South:...................... 20.0
+         | East:.. .................... 60.0
+         | West:....................... 10.0
+         | Top:........................ 50.0
+         | Bottom:..................... -50.0
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, 
+        ... bottom=-30, top=50)
+        >>> C = A.disjoint_union(B)
+        >>> C.print_info()
+         +-------------------- Spatial extent ----------------------------------------+
+         | North:...................... 80.0
+         | South:...................... 20.0
+         | East:.. .................... 60.0
+         | West:....................... 10.0
+         | Top:........................ 50.0
+         | Bottom:..................... -50.0
+        >>> B = SpatialExtent(north=40, south=30, east=60, west=30, 
+        ... bottom=-30, top=30)
+        >>> C = A.disjoint_union(B)
+        >>> C.print_info()
+         +-------------------- Spatial extent ----------------------------------------+
+         | North:...................... 80.0
+         | South:...................... 20.0
+         | East:.. .................... 60.0
+         | West:....................... 10.0
+         | Top:........................ 50.0
+         | Bottom:..................... -50.0
+        >>> A = SpatialExtent(north=80, south=20, east=60, west=10, 
+        ... bottom=-50, top=50)
+        >>> B = SpatialExtent(north=90, south=80, east=70, west=20, 
+        ... bottom=-30, top=60)
+        >>> C = A.disjoint_union(B)
+        >>> C.print_info()
+         +-------------------- Spatial extent ----------------------------------------+
+         | North:...................... 90.0
+         | South:...................... 20.0
+         | East:.. .................... 70.0
+         | West:....................... 10.0
+         | Top:........................ 60.0
+         | Bottom:..................... -50.0
+         
+         @endcode
+         
+         @param extent The spatial extent to create a disjoint union with
+         @return The union spatial extent
+        """
+
+        new = self.disjoint_union_2d(extent)
+
+        eT = extent.get_top()
+        eB = extent.get_bottom()
+
+        T = self.get_top()
+        B = self.get_bottom()
+
+        nT = T
+        nB = B
+
+        if B > eB:
+            nB = eB
+        if T < eT:
+            nT = eT
+
+        new.set_top(nT)
+        new.set_bottom(nB)
+
+        return new
+    
     def is_in_2d(self, extent):
         """!Return True if this extent (A) is located in the provided spatial
         extent (B) in two dimensions.
@@ -1497,7 +1671,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         area = self.get_area()
 
-        bbox = self.get_spatial_extent()
+        bbox = self.get_spatial_extent_as_tuple()
 
         z = abs(bbox[4] - bbox[5])
 
@@ -1513,14 +1687,14 @@ class SpatialExtent(SQLDatabaseInterface):
             core.error(_("Area computation is not supported "
                          "for LL projections"))
 
-        bbox = self.get_spatial_extent()
+        bbox = self.get_spatial_extent_as_tuple()
 
         y = abs(bbox[0] - bbox[1])
         x = abs(bbox[2] - bbox[3])
 
         return x * y
 
-    def get_spatial_extent(self):
+    def get_spatial_extent_as_tuple(self):
         """!Return a tuple (north, south, east, west, top, bottom) 
            of the spatial extent"""
 
@@ -1528,7 +1702,7 @@ class SpatialExtent(SQLDatabaseInterface):
             self.north, self.south, self.east, self.west,
             self.top, self.bottom)
 
-    def get_spatial_extent_2d(self):
+    def get_spatial_extent_as_tuple_2d(self):
         """!Return a tuple (north, south, east, west,) of the 2d spatial extent
         """
         return (self.north, self.south, self.east, self.west)

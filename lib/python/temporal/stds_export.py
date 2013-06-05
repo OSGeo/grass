@@ -320,7 +320,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     if sp.is_time_relative():
 	string += "%s=%s\n" % ("relative_time_unit", sp.get_relative_time_unit())
     string += "%s=%s\n" % ("number_of_maps", sp.metadata.get_number_of_maps())
-    north, south, east, west, top, bottom = sp.get_spatial_extent()
+    north, south, east, west, top, bottom = sp.get_spatial_extent_as_tuple()
     string += "%s=%s\n" % ("north", north)
     string += "%s=%s\n" % ("south", south)
     string += "%s=%s\n" % ("east", east)

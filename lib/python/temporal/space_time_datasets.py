@@ -97,7 +97,7 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap.get_stds_register()
         >>> rmap.get_absolute_time()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0), None)
-        >>> rmap.get_valid_time()
+        >>> rmap.get_temporal_extent_as_tuple()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
         >>> rmap.get_name()
         'strds_map_test_case'
@@ -105,7 +105,7 @@ class RasterDataset(AbstractMapDataset):
         True
         >>> rmap.get_temporal_type()
         'absolute'
-        >>> rmap.get_spatial_extent()
+        >>> rmap.get_spatial_extent_as_tuple()
         (80.0, 0.0, 120.0, 0.0, 0.0, 0.0)
         >>> rmap.is_time_absolute()
         True
@@ -146,14 +146,38 @@ class RasterDataset(AbstractMapDataset):
 
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents 2d overlap"""
-
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
         """!Return the two dimensional spatial relation"""
-
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
+    def spatial_intersection(self, dataset):
+        """!Return the two dimensional intersection as spatial_extent 
+           object or None in case no intersection was found.
+           
+           @param dataset The abstract dataset to intersect with
+           @return The intersection spatial extent or None
+        """
+        return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+
+    def spatial_union(self, dataset):
+        """!Return the two dimensional union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent or None
+        """
+        return self.spatial_extent.union_2d(dataset.spatial_extent)
+    
+    def spatial_disjoint_union(self, dataset):
+        """!Return the two dimensional union as spatial_extent object.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent
+        """
+        return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+    
     def get_np_array(self):
         """!Return this raster map as memmap numpy style array to access the raster
            values in numpy style without loading the whole map in the RAM.
@@ -382,7 +406,6 @@ class Raster3DDataset(AbstractMapDataset):
 
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents overlap"""
-
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.overlapping(dataset.spatial_extent)
         else:
@@ -390,12 +413,46 @@ class Raster3DDataset(AbstractMapDataset):
 
     def spatial_relation(self, dataset):
         """!Return the two or three dimensional spatial relation"""
-
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.spatial_relation(dataset.spatial_extent)
         else:
             return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
+    def spatial_intersection(self, dataset):
+        """!Return the three or two dimensional intersection as spatial_extent 
+           object or None in case no intersection was found.
+           
+           @param dataset The abstract dataset to intersect with
+           @return The intersection spatial extent or None
+        """
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
+            return self.spatial_extent.intersect(dataset.spatial_extent)
+        else:
+            return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+
+    def spatial_union(self, dataset):
+        """!Return the three or two dimensional union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent or None
+        """
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
+            return self.spatial_extent.union(dataset.spatial_extent)
+        else:
+            return self.spatial_extent.union_2d(dataset.spatial_extent)
+        
+    def spatial_disjoint_union(self, dataset):
+        """!Return the three or two dimensional union as spatial_extent object.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent
+        """
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
+            return self.spatial_extent.disjoint_union(dataset.spatial_extent)
+        else:
+            return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+    
     def get_np_array(self):
         """!Return this 3D raster map as memmap numpy style array to access the 3D raster
            values in numpy style without loading the whole map in the RAM.
@@ -638,6 +695,32 @@ class VectorDataset(AbstractMapDataset):
 
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
+    def spatial_intersection(self, dataset):
+        """!Return the two dimensional intersection as spatial_extent 
+           object or None in case no intersection was found.
+           
+           @param dataset The abstract dataset to intersect with
+           @return The intersection spatial extent or None
+        """
+        return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+
+    def spatial_union(self, dataset):
+        """!Return the two dimensional union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent or None
+        """
+        return self.spatial_extent.union_2d(dataset.spatial_extent)
+        
+    def spatial_disjoint_union(self, dataset):
+        """!Return the two dimensional union as spatial_extent object.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent
+        """
+        return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+        
     def reset(self, ident):
         """!Reset the internal structure and set the identifier"""
         self.base = VectorBase(ident=ident)
@@ -862,14 +945,38 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
 
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents 2d overlap"""
-
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
         """!Return the two dimensional spatial relation"""
-
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
+    def spatial_intersection(self, dataset):
+        """!Return the two dimensional intersection as spatial_extent 
+           object or None in case no intersection was found.
+           
+           @param dataset The abstract dataset to intersect with
+           @return The intersection spatial extent or None
+        """
+        return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+
+    def spatial_union(self, dataset):
+        """!Return the two dimensional union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent or None
+        """
+        return self.spatial_extent.union_2d(dataset.spatial_extent)
+        
+    def spatial_disjoint_union(self, dataset):
+        """!Return the two dimensional union as spatial_extent object.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent
+        """
+        return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+    
     def reset(self, ident):
 
         """!Reset the internal structure and set the identifier"""
@@ -926,6 +1033,41 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         else:
             return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
+    def spatial_intersection(self, dataset):
+        """!Return the three or two dimensional intersection as spatial_extent 
+           object or None in case no intersection was found.
+           
+           @param dataset The abstract dataset to intersect with
+           @return The intersection spatial extent or None
+        """
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
+            return self.spatial_extent.intersect(dataset.spatial_extent)
+        else:
+            return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+
+    def spatial_union(self, dataset):
+        """!Return the three or two dimensional union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent or None
+        """
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
+            return self.spatial_extent.union(dataset.spatial_extent)
+        else:
+            return self.spatial_extent.union_2d(dataset.spatial_extent)
+        
+    def spatial_disjoint_union(self, dataset):
+        """!Return the three or two dimensional union as spatial_extent object.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent
+        """
+        if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
+            return self.spatial_extent.disjoint_union(dataset.spatial_extent)
+        else:
+            return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+    
     def reset(self, ident):
 
         """!Reset the internal structure and set the identifier"""
@@ -968,14 +1110,38 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
 
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents 2d overlap"""
-
         return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
         """!Return the two dimensional spatial relation"""
-
         return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
+    def spatial_intersection(self, dataset):
+        """!Return the two dimensional intersection as spatial_extent 
+           object or None in case no intersection was found.
+           
+           @param dataset The abstract dataset to intersect with
+           @return The intersection spatial extent or None
+        """
+        return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+
+    def spatial_union(self, dataset):
+        """!Return the two dimensional union as spatial_extent 
+           object or None in case the extents does not overlap or meet.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent or None
+        """
+        return self.spatial_extent.union_2d(dataset.spatial_extent)
+        
+    def spatial_disjoint_union(self, dataset):
+        """!Return the two dimensional union as spatial_extent object.
+       
+           @param dataset The abstract dataset to create a union with
+           @return The union spatial extent
+        """
+        return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+    
     def reset(self, ident):
 
         """!Reset the internal structure and set the identifier"""

@@ -195,7 +195,186 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             end = self.D["end_time"]
         
         return AbstractTemporalExtent(start_time=start, end_time=end)
+    
+    def disjoint_union(self, extent):
+        """!Creates a disjoint union with this temporal extent and the provided one.
+           Return a new temporal extent with the new start and end time.
+           
+           @param extent The temporal extent to create a union with
+           @return The new temporal extent with start and end time           
+           
+           Usage:
+           
+           @code
+
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> inter = A.intersect(A)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 6
+            
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 7
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 5
+            | End time:................... 7
+             
+           >>> A = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 7
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 7
+             
+           >>> A = AbstractTemporalExtent(start_time=3, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+            
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=None )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 6
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 6
+            
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=4 )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=None )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=None )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=8 )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 8
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=None )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=None )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 5
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            | Start time:................. 3
+            | End time:................... 5
+            
+           @endcoe
+        """
         
+        start = None
+        end = None
+        
+        if self.D["start_time"] < extent.D["start_time"]:
+            start = self.D["start_time"]
+        else:
+            start = extent.D["start_time"]
+        
+        # End time handling
+        if self.D["end_time"] is None and extent.D["end_time"] is None:
+            if self.D["start_time"] > extent.D["start_time"]:
+                end = self.D["start_time"]
+            else:
+                end = extent.D["start_time"]
+        elif self.D["end_time"] is None:
+            if self.D["start_time"] > extent.D["end_time"]:
+                end = self.D["start_time"]
+            else:
+                end = extent.D["end_time"]
+        elif extent.D["end_time"] is None:
+            if self.D["end_time"] > extent.D["start_time"]:
+                end = self.D["end_time"]
+            else:
+                end = extent.D["start_time"]
+        elif self.D["end_time"] < extent.D["end_time"]:
+            end = extent.D["end_time"]
+        else:
+            end = self.D["end_time"]
+        
+        return AbstractTemporalExtent(start_time=start, end_time=end)
+    
+    def union(self, extent):
+        """!Creates a union with this temporal extent and the provided one.
+           Return a new temporal extent with the new start and end time.
+           
+           @param extent The temporal extent to create a union with
+           @return The new temporal extent with start and end time, 
+                   or None in case the temporal extents are unrelated (before or after)
+                   
+           @code
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=4 )
+           >>> inter = A.intersect(B)
+           >>> print inter
+           None
+           
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=3, end_time=None )
+           >>> inter = A.intersect(B)
+           >>> print inter
+           None
+           
+           @endcode
+        """
+
+        relation = self.temporal_relation(extent)
+        
+        if relation == "after" or relation == "before":
+            return None
+
+        return self.disjoint_union(extent)
+    
     def starts(self, extent):
         """!Return True if this temporal extent (A) starts at the start of the 
            provided temporal extent (B) and finishes within it

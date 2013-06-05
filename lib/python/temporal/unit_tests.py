@@ -1495,11 +1495,11 @@ def test_map_list_sorting():
 
     print "Original"
     for _map in map_list:
-        print _map.get_valid_time()[0], _map.get_valid_time()[1]
+        print _map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1]
     print "Sorted by start time"
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
     for _map in new_list:
-        print _map.get_valid_time()[0], _map.get_valid_time()[1]
+        print _map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1]
 
     if new_list[0] != map_list[1]:
         core.fatal("Sorting by start time failed")
@@ -1511,7 +1511,7 @@ def test_map_list_sorting():
     print "Sorted by end time"
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
     for _map in new_list:
-        print _map.get_valid_time()[0], _map.get_valid_time()[1]
+        print _map.get_temporal_extent_as_tuple()[0], _map.get_temporal_extent_as_tuple()[1]
 
     if new_list[0] != map_list[1]:
         core.fatal("Sorting by end time failed")
