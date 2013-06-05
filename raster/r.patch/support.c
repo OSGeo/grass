@@ -58,7 +58,11 @@ int support(char **names,
 		    }
 		}
 	}
-	/* else the color will be the color of the first map */
+	else {
+	    /* the color would be the color of the first map,
+	     * possibly not covering the range of the other maps */
+	    *colr_ok = 0;
+	}
 
 	if (do_cats)
 	    Rast_free_cats(&pcats);
