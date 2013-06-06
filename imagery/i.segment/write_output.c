@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/imagery.h>
 #include <grass/segment.h>	/* segmentation library */
 #include <grass/glocale.h>
 #include "iseg.h"
@@ -48,6 +49,7 @@ int write_output(struct globals *globals)
 
     /* close and save segment id file */
     Rast_close(out_fd);
+    G_free(outbuf);
 
     /* set colors */
     Rast_init_colors(&colors);
@@ -64,6 +66,9 @@ int write_output(struct globals *globals)
 	FCELL *meanbuf;
 	double thresh, maxdev, sim, mingood;
 	struct ngbr_stats Ri, Rk;
+	struct Ref Ref;		/* group reference list */
+	DCELL **inbuf;		/* buffers to store lines from each of the imagery group rasters */
+	int n, *in_fd;
 
 	mean_fd = Rast_open_new(globals->out_band, FCELL_TYPE);
 	meanbuf = Rast_allocate_f_buf();
@@ -81,6 +86,23 @@ int write_output(struct globals *globals)
 	maxdev = globals->max_diff * (1 - globals->alpha * globals->alpha);
 	mingood = 1;
 
+	/* open input bands */
+	if (!I_get_group_ref(globals->image_group, &Ref))
+	    G_fatal_error(_("Unable to read REF file for group <%s>"),
+			  globals->image_group);
+	if (Ref.nfiles <= 0)
+	    G_fatal_error(_("Group <%s> contains no raster maps"),
+			  globals->image_group);
+
+	in_fd = G_malloc(Ref.nfiles * sizeof(int));
+	inbuf = (DCELL **) G_malloc(Ref.nfiles * sizeof(DCELL *));
+
+	G_debug(1, "Opening input rasters...");
+	for (n = 0; n < Ref.nfiles; n++) {
+	    inbuf[n] = Rast_allocate_d_buf();
+	    in_fd[n] = Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);
+	}
+
 	G_message(_("Writing out goodness of fit"));
 	for (row = 0; row < globals->nrows; row++) {
 
@@ -88,16 +110,24 @@ int write_output(struct globals *globals)
 
 	    Rast_set_f_null_value(meanbuf, globals->ncols);
 
+	    for (n = 0; n < Ref.nfiles; n++) {
+		Rast_get_d_row(in_fd[n], inbuf[n], row);
+	    }
+
 	    for (col = 0; col < globals->ncols; col++) {
 
 		if (!(FLAG_GET(globals->null_flag, row, col))) {
+		    
 		    segment_get(&globals->rid_seg, (void *) &rid, row, col);
 
 		    if (rid > 0) {
+			
+			Ri.row = Rk.row = row;
+			Ri.col = Rk.col = col;
 
 			/* get values for Ri = this region */
 			globals->rs.id = rid;
-			fetch_reg_stats(Ri.row, Ri.col, &globals->rs, globals);
+			fetch_reg_stats(row, col, &globals->rs, globals);
 			Ri.mean = globals->rs.mean;
 			Ri.count = globals->rs.count; 
 
@@ -106,8 +136,9 @@ int write_output(struct globals *globals)
 			if (Ri.count > 1) {
 
 			    /* get values for Rk = this cell */
-			    segment_get(&globals->bands_seg,
-					(void *)globals->second_val, row, col);
+			    for (n = 0; n < Ref.nfiles; n++) {
+				globals->second_val[n] = inbuf[n][col];
+			    }
 
 			    Rk.mean = globals->second_val;
 
@@ -148,10 +179,17 @@ int write_output(struct globals *globals)
 	Rast_write_history(globals->out_band, &hist);
 
 	G_free(meanbuf);
+
+	G_debug(1, "Closing input rasters...");
+	for (n = 0; n < Ref.nfiles; n++) {
+	    Rast_close(in_fd[n]);
+	    G_free(inbuf[n]);
+	}
+	G_free(inbuf);
+	G_free(in_fd);
     }
 
     /* free memory */
-    G_free(outbuf);
     Rast_free_colors(&colors);
 
     return TRUE;
