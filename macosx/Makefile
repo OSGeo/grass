@@ -98,6 +98,10 @@ install-macosxapp:
 
 install-basic-macosx:
 	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR_TARGET) - 2>/dev/null
+	-sed -e 's#'$(GISBASE)'#'$(INST_DIR)'#g' \
+		${GISBASE}/etc/fontcap > ${INST_DIR_TARGET}/etc/fontcap
+	-sed -e 's#'$(GISBASE)'#'$(INST_DIR)'#g' \
+		${GISBASE}/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) > ${INST_DIR_TARGET}/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 	sed -e 's#^\(GRASS_HOME.[^=]*\).*#\1= $(INST_DIR)#g' \
 		-e 's#$(GISBASE)#$(INST_DIR)#g' \
 		${GISBASE}/include/Make/Platform.make > ${INST_DIR_TARGET}/include/Make/Platform.make
