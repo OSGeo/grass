@@ -527,8 +527,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            return a new temporal extent with the new start and end time.
            
            @param dataset The abstract dataset to create temporal union with
-           @return The new temporal extent with start and end time, 
-                   or None in case of no intersection
+           @return The new temporal extent with start and end time
         """
         return self.temporal_extent.disjoint_union(dataset.temporal_extent)
         

@@ -472,6 +472,108 @@ class AbstractMapDataset(AbstractDataset):
 
         self.write_timestamp_to_grass()
 
+    def temporal_buffer(self, increment, update=False, dbif=None):
+        """!Create a temporal buffer based on an increment
+        
+           For absolute time the increment must be a string of type "integer unit"
+           Unit can be year, years, month, months, day, days, hour, hours, minute,
+           minutes, day or days.
+        
+           @param increment This is the increment, a string in case of absolute 
+                            time or an integer in case of relative time
+           @param update Perform an immediate database update to store the 
+                         modified temporal extent, otherwise only this object
+                         will be modified
+                         
+           Usage:
+           
+           @code
+
+           >>> import grass.temporal as tgis
+           >>> maps = []
+           >>> for i in range(5):
+           ...   map = tgis.RasterDataset(None)
+           ...   if i%2 == 0:
+           ...       check = map.set_relative_time(i, i + 1, 'years')
+           ...   else:
+           ...       check = map.set_relative_time(i, None, 'years')
+           ...   map.temporal_buffer(3)
+           ...   maps.append(map)
+           >>> for map in maps:
+           ...   map.temporal_extent.print_info()
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. -3
+            | End time:................... 4
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. -2
+            | End time:................... 4
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. -1
+            | End time:................... 6
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 0
+            | End time:................... 6
+            | Relative time unit:......... years
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 1
+            | End time:................... 8
+            | Relative time unit:......... years
+           >>> maps = []
+           >>> for i in range(1,5):
+           ...   map = tgis.RasterDataset(None)
+           ...   if i%2 == 0:
+           ...       check = map.set_absolute_time(datetime(2001,i,1), datetime(2001, i + 1, 1))
+           ...   else:
+           ...       check = map.set_absolute_time(datetime(2001,i,1),  None)
+           ...   map.temporal_buffer("7 days")
+           ...   maps.append(map)
+           >>> for map in maps:
+           ...   map.temporal_extent.print_info()
+            +-------------------- Absolute time -----------------------------------------+
+            | Start time:................. 2000-12-25 00:00:00
+            | End time:................... 2001-01-08 00:00:00
+            +-------------------- Absolute time -----------------------------------------+
+            | Start time:................. 2001-01-25 00:00:00
+            | End time:................... 2001-03-08 00:00:00
+            +-------------------- Absolute time -----------------------------------------+
+            | Start time:................. 2001-02-22 00:00:00
+            | End time:................... 2001-03-08 00:00:00
+            +-------------------- Absolute time -----------------------------------------+
+            | Start time:................. 2001-03-25 00:00:00
+            | End time:................... 2001-05-08 00:00:00
+
+           @endcode
+        """
+        
+        if self.is_time_absolute():
+            start, end, tz = self.get_absolute_time()
+            
+            new_start = decrement_datetime_by_string(start, increment)
+            if end == None:
+                new_end = increment_datetime_by_string(start, increment)
+            else:
+                new_end = increment_datetime_by_string(end, increment)
+                
+            if update:
+                self.update_absolute_time(new_start, new_end, tz, dbif=dbif)
+            else:
+                self.set_absolute_time(new_start, new_end, tz)
+        else:
+            start, end, unit = self.get_relative_time()
+            new_start = start - increment
+            if end == None:
+                new_end = start + increment
+            else:
+                new_end = end + increment
+
+            if update:
+                self.update_relative_time(new_start, new_end, unit, dbif=dbif)
+            else:
+                self.set_relative_time(new_start, new_end, unit)
+        
     def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
         """!Set the spatial extent of the map
 
@@ -659,3 +761,9 @@ class AbstractMapDataset(AbstractDataset):
             dbif.close()
 
         return rows
+
+###############################################################################
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
