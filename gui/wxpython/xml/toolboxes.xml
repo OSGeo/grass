@@ -757,7 +757,7 @@
         <label>Least cost route or flow</label>
       </module-item>
       <separator/>
-      <module-item name="r.shaded.relief2">
+      <module-item name="r.shaded.relief">
         <label>Shaded relief</label>
       </module-item>
       <separator/>
