@@ -4,7 +4,7 @@
 
 Temporal GIS datetime math functions to be used in library functions and modules.
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2011-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -44,6 +44,72 @@ def time_delta_to_relative_time(delta):
 
 ###############################################################################
 
+def decrement_datetime_by_string(mydate, increment, mult=1):
+
+    """!Return a new datetime object decremented with the provided
+       relative dates specified as string.
+       Additional a multiplier can be specified to multiply the increment
+       before adding to the provided datetime object.
+       
+       Usage:
+       
+       @code
+         
+        >>> dt = datetime(2001, 1, 1, 0, 0, 0)
+        >>> string = "31 days"
+        >>> decrement_datetime_by_string(dt, string)
+        datetime.datetime(2000, 12, 1, 0, 0)
+        
+        >>> dt = datetime(2001, 1, 1, 0, 0, 0)
+        >>> string = "1 month"
+        >>> decrement_datetime_by_string(dt, string)
+        datetime.datetime(2000, 12, 1, 0, 0)
+
+        >>> dt = datetime(2001, 1, 1, 0, 0, 0)
+        >>> string = "2 month"
+        >>> decrement_datetime_by_string(dt, string)
+        datetime.datetime(2000, 11, 1, 0, 0)
+        
+        >>> dt = datetime(2001, 1, 1, 0, 0, 0)
+        >>> string = "24 months"
+        >>> decrement_datetime_by_string(dt, string)
+        datetime.datetime(1999, 1, 1, 0, 0)
+
+        >>> dt = datetime(2001, 1, 1, 0, 0, 0)
+        >>> string = "48 months"
+        >>> decrement_datetime_by_string(dt, string)
+        datetime.datetime(1997, 1, 1, 0, 0)
+        
+        >>> dt = datetime(2001, 6, 1, 0, 0, 0)
+        >>> string = "5 months"
+        >>> decrement_datetime_by_string(dt, string)
+        datetime.datetime(2001, 1, 1, 0, 0)
+        
+        >>> dt = datetime(2001, 6, 1, 0, 0, 0)
+        >>> string = "7 months"
+        >>> decrement_datetime_by_string(dt, string)
+        datetime.datetime(2000, 11, 1, 0, 0)
+        
+        >>> dt = datetime(2001, 1, 1, 0, 0, 0)
+        >>> string = "1 year"
+        >>> decrement_datetime_by_string(dt, string)
+        datetime.datetime(2000, 1, 1, 0, 0)
+        
+        @endcode
+       
+       @param mydate A datetime object to incremented
+       @param increment A string providing increment information:
+                  The string may include comma separated values of type seconds,
+                  minutes, hours, days, weeks, months and years
+                  Example: Increment the datetime 2001-01-01 00:00:00
+                  with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
+                  will result in the datetime 2003-02-18 12:05:00
+       @param mult A multiplier, default is 1
+       @return The new datetime object or none in case of an error
+    """
+    return modify_datetime_by_string(mydate, increment, mult, sign=int(-1))
+
+###############################################################################
 
 def increment_datetime_by_string(mydate, increment, mult=1):
     """!Return a new datetime object incremented with the provided
@@ -110,8 +176,34 @@ def increment_datetime_by_string(mydate, increment, mult=1):
                   with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
                   will result in the datetime 2003-02-18 12:05:00
        @param mult A multiplier, default is 1
+       @return The new datetime object or none in case of an error
     """
+    return modify_datetime_by_string(mydate, increment, mult, sign=int(1))
 
+###############################################################################
+
+def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
+    """!Return a new datetime object incremented with the provided
+       relative dates specified as string.
+       Additional a multiplier can be specified to multiply the increment
+       before adding to the provided datetime object.
+       
+       @param mydate A datetime object to incremented
+       @param increment A string providing increment information:
+                  The string may include comma separated values of type seconds,
+                  minutes, hours, days, weeks, months and years
+                  Example: Increment the datetime 2001-01-01 00:00:00
+                  with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
+                  will result in the datetime 2003-02-18 12:05:00
+       @param mult A multiplier, default is 1
+       @param sign Choose 1 for positive sign (incrementing) or -1 for negative 
+                   sign (decrementing). 
+       @return The new datetime object or none in case of an error
+    """
+    sign  = int(sign)
+    if sign != 1 and sign != -1:
+        return None
+    
     if increment:
 
         seconds = 0
@@ -133,31 +225,30 @@ def increment_datetime_by_string(mydate, increment, mult=1):
                 core.error(_("Wrong increment format: %s") % (increment))
                 return None
             if inc[1].find("seconds") >= 0 or inc[1].find("second") >= 0:
-                seconds = mult * int(inc[0])
+                seconds = sign * mult * int(inc[0])
             elif inc[1].find("minutes") >= 0 or inc[1].find("minute") >= 0:
-                minutes = mult * int(inc[0])
+                minutes = sign * mult * int(inc[0])
             elif inc[1].find("hours") >= 0 or inc[1].find("hour") >= 0:
-                hours = mult * int(inc[0])
+                hours = sign * mult * int(inc[0])
             elif inc[1].find("days") >= 0 or inc[1].find("day") >= 0:
-                days = mult * int(inc[0])
+                days = sign * mult * int(inc[0])
             elif inc[1].find("weeks") >= 0 or inc[1].find("week") >= 0:
-                weeks = mult * int(inc[0])
+                weeks = sign * mult * int(inc[0])
             elif inc[1].find("months") >= 0 or inc[1].find("month") >= 0:
-                months = mult * int(inc[0])
+                months = sign * mult * int(inc[0])
             elif inc[1].find("years") >= 0 or inc[1].find("year") >= 0:
-                years = mult * int(inc[0])
+                years = sign * mult * int(inc[0])
             else:
                 core.error(_("Wrong increment format: %s") % (increment))
                 return None
 
-        return increment_datetime(mydate, years, months, weeks, days, hours, minutes, seconds)
+        return modify_datetime(mydate, years, months, weeks, days, hours, minutes, seconds)
 
     return mydate
 
 ###############################################################################
 
-
-def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, 
+def modify_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, 
                        minutes=0, seconds=0):
     """!Return a new datetime object incremented with the provided 
        relative dates and times"""
@@ -189,18 +280,44 @@ def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0,
         try:
             dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
         except:
-            core.fatal(_("Unable to increment the datetime %s. "\
-                         "Please check that the yearly or monthly increment does not result in wrong number of days."%(mydate)))
+            raise
+
+        tdelta_months = dt1 - mydate
+    elif months < 0:
+        # Compute the actual number of days in the month to add as timedelta
+        year = mydate.year
+        month = mydate.month
+        years_to_remove = 0
+
+        all_months = int(months) + int(month)
+        if all_months <= 0:
+            years_to_remove = abs(int(all_months / 12.001))
+            residual_months = all_months + (years_to_remove * 12)
+            years_to_remove += 1
+        else:
+            residual_months = all_months
+
+        # Make a deep copy of the datetime object
+        dt1 = copy.copy(mydate)
+
+        # Correct the months
+        if residual_months <= 0:
+            residual_months += 12
+
+        try:
+            dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
+        except:
+            raise
 
         tdelta_months = dt1 - mydate
 
-    if years > 0:
+    if years != 0:
         # Make a deep copy of the datetime object
         dt1 = copy.copy(mydate)
         # Compute the number of days
         dt1 = dt1.replace(year=mydate.year + int(years))
         tdelta_years = dt1 - mydate
-
+        
     return mydate + tdelta_seconds + tdelta_minutes + tdelta_hours + \
         tdelta_days + tdelta_weeks + tdelta_months + tdelta_years
 
