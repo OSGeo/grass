@@ -26,6 +26,12 @@
 #ifdef HAVE_FFMPEG
 #include <avformat.h>
 #include <avio.h>
+#if LIBAVUTIL_VERSION_MAJOR < 51
+#include <avutil.h>
+#else
+/* libavutil 51.22.1's avutil.h doesn't include libavutil/mathematics.h */
+#include <mathematics.h>
+#endif
 
 /* 5 seconds stream duration */
 #define STREAM_DURATION   5.0
@@ -57,7 +63,7 @@ static AVStream *add_video_stream(AVFormatContext * oc, int codec_id, int w,
     AVCodecContext *c;
     AVStream *st;
 
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 112, 0)
     st = av_new_stream(oc, 0);
 #else
     st = avformat_new_stream(oc, NULL);
@@ -69,7 +75,11 @@ static AVStream *add_video_stream(AVFormatContext * oc, int codec_id, int w,
 
     c = st->codec;
     c->codec_id = codec_id;
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(52, 123, 0)
+    c->codec_type = CODEC_TYPE_VIDEO;
+#else
     c->codec_type = AVMEDIA_TYPE_VIDEO;
+#endif
 
     /* put sample parameters */
     c->bit_rate = 400000;
@@ -227,8 +237,11 @@ static void write_video_frame(AVFormatContext * oc, AVStream * st)
 	AVPacket pkt;
 
 	av_init_packet(&pkt);
-
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 32, 0)
+	pkt.flags |= PKT_FLAG_KEY;
+#else
 	pkt.flags |= AV_PKT_FLAG_KEY;
+#endif
 	pkt.stream_index = st->index;
 	pkt.data = (uint8_t *) picture;
 	pkt.size = sizeof(AVPicture);
@@ -249,7 +262,11 @@ static void write_video_frame(AVFormatContext * oc, AVStream * st)
 		av_rescale_q(c->coded_frame->pts, c->time_base,
 			     st->time_base);
 	    if (c->coded_frame->key_frame)
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 32, 0)
+		pkt.flags |= PKT_FLAG_KEY;
+#else
 		pkt.flags |= AV_PKT_FLAG_KEY;
+#endif
 	    pkt.stream_index = st->index;
 	    pkt.data = video_outbuf;
 	    pkt.size = out_size;
@@ -314,10 +331,18 @@ int gsd_init_mpeg(const char *filename)
     av_register_all();
 
     /* auto detect the output format from the name. default is mpeg. */
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 32, 0)
+    fmt = guess_format(NULL, filename, NULL);
+#else
     fmt = av_guess_format(NULL, filename, NULL);
+#endif
     if (!fmt) {
 	G_warning(_("Unable to deduce output format from file extension: using MPEG"));
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 32, 0)
+	fmt = guess_format("mpeg", NULL, NULL);
+#else
 	fmt = av_guess_format("mpeg", NULL, NULL);
+#endif
     }
     if (!fmt) {
 	G_warning(_("Unable to find suitable output format"));
@@ -368,7 +393,7 @@ int gsd_init_mpeg(const char *filename)
 
     /* open the output file, if needed */
     if (!(fmt->flags & AVFMT_NOFILE)) {
-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 100, 0)
+#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(52, 112, 0)
         if (url_fopen(&oc->pb, filename, URL_WRONLY) < 0) { 
 #else
 	if (avio_open(&oc->pb, filename, AVIO_FLAG_WRITE) < 0) {
