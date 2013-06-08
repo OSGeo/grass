@@ -45,23 +45,19 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     module->description =
-	_("Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map");
+	_("Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map.");
 
-    params.input = G_define_option();
-    params.input->key = "input";
+    params.input = G_define_standard_option(G_OPT_F_INPUT);
     params.input->description = _("GRIDATB i/o map file");
-    params.input->type = TYPE_STRING;
     params.input->required = YES;
+    params.input->gisprompt = "old,file,file";
 
-    params.output = G_define_option();
-    params.output->key = "output";
-    params.output->description = _("Name for output raster map");
-    params.output->type = TYPE_STRING;
+    params.output = G_define_standard_option(G_OPT_R_OUTPUT);
     params.output->required = YES;
-    params.output->gisprompt = "new,cell,raster";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     file = params.input->answer;
     oname = params.output->answer;
