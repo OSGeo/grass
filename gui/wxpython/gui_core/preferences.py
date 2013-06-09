@@ -1244,7 +1244,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                                        "location's\nprojection in any way. You will "
                                        "need to enable the Projection check box in "
                                        "the drop-down\nmenu located at the bottom "
-                                       "of the Map Display window."))
+                                       "of the Map Display window.\n"))
         gridSizer.Add(item = note0,
                       span = (1, 2),
                       pos = (row, 0))
