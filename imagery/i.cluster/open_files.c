@@ -15,7 +15,7 @@ int open_files(void)
 
     G_strip(group);
     if (!I_find_group(group))
-	G_fatal_error(_("Group <%s> not found"), group);
+	G_fatal_error(_("Group <%s> not found in current mapset"), group);
 
     G_strip(subgroup);
     if (!I_find_subgroup(group, subgroup))
