@@ -1,9 +1,9 @@
-How to release GRASS binaries and source code
+How to release GRASS GIS binaries and source code
 
 $Date$
 
 Note: This text contains *some* rules only applicable to the
-      development coordinators at CEA (currently Markus Neteler).
+      development coordinator (currently Markus Neteler, PSC Chair).
 
 
 ###########################################
@@ -14,17 +14,30 @@ Contents
 ###########################################
 (A) HOWTO create a release
 
-1. Local work (basically at FEM, Italy)
+1. Local work (done by release coordinator)
 
    - svn up
    - check if
         ( cd doc/raster/r.example/ ; make )
         ( cd doc/vector/v.example/ ; make )
       still compile; fix otherwise
+ 
+   - Check that autoconf scripts are up-to-date (to do only in RC cycle!):
+
+      rm -f config.guess config.sub
+      wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
+      wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
+      svn diff config.guess config.sub
+      autoconf-2.13
+      # check and submit to SVN:
+      svn ci -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
+      # test by running ./configure 
+
    - make distclean
 
    - cleanup rubbish:
        rm -f locale/templates/*.pot
+       rm -f locale/po/messages.mo
        find . -name '*~'     | xargs rm
        find . -name '*.bak'  | xargs rm
        find . -name '.#*'    | xargs rm
@@ -44,7 +57,7 @@ Contents
 7
 0
 0RC1
-2010
+2013
       rm -f include/VERSION~
 
      #version:
@@ -99,7 +112,7 @@ Contents
 7
 0
 0svn
-2010
+2013
 
     rm -f include/VERSION~
     svn ci -m"back to SVN" include/VERSION
@@ -162,8 +175,6 @@ Contents
                          <grass-dev@lists.osgeo.org>
                        http://lists.osgeo.org/mailman/listinfo/grassuser
                          <grass-user@lists.osgeo.org>
-                       http://lists.osgeo.org/mailman/listinfo/wingrass
-                         <wingrass@lists.osgeo.org>
 
    DebianGIS:          <debian-gis@lists.debian.org>
    FreeGIS:            <freegis-list@intevation.de>
@@ -186,8 +197,7 @@ Contents
    http://slashgeo.org/submit.pl
    http://freshmeat.net/projects/grass/?highlight=GRASS (update, MN)
    http://linuxtoday.com/contribute.php3
-   https://www.osor.eu/projects/grassgis (update, MN)
-   https://forge.osor.eu/news/submit.php?group_id=44 (submit news, MN)
+   https://joinup.ec.europa.eu/software/grassgis/home (submit news, MN)
    http://www.macnn.com/contact/newstips/1
    http://www10.giscafe.com/submit_material/submit_options.php#Press (MN)
    http://www.freegis.org   (update, MN)
