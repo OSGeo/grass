@@ -1369,7 +1369,7 @@ int main(int argc, char *argv[])
 		xmax = ymax;
 
 	    /* double precision ULP */
-	    min_snap = log2(xmax) - 52;
+	    min_snap = log(xmax)/log(2) - 52;
 	    min_snap = pow(2, min_snap);
 	    /* human readable */
 	    min_snap = log10(min_snap);
@@ -1380,7 +1380,7 @@ int main(int argc, char *argv[])
 	    min_snap = pow(10, min_snap);
 
 	    /* single precision ULP */
-	    max_snap = log2(xmax) - 23;
+	    max_snap = log(xmax)/log(2) - 23;
 	    max_snap = pow(2, max_snap);
 	    /* human readable */
 	    max_snap = log10(max_snap);
