@@ -218,14 +218,27 @@ def create_tmp():
     if not tmp:
         tmp = os.getenv('TEMP')
     if not tmp:
-        tmp = tempfile.gettempdir()
+        tmp = os.getenv('TMP')
     if not tmp:
-        tmp = '/tmp'
-    tmpdir = os.path.join(tmp, "grass7-%s-%s" % (user, gis_lock))
-    try:
-        os.mkdir(tmpdir, 0700)
-    except:
-        fatal(_("Unable to create temporary directory <%s>! Exiting.") % tmpdir)
+        tmp = tempfile.gettempdir()
+    if tmp:
+        tmpdir = os.path.join(tmp, "grass7-%s-%s" % (user, gis_lock))
+        try:
+            os.mkdir(tmpdir, 0700)
+        except:
+            tmp = None
+    if not tmp:
+        for ttmp in ("/tmp", "/var/tmp", "/usr/tmp"):
+            tmp = ttmp
+            tmpdir = os.path.join(tmp, "grass7-%s-%s" % (user, gis_lock))
+            try:
+                os.mkdir(tmpdir, 0700)
+            except:
+                tmp = None
+            if tmp:
+               break
+    if not tmp:
+        fatal(_("Unable to create temporary directory <grass7-%s-%s>! Exiting.") % (user, gis_lock))
 
 def create_gisrc():
     global gisrc, gisrcrc
