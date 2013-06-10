@@ -7,7 +7,7 @@ ETCDIR = $(ETC)/gui/images
 IMGSRC := $(wildcard *.png)
 IMGDST := $(patsubst %,$(ETCDIR)/%,$(IMGSRC))
 
-CATEGORIES = basic demo extra geology
+CATEGORIES = basic demo extra geology n_arrows
 SYMSRC := $(foreach dir,$(CATEGORIES),$(wildcard symbols/$(dir)/*.png))
 SYMDST := $(patsubst symbols/%,$(ETCDIR)/symbols/%,$(SYMSRC))
 
