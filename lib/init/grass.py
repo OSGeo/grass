@@ -348,6 +348,7 @@ def set_paths():
     grass_man_path = os.path.join(gisbase, 'docs', 'man')
     addons_man_path = os.path.join(addon_base, 'docs', 'man')
     man_path = os.getenv('MANPATH')
+    sys_man_path = None
     if man_path:
         path_prepend(addons_man_path, 'MANPATH')
         path_prepend(grass_man_path, 'MANPATH')
