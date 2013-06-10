@@ -26,7 +26,7 @@ ifeq ($(strip $(CROSS_COMPILING)),)
 endif
 
 test: $(OBJDIR)/test.tmp $(TESTFILE)
-	diff $(OBJDIR)/test.tmp $(TESTFILE)
+	cmp $(OBJDIR)/test.tmp $(TESTFILE)
 
 $(OBJDIR)/test.tmp: $(OBJDIR)/test$(EXE)
 	cd $(OBJDIR) && $(call run_grass,./test)
