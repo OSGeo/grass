@@ -1345,7 +1345,7 @@ int main(int argc, char *argv[])
     if (0 && flag.no_clean->answer)
 	Vect_topo_check(&Map, NULL);
 
-    if (n_polygons) {
+    if (n_polygons && nlayers == 1) {
 	/* test for topological errors */
 	/* this test is not perfect:
 	 * small gaps (areas without centroid) are not detected
@@ -1353,6 +1353,7 @@ int main(int argc, char *argv[])
 	ncentr = Vect_get_num_primitives(&Map, GV_CENTROID);
 	if (ncentr != n_polygons || n_overlaps) {
 	    double min_snap, max_snap;
+	    int exp;
 
 	    Vect_get_map_box(&Map, &box);
 	    
@@ -1369,8 +1370,9 @@ int main(int argc, char *argv[])
 		xmax = ymax;
 
 	    /* double precision ULP */
-	    min_snap = log(xmax)/log(2) - 52;
-	    min_snap = pow(2, min_snap);
+	    min_snap = frexp(xmax, &exp);
+	    exp -= 52;
+	    min_snap = ldexp(min_snap, exp);
 	    /* human readable */
 	    min_snap = log10(min_snap);
 	    if (min_snap < 0)
@@ -1380,8 +1382,9 @@ int main(int argc, char *argv[])
 	    min_snap = pow(10, min_snap);
 
 	    /* single precision ULP */
-	    max_snap = log(xmax)/log(2) - 23;
-	    max_snap = pow(2, max_snap);
+	    max_snap = frexp(xmax, &exp);
+	    exp -= 23;
+	    max_snap = ldexp(max_snap, exp);
 	    /* human readable */
 	    max_snap = log10(max_snap);
 	    if (max_snap < 0)
