@@ -98,6 +98,7 @@ Vect_net_build_graph(struct Map_info *Map,
     double dcost, bdcost, ll;
     int cost, bcost;
     dglGraph_s *gr;
+    dglInt32_t dgl_cost;
     dglInt32_t opaqueset[16] =
 	{ 360000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     struct field_info *Fi;
@@ -426,9 +427,9 @@ Vect_net_build_graph(struct Map_info *Map,
 	    else {
 		cost = (dglInt32_t) Map->dgraph.cost_multip * dcost;
 	    }
+	    dgl_cost = cost;
 	    G_debug(3, "Set node's cost to %d", cost);
-	    dglNodeSet_Attr(gr, dglGetNode(gr, (dglInt32_t) i),
-			    (dglInt32_t *) (dglInt32_t) & cost);
+	    dglNodeSet_Attr(gr, dglGetNode(gr, (dglInt32_t) i), &dgl_cost);
 	    Map->dgraph.node_costs[i] = dcost;
 	}
 	db_close_database_shutdown_driver(driver);
