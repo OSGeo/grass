@@ -399,11 +399,11 @@ class RasterAbstractBase(object):
         """
         if not region:
             region = Region()
-        x, y = functions.coor2pixel(point.coords(), region)
-        if x < 0 or x > region.cols or y < 0 or y > region.rows:
+        row, col = functions.coor2pixel(point.coords(), region)
+        if col < 0 or col > region.cols or row < 0 or row > region.rows:
             return None
-        line = self.get_row(int(x))
-        return line[int(y)]
+        line = self.get_row(int(row))
+        return line[int(col)]
 
     @must_be_open
     def has_cats(self):
