@@ -23,8 +23,8 @@
 #%end
 #%option G_OPT_V_INPUT
 #%end
-#%option G_OPT_V_FIELD_ALL
-#% label: Layer number or name. If -1, all layers are extracted.
+#%option G_OPT_V_FIELD
+#% label: Layer number or name.
 #% required: no
 #%end
 #%option G_OPT_DB_COLUMN
