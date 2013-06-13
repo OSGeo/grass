@@ -385,7 +385,7 @@ class VectorTopo(Vector):
 
     @must_be_open
     def cat(self, cat_id):
-        """Return a list of geometry features with category == cat_id.
+        """Return the geometry features with category == cat_id.
         """
         return self.read(libvect.Vect_get_line_cat(self.c_mapinfo,
                                                    cat_id, self.layer))
