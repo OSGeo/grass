@@ -1383,31 +1383,29 @@ class PreferencesDialog(PreferencesBaseDialog):
         path = win.GetValue()
 
         self.epsgCodeDict = ReadEpsgCodes(path)
-        list = self.FindWindowById(self.winId['projection:statusbar:epsg'])
+        epsgCombo = self.FindWindowById(self.winId['projection:statusbar:epsg'])
         if type(self.epsgCodeDict) == type(''):
             wx.MessageBox(parent = self,
                           message = _("Unable to read EPSG codes: %s") % self.epsgCodeDict,
                           caption = _("Error"),  style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
             self.epsgCodeDict = dict()
-            list.SetItems([])
-            list.SetValue('')
+            epsgCombo.SetItems([])
+            epsgCombo.SetValue('')
             self.FindWindowById(self.winId['projection:statusbar:proj4']).SetValue('')
             return
         
         choices = map(str, self.epsgCodeDict.keys())
 
-        list.SetItems(choices)
-        try:
-            code = int(list.GetValue())
-        except ValueError:
-            code = -1
+        epsgCombo.SetItems(choices)
+        code = 4326 # default
         win = self.FindWindowById(self.winId['projection:statusbar:proj4'])
         if code in self.epsgCodeDict:
-            win.SetValue(self.epsgCodeDict[code][1])
+            epsgCombo.SetStringSelection(str(code))
+            win.SetValue(self.epsgCodeDict[code][1].replace('<>', '').strip())
         else:
-            list.SetSelection(0)
-            code = int(list.GetStringSelection())
-            win.SetValue(self.epsgCodeDict[code][1])
+            epsgCombo.SetSelection(0)
+            code = int(epsgCombo.GetStringSelection())
+            win.SetValue(self.epsgCodeDict[code][1].replace('<>', '').strip())
     
     def OnSetEpsgCode(self, event):
         """!EPSG code selected"""
