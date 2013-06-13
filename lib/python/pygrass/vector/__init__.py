@@ -384,6 +384,13 @@ class VectorTopo(Vector):
         libvect.Vect_rewind(self.c_mapinfo)
 
     @must_be_open
+    def cat(self, cat_id):
+        """Return a list of geometry features with category == cat_id.
+        """
+        return self.read(libvect.Vect_get_line_cat(self.c_mapinfo,
+                                                   cat_id, self.layer))
+
+    @must_be_open
     def read(self, feature_id):
         """Return a geometry object given the feature id. ::
 
