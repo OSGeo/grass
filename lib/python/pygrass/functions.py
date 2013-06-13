@@ -4,8 +4,8 @@ Created on Tue Jun 26 12:38:48 2012
 
 @author: pietro
 """
-
 import fnmatch
+import os
 
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -26,6 +26,22 @@ def looking(obj, filter_string):
     word_list = dir(obj)
     word_list.sort()
     return fnmatch.filter(word_list, filter_string)
+
+
+def findfiles(dirpath, match=None):
+    """Return a list of the files"""
+    res = []
+    for f in sorted(os.listdir(dirpath)):
+        abspath = os.path.join(dirpath, f)
+        if os.path.isdir(abspath):
+            res.extend(findfiles(abspath, match))
+
+        if match:
+            if fnmatch.fnmatch(abspath, match):
+                res.append(abspath)
+        else:
+            res.append(abspath)
+    return res
 
 
 def remove(oldname, maptype):
@@ -133,7 +149,7 @@ def get_raster_for_points(poi_vector, raster, column=None):
     """Query a raster map for each point feature of a vector
 
     Example ::
-        
+
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.raster import RasterRow
         >>> ele = RasterRow('elevation')
