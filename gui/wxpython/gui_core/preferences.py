@@ -45,7 +45,7 @@ from grass.pydispatch.signal import Signal
 from grass.script import core as grass
 
 from core          import globalvar
-from core.gcmd     import RunCommand, GError
+from core.gcmd     import RunCommand
 from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, StoreEnvVariable
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
@@ -215,15 +215,6 @@ class PreferencesBaseDialog(wx.Dialog):
                               caption = _("Error"), style = wx.OK | wx.ICON_ERROR)
                 win.SetValue(self.settings.Get(group = 'atm', key = 'keycolumn', subkey = 'value'))
                 return False
-            if key == 'fieldSeparator':
-                try:
-                    value = str(value)
-                except UnicodeEncodeError:
-                    GError(parent = self, message = _("Field separator must be ASCII character "
-                                                      "not <%s> (use e.g. ';', '&', '#')") % value)
-                    return False
-                if value == '':
-                    value = self.settings.Get(group = 'atm', key = 'fieldSeparator', subkey = 'value')
             if subkey1:
                 self.settings.Set(group, value, key, [subkey, subkey1])
             else:
@@ -1153,17 +1144,6 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         flexSizer.Add(label, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(encoding, proportion = 0, flag = wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
-
-        # field separator
-        label = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                              label = _("Field separator:"))
-        separator = wx.TextCtrl(parent = panel, id = wx.ID_ANY,
-                                value = self.settings.Get(group = 'atm', key = 'fieldSeparator', subkey = 'value'),
-                                name = "GetValue", size = (200, -1))
-        self.winId['atm:fieldSeparator:value'] = separator.GetId()
-
-        flexSizer.Add(label, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
-        flexSizer.Add(separator, proportion = 0, flag = wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
         # ask on delete record
         askOnDeleteRec = wx.CheckBox(parent = panel, id = wx.ID_ANY,

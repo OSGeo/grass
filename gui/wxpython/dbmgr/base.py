@@ -163,20 +163,23 @@ class VirtualAttributeList(wx.ListCtrl,
         except:
             keyId = -1
         
-        fs = UserSettings.Get(group = 'atm', key = 'fieldSeparator', subkey = 'value')
         # read data
         # FIXME: Max. number of rows, while the GUI is still usable
 
         # stdout can be very large, do not use PIPE, redirect to temp file
         # TODO: more effective way should be implemented...
+
+        # split on field sep breaks if varchar() column contains the
+        # values, so while sticking with ASCII we make it something
+        # highly unlikely to exist naturally.
+        fs = '{_sep_}'
+
         outFile = tempfile.NamedTemporaryFile(mode = 'w+b')
 
         cmdParams = dict(quiet = True,
                          parent = self,
-                         flags = 'c')
-        # pipe must not be given in the params for windows
-        if not (sys.platform == "win32" and fs == '|'):
-            cmdParams.update(dict(sep = fs))
+                         flags = 'c',
+                         separator = fs)
 
         if sql:
             cmdParams.update(dict(sql = sql,
@@ -234,9 +237,7 @@ class VirtualAttributeList(wx.ListCtrl,
             if len(columns) != len(record):
                 GError(parent = self,
                        message = _("Inconsistent number of columns "
-                                   "in the table <%(table)s>. "
-                                   "Try to change field separator in GUI Settings, "
-                                   "Attributes tab, Data browser section.") % \
+                                   "in the table <%(table)s>.") % \
                                {'table' : tableName })
                 self.columns = {} # because of IsEmpty method
                 return
@@ -245,7 +246,7 @@ class VirtualAttributeList(wx.ListCtrl,
 
             i += 1
             if i >= 100000:
-                self.log.write(_("Limit 100000 records."))
+                self.log.write(_("Viewing limit: 100000 records."))
                 break
         
         self.SetItemCount(i)
