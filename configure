@@ -217,7 +217,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --with-x                use the X Window System"
 ac_help="$ac_help
-  --enable-largefile      enable support for large files (LFS)"
+  --disable-largefile     omit support for large files (LFS)"
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -13328,17 +13328,23 @@ fi # $USE_OPENCL
 
 # Done checking OpenCL
 
-# Enable LFS (from cdr-tools)
+# Enable LFS (from cdr-tools, tar, and autoconf 2.68)
 # Check whether --enable-largefile or --disable-largefile was given.
 if test "${enable_largefile+set}" = set; then
   enableval="$enable_largefile"
   :
 fi
 
-   if test "$enable_largefile" = yes; then
+   LFS_CFLAGS=
+   if test "$enable_largefile" != no; then
+     ac_save_cflags=$CFLAGS
+     if test "`which getconf 2>&5`" ; then
+       LFS_CFLAGS=`getconf LFS_CFLAGS 2>&5`
+       CFLAGS="$LFS_CFLAGS $ac_save_cflags"
+     fi
 
      echo $ac_n "checking for special C compiler options needed for large files""... $ac_c" 1>&6
-echo "configure:13342: checking for special C compiler options needed for large files" >&5
+echo "configure:13348: checking for special C compiler options needed for large files" >&5
 
 ac_cv_sys_largefile_CC=no
         largefile_cc_opt=""
@@ -13346,7 +13352,7 @@ ac_cv_sys_largefile_CC=no
 	  # IRIX 6.2 and later do not support large files by default,
 	  # so use the C compiler's -n32 option if that helps.
 	  cat > conftest.$ac_ext <<EOF
-#line 13350 "configure"
+#line 13356 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
     /* Check that off_t can represent 2**63 - 1 correctly.
@@ -13362,7 +13368,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13366: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13372: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
@@ -13371,7 +13377,7 @@ else
   ac_save_CC="${CC-cc}"
 	     CC="$CC -n32"
 	     cat > conftest.$ac_ext <<EOF
-#line 13375 "configure"
+#line 13381 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
     /* Check that off_t can represent 2**63 - 1 correctly.
@@ -13387,7 +13393,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13391: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13397: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_largefile_CC=' -n32'
 else
@@ -13404,14 +13410,21 @@ echo "$ac_t""$ac_cv_sys_largefile_CC" 1>&6
      if test "$ac_cv_sys_largefile_CC" != no; then
        CC="$CC$ac_cv_sys_largefile_CC"
        largefile_cc_opt="$ac_cv_sys_largefile_CC"
+
+       if test "$LFS_CFLAGS" ; then
+         LFS_CFLAGS="$LFS_CFLAGS $ac_cv_sys_largefile_CC"
+       else
+         LFS_CFLAGS="$ac_cv_sys_largefile_CC"
+         CFLAGS="$LFS_CFLAGS $ac_save_cflags"
+       fi
      fi
 
      echo $ac_n "checking for _FILE_OFFSET_BITS value needed for large files""... $ac_c" 1>&6
-echo "configure:13411: checking for _FILE_OFFSET_BITS value needed for large files" >&5
+echo "configure:13424: checking for _FILE_OFFSET_BITS value needed for large files" >&5
 
 ac_cv_sys_file_offset_bits=no
       cat > conftest.$ac_ext <<EOF
-#line 13415 "configure"
+#line 13428 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
     /* Check that off_t can represent 2**63 - 1 correctly.
@@ -13427,14 +13440,14 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13431: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13444: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 13438 "configure"
+#line 13451 "configure"
 #include "confdefs.h"
 #define _FILE_OFFSET_BITS 64
 #include <sys/types.h>
@@ -13452,7 +13465,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13456: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13469: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_file_offset_bits=64
 else
@@ -13469,13 +13482,20 @@ echo "$ac_t""$ac_cv_sys_file_offset_bits" 1>&6
 #define _FILE_OFFSET_BITS $ac_cv_sys_file_offset_bits
 EOF
 
+
+   if test "$LFS_CFLAGS" ; then
+     LFS_CFLAGS="$LFS_CFLAGS -D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+   else
+     LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+   fi
+
    fi
      echo $ac_n "checking for _LARGE_FILES value needed for large files""... $ac_c" 1>&6
-echo "configure:13475: checking for _LARGE_FILES value needed for large files" >&5
+echo "configure:13495: checking for _LARGE_FILES value needed for large files" >&5
 
 ac_cv_sys_large_files=no
       cat > conftest.$ac_ext <<EOF
-#line 13479 "configure"
+#line 13499 "configure"
 #include "confdefs.h"
 #include <sys/types.h>
     /* Check that off_t can represent 2**63 - 1 correctly.
@@ -13491,14 +13511,14 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13495: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13515: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 13502 "configure"
+#line 13522 "configure"
 #include "confdefs.h"
 #define _LARGE_FILES 1
 #include <sys/types.h>
@@ -13516,7 +13536,7 @@ int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:13520: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13540: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_large_files=1
 else
@@ -13533,27 +13553,34 @@ echo "$ac_t""$ac_cv_sys_large_files" 1>&6
 #define _LARGE_FILES $ac_cv_sys_large_files
 EOF
 
+
+   if test "$LFS_CFLAGS" ; then
+     LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES=$ac_cv_sys_large_files"
+   else
+     LFS_CFLAGS="-D_LARGE_FILES=$ac_cv_sys_large_files"
+   fi
+
    fi
      echo $ac_n "checking for _LARGEFILE_SOURCE value needed for large files""... $ac_c" 1>&6
-echo "configure:13539: checking for _LARGEFILE_SOURCE value needed for large files" >&5
+echo "configure:13566: checking for _LARGEFILE_SOURCE value needed for large files" >&5
 
 ac_cv_sys_largefile_source=no
       cat > conftest.$ac_ext <<EOF
-#line 13543 "configure"
+#line 13570 "configure"
 #include "confdefs.h"
 #include <stdio.h>
 int main() {
 return !fseeko;
 ; return 0; }
 EOF
-if { (eval echo configure:13550: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13577: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 13557 "configure"
+#line 13584 "configure"
 #include "confdefs.h"
 #define _LARGEFILE_SOURCE 1
 #include <stdio.h>
@@ -13562,7 +13589,7 @@ int main() {
 return !fseeko;
 ; return 0; }
 EOF
-if { (eval echo configure:13566: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13593: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_largefile_source=1
 else
@@ -13579,29 +13606,40 @@ echo "$ac_t""$ac_cv_sys_largefile_source" 1>&6
 #define _LARGEFILE_SOURCE $ac_cv_sys_largefile_source
 EOF
 
+
+   if test "$LFS_CFLAGS" ; then
+     LFS_CFLAGS="$LFS_CFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
+   else
+     LFS_CFLAGS="-D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
    fi
+
+   fi
+
+     CFLAGS=$ac_save_cflags
    fi
   
+ac_save_cflags=${CFLAGS}
+CFLAGS="$LFS_CFLAGS ${ac_save_cflags}"
 echo $ac_n "checking for _LARGEFILE_SOURCE value needed for large files""... $ac_c" 1>&6
-echo "configure:13587: checking for _LARGEFILE_SOURCE value needed for large files" >&5
+echo "configure:13625: checking for _LARGEFILE_SOURCE value needed for large files" >&5
 
 ac_cv_sys_largefile_source=no
       cat > conftest.$ac_ext <<EOF
-#line 13591 "configure"
+#line 13629 "configure"
 #include "confdefs.h"
 #include <stdio.h>
 int main() {
 return !fseeko;
 ; return 0; }
 EOF
-if { (eval echo configure:13598: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13636: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   :
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   cat > conftest.$ac_ext <<EOF
-#line 13605 "configure"
+#line 13643 "configure"
 #include "confdefs.h"
 #define _LARGEFILE_SOURCE 1
 #include <stdio.h>
@@ -13610,7 +13648,7 @@ int main() {
 return !fseeko;
 ; return 0; }
 EOF
-if { (eval echo configure:13614: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13652: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_sys_largefile_source=1
 else
@@ -13626,6 +13664,13 @@ echo "$ac_t""$ac_cv_sys_largefile_source" 1>&6
      cat >> confdefs.h <<EOF
 #define _LARGEFILE_SOURCE $ac_cv_sys_largefile_source
 EOF
+
+
+   if test "$LFS_CFLAGS" ; then
+     LFS_CFLAGS="$LFS_CFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
+   else
+     LFS_CFLAGS="-D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
+   fi
 
    fi
    # We used to try defining _XOPEN_SOURCE=500 too, to work around a bug
@@ -13633,18 +13678,18 @@ EOF
    # If you want fseeko and ftello with glibc, upgrade to a fixed glibc.
 
    echo $ac_n "checking for fseeko""... $ac_c" 1>&6
-echo "configure:13637: checking for fseeko" >&5
+echo "configure:13682: checking for fseeko" >&5
 
 ac_cv_func_fseeko=no
       cat > conftest.$ac_ext <<EOF
-#line 13641 "configure"
+#line 13686 "configure"
 #include "confdefs.h"
 #include <stdio.h>
 int main() {
 return fseeko && fseeko (stdin, 0, 0);
 ; return 0; }
 EOF
-if { (eval echo configure:13648: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:13693: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   ac_cv_func_fseeko=yes
 else
@@ -13661,10 +13706,10 @@ EOF
 
    fi
 echo $ac_n "checking if system supports Large Files at all""... $ac_c" 1>&6
-echo "configure:13665: checking if system supports Large Files at all" >&5
+echo "configure:13710: checking if system supports Large Files at all" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 13668 "configure"
+#line 13713 "configure"
 #include "confdefs.h"
 #include <stdio.h>
 #include <sys/types.h>
@@ -13696,7 +13741,7 @@ return !ftello;
 #endif
 ; return 0; }
 EOF
-if { (eval echo configure:13700: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:13745: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   ac_cv_largefiles=yes
 else
@@ -13713,19 +13758,21 @@ echo "$ac_t""$ac_cv_largefiles" 1>&6
 #define HAVE_LARGEFILES 1
 EOF
 
+	  USE_LARGEFILES=1
+	else
+	  USE_LARGEFILES=
+	  LFS_CFLAGS=
 	fi
-
-USE_LARGEFILES=
-if test $ac_cv_largefiles = yes; then
-	USE_LARGEFILES=1
-fi
-
+	
+	
+	
+CFLAGS=${ac_save_cflags}
 # Done large file support
 
 # Enable wxWidgets support (for wxGUI)
 
 echo $ac_n "checking whether to use wxWidgets""... $ac_c" 1>&6
-echo "configure:13729: checking whether to use wxWidgets" >&5
+echo "configure:13776: checking whether to use wxWidgets" >&5
 
 WXVERSION=
 WXWIDGETSCXXFLAGS= 
@@ -13746,7 +13793,7 @@ else
   # Extract the first word of "wx-config", so it can be a program name with args.
 set dummy wx-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:13750: checking for $ac_word" >&5
+echo "configure:13797: checking for $ac_word" >&5
 
 case "$WX_CONFIG" in
   /*)
@@ -13794,7 +13841,7 @@ fi
  REQWX="2.8.1"
 
  echo $ac_n "checking wxWidgets version""... $ac_c" 1>&6
-echo "configure:13798: checking wxWidgets version" >&5
+echo "configure:13845: checking wxWidgets version" >&5
  if WXVERSION=`"$WX_CONFIG" --version`; then
    echo "$ac_t""$WXVERSION" 1>&6
  else
@@ -13817,15 +13864,15 @@ for ac_hdr in wx/wxprec.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:13821: checking for $ac_hdr" >&5
+echo "configure:13868: checking for $ac_hdr" >&5
 
 cat > conftest.$ac_ext <<EOF
-#line 13824 "configure"
+#line 13871 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:13829: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:13876: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -14157,6 +14204,7 @@ s%@OCLLIBPATH@%$OCLLIBPATH%g
 s%@OCLLIB@%$OCLLIB%g
 s%@USE_OPENCL@%$USE_OPENCL%g
 s%@USE_LARGEFILES@%$USE_LARGEFILES%g
+s%@LFS_CFLAGS@%$LFS_CFLAGS%g
 s%@WX_CONFIG@%$WX_CONFIG%g
 s%@WXVERSION@%$WXVERSION%g
 s%@WXWIDGETSCXXFLAGS@%$WXWIDGETSCXXFLAGS%g
