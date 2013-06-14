@@ -8,11 +8,11 @@ MAPFILES = dbln coor topo head cidx hist
 DBFFILES := $(foreach map,$(MAPS),dbf/$(map).dbf)
 VECTFILES := $(foreach map,$(MAPS),$(foreach file,$(MAPFILES),vector/$(map)/$(file)))
 SRC := $(SRCFILES) $(DBFFILES) $(VECTFILES)
-DIRS := PERMANENT PERMANENT/vector PERMANENT/dbf $(patsubst %,PERMANENT/vector/%,$(MAPS))
+SRCDIRS := PERMANENT PERMANENT/vector PERMANENT/dbf $(patsubst %,PERMANENT/vector/%,$(MAPS))
 
 DSTDIR = $(ARCH_DISTDIR)/demolocation
 DST := $(patsubst %,$(DSTDIR)/PERMANENT/%,$(SRC))
-DSTDIRS := $(patsubst %,$(DSTDIR)/%,$(DIRS))
+DSTDIRS := $(patsubst %,$(DSTDIR)/%,$(SRCDIRS))
 RCFILE = $(DSTDIR)/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
 default: $(DST) $(RCFILE)
