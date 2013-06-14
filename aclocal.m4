@@ -632,7 +632,7 @@ dnl One line has been changed to:    [ac_save_CC="${CC-cc}" to default to "'cc"
 
 dnl AC_SYS_LARGEFILE_MACRO_VALUE test moved from AC_FUNC_FSEEKO into AC_SYS_LARGEFILE
 dnl Do not call AC_FUNC_FSEEKO because it does not check whether fseeko() is
-dnl available on non Large File mode. There are additionoal tests for fseeko()/ftello()
+dnl available on non Large File mode. There are additional tests for fseeko()/ftello()
 dnl inside the AC_HAVE_LARGEFILES test.
 
 dnl largefile_cc_opt definition added
@@ -675,12 +675,25 @@ AC_DEFUN([AC_SYS_LARGEFILE_MACRO_VALUE],
 	   [$3=$2])])])
    if test "[$]$3" != no; then
      AC_DEFINE_UNQUOTED([$1], [$]$3, [$4])
+
+   if test "$LFS_CFLAGS" ; then
+     LFS_CFLAGS="$LFS_CFLAGS -D$1=[$]$3"
+   else
+     LFS_CFLAGS="-D$1=[$]$3"
+   fi
+
    fi])
 
 AC_DEFUN([AC_SYS_LARGEFILE],
   [AC_ARG_ENABLE(largefile,
-     [  --enable-largefile      enable support for large files (LFS)])
-   if test "$enable_largefile" = yes; then
+     [  --disable-largefile     omit support for large files (LFS)])
+   LFS_CFLAGS=
+   if test "$enable_largefile" != no; then
+     ac_save_cflags=$CFLAGS
+     if test "`which getconf 2>&5`" ; then
+       LFS_CFLAGS=`getconf LFS_CFLAGS 2>&5`
+       CFLAGS="$LFS_CFLAGS $ac_save_cflags"
+     fi
 
      AC_CACHE_CHECK([for special C compiler options needed for large files],
        ac_cv_sys_largefile_CC,
@@ -699,6 +712,13 @@ AC_DEFUN([AC_SYS_LARGEFILE],
      if test "$ac_cv_sys_largefile_CC" != no; then
        CC="$CC$ac_cv_sys_largefile_CC"
        largefile_cc_opt="$ac_cv_sys_largefile_CC"
+
+       if test "$LFS_CFLAGS" ; then
+         LFS_CFLAGS="$LFS_CFLAGS $ac_cv_sys_largefile_CC"
+       else
+         LFS_CFLAGS="$ac_cv_sys_largefile_CC"
+         CFLAGS="$LFS_CFLAGS $ac_save_cflags"
+       fi
      fi
 
      AC_SYS_LARGEFILE_MACRO_VALUE(_FILE_OFFSET_BITS, 64,
@@ -713,6 +733,8 @@ AC_DEFUN([AC_SYS_LARGEFILE],
        ac_cv_sys_largefile_source,
        [Define to make fseeko visible on some hosts (e.g. glibc 2.2).],
        [#include <stdio.h>], [return !fseeko;])
+
+     CFLAGS=$ac_save_cflags
    fi
   ])
 
@@ -772,7 +794,14 @@ return !ftello;
      		[ac_cv_largefiles=no])])
 	if test $ac_cv_largefiles = yes; then
 		AC_DEFINE(HAVE_LARGEFILES)
-	fi])
+	  USE_LARGEFILES=1
+	else
+	  USE_LARGEFILES=
+	  LFS_CFLAGS=
+	fi
+	AC_SUBST(USE_LARGEFILES)
+	AC_SUBST(LFS_CFLAGS)
+	])
 
 dnl Checks for whether fseeko() is available in non large file mode
 dnl and whether there is a prototype for fseeko()
