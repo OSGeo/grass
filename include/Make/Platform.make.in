@@ -242,6 +242,7 @@ HAVE_NLS            = @HAVE_NLS@
 
 #Large File Support (LFS)
 USE_LARGEFILES      = @USE_LARGEFILES@
+LFS_CFLAGS          = @LFS_CFLAGS@
 
 #BSD sockets
 HAVE_SOCKET         = @HAVE_SOCKET@
