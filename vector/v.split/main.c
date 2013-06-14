@@ -35,13 +35,15 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *in_opt, *layer_opt, *out_opt, *length_opt, *units_opt, *vertices_opt;
+    struct Option *in_opt, *layer_opt, *out_opt, *length_opt,
+                  *units_opt, *vertices_opt;
+    struct Flag *nosplit_flag;
     
     struct Map_info In, Out;
-    struct line_pnts *Points, *Points2;
+    struct line_pnts *Points, *Points2, *Points3;
     struct line_cats *Cats;
 
-    int line, nlines, layer;
+    int line, nlines, layer, nosplit;
     double length = -1;
     int vertices = 0;
     double (*line_length) ();
@@ -82,6 +84,11 @@ int main(int argc, char *argv[])
     vertices_opt->required = NO;
     vertices_opt->multiple = NO;
     vertices_opt->description = _("Maximum number of vertices in segment");
+
+    nosplit_flag = G_define_flag();
+    nosplit_flag->key = 'n';
+    nosplit_flag->label = _("Add new vertices, but do not split");
+    nosplit_flag->description = _("Applies only to 'length' option");
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -146,6 +153,7 @@ int main(int argc, char *argv[])
 	if (vertices < 2)
 	    G_fatal_error(_("Number of vertices must be at least 2"));
     }
+    nosplit = nosplit_flag->answer;
     
     Vect_set_open_level(2);
     Vect_open_old2(&In, in_opt->answer, "", layer_opt->answer);
@@ -160,6 +168,7 @@ int main(int argc, char *argv[])
     
     Points = Vect_new_line_struct();
     Points2 = Vect_new_line_struct();
+    Points3 = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
     nlines = Vect_get_num_lines(&In);
@@ -199,6 +208,9 @@ int main(int argc, char *argv[])
 		    from = 0.;
 		    
 		    G_debug(3, "n: %ld, step: %f", n, step);
+		    
+		    if (nosplit)
+			Vect_reset_line(Points3);
 
 		    for (i = 0; i < n; i++) {
 			int ret;
@@ -233,7 +245,13 @@ int main(int argc, char *argv[])
 				Points->z[Points->n_points - 1];
 			}
 
-			Vect_write_line(&Out, ltype, Points2, Cats);
+			if (nosplit) {
+			    if (Points3->n_points > 0)
+				Points3->n_points--;
+			    Vect_append_points(Points3, Points2, GV_FORWARD);
+			}
+			else
+			    Vect_write_line(&Out, ltype, Points2, Cats);
 
 			/* last point */
 			x = Points2->x[Points2->n_points - 1];
@@ -242,6 +260,8 @@ int main(int argc, char *argv[])
 
 			from += step;
 		    }
+		    if (nosplit)
+			Vect_write_line(&Out, ltype, Points3, Cats);
 		}
 	    }
 	    else {
