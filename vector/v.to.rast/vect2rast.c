@@ -10,7 +10,7 @@
 int vect_to_rast(const char *vector_map, const char *raster_map, const char *field_name,
 		 const char *column, int nrows, int use, double value,
 		 int value_type, const char *rgbcolumn, const char *labelcolumn,
-		 int ftype, char *where, char *cats)
+		 int ftype, char *where, char *cats, int dense)
 {
     struct Map_info Map;
     struct line_pnts *Points;
@@ -142,7 +142,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
     }
 
     nlines = 1;
-    npasses = begin_rasterization(nrows, format);
+    npasses = begin_rasterization(nrows, format, dense);
     pass = 0;
 
     nareas_all = Vect_get_num_areas(&Map);
@@ -170,7 +170,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 	    if ((nlines =
 		 do_lines(&Map, Points, &cvarr, ctype, field, cat_list, 
 		          use, value, value_type, ftype,
-			  &nplines_all)) < 0) {
+			  &nplines_all, dense)) < 0) {
 		G_warning(_("Problem processing lines from vector map <%s>, continuing..."),
 			  vector_map);
 		stat = -1;

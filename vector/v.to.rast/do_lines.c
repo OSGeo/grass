@@ -7,7 +7,7 @@
 
 
 /* function prototypes */
-static int plot_line(double *, double *, int, int);
+static int plot_line(double *, double *, int, int, int);
 static int plot_points(double *, double *, int);
 static double v2angle(double *, double *, double, double);
 static double deg_angle(double, double, double, double);
@@ -16,7 +16,7 @@ static double deg_angle(double, double, double, double);
 int do_lines(struct Map_info *Map, struct line_pnts *Points,
 	     dbCatValArray * Cvarr, int ctype, int field,
 	     struct cat_list *cat_list, int use, double value,
-	     int value_type, int feature_type, int *count_all)
+	     int value_type, int feature_type, int *count_all, int dense)
 {
     double min = 0, max, u;
     int nlines, type, cat, no_contour = 0;
@@ -120,7 +120,7 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
 	}
 
 	if ((type & GV_LINES)) {
-	    plot_line(Points->x, Points->y, Points->n_points, use);
+	    plot_line(Points->x, Points->y, Points->n_points, use, dense);
 	    count++;
 	}
 	else if (type & GV_POINTS) {
@@ -139,15 +139,27 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
 }
 
 
-static int plot_line(double *x, double *y, int n, int use)
+static int plot_line(double *x, double *y, int n, int use, int dense)
 {
-    while (--n > 0) {
-	if (use == USE_D)
-	    set_dcat((DCELL) deg_angle(x[1], y[1], x[0], y[0]));
+    if (dense) {
+	while (--n > 0) {
+	    if (use == USE_D)
+		set_dcat((DCELL) deg_angle(x[1], y[1], x[0], y[0]));
 
-	G_plot_line2(x[0], y[0], x[1], y[1]);
-	x++;
-	y++;
+	    plot_line_dense(x[0], y[0], x[1], y[1]);
+	    x++;
+	    y++;
+	}
+    }
+    else {
+	while (--n > 0) {
+	    if (use == USE_D)
+		set_dcat((DCELL) deg_angle(x[1], y[1], x[0], y[0]));
+
+	    G_plot_line2(x[0], y[0], x[1], y[1]);
+	    x++;
+	    y++;
+	}
     }
 
     return 0;

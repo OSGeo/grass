@@ -33,10 +33,14 @@ int sort_areas(struct Map_info *, struct line_pnts *, int, struct cat_list *);
 
 /* do_lines.c */
 int do_lines(struct Map_info *, struct line_pnts *, dbCatValArray *, int, int,
-	     struct cat_list *, int, double, int, int, int *);
+	     struct cat_list *, int, double, int, int, int *, int);
+
+void plot_line_dense(double, double, double, double);
+void setup_plot(double, double, double, double, int (*dot) (int, int));
+
 
 /* raster.c */
-int begin_rasterization(int, int);
+int begin_rasterization(int, int, int);
 int output_raster(int);
 int set_cat(CELL);
 int set_dcat(DCELL);
@@ -51,6 +55,6 @@ int update_fcolors(const char *);
 
 /* vect2rast.c */
 int vect_to_rast(const char *, const char *, const char *, const char *, int, int,
-		 double, int, const char *, const char *, int, char *, char *);
+		 double, int, const char *, const char *, int, char *, char *, int);
 
 #endif

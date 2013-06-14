@@ -18,6 +18,7 @@ static CELL cat;
 static DCELL dcat;
 static int cur_x, cur_y;
 static int format;
+static int dense;
 static CELL *cell;
 static DCELL *dcell;
 static char **null_flags;
@@ -32,10 +33,12 @@ static int move(int, int);
 static int (*dot) (int, int);
 
 
-int begin_rasterization(int nrows, int f)
+int begin_rasterization(int nrows, int f, int do_dense)
 {
     int i, size;
     int pages;
+
+    dense = (do_dense != 0);
 
     /* otherwise get complaints about window changes */
     G_suppress_warnings(1);
@@ -127,7 +130,10 @@ static int configure_plot(void)
     G_set_window(&page);
 
     /* configure the plot routines */
-    G_setup_plot(-0.5, page.rows - 0.5, -0.5, page.cols - 0.5, move, cont);
+    if (dense)
+	setup_plot(0, page.rows, 0, page.cols, dot);
+    else
+	G_setup_plot(-0.5, page.rows - 0.5, -0.5, page.cols - 0.5, move, cont);
 
     return 0;
 }
