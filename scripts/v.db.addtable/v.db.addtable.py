@@ -87,6 +87,7 @@ def main():
     kv = grass.db_connection()
     database = kv['database']
     driver = kv['driver']
+    schema = kv['schema']
     
     # maybe there is already a table linked to the selected layer?
     nuldev = file(os.devnull, 'w')
@@ -119,6 +120,8 @@ def main():
             grass.fatal(_("Unable to create table <%s>") % table)
     
     # connect the map to the DB:
+    if schema is not '':
+        table = '%s.%s' (schema, table)
     grass.run_command('v.db.connect', quiet = True,
                       map = map_name, database = database, driver = driver,
 		      layer = layer, table = table, key = key)
