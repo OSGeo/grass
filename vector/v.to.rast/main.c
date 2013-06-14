@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     struct Option *input, *output, *rows, *col, *use_opt, *val_opt,
 		  *field_opt, *type_opt, *where_opt, *cats_opt,
 	          *rgbcol_opt, *label_opt;
+    struct Flag *dense_flag;
     int nrows, use, value_type, type;
     double value;
     char *desc;
@@ -114,6 +115,12 @@ int main(int argc, char *argv[])
     rows->answer = "4096";
     rows->description = _("Number of rows to hold in memory");
 
+    dense_flag = G_define_flag();
+    dense_flag->key = 'd';
+    dense_flag->label = _("Create densified lines (default: thin lines)");
+    dense_flag->description = _("All cells touched by the line will be set, "
+                                "not only those on the render path");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -155,7 +162,7 @@ int main(int argc, char *argv[])
     if (vect_to_rast(input->answer, output->answer, field_opt->answer,
 		     col->answer, nrows, use, value, value_type,
 		     rgbcol_opt->answer, label_opt->answer, type,
-		     where_opt->answer, cats_opt->answer)) {
+		     where_opt->answer, cats_opt->answer, dense_flag->answer)) {
 	exit(EXIT_FAILURE);
     }
 
