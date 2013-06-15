@@ -9,53 +9,66 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
+
 <h2>NAME</h2>
+
 <em><b>r.li</b></em> - Landscape structure analysis package overview.
 
+
 <h2>KEYWORDS</h2>
-raster, landscape structure analysis, landscape metrics, landscape pattern, landscape analysis
+
+raster, landscape structure analysis, landscape metrics,
+landscape pattern, landscape analysis
+
 
 <h2>DESCRIPTION</h2>
 
-The <em>r.li</em> suite is a toolset for multiscale analysis of landscape structure.
-It aims at replacing the <em>r.le</em> suite of modules through a client-server,
-multiprocess implementation. External software for quantitative measures of landscape
-structure is for example FRAGSTATS (McGarigal and Marks 1995).
-<p>The <em>r.li</em> suite offers a set of patch and diversity indices.
-It supports analysis of landscapes composed of a mosaic of
-patches, but, more generally, the modules work with any two-dimensional
-raster map whose cell values are integer (e.g., 1, 2) or floating point
-(e.g., 1.1, 3.2) values. The <em>r.li.setup</em> module has options for
-controlling the shape, size, number, and distribution of sampling
-areas used to collect information about the landscape structure.
-Sampling area shapes can be the entire map or a moving
-window of square, rectangular or with circular shape. The size of
-sampling areas can be changed, so that the landscape can be analyzed
-at a variety of spatial scales simultaneously. Sampling areas may be
-distributed across the landscape in a random, systematic, or
-stratified-random manner, or as a moving window.
-<p>The <em>r.li</em> modules can calculate a number of measures that produce
-single values as output (e.g. mean patch size in the sampling area),
-as well as measures that produce a distribution of values as output
-(e.g. frequency distribution of patch sizes in the sampling area). The
-results are stored as raster maps.
+The <em>r.li</em> suite is a toolset for multiscale analysis of landscape
+structure. It aims at replacing the <em>r.le</em> suite of modules
+through a client-server, multiprocess implementation. External software
+for quantitative measures of landscape structure is for example FRAGSTATS
+(McGarigal and Marks 1995).
+<p>
+The <em>r.li</em> suite offers a set of patch and diversity indices. It
+supports analysis of landscapes composed of a mosaic of patches, but,
+more generally, the modules work with any two-dimensional raster map
+whose cell values are integer (e.g., 1, 2) or floating point (e.g., 1.1,
+3.2) values. The <em>r.li.setup</em> module has options for controlling
+the shape, size, number, and distribution of sampling areas used to
+collect information about the landscape structure. Sampling area shapes
+can be the entire map or a moving window of square, rectangular or with
+circular shape. The size of sampling areas can be changed, so that the
+landscape can be analyzed at a variety of spatial scales simultaneously.
+Sampling areas may be distributed across the landscape in a random,
+systematic, or stratified-random manner, or as a moving window.
+<p>
+The <em>r.li</em> modules can calculate a number of measures that produce
+single values as output (e.g. mean patch size in the sampling area), as
+well as measures that produce a distribution of values as output (e.g.
+frequency distribution of patch sizes in the sampling area). The results
+are stored as raster maps.
 
-<p>The general procedure to calculate an index from a raster map is two-fold:
+<p>
+The general procedure to calculate an index from a raster map is
+two-fold:
 
 <ol>
-<li>run <em>r.li.setup</em>: create a configuration file selecting the parts of
-    raster to analyze.
+<li>run <em>r.li.setup</em>: create a configuration file selecting the
+    parts of raster to analyze.
 
-<li>run <em>r.li.'index'</em> (e.g., <em>r.li.patchdensity</em>) for calculate the selected
-    index using on the areas selected on configuration file.
+<li>run <em>r.li.'index'</em> (e.g., <em>r.li.patchdensity</em>) for
+    calculate the selected index using on the areas selected on
+    configuration file.
 </ol>
 
-<h2>NOTE</h2>
 
-Also the <em>r.li.daemon</em> has a main function and it can be run, but it is only a
-template for development of new indices.
+<h2>NOTES</h2>
+
+Also the <em>r.li.daemon</em> has a main function and it can be run, but
+it is only a template for development of new indices.
 <!-- mhh ??: -->
-The function itself has no meaning, it can be used only for debug.
+The function itself has no meaning, it can only be used for debugging.
+
 
 <h2>EXAMPLE</h2>
 
@@ -67,40 +80,42 @@ Spearfish region, using a 5x5 moving window, follow this procedure:
   <ol>
   <li> run 
 <div class="code"><pre>
-        r.li.setup
+  r.li.setup
 </pre></div>
   <li> The main <em>r.li.setup</em> window is displayed, click on "New"
-  <li>  Now it is displayed the new configuration window,
-	enter the configuration file name (e.g., "my_conf", do not use absolute paths) 
-	and the name of raster map (e.g., "geology").
-	The other fields are not needed for this configuration.
+  <li> Now it is displayed the new configuration window, enter the
+	configuration file name (e.g., "my_conf", do not use absolute
+	paths)  and the name of raster map (e.g., "geology"). The other
+	fields are not needed for this configuration.
   <li> Click on "Setup sampling frame", select "Whole maplayer" and click "OK"
   <li> Click on "Setup sampling areas", select "Moving window" and click "OK"
   <li> Click on "Use keyboard to enter moving window dimension"
   <li> Select "Rectangle" and enter 5 on "heigth" and "width" fields
   <li> Click on "Save settings"
-  <li> Close <em>r.li.setup</em> window
+  <li> Close the <em>r.li.setup</em> window
   </ol>
+
 <li> CALCULATE PATCHDENSITY INDEX
-<ol>
-	<li>	set region settings to geology raster map:
+  <ol>
+  <li> set the region settings to the "<tt>geology</tt>" raster map:
 <div class="code"><pre>
-	g.region rast=geology -p
+  g.region rast=geology -p
 </pre></div>
-	<li> run <em>r.li.patchdensity</em>:
+
+  <li> run <em>r.li.patchdensity</em>:
 <div class="code"><pre>
-        r.li.patchdensity map=geology conf=my_conf out=patchdens
+  r.li.patchdensity map=geology conf=my_conf out=patchdens
 </pre></div>
   </ol>
 </ol>
 
-The resulting patch density is stored in "patchdens" raster map.
+The resulting patch density is stored in "<tt>patchdens</tt>" raster map.
 
 You can verify the result for example with contour lines:
 <div class="code"><pre>
-r.contour in=patchdens out=patchdens step=5
-d.rast patchdens
-d.vect -c patchdens
+  r.contour in=patchdens out=patchdens step=5
+  d.rast patchdens
+  d.vect -c patchdens
 </pre></div>
 
 Note that if you want to run another index with the same area
@@ -111,6 +126,7 @@ program rescale it automatically. For instance if you have selected a
 5x5 sample area on 100x100 raster map, and you use the same
 configuration file on a 200x200 raster map, then the sample area is
 10x10.
+
 
 <h2>SEE ALSO</h2>
 
@@ -127,6 +143,7 @@ configuration file on a 200x200 raster map, then the sample area is
   <li> <a href="r.li.patchdensity.html">r.li.patchdensity</a>: Calculates patch density index on a raster map, using a 4 neighbour algorithm</li>
   <li> <a href="r.li.patchnum.html">r.li.patchnum</a>: Calculates patch number index on a raster map, using a 4 neighbour algorithm</li>
 </ul>
+
 <li>Indices based on patch dimension:
 <ul>
   <li> <a href="r.li.mps.html">r.li.mps</a>: Calculates mean patch size index on a raster map, using a 4 neighbour algorithm</li>
@@ -134,19 +151,23 @@ configuration file on a 200x200 raster map, then the sample area is
   <li> <a href="r.li.padrange.html">r.li.padrange</a>: Calculates range of patch area size on a raster map</li>
   <li> <a href="r.li.padsd.html">r.li.padsd</a>: Calculates standard deviation of patch area a raster map</li>
 </ul>
+
 <li>Indices based on patch shape:
 <ul>
   <li> <a href="r.li.shape.html">r.li.shape</a>: Calculates shape index on a raster map</li>
 </ul>
+
 <li>Indices based on patch edge: <!-- border? -->
 <ul>
   <li> <a href="r.li.edgedensity.html">r.li.edgedensity</a>: Calculates edge density index on a raster map, using a 4 neighbour algorithm</li>
 </ul>
+
 <li>Indices based on patch attributes:
 <ul>
   <li> <a href="r.li.cwed.html">r.li.cwed</a>: Calculates contrast Weighted Edge Density index on a raster map</li>
   <li> <a href="r.li.mpa.html">r.li.mpa</a>: Calculates mean pixel attribute index on a raster map</li>
 </ul>
+
 </ul>
 
 <b>Diversity indices</b>:
@@ -159,27 +180,45 @@ configuration file on a 200x200 raster map, then the sample area is
   <li> <a href="r.li.simpson.html">r.li.simpson</a>: Calculates Simpson diversity index on a raster map</li>
 </ul>
 
+
 <h2>ADDING NEW INDICES</h2>
-New indices can be defined and implemented by any C programmer, without having to
-deal with all basic functions (IO etc.). The computing architecture and the functions
-are clearly separated, thus allowing an easy expandability. Every index is defined
-separately, placed in a directory along with its Makefile for compiling it and a file
-description.html which describes the index including a simple example of use.
+
+New indices can be defined and implemented by any C programmer, without
+having to deal with all basic functions (IO etc.). The computing
+architecture and the functions are clearly separated, thus allowing an
+easy expandability. Every index is defined separately, placed in a
+directory along with its Makefile for compiling it and a file
+&lt;module_name&gt;.html which describes the index including a simple
+example of use.
+
 
 <h2>REFERENCES</h2>
 
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351 (<a href="http://www.fs.fed.us/pnw/pubs/gtr_351.pdf">PDF</a>).
+Gen. Tech. Rep. PNW-351
+ (<a href="http://www.fs.fed.us/pnw/pubs/gtr_351.pdf">PDF</a>).
+
 
 <h2>AUTHORS</h2>
+
 <a href="mailto:porta@cli.di.unipi.it">Claudio Porta</a> and 
-<a href="mailto:spano@cli.di.unipi.it">Lucio Davide Spano</a>, students of Computer Science 
-University of Pisa (Italy). <br>
+<a href="mailto:spano@cli.di.unipi.it">Lucio Davide Spano</a>,
+ students of Computer Science 
+University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI)<br>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
+
 <hr>
-<p><a href="index.html">Main index</a> - <a href="raster.html">Raster index</a> - <a href="topics.html">Topics index</a> - <a href="keywords.html">Keywords Index</a> - <a href="full_index.html">Full index</a>
+
+<p>
+<a href="index.html">Main index</a>
+ - <a href="raster.html">Raster index</a>
+ - <a href="topics.html">Topics index</a>
+ - <a href="keywords.html">Keywords Index</a>
+ - <a href="full_index.html">Full index</a>
+
 </body>
 </html>
