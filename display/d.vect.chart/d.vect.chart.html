@@ -35,8 +35,9 @@ d.vect.chart map=vectmap columns=cens51,cens61,cens71,cens81
 
 Create framed bar graphs of an erodibiliy index from the SPEARFISH dataset.
 <div class="code"><pre>
-r.to.vect -s -v in=erode.index out=erode_index feature=area 
-v.extract in=erode_index out=erode_index_ctrds type=centroid 
+g.region rast=erode.index
+r.to.vect -s -v input=erode.index output=erode_index feature=area 
+v.extract input=erode_index output=erode_index_ctrds type=centroid 
 d.rast aspect
 d.vect.chart map=erode_index_ctrds ctype=bar columns=cat \
              size=10 max_ref=12 scale=1.5 colors=yellow 
