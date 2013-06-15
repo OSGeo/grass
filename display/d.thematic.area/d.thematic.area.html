@@ -1,31 +1,56 @@
 <h2>DESCRIPTION</h2>
 
-<em>d.thematic.area</em> draws thematic coropleth vector maps based on an attribute column or an expression involving several columns. It takes a list of class breaks (excluding the minimum and maximum values) and a list of colors to apply to the classes (has to be the number of class breaks + 1).
+<em>d.thematic.area</em> draws thematic choropleth vector maps based 
+on an attribute column or an expression involving several columns. 
+It takes a list of class breaks (excluding the minimum and maximum 
+values) and a list of colors to apply to the classes (has to be the 
+number of class breaks + 1).
+<p>
+Instead of a list of class breaks, the user can also chose a 
+classification algorithm and a number of classes. See the 
+<em>v.class </em> man page for more information on these different 
+algorithms.
 
-Instead of a list of class breaks, the user can also chose a classification algorithm and a number of classes. See the v.class man page for more information on these different algorithms.
-
-The <em>-l</em> flag instructs the module to print legend information (class min | class max | number of observations in class | color) to standard output for futher use in graphical software. When combined with the <em>-e</em> flag, the legend information will be extended with some additional statistical information. If the <em>-n</em> flag is set, the module will only print the legend information without drawing the map. If the user gives a <em>legendfile</em>, the module will write d.graph instructions for painting a legend into that file.
+The <em>-l</em> flag instructs the module to print legend 
+information (<i>class min | class max | number of observations in class 
+| color</i>) to standard output for futher use in graphical software. 
+When combined with the <em>-e</em> flag, the legend information will 
+be extended with some additional statistical information. If the
+<em>-n</em> flag is set, the module will only print the legend 
+information without drawing the map. If the user gives a
+<em>legendfile</em>, the module will write <em>d.graph</em> instructions
+for painting a legend into that file.
 
 
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
-d.thematic.area -l map=communes3 data=pop breaks=111393.250000,222785.500000,334177.750000 colors=255:0:0,0:255:0,0:0:255,0,0,0
+d.thematic.area -l map=communes3 data=pop \
+  breaks=111393.250000,222785.500000,334177.750000 \
+  colors=255:0:0,0:255:0,0:0:255,0,0,0
 </pre></div>
 
-The following example uses a calculated attribute (density = pop/area) and the standard deviation algorithm to calculate class breaks for 5 classes:
+The following example uses a calculated attribute (density = 
+pop/area) and the standard deviation algorithm to calculate class 
+breaks for 5 classes:
+
 <div class="code"><pre>
-d.thematic.area -l map=communes2 data=pop/area algorithm=std nbclasses=5 colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0
+d.thematic.area -l map=communes2 data=pop/area algorithm=std \
+  nbclasses=5 colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="v.class.html">v.class</a></em>
-<em><a href="d.vect.html">d.vect</a></em>
-<em><a href="d.graph.html">d.graph</a></em>
-<em><a href="v.univar.html">v.univar</a></em>
+<em>
+<a href="v.class.html">v.class</a>,
+<a href="d.vect.html">d.vect</a>,
+<a href="d.graph.html">d.graph</a>,
+<a href="v.univar.html">v.univar</a>
+</em>
 
 
 <h2>AUTHOR</h2>
 
 Moritz Lennert
+
+<p><i>Last changed: $Date$</i>
