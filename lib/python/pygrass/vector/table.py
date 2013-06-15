@@ -22,6 +22,7 @@ from grass.script.db import db_table_in_vector
 from grass.script.core import warning
 import sys
 import sql
+import os
 
 
 DRIVERS = ('sqlite', 'pg')
@@ -633,7 +634,11 @@ class Link(object):
             for t in (np.int8, np.int16, np.int32, np.int64, np.uint8,
                       np.uint16, np.uint32, np.uint64):
                 sqlite3.register_adapter(t, long)
-            return sqlite3.connect(get_path(self.database))
+            dbpath = get_path(self.database)
+            dbdirpath = os.path.split(dbpath)[0]
+            if not os.path.exists(dbdirpath):
+                os.mkdir(dbdirpath)
+            return sqlite3.connect(dbpath)
         elif self.driver == 'pg':
             try:
                 import psycopg2
