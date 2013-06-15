@@ -1,10 +1,11 @@
 #!/bin/sh
 # the next line restarts using wish \
- exec $GRASS_WISH "$0" "$@"
+ exec "$GRASS_WISH" "$0" "$@"
 
 
-#Simply ask if the selected area is ok or not and save the answer in the 
-#environment variable env(name)
+# Simply ask if the selected area is ok or not and save the
+# answer in the environment variable "env(name)"
+
     wm title . "Select this area"
     wm minsize . 250 100
     label .label -text "Is this area ok?"
