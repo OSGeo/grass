@@ -146,7 +146,7 @@ class PointsList(wx.ListCtrl,
                 info.SetText(col[1][iLabel]) 
                 self.InsertColumnInfo(col[0], info)
 
-    def AddItem(self, event):
+    def AddItem(self):
         """!Appends an item to list with default values"""
         iDefVal = self.dataTypes["itemDefaultValue"]
         iColEd = self.dataTypes["colEditable"]
@@ -192,7 +192,14 @@ class PointsList(wx.ListCtrl,
     def GetCellValue(self, key, colName):
         """!Get value in cell of list using key (same regardless of sorting)"""
         colNum = self._getColumnNum(colName)
-        iColEd = self.dataTypes["colEditable"]      
+
+        if colNum < 0:
+            return None
+
+        iColEd = self.dataTypes["colEditable"]
+        if self.selIdxs[key][colNum] != -1:
+            return self.selIdxs[key][colNum]
+
         return self.itemDataMap[key][colNum]
 
     def GetCellSelIdx(self, key, colName):
@@ -256,7 +263,7 @@ class PointsList(wx.ListCtrl,
         iColEd = self.dataTypes["colEditable"]
         self.colsData[colNum][iColEd] = colType
 
-    def DeleteItem(self, event = None):
+    def DeleteItem(self):
         """!Delete selected item in list"""
         if self.selected == wx.NOT_FOUND:
             return
@@ -373,7 +380,7 @@ class PointsList(wx.ListCtrl,
 
                 self.selIdxs[key] = dlg.GetSelectionIndexes()
         dlg.Destroy()
-        return changed
+        return changed, key
         
     def CreateEditDialog(self, data, pointNo):
         """!Helper function

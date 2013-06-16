@@ -13,6 +13,8 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Lukas Bocan <silent_bob centrum.cz> (turn costs support)
+@author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
 
 import wx
@@ -25,9 +27,13 @@ class PointListToolbar(BaseToolbar):
 
     @param parent reference to VNETDialog
     """
-    def __init__(self, parent, list):
+    def __init__(self, parent, dialog, vnet_mgr):
         BaseToolbar.__init__(self, parent)
-        self.list = list
+        self.vnet_mgr = vnet_mgr
+        self.vnet_pts_mgr = self.vnet_mgr.GetPointsManager()
+
+        self.dialog = dialog
+
         self.InitToolbar(self._toolbarData())
         
         # realize the toolbar
@@ -41,6 +47,10 @@ class PointListToolbar(BaseToolbar):
                                     label = _('Insert points from Map Display')),
             'snapping'  : MetaIcon(img = 'move',
                                     label = _('Activate snapping to nodes')),
+            'isec_turn_edit'  : MetaIcon(img = 'line-edit',
+                                    label = _('Activate mode for turns editing')),
+            'global_turn_edit'  : MetaIcon(img = 'vector-tools',
+                                          label = _('Activate mode for global turns editing')),
             'pointAdd'     : MetaIcon(img = 'point-create',
                                     label = _('Add new point')),
             'pointDelete'  : MetaIcon(img = 'gcp-delete',
@@ -48,35 +58,45 @@ class PointListToolbar(BaseToolbar):
             }
 
         return  self._getToolbarData((('insertPoint', icons['insertPoint'],
-                                      self.list.dialog.OnInsertPoint,#TODO self.list.dialog
+                                      self.OnEditPointMode,#TODO self.list.dialog
                                       wx.ITEM_CHECK),
                                       ('snapping', icons['snapping'],
-                                      self.list.dialog.OnSnapping,
+                                      lambda event : self.vnet_mgr.Snapping(event.IsChecked()),
                                       wx.ITEM_CHECK),
                                       (None, ),
                                      ('pointAdd', icons["pointAdd"],
-                                        self.list.AddItem),
+                                        lambda event : self.vnet_pts_mgr.AddPoint()),
                                      ('pointDelete', icons["pointDelete"],
-                                        self.list.DeleteItem)))
+                                       self.OnDeletePoint),
+                                      (None, )#,
+                                      #('isec_turn_edit', icons['isec_turn_edit'],
+                                      #self.dialog.OnDefIsecTurnCosts,
+                                      #wx.ITEM_CHECK),
+                                      #('global_turn_edit', icons['global_turn_edit'],
+                                      #self.dialog.OnDefGlobalTurnCosts)
+                                      ))
                                     
     def GetToolId(self, toolName): #TODO can be useful in base
-
         return vars(self)[toolName]
+
+    def OnEditPointMode(self, event):
+        self.vnet_pts_mgr.EditPointMode(not self.vnet_pts_mgr.IsEditPointModeActive())
+
+    def OnDeletePoint(self, event):
+        pt_id = self.vnet_pts_mgr.GetSelected()
+        self.vnet_pts_mgr.DeletePoint(pt_id)
+
 
 class MainToolbar(BaseToolbar):
     """!Main toolbar
     """
-    def __init__(self, parent):
+    def __init__(self, parent, vnet_mgr):
         BaseToolbar.__init__(self, parent)
         
         self.InitToolbar(self._toolbarData())
 
-        choices = []
+        self.vnet_mgr = vnet_mgr
 
-        for moduleName in self.parent.vnetModulesOrder:
-            choices.append(self.parent.vnetParams[moduleName]['label'])
-
-        self.UpdateUndoRedo()
         # realize the toolbar
         self.Realize()
 
@@ -121,18 +141,18 @@ class MainToolbar(BaseToolbar):
                                     ))
 
 
-    def UpdateUndoRedo(self):
+    def UpdateUndoRedo(self, curr_step, steps_num):
 
         id = vars(self)['showResult']
         self.ToggleTool(id =id,
                         toggle = True)
 
-        if self.parent.history.GetCurrHistStep() >= self.parent.history.GetStepsNum():
+        if curr_step >= steps_num:
            self.Enable("undo", False)
         else:
            self.Enable("undo", True)
 
-        if self.parent.history.GetCurrHistStep() <= 0:
+        if curr_step <= 0:
            self.Enable("redo", False)
         else:
            self.Enable("redo", True)  
@@ -144,15 +164,16 @@ class MainToolbar(BaseToolbar):
 class AnalysisToolbar(BaseToolbar):
     """!Main toolbar
     """
-    def __init__(self, parent):
+    def __init__(self, parent, vnet_mgr):
         BaseToolbar.__init__(self, parent)
         
+        self.vnet_mgr = vnet_mgr
         self.InitToolbar(self._toolbarData())
 
         choices = []
 
-        for moduleName in self.parent.vnetModulesOrder:
-            choices.append(self.parent.vnetParams[moduleName]['label'])
+        for moduleName in self.vnet_mgr.GetAnalyses():
+            choices.append(self.vnet_mgr.GetAnalysisProperties(moduleName)['label'])
 
         self.anChoice = wx.ComboBox(parent = self, id = wx.ID_ANY,
                                     choices = choices,
