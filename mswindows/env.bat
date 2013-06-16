@@ -1,6 +1,6 @@
 rem Environmental variables for GRASS stand-alone installer
 
-set GRASS_PYTHON=python
+set GRASS_PYTHON=%GISBASE%\extrabin\python.exe
 set GRASS_PROJSHARE=%GISBASE%\proj
 set GRASS_HTML_BROWSER=explorer
 
@@ -11,4 +11,4 @@ set GEOTIFF_CSV=%GISBASE%\share\epsg_csv
 
 set PATH=%GISBASE%\msys\bin;%PATH%
 set PATH=%GISBASE%\extrabin;%GISBASE%\extralib;%PATH%
-set PATH=%GISBASE%\tcl-tk\bin;%GISBASE%\sqlite\bin;%PATH%
+set PATH=%GISBASE%\sqlite\bin;%PATH%
