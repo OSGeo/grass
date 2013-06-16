@@ -199,7 +199,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 
 	    if (left_new != left_old || right_new != right_old) {
 		G_debug(3,
-			"The pruned boundary changes attachement of centroid -> not pruned");
+			"The pruned boundary changes attachment of centroid -> not pruned");
 		Vect_rewrite_line(Out, newline, type, Points, Cats);
 		if (Err) {
 		    Vect_delete_line(Err, newline_err);

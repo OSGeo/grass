@@ -283,7 +283,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 
     if (left_new != left_old || right_new != right_old) {
 	G_debug(3,
-		"The modified boundary changes attachement of centroid -> not modified");
+		"The modified boundary changes attachment of centroid -> not modified");
 	Vect_rewrite_line(Out, newline, GV_BOUNDARY, APoints, Cats);
 	return 0;
     }

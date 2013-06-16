@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 		 "point shared between 2 and more polygons where angles of segments are different"),
 	       _("remove vertices in threshold from lines and boundaries, "
 		 "boundary is pruned only if topology is not damaged (new intersection, "
-		 "changed attachement of centroid), first and last segment of the boundary "
+		 "changed attachment of centroid), first and last segment of the boundary "
 		 "is never changed"),
 	       _("remove small areas, the longest boundary with adjacent area is removed"),
 	       _("remove all lines or boundaries of zero length, threshold is ignored"),
