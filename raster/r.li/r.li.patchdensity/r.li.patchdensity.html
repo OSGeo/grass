@@ -1,4 +1,5 @@
 <h2>DESCRIPTION</h2>
+
 <em>r.li.patchdensity</em> is a patch index for <em>r.li</em> suite.
 It calculates the function:
 
@@ -10,9 +11,11 @@ that is 1000000 by number of patch for area unit.
 This index is calculated using a 4 neighbour algorithm.
 
 <h2>EXAMPLES</h2>
-To calculate patch density index on map <em>my_map</em>, using <em>my_conf</em>
-configuration file (previously defined with <em>r.li.setup</em>) and saving
-results in the raster map <em>my_out</em>, run:
+
+To calculate patch density index on map <em>my_map</em>, using
+<em>my_conf</em> configuration file (previously defined with
+<em>r.li.setup</em>) and saving results in the raster map
+<em>my_out</em>, run:
 
 <div class="code"><pre>
 r.li.patchdensity input=my_map conf=my_conf out=my_out
@@ -34,6 +37,7 @@ r.to.vect forests out=forests feature=area
 d.vect forests type=boundary
 </pre></div>
 
+
 <h2>NOTES</h2>
 
 A map of NULL values is considered to have zero patches. <br>
@@ -43,17 +47,22 @@ r.null setnull=0 map=my_out
 </pre></div>
 after index calculation.<br>
 <!-- next ??????: -->
-If raster area is 0, <em>r.li.patchdensity</em> returns -1. This is only possible
-if the raster is masked.
+If raster area is 0, <em>r.li.patchdensity</em> returns -1. This is only
+possible if the raster is masked.
+
 
 <h2>SEE ALSO</h2>
+
 <em><a href="r.li.html">r.li</A></em> package overview <br>
 <em><a href="r.li.daemon.html">r.li.daemon</A></em><br>
 <em><a href="r.li.setup.html">r.li.setup</A></em>
 
+
 <h2>AUTHORS</h2>
+
 Claudio Porta and Lucio Davide Spano, students of Computer Science 
 University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI) (www.faunalia.it)<br>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
