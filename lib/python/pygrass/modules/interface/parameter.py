@@ -139,7 +139,8 @@ class Parameter(object):
                 vals = ', '.join([repr(val) for val in self.values])
         else:
             vals = False
-        keydescvals = "\n    (%s)" % ', '.join(self.keydescvalues)
+        if self.keydescvalues:
+            keydescvals = "\n    (%s)" % ', '.join(self.keydescvalues)
         return DOC['param'].format(name=self.name,
                 default=repr(self.default) + ', ' if self.default else '',
                 required='required, ' if self.required else 'optional, ',
