@@ -4,13 +4,13 @@ Created on Tue Apr  2 18:39:21 2013
 
 @author: pietro
 """
-from read import element2dict
+import read
 
 
 class Flag(object):
     def __init__(self, xflag=None, diz=None):
         self.value = False
-        diz = element2dict(xflag) if xflag is not None else diz
+        diz = read.element2dict(xflag) if xflag is not None else diz
         self.name = diz['name']
         self.special = True if self.name in (
             'verbose', 'overwrite', 'quiet', 'run') else False
@@ -47,6 +47,6 @@ class Flag(object):
         """
         {name}: {default}
             {description}"""
-        return _DOC['flag'].format(name=self.name,
-                                   default=repr(self.default),
-                                   description=self.description)
+        return read.DOC['flag'].format(name=self.name,
+                                       default=repr(self.default),
+                                       description=self.description)
