@@ -129,6 +129,11 @@ def main():
         dbln = open(os.path.join(new_dir,'dbln'),'r')
         dbnlist = dbln.readlines()
         dbln.close()
+        # check if dbf or sqlite directory exists
+        if dbconn['driver'] == 'dbf' and not os.path.exists(os.path.join(mset_dir, 'dbf')):
+	    os.mkdir(os.path.join(mset_dir, 'dbf'))
+	elif dbconn['driver'] == 'sqlite' and not os.path.exists(os.path.join(mset_dir, 'sqlite')):
+	    os.mkdir(os.path.join(mset_dir, 'sqlite'))
         # for each old connection
         for t in dbnlist:
             # it split the line of each connection, to found layer number and key
@@ -136,7 +141,7 @@ def main():
                 values = t.split('|')
             else:
                 values = t.split(' ')
-            
+
             from_table = values[1]
             layer = values[0].split('/')[0]
             # we need to take care about the table name in case of several layer
@@ -144,9 +149,9 @@ def main():
                 to_table = "%s_%s"%(map_name, layer)
             else:
                 to_table = from_table
-            
+
             grass.verbose(_("Coping table <%s> as table <%s>") % (from_table, to_table))
-            
+
             # copy the table in the default database
             ret = grass.run_command('db.copy', to_driver = dbconn['driver'], 
                                     to_database = todb, to_table = to_table, 
