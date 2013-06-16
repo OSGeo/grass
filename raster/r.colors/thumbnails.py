@@ -102,7 +102,7 @@ def make_gradient(path):
             # skip comments
             continue
         records.append(line.split())
-    records = [record for record in records if record[0] != 'nv']
+    records = [record for record in records if record[0] != 'nv' and record[0] != 'default']
     relative = False
     absolute = False
     for record in records:
