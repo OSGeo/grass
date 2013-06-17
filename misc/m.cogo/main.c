@@ -49,29 +49,29 @@ struct survey_record
 };
 
 
-static void print_coordinates(FILE * outfile, struct survey_record *in)
+static void print_coordinates(FILE *outfile, struct survey_record *in)
 {
     if (in->haslabel == YES)
-	fprintf(outfile, "%f %f %s\n", in->x, in->y, in->label);
+	fprintf(outfile, "%.15g %.15g %s\n", in->x, in->y, in->label);
     else
-	fprintf(outfile, "%f %f\n", in->x, in->y);
+	fprintf(outfile, "%.15g %.15g\n", in->x, in->y);
 }
 
 
-static void print_cogo(FILE * outfile, struct survey_record *in)
+static void print_cogo(FILE *outfile, struct survey_record *in)
 {
     if (in->haslabel == YES)
-	fprintf(outfile, "%s %s %d:%d:%.3f %s %f\n",
+	fprintf(outfile, "%s %s %02d:%02d:%02.9g %s %.13g\n",
 		in->label, in->n_s, in->deg, in->min, in->sec,
 		in->e_w, in->dist);
     else
-	fprintf(outfile, "%s %d:%d:%.3f %s %f\n",
+	fprintf(outfile, "%s %02d:%02d:%02.9g %s %.13g\n",
 		in->n_s, in->deg, in->min, in->sec, in->e_w, in->dist);
 
 }
 
 
-static const char *next_line(FILE * infile)
+static const char *next_line(FILE *infile)
 {
     static char line[512];
     const char *cptr;
@@ -210,12 +210,14 @@ int main(int argc, char **argv)
     struct Flag *format;
     struct Flag *quiet;
     struct Flag *reverse;
+    struct Flag *close;
     struct GModule *module;
     FILE *infile, *outfile;
-    struct survey_record record;
+    struct survey_record record, first_record;
     const char *cptr;
     char *ss;
-    int verbose = 1, linenum = 0;
+    int verbose = TRUE;
+    unsigned long linenum = 0, dataline = 0;
     int (*parse_line) (const char *, struct survey_record *);
     void (*print_func) (FILE *, struct survey_record *);
 
@@ -240,6 +242,11 @@ int main(int argc, char **argv)
     reverse->key = 'r';
     reverse->description =
 	_("Convert from coordinates to bearing and distance");
+
+    close = G_define_flag();
+    close->key = 'c';
+    close->description =
+	_("Repeat the starting coordinate at the end to close a loop");
 
     input = G_define_standard_option(G_OPT_F_INPUT);
     input->required = NO;
@@ -289,7 +296,7 @@ int main(int argc, char **argv)
     }
 
     if (quiet->answer)
-	verbose = 0;
+	verbose = FALSE;
 
     if (reverse->answer) {
 	parse_line = parse_reverse;
@@ -325,8 +332,18 @@ int main(int argc, char **argv)
 		G_warning(_("Input parse error on line %d"), linenum);
 	    continue;
 	}
+
+	dataline++;
+
+	if (dataline == 1)
+	    first_record = record;
+
 	print_func(outfile, &record);
     }
+
+    if (close->answer)
+	print_func(outfile, &first_record);
+
 
     if (infile != stdin)
 	fclose(infile);
