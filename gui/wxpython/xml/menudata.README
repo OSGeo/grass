@@ -17,7 +17,7 @@ menuitem breakdown:
 <label>     The menu short description. [maintained in this file]
 
 <handler>   The python function that handles the command.
-	     e.g.OnMenuCmd, OnXTerm, OnXTermNoXMon, many others..
+	     e.g.OnMenuCmd, many others..
 
 <help>      automatically populated by update_menudata.py from
 	     the <command> module's module->description (or if
