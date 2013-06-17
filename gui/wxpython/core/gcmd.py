@@ -518,7 +518,7 @@ class CommandThread(Thread):
 
         self.startTime = time.time()
 
-        # TODO: replace ugly hack bellow
+        # TODO: replace ugly hack below
         args = self.cmd
         if sys.platform == 'win32':
             ext = os.path.splitext(self.cmd[0])[1] == globalvar.SCT_EXT
