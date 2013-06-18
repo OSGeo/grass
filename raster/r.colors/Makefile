@@ -15,13 +15,13 @@ default: multi
 # Insert thumbnail previews
 r.colors.tmp.html: $(BIN)/r.colors$(EXE) thumbnails.py
 	$(call htmldesc,$<,$@)
-	sed 's!^<DD><b>\([a-z0-9._]*\)</b>:!<DD><img width="80" height="12" src="Colortable_\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
+	sed 's!^<dd><b>\([a-z0-9._]*\)</b>:!<dd><img width="80" height="12" src="Colortable_\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
 	mv -f "$@.tmp" "$@"
 	$(MAKE) thumbnails
 
 r3.colors.tmp.html: $(BIN)/r3.colors$(EXE) thumbnails.py
 	$(call htmldesc,$<,$@)
-	sed 's!^<DD><b>\([a-z0-9._]*\)</b>:!<DD><img width="80" height="12" src="Colortable_\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
+	sed 's!^<dd><b>\([a-z0-9._]*\)</b>:!<dd><img width="80" height="12" src="Colortable_\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
 	mv -f "$@.tmp" "$@"
 	$(MAKE) thumbnails
 
