@@ -51,3 +51,29 @@ POLYGON
     END
   END
 END
+
+# cleanup to avoid sliver visible after conversion to pdf
+POLYGON
+  COLOR NONE
+  RING
+    LINE
+      -1 -4.3875
+      -2.6143 -3.2
+      -4.2286 -1.5391
+      -2.6143 -2.7
+      -1 -4.3875
+    END
+  END
+END
+POLYGON
+  COLOR NONE
+  RING
+    LINE
+      1 -4.3875
+      2.6143 -3.2
+      4.2286 -1.5391
+      2.6143 -2.7
+      1 -4.3875
+    END
+  END
+END
