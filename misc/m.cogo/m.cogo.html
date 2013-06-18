@@ -4,7 +4,8 @@
 and X,Y coordinates.  Only simple bearing/distance or coordinate
 pairs are handled. It assumes a cartesian coordinate system.
 
-<p>Input can be entered via standard input (default) or from the file
+<p>
+Input can be entered via standard input (default) or from the file
 <b>input=</b><em>name</em>. Specifying the input as "-" also
 specifies standard input, and is useful for using the program in
 a pipeline.  Output will be to standard output unless a file
@@ -12,14 +13,16 @@ name other than "-" is specified.  The input file must
 closely adhere to the following format, where up to a 10 character
 label is allowed but not required (see <b>-l</b> flag).
 
-<p><b>Example COGO input:</b>
+<p>
+<b>Example COGO input:</b>
 <div class="code"><pre>
    P23 N 23:14:12 W 340
    P24 S 04:18:56 E 230
    ...
 </pre></div>
 
-<p>The first column may contain a label and you must use the <b>-l</b>
+<p>
+The first column may contain a label and you must use the <b>-l</b>
 flag so the program knows.  This is followed by a space, and then
 either the character 'N' or 'S' to indicate whether the bearing is
 relative to the north or south directions.  After another space,
@@ -30,22 +33,28 @@ A space follows the angle, and is then followed by either the 'E' or 'W'
 characters. A space separates the bearing from the distance (which should
 be in appropriate linear units).
 
-<p><b>Output of the above input:</b>
+<p>
+<b>Output of the above input:</b>
 <div class="code"><pre>
    -134.140211 312.420236 P23
    -116.832837 83.072345 P24
    ...
 </pre></div>
-<p>Unless specified with the <b>coord</b> option, calculations begin from (0,0).
 
-<p>For those unfamiliar with the notation for bearings: Picture yourself in the
+<p>
+Unless specified with the <b>coord</b> option, calculations begin from (0,0).
+
+
+<h2>NOTES</h2>
+
+For those unfamiliar with the notation for bearings: Picture yourself in the
 center of a circle.  The first hemispere notation tell you whether you should
 face north or south.  Then you read the angle and either turn that many
 degrees to the east or west, depending on the second hemisphere notation.  
 Finally, you move &lt;distance&gt; units in that direction to get to the 
 next station.
 
-
+<p>
 <em>m.cogo</em> can be run either non-interactively or
 interactively.  The program will be run non-interactively
 if the user specifies any parameter or flag. Use "m.cogo -",
@@ -54,8 +63,6 @@ parameters, <em>m.cogo</em> will prompt for each value
 using the familiar GRASS parser interface.
 
 <p>
-<h2>NOTES</h2>
-
 This program is very simplistic, and will not handle deviations
 from the input format explained above.  Currently, the
 program doesn't do anything particularly useful with
@@ -63,8 +70,13 @@ the output.  However, it is envisioned that this program
 will be extended to provide the capability to generate
 vector and/or sites layers.
 
+<p>
+Lines may be closed by using the <b>-c</b> flag or snapped with
+<em>v.clean</em>, lines may be converted to boundaries with <em>v.type</em>,
+and closed boundaries may be converted to areas with <em>v.centroids</em>.
 
-<h2>EXAMPLE</h2>
+
+<h2>EXAMPLES</h2>
 
 <div class="code"><pre>
    m.cogo -l in=cogo.dat
@@ -92,30 +104,41 @@ P015 S 88:44:56 W 146.2713
 P016 S 88:44:56 W 18.7164
 </pre></div>
 
+<p>
 Round trip:
 <div class="code"><pre>
    m.cogo -l in=cogo.dat | m.cogo -rl in="-"
 </pre></div>
 
-
+<p>
 Import as a vector points map:
 <div class="code"><pre>
    m.cogo -l in=cogo.dat | v.in.ascii out=cogo_points x=1 y=2 separator=space
 </pre></div>
 
-
+<p>
 Shell script to import as a vector line map:
 <div class="code"><pre>
-    m.cogo -l in=cogo.dat | tac | awk '
+   m.cogo -l in=cogo.dat | tac | awk '
        BEGIN { FS=" " ; R=0 }
        $1~/\d*\.\d*/ { printf(" %.8f %.8f\n", $1, $2) ; ++R }
        END { printf("L %d\n", R) }' | tac | \
        v.in.ascii -n format=standard out=cogo_line
 </pre></div>
 
-Lines may be closed by using the <b>-c</b> flag or snapped with
-<em>v.clean</em>, lines may be converted to boundaries with <em>v.type</em>,
-and closed boundaries may be converted to areas with <em>v.centroids</em>.
+<p>
+Convert that lines map into an area:
+<div class="code"><pre>
+   # Add the -c flag to the above example to close the loop:
+   m.cogo -l -c in=cogo.dat | ...
+       ...
+   v.type input=cogo_line output=cogo_boundary from_type=line to_type=boundary
+   v.centroids in=cogo_boundary out=cogo_area
+</pre></div>
+
+If necessary, snap the boundary closed with the <em>v.clean</em> module.
+Use <tt>tool=snap</tt> and <tt>thresh=0.0001</tt>, or some small value.
+<!-- does that need a cat number on the boundary to work? -->
 
 
 <h2>SEE ALSO</h2>
@@ -133,4 +156,5 @@ and closed boundaries may be converted to areas with <em>v.centroids</em>.
 
 Eric G. Miller
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
