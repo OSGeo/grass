@@ -35,6 +35,7 @@ import string
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
+import wx.combo
 try:
     import wx.lib.agw.flatnotebook   as FN
 except ImportError:
@@ -1196,3 +1197,53 @@ class ManageSettingsWidget(wx.Panel):
                 pass
         
         return data
+
+class ColorTablesComboBox(wx.combo.OwnerDrawnComboBox):
+    """!ComboBox with drawn color tables (created by thumbnails.py).
+
+    Used in r(3).colors dialog.
+    """
+    def OnDrawItem(self, dc, rect, item, flags):
+        """!Overridden from OwnerDrawnComboBox.
+        
+        Called to draw each item in the list.
+        """
+        if item == wx.NOT_FOUND:
+            # painting the control, but there is no valid item selected yet
+            return
+
+        r = wx.Rect(*rect)  # make a copy
+        r.Deflate(3, 5)
+
+        # for painting the items in the popup
+        bitmap = self.GetColorTableBitmap(self.GetString(item))
+        if bitmap:
+            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) / 2)
+        dc.DrawText(self.GetString(item),
+                    r.x + bitmap.GetWidth() + 10,
+                    (r.y + 0) + (r.height - dc.GetCharHeight()) / 2)
+
+    def OnMeasureItem(self, item):
+        """!Overridden from OwnerDrawnComboBox, should return the height.
+
+        Needed to display an item in the popup, or -1 for default.
+        """
+        return 24
+
+    def GetColorTableBitmap(self, colorTable):
+        """!Returns bitmap with colortable for given nacolor table name.
+        
+        @param colorTable name of color table        
+        """
+        if not hasattr(self, 'bitmaps'):
+            self.bitmaps = {}
+
+        if colorTable in self.bitmaps:
+            return self.bitmaps[colorTable]
+
+        path = os.path.join(os.getenv("GISBASE"), "docs", "html", "Colortable_%s.png" % colorTable)
+        if os.path.exists(path):
+            bitmap = wx.Bitmap(path)
+            self.bitmaps[colorTable] = bitmap
+            return bitmap
+        return None

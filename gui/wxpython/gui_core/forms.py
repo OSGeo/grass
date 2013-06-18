@@ -88,7 +88,7 @@ from grass.pydispatch.signal import Signal
 from grass.script import core as grass
 from grass.script import task as gtask
 
-from gui_core.widgets import StaticWrapText, ScrolledPanel
+from gui_core.widgets import StaticWrapText, ScrolledPanel, ColorTablesComboBox
 from gui_core.ghelp   import HelpPanel
 from gui_core         import gselect
 from core             import gcmd
@@ -1053,9 +1053,14 @@ class CmdPanel(wx.Panel):
                                             flag = wx.ADJUST_MINSIZE, border = 0)
                         else:
                             # list of values (combo)
-                            cb = wx.ComboBox(parent = which_panel, id = wx.ID_ANY, value = p.get('default',''),
-                                             size = globalvar.DIALOG_COMBOBOX_SIZE,
-                                             choices = valuelist, style = wx.CB_DROPDOWN)
+                            if p['name'] == 'color':
+                                cb = ColorTablesComboBox(parent=which_panel, value=p.get('default',''),
+                                                         size=globalvar.DIALOG_COMBOBOX_SIZE,
+                                                         choices=valuelist)
+                            else:
+                                cb = wx.ComboBox(parent=which_panel, id=wx.ID_ANY, value=p.get('default',''),
+                                                 size=globalvar.DIALOG_COMBOBOX_SIZE,
+                                                 choices=valuelist, style=wx.CB_DROPDOWN)
                             if value:
                                 cb.SetValue(value) # parameter previously set
                             which_sizer.Add(item = cb, proportion = 0,
