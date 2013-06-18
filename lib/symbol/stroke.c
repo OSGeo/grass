@@ -21,7 +21,10 @@
 
 #define PI M_PI
 
-void add_coor(SYMBCHAIN * chain, int x, int y)
+#define round(x) ((int) floor(0.5 + (x)))
+
+
+void add_coor(SYMBCHAIN *chain, int x, int y)
 {
     G_debug(5, "    add_coor %d, %d", x, y);
     if (chain->scount == chain->salloc) {
@@ -39,14 +42,14 @@ void add_coor(SYMBCHAIN * chain, int x, int y)
  *   ch - chain number 
  *   rotation - degrees CCW from East
  */
-int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
+int stroke_chain(SYMBPART *part, int ch, double s, double rotation)
 {
     int k, l, first;
     SYMBEL *elem;
     SYMBCHAIN *chain;
     double r;
     double a1, a2, da;
-    int x, y, x0, y0;
+    double x, y, x0, y0;
 
     G_debug(5, "  stroke_chain(): ch = %d", ch);
     chain = part->chain[ch];
@@ -63,9 +66,9 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
 		y = s * elem->coor.line.y[l];
 
 		if (rotation != 0.0)
-		    G_rotate_around_point_int(0, 0, &x, &y, rotation);
+		    G_rotate_around_point(0, 0, &x, &y, rotation);
 
-		add_coor(chain, x, y);
+		add_coor(chain, round(x), round(y));
 		if (first) {
 		    x0 = x;
 		    y0 = y;
@@ -96,9 +99,9 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
 		    y = s * elem->coor.arc.y + s * r * sin(a1);
 
 		    if (rotation != 0.0)
-			G_rotate_around_point_int(0, 0, &x, &y, rotation);
+			G_rotate_around_point(0, 0, &x, &y, rotation);
 
-		    add_coor(chain, x, y);
+		    add_coor(chain, round(x), round(y));
 		    if (first) {
 			x0 = x;
 			y0 = y;
@@ -118,9 +121,9 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
 		    y = s * elem->coor.arc.y + s * r * sin(a1);
 
 		    if (rotation != 0.0)
-			G_rotate_around_point_int(0, 0, &x, &y, rotation);
+			G_rotate_around_point(0, 0, &x, &y, rotation);
 
-		    add_coor(chain, x, y);
+		    add_coor(chain, round(x), round(y));
 		    if (first) {
 			x0 = x;
 			y0 = y;
@@ -137,7 +140,7 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
 	}
     }
     if (part->type == S_POLYGON) {
-	add_coor(chain, x0, y0);	/* Close ring */
+	add_coor(chain, round(x0), round(y0));	/* Close ring */
     }
 
     return 0;
