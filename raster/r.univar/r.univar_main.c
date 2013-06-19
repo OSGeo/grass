@@ -99,6 +99,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("univariate statistics"));
+    G_add_keyword(_("zonal statistics"));
     module->description =
 	_("Calculates univariate statistics from the non-null cells of a raster map.");
 
