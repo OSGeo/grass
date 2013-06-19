@@ -14506,8 +14506,6 @@ echo "  FreeType support:           `if test -n "${USE_FREETYPE}" ; then echo ye
 
 echo "  GDAL support:               `if test -n "${USE_GDAL}" ; then echo yes ; else echo no ; fi`"
 
-echo "  NETCDF support:             `if test -n "${USE_NETCDF}" ; then echo yes ; else echo no ; fi`"
-
 echo "  GEOS support:               `if test -n "${USE_GEOS}" ; then echo yes ; else echo no ; fi`"
 
 echo "  LAPACK support:             `if test -n "${USE_LAPACK}" ; then echo yes ; else echo no ; fi`"
@@ -14517,6 +14515,8 @@ echo "  Large File support (LFS):   `if test -n "${USE_LARGEFILES}" ; then echo 
 echo "  libLAS support:             `if test -n "${USE_LIBLAS}" ; then echo yes ; else echo no ; fi`"
 
 echo "  MySQL support:              `if test -n "${USE_MYSQL}" ; then echo yes ; else echo no ; fi`"
+
+echo "  NetCDF support:             `if test -n "${USE_NETCDF}" ; then echo yes ; else echo no ; fi`"
 
 echo "  NLS support:                `if test -n "${USE_NLS}" ; then echo yes ; else echo no ; fi`"
 
