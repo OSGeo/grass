@@ -1,4 +1,16 @@
 #!/usr/bin/env python
+#
+# thumbnails.py: Create thumbnail sample images of the various GRASS color rules
+#
+#  AUTHOR: Python version by Glynn Clements
+#      Earlier Bourne script version by Hamish Bowman,
+#      http://grasswiki.osgeo.org/wiki/Talk:Color_tables
+#
+#   (C) 2009-2013 by the GRASS Development Team
+#       This program is free software under the GNU General Public
+#       License (>=v2). Read the file COPYING that comes with GRASS
+#       for details.
+#
 
 import sys
 import os
@@ -102,7 +114,7 @@ def make_gradient(path):
             # skip comments
             continue
         records.append(line.split())
-    records = [record for record in records if record[0] != 'nv']
+    records = [record for record in records if record[0] != 'nv' and record[0] != 'default']
     relative = False
     absolute = False
     for record in records:
@@ -122,7 +134,7 @@ def make_gradient(path):
             maxval = min(maxval, 2500000)
         grad = tmp_grad_abs
         grass.mapcalc("$grad = if(row()==1, float($min), float($max))",
-                      grad = tmp_grad_abs, min = minval, max = maxval, quiet = True)
+        	      grad = tmp_grad_abs, min = minval, max = maxval, quiet = True)
     else:
         grad = tmp_grad_rel
 
@@ -134,7 +146,8 @@ def make_image(output_dir, table, grad, discrete = False):
     else:
         lines, cols = None, None
     grass.run_command("r.colors", map = grad, color = table, quiet = True)
-    grass.run_command("d.colortable", flags = 'n', map = grad, lines = lines, cols = cols, quiet = True)
+    grass.run_command("d.colortable", flags = 'n', map = grad,
+                      lines = lines, cols = cols, quiet = True)
     outfile = os.path.join(output_dir, "Colortable_%s.png" % table)
     convert_and_rotate(tmp_img, outfile, discrete)
 
