@@ -97,6 +97,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("univariate statistics"));
+
     module->description =
 	_("Calculates univariate statistics from the non-null 3d cells of a raster3d map.");
 

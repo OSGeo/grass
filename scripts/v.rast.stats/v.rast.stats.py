@@ -21,6 +21,8 @@
 #% keywords: vector
 #% keywords: statistics
 #% keywords: raster
+#% keywords: univariate statistics
+#% keywords: zonal statistics
 #%end
 #%flag
 #% key: c
