@@ -12,14 +12,14 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 default: cmd
 
 # Insert thumbnail previews
-v.colors.tmp.html: $(BIN)/v.colors$(EXE) thumbnails.py
+v.colors.tmp.html: $(BIN)/v.colors$(EXE) thumbnails
 	$(call htmldesc,$<,$@)
-	sed 's!^<DD><b>\([a-z0-9.]*\)</b>:!<DD><img width="80" height="12" src="Colortable_\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
+	sed 's!^<dd><b>\([a-z0-9.]*\)</b>:!<dd><img width="80" height="12" src="Colortable_\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
 	mv -f "$@.tmp" "$@"
 	$(MAKE) thumbnails
 
 thumbnails: $(BIN)/r.mapcalc$(EXE)
-	-$(call run_grass, ./thumbnails.py)
+	-$(call run_grass, $(GRASS_HOME)/tools/thumbnails.py)
 
 .PHONY: thumbnails
 
