@@ -1159,11 +1159,25 @@ def basename(path, ext = None):
 
 def find_program(pgm, args = []):
     """!Attempt to run a program, with optional arguments.
+    You must call the program in a way that will return a successful
+    exit code. For GRASS modules this means you need to pass it some
+    valid CLI option, like "--help". For other programs a common
+    valid do-little option is "--version".
+    
+    Example:
+
+    @code
+    >>> grass.find_program('r.sun', ['help'])
+    True
+    >>> grass.find_program('gdalwarp', ['--version'])
+    True
+    @endcode
 
     @param pgm program name
     @param args list of arguments
 
     @return False if the attempt failed due to a missing executable
+            or non-zero return code
     @return True otherwise
     """
     nuldev = file(os.devnull, 'w+')
