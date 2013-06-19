@@ -72,7 +72,7 @@ def sortfile(infile, outfile):
     inf = file(infile, 'r')
     outf = file(outfile, 'w')
 
-    if grass.find_program('sort', ['-n']):
+    if grass.find_program('sort'):
         grass.run_command('sort', flags = 'n', stdin = inf, stdout = outf)
     else:
         # FIXME: we need a large-file sorting function

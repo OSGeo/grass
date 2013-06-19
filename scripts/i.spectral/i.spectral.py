@@ -166,7 +166,7 @@ def main():
         grass.fatal(_("group= and raster= are mutually exclusive"))
 
     #check if present
-    if gnuplot and not grass.find_program('gnuplot', ['-V']):
+    if gnuplot and not grass.find_program('gnuplot'):
         grass.fatal(_("gnuplot required, please install first"))
 
     # get y-data for gnuplot-data file
