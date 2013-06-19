@@ -239,7 +239,7 @@ int export_band(GDALDatasetH hMEMDS, int band,
     GDALSetRasterColorInterpretation(hBand, GPI_RGB);
     CPLPopErrorHandler();
     
-    sprintf(value, "GRASS %s", GRASS_VERSION_NUMBER);
+    sprintf(value, "GRASS GIS %s", GRASS_VERSION_NUMBER);
     GDALSetMetadataItem(hBand, "Generated_with", value, NULL);
 
     /* use default color rules if no color rules are given */
