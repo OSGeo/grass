@@ -104,7 +104,7 @@ def get_commands():
     >>> cmds = list(get_commands()[0])
     >>> cmds.sort()
     >>> cmds[:5]
-    ['d.barscale', 'd.colorlist', 'd.colortable', 'd.erase', 'd.font']
+    ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
 
     @endcode
     """
@@ -142,8 +142,9 @@ def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     Popen() or call(). Example:
 
     @code
-    >>> grass.make_command("g.message", flags = 'w', message = 'this is a warning')
+    >>> make_command("g.message", flags = 'w', message = 'this is a warning')
     ['g.message', '-w', 'message=this is a warning']
+
     @endcode
 
     @param prog GRASS module
@@ -178,18 +179,19 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
     Accepts any of the arguments which Popen() accepts apart from "args"
     and "shell".
 
-    \code
-    >>> p = grass.start_command("g.gisenv", stdout = subprocess.PIPE)
-    >>> print p
-    <subprocess.Popen object at 0xb7c12f6c>
-    >>> print p.communicate()[0]
+    @code
+    >>> p = start_command("g.gisenv", stdout = subprocess.PIPE)
+    >>> print p  # doctest: +ELLIPSIS
+    <...Popen object at 0x...>
+    >>> print p.communicate()[0]  # doctest: +SKIP
     GISDBASE='/opt/grass-data';
     LOCATION_NAME='spearfish60';
     MAPSET='glynn';
     GRASS_DB_ENCODING='ascii';
     GUI='text';
     MONITOR='x0';
-    \endcode
+
+    @endcode
 
     @param prog GRASS module
     @param flags flags to be used (given as a string)
@@ -233,18 +235,19 @@ def pipe_command(*args, **kwargs):
     """!Passes all arguments to start_command(), but also adds
     "stdout = PIPE". Returns the Popen object.
 
-    \code
-    >>> p = grass.pipe_command("g.gisenv")
-    >>> print p
-    <subprocess.Popen object at 0xb7c12f6c>
-    >>> print p.communicate()[0]
+    @code
+    >>> p = pipe_command("g.gisenv")
+    >>> print p  # doctest: +ELLIPSIS
+    <....Popen object at 0x...>
+    >>> print p.communicate()[0]  # doctest: +SKIP
     GISDBASE='/opt/grass-data';
     LOCATION_NAME='spearfish60';
     MAPSET='glynn';
     GRASS_DB_ENCODING='ascii';
     GUI='text';
     MONITOR='x0';
-    \endcode
+
+    @endcode
 
     @param args list of unnamed arguments (see start_command() for details)
     @param kwargs list of named arguments (see start_command() for details)
@@ -536,11 +539,14 @@ class KeyValue(dict):
     written using attribute syntax. Example:
 
     \code
-    >>> region = grass.region()
-    >>> region['rows']
-    477
-    >>> region.rows
-    477
+    >>> reg = KeyValue()
+    >>> reg['north'] = 489
+    >>> reg.north
+    489
+    >>> reg.south = 205
+    >>> reg['south']
+    205
+
     \endcode
     """
 
@@ -721,11 +727,12 @@ def gisenv():
     """!Returns the output from running g.gisenv (with no arguments), as a
     dictionary. Example:
 
-    \code
-    >>> env = grass.gisenv()
-    >>> print env['GISDBASE']
+    @code
+    >>> env = gisenv()
+    >>> print env['GISDBASE']  # doctest: +SKIP
     /opt/grass-data
-    \endcode
+
+    @endcode
 
     @return list of GRASS variables
     """
@@ -751,15 +758,18 @@ def region(region3d = False, complete = False):
     """!Returns the output from running "g.region -g", as a
     dictionary. Example:
 
-    \param region3d True to get 3D region
+    @param region3d True to get 3D region
 
-    \code
-    >>> region = grass.region()
-    >>> [region[key] for key in "nsew"]
-    [228500.0, 215000.0, 645000.0, 630000.0]
-    >>> (region['nsres'], region['ewres'])
-    (10.0, 10.0)
-    \endcode
+    @code
+    >>> curent_region = region()
+    >>> # obtain n, s, e and w values
+    >>> [curent_region[key] for key in "nsew"]  # doctest: +ELLIPSIS
+    [..., ..., ..., ...]
+    >>> # obtain ns and ew resulutions
+    >>> (curent_region['nsres'], curent_region['ewres'])  # doctest: +ELLIPSIS
+    (..., ...)
+
+    @endcode
 
     @return dictionary of region values
     """
@@ -878,13 +888,14 @@ def find_file(name, element = 'cell', mapset = None):
     """!Returns the output from running g.findfile as a
     dictionary. Example:
 
-    \code
-    >>> result = grass.find_file('fields', element = 'vector')
+    @code
+    >>> result = find_file('elevation', element='cell')
     >>> print result['fullname']
-    fields@PERMANENT
-    >>> print result['file']
-    /opt/grass-data/spearfish60/PERMANENT/vector/fields
-    \endcode
+    elevation@PERMANENT
+    >>> print result['file']  # doctest: +ELLIPSIS
+    /.../PERMANENT/cell/elevation
+
+    @endcode
 
     @param name file name
     @param element element type (default 'cell')
@@ -908,8 +919,9 @@ def list_grouped(type, check_search_path = True):
     mapset. Example:
 
     @code
-    >>> grass.list_grouped('rast')['PERMANENT']
-    ['aspect', 'erosion1', 'quads', 'soils', 'strm.dist', ...
+    >>> list_grouped('rast')['PERMANENT']  # doctest: +ELLIPSIS
+    [..., 'lakes', ..., 'slope', ...
+
     @endcode
 
     @param type element type (rast, vect, rast3d, region, ...)
@@ -957,8 +969,9 @@ def list_pairs(type):
     pairs. Example:
 
     @code
-    >>> grass.list_pairs('rast')
-    [('aspect', 'PERMANENT'), ('erosion1', 'PERMANENT'), ('quads', 'PERMANENT'), ...
+    >>> list_pairs('rast')  # doctest: +ELLIPSIS
+    [..., ('lakes', 'PERMANENT'), ..., ('slope', 'PERMANENT'), ...
+
     @endcode
 
     @param type element type (rast, vect, rast3d, region, ...)
@@ -975,8 +988,9 @@ def list_strings(type):
     names. Example:
 
     @code
-    >>> grass.list_strings('rast')
-    ['aspect@PERMANENT', 'erosion1@PERMANENT', 'quads@PERMANENT', 'soils@PERMANENT', ...
+    >>> list_strings('rast')  # doctest: +ELLIPSIS
+    [..., 'lakes@PERMANENT', ..., 'slope@PERMANENT', ...
+
     @endcode
 
     @param type element type
@@ -1037,8 +1051,9 @@ def mlist_grouped(type, pattern = None, check_search_path = True, flag = ''):
     mapset. Example:
 
     @code
-    >>> grass.mlist_grouped('rast', pattern='r*')['PERMANENT']
-    ['railroads', 'roads', 'rstrct.areas', 'rushmore']
+    >>> mlist_grouped('vect', pattern='*roads*')['PERMANENT']
+    ['railroads', 'roadsmajor']
+
     @endcode
 
     @param type element type (rast, vect, rast3d, region, ...)
@@ -1098,12 +1113,13 @@ def parse_color(val, dflt = None):
     (r,g,b) triple whose components are floating point values between 0
     and 1. Example:
 
-    \code
-    >>> grass.parse_color("red")
+    @code
+    >>> parse_color("red")
     (1.0, 0.0, 0.0)
-    >>> grass.parse_color("255:0:0")
+    >>> parse_color("255:0:0")
     (1.0, 0.0, 0.0)
-    \endcode
+
+    @endcode
 
     @param val color value
     @param dflt default color value
@@ -1167,6 +1183,24 @@ def find_program(cmd, mode=os.F_OK | os.X_OK, path=None):
     of os.environ.get("PATH"), or can be overridden with a custom search
     path.
 
+    Example:
+
+    @code
+    >>> find_program('r.sun')  # doctest: +ELLIPSIS
+    '.../bin/r.sun'
+    >>> bool(find_program('ls'))
+    True
+    >>> bool(find_program('gdalwarp'))
+    True
+
+    @endcode
+
+    @param pgm program name
+    @param args list of arguments
+
+    @return False if the attempt failed due to a missing executable
+            or non-zero return code
+    @return True otherwise
     """
     # Check that a given file can be accessed with the correct mode.
     # Additionally check that `file` is not a directory, as on Windows
@@ -1460,3 +1494,9 @@ def legal_name(s):
         return False
 
     return True
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+
