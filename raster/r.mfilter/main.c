@@ -56,6 +56,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("filter"));
     module->description = _("Performs raster map matrix filter.");
 
     /* Define the different options */
