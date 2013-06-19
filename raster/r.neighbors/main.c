@@ -141,6 +141,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("aggregation"));
+    G_add_keyword(_("filter"));
     module->description =
 	_("Makes each cell category value a "
 	  "function of the category values assigned to the cells "
