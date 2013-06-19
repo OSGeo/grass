@@ -105,7 +105,7 @@ class MapFrameBase(wx.Frame):
     def _initMap(self, Map):
         """!Initialize map display, set dimensions and map region
         """
-        if not grass.find_program('g.region', ['--help']):
+        if not grass.find_program('g.region'):
             sys.exit(_("GRASS module '%s' not found. Unable to start map "
                        "display window.") % 'g.region')
         

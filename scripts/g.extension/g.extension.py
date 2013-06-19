@@ -139,7 +139,7 @@ PROXIES = {}
 # check requirements
 def check_progs():
     for prog in ('svn', 'make', 'gcc'):
-        if not grass.find_program(prog, ['--help']):
+        if not grass.find_program(prog):
             grass.fatal(_("'%s' required. Please install '%s' first.") % (prog, prog))
 
 # expand prefix to class name
