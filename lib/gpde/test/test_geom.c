@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include <grass/raster3d.h>
 #include "test_gpde_lib.h"
@@ -33,14 +32,14 @@ int unit_test_geom_data(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running geom_data unit tests ++"));
+    G_message("\n++ Running geom_data unit tests ++");
 
     sum += test_geom_data();
 
     if (sum > 0)
-	G_warning(_("\n-- geom_data unit tests failure --"));
+	G_warning("\n-- geom_data unit tests failure --");
     else
-	G_message(_("\n-- geom_data unit tests finished successfully --"));
+	G_message("\n-- geom_data unit tests finished successfully --");
 
     return sum;
 }

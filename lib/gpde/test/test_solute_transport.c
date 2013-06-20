@@ -16,7 +16,6 @@
 *****************************************************************************/
 
 #include <grass/gis.h>
-#include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include <grass/N_solute_transport.h>
 #include "test_gpde_lib.h"
@@ -40,19 +39,18 @@ int integration_test_solute_transport(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running solute_transport integration tests ++"));
+    G_message("\n++ Running solute_transport integration tests ++");
 
-    G_message(_("\t 1. testing 2d solute_transport"));
+    G_message("\t 1. testing 2d solute_transport");
     sum += test_solute_transport_2d();
 
-    G_message(_("\t 2. testing 3d solute_transport"));
+    G_message("\t 2. testing 3d solute_transport");
     sum += test_solute_transport_3d();
 
     if (sum > 0)
-	G_warning(_("\n-- solute_transport integration tests failure --"));
+	G_warning("\n-- solute_transport integration tests failure --");
     else
-	G_message(_
-		  ("\n-- solute_transport integration tests finished successfully --"));
+	G_message("\n-- solute_transport integration tests finished successfully --");
 
     return sum;
 }

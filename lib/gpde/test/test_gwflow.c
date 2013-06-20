@@ -19,7 +19,6 @@
 
 
 #include <grass/gis.h>
-#include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include <grass/gmath.h>
 #include <grass/N_gwflow.h>
@@ -44,18 +43,18 @@ int integration_test_gwflow(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running gwflow integration tests ++"));
+    G_message("\n++ Running gwflow integration tests ++");
 
-    G_message(_("\t 1. testing 2d gwflow"));
+    G_message("\t 1. testing 2d gwflow");
     sum += test_gwflow_2d();
 
-    G_message(_("\t 2. testing 3d gwflow"));
+    G_message("\t 2. testing 3d gwflow");
     sum += test_gwflow_3d();
 
     if (sum > 0)
-	G_warning(_("\n-- gwflow integration tests failure --"));
+	G_warning("\n-- gwflow integration tests failure --");
     else
-	G_message(_("\n-- gwflow integration tests finished successfully --"));
+	G_message("\n-- gwflow integration tests finished successfully --");
 
     return sum;
 }
