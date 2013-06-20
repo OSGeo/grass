@@ -213,6 +213,8 @@ void D_get_text_box(const char *text, double *t, double *b, double *l, double *r
 
 /******************************************************************************/
 
+/* D_pos_abs(easting, northing):  move to an absolute position
+	on the display using map coordinates */
 void D_pos_abs(double x, double y)
 {
     cur.x = x;
@@ -295,6 +297,8 @@ void D_end(void)
 {
 }
 
+/* D_move_abs(x,y):  move to an absolute position on the display using
+	display pixel coordinates */
 void D_move_abs(double x, double y)
 {
     path_move(&path, x, y);
