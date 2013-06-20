@@ -1361,8 +1361,9 @@ class PreferencesDialog(PreferencesBaseDialog):
         """!Load EPSG codes from the file"""
         win = self.FindWindowById(self.winId['projection:statusbar:projFile'])
         path = win.GetValue()
-
+        wx.BeginBusyCursor()
         self.epsgCodeDict = ReadEpsgCodes(path)
+
         epsgCombo = self.FindWindowById(self.winId['projection:statusbar:epsg'])
         if type(self.epsgCodeDict) == type(''):
             wx.MessageBox(parent = self,
@@ -1372,11 +1373,13 @@ class PreferencesDialog(PreferencesBaseDialog):
             epsgCombo.SetItems([])
             epsgCombo.SetValue('')
             self.FindWindowById(self.winId['projection:statusbar:proj4']).SetValue('')
+            wx.EndBusyCursor()
             return
         
-        choices = map(str, self.epsgCodeDict.keys())
+        choices = map(str, sorted(self.epsgCodeDict.keys()))
 
         epsgCombo.SetItems(choices)
+        wx.EndBusyCursor()
         code = 4326 # default
         win = self.FindWindowById(self.winId['projection:statusbar:proj4'])
         if code in self.epsgCodeDict:
