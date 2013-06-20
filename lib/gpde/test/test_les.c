@@ -16,7 +16,6 @@
 *****************************************************************************/
 
 #include <grass/gis.h>
-#include <grass/glocale.h>
 #include <grass/gmath.h>
 #include <grass/N_pde.h>
 #include "test_gpde_lib.h"
@@ -32,14 +31,14 @@ int unit_test_les_creation(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running les creation unit tests ++"));
+    G_message("\n++ Running les creation unit tests ++");
 
     sum += test_les();
 
     if (sum > 0)
-	G_warning(_("\n-- les creation unit tests failure --"));
+	G_warning("\n-- les creation unit tests failure --");
     else
-	G_message(_("\n-- les creation unit tests finished successfully --"));
+	G_message("\n-- les creation unit tests finished successfully --");
 
     return sum;
 }
@@ -93,7 +92,7 @@ int test_les(void)
     sples = N_alloc_les(TEST_N_NUM_ROWS, N_SPARSE_LES);
 
 
-    G_message(_("\t * testing les creation in parallel\n"));
+    G_message("\t * testing les creation in parallel\n");
 #pragma omp parallel for private(i, j) shared(les)
     for (i = 0; i < TEST_N_NUM_ROWS; i++) {
 	for (j = 0; j < TEST_N_NUM_ROWS; j++) {
@@ -124,7 +123,7 @@ int test_les(void)
     N_free_les(les);
     N_free_les(sples);
 
-    G_message(_("\t * testing les creation in serial\n"));
+    G_message("\t * testing les creation in serial\n");
 
     les = N_alloc_les(TEST_N_NUM_ROWS, N_NORMAL_LES);
     sples = N_alloc_les(TEST_N_NUM_ROWS, N_SPARSE_LES);

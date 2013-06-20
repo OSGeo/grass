@@ -16,7 +16,6 @@
 *****************************************************************************/
 
 #include <grass/gis.h>
-#include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include "test_gpde_lib.h"
 
@@ -31,14 +30,14 @@ int unit_test_tools(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running math tool unit tests ++"));
+    G_message("\n++ Running math tool unit tests ++");
 
     sum += test_mean_calc();
 
     if (sum > 0)
-	G_warning(_("\n-- math tool unit tests failure --"));
+	G_warning("\n-- math tool unit tests failure --");
     else
-	G_message(_("\n-- math tool unit tests finished successfully --"));
+	G_message("\n-- math tool unit tests finished successfully --");
 
     return sum;
 }

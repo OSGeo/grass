@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include "test_gpde_lib.h"
 
@@ -39,18 +38,18 @@ int unit_test_gradient(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running gradient unit tests ++"));
+    G_message("\n++ Running gradient unit tests ++");
 
-    G_message(_("\t 1. testing 2d gradient"));
+    G_message("\t 1. testing 2d gradient");
     sum += test_gradient_2d();
 
-    G_message(_("\t 2. testing 3d gradient"));
+    G_message("\t 2. testing 3d gradient");
     sum += test_gradient_3d();
 
     if (sum > 0)
-	G_warning(_("\n-- Gradient unit tests failure --"));
+	G_warning("\n-- Gradient unit tests failure --");
     else
-	G_message(_("\n-- Gradient unit tests finished successfully --"));
+	G_message("\n-- Gradient unit tests finished successfully --");
 
     return sum;
 }

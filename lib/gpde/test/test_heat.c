@@ -16,7 +16,6 @@
 *****************************************************************************/
 
 #include <grass/gis.h>
-#include <grass/glocale.h>
 #include <grass/N_pde.h>
 //#include <grass/N_heatflow.h>
 #include "test_gpde_lib.h"
@@ -30,16 +29,16 @@ int integration_test_heatflow(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running heat flow integration tests ++"));
+    G_message("\n++ Running heat flow integration tests ++");
 
-    G_message(_("\t 1. testing 2d heat flow"));
+    G_message("\t 1. testing 2d heat flow");
 
-    G_message(_("\t 2. testing 3d heat flow"));
+    G_message("\t 2. testing 3d heat flow");
 
     if (sum > 0)
-	G_warning(_("\n-- heat flow integration tests failure --"));
+	G_warning("\n-- heat flow integration tests failure --");
     else
-	G_message(_("\n-- heat flow integration tests finished successfully --"));
+	G_message("\n-- heat flow integration tests finished successfully --");
 
     return sum;
 }

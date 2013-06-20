@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/glocale.h>
 #include <grass/N_pde.h>
 #include <grass/gmath.h>
 #include "test_gpde_lib.h"
@@ -47,27 +46,27 @@ void set_params(void)
     param.unit->type = TYPE_STRING;
     param.unit->required = NO;
     param.unit->options = "array,assemble,geom,gradient,les,tools";
-    param.unit->description = _("Choose the unit tests to run");
+    param.unit->description = "Choose the unit tests to run";
 
     param.integration = G_define_option();
     param.integration->key = "integration";
     param.integration->type = TYPE_STRING;
     param.integration->required = NO;
     param.integration->options = "gwflow,heatflow,transport";
-    param.integration->description = _("Choose the integration tests to run");
+    param.integration->description = "Choose the integration tests to run";
 
 
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
-    param.testunit->description = _("Run all unit tests");
+    param.testunit->description = "Run all unit tests";
 
     param.testint = G_define_flag();
     param.testint->key = 'i';
-    param.testint->description = _("Run all integration tests");
+    param.testint->description = "Run all integration tests";
 
     param.full = G_define_flag();
     param.full->key = 'a';
-    param.full->description = _("Run all unit and integration tests");
+    param.full->description = "Run all unit and integration tests";
 
 }
 
