@@ -60,9 +60,9 @@
     <label>&amp;Raster</label>
     <items>
       <subtoolbox name="DevelopRasterMap"/>
-      <subtoolbox name="ManageColors"/>
+      <subtoolbox name="ManageRasterColors"/>
       <subtoolbox name="QueryRasterMaps"/>
-      <subtoolbox name="MapTypeConversions"/>
+      <subtoolbox name="RasterMapTypeConversions"/>
       <separator/>
       <module-item name="r.buffer">
         <label>Buffer rasters</label>
@@ -95,7 +95,7 @@
       <subtoolbox name="GenerateSurfaces"/>
       <subtoolbox name="InterpolateSurfaces"/>
       <separator/>
-      <subtoolbox name="ReportAndStatistics"/>
+      <subtoolbox name="RasterReportsAndStatistics"/>
     </items>
   </toolbox>
   <toolbox name="Vector">
@@ -103,10 +103,10 @@
     <items>
       <subtoolbox name="DevelopVectorMap"/>
       <subtoolbox name="TopologyMaintenance"/>
-      <subtoolbox name="ManageColors"/>
+      <subtoolbox name="ManageVectorColors"/>
       <subtoolbox name="QueryVectorMap"/>
       <subtoolbox name="FeatureSelection"/>
-      <subtoolbox name="MapTypeConversions"/>
+      <subtoolbox name="VectorMapTypeConversions"/>
       <separator/>
       <module-item name="v.buffer">
         <label>Buffer vectors</label>
@@ -131,7 +131,7 @@
       </module-item>
       <subtoolbox name="GeneratePoints"/>
       <separator/>
-      <subtoolbox name="ReportsAndStatistics"/>
+      <subtoolbox name="VectorReportsAndStatistics"/>
     </items>
   </toolbox>
   <toolbox name="Imagery">
@@ -159,14 +159,14 @@
       <subtoolbox name="SatelliteImagesProducts"/>
       <subtoolbox name="EvapotranspirationCalculation"/>
       <separator/>
-      <subtoolbox name="ReportAndStatistics"/>
+      <subtoolbox name="ImageryReportsAndStatistics"/>
     </items>
   </toolbox>
   <toolbox name="Volumes">
     <label>V&amp;olumes</label>
     <items>
       <subtoolbox name="DevelopVolumes"/>
-      <subtoolbox name="MapTypeConversions"/>
+      <subtoolbox name="Raster3dMapTypeConversions"/>
       <separator/>
       <module-item name="r3.colors">
         <label>3D color tables</label>
@@ -189,7 +189,7 @@
         <label>Interpolate volume from points</label>
       </module-item>
       <separator/>
-      <subtoolbox name="ReportAndStatistics"/>
+      <subtoolbox name="Raster3dReportsAndStatistics"/>
     </items>
   </toolbox>
   <toolbox name="Database">
@@ -645,7 +645,7 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="ManageColors">
+  <toolbox name="ManageRasterColors">
     <label>Manage colors</label>
     <items>
       <module-item name="r.colors">
@@ -654,7 +654,7 @@
       <module-item name="r.colors.stddev">
         <label>Color tables (stddev)</label>
       </module-item>
-      <wxgui-item name="ManageColorRulesInteractively"/>
+      <wxgui-item name="ManageRasterColorRulesInteractively"/>
       <module-item name="r.colors.out">
         <label>Export color table</label>
       </module-item>
@@ -681,7 +681,7 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="MapTypeConversions">
+  <toolbox name="RasterMapTypeConversions">
     <label>Map type conversions</label>
     <items>
       <module-item name="r.to.vect">
@@ -1030,8 +1030,8 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="ReportAndStatistics">
-    <label>Report and statistics</label>
+  <toolbox name="RasterReportsAndStatistics">
+    <label>Reports and statistics</label>
     <items>
       <module-item name="r.info">
         <label>Basic raster metadata</label>
@@ -1161,13 +1161,13 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="ManageColors">
+  <toolbox name="ManageVectorColors">
     <label>Manage colors</label>
     <items>
       <module-item name="v.colors">
         <label>Color tables</label>
       </module-item>
-      <wxgui-item name="ManageColorRulesInteractively"/>
+      <wxgui-item name="ManageVectorColorRulesInteractively"/>
       <module-item name="v.colors.out">
         <label>Export color table</label>
       </module-item>
@@ -1195,7 +1195,7 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="MapTypeConversions">
+  <toolbox name="VectorMapTypeConversions">
     <label>Map type conversions</label>
     <items>
       <module-item name="v.to.rast">
@@ -1389,7 +1389,7 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="ReportsAndStatistics">
+  <toolbox name="VectorReportsAndStatistics">
     <label>Reports and statistics</label>
     <items>
       <module-item name="v.info">
@@ -1583,8 +1583,8 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="ReportAndStatistics">
-    <label>Report and statistics</label>
+  <toolbox name="ImageryReportsAndStatistics">
+    <label>Reports and statistics</label>
     <items>
       <module-item name="r.bitpattern">
         <label>Bit pattern comparison </label>
@@ -1608,7 +1608,7 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="MapTypeConversions">
+  <toolbox name="Raster3dMapTypeConversions">
     <label>Map type conversions</label>
     <items>
       <module-item name="r3.to.rast">
@@ -1616,8 +1616,8 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="ReportAndStatistics">
-    <label>Report and Statistics</label>
+  <toolbox name="Raster3dReportsAndStatistics">
+    <label>Reports and Statistics</label>
     <items>
       <module-item name="r3.info">
         <label>Basic volume metadata</label>
@@ -1768,7 +1768,7 @@
       </module-item>
       <subtoolbox name="TemporalAggregation"/>
       <subtoolbox name="TemporalSampling"/>
-      <subtoolbox name="TemporalReportAndStatistics"/>
+      <subtoolbox name="TemporalReportsAndStatistics"/>
     </items>
   </toolbox>
   <toolbox name="TemporalManageDatasets">
@@ -1823,8 +1823,8 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="TemporalReportAndStatistics">
-    <label>Report and statistics</label>
+  <toolbox name="TemporalReportsAndStatistics">
+    <label>Reports and statistics</label>
     <items>
       <module-item name="t.info">
         <label>Space time datasets metadata</label>
