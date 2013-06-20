@@ -1,8 +1,9 @@
 <h2>DESCRIPTION</h2>
  
-<em>d.barscale</em> displays a barscale on the graphics monitor using either
-the mouse or given screen coordinates. It can draw the scale in a couple of
-styles or simply draw a north arrow.
+<em>d.barscale</em> displays a barscale on the graphics monitor 
+at the given screen coordinates. If no coordinates are given it
+will draw the barscale in the bottom left of the display.
+It can draw the scale or north arrow in a number of styles.
 
 
 <h2>NOTE</h2>
@@ -10,9 +11,6 @@ styles or simply draw a north arrow.
 <em>d.barscale</em> will not work in Lat/Lon locations as the horizontal
 scale distance changes with latitude. Try <em>d.grid</em> instead.
 
-<p>The -l flag will always draw a north arrow <em>and</em> a line scale
-together; it is currently not possible to draw a line scale without a north
-arrow. Instead, the -s flag can be used to draw a barscale only. 
 
 <h2>SEE ALSO</h2>
 
@@ -20,13 +18,15 @@ arrow. Instead, the -s flag can be used to draw a barscale only.
 <a href="d.graph.html">d.graph</a><br>
 <a href="d.grid.html">d.grid</a><br>
 <a href="d.legend.html">d.legend</a><br>
-<a href="d.measure.html">d.measure</a><br>
-<a href="d.where.html">d.where</a><br>  
 <a href="g.region.html">g.region</a><br>
 </em>
 
 
 <h2>AUTHOR</h2>
-unknown.
 
-<p><i>Last changed: $Date$</i>
+unknown, but from USACE/CERL.<br>
+Major rewrite for GRASS 7 by Hamish Bowman
+
+
+<p>
+<i>Last changed: $Date$</i>
