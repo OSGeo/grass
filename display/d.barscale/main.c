@@ -1,7 +1,7 @@
-
 /****************************************************************************
  *
  * MODULE:       d.barscale
+ *
  * AUTHOR(S):    unknown but from CERL code (original contributor)
  *               Markus Neteler <neteler itc.it>, 
  *               Bernhard Reiter <bernhard intevation.de>, 
@@ -11,40 +11,41 @@
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      displays a barscale on graphics monitor
- * COPYRIGHT:    (C) 1999-2011 by the GRASS Development Team
+ *		 Major rewrite for GRASS 7 by Hamish Bowman, June 2013
+ *
+ * PURPOSE:      Displays a barscale or north arrow on graphics monitor
+ *
+ * COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-
 #include <grass/gis.h>
 #include <grass/display.h>
-#include "options.h"
 #include <grass/glocale.h>
+#include "options.h"
 
-int color1;
-int color2;
-double east;
-double north;
+int fg_color, bg_color;
 int use_feet;
-int do_background = 1;
-int do_bar = 1;
-int draw = 0;
+int do_background = TRUE;
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *opt1, *opt2, *opt3, *fsize;
-    struct Flag *feet, *top, *linescale, *northarrow, *scalebar;
+    struct Option *bg_color_opt, *fg_color_opt, *coords, *fsize,
+		 *barstyle, *text_placement, *n_arrow;
+    struct Flag *feet, *northarrow, *no_text;
     struct Cell_head W;
-    int fontsize;
+    double east, north;
+    double fontsize;
+    int bar_style, text_position;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -52,52 +53,68 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
-    module->description = _("Displays a barscale on the graphics monitor.");
+    module->description = _("Displays a barscale or north arrow on the graphics monitor.");
 
     feet = G_define_flag();
     feet->key = 'f';
     feet->description = _("Use feet/miles instead of meters");
 
-    linescale = G_define_flag();
-    linescale->key = 'l';
-    linescale->description = _("Draw a line scale instead of a bar scale");
-
-    top = G_define_flag();
-    top->key = 't';
-    top->description = _("Write text on top of the scale, not to the right");
-
     northarrow = G_define_flag();
     northarrow->key = 'n';
     northarrow->description = _("Draw a north arrow only");
 
-    scalebar = G_define_flag();
-    scalebar->key = 's';
-    scalebar->description = _("Draw a scale bar only");
+    no_text = G_define_flag();
+    no_text->key = 't';
+    no_text->description = _("Draw the scale bar without text");
 
-    opt1 = G_define_standard_option(G_OPT_C_BG);
-    opt1->key = "bcolor";
+    barstyle = G_define_option();
+    barstyle->key = "style";
+    barstyle->description = _("Type of barscale to draw");
+/* TODO:   barstyle->options: part_checker (left side twice the freq of the right) and  |<--arrow_ends-->| */
+    barstyle->options =
+	"classic,line,solid,hollow,full_checker,up_ticks,down_ticks,both_ticks";
+    barstyle->answer = "classic";
 
-    opt2 = G_define_standard_option(G_OPT_C_FG);
-    opt2->key = "tcolor";
-    opt2->label = _("Text color");
-    
-    opt3 = G_define_option();
-    opt3->key = "at";
-    opt3->key_desc = "x,y";
-    opt3->type = TYPE_DOUBLE;
-    opt3->answer = "0.0,5.0";
-    opt3->options = "0-100";
-    opt3->required = NO;
-    opt3->description =
-	_("The screen coordinates for top-left corner of label ([0,0] is lower-left of frame)");
+    coords = G_define_option();
+    coords->key = "at";
+    coords->key_desc = "x,y";
+    coords->type = TYPE_DOUBLE;
+    coords->answer = "0.0,5.0";
+    coords->options = "0-100";
+    coords->required = NO;
+    coords->label =
+	_("The screen coordinates for top-left corner of label");
+    coords->description = _("(0,0) is lower-left of frame");
+
+    fg_color_opt = G_define_standard_option(G_OPT_C_FG);
+    fg_color_opt->key = "color";
+    fg_color_opt->label = _("Bar scale, text, and north arrow color");
+
+    bg_color_opt = G_define_standard_option(G_OPT_C_BG);
+    bg_color_opt->key = "background_color";
+    bg_color_opt->label = _("Background color (drawn behind the bar)");
+
+    text_placement = G_define_option();
+    text_placement->key = "text_position";
+    text_placement->description = _("Text position");
+    text_placement->options = "under,over,left,right";
+    text_placement->answer = "right";
 
     fsize = G_define_option();
     fsize->key = "fontsize";
-    fsize->type = TYPE_INTEGER;
+    fsize->type = TYPE_DOUBLE;
     fsize->required = NO;
     fsize->answer = "14";
     fsize->options = "1-72";
     fsize->description = _("Font size");
+
+    n_arrow = G_define_option();
+    n_arrow->key = "north_arrow";
+    n_arrow->description = _("Only used when drawing a north arrow only");
+    n_arrow->label = _("North arrow style");
+    n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8";
+    n_arrow->answer = "1a";
+
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -108,38 +125,90 @@ int main(int argc, char **argv)
 	G_fatal_error(_("%s does not work with a latitude-longitude location"),
 		      argv[0]);
 
-    if (linescale->answer)
-	do_bar = 0;
+    use_feet = feet->answer ? TRUE : FALSE;
 
-    use_feet = feet->answer ? 1 : 0;
-    if (northarrow->answer && scalebar->answer)
-	G_fatal_error(_("Choose either -n or -s flag"));
+    switch (barstyle->answer[0]) {
+    case 'c':
+	bar_style = STYLE_CLASSIC_BAR;
+	break;
+    case 'p':
+	bar_style = STYLE_PART_CHECKER;
+	break;
+    case 'f':
+	bar_style = STYLE_FULL_CHECKER;
+	break;
+    case 'l':
+	bar_style = STYLE_THIN_WITH_ENDS;
+	break;
+    case 's':
+	bar_style = STYLE_SOLID_BAR;
+	break;
+    case 'h':
+	bar_style = STYLE_HOLLOW_BAR;
+	break;
+    case 'u':
+	bar_style = STYLE_TICKS_UP;
+	break;
+    case 'd':
+	bar_style = STYLE_TICKS_DOWN;
+	break;
+    case 'b':
+	bar_style = STYLE_TICKS_BOTH;
+	break;
+    case 'a':
+	bar_style = STYLE_ARROW_ENDS;
+	break;
+    default:
+	G_fatal_error(_("Programmer error"));
+    }
 
     if (northarrow->answer)
-	draw = 1;
-    else if (scalebar->answer)
-	draw = 2;
+	bar_style = STYLE_NONE;
 
-    sscanf(opt3->answers[0], "%lf", &east);
-    sscanf(opt3->answers[1], "%lf", &north);
+
+    switch (text_placement->answer[0]) {
+    case 'u':
+	text_position = TEXT_UNDER;
+	break;
+    case 'o':
+	text_position = TEXT_OVER;
+	break;
+    case 'l':
+	text_position = TEXT_LEFT;
+	break;
+    case 'r':
+	text_position = TEXT_RIGHT;
+	break;
+    default:
+	G_fatal_error(_("Programmer error"));
+    }
+
+    sscanf(coords->answers[0], "%lf", &east);
+    sscanf(coords->answers[1], "%lf", &north);
+
     fontsize = atoi(fsize->answer);
+    if (no_text->answer)
+	fontsize = -1;
+
+    /* Parse and select foreground color */
+    fg_color = D_parse_color(fg_color_opt->answer, 0);
+
+    /* Parse and select background color */
+    bg_color = D_parse_color(bg_color_opt->answer, 1);
+    if (bg_color == 0)
+	do_background = FALSE;
+
 
     if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected. "
 			"Use d.mon to select graphics device."));
-    
     D_setup(0);
 
-    /* Parse and select background color */
-    color1 = D_parse_color(opt1->answer, 1);
-    if (color1 == 0)
-	do_background = 0;
-
-    /* Parse and select foreground color */
-    color2 = D_parse_color(opt2->answer, 0);
 
     /* Draw the scale */
-    draw_scale(top->answer, fontsize);
+    draw_scale(east, north, bar_style, text_position, fontsize,
+	       n_arrow->answer);
+
 
     D_save_command(G_recreate_command());
     D_close_driver();
