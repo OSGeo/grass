@@ -66,6 +66,7 @@ int main(int argc, char **argv)
     no_text = G_define_flag();
     no_text->key = 't';
     no_text->description = _("Draw the scale bar without text");
+    no_text->guisection = "Text";
 
     barstyle = G_define_option();
     barstyle->key = "style";
@@ -81,7 +82,7 @@ int main(int argc, char **argv)
     coords->type = TYPE_DOUBLE;
     coords->answer = "0.0,5.0";
     coords->options = "0-100";
-    coords->required = NO;
+    coords->required = YES;
     coords->label =
 	_("The screen coordinates for top-left corner of label");
     coords->description = _("(0,0) is lower-left of frame");
@@ -89,16 +90,19 @@ int main(int argc, char **argv)
     fg_color_opt = G_define_standard_option(G_OPT_C_FG);
     fg_color_opt->key = "color";
     fg_color_opt->label = _("Bar scale, text, and north arrow color");
+    fg_color_opt->guisection = "Colors";
 
     bg_color_opt = G_define_standard_option(G_OPT_C_BG);
     bg_color_opt->key = "background_color";
     bg_color_opt->label = _("Background color (drawn behind the bar)");
+    bg_color_opt->guisection = "Colors";
 
     text_placement = G_define_option();
     text_placement->key = "text_position";
     text_placement->description = _("Text position");
     text_placement->options = "under,over,left,right";
     text_placement->answer = "right";
+    text_placement->guisection = "Text";
 
     fsize = G_define_option();
     fsize->key = "fontsize";
@@ -107,6 +111,7 @@ int main(int argc, char **argv)
     fsize->answer = "14";
     fsize->options = "1-72";
     fsize->description = _("Font size");
+    fsize->guisection = "Text";
 
     n_arrow = G_define_option();
     n_arrow->key = "north_arrow";
