@@ -34,8 +34,10 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
        @param sp The space time raster dataset to select aps from
        @param dbif The temporal database interface to use
-       @param start The start time of the sample interval, may be relative or absolute
-       @param end The end time of the sample interval, may be relative or absolute
+       @param start The start time of the sample interval, may be relative or
+              absolute
+       @param end The end time of the sample interval, may be relative or
+              absolute
        @param sampling The sampling methods to use
     """
 
@@ -77,13 +79,13 @@ def collect_map_names(sp, dbif, start, end, sampling):
         use_follows = False
         use_precedes = False
 
-    where = create_temporal_relation_sql_where_statement(start, end, 
-                                                         use_start, 
-                                                         use_during, 
-                                                         use_overlap, 
-                                                         use_contain, 
-                                                         use_equal, 
-                                                         use_follows, 
+    where = create_temporal_relation_sql_where_statement(start, end,
+                                                         use_start,
+                                                         use_during,
+                                                         use_overlap,
+                                                         use_contain,
+                                                         use_equal,
+                                                         use_follows,
                                                          use_precedes)
 
     rows = sp.get_registered_maps("id", where, "start_time", dbif)
@@ -100,17 +102,21 @@ def collect_map_names(sp, dbif, start, end, sampling):
 ###############################################################################
 
 
-def aggregate_raster_maps(inputs, base, start, end, count, method, 
+def aggregate_raster_maps(inputs, base, start, end, count, method,
                           register_null, dbif):
     """!Aggregate a list of raster input maps with r.series
 
        @param inputs The names of the raster maps to be aggregated
        @param base The basename of the new created raster maps
-       @param start The start time of the sample interval, may be relative or absolute
-       @param end The end time of the sample interval, may be relative or absolute
-       @param count The number to be attached to the basename of the new created raster map
+       @param start The start time of the sample interval, may be relative or
+                    absolute
+       @param end The end time of the sample interval, may be relative or
+                  absolute
+       @param count The number to be attached to the basename of the new
+                    created raster map
        @param method The aggreation method to be used by r.series
-       @param register_null If true null maps will be registered in the space time raster dataset, if false not
+       @param register_null If true null maps will be registered in the space
+                            time raster dataset, if false not
        @param dbif The temporal database interface to use
     """
 
@@ -128,11 +134,12 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
             new_map.delete(dbif)
             new_map = RasterDataset(map_id)
         else:
-            core.error(_("Raster map <%s> is already in temporal database, use overwrite flag to overwrite"))
+            core.error(_("Raster map <%s> is already in temporal database, " \
+                         "use overwrite flag to overwrite"))
             return
 
-    core.verbose(_("Compute aggregation of maps between %s - %s" % (
-        str(start), str(end))))
+    core.verbose(_("Compute aggregation of maps between %(st)s - %(end)s" % {
+                   'st': str(start), 'end': str(end)}))
 
     # Create the r.series input file
     filename = core.tempfile(True)
@@ -145,7 +152,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
     file.close()
     # Run r.series
     ret = core.run_command("r.series", flags="z", file=filename,
-                           output=output, overwrite=core.overwrite(), 
+                           output=output, overwrite=core.overwrite(),
                            method=method)
 
     if ret != 0:

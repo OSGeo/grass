@@ -32,10 +32,10 @@ def register_maps_in_space_time_dataset(
     type, name, maps=None, file=None, start=None,
     end=None, unit=None, increment=None, dbif=None,
         interval=False, fs="|"):
-    """!Use this method to register maps in space time datasets. 
+    """!Use this method to register maps in space time datasets.
 
-       Additionally a start time string and an increment string can be specified
-       to assign a time interval automatically to the maps.
+       Additionally a start time string and an increment string can be
+       specified to assign a time interval automatically to the maps.
 
        It takes care of the correct update of the space time datasets from all
        registered maps.
@@ -43,22 +43,22 @@ def register_maps_in_space_time_dataset(
        @param type The type of the maps rast, rast3d or vect
        @param name The name of the space time dataset
        @param maps A comma separated list of map names
-       @param file Input file one map with start and optional end time, 
-                    one per line
+       @param file Input file one map with start and optional end time,
+                   one per line
        @param start The start date and time of the first raster map
                     (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                     format relative is integer 5)
        @param end The end date and time of the first raster map
-                   (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
-                   format relative is integer 5)
+                  (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
+                  format relative is integer 5)
        @param unit The unit of the relative time: years, months, days,
-                    hours, minutes, seconds
+                   hours, minutes, seconds
        @param increment Time increment between maps for time stamp creation
-                         (format absolute: NNN seconds, minutes, hours, days,
-                         weeks, months, years; format relative: 1.0)
+                        (format absolute: NNN seconds, minutes, hours, days,
+                        weeks, months, years; format relative: 1.0)
        @param dbif The database interface to be used
        @param interval If True, time intervals are created in case the start
-                        time and an increment is provided
+                       time and an increment is provided
        @param fs Field separator used in input file
     """
 
@@ -66,18 +66,20 @@ def register_maps_in_space_time_dataset(
     end_time_in_file = False
 
     if maps and file:
-        core.fatal(_("%s= and %s= are mutually exclusive") % ("maps", "file"))
+        core.fatal(_("%(m)s= and %(f)s= are mutually exclusive") % {'m': "maps",
+                                                                    'f': "file"})
 
     if end and increment:
-        core.fatal(_("%s= and %s= are mutually exclusive") % (
-            "end", "increment"))
+        core.fatal(_("%(e)s= and %(i)s= are mutually exclusive") % {'e': "end",
+                   'i': "increment"})
 
     if end and not start:
-        core.fatal(_("Please specify %s= and %s=") % ("start_time",
-                                                      "end_time"))
+        core.fatal(_("Please specify %(st)s= and %(e)s=") % {'st': "start_time",
+                                                             'e': "end_time"})
 
     if not maps and not file:
-        core.fatal(_("Please specify %s= or %s=") % ("maps", "file"))
+        core.fatal(_("Please specify %(m)s= or %(f)s=") % {'m': "maps",
+                                                           'f': "file"})
 
     # We may need the mapset
     mapset = core.gisenv()["MAPSET"]
@@ -107,15 +109,17 @@ def register_maps_in_space_time_dataset(
 
         if not sp.is_in_db(dbif):
             dbif.close()
-            core.fatal(_("Space time %s dataset <%s> no found") %
-                       (sp.get_new_map_instance(None).get_type(), name))
+            core.fatal(_("Space time %(sp)s dataset <%(name)s> no found") %
+                         {'sp': sp.get_new_map_instance(None).get_type(),
+                          'name': name})
 
         if sp.is_time_relative() and not unit:
             dbif.close()
-            core.fatal(_("Space time %s dataset <%s> with relative time found, "
-                         "but no relative unit set for %s maps") %
-                       (sp.get_new_map_instance(None).get_type(),
-                        name, sp.get_new_map_instance(None).get_type()))
+            core.fatal(_("Space time %(sp)s dataset <%(name)s> with relative"
+                         " time found, but no relative unit set for %(sp)s "
+                         "maps") % {
+                         'sp': sp.get_new_map_instance(None).get_type(),
+                         'name': name})
 
     # We need a dummy map object to build the map ids
     dummy = dataset_factory(type, None)
@@ -183,7 +187,7 @@ def register_maps_in_space_time_dataset(
     core.message(_("Gathering map informations"))
 
     for count in range(len(maplist)):
-        if count%50 == 0:
+        if count % 50 == 0:
             core.percent(count, num_maps, 1)
 
         # Get a new instance of the map type
@@ -204,13 +208,16 @@ def register_maps_in_space_time_dataset(
             if start == "" or start is None:
                 dbif.close()
                 if map.get_layer():
-                    core.fatal(_("Unable to register %s map <%s> with layer %s. "
-                                 "The map has no valid time and the start time is not set.") %
-                               (map.get_type(), map.get_map_id(), map.get_layer()))
+                    core.fatal(_("Unable to register %(t)s map <%(id)s> with "
+                                 "layer %(l)s. The map has no valid time and "
+                                 "the start time is not set.") % {
+                                 't': map.get_type(), 'id': map.get_map_id(),
+                                 'l': map.get_layer()})
                 else:
-                    core.fatal(_("Unable to register %s map <%s>. The map has no valid"
-                                 " time and the start time is not set.") %
-                               (map.get_type(), map.get_map_id()))
+                    core.fatal(_("Unable to register %(t)s map <%(id)s>. The"
+                                 " map has no valid time and the start time "
+                                 "is not set.") % {'t': map.get_type(),
+                                                   'id': map.get_map_id()})
 
             if unit:
                 map.set_time_to_relative()
@@ -219,52 +226,57 @@ def register_maps_in_space_time_dataset(
 
         else:
             is_in_db = True
-            
             # Check the overwrite flag
-            if not core.overwrite():                        
+            if not core.overwrite():
                 if map.get_layer():
-                    core.warning(_("Map is already registered in temporal database. "
-                                   "Unable to update %s map <%s> with layer %s. "
-                                   "Overwrite flag is not set.") %
-                               (map.get_type(), map.get_map_id(), str(map.get_layer())))
+                    core.warning(_("Map is already registered in temporal "
+                                   "database. Unable to update %(t)s map "
+                                   "<%(id)s> with layer %(l)s. Overwrite flag"
+                                   " is not set.") % {'t': map.get_type(),
+                                                      'id': map.get_map_id(),
+                                                      'l': str(map.get_layer())})
                 else:
-                    core.warning(_("Map is already registered in temporal database. "
-                                   "Unable to update %s map <%s>. "
-                                   "Overwrite flag is not set.") %
-                               (map.get_type(), map.get_map_id()))
-                
+                    core.warning(_("Map is already registered in temporal "
+                                   "database. Unable to update %(t)s map "
+                                   "<%(id)s>. Overwrite flag is not set.") % {
+                                   't': map.get_type(), 'id': map.get_map_id()})
+
                 # Simple registration is allowed
                 if name:
                     map_object_list.append(map)
                 # Jump to next map
                 continue
-            
+
             # Select information from temporal database
             map.select(dbif)
-            
+
             # Save the datasets that must be updated
             datasets = map.get_registered_datasets(dbif)
             if datasets:
                 for dataset in datasets:
                     datatsets_to_modify[dataset["id"]] = dataset["id"]
-                
+
                 if name and map.get_temporal_type() != sp.get_temporal_type():
                     dbif.close()
                     if map.get_layer():
-                        core.fatal(_("Unable to update %s map <%s> with layer. "
-                                     "The temporal types are different.") %
-                                   (map.get_type(), map.get_map_id(), map.get_layer()))
+                        core.fatal(_("Unable to update %(t)s map <%(id)s> "
+                                     "with layer %(l)s. The temporal types "
+                                     "are different.") % {'t': map.get_type(),
+                                                        'id': map.get_map_id(),
+                                                        'l': map.get_layer()})
                     else:
-                        core.fatal(_("Unable to update %s map <%s>. "
+                        core.fatal(_("Unable to update %(t)s map <%(id)s>. "
                                      "The temporal types are different.") %
-                                   (map.get_type(), map.get_map_id()))
+                                     {'t': map.get_type(),
+                                      'id': map.get_map_id()})
 
         # Load the data from the grass file database
         map.load()
 
         # Set the valid time
         if start:
-            # In case the time is in the input file we ignore the increment counter
+            # In case the time is in the input file we ignore the increment
+            # counter
             if start_time_in_file:
                 count = 1
             assign_valid_time_to_map(ttype=map.get_temporal_type(),
@@ -279,7 +291,8 @@ def register_maps_in_space_time_dataset(
             #  Gather the SQL insert statement
             statement += map.insert(dbif=dbif, execute=False)
 
-        # Sqlite3 performace better for huge datasets when committing in small chunks
+        # Sqlite3 performace better for huge datasets when committing in
+        # small chunks
         if dbif.dbmi.__name__ == "sqlite3":
             if count % 100 == 0:
                 if statement is not None and statement != "":
@@ -304,7 +317,7 @@ def register_maps_in_space_time_dataset(
         num_maps = len(map_object_list)
         core.message(_("Register maps in the space time raster dataset"))
         for map in map_object_list:
-            if count%50 == 0:
+            if count % 50 == 0:
                 core.percent(count, num_maps, 1)
             sp.register_map(map=map, dbif=dbif)
             count += 1
@@ -314,7 +327,7 @@ def register_maps_in_space_time_dataset(
         core.message(_("Update space time raster dataset"))
         sp.update_from_registered_maps(dbif)
         sp.update_command_string(dbif=dbif)
-    
+
     # Update affected datasets
     if datatsets_to_modify:
         for dataset in datatsets_to_modify:
@@ -335,7 +348,8 @@ def register_maps_in_space_time_dataset(
 
 ###############################################################################
 
-def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=1, interval=False):
+def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
+                             mult=1, interval=False):
     """!Assign the valid time to a map dataset
 
        @param ttype The temporal type which should be assigned

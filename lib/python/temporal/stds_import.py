@@ -32,13 +32,9 @@ for details.
 @author Soeren Gebbert
 """
 
-import shutil
 import os
 import os.path
 import tarfile
-import tempfile
-import time
-import filecmp
 
 import core
 from space_time_datasets import *
@@ -56,6 +52,7 @@ list_file_name = "list.txt"
 imported_maps = {}
 
 ############################################################################
+
 
 def _import_raster_maps_from_geotiff(maplist, overr, exp, location, link):
     impflags = ""
@@ -93,8 +90,9 @@ def _import_raster_maps_from_geotiff(maplist, overr, exp, location, link):
 
 ############################################################################
 
+
 def _import_raster_maps(maplist):
-    # We need to disable the projection check because of its 
+    # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
     for row in maplist:
@@ -110,6 +108,7 @@ def _import_raster_maps(maplist):
             core.fatal(_("Unable to unpack raster map <%s>.") % name)
 
 ############################################################################
+
 
 def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
     impflags = "o"
@@ -129,8 +128,9 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
 
 ############################################################################
 
+
 def _import_vector_maps(maplist):
-    # We need to disable the projection check because of its 
+    # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
     for row in maplist:
@@ -152,8 +152,8 @@ def _import_vector_maps(maplist):
         imported_maps[name] = name
 ############################################################################
 
-def import_stds(
-    input, output, extrdir, title=None, descr=None, location=None,
+
+def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         link=False, exp=False, overr=False, create=False, stds_type="strds"):
     """!Import space time datasets of type raster and vector
 
@@ -161,18 +161,18 @@ def import_stds(
         @param output The name of the output space time dataset
         @param extrdir The extraction directory
         @param title The title of the new created space time dataset
-        @param descr The description of the new created 
-                            space time dataset
+        @param descr The description of the new created
+                     space time dataset
         @param location The name of the location that should be created,
                         maps are imported into this location
         @param link Switch to link raster maps instead importing them
         @param exp Extend location extents based on new dataset
         @param overr Override projection (use location's projection)
-        @param create Create the location specified by the "location" 
+        @param create Create the location specified by the "location"
                       parameter and exit.
                       Do not import the space time datasets.
-        @param stds_type The type of the space time dataset that 
-                          should be imported
+        @param stds_type The type of the space time dataset that
+                         should be imported
     """
 
     global raise_on_error
@@ -224,7 +224,8 @@ def import_stds(
             else:
                 core.fatal(_("Projection information does not match. Aborting."))
 
-    # Create a new location based on the projection information and switch into it
+    # Create a new location based on the projection information and switch
+    # into it
     old_env = core.gisenv()
     if location:
         try:
@@ -237,8 +238,8 @@ def import_stds(
                 os.chdir(old_cwd)
                 return
         except Exception as e:
-            core.fatal(_("Unable to create location %s. Reason: %s")
-                       % (location, str(e)))
+            core.fatal(_("Unable to create location %(l)s. Reason: %(e)s")
+                         % {'l': location, 'e': str(e)})
         # Switch to the new created location
         ret = core.run_command("g.mapset", mapset="PERMANENT",
                                location=location,
@@ -300,8 +301,10 @@ def import_stds(
         if "temporal_type" not in init or \
            "semantic_type" not in init or \
            "number_of_maps" not in init:
-            core.fatal(_("Key words %s, %s or %s not found in init file.") %
-                       ("temporal_type", "semantic_type", "number_of_maps"))
+            core.fatal(_("Key words %(t)s, %(s)s or %(n)s not found in init"
+                         " file.") % {'t': "temporal_type",
+                                      's': "semantic_type",
+                                      'n': "number_of_maps"})
 
         if line_count != int(init["number_of_maps"]):
             core.fatal(_("Number of maps mismatch in init and list file."))
@@ -346,9 +349,9 @@ def import_stds(
         id = output + "@" + mapset
         sp = dataset_factory(_type, id)
         if sp.is_in_db() and core.overwrite() == False:
-            core.fatal(_("Space time %s dataset <%s> is already in the "
-                         "database. Use the overwrite flag.") % \
-                        (_type, sp.get_id()))
+            core.fatal(_("Space time %(t)s dataset <%(sp)s> is already in the "
+                         "database. Use the overwrite flag.") % {'t': _type,
+                                                                 'sp': sp.get_id()})
 
         # Import the maps
         if _type == "strds":
@@ -366,27 +369,27 @@ def import_stds(
 
         # Create the space time dataset
         if sp.is_in_db() and core.overwrite() == True:
-            core.info(_("Overwrite space time %s dataset "
-                        "<%s> and unregister all maps.") % \
-                       (sp.get_new_map_instance(None).get_type(), sp.get_id()))
+            core.info(_("Overwrite space time %(sp)s dataset "
+                        "<%(id)s> and unregister all maps.") % {
+                        'sp': sp.get_new_map_instance(None).get_type(),
+                        'id': sp.get_id()})
             sp.delete()
             sp = sp.get_new_instance(id)
 
         temporal_type = init["temporal_type"]
         semantic_type = init["semantic_type"]
         relative_time_unit = None
-        
-        if temporal_type == "relative":        
+        if temporal_type == "relative":
             if "relative_time_unit" not in init:
-                core.fatal(_("Key word %s not found in init file.") %("relative_time_unit"))
+                core.fatal(_("Key word %s not found in init file.") % ("relative_time_unit"))
             relative_time_unit = init["relative_time_unit"]
             sp.set_relative_time_unit(relative_time_unit)
-        
+
         core.verbose(_("Create space time %s dataset.") %
                      sp.get_new_map_instance(None).get_type())
 
-        sp.set_initial_values(temporal_type=temporal_type, 
-                              semantic_type=semantic_type, title=title, 
+        sp.set_initial_values(temporal_type=temporal_type,
+                              semantic_type=semantic_type, title=title,
                               description=descr)
         sp.insert()
 
@@ -394,7 +397,7 @@ def import_stds(
         fs = "|"
         register_maps_in_space_time_dataset(
             type=sp.get_new_map_instance(None).get_type(),
-            name=output, file=list_file_name, start="file", 
+            name=output, file=list_file_name, start="file",
             end="file", unit=relative_time_unit, dbif=None, fs=fs)
 
         os.chdir(old_cwd)
@@ -408,5 +411,5 @@ def import_stds(
             ret = core.run_command("g.mapset", mapset=old_env["MAPSET"],
                                    location=old_env["LOCATION_NAME"],
                                    gisdbase=old_env["GISDBASE"])
-        
+
         core.set_raise_on_error(old_state)
