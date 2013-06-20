@@ -120,6 +120,10 @@ int main(int argc, char *argv[])
     method_opt->options = "linear,cubic";
     method_opt->answer = "cubic";
     method_opt->guisection = _("Settings");
+    G_asprintf((char **) &(method_opt->descriptions),
+	       "linear;%s;cubic;%s",
+	       _("Linear interpolation"),
+	       _("Cubic interpolation"));
 
     lambda_f_opt = G_define_option();
     lambda_f_opt->key = "lambda";
