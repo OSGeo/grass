@@ -288,7 +288,7 @@
     <description>Removes installed GRASS AddOns extension.</description>
     <keywords>general,installation,extensions</keywords>
   </wxgui-item>
-  <wxgui-item name="ManageColorRulesInteractively">
+  <wxgui-item name="ManageRasterColorRulesInteractively">
     <label>Manage color rules interactively</label>
     <handler>OnRasterRules</handler>
     <description>Interactive management of raster color tables.</description>
@@ -318,7 +318,7 @@
     <description>Toolset for cleaning topology of vector map.</description>
     <keywords>vector,topology,geometry</keywords>
   </wxgui-item>
-  <wxgui-item name="ManageColorRulesInteractively">
+  <wxgui-item name="ManageVectorColorRulesInteractively">
     <label>Manage color rules interactively</label>
     <handler>OnVectorRules</handler>
     <description>Interactive management of vector color tables.</description>
