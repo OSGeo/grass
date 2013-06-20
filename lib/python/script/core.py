@@ -1233,29 +1233,20 @@ def basename(path, ext=None):
         name = fs[0]
     return name
 
-
-# find a program (replacement for "which")
-# from http://hg.python.org/cpython/file/6860263c05b3/Lib/shutil.py#l1068
-# see ticket #2008
-def find_program(cmd, mode=os.F_OK | os.X_OK, path=None):
-    """Given a command, mode, and a PATH string, return the path which
-    conforms to the given mode on the PATH, or None if there is no such
-    file.
-
-    `mode` defaults to os.F_OK | os.X_OK. `path` defaults to the result
-    of os.environ.get("PATH"), or can be overridden with a custom search
-    path.
-
+def find_program(pgm, args = []):
+    """!Attempt to run a program, with optional arguments.
+    You must call the program in a way that will return a successful
+    exit code. For GRASS modules this means you need to pass it some
+    valid CLI option, like "--help". For other programs a common
+    valid do-little option is "--version".
+    
     Example:
 
     @code
-    >>> find_program('r.sun')  # doctest: +ELLIPSIS
-    '.../bin/r.sun'
-    >>> bool(find_program('ls'))
+    >>> grass.find_program('r.sun', ['help'])
     True
-    >>> bool(find_program('gdalwarp'))
+    >>> grass.find_program('gdalwarp', ['--version'])
     True
-
     @endcode
 
     @param pgm program name
@@ -1265,57 +1256,18 @@ def find_program(cmd, mode=os.F_OK | os.X_OK, path=None):
             or non-zero return code
     @return True otherwise
     """
-    # Check that a given file can be accessed with the correct mode.
-    # Additionally check that `file` is not a directory, as on Windows
-    # directories pass the os.access check.
-    def _access_check(fn, mode):
-        return (os.path.exists(fn) and os.access(fn, mode)
-                and not os.path.isdir(fn))
-
-    # If we're given a path with a directory part, look it up directly rather
-    # than referring to PATH directories. This includes checking relative to
-    # the current directory, e.g. ./script
-    if os.path.dirname(cmd):
-        if _access_check(cmd, mode):
-            return cmd
-        return None
-
-    if path is None:
-        path = os.environ.get("PATH", os.defpath)
-    if not path:
-        return None
-    path = path.split(os.pathsep)
-
-    if sys.platform == "win32":
-        # The current directory takes precedence on Windows.
-        if not os.curdir in path:
-            path.insert(0, os.curdir)
-
-        # PATHEXT is necessary to check on Windows.
-        pathext = os.environ.get("PATHEXT", "").split(os.pathsep)
-        # See if the given file matches any of the expected path extensions.
-        # This will allow us to short circuit when given "python.exe".
-        # If it does match, only test that one, otherwise we have to try
-        # others.
-        if any(cmd.lower().endswith(ext.lower()) for ext in pathext):
-            files = [cmd]
+    nuldev = file(os.devnull, 'w+')
+    try:
+        ret = call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
+        if ret == 0:
+            found = True
         else:
-            files = [cmd + ext for ext in pathext]
-    else:
-        # On other platforms you don't have things like PATHEXT to tell you
-        # what file suffixes are executable, so just pass on cmd as-is.
-        files = [cmd]
+            found = False
+    except:
+        found = False
+    nuldev.close()
 
-    seen = set()
-    for dir in path:
-        normdir = os.path.normcase(dir)
-        if not normdir in seen:
-            seen.add(normdir)
-            for thefile in files:
-                name = os.path.join(dir, thefile)
-                if _access_check(name, mode):
-                    return name
-    return None
+    return found
 
 # try to remove a file, without complaints
 
