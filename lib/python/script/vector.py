@@ -51,9 +51,9 @@ def vector_db(map, **args):
     result = {}
     
     for l in s.splitlines():
-	f = l.split(';')
-	if len(f) != 5:
-	    continue
+        f = l.split(';')
+        if len(f) != 5:
+            continue
         
         if '/' in f[0]:
             f1 = f[0].split('/')
@@ -63,7 +63,7 @@ def vector_db(map, **args):
             layer = f[0]
             name = ''
             
-	result[int(layer)] = {
+        result[int(layer)] = {
             'layer'    : int(layer),
             'name'     : name,
             'table'    : f[1],
@@ -85,7 +85,7 @@ def vector_layer_db(map, layer):
     try:
         f = vector_db(map)[int(layer)]
     except KeyError:
-	fatal(_("Database connection not defined for layer %s") % layer)
+        fatal(_("Database connection not defined for layer %s") % layer)
 
     return f
 
@@ -118,7 +118,7 @@ def vector_columns(map, layer = None, getDict = True, **args):
         result = list()
     i = 0
     for line in s.splitlines():
-	ctype, cname = line.split('|')
+        ctype, cname = line.split('|')
         if getDict:
             result[cname] = { 'type' : ctype,
                               'index' : i }
@@ -195,11 +195,11 @@ def vector_info(map):
     
     kv = parse_key_val(s)
     for k in ['north', 'south', 'east', 'west', 'top', 'bottom']:
-	kv[k] = float(kv[k])
+        kv[k] = float(kv[k])
     for k in ['level', 'num_dblinks']:
-	kv[k] = int(kv[k])
+        kv[k] = int(kv[k])
     for k in ['nodes', 'points', 'lines', 'boundaries', 'centroids', 'areas', 'islands', 'primitives']:
-	kv[k] = int(kv[k])
+        kv[k] = int(kv[k])
     if 'map3d' in kv:
         kv['map3d'] = bool(int(kv['map3d']))
         if kv['map3d']:

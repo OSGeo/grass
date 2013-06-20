@@ -442,8 +442,8 @@ def get_interface_description(cmd):
     @param cmd command (name of GRASS module)
     """
     try:
-	p = Popen([cmd, '--interface-description'], stdout = PIPE,
-						    stderr = PIPE)
+        p = Popen([cmd, '--interface-description'], stdout = PIPE,
+                  stderr = PIPE)
         cmdout, cmderr = p.communicate()
         
         # TODO: replace ugly hack bellow
@@ -452,8 +452,8 @@ def get_interface_description(cmd):
                 cmd += '.py'
             
             os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
-	    p = Popen([sys.executable, cmd, '--interface-description'],
-		      stdout = PIPE, stderr = PIPE)
+            p = Popen([sys.executable, cmd, '--interface-description'],
+                      stdout = PIPE, stderr = PIPE)
             cmdout, cmderr = p.communicate()
         
         if p.returncode != 0:
