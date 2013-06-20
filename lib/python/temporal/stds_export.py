@@ -76,8 +76,8 @@ def _export_raster_maps_as_geotiff(rows, tar, list_file, new_cwd, fs):
                 gdal_type = "UInt32"
             else:
                 gdal_type = "Int32"
-            ret = core.run_command("r.out.gdal", flags="c", input=name, 
-                                   output=out_name, nodata=nodata, 
+            ret = core.run_command("r.out.gdal", flags="c", input=name,
+                                   output=out_name, nodata=nodata,
                                    type=gdal_type, format="GTiff")
         else:
             ret = core.run_command("r.out.gdal", flags="c",
@@ -140,8 +140,8 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the vector map with v.out.ogr
-        ret = core.run_command("v.out.ogr", input=name, 
-                               dsn=(name + ".xml"), layer=layer, format="GML")
+        ret = core.run_command("v.out.ogr", input=name, dsn=(name + ".xml"),
+                               layer=layer, format="GML")
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
@@ -210,7 +210,7 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
 ############################################################################
 
 
-def export_stds(input, output, compression, workdir, where, format_="pack", 
+def export_stds(input, output, compression, workdir, where, format_="pack",
                 type_="strds"):
     """
             !Export space time datasets as tar archive with optional compression
@@ -249,8 +249,8 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     sp = dataset_factory(type_, id)
 
     if sp.is_in_db() == False:
-        core.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
+        core.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
+                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     # Save current working directory path
     old_cwd = os.getcwd()
@@ -309,16 +309,17 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     init_file = open(init_file_name, "w")
     # Create the init string
     string = ""
-     # This is optional, if not present strds will be assumed for backward 
+     # This is optional, if not present strds will be assumed for backward
      # compatibility
-    string += "%s=%s\n" % ("stds_type", sp.get_type()) 
-     # This is optional, if not present gtiff will be assumed for 
+    string += "%s=%s\n" % ("stds_type", sp.get_type())
+     # This is optional, if not present gtiff will be assumed for
      # backward compatibility
-    string += "%s=%s\n" % ("format", format_) 
+    string += "%s=%s\n" % ("format", format_)
     string += "%s=%s\n" % ("temporal_type", sp.get_temporal_type())
     string += "%s=%s\n" % ("semantic_type", sp.get_semantic_type())
     if sp.is_time_relative():
-	string += "%s=%s\n" % ("relative_time_unit", sp.get_relative_time_unit())
+        string += "%s=%s\n" % ("relative_time_unit",
+                               sp.get_relative_time_unit())
     string += "%s=%s\n" % ("number_of_maps", sp.metadata.get_number_of_maps())
     north, south, east, west, top, bottom = sp.get_spatial_extent_as_tuple()
     string += "%s=%s\n" % ("north", north)

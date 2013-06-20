@@ -17,24 +17,29 @@ from multiprocessing import Process
 
 ############################################################################
 
+
 def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     register_null=False, layer=1,
                     vtype="point,line,boundary,centroid,area,face"):
     """!Extract a subset of a space time raster, raster3d or vector dataset
 
-       A mapcalc expression can be provided to process the temporal extracted maps.
+       A mapcalc expression can be provided to process the temporal extracted
+       maps.
        Mapcalc expressions are supported for raster and raster3d maps.
 
        @param input The name of the input space time raster/raster3d dataset
-       @param output The name of the extracted new space time raster/raster3d dataset
+       @param output The name of the extracted new space time raster/raster3d
+                     dataset
        @param type The type of the dataset: "raster", "raster3d" or vector
        @param where The temporal SQL WHERE statement for subset extraction
-       @param expression The r(3).mapcalc expression or the v.extract where statement
+       @param expression The r(3).mapcalc expression or the v.extract where
+                         statement
        @param base The base name of the new created maps in case a mapclac
-              expression is provided
-       @param nprocs The number of parallel processes to be used for mapcalc processing
+                   expression is provided
+       @param nprocs The number of parallel processes to be used for mapcalc
+                     processing
        @param register_null Set this number True to register empty maps
-             (only raster and raster3d maps)
+                            (only raster and raster3d maps)
        @param layer The vector layer number to be used when no timestamped
               layer is present, default is 1
        @param vtype The feature type to be extracted for vector maps, default
@@ -67,7 +72,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
     if not sp.is_in_db(dbif):
         dbif.close()
-        core.fatal(_("Space time %s dataset <%s> not found") % (type, id))
+        core.fatal(_("Space time %(type)s dataset <%(id)s> not found") % {
+                     'type': type, 'id': id})
 
     if expression and not base:
         dbif.close()
@@ -86,8 +92,9 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
     if new_sp.is_in_db():
         if not core.overwrite():
             dbif.close()
-            core.fatal(_("Space time %s dataset <%s> is already in database,"
-                         " use overwrite flag to overwrite") % (type, out_id))
+            core.fatal(_("Space time %(type)s dataset <%(id)s> is already in "
+                         "database, use overwrite flag to overwrite") % {
+                         'type': type, 'id': out_id})
     if type == "vector":
         rows = sp.get_registered_maps(
             "id,name,mapset,layer", where, "start_time", dbif)
@@ -109,7 +116,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
             for row in rows:
                 count += 1
 
-                if count%10 == 0:
+                if count % 10 == 0:
                     core.percent(count, num_rows, 1)
 
                 map_name = "%s_%i" % (base, count)
@@ -135,8 +142,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                         new_map.delete(dbif)
                         new_map = sp.get_new_map_instance(map_id)
                     else:
-                        core.error(_("Map <%s> is already in temporal database,"
-                                     " use overwrite flag to overwrite") %
+                        core.error(_("Map <%s> is already in temporal database"
+                                     ", use overwrite flag to overwrite") %
                                     (new_map.get_map_id()))
                         continue
 
@@ -158,19 +165,19 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                         proc_list.append(Process(target=run_vector_extraction,
                                                  args=(row["name"] + "@" + \
                                                        row["mapset"],
-                                                 map_name, row["layer"], 
+                                                 map_name, row["layer"],
                                                  vtype, expression)))
                     else:
                         proc_list.append(Process(target=run_vector_extraction,
                                                  args=(row["name"] + "@" + \
                                                        row["mapset"],
-                                                 map_name, layer, vtype, 
+                                                 map_name, layer, vtype,
                                                  expression)))
 
                 proc_list[proc_count].start()
                 proc_count += 1
 
-                # Join processes if the maximum number of processes are 
+                # Join processes if the maximum number of processes are
                 # reached or the end of the loop is reached
                 if proc_count == nprocs or proc_count == num_rows:
                     proc_count = 0
@@ -209,8 +216,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
         count = 0
         for row in rows:
             count += 1
-            
-            if count%10 == 0:
+
+            if count % 10 == 0:
                 core.percent(count, num_rows, 1)
 
             old_map = sp.get_new_map_instance(row["id"])
@@ -224,7 +231,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     # Read the raster map data
                     new_map.load()
 
-                    # In case of a empty map continue, do not register empty maps
+                    # In case of a empty map continue, do not register empty
+                    # maps
                     if type == "raster" or type == "raster3d":
                         if new_map.metadata.get_min() is None and \
                             new_map.metadata.get_max() is None:
@@ -279,15 +287,18 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
 ###############################################################################
 
+
 def run_mapcalc2d(expr):
     """Helper function to run r.mapcalc in parallel"""
     return core.run_command("r.mapcalc", expression=expr,
                             overwrite=core.overwrite(), quiet=True)
 
+
 def run_mapcalc3d(expr):
     """Helper function to run r3.mapcalc in parallel"""
     return core.run_command("r3.mapcalc", expression=expr,
                             overwrite=core.overwrite(), quiet=True)
+
 
 def run_vector_extraction(input, output, layer, type, where):
     """Helper function to run r.mapcalc in parallel"""

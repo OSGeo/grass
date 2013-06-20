@@ -29,7 +29,8 @@ from factory import *
 ###############################################################################
 
 
-def print_gridded_dataset_univar_statistics(type, input, where, extended, header, fs):
+def print_gridded_dataset_univar_statistics(type, input, where, extended,
+                                            header, fs):
     """!Print univariate statistics for a space time raster or raster3d dataset
 
        @param type Must be "strds" or "str3ds"
@@ -55,8 +56,8 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended, header
 
     if sp.is_in_db(dbif) == False:
         dbif.close()
-        core.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
+        core.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
+                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     sp.select(dbif)
 
@@ -65,8 +66,8 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended, header
 
     if not rows:
         dbif.close()
-        core.fatal(_("Space time %s dataset <%s> is empty") % (
-            sp.get_new_map_instance(None).get_type(), id))
+        core.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
+                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     if header == True:
         print "id" + fs + "start" + fs + "end" + fs + "mean" + fs + \
@@ -115,13 +116,13 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended, header
 ###############################################################################
 
 
-def print_vector_dataset_univar_statistics(input, twhere, layer, type, column, 
+def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
                                            where, extended, header, fs):
     """!Print univariate statistics for a space time vector dataset
 
        @param input The name of the space time dataset
        @param twhere A temporal database where statement
-       @param layer The layer number used in case no layer is present 
+       @param layer The layer number used in case no layer is present
               in the temporal dataset
        @param type options: point,line,boundary,centroid,area
        @param column The name of the attribute column
@@ -146,8 +147,8 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
 
     if sp.is_in_db(dbif) == False:
         dbif.close()
-        core.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
+        core.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
+                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     sp.select(dbif)
 
@@ -156,8 +157,8 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
 
     if not rows:
         dbif.close()
-        core.fatal(_("Space time %s dataset <%s> is empty") % (
-            sp.get_new_map_instance(None).get_type(), id))
+        core.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
+                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     string = ""
     if header == True:
@@ -191,7 +192,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
             mylayer = layer
 
         stats = core.parse_command("v.univar", map=id, where=where,
-                                   column=column, layer=mylayer, 
+                                   column=column, layer=mylayer,
                                    type=type, flags=flags)
 
         string = ""
@@ -211,11 +212,11 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
                     str(stats["mean_abs"]) + fs + \
                     str(stats["population_stddev"]) + fs + \
                     str(stats["population_variance"])
-                    
+
                     string += fs + str(stats["population_coeff_variation"]) + \
                     fs + str(stats["sample_stddev"]) + fs + \
                     str(stats["sample_variance"])
-                    
+
                     string += fs + str(stats["kurtosis"]) + fs + \
                     str(stats["skewness"])
                 else:
