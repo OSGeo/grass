@@ -55,10 +55,15 @@ class Parameter(object):
         #
         # default
         #
-        self.default = self._type(
-            diz['default']) if 'default' in diz else None
-        if self.default is not None:
+        if 'default' in diz:
+            if self.multiple or self.keydescvalues:
+                self.default = [self._type(v)
+                                for v in diz['default'].split(',')]
+            else:
+                self.default = self._type(diz['default'])
             self._value = self.default
+        else:
+            self.default = None
 
         self.guisection = diz.get('guisection', None)
 
