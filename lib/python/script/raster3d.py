@@ -57,15 +57,15 @@ def raster3d_info(map):
     s = read_command('r3.info', flags='rg', map=map)
     kv = parse_key_val(s)
     for k in ['min', 'max']:
-	kv[k] = float_or_null(kv[k])
+        kv[k] = float_or_null(kv[k])
     for k in ['north', 'south', 'east', 'west', 'top', 'bottom']:
-	kv[k] = float(kv[k])
+        kv[k] = float(kv[k])
     for k in ['nsres', 'ewres', 'tbres']:
-	kv[k] = float_or_dms(kv[k])
+        kv[k] = float_or_dms(kv[k])
     for k in ['tilenumx', 'tilenumy', 'tilenumz']:
-	kv[k] = int(kv[k])
+        kv[k] = int(kv[k])
     for k in ['tiledimx', 'tiledimy', 'tiledimz']:
-	kv[k] = int(kv[k])
+        kv[k] = int(kv[k])
     return kv
 
 # interface to r3.mapcalc
@@ -86,4 +86,4 @@ def mapcalc3d(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
                    quiet = quiet,
                    verbose = verbose,
                    overwrite = overwrite) != 0:
-	fatal(_("An error occurred while running r3.mapcalc"))
+        fatal(_("An error occurred while running r3.mapcalc"))

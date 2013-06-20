@@ -77,11 +77,11 @@ def raster_info(map):
     s = read_command('r.info', flags = 'gre', map = map)
     kv = parse_key_val(s)
     for k in ['min', 'max']:
-	kv[k] = float_or_null(kv[k])
+        kv[k] = float_or_null(kv[k])
     for k in ['north', 'south', 'east', 'west']:
-	kv[k] = float(kv[k])
+        kv[k] = float(kv[k])
     for k in ['nsres', 'ewres']:
-	kv[k] = float_or_dms(kv[k])
+        kv[k] = float_or_dms(kv[k])
     return kv
 
 # interface to r.mapcalc
@@ -102,7 +102,7 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
                    quiet = quiet,
                    verbose = verbose,
                    overwrite = overwrite) != 0:
-	fatal(_("An error occurred while running r.mapcalc"))
+        fatal(_("An error occurred while running r.mapcalc"))
 
 
 def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
