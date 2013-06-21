@@ -117,6 +117,9 @@ int draw_scale(double east, double north, int style, int text_posn,
 		D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 70);
 		D_text("N");
 		break;
+	    case '9':
+		D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 55);
+		D_text("N");
 	    case '2':
 	    case '5':
 	    case '6':
@@ -147,7 +150,7 @@ int draw_scale(double east, double north, int style, int text_posn,
 	fill_color->b = (unsigned char)B;
 	fill_color->a = RGBA_COLOR_OPAQUE;
 
-	if (n_arrow_num[0] == '2')
+	if (n_arrow_num[0] == '2' || n_arrow_num[0] == '9')
 	    fill_color->a = RGBA_COLOR_TRANSPARENT;
 
 	/* sizes manually tuned */
@@ -172,6 +175,7 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    symbol_size = 23.;
 	    break;
 	case '8':
+	case '9':
 	    symbol_size = 17.;
 	    break;
 	default:
