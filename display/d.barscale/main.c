@@ -71,9 +71,9 @@ int main(int argc, char **argv)
     barstyle = G_define_option();
     barstyle->key = "style";
     barstyle->description = _("Type of barscale to draw");
-/* TODO:   barstyle->options: part_checker (left side twice the freq of the right) and  |<--arrow_ends-->| */
+/* TODO:   barstyle->options:  |<--arrow_ends-->| */
     barstyle->options =
-	"classic,line,solid,hollow,full_checker,up_ticks,down_ticks,both_ticks";
+	"classic,line,solid,hollow,full_checker,part_checker,up_ticks,down_ticks,both_ticks";
     barstyle->answer = "classic";
 
     coords = G_define_option();
