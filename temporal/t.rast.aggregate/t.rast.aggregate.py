@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:       tr.aggregate
+# MODULE:       t.rast.aggregate
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Temporally aggregates the maps of a space time raster dataset by a user defined granularity.
@@ -23,21 +23,16 @@
 #%option G_OPT_STRDS_INPUT
 #%end
 
-#%option G_OPT_T_WHERE
+#%option G_OPT_STRDS_OUTPUT
+#%end
+
+#%option G_OPT_R_BASE
 #%end
 
 #%option
 #% key: granularity
 #% type: string
 #% description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or an integer value for relative time
-#% required: yes
-#% multiple: no
-#%end
-
-#%option
-#% key: output
-#% type: string
-#% description: Name of the output space time raster dataset
 #% required: yes
 #% multiple: no
 #%end
@@ -55,7 +50,7 @@
 #%option G_OPT_T_SAMPLE
 #%end
 
-#%option G_OPT_R_BASE
+#%option G_OPT_T_WHERE
 #%end
 
 #%flag
