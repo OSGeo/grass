@@ -1,5 +1,5 @@
 /*
- * draw_scale() places a scalebar or a north arrow somewhere in the display frame
+ * draw_scale() places a scalebar somewhere in the display frame
  */
 
 #include <stdio.h>
@@ -61,7 +61,7 @@ static const struct scale
 };
 
 int draw_scale(double east, double north, int style, int text_posn,
-	       double fontsize, char *n_arrow_num)
+	       double fontsize)
 {
     double meters;
     double line_len;
@@ -77,8 +77,8 @@ int draw_scale(double east, double north, int style, int text_posn,
     RGBA_Color *line_color, *fill_color;
     int R, G, B;
     double x0, y0;
-    char icon[64];
     double symbol_size;
+
 
     /* Establish text size */
     if (fontsize > 0)
@@ -91,113 +91,6 @@ int draw_scale(double east, double north, int style, int text_posn,
     y_pos = (100. - north) * (b - t) / 100.;
 
 
-    if (style == STYLE_NONE) {
-	/* draw north arrow only */
-
-	if (fontsize > 0) {
-	    /* draw the "N" */
-	    D_get_text_box("N", &tt, &tb, &tl, &tr);
-	    D_use_color(fg_color);
-
-	    /* positions manually tuned */
-	    switch (n_arrow_num[0]) {
-	    case '1':
-		D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 45);
-		D_text("N");
-		break;
-	    case '3':
-		D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 60);
-		D_text("N");
-		break;
-	    case '4':
-		D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 45);
-		D_text("N");
-		break;
-	    case '7':
-		D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 70);
-		D_text("N");
-		break;
-	    case '9':
-		D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 55);
-		D_text("N");
-	    case '2':
-	    case '5':
-	    case '6':
-	    case '8':
-		break;
-	    default:
-		G_fatal_error(_("Could not parse symbol"));
-	    }
-	}
-
-	/* display the symbol */
-	line_color = G_malloc(sizeof(RGBA_Color));
-	fill_color = G_malloc(sizeof(RGBA_Color));
-
-	if (D_color_number_to_RGB(fg_color, &R, &G, &B) == 0)
-	    /* fall back to black on failure */
-	    G_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
-	line_color->r = (unsigned char)R;
-	line_color->g = (unsigned char)G;
-	line_color->b = (unsigned char)B;
-	line_color->a = RGBA_COLOR_OPAQUE;
-
-	if (D_color_number_to_RGB(fg_color, &R, &G, &B) == 0)
-	    /* fall back to black on failure */
-	    G_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
-	fill_color->r = (unsigned char)R;
-	fill_color->g = (unsigned char)G;
-	fill_color->b = (unsigned char)B;
-	fill_color->a = RGBA_COLOR_OPAQUE;
-
-	if (n_arrow_num[0] == '2' || n_arrow_num[0] == '9')
-	    fill_color->a = RGBA_COLOR_TRANSPARENT;
-
-	/* sizes manually tuned */
-	switch (n_arrow_num[0]) {
-	case '1':
-	    symbol_size = 35.;
-	    break;
-	case '2':
-	    symbol_size = 19.;
-	    break;
-	case '3':
-	    symbol_size = 20.;
-	    break;
-	case '4':
-	    symbol_size = 15.;
-	    break;
-	case '5':
-	case '6':
-	    symbol_size = 14.;
-	    break;
-	case '7':
-	    symbol_size = 23.;
-	    break;
-	case '8':
-	case '9':
-	    symbol_size = 17.;
-	    break;
-	default:
-	    G_fatal_error(_("Could not parse symbol"));
-	}
-
-	x0 = D_d_to_u_col(x_pos);
-	y0 = D_d_to_u_row(y_pos);
-
-	strcpy(icon, "n_arrows/n_arrow");
-	strncat(icon, n_arrow_num, 32);
-	Symb = S_read(icon);
-	S_stroke(Symb, symbol_size, 0.0, 0);
-	D_symbol(Symb, x0, y0, line_color, fill_color);
-
-	G_free(line_color);
-	G_free(fill_color);
-
-	return 0;
-    }
-
-
     D_setup(0); /* back to regular coordinate settings */
     meters = D_get_u_east() - D_get_u_west();
     meters *= G_database_units_to_meters_factor();
@@ -208,11 +101,17 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    break;
     }
 
+    /* region is too small to draw anything. ever reached? */
     if (!incr)
-	return -1; /* use a G_fatal_error() here? */
+	return -1;
+
+    /* beyond the maximum just make the longest scale narrower */
+    if (incr >= NUMSCALES)
+	incr = NUMSCALES - 1;
 
     line_len = D_get_u_to_d_xconv() * scales[incr].size
 	/ G_database_units_to_meters_factor();
+
     seg_len = line_len / scales[incr].seg;
     /* work around round off */
     line_len = seg_len * scales[incr].seg;
@@ -250,22 +149,28 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    pb = y_pos + 30;
 	    if (style == STYLE_TICKS_UP) {
 		pt -= 12;
+		pb -= 6;
 		pl += 15;
 	    }
 	    if (style == STYLE_TICKS_DOWN) {
+		pt += 4;
 		pb += 12;
 		pl += 15;
 	    }
 	}
-	else if (text_posn == TEXT_LEFT){
+	else if (text_posn == TEXT_LEFT) {
 	    pr = x_pos + 35 + line_len;
 	    pl = x_pos - tr - 13;
 	    pt = y_pos + 0;
 	    pb = y_pos + 30;
-	    if (style == STYLE_TICKS_UP)
+	    if (style == STYLE_TICKS_UP) {
 		pt -= 12;
-	    if (style == STYLE_TICKS_DOWN)
+		pb -= 4;
+	    }
+	    if (style == STYLE_TICKS_DOWN) {
+		pt += 3;
 		pb += 11;
+	    }
 	}
 
 	if (fontsize < 0) {  /* no text */
@@ -279,6 +184,7 @@ int draw_scale(double east, double north, int style, int text_posn,
 		break;
 	    case STYLE_PART_CHECKER:
 	    case STYLE_FULL_CHECKER:
+	    case STYLE_MIXED_CHECKER:
 	    case STYLE_SOLID_BAR:
 	    case STYLE_HOLLOW_BAR:
 	    case STYLE_TICKS_BOTH:
@@ -319,7 +225,7 @@ int draw_scale(double east, double north, int style, int text_posn,
 	D_box_abs(pl, pt, pr, pb);
     }
 
-    /* Draw the small N with an arrow through it on the left side */
+    /* Draw the small N with an arrow through it on the left side for the classic barscale styles */
     D_use_color(fg_color);
     if (style == STYLE_CLASSIC_BAR || style == STYLE_THIN_WITH_ENDS) {
 	D_begin();
@@ -418,12 +324,11 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    xarr[2] = 0;		yarr[2] = (i % 2 ? -6 : 6);
 	    xarr[3] = -seg_len;	yarr[3] = 0;
 	    xarr[4] = 0;		yarr[4] = (i % 2 ? 6 : -6);
-	    /* width is seg_len and height is 4 */
+	    /* width is seg_len and height is 6 */
 	    D_polygon_rel(xarr, yarr, 5);
 	    D_pos_rel(seg_len, 0);
 	}
     }
-
     else if (style == STYLE_PART_CHECKER) {
 	D_begin();
 	D_move_abs(x_pos + 25, y_pos + 15 + 6);
@@ -461,15 +366,65 @@ int draw_scale(double east, double north, int style, int text_posn,
 		xarr[2] = 0;	    yarr[2] = (i % 2 ? -6 : 6);
 		xarr[3] = -seg_len; yarr[3] = 0;
 		xarr[4] = 0;	    yarr[4] = (i % 2 ? 6 : -6);
-		/* width is seg_len and height is 4 */
+		/* width is seg_len and height is 6 */
 		D_polygon_rel(xarr, yarr, 5);
 		D_pos_rel(seg_len, 0);
 	    }
+	}
+    }
+    else if (style == STYLE_MIXED_CHECKER) {
+	D_begin();
+	D_move_abs(x_pos + 25, y_pos + 15 + 6);
+	/* actual width is line_len-1+1=line_len and height is 7+1=8 */
+	D_cont_rel(line_len, 0);
+	D_cont_rel(0, -12);
+	D_cont_rel(-line_len, 0);
+	D_cont_rel(0, +12);
 
+	/* horizontal line across the middle to separate white from white */
+	D_move_abs(x_pos + 25, y_pos + 15);
+	D_cont_rel(line_len, 0);
+	D_end();  /* no-op? */
+	D_close();
+	D_stroke();
+
+	D_move_abs(x_pos + 25, y_pos + 15);
+
+	for (i = 1; i <= scales[incr].seg; i++) {
+	    if (i <= (scales[incr].seg == 5 ? 2 : 4)) {
+		if (i % 2 == 0) {
+		    xarr[0] = 0;	yarr[0] = 0;
+		    xarr[1] = seg_len;	yarr[1] = 0;
+		    xarr[2] = 0;	yarr[2] = -6;
+		    xarr[3] = -seg_len; yarr[3] = 0;
+		    xarr[4] = 0;	yarr[4] = +6;
+		    D_polygon_rel(xarr, yarr, 5);
+		}
+
+		xarr[0] = 0;		yarr[0] = 0;
+		xarr[1] = seg_len/2.;	yarr[1] = 0;
+		xarr[2] = 0;		yarr[2] = +6;
+		xarr[3] = -seg_len/2.;	yarr[3] = 0;
+		xarr[4] = 0;		yarr[4] = -6;
+		D_pos_rel(seg_len/2., 0);
+		D_polygon_rel(xarr, yarr, 5);
+		D_pos_rel(seg_len/2., 0);
+	    }
+	    else {
+		xarr[0] = 0;	    yarr[0] = 0;
+		xarr[1] = seg_len;  yarr[1] = 0;
+		xarr[2] = 0;	    yarr[2] = (i % 2 ? 6 : +6);
+		xarr[3] = -seg_len; yarr[3] = 0;
+		xarr[4] = 0;	    yarr[4] = (i % 2 ? -6 : 6);
+		/* width is seg_len and height is 6 */
+		D_polygon_rel(xarr, yarr, 5);
+		D_pos_rel(seg_len, -6);
+	    }
 	}
     }
     else if (style == STYLE_TICKS_BOTH) {
 	/* draw simple line scale with corssing ticks */
+	D_begin();
 	D_move_abs(x_pos + 25, y_pos + 5);
 	D_cont_abs(x_pos + 25, y_pos + 25);
 	D_move_abs(x_pos + 25, y_pos + 15);
@@ -484,6 +439,7 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    D_cont_rel(0, -11); /* 5 above, on px on line, and 5 below */
 	    D_move_rel(0, +11);
 	}
+	D_end();  /* no-op? */
     }
     else if (style == STYLE_TICKS_UP) {
 	/* draw simple line scale with up facing ticks */
@@ -493,8 +449,6 @@ int draw_scale(double east, double north, int style, int text_posn,
 	D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
 	D_move_abs(x_pos + 25 + line_len, y_pos - 2);
 	D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
-	D_end();  /* no-op? */
-	D_close();
 
 	D_move_abs(x_pos + 25, y_pos + 15);
 	for (i = 0; i <= scales[incr].seg - 2; i++) {
@@ -502,6 +456,8 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    D_cont_rel(0, -7); /* 5 above, on px on line, and 5 below */
 	    D_move_rel(0, +7);
 	}
+	D_end();  /* no-op? */
+	D_close();
     }
     else if (style == STYLE_TICKS_DOWN) {
 	/* draw simple line scale with down facing ticks */
@@ -511,8 +467,6 @@ int draw_scale(double east, double north, int style, int text_posn,
 	D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
 	D_move_abs(x_pos + 25 + line_len, y_pos +15 + 17);
 	D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
-	D_end();  /* no-op? */
-	D_close();
 
 	D_move_abs(x_pos + 25, y_pos + 15);
 	for (i = 0; i <= scales[incr].seg - 2; i++) {
@@ -520,13 +474,72 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    D_cont_rel(0, +7); /* 5 above, on px on line, and 5 below */
 	    D_move_rel(0, -7);
 	}
+	D_end();  /* no-op? */
+	D_close();
+    }
+    else if (style == STYLE_ARROW_ENDS) {
+	/* draw line scale with |<--dimension arrows-->| on the ends */
+	D_begin();
+	D_cont_abs(x_pos + 25, y_pos + 15);
+	D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
+	D_end();
+
+	/* display the symbol */
+	line_color = G_malloc(sizeof(RGBA_Color));
+	fill_color = G_malloc(sizeof(RGBA_Color));
+
+	if (D_color_number_to_RGB(fg_color, &R, &G, &B) == 0)
+	    /* fall back to black on failure */
+	    G_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
+	line_color->r = (unsigned char)R;
+	line_color->g = (unsigned char)G;
+	line_color->b = (unsigned char)B;
+	line_color->a = RGBA_COLOR_OPAQUE;
+
+	if (D_color_number_to_RGB(fg_color, &R, &G, &B) == 0)
+	    /* fall back to black on failure */
+	    G_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
+	fill_color->r = (unsigned char)R;
+	fill_color->g = (unsigned char)G;
+	fill_color->b = (unsigned char)B;
+	fill_color->a = RGBA_COLOR_OPAQUE;
+
+	symbol_size = 12;
+
+	x0 = D_d_to_u_col(x_pos + 25);
+	y0 = D_d_to_u_row(y_pos + 15);
+	Symb = S_read("extra/dim_arrow");
+	if(!Symb)
+	    G_fatal_error(_("Could not read symbol \"%s\""), "extra/dim_arrow");
+	S_stroke(Symb, symbol_size, 0.0, 0);
+	D_symbol(Symb, x0, y0, line_color, fill_color);
+	G_free(Symb);
+
+	x0 = D_d_to_u_col(x_pos + line_len + 25);
+	y0 = D_d_to_u_row(y_pos + 15);
+	Symb = S_read("extra/dim_arrow");
+	S_stroke(Symb, symbol_size, 180., 0);
+	D_symbol(Symb, x0, y0, line_color, fill_color);
+	G_free(Symb);
+
+	G_free(line_color);
+	G_free(fill_color);
+
+	/* draw simple line between the two ends */
+	D_begin();
+	D_move_abs(x_pos + 25, y_pos + 15);
+	D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
+	D_end();  /* no-op? */
     }
     D_stroke();
+
 
     if (fontsize < 0)
 	return 0;
 
     /* draw the distance + units text */
+    D_get_text_box(scales[incr].name, &tt, &tb, &tl, &tr);
+
     if (text_posn == TEXT_OVER) {
 	D_pos_abs(x_pos + 25 + line_len / 2.
 		  - strlen(scales[incr].name) * fontsize * 0.81 / 2,
@@ -540,12 +553,24 @@ int draw_scale(double east, double north, int style, int text_posn,
 	D_text(scales[incr].name);
     }
     else if (text_posn == TEXT_RIGHT) {
+	if (style == STYLE_TICKS_UP)
+	    y_pos -= 8;
+	else if (style == STYLE_TICKS_DOWN)
+	    y_pos += 9;
+
 	D_pos_abs(x_pos + 35 + line_len, y_pos + 20);
 	D_text(scales[incr].name);
     }
     else if (text_posn == TEXT_LEFT) {
-	D_pos_abs(x_pos - 24 -
-		  strlen(scales[incr].name) * fontsize/2, y_pos + 20);
+	if (style == STYLE_TICKS_UP)
+	    y_pos -= 8;
+	else if (style == STYLE_TICKS_DOWN)
+	    y_pos += 9;
+
+	if (style == STYLE_CLASSIC_BAR || style == STYLE_THIN_WITH_ENDS)
+	    x_pos -= 13;
+
+	D_pos_abs(x_pos + 5 - (tr - tl), y_pos + 20);
 	D_text(scales[incr].name);
     }
 
