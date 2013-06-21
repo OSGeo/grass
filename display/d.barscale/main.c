@@ -71,9 +71,8 @@ int main(int argc, char **argv)
     barstyle = G_define_option();
     barstyle->key = "style";
     barstyle->description = _("Type of barscale to draw");
-/* TODO:   barstyle->options:  |<--arrow_ends-->| */
     barstyle->options =
-	"classic,line,solid,hollow,full_checker,part_checker,up_ticks,down_ticks,both_ticks";
+	"classic,line,solid,hollow,full_checker,part_checker,mixed_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
     barstyle->answer = "classic";
 
     coords = G_define_option();
@@ -109,7 +108,7 @@ int main(int argc, char **argv)
     fsize->type = TYPE_DOUBLE;
     fsize->required = NO;
     fsize->answer = "14";
-    fsize->options = "1-72";
+    fsize->options = "1-360";
     fsize->description = _("Font size");
     fsize->guisection = "Text";
 
@@ -141,6 +140,9 @@ int main(int argc, char **argv)
 	break;
     case 'f':
 	bar_style = STYLE_FULL_CHECKER;
+	break;
+    case 'm':
+	bar_style = STYLE_MIXED_CHECKER;
 	break;
     case 'l':
 	bar_style = STYLE_THIN_WITH_ENDS;
@@ -210,9 +212,10 @@ int main(int argc, char **argv)
     D_setup(0);
 
 
-    /* Draw the scale */
-    draw_scale(east, north, bar_style, text_position, fontsize,
-	       n_arrow->answer);
+    if (bar_style == STYLE_NONE)
+	draw_n_arrow(east, north, fontsize, n_arrow->answer);
+    else
+	draw_scale(east, north, bar_style, text_position, fontsize);
 
 
     D_save_command(G_recreate_command());
