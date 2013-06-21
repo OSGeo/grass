@@ -1233,7 +1233,7 @@ def basename(path, ext=None):
         name = fs[0]
     return name
 
-def find_program(pgm, args = []):
+def find_program(pgm, *args):
     """!Attempt to run a program, with optional arguments.
     You must call the program in a way that will return a successful
     exit code. For GRASS modules this means you need to pass it some
@@ -1243,9 +1243,9 @@ def find_program(pgm, args = []):
     Example:
 
     @code
-    >>> grass.find_program('r.sun', ['help'])
+    >>> grass.find_program('r.sun', 'help')
     True
-    >>> grass.find_program('gdalwarp', ['--version'])
+    >>> grass.find_program('gdalwarp', '--version')
     True
     @endcode
 
@@ -1258,11 +1258,8 @@ def find_program(pgm, args = []):
     """
     nuldev = file(os.devnull, 'w+')
     try:
-        ret = call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
-        if ret == 0:
-            found = True
-        else:
-            found = False
+        call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
+        found = True
     except:
         found = False
     nuldev.close()

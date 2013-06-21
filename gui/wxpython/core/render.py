@@ -451,7 +451,7 @@ class Map(object):
         """!Return region projection and map units information
         """
         projinfo = dict()
-        if not grass.find_program('g.proj', ['--help']):
+        if not grass.find_program('g.proj', '--help'):
             sys.exit(_("GRASS module '%s' not found. Unable to start map "
                        "display window.") % 'g.proj')
         
