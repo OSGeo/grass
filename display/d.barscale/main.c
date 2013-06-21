@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     barstyle->key = "style";
     barstyle->description = _("Type of barscale to draw");
     barstyle->options =
-	"classic,line,solid,hollow,full_checker,part_checker,mixed_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
+	"classic,line,solid,hollow,full_checker,part_checker,mixed_checker,tail_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
     barstyle->answer = "classic";
 
     coords = G_define_option();
@@ -143,6 +143,9 @@ int main(int argc, char **argv)
 	break;
     case 'm':
 	bar_style = STYLE_MIXED_CHECKER;
+	break;
+    case 't':
+	bar_style = STYLE_TAIL_CHECKER;
 	break;
     case 'l':
 	bar_style = STYLE_THIN_WITH_ENDS;
