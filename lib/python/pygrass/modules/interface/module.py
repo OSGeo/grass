@@ -246,7 +246,7 @@ class Module(object):
              for line in izip_longest(*[iter(self.params_list)] * 3)]),)
         params = '\n'.join([par.__doc__ for par in self.params_list])
         flags = self.flags.__doc__
-        return '\n'.join([head, params, DOC['flag_head'], flags])
+        return '\n'.join([head, params, DOC['flag_head'], flags, DOC['foot']])
 
     def get_dict(self):
         dic = {}
