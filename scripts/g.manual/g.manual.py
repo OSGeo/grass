@@ -47,20 +47,25 @@ from grass.script import core as grass
 
 def start_browser(entry):
     if browser != 'xdg-open' and not grass.find_program(browser):
-        grass.fatal(_("Browser <%s> not found") % browser)
+        grass.fatal(_("Browser '%s' not found") % browser)
     
     path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
     if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
         path = os.path.join(os.getenv('GRASS_ADDON_BASE'), 'docs', 'html', entry + '.html')
     
     if not os.path.exists(path):
-        grass.fatal(_("No HTML manual page entry for <%s>") % entry)
-    
-    grass.verbose(_("Starting browser <%s> for module %s...") % (browser_name, entry))
-    
-    os.execlp(browser, browser_name, "file://%s" % (path))
-    grass.fatal(_("Error starting browser <%s> for HTML file <%s>") % (browser, entry))
-    
+        grass.fatal(_("No HTML manual page entry for '%s'") % entry)
+
+    grass.verbose(_("Starting browser '%(browser)s' for manual"
+                    " entry '%(entry)s'...")
+                  % dict(browser=browser_name, entry=entry))
+
+    try:
+        os.execlp(browser, browser_name, "file://%s" % (path))
+    except OSError:
+        grass.fatal(_("Error starting browser '%(browser)s' for HTML file"
+                      " '%(path)s'") % dict(browser=browser, path=path))
+
 def start_man(entry):
     path = os.path.join(gisbase, 'docs', 'man', 'man1', entry + '.1')
     if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
@@ -69,8 +74,8 @@ def start_man(entry):
     for ext in ['', '.gz', '.bz2']:
 	if os.path.exists(path + ext):
 	    os.execlp('man', 'man', path + ext)
-	    grass.fatal(_("Error starting 'man' for <%s>") % path)
-    grass.fatal(_("No manual page entry for <%s>") % entry)
+	    grass.fatal(_("Error starting 'man' for '%s'") % path)
+    grass.fatal(_("No manual page entry for '%s'") % entry)
 
 def main():
     global gisbase, browser, browser_name
