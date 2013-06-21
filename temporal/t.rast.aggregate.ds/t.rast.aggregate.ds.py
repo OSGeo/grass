@@ -32,12 +32,11 @@
 #% description: Type of the aggregation space time dataset, default is strds
 #%end
 
-#%option
-#% key: output
-#% type: string
-#% description: Name of the output space time raster dataset
-#% required: yes
-#% multiple: no
+#%option G_OPT_STRDS_OUTPUT
+#%end
+
+#%option G_OPT_R_BASE
+#% gisprompt:
 #%end
 
 #%option
@@ -51,10 +50,6 @@
 #%end
 
 #%option G_OPT_T_SAMPLE
-#%end
-
-#%option G_OPT_R_BASE
-#% gisprompt:
 #%end
 
 #%flag
