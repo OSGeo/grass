@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     fsize->key = "fontsize";
     fsize->type = TYPE_DOUBLE;
     fsize->required = NO;
-    fsize->answer = "14";
+    fsize->answer = "12";
     fsize->options = "1-360";
     fsize->description = _("Font size");
     fsize->guisection = "Text";

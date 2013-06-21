@@ -255,12 +255,12 @@ int draw_scale(double east, double north, int style, int text_posn,
 	D_cont_rel(-line_len + 1, 0);
 	D_cont_rel(0, 4);
 	D_end();
+	D_close();
 	D_stroke();
 
-	D_pos_rel(0, 1);
 	for (i = 1; i <= scales[incr].seg; i += 2) {
 	    /* width is seg_len and height is 5 */
-	    D_box_rel(seg_len, -5);
+	    D_box_rel(seg_len, -4);
 	    D_pos_rel(seg_len * 2, 0);
 	}
     }
@@ -391,7 +391,7 @@ int draw_scale(double east, double north, int style, int text_posn,
 	D_move_abs(x_pos + 25, y_pos + 15);
 
 	for (i = 1; i <= scales[incr].seg; i++) {
-	    if (i <= (scales[incr].seg == 5 ? 2 : 4)) {
+	    if (i <= (scales[incr].seg == 5 ? 2 : 6)) {
 		if (i % 2 == 0) {
 		    xarr[0] = 0;	yarr[0] = 0;
 		    xarr[1] = seg_len;	yarr[1] = 0;
