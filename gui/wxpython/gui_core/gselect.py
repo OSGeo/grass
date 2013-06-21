@@ -1803,7 +1803,7 @@ class GdalSelect(wx.Panel):
                                 driver = 'pg').splitlines()
                 if db is not None:
                     win.SetItems(sorted(db))
-                elif grass.find_program('psql'):
+                elif grass.find_program('psql', ['--help']):
                     if not win.GetItems():
                         p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
                         ret = p.communicate()[0]
