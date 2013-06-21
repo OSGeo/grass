@@ -185,6 +185,7 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    case STYLE_PART_CHECKER:
 	    case STYLE_FULL_CHECKER:
 	    case STYLE_MIXED_CHECKER:
+	    case STYLE_TAIL_CHECKER:
 	    case STYLE_SOLID_BAR:
 	    case STYLE_HOLLOW_BAR:
 	    case STYLE_TICKS_BOTH:
@@ -421,6 +422,55 @@ int draw_scale(double east, double north, int style, int text_posn,
 		D_pos_rel(seg_len, -6);
 	    }
 	}
+    }
+    else if (style == STYLE_TAIL_CHECKER) {
+	/* first draw outside box */
+	D_begin();
+	D_move_abs(x_pos + 25, y_pos + 15 + 6);
+	D_cont_rel(line_len, 0);
+	D_cont_rel(0, -12);
+	D_cont_rel(-line_len, 0);
+	D_cont_rel(0, +12);
+	D_close();
+	D_end();  /* no-op? */
+	D_stroke();
+
+	D_pos_rel(0, -6);
+	for (i = 1; i <= (scales[incr].seg == 5 ? 3 : 5); i++) {
+	    /* width is seg_len and height is 6 */
+	    xarr[0] = 0;	yarr[0] = 0;
+	    xarr[1] = seg_len;  yarr[1] = 0;
+	    xarr[2] = 0;	yarr[2] = (i % 2 ? -6 : 6);
+	    xarr[3] = -seg_len; yarr[3] = 0;
+	    xarr[4] = 0;	yarr[4] = (i % 2 ? 6 : -6);
+	    D_polygon_rel(xarr, yarr, 5);
+	    D_pos_rel(seg_len, 0);
+	}
+	/* draw a vertical cross line */
+	D_begin();
+	D_move_rel(0, 6);
+	D_cont_rel(0, -12);
+	D_close();
+	D_end();  /* no-op? */
+	D_stroke();
+
+	D_pos_rel(0, 6);
+	xarr[0] = 0;
+	yarr[0] = 0;
+	xarr[1] = line_len/2.;
+	if (scales[incr].seg == 5)
+	    xarr[1] -= seg_len/2.;
+	yarr[1] = 0;
+	xarr[2] = 0;
+	yarr[2] = 6;
+	xarr[3] = -line_len/2.;
+	if (scales[incr].seg == 5)
+	    xarr[3] += seg_len/2.;
+	yarr[3] = 0;
+	xarr[4] = 0;
+	yarr[4] = -6;
+	D_polygon_rel(xarr, yarr, 5);
+	D_pos_rel(seg_len, 0);
     }
     else if (style == STYLE_TICKS_BOTH) {
 	/* draw simple line scale with corssing ticks */
