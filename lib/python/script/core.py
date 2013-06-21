@@ -1258,7 +1258,7 @@ def find_program(pgm, *args):
     """
     nuldev = file(os.devnull, 'w+')
     try:
-        call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
+        call([pgm] + list(args), stdin = nuldev, stdout = nuldev, stderr = nuldev)
         found = True
     except:
         found = False
