@@ -117,7 +117,7 @@ int main(int argc, char **argv)
     n_arrow->key = "north_arrow";
     n_arrow->description = _("Only used when drawing a north arrow only");
     n_arrow->label = _("North arrow style");
-    n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8";
+    n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9";
     n_arrow->answer = "1a";
 
 
