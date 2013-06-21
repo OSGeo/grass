@@ -419,6 +419,51 @@ int draw_scale(double east, double north, int style, int text_posn,
 	    D_pos_rel(seg_len, 0);
 	}
     }
+
+    else if (style == STYLE_PART_CHECKER) {
+	D_begin();
+	D_move_abs(x_pos + 25, y_pos + 15 + 6);
+	/* actual width is line_len-1+1=line_len and height is 7+1=8 */
+	D_cont_rel(line_len, 0);
+	D_cont_rel(0, -12);
+	D_cont_rel(-line_len, 0);
+	D_cont_rel(0, +12);
+	D_close();
+	D_end();  /* no-op? */
+	D_stroke();
+
+	D_pos_rel(0, -6);
+	for (i = 1; i <= scales[incr].seg; i++) {
+	    if (i <= (scales[incr].seg == 5 ? 2 : 4)) {
+		xarr[0] = 0;		yarr[0] = 0;
+		xarr[1] = seg_len/2.;	yarr[1] = 0;
+		xarr[2] = 0;		yarr[2] = -6;
+		xarr[3] = -seg_len/2.;	yarr[3] = 0;
+		xarr[4] = 0;		yarr[4] = 6;
+		D_polygon_rel(xarr, yarr, 5);
+		D_pos_rel(seg_len/2., 0);
+
+		xarr[0] = 0;		yarr[0] = 0;
+		xarr[1] = seg_len/2.;	yarr[1] = 0;
+		xarr[2] = 0;		yarr[2] = 6;
+		xarr[3] = -seg_len/2.;	yarr[3] = 0;
+		xarr[4] = 0;		yarr[4] = -6;
+		D_polygon_rel(xarr, yarr, 5);
+		D_pos_rel(seg_len/2., 0);
+	    }
+	    else {
+		xarr[0] = 0;	    yarr[0] = 0;
+		xarr[1] = seg_len;  yarr[1] = 0;
+		xarr[2] = 0;	    yarr[2] = (i % 2 ? -6 : 6);
+		xarr[3] = -seg_len; yarr[3] = 0;
+		xarr[4] = 0;	    yarr[4] = (i % 2 ? 6 : -6);
+		/* width is seg_len and height is 4 */
+		D_polygon_rel(xarr, yarr, 5);
+		D_pos_rel(seg_len, 0);
+	    }
+
+	}
+    }
     else if (style == STYLE_TICKS_BOTH) {
 	/* draw simple line scale with corssing ticks */
 	D_move_abs(x_pos + 25, y_pos + 5);
