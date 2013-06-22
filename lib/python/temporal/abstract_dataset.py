@@ -11,15 +11,6 @@ Usage:
 
 >>> import grass.temporal as tgis
 >>> ad = AbstractDataset()
->>> ad.reset(ident="soil@PERMANENT")
-Traceback (most recent call last):
-  File "/usr/lib/python2.7/doctest.py", line 1289, in __run
-    compileflags, 1) in test.globs
-  File "<doctest __main__[2]>", line 1, in <module>
-    ad.reset(ident="soil@PERMANENT")
-  File "AbstractDataset.py", line 53, in reset
-    raise ImplementationError("This method must be implemented in the subclasses")
-ImplementationError: 'This method must be implemented in the subclasses'
 
 @endcode
 
@@ -32,6 +23,7 @@ for details.
 """
 import uuid
 import copy
+from abc import ABCMeta, abstractmethod
 from temporal_extent import *
 from spatial_extent import *
 from metadata import *
@@ -53,6 +45,9 @@ class ImplementationError(Exception):
 class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetConnector):
     """!This is the base class for all datasets 
        (raster, vector, raster3d, strds, stvds, str3ds)"""
+    
+    __metaclass__ = ABCMeta
+    
     def __init__(self):
         SpatialTopologyDatasetConnector.__init__(self)
         TemporalTopologyDatasetConnector.__init__(self)
@@ -140,13 +135,26 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         if self.is_spatial_topology_build():
             self.print_spatial_topology_shell_info()
             
+    @abstractmethod
     def reset(self, ident):
         """!Reset the internal structure and set the identifier
-
+        
+            This method creates the dataset specific internal objects
+            that store the base information, the spatial and temporal extent
+            and the metadata. It must be implemented in the dataset
+            specific subclasses. This is the code for the 
+            vector dataset:
+            
+            self.base = VectorBase(ident=ident)
+            self.absolute_time = VectorAbsoluteTime(ident=ident)
+            self.relative_time = VectorRelativeTime(ident=ident)
+            self.spatial_extent = VectorSpatialExtent(ident=ident)
+            self.metadata = VectorMetadata(ident=ident)
+        
            @param ident The identifier of the dataset that  "name@mapset" or in case of vector maps "name:layer@mapset"
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
 
+    @abstractmethod
     def get_type(self):
         """!Return the type of this class as string
            
@@ -154,24 +162,24 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            
            @return "vect", "rast", "rast3d", "stvds", "strds" or "str3ds"
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
 
+    @abstractmethod
     def get_new_instance(self, ident):
         """!Return a new instance with the type of this class
 
            @param ident The identifier of the new dataset instance
            @return A new instance with the type of this object
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
 
+    @abstractmethod
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents overlap
         
            @param dataset The abstract dataset to check spatial overlapping
            @return True if self and the provided dataset spatial overlap
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
 
+    @abstractmethod
     def spatial_intersection(self, dataset):
         """!Return the spatial intersection as spatial_extent 
            object or None in case no intersection was found.
@@ -179,8 +187,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            @param dataset The abstract dataset to intersect with
            @return The intersection spatial extent
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
 
+    @abstractmethod
     def spatial_union(self, dataset):
         """!Return the spatial union as spatial_extent 
            object or None in case the extents does not overlap or meet.
@@ -188,16 +196,16 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            @param dataset The abstract dataset to create a union with
            @return The union spatial extent
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
     
+    @abstractmethod
     def spatial_disjoint_union(self, dataset):
         """!Return the spatial union as spatial_extent object.
        
            @param dataset The abstract dataset to create a union with
            @return The union spatial extent
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
     
+    @abstractmethod
     def spatial_relation(self, dataset):
         """!Return the spatial relationship between self and dataset
         
@@ -205,21 +213,20 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            @return The spatial relationship as string
         """
 
-        raise ImplementationError("This method must be implemented in the subclasses")
-
+    @abstractmethod
     def print_info(self):
         """!Print information about this class in human readable style"""
-        raise ImplementationError("This method must be implemented in the subclasses")
 
+    @abstractmethod
     def print_shell_info(self):
         """!Print information about this class in shell style"""
-        raise ImplementationError("This method must be implemented in the subclasses")
 
+    @abstractmethod
     def print_self(self):
         """!Print the content of the internal structure to stdout"""
-        raise ImplementationError("This method must be implemented in the subclasses")
 
     def set_id(self, ident):
+        """!Set the identifier of the dataset"""
         self.base.set_id(ident)
         self.temporal_extent.set_id(ident)
         self.spatial_extent.set_id(ident)
@@ -455,14 +462,6 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         if connected:
             dbif.close()
         return statement
-
-    def set_time_to_absolute(self):
-        """!Set the temporal type to absolute"""
-        self.base.set_ttype("absolute")
-
-    def set_time_to_relative(self):
-        """!Set the temporal type to relative"""
-        self.base.set_ttype("relative")
 
     def is_time_absolute(self):
         """!Return True in case the temporal type is absolute
