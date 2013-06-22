@@ -46,9 +46,6 @@ import os
 from grass.script import core as grass
 
 def start_browser(entry):
-    if browser != 'xdg-open' and not grass.find_program(browser):
-        grass.fatal(_("Browser '%s' not found") % browser)
-    
     path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
     if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
         path = os.path.join(os.getenv('GRASS_ADDON_BASE'), 'docs', 'html', entry + '.html')
