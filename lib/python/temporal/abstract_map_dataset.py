@@ -5,11 +5,6 @@
 
 Temporal GIS related functions to be used in temporal GIS Python library package.
 
-Usage:
-
->>> import grass.temporal as tgis
->>> amd = tgis.AbstractMapDataset()
-
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -41,9 +36,13 @@ class AbstractMapDataset(AbstractDataset):
         - Abstract methods that must be implemented in the map specific
           subclasses
     """
+    
+    __metaclass__ = ABCMeta
+    
     def __init__(self):
         AbstractDataset.__init__(self)
 
+    @abstractmethod
     def get_new_stds_instance(self, ident):
         """!Return a new space time dataset instance that store maps with the
            type of this map object (rast, rast3d or vect)
@@ -51,9 +50,8 @@ class AbstractMapDataset(AbstractDataset):
            @param ident The identifier of the space time dataset
            @return The new space time dataset instance
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def get_stds_register(self):
         """!Return the space time dataset register table name
 
@@ -63,9 +61,8 @@ class AbstractMapDataset(AbstractDataset):
 
             @return The name of the stds register table
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def set_stds_register(self, name):
         """!Set the space time dataset register table name.
 
@@ -74,8 +71,6 @@ class AbstractMapDataset(AbstractDataset):
 
            @param name The name of the register table
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
     def check_resolution_with_current_region(self):
         """!Check if the raster or voxel resolution is
@@ -94,48 +89,42 @@ class AbstractMapDataset(AbstractDataset):
         raise ImplementationError(
             "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def has_grass_timestamp(self):
         """!Check if a grass file based time stamp exists for this map.
             @return True is the grass file based time stamped exists for this
                     map
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata
            in the grass file system based spatial database.
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def remove_timestamp_from_grass(self):
         """!Remove the timestamp from the grass file
            system based spatial database
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def map_exists(self):
         """!Return True in case the map exists in the grass spatial database
 
            @return True if map exists, False otherwise
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def read_info(self):
         """!Read the map info from the grass file system based database and
            store the content into a dictionary
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def load(self):
         """!Load the content of this object from the grass
            file system based database"""
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
     def _convert_timestamp(self):
         """!Convert the valid time into a grass datetime library
@@ -211,6 +200,14 @@ class AbstractMapDataset(AbstractDataset):
         """
         return self.base.get_layer()
 
+
+    def print_self(self):
+        """!Print the content of the internal structure to stdout"""
+        self.base.print_self()
+        self.temporal_extent.print_self()
+        self.spatial_extent.print_self()
+        self.metadata.print_self()
+        
     def print_info(self):
         """!Print information about this object in human readable style"""
 
@@ -324,6 +321,14 @@ class AbstractMapDataset(AbstractDataset):
         self.write_timestamp_to_grass()
         return AbstractDataset.update_all(self, dbif, execute)
 
+    def set_time_to_absolute(self):
+        """!Set the temporal type to absolute"""
+        self.base.set_ttype("absolute")
+
+    def set_time_to_relative(self):
+        """!Set the temporal type to relative"""
+        self.base.set_ttype("relative")
+        
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
         """!Set the absolute time with start time and end time
 

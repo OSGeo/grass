@@ -32,19 +32,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
        database, like the computation of the temporal and spatial extent as
        well as the collecting of metadata.
     """
+    
+    __metaclass__ = ABCMeta
+    
     def __init__(self, ident):
         AbstractDataset.__init__(self)
         self.reset(ident)
         self.map_counter = 0
-
-    def get_new_map_instance(self, ident=None):
-        """!Return a new instance of a map which is associated
-           with the type of this object
-
-           @param ident The unique identifier of the new object
-        """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
     def create_map_register_name(self):
         """!Create the name of the map register table of this space time
@@ -62,13 +56,21 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 self.base.get_mapset() + "_" + \
                 self.get_new_map_instance(None).get_type() + "_register"
 
+    @abstractmethod
+    def get_new_map_instance(self, ident=None):
+        """!Return a new instance of a map which is associated
+           with the type of this object
+
+           @param ident The unique identifier of the new object
+        """
+        
+    @abstractmethod
     def get_map_register(self):
         """!Return the name of the map register table
            @return The map register table name
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
+    @abstractmethod
     def set_map_register(self, name):
         """!Set the name of the map register table
 
@@ -80,8 +82,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            @param name The name of the register table
         """
-        raise ImplementationError(
-            "This method must be implemented in the subclasses")
 
     def print_self(self):
         """!Print the content of the internal structure to stdout"""
@@ -124,7 +124,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """!Set the initial values of the space time dataset
 
             In addition the command creation string is generated
-            an inerted into the metadata object.
+            an inserted into the metadata object.
 
             This method only modifies this object and does not commit
             the modifications to the temporal database.
@@ -140,9 +140,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if temporal_type == "absolute":
-            self.set_time_to_absolute()
+            self.base.set_ttype("absolute")
         elif temporal_type == "relative":
-            self.set_time_to_relative()
+            self.base.set_ttype("relative")
         else:
             core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
@@ -262,9 +262,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             core.fatal(_("Wrong granularity: \"%s\"") % str(granularity))
 
         if temporal_type == "absolute":
-            self.set_time_to_absolute()
+            self.base.set_ttype("absolute")
         elif temporal_type == "relative":
-            self.set_time_to_relative()
+            self.base.set_ttype("relative")
         else:
             core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
