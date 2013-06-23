@@ -56,13 +56,13 @@ int NetA_distance_from_points(dglGraph_s *graph, struct ilist *from,
     for (i = 0; i < from->n_values; i++) {
 	int v = from->value[i];
 
-	if (dst[v] == -2)
+	if (dst[v] == 0)
 	    continue;		/*ingore duplicates */
-	dst[v] = -2;		/* make sure all from nodes are processed first */
+	dst[v] = 0;		/* make sure all from nodes are processed first */
 	dglHeapData_u heap_data;
 
 	heap_data.ul = v;
-	dglHeapInsertMin(&heap, -2, ' ', heap_data);
+	dglHeapInsertMin(&heap, 0, ' ', heap_data);
     }
     while (1) {
 	dglInt32_t v, dist;
@@ -81,18 +81,6 @@ int NetA_distance_from_points(dglGraph_s *graph, struct ilist *from,
 	dglEdgeset_T_Initialize(&et, graph,
 				dglNodeGet_OutEdgeset(graph,
 						      dglGetNode(graph, v)));
-
-	if (dglGet_NodeAttrSize(graph) > 0) {
-	    dglInt32_t ncost;
-	    
-	    memcpy(&ncost, dglNodeGet_Attr(graph, dglGetNode(graph, v)),
-		   sizeof(ncost));
-	    /* do not route paths through closed nodes */
-	    if (ncost < 0 && dist >= 0)
-		continue;
-
-	    dist += ncost;
-	}
 
 	for (edge = dglEdgeset_T_First(&et); edge;
 	     edge = dglEdgeset_T_Next(&et)) {
@@ -161,16 +149,6 @@ int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
 	if (vertex == to)
 	    break;
 	dglInt32_t *edge, *node = dglGetNode(graph, vertex);
-
-
-	if (dglGet_NodeAttrSize(graph) > 0) {
-	    dglInt32_t ncost;
-	    
-	    memcpy(&ncost, dglNodeGet_Attr(graph, node), sizeof(ncost));
-	    /* do not route paths through closed nodes */
-	    if (ncost < 0 && vertex != from)
-		continue;
-	}
 
 	dglEdgeset_T_Initialize(&et, graph,
 				dglNodeGet_OutEdgeset(graph, node));
