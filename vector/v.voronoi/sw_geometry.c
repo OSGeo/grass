@@ -117,6 +117,17 @@ int right_of(struct Halfedge *el, struct Point *p)
 	return (0);
 
     if (e->a == 1.0) {
+	double xl = e->c - e->b * p->y;
+	t1 = p->x - xl;
+	t2 = p->y - topsite->coord.y;
+	t3 = xl - topsite->coord.x;
+	above = t1 * t1 > t2 * t2 + t3 * t3;
+#if 0
+	if (e->b < 0.0)
+	    above = !above;
+#endif
+
+#if 0
 	dyp = p->y - topsite->coord.y;
 	dxp = p->x - topsite->coord.x;
 	fast = 0;
@@ -138,6 +149,7 @@ int right_of(struct Halfedge *el, struct Point *p)
 	    if (e->b < 0.0)
 		above = !above;
 	}
+#endif
     }
     else {			/*e->b==1.0 */
 	yl = e->c - e->a * p->x;

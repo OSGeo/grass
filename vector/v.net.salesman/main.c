@@ -231,21 +231,20 @@ int main(int argc, char **argv)
 	    continue;
 
 	Vect_read_line(&Map, Points, Cats, i);
-	node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
-	if (!node) {
-	    G_warning(_("Point is not connected to the network"));
-	    continue;
-	}
 	if (!(Vect_cat_get(Cats, tfield, &cat)))
 	    continue;
 	if (Vect_cat_in_cat_list(cat, Clist)) {
-	    tsp_list_append(TList, node);
+	    node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+	    if (!node) {
+		G_warning(_("Point is not connected to the network"));
+	    }
+	    else
+		tsp_list_append(TList, node);
 	}
-	
     }
 
     ncities = TList->n_values;
-    G_message(_("Number of cities: [%d]"), ncities);
+    G_message(_("Number of cities: %d"), ncities);
     if (ncities < 2)
 	G_fatal_error(_("Not enough cities (< 2)"));
 
