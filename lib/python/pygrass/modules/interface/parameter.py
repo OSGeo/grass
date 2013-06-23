@@ -26,7 +26,6 @@ class Parameter(object):
         if diz['type'] in GETTYPE:
             self.type = GETTYPE[diz['type']]
             self.typedesc = diz['type']
-            self._type = GETTYPE[diz['type']]
         else:
             raise TypeError('New type: %s, ignored' % diz['type'])
 
@@ -46,10 +45,10 @@ class Parameter(object):
                     self.values = range(int(range_min), int(range_max) + 1)
                     self.isrange = diz['values'][0]
                 else:
-                    self.values = [self._type(i) for i in diz['values']]
+                    self.values = [self.type(i) for i in diz['values']]
                     self.isrange = False
             except TypeError:
-                self.values = [self._type(i) for i in diz['values']]
+                self.values = [self.type(i) for i in diz['values']]
                 self.isrange = False
 
         #
@@ -57,10 +56,10 @@ class Parameter(object):
         #
         if 'default' in diz:
             if self.multiple or self.keydescvalues:
-                self.default = [self._type(v)
+                self.default = [self.type(v)
                                 for v in diz['default'].split(',')]
             else:
-                self.default = self._type(diz['default'])
+                self.default = self.type(diz['default'])
             self._value = self.default
         else:
             self.default = None
@@ -83,15 +82,22 @@ class Parameter(object):
         if isinstance(value, list) or isinstance(value, tuple):
             if self.multiple or self.keydescvalues:
                 # check each value
-                self._value = [self._type(val) for val in value]
+                self._value = [self.type(val) for val in value]
             else:
                 str_err = 'The Parameter <%s> does not accept multiple inputs'
                 raise TypeError(str_err % self.name)
         elif self.typedesc == 'all':
             self._value = value
-        elif isinstance(value, self._type):
+        elif isinstance(value, self.type):
             if hasattr(self, 'values'):
-                if value in self.values:
+                if self.type is float:
+                    if self.values[0] <= value <= self.values[-1]:
+                        self._value = value
+                    else:
+                        err_str = 'The Parameter <%s>, must be: %g<=value<=%g'
+                        raise ValueError(err_str % (self.name, self.values[0],
+                                                    self.values[-1]))
+                elif value in self.values:
                     self._value = value
                 else:
                     raise ValueError('The Parameter <%s>, must be one of: %r' %
