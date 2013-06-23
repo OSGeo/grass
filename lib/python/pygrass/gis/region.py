@@ -9,6 +9,7 @@ import grass.lib.gis as libgis
 import grass.script as grass
 
 from grass.pygrass.errors import GrassError
+from grass.pygrass.shell.conversion import dict2html
 
 
 class Region(object):
@@ -168,7 +169,7 @@ class Region(object):
     @property
     def zone(self):
         """Return the zone of projection
-        
+
         >>> reg = Region()
         >>> reg.zone
         0
@@ -178,18 +179,27 @@ class Region(object):
     @property
     def proj(self):
         """Return a code for projection
-        
+
         >>> reg = Region()
         >>> reg.proj
         99
-        """        
+        """
         return self.c_region.contents.proj
+
+    @property
+    def cells(self):
+        """Return the number of cells"""
+        return self.rows * self.cols
 
     #----------MAGIC METHODS----------
     def __repr__(self):
         return 'Region(n=%g, s=%g, e=%g, w=%g, nsres=%g, ewres=%g)' % (
                self.north, self.south, self.east, self.west,
                self.nsres, self.ewres)
+
+    def _repr_html_(self):
+        return dict2html(dict(self.items()), keys=self.keys(),
+                         border='1', kdec='b')
 
     def __unicode__(self):
         return grass.pipe_command("g.region", flags="p").communicate()[0]
@@ -205,21 +215,13 @@ class Region(object):
                 return False
         return True
 
-    def iteritems(self):
-        return [('projection', self.proj),
-                ('zone', self.zone),
-                ('north', self.north),
-                ('south', self.south),
-                ('west', self.west),
-                ('east', self.east),
-                ('top', self.top),
-                ('bottom', self.bottom),
-                ('nsres', self.nsres),
-                ('ewres', self.ewres),
-                ('tbres', self.tbres),
-                ('rows', self.rows),
-                ('cols', self.cols),
-                ('cells', self.rows * self.cols)]
+    def keys(self):
+        return ['proj', 'zone', 'north', 'south', 'west', 'east',
+                'top', 'bottom', 'nsres', 'ewres', 'tbres', 'rows',
+                'cols', 'cells']
+
+    def items(self):
+        return [(k, self.__getattribute__(k)) for k in self.keys()]
 
     #----------METHODS----------
     def zoom(self, raster_name):
