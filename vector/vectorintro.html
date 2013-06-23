@@ -58,10 +58,10 @@ components in a single vector map are related. For example in a
 non-topological GIS if two areas shared a common border that border
 would be digitized two times and also stored in duplicate. In a
 topological GIS this border exists once and is shared between two
-areas.  Topological represenation of vector data helps to produce and
+areas.  Topological representation of vector data helps to produce and
 maintain vector maps with clean geometry as well as enables certain
 analyses that can not be conducted with non-topological or spaghetti
-data. In GRASS topological data are refered to as level 2 data and
+data. In GRASS, topological data are refered to as level 2 data and
 spaghetti data is referred to as level 1.
 <p>
 Sometimes topology is not necessary and the additional memory and
@@ -81,18 +81,18 @@ approximation and topographic analysis from a point or isoline file.
 <li> line: a directed sequence of connected vertices with two endpoints called nodes; </li>
 <li> boundary: the border line to describe an area; </li>
 <li> centroid: a point within a closed ring of boundaries; </li>
-<li> area: the topological composition of a closed ring of boundaries and optionally a centroid; </li>
+<li> area: the topological composition of a closed ring of boundaries and a centroid; </li>
 <li> face: a 3D area; </li>
 <li> kernel: a 3D centroid in a volume (not yet implemented); </li>
 <li> volume: a 3D corpus, the topological composition of faces and kernel (not yet implemented). </li>
 </ul>
 <p>
-Note that all lines and boundaries can be polylines (with vertices in between).
+Lines and boundaries can be composed of multiple vertices.
 <p>
 Area topology also holds information about isles. These isles are located
 within that area, not touching the boundaries of the outer area. Isles
-consist of one or more areas and are used internally to maintain correct
-topology for areas.
+are holes inside the area, can consist of one or more areas and are used 
+internally to maintain correct topology for areas.
 
 <p>
 The <a href="v.type.html">v.type</a> module can be used to convert
@@ -111,14 +111,14 @@ Adjacent polygons can be found by <a href="v.to.db.html">v.to.db</a>
 <p>
 Many operations including extraction, queries, overlay, and export will
 only act on features which have been assigned a category number. Typically
-a centroid will hold the attribute data for the area between it and its
-boundaries. Boundaries are not typically given a category ID as it would be
+a centroid will hold the attribute data for the area with which the centroid is 
+associated. Boundaries are not typically given a category ID as it would be
 ambiguous as to which area either side of it the attribute data would belong
 to. An exception might be when the boundary between two crop-fields is the
 center-line of a road, and the category information is an index to the road
 name. For everyday use boundaries and centroids can be treated as internal
-data types and the user can work directly and more simply with the "area"
-meta-feature type.
+data types and the user can work directly and more simply with the "area" 
+type.
 
 
 <h3>Vector object categories and attribute management</h3>
@@ -224,7 +224,7 @@ To bulk process attributes, it is recommended to use SQL
 <h3>Geometry operations</h3>
 
 The module <a href="v.in.region.html">v.in.region</a> saves the
-current region boundary into a vector area.
+current region extents as a vector area.
 
 Split vector lines can be changes to polylines by
 <a href="v.build.polylines.html">v.build.polylines</a>. Long lines can be
