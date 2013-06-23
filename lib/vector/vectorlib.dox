@@ -32,7 +32,7 @@ besides the coordinates describing the location of the primitives
 (points, lines, boundaries, centroids, faces, kernels, and volumes),
 their spatial relations are also stored. In general, topological GIS
 requires a data structure where the common boundary between two
-adjacent areas is stored as a single line, simplifying the vector data
+adjacent areas is stored as a single boundary, simplifying vector data
 maintenance.
 
 
@@ -75,19 +75,24 @@ The current implementation includes:
 
 GRASS vector maps are stored in an <em>arc-node</em> representation,
 consisting of curves called arcs. An arc is stored as a series of
-x,y,z coordinate pairs. The two endpoints of an arc are called
-<em>nodes</em>. Two consecutive x,y,z pairs define an arc segment. The
-user specifies the type of input to GRASS; GRASS doesn't decide. GRASS
+x,y,z coordinate pairs. Two consecutive x,y,z pairs define an arc segment. 
+<em>Nodes</em> are created automatically for the two endpoints of an arc. 
+The user specifies the type of input to GRASS; GRASS doesn't decide. GRASS
 supports feature type definition which allows for multiple types to
-co-exist in the same map. A centroid is assigned to the area it is
-within/inside (geometrically). An area is defined by one or more 
-boundaries that form a losed ring. The category to which an area belongs 
+co-exist in the same map. An area is defined by one or more 
+boundaries that form a closed ring. A centroid is assigned to the area it is
+within/inside (geometrically). The category to which an area belongs 
 is stored with the centroid. Such centroids are stored in the same binary
-'coor' file with other primitives. Each element may have none, one or
-more categories (cats). More cats can be distinguished by field number
-(field, called "layer" at user level).  Single and multi-category
-support on modules level are implemented. The z coordinate is optional 
-and both 2D and 3D files may be written.
+'coor' file with other primitives. Areas without centroids are from a 
+user's perspective holes within another area, therefore not presented to 
+a user as a real area, the equivalent of a polygon in Simple Feature Access.
+Each vector object may have none, one or more categories (cats). More 
+categories can be distinguished by field number (field, called "layer" 
+at user level). A vector object can also have multiple categories in the 
+same layer, an example would be buffers where a single area might belong 
+to multiple buffers of multiple buffered features. Single and 
+multi-category support on module level is implemented. The z coordinate 
+is optional and both 2D and 3D files may be written.
 
 The following <em>vector feature types (primitives)</em> are defined
 by the vector library (and holds by the coor file; see also \ref

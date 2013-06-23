@@ -36,6 +36,7 @@ struct dist
 static void RTreeInitNodeBranchM(struct RTree_Branch *b, struct RTree *t)
 {
     RTreeInitRect(&(b->rect), t);
+    memset(&(b->child), 0, sizeof(union RTree_Child));
     b->child.ptr = NULL;
 }
 
@@ -43,6 +44,7 @@ static void RTreeInitNodeBranchM(struct RTree_Branch *b, struct RTree *t)
 static void RTreeInitNodeBranchF(struct RTree_Branch *b, struct RTree *t)
 {
     RTreeInitRect(&(b->rect), t);
+    memset(&(b->child), 0, sizeof(union RTree_Child));
     b->child.pos = -1;
 }
 
@@ -50,6 +52,7 @@ static void RTreeInitNodeBranchF(struct RTree_Branch *b, struct RTree *t)
 static void RTreeInitLeafBranch(struct RTree_Branch *b, struct RTree *t)
 {
     RTreeInitRect(&(b->rect), t);
+    memset(&(b->child), 0, sizeof(union RTree_Child));
     b->child.id = 0;
 }
 
