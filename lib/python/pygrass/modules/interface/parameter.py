@@ -70,7 +70,7 @@ class Parameter(object):
         # gisprompt
         #
         if 'gisprompt' in diz:
-            self.type = diz['gisprompt']['prompt']
+            self.typedesc = diz['gisprompt']['prompt']
             self.input = False if diz['gisprompt']['age'] == 'new' else True
         else:
             self.input = True

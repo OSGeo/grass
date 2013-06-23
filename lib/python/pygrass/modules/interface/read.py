@@ -42,6 +42,7 @@ GETTYPE = {
     'integer': int,
     'float': float,
     'double': float,
+    'file': str,
     'all': lambda x: x,
 }
 
