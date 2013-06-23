@@ -204,3 +204,15 @@ def get_raster_for_points(poi_vector, raster, column=None):
     else:
         poi.attrs.commit()
         return True
+
+
+def r_export(rast, output='', fmt='png', **kargs):
+    from grass.pygrass.modules import Module
+    if rast.exist():
+        output = output if output else "%s_%s.%s" % (rast.name, rast.mapset,
+                                                     fmt)
+        Module('r.out.%s' % fmt, input=rast.fullname(), output=output,
+               overwrite=True, **kargs)
+        return output
+    else:
+        raise ValueError('Raster map does not exist.')
