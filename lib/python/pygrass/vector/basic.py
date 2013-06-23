@@ -8,6 +8,8 @@ import ctypes
 import grass.lib.vector as libvect
 from collections import Iterable
 
+from grass.pygrass.shell.conversion import dict2html
+
 
 class Bbox(object):
     """Instantiate a Bounding Box class that contains
@@ -109,6 +111,13 @@ class Bbox(object):
         return "Bbox({n}, {s}, {e}, {w})".format(n=self.north, s=self.south,
                                                  e=self.east, w=self.west)
 
+    def _repr_html_(self):
+        return dict2html(dict(self.items()), keys=self.keys(),
+                         border='1', kdec='b')
+
+    def keys(self):
+        return ['north', 'south', 'west', 'east', 'top', 'bottom']
+
     def contains(self, point):
         """Return True if the object is contained by the BoundingBox. ::
 
@@ -125,17 +134,15 @@ class Bbox(object):
                                               self.c_bbox))
 
     def items(self):
-        return [('north', self.north), ('south', self.south),
-                ('east', self.east), ('west', self.west),
-                ('top', self.top), ('bottom', self.bottom)]
+        return [(k, self.__getattribute__(k)) for k in self.keys()]
 
-    def nsewtb(self, is3d=False):
+    def nsewtb(self, tb=True):
         """Return a list
 
-        If is3d parameter is False return only:
+        If tb parameter is False return only:
         north, south, east, west
         """
-        if is3d:
+        if tb:
             return (self.north, self.south, self.east, self.west,
                     self.top, self.bottom)
         else:
