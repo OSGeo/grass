@@ -19,6 +19,8 @@ import grass.lib.raster as libraster
 from grass.pygrass import functions
 from grass.pygrass.gis.region import Region
 from grass.pygrass.errors import must_be_open
+from grass.pygrass.shell.conversion import dict2html
+from grass.pygrass.shell.show import raw_figure
 
 #
 # import raster classes
@@ -142,6 +144,17 @@ class Info(object):
                            tbres=self.tbres, zone=self.zone,
                            proj=self.proj, min=self.min, max=self.max)
 
+    def keys(self):
+        return ['name', 'mapset', 'rows', 'cols', 'north', 'south',
+                'east', 'west', 'top', 'bottom', 'nsres', 'ewres', 'tbres',
+                'zone', 'proj', 'min', 'max']
+
+    def items(self):
+        return [(k, self.__getattribute__(k)) for k in self.keys()]
+
+    def _repr_html_(self):
+        return dict2html(dict(self.items()), keys=self.keys(),
+                         border='1', kdec='b')
 
 
 class RasterAbstractBase(object):
@@ -249,7 +262,6 @@ class RasterAbstractBase(object):
 
     name = property(fget=_get_name, fset=_set_name)
 
-
     @must_be_open
     def _get_cats_title(self):
         return self.cats.title
@@ -293,15 +305,18 @@ class RasterAbstractBase(object):
         """Return a constructor of the class"""
         return (self.__getitem__(irow) for irow in xrange(self._rows))
 
+    def _repr_png_(self):
+        return raw_figure(functions.r_export(self))
+
     def exist(self):
         """Return True if the map already exist, and
-           set the mapset if were not set.
+        set the mapset if were not set.
 
-           call the C function `G_find_raster`.
+        call the C function `G_find_raster`. ::
 
-           >>> ele = RasterAbstractBase('elevation')
-           >>> ele.exist()
-           True
+            >>> ele = RasterAbstractBase('elevation')
+            >>> ele.exist()
+            True
         """
         if self.name:
             if self.mapset == '':
@@ -313,11 +328,11 @@ class RasterAbstractBase(object):
             return False
 
     def is_open(self):
-        """Return True if the map is open False otherwise
+        """Return True if the map is open False otherwise. ::
 
-           >>> ele = RasterAbstractBase('elevation')
-           >>> ele.is_open()
-           False
+            >>> ele = RasterAbstractBase('elevation')
+            >>> ele.is_open()
+            False
 
         """
         return True if self._fd is not None and self._fd >= 0 else False
@@ -342,11 +357,11 @@ class RasterAbstractBase(object):
         return "{name}@{mapset}".format(name=self.name, mapset=self.mapset)
 
     def name_mapset(self, name=None, mapset=None):
-        """Return the full name of the Raster
+        """Return the full name of the Raster. ::
 
-           >>> ele = RasterAbstractBase('elevation')
-           >>> ele.name_mapset()
-           'elevation@PERMANENT'
+            >>> ele = RasterAbstractBase('elevation')
+            >>> ele.name_mapset()
+            'elevation@PERMANENT'
 
         """
         if name is None:
