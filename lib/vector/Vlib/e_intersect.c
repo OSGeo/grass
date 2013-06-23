@@ -745,6 +745,31 @@ int segment_intersection_2d(double ax1, double ay1, double ax2, double ay2,
 	return 0;
     }
 
+    /* swap endpoints if needed */
+    /* if segments are vertical, we swap x-coords with y-coords */
+    vertical = 0;
+    if (ax1 > ax2) {
+	SWAP(ax1, ax2);
+	SWAP(ay1, ay2);
+    }
+    else if (ax1 == ax2) {
+	vertical = 1;
+	if (ay1 > ay2)
+	    SWAP(ay1, ay2);
+	SWAP(ax1, ay1);
+	SWAP(ax2, ay2);
+    }
+    if (bx1 > bx2) {
+	SWAP(bx1, bx2);
+	SWAP(by1, by2);
+    }
+    else if (bx1 == bx2) {
+	if (by1 > by2)
+	    SWAP(by1, by2);
+	SWAP(bx1, by1);
+	SWAP(bx2, by2);
+    }
+
     d = D;
     if (d != 0) {
 	G_debug(DLEVEL, "    general position");
@@ -804,31 +829,6 @@ int segment_intersection_2d(double ax1, double ay1, double ax2, double ay2,
     }
 
     /* segments are colinear. check for overlap */
-
-    /* swap endpoints if needed */
-    /* if segments are vertical, we swap x-coords with y-coords */
-    vertical = 0;
-    if (ax1 > ax2) {
-	SWAP(ax1, ax2);
-	SWAP(ay1, ay2);
-    }
-    else if (ax1 == ax2) {
-	vertical = 1;
-	if (ay1 > ay2)
-	    SWAP(ay1, ay2);
-	SWAP(ax1, ay1);
-	SWAP(ax2, ay2);
-    }
-    if (bx1 > bx2) {
-	SWAP(bx1, bx2);
-	SWAP(by1, by2);
-    }
-    else if (bx1 == bx2) {
-	if (by1 > by2)
-	    SWAP(by1, by2);
-	SWAP(bx1, by1);
-	SWAP(bx2, by2);
-    }
 
     G_debug(DLEVEL, "    collinear segments");
 

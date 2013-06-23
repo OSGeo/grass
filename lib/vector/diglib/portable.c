@@ -192,15 +192,13 @@ int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile * fp, size_t port_of
 		if (off_t_order == ENDIAN_LITTLE) {
 		    if (c1[port_off_t_size - 1] & 0x80)
 			memset(c2, 0xff, sizeof(off_t));
+		    memcpy(c2, c1, port_off_t_size);
 		}
 		else {
 		    if (c1[0] & 0x80)
 			memset(c2, 0xff, sizeof(off_t));
-		}
-		if (off_t_order == ENDIAN_LITTLE)
-		    memcpy(c2, c1, port_off_t_size);
-		else
 		    memcpy(c2 + nat_off_t - port_off_t_size, c1, port_off_t_size);
+		}
 		c1 += port_off_t_size;
 		c2 += sizeof(off_t);
 	    }
@@ -287,15 +285,13 @@ int dig__fread_port_L(long *buf, size_t cnt, struct gvfile * fp)
 		if (lng_order == ENDIAN_LITTLE) {
 		    if (c1[PORT_LONG - 1] & 0x80)
 			memset(c2, 0xff, sizeof(long));
+		    memcpy(c2, c1, PORT_LONG);
 		}
 		else {
 		    if (c1[0] & 0x80)
 			memset(c2, 0xff, sizeof(long));
-		}
-		if (lng_order == ENDIAN_LITTLE)
-		    memcpy(c2, c1, PORT_LONG);
-		else
 		    memcpy(c2 + nat_lng - PORT_LONG, c1, PORT_LONG);
+		}
 		c1 += PORT_LONG;
 		c2 += sizeof(long);
 	    }
@@ -372,15 +368,13 @@ int dig__fread_port_I(int *buf, size_t cnt, struct gvfile * fp)
 		if (int_order == ENDIAN_LITTLE) {
 		    if (c1[PORT_INT - 1] & 0x80)
 			memset(c2, 0xff, sizeof(int));
+		    memcpy(c2, c1, PORT_INT);
 		}
 		else {
 		    if (c1[0] & 0x80)
 			memset(c2, 0xff, sizeof(int));
-		}
-		if (int_order == ENDIAN_LITTLE)
-		    memcpy(c2, c1, PORT_INT);
-		else
 		    memcpy(c2 + nat_int - PORT_INT, c1, PORT_INT);
+		}
 		c1 += PORT_INT;
 		c2 += sizeof(int);
 	    }
@@ -457,15 +451,13 @@ int dig__fread_port_S(short *buf, size_t cnt, struct gvfile * fp)
 		if (shrt_order == ENDIAN_LITTLE) {
 		    if (c1[PORT_SHORT - 1] & 0x80)
 			memset(c2, 0xff, sizeof(short));
+		    memcpy(c2, c1, PORT_SHORT);
 		}
 		else {
 		    if (c1[0] & 0x80)
 			memset(c2, 0xff, sizeof(short));
-		}
-		if (shrt_order == ENDIAN_LITTLE)
-		    memcpy(c2, c1, PORT_SHORT);
-		else
 		    memcpy(c2 + nat_shrt - PORT_SHORT, c1, PORT_SHORT);
+		}
 		c1 += PORT_SHORT;
 		c2 += sizeof(short);
 	    }
