@@ -222,8 +222,8 @@ struct seg_intersections *find_all_intersections(const struct line_pnts *Points)
     int looped;
     /* double EPSILON = 0.00000001; */
     double EPSILON = GRASS_EPSILON;
-    double *x, *y, az1, az2, bz1, bz2;
-    double x1, y1, z1, x2, y2, z2;
+    double *x, *y;
+    double x1, y1, x2, y2;
     int res;
 
     /*int res2
@@ -237,7 +237,6 @@ struct seg_intersections *find_all_intersections(const struct line_pnts *Points)
     np = Points->n_points;
     x = Points->x;
     y = Points->y;
-    az1 = az2 = bz1 = bz2 = 0;
 
     si = create_si_struct(np - 1);
 
@@ -253,16 +252,6 @@ struct seg_intersections *find_all_intersections(const struct line_pnts *Points)
 		segment_intersection_2d(x[i], y[i], x[i + 1], y[i + 1], x[j],
 					y[j], x[j + 1], y[j + 1], &x1, &y1,
 					&x2, &y2);
-
-	    /*
-	    res =
-		Vect_segment_intersection(x[i], y[i], az1,
-		                          x[i + 1], y[i + 1], az2,
-					  x[j], y[j], bz1,
-					  x[j + 1], y[j + 1], bz2, 
-					  &x1, &y1, &z1, &x2, &y2, &z2, 0);
-	    */
-
 
 	    /*            res2 = segment_intersection_2d_e(x[i], y[i], x[i+1], y[i+1], x[j], y[j], x[j+1], y[j+1], &x1_, &y1_, &x2_, &y2_);
 	       if ((res != res2) || ((res != 0) && (x1!=x1_ || y1!=y1_)) ) {
