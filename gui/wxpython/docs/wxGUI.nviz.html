@@ -69,12 +69,12 @@ has several tabs:
 <h3>View</h3>
 
 You can use this panel to set the <em>position, direction, and
-  perspective</em> of the view. The position box shows a puck with a
-  direction line pointing to the center. The direction line indicates
-  the look direction (azimuth). You click and drag the puck to change
-  the current eye position. Another way to change eye position is
-  to press the buttons around the position box representing cardinal
-  and ordinal directions. 
+perspective</em> of the view. The position box shows a puck with a
+direction line pointing to the center. The direction line indicates
+the look direction (azimuth). You click and drag the puck to change
+the current eye position. Another way to change eye position is
+to press the buttons around the position box representing cardinal
+and ordinal directions. 
   
 <p>
 There are four other buttons for view control in the bottom of this panel
@@ -101,20 +101,21 @@ example, if the easting and northing are in meters and the elevation
 in feet, a vertical exaggeration of 0.305 would produce a true
 (unexaggerated) surface.
 <p>
-View parameters can be controlled by sliders or edited directly in text box.
-It's possible to enter values which are out of slider's range (and it will 
-adjust then).
+View parameters can be controlled by sliders or edited directly in the
+text boxes. It is possible to enter values which are out of slider's range
+(and it will then adjust to the new range).
 
 <h4>Fly-through mode</h4>
-View can be changed in fly-through mode (can be activated in Map Display toolbar),
-which enables to change the view smoothly and therefore it is suitable
-for creating animation (see below). To start flying, press left mouse button
-and hold it down to continue flying. Flight direction is controlled by mouse cursor
-position on screen. Flight speed can be increased/decreased stepwise by keys
-PageUp/PageDown, Home/End or Up/Down arrows.
-Speed is increased multiple times while Shift key is held down. Holding down
-Ctrl key switches flight mode in the way that position of viewpoint is
-changed (not the direction).
+
+View can be changed in fly-through mode (can be activated in Map Display
+toolbar), which enables to change the view smoothly and therefore it is
+suitable for creating animation (see below). To start flying, press left
+mouse button and hold it down to continue flying. Flight direction is
+controlled by mouse cursor position on screen. Flight speed can be
+increased/decreased stepwise by keys PageUp/PageDown, Home/End or Up/Down
+arrows. Speed is increased multiple times while Shift key is held down.
+Holding down Ctrl key switches flight mode in the way that position of
+viewpoint is changed (not the direction).
 
 <h3>Data properties</h3> 
 This tab controls the parameters related to map layers. It consists
@@ -123,10 +124,10 @@ of four collapsible panels - <em>Surface</em>, <em>Constant surface</em>,
 
 <h4>Surface</h4>
 
-Each active raster map layer from the current layer tree is displayed
-as surface in the 3D space. This panel controls how loaded surfaces are drawn.
-To change parameters of a surface, it must be selected in the very top part of the
-panel.
+Each active raster map layer from the current layer tree is displayed as
+surface in the 3D space. This panel controls how loaded surfaces are
+drawn. To change parameters of a surface, it must be selected in the very
+top part of the panel.
 <p>
 The top half of the panel has drawing style options.
 Surface can be drawn as a wire mesh or using filled polygons (most
@@ -153,12 +154,13 @@ draws the surfaces with flat shading with one color for every two
 cells. The surface appears faceted.
 
 <p>
-To set given draw settings for all loaded surfaces press button "Set to all".
+To set given draw settings for all loaded surfaces press button "Set to
+all".
 
 <p>
-The bottom half of the panel has options to set, unset or modify attributes
-of the current surface. Separate raster data or constants can be
-used for various attributes of the surface:
+The bottom half of the panel has options to set, unset or modify
+attributes of the current surface. Separate raster data or constants can
+be used for various attributes of the surface:
 <ul>
   <li><b>color</b> - raster map or constant color to drape over the current
     surface. This option is useful for draping imagery such as aerial
@@ -241,12 +243,12 @@ Thematic mapping can be used to determine marker color and size
 <h4>Volume</h4>
 
 Volumes (3D raster maps) can be displayed either as isosurfaces or slices.
-Similarly to surface panel you can define draw <b>shading</b>
-- <em>gouraud</em> (draws the volumes with a smooth shading to blend
-individual cell colors together) and <em>flat</em> (draws the volumes
-with flat shading with one color for every two cells. The volume
-appears faceted). As mentioned above currently are supported two
-visualization modes:
+Similarly to surface panel you can define draw <b>shading</b> -
+<em>gouraud</em> (draws the volumes with a smooth shading to blend
+individual cell colors together) and <em>flat</em> (draws the volumes with
+flat shading with one color for every two cells. The volume appears
+faceted). As mentioned above currently are supported two visualization
+modes:
 
 <ul>
   <li><b>isosurface</b> - the levels of values for drawing the
@@ -255,11 +257,11 @@ visualization modes:
   as cross-sections.</li>
 </ul>
 <p>
-The middle part of the panel has controls to add, delete, move up/down selected 
-isosurface or slice. The bottom part differs for isosurface and slice. 
-When choosing isosurface, this part the of panel has options to set, unset
-or modify attributes of the current isosurface. 
-Various attributes of the isosurface can be defined, similarly to surface
+The middle part of the panel has controls to add, delete, move up/down
+selected  isosurface or slice. The bottom part differs for isosurface and
+slice.  When choosing an isosurface, this part the of panel has options to
+set, unset or modify attributes of the current isosurface.  Various
+attributes of the isosurface can be defined, similarly to surface
 attributes:
 
 <ul>
@@ -292,19 +294,19 @@ Volumes can be moved the same way like surfaces do.
 <em>Analysis</em> tab contains <em>Cutting planes</em> panel.
 
 <h4>Cutting planes</h4>
+
 Cutting planes allow to cut surfaces along a plane. You can switch 
 between six planes; to disable cutting planes switch to <em>None</em>.
-Initially the plane is vertical, you can change it to horizontal by setting
-<em>tilt</em> 90 degrees. The <em>X</em> and <em>Y</em> values specify
-the rotation center of plane. You can see better what <em>X</em> and <em>Y</em>
-do when changing <em>rotation</em>. 
-<em>Height</em> parameter has sense only when changing 
-<em>tilt</em> too. Press button <em>Reset</em> to reset current cutting plane.
+Initially the plane is vertical, you can change it to horizontal by
+setting <em>tilt</em> 90 degrees. The <em>X</em> and <em>Y</em> values
+specify the rotation center of plane. You can see better what <em>X</em>
+and <em>Y</em> do when changing <em>rotation</em>.  The <em>Height</em>
+parameter applies only when changing <em>tilt</em> concurrently. 
+Press the <em>Reset</em> button to reset the current cutting plane.
 <p>
 In case of multiple surfaces you can visualize the cutting plane by
 <em>Shading</em>. Shading is visible only when more than one surface
 is loaded and these surfaces must have the same fine resolution set.
-
 
 
 <h3>Appearance</h3>
@@ -325,21 +327,22 @@ light model is displayed to visualize the light settings.
   <br><img src="wxGUI_nviz_tools_light.jpg" border="1" alt="toolbox"><br><br>
 </center>
 <p>
-The <em>Fringe</em> panel allows you to draw fringes in different directions
-(North &amp; East, South &amp; East, South &amp; West, North &amp; West).
-It is possible to set the fringe color and height of the bottom edge.
+The <em>Fringe</em> panel allows you to draw fringes in different
+directions (North &amp; East, South &amp; East, South &amp; West, North
+&amp; West). It is possible to set the fringe color and height of the
+bottom edge.
 <p>
 The <em>Decorations</em> panel enables to display north arrow and simple
 scale bar. North arrow and scale bar length is determined in map units. 
 You can display more than one scale bar.
 
 <h3>Animation</h3>
-Animation panel enables to create a simple animation as a sequence of images.
-Press 'Record' button and start changing the view. Views are
-recorded in given interval (FPS - Frames Per Second). After recording,
-the animation can be replayed. To save the animation, fill in the
-directory and file prefix, choose image format (PPM or TIF) and then
-press 'Save'. Now wait until the last image is generated.
+Animation panel enables to create a simple animation as a sequence of
+images. Press 'Record' button and start changing the view. Views are
+recorded in given interval (FPS - Frames Per Second). After recording, the
+animation can be replayed. To save the animation, fill in the directory
+and file prefix, choose image format (PPM or TIF) and then press 'Save'.
+Now wait until the last image is generated.
 
 It is recommended to record animations using fly-through mode to achieve
 smooth motion.
@@ -352,7 +355,7 @@ parameters, or to set the background color of the Map Display Window
 (the default color is white).
 
 
-<h2>To be implement</h2>
+<h2>To be implemented</h2>
 
 <ul>
   <li>Labels, decoration, etc. (Implemented, but not fully functional)</li>
@@ -367,14 +370,15 @@ wxNviz is under active development and
 distributed as &quot;Experimental Prototype&quot;.
 
 <p>
-Please note that with wxGTK port of wxPython (Linux systems),
-a problem might appear during wxNviz initialization (nothing is rendered at all)
-or when rendering vectors (bad order of rendering surfaces and vectors).
-If you encounter such problems, try to change a depth buffer number in
+Please note that with wxGTK port of wxPython (Linux systems), a problem
+might appear during wxNviz initialization (nothing is rendered at all) or
+when rendering vectors (bad order of rendering surfaces and vectors). If
+you encounter such problems, try to change a depth buffer number in
 <i>wxGUI Settings &gt; Preferences &gt; Map Display  &gt; Advanced</i>
-(possible numbers are 0, 16, 24, 32).
-It is currently not possible to automatically determine the right number
-which is working for your computer.
+(possible numbers are 0, 16, 24, 32). It is currently not possible to
+automatically determine the right number which is working for your
+computer.
+
 
 <h2>SEE ALSO</h2>
 
@@ -392,6 +396,7 @@ tutorials</a>).
 
 Command-line module <em><a href="m.nviz.image.html">m.nviz.image</a></em>.
 <br><br>
+
 
 <h2>AUTHORS</h2>
 
