@@ -113,6 +113,9 @@ def make_gradient(path):
         if line.startswith("#"):
             # skip comments
             continue
+        if len(line) == 0:
+            # skip empty lines
+            continue
         records.append(line.split())
     records = [record for record in records if record[0] != 'nv' and record[0] != 'default']
     relative = False
