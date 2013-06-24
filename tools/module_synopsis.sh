@@ -59,7 +59,10 @@ cd "$GISBASE"
 
 
 ### generate menu hierarchy
+
+#### fixme: no longer exists
 MDPY="$GISBASE/etc/wxpython/gui_modules/menudata.py"
+
 # python menudata.py commands
 # python menudata.py tree
 # python menudata.py strings
