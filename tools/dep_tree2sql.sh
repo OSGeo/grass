@@ -2,7 +2,7 @@
 
 ############################################################################
 #
-# MODULE:       sql.sh
+# MODULE:       dep_tree2sql.sh
 # AUTHOR(S):    Glynn Clements
 # PURPOSE:      run "nm" on every object file, library and executable to
 #               find dependencies, stored in PostgreSQL database
@@ -17,7 +17,7 @@
 # From: Glynn Clements <glynn at gclements.plus.com>
 # Date: Mon, 12 Jun 2006 13:00:25 +0100
 #
-# Usage: after having compiled GRASS, run "tools/sql.sh `pwd`" from the
+# Usage: after having compiled GRASS, run "tools/dep_tree2sql.sh `pwd`" from the
 # top of the GRASS source tree.
 #
 # Essentially, the script runs "nm" on every object file, library and
@@ -68,7 +68,7 @@
 # For simple "which files use this function" queries, a database lookup
 # is quicker and more reliable than grep-ing the source tree.
 #
-# Assuming that the sql.sh script runs successfully (some of it is
+# Assuming that the dep_tree2sql.sh script runs successfully (some of it is
 # Linux-specific, other bits are PostgreSQL-specific, but the changes
 # required for a different OS or RDBMS should be quite minor), the
 # easiest way to figure out what is in a given table (apart from looking
@@ -92,7 +92,7 @@ dbname=grass
 if [ -n "$1" ] ; then
 	builddir="$1"
 else
-	echo "Usage: sql.sh <source directory>" >&2
+	echo "Usage: del_tree2sql.sh <source directory>" >&2
 	exit 1
 fi
 
