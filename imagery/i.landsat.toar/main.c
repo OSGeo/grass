@@ -275,32 +275,39 @@ int main(int argc, char *argv[])
         lsat.flag = METADATAFILE;
         lsat_metadata(met, &lsat);
 	if (print_meta->answer) {
+	    char *lsatmeta;
+
 	    if (lsatmet->answer == NULL) {
 		G_fatal_error(_("Please use a metadata keyword with -p"));
 	    }
-	    if (strcmp(lsatmet->answer, "number") == 0) {
-		fprintf(stdout,"%d\n",lsat.number);
-	    }
-	    if (strcmp(lsatmet->answer, "creation") == 0) {
-		fprintf(stdout,"%s\n",lsat.creation);
-	    }
-	    if (strcmp(lsatmet->answer, "date") == 0) {
-		fprintf(stdout,"%s\n",lsat.date);
-	    }
-	    if (strcmp(lsatmet->answer, "sun_elev") == 0) {
-		fprintf(stdout,"%f\n",lsat.sun_elev);
-	    }
-	    if (strcmp(lsatmet->answer, "sunaz") == 0) {
-		fprintf(stdout,"%f\n",lsat.sun_az);
-	    }
-	    if (strcmp(lsatmet->answer, "sensor") == 0) {
-		fprintf(stdout,"%s\n",lsat.sensor);
-	    }
-	    if (strcmp(lsatmet->answer, "bands") == 0) {
-		fprintf(stdout,"%d\n",lsat.bands);
-	    }
-	    if (strcmp(lsatmet->answer, "time") == 0) {
-		fprintf(stdout,"%f\n",lsat.time);
+
+	    for (i = 0; lsatmet->answers[i] != NULL; i++) {
+		lsatmeta = lsatmet->answers[i];
+		
+		if (strcmp(lsatmeta, "number") == 0) {
+		    fprintf(stdout,"number=%d\n",lsat.number);
+		}
+		if (strcmp(lsatmeta, "creation") == 0) {
+		    fprintf(stdout,"creation=%s\n",lsat.creation);
+		}
+		if (strcmp(lsatmeta, "date") == 0) {
+		    fprintf(stdout,"date=%s\n",lsat.date);
+		}
+		if (strcmp(lsatmeta, "sun_elev") == 0) {
+		    fprintf(stdout,"sun_elev=%f\n",lsat.sun_elev);
+		}
+		if (strcmp(lsatmeta, "sunaz") == 0) {
+		    fprintf(stdout,"sunaz=%f\n",lsat.sun_az);
+		}
+		if (strcmp(lsatmeta, "sensor") == 0) {
+		    fprintf(stdout,"sensor=%s\n",lsat.sensor);
+		}
+		if (strcmp(lsatmeta, "bands") == 0) {
+		    fprintf(stdout,"bands=%d\n",lsat.bands);
+		}
+		if (strcmp(lsatmet->answer, "time") == 0) {
+		    fprintf(stdout,"%f\n",lsat.time);
+		}
 	    }
 	    exit(EXIT_SUCCESS);
 	}
