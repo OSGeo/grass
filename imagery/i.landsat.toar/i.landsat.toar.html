@@ -8,15 +8,16 @@ radiance or reflectance with atmospheric correction (DOS method).
 
 <p>
 Usually, to do so the production date, the acquisition date, and the
-solar elevation is needed. Moreover, for Landsat-7 ETM+ it is also
+solar elevation are needed. Moreover, for Landsat-7 ETM+ it is also
 needed the gain (high or low) of the nine respective bands.
 
 <p>
-Optionally (recommended), the data can be read from metadata file (.met or MTL.txt) for all
-Landsat MSS, TM and ETM+. However, if the solar elevation or the
-product creation date are given the values of the metadata file are
-overwriten. This is necessary when the data in the .met file is
-incorrect or not accurate.
+Optionally (recommended), the data can be read from metadata file
+(.met or MTL.txt) for all Landsat MSS, TM, ETM+ and OLI/TIRS. However,
+if the solar elevation is given the value of the metadata file are
+overwritten. This is necessary when the data in the .met file is
+incorrect or not accurate. Also, if acquisition or production dates are
+not found in the metadata file then the command line values are used.
 
 <p>
 <b>Attention</b>: Any null value or smaller than QCALmin in the input
@@ -138,6 +139,7 @@ correct calibration constants, which were changed in the dates:
   <li>Landsat-5 MSS: April 6, 1984 and November 9, 1984</li>
   <li>Landsat-5 TM:  May 4, 2003 and April, 2 2007</li>
   <li>Landsat-7 ETM+: July 1, 2000</li>
+  <li>Landsat-8 OLI/TIRS: launched in 2013</li>
 </ul>
 
 <h2>EXAMPLES</h2>

@@ -5,9 +5,9 @@
 
 #include "landsat.h"
 
-#define PI   3.1415926535897932384626433832795
-#define R2D 57.295779513082320877
-#define D2R  0.017453292519943295769
+#define PI   M_PI
+#define R2D  180. / M_PI
+#define D2R  M_PI / 180.
 
 /****************************************************************************
  * PURPOSE: Calibrated Digital Number to at-satellite Radiance
@@ -22,7 +22,7 @@ double lsat_qcal2rad(double qcal, band_data * band)
  *****************************************************************************/
 double lsat_rad2ref(double rad, band_data * band)
 {
-    return (double)(rad / band->K2);
+    return (double)(rad / band->K1);
 }
 
 /****************************************************************************
@@ -62,10 +62,10 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
     sin_e = (double)(sin(D2R * lsat->sun_elev));
     cos_v = (double)(cos(D2R * (lsat->number < 4 ? 9.2 : 8.2)));
 
-	/** Global irradiance on the sensor.
-		Radiance to reflectance coefficient, only NO thermal bands.
-		K1 and K2 variables are also utilized as thermal constants
-	*/
+    /** Global irradiance on the sensor.
+	Radiance to reflectance coefficient, only NO thermal bands.
+	K1 and K2 variables are also utilized as thermal constants
+    */
     if (lsat->band[i].thermal == 0) {
 	switch (method) {
 	case DOS2:
@@ -129,16 +129,17 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 	    break;
 	}
 	rad_sun = TAUv * (lsat->band[i].esun * sin_e * TAUz + Edown) / pi_d2;
-	G_verbose_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n", TAUv, TAUz,
-			  Edown);
+	if (method > DOS)
+	    G_verbose_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n",
+			      TAUv, TAUz, Edown);
 
-	lsat->band[i].K1 = 0.;
-	lsat->band[i].K2 = rad_sun;
+	lsat->band[i].K1 = rad_sun;
+	lsat->band[i].K2 = 0.;
     }
 
-	/** Digital number to radiance coefficients.
-		Whitout atmospheric calibration for thermal bands.
-	*/
+    /** Digital number to radiance coefficients.
+	Without atmospheric calibration for thermal bands.
+    */
     lsat->band[i].gain = ((lsat->band[i].lmax - lsat->band[i].lmin) /
 			  (lsat->band[i].qcalmax - lsat->band[i].qcalmin));
 
