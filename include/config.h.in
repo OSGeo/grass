@@ -302,6 +302,14 @@ typedef struct _stati64 STRUCT_STAT;
 
 #endif /* MINGW32 LFS */
 
+/* IBM AIX: 
+ * -D_LARGE_FILES should be sufficient,
+ * but on some systems, struct stat64 must be set explicitly */
+#if defined(_AIX) && defined(__GNUC__)
+#define _STRUCT_STAT_
+typedef struct stat64 STRUCT_STAT;
+#endif
+
 #endif	/* HAVE_LARGEFILES */
 
 
