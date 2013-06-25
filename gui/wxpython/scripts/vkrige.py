@@ -85,7 +85,8 @@ class KrigingPanel(wx.Panel):
         self.InputDataColumn = gselect.ColumnSelect(self, id = wx.ID_ANY)
         flexSizer.Add(item = self.InputDataColumn)
         
-        self.InputDataMap.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnInputDataChanged)
+        self.InputDataMap.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnInputMapChanged)
+        self.InputDataColumn.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnInputColumnChanged)
         
         InputBoxSizer.Add(item = flexSizer)
         
@@ -203,17 +204,21 @@ class KrigingPanel(wx.Panel):
         
         event.Skip()
 
-    def OnInputDataChanged(self, event):
-        """ Refreshes list of columns and fills output map name TextCtrl """
+    def OnInputMapChanged(self, event):
+        """ Refreshes list of columns."""
         MapName = event.GetString()
         self.InputDataColumn.InsertColumns(vector = MapName,
                                    layer = 1, excludeKey = True,
                                    type = ['integer', 'double precision'])
-        self.InputDataColumn.SetSelection(0)
-        self.RunButton.Enable(self.InputDataColumn.GetSelection() is not -1)
-        self.RBookgstatPanel.PlotButton.Enable(self.InputDataColumn.GetSelection() is not -1)
+
+    def OnInputColumnChanged(self, event):
+        """Fills output map name TextCtrl """
+        MapName = self.InputDataMap.GetValue()
+        enable = bool(self.InputDataColumn.GetValue())
+        self.RunButton.Enable(enable)
+        self.RBookgstatPanel.PlotButton.Enable(enable)
         
-        if self.InputDataColumn.GetSelection() is not -1:
+        if enable:
             self.OutputMapName.SetValue(MapName.split("@")[0]+"_kriging")
             self.OutputVarianceMapName.SetValue(MapName.split("@")[0]+"_kriging_var")
         else:
@@ -267,9 +272,9 @@ class KrigingPanel(wx.Panel):
     def _switchPage(self, priority):
         """!Manages @c 'output' notebook page according to priority."""
         if priority == 1:
-            self.notebook.HighlightPageByName('output')
+            self.RPackagesBook.HighlightPageByName('output')
         if priority >= 2:
-            self.notebook.SetSelectionByName('output')
+            self.RPackagesBook.SetSelectionByName('output')
         if priority >= 3:
             self.SetFocus()
             self.Raise()
