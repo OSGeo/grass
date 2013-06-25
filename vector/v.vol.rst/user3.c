@@ -47,6 +47,11 @@
 #include "points.h"
 #include <grass/bitmap.h>
 
+/* needed for AIX */
+#ifdef hz
+#undef hz
+#endif
+
 int secpar_loop(int ngstc, int nszc, int i)
 {
     double dnorm1, ro, dx2, dy2, dz2, grad1, grad2, slp, grad, oor1, oor2,

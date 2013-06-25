@@ -33,6 +33,11 @@
 #define	POINT2D_C
 #include <grass/interpf.h>
 
+/* needed for AIX */
+#ifdef hz
+#undef hz
+#endif
+
 int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,	/* current region */
 			  double *b,	/* solution of linear equations */
 			  double *ertot,	/* total error */
