@@ -79,6 +79,8 @@ class VirtualAttributeList(wx.ListCtrl,
         self.fieldCalc = None      
         self.columns = {} # <- LoadData()
         
+        self.sqlFilter = {}
+
         wx.ListCtrl.__init__(self, parent = parent, id = wx.ID_ANY,
                              style = wx.LC_REPORT | wx.LC_HRULES |
                              wx.LC_VRULES | wx.LC_VIRTUAL | wx.LC_SORT_ASCENDING)
@@ -118,10 +120,13 @@ class VirtualAttributeList(wx.ListCtrl,
         self.Bind(wx.EVT_LIST_COL_CLICK,       self.OnColumnSort)     
         self.Bind(wx.EVT_LIST_COL_RIGHT_CLICK, self.OnColumnMenu)     
         
-    def Update(self, mapDBInfo):
+    def Update(self, mapDBInfo = None):
         """!Update list according new mapDBInfo description"""
-        self.mapDBInfo = mapDBInfo
-        self.LoadData(self.layer)
+        if mapDBInfo:
+            self.mapDBInfo = mapDBInfo
+            self.LoadData(self.layer)
+        else:
+            self.LoadData(self.layer, **self.sqlFilter)
 
     def LoadData(self, layer, columns = None, where = None, sql = None):
         """!Load data into list
@@ -187,11 +192,15 @@ class VirtualAttributeList(wx.ListCtrl,
                                   overwrite = True))
             ret = RunCommand('db.select',
                              **cmdParams)
+            self.sqlFilter = {"sql" : sql}
         else:
             cmdParams.update(dict(map = self.mapDBInfo.map,
                                   layer = layer,
                                   where = where,
                                   stdout = outFile))
+            
+            self.sqlFilter = {"where" : where}
+
             if columns:
                 cmdParams.update(dict(columns = ','.join(columns)))
 
@@ -1332,7 +1341,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                                      keyColumn, cat))
                 self.ApplyCommands(self.listOfCommands, self.listOfSQLStatements)
             
-            tlist.Update(self.dbMgrData['mapDBInfo'])
+            tlist.Update()
         
     def OnDataItemAdd(self, event):
         """!Add new record to the attribute table"""
