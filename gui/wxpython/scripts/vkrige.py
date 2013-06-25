@@ -83,7 +83,6 @@ class KrigingPanel(wx.Panel):
         flexSizer.Add(item = wx.StaticText(self, id = wx.ID_ANY, label = _("Numeric column:")),
                       flag = wx.ALIGN_CENTER_VERTICAL)
         self.InputDataColumn = gselect.ColumnSelect(self, id = wx.ID_ANY)
-        self.InputDataColumn.SetSelection(0)
         flexSizer.Add(item = self.InputDataColumn)
         
         self.InputDataMap.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnInputDataChanged)
