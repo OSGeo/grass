@@ -187,7 +187,7 @@ class Controller:
         if isblock is True:
             predictor = 'x+y'
         else:
-            predictor = 1
+            predictor = '1'
         Formula = robjects.Formula(column + "~" + predictor)
         #print Formula
         return Formula
