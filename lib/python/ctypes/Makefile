@@ -80,6 +80,7 @@ default:
 else
 default:
 	@echo "Cannot build Python wrappers for static libraries" >&2
+	exit 1
 endif
 
 $(DSTDIR)/__init__.py: __init__.py | $(DSTDIR)
