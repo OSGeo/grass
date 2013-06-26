@@ -611,8 +611,12 @@ def non_interactive(arg, geofile=None):
                                                                os.F_OK):
                             fatal(_("Failed to create new location. The " \
                                     "location <%s> already exists." % location_name))
-                        sys.path.append(gfile('etc', 'python'))
+
+                        if gfile('etc', 'python') not in sys.path:
+                            sys.path.append(gfile('etc', 'python'))
+
                         from grass.script import core as grass
+
                         try:
                             if geofile and geofile.find('EPSG:') > -1:
                                 epsg = geofile.split(':', 1)[1]

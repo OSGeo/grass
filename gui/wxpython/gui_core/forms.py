@@ -66,7 +66,8 @@ if gisbase is None:
 else:
     wxbase = os.path.join(gisbase, 'etc', 'gui', 'wxpython')
 
-sys.path.append(wxbase)
+if wxbase not in sys.path:
+    sys.path.append(wxbase)
 
 from core import globalvar
 import wx
@@ -480,6 +481,7 @@ class TaskFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnCancel, id=wx.ID_CLOSE)
         accelTableList = [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CLOSE)]
         accelTableList = [(wx.ACCEL_CTRL, ord('Q'), wx.ID_CLOSE)]
+        # TODO: bind Ctrl-t for tile windows here (trac #2004)
 
         if self.get_dcmd is not None: # A callback has been set up
             btn_apply = wx.Button(parent = self.panel, id = wx.ID_APPLY)

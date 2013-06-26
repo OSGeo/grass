@@ -37,7 +37,9 @@ gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unico
 
 import grass.script as grass
 
-sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
+if gui_wx_path not in sys.path:
+    sys.path.append(gui_wx_path)
 
 from dbmgr.manager import AttributeManager
 

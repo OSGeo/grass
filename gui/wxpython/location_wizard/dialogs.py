@@ -24,7 +24,9 @@ import wx
 import wx.lib.scrolledpanel as scrolled
 
 if __name__ == '__main__':
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+    wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
+    if wxbase not in sys.path:
+        sys.path.append(wxbase)
 
 from core                 import globalvar
 from core.gcmd            import RunCommand

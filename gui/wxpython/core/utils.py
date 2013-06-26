@@ -22,7 +22,8 @@ import re
 import inspect
 
 from core.globalvar import ETCDIR
-sys.path.append(os.path.join(ETCDIR, "python"))
+if os.path.join(ETCDIR, "python") not in sys.path:
+    sys.path.append(os.path.join(ETCDIR, "python"))
 
 from grass.script import core as grass
 from grass.script import task as gtask

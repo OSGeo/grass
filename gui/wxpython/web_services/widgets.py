@@ -44,7 +44,9 @@ from gui_core.widgets  import GNotebook
 
 import grass.script as grass
 
-sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms"))
+rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
+if rinwms_path not in sys.path:
+    sys.path.append(rinwms_path)
 
 from wms_base import WMSDriversInfo
 
