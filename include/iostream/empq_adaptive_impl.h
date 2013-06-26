@@ -468,8 +468,8 @@ EMPQueueAdaptive<T,Key>::makeExternal() {
   
   //create an AMI_stream and write in it biggest half elts of im;
   AMI_STREAM<T> *amis0 = new AMI_STREAM<T>();
-  AMI_STREAM<T> *amis1;
-  assert(amis0 && amis1);
+  AMI_STREAM<T> *amis1 = NULL;
+  assert(amis0);
   unsigned long pqsize = im->size();
   //assert(im->size() == im->get_maxsize());
   T x;
@@ -490,6 +490,7 @@ EMPQueueAdaptive<T,Key>::makeExternal() {
   //sort the stream
   baseCmpType<T> fun;
   AMI_sort(amis0, &amis1, &fun); //XXX laura: replaced this to use a cmp obj
+  assert(amis1);
   delete amis0;
   EMPQAD_DEBUG { cout << "sorted the stream\n"; cout.flush(); }
   
