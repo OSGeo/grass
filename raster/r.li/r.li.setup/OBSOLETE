@@ -1,0 +1,3 @@
+The Tcl/Tk and Bourne shell r.li.setup has been replaced
+in GRASS 7 by a wxPython version which can be found
+in gui/wxpython/rlisetup/.
