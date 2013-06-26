@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_ro\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-20 11:39+0200\n"
-"PO-Revision-Date: 2013-06-20 17:16+0200\n"
+"PO-Revision-Date: 2013-06-25 22:09+0200\n"
 "Last-Translator: Andreea Marin <andreea.marin09 yahoo.com>\n"
 "Language-Team: GRASS Translation Team <grass-translations@lists.osgeo.org>\n"
 "Language: ro\n"
@@ -33,8 +33,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/mapdisp.py:84 ../gui/wxpython/core/render.py:434
 #, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
-msgstr ""
-"Modulul GRASS '%s' nu a fost găsit. Nu poate porni fereastra de vizualizare."
+msgstr "Modulul GRASS '%s' nu a fost găsit. Nu poate porni fereastra de vizualizare."
 
 #: ../gui/wxpython/gui_core/gselect.py:314
 msgid "Not selectable element"
@@ -244,7 +243,7 @@ msgstr "Indicator"
 
 #: ../gui/wxpython/gui_core/toolbars.py:42
 msgid "Zoom in"
-msgstr "Zoom in"
+msgstr "Mărește harta"
 
 #: ../gui/wxpython/gui_core/toolbars.py:43
 msgid "Drag or click mouse to zoom"
@@ -252,7 +251,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:45
 msgid "Zoom out"
-msgstr "Zoom out"
+msgstr "Micșorează harta"
 
 #: ../gui/wxpython/gui_core/toolbars.py:46
 msgid "Drag or click mouse to unzoom"
@@ -369,12 +368,8 @@ msgid "Close dialog on finish"
 msgstr "Închide caseta de dialog la final"
 
 #: ../gui/wxpython/gui_core/forms.py:514
-msgid ""
-"Close dialog when command is successfully finished. Change this settings in "
-"Preferences dialog ('Command' tab)."
-msgstr ""
-"Închide caseta de dialog când comanda a fost finalizată cu succes. Schimbă "
-"setările în caseta Preferences ('Command' tab)."
+msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
+msgstr "Închide caseta de dialog când comanda a fost finalizată cu succes. Schimbă setările în caseta Preferences ('Command' tab)."
 
 #: ../gui/wxpython/gui_core/forms.py:685
 #, python-format
@@ -525,12 +520,8 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:384
 #, python-format
-msgid ""
-"Vector map <%s> already exists in the current mapset. Do you want to "
-"overwrite it?"
-msgstr ""
-"Harta vectorială <%s> există deja în mapset-ul curent. Doriți să "
-"suprascrieți?"
+msgid "Vector map <%s> already exists in the current mapset. Do you want to overwrite it?"
+msgstr "Harta vectorială <%s> există deja în mapset-ul curent. Doriți să suprascrieți?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:387
 msgid "Overwrite?"
@@ -559,9 +550,7 @@ msgid "Set size and position"
 msgstr "Setează dimensiune și poziție"
 
 #: ../gui/wxpython/gui_core/dialogs.py:534
-msgid ""
-"Click and drag on the map display to set legend size and position and then "
-"press OK"
+msgid "Click and drag on the map display to set legend size and position and then press OK"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:544
@@ -580,7 +569,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/dialogs.py:596
 #, python-format
 msgid "Legend of raster map <%s>"
-msgstr ""
+msgstr "Legenda hărții raster <%s>"
 
 #: ../gui/wxpython/gui_core/dialogs.py:690
 msgid "Show text object"
@@ -589,7 +578,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/dialogs.py:700
 #: ../gui/wxpython/psmap/dialogs.py:3712
 msgid "Enter text:"
-msgstr ""
+msgstr "Introduceți textul:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:716 ../gui/wxpython/nviz/tools.py:1004
 msgid "Rotation:"
@@ -625,9 +614,7 @@ msgstr "Închide caseta de dialog,  modificările nu sunt aplicate"
 
 #: ../gui/wxpython/gui_core/dialogs.py:882
 msgid "Select the group you want to edit or enter name of new group:"
-msgstr ""
-"Selectează grupul pe care doriți să-l editați sau introduceți un nume pentru "
-"noul grup:"
+msgstr "Selectează grupul pe care doriți să-l editați sau introduceți un nume pentru noul grup:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:893
 msgid "Layers in selected group:"
@@ -698,7 +685,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:1198
 msgid "Map type:"
-msgstr ""
+msgstr "Tipul hărții:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1203
 #: ../gui/wxpython/psmap/dialogs.py:695 ../gui/wxpython/gmodeler/frame.py:1326
@@ -760,11 +747,11 @@ msgstr "Lista %s layere"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1431
 msgid "Layer id"
-msgstr "Layer id"
+msgstr "Strat id"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1432
 msgid "Layer name"
-msgstr "Layer nume"
+msgstr "Strat nume"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1433
 msgid "Name for GRASS map (editable)"
@@ -798,7 +785,7 @@ msgstr "&Import"
 #: ../gui/wxpython/gui_core/dialogs.py:1662
 #: ../gui/wxpython/modules/ogc_services.py:86
 msgid "Import selected layers"
-msgstr ""
+msgstr "Importă straturile selectate"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1489
 #: ../gui/wxpython/modules/extensions.py:102
@@ -809,7 +796,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/dialogs.py:1633 ../gui/wxpython/menustrings.py:152
 #: ../gui/wxpython/lmgr/layertree.py:60
 msgid "Link external vector data"
-msgstr ""
+msgstr "Leagă data vectorială externă"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1635 ../gui/wxpython/menustrings.py:56
 #: ../gui/wxpython/lmgr/layertree.py:58
@@ -819,7 +806,7 @@ msgstr "Import date vectoriale"
 #: ../gui/wxpython/gui_core/dialogs.py:1639 ../gui/wxpython/menustrings.py:150
 #: ../gui/wxpython/lmgr/layertree.py:54
 msgid "Link external raster data"
-msgstr ""
+msgstr "Leagă data raster externă"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1641 ../gui/wxpython/menustrings.py:29
 #: ../gui/wxpython/lmgr/layertree.py:52
@@ -842,7 +829,7 @@ msgstr "&Link"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1655
 msgid "Link selected layers"
-msgstr ""
+msgstr "Leagă straturile selectate"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1657
 #: ../gui/wxpython/gui_core/dialogs.py:1659
@@ -922,32 +909,31 @@ msgstr "Directorul simbolului:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2229
 msgid "Symbol name:"
-msgstr ""
+msgstr "Simbol nume:"
 
 #: ../gui/wxpython/gui_core/preferences.py:58
 msgid "User settings"
-msgstr ""
+msgstr "Setările utilizatorului"
 
 #: ../gui/wxpython/gui_core/preferences.py:78
 msgid "Set to default"
-msgstr ""
+msgstr "Setat la valorile implicite"
 
 #: ../gui/wxpython/gui_core/preferences.py:86
 msgid "Revert settings to default and apply changes"
-msgstr ""
+msgstr "Reveniți la setările implicite și aplicați modificările"
 
 #: ../gui/wxpython/gui_core/preferences.py:88
 #: ../gui/wxpython/wxplot/dialogs.py:376 ../gui/wxpython/wxplot/dialogs.py:763
 #: ../gui/wxpython/gcp/manager.py:2370
 msgid "Apply changes for the current session"
-msgstr ""
+msgstr "Aplicați modificările pentru sesiunea curentă"
 
 #: ../gui/wxpython/gui_core/preferences.py:90
 #: ../gui/wxpython/wxplot/dialogs.py:381 ../gui/wxpython/wxplot/dialogs.py:765
 #: ../gui/wxpython/gcp/manager.py:2372
-msgid ""
-"Apply and save changes to user settings file (default for next sessions)"
-msgstr ""
+msgid "Apply and save changes to user settings file (default for next sessions)"
+msgstr "Aplicați și salvați modificările la setările fpșierului utilizatorului (implicit pentru sesiunea viitoare)"
 
 #: ../gui/wxpython/gui_core/preferences.py:93
 #: ../gui/wxpython/psmap/dialogs.py:354
@@ -955,20 +941,20 @@ msgstr ""
 #: ../gui/wxpython/wxplot/dialogs.py:383 ../gui/wxpython/wxplot/dialogs.py:766
 #: ../gui/wxpython/vdigit/preferences.py:58
 msgid "Close dialog and ignore changes"
-msgstr ""
+msgstr "Închideți caseta de dialog și ignorați modificările"
 
 #: ../gui/wxpython/gui_core/preferences.py:149
 msgid "Settings applied to current session but not saved"
-msgstr ""
+msgstr "Setări aplicate sesiunii curente dar nu salvate"
 
 #: ../gui/wxpython/gui_core/preferences.py:176
 #, python-format
 msgid "Settings saved to file '%s'."
-msgstr ""
+msgstr "Setări salvate în fișierul '%s'."
 
 #: ../gui/wxpython/gui_core/preferences.py:211
 msgid "Key column cannot be empty string."
-msgstr ""
+msgstr "Coloana cheie nu poate fi un șir gol."
 
 #: ../gui/wxpython/gui_core/preferences.py:212
 #: ../gui/wxpython/gui_core/preferences.py:1264
@@ -1052,9 +1038,7 @@ msgid "Save current window layout as default"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:377
-msgid ""
-"Save current position and size of Layer Manager window and opened Map "
-"Display window(s) and use as default for next sessions."
+msgid "Save current position and size of Layer Manager window and opened Map Display window(s) and use as default for next sessions."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:400
@@ -1076,23 +1060,23 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:432
 msgid "Language settings"
-msgstr ""
+msgstr "Setările de limbă"
 
 #: ../gui/wxpython/gui_core/preferences.py:442
 msgid "Choose language (requires to save and GRASS restart):"
-msgstr ""
+msgstr "Alege limba (necesită salvarea și repornirea GRASS):"
 
 #: ../gui/wxpython/gui_core/preferences.py:464
 msgid "Appearance settings"
-msgstr ""
+msgstr "Aspectul setărilor"
 
 #: ../gui/wxpython/gui_core/preferences.py:475
 msgid "Element list:"
-msgstr ""
+msgstr "Lista de elemente:"
 
 #: ../gui/wxpython/gui_core/preferences.py:497
 msgid "Menu style (requires to save and GUI restart):"
-msgstr ""
+msgstr "Stilul meniului (necesită salvarea și repornirea GUI):"
 
 #: ../gui/wxpython/gui_core/preferences.py:521
 msgid "Height of map selection popup window (in pixels):"
@@ -1166,27 +1150,27 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/dialogs.py:392
 #: ../gui/wxpython/gmodeler/dialogs.py:494
 msgid "Command"
-msgstr ""
+msgstr "Comandă"
 
 #: ../gui/wxpython/gui_core/preferences.py:820
 msgid "Command dialog settings"
-msgstr ""
+msgstr "Setările casetei de dialog a comenzii"
 
 #: ../gui/wxpython/gui_core/preferences.py:842
 msgid "Close dialog when command is successfully finished"
-msgstr ""
+msgstr "Închide caseta de dialog cand comanda este finalizată cu succes"
 
 #: ../gui/wxpython/gui_core/preferences.py:863
 msgid "Allow interactive input"
-msgstr ""
+msgstr "Permiteți intrare interactivă"
 
 #: ../gui/wxpython/gui_core/preferences.py:873
 msgid "Verbosity level:"
-msgstr ""
+msgstr "Nivelul de detaliere:"
 
 #: ../gui/wxpython/gui_core/preferences.py:892
 msgid "Raster settings"
-msgstr ""
+msgstr "Setări raster"
 
 #: ../gui/wxpython/gui_core/preferences.py:903
 msgid "Overlay raster maps"
@@ -1198,20 +1182,20 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:940
 msgid "Vector settings"
-msgstr ""
+msgstr "Setări vector"
 
 #: ../gui/wxpython/gui_core/preferences.py:946
 msgid "Display:"
-msgstr ""
+msgstr "Afișare:"
 
 #: ../gui/wxpython/gui_core/preferences.py:969
 #: ../gui/wxpython/vdigit/preferences.py:344
 msgid "Attributes"
-msgstr ""
+msgstr "Atribute"
 
 #: ../gui/wxpython/gui_core/preferences.py:977
 msgid "Highlighting"
-msgstr ""
+msgstr "Evidențierea"
 
 #: ../gui/wxpython/gui_core/preferences.py:983
 #: ../gui/wxpython/psmap/dialogs.py:1776 ../gui/wxpython/psmap/dialogs.py:1879
@@ -1220,11 +1204,11 @@ msgstr ""
 #: ../gui/wxpython/nviz/preferences.py:490
 #: ../gui/wxpython/nviz/preferences.py:544 ../gui/wxpython/gcp/manager.py:2437
 msgid "Color:"
-msgstr ""
+msgstr "Culoare:"
 
 #: ../gui/wxpython/gui_core/preferences.py:993
 msgid "Line width (in pixels):"
-msgstr ""
+msgstr "Lățimea liniei (în pixeli):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1016
 msgid "Data browser"
@@ -1232,112 +1216,112 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1021
 msgid "Left mouse double click:"
-msgstr ""
+msgstr "Dublu clik pe butonul stâng al mouse-ului:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1033
 msgid "Encoding (e.g. utf-8, ascii, iso8859-1, koi8-r):"
-msgstr ""
+msgstr "Codificare (e.g. utf-8, ascii, iso8859-1, koi8-r):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1044
 msgid "Ask when deleting data record(s) from table"
-msgstr ""
+msgstr "Întreabă când ștergeți înregistrări de date din tabelă"
 
 #: ../gui/wxpython/gui_core/preferences.py:1065
 msgid "Create table"
-msgstr ""
+msgstr "Crează tabel"
 
 #: ../gui/wxpython/gui_core/preferences.py:1099
 #: ../gui/wxpython/mapdisp/statusbar.py:681
 msgid "Projection"
-msgstr ""
+msgstr "Proiecție"
 
 #: ../gui/wxpython/gui_core/preferences.py:1106
 msgid "Projection statusbar settings"
-msgstr ""
+msgstr "Setările barei de proiecție"
 
 #: ../gui/wxpython/gui_core/preferences.py:1115
 msgid ""
 "\n"
-"Note: This only controls the coordinates displayed in the lower-left of the "
-"Map Display\n"
-"window's status bar. It is purely cosmetic and does not affect the working "
-"location's\n"
-"projection in any way. You will need to enable the Projection check box in "
-"the drop-down\n"
+"Note: This only controls the coordinates displayed in the lower-left of the Map Display\n"
+"window's status bar. It is purely cosmetic and does not affect the working location's\n"
+"projection in any way. You will need to enable the Projection check box in the drop-down\n"
 "menu located at the bottom of the Map Display window.\n"
 msgstr ""
+"\n"
+"Notă: Aceasta controlează doar coordonatele afișate în colțul stâng al ferestrei de vizualizare\n"
+"Bara ferestrei. Este pur estetică și nu afectează locația de lucru\n"
+"proiecția în nici un fel. Veti avea nevoie să dați posibilitatea de selectare a proiecției în caseta de jos\n"
+"meniu situat în partea de jos a ferestrei de vizualizare.\n"
 
 #: ../gui/wxpython/gui_core/preferences.py:1130
 #: ../gui/wxpython/location_wizard/wizard.py:1269
 msgid "EPSG code:"
-msgstr ""
+msgstr "Codul EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1147
 msgid "Proj.4 string (required):"
-msgstr ""
+msgstr "Șirul Proj.4 (obligatoriu)"
 
 #: ../gui/wxpython/gui_core/preferences.py:1163
 msgid "EPSG file:"
-msgstr ""
+msgstr "Fișier EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1178
-msgid ""
-"Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string "
-"directly."
-msgstr ""
+msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
+msgstr "Încărcați codurile EPSG (fi rabdător), introduceți codul EPSG sau inserați direct șirul Proj.4."
 
 #: ../gui/wxpython/gui_core/preferences.py:1186
 msgid "&Load EPSG codes"
-msgstr ""
+msgstr "&Încarcă codurile EPSG"
 
 #: ../gui/wxpython/gui_core/preferences.py:1197
 msgid "Coordinates format"
-msgstr ""
+msgstr "Formatul coordonatelor"
 
 #: ../gui/wxpython/gui_core/preferences.py:1206
 msgid "LL projections"
-msgstr ""
+msgstr "Proiecțiile LL"
 
 #: ../gui/wxpython/gui_core/preferences.py:1225
 msgid "Precision:"
-msgstr ""
+msgstr "Precizia:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1263
 #, python-format
 msgid "Unable to read EPSG codes: %s"
-msgstr ""
+msgstr "Nu pot fi citite codurile EPSG: %s"
 
 #: ../gui/wxpython/gui_core/preferences.py:1290
 #: ../gui/wxpython/gui_core/preferences.py:1299
 #: ../gui/wxpython/gui_core/preferences.py:1308
 #, python-format
 msgid "EPSG code %s not found"
-msgstr ""
+msgstr "Codul EPSG %s nu este găsit"
 
 #: ../gui/wxpython/gui_core/preferences.py:1316
 msgid "Select default display font"
-msgstr ""
+msgstr "Selectați fontul de afișare prestabilit"
 
 #: ../gui/wxpython/gui_core/preferences.py:1341
 msgid "Select output font"
-msgstr ""
+msgstr "Selectați fontul de ieșire"
 
 #: ../gui/wxpython/gui_core/preferences.py:1419
 msgid "Select font:"
-msgstr ""
+msgstr "Selectați font:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1443
 msgid "Character encoding:"
-msgstr ""
+msgstr "Codarea caracterelor:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1461
 #: ../gui/wxpython/psmap/dialogs.py:291 ../gui/wxpython/psmap/dialogs.py:3554
 msgid "Font size:"
-msgstr ""
+msgstr "Dimensiune font:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1559
 msgid "Manage access to mapsets"
-msgstr ""
+msgstr "Gestionează accesul la mapset"
 
 #: ../gui/wxpython/gui_core/preferences.py:1572
 msgid ""
@@ -1347,10 +1331,15 @@ msgid ""
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
 msgstr ""
+"Vericați un mapset pentru a-l face accesibil, debifați-l pentru a-l ascunde.\n"
+"Note:\n"
+"   - Mapsetul curent este întotdeauna accesibil.\n"
+"   - Puteți scrie numai în mapsetul curent.\n"
+"   - Puteți scrie numai pentru mapseturile pe care le dețineți."
 
 #: ../gui/wxpython/gui_core/preferences.py:1647
 msgid "Owner"
-msgstr ""
+msgstr "Proprietar"
 
 #: ../gui/wxpython/gui_core/goutput.py:234
 msgid "Click here to show search module engine"
@@ -1362,7 +1351,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:253
 msgid "Output window"
-msgstr ""
+msgstr "Fereastra de ieșire"
 
 #: ../gui/wxpython/gui_core/goutput.py:255
 msgid "Command prompt"
@@ -1389,9 +1378,7 @@ msgid "&Log file"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:270
-msgid ""
-"Toggle to save list of executed commands into a file; content saved when "
-"switching off."
+msgid "Toggle to save list of executed commands into a file; content saved when switching off."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:486
@@ -1405,9 +1392,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:524
 #, python-format
-msgid ""
-"Command '%s' not yet implemented in the WxGUI. Try adding it as a command "
-"layer instead."
+msgid "Command '%s' not yet implemented in the WxGUI. Try adding it as a command layer instead."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:571
@@ -1433,12 +1418,12 @@ msgstr ""
 #: ../gui/wxpython/gui_core/goutput.py:664
 #: ../gui/wxpython/gui_core/goutput.py:814
 msgid "Text files"
-msgstr ""
+msgstr "Fișiere text"
 
 #: ../gui/wxpython/gui_core/goutput.py:664
 #: ../gui/wxpython/gui_core/goutput.py:814
 msgid "Files"
-msgstr ""
+msgstr "Fișiere"
 
 #: ../gui/wxpython/gui_core/goutput.py:676
 #, python-format
@@ -1479,11 +1464,10 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/model.py:994 ../gui/wxpython/lmgr/frame.py:752
 #: ../gui/wxpython/lmgr/frame.py:757
 msgid "unknown"
-msgstr ""
+msgstr "necunoscut"
 
 #: ../gui/wxpython/gui_core/goutput.py:864
-msgid ""
-"Please note that the data are left in inconsistent state and may be corrupted"
+msgid "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:866
@@ -1501,19 +1485,19 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/ghelp.py:57 ../gui/wxpython/gui_core/ghelp.py:65
 msgid "description"
-msgstr ""
+msgstr "descriere"
 
 #: ../gui/wxpython/gui_core/ghelp.py:58 ../gui/wxpython/gui_core/ghelp.py:67
 msgid "command"
-msgstr ""
+msgstr "comandă"
 
 #: ../gui/wxpython/gui_core/ghelp.py:59 ../gui/wxpython/gui_core/ghelp.py:66
 msgid "keywords"
-msgstr ""
+msgstr "cuvinte cheie"
 
 #: ../gui/wxpython/gui_core/ghelp.py:62
 msgid "Find module(s)"
-msgstr ""
+msgstr "Găsește modul(e)"
 
 #: ../gui/wxpython/gui_core/ghelp.py:134 ../gui/wxpython/gui_core/ghelp.py:167
 #, python-format
@@ -1640,12 +1624,8 @@ msgstr "Încarca data..."
 
 #: ../gui/wxpython/dbmgr/manager.py:152
 #, python-format
-msgid ""
-"Attribute table <%s> not found. For creating the table switch to 'Manage "
-"layers' tab."
-msgstr ""
-"Atributele tabelului <%s> nu a fost găsit. Pentru crearea tabelului "
-"activează tab-ul 'Gestionare layer'."
+msgid "Attribute table <%s> not found. For creating the table switch to 'Manage layers' tab."
+msgstr "Atributele tabelului <%s> nu a fost găsit. Pentru crearea tabelului activează tab-ul 'Gestionare layer'."
 
 #: ../gui/wxpython/dbmgr/manager.py:163
 #, python-format
@@ -1674,7 +1654,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:298
 msgid "Unknown value"
-msgstr ""
+msgstr "Valoare necunoscută"
 
 #: ../gui/wxpython/dbmgr/manager.py:304
 msgid "Unable to decode value. Set encoding in GUI preferences ('Attributes')."
@@ -1683,31 +1663,30 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/manager.py:313
 #, python-format
 msgid ""
-"Error loading attribute data. Record number: %(rec)d. Unable to convert "
-"value '%(val)s' in key column (%(key)s) to integer.\n"
+"Error loading attribute data. Record number: %(rec)d. Unable to convert value '%(val)s' in key column (%(key)s) to integer.\n"
 "\n"
 "Details: %(detail)s"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:395
 msgid "Sort ascending"
-msgstr ""
+msgstr "Sortare crescătoare"
 
 #: ../gui/wxpython/dbmgr/manager.py:396
 msgid "Sort descending"
-msgstr ""
+msgstr "Sortare descrescătoare"
 
 #: ../gui/wxpython/dbmgr/manager.py:399
 msgid "Calculate (only numeric columns)"
-msgstr ""
+msgstr "Calculează (doar coloanele numerice)"
 
 #: ../gui/wxpython/dbmgr/manager.py:405
 msgid "Area size"
-msgstr ""
+msgstr "Dimensiunea arealului"
 
 #: ../gui/wxpython/dbmgr/manager.py:406
 msgid "Line length"
-msgstr ""
+msgstr "Lungimea liniei"
 
 #: ../gui/wxpython/dbmgr/manager.py:407
 msgid "Compactness of an area"
@@ -1743,9 +1722,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:602
 #, python-format
-msgid ""
-"Database connection for vector map <%s> is not defined in DB file. You can "
-"define new connection in 'Manage layers' tab."
+msgid "Database connection for vector map <%s> is not defined in DB file. You can define new connection in 'Manage layers' tab."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:628
@@ -1812,7 +1789,7 @@ msgstr "Examplu: %s"
 
 #: ../gui/wxpython/dbmgr/manager.py:857 ../gui/wxpython/dbmgr/sqlbuilder.py:87
 msgid "Database connection"
-msgstr ""
+msgstr "Conexiunea bazei de date"
 
 #: ../gui/wxpython/dbmgr/manager.py:869
 #, python-format
@@ -1856,7 +1833,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1027
 msgid "List of layers"
-msgstr ""
+msgstr "Lista straturilor"
 
 #: ../gui/wxpython/dbmgr/manager.py:1127 ../gui/wxpython/core/settings.py:702
 msgid "Edit selected record"
@@ -1868,11 +1845,11 @@ msgstr "Inserează inregistrare nouă"
 
 #: ../gui/wxpython/dbmgr/manager.py:1132
 msgid "Delete selected record(s)"
-msgstr ""
+msgstr "Șterge înregistrarea selectată"
 
 #: ../gui/wxpython/dbmgr/manager.py:1133
 msgid "Delete all records"
-msgstr ""
+msgstr "Șterge toate înregistrările"
 
 #: ../gui/wxpython/dbmgr/manager.py:1142
 msgid "Highlight selected features"
@@ -1895,25 +1872,21 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/dialogs.py:906
 #: ../gui/wxpython/vdigit/dialogs.py:278
 msgid "Reload"
-msgstr ""
+msgstr "Reîncarcă"
 
 #: ../gui/wxpython/dbmgr/manager.py:1188
 #, python-format
-msgid ""
-"Selected data records (%d) will be permanently deleted from table. Do you "
-"want to delete them?"
+msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1191 ../gui/wxpython/dbmgr/manager.py:1237
 #: ../gui/wxpython/gmodeler/dialogs.py:851
 msgid "Delete records"
-msgstr ""
+msgstr "Șterge înregistrările"
 
 #: ../gui/wxpython/dbmgr/manager.py:1234
 #, python-format
-msgid ""
-"All data records (%d) will be permanently deleted from table. Do you want to "
-"delete them?"
+msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1392
@@ -1955,36 +1928,30 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1632
 #, python-format
-msgid ""
-"Unable to rename column <%(column)s> to <%(columnTo)s>. Column already "
-"exists in the table <%(table)s>."
+msgid "Unable to rename column <%(column)s> to <%(columnTo)s>. Column already exists in the table <%(table)s>."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1648
 #, python-format
-msgid ""
-"Unable to rename column. Column <%(column)s> doesn't exist in the table <"
-"%(table)s>."
+msgid "Unable to rename column. Column <%(column)s> doesn't exist in the table <%(table)s>."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1675
 msgid "Drop selected column"
-msgstr ""
+msgstr "Șterge coloana selectată"
 
 #: ../gui/wxpython/dbmgr/manager.py:1678
 msgid "Drop all columns"
-msgstr ""
+msgstr "Șterge toate coloanele"
 
 #: ../gui/wxpython/dbmgr/manager.py:1693
 #, python-format
-msgid ""
-"Selected column '%s' will PERMANENTLY removed from table. Do you want to "
-"drop the column?"
+msgid "Selected column '%s' will PERMANENTLY removed from table. Do you want to drop the column?"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:1696 ../gui/wxpython/dbmgr/manager.py:1733
 msgid "Drop column(s)"
-msgstr ""
+msgstr "Șterge coloana(ele)"
 
 #: ../gui/wxpython/dbmgr/manager.py:1730
 #, python-format
@@ -2022,11 +1989,11 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:2092
 msgid "Nothing to extract."
-msgstr ""
+msgstr "Nimic de extras."
 
 #: ../gui/wxpython/dbmgr/manager.py:2122
 msgid "Nothing to delete."
-msgstr ""
+msgstr "Nimic de șters."
 
 #: ../gui/wxpython/dbmgr/manager.py:2212 ../gui/wxpython/dbmgr/manager.py:2627
 #: ../gui/wxpython/dbmgr/manager.py:3047
@@ -2036,7 +2003,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:2267
 msgid "Column name"
-msgstr ""
+msgstr "Numele coloanei"
 
 #: ../gui/wxpython/dbmgr/manager.py:2267
 #: ../gui/wxpython/gmodeler/frame.py:1314
@@ -2054,7 +2021,7 @@ msgstr "Lungimea datei"
 #: ../gui/wxpython/vdigit/preferences.py:362
 #: ../gui/wxpython/vdigit/preferences.py:364
 msgid "Layer"
-msgstr "Layer"
+msgstr "Strat"
 
 #: ../gui/wxpython/dbmgr/manager.py:2321 ../gui/wxpython/dbmgr/manager.py:2440
 #: ../gui/wxpython/dbmgr/manager.py:2693
@@ -2063,26 +2030,24 @@ msgstr "Driver"
 
 #: ../gui/wxpython/dbmgr/manager.py:2321
 msgid "Key"
-msgstr ""
+msgstr "Cheie"
 
 #: ../gui/wxpython/dbmgr/manager.py:2397
-msgid ""
-"Unknown default DB connection. Please define DB connection using db.connect "
-"module."
+msgid "Unknown default DB connection. Please define DB connection using db.connect module."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:2416
 msgid "Add layer"
-msgstr "Adaugă layer"
+msgstr "Adaugă strat"
 
 #: ../gui/wxpython/dbmgr/manager.py:2426
 msgid "Layer description"
-msgstr "Descriere layer"
+msgstr "Descriere strat"
 
 #: ../gui/wxpython/dbmgr/manager.py:2456 ../gui/wxpython/dbmgr/manager.py:2494
 #: ../gui/wxpython/dbmgr/manager.py:2711
 msgid "Key column"
-msgstr ""
+msgstr "Coloana cheie"
 
 #: ../gui/wxpython/dbmgr/manager.py:2461
 msgid "Insert record for each category into table"
@@ -2090,7 +2055,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:2476
 msgid "You need to add categories by v.category module."
-msgstr ""
+msgstr "Este nevoie să adaugi categorii cu modulul v.category."
 
 #: ../gui/wxpython/dbmgr/manager.py:2481
 msgid "Table description"
@@ -2098,61 +2063,61 @@ msgstr "Descriere tabel"
 
 #: ../gui/wxpython/dbmgr/manager.py:2489
 msgid "Table name"
-msgstr ""
+msgstr "Numele tabelului"
 
 #: ../gui/wxpython/dbmgr/manager.py:2502
 msgid "&Create table"
-msgstr ""
+msgstr "&Crează tabel"
 
 #: ../gui/wxpython/dbmgr/manager.py:2506
 msgid "&Add layer"
-msgstr ""
+msgstr "&Adaugă strat"
 
 #: ../gui/wxpython/dbmgr/manager.py:2510
 msgid "&Set default"
-msgstr ""
+msgstr "&Setează default"
 
 #: ../gui/wxpython/dbmgr/manager.py:2610
 msgid "Remove layer"
-msgstr ""
+msgstr "Elimină strat"
 
 #: ../gui/wxpython/dbmgr/manager.py:2613
 msgid "Layer to remove"
-msgstr ""
+msgstr "Strat pentru eliminare"
 
 #: ../gui/wxpython/dbmgr/manager.py:2634
 msgid "&Remove layer"
-msgstr ""
+msgstr "&Elimină strat"
 
 #: ../gui/wxpython/dbmgr/manager.py:2678
 msgid "Modify layer"
-msgstr ""
+msgstr "Modifică strat"
 
 #: ../gui/wxpython/dbmgr/manager.py:2750
 msgid "&Modify layer"
-msgstr ""
+msgstr "&Modifică strat"
 
 #: ../gui/wxpython/dbmgr/manager.py:2798
 msgid ""
 "Unable to get list of tables.\n"
 "Please use db.connect to set database parameters."
 msgstr ""
+"Nu se poate obține lista tabelelor.\n"
+"Vă rugăm utilizați db.connect pentru a seta parametrii bazei de date."
 
 #: ../gui/wxpython/dbmgr/manager.py:2895
 msgid "Unable to create new table. Table name or key column name is missing."
-msgstr ""
+msgstr "Nu se poate crea un tabel nou. Numele tabelului sau numele coloanei primare lipsește."
 
 #: ../gui/wxpython/dbmgr/manager.py:2901
 #, python-format
 msgid "Unable to create new table. Table <%s> already exists in the database."
-msgstr ""
+msgstr "Nu se poate crea un tabel nou. Tabelul <%s> există deja în baza de date."
 
 #: ../gui/wxpython/dbmgr/manager.py:2938
 #, python-format
-msgid ""
-"Unable to add new layer to vector map <%(vector)s>. Layer %(layer)d already "
-"exists."
-msgstr ""
+msgid "Unable to add new layer to vector map <%(vector)s>. Layer %(layer)d already exists."
+msgstr "Nu se poate adăuga un strat nou la harta vectorială <%(vector)s>.  Stratul %(layer)d există deja."
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:68
 #, python-format
@@ -2165,7 +2130,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:99 ../gui/wxpython/menustrings.py:820
 msgid "Query"
-msgstr ""
+msgstr "Interogare"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:117
 msgid "Set SQL statement to default"
@@ -2173,7 +2138,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:119
 msgid "Verify"
-msgstr ""
+msgstr "Verifică"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:120
 msgid "Verify SQL statement"
@@ -2189,7 +2154,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:173
 msgid "Columns"
-msgstr ""
+msgstr "Coloane"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:183
 msgid "Add on double-click"
@@ -2197,23 +2162,23 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:184
 msgid "columns"
-msgstr ""
+msgstr "coloane"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:184
 msgid "values"
-msgstr ""
+msgstr "valori"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:195
 msgid "Values"
-msgstr ""
+msgstr "Valori"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:204
 msgid "Get all values"
-msgstr ""
+msgstr "Obține toate valorile"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:207
 msgid "Get sample"
-msgstr ""
+msgstr "Obține eșantion"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:227
 msgid "Close dialog on apply"
@@ -2240,13 +2205,12 @@ msgstr ""
 msgid ""
 "No attribute table found.\n"
 "\n"
-"Do you want to create a new attribute table and defined a link to vector map "
-"<%s>?"
+"Do you want to create a new attribute table and defined a link to vector map <%s>?"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/dialogs.py:74
 msgid "Create table?"
-msgstr ""
+msgstr "Creați tabel?"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:94
 msgid "Close dialog on submit"
@@ -2254,245 +2218,241 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/dialogs.py:106
 msgid "No attributes found"
-msgstr ""
+msgstr "Nici un atribut găsit"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:112 ../gui/wxpython/menustrings.py:650
 msgid "Update attributes"
-msgstr ""
+msgstr "Actualizare atribute"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:114
 msgid "Define attributes"
-msgstr ""
+msgstr "Definire atribute"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:116
 msgid "Display attributes"
-msgstr ""
+msgstr "Afișare atribute"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:120
 msgid "&Reload"
-msgstr ""
+msgstr "&Reîncarcă"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:121 ../gui/wxpython/dbmgr/dialogs.py:587
 msgid "&Submit"
-msgstr ""
+msgstr "&Trimite"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:139 ../gui/wxpython/vdigit/dialogs.py:166
 msgid "Feature id:"
-msgstr ""
+msgstr "Trăsătură id:"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:226
 #, python-format
 msgid "Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s."
-msgstr ""
+msgstr "Coloana <%(col)s>: Valoare '%(value)s' trebuie introdusă ca %(type)s."
 
 #: ../gui/wxpython/dbmgr/dialogs.py:426
 msgid "Unknown"
-msgstr ""
+msgstr "Necunoscut"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:484 ../gui/wxpython/dbmgr/dialogs.py:602
 #: ../gui/wxpython/vdigit/dialogs.py:118 ../gui/wxpython/vdigit/dialogs.py:556
 #: ../gui/wxpython/vdigit/preferences.py:362
 msgid "Category"
-msgstr ""
+msgstr "Categorie"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:36
 msgid "Set default region extent and resolution"
-msgstr ""
+msgstr "Setați implicit extinderea și rezoluția regiunii"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:83
 msgid "&Set region"
-msgstr ""
+msgstr "&Setați regiune"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:113
 msgid "Invalid location selected."
-msgstr ""
+msgstr "Locație selectată invalidă."
 
 #: ../gui/wxpython/location_wizard/dialogs.py:130
 msgid "Invalid region"
-msgstr ""
+msgstr "Regiune invalidă"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:160
 msgid "Click here to show 3D settings"
-msgstr ""
+msgstr "Click aici pentru a afișa setările 3D"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:161
 msgid "Click here to hide 3D settings"
-msgstr ""
+msgstr "Click aici pentru a ascunde setările 3D"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:184
 #: ../gui/wxpython/location_wizard/dialogs.py:465
 #, python-format
 msgid "Rows: %d"
-msgstr ""
+msgstr "Rânduri: %d"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:185
 #: ../gui/wxpython/location_wizard/dialogs.py:466
 #, python-format
 msgid "Cols: %d"
-msgstr ""
+msgstr "Coloane: %d"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:186
 #: ../gui/wxpython/location_wizard/dialogs.py:467
 #, python-format
 msgid "Cells: %d"
-msgstr ""
+msgstr "Celule: %d"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:227
 #: ../gui/wxpython/location_wizard/dialogs.py:469
 #, python-format
 msgid "Depth: %d"
-msgstr ""
+msgstr "Adâncime: %d"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:228
 #: ../gui/wxpython/location_wizard/dialogs.py:470
 #, python-format
 msgid "3D Cells: %d"
-msgstr ""
+msgstr "Celule 3D: %d"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:231
 #: ../gui/wxpython/psmap/dialogs.py:384
 msgid "Top"
-msgstr ""
+msgstr "Sus"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:239
 #: ../gui/wxpython/psmap/dialogs.py:384
 msgid "Bottom"
-msgstr ""
+msgstr "Jos"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:247
 msgid "T-B resolution"
-msgstr ""
+msgstr "rezoluția T-B"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:310
 msgid "North"
-msgstr ""
+msgstr "Nord"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:318
 msgid "West"
-msgstr ""
+msgstr "Vest"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:338
 msgid "East"
-msgstr ""
+msgstr "Est"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:347
 msgid "South"
-msgstr ""
+msgstr "Sud"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:351
 msgid "N-S resolution"
-msgstr ""
+msgstr "rezoluția N-S"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:359
 msgid "E-W resolution"
-msgstr ""
+msgstr "rezoluția E-W"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:437
 #, python-format
 msgid "Invalid value: %s"
-msgstr ""
+msgstr "Valoare invalidă: %s"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:521
 msgid "Select datum transformation"
-msgstr ""
+msgstr "Selectați transformare datum"
 
 #: ../gui/wxpython/location_wizard/dialogs.py:546
 msgid "Select from list of datum transformations"
-msgstr ""
+msgstr "Selectați din lista transformărilor de referință"
 
 #: ../gui/wxpython/location_wizard/wizard.py:94
 msgid "Define GRASS Database and Location Name"
-msgstr ""
+msgstr "Definiță baza de date GRASS și numele locației"
 
 #: ../gui/wxpython/location_wizard/wizard.py:111
 #: ../gui/wxpython/gis_set.py:113
 msgid "GIS Data Directory:"
-msgstr ""
+msgstr "Directorul de date GIS:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:127
 msgid "Project Location"
-msgstr ""
+msgstr "Proiecția locației"
 
 #: ../gui/wxpython/location_wizard/wizard.py:128
 msgid "Name of location directory in GIS Data Directory"
-msgstr ""
+msgstr "Numele directorului de locație în directorul de date GIS"
 
 #: ../gui/wxpython/location_wizard/wizard.py:139
 msgid "Location Title"
-msgstr ""
+msgstr "Titlul locației"
 
 #: ../gui/wxpython/location_wizard/wizard.py:140
 msgid "Optional location title, you can leave this field blank."
-msgstr ""
+msgstr "Titlul locației opționa, puteți lăsa câmpul necompletat."
 
 #: ../gui/wxpython/location_wizard/wizard.py:159
 #, python-format
-msgid ""
-"Name <%(name)s> is not a valid name for location. Please use only ASCII "
-"characters excluding %(chars)s and space."
-msgstr ""
+msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
+msgstr "Nume <%(name)s> nu este un nume valid pentru locație. Vă rugăm utilizați doar caractere ASCII excluzând %(chars)s și spații."
 
 #: ../gui/wxpython/location_wizard/wizard.py:162
 msgid "Invalid location name"
-msgstr ""
+msgstr "Nume locație invalid"
 
 #: ../gui/wxpython/location_wizard/wizard.py:177
 msgid "Choose GRASS data directory:"
-msgstr ""
+msgstr "Alegeți directorul de date GIS:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:188
 #: ../gui/wxpython/location_wizard/wizard.py:1975
 msgid "Location already exists in GRASS Database."
-msgstr ""
+msgstr "Locația există deja în baza de date GRASS."
 
 #: ../gui/wxpython/location_wizard/wizard.py:192
 msgid "Unable to create location"
-msgstr ""
+msgstr "Nu s-a putut crea locația"
 
 #: ../gui/wxpython/location_wizard/wizard.py:205
-msgid ""
-"Title of the location is limited only to one line and 256 characters. The "
-"rest of the text will be ignored."
-msgstr ""
+msgid "Title of the location is limited only to one line and 256 characters. The rest of the text will be ignored."
+msgstr "Titlul locației este limitat doar la o singură linie și 256 caractere. Restul textului va fi ignorat."
 
 #: ../gui/wxpython/location_wizard/wizard.py:212
 msgid "Choose method for creating a new location"
-msgstr ""
+msgstr "Alegeți metoda pentru crearea unei locații noi"
 
 #: ../gui/wxpython/location_wizard/wizard.py:219
 msgid "Select coordinate system parameters from a list"
-msgstr ""
+msgstr "Selectați parametrii sistemului de coordonate dintr-o listă"
 
 #: ../gui/wxpython/location_wizard/wizard.py:222
 msgid "Select EPSG code of spatial reference system"
-msgstr ""
+msgstr "Selectați codul EPSG a sistemului de referință spațial"
 
 #: ../gui/wxpython/location_wizard/wizard.py:224
 msgid "Read projection and datum terms from a georeferenced data file"
-msgstr ""
+msgstr "Citiți proiecția și termenii de referință dintr-un fișier de date georeferențiate"
 
 #: ../gui/wxpython/location_wizard/wizard.py:227
 msgid "Read projection and datum terms from a WKT or PRJ file"
-msgstr ""
+msgstr "Citiți proiecția și termenii de referință dintr-un fișier WKT sau PRJ"
 
 #: ../gui/wxpython/location_wizard/wizard.py:230
 msgid "Specify projection and datum terms using custom PROJ.4 parameters"
-msgstr ""
+msgstr "Specificați proiecția și termenii de referință folosind parametrii PROJ.4"
 
 #: ../gui/wxpython/location_wizard/wizard.py:233
 msgid "Create a generic Cartesian coordinate system (XY)"
-msgstr ""
+msgstr "Creați un siste generic de coordonate carteziene (XY)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:334
 msgid "Choose projection"
-msgstr ""
+msgstr "Alege proiecție"
 
 #: ../gui/wxpython/location_wizard/wizard.py:350
 #: ../gui/wxpython/location_wizard/wizard.py:851
 #: ../gui/wxpython/location_wizard/wizard.py:1017
 #: ../gui/wxpython/location_wizard/wizard.py:1285
 msgid "Code"
-msgstr ""
+msgstr "Cod"
 
 #: ../gui/wxpython/location_wizard/wizard.py:350
 #: ../gui/wxpython/location_wizard/wizard.py:851
@@ -2501,153 +2461,153 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/frame.py:1315
 #: ../gui/wxpython/gmodeler/frame.py:1377
 msgid "Description"
-msgstr ""
+msgstr "Descriere"
 
 #: ../gui/wxpython/location_wizard/wizard.py:355
 msgid "Projection code:"
-msgstr ""
+msgstr "Codul proiecției:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:363
 #: ../gui/wxpython/location_wizard/wizard.py:865
 #: ../gui/wxpython/location_wizard/wizard.py:1030
 msgid "Search in description:"
-msgstr ""
+msgstr "Caută în descriere:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:537
 #, python-format
 msgid "Unable to read list: %s"
-msgstr ""
+msgstr "Nu s-a putut citi lista: %s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:640
 msgid "Choose projection parameters"
-msgstr ""
+msgstr "Alegeți parametrii proiecției"
 
 #: ../gui/wxpython/location_wizard/wizard.py:656
 msgid "Select datum or ellipsoid (next page)"
-msgstr ""
+msgstr "Selectați datum sau elipsoid (pagina următoare)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:662
 msgid "Datum with associated ellipsoid"
-msgstr ""
+msgstr "Datum asociat cu elipsoid"
 
 #: ../gui/wxpython/location_wizard/wizard.py:665
 msgid "Ellipsoid only"
-msgstr ""
+msgstr "Doar elipsoid"
 
 #: ../gui/wxpython/location_wizard/wizard.py:722
 #, python-format
 msgid "You must enter a value for %s"
-msgstr ""
+msgstr "Trebuie să introduceți o valoare pentru  %s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:734
 #: ../gui/wxpython/location_wizard/wizard.py:752
 #, python-format
 msgid " Enter parameters for %s projection "
-msgstr ""
+msgstr "Introduceți parametrii pentru %s proiecție"
 
 #: ../gui/wxpython/location_wizard/wizard.py:775
 msgid "No"
-msgstr ""
+msgstr "Nu"
 
 #: ../gui/wxpython/location_wizard/wizard.py:775
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #: ../gui/wxpython/location_wizard/wizard.py:829
 msgid "Specify geodetic datum"
-msgstr ""
+msgstr "Specifică datum geodezic"
 
 #: ../gui/wxpython/location_wizard/wizard.py:851
 msgid "Ellipsoid"
-msgstr ""
+msgstr "Elipsoid"
 
 #: ../gui/wxpython/location_wizard/wizard.py:856
 msgid "Datum code:"
-msgstr ""
+msgstr "Cod datum:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:994
 msgid "Specify ellipsoid"
-msgstr ""
+msgstr "Specifică elipsoid"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1022
 msgid "Ellipsoid code:"
-msgstr ""
+msgstr "Cod elipsoid:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1111
 #: ../gui/wxpython/location_wizard/wizard.py:1171
 msgid "Select georeferenced file"
-msgstr ""
+msgstr "Selectați fișierul georeferențiat"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1116
 msgid "Georeferenced file:"
-msgstr ""
+msgstr "Fișier georeferențiat:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1185
 #: ../gui/wxpython/location_wizard/wizard.py:1242
 msgid "Select WKT or PRJ file"
-msgstr ""
+msgstr "Selectați fișierul WKT sau PRJ"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1190
 msgid "WKT or PRJ file:"
-msgstr ""
+msgstr "Fișier WKT sau PRJ:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1259
 msgid "Choose EPSG Code"
-msgstr ""
+msgstr "Alegeți codul EPSG"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1267
 msgid "Path to the EPSG-codes file:"
-msgstr ""
+msgstr "Calea către EPSG- fișier coduri:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1285
 msgid "Parameters"
-msgstr ""
+msgstr "Parametrii"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1422
 msgid "Choose EPSG codes file"
-msgstr ""
+msgstr "Alegeți fișier EPSG coduri"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1451
 #, python-format
 msgid "Unable to read EPGS codes: %s"
-msgstr ""
+msgstr "Nu s-a putut citi codurile EPGS: %s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1469
 msgid "Choose method of specifying georeferencing parameters"
-msgstr ""
+msgstr "Alegeți metoda de specificare a parametrilor de georefențiere"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1477
 msgid "Enter PROJ.4 parameters string:"
-msgstr ""
+msgstr "Introduceți parametrii șirului PROJ.4:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1532
 #: ../gui/wxpython/location_wizard/wizard.py:1536
 msgid "Datum transform is required."
-msgstr ""
+msgstr "Transformarea datumului este necesară."
 
 #: ../gui/wxpython/location_wizard/wizard.py:1571
 msgid "Summary"
-msgstr ""
+msgstr "Rezumat"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1616
 msgid "GRASS Database:"
-msgstr ""
+msgstr "Baza de date GRASS:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1622
 msgid "Location Name:"
-msgstr ""
+msgstr "Numele locației:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1628
 msgid "Location Title:"
-msgstr ""
+msgstr "Titlul locației:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1634
 msgid "Projection:"
-msgstr ""
+msgstr "Proiecția:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1640
 msgid "PROJ.4 definition:"
-msgstr ""
+msgstr "Definirea PROJ.4:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1715
 #: ../gui/wxpython/psmap/dialogs.py:506 ../gui/wxpython/psmap/dialogs.py:527
@@ -2657,15 +2617,15 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:1722
 #, python-format
 msgid "Do you want to create GRASS location <%s>?"
-msgstr ""
+msgstr "Doriți să creați locația GRASS <%s>?"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1723
 msgid "Create new location?"
-msgstr ""
+msgstr "Creați locație nouă?"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1766
 msgid "Define new GRASS Location"
-msgstr ""
+msgstr "Definirea unei locații noi GRASS"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1858
 #, python-format
@@ -2674,6 +2634,9 @@ msgid ""
 "\n"
 "Details: %(err)s"
 msgstr ""
+"Nu s-a putut crea locație nouă. Locația <%(loc)s> nu a fost creată.\n"
+"\n"
+"Detalii:%(err)s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1866
 msgid "Location wizard canceled. Location not created."
@@ -2681,28 +2644,26 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1973
 msgid "Unable to create new location"
-msgstr ""
+msgstr "Nu s-a putut crea locație nouă"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1992
 #, python-format
-msgid ""
-"Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will "
-"need to change the default GIS data directory in the GRASS startup screen."
+msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1997
 msgid "New GIS data directory"
-msgstr ""
+msgstr "Director de date GIS nou"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2028
 msgid "EPSG code missing."
-msgstr ""
+msgstr "Codul EPSG lipsește."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2039
 #: ../gui/wxpython/location_wizard/wizard.py:2048
 #, python-format
 msgid "File <%s> not found."
-msgstr ""
+msgstr "Fișierul <%s> nu este găsit."
 
 #: ../gui/wxpython/psmap/instructions.py:133
 #, python-format
@@ -2710,11 +2671,13 @@ msgid ""
 "Unable to open file\n"
 "%s"
 msgstr ""
+"Nu se poate deschide fișierul\n"
+"%s"
 
 #: ../gui/wxpython/psmap/instructions.py:460
 #, python-format
 msgid "Instruction file will be loaded with following region: %s\n"
-msgstr ""
+msgstr "Fișierul de instrucțiune va fi încărcat cu următoare regiune: %s\n"
 
 #: ../gui/wxpython/psmap/instructions.py:465
 #, python-format
@@ -2722,6 +2685,8 @@ msgid ""
 "Region cannot be set\n"
 "%s"
 msgstr ""
+"Regiunea nu poate fi stabilită\n"
+"%s"
 
 #: ../gui/wxpython/psmap/instructions.py:604
 #: ../gui/wxpython/psmap/instructions.py:754
@@ -2736,7 +2701,7 @@ msgstr ""
 #: ../gui/wxpython/psmap/instructions.py:1534
 #, python-format
 msgid "Failed to read instruction %s"
-msgstr ""
+msgstr "A eșuat citirea instrucțiunilor %s"
 
 #: ../gui/wxpython/psmap/instructions.py:618
 #, python-format
@@ -2781,16 +2746,12 @@ msgstr ""
 #: ../gui/wxpython/psmap/instructions.py:811
 #: ../gui/wxpython/psmap/instructions.py:1693
 #, python-format
-msgid ""
-"Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding "
-"which is required by module ps.map."
+msgid "Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
 msgstr ""
 
 #: ../gui/wxpython/psmap/instructions.py:815
 #: ../gui/wxpython/psmap/instructions.py:1697
-msgid ""
-"Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is "
-"required by module ps.map."
+msgid "Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
 msgstr ""
 
 #: ../gui/wxpython/psmap/instructions.py:931
@@ -2857,52 +2818,52 @@ msgstr ""
 #: ../gui/wxpython/psmap/toolbars.py:75 ../gui/wxpython/psmap/dialogs.py:3704
 #: ../gui/wxpython/psmap/dialogs.py:3709
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: ../gui/wxpython/psmap/toolbars.py:77
 msgid "Map info"
-msgstr ""
+msgstr "Informații hartă"
 
 #: ../gui/wxpython/psmap/toolbars.py:79 ../gui/wxpython/wxplot/dialogs.py:576
 #: ../gui/wxpython/wxplot/dialogs.py:618
 msgid "Legend"
-msgstr ""
+msgstr "Legendă"
 
 #: ../gui/wxpython/psmap/toolbars.py:81 ../gui/wxpython/nviz/tools.py:1895
 msgid "Scale bar"
-msgstr ""
+msgstr "Scara"
 
 #: ../gui/wxpython/psmap/toolbars.py:83 ../gui/wxpython/psmap/dialogs.py:4060
 #: ../gui/wxpython/psmap/dialogs.py:4108
 msgid "Image"
-msgstr ""
+msgstr "Imagine"
 
 #: ../gui/wxpython/psmap/toolbars.py:85 ../gui/wxpython/psmap/dialogs.py:4493
 #: ../gui/wxpython/mapdisp/toolbars.py:35 ../gui/wxpython/nviz/tools.py:1853
 msgid "North Arrow"
-msgstr ""
+msgstr "Săgeata Nord"
 
 #: ../gui/wxpython/psmap/toolbars.py:87
 msgid "Add simple graphics"
-msgstr ""
+msgstr "Adaugă grafice simple"
 
 #: ../gui/wxpython/psmap/toolbars.py:89 ../gui/wxpython/psmap/dialogs.py:4525
 #: ../gui/wxpython/vdigit/preferences.py:516
 msgid "Point"
-msgstr ""
+msgstr "Punct"
 
 #: ../gui/wxpython/psmap/toolbars.py:91
 #: ../gui/wxpython/vdigit/preferences.py:517
 msgid "Line"
-msgstr ""
+msgstr "Linie"
 
 #: ../gui/wxpython/psmap/toolbars.py:93
 msgid "Rectangle"
-msgstr ""
+msgstr "Dreptunghi"
 
 #: ../gui/wxpython/psmap/dialogs.py:197
 msgid "Units:"
-msgstr ""
+msgstr "Unități:"
 
 #: ../gui/wxpython/psmap/dialogs.py:206
 msgid ""
@@ -2912,15 +2873,15 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:207
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: ../gui/wxpython/psmap/dialogs.py:208
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: ../gui/wxpython/psmap/dialogs.py:220
 msgid "Position is given:"
-msgstr ""
+msgstr "Poziția este dată:"
 
 #: ../gui/wxpython/psmap/dialogs.py:221
 msgid "relative to paper"
@@ -2942,7 +2903,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:304
 msgid "Choose color:"
-msgstr ""
+msgstr "Alege culoare:"
 
 #: ../gui/wxpython/psmap/dialogs.py:352
 msgid "Close dialog and apply changes"
@@ -2950,39 +2911,39 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:358 ../gui/wxpython/vdigit/dialogs.py:142
 msgid "Apply changes"
-msgstr ""
+msgstr "Aplică modificările"
 
 #: ../gui/wxpython/psmap/dialogs.py:383
 msgid "Units"
-msgstr ""
+msgstr "Unități"
 
 #: ../gui/wxpython/psmap/dialogs.py:383
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #: ../gui/wxpython/psmap/dialogs.py:383
 msgid "Orientation"
-msgstr ""
+msgstr "Orientare"
 
 #: ../gui/wxpython/psmap/dialogs.py:383 ../gui/wxpython/psmap/dialogs.py:2084
 msgid "Width"
-msgstr ""
+msgstr "Lățime"
 
 #: ../gui/wxpython/psmap/dialogs.py:383
 msgid "Height"
-msgstr ""
+msgstr "Înălțime"
 
 #: ../gui/wxpython/psmap/dialogs.py:384
 msgid "Left"
-msgstr ""
+msgstr "Stânga"
 
 #: ../gui/wxpython/psmap/dialogs.py:384
 msgid "Right"
-msgstr ""
+msgstr "Dreapta"
 
 #: ../gui/wxpython/psmap/dialogs.py:439
 msgid "Literal is not allowed!"
-msgstr ""
+msgstr "Literal nu este permis!"
 
 #: ../gui/wxpython/psmap/dialogs.py:439 ../gui/wxpython/psmap/dialogs.py:1034
 #: ../gui/wxpython/psmap/dialogs.py:1056 ../gui/wxpython/psmap/dialogs.py:1106
@@ -2992,23 +2953,23 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:448
 msgid "Page size"
-msgstr ""
+msgstr "Dimensiunea paginii"
 
 #: ../gui/wxpython/psmap/dialogs.py:450
 msgid "Margins"
-msgstr ""
+msgstr "Margini"
 
 #: ../gui/wxpython/psmap/dialogs.py:454
 msgid "Portrait"
-msgstr ""
+msgstr "Portret"
 
 #: ../gui/wxpython/psmap/dialogs.py:454
 msgid "Landscape"
-msgstr ""
+msgstr "Peisaj"
 
 #: ../gui/wxpython/psmap/dialogs.py:556
 msgid "Map settings"
-msgstr ""
+msgstr "Setările hărții"
 
 #: ../gui/wxpython/psmap/dialogs.py:562
 msgid "Map frame settings"
@@ -3040,11 +3001,11 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:699 ../gui/wxpython/psmap/dialogs.py:1283
 msgid "Map:"
-msgstr ""
+msgstr "Harta:"
 
 #: ../gui/wxpython/psmap/dialogs.py:699
 msgid "Region:"
-msgstr ""
+msgstr "Regiunea:"
 
 #: ../gui/wxpython/psmap/dialogs.py:718
 msgid "Map scale and center"
@@ -3052,23 +3013,23 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:723
 msgid "Center:"
-msgstr ""
+msgstr "Centru:"
 
 #: ../gui/wxpython/psmap/dialogs.py:724
 msgid "E:"
-msgstr ""
+msgstr "E:"
 
 #: ../gui/wxpython/psmap/dialogs.py:725
 msgid "N:"
-msgstr ""
+msgstr "N:"
 
 #: ../gui/wxpython/psmap/dialogs.py:728 ../gui/wxpython/psmap/dialogs.py:4165
 msgid "Scale:"
-msgstr ""
+msgstr "Scara:"
 
 #: ../gui/wxpython/psmap/dialogs.py:729
 msgid "1 :"
-msgstr ""
+msgstr "1:"
 
 #: ../gui/wxpython/psmap/dialogs.py:749
 msgid "Map max resolution (dpi):"
@@ -3102,7 +3063,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1033
 msgid "No map selected!"
-msgstr ""
+msgstr "Nici o hartă selectată!"
 
 #: ../gui/wxpython/psmap/dialogs.py:1055
 msgid "No region selected!"
@@ -3115,19 +3076,19 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:1143 ../gui/wxpython/nviz/tools.py:648
 #: ../gui/wxpython/nviz/mapwindow.py:1630
 msgid "Raster map"
-msgstr ""
+msgstr "Harta raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:1165
 msgid "Choose raster map"
-msgstr ""
+msgstr "Alege harta raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:1169
 msgid "no raster map"
-msgstr ""
+msgstr "nici o hartă raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:1170
 msgid "raster:"
-msgstr ""
+msgstr "raster:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1210 ../gui/wxpython/psmap/frame.py:580
 #: ../gui/wxpython/psmap/frame.py:603
@@ -3136,122 +3097,122 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1270 ../gui/wxpython/gmodeler/model.py:668
 msgid "Vector maps"
-msgstr ""
+msgstr "Hărți vectoriale"
 
 #: ../gui/wxpython/psmap/dialogs.py:1279
 msgid "Add map"
-msgstr ""
+msgstr "Adaugă harta"
 
 #: ../gui/wxpython/psmap/dialogs.py:1287 ../gui/wxpython/psmap/dialogs.py:1651
 msgid "points"
-msgstr ""
+msgstr "puncte"
 
 #: ../gui/wxpython/psmap/dialogs.py:1287 ../gui/wxpython/psmap/dialogs.py:1653
 msgid "lines"
-msgstr ""
+msgstr "linii"
 
 #: ../gui/wxpython/psmap/dialogs.py:1287
 msgid "areas"
-msgstr ""
+msgstr "areale"
 
 #: ../gui/wxpython/psmap/dialogs.py:1289
 msgid "Data Type"
-msgstr ""
+msgstr "Tipul datei"
 
 #: ../gui/wxpython/psmap/dialogs.py:1292
 msgid "Add"
-msgstr ""
+msgstr "Adaugă"
 
 #: ../gui/wxpython/psmap/dialogs.py:1304
 msgid "Manage vector maps"
-msgstr ""
+msgstr "Gestionați hărțile vectoriale"
 
 #: ../gui/wxpython/psmap/dialogs.py:1312
 msgid "The topmost vector map overlaps the others"
-msgstr ""
+msgstr "Cea mai de sus hartă vectorială se suprapune peste celelalte"
 
 #: ../gui/wxpython/psmap/dialogs.py:1314 ../gui/wxpython/psmap/dialogs.py:2636
 msgid "Up"
-msgstr ""
+msgstr "Sus"
 
 #: ../gui/wxpython/psmap/dialogs.py:1315 ../gui/wxpython/psmap/dialogs.py:2637
 msgid "Down"
-msgstr ""
+msgstr "Jos"
 
 #: ../gui/wxpython/psmap/dialogs.py:1316 ../gui/wxpython/menustrings.py:163
 #: ../gui/wxpython/nviz/tools.py:1094 ../gui/wxpython/nviz/tools.py:1883
 msgid "Delete"
-msgstr ""
+msgstr "Șterge"
 
 #: ../gui/wxpython/psmap/dialogs.py:1317
 msgid "Properties..."
-msgstr ""
+msgstr "Proprietăți..."
 
 #: ../gui/wxpython/psmap/dialogs.py:1517
 msgid "Raster map settings"
-msgstr ""
+msgstr "Setările hărții raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:1554
 msgid "Vector maps settings"
-msgstr ""
+msgstr "Setările hărților vectoriale"
 
 #: ../gui/wxpython/psmap/dialogs.py:1589
 #, python-format
 msgid "%s properties"
-msgstr ""
+msgstr "%s proprietăți"
 
 #: ../gui/wxpython/psmap/dialogs.py:1640
 msgid "Data selection"
-msgstr ""
+msgstr "Selectarea datei"
 
 #: ../gui/wxpython/psmap/dialogs.py:1647
 msgid "Feature type"
-msgstr ""
+msgstr "Tipul trăsăturii"
 
 #: ../gui/wxpython/psmap/dialogs.py:1651
 msgid "centroids"
-msgstr ""
+msgstr "centroizi"
 
 #: ../gui/wxpython/psmap/dialogs.py:1653
 msgid "boundaries"
-msgstr ""
+msgstr "limitele"
 
 #: ../gui/wxpython/psmap/dialogs.py:1669
 msgid "Layer selection"
-msgstr ""
+msgstr "Selectarea stratului"
 
 #: ../gui/wxpython/psmap/dialogs.py:1675
 msgid "Database connection is not defined in DB file."
-msgstr ""
+msgstr "Conexiunea bazei de date nu este definită în fișierul DB."
 
 #: ../gui/wxpython/psmap/dialogs.py:1676
 msgid "Select layer:"
-msgstr ""
+msgstr "Selectați strat:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1699
 msgid "list of categories (e.g. 1,3,5-7)"
-msgstr ""
+msgstr "lista categoriilor (e.g. 1,3,5-7)"
 
 #: ../gui/wxpython/psmap/dialogs.py:1726 ../gui/wxpython/menustrings.py:312
 #: ../gui/wxpython/nviz/tools.py:786 ../gui/wxpython/nviz/tools.py:2271
 msgid "Mask"
-msgstr ""
+msgstr "Mască"
 
 #: ../gui/wxpython/psmap/dialogs.py:1729
 msgid "Use current mask"
-msgstr ""
+msgstr "Folosiți masca curentă"
 
 #: ../gui/wxpython/psmap/dialogs.py:1746 ../gui/wxpython/psmap/dialogs.py:1845
 msgid "Colors"
-msgstr ""
+msgstr "Culori"
 
 #: ../gui/wxpython/psmap/dialogs.py:1751 ../gui/wxpython/psmap/dialogs.py:1850
 msgid "Outline"
-msgstr ""
+msgstr "Contur"
 
 #: ../gui/wxpython/psmap/dialogs.py:1755 ../gui/wxpython/psmap/dialogs.py:1859
 msgid "draw outline"
-msgstr ""
+msgstr "desenați contur"
 
 #: ../gui/wxpython/psmap/dialogs.py:1758 ../gui/wxpython/psmap/dialogs.py:1863
 #: ../gui/wxpython/psmap/dialogs.py:3749 ../gui/wxpython/psmap/dialogs.py:3754
@@ -3281,25 +3242,25 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1903
 msgid "Color of lines:"
-msgstr ""
+msgstr "Culoarea liniilor:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1948 ../gui/wxpython/psmap/dialogs.py:2079
 #: ../gui/wxpython/psmap/dialogs.py:2148
 msgid "Size and style"
-msgstr ""
+msgstr "Dimensiune și stil"
 
 #: ../gui/wxpython/psmap/dialogs.py:1953 ../gui/wxpython/gcp/manager.py:2396
 #: ../gui/wxpython/vdigit/preferences.py:80
 msgid "Symbology"
-msgstr ""
+msgstr "Simbologie"
 
 #: ../gui/wxpython/psmap/dialogs.py:1958 ../gui/wxpython/nviz/tools.py:1371
 msgid "symbol:"
-msgstr ""
+msgstr "simbol:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1967
 msgid "eps file:"
-msgstr ""
+msgstr "fișier eps:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1971 ../gui/wxpython/psmap/dialogs.py:2160
 msgid "Type filename or click browse to choose file"
@@ -3307,16 +3268,16 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1972 ../gui/wxpython/psmap/dialogs.py:2161
 msgid "Choose a file"
-msgstr ""
+msgstr "Alegeți un fișier"
 
 #: ../gui/wxpython/psmap/dialogs.py:1995 ../gui/wxpython/psmap/dialogs.py:2706
 #: ../gui/wxpython/psmap/dialogs.py:3470 ../gui/wxpython/wxplot/dialogs.py:601
 msgid "Size"
-msgstr ""
+msgstr "Dimensiune"
 
 #: ../gui/wxpython/psmap/dialogs.py:2000 ../gui/wxpython/nviz/tools.py:1321
 msgid "size:"
-msgstr ""
+msgstr "dimensiune:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2002
 msgid "size from map table column:"
@@ -3324,15 +3285,15 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2004
 msgid "scale:"
-msgstr ""
+msgstr "scara:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2036
 msgid "Rotation"
-msgstr ""
+msgstr "Rotația"
 
 #: ../gui/wxpython/psmap/dialogs.py:2042
 msgid "rotate symbols:"
-msgstr ""
+msgstr "rotește simboluri:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2043
 msgid "counterclockwise in degrees:"
@@ -3353,11 +3314,11 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:2114 ../gui/wxpython/psmap/dialogs.py:4896
 #: ../gui/wxpython/wxplot/dialogs.py:567
 msgid "Line style"
-msgstr ""
+msgstr "Stilul liniei"
 
 #: ../gui/wxpython/psmap/dialogs.py:2118
 msgid "Choose line style:"
-msgstr ""
+msgstr "Alegeți stilul liniei:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2128
 msgid "Choose linecap:"
@@ -3385,23 +3346,23 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2481
 msgid "Raster legend"
-msgstr ""
+msgstr "Legendă raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:2485
 msgid "Show raster legend"
-msgstr ""
+msgstr "Arată legendă raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:2491
 msgid "Source raster"
-msgstr ""
+msgstr "Sursa raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:2496
 msgid "current raster"
-msgstr ""
+msgstr "rasterul curent"
 
 #: ../gui/wxpython/psmap/dialogs.py:2497
 msgid "select raster"
-msgstr ""
+msgstr "selectați raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:2504 ../gui/wxpython/psmap/dialogs.py:3189
 #, python-format
@@ -3410,7 +3371,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2523
 msgid "Type of legend"
-msgstr ""
+msgstr "Tipul de legendă"
 
 #: ../gui/wxpython/psmap/dialogs.py:2527
 msgid "discrete legend (categorical maps)"
@@ -3441,39 +3402,39 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2598
 msgid "Vector legend"
-msgstr ""
+msgstr "Legendă vector"
 
 #: ../gui/wxpython/psmap/dialogs.py:2602
 msgid "Show vector legend"
-msgstr ""
+msgstr "Arată legendă vector"
 
 #: ../gui/wxpython/psmap/dialogs.py:2608
 msgid "Source vector maps"
-msgstr ""
+msgstr "Sursa hărților vectoriale"
 
 #: ../gui/wxpython/psmap/dialogs.py:2614
 msgid "Choose vector maps and their order in legend"
-msgstr ""
+msgstr "Alegeți hărțile vectoriale și ordinea lor în legendă"
 
 #: ../gui/wxpython/psmap/dialogs.py:2618 ../gui/wxpython/nviz/tools.py:1173
 msgid "Vector map"
-msgstr ""
+msgstr "Harta vectorială"
 
 #: ../gui/wxpython/psmap/dialogs.py:2619
 msgid "Label"
-msgstr ""
+msgstr "Etichetă"
 
 #: ../gui/wxpython/psmap/dialogs.py:2638 ../gui/wxpython/psmap/dialogs.py:2944
 msgid "Edit label"
-msgstr ""
+msgstr "Editează eticheta"
 
 #: ../gui/wxpython/psmap/dialogs.py:2657
 msgid "draw border around legend"
-msgstr ""
+msgstr "desenează chenar în jurul legendei"
 
 #: ../gui/wxpython/psmap/dialogs.py:2694
 msgid "Size and position"
-msgstr ""
+msgstr "Dimensiune și poziție"
 
 #: ../gui/wxpython/psmap/dialogs.py:2704 ../gui/wxpython/psmap/dialogs.py:3245
 #: ../gui/wxpython/psmap/dialogs.py:3440 ../gui/wxpython/psmap/dialogs.py:3814
@@ -3482,21 +3443,23 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:4683 ../gui/wxpython/nviz/tools.py:853
 #: ../gui/wxpython/nviz/tools.py:1583
 msgid "Position"
-msgstr ""
+msgstr "Poziție"
 
 #: ../gui/wxpython/psmap/dialogs.py:2728
 msgid "Leave the edit field empty, to use default values."
-msgstr ""
+msgstr "Lăsați câmpul editabil gol, pentru a folosi valorile implicite."
 
 #: ../gui/wxpython/psmap/dialogs.py:2750
 msgid ""
 "Width of the color symbol (for lines)\n"
 "in front of the legend text"
 msgstr ""
+"Lățimea sinbolului de culoare (pentru linii)\n"
+" în fața textului legendei"
 
 #: ../gui/wxpython/psmap/dialogs.py:2756 ../gui/wxpython/psmap/dialogs.py:2861
 msgid "Columns:"
-msgstr ""
+msgstr "Coloane:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2760
 msgid "column span:"
@@ -3510,7 +3473,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2944
 msgid "Edit legend label:"
-msgstr ""
+msgstr "Editează eticheta legendei:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2985
 msgid "No raster map selected!"
@@ -3526,7 +3489,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:3282
 msgid "Color settings"
-msgstr ""
+msgstr "Setări culoare"
 
 #: ../gui/wxpython/psmap/dialogs.py:3288
 msgid "use border color:"
@@ -3548,39 +3511,39 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:3475
 msgid "Length:"
-msgstr ""
+msgstr "Lungime:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3479
 msgid "Scalebar length is given in map units"
-msgstr ""
+msgstr "Lungimea scării este dată în unități de hartă"
 
 #: ../gui/wxpython/psmap/dialogs.py:3482
 msgid "Scalebar height is real height on paper"
-msgstr ""
+msgstr "Înălțimea scării este înălțimea reală pe hârtie"
 
 #: ../gui/wxpython/psmap/dialogs.py:3484
 msgid "default"
-msgstr ""
+msgstr "implicit"
 
 #: ../gui/wxpython/psmap/dialogs.py:3523 ../gui/wxpython/wxplot/dialogs.py:625
 msgid "Style"
-msgstr ""
+msgstr "Stil"
 
 #: ../gui/wxpython/psmap/dialogs.py:3528
 msgid "Type:"
-msgstr ""
+msgstr "Tip:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3544
 msgid "Number of segments:"
-msgstr ""
+msgstr "Număr de segmente:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3548
 msgid "Label every "
-msgstr ""
+msgstr "Etichetați fiecare"
 
 #: ../gui/wxpython/psmap/dialogs.py:3549
 msgid "segments"
-msgstr ""
+msgstr "segmente"
 
 #: ../gui/wxpython/psmap/dialogs.py:3558
 msgid "transparent text background"
@@ -3676,11 +3639,11 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:4399
 msgid "No image selected."
-msgstr ""
+msgstr "Nici o imagine selectată."
 
 #: ../gui/wxpython/psmap/dialogs.py:4496
 msgid "North Arrow settings"
-msgstr ""
+msgstr "Setările săgeții Nord"
 
 #: ../gui/wxpython/psmap/dialogs.py:4507
 msgid "Compute convergence"
@@ -3688,11 +3651,11 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:4563
 msgid "Symbol"
-msgstr ""
+msgstr "Simbol"
 
 #: ../gui/wxpython/psmap/dialogs.py:4569
 msgid "Select symbol:"
-msgstr ""
+msgstr "Selectați simbol:"
 
 #: ../gui/wxpython/psmap/dialogs.py:4583
 msgid ""
@@ -3706,7 +3669,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:785 ../gui/wxpython/nviz/tools.py:2270
 #: ../gui/wxpython/wxplot/dialogs.py:595
 msgid "Color"
-msgstr ""
+msgstr "Culoare"
 
 #: ../gui/wxpython/psmap/dialogs.py:4601 ../gui/wxpython/psmap/dialogs.py:4855
 msgid "Outline color:"
@@ -3718,7 +3681,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:4639
 msgid "Size and Rotation"
-msgstr ""
+msgstr "Dimensiune și rotație"
 
 #: ../gui/wxpython/psmap/dialogs.py:4644
 msgid "Size (pt):"
@@ -3760,15 +3723,15 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:276
 msgid "Generating PDF..."
-msgstr ""
+msgstr "Generare PDF..."
 
 #: ../gui/wxpython/psmap/frame.py:278
 msgid "Generating PostScript..."
-msgstr ""
+msgstr "Generare PostScrip..."
 
 #: ../gui/wxpython/psmap/frame.py:280
 msgid "Generating preview..."
-msgstr ""
+msgstr "Generare previzualizare..."
 
 #: ../gui/wxpython/psmap/frame.py:290
 #, python-format
@@ -3782,7 +3745,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:323
 msgid "PDF generated"
-msgstr ""
+msgstr "PDF generat"
 
 #: ../gui/wxpython/psmap/frame.py:326
 #, python-format
@@ -3791,34 +3754,37 @@ msgid ""
 "\n"
 " %s"
 msgstr ""
+"Programul ps2pdf nu este disponibil. Vă rugăm să-l instalați pentru a crea PGF.\n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/psmap/frame.py:329
 msgid "PostScript file generated"
-msgstr ""
+msgstr "Fișier PostScript generat"
 
 #: ../gui/wxpython/psmap/frame.py:335
 msgid "Generating preview, wait please"
-msgstr ""
+msgstr "Generarea de previzualizare, vă rugăm să asteptați"
 
 #: ../gui/wxpython/psmap/frame.py:349
 msgid "Preview not available"
-msgstr ""
+msgstr "Previzualizarea nu este disponibilă"
 
 #: ../gui/wxpython/psmap/frame.py:350
 msgid "Preview is not available probably due to missing Ghostscript."
-msgstr ""
+msgstr "Previzualizarea nu este disponibilă probabil din cauza lipsei Ghostscript."
 
 #: ../gui/wxpython/psmap/frame.py:352
 msgid "Please follow instructions on GRASS Trac Wiki."
-msgstr ""
+msgstr "Vă rugăm să urmați instrucțiunile de pe GRASS Trac Wiki."
 
 #: ../gui/wxpython/psmap/frame.py:363
 msgid "Preview generated"
-msgstr ""
+msgstr "Previzualizare generată"
 
 #: ../gui/wxpython/psmap/frame.py:393
 msgid "Save file as"
-msgstr ""
+msgstr "Salvați fișierul ca"
 
 #: ../gui/wxpython/psmap/frame.py:431
 #, python-format
@@ -3844,9 +3810,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:1058 ../gui/wxpython/gmodeler/frame.py:717
-msgid ""
-"This program is free software under the GNU General Public License(>=v2). "
-"Read the file COPYING that comes with GRASS for details."
+msgid "This program is free software under the GNU General Public License(>=v2). Read the file COPYING that comes with GRASS for details."
 msgstr ""
 
 #: ../gui/wxpython/psmap/frame.py:1367
@@ -3855,55 +3819,55 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/utils.py:92
 msgid "inch"
-msgstr ""
+msgstr "inci"
 
 #: ../gui/wxpython/psmap/utils.py:93 ../gui/wxpython/modules/vclean.py:194
 msgid "point"
-msgstr ""
+msgstr "punct"
 
 #: ../gui/wxpython/psmap/utils.py:94
 msgid "centimeter"
-msgstr ""
+msgstr "centimetru"
 
 #: ../gui/wxpython/psmap/utils.py:95
 msgid "millimeter"
-msgstr ""
+msgstr "milimetru"
 
 #: ../gui/wxpython/psmap/utils.py:96
 msgid "meters"
-msgstr ""
+msgstr "metri"
 
 #: ../gui/wxpython/psmap/utils.py:97
 msgid "kilometers"
-msgstr ""
+msgstr "kilometri"
 
 #: ../gui/wxpython/psmap/utils.py:98
 msgid "feet"
-msgstr ""
+msgstr "picioare"
 
 #: ../gui/wxpython/psmap/utils.py:99
 msgid "miles"
-msgstr ""
+msgstr "mile"
 
 #: ../gui/wxpython/psmap/utils.py:100 ../gui/wxpython/psmap/utils.py:104
 msgid "nautical miles"
-msgstr ""
+msgstr "mile marine"
 
 #: ../gui/wxpython/psmap/utils.py:102
 msgid "pixel"
-msgstr ""
+msgstr "pixel"
 
 #: ../gui/wxpython/psmap/utils.py:103
 msgid "meter"
-msgstr ""
+msgstr "metru"
 
 #: ../gui/wxpython/psmap/utils.py:105
 msgid "degree"
-msgstr ""
+msgstr "grade"
 
 #: ../gui/wxpython/psmap/utils.py:345
 msgid "Unable to run `ps.map -b`"
-msgstr ""
+msgstr "Nu se poate rula `ps.map -b`"
 
 #: ../gui/wxpython/core/settings.py:447
 msgid "Segment break"
@@ -3911,7 +3875,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:514
 msgid "animation"
-msgstr ""
+msgstr "animație"
 
 #: ../gui/wxpython/core/settings.py:695
 msgid "Collapse all except PERMANENT and current"
@@ -3959,7 +3923,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:724
 msgid "Nothing"
-msgstr ""
+msgstr "Nimic"
 
 #: ../gui/wxpython/core/settings.py:725
 msgid "Scroll forward to zoom in"
@@ -3971,19 +3935,19 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:759
 msgid "box"
-msgstr ""
+msgstr "cutie"
 
 #: ../gui/wxpython/core/settings.py:760
 msgid "sphere"
-msgstr ""
+msgstr "sferă"
 
 #: ../gui/wxpython/core/settings.py:761
 msgid "cube"
-msgstr ""
+msgstr "cub"
 
 #: ../gui/wxpython/core/settings.py:762
 msgid "diamond"
-msgstr ""
+msgstr "romb"
 
 #: ../gui/wxpython/core/settings.py:763
 msgid "aster"
@@ -3995,7 +3959,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:765
 msgid "histogram"
-msgstr ""
+msgstr "histrogramă"
 
 #: ../gui/wxpython/core/settings.py:802
 #, python-format
@@ -4038,30 +4002,30 @@ msgstr ""
 #: ../gui/wxpython/core/gcmd.py:82
 #, python-format
 msgid "ERROR: %s\n"
-msgstr ""
+msgstr "EROARE: %s\n"
 
 #: ../gui/wxpython/core/gcmd.py:123
 msgid "Reason"
-msgstr ""
+msgstr "Motiv"
 
 #: ../gui/wxpython/core/gcmd.py:135 ../gui/wxpython/core/workspace.py:1017
 #: ../gui/wxpython/mapdisp/mapwindow.py:1653
 #: ../gui/wxpython/wxplot/dialogs.py:493
 msgid "Warning"
-msgstr ""
+msgstr "Atenție"
 
 #: ../gui/wxpython/core/gcmd.py:385
 msgid "Execution failed:"
-msgstr ""
+msgstr "Execuție eșuată:"
 
 #: ../gui/wxpython/core/gcmd.py:388 ../gui/wxpython/core/render.py:643
 #: ../gui/wxpython/core/render.py:646
 msgid "Details:"
-msgstr ""
+msgstr "Detalii:"
 
 #: ../gui/wxpython/core/gcmd.py:390 ../gui/wxpython/core/gcmd.py:394
 msgid "Error: "
-msgstr ""
+msgstr "Eroare:"
 
 #: ../gui/wxpython/core/gcmd.py:469
 #, python-format
@@ -4095,12 +4059,12 @@ msgstr ""
 #: ../gui/wxpython/core/render.py:180
 #, python-format
 msgid "Command '%s' failed\n"
-msgstr ""
+msgstr "Comandă '%s' eșuată\n"
 
 #: ../gui/wxpython/core/render.py:182
 #, python-format
 msgid "Details: %s\n"
-msgstr ""
+msgstr "Detalii: %s\n"
 
 #: ../gui/wxpython/core/render.py:280
 #, python-format
@@ -4127,9 +4091,7 @@ msgid "Unable to zoom to vector map <%s>."
 msgstr ""
 
 #: ../gui/wxpython/core/render.py:648
-msgid ""
-"Unable to get current geographic extent. Force quiting wxGUI. Please "
-"manually run g.region to fix the problem."
+msgid "Unable to get current geographic extent. Force quiting wxGUI. Please manually run g.region to fix the problem."
 msgstr ""
 
 #: ../gui/wxpython/core/render.py:931
@@ -4184,7 +4146,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/model.py:58
 msgid "model"
-msgstr ""
+msgstr "model"
 
 #: ../gui/wxpython/gmodeler/model.py:59
 msgid "Script generated by wxGUI Graphical Modeler."
@@ -4197,15 +4159,15 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/model.py:483
 msgid "Running model..."
-msgstr ""
+msgstr "Rularea modelului..."
 
 #: ../gui/wxpython/gmodeler/model.py:502
 msgid "Model is empty. Nothing to run."
-msgstr ""
+msgstr "Modelul este gol. Nimic nu este de rulat."
 
 #: ../gui/wxpython/gmodeler/model.py:511 ../gui/wxpython/gmodeler/frame.py:508
 msgid "Validating model..."
-msgstr ""
+msgstr "Validarea modelului..."
 
 #: ../gui/wxpython/gmodeler/model.py:517
 #, python-format
@@ -4217,7 +4179,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/model.py:519
 msgid "Run model?"
-msgstr ""
+msgstr "Rulați modelul?"
 
 #: ../gui/wxpython/gmodeler/model.py:554
 msgid "Variables below not defined:"
@@ -4225,11 +4187,11 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/model.py:662
 msgid "Raster maps"
-msgstr ""
+msgstr "Hărți raster"
 
 #: ../gui/wxpython/gmodeler/model.py:665
 msgid "3D raster maps"
-msgstr ""
+msgstr "hărți raster 3D"
 
 #: ../gui/wxpython/gmodeler/model.py:1242
 msgid "<not defined>"
@@ -4237,23 +4199,23 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/model.py:1352
 msgid "Condition: "
-msgstr ""
+msgstr "Condiție:"
 
 #: ../gui/wxpython/gmodeler/model.py:1354
 msgid "Condition: not defined"
-msgstr ""
+msgstr "Condiție: nedefinită"
 
 #: ../gui/wxpython/gmodeler/model.py:1415
 msgid "loop"
-msgstr ""
+msgstr "buclă"
 
 #: ../gui/wxpython/gmodeler/model.py:1456
 msgid "if-else"
-msgstr ""
+msgstr "dacă-altfel"
 
 #: ../gui/wxpython/gmodeler/model.py:2150
 msgid "Model parameters"
-msgstr ""
+msgstr "Parametrii modelului"
 
 #: ../gui/wxpython/gmodeler/model.py:2167
 msgid "Delete intermediate data when finish"
@@ -4262,7 +4224,7 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/model.py:2219
 #: ../gui/wxpython/gmodeler/frame.py:115
 msgid "Variables"
-msgstr ""
+msgstr "Variabile"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:47
 msgid "Data properties"
@@ -4270,19 +4232,19 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:73
 msgid "Name of raster map:"
-msgstr ""
+msgstr "Numele hărții raster:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:75
 msgid "Name of vector map:"
-msgstr ""
+msgstr "Numele hărții vectoriale:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:78
 msgid "Name of element:"
-msgstr ""
+msgstr "Numele elementului:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:118
 msgid "Add new GRASS module to the model"
-msgstr ""
+msgstr "Adaugă modul nou GRASS la model"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:205
 msgid ""
@@ -4314,11 +4276,11 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:313
 msgid "Command:"
-msgstr ""
+msgstr "Comandă:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:319
 msgid "Option:"
-msgstr ""
+msgstr "Opțiune:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:334
 msgid ""
@@ -4340,13 +4302,13 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:385
 msgid "Condition"
-msgstr ""
+msgstr "Condiție"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:391
 #: ../gui/wxpython/gmodeler/dialogs.py:493
 #: ../gui/wxpython/gmodeler/frame.py:1459
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:410
 msgid "Loop properties"
@@ -4407,9 +4369,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:848
 #, python-format
-msgid ""
-"Selected data records (%d) will permanently deleted from table. Do you want "
-"to delete them?"
+msgid "Selected data records (%d) will permanently deleted from table. Do you want to delete them?"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:905
@@ -4431,7 +4391,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/preferences.py:83
 msgid "Action"
-msgstr ""
+msgstr "Acțiune"
 
 #: ../gui/wxpython/gmodeler/preferences.py:96
 #: ../gui/wxpython/gmodeler/preferences.py:334
@@ -4440,7 +4400,7 @@ msgstr "Valid:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:113
 msgid "Invalid:"
-msgstr ""
+msgstr "Invalid:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:130
 msgid "Running:"
@@ -4555,18 +4515,16 @@ msgid "%d maps deleted from current mapset"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:341 ../gui/wxpython/gmodeler/frame.py:456
-msgid ""
-"Current model is not empty. Do you want to store current settings to model "
-"file?"
+msgid "Current model is not empty. Do you want to store current settings to model file?"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:344 ../gui/wxpython/gmodeler/frame.py:459
 msgid "Create new model?"
-msgstr ""
+msgstr "Creați model nou?"
 
 #: ../gui/wxpython/gmodeler/frame.py:371
 msgid "Choose model file"
-msgstr ""
+msgstr "Alegeți fișierul model"
 
 #: ../gui/wxpython/gmodeler/frame.py:373 ../gui/wxpython/gmodeler/frame.py:417
 #: ../gui/wxpython/lmgr/frame.py:413
@@ -4661,19 +4619,19 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/frame.py:1196
 #: ../gui/wxpython/lmgr/layertree.py:336
 msgid "Remove"
-msgstr ""
+msgstr "Eliminați"
 
 #: ../gui/wxpython/gmodeler/frame.py:1200
 msgid "Disable"
-msgstr ""
+msgstr "Dezactivați"
 
 #: ../gui/wxpython/gmodeler/frame.py:1203
 msgid "Enable"
-msgstr ""
+msgstr "Activați"
 
 #: ../gui/wxpython/gmodeler/frame.py:1208
 msgid "Add control point"
-msgstr ""
+msgstr "Adaugă punct de control"
 
 #: ../gui/wxpython/gmodeler/frame.py:1210
 msgid "Remove control point"
@@ -4686,7 +4644,7 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/frame.py:1228
 #: ../gui/wxpython/lmgr/layertree.py:350
 msgid "Properties"
-msgstr ""
+msgstr "Proprietăți"
 
 #: ../gui/wxpython/gmodeler/frame.py:1311
 msgid "List of variables - right-click to delete"
@@ -4703,7 +4661,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:1323
 msgid "integer"
-msgstr ""
+msgstr "întreg"
 
 #: ../gui/wxpython/gmodeler/frame.py:1324
 msgid "float"
@@ -4715,11 +4673,11 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:1328
 msgid "mapset"
-msgstr ""
+msgstr "mapset"
 
 #: ../gui/wxpython/gmodeler/frame.py:1329
 msgid "file"
-msgstr ""
+msgstr "fișier"
 
 #: ../gui/wxpython/gmodeler/frame.py:1336
 msgid "Add new variable to the model"
@@ -4779,14 +4737,12 @@ msgid "Save file"
 msgstr "Salvează fișier"
 
 #: ../gui/wxpython/gmodeler/frame.py:1619
-msgid ""
-"Python script is locally modificated. Refresh will discard all changes. Do "
-"you really want to continue?"
+msgid "Python script is locally modificated. Refresh will discard all changes. Do you really want to continue?"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:1622
 msgid "Update"
-msgstr ""
+msgstr "Actualizare"
 
 #: ../gui/wxpython/menustrings.py:2 ../gui/wxpython/menustrings.py:857
 msgid "&File"
@@ -4794,54 +4750,54 @@ msgstr "&Fișier"
 
 #: ../gui/wxpython/menustrings.py:3
 msgid "Workspace"
-msgstr ""
+msgstr "Spațiu de lucru"
 
 #: ../gui/wxpython/menustrings.py:4 ../gui/wxpython/menustrings.py:858
 #: ../gui/wxpython/nviz/tools.py:1090
 msgid "New"
-msgstr ""
+msgstr "Nou"
 
 #: ../gui/wxpython/menustrings.py:5
 msgid "Create new workspace"
-msgstr ""
+msgstr "Crează spațiu de lucru nou"
 
 #: ../gui/wxpython/menustrings.py:6 ../gui/wxpython/menustrings.py:860
 msgid "Open"
-msgstr ""
+msgstr "Deschide"
 
 #: ../gui/wxpython/menustrings.py:7
 msgid "Load workspace from file"
-msgstr ""
+msgstr "Încarcă spațiu de lucru din fișierul"
 
 #: ../gui/wxpython/menustrings.py:8 ../gui/wxpython/menustrings.py:862
 #: ../gui/wxpython/modules/colorrules.py:406
 msgid "Save"
-msgstr ""
+msgstr "Salvează"
 
 #: ../gui/wxpython/menustrings.py:9 ../gui/wxpython/lmgr/frame.py:1069
 #: ../gui/wxpython/lmgr/frame.py:1086
 msgid "Save workspace"
-msgstr ""
+msgstr "Salvează spațiu de lucru"
 
 #: ../gui/wxpython/menustrings.py:10 ../gui/wxpython/menustrings.py:864
 msgid "Save as"
-msgstr ""
+msgstr "Salvează ca "
 
 #: ../gui/wxpython/menustrings.py:11
 msgid "Save workspace to file"
-msgstr ""
+msgstr "Salvează spațiu de lucru în fișierul"
 
 #: ../gui/wxpython/menustrings.py:12 ../gui/wxpython/menustrings.py:866
 msgid "Close"
-msgstr ""
+msgstr "Închide"
 
 #: ../gui/wxpython/menustrings.py:13
 msgid "Close workspace file"
-msgstr ""
+msgstr "Închide fișierul spațiului de lucru"
 
 #: ../gui/wxpython/menustrings.py:14
 msgid "Load GRC file (Tcl/Tk GUI)"
-msgstr ""
+msgstr "Încarcă fișier GRC (Tcl/Tk GUI)"
 
 #: ../gui/wxpython/menustrings.py:15
 msgid "Load map layers from GRC file to layer tree"
@@ -4853,7 +4809,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:17
 msgid "Add raster"
-msgstr ""
+msgstr "Adaugă raster"
 
 #: ../gui/wxpython/menustrings.py:18
 msgid "Add raster map layer to current display"
@@ -4861,7 +4817,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:19
 msgid "Add vector"
-msgstr ""
+msgstr "Adaugă vector"
 
 #: ../gui/wxpython/menustrings.py:20
 msgid "Add vector map layer to current display"
@@ -4904,9 +4860,7 @@ msgid "ASCII x,y,z point import and gridding"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:33
-msgid ""
-"Create a raster map from an assemblage of many coordinates using univariate "
-"statistics."
+msgid "Create a raster map from an assemblage of many coordinates using univariate statistics."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:34
@@ -4938,9 +4892,7 @@ msgid "ESRI ASCII grid import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:41
-msgid ""
-"Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster "
-"map layer."
+msgid "Converts an ESRI ARC/INFO ascii raster file (GRID) into a (binary) raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:42
@@ -4980,9 +4932,7 @@ msgid "Terra ASTER HDF import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:51
-msgid ""
-"Georeference, rectify and import Terra-ASTER imagery and relative DEM's "
-"using gdalwarp."
+msgid "Georeference, rectify and import Terra-ASTER imagery and relative DEM's using gdalwarp."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:52
@@ -5038,9 +4988,7 @@ msgid "Historical GRASS vector import (all maps)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:66
-msgid ""
-"Converts all older versions of GRASS vector maps in current mapset to "
-"current format."
+msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:67
@@ -5072,9 +5020,7 @@ msgid "Garmin GPS import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:74
-msgid ""
-"Download waypoints, routes, and tracks from a Garmin GPS receiver into a "
-"vector map."
+msgid "Download waypoints, routes, and tracks from a Garmin GPS receiver into a vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:75
@@ -5082,9 +5028,7 @@ msgid "GPSBabel GPS import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:76
-msgid ""
-"Import waypoints, routes, and tracks from a GPS receiver or GPS download "
-"file into a vector map."
+msgid "Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:77
@@ -5100,9 +5044,7 @@ msgid "GEOnet import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:80
-msgid ""
-"Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector "
-"points map."
+msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:81
@@ -5122,8 +5064,7 @@ msgid "ASCII 3D import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:85
-msgid ""
-"Converts a 3D ASCII raster text file into a (binary) 3D raster map layer."
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:86
@@ -5131,9 +5072,7 @@ msgid "Vis5D import"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:87
-msgid ""
-"Imports 3-dimensional Vis5D files (i.e. the V5D file with 1 variable and 1 "
-"time step)."
+msgid "Imports 3-dimensional Vis5D files (i.e. the V5D file with 1 variable and 1 time step)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:88
@@ -5173,8 +5112,7 @@ msgid "ASCII x,y,z points export"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:97
-msgid ""
-"Export a raster map to a text file as x,y,z values based on cell centers."
+msgid "Export a raster map to a text file as x,y,z values based on cell centers."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:98
@@ -5230,9 +5168,7 @@ msgid "PPM export"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:111
-msgid ""
-"Converts a GRASS raster map to a PPM image file at the pixel resolution of "
-"the currently defined region."
+msgid "Converts a GRASS raster map to a PPM image file at the pixel resolution of the currently defined region."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:112
@@ -5240,9 +5176,7 @@ msgid "PPM from RGB export"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:113
-msgid ""
-"Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel "
-"resolution of the CURRENTLY DEFINED REGION."
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file at the pixel resolution of the CURRENTLY DEFINED REGION."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:114 ../gui/wxpython/menustrings.py:133
@@ -5258,9 +5192,7 @@ msgid "TIFF export"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:117
-msgid ""
-"Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel "
-"resolution of the currently defined region."
+msgid "Exports a GRASS raster map to a 8/24bit TIFF image file at the pixel resolution of the currently defined region."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:118
@@ -5317,8 +5249,7 @@ msgid "Multiple GPS export formats using GPSBabel"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:132
-msgid ""
-"Exports a vector map to a GPS receiver or file format supported by GpsBabel."
+msgid "Exports a vector map to a GPS receiver or file format supported by GpsBabel."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:134
@@ -5394,10 +5325,7 @@ msgid "Copy"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:156
-msgid ""
-"Copies available data files in the user's current mapset search path and "
-"location to the appropriate element directories under the user's current "
-"mapset."
+msgid "Copies available data files in the user's current mapset search path and location to the appropriate element directories under the user's current mapset."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:157
@@ -5413,9 +5341,7 @@ msgid "List filtered"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:160
-msgid ""
-"Lists available GRASS data base files of the user-specified data type "
-"optionally using the search pattern."
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:161 ../gui/wxpython/lmgr/layertree.py:340
@@ -5476,9 +5402,7 @@ msgid "Vector to volume"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:177 ../gui/wxpython/menustrings.py:582
-msgid ""
-"Converts a binary GRASS vector map (only points) layer into a 3D GRASS "
-"raster map layer."
+msgid "Converts a binary GRASS vector map (only points) layer into a 3D GRASS raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:178 ../gui/wxpython/menustrings.py:583
@@ -5550,9 +5474,7 @@ msgid "Bearing/distance to coordinates"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:195
-msgid ""
-"A simple utility for converting bearing and distance measurements to "
-"coordinates and vice versa."
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:196 ../gui/wxpython/lmgr/toolbars.py:142
@@ -5705,9 +5627,7 @@ msgid "Manage projections"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:235
-msgid ""
-"Prints and manipulates GRASS projection information files (in various co-"
-"ordinate system descriptions)."
+msgid "Prints and manipulates GRASS projection information files (in various co-ordinate system descriptions)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:236
@@ -5776,9 +5696,7 @@ msgid "Digitize raster (requires XTerm)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:252
-msgid ""
-"Interactive tool used to draw and save vector features on a graphics monitor "
-"using a pointing device (mouse) and save to a raster map."
+msgid "Interactive tool used to draw and save vector features on a graphics monitor using a pointing device (mouse) and save to a raster map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:253
@@ -5850,10 +5768,7 @@ msgid "Resample using spline tension"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:270
-msgid ""
-"Reinterpolates and optionally computes topographic analysis from input "
-"raster map to a new raster map (possibly with different resolution) using "
-"regularized spline with tension and smoothing."
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:271 ../gui/wxpython/menustrings.py:544
@@ -5885,9 +5800,7 @@ msgid "Tiling"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:278
-msgid ""
-"Produces tilings of the source projection for use in the destination region "
-"and projection."
+msgid "Produces tilings of the source projection for use in the destination region and projection."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:279 ../gui/wxpython/menustrings.py:563
@@ -5939,8 +5852,7 @@ msgid "Create RGB"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:291
-msgid ""
-"Combines red, green and blue raster maps into a single composite raster map."
+msgid "Combines red, green and blue raster maps into a single composite raster map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:292 ../gui/wxpython/menustrings.py:713
@@ -5948,9 +5860,7 @@ msgid "RGB to HIS"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:293
-msgid ""
-"Generates red, green and blue raster map layers combining hue, intensity and "
-"saturation (HIS) values from user-specified input raster map layers."
+msgid "Generates red, green and blue raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:294
@@ -5978,9 +5888,7 @@ msgid "Buffer rasters"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:307
-msgid ""
-"Creates a raster map layer showing buffer zones surrounding cells that "
-"contain non-NULL category values."
+msgid "Creates a raster map layer showing buffer zones surrounding cells that contain non-NULL category values."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:308
@@ -6020,10 +5928,7 @@ msgid "Moving window"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:318
-msgid ""
-"Makes each cell category value a function of the category values assigned to "
-"the cells around it, and stores new cell values in an output raster map "
-"layer."
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:319
@@ -6031,10 +5936,7 @@ msgid "Neighborhood points"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:320
-msgid ""
-"Makes each cell value a function of the attribute values assigned to the "
-"vector points or centroids around it, and stores new cell values in an "
-"output raster map layer."
+msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:321
@@ -6046,9 +5948,7 @@ msgid "Cross product"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:323
-msgid ""
-"Creates a cross product of the category values from multiple raster map "
-"layers."
+msgid "Creates a cross product of the category values from multiple raster map layers."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:324
@@ -6056,9 +5956,7 @@ msgid "Raster series"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:325
-msgid ""
-"Makes each output cell value a function of the values assigned to the "
-"corresponding cells in the input raster map layers."
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:326
@@ -6066,9 +5964,7 @@ msgid "Patch raster maps"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:327
-msgid ""
-"Creates a composite raster map layer by using known category values from one "
-"(or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:328
@@ -6096,8 +5992,7 @@ msgid "Shadows map"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:334
-msgid ""
-"Calculates cast shadow areas from sun position and elevation raster map."
+msgid "Calculates cast shadow areas from sun position and elevation raster map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:335
@@ -6117,10 +6012,7 @@ msgid "Cost surface"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:339
-msgid ""
-"Creates a raster map showing the cumulative cost of moving between different "
-"geographic locations on an input raster map whose cell category values "
-"represent cost."
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:340
@@ -6128,11 +6020,7 @@ msgid "Cumulative movement costs"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:341
-msgid ""
-"Outputs a raster map layer showing the anisotropic cumulative cost of moving "
-"between different geographic locations on an input elevation raster map "
-"layer whose cell category values represent elevation combined with an input "
-"raster map layer whose cell values represent friction cost."
+msgid "Outputs a raster map layer showing the anisotropic cumulative cost of moving between different geographic locations on an input elevation raster map layer whose cell category values represent elevation combined with an input raster map layer whose cell values represent friction cost."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:342
@@ -6156,9 +6044,7 @@ msgid "Slope and aspect"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:347
-msgid ""
-"Generates raster maps of slope, aspect, curvatures and partial derivatives "
-"from a elevation raster map."
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from a elevation raster map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:348
@@ -6210,9 +6096,7 @@ msgid "Clump"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:360
-msgid ""
-"Recategorizes data in a raster map by grouping cells that form physically "
-"discrete areas into unique categories."
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:361
@@ -6240,9 +6124,7 @@ msgid "Carve stream channels"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:367
-msgid ""
-"Takes vector stream data, transforms it to raster and subtracts depth from "
-"the output DEM."
+msgid "Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:368
@@ -6258,9 +6140,7 @@ msgid "Depressionless map and flowlines"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:371
-msgid ""
-"Filters and generates a depressionless elevation map and a flow direction "
-"map from a given elevation raster map."
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:372
@@ -6276,9 +6156,7 @@ msgid "Flow lines"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:375
-msgid ""
-"Construction of slope curves (flowlines), flowpath lengths, and flowline "
-"densities (upslope areas) from a raster digital elevation model (DEM)."
+msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:376
@@ -6310,9 +6188,7 @@ msgid "Groundwater modeling"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:383
-msgid ""
-"Numerical calculation program for transient, confined and unconfined "
-"groundwater flow in two dimensions."
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:384
@@ -6328,9 +6204,7 @@ msgid "SIMWE Sediment flux modeling"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:387
-msgid ""
-"Sediment transport and erosion/deposition simulation using path sampling "
-"method (SIMWE)."
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:388
@@ -6358,9 +6232,7 @@ msgid "Set up (requires XTerm)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:394
-msgid ""
-"Interactive tool used to setup the sampling and analysis framework that will "
-"be used by the other r.le programs."
+msgid "Interactive tool used to setup the sampling and analysis framework that will be used by the other r.le programs."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:395
@@ -6368,9 +6240,7 @@ msgid "Analyze landscape"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:396
-msgid ""
-"Contains a set of measures for attributes, diversity, texture, "
-"juxtaposition, and edge."
+msgid "Contains a set of measures for attributes, diversity, texture, juxtaposition, and edge."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:397
@@ -6378,9 +6248,7 @@ msgid "Analyze patches"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:398
-msgid ""
-"Calculates attribute, patch size, core (interior) size, shape, fractal "
-"dimension, and perimeter measures for sets of patches in a landscape."
+msgid "Calculates attribute, patch size, core (interior) size, shape, fractal dimension, and perimeter measures for sets of patches in a landscape."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:399
@@ -6388,10 +6256,7 @@ msgid "Summary and display (requires XTerm)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:400
-msgid ""
-"Displays the boundary of each r.le patch and shows how the boundary is "
-"traced, displays the attribute, size, perimeter and shape indices for each "
-"patch and saves the data in an output file."
+msgid "Displays the boundary of each r.le patch and shows how the boundary is traced, displays the attribute, size, perimeter and shape indices for each patch and saves the data in an output file."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:401
@@ -6411,8 +6276,7 @@ msgid "Edge density"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:405
-msgid ""
-"Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:406
@@ -6428,9 +6292,7 @@ msgid "Patch area mean"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:409
-msgid ""
-"Calculates mean patch size index on a raster map, using a 4 neighbour "
-"algorithm"
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:410
@@ -6462,8 +6324,7 @@ msgid "Patch density"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:417
-msgid ""
-"Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:418
@@ -6471,8 +6332,7 @@ msgid "Patch number"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:419
-msgid ""
-"Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:420
@@ -6520,11 +6380,7 @@ msgid "Rate of spread"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:432
-msgid ""
-"Generates three, or four raster map layers showing 1) the base "
-"(perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, 3) the "
-"direction of the maximum ROS, and optionally 4) the maximum potential "
-"spotting distance."
+msgid "Generates three, or four raster map layers showing 1) the base (perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, 3) the direction of the maximum ROS, and optionally 4) the maximum potential spotting distance."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:433
@@ -6532,9 +6388,7 @@ msgid "Least-cost spread paths"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:434
-msgid ""
-"Recursively traces the least cost path backwards to cells from which the "
-"cumulative cost was determined."
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:435
@@ -6542,10 +6396,7 @@ msgid "Anisotropic spread simulation"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:436
-msgid ""
-"Simulates elliptically anisotropic spread on a graphics window and generates "
-"a raster map of the cumulative time of spread, given raster maps containing "
-"the rates of spread (ROS), the ROS directions and the spread origins."
+msgid "Simulates elliptically anisotropic spread on a graphics window and generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:437
@@ -6565,9 +6416,7 @@ msgid "Reclassify by size"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:441
-msgid ""
-"Reclasses a raster map greater or less than user specified area size (in "
-"hectares)."
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:442 ../gui/wxpython/menustrings.py:648
@@ -6575,9 +6424,7 @@ msgid "Reclassify"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:443
-msgid ""
-"Creates a new map layer whose category values are based upon a "
-"reclassification of the categories in an existing raster map layer."
+msgid "Creates a new map layer whose category values are based upon a reclassification of the categories in an existing raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:444
@@ -6601,9 +6448,7 @@ msgid "Rescale with histogram"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:449
-msgid ""
-"Rescales histogram equalized the range of category values in a raster map "
-"layer."
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:450
@@ -6623,9 +6468,7 @@ msgid "Random cells and vector points"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:454
-msgid ""
-"Creates a raster map layer and vector point map containing randomly located "
-"points."
+msgid "Creates a raster map layer and vector point map containing randomly located points."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:455
@@ -6645,9 +6488,7 @@ msgid "Gaussian kernel density surface"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:459
-msgid ""
-"Generates a raster density map from vector point data using a moving kernel "
-"or optionally generates a vector density map on a vector network."
+msgid "Generates a raster density map from vector point data using a moving kernel or optionally generates a vector density map on a vector network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:460
@@ -6655,10 +6496,7 @@ msgid "Gaussian deviates surface"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:461
-msgid ""
-"GRASS module to produce a raster map layer of gaussian deviates whose mean "
-"and standard deviation can be expressed by the user. It uses a gaussian "
-"random number generator."
+msgid "GRASS module to produce a raster map layer of gaussian deviates whose mean and standard deviation can be expressed by the user. It uses a gaussian random number generator."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:462 ../gui/wxpython/nviz/tools.py:4307
@@ -6666,9 +6504,7 @@ msgid "Plane"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:463
-msgid ""
-"Creates raster plane map given dip (inclination), aspect (azimuth) and one "
-"point."
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:464
@@ -6676,9 +6512,7 @@ msgid "Random deviates surface"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:465
-msgid ""
-"Produces a raster map of uniform random deviates whose range can be "
-"expressed by the user."
+msgid "Produces a raster map of uniform random deviates whose range can be expressed by the user."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:466
@@ -6730,9 +6564,7 @@ msgid "IDW from vector points"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:478
-msgid ""
-"Surface interpolation from vector point data by Inverse Distance Squared "
-"Weighting."
+msgid "Surface interpolation from vector point data by Inverse Distance Squared Weighting."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:479
@@ -6748,10 +6580,7 @@ msgid "Regularized spline tension"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:482
-msgid ""
-"Spatial approximation and topographic analysis from given point or isoline "
-"data in vector format to floating point raster format using regularized "
-"spline with tension."
+msgid "Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:483
@@ -6787,9 +6616,7 @@ msgid "Manage category information"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:491
-msgid ""
-"Manages category values and labels associated with user-specified raster map "
-"layers."
+msgid "Manages category values and labels associated with user-specified raster map layers."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:492
@@ -6837,9 +6664,7 @@ msgid "Statistics for clumped cells"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:503
-msgid ""
-"Calculates the volume of data \"clumps\", and (optionally) produces a GRASS "
-"vector points map containing the calculated centroids of these clumps."
+msgid "Calculates the volume of data \"clumps\", and (optionally) produces a GRASS vector points map containing the calculated centroids of these clumps."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:504
@@ -6855,8 +6680,7 @@ msgid "Univariate raster statistics"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:507
-msgid ""
-"Calculates univariate statistics from the non-null cells of a raster map."
+msgid "Calculates univariate statistics from the non-null cells of a raster map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:508
@@ -6872,8 +6696,7 @@ msgid "Sample transects (bearing/distance)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:511
-msgid ""
-"Outputs raster map layer values lying along user defined transect line(s)."
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:512
@@ -6881,9 +6704,7 @@ msgid "Covariance/correlation"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:513
-msgid ""
-"Outputs a covariance/correlation matrix for user-specified raster map layer"
-"(s)."
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:514
@@ -6899,9 +6720,7 @@ msgid "Mutual category occurrences"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:517
-msgid ""
-"Tabulates the mutual occurrence (coincidence) of categories for two raster "
-"map layers."
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:518
@@ -6929,9 +6748,7 @@ msgid "Edit vector map (non-interactively)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:525
-msgid ""
-"Edits a vector map, allows adding, deleting and modifying selected vector "
-"features."
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:526
@@ -6955,9 +6772,7 @@ msgid "Dissolve boundaries"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:531
-msgid ""
-"Dissolves boundaries between adjacent areas sharing a common category number "
-"or attribute."
+msgid "Dissolves boundaries between adjacent areas sharing a common category number or attribute."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:532
@@ -6997,9 +6812,7 @@ msgid "Reposition vector map"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:541
-msgid ""
-"Performs an affine transformation (shift, scale and rotate, or GPCs) on "
-"vector map."
+msgid "Performs an affine transformation (shift, scale and rotate, or GPCs) on vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:542
@@ -7083,8 +6896,7 @@ msgid "Adds missing centroids to closed boundaries."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:565
-msgid ""
-"Set color rules for features in a vector using a numeric attribute column."
+msgid "Set color rules for features in a vector using a numeric attribute column."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:567
@@ -7120,9 +6932,7 @@ msgid "Attribute query"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:575
-msgid ""
-"Selects vector objects from an existing vector map and creates a new map "
-"containing only the selected objects."
+msgid "Selects vector objects from an existing vector map and creates a new map containing only the selected objects."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:576
@@ -7130,8 +6940,7 @@ msgid "Spatial query"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:577
-msgid ""
-"Selects features from vector map (A) by features from other vector map (B)."
+msgid "Selects features from vector map (A) by features from other vector map (B)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:587
@@ -7139,8 +6948,7 @@ msgid "Buffer vectors"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:588
-msgid ""
-"Creates a buffer around features of given type (areas must contain centroid)."
+msgid "Creates a buffer around features of given type (areas must contain centroid)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:589
@@ -7160,9 +6968,7 @@ msgid "Detect interiors"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:593
-msgid ""
-"Building contour determination and Region Growing algorithm for determining "
-"the building inside"
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:594
@@ -7170,9 +6976,7 @@ msgid "Correct and reclassify objects"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:595
-msgid ""
-"Correction of the v.lidar.growing output. It is the last of the three "
-"algorithms for LIDAR filtering."
+msgid "Correction of the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:596
@@ -7200,9 +7004,7 @@ msgid "Create points/segments"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:602
-msgid ""
-"Creates points/segments from input lines, linear reference system and "
-"positions read from stdin or a file."
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:603
@@ -7210,9 +7012,7 @@ msgid "Find line id and offset"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:604
-msgid ""
-"Finds line id and real km+offset for given points in vector map using linear "
-"reference system."
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:605
@@ -7220,9 +7020,7 @@ msgid "Nearest features"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:606
-msgid ""
-"Finds the nearest element in vector map 'to' for elements in vector map "
-"'from'."
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:607
@@ -7266,9 +7064,7 @@ msgid "Shortest path for sets of features"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:617
-msgid ""
-"Computes shortest distance via the network between the given sets of "
-"features."
+msgid "Computes shortest distance via the network between the given sets of features."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:618
@@ -7332,9 +7128,7 @@ msgid "Centrality"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:633
-msgid ""
-"Computes degree, centrality, betweeness, closeness and eigenvector "
-"centrality measures in the network."
+msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:634
@@ -7390,9 +7184,7 @@ msgid "Attach, delete or report vector categories to map geometry."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:649
-msgid ""
-"Changes vector category values for an existing vector map according to "
-"results of SQL queries or a value in attribute table column."
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:651
@@ -7400,9 +7192,7 @@ msgid "Update area attributes from raster"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:652
-msgid ""
-"Calculates univariate statistics from a raster map based on vector polygons "
-"and uploads statistics to new attribute columns."
+msgid "Calculates univariate statistics from a raster map based on vector polygons and uploads statistics to new attribute columns."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:653
@@ -7462,9 +7252,7 @@ msgid "Delaunay triangles"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:667
-msgid ""
-"Creates a Delaunay triangulation from an input vector map containing points "
-"or centroids."
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:668
@@ -7472,9 +7260,7 @@ msgid "Voronoi diagram/Thiessen polygons"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:669
-msgid ""
-"Creates a Voronoi diagram from an input vector map containing points or "
-"centroids."
+msgid "Creates a Voronoi diagram from an input vector map containing points or centroids."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:670
@@ -7494,8 +7280,7 @@ msgid "Generate from database"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:674
-msgid ""
-"Creates new vector (points) map from database table containing coordinates."
+msgid "Creates new vector (points) map from database table containing coordinates."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:675
@@ -7571,9 +7356,7 @@ msgid "Univariate attribute statistics for points"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:693
-msgid ""
-"Calculates univariate statistics for attribute. Variance and standard "
-"deviation is calculated only for points if specified."
+msgid "Calculates univariate statistics for attribute. Variance and standard deviation is calculated only for points if specified."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:694
@@ -7581,9 +7364,7 @@ msgid "Univariate statistics for attribute columns"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:695
-msgid ""
-"Calculates univariate statistics on selected table column for a GRASS vector "
-"map."
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:696
@@ -7651,15 +7432,11 @@ msgid "HIS to RGB"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:712
-msgid ""
-"Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to "
-"RGB (Red-Green-Blue) color space."
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:714
-msgid ""
-"Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-"
-"Intensity-Saturation) color space."
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:715
@@ -7667,9 +7444,7 @@ msgid "Rectify image or raster"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:716
-msgid ""
-"Rectifies an image by computing a coordinate transformation for each pixel "
-"in the image based on the control points."
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:717 ../gui/wxpython/lmgr/layertree.py:457
@@ -7685,8 +7460,7 @@ msgid "Spectral response"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:720
-msgid ""
-"Displays spectral response at user specified locations in group or images."
+msgid "Displays spectral response at user specified locations in group or images."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:721
@@ -7694,8 +7468,7 @@ msgid "Brovey sharpening"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:722
-msgid ""
-"Brovey transform to merge multispectral and high-res panchromatic channels"
+msgid "Brovey transform to merge multispectral and high-res panchromatic channels"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:723
@@ -7707,9 +7480,7 @@ msgid "Clustering input for unsupervised classification"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:725
-msgid ""
-"Generates spectral signatures for land cover types in an image using a "
-"clustering algorithm."
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:726
@@ -7733,9 +7504,7 @@ msgid "Interactive input for supervised classification (requires Xterm)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:731
-msgid ""
-"Generates spectral signatures for an image by allowing the user to outline "
-"regions of interest."
+msgid "Generates spectral signatures for an image by allowing the user to outline regions of interest."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:732
@@ -7751,9 +7520,7 @@ msgid "Sequential maximum a posteriori classification (SMAP)"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:735
-msgid ""
-"Performs contextual image classification using sequential maximum a "
-"posteriori (SMAP) estimation."
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:736
@@ -7821,9 +7588,7 @@ msgid "Landsat DN to radiance/reflectance"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:752
-msgid ""
-"Calculates top-of-atmosphere radiance or reflectance and temperature for "
-"Landsat MSS/TM/ETM+."
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:753
@@ -7883,9 +7648,7 @@ msgid "Kappa analysis"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:768
-msgid ""
-"Calculate error matrix and kappa parameter for accuracy assessment of "
-"classification result."
+msgid "Calculate error matrix and kappa parameter for accuracy assessment of classification result."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:769
@@ -7941,15 +7704,11 @@ msgid "Cross section"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:785
-msgid ""
-"Creates cross section 2D raster map from 3D raster map based on 2D elevation "
-"map."
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:787
-msgid ""
-"Calculates numerically transient, confined groundwater flow in three "
-"dimensions."
+msgid "Calculates numerically transient, confined groundwater flow in three dimensions."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:788
@@ -7957,9 +7716,7 @@ msgid "Interpolate volume from points"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:789
-msgid ""
-"Interpolates point data to a 3D raster map using regularized spline with "
-"tension (RST) algorithm."
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:790
@@ -7987,58 +7744,56 @@ msgid "Univariate statistics for volumes"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:796
-msgid ""
-"Calculates univariate statistics from the non-null 3d cells of a raster3d "
-"map."
+msgid "Calculates univariate statistics from the non-null 3d cells of a raster3d map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:797
 msgid "&Database"
-msgstr ""
+msgstr "&Baza de date"
 
 #: ../gui/wxpython/menustrings.py:798
 msgid "Database information"
-msgstr ""
+msgstr "Informații baza de date"
 
 #: ../gui/wxpython/menustrings.py:799
 msgid "List drivers"
-msgstr ""
+msgstr "Listează driverele"
 
 #: ../gui/wxpython/menustrings.py:800
 msgid "Lists all database drivers."
-msgstr ""
+msgstr "Listează toate driverele bazei de date."
 
 #: ../gui/wxpython/menustrings.py:801
 msgid "List tables"
-msgstr ""
+msgstr "Listează tabelele"
 
 #: ../gui/wxpython/menustrings.py:802
 msgid "Lists all tables for a given database."
-msgstr ""
+msgstr "Listează toate tabelele pentru o bază de date dată."
 
 #: ../gui/wxpython/menustrings.py:803
 msgid "Describe table"
-msgstr ""
+msgstr "Descrie tabel"
 
 #: ../gui/wxpython/menustrings.py:804
 msgid "Describes a table in detail."
-msgstr ""
+msgstr "Descrie în detaliu un tabel."
 
 #: ../gui/wxpython/menustrings.py:805
 msgid "List columns"
-msgstr ""
+msgstr "Listează coloane"
 
 #: ../gui/wxpython/menustrings.py:806
 msgid "List all columns for a given table."
-msgstr ""
+msgstr "Listează toate coloanele pentru un tabel dat."
 
 #: ../gui/wxpython/menustrings.py:807
 msgid "Manage databases"
-msgstr ""
+msgstr "Gestionează baza de date"
 
 #: ../gui/wxpython/menustrings.py:808
 msgid "Connect"
-msgstr ""
+msgstr "Conectează"
 
 #: ../gui/wxpython/menustrings.py:809
 msgid "Prints/sets general DB connection for current mapset and exits."
@@ -8062,11 +7817,11 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:814
 msgid "Copy table"
-msgstr ""
+msgstr "Copiază tabel"
 
 #: ../gui/wxpython/menustrings.py:815
 msgid "Copy a table."
-msgstr ""
+msgstr "Copiază un tabel."
 
 #: ../gui/wxpython/menustrings.py:816 ../gui/wxpython/menustrings.py:836
 msgid "Drop column"
@@ -8078,7 +7833,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:818
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: ../gui/wxpython/menustrings.py:819
 msgid "Test database driver, database must exist and set by db.connect."
@@ -8106,12 +7861,10 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:828
 msgid "New table"
-msgstr ""
+msgstr "Tabel nou"
 
 #: ../gui/wxpython/menustrings.py:829
-msgid ""
-"Creates and connects a new attribute table to a given layer of an existing "
-"vector map."
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:830
@@ -8124,7 +7877,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:832
 msgid "Join table"
-msgstr ""
+msgstr "Alătură tabel"
 
 #: ../gui/wxpython/menustrings.py:833
 msgid "Allows to join a table to a vector map table."
@@ -8132,22 +7885,18 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:834
 msgid "Add columns"
-msgstr ""
+msgstr "Adaugă coloane"
 
 #: ../gui/wxpython/menustrings.py:835
-msgid ""
-"Adds one or more columns to the attribute table connected to a given vector "
-"map."
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:837
-msgid ""
-"Drops a column from the attribute table connected to a given vector map."
+msgid "Drops a column from the attribute table connected to a given vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:839
-msgid ""
-"Renames a column in the attribute table connected to a given vector map."
+msgid "Renames a column in the attribute table connected to a given vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:840
@@ -8155,8 +7904,7 @@ msgid "Change values"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:841
-msgid ""
-"Allows to update a column in the attribute table connected to a vector map."
+msgid "Allows to update a column in the attribute table connected to a vector map."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:842
@@ -8797,54 +8545,52 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:952
 msgid "Layer:"
-msgstr ""
+msgstr "Strat:"
 
 #: ../gui/wxpython/modules/colorrules.py:954
 msgid "Attribute column:"
-msgstr ""
+msgstr "Coloana atribut:"
 
 #: ../gui/wxpython/modules/colorrules.py:957
 msgid "Load color from column:"
-msgstr ""
+msgstr "Încarcă culoare din coloana:"
 
 #: ../gui/wxpython/modules/colorrules.py:957
 msgid "Save color to column:"
-msgstr ""
+msgstr "Salvează culoare la coloana:"
 
 #: ../gui/wxpython/modules/colorrules.py:959
 msgid "Load size from column:"
-msgstr ""
+msgstr "Încarcă dimensiunea din coloana:"
 
 #: ../gui/wxpython/modules/colorrules.py:959
 msgid "Save size to column:"
-msgstr ""
+msgstr "Salvează dimensiunea la coloana:"
 
 #: ../gui/wxpython/modules/colorrules.py:961
 msgid "Load width from column:"
-msgstr ""
+msgstr "Încarcă lățimea din coloana:"
 
 #: ../gui/wxpython/modules/colorrules.py:961
 msgid "Save width to column:"
-msgstr ""
+msgstr "Salvează lățimea la coloana:"
 
 #: ../gui/wxpython/modules/colorrules.py:965
 msgid "Use color column instead of color table:"
-msgstr ""
+msgstr "Folosiți coloana de culoare in loc de tabelul de culoare:"
 
 #: ../gui/wxpython/modules/colorrules.py:980
 msgid "Add GRASSRGB column to current attribute table."
-msgstr ""
+msgstr "Adaugă coloana GRASSRGB la tabela de atribute curentă."
 
 #: ../gui/wxpython/modules/colorrules.py:1035
 #: ../gui/wxpython/modules/colorrules.py:1084
 msgid "Import or export color table"
-msgstr ""
+msgstr "Importă sau exportă tabela de culoare"
 
 #: ../gui/wxpython/modules/colorrules.py:1096
 #, python-format
-msgid ""
-"Database connection for vector map <%s> is not defined in DB file.  Do you "
-"want to create and connect new attribute table?"
+msgid "Database connection for vector map <%s> is not defined in DB file.  Do you want to create and connect new attribute table?"
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1099
@@ -8853,16 +8599,12 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1171
 #, python-format
-msgid ""
-"Selected map <%(map)s> is not in current mapset <%(mapset)s>. Color rules "
-"cannot be edited."
+msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Color rules cannot be edited."
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1176
 #, python-format
-msgid ""
-"Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute "
-"table cannot be edited."
+msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute table cannot be edited."
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1318
@@ -8876,9 +8618,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1411
 #, python-format
-msgid ""
-"Number of loaded records reached %d, displaying all the records will be time-"
-"consuming and may lead to computer freezing, do you still want to continue?"
+msgid "Number of loaded records reached %d, displaying all the records will be time-consuming and may lead to computer freezing, do you still want to continue?"
 msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1415
@@ -8929,7 +8669,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/extensions.py:98
 msgid "&Install"
-msgstr ""
+msgstr "&Instalează"
 
 #: ../gui/wxpython/modules/extensions.py:99
 msgid "Install selected add-ons GRASS module"
@@ -8937,7 +8677,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/extensions.py:172
 msgid "Extension not defined"
-msgstr ""
+msgstr "Extensia nu este definită"
 
 #: ../gui/wxpython/modules/extensions.py:186
 msgid "Fetch list of available extensions by clicking on 'Fetch' button"
@@ -8958,11 +8698,11 @@ msgstr ""
 
 #: ../gui/wxpython/modules/extensions.py:395
 msgid "List of installed extensions"
-msgstr ""
+msgstr "Lista extensiilor instalate"
 
 #: ../gui/wxpython/modules/extensions.py:401
 msgid "&Uninstall"
-msgstr ""
+msgstr "&Dezinstalează"
 
 #: ../gui/wxpython/modules/extensions.py:402
 msgid "Uninstall selected AddOns extensions"
@@ -8983,7 +8723,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/extensions.py:491
 msgid "Extension"
-msgstr ""
+msgstr "Extensie"
 
 #: ../gui/wxpython/modules/ogc_services.py:38
 msgid "Import data from WMS server"
@@ -8991,41 +8731,39 @@ msgstr ""
 
 #: ../gui/wxpython/modules/ogc_services.py:54
 msgid " Server settings "
-msgstr ""
+msgstr "Setările server-ului"
 
 #: ../gui/wxpython/modules/ogc_services.py:56
 msgid "Server:"
-msgstr ""
+msgstr "Server:"
 
 #: ../gui/wxpython/modules/ogc_services.py:63
 msgid " List of layers "
-msgstr ""
+msgstr "Lista straturilor"
 
 #: ../gui/wxpython/modules/ogc_services.py:79
 msgid "&Connect"
-msgstr ""
+msgstr "&Conectează"
 
 #: ../gui/wxpython/modules/ogc_services.py:80
 msgid "Connect to the server"
-msgstr ""
+msgstr "Conectează la server"
 
 #: ../gui/wxpython/modules/ogc_services.py:167
-msgid ""
-"The 'xml2' parser is required, please install it first. You may also try "
-"running r.in.wms directly from the command line."
+msgid "The 'xml2' parser is required, please install it first. You may also try running r.in.wms directly from the command line."
 msgstr ""
 
 #: ../gui/wxpython/modules/ogc_services.py:248
 msgid "Layer / Style"
-msgstr ""
+msgstr "Strat / Stil"
 
 #: ../gui/wxpython/modules/ogc_services.py:249
 msgid "Title"
-msgstr ""
+msgstr "Titlu"
 
 #: ../gui/wxpython/modules/ogc_services.py:259
 msgid "Layers"
-msgstr ""
+msgstr "Straturi"
 
 #: ../gui/wxpython/modules/histogram.py:176
 #: ../gui/wxpython/mapdisp/mapwindow.py:438
@@ -9062,11 +8800,11 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:31
 msgid "Add scalebar and north arrow"
-msgstr ""
+msgstr "Adaugă scara și săgeata nord"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:33
 msgid "Add legend"
-msgstr ""
+msgstr "Adaugă legenda"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:37
 msgid "Analyze map"
@@ -9078,7 +8816,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:40
 msgid "Measure distance"
-msgstr ""
+msgstr "Măsoară distanța"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:42
 msgid "Profile surface map"
@@ -9099,7 +8837,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:53
 msgid "Rotate 3D scene"
-msgstr ""
+msgstr "Rotește scena 3D"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:54
 msgid "Drag with mouse to rotate 3D scene"
@@ -9111,8 +8849,7 @@ msgid "Fly-through mode"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:57
-msgid ""
-"Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
+msgid "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:59
@@ -9127,11 +8864,11 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/frame.py:217 ../gui/wxpython/mapdisp/frame.py:269
 #: ../gui/wxpython/mapdisp/frame.py:416
 msgid "2D view"
-msgstr ""
+msgstr "Vizualizare 2D"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:84 ../gui/wxpython/lmgr/frame.py:303
 msgid "3D view"
-msgstr ""
+msgstr "Vizualizare 3D"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:88
 msgid "3D view mode not available"
@@ -9144,26 +8881,20 @@ msgid "Reason: %s"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:90
-msgid ""
-"Note that the wxGUI's 3D view mode is currently disabled on MS Windows "
-"(hopefully this will be fixed soon). Please keep an eye out for updated "
-"versions of GRASS. In the meantime you can use \"NVIZ\" from the File menu."
+msgid "Note that the wxGUI's 3D view mode is currently disabled on MS Windows (hopefully this will be fixed soon). Please keep an eye out for updated versions of GRASS. In the meantime you can use \"NVIZ\" from the File menu."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:98
 #: ../gui/wxpython/vdigit/toolbars.py:695
 msgid "Digitize"
-msgstr ""
+msgstr "Digitizează"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:105
 msgid "Vector digitizer not available"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:107
-msgid ""
-"Note that the wxGUI's vector digitizer is currently disabled (hopefully this "
-"will be fixed soon). Please keep an eye out for updated versions of GRASS. "
-"In the meantime you can use \"v.digit\" from the Develop Vector menu."
+msgid "Note that the wxGUI's vector digitizer is currently disabled (hopefully this will be fixed soon). Please keep an eye out for updated versions of GRASS. In the meantime you can use \"v.digit\" from the Develop Vector menu."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/gprint.py:285
@@ -9203,10 +8934,7 @@ msgid "Show computational extent"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:392
-msgid ""
-"Show/hide computational region extent (set with g.region). Display region "
-"drawn as a blue box inside the computational region, computational region "
-"inside a display region as a red box)."
+msgid "Show/hide computational region extent (set with g.region). Display region drawn as a blue box inside the computational region, computational region inside a display region as a red box)."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:432
@@ -9214,9 +8942,7 @@ msgid "Display mode"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:439
-msgid ""
-"Align region extent based on display size from center point. Default value "
-"for new map displays can be set up in 'User GUI settings' dialog."
+msgid "Align region extent based on display size from center point. Default value for new map displays can be set up in 'User GUI settings' dialog."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:452
@@ -9224,9 +8950,7 @@ msgid "Display resolution"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:459
-msgid ""
-"Constrain display resolution to computational region settings. Default value "
-"for new map displays can be set up in 'User GUI settings' dialog."
+msgid "Constrain display resolution to computational region settings. Default value for new map displays can be set up in 'User GUI settings' dialog."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:483
@@ -9234,9 +8958,7 @@ msgid "Map scale"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:497
-msgid ""
-"As everyone's monitors and resolutions are set differently these values are "
-"not true map scales, but should get you into the right neighborhood."
+msgid "As everyone's monitors and resolutions are set differently these values are not true map scales, but should get you into the right neighborhood."
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:550
@@ -9261,9 +8983,7 @@ msgid "Use defined projection"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:695
-msgid ""
-"Reproject coordinates displayed in the statusbar. Projection can be defined "
-"in GUI preferences dialog (tab 'Projection')"
+msgid "Reproject coordinates displayed in the statusbar. Projection can be defined in GUI preferences dialog (tab 'Projection')"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:720
@@ -9392,25 +9112,27 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:759
 msgid "Nothing to query."
-msgstr ""
+msgstr "Nimic de interogat."
 
 #: ../gui/wxpython/mapdisp/frame.py:827
 msgid "Nothing found."
-msgstr ""
+msgstr "Nimic găsit."
 
 #: ../gui/wxpython/mapdisp/frame.py:955
 msgid ""
 "Click and drag with left mouse button to measure.\n"
 "Double click with left button to clear."
 msgstr ""
+"Clik și trageți cu butonul stâng al mouse-lui pentru a măsura.\n"
+"Dublu click cu butonul stâng pentru a șterge."
 
 #: ../gui/wxpython/mapdisp/frame.py:961
 msgid "Measuring distance"
-msgstr ""
+msgstr "Distanța de măsurare"
 
 #: ../gui/wxpython/mapdisp/frame.py:964
 msgid "Measuring distance:"
-msgstr ""
+msgstr "Distanța de măsurare:"
 
 #: ../gui/wxpython/mapdisp/frame.py:974
 #, python-format
@@ -9418,14 +9140,16 @@ msgid ""
 "Geodesic distance is not yet supported by this tool.\n"
 "Reason: %s"
 msgstr ""
+"Distanța geodezică nu este suportată de acest intrument.\n"
+"Motivul: %s"
 
 #: ../gui/wxpython/mapdisp/frame.py:1004 ../gui/wxpython/mapdisp/frame.py:1010
 msgid "segment"
-msgstr ""
+msgstr "segment"
 
 #: ../gui/wxpython/mapdisp/frame.py:1005 ../gui/wxpython/mapdisp/frame.py:1011
 msgid "total distance"
-msgstr ""
+msgstr "distanța totală"
 
 #: ../gui/wxpython/mapdisp/frame.py:1006
 msgid "bearing"
@@ -9433,11 +9157,11 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1006
 msgid "degrees (clockwise from grid-north)"
-msgstr ""
+msgstr "grade (în sensul acelor de ceasornic de la nord)"
 
 #: ../gui/wxpython/mapdisp/frame.py:1121
 msgid "Scale and North arrow"
-msgstr ""
+msgstr "Scara și săgeata Nord"
 
 #: ../gui/wxpython/mapdisp/frame.py:1274 ../gui/wxpython/gcp/mapdisplay.py:578
 msgid "Zoom to computational region (set with g.region)"
@@ -9462,27 +9186,27 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:83 ../gui/wxpython/nviz/preferences.py:55
 #: ../gui/wxpython/nviz/preferences.py:60
 msgid "View"
-msgstr ""
+msgstr "Vizualizare"
 
 #: ../gui/wxpython/nviz/tools.py:95
 msgid "Analysis"
-msgstr ""
+msgstr "Analiză"
 
 #: ../gui/wxpython/nviz/tools.py:98 ../gui/wxpython/nviz/tools.py:378
 msgid "Animation"
-msgstr ""
+msgstr "Animație"
 
 #: ../gui/wxpython/nviz/tools.py:218
 msgid "Control View"
-msgstr ""
+msgstr "Vizualizare de control"
 
 #: ../gui/wxpython/nviz/tools.py:239
 msgid "Adjusts the distance and angular perspective of the image viewpoint"
-msgstr ""
+msgstr "Reglează distanța și perspectiva unghiulară de vedere a imaginii"
 
 #: ../gui/wxpython/nviz/tools.py:244 ../gui/wxpython/nviz/preferences.py:68
 msgid "Perspective:"
-msgstr ""
+msgstr "Perspectivă:"
 
 #: ../gui/wxpython/nviz/tools.py:252
 msgid "Tilts the plane of the surface from the horizontal"
@@ -9493,72 +9217,64 @@ msgid "Tilt:"
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:263
-msgid ""
-"Adjusts the viewing height above the surface (angle of view automatically "
-"adjusts to maintain the same center of view)"
-msgstr ""
+msgid "Adjusts the viewing height above the surface (angle of view automatically adjusts to maintain the same center of view)"
+msgstr "Reglează înălțimea de vizualizare deasupra suprafeței (unghiul de vedere se reglează automat pentru a menține același centru de vedere)"
 
 #: ../gui/wxpython/nviz/tools.py:268
 msgid "Adjusts the relative height of features above the plane of the surface"
-msgstr ""
+msgstr "Reglează înălțimea relativă a trăsăturilor peste planul suprafeței"
 
 #: ../gui/wxpython/nviz/tools.py:282 ../gui/wxpython/nviz/preferences.py:149
 msgid "Z-exag:"
-msgstr ""
+msgstr "Exagerarea Z:"
 
 #: ../gui/wxpython/nviz/tools.py:295
 msgid "Look:"
-msgstr ""
+msgstr "Aspect:"
 
 #: ../gui/wxpython/nviz/tools.py:298
 msgid "here"
-msgstr ""
+msgstr "aici"
 
 #: ../gui/wxpython/nviz/tools.py:301
-msgid ""
-"Allows you to select a point on the surface that becomes the new center of "
-"view. Click on the button and then on the surface."
-msgstr ""
+msgid "Allows you to select a point on the surface that becomes the new center of view. Click on the button and then on the surface."
+msgstr "Permite selectarea unui punct de pe suprafață, care devine noul centru al vizualizării. Click pe buton si după aceea pe suprafață."
 
 #: ../gui/wxpython/nviz/tools.py:307
 msgid "center"
-msgstr ""
+msgstr "centru"
 
 #: ../gui/wxpython/nviz/tools.py:310
 msgid "Resets the view to the original default center of view"
-msgstr ""
+msgstr "Resetează vizualizare la centrul de vizualizare inițial implicit"
 
 #: ../gui/wxpython/nviz/tools.py:314
 msgid "top"
-msgstr ""
+msgstr "de sus"
 
 #: ../gui/wxpython/nviz/tools.py:317
-msgid ""
-"Sets the viewer directly over the scene's center position. This top view "
-"orients approximately north south."
-msgstr ""
+msgid "Sets the viewer directly over the scene's center position. This top view orients approximately north south."
+msgstr "Setează privitorul direct pe poziția centrală a scenei.  Acest punct de vizualizare de sus orientezaă aproximativ nord - sud."
 
 #: ../gui/wxpython/nviz/tools.py:321
 msgid "reset"
-msgstr ""
+msgstr "resetează"
 
 #: ../gui/wxpython/nviz/tools.py:322
 msgid "Reset to default view"
-msgstr ""
+msgstr "Resetează vizualizare implicită"
 
 #: ../gui/wxpython/nviz/tools.py:340 ../gui/wxpython/nviz/preferences.py:171
 msgid "Image Appearance"
-msgstr ""
+msgstr "Aspectul Imaginii"
 
 #: ../gui/wxpython/nviz/tools.py:385
-msgid ""
-"Press 'Record' button and start changing the view. It is recommended to use "
-"fly-through mode (Map Display toolbar) to achieve smooth motion."
-msgstr ""
+msgid "Press 'Record' button and start changing the view. It is recommended to use fly-through mode (Map Display toolbar) to achieve smooth motion."
+msgstr "Apăsați pe butonul 'Record' și începeți să modificați vizualizare. Se recomandă să utilizați modul zboară prin (bara de instrumente din fereastra de vizualizare) pentru a realiza o mișcare fluidă."
 
 #: ../gui/wxpython/nviz/tools.py:396
 msgid "Record"
-msgstr ""
+msgstr "Înregistrează"
 
 #: ../gui/wxpython/nviz/tools.py:398
 msgid "Play"
@@ -9566,11 +9282,11 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:400
 msgid "Pause"
-msgstr ""
+msgstr "Pauză"
 
 #: ../gui/wxpython/nviz/tools.py:402
 msgid "Stop"
-msgstr ""
+msgstr "Oprește"
 
 #: ../gui/wxpython/nviz/tools.py:414
 msgid "Total number of frames :"
@@ -9597,8 +9313,7 @@ msgid "File prefix:"
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:483
-msgid ""
-"Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
+msgid "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:484
@@ -9798,9 +9513,7 @@ msgid "Rotates the current cutting plane about horizontal axis"
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1038
-msgid ""
-"Sets the Z coordinate of the current cutting plane (only meaningful when "
-"tilt is not 0)"
+msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1107
@@ -10013,40 +9726,40 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:2511
 msgid "W"
-msgstr ""
+msgstr "V"
 
 #: ../gui/wxpython/nviz/tools.py:2512
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: ../gui/wxpython/nviz/tools.py:2513
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: ../gui/wxpython/nviz/tools.py:2514
 msgid "E"
-msgstr ""
+msgstr "E"
 
 #: ../gui/wxpython/nviz/tools.py:2515
 msgid "NW"
-msgstr ""
+msgstr "NV"
 
 #: ../gui/wxpython/nviz/tools.py:2516
 msgid "NE"
-msgstr ""
+msgstr "NE"
 
 #: ../gui/wxpython/nviz/tools.py:2517
 msgid "SE"
-msgstr ""
+msgstr "SE"
 
 #: ../gui/wxpython/nviz/tools.py:2518
 msgid "SW"
-msgstr ""
+msgstr "SV"
 
 #: ../gui/wxpython/nviz/tools.py:3007 ../gui/wxpython/nviz/tools.py:3699
 #: ../gui/wxpython/nviz/tools.py:3701 ../gui/wxpython/nviz/tools.py:4602
 msgid "Level"
-msgstr ""
+msgstr "Nivel"
 
 #: ../gui/wxpython/nviz/tools.py:3518
 msgid "List of slices"
@@ -10059,15 +9772,15 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:4305
 msgid "None"
-msgstr ""
+msgstr "Nici unul"
 
 #: ../gui/wxpython/nviz/tools.py:4467
 msgid "Vector map is 3D"
-msgstr ""
+msgstr "Harta vectorială este 3D"
 
 #: ../gui/wxpython/nviz/tools.py:4470
 msgid "Vector map is 2D"
-msgstr ""
+msgstr "Harta vectoriala este 2D"
 
 #: ../gui/wxpython/nviz/tools.py:4472
 #, python-format
@@ -10080,82 +9793,80 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:4703 ../gui/wxpython/nviz/tools.py:4714
 msgid "North edge:"
-msgstr ""
+msgstr "Marginea de Nord:"
 
 #: ../gui/wxpython/nviz/tools.py:4704 ../gui/wxpython/nviz/tools.py:4715
 msgid "South edge:"
-msgstr ""
+msgstr "Marginea de Sud:"
 
 #: ../gui/wxpython/nviz/tools.py:4705 ../gui/wxpython/nviz/tools.py:4712
 #: ../gui/wxpython/nviz/tools.py:4721
 msgid "West edge:"
-msgstr ""
+msgstr "Marginea de Vest:"
 
 #: ../gui/wxpython/nviz/tools.py:4706 ../gui/wxpython/nviz/tools.py:4713
 #: ../gui/wxpython/nviz/tools.py:4722
 msgid "East edge:"
-msgstr ""
+msgstr "Marginea de Est:"
 
 #: ../gui/wxpython/nviz/tools.py:4708 ../gui/wxpython/nviz/tools.py:4719
 #: ../gui/wxpython/nviz/tools.py:4727
 msgid "Northing (Y):"
-msgstr ""
+msgstr "Nordul (Y):"
 
 #: ../gui/wxpython/nviz/tools.py:4709 ../gui/wxpython/nviz/tools.py:4718
 #: ../gui/wxpython/nviz/tools.py:4728
 msgid "Height (Z):"
-msgstr ""
+msgstr "Înălțimea (Z):"
 
 #: ../gui/wxpython/nviz/tools.py:4710 ../gui/wxpython/nviz/tools.py:4717
 #: ../gui/wxpython/nviz/tools.py:4726
 msgid "Easting (X):"
-msgstr ""
+msgstr "Estul (X):"
 
 #: ../gui/wxpython/nviz/tools.py:4723
 msgid "Bottom edge:"
-msgstr ""
+msgstr "Marginea de jos:"
 
 #: ../gui/wxpython/nviz/tools.py:4724
 msgid "Top edge:"
-msgstr ""
+msgstr "Marginea de sus:"
 
 #: ../gui/wxpython/nviz/tools.py:4828
 msgid "Adjusts the distance and direction of the image viewpoint"
-msgstr ""
+msgstr "Reglează distanța și direcția punctului de vedere a imaginii"
 
 #: ../gui/wxpython/nviz/tools.py:4860
-msgid ""
-"Adjusts the light direction. Click and drag the puck to change the light "
-"direction."
-msgstr ""
+msgid "Adjusts the light direction. Click and drag the puck to change the light direction."
+msgstr "Reglează direcția de lumină. Faceți click și trageți pucul pentru a schimba direcția de lumină."
 
 #: ../gui/wxpython/nviz/preferences.py:31
 msgid "3D view settings"
-msgstr ""
+msgstr "Setările vizualizării 3D"
 
 #: ../gui/wxpython/nviz/preferences.py:48
 msgid "Revert settings to default, changes are not applied"
-msgstr ""
+msgstr "Reveniți la setările implicite, modificările nu sunt aplicate"
 
 #: ../gui/wxpython/nviz/preferences.py:71
 #: ../gui/wxpython/nviz/preferences.py:134
 #: ../gui/wxpython/nviz/preferences.py:152
 msgid "value:"
-msgstr ""
+msgstr "valoare:"
 
 #: ../gui/wxpython/nviz/preferences.py:83
 msgid "step:"
-msgstr ""
+msgstr "pas:"
 
 #: ../gui/wxpython/nviz/preferences.py:98
 #: ../gui/wxpython/nviz/preferences.py:265
 msgid "Position:"
-msgstr ""
+msgstr "Poziția:"
 
 #: ../gui/wxpython/nviz/preferences.py:101
 #: ../gui/wxpython/nviz/preferences.py:268
 msgid "x:"
-msgstr ""
+msgstr "x:"
 
 #: ../gui/wxpython/nviz/preferences.py:131
 msgid "Twist:"
@@ -10199,16 +9910,12 @@ msgid "3D view settings saved to file <%s>."
 msgstr ""
 
 #: ../gui/wxpython/nviz/mapwindow.py:204
-msgid ""
-"Opening 3D view was not successful. Please try to change the value of depth "
-"buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
+msgid "Opening 3D view was not successful. Please try to change the value of depth buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
 msgstr ""
 
 #: ../gui/wxpython/nviz/mapwindow.py:530
 #, python-format
-msgid ""
-"Image is too large, your OpenGL implementation supports maximum texture size "
-"%d px."
+msgid "Image is too large, your OpenGL implementation supports maximum texture size %d px."
 msgstr ""
 
 #: ../gui/wxpython/nviz/mapwindow.py:1026
@@ -10326,11 +10033,7 @@ msgid "At least one raster map required"
 msgstr ""
 
 #: ../gui/wxpython/nviz/wxnviz.py:32 ../gui/wxpython/wxplot/profile.py:30
-msgid ""
-"This module requires the NumPy module, which could not be imported. It "
-"probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
-"information on downloading source or binaries."
+msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
 msgstr ""
 
 #: ../gui/wxpython/nviz/wxnviz.py:49
@@ -10572,8 +10275,7 @@ msgid "Scale"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/dialogs.py:662
-msgid ""
-"Automatic axis scaling, custom max and min, or scale matches data range (min)"
+msgid "Automatic axis scaling, custom max and min, or scale matches data range (min)"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/dialogs.py:667
@@ -10815,32 +10517,32 @@ msgstr ""
 #: ../gui/wxpython/lmgr/layertree.py:1097
 #: ../gui/wxpython/lmgr/layertree.py:1156
 msgid "Please wait, updating data..."
-msgstr ""
+msgstr "Vă rugăm să așteptați, actualizarea datelor..."
 
 #: ../gui/wxpython/lmgr/layertree.py:1451
 msgid "opacity:"
-msgstr ""
+msgstr "opacitate:"
 
 #: ../gui/wxpython/lmgr/layertree.py:1468
 #, python-format
 msgid "Map <%s> not found."
-msgstr ""
+msgstr "Harta <%s> nu a fost găsită."
 
 #: ../gui/wxpython/lmgr/toolbars.py:50
 msgid "Start new map display"
-msgstr ""
+msgstr "Începeți afișarea unei noi hărți"
 
 #: ../gui/wxpython/lmgr/toolbars.py:52
 msgid "Create new workspace (Ctrl+N)"
-msgstr ""
+msgstr "Creați un spațiu de lucru nou (Ctrl+N)"
 
 #: ../gui/wxpython/lmgr/toolbars.py:54
 msgid "Open existing workspace file (Ctrl+O)"
-msgstr ""
+msgstr "Deschideți fișierul din spațiul de lucru existent (Ctrl+O)"
 
 #: ../gui/wxpython/lmgr/toolbars.py:56
 msgid "Save current workspace to file (Ctrl+S)"
-msgstr ""
+msgstr "Salvați spațiul de lucru curent în fișierul (Ctrl+S)"
 
 #: ../gui/wxpython/lmgr/toolbars.py:85
 msgid "Add multiple raster or vector map layers (Ctrl+Shift+L)"
@@ -10888,23 +10590,23 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:140
 msgid "Georectifier"
-msgstr ""
+msgstr "Georectificare"
 
 #: ../gui/wxpython/lmgr/toolbars.py:173
 msgid "GUI settings"
-msgstr ""
+msgstr "Setări GUI"
 
 #: ../gui/wxpython/lmgr/toolbars.py:174
 msgid "GRASS manual"
-msgstr ""
+msgstr "Manual GRASS"
 
 #: ../gui/wxpython/lmgr/toolbars.py:199
 msgid "Edit vector maps"
-msgstr ""
+msgstr "Editare hărți vectoriale"
 
 #: ../gui/wxpython/lmgr/toolbars.py:201
 msgid "Show attribute table"
-msgstr ""
+msgstr "Arată tabela de atribute"
 
 #: ../gui/wxpython/lmgr/toolbars.py:230
 msgid "Generate command for m.nviz.image"
@@ -11068,9 +10770,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:621
 #, python-format
-msgid ""
-"Script <%s> is not executable. Do you want to set the permissions that "
-"allows you to run this script (note that you must be the owner of the file)?"
+msgid "Script <%s> is not executable. Do you want to set the permissions that allows you to run this script (note that you must be the owner of the file)?"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:626
@@ -11083,9 +10783,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:646
 #, python-format
-msgid ""
-"Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this "
-"directory to GRASS_ADDON_PATH?"
+msgid "Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this directory to GRASS_ADDON_PATH?"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:649
@@ -11131,9 +10829,7 @@ msgid "Platform"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:831
-msgid ""
-"Current workspace is not empty. Do you want to store current settings to "
-"workspace file?"
+msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:834
@@ -11207,9 +10903,7 @@ msgid "Unsupported map layer type <%s>."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1642
-msgid ""
-"Note that cell values can only be displayed for regions of less than 10,000 "
-"cells."
+msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1724
@@ -11237,10 +10931,7 @@ msgid "No map layer selected. Operation canceled."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1837
-msgid ""
-"Display resolution is currently not constrained to computational settings. "
-"It's suggested to constrain map to region geometry. Do you want to constrain "
-"the resolution?"
+msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1846
@@ -11496,8 +11187,7 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1305
 msgid ""
-"Insufficient points defined and active (checked) for selected rectification "
-"method.\n"
+"Insufficient points defined and active (checked) for selected rectification method.\n"
 "3+ points needed for 1st order,\n"
 "6+ points for 2nd order, and\n"
 "10+ points for 3rd order."
@@ -11519,8 +11209,7 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1443
 #, python-format
-msgid ""
-"Vector map <%s> already exists. Change extension name and georectify again."
+msgid "Vector map <%s> already exists. Change extension name and georectify again."
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1453
@@ -11573,71 +11262,71 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1925 ../gui/wxpython/gcp/manager.py:1942
 msgid "source E"
-msgstr ""
+msgstr "sursa E"
 
 #: ../gui/wxpython/gcp/manager.py:1926 ../gui/wxpython/gcp/manager.py:1943
 msgid "source N"
-msgstr ""
+msgstr "sursa N"
 
 #: ../gui/wxpython/gcp/manager.py:1927 ../gui/wxpython/gcp/manager.py:1944
 msgid "target E"
-msgstr ""
+msgstr "ținta E"
 
 #: ../gui/wxpython/gcp/manager.py:1928 ../gui/wxpython/gcp/manager.py:1945
 msgid "target N"
-msgstr ""
+msgstr "ținta N"
 
 #: ../gui/wxpython/gcp/manager.py:1929 ../gui/wxpython/gcp/manager.py:1946
 msgid "Forward error"
-msgstr ""
+msgstr "Eroare înainte"
 
 #: ../gui/wxpython/gcp/manager.py:1930 ../gui/wxpython/gcp/manager.py:1947
 msgid "Backward error"
-msgstr ""
+msgstr "Eroare înapoi"
 
 #: ../gui/wxpython/gcp/manager.py:2078
 msgid "Invalid coordinate value. Operation canceled."
-msgstr ""
+msgstr "Invalidă valoarea de coordonată. Operațiune anulată."
 
 #: ../gui/wxpython/gcp/manager.py:2117
 msgid "Create vector map group"
-msgstr ""
+msgstr "Creați un grup de hartă vectorială"
 
 #: ../gui/wxpython/gcp/manager.py:2190
 msgid "Select vector map(s) to add to group:"
-msgstr ""
+msgstr "Selectați harta vectorială pentru a adauga la grup:"
 
 #: ../gui/wxpython/gcp/manager.py:2237
 msgid "Edit GCP"
-msgstr ""
+msgstr "Editați GCP"
 
 #: ../gui/wxpython/gcp/manager.py:2248
 msgid "Ground Control Point No."
-msgstr ""
+msgstr "Nr. puncte de control"
 
 #: ../gui/wxpython/gcp/manager.py:2267
 msgid "source E:"
-msgstr ""
+msgstr "sursa E:"
 
 #: ../gui/wxpython/gcp/manager.py:2268
 msgid "target E:"
-msgstr ""
+msgstr "ținta E:"
 
 #: ../gui/wxpython/gcp/manager.py:2269
 msgid "source N:"
-msgstr ""
+msgstr "sursa N:"
 
 #: ../gui/wxpython/gcp/manager.py:2270
 msgid "target N:"
-msgstr ""
+msgstr "ținta N:"
 
 #: ../gui/wxpython/gcp/manager.py:2405
 msgid "Highlight highest RMS error only"
-msgstr ""
+msgstr "Evidențiați cea mai mare eroare RMS numai"
 
 #: ../gui/wxpython/gcp/manager.py:2411
 msgid "Highlight RMS error > M + SD * factor:"
-msgstr ""
+msgstr "Evidențiați eroara RMS  > M + SD * factor:"
 
 #: ../gui/wxpython/gcp/manager.py:2412
 msgid ""
@@ -11645,38 +11334,41 @@ msgid ""
 "mean + standard deviation * given factor. \n"
 "Recommended values for this factor are between 1 and 2."
 msgstr ""
+"Evidențiați GCP -urile cu eroare RMS mai mare decât \n"
+"media + deviația standard * factor dat. \n"
+"Valorile recomandate pentru acest factor sunt între 1 și 2."
 
 #: ../gui/wxpython/gcp/manager.py:2428
 msgid "Symbol settings"
-msgstr ""
+msgstr "Setări simbol"
 
 #: ../gui/wxpython/gcp/manager.py:2454
 msgid "Color for high RMS error:"
-msgstr ""
+msgstr "Culoare pentru cea mai mare eroare RMS:"
 
 #: ../gui/wxpython/gcp/manager.py:2471
 msgid "Color for selected GCP:"
-msgstr ""
+msgstr "Culoare pentru GCP selectate:"
 
 #: ../gui/wxpython/gcp/manager.py:2488
 msgid "Color for unused GCPs:"
-msgstr ""
+msgstr "Culoare pentru GCP-urile neutilizate:"
 
 #: ../gui/wxpython/gcp/manager.py:2504
 msgid "Show unused GCPs"
-msgstr ""
+msgstr "Arată GCP-urile neutilizate"
 
 #: ../gui/wxpython/gcp/manager.py:2513
 msgid "Symbol size:"
-msgstr ""
+msgstr "Dimensiune simbol:"
 
 #: ../gui/wxpython/gcp/manager.py:2585
 msgid "Rectification"
-msgstr ""
+msgstr "Rectificare"
 
 #: ../gui/wxpython/gcp/manager.py:2591
 msgid "Select rectification order"
-msgstr ""
+msgstr "Selectați pentru rectificare"
 
 #: ../gui/wxpython/gcp/manager.py:2592
 msgid "1st order"
@@ -11692,7 +11384,7 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:2601
 msgid "Select interpolation method:"
-msgstr ""
+msgstr "Selectați metoda de interpolare:"
 
 #: ../gui/wxpython/gcp/manager.py:2612
 msgid "clip to computational region in target location"
@@ -11700,13 +11392,15 @@ msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:2651
 msgid "RMS threshold factor must be > 0"
-msgstr ""
+msgstr "Factorul de prag RMS trebuie să fie > 0"
 
 #: ../gui/wxpython/gcp/manager.py:2654
 msgid ""
 "RMS threshold factor is < 1\n"
 "Too many points might be highlighted"
 msgstr ""
+"Factorul de prag RMS este < 1\n"
+"Prea multe puncte ar putea fi evidențiate"
 
 #: ../gui/wxpython/gcp/manager.py:2773
 #, python-format
@@ -11764,7 +11458,7 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:132
 msgid "Start &GRASS"
-msgstr ""
+msgstr "Pornește &GRASS"
 
 #: ../gui/wxpython/gis_set.py:138
 msgid "&Browse"
@@ -11779,48 +11473,46 @@ msgid "&Location wizard"
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:143
-msgid ""
-"Start location wizard. After location is created successfully, GRASS session "
-"is started."
+msgid "Start location wizard. After location is created successfully, GRASS session is started."
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:147
 msgid "Rename mapset"
-msgstr ""
+msgstr "Redenumește mapset"
 
 #: ../gui/wxpython/gis_set.py:147
 msgid "Rename location"
-msgstr ""
+msgstr "Redenumește locația"
 
 #: ../gui/wxpython/gis_set.py:148
 msgid "Delete mapset"
-msgstr ""
+msgstr "Șterge mapset"
 
 #: ../gui/wxpython/gis_set.py:148
 msgid "Delete location"
-msgstr ""
+msgstr "Șterge locație"
 
 #: ../gui/wxpython/gis_set.py:190
 msgid "Welcome to GRASS GIS"
-msgstr ""
+msgstr "Bine ați venit în GRASS GIS"
 
 #: ../gui/wxpython/gis_set.py:198
 msgid "Enter GRASS session"
-msgstr ""
+msgstr "Introduceți sesiunea GRASS"
 
 #: ../gui/wxpython/gis_set.py:214 ../gui/wxpython/gis_set.py:655
 msgid "Unable to set GRASS database. Check your locale settings."
-msgstr ""
+msgstr "Nu se poate stabili baza de date GRASS. Verificați setările de localizare."
 
 #: ../gui/wxpython/gis_set.py:232
 #, python-format
 msgid "ERROR: Location <%s> not found"
-msgstr ""
+msgstr "EROARE: Locația <%s> nu a fost găsită"
 
 #: ../gui/wxpython/gis_set.py:244
 #, python-format
 msgid "ERROR: Mapset <%s> not found"
-msgstr ""
+msgstr "EROARE: Mapset <%s> nu a fost găsit"
 
 #: ../gui/wxpython/gis_set.py:383
 #, python-format
@@ -11829,18 +11521,16 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:412
 #, python-format
-msgid ""
-"Do you want to import data source <%(name)s> to created location? Default "
-"region will be set to match imported map."
+msgid "Do you want to import data source <%(name)s> to created location? Default region will be set to match imported map."
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:416
 msgid "Import data"
-msgstr ""
+msgstr "Importă data"
 
 #: ../gui/wxpython/gis_set.py:428
 msgid "Do you want to create new mapset?"
-msgstr ""
+msgstr "Doriți să creați un mapset nou?"
 
 #: ../gui/wxpython/gis_set.py:471
 #, python-format
@@ -11927,8 +11617,7 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:605
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location <"
-"%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location <%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
@@ -11975,8 +11664,7 @@ msgid ""
 "\n"
 "Concurrent use not allowed.\n"
 "\n"
-"Do you want to try to remove .gislock (note that you need permission for "
-"this operation) and continue?"
+"Do you want to try to remove .gislock (note that you need permission for this operation) and continue?"
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:845 ../gui/wxpython/gis_set.py:857
@@ -11987,8 +11675,7 @@ msgstr ""
 msgid ""
 "ARE YOU REALLY SURE?\n"
 "\n"
-"If you really are running another GRASS session doing this could corrupt "
-"your data. Have another look in the processor manager just to be sure..."
+"If you really are running another GRASS session doing this could corrupt your data. Have another look in the processor manager just to be sure..."
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:868
@@ -12001,9 +11688,7 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:918
 #, python-format
-msgid ""
-"Name <%(name)s> is not a valid name for location or mapset. Please use only "
-"ASCII characters excluding %(chars)s and space."
+msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:921
@@ -12015,10 +11700,7 @@ msgid "Starting GRASS for the first time"
 msgstr "Pornește GRASS pentru prima dată"
 
 #: ../gui/wxpython/gis_set.py:985
-msgid ""
-"GRASS needs a directory in which to store its data. Create one now if you "
-"have not already done so. A popular choice is \"grassdata\", located in your "
-"home directory."
+msgid "GRASS needs a directory in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory."
 msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:83
@@ -12042,8 +11724,7 @@ msgstr "Digitizează linie nouă"
 #: ../gui/wxpython/vdigit/toolbars.py:88 ../gui/wxpython/vdigit/toolbars.py:91
 #: ../gui/wxpython/vdigit/toolbars.py:112
 msgid "Left: new point; Ctrl+Left: undo last point; Right: close line"
-msgstr ""
-"Stânga: punct nou; Ctrl+Left: anulează ultimul punct; Dreapta: închide linie"
+msgstr "Stânga: punct nou; Ctrl+Left: anulează ultimul punct; Dreapta: închide linie"
 
 #: ../gui/wxpython/vdigit/toolbars.py:90
 msgid "Digitize new boundary"
@@ -12054,9 +11735,7 @@ msgid "Digitize new centroid"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:96
-msgid ""
-"Digitize new area (composition of boundaries without category and one "
-"centroid with category)"
+msgid "Digitize new area (composition of boundaries without category and one centroid with category)"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:99
@@ -12208,7 +11887,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:733
 msgid "Save changes?"
-msgstr ""
+msgstr "Salvați modificările?"
 
 #: ../gui/wxpython/vdigit/toolbars.py:740
 #, python-format
@@ -12231,7 +11910,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/dialogs.py:105
 msgid "Add new category"
-msgstr ""
+msgstr "Adaugă categorie nouă"
 
 #: ../gui/wxpython/vdigit/dialogs.py:144
 msgid "Ignore changes and close dialog"
@@ -12260,7 +11939,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/dialogs.py:595
 msgid "Set value"
-msgstr ""
+msgstr "Setează valoare"
 
 #: ../gui/wxpython/vdigit/dialogs.py:602
 msgid "Starting value"
@@ -12268,11 +11947,11 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/dialogs.py:611
 msgid "Step"
-msgstr ""
+msgstr "Pas"
 
 #: ../gui/wxpython/vdigit/dialogs.py:641
 msgid "List of duplicates"
-msgstr ""
+msgstr "Lista dublurilor"
 
 #: ../gui/wxpython/vdigit/dialogs.py:737
 msgid "Feature id"
@@ -12280,7 +11959,7 @@ msgstr "Id trăsătură"
 
 #: ../gui/wxpython/vdigit/dialogs.py:738
 msgid "Layer (Categories)"
-msgstr ""
+msgstr "Strat (Categorii)"
 
 #: ../gui/wxpython/vdigit/preferences.py:53
 msgid "Apply changes for this session"
@@ -12304,7 +11983,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:161
 msgid "map units"
-msgstr ""
+msgstr "unitățile hărții"
 
 #: ../gui/wxpython/vdigit/preferences.py:170
 msgid "Snap also to vertex"
@@ -12331,8 +12010,7 @@ msgid "Select only features inside of selection bounding box"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:220
-msgid ""
-"By default are selected all features overlapping selection bounding box "
+msgid "By default are selected all features overlapping selection bounding box "
 msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:223
@@ -12370,11 +12048,11 @@ msgstr ""
 #: ../gui/wxpython/vdigit/preferences.py:284
 #: ../gui/wxpython/vdigit/preferences.py:416
 msgid "length"
-msgstr ""
+msgstr "lungime"
 
 #: ../gui/wxpython/vdigit/preferences.py:289
 msgid "Select lines"
-msgstr ""
+msgstr "Selectează linii"
 
 #: ../gui/wxpython/vdigit/preferences.py:291
 #: ../gui/wxpython/vdigit/preferences.py:314
@@ -12444,9 +12122,7 @@ msgid "perimeter"
 msgstr "perimetru"
 
 #: ../gui/wxpython/vdigit/preferences.py:484
-msgid ""
-"Note: These settings are stored in the workspace not in the vector digitizer "
-"preferences."
+msgid "Note: These settings are stored in the workspace not in the vector digitizer preferences."
 msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:512
@@ -12459,11 +12135,11 @@ msgstr "Digitizează o nouă linie/limită"
 
 #: ../gui/wxpython/vdigit/preferences.py:514
 msgid "Highlight"
-msgstr ""
+msgstr "Luminozitate"
 
 #: ../gui/wxpython/vdigit/preferences.py:515
 msgid "Highlight (duplicates)"
-msgstr ""
+msgstr "Luminozitate (dubluri)"
 
 #: ../gui/wxpython/vdigit/preferences.py:518
 msgid "Boundary (no area)"
@@ -12542,15 +12218,12 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdisplay.py:869
 #, python-format
-msgid ""
-"Topology for vector map <%s> is not available. Topology is required by "
-"digitizer. Do you want to rebuild topology (takes some time) and open the "
-"vector map for editing?"
+msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdisplay.py:873
 msgid "Topology missing"
-msgstr ""
+msgstr "Lipsește topologia"
 
 #: ../gui/wxpython/vdigit/wxdigit.py:50
 msgid "Digitization Error"
@@ -12567,7 +12240,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdigit.py:58
 msgid "Operation canceled."
-msgstr ""
+msgstr "Operațiune anulată."
 
 #: ../gui/wxpython/vdigit/wxdigit.py:65
 msgid "Writing new feature failed. Operation cancelled."
@@ -12590,8 +12263,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdigit.py:97
 #, python-format
-msgid ""
-"Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
+msgid "Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
 msgstr ""
 
 #: ../gui/wxpython/vdigit/wxdigit.py:105
