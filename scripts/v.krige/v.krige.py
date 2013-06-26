@@ -86,7 +86,7 @@ for details.
 #%option G_OPT_R_OUTPUT
 #% key: output_var
 #% label: Name for output variance raster map
-#% description: If omitted, will be <input name>_kriging_var
+#% description: If omitted, will be <input name>_kriging.var
 #% required : no
 #%end
 
@@ -247,9 +247,11 @@ class Controller:
     def Run(self, input, column, output, package, sill, nugget, range, logger, \
             overwrite, model, block, output_var, command, **kwargs):
         """ Wrapper for all functions above. """
+
         logger.message(_("Processing %d cells. Computing time raises "
                          "exponentially with resolution." % grass.region()['cells']))
         logger.message(_("Importing data..."))
+
         if globals()["InputData"] is None:
             globals()["InputData"] = self.ImportMap(input, column)
         # and from here over, InputData refers to the global variable
@@ -268,11 +270,12 @@ class Controller:
                                           sill = sill,
                                           nugget = nugget,
                                           range = range)
-        logger.message(_("Variogram fitted."))
+        logger.message(_("Variogram fitting complete."))
         
         logger.message(_("Kriging..."))
-        KrigingResult = self.DoKriging(Formula, InputData, GridPredicted, Variogram['variogrammodel'], block) # using global ones
-        logger.message(_("Kriging performed."))
+        KrigingResult = self.DoKriging(Formula, InputData,
+                 GridPredicted, Variogram['variogrammodel'], block) # using global ones
+        logger.message(_("Kriging complete."))
         
         self.ExportMap(map = KrigingResult,
                        column='var1.pred',
@@ -331,9 +334,13 @@ def main(argv = None):
             options['output'] = options['input'] + '_kriging'
 
         # check for output map with same name. g.parser can't handle this, afaik.
-        if grass.find_file(options['output'], element = 'cell')['fullname'] and os.getenv("GRASS_OVERWRITE") == None:
+        if grass.find_file(options['output'], element = 'cell')['fullname'] \
+           and os.getenv("GRASS_OVERWRITE") == None:
             grass.fatal(_("option: <output>: Raster map already exists."))
-        if options['output_var'] is not '' and (grass.find_file(options['output_var'], element = 'cell')['fullname'] and os.getenv("GRASS_OVERWRITE") == None):
+
+        if options['output_var'] is not '' \
+           and (grass.find_file(options['output_var'], element = 'cell')['fullname'] \
+           and os.getenv("GRASS_OVERWRITE") == None):
             grass.fatal(_("option: <output>: Variance raster map already exists."))
 
         importR()        
@@ -394,7 +401,8 @@ def importR():
         import rpy2.robjects as robjects
         import rpy2.rinterface as rinterface #to speed up kriging? for plots.
     except ImportError:
-        grass.fatal(_("Python module 'Rpy2' not found. Please install it and re-run v.krige.")) # ok for other OSes?
+        # ok for other OSes?
+        grass.fatal(_("Python module 'Rpy2' not found. Please install it and re-run v.krige."))
         
     # R packages check. Will create one error message after check of all packages.
     missingPackagesList = []
@@ -402,7 +410,9 @@ def importR():
         if not robjects.r.require(each, quietly = True)[0]:
             missingPackagesList.append(each)
     if missingPackagesList:
-        errorString = _("R package(s) ") + ", ".join(map(str, missingPackagesList)) +  _(" missing. Install it/them and re-run v.krige.")
+        errorString = _("R package(s) ") + \
+                      ", ".join(map(str, missingPackagesList)) + \
+                      _(" missing. Install it/them and re-run v.krige.")
         grass.fatal(errorString)
     
 if __name__ == '__main__':

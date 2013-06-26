@@ -208,7 +208,7 @@ class KrigingPanel(wx.Panel):
         """ Refreshes list of columns."""
         MapName = event.GetString()
         self.InputDataColumn.InsertColumns(vector = MapName,
-                                   layer = 1, excludeKey = True,
+                                   layer = 1, excludeKey = False,
                                    type = ['integer', 'double precision'])
 
     def OnInputColumnChanged(self, event):
@@ -220,7 +220,7 @@ class KrigingPanel(wx.Panel):
         
         if enable:
             self.OutputMapName.SetValue(MapName.split("@")[0]+"_kriging")
-            self.OutputVarianceMapName.SetValue(MapName.split("@")[0]+"_kriging_var")
+            self.OutputVarianceMapName.SetValue(MapName.split("@")[0]+"_kriging.var")
         else:
             self.OutputMapName.SetValue('')
             self.OutputVarianceMapName.SetValue('')
