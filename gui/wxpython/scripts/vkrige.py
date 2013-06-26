@@ -34,7 +34,8 @@ except ImportError:
 ### wxGUI imports
 
 GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
-sys.path.append(GUIModulesPath)
+if GUIModulesPath not in sys.path:
+    sys.path.append(GUIModulesPath)
 
 from core import globalvar
 from gui_core import gselect

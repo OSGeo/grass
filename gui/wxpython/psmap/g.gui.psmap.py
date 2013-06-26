@@ -40,7 +40,9 @@ import  wx
 
 import grass.script as grass
 
-sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
+if wxbase not in sys.path:
+    sys.path.append(wxbase)
 
 from core.globalvar import CheckWxVersion
 from psmap.frame        import PsMapFrame

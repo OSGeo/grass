@@ -27,7 +27,9 @@ ETCSYMBOLDIR = os.path.join(ETCDIR, "gui", "images", "symbols")
 
 from core.debug import Debug
 
-sys.path.append(os.path.join(ETCDIR, "python"))
+if os.path.join(ETCDIR, "python") not in sys.path:
+    sys.path.append(os.path.join(ETCDIR, "python"))
+
 from grass.script.core import get_commands
 
 

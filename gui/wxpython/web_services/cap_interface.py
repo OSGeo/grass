@@ -25,7 +25,8 @@ import os
 import sys
 
 WMSLibPath = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
-sys.path.append(WMSLibPath)
+if WMSLibPath not in sys.path:
+    sys.path.append(WMSLibPath)
 
 from wms_cap_parsers import WMSCapabilitiesTree, \
                             WMTSCapabilitiesTree, \

@@ -37,7 +37,9 @@ try:
 except ImportError:
     import wx.lib.flatnotebook   as FN
 
-sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
+if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
+    sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
+
 from grass.script          import core as grass
 
 from core.gcmd             import RunCommand, GError, GMessage, GException

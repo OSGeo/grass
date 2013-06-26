@@ -25,9 +25,9 @@ class OverlayController(object):
         self._pdcType = 'image'
         self._propwin = None
         self._defaultAt = ''
-        self._cmd = None  # to be set by user
+        self._cmd = None   # to be set by user
         self._name = None  # to be defined by subclass
-        self._id = None  # to be defined by subclass
+        self._id = None    # to be defined by subclass
 
     def SetCmd(self, cmd):
         hasAt = False
@@ -103,7 +103,7 @@ class OverlayController(object):
         self._overlay = self._renderer.AddOverlay(id = self._id, ltype = self._name,
                                                   command = self.cmd, active = False,
                                                   render = False, hidden = True)
-        # check if successfull
+        # check if successful
 
     def _update(self):
         self._renderer.ChangeOverlay(id = self._id, command = self._cmd,

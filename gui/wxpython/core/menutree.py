@@ -43,7 +43,10 @@ except ImportError:
 import wx
 
 if __name__ == '__main__':
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
+    if gui_wx_path not in sys.path:
+        sys.path.append(gui_wx_path)
+
 from core.treemodel import TreeModel, ModuleNode
 from core.settings import UserSettings
 
@@ -217,7 +220,9 @@ if __name__ == "__main__":
         elif arg in ('manager', 'modeler', 'psmap'):
             menu = arg
 
-    sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython"))
+    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
+    if gui_wx_path not in sys.path:
+        sys.path.append(gui_wx_path)
 
     # FIXME: cross-dependencies
     if menu == 'manager':
