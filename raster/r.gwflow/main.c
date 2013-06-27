@@ -33,7 +33,7 @@ typedef struct
     struct Option *output, *phead, *status, *hc_x, *hc_y, *q, *s, *r, *top,
 	*bottom, *vector_x, *vector_y, *budget, *type,
 	*river_head, *river_bed, *river_leak, *drain_bed, *drain_leak,
-        *dt, *maxit, *error, *solver;
+        *dt, *maxit, *innerit, *error, *solver;
     struct Flag *full_les;
 } paramType;
 
@@ -163,6 +163,9 @@ void set_params(void)
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
+    param.innerit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
+    param.innerit->description =_("The maximum number of iterations in the linearization approach");
+    param.innerit->answer = "25";
     param.error = N_define_standard_option(N_OPT_ITERATION_ERROR);
     param.solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
     param.solver->options = "cg,pcg,cholesky";
@@ -188,7 +191,7 @@ int main(int argc, char *argv[])
     double *tmp_vect = NULL;
     struct Cell_head region;
     double error,  max_norm = 0, tmp;
-    int maxit, i, inner_count = 0;
+    int maxit, i, innerit, inner_count = 0;
     char *solver;
     int x, y, stat;
     N_gradient_field_2d *field = NULL;
@@ -249,6 +252,8 @@ int main(int argc, char *argv[])
 
     /*Set the maximum iterations */
     sscanf(param.maxit->answer, "%i", &(maxit));
+    /*Set the maximum number of inner iterations */
+    sscanf(param.innerit->answer, "%i", &(innerit));
     /*Set the calculation error break criteria */
     sscanf(param.error->answer, "%lf", &(error));
     /*set the solver */
@@ -404,7 +409,7 @@ int main(int argc, char *argv[])
 	    N_convert_array_2d_null_to_zero(data->phead);
 	     /**/ inner_count++;
 	}
-	while (max_norm > 0.01 && inner_count < 50);
+	while (max_norm > 0.01 && inner_count < innerit);
 
 	if (tmp_vect)
 	    free(tmp_vect);
