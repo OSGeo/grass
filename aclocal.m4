@@ -596,9 +596,18 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		# NOTE: do we need to support aix < 6 ?
 	    LIBS="$LIBS -lc"
 	    SHLIB_CFLAGS=""
-	    SHLIB_SUFFIX=".so"
 	    LDFLAGS=""
-	    LD_SEARCH_FLAGS='-L${LIB_RUNTIME_DIR}'
+        if test "$GCC" = "yes" ; then
+            SHLIB_CFLAGS="-fPIC"
+            SHLIB_LD="$CC -shared"
+            LD_SEARCH_FLAGS='-Wl,-bsvr4,-R,${LIB_RUNTIME_DIR}'
+        else
+        	# assume xlc
+            SHLIB_CFLAGS="-qmkshrobj"
+            SHLIB_LD="$CC -shared"
+            LD_SEARCH_FLAGS='-Wl,-bsvr4,-R,${LIB_RUNTIME_DIR}'
+        fi
+	    SHLIB_SUFFIX=".so"
 	    LD_LIBRARY_PATH_VAR="LIBPATH"
 	    GRASS_NEEDS_EXP_FILE=1
 	    GRASS_EXPORT_FILE_SUFFIX='${LIB_VER}.exp'
