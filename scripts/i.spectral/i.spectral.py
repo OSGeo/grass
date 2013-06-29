@@ -5,53 +5,69 @@
 # MODULE:       i.spectral
 # AUTHOR(S):    Markus Neteler, 18. August 1998
 #               Converted to Python by Glynn Clements
-# PURPOSE:      displays spectral response at user specified locations in
-#               group or images
-# COPYRIGHT:    (C) 1999 by the GRASS Development Team
+# PURPOSE:      Displays spectral response at user specified locations in
+#               group or raster images
+# COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
 #
 #############################################################################
-
+#
+#  this script needs gnuplot for pretty rendering
+#  TODO: use PyPlot like the wxGUI Profiling tool
+#
 # written by Markus Neteler 18. August 1998
 #            neteler geog.uni-hannover.de
 # 
 # bugfix: 25. Nov.98/20. Jan. 1999
 # 3 March 2006: Added multiple images and group support by Francesco Pirotti - CIRGEO
-# this script needs gnuplot
+#
 
 #%Module
-#%  description: Displays spectral response at user specified locations in group or images.
-#%  keywords: imagery
-#%  keywords: querying
-#%  keywords: raster
-#%  keywords: multispectral
+#% description: Displays spectral response at user specified locations in group or images.
+#% keywords: imagery
+#% keywords: querying
+#% keywords: raster
+#% keywords: multispectral
 #%End
 #%option G_OPT_I_GROUP
 #% required : no
+#% guisection: Input
 #%end
 #%option G_OPT_R_INPUTS
 #% key: raster
 #% required : no
-#%end
-#%option G_OPT_F_OUTPUT
-#% key: output
-#% description: Name for output PNG image
-#% required : no
+#% guisection: Input
 #%end
 #%option G_OPT_M_COORDS
 #% multiple: yes
 #% required: yes
+#% guisection: Input
 #%end
-#%flag
-#%key: c
-#%description: Label with coordinates instead of numbering
+#%option G_OPT_F_OUTPUT
+#% key: output
+#% description: Name for output image
+#% guisection: Output
+#% required : no
 #%end
+#%Option
+#% key: format
+#% type: string
+#% description: Graphics format for output file
+#% options: png,eps,svg
+#% answer: png
+#% multiple: no
+#% guisection: Output
+#%End
 #%flag
-#%key: g
-#%description: Use gnuplot for display
+#% key: c
+#% description: Show sampling coordinates instead of numbering in the legend
+#%end
+#% flag
+#% key: g
+#% description: Use gnuplot for display
 #%end
 
 import os
@@ -63,7 +79,7 @@ def cleanup():
     grass.try_rmdir(tmp_dir)
 
 
-def draw_gnuplot(what, xlabels, output, label):
+def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
     xrange = 0
 
     for i, row in enumerate(what):
@@ -77,28 +93,42 @@ def draw_gnuplot(what, xlabels, output, label):
     # build gnuplot script
     lines = []
     if output:
+        if img_format == 'png':
+            term_opts = "png truecolor large size 825,550"
+	elif img_format == 'eps':
+            term_opts = "postscript eps color solid size 6,4"
+	elif img_format == 'svg':
+            term_opts = "svg size 825,550 dynamic solid"
+        else:
+            grass.fatal(_("Programmer error (%s)") % img_format)
+
         lines += [
-            "set term png large",
+            "set term " + term_opts,
             "set output '%s'" % output
         ]
+
     lines += [
         "set xtics (%s)" % xlabels,
         "set grid",
         "set title 'Spectral signatures'",
-        "set xrange [0:%d]" % xrange,
+        "set xrange [0.5 : %d - 0.5]" % xrange,
         "set noclabel",
         "set xlabel 'Bands'",
+        "set xtics rotate by -40",
         "set ylabel 'DN Value'",
         "set style data lines"
     ]
 
     cmd = []
     for i, row in enumerate(what):
-        if not label:
-            title = str(i + 1)
+        if not coord_legend:
+            title = 'Pick ' + str(i + 1)
         else:
             title = str(tuple(row[0:2]))
-        cmd.append("'data_%d' title '%s'" % (i, title))
+
+        x_datafile = os.path.join(tmp_dir, 'data_%d' % i)
+        cmd.append(" '%s' title '%s'" % (x_datafile, title))
+
     cmd = ','.join(cmd)
     cmd = ' '.join(['plot', cmd, "with linespoints pt 779"])
     lines.append(cmd)
@@ -153,7 +183,8 @@ def main():
     raster = options['raster']
     output = options['output']
     coords = options['coordinates']
-    label = flags['c']
+    img_fmt = options['format']
+    coord_legend = flags['c']
     gnuplot = flags['g']
     
     global tmp_dir
@@ -165,28 +196,29 @@ def main():
     if group and raster:
         grass.fatal(_("group= and raster= are mutually exclusive"))
 
-    #check if present
+    # check if gnuplot is present
     if gnuplot and not grass.find_program('gnuplot'):
         grass.fatal(_("gnuplot required, please install first"))
 
-    # get y-data for gnuplot-data file
-    # get data from group files and set the x-axis labels
-
+    # get data from group listing and set the x-axis labels
     if group:
-        # ## PARSES THE GROUP FILES - gets rid of ugly header info from group
-        #list output
+        # Parse the group list output
         s = grass.read_command('i.group', flags='g', group=group, quiet=True)
         rastermaps = s.splitlines()
     else:
-        # ## get data from list of files and set the x-axis labels
+        # get data from list of files and set the x-axis labels
         rastermaps = raster.split(',')
 
     xlabels = ["'%s' %d" % (n, i + 1) for i, n in enumerate(rastermaps)]
     xlabels = ','.join(xlabels)
 
+    # get y-data for gnuplot-data file
     what = []
     s = grass.read_command('r.what', map=rastermaps, coordinates=coords,
-                           quiet=True)
+                           null='0', quiet=True)
+    if len(s) is 0:
+        grass.fatal(_('No data returned from query'))
+
     for l in s.splitlines():
         f = l.split('|')
         for i, v in enumerate(f):
@@ -198,7 +230,7 @@ def main():
 
     # build data files
     if gnuplot:
-        draw_gnuplot(what, xlabels, output, label)
+        draw_gnuplot(what, xlabels, output, img_fmt, coord_legend)
     else:
         draw_linegraph(what)
 
