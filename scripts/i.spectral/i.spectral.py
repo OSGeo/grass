@@ -216,7 +216,7 @@ def main():
     what = []
     s = grass.read_command('r.what', map=rastermaps, coordinates=coords,
                            null='0', quiet=True)
-    if len(s) is 0:
+    if len(s) == 0:
         grass.fatal(_('No data returned from query'))
 
     for l in s.splitlines():
