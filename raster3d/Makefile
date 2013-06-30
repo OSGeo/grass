@@ -10,6 +10,7 @@ SUBDIRS = \
 	r3.mask \
 	r3.mkdspf \
 	r3.null \
+	r3.neighbors \
 	r3.out.ascii \
 	r3.out.bin \
 	r3.out.netcdf \
