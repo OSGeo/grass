@@ -1,0 +1,115 @@
+<h2>DESCRIPTION</h2>
+
+<em><b>r3.neighbors</b></em> looks at each voxel in a 3D raster input
+map layer, and examines the values assigned to the
+voxel in a user-defined "neighborhood" around it.  It
+outputs a new 3D raster map in which each voxel is
+assigned a value that is a (user-specified)
+function of the values in that voxel's neighborhood.  For
+example, each voxel in the output map might be assigned a
+value equal to the average of the values
+appearing in its 3 x 3 x 3 voxel "neighborhood" in the input
+map layer.
+
+<h3>OPTIONS</h3>
+
+The user must specify the names of the 3D raster map layers to
+be used for <b>input</b> and <b>output</b>, the
+<b>method</b> used to analyze neighborhood
+values (i.e., the neighborhood function or operation to be
+performed), and the moving <b>window</b> of the neighborhood.
+<p>
+<em>Neighborhood Operation Methods:</em>
+The <b>neighborhood</b> operators determine what new 
+value a center voxel in a neighborhood will have after examining
+values inside its neighboring voxels.
+Each voxel in a 3D raster map layer becomes the center voxel of a neighborhood 
+as the neighborhood window moves from voxel to voxel throughout the map layer.
+<em><b>r3.neighbors</b></em> can perform the following operations:
+
+<p><dl>
+
+<dt><b>average</b> 
+
+<dd>The average value within the neighborhood.
+
+<dt><b>median</b> 
+
+<dd>The value found half-way through a list of the
+neighborhood's values,
+when these are ranged in numerical order.
+
+<dt><b>mode</b> 
+
+<dd>The most frequently occurring value in the neighborhood.
+
+<dt><b>minimum</b> 
+
+<dd>The minimum value within the neighborhood.
+
+<dt><b>maximum</b> 
+
+<dd>The maximum value within the neighborhood.
+
+<dt><b>range</b>
+
+<dd>The range value within the neighborhood.
+
+<dt><b>stddev</b> 
+
+<dd>The statistical standard deviation of values
+within the neighborhood.
+
+<dt><b>sum</b> 
+
+<dd>The sum of values within the neighborhood.
+
+<dt><b>variance</b> 
+
+<dd>The statistical variance of values
+within the neighborhood.
+
+<dt><b>diversity</b> 
+
+<dd>The number of different values within the neighborhood.
+
+<dt><b>interspersion</b> 
+
+<dd>The percentage of voxels containing values which differ from the values
+assigned to the center voxel in the neighborhood, plus 1.
+
+</dl>
+<p><br>
+
+<em>Neighborhood Size:</em>
+The neighborhood moving <b>window</b> specifies which voxel surrounding any given
+voxel fall into the neighborhood for that voxel.
+The <b>window</b> must be three comma separated odd integers. The dimension order is: x,y,z.
+For example: the parameter window=3,3,3 specifies a moving window (a cube) with 27 voxel. 
+<p>
+
+<h2>NOTES</h2>
+
+The <em><b>r3.neighbors</b></em> program works in the current geographic region. 
+It is recommended, but not required,
+that the 3D resolution of the geographic region be the same as that
+of the 3D raster map layer. 
+<p>
+<em><b>r3.neighbors</b></em> doesn't propagate NULLs, but computes the
+aggregation over the non-NULL voxels in the neighborhood.
+<p>
+
+<h2>SEE ALSO</h2>
+
+<em><a href="g.region.html">g.region</a></em><br>
+<em><a href="r.neighbors.html">r.neighbors</a></em><br>
+<em><a href="r3.mapcalc.html">r3.mapcalc</a></em><br>
+<em><a href="r3.stats.html">r3.stats</a></em><br>
+<em><a href="r3.support.html">r3.support</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Soeren Gebbert
+
+<p><i>Last changed: $Date: 2011-11-08 22:24:20 +0100 (Di, 08. Nov 2011) $</i>  
