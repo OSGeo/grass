@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     sensor->key = "sensor";
     sensor->type = TYPE_STRING;
     sensor->label = _("Spacecraft sensor");
-    sensor->description = _("Required only if 'metfile' not given (recommended by sanity)");
+    sensor->description = _("Required only if 'metfile' not given (recommended for sanity)");
     sensor->options = "mss1,mss2,mss3,mss4,mss5,tm4,tm5,tm7,ot8";
     desc = NULL;
     G_asprintf(&desc,
