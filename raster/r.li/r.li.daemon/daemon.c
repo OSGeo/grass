@@ -181,7 +181,7 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
 
 int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 {
-    STRUCT_STAT s;
+    struct stat s;
     struct Cell_head cellhd;
     char *buf;
     const char *token;

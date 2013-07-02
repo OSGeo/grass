@@ -894,7 +894,7 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
 int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 {
     char *path, file_path[GPATH_MAX];
-    STRUCT_STAT stat_buf;
+    struct stat stat_buf;
     
     switch (Map->format) {
     case GV_FORMAT_NATIVE:

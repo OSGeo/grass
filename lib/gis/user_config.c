@@ -59,7 +59,7 @@ static char *_make_toplevel(void)
     uid_t me;
     struct passwd *my_passwd;
 #endif
-    STRUCT_STAT buf;
+    struct stat buf;
     char *path;
 
     errno = 0;
@@ -194,7 +194,7 @@ static char *_make_sublevels(const char *elems)
 {
     int i, status;
     char *cp, *path, *top, *ptr;
-    STRUCT_STAT buf;
+    struct stat buf;
 
     /* Get top level path */
     if (NULL == (top = _make_toplevel()))

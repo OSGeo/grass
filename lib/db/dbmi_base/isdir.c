@@ -28,7 +28,7 @@
 */
 int db_isdir(const char *path)
 {
-    STRUCT_STAT x;
+    struct stat x;
 
     if (stat(path, &x) != 0)
 	return DB_FAILED;

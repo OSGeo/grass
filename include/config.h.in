@@ -297,19 +297,11 @@
 #include <sys/stat.h>
 #define stat _stati64
 #define fstat _fstati64
-#define _STRUCT_STAT_
-typedef struct _stati64 STRUCT_STAT;
 
 #endif /* MINGW32 LFS */
 
 #endif	/* HAVE_LARGEFILES */
 
-
-#ifndef _STRUCT_STAT_
-#define _STRUCT_STAT_
-#include <sys/stat.h>
-typedef struct stat STRUCT_STAT;
-#endif
 
 /* define if langinfo.h exists */
 #undef HAVE_LANGINFO_H

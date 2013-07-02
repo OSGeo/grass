@@ -17,7 +17,6 @@
  *               for details.
  *
  *****************************************************************************/
-#include <grass/config.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -99,7 +98,7 @@ int main(int argc, char **argv)
     }
 
     if (opt2->answer) {		/* Full path to freetype font */
-	STRUCT_STAT info;
+	struct stat info;
 
 	/* Check a valid filename has been supplied */
 	if (stat(opt2->answer, &info) != 0)

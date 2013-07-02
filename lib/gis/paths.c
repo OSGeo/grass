@@ -120,12 +120,12 @@ char *G_convert_dirseps_from_host(char *path)
  * Returns information about the specified file.
  *
  * \param file_name file name
- * \param stat
+ * \param stat pointer to structure filled with file information
  *
  * \return Return value from system lstat function
  **/
 
-int G_stat(const char *file_name, STRUCT_STAT *buf)
+int G_stat(const char *file_name, struct stat *buf)
 {
     return stat(file_name, buf);
 }
@@ -135,14 +135,14 @@ int G_stat(const char *file_name, STRUCT_STAT *buf)
  *
  * Returns information about the specified file.
  *
- * \param file_name file name
- * \param stat in the case of a symbolic link, the link itself is
- *             stat-ed, not the file that it refers to
+ * \param file_name file name, in the case of a symbolic link, the 
+ *                  link itself is stat-ed, not the file that it refers to
+ * \param stat pointer to structure filled with file information
  *
  * \return Return value from system lstat function
  **/
 
-int G_lstat(const char *file_name, STRUCT_STAT *buf)
+int G_lstat(const char *file_name, struct stat *buf)
 {
 #ifdef __MINGW32__
     return stat(file_name, buf);
@@ -165,7 +165,7 @@ int G_owner(const char *path)
 {
 
 #ifndef __MINGW32__
-    STRUCT_STAT info;
+    struct stat info;
 
     G_stat(path, &info);
 

@@ -189,7 +189,7 @@ int dig_file_load(struct gvfile * file)
     int ret, mode, load;
     const char *cmode;
     size_t size;
-    STRUCT_STAT sbuf;
+    struct stat sbuf;
 
     G_debug(2, "dig_file_load ()");
 
