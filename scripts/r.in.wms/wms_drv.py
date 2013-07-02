@@ -38,7 +38,7 @@ try:
 except ImportError: # < Python 2.7
     from xml.parsers.expat import ExpatError as ParseError
     
-from wms_base import WMSBase
+from wms_base import WMSBase, GetSRSParamVal
 
 from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
 
@@ -97,9 +97,9 @@ class WMSDrv(WMSBase):
                 wms_data = self._fetchDataFromServer(query_url, self.params['username'], self.params['password'])
             except (IOError, HTTPException), e:
                 if HTTPError == type(e) and e.code == 401:
-                    grass.fatal(_("Authorization failed to '%s' when fetching data.") % self.params['url'])
+                    grass.fatal(_("Authorization failed to '%s' when fetching data.\n%s") % (self.params['url'], str(e)))
                 else:
-                    grass.fatal(_("Unable to fetch data from: '%s'") % self.params['url'])
+                    grass.fatal(_("Unable to fetch data from: '%s'\n%s") % (self.params['url'], str(e)))
 
             temp_tile = self._tempfile()
                 
@@ -335,7 +335,9 @@ class WMSRequestMgr(BaseRequestMgr):
         """!Initialize data needed for iteration through tiles.
         """
         self.version = params['wms_version']
-        proj = params['proj_name'] + "=EPSG:"+ str(params['srs'])
+        self.srs_param = params['srs']
+
+        proj = params['proj_name'] + "=" +  GetSRSParamVal(params['srs'])
         self.url = params['url'] + ("SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&STYLES=%s&BGCOLOR=%s&TRANSPARENT=%s" % \
                   (params['wms_version'], params['layers'], tile_size['cols'], tile_size['rows'], params['styles'], \
                    params['bgcolor'], params['transparent']))
@@ -411,10 +413,7 @@ class WMSRequestMgr(BaseRequestMgr):
         if self.i_y == self.num_tiles_y - 1 and self.last_tile_y:
             tile_ref['sizeY'] = self.last_tile_y_size 
 
-        if self._isGeoProj(self.proj_srs) and self.version == "1.3.0":                
-            query_bbox = self._flipBbox(self.tile_bbox, self.proj_srs, self.version)
-        else:
-            query_bbox = self.tile_bbox
+        query_bbox = self._getQueryBbox(self.tile_bbox, self.proj_srs, self.srs_param, self.version)
         query_url = self.url + "&" + "BBOX=%s,%s,%s,%s" % ( query_bbox['minx'],  query_bbox['miny'],  query_bbox['maxx'],  query_bbox['maxy'])
 
         tile_ref['t_cols_offset'] = int(self.tile_cols * self.i_x)
@@ -431,12 +430,23 @@ class WMSRequestMgr(BaseRequestMgr):
 
         return query_url, tile_ref
 
-    def _flipBbox(self, bbox, proj, version):
-        """ 
-        Flips coordinates if WMS standard is 1.3.0 and 
-        projection is geographic.
+    def _getQueryBbox(self, bbox, proj, srs_param, version):
+        """!Creates query bbox (used in request URL) 
 
-        value flips between this keys:
+        Mostly bbox is not modified but if WMS standard is 1.3.0 and 
+        projection is geographic, the bbox x and y are in most cases flipped.
+        """
+        # CRS:84 and CRS:83 are exception (CRS:83 and CRS:27 need to be tested)
+        if srs_param in [84, 83] or version != '1.3.0':
+            return bbox
+        elif self._isGeoProj(proj):
+            return self._flipBbox(bbox)
+
+        return bbox
+
+    def _flipBbox(self, bbox):
+        """ 
+        Flips bbox values between this keys:
         maxy -> maxx
         maxx -> maxy
         miny -> minx
@@ -452,7 +462,6 @@ class WMSRequestMgr(BaseRequestMgr):
         new_bbox['minx'] = temp_bbox['miny']
 
         return new_bbox
-
 
 class WMTSRequestMgr(BaseRequestMgr):
     def __init__(self, params, bbox, region, proj_srs, cap_file = None):
