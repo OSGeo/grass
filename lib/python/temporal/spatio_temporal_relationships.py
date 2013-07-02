@@ -48,21 +48,78 @@ class SpatioTemporalTopologyBuilder(object):
 
         dbif, connected = init_dbif(None)
 
-        for _map in tb:
-            _map.select(dbif)
-            _map.print_info()
+        for map in tb:
+            map.select(dbif)
+            map.print_info()
+            
+        # Same can be done with the existing map list
+        # But be aware that this is might not be temporally ordered
+        for map in maps:
+            map.select(dbf)
+            map.print_info()
 
         # Using the next and previous methods, we can iterate over the
         # topological related maps in this way
 
-        _first = tb.get_first()
+        first = tb.get_first()
 
-        while _first:
-            _first.print_topology_info()
-            _first = _first.next()
+        while first:
+            first.print_topology_info()
+            first = first.next()
 
         # Dictionary like accessed
-        _map = tb["name@mapset"]
+        map = tb["name@mapset"]
+        
+        >>> # Example with two lists of maps
+        >>> import grass.temporal as tgis
+        >>> # Create two list of maps with equal time stamps
+        >>> mapsA = []
+        >>> mapsB = []
+        >>> for i in range(10):
+        ...     idA = "a%i@B"%(i)
+        ...     mapA = tgis.RasterDataset(idA)
+        ...     idB = "b%i@B"%(i)
+        ...     mapB = tgis.RasterDataset(idB)
+        ...     check = mapA.set_relative_time(i, i + 1, "months")
+        ...     check = mapB.set_relative_time(i, i + 1, "months")
+        ...     mapsA.append(mapA)
+        ...     mapsB.append(mapB)
+        >>> # Build the topology between the two map lists
+        >>> tb = SpatioTemporalTopologyBuilder()
+        >>> tb.build(mapsA, mapsB, None)
+        >>> # Check relations of mapsA
+        >>> for map in mapsA:
+        ...     if map.get_equal():
+        ...         relations = map.get_equal()
+        ...         print "Map %s has equal relation to map %s"%(map.get_name(),
+        ...               relations[0].get_name())
+        Map a0 has equal relation to map b0
+        Map a1 has equal relation to map b1
+        Map a2 has equal relation to map b2
+        Map a3 has equal relation to map b3
+        Map a4 has equal relation to map b4
+        Map a5 has equal relation to map b5
+        Map a6 has equal relation to map b6
+        Map a7 has equal relation to map b7
+        Map a8 has equal relation to map b8
+        Map a9 has equal relation to map b9
+        >>> # Check relations of mapsB
+        >>> for map in mapsB:
+        ...     if map.get_equal():
+        ...         relations = map.get_equal()
+        ...         print "Map %s has equal relation to map %s"%(map.get_name(),
+        ...               relations[0].get_name())
+        Map b0 has equal relation to map a0
+        Map b1 has equal relation to map a1
+        Map b2 has equal relation to map a2
+        Map b3 has equal relation to map a3
+        Map b4 has equal relation to map a4
+        Map b5 has equal relation to map a5
+        Map b6 has equal relation to map a6
+        Map b7 has equal relation to map a7
+        Map b8 has equal relation to map a8
+        Map b9 has equal relation to map a9
+        
         @endcode
 
     """
