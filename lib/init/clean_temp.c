@@ -42,7 +42,7 @@ void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
     char buf[BUF_MAX];
     DIR *curdir;
     struct dirent *cur_entry;
-    STRUCT_STAT info;
+    struct stat info;
     int n, pathlen;
 
     curdir = opendir(pathname);

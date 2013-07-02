@@ -63,7 +63,7 @@
 int G_recursive_copy(const char *src, const char *dst)
 {
     DIR *dirp;
-    STRUCT_STAT sb;
+    struct stat sb;
 
     if (G_lstat(src, &sb) < 0)
 	return 1;

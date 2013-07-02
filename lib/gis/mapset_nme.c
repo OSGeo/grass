@@ -159,7 +159,7 @@ char **G_available_mapsets(void)
 
     while ((ent = readdir(dir))) {
 	char buf[GPATH_MAX];
-	STRUCT_STAT st;
+	struct stat st;
 
 	sprintf(buf, "%s/%s/WIND", G_location_path(), ent->d_name);
 

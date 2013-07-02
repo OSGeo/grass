@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 
     unsigned char *pbNodeAttr, *pbEdgeAttr, *pbToNodeAttr;
 
-    STRUCT_STAT statdata;
+    struct stat statdata;
 
     dglGraph_s graphOut;
 

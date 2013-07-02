@@ -88,7 +88,7 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
     return G__make_mapset_element(buf);
 }
 
-static int check_owner(const STRUCT_STAT *info)
+static int check_owner(const struct stat *info)
 {
 #if defined(__MINGW32__) || defined(SKIP_MAPSET_OWN_CHK)
     return 1;
@@ -116,7 +116,7 @@ static int check_owner(const STRUCT_STAT *info)
 int G__mapset_permissions(const char *mapset)
 {
     char path[GPATH_MAX];
-    STRUCT_STAT info;
+    struct stat info;
 
     G_file_name(path, "", "", mapset);
 
@@ -146,7 +146,7 @@ int G__mapset_permissions2(const char *gisdbase, const char *location,
 			   const char *mapset)
 {
     char path[GPATH_MAX];
-    STRUCT_STAT info;
+    struct stat info;
 
     sprintf(path, "%s/%s/%s", gisdbase, location, mapset);
 

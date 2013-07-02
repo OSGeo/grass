@@ -106,7 +106,7 @@ static int recursive_remove(const char *path)
 {
     DIR *dirp;
     struct dirent *dp;
-    STRUCT_STAT sb;
+    struct stat sb;
     char path2[GPATH_MAX];
 
     if (G_lstat(path, &sb))

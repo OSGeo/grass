@@ -129,7 +129,7 @@ static void find_maps(void)
 	return;
 
     while ((ent = readdir(dir)) != NULL) {
-	STRUCT_STAT buf;
+	struct stat buf;
 
 	if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, ".."))
 	    continue;
