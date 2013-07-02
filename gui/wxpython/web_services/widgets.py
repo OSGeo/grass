@@ -683,7 +683,6 @@ class WSPanel(wx.Panel):
         first = True
         for l in curr_sel_ls:
             layer_projs = l['cap_intf_l'].GetLayerData('srs')
-
             if first:
                 projs_list = layer_projs
                 first = False
@@ -696,7 +695,7 @@ class WSPanel(wx.Panel):
             for proj in projs_list:
                 proj_spl = proj.strip().split(':')
 
-                if 'epsg' in proj_spl[0].strip().lower():
+                if proj_spl[0].strip().lower() in self.drv_info.GetSrs():
                     try:
                         int(proj_spl[1])
                         self.projs_list.append(proj)
