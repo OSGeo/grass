@@ -17,6 +17,7 @@ for details.
 
 @author Soeren Gebbert
 """
+import copy
 
 class TemporalTopologyDatasetConnector(object):
     """!This class implements a temporal topology access structure to connect temporal related datasets
@@ -104,7 +105,11 @@ class TemporalTopologyDatasetConnector(object):
         started=a@P
         finishes=a@P
         finished=a@P
-        
+        >>> rlist = tmr.get_temporal_relations()
+        >>> if "FINISHED" in rlist.keys():
+        ...    print rlist["FINISHED"][0].get_id()
+        a@P
+
         @endcode
     """
 
@@ -115,6 +120,16 @@ class TemporalTopologyDatasetConnector(object):
         """!Reset any information about temporal topology"""
         self._temporal_topology = {}
         self._has_temporal_topology = False
+        
+    def get_temporal_relations(self):
+        """!Return the dictionary of temporal relationships
+        
+            Keys are the temporal relationships in upper case,
+            values are abstract map objects.
+            
+            @return The temporal relations dictionary
+        """
+        return copy.copy(self._temporal_topology)
         
     def get_number_of_temporal_relations(self):
         """! Return a dictionary in which the keys are the relation names and the value
