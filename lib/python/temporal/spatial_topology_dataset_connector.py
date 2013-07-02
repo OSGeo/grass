@@ -17,6 +17,7 @@ for details.
 
 @author Soeren Gebbert
 """
+import copy
 
 class SpatialTopologyDatasetConnector(object):
     """!This class implements a spatial topology access structure to connect spatial related datasets
@@ -65,6 +66,11 @@ class SpatialTopologyDatasetConnector(object):
         in=a@P
         contain=a@P
         meet=a@P
+        >>> rlist = tmr.get_spatial_relations()
+        >>> if "COVER" in rlist.keys():
+        ...    print rlist["COVER"][0].get_id()
+        a@P
+
         
         @endcode
     """
@@ -77,6 +83,16 @@ class SpatialTopologyDatasetConnector(object):
         self._spatial_topology = {}
         self._has_spatial_topology = False
         
+    def get_spatial_relations(self):
+        """!Return the dictionary of spatial relationships
+        
+            Keys are the spatial relationships in upper case,
+            values are abstract map objects.
+            
+            @return The spatial relations dictionary
+        """
+        return copy.copy(self._spatial_topology)
+    
     def get_number_of_spatial_relations(self):
         """! Return a dictionary in which the keys are the relation names and the value
         are the number of relations.
