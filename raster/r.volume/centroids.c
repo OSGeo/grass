@@ -28,14 +28,14 @@ int centroids(int fd,		/* File descriptor of map layer to process */
 {				/* Highest positive cat number in map layer */
     CELL *cell_buf, v;
     int i, adjusted, numb, left, right;
-    int *count;
+    long int *count;
     int row, col, rows, cols;
 
     adjusted = 0;
 
     cell_buf = Rast_allocate_c_buf();
     /* space to accumulate counts */
-    count = (int *)G_malloc((max + 1) * sizeof(int));
+    count = (long int *)G_malloc((max + 1) * sizeof(long int));
 
     /* zero the count totals */
     for (i = 1; i <= max; i++) {
