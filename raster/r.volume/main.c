@@ -166,9 +166,10 @@ int main(int argc, char *argv[])
 		    row, col, i, clumpmap, max);
 	    if (i < 1)
 		continue;	/* ignore zeros and negs */
+	    if (Rast_is_d_null_value(&data_buf[col]))
+		continue;
+	    sum[i] += data_buf[col];
 	    count[i]++;
-	    if (!Rast_is_d_null_value(&data_buf[col]))
-		sum[i] += data_buf[col];
 	}
     }
     G_percent(row, rows, 2);
