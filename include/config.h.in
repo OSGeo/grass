@@ -279,7 +279,7 @@
 
 #endif
 
-#if defined(__MINGW32__) && defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64
+#if defined(__MINGW32__)
 
 /* add/remove as needed */
 /* redefine off_t */
