@@ -61,6 +61,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 /* adj_cellhd.c */
 void G_adjust_Cell_head(struct Cell_head *, int, int);
