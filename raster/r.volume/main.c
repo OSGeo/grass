@@ -152,7 +152,6 @@ int main(int argc, char *argv[])
     cols = window.cols;
 
     /* now get the data -- first pass */
-    G_message("Complete ...");
     for (row = 0; row < rows; row++) {
 	G_percent(row, rows, 2);
 	Rast_get_c_row(fd_data, data_buf, row);
@@ -183,6 +182,7 @@ int main(int argc, char *argv[])
 
     /* got everything, now do output */
     if (*site_list) {
+	/* FIXME: convert to modern vector points map metadata */
 	char desc[GNAME_MAX * 2 + 40];
 
 	site_info.form = NULL;
