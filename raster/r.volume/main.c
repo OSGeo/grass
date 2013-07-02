@@ -34,7 +34,8 @@ int centroids(int, int *, int *, int, int);
 int main(int argc, char *argv[])
 {
     /* variables   */
-    CELL *data_buf, *clump_buf;
+    DCELL *data_buf;
+    CELL *clump_buf;
     CELL i, max;
     int row, col, rows, cols;
     int out_mode, use_MASK, *n, *e;
@@ -144,7 +145,7 @@ int main(int argc, char *argv[])
 	count[i] = 0;
     }
 
-    data_buf = Rast_allocate_c_buf();
+    data_buf = Rast_allocate_d_buf();
     clump_buf = Rast_allocate_c_buf();
 
     /* get window size */
@@ -154,7 +155,7 @@ int main(int argc, char *argv[])
     /* now get the data -- first pass */
     for (row = 0; row < rows; row++) {
 	G_percent(row, rows, 2);
-	Rast_get_c_row(fd_data, data_buf, row);
+	Rast_get_d_row(fd_data, data_buf, row);
 	Rast_get_c_row(fd_clump, clump_buf, row);
 	for (col = 0; col < cols; col++) {
 	    i = clump_buf[col];
@@ -166,7 +167,8 @@ int main(int argc, char *argv[])
 	    if (i < 1)
 		continue;	/* ignore zeros and negs */
 	    count[i]++;
-	    sum[i] += data_buf[col];
+	    if (!Rast_is_d_null_value(&data_buf[col]))
+		sum[i] += data_buf[col];
 	}
     }
     G_percent(row, rows, 2);
