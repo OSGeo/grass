@@ -24,7 +24,7 @@ except:
 
 import xml.etree.ElementTree as etree
 
-from wms_base import WMSBase
+from wms_base import WMSBase, GetSRSParamVal
 
 class NullDevice():
     def write(self, s):
@@ -50,7 +50,7 @@ class WMSGdalDrv(WMSBase):
         server_url.text =self.params['url']
         
         srs = etree.SubElement(service, self.params['proj_name'])   
-        srs.text = 'EPSG:' + str(self.params['srs'])
+        srs.text = GetSRSParamVal(self.params['srs'])
         
         image_format = etree.SubElement(service, "ImageFormat")
         image_format.text = self.params['format']
@@ -65,7 +65,7 @@ class WMSGdalDrv(WMSBase):
         styles.text = self.params['styles']
         
         data_window = etree.SubElement(gdal_wms, "DataWindow")
-        
+
         upper_left_x = etree.SubElement(data_window, "UpperLeftX")
         upper_left_x.text = str(self.bbox['minx']) 
         
@@ -115,8 +115,8 @@ class WMSGdalDrv(WMSBase):
         if ("+proj=latlong" in self.proj_srs or \
             "+proj=longlat" in self.proj_srs) and \
             self.params['wms_version'] == "1.3.0":
-            grass.warning(_("If module will not be able to fetch the data in this\
-                           geographic projection, \n try 'WMS_GRASS' driver or use WMS version 1.1.1."))
+            grass.warning(_("If module will not be able to fetch the data in this " +
+                            "geographic projection, \n try 'WMS_GRASS' driver or use WMS version 1.1.1."))
 
         self._debug("_download", "started")
         

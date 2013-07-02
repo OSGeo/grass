@@ -61,12 +61,6 @@ class WMSBase:
         for key in ['url', 'layers', 'styles', 'method']:
             self.params[key] = options[key].strip()
 
-        self.params['wms_version'] = options['wms_version']  
-        if self.params['wms_version'] == "1.3.0":
-            self.params['proj_name'] = "CRS"
-        else:
-            self.params['proj_name'] = "SRS"
-
         self.flags = flags
 
         if self.flags['o']:
@@ -97,7 +91,18 @@ class WMSBase:
         self.params['srs'] = int(options['srs'])
         if self.params['srs'] <= 0 and  not 'srs' in driver_props['ignored_params']:
             grass.fatal(_("Invalid EPSG code %d") % self.params['srs'])
+
+        self.params['wms_version'] = options['wms_version']  
+        if "CRS" in GetSRSParamVal(self.params['srs']) and self.params['wms_version'] == "1.1.1":
+            self.params['wms_version'] = "1.3.0"
+            grass.warning(_("WMS version <1.3.0> will be used, because version <1.1.1> does not support <%s>projection")
+                            % GetSRSParamVal(self.params['srs']))
         
+        if self.params['wms_version'] == "1.3.0":
+            self.params['proj_name'] = "CRS"
+        else:
+            self.params['proj_name'] = "SRS"
+
         # read projection info
         self.proj_location = grass.read_command('g.proj', 
                                                 flags ='jf').rstrip('\n')
@@ -111,7 +116,7 @@ class WMSBase:
         else:
             self.proj_srs = grass.read_command('g.proj', 
                                                flags = 'jf', 
-                                               epsg = str(self.params['srs']) ).rstrip('\n')
+                                               epsg = str(GetEpsg(self.params['srs']))).rstrip('\n')
         
         self.proj_srs = self._modifyProj(self.proj_srs)
 
@@ -530,6 +535,9 @@ class WMSDriversInfo:
         # form for request
         self.formats = ["image/geotiff", "image/tiff", "image/png", "image/jpeg", "image/gif"]
 
+        self.srs = ("epsg", "crs")
+
+
     def GetDrvProperties(self, driver):
         """!Get information about driver parameters.
         """
@@ -594,3 +602,36 @@ class WMSDriversInfo:
         if label in self.f_labels:
             return self.formats[self.f_labels.index(label)]
         return None
+
+    def GetSrs(self):
+        """!Get supported srs prefixes (e.g. epsg/crs)
+
+        @todo filter according to version and driver params
+        """
+        return self.srs
+
+
+
+#TODO move to utils?
+def GetSRSParamVal(srs):
+    """!Decides whether to use CRS or EPSG prefix according to srs number.
+    """
+
+    if srs in [84, 83, 27]:
+        return "CRS:%d" % srs
+    else:
+        return "EPSG:%d" % srs
+
+def GetEpsg(srs):
+    """
+     @return EPSG number 
+             If srs is CRS number, return EPSG number which corresponds to CRS number.
+    """    
+    if srs == 84:
+        return 4326
+    if srs == 83:
+        return 4269
+    if srs == 27:
+        return 4267
+
+    return srs
