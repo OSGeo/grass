@@ -179,7 +179,7 @@ import grass.script as grass
 def GetRegionParams(opt_region):
 
     # set region 
-    if opt_region:  
+    if opt_region:
         reg_spl = opt_region.strip().split('@', 1)
         reg_mapset = '.'
         if len(reg_spl) > 1:
@@ -200,7 +200,6 @@ def GetRegionParams(opt_region):
     return region_params
 
 def main():
-
 
     if 'GRASS' in options['driver']:
         grass.debug("Using GRASS driver")
