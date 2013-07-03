@@ -168,13 +168,17 @@ def toolboxes2menudata(userDefined=True):
     else:
         mainMenu = etree.parse(mainMenuFile)
     root = mainMenu.getroot()
-
+    
+    userHasToolboxes = False
     if userDefined and userToolboxesFile:
-        userToolboxes = etree.parse(userToolboxesFile)
-        _expandUserToolboxesItem(root, userToolboxes)
-        _expandToolboxes(root, userToolboxes)
+        userToolboxes = etree.parse(userToolboxesFile)        
+        # in case user has empty toolboxes file (to avoid genereation)
+        if userToolboxes.findall('.//toolbox'):
+            _expandUserToolboxesItem(root, userToolboxes)
+            _expandToolboxes(root, userToolboxes)
+            userHasToolboxes = True
 
-    if not userToolboxesFile:
+    if not userHasToolboxes:
         _removeUserToolboxesItem(root)
 
     toolboxes = etree.parse(toolboxesFile)
