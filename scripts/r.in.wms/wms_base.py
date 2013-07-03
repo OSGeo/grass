@@ -264,7 +264,7 @@ class WMSBase:
         # print to output
         cap_lines = cap.readlines()
         for line in cap_lines: 
-            print line
+            print line.rstrip()
         
     def _computeBbox(self):
         """!Get region extent for WMS query (bbox)
@@ -303,7 +303,8 @@ class WMSBase:
             points = grass.read_command('m.proj', flags = 'd',
                                         proj_output = self.proj_srs,
                                         proj_input = self.proj_location,
-                                        input = temp_region) # TODO: stdin
+                                        input = temp_region,
+                                        quiet = True) # TODO: stdin
             grass.try_remove(temp_region)
             if not points:
                 grass.fatal(_("Unable to determine region, %s failed") % 'm.proj')
@@ -523,6 +524,7 @@ class GRASSImporter:
                                  output = self.opt_output ) != 0:
                 grass.fatal(_('%s failed') % 'r.composite')
 
+        grass.message(_('<%s> created.') % self.opt_output)
 
 class WMSDriversInfo:
     def __init__(self):
