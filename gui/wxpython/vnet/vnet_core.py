@@ -60,9 +60,6 @@ class VNETManager:
         self.history = VNETHistory(self.guiparent, self.vnet_data, self.tmp_maps)
         self.analyses = VNETAnalyses(self.vnet_data, self.RunAnDone, self.goutput, self.tmp_maps)
 
-        # information, whether mouse event handler is registered in map window
-        self.handlerRegistered = False
-
         self.snap_nodes = SnappingNodes(self.vnet_data, self.tmp_maps, self.mapWin)
 
         self.ttbCreated = Signal('VNETManager.ttbCreated')
@@ -75,9 +72,15 @@ class VNETManager:
 
 
     def  __del__(self):
+        self.CleanUp()
+
+    def CleanUp(self):
         """!Removes temp layers, unregisters handlers and graphics"""
+
         update = self.tmp_maps.DeleteAllTmpMaps()
 
+        self.vnet_data.CleanUp()
+        
         if update:
             up_map_evt = gUpdateMap(render = True, renderVector = True)
             wx.PostEvent(self.mapWin, up_map_evt)

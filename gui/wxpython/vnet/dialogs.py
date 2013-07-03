@@ -158,10 +158,6 @@ class VNETDialog(wx.Dialog):
 
         self.toolbars['mainToolbar'].UpdateUndoRedo(0, 0)
 
-    def  __del__(self):
-        """!Removes temp layers, unregisters handlers and graphics"""
-        #TODO onclose
-        pass
 
     def _addPanes(self):
         """!Adds toolbar pane and pane with tabs"""
@@ -759,6 +755,7 @@ class VNETDialog(wx.Dialog):
 
     def OnCloseDialog(self, event):
         """!Cancel dialog"""
+        self.vnet_mgr.CleanUp()
         self.parent.dialogs['vnet'] = None
         self.Destroy()
 
@@ -1633,7 +1630,7 @@ class DefGlobalTurnsDialog(wx.Dialog):
 
         self.btnAdd.Bind(wx.EVT_BUTTON, self.OnAddButtonClick)
         self.btnRemove.Bind(wx.EVT_BUTTON, self.OnRemoveButtonClick)
-        self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseDialog)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseDialog)
         self.useUTurns.Bind(wx.EVT_CHECKBOX, self.OnCheckedUTurns)
                 
         self.btnClose.SetDefault()
