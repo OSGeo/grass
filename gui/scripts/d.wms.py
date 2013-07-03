@@ -16,24 +16,18 @@
 #############################################################################
 
 #%module
-#% description: Downloads and displays data from WMS server.
+#% description: Downloads and displays data from WMS/WMTS/NASA OnEarth server.
 #% keywords: raster
 #% keywords: import
-#% keywords: wms
+#% keywords: WMS
+#% keywords: WMTS 
+#% keywords: OnEarth
 #%end
 
 #%option
 #% key: url
 #% type: string
-#% description: URL of WMS server 
-#% required: yes
-#%end
-
-#%option
-#% key: layers
-#% type: string
-#% description: Layers to request from WMS server
-#% multiple: yes
+#% description: Typically starts with "http://"
 #% required: yes
 #%end
 
@@ -45,20 +39,19 @@
 #%end
 
 #%option
-#% key: srs
-#% type: integer
-#% description: EPSG number of source projection for request 
-#% answer:4326 
-#% guisection: Request properties
+#% key: layers
+#% type: string
+#% description: Layer(s) to request from the map server
+#% multiple: yes
+#% required: yes
 #%end
 
 #%option
-#% key: wms_version
+#% key: styles
 #% type: string
-#% description: WMS standard
-#% options: 1.1.1,1.3.0
-#% answer: 1.1.1
-#% guisection: Request properties
+#% description: Layer style(s) to request from the map server
+#% multiple: yes
+#% guisection: Map style
 #%end
 
 #%option
@@ -67,68 +60,94 @@
 #% description: Image format requested from the server
 #% options: geotiff,tiff,jpeg,gif,png
 #% answer: geotiff
-#% guisection: Request properties
+#% guisection: Request
 #%end
 
 #%option
-#% key: method
-#% type: string
-#% description: Reprojection method to use
-#% options:nearest,linear,cubic,cubicspline
-#% answer:nearest
-#% guisection: Request properties
+#% key: srs
+#% type: integer
+#% description: EPSG code of requested source projection 
+#% answer:4326 
+#% guisection: Request
+#%end
+
+#%option
+#% key: driver
+#% type:string
+#% description: Driver used to communication with server
+#% descriptions: WMS_GDAL;Download data using GDAL WMS driver;WMS_GRASS;Download data using native GRASS-WMS driver;WMTS_GRASS;Download data using native GRASS-WMTS driver;OnEarth_GRASS;Download data using native GRASS-OnEarth driver;
+#% options:WMS_GDAL, WMS_GRASS, WMTS_GRASS, OnEarth_GRASS
+#% answer:WMS_GRASS
+#% guisection: Connection
+#%end
+
+#%option
+#% key: wms_version
+#% type:string
+#% description: WMS standard version
+#% options: 1.1.1,1.3.0
+#% answer: 1.1.1
+#% guisection: Request
 #%end
 
 #%option
 #% key: maxcols
 #% type:integer
 #% description: Maximum columns to request at a time
-#% answer:400
-#% guisection: Request properties
+#% answer:512
+#% guisection: Request
 #%end
 
 #%option
 #% key: maxrows
 #% type: integer
 #% description: Maximum rows to request at a time
-#% answer: 300
-#% guisection: Request properties
+#% answer: 512
+#% guisection: Request
 #%end
 
 #%option
 #% key: urlparams
 #% type:string
-#% description: Additional query parameters for server
-#% guisection: Request properties
+#% description: Additional query parameters to pass to the server
+#% guisection: Request
 #%end
 
 #%option
 #% key: username
 #% type:string
 #% description: Username for server connection
-#% guisection: Request properties
+#% guisection: Connection
 #%end
 
 #%option
 #% key: password
 #% type:string
 #% description: Password for server connection
-#% guisection: Request properties
+#% guisection: Connection
 #%end
 
 #%option
-#% key: styles
+#% key: method
 #% type: string
-#% description: Styles to request from map server
-#% multiple: yes
-#% guisection: Map style
+#% description: Interpolation method to use in reprojection
+#% options:nearest,linear,cubic,cubicspline
+#% answer:nearest
+#% guisection: Request
 #%end
 
 #%option
 #% key: bgcolor
 #% type: string
-#% description: Color of map background
+#% description: Background color
 #% guisection: Map style
+#%end
+
+#%option G_OPT_F_INPUT
+#% key: capfile
+#% required: no
+#% gisprompt: old,bin,file
+#% description: Capabilities file to parse (input). It is relevant for WMTS_GRASS and OnEarth_GRASS drivers
 #%end
 
 #%flag
@@ -136,21 +155,6 @@
 #% description: Don't request transparent data
 #% guisection: Map style
 #%end
-
-#%option
-#% key: driver
-#% type:string
-#% description: Driver for communication with server
-#% descriptions: WMS_GDAL;Download data using GDAL WMS driver;WMS_GRASS;Download data using native GRASS-WMS driver;WMTS_GRASS;Download data using native GRASS-WMTS driver;OnEarth_GRASS;Download data using native GRASS-OnEarth driver;
-#% options:WMS_GDAL, WMS_GRASS, WMTS_GRASS, OnEarth_GRASS
-#% answer:WMS_GRASS
-#%end
-
-#%option G_OPT_F_INPUT
-#% key: capfile
-#% required: no
-#% gisprompt: old,file,bin_input
-#% description: Capabilities file to load
 
 import os
 import sys
