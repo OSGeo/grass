@@ -60,6 +60,9 @@ class VNETData:
         self.pointsChanged = self.an_points.pointsChanged
         self.parametersChanged = self.an_params.parametersChanged
 
+    def CleanUp(self):
+        self.an_points.CleanUp()
+
     def GetAnalyses(self):
         return self.an_props.used_an
 
@@ -220,6 +223,7 @@ class VNETPointsData:
         self.an_data = an_data
         self.an_params = an_params
 
+        # information, whether mouse event handler is registered in map window
         self.handlerRegistered = False
 
         self.pointsChanged = Signal('VNETPointsData.pointsChanged')
@@ -250,7 +254,9 @@ class VNETPointsData:
         self.selected = 0
 
     def  __del__(self):
+        self.CleanUp()
 
+    def CleanUp(self):
         self.mapWin.UnregisterGraphicsToDraw(self.pointsToDraw)
 
         if self.handlerRegistered:
