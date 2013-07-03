@@ -121,9 +121,9 @@ it is used to create a menu.
 When \c toolboxes.xml or \c main_menu.xml file is not in user home directory
 but \c menudata.xml is, the file is re-generated (each time the GUI starts).
 So, if you just have your own \c main_menu.xml, it is better to create also
-a \c toolboxes.xml file with no toolboxes (you may want to remove
-\c "<user-toolboxes-list>" tag from your \c main_menu.xml file because it will
-be no longer ignored). Similarly, if you have only the \c toolboxes.xml file it
+a \c toolboxes.xml file with no toolboxes (note that you still need to create
+a valid XML toolbox file).
+Similarly, if you have only the \c toolboxes.xml file it
 is better to copy the \c main_menu.xml file from distribution into your home
 directory.
 
