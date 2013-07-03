@@ -140,7 +140,8 @@ This program is free software under the GNU General Public License
 #%option
 #% key: bgcolor
 #% type: string
-#% description: Background color
+#% label: Background color
+#% description: Format: 0xRRGGBB
 #% guisection: Map style
 #%end
 
