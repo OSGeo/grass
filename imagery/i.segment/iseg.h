@@ -55,7 +55,7 @@ struct globals
     /* region info */
     int nrows, ncols;
     int row_min, row_max, col_min, col_max; /* region constraints */
-    int ncells;
+    long ncells, notnullcells;
 
     char *out_name;		/* name of output raster map */
     char *seeds, *bounds_map;	/* optional segment seeds and polygon constraints/boundaries */
@@ -84,7 +84,7 @@ struct globals
     FLAG *candidate_flag, *null_flag;	/*TODO, need some way to remember MASK/NULL values.  Was using -1, 0, 1 in int array.  Better to use 2 FLAG structures, better readibility? */
 
     /* number of remaining cells to check */
-    int candidate_count;
+    long candidate_count;
 
     /* functions */
 	

@@ -17,7 +17,7 @@ int open_files(struct globals *globals)
     int *in_fd, bounds_fd, is_null;
     int n, row, col, srows, scols, inlen, outlen, nseg;
     DCELL **inbuf;		/* buffers to store lines from each of the imagery group rasters */
-    CELL *boundsbuf, bounds_null, bounds_val;
+    CELL *boundsbuf, bounds_val;
     int have_bounds = 0;
     CELL s, id;
     struct Range range;	/* min/max values of bounds map */
@@ -28,6 +28,9 @@ int open_files(struct globals *globals)
     /*allocate memory for flags */
     globals->null_flag = flag_create(globals->nrows, globals->ncols);
     globals->candidate_flag = flag_create(globals->nrows, globals->ncols);
+
+    flag_clear_all(globals->null_flag);
+    flag_clear_all(globals->candidate_flag);
 
     G_debug(1, "Checking image group...");
 
@@ -92,6 +95,29 @@ int open_files(struct globals *globals)
     G_debug(1, "data element size, in: %d , out: %d ", inlen, outlen);
     globals->datasize = sizeof(double) * globals->nbands;
 
+    /* count non-null cells */
+    globals->notnullcells = (long)globals->nrows * globals->ncols;
+    for (row = 0; row < globals->nrows; row++) {
+	for (n = 0; n < Ref.nfiles; n++) {
+	    Rast_get_d_row(in_fd[n], inbuf[n], row);
+	}
+	for (col = 0; col < globals->ncols; col++) {
+
+	    is_null = 0;	/*Assume there is data */
+	    for (n = 0; n < Ref.nfiles; n++) {
+		if (Rast_is_d_null_value(&inbuf[n][col])) {
+		    is_null = 1;
+		}
+	    }
+	    if (is_null) {
+		globals->notnullcells--;
+		FLAG_SET(globals->null_flag, row, col);
+	    }
+	}
+    }
+    if (globals->notnullcells < 2)
+	G_fatal_error(_("Insufficient number of non-NULL cells in current region"));
+
     /* segment lib segment size */
     srows = 64;
     scols = 64;
@@ -110,7 +136,10 @@ int open_files(struct globals *globals)
 	G_fatal_error("Unable to create input temporary files");
 
     /* load input bands to segment structure */
-    G_debug(1, "Reading input rasters into segmentation data files...");
+    if (Ref.nfiles > 1)
+	G_message(_("Loading input bands..."));
+    else
+	G_message(_("Loading input band..."));
 
     globals->bands_val = (double *)G_malloc(inlen);
     globals->second_val = (double *)G_malloc(inlen);
@@ -122,6 +151,7 @@ int open_files(struct globals *globals)
     globals->col_min = globals->ncols;
     globals->col_max = 0;
     for (row = 0; row < globals->nrows; row++) {
+	G_percent(row, globals->nrows, 4);
 	for (n = 0; n < Ref.nfiles; n++) {
 	    Rast_get_d_row(in_fd[n], inbuf[n], row);
 	}
@@ -129,24 +159,21 @@ int open_files(struct globals *globals)
 
 	    is_null = 0;	/*Assume there is data */
 	    for (n = 0; n < Ref.nfiles; n++) {
+		globals->bands_val[n] = inbuf[n][col];
 		if (Rast_is_d_null_value(&inbuf[n][col])) {
 		    is_null = 1;
-		    globals->bands_val[n] = inbuf[n][col];
 		}
 		else {
-		    if (globals->weighted == TRUE)
-			globals->bands_val[n] = inbuf[n][col];
-		    else
+		    if (globals->weighted == FALSE)
 		    	/* scaled version */
 			globals->bands_val[n] = (inbuf[n][col] - min[n]) / (max[n] - min[n]);
 		}
 	    }
-	    segment_put(&globals->bands_seg, (void *)globals->bands_val, row, col);
+	    if (segment_put(&globals->bands_seg,
+	                    (void *)globals->bands_val, row, col) != 1)
+		G_fatal_error(_("Unable to write to temporary file"));
 
 	    if (!is_null) {
-
-		FLAG_UNSET(globals->null_flag, row, col);
-		
 		if (!globals->seeds) {
 		    /* sequentially number all cells with a unique segment ID */
 		    id = s;
@@ -154,7 +181,6 @@ int open_files(struct globals *globals)
 		}
 
 		/* get min/max row/col to narrow the processing window */
-
 		if (globals->row_min > row)
 		    globals->row_min = row;
 		if (globals->row_max < row)
@@ -167,19 +193,24 @@ int open_files(struct globals *globals)
 	    else {
 		/* all input bands NULL */
 		Rast_set_c_null_value(&id, 1);
-		/*Rast_set_c_null_value(&(globals->rid[row][col]), 1);*/
 		FLAG_SET(globals->null_flag, row, col);
 	    }
-	    if (!globals->seeds)
-		segment_put(&globals->rid_seg, (void *)&id, row, col);
+	    if (!globals->seeds || is_null) {
+		if (segment_put(&globals->rid_seg,
+		                (void *)&id, row, col) != 1)
+		    G_fatal_error(_("Unable to write to temporary file"));
+	    }
 	}
     }
-    G_debug(1, "nrows: %d, min row: %d, max row %d", globals->nrows, globals->row_min, globals->row_max);
-    G_debug(1, "ncols: %d, min col: %d, max col %d", globals->ncols, globals->col_min, globals->col_max);
+    G_debug(1, "nrows: %d, min row: %d, max row %d",
+	       globals->nrows, globals->row_min, globals->row_max);
+    G_debug(1, "ncols: %d, min col: %d, max col %d",
+               globals->ncols, globals->col_min, globals->col_max);
     
     globals->row_max++;
     globals->col_max++;
-    globals->ncells = (globals->row_max - globals->row_min) * (globals->col_max - globals->col_min);
+    globals->ncells = (long)(globals->row_max - globals->row_min) *
+			    (globals->col_max - globals->col_min);
 
     /* bounds/constraints */
 
@@ -205,27 +236,27 @@ int open_files(struct globals *globals)
 	                  globals->bounds_map);
 	}
 
-	bounds_null = globals->upper_bound = globals->lower_bound + 1;
-
 	bounds_fd = Rast_open_old(globals->bounds_map, globals->bounds_mapset);
 	boundsbuf = Rast_allocate_c_buf();
 
 	for (row = 0; row < globals->nrows; row++) {
 	    Rast_get_c_row(bounds_fd, boundsbuf, row);
 	    for (col = 0; col < globals->ncols; col++) {
+		bounds_val = boundsbuf[col];
 		if (FLAG_GET(globals->null_flag, row, col)) {
 		    Rast_set_c_null_value(&bounds_val, 1);
 		}
 		else {
-		    if (Rast_is_c_null_value(&boundsbuf[col]))
-			boundsbuf[col] = bounds_null;
-		    else {
+		    if (!Rast_is_c_null_value(&bounds_val)) {
 			have_bounds = 1;
-			if (globals->lower_bound > boundsbuf[col])
-			    globals->lower_bound = boundsbuf[col];
+			if (globals->lower_bound > bounds_val)
+			    globals->lower_bound = bounds_val;
+			if (globals->upper_bound < bounds_val)
+			    globals->upper_bound = bounds_val;
 		    }
 		}
-		segment_put(&globals->bounds_seg, &bounds_val, row, col);
+		if (segment_put(&globals->bounds_seg, &bounds_val, row, col) != 1)
+		    G_fatal_error(_("Unable to write to temporary file"));
 	    }
 	}
 	Rast_close(bounds_fd);
@@ -269,7 +300,6 @@ int open_files(struct globals *globals)
     G_free(fp_range);
     G_free(min);
     G_free(max);
-    /* Need to clean up anything else? */
 
     return TRUE;
 }
@@ -307,10 +337,11 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 	    }
 	    else {
 		seeds_val = seeds_buf[col];
-		if (!Rast_is_c_null_value(&seeds_buf[col]))
+		if (!Rast_is_c_null_value(&seeds_val))
 		    have_seeds = 1;
 	    }
-	    segment_put(&seeds_seg, &seeds_val, row, col);
+	    if (segment_put(&seeds_seg, &seeds_val, row, col) != 1)
+		G_fatal_error(_("Unable to write to temporary file"));
 	}
     }
 
@@ -331,12 +362,12 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
     for (row = 0; row < globals->nrows; row++) {
 	Rast_get_c_row(seeds_fd, seeds_buf, row);
 	for (col = 0; col < globals->ncols; col++) {
-	    if (FLAG_GET(globals->null_flag, row, col)) {
-		segment_put(&globals->rid_seg, &seeds_val, row, col);
-	    }
-	    else if (!(FLAG_GET(globals->candidate_flag, row, col))) {
-		if (Rast_is_c_null_value(&(seeds_buf[col])) || seeds_buf[col] < 1) {
-		    segment_put(&globals->rid_seg, &sneg, row, col);
+	    if (!(FLAG_GET(globals->null_flag, row, col)) && 
+	        !(FLAG_GET(globals->candidate_flag, row, col))) {
+
+		if (Rast_is_c_null_value(&(seeds_buf[col]))) {
+		    if (segment_put(&globals->rid_seg, &sneg, row, col) != 1)
+			G_fatal_error(_("Unable to write to temporary file"));
 		    sneg--;
 		}
 		else {
@@ -374,7 +405,8 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
     segment_get(seeds_seg, &Ri_id, Ri->row, Ri->col);
     
     /* set new segment id */
-    segment_put(&globals->rid_seg, &new_id, Ri->row, Ri->col);
+    if (segment_put(&globals->rid_seg, &new_id, Ri->row, Ri->col) != 1)
+	G_fatal_error(_("Unable to write to temporary file"));
     /* set candidate flag */
     FLAG_SET(globals->candidate_flag, Ri->row, Ri->col);
 
@@ -428,7 +460,9 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
 	    }
 
 	    /* set segment id */
-	    segment_put(&globals->rid_seg, &new_id, ngbr_rc.row, ngbr_rc.col);
+	    if (segment_put(&globals->rid_seg,
+	                    &new_id, ngbr_rc.row, ngbr_rc.col) != 1)
+		G_fatal_error(_("Unable to write to temporary file"));
 	    
 	    /* set candidate flag */
 	    FLAG_SET(globals->candidate_flag, ngbr_rc.row, ngbr_rc.col);
@@ -486,16 +520,16 @@ static int manage_memory(int srows, int scols, struct globals *globals)
     /* calculate number of region stats that can be kept in memory */
     reg_size_count = (globals->mb - segs_mb) / reg_size_mb;
     globals->min_reg_size = 3;
-    if (reg_size_count < (double) globals->nrows * globals->ncols / globals->min_reg_size) {
-	globals->min_reg_size = (double) globals->nrows * globals->ncols / reg_size_count;
+    if (reg_size_count < (double) globals->notnullcells / globals->min_reg_size) {
+	globals->min_reg_size = (double) globals->notnullcells / reg_size_count;
     }
     else {
-	reg_size_count = (double) globals->nrows * globals->ncols / globals->min_reg_size;
+	reg_size_count = (double) globals->notnullcells / globals->min_reg_size;
 	/* recalculate segs_mb */
 	segs_mb = globals->mb - reg_size_count * reg_size_mb;
     }
 
-    G_verbose_message(_("Stats for regions with at least %d cells are stored in memory"),
+    G_verbose_message(_("Regions with at least %d cells are stored in memory"),
                       globals->min_reg_size);
 
     /* calculate number of segments in memory */
