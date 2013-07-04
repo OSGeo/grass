@@ -16,8 +16,14 @@
 
 #define EPSILON 1.0e-8
 
-#define MAX(a,b) ( ((a)>(b)) ? (a) : (b) )
-#define MIN(a,b) ( ((a)<(b)) ? (a) : (b) )
+#ifdef MAX
+#undef MAX
+#endif
+#define MAX(a,b) ( ((a) > (b)) ? (a) : (b) )
+#ifdef MIN
+#undef MIN
+#endif
+#define MIN(a,b) ( ((a) < (b)) ? (a) : (b) )
 
 
 /* internal functions */
@@ -111,7 +117,7 @@ int create_isegs(struct globals *globals)
 {
     int row, col;
     int successflag = 1;
-    int have_bound;
+    int have_bound, rid;
     CELL current_bound, bounds_val;
 
     G_debug(1, "segmentation method: %d", globals->method);
@@ -136,25 +142,29 @@ int create_isegs(struct globals *globals)
 	    globals->col_max = 0;
 	    for (row = 0; row < globals->nrows; row++) {
 		for (col = 0; col < globals->ncols; col++) {
+		    FLAG_SET(globals->null_flag, row, col);
 		    segment_get(&globals->bounds_seg, &bounds_val,
 				row, col);
 
-		    if (bounds_val == current_bound) {
-			have_bound = 1;
+		    if (!Rast_is_c_null_value(&bounds_val)
+		        && bounds_val == current_bound) {
 
-			FLAG_UNSET(globals->null_flag, row, col);
+			segment_get(&globals->rid_seg, &rid, row, col);
+			if (!Rast_is_c_null_value(&rid)) {
+			    have_bound = 1;
 
-			if (globals->row_min > row)
-			    globals->row_min = row;
-			if (globals->row_max < row)
-			    globals->row_max = row;
-			if (globals->col_min > col)
-			    globals->col_min = col;
-			if (globals->col_max < col)
-			    globals->col_max = col;
+			    FLAG_UNSET(globals->null_flag, row, col);
+
+			    if (globals->row_min > row)
+				globals->row_min = row;
+			    if (globals->row_max < row)
+				globals->row_max = row;
+			    if (globals->col_min > col)
+				globals->col_min = col;
+			    if (globals->col_max < col)
+				globals->col_max = col;
+			}
 		    }
-		    else
-			FLAG_SET(globals->null_flag, row, col);
 		}
 	    }
 	    globals->row_max++;
@@ -163,6 +173,17 @@ int create_isegs(struct globals *globals)
 	    if (have_bound)
 		successflag = region_growing(globals);
 	}    /* end outer loop for processing polygons */
+
+	/* restore NULL flag */
+	flag_clear_all(globals->null_flag);
+	for (row = 0; row < globals->nrows; row++) {
+	    for (col = 0; col < globals->ncols; col++) {
+		segment_get(&globals->rid_seg, &rid, row, col);
+		if (Rast_is_c_null_value(&rid))
+		    FLAG_SET(globals->null_flag, row, col);
+	    }
+	}
+
     }
 
     return successflag;
@@ -237,12 +258,14 @@ int region_growing(struct globals *globals)
 	    }
 	}
 
-	G_debug(4, "Starting to process %d candidate cells",
+	G_debug(4, "Starting to process %ld candidate cells",
 		globals->candidate_count);
 
 	/*process candidate cells */
+	G_percent_reset();
 	for (row = globals->row_min; row < globals->row_max; row++) {
-	    G_percent(row, globals->row_max, 4);
+	    G_percent(row - globals->row_min,
+	              globals->row_max - globals->row_min, 4);
 	    for (col = globals->col_min; col < globals->col_max; col++) {
 		if (!(FLAG_GET(globals->candidate_flag, row, col)))
 		    continue;
@@ -301,6 +324,7 @@ int region_growing(struct globals *globals)
 		    if (Ri.count < Rk.count)
 			smaller = Ri.count;
 
+		    /* TODO: better */
 		    adjthresh = pow(alpha2, 1. + (double) smaller / divisor);
 
 		    if (compare_double(Ri_similarity, adjthresh) == -1) {
@@ -322,6 +346,9 @@ int region_growing(struct globals *globals)
 		        (globals->nn >= 8 && Rk.count <= globals->nn))
 		    candidates_only = FALSE;
 		}
+		
+		if (Rk.id == 0)
+		    pathflag = FALSE;
 
 		while (pathflag) {
 		    pathflag = FALSE;
@@ -364,6 +391,9 @@ int region_growing(struct globals *globals)
 			if (Ri_nn == 1 && Rk_nn > 1)
 			    do_merge = 1;
 
+			if (Rk.id == 0)
+			    do_merge = 0;
+
 			/* adjust threshold */
 			if (do_merge) {
 			    int smaller = Rk.count;
@@ -371,6 +401,7 @@ int region_growing(struct globals *globals)
 			    if (Ri.count < Rk.count)
 				smaller = Ri.count;
 
+			    /* TODO: better */
 			    adjthresh = pow(alpha2, 1. + (double) smaller / divisor);
 
 			    do_merge = 0;
@@ -507,6 +538,7 @@ int region_growing(struct globals *globals)
 	flag_clear_all(globals->candidate_flag);
 	
 	n_merges = 0;
+	globals->candidate_count = 0;
 
 	/* Set candidate flag to true/1 for all non-NULL cells */
 	for (row = globals->row_min; row < globals->row_max; row++) {
@@ -519,20 +551,19 @@ int region_growing(struct globals *globals)
 	    }
 	}
 
-	G_debug(4, "Starting to process %d candidate cells",
+	G_debug(4, "Starting to process %ld candidate cells",
 		globals->candidate_count);
 
 	/* process candidate cells */
+	G_percent_reset();
 	for (row = globals->row_min; row < globals->row_max; row++) {
-	    G_percent(row, globals->row_max, 9);
+	    G_percent(row - globals->row_min,
+	              globals->row_max - globals->row_min, 4);
 	    for (col = globals->col_min; col < globals->col_max; col++) {
 		int do_merge = 1;
 		
 		if (!(FLAG_GET(globals->candidate_flag, row, col)))
 		    continue;
-		
-		nbtree_clear(Ri_ngbrs);
-		nbtree_clear(Rk_ngbrs);
 
 		Ri.row = row;
 		Ri.col = col;
@@ -551,8 +582,12 @@ int region_growing(struct globals *globals)
 		memcpy(Ri.mean, Ri_rs.mean, globals->datasize);
 		Ri.count = Ri_rs.count;
 
-		while (do_merge) {
+		if (Ri.count >= globals->min_segment_size) {
+		    set_candidate_flag(&Ri, FALSE, globals);
+		    do_merge = 0;
+		}
 
+		while (do_merge) {
 		    do_merge = 0;
 
 		    /* merge all smaller than min size */
@@ -561,6 +596,8 @@ int region_growing(struct globals *globals)
 
 		    Ri_nn = 0;
 		    Ri_similarity = 2;
+		    
+		    Rk.id = 0;
 
 		    if (do_merge) {
 
@@ -571,10 +608,7 @@ int region_growing(struct globals *globals)
 						   globals);
 		    }
 
-		    if (Ri_nn > 0) {
-
-			nbtree_clear(Ri_ngbrs);
-			
+		    if (Ri_nn > 0 && Rk.id != 0) {
 			/* merge Ri with Rk */
 			/* do not clear candidate flag for Rk */
 			merge_regions(&Ri, &Ri_rs, &Rk, &Rk_rs, 0, globals);
@@ -631,6 +665,13 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 
     G_debug(4, "find_best_neighbor()");
 
+    if (Ri->id != Ri_rs->id)
+	G_fatal_error("Ri = %d but Ri_rs = %d", Ri->id, Ri_rs->id);
+    if (Ri->id <= 0)
+	G_fatal_error("Ri is %d", Ri->id);
+    if (Ri_rs->id <= 0)
+	G_fatal_error("Ri_rs is %d", Ri_rs->id);
+
     /* dynamics of the region growing algorithm
      * some regions are growing fast, often surrounded by many small regions
      * not all regions are equally growing, some will only grow at a later stage ? */
@@ -642,17 +683,11 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
     ngbr_rc.col = Ri->col;
     rbtree_insert(no_check_tree, &ngbr_rc);
 
+    nbtree_clear(Ri_ngbrs);
     n_ngbrs = 0;
     /* TODO: add size of largest region to reg_tree, use this as min */
     Rk->count = globals->ncells;
     Rk->id = Rk_rs->id = 0;
-    
-    if (Ri->id != Ri_rs->id)
-	G_fatal_error("Ri = %d but Ri_rs = %d", Ri->id, Ri_rs->id);
-    if (Ri->id <= 0)
-	G_fatal_error("Ri is %d", Ri->id);
-    if (Ri_rs->id <= 0)
-	G_fatal_error("Ri_rs is %d", Ri_rs->id);
 
     /* go through segment, spreading outwards from head */
     rclist_init(&rilist);
@@ -1031,12 +1066,9 @@ static int search_neighbors(struct ngbr_stats *Ri,
 
 int update_band_vals(int row, int col, struct reg_stats *rs,
                      struct globals *globals) {
-    struct RB_TREE *rc_check_tree;	/* cells already checked */
-    struct rclist rlist;
     struct rc next, ngbr_rc;
     int neighbors[8][2];
     int rid, count, n;
-    int no_check;
     
     /* update band values with sum */
     /* rs->id must be set */
@@ -1053,28 +1085,18 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 	G_fatal_error(_("Region ids are different"));
     }
 
-    /* TODO: add fast version for globals->min_reg_size == 3 */
-
-    /* go through region, spreading outwards from head */
-    rclist_init(&rlist);
-
-    rc_check_tree = rbtree_create(compare_rc, sizeof(struct rc));
-    ngbr_rc.row = row;
-    ngbr_rc.col = col;
-    rbtree_insert(rc_check_tree, &ngbr_rc);
-    count = 1;
+    if (rs->count == 1) {
+	G_warning(_("Region consists of only one cell, nothing to update"));
+	return rs->count;
+    }
 
     /* update region stats */
-    segment_put(&globals->bands_seg, (void *)rs->sum,
-		ngbr_rc.row, ngbr_rc.col);
+    segment_put(&globals->bands_seg, (void *)rs->sum, row, col);
+    count = 1;
 
-    next.row = row;
-    next.col = col;
-    do {
-	G_debug(5, "find_pixel_neighbors for row: %d , col %d",
-		next.row, next.col);
-
-	globals->find_neighbors(next.row, next.col, neighbors);
+    /* fast version for rs->count == 2 */
+    if (rs->count == 2) {
+	globals->find_neighbors(row, col, neighbors);
 
 	n = globals->nn - 1;
 	do {
@@ -1082,41 +1104,97 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 	    ngbr_rc.row = neighbors[n][0];
 	    ngbr_rc.col = neighbors[n][1];
 
-	    no_check = (ngbr_rc.row < 0 || ngbr_rc.row >= globals->nrows ||
-		ngbr_rc.col < 0 || ngbr_rc.col >= globals->ncols);
+	    if (ngbr_rc.row < globals->row_min || ngbr_rc.row >= globals->row_max ||
+		ngbr_rc.col < globals->col_min || ngbr_rc.col >= globals->col_max) {
+		continue;
+	    }
 
-	    if (!no_check) {
-		if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
+	    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
+
+		segment_get(&globals->rid_seg, (void *) &rid,
+			    ngbr_rc.row, ngbr_rc.col);
 		
-		    /* already checked ? */
-		    if (!rbtree_find(rc_check_tree, &ngbr_rc)) {
+		if (rid == rs->id) {
 
-			/* not yet checked, don't check it again */
-			rbtree_insert(rc_check_tree, &ngbr_rc);
+		    /* update region stats */
+		    segment_put(&globals->bands_seg,
+				(void *)rs->sum,
+				ngbr_rc.row, ngbr_rc.col);
 
-			segment_get(&globals->rid_seg, (void *) &rid,
-				    ngbr_rc.row, ngbr_rc.col);
-			
-			if (rid == rs->id) {
+		    count++;
 
-			    /* want to check this neighbor's neighbors */
-			    rclist_add(&rlist, ngbr_rc.row, ngbr_rc.col);
-
-			    /* update region stats */
-			    segment_put(&globals->bands_seg,
-					(void *)rs->sum,
-					ngbr_rc.row, ngbr_rc.col);
-			    count++;
-			}
-		    }
+		    /* only one other neighbor can have the same ID
+		     * deactivate for debugging */
+		    break;
 		}
 	    }
 	} while (n--);
-    } while (rclist_drop(&rlist, &next));
+	if (count > 2)
+	    G_fatal_error(_("Region size is larger than 2: %d"), count);
+    }
+    else if (rs->count > 2) {
+	struct RB_TREE *rc_check_tree;	/* cells already checked */
+	struct rclist rlist;
+	int no_check;
 
-    /* clean up */
-    rbtree_destroy(rc_check_tree);
-    rclist_destroy(&rlist);
+	/* go through region, spreading outwards from head */
+	rclist_init(&rlist);
+
+	rc_check_tree = rbtree_create(compare_rc, sizeof(struct rc));
+	ngbr_rc.row = row;
+	ngbr_rc.col = col;
+	rbtree_insert(rc_check_tree, &ngbr_rc);
+
+	next.row = row;
+	next.col = col;
+	do {
+	    G_debug(5, "find_pixel_neighbors for row: %d , col %d",
+		    next.row, next.col);
+
+	    globals->find_neighbors(next.row, next.col, neighbors);
+
+	    n = globals->nn - 1;
+	    do {
+
+		ngbr_rc.row = neighbors[n][0];
+		ngbr_rc.col = neighbors[n][1];
+
+		no_check = (ngbr_rc.row < 0 || ngbr_rc.row >= globals->nrows ||
+		    ngbr_rc.col < 0 || ngbr_rc.col >= globals->ncols);
+
+		if (!no_check) {
+		    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
+		    
+			/* already checked ? */
+			if (!rbtree_find(rc_check_tree, &ngbr_rc)) {
+
+			    /* not yet checked, don't check it again */
+			    rbtree_insert(rc_check_tree, &ngbr_rc);
+
+			    segment_get(&globals->rid_seg, (void *) &rid,
+					ngbr_rc.row, ngbr_rc.col);
+			    
+			    if (rid == rs->id) {
+
+				/* want to check this neighbor's neighbors */
+				rclist_add(&rlist, ngbr_rc.row, ngbr_rc.col);
+
+				/* update region stats */
+				segment_put(&globals->bands_seg,
+					    (void *)rs->sum,
+					    ngbr_rc.row, ngbr_rc.col);
+				count++;
+			    }
+			}
+		    }
+		}
+	    } while (n--);
+	} while (rclist_drop(&rlist, &next));
+
+	/* clean up */
+	rbtree_destroy(rc_check_tree);
+	rclist_destroy(&rlist);
+    }
     
     if (count != rs->count) {
 	G_fatal_error(_("Region size is %d, should be %d"),
@@ -1470,8 +1548,9 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 		    /* update region stats */
 		    rs->count++;
 
-		    /* only one other neighbor can have the same ID */
-		    /* break; */
+		    /* only one other neighbor can have the same ID
+		     * deactivate for debugging */
+		    break;
 		}
 	    }
 	} while (n--);
