@@ -308,7 +308,7 @@ int region_growing(struct globals *globals)
 		/* Rk is now complete */
 		G_debug(4, "Rk is now complete");
 
-		if (Ri_nn == 0) {
+		if (Rk.id == 0) {
 		    /* this can only happen if only one segment is left */
 		    G_debug(4, "Segment had no valid neighbors");
 		    pathflag = FALSE;
@@ -607,15 +607,16 @@ int region_growing(struct globals *globals)
 						   &Ri_similarity, 1,
 						   globals);
 		    }
+		    do_merge = 0;
 
-		    if (Ri_nn > 0 && Rk.id != 0) {
+		    if (Rk.id != 0) {
 			/* merge Ri with Rk */
 			/* do not clear candidate flag for Rk */
 			merge_regions(&Ri, &Ri_rs, &Rk, &Rk_rs, 0, globals);
 			n_merges++;
 
-			if (Ri_nn <= 0 || Ri.count >= globals->min_segment_size)
-			    do_merge = 0;
+			if (Ri.count < globals->min_segment_size)
+			    do_merge = 1;
 		    }
 		}
 	    }
