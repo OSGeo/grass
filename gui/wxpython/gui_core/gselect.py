@@ -802,11 +802,9 @@ class LayerSelect(wx.ComboBox):
         @param dsn    OGR data source name
         """
         layers = list()
-        if self.all:
-            layers.append('-1')
 
         if vector:
-	    layers = GetVectorNumberOfLayers(vector)
+            layers = GetVectorNumberOfLayers(vector)
 
         elif dsn:
             ret = RunCommand('v.in.ogr',
@@ -816,12 +814,15 @@ class LayerSelect(wx.ComboBox):
                              dsn = dsn)
             if ret:
                 layers = ret.splitlines()
-    
+        
         if self.default:
             if len(layers) == 0:
                 layers.insert(0, str(self.default))
             elif self.default not in layers:
                 layers.append(self.default)
+
+        if self.all:
+            layers.insert(0, '-1')
 
         if len(layers) > 0:
             self.SetItems(layers)
