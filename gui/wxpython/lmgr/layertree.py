@@ -1050,9 +1050,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.GetLayerInfo(layer, key = 'propwin') is not None:
             # recycle GUI dialogs
             win = self.GetLayerInfo(layer, key = 'propwin')
-            if ltype != 'wms':
-                # update properties (columns, layers)
-                win.notebookpanel.OnUpdateSelection(None)
             if win.IsShown():
                 win.SetFocus()
             else:
