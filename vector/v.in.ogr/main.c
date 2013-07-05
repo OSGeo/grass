@@ -1024,9 +1024,9 @@ int main(int argc, char *argv[])
 			if (Ogr_ftype == OFTInteger || Ogr_ftype == OFTReal) {
 			    sprintf(buf, ", %s",
 				    OGR_F_GetFieldAsString(Ogr_feature, i));
+			}
 #if GDAL_VERSION_NUM >= 1320
 			    /* should we use OGR_F_GetFieldAsDateTime() here ? */
-			}
 			else if (Ogr_ftype == OFTDate || Ogr_ftype == OFTTime
 				 || Ogr_ftype == OFTDateTime) {
 			    char *newbuf;
@@ -1038,8 +1038,8 @@ int main(int argc, char *argv[])
 			    sprintf(buf, ", '%s'", db_get_string(&strval));
 			    newbuf = G_str_replace(buf, "/", "-");	/* fix 2001/10/21 to 2001-10-21 */
 			    sprintf(buf, "%s", newbuf);
-#endif
 			}
+#endif
 			else if (Ogr_ftype == OFTString ||
 				 Ogr_ftype == OFTIntegerList) {
 			    db_set_string(&strval, (char *)
@@ -1048,23 +1048,30 @@ int main(int argc, char *argv[])
 			    db_double_quote_string(&strval);
 			    sprintf(buf, ", '%s'", db_get_string(&strval));
 			}
-
+			else {
+			    /* column type not supported */
+			    buf[0] = 0;
+			}
 		    }
 		    else {
 			/* G_warning (_("Column value not set" )); */
 			if (Ogr_ftype == OFTInteger || Ogr_ftype == OFTReal) {
 			    sprintf(buf, ", NULL");
+			}
 #if GDAL_VERSION_NUM >= 1320
+			else if (Ogr_ftype == OFTDate ||
+				 Ogr_ftype == OFTTime || 
+				 Ogr_ftype == OFTDateTime) {
+			    sprintf(buf, ", ''");
 			}
-			else if (Ogr_ftype == OFTString ||
-				 Ogr_ftype == OFTIntegerList ||
-				 Ogr_ftype == OFTDate) {
-#else
-			}
+#endif
 			else if (Ogr_ftype == OFTString ||
 				 Ogr_ftype == OFTIntegerList) {
-#endif
 			    sprintf(buf, ", ''");
+			}
+			else {
+			    /* column type not supported */
+			    buf[0] = 0;
 			}
 		    }
 		    db_append_string(&sql, buf);
