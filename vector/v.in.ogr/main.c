@@ -762,8 +762,8 @@ int main(int argc, char *argv[])
 	OGR_L_ResetReading(Ogr_layer);
 
 	/* count polygons and isles */
-	G_message(_("Counting polygons for %d features (OGR layer <%s>)..."),
-		  n_features, layer_names[layer]);
+	G_message(_("Check if OGR layer <%s> contains polygons..."),
+		  layer_names[layer]);
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 	    G_percent(feature_count++, n_features, 1);	/* show something happens */
 	    /* Geometry */
