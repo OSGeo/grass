@@ -58,6 +58,24 @@
 #% guisection: RST options
 #%end
 #%option
+#% key: npmin
+#% type: integer
+#% description: Minimum number of points for approximation in a segment (>segmax)
+#% required : no
+#% answer : 600
+#% options : 2-10000
+#% guisection: RST options
+#%end
+#%option
+#% key: segmax
+#% type: integer
+#% description: Maximum number of points in a segment
+#% required : no
+#% answer : 300
+#% options : 2-10000
+#% guisection: RST options
+#%end
+#%option
 #% key: method
 #% type: string
 #% description: Interpolation method
@@ -97,6 +115,8 @@ def main():
     smooth = options['smooth']
     method = options['method']
     edge = int(options['edge'])
+    segmax = int(options['segmax'])
+    npmin = int(options['npmin'])
     quiet = True # FIXME 
     
     mapset = grass.gisenv()['MAPSET']
@@ -247,16 +267,6 @@ def main():
                 grass.verbose(_("No points to interpolate"))
                 failed_list.append(holename)
                 continue
-            
-            grass.message(_("Note: The following warnings about number of points for interpolation may be ignored."))
-            
-            # set the max number before segmentation
-            # npmin and segmax values were choosen by fair guess and thus are superior to all other values ;)
-            segmax = 100
-            npmin = 300
-            if pointsnumber < 600:
-                npmin = pointsnumber
-                segmax = pointsnumber
             
             # launch v.surf.rst
             tmp_rmaps.append(holename + '_dem')
