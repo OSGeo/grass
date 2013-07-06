@@ -51,7 +51,7 @@ typedef struct
     int count, alloc;		/* number of elements */
     SYMBEL **elem;		/* array of elements */
     int scount, salloc;		/* number of points in stroked version */
-    int *sx, *sy;		/* coordinates in stroked version */
+    double *sx, *sy;		/* coordinates in stroked version */
 } SYMBCHAIN;
 
 /* part */
