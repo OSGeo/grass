@@ -338,9 +338,13 @@ class WMSRequestMgr(BaseRequestMgr):
         self.srs_param = params['srs']
 
         proj = params['proj_name'] + "=" +  GetSRSParamVal(params['srs'])
-        self.url = params['url'] + ("SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&STYLES=%s&BGCOLOR=%s&TRANSPARENT=%s" % \
+        self.url = params['url'] + ("SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&STYLES=%s&TRANSPARENT=%s" % \
                   (params['wms_version'], params['layers'], tile_size['cols'], tile_size['rows'], params['styles'], \
-                   params['bgcolor'], params['transparent']))
+                   params['transparent']))
+
+        if params['bgcolor']:
+            self.url +=  "&BGCOLOR=" + params['bgcolor']
+
         self.url += "&" +proj+ "&" + "FORMAT=" + params['format']
 
         self.bbox = bbox
