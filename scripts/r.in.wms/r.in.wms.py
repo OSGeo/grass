@@ -52,7 +52,7 @@ This program is free software under the GNU General Public License
 #% key: format
 #% type: string
 #% description: Image format requested from the server
-#% options: geotiff,tiff,jpeg,gif,png
+#% options: geotiff,tiff,jpeg,gif,png,png8
 #% answer: geotiff
 #% guisection: Request
 #%end
