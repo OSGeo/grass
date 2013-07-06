@@ -127,7 +127,7 @@ This program is free software under the GNU General Public License
 #% description: Interpolation method to use in reprojection
 #% options:nearest,linear,cubic,cubicspline
 #% answer:nearest
-#% guisection: Request
+#% required: no
 #%end
 
 #%option
