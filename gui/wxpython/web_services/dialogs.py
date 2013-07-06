@@ -455,7 +455,6 @@ class WSDialogBase(wx.Dialog):
         self.active_ws_panel.Show()
         self.SetMaxSize((-1, -1))
         self.Layout()
-        self.Fit()
 
     def OnAdvConnPaneChanged(self, event):
         """!Collapse search module box
