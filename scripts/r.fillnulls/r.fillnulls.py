@@ -10,6 +10,7 @@
 #               Converted to Python by Glynn Clements
 #               Add support to v.surf.bspline by Luca Delucchi
 #               Per hole filling with RST by Maris Nartiss
+#               Speedup for per hole filling with RST by Stefan Blumentrath
 # PURPOSE:      fills NULL (no data areas) in raster maps
 #               The script respects a user mask (MASK) if present.
 #
@@ -184,17 +185,21 @@ def main():
         tmp_rmaps.append(prefix + 'clumped')
         if grass.run_command('r.clump', input = prefix + 'grown', output = prefix + 'clumped', quiet = quiet) != 0:
             grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
-            
-        # use new IDs to identify holes
+        
+        # get a list of unique hole cat's
         grass.mapcalc("$out = if(isnull($inp), null(), $clumped)",
                         out = prefix + 'holes', inp = prefix + 'nulls', clumped = prefix + 'clumped')
         tmp_rmaps.append(prefix + 'holes')
         
+        # use new IDs to identify holes
+        if grass.run_command('r.to.vect', flags = 'v', input = prefix + 'holes', output = prefix + 'holes',
+                            type = 'area', quiet = quiet) != 0:
+            grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
+        tmp_vmaps.append(prefix + 'holes')
+        
         # get a list of unique hole cat's
-        cats_file_name = grass.tempfile(True)
-        cats_file = file(cats_file_name, 'w')
-        grass.run_command('r.stats', flags = 'n', input = prefix + 'holes', stdout = cats_file, quiet = quiet)
-        cats_file.close()
+        cats_file_name = grass.tempfile(False)
+        grass.run_command('v.db.select', flags = 'c', map = prefix + 'holes', columns = 'cat', file = cats_file_name, quiet = quiet)
         cat_list = list()
         cats_file = file(cats_file_name)
         for line in cats_file:
@@ -208,34 +213,33 @@ def main():
         # GTC Hole is NULL area in a raster map
         grass.message(_("Processing %d map holes") % len(cat_list))
         first = True
+        hole_n = 1
         for cat in cat_list:
             holename = prefix + 'hole_' + cat
             # GTC Hole is a NULL area in a raster map
-            grass.message(_("Filling hole %s of %s") % (cat, len(cat_list)))
-            
+            grass.message(_("Filling hole %s of %s") % (hole_n, len(cat_list)))
+            hole_n = hole_n + 1
             # cut out only CAT hole for processing
-            if grass.run_command('g.region', rast = prefix + 'holes', align = input, quiet = quiet) != 0:
+            if grass.run_command('v.extract', input = prefix + 'holes', output = holename + '_pol',
+                                cats = cat, quiet = quiet) != 0:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
-            grass.mapcalc("$out = if($inp == $catn, $inp, null())",
-                            out = prefix + 'tmp_hole', inp = prefix + 'holes', catn = cat)
+            tmp_vmaps.append(holename + '_pol')
             
-            # zoom to specific hole to remove rest of data
-            if grass.run_command('g.region', zoom = prefix + 'tmp_hole', align = input, quiet = quiet) != 0:
-                grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
-            
-            # increase region a bit to fit edge zone
-            if grass.run_command('g.region', align = input, 
+            # zoom to specific hole with a buffer of two cells around the hole to remove rest of data
+            if grass.run_command('g.region', vect = holename + '_pol', align = input, 
                                 w = 'w-%d' % (edge * 2 * ew_res), e = 'e+%d' % (edge * 2 * ew_res), 
                                 n = 'n+%d' % (edge * 2 * ns_res), s = 's-%d' % (edge * 2 * ns_res),
                                 quiet = quiet) != 0:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             
-            # copy only data around hole
-            grass.mapcalc("$out = $inp", out = holename, inp = prefix + 'tmp_hole')
-            
             # remove temporary map to not overfill disk
-            if grass.run_command('g.remove', flags = 'f', rast = prefix + 'tmp_hole', quiet = quiet) != 0:
+            if grass.run_command('g.remove', flags = 'f', vect = holename + '_pol', quiet = quiet) != 0:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
+            tmp_vmaps.remove(holename + '_pol')
+            
+            # copy only data around hole
+            grass.mapcalc("$out = if($inp == $catn, $inp, null())",
+                            out = holename, inp = prefix + 'holes', catn = cat)
             tmp_rmaps.append(holename)
             
             # If here loop is split into two, next part of loop can be run in parallel 
@@ -267,6 +271,11 @@ def main():
                 grass.verbose(_("No points to interpolate"))
                 failed_list.append(holename)
                 continue
+            
+            # Avoid v.surf.rst warnings
+            if pointsnumber < segmax:
+                npmin = pointsnumber + 1
+                segmax = pointsnumber
             
             # launch v.surf.rst
             tmp_rmaps.append(holename + '_dem')
