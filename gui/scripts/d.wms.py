@@ -133,7 +133,7 @@
 #% description: Interpolation method to use in reprojection
 #% options:nearest,linear,cubic,cubicspline
 #% answer:nearest
-#% guisection: Request
+#% required: no
 #%end
 
 #%option
