@@ -1,4 +1,3 @@
-
 /****************************************************************************
 *
 * MODULE:       Symbol library 
@@ -14,6 +13,7 @@
 *   	    	for details.
 *
 *****************************************************************************/
+
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
@@ -21,16 +21,14 @@
 
 #define PI M_PI
 
-#define round(x) ((int) floor(0.5 + (x)))
 
-
-void add_coor(SYMBCHAIN *chain, int x, int y)
+void add_coor(SYMBCHAIN *chain, double x, double y)
 {
-    G_debug(5, "    add_coor %d, %d", x, y);
+    G_debug(5, "    add_coor %f, %f", x, y);
     if (chain->scount == chain->salloc) {
 	chain->salloc += 10;
-	chain->sx = (int *)G_realloc(chain->sx, chain->salloc * sizeof(int));
-	chain->sy = (int *)G_realloc(chain->sy, chain->salloc * sizeof(int));
+	chain->sx = (double *)G_realloc(chain->sx, chain->salloc * sizeof(double));
+	chain->sy = (double *)G_realloc(chain->sy, chain->salloc * sizeof(double));
     }
     chain->sx[chain->scount] = x;
     chain->sy[chain->scount] = y;
@@ -68,7 +66,7 @@ int stroke_chain(SYMBPART *part, int ch, double s, double rotation)
 		if (rotation != 0.0)
 		    G_rotate_around_point(0, 0, &x, &y, rotation);
 
-		add_coor(chain, round(x), round(y));
+		add_coor(chain, x, y);
 		if (first) {
 		    x0 = x;
 		    y0 = y;
@@ -101,7 +99,7 @@ int stroke_chain(SYMBPART *part, int ch, double s, double rotation)
 		    if (rotation != 0.0)
 			G_rotate_around_point(0, 0, &x, &y, rotation);
 
-		    add_coor(chain, round(x), round(y));
+		    add_coor(chain, x, y);
 		    if (first) {
 			x0 = x;
 			y0 = y;
@@ -123,7 +121,7 @@ int stroke_chain(SYMBPART *part, int ch, double s, double rotation)
 		    if (rotation != 0.0)
 			G_rotate_around_point(0, 0, &x, &y, rotation);
 
-		    add_coor(chain, round(x), round(y));
+		    add_coor(chain, x, y);
 		    if (first) {
 			x0 = x;
 			y0 = y;
@@ -140,7 +138,7 @@ int stroke_chain(SYMBPART *part, int ch, double s, double rotation)
 	}
     }
     if (part->type == S_POLYGON) {
-	add_coor(chain, round(x0), round(y0));	/* Close ring */
+	add_coor(chain, x0, y0);	/* Close ring */
     }
 
     return 0;
