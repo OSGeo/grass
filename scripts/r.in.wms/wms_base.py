@@ -532,10 +532,10 @@ class WMSDriversInfo:
         """
 
         # format labels
-        self.f_labels = ["geotiff", "tiff", "png", "jpeg", "gif"]
+        self.f_labels = ["geotiff", "tiff", "png", "jpeg", "gif", "png8"]
 
         # form for request
-        self.formats = ["image/geotiff", "image/tiff", "image/png", "image/jpeg", "image/gif"]
+        self.formats = ["image/geotiff", "image/tiff", "image/png", "image/jpeg", "image/gif", "image/png8"]
 
         self.srs = ("epsg", "crs")
 
