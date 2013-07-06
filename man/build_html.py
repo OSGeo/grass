@@ -97,7 +97,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
         <li><a href="wxGUI.html">wxGUI</a> wxPython-based GUI frontend</li>
-        <li><a href="wxGUI.Components.html">wxGUI components</a></li>
+        <li><a href="wxGUI.components.html">wxGUI components</a></li>
        </ul>
 
        <ul>
