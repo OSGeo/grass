@@ -15,7 +15,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
-from   math import ceil
+from math import ceil
 
 import base64
 import urllib2
