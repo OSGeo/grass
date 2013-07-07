@@ -301,8 +301,8 @@ class WMSBase:
                 temp_region_opened.close()            
 
             points = grass.read_command('m.proj', flags = 'd',
-                                        proj_output = self.proj_srs,
-                                        proj_input = self.proj_location,
+                                        proj_out = self.proj_srs,
+                                        proj_in = self.proj_location,
                                         input = temp_region,
                                         quiet = True) # TODO: stdin
             grass.try_remove(temp_region)

@@ -46,14 +46,14 @@
 #% guisection: Files & format
 #%end
 #%option
-#% key: proj_input
+#% key: proj_in
 #% type: string
 #% description: Input projection parameters (PROJ.4 style)
 #% required : no
 #% guisection: Projections
 #%end
 #%option
-#% key: proj_output
+#% key: proj_out
 #% type: string
 #% description: Output projection parameters (PROJ.4 style)
 #% required : no
@@ -113,8 +113,8 @@ def main():
     input = options['input']
     output = options['output']
     fs = options['separator']
-    proj_in = options['proj_input']
-    proj_out = options['proj_output']
+    proj_in = options['proj_in']
+    proj_out = options['proj_out']
     ll_in = flags['i']
     ll_out = flags['o']
     decimal = flags['d']

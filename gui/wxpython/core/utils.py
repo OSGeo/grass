@@ -577,8 +577,8 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
     coors = RunCommand('m.proj',
                        flags = flags,
                        input = '-',
-                       proj_input = projIn,
-                       proj_output = projOut,
+                       proj_in = projIn,
+                       proj_out = projOut,
                        sep = ';',
                        stdin = '%f;%f' % (coord[0], coord[1]),
                        read = True)
