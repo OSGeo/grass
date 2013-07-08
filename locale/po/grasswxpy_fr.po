@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-26 14:45+0100\n"
-"PO-Revision-Date: 2013-05-18 23:03+0100\n"
+"PO-Revision-Date: 2013-07-08 07:13+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -11688,14 +11688,12 @@ msgstr "Fichier géo-référencé : "
 
 #: ../gui/wxpython/location_wizard/wizard.py:1221
 #: ../gui/wxpython/location_wizard/wizard.py:1277
-#, fuzzy
 msgid "Select WKT or PRJ file"
-msgstr "Choisir un fichier WKT"
+msgstr "Choisir un fichier WKT ou PRJ"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1226
-#, fuzzy
 msgid "WKT or PRJ file:"
-msgstr "Fichier WKT :"
+msgstr "Fichier WKT ou PRJ :"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1292
 msgid "Choose EPSG Code"
@@ -16667,6 +16665,12 @@ msgstr "Créer une nouvelle carte vecteur à partir de la région courante."
 msgid "Fills lake from seed at given level."
 msgstr "Remplit le lac depuis un point d'origine jusqu'à un niveau donné."
 
+msgid "Select WKT file"
+msgstr "Choisir un fichier WKT"
+
+msgid "WKT file:"
+msgstr "Fichier WKT :"
+
 #~ msgid "3D view mode: %s\n"
 #~ msgstr "Mode vue 3D : %s\n"
 
@@ -17342,12 +17346,6 @@ msgstr "Remplit le lac depuis un point d'origine jusqu'à un niveau donné."
 #~ msgid "Location Title"
 #~ msgstr "Titre du secteur"
 
-#~ msgid "Select WKT file"
-#~ msgstr "Choisir un fichier WKT"
-
-#~ msgid "WKT file:"
-#~ msgstr "Fichier WKT :"
-
 #~ msgid "Nothing found."
 #~ msgstr "Aucun résultat."
 
@@ -17390,3 +17388,86 @@ msgstr "Remplit le lac depuis un point d'origine jusqu'à un niveau donné."
 
 #~ msgid "Generates a raster density map from vector point data using a moving kernel or optionally generates a vector density map on a vector network."
 #~ msgstr "Génère une carte raster de densité à partir de données vecteurs points en utilisant un noyau mouvant et optionnellement génère une carte de densité sur un réseau vectoriel."
+
+#~ msgid "Advanced display settings"
+#~ msgstr "Paramètres d'affichage avancés"
+
+#~ msgid "3D view depth buffer (possible values are 16, 24, 32):"
+#~ msgstr "Taille du tampon d'affichage 3D (valeurs possibles 16, 24, 32) :"
+
+#~ msgid ""
+#~ "\n"
+#~ "Note: This only controls the coordinates displayed in the lower-left of the Map Display\n"
+#~ "window's status bar. It is purely cosmetic and does not affect the working location's\n"
+#~ "projection in any way. You will need to enable the Projection check box in the drop-down\n"
+#~ "menu located at the bottom of the Map Display window.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Note : Ceci contrôle uniquement les coordonnées affichées dans le coin inférieur gauche\n"
+#~ " de la fenêtre de Carte. L'effet est purement cosméthique et n'affecte pas la projection\n"
+#~ " du secteur d'aucune manière. Vous devrez cocher la case Projection dans le menu déroulant\n"
+#~ " en bas de la fenêtre de carte.\n"
+
+#~ msgid "&Log file"
+#~ msgstr "Fichier &Log"
+
+#, fuzzy
+#~ msgid "Toggle to save list of executed commands into a file; content saved when switching off."
+#~ msgstr "Activer pour enregistrer dans un fichier la liste des commandes exécutées; le contenu sera enregistré à la désactivation."
+
+#~ msgid "Command output saved into '%s'"
+#~ msgstr "Sortie de la commande enregistrée dans '%s'"
+
+#~ msgid "Command log saved to '%s'"
+#~ msgstr "Historique des commandes enregistré dans '%s'"
+
+#, fuzzy
+#~ msgid "Inconsistent number of columns in the table <%(table)s>."
+#~ msgstr "Nombre de colonnes non valide dans la table <%(table)s>."
+
+#~ msgid "Viewing limit: 100000 records."
+#~ msgstr "Limite d'affichage : 100000 enregistrements."
+
+#, fuzzy
+#~ msgid "relative to paper"
+#~ msgstr "par rapport au papier"
+
+#~ msgid "%(prg)s exited with return code %(code)s"
+#~ msgstr "%(prg)s s'est terminé avec le code de sortie %(code)s"
+
+#~ msgid "PDF generated"
+#~ msgstr "PDF généré"
+
+#~ msgid "PostScript file generated"
+#~ msgstr "Fichier PostScript généré"
+
+#~ msgid "%(env)s: line skipped - unable to parse Reason: %(e)s\n"
+#~ msgstr "%(env)s : ligne sautée - impossible de lire. Raison : %(e)s\n"
+
+#~ msgid "Quit the GRASS wxGUI session."
+#~ msgstr "Quitter la session wxGUI."
+
+#, fuzzy
+#~ msgid "The 'xml2' parser is required, please install it first. You may also try running r.in.wms directly from the command line."
+#~ msgstr "Le parseur 'xml2' est requis, merci de l'installer en premier. Vous pouvez aussi essayer de lancer r.in.wms depuis la ligne de commande."
+
+#, fuzzy
+#~ msgid "Opening 3D view was not successful. Please try to change the value of depth buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
+#~ msgstr "Lancement de la vue 3D a échoué. Essayez de modifier la valeur de tampon d'affichage dans Paramètres > Préférences > onglet Fenêtre de carte > Paramètres d'affichage avancés"
+
+#~ msgid ""
+#~ "Unable to open file <%(file)s> for writing.\n"
+#~ "Reason: %(e)s"
+#~ msgstr ""
+#~ "Impossible d'ouvrir le fichier <%(file)s> en écriture.\n"
+#~ "Raison: %(e)s"
+
+#~ msgid ""
+#~ "%(l)d files created:\n"
+#~ "%(p)s"
+#~ msgstr ""
+#~ "%(l)d fichiers crées : \n"
+#~ "%(p)s"
+
+#~ msgid "Invalid line in GISRC file (%(e)s):%(l)s\n"
+#~ msgstr "Ligne invalide dans le fichier GISRC (%(e)s) : %(l)s\n"

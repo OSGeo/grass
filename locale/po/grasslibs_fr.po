@@ -12,15 +12,14 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-26 14:45+0100\n"
-"PO-Revision-Date: 2013-01-26 13:45+0100\n"
+"PO-Revision-Date: 2013-07-08 07:44+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: French <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: French\n"
-"X-Poedit-Country: FRANCE\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../lib/nviz/render.c:105
 msgid "Bad server connection"
@@ -234,12 +233,12 @@ msgstr "Impossible d'ouvrir la couche vectorielle <%s>"
 #: ../lib/ogsf/Gv3.c:261
 #, c-format
 msgid "No features from vector map <%s> fall within current region"
-msgstr "Aucun objet de la carte vecteur <%s> ne tombe dans la région courante"
+msgstr "Aucune entité de la carte vecteur <%s> ne tombe dans la région courante"
 
 #: ../lib/ogsf/Gv3.c:266
 #, c-format
 msgid "Vector map <%s> loaded (%d features)"
-msgstr "Carte vecteur <%s> chargée (%d objets)"
+msgstr "Carte vecteur <%s> chargée (%d entités)"
 
 #: ../lib/ogsf/Gv3.c:336 ../lib/ogsf/Gp3.c:200 ../lib/vector/Vlib/map.c:175
 #: ../lib/vector/Vlib/map.c:303 ../lib/vector/Vlib/map.c:417
@@ -4720,7 +4719,7 @@ msgstr "%s: la surface %d n'existe pas"
 
 #: ../lib/vector/Vlib/write_nat.c:684 ../lib/vector/Vlib/write_sfa.c:191
 msgid "Attempt to delete dead feature"
-msgstr "Tentative de suppression d'un objet mort"
+msgstr "Tentative de suppression d'une entité morte"
 
 #: ../lib/vector/Vlib/write_nat.c:795
 #, fuzzy, c-format
@@ -4729,7 +4728,7 @@ msgstr "Tentative de supprimer une surface morte"
 
 #: ../lib/vector/Vlib/write_nat.c:935
 msgid "Attempt to restore alive feature"
-msgstr "Tentative de restauration d'un objet mort"
+msgstr "Tentative de restauration d'une entité morte"
 
 #: ../lib/vector/Vlib/legal_vname.c:43
 #, c-format
@@ -4812,9 +4811,9 @@ msgid "Snapped vertices: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/snap.c:519
-#, fuzzy, c-format
+#, c-format
 msgid "New vertices: %d"
-msgstr "Nombre de primitives: %d"
+msgstr "Nouveau sommet : %d"
 
 #: ../lib/vector/Vlib/snap.c:546
 #, fuzzy
@@ -5416,7 +5415,7 @@ msgstr "La carte vecteur n'est pas ouverte"
 #: ../lib/vector/Vlib/geos.c:55
 #, c-format
 msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr "Vect_read_line_geos(): l'id d'objet %d n'est pas raisonnable (nombre maxi d'objets dans la carte vecteur <%s>: %d)"
+msgstr "Vect_read_line_geos(): l'id d'objet %d n'est pas plausible (nombre maxi d'objets dans la carte vecteur <%s>: %d)"
 
 #: ../lib/vector/Vlib/geos.c:60
 msgid "only native format supported"
@@ -5449,7 +5448,7 @@ msgstr "Tentative de lecture des points de la surface non existante d'id %d"
 #: ../lib/vector/Vlib/geos.c:470
 #, c-format
 msgid "Unable to read feature id %d"
-msgstr "Impossible de lire l'objet d'id %d"
+msgstr "Impossible de lire l'entité d'id %d"
 
 #: ../lib/vector/Vlib/box.c:223
 #, fuzzy, c-format
@@ -5562,9 +5561,8 @@ msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
 msgstr "L'enregistrement de la base de données pour le noeud %d (cat = %d) n'a pas été trouvé (coût fixé à 0)"
 
 #: ../lib/vector/Vlib/net.c:440
-#, fuzzy
 msgid "Flattening the graph..."
-msgstr "Aplanir le graphique..."
+msgstr "Aplanir le graph ..."
 
 #: ../lib/vector/Vlib/net.c:449
 msgid "Graph was built"
@@ -6076,31 +6074,31 @@ msgstr "Impossible de sélectionner un enregistrement depuis la table <%s> (clef
 
 #: ../lib/vector/Vlib/write.c:186
 msgid "Unable to write feature, vector map is not opened"
-msgstr "Impossible d'écrire la ligne, la couche n'est pas ouverte"
+msgstr "Impossible d'écrire l'entité, la couche n'est pas ouverte"
 
 #: ../lib/vector/Vlib/write.c:231
 msgid "Unable to rewrite feature, vector map is not opened"
-msgstr "Impossible de ré-écrire la ligne, la couche n'est pas ouverte"
+msgstr "Impossible de ré-écrire l'entité, la couche n'est pas ouverte"
 
 #: ../lib/vector/Vlib/write.c:270
 #, c-format
 msgid "Unable to delete feature %d, vector map <%s> is not opened on topology level"
-msgstr "Impossible de supprimer la ligne %d, la carte vectorielle <%s> n'est pas ouverte au niveau topologique"
+msgstr "Impossible de supprimer l'entité %d, la carte vectorielle <%s> n'est pas ouverte au niveau topologique"
 
 #: ../lib/vector/Vlib/write.c:276
 #, c-format
 msgid "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr "Impossible de supprimer la ligne %d, la carte vecotirelle <%s> n'est pas ouverte en mode « écriture »"
+msgstr "Impossible de supprimer l'entité %d, la carte vecotirelle <%s> n'est pas ouverte en mode « écriture »"
 
 #: ../lib/vector/Vlib/write.c:315
 #, c-format
 msgid "Unable to restore feature %d, vector map <%s> is not opened on topology level"
-msgstr "Impossible de restaurer la ligne %d, la carte vectorielle <%s> n'est pas ouverte au niveau topologique"
+msgstr "Impossible de restaurer l'entité %d, la carte vectorielle <%s> n'est pas ouverte au niveau topologique"
 
 #: ../lib/vector/Vlib/write.c:321
 #, c-format
 msgid "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr "Impossible de restaurer la ligne %d, la carte vectorielle <%s> n'est pas ouverte en mode « écriture »"
+msgstr "Impossible de restaurer l'entité %d, la carte vectorielle <%s> n'est pas ouverte en mode « écriture »"
 
 #: ../lib/vector/Vlib/build_sfa.c:279 ../lib/vector/Vlib/build_sfa.c:542
 #, c-format
@@ -6116,7 +6114,7 @@ msgstr "Le type d'objet OGR %d n'est pas géré"
 #: ../lib/vector/Vlib/read_ogr.c:578
 #, c-format
 msgid "OGR feature type %d not supported"
-msgstr "Objet OGR de type %d non pris en charge"
+msgstr "Entité OGR de type %d non pris en charge"
 
 #: ../lib/vector/Vlib/build_sfa.c:640
 #, fuzzy, c-format
@@ -6280,7 +6278,7 @@ msgstr "Impossible d'obtenir la géométrie caractéristique, FID [%Id]"
 
 #: ../lib/vector/Vlib/read_ogr.c:390
 msgid "OGR feature without ID"
-msgstr "Objet OGR sans ID"
+msgstr "Entité OGR sans ID"
 
 #: ../lib/vector/Vlib/read_ogr.c:514
 #, fuzzy, c-format
@@ -6692,9 +6690,9 @@ msgid "Area %d has no boundaries"
 msgstr "Matrices non autorisées"
 
 #: ../lib/vector/vedit/cats.c:63
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to set category %d for (feature id %d)"
-msgstr "Impossible d'ouvrir le fichier des catégories d'index pour la couche vectorielle <%s>"
+msgstr "Impossible de définir la catégorie %d pour (entité d'id %d)"
 
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
@@ -6782,9 +6780,8 @@ msgid "Data type of column <%s> must be numeric"
 msgstr "Le type des données de la colonne <%s> doit être numeric"
 
 #: ../lib/rst/interp_float/vinput2d.c:121
-#, fuzzy
 msgid "Reading features from vector map ..."
-msgstr "Lecture d'objet depuis la carte vectorielle ..."
+msgstr "Lecture des entités depuis la carte vectorielle ..."
 
 #: ../lib/rst/interp_float/vinput2d.c:153
 #, c-format
@@ -7964,9 +7961,8 @@ msgstr "Nom de(s) couche(s) vectorielle(s) en entrée"
 
 #: ../lib/gis/parser_standard_options.c:441
 #: ../lib/gis/parser_standard_options.c:450
-#, fuzzy
 msgid "Feature type"
-msgstr "Type(s) d'entité(s)"
+msgstr "Types d'entité"
 
 #: ../lib/gis/parser_standard_options.c:457
 #, fuzzy
@@ -8002,14 +7998,12 @@ msgid "Example: 1,3,7-9,13"
 msgstr "Exemple: 1,3,7-9,13"
 
 #: ../lib/gis/parser_standard_options.c:494
-#, fuzzy
 msgid "Feature id"
-msgstr "Type(s) d'entité(s)"
+msgstr "Id d'entité"
 
 #: ../lib/gis/parser_standard_options.c:501
-#, fuzzy
 msgid "Feature ids"
-msgstr "Type(s) d'entité(s)"
+msgstr "Id d'entités"
 
 #: ../lib/gis/parser_standard_options.c:512
 msgid "Name of input file"
@@ -9162,10 +9156,10 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Impossible d'ouvrir le fichier fidx pour la couche vectorielle <%s@%s>"
 
 #~ msgid "Unable to write feature (negative offset)"
-#~ msgstr "Impossible d'écrire la ligne (décalage négatif)"
+#~ msgstr "Impossible d'écrire l'entité (décalage négatif)"
 
 #~ msgid "Unable to restore feature %d from vector map <%s>"
-#~ msgstr "Impossible de restaurer la ligne %d de la couche vectorielle <%s>"
+#~ msgstr "Impossible de restaurer l'entité %d de la couche vectorielle <%s>"
 
 #~ msgid "Don't know how to read links for format %d"
 #~ msgstr "Aucun gestionnaire pour lire les liens de format %d"
@@ -9856,7 +9850,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Impossible d'ouvrir la couche <%s>"
 
 #~ msgid "OGR feature without ID ignored"
-#~ msgstr "Objet OGR sans ID ignoré"
+#~ msgstr "Entité OGR sans ID ignorée"
 
 #~ msgid "test, gpde"
 #~ msgstr "test, gpde"
@@ -9912,7 +9906,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Mot-clef %s inconnu dans l'en-tête du vecteur"
 
 #~ msgid "Unable to delete feature %d from vector map <%s>"
-#~ msgstr "Impossible de supprimer la ligne %d de la couche vectorielle <%s>"
+#~ msgstr "Impossible de supprimer l'entité %d de la couche vectorielle <%s>"
 
 #~ msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
 #~ msgstr "Nom de table illégal <%s>. Ne doit contenir ni '.', ni 'NULL'.\n"
@@ -10157,7 +10151,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "'%s' doit être > 0 pour '%s'"
 
 #~ msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-#~ msgstr "Vect_read_line(): l'id d'objet %d n'est pas raisonnable (nombre maxi d'objets dans la carte vecteur <%s>: %d)"
+#~ msgstr "Vect_read_line(): l'id de l'entité %d n'est pas plausible (nombre maxi d'objets dans la carte vecteur <%s>: %d)"
 
 #~ msgid "not implemented"
 #~ msgstr "non implémenté"
@@ -10166,7 +10160,7 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Lecture aléatoire non supportée par OGR pour cette couche, impossible de construire les fichiers support"
 
 #~ msgid "Feature %d without geometry ignored"
-#~ msgstr "L'objet %d sans géométrie a été ignoré"
+#~ msgstr "L'entité %d sans géométrie a été ignoré"
 
 #~ msgid "Unable to read head file"
 #~ msgstr "Impossible de lire le fichier d'en-tête"
@@ -10175,13 +10169,13 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgstr "Impossible de créer la couche vectorielle <%s>"
 
 #~ msgid "Unable to rewrite feature %d"
-#~ msgstr "Impossible de ré-écrire la ligne %d"
+#~ msgstr "Impossible de ré-écrire l'entité %d"
 
 #~ msgid "Unable to add database link"
 #~ msgstr "Impossible d'ajouter un lien base de données"
 
 #~ msgid "Unable to get feature geometry, FID %ld"
-#~ msgstr "Impossible d'obtenir la géométrie de l'objet, FID %ld"
+#~ msgstr "Impossible d'obtenir la géométrie de l'entité, FID %ld"
 
 #~ msgid "Name of input raster3d map"
 #~ msgstr "Nom de la couche matricielle 3D en entrée"
@@ -10225,3 +10219,6 @@ msgstr "Echec lors de la conversion de l'attribut."
 
 #~ msgid "LOCATION << %s >> not available"
 #~ msgstr "Secteur (LOCATION)  << %s >>  indisponible"
+
+#~ msgid "Feature: "
+#~ msgstr "Entité :"
