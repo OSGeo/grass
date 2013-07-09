@@ -41,7 +41,7 @@ static int (*Read_next_line_array[][3]) () = {
     , {
         read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
     , {
-	read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
+        read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
 #else
     , {
 	read_dummy, format, format}
@@ -53,7 +53,7 @@ static int (*Read_next_line_array[][3]) () = {
 	read_dummy, V1_read_next_line_pg, V2_read_next_line_pg}
 #else
     , {
-	read_dummy, format, format, format}
+	read_dummy, format, format}
 #endif
 };
 
