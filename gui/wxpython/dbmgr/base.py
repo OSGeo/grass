@@ -1005,8 +1005,10 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
+        sqlQueryPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
+
         # attribute data            
-        sqlBox = wx.StaticBox(parent = panel, id = wx.ID_ANY,
+        sqlBox = wx.StaticBox(parent = sqlQueryPanel, id = wx.ID_ANY,
                               label = " %s " % _("SQL Query"))
 
         sqlSizer = wx.StaticBoxSizer(sqlBox, wx.VERTICAL)
@@ -1031,7 +1033,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             dbmStyle = { 'agwStyle' : FNPageStyle }
         else:
             dbmStyle = { 'style' : FNPageStyle }
-        sqlNtb = FN.FlatNotebook(parent = panel, id = wx.ID_ANY,
+        sqlNtb = FN.FlatNotebook(parent = sqlQueryPanel, id = wx.ID_ANY,
                                  **dbmStyle)
         # Simple tab
         simpleSqlPanel = wx.Panel(parent = sqlNtb, id = wx.ID_ANY)
@@ -1118,7 +1120,10 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                       proportion = 1,
                       flag = wx.ALL | wx.EXPAND,
                       border = 5)
-        pageSizer.Add(item = sqlSizer,
+
+        sqlQueryPanel.SetSizer(sqlSizer)
+        
+        pageSizer.Add(item = sqlQueryPanel,
                       proportion = 0,
                       flag = wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.EXPAND,
                       border = 5)
