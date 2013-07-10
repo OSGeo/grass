@@ -662,7 +662,7 @@ class MapFrame(SingleMapFrame):
         @param x,y coordinates
         @param layers selected tree item layers
         """
-        layers = self._giface.GetLayerList().GetSelectedLayers(checkedOnly = True)
+        layers = self._giface.GetLayerList().GetSelectedLayers(checkedOnly=False)
         rast = []
         vect = []
         for layer in layers:
