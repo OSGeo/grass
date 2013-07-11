@@ -67,7 +67,7 @@ Contents
      VERSION=${MAJOR}.${MINOR}.${RELEASE}
      echo $VERSION
 
-     svn ci -m"GRASS $VERSION" include/VERSION
+     svn ci -m"GRASS GIS $VERSION" include/VERSION
      svn up
 
  o Create Changelog file on release branch:
@@ -124,7 +124,7 @@ Contents
     echo $SERVER1
     echo $SERVER2
 
-   along with associated files:
+   # copy along with associated files:
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
          INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
          SUBMITTING_PYTHON SUBMITTING_SCRIPTS neteler@$SERVER1
