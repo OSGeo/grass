@@ -36,7 +36,7 @@ struct menu
     stat_func_w *method_w;	/* routine to compute new value (weighted) */
     ifunc cat_names;		/* routine to make category names */
     int copycolr;		/* flag if color table can be copied */
-    int half;			/* whether to add 0.5 to result */
+    int half;			/* whether to add 0.5 to result (redundant) */
     char *name;			/* method name */
     char *text;			/* menu display - full description */
 };
@@ -77,7 +77,6 @@ struct output
     stat_func *method_fn;
     stat_func_w *method_fn_w;
     int copycolr;
-    int half;
     ifunc cat_names;
     int map_type;
     double quantile;
@@ -314,7 +313,6 @@ int main(int argc, char *argv[])
 	    out->method_fn = menu[method].method;
 	    out->method_fn_w = NULL;
 	}
-	out->half = menu[method].half;
 	out->copycolr = menu[method].copycolr;
 	out->cat_names = menu[method].cat_names;
 	if (out->copycolr)
@@ -411,9 +409,6 @@ int main(int argc, char *argv[])
 			memcpy(values_tmp, values, n * sizeof(DCELL));
 			(*out->method_fn)(rp, values_tmp, n, &out->quantile);
 		    }
-
-		    if (out->half && !Rast_is_d_null_value(rp))
-			*rp += 0.5;
 		}
 	    }
 	}
