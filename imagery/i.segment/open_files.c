@@ -61,6 +61,7 @@ int open_files(struct globals *globals)
     /* Get min/max values of each input raster for scaling */
 
     globals->max_diff = 0.;
+    globals->nbands = Ref.nfiles;
 
     for (n = 0; n < Ref.nfiles; n++) {
 	/* returns -1 on error, 2 on empty range, quiting either way. */
@@ -85,8 +86,6 @@ int open_files(struct globals *globals)
 
     /* ********** find out file segmentation size ************ */
     G_debug(1, "Calculate temp file sizes...");
-
-    globals->nbands = Ref.nfiles;
 
     /* size of each element to be stored */
 
