@@ -7,7 +7,9 @@
 Values are stored in the mapset's <tt>VAR</tt> file;
 the connection is not tested for validity.
 <p>The <b>-d</b> flag will set the default TGIS connection parameters. 
-A sqlite3 database "tgis.db" will be created in the PERMANET directory of the current location.
+A sqlite3 database "tgis/sqlite.db" will be created in the PERMANET directory 
+of the current location. It will be located in the "tgis" sub-directory to not
+interfere with the sqlite3 database used for vector attribute storage.
 <p>The <b>-p</b> flag will display the current TGIS connection parameters. 
 <p>The <b>-pg</b> flag will display the current TGIS connection parameters using shell style. 
 <p>The <b>-c</b> flag will silently check if the TGIS connection parameters have
@@ -22,7 +24,7 @@ and write access in the TGIS database, consider to use a postgresql database ins
 <h3>SQLite</h3>
 
 <div class="code"><pre>
-t.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/PERMANENT/tgis.db'
+t.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite.db'
 t.connect -p
 t.info -s
 </pre></div>

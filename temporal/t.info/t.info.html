@@ -27,10 +27,9 @@ space time raster dataset to stdout.
 <div class="code"><pre>
 
 t.info -s
-
  +------------------- Temporal DBMI backend information ----------------------+
  | DBMI Python interface:...... sqlite3
- | DBMI init string:........... /1/soeren/grassdata/TestLL/PERMANENT/tgis.db
+ | DBMI init string:........... /home/soeren/grassdata/Test_ECAD_3/PERMANENT/tgis/sqlite.db
  | SQL template path:.......... /home/soeren/src/grass7.0/grass_trunk/dist.x86_64-unknown-linux-gnu/etc/sql
  +----------------------------------------------------------------------------+
 
@@ -42,7 +41,7 @@ t.create type=strds temporaltype=absolute \
          description="Test dataset with daily precipitation"
 
 t.register -i type=rast input=precipitation_daily \
-           maps=map1 start=20-08-2012 increment="1 days"
+           maps=map1 start=2012-08-20 increment="1 days"
 
 t.info type=rast input=map1
 
@@ -53,7 +52,7 @@ t.info type=rast input=map1
  | Name: ...................... map1
  | Mapset: .................... PERMANENT
  | Creator: ................... soeren
- | Creation time: ............. 2012-10-16 14:45:24.554908
+ | Creation time: ............. 2013-07-13 11:38:19.357300
  | Temporal type: ............. absolute
  +-------------------- Absolute time -----------------------------------------+
  | Start time:................. 2012-08-20 00:00:00
@@ -74,7 +73,7 @@ t.info type=rast input=map1
  | East-west resolution:....... 10.0
  | Minimum value:.............. 0.0
  | Maximum value:.............. 9.0
- | STRDS register table ....... map_989e88525bae40db9c16d03d3574d656_strds_register
+ | STRDS register table ....... map_2db89689ae774e9f929ef693339ae116_strds_register
  | Registered datasets ........ precipitation_daily@PERMANENT
  +----------------------------------------------------------------------------+
 
@@ -83,40 +82,50 @@ t.info type=strds input=precipitation_daily
  +-------------------- Space Time Raster Dataset -----------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+
- | Id: ........................ precipitation_daily@PERMANENT
+ | Id: ........................ precipitation_daily@test
  | Name: ...................... precipitation_daily
- | Mapset: .................... PERMANENT
+ | Mapset: .................... test
  | Creator: ................... soeren
- | Creation time: ............. 2012-10-16 14:52:24.093147
+ | Creation time: ............. 2013-07-13 12:16:26.971963
  | Temporal type: ............. absolute
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
  | Start time:................. 2012-08-20 00:00:00
  | End time:................... 2012-08-21 00:00:00
- | Granularity:................ 1 days
+ | Granularity:................ 1 day
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
  | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
+ | South:...................... -1.0
+ | East:.. .................... 120.5
+ | West:....................... -40.5
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Number of registered maps:.. 1
- | Title:
- | Daily precipitation
- | Description:
- | Test dataset with daily precipitation
- | North-South resolution min:. 10.0
- | North-South resolution max:. 10.0
- | East-west resolution min:... 10.0
- | East-west resolution max:... 10.0
+ | Raster register table:...... precipitation_daily_test_raster_register
+ | North-South resolution min:. 1.0
+ | North-South resolution max:. 1.0
+ | East-west resolution min:... 1.0
+ | East-west resolution max:... 1.0
  | Minimum value min:.......... 0.0
  | Minimum value max:.......... 0.0
  | Maximum value min:.......... 9.0
  | Maximum value max:.......... 9.0
- | Raster register table:...... precipitation_daily_PERMANENT_raster_register
+ | Number of registered maps:.. 1
+ |
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Command history:
+ | # 2013-07-13 12:16:27 
+ | t.create type="strds" temporaltype="absolute"
+ |     output="precipitation_daily" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | # 2013-07-13 12:16:27 
+ | t.register -i type="rast" input="precipitation_daily"
+ |     maps="map1" start="2012-08-20" increment="1 days"
+ | 
  +----------------------------------------------------------------------------+
 </pre></div>
 <h2>SEE ALSO</h2>

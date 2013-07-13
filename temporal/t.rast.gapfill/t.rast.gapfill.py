@@ -96,7 +96,6 @@ def main():
         if _map.get_id() is None:
             count += 1
             _id = "%s_%d@%s" % (base, num + count, mapset)
-            print _id
             _map.set_id(_id)
             if _map.map_exists() or _map.is_in_db(dbif):
                 grass.fatal(_("Map with name <%s> already exists. "

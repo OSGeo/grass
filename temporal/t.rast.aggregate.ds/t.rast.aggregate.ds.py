@@ -5,7 +5,7 @@
 # MODULE:	t.rast.aggregate.ds
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Aggregated data of an existing space time raster dataset using the temporal topology of a second space time dataset
+# PURPOSE:	Aggregated data of an existing space time raster dataset using the time intervals of a second space time dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Aggregated data of an existing space time raster dataset using the temporal topology of a second space time dataset.
+#% description: Aggregated data of an existing space time raster dataset using the time intervals of a second space time dataset.
 #% keywords: temporal
 #% keywords: aggregation
 #%end

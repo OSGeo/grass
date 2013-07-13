@@ -119,6 +119,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.spatial_extent.print_shell_info()
         self.metadata.print_shell_info()
 
+    def print_history(self):
+        """!Print history information about this class in human readable 
+            shell style
+        """
+        self.metadata.print_history()
+        
     def set_initial_values(self, temporal_type, semantic_type,
                            title=None, description=None):
         """!Set the initial values of the space time dataset
@@ -175,7 +181,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            """
         # The grass module
 
-        command = "- %s -\n"%(str(datetime.today().strftime("%Y-%m-%d %H:%M:%S")))
+        command = "# %s \n"%(str(datetime.today().strftime("%Y-%m-%d %H:%M:%S")))
         command += os.path.basename(sys.argv[0])
 
         # We will wrap the command line to fit into 80 character
