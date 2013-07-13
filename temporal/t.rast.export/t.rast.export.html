@@ -1,10 +1,118 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+This module exports a space time raster dataset as a tar archive. The archive contains the
+raster maps either as geotiff files or as GRASS binary files exported using r.out.bin.
+The map specific color tables are exported as well in case of geotiff files.
+In addition several meta data files are created in the archive that describe the 
+temporal layout. All time stamps are stored in the file "list.txt", for each map one row.
+The name of the map, the start time and the end time are written. In case of a time instance, 
+the start time is equal to the end time. The "init.txt" files stores the temporal
+type, the number of maps, the chosen export format and some other metadata. The "proj.txt"
+files stores the projection information as proj4 string of the 
+location the space time raster dataset was exported from.
+The file "readme.txt" describes the file format. The output of r.info is stored in "metadata.txt".
+<p>
+The tar archive can be compressed using the <b>compress</b> option. Gzip and bzip2 are
+available. A <b>where</b> option can be specified, to export only a subset of the space time dataset.
+Archives exported with <b>t.rast.export</b> can be importet with <b>t.rast.import</b>.
+
+<h2>EXAMPLE</h2>
+
+In this example we create 7 raster maps that will be registered in a single space time
+raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
+The names of the raster maps are stored in a text file that is used for raster map registration.
+We export the created space time raster dataset and will have a look at some files that are created: 
+
+<div class="code"><pre>
+
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
+
+for map in ${MAPS} ; do
+    r.mapcalc --o expr="${map} = 1" 
+    echo ${map} >> map_list.txt 
+done
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i type=rast input=precipitation_daily \
+           file=map_list.txt start="2012-08-20" increment="1 days"
+
+t.rast.export input=precipitation_daily output=precipitation_daily.tar
+
+tar xvf precipitation_daily.tar
+map_1.tif
+map_1.color
+map_2.tif
+map_2.color
+map_3.tif
+map_3.color
+map_4.tif
+map_4.color
+map_5.tif
+map_5.color
+map_6.tif
+map_6.color
+map_7.tif
+map_7.color
+list.txt
+proj.txt
+init.txt
+readme.txt
+metadata.txt
+
+
+cat init.txt
+stds_type=strds
+format=GTiff
+temporal_type=absolute
+semantic_type=mean
+number_of_maps=7
+north=80.0
+south=0.0
+east=120.0
+west=0.0
+
+
+cat proj.txt
++proj=longlat
++no_defs
++a=6378137
++rf=298.257223563
++towgs84=0,0,0,0,0,0,0
+
+
+cat list.txt
+map_1|2012-08-20 00:00:00|2012-08-21 00:00:00
+map_2|2012-08-21 00:00:00|2012-08-22 00:00:00
+map_3|2012-08-22 00:00:00|2012-08-23 00:00:00
+map_4|2012-08-23 00:00:00|2012-08-24 00:00:00
+map_5|2012-08-24 00:00:00|2012-08-25 00:00:00
+map_6|2012-08-25 00:00:00|2012-08-26 00:00:00
+map_7|2012-08-26 00:00:00|2012-08-27 00:00:00
+
+
+cat readme.txt 
+This space time raster dataset was exported with t.rast.export of GRASS GIS 7
+
+Files:
+       *.tif  -- GeoTIFF raster files
+     *.color  -- GRASS GIS raster color rules
+     proj.txt -- Projection information in PROJ.4 format
+     init.txt -- GRASS GIS space time raster dataset information
+     list.txt -- Time series file, lists all maps by name with interval
+                 time stamps in ISO-Format. Field separator is |
+ metadata.txt -- The output of t.info
+   readme.txt -- This file
+
+</div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="t.rast.import.html">t.rast.import</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
 </em>

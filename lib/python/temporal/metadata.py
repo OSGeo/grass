@@ -990,6 +990,37 @@ class STDSMetadataBase(SQLDatabaseInterface):
             for token in command.split("\n"):
                 print " | " + str(token)
 
+    def print_history(self):
+        """!Print history information about this class in human readable 
+            shell style
+        """
+        #      0123456789012345678901234567890
+        print "# Title:"
+        print "# " + str(self.get_title())
+        print "# Description:"
+        print "# " + str(self.get_description())
+        print "# Command history:"
+        command = self.get_command()
+        
+        if command:
+            tokens = command.split("\n")
+            print_list = []
+            for token in tokens:
+                token = str(token).rstrip().lstrip()
+                if len(token) > 1:
+                    print_list.append(token)
+                
+            count = 0
+            for token in print_list:
+                count += 1
+                if len(token) > 1:
+                    if token[0] == "#":
+                        print token
+                    elif count < len(print_list):
+                        print token + " \\"
+                    else:
+                        print token 
+                        
     def print_shell_info(self):
         """!Print information about this class in shell style"""
         print "number_of_maps=" + str(self.get_number_of_maps())

@@ -41,6 +41,11 @@
 #%end
 
 #%flag
+#% key: h
+#% description: Print history information in human readable shell style
+#%end
+
+#%flag
 #% key: s
 #% description: Print information about the temporal DBMI interface and exit
 #% suppress_required: yes
@@ -59,6 +64,7 @@ def main():
     type = options["type"]
     shellstyle = flags['g']
     system = flags['s']
+    history = flags['h']
 
     # Make sure the temporal database exists
     tgis.init()
@@ -96,6 +102,10 @@ def main():
         grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
 
     ds.select()
+
+    if history == True:
+        ds.print_history()
+        return
 
     if shellstyle == True:
         ds.print_shell_info()

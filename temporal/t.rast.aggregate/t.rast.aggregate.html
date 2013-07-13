@@ -4,9 +4,9 @@
 This module support <em>absolute</em> and <em>relative time</em>.
 The temporal granularity of absolute time can be 
 <em>seconds, minutes, hours, days, weeks, months</em> or <em>years</em>.
-Mixing of granularities is not supported. 
-In case of relative time the temporal unit of the input space time raster dataset is used. The granularity
-must be specified with an integer value. 
+Mixing of granularities eg. "1 year, 3 months 5 days" is not supported. 
+In case of relative time the temporal unit of the input space time raster 
+dataset is used. The granularity must be specified with an integer value. 
 <p>
 This module is sensitive to the current region and mask settings, hence spatial extent and spatial resolution. 
 In case the registered raster maps of the input space time raster dataset
@@ -63,6 +63,45 @@ t.register -i type=rast input=precipitation_daily \
 
 t.info type=strds input=precipitation_daily
 
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-09-03 00:00:00
+ | End time:................... 2012-09-10 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... -1.0
+ | East:.. .................... 120.5
+ | West:....................... -40.5
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... precipitation_daily_test_raster_register
+ | North-South resolution min:. 1.0
+ | North-South resolution max:. 1.0
+ | East-west resolution min:... 1.0
+ | East-west resolution max:... 1.0
+ | Minimum value min:.......... 1.0
+ | Minimum value max:.......... 1.0
+ | Maximum value min:.......... 1.0
+ | Maximum value max:.......... 1.0
+ | Number of registered maps:.. 7
+ |
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Command history:
+ | # 2013-07-13 13:10:46 
+ | t.create type="strds" temporaltype="absolute"
+ |     output="precipitation_daily" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | # 2013-07-13 13:10:47 
+ | t.register -i type="rast" input="precipitation_daily"
+ |     file="map_list.txt" start="2012-08-20" increment="1 days"
+ | 
+ +----------------------------------------------------------------------------+
+
 t.rast.aggregate input=precipitation_daily \
                  output=precipitation_weekly \
                  base=prec_weekly granularity="1 weeks" \
@@ -73,8 +112,57 @@ t.support input=precipitation_weekly \
           description="Aggregated precipitation dataset with weekly resolution"
                  
 t.info type=strds input=precipitation_weekly
-</pre></div>
 
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_weekly@test
+ | Name: ...................... precipitation_weekly
+ | Mapset: .................... test
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-07-13 13:11:23.286982
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-09-03 00:00:00
+ | End time:................... 2012-09-10 00:00:00
+ | Granularity:................ 7 days
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... -1.0
+ | East:.. .................... 120.5
+ | West:....................... -40.5
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... precipitation_weekly_test_raster_register
+ | North-South resolution min:. 1.0
+ | North-South resolution max:. 1.0
+ | East-west resolution min:... 1.0
+ | East-west resolution max:... 1.0
+ | Minimum value min:.......... 7.0
+ | Minimum value max:.......... 7.0
+ | Maximum value min:.......... 7.0
+ | Maximum value max:.......... 7.0
+ | Number of registered maps:.. 1
+ |
+ | Title:
+ | Weekly precipitation
+ | Description:
+ | Aggregated precipitation dataset with weekly resolution
+ | Command history:
+ | # 2013-07-13 13:11:23 
+ | t.rast.aggregate input="precipitation_daily"
+ |     output="precipitation_weekly" base="prec_weekly" granularity="1 weeks"
+ |     method="sum" sampling="during"
+ | # 2013-07-13 13:11:29 
+ | t.support input="precipitation_weekly"
+ |     title="Weekly precipitation"
+ |     description="Aggregated precipitation dataset with weekly resolution"
+ | 
+ +----------------------------------------------------------------------------+
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
@@ -86,7 +174,6 @@ t.info type=strds input=precipitation_weekly
 <a href="g.region.html">g.region</a><br>
 <a href="r.mask.html">r.mask</a><br>
 </em>
-
 
 <h2>AUTHOR</h2>
 

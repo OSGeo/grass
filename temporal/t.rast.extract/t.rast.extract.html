@@ -1,6 +1,79 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+The purpose of <b>t.rast.extract</b> is to extract a subset of a space time 
+raster dataset and to store that subset in a different space time raster dataset.
+The <b>where</b> condition is used to select the subset. In addition a r.mapcalc
+sub-expression can be specified that performs operations on all maps of the selected subset.
+In this expression the name of the input space time raster dataset can be used
+as simple map name. Other STRDS than the input STRDS can not be specified, but
+any raster map. In case a r.mapcalc sub-expression is defined, the base name 
+of the resulting raster maps must be specified. The r.mapcalc expression can be
+used to select maps as well, since by default resulting empty maps are not registered
+in the output space time raster dataset and removed after processing. The number of 
+parallel grass processes can be specified to speed up the processing.
+<p>
+If no r.mapcalc expression is defined, the selected maps are simply registered in
+the new created output space time raster dataset to avoid data duplication.
+
+<h2>Note</h2>
+
+The r.mapcalc sub-expression should not contain the left side "map =" of 
+a full r.mapcalc expression, only the right side, eg.: 
+
+
+<div class="code"><pre>
+t.rast.extract input=precipitation where="start_time > '2001-01-05'" \
+               output=selected_precipitation base=new_prec_map \
+               expression="if(precipitation < 5, null(), precipitation)"
+</div>
+
+<h2>EXAMPLE</h2>
+
+In this example we create 8 raster maps that will be registered in a single space time
+raster dataset named <em>precipitation_yearly</em> using a yearly temporal granularity.
+The names of the raster maps are stored in a text file that is used for raster map registration.
+<p>
+Then we extract all maps that are later 2005 and store the selected maps in
+the space time raster dataset <em>precipitation_yearly_later_2005</em>.
+<p>
+
+<div class="code"><pre>
+
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7 map_8"
+
+for map in ${MAPS} ; do
+    r.mapcalc --o expr="${map} = 1" 
+    echo ${map} >> map_list.txt 
+done
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_yearly \
+         title="Yearly precipitation" \
+         description="Test dataset with yearly precipitation"
+
+t.register -i type=rast input=precipitation_yearly \
+           file=map_list.txt start="2000-01-01" increment="1 year"
+
+t.rast.list precipitation_yearly
+
+map_1   test    2000-01-01 00:00:00 2001-01-01 00:00:00
+map_2   test    2001-01-01 00:00:00 2002-01-01 00:00:00
+map_3   test    2002-01-01 00:00:00 2003-01-01 00:00:00
+map_4   test    2003-01-01 00:00:00 2004-01-01 00:00:00
+map_5   test    2004-01-01 00:00:00 2005-01-01 00:00:00
+map_6   test    2005-01-01 00:00:00 2006-01-01 00:00:00
+map_7   test    2006-01-01 00:00:00 2007-01-01 00:00:00
+map_8   test    2007-01-01 00:00:00 2008-01-01 00:00:00
+
+t.rast.extract input=precipitation_yearly output=precipitation_yearly_later_2005 \
+               where="start_time >= '2005-01-01'"
+
+t.rast.list precipitation_yearly_later_2005
+
+map_6   test    2005-01-01 00:00:00 2006-01-01 00:00:00
+map_7   test    2006-01-01 00:00:00 2007-01-01 00:00:00
+map_8   test    2007-01-01 00:00:00 2008-01-01 00:00:00
+</pre></div>
 
 <h2>SEE ALSO</h2>
 

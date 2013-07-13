@@ -368,7 +368,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     read_file.write("%13s -- Time series file, lists all maps by name "
                     "with interval\n" % (list_file_name))
     read_file.write("                 time stamps in ISO-Format. Field separator is |\n")
-    read_file.write("%13s -- Projection information in PROJ.4 format\n" %
+    read_file.write("%13s -- The output of t.info\n" %
                     (metadata_file_name))
     read_file.write("%13s -- This file\n" % (read_file_name))
     read_file.close()

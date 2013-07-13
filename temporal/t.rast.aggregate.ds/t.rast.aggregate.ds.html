@@ -1,10 +1,233 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+This module works like <a href="t.rast.aggregate.html">t.rast.aggregate</a> but instead
+of defining a fixed granularity for temporal aggregation the time intervals of
+all maps registered in a second space time dataset (can be STRDS, STR3DS or STVDS)
+are used to aggregate the maps of the input space time raster dataset.
+
+<h2>EXAMPLE</h2>
+
+In this example we create 7 raster maps that will be registered in a single space time
+raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
+The names of the raster maps are stored in a text file that is used for raster map registration.
+<p>
+A space time vector dataset is created out of two vector maps with different
+temporal resolution. The maps are created using v.random. 
+The first map has a granule of 3 days the second a granule of 4 days.  
+<p>
+The space time raster dataset <em>precipitation_daily</em> with daily temporal granularity 
+will be aggregated using the space time vector dataset 
+resulting in the output space time raster dataset
+<em>precipitation_agg</em>. The aggregation method is set to <em>sum</em> to accumulate the precipitation values
+of all intervals in the space time vector dataset. The sampling option assures that only raster maps that are 
+temporally during the time intervals of the space time vector dataset are
+considered for computation: 
+
+<div class="code"><pre>
+
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
+
+for map in ${MAPS} ; do
+    r.mapcalc --o expr="${map} = 1" 
+    echo ${map} >> map_list.txt 
+done
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i type=rast input=precipitation_daily \
+           file=map_list.txt start="2012-08-20" increment="1 days"
+
+t.info type=strds input=precipitation_daily
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily@test
+ | Name: ...................... precipitation_daily
+ | Mapset: .................... test
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-07-13 14:08:32.607419
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-27 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... -1.0
+ | East:.. .................... 120.5
+ | West:....................... -40.5
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... precipitation_daily_test_raster_register
+ | North-South resolution min:. 1.0
+ | North-South resolution max:. 1.0
+ | East-west resolution min:... 1.0
+ | East-west resolution max:... 1.0
+ | Minimum value min:.......... 1.0
+ | Minimum value max:.......... 1.0
+ | Maximum value min:.......... 1.0
+ | Maximum value max:.......... 1.0
+ | Number of registered maps:.. 7
+ |
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Command history:
+ | # 2013-07-13 14:08:32 
+ | t.create type="strds" temporaltype="absolute"
+ |     output="precipitation_daily" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | # 2013-07-13 14:08:33 
+ | t.register -i type="rast" input="precipitation_daily"
+ |     file="map_list.txt" start="2012-08-20" increment="1 days"
+ | 
+ +----------------------------------------------------------------------------+
+
+v.random output=points_1 n=20
+v.random output=points_2 n=20
+
+t.create type=stvds temporaltype=absolute \
+         output=points \
+         title="Points" \
+         description="Points for aggregation"
+
+t.register -i type=vect input=points \
+           map=points_1 start="2012-08-20" increment="3 days"
+t.register -i type=vect input=points \
+           map=points_2 start="2012-08-23" increment="4 days"
+
+t.info type=stvds input=points
+
+ +-------------------- Space Time Vector Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ points@test
+ | Name: ...................... points
+ | Mapset: .................... test
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-07-13 14:09:03.024090
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-27 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 73.65504
+ | South:...................... 4.601117
+ | East:.. .................... 118.150138
+ | West:....................... -39.987854
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Vector register table:...... points_test_vector_register
+ | Number of points ........... 40
+ | Number of lines ............ 0
+ | Number of boundaries ....... 0
+ | Number of centroids ........ 0
+ | Number of faces ............ 0
+ | Number of kernels .......... 0
+ | Number of primitives ....... 40
+ | Number of nodes ............ 0
+ | Number of areas ............ 0
+ | Number of islands .......... 0
+ | Number of holes ............ 0
+ | Number of volumes .......... 0
+ | Number of registered maps:.. 2
+ |
+ | Title:
+ | Points
+ | Description:
+ | Points for aggregation
+ | Command history:
+ | # 2013-07-13 14:09:03 
+ | t.create type="stvds" temporaltype="absolute"
+ |     output="points" title="Points" description="Points for aggregation"
+ | # 2013-07-13 14:09:12 
+ | t.register -i type="vect" input="points"
+ |     map="points_1" start="2012-08-20" increment="3 days"
+ | # 2013-07-13 14:09:13 
+ | t.register -i type="vect" input="points"
+ |     map="points_2" start="2012-08-23" increment="4 days"
+ | 
+ +----------------------------------------------------------------------------+
+
+t.rast.aggregate.ds input=precipitation_daily \
+                    output=precipitation_agg \
+                    sample=points type=stvds \
+                    base=prec_agg \
+                    method=sum sampling=during
+
+t.support input=precipitation_agg \
+          title="Aggregated precipitation" \
+          description="Aggregated precipitation dataset"
+                 
+t.info type=strds input=precipitation_agg
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_agg@test
+ | Name: ...................... precipitation_agg
+ | Mapset: .................... test
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-07-13 14:12:02.489102
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-27 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... -1.0
+ | East:.. .................... 120.5
+ | West:....................... -40.5
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... precipitation_agg_test_raster_register
+ | North-South resolution min:. 1.0
+ | North-South resolution max:. 1.0
+ | East-west resolution min:... 1.0
+ | East-west resolution max:... 1.0
+ | Minimum value min:.......... 3.0
+ | Minimum value max:.......... 4.0
+ | Maximum value min:.......... 3.0
+ | Maximum value max:.......... 4.0
+ | Number of registered maps:.. 2
+ |
+ | Title:
+ | Aggregated precipitation
+ | Description:
+ | Aggregated precipitation dataset
+ | Command history:
+ | # 2013-07-13 14:12:02 
+ | t.rast.aggregate.ds input="precipitation_daily"
+ |     output="precipitation_agg" sample="points" type="stvds" base="prec_agg"
+ |     method="sum" sampling="during"
+ | # 2013-07-13 14:12:09 
+ | t.support input="precipitation_agg"
+ |     title="Aggregated precipitation"
+ |     description="Aggregated precipitation dataset"
+ | 
+ +----------------------------------------------------------------------------+
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="t.rast.aggregate.html">t.rast.aggregate</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
 </em>
