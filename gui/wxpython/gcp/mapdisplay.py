@@ -121,6 +121,8 @@ class MapFrame(SingleMapFrame):
                                           Map=self.TgtMap, frame = self, tree=self.tree, lmgr=self._layerManager)
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap
+        self._setUpMapWindow(self.SrcMapWindow)
+        self._setUpMapWindow(self.TgtMapWindow)
         self.SrcMapWindow.SetCursor(self.cursors["cross"])
         self.TgtMapWindow.SetCursor(self.cursors["cross"])
 
@@ -199,6 +201,15 @@ class MapFrame(SingleMapFrame):
         self.dialogs['legend'] = None
 
         self.decorationDialog = None # decoration/overlays
+
+    def _setUpMapWindow(self, mapWindow):
+        # enable or disable zoom history tool
+        mapWindow.zoomHistoryAvailable.connect(
+            lambda:
+            self.GetMapToolbar().Enable('zoomback', enable=True))
+        mapWindow.zoomHistoryUnavailable.connect(
+            lambda:
+            self.GetMapToolbar().Enable('zoomback', enable=False))
 
     def AddToolbar(self, name):
         """!Add defined toolbar to the window

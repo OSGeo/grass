@@ -71,7 +71,9 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self._addPanes()
         self._bindWindowsActivation()
-    
+        self._setUpMapWindow(self.firstMapWindow)
+        self._setUpMapWindow(self.secondMapWindow)
+
         self._mgr.GetPane('sliderV').Hide()
         self._mgr.GetPane('sliderH').Show()
         self.slider = self.sliderH
