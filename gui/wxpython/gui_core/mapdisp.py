@@ -42,7 +42,9 @@ class MapFrameBase(wx.Frame):
     
     If derived class enables and disables auto-rendering,
     it should override IsAutoRendered method.
-    
+
+    It is expected that derived class will call _setUpMapWindow().
+
     Derived class can has one or more map windows (and map renderes)
     but implementation of MapFrameBase expects that one window and
     one map will be current.
@@ -300,7 +302,18 @@ class MapFrameBase(wx.Frame):
         
         win = self.GetWindow()
         self._prepareZoom(mapWindow = win, zoomType = -1)
-        
+
+    def _setUpMapWindow(self, mapWindow):
+        """Binds map windows' zoom history signals to map toolbar."""
+        # enable or disable zoom history tool
+        import sys
+        mapWindow.zoomHistoryAvailable.connect(
+            lambda:
+            self.GetMapToolbar().Enable('zoomBack', enable=True))
+        mapWindow.zoomHistoryUnavailable.connect(
+            lambda:
+            self.GetMapToolbar().Enable('zoomBack', enable=False))
+
     def _prepareZoom(self, mapWindow, zoomType):
         """!Prepares MapWindow for zoom, toggles toolbar
         
@@ -443,7 +456,7 @@ class DoubleMapFrame(MapFrameBase):
     when both map windows will be initialized.
     
     Drived class should have method GetMapToolbar() returns toolbar
-    which has method SetActiveMap().
+    which has methods SetActiveMap() and Enable().
     
     @note To access maps use getters only
     (when using class or when writing class itself).

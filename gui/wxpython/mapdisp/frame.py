@@ -164,6 +164,8 @@ class MapFrame(SingleMapFrame):
             self.UpdateTools(None))
         self.MapWindow2D.mouseHandlerUnregistered.connect(self.ResetPointer)
 
+        self.MapWindow2D.InitZoomHistory()
+
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
@@ -197,14 +199,6 @@ class MapFrame(SingleMapFrame):
         # Init print module and classes
         #
         self.printopt = PrintOptions(self, self.MapWindow)
-        
-        #
-        # Init zoom history
-        #
-        self.MapWindow.ZoomHistory(self.Map.region['n'],
-                                   self.Map.region['s'],
-                                   self.Map.region['e'],
-                                   self.Map.region['w'])
 
         #
         # Re-use dialogs

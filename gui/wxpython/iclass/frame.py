@@ -93,7 +93,11 @@ class IClassMapFrame(DoubleMapFrame):
         self.MapWindow = self.firstMapWindow # current by default
         
         self._bindWindowsActivation()
-        
+        self._setUpMapWindow(self.firstMapWindow)
+        self._setUpMapWindow(self.secondMapWindow)
+        self.firstMapWindow.InitZoomHistory()
+        self.secondMapWindow.InitZoomHistory()
+
         self.SetSize(size)
         #
         # Add toolbars
@@ -371,6 +375,14 @@ class IClassMapFrame(DoubleMapFrame):
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
             mapTb.SetActiveMap((win == self.secondMapWindow))
         self.StatusbarUpdate() 
+
+    def ActivateFirstMap(self, event=None):
+        DoubleMapFrame.ActivateFirstMap(self, event)
+        self.GetMapToolbar().Enable('zoomBack', enable=(len(self.MapWindow.zoomhistory) > 1))
+
+    def ActivateSecondMap(self, event=None):
+        DoubleMapFrame.ActivateSecondMap(self, event)
+        self.GetMapToolbar().Enable('zoomBack', enable=(len(self.MapWindow.zoomhistory) > 1))
 
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
