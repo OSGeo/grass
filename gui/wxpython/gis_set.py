@@ -94,7 +94,7 @@ class GRASSStartup(wx.Frame):
                                            wx.Bitmap(name = name,
                                                      type = wx.BITMAP_TYPE_PNG))
         except:
-            self.hbitmap = wx.StaticBitmap(self.panel, wx.ID_ANY, wx.EmptyBitmap(530,150))
+            self.hbitmap = wx.StaticBitmap(self.panel, wx.ID_ANY, wx.BitmapFromImage(wx.EmptyImage(530,150)))
 
         # labels
         ### crashes when LOCATION doesn't exist
