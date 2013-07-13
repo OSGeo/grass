@@ -25,11 +25,9 @@ from wx.lib.newevent import NewEvent
 from grass.script import core as grass
 
 from core          import utils
-from core.events   import gUpdateMap
 from core.debug    import Debug
 
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
-from core.gcmd     import GException
 
 try:
     haveGdal = True
@@ -38,18 +36,17 @@ try:
 except ImportError:
     haveGdal = False
 
-wxUpdateProgressBar, EVT_UPDATE_PRGBAR = NewEvent()
+from grass.pydispatch.signal import Signal
+
 
 class RenderWMSMgr(wx.EvtHandler):
     """!Fetch and prepare WMS data for rendering.
     """
-    def __init__(self, receiver, layer, Map, mapfile, maskfile):
+    def __init__(self, layer, mapfile, maskfile):
         if not haveGdal:
             sys.stderr.write(_("Unable to load GDAL Python bindings.\n"\
                                "WMS layers can not be displayed without the bindings.\n"))
-    
-        self.Map = Map
-        self.receiver = receiver
+
         self.layer = layer
 
         wx.EvtHandler.__init__(self)
@@ -71,6 +68,9 @@ class RenderWMSMgr(wx.EvtHandler):
         self.dstSize = {}
  
         self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
+        
+        self.dataFetched = Signal('RenderWMSMgr.dataFetched')
+        self.updateProgress = Signal('RenderWMSMgr.updateProgress')
 
     def __del__(self):
         grass.try_remove(self.tempMap)
@@ -160,9 +160,7 @@ class RenderWMSMgr(wx.EvtHandler):
             return
         self.downloading = False
         if not self.updateMap:
-            if self.receiver:
-                event = wxUpdateProgressBar(layer = self.layer, map = self.Map)
-                self.receiver.GetEventHandler().ProcessEvent(event) 
+            self.updateProgress.emit(layer=self.layer)
             self.renderedRegion = None
             self.fetched_data_cmd = None
             return
@@ -180,9 +178,7 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.fetched_data_cmd = self.fetching_cmd
 
-        if self.receiver:
-            event = gUpdateMap()
-            wx.PostEvent(self.receiver, event)
+        self.dataFetched.emit()
 
     def _getRegionDict(self):
         """!Parse string from GRASS_REGION env variable into dict.
@@ -247,12 +243,6 @@ class RenderWMSMgr(wx.EvtHandler):
         self.updateMap = False
         self.thread.abort(abortall = True)        
 
-    def SetReceiver(self, receiver):
-        """!Set events receiver
-
-        @todo  If it will be needed to change receiver, take care of running threads.
-        """        
-        self.receiver = receiver
 
 class GDALRasterMerger:
     """!Merge rasters.

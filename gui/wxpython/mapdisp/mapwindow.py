@@ -38,7 +38,6 @@ from core.debug         import Debug
 from core.settings      import UserSettings
 from core.events        import EVT_UPDATE_MAP
 from gui_core.mapwindow import MapWindow
-from core.ws            import EVT_UPDATE_PRGBAR
 from core.utils         import GetGEventAttribsForHandler
 
 try:
@@ -102,8 +101,6 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Bind(wx.EVT_SIZE,            self.OnSize)
         self.Bind(wx.EVT_IDLE,            self.OnIdle)
         self.Bind(EVT_UPDATE_MAP,         self.OnUpdateMap)
-        if self.frame and hasattr(self.frame, 'OnUpdateProgress'):
-            self.Bind(EVT_UPDATE_PRGBAR,   self.frame.OnUpdateProgress)
 
         self._bindMouseEvents()
         
@@ -140,6 +137,8 @@ class BufferedWindow(MapWindow, wx.Window):
         self._buffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
         
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x:None)
+        # rerender when Map reports change
+        self.Map.layerChanged.connect(lambda: self.UpdateMap())
         
         # vars for handling mouse clicks
         self.dragid   = -1

@@ -1522,7 +1522,7 @@ class GMFrame(wx.Frame):
     def OnAddWS(self, event, cmd = None):
         """!Add web services layer"""
         from web_services.dialogs import AddWSDialog
-        dlg = AddWSDialog(parent = self, gmframe = self)
+        dlg = AddWSDialog(parent = self, giface = self._giface)
         dlg.CentreOnScreen()
         x, y = dlg.GetPosition()
         dlg.SetPosition((x, y - 200))

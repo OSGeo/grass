@@ -41,7 +41,6 @@ class MapWindow(object):
         self.Map = Map
         self.frame = frame
         self._giface = giface
-        self.Map.SetReceiver(self)
         
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing

@@ -976,8 +976,6 @@ class SbProgress(SbItem):
         self.widget = wx.Gauge(parent = self.statusbar, id = wx.ID_ANY,
                                range = 0, style = wx.GA_HORIZONTAL)
         self.widget.Hide()
-
-        self.maps = {}
         
     def GetRange(self):
         """!Returns progress range."""
@@ -985,90 +983,36 @@ class SbProgress(SbItem):
     
     def SetRange(self, range):
         """!Sets progress range."""
-        self.widget.SetRange(range)
+        if range > 0:        
+            if self.GetRange() != range:
+                self.widget.SetRange(range)
+            self.widget.Show()
+        else:
+            self.widget.Hide()
     
     def IsShown(self):
         """!Is progress bar shown
         """
         return self.widget.IsShown()
-                
-    def UpdateProgress(self, layer, map):
-        """!Update progress"""
-        
-        if map not in self.maps or layer is None:
-            # self.map holds values needed for progress info for every Render instance in mapframe
-            self.maps[map] = {'progresVal' : 0, # current progress value
-                              'downloading' : [], # layers, which are downloading data
-                              'rendered' : [], # already rendered layers
-                              'range' : len(map.GetListOfLayers(active = True)) + 
-                                        len(map.GetListOfLayers(active = True, ltype = 'overlay'))}
-        else:
-            if layer not in self.maps[map]['rendered']:
-                self.maps[map]['rendered'].append(layer)
-            if layer.IsDownloading() and \
-                    layer not in self.maps[map]['downloading']:
-                self.maps[map]['downloading'].append(layer)
-            else:
-                self.maps[map]['progresVal'] += 1
-                if layer in self.maps[map]['downloading']:
-                    self.maps[map]['downloading'].remove(layer)
-        
-        self.Update(map)
-        self.sbManager.Update()
-        
-    def Update(self, map = None):      
-        """!Update statusbar"""
-        activeMap = self.mapFrame.GetMap()
-        if map is None:
-                map = activeMap
-        if map not in self.maps:
-            return
-        if map != activeMap:
-            return
 
-        # update progress bar
-        if self.maps[map]['range'] == self.maps[map]['progresVal']:
+    def SetValue(self, value):
+        if value > self.GetRange():
+            return
+        self.widget.SetValue(value)
+        if value == self.GetRange():
             self.widget.Hide()
-            return
-        elif self.maps[map]['range'] > 0:
-            if self.widget.GetRange() != self.maps[map]['range']:
-                self.widget.SetRange(self.maps[map]['range'])
-            self.widget.Show()
-        else:
-            return
-        
-        self.widget.SetValue(self.maps[map]['progresVal'])
-        
-        # update statusbar text
-        stText = ''
-        first = True
-        for layer in self.maps[map]['downloading']:
-            if first:
-                stText += _("Downloading data ")
-                first = False
-            else:
-                stText += ', '
-            stText += '<%s>' % layer.GetName()
-        if stText:
-            stText += '...'
-        
-        if  self.maps[map]['range'] != len(self.maps[map]['rendered']):
-            if stText:
-                stText = _('Rendering & ') + stText
-            else:
-                stText = _('Rendering...')
 
-        self.statusbar.SetStatusText(stText, self.position)
+        wx.Yield()
 
-    def GetValue(self):
-        return self.widget.GetValue()
-    
     def GetWidget(self):
         """!Returns underlaying winget.
         
         @return widget or None if doesn't exist
         """
         return self.widget
+
+    def Update(self):
+        pass
     
 class SbGoToGCP(SbItem):
     """!SpinCtrl to select GCP to focus on
