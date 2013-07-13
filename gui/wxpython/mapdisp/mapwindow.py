@@ -1524,6 +1524,8 @@ class BufferedWindow(MapWindow, wx.Window):
         Emits zoomChanged signal.
         Emits zoomHistoryUnavailable signal when stack is empty.
         """
+        Debug.msg(4, "BufferedWindow.ZoomBack(): hist)=%s" % self.zoomhistory)
+
         zoom = list()
         
         if len(self.zoomhistory) > 1:
@@ -1578,6 +1580,26 @@ class BufferedWindow(MapWindow, wx.Window):
         self.zoomChanged.emit()
         
         return removed
+
+    def InitZoomHistory(self):
+        """Initializes zoom history.
+
+        @todo First item is handled in some special way. Improve the
+        documentation or fix the code.
+
+        It does not emits any signals.
+
+        This method can be possibly removed when the history will solve the
+        fist item in different way or when GCP manager (and possibly others)
+        will handle Map variable in the way that it will be prepared for
+        MapWindow/BufferedWindow and thus usable to initialize history.
+        """
+        self.zoomhistory.append((self.Map.region['n'],
+                                 self.Map.region['s'],
+                                 self.Map.region['e'],
+                                 self.Map.region['w']))
+        Debug.msg(4, "BufferedWindow.InitZoomHistory(): hist=%s" %
+                  (self.zoomhistory))
 
     def ResetZoomHistory(self):
         """!Reset zoom history"""
