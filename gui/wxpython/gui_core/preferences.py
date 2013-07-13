@@ -50,6 +50,7 @@ from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, StoreEnv
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
 from gui_core.widgets import IntegerValidator
+from core.debug       import Debug
 
 class PreferencesBaseDialog(wx.Dialog):
     """!Base preferences dialog"""
@@ -175,7 +176,7 @@ class PreferencesBaseDialog(wx.Dialog):
                 self.settings.Set(group = 'language', key = 'locale', subkey = 'lc_all', value = 'C')
                 lang = 'C'
             self.settings.SaveToFile()
-            self._giface.WriteLog(_('Settings saved to file \'%s\'.') % self.settings.filePath)
+            Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
             if lang:
                 StoreEnvVariable(key = 'LANG', value = lang)
             else:
