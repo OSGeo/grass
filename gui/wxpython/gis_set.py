@@ -86,7 +86,7 @@ class GRASSStartup(wx.Frame):
         #
         # image
         try:
-            if os.gentenv('ISISROOT'):
+            if os.getenv('ISISROOT'):
                 name = os.path.join(globalvar.ETCDIR, "gui", "images", "startup_banner_isis.png")
             else:
                 name = os.path.join(globalvar.ETCDIR, "gui", "images", "startup_banner.png")
