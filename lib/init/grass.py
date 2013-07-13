@@ -726,15 +726,15 @@ def load_env():
         os.environ[k] = v
     # Allow for mixed ISIS-GRASS Environment
     if os.getenv('ISISROOT'):
-		isis = os.getenv('ISISROOT')
-        os.environ['ISIS_LIB'] = isis + "/lib"
-        os.environ['ISIS_3RDPARTY'] = isis + "/3rdParty/lib"
-        os.environ['QT_PLUGIN_PATH'] = isis + "/3rdParty/plugins"
+        isis = os.getenv('ISISROOT')
+        os.environ['ISIS_LIB'] = isis + os.sep + "lib"
+        os.environ['ISIS_3RDPARTY'] = isis + os.sep + "3rdParty" + os.sep + "lib"
+        os.environ['QT_PLUGIN_PATH'] = isis + os.sep + "3rdParty" + os.sep + "plugins"
         #os.environ['ISIS3DATA'] = isis + "$ISIS3DATA"
-        libpath = os.getenv('LD_LIBRARY_PATH')
+        libpath = os.getenv('LD_LIBRARY_PATH', '')
         isislibpath = os.getenv('ISIS_LIB')
         isis3rdparty = os.getenv('ISIS_3RDPARTY')
-        os.environ['LD_LIBRARY_PATH'] = libpath + ":" + isislibpath + ":" + isis3rdparty
+        os.environ['LD_LIBRARY_PATH'] = libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
 
 
 def set_language():
@@ -1033,10 +1033,11 @@ def bash_startup():
 
     f = open(bashrc, 'w')
     f.write("test -r ~/.alias && . ~/.alias\n")
-	if os.getenv('ISISROOT'):
+    if os.getenv('ISISROOT'):
         f.write("PS1='ISIS-GRASS %s (%s):\w > '\n" % (grass_version, location_name))
-	else:
+    else:
         f.write("PS1='GRASS %s (%s):\w > '\n" % (grass_version, location_name))
+    
     f.write("PROMPT_COMMAND=\"'%s'\"\n" % os.path.join(gisbase, 'etc',
                                                        'prompt.py'))
 
