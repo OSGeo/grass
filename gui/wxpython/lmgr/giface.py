@@ -153,7 +153,7 @@ class LayerManagerGrassInterfaceForMapDisplay(object):
         return LayerList(self.tree)
 
     def GetMapWindow(self):
-        return self.tree.GetMapDisplay()
+        return self.tree.GetMapDisplay().GetMapWindow()
 
     def __getattr__(self, name):
         return getattr(self._giface, name)

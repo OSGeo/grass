@@ -30,8 +30,6 @@ import grass.script as grass
 
 from core             import globalvar
 from core.debug       import Debug
-from core.ws          import RenderWMSMgr
-from core.events      import gUpdateMap
 from core.gcmd        import GMessage, GWarning, GError, RunCommand
 from core.utils       import GetSettingsPath, CmdToTuple, CmdTupleToList
 from core.gconsole    import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
@@ -471,7 +469,7 @@ class WSDialogBase(wx.Dialog):
 
 class AddWSDialog(WSDialogBase):
     """!Dialog for adding web service layer."""
-    def __init__(self, parent, gmframe, id = wx.ID_ANY,
+    def __init__(self, parent, giface, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
 
         WSDialogBase.__init__(self, parent, id = wx.ID_ANY,
@@ -479,7 +477,8 @@ class AddWSDialog(WSDialogBase):
 
         self.SetTitle(_("Add web service layer"))
 
-        self.gmframe = gmframe
+        self.parent = parent
+        self.giface = giface
         self.btn_connect.SetDefault()
 
     def _createWidgets(self):
@@ -524,7 +523,7 @@ class AddWSDialog(WSDialogBase):
         if not lcmd:
             return None
 
-        ltree = self.gmframe.GetLayerTree()
+        ltree = self.giface.GetLayerTree()
 
         active_ws = self.active_ws_panel.GetWebService()
         if 'WMS' not in active_ws:
@@ -542,10 +541,10 @@ class AddWSDialog(WSDialogBase):
         cmd_list = ltree.GetLayerInfo(layer,'cmd')
         cmd = CmdToTuple(cmd_list)
 
-        prop_win = WSPropertiesDialog(parent = self.gmframe,
+        prop_win = WSPropertiesDialog(parent = self.parent,
+                                      giface = self.giface,
                                       id = wx.ID_ANY,
                                       layer = layer,
-                                      ltree = ltree,
                                       ws_cap_files = ws_cap_files,
                                       cmd = cmd)
 
@@ -555,15 +554,15 @@ class AddWSDialog(WSDialogBase):
 
 class WSPropertiesDialog(WSDialogBase):
     """!Dialog for editing web service properties."""
-    def __init__(self, parent, layer, ltree, ws_cap_files, cmd, id = wx.ID_ANY,
+    def __init__(self, parent, giface, layer, ws_cap_files, cmd, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """
-        @param layer - layer tree item
-        @param ltree - layer tree reference
-        @param ws_cap_files - dict web service('WMS_1.1.1', 'WMS_1.3.0', 'WMTS', 'OnEarth') : cap file path
-                            - cap files, which will be parsed
-        @param cmd - cmd to which dialog widgets will be initialized if it is possible 
-                    (cmp parameters exists in parsed web service cap_file)
+        @param giface grass interface
+        @param layer layer tree item
+        @param ws_cap_files dict web service('WMS_1.1.1', 'WMS_1.3.0', 'WMTS', 'OnEarth') : cap file path
+                            cap files, which will be parsed
+        @param cmd cmd to which dialog widgets will be initialized if it is possible 
+                   (cmp parameters exists in parsed web service cap_file)
         """
 
         WSDialogBase.__init__(self, parent, id = wx.ID_ANY,
@@ -571,8 +570,8 @@ class WSPropertiesDialog(WSDialogBase):
 
         self.SetTitle(_("Web service layer properties"))
 
-        self.ltree = ltree
         self.layer = layer
+        self.giface = giface
 
         # after web service panels are connected, set dialog widgets
         # according to cmd in this variable (if it is not None) 
@@ -690,19 +689,17 @@ class WSPropertiesDialog(WSDialogBase):
         if 'WMS' not in active_ws:
             lcmd.append('capfile=' + self.revert_ws_cap_files[active_ws])
 
-        self.ltree.GetOptData(dcmd = lcmd, 
-                              layer = self.layer, 
-                              params = None,
-                              propwin = self)
+        self.giface.GetLayerTree().GetOptData(dcmd = lcmd, 
+                                              layer = self.layer, 
+                                              params = None,
+                                              propwin = self)
 
         #TODO use just list or tuple
         cmd = CmdToTuple(lcmd)
         self.revert_cmd = cmd
         self._setRevertCapFiles(self._getCapFiles())
 
-        display = self.ltree.GetMapDisplay().GetMapWindow()
-        event = gUpdateMap()
-        wx.PostEvent(display, event)
+        self.giface.updateMap.emit()
 
     def UpdateDialogAfterConnection(self):
         """!Connect to the server

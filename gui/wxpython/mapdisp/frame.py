@@ -38,7 +38,6 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 
 from core               import globalvar
 from core.render        import Map
-from core.ws            import EVT_UPDATE_PRGBAR
 from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar, NvizIcons
 from mapdisp.gprint     import PrintOptions
@@ -134,6 +133,9 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager.AddStatusbarItem(sbRender)
         
         self.statusbarManager.Update()
+        
+        #
+        self.Map.updateProgress.connect(self.ProcessProgress)
 
         # init decoration objects
         self.decorations = {}
@@ -181,7 +183,6 @@ class MapFrame(SingleMapFrame):
         #
         self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
-        self.Bind(EVT_UPDATE_PRGBAR, self.OnUpdateProgress)
         
         #
         # Update fancy gui style
@@ -455,13 +456,6 @@ class MapFrame(SingleMapFrame):
         if self._mgr.GetPane(name).IsOk():
             return self._mgr.GetPane(name).IsShown()
         return False
-        
-    def OnUpdateProgress(self, event):
-        """!Update progress bar info
-        """
-        self.GetProgressBar().UpdateProgress(event.layer, event.map)
-        
-        event.Skip()
         
     def OnFocus(self, event):
         """!Change choicebook page to match display.
@@ -1358,3 +1352,10 @@ class MapFrame(SingleMapFrame):
         toolbar.action['id'] = vars(toolbar)["pointer"]
         toolbar.OnTool(None)
         self.OnPointer(event=None)
+
+    def ProcessProgress(self, range, value, text):
+        """!Update progress bar during rendering"""
+        bar = self.statusbarManager.GetProgressBar()
+        bar.SetRange(range)
+        bar.SetValue(value)
+        self.SetStatusText(text)

@@ -35,12 +35,14 @@ import types
 import wx
 
 from grass.script import core as grass
+from grass.pydispatch.signal import Signal
 
 from core          import utils
-from core.ws       import RenderWMSMgr, wxUpdateProgressBar
+from core.ws       import RenderWMSMgr
 from core.gcmd     import GException, GError, RunCommand
 from core.debug    import Debug
 from core.settings import UserSettings
+
 
 USE_GPNMCOMP = True
 
@@ -257,11 +259,9 @@ class Layer(object):
             raise GException(_("Unsupported map layer type '%s'") % ltype)
         
         if ltype == 'wms' and not isinstance(self.renderMgr, RenderWMSMgr):
-            self.renderMgr = RenderWMSMgr(receiver = self.Map.GetReceiver(),
-                                          layer = self, 
-                                          Map = self.Map, 
-                                          mapfile = self.mapfile, 
-                                          maskfile = self.maskfile)
+            self.renderMgr = RenderWMSMgr(layer=self, 
+                                          mapfile=self.mapfile, 
+                                          maskfile=self.maskfile)
         elif self.type == 'wms' and ltype != 'wms':
             self.renderMgr = None
         
@@ -398,9 +398,9 @@ class Map(object):
         # setting some initial env. variables
         self._initGisEnv() # g.gisenv
         self.GetWindow()
-
-        # receiver of events
-        self.receiver = None
+        
+        # info to report progress
+        self.progressInfo = None
 
         # GRASS environment variable (for rendering)
         self.env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
@@ -418,6 +418,9 @@ class Map(object):
 
         # is some layer being downloaded?
         self.downloading = False
+        
+        self.layerChanged = Signal('Map.layerChanged')
+        self.updateProgress = Signal('Map.updateProgress')
 
     def _runCommand(self, cmd, **kwargs):
         """!Run command in environment defined by self.gisrc if
@@ -885,9 +888,10 @@ class Map(object):
             layers = self.layers + self.overlays
         
         self.downloading = False
-        if self.receiver:
-            event = wxUpdateProgressBar(layer = None, map = self)
-            self.receiver.GetEventHandler().ProcessEvent(event)
+
+        self.ReportProgress(layer=None)
+
+
         for layer in layers:
             # skip non-active map layers
             if not layer or not layer.active:
@@ -899,10 +903,9 @@ class Map(object):
                     continue
 
             if layer.IsDownloading():
-                self.downloading = True     
-            if self.receiver:
-                event = wxUpdateProgressBar(layer = layer, map = self)
-                self.receiver.GetEventHandler().ProcessEvent(event) 
+                self.downloading = True 
+
+            self.ReportProgress(layer=layer)
 
             # skip map layers when rendering fails
             if not os.path.exists(layer.mapfile):
@@ -915,7 +918,7 @@ class Map(object):
                 opacities.append(str(layer.opacity))
             
             Debug.msg(3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
-        
+
         return maps, masks, opacities
         
     def GetMapsMasksAndOpacities(self, force, windres):
@@ -1045,6 +1048,11 @@ class Map(object):
             if not layer.Render():
                 raise GException(_("Unable to render map layer <%s>.") % name)
         
+        renderMgr = layer.GetRenderMgr()
+        if renderMgr:
+            renderMgr.dataFetched.connect(self.layerChanged)
+            renderMgr.updateProgress.connect(self.ReportProgress)
+
         wx.EndBusyCursor()
         
         return layer
@@ -1349,21 +1357,54 @@ class Map(object):
             if force or layer.forceRender:
                 layer.Render()
 
-    def GetReceiver(self):
-        """!Get event receiver"""
-        return self.receiver
-
-    def SetReceiver(self, receiver):
-        """!Set events receiver
-
-        @todo  If it will be needed to change receiver, take care of running threads.
-        """
-        self.receiver = receiver
-        for l in self.overlays + self.layers:
-            if l.GetRenderMgr():
-                l.GetRenderMgr().SetReceiver(self.receiver)
-
     def AbortAllThreads(self):
         """!Abort all layers threads e. g. donwloading data"""
         for l in self.layers + self.overlays:
             l.AbortThread()
+
+    def ReportProgress(self, layer):
+        """!Calculates progress in rendering/downloading
+        and emits signal to inform progress bar about progress.
+        """
+        if self.progressInfo is None or layer is None:
+            self.progressInfo = {'progresVal' : 0, # current progress value
+                                 'downloading' : [], # layers, which are downloading data
+                                 'rendered' : [], # already rendered layers
+                                 'range' : len(self.GetListOfLayers(active = True)) + 
+                                           len(self.GetListOfLayers(active = True, ltype = 'overlay'))}
+        else:
+            if layer not in self.progressInfo['rendered']:
+                self.progressInfo['rendered'].append(layer)
+            if layer.IsDownloading() and \
+                    layer not in self.progressInfo['downloading']:
+                self.progressInfo['downloading'].append(layer)
+            else:
+                self.progressInfo['progresVal'] += 1
+                if layer in self.progressInfo['downloading']:
+                    self.progressInfo['downloading'].remove(layer)
+            
+        # for updating statusbar text
+        stText = ''
+        first = True
+        for layer in self.progressInfo['downloading']:
+            if first:
+                stText += _("Downloading data ")
+                first = False
+            else:
+                stText += ', '
+            stText += '<%s>' % layer.GetName()
+        if stText:
+            stText += '...'
+        
+        if  self.progressInfo['range'] != len(self.progressInfo['rendered']):
+            if stText:
+                stText = _('Rendering & ') + stText
+            else:
+                stText = _('Rendering...')
+
+        self.updateProgress.emit(range=self.progressInfo['range'],
+                                 value=self.progressInfo['progresVal'],
+                                 text=stText)
+        
+
+        
