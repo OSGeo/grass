@@ -83,6 +83,20 @@ class BufferedWindow(MapWindow, wx.Window):
         # Emitted when zoom of a window is changed
         self.zoomChanged = Signal('BufferedWindow.zoomChanged')
 
+        # Emitted when map was queried, parameters x, y are mouse coordinates
+        # TODO: change pixel coordinates to map coordinates (using Pixel2Cell)
+        self.mapQueried = Signal('BufferedWindow.mapQueried')
+
+        # Emitted when the zoom history stack is emptied
+        self.zoomHistoryUnavailable = Signal('BufferedWindow.zoomHistoryUnavailable')
+        # Emitted when the zoom history stack is not empty
+        self.zoomHistoryAvailable = Signal('BufferedWindow.zoomHistoryAvailable')
+
+        # Emitted when someone registers as mouse event handler
+        self.mouseHandlerRegistered = Signal('BufferedWindow.mouseHandlerRegistered')
+        # Emitted when mouse event handler is unregistered
+        self.mouseHandlerUnregistered = Signal('BufferedWindow.mouseHandlerUnregistered')
+
         # event bindings
         self.Bind(wx.EVT_PAINT,           self.OnPaint)
         self.Bind(wx.EVT_SIZE,            self.OnSize)
@@ -1164,6 +1178,8 @@ class BufferedWindow(MapWindow, wx.Window):
         
     def OnLeftUp(self, event):
         """!Left mouse button released
+
+        Emits mapQueried signal when mouse use is 'query'.
         """
         Debug.msg (5, "BufferedWindow.OnLeftUp(): use=%s" % \
                        self.mouse["use"])
@@ -1189,8 +1205,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.frame.StatusbarUpdate()
             
         elif self.mouse["use"] == "query":
-            self.frame.Query(self.mouse['end'][0], self.mouse['end'][1])
-        
+            self.mapQueried.emit(x=self.mouse['end'][0], y=self.mouse['end'][1])
+
         elif self.mouse["use"] in ["measure", "profile"]:
             # measure or profile
             if self.mouse["use"] == "measure":
@@ -1504,18 +1520,19 @@ class BufferedWindow(MapWindow, wx.Window):
         
     def ZoomBack(self):
         """!Zoom to previous extents in zoomhistory list
+
+        Emits zoomChanged signal.
+        Emits zoomHistoryUnavailable signal when stack is empty.
         """
         zoom = list()
         
         if len(self.zoomhistory) > 1:
             self.zoomhistory.pop()
             zoom = self.zoomhistory[-1]
-        
-        # disable tool if stack is empty
-        if len(self.zoomhistory) < 2: # disable tool
-            toolbar = self.frame.GetMapToolbar()
-            toolbar.Enable('zoomBack', enable = False)
-        
+
+        if len(self.zoomhistory) < 2:
+            self.zoomHistoryUnavailable.emit()
+
         # zoom to selected region
         self.Map.GetRegion(n = zoom[0], s = zoom[1],
                            e = zoom[2], w = zoom[3],
@@ -1530,6 +1547,10 @@ class BufferedWindow(MapWindow, wx.Window):
 
     def ZoomHistory(self, n, s, e, w):
         """!Manages a list of last 10 zoom extents
+
+        Emits zoomChanged signal.
+        Emits zoomHistoryAvailable signal when stack is not empty.
+        Emits zoomHistoryUnavailable signal when stack is empty.
 
         @param n,s,e,w north, south, east, west
 
@@ -1550,13 +1571,9 @@ class BufferedWindow(MapWindow, wx.Window):
         
         # update toolbar
         if len(self.zoomhistory) > 1:
-            enable = True
+            self.zoomHistoryAvailable.emit()
         else:
-            enable = False
-        
-        toolbar = self.frame.GetMapToolbar()
-        
-        toolbar.Enable('zoomBack', enable)
+            self.zoomHistoryUnavailable.emit()
 
         self.zoomChanged.emit()
         
@@ -1817,19 +1834,20 @@ class BufferedWindow(MapWindow, wx.Window):
         return self.Map
 
     def RegisterMouseEventHandler(self, event, handler, cursor = None):
-        """!Calls UpdateTools to manage connected toolbars"""
-        self.frame.UpdateTools(None)
+        """Registeres mouse event handler.
+
+        Emits mouseHandlerRegistered signal before handler is registered.
+        """
+        self.mouseHandlerRegistered.emit()
         MapWindow.RegisterMouseEventHandler(self, event, handler, cursor)
 
     def UnregisterMouseEventHandler(self, event, handler):
-        """!Sets pointer and toggles it after unregistration"""
+        """Unregisteres mouse event handler.
+
+        Emits mouseHandlerUnregistered signal after handler is unregistered.
+        """
         MapWindow.UnregisterMouseEventHandler(self, event, handler)
-        
-        # sets pointer mode
-        toolbar = self.frame.toolbars['map']
-        toolbar.action['id'] = vars(toolbar)["pointer"]
-        toolbar.OnTool(None)
-        self.frame.OnPointer(event = None)
+        self.mouseHandlerUnregistered.emit()
         
     def RegisterGraphicsToDraw(self, graphicsType, setStatusFunc = None, drawFunc = None):
         """! This method registers graphics to draw.

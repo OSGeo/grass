@@ -148,6 +148,20 @@ class MapFrame(SingleMapFrame):
         self.MapWindow2D = BufferedWindow(self, giface = self._giface, id = wx.ID_ANY,
                                           Map = self.Map, frame = self, tree = self.tree,
                                           lmgr = self._layerManager, overlays = self.decorations)
+        self.MapWindow2D.mapQueried.connect(self.Query)
+        # enable or disable zoom history tool
+        self.MapWindow2D.zoomHistoryAvailable.connect(
+            lambda:
+            self.GetMapToolbar().Enable('zoomBack', enable=True))
+        self.MapWindow2D.zoomHistoryUnavailable.connect(
+            lambda:
+            self.GetMapToolbar().Enable('zoomBack', enable=False))
+        # manage the state of toolbars connected to mouse cursor
+        self.MapWindow2D.mouseHandlerRegistered.connect(
+            lambda:
+            self.UpdateTools(None))
+        self.MapWindow2D.mouseHandlerUnregistered.connect(self.ResetPointer)
+
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
@@ -1331,3 +1345,16 @@ class MapFrame(SingleMapFrame):
                         self.dialogs['legend'].resizeBtn.GetId():
                     return
             self.dialogs['legend'].resizeBtn.SetValue(0)
+
+    def ResetPointer(self):
+        """Sets pointer mode.
+
+        Sets pointer and toggles it (e.g. after unregistration of mouse
+        handler).
+        Somehow related to UpdateTools.
+        """
+        # sets pointer mode
+        toolbar = self.toolbars['map']
+        toolbar.action['id'] = vars(toolbar)["pointer"]
+        toolbar.OnTool(None)
+        self.OnPointer(event=None)
