@@ -15,6 +15,7 @@ SUBDIRS = \
 	db.test \
 	g.extension \
 	g.extension.rebuild.all \
+	g.isis3mt \
 	g.manual \
 	i.image.mosaic \
 	i.in.spotvgt \
