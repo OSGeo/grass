@@ -1072,10 +1072,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         # redraw map
         self.UpdateMap()
-        
-        # update statusbar
-        self.frame.StatusbarUpdate()
-        
+
         self.Refresh()
         self.processMouse = True
         
@@ -1186,10 +1183,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
             # redraw map
             self.UpdateMap(render = True)
-            
-            # update statusbar
-            self.frame.StatusbarUpdate()
-            
+
         elif self.mouse["use"] == "query":
             self.mapQueried.emit(x=self.mouse['end'][0], y=self.mouse['end'][1])
 
@@ -1324,10 +1318,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         # redraw map
         self.UpdateMap(render = True)
-        
-        # update statusbar
-        self.frame.StatusbarUpdate()
-        
+
     def OnMouseEnter(self, event):
         """!Mouse entered window and no mouse buttons were pressed
         """
@@ -1527,9 +1518,6 @@ class BufferedWindow(MapWindow, wx.Window):
                            update = True)
         # update map
         self.UpdateMap()
-        
-        # update statusbar
-        self.frame.StatusbarUpdate()
 
         self.zoomChanged.emit()
 
@@ -1539,6 +1527,10 @@ class BufferedWindow(MapWindow, wx.Window):
         Emits zoomChanged signal.
         Emits zoomHistoryAvailable signal when stack is not empty.
         Emits zoomHistoryUnavailable signal when stack is empty.
+
+        All methods which are changing zoom should call this method
+        to make a record in the history. The signal zoomChanged will be
+        then emitted automatically.
 
         @param n,s,e,w north, south, east, west
 
@@ -1637,9 +1629,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         if render:
             self.UpdateMap()
-        
-        self.frame.StatusbarUpdate()
-        
+
     def ZoomToWind(self):
         """!Set display geometry to match computational region
         settings (set with g.region)
@@ -1650,8 +1640,6 @@ class BufferedWindow(MapWindow, wx.Window):
                          self.Map.region['e'], self.Map.region['w'])
         
         self.UpdateMap()
-        
-        self.frame.StatusbarUpdate()
 
     def ZoomToDefault(self):
         """!Set display geometry to match default region settings
@@ -1663,10 +1651,7 @@ class BufferedWindow(MapWindow, wx.Window):
                          self.Map.region['e'], self.Map.region['w'])
         
         self.UpdateMap()
-        
-        self.frame.StatusbarUpdate()
-    
-    
+
     def GoTo(self, e, n):
         region = self.Map.GetCurrentRegion()
 
