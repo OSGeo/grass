@@ -278,11 +278,9 @@ class SbManager:
 
     def _progressShown(self):
         self._oldStatus = self.statusbar.GetStatusText(0)
-        print 'show:'+self._oldStatus
 
     def _progressHidden(self):
         self.statusbar.SetStatusText(self._oldStatus, 0)
-        print 'hide:'+self._oldStatus
 
     def OnToggleStatus(self, event):
         """!Toggle status text
