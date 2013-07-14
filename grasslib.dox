@@ -72,20 +72,20 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
 \subsection statslibs Math and Statisctics Libraries
 
- - arraystats:  \ref arraystats (library of statistics for arrays of doubles)
- - cdhc:	\ref cdhc (library for testing normality and exponentiality)
+ - arraystats:  \ref arraystatslib (library of statistics for arrays of doubles)
+ - cdhc:	\ref cdhclib (library for testing normality and exponentiality)
  - gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
  - gpde:        \ref gpdelib (partial differential equations library)
 
 \subsection rasteribs Raster Libraries
 
- - edit:	\ref edit (raster edit library for cellhd, history, cats)
+ - edit:	\ref editlib (raster edit library for cellhd, history, cats)
  - raster3d:	\ref raster3dlib
  - raster:	\ref rasterlib
  - rowio:	\ref rowiolib
- - rst:	        \ref rst (library for interpolation with regularized splines with tension)
+ - rst:	        \ref rstlib (library for interpolation with regularized splines with tension)
  - segment:	\ref segmentlib (segment library for segmented raster reading)
- - stats:       \ref stats (raster stats library)
+ - stats:       \ref statslib (raster stats library)
 
 \subsection imagerylibs Imagery Liraries (image processing)
 
