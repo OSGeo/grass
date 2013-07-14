@@ -327,6 +327,10 @@
       <module-item name="v.in.lidar">
         <label>LAS LiDAR points import</label>
       </module-item>
+      <separator/>
+      <module-item name="v.unpack">
+        <label>Unpack vector map</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="Import3DRasterData">
@@ -436,6 +440,10 @@
       </module-item>
       <module-item name="v.out.vtk">
         <label>VTK export</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.pack">
+        <label>Pack vector map</label>
       </module-item>
     </items>
   </toolbox>
