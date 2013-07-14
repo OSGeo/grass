@@ -100,7 +100,7 @@ def main():
                               from_table =  dbconn['table'], 
                               to_driver = 'sqlite', to_database = sqlitedb, 
                               to_table = dbconn['table'])
-        tar.add(sqlitedb, os.path.join(infile, 'db.sqlite'))
+        tar.add(sqlitedb, 'db.sqlite')
     
     # add to the tar file the PROJ files to check when unpack file    
     gisenv = grass.gisenv()
@@ -108,7 +108,7 @@ def main():
         path = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'],
                             'PERMANENT', 'PROJ_' + support)
         if os.path.exists(path):
-            tar.add(path, os.path.join(infile, 'PROJ_' + support))
+            tar.add(path, 'PROJ_' + support)
     tar.close()
     
     grass.message(_("Pack file <%s> created") % os.path.join(os.getcwd(), outfile))
