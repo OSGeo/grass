@@ -36,7 +36,6 @@ from gui_core.dialogs   import SavedRegion
 from core.gcmd          import RunCommand, GException, GError, GMessage
 from core.debug         import Debug
 from core.settings      import UserSettings
-from core.events        import EVT_UPDATE_MAP
 from gui_core.mapwindow import MapWindow
 from core.utils         import GetGEventAttribsForHandler
 
@@ -100,7 +99,6 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Bind(wx.EVT_PAINT,           self.OnPaint)
         self.Bind(wx.EVT_SIZE,            self.OnSize)
         self.Bind(wx.EVT_IDLE,            self.OnIdle)
-        self.Bind(EVT_UPDATE_MAP,         self.OnUpdateMap)
 
         self._bindMouseEvents()
         
@@ -604,17 +602,6 @@ class BufferedWindow(MapWindow, wx.Window):
         
     def IsAlwaysRenderEnabled(self):
         return self.alwaysRender
-
-    def OnUpdateMap(self, event):
-        """!Called when this class receives core.events.gUpdateMap event. 
-        """
-        kwargs, missing_args = GetGEventAttribsForHandler(self.UpdateMap, event)
-
-        if missing_args:
-            Debug.msg (1, "Invalid call of EVT_UPDATE_MAP event.")
-            return
-
-        self.UpdateMap(**kwargs)
 
     def UpdateMap(self, render = True, renderVector = True):
         """!Updates the canvas anytime there is a change to the

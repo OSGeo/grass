@@ -26,7 +26,6 @@ import wx
 
 from core             import utils
 from core.gcmd        import RunCommand, GMessage
-from core.events      import gUpdateMap
 from core.gconsole    import CmdThread, EVT_CMD_DONE, GConsole
 
 from gui_core.gselect import VectorDBInfo
@@ -42,8 +41,8 @@ class VNETManager:
         self.data = {}
 
         self.guiparent = guiparent
-        self.mapDisp  = giface.GetMapDisplay()
-        self.mapWin = giface.GetMapWindow().GetMapWindow()
+        self.giface = giface
+        self.mapWin = giface.GetMapWindow()
 
         self.goutput = GConsole(guiparent = guiparent) 
 
@@ -60,7 +59,7 @@ class VNETManager:
         self.history = VNETHistory(self.guiparent, self.vnet_data, self.tmp_maps)
         self.analyses = VNETAnalyses(self.vnet_data, self.RunAnDone, self.goutput, self.tmp_maps)
 
-        self.snap_nodes = SnappingNodes(self.vnet_data, self.tmp_maps, self.mapWin)
+        self.snap_nodes = SnappingNodes(self.giface, self.vnet_data, self.tmp_maps, self.mapWin)
 
         self.ttbCreated = Signal('VNETManager.ttbCreated')
         self.analysisDone = Signal('VNETManager.analysisDone')
@@ -82,11 +81,9 @@ class VNETManager:
         self.vnet_data.CleanUp()
         
         if update:
-            up_map_evt = gUpdateMap(render = True, renderVector = True)
-            wx.PostEvent(self.mapWin, up_map_evt)
+            self.giface.updateMap.emit(render=True, renderVector=True)
         else:
-            up_map_evt = gUpdateMap(render = True, renderVector = True)
-            wx.PostEvent(self.mapWin, up_map_evt)
+            self.giface.updateMap.emit(render=False, renderVector=False)
 
     def GetPointsManager(self):
         return self.vnet_data.GetPointsData()
@@ -157,8 +154,7 @@ class VNETManager:
         else:
             self.results["vect_map"].DeleteRenderLayer()
 
-        up_map_evt = gUpdateMap(render = True, renderVector = True)
-        wx.PostEvent(self.mapWin, up_map_evt)
+        self.giface.updateMap.emit(render=True, renderVector=True)
 
     def GetAnalysisProperties(self, analysis = None):
         return self.vnet_data.GetAnalysisProperties(analysis = analysis)
@@ -191,8 +187,7 @@ class VNETManager:
         cmd, cmd_colors = self.vnet_data.GetLayerStyle()
         self.results["vect_map"].AddRenderLayer(cmd, cmd_colors)
 
-        up_map_evt = gUpdateMap(render = True, renderVector = True)
-        wx.PostEvent(self.mapWin, up_map_evt)
+        self.giface.updateMap.emit(render=True, renderVector=True)
 
     def GetHistStep(self):
         return self.history.GetHistStep()
@@ -234,22 +229,18 @@ class VNETManager:
         self.vnet_data.GetPointsData().SetPointDrawSettings()
         if not self.results["vect_map"]  or \
            not self.tmp_maps.HasTmpVectMap(self.results["vect_map"].GetVectMapName()):
-            up_map_evt = gUpdateMap(render = False, renderVector = False)
-            wx.PostEvent(self.mapWin, up_map_evt)
+            self.giface.updateMap.emit(render=False, renderVector=False)
         elif self.results["vect_map"].GetRenderLayer():
             cmd, cmd_colors = self.vnet_data.GetLayerStyle()
             self.results["vect_map"].AddRenderLayer(cmd, cmd_colors)
             
-            up_map_evt = gUpdateMap(render = True, renderVector = True)
-            wx.PostEvent(self.mapWin, up_map_evt)#TODO optimization
+            self.giface.updateMap.emit(render=True, renderVector=True)
+            #TODO optimization
         else:
-            up_map_evt = gUpdateMap(render = False, renderVector = False)
-            wx.PostEvent(self.mapWin, up_map_evt)
+            self.giface.updateMap.emit(render=False, renderVector=False)
 
     def PointsChanged(self, method, kwargs):
-
-        up_map_evt = gUpdateMap(render = False, renderVector = False)
-        wx.PostEvent(self.mapWin, up_map_evt)
+        self.giface.updateMap.emit(render=False, renderVector=False)
 
     def CreateTttb(self, params):
 
@@ -377,8 +368,7 @@ class VNETManager:
                 RunCommand(layerStyleVnetColors[0],
                         **layerStyleVnetColors[1])
         else:
-            up_map_evt = gUpdateMap(render = True, renderVector = True)
-            wx.PostEvent(self.mapWin, up_map_evt)
+            self.giface.updateMap.emit(render=True, renderVector=True)
 
 class VNETAnalyses:
     def __init__(self, data, onAnDone, goutput, tmp_maps):
@@ -418,8 +408,7 @@ class VNETAnalyses:
         cmdPts = []
         for cat in cats:
             if  len(catPts[cat[0]]) < 1:#TODO
-                GMessage(parent = self.guiparent,
-                         message=_("Please choose '%s' and '%s' point.") % (cats[0][1], cats[1][1]))
+                GMessage(message=_("Please choose '%s' and '%s' point.") % (cats[0][1], cats[1][1]))
                 return False
             cmdPts.append(catPts[cat[0]][0])
 
@@ -993,8 +982,9 @@ def AddTmpMapAnalysisMsg(mapName, tmp_maps): #TODO
 
 
 class SnappingNodes(wx.EvtHandler):
-    def __init__(self, data, tmp_maps, mapWin):
+    def __init__(self, giface, data, tmp_maps, mapWin):
 
+        self.giface = giface        
         self.data = data
         self.tmp_maps = tmp_maps
         self.mapWin = mapWin
@@ -1019,8 +1009,7 @@ class SnappingNodes(wx.EvtHandler):
             if self.tmp_maps.HasTmpVectMap("vnet_snap_points"):
                 self.snapPts.DeleteRenderLayer() 
                 
-                up_map_evt = gUpdateMap(render = False, renderVector = False)
-                wx.PostEvent(self.mapWin, up_map_evt)
+                self.giface.updateMap.emit(render=False, renderVector=False)
 
             if self.snapData.has_key('cmdThread'):
                 self.snapData['cmdThread'].abort()
@@ -1050,8 +1039,7 @@ class SnappingNodes(wx.EvtHandler):
                 return -1 
 
         elif self.snapPts.VectMapState() == 0:
-                dlg = wx.MessageDialog(parent = self.parent,
-                                       message = _("Temporary map '%s' was changed outside " +
+                dlg = wx.MessageDialog(message = _("Temporary map '%s' was changed outside " +
                                                     "vector analysis tool.\n" 
                                                     "Do you really want to activate " + 
                                                     "snapping and overwrite it? ") % \
@@ -1104,8 +1092,7 @@ class SnappingNodes(wx.EvtHandler):
         else:
             self.snapPts.AddRenderLayer()
             
-            up_map_evt = gUpdateMap(render = True, renderVector = True)
-            wx.PostEvent(self.mapWin, up_map_evt)
+            self.giface.updateMap.emit(render=True, renderVector=True)
 
             self.snapping.emit(evt = "computing_points_done")
 
@@ -1117,7 +1104,6 @@ class SnappingNodes(wx.EvtHandler):
             self.snapPts.SaveVectMapState()
             self.snapPts.AddRenderLayer() 
 
-            up_map_evt = gUpdateMap(render = True, renderVector = True)
-            wx.PostEvent(self.mapWin, up_map_evt)
+            self.giface.updateMap.emit(render=True, renderVector=True)
 
             self.snapping.emit(evt = "computing_points_done")

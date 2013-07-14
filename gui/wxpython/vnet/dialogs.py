@@ -40,7 +40,6 @@ import wx.lib.scrolledpanel    as scrolled
 
 from core             import globalvar, utils
 from core.gcmd        import RunCommand, GMessage
-from core.events      import gUpdateMap
 from core.settings    import UserSettings
 
 from dbmgr.base       import DbMgrBase 
@@ -71,10 +70,9 @@ class VNETDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, style=style, title = title, **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
-        self.parent  = parent 
-        self.mapDisp  = giface.GetMapDisplay()
-        self.mapWin = giface.GetMapWindow().GetMapWindow()
-        self._giface = giface
+        self.parent  = parent
+        self.mapWin = giface.GetMapWindow()
+        self.giface = giface
 
         # contains current analysis result (do not have to be last one, when history is browsed), 
         # it is instance of VectMap class
@@ -292,8 +290,7 @@ class VNETDialog(wx.Dialog):
             cmd = self.GetLayerStyle()
             self.tmp_result.AddRenderLayer(cmd)
 
-        up_map_evt = gUpdateMap(render = True, renderVector = True)
-        wx.PostEvent(self.mapWin, up_map_evt)
+        self.giface.updateMap.emit(render=True, renderVector=True)
 
     def _createOutputPage(self):
         """!Tab with output console"""
@@ -606,8 +603,7 @@ class VNETDialog(wx.Dialog):
                                                         opacity = 1.0,    render = True,       
                                                         pos = -1)         
 
-            up_map_evt = gUpdateMap(render = True, renderVector = True)
-            wx.PostEvent(self.mapWin, up_map_evt)
+            self.giface.updateMap.emit(render=True, renderVector=True)
 
     def UseTurns(self):
         if self.useTurns.IsChecked():
@@ -849,8 +845,7 @@ class VNETDialog(wx.Dialog):
         self._updateResultDbMgrPage()
         self._updateDbMgrData()
 
-        up_map_evt = gUpdateMap(render = True, renderVector = True)
-        wx.PostEvent(self.mapWin, up_map_evt)
+        self.giface.updateMap.emit(render=True, renderVector=True)
 
     def OnShowResult(self, event):
         """!Show/hide analysis result"""
