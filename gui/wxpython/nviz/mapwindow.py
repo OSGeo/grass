@@ -42,6 +42,7 @@ from nviz.workspace     import NvizSettings
 from nviz.animation     import Animation
 from nviz               import wxnviz
 from core.globalvar     import CheckWxVersion
+from core.utils         import str2rgb
 
 wxUpdateProperties, EVT_UPDATE_PROP  = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW  = NewEvent()
@@ -1407,6 +1408,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             except ValueError:
                 continue
             if key == 'color':
+                if not ':' in value:
+                    value = ':'.join(map(str, str2rgb[value]))
                 data['lines']['color']['value'] = value
                 data['points']['color']['value'] = value
 
