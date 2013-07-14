@@ -1,6 +1,7 @@
 MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 MOD_OBJS := $(filter-out test.o port_test.o,$(AUTO_OBJS))
 
@@ -22,3 +23,5 @@ $(OBJDIR)/test$(EXE): $(OBJDIR)/test.o $(GISDEP) $(CDHCDEP)
 	$(call linker)
 
 $(OBJDIR)/test$(EXE): LIBES = $(GISLIB) $(CDHCLIB)
+
+DOXNAME = cdhc
