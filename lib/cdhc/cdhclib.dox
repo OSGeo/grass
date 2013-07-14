@@ -1,10 +1,10 @@
 /*! \page cdhclib GRASS testing normality & exponentiality Library
 
-by GRASS Development Team (http://grass.osgeo.org)
+by Darrell McCauley and  GRASS Development Team (http://grass.osgeo.org)
 
 \tableofcontents
 
-\section cdhcintro GRASS testing normality & exponentiality library
+\section cdhcintro GRASS library for testing normality & exponentiality
 
 - Moments \sqrt{b_1} and b_2
 - Geary's a-statistic & an approx. normal
