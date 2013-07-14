@@ -125,12 +125,20 @@ class MapFrame(SingleMapFrame):
         self._setUpMapWindow(self.TgtMapWindow)
         self.SrcMapWindow.SetCursor(self.cursors["cross"])
         self.TgtMapWindow.SetCursor(self.cursors["cross"])
+        # used to switch current map (combo box in toolbar)
         self.SrcMapWindow.mouseEntered.connect(
             lambda:
             self._setActiveMapWindow(self.SrcMapWindow))
         self.TgtMapWindow.mouseEntered.connect(
             lambda:
             self._setActiveMapWindow(self.TgtMapWindow))
+        # used to add or edit GCP
+        self.SrcMapWindow.mouseLeftUpPointer.connect(
+            lambda x, y:
+            self._onMouseLeftUpPointer(self.SrcMapWindow, x, y))
+        self.TgtMapWindow.mouseLeftUpPointer.connect(
+            lambda x, y:
+            self._onMouseLeftUpPointer(self.TgtMapWindow, x, y))
 
         #
         # initialize region values
@@ -651,3 +659,13 @@ class MapFrame(SingleMapFrame):
             self.UpdateActive(mapWindow)
             # needed for wingrass
             self.SetFocus()
+
+    def _onMouseLeftUpPointer(self, mapWindow, x, y):
+        if mapWindow == self.SrcMapWindow:
+            coordtype = 'source'
+        else:
+            coordtype = 'target'
+
+        coord = (x, y)
+        self._layerManager.gcpmanagement.SetGCPData(coordtype, coord, self, confirm=True)
+        mapWindow.UpdateMap(render=False, renderVector=False)
