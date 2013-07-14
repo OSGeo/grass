@@ -35,9 +35,13 @@ import os
 import sys
 import shutil
 import tarfile
+import atexit
 
 from grass.script import core as grass
 from grass.script import vector as vector
+
+def cleanup():
+    grass.try_rmdir(basedir)
 
 def main():
     infile = options['input']
@@ -73,6 +77,7 @@ def main():
     
     # prepare for packing
     grass.verbose(_("Packing <%s>...") % (gfile['fullname']))
+    global basedir
     basedir = grass.tempdir()
 
     # write tar file, optional compression 
@@ -110,4 +115,5 @@ def main():
             
 if __name__ == "__main__":
     options, flags = grass.parser()
+    atexit.register(cleanup)
     sys.exit(main())
