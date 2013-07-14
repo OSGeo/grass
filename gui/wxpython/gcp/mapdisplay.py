@@ -125,6 +125,12 @@ class MapFrame(SingleMapFrame):
         self._setUpMapWindow(self.TgtMapWindow)
         self.SrcMapWindow.SetCursor(self.cursors["cross"])
         self.TgtMapWindow.SetCursor(self.cursors["cross"])
+        self.SrcMapWindow.mouseEntered.connect(
+            lambda:
+            self._setActiveMapWindow(self.SrcMapWindow))
+        self.TgtMapWindow.mouseEntered.connect(
+            lambda:
+            self._setActiveMapWindow(self.TgtMapWindow))
 
         #
         # initialize region values
@@ -637,3 +643,11 @@ class MapFrame(SingleMapFrame):
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
         return self.toolbars['gcpdisp']
+
+    def _setActiveMapWindow(self, mapWindow):
+        if not self.MapWindow == mapWindow:
+            self.MapWindow = mapWindow
+            self.Map = mapWindow.Map
+            self.UpdateActive(mapWindow)
+            # needed for wingrass
+            self.SetFocus()

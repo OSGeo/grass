@@ -307,7 +307,6 @@ class MapFrameBase(wx.Frame):
     def _setUpMapWindow(self, mapWindow):
         """Binds map windows' zoom history signals to map toolbar."""
         # enable or disable zoom history tool
-        import sys
         mapWindow.zoomHistoryAvailable.connect(
             lambda:
             self.GetMapToolbar().Enable('zoomBack', enable=True))

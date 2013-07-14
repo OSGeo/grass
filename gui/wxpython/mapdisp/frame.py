@@ -391,12 +391,11 @@ class MapFrame(SingleMapFrame):
         
     def AddToolbar(self, name, fixed = False):
         """!Add defined toolbar to the window
-        
-        Currently known toolbars are:
+
+        Currently recognized toolbars are:
          - 'map'     - basic map toolbar
          - 'vdigit'  - vector digitizer
-         - 'gcpdisp' - GCP Manager 
-         
+
         @param name toolbar to add
         @param fixed fixed toolbar
         """

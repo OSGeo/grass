@@ -95,6 +95,9 @@ class BufferedWindow(MapWindow, wx.Window):
         # Emitted when mouse event handler is unregistered
         self.mouseHandlerUnregistered = Signal('BufferedWindow.mouseHandlerUnregistered')
 
+        # Emitted when map enters the window
+        self.mouseEntered = Signal('BufferedWindow.mouseEntered')
+
         # event bindings
         self.Bind(wx.EVT_PAINT,           self.OnPaint)
         self.Bind(wx.EVT_SIZE,            self.OnSize)
@@ -1321,19 +1324,12 @@ class BufferedWindow(MapWindow, wx.Window):
 
     def OnMouseEnter(self, event):
         """!Mouse entered window and no mouse buttons were pressed
+
+        Emits the mouseEntered signal.
         """
-        if not self.frame.IsStandalone() and \
-                self.frame.GetLayerManager().gcpmanagement:
-            if self.frame.GetToolbar('gcpdisp'):
-                if not self.frame.MapWindow == self:
-                    self.frame.MapWindow = self
-                    self.frame.Map = self.Map
-                    self.frame.UpdateActive(self)
-                    # needed for wingrass
-                    self.SetFocus()
-        else:
-            event.Skip()
-        
+        self.mouseEntered.emit()
+        event.Skip()
+
     def OnMouseMoving(self, event):
         """!Motion event and no mouse buttons were pressed
         """
