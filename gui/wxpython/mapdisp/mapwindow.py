@@ -97,6 +97,12 @@ class BufferedWindow(MapWindow, wx.Window):
 
         # Emitted when map enters the window
         self.mouseEntered = Signal('BufferedWindow.mouseEntered')
+        # Emitted when left mouse button is released and mouse use is 'pointer'
+        # Parameters are x and y of the mouse click in map (cell) units
+        # new and experimental, if the concept would be used widely,
+        # it could replace register and unregister mechanism
+        # and partially maybe also internal mouse use dictionary
+        self.mouseLeftUpPointer = Signal('BufferedWindow.mouseLeftUpPointer')
 
         # event bindings
         self.Bind(wx.EVT_PAINT,           self.OnPaint)
@@ -1192,21 +1198,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
             self.ClearLines(pdc = self.pdcTmp)
             self.DrawLines(pdc = self.pdcTmp)
-        
-        elif self.mouse["use"] == "pointer" and \
-                not self.frame.IsStandalone() and \
-                self.frame.GetLayerManager().gcpmanagement:
-            # -> GCP manager
-            if self.frame.GetToolbar('gcpdisp'):
-                coord = self.Pixel2Cell(self.mouse['end'])
-                if self.frame.MapWindow == self.frame.SrcMapWindow:
-                    coordtype = 'source'
-                else:
-                    coordtype = 'target'
-                
-                self.frame.GetLayerManager().gcpmanagement.SetGCPData(coordtype, coord, self, confirm = True)
-                self.UpdateMap(render = False, renderVector = False)
-            
+
         elif self.mouse["use"] == "pointer" and \
                 hasattr(self, "digit"):
             self._onLeftUp(event)
@@ -1223,7 +1215,10 @@ class BufferedWindow(MapWindow, wx.Window):
                 pass
             self.dragid = None
             self.currtxtid = None
-            
+
+            coordinates = self.Pixel2Cell(self.mouse['end'])
+            self.mouseLeftUpPointer.emit(x=coordinates[0], y=coordinates[1])
+
         elif self.mouse['use'] == 'legend':
             self.frame.dialogs['legend'].resizeBtn.SetValue(False)
             screenSize = self.GetClientSizeTuple()
