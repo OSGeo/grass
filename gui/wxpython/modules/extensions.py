@@ -266,7 +266,7 @@ class ExtensionTreeModelBuilder:
             flags = 'g'
         else:
             flags = 'l'
-        ret = RunCommand('g.extension', read = True, parent = self,
+        ret = RunCommand('g.extension', read = True,
                          svnurl = url,
                          flags = flags, quiet = True)
         if not ret:
