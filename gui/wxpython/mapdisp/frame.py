@@ -135,7 +135,7 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager.Update()
         
         #
-        self.Map.updateProgress.connect(self.ProcessProgress)
+        self.Map.updateProgress.connect(self.statusbarManager.SetProgress)
 
         # init decoration objects
         self.decorations = {}
@@ -1347,12 +1347,3 @@ class MapFrame(SingleMapFrame):
         toolbar.action['id'] = vars(toolbar)["pointer"]
         toolbar.OnTool(None)
         self.OnPointer(event=None)
-
-    def ProcessProgress(self, range, value, text):
-        """!Update progress bar during rendering"""
-        bar = self.statusbarManager.GetProgressBar()
-        bar.SetRange(range)
-        bar.SetValue(value)
-        # minimalize the damage in the status bar text
-        if text:
-            self.SetStatusText(text)

@@ -84,7 +84,11 @@ class SbManager:
         self._postInitialized = False
         
         self.progressbar = SbProgress(self.mapFrame, self.statusbar, self)
-        
+        self.progressbar.progressShown.connect(self._progressShown)
+        self.progressbar.progressHidden.connect(self._progressHidden)
+
+        self._oldStatus = ''
+
         self._hiddenItems = {}
     
     def SetProperty(self, name, value):
@@ -271,7 +275,15 @@ class SbManager:
     def GetProgressBar(self):
         """!Returns progress bar"""
         return self.progressbar
-    
+
+    def _progressShown(self):
+        self._oldStatus = self.statusbar.GetStatusText(0)
+        print 'show:'+self._oldStatus
+
+    def _progressHidden(self):
+        self.statusbar.SetStatusText(self._oldStatus, 0)
+        print 'hide:'+self._oldStatus
+
     def OnToggleStatus(self, event):
         """!Toggle status text
         """
@@ -288,6 +300,13 @@ class SbManager:
         """!Returns current mode"""
         return self.choice.GetSelection()
 
+    def SetProgress(self, range, value, text):
+        """Update progress."""
+        self.progressbar.SetRange(range)
+        self.progressbar.SetValue(value)
+        if text:
+            self.statusbar.SetStatusText(text)
+        
 class SbItem:
     """!Base class for statusbar items.
     
@@ -969,13 +988,16 @@ class SbProgress(SbItem):
     Underlaying widget is wx.Gauge.
     """
     def __init__(self, mapframe, statusbar, sbManager, position = 0):
+        self.progressShown = Signal('SbProgress.progressShown')
+        self.progressHidden = Signal('SbProgress.progressHidden')
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'progress'
         self.sbManager = sbManager
         # on-render gauge
         self.widget = wx.Gauge(parent = self.statusbar, id = wx.ID_ANY,
                                range = 0, style = wx.GA_HORIZONTAL)
-        self.widget.Hide()
+        self.Hide()
+        
         
     def GetRange(self):
         """!Returns progress range."""
@@ -986,10 +1008,20 @@ class SbProgress(SbItem):
         if range > 0:        
             if self.GetRange() != range:
                 self.widget.SetRange(range)
-            self.widget.Show()
+            self.Show()
         else:
-            self.widget.Hide()
+            self.Hide()
     
+    def Show(self):
+        if not self.IsShown():
+            self.progressShown.emit()
+            self.widget.Show()
+
+    def Hide(self):
+        if self.IsShown():
+            self.progressHidden.emit()
+            self.widget.Hide()
+
     def IsShown(self):
         """!Is progress bar shown
         """
@@ -1000,7 +1032,7 @@ class SbProgress(SbItem):
             return
         self.widget.SetValue(value)
         if value == self.GetRange():
-            self.widget.Hide()
+            self.Hide()
 
         wx.Yield()
 
