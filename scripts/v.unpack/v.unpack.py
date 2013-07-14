@@ -139,7 +139,10 @@ def main():
             layer = values[0].split('/')[0]
             # we need to take care about the table name in case of several layer
             if options["output"]:
-                to_table = "%s_%s"%(map_name, layer)
+                if len(dbnlist) > 1:
+                    to_table = "%s_%s" % (map_name, layer)
+                else:
+                    to_table = map_name
             else:
                 to_table = from_table
             
