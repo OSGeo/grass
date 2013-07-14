@@ -672,11 +672,13 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
                   (ret, (time.time() - start)))
     
     Debug.msg(3, "gcmd.RunCommand(): print error")
-    if ret != 0 and parent:
-        Debug.msg(2, "gcmd.RunCommand(): error %s" % stderr)
-        if (stderr == None):
-            Debug.msg(2, "gcmd.RunCommand(): nothing to print ???")
+    if ret != 0:
+        if stderr:
+            Debug.msg(2, "gcmd.RunCommand(): error %s" % stderr)
         else:
+            Debug.msg(2, "gcmd.RunCommand(): nothing to print ???")
+        
+        if parent:
             GError(parent = parent,
                    caption = _("Error in %s") % prog,
                    message = stderr)
