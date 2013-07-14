@@ -277,8 +277,10 @@ class VNETPointsData:
         self.pointsChanged.emit(method = "AddPoint", kwargs = {})
 
     def DeletePoint(self, pt_id):
-        self.pointsToDraw.DeleteItem(pt_id)
-        self.data.pop(pt_id)
+        item = self.pointsToDraw.GetItem(pt_id)
+        if item:
+            self.pointsToDraw.DeleteItem(item)
+            self.data.pop(pt_id)
 
         self.pointsChanged.emit(method = "DeletePoint", kwargs = {"pt_id" : pt_id})
 
@@ -307,7 +309,7 @@ class VNETPointsData:
             if self._usePoint(pt_id, data["use"]) == -1:
                 data["use"] =  False
             idx = self.cols["name"].index("use")
-            self.data[pt_id][idx] = v
+            self.data[pt_id][idx] = data["use"]
 
         self.pointsChanged.emit(method = "SetPointData", kwargs = {"pt_id" : pt_id, "data" : data})
 
@@ -402,7 +404,6 @@ class VNETPointsData:
         """!Item is checked/unchecked"""
         analysis, valid = self.an_params.GetParam("analysis")
         cats = self.an_data[analysis]["cmdParams"]["cats"]
-
         ##TODO move
         #if self.updateMap:
         #    up_map_evt = gUpdateMap(render = False, renderVector = False)
@@ -500,18 +501,18 @@ class VNETPointsData:
         else:
             msg = _("new point")
 
-        if self.selected == len(self.data) - 1:
-            self.SetSelected(0)
-        else:
-            self.SetSelected(self.GetSelected() + 1)
-
         self.SetPointData(self.selected, 
                          {'topology' : msg,
                           'e' : e,
                           'n' : n})
 
         self.pointsToDraw.GetItem(self.selected).SetCoords([e, n])
-            
+
+        if self.selected == len(self.data) - 1:
+            self.SetSelected(0)
+        else:
+            self.SetSelected(self.GetSelected() + 1)
+
     def GetColumns(self, only_relevant  = True):
         
         cols_data = deepcopy(self.cols)
