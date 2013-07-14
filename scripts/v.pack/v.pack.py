@@ -47,6 +47,9 @@ def main():
     infile = options['input']
     compression_off = flags['c']
     
+    global basedir
+    basedir = grass.tempdir()
+    
     # check if vector map exists
     gfile = grass.find_file(infile, element = 'vector')
     if not gfile['name']:
@@ -77,9 +80,7 @@ def main():
     
     # prepare for packing
     grass.verbose(_("Packing <%s>...") % (gfile['fullname']))
-    global basedir
-    basedir = grass.tempdir()
-
+    
     # write tar file, optional compression 
     if compression_off:
         tar = tarfile.open(name = outfile, mode = 'w:')
