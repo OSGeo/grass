@@ -176,6 +176,10 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(self.notebook, wx.aui.AuiPaneInfo().
                              Left().CentrePane().BestSize((-1,-1)).Dockable(False).
                              CloseButton(False).DestroyOnClose(True).Row(1).Layer(0))
+        self._auimgr.AddPane(SearchModuleWindow(parent=self, model=self._menuTreeBuilder.GetModel()), wx.aui.AuiPaneInfo().
+                             Left().BestSize((-1,-1)).Dockable(True).
+                             CloseButton(False).DestroyOnClose(True).Row(1).Layer(0).
+                             PaneBorder(False).CaptionVisible(True))
 
         self._auimgr.Update()
 
