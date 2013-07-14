@@ -186,6 +186,7 @@ class MapFrame(SingleMapFrame):
         #
         self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
+        self.Bind(wx.EVT_SIZE,     self.OnSize)
         
         #
         # Update fancy gui style
@@ -214,6 +215,14 @@ class MapFrame(SingleMapFrame):
 
         self.decorationDialog = None # decoration/overlays
         
+    def OnSize(self, event):
+        """!Adjust statusbar on changing size"""
+        # reposition checkbox in statusbar
+        self.StatusbarReposition()
+        
+        # update statusbar
+        self.StatusbarUpdate()
+
     def GetMapWindow(self):
         return self.MapWindow
     

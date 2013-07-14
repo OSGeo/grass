@@ -482,12 +482,6 @@ class BufferedWindow(MapWindow, wx.Window):
                     self.UpdateMap()
                     updatemap = False
 
-            # reposition checkbox in statusbar
-            self.frame.StatusbarReposition()
-            
-            # update statusbar
-            self.frame.StatusbarUpdate()
-
             if updatemap:
                 self.UpdateMap(render = True)
             self.resize = False
