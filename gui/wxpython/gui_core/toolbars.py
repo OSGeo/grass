@@ -205,6 +205,7 @@ class BaseToolbar(wx.ToolBar):
         try:
             id = getattr(self, tool)
         except AttributeError:
+            # this should raise an error
             return
         
         self.EnableTool(id, enable)

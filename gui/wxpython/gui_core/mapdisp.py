@@ -242,6 +242,7 @@ class MapFrameBase(wx.Frame):
        
     def StatusbarUpdate(self):
         """!Update statusbar content"""
+        Debug.msg(5, "MapFrameBase.StatusbarUpdate()")
         self.statusbarManager.Update()
         
     def IsAutoRendered(self):

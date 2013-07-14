@@ -165,6 +165,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow2D.mouseHandlerUnregistered.connect(self.ResetPointer)
 
         self.MapWindow2D.InitZoomHistory()
+        self.MapWindow2D.zoomChanged.connect(self.StatusbarUpdate)
 
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
@@ -1352,4 +1353,6 @@ class MapFrame(SingleMapFrame):
         bar = self.statusbarManager.GetProgressBar()
         bar.SetRange(range)
         bar.SetValue(value)
-        self.SetStatusText(text)
+        # minimalize the damage in the status bar text
+        if text:
+            self.SetStatusText(text)
