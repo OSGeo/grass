@@ -17,7 +17,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import textwrap
 import Queue
 from math import sin, cos, pi, sqrt
 
@@ -38,6 +37,7 @@ from core.gcmd          import RunCommand, GError, GMessage
 from core.settings      import UserSettings
 from gui_core.forms     import GUI
 from gui_core.dialogs   import HyperlinkDialog
+from gui_core.ghelp     import ShowAboutDialog
 from psmap.menudata     import PsMapMenuData
 
 from psmap.dialogs      import *
@@ -1062,16 +1062,7 @@ class PsMapFrame(wx.Frame):
         
     def OnAbout(self, event):
         """!Display About window"""
-        info = wx.AboutDialogInfo()
-        
-        info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
-        info.SetName(_('wxGUI Cartographic Composer'))
-        info.SetWebSite('http://grass.osgeo.org')
-        info.SetDescription(_('(C) 2011 by the GRASS Development Team\n\n') + 
-                            '\n'.join(textwrap.wrap(_('This program is free software under the GNU General Public License'
-                                                      '(>=v2). Read the file COPYING that comes with GRASS for details.'), 75)))
-        
-        wx.AboutBox(info)
+        ShowAboutDialog(prgName=_('wxGUI Cartographic Composer'), startYear='2011')
 
     def OnCloseWindow(self, event):
         """!Close window"""

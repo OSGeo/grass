@@ -21,6 +21,7 @@ import os
 import codecs
 import platform
 import re
+import textwrap
 
 import wx
 from wx.html import HtmlWindow
@@ -773,3 +774,21 @@ class HelpPanel(wx.Panel):
         self.OnHistory()
         
         event.Skip()
+
+def ShowAboutDialog(prgName, startYear):
+    """!Displays About window.
+
+    @param prgName name of the program
+    @param startYear the first year of existence of the program
+    """
+    info = wx.AboutDialogInfo()
+    
+    info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+    info.SetName(prgName)
+    info.SetWebSite('http://grass.osgeo.org')
+    year = grass.version()['date']
+    info.SetDescription('(C) %(start)s-%(end)s by the GRASS Development Team\n\n' % {'start': startYear, 'end': year} +
+                        '\n'.join(textwrap.wrap('This program is free software under the GNU General Public License'
+                                                '(>=v2). Read the file COPYING that comes with GRASS for details.', 75)))
+    
+    wx.AboutBox(info)

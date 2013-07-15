@@ -23,7 +23,6 @@ import os
 import sys
 import time
 import stat
-import textwrap
 import tempfile
 import copy
 import re
@@ -41,6 +40,7 @@ from gui_core.goutput     import GConsoleWindow
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
 from gui_core.dialogs     import GetImageHandlers
+from gui_core.ghelp       import ShowAboutDialog
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings        import UserSettings
 from gui_core.menu        import Menu
@@ -720,17 +720,7 @@ class ModelFrame(wx.Frame):
 
     def OnAbout(self, event):
         """!Display About window"""
-        info = wx.AboutDialogInfo()
-
-        info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
-        info.SetName(_('wxGUI Graphical Modeler'))
-        info.SetWebSite('http://grass.osgeo.org')
-        year = grass.version()['date']
-        info.SetDescription(_('(C) 2010-%s by the GRASS Development Team\n\n') % year + 
-                            '\n'.join(textwrap.wrap(_('This program is free software under the GNU General Public License'
-                                                      '(>=v2). Read the file COPYING that comes with GRASS for details.'), 75)))
-        
-        wx.AboutBox(info)
+        ShowAboutDialog(prgName=_('wxGUI Graphical Modeler'), startYear='2010')
         
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
