@@ -1026,13 +1026,25 @@ class SbProgress(SbItem):
         return self.widget.IsShown()
 
     def SetValue(self, value):
+        """!Sets value of progressbar.
+        
+        Calls wx.Yield which allows
+        to update gui for displaying progress.
+        """
+        self.SafeSetValue(self, value)
+        wx.Yield()
+
+    def SafeSetValue(self, value):
+        """! Thread save SetValue method.
+        
+        Needed for wxNVIZ.
+        """
         if value > self.GetRange():
             return
         self.widget.SetValue(value)
         if value == self.GetRange():
             self.Hide()
 
-        wx.Yield()
 
     def GetWidget(self):
         """!Returns underlaying winget.
