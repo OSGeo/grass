@@ -108,10 +108,14 @@ class AboutWindow(wx.Frame):
                       flag = wx.ALL | wx.ALIGN_CENTER, border = 20)
         
         info = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                             label = 'GRASS GIS ' + vInfo['version'] + '\n\n')
+                             label = 'GRASS GIS ' + vInfo['version'] + '\n')
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         info.SetForegroundColour(wx.Colour(35, 142, 35))
         infoSizer.Add(item = info, proportion = 0,
+                      flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 1)
+
+        team = wx.StaticText(parent=infoTxt, label=_grassDevTeam(1999) + '\n')
+        infoSizer.Add(item = team, proportion = 0,
                       flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 1)
         
         row = 0
@@ -786,9 +790,12 @@ def ShowAboutDialog(prgName, startYear):
     info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
     info.SetName(prgName)
     info.SetWebSite('http://grass.osgeo.org')
-    year = grass.version()['date']
-    info.SetDescription('%(c)s %(start)s-%(end)s by the GRASS Development Team\n\n' % {'c': unichr(169), 'start': startYear, 'end': year} +
+    info.SetDescription(_grassDevTeam(startYear) + '\n\n' +
                         '\n'.join(textwrap.wrap('This program is free software under the GNU General Public License'
                                                 '(>=v2). Read the file COPYING that comes with GRASS for details.', 75)))
     
     wx.AboutBox(info)
+
+def _grassDevTeam(start):
+    end = grass.version()['date']
+    return '%(c)s %(start)s-%(end)s by the GRASS Development Team' % {'c': unichr(169), 'start': start, 'end': end}
