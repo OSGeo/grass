@@ -86,7 +86,7 @@ elevation map. Each point will receive the elevation value from the
 elevation raster, as if it came from a point survey.
 
 <div class="code"><pre>
- g.region rast=elevation.10m -res=150 -p
+ g.region rast=elevation.10m res=150 -p
  v.random output=rand2k_elev n=2000
  v.db.addtable map=rand2k_elev column="elevation double precision"
  v.what.rast vect=rand2k_elev rast=elevation.10m column=elevation
