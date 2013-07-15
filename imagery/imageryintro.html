@@ -17,7 +17,7 @@ bits. This energy is called radiance-at-sensor. To obtain physical
 values from DNs, satellite image providers use a linear transform 
 equation <tt>(y = a * x + b)</tt> to encode the radiance-at-sensor 
 in 8 to 16 bits. DNs can be turned back into physical values by 
-applying the reverse formula <tt>(x = (y - b))</tt>.
+applying the reverse formula <tt>(x = (y - b) / a)</tt>.
 <p>
 The GRASS GIS module <a href="i.landsat.toar.html">i.landsat.toar</a>
 easily transforms Landsat DN to radiance-at-sensor. The equivalent 
