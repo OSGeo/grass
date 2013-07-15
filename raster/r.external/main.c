@@ -54,7 +54,6 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
-    G_add_keyword(_("input"));
     G_add_keyword(_("external"));
     module->description =
 	_("Links GDAL supported raster data as a pseudo GRASS raster map.");
