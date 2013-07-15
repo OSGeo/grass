@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
 from core.globalvar import ETCWXDIR
 from core.utils import GetSettingsPath
-from core.gcmd import GError
+from core.gcmd import GError, RunCommand
 
 import grass.script.task as gtask
 import grass.script.core as gcore
@@ -181,6 +181,8 @@ def toolboxes2menudata(userDefined=True):
     if not userHasToolboxes:
         _removeUserToolboxesItem(root)
 
+    _expandAddonsItem(root)
+    
     toolboxes = etree.parse(toolboxesFile)
     _expandToolboxes(root, toolboxes)
 
@@ -336,6 +338,46 @@ def _removeUserToolboxesItem(root):
     """
     for n in root.findall('./items/user-toolboxes-list'):
         items = root.find('./items')
+        items.remove(n)
+
+
+def _expandAddonsItem(node):
+    """!Expands tag addons (in main_menu.xml) with currently installed addons.append
+    
+    Note: there is no mechanism yet to tell the gui to rebuild the menudata.xml
+    file when new addons are added/removed.
+    """
+    # no addonsTag -> do nothing
+    addonsTags = node.findall('./items/addons')
+    if not addonsTags:
+        return
+    # fetch addons
+    addons = sorted(RunCommand('g.extension', quiet=True, read=True,
+                               flags = 'a').splitlines())
+
+    # no addons -> remove addons tag
+    if not addons:
+        for n in addonsTags:    
+            items = node.find('./items')
+            idx = items.getchildren().index(n)
+            items.remove(n)
+        return
+
+    # create addons toolbox
+    # keywords and desc are handled later automatically
+    for n in addonsTags:    
+        items = node.find('./items')
+        idx = items.getchildren().index(n)
+        el = etree.Element('toolbox', attrib={'name': 'AddonsToolboxesList'})
+        items.insert(idx, el)
+        label = etree.SubElement(el, tag='label')
+        label.text = _("Addons")
+        it = etree.SubElement(el, tag='items')
+        for addon in addons:
+            addonItem = etree.SubElement(it, tag='module-item')
+            addonItem.attrib = {'name': addon}
+            addonLabel = etree.SubElement(addonItem, tag='label')
+            addonLabel.text = addon
         items.remove(n)
 
 
