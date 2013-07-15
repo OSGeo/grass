@@ -463,14 +463,13 @@ class RBookgstatPanel(RBookPanel):
         column = self.parent.InputDataColumn.GetValue()
         
         # import data or pick them up
-        if globals()["InputData"] is None:
-            globals()["InputData"] = controller.ImportMap(map = map,
+        if self.controller.InputData is None:
+            self.controller.InputData = controller.ImportMap(map = map,
                                                           column = column)
         # fit the variogram or pick it up
         Formula = controller.ComposeFormula(column = column,
                                             isblock = self.KrigingRadioBox.GetStringSelection() == "Block kriging",
-                                            inputdata = globals()['InputData'])
-        #if globals()["Variogram"] is None:
+                                            inputdata = self.controller.InputData)
         if hasattr(self, 'VariogramCheckBox') and self.VariogramCheckBox.IsChecked():
             self.model = ''
             for each in ("Sill","Nugget","Range"):
@@ -484,8 +483,8 @@ class RBookgstatPanel(RBookPanel):
                 if getattr(self, each+'ChextBox').IsChecked(): #@FIXME will be removed when chextboxes will be frozen
                     setattr(self, each.lower(), getattr(self, each+"Ctrl").GetValue())
             
-        globals()["Variogram"] = controller.FitVariogram(Formula,
-                                                         InputData,
+        self.controller.Variogram = controller.FitVariogram(Formula,
+                                                         self.controller.InputData,
                                                          model = self.model,
                                                          sill = self.sill,
                                                          nugget = self.nugget,
