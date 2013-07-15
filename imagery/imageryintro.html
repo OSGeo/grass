@@ -1,14 +1,53 @@
 <!-- meta page description: Image processing in GRASS GIS -->
 <!-- meta page index: imagery -->
-<h3>Image data in general</h3>
+<h3>General introduction</h3>
 
-In GRASS, image data are identical to <a href="rasterintro.html">raster data</a>.
-However, a couple of commands are explicitly dedicated to image
-processing.  The geographic boundaries of the raster/imagery file are
-described by the north, south, east, and west fields. These values
-describe the lines which bound the map at its edges. These lines do
-NOT pass through the center of the grid cells at the edge of the map,
-but along the edge of the map itself.
+<b>Digital numbers and physical values (reflection/radiance-at-sensor):</b>
+<p>
+Satellite imagery is commonly stored in Digital Numbers (DN) for 
+minimizing the storage volume, i.e. the originally sampled analog 
+physical value (color, temperature, etc) is stored a discrete 
+representation in 8-16 bits. For example, Landsat data are stored in 
+8bit values (i.e., ranging from 0 to 255); other satellite data may 
+be stored in 10 or 16 bits. Having data stored in DN, it implies 
+that these data are not yet the observed ground reality. Such data 
+are called "at-satellite", for example the amount of energy sensed 
+by the sensor of the satellite platform is encoded in 8 or more 
+bits. This energy is called radiance-at-sensor. To obtain physical 
+values from DNs, satellite image providers use a linear transform 
+equation <tt>(y = a * x + b)</tt> to encode the radiance-at-sensor 
+in 8 to 16 bits. DNs can be turned back into physical values by 
+applying the reverse formula <tt>(x = (y - b))</tt>.
+<p>
+The GRASS GIS module <a href="i.landsat.toar.html">i.landsat.toar</a>
+easily transforms Landsat DN to radiance-at-sensor. The equivalent 
+module for ASTER data is <a href="i.aster.toar.html">i.aster.toar</a>.
+For other satellites, <a href="r.mapcalc.html">r.mapcalc</a> can 
+be employed.
+<p>
+<b>Reflection/radiance-at-sensor and surface reflectance</b>
+<p>
+When radiance-at-sensor has been obtained, still the atmosphere 
+influences the signal as recorded at the sensor. This atmospheric 
+interaction with the sun energy reflected back into space by 
+ground/vegetation/soil needs to be corrected. There are two ways to 
+apply atmospheric correction for satellite imagery. The simple way 
+for Landsat is with <a href="i.landsat.toar.html">i.landsat.toar</a>,
+using the DOS correction method. The more accurate way is using 
+<a href="i.atcorr.html">i.atcorr</a> (which works for many satellite 
+sensors). The atmospherically corrected sensor data represent 
+surface <a href="http://en.wikipedia.org/wiki/reflectance">reflectance</a>,
+which ranges theoretically from 0% to 100%. Note that this level of 
+data correction is the proper level of correction to calculate 
+vegetation indices.
+<p>
+In GRASS GIS, image data are identical to <a href="rasterintro.html">raster data</a>.
+However, a couple of commands are explicitly dedicated to image 
+processing. The geographic boundaries of the raster/imagery file are 
+described by the north, south, east, and west fields. These values 
+describe the lines which bound the map at its edges. These lines do 
+NOT pass through the center of the grid cells at the edge of the 
+map, but along the edge of the map itself.
 
 <p>
 As a general rule in GRASS:
@@ -21,7 +60,7 @@ As a general rule in GRASS:
 </ol>
 
 
-<h3>Raster import</h3>
+<h3>Imagery import</h3>
 
 The module <a href="r.in.gdal.html">r.in.gdal</a> offers a common
 interface for many different raster and satellite image
