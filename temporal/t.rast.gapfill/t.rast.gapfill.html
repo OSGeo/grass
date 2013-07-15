@@ -1,10 +1,72 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+This modules fills temporal gaps in space time raster datasets using linear 
+interpolation. Temporal gaps will be detected all gaps in the input space time 
+raster dataset automatically. The predecessor and successor maps of the gaps 
+will be identified and are used to linear interpolate the raster map between
+them. 
+
+<h2>Note</h2>
+This module uses <a href="r.series.interpol.html">r.series.interpol</a> to
+perform the interpolation for each gap independently. Hence several interpolation
+processes can be run in parallel.
+<h2>Examples</h2>
+
+In this example we will create 3 raster maps and register them in the
+temporal database an then in the newly created space time raster dataset.
+There are gaps of one day size between the raster maps. The values of
+the maps are chosen so that the interpolated values can be estimated.
+We expect to maps with values 2 and 4 after interpolation, since we have two gaps.
+
+<div class="code"><pre>
+r.mapcalc expr="map1 = 1" 
+r.mapcalc expr="map2 = 3" 
+r.mapcalc expr="map3 = 5" 
+
+t.register type=rast maps=map1 start=2012-08-20 end=2012-08-21
+t.register type=rast maps=map2 start=2012-08-22 end=2012-08-23
+t.register type=rast maps=map3 start=2012-08-24 end=2012-08-25
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+         
+t.register type=rast input=precipitation_daily maps=map1,map2,map3
+
+t.rast.list -h input=precipitation_daily columns=name,start_time,min,max
+
+name    start_time  min max
+map1    2012-08-20 00:00:00 1.0 1.0
+map2    2012-08-22 00:00:00 3.0 3.0
+map3    2012-08-24 00:00:00 5.0 5.0
+
+t.rast.list -h input=precipitation_daily method=deltagaps
+
+id  name    mapset  start_time  end_time    interval_length distance_from_begin
+map1@soeren map1    soeren  2012-08-20 00:00:00 2012-08-21 00:00:00 1.0 0.0
+None        None    None    2012-08-21 00:00:00 2012-08-22 00:00:00 1.0 1.0
+map2@soeren map2    soeren  2012-08-22 00:00:00 2012-08-23 00:00:00 1.0 2.0
+None        None    None    2012-08-23 00:00:00 2012-08-24 00:00:00 1.0 3.0
+map3@soeren map3    soeren  2012-08-24 00:00:00 2012-08-25 00:00:00 1.0 4.0
+
+t.rast.gapfill input=precipitation_daily base=gap
+
+t.rast.list -h input=precipitation_daily columns=name,start_time,min,max
+
+name    start_time  min max
+map1    2012-08-20 00:00:00 1.0 1.0
+gap_6   2012-08-21 00:00:00 2.0 2.0
+map2    2012-08-22 00:00:00 3.0 3.0
+gap_7   2012-08-23 00:00:00 4.0 4.0
+map3    2012-08-24 00:00:00 5.0 5.0
+
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="r.series.interpol.html">r.series.interpol</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
 </em>

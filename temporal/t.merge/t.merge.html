@@ -10,6 +10,192 @@ maps from the input space time datasets will be added to the output.
 Maps from the input space time datasets will be registered only once in the 
 output space time dataset, hence the same maps can be registered in different input space time datasets.
 
+<h2>Examples</h2>
+
+In this example we will create two space time raster datasets and register 
+two unique maps in each of it. Then we merge the two space time raster
+datasets together.
+
+<div class="code"><pre>
+r.mapcalc expr="map1 = rand(0, 10)" 
+r.mapcalc expr="map2 = rand(10, 20)" 
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily_1 \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i type=rast input=precipitation_daily_1 \
+           maps=map1,map2 start=2012-08-20 increment="1 days"
+
+t.info precipitation_daily_1
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily_1@soeren
+ | Name: ...................... precipitation_daily_1
+ | Mapset: .................... soeren
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-07-15 16:05:36.198668
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-22 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 90.0
+ | South:...................... -90.0
+ | East:.. .................... 180.0
+ | West:....................... -180.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... precipitation_daily_1_soeren_raster_register
+ | North-South resolution min:. 1.0
+ | North-South resolution max:. 1.0
+ | East-west resolution min:... 1.0
+ | East-west resolution max:... 1.0
+ | Minimum value min:.......... 0.0
+ | Minimum value max:.......... 10.0
+ | Maximum value min:.......... 9.0
+ | Maximum value max:.......... 19.0
+ | Number of registered maps:.. 2
+ |
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Command history:
+ | # 2013-07-15 16:05:36 
+ | t.create type="strds" temporaltype="absolute"
+ |     output="precipitation_daily_1" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | # 2013-07-15 16:05:36 
+ | t.register -i type="rast"
+ |     input="precipitation_daily_1" maps="map1,map2" start="2012-08-20"
+ |     increment="1 days"
+ | 
+ +----------------------------------------------------------------------------+
+
+r.mapcalc expr="map3 = rand(20, 30)" 
+r.mapcalc expr="map4 = rand(30, 40)" 
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily_2 \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i type=rast input=precipitation_daily_2 \
+           maps=map3,map4 start=2012-08-22 increment="1 days"
+
+t.info precipitation_daily_2
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily_2@soeren
+ | Name: ...................... precipitation_daily_2
+ | Mapset: .................... soeren
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-07-15 16:05:37.430380
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-22 00:00:00
+ | End time:................... 2012-08-24 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 90.0
+ | South:...................... -90.0
+ | East:.. .................... 180.0
+ | West:....................... -180.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... precipitation_daily_2_soeren_raster_register
+ | North-South resolution min:. 1.0
+ | North-South resolution max:. 1.0
+ | East-west resolution min:... 1.0
+ | East-west resolution max:... 1.0
+ | Minimum value min:.......... 20.0
+ | Minimum value max:.......... 30.0
+ | Maximum value min:.......... 29.0
+ | Maximum value max:.......... 39.0
+ | Number of registered maps:.. 2
+ |
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Command history:
+ | # 2013-07-15 16:05:37 
+ | t.create type="strds" temporaltype="absolute"
+ |     output="precipitation_daily_2" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | # 2013-07-15 16:05:37 
+ | t.register -i type="rast"
+ |     input="precipitation_daily_2" maps="map3,map4" start="2012-08-22"
+ |     increment="1 days"
+ | 
+ +----------------------------------------------------------------------------+
+
+t.merge input=precipitation_daily_1,precipitation_daily_2 \
+        output=precipitation_daily_3
+
+t.info precipitation_daily_3
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily_3@soeren
+ | Name: ...................... precipitation_daily_3
+ | Mapset: .................... soeren
+ | Creator: ................... soeren
+ | Creation time: ............. 2013-07-15 16:07:47.292784
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-24 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 90.0
+ | South:...................... -90.0
+ | East:.. .................... 180.0
+ | West:....................... -180.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... precipitation_daily_3_soeren_raster_register
+ | North-South resolution min:. 1.0
+ | North-South resolution max:. 1.0
+ | East-west resolution min:... 1.0
+ | East-west resolution max:... 1.0
+ | Minimum value min:.......... 0.0
+ | Minimum value max:.......... 30.0
+ | Maximum value min:.......... 9.0
+ | Maximum value max:.......... 39.0
+ | Number of registered maps:.. 4
+ |
+ | Title:
+ | Merged space time dataset
+ | Description:
+ | Merged space time dataset
+ | Command history:
+ | # 2013-07-15 16:07:47 
+ | t.merge
+ |     input="precipitation_daily_1,precipitation_daily_2"
+ |     output="precipitation_daily_3"
+ | 
+ +----------------------------------------------------------------------------+
+
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>

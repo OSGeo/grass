@@ -10,6 +10,41 @@ The user can define the columns that should
 be printed for each dataset and the order of the datasets. In addition a SQL WHERE statement can
 be specified to select a subset of the requested datasets.
 
+
+<h2>Examples</h2>
+
+In this example we will create 3 raster maps and register them first only in the
+temporal database an then in the newly created space time raster dataset.
+We use t.list to show what maps are already in the 
+
+<div class="code"><pre>
+r.mapcalc expr="map1 = rand(0, 10)" 
+r.mapcalc expr="map2 = rand(10, 20)" 
+r.mapcalc expr="map3 = rand(20, 30)" 
+
+t.register type=rast maps=map1 start=2012-08-20 end=2012-08-21
+t.register type=rast maps=map2 start=2012-08-21 end=2012-08-22
+t.register type=rast maps=map3 start=2012-08-22 end=2012-08-23
+
+t.list rast
+
+map1@soeren
+map2@soeren
+map3@soeren
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+         
+t.register type=rast input=precipitation_daily maps=map1,map2,map3
+
+t.list strds
+
+precipitation_daily@soeren
+
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>

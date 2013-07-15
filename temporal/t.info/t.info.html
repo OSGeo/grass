@@ -33,7 +33,7 @@ t.info -s
  | SQL template path:.......... /home/soeren/src/grass7.0/grass_trunk/dist.x86_64-unknown-linux-gnu/etc/sql
  +----------------------------------------------------------------------------+
 
-r.mapcalc --o expr="map1 = rand(0, 10)" 
+r.mapcalc expr="map1 = rand(0, 10)" 
 
 t.create type=strds temporaltype=absolute \
          output=precipitation_daily \

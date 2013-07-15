@@ -49,6 +49,7 @@
 #%end
 
 from multiprocessing import Process
+import copy
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -89,6 +90,7 @@ def main():
     num = len(maps)
 
     gap_list = []
+    overwrite_flags = {}
 
     # Identify all gaps and create new names
     count = 0
@@ -97,9 +99,15 @@ def main():
             count += 1
             _id = "%s_%d@%s" % (base, num + count, mapset)
             _map.set_id(_id)
+            overwrite_flags[_id] = False
             if _map.map_exists() or _map.is_in_db(dbif):
-                grass.fatal(_("Map with name <%s> already exists. "
-                              "Please use another base name." % (_id)))
+                if not grass.overwrite:
+                        grass.fatal(_("Map with name <%s> already exists. "
+                                      "Please use another base name." % (_id)))
+                else:
+                    if _map.is_in_db(dbif):
+                        overwrite_flags[_id] = True
+                        
 
             gap_list.append(_map)
 
@@ -108,7 +116,7 @@ def main():
         return
 
     # Build the temporal topology
-    tb = tgis.temporal_topology_builder()
+    tb = tgis.SpatioTemporalTopologyBuilder()
     tb.build(maps)
 
     # Do some checks before computation
@@ -162,6 +170,20 @@ def main():
 
     # Insert new interpolated maps in temporal database and dataset
     for _map in gap_list:
+        id = _map.get_id()
+        if overwrite_flags[id] == True:
+            if _map.is_time_absolute():
+                start, end, tz = _map.get_absolute_time()
+                if _map.is_in_db():
+                    _map.delete(dbif)
+                _map = sp.get_new_map_instance(id)
+                _map.set_absolute_time(start, end, tz)
+            else:
+                start, end, unit = _map.get_relative_time()
+                if _map.is_in_db():
+                    _map.delete(dbif)
+                _map = sp.get_new_map_instance(id)
+                _map.set_relative_time(start, end, tz)
         _map.load()
         _map.insert(dbif)
         sp.register_map(_map, dbif)
