@@ -86,7 +86,7 @@ elevation map. Each point will receive the elevation value from the
 elevation raster, as if it came from a point survey.
 
 <div class="code"><pre>
- g.region rast=elevation.10m -p
+ g.region rast=elevation.10m -res=150 -p
  v.random output=rand2k_elev n=2000
  v.db.addtable map=rand2k_elev column="elevation double precision"
  v.what.rast vect=rand2k_elev rast=elevation.10m column=elevation
@@ -128,9 +128,9 @@ v.krige command).
 <div class="code"><pre>
  v.krige input=rand2k_elev_filt column=elevation output=rand2k_elev_kriging \
          output_var=rand2k_elev_kriging_var
- v.krige input=rand2k_elev_filt column=elevation output=rand2k_elev_kriging \
-         output_var=rand2k_elev_kriging_var model=Lin sill=2500 nugget=0 range=1000 \
-         --overwrite
+ v.krige input=rand2k_elev_filt column=elevation \
+         output=rand2k_elev_filt_kriging output_var=rand2k_elev_filt_kriging_var\
+         model=Mat sill=2500 nugget=0 range=1000 
 </pre></div>
 
 Or run wxGUI, to interactively fit the variogram and explore options:
