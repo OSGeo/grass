@@ -787,7 +787,7 @@ def ShowAboutDialog(prgName, startYear):
     info.SetName(prgName)
     info.SetWebSite('http://grass.osgeo.org')
     year = grass.version()['date']
-    info.SetDescription('(C) %(start)s-%(end)s by the GRASS Development Team\n\n' % {'start': startYear, 'end': year} +
+    info.SetDescription('%(c)s %(start)s-%(end)s by the GRASS Development Team\n\n' % {'c': unichr(169), 'start': startYear, 'end': year} +
                         '\n'.join(textwrap.wrap('This program is free software under the GNU General Public License'
                                                 '(>=v2). Read the file COPYING that comes with GRASS for details.', 75)))
     
