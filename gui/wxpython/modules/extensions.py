@@ -31,6 +31,7 @@ from core.utils       import SetAddOnPath
 from core.menutree    import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl, SearchModuleWidget
 from gui_core.treeview import CTreeView
+from core.toolboxes   import toolboxesOutdated
 
 
 class InstallExtensionWindow(wx.Frame):
@@ -205,6 +206,8 @@ class InstallExtensionWindow(wx.Frame):
                 SetAddOnPath(key = 'BASE')
             
             globalvar.UpdateGRASSAddOnCommands()
+            toolboxesOutdated()
+            
 
     def OnItemSelected(self, node):
         """!Item selected"""
@@ -386,6 +389,7 @@ class UninstallExtensionWindow(wx.Frame):
         
         # update prompt
         globalvar.UpdateGRASSAddOnCommands(eList)
+        toolboxesOutdated()
 
         
 class CheckListExtension(GListCtrl):

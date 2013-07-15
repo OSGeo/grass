@@ -59,6 +59,14 @@ if not os.path.exists(userMainMenuFile):
     userMainMenuFile = None
 
 
+def toolboxesOutdated():
+    """!Removes auto-generated menudata.xml
+    to let gui regenerate it next time it starts."""
+    path = os.path.join(GetSettingsPath(), 'toolboxes', 'menudata.xml')
+    if os.path.exists(path):
+        gcore.try_remove(path)
+
+
 def getMenuFile():
     """!Returns path to XML file for building menu.
 
