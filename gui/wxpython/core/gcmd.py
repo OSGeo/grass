@@ -149,6 +149,9 @@ class GException(Exception):
     def __str__(self):
         return self.value
 
+    def __unicode__(self):
+        return self.value
+
 class Popen(subprocess.Popen):
     """!Subclass subprocess.Popen"""
     def __init__(self, args, **kwargs):

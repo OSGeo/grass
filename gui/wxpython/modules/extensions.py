@@ -26,7 +26,7 @@ import wx
 from grass.script import task as gtask
 
 from core             import globalvar
-from core.gcmd        import GError, RunCommand
+from core.gcmd        import GError, RunCommand, GException
 from core.utils       import SetAddOnPath
 from core.menutree    import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl, SearchModuleWidget
@@ -183,7 +183,11 @@ class InstallExtensionWindow(wx.Frame):
         """!Fetch list of available extensions"""
         wx.BeginBusyCursor()
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
-        self.modelBuilder.Load(url = self.repo.GetValue().strip())
+        try:
+            self.modelBuilder.Load(url = self.repo.GetValue().strip())
+        except GException, e:
+            GError(unicode(e), parent = self, showTraceback = False)
+        
         self.tree.RefreshItems()
         self.SetStatusText("", 0)
         wx.EndBusyCursor()
@@ -273,7 +277,7 @@ class ExtensionTreeModelBuilder:
                          svnurl = url,
                          flags = flags, quiet = True)
         if not ret:
-            return
+            raise GException(_("Unable to load extensions."))
         
         currentNode = None
         for line in ret.splitlines():
@@ -311,8 +315,7 @@ class ExtensionTreeModelBuilder:
                 currentNode.data = {'command': module,
                                     'keywords': '',
                                     'description': ''}        
-
-
+        
 class UninstallExtensionWindow(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
                  title = _("Uninstall GRASS Addons extensions"), **kwargs):
