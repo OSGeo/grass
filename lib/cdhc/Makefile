@@ -1,13 +1,13 @@
 MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 MOD_OBJS := $(filter-out test.o port_test.o,$(AUTO_OBJS))
 
 LIB = CDHC
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 default: lib
 	@echo "==============TEST============="
