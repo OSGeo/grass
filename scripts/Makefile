@@ -68,9 +68,9 @@ SUBDIRS = \
 	v.pack \
 	v.unpack \
 	v.what.vect \
-	wxpyimgview
+	wxpyimgview \
 
-#        v.krige \
+	v.krige \
 
 #	r.mapcalculator \
 #	r3.mapcalculator \

@@ -124,18 +124,26 @@ except ImportError:
 
 # globals
 
-Command = None
-InputData = None
-Variogram = None
-VariogramFunction = None
-robjects = None
-rinterface = None
+#~ Command = None
+#~ InputData = None
+#~ Variogram = None
+#~ VariogramFunction = None
+#~ robjects = None
+#~ rinterface = None
 
 #classes in alphabetical order. methods in logical order :)
 
 # <2.5 class definition, without () - please test 
 class Controller:
     """ Executes analysis. For the moment, only with gstat functions."""
+    # moved here the global variables
+    def __init__(self):
+        #~ self.Command = None
+        self.InputData = None
+        self.Variogram = None
+        #~ VariogramFunction = None
+        #~ robjects = None
+        #~ rinterface = None
     
     def ImportMap(self, map, column):
         """ Imports GRASS map as SpatialPointsDataFrame and adds x/y columns to attribute table.
@@ -252,20 +260,20 @@ class Controller:
                          "exponentially with resolution." % grass.region()['cells']))
         logger.message(_("Importing data..."))
 
-        if globals()["InputData"] is None:
-            globals()["InputData"] = self.ImportMap(input, column)
+        if self.InputData is None:
+            self.InputData = self.ImportMap(input, column)
         # and from here over, InputData refers to the global variable
         #print(robjects.r.slot(InputData, 'data').names)
         logger.message(_("Data successfully imported."))
         
-        GridPredicted = self.CreateGrid(InputData)
+        GridPredicted = self.CreateGrid(self.InputData)
         
         logger.message(_("Fitting variogram..."))
         isblock = block is not ''
-        Formula = self.ComposeFormula(column, isblock, InputData)
-        if globals()["Variogram"] is None:
-            globals()["Variogram"] = self.FitVariogram(Formula,
-                                          InputData,
+        Formula = self.ComposeFormula(column, isblock, self.InputData)
+        if self.Variogram is None:
+            self.Variogram = self.FitVariogram(Formula,
+                                          self.InputData,
                                           model = model,
                                           sill = sill,
                                           nugget = nugget,
@@ -273,8 +281,8 @@ class Controller:
         logger.message(_("Variogram fitting complete."))
         
         logger.message(_("Kriging..."))
-        KrigingResult = self.DoKriging(Formula, InputData,
-                 GridPredicted, Variogram['variogrammodel'], block) # using global ones
+        KrigingResult = self.DoKriging(Formula, self.InputData,
+                 GridPredicted, self.Variogram['variogrammodel'], block) # using global ones
         logger.message(_("Kriging complete."))
         
         self.ExportMap(map = KrigingResult,
@@ -282,14 +290,14 @@ class Controller:
                        name = output,
                        overwrite = overwrite,
                        command = command,
-                       variograms = Variogram)
+                       variograms = self.Variogram)
         if output_var is not '':
             self.ExportMap(map = KrigingResult,
                            column='var1.var',
                            name = output_var,
                            overwrite = overwrite,
                            command = command,
-                           variograms = Variogram)
+                           variograms = self.Variogram)
         
 def main(argv = None):
     """ Main. Calls either GUI or CLI, depending on arguments provided. """
