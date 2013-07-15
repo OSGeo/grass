@@ -1031,7 +1031,7 @@ class SbProgress(SbItem):
         Calls wx.Yield which allows
         to update gui for displaying progress.
         """
-        self.SafeSetValue(self, value)
+        self.SafeSetValue(value)
         wx.Yield()
 
     def SafeSetValue(self, value):
