@@ -47,10 +47,11 @@ from gui_core.widgets import GNotebook
 
 import wx
 #import wx.lib.plot as plot # for plotting the variogram.
+import rpy2.robjects as robjects
+import rpy2.rinterface as rinterface
 
 # global variables
 maxint = 1e6 # instead of sys.maxint, not working with SpinCtrl on 64bit [reported by Bob Moskovitz]
-
 
 #@TODO move away functions not regarding the GUI
 
@@ -192,17 +193,7 @@ class KrigingPanel(wx.Panel):
         event.Skip()
 
     def OnHelpButton(self, event):
-        # file = os.path.join(os.getenv("GISBASE"), "docs", "html", "v.krige.html")
-        # file = os.path.join(os.path.curdir, "description.html")
-        # @TODO fix HelpWindow
-        # helpFrame = help.HelpWindow(parent=self, id=wx.ID_ANY,
-        #                            title=_("GRASS - Help page for v.krige"),
-        #                            size=(640, 480),
-        #                            file=file)
-        # helpFrame.Show(True)
-
         grass.run_command('g.manual', entry = 'v.krige')
-        
         event.Skip()
 
     def OnInputMapChanged(self, event):
@@ -467,9 +458,8 @@ class RBookgstatPanel(RBookPanel):
             self.controller.InputData = self.controller.ImportMap(map = map,
                                                           column = column)
         # fit the variogram or pick it up
-        Formula = self.controller.ComposeFormula(column = column,
-                                            isblock = self.KrigingRadioBox.GetStringSelection() == "Block kriging",
-                                            inputdata = self.controller.InputData)
+        #~ Formula = self.controller.ComposeFormula(column = column,
+                                            #~ isblock = self.KrigingRadioBox.GetStringSelection() == "Block kriging")
         if hasattr(self, 'VariogramCheckBox') and self.VariogramCheckBox.IsChecked():
             self.model = ''
             for each in ("Sill","Nugget","Range"):
@@ -482,21 +472,28 @@ class RBookgstatPanel(RBookPanel):
             for each in ("Sill","Nugget","Range"):
                 if getattr(self, each+'ChextBox').IsChecked(): #@FIXME will be removed when chextboxes will be frozen
                     setattr(self, each.lower(), getattr(self, each+"Ctrl").GetValue())
-            
-        self.controller.Variogram = self.controller.FitVariogram(Formula,
+                    
+        isblock = self.KrigingRadioBox.GetStringSelection() == "Block kriging"
+        if isblock is not '':
+            self.predictor = 'x+y'
+        else:
+            self.predictor = '1'
+        print(type(str(column)))
+        self.controller.Variogram = self.controller.FitVariogram(robjects.Formula(str(column) + "~" + self.predictor),
                                                          self.controller.InputData,
                                                          model = self.model,
                                                          sill = self.sill,
                                                          nugget = self.nugget,
                                                          range = self.range)
-        
+
         # use R plot function, in a separate window.
         thread.start_new_thread(self.plot, ())
         
     def plot(self):
         #robjects.r.X11()
         #robjects.r.png("variogram.png")
-        textplot = robjects.r.plot(Variogram['datavariogram'], Variogram['variogrammodel'])
+        textplot = robjects.r.plot(self.controller.Variogram['datavariogram'], 
+                                   self.controller.Variogram['variogrammodel'])
         print textplot
         self.refresh()
         #robjects.r['dev.off']()

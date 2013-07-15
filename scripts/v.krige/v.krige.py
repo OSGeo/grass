@@ -191,13 +191,13 @@ class Controller:
                                                         proj4string =  robjects.r.CRS(robjects.r.proj4string(inputdata)))
         return GridPredicted
     
-    def ComposeFormula(self, column, isblock, inputdata):
+    def ComposeFormula(self, column, isblock):
         if isblock is True:
             predictor = 'x+y'
         else:
             predictor = '1'
+        print column + "~" + predictor
         Formula = robjects.Formula(column + "~" + predictor)
-        #print Formula
         return Formula
     
     def FitVariogram(self, formula, inputdata, sill, nugget, range, model = ''):
@@ -269,10 +269,13 @@ class Controller:
         GridPredicted = self.CreateGrid(self.InputData)
         
         logger.message(_("Fitting variogram..."))
-        isblock = block is not ''
-        Formula = self.ComposeFormula(column, isblock, self.InputData)
+
+        if block is not '':
+            self.predictor = 'x+y'
+        else:
+            self.predictor = '1'
         if self.Variogram is None:
-            self.Variogram = self.FitVariogram(Formula,
+            self.Variogram = self.FitVariogram(robjects.Formula(column + "~" + self.predictor),
                                           self.InputData,
                                           model = model,
                                           sill = sill,
