@@ -139,7 +139,7 @@ def _setupToolboxes():
         return None
 
     if _createPath(path):
-           return path
+        return path
     return None
 
 
@@ -168,30 +168,55 @@ def toolboxes2menudata(userDefined=True):
 
     @return ElementTree instance
     """
-    wxguiItems = etree.parse(wxguiItemsFile)
-    moduleItems = etree.parse(moduleItemsFile)
-
     if userDefined and userMainMenuFile:
         mainMenu = etree.parse(userMainMenuFile)
     else:
         mainMenu = etree.parse(mainMenuFile)
-    root = mainMenu.getroot()
-    
-    userHasToolboxes = False
+
+    toolboxes = etree.parse(toolboxesFile)
+
     if userDefined and userToolboxesFile:
-        userToolboxes = etree.parse(userToolboxesFile)        
-        # in case user has empty toolboxes file (to avoid genereation)
-        if userToolboxes.findall('.//toolbox'):
-            _expandUserToolboxesItem(root, userToolboxes)
-            _expandToolboxes(root, userToolboxes)
-            userHasToolboxes = True
+        userToolboxes = etree.parse(userToolboxesFile)
+    else:
+        userToolboxes = None
+
+    wxguiItems = etree.parse(wxguiItemsFile)
+    moduleItems = etree.parse(moduleItemsFile)
+
+    return toolboxes2menudataInternal(mainMenu=mainMenu,
+                                      toolboxes=toolboxes,
+                                      userToolboxes=userToolboxes,
+                                      wxguiItems=wxguiItems,
+                                      moduleItems=moduleItems)
+
+
+def toolboxes2menudataInternal(mainMenu, toolboxes, userToolboxes,
+                               wxguiItems, moduleItems):
+    """!Creates XML file with data for menu.
+
+    Parses toolboxes files from distribution and from users,
+    puts them together, adds metadata to modules and convert
+    tree to previous format used for loading menu.
+
+    @param userDefined use toolboxes defined by user or not (during compilation)
+
+    @return ElementTree instance
+    """
+    root = mainMenu.getroot()
+
+    userHasToolboxes = False
+
+    # in case user has empty toolboxes file (to avoid genereation)
+    if userToolboxes and userToolboxes.findall('.//toolbox'):
+        _expandUserToolboxesItem(root, userToolboxes)
+        _expandToolboxes(root, userToolboxes)
+        userHasToolboxes = True
 
     if not userHasToolboxes:
         _removeUserToolboxesItem(root)
 
     _expandAddonsItem(root)
-    
-    toolboxes = etree.parse(toolboxesFile)
+
     _expandToolboxes(root, toolboxes)
 
     _expandItems(root, moduleItems, 'module-item')
@@ -232,7 +257,7 @@ def _expandToolboxes(node, toolboxes):
 
     @param node tree node where to look for subtoolboxes to be expanded
     @param toolboxes tree of toolboxes to be used for expansion
-    
+
     >>> menu = etree.fromstring('''
     ... <toolbox name="Raster">
     ...   <label>&amp;Raster</label>
@@ -351,7 +376,7 @@ def _removeUserToolboxesItem(root):
 
 def _expandAddonsItem(node):
     """!Expands tag addons (in main_menu.xml) with currently installed addons.append
-    
+
     Note: there is no mechanism yet to tell the gui to rebuild the menudata.xml
     file when new addons are added/removed.
     """
@@ -488,7 +513,7 @@ def _addHandlers(node):
 
 def _convertTag(node, old, new):
     """!Converts tag name.
-    
+
     >>> tree = etree.fromstring('<toolboxes><toolbox><items><module-item/></items></toolbox></toolboxes>')
     >>> _convertTag(tree, 'toolbox', 'menu')
     >>> _convertTag(tree, 'module-item', 'menuitem')
@@ -577,7 +602,7 @@ def do_doctest_gettext_workaround():
     __builtin__._ = new_translator
 
 
-def test():
+def doc_test():
     """Tests the module using doctest
 
     @return a number of failed tests
@@ -587,6 +612,56 @@ def test():
     do_doctest_gettext_workaround()
 
     return doctest.testmod().failed
+
+
+def module_test():
+    """Tests the module using test files included in the current directory and
+    in files from distribution.
+    """
+    toolboxesFile = os.path.join(ETCWXDIR, 'xml', 'toolboxes.xml')
+    userToolboxesFile = 'test.toolboxes_user_toolboxes.xml'
+    menuFile = 'test.toolboxes_menu.xml'
+    wxguiItemsFile = os.path.join(ETCWXDIR, 'xml', 'wxgui_items.xml')
+    moduleItemsFile = os.path.join(ETCWXDIR, 'xml', 'module_items.xml')
+
+    toolboxes = etree.parse(toolboxesFile)
+    userToolboxes = etree.parse(userToolboxesFile)
+    menu = etree.parse(menuFile)
+
+    wxguiItems = etree.parse(wxguiItemsFile)
+    moduleItems = etree.parse(moduleItemsFile)
+
+    tree = toolboxes2menudataInternal(mainMenu=menu,
+                                      toolboxes=toolboxes,
+                                      userToolboxes=userToolboxes,
+                                      wxguiItems=wxguiItems,
+                                      moduleItems=moduleItems)
+    root = tree.getroot()
+    tested = _getXMLString(root)
+    # useful to generate the correct file (uncomment)
+    #sys.stdout.write(_getXMLString(root))
+    #return 0
+
+    menudataFile = 'test.toolboxes_menudata.xml'
+    with open(menudataFile) as correctMenudata:
+        correct = str(correctMenudata.read())
+
+    import difflib
+    differ = difflib.Differ()
+    result = list(differ.compare(correct.splitlines(True),
+                                 tested.splitlines(True)))
+
+    someDiff = False
+    for line in result:
+        if line.startswith('+') or line.startswith('-'):
+            sys.stdout.write(line)
+            someDiff = True
+    if someDiff:
+        print "difference"
+    else:
+        print "OK"
+
+    return 0
 
 
 def main():
@@ -604,5 +679,7 @@ def main():
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == 'doctest':
-            sys.exit(test())
+            sys.exit(doc_test())
+        elif sys.argv[1] == 'test':
+            sys.exit(module_test())
     sys.exit(main())

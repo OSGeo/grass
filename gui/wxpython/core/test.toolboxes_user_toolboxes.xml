@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolboxes>
+  <toolbox name="TestingToolboxA">
+    <label>&amp;Testing toolbox A</label>
+    <items>
+      <module-item name="g.region">
+        <label>Set region</label>
+      </module-item>
+      <separator/>
+      <module-item name="m.unknown">
+        <label>Testing unknown module</label>
+      </module-item>
+      <subtoolbox name="QueryRasterMap"/>
+    </items>
+  </toolbox>
+  <toolbox name="TestingToolboxB">
+    <label>&amp;Testing toolbox B</label>
+    <items>
+      <module-item name="g.region">
+        <label>Set region</label>
+      </module-item>
+    </items>
+  </toolbox>
+</toolboxes>
+
