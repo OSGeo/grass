@@ -782,6 +782,7 @@ class SearchModuleWidget(wx.Panel):
         self._model = model
         self._results = [] # list of found nodes
         self._resultIndex = -1
+        self._searchKeys = ['description', 'keywords', 'command']
         
         self.moduleSelected = Signal('SearchModuleWidget.moduleSelected')
         self.showSearchResult = Signal('SearchModuleWidget.showSearchResult')
@@ -789,28 +790,18 @@ class SearchModuleWidget(wx.Panel):
 
         wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY, **kwargs)
 
-        self._searchDict = { _('description') : 'description',
-                             _('command') : 'command',
-                             _('keywords') : 'keywords' }
-
-
-        self._box = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                label = " %s " % _("Find module - (press Enter for next match)"))
-
-        self._searchBy = wx.Choice(parent = self, id = wx.ID_ANY)
-        items = [_('description'), _('keywords'), _('command')]
-        datas = ['description', 'keywords', 'command']
-        for item, data in zip(items, datas):
-            self._searchBy.Append(item = item, clientData = data)
-        self._searchBy.SetSelection(0)
-        self._searchBy.Bind(wx.EVT_CHOICE, self.OnSearchModule)
+#        self._box = wx.StaticBox(parent = self, id = wx.ID_ANY,
+#                                label = " %s " % _("Find module - (press Enter for next match)"))
 
         if sys.platform == 'win32':
-            ctrl = wx.TextCtrl
+            self._search = wx.TextCtrl(parent = self, id = wx.ID_ANY,
+                                       size = (-1, 25), style = wx.TE_PROCESS_ENTER)
         else:
-            ctrl = wx.SearchCtrl
-        self._search = ctrl(parent = self, id = wx.ID_ANY,
-                            size = (-1, 25), style = wx.TE_PROCESS_ENTER)
+            self._search = wx.SearchCtrl(parent = self, id = wx.ID_ANY,
+                                         size = (-1, 25), style = wx.TE_PROCESS_ENTER)
+            self._search.SetDescriptiveText(_('Fulltext search'))
+            self._search.SetToolTipString(_("Type to search in all modules. Press Enter for next match."))
+
         self._search.Bind(wx.EVT_TEXT, self.OnSearchModule)
         self._search.Bind(wx.EVT_KEY_UP,  self.OnKeyUp)
 
@@ -820,33 +811,31 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showChoice:
             self._searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
-            self._searchChoice.SetItems(self._searchModule(key='command', value=''))
+            self._searchChoice.SetItems(self._searchModule(keys=['command'], value=''))
             self._searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
 
         self._layout()
 
     def _layout(self):
         """!Do layout"""
-        sizer = wx.StaticBoxSizer(self._box, wx.HORIZONTAL)
-        gridSizer = wx.GridBagSizer(hgap = 3, vgap = 3)
-        
-        gridSizer.Add(item = self._searchBy,
-                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
-        gridSizer.Add(item = self._search,
-                      flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (0, 1))
-        row = 1
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        boxSizer = wx.BoxSizer(wx.VERTICAL)
+
+        boxSizer.Add(item=self._search,
+                     flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.BOTTOM,
+                     border=5)
         if self._showChoice:
-            gridSizer.Add(item = self._searchChoice,
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
-            row += 1
+            hSizer = wx.BoxSizer(wx.HORIZONTAL)
+            hSizer.Add(item=self._searchChoice,
+                       flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.BOTTOM,
+                       border=5)
+            hSizer.AddStretchSpacer()
+            boxSizer.Add(item=hSizer, flag=wx.EXPAND)
         if self._showTip:
-            gridSizer.Add(item = self._searchTip,
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos = (row, 0), span = (1, 2))
-            row += 1
+            boxSizer.Add(item=self._searchTip,
+                          flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
-        gridSizer.AddGrowableCol(1)
-
-        sizer.Add(item = gridSizer, proportion = 1)
+        sizer.Add(item = boxSizer, proportion = 1)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -861,19 +850,13 @@ class SearchModuleWidget(wx.Panel):
                 self.showSearchResult.emit(result=self._results[self._resultIndex])
         event.Skip()
 
-    def GetSelection(self):
-        """!Get selected element"""
-        selection = self._searchBy.GetStringSelection()
-
-        return self._searchDict[selection]
-
-    def SetSelection(self, i):
-        """!Set selection element"""
-        self._searchBy.SetSelection(i)
-
     def OnSearchModule(self, event):
         """!Search module by keywords or description"""
-        commands = self._searchModule(key=self.GetSelection(), value=self._search.GetValue())
+        value = self._search.GetValue()
+        if len(value) <= 2:
+            self.showNotification.emit(message=_("Searching, please type more characters."))
+            return
+        commands = self._searchModule(keys=self._searchKeys, value=value)
         if self._showChoice:
             self._searchChoice.SetItems(commands)
             if commands:
@@ -887,8 +870,13 @@ class SearchModuleWidget(wx.Panel):
 
         event.Skip()
 
-    def _searchModule(self, key, value):
-        nodes = self._model.SearchNodes(key=key, value=value)
+    def _searchModule(self, keys, value):
+        nodes = set()
+        for key in keys:
+            nodes.update(self._model.SearchNodes(key=key, value=value))
+
+        nodes = list(nodes)
+        nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
         self._results = nodes
         self._resultIndex = -1
         return [node.data['command'] for node in nodes if node.data['command']]
@@ -906,7 +894,6 @@ class SearchModuleWidget(wx.Panel):
 
     def Reset(self):
         """!Reset widget"""
-        self._searchBy.SetSelection(0)
         self._search.SetValue('')
         if self._showTip:
             self._searchTip.SetLabel('')
