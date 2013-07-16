@@ -129,9 +129,10 @@ class SearchModuleWindow(wx.Panel):
         
         # tree
         self._tree = CTreeView(model=model, parent=self)
+        self._tree.SetToolTipString(_("Double-click or Ctrl-Enter to run selected module"))
 
-        self._dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                     label = " %s " % _("Menu tree (double-click or Ctrl-Enter to run command)"))
+#        self._dataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+#                                     label = " %s " % _("Module tree"))
 
         # search widget
         self._search = SearchModuleWidget(parent=self,
@@ -142,7 +143,7 @@ class SearchModuleWindow(wx.Panel):
         
         # buttons
         self._btnRun = wx.Button(self, id=wx.ID_OK, label=_("&Run"))
-        self._btnRun.SetToolTipString(_("Run selected command from the menu tree"))
+        self._btnRun.SetToolTipString(_("Run selected module from the tree"))
         
         # bindings
         self._btnRun.Bind(wx.EVT_BUTTON, lambda evt: self.Run())
@@ -160,7 +161,7 @@ class SearchModuleWindow(wx.Panel):
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         # body
-        dataSizer = wx.StaticBoxSizer(self._dataBox, wx.HORIZONTAL)
+        dataSizer = wx.BoxSizer(wx.HORIZONTAL)
         dataSizer.Add(item = self._tree, proportion =1,
                       flag = wx.EXPAND)
         

@@ -319,7 +319,7 @@ class GMFrame(wx.Frame):
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'search'):
             self.search = SearchModuleWindow(parent = self, model=self._menuTreeBuilder.GetModel())
             self.search.showNotification.connect(lambda message: self.SetStatusText(message))
-            self.notebook.AddPage(page = self.search, text = _("Search module"), name = 'search')
+            self.notebook.AddPage(page = self.search, text = _("Search modules"), name = 'search')
         else:
             self.search = None
         

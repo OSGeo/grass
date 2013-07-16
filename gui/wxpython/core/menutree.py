@@ -100,10 +100,10 @@ class MenuTreeModelBuilder:
                 desc = _(desc.text)
             else:
                 desc = ""
-            if keywords != None:
-                keywords = keywords.text
-            else:
+            if keywords is None or keywords.text is None:
                 keywords = ""
+            else:            
+                keywords = keywords.text
             if shortcut != None:
                 shortcut = shortcut.text
             else:
