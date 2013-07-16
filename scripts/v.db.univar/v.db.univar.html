@@ -1,15 +1,14 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.db.univar</em> calculates basic univariate statistics for numeric
-attributes in a data table. It will calculate minimum, maximum, range, mean,
-standard deviation, variance, coefficient of variation, quartiles, median, and
-90th percentile.
+attributes in a vector attribute table. It will calculate minimum, 
+maximum, range, mean, standard deviation, variance, coefficient of 
+variation, quartiles, median, and 90th percentile.
 It uses <em>db.select</em> to create list values for statistical calculations.
 
 <em>NOTES</em>
 
-If the database and driver are not specified, the default values set in
-<em>db.connect</em> will be used.
+A database connection must be defined for the selected vector layer.
 
 <h2>EXAMPLE</h2>
 
@@ -28,8 +27,9 @@ v.db.univar samples colum=heights
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="db.univar.html">db.univar</a>,
 <a href="r.univar.html">r.univar</a>,
-<a href="v.univar.html">v.univar,</a>,
+<a href="v.univar.html">v.univar</a>,
 <a href="db.select.html">db.select</a>,
 <a href="d.vect.thematic.html">d.vect.thematic</a>
 </em>
