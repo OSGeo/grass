@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.db.univar</em> calculates basic univariate statistics for numeric
+<em>db.univar</em> calculates basic univariate statistics for numeric
 attributes in a data table. It will calculate minimum, maximum, range, mean,
 standard deviation, variance, coefficient of variation, quartiles, median, and
 90th percentile.
@@ -22,14 +22,15 @@ v.db.addtable samples column="heights double precision"
 v.what.rast samples raster=elevation colum=heights
 v.db.select samples
 
-v.db.univar samples colum=heights
+db.univar samples colum=heights
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.db.univar.html">v.db.univar</a>,
 <a href="r.univar.html">r.univar</a>,
-<a href="v.univar.html">v.univar,</a>,
+<a href="v.univar.html">v.univar</a>,
 <a href="db.select.html">db.select</a>,
 <a href="d.vect.thematic.html">d.vect.thematic</a>
 </em>
