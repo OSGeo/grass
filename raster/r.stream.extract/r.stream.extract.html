@@ -1,0 +1,240 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.stream.extract</em> extracts streams in both raster and vector
+format from a required input <em>elevation</em> map and optional input
+<em>accumulation</em> map.
+
+<h2>OPTIONS</h2>
+
+<dl>
+<dt><em>elevation</em> 
+<dd>Input map, required: Elevation on which the entire analysis is based.
+NULL (nodata) cells are ignored, zero and negative values are valid
+elevation data. Gaps in the elevation map that are located within the
+area of interest must be filled beforehand, e.g. with
+<em>r.fillnulls</em>, to avoid distortions.
+<p>
+<dt><em>accumulation</em>
+<dd>Input map, optional: Accumulation values of the provided
+<em>accumulation</em> map are used and not calculated from the input
+<em>elevation</em> map. If <em>accumulation</em> is given,
+<em>elevation</em> must be exactly the same map used to calculate
+<em>accumulation</em>. If <em>accumulation</em> was calculated with
+<a href="r.terraflow.html">r.terraflow</a>, the filled elevation output
+of r.terraflow must be used. Further on, the current region should be 
+aligned to the <em>accumulation map</em>. Flow direction is
+first calculated from <em>elevation</em> and then adjusted to
+<em>accumulation</em>. It is not necessary to provide <em>accumulation</em>
+as the number of cells, it can also be the optionally adjusted or
+weighed total contributing area in square meters or any other unit. 
+When an original flow accumulation map is adjusted or weighed, the 
+adjustment or weighing should not convert valid accumulation values to 
+NULL (nodata) values.
+<p>
+<dt><em>depression</em> 
+<dd>Input map, optional: All non-NULL and non-zero cells will be regarded
+as real depressions. Streams will not be routed out of depressions. If an
+area is marked as depression but the elevation model has no depression
+at this location, streams will not stop there. If a flow accumulation map
+and a map with real depressions are provided, the flow accumulation map
+must match the depression map such that flow is not distributed out of 
+the indicated depressions. It is recommended to use internally computed
+flow accumulation if a depression map is provided.
+<p>
+<dt><em>threshold</em>
+<dd>Required: <em>threshold</em> for stream initiation by overland flow:
+the minumum (optionally modifed) flow accumulation value that will initiate
+a new stream. If Montgomery's method for channel initiation is used, the
+cell value of the accumulation input map is multiplied by
+(tan(local slope))<sup>mexp</sup> and then compared to <em>threshold</em>.
+<p>
+<dt><em>d8cut</em>
+<dd>Minimum amount of overland flow (accumulation) when SFD (D8) will be
+used instead of MFD (FD8) to calculate flow accumulation. Only applies
+if no accumulation map is provided. Setting to 0 disables MFD completely.
+<p>
+<dt><em>mexp</em>
+<dd>Use the method of Montgomery and Foufoula-Georgiou (1993) to
+initiate a stream with exponent <em>mexp</em>. The cell value of the
+accumulation input map is multiplied by (tan(local slope))<sup>mexp</sup>
+and then compared to <em>threshold</em>. If threshold is reached or
+exceeded, a new stream is initiated. The default value 0 disables
+Montgomery. Montgomery and Foufoula-Georgiou (1993) generally recommend
+to use 2.0 as exponent. <em>mexp</em> values closer to 0 will produce
+streams more similar to streams extracted with Montgomery disabled.
+Larger <em>mexp</em> values decrease the number of streams in flat areas
+and increase the number of streams in steep areas. If <em>weight</em> is
+given, the weight is applied first.
+<p>
+<dt><em>stream_length</em>
+<dd>Minimum stream length in number of cells for first-order (head/spring)
+stream segments. All first-order stream segments shorter than
+<em>stream_length</em> will be deleted.
+
+<p>
+<dt><em>stream_rast</em>
+<dd>Output raster map with extracted streams. Cell values encode a 
+unique ID for each stream segment.
+<p>
+<dt><em>stream_vect</em>
+<dd>Output vector map with extracted stream segments and points. Points
+are written at the start location of each stream segment and at the
+outlet of a stream network. In layer 1, categories are unique IDs,
+identical to the cell value of the raster output. The attribute table
+for layer 1 holds information about the type of stream segment: start
+segment, or intermediate segment with tributaries. Columns are cat int,
+stream_type varchar(), type_code int. The encoding for type_code is 0 =
+start, 1 = intermediate. In layer 2, categories are identical to
+type_code in layer 1 with additional category 2 = outlet for outlet
+points. Points with category 1 = intermediate in layer 2 are at the
+location of confluences.
+<p>
+<dt><em>direction</em>
+<dd>Output raster map with flow direction for all non-NULL cells in
+input elevation. Flow direction is of D8 type with a range of 1 to 8.
+Multiplying values with 45 gives degrees CCW from East. Flow direction
+was adjusted during thinning, taking shortcuts and skipping cells that
+were eliminated by the thinning procedure.
+</dl>
+
+<h2>NOTES</h2>
+
+<h4>Stream extraction</h4>
+If no accumulation input map is provided, flow accumulation is
+determined with a hydrological anaylsis similar to
+<a href="r.watershed.html">r.watershed</a>. The algorithm is
+MFD (FD8) after Holmgren 1994, as for
+<a href="r.watershed.html">r.watershed</a>. The <em>threshold</em>
+option determines the number of streams and detail of stream networks.
+Whenever flow accumulation reaches <em>threshold</em>, a new stream is
+started and traced downstream to its outlet point. As for
+<a href="r.watershed.html">r.watershed</a>, flow accumulation is
+calculated as the number of cells draining through a cell.
+
+<h4>Weighed flow accumulation</h4>
+Flow accumulation can be calculated first, e.g. with
+<a href="r.watershed.html">r.watershed</a>, and then modified before
+using it as input for <em>r.stream.extract</em>. In its general form, a
+weighed accumulation map is generated by first creating a weighing map
+and then multiplying the accumulation map with the weighing map using
+<a href="r.mapcalc.html">r.mapcalc</a>. It is highly recommended to
+evaluate the weighed flow accumulation map first, before using it as
+input for <em>r.stream.extract</em>.
+<p>
+This allows e.g. to decrease the number of streams in dry areas and
+increase the number of streams in wet areas by setting <em>weight</em>
+to smaller than 1 in dry areas and larger than 1 in wet areas.
+<p>
+Another possibility is to restrict channel initiation to valleys
+determined from terrain morphology. Valleys can be determined with
+<a href="r.param.scale.html">r.param.scale</a> param=crosc
+(cross-sectional or tangential curvature). Curvature values &lt; 0
+indicate concave features, i.e. valleys. The size of the processing
+window determines whether narrow or broad valleys will be identified
+(See example below).
+
+<h4>Defining a region of interest</h4>
+The stream extraction procedure can be restricted to a certain region of 
+interest, e.g. a subbasin, by setting the computational region with 
+<em>g.region</em> and/or creating a MASK. Such region of interest should 
+be a complete catchment area, complete in the sense that the complete 
+area upstream of an outlet point is included and buffered with at least 
+one cell.
+
+<h4>Stream output</h4>
+The <em>stream_rast</em> output raster and vector contains stream
+segments with unique IDs. Note that these IDs are different from the IDs
+assigned by <a href="r.watershed.html">r.watershed</a>. The vector
+output also contains points at the location of the start of a stream
+segment, at confluences and at stream network outlet locations.
+<p>
+
+<h2>EXAMPLE</h2>
+This example is based on the elevation map <em>elev_ned_30m</em> in the
+North Carolina sample dataset and uses valleys determined with
+<a href="r.param.scale.html">r.param.scale</a> to weigh an accumulation
+map produced with <a href="r.watershed.html">r.watershed</a>.
+
+<pre>
+# set region
+g.region -p rast=elev_ned_30m@PERMANENT
+
+# calculate flow accumulation
+r.watershed ele=elev_ned_30m@PERMANENT acc=elevation.10m.acc
+
+# curvature to get narrow valleys
+r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_5 size=5 param=crosc
+
+# curvature to get a bit broader valleys
+r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_7 size=7 param=crosc
+
+# curvature to get broad valleys
+r.param.scale input=elev_ned_30m@PERMANENT output=tangential_curv_11 size=11 param=crosc
+
+# create weight map
+r.mapcalc "weight = if(tangential_curv_5 < 0, -100 * tangential_curv_5, \
+                    if(tangential_curv_7 < 0, -100 * tangential_curv_7, \
+		    if(tangential_curv_11 < 0, -100 * tangential_curv_11, 0.000001)))"
+
+# weigh accumulation map
+r.mapcalc "elev_ned_30m.acc.weighed = elev_ned_30m.acc * weight"
+
+# copy color table from original accumulation map
+r.colors map=elev_ned_30m.acc.weighed raster=elev_ned_30m.acc
+</pre>
+
+Display both the original and the weighed accumulation map.
+<br>
+Compare them and proceed if the weighed accumulation map makes sense.
+
+<pre>
+# extract streams
+r.stream.extract elevation=elev_ned_30m@PERMANENT \
+                 accumulation=elev_ned_30m.acc.weighed \
+		 threshold=1000 \
+		 stream_rast=elev_ned_30m.streams
+
+# extract streams using the original accumulation map
+r.stream.extract elevation=elev_ned_30m@PERMANENT \
+                 accumulation=elev_ned_30m.acc \
+		 threshold=1000 \
+		 stream_rast=elev_ned_30m.streams.noweight
+</pre>
+
+Now display both stream maps and decide which one is more realistic.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.watershed.html">r.watershed</a>,
+<a href="r.terraflow.html">r.terraflow</a>,
+<a href="r.param.scale.html">r.param.scale</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.thin.html">r.thin</a>,
+<a href="r.to.vect.html">r.to.vect</a>
+</em>
+
+<h2>REFERENCES</h2>
+Ehlschlaeger, C. (1989). <i>Using the A<sup>T</sup> Search Algorithm
+to Develop Hydrologic Models from Digital Elevation Data</i>,
+<b>Proceedings of International Geographic Information Systems (IGIS)
+Symposium '89</b>, pp 275-281 (Baltimore, MD, 18-19 March 1989).<br>
+URL: <a href="http://faculty.wiu.edu/CR-Ehlschlaeger2/older/IGIS/paper.html">
+http://faculty.wiu.edu/CR-Ehlschlaeger2/older/IGIS/paper.html</a>
+
+<p>
+Holmgren, P. (1994). <i>Multiple flow direction algorithms for runoff 
+modelling in grid based elevation models: An empirical evaluation.</i>
+<b>Hydrological Processes</b> Vol 8(4), pp 327-334.<br>
+DOI: <a href="http://dx.doi.org/10.1002/hyp.3360080405">10.1002/hyp.3360080405</a>
+
+<p>
+Montgomery, D.R., Foufoula-Georgiou, E. (1993). <i>Channel network source
+representation using digital elevation models.</i>
+<b>Water Resources Research</b> Vol 29(12), pp 3925-3934. 
+
+<h2>AUTHOR</h2>
+Markus Metz
+
+<p>
+<i>Last changed: $Date$</i>
