@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--This is an auto-generated file-->
+<menudata>
+  <menubar>
+    <menu>
+      <label>Region</label>
+      <items>
+        <menuitem>
+          <label>Display region</label>
+          <command>g.region -p</command>
+          <help>Manages the boundary definitions for the geographic region.</help>
+          <keywords>general,settings</keywords>
+          <handler>RunMenuCmd</handler>
+        </menuitem>
+        <menuitem>
+          <label>Set region</label>
+          <command>g.region</command>
+          <help>Manages the boundary definitions for the geographic region.</help>
+          <keywords>general,settings</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Testing toolbox A</label>
+      <items>
+        <menuitem>
+          <label>Set region</label>
+          <command>g.region</command>
+          <help>Manages the boundary definitions for the geographic region.</help>
+          <keywords>general,settings</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+        <separator />
+        <menuitem>
+          <label>Testing unknown module</label>
+          <command>m.unknown</command>
+          <help />
+          <keywords />
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+        <subtoolbox name="QueryRasterMap" />
+      </items>
+    </menu>
+    <menu>
+      <label>Map projections</label>
+      <items>
+        <menuitem>
+          <label>Display map projection</label>
+          <command>g.proj -p</command>
+          <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</help>
+          <keywords>general,projection,create location</keywords>
+          <handler>RunMenuCmd</handler>
+        </menuitem>
+        <menuitem>
+          <label>Manage projections</label>
+          <command>g.proj</command>
+          <help>Prints and manipulates GRASS projection information files (in various co-ordinate system descriptions). Can also be used to create new GRASS locations.</help>
+          <keywords>general,projection,create location</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+        <separator />
+        <menuitem>
+          <label>Convert coordinates</label>
+          <command>m.proj</command>
+          <help />
+          <keywords />
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Testing toolbox B</label>
+      <items>
+        <menuitem>
+          <label>Set region</label>
+          <command>g.region</command>
+          <help>Manages the boundary definitions for the geographic region.</help>
+          <keywords>general,settings</keywords>
+          <handler>OnMenuCmd</handler>
+        </menuitem>
+      </items>
+    </menu>
+  </menubar>
+</menudata>
