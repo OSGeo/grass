@@ -1,0 +1,41 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.db.univar</em> calculates basic univariate statistics for numeric
+attributes in a data table. It will calculate minimum, maximum, range, mean,
+standard deviation, variance, coefficient of variation, quartiles, median, and
+90th percentile.
+It uses <em>db.select</em> to create list values for statistical calculations.
+
+<em>NOTES</em>
+
+If the database and driver are not specified, the default values set in
+<em>db.connect</em> will be used.
+
+<h2>EXAMPLE</h2>
+
+In this example, random points are sampled from the elevation map
+(North Carolina sample dataset) and univariate statistics performed:
+<div class="code"><pre>
+g.region rast=elevation -p
+v.random output=samples n=100
+v.db.addtable samples column="heights double precision"
+v.what.rast samples raster=elevation colum=heights
+v.db.select samples
+
+v.db.univar samples colum=heights
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.univar.html">r.univar</a>,
+<a href="v.univar.html">v.univar,</a>,
+<a href="db.select.html">db.select</a>,
+<a href="d.vect.thematic.html">d.vect.thematic</a>
+</em>
+
+<h2>AUTHOR</h2>
+ Michael Barton, Arizona State University
+<p>and authors of <em>r.univar.sh</em>
+
+<p><i>Last changed: $Date$</i>
