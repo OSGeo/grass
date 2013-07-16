@@ -13,6 +13,7 @@ SUBDIRS = \
 	db.in.ogr \
 	db.out.ogr \
 	db.test \
+	db.univar \
 	g.extension \
 	g.extension.rebuild.all \
 	g.manual \
