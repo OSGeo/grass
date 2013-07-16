@@ -284,7 +284,7 @@ class Controller:
         logger.message(_("Variogram fitting complete."))
         
         logger.message(_("Kriging..."))
-        KrigingResult = self.DoKriging(Formula, self.InputData,
+        KrigingResult = self.DoKriging(robjects.Formula(column + "~" + self.predictor), self.InputData,
                  GridPredicted, self.Variogram['variogrammodel'], block) # using global ones
         logger.message(_("Kriging complete."))
         

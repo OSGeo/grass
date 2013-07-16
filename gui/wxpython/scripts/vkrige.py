@@ -175,7 +175,7 @@ class KrigingPanel(wx.Panel):
         
     def CreatePage(self, package, Rinstance, controller):
         """ Creates the three notebook pages, one for each R package """
-        for package in ["gstat"]: 
+        for package in ["gstat"]: #@TODO add here other packages when they will be implemented
             classobj = eval("RBook"+package+"Panel")
             setattr(self, "RBook"+package+"Panel", (classobj(self,
                                                              id = wx.ID_ANY,
@@ -478,7 +478,7 @@ class RBookgstatPanel(RBookPanel):
             self.predictor = 'x+y'
         else:
             self.predictor = '1'
-        print(type(str(column)))
+        
         self.controller.Variogram = self.controller.FitVariogram(robjects.Formula(str(column) + "~" + self.predictor),
                                                          self.controller.InputData,
                                                          model = self.model,
@@ -501,7 +501,7 @@ class RBookgstatPanel(RBookPanel):
     def refresh(self):
         while True:
             rinterface.process_revents()
-            time.sleep(0.1)
+            time.sleep(0.2)
         
 class RBookgeoRPanel(RBookPanel):
     """ Subclass of RBookPanel, with specific geoR options and kriging functions. """
