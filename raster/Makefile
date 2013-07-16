@@ -97,6 +97,7 @@ SUBDIRS = \
 	r.statistics2 \
 	r.statistics3 \
 	r.stats \
+	r.stream.extract \
 	r.sun \
 	r.sunhours \
 	r.sunmask \
