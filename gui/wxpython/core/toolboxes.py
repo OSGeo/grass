@@ -43,6 +43,7 @@ from core.gcmd import GError, RunCommand
 import grass.script.task as gtask
 import grass.script.core as gcore
 from grass.script.core import ScriptError
+from core.debug import Debug
 
 
 # this could be placed to functions
@@ -67,6 +68,89 @@ def toolboxesOutdated():
         gcore.try_remove(path)
 
 
+# TODO: merge the function with getMenuFile
+def getMenudataFile(userRootFile, newFile, fallback):
+    """!Returns path to XML file for building menu.
+
+    Creates toolbox directory where user defined toolboxes should be located.
+    Checks whether it is needed to create new XML file (user changed toolboxes)
+    or the already generated file could be used.
+    If something goes wrong during building or user doesn't modify menu,
+    default file (from distribution) is returned.
+    """
+    Debug.msg(1, "toolboxes.getMenudataFile: {userRootFile}, {newFile}, {fallback}".format(**locals()))
+
+    distributionRootFile = os.path.join(ETCWXDIR, 'xml', userRootFile)
+    userRootFile = os.path.join(GetSettingsPath(), 'toolboxes', userRootFile)
+    if not os.path.exists(userRootFile):
+        userRootFile = None
+
+    ##fallback = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
+    # always create toolboxes directory if does not exist yet
+    tbDir = _setupToolboxes()
+
+    if tbDir:
+        menudataFile = os.path.join(tbDir, newFile)
+        generateNew = False
+        # when any of main_menu.xml or toolboxes.xml are changed,
+        # generate new menudata.xml
+
+        if os.path.exists(menudataFile):
+            # remove menu file when there is no main_menu and toolboxes
+            if not userToolboxesFile and not userRootFile:
+                os.remove(menudataFile)
+                Debug.msg(2, "toolboxes.getMenudataFile: no user defined files, menudata deleted")
+                return fallback
+
+            if bool(userToolboxesFile) != bool(userRootFile):
+                # always generate new because we don't know if there has been any change
+                generateNew = True
+                Debug.msg(2, "toolboxes.getMenudataFile: only one of the user defined files")
+            else:
+                # if newer files -> generate new
+                menudataTime = os.path.getmtime(menudataFile)
+                if userToolboxesFile:
+                    if os.path.getmtime(userToolboxesFile) > menudataTime:
+                        Debug.msg(2, "toolboxes.getMenudataFile: user toolboxes is newer than menudata")
+                        generateNew = True
+                if userRootFile:
+                    if os.path.getmtime(userRootFile) > menudataTime:
+                        Debug.msg(2, "toolboxes.getMenudataFile: user root file is newer than menudata")
+                        generateNew = True
+        elif userToolboxesFile or userRootFile:
+            Debug.msg(2, "toolboxes.getMenudataFile: no menudata")
+            generateNew = True
+        else:
+            Debug.msg(2, "toolboxes.getMenudataFile: no user defined files")
+            return fallback
+
+        if generateNew:
+            try:
+                # The case when user does not have custom root
+                # file but has toolboxes requieres regeneration.
+                # Unfortunately, this is the case can be often: defined
+                # toolboxes but undefined module tree file.
+                Debug.msg(2, "toolboxes.getMenudataFile: creating a tree")
+                tree = createTree(distributionRootFile=distributionRootFile, userRootFile=userRootFile)
+            except ETREE_EXCEPTIONS:
+                GError(_("Unable to parse user toolboxes XML files. "
+                         "Default toolboxes will be loaded."))
+                return fallback
+
+            try:
+                xml = _getXMLString(tree.getroot())
+                fh = open(menudataFile, 'w')
+                fh.write(xml)
+                fh.close()
+                return menudataFile
+            except:
+                return fallback
+        else:
+            return menudataFile
+    else:
+        return fallback
+
+
 def getMenuFile():
     """!Returns path to XML file for building menu.
 
@@ -76,6 +160,7 @@ def getMenuFile():
     If something goes wrong during building or user doesn't modify menu,
     default file (from distribution) is returned.
     """
+    Debug.msg(1, "toolboxes.getMenuFile")
     fallback = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
     # always create toolboxes directory if does not exist yet
     tbDir = _setupToolboxes()
@@ -156,6 +241,39 @@ def _createPath(path):
             return False
     return True
 
+# TODO: merge with toolboxes2menudata
+def createTree(distributionRootFile, userRootFile, userDefined=True):
+    """!Creates XML file with data for menu.
+
+    Parses toolboxes files from distribution and from users,
+    puts them together, adds metadata to modules and convert
+    tree to previous format used for loading menu.
+
+    @param userDefined use toolboxes defined by user or not (during compilation)
+
+    @return ElementTree instance
+    """
+    if userDefined and userRootFile:
+        mainMenu = etree.parse(userRootFile)
+    else:
+        mainMenu = etree.parse(distributionRootFile)
+
+    toolboxes = etree.parse(toolboxesFile)
+
+    if userDefined and userToolboxesFile:
+        userToolboxes = etree.parse(userToolboxesFile)
+    else:
+        userToolboxes = None
+
+    wxguiItems = etree.parse(wxguiItemsFile)
+    moduleItems = etree.parse(moduleItemsFile)
+
+    return toolboxes2menudataInternal(mainMenu=mainMenu,
+                                      toolboxes=toolboxes,
+                                      userToolboxes=userToolboxes,
+                                      wxguiItems=wxguiItems,
+                                      moduleItems=moduleItems)
+
 
 def toolboxes2menudata(userDefined=True):
     """!Creates XML file with data for menu.
@@ -190,6 +308,7 @@ def toolboxes2menudata(userDefined=True):
                                       moduleItems=moduleItems)
 
 
+# TODO: rename
 def toolboxes2menudataInternal(mainMenu, toolboxes, userToolboxes,
                                wxguiItems, moduleItems):
     """!Creates XML file with data for menu.
@@ -215,9 +334,9 @@ def toolboxes2menudataInternal(mainMenu, toolboxes, userToolboxes,
     if not userHasToolboxes:
         _removeUserToolboxesItem(root)
 
-    _expandAddonsItem(root)
-
     _expandToolboxes(root, toolboxes)
+
+    # we do not expand addons here since they need to be expanded in runtime
 
     _expandItems(root, moduleItems, 'module-item')
     _expandItems(root, wxguiItems, 'wxgui-item')
@@ -248,6 +367,17 @@ def _indent(elem, level=0):
     else:
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
+
+
+def expandAddons(tree):
+    """!Expands addons element.
+    """
+    root = tree.getroot()
+    _expandAddonsItem(root)
+    # expanding and converting is done twice, so there is some overhead
+    _expandRuntimeModules(root)
+    _addHandlers(root)
+    _convertTree(root)
 
 
 def _expandToolboxes(node, toolboxes):
@@ -344,7 +474,7 @@ def _expandUserToolboxesItem(node, toolboxes):
     >>> toolboxes = etree.fromstring('<toolboxes><toolbox name="UserToolbox"><items><module-item name="g.region"/></items></toolbox></toolboxes>')
     >>> _expandUserToolboxesItem(tree, toolboxes)
     >>> etree.tostring(tree)
-    '<toolbox><items><toolbox name="GeneratedUserToolboxesList"><label>Toolboxes</label><items><toolbox name="UserToolbox"><items><module-item name="g.region" /></items></toolbox></items></toolbox></items></toolbox>'
+    '<toolbox><items><toolbox name="GeneratedUserToolboxesList"><label>Custom toolboxes</label><items><toolbox name="UserToolbox"><items><module-item name="g.region" /></items></toolbox></items></toolbox></items></toolbox>'
     """
     tboxes = toolboxes.findall('.//toolbox')
 
@@ -354,7 +484,7 @@ def _expandUserToolboxesItem(node, toolboxes):
         el = etree.Element('toolbox', attrib={'name': 'GeneratedUserToolboxesList'})
         items.insert(idx, el)
         label = etree.SubElement(el, tag='label')
-        label.text = _("Toolboxes")
+        label.text = _("Custom toolboxes")
         it = etree.SubElement(el, tag='items')
         for toolbox in tboxes:
             it.append(copy.deepcopy(toolbox))
@@ -374,34 +504,50 @@ def _removeUserToolboxesItem(root):
         items.remove(n)
 
 
+def _getAddons():
+    return sorted(RunCommand('g.extension', quiet=True, read=True,
+                             flags='a').splitlines())
+
+
+def _removeAddonsItem(node, addonsNodes):
+    # TODO: change impl to be similar with the remove toolboxes
+    for n in addonsNodes:
+        items = node.find('./items')
+        if items is not None:
+            items.remove(n)
+        # because of inconsistent menudata file
+        items = node.find('./menubar')
+        if items is not None:
+            items.remove(n)
+
+
 def _expandAddonsItem(node):
-    """!Expands tag addons (in main_menu.xml) with currently installed addons.append
+    """!Expands addons element with currently installed addons.
 
     Note: there is no mechanism yet to tell the gui to rebuild the menudata.xml
     file when new addons are added/removed.
     """
     # no addonsTag -> do nothing
-    addonsTags = node.findall('./items/addons')
+    addonsTags = node.findall('.//addons')
     if not addonsTags:
         return
     # fetch addons
-    addons = sorted(RunCommand('g.extension', quiet=True, read=True,
-                               flags = 'a').splitlines())
+    addons = _getAddons()
 
     # no addons -> remove addons tag
     if not addons:
-        for n in addonsTags:    
-            items = node.find('./items')
-            idx = items.getchildren().index(n)
-            items.remove(n)
+        _removeAddonsItem(node, addonsTags)
         return
 
     # create addons toolbox
     # keywords and desc are handled later automatically
-    for n in addonsTags:    
-        items = node.find('./items')
+    for n in addonsTags:
+        # find parent is not possible with implementation of etree (in 2.7)
+        items = node.find('./menubar')
         idx = items.getchildren().index(n)
-        el = etree.Element('toolbox', attrib={'name': 'AddonsToolboxesList'})
+        # do not set name since it is already in menudata file
+        # attib={'name': 'AddonsList'}
+        el = etree.Element('menu')
         items.insert(idx, el)
         label = etree.SubElement(el, tag='label')
         label.text = _("Addons")
@@ -548,7 +694,9 @@ def _convertTree(root):
     """
     root.attrib = {}
     label = root.find('label')
-    root.remove(label)
+    # must check because of inconsistent XML menudata file
+    if label is not None:
+        root.remove(label)
     _convertTag(root, 'description', 'help')
     _convertTag(root, 'wx-id', 'id')
     _convertTag(root, 'module', 'command')
@@ -558,7 +706,9 @@ def _convertTree(root):
 
     root.tag = 'menudata'
     i1 = root.find('./items')
-    i1.tag = 'menubar'
+    # must check because of inconsistent XML menudata file
+    if i1 is not None:
+        i1.tag = 'menubar'
     _convertTagAndRemoveAttrib(root, 'toolbox', 'menu')
 
 
@@ -669,14 +819,22 @@ def main():
 
     File is written to the standard output.
     """
-    tree = toolboxes2menudata(userDefined=False)
-    root = tree.getroot()
-    sys.stdout.write(_getXMLString(root))
+    # TODO: fix parameter handling
+    if len(sys.argv) > 1:
+        mainFile = os.path.join(ETCWXDIR, 'xml', 'module_tree.xml')
+        tree = createTree(distributionRootFile=mainFile, userRootFile=None, userDefined=False)
+        root = tree.getroot()
+        sys.stdout.write(_getXMLString(root))
+    else:
+        tree = toolboxes2menudata(userDefined=False)
+        root = tree.getroot()
+        sys.stdout.write(_getXMLString(root))
 
     return 0
 
 
 if __name__ == '__main__':
+    # TODO: fix parameter handling
     if len(sys.argv) > 1:
         if sys.argv[1] == 'doctest':
             sys.exit(doc_test())
