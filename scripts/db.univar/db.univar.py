@@ -97,9 +97,6 @@ def main():
     where = options['where']
     perc = options['percentile']
 
-    if perc and len(perc) > 0:
-        extend = True 
-
     perc = [float(p) for p in perc.split(',')]
 
     if not shellstyle:
