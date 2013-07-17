@@ -68,9 +68,8 @@ def toolboxesOutdated():
         gcore.try_remove(path)
 
 
-# TODO: merge the function with getMenuFile
 def getMenudataFile(userRootFile, newFile, fallback):
-    """!Returns path to XML file for building menu.
+    """!Returns path to XML file for building menu or another tree.
 
     Creates toolbox directory where user defined toolboxes should be located.
     Checks whether it is needed to create new XML file (user changed toolboxes)
@@ -134,7 +133,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 tree = createTree(distributionRootFile=distributionRootFile, userRootFile=userRootFile)
             except ETREE_EXCEPTIONS:
                 GError(_("Unable to parse user toolboxes XML files. "
-                         "Default toolboxes will be loaded."))
+                         "Default files will be loaded."))
                 return fallback
 
             try:
@@ -144,75 +143,12 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 fh.close()
                 return menudataFile
             except:
+                Debug.msg(2, "toolboxes.getMenudataFile: writing menudata failed, returning fallback file")
                 return fallback
         else:
             return menudataFile
     else:
-        return fallback
-
-
-def getMenuFile():
-    """!Returns path to XML file for building menu.
-
-    Creates toolbox directory where user defined toolboxes should be located.
-    Checks whether it is needed to create new XML file (user changed toolboxes)
-    or the already generated file could be used.
-    If something goes wrong during building or user doesn't modify menu,
-    default file (from distribution) is returned.
-    """
-    Debug.msg(1, "toolboxes.getMenuFile")
-    fallback = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
-    # always create toolboxes directory if does not exist yet
-    tbDir = _setupToolboxes()
-
-    if tbDir:
-        menudataFile = os.path.join(tbDir, 'menudata.xml')
-        generateNew = False
-        # when any of main_menu.xml or toolboxes.xml are changed,
-        # generate new menudata.xml
-
-        if os.path.exists(menudataFile):
-            # remove menu file when there is no main_menu and toolboxes
-            if not userToolboxesFile and not userMainMenuFile:
-                os.remove(menudataFile)
-                return fallback
-
-            if bool(userToolboxesFile) != bool(userMainMenuFile):
-                # always generate new because we don't know if there has been any change
-                generateNew = True
-            else:
-                # if newer files -> generate new
-                menudataTime = os.path.getmtime(menudataFile)
-                if userToolboxesFile:
-                    if os.path.getmtime(userToolboxesFile) > menudataTime:
-                        generateNew = True
-                if userMainMenuFile:
-                    if os.path.getmtime(userMainMenuFile) > menudataTime:
-                        generateNew = True
-        elif userToolboxesFile or userMainMenuFile:
-            generateNew = True
-        else:
-            return fallback
-
-        if generateNew:
-            try:
-                tree = toolboxes2menudata()
-            except ETREE_EXCEPTIONS:
-                GError(_("Unable to parse user toolboxes XML files. "
-                         "Default toolboxes will be loaded."))
-                return fallback
-
-            try:
-                xml = _getXMLString(tree.getroot())
-                fh = open(os.path.join(tbDir, 'menudata.xml'), 'w')
-                fh.write(xml)
-                fh.close()
-                return menudataFile
-            except:
-                return fallback
-        else:
-            return menudataFile
-    else:
+        Debug.msg(2, "toolboxes.getMenudataFile: returning menudata fallback file")
         return fallback
 
 
@@ -241,7 +177,7 @@ def _createPath(path):
             return False
     return True
 
-# TODO: merge with toolboxes2menudata
+
 def createTree(distributionRootFile, userRootFile, userDefined=True):
     """!Creates XML file with data for menu.
 
@@ -268,49 +204,15 @@ def createTree(distributionRootFile, userRootFile, userDefined=True):
     wxguiItems = etree.parse(wxguiItemsFile)
     moduleItems = etree.parse(moduleItemsFile)
 
-    return toolboxes2menudataInternal(mainMenu=mainMenu,
-                                      toolboxes=toolboxes,
-                                      userToolboxes=userToolboxes,
-                                      wxguiItems=wxguiItems,
-                                      moduleItems=moduleItems)
+    return toolboxes2menudata(mainMenu=mainMenu,
+                              toolboxes=toolboxes,
+                              userToolboxes=userToolboxes,
+                              wxguiItems=wxguiItems,
+                              moduleItems=moduleItems)
 
 
-def toolboxes2menudata(userDefined=True):
-    """!Creates XML file with data for menu.
-
-    Parses toolboxes files from distribution and from users,
-    puts them together, adds metadata to modules and convert
-    tree to previous format used for loading menu.
-
-    @param userDefined use toolboxes defined by user or not (during compilation)
-
-    @return ElementTree instance
-    """
-    if userDefined and userMainMenuFile:
-        mainMenu = etree.parse(userMainMenuFile)
-    else:
-        mainMenu = etree.parse(mainMenuFile)
-
-    toolboxes = etree.parse(toolboxesFile)
-
-    if userDefined and userToolboxesFile:
-        userToolboxes = etree.parse(userToolboxesFile)
-    else:
-        userToolboxes = None
-
-    wxguiItems = etree.parse(wxguiItemsFile)
-    moduleItems = etree.parse(moduleItemsFile)
-
-    return toolboxes2menudataInternal(mainMenu=mainMenu,
-                                      toolboxes=toolboxes,
-                                      userToolboxes=userToolboxes,
-                                      wxguiItems=wxguiItems,
-                                      moduleItems=moduleItems)
-
-
-# TODO: rename
-def toolboxes2menudataInternal(mainMenu, toolboxes, userToolboxes,
-                               wxguiItems, moduleItems):
+def toolboxes2menudata(mainMenu, toolboxes, userToolboxes,
+                       wxguiItems, moduleItems):
     """!Creates XML file with data for menu.
 
     Parses toolboxes files from distribution and from users,
@@ -758,9 +660,7 @@ def doc_test():
     @return a number of failed tests
     """
     import doctest
-
     do_doctest_gettext_workaround()
-
     return doctest.testmod().failed
 
 
@@ -781,16 +681,21 @@ def module_test():
     wxguiItems = etree.parse(wxguiItemsFile)
     moduleItems = etree.parse(moduleItemsFile)
 
-    tree = toolboxes2menudataInternal(mainMenu=menu,
-                                      toolboxes=toolboxes,
-                                      userToolboxes=userToolboxes,
-                                      wxguiItems=wxguiItems,
-                                      moduleItems=moduleItems)
+    tree = toolboxes2menudata(mainMenu=menu,
+                              toolboxes=toolboxes,
+                              userToolboxes=userToolboxes,
+                              wxguiItems=wxguiItems,
+                              moduleItems=moduleItems)
     root = tree.getroot()
     tested = _getXMLString(root)
-    # useful to generate the correct file (uncomment)
-    #sys.stdout.write(_getXMLString(root))
-    #return 0
+
+    # for generatiing correct test file supposing that the implementation
+    # is now correct and working
+    # run the normal test and check the difference before overwriting
+    # the old correct test file
+    if len(sys.argv) > 2 and sys.argv[2] == "generate-correct-file":
+        sys.stdout.write(_getXMLString(root))
+        return 0
 
     menudataFile = 'test.toolboxes_menudata.xml'
     with open(menudataFile) as correctMenudata:
@@ -807,11 +712,11 @@ def module_test():
             sys.stdout.write(line)
             someDiff = True
     if someDiff:
-        print "difference"
+        print "Difference between files."
+        return 1
     else:
         print "OK"
-
-    return 0
+        return 0
 
 
 def main():
@@ -822,13 +727,12 @@ def main():
     # TODO: fix parameter handling
     if len(sys.argv) > 1:
         mainFile = os.path.join(ETCWXDIR, 'xml', 'module_tree.xml')
-        tree = createTree(distributionRootFile=mainFile, userRootFile=None, userDefined=False)
-        root = tree.getroot()
-        sys.stdout.write(_getXMLString(root))
     else:
-        tree = toolboxes2menudata(userDefined=False)
-        root = tree.getroot()
-        sys.stdout.write(_getXMLString(root))
+        mainFile = os.path.join(ETCWXDIR, 'xml', 'main_menu.xml')
+    tree = createTree(distributionRootFile=mainFile, userRootFile=None,
+                      userDefined=False)
+    root = tree.getroot()
+    sys.stdout.write(_getXMLString(root))
 
     return 0
 
