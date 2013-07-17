@@ -448,7 +448,7 @@ def get_interface_description(cmd):
         
         # TODO: replace ugly hack bellow
         if not cmdout and sys.platform == 'win32':
-            if os.path.splitext(cmd)[1] == '':
+            if os.path.splitext(cmd)[1] != '.py':
                 cmd += '.py'
             
             os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
