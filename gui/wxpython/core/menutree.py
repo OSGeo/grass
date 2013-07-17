@@ -18,7 +18,8 @@ where <i>action</i>:
  - dump (tree structure with stored data)
 
 and <i>menu</i>:
- - manager (Layer Manager)
+ - manager (Main menu in Layer Manager)
+ - module_tree (Module tree in Layer Manager)
  - modeler (Graphical Modeler)
  - psmap (Cartographic Composer)
 
@@ -221,7 +222,7 @@ if __name__ == "__main__":
     for arg in sys.argv:
         if arg in ('strings', 'tree', 'commands', 'dump'):
             action =  arg
-        elif arg in ('manager', 'modeler', 'psmap'):
+        elif arg in ('manager', 'module_tree', 'modeler', 'psmap'):
             menu = arg
 
     gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
@@ -234,12 +235,21 @@ if __name__ == "__main__":
         from core.globalvar    import ETCWXDIR
         filename = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
         menudata = LayerManagerMenuData(filename)
+    # FIXME: since module descriptions are used again we have now the third copy of the same string (one is in modules)
+    elif menu == 'module_tree':
+        from lmgr.menudata import LayerManagerModuleTree
+        from core.globalvar import ETCWXDIR
+        filename = os.path.join(ETCWXDIR, 'xml', 'module_tree_menudata.xml')
+        menudata = LayerManagerModuleTree(filename)
     elif menu == 'modeler':
         from gmodeler.menudata import ModelerMenuData
         menudata = ModelerMenuData()
     elif menu == 'psmap':
         from psmap.menudata import PsMapMenuData
         menudata = PsMapMenuData()
+    else:
+        import grass.script.core as gscore
+        gscore.fatal("Unknown value for parameter menu: " % menu)
 
     if action == 'strings':
         menudata.PrintStrings(sys.stdout)
@@ -249,5 +259,8 @@ if __name__ == "__main__":
         menudata.PrintCommands(sys.stdout)
     elif action == 'dump':
         print menudata.model
+    else:
+        import grass.script.core as gscore
+        gscore.fatal("Unknown value for parameter action: " % action)
 
     sys.exit(0)

@@ -63,8 +63,8 @@
         <menuitem>
           <label>Convert coordinates</label>
           <command>m.proj</command>
-          <help />
-          <keywords />
+          <help>Converts coordinates from one projection to another (cs2cs frontend).</help>
+          <keywords>miscellaneous,projection</keywords>
           <handler>OnMenuCmd</handler>
         </menuitem>
       </items>
