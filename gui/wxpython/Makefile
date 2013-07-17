@@ -42,7 +42,7 @@ xml/menudata.xml: core/toolboxes.py
 xml/module_tree_menudata.xml: core/toolboxes.py
 	$(call run_grass,$(PYTHON) $< dummy_parameter > $@)
 
-menustrings.py: core/menutree.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml $(ETCDIR)/xml/menudata_psmap.xml
+menustrings.py: core/menutree.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/module_tree_menudata.xml $(ETCDIR)/xml/menudata_modeler.xml $(ETCDIR)/xml/menudata_psmap.xml
 	@echo "# This is a generated file.\n" > $@
 	$(call run_grass,$(PYTHON) $< >> $@)
 	$(call run_grass,$(PYTHON) $< "modeler" >> $@)
