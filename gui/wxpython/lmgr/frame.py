@@ -47,7 +47,7 @@ from core.settings         import UserSettings, GetDisplayVectSettings
 from core.utils            import SetAddOnPath, GetLayerNameFromCmd, command2ltype
 from gui_core.preferences  import MapsetAccess, PreferencesDialog
 from lmgr.layertree        import LayerTree, LMIcons
-from lmgr.menudata         import LayerManagerMenuData
+from lmgr.menudata         import LayerManagerMenuData, LayerManagerModuleTree
 from gui_core.widgets      import GNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
@@ -105,7 +105,10 @@ class GMFrame(wx.Frame):
         
         self._giface = LayerManagerGrassInterface(self)
         
+        # the main menu bar
         self._menuTreeBuilder = LayerManagerMenuData()
+        # the search tree and command console
+        self._moduleTreeBuilder = LayerManagerModuleTree()
         self._auimgr = wx.aui.AuiManager(self)
         
         
@@ -279,7 +282,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(guiparent = self, giface = self._giface,
                                   ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group')
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
-                                      menuModel=self._menuTreeBuilder.GetModel(),
+                                      menuModel=self._moduleTreeBuilder.GetModel(),
                                       gcstyle = GC_SEARCH | GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
 
@@ -317,7 +320,7 @@ class GMFrame(wx.Frame):
         
         # create 'search module' notebook page
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'search'):
-            self.search = SearchModuleWindow(parent = self, model=self._menuTreeBuilder.GetModel())
+            self.search = SearchModuleWindow(parent = self, model=self._moduleTreeBuilder.GetModel())
             self.search.showNotification.connect(lambda message: self.SetStatusText(message))
             self.notebook.AddPage(page = self.search, text = _("Search modules"), name = 'search')
         else:

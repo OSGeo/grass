@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../..
 
 SUBDIRS = docs animation mapswipe gmodeler rlisetup psmap dbmgr vdigit iclass
-EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc xml/menudata.xml
+EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc xml/menudata.xml xml/module_tree_menudata.xml
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
@@ -28,6 +28,7 @@ DSTDIRS := $(patsubst %,$(ETCDIR)/%,icons scripts xml)
 default: $(DSTFILES)
 	-$(MAKE) $(ETCDIR)/xml/module_items.xml
 	-$(MAKE) xml/menudata.xml
+	-$(MAKE) xml/module_tree_menudata.xml
 	-$(MAKE) menustrings.py
 	$(MAKE) parsubdirs
 
@@ -37,6 +38,9 @@ $(ETCDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
 
 xml/menudata.xml: core/toolboxes.py
 	$(call run_grass,$(PYTHON) $< > $@)
+
+xml/module_tree_menudata.xml: core/toolboxes.py
+	$(call run_grass,$(PYTHON) $< dummy_parameter > $@)
 
 menustrings.py: core/menutree.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml $(ETCDIR)/xml/menudata_psmap.xml
 	@echo "# This is a generated file.\n" > $@
