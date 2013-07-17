@@ -72,9 +72,9 @@ class GConsoleWindow(wx.SplitterWindow):
         wx.SplitterWindow.__init__(self, parent, id = wx.ID_ANY, style = style, **kwargs)
         self.SetName("GConsole")
         
-        self.panelOutput = wx.Panel(parent = self, id = wx.ID_ANY)
-        self.panelPrompt = wx.Panel(parent = self, id = wx.ID_ANY)
-
+        self.panelOutput = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.panelProgress = wx.Panel(parent=self.panelOutput, id=wx.ID_ANY, name='progressPanel')
+        self.panelPrompt = wx.Panel(parent=self, id=wx.ID_ANY)
         # initialize variables
         self.parent = parent # GMFrame | CmdPanel | ?
         self._gconsole = gconsole
@@ -87,7 +87,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.showNotification = Signal("GConsoleWindow.showNotification")
 
         # progress bar
-        self.progressbar = wx.Gauge(parent = self.panelOutput, id = wx.ID_ANY,
+        self.progressbar = wx.Gauge(parent = self.panelProgress, id = wx.ID_ANY,
                                     range = 100, pos = (110, 50), size = (-1, 25),
                                     style = wx.GA_HORIZONTAL)
         self._gconsole.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
@@ -144,15 +144,14 @@ class GConsoleWindow(wx.SplitterWindow):
         else:
             self.search = None
 
-        self.outputBox = wx.StaticBox(parent = self.panelOutput, id = wx.ID_ANY,
-                                      label = " %s " % _("Output window"))
 
         if self._gcstyle & GC_PROMPT:
             cmdLabel = _("Command prompt")
-        else:
-            cmdLabel = _("Command")
-        self.cmdBox = wx.StaticBox(parent = self.panelOutput, id = wx.ID_ANY,
-                                   label = " %s " % cmdLabel)
+            self.outputBox = wx.StaticBox(parent = self.panelOutput, id = wx.ID_ANY,
+                                          label = " %s " % _("Output window"))
+
+            self.cmdBox = wx.StaticBox(parent = self.panelOutput, id = wx.ID_ANY,
+                                       label = " %s " % cmdLabel)
 
         # buttons
         self.btnOutputClear = wx.Button(parent = self.panelOutput, id = wx.ID_CLEAR)
@@ -161,9 +160,8 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnCmdClear.SetToolTipString(_("Clear command prompt content"))
         self.btnOutputSave  = wx.Button(parent = self.panelOutput, id = wx.ID_SAVE)
         self.btnOutputSave.SetToolTipString(_("Save output window content to the file"))
-        self.btnCmdAbort = wx.Button(parent = self.panelOutput, id = wx.ID_STOP)
+        self.btnCmdAbort = wx.Button(parent = self.panelProgress, id = wx.ID_STOP)
         self.btnCmdAbort.SetToolTipString(_("Abort running command"))
-        self.btnCmdAbort.Enable(False)
         self.btnCmdProtocol = wx.ToggleButton(parent = self.panelOutput, id = wx.ID_ANY,
                                               label = _("&Log file"),
                                               size = self.btnCmdClear.GetSize())
@@ -184,10 +182,16 @@ class GConsoleWindow(wx.SplitterWindow):
         
     def _layout(self):
         """!Do layout"""
-        outputSizer = wx.BoxSizer(wx.VERTICAL)
+        self.outputSizer = wx.BoxSizer(wx.VERTICAL)
+        progressSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
-        cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
+        if self._gcstyle & GC_PROMPT:
+            outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
+            cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
+        else:
+            outBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            cmdBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            
         
         if self._gcstyle & GC_PROMPT:
             promptSizer = wx.BoxSizer(wx.VERTICAL)
@@ -200,41 +204,48 @@ class GConsoleWindow(wx.SplitterWindow):
                             proportion = 0, flag = wx.EXPAND | wx.LEFT, border = 5)
         
         if self._gcstyle & GC_SEARCH:
-            outputSizer.Add(item = self.searchPane, proportion = 0,
+            self.outputSizer.Add(item = self.searchPane, proportion = 0,
                             flag = wx.EXPAND | wx.ALL, border = 3)
-        outputSizer.Add(item = self.cmdOutput, proportion = 1,
+        self.outputSizer.Add(item = self.cmdOutput, proportion = 1,
                         flag = wx.EXPAND | wx.ALL, border = 3)
-        outputSizer.Add(item = self.progressbar, proportion = 0,
-                        flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 3)
-        outBtnSizer.Add(item = self.btnOutputClear, proportion = 1,
+        if self._gcstyle & GC_PROMPT:
+            proportion = 1
+        else:
+            proportion = 0
+            outBtnSizer.AddStretchSpacer()
+
+        outBtnSizer.Add(item = self.btnOutputClear, proportion = proportion,
                         flag = wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT, border = 5)
-        outBtnSizer.Add(item = self.btnOutputSave, proportion = 1,
+
+        outBtnSizer.Add(item = self.btnOutputSave, proportion = proportion,
                         flag = wx.ALIGN_RIGHT | wx.RIGHT, border = 5)
-        
+
         cmdBtnSizer.Add(item = self.btnCmdProtocol, proportion = 1,
                         flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border = 5)
         cmdBtnSizer.Add(item = self.btnCmdClear, proportion = 1,
                         flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
-        cmdBtnSizer.Add(item = self.btnCmdAbort, proportion = 1,
-                        flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
+        progressSizer.Add(item = self.btnCmdAbort, proportion = 0,
+                          flag = wx.ALL|wx.ALIGN_CENTER, border = 5)
+        progressSizer.Add(item = self.progressbar, proportion = 1,
+                          flag = wx.ALIGN_CENTER|wx.RIGHT|wx.TOP|wx.BOTTOM, border = 5)
+                          
+        self.panelProgress.SetSizer(progressSizer)
+        progressSizer.Fit(self.panelProgress)
         
-        if self._gcstyle & GC_PROMPT:
-            proportion = (2, 3)
-        else:
-            proportion = (1, 1)
-        
-        btnSizer.Add(item = outBtnSizer, proportion = proportion[0],
+        btnSizer.Add(item = outBtnSizer, proportion = 1,
                      flag = wx.ALL | wx.ALIGN_CENTER, border = 5)
-        btnSizer.Add(item = cmdBtnSizer, proportion = proportion[1],
+        btnSizer.Add(item = cmdBtnSizer, proportion = 1,
                      flag = wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
-        outputSizer.Add(item = btnSizer, proportion = 0,
+        self.outputSizer.Add(item = self.panelProgress, proportion = 0,
+                        flag = wx.EXPAND)
+        self.outputSizer.Add(item = btnSizer, proportion = 0,
                         flag = wx.EXPAND)
         
-        outputSizer.Fit(self)
-        outputSizer.SetSizeHints(self)
-        self.panelOutput.SetSizer(outputSizer)
+        self.outputSizer.Fit(self)
+        self.outputSizer.SetSizeHints(self)
+        self.panelOutput.SetSizer(self.outputSizer)
         # eliminate gtk_widget_size_allocate() warnings
-        outputSizer.SetVirtualSizeHints(self.panelOutput)
+        self.outputSizer.SetVirtualSizeHints(self.panelOutput)
         
         if self._gcstyle & GC_PROMPT:
             promptSizer.Fit(self)
@@ -251,6 +262,7 @@ class GConsoleWindow(wx.SplitterWindow):
         
         self.SetSashGravity(1.0)
         
+        self.outputSizer.Hide(self.panelProgress)
         # layout
         self.SetAutoLayout(True)
         self.Layout()
@@ -427,6 +439,9 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def OnCmdProgress(self, event):
         """!Update progress message info"""
+        if not self.outputSizer.IsShown(self.panelProgress):
+            self.outputSizer.Show(self.panelProgress)
+            self.outputSizer.Layout()
         self.progressbar.SetValue(event.value)
         event.Skip()
 
@@ -477,18 +492,19 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def OnCmdRun(self, event):
         """!Run command"""
-        self.btnCmdAbort.Enable()
-
         event.Skip()
 
     def OnCmdDone(self, event):
         """!Command done (or aborted)
         """
-        self.btnCmdAbort.Enable(False)
-
         self.progressbar.SetValue(0) # reset progress bar on '0%'
+        wx.CallLater(100, self._hideProgress)
         event.Skip()
 
+    def _hideProgress(self):
+        self.outputSizer.Hide(self.panelProgress)
+        self.outputSizer.Layout()
+        
     def OnStcChanged(self, event):
         newEvent = gGcContentChanged()
         wx.PostEvent(self, newEvent)

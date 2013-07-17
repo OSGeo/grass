@@ -283,7 +283,7 @@ class GMFrame(wx.Frame):
                                   ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group')
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
                                       menuModel=self._moduleTreeBuilder.GetModel(),
-                                      gcstyle = GC_SEARCH | GC_PROMPT)
+                                      gcstyle = GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
 
         self.goutput.showNotification.connect(lambda message: self.SetStatusText(message))
