@@ -238,7 +238,9 @@ class PreferencesBaseDialog(wx.Dialog):
                 pos  = mapdisp.GetPosition()
                 size = mapdisp.GetSize()
 
-                dim += ',%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
+                # window size must be larger than zero
+                if size[0] > 0 and size[1] > 0:
+                    dim += ',%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
 
             self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = dim)
         else:
