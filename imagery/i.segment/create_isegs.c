@@ -309,10 +309,9 @@ int region_growing(struct globals *globals)
 		G_debug(4, "Rk is now complete");
 
 		if (Rk.id == 0) {
-		    /* this can only happen if only one segment is left */
+		    /* this can only happen if the segment is surrounded by NULL data */
 		    G_debug(4, "Segment had no valid neighbors");
-		    pathflag = FALSE;
-		    Ri.count = 0;
+		    continue;
 		}
 
 		if (/* !(t & 1) && */ Ri_nn == 1 &&

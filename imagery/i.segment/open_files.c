@@ -294,6 +294,8 @@ int open_files(struct globals *globals)
 	load_seeds(globals, srows, scols, nseg);
     }
 
+    G_debug(1, "Number of initial regions: %d", globals->n_regions);
+
     G_free(inbuf);
     G_free(in_fd);
     G_free(fp_range);
@@ -368,6 +370,7 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 		    if (segment_put(&globals->rid_seg, &sneg, row, col) != 1)
 			G_fatal_error(_("Unable to write to temporary file"));
 		    sneg--;
+		    globals->n_regions--;
 		}
 		else {
 		    Ri.row = row;
@@ -494,6 +497,8 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
     else {
 	update_band_vals(Ri->row, Ri->col, &(globals->rs), globals);
     }
+    if (globals->rs.count > 1)
+	globals->n_regions -= (globals->rs.count - 1);
 
     return 1;
 }
