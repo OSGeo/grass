@@ -14903,7 +14903,6 @@ msgid "Example: update rybniky set kapri = 'hodne' where kapri = 'malo'"
 msgstr ""
 
 #: ../db/db.execute/main.c:138
-#, fuzzy
 msgid "Name of file containing SQL statement(s)"
 msgstr "Plik zawierający wyrażenia SQL"
 
@@ -14913,14 +14912,13 @@ msgstr "Ignoruj błędy SQL i kontynuuj"
 
 #: ../db/db.execute/main.c:161 ../vector/v.build/main.c:51
 #: ../vector/v.build/main.c:77
-#, fuzzy
 msgid "Errors"
-msgstr "Błąd: %s"
+msgstr "Błędy"
 
 #: ../db/db.execute/main.c:167
-#, fuzzy, c-format
+#, c-format
 msgid "You must provide <%s> or <%s> option"
-msgstr "Musisz dostarczyć przynajmniej cztery punkty %d"
+msgstr "Musisz dostarczyć opcję <%s> lub <%s>"
 
 #: ../db/db.createdb/main.c:74
 msgid "Creates an empty database."
@@ -14994,7 +14992,7 @@ msgstr "Ustaw z domyślnego regionu"
 #: ../db/db.connect/main.c:71
 #, fuzzy
 msgid "Overwrite current settings if already initialized"
-msgstr "Nadpisz istniejący plik"
+msgstr "Nadpisz istniejące ustawienia"
 
 #: ../db/db.connect/main.c:93
 msgid "Default group of database users to which select privilege is granted"
@@ -15025,9 +15023,8 @@ msgid "Default database is not set"
 msgstr "Nie ma ustawionej domyślnej bazy danych"
 
 #: ../db/db.login/main.c:41
-#, fuzzy
 msgid "Sets user/password for DB driver/database."
-msgstr "Zdefiniuj użytkownika/hasło dla sterownika/bazy danych."
+msgstr "Definiuje użytkownika/hasło dla sterownika/bazy danych."
 
 #: ../db/db.login/main.c:57
 msgid "Username"
@@ -15044,40 +15041,36 @@ msgstr "Nie można ustawić użytkownika/hasła"
 #: ../db/db.login/main.c:77
 #, fuzzy, c-format
 msgid "The password was stored in file (%s/dblogin)"
-msgstr "Hasło zostało zachowane w pliku"
+msgstr "Hasło zostało zachowane w  (%s/dblogin)"
 
 #: ../db/db.databases/main.c:52
 msgid "Unable to list databases"
 msgstr "Nie można wyświetlić listy baz danych."
 
 #: ../db/db.databases/main.c:61
-#, fuzzy
 msgid "No databases found"
-msgstr "Wyświetl listę wszystkich sterowników bazy danych"
+msgstr "Nie znaleziono bazy danych"
 
 #: ../db/db.databases/main.c:85
-#, fuzzy
 msgid "Location"
-msgstr "Lokacja: %s\n"
+msgstr "Lokacja"
 
 #: ../db/db.databases/main.c:86
 msgid "Path for SQLite driver, or connection string for PostgreSQL driver"
 msgstr ""
 
 #: ../db/db.databases/main.c:97
-#, fuzzy
 msgid "Lists all databases for a given driver and location."
-msgstr "Wyświetl listę baz danych dla danego sterownika i lokacji"
+msgstr "Wyświetla listę baz danych dla danego sterownika i lokacji."
 
 #: ../db/drivers/ogr/cursor.c:65 ../db/drivers/odbc/cursor.c:36
 #, fuzzy
 msgid "Unable to allocate cursor"
-msgstr "Nie można ulokować pamięci"
+msgstr "Nie można przydzielić kursora"
 
 #: ../db/drivers/ogr/cursor.c:74
-#, fuzzy
 msgid "Unable to add new token"
-msgstr "Nie możn odczytać pliku zakresu"
+msgstr "Nie można dodać nowego tokena"
 
 #: ../db/drivers/ogr/fetch.c:55 ../db/drivers/ogr/fetch.c:188
 #: ../db/drivers/sqlite/fetch.c:265 ../db/drivers/mysql/fetch.c:34
@@ -18548,7 +18541,6 @@ msgid "Drops an attribute table."
 msgstr "Usuwa tabelę atrybutów."
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:5
-#, fuzzy
 msgid "Name of database driver"
 msgstr "Nazwa pliku bazy danych"
 
@@ -19112,9 +19104,8 @@ msgstr "Nazwa rozszerzenia do zainstalowania/odinstalowania"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:7
 #: ../vector/v.net/args.c:36
-#, fuzzy
 msgid "Operation to be performed"
-msgstr "Mapa(y) rastrowa(e) dla której ma być utworzony profil"
+msgstr "Operacja do wykonania"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:8
 msgid "SVN Addons repository URL"
@@ -26638,9 +26629,9 @@ msgid "Invalid order (%d); please enter 1 to %d"
 msgstr ""
 
 #: ../imagery/i.rectify/main.c:206
-#, fuzzy, c-format
+#, c-format
 msgid "Location: %s"
-msgstr "Lokacja: %s\n"
+msgstr "Lokacja: %s"
 
 #: ../imagery/i.rectify/main.c:207
 #, fuzzy, c-format
@@ -28414,9 +28405,8 @@ msgid "First column is 1. If 0, unique category is assigned to each row and writ
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:146 ../vector/v.in.dwg/main.c:106
-#, fuzzy
 msgid "Create 3D vector map"
-msgstr "Nazwa mapy wektorowej"
+msgstr "Utwórz mapę wektorową 3D"
 
 #: ../vector/v.in.ascii/main.c:151
 msgid "Create a new empty vector map and exit. Nothing is read from input."
@@ -28807,34 +28797,28 @@ msgid "Unable to open driver <%s>"
 msgstr "Nie można uruchomić sterownika <%s>"
 
 #: ../vector/v.info/print.c:304
-#, fuzzy
 msgid "Name:"
-msgstr "nazwa"
+msgstr "Nazwa:"
 
 #: ../vector/v.info/print.c:307
-#, fuzzy
 msgid "Mapset:"
-msgstr "Mapset:   %s\n"
+msgstr "Mapset:"
 
 #: ../vector/v.info/print.c:311
-#, fuzzy
 msgid "Location:"
-msgstr "Lokacja: %s\n"
+msgstr "Lokacja:"
 
 #: ../vector/v.info/print.c:314
-#, fuzzy
 msgid "Database:"
-msgstr "Nazwa bazy danych:"
+msgstr "Baza danych:"
 
 #: ../vector/v.info/print.c:318
-#, fuzzy
 msgid "Title:"
-msgstr "Tytuł"
+msgstr "Tytuł:"
 
 #: ../vector/v.info/print.c:321
-#, fuzzy
 msgid "Map scale:"
-msgstr "Skala mapy:       1:%d"
+msgstr "Skala mapy:"
 
 #: ../vector/v.info/print.c:325
 #, fuzzy
@@ -30464,12 +30448,11 @@ msgstr ""
 
 #: ../vector/v.net/args.c:17 ../vector/v.net/args.c:56
 msgid "Arcs"
-msgstr ""
+msgstr "Łuki"
 
 #: ../vector/v.net/args.c:21
-#, fuzzy
 msgid "Name of input vector point map (nodes)"
-msgstr "nazwa wejściowego pliku wektorowego"
+msgstr "Nazwa wejściowej mapy wektorowej (węzły)"
 
 #: ../vector/v.net/args.c:23
 msgid "Required for operation 'connect' and 'arcs'"
@@ -30478,7 +30461,7 @@ msgstr ""
 #: ../vector/v.net/args.c:25 ../vector/v.net/args.c:63
 #: ../vector/v.net/args.c:85 ../vector/v.net/args.c:92
 msgid "Nodes"
-msgstr ""
+msgstr "Węzły"
 
 #: ../vector/v.net/args.c:40
 msgid "new point is placed on each node (line end) if doesn't exist"
@@ -37093,18 +37076,17 @@ msgid "Unknown geometry type"
 msgstr "Nieznany typ geometrii"
 
 #: ../vector/v.net.components/main.c:73
-#, fuzzy
 msgid "components"
-msgstr "ukończone"
+msgstr "komponenty"
 
 #: ../vector/v.net.components/main.c:75
 msgid "Computes strongly and weakly connected components in the network."
-msgstr ""
+msgstr "Oblicza silnie i słabo połączone komponenty w sieciach."
 
 #: ../vector/v.net.components/main.c:123
 #, fuzzy
 msgid "Weakly connected components"
-msgstr "wektor, import, konwersja"
+msgstr "Słabo połączone komponenty"
 
 #: ../vector/v.net.components/main.c:124
 #, fuzzy
@@ -37134,9 +37116,8 @@ msgid "Distribution of perturbation"
 msgstr ""
 
 #: ../vector/v.perturb/main.c:87
-#, fuzzy
 msgid "Parameter(s) of distribution"
-msgstr "rozmieszczenie klas"
+msgstr "Parametr(y) rozmieszczenia"
 
 #: ../vector/v.perturb/main.c:88
 msgid "If the distribution is uniform, only one parameter, the maximum, is needed. For a normal distribution, two parameters, the mean and standard deviation, are required."
@@ -37153,7 +37134,7 @@ msgstr ""
 
 #: ../vector/v.perturb/main.c:126 ../vector/v.perturb/main.c:133
 msgid "Error scanning arguments"
-msgstr ""
+msgstr "Błąd podczas skanowania argumentów"
 
 #: ../vector/v.perturb/main.c:129
 msgid "Maximum of uniform distribution must be >= zero"
@@ -37229,9 +37210,8 @@ msgid "Computing eigenvector centrality measure"
 msgstr "Obliczanie średniej klas ..."
 
 #: ../vector/v.net.centrality/main.c:339
-#, fuzzy
 msgid "Writing data into the table..."
-msgstr "Zapisywanie danych do pliku..."
+msgstr "Zapisywanie danych do tabeli..."
 
 #: ../vector/v.generalize/smoothing.c:135
 #: ../vector/v.generalize/smoothing.c:225
@@ -37247,9 +37227,8 @@ msgid "Unable to calculate the output vectors"
 msgstr "Nie można obliczyć wyjściowych wektorów"
 
 #: ../vector/v.generalize/main.c:77
-#, fuzzy
 msgid "generalization"
-msgstr "Generalizacja (%s)..."
+msgstr "generalizacja"
 
 #: ../vector/v.generalize/main.c:78
 #, fuzzy
@@ -37258,7 +37237,7 @@ msgstr "Sygnatury które mają być użyte do klasyfikacji"
 
 #: ../vector/v.generalize/main.c:79
 msgid "smoothing"
-msgstr ""
+msgstr "wygładzanie"
 
 #: ../vector/v.generalize/main.c:80
 #, fuzzy
@@ -37266,9 +37245,8 @@ msgid "displacement"
 msgstr "Położenie"
 
 #: ../vector/v.generalize/main.c:81
-#, fuzzy
 msgid "network generalization"
-msgstr "wekor, interpolacja"
+msgstr "generalizacja sieci"
 
 #: ../vector/v.generalize/main.c:82
 #, fuzzy
@@ -37321,9 +37299,8 @@ msgid "Snakes method for line smoothing"
 msgstr ""
 
 #: ../vector/v.generalize/main.c:130
-#, fuzzy
 msgid "Network generalization"
-msgstr "wekor, interpolacja"
+msgstr "Generalizacja sieci"
 
 #: ../vector/v.generalize/main.c:131
 msgid "Displacement of lines close to each other"
@@ -37390,9 +37367,8 @@ msgid "Do not modify end points of lines forming a closed loop"
 msgstr ""
 
 #: ../vector/v.generalize/main.c:235
-#, fuzzy
 msgid "Do not copy attributes"
-msgstr "Nie kopiuj tabeli"
+msgstr "Nie kopiuj atrybutów"
 
 #: ../vector/v.generalize/main.c:289
 msgid "Unknown method"
@@ -37448,11 +37424,11 @@ msgstr ""
 
 #: ../vector/v.generalize/main.c:574
 msgid "reduced"
-msgstr ""
+msgstr "zredukowane"
 
 #: ../vector/v.generalize/main.c:574
 msgid "changed"
-msgstr "zmieniony"
+msgstr "zmienione"
 
 #: ../vector/v.generalize/misc.c:156
 #, c-format
@@ -37565,7 +37541,7 @@ msgstr ""
 #: ../vector/v.outlier/outlier.c:86 ../vector/v.outlier/outlier.c:95
 #: ../vector/v.outlier/outlier.c:192
 msgid "Impossible to write in the database"
-msgstr ""
+msgstr "Nie można zapisać do bazy danych"
 
 #: ../vector/v.random/main.c:89
 #, fuzzy
@@ -37672,11 +37648,11 @@ msgid "Threshold for the outliers"
 msgstr ""
 
 #: ../vector/v.outlier/main.c:239
-#, fuzzy, c-format
+#, c-format
 msgid "It was impossible to create <%s> table."
-msgstr "nie można utworzyć %s"
+msgstr "Nie można utworzyć tabeli <%s>."
 
 #: ../vector/v.outlier/main.c:401
 #, fuzzy
 msgid "Outlier detection"
-msgstr "Kolor konturu"
+msgstr "Wykrywanie konturu"
