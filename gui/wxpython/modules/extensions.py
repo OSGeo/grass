@@ -59,7 +59,6 @@ class InstallExtensionWindow(wx.Frame):
         
         self.search = SearchModuleWidget(parent=self.panel, model=self.modelBuilder.GetModel(),
                                          showChoice = False)
-        self.search.SetSelection(0)
         self.search.showSearchResult.connect(lambda result: self.tree.Select(result))
         # show text in statusbar when notification appears
         self.search.showNotification.connect(lambda message: self.SetStatusText(message))
