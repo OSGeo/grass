@@ -27,6 +27,7 @@ import wx
 from core             import utils
 from core.gcmd        import RunCommand, GMessage
 from core.gconsole    import CmdThread, EVT_CMD_DONE, GConsole
+from core.utils import _
 
 from gui_core.gselect import VectorDBInfo
 

@@ -22,6 +22,7 @@ if __name__ == '__main__':
     if gui_wx_path not in sys.path:
         sys.path.append(gui_wx_path)
 
+from core.utils import _
 from gui_core.treeview import TreeListView
 from core.treemodel import TreeModel, DictNode
 

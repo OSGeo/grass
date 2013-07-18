@@ -24,6 +24,7 @@ from wx.py.shell   import Shell as PyShell
 from wx.py.version import VERSION
 
 import grass.script as grass
+from core.utils import _
 
 class PyShellWindow(wx.Panel):
     """!Python Shell Window"""

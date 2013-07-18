@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 import wx
 from utils import Orientation, ReplayMode
+from core.utils import _
 
 class Animation(wx.EvtHandler):
     """!Animation class specifies which frame to show at which instance."""

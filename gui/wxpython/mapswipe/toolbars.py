@@ -20,6 +20,8 @@ import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
+from core.utils import _
+
 
 swipeIcons = {
         'tools': MetaIcon(img = 'tools', label = _("Tools")),

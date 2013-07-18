@@ -22,6 +22,7 @@ from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit   import IVDigit
 from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
 from core.gcmd        import GWarning
+from core.utils import _
 try:
     from grass.lib.gis    import G_verbose, G_set_verbose
     from grass.lib.vector import *

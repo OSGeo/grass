@@ -49,7 +49,6 @@ import os
 import sys
 
 import  wx
-import gettext
 
 import grass.script as grass
 
@@ -61,12 +60,11 @@ if __name__ == '__main__':
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
+from core.utils import _
 from mapswipe.frame import SwipeMapFrame
 
 
 def main():
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-
     driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
     if driver == 'png':
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'

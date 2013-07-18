@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 import wx
 
 from core.debug import Debug
+from core.utils import _
 from mapdisp.mapwindow import BufferedWindow
 
 

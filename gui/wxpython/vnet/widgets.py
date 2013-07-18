@@ -26,6 +26,7 @@ import wx
 from wx.lib.mixins.listctrl import CheckListCtrlMixin, ColumnSorterMixin, ListCtrlAutoWidthMixin, TextEditMixin
 
 from core import globalvar
+from core.utils import _
 
 
 class PointsList(wx.ListCtrl,

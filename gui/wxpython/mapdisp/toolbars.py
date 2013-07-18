@@ -22,6 +22,7 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from nviz.main         import haveNviz
 from vdigit.main       import haveVDigit
 from icons.icon        import MetaIcon
+from core.utils import _
 
 MapIcons =  {
     'query'      : MetaIcon(img = 'info',

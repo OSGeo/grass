@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 import wx
 
 from core               import globalvar
+from core.utils import _
 from gui_core.dialogs   import SimpleDialog
 from gui_core           import gselect
 from gui_core.widgets   import SimpleValidator

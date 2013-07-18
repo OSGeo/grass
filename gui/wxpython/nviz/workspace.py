@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 import copy
 
 from core.settings import UserSettings
+from core.utils import _
 
 try:
     from nviz      import wxnviz

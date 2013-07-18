@@ -22,6 +22,7 @@ import wx
 from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
 from core.gcmd        import RunCommand
 from core.settings    import UserSettings
+from core.utils import _
 import grass.script as grass
 
 def GetUnicodeValue(value):

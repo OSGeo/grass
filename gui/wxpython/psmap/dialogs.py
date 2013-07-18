@@ -52,6 +52,7 @@ except ImportError:
 import grass.script as grass
 
 from core               import globalvar
+from core.utils import _
 from dbmgr.vinfo        import VectorDBInfo
 from gui_core.gselect   import Select
 from core.gcmd          import RunCommand, GError, GMessage

@@ -28,6 +28,8 @@ if __name__ == "__main__":
         sys.path.append(gui_wx_path)
 
 from core import globalvar
+from core.utils import _
+
 import wx
 try:
     import wx.lib.agw.advancedsplash as SC
@@ -114,8 +116,6 @@ def process_opt(opts, args):
     return (workspaceFile,)
 
 def main(argv = None):
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
     if argv is None:
         argv = sys.argv

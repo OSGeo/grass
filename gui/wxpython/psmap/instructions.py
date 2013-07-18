@@ -41,7 +41,7 @@ import wx
 import grass.script as grass
 
 from core.gcmd          import RunCommand, GError, GMessage, GWarning
-from core.utils         import CmdToTuple, GetCmdString
+from core.utils         import CmdToTuple, GetCmdString, _
 from dbmgr.vinfo        import VectorDBInfo
 from psmap.utils        import *
 

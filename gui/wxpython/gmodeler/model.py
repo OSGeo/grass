@@ -41,6 +41,7 @@ from wx.lib import ogl
 
 from core                import globalvar
 from core                import utils
+from core.utils import _
 from core.gcmd           import GMessage, GException, GError, RunCommand, EncodeString, GWarning, GetDefaultEncoding
 from core.settings       import UserSettings
 from gui_core.forms      import GUI, CmdPanel

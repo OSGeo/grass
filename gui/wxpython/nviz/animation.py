@@ -20,6 +20,7 @@ import copy
 import wx
 
 from grass.pydispatch.signal import Signal
+from core.utils import _
 
 class Animation:
     """!Class represents animation as a sequence of states (views).

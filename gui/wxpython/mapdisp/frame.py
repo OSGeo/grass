@@ -43,7 +43,7 @@ from mapdisp.toolbars   import MapToolbar, NvizIcons
 from mapdisp.gprint     import PrintOptions
 from core.gcmd          import GError, GMessage
 from dbmgr.dialogs      import DisplayAttributesDialog
-from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd
+from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd, _
 from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDialog, TextLayerDialog, \
                                DECOR_DIALOG_LEGEND, DECOR_DIALOG_BARSCALE
 from core.debug         import Debug

@@ -41,6 +41,7 @@ from core          import utils
 from core.giface   import StandaloneGrassInterface
 from core.gcmd     import RunCommand
 from core.render   import Map, MapLayer
+from core.utils import _
 from mapdisp.frame import MapFrame
 from grass.script  import core as grass
 from core.debug    import Debug
@@ -373,8 +374,6 @@ if __name__ == "__main__":
         except ValueError:
             pass
 
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
     grass.verbose(_("Starting map display <%s>...") % (monName))
 

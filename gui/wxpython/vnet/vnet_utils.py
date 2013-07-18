@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 
 import  math
 from grass.script     import core as grass
+from core.utils import _
 
 try:
     import grass.lib.vector as vectlib

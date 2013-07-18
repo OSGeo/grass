@@ -33,6 +33,7 @@ import grass.script as grass
 from core             import globalvar
 from core.gcmd        import GMessage
 from core.debug       import Debug
+from core.utils import _
 from dbmgr.base       import DbMgrBase
 from gui_core.widgets import GNotebook
                 

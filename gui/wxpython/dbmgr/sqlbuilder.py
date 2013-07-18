@@ -33,6 +33,7 @@ if __name__ == "__main__":
         sys.path.append(gui_wx_path)
 
 from core import globalvar
+from core.utils import _
 import wx
 
 from core.gcmd   import RunCommand, GError, GMessage
@@ -728,9 +729,6 @@ if __name__ == "__main__":
     else:
         print >>sys.stderr, __doc__
         sys.exit()
-
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
     app = wx.App(0)
     sqlb = sqlBuilder(parent = None, vectmap = sys.argv[2], layer = layer)

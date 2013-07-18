@@ -23,6 +23,7 @@ import wx
 import wx.lib.plot as plot
 
 import grass.script as grass
+from core.utils import _
 
 try:
     import numpy

@@ -46,6 +46,7 @@ except ImportError:
 import grass.script as grass
 
 from core               import globalvar
+from core.utils import _
 from gui_core.gselect   import VectorDBInfo
 from core.gcmd          import GMessage, RunCommand
 from modules.colorrules import ThematicVectorTable

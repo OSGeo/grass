@@ -25,6 +25,7 @@ This program is free software under the GNU General Public License
 from core.gcmd          import RunCommand
 from gui_core.toolbars  import BaseToolbar, BaseIcons
 from icons.icon         import MetaIcon
+from core.utils import _
 
 class LMWorkspaceToolbar(BaseToolbar):
     """!Layer Manager `workspace` toolbar

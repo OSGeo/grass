@@ -27,7 +27,7 @@ from grass.script import task as gtask
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand, GException
-from core.utils       import SetAddOnPath
+from core.utils       import SetAddOnPath, _
 from core.menutree    import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl, SearchModuleWidget
 from gui_core.treeview import CTreeView

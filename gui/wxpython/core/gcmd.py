@@ -49,6 +49,10 @@ from grass.script import core as grass
 from core       import globalvar
 from core.debug import Debug
 
+# cannot import from the core.utils module to avoid cross dependencies
+import gettext
+_ = gettext.translation('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale')).ugettext
+
 def GetRealCmd(cmd):
     """!Return real command name - only for MS Windows
     """

@@ -31,6 +31,7 @@ if __name__ == "__main__":
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from core.giface      import StandaloneGrassInterface
+from core.utils import _
 from gui_core.gselect import Select
 from gui_core.forms   import GUI
 from core.settings    import UserSettings
@@ -595,8 +596,6 @@ class MapCalcFrame(wx.Frame):
         self.Destroy()
 
 if __name__ == "__main__":
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
     app = wx.App(0)
     frame = MapCalcFrame(parent = None, cmd = 'r.mapcalc', giface = StandaloneGrassInterface())

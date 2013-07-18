@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
 from core.globalvar import hasAgw
 from core.treemodel import TreeModel, DictNode
+from core.utils import _
 
 from grass.pydispatch.signal import Signal
 

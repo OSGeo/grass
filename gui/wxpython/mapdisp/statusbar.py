@@ -39,6 +39,7 @@ import wx
 from core          import utils
 from core.gcmd     import GMessage, RunCommand
 from core.settings import UserSettings
+from core.utils import _
 
 from grass.script  import core as grass
 

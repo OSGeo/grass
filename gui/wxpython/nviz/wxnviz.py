@@ -48,6 +48,7 @@ from grass.lib.nviz     import *
 from grass.lib.raster   import *
 
 from core.debug import Debug
+from core.utils import _
 import grass.script as grass
 
 log      = None

@@ -29,7 +29,6 @@ import codecs
 import getpass
 
 ### i18N
-import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
 if __name__ == "__main__":
@@ -46,7 +45,7 @@ from grass.script import core as grass
 
 from gui_core.ghelp import HelpFrame
 from core.gcmd      import GMessage, GError, DecodeString, RunCommand, GWarning
-from core.utils     import GetListOfLocations, GetListOfMapsets
+from core.utils     import GetListOfLocations, GetListOfMapsets, _
 from location_wizard.dialogs import RegionDef
 from gui_core.dialogs import TextEntryDialog
 from gui_core.widgets import GenericValidator
@@ -78,9 +77,7 @@ class GRASSStartup(wx.Frame):
         self.panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY)
         
         # i18N
-        import gettext
-        gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-
+        
         #
         # graphical elements
         #
@@ -1023,8 +1020,6 @@ if __name__ ==  "__main__":
     if os.getenv("GISBASE") is None:
         sys.exit("Failed to start GUI, GRASS GIS is not running.")
         
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
     GRASSStartUp = StartUp(0)
     GRASSStartUp.MainLoop()

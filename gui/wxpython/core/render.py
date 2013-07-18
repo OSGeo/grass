@@ -38,6 +38,7 @@ from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 from core          import utils
+from core.utils import _
 from core.ws       import RenderWMSMgr
 from core.gcmd     import GException, GError, RunCommand
 from core.debug    import Debug
