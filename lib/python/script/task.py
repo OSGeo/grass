@@ -451,7 +451,10 @@ def get_interface_description(cmd):
             if os.path.splitext(cmd)[1] != '.py':
                 cmd += '.py'
             
-            os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
+            if cmd == 'd.rast3d.py':
+                os.chdir(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'scripts'))
+            else:
+                os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
             p = Popen([sys.executable, cmd, '--interface-description'],
                       stdout = PIPE, stderr = PIPE)
             cmdout, cmderr = p.communicate()
