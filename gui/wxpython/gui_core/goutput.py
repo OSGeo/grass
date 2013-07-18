@@ -39,6 +39,7 @@ from core.gconsole   import GConsole, \
     EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
 from gui_core.prompt import GPromptSTC
 from core.settings   import UserSettings
+from core.utils import _
 from gui_core.widgets import SearchModuleWidget
 
 

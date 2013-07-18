@@ -33,6 +33,7 @@ except ImportError:
 import grass.script as grass
 
 from core             import globalvar
+from core.utils import _
 from core.gcmd        import GError, DecodeString
 from gui_core.widgets import FormListbook, ScrolledPanel
 from core.debug       import Debug

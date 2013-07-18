@@ -28,6 +28,7 @@ except ImportError:
     hasVisvis = False
 
 from core.gcmd import GException, GError, GMessage
+from core.utils import _
 import grass.script as grass
 
 from temporal_manager import TemporalManager
@@ -564,9 +565,6 @@ class AnimationController(wx.EvtHandler):
 
 
 #def test():
-#    import gettext
-#    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-#
 #    import grass.script as grass
 #    import wx
 #    app = wx.PySimpleApp()

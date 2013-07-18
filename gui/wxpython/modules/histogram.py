@@ -25,7 +25,7 @@ from core                 import globalvar
 from core.render          import Map
 from gui_core.forms       import GUI
 from mapdisp.gprint       import PrintOptions
-from core.utils           import GetLayerNameFromCmd
+from core.utils           import GetLayerNameFromCmd, _
 from gui_core.dialogs     import GetImageHandlers, ImageSizeDialog
 from gui_core.preferences import DefaultFontDialog
 from core.debug           import Debug

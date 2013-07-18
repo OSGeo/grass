@@ -54,7 +54,6 @@ import os
 import sys
 
 import wx
-import gettext
 
 import grass.script as grass
 
@@ -64,11 +63,10 @@ if __name__ == '__main__':
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
+from core.utils import _
 from animation.frame import AnimationFrame, MAX_COUNT
 
 def main():
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-
     options, flags = grass.parser()
 
     rast = options['rast']

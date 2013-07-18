@@ -32,6 +32,7 @@ from grass.pydispatch.signal import Signal
 from core          import globalvar
 from core          import utils
 from core.gcmd     import EncodeString, DecodeString, GetRealCmd
+from core.utils import _
 
 
 class GPrompt(object):

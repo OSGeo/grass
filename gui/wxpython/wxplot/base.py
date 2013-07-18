@@ -27,6 +27,7 @@ from wxplot.dialogs    import TextDialog, OptDialog
 from core.render       import Map
 from icons.icon        import MetaIcon
 from gui_core.toolbars import BaseIcons
+from core.utils import _
 
 import grass.script as grass
 

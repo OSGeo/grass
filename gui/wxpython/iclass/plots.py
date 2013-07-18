@@ -18,6 +18,7 @@ for details.
 import wx
 import wx.lib.plot as plot
 import wx.lib.scrolledpanel as scrolled
+from core.utils import _
 
 class PlotPanel(scrolled.ScrolledPanel):
     """!Panel for drawing multiple plots.

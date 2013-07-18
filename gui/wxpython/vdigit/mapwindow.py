@@ -22,7 +22,7 @@ from core.gcmd      import RunCommand, GMessage, GError
 from core.debug     import Debug
 from mapdisp.mapwindow import BufferedWindow
 from core.settings  import UserSettings
-from core.utils     import ListOfCatsToRange
+from core.utils     import ListOfCatsToRange, _
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
 from gui_core       import gselect

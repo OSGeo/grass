@@ -36,6 +36,7 @@ import grass.script as grass
 
 from core             import globalvar
 from core             import utils
+from core.utils import _
 from core.gcmd        import GMessage, RunCommand, GError
 from gui_core.gselect import Select, LayerSelect, ColumnSelect, VectorDBInfo
 from core.render      import Map

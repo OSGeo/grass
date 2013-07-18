@@ -31,7 +31,7 @@ import grass.script as grass
 from core             import globalvar
 from core.debug       import Debug
 from core.gcmd        import GMessage, GWarning, GError, RunCommand
-from core.utils       import GetSettingsPath, CmdToTuple, CmdTupleToList
+from core.utils       import GetSettingsPath, CmdToTuple, CmdTupleToList, _
 from core.gconsole    import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from gui_core.gselect import Select

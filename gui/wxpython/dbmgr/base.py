@@ -46,7 +46,7 @@ import grass.script as grass
 
 from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
 from core.gcmd        import RunCommand, GException, GError, GMessage, GWarning
-from core.utils       import ListOfCatsToRange
+from core.utils       import ListOfCatsToRange, _
 from gui_core.dialogs import CreateNewVector
 from dbmgr.vinfo      import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc
 from core.debug       import Debug

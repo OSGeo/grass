@@ -27,6 +27,7 @@ from core.render        import Map
 from mapdisp            import statusbar as sb
 from core.debug         import Debug
 from core.gcmd          import GError, GMessage
+from core.utils import _
 
 from mapswipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
 from mapswipe.mapwindow import SwipeBufferedWindow

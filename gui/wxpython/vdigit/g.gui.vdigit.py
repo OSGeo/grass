@@ -32,7 +32,6 @@
 
 import os
 import sys
-import gettext
 
 import grass.script as grass
 
@@ -44,6 +43,7 @@ if __name__ == '__main__':
         sys.path.append(gui_wx_path)
 
 from core.globalvar import CheckWxVersion
+from core.utils import _
 from mapdisp.frame import MapFrame
 from core.giface   import StandaloneGrassInterface
 from core.settings import UserSettings
@@ -90,7 +90,6 @@ def main():
     app.MainLoop()
     
 if __name__ == "__main__":
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     grass.set_raise_on_error(False)
     options, flags = grass.parser()
     

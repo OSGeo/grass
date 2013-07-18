@@ -31,6 +31,7 @@ import wx.lib.mixins.listctrl as listmix
 
 from core                 import globalvar
 from core                 import utils
+from core.utils import _
 from gui_core.widgets     import SearchModuleWidget, SimpleValidator
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import SimpleDialog, MapLayersDialogForModeler

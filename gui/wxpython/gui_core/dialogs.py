@@ -51,7 +51,7 @@ from core.gcmd        import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
 from gui_core.forms   import GUI
 from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator
-from core.utils       import GetLayerNameFromCmd, GetValidLayerName
+from core.utils       import GetLayerNameFromCmd, GetValidLayerName, _
 from core.settings    import UserSettings, GetDisplayVectSettings
 from core.debug       import Debug
 

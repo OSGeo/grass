@@ -21,6 +21,7 @@ import os
 import sys
 import copy
 import tempfile
+from core.utils import _
 
 if __name__ == "__main__":
     gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
@@ -1297,11 +1298,8 @@ class MapManager:
                 self.toolbar.choice.SetString(idx, self._addSuffix(alias))
 
 def test():
-    import gettext
     import core.render as render
-    
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
+
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
     

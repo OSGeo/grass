@@ -30,6 +30,7 @@ if __name__ == '__main__':
 
 from core                 import globalvar
 from core.gcmd            import RunCommand
+from core.utils import _
 from location_wizard.base import BaseClass
 
 from grass.script import core as grass
@@ -620,10 +621,8 @@ class SelectTransformDialog(wx.Dialog):
 
 def testRegionDef():
     import sys
-    import gettext
     import wx.lib.inspection
     import grass.script as grass
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
     app = wx.PySimpleApp()
 

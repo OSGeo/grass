@@ -28,6 +28,7 @@ from core          import utils
 from core.debug    import Debug
 
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
+from core.utils import _
 
 try:
     haveGdal = True

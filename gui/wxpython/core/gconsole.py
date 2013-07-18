@@ -39,6 +39,7 @@ from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
+from core.utils import _
 from gui_core.forms import GUI
 from core.debug import Debug
 from core.settings import UserSettings

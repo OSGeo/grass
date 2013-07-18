@@ -22,6 +22,7 @@ import copy
 import wx
 
 from core.settings import UserSettings
+from core.utils import _
 
 # default icon set
 import grass_icons

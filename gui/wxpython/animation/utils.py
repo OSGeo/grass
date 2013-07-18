@@ -28,6 +28,7 @@ import grass.temporal as tgis
 import grass.script as grass
 
 from core.gcmd import GException
+from core.utils import _
 
 class TemporalMode:
     TEMPORAL = 1

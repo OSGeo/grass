@@ -35,6 +35,7 @@ from core.gconsole      import CmdThread, EVT_CMD_DONE
 from psmap.toolbars     import PsMapToolbar
 from core.gcmd          import RunCommand, GError, GMessage
 from core.settings      import UserSettings
+from core.utils import _
 from gui_core.forms     import GUI
 from gui_core.dialogs   import HyperlinkDialog
 from gui_core.ghelp     import ShowAboutDialog

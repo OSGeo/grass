@@ -22,6 +22,7 @@ import wx
 
 from core.settings import UserSettings
 from core.gcmd     import GError
+from core.utils import _
 
 from grass.script import core as grass
 

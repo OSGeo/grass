@@ -51,6 +51,7 @@ if __name__ == '__main__':
 from core.treemodel import TreeModel, ModuleNode
 from core.settings import UserSettings
 from core.toolboxes import expandAddons as expAddons
+from core.utils import _
 
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
@@ -214,9 +215,6 @@ def printCommands(node, fh, itemSep, menuSep):
 
 
 if __name__ == "__main__":
-    # i18N
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
     action = 'strings'
     menu   = 'manager'

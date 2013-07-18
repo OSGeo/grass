@@ -26,6 +26,7 @@ from wxplot.base       import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.dialogs    import ScatterRasterDialog, PlotStatsFrame
 from core.gcmd         import RunCommand, GException, GError, GMessage
+from core.utils import _
 
 class ScatterFrame(BasePlotFrame):
     """!Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.

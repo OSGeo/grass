@@ -25,6 +25,7 @@ import wx.lib.scrolledpanel as scrolled
 
 from core             import globalvar
 from core.settings    import UserSettings
+from core.utils import _
 from gui_core.gselect import Select
 
 from grass.script import core  as grass

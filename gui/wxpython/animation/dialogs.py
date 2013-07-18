@@ -36,6 +36,7 @@ from core import globalvar
 from gui_core import gselect
 from gui_core.dialogs import MapLayersDialog, GetImageHandlers
 from core.settings import UserSettings
+from core.utils import _
 
 from utils import TemporalMode, validateTimeseriesName, validateMapNames
 from nviztask import NvizTask
@@ -1242,8 +1243,6 @@ class ExportDialog(wx.Dialog):
 
 def test():
     import wx.lib.inspection
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
     import grass.script as grass
 

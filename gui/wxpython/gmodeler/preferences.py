@@ -21,6 +21,7 @@ import wx.lib.colourselect    as csel
 from core                 import globalvar
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings        import UserSettings
+from core.utils import _
 
 class PreferencesDialog(PreferencesBaseDialog):
     """!User preferences dialog"""

@@ -27,6 +27,10 @@ ETCSYMBOLDIR = os.path.join(ETCDIR, "gui", "images", "symbols")
 
 from core.debug import Debug
 
+# cannot import from the core.utils module to avoid cross dependencies
+import gettext
+_ = gettext.translation('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale')).ugettext
+
 if os.path.join(ETCDIR, "python") not in sys.path:
     sys.path.append(os.path.join(ETCDIR, "python"))
 

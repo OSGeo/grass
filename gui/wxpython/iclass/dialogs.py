@@ -26,6 +26,7 @@ import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
 
 from core               import globalvar
+from core.utils import _
 from core.settings      import UserSettings
 from core.gcmd          import GMessage
 from gui_core.dialogs   import SimpleDialog, GroupDialog

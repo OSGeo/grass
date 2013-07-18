@@ -42,7 +42,7 @@ from nviz.workspace     import NvizSettings
 from nviz.animation     import Animation
 from nviz               import wxnviz
 from core.globalvar     import CheckWxVersion
-from core.utils         import str2rgb
+from core.utils         import str2rgb, _
 
 wxUpdateProperties, EVT_UPDATE_PROP  = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW  = NewEvent()

@@ -28,7 +28,6 @@
 
 import os
 import sys
-import gettext
 
 import  wx
 import grass.script as grass
@@ -39,12 +38,11 @@ if wxbase not in sys.path:
 
 from core.giface import StandaloneGrassInterface
 from core.globalvar import CheckWxVersion
+from core.utils import _
 from rlisetup.frame import RLiSetupFrame
 
 
 def main():
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'),
-                    unicode = True)
     app = wx.PySimpleApp()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()

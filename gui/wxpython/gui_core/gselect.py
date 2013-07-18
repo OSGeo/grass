@@ -58,7 +58,7 @@ from gui_core.widgets  import ManageSettingsWidget
 from core.gcmd     import RunCommand, GError, GMessage
 from core.utils    import GetListOfLocations, GetListOfMapsets, GetFormats
 from core.utils    import GetSettingsPath, GetValidLayerName, ListSortLower
-from core.utils    import GetVectorNumberOfLayers
+from core.utils    import GetVectorNumberOfLayers, _
 from core.settings import UserSettings
 from core.debug    import Debug
 

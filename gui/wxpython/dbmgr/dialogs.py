@@ -21,6 +21,7 @@ import os
 import types
 
 from core import globalvar
+from core.utils import _
 import wx
 import wx.lib.scrolledpanel as scrolled
 

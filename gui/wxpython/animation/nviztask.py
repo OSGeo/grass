@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
-from core.utils import GetLayerNameFromCmd, CmdToTuple
+from core.utils import GetLayerNameFromCmd, CmdToTuple, _
 from grass.script import task as gtask
 from grass.script import core as grass
 
@@ -198,8 +198,6 @@ class NvizTask:
 
 
 def test():
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
     nviz = NvizTask('/home/anna/testy/nviz/t12.gxw')
     # nviz = NvizState('/home/anna/testy/nviz/t3.gxw')

@@ -41,6 +41,7 @@ import wx.lib.scrolledpanel    as scrolled
 from core             import globalvar, utils
 from core.gcmd        import RunCommand, GMessage
 from core.settings    import UserSettings
+from core.utils import _
 
 from dbmgr.base       import DbMgrBase 
 from dbmgr.vinfo      import VectorDBInfo

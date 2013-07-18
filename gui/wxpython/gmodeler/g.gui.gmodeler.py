@@ -38,7 +38,6 @@ import os
 import sys
 
 import  wx
-import gettext
 
 import grass.script as grass
 
@@ -48,11 +47,10 @@ if gui_wx_path not in sys.path:
 
 from core.giface import StandaloneGrassInterface
 from core.globalvar import CheckWxVersion
+from core.utils import _
 from gmodeler.frame import ModelFrame
 
 def main():
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
     app = wx.PySimpleApp()
     if not CheckWxVersion([2, 9]):

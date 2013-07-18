@@ -26,7 +26,7 @@ import types
 
 from core       import globalvar
 from core.gcmd  import GException, GError
-from core.utils import GetSettingsPath, PathJoin, rgb2str
+from core.utils import GetSettingsPath, PathJoin, rgb2str, _
 
 class Settings:
     """!Generic class where to store settings"""

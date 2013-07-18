@@ -33,6 +33,7 @@ import wx.lib.scrolledpanel as scrolled
 
 from gui_core import gselect
 from core import gcmd
+from core.utils import _
 from location_wizard.wizard import TitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
 from grass.script import core as grass

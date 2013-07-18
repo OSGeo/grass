@@ -21,9 +21,7 @@ import os, sys
 from tempfile import gettempdir
 import time
 import thread
-## i18N
-import gettext
-gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+from core.utils import _
 
 ### dependencies to be checked once, as they are quite time-consuming. cfr. grass.parser.
 # GRASS binding

@@ -20,7 +20,7 @@ import os
 
 import wx
 
-from core.utils     import normalize_whitespace
+from core.utils     import normalize_whitespace, _
 from core.settings  import UserSettings
 from core.gcmd      import EncodeString, GetDefaultEncoding
 from nviz.main      import NvizSettings

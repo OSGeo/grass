@@ -29,6 +29,7 @@ if __name__ == '__main__':
 from core import globalvar
 from gui_core.widgets import IntegerValidator
 from core.gcmd import RunCommand
+from core.utils import _
 
 from mapwindow import AnimationWindow, BitmapProvider, BitmapPool
 from controller import AnimationController
@@ -512,8 +513,6 @@ class TimeAnimationSlider(AnimationSliderBase):
             self.Layout()
 
 def test():
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
     import grass.script as grass
 

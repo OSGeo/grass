@@ -37,7 +37,7 @@ if __name__ == '__main__':
         sys.path.append(gui_wx_path)
 
 from core.globalvar import ETCWXDIR
-from core.utils import GetSettingsPath
+from core.utils import GetSettingsPath, _
 from core.gcmd import GError, RunCommand
 
 import grass.script.task as gtask

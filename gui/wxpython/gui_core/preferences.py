@@ -46,7 +46,7 @@ from grass.script import core as grass
 
 from core          import globalvar
 from core.gcmd     import RunCommand
-from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, StoreEnvVariable
+from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, StoreEnvVariable, _
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
 from gui_core.widgets import IntegerValidator

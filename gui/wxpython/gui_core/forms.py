@@ -94,6 +94,7 @@ from gui_core.ghelp   import HelpPanel
 from gui_core         import gselect
 from core             import gcmd
 from core             import utils
+from core.utils import _
 from core.settings    import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 
@@ -2340,8 +2341,6 @@ class GrassGUIApp(wx.App):
         return True
 
 if __name__ == "__main__":
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
     if len(sys.argv) == 1:
         sys.exit(_("usage: %s <grass command>") % sys.argv[0])

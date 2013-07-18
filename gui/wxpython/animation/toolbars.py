@@ -21,6 +21,7 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 
 from anim import ReplayMode
+from core.utils import _
 
 ganimIcons = {
         'speed': MetaIcon(img = 'settings', label = _("Change animation speed")),

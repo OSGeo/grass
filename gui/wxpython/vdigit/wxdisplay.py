@@ -23,6 +23,7 @@ import wx
 
 from core.debug    import Debug
 from core.settings import UserSettings
+from core.utils import _
 
 try:
     from grass.lib.gis    import *

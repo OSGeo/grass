@@ -28,6 +28,7 @@ except ImportError:
 
 import grass.script as grass
 from core.gcmd          import RunCommand
+from core.utils import _
 
 class Rect2D(wx.Rect2D):
     """!Class representing rectangle with floating point values.

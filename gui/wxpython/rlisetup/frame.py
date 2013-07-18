@@ -9,6 +9,7 @@ import wx
 import os
 
 from core import globalvar, gcmd
+from core.utils import _
 from grass.script import core as grass
 from rlisetup.functions import retRLiPath
 from rlisetup.wizard import RLIWizard

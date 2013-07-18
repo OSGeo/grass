@@ -37,7 +37,7 @@ from core.gcmd          import RunCommand, GException, GError, GMessage
 from core.debug         import Debug
 from core.settings      import UserSettings
 from gui_core.mapwindow import MapWindow
-from core.utils         import GetGEventAttribsForHandler
+from core.utils         import GetGEventAttribsForHandler, _
 
 try:
     import grass.lib.gis as gislib

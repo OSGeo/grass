@@ -22,6 +22,7 @@ import wx
 
 from core               import globalvar
 from core.debug         import Debug
+from core.utils import _
 from icons.icon         import MetaIcon
 
 BaseIcons = {

@@ -21,6 +21,7 @@ from core.menutree  import MenuTreeModelBuilder
 from core.toolboxes import getMenudataFile
 from core.globalvar import ETCWXDIR
 from core.gcmd import GError
+from core.utils import _
 
 
 class LayerManagerMenuData(MenuTreeModelBuilder):

@@ -27,6 +27,8 @@ import wx.lib.mixins.listctrl as listmix
 from core.gcmd        import RunCommand, GError
 from core.debug       import Debug
 from core.settings    import UserSettings
+from core.utils import _
+
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
     def __init__(self, parent, title,

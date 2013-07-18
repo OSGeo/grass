@@ -24,6 +24,7 @@ import grass.script as grass
 from core.gcmd import RunCommand
 from core.debug import Debug
 from core.settings import UserSettings
+from core.utils import _
 
 from grass.pydispatch.signal import Signal
 

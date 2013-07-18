@@ -26,6 +26,7 @@ if __name__ == '__main__':
 import grass.script as grass
 import grass.temporal as tgis
 from core.gcmd import GException
+from core.utils import _
 from utils import validateTimeseriesName, TemporalType
 
 
@@ -325,9 +326,7 @@ class TemporalManager(object):
         infoDict[id]['maps'] = maps
 
 def test():
-    import gettext
     from pprint import pprint
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
     temp = TemporalManager()
 
