@@ -25,13 +25,18 @@ from core.gcmd import GError
 
 class LayerManagerMenuData(MenuTreeModelBuilder):
     def __init__(self, filename=None):
+        if filename:
+            expandAddons = False
+        else:
+            expandAddons = True
+
         fallback = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
         if not filename:
             filename = getMenudataFile(userRootFile='main_menu.xml',
                                        newFile='menudata.xml',
                                        fallback=fallback)
         try:
-            MenuTreeModelBuilder.__init__(self, filename)
+            MenuTreeModelBuilder.__init__(self, filename, expandAddons=expandAddons)
         except (ValueError, AttributeError, TypeError):
             GError(_("Unable to parse user toolboxes XML files. "
                      "Default main menu will be loaded."))
@@ -41,6 +46,11 @@ class LayerManagerMenuData(MenuTreeModelBuilder):
 
 class LayerManagerModuleTree(MenuTreeModelBuilder):
     def __init__(self, filename=None):
+        if filename:
+            expandAddons = False
+        else:
+            expandAddons = True
+
         fallback = os.path.join(ETCWXDIR, 'xml', 'module_tree_menudata.xml')
         if not filename:
             filename = getMenudataFile(userRootFile='module_tree.xml',
@@ -48,7 +58,7 @@ class LayerManagerModuleTree(MenuTreeModelBuilder):
                                        fallback=fallback)
         # TODO: try-except useless?
         try:
-            MenuTreeModelBuilder.__init__(self, filename)
+            MenuTreeModelBuilder.__init__(self, filename, expandAddons=expandAddons)
         except (ValueError, AttributeError, TypeError):
             GError(_("Unable to parse user toolboxes XML files. "
                      "Default module tree will be loaded."))
