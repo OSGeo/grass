@@ -560,7 +560,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         row += 1
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                           label = _("Command dialog style:")),
+                                           label = _("Module dialog style:")),
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
@@ -825,10 +825,10 @@ class PreferencesDialog(PreferencesBaseDialog):
         """!Create notebook page for commad dialog settings"""
         panel = SP.ScrolledPanel(parent = notebook, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False, scroll_y = True)
-        notebook.AddPage(page = panel, text = _("Command"))
+        notebook.AddPage(page = panel, text = _("Modules"))
         
         border = wx.BoxSizer(wx.VERTICAL)
-        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Command dialog settings"))
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Module dialog settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
@@ -849,7 +849,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         row += 1
         # close
         close = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                            label = _("Close dialog when command is successfully finished"),
+                            label = _("Close dialog when module is successfully finished"),
                             name = "IsChecked")
         close.SetValue(self.settings.Get(group = 'cmd', key = 'closeDlg', subkey = 'enabled'))
         self.winId['cmd:closeDlg:enabled'] = close.GetId()
