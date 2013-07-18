@@ -798,7 +798,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                           wx.ALIGN_CENTER_VERTICAL,
                           pos = (row, 0))
             value = self.settings.Get(group='display', key='nvizDepthBuffer', subkey='value')
-            textCtrl = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value=str(value), validator=IntegerValidator())
+            textCtrl = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value=str(value), validator=IntegerValidator(),
+                                   name='GetValue')
             self.winId['display:nvizDepthBuffer:value'] = textCtrl.GetId()
             gridSizer.Add(item = textCtrl,
                           flag = wx.ALIGN_RIGHT |

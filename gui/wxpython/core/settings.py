@@ -191,7 +191,7 @@ class Settings:
                     'selection' : 0,
                     },
                 'nvizDepthBuffer' : {
-                    'value' : 16,
+                    'value' : '16',
                     },
                 },
             #
