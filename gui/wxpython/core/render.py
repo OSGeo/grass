@@ -579,14 +579,14 @@ class Map(object):
             self.region['n'] = min(self.region['n'], 90.0)
             self.region['s'] = max(self.region['s'], -90.0)
         
-    def ChangeMapSize(self, (width, height)):
+    def ChangeMapSize(self, size):
         """!Change size of rendered map.
         
         @param width,height map size given as tuple
         """
         try:
-            self.width  = int(width)
-            self.height = int(height)
+            self.width  = int(size[0])
+            self.height = int(size[1])
             if self.width < 1 or self.height < 1:
                 sys.stderr.write(_("Invalid map size %d,%d\n") % (self.width, self.height))
                 raise ValueError

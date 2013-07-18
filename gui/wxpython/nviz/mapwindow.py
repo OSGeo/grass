@@ -749,7 +749,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 
         event.Skip()
             
-    def Pixel2Cell(self, (x, y)):
+    def Pixel2Cell(self, xyCoords):
         """!Convert image coordinates to real word coordinates
 
         @param x, y image coordinates
@@ -759,6 +759,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """
         size = self.GetClientSize()
         # UL -> LL
+        x, y = xyCoords
         sid, x, y, z = self._display.GetPointOnSurface(x, size[1] - y)
         
         if not sid:

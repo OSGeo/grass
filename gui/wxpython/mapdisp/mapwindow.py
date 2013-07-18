@@ -1361,7 +1361,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         return True
 
-    def Pixel2Cell(self, (x, y)):
+    def Pixel2Cell(self, xyCoords):
         """!Convert image coordinates to real word coordinates
         
         @param x, y image coordinates
@@ -1370,8 +1370,8 @@ class BufferedWindow(MapWindow, wx.Window):
         @return None on error
         """
         try:
-            x = int(x)
-            y = int(y)
+            x = int(xyCoords[0])
+            y = int(xyCoords[1])
         except:
             return None
         
@@ -1388,12 +1388,12 @@ class BufferedWindow(MapWindow, wx.Window):
         
         return (east, north)
     
-    def Cell2Pixel(self, (east, north)):
+    def Cell2Pixel(self, enCoords):
         """!Convert real word coordinates to image coordinates
         """
         try:
-            east  = float(east)
-            north = float(north)
+            east  = float(enCoords[0])
+            north = float(enCoords[1])
         except:
             return None
         

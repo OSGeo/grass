@@ -212,10 +212,10 @@ class MapWindow(object):
         
         return True
     
-    def Pixel2Cell(self, (x, y)):
+    def Pixel2Cell(self, xyCoords):
         raise NotImplementedError()
     
-    def Cell2Pixel(self, (east, north)):
+    def Cell2Pixel(self, enCoords):
         raise NotImplementedError()
 
     def OnMotion(self, event):
