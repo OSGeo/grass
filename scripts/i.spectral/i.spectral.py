@@ -197,7 +197,7 @@ def main():
         grass.fatal(_("group= and raster= are mutually exclusive"))
 
     # check if gnuplot is present
-    if gnuplot and not grass.find_program('gnuplot'):
+    if gnuplot and not grass.find_program('gnuplot', '-V'):
         grass.fatal(_("gnuplot required, please install first"))
 
     # get data from group listing and set the x-axis labels

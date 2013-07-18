@@ -112,7 +112,7 @@ def main():
     also = flags['a']
 
     #### check for gdalinfo (just to check if installation is complete)
-    if not grass.find_program('gdalinfo'):
+    if not grass.find_program('gdalinfo', '--help'):
 	grass.fatal(_("'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)"))
 
     pid = str(os.getpid())
