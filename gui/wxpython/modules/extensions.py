@@ -35,9 +35,10 @@ from core.toolboxes   import toolboxesOutdated
 
 
 class InstallExtensionWindow(wx.Frame):
-    def __init__(self, parent, id = wx.ID_ANY,
+    def __init__(self, parent, giface, id = wx.ID_ANY,
                  title = _("Fetch & install extension from GRASS Addons"), **kwargs):
         self.parent = parent
+        self._giface = giface
         self.options = dict() # list of options
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
@@ -99,10 +100,13 @@ class InstallExtensionWindow(wx.Frame):
                                     label = _("&Install"))
         self.btnInstall.SetToolTipString(_("Install selected add-ons GRASS module"))
         self.btnInstall.Enable(False)
+        self.btnHelp = wx.Button(parent = self.panel, id = wx.ID_HELP)
+        self.btnHelp.SetToolTipString(_("Show g.extension manual page"))
         
         self.btnClose.Bind(wx.EVT_BUTTON, lambda evt: self.Close())
         self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
         self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
+        self.btnHelp.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.tree.selectionChanged.connect(self.OnItemSelected)
         self.tree.itemActivated.connect(self.OnItemActivated)
 
@@ -135,6 +139,8 @@ class InstallExtensionWindow(wx.Frame):
             optionSizer.Add(item = self.options[key], proportion = 0)
         
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = self.btnHelp, proportion = 0)
+        btnSizer.AddStretchSpacer()
         btnSizer.Add(item = self.btnClose, proportion = 0,
                      flag = wx.RIGHT, border = 5)
         btnSizer.Add(item = self.btnInstall, proportion = 0)
@@ -148,7 +154,7 @@ class InstallExtensionWindow(wx.Frame):
         sizer.Add(item = optionSizer, proportion = 0,
                         flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         sizer.Add(item = btnSizer, proportion = 0,
-                  flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+                  flag = wx.ALIGN_RIGHT | wx.ALL | wx.EXPAND, border = 5)
         
         self.panel.SetSizer(sizer)
         sizer.Fit(self.panel)
@@ -210,7 +216,9 @@ class InstallExtensionWindow(wx.Frame):
             
             globalvar.UpdateGRASSAddOnCommands()
             toolboxesOutdated()
-            
+
+    def OnHelp(self, event):
+        self._giface.Help(entry='g.extension')
 
     def OnItemSelected(self, node):
         """!Item selected"""
