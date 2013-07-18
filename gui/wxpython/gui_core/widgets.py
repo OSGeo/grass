@@ -143,6 +143,7 @@ class NotebookController:
         """!Highlighted tab name should be removed."""
         page = event.GetSelection()
         self.RemoveHighlight(page)
+        event.Skip()
 
     def RemoveHighlight(self, page):
         """!Removes highlight string from notebook tab name if necessary.
