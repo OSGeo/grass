@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
 from core.treemodel import TreeModel, ModuleNode
 from core.settings import UserSettings
-from core.toolboxes import expandAddons
+from core.toolboxes import expandAddons as expAddons
 
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
@@ -59,14 +59,16 @@ if not os.getenv("GISBASE"):
 # TODO: change the system to remove strange derived classes
 class MenuTreeModelBuilder:
     """!Abstract menu data class"""
-    def __init__(self, filename):
+    def __init__(self, filename, expandAddons=True):
 
         self.menustyle = UserSettings.Get(group = 'appearance',
                                           key = 'menustyle',
                                           subkey = 'selection')
 
         xmlTree = etree.parse(filename)
-        expandAddons(xmlTree)
+        if expandAddons:
+            expAddons(xmlTree)
+
         self.model = TreeModel(ModuleNode)
         self._createModel(xmlTree)
 
