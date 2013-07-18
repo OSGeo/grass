@@ -1705,9 +1705,6 @@ class CmdPanel(wx.Panel):
                                 lambda event:
                                     self._switchPageHandler(event = event, priority = 3))
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
-            index = self.AddBitmapToImageList(section = 'output', imageList = imageList)
-            if index >= 0:
-                self.notebook.SetPageImage('output', index)
         else:
             self.goutput = None
             self._gconsole = None
@@ -2140,12 +2137,10 @@ class CmdPanel(wx.Panel):
         
     def AddBitmapToImageList(self, section, imageList):
         iconTheme = UserSettings.Get(group = 'appearance', key = 'iconTheme', subkey = 'type')
-        iconSectionDict = {'manual': os.path.join(globalvar.ETCICONDIR, iconTheme, 'help.png'),
-                           _("Optional"): os.path.join(globalvar.ETCICONDIR, iconTheme, 'settings.png')}
+        iconSectionDict = {'manual': os.path.join(globalvar.ETCICONDIR, iconTheme, 'help.png')}
         if section in iconSectionDict.keys():
-            bitmap = wx.Bitmap(iconSectionDict[section])
-            bitmap.SetSize((16, 16))
-            idx = imageList.Add(bitmap)
+            image = wx.Image(iconSectionDict[section]).Scale(16, 16, wx.IMAGE_QUALITY_HIGH)
+            idx = imageList.Add(wx.BitmapFromImage(image))
             return idx
 
         return -1
