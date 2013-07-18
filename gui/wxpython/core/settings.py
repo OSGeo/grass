@@ -144,7 +144,7 @@ class Settings:
                     'type' : 'grass'
                     },
                 'commandNotebook' : {
-                    'selection' : 2
+                    'selection' : 0
                     },
                 },
             #
