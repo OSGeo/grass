@@ -32,10 +32,15 @@ from core.gcmd  import RunCommand
 from core.debug import Debug
 # from core.settings import UserSettings
 
-# intended to be used also outside this module
-import gettext
-_ = gettext.translation('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale')).ugettext
-
+try:
+    # intended to be used also outside this module
+    import gettext
+    _ = gettext.translation('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale')).ugettext
+except IOError:
+    # using no translation silently
+    def null_gettext(string):
+        return string
+    _ = null_gettext
 
 def normalize_whitespace(text):
     """!Remove redundant whitespace from a string"""

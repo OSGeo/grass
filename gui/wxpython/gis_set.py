@@ -28,15 +28,13 @@ import platform
 import codecs
 import getpass
 
-### i18N
-gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-
 if __name__ == "__main__":
     gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
     if gui_wx_path not in sys.path:
         sys.path.append(gui_wx_path)
 
 from core import globalvar
+from core.utils import _
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
