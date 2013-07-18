@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-10 01:07+0200\n"
-"PO-Revision-Date: 2013-07-16 11:28+0100\n"
+"PO-Revision-Date: 2013-07-16 15:42+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: GRASS Translation Team\n"
 "Language: pl\n"
@@ -4158,9 +4158,8 @@ msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr "BŁĄD: opcja <%s>: <%s> istnieje.\n"
 
 #: ../lib/gis/parser.c:1428
-#, fuzzy
 msgid "No separator given"
-msgstr "Separator pól"
+msgstr "Nie wskazano separatora"
 
 #: ../lib/gis/get_window.c:117
 #, fuzzy, c-format
@@ -4168,24 +4167,24 @@ msgid "Unable to open element file <%s> for <%s@%s>"
 msgstr "Nie można otworzyć pliku nagłówka dla wektora <%s>"
 
 #: ../lib/gis/key_value3.c:34
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file <%s>"
-msgstr "Błąd podczas zapisu pliku topo"
+msgstr "Błąd podczas zapisu pliku <%s>"
 
 #: ../lib/gis/key_value3.c:37
-#, fuzzy, c-format
+#, c-format
 msgid "Error closing output file <%s>"
-msgstr "Błąd podczas zamykania pliku g3d"
+msgstr "Błąd podczas zamykania pliku <%s>"
 
 #: ../lib/gis/key_value3.c:62
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading file <%s>"
-msgstr "Nie można otworzyć nagłówka pliku dla [%s w %s]"
+msgstr "Błąd odczytu pliku  <%s>"
 
 #: ../lib/gis/key_value3.c:65
-#, fuzzy, c-format
+#, c-format
 msgid "Error closing input file <%s>"
-msgstr "Błąd podczas zamykania pliku g3d"
+msgstr "Błąd podczas zamykania pliku  <%s>"
 
 #: ../lib/gis/rd_cellhd.c:139 ../lib/gis/rd_cellhd.c:150
 #: ../lib/gis/rd_cellhd.c:160 ../lib/gis/rd_cellhd.c:177
@@ -4204,19 +4203,16 @@ msgstr "Błąd podczas zamykania pliku g3d"
 #: ../lib/gis/rd_cellhd.c:331 ../lib/gis/rd_cellhd.c:333
 #: ../lib/gis/rd_cellhd.c:341 ../lib/gis/rd_cellhd.c:349
 #: ../lib/gis/rd_cellhd.c:353
-#, fuzzy
 msgid "Syntax error in cell header"
-msgstr "błąd składni "
+msgstr "Błąd składni w komórce nagłówka"
 
 #: ../lib/gis/rd_cellhd.c:147
-#, fuzzy
 msgid "Duplicate projection field"
-msgstr "powtórzone pole odwzorowania"
+msgstr "Powtórzone pole odwzorowania"
 
 #: ../lib/gis/rd_cellhd.c:157
-#, fuzzy
 msgid "Duplicate zone field"
-msgstr "powtórzone pole strefy"
+msgstr "Powtórzone pole strefy"
 
 #: ../lib/gis/rd_cellhd.c:167 ../lib/gis/rd_cellhd.c:169
 #: ../lib/gis/rd_cellhd.c:358 ../lib/gis/rd_cellhd.c:360
@@ -4224,149 +4220,131 @@ msgstr "powtórzone pole strefy"
 #: ../lib/gis/rd_cellhd.c:366 ../lib/gis/rd_cellhd.c:368
 #: ../lib/gis/rd_cellhd.c:379 ../lib/gis/rd_cellhd.c:381
 #: ../lib/gis/rd_cellhd.c:383 ../lib/gis/rd_cellhd.c:385
-#, fuzzy, c-format
+#, c-format
 msgid "Field <%s> missing"
-msgstr "brak pola strefy"
+msgstr "Brak pola <%s>"
 
 #: ../lib/gis/rd_cellhd.c:191
-#, fuzzy
 msgid "Duplicate north field"
-msgstr "powtórzone pole północy"
+msgstr "Powtórzone pole północy"
 
 #: ../lib/gis/rd_cellhd.c:199
-#, fuzzy
 msgid "Duplicate south field"
-msgstr "powtórzone pole południa"
+msgstr "Powtórzone pole południa"
 
 #: ../lib/gis/rd_cellhd.c:207
-#, fuzzy
 msgid "Duplicate east field"
-msgstr "powtórzone pole wschodu"
+msgstr "Powtórzone pole wschodu"
 
 #: ../lib/gis/rd_cellhd.c:215
-#, fuzzy
 msgid "Duplicate west field"
-msgstr "powtórzone pole zachodu"
+msgstr "Powtórzone pole zachodu"
 
 #: ../lib/gis/rd_cellhd.c:223
-#, fuzzy
 msgid "Duplicate top field"
-msgstr "powtórzone pole góry"
+msgstr "Powtórzone pole góry"
 
 #: ../lib/gis/rd_cellhd.c:231
-#, fuzzy
 msgid "Duplicate bottom field"
-msgstr "powtórzone pole dołu"
+msgstr "Powtórzone pole dołu"
 
 #: ../lib/gis/rd_cellhd.c:239
-#, fuzzy
 msgid "Duplicate e-w resolution field"
-msgstr "powtórzone pole rozdzielczości e-s"
+msgstr "Powtórzone pole rozdzielczości e-s"
 
 #: ../lib/gis/rd_cellhd.c:249
-#, fuzzy
 msgid "Duplicate 3D e-w resolution field"
-msgstr "powtórzone pole rozdzielczości 3D e-w"
+msgstr "Powtórzone pole rozdzielczości 3D e-w"
 
 #: ../lib/gis/rd_cellhd.c:259
-#, fuzzy
 msgid "Duplicate n-s resolution field"
-msgstr "powtórzone pole rozdzielczości n-s"
+msgstr "Powtórzone pole rozdzielczości n-s"
 
 #: ../lib/gis/rd_cellhd.c:269
-#, fuzzy
 msgid "Duplicate 3D n-s resolution field"
-msgstr "powtórzone pole rozdzielczości 3D n-s"
+msgstr "Powtórzone pole rozdzielczości 3D n-s"
 
 #: ../lib/gis/rd_cellhd.c:279
-#, fuzzy
 msgid "Duplicate t-b resolution field"
-msgstr "powtórzone pole rozdzielczości t-b"
+msgstr "Powtórzone pole rozdzielczości t-b"
 
 #: ../lib/gis/rd_cellhd.c:289
-#, fuzzy
 msgid "Duplicate rows field"
-msgstr "powtórzone pole wierszy"
+msgstr "Powtórzone pole wierszy"
 
 #: ../lib/gis/rd_cellhd.c:299
-#, fuzzy
 msgid "Duplicate 3D rows field"
-msgstr "powtórzone pole wierszy 3D"
+msgstr "Powtórzone pole wierszy 3D"
 
 #: ../lib/gis/rd_cellhd.c:309
-#, fuzzy
 msgid "Duplicate cols field"
-msgstr "powtórzone pole kolumn"
+msgstr "Powtórzone pole kolumn"
 
 #: ../lib/gis/rd_cellhd.c:319
-#, fuzzy
 msgid "Duplicate 3D cols field"
-msgstr "powtórzone pole kolumn 3D"
+msgstr "Powtórzone pole kolumn 3D"
 
 #: ../lib/gis/rd_cellhd.c:329
-#, fuzzy
 msgid "Duplicate depths field"
-msgstr "powtórzone pole głębokości"
+msgstr "Powtórzone pole głębokości"
 
 #: ../lib/gis/rd_cellhd.c:339
-#, fuzzy
 msgid "Duplicate format field"
-msgstr "powtórzone pole formatu"
+msgstr "Powtórzone pole formatu"
 
 #: ../lib/gis/rd_cellhd.c:347
-#, fuzzy
 msgid "Duplicate compressed field"
-msgstr "powtórzone pole kompresji"
+msgstr "Powtórzone pole kompresji"
 
 #: ../lib/gis/paths.c:201
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file <%s> for reading"
-msgstr "Nie można otworzyć pliku <%s> do zapisu"
+msgstr "Nie można otworzyć pliku <%s> do odczytu"
 
 #: ../lib/gis/paths.c:217
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to fetch security info for <%s>"
-msgstr "Nie można zapisać historii dla [%s]"
+msgstr "Nie można zapisać historii dla <%s>"
 
 #: ../lib/gis/timestamp.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create timestamp file for %s map <%s@%s>"
-msgstr "Nie można odczytać nagłówka pliku dla mapy rastrowej <%s@%s>."
+msgstr "Nie można utworzyć pliku znacznika czasu dla %s mapy <%s@%s>"
 
 #: ../lib/gis/timestamp.c:301
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid timestamp specified for %s map <%s@%s>"
-msgstr "Niepoprawny plik histogramu dla  [%s w %s]"
+msgstr "Niepoprawny znacznik czasu dla %s map <%s@%s>"
 
 #: ../lib/gis/timestamp.c:331
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open timestamp file for %s map <%s@%s>"
-msgstr "Nie można otworzyć pliku śledzenia błędu '%s'"
+msgstr "Nie można otworzyć pliku znacznika czasu dla %s map <%s@%s>"
 
 #: ../lib/gis/timestamp.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid timestamp file for %s map <%s@%s>"
-msgstr "Niepoprawny plik histogramu dla  [%s w %s]"
+msgstr "Niepoprawny plik znacznika czasu  dla %s map <%s@%s>"
 
 #: ../lib/gis/timestamp.c:479
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open timestamp file for vector map <%s@%s>"
-msgstr "Nie można otworzyć pliku śledzenia błędu '%s'"
+msgstr "Nie można otworzyć pliku znacznika czasu dla mapy wektorowej <%s@%s>"
 
 #: ../lib/gis/timestamp.c:488
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid timestamp file for vector map <%s@%s>"
-msgstr "Niepoprawny plik histogramu dla  [%s w %s]"
+msgstr "Niepoprawny plik znacznika czasu dla mapy wektorowej <%s@%s>"
 
 #: ../lib/gis/timestamp.c:524
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create timestamp file for vector map <%s@%s>"
-msgstr "Nie można odczytać nagłówka pliku dla mapy rastrowej <%s@%s>."
+msgstr "Nie można utworzyć pliku znacznika czasu dla mapy wektorowej <%s@%s>"
 
 #: ../lib/gis/timestamp.c:533
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid timestamp specified for vector map <%s@%s>"
-msgstr "Niepoprawny plik histogramu dla  [%s w %s]"
+msgstr "Niepoprawny  plik znacznika czasu dla mapy wektorowej <%s@%s>"
 
 #: ../lib/gis/get_projinfo.c:34 ../lib/gis/get_projinfo.c:60
 #, c-format
@@ -4378,11 +4356,8 @@ msgid "This location has no description."
 msgstr "Ta lokacja nie ma opisu."
 
 #: ../lib/gis/parser_help.c:79
-#, fuzzy
 msgid "Description:"
-msgstr ""
-"\n"
-"Opis:\n"
+msgstr "Opis:"
 
 #: ../lib/gis/parser_help.c:89
 msgid "Keywords:"
@@ -4393,19 +4368,16 @@ msgid "Usage:"
 msgstr ""
 
 #: ../lib/gis/parser_help.c:127
-#, fuzzy
 msgid "ERROR: Option key not defined"
-msgstr "Obiekt OGR bez ID został zignorowany."
+msgstr "BŁĄD: Klucz opcji nie zdefiniowany"
 
 #: ../lib/gis/parser_help.c:171
-#, fuzzy
 msgid "Flags:"
-msgstr "Flagi"
+msgstr "Flagi:"
 
 #: ../lib/gis/parser_help.c:205
-#, fuzzy
 msgid "Parameters:"
-msgstr "Parametry"
+msgstr "Parametry:"
 
 #: ../lib/gis/parser_help.c:228
 #, c-format
@@ -4428,13 +4400,13 @@ msgid "G__open(write): xmapset <%s> != G_mapset() <%s>"
 msgstr "G__open(write): xmapset <%s> != G_mapset() <%s>"
 
 #: ../lib/gis/distance.c:154
-#, fuzzy, c-format
+#, c-format
 msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
-msgstr "G_distance_point_to_line_segment: to nie powinno się zdarzyć: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+msgstr "%s: to nie powinno się zdarzyć: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
 
 #: ../lib/arraystats/class.c:21
 msgid "Discont algorithm currently not available because of bugs"
-msgstr "Algorytm 'discont' nie jest obecnie dostępny z powodu błędów w oprogramowaniu"
+msgstr "Algorytm discont nie jest obecnie dostępny z powodu błędów w oprogramowaniu"
 
 #: ../lib/arraystats/class.c:23
 #, c-format
@@ -4452,27 +4424,27 @@ msgid "There are classbreaks outside the range min-max. Number of classes reduce
 msgstr "Podano przedziały klas spoza zakresu min-max. Liczba klas zmniejszona do %i ,ale dla klas %i użyto wartości prawdopodobnych."
 
 #: ../lib/lidar/zones.c:473 ../lib/lidar/zones.c:510
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> created in database."
-msgstr "Tabela <%s> już istnieje w bazie danych <%s>."
+msgstr "<%s> już istnieje w bazie danych."
 
 #: ../lib/lidar/zones.c:477 ../lib/lidar/zones.c:514
 #, c-format
 msgid "<%s> has not been created in database."
-msgstr ""
+msgstr "<%s> nie został utworzony w bazie danych."
 
 #: ../lib/lidar/raster.c:74 ../lib/lidar/raster.c:89 ../lib/lidar/raster.c:102
 #: ../lib/lidar/raster.c:119 ../lib/lidar/raster.c:134
 #: ../lib/lidar/raster.c:147 ../lib/lidar/raster.c:162
 #: ../lib/lidar/raster.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access table <%s>"
-msgstr "Nie można utworzyć tabeli: [%s]"
+msgstr "Nie można otworzyć tabeli: <%s>"
 
 #: ../lib/python/temporal/space_time_datasets.py:232
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to create timestamp file for raster map <%s>"
-msgstr "Nie można odczytać nagłówka pliku dla mapy rastrowej <%s@%s>."
+msgstr "Nie można utworzyć pliku znacznika czasu dla mapy rastrowej <%s>."
 
 #: ../lib/python/temporal/space_time_datasets.py:236
 #, fuzzy, python-format
@@ -4486,9 +4458,8 @@ msgstr "Nie można odczytać nagłówka pliku dla mapy rastrowej <%s@%s>."
 
 #: ../lib/python/temporal/space_time_datasets.py:307
 #: ../lib/python/temporal/space_time_datasets.py:323
-#, fuzzy
 msgid "Unable to read range file"
-msgstr "Nie można odczytać pliku nagłówkowego"
+msgstr "Nie można odczytać pliku zakresu"
 
 #: ../lib/python/temporal/space_time_datasets.py:507
 #, fuzzy, python-format
@@ -7983,9 +7954,9 @@ msgid "Building topology for OGR layer <%s> from datasource '%s'..."
 msgstr "Buduję topologię dla mapy wektorowej <%s>..."
 
 #: ../lib/vector/Vlib/open.c:429
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open vector map <%s> on level %d"
-msgstr "Nie można otworzyć mapy wektorowej <%s>"
+msgstr "Nie można otworzyć mapy wektorowej <%s> na poziomie %d"
 
 #: ../lib/vector/Vlib/open.c:483
 #, c-format
@@ -7993,19 +7964,19 @@ msgid "Unable to open history file for vector map <%s>"
 msgstr "Nie można otworzyć pliku historii mapy wektorej <%s>"
 
 #: ../lib/vector/Vlib/open.c:706
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create new vector map: <%s> is not the current mapset (%s)"
-msgstr "Mapa rastrowa <%s> nie znajduje się w bieżącym mapsecie (%s)"
+msgstr "Nie można utworzyć mapy wektorowej: <%s> nie znajduje się w bieżącym mapsecie (%s)"
 
 #: ../lib/vector/Vlib/open.c:715
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create vector map <%s>. Name is not SQL compliant."
-msgstr "Nazwa mapy wektorowej nie jest zgodna z SQL"
+msgstr "Nie można utworzyć mapy wektorowej <%s>. Nazwa nie jest zgodna z SQL."
 
 #: ../lib/vector/Vlib/open.c:773
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open history file of vector map <%s>"
-msgstr "Nie można otworzyć pliku nagłówka dla mapy wektorowej <%s>"
+msgstr "Nie można otworzyć pliku historii dla mapy wektorowej <%s>"
 
 #: ../lib/vector/Vlib/open.c:812
 #, c-format
@@ -8021,9 +7992,8 @@ msgid "Using PostGIS format"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:821
-#, fuzzy
 msgid "Using native format"
-msgstr "obsługiwany jest tylko format natywny"
+msgstr "Obsługiwany jest tylko format natywny"
 
 #: ../lib/vector/Vlib/open.c:906
 #, c-format
@@ -8049,18 +8019,16 @@ msgid "Size of 'coor' file differs from value saved in sidx file"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:1239
-#, fuzzy
 msgid "Unable to open OGR file"
-msgstr "Nie można otworzyć pliku GDAL"
+msgstr "Nie można otworzyć pliku OGR"
 
 #: ../lib/vector/Vlib/open.c:1265
 msgid "OGR output also detected, using OGR"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:115
-#, fuzzy
 msgid "Area of size = 0.0 (less than 4 vertices) ignored"
-msgstr "Obszar o powierzchni = 0.0 zignorowany"
+msgstr "Obszar o powierzchni = 0.0 (mniej niż 4 werteksy) zignorowany"
 
 #: ../lib/vector/Vlib/build.c:131
 msgid "Unable to add area (map closed, topo saved)"
@@ -8087,19 +8055,19 @@ msgid "Checking for topological errors..."
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:623
-#, fuzzy, c-format
+#, c-format
 msgid "Number of lines of length zero: %d"
-msgstr "Liczba linii: %d"
+msgstr "Liczba linii zerowej długości: %d"
 
 #: ../lib/vector/Vlib/build.c:625
-#, fuzzy, c-format
+#, c-format
 msgid "Number of boundaries of length zero: %d"
-msgstr "Liczba granic: %d"
+msgstr "Liczba granic of length zero: %d"
 
 #: ../lib/vector/Vlib/build.c:634
-#, fuzzy, c-format
+#, c-format
 msgid "Number of boundary intersections: %d"
-msgstr "Liczba granic: %d"
+msgstr "Liczba przecięć granic: %d"
 
 #: ../lib/vector/Vlib/build.c:658
 #, fuzzy
@@ -8256,14 +8224,14 @@ msgid "Duplicate centroid %d, unable to delete area"
 msgstr ""
 
 #: ../lib/vector/vedit/delete.c:105
-#, fuzzy, c-format
+#, c-format
 msgid "Area %d without centroid"
-msgstr "Liczba obszarów bez centroidów: %d"
+msgstr "Obszar %d nie posiada centroidów"
 
 #: ../lib/vector/vedit/delete.c:121
-#, fuzzy, c-format
+#, c-format
 msgid "Area %d has no boundaries"
-msgstr "%d nowych granic"
+msgstr "Obszar %d nie posiada granic"
 
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
