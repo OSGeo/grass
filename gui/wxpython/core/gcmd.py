@@ -50,8 +50,15 @@ from core       import globalvar
 from core.debug import Debug
 
 # cannot import from the core.utils module to avoid cross dependencies
-import gettext
-_ = gettext.translation('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale')).ugettext
+try:
+    # intended to be used also outside this module
+    import gettext
+    _ = gettext.translation('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale')).ugettext
+except IOError:
+    # using no translation silently
+    def null_gettext(string):
+        return string
+    _ = null_gettext
 
 def GetRealCmd(cmd):
     """!Return real command name - only for MS Windows
