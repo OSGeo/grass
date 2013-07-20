@@ -111,8 +111,8 @@ void I_iclass_free_statistics(IClass_statistics * statistics)
 
     G_debug(4, "free_statistics()");
 
-    G_free(statistics->name);
-    G_free(statistics->color);
+    G_free((char *) statistics->name);
+    G_free((char *) statistics->color);
     G_free(statistics->band_min);
     G_free(statistics->band_max);
     G_free(statistics->band_sum);
