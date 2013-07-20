@@ -1769,7 +1769,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
     def OnHelp(self, event):
         """!Show GCP Manager manual page"""
-        self._giface.Help(entry = 'wxGUI.GCP_Manager')
+        self._giface.Help(entry='wxGUI.gcp')
 
     def OnUpdateActive(self, event):
 
