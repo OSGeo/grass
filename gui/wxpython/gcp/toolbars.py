@@ -23,8 +23,9 @@ import wx
 from core              import globalvar
 from core.utils import _
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from icon              import MetaIcon
-    
+from icons.icon import MetaIcon
+
+
 class GCPManToolbar(BaseToolbar):
     """!Toolbar for managing ground control points
 

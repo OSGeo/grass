@@ -299,9 +299,10 @@ class GCPWizard(object):
 
     def Cleanup(self):
         """!Return to current location and mapset"""
-        self.SwitchEnv('target')
-        self.parent.gcpmanagement = None
+        # here was also the cleaning of gcpmanagement from layer manager
+        # which is no longer needed
 
+        self.SwitchEnv('target')
         self.wizard.Destroy()
 
 class LocationPage(TitledPage):
@@ -795,20 +796,26 @@ class GCP(MapFrame, ColumnSorterMixin):
         
         #wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
         MapFrame.__init__(self, parent = parent, giface = self._giface, title = title, size = size,
-                            Map = Map, toolbars = toolbars, lmgr = lmgr, name = 'GCPMapWindow')
+                            Map=Map, toolbars=toolbars, name='GCPMapWindow')
 
-        #
         # init variables
-        #
-        self.parent = parent # GMFrame
-        self.parent.gcpmanagement = self
-        
+        self.parent = parent
+
         #
         # register data structures for drawing GCP's
         #
         self.pointsToDrawTgt = self.TgtMapWindow.RegisterGraphicsToDraw(graphicsType = "point", setStatusFunc = self.SetGCPSatus)
         self.pointsToDrawSrc = self.SrcMapWindow.RegisterGraphicsToDraw(graphicsType = "point", setStatusFunc = self.SetGCPSatus)
-        
+
+        # connect to the map windows signals
+        # used to add or edit GCP
+        self.SrcMapWindow.mouseLeftUpPointer.connect(
+            lambda x, y:
+            self._onMouseLeftUpPointer(self.SrcMapWindow, x, y))
+        self.TgtMapWindow.mouseLeftUpPointer.connect(
+            lambda x, y:
+            self._onMouseLeftUpPointer(self.TgtMapWindow, x, y))
+
         # window resized
         self.resize = False
 
@@ -949,7 +956,9 @@ class GCP(MapFrame, ColumnSorterMixin):
 
     def __del__(self):
         """!Disable GCP manager mode"""
-        self.parent.gcpmanagement = None
+        # leaving the method here but was used only to delete gcpmanagement
+        # from layer manager which is now not needed
+        pass
         
     def CreateGCPList(self):
         """!Create GCP List Control"""
@@ -1333,9 +1342,20 @@ class GCP(MapFrame, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
     
     def OnFocus(self, event):
+        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapFrame?
         # self.grwiz.SwitchEnv('source')
         pass
-        
+
+    def _onMouseLeftUpPointer(self, mapWindow, x, y):
+        if mapWindow == self.SrcMapWindow:
+            coordtype = 'source'
+        else:
+            coordtype = 'target'
+
+        coord = (x, y)
+        self.SetGCPData(coordtype, coord, self, confirm=True)
+        mapWindow.UpdateMap(render=False, renderVector=False)
+
     def OnRMS(self, event):
         """
         RMS button handler

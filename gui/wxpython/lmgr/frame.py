@@ -94,8 +94,7 @@ class GMFrame(wx.Frame):
         self.currentPageNum  = None       # currently selected page number for layer tree notebook
         self.workspaceFile = workspace    # workspace file
         self.workspaceChanged = False     # track changes in workspace
-        self.gcpmanagement = None         # reference to GCP class or None
-        
+
         wx.Frame.__init__(self, parent = parent, id = id, size = size,
                           style = style, **kwargs)
         self._setTitle()

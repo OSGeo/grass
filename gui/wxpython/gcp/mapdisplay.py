@@ -42,17 +42,16 @@ class MapFrame(SingleMapFrame):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
-    def __init__(self, parent, giface, title=_("GRASS GIS Manage Ground Control Points"),
-                 toolbars=["gcpdisp"], tree=None, notebook=None, lmgr=None,
-                 page=None, Map=None, auimgr=None, name = 'GCPMapWindow', **kwargs):
+    def __init__(self, parent, giface,
+                 title=_("GRASS GIS Manage Ground Control Points"),
+                 toolbars=["gcpdisp"], Map=None, auimgr=None,
+                 name='GCPMapWindow', **kwargs):
         """!Main map display window with toolbars, statusbar and
         DrawWindow
 
+        @param giface GRASS interface instance
+        @param title window title
         @param toolbars array of activated toolbars, e.g. ['map', 'digit']
-        @param tree reference to layer tree
-        @param notebook control book ID in Layer Manager
-        @param lmgr Layer Manager
-        @param page notebook page with layer tree
         @param Map instance of render.Map
         @param auimgs AUI manager
         @param kwargs wx.Frame attribures
@@ -60,12 +59,9 @@ class MapFrame(SingleMapFrame):
         
         SingleMapFrame.__init__(self, parent = parent, giface = giface, title = title,
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
-        
-        self._layerManager = lmgr   # Layer Manager object
-        self.tree       = tree      # Layer Manager layer tree object
-        self.page       = page      # Notebook page holding the layer tree
-        self.layerbook  = notebook  # Layer Manager layer tree notebook
+
         self._giface = giface
+
         #
         # Add toolbars
         #
@@ -115,11 +111,11 @@ class MapFrame(SingleMapFrame):
         #
         self.grwiz.SwitchEnv('source')
         self.SrcMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
-                                          Map=self.SrcMap, frame = self, tree=self.tree, lmgr=self._layerManager)
+                                           Map=self.SrcMap, frame=self)
 
         self.grwiz.SwitchEnv('target')
         self.TgtMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
-                                          Map=self.TgtMap, frame = self, tree=self.tree, lmgr=self._layerManager)
+                                          Map=self.TgtMap, frame=self)
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap
         self._setUpMapWindow(self.SrcMapWindow)
@@ -133,13 +129,6 @@ class MapFrame(SingleMapFrame):
         self.TgtMapWindow.mouseEntered.connect(
             lambda:
             self._setActiveMapWindow(self.TgtMapWindow))
-        # used to add or edit GCP
-        self.SrcMapWindow.mouseLeftUpPointer.connect(
-            lambda x, y:
-            self._onMouseLeftUpPointer(self.SrcMapWindow, x, y))
-        self.TgtMapWindow.mouseLeftUpPointer.connect(
-            lambda x, y:
-            self._onMouseLeftUpPointer(self.TgtMapWindow, x, y))
 
         #
         # initialize region values
@@ -289,19 +278,13 @@ class MapFrame(SingleMapFrame):
         Change choicebook page to match display.
         Or set display for georectifying
         """
-        if self._layerManager and \
-                self._layerManager.gcpmanagement:
-            # in GCP Management, set focus to current MapWindow for mouse actions
-            self.OnPointer(event)
-            self.MapWindow.SetFocus()
-        else:
-            # change bookcontrol page to page associated with display
-            # GCP Manager: use bookcontrol?
-            if self.page:
-                pgnum = self.layerbook.GetPageIndex(self.page)
-                if pgnum > -1:
-                    self.layerbook.SetSelection(pgnum)
-        
+        # was in if layer manager but considering the state it was executed
+        # always, moreover, there is no layer manager dependent code
+
+        # in GCP Management, set focus to current MapWindow for mouse actions
+        self.OnPointer(event)
+        self.MapWindow.SetFocus()
+
         event.Skip()
 
     def OnDraw(self, event):
@@ -627,19 +610,16 @@ class MapFrame(SingleMapFrame):
         
     def IsStandalone(self):
         """!Check if Map display is standalone"""
-        if self._layerManager:
-            return False
-        
+        # we do not know and we do not care, so always False
         return True
     
     def GetLayerManager(self):
         """!Get reference to Layer Manager
 
-        @return window reference
-        @return None (if standalone)
+        @return always None
         """
-        return self._layerManager
-    
+        return None
+
     def GetSrcWindow(self):
         return self.SrcMapWindow
         
@@ -660,13 +640,3 @@ class MapFrame(SingleMapFrame):
             self.UpdateActive(mapWindow)
             # needed for wingrass
             self.SetFocus()
-
-    def _onMouseLeftUpPointer(self, mapWindow, x, y):
-        if mapWindow == self.SrcMapWindow:
-            coordtype = 'source'
-        else:
-            coordtype = 'target'
-
-        coord = (x, y)
-        self._layerManager.gcpmanagement.SetGCPData(coordtype, coord, self, confirm=True)
-        mapWindow.UpdateMap(render=False, renderVector=False)
