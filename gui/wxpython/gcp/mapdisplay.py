@@ -34,6 +34,7 @@ from core.settings     import UserSettings
 from mapdisp.mapwindow import BufferedWindow
 
 import mapdisp.statusbar as sb
+import gcp.statusbar as sbgcp
 
 # for standalone app
 cmdfilename = None
@@ -88,8 +89,8 @@ class MapFrame(SingleMapFrame):
                                sb.SbDisplayGeometry,
                                sb.SbMapScale,
                                sb.SbProjection,
-                               sb.SbGoToGCP,
-                               sb.SbRMSError]
+                               sbgcp.SbGoToGCP,
+                               sbgcp.SbRMSError]
                             
         
         # create statusbar and its manager
