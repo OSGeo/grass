@@ -628,10 +628,7 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         # render background image if needed
         #
-        # update layer dictionary if there has been a change in layers
-        if self.tree and self.tree.reorder:
-            self.tree.ReorderLayers()
-        
+
         # reset flag for auto-rendering
         if self.tree:
             self.tree.rerender = False
@@ -1577,8 +1574,8 @@ class BufferedWindow(MapWindow, wx.Window):
         @param render True to re-render display
         """
         if not layers:
-            layers = self.tree.GetSelectedLayer(multi = True, checkedOnly = False)
-            layers = [self.tree.GetLayerInfo(layer, key = 'maplayer') for layer in layers]
+            layers = self._giface.GetLayerList().GetSelectedLayers(checkedOnly=False)
+            layers = [layer.maplayer for layer in layers]
 
         if not layers:
             return

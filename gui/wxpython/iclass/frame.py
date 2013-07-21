@@ -1252,7 +1252,7 @@ class MapManager:
             choice.SetSelection(0)
             
             #layers.reverse()
-            self.map.ReorderLayers(layers)
+            self.map.SetLayers(layers)
             self.frame.Render(self.mapWindow)
         
     def SetOpacity(self, name):

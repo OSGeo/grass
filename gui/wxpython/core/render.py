@@ -1098,20 +1098,17 @@ class Map(object):
         
         return None
 
-    def ReorderLayers(self, layerList):
-        """!Reorder list to match layer tree
-        
-        @param layerList list of layers
-        """
-        self.layers = layerList
-        
+    def SetLayers(self, layers):
+        self.layers = layers
+
+        # only for debug
+        # might be removed including message, it seems more than clear
         layerNameList = ""
         for layer in self.layers:
             if layer.GetName():
                 layerNameList += layer.GetName() + ','
-        Debug.msg (4, "Map.ReoderLayers(): layers=%s" % \
-                   (layerNameList))
-        
+        Debug.msg(5, "Map.SetLayers(): layers=%s" % (layerNameList))
+
     def ChangeLayer(self, layer, render = False, **kargs):
         """!Change map layer properties
 
