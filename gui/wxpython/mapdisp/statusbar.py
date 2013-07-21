@@ -277,9 +277,11 @@ class SbManager:
 
     def _progressShown(self):
         self._oldStatus = self.statusbar.GetStatusText(0)
+        self.choice.GetClientData(self.choice.GetSelection()).Hide()
 
     def _progressHidden(self):
         self.statusbar.SetStatusText(self._oldStatus, 0)
+        self.choice.GetClientData(self.choice.GetSelection()).Show()
 
     def OnToggleStatus(self, event):
         """!Toggle status text
