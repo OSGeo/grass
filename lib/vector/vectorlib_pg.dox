@@ -23,9 +23,10 @@ page</a> for more info.
 \section vlibFn List of functions
 
 Note that the functions listed bellow are lower level subroutines, in
-other word these functions are not consider for usage. They are
-internally used by the vector library when accessing PostGIS data. The
-programmer should use higher level functions instead. 
+other word these functions are not considered to be part of public
+API. They are internally used by the vector library when accessing
+PostGIS data. The programmer should use higher level functions
+instead.
 
 - Vect_open_old() to open exising vector map (ie. PostGIS table when using GRASS-PostGIS data provider)
 - Vect_open_new() to create new vector map
@@ -51,12 +52,11 @@ access is provided by functions starting with <tt>V2_</tt> prefix.
 - V2_open_old_pg()
 
 - V1_open_new_pg()
-- V2_open_new_pg()
 
 - V1_close_pg()
 - V2_close_pg()
 
-\par Read feature from PostGIS table
+\par Read access
 
 - V1_rewind_pg()
 - V2_rewind_pg()
@@ -68,21 +68,23 @@ access is provided by functions starting with <tt>V2_</tt> prefix.
 - V2_read_line_sfa()
 - V2_read_line_pg()
 
-\par Write new feature to PostGIS table
+\par Write new feature or topological element
 
 - V1_write_line_pg()
-- V2_write_line_sfa()
-- V2_write_line_pg()
+- V2_write_line_sfa() - write new simple feature
+- V2_write_line_pg() - write new topological element in PostGIS Topology schema
 
-\par Delete exising feature from PostGIS table
+\par Delete exising feature or topological element
 
 - V1_delete_line_pg()
-- V2_delete_line_sfa()
+- V2_delete_line_sfa() - delete simple feature
+- V2_delete_line_pg() - delete topological element from PostGIS Topology schema
 
-\par Modify existing feature from PostGIS table
+\par Modify existing feature or topological element
 
 - V1_rewrite_line_pg()
-- V2_rewrite_line_sfa()
+- V2_rewrite_line_sfa() - modify simple feature
+- V2_rewrite_line_pg() - modify topological element from PostGIS Topology schema
 
 \par Build topology
 
