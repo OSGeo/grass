@@ -64,7 +64,7 @@ int open_files(struct globals *globals)
     globals->nbands = Ref.nfiles;
 
     for (n = 0; n < Ref.nfiles; n++) {
-	/* returns -1 on error, 2 on empty range, quiting either way. */
+	/* returns -1 on error, 2 on empty range, quitting either way. */
 	if (Rast_read_fp_range(Ref.file[n].name, Ref.file[n].mapset, &fp_range[n]) != 1)
 	    G_fatal_error(_("No min/max found in raster map <%s>"),
 			  Ref.file[n].name);
@@ -114,6 +114,7 @@ int open_files(struct globals *globals)
 	    }
 	}
     }
+    G_verbose_message(_("Non-NULL cells: %ld"), globals->notnullcells);
     if (globals->notnullcells < 2)
 	G_fatal_error(_("Insufficient number of non-NULL cells in current region"));
 
@@ -544,7 +545,7 @@ static int manage_memory(int srows, int scols, struct globals *globals)
 		sizeof(CELL) * 4 * srows * scols);
     }
     else {
-	/* input bands, segment ids, bounds map */
+	/* input bands, segment ids */
 	nseg = (1024. * 1024. * segs_mb) /
 	       (sizeof(DCELL) * globals->nbands * srows * scols + 
 		sizeof(CELL) * 2 * srows * scols);
