@@ -1131,7 +1131,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
-        self.reorder = True
+        self.Map.SetLayers(self.GetVisibleLayers())
         
         if self.mapdisplay.GetToolbar('vdigit'):
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool = True)
@@ -1215,7 +1215,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # redraw map if auto-rendering is enabled
         self.rerender = True
-        self.reorder = True
+        self.Map.SetLayers(self.GetVisibleLayers())
         
     def OnCmdChanged(self, event):
         """!Change command string"""
@@ -1356,7 +1356,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
-        self.reorder = True
+        self.Map.SetLayers(self.GetVisibleLayers())
         
         # select new item
         self.SelectItem(newItem)
@@ -1525,40 +1525,33 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                          active = True))
                 if nlayers < 2:
                     mapWin.ResetView()
-        
-    def ReorderLayers(self):
-        """!Add commands from data associated with any valid layers
-        (checked or not) to layer list in order to match layers in
-        layer tree."""
 
+    def GetVisibleLayers(self):
         # make a list of visible layers
-        treelayers = []
-        
+        layers = []
+
         vislayer = self.GetFirstVisibleItem()
-        
+
         if not vislayer or self.GetPyData(vislayer) is None:
-            return
-        
+            return layers
+
         itemList = ""
-        
         for item in range(self.GetCount()):
             itemList += self.GetItemText(vislayer) + ','
-            if self.GetLayerInfo(vislayer, key = 'type') != 'group':
-                treelayers.append(self.GetLayerInfo(vislayer, key = 'maplayer'))
+            if self.GetLayerInfo(vislayer, key='type') != 'group':
+                layers.append(self.GetLayerInfo(vislayer, key='maplayer'))
 
             if not self.GetNextVisible(vislayer):
                 break
             else:
                 vislayer = self.GetNextVisible(vislayer)
-        
-        Debug.msg (4, "LayerTree.ReorderLayers(): items=%s" % \
-                   (itemList))
-        
-        # reorder map layers
-        treelayers.reverse()
-        self.Map.ReorderLayers(treelayers)
-        self.reorder = False
-        
+
+        Debug.msg(5, "LayerTree.GetVisibleLayers(): items=%s" %
+                  (reversed(itemList)))
+
+        layers.reverse()
+        return layers
+
     def ChangeLayer(self, item):
         """!Change layer"""
         type = self.GetLayerInfo(item, key = 'type')
@@ -1594,10 +1587,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # if digitization tool enabled -> update list of available vector map layers
         if self.mapdisplay.GetToolbar('vdigit'):
             self.mapdisplay.GetToolbar('vdigit').UpdateListOfLayers(updateTool = True)
-        
+
+        self.Map.SetLayers(self.GetVisibleLayers())
         # redraw map if auto-rendering is enabled
-        self.rerender = self.reorder = True
-        
+        self.rerender = True
+
     def OnCloseWindow(self, event):
         pass
         # self.Map.Clean()

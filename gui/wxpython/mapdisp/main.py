@@ -170,7 +170,7 @@ class DMonMap(Map):
                 else:
                     reorderedLayers[layersOrder[i]] = layer
 
-            self.ReorderLayers(reorderedLayers)
+            self.SetLayers(reorderedLayers)
 
         except IOError, e:
             grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
