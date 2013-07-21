@@ -288,6 +288,8 @@ int region_growing(struct globals *globals)
 		
 		if (Ri.id < 0)
 		    continue;
+		if (Ri.id == 0)
+		    G_fatal_error("Zero segment id at row %d, col %d", Ri.row, Ri.col);
 
 		/* find segment neighbors */
 		/* find Ri's best neighbor, clear candidate flag */
@@ -345,9 +347,6 @@ int region_growing(struct globals *globals)
 		        (globals->nn >= 8 && Rk.count <= globals->nn))
 		    candidates_only = FALSE;
 		}
-		
-		if (Rk.id == 0)
-		    pathflag = FALSE;
 
 		while (pathflag) {
 		    pathflag = FALSE;
@@ -380,18 +379,11 @@ int region_growing(struct globals *globals)
 
 			/* not mutually best neighbors */
 			if (Rk_similarity != Ri_similarity) {
-			    /* important for fp precision limit
-			     * because region stats may be calculated 
-			     * in two slightly different ways */
-			    if (Ri_similarity - Rk_similarity > EPSILON)
 				do_merge = 0;
 			}
 			/* Ri has only one neighbor, merge */
 			if (Ri_nn == 1 && Rk_nn > 1)
 			    do_merge = 1;
-
-			if (Rk.id == 0)
-			    do_merge = 0;
 
 			/* adjust threshold */
 			if (do_merge) {
@@ -443,7 +435,8 @@ int region_growing(struct globals *globals)
 			    search_neighbors(&Ri, &Ri_rs, Ri_ngbrs, &Ri_similarity,
 					     &Rk, &Rk_rs, globals);
 
-			    if (Ri_nn > 0 && compare_double(Ri_similarity, threshold) == -1) {
+			    if (Rk.id != 0 && Ri_nn > 0 && 
+			        compare_double(Ri_similarity, threshold) == -1) {
 
 				pathflag = TRUE;
 				/* candidates_only:
@@ -467,6 +460,11 @@ int region_growing(struct globals *globals)
 
 			    if (Rk.id < 1)
 				pathflag = FALSE;
+
+			    if (Rk_bestn.id == 0) {
+				G_debug(4, "Rk's best neighour is zero");
+				pathflag = FALSE;
+			    }
 
 			    if (pathflag) {
 				
@@ -686,7 +684,7 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
     nbtree_clear(Ri_ngbrs);
     n_ngbrs = 0;
     /* TODO: add size of largest region to reg_tree, use this as min */
-    Rk->count = globals->ncells;
+    Rk->count = globals->ncells + 1;
     Rk->id = Rk_rs->id = 0;
 
     /* go through segment, spreading outwards from head */
@@ -906,7 +904,7 @@ double calculate_manhattan_similarity(struct ngbr_stats *Ri,
     double val = 0.;
     int n = globals->nbands - 1;
 
-    /* squared euclidean distance, sum the square differences for each dimension */
+    /* squared manhattan distance, sum the differences for each dimension */
     do {
 	val += Ri->mean[n] - Rk->mean[n];
     } while (n--);
@@ -1018,8 +1016,16 @@ static int search_neighbors(struct ngbr_stats *Ri,
 
     G_debug(4, "search_neighbors");
 
+    if (Ri->id != Ri_rs->id)
+	G_fatal_error("Ri = %d but Ri_rs = %d", Ri->id, Ri_rs->id);
+    if (Ri->id <= 0)
+	G_fatal_error("Ri is %d", Ri->id);
+    if (Ri_rs->id <= 0)
+	G_fatal_error("Ri_rs is %d", Ri_rs->id);
+
     nbtree_init_trav(&travngbr, Ri_ngbrs);
     Rk->count = globals->ncells + 1;
+    Rk->id = Rk_rs->id = 0;
 
     while ((next = nbtree_traverse(&travngbr))) {
 	tempsim = (globals->calculate_similarity)(Ri, next, globals);
@@ -1047,19 +1053,9 @@ static int search_neighbors(struct ngbr_stats *Ri,
     }
     Rk_rs->id = Rk->id;
 
-    /* faster, but with fp error:
-     * calculate sum from mean and count */
-    /*
-    Rk_rs->count = Rk->count;
-    memcpy(Rk_rs->mean, Rk->mean, globals->datasize);
-    i = globals->nbands - 1;
-    do {
-	Rk_rs->sum[i] = Rk_rs->mean[i] * Rk_rs->count;
-    } while (i--);
-    */
-
-    /* a bit slower but correct: */
-    fetch_reg_stats(Rk->row, Rk->col, Rk_rs, globals);
+    if (Rk->id != 0) {
+	fetch_reg_stats(Rk->row, Rk->col, Rk_rs, globals);
+    }
 
     return 1;
 }
@@ -1487,7 +1483,7 @@ int fetch_reg_stats(int row, int col, struct reg_stats *rs,
     struct reg_stats *rs_found;
     
     if (rs->id <= 0)
-	G_fatal_error("Invalid region id %d", rs->id);
+	G_fatal_error("fetch_reg_stats(): invalid region id %d", rs->id);
 
     if ((rs_found = rgtree_find(globals->reg_tree, rs)) != NULL) {
 
