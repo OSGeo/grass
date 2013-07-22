@@ -56,13 +56,21 @@ class BufferedWindow(MapWindow, wx.Window):
     SaveToFile() method.
     """
     def __init__(self, parent, giface, Map, frame,
-                 id = wx.ID_ANY, tree = None, lmgr = None, overlays = None,
+                 id=wx.ID_ANY, overlays=None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
+        """!
+        @param parent parent window
+        @param giface grass interface instance
+        @param Map map instance
+        @param frame map frame instance (to be removed)
+        @param id wx window id
+        @param style wx window style
+        @param kwargs keyword arguments passed to MapWindow and wx.Window
+        """
         MapWindow.__init__(self, parent = parent, giface = giface, Map = Map,
                            frame = frame, **kwargs)
         wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
-        
-        self.tree = tree
+
         # flags
         self.resize = False # indicates whether or not a resize event has taken place
         self.dragimg = None # initialize variable for map panning
