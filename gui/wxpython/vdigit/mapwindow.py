@@ -31,10 +31,10 @@ class VDigitWindow(BufferedWindow):
     """!A Buffered window extended for vector digitizer.
     """
     def __init__(self, parent, giface, Map, frame,
-                 id = wx.ID_ANY, tree = None, lmgr = None,
+                 id=wx.ID_ANY, lmgr=None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
         BufferedWindow.__init__(self, parent = parent, giface = giface, id = id, Map = Map,
-                                frame = frame, tree = tree, style = style, **kwargs)
+                                frame=frame, style=style, **kwargs)
         self.lmgr = lmgr
         self.pdcVector = wx.PseudoDC()
         self.toolbar   = self.parent.GetToolbar('vdigit')

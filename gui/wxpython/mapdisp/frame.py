@@ -148,8 +148,8 @@ class MapFrame(SingleMapFrame):
         # Init map display (buffered DC & set default cursor)
         #
         self.MapWindow2D = BufferedWindow(self, giface = self._giface, id = wx.ID_ANY,
-                                          Map = self.Map, frame = self, tree = self.tree,
-                                          lmgr = self._layerManager, overlays = self.decorations)
+                                          Map=self.Map, frame=self,
+                                          overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
         # enable or disable zoom history tool
         self.MapWindow2D.zoomHistoryAvailable.connect(
