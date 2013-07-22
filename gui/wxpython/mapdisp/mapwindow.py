@@ -629,10 +629,11 @@ class BufferedWindow(MapWindow, wx.Window):
         # render background image if needed
         #
 
-        # reset flag for auto-rendering
-        if self.tree:
-            self.tree.rerender = False
-        
+        # here was the change of the layertree rerender variable
+        # but it is fully the problem of layertree
+        # and so it is handled there
+        # remove this comment when it is old enough
+
         try:
             if render:
                 # update display size

@@ -131,8 +131,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.saveitem = {}                   # dictionary to preserve layer attributes for drag and drop
         self.first = True                    # indicates if a layer is just added or not
         self.flag = ''                       # flag for drag and drop hittest
-        self.rerender = False                # layer change requires a rerendering if auto render
-        self.reorder = False                 # layer change requires a reordering
+        # layer change requires a rerendering
+        # (used to request rendering only when layer changes are finished)
+        self.rerender = False
         self.hitCheckbox = False             # if cursor points at layer checkbox (to cancel selection changes)
         self.forceCheck = False              # force check layer if CheckItem is called
         
@@ -162,7 +163,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                    id = wx.ID_ANY, pos = pos,
                                    size = globalvar.MAP_WINDOW_SIZE,
                                    style = wx.DEFAULT_FRAME_STYLE,
-                                   tree = self, notebook = self.notebook,
+                                   notebook = self.notebook,
                                    lmgr = self.lmgr, page = self.treepg,
                                    Map = self.Map)
         
@@ -362,15 +363,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """!Only re-order and re-render a composite map image from GRASS during
         idle time instead of multiple times during layer changing.
         """
+        # no need to check for digitizer since it is handled internaly
+        # no need to distinguish 2D and 3D since the interface is the same
+        # remove this comment when it is onl enough
         if self.rerender:
-            if self.mapdisplay.GetToolbar('vdigit'):
-                vector = True
-            else:
-                vector = False
             if self.mapdisplay.IsAutoRendered():
-                self.mapdisplay.MapWindow2D.UpdateMap(render = True, renderVector = vector)
-                if self.lmgr.IsPaneShown('toolbarNviz'): # nviz
-                    self.mapdisplay.MapWindow3D.UpdateMap(render = True)
+                self.mapdisplay.GetMapWindow().UpdateMap(render=True)
             self.rerender = False
         
         event.Skip()
