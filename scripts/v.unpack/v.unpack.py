@@ -49,14 +49,14 @@ def cleanup():
 def main():
     infile = options['input']
     
-    # check if the input file exists
-    if not os.path.exists(infile):
-        grass.fatal(_("File <%s> not found") % infile)
-    
     # create temporary directory
     global tmp_dir
     tmp_dir = grass.tempdir()
     grass.debug('tmp_dir = %s' % tmp_dir)
+    
+    # check if the input file exists
+    if not os.path.exists(infile):
+        grass.fatal(_("File <%s> not found") % infile)
     
     # copy the files to tmp dir
     input_base = os.path.basename(infile)
