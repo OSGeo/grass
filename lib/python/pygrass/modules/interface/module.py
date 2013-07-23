@@ -269,6 +269,16 @@ class Module(object):
         return args
 
     def run(self, node=None):
+        """!Run the module
+
+           This function will wait for the process to terminate
+           in case finish_==True and sets up stdout and stderr.
+           If finish_==False this function will return after starting
+           the process. Use self.popen.communicate() of self.popen.wait()
+           to wait for the process termination. The handling
+           of stdout and stderr must then be done outside of this
+           function.
+        """
         if self.inputs['stdin'].value:
             self.stdin = self.inputs['stdin'].value
             self.stdin_ = subprocess.PIPE
@@ -283,8 +293,6 @@ class Module(object):
                                       stderr=self.stderr_,
                                       env=self.env_)
         if self.finish_:
-            self.popen.wait()
-
-        stdout, stderr = self.popen.communicate(input=self.stdin)
-        self.outputs['stdout'].value = stdout if stdout else ''
-        self.outputs['stderr'].value = stderr if stderr else ''
+            stdout, stderr = self.popen.communicate(input=self.stdin)
+            self.outputs['stdout'].value = stdout if stdout else ''
+            self.outputs['stderr'].value = stderr if stderr else ''
