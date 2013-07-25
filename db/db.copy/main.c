@@ -95,6 +95,14 @@ int main(int argc, char **argv)
 	if (select->answer)
 	    G_fatal_error(_("Cannot combine 'from_table' and 'select' options"));
 
+	if (!db_table_exists(from_driver->answer, from_database->answer,
+	                     from_table->answer)) {
+	    G_warning(_("Table <%s> not found in database <%s> using driver <%s>"),
+		       from_table->answer, from_database->answer,
+		       from_driver->answer);
+	    exit(EXIT_FAILURE);
+	}
+
 	if (where->answer) {
 	    ret =
 		db_copy_table_where(from_driver->answer,
