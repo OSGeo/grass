@@ -47,9 +47,9 @@ int main(int argc, char **argv)
 
     parse_command_line(argc, argv);
     if (!db_table_exists(parms.driver, parms.database, parms.table)) {
-	G_message(_("Table <%s> not found in database <%s> using driver <%s>"),
+	G_warning(_("Table <%s> not found in database <%s> using driver <%s>"),
 		   parms.table, parms.database, parms.driver);
-	exit(EXIT_SUCCESS);
+	exit(EXIT_FAILURE);
     }
     driver = db_start_driver(parms.driver);
     if (driver == NULL)
