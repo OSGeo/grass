@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
+#include <grass/gis.h>
 #include "sw_defs.h"
 
 int geominit(void)
@@ -32,12 +33,22 @@ struct Edge *bisect(struct Site *s1, struct Site *s2)
     newedge->ep[0] = (struct Site *)NULL;
     newedge->ep[1] = (struct Site *)NULL;
 
-    dx = s2->coord.x - s1->coord.x;
-    dy = s2->coord.y - s1->coord.y;
+    if (s1->coord.x < s2->coord.x || 
+        (s1->coord.x == s2->coord.x && s1->coord.y < s2->coord.y)) {
+	dx = s2->coord.x - s1->coord.x;
+	dy = s2->coord.y - s1->coord.y;
+	newedge->c =
+	    s1->coord.x * dx + s1->coord.y * dy + (dx * dx + dy * dy) * 0.5;
+    }
+    else {
+	dx = s1->coord.x - s2->coord.x;
+	dy = s1->coord.y - s2->coord.y;
+	newedge->c =
+	    s2->coord.x * dx + s2->coord.y * dy + (dx * dx + dy * dy) * 0.5;
+    }
+
     adx = dx > 0 ? dx : -dx;
     ady = dy > 0 ? dy : -dy;
-    newedge->c =
-	s1->coord.x * dx + s1->coord.y * dy + (dx * dx + dy * dy) * 0.5;
     if (adx > ady) {
 	newedge->a = 1.0;
 	newedge->b = dy / dx;
@@ -55,12 +66,27 @@ struct Edge *bisect(struct Site *s1, struct Site *s2)
     return (newedge);
 }
 
+/* single precision ULP */
+static double d_ulp(double d)
+{
+    int exp;
+
+
+    if (d == 0)
+	return GRASS_EPSILON;
+
+    d = frexp(d, &exp);
+    exp -= 22;
+    d = ldexp(d, exp);
+
+    return d;
+}
 
 struct Site *intersect(struct Halfedge *el1, struct Halfedge *el2)
 {
     struct Edge *e1, *e2, *e;
     struct Halfedge *el;
-    double d, xint, yint;
+    double d, dt, xint, yint;
     int right_of_site;
     struct Site *v;
 
@@ -72,7 +98,19 @@ struct Site *intersect(struct Halfedge *el1, struct Halfedge *el2)
 	return ((struct Site *)NULL);
 
     d = e1->a * e2->b - e1->b * e2->a;
-    if (-1.0e-10 < d && d < 1.0e-10)
+    if (fabs(e1->a * e2->b) > fabs(e1->b * e2->a)) {
+	dt = fabs(e1->a * e2->b);
+    }
+    else
+	dt = fabs(e1->b * e2->a);
+
+    if (dt != dt)
+	return ((struct Site *)NULL);
+
+    dt = d_ulp(dt);
+    G_debug(4, "dt = %g", dt);
+
+    if (-dt < d && d < dt)
 	return ((struct Site *)NULL);
 
     xint = (e1->c * e2->b - e2->c * e1->b) / d;
