@@ -187,7 +187,7 @@ int main(int argc, char **argv)
     G_set_verbose(0);
     Vect_build_partial(&Out, GV_BUILD_BASE);
     G_set_verbose(verbose);
-    
+
     ncoor = 0;
     acoor = 100;
     coor = (COOR *) G_malloc(sizeof(COOR) * acoor);
@@ -410,7 +410,7 @@ int main(int argc, char **argv)
     if (err_nocentr || err_centr_dupl || err_centr_out) {
 	int nmod;
 
-	G_important_message(_("Output needs topological cleaning"));
+	G_important_message(_("Cleaning output topology"));
 	Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL);
 	do {
 	    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
