@@ -160,10 +160,11 @@ int readsites(void)
 	nsites++;
     }
 
-    if(nsites < 1) {
+    if (nsites < 3) {
 	const char *name = Vect_get_full_name(&In);
 	Vect_close(&In);
-	G_fatal_error(_("No points/centroids found in <%s>"), name);
+	G_fatal_error(_("Found %d points/centroids in <%s>, but at least 3 are needed"),
+	              nsites, name);
     }
 
     if (nsites < nlines)
