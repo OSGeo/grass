@@ -32,8 +32,9 @@
  */
 int db__driver_open_database(dbHandle * handle)
 {
-    char name2[GPATH_MAX];
+    char name2[GPATH_MAX], *path;
     const char *name;
+    int i;
 
     G_debug(3, "\ndb_driver_open_database()");
 
@@ -80,6 +81,25 @@ int db__driver_open_database(dbHandle * handle)
     }
 
     G_debug(2, "name2 = '%s'", name2);
+
+    path = G_store(name2);
+    path = G_convert_dirseps_to_host(path);
+    i = strlen(path);
+    while (path[i] != HOST_DIRSEP && i > 0)
+	i--;
+
+    path[i] = '\0';
+    if (*path) {
+	G_debug(2, "path to db is %s", path);
+
+	/* create directory if not existing */
+	if (access(path, 0) != 0) {
+	    if (G_mkdir(path) != 0)
+		G_fatal_error(_("Unable to create directory '%s' for sqlite database"),
+		              path);
+	}
+    }
+    G_free(path);
 
     if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
 	db_d_append_error("%s %s\n%s",
