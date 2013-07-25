@@ -15,7 +15,7 @@
 
 int write_output(struct globals *globals)
 {
-    int out_fd, row, col;
+    int out_fd, row, col, maxid;
     CELL *outbuf, rid;
     struct Colors colors;
     struct History hist;
@@ -29,6 +29,7 @@ int write_output(struct globals *globals)
     G_debug(1, "start data transfer from segmentation file to raster");
 
     G_message(_("Writing out segment IDs"));
+    maxid = 0;
     for (row = 0; row < globals->nrows; row++) {
 
 	G_percent(row, globals->nrows, 9);
@@ -41,6 +42,8 @@ int write_output(struct globals *globals)
 
 		if (rid > 0) {
 		    outbuf[col] = rid;
+		    if (maxid < rid)
+			maxid = rid;
 		}
 	    }
 	}
@@ -53,7 +56,7 @@ int write_output(struct globals *globals)
 
     /* set colors */
     Rast_init_colors(&colors);
-    Rast_make_random_colors(&colors, 1, globals->nrows * globals->ncols);
+    Rast_make_random_colors(&colors, 1, maxid);
     Rast_write_colors(globals->out_name, G_mapset(), &colors);
 
     Rast_short_history(globals->out_name, "raster", &hist);
