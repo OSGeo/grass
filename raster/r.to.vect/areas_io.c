@@ -84,11 +84,15 @@ static int write_bnd(struct COOR *line_begin, struct COOR *line_end,	/* start an
 		     int n	/* number of points to write */
     )
 {
-    struct line_pnts *points = Vect_new_line_struct();
+    static struct line_pnts *points = NULL;
     double x;
     double y;
     struct COOR *p, *last;
     int i;
+
+    if (!points)
+	points = Vect_new_line_struct();
+    Vect_reset_line(points);
 
     n++;			/* %% 6.4.88 */
 
@@ -157,12 +161,16 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
 			    int n	/* number of points to write */
     )
 {
-    struct line_pnts *points = Vect_new_line_struct();
+    static struct line_pnts *points = NULL;
     double x, y;
     double dx, dy;
     int idx, idy;
     struct COOR *p, *last;
     int i, total;
+
+    if (!points)
+	points = Vect_new_line_struct();
+    Vect_reset_line(points);
 
     n++;			/* %% 6.4.88 */
 
