@@ -99,11 +99,15 @@ int write_line(struct COOR *seed)
 static int write_ln(struct COOR *begin, struct COOR *end,	/* start and end point of line */
 		    int n)
 {				/* number of points to write */
-    struct line_pnts *points = Vect_new_line_struct();
+    static struct line_pnts *points = NULL;
     double x, y;
     struct COOR *p, *last;
     int i, cat, field;
     static int count = 1;
+
+    if (!points)
+	points = Vect_new_line_struct();
+    Vect_reset_line(points);
 
     field = 1;
     ++n;
