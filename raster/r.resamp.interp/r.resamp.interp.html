@@ -9,8 +9,8 @@ number of adjacent cells in the input map to determine the value of each
 cell in the output map as follows:
 <ul>
 <li>nearest neighbour (1 cell)</li>
-<li>bilinear (4 cells)</li>
-<li>bicubic (16 cells)</li>
+<li>linear (4 cells, also called bilinear)</li>
+<li>cubic (16 cells, also called bicubic)</li>
 <li>lanczos (25 cells)</li>
 </ul>
 
@@ -26,7 +26,7 @@ to a different resolution rather than for interpolation from scattered data
 r.resamp.rst</em>) resample the map to match the current region settings.
 
  
-<p>Note that for bilinear, bicubic and lanczos interpolation,
+<p>Note that for linear, cubic and lanczos interpolation,
 cells of the output raster that cannot be bounded by the appropriate number
 of input cell centers are set to NULL (NULL propagation). This could occur
 due to the input cells being outside the current region, being NULL or MASKed.
