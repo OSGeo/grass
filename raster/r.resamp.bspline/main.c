@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("resample"));
     G_add_keyword(_("interpolation"));
     module->description =
-	_("Performs bicubic or bilinear spline interpolation with Tykhonov regularization.");
+	_("Performs cubic or linear spline interpolation with Tykhonov regularization.");
 
     in_opt = G_define_standard_option(G_OPT_R_INPUT);
 

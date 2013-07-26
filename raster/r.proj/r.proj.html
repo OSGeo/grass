@@ -87,13 +87,13 @@ for accomplishing this, therefore, is as follows:
 <p><em>r.proj</em> converts a map to a new geographic projection. It
 reads a map from a different location, projects it and write it out to
 the current location. The projected data is resampled with one of four
-different methods: nearest neighbor, bilinear, cubic convolution or
+different methods: nearest neighbor, linear, cubic convolution or
 lanczos.
 <p>The <b>method=nearest</b> method, which performs a nearest neighbor
 assignment, is the fastest of the three resampling methods. It is
 primarily used for categorical data such as a land use classification,
 since it will not change the values of the data
-cells. The <b>method=bilinear</b> method determines the new value of
+cells. The <b>method=linear</b> method determines the new value of
 the cell based on a weighted distance average of the 4 surrounding
 cells in the input map. The <b>method=cubic</b> method determines the
 new value of the cell based on a weighted distance average of the 16
@@ -103,19 +103,19 @@ average of the 25 surrounding cells in the input map. Compared to
 cubic, lanczos puts a higher weight on cells close to the center and a
 lower weight on cells away from the center, resulting in slightly
 better contrast.
-<p>The bilinear, cubic and lanczos interpolation methods are most
+<p>The linear, cubic and lanczos interpolation methods are most
 appropriate for continuous data and cause some smoothing. The amount
-of smoothing decreases from bilinear to cubic to lanczos. These
+of smoothing decreases from linear to cubic to lanczos. These
 options should not be used with categorical data, since the cell
 values will be altered.
-<p>In the bilinear, cubic and lanczos methods, if any of the surrounding
+<p>In the linear, cubic and lanczos methods, if any of the surrounding
 cells used to interpolate the new cell value are null, the resulting
 cell will be null, even if the nearest cell is not null. This will
 cause some thinning along null borders, such as the coasts of land
-areas in a DEM. The bilinear_f, cubic_f and lanczos_f interpolation
+areas in a DEM. The linear_f, cubic_f and lanczos_f interpolation
 methods can be used if thinning along null edges is not desired.
 These methods &quot;fall back&quot; to simpler interpolation methods
-along null borders.  That is, from lanczos to cubic to bilinear to
+along null borders.  That is, from lanczos to cubic to linear to
 nearest.
 <p>If nearest neighbor assignment is used, the output map has the same
 raster format as the input map. If any of the interpolations is used,

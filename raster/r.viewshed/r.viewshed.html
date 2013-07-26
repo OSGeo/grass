@@ -118,7 +118,7 @@ center, is interpolated. Thus the terrain is viewed as a smooth surface.
 Two points are visible to each other if their line-of-sight does not
 intersect the terrain. The height for an arbitrary point x in the terrain 
 is interpolated from the 4 surrounding neighbours. This means that this 
-model does a bilinear interpolation of heights.
+model does a linear (bilinear) interpolation of heights.
 
 This model is suitable for both low and high resolution rasters as well 
 as terrain with flat and steep slopes.
