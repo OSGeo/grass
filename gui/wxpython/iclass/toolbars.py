@@ -47,6 +47,8 @@ iClassIcons = {
                             label = _('Import training areas from vector map')),
         'addRgb' : MetaIcon(img = 'layer-rgb-add',
                             label = _('Add RGB map layer')),
+        'scatt_plot'    : MetaIcon(img = 'layer-raster-analyze',
+                                   label = _('Open Scatter Plot Tool (EXPERIMENTAL GSoC 2013)')),
         }
         
 class IClassMapToolbar(BaseToolbar):
@@ -119,6 +121,9 @@ class IClassMapToolbar(BaseToolbar):
                                       self.parent.OnZoomBack),
                                      ("zoomToMap", icons["zoomExtent"],
                                       self.parent.OnZoomToMap),
+                                     (None, ),
+                                     ("scatt_plot", iClassIcons["scatt_plot"],
+                                      self.parent.OnScatterplot)
                                     ))
 class IClassToolbar(BaseToolbar):
     """!IClass toolbar

@@ -1123,6 +1123,26 @@ class IClassMapFrame(DoubleMapFrame):
                     toolbar.action['id'] = -1
                     toolbar.OnTool(None)
 
+    def OnScatterplot(self, event):
+        """!Init interactive scatterplot tools
+        """
+        if self.dialogs['scatt_plot']:
+            self.dialogs['scatt_plot'].Raise()
+            return
+
+        try:
+          from scatt_plot.dialogs import ScattPlotMainDialog
+        except:
+          GError(parent  = self, message = _("The Scatter Plot Tool is not installed."))
+          return
+
+        self.dialogs['scatt_plot'] = ScattPlotMainDialog(parent=self, giface=self._giface, iclass_mapwin = self.GetFirstWindow())
+
+        scatt_mgr = self.dialogs['scatt_plot'].GetScattMgr()
+        scatt_mgr.DigitDataChanged(self.toolbars['vdigit'].mapLayer.GetName(), self.GetFirstWindow().digit)
+
+        self.dialogs['scatt_plot'].CenterOnScreen()
+        self.dialogs['scatt_plot'].Show()
 
 class MapManager:
     """! Class for managing map renderer.
