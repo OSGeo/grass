@@ -60,6 +60,9 @@ Contents
 2013
       rm -f include/VERSION~
 
+    - Update additionally the winGRASS version
+      grass-addons/tools/wingrass-packager/grass_packager_release.bat
+
      #version:
      MAJOR=`cat include/VERSION | head -1 | tail -1`
      MINOR=`cat include/VERSION | head -2 | tail -1`
@@ -149,9 +152,9 @@ Contents
    version at (warning: needs stuff to be compiled).
       - download new source code package, compile with most settings
       -  cd dist.$ARCH/docs/html
-         echo www/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
-         scp -r * neteler@grass.osgeo.org:/osgeo/grass/grass-cms/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
-         scp -r * neteler@download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
+         echo www/grass$MAJOR$MINOR/manuals/
+         scp -r * neteler@grass.osgeo.org:/osgeo/grass/grass-cms/grass$MAJOR$MINOR/manuals/
+         scp -r * neteler@download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/manuals/
 
  o stable release: update cronjob 'cron_grass_HEAD_src_snapshot.sh' to next but one
                    release tag for the differences
