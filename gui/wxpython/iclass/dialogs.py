@@ -154,8 +154,8 @@ class IClassCategoryManagerDialog(wx.Dialog):
                            label = " %s " % _("Classes"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-        self.catList = CategoryListCtrl(panel, mapwindow = parent, statistics = parent.statisticsDict,
-                                         statisticsList = parent.statisticsList)
+        self.catList = CategoryListCtrl(panel, mapwindow = parent, 
+                                               stats_data = parent.stats_data)
         addButton = wx.Button(panel, id = wx.ID_ADD)
         deleteButton = wx.Button(panel, id = wx.ID_DELETE)
         
@@ -187,8 +187,8 @@ class IClassCategoryManagerDialog(wx.Dialog):
         self.Layout()
 
     def OnAddCategory(self, event):
-        if self.parent.statisticsList:
-            cat = max(self.parent.statisticsList) + 1
+        if self.parent.stats_data.GetCategories():
+            cat = max(self.parent.stats_data.GetCategories()) + 1
         else:
             cat = 1
         defaultName = 'class' + '_' + str(cat) # intentionally not translatable
@@ -221,16 +221,13 @@ class CategoryListCtrl(wx.ListCtrl,
     when deleting class (category).
     It uses virtual data in the terms of @c wx.ListCtrl.
     
-    @todo statistics and categories are managed here directly,
-    it could be better to use some interface
     @todo delete vector features after deleting class
     """
-    def __init__(self, parent, mapwindow, statistics, statisticsList, id = wx.ID_ANY):
+    def __init__(self, parent, mapwindow, stats_data, id = wx.ID_ANY):
         """!
         @param parent gui parent
         @param mapwindow mapwindow instance with iclass toolbar and remove raster method
-        @param statistics dictionary of statistics (defined in statistics.py)
-        @param statisticsList list of statistics
+        @param stats_data StatisticsData instance (defined in statistics.py)
         @param id wx id
         """
         wx.ListCtrl.__init__(self, parent, id,
@@ -239,9 +236,8 @@ class CategoryListCtrl(wx.ListCtrl,
                         (_('Color'), 'color'))
         self.Populate(columns = self.columns)
         self.mapWindow = mapwindow
-        self.statisticsDict = statistics
-        self.statisticsList = statisticsList
-        self.SetItemCount(len(statisticsList))
+        self.stats_data = stats_data
+        self.SetItemCount(len(self.stats_data.GetCategories()))
         
         self.rightClickedItemIdx = wx.NOT_FOUND
         
@@ -254,7 +250,15 @@ class CategoryListCtrl(wx.ListCtrl,
         
         self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnClassRightUp) #wxMSW
         self.Bind(wx.EVT_RIGHT_UP,            self.OnClassRightUp) #wxGTK
-        
+    
+        self.stats_data.statisticsAdded.connect(self.Update)
+        self.stats_data.statisticsDeleted.connect(self.Update)
+        self.stats_data.allStatisticsDeleted.connect(self.Update)
+        self.stats_data.statisticsSet.connect(self.Update)
+
+    def Update(self):
+        self.SetItemCount(len(self.stats_data.GetCategories()))
+
     def SetVirtualData(self, row, column, text):
         attr = self.columns[column][1]
         if attr == 'name':
@@ -263,7 +267,10 @@ class CategoryListCtrl(wx.ListCtrl,
             except UnicodeEncodeError:
                 GMessage(parent = self, message = _("Please use only ASCII characters."))
                 return
-        setattr(self.statisticsDict[self.statisticsList[row]], attr, text)
+
+
+        cat = self.stats_data.GetCategories()[row]
+        self.stats_data.GetStatistics(cat).SetStatistics(stats = {attr : text})
         
         self.UpdateChoice()
         toolbar = self.mapWindow.toolbars['iClass']
@@ -284,41 +291,46 @@ class CategoryListCtrl(wx.ListCtrl,
         
     def AddCategory(self, cat, name, color):
         """!Add category record (used when importing areas)"""
-        st = Statistics()
-        st.SetBaseStatistics(cat = cat, name = name, color = color)
-        self.statisticsDict[cat] = st
-        self.statisticsList.append(cat)
-        self.SetItemCount(len(self.statisticsList))
+
+        self.stats_data.AddStatistics(cat, name, color)
+        self.SetItemCount(len(self.stats_data.GetCategories()))
         
         self.UpdateChoice()
         self.mapWindow.UpdateChangeState(changes = True)
                 
     def DeleteCategory(self):
         indexList = sorted(self.GetSelectedIndices(), reverse = True)
-        cats = []
+        del_cats = []
+        cats = self.stats_data.GetCategories()
+
         for i in indexList:
             # remove temporary raster
-            name = self.statisticsDict[self.statisticsList[i]].rasterName
+            cat = cats[i]
+            stat = self.stats_data.GetStatistics(cat)
+
+            name = stat.rasterName
             self.mapWindow.RemoveTempRaster(name)
             
-            cats.append(self.statisticsList[i])
-            del self.statisticsDict[self.statisticsList[i]]
-            del self.statisticsList[i]
+            del_cats.append(cat)
+            self.stats_data.DeleteStatistics(cat)
             
-        self.SetItemCount(len(self.statisticsList))
+        self.SetItemCount(len(self.stats_data.GetCategories()))
         
         self.UpdateChoice()
         self.mapWindow.UpdateChangeState(changes = True)
         
-        self.mapWindow.DeleteAreas(cats = cats)
+        self.mapWindow.DeleteAreas(cats = del_cats)
     
     def UpdateChoice(self):
         toolbar = self.mapWindow.toolbars['iClass']
         name = toolbar.GetSelectedCategoryName()
         catNames = []
-        for cat in self.statisticsList:
-            catNames.append(self.statisticsDict[cat].name)
-        toolbar.SetCategories(catNames = catNames, catIdx = self.statisticsList)
+
+        cats = self.stats_data.GetCategories()
+        for cat in cats:
+            stat = self.stats_data.GetStatistics(cat)
+            catNames.append(stat.name)
+        toolbar.SetCategories(catNames = catNames, catIdx = cats)
         if name in catNames:
             toolbar.choice.SetStringSelection(name)
         elif catNames:
@@ -361,11 +373,12 @@ class CategoryListCtrl(wx.ListCtrl,
     def OnCategorySelected(self, event):
         """!Highlight selected areas"""
         indexList = self.GetSelectedIndices()
-        cats = []
+        sel_cats = []
+        cats = self.stats_data.GetCategories()
         for i in indexList:
-            cats.append(self.statisticsList[i])
+            sel_cats.append(cats[i])
         
-        self.mapWindow.HighlightCategory(cats)
+        self.mapWindow.HighlightCategory(sel_cats)
         if event:
             event.Skip()
         
@@ -388,7 +401,7 @@ class CategoryListCtrl(wx.ListCtrl,
     
     def OnZoomToAreasByCat(self, event):
         """!Zoom to areas of given category"""
-        cat = self.statisticsList[self.rightClickedItemIdx]
+        cat = self.stats_data.GetCategories()[self.rightClickedItemIdx]
         self.mapWindow.ZoomToAreasByCat(cat)
         
     def DeselectAll(self):
@@ -401,8 +414,9 @@ class CategoryListCtrl(wx.ListCtrl,
         self.OnCategorySelected(None)
         
     def OnGetItemText(self, item, col):
-        cat = self.statisticsList[item]
-        return getattr(self.statisticsDict[cat], self.columns[col][1]) 
+        cat = self.stats_data.GetCategories()[item]
+        stat = self.stats_data.GetStatistics(cat)
+        return getattr(stat, self.columns[col][1]) 
 
     def OnGetItemImage(self, item):
         return -1

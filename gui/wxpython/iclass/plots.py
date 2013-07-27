@@ -28,15 +28,14 @@ class PlotPanel(scrolled.ScrolledPanel):
     for each band and for one category. Coincidence plots show min max range
     of classes for each band.
     """
-    def __init__(self, parent, statDict, statList):
+    def __init__(self, parent, stats_data):
         scrolled.ScrolledPanel.__init__(self, parent)
         
         self.SetupScrolling(scroll_x = False, scroll_y = True)
         self.parent = parent
         self.canvasList = []
         self.bandList = []
-        self.statDict = statDict
-        self.statList = statList
+        self.stats_data = stats_data
         self.currentCat = None
         
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -60,17 +59,19 @@ class PlotPanel(scrolled.ScrolledPanel):
             return
         
         if self.plotSwitch.GetSelection() == 0:
-            if not self.statDict[self.currentCat].IsReady():
+            stat = self.stats_data.GetStatistics(self.currentCat)
+            if not stat.IsReady():
                 self.ClearPlots()
                 return
-            self.DrawHistograms(self.statDict[self.currentCat])
+            self.DrawHistograms(stat)
         else:
             self.DrawCoincidencePlots()
             
     def StddevChanged(self):
         """!Standard deviation multiplier changed, redraw histograms"""
         if self.plotSwitch.GetSelection() == 0:
-            self.UpdateRanges(self.statDict[self.currentCat])
+            stat = self.stats_data.GetStatistics(self.currentCat)
+            self.UpdateRanges(stat)
         
     def EnableZoom(self, type, enable = True):
         for canvas in self.canvasList:
@@ -114,22 +115,21 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.SetVirtualSize(self.GetBestVirtualSize()) 
         self.Layout()
         
-    def UpdatePlots(self, group, currentCat, statDict, statList):
+    def UpdatePlots(self, group, currentCat, stats_data):
         """!Update plots after new analysis
         
         @param group imagery group
         @param currentCat currently selected category (class)
-        @param statDict dictionary with Statistics
-        @param statList list of currently used categories
+        @param stats_data StatisticsData instance (defined in statistics.py)
         """
-        self.statDict = statDict
-        self.statList = statList
+        self.stats_data = stats_data
         self.currentCat = currentCat
         self.bandList = self.parent.GetGroupLayers(group)
         
         graphType = self.plotSwitch.GetSelection()
-        
-        if not statDict[currentCat].IsReady() and graphType == 0:
+
+        stat = self.stats_data.GetStatistics(currentCat)
+        if not stat.IsReady() and graphType == 0:
             return
             
         self.DestroyPlots()
@@ -146,12 +146,15 @@ class PlotPanel(scrolled.ScrolledPanel):
             lines = []
             level = 0.5
             lines.append(self.DrawInvisibleLine(level))
-            for i, cat in enumerate(self.statList):
-                if not self.statDict[cat].IsReady():
+
+            cats = self.stats_data.GetCategories()
+            for i, cat in enumerate(cats):
+                stat = self.stats_data.GetStatistics(cat)
+                if not stat.IsReady():
                     continue
-                color = self.statDict[cat].color
+                color = stat.color
                 level = i + 1
-                line = self.DrawCoincidenceLine(level, color, self.statDict[cat].bands[bandIdx])
+                line = self.DrawCoincidenceLine(level, color, stat.bands[bandIdx])
                 lines.append(line)
             
             # invisible 
