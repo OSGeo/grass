@@ -738,6 +738,9 @@
   <toolbox name="SolarRadianceAndShadows">
     <label>Solar radiance and shadows</label>
     <items>
+      <module-item name="r.latlong">
+        <label>LatLong map</label>
+      </module-item>
       <module-item name="r.sun">
         <label>Solar irradiance and irradiation</label>
       </module-item>
@@ -1528,10 +1531,6 @@
       <separator/>
       <module-item name="i.atcorr">
         <label>Atmospheric correction</label>
-      </module-item>
-      <separator/>
-      <module-item name="i.latlong">
-        <label>LatLong map</label>
       </module-item>
     </items>
   </toolbox>
