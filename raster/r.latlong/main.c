@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- * MODULE:       i.latlong
+ * MODULE:       r.latlong
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Calculates the longitude of the pixels in the map. 
  *
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    G_add_keyword(_("imagery"));
+    G_add_keyword(_("raster"));
     G_add_keyword(_("latitude"));
     G_add_keyword(_("longitude"));
     G_add_keyword(_("projection"));
