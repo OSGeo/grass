@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.latlong</em> creates a latitude (degree decimal) map, or longitude
+<em>r.latlong</em> creates a latitude (degree decimal) map, or longitude
 if the -l flag is used, from any map in any projection using PROJ.4 library. 
 This is an input to <em>r.sun</em> and <em>i.evapo.potrad</em>.
 
@@ -15,7 +15,7 @@ Datum transform is not implemented, the same datum is taken as output.
 
 <div class="code"><pre>
 g.region rast=elevation -p
-i.latlong input=elevation output=latitude
+r.latlong input=elevation output=latitude
 </pre></div>
 
 <h2>SEE ALSO</h2>

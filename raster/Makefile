@@ -40,6 +40,7 @@ SUBDIRS = \
 	r.in.xyz \
 	r.info \
 	r.kappa \
+	r.latlong \
 	r.lake \
 	r.li \
 	r.los \
