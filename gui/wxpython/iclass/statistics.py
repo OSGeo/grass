@@ -4,10 +4,11 @@
 @brief wxIClass classes for storing statistics about cells in training areas.
 
 Classes:
+ - statistics::StatisticsData
  - statistics::Statistics
  - statistics::BandStatistics
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2011, 2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -27,6 +28,50 @@ try:
 except ImportError, e:
     sys.stderr.write(_("Loading imagery lib failed"))
 
+from grass.pydispatch.signal import Signal
+
+class StatisticsData:
+    """!Stores all statistics.
+    """ 
+    def __init__(self):
+        self.statisticsDict = {}
+        self.statisticsList = []
+
+        self.statisticsAdded = Signal("StatisticsData.statisticsAdded") 
+        self.statisticsDeleted = Signal("StatisticsData.statisticsDeleted") 
+        self.allStatisticsDeleted = Signal("StatisticsData.allStatisticsDeleted") 
+
+        self.statisticsSet = Signal("StatisticsData.statisticsSet") 
+
+    def GetStatistics(self, cat):
+        return self.statisticsDict[cat]
+
+    def AddStatistics(self, cat, name, color):
+        st = Statistics()
+        st.SetBaseStatistics(cat = cat, name = name, color = color)
+        st.statisticsSet.connect(lambda stats : self.statisticsSet.emit(cat = cat, 
+                                                                        stats = stats))
+
+        self.statisticsDict[cat] = st
+        self.statisticsList.append(cat)
+
+        self.statisticsAdded.emit(cat = cat, name = name, color = color)
+
+    def DeleteStatistics(self, cat):
+        del self.statisticsDict[cat]
+        self.statisticsList.remove(cat)
+
+        self.statisticsDeleted.emit(cat = cat)
+
+    def GetCategories(self):
+        return self.statisticsList[:]
+
+    def DeleteAllStatistics(self):
+        self.statisticsDict.clear()
+        del self.statisticsList[:]  # not ...=[] !
+
+        self.allStatisticsDeleted.emit()
+
 class Statistics:
     """! Statistis conected to one class (category).
     
@@ -44,8 +89,9 @@ class Statistics:
         self.nstd = 1.5
         self.bands = []
         self.ready = False
-        
-        
+
+        self.statisticsSet = Signal("Statistics.statisticsSet") 
+
     def SetReady(self, ready = True):
         self.ready = ready
         
@@ -68,7 +114,7 @@ class Statistics:
         name = name.replace(' ', '_')
         self.rasterName = name + '_' + os.path.basename(rasterPath)
         
-    def SetStatistics(self, cStatistics):
+    def SetFromcStatistics(self, cStatistics):
         """! Sets all statistical values.
         
         Copies all statistic values from \a cStattistics.
@@ -76,31 +122,40 @@ class Statistics:
         @param cStatistics pointer to C statistics structure
         """
         cat = c_int()
+
+        set_stats = {}
         I_iclass_statistics_get_cat(cStatistics, byref(cat))
-        self.category = cat.value
-        
+        if self.category != cat.value:
+            set_stats["category"] = cat.value
+
         name = c_char_p()
         I_iclass_statistics_get_name(cStatistics, byref(name))
-        self.name = name.value
-        
+        if self.name != name.value:
+            set_stats["name"] = name.value
+
         color = c_char_p()
         I_iclass_statistics_get_color(cStatistics, byref(color))
-        self.color = color.value
+        if self.color != color.value:
+            set_stats["color"] = color.value
         
         nbands = c_int()
         I_iclass_statistics_get_nbands(cStatistics, byref(nbands))
-        self.nbands = nbands.value
+        if self.nbands != nbands.value:
+            set_stats["nbands"] = nbands.value
         
         ncells = c_int()
         I_iclass_statistics_get_ncells(cStatistics, byref(ncells))
-        self.ncells = ncells.value
-        
+        if self.ncells != ncells.value:
+            set_stats["ncells"] = ncells.value
+
         nstd = c_float()
         I_iclass_statistics_get_nstd(cStatistics, byref(nstd))
-        self.nstd = nstd.value
-        
+        if self.nstd != nstd.value:
+            set_stats["nstd"] = nstd.value
+                
+        self.SetStatistics(set_stats)
         self.SetBandStatistics(cStatistics)
-        
+
     def SetBandStatistics(self, cStatistics):
         """! Sets all band statistics.
         
@@ -109,9 +164,16 @@ class Statistics:
         self.bands = []
         for i in range(self.nbands):
             band = BandStatistics()
-            band.SetStatistics(cStatistics, index = i)
+            band.SetFromcStatistics(cStatistics, index = i)
             self.bands.append(band)
-        
+
+    def SetStatistics(self, stats):
+
+        for st, val in stats.iteritems():
+            setattr(self, st, val)
+
+        self.statisticsSet.emit(stats = stats)
+
 class BandStatistics:
     """! Statistis conected to one band within class (category).
     
@@ -125,7 +187,7 @@ class BandStatistics:
         self.histo = [0] * 256 # max categories
         
         
-    def SetStatistics(self, cStatistics, index):
+    def SetFromcStatistics(self, cStatistics, index):
         """! Sets statistics for one band by given index.
         
         @param cStatistics pointer to C statistics structure

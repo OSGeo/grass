@@ -57,12 +57,12 @@ import grass.script as grass
 from iclass.digit       import IClassVDigitWindow, IClassVDigit
 from iclass.toolbars    import IClassMapToolbar, IClassMiscToolbar,\
                                IClassToolbar, IClassMapManagerToolbar
-from iclass.statistics  import Statistics, BandStatistics
+from iclass.statistics  import StatisticsData, Statistics, BandStatistics
 from iclass.dialogs     import CategoryListCtrl, IClassCategoryManagerDialog,\
                                IClassGroupDialog, IClassSignatureFileDialog,\
                                IClassExportAreasDialog, IClassMapDialog
 from iclass.plots       import PlotPanel
-        
+
 class IClassMapFrame(DoubleMapFrame):
     """! wxIClass main frame
     
@@ -158,13 +158,13 @@ class IClassMapFrame(DoubleMapFrame):
         # dialogs
         self.dialogs = dict()
         self.dialogs['classManager'] = None
+        self.dialogs['scatt_plot'] = None
         # just to make digitizer happy
         self.dialogs['attributes'] = None
         self.dialogs['category']   = None
         
         # PyPlot init
-        self.plotPanel = PlotPanel(self, statDict = self.statisticsDict,
-                                   statList = self.statisticsList)
+        self.plotPanel = PlotPanel(self, stats_data = self.stats_data)
                                    
         self._addPanes()
         self._mgr.Update()
@@ -193,8 +193,8 @@ class IClassMapFrame(DoubleMapFrame):
             I_iclass_free_statistics(st)
             
         self.RemoveTempVector()
-        for i in self.statisticsList:
-            self.RemoveTempRaster(self.statisticsDict[i].rasterName)
+        for i in self.stats_data.GetCategories():
+            self.RemoveTempRaster(self.stats_data.GetStatistics(i).rasterName)
             
     def OnHelp(self, event):
         """!Show help page"""
@@ -396,8 +396,8 @@ class IClassMapFrame(DoubleMapFrame):
         
         @return 'R:G:B'
         """
-        if cat in self.statisticsDict:
-            return self.statisticsDict[cat].color
+        if cat in self.stats_data.GetCategories():
+            return self.stats_data.GetStatistics(cat).color
         return '0:0:0'
         
     def OnZoomMenu(self, event):
@@ -474,7 +474,7 @@ class IClassMapFrame(DoubleMapFrame):
     def OnImportAreas(self, event):
         """!Import training areas"""
         # check if we have any changes
-        if self.GetAreasCount() or self.statisticsList:
+        if self.GetAreasCount() or self.stats_data.GetCategories():
             qdlg = wx.MessageDialog(parent = self,
                                     message = _("All changes will be lost. "
                                                 "Do you want to continue?") ,
@@ -558,12 +558,11 @@ class IClassMapFrame(DoubleMapFrame):
         self.poMapInfo = self.GetFirstWindow().digit.GetDisplay().poMapInfo
         
         # remove temporary rasters
-        for i in self.statisticsList:
-            self.RemoveTempRaster(self.statisticsDict[i].rasterName)
+        for cat in self.stats_data.GetCategories():
+            self.RemoveTempRaster(self.stats_data.GetStatistics(cat).rasterName)
         
         # clear current statistics
-        self.statisticsDict.clear()
-        del self.statisticsList[:] # not ...=[] !
+        self.stats_data.DeleteAllStatistics()
         
         # reset plots
         self.plotPanel.Reset()
@@ -658,7 +657,7 @@ class IClassMapFrame(DoubleMapFrame):
             
             if self.ExportAreas(vectorName = vName, withTable = withTable):
                 GMessage(_("%d training areas (%d classes) exported to vector map <%s>.") % \
-                             (self.GetAreasCount(), len(self.statisticsList),
+                             (self.GetAreasCount(), len(self.stats_data.GetCategories()),
                               self.exportVector), parent = self)
                     
     def ExportAreas(self, vectorName, withTable):
@@ -716,8 +715,8 @@ class IClassMapFrame(DoubleMapFrame):
             return False
         
         # populate table
-        for cat in self.statisticsList:
-            stat = self.statisticsDict[cat]
+        for cat in self.stats_data.GetCategories():
+            stat = self.stats_data.GetStatistics(cat)
             
             self._runDBUpdate(map = vectorName, column = "class", value = stat.name, cat = cat)
             self._runDBUpdate(map = vectorName, column = "color", value = stat.color, cat = cat)
@@ -769,13 +768,14 @@ class IClassMapFrame(DoubleMapFrame):
         
         Updates number of stddev, histograms, layer in preview display. 
         """
-        nstd = self.statisticsDict[currentCat].nstd
+        stat = self.stats_data.GetStatistics(currentCat)
+        nstd = stat.nstd
         self.toolbars['iClass'].UpdateStddev(nstd)
         
         self.plotPanel.UpdateCategory(currentCat)
         self.plotPanel.OnPlotTypeSelected(None)
                                    
-        name = self.statisticsDict[currentCat].rasterName
+        name = stat.rasterName
         name = self.previewMapManager.GetAlias(name)
         if name:
             self.previewMapManager.SelectLayer(name)
@@ -804,12 +804,12 @@ class IClassMapFrame(DoubleMapFrame):
         
     def UpdateRasterName(self, newName, cat):
         """!Update alias of raster map when category name is changed"""
-        origName = self.statisticsDict[cat].rasterName
+        origName = self.stats_data.GetStatistics(cat).rasterName
         self.previewMapManager.SetAlias(origName, newName)
         
     def StddevChanged(self, cat, nstd):
         """!Standard deviation multiplier changed, rerender map, histograms"""
-        stat = self.statisticsDict[cat]
+        stat = self.stats_data.GetStatistics(cat)
         stat.nstd = nstd
         
         if not stat.IsReady():
@@ -867,8 +867,7 @@ class IClassMapFrame(DoubleMapFrame):
         if self.RunAnalysis():
             currentCat = self.GetCurrentCategoryIdx()
             self.plotPanel.UpdatePlots(group = self.group, currentCat = currentCat,
-                                       statDict = self.statisticsDict,
-                                       statList = self.statisticsList)
+                                       stats_data = self.stats_data)
         
     def RunAnalysis(self):
         """!Run analysis
@@ -893,9 +892,12 @@ class IClassMapFrame(DoubleMapFrame):
         I_free_signatures(self.signatures)
         I_iclass_init_signatures(self.signatures, self.refer)
         
-        cats = self.statisticsList[:]
+        # why create copy
+        #cats = self.statisticsList[:]
+        
+        cats = self.stats_data.GetCategories()
         for i in cats:
-            stats = self.statisticsDict[i]
+            stats = self.stats_data.GetStatistics(i)
             
             statistics_obj = IClass_statistics()
             statistics = pointer(statistics_obj)
@@ -912,9 +914,11 @@ class IClassMapFrame(DoubleMapFrame):
                 # tests
                 self.cStatisticsDict[i] = statistics
                 
-                stats.SetStatistics(statistics)
+                stats.SetFromcStatistics(statistics)
                 stats.SetReady()
-                self.statisticsDict[stats.category] = stats
+                
+                # stat is already part of stats_data?
+                #self.statisticsDict[stats.category] = stats
                 
                 self.ConvertToNull(name = stats.rasterName)
                 self.previewMapManager.AddLayer(name = stats.rasterName,
@@ -977,8 +981,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.group = None
         self.sigFile = None
         
-        self.statisticsDict = {}
-        self.statisticsList = []
+        self.stats_data = StatisticsData()
         
         self.cStatisticsDict = {}
         
