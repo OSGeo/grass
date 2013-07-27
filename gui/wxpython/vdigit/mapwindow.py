@@ -40,6 +40,11 @@ class VDigitWindow(BufferedWindow):
         self.toolbar   = self.parent.GetToolbar('vdigit')
         self.digit     = None # wxvdigit.IVDigit
         
+        if hasattr(giface, "GetLayerTree"):
+            self.tree = giface.GetLayerTree()
+        else:
+            self.tree = None
+
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         
     def GetDisplay(self):
