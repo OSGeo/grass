@@ -1,4 +1,4 @@
-#!/c/OSGeo4W/apps/msys/bin/sh
+#!sh
 
 set -e
 
@@ -114,8 +114,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	log configure
 	./configure \
-		--with-libs="$OSGEO4W_ROOT_MSYS/lib $PWD/mswindows/osgeo4w/lib" \
-		--with-includes=$OSGEO4W_ROOT_MSYS/include \
+		--with-libs="$OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/apps/msys/lib $PWD/mswindows/osgeo4w/lib" \
+		--with-includes="$OSGEO4W_ROOT_MSYS/include $OSGEO4W_ROOT_MSYS/apps/msys/include" \
 		--libexecdir=$OSGEO4W_ROOT_MSYS/bin \
 		--prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
 	        --bindir=$OSGEO4W_ROOT_MSYS/bin \
