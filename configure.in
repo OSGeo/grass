@@ -64,11 +64,11 @@ AC_SUBST(BINDIR)
 
 AC_PATH_PROG(pwd, pwd, pwd)
 
-dnl if test "$MINGW32" = yes ; then
-dnl   winpwd="$pwd -W"
-dnl else
-dnl   winpwd="$pwd"
-dnl fi
+if test "$MINGW32" = yes ; then
+  winpwd="$pwd -W"
+else
+  winpwd="$pwd"
+fi
 
 AC_MSG_CHECKING(for source directory)
 
@@ -83,7 +83,7 @@ AC_MSG_RESULT("$SRCDIR")
 AC_MSG_CHECKING(for build directory)
 
 DSTDIR=`$pwd`
-dnl WINDSTDIR=`$winpwd`
+WINDSTDIR=`$winpwd`
 
 AC_MSG_RESULT("$DSTDIR")
 
@@ -107,8 +107,7 @@ AC_CONFIG_AUX_DIR("$SRCDIR")
 
 # Set GISBASE and GRASS_BIN
 
-dnl GISBASE="${WINDSTDIR}/dist.${ARCH}"
-GISBASE="${DSTDIR}/dist.${ARCH}"
+GISBASE="${WINDSTDIR}/dist.${ARCH}"
 GRASS_BIN="${DSTDIR}/bin.${ARCH}"
 
 AC_SUBST(GISBASE)
