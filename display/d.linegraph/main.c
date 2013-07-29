@@ -562,7 +562,7 @@ int main(int argc, char **argv)
     D_text(xlabel);
 
     /* top label */
-    sprintf(xlabel, title[2]->answer);
+    sprintf(xlabel, "%s", title[2]->answer);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 2.0;
     D_text_size(text_width, text_height);
