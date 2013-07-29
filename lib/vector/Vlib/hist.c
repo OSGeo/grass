@@ -63,7 +63,7 @@ int Vect_hist_write(struct Map_info *Map, const char *str)
     G_debug(5, "Vect_hist_write(): %s", str);
     ret = 0;
     if (Map->hist_fp) {
-	ret = fprintf(Map->hist_fp, str);
+	ret = fprintf(Map->hist_fp, "%s", str);
 	fflush(Map->hist_fp);
     }
 
