@@ -133,7 +133,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 	     * key needs to be passed on. */
 	}
 	else if (strcmp(in_proj_keys->value[i], "defined") == 0)
-	    sprintf(buffa, in_proj_keys->key[i]);
+	    sprintf(buffa, "%s", in_proj_keys->key[i]);
 
 	else
 	    sprintf(buffa, "%s=%s",
@@ -190,7 +190,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
     /* If datum parameters are present in the PROJ_INFO keys, pass them on */
     if (GPJ__get_datum_params(in_proj_keys, &datum, &params) == 2) {
-	sprintf(buffa, params);
+	sprintf(buffa, "%s", params);
 	alloc_options(buffa);
 	G_free(params);
 
@@ -200,7 +200,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     else if (datum != NULL) {
 
 	if (GPJ_get_default_datum_params_by_name(datum, &params) > 0) {
-	    sprintf(buffa, params);
+	    sprintf(buffa, "%s", params);
 	    alloc_options(buffa);
 	    returnval = 2;
 	    G_free(params);
@@ -247,7 +247,7 @@ static void alloc_options(char *buffa)
 
     nsize = strlen(buffa);
     opt_in[nopt1++] = (char *)G_malloc(nsize + 1);
-    sprintf(opt_in[nopt1 - 1], buffa);
+    sprintf(opt_in[nopt1 - 1], "%s", buffa);
     return;
 }
 
@@ -272,7 +272,7 @@ int pj_get_string(struct pj_info *info, char *str)
 	sprintf(buffa, "proj=latlong ellps=WGS84");
 	nsize = strlen(buffa);
 	opt_in[nopt] = (char *)G_malloc(nsize + 1);
-	sprintf(opt_in[nopt++], buffa);
+	sprintf(opt_in[nopt++], "%s", buffa);
     }
     else {
 	/* Parameters have been provided; parse through them but don't
@@ -304,14 +304,14 @@ int pj_get_string(struct pj_info *info, char *str)
 			if (strcmp(info->proj, "ll") == 0)
 			    sprintf(buffa, "proj=latlong");
 			else
-			    sprintf(buffa, s);
+			    sprintf(buffa, "%s", s);
 		    }
 		    else {
-			sprintf(buffa, s);
+			sprintf(buffa, "%s", s);
 		    }
 		    nsize = strlen(buffa);
 		    opt_in[nopt] = (char *)G_malloc(nsize + 1);
-		    sprintf(opt_in[nopt++], buffa);
+		    sprintf(opt_in[nopt++], "%s", buffa);
 		}
 	    }
 	    s = 0;

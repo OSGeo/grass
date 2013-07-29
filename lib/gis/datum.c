@@ -112,12 +112,12 @@ int G_get_datumparams_from_projinfo(const struct Key_Value *projinfo,
     int returnval = -1;
 
     if (NULL != G_find_key_value("datum", projinfo)) {
-	sprintf(datumname, G_find_key_value("datum", projinfo));
+	sprintf(datumname, "%s", G_find_key_value("datum", projinfo));
 	returnval = 1;
     }
 
     if (G_find_key_value("datumparams", projinfo) != NULL) {
-	sprintf(params, G_find_key_value("datumparams", projinfo));
+	sprintf(params, "%s", G_find_key_value("datumparams", projinfo));
 	returnval = 2;
     }
     else if (G_find_key_value("nadgrids", projinfo) != NULL) {
