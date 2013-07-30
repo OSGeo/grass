@@ -79,7 +79,9 @@ class Parameter(object):
         return self._value
 
     def _set_value(self, value):
-        if isinstance(value, list) or isinstance(value, tuple):
+        if value is None:
+            self._value = value
+        elif isinstance(value, list) or isinstance(value, tuple):
             if self.multiple or self.keydescvalues:
                 # check each value
                 self._value = [self.type(val) for val in value]
