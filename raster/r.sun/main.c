@@ -401,15 +401,6 @@ int main(int argc, char *argv[])
 	_("Output beam irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.beam_rad->guisection = _("Output options");
 
-    parm.insol_time = G_define_option();
-    parm.insol_time->key = "insol_time";
-    parm.insol_time->type = TYPE_STRING;
-    parm.insol_time->required = NO;
-    parm.insol_time->gisprompt = "new,cell,raster";
-    parm.insol_time->description =
-	_("Output insolation time raster map [h] (mode 2 only)");
-    parm.insol_time->guisection = _("Output options");
-
     parm.diff_rad = G_define_option();
     parm.diff_rad->key = "diff_rad";
     parm.diff_rad->type = TYPE_STRING;
@@ -436,6 +427,15 @@ int main(int argc, char *argv[])
     parm.glob_rad->description =
 	_("Output global (total) irradiance/irradiation [W.m-2] (mode 1) or irradiance/irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.glob_rad->guisection = _("Output options");
+
+    parm.insol_time = G_define_option();
+    parm.insol_time->key = "insol_time";
+    parm.insol_time->type = TYPE_STRING;
+    parm.insol_time->required = NO;
+    parm.insol_time->gisprompt = "new,cell,raster";
+    parm.insol_time->description =
+	_("Output insolation time raster map [h] (mode 2 only)");
+    parm.insol_time->guisection = _("Output options");
 
     parm.day = G_define_option();
     parm.day->key = "day";
