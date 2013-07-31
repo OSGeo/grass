@@ -44,7 +44,15 @@
 #% required: no
 #%end
 
+#%flag
+#% key: r
+#% description: Remove all registered maps from the temporal and spatial database
+#%end
 
+#%flag
+#% key: f
+#% description: Force recursive removing
+#%end
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -57,9 +65,14 @@ def main():
     datasets = options["inputs"]
     file = options["file"]
     type = options["type"]
+    recursive = flags["r"]
+    force = flags["f"]
+
+    if recursive and not force:
+        grass.fatal(_("The recursive flag works only in conjunction with the force flag: use -rf"))
 
     if datasets and file:
-        core.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
+        grass.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
     # Make sure the temporal database exists
     tgis.init()
@@ -108,6 +121,26 @@ def main():
             dbif.close()
             grass.fatal(_("Space time %s dataset <%s> not found")
                         % (sp.get_new_map_instance(None).get_type(), id))
+
+        if recursive and force:
+            grass.message(_("Removing registered maps"))
+            sp.select(dbif)
+            maps = sp.get_registered_maps_as_objects(dbif=dbif)
+            map_statement = ""
+            count = 1
+            for map in maps:
+                map.select(dbif)
+                grass.run_command("g.remove", rast=map.get_name(), quiet=True)
+                map_statement += map.delete(dbif=dbif, execute=False)
+
+                count += 1
+                # Delete every 100 maps
+                if count%100 == 0:
+                    dbif.execute_transaction(map_statement)
+                    map_statement = ""
+
+            if map_statement:
+                dbif.execute_transaction(map_statement)
 
         statement += sp.delete(dbif=dbif, execute=False)
 
