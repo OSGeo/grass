@@ -645,7 +645,7 @@ double find_max_value_within_key(TreeNode * root, double maxKey, double angle, d
     TreeNode *keyNode = search_for_node(root, maxKey);
 
     if (keyNode == NIL) {
-	/*fprintf(stderr, "key node not found. error occured!\n");
+	/*fprintf(stderr, "key node not found. error occurred!\n");
 	   //there is no point in the structure with key < maxKey */
 	/*node not found */
 	G_fatal_error(_("Attempt to find node with key=%f failed"), maxKey);

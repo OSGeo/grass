@@ -161,12 +161,12 @@ int main(int argc, char **argv)
     all_ok = 1;
 
     if (floating_point_exception_occurred) {
-	G_warning(_("Floating point error(s) occured in the calculation"));
+	G_warning(_("Floating point error(s) occurred in the calculation"));
 	all_ok = 0;
     }
 
     if (overflow_occurred) {
-	G_warning(_("Overflow occured in the calculation"));
+	G_warning(_("Overflow occurred in the calculation"));
 	all_ok = 0;
     }
 

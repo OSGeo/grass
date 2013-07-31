@@ -1752,14 +1752,14 @@ msgstr ""
 #: ../gui/wxpython/gui_core/mapwindow.py:104
 #, python-format
 msgid ""
-"Error occured during calling of handler: %s \n"
+"Error occurred during calling of handler: %s \n"
 "Handler was unregistered."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/mapwindow.py:173
 #, python-format
 msgid ""
-"Error occured during unregistration of handler: %s \n"
+"Error occurred during unregistration of handler: %s \n"
 "                                        Handler was unregistered."
 msgstr ""
 
@@ -1771,7 +1771,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/mapwindow.py:202
 #, python-format
 msgid ""
-"Error occured during unregistration of handler: %s \n"
+"Error occurred during unregistration of handler: %s \n"
 "                                        Handler was unregistered"
 msgstr ""
 

@@ -654,7 +654,7 @@ EOF
 	if [ $? -eq 0 ] ; then
 	    g.message message="Line vector <$NAME> successfully created."
 	else
-	    g.message -e message='An error occured on creating <$NAME>, please check!'
+	    g.message -e message='An error occurred on creating <$NAME>, please check!'
 	    exit 1
 	fi
 
