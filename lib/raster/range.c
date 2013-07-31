@@ -209,8 +209,11 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 	}
 
 	/* if range file exists but empty */
-	if (!fgets(buf, sizeof buf, fd))
+        if (!fgets(buf, sizeof buf, fd)) {
+            if (fd)
+                fclose(fd);
 	    return 2;
+        }
 
 	x[0] = x[1] = x[2] = x[3] = 0;
 	count = sscanf(buf, "%d%d%d%d", &x[0], &x[1], &x[2], &x[3]);
