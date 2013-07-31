@@ -60,8 +60,8 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *in_opt, *out_opt, *feature_opt, *column_name;
-    struct Flag *smooth_flg, *value_flg, *z_flg, *no_topol;
-    int feature;
+    struct Flag *smooth_flg, *value_flg, *z_flg, *no_topol, *notab_flg;
+    int feature, notab_flag;
 
 
     G_gisinit(argv[0]);
@@ -110,12 +110,15 @@ int main(int argc, char *argv[])
     no_topol->label = _("Do not build vector topology");
     no_topol->description = _("Recommended for massive point conversion");
 
+    notab_flg = G_define_standard_flag(G_FLG_V_TABLE);
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     feature = Vect_option_to_types(feature_opt);
     smooth_flag = (smooth_flg->answer) ? SMOOTH : NO_SMOOTH;
     value_flag = value_flg->answer;
+    notab_flag = notab_flg->answer;
 
     if (z_flg->answer && (feature != GV_POINT))
 	G_fatal_error(_("z flag is supported only for points"));
@@ -128,8 +131,17 @@ int main(int argc, char *argv[])
     G_get_window(&cell_head);
 
     if (value_flag && data_type != CELL_TYPE) {
-	G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be written to the table."));
+	if (!notab_flag)
+	    G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be written to the table."));
+	else if (z_flg->answer)
+	    G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be z coordinate."));
+	else
+	    G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be lost."));
 	value_flag = 0;
+    }
+
+    if (!value_flag && notab_flag) {
+	G_warning(_("Categories will be unique sequence, raster values will be lost."));
     }
 
     if (z_flg->answer)
@@ -154,7 +166,8 @@ int main(int argc, char *argv[])
 
     /* Create table */
     if ((feature & (GV_AREA | GV_POINT | GV_LINE)) &&
-	(!value_flag || (value_flag && has_cats)) && !(z_flg->answer)) {
+	(!value_flag || (value_flag && has_cats)) && !(z_flg->answer)
+	&& !notab_flag) {
 	char buf[1000];
 
 	Fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
