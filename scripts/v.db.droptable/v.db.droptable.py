@@ -75,7 +75,7 @@ def main():
 
     if grass.write_command('db.execute', stdin = "DROP TABLE %s" % table, input = '-',
                            database = database, driver = driver) != 0:
-	grass.fatal(_("An error occured while running db.execute"))
+	grass.fatal(_("An error occurred while running db.execute"))
 
     grass.run_command('v.db.connect', flags = 'd', map = map, layer = layer)
 

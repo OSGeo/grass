@@ -6185,11 +6185,11 @@ msgid "parse error"
 msgstr "ตัวแปร"
 
 #: ../raster/r.mapcalc/main.c:164
-msgid "Floating point error(s) occured in the calculation"
+msgid "Floating point error(s) occurred in the calculation"
 msgstr "การคำนวน ปรากฎว่า Floating point ผิดพลาด"
 
 #: ../raster/r.mapcalc/main.c:169
-msgid "Overflow occured in the calculation"
+msgid "Overflow occurred in the calculation"
 msgstr "การคำนวน ปรากฎว่า Overflow"
 
 #: ../raster/r.mapcalc/evaluate.c:140

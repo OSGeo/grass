@@ -76,7 +76,7 @@ finalcleanup()
 check_exit_status()
 {
  if [ $1 -ne 0 ] ; then
-  echo "An error occured."
+  echo "An error occurred."
   cleanup ; finalcleanup
   exit 1
  fi

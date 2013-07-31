@@ -126,7 +126,7 @@ def main():
                 try:
                     outf.write(" %.15g %.15g %.15g\n" % tuple(map(float, point)))
                 except ValueError:
-                    grass.fatal(_("An error occured on line '%s', exiting.") % line.strip())
+                    grass.fatal(_("An error occurred on line '%s', exiting.") % line.strip())
             outf.write(" 1 %d\n" % cat)
             cat += 1       
     else:
@@ -194,7 +194,7 @@ VERTI:
         grass.message(_("Importing with v.in.ascii...")) 
         if grass.run_command('v.in.ascii', flags = do3D, input = digfile,
 			     output = name, format = 'standard') != 0:
-            grass.fatal(_('An error occured on creating "%s", please check') % name)
+            grass.fatal(_('An error occurred on creating "%s", please check') % name)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -6338,11 +6338,11 @@ msgid "parse error"
 msgstr "Parâmetros do agrupamento\n"
 
 #: ../raster/r.mapcalc/main.c:164
-msgid "Floating point error(s) occured in the calculation"
+msgid "Floating point error(s) occurred in the calculation"
 msgstr ""
 
 #: ../raster/r.mapcalc/main.c:169
-msgid "Overflow occured in the calculation"
+msgid "Overflow occurred in the calculation"
 msgstr ""
 
 #: ../raster/r.mapcalc/evaluate.c:140

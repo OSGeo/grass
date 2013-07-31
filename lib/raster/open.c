@@ -760,7 +760,7 @@ int Rast_map_is_fp(const char *name, const char *mapset)
 
    Determines if the raster map is floating point or integer. Returns
    DCELL_TYPE for double maps, FCELL_TYPE for float maps, CELL_TYPE for
-   integer maps, -1 if error has occured
+   integer maps, -1 if error has occurred
 
    \param name map name 
    \param mapset mapset where map <i>name</i> lives
@@ -799,7 +799,7 @@ RASTER_MAP_TYPE Rast_map_type(const char *name, const char *mapset)
 
    Determines if the raster map is floating point or integer. Returns
    DCELL_TYPE for double maps, FCELL_TYPE for float maps, CELL_TYPE for
-   integer maps, -1 if error has occured
+   integer maps, -1 if error has occurred
 
    \param fd file descriptor
 

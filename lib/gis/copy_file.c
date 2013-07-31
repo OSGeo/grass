@@ -28,7 +28,7 @@
  * \param infile  String containing path to source file
  * \param outfile String containing path to destination file
  * 
- * \return 1 on success; 0 if an error occured (warning will be printed)
+ * \return 1 on success; 0 if an error occurred (warning will be printed)
  **/
 
 int G_copy_file(const char *infile, const char *outfile)

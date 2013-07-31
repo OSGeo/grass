@@ -6157,11 +6157,11 @@ msgid "parse error"
 msgstr "セパレーション"
 
 #: ../raster/r.mapcalc/main.c:164
-msgid "Floating point error(s) occured in the calculation"
+msgid "Floating point error(s) occurred in the calculation"
 msgstr "計算中に浮動小数点エラーが発生しました"
 
 #: ../raster/r.mapcalc/main.c:169
-msgid "Overflow occured in the calculation"
+msgid "Overflow occurred in the calculation"
 msgstr "計算がオーバーフローしました"
 
 #: ../raster/r.mapcalc/evaluate.c:140
