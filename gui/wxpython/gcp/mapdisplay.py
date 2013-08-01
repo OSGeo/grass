@@ -32,6 +32,7 @@ from gui_core.dialogs  import GetImageHandlers, ImageSizeDialog
 from gui_core.mapdisp  import SingleMapFrame
 from core.settings     import UserSettings
 from mapdisp.mapwindow import BufferedWindow
+from gui_core.mapwindow import MapWindowProperties
 
 import mapdisp.statusbar as sb
 import gcp.statusbar as sbgcp
@@ -62,6 +63,10 @@ class MapFrame(SingleMapFrame):
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
 
         self._giface = giface
+        # properties are shared in other objects, so defining here
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
+        self.mapWindowProperties.alignExtent = True
 
         #
         # Add toolbars
@@ -112,10 +117,12 @@ class MapFrame(SingleMapFrame):
         #
         self.grwiz.SwitchEnv('source')
         self.SrcMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
+                                           properties=self.mapWindowProperties,
                                            Map=self.SrcMap, frame=self)
 
         self.grwiz.SwitchEnv('target')
         self.TgtMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
+                                           properties=self.mapWindowProperties,
                                           Map=self.TgtMap, frame=self)
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap

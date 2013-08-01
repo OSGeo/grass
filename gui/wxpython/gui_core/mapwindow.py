@@ -25,6 +25,72 @@ from core.gcmd     import GError
 from core.utils import _
 
 from grass.script import core as grass
+from grass.pydispatch.signal import Signal
+
+
+class MapWindowProperties(object):
+    def __init__(self):
+        self._resolution = None
+        self.resolutionChanged = Signal('MapWindowProperties.resolutionChanged')
+        self._autoRender = None
+        self.autoRenderChanged = Signal('MapWindowProperties.autoRenderChanged')
+        self._showRegion = None
+        self.showRegionChanged = Signal('MapWindowProperties.showRegionChanged')
+        self._alignExtent = None
+        self.alignExtentChanged = Signal('MapWindowProperties.alignExtentChanged')
+
+    def setValuesFromUserSettings(self):
+        """Convenient function to get values from user settings into this object."""
+        self._resolution = UserSettings.Get(group='display',
+                                            key='compResolution',
+                                            subkey='enabled')
+        self._autoRender = UserSettings.Get(group='display',
+                                            key='autoRendering',
+                                            subkey='enabled')
+        self._showRegion = False  # in statusbar.py was not from settings
+        self._alignExtent = UserSettings.Get(group='display',
+                                             key='alignExtent',
+                                             subkey='enabled')
+    @property
+    def resolution(self):
+        return self._resolution
+
+    @resolution.setter
+    def resolution(self, value):
+        if value != self._resolution:
+            self._resolution = value
+            self.resolutionChanged.emit(value=value)
+
+    @property
+    def autoRender(self):
+        return self._autoRender
+
+    @autoRender.setter
+    def autoRender(self, value):
+        if value != self._autoRender:
+            self._autoRender = value
+            self.autoRenderChanged.emit(value=value)
+
+    @property
+    def showRegion(self):
+        return self._showRegion
+
+    @showRegion.setter
+    def showRegion(self, value):
+        if value != self._showRegion:
+            self._showRegion = value
+            self.showRegionChanged.emit(value=value)
+
+    @property
+    def alignExtent(self):
+        return self._alignExtent
+
+    @alignExtent.setter
+    def alignExtent(self, value):
+        if value != self._alignExtent:
+            self._alignExtent = value
+            self.alignExtentChanged.emit(value=value)
+
 
 class MapWindow(object):
     """!Abstract map display window class

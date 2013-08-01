@@ -23,6 +23,7 @@ import grass.script as grass
 
 from gui_core.mapdisp   import DoubleMapFrame
 from gui_core.dialogs   import GetImageHandlers
+from gui_core.mapwindow import MapWindowProperties
 from core.render        import Map
 from mapdisp            import statusbar as sb
 from core.debug         import Debug
@@ -60,9 +61,14 @@ class SwipeMapFrame(DoubleMapFrame):
         self.sliderH = wx.Slider(self, id = wx.ID_ANY, style = wx.SL_HORIZONTAL)
         self.sliderV = wx.Slider(self, id = wx.ID_ANY, style = wx.SL_VERTICAL)
         
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
+        self.mapWindowProperties.autoRenderChanged.connect(self.OnAutoRenderChanged)
         self.firstMapWindow = SwipeBufferedWindow(parent = self.splitter, giface = self._giface,
+                                                  properties=self.mapWindowProperties,
                                                   Map = self.firstMap, frame = self)
         self.secondMapWindow = SwipeBufferedWindow(parent = self.splitter, giface = self._giface,
+                                                   properties=self.mapWindowProperties,
                                                    Map = self.secondMap, frame = self)
         self.MapWindow = self.firstMapWindow # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
@@ -162,7 +168,6 @@ class SwipeMapFrame(DoubleMapFrame):
         self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems, mapframe = self, statusbar = statusbar)
         self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar = statusbar, position = 2))
         sbRender = sb.SbRender(self, statusbar = statusbar, position = 3)
-        sbRender.autoRender.connect(self.OnAutoRenderChanged)
         self.statusbarManager.AddStatusbarItem(sbRender)
         
         self.statusbarManager.Update()
@@ -237,7 +242,7 @@ class SwipeMapFrame(DoubleMapFrame):
             self.ResetSlider()
             self.resize = False
 
-    def OnAutoRenderChanged(self, state):
+    def OnAutoRenderChanged(self, value):
         """!Auto rendering state changed."""
         style = self.splitter.GetWindowStyle()
         style ^= wx.SP_LIVE_UPDATE

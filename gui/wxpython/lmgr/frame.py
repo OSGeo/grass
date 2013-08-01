@@ -1821,12 +1821,13 @@ class GMFrame(wx.Frame):
     def OnAddRasterArrow(self, event):
         """!Add flow arrows raster map to the current layer tree"""
         self.notebook.SetSelectionByName('layers')
+        # here it seems that it should be retrieved from the mapwindow
         mapdisplay = self.GetMapDisplay()
-        resolution = mapdisplay.GetProperty('resolution')
+        resolution = mapdisplay.mapWindowProperties.resolution
         if not resolution:
             dlg = self.MsgDisplayResolution()
             if dlg.ShowModal() == wx.ID_YES:
-                mapdisplay.SetProperty('resolution', True)
+                mapdisplay.mapWindowProperties.resolution = True
             dlg.Destroy()
 
         self.GetLayerTree().AddLayer('rastarrow')
@@ -1835,13 +1836,13 @@ class GMFrame(wx.Frame):
         """!Add cell number raster map to the current layer tree"""
         self.notebook.SetSelectionByName('layers')
         mapdisplay = self.GetMapDisplay()
-        resolution = mapdisplay.GetProperty('resolution')
+        resolution = mapdisplay.mapWindowProperties.resolution
         if not resolution:
             limitText = _("Note that cell values can only be displayed for "
                           "regions of less than 10,000 cells.")
             dlg = self.MsgDisplayResolution(limitText)
             if dlg.ShowModal() == wx.ID_YES:
-                mapdisplay.SetProperty('resolution', True)
+                mapdisplay.mapWindowProperties.resolution = True
             dlg.Destroy()
 
         # region = tree.GetMap().GetCurrentRegion()

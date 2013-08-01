@@ -381,19 +381,30 @@ class SbRender(SbItem):
     def __init__(self, mapframe, statusbar, position = 0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'render'
-        
+        self._properties = mapframe.mapWindowProperties
         self.widget = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
                                   label = _("Render"))
         
-        self.widget.SetValue(UserSettings.Get(group = 'display',
-                                              key = 'autoRendering',
-                                              subkey = 'enabled'))
+        self.widget.SetValue(self._properties.autoRender)
         self.widget.Hide()
         self.widget.SetToolTip(wx.ToolTip (_("Enable/disable auto-rendering")))
-                                           
-        self.autoRender = Signal('SbRender.autoRender')
-        self.widget.Bind(wx.EVT_CHECKBOX, lambda evt: 
-                                          self.autoRender.emit(state = self.GetValue()))
+
+        self._connectAutoRender()
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onCheckbox)
+
+    def _setValue(self, value):
+        self.widget.SetValue(value)
+
+    def _connectAutoRender(self):
+        self._properties.autoRenderChanged.connect(self._setValue)
+
+    def _disconnectAutoRender(self):
+        self._properties.autoRenderChanged.disconnect(self._setValue)
+
+    def _onCheckbox(self, event):
+        self._disconnectAutoRender()
+        self._properties.autoRender = self.widget.GetValue()
+        self._connectAutoRender()
 
     def Update(self):
         self.Show()
@@ -402,18 +413,16 @@ class SbShowRegion(SbItem):
     """!Checkbox to enable and disable showing of computational region.
     
     Requires MapFrame.OnRender, MapFrame.IsAutoRendered, MapFrame.GetWindow.
-    Expects that instance returned by MapFrame.GetWindow will handle
-    regionCoords attribute. 
     """
     def __init__(self, mapframe, statusbar, position = 0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'region'
         self.label = _("Show comp. extent")
-        
+        self._properties = mapframe.mapWindowProperties
+
         self.widget = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
                                   label = _("Show computational extent"))
-        
-        self.widget.SetValue(False)
+        self.widget.SetValue(self._properties.showRegion)
         self.widget.Hide()
         self.widget.SetToolTip(wx.ToolTip (_("Show/hide computational "
                                              "region extent (set with g.region). "
@@ -421,9 +430,18 @@ class SbShowRegion(SbItem):
                                              "computational region, "
                                              "computational region inside a display region "
                                              "as a red box).")))
-                                            
         self.widget.Bind(wx.EVT_CHECKBOX, self.OnToggleShowRegion)
-    
+        self._connectShowRegion()
+
+    def _setValue(self, value):
+        self.widget.SetValue(value)
+
+    def _connectShowRegion(self):
+        self._properties.showRegionChanged.connect(self._setValue)
+
+    def _disconnectShowRegion(self):
+        self._properties.showRegionChanged.disconnect(self._setValue)
+
     def OnToggleShowRegion(self, event):
         """!Shows/Hides extent (comp. region) in map canvas.
         
@@ -431,28 +449,21 @@ class SbShowRegion(SbItem):
 
         @todo needs refactoring
         """
-        if self.widget.GetValue():
-            # show extent
-            for mapWindow in self.mapFrame.GetWindows():
-                mapWindow.regionCoords = []
-        elif hasattr(self.mapFrame.GetWindow(), 'regionCoords'):
-            for mapWindow in self.mapFrame.GetWindows():
-                del mapWindow.regionCoords
+        self._disconnectShowRegion()
+        self._properties.showRegion = self.widget.GetValue()
+        self._connectShowRegion()
 
         # redraw map if auto-rendering is enabled
         if self.mapFrame.IsAutoRendered():
             self.mapFrame.OnRender(None)
 
     def SetValue(self, value):
+        self._disconnectShowRegion()
+        self._properties.showRegion = value
         SbItem.SetValue(self, value)
-        if value:
-            for mapWindow in self.mapFrame.GetWindows():
-                mapWindow.regionCoords = []
-        elif hasattr(self.mapFrame.GetWindow(), 'regionCoords'):
-            # TODO: this maybe never happends
-            for mapWindow in self.mapFrame.GetWindows():
-                mapWindow.regionCoords = []
-        
+        self._connectShowRegion()
+
+
 class SbAlignExtent(SbItem):
     """!Checkbox to select zoom behavior.
     
@@ -463,17 +474,37 @@ class SbAlignExtent(SbItem):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'alignExtent'
         self.label = _("Display mode")
-        
+        self._properties = mapframe.mapWindowProperties
+
         self.widget = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
                                   label = _("Align region extent based on display size"))
-        
-        self.widget.SetValue(UserSettings.Get(group = 'display', key = 'alignExtent', subkey = 'enabled'))
+        self.widget.SetValue(self._properties.alignExtent)
         self.widget.Hide()
         self.widget.SetToolTip(wx.ToolTip (_("Align region extent based on display "
                                              "size from center point. "
                                              "Default value for new map displays can "
                                              "be set up in 'User GUI settings' dialog.")))      
-        
+        self._connectAlignExtent()
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onCheckbox)
+
+    # TODO: these four methods are in many stitems
+    # some generalization?
+    # passing properties as stings and set/get attr would work, but it is nice?
+    def _setValue(self, value):
+        self.widget.SetValue(value)
+
+    def _connectAlignExtent(self):
+        self._properties.alignExtentChanged.connect(self._setValue)
+
+    def _disconnectAlignExtent(self):
+        self._properties.alignExtentChanged.disconnect(self._setValue)
+
+    def _onCheckbox(self, event):
+        self._disconnectAlignExtent()
+        self._properties.alignExtent = self.widget.GetValue()
+        self._connectAlignExtent()
+
+
 class SbResolution(SbItem):
     """!Checkbox to select used display resolution.
     
@@ -483,11 +514,10 @@ class SbResolution(SbItem):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'resolution'
         self.label = _("Display resolution")
-        
+        self._properties = self.mapFrame.mapWindowProperties
         self.widget = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
                                   label = _("Constrain display resolution to computational settings"))
-        
-        self.widget.SetValue(UserSettings.Get(group = 'display', key = 'compResolution', subkey = 'enabled'))
+        self.widget.SetValue(self._properties.resolution)
         self.widget.Hide()
         self.widget.SetToolTip(wx.ToolTip (_("Constrain display resolution "
                                              "to computational region settings. "
@@ -495,10 +525,23 @@ class SbResolution(SbItem):
                                              "be set up in 'User GUI settings' dialog.")))
                                             
         self.widget.Bind(wx.EVT_CHECKBOX, self.OnToggleUpdateMap)
-        
+        self._connectResolutionChange()
+
+    def _setValue(self, value):
+        self.widget.SetValue(value)
+
+    def _connectResolutionChange(self):
+        self._properties.resolutionChanged.connect(self._setValue)
+
+    def _disconnectResolutionChange(self):
+        self._properties.resolutionChanged.disconnect(self._setValue)
+
     def OnToggleUpdateMap(self, event):
         """!Update display when toggle display mode
         """
+        self._disconnectResolutionChange()
+        self._properties.resolution = self.widget.GetValue()
+        self._connectResolutionChange()
         # redraw map if auto-rendering is enabled
         if self.mapFrame.IsAutoRendered():
             self.mapFrame.OnRender(None)
@@ -798,7 +841,7 @@ class SbDisplayGeometry(SbTextItem):
         
     def Show(self):
         region = copy.copy(self.mapFrame.GetMap().GetCurrentRegion())
-        if self.mapFrame.GetProperty('resolution'):
+        if self.mapFrame.mapWindowProperties.resolution:
             compRegion = self.mapFrame.GetMap().GetRegion(add3d = False)
             region['rows'] = abs(int((region['n'] - region['s']) / compRegion['nsres']) + 0.5)
             region['cols'] = abs(int((region['e'] - region['w']) / compRegion['ewres']) + 0.5)

@@ -49,6 +49,7 @@ from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDial
 from core.debug         import Debug
 from core.settings      import UserSettings
 from gui_core.mapdisp   import SingleMapFrame
+from gui_core.mapwindow import MapWindowProperties
 from gui_core.query     import QueryDialog, PrepareQueryResults
 from mapdisp.mapwindow  import BufferedWindow
 from mapdisp.overlays   import LegendController, BarscaleController
@@ -91,6 +92,11 @@ class MapFrame(SingleMapFrame):
         self.tree       = tree      # Layer Manager layer tree object
         self.page       = page      # Notebook page holding the layer tree
         self.layerbook  = notebook  # Layer Manager layer tree notebook
+
+        # properties are shared in other objects, so defining here
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
+
         #
         # Add toolbars
         #
@@ -128,8 +134,6 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems, mapframe = self, statusbar = statusbar)
         self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar = statusbar, position = 2))
         sbRender = sb.SbRender(self, statusbar = statusbar, position = 3)
-        sbRender.autoRender.connect(lambda state: self.OnRender(None) if state else None)
-
         self.statusbarManager.AddStatusbarItem(sbRender)
         
         self.statusbarManager.Update()
@@ -144,11 +148,16 @@ class MapFrame(SingleMapFrame):
         self.decorations[self.legend.id] = self.legend
         self.decorations[self.barscale.id] = self.barscale
 
+        self.mapWindowProperties.autoRenderChanged.connect(
+            lambda value:
+            self.OnRender(None) if value else None)
+
         #
         # Init map display (buffered DC & set default cursor)
         #
         self.MapWindow2D = BufferedWindow(self, giface = self._giface, id = wx.ID_ANY,
                                           Map=self.Map, frame=self,
+                                          properties=self.mapWindowProperties,
                                           overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
         # enable or disable zoom history tool
@@ -242,6 +251,7 @@ class MapFrame(SingleMapFrame):
             self.MapWindowVDigit = VDigitWindow(parent = self, giface = self._giface,
                                                 id = wx.ID_ANY, frame = self,
                                                 Map = self.Map, tree = self.tree,
+                                                properties=self.mapWindowProperties,
                                                 lmgr = self._layerManager)
             self.MapWindowVDigit.Show()
             self._mgr.AddPane(self.MapWindowVDigit, wx.aui.AuiPaneInfo().CentrePane().
@@ -1266,12 +1276,12 @@ class MapFrame(SingleMapFrame):
     def SetProperties(self, render = False, mode = 0, showCompExtent = False,
                       constrainRes = False, projection = False, alignExtent = True):
         """!Set properies of map display window"""
-        self.SetProperty('render', render)
+        self.mapWindowProperties.autoRender = render
         self.statusbarManager.SetMode(mode)
         self.StatusbarUpdate()
-        self.SetProperty('region', showCompExtent)
-        self.SetProperty('alignExtent', alignExtent)
-        self.SetProperty('resolution', constrainRes)
+        self.mapWindowProperties.showRegion = showCompExtent
+        self.mapWindowProperties.alignExtent = alignExtent
+        self.mapWindowProperties.resolution = constrainRes
         self.SetProperty('projection', projection)
         
     def IsStandalone(self):

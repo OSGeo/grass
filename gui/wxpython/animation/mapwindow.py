@@ -105,7 +105,7 @@ class BufferedWindow(wx.Window):
 
 
 class AnimationWindow(BufferedWindow):
-    def __init__(self, parent, id = wx.ID_ANY, 
+    def __init__(self, parent, id=wx.ID_ANY,
                  style = wx.DEFAULT_FRAME_STYLE | wx.FULL_REPAINT_ON_RESIZE | wx.BORDER_RAISED):
         Debug.msg(2, "AnimationWindow.__init__()")
 
@@ -113,7 +113,7 @@ class AnimationWindow(BufferedWindow):
         self.text = ''
         self.parent = parent
 
-        BufferedWindow.__init__(self, parent = parent, id = id, style = style)
+        BufferedWindow.__init__(self, parent=parent, id=id, style=style)
         self.SetBackgroundColour(wx.BLACK)
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.Bind(wx.EVT_SIZE, self.OnSize)
