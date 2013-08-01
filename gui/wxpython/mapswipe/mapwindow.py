@@ -36,9 +36,10 @@ class SwipeBufferedWindow(BufferedWindow):
     Enables to draw the image translated.
     Special mouse events with changed coordinates are used.
     """
-    def __init__(self, parent, giface, Map, frame, **kwargs):
+    def __init__(self, parent, giface, Map, properties, frame, **kwargs):
         BufferedWindow.__init__(self, parent = parent, giface = giface,
-                                Map=Map, frame=frame, **kwargs)
+                                Map=Map, frame=frame,
+                                properties=properties, **kwargs)
         Debug.msg(2, "SwipeBufferedWindow.__init__()")
 
         self.specialSize = super(SwipeBufferedWindow, self).GetClientSize()

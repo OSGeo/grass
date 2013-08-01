@@ -55,7 +55,7 @@ class BufferedWindow(MapWindow, wx.Window):
     can also save the drawing to file by calling the
     SaveToFile() method.
     """
-    def __init__(self, parent, giface, Map, frame,
+    def __init__(self, parent, giface, Map, frame, properties,
                  id=wx.ID_ANY, overlays=None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
         """!
@@ -70,6 +70,8 @@ class BufferedWindow(MapWindow, wx.Window):
         MapWindow.__init__(self, parent = parent, giface = giface, Map = Map,
                            frame = frame, **kwargs)
         wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
+
+        self._properties = properties
 
         # flags
         self.resize = False # indicates whether or not a resize event has taken place
@@ -519,7 +521,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.Map.ChangeMapSize((width, height))
         ibuffer = wx.EmptyBitmap(max(1, width), max(1, height))
-        self.Map.Render(force = True, windres = self.frame.GetProperty('resolution'))
+        self.Map.Render(force = True, windres = self._properties.resolution)
         img = self.GetImage()
         self.pdc.RemoveAll()
         self.Draw(self.pdc, img, drawid = 99)
@@ -646,7 +648,7 @@ class BufferedWindow(MapWindow, wx.Window):
             if render:
                 # update display size
                 self.Map.ChangeMapSize(self.GetClientSize())
-                if self.frame.GetProperty('resolution'):
+                if self._properties.resolution:
                     # use computation region resolution for rendering
                     windres = True
                 else:
@@ -755,7 +757,7 @@ class BufferedWindow(MapWindow, wx.Window):
         Display region is drawn as a blue box inside the computational region,
         computational region inside a display region as a red box).
         """
-        if hasattr(self, "regionCoords"):
+        if self._properties.showRegion:
             compReg = self.Map.GetRegion()
             dispReg = self.Map.GetCurrentRegion()
             reg = None
@@ -766,15 +768,15 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.polypen = wx.Pen(colour = wx.Colour(255, 0, 0, 128),
                                       width = 3, style = wx.SOLID)
                 reg = compReg
-            
-            self.regionCoords = []
-            self.regionCoords.append((reg['w'], reg['n']))
-            self.regionCoords.append((reg['e'], reg['n']))
-            self.regionCoords.append((reg['e'], reg['s']))
-            self.regionCoords.append((reg['w'], reg['s']))
-            self.regionCoords.append((reg['w'], reg['n']))
+
+            regionCoords = []
+            regionCoords.append((reg['w'], reg['n']))
+            regionCoords.append((reg['e'], reg['n']))
+            regionCoords.append((reg['e'], reg['s']))
+            regionCoords.append((reg['w'], reg['s']))
+            regionCoords.append((reg['w'], reg['n']))
             # draw region extent
-            self.DrawLines(pdc = self.pdcDec, polycoords = self.regionCoords)
+            self.DrawLines(pdc=self.pdcDec, polycoords=regionCoords)
 
     def IsInRegion(self, region, refRegion):
         """!
@@ -1469,8 +1471,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.Map.region['center_northing'] = cn
             self.Map.region['ewres'] = (newreg['e'] - newreg['w']) / self.Map.width
             self.Map.region['nsres'] = (newreg['n'] - newreg['s']) / self.Map.height
-            if not self.frame.HasProperty('alignExtent') or \
-                    self.frame.GetProperty('alignExtent'):
+            if self._properties.alignExtent:
                 self.Map.AlignExtentFromDisplay()
             else:
                 for k in ('n', 's', 'e', 'w'):

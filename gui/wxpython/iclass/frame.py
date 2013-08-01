@@ -51,6 +51,7 @@ from gui_core.mapdisp   import DoubleMapFrame
 from core.render        import Map, MapLayer
 from core.gcmd          import RunCommand, GMessage, GError, GWarning
 from gui_core.dialogs   import SetOpacityDialog
+from gui_core.mapwindow import MapWindowProperties
 from dbmgr.vinfo        import VectorDBInfo
 import grass.script as grass
 
@@ -87,9 +88,16 @@ class IClassMapFrame(DoubleMapFrame):
                                 firstMap = Map(), secondMap = Map(),
                                 **kwargs)
         self._giface = giface
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
+        # show computation region by defaut
+        self.mapWindowProperties.showRegion = True
+
         self.firstMapWindow = IClassVDigitWindow(parent = self, giface = self._giface,
+                                                 properties=self.mapWindowProperties,
                                                  map = self.firstMap, frame = self)
         self.secondMapWindow = BufferedWindow(parent = self, giface = self._giface,
+                                              properties=self.mapWindowProperties,
                                               Map = self.secondMap, frame = self)
         self.MapWindow = self.firstMapWindow # current by default
         
@@ -143,7 +151,6 @@ class IClassMapFrame(DoubleMapFrame):
         self.statusbarManager.AddStatusbarItem(sb.SbRender(self, statusbar = statusbar, position = 3))
         
         self.statusbarManager.Update()
-        self.SetProperty('region', True) # show computation region by defaut
 
         self.trainingMapManager = MapManager(self, mapWindow = self.GetFirstWindow(),
                                              Map = self.GetFirstMap())

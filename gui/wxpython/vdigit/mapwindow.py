@@ -30,10 +30,11 @@ from gui_core       import gselect
 class VDigitWindow(BufferedWindow):
     """!A Buffered window extended for vector digitizer.
     """
-    def __init__(self, parent, giface, Map, frame, tree=None,
+    def __init__(self, parent, giface, Map, frame, properties, tree=None,
                  id=wx.ID_ANY, lmgr=None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
         BufferedWindow.__init__(self, parent = parent, giface = giface, id = id, Map = Map,
+                                properties=properties,
                                 frame=frame, style=style, **kwargs)
         self.lmgr = lmgr
         self.tree = tree

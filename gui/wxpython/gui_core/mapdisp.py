@@ -256,7 +256,11 @@ class MapFrameBase(wx.Frame):
         
     def IsAutoRendered(self):
         """!Check if auto-rendering is enabled"""
-        return self.GetProperty('render')
+        # TODO: this is now not the right place to access this attribute
+        # TODO: add mapWindowProperties to init parameters
+        # and pass the right object in the init of derived class?
+        # or do not use this method at all, let mapwindow decide
+        return self.mapWindowProperties.autoRender
         
     def CoordinatesChanged(self):
         """!Shows current coordinates on statusbar.
