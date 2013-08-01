@@ -902,7 +902,7 @@ class SearchModuleWidget(wx.Panel):
 
 class ManageSettingsWidget(wx.Panel):
     """!Widget which allows loading and saving settings into file."""
-    def __init__(self, parent, settingsFile, id = wx.ID_ANY):
+    def __init__(self, parent, settingsFile):
         """
         Signals:
             settingsChanged - called when users changes setting

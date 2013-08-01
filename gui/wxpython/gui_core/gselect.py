@@ -56,11 +56,13 @@ from   grass.script import task as gtask
 from gui_core.widgets  import ManageSettingsWidget
 
 from core.gcmd     import RunCommand, GError, GMessage
-from core.utils    import GetListOfLocations, GetListOfMapsets, GetFormats
+from core.utils    import GetListOfLocations, GetListOfMapsets, \
+                          GetFormats, rasterFormatExtension, vectorFormatExtension
 from core.utils    import GetSettingsPath, GetValidLayerName, ListSortLower
 from core.utils    import GetVectorNumberOfLayers, _
 from core.settings import UserSettings
 from core.debug    import Debug
+
 
 class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
@@ -1131,16 +1133,16 @@ class SubGroupSelect(wx.ComboBox):
         self.SetValue('')
 
 class FormatSelect(wx.Choice):
-    def __init__(self, parent, ogr = False,
-                 sourceType = None, id = wx.ID_ANY, size = globalvar.DIALOG_SPIN_SIZE, 
+    def __init__(self, parent, srcType, ogr=False,
+                 size=globalvar.DIALOG_SPIN_SIZE, 
                  **kwargs):
         """!Widget for selecting external (GDAL/OGR) format
 
         @param parent parent window
-        @param sourceType source type ('file', 'directory', 'database', 'protocol') or None
+        @param srcType source type ('file', 'database', 'protocol')
         @param ogr True for OGR otherwise GDAL
         """
-        super(FormatSelect, self).__init__(parent, id, size = size, 
+        super(FormatSelect, self).__init__(parent, id=wx.ID_ANY, size=size, 
                                            **kwargs)
         self.SetName("FormatSelect")
         
@@ -1148,78 +1150,17 @@ class FormatSelect(wx.Choice):
             ftype = 'ogr'
         else:
             ftype = 'gdal'
-        
+
         formats = list()
-        for f in GetFormats()[ftype].values():
+        for f in GetFormats()[ftype][srcType].values():
             formats += f
         self.SetItems(formats)
         
     def GetExtension(self, name):
         """!Get file extension by format name"""
-        formatToExt = {
-            # raster
-            'GeoTIFF' : 'tif',
-            'Erdas Imagine Images (.img)' : 'img',
-            'Ground-based SAR Applications Testbed File Format (.gff)' : 'gff',
-            'Arc/Info Binary Grid' : 'adf',
-            'Portable Network Graphics' : 'png',
-            'JPEG JFIF' : 'jpg',
-            'Japanese DEM (.mem)' : 'mem',
-            'Graphics Interchange Format (.gif)' : 'gif',
-            'X11 PixMap Format' : 'xpm',
-            'MS Windows Device Independent Bitmap' : 'bmp',
-            'SPOT DIMAP' : 'dim',
-            'RadarSat 2 XML Product' : 'xml',
-            'EarthWatch .TIL' : 'til',
-            'ERMapper .ers Labelled' : 'ers',
-            'ERMapper Compressed Wavelets' : 'ecw',
-            'GRIdded Binary (.grb)' : 'grb',
-            'EUMETSAT Archive native (.nat)' : 'nat',
-            'Idrisi Raster A.1' : 'rst',
-            'Golden Software ASCII Grid (.grd)' : 'grd',
-            'Golden Software Binary Grid (.grd)' : 'grd',
-            'Golden Software 7 Binary Grid (.grd)' : 'grd',
-            'R Object Data Store' : 'r',
-            'USGS DOQ (Old Style)' : 'doq',
-            'USGS DOQ (New Style)' : 'doq',
-            'ENVI .hdr Labelled' : 'hdr',
-            'ESRI .hdr Labelled' : 'hdr',
-            'Generic Binary (.hdr Labelled)' : 'hdr',
-            'PCI .aux Labelled' : 'aux',
-            'EOSAT FAST Format' : 'fst',
-            'VTP .bt (Binary Terrain) 1.3 Format' : 'bt',
-            'FARSITE v.4 Landscape File (.lcp)' : 'lcp',
-            'Swedish Grid RIK (.rik)' : 'rik',
-            'USGS Optional ASCII DEM (and CDED)' : 'dem',
-            'Northwood Numeric Grid Format .grd/.tab' : '',
-            'Northwood Classified Grid Format .grc/.tab' : '',
-            'ARC Digitized Raster Graphics' : 'arc',
-            'Magellan topo (.blx)' : 'blx',
-            'SAGA GIS Binary Grid (.sdat)' : 'sdat',
-            # vector
-            'ESRI Shapefile' : 'shp',
-            'UK .NTF'        : 'ntf',
-            'SDTS'           : 'ddf',
-            'DGN'            : 'dgn',
-            'VRT'            : 'vrt',
-            'REC'            : 'rec',
-            'BNA'            : 'bna',
-            'CSV'            : 'csv',
-            'GML'            : 'gml',
-            'GPX'            : 'gpx',
-            'KML'            : 'kml',
-            'GMT'            : 'gmt',
-            'PGeo'           : 'mdb',
-            'XPlane'         : 'dat',
-            'AVCBin'         : 'adf',
-            'AVCE00'         : 'e00',
-            'DXF'            : 'dxf',
-            'Geoconcept'     : 'gxt',
-            'GeoRSS'         : 'xml',
-            'GPSTrackMaker'  : 'gtm',
-            'VFK'            : 'vfk',
-            'SVG'            : 'svg',
-            }
+        formatToExt = dict()
+        formatToExt.update(rasterFormatExtension)
+        formatToExt.update(vectorFormatExtension)
         
         return formatToExt.get(name, '')
 
@@ -1227,8 +1168,8 @@ class FormatSelect(wx.Choice):
 # wxGdalSelect, EVT_GDALSELECT = NewEvent()
 
 class GdalSelect(wx.Panel):
-    def __init__(self, parent, panel, ogr = False, link = False, dest = False, 
-                 default = 'file', exclude = [], envHandler = None):
+    def __init__(self, parent, panel, ogr=False, link=False, dest=False, 
+                 exclude=None):
         """!Widget for selecting GDAL/OGR datasource, format
         
         @param parent parent window
@@ -1238,22 +1179,23 @@ class GdalSelect(wx.Panel):
         @param exclude list of types to be excluded
         """
         self.parent = parent
-        self.ogr    = ogr
-        self.dest   = dest 
-        wx.Panel.__init__(self, parent = panel, id = wx.ID_ANY)
+        self.ogr = ogr
+        self.dest = dest 
+        self._sourceType = None
+
+        wx.Panel.__init__(self, parent=panel)
 
         if self.ogr:
             settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
         else:
             settingsFile = os.path.join(GetSettingsPath(), 'wxGDAL')
-        
-        self.settsManager = ManageSettingsWidget(parent = self, 
-                                                 id = wx.ID_ANY,
-                                                 settingsFile = settingsFile)
+
+        self.settsManager = ManageSettingsWidget(parent=self, 
+                                                 settingsFile=settingsFile)
         self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
         self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
 
-        self.inputBox = wx.StaticBox(parent = self, id = wx.ID_ANY)
+        self.inputBox = wx.StaticBox(parent=self)
         if dest:
             self.inputBox.SetLabel(" %s " % _("Output settings"))
         else:
@@ -1276,6 +1218,8 @@ class GdalSelect(wx.Panel):
             sources.append(_("Native"))
             self.sourceMap['native'] = idx
             idx += 1
+        if exclude is None:
+            exclude = []
         if 'file' not in exclude:
             sources.append(_("File") + extraLabel)
             self.sourceMap['file'] = idx
@@ -1295,194 +1239,374 @@ class GdalSelect(wx.Panel):
         if 'database' not in exclude and ogr and (link or dest):
             sources.append(_("PostGIS (PG)"))
             self.sourceMap['db-pg'] = idx
-        
-        self.source = wx.RadioBox(parent = self, id = wx.ID_ANY,
-                                  style = wx.RA_SPECIFY_COLS,
-                                  choices = sources)
+        self.sourceMapByIdx = {}
+        for name, idx in self.sourceMap.items():
+            self.sourceMapByIdx[ idx ] = name
+
+        self.source = wx.RadioBox(parent=self, id=wx.ID_ANY,
+                                  style=wx.RA_SPECIFY_COLS,
+                                  choices=sources)
         if dest:
             self.source.SetLabel(" %s " % _('Output type'))
         else:
             self.source.SetLabel(" %s " % _('Source type'))
         
         self.source.SetSelection(0)
-        self.source.Bind(wx.EVT_RADIOBOX, self.OnSetType)
+        self.source.Bind(wx.EVT_RADIOBOX,
+                         lambda evt: self.SetSourceType(self.sourceMapByIdx[evt.GetInt()]))
         
-        # dsn widgets
-        if not ogr:
-            filemask = 'GeoTIFF (%s)|%s|%s (*.*)|*.*' % \
-                (self._getExtPattern('tif'), self._getExtPattern('tif'), _('All files'))
-        else:
-            filemask = 'ESRI Shapefile (%s)|%s|%s (*.*)|*.*' % \
-                (self._getExtPattern('shp'), self._getExtPattern('shp'), _('All files'))
         
-        dsnFile = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
-                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText = '',
-                                              dialogTitle=_('Choose file to import'),
-                                              buttonText=_('Browse'),
-                                              startDirectory=os.getcwd(),
-                                              changeCallback=self.OnSetDsn,
-                                              fileMask=filemask)
-        dsnFile.Hide()
-        
-        dsnDir = filebrowse.DirBrowseButton(parent=self, id=wx.ID_ANY, 
-                                            size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                            dialogTitle=_('Choose input directory'),
-                                            buttonText=_('Browse'),
-                                            startDirectory=os.getcwd(),
-                                            changeCallback=self.OnSetDsn)
-        dsnDir.SetName('GdalSelect')
-        dsnDir.Hide()
-        
-        dsnDbFile = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
-                                                size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                                dialogTitle=_('Choose file'),
-                                                buttonText=_('Browse'),
-                                                startDirectory=os.getcwd(),
-                                                changeCallback=self.OnSetDsn)
-        dsnDbFile.Hide()
-        dsnDbFile.SetName('GdalSelect')
+        self.nativeWidgets = {}
+        self.fileWidgets = {}
+        self.dirWidgets = {}
+        self.dbWidgets = {}
+        self.protocolWidgets = {}
+        self.pgWidgets = {}
 
-        dsnDbText = wx.TextCtrl(parent = self, id = wx.ID_ANY)
-        dsnDbText.Hide()
-        dsnDbText.Bind(wx.EVT_TEXT, self.OnSetDsn)
-        dsnDbText.SetName('GdalSelect')
-
-        dsnDbChoice = wx.Choice(parent = self, id = wx.ID_ANY)
-        dsnDbChoice.Hide()
-        dsnDbChoice.Bind(wx.EVT_CHOICE, self.OnSetDsn)
-        dsnDbChoice.SetName('GdalSelect')
-
-        dsnPro = wx.TextCtrl(parent = self, id = wx.ID_ANY)
-        dsnPro.Hide()
-        dsnPro.Bind(wx.EVT_TEXT, self.OnSetDsn)
-        dsnPro.SetName('GdalSelect')
-
-        # format
-        self.format = FormatSelect(parent = self,
-                                   ogr = ogr, size = (300, -1))
-        self.format.Bind(wx.EVT_CHOICE, self.OnSetFormat)
-        self.extension = wx.TextCtrl(parent = self, id = wx.ID_ANY)
-        self.extension.Bind(wx.EVT_TEXT, self.OnSetExtension)
-        self.extension.Hide()
-        
         if ogr:
             fType = 'ogr'
         else:
             fType = 'gdal'
-        self.input = { 'file' : [_("File:"),
-                                 dsnFile,
-                                 GetFormats(writableOnly = dest)[fType]['file']],
-                       'dir'  : [_("Name:"),
-                                 dsnDir,
-                                 GetFormats(writableOnly = dest)[fType]['file']],
-                       'db'   : [_("Name:"),
-                                 dsnDbText,
-                                 GetFormats(writableOnly = dest)[fType]['database']],
-                       'pro'  : [_("Protocol:"),
-                                 dsnPro,
-                                 GetFormats(writableOnly = dest)[fType]['protocol']],
-                       'db-win' : { 'file'   : dsnDbFile,
-                                    'dir'    : dsnDir,
-                                    'text'   : dsnDbText,
-                                    'choice' : dsnDbChoice },
-                       'native' : [_("Name:"), dsnDir, ''],
-                       'db-pg' : [_("Name:"),
-                                  dsnDbChoice,
-                                  ["PostgreSQL"]],
-                       }
-        
+
+        # file
+        fileMask = '%(all)s (*.*)|*.*|' % {'all': _('All files')}
+        for name, ext in sorted(rasterFormatExtension.items()):
+            fileMask += '%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|' % {'name': name,
+                                                                               'low': ext.lower(),
+                                                                               'up': ext.upper()}
+        fileMask += '%s (*.zip;*.ZIP)|*.zip;*.ZIP|' % _('ZIP files')
+        fileMask += '%s (*.gz;*.GZ)|*.gz;*.GZ|' % _('GZIP files')
+        fileMask += '%s (*.tar;*.TAR)|*.tar;*.TAR|' % _('TAR files')
+        fileMask += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ|' % _('TARGZ files')
+        # only contains formats with extensions hardcoded    
+
+        self.filePanel = wx.Panel(parent=self)
+        browse = filebrowse.FileBrowseButton(parent=self.filePanel, id=wx.ID_ANY, 
+                                             size=globalvar.DIALOG_GSELECT_SIZE,
+                                             labelText = _('File:'),
+                                             dialogTitle=_('Choose file to import'),
+                                             buttonText=_('Browse'),
+                                             startDirectory=os.getcwd(),
+                                             changeCallback=self.OnUpdate,
+                                             fileMask=fileMask)
+        self.fileWidgets['browse'] = browse
+        self.fileWidgets['options'] = wx.TextCtrl(parent=self.filePanel)
+
+        # directory
+        self.dirPanel = wx.Panel(parent=self)
+        browse = filebrowse.DirBrowseButton(parent=self.dirPanel, id=wx.ID_ANY, 
+                                            size=globalvar.DIALOG_GSELECT_SIZE,
+                                            labelText=_('Directory:'),
+                                            dialogTitle=_('Choose input directory'),
+                                            buttonText=_('Browse'),
+                                            startDirectory=os.getcwd(),
+                                            changeCallback=self.OnUpdate)
+
+        self.dirWidgets['browse'] = browse
+        formatSelect = wx.Choice(parent=self.dirPanel, size=(300, -1))
+        self.dirWidgets['format'] = formatSelect
+        fileFormats = GetFormats(writableOnly=dest)[fType]['file']
+        formatSelect.SetItems(sorted(list(fileFormats)))
+        formatSelect.Bind(wx.EVT_CHOICE, lambda evt: self.SetExtension(self.dirWidgets['format'].GetStringSelection()))
+        formatSelect.Bind(wx.EVT_CHOICE, self.OnUpdate)
+
+        self.dirWidgets['extensionLabel'] = wx.StaticText(parent=self.dirPanel,
+                                                          label = _("Extension:"))
+        self.dirWidgets['extension'] = wx.TextCtrl(parent=self.dirPanel)
+        self.dirWidgets['extension'].Bind(wx.EVT_TEXT, self.ExtensionChanged)
+        self.dirWidgets['options'] = wx.TextCtrl(parent=self.dirPanel)
+        if self.ogr:
+            shapefile = 'ESRI Shapefile'
+            if shapefile in fileFormats:
+                formatSelect.SetStringSelection(shapefile)
+                self.SetExtension(shapefile)
+        else:
+            tiff = 'GeoTIFF'
+            if tiff in fileFormats:
+                formatSelect.SetStringSelection(tiff)
+                self.SetExtension(tiff)
+
+        # database
+        self.dbPanel = wx.Panel(parent=self)
+        self.dbFormats = GetFormats(writableOnly=dest)[fType]['database']
+        dbChoice = wx.Choice(parent=self.dbPanel, choices=self.dbFormats)
+        dbChoice.Bind(wx.EVT_CHOICE, lambda evt: self.SetDatabase(db=dbChoice.GetStringSelection()))
+        self.dbWidgets['format'] = dbChoice
+
+        browse = filebrowse.FileBrowseButton(parent=self.dbPanel, id=wx.ID_ANY, 
+                                             size=globalvar.DIALOG_GSELECT_SIZE,
+                                             labelText=_("Name:"),
+                                             dialogTitle=_('Choose file'),
+                                             buttonText=_('Browse'),
+                                             startDirectory=os.getcwd(),
+                                             changeCallback=self.OnUpdate)
+        self.dbWidgets['browse'] = browse
+        self.dbWidgets['choice'] = wx.Choice(parent=self.dbPanel)
+        self.dbWidgets['choice'].Bind(wx.EVT_CHOICE, self.OnUpdate)
+        self.dbWidgets['text'] = wx.TextCtrl(parent=self.dbPanel)
+        self.dbWidgets['text'].Bind(wx.EVT_TEXT, self.OnUpdate)
+        self.dbWidgets['textLabel1'] = wx.StaticText(parent=self.dbPanel, label=_("Name:"))
+        self.dbWidgets['textLabel2'] = wx.StaticText(parent=self.dbPanel, label=_("Name:"))
+        browse = filebrowse.DirBrowseButton(parent=self.dbPanel, id=wx.ID_ANY, 
+                                            size=globalvar.DIALOG_GSELECT_SIZE,
+                                            labelText=_('Directory:'),
+                                            dialogTitle=_('Choose input directory'),
+                                            buttonText=_('Browse'),
+                                            startDirectory=os.getcwd(),
+                                            changeCallback=self.OnUpdate)
+        self.dbWidgets['dirbrowse'] = browse
+        self.dbWidgets['options'] = wx.TextCtrl(parent=self.dbPanel)
+
+        # protocol
+        self.protocolPanel = wx.Panel(parent=self)
+        protocolFormats = GetFormats(writableOnly=self.dest)[fType]['protocol']
+        protocolChoice = wx.Choice(parent=self.protocolPanel, choices=protocolFormats)
+        self.protocolWidgets['format'] = protocolChoice   
+
+        self.protocolWidgets['text'] = wx.TextCtrl(parent=self.protocolPanel)  
+        self.protocolWidgets['text'].Bind(wx.EVT_TEXT, self.OnUpdate)                   
+        self.protocolWidgets['options'] = wx.TextCtrl(parent=self.protocolPanel)
+
+        # native
+        self.nativePanel = wx.Panel(parent=self)
+
+        self._layout()
+        sourceType = 'file'
+        self.SetSourceType(sourceType) # needed always to fit dialog size
         if self.dest:
             current = RunCommand('v.external.out',
-                                 parent = self,
-                                 read = True, parse = grass.parse_key_val,
-                                 flags = 'g')
+                                 parent=self,
+                                 read=True, parse=grass.parse_key_val,
+                                 flags='g')
             if current['format'] == 'native':
-                self.dsnType = 'native'
+                sourceType = 'native'
             elif current['format'] in GetFormats()['ogr']['database']:
-                self.dsnType = 'db'
+                sourceType = 'db'
             else:
-                self.dsnType = 'dir'
-        else:
-            self.dsnType = default
-        
-        self.dsnText = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                     label = self.input[self.dsnType][0],
-                                     size = (75, -1))
-        self.extensionText = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                           label = _("Extension:"))
-        self.extensionText.Hide()
-        
-        self.creationOpt = wx.TextCtrl(parent = self, id = wx.ID_ANY)
-        if not self.dest:
-            self.creationOpt.Hide()
-        
-        self._layout()
-        
-        self.OnSetType(event = None, sel = self.sourceMap[self.dsnType])
+                sourceType = 'dir'
+
         if self.dest:
-            if current['format'] != 'native':
-                self.OnSetFormat(event = None, format = current['format'])
-                self.OnSetDsn(event = None, path = current['dsn'])
-                self.creationOpt.SetValue(current.get('options', ''))
-        else:
-            if not ogr:
-                self.OnSetFormat(event = None, format = 'GeoTIFF')
+            wx.CallAfter(self._postInit, sourceType,
+                         current['format'], current.get('dsn', ''), current.get('options', ''))
+
+
+    def _postInit(self, sourceType, format, dsn, options):
+        """!Fill in default values."""
+        self.SetSourceType(sourceType)
+        self.source.SetSelection(self.sourceMap[sourceType])
+
+        dsn = os.path.expandvars(dsn) # v.external.out uses $HOME
+        # fill in default values
+        if sourceType == 'dir':
+            self.dirWidgets['format'].SetStringSelection(format)
+            self.dirWidgets['browse'].SetValue(dsn)
+            self.dirWidgets['options'].SetValue(options)
+        elif sourceType == 'db':
+            self.dbWidgets['format'].SetStringSelection(format)
+            self.dbWidgets['options'].SetValue(options)
+            name = self._getCurrentDbWidgetName()
+            if name == 'choice' and dsn in self.dbWidgets[name].GetItems():
+                self.dbWidgets[name].SetStringSelection(dsn)
             else:
-                self.OnSetFormat(event = None, format = 'ESRI Shapefile')
-        
+                self.dbWidgets[name].SetValue(dsn)
+
     def _layout(self):
         """!Layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-                
-        inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
-        
-        self.dsnSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        
-        row = 0
-        self.dsnSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                               label = _("Format:")),
-                          flag = wx.ALIGN_CENTER_VERTICAL,
-                          pos = (row, 0))
-        self.dsnSizer.Add(item=self.format,
-                          flag = wx.ALIGN_CENTER_VERTICAL,
-                          pos = (row, 1))
-        self.dsnSizer.Add(item = self.extensionText,
+
+        self.changingSizer = wx.StaticBoxSizer(self.inputBox, wx.VERTICAL)
+
+        # file
+        paddingSizer = wx.BoxSizer(wx.VERTICAL)
+        sizer = wx.GridBagSizer(vgap=5, hgap=10)
+        paddingSizer.Add(item=self.fileWidgets['browse'],
+                         flag=wx.BOTTOM | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                         border=30)
+        sizer.Add(item=paddingSizer, flag=wx.EXPAND, pos=(0, 0), span=(1, 2))
+        sizer.AddGrowableCol(0)
+        if self.dest:
+            sizer.Add(item=wx.StaticText(parent=self.filePanel,
+                                         label = _("Creation options:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (1, 0))
+            sizer.Add(item=self.fileWidgets['options'],
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                      pos=(1, 1))
+        else:
+            self.fileWidgets['options'].Hide()
+        self.filePanel.SetSizer(sizer)
+
+        # directory
+        sizer = wx.GridBagSizer(vgap=3, hgap=10)
+        sizer.Add(item=wx.StaticText(parent=self.dirPanel,
+                                       label = _("Format:")),
                           flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos = (row, 2))
-        self.dsnSizer.Add(item=self.extension,
-                          flag = wx.ALIGN_CENTER_VERTICAL,
-                          pos = (row, 3))
-        row += 1
-        self.dsnSizer.Add(item = self.dsnText,
-                          flag = wx.ALIGN_CENTER_VERTICAL,
-                          pos = (row, 0))
-        self.dsnSizer.Add(item = self.input[self.dsnType][1],
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                          pos = (row, 1), span = (1, 3))
-        row += 1
-        if self.creationOpt.IsShown():
-            self.dsnSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                                   label = _("Creation options:")),
-                              flag = wx.ALIGN_CENTER_VERTICAL,
-                              pos = (row, 0))
-            self.dsnSizer.Add(item = self.creationOpt,
-                              flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                              pos = (row, 1), span = (1, 3))
-            row += 1
+                          pos=(0, 0))
+        sizer.Add(item=self.dirWidgets['format'],
+                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                  pos=(0, 1))
+        sizer.Add(item=self.dirWidgets['extensionLabel'],
+                  flag=wx.ALIGN_CENTER_VERTICAL,
+                  pos=(0, 2))
+        sizer.Add(item=self.dirWidgets['extension'],
+                  flag=wx.ALIGN_CENTER_VERTICAL,
+                  pos=(0, 3))
+        sizer.Add(item=self.dirWidgets['browse'],
+                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                  pos=(1, 0), span=(1, 4))       
+        if self.dest:
+            sizer.Add(item=wx.StaticText(parent=self.dirPanel,
+                                         label = _("Creation options:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (2, 0))
+            sizer.Add(item=self.dirWidgets['options'],
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                      pos=(2, 1), span=(1, 3))
+            self.dirWidgets['extensionLabel'].Hide()
+            self.dirWidgets['extension'].Hide()
+        else:
+            self.dirWidgets['options'].Hide()
+        sizer.AddGrowableCol(1)
+        self.dirPanel.SetSizer(sizer)
+
+        # database
+        sizer = wx.GridBagSizer(vgap=1, hgap=10)
+        sizer.Add(item=wx.StaticText(parent=self.dbPanel,
+                                       label = _("Format:")),
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(0, 0))
+        sizer.Add(item=self.dbWidgets['format'],
+                  flag=wx.ALIGN_CENTER_VERTICAL,
+                  pos=(0, 1))
+        sizer.Add(item=self.dbWidgets['textLabel1'],
+                  flag=wx.ALIGN_CENTER_VERTICAL,
+                  pos=(1, 0))
+        sizer.Add(item=self.dbWidgets['text'],
+                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                  pos=(1, 1))
+        sizer.Add(item=self.dbWidgets['browse'],
+                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                  pos=(2, 0), span=(1, 2))
+        sizer.Add(item=self.dbWidgets['dirbrowse'],
+                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                  pos=(3, 0), span=(1, 2))
+        sizer.Add(item=self.dbWidgets['textLabel2'],
+                  flag=wx.ALIGN_CENTER_VERTICAL,
+                  pos=(4, 0))
+        sizer.Add(item=self.dbWidgets['choice'],
+                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                  pos=(4, 1))
+        if self.dest:
+            sizer.Add(item=wx.StaticText(parent=self.dbPanel,
+                                         label = _("Creation options:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (5, 0))
+            sizer.Add(item=self.dbWidgets['options'],
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                      pos=(5, 1))
         
-        self.dsnSizer.AddGrowableCol(3)
-        inputSizer.Add(item=self.dsnSizer, proportion = 1,
-                       flag=wx.EXPAND | wx.BOTTOM, border = 10)
+        else:
+            self.dbWidgets['options'].Hide()
+
+        self.dbPanel.SetSizer(sizer)
+        sizer.SetEmptyCellSize((0, 0))
+        sizer.AddGrowableCol(1)
+
+        # protocol
+        sizer = wx.GridBagSizer(vgap=3, hgap=3)
+        sizer.Add(item=wx.StaticText(parent=self.protocolPanel,
+                                       label = _("Format:")),
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(0, 0))
+        sizer.Add(item=self.protocolWidgets['format'],
+                  flag=wx.ALIGN_CENTER_VERTICAL,
+                  pos=(0, 1))
+        sizer.Add(item=wx.StaticText(parent=self.protocolPanel,
+                                     label = _("Protocol:")),
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(1, 0))
+        sizer.Add(item=self.protocolWidgets['text'],
+                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                  pos=(1, 1))
+        if self.dest:
+            sizer.Add(item=wx.StaticText(parent=self.protocolPanel,
+                                         label = _("Creation options:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (2, 0))
+            sizer.Add(item=self.protocolWidgets['options'],
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                      pos=(2, 1))
+
+        else:
+            self.protocolWidgets['options'].Hide()
+        sizer.AddGrowableCol(1)
+        self.protocolPanel.SetSizer(sizer)
+
+        # native
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(item=wx.StaticText(parent=self.nativePanel,
+                                     label = _("No settings available")),
+                          flag=wx.ALIGN_CENTER_VERTICAL|wx.ALL|wx.EXPAND, border=5)
+        self.nativePanel.SetSizer(sizer)
+
+        for panel in (self.nativePanel, self.filePanel,
+                      self.dirPanel, self.dbPanel,
+                      self.protocolPanel):
+            
+            self.changingSizer.Add(item=panel, proportion=1,
+                                   flag=wx.EXPAND)
         
         mainSizer.Add(item=self.settsManager, proportion=0,
                       flag=wx.ALL | wx.EXPAND, border=5)
         mainSizer.Add(item=self.source, proportion=0,
                       flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=5)
-        mainSizer.Add(item=inputSizer, proportion=0,
+        mainSizer.Add(item=self.changingSizer, proportion=1,
                       flag=wx.ALL | wx.EXPAND, border=5)
-        
+        self.mainSizer = mainSizer
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
+
+    def _getExtension(self, name):
+        """!Get file extension by format name"""
+        formatToExt = dict()
+        formatToExt.update(rasterFormatExtension)
+        formatToExt.update(vectorFormatExtension)
+
+        return formatToExt.get(name, '')        
+
+    def SetSourceType(self, sourceType):
+        """!Set source type (db, file, dir, ...).
+        Does not switch radioboxes."""
+        self._sourceType = sourceType
+        self.changingSizer.Show(item=self.filePanel, show=(sourceType == 'file'))
+        self.changingSizer.Show(item=self.nativePanel, show=(sourceType == 'native'))
+        self.changingSizer.Show(item=self.dirPanel, show=(sourceType == 'dir'))
+        self.changingSizer.Show(item=self.protocolPanel, show=(sourceType == 'pro'))
+        self.changingSizer.Show(item=self.dbPanel, show=(sourceType in ('db', 'db-pg')))
+
+        self.changingSizer.Layout()
+
+        if sourceType == 'db':
+            self.dbWidgets['format'].SetItems(self.dbFormats)
+            if self.dbFormats:
+                if 'PostgreSQL' in self.dbFormats:                
+                    self.dbWidgets['format'].SetStringSelection('PostgreSQL')
+                else:
+                    self.dbWidgets['format'].SetSelection(0)
+            self.dbWidgets['format'].Enable()
+
+        if sourceType == 'db-pg':
+            self.dbWidgets['format'].SetItems(['PostgreSQL'])
+            self.dbWidgets['format'].SetSelection(0)
+            self.dbWidgets['format'].Disable()
+
+        if sourceType in ('db','db-pg'):
+            db = self.dbWidgets['format'].GetStringSelection()
+            self.SetDatabase(db)
+
+        if hasattr(self.parent, 'list'):
+            self.parent.list.DeleteAllItems()
+            self._reloadLayers()
 
     def OnSettingsChanged(self, data):
         """!User changed setting"""
@@ -1490,12 +1614,35 @@ class GdalSelect(wx.Panel):
         if len(data) == 3:
             data.append('')
         elif len < 3:
-            return        
+            return     
 
-        self.OnSetType(event = None, sel = self.sourceMap[data[0]])
-        self.OnSetFormat(event = None, format = data[2])
-        self.OnSetDsn(event = None, path = data[1])
-        self.creationOpt.SetValue(data[3])
+        self.source.SetSelection(self.sourceMap[data[0]]) 
+        self.SetSourceType(data[0])
+        if data[0] == 'file':
+            self.fileWidgets['browse'].SetValue(data[1])
+            self.fileWidgets['options'].SetValue(data[3])
+        elif data[0] == 'dir':
+            self.dirWidgets['browse'].SetValue(data[1])
+            self.dirWidgets['format'].SetStringSelection(data[2])
+            self.dirWidgets['options'].SetValue(data[3])
+            self.SetExtension(data[2])
+        elif data[0] == 'pro':
+            self.protocolWidgets['text'].SetValue(data[2])
+            self.protocolWidgets['options'].SetValue(data[3])
+        elif data[0] in ('db', 'db-pg'):
+            name = self._getCurrentDbWidgetName()
+            if name =='choice':
+                if len(data[1].split(':', 1)) > 1:
+                    for item in data[1].split(':', 1)[1].split(','):
+                        key, value = item.split('=', 1)
+                        if key == 'dbname':
+                            self.dbWidgets[name].SetStringSelection(value)
+                            break
+                else:
+                    self.dbWidgets[name].SetStringSelection(data[1])
+            else:
+                self.dbWidgets[name].SetValue(data[1])
+            self.dbWidgets['options'].SetValue(data[3])
 
     def OnSettingsSaving(self, name):
         """!Saving data"""
@@ -1504,9 +1651,8 @@ class GdalSelect(wx.Panel):
                      message = _("No data source defined, settings are not saved."))
             return
 
-        self.settsManager.SetDataToSave((self.dsnType, self.GetDsn(),
-                                         self.format.GetStringSelection(),
-                                         self.creationOpt.GetValue()))
+        self.settsManager.SetDataToSave((self._sourceType, self.GetDsn(),
+                                         self.GetFormat(), self.GetOptions()))
         self.settsManager.SaveSettings(name)
 
     def _getExtPatternGlob(self, ext):
@@ -1515,125 +1661,37 @@ class GdalSelect(wx.Panel):
         for c in ext:
             pattern += '[%s%s]' % (c.lower(), c.upper())
         return pattern
-    
-    def _getExtPattern(self, ext):
-        """!Get pattern for case-insensitive file mask"""
-        return '*.%s;*.%s' % (ext.lower(), ext.upper())
 
+    def _getCurrentDbWidgetName(self):
+        """!Returns active dns database widget name."""
+        for widget in ('browse', 'dirbrowse', 'text', 'choice'):
+            if self.dbWidgets[widget].IsShown():
+                return widget
 
-    def OnSetType(self, event, sel = None):
-        """!Datasource type changed.
-
-        @todo improve showing/hiding widgets        
-        """
-        if event:
-            sel = event.GetSelection()
-        else:
-            self.source.SetSelection(sel)
-        win = self.input[self.dsnType][1]
-        if win:
-            self.dsnSizer.Detach(win)
-            win.Hide()
-        
-        if sel == self.sourceMap['file']:   # file
-            self.dsnType = 'file'
-            try:
-                format = self.input[self.dsnType][2][0]
-            except IndexError:
-                format = ''
-            try:
-                ext = self.format.GetExtension(format)
-                if not ext:
-                    raise KeyError
-                format += ' (%s)|%s|%s (*.*)|*.*' % \
-                    (self._getExtPattern(ext), self._getExtPattern(ext),
-                     _('All files'))
-            except KeyError:
-                format += '%s (*.*)|*.*' % _('All files')
-            
-            win = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
-                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                              dialogTitle=_('Choose file to import'),
-                                              buttonText=_('Browse'),
-                                              startDirectory=os.getcwd(),
-                                              changeCallback=self.OnSetDsn,
-                                              fileMask = format)
-            self.input[self.dsnType][1] = win
-        
-        elif sel == self.sourceMap['dir']: # directory
-            self.dsnType = 'dir'
-        elif sel == self.sourceMap['db']:  # database
-            self.dsnType = 'db'
-        elif sel == self.sourceMap['pro']: # protocol
-            self.dsnType = 'pro'
-        elif sel == self.sourceMap['native']:
-            self.dsnType = 'native'
-        elif sel == self.sourceMap['db-pg']: # PostGIS database (PG data provider)
-            self.dsnType = 'db-pg'
-        
-        if self.dsnType == 'db':
-            self.input[self.dsnType][1] = self.input['db-win']['text']
-        win = self.input[self.dsnType][1]
-                
-        self.dsnSizer.Add(item = self.input[self.dsnType][1],
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                          pos = (1, 1), span = (1, 3))
-        if self.dsnType != 'db-pg':
-            win.SetValue('')
-        win.Show()
-        
-        if sel == self.sourceMap['native']: # native
-            win.Enable(False)
-            self.format.Enable(False)
-            self.creationOpt.Enable(False)
-            self.parent.btnOk.Enable(True)
-        else:
-            if not win.IsEnabled():
-                win.Enable(True)
-            if sel == self.sourceMap['db-pg']:
-                if self.format.IsEnabled():
-                    self.format.Enable(False)
-                self.creationOpt.Enable(True)
-            else:
-                if not self.format.IsEnabled():
-                    self.format.Enable(True)
-                    self.creationOpt.Enable(True)
-            self.dsnText.SetLabel(self.input[self.dsnType][0])
-            items = copy.copy(self.input[self.dsnType][2])
-            if sel == self.sourceMap['file']:
-                items += ['ZIP', 'GZIP', 'TAR (tar.gz)']
-            self.format.SetItems(sorted(items))
-            
-            if self.parent.GetName() == 'MultiImportDialog':
-                self.parent.list.DeleteAllItems()
-        
-        if sel in (self.sourceMap['file'], self.sourceMap['dir']):
-            if not self.ogr:
-                self.OnSetFormat(event = None, format = 'GeoTIFF')
-            else:
-                self.OnSetFormat(event = None, format = 'ESRI Shapefile')
-        elif sel == self.sourceMap['db-pg']:
-            self.OnSetFormat(event = None, format = 'PostgreSQL')
-        
-        if sel == self.sourceMap['dir'] and not self.dest:
-            if not self.extension.IsShown():
-                self.extensionText.Show()
-                self.extension.Show()
-        else:
-            if self.extension.IsShown():
-                self.extensionText.Hide()
-                self.extension.Hide()
-        
-        self.dsnSizer.Layout()
-        
     def GetDsn(self):
         """!Get datasource name
         """
-        if self.format.GetStringSelection() in ('PostgreSQL',
-                                                'PostGIS Raster driver'):
-            dsn = 'PG:dbname=%s' % self.input[self.dsnType][1].GetStringSelection()
+        if self._sourceType in ('db', 'db-pg'):
+            if self.dbWidgets['format'].GetStringSelection() in ('PostgreSQL',
+                                                                 'PostGIS Raster driver'):
+
+                dsn = 'PG:dbname=%s' % self.dbWidgets['choice'].GetStringSelection()
+            else:
+                name = self._getCurrentDbWidgetName()
+                if name == 'choice':
+                    dsn = self.dbWidgets[name].GetStringSelection()
+                else:
+                    dsn = self.dbWidgets[name].GetValue()
+
         else:
-            dsn = self.input[self.dsnType][1].GetValue()
+            if self._sourceType == 'file':
+                dsn = self.fileWidgets['browse'].GetValue()
+            elif self._sourceType == 'dir':
+                dsn = self.dirWidgets['browse'].GetValue()
+            elif self._sourceType == 'pro':
+                dsn = self.protocolWidgets['text'].GetValue()
+            else:
+                dsn = ''
             # check compressed files
             try:
                 ext = os.path.splitext(dsn)[1].lower()
@@ -1646,48 +1704,69 @@ class GdalSelect(wx.Panel):
                 dsn = '/vsigzip/' + dsn
             elif ext in ('.tar', '.tar.gz', '.tgz'):
                 dsn = '/vsitar/' + dsn
-        
-        return dsn
-    
-    def OnSetDsn(self, event, path = None):
-        """!Input DXF file/OGR dsn defined, update list of layer
-        widget"""
-        if event:
-            path = event.GetString()
-        else:
-            if self.format.GetStringSelection() == 'PostgreSQL':
-                for item in path.split(':', 1)[1].split(','):
-                    key, value = item.split('=', 1)
-                    if key == 'dbname':
-                        if not self.input[self.dsnType][1].SetStringSelection(value):
-                            GMessage(_("Database <%s> not accessible.") % value,
-                                     parent = self)
-                        break
-            else:
-                self.input[self.dsnType][1].SetValue(path)
 
-        if not path:
-            if self.dest:
-                self.parent.btnOk.Enable(False)
-            return
-        
-        if self.dest:
-            self.parent.btnOk.Enable(True)
-        else:
-            self._reloadLayers()
-        
-        if event:
-            event.Skip()
-        
+        return dsn
+
+    def SetDatabase(self, db):
+        """!Update database panel."""
+        sizer = self.dbPanel.GetSizer()
+        showBrowse = db in ('SQLite', 'Rasterlite')
+        showDirbrowse = db in ('FileGDB')
+        showChoice = db in ('PostgreSQL','PostGIS WKT Raster driver',
+                            'PostGIS Raster driver')
+
+        showText = not(showBrowse or showChoice or showDirbrowse)
+        sizer.Show(self.dbWidgets['browse'], show=showBrowse)
+        sizer.Show(self.dbWidgets['dirbrowse'], show=showDirbrowse)
+        sizer.Show(self.dbWidgets['choice'], show=showChoice)
+        sizer.Show(self.dbWidgets['textLabel2'], show=showChoice)
+        sizer.Show(self.dbWidgets['text'], show=showText)
+        sizer.Show(self.dbWidgets['textLabel1'], show=showText)
+        if showChoice:
+            # try to get list of PG databases
+            dbNames = RunCommand('db.databases', quiet=True, read=True,
+                            driver='pg').splitlines()
+            if dbNames is not None:
+                self.dbWidgets['choice'].SetItems(sorted(dbNames))
+                self.dbWidgets['choice'].SetSelection(0)
+            elif grass.find_program('psql', '--help'):
+                if not self.dbWidgets['choice'].GetItems():
+                    p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
+                    ret = p.communicate()[0]
+                    if ret:
+                        dbNames = list()
+                        for line in ret.splitlines():
+                            sline = line.split('|')
+                            if len(sline) < 2:
+                                continue
+                            dbname = sline[0]
+                            if dbname:
+                                dbNames.append(dbname)
+                        self.dbWidgets['choice'].SetItems(db)
+                        self.dbWidgets['choice'].SetSelection(0)
+                if self.dest and self.dbWidgets['choice'].GetStringSelection():
+                    self.parent.btnOk.Enable(True)
+            else:
+                sizer.Show(self.dbWidgets['text'])
+                sizer.Show(self.dbWidgets['choice'], False)
+
+        sizer.Layout()
+
+    def OnUpdate(self, event):
+        """!Update required - load layers."""
+        self._reloadLayers()
+
+        event.Skip()
+
     def _reloadLayers(self):
         """!Reload list of layers"""
         dsn = self.GetDsn()
         if not dsn:
             return
-        
+
         data = list()        
         layerId = 1
-        
+
         if self.ogr:
             ret = RunCommand('v.external',
                              quiet = True,
@@ -1695,11 +1774,12 @@ class GdalSelect(wx.Panel):
                              flags = 't',
                              dsn = dsn)
             if not ret:
-                self.parent.list.LoadData()
+                if hasattr(self.parent, 'list'):
+                    self.parent.list.LoadData()
                 if hasattr(self, "btn_run"):
                     self.btn_run.Enable(False)
                 return
-            
+
             layerId = 1
             for line in ret.splitlines():
                 layerName, featureType, projection = map(lambda x: x.strip(), line.split(','))
@@ -1711,12 +1791,12 @@ class GdalSelect(wx.Panel):
                 data.append((layerId, layerName, featureType, projectionMatch, grassName))
                 layerId += 1
         else:
-            if self.dsnType == 'file':
+            if self._sourceType == 'file':
                 baseName = os.path.basename(dsn)
                 grassName = GetValidLayerName(baseName.split('.', -1)[0])
                 data.append((layerId, baseName, grassName))
-            elif self.dsnType == 'dir':
-                ext = self.extension.GetValue()
+            elif self._sourceType == 'dir':
+                ext = self.dirWidgets['extension'].GetValue()
                 for filename in glob.glob(os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)):
                     baseName = os.path.basename(filename)
                     grassName = GetValidLayerName(baseName.split('.', -1)[0])
@@ -1729,146 +1809,62 @@ class GdalSelect(wx.Panel):
 #        evt = wxGdalSelect(dsn = dsn)
 #        evt.SetId(self.input[self.dsnType][1].GetId())
 #        wx.PostEvent(self.parent, evt)
-        
+
         if self.parent.GetName() == 'MultiImportDialog':
             self.parent.list.LoadData(data)
             if len(data) > 0:
                 self.parent.btn_run.Enable(True)
             else:
                 self.parent.btn_run.Enable(False)
-        
-    def OnSetExtension(self, event):
-        """!Extension changed"""
-        if not self.dest:
-            # reload layers
-            self._reloadLayers()
-        
-    def OnSetFormat(self, event, format = None):
-        """!Format changed"""
-        if self.dsnType not in ['file', 'dir', 'db', 'db-pg']:
-            return
-        
-        win = self.input[self.dsnType][1]
-        self.dsnSizer.Detach(win)
-        
-        if self.dsnType == 'file':
-            win.Destroy()
-        else: # database
-            win.Hide()
-        
-        if event:
-            format = event.GetString()
-        else:
-            self.format.SetStringSelection(format)
-        
-        if self.dsnType == 'file':
-            try:
-                ext = self.format.GetExtension(format)
-                if not ext:
-                    raise KeyError
-                wildcard = format + ' (%s)|%s|%s (*.*)|*.*' % \
-                    (self._getExtPattern(ext), self._getExtPattern(ext),
-                     _('All files'))
-            except KeyError:
-                if format == 'ZIP':
-                    wildcard = '%s (*.zip;*.ZIP)|*.zip;*.ZIP' % _('ZIP files')
-                elif format == 'GZIP':
-                    wildcard = '%s (*.gz;*.GZ)|*.gz;*.GZ' % _('GZIP files')
-                elif format == 'TAR (tar.gz)':
-                    wildcard  = '%s (*.tar;*.TAR)|*.tar;*.TAR|' % _('TAR files')
-                    wildcard += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ' % _('TARGZ files')
-                else:
-                    wildcard = '%s (*.*)|*.*' % _('All files')
-            
-            win = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
-                                              size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
-                                              dialogTitle=_('Choose file'),
-                                              buttonText=_('Browse'),
-                                              startDirectory=os.getcwd(),
-                                              changeCallback=self.OnSetDsn,
-                                              fileMask = wildcard)
-            
-        elif self.dsnType == 'dir':
-            pass
-        
-        else: # database
-            if format in ('SQLite', 'Rasterlite'):
-                win = self.input['db-win']['file']
-            elif format in ('FileGDB'):
-                win = self.input['db-win']['dir']
-            elif format in ('PostgreSQL', 'PostGIS WKT Raster driver',
-                            'PostGIS Raster driver'):
-                win = self.input['db-win']['choice']
-                # try to get list of PG databases
-                db = RunCommand('db.databases', quiet = True, read = True,
-                                driver = 'pg').splitlines()
-                if db is not None:
-                    win.SetItems(sorted(db))
-                elif grass.find_program('psql', '--help'):
-                    if not win.GetItems():
-                        p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
-                        ret = p.communicate()[0]
-                        if ret:
-                            db = list()
-                            for line in ret.splitlines():
-                                sline = line.split('|')
-                                if len(sline) < 2:
-                                    continue
-                                dbname = sline[0]
-                                if dbname:
-                                    db.append(dbname)
-                            win.SetItems(db)
-                    if self.dest and win.GetStringSelection():
-                        self.parent.btnOk.Enable(True)
-                else:
-                    win = self.input['db-win']['text']
-            else:
-                win = self.input['db-win']['text']
-        
-        self.input[self.dsnType][1] = win
-        if not win.IsShown():
-            win.Show()
-        self.dsnSizer.Add(item = self.input[self.dsnType][1],
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                          pos = (1, 1), span = (1, 3))
-        self.dsnSizer.Layout()
-        
-        # update extension
-        self.extension.SetValue(self.GetFormatExt())
 
+    def ExtensionChanged(self, event):
         if not self.dest:
             # reload layers
             self._reloadLayers()
-        
+
+    def SetExtension(self, name):
+        """!Extension changed"""
+        ext = self._getExtension(name)
+        self.dirWidgets['extension'].SetValue(ext)
+
     def GetType(self):
         """!Get source type"""
-        return self.dsnType
+        return self._sourceType
 
-    def GetDsnWin(self):
-        """!Get list of DSN windows"""
-        win = list()
-        for stype in ('file', 'dir', 'pro'):
-            win.append(self.input[stype][1])
-        for stype in ('file', 'text', 'choice'):
-            win.append(self.input['db-win'][stype])
-        
-        return win
-    
     def GetFormat(self):
         """!Get format as string"""
-        return self.format.GetStringSelection().replace(' ', '_')
-    
+        if self._sourceType == 'file':
+            format = self.fileWidgets['browse'].GetValue()
+        elif self._sourceType == 'dir':
+            format = self.dirWidgets['browse'].GetValue()
+        elif self._sourceType == 'pro':
+            format = self.protocolWidgets['text'].GetValue()
+        elif self._sourceType in ('db', 'db-pg'):
+            wname = self._getCurrentDbWidgetName()
+            if wname =='choice':
+                format = self.dbWidgets[wname].GetStringSelection()
+            else:
+                format = self.dbWidgets[wname].GetValue()
+        return format.replace(' ', '_')
+
     def GetFormatExt(self):
         """!Get format extension"""
-        return self.format.GetExtension(self.format.GetStringSelection())
-    
+        return self._getExtension(self.GetFormat())
+
     def GetOptions(self):
         """!Get creation options"""
-        if not self.creationOpt.IsShown():
-            return ''
-        
-        return self.creationOpt.GetValue()
-    
+        if self._sourceType == 'file':
+            options = self.fileWidgets['options'].GetValue()
+        elif self._sourceType == 'dir':
+            options = self.dirWidgets['options'].GetValue()
+        elif self._sourceType == 'pro':
+            options = self.protocolWidgets['options'].GetValue()
+        elif self._sourceType in ('db', 'db-pg'):
+            options = self.dbWidgets['options'].GetValue()
+
+        return options
+
+
 class ProjSelect(wx.ComboBox):
     """!Widget for selecting input raster/vector map used by
     r.proj/v.proj modules."""
