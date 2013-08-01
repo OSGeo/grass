@@ -832,16 +832,12 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'fi$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '# Set the GRASS_PROJSHARE variable$\r$\n'
-	FileWrite $0 'GRASS_PROJSHARE="$INSTALL_DIR\proj"$\r$\n'
+	FileWrite $0 'GRASS_PROJSHARE="$INSTALL_DIR\share\proj"$\r$\n'
 	FileWrite $0 'export GRASS_PROJSHARE$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '# Set the GDAL_DATA variable$\r$\n'
 	FileWrite $0 'GDAL_DATA="$INSTALL_DIR\share\gdal"$\r$\n'
 	FileWrite $0 'export GDAL_DATA$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '# Set the PROJ_LIB variable$\r$\n'
-	FileWrite $0 'PROJ_LIB="$INSTALL_DIR\proj"$\r$\n'
-	FileWrite $0 'export PROJ_LIB $\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '# Set the GEOTIFF_CSV variable$\r$\n'
 	FileWrite $0 'GEOTIFF_CSV="$INSTALL_DIR\share\epsg_csv"$\r$\n'
@@ -894,7 +890,7 @@ Section "GRASS" SecGRASS
 	;replace config_projshare
 	Push "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" ; file to modify
 	Push 'config_projshare = "/c/OSGeo4W@OSGEO4W_DIR_POSTFIX@/share/proj"' ; string that a line must begin with *WS Sensitive*
-	Push 'config_projshare = "$INSTDIR\proj"' ; string to replace whole line with
+	Push 'config_projshare = "$INSTDIR\share\proj"' ; string to replace whole line with
 	Call ReplaceLineStr
                  
 SectionEnd

@@ -1,7 +1,7 @@
 rem -----------------------------------------------------------------------------------------------------------------------
 rem Self Contained GRASS Automated Packager
 rem -----------------------------------------------------------------------------------------------------------------------
-rem Original author: Marco Pasetti
+rem Edited by: Marco Pasetti
 rem Revised for OSGeo4W by: Colin Nielsen, Helmut Kudrnovsky, and Martin Landa
 rem Last Update: $Id$
 rem -----------------------------------------------------------------------------------------------------------------------
@@ -14,14 +14,18 @@ rem ----------------------------------------------------------------------------
 
 set PACKAGE_DIR=.\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package
 
-set OSGEO4W_DIR=c:\OSGeo4W@OSGEO4W_DIR_POSTFIX@
+set OSGEO4W_BLD_DIR=C:\OSGeo4W
+if exist C:\OSGeo4W_grass@GRASS_VERSION_MAJOR@ (
+set OSGEO4W_PKG_DIR=C:\OSGeo4W_grass@GRASS_VERSION_MAJOR@
+) else (
+set OSGEO4W_PKG_DIR=C:\OSGeo4W
+)
 
-set GRASS_PREFIX=%OSGEO4W_DIR%\apps\grass\grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@
-set GRASS_BIN_PREFIX=%OSGEO4W_DIR%\bin
+set GRASS_PREFIX=%OSGEO4W_BLD_DIR%\apps\grass\grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
-@echo Remove the previous Selected Package and create a new PACKAGE_DIR
+@echo Remove the previous package and create a new PACKAGE_DIR
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
@@ -34,41 +38,32 @@ mkdir %PACKAGE_DIR%
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
-xcopy %GRASS_PREFIX% %PACKAGE_DIR% /S/V/F
+xcopy %GRASS_PREFIX% %PACKAGE_DIR% /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
-@echo Copy Extralibs to PACKAGE_DIR\extralib
+@echo Copy DLL libs to PACKAGE_DIR\extralib
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
 mkdir %PACKAGE_DIR%\extralib
 
-copy %OSGEO4W_DIR%\bin\*.dll %PACKAGE_DIR%\extralib
-del %PACKAGE_DIR%\extralib\libgrass_*6.4*.dll
-del %PACKAGE_DIR%\extralib\libgrass_*6.5*.dll
-del %PACKAGE_DIR%\extralib\Qt*4.dll
+copy %OSGEO4W_PKG_DIR%\bin\*.dll %PACKAGE_DIR%\extralib
 del %PACKAGE_DIR%\extralib\msvcp*
 del %PACKAGE_DIR%\extralib\msvcr*
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
-@echo Move GRASS libs from extralib to lib
-@echo -----------------------------------------------------------------------------------------------------------------------
-@echo.
-
-move %PACKAGE_DIR%\extralib\libgrass_*.dll %PACKAGE_DIR%\lib
-
-@echo.
-@echo -----------------------------------------------------------------------------------------------------------------------
-@echo Copy Extrabins to PACKAGE_DIR\extrabin
+@echo Copy extrabins to PACKAGE_DIR\extrabin
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
 mkdir %PACKAGE_DIR%\extrabin
 mkdir %PACKAGE_DIR%\extrabin\gdalplugins
 
-copy %OSGEO4W_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
+copy %OSGEO4W_PKG_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
+xcopy %OSGEO4W_PKG_DIR%\bin\gdalplugins\* %PACKAGE_DIR%\extrabin\gdalplugins /S/V/F/I
+del %PACKAGE_DIR%\extrabin\apt*.exe
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
@@ -76,7 +71,7 @@ copy %OSGEO4W_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
-copy %OSGEO4W_DIR%\usr\src\grass_trunk\mswindows\external\rbatch\* %PACKAGE_DIR%\extrabin
+copy %OSGEO4W_PKG_DIR%\usr\src\grass_trunk\mswindows\external\rbatch\* %PACKAGE_DIR%\extrabin
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
@@ -84,7 +79,9 @@ copy %OSGEO4W_DIR%\usr\src\grass_trunk\mswindows\external\rbatch\* %PACKAGE_DIR%
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
-xcopy %OSGEO4W_DIR%\share\proj %PACKAGE_DIR%\proj /S/V/F/I
+mkdir %PACKAGE_DIR%\share
+mkdir %PACKAGE_DIR%\share\proj
+xcopy %OSGEO4W_PKG_DIR%\share\proj %PACKAGE_DIR%\share\proj /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
@@ -92,9 +89,8 @@ xcopy %OSGEO4W_DIR%\share\proj %PACKAGE_DIR%\proj /S/V/F/I
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
-mkdir %PACKAGE_DIR%\share
 mkdir %PACKAGE_DIR%\share\gdal
-xcopy %OSGEO4W_DIR%\share\gdal %PACKAGE_DIR%\share\gdal /S/V/F/I
+xcopy %OSGEO4W_PKG_DIR%\share\gdal %PACKAGE_DIR%\share\gdal /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
@@ -103,7 +99,7 @@ xcopy %OSGEO4W_DIR%\share\gdal %PACKAGE_DIR%\share\gdal /S/V/F/I
 @echo.
 
 mkdir %PACKAGE_DIR%\share\epsg_csv
-xcopy %OSGEO4W_DIR%\share\epsg_csv %PACKAGE_DIR%\share\epsg_csv /S/V/F/I
+xcopy %OSGEO4W_PKG_DIR%\share\epsg_csv %PACKAGE_DIR%\share\epsg_csv /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
@@ -113,17 +109,14 @@ xcopy %OSGEO4W_DIR%\share\epsg_csv %PACKAGE_DIR%\share\epsg_csv /S/V/F/I
 
 mkdir %PACKAGE_DIR%\msys
 
-copy %OSGEO4W_DIR%\apps\msys\* %PACKAGE_DIR%\msys
+xcopy %OSGEO4W_PKG_DIR%\apps\msys\* %PACKAGE_DIR%\msys /S/V/F/I
 
-xcopy %OSGEO4W_DIR%\apps\msys\bin %PACKAGE_DIR%\msys\bin /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\msys\doc %PACKAGE_DIR%\msys\doc /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\msys\etc %PACKAGE_DIR%\msys\etc /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\msys\info %PACKAGE_DIR%\msys\info /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\msys\lib %PACKAGE_DIR%\msys\lib /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\msys\man %PACKAGE_DIR%\msys\man /S/V/F/I
-del %PACKAGE_DIR%\msys\etc\fstab
-rem delete msys.bat from osgeo4w because there is an adaption (for spaces in installation path) written by GRASS-Installer.nsi
+rem delete msys.bat and fstab from osgeo4w because there is an
+rem adaption (for spaces in installation path) written by
+rem GRASS-Installer.nsi
+
 del %PACKAGE_DIR%\msys\msys.bat
+del %PACKAGE_DIR%\msys\etc\fstab
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
@@ -133,13 +126,24 @@ del %PACKAGE_DIR%\msys\msys.bat
 
 mkdir %PACKAGE_DIR%\Python27
 
-copy %OSGEO4W_DIR%\apps\Python27\* %PACKAGE_DIR%\Python27
+xcopy %OSGEO4W_PKG_DIR%\apps\Python27\* %PACKAGE_DIR%\Python27 /S/V/F/I
 
-xcopy %OSGEO4W_DIR%\apps\Python27\DLLs %PACKAGE_DIR%\Python27\DLLs /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\Python27\include %PACKAGE_DIR%\Python27\include /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\Python27\Lib %PACKAGE_DIR%\Python27\Lib /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\Python27\libs %PACKAGE_DIR%\Python27\libs /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\Python27\Scripts %PACKAGE_DIR%\Python27\Scripts /S/V/F/I
+@echo.
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo Copy Tcl/Tk content to PACKAGE_DIR\lib
+@echo -----------------------------------------------------------------------------------------------------------------------
+@echo.
+
+mkdir %PACKAGE_DIR%\lib\tcl8.5
+mkdir %PACKAGE_DIR%\lib\tk8.5
+
+copy %OSGEO4W_PKG_DIR%\lib\tcl8.5\*.tcl %PACKAGE_DIR%\lib\tcl8.5
+copy %OSGEO4W_PKG_DIR%\lib\tcl8.5\tclIndex %PACKAGE_DIR%\lib\tcl8.5
+
+copy %OSGEO4W_PKG_DIR%\lib\tk8.5\*.tcl %PACKAGE_DIR%\lib\tk8.5
+copy %OSGEO4W_PKG_DIR%\lib\tk8.5\tclIndex %PACKAGE_DIR%\lib\tk8.5
+
+xcopy %OSGEO4W_PKG_DIR%\lib\tk8.5\ttk %PACKAGE_DIR%\lib\tk8.5\ttk /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
