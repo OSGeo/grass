@@ -249,7 +249,8 @@ class MapFrame(SingleMapFrame):
             from vdigit.mapwindow import VDigitWindow
             self.MapWindowVDigit = VDigitWindow(parent = self, giface = self._giface,
                                                 id = wx.ID_ANY, frame = self,
-                                                Map = self.Map, lmgr = self._layerManager)
+                                                Map = self.Map, tree = self.tree,
+                                                lmgr = self._layerManager)
             self.MapWindowVDigit.Show()
             self._mgr.AddPane(self.MapWindowVDigit, wx.aui.AuiPaneInfo().CentrePane().
                           Dockable(False).BestSize((-1,-1)).Name('vdigit').
