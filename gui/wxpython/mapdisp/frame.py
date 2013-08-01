@@ -214,14 +214,6 @@ class MapFrame(SingleMapFrame):
         self.dialogs['query'] = None
 
         self.decorationDialog = None # decoration/overlays
-        
-    def OnSize(self, event):
-        """!Adjust statusbar on changing size"""
-        # reposition checkbox in statusbar
-        self.StatusbarReposition()
-        
-        # update statusbar
-        self.StatusbarUpdate()
 
     def GetMapWindow(self):
         return self.MapWindow

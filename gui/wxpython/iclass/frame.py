@@ -178,6 +178,7 @@ class IClassMapFrame(DoubleMapFrame):
         wx.CallAfter(self.AddTrainingAreaMap)
         
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
         self.SendSizeEvent()
         
