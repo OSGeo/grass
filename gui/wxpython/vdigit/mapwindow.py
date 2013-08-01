@@ -30,20 +30,16 @@ from gui_core       import gselect
 class VDigitWindow(BufferedWindow):
     """!A Buffered window extended for vector digitizer.
     """
-    def __init__(self, parent, giface, Map, frame,
+    def __init__(self, parent, giface, Map, frame, tree=None,
                  id=wx.ID_ANY, lmgr=None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
         BufferedWindow.__init__(self, parent = parent, giface = giface, id = id, Map = Map,
                                 frame=frame, style=style, **kwargs)
         self.lmgr = lmgr
+        self.tree = tree
         self.pdcVector = wx.PseudoDC()
         self.toolbar   = self.parent.GetToolbar('vdigit')
         self.digit     = None # wxvdigit.IVDigit
-        
-        if hasattr(giface, "GetLayerTree"):
-            self.tree = giface.GetLayerTree()
-        else:
-            self.tree = None
 
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         
