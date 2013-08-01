@@ -140,6 +140,7 @@ int main(int argc, char **argv)
     int row, col;
     struct Colors colors;
     struct FPRange range;
+    struct History hist;
     DCELL min, max;
     DCELL *out_row;
     double scale = 1.0;
@@ -366,6 +367,12 @@ int main(int argc, char **argv)
 	if (Rast_read_colors(in_name, "", &colors) < 0)
 	    G_fatal_error(_("Unable to read color table for raster map <%s>"), in_name);
 	Rast_write_colors(val_name, G_mapset(), &colors);
+
+	Rast_short_history(val_name, "raster", &hist);
+	Rast_set_history(&hist, HIST_DATSRC_1, in_name);
+	Rast_append_format_history(&hist, "value of nearest feature");
+	Rast_command_history(&hist);
+	Rast_write_history(val_name, &hist);
     }
 
     if (dist_name) {
@@ -374,6 +381,12 @@ int main(int argc, char **argv)
 	Rast_get_fp_range_min_max(&range, &min, &max);
 	Rast_make_fp_colors(&colors, "rainbow", min, max);
 	Rast_write_colors(dist_name, G_mapset(), &colors);
+
+	Rast_short_history(dist_name, "raster", &hist);
+	Rast_set_history(&hist, HIST_DATSRC_1, in_name);
+	Rast_append_format_history(&hist, "%s distance to nearest feature", opt.met->answer);
+	Rast_command_history(&hist);
+	Rast_write_history(dist_name, &hist);
     }
 
     return EXIT_SUCCESS;
