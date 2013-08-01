@@ -1886,6 +1886,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         """
         # re-render image on idle
         self.resize = time.clock()
+        super(MapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
         """!GCP Map Display resized, adjust Map Windows

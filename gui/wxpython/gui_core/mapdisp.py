@@ -118,7 +118,15 @@ class MapFrameBase(wx.Frame):
         Map.ChangeMapSize(self.GetClientSize())
         Map.region = Map.GetRegion() # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
+
+    def OnSize(self, event):
+        """!Adjust statusbar on changing size"""
+        # reposition checkbox in statusbar
+        self.StatusbarReposition()
         
+        # update statusbar
+        self.StatusbarUpdate()
+
     def SetProperty(self, name, value):
         """!Sets property"""
         self.statusbarManager.SetProperty(name, value)

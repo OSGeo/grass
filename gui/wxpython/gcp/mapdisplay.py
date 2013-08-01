@@ -141,6 +141,7 @@ class MapFrame(SingleMapFrame):
         # Bind various events
         #
         self.activemap.Bind(wx.EVT_CHOICE, self.OnUpdateActive)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
         
         #
         # Update fancy gui style
