@@ -97,7 +97,6 @@ def main():
         frame.SetRasterNames()
 
     frame.SetViewMode(mode)
-    frame.ZoomToMap()
     frame.Show()
 
     app.MainLoop()
