@@ -36,14 +36,18 @@ void dig_line_reset_updated(struct Plus_head *Plus)
  */
 void dig_line_add_updated(struct Plus_head *Plus, int line)
 {
+    int i;
+    
     G_debug(3, "dig_line_add_updated(): line = %d", line);
 
-    /* Check if already in list
-    for (i = 0; i < Plus->uplist.n_uplines; i++)
-	if (Plus->uplist.uplines[i] == line)
+    /* Check if already in list */
+    for (i = 0; i < Plus->uplist.n_uplines; i++) {
+	if (Plus->uplist.uplines[i] == line) {
+            G_debug(3, "\tskipped");
 	    return;
-    */
-
+        }
+    }
+    
     /* Alloc space if needed */
     if (Plus->uplist.n_uplines == Plus->uplist.alloc_uplines) {
 	Plus->uplist.alloc_uplines += 1000;
@@ -82,9 +86,12 @@ void dig_node_add_updated(struct Plus_head *Plus, int node)
     G_debug(3, "dig_node_add_updated(): node = %d", node);
 
     /* Check if already in list */
-    for (i = 0; i < Plus->uplist.n_upnodes; i++)
-	if (Plus->uplist.upnodes[i] == node)
+    for (i = 0; i < Plus->uplist.n_upnodes; i++) {
+	if (abs(Plus->uplist.upnodes[i]) == abs(node)) {
+            G_debug(3, "\tskipped");
 	    return;
+        }
+    }
 
     /* Alloc space if needed */
     if (Plus->uplist.n_upnodes == Plus->uplist.alloc_upnodes) {
