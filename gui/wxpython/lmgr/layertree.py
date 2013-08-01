@@ -367,9 +367,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # no need to distinguish 2D and 3D since the interface is the same
         # remove this comment when it is onl enough
         if self.rerender:
+            # restart rerender value here before wx.Yield
+            # can cause another idle event
+            self.rerender = False
             if self.mapdisplay.IsAutoRendered():
                 self.mapdisplay.GetMapWindow().UpdateMap(render=True)
-            self.rerender = False
         
         event.Skip()
         

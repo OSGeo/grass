@@ -1041,7 +1041,9 @@ class SbProgress(SbItem):
         Needed for wxNVIZ.
         """
         if value > self.GetRange():
+            self.Hide()
             return
+
         self.widget.SetValue(value)
         if value == self.GetRange():
             self.Hide()
