@@ -1591,7 +1591,6 @@ class ImportDialog(wx.Dialog):
         self.btn_run = wx.Button(parent = self.panel, id = wx.ID_OK, label = _("&Import"))
         self.btn_run.SetToolTipString(_("Import selected layers"))
         self.btn_run.SetDefault()
-        self.btn_run.Enable(False)
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
         
     def doLayout(self):
@@ -1741,6 +1740,7 @@ class GdalImportDialog(ImportDialog):
         
         self.dsnInput = GdalSelect(parent = self, panel = self.panel,
                                    ogr = ogr, link = link)
+        self.dsnInput.reloadDataRequired.connect(lambda data: self.list.LoadData(data))
         
         if link:
             self.add.SetLabel(_("Add linked layers into layer tree"))
@@ -1872,7 +1872,6 @@ class GdalOutputDialog(wx.Dialog):
         self.btnOk = wx.Button(parent = self.panel, id = wx.ID_OK)
         self.btnOk.SetToolTipString(_("Set external format and close dialog"))
         self.btnOk.SetDefault()
-        self.btnOk.Enable(False)
         
         self.dsnInput = GdalSelect(parent = self, panel = self.panel,
                                    ogr = ogr,
@@ -1922,6 +1921,9 @@ class GdalOutputDialog(wx.Dialog):
             dsn = self.dsnInput.GetDsn()
             frmt = self.dsnInput.GetFormat()
             options = self.dsnInput.GetOptions()
+            if not dsn:
+                GMessage(_("No data source selected."), parent=self)
+                return
             
             RunCommand('v.external.out',
                        parent = self,
@@ -1956,6 +1958,9 @@ class DxfImportDialog(ImportDialog):
     def OnRun(self, event):
         """!Import/Link data (each layes as separate vector map)"""
         data = self.list.GetLayers()
+        if not data:
+            GMessage(_("No layers selected."), parent=self)
+            return
         
         # hide dialog
         self.Hide()
@@ -1979,7 +1984,7 @@ class DxfImportDialog(ImportDialog):
             # run in Layer Manager
             self._giface.RunCmd(cmd, switchPage = True, onDone = self.AddLayers)
         
-        self.OnCancel()
+        self.Close()
 
     def OnSetDsn(self, event):
         """!Input DXF file defined, update list of layer widget"""
@@ -1996,7 +2001,6 @@ class DxfImportDialog(ImportDialog):
                          input = path)
         if not ret:
             self.list.LoadData()
-            self.btn_run.Enable(False)
             return
             
         for line in ret.splitlines():
@@ -2006,11 +2010,8 @@ class DxfImportDialog(ImportDialog):
             data.append((layerId, layerName.strip(), grassName.strip()))
         
         self.list.LoadData(data)
-        if len(data) > 0:
-            self.btn_run.Enable(True)
-        else:
-            self.btn_run.Enable(False)
-             
+
+
 class LayersList(GListCtrl, listmix.TextEditMixin):
     """!List of layers to be imported (dxf, shp...)"""
     def __init__(self, parent, columns, log = None):

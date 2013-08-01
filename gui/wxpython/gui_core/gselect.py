@@ -63,6 +63,7 @@ from core.utils    import GetVectorNumberOfLayers, _
 from core.settings import UserSettings
 from core.debug    import Debug
 
+from grass.pydispatch.signal import Signal
 
 class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
@@ -1185,6 +1186,8 @@ class GdalSelect(wx.Panel):
 
         wx.Panel.__init__(self, parent=panel)
 
+        self.reloadDataRequired = Signal('GdalSelect.reloadDataRequired')
+
         if self.ogr:
             settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
         else:
@@ -1405,8 +1408,9 @@ class GdalSelect(wx.Panel):
             self.dbWidgets['format'].SetStringSelection(format)
             self.dbWidgets['options'].SetValue(options)
             name = self._getCurrentDbWidgetName()
-            if name == 'choice' and dsn in self.dbWidgets[name].GetItems():
-                self.dbWidgets[name].SetStringSelection(dsn)
+            if name == 'choice':
+                if dsn in self.dbWidgets[name].GetItems():
+                    self.dbWidgets[name].SetStringSelection(dsn)
             else:
                 self.dbWidgets[name].SetValue(dsn)
 
@@ -1604,9 +1608,8 @@ class GdalSelect(wx.Panel):
             db = self.dbWidgets['format'].GetStringSelection()
             self.SetDatabase(db)
 
-        if hasattr(self.parent, 'list'):
-            self.parent.list.DeleteAllItems()
-            self._reloadLayers()
+        self.reloadDataRequired.emit(data=None)
+        self._reloadLayers()
 
     def OnSettingsChanged(self, data):
         """!User changed setting"""
@@ -1744,8 +1747,6 @@ class GdalSelect(wx.Panel):
                                 dbNames.append(dbname)
                         self.dbWidgets['choice'].SetItems(db)
                         self.dbWidgets['choice'].SetSelection(0)
-                if self.dest and self.dbWidgets['choice'].GetStringSelection():
-                    self.parent.btnOk.Enable(True)
             else:
                 sizer.Show(self.dbWidgets['text'])
                 sizer.Show(self.dbWidgets['choice'], False)
@@ -1774,10 +1775,7 @@ class GdalSelect(wx.Panel):
                              flags = 't',
                              dsn = dsn)
             if not ret:
-                if hasattr(self.parent, 'list'):
-                    self.parent.list.LoadData()
-                if hasattr(self, "btn_run"):
-                    self.btn_run.Enable(False)
+                self.reloadDataRequired.emit(data=None)
                 return
 
             layerId = 1
@@ -1811,11 +1809,7 @@ class GdalSelect(wx.Panel):
 #        wx.PostEvent(self.parent, evt)
 
         if self.parent.GetName() == 'MultiImportDialog':
-            self.parent.list.LoadData(data)
-            if len(data) > 0:
-                self.parent.btn_run.Enable(True)
-            else:
-                self.parent.btn_run.Enable(False)
+            self.reloadDataRequired.emit(data=data)
 
     def ExtensionChanged(self, event):
         if not self.dest:
@@ -1833,18 +1827,15 @@ class GdalSelect(wx.Panel):
 
     def GetFormat(self):
         """!Get format as string"""
-        if self._sourceType == 'file':
-            format = self.fileWidgets['browse'].GetValue()
-        elif self._sourceType == 'dir':
-            format = self.dirWidgets['browse'].GetValue()
+        if self._sourceType == 'dir':
+            format = self.dirWidgets['format'].GetStringSelection()
         elif self._sourceType == 'pro':
-            format = self.protocolWidgets['text'].GetValue()
+            format = self.protocolWidgets['format'].GetStringSelection()
         elif self._sourceType in ('db', 'db-pg'):
-            wname = self._getCurrentDbWidgetName()
-            if wname =='choice':
-                format = self.dbWidgets[wname].GetStringSelection()
-            else:
-                format = self.dbWidgets[wname].GetValue()
+            format = self.dbWidgets['format'].GetStringSelection()
+        else:
+            format = ''
+
         return format.replace(' ', '_')
 
     def GetFormatExt(self):
