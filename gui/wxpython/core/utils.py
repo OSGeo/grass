@@ -767,6 +767,75 @@ def GetFormats(writableOnly = False):
     
     return formats['all']
 
+
+rasterFormatExtension = {
+            'GeoTIFF' : 'tif',
+            'Erdas Imagine Images (.img)' : 'img',
+            'Ground-based SAR Applications Testbed File Format (.gff)' : 'gff',
+            'Arc/Info Binary Grid' : 'adf',
+            'Portable Network Graphics' : 'png',
+            'JPEG JFIF' : 'jpg',
+            'Japanese DEM (.mem)' : 'mem',
+            'Graphics Interchange Format (.gif)' : 'gif',
+            'X11 PixMap Format' : 'xpm',
+            'MS Windows Device Independent Bitmap' : 'bmp',
+            'SPOT DIMAP' : 'dim',
+            'RadarSat 2 XML Product' : 'xml',
+            'EarthWatch .TIL' : 'til',
+            'ERMapper .ers Labelled' : 'ers',
+            'ERMapper Compressed Wavelets' : 'ecw',
+            'GRIdded Binary (.grb)' : 'grb',
+            'EUMETSAT Archive native (.nat)' : 'nat',
+            'Idrisi Raster A.1' : 'rst',
+            'Golden Software ASCII Grid (.grd)' : 'grd',
+            'Golden Software Binary Grid (.grd)' : 'grd',
+            'Golden Software 7 Binary Grid (.grd)' : 'grd',
+            'R Object Data Store' : 'r',
+            'USGS DOQ (Old Style)' : 'doq',
+            'USGS DOQ (New Style)' : 'doq',
+            'ENVI .hdr Labelled' : 'hdr',
+            'ESRI .hdr Labelled' : 'hdr',
+            'Generic Binary (.hdr Labelled)' : 'hdr',
+            'PCI .aux Labelled' : 'aux',
+            'EOSAT FAST Format' : 'fst',
+            'VTP .bt (Binary Terrain) 1.3 Format' : 'bt',
+            'FARSITE v.4 Landscape File (.lcp)' : 'lcp',
+            'Swedish Grid RIK (.rik)' : 'rik',
+            'USGS Optional ASCII DEM (and CDED)' : 'dem',
+            'Northwood Numeric Grid Format .grd/.tab' : '',
+            'Northwood Classified Grid Format .grc/.tab' : '',
+            'ARC Digitized Raster Graphics' : 'arc',
+            'Magellan topo (.blx)' : 'blx',
+            'SAGA GIS Binary Grid (.sdat)' : 'sdat'
+            }
+
+
+vectorFormatExtension = {
+            'ESRI Shapefile' : 'shp',
+            'UK .NTF'        : 'ntf',
+            'SDTS'           : 'ddf',
+            'DGN'            : 'dgn',
+            'VRT'            : 'vrt',
+            'REC'            : 'rec',
+            'BNA'            : 'bna',
+            'CSV'            : 'csv',
+            'GML'            : 'gml',
+            'GPX'            : 'gpx',
+            'KML'            : 'kml',
+            'GMT'            : 'gmt',
+            'PGeo'           : 'mdb',
+            'XPlane'         : 'dat',
+            'AVCBin'         : 'adf',
+            'AVCE00'         : 'e00',
+            'DXF'            : 'dxf',
+            'Geoconcept'     : 'gxt',
+            'GeoRSS'         : 'xml',
+            'GPSTrackMaker'  : 'gtm',
+            'VFK'            : 'vfk',
+            'SVG'            : 'svg',
+            }
+
+
 def GetSettingsPath():
     """!Get full path to the settings directory
     """
