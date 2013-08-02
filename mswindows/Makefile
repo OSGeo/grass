@@ -4,10 +4,6 @@ include $(MODULE_TOPDIR)/include/Make/Other.make
 
 EXTRA_CLEAN_FILES = GRASS-Packager.bat GRASS-Installer.nsi
 
-# OSGeo4W directory postfix, separate OSGeo4W installations are used
-# for building GRASS 6.x and 7.x
-OSGEO4W_DIR_POSTFIX = '_g7'
-
 ifneq ($(MINGW),)
 default: GRASS-Packager.bat GRASS-Installer.nsi
 else
@@ -19,7 +15,6 @@ GRASS-Packager.bat: GRASS-Packager.bat.tmpl
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
 	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
 	-e 's#@GRASS_VERSION_RELEASE@#$(GRASS_VERSION_RELEASE)#' \
-	-e 's#@OSGEO4W_DIR_POSTFIX@#$(OSGEO4W_DIR_POSTFIX)#' \
 	$< > $@
 
 GRASS-Installer.nsi: GRASS-Installer.nsi.tmpl
@@ -28,5 +23,4 @@ GRASS-Installer.nsi: GRASS-Installer.nsi.tmpl
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
 	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
 	-e 's#@GRASS_VERSION_RELEASE@#$(GRASS_VERSION_RELEASE)#' \
-	-e 's#@OSGEO4W_DIR_POSTFIX@#$(OSGEO4W_DIR_POSTFIX)#' \
 	$< > $@
