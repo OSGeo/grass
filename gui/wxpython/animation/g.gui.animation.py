@@ -114,5 +114,8 @@ def main():
     app.MainLoop()
 
 if __name__ == '__main__':
-    main()
-
+    # launch GUI in the background
+    child_pid = os.fork()
+    if child_pid == 0:
+        main()
+    os._exit(0)
