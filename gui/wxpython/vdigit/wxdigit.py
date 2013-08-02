@@ -17,7 +17,7 @@ data processing with NumPy is much faster than iterating in Python
 (and NumPy would be an excellent candidate for acceleration via
 e.g. OpenCL or CUDA; I'm surprised it hasn't happened already).
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2011, 2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -26,6 +26,8 @@ This program is free software under the GNU General Public License
 """
 
 import grass.script.core as grass
+
+from grass.pydispatch.signal import Signal
 
 from core.gcmd        import GError
 from core.debug       import Debug
@@ -176,7 +178,17 @@ class IVDigit:
         
         if self.poMapInfo:
             self.InitCats()
-        
+
+        #TODO signal for errors?
+        self.featureAdded = Signal('IVDigit.featureAdded')
+        self.areasDeleted = Signal('IVDigit.areasDeleted')
+        self.vertexMoved = Signal('IVDigit.vertexMoved')
+        self.vertexAdded = Signal('IVDigit.vertexAdded')
+        self.vertexRemoved = Signal('IVDigit.vertexRemoved')
+        self.featuresDeleted = Signal('IVDigit.featuresDeleted')
+        self.featuresMoved = Signal('IVDigit.featuresMoved')
+        self.lineEdited = Signal('IVDigit.lineEdited')
+
     def __del__(self):
         Debug.msg(1, "IVDigit.__del__()")
         Vect_destroy_line_struct(self.poPoints)
@@ -394,7 +406,6 @@ class IVDigit:
         
         @return tuple (number of added features, feature ids)
         """
-        
         layer = self._getNewFeaturesLayer()
         cat = self._getNewFeaturesCat()
         
@@ -419,10 +430,14 @@ class IVDigit:
             return (-1, None)
         
         self.toolbar.EnableUndo()
-        
-        return self._addFeature(vtype, points, layer, cat,
-                                self._getSnapMode(), self._display.GetThreshold())
-    
+
+        ret = self._addFeature(vtype, points, layer, cat,
+                               self._getSnapMode(), self._display.GetThreshold())
+        if ret[0] > -1:
+            self.featureAdded.emit(new_geom = points, cat = {layer : [cat]})
+
+        return ret
+
     def DeleteSelectedLines(self):
         """!Delete selected features
 
@@ -434,16 +449,25 @@ class IVDigit:
         # colect categories for delete if requested
         deleteRec = UserSettings.Get(group = 'vdigit', key = 'delRecord', subkey = 'enabled')
         catDict = dict()
+
+        old_geoms = []
+        old_areas_cats = []
         if deleteRec:
             for i in self._display.selected['ids']:
+                
                 if Vect_read_line(self.poMapInfo, None, self.poCats, i) < 0:
                     self._error.ReadLine(i)
                 
+                old_geoms.append(self._getGeom(i))
+                old_areas_cats.append(self._getLineAreasCategories(i))
+                
                 cats = self.poCats.contents
-                for j in range(cats.n_cats):
-                    if cats.field[j] not in catDict.keys():
-                        catDict[cats.field[j]] = list()
-                    catDict[cats.field[j]].append(cats.cat[j])
+
+                # catDict was not used -> put into comment
+                #for j in range(cats.n_cats):
+                #    if cats.field[j] not in catDict.keys():
+                #        catDict[cats.field[j]] = list()
+                #    catDict[cats.field[j]].append(cats.cat[j])
         
         poList = self._display.GetSelectedIList()
         nlines = Vedit_delete_lines(self.poMapInfo, poList)
@@ -456,7 +480,8 @@ class IVDigit:
                 self._deleteRecords(cats)
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+            self.featuresDeleted.emit(old_geoms = old_geoms, old_areas_cats = old_areas_cats)
+
         return nlines
             
     def _deleteRecords(self, cats):
@@ -512,22 +537,123 @@ class IVDigit:
 
         @return number of deleted 
         """
+        if len(self._display.selected['ids']) < 1:
+            return 0
+        
         poList = self._display.GetSelectedIList()
         cList  = poList.contents
         
         nareas = 0
+        old_geoms = []
+        old_areas_cats = []
+
         for i in range(cList.n_values):
+
             if Vect_get_line_type(self.poMapInfo, cList.value[i]) != GV_CENTROID:
                 continue
-            
+
+            area = Vect_get_centroid_area(self.poMapInfo, cList.value[i]);
+            if area > 0: 
+                geoms, cats = self._getaAreaGeomsCats(area)
+                old_geoms += geoms
+                old_areas_cats += cats
+
             nareas += Vedit_delete_area_centroid(self.poMapInfo, cList.value[i])
         
         if nareas > 0:
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+            self.areasDeleted.emit(old_geoms = old_geoms, old_areas_cats = old_areas_cats)        
+
         return nareas
+   
+
+    def _getaAreaGeomsCats(self, area):
+
+        po_b_list = Vect_new_list()
+        Vect_get_area_boundaries(self.poMapInfo, area, po_b_list);
+        b_list = po_b_list.contents
+
+        geoms = []
+        areas_cats = []
+
+        if b_list.n_values > 0:
+            for i_line in  range(b_list.n_values):
+
+                line = b_list.value[i_line];
+
+                geoms.append(self._getGeom(abs(line)))
+                areas_cats.append(self._getLineAreasCategories(abs(line)))
+        
+        Vect_destroy_list(po_b_list);
+
+        return geoms, areas_cats
+
+    def _getLineAreasCategories(self, ln_id):
+
+        ltype = Vect_read_line(self.poMapInfo, None, None, ln_id)
+        if ltype != GV_BOUNDARY:
+            return []
+
+        cats = [None, None]
+
+        left = c_int()
+        right = c_int()
+
+        if Vect_get_line_areas(self.poMapInfo, ln_id, pointer(left), pointer(right)) == 1:
+            areas = [left.value, right.value]
+
+            for i, a in enumerate(areas):
+                if a > 0: 
+                    centroid = Vect_get_area_centroid(self.poMapInfo, a)
+                    if centroid <= 0:
+                        continue
+                    c = self._getCategories(centroid)
+                    if c:
+                        cats[i] = c
+
+        return cats
+
+    def _getCategories(self, ln_id):
+        
+        poCats = Vect_new_cats_struct()
+        if Vect_read_line(self.poMapInfo, None, poCats, ln_id) < 0:
+            Vect_destroy_cats_struct(poCats)
+            return None
+
+        cCats = poCats.contents
+
+        cats = {}
+        for j in range(cCats.n_cats):
+            if cats.has_key(cCats.field[j]):
+                cats[cCats.field[j]].append(cCats.cat[j])
+            else:
+                cats[cCats.field[j]] = [cCats.cat[j]]
     
+        Vect_destroy_cats_struct(poCats)
+        return cats
+
+    def _getGeom(self, ln_id):
+
+        poPoints = Vect_new_line_struct()
+        if Vect_read_line(self.poMapInfo, poPoints, None, ln_id) < 0:
+            Vect_destroy_line_struct(poPoints)
+            return None
+
+        geom = self._convertGeom(poPoints)
+        Vect_destroy_line_struct(poPoints)
+        return geom
+
+    def _convertGeom(self, poPoints):
+
+        Points = poPoints.contents
+
+        pts_geom = []
+        for j in range(Points.n_points):
+            pts_geom.append((Points.x[j], Points.y[j]))
+
+        return pts_geom
+
     def MoveSelectedLines(self, move):
         """!Move selected features
 
@@ -536,16 +662,39 @@ class IVDigit:
         if not self._checkMap():
             return -1
         
+        nsel = len(self._display.selected['ids'])
+        if nsel < 1:
+            return -1   
+        
         thresh = self._display.GetThreshold()
         snap   = self._getSnapMode()
         
         poList = self._display.GetSelectedIList()
+
+        old_geoms = []
+        old_areas_cats = []
+        for sel_id in self._display.selected['ids']:
+            old_geoms.append(self._getGeom(sel_id))
+            old_areas_cats.append(self._getLineAreasCategories(sel_id))
+
+        poNewIds = Vect_new_list()
         nlines = Vedit_move_lines(self.poMapInfo, self.popoBgMapInfo, int(self.poBgMapInfo is not None),
                                   poList,
                                   move[0], move[1], 0,
-                                  snap, thresh)
+                                  snap, thresh, poNewIds)
+
         Vect_destroy_list(poList)
         
+        cList = poNewIds.contents
+
+        if nlines > 0:
+            new_areas_cats = []
+            for i in range(cList.n_values):
+                new_id = cList.value[i]
+                new_areas_cats.append(self._getLineAreasCategories(new_id))
+
+        Vect_destroy_list(poNewIds)
+
         if nlines > 0 and self._settings['breakLines']:
             for i in range(1, nlines):
                 self._breakLineAtIntersection(nlines + i, None, changeset)
@@ -553,7 +702,11 @@ class IVDigit:
         if nlines > 0:
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+ 
+            self.featuresMoved.emit(move = move, 
+                                    old_geoms = old_geoms, 
+                                    old_areas_cats = old_areas_cats, 
+                                    new_areas_cats = new_areas_cats)
         return nlines
 
     def MoveSelectedVertex(self, point, move):
@@ -571,20 +724,33 @@ class IVDigit:
         
         if len(self._display.selected['ids']) != 1:
             return -1
-        
-        Vect_reset_line(self.poPoints)
-        Vect_append_point(self.poPoints, point[0], point[1], 0.0)
-        
+
         # move only first found vertex in bbox 
         poList = self._display.GetSelectedIList()
+
+        cList = poList.contents
+        old_geom = self._getGeom(cList.value[0])
+        old_areas_cats = self._getLineAreasCategories(cList.value[0])
+
+        Vect_reset_line(self.poPoints)
+        Vect_append_point(self.poPoints, point[0], point[1], 0.0)
+
+        poNewIds = Vect_new_list()
         moved = Vedit_move_vertex(self.poMapInfo, self.popoBgMapInfo, int(self.poBgMapInfo is not None),
                                   poList, self.poPoints,
                                   self._display.GetThreshold(type = 'selectThresh'),
                                   self._display.GetThreshold(),
                                   move[0], move[1], 0.0,
-                                  1, self._getSnapMode())
+                                  1, self._getSnapMode(), poNewIds)
         Vect_destroy_list(poList)
-        
+
+        new_id = poNewIds.contents.value[0]
+        Vect_destroy_list(poNewIds)
+
+        if new_id > -1:
+            new_geom = self._getGeom(new_id)
+            new_areas_cats = self._getLineAreasCategories(new_id)
+
         if moved > 0 and self._settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
                                           None)
@@ -592,7 +758,13 @@ class IVDigit:
         if moved > 0:
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+
+        if new_id > -1:
+            self.vertexMoved.emit(new_geom = new_geom,  
+                                  new_areas_cats = new_areas_cats, 
+                                  old_areas_cats = old_areas_cats, 
+                                  old_geom = old_geom)
+
         return moved
 
     def AddVertex(self, coords):
@@ -681,6 +853,9 @@ class IVDigit:
             self._error.ReadLine(line)
             return -1
         
+        old_geom = self._getGeom(line)
+        old_areas_cats = self._getLineAreasCategories(line)
+
         # build feature geometry
         Vect_reset_line(self.poPoints)
         for p in coords:
@@ -703,7 +878,15 @@ class IVDigit:
         if newline > 0:
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+
+            new_geom = self._getGeom(newline)
+            new_areas_cats = self._getLineAreasCategories(newline)
+    
+            self.lineEdited.emit(old_geom = old_geom, 
+                                 old_areas_cats = old_areas_cats, 
+                                 new_geom = new_geom, 
+                                 new_areas_cats = new_areas_cats)
+
         return newline
 
     def FlipLine(self):
@@ -1510,26 +1693,49 @@ class IVDigit:
             return 0
         
         poList  = self._display.GetSelectedIList()
+        cList = poList.contents
+        
+        old_geom = self._getGeom(cList.value[0])
+        old_areas_cats = self._getLineAreasCategories(cList.value[0])
+
         Vect_reset_line(self.poPoints)
         Vect_append_point(self.poPoints, coords[0], coords[1], 0.0)
         
         thresh = self._display.GetThreshold(type = 'selectThresh')
         
+        poNewIds = Vect_new_list()
+
         if add:
             ret = Vedit_add_vertex(self.poMapInfo, poList,
-                                   self.poPoints, thresh)
+                                   self.poPoints, thresh, poNewIds)
         else:
             ret = Vedit_remove_vertex(self.poMapInfo, poList,
-                                      self.poPoints, thresh)
+                                      self.poPoints, thresh, poNewIds)
+
+        new_id = poNewIds.contents.value[0]
+        Vect_destroy_list(poNewIds)
         Vect_destroy_list(poList)
+
+        if new_id > -1:
+            new_geom = self._getGeom(new_id)
+            new_areas_cats = self._getLineAreasCategories(new_id)
         
         if not add and ret > 0 and self._settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
                                           None)
-        
+
         if ret > 0:
             self._addChangeset()
-                
+
+        if new_id > -1:
+            if add:
+                self.vertexAdded.emit(old_geom = old_geom, new_geom = new_geom)
+            else:
+                self.vertexRemoved.emit(old_geom = old_geom, 
+                                        new_geom = new_geom,
+                                        old_areas_cats = old_areas_cats,
+                                        new_areas_cats = new_areas_cats)
+
         return 1
     
     def GetLineCats(self, line):
