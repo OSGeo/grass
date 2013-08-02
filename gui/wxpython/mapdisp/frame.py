@@ -216,6 +216,7 @@ class MapFrame(SingleMapFrame):
         #
         self.dialogs = {}
         self.dialogs['attributes'] = None
+        self.dialogs['scatt_plot'] = None
         self.dialogs['category'] = None
         self.dialogs['barscale'] = None
         self.dialogs['legend'] = None
@@ -1304,6 +1305,19 @@ class MapFrame(SingleMapFrame):
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
         return self.toolbars['map']
+
+    def OnScatterplot2(self, event):
+        """!Init interactive scatterplot tools
+        """
+        if self.dialogs['scatt_plot']:
+            self.dialogs['scatt_plot'].Raise()
+            return
+
+        from scatt_plot.dialogs import ScattPlotMainDialog
+        self.dialogs['scatt_plot'] = ScattPlotMainDialog(parent=self, giface=self._giface)
+        
+        self.dialogs['scatt_plot'].CenterOnScreen()
+        self.dialogs['scatt_plot'].Show()
 
     def OnVNet(self, event):
         """!Dialog for v.net* modules 

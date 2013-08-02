@@ -243,7 +243,8 @@ class MapToolbar(BaseToolbar):
                       (MapIcons["scatter"],     self.parent.OnScatterplot),
                       (MapIcons["histogram"],   self.parent.OnHistogramPyPlot),
                       (BaseIcons["histogramD"], self.parent.OnHistogram),
-                      (MapIcons["vnet"],        self.parent.OnVNet)))
+                      (MapIcons["vnet"],        self.parent.OnVNet),
+                      (MapIcons["scatter"],     self.parent.OnScatterplot2)))
         
     def OnDecoration(self, event):
         """!Decorations overlay menu
