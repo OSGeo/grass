@@ -279,7 +279,8 @@ class GMFrame(wx.Frame):
         
         # create 'command output' text area
         self._gconsole = GConsole(guiparent = self, giface = self._giface,
-                                  ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group')
+                                  ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group|^r.in.gdal|^r.external|^r.external.out|'
+                                  '^v.in.ogr|^v.external|^v.external.out')
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
                                       menuModel=self._moduleTreeBuilder.GetModel(),
                                       gcstyle = GC_PROMPT)
@@ -607,6 +608,19 @@ class GMFrame(wx.Frame):
             self.OnMapCalculator(event = None, cmd = command)
         elif command[0] == 'i.group':
             self.OnEditImageryGroups(event = None, cmd = command)
+        elif command[0] == 'r.in.gdal':
+            self.OnImportGdalLayers(event = None, cmd = command)
+        elif command[0] == 'r.external':
+            self.OnLinkGdalLayers(event = None, cmd = command)
+        elif command[0] == 'r.external.out':
+             self.OnRasterOutputFormat(event = None)
+        elif command[0] == 'v.in.ogr':
+            self.OnImportOgrLayers(event = None, cmd = command)
+        elif command[0] == 'v.external':
+            self.OnLinkOgrLayers(event = None, cmd = command)
+        elif command[0] == 'v.external.out':
+             self.OnVectorOutputFormat(event = None)
+
         else:
             raise ValueError('Layer Manager special command (%s)'
                              ' not supported.' % ' '.join(command))
