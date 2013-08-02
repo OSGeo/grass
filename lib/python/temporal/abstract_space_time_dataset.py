@@ -32,9 +32,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
        database, like the computation of the temporal and spatial extent as
        well as the collecting of metadata.
     """
-    
+
     __metaclass__ = ABCMeta
-    
+
     def __init__(self, ident):
         AbstractDataset.__init__(self)
         self.reset(ident)
@@ -63,7 +63,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            @param ident The unique identifier of the new object
         """
-        
+
     @abstractmethod
     def get_map_register(self):
         """!Return the name of the map register table
@@ -120,11 +120,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.metadata.print_shell_info()
 
     def print_history(self):
-        """!Print history information about this class in human readable 
+        """!Print history information about this class in human readable
             shell style
         """
         self.metadata.print_history()
-        
+
     def set_initial_values(self, temporal_type, semantic_type,
                            title=None, description=None):
         """!Set the initial values of the space time dataset
@@ -1041,7 +1041,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                                           self.get_relative_time_unit())
                 # The fast way
                 if has_bt_columns:
-                    map.set_spatial_extent(west=row["west"], east=row["east"],
+                    map.set_spatial_extent_from_values(west=row["west"],
+                                                       east=row["east"],
                                            south=row["south"], top=row["top"],
                                            north=row["north"],
                                            bottom=row["bottom"])
@@ -1491,16 +1492,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Get the update statement, we update the table entry of the old
         # identifier
         statement = self.update(dbif, execute=False, ident=old_ident)
-
         # We need to rename the raster register table
-        statement += "ALTER TABLE %s RENAME TO \'%s\';\n" % \
+        statement += "ALTER TABLE %s RENAME TO \"%s\";\n" % \
                      (old_map_register_table, new_map_register_table)
 
         # We need to rename the space time dataset in the maps register table
         if maps:
             for map in maps:
                 map.select()
-                statement += "UPDATE %s SET id = \'%s\' WHERE id = \'%s\';\n"%\
+                statement += "UPDATE %s SET id = \"%s\" WHERE id = \"%s\";\n"%\
                              (map.get_stds_register(), ident, old_ident)
 
         # Execute the accumulated statements
@@ -1656,7 +1656,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 dbif)
             # Commented because of performance issue calling g.message thousend times
             #core.verbose(_("Set temporal unit for space time %s dataset "
-            #               "<%s> to %s") % (map.get_type(), self.get_id(), 
+            #               "<%s> to %s") % (map.get_type(), self.get_id(),
             #                                map_rel_time_unit))
 
         stds_rel_time_unit = self.get_relative_time_unit()
@@ -1739,11 +1739,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             #if map.get_layer():
             #    core.verbose(_("Created register table <%s> for "
             #                   "%s map <%s> with layer %s") %
-            #                    (map_register_table, map.get_type(), 
+            #                    (map_register_table, map.get_type(),
             #                     map.get_map_id(), map.get_layer()))
             #else:
             #    core.verbose(_("Created register table <%s> for %s map <%s>") %
-            #                    (map_register_table, map.get_type(), 
+            #                    (map_register_table, map.get_type(),
             #                     map.get_map_id()))
 
         # We need to create the table and register it
@@ -2002,7 +2002,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         else:
             # Check if the end time is smaller than the maximum start time
             if self.is_time_absolute():
-                sql = """SELECT max(start_time) FROM GRASS_MAP_absolute_time 
+                sql = """SELECT max(start_time) FROM GRASS_MAP_absolute_time
                          WHERE GRASS_MAP_absolute_time.id IN
                         (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register);"""
                 sql = sql.replace("GRASS_MAP", self.get_new_map_instance(
@@ -2010,7 +2010,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = sql.replace("SPACETIME_NAME",
                     stds_name + "_" + stds_mapset)
             else:
-                sql = """SELECT max(start_time) FROM GRASS_MAP_relative_time 
+                sql = """SELECT max(start_time) FROM GRASS_MAP_relative_time
                          WHERE GRASS_MAP_relative_time.id IN
                         (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register);"""
                 sql = sql.replace("GRASS_MAP", self.get_new_map_instance(
@@ -2046,7 +2046,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if use_start_time:
             if self.is_time_absolute():
                 sql = """UPDATE STDS_absolute_time SET end_time =
-               (SELECT max(start_time) FROM GRASS_MAP_absolute_time WHERE 
+               (SELECT max(start_time) FROM GRASS_MAP_absolute_time WHERE
                GRASS_MAP_absolute_time.id IN
                         (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
                ) WHERE id = 'SPACETIME_ID';"""
@@ -2058,7 +2058,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = sql.replace("STDS", self.get_type())
             elif self.is_time_relative():
                 sql = """UPDATE STDS_relative_time SET end_time =
-               (SELECT max(start_time) FROM GRASS_MAP_relative_time WHERE 
+               (SELECT max(start_time) FROM GRASS_MAP_relative_time WHERE
                GRASS_MAP_relative_time.id IN
                         (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
                ) WHERE id = 'SPACETIME_ID';"""

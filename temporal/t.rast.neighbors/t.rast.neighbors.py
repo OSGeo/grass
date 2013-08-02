@@ -23,6 +23,9 @@
 #%option G_OPT_STRDS_INPUT
 #%end
 
+#%option G_OPT_STRDS_OUTPUT
+#%end
+
 #%option G_OPT_T_WHERE
 #%end
 
@@ -36,14 +39,6 @@
 #%end
 
 #%option
-#% key: output
-#% type: string
-#% description: Name of the output space time raster dataset
-#% required: yes
-#% multiple: no
-#%end
-
-#%option
 #% key: method
 #% type: string
 #% description: Aggregate operation to be performed on the raster maps
@@ -52,7 +47,6 @@
 #% options: average,median,mode,minimum,maximum,range,stddev,sum,count,variance,diversity,interspersion,quart1,quart3,perc90,quantile
 #% answer: average
 #%end
-
 
 #%option G_OPT_R_BASE
 #%end

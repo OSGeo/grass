@@ -36,9 +36,9 @@ class AbstractMapDataset(AbstractDataset):
         - Abstract methods that must be implemented in the map specific
           subclasses
     """
-    
+
     __metaclass__ = ABCMeta
-    
+
     def __init__(self):
         AbstractDataset.__init__(self)
 
@@ -207,7 +207,7 @@ class AbstractMapDataset(AbstractDataset):
         self.temporal_extent.print_self()
         self.spatial_extent.print_self()
         self.metadata.print_self()
-        
+
     def print_info(self):
         """!Print information about this object in human readable style"""
 
@@ -328,7 +328,7 @@ class AbstractMapDataset(AbstractDataset):
     def set_time_to_relative(self):
         """!Set the temporal type to relative"""
         self.base.set_ttype("relative")
-        
+
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
         """!Set the absolute time with start time and end time
 
@@ -348,7 +348,7 @@ class AbstractMapDataset(AbstractDataset):
             if self.get_layer() is not None:
                 core.fatal(_("Start time must be of type datetime for %(type)s"
                              " map <%(id)s> with layer: %(l)s") % {
-                             'type': self.get_type(), 'id': self.get_map_id(), 
+                             'type': self.get_type(), 'id': self.get_map_id(),
                              'l': self.get_layer()})
             else:
                 core.fatal(_("Start time must be of type datetime for "
@@ -507,6 +507,43 @@ class AbstractMapDataset(AbstractDataset):
 
         self.write_timestamp_to_grass()
 
+    def set_temporal_extent(self, temporal_extent):
+        """!Convenient method to set the temporal extent from a temporal extent object
+
+           @param temporal_extent The temporal axtent that should be set for this object
+
+           @code
+           >>> import datetime
+           >>> import grass.temporal as tgis
+           >>> map      = tgis.RasterDataset(None)
+           >>> temp_ext = tgis.RelativeTemporalExtent(start_time=1, end_time=2, unit="years")
+           >>> map.set_temporal_extent(temp_ext)
+           >>> print map.get_temporal_extent_as_tuple()
+           (1, 2)
+           >>> map      = tgis.VectorDataset(None)
+           >>> temp_ext = tgis.AbsoluteTemporalExtent(start_time=datetime.datetime(2000, 1, 1),
+           ...                                        end_time=datetime.datetime(2001, 1, 1))
+           >>> map.set_temporal_extent(temp_ext)
+           >>> print map.get_temporal_extent_as_tuple()
+           (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
+
+           @endcode
+        """
+
+        if issubclass(RelativeTemporalExtent, type(temporal_extent)):
+            start = temporal_extent.get_start_time()
+            end = temporal_extent.get_end_time()
+            unit = temporal_extent.get_unit()
+
+            self.set_relative_time(start, end, unit)
+
+        elif issubclass(AbsoluteTemporalExtent, type(temporal_extent)):
+            start = temporal_extent.get_start_time()
+            end = temporal_extent.get_end_time()
+            tz = temporal_extent.get_timezone()
+
+            self.set_absolute_time(start, end, tz)
+
     def temporal_buffer(self, increment, update=False, dbif=None):
         """!Create a temporal buffer based on an increment
 
@@ -610,8 +647,8 @@ class AbstractMapDataset(AbstractDataset):
             else:
                 self.set_relative_time(new_start, new_end, unit)
 
-    def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
-        """!Set the spatial extent of the map
+    def set_spatial_extent_from_values(self, north, south, east, west, top=0, bottom=0):
+        """!Set the spatial extent of the map from values
 
             This method only modifies this object and does not commit
             the modifications to the temporal database.
@@ -623,8 +660,83 @@ class AbstractMapDataset(AbstractDataset):
            @param top The top edge
            @param bottom The bottom edge
         """
-        self.spatial_extent.set_spatial_extent(
+        self.spatial_extent.set_spatial_extent_from_values(
             north, south, east, west, top, bottom)
+
+    def set_spatial_extent(self, spatial_extent):
+        """!Set the spatial extent of the map
+
+            This method only modifies this object and does not commit
+            the modifications to the temporal database.
+
+            @param spatial_extent An object of type SpatialExtent or its subclasses
+
+           @code
+           >>> import datetime
+           >>> import grass.temporal as tgis
+           >>> map      = tgis.RasterDataset(None)
+           >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
+           >>> map.set_spatial_extent(spat_ext)
+           >>> print map.get_spatial_extent_as_tuple()
+           (10.0, -10.0, 20.0, -20.0, 5.0, -5.0)
+
+           @endcode
+        """
+        self.spatial_extent.set_spatial_extent(spatial_extent)
+
+    def spatial_buffer(self, size, update=False, dbif=None):
+        """!Buffer the spatial extent by a given size in all
+           spatial directions.
+
+           @param size The buffer size, using the unit of the grass region
+
+           @code
+
+           >>> import grass.temporal as tgis
+           >>> map = tgis.RasterDataset(None)
+           >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
+           >>> map.set_spatial_extent(spat_ext)
+           >>> map.spatial_buffer(10)
+           >>> print map.get_spatial_extent_as_tuple()
+           (20.0, -20.0, 30.0, -30.0, 15.0, -15.0)
+
+           @endcode
+        """
+        self.spatial_extent.north   += size
+        self.spatial_extent.south   -= size
+        self.spatial_extent.east    += size
+        self.spatial_extent.west    -= size
+        self.spatial_extent.top     += size
+        self.spatial_extent.bottom  -= size
+
+        if update:
+            self.spatial_extent.update(dbif)
+
+    def spatial_buffer_2d(self, size, update=False, dbif=None):
+        """!Buffer the spatial extent by a given size in 2d
+           spatial directions.
+
+           @param size The buffer size, using the unit of the grass region
+
+           @code
+
+           >>> import grass.temporal as tgis
+           >>> map = tgis.RasterDataset(None)
+           >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
+           >>> map.set_spatial_extent(spat_ext)
+           >>> map.spatial_buffer_2d(10)
+           >>> print map.get_spatial_extent_as_tuple()
+           (20.0, -20.0, 30.0, -30.0, 5.0, -5.0)
+
+           @endcode
+        """
+        self.spatial_extent.north   += size
+        self.spatial_extent.south   -= size
+        self.spatial_extent.east    += size
+        self.spatial_extent.west    -= size
+
+        if update:
+            self.spatial_extent.update(dbif)
 
     def check_for_correct_time(self):
         """!Check for correct time"""
@@ -696,7 +808,7 @@ class AbstractMapDataset(AbstractDataset):
             #core.verbose(_("Delete %s dataset <%s> from temporal database")
             #             % (self.get_type(), self.get_id()))
 
-            # Delete yourself from the database, trigger functions will 
+            # Delete yourself from the database, trigger functions will
             # take care of dependencies
             statement += self.base.get_delete_statement()
 
@@ -736,7 +848,7 @@ class AbstractMapDataset(AbstractDataset):
         #if self.get_layer() is not None:
         #    core.verbose(_("Unregister %(type)s map <%(map)s> with "
         #                   "layer %(layer)s from space time datasets" % \
-        #                 {'type':self.get_type(), 'map':self.get_map_id(), 
+        #                 {'type':self.get_type(), 'map':self.get_map_id(),
         #                  'layer':self.get_layer()}))
         #else:
         #    core.verbose(_("Unregister %(type)s map <%(map)s> "
