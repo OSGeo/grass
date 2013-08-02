@@ -1096,11 +1096,12 @@ class MapFrame(SingleMapFrame):
 
             # decoration overlay control dialog
             self.dialogs['barscale'] = \
-                DecorationDialog(parent = self, title = _('Scale and North arrow'),
-                                     overlayController = self.barscale,
-                                     ddstyle = DECOR_DIALOG_BARSCALE,
-                                     size = (350, 200),
-                                     style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE)
+                DecorationDialog(parent=self, title=_('Scale and North arrow'),
+                                 giface=self._giface,
+                                 overlayController=self.barscale,
+                                 ddstyle=DECOR_DIALOG_BARSCALE,
+                                 size=(350, 200),
+                                 style=wx.DEFAULT_DIALOG_STYLE | wx.CENTRE)
 
             self.dialogs['barscale'].CentreOnParent()
             ### dialog cannot be show as modal - in the result d.barscale is not selectable
@@ -1133,11 +1134,12 @@ class MapFrame(SingleMapFrame):
                 self.dialogs['legend'].Show()
         else:
             self.dialogs['legend'] = \
-                DecorationDialog(parent = self, title = _("Legend"),
-                                 overlayController = self.legend,
-                                 ddstyle = DECOR_DIALOG_LEGEND,
-                                 size = (350, 200),
-                                 style = wx.DEFAULT_DIALOG_STYLE | wx.CENTRE)
+                DecorationDialog(parent=self, title=_("Legend"),
+                                 overlayController=self.legend,
+                                 giface=self._giface, 
+                                 ddstyle=DECOR_DIALOG_LEGEND,
+                                 size=(350, 200),
+                                 style=wx.DEFAULT_DIALOG_STYLE | wx.CENTRE)
 
             self.dialogs['legend'].CentreOnParent() 
             ### dialog cannot be show as modal - in the result d.legend is not selectable
@@ -1339,11 +1341,10 @@ class MapFrame(SingleMapFrame):
         # untoggles button in add legend dialog
         # FIXME: remove this mess
         if self.dialogs['legend']:
-            if hasattr(event ,'GetEventObject') and hasattr(event.GetEventObject() ,'GetId'):
-                if event.GetEventObject().GetId() == \
-                        self.dialogs['legend'].resizeBtn.GetId():
-                    return
-            self.dialogs['legend'].resizeBtn.SetValue(0)
+            btn = self.dialogs['legend'].resizeBtn
+            if btn.GetValue():
+                btn.SetValue(0)
+                self.dialogs['legend'].DisconnectResizing()
 
     def ResetPointer(self):
         """Sets pointer mode.

@@ -518,7 +518,7 @@ class DecorationDialog(wx.Dialog):
     """!Controls setting options and displaying/hiding map overlay
     decorations
     """
-    def __init__(self, parent, title, overlayController,
+    def __init__(self, parent, title, giface, overlayController,
                  ddstyle, **kwargs):
         
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title, **kwargs)
@@ -526,6 +526,10 @@ class DecorationDialog(wx.Dialog):
         self.parent  = parent  # MapFrame
         self._overlay = overlayController
         self._ddstyle = ddstyle
+        self._giface = giface
+        
+        self._oldMouseUse = None
+        self._oldCursor = None
         
         sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -630,23 +634,50 @@ class DecorationDialog(wx.Dialog):
                 self._overlay.propwin.SetFocus()
             else:
                 self._overlay.propwin.Show()
-        
+
     def OnResize(self, event):
+        window = self._giface.GetMapWindow()
         if event.GetInt(): 
-            self.parent.SwitchTool(self.parent.toolbars['map'], event)
-            self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
-            self.parent.MapWindow.mouse['use'] = 'legend'
-            self.parent.MapWindow.mouse['box'] = 'box'
-            self.parent.MapWindow.pen = wx.Pen(colour = 'Black', width = 2, style = wx.SHORT_DASH)
+            self._oldMouseUse = window.mouse['use']
+            self._oldCursor = window.GetCursor()
+            window.SetCursor(self.parent.cursors["cross"])
+            window.mouse['use'] = None
+            window.mouse['box'] = 'box'
+            window.pen = wx.Pen(colour = 'Black', width = 2, style = wx.SHORT_DASH)
+            window.mouseLeftUp.connect(self._resizeLegend)
         else:
-            self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
-            self.parent.MapWindow.mouse['use'] = 'pointer'
-            
+            self.Restore()
+            self.DisconnectResizing()
+
+    def Restore(self):
+        """!Restore conditions before resizing"""
+        window = self._giface.GetMapWindow()
+        if self._oldCursor:
+            window.SetCursor(self._oldCursor)
+        if self._oldMouseUse:
+            window.mouse['use'] = self._oldMouseUse
+
+    def DisconnectResizing(self):
+        self._giface.GetMapWindow().mouseLeftUp.disconnect(self._resizeLegend)
+
+    def _resizeLegend(self, x, y):
+        """!Update legend after drawing new legend size (moved from BufferedWindow)"""
+        self.resizeBtn.SetValue(False)
+        window = self._giface.GetMapWindow()
+        self.DisconnectResizing()
+        self.Restore()
+        # resize legend
+        screenSize = window.GetClientSizeTuple()
+        self._overlay.ResizeLegend(window.mouse["begin"], window.mouse["end"], screenSize)
+        # redraw
+        self._giface.updateMap.emit()
+
     def CloseDialog(self):
         """!Hide dialog"""
         if self._ddstyle == DECOR_DIALOG_LEGEND and self.resizeBtn.GetValue():
+            self.Restore()
             self.resizeBtn.SetValue(False)
-            self.OnResize(None)
+            self.DisconnectResizing()
 
         self.Hide()
 
@@ -654,16 +685,16 @@ class DecorationDialog(wx.Dialog):
         """!Button 'OK' pressed"""
         # enable or disable overlay
         self._overlay.Show(self.chkbox.IsChecked())
-        
+
         # update map
         if self.parent.IsPaneShown('3d'):
             self.parent.MapWindow.UpdateOverlays()
-        
-        self.parent.MapWindow.UpdateMap()
-        
+
+        self._giface.updateMap.emit()
+
         # hide dialog
         self.CloseDialog()
-        
+
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process decoration layer data"""
         if dcmd:
