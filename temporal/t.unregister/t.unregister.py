@@ -162,7 +162,8 @@ def main():
         count += 1
 
     # Execute the collected SQL statenents
-    dbif.execute_transaction(statement)
+    if statement:
+        dbif.execute_transaction(statement)
 
     grass.percent(num_maps, num_maps, 1)
 
