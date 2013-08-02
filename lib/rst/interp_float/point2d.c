@@ -119,7 +119,7 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,	/
 		sprintf(buf, ", %f", err);
 		db_append_string(&sql2, buf);
 		db_append_string(&sql2, ")");
-		G_debug(3, db_get_string(&sql2));
+		G_debug(3, "IL_check_at_points_2d: %s", db_get_string(&sql2));
 
 		if (db_execute_immediate(driver2, &sql2) != DB_OK) {
 		    db_close_database(driver2);
@@ -176,7 +176,7 @@ int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,	/
 	    sprintf(buf, ", %f", skip_err);
 	    db_append_string(&sql2, buf);
 	    db_append_string(&sql2, ")");
-	    G_debug(3, db_get_string(&sql2));
+	    G_debug(3, "IL_check_at_points_2d: %s", db_get_string(&sql2));
 
 	    if (db_execute_immediate(driver2, &sql2) != DB_OK) {
 		db_close_database(driver2);
