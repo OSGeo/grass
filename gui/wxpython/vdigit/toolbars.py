@@ -17,7 +17,6 @@ This program is free software under the GNU General Public License
 import wx
 
 from grass.script import core as grass
-from grass.pydispatch.signal import Signal
 
 from gui_core.toolbars  import BaseToolbar, BaseIcons
 from gui_core.dialogs   import CreateNewVector
@@ -43,8 +42,6 @@ class VDigitToolbar(BaseToolbar):
         self.digit         = None
         self._giface       = giface
         
-        self.editingStarted = Signal("VDigitToolbar.editingStarted")
-
         # currently selected map layer for editing (reference to MapLayer instance)
         self.mapLayer = None
         # list of vector layers from Layer Manager (only in the current mapset)
@@ -823,7 +820,6 @@ class VDigitToolbar(BaseToolbar):
             alpha = int(opacity * 255)
             self.digit.GetDisplay().UpdateSettings(alpha = alpha)
         
-        self.editingStarted.emit(vectMap = mapLayer.GetName())
         return True
 
     def StopEditing(self):
