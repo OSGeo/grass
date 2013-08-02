@@ -93,4 +93,8 @@ if __name__ == "__main__":
     grass.set_raise_on_error(False)
     options, flags = grass.parser()
     
-    main()
+    # launch GUI in the background
+    child_pid = os.fork()
+    if child_pid == 0:
+        main()
+    os._exit(0)
