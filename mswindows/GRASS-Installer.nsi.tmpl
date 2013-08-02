@@ -10,11 +10,11 @@
 
 ;Define the source path of the demolocation files
 
-!define DEMOLOCATION_PATH "c:\OSGeo4W@OSGEO4W_DIR_POSTFIX@\usr\src\grass_trunk\demolocation"
+!define DEMOLOCATION_PATH "c:\OSGeo4W\usr\src\grass_trunk\demolocation"
 
 ;Define the source of the patched msys.bat
 
-!define MSYS_BATCH "C:\OSGeo4W@OSGEO4W_DIR_POSTFIX@\usr\src\grass_trunk\mswindows\osgeo4w\msys.bat"
+!define MSYS_BATCH "C:\OSGeo4W\usr\src\grass_trunk\mswindows\osgeo4w\msys.bat"
 
 ;Select if you are building a "Development Version" (Devel) or a "Release Version" (Release) of the GRASS Installer
 
@@ -887,13 +887,13 @@ Section "GRASS" SecGRASS
 
 	;replace gisbase
 	Push "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" ; file to modify
-	Push 'gisbase = "/c/OSGeo4W@OSGEO4W_DIR_POSTFIX@/apps/grass/grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"' ; string that a line must begin with *WS Sensitive*
+	Push 'gisbase = "/c/OSGeo4W/apps/grass/grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"' ; string that a line must begin with *WS Sensitive*
 	Push 'gisbase = "$INSTDIR"' ; string to replace whole line with
 	Call ReplaceLineStr
 	
 	;replace config_projshare
 	Push "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" ; file to modify
-	Push 'config_projshare = "/c/OSGeo4W@OSGEO4W_DIR_POSTFIX@/share/proj"' ; string that a line must begin with *WS Sensitive*
+	Push 'config_projshare = "/c/OSGeo4W/share/proj"' ; string that a line must begin with *WS Sensitive*
 	Push 'config_projshare = "$INSTDIR\share\proj"' ; string to replace whole line with
 	Call ReplaceLineStr
                  
