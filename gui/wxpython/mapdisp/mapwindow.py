@@ -113,6 +113,8 @@ class BufferedWindow(MapWindow, wx.Window):
         # it could replace register and unregister mechanism
         # and partially maybe also internal mouse use dictionary
         self.mouseLeftUpPointer = Signal('BufferedWindow.mouseLeftUpPointer')
+        # Emitted when left mouse button is released
+        self.mouseLeftUp = Signal('BufferedWindow.mouseLeftUp')
 
         # event bindings
         self.Bind(wx.EVT_PAINT,           self.OnPaint)
@@ -1143,9 +1145,6 @@ class BufferedWindow(MapWindow, wx.Window):
             else:
                 self.mouse['begin'] = self.mouse['end']
         
-        elif self.mouse['use'] in ('zoom', 'legend'):
-            pass
-        
         # vector digizer
         elif self.mouse["use"] == "pointer" and \
                 hasattr(self, "digit"):
@@ -1179,6 +1178,7 @@ class BufferedWindow(MapWindow, wx.Window):
                        self.mouse["use"])
         
         self.mouse['end'] = event.GetPositionTuple()[:]
+        coordinates = self.Pixel2Cell(self.mouse['end'])
         
         if self.mouse['use'] in ["zoom", "pan"]:
             # set region in zoom or pan
@@ -1224,19 +1224,11 @@ class BufferedWindow(MapWindow, wx.Window):
             self.dragid = None
             self.currtxtid = None
 
-            coordinates = self.Pixel2Cell(self.mouse['end'])
             self.mouseLeftUpPointer.emit(x=coordinates[0], y=coordinates[1])
 
-        elif self.mouse['use'] == 'legend':
-            self.frame.dialogs['legend'].resizeBtn.SetValue(False)
-            screenSize = self.GetClientSizeTuple()
-            self.overlays[1].ResizeLegend(self.mouse["begin"], self.mouse["end"], screenSize)
+       # TODO: decide which coordinates to send (e, n, mouse['begin'], mouse['end'])
+        self.mouseLeftUp.emit(x=coordinates[0], y=coordinates[1])
 
-            self.frame.MapWindow.SetCursor(self.frame.cursors["default"])
-            self.frame.MapWindow.mouse['use'] = 'pointer'
-            
-            self.UpdateMap()
-            
     def OnButtonDClick(self, event):
         """!Mouse button double click
         """
