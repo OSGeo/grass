@@ -64,4 +64,10 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    main()
+    
+    # launch GUI in the background
+    child_pid = os.fork()
+    if child_pid == 0:
+        main()
+    os._exit(0)
+
