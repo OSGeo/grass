@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
 
     /* Set Image name */
     if (parm.name->answer)
-	sprintf(img_name, parm.name->answer);
+	sprintf(img_name, "%s", parm.name->answer);
     else
 	sprintf(img_name, "NVIZ");
 
@@ -321,8 +321,7 @@ int main(int argc, char *argv[])
     Rast_close(fd);
     fclose(fp);
 
-    sprintf(buf1, _("Created NVIZ script <%s>."), outfile);
-    G_done_msg(buf1);
+    G_done_msg(_("Created NVIZ script <%s>."), outfile);
 
     exit(EXIT_SUCCESS);
 
