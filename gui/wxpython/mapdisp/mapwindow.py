@@ -1799,7 +1799,7 @@ class BufferedWindow(MapWindow, wx.Window):
         dEast  = (e2 - e1)
         dNorth = (n2 - n1)
         
-        if self.frame.Map.projinfo['proj'] == 'll' and haveCtypes:
+        if self.Map.projinfo['proj'] == 'll' and haveCtypes:
             dist = gislib.G_distance(e1, n1, e2, n2)
         else:
             dist = math.sqrt(math.pow((dEast), 2) + math.pow((dNorth), 2))
