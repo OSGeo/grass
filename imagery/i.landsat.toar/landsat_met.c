@@ -17,7 +17,7 @@
 #define TM5_MET_SIZE    28700	/* .met file size 28686 bytes */
 
 
-inline void chrncpy(char *dest, char src[], int n)
+static void chrncpy(char *dest, char src[], int n)
 {
     int i;
 
