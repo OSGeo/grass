@@ -71,6 +71,7 @@ class BufferedWindow(MapWindow, wx.Window):
         wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
 
         self._properties = properties
+        self.frame = frame  # remove including a frame parameter
 
         # flags
         self.resize = False # indicates whether or not a resize event has taken place
@@ -782,6 +783,7 @@ class BufferedWindow(MapWindow, wx.Window):
             # draw region extent
             self.DrawLines(pdc=self.pdcDec, polycoords=regionCoords)
 
+    # TODO: move to utils
     def IsInRegion(self, region, refRegion):
         """!
         Test if 'region' is inside of 'refRegion'
