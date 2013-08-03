@@ -109,8 +109,6 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager.AddStatusbarItem(sb.SbRender(self, statusbar = statusbar, position = 3))
         
         self.statusbarManager.SetMode(8) # goto GCP
-        self.statusbarManager.Update()
-        
 
         #
         # Init map display (buffered DC & set default cursor)
@@ -215,7 +213,11 @@ class MapFrame(SingleMapFrame):
 
         self.decorationDialog = None # decoration/overlays
 
+        # doing nice things in statusbar when other things are ready
+        self.statusbarManager.Update()
+
     def _setUpMapWindow(self, mapWindow):
+        # TODO: almost the smae implementation as for MapFrameBase (only names differ)
         # enable or disable zoom history tool
         mapWindow.zoomHistoryAvailable.connect(
             lambda:
@@ -223,6 +225,7 @@ class MapFrame(SingleMapFrame):
         mapWindow.zoomHistoryUnavailable.connect(
             lambda:
             self.GetMapToolbar().Enable('zoomback', enable=False))
+        mapWindow.mouseMoving.connect(self.CoordinatesChanged)
 
     def AddToolbar(self, name):
         """!Add defined toolbar to the window
