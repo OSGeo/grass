@@ -103,10 +103,9 @@ class MapWindow(object):
      - Pixel2Cell
      - Cell2Pixel (if it is possible)
     """
-    def __init__(self, parent, giface, Map, frame, **kwargs):
+    def __init__(self, parent, giface, Map):
         self.parent = parent
         self.Map = Map
-        self.frame = frame
         self._giface = giface
         
         # mouse attributes -- position on the screen, begin and end of
@@ -174,7 +173,12 @@ class MapWindow(object):
 
     def RegisterMouseEventHandler(self, event, handler, cursor = None):
         """!Binds event handler
-        
+
+        @depreciated This method is depreciated. Use Signals or drawing API instead.
+        Signals do not cover all events but new Signals can be added when needed
+        consider also adding generic signal. However, more interesing and useful
+        is higher level API to create objects, graphics etc.
+
         Call event.Skip() in handler to allow default processing in MapWindow.
 
         If any error occures inside of handler, the handler is removed.
@@ -226,6 +230,8 @@ class MapWindow(object):
     def UnregisterAllHandlers(self):
         """!Unregisters all registered handlers 
 
+        @depreciated This method is depreciated. Use Signals or drawing API instead.
+
         Before each handler is unregistered it is called with string
         value "unregistered" of event parameter.
         """
@@ -242,7 +248,9 @@ class MapWindow(object):
         
     def UnregisterMouseEventHandler(self, event, handler):
         """!Unbinds event handler for event
-        
+
+        @depreciated This method is depreciated. Use Signals or drawing API instead.
+
         Before handler is unregistered it is called with string value
         "unregistered" of event parameter.
 
@@ -301,7 +309,7 @@ class MapWindow(object):
     def GetLastEN(self):
         """!Returns last coordinates of mouse cursor.
 
-        This method is depreciated.
+        @depreciated This method is depreciated. Use Signal with coordinates as parameters.
 
         @see OnMotion
         """
