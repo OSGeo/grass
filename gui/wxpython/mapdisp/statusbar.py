@@ -81,6 +81,7 @@ class SbManager:
         self.statusbarItems = dict()
         
         self._postInitialized = False
+        self._modeIndexSet = False
         
         self.progressbar = SbProgress(self.mapFrame, self.statusbar, self)
         self.progressbar.progressShown.connect(self._progressShown)
@@ -200,10 +201,11 @@ class SbManager:
                          subkey = 'choices',
                          value = self.choice.GetItems(),
                          internal = True)
-        
-        self.choice.SetSelection(UserSettings.Get(group = 'display',
-                                                  key = 'statusbarMode',
-                                                  subkey = 'selection')) 
+
+        if not self._modeIndexSet:
+            self.choice.SetSelection(UserSettings.Get(group = 'display',
+                                                      key = 'statusbarMode',
+                                                      subkey = 'selection'))
         self.Reposition()
         
         self._postInitialized = True
@@ -293,6 +295,7 @@ class SbManager:
         
         Mode is usually driven by user through choice.
         """
+        self._modeIndexSet = True
         self.choice.SetSelection(modeIndex)
     
     def GetMode(self):
