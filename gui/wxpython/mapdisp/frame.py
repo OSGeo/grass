@@ -559,7 +559,8 @@ class MapFrame(SingleMapFrame):
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["hand"])
         self.MapWindow.SetFocus()
-        
+    
+    # TODO: can be replaced/merged by ZoomToWind
     def OnZoomRegion(self, event):
         """!Zoom to region
         """
@@ -568,6 +569,7 @@ class MapFrame(SingleMapFrame):
         self.UpdateMap()
         # event.Skip()
 
+    # TODO: delete this here and in gcp
     def OnAlignRegion(self, event):
         """!Align region
         """
@@ -979,6 +981,7 @@ class MapFrame(SingleMapFrame):
         # the desired raster) is selected to be profiled
         win.OnSelectRaster(None)
 
+    # TODO: move somewhere where can be reused (utils?), remove from gcp
     def FormatDist(self, dist):
         """!Format length numbers and units in a nice way,
         as a function of length. From code by Hamish Bowman
