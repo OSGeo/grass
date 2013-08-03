@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     coords->options = "0-100";
     coords->required = YES;
     coords->label =
-	_("The screen coordinates for top-left corner of label");
+	_("Screen coordinates of the rectangle's top-left corner");
     coords->description = _("(0,0) is lower-left of frame");
 
     fg_color_opt = G_define_standard_option(G_OPT_C_FG);
