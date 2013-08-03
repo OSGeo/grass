@@ -115,6 +115,9 @@ class BufferedWindow(MapWindow, wx.Window):
         self.mouseLeftUpPointer = Signal('BufferedWindow.mouseLeftUpPointer')
         # Emitted when left mouse button is released
         self.mouseLeftUp = Signal('BufferedWindow.mouseLeftUp')
+        # Emitted when mouse us moving (mouse motion event)
+        # Parametres are x and y of the mouse position in map (cell) units
+        self.mouseMoving = Signal('BufferedWindow.mouseMoving')
 
         # event bindings
         self.Bind(wx.EVT_PAINT,           self.OnPaint)
@@ -1045,6 +1048,9 @@ class BufferedWindow(MapWindow, wx.Window):
             self.OnMouseEnter(event)
         
         elif event.Moving():
+            pixelCoordinates = event.GetPositionTuple()[:]
+            coordinates = self.Pixel2Cell(pixelCoordinates)
+            self.mouseMoving.emit(x=coordinates[0], y=coordinates[1])
             self.OnMouseMoving(event)
                 
     def OnMouseWheel(self, event):
