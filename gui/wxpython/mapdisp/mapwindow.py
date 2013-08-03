@@ -67,8 +67,7 @@ class BufferedWindow(MapWindow, wx.Window):
         @param style wx window style
         @param kwargs keyword arguments passed to MapWindow and wx.Window
         """
-        MapWindow.__init__(self, parent = parent, giface = giface, Map = Map,
-                           frame = frame, **kwargs)
+        MapWindow.__init__(self, parent=parent, giface=giface, Map=Map)
         wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
 
         self._properties = properties

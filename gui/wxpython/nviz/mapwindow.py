@@ -86,10 +86,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             glcanvas.GLCanvas.__init__(self, parent, id, attribList=attribs)
         else:
             glcanvas.GLCanvas.__init__(self, parent, id)
-        
-            
-        MapWindow.__init__(self, parent = parent, giface = giface, frame = frame,
-                           Map = Map)
+
+        MapWindow.__init__(self, parent=parent, giface=giface, Map=Map)
         self.Hide()
         
         self.init = False
