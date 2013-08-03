@@ -106,7 +106,13 @@ class IClassMapFrame(DoubleMapFrame):
         self._setUpMapWindow(self.secondMapWindow)
         self.firstMapWindow.InitZoomHistory()
         self.secondMapWindow.InitZoomHistory()
-
+        # TODO: for vdigit: it does nothing here because areas do not produce this info
+        self.firstMapWindow.digitizingInfo.connect(
+            lambda text:
+            self.statusbarManager.statusbarItems['coordinates'].SetAdditionalInfo(text))
+        self.firstMapWindow.digitizingInfoUnavailable.connect(
+            lambda:
+            self.statusbarManager.statusbarItems['coordinates'].SetAdditionalInfo(None))
         self.SetSize(size)
         #
         # Add toolbars

@@ -286,29 +286,23 @@ class MapWindow(object):
 
     def OnMotion(self, event):
         """!Tracks mouse motion and update statusbar
-        
+
+        @todo remove this method when lastEN is not used
+
         @see GetLastEN
         """
         try:
             self.lastEN = self.Pixel2Cell(event.GetPositionTuple())
         except (ValueError):
             self.lastEN = None
-        # FIXME: special case for vdigit and access to statusbarManager
-        if self.frame.statusbarManager.GetMode() == 0: # Coordinates            
-            updated = False
-            if hasattr(self, "digit"):
-                precision = int(UserSettings.Get(group = 'projection', key = 'format',
-                                             subkey = 'precision'))
-                updated = self._onMotion(self.lastEN, precision)
 
-            if not updated:
-                self.frame.CoordinatesChanged()
-        
         event.Skip()
 
     def GetLastEN(self):
         """!Returns last coordinates of mouse cursor.
-        
+
+        This method is depreciated.
+
         @see OnMotion
         """
         return self.lastEN

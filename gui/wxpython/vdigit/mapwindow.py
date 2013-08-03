@@ -17,6 +17,8 @@ This program is free software under the GNU General Public License
 import wx
 import tempfile
 
+from grass.pydispatch.signal import Signal
+
 from dbmgr.dialogs  import DisplayAttributesDialog
 from core.gcmd      import RunCommand, GMessage, GError
 from core.debug     import Debug
@@ -41,9 +43,23 @@ class VDigitWindow(BufferedWindow):
         self.pdcVector = wx.PseudoDC()
         self.toolbar   = self.parent.GetToolbar('vdigit')
         self.digit     = None # wxvdigit.IVDigit
+        self._digitizingInfo = False  # digitizing with info
+
+        # Emitted when info about digitizing updated
+        # Parameter text is a string with information
+        # currently used only for coordinates of mouse cursor + segmnt and
+        # total feature length
+        self.digitizingInfo = Signal('BufferedWindow.digitizingInfo')
+        # Emitted when some info about digitizing is or will be availbale
+        self.digitizingInfoAvailable = Signal('BufferedWindow.digitizingInfo')
+        # Emitted when some info about digitizing is or will be availbale
+        # digitizingInfo signal is emmited only between digitizingInfoAvailable
+        # and digitizingInfoUnavailable signals
+        self.digitizingInfoUnavailable = Signal('BufferedWindow.digitizingInfo')
 
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-        
+        self.mouseMoving.connect(self._mouseMovingToDigitizingInfo)
+
     def GetDisplay(self):
         if self.digit:
             return self.digit.GetDisplay()
@@ -53,35 +69,36 @@ class VDigitWindow(BufferedWindow):
         """!Set up related toolbar
         """
         self.toolbar = toolbar
-        
-    def _onMotion(self, coord, precision):
-        """!Track mouse motion and update statusbar (see self.Motion)
 
-        @parem coord easting, northing
-        @param precision formatting precision
-        """
-        e, n = coord
-        
+    def _mouseMovingToDigitizingInfo(self, x, y):
+        e, n = x, y
+        precision = int(UserSettings.Get(group='projection', key='format',
+                                         subkey='precision'))
         if self.toolbar.GetAction() != 'addLine' or \
                 self.toolbar.GetAction('type') not in ('line', 'boundary') or \
                 len(self.polycoords) == 0:
-            return False
-        
+            # we cannot provide info, so find out if it is something new
+            if self._digitizingInfo:
+                self._digitizingInfo = False
+                self.digitizingInfoUnavailable.emit()
+            return
+        # else, we can provide info, so find out if it is first time
+        if not self._digitizingInfo:
+            self._digitizingInfo = True
+            self.digitizingInfoAvailable.emit()
+
         # for linear feature show segment and total length
         distance_seg = self.Distance(self.polycoords[-1],
-                                     (e, n), screen = False)[0]
+                                     (e, n), screen=False)[0]
         distance_tot = distance_seg
         for idx in range(1, len(self.polycoords)):
             distance_tot += self.Distance(self.polycoords[idx-1],
                                           self.polycoords[idx],
-                                          screen = False)[0]
-        self.parent.SetStatusText("%.*f, %.*f (seg: %.*f; tot: %.*f)" % \
-                                                (precision, e, precision, n,
-                                                 precision, distance_seg,
-                                                 precision, distance_tot), 0)
-        
-        return True
-    
+                                          screen=False)[0]
+        text = "seg: %.*f; tot: %.*f" % (precision, distance_seg,
+                                         precision, distance_tot)
+        self.digitizingInfo.emit(text=text)
+
     def OnKeyDown(self, event):
         """!Key pressed"""
         shift = event.ShiftDown()

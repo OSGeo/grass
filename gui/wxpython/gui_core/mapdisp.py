@@ -264,10 +264,11 @@ class MapFrameBase(wx.Frame):
         
     def CoordinatesChanged(self):
         """!Shows current coordinates on statusbar.
-        
-        Used in BufferedWindow to report change of map coordinates (under mouse cursor).
         """
-        self.statusbarManager.ShowItem('coordinates')
+        # assuming that the first mode is coordinates
+        # probably shold not be here but good solution is not available now
+        if self.statusbarManager.GetMode() == 0:
+            self.statusbarManager.ShowItem('coordinates')
         
     def StatusbarReposition(self):
         """!Reposition items in statusbar"""
@@ -326,6 +327,7 @@ class MapFrameBase(wx.Frame):
         mapWindow.zoomHistoryUnavailable.connect(
             lambda:
             self.GetMapToolbar().Enable('zoomBack', enable=False))
+        mapWindow.mouseMoving.connect(self.CoordinatesChanged)
 
     def _prepareZoom(self, mapWindow, zoomType):
         """!Prepares MapWindow for zoom, toggles toolbar

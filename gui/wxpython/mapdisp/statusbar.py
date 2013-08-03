@@ -860,8 +860,14 @@ class SbCoordinates(SbTextItem):
         SbTextItem.__init__(self, mapframe, statusbar, position)
         self.name = 'coordinates'
         self.label = _("Coordinates")
+        self._additionalInfo = None
+        self._basicValue = None
         
     def Show(self):
+        """Show the last map window coordinates.
+
+        @todo remove last EN call and use coordinates comming from signal
+        """
         precision = int(UserSettings.Get(group = 'projection', key = 'format',
                              subkey = 'precision'))
         format = UserSettings.Get(group = 'projection', key = 'format',
@@ -869,15 +875,35 @@ class SbCoordinates(SbTextItem):
         projection = self.mapFrame.GetProperty('projection')
         try:
             e, n = self.mapFrame.GetWindow().GetLastEN()
-            self.SetValue(self.ReprojectENFromMap(e, n, projection, precision, format))
+            self._basicValue = self.ReprojectENFromMap(e, n, projection, precision, format)
+            if self._additionalInfo:
+                value = "{coords} ({additionalInfo})".format(coords=self._basicValue,
+                                                             additionalInfo=self._additionalInfo)
+            else:
+                value = self._basicValue
+            self.SetValue(value)
         except SbException, e:
             self.SetValue(e)
+        # TODO: remove these excepts, they just hide errors, solve problems differently
         except TypeError, e:
             self.SetValue("")
         except AttributeError:
             self.SetValue("") # during initialization MapFrame has no MapWindow
         SbTextItem.Show(self)
-        
+
+    def SetAdditionalInfo(self, text):
+        """Sets additional info to be shown together with coordinates.
+
+        The format is translation dependent but the default is
+        "coordinates (additional info)"
+
+        It does not show the changed text immediately, it waits for the Show()
+        method to be called.
+
+        @param text string to be shown
+        """
+        self._additionalInfo = text
+
     def ReprojectENFromMap(self, e, n, useDefinedProjection, precision, format):
         """!Reproject east, north to user defined projection.
         

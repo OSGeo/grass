@@ -160,13 +160,7 @@ class MapFrame(SingleMapFrame):
                                           properties=self.mapWindowProperties,
                                           overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
-        # enable or disable zoom history tool
-        self.MapWindow2D.zoomHistoryAvailable.connect(
-            lambda:
-            self.GetMapToolbar().Enable('zoomBack', enable=True))
-        self.MapWindow2D.zoomHistoryUnavailable.connect(
-            lambda:
-            self.GetMapToolbar().Enable('zoomBack', enable=False))
+        self._setUpMapWindow(self.MapWindow2D)
         # manage the state of toolbars connected to mouse cursor
         self.MapWindow2D.mouseHandlerRegistered.connect(
             lambda:
@@ -253,6 +247,13 @@ class MapFrame(SingleMapFrame):
                                                 Map = self.Map, tree = self.tree,
                                                 properties=self.mapWindowProperties,
                                                 lmgr = self._layerManager)
+            self._setUpMapWindow(self.MapWindowVDigit)
+            self.MapWindowVDigit.digitizingInfo.connect(
+                lambda text:
+                self.statusbarManager.statusbarItems['coordinates'].SetAdditionalInfo(text))
+            self.MapWindowVDigit.digitizingInfoUnavailable.connect(
+                lambda:
+                self.statusbarManager.statusbarItems['coordinates'].SetAdditionalInfo(None))
             self.MapWindowVDigit.Show()
             self._mgr.AddPane(self.MapWindowVDigit, wx.aui.AuiPaneInfo().CentrePane().
                           Dockable(False).BestSize((-1,-1)).Name('vdigit').
