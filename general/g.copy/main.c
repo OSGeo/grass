@@ -40,7 +40,6 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
-    G_add_keyword(_("copy"));
     module->description =
 	_("Copies available data files in the current mapset "
 	  "search path to the user's current mapset.");
