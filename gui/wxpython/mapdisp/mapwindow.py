@@ -8,7 +8,7 @@ Classes:
  - mapwindow::GraphicsSet
  - mapwindow::GraphicsSetItem
 
-(C) 2006-2012 by the GRASS Development Team
+(C) 2006-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -16,8 +16,9 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton
 @author Jachym Cepicky
-@author Vaclav Petras <wenzeslaus gmail.com> (handlers support)
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support, GraphicsSet)
+@author Anna Petrasova <kratochanna gmail.com> (refactoring)
+@author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 """
 
 import os
@@ -38,6 +39,7 @@ from core.debug         import Debug
 from core.settings      import UserSettings
 from gui_core.mapwindow import MapWindow
 from core.utils         import GetGEventAttribsForHandler, _
+import core.utils as utils
 
 try:
     import grass.lib.gis as gislib
@@ -99,11 +101,6 @@ class BufferedWindow(MapWindow, wx.Window):
         self.zoomHistoryUnavailable = Signal('BufferedWindow.zoomHistoryUnavailable')
         # Emitted when the zoom history stack is not empty
         self.zoomHistoryAvailable = Signal('BufferedWindow.zoomHistoryAvailable')
-
-        # Emitted when someone registers as mouse event handler
-        self.mouseHandlerRegistered = Signal('BufferedWindow.mouseHandlerRegistered')
-        # Emitted when mouse event handler is unregistered
-        self.mouseHandlerUnregistered = Signal('BufferedWindow.mouseHandlerUnregistered')
 
         # Emitted when map enters the window
         self.mouseEntered = Signal('BufferedWindow.mouseEntered')
@@ -766,7 +763,7 @@ class BufferedWindow(MapWindow, wx.Window):
             compReg = self.Map.GetRegion()
             dispReg = self.Map.GetCurrentRegion()
             reg = None
-            if self.IsInRegion(dispReg, compReg):
+            if utils.isInRegion(dispReg, compReg):
                 self.polypen = wx.Pen(colour = wx.Colour(0, 0, 255, 128), width = 3, style = wx.SOLID)
                 reg = dispReg
             else:
@@ -782,25 +779,6 @@ class BufferedWindow(MapWindow, wx.Window):
             regionCoords.append((reg['w'], reg['n']))
             # draw region extent
             self.DrawLines(pdc=self.pdcDec, polycoords=regionCoords)
-
-    # TODO: move to utils
-    def IsInRegion(self, region, refRegion):
-        """!
-        Test if 'region' is inside of 'refRegion'
-
-        @param region input region
-        @param refRegion reference region (e.g. computational region)
-
-        @return True if region is inside of refRegion
-        @return False 
-        """
-        if region['s'] >= refRegion['s'] and \
-                region['n'] <= refRegion['n'] and \
-                region['w'] >= refRegion['w'] and \
-                region['e'] <= refRegion['e']:
-            return True
-        
-        return False
 
     def EraseMap(self):
         """!Erase map canvas
@@ -1817,22 +1795,6 @@ class BufferedWindow(MapWindow, wx.Window):
         """!Get render.Map() instance"""
         return self.Map
 
-    def RegisterMouseEventHandler(self, event, handler, cursor = None):
-        """Registeres mouse event handler.
-
-        Emits mouseHandlerRegistered signal before handler is registered.
-        """
-        self.mouseHandlerRegistered.emit()
-        MapWindow.RegisterMouseEventHandler(self, event, handler, cursor)
-
-    def UnregisterMouseEventHandler(self, event, handler):
-        """Unregisteres mouse event handler.
-
-        Emits mouseHandlerUnregistered signal after handler is unregistered.
-        """
-        MapWindow.UnregisterMouseEventHandler(self, event, handler)
-        self.mouseHandlerUnregistered.emit()
-        
     def RegisterGraphicsToDraw(self, graphicsType, setStatusFunc = None, drawFunc = None):
         """! This method registers graphics to draw.
         

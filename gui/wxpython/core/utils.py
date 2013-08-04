@@ -21,6 +21,11 @@ import shlex
 import re
 import inspect
 
+if __name__ == '__main__':
+    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
+    if gui_wx_path not in sys.path:
+        sys.path.append(gui_wx_path)
+
 from core.globalvar import ETCDIR
 if os.path.join(ETCDIR, "python") not in sys.path:
     sys.path.append(os.path.join(ETCDIR, "python"))
@@ -1062,3 +1067,75 @@ def GuiModuleMain(mainfn):
         os._exit(0)
     else:
         mainfn()
+
+
+def isInRegion(regionA, regionB):
+    """!Tests if 'regionA' is inside of 'regionB'.
+
+    For example, region A is a display region and region B is some reference
+    region, e.g., a computational region.
+
+    @code
+    >>> displayRegion = {'n': 223900, 's': 217190, 'w': 630780, 'e': 640690}
+    >>> compRegion = {'n': 228500, 's': 215000, 'w': 630000, 'e': 645000}
+    >>> isInRegion(displayRegion, compRegion)
+    True
+    >>> displayRegion = {'n':226020, 's': 212610, 'w': 626510, 'e': 646330}
+    >>> isInRegion(displayRegion, compRegion)
+    False
+
+    @endcode
+
+    @param regionA input region A as dictionary
+    @param regionB input region B as dictionary
+
+    @return True if region A is inside of region B
+    @return False othewise
+    """
+    if regionA['s'] >= regionB['s'] and \
+            regionA['n'] <= regionB['n'] and \
+            regionA['w'] >= regionB['w'] and \
+            regionA['e'] <= regionB['e']:
+        return True
+
+    return False
+
+
+def do_doctest_gettext_workaround():
+    """Setups environment for doing a doctest with gettext usage.
+
+    When using gettext with dynamically defined underscore function
+    (`_("For translation")`), doctest does not work properly. One option is to
+    use `import as` instead of dynamically defined underscore function but this
+    would require change all modules which are used by tested module. This
+    should be considered for the future. The second option is to define dummy
+    underscore function and one other function which creates the right
+    environment to satisfy all. This is done by this function.
+    """
+    def new_displayhook(string):
+        """A replacement for default `sys.displayhook`"""
+        if string is not None:
+            sys.stdout.write("%r\n" % (string,))
+
+    def new_translator(string):
+        """A fake gettext underscore function."""
+        return string
+
+    sys.displayhook = new_displayhook
+
+    import __builtin__
+    __builtin__._ = new_translator
+
+
+def doc_test():
+    """Tests the module using doctest
+
+    @return a number of failed tests
+    """
+    import doctest
+    do_doctest_gettext_workaround()
+    return doctest.testmod().failed
+
+
+if __name__ == '__main__':
+    sys.exit(doc_test())

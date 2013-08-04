@@ -107,7 +107,12 @@ class MapWindow(object):
         self.parent = parent
         self.Map = Map
         self._giface = giface
-        
+
+        # Emitted when someone registers as mouse event handler
+        self.mouseHandlerRegistered = Signal('BufferedWindow.mouseHandlerRegistered')
+        # Emitted when mouse event handler is unregistered
+        self.mouseHandlerUnregistered = Signal('BufferedWindow.mouseHandlerUnregistered')        
+
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing
         self.mouse = {
@@ -205,7 +210,9 @@ class MapWindow(object):
             self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction)
             event.Skip()
         @endcode
-        
+
+        Emits mouseHandlerRegistered signal before handler is registered.        
+
         @param event one of mouse events
         @param handler function to handle event
         @param cursor cursor which temporary overrides current cursor
@@ -213,6 +220,7 @@ class MapWindow(object):
         @return True if successful
         @return False if event cannot be bind
         """
+        self.mouseHandlerRegistered.emit()
         # inserts handler into list
         for containerEv, handlers in self.handlersContainer.iteritems():
             if event == containerEv: 
@@ -254,6 +262,8 @@ class MapWindow(object):
         Before handler is unregistered it is called with string value
         "unregistered" of event parameter.
 
+        Emits mouseHandlerUnregistered signal after handler is unregistered.
+
         @param handler handler to unbind
         @param event event from which handler will be unbinded
         
@@ -283,7 +293,8 @@ class MapWindow(object):
         # restore overridden cursor
         if self._overriddenCursor:
             self.SetCursor(self._overriddenCursor)
-        
+
+        self.mouseHandlerUnregistered.emit()
         return True
     
     def Pixel2Cell(self, xyCoords):
