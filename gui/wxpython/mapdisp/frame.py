@@ -174,7 +174,7 @@ class MapFrame(SingleMapFrame):
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
-        self.MapWindow.SetCursor(self.cursors["default"])
+        self.MapWindow.SetNamedCursor('default')
         # used by vector digitizer
         self.MapWindowVDigit = None
         # used by Nviz (3D display mode)
@@ -331,7 +331,7 @@ class MapFrame(SingleMapFrame):
                                         Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self._setUpMapWindow(self.MapWindow3D)
             self.MapWindow = self.MapWindow3D
-            self.MapWindow.SetCursor(self.cursors["default"])
+            self.MapWindow.SetNamedCursor('default')
             
             # add Nviz notebookpage
             self._layerManager.AddNvizTools()
@@ -519,7 +519,7 @@ class MapFrame(SingleMapFrame):
         # change the cursor
         if self.GetToolbar('vdigit'):
             # digitization tool activated
-            self.MapWindow.SetCursor(self.cursors["cross"])
+            self.MapWindow.SetNamedCursor('cross')
 
             # reset mouse['box'] if needed
             if self.toolbars['vdigit'].GetAction() in ['addLine']:
@@ -535,7 +535,7 @@ class MapFrame(SingleMapFrame):
                 self.MapWindow.mouse['box'] = 'box'
         
         else:
-            self.MapWindow.SetCursor(self.cursors["default"])
+            self.MapWindow.SetNamedCursor('default')
 
     def OnRotate(self, event):
         """!Rotate 3D view
@@ -547,7 +547,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.mouse['use'] = "rotate"
         
         # change the cursor
-        self.MapWindow.SetCursor(self.cursors["hand"])
+        self.MapWindow.SetNamedCursor('hand')
 
     def OnFlyThrough(self, event):
         """!Fly-through mode
@@ -559,7 +559,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.mouse['use'] = "fly"
         
         # change the cursor
-        self.MapWindow.SetCursor(self.cursors["hand"])
+        self.MapWindow.SetNamedCursor('hand')
         self.MapWindow.SetFocus()
 
     def SaveToFile(self, event):
@@ -806,7 +806,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.zoomtype = 0
         
         # change the cursor
-        self.MapWindow.SetCursor(self.cursors["cross"])
+        self.MapWindow.SetNamedCursor('cross')
         
     def AddTmpVectorMapLayer(self, name, cats, useId = False, addLayer = True):
         """!Add temporal vector map layer to map composition
@@ -879,7 +879,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.polypen = wx.Pen(colour = 'green', width = 2, style = wx.SHORT_DASH)
         
         # change the cursor
-        self.MapWindow.SetCursor(self.cursors["pencil"])
+        self.MapWindow.SetNamedCursor('pencil')
         
         # initiating output (and write a message)
         # e.g., in Layer Manager switch to output console

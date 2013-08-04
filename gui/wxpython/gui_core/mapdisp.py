@@ -74,17 +74,6 @@ class MapFrameBase(wx.Frame):
         self.parent     = parent
         
         wx.Frame.__init__(self, parent, id, title, style = style, name = name, **kwargs)
-        
-        # available cursors
-        self.cursors = {
-            # default: cross
-            # "default" : wx.StockCursor(wx.CURSOR_DEFAULT),
-            "default" : wx.StockCursor(wx.CURSOR_ARROW),
-            "cross"   : wx.StockCursor(wx.CURSOR_CROSS),
-            "hand"    : wx.StockCursor(wx.CURSOR_HAND),
-            "pencil"  : wx.StockCursor(wx.CURSOR_PENCIL),
-            "sizenwse": wx.StockCursor(wx.CURSOR_SIZENWSE)
-            }
                 
         #
         # set the size & system icon
@@ -341,7 +330,7 @@ class MapFrameBase(wx.Frame):
         mapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
         
         # change the cursor
-        mapWindow.SetCursor(self.cursors["cross"])
+        mapWindow.SetNamedCursor('cross')
     
     def SwitchTool(self, toolbar, event):
         """!Helper function to switch tools"""
@@ -376,7 +365,7 @@ class MapFrameBase(wx.Frame):
         mapWindow.zoomtype = 0
         
         # change the cursor
-        mapWindow.SetCursor(self.cursors["hand"])
+        mapWindow.SetNamedCursor('hand')
         
     def OnZoomBack(self, event):
         """!Zoom last (previously stored position)
@@ -660,9 +649,9 @@ class DoubleMapFrame(MapFrameBase):
         self.SwitchTool(toolbar, event)
 
         self.GetFirstWindow().mouse['use'] = 'pointer'
-        self.GetFirstWindow().SetCursor(self.cursors["default"])
+        self.GetFirstWindow().SetNamedCursor('default')
         self.GetSecondWindow().mouse['use'] = 'pointer'
-        self.GetSecondWindow().SetCursor(self.cursors["default"])
+        self.GetSecondWindow().SetNamedCursor('default')
 
     def OnRender(self, event):
         """!Re-render map composition (each map layer)

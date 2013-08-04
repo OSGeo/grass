@@ -101,7 +101,7 @@ class ProfileFrame(BasePlotFrame):
         self.mapwin.mouse['box'] = 'line'
         self.mapwin.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
         self.mapwin.polypen = wx.Pen(colour = 'dark green', width = 2, style = wx.SHORT_DASH)
-        self.mapwin.SetCursor(self.Parent.cursors["cross"])
+        self.mapwin.SetNamedCursor('cross')
 
     def OnSelectRaster(self, event):
         """!Select raster map(s) to profile
@@ -266,8 +266,8 @@ class ProfileFrame(BasePlotFrame):
             dlg.Destroy()
             return
 
-        self.mapwin.SetCursor(self.parent.cursors["default"])
-        self.SetCursor(self.parent.cursors["default"])
+        self.mapwin.SetNamedCursor('default')
+        self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
         self.SetGraphStyle()
         self.SetupProfile()
         p = self.CreatePlotList()

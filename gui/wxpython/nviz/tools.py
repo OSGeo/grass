@@ -2887,10 +2887,10 @@ class NvizToolWindow(FN.FlatNotebook):
             if self.FindWindowById(event.GetId()).GetValue():
                 self.mapDisplay.Raise()
                 self.mapWindow.mouse['use'] = 'lookHere'
-                self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
+                self.mapWindow.SetNamedCursor('cross')
             else:
                 self.mapWindow.mouse['use'] = 'default'
-                self.mapWindow.SetCursor(self.mapWindow.cursors['default'])
+                self.mapWindow.SetNamedCursor('default')
             
     def OnResetView(self, event):
         """!Reset to default view (view page)"""
@@ -4388,10 +4388,10 @@ class NvizToolWindow(FN.FlatNotebook):
         if event.GetInt():
             self.mapDisplay.Raise()
             self.mapWindow.mouse['use'] = type
-            self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
+            self.mapWindow.SetNamedCursor('cross')
         else:
             self.mapWindow.mouse['use'] = 'default'
-            self.mapWindow.SetCursor(self.mapWindow.cursors["default"])
+            self.mapWindow.SetNamedCursor('default')
     
     def OnArrowDelete(self, event):
         """!Delete arrow"""

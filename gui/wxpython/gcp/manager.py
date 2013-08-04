@@ -921,7 +921,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.mapwin.mouse["use"] == "pointer"
         self.mapwin.zoomtype = 0
         self.mapwin.pen = wx.Pen(colour='black', width=2, style=wx.SOLID)
-        self.mapwin.SetCursor(self.cursors["cross"])
+        self.mapwin.SetNamedCursor('cross')
 
         self.mapwin = self.TgtMapWindow
         
@@ -930,7 +930,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.mapwin.mouse["use"] == "pointer"
         self.mapwin.zoomtype = 0
         self.mapwin.pen = wx.Pen(colour='black', width=2, style=wx.SOLID)
-        self.mapwin.SetCursor(self.cursors["cross"])
+        self.mapwin.SetNamedCursor('cross')
 
         #
         # show new display & draw map
