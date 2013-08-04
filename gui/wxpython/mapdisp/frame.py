@@ -329,6 +329,7 @@ class MapFrame(SingleMapFrame):
         if not self.MapWindow3D:
             self.MapWindow3D = GLWindow(self, giface = self._giface, id = wx.ID_ANY, frame = self,
                                         Map = self.Map, tree = self.tree, lmgr = self._layerManager)
+            self._setUpMapWindow(self.MapWindow3D)
             self.MapWindow = self.MapWindow3D
             self.MapWindow.SetCursor(self.cursors["default"])
             
