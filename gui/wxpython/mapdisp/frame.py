@@ -1226,12 +1226,14 @@ class MeasureController:
         self._mapWindow = self._giface.GetMapWindow()
         self._projInfo = self._mapWindow.Map.projinfo
         self._measureGraphics = None
-        
+
         self._totaldist = 0.0 # total measured distance
-        
+
         self._oldMouseUse = None
         self._oldCursor = None
-        
+
+        self._useCtypes = False
+
     def IsMeasuring(self):
         """!Returns True if measuring mode is enabled, otherwise False"""
         return bool(self._measureGraphics)
@@ -1329,10 +1331,11 @@ class MeasureController:
             try:
                 import grass.lib.gis as gislib
                 gislib.G_begin_distance_calculations()
+                self._useCtypes = True
             except ImportError, e:
-                self._giface.WriteWarning(_('Geodesic distance is not yet '
-                                                          'supported by this tool.\n'
-                                                          'Reason: %s' % e))
+                self._giface.WriteWarning(_('Geodesic distance calculation '
+                                            'is not available.\n'
+                                            'Reason: %s' % e))
         
     def MeasureDist(self, beginpt, endpt):
         """!Calculate distance and print to output window.
@@ -1343,11 +1346,14 @@ class MeasureController:
         dist, (north, east) = self._mapWindow.Distance(beginpt, endpt, screen=False)
         
         dist = round(dist, 3)
-        d, dunits = units.formatDist(dist, self._projInfo['units'])
+        mapunits = self._projInfo['units']
+        if mapunits == 'degrees' and self._useCtypes:
+            mapunits = 'meters'
+        d, dunits = units.formatDist(dist, mapunits)
         
         self._totaldist += dist
         td, tdunits = units.formatDist(self._totaldist,
-                                       self._projInfo['units'])
+                                       mapunits)
         
         strdist = str(d)
         strtotdist = str(td)
