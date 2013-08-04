@@ -33,6 +33,7 @@ from   wx              import glcanvas
 from wx.glcanvas       import WX_GL_DEPTH_SIZE
 
 import grass.script as grass
+from grass.pydispatch.signal import Signal
 
 from core.gcmd          import GMessage, GException, GError
 from core.debug         import Debug
@@ -89,7 +90,20 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         MapWindow.__init__(self, parent=parent, giface=giface, Map=Map)
         self.Hide()
-        
+
+        # TODO: same signals as in BufferedWindow
+        # same interface is good, but how to ensure same names
+        # or avoid duplication, define in map window base class?
+
+        # Emitted when mouse us moving (mouse motion event)
+        # Parametres are x and y of the mouse position in map (cell) units
+        self.mouseMoving = Signal('GLWindow.mouseMoving')
+
+        # Emitted when the zoom history stack is emptied
+        self.zoomHistoryUnavailable = Signal('GLWindow.zoomHistoryUnavailable')
+        # Emitted when the zoom history stack is not empty
+        self.zoomHistoryAvailable = Signal('GLWindow.zoomHistoryAvailable')
+
         self.init = False
         self.initView = False
         self.context = None
@@ -658,7 +672,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # double click    
         elif event.ButtonDClick():
             self.OnDClick(event)
-        
+
+        elif event.Moving():
+            pixelCoordinates = event.GetPositionTuple()[:]
+            coordinates = self.Pixel2Cell(pixelCoordinates)
+            # coordinates are none when no map is loaded
+            # TODO: handle in more clever way: check the state
+            if coordinates is not None:
+                self.mouseMoving.emit(x=coordinates[0], y=coordinates[1])
+
         event.Skip()
 
     def OnMouseWheel(self, event):
@@ -670,7 +692,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             return
             
         wheel = event.GetWheelRotation()
-        Debug.msg (5, "GLWindow.OnMouseMotion(): wheel = %d" % wheel)
+        Debug.msg (5, "GLWindow.OnMouseWheel(): wheel = %d" % wheel)
         if self.timerFly.IsRunning() and self.fly['mouseControl']:
             if wheel > 0:
                 self.ChangeFlySpeed(increase = True)
@@ -972,8 +994,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # disable tool if stack is empty
         if len(self.viewhistory) < 2: # disable tool
-            toolbar = self.parent.GetMapToolbar()
-            toolbar.Enable('zoomback', enable = False)
+            self.zoomHistoryUnavailable.emit()
             
         # set view and update nviz view page
         self.lmgr.nviz.UpdateState(view = view[0], iview = view[1])
@@ -1008,13 +1029,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # update toolbar
         if len(self.viewhistory) > 1:
-            enable = True
+            self.zoomHistoryAvailable.emit()
         else:
-            enable = False
-        
-        toolbar = self.parent.GetMapToolbar()
-        toolbar.Enable('zoomback', enable)
-        
+            self.zoomHistoryUnavailable.emit()
+
         return removed     
     
     def ResetViewHistory(self):
