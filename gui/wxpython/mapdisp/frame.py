@@ -63,7 +63,6 @@ from mapdisp import statusbar as sb
 
 import grass.script as grass
 
-haveCtypes = False
 
 class MapFrame(SingleMapFrame):
     """!Main frame for map display window. Drawing takes place in
@@ -218,6 +217,8 @@ class MapFrame(SingleMapFrame):
         self.dialogs['query'] = None
 
         self.decorationDialog = None # decoration/overlays
+        
+        self.measureController = None
 
     def GetMapWindow(self):
         return self.MapWindow
@@ -864,89 +865,9 @@ class MapFrame(SingleMapFrame):
             return cmd
 
     def OnMeasure(self, event):
-        """!Init measurement routine that calculates map distance
-        along transect drawn on map display
-        """
-        self.totaldist = 0.0 # total measured distance
-        
-        self.SwitchTool(self.toolbars['map'], event)
-
-        # change mouse to draw line for measurement
-        self.MapWindow.mouse['use'] = "measure"
-        self.MapWindow.mouse['box'] = "line"
-        self.MapWindow.zoomtype = 0
-        self.MapWindow.pen     = wx.Pen(colour = 'red', width = 2, style = wx.SHORT_DASH)
-        self.MapWindow.polypen = wx.Pen(colour = 'green', width = 2, style = wx.SHORT_DASH)
-        
-        # change the cursor
-        self.MapWindow.SetNamedCursor('pencil')
-        
-        # initiating output (and write a message)
-        # e.g., in Layer Manager switch to output console
-        # TODO: this should be something like: write important message or write tip
-        # TODO: mixed 'switching' and message? no, measuring handles 'swithing' on its own
-        self._giface.WriteWarning(_('Click and drag with left mouse button '
-                                              'to measure.%s'
-                                              'Double click with left button to clear.') % \
-                                                (os.linesep))
-        if self.Map.projinfo['proj'] != 'xy':
-            units = self.Map.projinfo['units']
-            self._giface.WriteCmdLog(_('Measuring distance') + ' ('
-                                      + units + '):')
-        else:
-            self._giface.WriteCmdLog(_('Measuring distance:'))
-        
-        if self.Map.projinfo['proj'] == 'll':
-            try:
-                import grass.lib.gis as gislib
-                global haveCtypes
-                haveCtypes = True
-
-                gislib.G_begin_distance_calculations()
-            except ImportError, e:
-                self._giface.WriteWarning(_('Geodesic distance is not yet '
-                                                          'supported by this tool.\n'
-                                                          'Reason: %s' % e))
-        
-    def MeasureDist(self, beginpt, endpt):
-        """!Calculate map distance from screen distance
-        and print to output window
-        """
-        
-        dist, (north, east) = self.MapWindow.Distance(beginpt, endpt)
-        
-        dist = round(dist, 3)
-        d, dunits = units.formatDist(dist, self.Map.projinfo['units'])
-
-        self.totaldist += dist
-        td, tdunits = units.formatDist(self.totaldist,
-                                       self.Map.projinfo['units'])
-
-        strdist = str(d)
-        strtotdist = str(td)
-        
-        if self.Map.projinfo['proj'] == 'xy' or 'degree' not in self.Map.projinfo['unit']:
-            angle = int(math.degrees(math.atan2(north,east)) + 0.5)
-            # uncomment below (or flip order of atan2(y,x) above) to use
-            #   the mathematical theta convention (CCW from +x axis)
-            #angle = 90 - angle
-            if angle < 0:
-                angle = 360 + angle
-            
-            mstring = '%s = %s %s\n%s = %s %s\n%s = %d %s\n%s' \
-                % (_('segment'), strdist, dunits,
-                   _('total distance'), strtotdist, tdunits,
-                   _('bearing'), angle, _('degrees (clockwise from grid-north)'),
-                   '-' * 60)
-        else:
-            mstring = '%s = %s %s\n%s = %s %s\n%s' \
-                % (_('segment'), strdist, dunits,
-                   _('total distance'), strtotdist, tdunits,
-                   '-' * 60)
-        
-        self._giface.WriteLog(mstring, priority=2)
-        
-        return dist
+        if not self.measureController:
+            self.measureController = MeasureController(self._giface)
+        self.measureController.StartMeasurement()
 
     def OnProfile(self, event):
         """!Launch profile tool
@@ -1281,6 +1202,8 @@ class MapFrame(SingleMapFrame):
             if btn.GetValue():
                 btn.SetValue(0)
                 self.dialogs['legend'].DisconnectResizing()
+        if self.measureController and self.measureController.IsMeasuring():
+            self.measureController.StopMeasurement(restore=False)
 
     def ResetPointer(self):
         """Sets pointer mode.
@@ -1294,3 +1217,160 @@ class MapFrame(SingleMapFrame):
         toolbar.action['id'] = vars(toolbar)["pointer"]
         toolbar.OnTool(None)
         self.OnPointer(event=None)
+
+
+class MeasureController:
+    """!Class controls measuring in map display."""
+    def __init__(self, giface):
+        self._giface = giface
+        self._mapWindow = self._giface.GetMapWindow()
+        self._projInfo = self._mapWindow.Map.projinfo
+        self._measureGraphics = None
+        
+        self._totaldist = 0.0 # total measured distance
+        
+        self._oldMouseUse = None
+        self._oldCursor = None
+        
+    def IsMeasuring(self):
+        """!Returns True if measuring mode is enabled, otherwise False"""
+        return bool(self._measureGraphics)
+
+    def _startMeasurement(self, x, y):
+        """!Handles the actual start of measuring
+        and adding each new point.
+        
+        @param x,y east north coordinates
+        """
+        if not self._measureGraphics.GetAllItems():
+            item = self._measureGraphics.AddItem(coords=[[x, y]])
+            item.SetPropertyVal('penName', 'measure')
+        else:
+            # needed to switch mouse begin and end to draw intermediate line properly
+            coords = self._measureGraphics.GetItem(0).GetCoords()[-1]
+            self._mapWindow.mouse['begin'] = self._mapWindow.Cell2Pixel(coords)
+
+    def _addMeasurement(self, x, y):
+        """!New point added.
+
+        @param x,y east north coordinates
+        """
+        # add new point and calculate distance
+        item = self._measureGraphics.GetItem(0)
+        coords = item.GetCoords() + [[x, y]]
+        item.SetCoords(coords)
+        self.MeasureDist(coords[-2], coords[-1])
+        # draw
+        self._mapWindow.ClearLines()
+        self._measureGraphics.Draw(pdc=self._mapWindow.pdcTmp)
+        
+    def StopMeasurement(self, restore=True):
+        """!Measure mode is stopped."""
+        self._mapWindow.ClearLines(pdc=self._mapWindow.pdcTmp)
+        self._mapWindow.mouse['end'] = self._mapWindow.mouse['begin']
+        # disconnect mouse events
+        self._mapWindow.mouseLeftUp.disconnect(self._addMeasurement)
+        self._mapWindow.mouseDClick.disconnect(self.StopMeasurement)
+        self._mapWindow.mouseLeftDown.disconnect(self._startMeasurement)
+        # unregister
+        self._mapWindow.UnregisterGraphicsToDraw(self._measureGraphics)
+        self._measureGraphics = None
+        self._mapWindow.Refresh()
+
+        if restore:
+            # restore mouse['use'] and cursor to the state before measuring starts
+            self._mapWindow.SetNamedCursor(self._oldCursor)
+            self._mapWindow.mouse['use'] = self._oldMouseUse
+        
+        self._giface.WriteCmdLog(_('Measuring finished'))
+
+    def StartMeasurement(self):
+        """!Init measurement routine that calculates map distance
+        along transect drawn on map display
+        """
+        self._totaldist = 0.0 # total measured distance
+        
+        self._oldMouseUse = self._mapWindow.mouse['use']
+        self._oldCursor = self._mapWindow.GetNamedCursor()
+
+        self._measureGraphics = self._mapWindow.RegisterGraphicsToDraw(graphicsType='line')
+
+        self._mapWindow.mouseLeftDown.connect(self._startMeasurement)
+        self._mapWindow.mouseDClick.connect(self.StopMeasurement)
+        self._mapWindow.mouseLeftUp.connect(self._addMeasurement)
+
+        # change mouse['box'] and pen to draw line during dragging
+        # TODO: better soluyion for drawing this line
+        self._mapWindow.mouse['use'] = None
+        self._mapWindow.mouse['box'] = "line"
+        self._mapWindow.pen = wx.Pen(colour='red', width=2, style=wx.SHORT_DASH)
+        
+        self._measureGraphics.AddPen('measure', wx.Pen(colour='green', width=2, style=wx.SHORT_DASH) )
+        
+        # change the cursor
+        self._mapWindow.SetNamedCursor('pencil')
+        
+        # initiating output (and write a message)
+        # e.g., in Layer Manager switch to output console
+        # TODO: this should be something like: write important message or write tip
+        # TODO: mixed 'switching' and message? no, measuring handles 'swithing' on its own
+        self._giface.WriteWarning(_('Click and drag with left mouse button '
+                                    'to measure.%s'
+                                    'Double click with left button to clear.') % \
+                                    (os.linesep))
+        if self._projInfo['proj'] != 'xy':
+            mapunits = self._projInfo['units']
+            self._giface.WriteCmdLog(_('Measuring distance') + ' ('
+                                      + mapunits + '):')
+        else:
+            self._giface.WriteCmdLog(_('Measuring distance:'))
+        
+        if self._projInfo['proj'] == 'll':
+            try:
+                import grass.lib.gis as gislib
+                gislib.G_begin_distance_calculations()
+            except ImportError, e:
+                self._giface.WriteWarning(_('Geodesic distance is not yet '
+                                                          'supported by this tool.\n'
+                                                          'Reason: %s' % e))
+        
+    def MeasureDist(self, beginpt, endpt):
+        """!Calculate distance and print to output window.
+        
+        @param beginpt,endpt EN coordinates
+        """
+        # move also Distance method?
+        dist, (north, east) = self._mapWindow.Distance(beginpt, endpt, screen=False)
+        
+        dist = round(dist, 3)
+        d, dunits = units.formatDist(dist, self._projInfo['units'])
+        
+        self._totaldist += dist
+        td, tdunits = units.formatDist(self._totaldist,
+                                       self._projInfo['units'])
+        
+        strdist = str(d)
+        strtotdist = str(td)
+        
+        if self._projInfo['proj'] == 'xy' or 'degree' not in self._projInfo['unit']:
+            angle = int(math.degrees(math.atan2(north,east)) + 0.5)
+            # uncomment below (or flip order of atan2(y,x) above) to use
+            #   the mathematical theta convention (CCW from +x axis)
+            #angle = 90 - angle
+            if angle < 0:
+                angle = 360 + angle
+            
+            mstring = '%s = %s %s\n%s = %s %s\n%s = %d %s\n%s' \
+                % (_('segment'), strdist, dunits,
+                   _('total distance'), strtotdist, tdunits,
+                   _('bearing'), angle, _('degrees (clockwise from grid-north)'),
+                   '-' * 60)
+        else:
+            mstring = '%s = %s %s\n%s = %s %s\n%s' \
+                % (_('segment'), strdist, dunits,
+                   _('total distance'), strtotdist, tdunits,
+                   '-' * 60)
+        
+        self._giface.WriteLog(mstring, priority=2)
+        
+        return dist
