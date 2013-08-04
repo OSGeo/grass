@@ -15,7 +15,7 @@ SUBDIRS = \
 	db.test \
 	db.univar \
 	g.extension \
-	g.extension.rebuild.all \
+	g.extension.all \
 	g.manual \
 	i.image.mosaic \
 	i.in.spotvgt \
