@@ -798,10 +798,9 @@ class VDigitToolbar(BaseToolbar):
         if 'map' in self.parent.toolbars:
             self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
         
-        if self.digitClass != IClassVDigit:
-            lmgr = self.parent.GetLayerManager()
-            if lmgr:
-                lmgr.toolbars['tools'].Enable('vdigit', enable = False)
+        # here was dead code to enable vdigit button in toolbar
+        # with if to ignore iclass
+        # some signal (DigitizerStarted) can be emitted here
         
         Debug.msg (4, "VDigitToolbar.StartEditing(): layer=%s" % mapLayer.GetName())
         
@@ -854,7 +853,8 @@ class VDigitToolbar(BaseToolbar):
             # TODO: replace by giface
             lmgr = self.parent.GetLayerManager()
             if lmgr:
-                lmgr.toolbars['tools'].Enable('vdigit', enable = True)
+                # here was dead code to enable vdigit button in toolbar
+                # some signal (DigitizerEnded) can be emitted here
                 lmgr._giface.GetProgress().SetValue(0)
                 lmgr.GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
                                                     self.mapLayer.GetName())
