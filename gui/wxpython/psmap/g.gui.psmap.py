@@ -44,8 +44,8 @@ if wxbase not in sys.path:
     sys.path.append(wxbase)
 
 from core.globalvar import CheckWxVersion
-from core.utils     import _, GuiModuleMain
-from psmap.frame        import PsMapFrame
+from core.utils import _, GuiModuleMain
+from psmap.frame import PsMapFrame
 from psmap.instructions import Instruction
 
 def main():
