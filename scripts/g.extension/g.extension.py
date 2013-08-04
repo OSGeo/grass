@@ -29,7 +29,8 @@
 #% key: extension
 #% type: string
 #% key_desc: name
-#% description: Name of extension to install/remove
+#% label: Name of extension to install or remove
+#% description: Name of toolbox (set of extensions) when -t flag is given
 #% required: yes
 #%end
 #%option
@@ -110,7 +111,7 @@
 #%end
 #%flag
 #% key: t
-#% description: Operate on toolboxes instead of single modules
+#% description: Operate on toolboxes instead of single modules (experimental)
 #% suppress_required: yes
 #%end
 
