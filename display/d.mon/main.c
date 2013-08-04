@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
     G_add_keyword(_("display"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("monitors"));
-    G_add_keyword(_("drivers"));
     module->description = _("Controls graphics display monitors from the command line.");
     
     start_opt = G_define_option();
