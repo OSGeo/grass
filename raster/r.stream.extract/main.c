@@ -75,26 +75,26 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
-    module->description = _("Stream network extraction");
+    G_add_keyword(_("stream network"));
+    module->description = _("Performs stream network extraction.");
 
-    input.ele = G_define_standard_option(G_OPT_R_INPUT);
-    input.ele->key = "elevation";
-    input.ele->label = _("Elevation map");
-    input.ele->description = _("Elevation on which entire analysis is based");
+    input.ele = G_define_standard_option(G_OPT_R_ELEV);
 
     input.acc = G_define_standard_option(G_OPT_R_INPUT);
     input.acc->key = "accumulation";
-    input.acc->label = _("Accumulation map");
+    input.acc->label = _("Name of input accumulation raster map");
     input.acc->required = NO;
     input.acc->description =
-	_("Stream extraction will use provided accumulation instead of calculating it anew");
+	_("Stream extraction will use provided accumulation instead of calculating it a new");
+    input.acc->guisection = _("Input options");
 
     input.depression = G_define_standard_option(G_OPT_R_INPUT);
     input.depression->key = "depression";
-    input.depression->label = _("Map with real depressions");
+    input.depression->label = _("Name of raster map with real depressions");
     input.depression->required = NO;
     input.depression->description =
 	_("Streams will not be routed out of real depressions");
+    input.depression->guisection = _("Input options");
 
     input.threshold = G_define_option();
     input.threshold->key = "threshold";
@@ -143,21 +143,21 @@ int main(int argc, char *argv[])
     output.stream_rast = G_define_standard_option(G_OPT_R_OUTPUT);
     output.stream_rast->key = "stream_rast";
     output.stream_rast->description =
-	_("Output raster map with unique stream ids");
+	_("Name for output raster map with unique stream ids");
     output.stream_rast->required = NO;
     output.stream_rast->guisection = _("Output options");
 
     output.stream_vect = G_define_standard_option(G_OPT_V_OUTPUT);
     output.stream_vect->key = "stream_vect";
     output.stream_vect->description =
-	_("Output vector with unique stream ids");
+	_("Name for output vector map with unique stream ids");
     output.stream_vect->required = NO;
     output.stream_vect->guisection = _("Output options");
 
     output.dir_rast = G_define_standard_option(G_OPT_R_OUTPUT);
     output.dir_rast->key = "direction";
     output.dir_rast->description =
-	_("Output raster map with flow direction");
+	_("Name for output raster map with flow direction");
     output.dir_rast->required = NO;
     output.dir_rast->guisection = _("Output options");
 
