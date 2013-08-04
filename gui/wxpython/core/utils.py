@@ -1047,11 +1047,18 @@ def GetGEventAttribsForHandler(method, event):
 
 def GuiModuleMain(mainfn):
     """!Main function for g.gui.* modules
-
+    
+    Note: os.fork() is supported only on Unix platforms
+    
+    @todo: Replace os.fork() by multiprocessing (?)
+    
     @param module's main function
     """
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
+    if sys.platform != 'win32':
+        # launch GUI in the background
+        child_pid = os.fork()
+        if child_pid == 0:
+            mainfn()
+        os._exit(0)
+    else:
         mainfn()
-    os._exit(0)
