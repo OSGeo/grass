@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("classification"));
+    G_add_keyword(_("supervised classification"));
     G_add_keyword(_("segmentation"));
     G_add_keyword(_("SMAP"));
     module->description =
