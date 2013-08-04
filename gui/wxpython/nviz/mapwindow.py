@@ -71,12 +71,14 @@ class NvizThread(Thread):
 
 class GLWindow(MapWindow, glcanvas.GLCanvas):
     """!OpenGL canvas for Map Display Window"""
-    def __init__(self, parent, giface, id = wx.ID_ANY, frame = None,
-                 Map = None, tree = None, lmgr = None):
-        self.parent = parent # MapFrame
+    def __init__(self, parent, giface, frame, Map, tree, lmgr, id=wx.ID_ANY):
+        """All parameters except for id are mandatory. The todo is to remove
+        them completely."""
+        self.parent = parent
         self.tree = tree
         self.lmgr = lmgr
-        
+        self.frame = frame
+
         # for wxGTK we need to set WX_GL_DEPTH_SIZE to draw vectors correctly
         # but we don't know the right value
         # in wxpython 2.9, there is IsDisplaySupported

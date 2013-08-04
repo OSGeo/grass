@@ -719,9 +719,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         maplayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
         
         self.mapdisplay.toolbars['vdigit'].OnExit()
-        if self.lmgr:
-            self.lmgr.toolbars['tools'].Enable('vdigit', enable = True)
-        
+        # here was dead code to enable vdigit button in toolbar
+
         self._setGradient()
         self.RefreshLine(self.layer_selected)
         

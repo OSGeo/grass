@@ -886,7 +886,7 @@ class SbCoordinates(SbTextItem):
                 value = self._basicValue
             self.SetValue(value)
         except SbException, e:
-            self.SetValue(e)
+            self.SetValue(e.message)
         # TODO: remove these excepts, they just hide errors, solve problems differently
         except TypeError, e:
             self.SetValue("")
@@ -955,7 +955,7 @@ class SbRegionExtent(SbTextItem):
             regionReprojected = self.ReprojectRegionFromMap(region, projection, precision, format)
             self.SetValue(regionReprojected)
         except SbException, e:
-            self.SetValue(e)
+            self.SetValue(e.message)
         SbTextItem.Show(self)
     
     def _getRegion(self):
