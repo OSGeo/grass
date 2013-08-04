@@ -1383,8 +1383,9 @@ class CmdPanel(wx.Panel):
                         this_sizer = which_sizer
                     colorSize = 150
                     # For color selectors, this is a three-member array, holding the IDs of
-                    # the text control for multiple colors (or None),
-                    # the selector proper and either a "transparent" checkbox or None
+                    # the color picker,  the text control for multiple colors (or None),
+                    # and either a "transparent" checkbox or None
+                    p['wxId'] = [None] * 3
                     if p.get('multiple', False):
                         txt = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY)
                         this_sizer.Add(item = txt, proportion = 1,
@@ -1392,10 +1393,8 @@ class CmdPanel(wx.Panel):
                         txt.Bind(wx.EVT_TEXT, self.OnSetValue)
                         colorSize = 40
                         label_color = ''
-                        p['wxId'] = [txt.GetId(),]
+                        p['wxId'][1] = txt.GetId()
                         which_sizer.Add(this_sizer, flag = wx.EXPAND | wx.RIGHT, border = 5)
-                    else:
-                        p['wxId'] = [None,]
 
                     btn_colour = csel.ColourSelect(parent = which_panel, id = wx.ID_ANY,
                                                    label = label_color, colour = default_color,
@@ -1403,7 +1402,7 @@ class CmdPanel(wx.Panel):
                     this_sizer.Add(item = btn_colour, proportion = 0,
                                    flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
                     btn_colour.Bind(csel.EVT_COLOURSELECT,  self.OnColorChange)
-                    p['wxId'].append(btn_colour.GetId())
+                    p['wxId'][0] = btn_colour.GetId()
 
                     if p.get('element', '') == 'color_none':
                         none_check = wx.CheckBox(which_panel, wx.ID_ANY, _("Transparent"))
@@ -1415,9 +1414,8 @@ class CmdPanel(wx.Panel):
                                        flag = wx.ADJUST_MINSIZE | wx.LEFT | wx.RIGHT | wx.TOP, border = 5)
                         which_sizer.Add(this_sizer)
                         none_check.Bind(wx.EVT_CHECKBOX, self.OnColorChange)
-                        p['wxId'].append(none_check.GetId())
-                    else:
-                        p['wxId'].append(None)
+                        p['wxId'][2] = none_check.GetId()
+
 
                 # file selector
                 elif p.get('prompt','') !=  'color' and p.get('prompt', '') == 'file':
@@ -1951,14 +1949,14 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
         for p in self.task.params:
             if 'wxId' in p and myId in p['wxId']:
-                multiple = p['wxId'][0] is not None # multiple colors
+                multiple = p['wxId'][1] is not None # multiple colors
                 hasTansp = p['wxId'][2] is not None
                 if multiple:
                     # selected color is added at the end of textCtrl
-                    colorchooser = wx.FindWindowById(p['wxId'][1])
+                    colorchooser = wx.FindWindowById(p['wxId'][0])
                     new_color = colorchooser.GetValue()[:]
                     new_label = utils.rgb2str.get(new_color, ':'.join(map(str, new_color)))
-                    textCtrl = wx.FindWindowById(p['wxId'][0])
+                    textCtrl = wx.FindWindowById(p['wxId'][1])
                     val = textCtrl.GetValue()
                     sep = ','
                     if val and val[-1] != sep:
@@ -1969,7 +1967,7 @@ class CmdPanel(wx.Panel):
                 elif hasTansp and wx.FindWindowById(p['wxId'][2]).GetValue():
                     p[ 'value' ] = 'none'
                 else:
-                    colorchooser = wx.FindWindowById(p['wxId'][1])
+                    colorchooser = wx.FindWindowById(p['wxId'][0])
                     new_color = colorchooser.GetValue()[:]
                     # This is weird: new_color is a 4-tuple and new_color[:] is a 3-tuple
                     # under wx2.8.1
