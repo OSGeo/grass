@@ -43,11 +43,11 @@ if __name__ == '__main__':
         sys.path.append(gui_wx_path)
 
 from core.globalvar import CheckWxVersion
-from core.utils     import _, GuiModuleMain
-from mapdisp.frame  import MapFrame
-from core.giface    import StandaloneGrassInterface
-from core.settings  import UserSettings
-from vdigit.main    import haveVDigit, errorMsg
+from core.utils import _, GuiModuleMain
+from mapdisp.frame import MapFrame
+from core.giface import StandaloneGrassInterface
+from core.settings import UserSettings
+from vdigit.main import haveVDigit, errorMsg
 
 class VDigitMapFrame(MapFrame):
     def __init__(self, vectorMap):

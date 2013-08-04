@@ -36,9 +36,9 @@ wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
 if wxbase not in sys.path:
     sys.path.append(wxbase)
 
-from core.giface    import StandaloneGrassInterface
+from core.giface import StandaloneGrassInterface
 from core.globalvar import CheckWxVersion
-from core.utils     import _, GuiModuleMain
+from core.utils import _, GuiModuleMain
 from rlisetup.frame import RLiSetupFrame
 
 

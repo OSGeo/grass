@@ -59,11 +59,11 @@ if __name__ == '__main__':
     if wxbase not in sys.path:
         sys.path.append(wxbase)
 
-from core.settings  import UserSettings
+from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
-from core.giface    import StandaloneGrassInterface
-from core.utils     import _, GuiModuleMain
-from iclass.frame   import IClassMapFrame
+from core.giface import StandaloneGrassInterface
+from core.utils import _, GuiModuleMain
+from iclass.frame import IClassMapFrame
 
 def main():
     group_name = map_name = trainingmap_name = None
