@@ -2,13 +2,13 @@
 
 ############################################################################
 #
-# MODULE:       g.extension.rebuild.all
+# MODULE:       g.extension.all
 #
-# AUTHOR(S):   	Martin Landa <landa.martin gmail.com>
+# AUTHOR(S):    Martin Landa <landa.martin gmail.com>
 #
-# PURPOSE:      Rebuild locally installed GRASS Addons extensions 
+# PURPOSE:      Rebuilds or removes locally installed GRASS Addons extensions 
 #
-# COPYRIGHT:    (C) 2011 by Martin Landa, and the GRASS Development Team
+# COPYRIGHT:    (C) 2011-2013 by Martin Landa, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -17,15 +17,23 @@
 #############################################################################
 
 #%module
-#% label: Rebuilds all locally installed GRASS Addons extensions.
+#% label: Rebuilds or removes all locally installed GRASS Addons extensions.
 #% description: By default only extensions built against different GIS Library are rebuilt.
 #% keywords: general
 #% keywords: installation
 #% keywords: extensions
 #%end
+#%option
+#% key: operation
+#% type: string
+#% description: Operation to be performed
+#% required: no
+#% options: rebuild,remove
+#% answer: rebuild
+#%end
 #%flag
 #% key: f
-#% description: Force to rebuild all extensions
+#% label: Force operation (required for removal)
 #% end
 
 import os
@@ -68,22 +76,42 @@ def get_extensions():
     return ret
 
 def main():
-    if flags['f']:
+    remove = options['operation'] == 'remove'
+    if remove or flags['f']:
         extensions = grass.read_command('g.extension',
                                         quiet = True, flags = 'a').splitlines()
     else:
         extensions = get_extensions()
     
     if not extensions:
-        grass.info(_("Nothing to rebuild."))
+        if remove:
+            grass.info(_("No extension found. Nothing to remove."))
+        else:
+            grass.info(_("Nothing to rebuild. Rebuilding process can be forced with -f flag."))
+        return 0
+    
+    if remove and not flags['f']:
+        grass.message(_("List of extensions to be removed:"))
+        print os.linesep.join(extensions)
+        grass.message(_("You must use the force flag (-f) to actually remove them. Exiting."))
         return 0
     
     for ext in extensions:
         grass.message('-' * 60)
-        grass.message(_("Reinstalling extension <%s>...") % ext)
+        if remove:
+            grass.message(_("Removing extension <%s>...") % ext)
+        else:
+            grass.message(_("Reinstalling extension <%s>...") % ext)
         grass.message('-' * 60)
-        grass.run_command('g.extension',
-                          extension = ext)
+        if remove:
+            operation = 'remove'
+            operation_flags = 'f'
+        else:
+            operation = 'add'
+            operation_flags = ''
+        if 0 != grass.run_command('g.extension', flags = operation_flags,
+                                  extension = ext, operation = operation):
+            grass.error(_("Unable to process extension:%s") % ext)
     
     return 0
 
