@@ -26,7 +26,7 @@
 #% description: Imports GetFeature from a WFS server.
 #% keywords: vector
 #% keywords: import
-#% keywords: WFS
+#% keywords: OGC web services
 #%end
 #%option
 #% key: url
