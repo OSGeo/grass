@@ -47,8 +47,8 @@ if __name__ == '__main__':
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
+from core.utils import GuiModuleMain
 from gcp.manager import GCPWizard
-
 
 def main():
     """!Sets the GRASS display driver
@@ -60,9 +60,7 @@ def main():
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
     else:
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-
-    options, flags = grass.parser()
-
+    
     app = wx.PySimpleApp()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
@@ -71,10 +69,7 @@ def main():
 
     app.MainLoop()
 
-
 if __name__ == '__main__':
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
-        main()
-    os._exit(0)
+    options, flags = grass.parser()
+    
+    GuiModuleMain(main)

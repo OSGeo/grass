@@ -4,7 +4,7 @@
 # MODULE:    g.gui.vdigit
 # AUTHOR(S): Martin Landa <landa.martin gmail.com>
 # PURPOSE:   wxGUI Vector Digitizer
-# COPYRIGHT: (C) 2007-2012 by Martin Landa, and the GRASS Development Team
+# COPYRIGHT: (C) 2007-2013 by Martin Landa, and the GRASS Development Team
 #
 #  This program is free software; you can 1redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -43,11 +43,11 @@ if __name__ == '__main__':
         sys.path.append(gui_wx_path)
 
 from core.globalvar import CheckWxVersion
-from core.utils import _
-from mapdisp.frame import MapFrame
-from core.giface   import StandaloneGrassInterface
-from core.settings import UserSettings
-from vdigit.main   import haveVDigit, errorMsg
+from core.utils     import _, GuiModuleMain
+from mapdisp.frame  import MapFrame
+from core.giface    import StandaloneGrassInterface
+from core.settings  import UserSettings
+from vdigit.main    import haveVDigit, errorMsg
 
 class VDigitMapFrame(MapFrame):
     def __init__(self, vectorMap):
@@ -67,13 +67,6 @@ class VDigitMapFrame(MapFrame):
         self.toolbars['vdigit'].StartEditing(mapLayer)
 
 def main():
-    if not haveVDigit:
-        grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
-    
-    if not grass.find_file(name = options['map'], element = 'vector',
-                           mapset = grass.gisenv()['MAPSET'])['fullname']:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % options['map'])
-
     # allow immediate rendering
     driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
     if driver == 'png':
@@ -91,10 +84,14 @@ def main():
     
 if __name__ == "__main__":
     grass.set_raise_on_error(False)
+    
     options, flags = grass.parser()
     
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
-        main()
-    os._exit(0)
+    if not haveVDigit:
+        grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
+    
+    if not grass.find_file(name = options['map'], element = 'vector',
+                           mapset = grass.gisenv()['MAPSET'])['fullname']:
+        grass.fatal(_("Vector map <%s> not found in current mapset") % options['map'])
+    
+    GuiModuleMain(main)

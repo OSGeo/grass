@@ -3,7 +3,7 @@
 
 @brief Misc utilities for wxGUI
 
-(C) 2007-2009, 2011-2012 by the GRASS Development Team
+(C) 2007-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1044,3 +1044,14 @@ def GetGEventAttribsForHandler(method, event):
             missing_args.append(a)
 
     return kwargs, missing_args
+
+def GuiModuleMain(mainfn):
+    """!Main function for g.gui.* modules
+
+    @param module's main function
+    """
+    # launch GUI in the background
+    child_pid = os.fork()
+    if child_pid == 0:
+        mainfn()
+    os._exit(0)

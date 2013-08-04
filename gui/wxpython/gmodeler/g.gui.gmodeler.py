@@ -47,11 +47,10 @@ if gui_wx_path not in sys.path:
 
 from core.giface import StandaloneGrassInterface
 from core.globalvar import CheckWxVersion
-from core.utils import _
+from core.utils import _, GuiModuleMain
 from gmodeler.frame import ModelFrame
 
 def main():
-    
     app = wx.PySimpleApp()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
@@ -65,8 +64,4 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
-        main()
-    os._exit(0)
+    GuiModuleMain(main)

@@ -36,9 +36,9 @@ wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
 if wxbase not in sys.path:
     sys.path.append(wxbase)
 
-from core.giface import StandaloneGrassInterface
+from core.giface    import StandaloneGrassInterface
 from core.globalvar import CheckWxVersion
-from core.utils import _
+from core.utils     import _, GuiModuleMain
 from rlisetup.frame import RLiSetupFrame
 
 
@@ -53,9 +53,5 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
-        main()
-    os._exit(0)
+
+    GuiModuleMain(main)

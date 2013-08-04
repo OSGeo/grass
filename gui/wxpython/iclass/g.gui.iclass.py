@@ -62,7 +62,7 @@ if __name__ == '__main__':
 from core.settings  import UserSettings
 from core.globalvar import CheckWxVersion
 from core.giface    import StandaloneGrassInterface
-from core.utils import _
+from core.utils     import _, GuiModuleMain
 from iclass.frame   import IClassMapFrame
 
 def main():
@@ -116,8 +116,4 @@ if __name__ == '__main__':
     grass.set_raise_on_error(False)
     options, flags = grass.parser()
     
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
-        main()
-    os._exit(0)
+    GuiModuleMain(main)

@@ -4,7 +4,7 @@
 # MODULE:    g.gui.dbmgr
 # AUTHOR(S): Martin Landa <landa.martin gmail.com>
 # PURPOSE:   Attribute Table Manager
-# COPYRIGHT: (C) 2012 by Martin Landa, and the GRASS Development Team
+# COPYRIGHT: (C) 2012-2013 by Martin Landa, and the GRASS Development Team
 #
 #  This program is free software; you can 1redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -39,7 +39,7 @@ gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
 if gui_wx_path not in sys.path:
     sys.path.append(gui_wx_path)
 
-from core.utils import _
+from core.utils import _, GuiModuleMain
 from dbmgr.manager import AttributeManager
 
 def main():
@@ -61,8 +61,4 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
-        main()
-    os._exit(0)
+    GuiModuleMain(main)
