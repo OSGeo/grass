@@ -37,6 +37,7 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
     sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 
 from core               import globalvar
+import core.units as units
 from core.render        import Map
 from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar, NvizIcons
@@ -559,26 +560,7 @@ class MapFrame(SingleMapFrame):
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["hand"])
         self.MapWindow.SetFocus()
-    
-    # TODO: can be replaced/merged by ZoomToWind
-    def OnZoomRegion(self, event):
-        """!Zoom to region
-        """
-        self.Map.getRegion()
-        self.Map.getResolution()
-        self.UpdateMap()
-        # event.Skip()
 
-    # TODO: delete this here and in gcp
-    def OnAlignRegion(self, event):
-        """!Align region
-        """
-        if not self.Map.alignRegion:
-            self.Map.alignRegion = True
-        else:
-            self.Map.alignRegion = False
-        # event.Skip()        
-        
     def SaveToFile(self, event):
         """!Save map to image
         """
@@ -933,11 +915,12 @@ class MapFrame(SingleMapFrame):
         dist, (north, east) = self.MapWindow.Distance(beginpt, endpt)
         
         dist = round(dist, 3)
-        d, dunits = self.FormatDist(dist)
-        
+        d, dunits = units.formatDist(dist, self.Map.projinfo['units'])
+
         self.totaldist += dist
-        td, tdunits = self.FormatDist(self.totaldist)
-        
+        td, tdunits = units.formatDist(self.totaldist,
+                                       self.Map.projinfo['units'])
+
         strdist = str(d)
         strtotdist = str(td)
         
@@ -980,58 +963,6 @@ class MapFrame(SingleMapFrame):
         # Open raster select dialog to make sure that a raster (and
         # the desired raster) is selected to be profiled
         win.OnSelectRaster(None)
-
-    # TODO: move somewhere where can be reused (utils?), remove from gcp
-    def FormatDist(self, dist):
-        """!Format length numbers and units in a nice way,
-        as a function of length. From code by Hamish Bowman
-        Grass Development Team 2006"""
-        
-        mapunits = self.Map.projinfo['units']
-        if mapunits == 'metres':
-            mapunits = 'meters'
-        outunits = mapunits
-        dist = float(dist)
-        divisor = 1.0
-        
-        # figure out which units to use
-        if mapunits == 'meters':
-            if dist > 2500.0:
-                outunits = 'km'
-                divisor = 1000.0
-            else: outunits = 'm'
-        elif mapunits == 'feet':
-            # nano-bug: we match any "feet", but US Survey feet is really
-            #  5279.9894 per statute mile, or 10.6' per 1000 miles. As >1000
-            #  miles the tick markers are rounded to the nearest 10th of a
-            #  mile (528'), the difference in foot flavours is ignored.
-            if dist > 5280.0:
-                outunits = 'miles'
-                divisor = 5280.0
-            else:
-                outunits = 'ft'
-        elif 'degree' in mapunits and \
-                not haveCtypes:
-            if dist < 1:
-                outunits = 'min'
-                divisor = (1/60.0)
-            else:
-                outunits = 'deg'
-        else:
-            outunits = 'meters'
-        
-        # format numbers in a nice way
-        if (dist/divisor) >= 2500.0:
-            outdist = round(dist/divisor)
-        elif (dist/divisor) >= 1000.0:
-            outdist = round(dist/divisor,1)
-        elif (dist/divisor) > 0.0:
-            outdist = round(dist/divisor,int(math.ceil(3-math.log10(dist/divisor))))
-        else:
-            outdist = float(dist/divisor)
-        
-        return (outdist, outunits)
-    
 
     def OnHistogramPyPlot(self, event):
         """!Init PyPlot histogram display canvas and tools
