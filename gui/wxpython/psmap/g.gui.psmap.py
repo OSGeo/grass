@@ -44,13 +44,11 @@ if wxbase not in sys.path:
     sys.path.append(wxbase)
 
 from core.globalvar import CheckWxVersion
-from core.utils import _
+from core.utils     import _, GuiModuleMain
 from psmap.frame        import PsMapFrame
 from psmap.instructions import Instruction
 
 def main():
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
     app = wx.PySimpleApp()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
@@ -65,9 +63,4 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
-        main()
-    os._exit(0)
-
+    GuiModuleMain(main)

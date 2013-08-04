@@ -63,12 +63,10 @@ if __name__ == '__main__':
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
-from core.utils import _
+from core.utils import _, GuiModuleMain
 from animation.frame import AnimationFrame, MAX_COUNT
 
 def main():
-    options, flags = grass.parser()
-
     rast = options['rast']
     vect = options['vect']
     strds = options['strds']
@@ -114,8 +112,6 @@ def main():
     app.MainLoop()
 
 if __name__ == '__main__':
-    # launch GUI in the background
-    child_pid = os.fork()
-    if child_pid == 0:
-        main()
-    os._exit(0)
+    options, flags = grass.parser()
+    
+    GuiModuleMain(main)
