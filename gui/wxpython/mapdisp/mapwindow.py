@@ -112,6 +112,10 @@ class BufferedWindow(MapWindow, wx.Window):
         self.mouseLeftUpPointer = Signal('BufferedWindow.mouseLeftUpPointer')
         # Emitted when left mouse button is released
         self.mouseLeftUp = Signal('BufferedWindow.mouseLeftUp')
+        # Emitted when left mouse button was pressed
+        self.mouseLeftDown = Signal('BufferedWindow.mouseLeftDown')
+        # Emitted after double-click
+        self.mouseDClick = Signal('BufferedWindow.mouseDClick')
         # Emitted when mouse us moving (mouse motion event)
         # Parametres are x and y of the mouse position in map (cell) units
         self.mouseMoving = Signal('BufferedWindow.mouseMoving')
@@ -734,17 +738,6 @@ class BufferedWindow(MapWindow, wx.Window):
         
         if len(self.polycoords) > 0:
             self.DrawLines(self.pdcTmp)
-        
-        # 
-        # clear measurement
-        #
-        if self.mouse["use"] == "measure":
-            self.ClearLines(pdc = self.pdcTmp)
-            self.polycoords = []
-            self.mouse['use'] = 'pointer'
-            self.mouse['box'] = 'point'
-            self.mouse['end'] = [0, 0]
-            self.SetNamedCursor('default')
             
         stop = time.clock()
         
@@ -1121,8 +1114,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.mouse['begin'] = event.GetPositionTuple()[:]
         
-        if self.mouse["use"] in ["measure", "profile"]:
-            # measure or profile
+        if self.mouse["use"] in ["profile"]:
             if len(self.polycoords) == 0:
                 self.mouse['end'] = self.mouse['begin']
                 self.polycoords.append(self.Pixel2Cell(self.mouse['begin']))
@@ -1151,6 +1143,8 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.dragid = idlist[0] #drag whatever is on top
         else:
             pass
+        coords = self.Pixel2Cell(self.mouse['begin'])
+        self.mouseLeftDown.emit(x=coords[0], y=coords[1])
         
         event.Skip()
         
@@ -1183,11 +1177,7 @@ class BufferedWindow(MapWindow, wx.Window):
         elif self.mouse["use"] == "query":
             self.mapQueried.emit(x=self.mouse['end'][0], y=self.mouse['end'][1])
 
-        elif self.mouse["use"] in ["measure", "profile"]:
-            # measure or profile
-            if self.mouse["use"] == "measure":
-                self.frame.MeasureDist(self.mouse['begin'], self.mouse['end'])
-            
+        elif self.mouse["use"] in ["profile"]:            
             self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
             self.ClearLines(pdc = self.pdcTmp)
             self.DrawLines(pdc = self.pdcTmp)
@@ -1220,35 +1210,28 @@ class BufferedWindow(MapWindow, wx.Window):
         Debug.msg (5, "BufferedWindow.OnButtonDClick(): use=%s" % \
                    self.mouse["use"])
         
-        if self.mouse["use"] == "measure":
-            # measure
-            self.ClearLines(pdc=self.pdcTmp)
-            self.polycoords = []
-            self.mouse['use'] = 'pointer'
-            self.mouse['box'] = 'point'
-            self.mouse['end'] = [0, 0]
-            self.Refresh()
-            self.SetNamedCursor('default')
-        
-        elif self.mouse["use"] != "profile" or \
+        screenCoords = event.GetPosition()
+
+        if self.mouse["use"] != "profile" or \
                 (self.mouse['use'] != 'pointer' and \
                      hasattr(self, "digit")):
                # select overlay decoration options dialog
-            clickposition = event.GetPositionTuple()[:]
-            idlist  = self.pdc.FindObjects(clickposition[0], clickposition[1], self.hitradius)
-            if idlist == []:
-                return
-            self.dragid = idlist[0]
+            idlist  = self.pdc.FindObjects(screenCoords[0], screenCoords[1], self.hitradius)
+            if idlist:
+                self.dragid = idlist[0]
+    
+                # self.ovlcoords[self.dragid] = self.pdc.GetIdBounds(self.dragid)
+                if self.dragid > 100:
+                    self.currtxtid = self.dragid
+                    self.frame.OnAddText(None)
+                elif self.dragid == 0:
+                    self.frame.AddBarscale()
+                elif self.dragid == 1:
+                    self.frame.AddLegend()
+                
+        coords = self.Pixel2Cell(screenCoords)
+        self.mouseDClick.emit(x=coords[0], y=coords[1])
 
-            # self.ovlcoords[self.dragid] = self.pdc.GetIdBounds(self.dragid)
-            if self.dragid > 100:
-                self.currtxtid = self.dragid
-                self.frame.OnAddText(None)
-            elif self.dragid == 0:
-                self.frame.AddBarscale()
-            elif self.dragid == 1:
-                self.frame.AddLegend()
-        
     def OnRightDown(self, event):
         """!Right mouse button pressed
         """
@@ -1904,10 +1887,12 @@ class GraphicsSet:
                               size = self.properties["size"])
             
             elif self.graphicsType == "line":
-                if item.GetPropertyVal("pen"):
-                    self.parentMapWin.polypen = self.pens[item.GetPropertyVal("pen")]
+                if item.GetPropertyVal("penName"):
+                    self.parentMapWin.polypen = self.pens[item.GetPropertyVal("penName")]
                 else:
                     self.parentMapWin.polypen = self.pens["default"]
+                coords = item.GetCoords()
+                
                 self.drawFunc(pdc = pdc, 
                               polycoords = coords)
             itemOrderNum += 1
