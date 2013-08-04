@@ -119,10 +119,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.mouse = {
             'use': 'pointer'
             }
-        self.cursors = {
-            'default' : wx.StockCursor(wx.CURSOR_ARROW),
-            'cross'   : wx.StockCursor(wx.CURSOR_CROSS),
-            }
+
         # list of loaded map layers (layer tree items)
         self.layers  = list()
         # list of constant surfaces
@@ -723,7 +720,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             toggle = self.lmgr.nviz.FindWindowByName('here')
             toggle.SetValue(False)
             self.mouse['use'] = 'pointer'
-            self.SetCursor(self.cursors['default'])
+            self.SetNamedCursor('default')
                 
         if self.mouse['use'] == 'arrow':
             pos = event.GetPosition()
@@ -839,7 +836,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 self.lmgr.nviz.AddArrow()
             self.mouse['use'] = 'pointer'
-            self.SetCursor(self.cursors['default'])
+            self.SetNamedCursor('default')
             
 
         elif self.mouse['use'] == 'pointer':

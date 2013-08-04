@@ -72,7 +72,7 @@ class ScatterFrame(BasePlotFrame):
         create a list of cell value pairs. This is passed to
         plot to create a scatterplot.
         """
-        self.SetCursor(self.parent.cursors["default"])
+        self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
         self.SetGraphStyle()
         self.SetupScatterplot()
         p = self.CreatePlotList()

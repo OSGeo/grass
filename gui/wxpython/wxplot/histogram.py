@@ -74,7 +74,7 @@ class HistogramPlotFrame(BasePlotFrame):
         plot to create a line graph of the histogram.
         """
         try:
-            self.SetCursor(self.parent.cursors["default"])
+            self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
         except:
             pass
         

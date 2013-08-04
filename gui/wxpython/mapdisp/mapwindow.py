@@ -744,7 +744,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.mouse['use'] = 'pointer'
             self.mouse['box'] = 'point'
             self.mouse['end'] = [0, 0]
-            self.SetCursor(self.frame.cursors["default"])
+            self.SetNamedCursor('default')
             
         stop = time.clock()
         
@@ -1228,7 +1228,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.mouse['box'] = 'point'
             self.mouse['end'] = [0, 0]
             self.Refresh()
-            self.SetCursor(self.frame.cursors["default"])
+            self.SetNamedCursor('default')
         
         elif self.mouse["use"] != "profile" or \
                 (self.mouse['use'] != 'pointer' and \

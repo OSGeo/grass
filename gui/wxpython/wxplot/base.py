@@ -580,6 +580,6 @@ class BasePlotFrame(wx.Frame):
             pass
 
         if self.mapwin:
-            self.mapwin.SetCursor(self.Parent.cursors["default"])
+            self.mapwin.SetNamedCursor('default')
         self.Destroy()
         

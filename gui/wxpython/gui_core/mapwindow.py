@@ -145,7 +145,16 @@ class MapWindow(object):
             wx.EVT_MOUSEWHEEL : [],
             wx.EVT_MOUSE_EVENTS : []
             }
-        
+
+        # available cursors:
+        self._cursors = {
+            "default" : wx.StockCursor(wx.CURSOR_ARROW),
+            "cross"   : wx.StockCursor(wx.CURSOR_CROSS),
+            "hand"    : wx.StockCursor(wx.CURSOR_HAND),
+            "pencil"  : wx.StockCursor(wx.CURSOR_PENCIL),
+            "sizenwse": wx.StockCursor(wx.CURSOR_SIZENWSE)
+            }
+
         wx.CallAfter(self.InitBinding)
 
     def __del__(self):
@@ -230,8 +239,8 @@ class MapWindow(object):
         self.mouse['use'] = 'genericEvent'
         
         if cursor:
-            self._overriddenCursor = self.GetCursor()
-            self.SetCursor(cursor)
+            self._overriddenCursor = self.GetNamedCursor()
+            self.SetNamedCursor(cursor)
         
         return True
 
@@ -292,7 +301,7 @@ class MapWindow(object):
         
         # restore overridden cursor
         if self._overriddenCursor:
-            self.SetCursor(self._overriddenCursor)
+            self.SetNamedCursor(self._overriddenCursor)
 
         self.mouseHandlerUnregistered.emit()
         return True
@@ -325,3 +334,15 @@ class MapWindow(object):
         @see OnMotion
         """
         return self.lastEN
+
+    def SetNamedCursor(self, cursorName):
+        """!Sets cursor defined by name."""
+        cursor = self._cursors[cursorName]
+        self.SetCursor(cursor)
+        self._cursor = cursorName
+
+    def GetNamedCursor(self):
+        """!Returns current cursor name."""
+        return self._cursor
+
+    cursor = property(fget=GetNamedCursor, fset=SetNamedCursor)

@@ -639,8 +639,8 @@ class DecorationDialog(wx.Dialog):
         window = self._giface.GetMapWindow()
         if event.GetInt(): 
             self._oldMouseUse = window.mouse['use']
-            self._oldCursor = window.GetCursor()
-            window.SetCursor(self.parent.cursors["cross"])
+            self._oldCursor = window.GetNamedCursor()
+            window.SetNamedCursor('cross')
             window.mouse['use'] = None
             window.mouse['box'] = 'box'
             window.pen = wx.Pen(colour = 'Black', width = 2, style = wx.SHORT_DASH)
@@ -653,7 +653,7 @@ class DecorationDialog(wx.Dialog):
         """!Restore conditions before resizing"""
         window = self._giface.GetMapWindow()
         if self._oldCursor:
-            window.SetCursor(self._oldCursor)
+            window.SetNamedCursor(self._oldCursor)
         if self._oldMouseUse:
             window.mouse['use'] = self._oldMouseUse
 

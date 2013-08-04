@@ -252,8 +252,7 @@ class VDigitToolbar(BaseToolbar):
         """!Tool selected -> untoggles previusly selected tool in
         toolbar"""
         # set cursor
-        cursor = self.parent.cursors["cross"]
-        self.MapWindow.SetCursor(cursor)
+        self.MapWindow.SetNamedCursor('cross')
         
         # pointer
         self.parent.OnPointer(None)
@@ -808,7 +807,7 @@ class VDigitToolbar(BaseToolbar):
         
         # change cursor
         if self.MapWindow.mouse['use'] == 'pointer':
-            self.MapWindow.SetCursor(self.parent.cursors["cross"])
+            self.MapWindow.SetNamedCursor('cross')
         
         if not self.MapWindow.resize:
             self.MapWindow.UpdateMap(render = True)
@@ -866,7 +865,7 @@ class VDigitToolbar(BaseToolbar):
                     self.Map.ChangeLayerActive(self.mapLayer, True)
         
         # change cursor
-        self.MapWindow.SetCursor(self.parent.cursors["default"])
+        self.MapWindow.SetNamedCursor('default')
         self.MapWindow.pdcVector = None
         
         # close dialogs

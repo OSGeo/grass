@@ -126,8 +126,8 @@ class MapFrame(SingleMapFrame):
         self.Map = self.SrcMap
         self._setUpMapWindow(self.SrcMapWindow)
         self._setUpMapWindow(self.TgtMapWindow)
-        self.SrcMapWindow.SetCursor(self.cursors["cross"])
-        self.TgtMapWindow.SetCursor(self.cursors["cross"])
+        self.SrcMapWindow.SetNamedCursor('cross')
+        self.TgtMapWindow.SetNamedCursor('cross')
         # used to switch current map (combo box in toolbar)
         self.SrcMapWindow.mouseEntered.connect(
             lambda:
@@ -327,10 +327,10 @@ class MapFrame(SingleMapFrame):
         self.toolbars['gcpdisp'].action['desc'] = ''
         
         # change the cursor
-        self.SrcMapWindow.SetCursor(self.cursors["cross"])
+        self.SrcMapWindow.SetNamedCursor('cross')
         self.SrcMapWindow.mouse['use'] = "pointer"
         self.SrcMapWindow.mouse['box'] = "point"
-        self.TgtMapWindow.SetCursor(self.cursors["cross"])
+        self.TgtMapWindow.SetNamedCursor('cross')
         self.TgtMapWindow.mouse['use'] = "pointer"
         self.TgtMapWindow.mouse['box'] = "point"
 
@@ -348,7 +348,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         
         # change the cursor
-        self.MapWindow.SetCursor(self.cursors["cross"])
+        self.MapWindow.SetNamedCursor('cross')
 
         if self.MapWindow == self.SrcMapWindow:
             win = self.TgtMapWindow
@@ -361,7 +361,7 @@ class MapFrame(SingleMapFrame):
         win.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         
         # change the cursor
-        win.SetCursor(self.cursors["cross"])
+        win.SetNamedCursor('cross')
 
     def OnZoomOut(self, event):
         """
@@ -377,7 +377,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         
         # change the cursor
-        self.MapWindow.SetCursor(self.cursors["cross"])
+        self.MapWindow.SetNamedCursor('cross')
 
         if self.MapWindow == self.SrcMapWindow:
             win = self.TgtMapWindow
@@ -390,7 +390,7 @@ class MapFrame(SingleMapFrame):
         win.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         
         # change the cursor
-        win.SetCursor(self.cursors["cross"])
+        win.SetNamedCursor('cross')
 
     def OnPan(self, event):
         """
@@ -404,7 +404,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow.zoomtype = 0
         
         # change the cursor
-        self.MapWindow.SetCursor(self.cursors["hand"])
+        self.MapWindow.SetNamedCursor('hand')
 
         if self.MapWindow == self.SrcMapWindow:
             win = self.TgtMapWindow
@@ -416,7 +416,7 @@ class MapFrame(SingleMapFrame):
         win.zoomtype = 0
         
         # change the cursor
-        win.SetCursor(self.cursors["hand"])
+        win.SetNamedCursor('hand')
 
     def OnErase(self, event):
         """
