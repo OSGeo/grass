@@ -43,8 +43,8 @@ from core.gcmd         import RunCommand, GWarning, GError, GMessage
 class ProfileFrame(BasePlotFrame):
     """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
-    def __init__(self, parent, controller, size=wx.Size(700, 400),
-                 rasterList = [], **kwargs):
+    def __init__(self, parent, controller, units, size=wx.Size(700, 400),
+                 rasterList = None, **kwargs):
         BasePlotFrame.__init__(self, parent=parent, size=size, **kwargs)
 
         self.controller = controller
@@ -53,11 +53,15 @@ class ProfileFrame(BasePlotFrame):
         self.toolbar = ProfileToolbar(parent = self)
         self.SetToolBar(self.toolbar)
         self.SetTitle(_("GRASS Profile Analysis Tool"))
-        
+        self._units = units
+
         #
         # Init variables
         #
-        self.rasterList = rasterList
+        if rasterList is None:
+            self.rasterList = []
+        else:
+            self.rasterList = rasterList
         self.plottype = 'profile'
         self.coordstr = ''              # string of coordinates for r.profile
         self.seglist = []               # segment endpoint list
@@ -76,8 +80,10 @@ class ProfileFrame(BasePlotFrame):
             self.raster = {}
                 
         # determine units (axis labels)
-        if self.parent.Map.projinfo['units'] != '':
-            self.xlabel = _('Distance (%s)') % self.parent.Map.projinfo['units']
+        # maybe, we should not accept these invalid units
+        # but ok, trying to handle it here
+        if self._units is not None and self._units != '':
+            self.xlabel = _('Distance (%s)') % self._units
         else:
             self.xlabel = _("Distance along transect")
         self.ylabel = _("Cell values")

@@ -638,20 +638,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                           message = _("Unable to create profile of "
                                     "raster map."),
                           caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
-            return False
+            return
+        self.mapdisplay.Profile(rasters=[mapLayer.GetName()])
 
-        if not hasattr (self, "profileFrame"):
-            self.profileFrame = None
-
-        if hasattr (self.mapdisplay, "profile") and self.mapdisplay.profile:
-            self.profileFrame = self.mapdisplay.profile
-
-        if not self.profileFrame:
-            self.profileFrame = ProfileFrame(parent = self.mapdisplay, mapwindow = self.mapdisplay.GetMapWindow(),
-                                             rasterList = [mapLayer.GetName()])
-            # show new display
-            self.profileFrame.Show()
-        
     def OnRasterColorTable(self, event):
         """!Set color table for raster map"""
         name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
