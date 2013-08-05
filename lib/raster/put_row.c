@@ -63,7 +63,7 @@ static void put_raster_row(int, const void *, RASTER_MAP_TYPE, int);
  */
 void Rast_put_row(int fd, const void *buf, RASTER_MAP_TYPE data_type)
 {
-    put_raster_row(fd, buf, data_type, data_type);
+    put_raster_row(fd, buf, data_type, 0);
 }
 
 /*!
