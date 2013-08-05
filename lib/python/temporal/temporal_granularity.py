@@ -24,16 +24,16 @@ from abstract_dataset import *
 from datetime_math import *
 
 ###############################################################################
-        
+
 def check_granularity_string(granularity, temporal_type):
     """!Check if the granularity string is valid
-    
+
         @param granularity The granularity string
         @param temporal_type The temporal type of the granularity relative or absolute
         @return True if valid, False if invalid
-        
+
         @code
-        
+
         >>> check_granularity_string("1 year", "absolute")
         True
         >>> check_granularity_string("1 month", "absolute")
@@ -62,25 +62,30 @@ def check_granularity_string(granularity, temporal_type):
         False
         >>> check_granularity_string("bla second", "absolute")
         False
+        >>> check_granularity_string("bla", "absolute")
+        False
         >>> check_granularity_string(1, "relative")
         True
         >>> check_granularity_string("bla", "relative")
         False
-        
+
         @endcode
     """
     temporal_type
-    
+
     if granularity is None:
         return False
 
     if temporal_type == "absolute":
-        num, unit = granularity.split(" ")
-        if unit not in ["second", "seconds", "minute", "minutes", "hour", 
+        try:
+            num, unit = granularity.split(" ")
+        except:
+            return False
+        if unit not in ["second", "seconds", "minute", "minutes", "hour",
                         "hours", "day", "days", "week", "weeks", "month",
                         "months", "year", "years"]:
             return False
-            
+
         try:
             integer = int(num)
         except:
@@ -92,7 +97,7 @@ def check_granularity_string(granularity, temporal_type):
             return False
     else:
         return False
-        
+
     return True
 
 ###############################################################################
@@ -100,16 +105,16 @@ def check_granularity_string(granularity, temporal_type):
 def compute_relative_time_granularity(maps):
     """!Compute the relative time granularity
 
-        Attention: The computation of the granularity 
-        is only correct in case of not overlapping intervals. 
+        Attention: The computation of the granularity
+        is only correct in case of not overlapping intervals.
         Hence a correct temporal topology is required for computation.
 
         @param maps a ordered by start_time list of map objects
         @return An integer
-        
-        
+
+
         @code
-        
+
         >>> import grass.temporal as tgis
         >>> tgis.init()
         >>> maps = []
@@ -120,7 +125,7 @@ def compute_relative_time_granularity(maps):
         ...     maps.append(map)
         >>> tgis.compute_relative_time_granularity(maps)
         1
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((0,3), (3,6), (6,9))
@@ -132,7 +137,7 @@ def compute_relative_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_relative_time_granularity(maps)
         3
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((0,3), (4,6), (8,11))
@@ -144,7 +149,7 @@ def compute_relative_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_relative_time_granularity(maps)
         1
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((0,8), (2,6), (5,9))
@@ -156,7 +161,7 @@ def compute_relative_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_relative_time_granularity(maps)
         4
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((0,8), (8,12), (12,18))
@@ -168,7 +173,7 @@ def compute_relative_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_relative_time_granularity(maps)
         2
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((0,None), (8,None), (12,None), (24,None))
@@ -180,7 +185,7 @@ def compute_relative_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_relative_time_granularity(maps)
         4
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((0,None), (8,14), (18,None), (24,None))
@@ -192,7 +197,7 @@ def compute_relative_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_relative_time_granularity(maps)
         2
-        
+
         @endcode
     """
 
@@ -214,7 +219,7 @@ def compute_relative_time_granularity(maps):
             if relation == "after":
                 start1, end1 = maps[i].get_temporal_extent_as_tuple()
                 start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
-                # Gaps are between intervals, intervals and 
+                # Gaps are between intervals, intervals and
                 # points, points and points
                 if end1 and start2:
                     t = abs(end1 - start2)
@@ -241,16 +246,16 @@ def compute_relative_time_granularity(maps):
 def compute_absolute_time_granularity(maps):
     """!Compute the absolute time granularity
 
-        Attention: The computation of the granularity 
-        is only correct in case of not overlapping intervals. 
+        Attention: The computation of the granularity
+        is only correct in case of not overlapping intervals.
         Hence a correct temporal topology is required for computation.
-        
+
         The computed granularity is returned as number of seconds or minutes or hours
-        or days or months or years. 
+        or days or months or years.
 
         @param maps a ordered by start_time list of map objects
         @return The temporal topology as string "integer unit"
-        
+
         @code
 
         >>> import grass.temporal as tgis
@@ -268,7 +273,7 @@ def compute_absolute_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_absolute_time_granularity(maps)
         '1 month'
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((dt(2000,01,01),None), (dt(2000,01,02),None), (dt(2000,01,03),None))
@@ -280,7 +285,7 @@ def compute_absolute_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_absolute_time_granularity(maps)
         '1 day'
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((dt(2000,01,01),None), (dt(2000,01,02),None), (dt(2000,05,04,0,5,30),None))
@@ -292,7 +297,7 @@ def compute_absolute_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_absolute_time_granularity(maps)
         '30 seconds'
-        
+
         >>> maps = []
         >>> count = 0
         >>> timelist = ((dt(2000,01,01),dt(2000,05,02)), (dt(2000,05,04,2),None))
@@ -308,7 +313,7 @@ def compute_absolute_time_granularity(maps):
         >>> maps = []
         >>> count = 0
         >>> timelist = ((dt(2000,01,01),dt(2000,02,01)), (dt(2005,05,04,12),dt(2007,05,20,6)))
-        >>> for t in timelist:  
+        >>> for t in timelist:
         ...   map = tgis.RasterDataset("a%i@P"%count)
         ...   check = map.set_absolute_time(t[0],t[1])
         ...   if check:
@@ -316,7 +321,7 @@ def compute_absolute_time_granularity(maps):
         ...   count += 1
         >>> tgis.compute_absolute_time_granularity(maps)
         '6 hours'
-        
+
         @endcode
     """
 
@@ -350,7 +355,7 @@ def compute_absolute_time_granularity(maps):
             if relation == "after":
                 start1, end1 = maps[i].get_temporal_extent_as_tuple()
                 start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
-                # Gaps are between intervals, intervals and 
+                # Gaps are between intervals, intervals and
                 # points, points and points
                 if end1 and start2:
                     delta.append(end1 - start2)
@@ -507,7 +512,7 @@ def gcd_list(list):
     Returns: GCD of all numbers
     """
     return reduce(gcd, list)
-    
+
 ###############################################################################
 
 if __name__ == "__main__":
