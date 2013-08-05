@@ -3,7 +3,8 @@
 
 @brief GRASS Python scripting module (temporal GIS functions)
 
-Temporal GIS related functions to be used in temporal GIS Python library package.
+Temporal GIS related functions to be used in temporal GIS Python
+library package.
 
 (C) 2011-2012 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -715,8 +716,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            with "gap" map objects (id==None) for spatio-temporal topological
            operations that require the temporal extent only.
 
-           Each list entry is a list of map objects
-           which are potentially located in the actual granule.
+           Each list entry is a list of AbstractMapDatasets objects
+           which are potentially equal the actual granule, contain the
+           actual granule or are located in the actual granule.
+           Hence for each granule a list of AbstractMapDatasets can be
+           expected.
+
+           Maps that overlap the granule are ignored.
 
            The granularity of the space time dataset is used as increment in
            case the granule is not user defined.
@@ -746,12 +752,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                        unit and can not be changed.
            @param dbif The database interface to be used
 
-           @return ordered object list, or None in case nothing found
+           @return ordered list of map lists. Each list represents a single
+                   granule, or None in case nothing found
         """
 
         dbif, connected = init_dbif(dbif)
-
-        obj_list = []
 
         if gran is None:
             gran = self.get_granularity()
@@ -765,137 +770,194 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if start is None or end is None:
             return None
 
-        # Time instances and mixed time
-        is_irregular = False
+        maps = self.get_registered_maps_as_objects(dbif=dbif,
+                                                   order="start_time")
+
+        if not maps:
+            return None
 
         # We need to adjust the end time in case the the dataset has no
         # interval time, so we can catch time instances at the end
         if self.get_map_time() != "interval":
-            is_irregular = True
-
             if self.is_time_absolute():
                 end = increment_datetime_by_string(end, gran)
             else:
                 end = end + gran
 
+        l = AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,
+                                                                     start,
+                                                                     end,
+                                                                     gran)
+        if connected:
+            dbif.close()
+
+        return l
+
+    @staticmethod
+    def resample_maplist_by_granularity(maps, start, end, gran):
+        """!Resample a list of AbstractMapDatasets by a given granularity
+
+           The provided map list must be sorted by start time.
+           A valid temporal topology (no overlapping or inclusion allowed)
+           is needed to receive correct results.
+
+           Maps with interval time, time instances and mixed
+           time are supported.
+
+           The temporal topology search order is as follows:
+           1. Maps that are equal to the actual granule are used
+           2. If no euqal found then maps that contain the actual granule
+              are used
+           3. If no maps are found that contain the actual granule then maps
+              are used that overlaps the actual granule
+           4. If no overlaps maps found then overlapped maps are used
+           5. If no overlapped maps are found then maps are used that are
+              durin the actual granule
+
+           Each entry in the resulting list is a list of
+           AbstractMapDatasets objects.
+           Hence for each granule a list of AbstractMapDatasets can be
+           expected.
+
+           Gaps between maps are identified as unregistered maps with id==None.
+
+           @param maps An ordered list (by start time) of AbstractMapDatasets
+                   objects. All maps must have the same temporal type
+                   and the same unit in case of relative time.
+           @param start The start time of the provided map list
+           @param end   The end time of the provided map list
+           @param gran The granularity string to be used, if None the
+                   granularity of the space time dataset is used.
+                   Absolute time has the format "number unit", relative
+                   time has the format "number".
+                   The unit in case of absolute time can be one of "second,
+                   seconds, minute, minutes, hour, hours, day, days, week,
+                   weeks, month, months, year, years". The unit of the
+                   relative time granule is always the space time dataset
+                   unit and can not be changed.
+
+           @return ordered list of map lists. Each list represents a single
+               granule, or None in case nothing found
+
+           Usage:
+
+        @code
+
+        >>> import grass.temporal as tgis
+        >>> maps = []
+        >>> for i in xrange(3):
+        ...     map = tgis.RasterDataset("map%i@PERMANENT"%i)
+        ...     check = map.set_relative_time(i + 2, i + 3, "days")
+        ...     maps.append(map)
+        >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,0,8,1)
+        >>> for map_list in grans:
+        ...    print map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple()
+        None (0, 1)
+        None (1, 2)
+        map0@PERMANENT (2, 3)
+        map1@PERMANENT (3, 4)
+        map2@PERMANENT (4, 5)
+        None (5, 6)
+        None (6, 7)
+        None (7, 8)
+
+        >>> maps = []
+        >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+        >>> check = map1.set_relative_time(2, 6, "days")
+        >>> maps.append(map1)
+        >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+        >>> check = map2.set_relative_time(7, 13, "days")
+        >>> maps.append(map2)
+        >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,0,16,2)
+        >>> for map_list in grans:
+        ...    print map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple()
+        None (0, 2)
+        map1@PERMANENT (2, 4)
+        map1@PERMANENT (4, 6)
+        map2@PERMANENT (6, 8)
+        map2@PERMANENT (8, 10)
+        map2@PERMANENT (10, 12)
+        map2@PERMANENT (12, 14)
+        None (14, 16)
+
+        >>> maps = []
+        >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+        >>> check = map1.set_relative_time(2, None, "days")
+        >>> maps.append(map1)
+        >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+        >>> check = map2.set_relative_time(7, None, "days")
+        >>> maps.append(map2)
+        >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,0,16,2)
+        >>> for map_list in grans:
+        ...    print map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple()
+        None (0, 2)
+        map1@PERMANENT (2, 4)
+        None (4, 6)
+        map2@PERMANENT (6, 8)
+        None (8, 10)
+        None (10, 12)
+        None (12, 14)
+        None (14, 16)
+
+        @endcode
+        """
+
+        if not maps:
+            return None
+
+        first = maps[0]
+
+        # Build the gaplist
+        gap_list = []
         while start < end:
-            if self.is_time_absolute():
+            if first.is_time_absolute():
                 next = increment_datetime_by_string(start, gran)
             else:
                 next = start + gran
 
-            # First we search for intervals that are are equal the granule or
-            # contain it
-            where = create_temporal_relation_sql_where_statement(
-                    start=start, end=next, use_start=False, use_during=False,
-                    use_overlap=False, use_contain=True, use_equal=True,
-                    use_follows=False, use_precedes=False)
-            rows = self.get_registered_maps("id", where, "start_time", dbif)
-
-            found_gap = False
-
-            if rows is not None and len(rows) != 0:
-                if len(rows) > 1:
-                    core.warning(_("More than one map found in a granule. "
-                                   "Temporal granularity seems to be invalid "
-                                   "or the chosen granularity is not a "
-                                   "greatest common divider of all intervals "
-                                   "and gaps in the dataset."))
-
-                maplist = []
-                for row in rows:
-
-                    map = self.get_new_map_instance(row["id"])
-
-                    if self.is_time_absolute():
-                        map.set_absolute_time(start, next)
-                    elif self.is_time_relative():
-                        map.set_relative_time(start, next,
-                                              self.get_relative_time_unit())
-
-                    maplist.append(copy.copy(map))
-
-                obj_list.append(copy.copy(maplist))
+            map = first.get_new_instance(None)
+            if first.is_time_absolute():
+                map.set_absolute_time(start, next, None)
             else:
-                # We may found a gap or a gap after a time instance
-                found_gap = True
+                map.set_relative_time(start, next, first.get_relative_time_unit())
 
-                # Searching for time instances and intervals that are during
-                # the current granule or overlapping it
-                where = create_temporal_relation_sql_where_statement(
-                        start=start, end=next, use_start=True, use_during=True,
-                        use_overlap=True, use_contain=False, use_equal=False,
-                        use_follows=False, use_precedes=False)
-
-                rows = self.get_registered_maps("id,start_time,end_time",
-                                                where, "start_time", dbif)
-
-                if rows is not None and len(rows) != 0:
-                    # No gap if we found something in the granule with
-                    # intervaltime
-                    if len(rows) > 1:
-                        core.warning(_("More than one map found in a granule. "
-                                       "Temporal granularity seems to be "
-                                       "invalid or the chosen granularity is "
-                                       "not a greatest common divider of all "
-                                       "time instances in the dataset."))
-
-                    maplist = []
-                    count = 0
-                    for row in rows:
-                        if count == 0:
-                            if row["end_time"] is not None or row["start_time"] != start:
-                                found_gap = False
-                        count += 1
-
-                        map = self.get_new_map_instance(row["id"])
-
-                        if self.is_time_absolute():
-                            if row["end_time"] is not None or row["start_time"] != start:
-                                map.set_absolute_time(start, next)
-                            else:
-                                map.set_absolute_time(start, None)
-                        elif self.is_time_relative():
-                            if row["end_time"] is not None or row["start_time"] != start:
-                                map.set_relative_time(start, next,
-                                                 self.get_relative_time_unit())
-                            else:
-                                map.set_relative_time(start, None,
-                                                 self.get_relative_time_unit())
-
-                        maplist.append(copy.copy(map))
-
-                    obj_list.append(copy.copy(maplist))
-
-                # In case of irregular time (point, mixed) the last granule
-                # does not belong to the dataset and will be ignored
-                if is_irregular:
-                    if next == end:
-                        found_gap = False
-
-            # Gap handling
-            if found_gap:
-                # Append a map object with None as id to indicate a gap
-                map = self.get_new_map_instance(None)
-
-                if self.is_time_absolute():
-                    map.set_absolute_time(start, next)
-                elif self.is_time_relative():
-                    map.set_relative_time(start, next,
-                                          self.get_relative_time_unit())
-
-                maplist = []
-                maplist.append(copy.copy(map))
-
-                obj_list.append(copy.copy(maplist))
-
+            gap_list.append(copy.copy(map))
             start = next
 
-        if connected:
-            dbif.close()
+        tb = SpatioTemporalTopologyBuilder()
+        tb.build(gap_list, maps)
 
-        if obj_list:
-            return obj_list
+        relations_order = ["EQUAL", "DURING", "OVERLAPS", "OVERLAPPED", "CONTAINS"]
+
+        gran_list = []
+        for gap in gap_list:
+            # If not temporal relations then gap
+            if not gap.get_temporal_relations():
+                gran_list.append([gap,])
+            else:
+                relations = gap.get_temporal_relations()
+
+                map_list = []
+
+                for relation in relations_order:
+                    if relation in relations:
+                        map_list += relations[relation]
+                        break
+
+                if map_list:
+                    new_maps = []
+                    for map in map_list:
+                        new_map = map.get_new_instance(map.get_id())
+                        new_map.set_temporal_extent(gap.get_temporal_extent())
+                        new_map.set_spatial_extent(map.get_spatial_extent())
+                        new_maps.append(new_map)
+                    gran_list.append(new_maps)
+                else:
+                    gran_list.append([gap,])
+
+        if gran_list:
+            return gran_list
+
         return None
 
     def get_registered_maps_as_objects_with_gaps(self, where=None, dbif=None):
@@ -1464,6 +1526,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
            This method renames the space time dataset, the map register table
            and updates the entries in registered maps stds register.
+
+           Renaming does not work with Postgresql yet.
 
            @param ident The new identifier "name@mapset"
            @param dbif The database interface to be used

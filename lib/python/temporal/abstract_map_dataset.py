@@ -516,12 +516,12 @@ class AbstractMapDataset(AbstractDataset):
            >>> import datetime
            >>> import grass.temporal as tgis
            >>> map      = tgis.RasterDataset(None)
-           >>> temp_ext = tgis.RelativeTemporalExtent(start_time=1, end_time=2, unit="years")
+           >>> temp_ext = tgis.RasterRelativeTime(start_time=1, end_time=2, unit="years")
            >>> map.set_temporal_extent(temp_ext)
            >>> print map.get_temporal_extent_as_tuple()
            (1, 2)
            >>> map      = tgis.VectorDataset(None)
-           >>> temp_ext = tgis.AbsoluteTemporalExtent(start_time=datetime.datetime(2000, 1, 1),
+           >>> temp_ext = tgis.VectorAbsoluteTime(start_time=datetime.datetime(2000, 1, 1),
            ...                                        end_time=datetime.datetime(2001, 1, 1))
            >>> map.set_temporal_extent(temp_ext)
            >>> print map.get_temporal_extent_as_tuple()
@@ -530,14 +530,15 @@ class AbstractMapDataset(AbstractDataset):
            @endcode
         """
 
-        if issubclass(RelativeTemporalExtent, type(temporal_extent)):
+
+        if issubclass(type(temporal_extent), RelativeTemporalExtent):
             start = temporal_extent.get_start_time()
             end = temporal_extent.get_end_time()
             unit = temporal_extent.get_unit()
 
             self.set_relative_time(start, end, unit)
 
-        elif issubclass(AbsoluteTemporalExtent, type(temporal_extent)):
+        elif issubclass(type(temporal_extent), AbsoluteTemporalExtent):
             start = temporal_extent.get_start_time()
             end = temporal_extent.get_end_time()
             tz = temporal_extent.get_timezone()

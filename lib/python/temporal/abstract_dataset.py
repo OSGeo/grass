@@ -5,14 +5,6 @@
 
 Temporal GIS related functions to be used in temporal GIS Python library package.
 
-Usage:
-
-@code
-
->>> import grass.temporal as tgis
->>> ad = AbstractDataset()
-
-@endcode
 
 (C) 2011-2012 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -488,7 +480,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         else:
             return None
 
-    def _get_temporal_extent(self):
+    def get_temporal_extent(self):
         """!Return the temporal extent of the correct internal type
         """
         if self.is_time_absolute():
@@ -497,7 +489,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
             return self.relative_time
         return None
 
-    temporal_extent = property(fget=_get_temporal_extent)
+    temporal_extent = property(fget=get_temporal_extent)
 
     def temporal_relation(self, dataset):
         """!Return the temporal relation of self and the provided dataset
