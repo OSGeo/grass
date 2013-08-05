@@ -33,11 +33,11 @@ from base import *
 
 class RasterMetadataBase(SQLDatabaseInterface):
     """!This is the metadata base class for time stamped raster and raster3d maps
-    
+
         Usage:
-        
+
         @code
-        
+
         >>> init()
         >>> meta = RasterMetadataBase(table="metadata", ident="soil@PERMANENT",
         ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
@@ -76,11 +76,11 @@ class RasterMetadataBase(SQLDatabaseInterface):
         ewres=0.1
         min=0.0
         max=100.0
-        
+
         @endcode
     """
-    def __init__(self, table=None, ident=None, datatype=None, cols=None, 
-		rows=None, number_of_cells=None, nsres=None, ewres=None, 
+    def __init__(self, table=None, ident=None, datatype=None, cols=None,
+		rows=None, number_of_cells=None, nsres=None, ewres=None,
 		min=None, max=None):
 
         SQLDatabaseInterface.__init__(self, table, ident)
@@ -225,7 +225,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
             return self.D["max"]
         else:
             return None
-    
+
     # Properties
     datatype = property(fget=get_datatype, fset=set_datatype)
     cols = property(fget=get_cols, fset=set_cols)
@@ -235,7 +235,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
     ewres = property(fget=get_ewres, fset=set_ewres)
     min = property(fget=get_min, fset=set_min)
     max = property(fget=get_max, fset=set_max)
-    
+
     def print_info(self):
         """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
@@ -265,19 +265,19 @@ class RasterMetadataBase(SQLDatabaseInterface):
 
 class RasterMetadata(RasterMetadataBase):
     """!This is the raster metadata class
-       
+
         This class is the interface to the raster_metadata table in the
         temporal database that stores the metadata of all registered raster maps.
-        
+
         The metadata includes the datatype, number of cols, rows and cells and
-        the north-south and east west resolution of the map. Additionally the 
+        the north-south and east west resolution of the map. Additionally the
         minimum and maximum values and the name of the space time raster dataset
         register table is stored.
-       
+
         Usage:
-        
+
         @code
-       
+
         >>> init()
         >>> meta = RasterMetadata(ident="soil@PERMANENT",
         ... datatype="CELL", cols=100, rows=100, number_of_cells=10000, nsres=0.1,
@@ -320,15 +320,15 @@ class RasterMetadata(RasterMetadataBase):
         min=0.0
         max=100.0
         strds_register=None
-        
+
         @endcode
     """
-    def __init__(self, ident=None, strds_register=None, datatype=None, 
-		 cols=None, rows=None, number_of_cells=None, nsres=None, 
+    def __init__(self, ident=None, strds_register=None, datatype=None,
+		 cols=None, rows=None, number_of_cells=None, nsres=None,
 		 ewres=None, min=None, max=None):
 
         RasterMetadataBase.__init__(self, "raster_metadata", ident, datatype,
-                                      cols, rows, number_of_cells, nsres, 
+                                      cols, rows, number_of_cells, nsres,
                                       ewres, min, max)
 
         self.set_strds_register(strds_register)
@@ -344,7 +344,7 @@ class RasterMetadata(RasterMetadataBase):
             return self.D["strds_register"]
         else:
             return None
-        
+
     strds_register = property(fget=get_strds_register, fset=set_strds_register)
 
     def print_info(self):
@@ -365,19 +365,19 @@ class RasterMetadata(RasterMetadataBase):
 
 class Raster3DMetadata(RasterMetadataBase):
     """!This is the raster3d metadata class
-       
+
         This class is the interface to the raster3d_metadata table in the
-        temporal database that stores the metadata of all registered 
+        temporal database that stores the metadata of all registered
         3D raster maps.
-        
+
         The metadata includes all raster metadata variables and additional
         the number of depths, the top-bottom resolution and the space time 3D
         raster dataset register table is stored.
-       
+
         Usage:
-        
+
         @code
-       
+
         >>> init()
         >>> meta = Raster3DMetadata(ident="soil@PERMANENT",
         ... datatype="FCELL", cols=100, rows=100, depths=100,
@@ -429,15 +429,15 @@ class Raster3DMetadata(RasterMetadataBase):
         str3ds_register=None
         depths=100
         tbres=0.1
-        
+
         @endcode
     """
-    def __init__(self, ident=None, str3ds_register=None, datatype=None, 
-		 cols=None, rows=None, depths=None, number_of_cells=None, 
+    def __init__(self, ident=None, str3ds_register=None, datatype=None,
+		 cols=None, rows=None, depths=None, number_of_cells=None,
 		 nsres=None, ewres=None, tbres=None, min=None, max=None):
 
-        RasterMetadataBase.__init__(self, "raster3d_metadata", ident, 
-				datatype, cols, rows, number_of_cells, nsres, 
+        RasterMetadataBase.__init__(self, "raster3d_metadata", ident,
+				datatype, cols, rows, number_of_cells, nsres,
 				ewres, min, max)
 
         self.set_str3ds_register(str3ds_register)
@@ -489,7 +489,7 @@ class Raster3DMetadata(RasterMetadataBase):
     depths = property(fget=get_depths, fset=set_depths)
     tbres = property(fget=get_tbres, fset=set_tbres)
     str3ds_register = property(fget=get_str3ds_register, fset=set_str3ds_register)
-    
+
     def print_info(self):
         """!Print information about this class in human readable style"""
         print " +-------------------- Metadata information ----------------------------------+"
@@ -513,19 +513,19 @@ class Raster3DMetadata(RasterMetadataBase):
 
 class VectorMetadata(SQLDatabaseInterface):
     """!This is the vector metadata class
-        
+
         This class is the interface to the vector_metadata table in the
-        temporal database that stores the metadata of all registered 
+        temporal database that stores the metadata of all registered
         vector maps.
-        
+
         Usage:
-        
+
         @code
-       
+
         >>> init()
-        >>> meta = VectorMetadata(ident="lidar@PERMANENT", is_3d=True, 
+        >>> meta = VectorMetadata(ident="lidar@PERMANENT", is_3d=True,
         ... number_of_points=1, number_of_lines=2, number_of_boundaries=3,
-        ... number_of_centroids=4, number_of_faces=5, number_of_kernels=6, 
+        ... number_of_centroids=4, number_of_faces=5, number_of_kernels=6,
         ... number_of_primitives=7, number_of_nodes=8, number_of_areas=9,
         ... number_of_islands=10, number_of_holes=11, number_of_volumes=12)
         >>> meta.id
@@ -587,13 +587,13 @@ class VectorMetadata(SQLDatabaseInterface):
         islands=10
         holes=11
         volumes=12
-        
+
         @endcode
     """
     def __init__(
-        self, ident=None, stvds_register=None, is_3d=False, 
+        self, ident=None, stvds_register=None, is_3d=False,
         number_of_points=None, number_of_lines=None, number_of_boundaries=None,
-        number_of_centroids=None, number_of_faces=None, number_of_kernels=None, 
+        number_of_centroids=None, number_of_faces=None, number_of_kernels=None,
         number_of_primitives=None, number_of_nodes=None, number_of_areas=None,
         number_of_islands=None, number_of_holes=None, number_of_volumes=None):
 
@@ -694,7 +694,7 @@ class VectorMetadata(SQLDatabaseInterface):
             return None
 
     def get_3d_info(self):
-        """!Return True if the map is three dimensional, 
+        """!Return True if the map is three dimensional,
            False if not and None if not info was found"""
         if "is_3d" in self.D:
             return self.D["is_3d"]
@@ -796,37 +796,37 @@ class VectorMetadata(SQLDatabaseInterface):
             return self.D["volumes"]
         else:
             return None
-    
+
     # Set the properties
     id  = property(fget=get_id, fset=set_id)
-    stvds_register  = property(fget=get_stvds_register, 
+    stvds_register  = property(fget=get_stvds_register,
                                fset=set_stvds_register)
     is_3d  = property(fget=get_3d_info, fset=set_3d_info)
-    number_of_points = property(fget=get_number_of_points, 
+    number_of_points = property(fget=get_number_of_points,
                                 fset=set_number_of_points)
-    number_of_lines = property(fget=get_number_of_lines, 
+    number_of_lines = property(fget=get_number_of_lines,
                                fset=set_number_of_lines)
-    number_of_boundaries = property(fget=get_number_of_boundaries, 
+    number_of_boundaries = property(fget=get_number_of_boundaries,
                                     fset=set_number_of_boundaries)
-    number_of_centroids = property(fget=get_number_of_centroids, 
+    number_of_centroids = property(fget=get_number_of_centroids,
                                    fset=set_number_of_centroids)
-    number_of_faces = property(fget=get_number_of_faces, 
+    number_of_faces = property(fget=get_number_of_faces,
                                fset=set_number_of_faces)
-    number_of_kernels = property(fget=get_number_of_kernels, 
+    number_of_kernels = property(fget=get_number_of_kernels,
                                  fset=set_number_of_kernels)
-    number_of_primitives = property(fget=get_number_of_primitives, 
+    number_of_primitives = property(fget=get_number_of_primitives,
                                     fset=set_number_of_primitives)
-    number_of_nodes = property(fget=get_number_of_nodes, 
+    number_of_nodes = property(fget=get_number_of_nodes,
                                fset=set_number_of_nodes)
-    number_of_areas = property(fget=get_number_of_areas, 
+    number_of_areas = property(fget=get_number_of_areas,
                                fset=set_number_of_areas)
-    number_of_islands = property(fget=get_number_of_islands, 
+    number_of_islands = property(fget=get_number_of_islands,
                                  fset=set_number_of_islands)
-    number_of_holes = property(fget=get_number_of_holes, 
+    number_of_holes = property(fget=get_number_of_holes,
                                fset=set_number_of_holes)
-    number_of_volumes = property(fget=get_number_of_volumes, 
+    number_of_volumes = property(fget=get_number_of_volumes,
                                  fset=set_number_of_volumes)
-        
+
     def print_info(self):
         """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
@@ -868,14 +868,14 @@ class VectorMetadata(SQLDatabaseInterface):
 
 
 class STDSMetadataBase(SQLDatabaseInterface):
-    """!This is the space time dataset metadata base class for 
+    """!This is the space time dataset metadata base class for
        strds, stvds and str3ds datasets
        setting/getting the id, the title and the description
-       
+
         Usage:
-        
+
         @code
-        
+
         >>> init()
         >>> meta = STDSMetadataBase(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
@@ -888,14 +888,15 @@ class STDSMetadataBase(SQLDatabaseInterface):
         >>> meta.number_of_maps
         >>> meta.print_info()
          | Number of registered maps:.. None
+         |
          | Title:
          | Soils
          | Description:
          | Soils 1950 - 2010
-         | Commands of creation:
+         | Command history:
         >>> meta.print_shell_info()
         number_of_maps=None
-        
+
         @endcode
     """
     def __init__(self, table=None, ident=None, title=None, description=None, command=None):
@@ -925,7 +926,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
     def set_command(self, command):
         """!Set the number of cols"""
         self.D["command"] = command
-        
+
     def get_id(self):
         """!Convenient method to get the unique identifier (primary key)
            @return None if not found
@@ -958,9 +959,9 @@ class STDSMetadataBase(SQLDatabaseInterface):
             return self.D["command"]
         else:
             return None
-            
+
     def get_number_of_maps(self):
-        """!Get the number of registered maps, 
+        """!Get the number of registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -968,12 +969,12 @@ class STDSMetadataBase(SQLDatabaseInterface):
             return self.D["number_of_maps"]
         else:
             return None
-        
+
     id  = property(fget=get_id, fset=set_id)
     title  = property(fget=get_title, fset=set_title)
     description  = property(fget=get_description, fset=set_description)
     number_of_maps  = property(fget=get_number_of_maps)
-    
+
     def print_info(self):
         """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
@@ -991,7 +992,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
                 print " | " + str(token)
 
     def print_history(self):
-        """!Print history information about this class in human readable 
+        """!Print history information about this class in human readable
             shell style
         """
         #      0123456789012345678901234567890
@@ -1001,7 +1002,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
         print "# " + str(self.get_description())
         print "# Command history:"
         command = self.get_command()
-        
+
         if command:
             tokens = command.split("\n")
             print_list = []
@@ -1009,7 +1010,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
                 token = str(token).rstrip().lstrip()
                 if len(token) > 1:
                     print_list.append(token)
-                
+
             count = 0
             for token in print_list:
                 count += 1
@@ -1019,8 +1020,8 @@ class STDSMetadataBase(SQLDatabaseInterface):
                     elif count < len(print_list):
                         print token + " \\"
                     else:
-                        print token 
-                        
+                        print token
+
     def print_shell_info(self):
         """!Print information about this class in shell style"""
         print "number_of_maps=" + str(self.get_number_of_maps())
@@ -1029,16 +1030,16 @@ class STDSMetadataBase(SQLDatabaseInterface):
 
 
 class STDSRasterMetadataBase(STDSMetadataBase):
-    """!This is the space time dataset metadata base 
+    """!This is the space time dataset metadata base
         class for strds and str3ds datasets
 
         Most of the metadata values are set by SQL scripts in the database when
-        new maps are added. Therefor only some set- an many 
+        new maps are added. Therefor only some set- an many
         get-functions are available.
-        
-       
+
+
         Usage:
-        
+
         @code
         >>> init()
         >>> meta = STDSRasterMetadataBase(ident="soils@PERMANENT",
@@ -1059,12 +1060,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         >>> meta.ewres_min
         >>> meta.ewres_max
         >>> meta.print_info()
-         | Number of registered maps:.. None
-         | Title:
-         | Soils
-         | Description:
-         | Soils 1950 - 2010
-         | Commands of creation:
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1073,6 +1068,13 @@ class STDSRasterMetadataBase(STDSMetadataBase):
          | Minimum value max:.......... None
          | Maximum value min:.......... None
          | Maximum value max:.......... None
+         | Number of registered maps:.. None
+         |
+         | Title:
+         | Soils
+         | Description:
+         | Soils 1950 - 2010
+         | Command history:
         >>> meta.print_shell_info()
         number_of_maps=None
         nsres_min=None
@@ -1083,7 +1085,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         min_max=None
         max_min=None
         max_max=None
-        
+
         @endcode
     """
     def __init__(self, table=None, ident=None, title=None, description=None):
@@ -1101,7 +1103,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         self.D["ewres_max"] = None
 
     def get_max_min(self):
-        """!Get the minimal maximum of all registered maps, 
+        """!Get the minimal maximum of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1111,7 +1113,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return None
 
     def get_min_min(self):
-        """!Get the minimal minimum of all registered maps, 
+        """!Get the minimal minimum of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1121,7 +1123,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return None
 
     def get_max_max(self):
-        """!Get the maximal maximum of all registered maps, 
+        """!Get the maximal maximum of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1131,7 +1133,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return None
 
     def get_min_max(self):
-        """!Get the maximal minimum of all registered maps, 
+        """!Get the maximal minimum of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1141,7 +1143,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return None
 
     def get_nsres_min(self):
-        """!Get the minimal north-south resolution of all registered maps, 
+        """!Get the minimal north-south resolution of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1151,7 +1153,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return None
 
     def get_nsres_max(self):
-        """!Get the maximal north-south resolution of all registered maps, 
+        """!Get the maximal north-south resolution of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1161,7 +1163,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return None
 
     def get_ewres_min(self):
-        """!Get the minimal east-west resolution of all registered maps, 
+        """!Get the minimal east-west resolution of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1171,7 +1173,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return None
 
     def get_ewres_max(self):
-        """!Get the maximal east-west resolution of all registered maps, 
+        """!Get the maximal east-west resolution of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1179,7 +1181,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return self.D["ewres_max"]
         else:
             return None
-    
+
     nsres_min = property(fget=get_nsres_min)
     nsres_max = property(fget=get_nsres_max)
     ewres_min = property(fget=get_ewres_min)
@@ -1188,7 +1190,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     min_max = property(fget=get_min_max)
     max_min = property(fget=get_max_min)
     max_max = property(fget=get_max_max)
-    
+
     def print_info(self):
         """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
@@ -1219,19 +1221,19 @@ class STDSRasterMetadataBase(STDSMetadataBase):
 
 class STRDSMetadata(STDSRasterMetadataBase):
     """!This is the raster metadata class
-        
+
         This class is the interface to the strds_metadata table in the
-        temporal database that stores the metadata of all registered 
+        temporal database that stores the metadata of all registered
         space time raster datasets
-        
+
         Most of the metadata values are set by SQL scripts in the database when
-        new raster maps are added. Therefor only some set- an many 
+        new raster maps are added. Therefor only some set- an many
         get-functions are available.
-        
+
         Usage:
-        
+
         @code
-        
+
         >>> init()
         >>> meta = STRDSMetadata(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
@@ -1253,12 +1255,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
         >>> meta.raster_register
         >>> meta.print_info()
          +-------------------- Metadata information ----------------------------------+
-         | Number of registered maps:.. None
-         | Title:
-         | Soils
-         | Description:
-         | Soils 1950 - 2010
-         | Commands of creation:
+         | Raster register table:...... None
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1267,7 +1264,13 @@ class STRDSMetadata(STDSRasterMetadataBase):
          | Minimum value max:.......... None
          | Maximum value min:.......... None
          | Maximum value max:.......... None
-         | Raster register table:...... None
+         | Number of registered maps:.. None
+         |
+         | Title:
+         | Soils
+         | Description:
+         | Soils 1950 - 2010
+         | Command history:
         >>> meta.print_shell_info()
         number_of_maps=None
         nsres_min=None
@@ -1279,7 +1282,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
         max_min=None
         max_max=None
         raster_register=None
-        
+
         @endcode
     """
     def __init__(self, ident=None, raster_register=None, title=None, description=None):
@@ -1300,8 +1303,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
             return self.D["raster_register"]
         else:
             return None
-    
-    raster_register = property(fget=get_raster_register, 
+
+    raster_register = property(fget=get_raster_register,
                                fset=set_raster_register)
 
     def print_info(self):
@@ -1322,19 +1325,19 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
 class STR3DSMetadata(STDSRasterMetadataBase):
     """!This is the space time 3D raster metadata class
-    
+
         This class is the interface to the str3ds_metadata table in the
-        temporal database that stores the metadata of all registered 
+        temporal database that stores the metadata of all registered
         space time 3D raster datasets
-        
+
         Most of the metadata values are set by SQL scripts in the database when
-        new 3D raster maps are added. Therefor only some set- an many 
+        new 3D raster maps are added. Therefor only some set- an many
         get-functions are available.
-        
+
         Usage:
-        
+
         @code
-        
+
         >>> init()
         >>> meta = STR3DSMetadata(ident="soils@PERMANENT",
         ... title="Soils", description="Soils 1950 - 2010")
@@ -1358,12 +1361,9 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         >>> meta.raster3d_register
         >>> meta.print_info()
          +-------------------- Metadata information ----------------------------------+
-         | Number of registered maps:.. None
-         | Title:
-         | Soils
-         | Description:
-         | Soils 1950 - 2010
-         | Commands of creation:
+         | 3D raster register table:... None
+         | Top-bottom resolution min:.. None
+         | Top-bottom resolution max:.. None
          | North-South resolution min:. None
          | North-South resolution max:. None
          | East-west resolution min:... None
@@ -1372,9 +1372,13 @@ class STR3DSMetadata(STDSRasterMetadataBase):
          | Minimum value max:.......... None
          | Maximum value min:.......... None
          | Maximum value max:.......... None
-         | Top-bottom resolution min:.. None
-         | Top-bottom resolution max:.. None
-         | 3D raster register table:... None
+         | Number of registered maps:.. None
+         |
+         | Title:
+         | Soils
+         | Description:
+         | Soils 1950 - 2010
+         | Command history:
         >>> meta.print_shell_info()
         number_of_maps=None
         nsres_min=None
@@ -1388,7 +1392,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         tbres_min=None
         tbres_max=None
         raster3d_register=None
-        
+
         @endcode
         """
     def __init__(self, ident=None, raster3d_register=None, title=None, description=None):
@@ -1423,7 +1427,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
             return None
 
     def get_tbres_max(self):
-        """!Get the maximal top-bottom resolution of all registered maps, 
+        """!Get the maximal top-bottom resolution of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1432,11 +1436,11 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         else:
             return None
 
-    raster3d_register = property(fget=get_raster3d_register, 
+    raster3d_register = property(fget=get_raster3d_register,
                                fset=set_raster3d_register)
     tbres_min = property(fget=get_tbres_min)
     tbres_max = property(fget=get_tbres_max)
-    
+
     def print_info(self):
         """!Print information about this class in human readable style"""
         print " +-------------------- Metadata information ----------------------------------+"
@@ -1459,19 +1463,19 @@ class STR3DSMetadata(STDSRasterMetadataBase):
 
 class STVDSMetadata(STDSMetadataBase):
     """!This is the space time vector dataset metadata class
-        
+
        This class is the interface to the stvds_metadata table in the
-       temporal database that stores the metadata of all registered 
+       temporal database that stores the metadata of all registered
        space time vector datasets
-        
+
        Most of the metadata values are set by SQL scripts in the database when
        new vector maps are added. Therefor only some set- an many get-functions
        are available.
-        
+
         Usage:
-        
+
         @code
-        
+
         >>> init()
         >>> meta = STVDSMetadata(ident="lidars@PERMANENT",
         ... title="LIDARS", description="LIDARS 2008 - 2010")
@@ -1496,12 +1500,6 @@ class STVDSMetadata(STDSMetadataBase):
         >>> meta.number_of_volumes
         >>> meta.print_info()
          +-------------------- Metadata information ----------------------------------+
-         | Number of registered maps:.. None
-         | Title:
-         | LIDARS
-         | Description:
-         | LIDARS 2008 - 2010
-         | Commands of creation:
          | Vector register table:...... None
          | Number of points ........... None
          | Number of lines ............ None
@@ -1515,6 +1513,13 @@ class STVDSMetadata(STDSMetadataBase):
          | Number of islands .......... None
          | Number of holes ............ None
          | Number of volumes .......... None
+         | Number of registered maps:.. None
+         |
+         | Title:
+         | LIDARS
+         | Description:
+         | LIDARS 2008 - 2010
+         | Command history:
         >>> meta.print_shell_info()
         number_of_maps=None
         vector_register=None
@@ -1530,7 +1535,7 @@ class STVDSMetadata(STDSMetadataBase):
         islands=None
         holes=None
         volumes=None
-        
+
         @endcode
     """
     def __init__(
@@ -1552,7 +1557,7 @@ class STVDSMetadata(STDSMetadataBase):
         self.D["islands"] = None
         self.D["holes"] = None
         self.D["volumes"] = None
-        
+
     def set_vector_register(self, vector_register):
         """!Set the vector map register table name"""
         self.D["vector_register"] = vector_register
@@ -1566,7 +1571,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_points(self):
-        """!Get the number of points of all registered maps, 
+        """!Get the number of points of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1576,7 +1581,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_lines(self):
-        """!Get the number of lines of all registered maps, 
+        """!Get the number of lines of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1586,7 +1591,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_boundaries(self):
-        """!Get the number of boundaries of all registered maps, 
+        """!Get the number of boundaries of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1596,7 +1601,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_centroids(self):
-        """!Get the number of centroids of all registered maps, 
+        """!Get the number of centroids of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1606,7 +1611,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_faces(self):
-        """!Get the number of faces of all registered maps, 
+        """!Get the number of faces of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1616,7 +1621,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_kernels(self):
-        """!Get the number of kernels of all registered maps, 
+        """!Get the number of kernels of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1626,7 +1631,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_primitives(self):
-        """!Get the number of primitives of all registered maps, 
+        """!Get the number of primitives of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1636,7 +1641,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_nodes(self):
-        """!Get the number of nodes of all registered maps, 
+        """!Get the number of nodes of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1646,7 +1651,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_areas(self):
-        """!Get the number of areas of all registered maps, 
+        """!Get the number of areas of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1656,7 +1661,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_islands(self):
-        """!Get the number of islands of all registered maps, 
+        """!Get the number of islands of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1666,7 +1671,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_holes(self):
-        """!Get the number of holes of all registered maps, 
+        """!Get the number of holes of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1676,7 +1681,7 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     def get_number_of_volumes(self):
-        """!Get the number of volumes of all registered maps, 
+        """!Get the number of volumes of all registered maps,
            this value is set in the database
            automatically via SQL, so no setter exists
            @return None if not found"""
@@ -1684,7 +1689,7 @@ class STVDSMetadata(STDSMetadataBase):
             return self.D["volumes"]
         else:
             return None
-    
+
     # Set the properties
     vector_register  = property(fget=get_vector_register,
                                 fset=set_vector_register)
