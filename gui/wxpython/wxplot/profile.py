@@ -43,11 +43,13 @@ from core.gcmd         import RunCommand, GWarning, GError, GMessage
 class ProfileFrame(BasePlotFrame):
     """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
-    def __init__(self, parent, mapwindow, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
-                 size = wx.Size(700, 400),
+    def __init__(self, parent, controller, size=wx.Size(700, 400),
                  rasterList = [], **kwargs):
-        BasePlotFrame.__init__(self, parent, mapwindow = mapwindow, size = size, **kwargs)
+        BasePlotFrame.__init__(self, parent=parent, size=size, **kwargs)
 
+        self.controller = controller
+        self.controller.transectChanged.connect(self.SetTransect)
+        self.transect = []
         self.toolbar = ProfileToolbar(parent = self)
         self.SetToolBar(self.toolbar)
         self.SetTitle(_("GRASS Profile Analysis Tool"))
@@ -79,29 +81,31 @@ class ProfileFrame(BasePlotFrame):
         else:
             self.xlabel = _("Distance along transect")
         self.ylabel = _("Cell values")
+
+        # Bind events
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         
     def _initOpts(self):
         """!Initialize plot options
         """
         self.InitPlotOpts('profile')
 
+    def SetTransect(self, coords):
+        self.transect = coords
+        if coords:
+            self.OnCreateProfile(None)
+        else:
+            self.OnErase(None)
+
     def OnDrawTransect(self, event):
         """!Draws transect to profile in map display
         """
-        self.parent.SwitchTool(self.parent.toolbars['map'], event)
-        self.mapwin.polycoords = []
-        self.seglist = []
-        self.mapwin.ClearLines(self.mapwin.pdc)
-        self.ppoints = ''
+        if self.controller.IsActive():
+            self.controller.Stop()
+        self.controller.Start()
 
         self.parent.SetFocus()
         self.parent.Raise()
-        
-        self.mapwin.mouse['use'] = 'profile'
-        self.mapwin.mouse['box'] = 'line'
-        self.mapwin.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
-        self.mapwin.polypen = wx.Pen(colour = 'dark green', width = 2, style = wx.SHORT_DASH)
-        self.mapwin.SetNamedCursor('cross')
 
     def OnSelectRaster(self, event):
         """!Select raster map(s) to profile
@@ -113,7 +117,7 @@ class ProfileFrame(BasePlotFrame):
             self.raster = self.InitRasterOpts(self.rasterList, self.plottype)
             
             # plot profile
-            if len(self.mapwin.polycoords) > 0 and len(self.rasterList) > 0:
+            if len(self.transect) > 0 and len(self.rasterList) > 0:
                 self.OnCreateProfile(event = None)
 
         dlg.Destroy()
@@ -130,8 +134,8 @@ class ProfileFrame(BasePlotFrame):
         
         region = grass.region()
         insideRegion = True
-        if len(self.mapwin.polycoords) > 0:
-            for point in self.mapwin.polycoords:
+        if len(self.transect) > 0:
+            for point in self.transect:
                 if not (region['w'] <= point[0] <= region['e'] and region['s'] <= point[1] <= region['n']):
                     insideRegion = False
                 # build string of coordinate points for r.profile
@@ -151,9 +155,9 @@ class ProfileFrame(BasePlotFrame):
         self.ptitle = _('Profile of')
         
         # create list of coordinates for transect segment markers
-        if len(self.mapwin.polycoords) > 0:
+        if len(self.transect) > 0:
             self.seglist = []
-            for point in self.mapwin.polycoords:
+            for point in self.transect:
                 # get value of raster cell at coordinate point
                 ret = RunCommand('r.what',
                                  parent = self,
@@ -257,7 +261,7 @@ class ProfileFrame(BasePlotFrame):
         points. Profile transect is drawn, using methods in mapdisp.py
         """
             
-        if len(self.mapwin.polycoords) == 0 or len(self.rasterList) == 0:
+        if len(self.transect) == 0 or len(self.rasterList) == 0:
             dlg = wx.MessageDialog(parent = self,
                                    message = _('You must draw a transect to profile in the map display window.'),
                                    caption = _('Nothing to profile'),
@@ -266,17 +270,11 @@ class ProfileFrame(BasePlotFrame):
             dlg.Destroy()
             return
 
-        self.mapwin.SetNamedCursor('default')
         self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
-        self.SetGraphStyle()
+
         self.SetupProfile()
         p = self.CreatePlotList()
         self.DrawPlot(p)
-
-        # reset transect
-        self.mapwin.mouse['begin'] = self.mapwin.mouse['end'] = (0.0,0.0)
-        self.mapwin.mouse['use'] = 'pointer'
-        self.mapwin.mouse['box'] = 'point'
 
     def CreatePlotList(self):
         """!Create a plot data list from transect datalist and
@@ -405,6 +403,10 @@ class ProfileFrame(BasePlotFrame):
         if stats.Show() == wx.ID_CLOSE:
             stats.Destroy()       
 
+    def OnCloseWindow(self, event):
+        if self.controller.IsActive():
+            self.controller.Stop()
+        self.Destroy()
     
 class ProfileToolbar(BaseToolbar):
     """!Toolbar for profiling raster map

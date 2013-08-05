@@ -1111,19 +1111,11 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         Debug.msg (5, "BufferedWindow.OnLeftDown(): use=%s" % \
                    self.mouse["use"])
-        
+
         self.mouse['begin'] = event.GetPositionTuple()[:]
-        
-        if self.mouse["use"] in ["profile"]:
-            if len(self.polycoords) == 0:
-                self.mouse['end'] = self.mouse['begin']
-                self.polycoords.append(self.Pixel2Cell(self.mouse['begin']))
-                self.ClearLines(pdc=self.pdcTmp)
-            else:
-                self.mouse['begin'] = self.mouse['end']
-        
+
         # vector digizer
-        elif self.mouse["use"] == "pointer" and \
+        if self.mouse["use"] == "pointer" and \
                 hasattr(self, "digit"):
             if event.ControlDown():
                 self.OnLeftDownUndo(event)
@@ -1177,11 +1169,6 @@ class BufferedWindow(MapWindow, wx.Window):
         elif self.mouse["use"] == "query":
             self.mapQueried.emit(x=self.mouse['end'][0], y=self.mouse['end'][1])
 
-        elif self.mouse["use"] in ["profile"]:            
-            self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
-            self.ClearLines(pdc = self.pdcTmp)
-            self.DrawLines(pdc = self.pdcTmp)
-
         elif self.mouse["use"] == "pointer" and \
                 hasattr(self, "digit"):
             self._onLeftUp(event)
@@ -1212,9 +1199,8 @@ class BufferedWindow(MapWindow, wx.Window):
         
         screenCoords = event.GetPosition()
 
-        if self.mouse["use"] != "profile" or \
-                (self.mouse['use'] != 'pointer' and \
-                     hasattr(self, "digit")):
+        if self.mouse['use'] != 'pointer' and \
+                     hasattr(self, "digit"):
                # select overlay decoration options dialog
             idlist  = self.pdc.FindObjects(screenCoords[0], screenCoords[1], self.hitradius)
             if idlist:

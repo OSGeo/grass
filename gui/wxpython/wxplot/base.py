@@ -47,13 +47,12 @@ PlotIcons = {
 
 class BasePlotFrame(wx.Frame):
     """!Abstract PyPlot display frame class"""
-    def __init__(self, parent = None, mapwindow = None, id = wx.ID_ANY, size = wx.Size(700, 400),
-                 style = wx.DEFAULT_FRAME_STYLE, rasterList = [],  **kwargs):
+    def __init__(self, parent=None, size=wx.Size(700, 400),
+                 style=wx.DEFAULT_FRAME_STYLE, rasterList=[],  **kwargs):
 
-        wx.Frame.__init__(self, parent, id, size = size, style = style, **kwargs)
+        wx.Frame.__init__(self, parent, id=wx.ID_ANY, size = size, style = style, **kwargs)
         
         self.parent = parent # MapFrame for a plot type
-        self.mapwin = mapwindow
         self.Map    = Map()             # instance of render.Map to be associated with display
         self.rasterList = rasterList    #list of rasters to plot
         self.raster = {}    # dictionary of raster maps and their plotting parameters
@@ -100,11 +99,6 @@ class BasePlotFrame(wx.Frame):
         self.xlabel = ""        # default X-axis label
         self.ylabel = ""        # default Y-axis label
 
-        #
-        # Bind various events
-        #
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-        
         self.CentreOnScreen()
         
         self._createColorDict()
@@ -431,10 +425,6 @@ class BasePlotFrame(wx.Frame):
         """!Erase the plot window
         """
         self.client.Clear()
-        self.mapwin.ClearLines(self.mapwin.pdc)
-        self.mapwin.ClearLines(self.mapwin.pdcTmp)
-        self.mapwin.polycoords = []
-        self.mapwin.Refresh()
 
     def SaveToFile(self, event):
         """!Save plot to graphics file
@@ -535,7 +525,8 @@ class BasePlotFrame(wx.Frame):
         btnval = dlg.ShowModal()
 
         if btnval == wx.ID_SAVE or btnval == wx.ID_OK or btnval == wx.ID_CANCEL:
-            dlg.Destroy()            
+            dlg.Destroy() 
+        self.Update()
 
     def PrintMenu(self, event):
         """!Print options and output menu
@@ -564,22 +555,4 @@ class BasePlotFrame(wx.Frame):
         self.client.Printout()
 
     def OnQuit(self, event):
-        self.Close(True)
-
-    def OnCloseWindow(self, event):
-        """!Close plot window and clean up
-        """
-        try:
-            self.mapwin.ClearLines()
-            self.mapwin.mouse['begin'] = self.mapwin.mouse['end'] = (0.0, 0.0)
-            self.mapwin.mouse['use'] = 'pointer'
-            self.mapwin.mouse['box'] = 'point'
-            self.mapwin.polycoords = []
-            self.mapwin.UpdateMap(render = False, renderVector = False)
-        except:
-            pass
-
-        if self.mapwin:
-            self.mapwin.SetNamedCursor('default')
-        self.Destroy()
-        
+        self.Close(True)        
