@@ -138,7 +138,6 @@ class BufferedWindow(MapWindow, wx.Window):
         self.imagedict = {}   
         self.select = {}      # selecting/unselecting decorations for dragging
         self.textdict = {}    # text, font, and color indexed by id
-        self.currtxtid = None # PseudoDC id for currently selected text
         
         # zoom objects
         self.zoomhistory  = [] # list of past zoom extents
@@ -1184,7 +1183,6 @@ class BufferedWindow(MapWindow, wx.Window):
             else:
                 pass
             self.dragid = None
-            self.currtxtid = None
 
             self.mouseLeftUpPointer.emit(x=coordinates[0], y=coordinates[1])
 
@@ -1199,21 +1197,12 @@ class BufferedWindow(MapWindow, wx.Window):
         
         screenCoords = event.GetPosition()
 
-        if self.mouse['use'] != 'pointer' and \
-                     hasattr(self, "digit"):
-               # select overlay decoration options dialog
+        if self.mouse['use'] == 'pointer':
+            # select overlay decoration options dialog
             idlist  = self.pdc.FindObjects(screenCoords[0], screenCoords[1], self.hitradius)
             if idlist:
                 self.dragid = idlist[0]
-    
-                # self.ovlcoords[self.dragid] = self.pdc.GetIdBounds(self.dragid)
-                if self.dragid > 100:
-                    self.currtxtid = self.dragid
-                    self.frame.OnAddText(None)
-                elif self.dragid == 0:
-                    self.frame.AddBarscale()
-                elif self.dragid == 1:
-                    self.frame.AddLegend()
+                self.overlayActivated.emit(overlayId=self.dragid)
                 
         coords = self.Pixel2Cell(screenCoords)
         self.mouseDClick.emit(x=coords[0], y=coords[1])
