@@ -614,9 +614,7 @@ class DecorationDialog(wx.Dialog):
         if found:
             # enable 'OK' and 'Resize' button
             self.btnOK.Enable()
-            if not self.parent.IsPaneShown('3d'):
-                self.resizeBtn.Enable()
-            
+
             # set title
             self.SetTitle(_('Legend of raster map <%s>') % \
                               mapName)
@@ -705,7 +703,11 @@ class DecorationDialog(wx.Dialog):
             if self._ddstyle == DECOR_DIALOG_LEGEND and not self.parent.IsPaneShown('3d'):
                 self.resizeBtn.Enable()
 
-
+    def Show(self, show=True):
+        if show:
+            self.resizeBtn.Enable(not self.parent.IsPaneShown('3d'))
+        wx.Dialog.Show(self, show)
+        
 class TextLayerDialog(wx.Dialog):
     """
     Controls setting options and displaying/hiding map overlay decorations

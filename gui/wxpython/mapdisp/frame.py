@@ -365,6 +365,8 @@ class MapFrame(SingleMapFrame):
             for page in ('view', 'light', 'fringe', 'constant', 'cplane', 'animation'):
                 self._layerManager.nviz.UpdatePage(page)
                 
+        self._giface.updateMap.disconnect(self.MapWindow2D.UpdateMap)
+        self._giface.updateMap.connect(self.MapWindow3D.UpdateMap)
         self.MapWindow3D.overlays = self.MapWindow2D.overlays
         self.MapWindow3D.textdict = self.MapWindow2D.textdict
         # update overlays needs to be called after because getClientSize
@@ -403,6 +405,9 @@ class MapFrame(SingleMapFrame):
             self.MapWindow2D.textdict = self.MapWindow3D.textdict
         except AttributeError:
             pass
+        self._giface.updateMap.disconnect(self.MapWindow3D.UpdateMap)
+        self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
+
         self.MapWindow.UpdateMap()
         self._mgr.Update()
         
