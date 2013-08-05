@@ -869,17 +869,20 @@ class MapFrame(SingleMapFrame):
     def OnProfile(self, event):
         """!Launch profile tool
         """
-        self.profileController = ProfileController(self._giface, mapWindow=self.GetMapWindow())
         rasters = []
         layers = self._giface.GetLayerList().GetSelectedLayers()
         for layer in layers:
             if layer.type == 'raster':
                 rasters.append(layer.maplayer.name)
+        self.Profile(rasters=rasters)
 
+    def Profile(self, rasters=None):
+        """!Launch profile tool"""
+        self.profileController = ProfileController(self._giface,
+                                                   mapWindow=self.GetMapWindow())
         win = ProfileFrame(parent=self, rasterList=rasters,
+                           units=self.Map.projinfo['units'],
                            controller=self.profileController)
-        
-        win.CentreOnParent()
         win.Show()
         # Open raster select dialog to make sure that a raster (and
         # the desired raster) is selected to be profiled
