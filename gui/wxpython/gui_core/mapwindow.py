@@ -148,14 +148,20 @@ class MapWindow(object):
             wx.EVT_MOUSE_EVENTS : []
             }
 
-        # available cursors:
+        # available cursors
         self._cursors = {
-            "default" : wx.StockCursor(wx.CURSOR_ARROW),
-            "cross"   : wx.StockCursor(wx.CURSOR_CROSS),
-            "hand"    : wx.StockCursor(wx.CURSOR_HAND),
-            "pencil"  : wx.StockCursor(wx.CURSOR_PENCIL),
+            "default": wx.StockCursor(wx.CURSOR_ARROW),
+            "cross": wx.StockCursor(wx.CURSOR_CROSS),
+            "hand": wx.StockCursor(wx.CURSOR_HAND),
+            "pencil": wx.StockCursor(wx.CURSOR_PENCIL),
             "sizenwse": wx.StockCursor(wx.CURSOR_SIZENWSE)
             }
+
+        # default cursor for window is arrow (at least we rely on it here)
+        # but we need to define attribute here
+        # cannot call SetNamedCursor since it expects the instance
+        # to be a wx window, so setting only the attribute
+        self._cursor = 'default'
 
         wx.CallAfter(self.InitBinding)
 
