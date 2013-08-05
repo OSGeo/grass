@@ -159,6 +159,7 @@ class MapFrame(SingleMapFrame):
                                           properties=self.mapWindowProperties,
                                           overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
+        self.MapWindow2D.overlayActivated.connect(self._activateOverlay)
         self._setUpMapWindow(self.MapWindow2D)
         # manage the state of toolbars connected to mouse cursor
         self.MapWindow2D.mouseHandlerRegistered.connect(
@@ -247,7 +248,8 @@ class MapFrame(SingleMapFrame):
                                                 id = wx.ID_ANY, frame = self,
                                                 Map = self.Map, tree = self.tree,
                                                 properties=self.mapWindowProperties,
-                                                lmgr = self._layerManager)
+                                                lmgr = self._layerManager,
+                                                overlays=self.decorations)
             self._setUpMapWindow(self.MapWindowVDigit)
             self.MapWindowVDigit.digitizingInfo.connect(
                 lambda text:
@@ -346,6 +348,7 @@ class MapFrame(SingleMapFrame):
             self.MapWindow3D.Show()
             self.MapWindow3D.ResetViewHistory()            
             self.MapWindow3D.UpdateView(None)
+            self.MapWindow3D.overlayActivated.connect(self._activateOverlay)
         else:
             self.MapWindow = self.MapWindow3D
             os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True, windres3 = True)
@@ -921,7 +924,19 @@ class MapFrame(SingleMapFrame):
         win.Show()
         win.Refresh()
         win.Update()
-       
+
+    def _activateOverlay(self, overlayId):
+        """!Launch decoratio dialog according to overlay id.
+
+        @param overlayId id of overlay        
+        """
+        if overlayId > 100:
+            self.OnAddText(None)
+        elif overlayId == 0:
+            self.AddBarscale()
+        elif overlayId == 1:
+            self.AddLegend()
+
     def AddBarscale(self, cmd = None, showDialog = True):
         """!Handler for scale/arrow map decoration menu selection.
         """

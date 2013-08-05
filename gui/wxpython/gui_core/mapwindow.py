@@ -109,9 +109,11 @@ class MapWindow(object):
         self._giface = giface
 
         # Emitted when someone registers as mouse event handler
-        self.mouseHandlerRegistered = Signal('BufferedWindow.mouseHandlerRegistered')
+        self.mouseHandlerRegistered = Signal('MapWindow.mouseHandlerRegistered')
         # Emitted when mouse event handler is unregistered
-        self.mouseHandlerUnregistered = Signal('BufferedWindow.mouseHandlerUnregistered')        
+        self.mouseHandlerUnregistered = Signal('MapWindow.mouseHandlerUnregistered')
+        # emitted after double click in pointer mode on legend, text, scalebar
+        self.overlayActivated = Signal('MapWindow.overlayActivated')
 
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing

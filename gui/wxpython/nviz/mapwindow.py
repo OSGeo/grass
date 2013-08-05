@@ -889,13 +889,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if self.mouse['use'] != 'pointer': return
         pos = event.GetPositionTuple()
         self.dragid = self.FindObjects(pos[0], pos[1], self.hitradius)
-        
-        if self.dragid == 1:
-            self.parent.AddLegend()
-        elif self.dragid > 100:
-            self.parent.OnAddText(None)
-        else:
-            return
+        self.overlayActivated.emit(overlayId=self.dragid)
     
     def FocusPanning(self, event):
         """!Simulation of panning using focus"""
