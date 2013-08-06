@@ -116,12 +116,12 @@ class MapFrame(SingleMapFrame):
         self.grwiz.SwitchEnv('source')
         self.SrcMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
                                            properties=self.mapWindowProperties,
-                                           Map=self.SrcMap, frame=self)
+                                           Map=self.SrcMap)
 
         self.grwiz.SwitchEnv('target')
         self.TgtMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
                                            properties=self.mapWindowProperties,
-                                          Map=self.TgtMap, frame=self)
+                                          Map=self.TgtMap)
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap
         self._setUpMapWindow(self.SrcMapWindow)

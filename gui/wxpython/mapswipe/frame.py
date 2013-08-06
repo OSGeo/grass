@@ -66,10 +66,10 @@ class SwipeMapFrame(DoubleMapFrame):
         self.mapWindowProperties.autoRenderChanged.connect(self.OnAutoRenderChanged)
         self.firstMapWindow = SwipeBufferedWindow(parent = self.splitter, giface = self._giface,
                                                   properties=self.mapWindowProperties,
-                                                  Map = self.firstMap, frame = self)
+                                                  Map = self.firstMap)
         self.secondMapWindow = SwipeBufferedWindow(parent = self.splitter, giface = self._giface,
                                                    properties=self.mapWindowProperties,
-                                                   Map = self.secondMap, frame = self)
+                                                   Map = self.secondMap)
         self.MapWindow = self.firstMapWindow # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
         self.SetBindRegions(True)

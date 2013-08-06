@@ -154,8 +154,8 @@ class MapFrame(SingleMapFrame):
         #
         # Init map display (buffered DC & set default cursor)
         #
-        self.MapWindow2D = BufferedWindow(self, giface = self._giface, id = wx.ID_ANY,
-                                          Map=self.Map, frame=self,
+        self.MapWindow2D = BufferedWindow(self, giface = self._giface,
+                                          Map=self.Map,
                                           properties=self.mapWindowProperties,
                                           overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
@@ -244,11 +244,10 @@ class MapFrame(SingleMapFrame):
         
         if not self.MapWindowVDigit:
             from vdigit.mapwindow import VDigitWindow
-            self.MapWindowVDigit = VDigitWindow(parent = self, giface = self._giface,
-                                                id = wx.ID_ANY, frame = self,
-                                                Map = self.Map, tree = self.tree,
+            self.MapWindowVDigit = VDigitWindow(parent=self, giface=self._giface,
                                                 properties=self.mapWindowProperties,
-                                                lmgr = self._layerManager,
+                                                Map=self.Map, tree=self.tree,
+                                                lmgr=self._layerManager,
                                                 overlays=self.decorations)
             self._setUpMapWindow(self.MapWindowVDigit)
             self.MapWindowVDigit.digitizingInfo.connect(

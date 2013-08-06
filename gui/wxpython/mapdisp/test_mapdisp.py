@@ -175,7 +175,7 @@ class Tester(object):
         width, height = self.frame.GetClientSize()
         copyOfInitMap(map_, width, height)
         window = BufferedWindow(parent=panel, giface=giface, Map=map_,
-                                properties=mapWindowProperties, frame=self.frame)
+                                properties=mapWindowProperties)
         sizer.Add(item=window, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         panel.SetSizer(sizer)
         panel.Layout()
@@ -205,7 +205,7 @@ class Tester(object):
         width, height = self.frame.GetClientSize()
         copyOfInitMap(map_, width, height)
         window = BufferedWindow(parent=panel, giface=giface, Map=map_,
-                                properties=mapWindowProperties, frame=self.frame)
+                                properties=mapWindowProperties)
 
         giface.mapWindow = window
 
@@ -235,7 +235,7 @@ class Tester(object):
         width, height = self.frame.GetClientSize()
         copyOfInitMap(map_, width, height)
         window = BufferedWindow(parent=panel, giface=giface, Map=map_,
-                                properties=mapWindowProperties, frame=self.frame)
+                                properties=mapWindowProperties)
 
         giface.mapWindow = window
 
@@ -266,7 +266,7 @@ class Tester(object):
         width, height = self.frame.GetClientSize()
         copyOfInitMap(map_, width, height)
         window = BufferedWindow(parent=panel, giface=giface, Map=map_,
-                                properties=mapWindowProperties, frame=self.frame)
+                                properties=mapWindowProperties)
 
         giface.mapWindow = window
 
