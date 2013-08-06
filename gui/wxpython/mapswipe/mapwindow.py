@@ -21,7 +21,7 @@ import wx
 
 from core.debug import Debug
 from core.utils import _
-from mapdisp.mapwindow import BufferedWindow
+from mapwin.buffered import BufferedMapWindow
 
 
 EVT_MY_MOUSE_EVENTS = wx.NewEventType()
@@ -30,15 +30,15 @@ EVT_MOUSE_EVENTS = wx.PyEventBinder(EVT_MY_MOUSE_EVENTS)
 EVT_MOTION = wx.PyEventBinder(EVT_MY_MOTION)
 
 
-class SwipeBufferedWindow(BufferedWindow):
+class SwipeBufferedWindow(BufferedMapWindow):
     """!A subclass of BufferedWindow class. 
 
     Enables to draw the image translated.
     Special mouse events with changed coordinates are used.
     """
     def __init__(self, parent, giface, Map, properties, **kwargs):
-        BufferedWindow.__init__(self, parent=parent, giface=giface, Map=Map, 
-                                properties=properties, **kwargs)
+        BufferedMapWindow.__init__(self, parent=parent, giface=giface, Map=Map,
+                                   properties=properties, **kwargs)
         Debug.msg(2, "SwipeBufferedWindow.__init__()")
 
         self.specialSize = super(SwipeBufferedWindow, self).GetClientSize()

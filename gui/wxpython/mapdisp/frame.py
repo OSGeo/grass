@@ -43,20 +43,21 @@ from mapdisp.gprint     import PrintOptions
 from core.gcmd          import GError, GMessage
 from dbmgr.dialogs      import DisplayAttributesDialog
 from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd, _
-from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDialog, TextLayerDialog, \
-                               DECOR_DIALOG_LEGEND, DECOR_DIALOG_BARSCALE
+from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug         import Debug
 from core.settings      import UserSettings
 from gui_core.mapdisp   import SingleMapFrame
-from gui_core.mapwindow import MapWindowProperties
+from mapwin.base import MapWindowProperties
 from gui_core.query     import QueryDialog, PrepareQueryResults
-from mapdisp.mapwindow  import BufferedWindow
-from mapdisp.overlays   import LegendController, BarscaleController
+from mapwin.buffered import BufferedMapWindow
+from mapwin.decorations import DecorationDialog, TextLayerDialog, \
+    LegendController, BarscaleController, \
+    DECOR_DIALOG_LEGEND, DECOR_DIALOG_BARSCALE
 from modules.histogram  import HistogramFrame
 from wxplot.histogram   import HistogramPlotFrame
 from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
-from mapdisp.analysis import ProfileController, MeasureDistanceController
+from mapwin.analysis import ProfileController, MeasureDistanceController
 
 from mapdisp import statusbar as sb
 
@@ -71,7 +72,7 @@ class MapFrame(SingleMapFrame):
                  toolbars = ["map"], tree = None, notebook = None, lmgr = None,
                  page = None, Map = Map(), auimgr = None, name = 'MapWindow', **kwargs):
         """!Main map display window with toolbars, statusbar and
-        BufferedWindow (map canvas)
+        2D map window, 3D map window and digitizer.
         
         @param toolbars array of activated toolbars, e.g. ['map', 'digit']
         @param tree reference to layer tree
@@ -154,10 +155,10 @@ class MapFrame(SingleMapFrame):
         #
         # Init map display (buffered DC & set default cursor)
         #
-        self.MapWindow2D = BufferedWindow(self, giface = self._giface,
-                                          Map=self.Map,
-                                          properties=self.mapWindowProperties,
-                                          overlays=self.decorations)
+        self.MapWindow2D = BufferedMapWindow(self, giface = self._giface,
+                                             Map=self.Map,
+                                             properties=self.mapWindowProperties,
+                                             overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
         self.MapWindow2D.overlayActivated.connect(self._activateOverlay)
         self._setUpMapWindow(self.MapWindow2D)

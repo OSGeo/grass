@@ -29,7 +29,7 @@ except (ImportError, NameError), err:
 class VDigit(IVDigit):
     def __init__(self, mapwindow):
         """!Base class of vector digitizer
-        
-        @param mapwindow reference to mapwindow (mapdisp_window.BufferedWindow) instance
+
+        @param mapwindow reference to a map window instance
         """
         IVDigit.__init__(self, mapwindow)

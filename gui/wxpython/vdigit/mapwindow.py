@@ -22,22 +22,22 @@ from grass.pydispatch.signal import Signal
 from dbmgr.dialogs  import DisplayAttributesDialog
 from core.gcmd      import RunCommand, GMessage, GError
 from core.debug     import Debug
-from mapdisp.mapwindow import BufferedWindow
+from mapwin.buffered import BufferedMapWindow
 from core.settings  import UserSettings
 from core.utils     import ListOfCatsToRange, _
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
 from gui_core       import gselect
 
-class VDigitWindow(BufferedWindow):
+class VDigitWindow(BufferedMapWindow):
     """!A Buffered window extended for vector digitizer.
     """
     def __init__(self, parent, giface, Map, properties, tree=None,
                  id=wx.ID_ANY, lmgr=None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
-        BufferedWindow.__init__(self, parent=parent, giface=giface, Map=Map,
-                                properties=properties,
-                                style=style, **kwargs)
+        BufferedMapWindow.__init__(self, parent=parent, giface=giface, Map=Map,
+                                   properties=properties,
+                                   style=style, **kwargs)
         self.lmgr = lmgr
         self.tree = tree
         self.pdcVector = wx.PseudoDC()
@@ -49,13 +49,13 @@ class VDigitWindow(BufferedWindow):
         # Parameter text is a string with information
         # currently used only for coordinates of mouse cursor + segmnt and
         # total feature length
-        self.digitizingInfo = Signal('BufferedWindow.digitizingInfo')
+        self.digitizingInfo = Signal('VDigitWindow.digitizingInfo')
         # Emitted when some info about digitizing is or will be availbale
-        self.digitizingInfoAvailable = Signal('BufferedWindow.digitizingInfo')
+        self.digitizingInfoAvailable = Signal('VDigitWindow.digitizingInfo')
         # Emitted when some info about digitizing is or will be availbale
         # digitizingInfo signal is emmited only between digitizingInfoAvailable
         # and digitizingInfoUnavailable signals
-        self.digitizingInfoUnavailable = Signal('BufferedWindow.digitizingInfo')
+        self.digitizingInfoUnavailable = Signal('VDigitWindow.digitizingInfo')
 
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.mouseMoving.connect(self._mouseMovingToDigitizingInfo)
@@ -469,8 +469,8 @@ class VDigitWindow(BufferedWindow):
             # add line or boundary -> remove last point from the line
             try:
                 removed = self.polycoords.pop()
-                Debug.msg(4, "BufferedWindow.OnMiddleDown(): polycoords_poped=%s" % \
-                              [removed,])
+                Debug.msg(4, "VDigitWindow.OnMiddleDown(): polycoords_poped=%s" %
+                          [removed, ])
                 # self.mouse['begin'] = self.Cell2Pixel(self.polycoords[-1])
             except:
                 pass
@@ -1050,9 +1050,9 @@ class VDigitWindow(BufferedWindow):
         
     def _onMouseMoving(self, event):
         self.mouse['end'] = event.GetPositionTuple()[:]
-        
-        Debug.msg (5, "BufferedWindow.OnMouseMoving(): coords=%f,%f" % \
-                       (self.mouse['end'][0], self.mouse['end'][1]))
+
+        Debug.msg(5, "VDigitWindow.OnMouseMoving(): coords=%f,%f" %
+                  (self.mouse['end'][0], self.mouse['end'][1]))
 
         action = self.toolbar.GetAction()
         if action == "addLine" and \

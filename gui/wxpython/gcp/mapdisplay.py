@@ -31,8 +31,8 @@ from core.utils import _
 from gui_core.dialogs  import GetImageHandlers, ImageSizeDialog
 from gui_core.mapdisp  import SingleMapFrame
 from core.settings     import UserSettings
-from mapdisp.mapwindow import BufferedWindow
-from gui_core.mapwindow import MapWindowProperties
+from mapwin.buffered import BufferedMapWindow
+from mapwin.base import MapWindowProperties
 
 import mapdisp.statusbar as sb
 import gcp.statusbar as sbgcp
@@ -114,14 +114,14 @@ class MapFrame(SingleMapFrame):
         # Init map display (buffered DC & set default cursor)
         #
         self.grwiz.SwitchEnv('source')
-        self.SrcMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
-                                           properties=self.mapWindowProperties,
-                                           Map=self.SrcMap)
+        self.SrcMapWindow = BufferedMapWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
+                                              properties=self.mapWindowProperties,
+                                              Map=self.SrcMap)
 
         self.grwiz.SwitchEnv('target')
-        self.TgtMapWindow = BufferedWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
-                                           properties=self.mapWindowProperties,
-                                          Map=self.TgtMap)
+        self.TgtMapWindow = BufferedMapWindow(parent=self, giface=self._giface, id=wx.ID_ANY,
+                                              properties=self.mapWindowProperties,
+                                              Map=self.TgtMap)
         self.MapWindow = self.SrcMapWindow
         self.Map = self.SrcMap
         self._setUpMapWindow(self.SrcMapWindow)
