@@ -64,6 +64,9 @@ class GraphicsSet:
         elif self.graphicsType == "line":
             self.drawFunc = self.parentMapWin.DrawLines
 
+        elif self.graphicsType == "rectangle":
+            self.drawFunc = self.parentMapWin.DrawRectangle
+
     def Draw(self, pdc):
         """!Draws all containing items.
 
@@ -105,6 +108,17 @@ class GraphicsSet:
 
                 self.drawFunc(pdc=pdc,
                               polycoords=coords)
+             
+            elif self.graphicsType == "rectangle":
+                if item.GetPropertyVal("penName"):
+                    pen = self.pens[item.GetPropertyVal("penName")]
+                else:
+                    pen = self.pens["default"]
+                coords = item.GetCoords()
+
+                self.drawFunc(pdc=pdc, pen=pen, 
+                              point1=coords[0],
+                              point2=coords[1])
             itemOrderNum += 1
 
     def AddItem(self, coords, penName=None, label=None, hide=False):
@@ -116,6 +130,7 @@ class GraphicsSet:
         @param coords - list of east, north coordinates (double) of item
                         Example: point: [1023, 122]
                                  line: [[10, 12],[20,40],[23, 2334]]
+                                 rectangle: [[10, 12], [33, 45]]
         @param penName (string) the 'default' pen is used if is not defined
         @param label (string) label, which will be drawn with point. It is
         relavant just for 'point' type.
@@ -266,6 +281,7 @@ class GraphicsSetItem:
         @param coords - list of coordinates (double) of item
                         Example: point: [1023, 122]
                                  line: [[10, 12],[20,40],[23, 2334]]
+                                 rectangle: [[10, 12], [33, 45]]
         @param penName (string) if it is not defined 'default' pen is used
         @param label (string) label, which will be drawn with point. It is
         relevant just for 'point' type
@@ -317,6 +333,7 @@ class GraphicsSetItem:
         @param coords - list of east, north coordinates (double) of item
                         Example: point: [1023, 122]
                                  line: [[10, 12],[20,40],[23, 2334]]
+                                 rectangle: [[10, 12], [33, 45]]
         """
         self.coords = coords
 

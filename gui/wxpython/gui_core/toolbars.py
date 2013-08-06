@@ -94,9 +94,10 @@ class BaseToolbar(wx.ToolBar):
                                               ))
     @endcode
     """
-    def __init__(self, parent):
+    def __init__(self, parent, style=wx.NO_BORDER|wx.TB_HORIZONTAL):
         self.parent = parent
-        wx.ToolBar.__init__(self, parent = self.parent, id = wx.ID_ANY)
+        wx.ToolBar.__init__(self, parent=self.parent, id=wx.ID_ANY,
+                            style=style)
         
         self.action = dict()
         

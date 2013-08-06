@@ -954,6 +954,22 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         
         return self.lineid
 
+    def DrawRectangle(self, pdc, point1, point2, pen=None):
+        """!Draw rectangle (not filled) in PseudoDC
+
+        @param pdc PseudoDC
+        @param point1 top left corner (map coordinates)
+        @param point2 bottom right corner (map coordinates)
+        @param pen pen
+        """
+        Debug.msg(4, "BufferedWindow.DrawRectangle(): pdc=%s, point1=%s, point2=%s" % \
+                  (pdc, point1, point2))
+        x1, y1 = self.Cell2Pixel(point1)
+        x2, y2 = self.Cell2Pixel(point2)
+        coords = [x1, y1, x2, y2]
+        self.lineid = self.Draw(pdc, drawid=None, pdctype='box', coords=coords, pen=pen)
+        return self.lineid
+
     def _computeZoomToPointAndRecenter(self, position, zoomtype):
         """!Computes zoom parameters for recenter mode.
 
@@ -1756,15 +1772,15 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
     def RegisterGraphicsToDraw(self, graphicsType, setStatusFunc = None, drawFunc = None):
         """! This method registers graphics to draw.
         
-        @param type (string) - graphics type: "point" or "line"
+        @param type (string) - graphics type: "point", "line" or "rectangle"
         @param setStatusFunc (function reference) - function called before drawing each item
                 Status function should be in this form: setStatusFunc(item, itemOrderNum)
                     item - passes instance of GraphicsSetItem which will be drawn
                     itemOrderNum - number of item in drawing order (from O)
                                    Hidden items are also counted in drawing order.
         @param drawFunc (function reference) - defines own function for drawing
-                            If function is not defined DrawCross method is used for type "point"
-                            or DrawLines method for type "line".
+                            If function is not defined DrawCross method is used for type "point",
+                            DrawLines method for type "line", DrawRectangle for "rectangle".
                             
         @return reference to GraphicsSet, which was added.
         """
