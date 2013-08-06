@@ -17,7 +17,8 @@ int error(const char *a, const char *b, const char *c)
     if (isatty(0))
 	fprintf(stderr, "%s\n", msg);
     else
-	G_fatal_error(msg);
+	G_fatal_error("%s", msg);
+
     reject();
 
     return 0;
