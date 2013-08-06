@@ -37,7 +37,7 @@ from grass.pydispatch.signal import Signal
 
 from core.gcmd          import GMessage, GException, GError
 from core.debug         import Debug
-from gui_core.mapwindow import MapWindow
+from mapwin.base import MapWindowBase
 from core.settings      import UserSettings
 from nviz.workspace     import NvizSettings
 from nviz.animation     import Animation
@@ -69,7 +69,7 @@ class NvizThread(Thread):
         """!Get display instance"""
         return self._display
 
-class GLWindow(MapWindow, glcanvas.GLCanvas):
+class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     """!OpenGL canvas for Map Display Window"""
     def __init__(self, parent, giface, frame, Map, tree, lmgr, id=wx.ID_ANY):
         """All parameters except for id are mandatory. The todo is to remove
@@ -90,10 +90,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         else:
             glcanvas.GLCanvas.__init__(self, parent, id)
 
-        MapWindow.__init__(self, parent=parent, giface=giface, Map=Map)
+        MapWindowBase.__init__(self, parent=parent, giface=giface, Map=Map)
         self.Hide()
 
-        # TODO: same signals as in BufferedWindow
+        # TODO: same signals as in BufferedMapWindow
         # same interface is good, but how to ensure same names
         # or avoid duplication, define in map window base class?
 

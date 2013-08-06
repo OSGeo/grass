@@ -45,13 +45,13 @@ except ImportError, e:
 import grass.script as grass
 
 from mapdisp            import statusbar as sb
-from mapdisp.mapwindow  import BufferedWindow
+from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars    import VDigitToolbar
 from gui_core.mapdisp   import DoubleMapFrame
 from core.render        import Map, MapLayer
 from core.gcmd          import RunCommand, GMessage, GError, GWarning
 from gui_core.dialogs   import SetOpacityDialog
-from gui_core.mapwindow import MapWindowProperties
+from mapwin.base import MapWindowProperties
 from dbmgr.vinfo        import VectorDBInfo
 import grass.script as grass
 
@@ -96,9 +96,9 @@ class IClassMapFrame(DoubleMapFrame):
         self.firstMapWindow = IClassVDigitWindow(parent = self, giface = self._giface,
                                                  properties=self.mapWindowProperties,
                                                  map = self.firstMap)
-        self.secondMapWindow = BufferedWindow(parent = self, giface = self._giface,
-                                              properties=self.mapWindowProperties,
-                                              Map = self.secondMap)
+        self.secondMapWindow = BufferedMapWindow(parent=self, giface=self._giface,
+                                                 properties=self.mapWindowProperties,
+                                                 Map=self.secondMap)
         self.MapWindow = self.firstMapWindow # current by default
         
         self._bindWindowsActivation()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """!
-@package mapdisp.analysis
+@package mapwin.analysis
 
 @brief Map display controllers for analyses (profiling, measuring)
 
@@ -33,7 +33,7 @@ class AnalysisControllerBase:
         """!
 
         @param giface grass interface
-        @param mapWindow instance of BufferedWindow
+        @param mapWindow instance of BufferedMapWindow
         """
         self._giface = giface
         self._mapWindow = mapWindow

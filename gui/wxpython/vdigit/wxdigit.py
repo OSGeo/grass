@@ -129,7 +129,7 @@ class IVDigit:
     def __init__(self, mapwindow, driver = DisplayDriver):
         """!Base class for vector digitizer (ctypes interface)
         
-        @param mapwindow reference for map window (BufferedWindow)
+        @param mapwindow reference to a map window
         """
         self.poMapInfo   = None      # pointer to Map_info
         self.mapWindow = mapwindow

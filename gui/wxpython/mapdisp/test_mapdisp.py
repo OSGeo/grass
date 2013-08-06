@@ -66,9 +66,8 @@ from core.utils import _
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
 from core.giface import StandaloneGrassInterface
-from gui_core.mapwindow import MapWindowProperties
-from mapdisp.mapwindow import BufferedWindow
-from mapdisp.frame import MapFrame
+from mapwin.base import MapWindowProperties
+from mapwin.buffered import BufferedMapWindow
 from core.render import Map
 
 
@@ -174,14 +173,16 @@ class Tester(object):
         mapWindowProperties.setValuesFromUserSettings()
         width, height = self.frame.GetClientSize()
         copyOfInitMap(map_, width, height)
-        window = BufferedWindow(parent=panel, giface=giface, Map=map_,
-                                properties=mapWindowProperties)
+        window = BufferedMapWindow(parent=panel, giface=giface, Map=map_,
+                                   properties=mapWindowProperties)
         sizer.Add(item=window, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         panel.SetSizer(sizer)
         panel.Layout()
         self.frame.Show()
 
     def testMapDisplay(self, giface, map_):
+        from mapdisp.frame import MapFrame
+
         # known issues (should be similar with d.mon):
         # * opening map in digitizer ends with: vdigit/toolbars.py:723: 'selection' referenced before assignment
         # * nviz start fails (closes window? segfaults?) after mapdisp/frame.py:306: 'NoneType' object has no attribute 'GetLayerNotebook'
@@ -204,8 +205,8 @@ class Tester(object):
 
         width, height = self.frame.GetClientSize()
         copyOfInitMap(map_, width, height)
-        window = BufferedWindow(parent=panel, giface=giface, Map=map_,
-                                properties=mapWindowProperties)
+        window = BufferedMapWindow(parent=panel, giface=giface, Map=map_,
+                                   properties=mapWindowProperties)
 
         giface.mapWindow = window
 
@@ -234,8 +235,8 @@ class Tester(object):
 
         width, height = self.frame.GetClientSize()
         copyOfInitMap(map_, width, height)
-        window = BufferedWindow(parent=panel, giface=giface, Map=map_,
-                                properties=mapWindowProperties)
+        window = BufferedMapWindow(parent=panel, giface=giface, Map=map_,
+                                   properties=mapWindowProperties)
 
         giface.mapWindow = window
 
@@ -249,7 +250,7 @@ class Tester(object):
 
         self.frame.Show()
 
-        from mapdisp.analysis import MeasureDistanceController
+        from mapwin.analysis import MeasureDistanceController
         self.controller = MeasureDistanceController(giface, window)
         self.controller.Start()
 
@@ -265,8 +266,8 @@ class Tester(object):
 
         width, height = self.frame.GetClientSize()
         copyOfInitMap(map_, width, height)
-        window = BufferedWindow(parent=panel, giface=giface, Map=map_,
-                                properties=mapWindowProperties)
+        window = BufferedMapWindow(parent=panel, giface=giface, Map=map_,
+                                   properties=mapWindowProperties)
 
         giface.mapWindow = window
 
@@ -280,7 +281,7 @@ class Tester(object):
 
         self.frame.Show()
 
-        from mapdisp.analysis import ProfileController
+        from mapwin.analysis import ProfileController
         self.controller = ProfileController(giface, window)
         self.controller.Start()
 

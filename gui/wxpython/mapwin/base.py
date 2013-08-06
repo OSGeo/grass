@@ -1,10 +1,11 @@
 """!
-@package gui_core.mapwindow
+@package mapwin.mapwindow
 
-@brief Map display canvas - base class for buffered window.
+@brief Map display canvas basic functionality - base class and properties.
 
 Classes:
- - mapwindow::MapWindow
+ - mapwindow::MapWindowProperties
+ - mapwindow::MapWindowBase
 
 (C) 2006-2012 by the GRASS Development Team
 
@@ -92,7 +93,7 @@ class MapWindowProperties(object):
             self.alignExtentChanged.emit(value=value)
 
 
-class MapWindow(object):
+class MapWindowBase(object):
     """!Abstract map display window class
     
     Superclass for BufferedWindow class (2D display mode), and GLWindow

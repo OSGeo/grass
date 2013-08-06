@@ -11,7 +11,7 @@ ETCDIR = $(ETC)/gui/wxpython
 
 SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
 	$(wildcard animation/* core/*.py dbmgr/* gcp/*.py gmodeler/* \
-	gui_core/*.py iclass/* lmgr/*.py location_wizard/*.py mapdisp/*.py \
+	gui_core/*.py iclass/* lmgr/*.py location_wizard/*.py mapwin/*.py mapdisp/*.py \
 	mapswipe/* modules/*.py nviz/*.py psmap/* rlisetup/* vdigit/* \
 	vnet/*.py web_services/*.py wxplot/*.py) \
 	gis_set.py gis_set_error.py wxgui.py README
@@ -20,7 +20,7 @@ DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) \
 	$(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
 PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,animation core dbmgr gcp gmodeler \
-	gui_core iclass lmgr location_wizard mapdisp modules nviz psmap \
+	gui_core iclass lmgr location_wizard mapwin mapdisp modules nviz psmap \
 	mapswipe vdigit wxplot web_services rlisetup vnet)
 
 DSTDIRS := $(patsubst %,$(ETCDIR)/%,icons scripts xml)
