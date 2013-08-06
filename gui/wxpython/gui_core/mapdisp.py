@@ -101,8 +101,6 @@ class MapFrameBase(wx.Frame):
             sys.exit(_("GRASS module '%s' not found. Unable to start map "
                        "display window.") % 'g.region')
         
-        self.width, self.height = self.GetClientSize()
-        
         Debug.msg(2, "MapFrame._initMap():")
         Map.ChangeMapSize(self.GetClientSize())
         Map.region = Map.GetRegion() # g.region -upgc
