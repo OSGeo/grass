@@ -365,7 +365,7 @@ class DecorationDialog(wx.Dialog):
                 self.resizeBtn.Enable()
 
     def Show(self, show=True):
-        if show:
+        if show and self._ddstyle == DECOR_DIALOG_LEGEND:
             self.resizeBtn.Enable(not self.parent.IsPaneShown('3d'))
         wx.Dialog.Show(self, show)
 
