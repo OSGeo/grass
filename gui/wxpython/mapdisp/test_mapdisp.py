@@ -69,6 +69,7 @@ from core.giface import StandaloneGrassInterface
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
 from core.render import Map
+from rlisetup.sampling_frame import RLiSetupMapPanel
 
 
 # TODO: same classes as in dmon
@@ -182,7 +183,6 @@ class Tester(object):
 
     def testMapDisplay(self, giface, map_):
         from mapdisp.frame import MapFrame
-
         # known issues (should be similar with d.mon):
         # * opening map in digitizer ends with: vdigit/toolbars.py:723: 'selection' referenced before assignment
         # * nviz start fails (closes window? segfaults?) after mapdisp/frame.py:306: 'NoneType' object has no attribute 'GetLayerNotebook'
@@ -301,7 +301,14 @@ class Tester(object):
         # the desired raster) is selected to be profiled
         profileWindow.OnSelectRaster(None)
 
+    def testMapWindowRlisetup(self, map_):
+        self.frame = wx.Frame(parent=None,
+                              title=_("Map window rlisetup test frame"))
+                              
+        RLiSetupMapPanel(parent=self.frame, map_=map_)
+        self.frame.Show()
 
+        
 def main():
     """!Sets the GRASS display driver
     """
@@ -352,6 +359,8 @@ def main():
         tester.testMapWindowDistance(giface, map_)
     elif test == 'profile':
         tester.testMapWindowProfile(giface, map_)
+    elif test == 'rlisetup':
+        tester.testMapWindowRlisetup(map_)
     else:
         # TODO: this should not happen but happens
         import grass.script as sgrass

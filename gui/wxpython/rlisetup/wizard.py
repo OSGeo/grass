@@ -36,6 +36,7 @@ from core import gcmd
 from core.utils import _
 from location_wizard.wizard import TitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
+from rlisetup.sampling_frame import RLiSetupMapPanel
 from grass.script import core as grass
 from grass.script import raster as grast
 
@@ -58,6 +59,7 @@ class RLIWizard(object):
         self.rlipath = retRLiPath()
         #pages
         self.startpage = FirstPage(self.wizard, self)
+        self.drawsampleframepage = DrawSampleFramePage(self.wizard, self)
         self.keyboardpage = KeybordPage(self.wizard, self)
         self.samplingareapage = SamplingAreasPage(self.wizard, self)
         self.summarypage = SummaryPage(self.wizard, self)
@@ -68,6 +70,8 @@ class RLIWizard(object):
         self.startpage.SetNext(self.samplingareapage)
         self.keyboardpage.SetPrev(self.startpage)
         self.keyboardpage.SetNext(self.samplingareapage)
+        self.drawsampleframepage.SetNext(self.samplingareapage)
+        self.drawsampleframepage.SetPrev(self.startpage)
         self.samplingareapage.SetPrev(self.startpage)
         self.samplingareapage.SetNext(self.summarypage)
         self.units.SetPrev(self.samplingareapage)
@@ -78,6 +82,7 @@ class RLIWizard(object):
 
         #layout
         self.startpage.DoLayout()
+        self.drawsampleframepage.DoLayout()
         self.keyboardpage.DoLayout()
         self.samplingareapage.DoLayout()
         self.summarypage.DoLayout()
@@ -309,8 +314,8 @@ class FirstPage(TitledPage):
                                       majorDimension=1,
                                       style=wx.RA_SPECIFY_ROWS)
 
-        self.sampling_reg.EnableItem(2, False)  # disable 'draw' for now
-        self.sampling_reg.SetItemToolTip(2, _("This option is not supported yet"))
+#        self.sampling_reg.EnableItem(2, False)  # disable 'draw' for now
+#        self.sampling_reg.SetItemToolTip(2, _("This option is not supported yet"))
         self.sizer.Add(item=self.sampling_reg,
                         flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
                         pos=(4, 0), span=(1, 2))
@@ -337,6 +342,7 @@ class FirstPage(TitledPage):
             self.SetNext(self.parent.keyboardpage)
         elif event.GetInt() == 2: # currently disabled
             self.region = 'draw'
+            self.SetNext(self.parent.drawsampleframepage)
 
     def OnName(self, event):
         """!Sets the name of configuration file"""
@@ -375,7 +381,7 @@ class FirstPage(TitledPage):
 
     def OnExitPage(self, event=None):
         """!Function during exiting"""
-        if self.region == 'draw' or self.conf_name == '' or self.rast == '':
+        if self.conf_name == '' or self.rast == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -387,11 +393,9 @@ class FirstPage(TitledPage):
                 self.SetNext(self.parent.samplingareapage)
                 self.parent.samplingareapage.SetPrev(self)
             elif self.region == 'draw':
-                gcmd.GMessage(parent=self,
-                              message=_("Function not supported yet"))
-                event.Veto()
+                self.SetNext(self.parent.drawsampleframepage)
+                self.parent.samplingareapage.SetPrev(self.parent.drawsampleframepage)
                 return
-
 
 class KeybordPage(TitledPage):
     """
@@ -505,6 +509,51 @@ class KeybordPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+
+
+class DrawSampleFramePage(TitledPage):
+    def __init__(self, wizard, parent):
+        TitledPage.__init__(self, wizard, _("Draw sampling frame"))
+        self.parent = parent
+        self.mapPanel = RLiSetupMapPanel(self)
+        self.mapPanel.sampleFrameChanged.connect(self.SampleFrameChanged)
+        self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(0, 0))
+        # TO BE REMOVED
+        warning = wx.StaticText(self, label=_("WARNING: this functionality is not supported yet"))
+        warning.SetForegroundColour(wx.RED)
+        self.sizer.Add(item=warning, pos=(1, 0), flag=wx.ALIGN_CENTRE)
+        self.sizer.AddGrowableCol(0)
+        self.sizer.AddGrowableRow(0)
+        
+        self._raster = None
+
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
+
+    def SampleFrameChanged(self):
+        region = self.mapPanel.GetRegion()
+        if region:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+        else:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+         # TODO: calculate needed values here   
+        
+    def OnEnterPage(self, event):
+        self.SampleFrameChanged()
+        rast = self.parent.startpage.rast
+        if self._raster != rast:
+            map_ = self.mapPanel.GetMap()
+            map_.DeleteAllLayers()
+            cmdlist = ['d.rast', 'map=%s' % rast]
+            map_.AddLayer(ltype='raster', command=cmdlist, active=True,
+                              name=rast, hidden=False, opacity=1.0,
+                              render=True)
+        
+    def OnExitPage(self, event=None):
+        """!Function during exiting"""
+        if event.GetDirection():
+            self.SetNext(self.parent.samplingareapage)
+            self.parent.samplingareapage.SetPrev(self)
 
 
 class SamplingAreasPage(TitledPage):
