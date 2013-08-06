@@ -32,12 +32,12 @@ from gui_core       import gselect
 class VDigitWindow(BufferedWindow):
     """!A Buffered window extended for vector digitizer.
     """
-    def __init__(self, parent, giface, Map, frame, properties, tree=None,
+    def __init__(self, parent, giface, Map, properties, tree=None,
                  id=wx.ID_ANY, lmgr=None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
-        BufferedWindow.__init__(self, parent = parent, giface = giface, id = id, Map = Map,
+        BufferedWindow.__init__(self, parent=parent, giface=giface, Map=Map,
                                 properties=properties,
-                                frame=frame, style=style, **kwargs)
+                                style=style, **kwargs)
         self.lmgr = lmgr
         self.tree = tree
         self.pdcVector = wx.PseudoDC()

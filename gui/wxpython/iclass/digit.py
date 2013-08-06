@@ -34,7 +34,7 @@ import grass.script as grass
 
 class IClassVDigitWindow(VDigitWindow):
     """! Class similar to VDigitWindow but specialized for wxIClass."""
-    def __init__(self, parent, giface, map, frame, properties):
+    def __init__(self, parent, giface, map, properties):
         """!
         
         @a parent should has toolbar providing current class (category).
@@ -43,7 +43,7 @@ class IClassVDigitWindow(VDigitWindow):
         @param map map renderer instance
         """
         VDigitWindow.__init__(self, parent=parent, giface=giface,
-                              Map=map, frame=frame, properties=properties)
+                              Map=map, properties=properties)
 
     def _onLeftDown(self, event):
         action = self.toolbar.GetAction()

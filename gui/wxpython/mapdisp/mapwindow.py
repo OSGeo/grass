@@ -57,23 +57,22 @@ class BufferedWindow(MapWindow, wx.Window):
     can also save the drawing to file by calling the
     SaveToFile() method.
     """
-    def __init__(self, parent, giface, Map, frame, properties,
+    def __init__(self, parent, giface, Map, properties,
                  id=wx.ID_ANY, overlays=None,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs):
         """!
         @param parent parent window
         @param giface grass interface instance
         @param Map map instance
-        @param frame map frame instance (to be removed)
+        @param properties instance of MapWindowProperties
         @param id wx window id
         @param style wx window style
         @param kwargs keyword arguments passed to MapWindow and wx.Window
         """
         MapWindow.__init__(self, parent=parent, giface=giface, Map=Map)
-        wx.Window.__init__(self, parent = parent, id = id, style = style, **kwargs)
+        wx.Window.__init__(self, parent=parent, id=id, style=style, **kwargs)
 
         self._properties = properties
-        self.frame = frame  # remove including a frame parameter
 
         # flags
         self.resize = False # indicates whether or not a resize event has taken place
