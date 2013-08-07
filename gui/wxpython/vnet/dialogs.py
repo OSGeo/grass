@@ -752,7 +752,7 @@ class VNETDialog(wx.Dialog):
         if self.defIsecTurnsHndlrReg == False:
             self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
                                                   self.OnDefIsecTurnCost,
-                                                  wx.StockCursor(wx.CURSOR_CROSS))
+                                                  'cross')
             self.defIsecTurnsHndlrReg = True
         else:
             self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, 

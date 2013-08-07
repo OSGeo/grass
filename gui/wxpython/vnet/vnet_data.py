@@ -451,7 +451,7 @@ class VNETPointsData:
         if activate:
             self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
                                                   self.OnMapClickHandler,
-                                                  wx.StockCursor(wx.CURSOR_CROSS))
+                                                  'cross')
             self.handlerRegistered = True
         else:
             self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, 

@@ -216,7 +216,7 @@ class MapWindowBase(object):
             # expects LayerManager to be the parent
             self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
             if self.mapwin.RegisterEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
-                                                wx.StockCursor(wx.CURSOR_CROSS)):
+                                                'cross'):
                 self.parent.GetLayerTree().GetMapDisplay().Raise()
             else:
                 # handle that you cannot get coordinates

@@ -2009,7 +2009,7 @@ class CoordinatesSelect(wx.Panel):
         if self.buttonInsCoords.GetToggle() and self.mapWin:
             if self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
                                                      self._onMapClickHandler,
-                                                     wx.StockCursor(wx.CURSOR_CROSS)) == False:
+                                                     'cross') == False:
                 self.buttonInsCoords.SetToggle(False)
                 return
             
