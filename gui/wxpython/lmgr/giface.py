@@ -64,9 +64,35 @@ class LayerList(object):
             layers.append(layer)
         return layers
 
+    # TODO: it is not clear if default of checkedOnly should be False or True
+    def GetSelectedLayer(self, checkedOnly=False):
+        """!Returns selected layer or None when there is no selected layer."""
+        item = self._tree.GetSelectedLayer(multi=False,
+                                           checkedOnly=checkedOnly)
+        if item is None:
+            return None
+        else:
+            data = self._tree.GetPyData(item)
+            return Layer(data)
+
     def GetLayerInfo(self, layer):
         """!For compatibility only, will be removed."""
         return Layer(self._tree.GetPyData(layer))
+
+    def AddLayer(self, ltype, name=None, checked=None,
+                 opacity=1.0, cmd=None):
+        """!Adds a new layer to the layer list.
+
+        Launches property dialog if needed (raster, vector, etc.)
+
+        @param ltype layer type (raster, vector, 3d-raster, ...)
+        @param name layer name
+        @param checked if True layer is checked
+        @param opacity layer opacity level
+        @param cmd command (given as a list)
+        """
+        self._tree.AddLayer(ltype=ltype, lname=name, lchecked=checked,
+                            lopacity=opacity, lcmd=cmd)
 
 
 class LayerManagerGrassInterface(object):

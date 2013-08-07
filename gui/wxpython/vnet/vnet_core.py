@@ -349,20 +349,29 @@ class VNETManager:
                     overwrite = True,
                     vect = [self.results["vect_map"].GetVectMapName(), mapName])
 
+        # TODO: this is a workaround: usage of parent
+        # use giface/LayerList instead (needs to be extended first, please do,
+        # don't forget on abstract giface in core/giface.py and dmon's giface)
+        tree = None
+        try:
+            # map display (MapFrame) should still have tree
+            tree = self.mapWin.parent.tree
+        except:
+            pass
 
-        if not self.mapWin.tree:
+        if tree is None:
             return
 
-        if  self.mapWin.tree.FindItemByData(key = 'name', value = mapName) is None: 
-
-            cmd, cmd_colors = self.vnet_data.GetLayerStyle()#TODO get rid of insert
+        if tree.FindItemByData(key='name', value=mapName) is None:
+            # TODO: get rid of insert
+            cmd, cmd_colors = self.vnet_data.GetLayerStyle()
             cmd.insert(0, 'd.vect')
             cmd.append('map=%s' % mapName)
 
-            self.mapWin.tree.AddLayer(ltype = "vector", 
-                                      lname = mapName,
-                                      lcmd = cmd,
-                                      lchecked = True)
+            tree.AddLayer(ltype = "vector",
+                          lname = mapName,
+                          lcmd = cmd,
+                          lchecked = True)
             if cmd_colors:
                 layerStyleVnetColors = utils.CmdToTuple(cmd_colors)
 

@@ -248,8 +248,9 @@ class Layer(object):
 
 
 class LayerList(object):
-    def __init__(self, map):
+    def __init__(self, map, giface):
         self._map = map
+        self._giface = giface
 
 #    def __iter__(self):
 #        for in :
@@ -264,6 +265,35 @@ class LayerList(object):
             layers.append(layer)
         return layers
 
+    def GetSelectedLayer(self, checkedOnly=False):
+        """!Returns selected layer or None when there is no selected layer."""
+        layers = self.GetSelectedLayers()
+        if len(layers) > 0:
+            return layers[0]
+        else:
+            return None
+
+    def AddLayer(self, ltype, name=None, checked=None,
+                 opacity=1.0, cmd=None):
+        """!Adds a new layer to the layer list.
+
+        Launches property dialog if needed (raster, vector, etc.)
+
+        @param ltype layer type (raster, vector, 3d-raster, ...)
+        @param name layer name
+        @param checked if True layer is checked
+        @param opacity layer opacity level
+        @param cmd command (given as a list)
+        """
+        self._map.AddLayer(ltype="vector", command=cmd,
+                           name=name, active=True,
+                           opacity=opacity, render=True,
+                           pos=-1)
+        # TODO: this should be solved by signal
+        # (which should be introduced everywhere,
+        # alternative is some observer list)
+        self._giface.updateMap.emit(render=True, renderVector=True)
+
 
 class DMonGrassInterface(StandaloneGrassInterface):
     """!@implements GrassInterface"""
@@ -272,7 +302,10 @@ class DMonGrassInterface(StandaloneGrassInterface):
         self._mapframe = mapframe
 
     def GetLayerList(self):
-        return LayerList(self._mapframe.GetMap())
+        return LayerList(self._mapframe.GetMap(), giface=self)
+
+    def GetMapWindow(self):
+        return self._mapframe.GetMapWindow()
 
 
 class DMonFrame(MapFrame):

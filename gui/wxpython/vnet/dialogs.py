@@ -444,13 +444,12 @@ class VNETDialog(wx.Dialog):
     def _createInputDbMgrPage(self):
         """!Tab with attribute tables of analysis input layers"""
         self.inpDbMgrData['dbMgr'] = DbMgrBase()
- 
-        selMapName = None       
+
+        selMapName = None
         # if selected vector map is in layer tree then set it
-        if self.mapWin.tree and self.mapWin.tree.layer_selected:
-            selMapData = self.mapWin.tree.GetPyData(self.mapWin.tree.layer_selected)[0]
-            if selMapData['type'] == 'vector': # wrap somehow in LayerTree
-                selMapName = selMapData['maplayer'].name
+        layer = self.giface.GetLayerList().GetSelectedLayer()
+        if layer is not None and layer.type == 'vector':
+            selMapName = layer.maplayer.name
 
         self.inpDbMgrData['browse'] = self.inpDbMgrData['dbMgr'].CreateDbMgrPage(parent = self.notebook,
                                                                                  pageName = 'browse')
@@ -591,20 +590,12 @@ class VNETDialog(wx.Dialog):
         cmd = ['d.vect', 
                'map=' + vectorMap]
 
-        if self.mapWin.tree and \
-           self.mapWin.tree.FindItemByData(key = 'name', value = vectorMap) is None: 
-            self.mapWin.tree.AddLayer(ltype = "vector", 
-                                      lcmd = cmd,
-                                      lname =vectorMap,
-                                      lchecked = True)
-        #d.mon case
-        else:
-            self.renderLayer = self.mapWin.Map.AddLayer(ltype = "vector", command = cmd,
-                                                        name = vectorMap, active = True,
-                                                        opacity = 1.0,    render = True,       
-                                                        pos = -1)         
-
-            self.giface.updateMap.emit(render=True, renderVector=True)
+        if True:
+            self.giface.GetLayerList().AddLayer(ltype="vector",
+                                                cmd=cmd,
+                                                name=vectorMap,
+                                                checked=True)
+        # d.mon case is not need giface implementation should solve it for us
 
     def UseTurns(self):
         if self.useTurns.IsChecked():

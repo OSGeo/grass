@@ -61,7 +61,6 @@ if __name__ == '__main__':
     if WXGUIBASE not in sys.path:
         sys.path.append(WXGUIBASE)
 
-import core.utils as utils
 from core.utils import _
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
@@ -70,41 +69,7 @@ from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
 from core.render import Map
 from rlisetup.sampling_frame import RLiSetupMapPanel
-
-
-# TODO: same classes as in dmon
-class Layer(object):
-    def __init__(self, maplayer):
-        self._maplayer = maplayer
-
-    def __getattr__(self, name):
-        if name == 'cmd':
-            return utils.CmdTupleToList(self._maplayer.GetCmd())
-        elif hasattr(self._maplayer, name):
-            return getattr(self._maplayer, name)
-        elif name == 'maplayer':
-            return self._maplayer
-        elif name == 'type':
-            return self._maplayer.GetType()
-            #elif name == 'ctrl':
-        elif name == 'label':
-            return self._maplayer.GetName()
-            #elif name == 'maplayer' : None,
-            #elif name == 'propwin':
-
-
-class LayerList(object):
-    def __init__(self, map_):
-        self._map = map_
-
-    def GetSelectedLayers(self, checkedOnly=True):
-        # hidden and selected vs checked and selected
-        items = self._map.GetListOfLayers()
-        layers = []
-        for item in items:
-            layer = Layer(item)
-            layers.append(layer)
-        return layers
+from mapdisp.main import LayerList
 
 
 class MapdispGrassInterface(StandaloneGrassInterface):
@@ -115,7 +80,7 @@ class MapdispGrassInterface(StandaloneGrassInterface):
         self.mapWindow = None
 
     def GetLayerList(self):
-        return LayerList(self._map)
+        return LayerList(self._map, giface=self)
 
     def GetMapWindow(self):
         return self.mapWindow

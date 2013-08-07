@@ -49,6 +49,28 @@ class LayerList(object):
         """
         raise NotImplementedError()
 
+    def GetSelectedLayer(self, checkedOnly=False):
+        """!Returns selected layer or None when there is no selected layer.
+
+        @note Parameter checkedOnly is here False by default. This might change
+        if we find the right way of handling unchecked layers.
+        """
+        raise NotImplementedError()
+
+    def AddLayer(self, ltype, name=None, checked=None,
+                 opacity=1.0, cmd=None):
+        """!Adds a new layer to the layer list.
+
+        Launches property dialog if needed (raster, vector, etc.)
+
+        @param ltype layer type (raster, vector, 3d-raster, ...)
+        @param name layer name
+        @param checked if True layer is checked
+        @param opacity layer opacity level
+        @param cmd command (given as a list)
+        """
+        raise NotImplementedError()
+
 
 class GrassInterface:
     """!GrassInterface provides the functionality which should be available
@@ -208,7 +230,7 @@ class StandaloneGrassInterface():
         os.environ["GRASS_MESSAGE_FORMAT"] = orig
 
     def GetLayerList(self):
-        return None
+        raise NotImplementedError()
 
     def GetMapDisplay(self):
         """!Get current map display.
@@ -221,7 +243,9 @@ class StandaloneGrassInterface():
         return []
 
     def GetMapWindow(self):
-        return None
+        raise NotImplementedError()
 
     def GetProgress(self):
+        # TODO: implement some progress with same inface as gui one
+        # (probably using g.message or similarly to Write... functions)
         raise NotImplementedError()
