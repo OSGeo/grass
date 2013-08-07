@@ -320,7 +320,7 @@ class NewVectorDialog(SimpleDialog):
         return None
 
 def CreateNewVector(parent, cmd, title = _('Create new vector map'),
-                    exceptMap = None, log = None,
+                    exceptMap=None, giface=None,
                     disableAdd = False, disableTable = False):
     """!Create new vector map layer
     
@@ -443,8 +443,8 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
     if '@' not in outmap:
         outmap += '@' + grass.gisenv()['MAPSET']
         
-    if log:
-        log.WriteLog(_("New vector map <%s> created") % outmap)
+    if giface:
+        giface.WriteLog(_("New vector map <%s> created") % outmap)
         
     return dlg
 

@@ -340,8 +340,11 @@ class GMFrame(wx.Frame):
         
         return self.notebook
             
-    def AddNvizTools(self):
-        """!Add nviz notebook page"""
+    def AddNvizTools(self, firstTime):
+        """!Add nviz notebook page
+
+        @param firstTime if a mapdisplay is starting 3D mode for the first time
+        """
         Debug.msg(5, "GMFrame.AddNvizTools()")
         if not haveNviz:
             return
@@ -361,8 +364,12 @@ class GMFrame(wx.Frame):
         idx = self.notebook.GetPageIndexByName('layers')
         self.notebook.InsertPage(indx = idx + 1, page = self.nviz, text = _("3D view"), name = 'nviz')
         self.notebook.SetSelectionByName('nviz')
-        
-        
+
+        # this is a bit strange here since a new window is created everytime
+        if not firstTime:
+            for page in ('view', 'light', 'fringe', 'constant', 'cplane', 'animation'):
+                self.nviz.UpdatePage(page)
+
     def RemoveNvizTools(self):
         """!Remove nviz notebook page"""
         # if more mapwindow3D were possible, check here if nb page should be removed
@@ -1465,7 +1472,7 @@ class GMFrame(wx.Frame):
         """!Init histogram display canvas and tools
         """
         from modules.histogram import HistogramFrame
-        win = HistogramFrame(self)
+        win = HistogramFrame(self, giface=self._giface)
         
         win.CentreOnScreen()
         win.Show()
@@ -1632,7 +1639,17 @@ class GMFrame(wx.Frame):
         cb_boxsizer.Fit(self.GetLayerTree())
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
-        
+
+        mapdisplay = self.currentPage.maptree.mapdisplay
+        mapdisplay.Bind(wx.EVT_ACTIVATE,
+                        lambda event, page=self.currentPage:
+                        self._onMapDisplayFocus(page))
+        mapdisplay.starting3dMode.connect(
+            lambda firstTime, mapDisplayPage=self.currentPage:
+            self._onMapDisplayStarting3dMode(mapDisplayPage))
+        mapdisplay.starting3dMode.connect(self.AddNvizTools)
+        mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
+
         # use default window layout
         if UserSettings.Get(group = 'general', key = 'defWindowPos', subkey = 'enabled'):
             dim = UserSettings.Get(group = 'general', key = 'defWindowPos', subkey = 'dim')
@@ -1648,7 +1665,26 @@ class GMFrame(wx.Frame):
         self.displayIndex += 1
         
         return self.GetMapDisplay()
-    
+
+    def _onMapDisplayFocus(self, notebookLayerPage):
+        """Changes bookcontrol page to page associated with display."""
+        # moved from mapdisp/frame.py
+        # TODO: why it is called 3 times when getting focus?
+        # and one times when loosing focus?
+        pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
+        if pgnum > -1:
+            self.notebookLayers.SetSelection(pgnum)
+            self.currentPage = self.notebookLayers.GetCurrentPage()
+
+    def _onMapDisplayStarting3dMode(self, mapDisplayPage):
+        """!Disables 3D mode for all map displays except for @p mapDisplay"""
+        # TODO: it should be disabled also for newly created map windows
+        # moreover mapdisp.Disable3dMode() does not work properly
+        for page in range(0, self.GetLayerNotebook().GetPageCount()):
+            mapdisp = self.GetLayerNotebook().GetPage(page).maptree.GetMapDisplay()
+            if self.GetLayerNotebook().GetPage(page) != mapDisplayPage:
+                mapdisp.Disable3dMode()
+
     def OnAddMaps(self, event = None):
         """!Add selected map layers into layer tree"""
         dialog = MapLayersDialog(parent = self, title = _("Add selected map layers into layer tree"))
