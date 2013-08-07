@@ -166,6 +166,37 @@ class RLIWizard(object):
             #import pdb; pdb.set_trace()
             fil.write("SAMPLINGFRAME %r|%r|%r|%r\n" % (self.per_x, self.per_y,
                                                        self.per_rl, self.per_cl))
+        elif self.startpage.region == 'draw':
+            self._temp_region()
+            frame = self.drawsampleframepage.GetSampleFrame()
+            # should we call this? with align param?
+            gcmd.RunCommand('g.region', align=self.startpage.rast, 
+                            n=frame['n'], s=frame['s'],
+                            w=frame['w'], e=frame['e'])
+            newreg = grass.region()
+            self.SF_N = newreg['n']  #	set env(SF_N) $n
+            self.SF_S = newreg['s']  # set env(SF_S) $s
+            self.SF_E = newreg['e']  # set env(SF_E) $e
+            self.SF_W = newreg['w']  # set env(SF_W) $w		
+   
+            self.SF_Y = abs(round(self.gregion['n'] - newreg['n']) / newreg['nsres'])
+#		 set env(SF_Y) [expr abs(round(($s_n - $n) / $nres)) ] 
+            self.SF_X = abs(round(self.gregion['w'] - newreg['w']) / newreg['ewres'])
+#		 set env(SF_X) [expr abs(round(($s_w - $w) / $sres)) ] 
+            self.SF_RL = abs(round(newreg['n'] - newreg['s']) / newreg['nsres'])
+#		 set env(SF_RL) [expr abs(round(($n - $s) / $nres)) ]
+            self.SF_CL = abs(round(newreg['e'] - newreg['w']) / newreg['ewres'])
+#		 set env(SF_CL) [expr abs(round(($e - $w) / $sres)) ]
+            self.per_x = float(self.SF_X) / float(self.rasterinfo['cols'])
+#		 double($env(SF_X)) / double($cols)
+            self.per_y = float(self.SF_Y) / float(self.rasterinfo['rows'])
+#	       double($env(SF_Y)) / double($rows)
+            self.per_rl = float(self.SF_RL) / float(self.rasterinfo['rows'])
+#		 double($env(SF_RL)) / double($rows)
+            self.per_cl = float(self.SF_CL) / float(self.rasterinfo['cols'])
+#		 double($env(SF_CL)) / double($cols)
+            fil.write("SAMPLINGFRAME %r|%r|%r|%r\n" % (self.per_x, self.per_y,
+                                                       self.per_rl, self.per_cl))
 
     def _circle(self, radius, mask):
         """create a circle mask"""
@@ -518,10 +549,6 @@ class DrawSampleFramePage(TitledPage):
         self.mapPanel = RLiSetupMapPanel(self)
         self.mapPanel.sampleFrameChanged.connect(self.SampleFrameChanged)
         self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(0, 0))
-        # TO BE REMOVED
-        warning = wx.StaticText(self, label=_("WARNING: this functionality is not supported yet"))
-        warning.SetForegroundColour(wx.RED)
-        self.sizer.Add(item=warning, pos=(1, 0), flag=wx.ALIGN_CENTRE)
         self.sizer.AddGrowableCol(0)
         self.sizer.AddGrowableRow(0)
         
@@ -531,13 +558,15 @@ class DrawSampleFramePage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
     def SampleFrameChanged(self):
-        region = self.mapPanel.GetRegion()
+        region = self.GetSampleFrame()
         if region:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
         else:
-            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
-         # TODO: calculate needed values here   
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False) 
         
+    def GetSampleFrame(self):
+        return self.mapPanel.GetRegion()
+
     def OnEnterPage(self, event):
         self.SampleFrameChanged()
         rast = self.parent.startpage.rast
