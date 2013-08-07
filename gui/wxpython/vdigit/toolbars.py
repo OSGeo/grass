@@ -31,11 +31,11 @@ from iclass.digit       import IClassVDigit
 class VDigitToolbar(BaseToolbar):
     """!Toolbar for digitization
     """
-    def __init__(self, parent, MapWindow, digitClass, giface, tools = [], layerTree = None, log = None):
+    def __init__(self, parent, MapWindow, digitClass, giface,
+                 tools=[], layerTree=None):
         self.MapWindow     = MapWindow
         self.Map           = MapWindow.GetMap() # Map class instance
         self.layerTree     = layerTree  # reference to layer tree associated to map display
-        self.log           = log        # log area
         self.tools         = tools
         self.digitClass    = digitClass
         BaseToolbar.__init__(self, parent)
@@ -336,7 +336,8 @@ class VDigitToolbar(BaseToolbar):
         self.MapWindow.mouse['use'] = "pointer"
         self.MapWindow.mouse['box'] = "point"
         self.MapWindow.polycoords = []
-        
+
+        # TODO: replace this by binding wx event in parent (or use signals...)
         if not self.parent.IsStandalone():
             # disable the toolbar
             self.parent.RemoveToolbar("vdigit")
@@ -688,7 +689,7 @@ class VDigitToolbar(BaseToolbar):
             else:
                 openVectorMap = None
             dlg = CreateNewVector(self.parent,
-                                  exceptMap = openVectorMap, log = self.log,
+                                  exceptMap=openVectorMap, giface=self._giface,
                                   cmd = (('v.edit',
                                           { 'tool' : 'create' },
                                           'map')),
@@ -707,6 +708,10 @@ class VDigitToolbar(BaseToolbar):
                 
                 # create table ?
                 if dlg.IsChecked('table'):
+                    # TODO: replace this by signal
+                    # also note that starting of tools such as atm, iclass,
+                    # plots etc. should be handled in some better way
+                    # than starting randomly from mapdisp and lmgr
                     lmgr = self.parent.GetLayerManager()
                     if lmgr:
                         lmgr.OnShowAttributeTable(None, selection = 'table')

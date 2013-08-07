@@ -265,13 +265,14 @@ class HistogramFrame(wx.Frame):
     """!Main frame for hisgram display window. Uses d.histogram
     rendered onto canvas
     """
-    def __init__(self, parent = None, id = wx.ID_ANY,
+    def __init__(self, parent, giface, id=wx.ID_ANY,
                  title = _("GRASS GIS Histogramming Tool (d.histogram)"),
                  size = wx.Size(500, 350),
                  style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         wx.Frame.__init__(self, parent, id, title, size = size, style = style, **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
-        
+
+        self._giface = giface
         self.Map   = Map()         # instance of render.Map to be associated with display
         self.layer = None          # reference to layer with histogram
         
@@ -286,12 +287,13 @@ class HistogramFrame(wx.Frame):
         self.SetToolBar(self.toolbar)
 
         # find selected map
+        # might by moved outside this class
+        # setting to None but honestly we do not handle no map case
+        # TODO: when self.mapname is None content of map window is showed
         self.mapname = None
-        if parent.GetName() == "MapWindow" and not parent.IsStandalone():
-            tree = parent.GetLayerManager().GetLayerTree()
-
-            if tree.layer_selected and tree.GetLayerInfo(tree.layer_selected, key = 'type') == 'raster':
-                self.mapname = tree.GetLayerInfo(tree.layer_selected, key = 'maplayer').name
+        layers = self._giface.GetLayerList().GetSelectedLayers()
+        if len(layers) > 0:
+            self.mapname = layers[0].maplayer.name
 
         # Add statusbar
         self.statusbar = self.CreateStatusBar(number = 1, style = 0)

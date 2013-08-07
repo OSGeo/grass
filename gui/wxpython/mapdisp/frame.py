@@ -63,6 +63,8 @@ from mapdisp import statusbar as sb
 
 import grass.script as grass
 
+from grass.pydispatch.signal import Signal
+
 
 class MapFrame(SingleMapFrame):
     """!Main frame for map display window. Drawing takes place in
@@ -88,10 +90,25 @@ class MapFrame(SingleMapFrame):
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
         
         self._giface = giface
-        self._layerManager = lmgr   # Layer Manager object
-        self.tree       = tree      # Layer Manager layer tree object
-        self.page       = page      # Notebook page holding the layer tree
-        self.layerbook  = notebook  # Layer Manager layer tree notebook
+        # Layer Manager object
+        # need by GLWindow (a lot), VDigitWindow (a little bit)
+        self._layerManager = lmgr
+        # Layer Manager layer tree object
+        # used for VDigit toolbar and window and GLWindow
+        self.tree = tree
+        # Notebook page holding the layer tree
+        # used only in OnCloseWindow
+        self.page = page
+        # Layer Manager layer tree notebook
+        # used only in OnCloseWindow
+        self.layerbook = notebook
+
+        # Emitted when starting (switching to) 3D mode.
+        # Parameter firstTime specifies if 3D was already actived.
+        self.starting3dMode = Signal("MapFrame.starting3dMode")
+
+        # Emitted when ending (switching from) 3D mode.
+        self.ending3dMode = Signal("MapFrame.ending3dMode")
 
         # properties are shared in other objects, so defining here
         self.mapWindowProperties = MapWindowProperties()
@@ -188,7 +205,6 @@ class MapFrame(SingleMapFrame):
         #
         # Bind various events
         #
-        self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
         self.Bind(wx.EVT_SIZE,     self.OnSize)
         
@@ -237,12 +253,7 @@ class MapFrame(SingleMapFrame):
             GError(_("Unable to start wxGUI vector digitizer.\n"
                      "Details: %s") % errorMsg, parent = self)
             return
-        
-        if self._layerManager:
-            log = self._layerManager.GetLogWindow()
-        else:
-            log = None
-        
+
         if not self.MapWindowVDigit:
             from vdigit.mapwindow import VDigitWindow
             self.MapWindowVDigit = VDigitWindow(parent=self, giface=self._giface,
@@ -271,8 +282,8 @@ class MapFrame(SingleMapFrame):
             self._mgr.GetPane('3d').Hide()
         self._mgr.GetPane('vdigit').Show()
         self.toolbars['vdigit'] = VDigitToolbar(parent = self, MapWindow = self.MapWindow,
-                                                digitClass = VDigit, giface =  self._giface,
-                                                layerTree = self.tree, log = log)
+                                                digitClass=VDigit, giface=self._giface,
+                                                layerTree=self.tree)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
         
         self._mgr.AddPane(self.toolbars['vdigit'],
@@ -302,13 +313,9 @@ class MapFrame(SingleMapFrame):
                                "was not found or loaded properly.\n"
                                "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg))
             return
-        
-        # disable 3D mode for other displays
-        for page in range(0, self._layerManager.GetLayerNotebook().GetPageCount()):
-            mapdisp = self._layerManager.GetLayerNotebook().GetPage(page).maptree.GetMapDisplay()
-            if self._layerManager.GetLayerNotebook().GetPage(page) != self._layerManager.currentPage:
-                if '3D' in mapdisp.toolbars['map'].combo.GetString(1):
-                    mapdisp.toolbars['map'].combo.Delete(1)
+
+        # here was disabling 3D for other displays, now done on starting3dMode
+
         self.toolbars['map'].Enable2D(False)
         # add rotate tool to map toolbar
         self.toolbars['map'].InsertTool((('rotate', NvizIcons['rotate'],
@@ -332,12 +339,13 @@ class MapFrame(SingleMapFrame):
             self.MapWindow3D = GLWindow(self, giface = self._giface, id = wx.ID_ANY, frame = self,
                                         Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self._setUpMapWindow(self.MapWindow3D)
+            self.MapWindow3D.mapQueried.connect(self.Query)
             self.MapWindow = self.MapWindow3D
             self.MapWindow.SetNamedCursor('default')
-            
-            # add Nviz notebookpage
-            self._layerManager.AddNvizTools()
-            
+
+            # here was AddNvizTools in lmgr
+            self.starting3dMode.emit(firstTime=True)
+
             # switch from MapWindow to MapWindowGL
             self._mgr.GetPane('2d').Hide()
             self._mgr.AddPane(self.MapWindow3D, wx.aui.AuiPaneInfo().CentrePane().
@@ -358,13 +366,12 @@ class MapFrame(SingleMapFrame):
             # switch from MapWindow to MapWindowGL
             self._mgr.GetPane('2d').Hide()
             self._mgr.GetPane('3d').Show()
-            
-            # add Nviz notebookpage
-            self._layerManager.AddNvizTools()
+
+            # here was AddNvizTools in lmgr and updating of pages
+            self.starting3dMode.emit(firstTime=False)
+
             self.MapWindow3D.ResetViewHistory()
-            for page in ('view', 'light', 'fringe', 'constant', 'cplane', 'animation'):
-                self._layerManager.nviz.UpdatePage(page)
-                
+
         self._giface.updateMap.disconnect(self.MapWindow2D.UpdateMap)
         self._giface.updateMap.connect(self.MapWindow3D.UpdateMap)
         self.MapWindow3D.overlays = self.MapWindow2D.overlays
@@ -375,7 +382,13 @@ class MapFrame(SingleMapFrame):
         
         self.SetStatusText("", 0)
         self._mgr.Update()
-    
+
+    def Disable3dMode(self):
+        """Disables 3D mode (NVIZ) in user interface."""
+        # TODO: this is broken since item is removed but switch is drived by index
+        if '3D' in self.toolbars['map'].combo.GetString(1):
+            self.toolbars['map'].combo.Delete(1)
+
     def RemoveNviz(self):
         """!Restore 2D view"""
         try:
@@ -398,13 +411,14 @@ class MapFrame(SingleMapFrame):
         self._mgr.GetPane('3d').Hide()
 
         self.MapWindow = self.MapWindow2D
-        # remove nviz notebook page
-        self._layerManager.RemoveNvizTools()
+        # here was RemoveNvizTools form lmgr
+        self.ending3dMode.emit()
         try:
             self.MapWindow2D.overlays = self.MapWindow3D.overlays
             self.MapWindow2D.textdict = self.MapWindow3D.textdict
         except AttributeError:
             pass
+        # TODO: here we end because self.MapWindow3D is None for a while
         self._giface.updateMap.disconnect(self.MapWindow3D.UpdateMap)
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
 
@@ -472,19 +486,7 @@ class MapFrame(SingleMapFrame):
         if self._mgr.GetPane(name).IsOk():
             return self._mgr.GetPane(name).IsShown()
         return False
-        
-    def OnFocus(self, event):
-        """!Change choicebook page to match display.
-        """
-        # change bookcontrol page to page associated with display
-        if self.page:
-            pgnum = self.layerbook.GetPageIndex(self.page)
-            if pgnum > -1:
-                self.layerbook.SetSelection(pgnum)
-                self._layerManager.currentPage = self.layerbook.GetCurrentPage()
-        
-        event.Skip()
-        
+
     def RemoveQueryLayer(self):
         """!Removes temporary map layers (queries)"""
         qlayer = self.GetMap().GetListOfLayers(name = globalvar.QUERYLAYER)
@@ -639,6 +641,7 @@ class MapFrame(SingleMapFrame):
         """!Window closed.
         Also close associated layer tree page
         """
+        Debug.msg(2, "MapFrame.OnCloseWindow(): function starts")
         pgnum = None
         self.Map.Clean()
         
@@ -656,6 +659,7 @@ class MapFrame(SingleMapFrame):
             pgnum = self.layerbook.GetPageIndex(self.page)
             if pgnum > -1:
                 self.layerbook.DeletePage(pgnum)
+        Debug.msg(2, "MapFrame.OnCloseWindow(): function ends")
 
     def Query(self, x, y):
         """!Query selected layers. 
@@ -926,7 +930,7 @@ class MapFrame(SingleMapFrame):
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
         """
-        win = HistogramFrame(self)
+        win = HistogramFrame(self, giface=self._giface)
         
         win.CentreOnParent()
         win.Show()
@@ -1077,10 +1081,9 @@ class MapFrame(SingleMapFrame):
     
     def OnAddArrow(self, event):
         """!Handler for north arrow menu selection.
-            Opens Appearance page of nviz notebook.
         """
-        
-        self._layerManager.nviz.SetPage('decoration')
+        # here was opening of appearance page of nviz notebook
+        # but now moved to MapWindow3D where are other problematic nviz calls
         self.MapWindow3D.SetDrawArrow((70, 70))
         
     def GetOptData(self, dcmd, type, params, propwin):
@@ -1098,6 +1101,7 @@ class MapFrame(SingleMapFrame):
         """!Set display extents to match selected raster (including
         NULLs) or vector map.
         """
+        Debug.msg(3, "MapFrame.OnZoomToMap()")
         layers = None
         if self.IsStandalone():
             layers = self.MapWindow.GetMap().GetListOfLayers(active = False)
@@ -1163,7 +1167,16 @@ class MapFrame(SingleMapFrame):
         self.SetProperty('projection', projection)
         
     def IsStandalone(self):
-        """!Check if Map display is standalone"""
+        """!Check if Map display is standalone
+
+        @depreciated
+        """
+        # TODO: once it is removed from 2 places in vdigit it can be deleted
+        # here and also in base class and other classes in the tree (hopefully)
+        # and one place here still uses IsStandalone
+        Debug.msg(1, "MapFrame.IsStandalone(): Method IsStandalone is"
+                  "depreciated, use some general approach instead such as"
+                  " Signals or giface")
         if self._layerManager:
             return False
         
@@ -1174,7 +1187,12 @@ class MapFrame(SingleMapFrame):
 
         @return window reference
         @return None (if standalone)
+
+        @depreciated
         """
+        Debug.msg(1, "MapFrame.GetLayerManager(): Method GetLayerManager is"
+                  "depreciated, use some general approach instead such as"
+                  " Signals or giface")
         return self._layerManager
     
     def GetMapToolbar(self):

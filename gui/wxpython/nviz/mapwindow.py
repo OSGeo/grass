@@ -106,6 +106,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # Emitted when the zoom history stack is not empty
         self.zoomHistoryAvailable = Signal('GLWindow.zoomHistoryAvailable')
 
+        # Emitted when map was queried, parameters x, y are mouse coordinates
+        # TODO: change pixel coordinates to map coordinates (using Pixel2Cell)
+        self.mapQueried = Signal('GLWindow.mapQueried')
+
         self.init = False
         self.initView = False
         self.context = None
@@ -821,13 +825,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def OnLeftUp(self, event):
         self.mouse['end'] = event.GetPositionTuple()
         if self.mouse["use"] == "query":
-            # querying
-            if self.frame.IsStandalone():
-                GMessage(parent = self.frame,
-                         message = _("Querying is not implemented in standalone mode of Map Display"))
-                return
-
-            self.frame.Query(self.mouse['begin'][0],self.mouse['begin'][1])
+            # here changed from 'begin' to 'end' because it is more common
+            # behavior used also in 2d map window
+            # and moreover we are in left up
+            self.mapQueried.emit(x=self.mouse['end'][0],
+                                 y=self.mouse['end'][1])
 
         elif self.mouse["use"] in ('arrow', 'scalebar'):
             self.lmgr.nviz.FindWindowById(
@@ -1229,7 +1231,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return int(size * coef)/coef
     
     def SetDrawArrow(self, pos):
-        
+        """North arrow drawing.
+
+        Also, opens Appearance page of nviz notebook (needs refactoring).
+        """
         if self._display.SetArrow(pos[0], pos[1], 
                                  self.decoration['arrow']['size'],
                                  self.decoration['arrow']['color']):
@@ -1239,7 +1244,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.decoration['arrow']['position']['x'] = pos[0]
             self.decoration['arrow']['position']['y'] = pos[1]
             self.Refresh(False)
-    
+        # this was in mapdisp/frame.py but moved here to be with similar calls
+        # such as self.lmgr.nviz.UpdatePage
+        # anyway, it need to be handled in some another way
+        self.lmgr.nviz.SetPage('decoration')
+
     def SetDrawScalebar(self, pos):
         """!Add scale bar, sets properties and draw"""
         if len(self.decoration['scalebar']) == 0:
