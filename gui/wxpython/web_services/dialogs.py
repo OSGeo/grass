@@ -82,9 +82,8 @@ class WSDialogBase(wx.Dialog):
 
         settingsFile = os.path.join(GetSettingsPath(), 'wxWS')
 
-        self.settsManager = ManageSettingsWidget(parent = self, 
-                                                 id = wx.ID_ANY,
-                                                 settingsFile = settingsFile)
+        self.settsManager = ManageSettingsWidget(parent=self,
+                                                 settingsFile=settingsFile)
 
         self.settingsBox = wx.StaticBox(parent = self, 
                                         id = wx.ID_ANY,
@@ -523,6 +522,16 @@ class AddWSDialog(WSDialogBase):
         if not lcmd:
             return None
 
+        # TODO: It is not clear how to do GetOptData in giface
+        # knowing what GetOptData is doing might help
+        # (maybe Get... is not the right name)
+        # please fix giface if you know
+        # tree -> giface
+        # GetLayerTree -> GetLayerList
+        # AddLayer -> AddLayer (but tree ones returns some layer,
+        # giface ones nothing)
+        # GetLayerInfo -> Layer object can by used instead
+        # GetOptData -> unknown
         ltree = self.giface.GetLayerTree()
 
         active_ws = self.active_ws_panel.GetWebService()
@@ -760,12 +769,12 @@ class SaveWMSLayerDialog(wx.Dialog):
 
     @todo Implement saving data in region of map display.
     """
-    def __init__(self, parent, layer, ltree):
+    def __init__(self, parent, layer, giface):
         
         wx.Dialog.__init__(self, parent = parent, title = ("Save web service layer"), id = wx.ID_ANY)
 
         self.layer = layer
-        self.ltree = ltree
+        self._giface = giface
 
         self.cmd = self.layer.GetCmd()
 
@@ -990,12 +999,13 @@ class SaveWMSLayerDialog(wx.Dialog):
     def _addLayer(self):
         """!Add layer into layer tree.
         """
-        if self.ltree.FindItemByData(key = 'name', value = self.output) is None: 
+        llist = self._giface.GetLayerList()
+        if len(llist.GetLayersByName(self.output)) == 0:
             cmd = ['d.rast', 'map=' + self.output]
-            self.ltree.AddLayer(ltype = 'raster',
-                                lname = self.output,
-                                lcmd = cmd,
-                                lchecked = True)
+            llist.AddLayer(ltype='raster',
+                           name=self.output,
+                           cmd=cmd,
+                           checked=True)
 
     def OnCmdOutput(self, event):
         """!Handle cmd output according to debug level.

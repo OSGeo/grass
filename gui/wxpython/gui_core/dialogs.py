@@ -1183,10 +1183,11 @@ class MapLayersDialogForModeler(MapLayersDialogBase):
     
 class ImportDialog(wx.Dialog):
     """!Dialog for bulk import of various data (base class)"""
-    def __init__(self, parent, itype,
+    def __init__(self, parent, giface, itype,
                  id = wx.ID_ANY, title = _("Multiple import"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         self.parent = parent    # GMFrame 
+        self._giface = giface  # used to add layers
         self.importType = itype
         self.options = dict()   # list of options
         
@@ -1346,10 +1347,12 @@ class ImportDialog(wx.Dialog):
         """!Add imported/linked layers into layer tree"""
         if not self.add.IsChecked() or returncode != 0:
             return
-        
+
+        # TODO: if importing map creates more map the folowing does not work
+        # * do nothing if map does not exist or
+        # * try to determine names using regexp or
+        # * persuade import tools to report map names
         self.commandId += 1
-        maptree = self.parent.GetLayerTree()
-        
         layer, output = self.list.GetLayers()[self.commandId]
         
         if '@' not in output:
@@ -1358,24 +1361,26 @@ class ImportDialog(wx.Dialog):
             name = output
         
         # add imported layers into layer tree
+        # an alternative would be emit signal (mapCreated) and (optionally)
+        # connect to this signal
+        llist = self._giface.GetLayerList()
         if self.importType == 'gdal':
             cmd = ['d.rast',
                    'map=%s' % name]
             if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
                 cmd.append('-n')
-            
-            item = maptree.AddLayer(ltype = 'raster',
-                                    lname = name, lchecked = False,
-                                    lcmd = cmd, multiple = False)
+
+            llist.AddLayer(ltype='raster',
+                           name=name, checked=False,
+                           cmd=cmd)
         else:
-            item = maptree.AddLayer(ltype = 'vector',
-                                    lname = name, lchecked = False,
-                                    lcmd = ['d.vect',
-                                            'map=%s' % name] + GetDisplayVectSettings(),
-                                    multiple = False)
-        
-        maptree.mapdisplay.MapWindow.ZoomToMap()
-        
+            llist.AddLayer(ltype='vector',
+                           name=name, checked=False,
+                           cmd=['d.vect',
+                                'map=%s' % name] + GetDisplayVectSettings())
+
+        self._giface.GetMapWindow().ZoomToMap()
+
     def OnAbort(self, event):
         """!Abort running import
 
@@ -1398,13 +1403,13 @@ class GdalImportDialog(ImportDialog):
         self.ogr  = ogr
         
         if ogr:
-            ImportDialog.__init__(self, parent, itype = 'ogr')
+            ImportDialog.__init__(self, parent, giface=giface, itype='ogr')
             if link:
                 self.SetTitle(_("Link external vector data"))
             else:
                 self.SetTitle(_("Import vector data"))
         else:
-            ImportDialog.__init__(self, parent, itype = 'gdal') 
+            ImportDialog.__init__(self, parent, giface=giface, itype='gdal') 
             if link:
                 self.SetTitle(_("Link external raster data"))
             else:
@@ -1413,11 +1418,14 @@ class GdalImportDialog(ImportDialog):
         self.dsnInput = GdalSelect(parent = self, panel = self.panel,
                                    ogr = ogr, link = link)
         self.dsnInput.reloadDataRequired.connect(lambda data: self.list.LoadData(data))
-        
+
+        mightNotWork = _("this might not work for multiple bands")
         if link:
-            self.add.SetLabel(_("Add linked layers into layer tree"))
+            self.add.SetLabel(_("Add linked layers into layer tree"
+                                " ({mightNotWork})".format(mightNotWork=mightNotWork)))
         else:
-            self.add.SetLabel(_("Add imported layers into layer tree"))
+            self.add.SetLabel(_("Add imported layers into layer tree"
+                                " ({mightNotWork})".format(mightNotWork=mightNotWork)))
         
         self.add.SetValue(UserSettings.Get(group = 'cmd', key = 'addNewLayer', subkey = 'enabled'))
 
@@ -1606,7 +1614,7 @@ class GdalOutputDialog(wx.Dialog):
 class DxfImportDialog(ImportDialog):
     """!Dialog for bulk import of DXF layers""" 
     def __init__(self, parent, giface):
-        ImportDialog.__init__(self, parent, itype = 'dxf',
+        ImportDialog.__init__(self, parent, giface=giface, itype='dxf',
                               title = _("Import DXF layers"))
         self._giface = giface
         self.dsnInput = filebrowse.FileBrowseButton(parent = self.panel, id = wx.ID_ANY, 
