@@ -223,11 +223,13 @@ class DMonMap(Map):
         del os.environ["GRASS_RENDER_IMMEDIATE"]
 
         RunCommand('g.gisenv',
-                    set = 'MONITOR=%s' % currMon)
-        
+                   set='MONITOR=%s' % currMon)
+
         return layer
 
+
 class Layer(object):
+    """!@implements core::giface::Layer"""
     def __init__(self, maplayer):
         self._maplayer = maplayer
 
@@ -243,18 +245,14 @@ class Layer(object):
             #elif name == 'ctrl':
         elif name == 'label':
             return self._maplayer.GetName()
-            #elif name == 'maplayer' : None,
             #elif name == 'propwin':
 
 
 class LayerList(object):
     def __init__(self, map, giface):
+        """!@implements core::giface::LayerList"""
         self._map = map
         self._giface = giface
-
-#    def __iter__(self):
-#        for in :
-#            yield
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
@@ -285,7 +283,7 @@ class LayerList(object):
         @param opacity layer opacity level
         @param cmd command (given as a list)
         """
-        self._map.AddLayer(ltype="vector", command=cmd,
+        self._map.AddLayer(ltype=ltype, command=cmd,
                            name=name, active=True,
                            opacity=opacity, render=True,
                            pos=-1)
@@ -293,6 +291,27 @@ class LayerList(object):
         # (which should be introduced everywhere,
         # alternative is some observer list)
         self._giface.updateMap.emit(render=True, renderVector=True)
+
+    def GetLayersByName(self, name):
+        items = self._map.GetListOfLayers()
+        layers = []
+        for item in items:
+            if item.GetName() == name:
+                layer = Layer(item)
+                layers.append(layer)
+        return layers
+
+    def GetLayerByData(self, key, value):
+        # TODO: implementation was not tested
+        items = self._map.GetListOfLayers()
+        for item in items:
+            layer = Layer(item)
+            try:
+                if getattr(layer, key) == value:
+                    return layer
+            except AttributeError:
+                pass
+        return None
 
 
 class DMonGrassInterface(StandaloneGrassInterface):

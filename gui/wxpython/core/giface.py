@@ -36,6 +36,7 @@ class Layer(object):
     Current implementations only provides all attributes of existing layer
     as used in lmgr.
     """
+    pass
 
 
 class LayerList(object):
@@ -68,6 +69,25 @@ class LayerList(object):
         @param checked if True layer is checked
         @param opacity layer opacity level
         @param cmd command (given as a list)
+        """
+        raise NotImplementedError()
+
+    def GetLayersByName(self, name):
+        """!Returns list of layers with a given name.
+
+        @param name fully qualified map name
+
+        @todo if common usage is just to check the presence of layer,
+        intoroduce a new method ContainsLayerByName(name)
+        """
+        raise NotImplementedError()
+
+    def GetLayerByData(self, key, value):
+        """!Returns layer with specified.
+
+        @note Returns only one layer. This might change.
+
+        @warning Avoid using this method, it might be removed in the future.
         """
         raise NotImplementedError()
 
