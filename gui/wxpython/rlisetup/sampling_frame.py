@@ -33,7 +33,7 @@ from core.giface import StandaloneGrassInterface
 from mapwin.base import MapWindowProperties
 from mapwin.buffered import BufferedMapWindow
 from core.render import Map
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseToolbar, BaseIcons, ToolSwitcher
 from icons.icon import MetaIcon
 
 from grass.pydispatch.signal import Signal
@@ -65,7 +65,9 @@ class RLiSetupMapPanel(wx.Panel):
                           Dockable(True).BestSize((-1, -1)).Name('mapwindow').
                           CloseButton(False).DestroyOnClose(True).
                           Layer(0))
-        self.toolbar = RLiSetupToolbar(self)
+        self._toolSwitcher = ToolSwitcher()
+        self._toolSwitcher.toggleToolChanged.connect(self._onToolChanged)
+        self.toolbar = RLiSetupToolbar(self, self._toolSwitcher)
 
         self._mgr.AddPane(self.toolbar,
                           wx.aui.AuiPaneInfo().
@@ -75,17 +77,11 @@ class RLiSetupMapPanel(wx.Panel):
                           BestSize((self.toolbar.GetBestSize())))
         self._mgr.Update()
 
-        self._initTool()
+        self.toolbar.SelectDefault()
 
         self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='rectangle')
         self._registeredGraphics.AddPen('rlisetup', wx.Pen(wx.GREEN, width=3, style=wx.SOLID))
         self._registeredGraphics.AddItem(coords=[[0, 0], [0, 0]], penName='rlisetup', hide=True)
-
-    def _initTool(self):
-        """!Initialize draw mode"""
-        self.toolbar.ToggleTool(self.toolbar.draw, True)
-        self.toolbar.action['id'] = self.toolbar.draw
-        self.OnDraw(None)
 
     def GetMap(self):
         return self.map_
@@ -97,13 +93,11 @@ class RLiSetupMapPanel(wx.Panel):
     def OnZoomIn(self, event):
         """!Zoom in the map.
         """
-        self.SwitchTool(event)
         self._prepareZoom(mapWindow=self.mapWindow, zoomType=1)
 
     def OnZoomOut(self, event):
         """!Zoom out the map.
         """
-        self.SwitchTool(event)
         self._prepareZoom(mapWindow=self.mapWindow, zoomType=-1)
 
     def _prepareZoom(self, mapWindow, zoomType):
@@ -120,10 +114,8 @@ class RLiSetupMapPanel(wx.Panel):
         # change the cursor
         mapWindow.SetNamedCursor('cross')
 
-    def SwitchTool(self, event):
-        """!Helper function to switch tools"""
-        self.toolbar.OnTool(event)
-        self.toolbar.action['desc'] = ''
+    def _onToolChanged(self):
+        """!Helper function to disconnect drawing"""
         try:
             self.mapWindow.mouseLeftUp.disconnect(self._rectangleDrawn)
         except DispatcherKeyError:
@@ -132,8 +124,6 @@ class RLiSetupMapPanel(wx.Panel):
     def OnPan(self, event):
         """!Panning, set mouse to drag
         """
-        self.SwitchTool(event)
-
         self.mapWindow.mouse['use'] = "pan"
         self.mapWindow.mouse['box'] = "pan"
         self.mapWindow.zoomtype = 0
@@ -147,8 +137,6 @@ class RLiSetupMapPanel(wx.Panel):
 
     def OnDraw(self, event):
         """!Start draw mode"""
-        self.SwitchTool(event)
-
         self.mapWindow.mouse['use'] = None
         self.mapWindow.mouse['box'] = "box"
         self.mapWindow.pen = wx.Pen(colour=wx.RED, width=2, style=wx.SHORT_DASH)
@@ -182,12 +170,17 @@ icons = {'draw': MetaIcon(img='edit',
 class RLiSetupToolbar(BaseToolbar):
     """!IClass toolbar
     """
-    def __init__(self, parent):
+    def __init__(self, parent, toolSwitcher):
         """!RLiSetup toolbar constructor
         """
-        BaseToolbar.__init__(self, parent, style=wx.NO_BORDER | wx.TB_VERTICAL)
+        BaseToolbar.__init__(self, parent, toolSwitcher, style=wx.NO_BORDER | wx.TB_VERTICAL)
 
         self.InitToolbar(self._toolbarData())
+        self._default = self.draw
+
+        for tool in (self.draw, self.pan, self.zoomIn, self.zoomOut):
+            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
+
         # realize the toolbar
         self.Realize()
 

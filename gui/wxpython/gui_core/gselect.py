@@ -1993,6 +1993,10 @@ class CoordinatesSelect(wx.Panel):
                                                                    size = globalvar.DIALOG_COLOR_SIZE)
         self.registered = False
         self.buttonInsCoords.Bind(wx.EVT_BUTTON, self._onClick)
+        switcher = self._giface.GetMapDisplay().GetToolSwitcher()
+        switcher.AddCustomToolToGroup(group='mouseUse',
+                                      btnId=self.buttonInsCoords.GetId(), 
+                                      toggleHandler=self.buttonInsCoords.SetValue)
         self._doLayout()
         
     def _doLayout(self):
@@ -2005,12 +2009,13 @@ class CoordinatesSelect(wx.Panel):
         
     def _onClick(self, event):
         """!Button for interacitve inserting of coordinates clicked"""
+        switcher = self._giface.GetMapDisplay().GetToolSwitcher()
+        switcher.ToolChanged(self.buttonInsCoords.GetId())
         self.mapWin = self._giface.GetMapWindow()
         if self.buttonInsCoords.GetToggle() and self.mapWin:
             if self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
                                                      self._onMapClickHandler,
                                                      'cross') == False:
-                self.buttonInsCoords.SetToggle(False)
                 return
             
             self.registered = True
@@ -2021,14 +2026,10 @@ class CoordinatesSelect(wx.Panel):
                                                             self._onMapClickHandler):
                 self.registered = False
                 return
-            
-            self.buttonInsCoords.SetToggle(False)           
-    
+
     def _onMapClickHandler(self, event):
         """!Gets coordinates from mapwindow"""
         if event == "unregistered":
-            if self.buttonInsCoords:
-                self.buttonInsCoords.SetToggle(False)
             return
         
         e, n = self.mapWin.GetLastEN()
@@ -2041,9 +2042,11 @@ class CoordinatesSelect(wx.Panel):
         
         value = prevCoords + str(e) + "," + str(n)
         self.coordsField.SetValue(value)
-        
-    def __del__(self):
+
+    def OnClose(self):
         """!Unregistrates _onMapClickHandler from mapWin"""
+        switcher = self._giface.GetMapDisplay().GetToolSwitcher()
+        switcher.RemoveCustomToolFromGroup(self.buttonInsCoords.GetId())
         if self.mapWin and self.registered:
             self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
                                                     self._onMapClickHandler)

@@ -53,6 +53,7 @@ from core.gcmd          import RunCommand, GMessage, GError, GWarning
 from gui_core.dialogs   import SetOpacityDialog
 from mapwin.base import MapWindowProperties
 from dbmgr.vinfo        import VectorDBInfo
+from gui_core.toolbars import ToolSwitcher
 import grass.script as grass
 
 from iclass.digit       import IClassVDigitWindow, IClassVDigit
@@ -186,7 +187,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.previewMapManager.SetToolbar(self.toolbars['iClassPreviewMapManager'])
         
         # default action
-        self.OnPan(event = None)
+        self.GetMapToolbar().SelectDefault()
         
         wx.CallAfter(self.AddTrainingAreaMap)
         
@@ -263,7 +264,7 @@ class IClassMapFrame(DoubleMapFrame):
          Toolbars 'iClassPreviewMapManager' are added in _addPanes().
         """
         if name == "iClassMap":
-            self.toolbars[name] = IClassMapToolbar(self)
+            self.toolbars[name] = IClassMapToolbar(self, self._toolSwitcher)
             
             self._mgr.AddPane(self.toolbars[name],
                               wx.aui.AuiPaneInfo().
@@ -299,13 +300,13 @@ class IClassMapFrame(DoubleMapFrame):
                               BestSize((self.toolbars[name].GetBestSize())))
 
         if name == "vdigit":
-            self.toolbars[name] = VDigitToolbar(parent = self, MapWindow = self.GetFirstWindow(),
-                                                digitClass = IClassVDigit, giface = self._giface,
+            self.toolbars[name] = VDigitToolbar(parent=self, toolSwitcher=self._toolSwitcher,
+                                                MapWindow=self.GetFirstWindow(),
+                                                digitClass=IClassVDigit, giface=self._giface,
                                                 tools = ['addArea', 'moveVertex', 'addVertex',
                                                          'removeVertex', 'editLine', 'moveLine',
                                                          'deleteLine', 'deleteArea',
                                                          'undo', 'redo'])
-            
             self._mgr.AddPane(self.toolbars[name],
                               wx.aui.AuiPaneInfo().
                               Name(name).Caption(_("Digitization Toolbar")).
@@ -1118,24 +1119,6 @@ class IClassMapFrame(DoubleMapFrame):
         toolbar = self.GetMapToolbar()
 
         self.GetFirstWindow().mouse['use'] = 'pointer'
-
-    def SwitchTool(self, toolbar, event):
-        """!Calls UpdateTools to manage connected toolbars"""
-        self.UpdateTools(event)
-        super(IClassMapFrame, self).SwitchTool(toolbar, event)
-
-    def UpdateTools(self, event):
-        """!Method deals with relations of toolbars and other
-        elements"""
-        # untoggles button in other toolbars
-        for toolbar in self.toolbars.itervalues():
-            if hasattr(event, 'GetEventObject') == True:
-                if event.GetEventObject() == toolbar:
-                    continue
-                if toolbar.action:
-                    toolbar.ToggleTool(toolbar.action['id'], False)
-                    toolbar.action['id'] = -1
-                    toolbar.OnTool(None)
 
     def OnScatterplot(self, event):
         """!Init interactive scatterplot tools

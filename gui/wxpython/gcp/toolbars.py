@@ -78,12 +78,13 @@ class GCPManToolbar(BaseToolbar):
 class GCPDisplayToolbar(BaseToolbar):
     """!GCP Display toolbar
     """
-    def __init__(self, parent):
+    def __init__(self, parent, toolSwitcher):
         """!GCP Display toolbar constructor
         """
-        BaseToolbar.__init__(self, parent)
+        BaseToolbar.__init__(self, parent, toolSwitcher)
         
         self.InitToolbar(self._toolbarData())
+        self._default = self.gcpset
         
         # add tool to toggle active map window
         self.togglemapid = wx.NewId()
@@ -96,15 +97,12 @@ class GCPDisplayToolbar(BaseToolbar):
                                                               BaseIcons["zoomBack"].GetLabel(),
                                                               _(' / Zoom to map')))
 
+        for tool in (self.gcpset, self.pan, self.zoomin, self.zoomout):
+            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
+
         # realize the toolbar
         self.Realize()
-        
-        self.action = { 'id' : self.gcpset }
-        self.defaultAction = { 'id' : self.gcpset,
-                               'bind' : self.parent.OnPointer }
-        
-        self.OnTool(None)
-        
+
         self.EnableTool(self.zoomback, False)
         
     def _toolbarData(self):
@@ -153,4 +151,3 @@ class GCPDisplayToolbar(BaseToolbar):
                                      ('quit', icons["quit"],
                                       self.parent.OnQuit))
                                     )
-

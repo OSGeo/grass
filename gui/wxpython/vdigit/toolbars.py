@@ -31,14 +31,14 @@ from iclass.digit       import IClassVDigit
 class VDigitToolbar(BaseToolbar):
     """!Toolbar for digitization
     """
-    def __init__(self, parent, MapWindow, digitClass, giface,
+    def __init__(self, parent, toolSwitcher, MapWindow, digitClass, giface,
                  tools=[], layerTree=None):
         self.MapWindow     = MapWindow
         self.Map           = MapWindow.GetMap() # Map class instance
         self.layerTree     = layerTree  # reference to layer tree associated to map display
         self.tools         = tools
         self.digitClass    = digitClass
-        BaseToolbar.__init__(self, parent)
+        BaseToolbar.__init__(self, parent, toolSwitcher)
         self.digit         = None
         self._giface       = giface
         
@@ -53,11 +53,11 @@ class VDigitToolbar(BaseToolbar):
         
         # only one dialog can be open
         self.settingsDialog   = None
-        
+
         # create toolbars (two rows optionally)
         self.InitToolbar(self._toolbarData())
-        self.Bind(wx.EVT_TOOL, self._toolChosen)
         
+        self._default = -1
         # default action (digitize new point, line, etc.)
         self.action = { 'desc' : '',
                         'type' : '',
@@ -65,6 +65,13 @@ class VDigitToolbar(BaseToolbar):
         
         # list of available vector maps
         self.UpdateListOfLayers(updateTool = True)
+        
+        for tool in ('addPoint', 'addLine', 'addBoundary', 'addCentroid', 'addArea',
+                     'addVertex', 'deleteLine', 'deleteArea', 'displayAttr', 'displayCats',
+                     'editLine', 'moveLine', 'moveVertex', 'removeVertex', 'additionalTools'):
+            if hasattr(self, tool):
+                tool = getattr(self, tool)
+                self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
         
         # realize toolbar
         self.Realize()
@@ -78,12 +85,9 @@ class VDigitToolbar(BaseToolbar):
             self.EnableTool(self.undo, False)
         if self.redo > 0:
             self.EnableTool(self.redo, False)
-        
-        # toogle to pointer by default
-        self.OnTool(None)
-        
+
         self.FixSize(width = 105)
-                
+
     def _toolbarData(self):
         """!Toolbar data
         """
@@ -235,27 +239,15 @@ class VDigitToolbar(BaseToolbar):
                          self.OnExit))
         
         return self._getToolbarData(data)
-    
-    def _toolChosen(self, event):
-        """!Tool selected -> untoggles selected tools in other
-        toolbars
 
-        @todo implement iclass front-end
-        """
-        self.parent.MapWindow.UnregisterAllHandlers()
-        
-        if hasattr(self.parent, "UpdateTools"):
-            self.parent.UpdateTools(event)
-        self.OnTool(event)
-        
     def OnTool(self, event):
         """!Tool selected -> untoggles previusly selected tool in
         toolbar"""
+        Debug.msg(3, "VDigitToolbar.OnTool(): id = %s" % event.GetId())
         # set cursor
         self.MapWindow.SetNamedCursor('cross')
-        
-        # pointer
-        self.parent.OnPointer(None)
+        self.MapWindow.mouse['box'] = 'point' 
+        self.MapWindow.mouse['use'] = 'pointer'
          
         aId = self.action.get('id', -1)       
         BaseToolbar.OnTool(self, event)
@@ -316,7 +308,7 @@ class VDigitToolbar(BaseToolbar):
 
     def OnAddArea(self, event):
         """!Add area to the vector map layer"""
-        Debug.msg (2, "VDigitToolbar.OnAddCentroid()")
+        Debug.msg (2, "VDigitToolbar.OnAddArea()")
         self.action = { 'desc' : "addLine",
                         'type' : "area",
                         'id'   : self.addArea }
@@ -333,8 +325,7 @@ class VDigitToolbar(BaseToolbar):
             self.settingsDialog.OnCancel(None)
         
         # set default mouse settings
-        self.MapWindow.mouse['use'] = "pointer"
-        self.MapWindow.mouse['box'] = "point"
+        self.parent.GetMapToolbar().SelectDefault()
         self.MapWindow.polycoords = []
 
         # TODO: replace this by binding wx event in parent (or use signals...)
@@ -443,7 +434,11 @@ class VDigitToolbar(BaseToolbar):
         else:
             if self.GetToolEnabled(tool) is True:
                 self.EnableTool(tool, False)
-        
+
+    def GetAction(self, type = 'desc'):
+        """!Get current action info"""
+        return self.action.get(type, '')
+
     def OnSettings(self, event):
         """!Show settings dialog"""
         if self.digit is None:

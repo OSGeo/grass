@@ -28,8 +28,10 @@ import wx.aui
 from core        import globalvar
 from core.debug  import Debug
 from core.utils import _
+from gui_core.toolbars import ToolSwitcher
 
 from grass.script import core as grass
+
 
 class MapFrameBase(wx.Frame):
     """!Base class for map display window
@@ -94,6 +96,10 @@ class MapFrameBase(wx.Frame):
         else:
             self._mgr = auimgr
         
+        # handles switching between tools in different toolbars
+        self._toolSwitcher = ToolSwitcher()
+        self._toolSwitcher.toggleToolChanged.connect(self._onToggleTool)
+
     def _initMap(self, Map):
         """!Initialize map display, set dimensions and map region
         """
@@ -106,6 +112,9 @@ class MapFrameBase(wx.Frame):
         Map.region = Map.GetRegion() # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
 
+    def _onToggleTool(self):
+        self.GetWindow().UnregisterAllHandlers()
+
     def OnSize(self, event):
         """!Adjust statusbar on changing size"""
         # reposition checkbox in statusbar
@@ -113,6 +122,9 @@ class MapFrameBase(wx.Frame):
         
         # update statusbar
         self.StatusbarUpdate()
+
+    def GetToolSwitcher(self):
+        return self._toolSwitcher
 
     def SetProperty(self, name, value):
         """!Sets property"""
@@ -288,20 +300,14 @@ class MapFrameBase(wx.Frame):
     def OnZoomIn(self, event):
         """!Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
-        """
-        toolbar = self.GetMapToolbar()
-        self.SwitchTool(toolbar, event)
-        
+        """        
         win = self.GetWindow()
         self._prepareZoom(mapWindow = win, zoomType = 1)
         
     def OnZoomOut(self, event):
         """!Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
-        """
-        toolbar = self.GetMapToolbar()
-        self.SwitchTool(toolbar, event)
-        
+        """        
         win = self.GetWindow()
         self._prepareZoom(mapWindow = win, zoomType = -1)
 
@@ -329,27 +335,15 @@ class MapFrameBase(wx.Frame):
         
         # change the cursor
         mapWindow.SetNamedCursor('cross')
-    
-    def SwitchTool(self, toolbar, event):
-        """!Helper function to switch tools"""
-        # unregistration of all registered mouse event handlers of
-        # Mapwindow
-        self.MapWindow.UnregisterAllHandlers()
-        
-        if toolbar:
-            toolbar.OnTool(event)
-            toolbar.action['desc'] = ''
             
     def OnPointer(self, event):
         """!Sets mouse mode to pointer."""
         self.MapWindow.mouse['use'] = 'pointer'
+        self.MapWindow.mouse['box'] = 'point'
 
     def OnPan(self, event):
         """!Panning, set mouse to drag
         """
-        toolbar = self.GetMapToolbar()
-        self.SwitchTool(toolbar, event)
-        
         win = self.GetWindow()
         self._preparePan(mapWindow = win)
     
@@ -359,7 +353,7 @@ class MapFrameBase(wx.Frame):
         @param mapWindow MapWindow to prepare
         """
         mapWindow.mouse['use'] = "pan"
-        mapWindow.mouse['box'] = "pan"
+        mapWindow.mouse['box'] = "box"
         mapWindow.zoomtype = 0
         
         # change the cursor
@@ -503,6 +497,10 @@ class DoubleMapFrame(MapFrameBase):
         self.GetFirstWindow().Bind(wx.EVT_ENTER_WINDOW, self.ActivateFirstMap)
         self.GetSecondWindow().Bind(wx.EVT_ENTER_WINDOW, self.ActivateSecondMap)
     
+    def _onToggleTool(self):
+        self.GetFirstWindow().UnregisterAllHandlers()
+        self.GetSecondWindow().UnregisterAllHandlers()
+
     def GetFirstMap(self):
         """!Returns first Map instance
         """
@@ -606,10 +604,7 @@ class DoubleMapFrame(MapFrameBase):
     def OnZoomIn(self, event):
         """!Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
-        """
-        toolbar = self.GetMapToolbar()
-        self.SwitchTool(toolbar, event)
-        
+        """        
         win = self.GetFirstWindow()
         self._prepareZoom(mapWindow = win, zoomType = 1)
         
@@ -619,10 +614,7 @@ class DoubleMapFrame(MapFrameBase):
     def OnZoomOut(self, event):
         """!Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
-        """
-        toolbar = self.GetMapToolbar()
-        self.SwitchTool(toolbar, event)
-        
+        """        
         win = self.GetFirstWindow()
         self._prepareZoom(mapWindow = win, zoomType = -1)
         
@@ -631,10 +623,7 @@ class DoubleMapFrame(MapFrameBase):
         
     def OnPan(self, event):
         """!Panning, set mouse to drag
-        """
-        toolbar = self.GetMapToolbar()
-        self.SwitchTool(toolbar, event)
-        
+        """        
         win = self.GetFirstWindow()
         self._preparePan(mapWindow = win)
         
@@ -643,12 +632,11 @@ class DoubleMapFrame(MapFrameBase):
         
     def OnPointer(self, event):
         """!Set pointer mode (dragging overlays)"""
-        toolbar = self.GetMapToolbar()
-        self.SwitchTool(toolbar, event)
-
         self.GetFirstWindow().mouse['use'] = 'pointer'
+        self.GetFirstWindow().mouse['box'] = 'point'
         self.GetFirstWindow().SetNamedCursor('default')
         self.GetSecondWindow().mouse['use'] = 'pointer'
+        self.GetSecondWindow().mouse['box'] = 'point'
         self.GetSecondWindow().SetNamedCursor('default')
 
     def OnRender(self, event):

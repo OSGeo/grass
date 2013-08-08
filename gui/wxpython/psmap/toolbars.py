@@ -26,14 +26,19 @@ from icons.icon        import MetaIcon
 from core.globalvar    import ETCIMGDIR
 
 class PsMapToolbar(BaseToolbar):
-    def __init__(self, parent):
+    def __init__(self, parent, toolSwitcher):
         """!Toolbar Cartographic Composer (psmap.py)
         
         @param parent parent window
         """
-        BaseToolbar.__init__(self, parent)
+        BaseToolbar.__init__(self, parent, toolSwitcher)
         
         self.InitToolbar(self._toolbarData())
+        self._default = self.pointer
+        
+        for tool in (self.pointer, self.pan, self.zoomin, self.zoomout,
+                     self.drawGraphics, self.addMap):
+            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
 
         # custom button for graphics mode selection
         # TODO: could this be somehow generalized?
@@ -46,11 +51,6 @@ class PsMapToolbar(BaseToolbar):
 
         self.Realize()
 
-        self.action = { 'id' : self.pointer }
-        self.defaultAction = { 'id' : self.pointer,
-                               'bind' : self.parent.OnPointer }
-        self.OnTool(None)
-        
         from psmap.frame import havePILImage
         if not havePILImage:
             self.EnableTool(self.preview, False)
@@ -169,7 +169,6 @@ class PsMapToolbar(BaseToolbar):
 
     def OnDrawGraphics(self, event):
         """!Graphics tool activated."""
-        self.OnTool(event)
         # we need the previous id
         if self.drawGraphicsAction == 'pointAdd':
             self.parent.OnAddPoint(event)

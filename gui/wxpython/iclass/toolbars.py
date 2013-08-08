@@ -54,12 +54,13 @@ iClassIcons = {
 class IClassMapToolbar(BaseToolbar):
     """!IClass Map toolbar
     """
-    def __init__(self, parent):
+    def __init__(self, parent, toolSwitcher):
         """!IClass Map toolbar constructor
         """
-        BaseToolbar.__init__(self, parent)
+        BaseToolbar.__init__(self, parent, toolSwitcher)
         
         self.InitToolbar(self._toolbarData())
+        self._default = self.pan
         
         # add tool to toggle active map window
         self.togglemapid = wx.NewId()
@@ -72,14 +73,10 @@ class IClassMapToolbar(BaseToolbar):
                                                               BaseIcons["zoomBack"].GetLabel(),
                                                               _('/ Zoom to map')))
 
+        for tool in (self.pan, self.zoomIn, self.zoomOut):
+            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
         # realize the toolbar
         self.Realize()
-        
-        self.action = { 'id' : self.pan }
-        self.defaultAction = { 'id' : self.pan,
-                               'bind' : self.parent.OnPan }
-        
-        self.OnTool(None)
         
         self.EnableTool(self.zoomBack, False)
         

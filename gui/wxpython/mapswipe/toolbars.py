@@ -32,19 +32,19 @@ swipeIcons = {
 class SwipeMapToolbar(BaseToolbar):
     """!Map toolbar (to control map zoom and rendering)
     """
-    def __init__(self, parent):
+    def __init__(self, parent, toolSwitcher):
         """!Map toolbar constructor
         """
-        BaseToolbar.__init__(self, parent)
+        BaseToolbar.__init__(self, parent, toolSwitcher)
         
         self.InitToolbar(self._toolbarData())
+        self._default = self.pan
 
         # realize the toolbar
         self.Realize()
         
-        self.action = { 'id' : self.pan }
-        self.defaultAction = { 'id' : self.pan,
-                               'bind' : self.parent.OnPan }
+        for tool in (self.pointer, self.pan, self.zoomIn, self.zoomOut):
+            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
         
         self.EnableTool(self.zoomBack, False)
         

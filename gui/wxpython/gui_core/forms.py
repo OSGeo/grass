@@ -394,6 +394,8 @@ class TaskFrame(wx.Frame):
             self.modeler = self.parent
         else:
             self.modeler = None
+
+        self.dialogClosing = Signal('TaskFrame.dialogClosing')
         
         # module name + keywords
         title = self.task.get_name()
@@ -738,7 +740,7 @@ class TaskFrame(wx.Frame):
     def OnCancel(self, event):
         """!Cancel button pressed"""
         self.MakeModal(False)
-        
+        self.dialogClosing.emit()
         if self.get_dcmd and \
                 self.parent and \
                 self.parent.GetName() in ('LayerTree',
@@ -1516,6 +1518,9 @@ class CmdPanel(wx.Panel):
                                                         param = p)
                         p['wxId'] = [win.GetTextWin().GetId()]
                         win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
+                        # bind closing event because destructor is not working properly
+                        if hasattr(self.parent, 'dialogClosing'):
+                            self.parent.dialogClosing.connect(win.OnClose)
                     
                     # normal text field
                     else:
