@@ -33,6 +33,7 @@ from gui_core.mapdisp  import SingleMapFrame
 from core.settings     import UserSettings
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
+from gui_core.toolbars import ToolSwitcher
 
 import mapdisp.statusbar as sb
 import gcp.statusbar as sbgcp
@@ -141,6 +142,8 @@ class MapFrame(SingleMapFrame):
         #
         self._initMap(Map = self.SrcMap) 
         self._initMap(Map = self.TgtMap) 
+        
+        self.GetMapToolbar().SelectDefault()
 
         #
         # Bind various events
@@ -239,7 +242,7 @@ class MapFrame(SingleMapFrame):
         """
         # default toolbar
         if name == "map":
-            self.toolbars['map'] = MapToolbar(self, self.Map)
+            self.toolbars['map'] = MapToolbar(self, self._toolSwitcher)
 
             self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
@@ -252,7 +255,7 @@ class MapFrame(SingleMapFrame):
 
         # GCP display
         elif name == "gcpdisp":
-            self.toolbars['gcpdisp'] = GCPDisplayToolbar(self)
+            self.toolbars['gcpdisp'] = GCPDisplayToolbar(self, self._toolSwitcher)
 
             self._mgr.AddPane(self.toolbars['gcpdisp'],
                               wx.aui.AuiPaneInfo().
@@ -322,10 +325,7 @@ class MapFrame(SingleMapFrame):
 
     def OnPointer(self, event):
         """!Pointer button clicked
-        """
-        self.toolbars['gcpdisp'].OnTool(event)
-        self.toolbars['gcpdisp'].action['desc'] = ''
-        
+        """        
         # change the cursor
         self.SrcMapWindow.SetNamedCursor('cross')
         self.SrcMapWindow.mouse['use'] = "pointer"
@@ -338,10 +338,7 @@ class MapFrame(SingleMapFrame):
         """
         Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
-        """
-        self.toolbars['gcpdisp'].OnTool(event)
-        self.toolbars['gcpdisp'].action['desc'] = ''
-        
+        """        
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
         self.MapWindow.zoomtype = 1
@@ -368,9 +365,6 @@ class MapFrame(SingleMapFrame):
         Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        self.toolbars['gcpdisp'].OnTool(event)
-        self.toolbars['gcpdisp'].action['desc'] = ''
-        
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
         self.MapWindow.zoomtype = -1
@@ -395,10 +389,7 @@ class MapFrame(SingleMapFrame):
     def OnPan(self, event):
         """
         Panning, set mouse to drag
-        """
-        self.toolbars['gcpdisp'].OnTool(event)
-        self.toolbars['gcpdisp'].action['desc'] = ''
-        
+        """        
         self.MapWindow.mouse['use'] = "pan"
         self.MapWindow.mouse['box'] = "pan"
         self.MapWindow.zoomtype = 0

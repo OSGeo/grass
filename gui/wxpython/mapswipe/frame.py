@@ -23,6 +23,7 @@ import grass.script as grass
 
 from gui_core.mapdisp   import DoubleMapFrame
 from gui_core.dialogs   import GetImageHandlers
+from gui_core.toolbars import ToolSwitcher
 from mapwin.base import MapWindowProperties
 from core.render        import Map
 from mapdisp            import statusbar as sb
@@ -98,7 +99,7 @@ class SwipeMapFrame(DoubleMapFrame):
         self.rasters = {'first': None, 'second': None}
 
         # default action in map toolbar
-        self.OnPan(event = None)
+        self.GetMapToolbar().SelectDefault()
 
         self.resize = False
 
@@ -256,7 +257,7 @@ class SwipeMapFrame(DoubleMapFrame):
          - 'swipeMain'         - swipe functionality
         """
         if name == "swipeMap":
-            self.toolbars[name] = SwipeMapToolbar(self)
+            self.toolbars[name] = SwipeMapToolbar(self, self._toolSwitcher)
             self._mgr.AddPane(self.toolbars[name],
                       wx.aui.AuiPaneInfo().
                       Name(name).Caption(_("Map Toolbar")).

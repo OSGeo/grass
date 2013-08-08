@@ -22,6 +22,8 @@ import wx
 from core.utils import GetLayerNameFromCmd, _
 from gui_core.forms import GUI
 
+from grass.pydispatch.errors import DispatcherKeyError
+
 
 class OverlayController(object):
 
@@ -187,9 +189,6 @@ class DecorationDialog(wx.Dialog):
         self._ddstyle = ddstyle
         self._giface = giface
 
-        self._oldMouseUse = None
-        self._oldCursor = None
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
@@ -218,7 +217,12 @@ class DecorationDialog(wx.Dialog):
             self.resizeBtn.SetToolTipString(_("Click and drag on the map display to set legend "
                                               "size and position and then press OK"))
             self.resizeBtn.Disable()
-            self.resizeBtn.Bind(wx.EVT_TOGGLEBUTTON, self.OnResize)
+            toolSwitcher = self._giface.GetMapDisplay().GetToolSwitcher()
+            toolSwitcher.AddCustomToolToGroup(group='mouseUse', btnId=self.resizeBtn.GetId(),
+                                              toggleHandler=self.resizeBtn.SetValue)
+            toolSwitcher.toggleToolChanged.connect(self._toolChanged)
+            self.resizeBtn.Bind(wx.EVT_TOGGLEBUTTON, lambda evt: toolSwitcher.ToolChanged(evt.GetId()))
+
             box.Add(item=self.resizeBtn, proportion=0,
                     flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
             sizer.Add(item=box, proportion=0,
@@ -294,38 +298,37 @@ class DecorationDialog(wx.Dialog):
             else:
                 self._overlay.propwin.Show()
 
-    def OnResize(self, event):
-        window = self._giface.GetMapWindow()
-        if event.GetInt():
-            self._oldMouseUse = window.mouse['use']
-            self._oldCursor = window.GetNamedCursor()
-            window.SetNamedCursor('cross')
-            window.mouse['use'] = None
-            window.mouse['box'] = 'box'
-            window.pen = wx.Pen(colour='Black', width=2, style=wx.SHORT_DASH)
-            window.mouseLeftUp.connect(self._resizeLegend)
+    def _toolChanged(self, id):
+        """!Tool in toolbar or button itself were pressed"""
+        if id == self.resizeBtn.GetId():
+            if self.resizeBtn.GetValue():
+                # prepare for resizing
+                window = self._giface.GetMapWindow()
+                window.SetNamedCursor('cross')
+                window.mouse['use'] = None
+                window.mouse['box'] = 'box'
+                window.pen = wx.Pen(colour='Black', width=2, style=wx.SHORT_DASH)
+                window.mouseLeftUp.connect(self._resizeLegend)
+            else:
+                # stop resizing mode
+                self.DisconnectResizing()
+                self._giface.GetMapDisplay().GetMapToolbar().SelectDefault()
         else:
-            self.Restore()
+            # any other tool was pressed -> stop resizing mode
             self.DisconnectResizing()
 
-    def Restore(self):
-        """!Restore conditions before resizing"""
-        window = self._giface.GetMapWindow()
-        if self._oldCursor:
-            window.SetNamedCursor(self._oldCursor)
-        if self._oldMouseUse:
-            window.mouse['use'] = self._oldMouseUse
-
     def DisconnectResizing(self):
-        self._giface.GetMapWindow().mouseLeftUp.disconnect(self._resizeLegend)
+        try:
+            self._giface.GetMapWindow().mouseLeftUp.disconnect(self._resizeLegend)
+        except DispatcherKeyError:
+            pass
 
     def _resizeLegend(self, x, y):
         """!Update legend after drawing new legend size (moved from BufferedWindow)"""
-        self.resizeBtn.SetValue(False)
-        window = self._giface.GetMapWindow()
+        self._giface.GetMapDisplay().GetMapToolbar().SelectDefault()
         self.DisconnectResizing()
-        self.Restore()
         # resize legend
+        window = self._giface.GetMapWindow()
         screenSize = window.GetClientSizeTuple()
         self._overlay.ResizeLegend(window.mouse["begin"], window.mouse["end"], screenSize)
         # redraw
@@ -334,8 +337,6 @@ class DecorationDialog(wx.Dialog):
     def CloseDialog(self):
         """!Hide dialog"""
         if self._ddstyle == DECOR_DIALOG_LEGEND and self.resizeBtn.GetValue():
-            self.Restore()
-            self.resizeBtn.SetValue(False)
             self.DisconnectResizing()
 
         self.Hide()

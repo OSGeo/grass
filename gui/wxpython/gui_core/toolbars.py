@@ -20,10 +20,14 @@ import platform
 
 import wx
 
-from core               import globalvar
-from core.debug         import Debug
+from core import globalvar
+from core.debug import Debug
 from core.utils import _
-from icons.icon         import MetaIcon
+from icons.icon import MetaIcon
+from collections import defaultdict
+
+from grass.pydispatch.signal import Signal
+
 
 BaseIcons = {
     'display'    : MetaIcon(img = 'show',
@@ -94,16 +98,17 @@ class BaseToolbar(wx.ToolBar):
                                               ))
     @endcode
     """
-    def __init__(self, parent, style=wx.NO_BORDER|wx.TB_HORIZONTAL):
+    def __init__(self, parent, toolSwitcher=None, style=wx.NO_BORDER|wx.TB_HORIZONTAL):
         self.parent = parent
         wx.ToolBar.__init__(self, parent=self.parent, id=wx.ID_ANY,
                             style=style)
         
-        self.action = dict()
-        
-        self.Bind(wx.EVT_TOOL, self.OnTool)
-        
+
+        self._default = None
         self.SetToolBitmapSize(globalvar.toolbarSize)
+        
+        self.toolSwitcher = toolSwitcher
+        self.handlers = {}
         
     def InitToolbar(self, toolData):
         """!Initialize toolbar, add tools to the toolbar
@@ -138,12 +143,14 @@ class BaseToolbar(wx.ToolBar):
                 toolWin = self.InsertLabelTool(pos, tool, label, bitmap,
                                             bmpDisabled, kind,
                                             shortHelp, longHelp)
+            self.handlers[tool] = handler
             self.Bind(wx.EVT_TOOL, handler, toolWin)
+            self.Bind(wx.EVT_TOOL, self.OnTool, toolWin)
         else: # separator
             self.AddSeparator()
-        
+
         return tool
-    
+
     def EnableLongHelp(self, enable = True):
         """!Enable/disable long help
         
@@ -152,7 +159,7 @@ class BaseToolbar(wx.ToolBar):
         for tool in self._data:
             if tool[0] == '': # separator
                 continue
-            
+
             if enable:
                 self.SetToolLongHelp(vars(self)[tool[0]], tool[4])
             else:
@@ -161,33 +168,20 @@ class BaseToolbar(wx.ToolBar):
     def OnTool(self, event):
         """!Tool selected
         """
+        if self.toolSwitcher:
+            Debug.msg(3, "BaseToolbar.OnTool(): id = %s" % event.GetId())
+            self.toolSwitcher.ToolChanged(event.GetId())
+        event.Skip()
+
+    def SelectTool(self, id):
+        self.ToggleTool(id, True)
+        self.toolSwitcher.ToolChanged(id)
         
-        id = self.action.get('id', -1)
-        
-        if event:
-            # deselect previously selected tool
-            if id != -1 and id != event.GetId() :
-                self.ToggleTool(self.action['id'], False)
-            elif id != -1:
-                self.ToggleTool(self.action['id'], True)
-            
-            self.action['id'] = event.GetId()
-            
-            event.Skip()
-        elif id != -1:
-            # initialize toolbar
-            self.ToggleTool(self.action['id'], True)
-        
-    def GetAction(self, type = 'desc'):
-        """!Get current action info"""
-        return self.action.get(type, '')
-    
-    def SelectDefault(self, event):
+        self.handlers[id](event=None)
+
+    def SelectDefault(self):
         """!Select default tool"""
-        self.ToggleTool(self.defaultAction['id'], True)
-        self.defaultAction['bind'](event)
-        self.action = { 'id' : self.defaultAction['id'],
-                        'desc' : self.defaultAction.get('desc', '') }
+        self.SelectTool(self._default)
         
     def FixSize(self, width):
         """!Fix toolbar width on Windows
@@ -253,3 +247,80 @@ class BaseToolbar(wx.ToolBar):
         
         self.PopupMenu(menu)
         menu.Destroy()
+
+
+class ToolSwitcher:
+    """!Class handling switching tools in toolbar and custom toggle buttons."""
+    def __init__(self):
+        self._groups = defaultdict(lambda: defaultdict(list))
+        self._toolsGroups = defaultdict(list)
+        
+        # emitted when tool is changed
+        self.toggleToolChanged = Signal('ToolSwitcher.toggleToolChanged')
+
+    def AddToolToGroup(self, group, toolbar, tool):
+        """!Adds tool from toolbar to group of exclusive tools.
+        
+        @param group name of group (e.g. 'mouseUse')
+        @param toolbar instance of toolbar
+        @param tool id of a tool from the toolbar
+        """
+        self._groups[group][toolbar].append(tool)
+        self._toolsGroups[tool].append(group)
+        
+    def AddCustomToolToGroup(self, group, btnId, toggleHandler):
+        """!Adds custom tool from to group of exclusive tools (some toggle button).
+        
+        @param group name of group (e.g. 'mouseUse')
+        @param btnId id of a tool (typically button)
+        @param toggleHandler handler to be called to switch the button
+        """
+        self._groups[group]['custom'].append((btnId, toggleHandler))
+        self._toolsGroups[btnId].append(group)
+       
+    def RemoveCustomToolFromGroup(self, tool):
+        """!Removes custom tool from group.
+
+        @param tool id of the button
+        """
+        if not tool in self._toolsGroups:
+            return
+        for group in self._toolsGroups[tool]:
+            self._groups[group]['custom'] = \
+                [(bid, hdlr) for (bid, hdlr)
+                in self._groups[group]['custom'] if bid != tool]
+        
+    def RemoveToolbarFromGroup(self, group, toolbar):
+        """!Removes toolbar from group.
+        
+        Before toolbar is destroyed, it must be removed from group, too.
+        Otherwise we can expect some DeadObject errors.
+        
+        @param group name of group (e.g. 'mouseUse')
+        @param toolbar instance of toolbar
+        """
+        for tb in self._groups[group]:
+            if tb == toolbar:
+                del self._groups[group][tb]
+                break
+
+    def ToolChanged(self, tool):
+        """!When any tool/button is pressed, other tools from group must be unchecked.
+        
+        @param tool id of a tool/button
+        """
+        for group in self._toolsGroups[tool]:
+            for tb in self._groups[group]:
+                if tb == 'custom':
+                    for btnId, handler in self._groups[group][tb]:
+                        if btnId != tool:
+                            handler(False)
+                else:
+                    for tl in self._groups[group][tb]:
+                        if tb.FindById(tl):  # check if still exists
+                            if tl != tool:
+                                tb.ToggleTool(tl, False)
+                            else:
+                                tb.ToggleTool(tool, True)
+
+        self.toggleToolChanged.emit(id=tool)

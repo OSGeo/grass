@@ -66,16 +66,15 @@ NvizIcons = {
 class MapToolbar(BaseToolbar):
     """!Map Display toolbar
     """
-    def __init__(self, parent, mapcontent):
+    def __init__(self, parent, toolSwitcher):
         """!Map Display constructor
 
         @param parent reference to MapFrame
-        @param mapcontent reference to render.Map (registred by MapFrame)
         """
-        self.mapcontent = mapcontent # render.Map
-        BaseToolbar.__init__(self, parent = parent) # MapFrame
+        BaseToolbar.__init__(self, parent=parent, toolSwitcher=toolSwitcher) # MapFrame
         
         self.InitToolbar(self._toolbarData())
+        self._default = self.pointer
         
         # optional tools
         choices = [ _('2D view'), ]
@@ -127,11 +126,8 @@ class MapToolbar(BaseToolbar):
         self.combo.Hide()
         self.combo.Show()
         
-        self.action = { 'id' : self.pointer }
-        self.defaultAction = { 'id' : self.pointer,
-                               'bind' : self.parent.OnPointer }
-        
-        self.OnTool(None)
+        for tool in (self.pointer, self.query, self.pan, self.zoomIn, self.zoomOut):
+            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
         
         self.EnableTool(self.zoomBack, False)
         

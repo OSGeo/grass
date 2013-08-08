@@ -40,6 +40,7 @@ from gui_core.forms     import GUI
 from gui_core.dialogs   import HyperlinkDialog
 from gui_core.ghelp     import ShowAboutDialog
 from psmap.menudata     import PsMapMenuData
+from gui_core.toolbars import ToolSwitcher
 
 from psmap.dialogs      import *
 from psmap.instructions import *
@@ -65,10 +66,10 @@ class PsMapFrame(wx.Frame):
         self.SetMenuBar(self.menubar)
         #toolbar
 
-        self.toolbar = PsMapToolbar(parent = self)
+        self._toolSwitcher = ToolSwitcher()
+        self.toolbar = PsMapToolbar(parent=self, toolSwitcher=self._toolSwitcher)
         self.SetToolBar(self.toolbar)
         
-        self.actionOld = self.toolbar.action['id']
         self.iconsize = (16, 16)
         #satusbar
         self.statusbar = self.CreateStatusBar(number = 1)
@@ -154,7 +155,9 @@ class PsMapFrame(wx.Frame):
         
         # set WIND_OVERRIDE
         grass.use_temp_region()
-        
+
+        self.toolbar.SelectDefault()
+
         # create queues
         self.requestQ = Queue.Queue()
         self.resultQ = Queue.Queue()
@@ -457,25 +460,21 @@ class PsMapFrame(wx.Frame):
         dlg.Destroy()
         
     def OnPointer(self, event):
-        self.toolbar.OnTool(event)
         self.mouse["use"] = "pointer"
         self.canvas.SetCursor(self.cursors["default"])
         self.previewCanvas.SetCursor(self.cursors["default"])
         
     def OnPan(self, event):
-        self.toolbar.OnTool(event)
         self.mouse["use"] = "pan"
         self.canvas.SetCursor(self.cursors["hand"])
         self.previewCanvas.SetCursor(self.cursors["hand"])
         
     def OnZoomIn(self, event):
-        self.toolbar.OnTool(event)
         self.mouse["use"] = "zoomin"
         self.canvas.SetCursor(self.cursors["cross"])
         self.previewCanvas.SetCursor(self.cursors["cross"])
         
     def OnZoomOut(self, event):
-        self.toolbar.OnTool(event)
         self.mouse["use"] = "zoomout"
         self.canvas.SetCursor(self.cursors["cross"])
         self.previewCanvas.SetCursor(self.cursors["cross"])
@@ -500,14 +499,7 @@ class PsMapFrame(wx.Frame):
         
         
     def OnAddMap(self, event, notebook = False):
-        """!Add or edit map frame"""
-        if event is not None:
-            if event.GetId() != self.toolbar.action['id']:
-                self.actionOld = self.toolbar.action['id']
-                self.mouseOld = self.mouse['use']
-                self.cursorOld = self.canvas.GetCursor()
-            self.toolbar.OnTool(event)
-        
+        """!Add or edit map frame"""        
         if self.instruction.FindInstructionByType('map'):
             mapId = self.instruction.FindInstructionByType('map').id
         else: mapId = None
@@ -524,19 +516,9 @@ class PsMapFrame(wx.Frame):
             id[2] = vectorId
         
         
-        if mapId: # map exists
-            
-            self.toolbar.ToggleTool(self.actionOld, True)
-            self.toolbar.ToggleTool(self.toolbar.action['id'], False)
-            self.toolbar.action['id'] = self.actionOld
-            try:
-                self.canvas.SetCursor(self.cursorOld) 
-            except AttributeError:
-                pass
-            
-##            dlg = MapDialog(parent = self, id  = id, settings = self.instruction,
-##                            notebook = notebook)
-##            dlg.ShowModal()  
+        if mapId: # map exists        
+            self.toolbar.SelectDefault()
+
             if notebook:
                 #check map, raster, vector and save, destroy them
                 if 'map' in self.openDialogs:
@@ -1450,12 +1432,7 @@ class PsMapBufferedWindow(wx.Window):
             self.openDialogs['map'] = dlg
             self.openDialogs['map'].Show()
             
-            self.mouse['use'] = self.parent.mouseOld
-
-            self.SetCursor(self.parent.cursorOld)
-            self.parent.toolbar.ToggleTool(self.parent.actionOld, True)
-            self.parent.toolbar.ToggleTool(self.parent.toolbar.action['id'], False)
-            self.parent.toolbar.action['id'] = self.parent.actionOld
+            self.parent.toolbar.SelectDefault()
             return
 
         # resize resizable objects (map, line, rectangle)

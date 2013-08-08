@@ -49,6 +49,7 @@ from core.settings      import UserSettings
 from gui_core.mapdisp   import SingleMapFrame
 from mapwin.base import MapWindowProperties
 from gui_core.query     import QueryDialog, PrepareQueryResults
+from gui_core.toolbars import ToolSwitcher
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import DecorationDialog, TextLayerDialog, \
     LegendController, BarscaleController, \
@@ -119,7 +120,7 @@ class MapFrame(SingleMapFrame):
         #
         for toolb in toolbars:
             self.AddToolbar(toolb)
-        
+
         #
         # Add statusbar
         #
@@ -179,10 +180,7 @@ class MapFrame(SingleMapFrame):
         self.MapWindow2D.mapQueried.connect(self.Query)
         self.MapWindow2D.overlayActivated.connect(self._activateOverlay)
         self._setUpMapWindow(self.MapWindow2D)
-        # manage the state of toolbars connected to mouse cursor
-        self.MapWindow2D.mouseHandlerRegistered.connect(
-            lambda:
-            self.UpdateTools(None))
+
         self.MapWindow2D.mouseHandlerUnregistered.connect(self.ResetPointer)
 
         self.MapWindow2D.InitZoomHistory()
@@ -202,6 +200,7 @@ class MapFrame(SingleMapFrame):
         #
         self._initMap(Map = self.Map) 
 
+        self.toolbars['map'].SelectDefault()
         #
         # Bind various events
         #
@@ -281,7 +280,8 @@ class MapFrame(SingleMapFrame):
         elif self._mgr.GetPane('3d').IsShown():
             self._mgr.GetPane('3d').Hide()
         self._mgr.GetPane('vdigit').Show()
-        self.toolbars['vdigit'] = VDigitToolbar(parent = self, MapWindow = self.MapWindow,
+        self.toolbars['vdigit'] = VDigitToolbar(parent=self, toolSwitcher=self._toolSwitcher,
+                                                MapWindow = self.MapWindow,
                                                 digitClass=VDigit, giface=self._giface,
                                                 layerTree=self.tree)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
@@ -320,8 +320,12 @@ class MapFrame(SingleMapFrame):
         # add rotate tool to map toolbar
         self.toolbars['map'].InsertTool((('rotate', NvizIcons['rotate'],
                                           self.OnRotate, wx.ITEM_CHECK, 7),)) # 7 is position
+        self._toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self.toolbars['map'],
+                                          tool=self.toolbars['map'].rotate)
         self.toolbars['map'].InsertTool((('flyThrough', NvizIcons['flyThrough'],
-                                          self.OnFlyThrough, wx.ITEM_CHECK, 8),)) 
+                                          self.OnFlyThrough, wx.ITEM_CHECK, 8),))
+        self._toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self.toolbars['map'],
+                                          tool=self.toolbars['map'].flyThrough)
         self.toolbars['map'].ChangeToolsDesc(mode2d = False)
         # update status bar
         
@@ -424,6 +428,7 @@ class MapFrame(SingleMapFrame):
 
         self.MapWindow.UpdateMap()
         self._mgr.Update()
+        self.GetMapToolbar().SelectDefault()
         
     def AddToolbar(self, name, fixed = False):
         """!Add defined toolbar to the window
@@ -437,7 +442,7 @@ class MapFrame(SingleMapFrame):
         """
         # default toolbar
         if name == "map":
-            self.toolbars['map'] = MapToolbar(self, self.Map)
+            self.toolbars['map'] = MapToolbar(self, toolSwitcher=self._toolSwitcher)
             
             self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
@@ -468,6 +473,7 @@ class MapFrame(SingleMapFrame):
             return
         
         self._mgr.DetachPane(self.toolbars[name])
+        self._toolSwitcher.RemoveToolbarFromGroup('mouseUse', self.toolbars[name])
         self.toolbars[name].Destroy()
         self.toolbars.pop(name)
         
@@ -511,43 +517,20 @@ class MapFrame(SingleMapFrame):
 
     def OnPointer(self, event):
         """!Pointer button clicked
-        """
-        if self.GetMapToolbar():
-            if event:
-                self.SwitchTool(self.toolbars['map'], event)
-            self.toolbars['map'].action['desc'] = ''
-        
+        """        
         self.MapWindow.mouse['use'] = "pointer"
         self.MapWindow.mouse['box'] = "point"
 
         # change the cursor
         if self.GetToolbar('vdigit'):
-            # digitization tool activated
-            self.MapWindow.SetNamedCursor('cross')
+            self.toolbars['vdigit'].action['id'] = -1
+            self.toolbars['vdigit'].action['desc']=''
 
-            # reset mouse['box'] if needed
-            if self.toolbars['vdigit'].GetAction() in ['addLine']:
-                if self.toolbars['vdigit'].GetAction('type') in ['point', 'centroid']:
-                    self.MapWindow.mouse['box'] = 'point'
-                else: # line, boundary
-                    self.MapWindow.mouse['box'] = 'line'
-            elif self.toolbars['vdigit'].GetAction() in ['addVertex', 'removeVertex', 'splitLine',
-                                                         'editLine', 'displayCats', 'queryMap',
-                                                         'copyCats']:
-                self.MapWindow.mouse['box'] = 'point'
-            else: # moveLine, deleteLine
-                self.MapWindow.mouse['box'] = 'box'
-        
-        else:
-            self.MapWindow.SetNamedCursor('default')
+        self.MapWindow.SetNamedCursor('default')
 
     def OnRotate(self, event):
         """!Rotate 3D view
         """
-        if self.GetMapToolbar():
-            self.SwitchTool(self.toolbars['map'], event)
-            self.toolbars['map'].action['desc'] = ''
-        
         self.MapWindow.mouse['use'] = "rotate"
         
         # change the cursor
@@ -556,10 +539,6 @@ class MapFrame(SingleMapFrame):
     def OnFlyThrough(self, event):
         """!Fly-through mode
         """
-        if self.GetMapToolbar():
-            self.SwitchTool(self.toolbars['map'], event)
-            self.toolbars['map'].action['desc'] = ''
-        
         self.MapWindow.mouse['use'] = "fly"
         
         # change the cursor
@@ -803,10 +782,6 @@ class MapFrame(SingleMapFrame):
         
     def OnQuery(self, event):
         """!Query tools menu"""
-        if self.GetMapToolbar():
-            self.SwitchTool(self.toolbars['map'], event)
-        
-        self.toolbars['map'].action['desc'] = 'queryMap'
         self.MapWindow.mouse['use'] = "query"
         self.MapWindow.mouse['box'] = "point"
         self.MapWindow.zoomtype = 0
@@ -1030,7 +1005,6 @@ class MapFrame(SingleMapFrame):
     def OnAddText(self, event):
         """!Handler for text decoration menu selection.
         """
-        self.SwitchTool(self.toolbars['map'], event)
         if self.MapWindow.dragid > -1:
             id = self.MapWindow.dragid
             self.MapWindow.dragid = -1
@@ -1210,47 +1184,11 @@ class MapFrame(SingleMapFrame):
         self.dialogs['vnet'] = VNETDialog(parent=self, giface=self._giface)
         self.dialogs['vnet'].CenterOnScreen()
         self.dialogs['vnet'].Show()
-            
-    def SwitchTool(self, toolbar, event):
-        """!Calls UpdateTools to manage connected toolbars"""
-        self.UpdateTools(event)
-        SingleMapFrame.SwitchTool(self, toolbar, event)
-
-    def UpdateTools(self, event):
-        """!Method deals with relations of toolbars and other
-        elements""" 
-        # untoggles button in other toolbars
-        for toolbar in self.toolbars.itervalues():
-            if hasattr(event, 'GetEventObject') == True:
-                if event.GetEventObject() == toolbar:
-                    continue
-            toolbar.ToggleTool(toolbar.action['id'], False)
-            toolbar.action['id'] = -1
-            toolbar.OnTool(None)
-        
-        # mouse settings
-        self.MapWindow.mouse['box'] = 'point' 
-        self.MapWindow.mouse['use'] = 'pointer'
-        
-        # untoggles button in add legend dialog
-        # FIXME: remove this mess
-        if self.dialogs['legend']:
-            btn = self.dialogs['legend'].resizeBtn
-            if btn.GetValue():
-                btn.SetValue(0)
-                self.dialogs['legend'].DisconnectResizing()
-        if self.measureDistController and self.measureDistController.IsActive():
-            self.measureDistController.Stop(restore=False)
 
     def ResetPointer(self):
         """Sets pointer mode.
 
         Sets pointer and toggles it (e.g. after unregistration of mouse
         handler).
-        Somehow related to UpdateTools.
         """
-        # sets pointer mode
-        toolbar = self.toolbars['map']
-        toolbar.action['id'] = vars(toolbar)["pointer"]
-        toolbar.OnTool(None)
-        self.OnPointer(event=None)
+        self.GetMapToolbar().SelectDefault()

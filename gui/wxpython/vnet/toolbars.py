@@ -29,14 +29,15 @@ class PointListToolbar(BaseToolbar):
 
     @param parent reference to VNETDialog
     """
-    def __init__(self, parent, dialog, vnet_mgr):
-        BaseToolbar.__init__(self, parent)
+    def __init__(self, parent, toolSwitcher, dialog, vnet_mgr):
+        BaseToolbar.__init__(self, parent, toolSwitcher)
         self.vnet_mgr = vnet_mgr
         self.vnet_pts_mgr = self.vnet_mgr.GetPointsManager()
 
         self.dialog = dialog
 
         self.InitToolbar(self._toolbarData())
+        self.toolSwitcher.AddToolToGroup('mouseUse', self, self.insertPoint)
         
         # realize the toolbar
         self.Realize()

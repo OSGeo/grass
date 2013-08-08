@@ -207,9 +207,11 @@ class VNETDialog(wx.Dialog):
                               name = 'points')
 
         self.list = PtsList(parent = pointsPanel, vnet_mgr = self.vnet_mgr)
-        self.toolbars['pointsList'] = PointListToolbar(parent = pointsPanel, 
-                                                       dialog = self, 
-                                                       vnet_mgr = self.vnet_mgr)
+        toolSwitcher=self.giface.GetMapDisplay().GetToolSwitcher()
+        self.toolbars['pointsList'] = PointListToolbar(parent=pointsPanel,
+                                                       toolSwitcher=toolSwitcher,
+                                                       dialog=self, 
+                                                       vnet_mgr=self.vnet_mgr)
 
         anSettingsPanel = wx.Panel(parent = pointsPanel)
 
