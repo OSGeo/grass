@@ -694,9 +694,9 @@ class VDigitToolbar(BaseToolbar):
                 # add layer to map layer tree
                 if self.layerTree:
                     mapName = dlg.GetName() + '@' + grass.gisenv()['MAPSET']
-                    self.layerTree.AddLayer(ltype = 'vector',
-                                            lname = mapName,
-                                            lcmd = ['d.vect', 'map=%s' % mapName])
+                    self._giface.GetLayerList().AddLayer(ltype='vector',
+                                                         name=mapName,
+                                                         cmd=['d.vect', 'map=%s' % mapName])
                     
                     vectLayers = self.UpdateListOfLayers(updateTool = True)
                     selection = vectLayers.index(mapName)

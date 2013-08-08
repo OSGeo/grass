@@ -157,9 +157,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # init associated map display
         pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
-        gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(self._giface,
-                                                                   self)
-        self.mapdisplay = MapFrame(self, giface = gifaceForDisplay,
+        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(self._giface,
+                                                                         self)
+        self.mapdisplay = MapFrame(self, giface=self._gifaceForDisplay,
                                    id = wx.ID_ANY, pos = pos,
                                    size = globalvar.MAP_WINDOW_SIZE,
                                    style = wx.DEFAULT_FRAME_STYLE,
@@ -552,7 +552,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnSaveWs(self, event):
         """!Show dialog for saving web service layer into GRASS vector/raster layer"""
         mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
-        dlg = SaveWMSLayerDialog(parent = self, layer = mapLayer, ltree = self)
+        dlg = SaveWMSLayerDialog(parent=self, layer=mapLayer,
+                                 giface=self._gifaceForDisplay)
         dlg.CentreOnScreen()
         dlg.Show()
 
