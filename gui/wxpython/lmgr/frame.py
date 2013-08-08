@@ -279,8 +279,9 @@ class GMFrame(wx.Frame):
         
         # create 'command output' text area
         self._gconsole = GConsole(guiparent = self, giface = self._giface,
-                                  ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group|^r.in.gdal|^r.external|^r.external.out|'
-                                  '^v.in.ogr|^v.external|^v.external.out')
+                                  ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.in.gdal$|'
+                                                      '^r.external$|^r.external.out$|'
+                                                      '^v.in.ogr$|^v.external$|^v.external.out$')
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
                                       menuModel=self._moduleTreeBuilder.GetModel(),
                                       gcstyle = GC_PROMPT)
