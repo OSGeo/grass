@@ -33,7 +33,7 @@ class Layer(object):
     def __dir__(self):
         return self._pydata[0].keys()
 
-    def __repr__(self):
+    def __str__(self):
         return self.maplayer.name
 
 
@@ -94,9 +94,35 @@ class LayerList(object):
         self._tree.AddLayer(ltype=ltype, lname=name, lchecked=checked,
                             lopacity=opacity, lcmd=cmd)
 
+    def GetLayersByName(self, name):
+        items = self._tree.FindItemByData(key='name', value=name)
+        if items is None:
+            return []
+        else:
+            layers = []
+            for item in items:
+                layer = Layer(self._tree.GetPyData(item))
+                layers.append(layer)
+            return layers
+
+    def GetLayerByData(self, key, value):
+        """!Returns layer with specified.
+
+        Returns only one layer.
+        Avoid using this method, it might be removed in the future.
+        """
+        if key == 'name':
+            print "giface.GetLayerByData(): Do not with use key='name',"
+            " use GetLayersByName instead."
+        item = self._tree.FindItemByData(key=key, value=value)
+        if item is None:
+            return None
+        else:
+            return Layer(self._tree.GetPyData(item))
+
 
 class LayerManagerGrassInterface(object):
-    """!@implements GrassInterface"""
+    """!@implements core::giface::GrassInterface"""
     def __init__(self, lmgr):
         """!Costructor is specific to the current implementation.
 
@@ -160,6 +186,8 @@ class LayerManagerGrassInterface(object):
 class LayerManagerGrassInterfaceForMapDisplay(object):
     """!Provides reference only to the given layer list (according to tree),
         not to the current.
+
+        @implements core::giface::GrassInterface
     """
     def __init__(self, giface, tree):
         """!
