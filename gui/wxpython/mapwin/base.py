@@ -355,3 +355,29 @@ class MapWindowBase(object):
         return self._cursor
 
     cursor = property(fget=GetNamedCursor, fset=SetNamedCursor)
+
+    def SetModePointer(self):
+        """!Sets mouse mode to pointer."""
+        self.mouse['use'] = 'pointer'
+        self.mouse['box'] = 'point'
+        self.SetNamedCursor('default')
+
+    def SetModePan(self):
+        """!Sets mouse mode to pan."""
+        self.mouse['use'] = "pan"
+        self.mouse['box'] = "box"
+        self.zoomtype = 0
+        self.SetNamedCursor('hand')
+
+    def SetModeZoomIn(self):
+        self._setModeZoom(zoomType=1)
+
+    def SetModeZoomOut(self):
+        self._setModeZoom(zoomType=-1)
+
+    def _setModeZoom(self, zoomType):
+        self.mouse['use'] = "zoom"
+        self.mouse['box'] = "box"
+        self.zoomtype = zoomType
+        self.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
+        self.SetNamedCursor('cross')

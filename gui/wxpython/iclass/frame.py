@@ -53,7 +53,6 @@ from core.gcmd          import RunCommand, GMessage, GError, GWarning
 from gui_core.dialogs   import SetOpacityDialog
 from mapwin.base import MapWindowProperties
 from dbmgr.vinfo        import VectorDBInfo
-from gui_core.toolbars import ToolSwitcher
 import grass.script as grass
 
 from iclass.digit       import IClassVDigitWindow, IClassVDigit
@@ -1116,9 +1115,8 @@ class IClassMapFrame(DoubleMapFrame):
 
         @todo: pointers need refactoring
         """
-        toolbar = self.GetMapToolbar()
-
-        self.GetFirstWindow().mouse['use'] = 'pointer'
+        self.GetFirstWindow().SetModePointer()
+        self.GetSecondWindow().SetModePointer()
 
     def OnScatterplot(self, event):
         """!Init interactive scatterplot tools

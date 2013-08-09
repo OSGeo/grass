@@ -23,7 +23,6 @@ import grass.script as grass
 
 from gui_core.mapdisp   import DoubleMapFrame
 from gui_core.dialogs   import GetImageHandlers
-from gui_core.toolbars import ToolSwitcher
 from mapwin.base import MapWindowProperties
 from core.render        import Map
 from mapdisp            import statusbar as sb

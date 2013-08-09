@@ -298,18 +298,12 @@ class MapFrameBase(wx.Frame):
         self.MapWindow.EraseMap()
         
     def OnZoomIn(self, event):
-        """!Zoom in the map.
-        Set mouse cursor, zoombox attributes, and zoom direction
-        """        
-        win = self.GetWindow()
-        self._prepareZoom(mapWindow = win, zoomType = 1)
+        """!Zoom in the map."""
+        self.MapWindow.SetModeZoomIn()
         
     def OnZoomOut(self, event):
-        """!Zoom out the map.
-        Set mouse cursor, zoombox attributes, and zoom direction
-        """        
-        win = self.GetWindow()
-        self._prepareZoom(mapWindow = win, zoomType = -1)
+        """!Zoom out the map."""
+        self.MapWindow.SetModeZoomOut()
 
     def _setUpMapWindow(self, mapWindow):
         """Binds map windows' zoom history signals to map toolbar."""
@@ -322,43 +316,15 @@ class MapFrameBase(wx.Frame):
             self.GetMapToolbar().Enable('zoomBack', enable=False))
         mapWindow.mouseMoving.connect(self.CoordinatesChanged)
 
-    def _prepareZoom(self, mapWindow, zoomType):
-        """!Prepares MapWindow for zoom, toggles toolbar
-        
-        @param mapWindow MapWindow to prepare
-        @param zoomType 1 for zoom in, -1 for zoom out
-        """
-        mapWindow.mouse['use'] = "zoom"
-        mapWindow.mouse['box'] = "box"
-        mapWindow.zoomtype = zoomType
-        mapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
-        
-        # change the cursor
-        mapWindow.SetNamedCursor('cross')
-            
     def OnPointer(self, event):
         """!Sets mouse mode to pointer."""
-        self.MapWindow.mouse['use'] = 'pointer'
-        self.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.SetModePointer()
 
     def OnPan(self, event):
         """!Panning, set mouse to drag
         """
-        win = self.GetWindow()
-        self._preparePan(mapWindow = win)
-    
-    def _preparePan(self, mapWindow):
-        """!Prepares MapWindow for pan, toggles toolbar
-        
-        @param mapWindow MapWindow to prepare
-        """
-        mapWindow.mouse['use'] = "pan"
-        mapWindow.mouse['box'] = "box"
-        mapWindow.zoomtype = 0
-        
-        # change the cursor
-        mapWindow.SetNamedCursor('hand')
-        
+        self.MapWindow.SetModePan()
+
     def OnZoomBack(self, event):
         """!Zoom last (previously stored position)
         """
@@ -602,42 +568,24 @@ class DoubleMapFrame(MapFrameBase):
         self.Render(mapToRender = self.GetFirstWindow())
 
     def OnZoomIn(self, event):
-        """!Zoom in the map.
-        Set mouse cursor, zoombox attributes, and zoom direction
-        """        
-        win = self.GetFirstWindow()
-        self._prepareZoom(mapWindow = win, zoomType = 1)
-        
-        win = self.GetSecondWindow()
-        self._prepareZoom(mapWindow = win, zoomType = 1)
+        """!Zoom in the map."""
+        self.GetFirstWindow().SetModeZoomIn()
+        self.GetSecondWindow().SetModeZoomIn()
 
     def OnZoomOut(self, event):
-        """!Zoom out the map.
-        Set mouse cursor, zoombox attributes, and zoom direction
-        """        
-        win = self.GetFirstWindow()
-        self._prepareZoom(mapWindow = win, zoomType = -1)
-        
-        win = self.GetSecondWindow()
-        self._prepareZoom(mapWindow = win, zoomType = -1)
+        """!Zoom out the map."""
+        self.GetFirstWindow().SetModeZoomOut()
+        self.GetSecondWindow().SetModeZoomOut()
         
     def OnPan(self, event):
-        """!Panning, set mouse to drag
-        """        
-        win = self.GetFirstWindow()
-        self._preparePan(mapWindow = win)
-        
-        win = self.GetSecondWindow()
-        self._preparePan(mapWindow = win)
-        
+        """!Panning, set mouse to pan"""
+        self.GetFirstWindow().SetModePan()
+        self.GetSecondWindow().SetModePan()
+
     def OnPointer(self, event):
         """!Set pointer mode (dragging overlays)"""
-        self.GetFirstWindow().mouse['use'] = 'pointer'
-        self.GetFirstWindow().mouse['box'] = 'point'
-        self.GetFirstWindow().SetNamedCursor('default')
-        self.GetSecondWindow().mouse['use'] = 'pointer'
-        self.GetSecondWindow().mouse['box'] = 'point'
-        self.GetSecondWindow().SetNamedCursor('default')
+        self.GetFirstWindow().SetModePointer()
+        self.GetSecondWindow().SetModePointer()
 
     def OnRender(self, event):
         """!Re-render map composition (each map layer)

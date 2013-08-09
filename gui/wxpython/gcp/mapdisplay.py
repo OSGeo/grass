@@ -33,7 +33,6 @@ from gui_core.mapdisp  import SingleMapFrame
 from core.settings     import UserSettings
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
-from gui_core.toolbars import ToolSwitcher
 
 import mapdisp.statusbar as sb
 import gcp.statusbar as sbgcp
@@ -326,88 +325,26 @@ class MapFrame(SingleMapFrame):
     def OnPointer(self, event):
         """!Pointer button clicked
         """        
-        # change the cursor
+        self.SrcMapWindow.SetModePointer()
+        self.TgtMapWindow.SetModePointer()
+        # change the default cursor
         self.SrcMapWindow.SetNamedCursor('cross')
-        self.SrcMapWindow.mouse['use'] = "pointer"
-        self.SrcMapWindow.mouse['box'] = "point"
         self.TgtMapWindow.SetNamedCursor('cross')
-        self.TgtMapWindow.mouse['use'] = "pointer"
-        self.TgtMapWindow.mouse['box'] = "point"
 
     def OnZoomIn(self, event):
-        """
-        Zoom in the map.
-        Set mouse cursor, zoombox attributes, and zoom direction
-        """        
-        self.MapWindow.mouse['use'] = "zoom"
-        self.MapWindow.mouse['box'] = "box"
-        self.MapWindow.zoomtype = 1
-        self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-        
-        # change the cursor
-        self.MapWindow.SetNamedCursor('cross')
-
-        if self.MapWindow == self.SrcMapWindow:
-            win = self.TgtMapWindow
-        elif self.MapWindow == self.TgtMapWindow:
-            win = self.SrcMapWindow
-
-        win.mouse['use'] = "zoom"
-        win.mouse['box'] = "box"
-        win.zoomtype = 1
-        win.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-        
-        # change the cursor
-        win.SetNamedCursor('cross')
+        """Zoom in the map."""
+        self.SrcMapWindow.SetModeZoomIn()
+        self.TgtMapWindow.SetModeZoomIn()
 
     def OnZoomOut(self, event):
-        """
-        Zoom out the map.
-        Set mouse cursor, zoombox attributes, and zoom direction
-        """
-        self.MapWindow.mouse['use'] = "zoom"
-        self.MapWindow.mouse['box'] = "box"
-        self.MapWindow.zoomtype = -1
-        self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-        
-        # change the cursor
-        self.MapWindow.SetNamedCursor('cross')
-
-        if self.MapWindow == self.SrcMapWindow:
-            win = self.TgtMapWindow
-        elif self.MapWindow == self.TgtMapWindow:
-            win = self.SrcMapWindow
-
-        win.mouse['use'] = "zoom"
-        win.mouse['box'] = "box"
-        win.zoomtype = -1
-        win.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-        
-        # change the cursor
-        win.SetNamedCursor('cross')
+        """Zoom out the map."""
+        self.SrcMapWindow.SetModeZoomOut()
+        self.TgtMapWindow.SetModeZoomOut()
 
     def OnPan(self, event):
-        """
-        Panning, set mouse to drag
-        """        
-        self.MapWindow.mouse['use'] = "pan"
-        self.MapWindow.mouse['box'] = "pan"
-        self.MapWindow.zoomtype = 0
-        
-        # change the cursor
-        self.MapWindow.SetNamedCursor('hand')
-
-        if self.MapWindow == self.SrcMapWindow:
-            win = self.TgtMapWindow
-        elif self.MapWindow == self.TgtMapWindow:
-            win = self.SrcMapWindow
-
-        win.mouse['use'] = "pan"
-        win.mouse['box'] = "pan"
-        win.zoomtype = 0
-        
-        # change the cursor
-        win.SetNamedCursor('hand')
+        """Panning, set mouse to drag"""
+        self.SrcMapWindow.SetModePan()
+        self.TgtMapWindow.SetModePan()
 
     def OnErase(self, event):
         """
