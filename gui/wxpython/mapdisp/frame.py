@@ -49,7 +49,6 @@ from core.settings      import UserSettings
 from gui_core.mapdisp   import SingleMapFrame
 from mapwin.base import MapWindowProperties
 from gui_core.query     import QueryDialog, PrepareQueryResults
-from gui_core.toolbars import ToolSwitcher
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import DecorationDialog, TextLayerDialog, \
     LegendController, BarscaleController, \
@@ -518,15 +517,11 @@ class MapFrame(SingleMapFrame):
     def OnPointer(self, event):
         """!Pointer button clicked
         """        
-        self.MapWindow.mouse['use'] = "pointer"
-        self.MapWindow.mouse['box'] = "point"
+        self.MapWindow.SetModePointer()
 
-        # change the cursor
         if self.GetToolbar('vdigit'):
             self.toolbars['vdigit'].action['id'] = -1
             self.toolbars['vdigit'].action['desc']=''
-
-        self.MapWindow.SetNamedCursor('default')
 
     def OnRotate(self, event):
         """!Rotate 3D view

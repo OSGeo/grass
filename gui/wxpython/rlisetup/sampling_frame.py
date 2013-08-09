@@ -90,46 +90,17 @@ class RLiSetupMapPanel(wx.Panel):
         """!Returns currently drawn region in a dict"""
         return self._region
 
+    def OnPan(self, event):
+        """!Panning, set mouse to drag."""
+        self.mapWindow.SetModePan()
+
     def OnZoomIn(self, event):
-        """!Zoom in the map.
-        """
-        self._prepareZoom(mapWindow=self.mapWindow, zoomType=1)
+        """!Zoom in the map."""
+        self.mapWindow.SetModeZoomIn()
 
     def OnZoomOut(self, event):
-        """!Zoom out the map.
-        """
-        self._prepareZoom(mapWindow=self.mapWindow, zoomType=-1)
-
-    def _prepareZoom(self, mapWindow, zoomType):
-        """!Prepares MapWindow for zoom
-
-        @param mapWindow MapWindow to prepare
-        @param zoomType 1 for zoom in, -1 for zoom out
-        """
-        mapWindow.mouse['use'] = "zoom"
-        mapWindow.mouse['box'] = "box"
-        mapWindow.zoomtype = zoomType
-        mapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-
-        # change the cursor
-        mapWindow.SetNamedCursor('cross')
-
-    def _onToolChanged(self):
-        """!Helper function to disconnect drawing"""
-        try:
-            self.mapWindow.mouseLeftUp.disconnect(self._rectangleDrawn)
-        except DispatcherKeyError:
-            pass
-
-    def OnPan(self, event):
-        """!Panning, set mouse to drag
-        """
-        self.mapWindow.mouse['use'] = "pan"
-        self.mapWindow.mouse['box'] = "pan"
-        self.mapWindow.zoomtype = 0
-
-        # change the cursor
-        self.mapWindow.SetNamedCursor('hand')
+        """!Zoom out the map."""
+        self.mapWindow.SetModeZoomOut()
 
     def OnZoomToMap(self, event):
         layers = self.map_.GetListOfLayers()
@@ -143,6 +114,13 @@ class RLiSetupMapPanel(wx.Panel):
         self.mapWindow.SetNamedCursor('cross')
 
         self.mapWindow.mouseLeftUp.connect(self._rectangleDrawn)
+
+    def _onToolChanged(self):
+        """!Helper function to disconnect drawing"""
+        try:
+            self.mapWindow.mouseLeftUp.disconnect(self._rectangleDrawn)
+        except DispatcherKeyError:
+            pass
 
     def _rectangleDrawn(self):
         """!When drawing finished, get region values"""
