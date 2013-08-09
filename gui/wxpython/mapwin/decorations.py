@@ -318,10 +318,11 @@ class DecorationDialog(wx.Dialog):
             self.DisconnectResizing()
 
     def DisconnectResizing(self):
-        try:
-            self._giface.GetMapWindow().mouseLeftUp.disconnect(self._resizeLegend)
-        except DispatcherKeyError:
-            pass
+        if not self.parent.IsPaneShown('3d'):
+            try:            
+                self._giface.GetMapWindow().mouseLeftUp.disconnect(self._resizeLegend)
+            except DispatcherKeyError:
+                pass
 
     def _resizeLegend(self, x, y):
         """!Update legend after drawing new legend size (moved from BufferedWindow)"""
