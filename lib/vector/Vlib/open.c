@@ -559,6 +559,29 @@ int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
 }
 
 /*!
+  \brief Open existing temporary vector map for reading
+  
+  Temporary vector maps are stored in the current mapset (directory
+  <tt>.tmp/<hostname>/vector</tt>).
+
+  Calls G_fatal_error() on failure.
+
+  \todo Create new vector map if doesn't exist.
+  
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to open
+  \param mapset mapset name ("" for search path)
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error
+*/
+int Vect_open_tmp_old(struct Map_info *Map, const char *name, const char *mapset)
+{
+    return Vect__open_old(Map, name, mapset, NULL, FALSE, FALSE, TRUE);
+}
+
+/*!
   \brief Open existing vector map for reading
   
   Calls G_fatal_error() on failure.
@@ -600,6 +623,32 @@ int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset,
 int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 {
     return Vect__open_old(Map, name, mapset, NULL, TRUE, FALSE, FALSE);
+}
+
+/*!
+  \brief Open existing temporary vector map for reading/writing
+  
+  Temporary vector maps are stored in the current mapset (directory
+  <tt>.tmp/<hostname>/vector</tt>).
+
+  By default list of updated features is not maintained, see
+  Vect_set_updated() for details.
+  
+  Calls G_fatal_error() on failure.
+
+  \todo Create new vector map if doesn't exist.
+
+  \param[out] Map pointer to Map_info structure
+  \param name name of vector map to update
+  \param mapset mapset name
+  
+  \return 1 open on level 1 (without topology)
+  \return 2 open on level 2 (with topology)
+  \return -1 on error
+*/
+int Vect_open_tmp_update(struct Map_info *Map, const char *name, const char *mapset)
+{
+    return Vect__open_old(Map, name, mapset, NULL, TRUE, FALSE, TRUE);
 }
 
 /*!
