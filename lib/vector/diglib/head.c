@@ -85,6 +85,7 @@ int dig__read_head(struct Map_info *Map)
     unsigned char buf[10];
     struct Port_info port;
 
+    G_debug(2, "dig__read_head(): name = '%s'", Map->name);
     dig_fseek(&(Map->dig_fp), 0L, 0);
 
     /* bytes 1 - 5 */
@@ -96,8 +97,7 @@ int dig__read_head(struct Map_info *Map)
     Map->head.coor_version.back_minor = buf[3];
     Map->head.port.byte_order = buf[4];
 
-    G_debug(2,
-	    "Coor header: file version %d.%d , supported from GRASS version %d.%d",
+    G_debug(2, "Coor header: file version %d.%d , supported from GRASS version %d.%d",
 	    Map->head.coor_version.major, Map->head.coor_version.minor,
 	    Map->head.coor_version.back_major, Map->head.coor_version.back_minor);
 

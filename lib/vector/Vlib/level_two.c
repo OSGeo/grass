@@ -457,6 +457,8 @@ int Vect_get_centroid_area(const struct Map_info *Map, int centroid)
 */
 void Vect_set_updated(struct Map_info *Map, int enable)
 {
+    G_debug(1, "Vect_set_updated(): name = '%s' enabled = %d", Map->name, enable);
+    
     check_level(Map);
     
     Map->plus.uplist.do_uplist = enable != 0 ? TRUE : FALSE;

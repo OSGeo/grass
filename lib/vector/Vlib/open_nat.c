@@ -38,32 +38,36 @@ static int check_coor(struct Map_info *Map);
 */
 int V1_open_old_nat(struct Map_info *Map, int update)
 {
-    char buf[1000];
+    char *path;
     struct Coor_info CInfo;
 
     G_debug(1, "V1_open_old_nat(): name = %s mapset = %s", Map->name,
 	    Map->mapset);
 
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+    path = Vect__get_path(Map);
     dig_file_init(&(Map->dig_fp));
     if (update)
-	Map->dig_fp.file = G_fopen_modify(buf, GV_COOR_ELEMENT);
+	Map->dig_fp.file = G_fopen_modify(path, GV_COOR_ELEMENT);
     else
 	Map->dig_fp.file =
-	    G_fopen_old(buf, GV_COOR_ELEMENT, Map->mapset);
-
+	    G_fopen_old(path, GV_COOR_ELEMENT, Map->mapset);
+    G_free(path);
+    
     if (Map->dig_fp.file == NULL) {
         G_warning(_("Unable to open coor file for vector map <%s>"),
 		  Vect_get_full_name(Map));
         return -1;
     }
 
-    /* needed to determine file size, Map->head.size will be updated by dig__read_head(Map) */
+    /* needed to determine file size, Map->head.size will be updated
+       by dig__read_head(Map) */
     Vect_coor_info(Map, &CInfo); 
     Map->head.size = CInfo.size;
     
-    if (!(dig__read_head(Map)))
-	return (-1);
+    if (!(dig__read_head(Map))) {
+        G_debug(1, "dig__read_head(): failed");
+	return -1;
+    }
 
     /* compare coor size stored in head with real size */
     /* check should catch if LFS is required but not available */
