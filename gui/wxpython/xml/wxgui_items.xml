@@ -4,6 +4,7 @@
   <wxgui-item name="Georectify">
     <label>Georectify</label>
     <handler>OnGCPManager</handler>
+    <related-module>g.gui.gcp</related-module>
     <description>Manage Ground Control Points for Georectification</description>
   </wxgui-item>
   <wxgui-item name="GraphicalModeler">
