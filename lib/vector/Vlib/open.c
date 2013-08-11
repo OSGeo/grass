@@ -171,8 +171,13 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     const char *fmapset;
 
     G_debug(1, "Vect__open_old(): name = %s, mapset = %s, layer = %s, update = %d, "
-            "head_only = %d, is_tmp = %d", name, mapset, layer ? layer : "", update, head_only,
+            "head_only = %d, is_tmp = %d", name, mapset, layer ? layer : "NULL", update, head_only,
             is_tmp);
+    
+    if (!is_tmp) {
+        is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TRUE : FALSE;
+        G_debug(1, "Vect__open_old(): is_tmp = %d (check GRASS_VECTOR_TEMPORARY)", is_tmp);
+    }
 
     /* zero Map_info structure */
     G_zero(Map, sizeof(struct Map_info));
@@ -845,7 +850,12 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 */
 int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 {
-    return open_new(Map, name, with_z, FALSE);
+    int is_tmp;
+    
+    is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TRUE : FALSE;
+    G_debug(1, "Vect_open_new(): is_tmp = %d", is_tmp);
+    
+    return open_new(Map, name, with_z, is_tmp);
 }
 
 /*!
@@ -878,7 +888,8 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
     else {
         sprintf(tmp_name, "%s", name);
     }
-    
+    G_debug(1, "Vect_open_tmp_new(): name = '%s' with_z = %d", name, with_z);
+
     return open_new(Map, tmp_name, with_z, TRUE); /* temporary map */
 }
 
@@ -1017,24 +1028,27 @@ int Vect_maptype(const struct Map_info *Map)
 int Vect_open_topo(struct Map_info *Map, int head_only)
 {
     int err, ret;
-    char buf[GPATH_MAX], file_path[GPATH_MAX];
+    char file_path[GPATH_MAX], *path;
     struct gvfile fp;
     struct Coor_info CInfo;
     struct Plus_head *Plus;
 
-    G_debug(1, "Vect_open_topo(): name = %s mapset= %s", Map->name,
+    G_debug(1, "Vect_open_topo(): name = %s mapset = %s", Map->name,
             Map->mapset);
 
     Plus = &(Map->plus);
 
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    G_file_name(file_path, buf, GV_TOPO_ELEMENT, Map->mapset);
-
-    if (access(file_path, F_OK) != 0)   /* does not exist */
+    path = Vect__get_path(Map);
+    G_file_name(file_path, path, GV_TOPO_ELEMENT, Map->mapset);
+    
+    if (access(file_path, F_OK) != 0) {  /* does not exist */
+        G_free(path);
         return 1;
+    }
 
     dig_file_init(&fp);
-    fp.file = G_fopen_old(buf, GV_TOPO_ELEMENT, Map->mapset);
+    fp.file = G_fopen_old(path, GV_TOPO_ELEMENT, Map->mapset);
+    G_free(path);
 
     if (fp.file == NULL) {      /* topo file is not available */
         G_debug(1, "Cannot open topo file for vector '%s@%s'.",

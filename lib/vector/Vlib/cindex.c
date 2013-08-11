@@ -485,7 +485,7 @@ int Vect_cidx_save(struct Map_info *Map)
 int Vect_cidx_open(struct Map_info *Map, int head_only)
 {
     int ret;
-    char buf[500], file_path[2000];
+    char file_path[GPATH_MAX], *path;
     struct gvfile fp;
     struct Plus_head *Plus;
 
@@ -494,16 +494,18 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
 
     Plus = &(Map->plus);
 
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-    G_file_name(file_path, buf, GV_CIDX_ELEMENT, Map->mapset);
+    path = Vect__get_path(Map);
+    G_file_name(file_path, path, GV_CIDX_ELEMENT, Map->mapset);
 
-    if (access(file_path, F_OK) != 0)	/* does not exist */
+    if (access(file_path, F_OK) != 0) {	/* does not exist */
+        G_free(path);
 	return 1;
-
+    }
 
     dig_file_init(&fp);
-    fp.file = G_fopen_old(buf, GV_CIDX_ELEMENT, Map->mapset);
-
+    fp.file = G_fopen_old(path, GV_CIDX_ELEMENT, Map->mapset);
+    G_free(path);
+    
     if (fp.file == NULL) {	/* category index file is not available */
 	G_warning(_("Unable to open category index file for vector map <%s>"),
 		  Vect_get_full_name(Map));

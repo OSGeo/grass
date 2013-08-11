@@ -50,9 +50,15 @@ int V1_close_nat(struct Map_info *Map)
     fclose(Map->dig_fp.file);
     dig_file_free(&(Map->dig_fp));
 
-    /* delete temporary map */
+    /* delete temporary map ? */
     if (Map->temporary) {
-        Vect__delete(Map->name, TRUE);
+        if (getenv("GRASS_VECTOR_TEMPORARY") == NULL) {
+            G_debug(1, "V1_close_nat(): temporary map <%s> TO BE DELETED", Map->name);
+            Vect__delete(Map->name, TRUE);
+        }
+        else {
+            G_debug(1, "V1_close_nat(): temporary map <%s> IS NOT DELETED", Map->name);
+        }
     }
 
     return 0;
