@@ -259,6 +259,19 @@ PERMANENT
     by <em><a href="v.external.out.html">v.external.out</a></em> is
     ignored. The format is always native.</dd>
 
+  <dt>GRASS_VECTOR_TEMPORARY</dt>
+  <dd>[vectorlib]<br> If the environment variable
+    GRASS_VECTOR_TEMPORARY exists, vector library will operate with
+    temporary vector maps. New vector maps will be created
+    in <tt>$MAPSET/.tmp/$HOSTNAME/vector</tt>, existing vector maps
+    will be read also from this directory. Note that temporary vector
+    maps are not visible to the user
+    via <em><a href="g.list.html">g.list</a></em>. They are used
+    internally by the GRASS modules and deleted automatically when the
+    map is closed or GRASS session quited. Note that this variable is
+    dedicated for internal use only.
+  </dd>
+  
   <dt>GRASS_WXBUNDLED</dt>
   <dd>[wxGUI]<br>
     set to tell wxGUI that a bundled wxPython will be used.<br>
