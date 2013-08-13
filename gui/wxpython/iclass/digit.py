@@ -122,6 +122,51 @@ class IClassVDigit(IVDigit):
         for cat in cats:
             Vedit_delete_areas_cat(self.poMapInfo, 1, cat)
        
+    def CopyMap(self, name, tmp = False):
+        """!Make a copy of open vector map
+
+        Note: Attributes are not copied
+        
+        @param name name for a copy
+        @param tmp True for temporary map
+
+        @return number of copied features
+        @return -1 on error
+        """
+        if not self.poMapInfo:
+            # nothing to copy
+            return -1
+        
+        poMapInfoNew = pointer(Map_info())
+        
+        if not tmp:
+            open_fn = Vect_open_new
+        else:
+            open_fn = Vect_open_tmp_new
+
+        is3D = bool(Vect_is_3d(self.poMapInfo))
+        if open_fn(poMapInfoNew, name, is3D) == -1:
+            return -1
+
+        verbose = G_verbose()
+        G_set_verbose(-1)      # be silent
+        
+        if Vect_copy_map_lines(self.poMapInfo, poMapInfoNew) == 1:
+            G_set_verbose(verbose)
+            return -1
+        
+        Vect_build(poMapInfoNew)
+        G_set_verbose(verbose)
+        
+        ret = Vect_get_num_lines(poMapInfoNew)
+        Vect_close(poMapInfoNew)
+        
+        return ret
+
+    def GetMapInfo(self):
+        """!Returns Map_info() struct of open vector map"""
+        return self.poMapInfo
+
 class IClassDisplayDriver(DisplayDriver):
     """! Class similar to DisplayDriver but specialized for wxIClass
 
