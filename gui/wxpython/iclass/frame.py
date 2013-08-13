@@ -196,7 +196,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.SendSizeEvent()
         
     def OnCloseWindow(self, event):
-        self.GetFirstWindow().digit.GetDisplay().CloseMap()
+        self.GetFirstWindow().GetDigit().CloseMap()
         self.Destroy()
         
     def __del__(self):
@@ -214,18 +214,25 @@ class IClassMapFrame(DoubleMapFrame):
         """!Show help page"""
         self._giface.Help(entry = 'wxGUI.iclass')
         
+    def _getTempVectorName(self):
+        """!Return new name for temporary vector map (training areas)"""
+        vectorPath = grass.tempfile(create = False)
+        
+        return 'trAreas' + os.path.basename(vectorPath).replace('.','')
+                
     def CreateTempVector(self):
         """!Create temporary vector map for training areas"""
-        vectorPath = grass.tempfile(create = False)
-        vectorName = 'trAreas' + os.path.basename(vectorPath).replace('.','')
-
+        vectorName = self._getTempVectorName()
+        
+        env = os.environ.copy()
+        env['GRASS_VECTOR_TEMPORARY'] = '1' # create temporary map
         cmd = ('v.edit', {'tool': 'create',
                           'map': vectorName})
         
         ret = RunCommand(prog = cmd[0],
-                         parent = self,
-                         overwrite = True,
+                         parent = self, env = env,
                          **cmd[1])
+        
         if ret != 0:
             return False
         
@@ -539,38 +546,31 @@ class IClassMapFrame(DoubleMapFrame):
         wx.BeginBusyCursor()
         wx.Yield()
 
-        mapLayer = self.toolbars['vdigit'].mapLayer
-        # set mapLayer temporarily to None
-        # to avoid 'save changes' code in vdigit.toolbars
-        self.toolbars['vdigit'].mapLayer = None
+        # close, build, copy and open again the temporary vector
+        digitClass = self.GetFirstWindow().GetDigit()
         
-        ret =  self.toolbars['vdigit'].StopEditing()
-        if not ret:
-            wx.EndBusyCursor()
-            return False
+        # open vector map to be imported
+        if digitClass.OpenMap(vector) is None:
+            GError(parent = self, message = _("Unable to open vector map <%s>") % vector)
+            return
+        
+        # copy features to the temporary map
+        vname = self._getTempVectorName()
+        os.environ['GRASS_VECTOR_TEMPORARY'] = '1' # avoid deleting temporary map
+        if digitClass.CopyMap(vname, tmp = True) == -1:
+            GError(parent = self, message = _("Unable to copy vector features from <%s>") % vector)
+            return
+        del os.environ['GRASS_VECTOR_TEMPORARY']
+        
+        # close map
+        digitClass.CloseMap()
+        
+        # open temporary map (copy of imported map)
+        self.poMapInfo = digitClass.OpenMap(vname, tmp = True)
+        if self.poMapInfo is None:
+            GError(parent = self, message = _("Unable to open temporary vector map"))
+            return
 
-        # check if attribute table really exists (fix broken connections)
-        for layer in grass.vector_db(vector):
-            if 0 != RunCommand('v.db.select', flags = 'c', map = vector, where = "0 = 1"):
-                GWarning(_("Vector map <%s>: no attribute table found") % vector,
-                         parent = self)
-                RunCommand('v.db.connect', flags = 'd', map = vector, layer = layer,
-                           quiet = True)
-        
-        if 0 != RunCommand('g.copy',
-                           vect = [vector, self.trainingAreaVector],
-                           overwrite = True, quiet = True,
-                           parent = self):
-            wx.EndBusyCursor()
-            return False
-            
-        ret = self.toolbars['vdigit'].StartEditing(mapLayer)
-        if not ret:
-            wx.EndBusyCursor()
-            return False
-            
-        self.poMapInfo = self.GetFirstWindow().digit.GetDisplay().poMapInfo
-        
         # remove temporary rasters
         for cat in self.stats_data.GetCategories():
             self.RemoveTempRaster(self.stats_data.GetStatistics(cat).rasterName)
@@ -684,26 +684,12 @@ class IClassMapFrame(DoubleMapFrame):
         wx.Yield()
         
         # close, build, copy and open again the temporary vector
-        displayDriver = self.GetFirstWindow().digit.GetDisplay()
-        displayDriver.CloseMap()
-
+        digitClass = self.GetFirstWindow().GetDigit()
         if '@' in vectorName:
             vectorName = vectorName.split('@')[0]
-        if 0 != RunCommand('g.copy',
-                           vect = [self.trainingAreaVector, vectorName],
-                           overwrite = True, quiet = True, parent = self):
-            wx.EndBusyCursor()
+        if digitClass.CopyMap(vectorName) < 0:
             return False
         
-        # remove connection if exists
-        dbinfo = grass.vector_db(vectorName)
-        if dbinfo:
-            for layer in dbinfo.keys():
-                RunCommand('v.db.connect', flags = 'd', map = vectorName, layer = layer)
-        
-        mapset = grass.gisenv()['MAPSET']
-        self.poMapInfo = displayDriver.OpenMap(name = self.trainingAreaVector, mapset = mapset)
-            
         if not withTable:
             wx.EndBusyCursor()
             return False
@@ -799,17 +785,17 @@ class IClassMapFrame(DoubleMapFrame):
         
         @param cats list of categories to be deleted
         """
-        self.firstMapWindow.digit.DeleteAreasByCat(cats)
+        self.firstMapWindow.GetDigit().DeleteAreasByCat(cats)
         self.firstMapWindow.UpdateMap(render=False, renderVector=True)
         
     def HighlightCategory(self, cats):
         """!Highlight araes given by category"""
-        self.firstMapWindow.digit.GetDisplay().SetSelected(cats, layer = 1)
+        self.firstMapWindow.GetDigit().GetDisplay().SetSelected(cats, layer = 1)
         self.firstMapWindow.UpdateMap(render=False, renderVector=True)
         
     def ZoomToAreasByCat(self, cat):
         """!Zoom to areas given by category"""
-        n, s, w, e = self.GetFirstWindow().digit.GetDisplay().GetRegionSelected()
+        n, s, w, e = self.GetFirstWindow().GetDigit().GetDisplay().GetRegionSelected()
         self.GetFirstMap().GetRegion(n = n, s = s, w = w, e = e, update = True)
         self.GetFirstMap().AdjustRegion()
         self.GetFirstMap().AlignExtentFromDisplay()
@@ -867,13 +853,14 @@ class IClassMapFrame(DoubleMapFrame):
         else:
             GMessage(parent = self, message = _("Failed to create temporary vector map."))
             return
-            
+        
+        # use 'hidden' for temporary maps (TODO: do it better)
         mapLayer = self.GetFirstMap().AddLayer(ltype = 'vector',
                                                command = ['d.vect', 'map=%s' % vname],
-                                               name = vname, active = False)
+                                               name = vname, active = False, hidden = True)
         
         self.toolbars['vdigit'].StartEditing(mapLayer)
-        self.poMapInfo = self.GetFirstWindow().digit.GetDisplay().poMapInfo
+        self.poMapInfo = self.GetFirstWindow().GetDigit().GetMapInfo()
         self.Render(self.GetFirstWindow())
         
     def OnRunAnalysis(self, event):
@@ -1134,7 +1121,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.dialogs['scatt_plot'] = ScattPlotMainDialog(parent=self, giface=self._giface, iclass_mapwin = self.GetFirstWindow())
 
         scatt_mgr = self.dialogs['scatt_plot'].GetScattMgr()
-        scatt_mgr.DigitDataChanged(self.toolbars['vdigit'].mapLayer.GetName(), self.GetFirstWindow().digit)
+        scatt_mgr.DigitDataChanged(self.toolbars['vdigit'].mapLayer.GetName(), self.GetFirstWindow().GetDigit())
 
         self.dialogs['scatt_plot'].CenterOnScreen()
         self.dialogs['scatt_plot'].Show()
