@@ -1307,6 +1307,9 @@ class IVDigit:
         if not self._checkMap():
             return
         
+        # print extra line before building message
+        sys.stdout.write(os.linesep)
+        # build topology, close map
         self._display.CloseMap()
 
     def InitCats(self):

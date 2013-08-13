@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
 import sys
 
 import wx
@@ -23,7 +22,6 @@ from core              import globalvar
 from core.utils import _
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon        import MetaIcon
-from core.globalvar    import ETCIMGDIR
 
 class PsMapToolbar(BaseToolbar):
     def __init__(self, parent, toolSwitcher):
@@ -220,19 +218,3 @@ class PsMapToolbar(BaseToolbar):
         if event:
             self.drawGraphicsAction = 'rectangleAdd'
             self.parent.OnAddRectangle(event)
-
-    def CreateSelectionButton(self):
-        """!Add button to toolbar for selection of graphics drawing mode.
-
-        Button must be custom (not toolbar tool) to set smaller width.
-        """
-        arrowPath = os.path.join(ETCIMGDIR, 'small_down_arrow.png')
-        if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
-            bitmap = wx.Bitmap(name = arrowPath)
-        else:
-            bitmap = wx.ArtProvider.GetBitmap(id = wx.ART_MISSING_IMAGE, client = wx.ART_TOOLBAR)
-        button =  wx.BitmapButton(parent = self, id = wx.ID_ANY, size = ((-1, self.GetSize()[1])),
-                                  bitmap = bitmap, style = wx.NO_BORDER)
-        button.SetToolTipString(_("Select graphics tool"))
-
-        return button
