@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 """
 
 import platform
+import os
 
 import wx
 
@@ -25,6 +26,7 @@ from core.debug import Debug
 from core.utils import _
 from icons.icon import MetaIcon
 from collections import defaultdict
+from core.globalvar import ETCIMGDIR
 
 from grass.pydispatch.signal import Signal
 
@@ -248,6 +250,21 @@ class BaseToolbar(wx.ToolBar):
         self.PopupMenu(menu)
         menu.Destroy()
 
+    def CreateSelectionButton(self):
+        """!Add button to toolbar for selection of graphics drawing mode.
+
+        Button must be custom (not toolbar tool) to set smaller width.
+        """
+        arrowPath = os.path.join(ETCIMGDIR, 'small_down_arrow.png')
+        if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
+            bitmap = wx.Bitmap(name = arrowPath)
+        else:
+            bitmap = wx.ArtProvider.GetBitmap(id = wx.ART_MISSING_IMAGE, client = wx.ART_TOOLBAR)
+        button =  wx.BitmapButton(parent = self, id = wx.ID_ANY, size = ((-1, self.GetSize()[1])),
+                                  bitmap = bitmap, style = wx.NO_BORDER)
+        button.SetToolTipString(_("Select graphics tool"))
+
+        return button
 
 class ToolSwitcher:
     """!Class handling switching tools in toolbar and custom toggle buttons."""

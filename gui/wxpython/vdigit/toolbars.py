@@ -6,7 +6,7 @@
 List of classes:
  - toolbars::VDigitToolbar
 
-(C) 2007-2012 by the GRASS Development Team
+(C) 2007-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -72,6 +72,14 @@ class VDigitToolbar(BaseToolbar):
             if hasattr(self, tool):
                 tool = getattr(self, tool)
                 self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
+            else:
+                Debug.msg(1, '%s skipped' % tool)
+        
+        # custom button for digitization of area/boundary/centroid
+        # TODO: could this be somehow generalized?
+        self.areaButton = self.CreateSelectionButton()
+        self.areaButtonId = self.InsertControl(5, self.areaButton)
+        self.areaButton.Bind(wx.EVT_BUTTON, self.OnAddAreaMenu)
         
         # realize toolbar
         self.Realize()
@@ -93,7 +101,7 @@ class VDigitToolbar(BaseToolbar):
         """
         data = []
         
-        icons = {
+        self.icons = {
             'addPoint'        : MetaIcon(img = 'point-create',
                                          label = _('Digitize new point'),
                                          desc = _('Left: new point')),
@@ -107,7 +115,7 @@ class VDigitToolbar(BaseToolbar):
                                          label = _('Digitize new centroid'),
                                          desc = _('Left: new point')),
             'addArea'         : MetaIcon(img = 'polygon-create',
-                                         label = _('Digitize new area (composition of boundaries without category and one centroid with category)'),
+                                         label = _('Digitize new area'),
                                          desc = _('Left: new point')),
             'addVertex'       : MetaIcon(img = 'vertex-create',
                                          label = _('Add new vertex'),
@@ -156,86 +164,78 @@ class VDigitToolbar(BaseToolbar):
         if not self.tools or 'selector' in self.tools:
             data.append((None, ))
         if not self.tools or 'addPoint' in self.tools:
-            data.append(("addPoint", icons["addPoint"],
+            data.append(("addPoint", self.icons["addPoint"],
                          self.OnAddPoint,
                          wx.ITEM_CHECK))
         if not self.tools or 'addLine' in self.tools:
-            data.append(("addLine", icons["addLine"],
+            data.append(("addLine", self.icons["addLine"],
                         self.OnAddLine,
                         wx.ITEM_CHECK))
-        if not self.tools or 'addBoundary' in self.tools:
-            data.append(("addBoundary", icons["addBoundary"],
-                         self.OnAddBoundary,
-                         wx.ITEM_CHECK))
-        if not self.tools or 'addCentroid' in self.tools:
-            data.append(("addCentroid", icons["addCentroid"],
-                         self.OnAddCentroid,
-                         wx.ITEM_CHECK))
         if not self.tools or 'addArea' in self.tools:
-            data.append(("addArea", icons["addArea"],
-                         self.OnAddArea,
-                         wx.ITEM_CHECK))
+            data.append(("addArea", self.icons["addArea"],
+                        self.OnAddAreaTool,
+                        wx.ITEM_CHECK))
         if not self.tools or 'moveVertex' in self.tools:            
-            data.append(("moveVertex", icons["moveVertex"],
+            data.append(("moveVertex", self.icons["moveVertex"],
                          self.OnMoveVertex,
                          wx.ITEM_CHECK))
         if not self.tools or 'addVertex' in self.tools:
-            data.append(("addVertex", icons["addVertex"],
+            data.append(("addVertex", self.icons["addVertex"],
                          self.OnAddVertex,
                          wx.ITEM_CHECK))
         if not self.tools or 'removeVertex' in self.tools:
-            data.append(("removeVertex", icons["removeVertex"],
+            data.append(("removeVertex", self.icons["removeVertex"],
                          self.OnRemoveVertex,
                          wx.ITEM_CHECK))
         if not self.tools or 'editLine' in self.tools:            
-            data.append(("editLine", icons["editLine"],
+            data.append(("editLine", self.icons["editLine"],
                          self.OnEditLine,
                          wx.ITEM_CHECK))
         if not self.tools or 'moveLine' in self.tools:
-            data.append(("moveLine", icons["moveLine"],
+            data.append(("moveLine", self.icons["moveLine"],
                          self.OnMoveLine,
                          wx.ITEM_CHECK))
         if not self.tools or 'deleteLine' in self.tools:
-            data.append(("deleteLine", icons["deleteLine"],
+            data.append(("deleteLine", self.icons["deleteLine"],
                          self.OnDeleteLine,
                          wx.ITEM_CHECK))
         if not self.tools or 'deleteArea' in self.tools:
-            data.append(("deleteArea", icons["deleteArea"],
+            data.append(("deleteArea", self.icons["deleteArea"],
                          self.OnDeleteArea,
                          wx.ITEM_CHECK))
         if not self.tools or 'displayCats' in self.tools:
-            data.append(("displayCats", icons["displayCats"],
+            data.append(("displayCats", self.icons["displayCats"],
                          self.OnDisplayCats,
                          wx.ITEM_CHECK))
         if not self.tools or 'displayAttr' in self.tools:
-            data.append(("displayAttr", icons["displayAttr"],
+            data.append(("displayAttr", self.icons["displayAttr"],
                          self.OnDisplayAttr,
                          wx.ITEM_CHECK))
         if not self.tools or 'additionalSelf.Tools' in self.tools:
-            data.append(("additionalTools", icons["additionalTools"],
+            data.append(("additionalTools", self.icons["additionalTools"],
                          self.OnAdditionalToolMenu,
                          wx.ITEM_CHECK))
         if not self.tools or 'undo' in self.tools or \
                 'redo' in self.tools:
             data.append((None, ))
         if not self.tools or 'undo' in self.tools:
-            data.append(("undo", icons["undo"],
+            data.append(("undo", self.icons["undo"],
                          self.OnUndo))
         if not self.tools or 'redo' in self.tools:
-            data.append(("redo", icons["redo"],
+            data.append(("redo", self.icons["redo"],
                          self.OnRedo))
         if not self.tools or 'settings' in self.tools or \
                 'help' in self.tools or \
                 'quit' in self.tools:
             data.append((None, ))
         if not self.tools or 'settings' in self.tools:
-            data.append(("settings", icons["settings"],
+            data.append(("settings", self.icons["settings"],
                          self.OnSettings))
         if not self.tools or 'help' in self.tools:
-            data.append(("help", icons["help"],
+            data.append(("help", self.icons["help"],
                          self.OnHelp))
         if not self.tools or 'quit' in self.tools:
-            data.append(("quit", icons["quit"],
+            data.append(("quit", self.icons["quit"],
                          self.OnExit))
         
         return self._getToolbarData(data)
@@ -286,33 +286,75 @@ class VDigitToolbar(BaseToolbar):
                         'id'   : self.addLine }
         self.MapWindow.mouse['box'] = 'line'
         ### self.MapWindow.polycoords = [] # reset temp line
-                
+
     def OnAddBoundary(self, event):
         """!Add boundary to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddBoundary()")
+         # reset temp line
         if self.action['desc'] != 'addLine' or \
                 self.action['type'] != 'boundary':
-            self.MapWindow.polycoords = [] # reset temp line
+            self.MapWindow.polycoords = []
+
+        # update icon and tooltip
+        self.SetToolNormalBitmap(self.addArea, self.icons['addBoundary'].GetBitmap())
+        self.SetToolShortHelp(self.addArea, self.icons['addBoundary'].GetLabel())
+
+        # set action
         self.action = { 'desc' : "addLine",
                         'type' : "boundary",
-                        'id'   : self.addBoundary }
+                        'id'   : self.addArea }
         self.MapWindow.mouse['box'] = 'line'
         
     def OnAddCentroid(self, event):
         """!Add centroid to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddCentroid()")
+
+        # update icon and tooltip
+        self.SetToolNormalBitmap(self.addArea, self.icons['addCentroid'].GetBitmap())
+        self.SetToolShortHelp(self.addArea, self.icons['addCentroid'].GetLabel())
+        
+        # set action
         self.action = { 'desc' : "addLine",
                         'type' : "centroid",
-                        'id'   : self.addCentroid }
+                        'id'   : self.addArea }
         self.MapWindow.mouse['box'] = 'point'
 
     def OnAddArea(self, event):
         """!Add area to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddArea()")
+        # update icon and tooltip
+        self.SetToolNormalBitmap(self.addArea, self.icons['addArea'].GetBitmap())
+        self.SetToolShortHelp(self.addArea, self.icons['addArea'].GetLabel())
+        
+        # set action
         self.action = { 'desc' : "addLine",
                         'type' : "area",
                         'id'   : self.addArea }
         self.MapWindow.mouse['box'] = 'line'
+
+    def OnAddAreaTool(self, event):
+        """!Area tool activated."""
+        Debug.msg (2, "VDigitToolbar.OnAddAreaTool()")
+        # we need the previous id
+        if 'type' not in self.action or \
+                self.action['type'] in ('addArea', ''): # default action
+            self.OnAddArea(event)
+        elif self.action['type'] == 'addBoundary':
+            self.OnAddBoundary(event)
+        elif self.action['type'] == 'addCentroid':
+            self.OnAddCentroid(event)
+
+    def OnAddAreaMenu(self, event):
+        """!Digitize area menu (add area/boundary/centroid)"""
+        menuItems = []
+        if not self.tools or 'addArea' in self.tools:
+            menuItems.append((self.icons["addArea"], self.OnAddArea))
+        if not self.tools or 'addBoundary' in self.tools:
+            menuItems.append((self.icons["addBoundary"], self.OnAddBoundary))
+        if not self.tools or 'addCentroid' in self.tools:
+            menuItems.append((self.icons["addCentroid"],  self.OnAddCentroid))
+        
+        self._onMenu(menuItems)
 
     def OnExit (self, event = None):
         """!Quit digitization tool"""
