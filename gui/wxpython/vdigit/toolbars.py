@@ -758,8 +758,8 @@ class VDigitToolbar(BaseToolbar):
         self.digit = self.MapWindow.digit = self.digitClass(mapwindow = self.MapWindow)
         
         self.mapLayer = mapLayer
-        # open vector map
-        if self.digit.OpenMap(mapLayer.GetName()) is None:
+        # open vector map (assume that 'hidden' map layer is temporary vector map)
+        if self.digit.OpenMap(mapLayer.GetName(), tmp = mapLayer.IsHidden()) is None:
             self.mapLayer = None
             self.StopEditing()
             return False

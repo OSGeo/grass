@@ -1281,10 +1281,11 @@ class IVDigit:
         """!Get display driver instance"""
         return self._display
     
-    def OpenMap(self, name):
+    def OpenMap(self, name, tmp = False):
         """!Open vector map for editing
         
         @param map name of vector map to be set up
+        @param tmp True to open temporary vector map
         """
         Debug.msg (3, "AbstractDigit.SetMapName map=%s" % name)
 
@@ -1293,7 +1294,7 @@ class IVDigit:
         else:
             mapset = grass.gisenv()['MAPSET']
         
-        self.poMapInfo = self._display.OpenMap(str(name), str(mapset), True)
+        self.poMapInfo = self._display.OpenMap(str(name), str(mapset), True, tmp)
         
         if self.poMapInfo:
             self.InitCats()

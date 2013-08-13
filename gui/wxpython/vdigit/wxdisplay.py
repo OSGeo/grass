@@ -857,12 +857,14 @@ class DisplayDriver:
         
         return ret
     
-    def OpenMap(self, name, mapset, update = True):
+    def OpenMap(self, name, mapset, update = True, tmp = False):
         """!Open vector map by the driver
         
         @param name name of vector map to be open
         @param mapset name of mapset where the vector map lives
-   
+        @param update True to open vector map in update mode
+        @param tmp True to open temporary vector map
+        
         @return map_info
         @return None on error
         """
@@ -874,16 +876,24 @@ class DisplayDriver:
         
         # open existing map
         if update:
-            ret = Vect_open_update(self.poMapInfo, name, mapset)
-            Vect_set_updated(self.poMapInfo, True) # track updated lines
+            if tmp:
+                open_fn = Vect_open_tmp_update
+            else:
+                open_fn = Vect_open_update
         else:
-            ret = Vect_open_old(self.poMapInfo, name, mapset)
-        self.is3D = Vect_is_3d(self.poMapInfo)
+            if tmp:
+                open_fn = Vect_open_tmp_old
+            else:
+                open_fn = Vect_open_old
         
-        if ret == -1: # error
+        ret = open_fn(self.poMapInfo, name, mapset)
+        
+        if ret == -1:
+             # fatal error detected
             del self.mapInfo
             self.poMapInfo = self.mapInfo = None
         elif ret < 2:
+            # map open at level 1, try to build topology
             dlg = wx.MessageDialog(parent = self.window,
                                    message = _("Topology for vector map <%s> is not available. "
                                                "Topology is required by digitizer. Do you want to "
@@ -898,8 +908,13 @@ class DisplayDriver:
             else:
                 Vect_build(self.poMapInfo)
         
+        if update:
+            Vect_set_updated(self.poMapInfo, True) # track updated lines at update mode
+        
+        self.is3D = Vect_is_3d(self.poMapInfo)
+        
         return self.poMapInfo
-    
+
     def GetMapBoundingBox(self):
         """!Get bounding box of (opened) vector map layer
 
