@@ -65,6 +65,10 @@ class VDigitWindow(BufferedMapWindow):
             return self.digit.GetDisplay()
         return None
 
+    def GetDigit(self):
+        """!Get digit class"""
+        return self.digit
+    
     def SetToolbar(self, toolbar):
         """!Set up related toolbar
         """
