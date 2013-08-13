@@ -431,7 +431,7 @@ class IVDigit:
         if not self._checkMap():
             return -1
         
-        # colect categories for delete if requested
+        # collect categories for deleting if requested
         deleteRec = UserSettings.Get(group = 'vdigit', key = 'delRecord', subkey = 'enabled')
         catDict = dict()
         if deleteRec:
@@ -453,7 +453,7 @@ class IVDigit:
         
         if nlines > 0:
             if deleteRec:
-                self._deleteRecords(cats)
+                self._deleteRecords(catDict)
             self._addChangeset()
             self.toolbar.EnableUndo()
         
@@ -476,7 +476,7 @@ class IVDigit:
                 return -1
             
             Fi = poFi.contents
-            if Fi.table not in cats.keys():
+            if Fi.number not in cats.keys():
                 continue
             
             poDriver = db_start_driver(Fi.driver)
@@ -493,19 +493,19 @@ class IVDigit:
             db_init_string(poStmt)
             db_set_string(poStmt, "DELETE FROM %s WHERE" % Fi.table)
             n_cats = 0
-            for cat in cats[Fi.table]:
+            for cat in cats[Fi.number]:
                 if n_cats > 0:
                     db_append_string(poStmt, " or")
                     
-                db_append_string(poStmt, " %s = %d" % (Fi.key, cats))
+                db_append_string(poStmt, " %s = %d" % (Fi.key, cat))
                 n_cats += 1
-                
+            
             if n_cats > 0 and \
                     db_execute_immediate(poDriver, poStmt) != DB_OK:
                 self._error.DbExecute(db_get_string(poStmt))
                 return -1
             
-            db_close_shutdown_database(poDriver)
+            db_close_database_shutdown_driver(poDriver)
         
     def DeleteSelectedAreas(self):
         """!Delete selected areas (centroid+boundaries)
