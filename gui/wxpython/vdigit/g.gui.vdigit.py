@@ -26,8 +26,12 @@
 #% keywords: editing
 #% keywords: digitization
 #%end
+#%flag
+#% key: c
+#% description: Create new vector map if doesn't exist
+#%end
 #%option G_OPT_V_MAP
-#%label: Name of vector map to load
+#% label: Name of vector map to edit
 #%end
 
 import os
@@ -92,6 +96,12 @@ if __name__ == "__main__":
     
     if not grass.find_file(name = options['map'], element = 'vector',
                            mapset = grass.gisenv()['MAPSET'])['fullname']:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % options['map'])
+        if not flags['c']:
+            grass.fatal(_("Vector map <%s> not found in current mapset. "
+                          "New vector map can be created by providing '-c' flag.") % options['map'])
+        else:
+            grass.message(_("New vector map <%s> created") % options['map'])
+            if 0 != grass.run_command('v.edit', map = options['map'], tool = 'create'):
+                grass.fatal(_("Unable to create new vector map <%s>") % options['map'])
     
     GuiModuleMain(main)
