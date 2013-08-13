@@ -253,6 +253,10 @@ class Layer(object):
     def IsActive(self):
         """!Check if layer is activated for rendering"""
         return self.active
+
+    def IsHidden(self):
+        """!Check if layer is hidden"""
+        return self.hidden
     
     def SetType(self, ltype):
         """!Set layer type"""
@@ -1403,6 +1407,3 @@ class Map(object):
         self.updateProgress.emit(range=self.progressInfo['range'],
                                  value=self.progressInfo['progresVal'],
                                  text=stText)
-        
-
-        
