@@ -507,10 +507,10 @@ class AbstractMapDataset(AbstractDataset):
 
         self.write_timestamp_to_grass()
 
-    def set_temporal_extent(self, temporal_extent):
+    def set_temporal_extent(self, extent):
         """!Convenient method to set the temporal extent from a temporal extent object
 
-           @param temporal_extent The temporal axtent that should be set for this object
+           @param temporal_extent The temporal extent that should be set for this object
 
            @code
            >>> import datetime
@@ -527,21 +527,31 @@ class AbstractMapDataset(AbstractDataset):
            >>> print map.get_temporal_extent_as_tuple()
            (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
 
+           >>> map1 = tgis.VectorDataset("A@P")
+           >>> check = map1.set_absolute_time(datetime.datetime(2000,5,5), datetime.datetime(2005,6,6), None)
+           >>> print map1.get_temporal_extent_as_tuple()
+           (datetime.datetime(2000, 5, 5, 0, 0), datetime.datetime(2005, 6, 6, 0, 0))
+           >>> map2 = tgis.RasterDataset("B@P")
+           >>> check = map2.set_absolute_time(datetime.datetime(1990,1,1), datetime.datetime(1999,8,1), None)
+           >>> print map2.get_temporal_extent_as_tuple()
+           (datetime.datetime(1990, 1, 1, 0, 0), datetime.datetime(1999, 8, 1, 0, 0))
+           >>> map2.set_temporal_extent(map1.get_temporal_extent())
+           >>> print map2.get_temporal_extent_as_tuple()
+           (datetime.datetime(2000, 5, 5, 0, 0), datetime.datetime(2005, 6, 6, 0, 0))
+
            @endcode
         """
-
-
-        if issubclass(type(temporal_extent), RelativeTemporalExtent):
-            start = temporal_extent.get_start_time()
-            end = temporal_extent.get_end_time()
-            unit = temporal_extent.get_unit()
+        if issubclass(type(extent), RelativeTemporalExtent):
+            start = extent.get_start_time()
+            end = extent.get_end_time()
+            unit = extent.get_unit()
 
             self.set_relative_time(start, end, unit)
 
-        elif issubclass(type(temporal_extent), AbsoluteTemporalExtent):
-            start = temporal_extent.get_start_time()
-            end = temporal_extent.get_end_time()
-            tz = temporal_extent.get_timezone()
+        elif issubclass(type(extent), AbsoluteTemporalExtent):
+            start = extent.get_start_time()
+            end = extent.get_end_time()
+            tz = extent.get_timezone()
 
             self.set_absolute_time(start, end, tz)
 
