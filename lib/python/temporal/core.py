@@ -20,7 +20,7 @@ Usage:
 >>> # Execute a SQL statement
 >>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
 >>> # Mogrify an SQL statement
->>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?", 
+>>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?",
 ... ("precipitation",)])
 "SELECT name from raster_base where name = 'precipitation'"
 >>> dbif.close()
@@ -97,7 +97,7 @@ def get_temporal_dbmi_init_string():
 
 ###############################################################################
 
-# This variable specifies if the ctypes interface to the grass 
+# This variable specifies if the ctypes interface to the grass
 # libraries should be used to read map specific data. If set to False
 # the grass scripting library will be used to get map informations.
 # The advantage of the ctypes inteface is speed, the disadvantage is that
@@ -107,7 +107,7 @@ use_ctypes_map_access = True
 
 def set_use_ctypes_map_access(use_ctype = True):
     """!Define the map access method for the temporal GIS library
-    
+
        Using ctypes to read map metadata is much faster
        then using the grass.script interface that calls grass modules.
        The disadvantage is that GRASS C-library function will call
@@ -138,21 +138,21 @@ def get_sql_template_path():
 
 def init():
     """!This function set the correct database backend from the environmental variables
-       and creates the grass location database structure for raster, 
-       vector and raster3d maps as well as for the space-time datasets strds, 
+       and creates the grass location database structure for raster,
+       vector and raster3d maps as well as for the space-time datasets strds,
        str3ds and stvds in case it not exists.
 
-        ATTENTION: This functions must be called before any spatio-temporal processing 
+        ATTENTION: This functions must be called before any spatio-temporal processing
                    can be started
     """
     # We need to set the correct database backend from the environment variables
     global tgis_backed
     global has_command_column
-    
+
 
     core.run_command("t.connect", flags="c")
     kv = core.parse_command("t.connect", flags="pg")
-    
+
     if "driver" in kv:
         if kv["driver"] == "sqlite":
             tgis_backed = kv["driver"]
@@ -177,7 +177,7 @@ def init():
     else:
         # Set the default sqlite3 connection in case nothing was defined
         core.run_command("t.connect", flags="d")
-            
+
     database = get_temporal_dbmi_init_string()
 
     db_exists = False
@@ -191,11 +191,11 @@ def init():
             cursor = connection.cursor()
             # Check for raster_base table
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='raster_base';")
-            
+
             name = cursor.fetchone()[0]
             if name == "raster_base":
                 db_exists = True
-                
+
                 # Try to add the command column to the space time dataset metadata tables
                 try:
                     cursor.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
@@ -209,10 +209,10 @@ def init():
                     cursor.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
                 except:
                     pass
-                
+
             connection.commit()
             cursor.close()
-            
+
     elif tgis_backed == "pg":
         # Connect to database
         connection = dbmi.connect(database)
@@ -221,7 +221,7 @@ def init():
         cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables "
                        "WHERE table_name=%s)", ('raster_base',))
         db_exists = cursor.fetchone()[0]
-    
+
         if db_exists:
             # Try to add the command column to the space time dataset metadata tables
             try:
@@ -236,7 +236,7 @@ def init():
                 cursor.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
             except:
                 pass
-        
+
         connection.commit()
         cursor.close()
 
@@ -289,12 +289,12 @@ def init():
 
 
     if tgis_backed == "sqlite":
-        
+
         # We need to create the sqlite3 database path if it does not exists
         tgis_dir = os.path.dirname(database)
         if not os.path.exists(tgis_dir):
             os.makedirs(tgis_dir)
-            
+
         # Connect to database
         connection = dbmi.connect(database)
         cursor = connection.cursor()
@@ -370,12 +370,12 @@ class SQLDatabaseInterfaceConnection():
             self.dbmi = sqlite3
         else:
             self.dbmi = psycopg2
-            
+
     def rollback(self):
         """
-            Roll back the last transaction. This must be called 
+            Roll back the last transaction. This must be called
             in case a new query should be performed after a db error.
-            
+
             This is only relevant for postgresql database.
         """
         if self.dbmi.__name__ == "psycopg2":
@@ -390,7 +390,7 @@ class SQLDatabaseInterfaceConnection():
         init = get_temporal_dbmi_init_string()
         #print "Connect to",  self.database
         if self.dbmi.__name__ == "sqlite3":
-            self.connection = self.dbmi.connect(init, 
+            self.connection = self.dbmi.connect(init,
                     detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
             self.connection.row_factory = self.dbmi.Row
             self.connection.isolation_level = None
@@ -413,27 +413,27 @@ class SQLDatabaseInterfaceConnection():
 
     def mogrify_sql_statement(self, content):
         """!Return the SQL statement and arguments as executable SQL string
-        
-           @param content The content as tuple with two entries, the first 
+
+           @param content The content as tuple with two entries, the first
                            entry is the SQL statement with DBMI specific
                            place holder (?), the second entry is the argument
                            list that should substitue the place holder.
-            
+
            Usage:
-           
+
            @code
-           
+
            >>> init()
            >>> dbif = SQLDatabaseInterfaceConnection()
            >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
            ... ["soil@PERMANENT",]])
            "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
-           
+
            @endcode
         """
         sql = content[0]
         args = content[1]
-        
+
         if self.dbmi.__name__ == "psycopg2":
             if len(args) == 0:
                 return sql
@@ -471,7 +471,7 @@ class SQLDatabaseInterfaceConnection():
                         break
 
                     if args[count] is None:
-                        statement = "%sNULL%s" % (statement[0:pos], 
+                        statement = "%sNULL%s" % (statement[0:pos],
                                                   statement[pos + 1:])
                     elif isinstance(args[count], (int, long)):
                         statement = "%s%d%s" % (statement[0:pos], args[count],
@@ -480,10 +480,10 @@ class SQLDatabaseInterfaceConnection():
                         statement = "%s%f%s" % (statement[0:pos], args[count],
                                                 statement[pos + 1:])
                     else:
-                        # Default is a string, this works for datetime 
+                        # Default is a string, this works for datetime
                         # objects too
-                        statement = "%s\'%s\'%s" % (statement[0:pos], 
-                                                    str(args[count]), 
+                        statement = "%s\'%s\'%s" % (statement[0:pos],
+                                                    str(args[count]),
                                                     statement[pos + 1:])
                     count += 1
 
@@ -506,7 +506,7 @@ class SQLDatabaseInterfaceConnection():
         sql_script += "BEGIN TRANSACTION;\n"
         sql_script += statement
         sql_script += "END TRANSACTION;"
-        
+
         try:
             if self.dbmi.__name__ == "sqlite3":
                 self.cursor.executescript(statement)
@@ -526,21 +526,21 @@ class SQLDatabaseInterfaceConnection():
 ###############################################################################
 
 def init_dbif(dbif):
-    """!This method checks if the database interface connection exists, 
+    """!This method checks if the database interface connection exists,
         if not a new one will be created, connected and True will be returned
 
         Usage code sample:
         @code
-        
+
         dbif, connect = tgis.init_dbif(None)
-        
+
         sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
                                                ["id", "soil@PERMANENT"])
         dbif.execute_transaction(sql)
-        
+
         if connect:
             dbif.close()
-        
+
         @endcode
     """
     if dbif is None:
