@@ -10,8 +10,6 @@ CREATE VIEW vector_view_abs_time AS SELECT
             A1.id, A1.mapset,
             A1.name, A1.layer, A1.temporal_type,
             A1.creation_time, 
--- Uncommented due to performance issues
---            A1.modification_time, A1.revision, 
             A1.creator, 
             A2.start_time, A2.end_time, A2.timezone,
             A3.north, A3.south, A3.east, A3.west, A3.bottom, A3.top, A3.proj,
@@ -26,9 +24,7 @@ CREATE VIEW vector_view_abs_time AS SELECT
 CREATE VIEW vector_view_rel_time AS SELECT 
             A1.id, A1.mapset,
             A1.name, A1.layer, A1.temporal_type,
-            A1.creation_time, 
--- Uncommented due to performance issues
---            A1.modification_time, A1.revision, 
+            A1.creation_time,
             A1.creator, 
             A2.start_time, A2.end_time,
             A3.north, A3.south, A3.east, A3.west, A3.bottom, A3.top, A3.proj,

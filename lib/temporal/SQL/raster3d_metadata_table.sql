@@ -22,14 +22,8 @@ CREATE TABLE  raster3d_metadata (
   tbres DOUBLE PRECISION NOT NULL,
   min DOUBLE PRECISION,
   max DOUBLE PRECISION,
-  PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES  raster3d_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  raster3d_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Create a trigger to update the modification time and revision number in case the metadata have been updated 
+CREATE INDEX raster3d_metadata_index ON raster3d_metadata (id);
 
---CREATE TRIGGER update_raster3d_metadata AFTER UPDATE ON raster3d_metadata 
---  BEGIN
---    UPDATE raster3d_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE raster3d_base SET revision = (revision + 1) WHERE id = old.id;
---  END;

@@ -20,15 +20,7 @@ CREATE TABLE  raster_metadata (
   ewres DOUBLE PRECISION NOT NULL,
   min DOUBLE PRECISION,
   max DOUBLE PRECISION,
-  PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES  raster_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  raster_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Create a trigger to update the modification time and revision number in case the metadata have been updated 
--- Uncommented due to performance issues
---CREATE TRIGGER update_raster_metadata AFTER UPDATE ON raster_metadata 
---  BEGIN
---    UPDATE raster_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE raster_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
-
+CREATE INDEX raster_metadata_index ON raster_metadata (id);

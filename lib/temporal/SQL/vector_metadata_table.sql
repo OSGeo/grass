@@ -25,14 +25,7 @@ CREATE TABLE  vector_metadata (
   islands INTEGER,        -- The number of islands (topological information)
   holes INTEGER,          -- The number of holes (topological information)
   volumes INTEGER,        -- The number of volumes (topological information)
-  PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES  vector_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  vector_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
--- Uncommented due to performance issues
---CREATE TRIGGER update_vector_metadata AFTER UPDATE ON vector_metadata 
---  BEGIN
---    UPDATE vector_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE vector_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
+CREATE INDEX vector_metadata_index ON vector_metadata (id);

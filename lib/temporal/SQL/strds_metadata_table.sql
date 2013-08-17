@@ -21,14 +21,5 @@ CREATE TABLE  strds_metadata (
   title VARCHAR,                -- Title of the space-time raster dataset
   description VARCHAR,          -- Detailed description of the space-time raster dataset
   command VARCHAR,              -- The command that was used to create the space time raster dataset
-  PRIMARY KEY (id),  
-  FOREIGN KEY (id) REFERENCES  strds_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  strds_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
--- Uncommented due to performance issues
---CREATE TRIGGER update_strds_metadata AFTER UPDATE ON strds_metadata 
---  BEGIN
---    UPDATE strds_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE strds_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
