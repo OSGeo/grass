@@ -35,9 +35,8 @@ for details.
 @author Soeren Gebbert
 """
 import os
-import copy
-import sys
 import grass.script.core as core
+from datetime import datetime
 # Import all supported database backends
 # Ignore import errors since they are checked later
 try:
@@ -54,10 +53,17 @@ except:
 # Global variable that defines the backend
 # of the temporal GIS
 # It can either be "sqlite" or "pg"
-tgis_backed = None
+tgis_backend = None
 
 # The version of the temporal framework
-tgis_version="1.0"
+# this value must be an integer larger than 0
+# Increase this value in case of backward incompatible changes in the TGIS API
+tgis_version=1
+# The version of the temporal database since framework and database version can differ
+# this value must be an integer larger than 0
+# Increase this value in case of backward incompatible changes
+# temporal database SQL layout
+tgis_db_version=1
 
 ###############################################################################
 
@@ -68,14 +74,38 @@ def get_tgis_version():
     global tgis_version
     return tgis_version
 
+###############################################################################
+
+def get_tgis_metadata(dbif=None):
+    """!Return the tgis metadata table as a list of rows (dicts)
+               or None if not present
+
+       @param dbif The database interface to be used
+       @return The selected rows with key/value comumns or None
+    """
+
+    dbif, connected = init_dbif(dbif)
+
+    # Select metadata if the table is present
+    try:
+        statement = "SELECT * FROM tgis_metadata;\n"
+        dbif.cursor.execute(statement)
+        rows = dbif.cursor.fetchall()
+    except:
+        rows = None
+
+    if connected:
+        dbif.close()
+
+    return rows
 
 ###############################################################################
 
 def get_temporal_dbmi_init_string():
     kv = core.parse_command("t.connect", flags="pg")
     grassenv = core.gisenv()
-    global tgis_backed
-    if tgis_backed == "sqlite":
+    global tgis_backend
+    if tgis_backend == "sqlite":
         if "database" in kv:
             string = kv["database"]
             string = string.replace("$GISDBASE", grassenv["GISDBASE"])
@@ -86,7 +116,7 @@ def get_temporal_dbmi_init_string():
             core.fatal(_("Unable to initialize the temporal GIS DBMI "
                          "interface. Use t.connect to specify the driver "
                          "and the database string"))
-    elif tgis_backed == "pg":
+    elif tgis_backend == "pg":
         if "database" in kv:
             string = kv["database"]
             return string
@@ -146,16 +176,14 @@ def init():
                    can be started
     """
     # We need to set the correct database backend from the environment variables
-    global tgis_backed
-    global has_command_column
-
+    global tgis_backend
 
     core.run_command("t.connect", flags="c")
     kv = core.parse_command("t.connect", flags="pg")
 
     if "driver" in kv:
         if kv["driver"] == "sqlite":
-            tgis_backed = kv["driver"]
+            tgis_backend = kv["driver"]
             try:
                 import sqlite3
             except ImportError:
@@ -163,7 +191,7 @@ def init():
                 raise
             dbmi = sqlite3
         elif kv["driver"] == "pg":
-            tgis_backed = kv["driver"]
+            tgis_backend = kv["driver"]
             try:
                 import psycopg2
             except ImportError:
@@ -178,180 +206,203 @@ def init():
         # Set the default sqlite3 connection in case nothing was defined
         core.run_command("t.connect", flags="d")
 
-    database = get_temporal_dbmi_init_string()
-
     db_exists = False
+    database = get_temporal_dbmi_init_string()
+    dbif = SQLDatabaseInterfaceConnection()
 
     # Check if the database already exists
-    if tgis_backed == "sqlite":
+    if tgis_backend == "sqlite":
         # Check path of the sqlite database
         if os.path.exists(database):
-            # Connect to database
-            connection = dbmi.connect(database)
-            cursor = connection.cursor()
+            dbif.connect()
             # Check for raster_base table
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='raster_base';")
-
-            name = cursor.fetchone()[0]
-            if name == "raster_base":
+            dbif.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='raster_base';")
+            name = dbif.cursor.fetchone()
+            if name and name[0] == "raster_base":
                 db_exists = True
+            dbif.close()
 
-                # Try to add the command column to the space time dataset metadata tables
-                try:
-                    cursor.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
-                except:
-                    pass
-                try:
-                    cursor.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
-                except:
-                    pass
-                try:
-                    cursor.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
-                except:
-                    pass
-
-            connection.commit()
-            cursor.close()
-
-    elif tgis_backed == "pg":
+    elif tgis_backend == "pg":
         # Connect to database
-        connection = dbmi.connect(database)
-        cursor = connection.cursor()
+        dbif.connect()
         # Check for raster_base table
-        cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables "
-                       "WHERE table_name=%s)", ('raster_base',))
-        db_exists = cursor.fetchone()[0]
+        dbif.cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables "
+                   "WHERE table_name=%s)", ('raster_base',))
+        if dbif.cursor.fetchone()[0]:
+            db_exists = True
 
-        if db_exists:
+    if db_exists:
+        # Check if we have to add the command column
+        add_command_col = True
+        rows = get_tgis_metadata(dbif)
+        if rows:
+            for row in rows:
+                if row["key"] == "tgis_db_version":
+                    version = int(row["value"])
+                    if version >= 1:
+                        add_command_col = False
+
+        if add_command_col:
             # Try to add the command column to the space time dataset metadata tables
+            # this is due backward compatibility with old databases
             try:
-                cursor.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
+                dbif.cursor.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
             except:
                 pass
             try:
-                cursor.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
+                dbif.cursor.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
             except:
                 pass
             try:
-                cursor.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
+                dbif.cursor.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
             except:
                 pass
-
-        connection.commit()
-        cursor.close()
 
     if db_exists == True:
+        dbif.close()
         return
 
-    core.message(_("Create temporal database: %s" % (database)))
+    create_temporal_database(dbif, database)
+
+###############################################################################
+
+def create_temporal_database(dbif, database):
+    """!This function will create the temporal database
+
+       It will create all tables and triggers that are needed to run
+       the temporal GIS
+
+       @param dbif The database interface to be used
+    """
+    global tgis_backend
+    global tgis_version
+    global tgis_db_version
+
+    template_path = get_sql_template_path()
 
     # Read all SQL scripts and templates
     map_tables_template_sql = open(os.path.join(
-        get_sql_template_path(), "map_tables_template.sql"), 'r').read()
+        template_path, "map_tables_template.sql"), 'r').read()
     raster_metadata_sql = open(os.path.join(
         get_sql_template_path(), "raster_metadata_table.sql"), 'r').read()
-    raster3d_metadata_sql = open(os.path.join(get_sql_template_path(
-        ), "raster3d_metadata_table.sql"), 'r').read()
-    vector_metadata_sql = open(os.path.join(
-        get_sql_template_path(), "vector_metadata_table.sql"), 'r').read()
-    raster_views_sql = open(os.path.join(
-        get_sql_template_path(), "raster_views.sql"), 'r').read()
-    raster3d_views_sql = open(os.path.join(get_sql_template_path(
-        ), "raster3d_views.sql"), 'r').read()
-    vector_views_sql = open(os.path.join(
-        get_sql_template_path(), "vector_views.sql"), 'r').read()
+    raster3d_metadata_sql = open(os.path.join(template_path,
+                                              "raster3d_metadata_table.sql"),
+                                              'r').read()
+    vector_metadata_sql = open(os.path.join(template_path,
+                                            "vector_metadata_table.sql"),
+                                            'r').read()
+    raster_views_sql = open(os.path.join(template_path, "raster_views.sql"),
+                            'r').read()
+    raster3d_views_sql = open(os.path.join(template_path,
+                                           "raster3d_views.sql"), 'r').read()
+    vector_views_sql = open(os.path.join(template_path, "vector_views.sql"),
+                            'r').read()
 
-    stds_tables_template_sql = open(os.path.join(
-        get_sql_template_path(), "stds_tables_template.sql"), 'r').read()
-    strds_metadata_sql = open(os.path.join(
-        get_sql_template_path(), "strds_metadata_table.sql"), 'r').read()
-    str3ds_metadata_sql = open(os.path.join(
-        get_sql_template_path(), "str3ds_metadata_table.sql"), 'r').read()
-    stvds_metadata_sql = open(os.path.join(
-        get_sql_template_path(), "stvds_metadata_table.sql"), 'r').read()
-    strds_views_sql = open(os.path.join(
-        get_sql_template_path(), "strds_views.sql"), 'r').read()
-    str3ds_views_sql = open(os.path.join(
-        get_sql_template_path(), "str3ds_views.sql"), 'r').read()
-    stvds_views_sql = open(os.path.join(
-        get_sql_template_path(), "stvds_views.sql"), 'r').read()
+    stds_tables_template_sql = open(os.path.join(template_path,
+                                                 "stds_tables_template.sql"),
+                                                 'r').read()
+    strds_metadata_sql = open(os.path.join(template_path,
+                                           "strds_metadata_table.sql"),
+                                           'r').read()
+    str3ds_metadata_sql = open(os.path.join(template_path,
+                                            "str3ds_metadata_table.sql"),
+                                            'r').read()
+    stvds_metadata_sql = open(os.path.join(template_path,
+                                           "stvds_metadata_table.sql"),
+                                           'r').read()
+    strds_views_sql = open(os.path.join(template_path, "strds_views.sql"),
+                           'r').read()
+    str3ds_views_sql = open(os.path.join(template_path, "str3ds_views.sql"),
+                            'r').read()
+    stvds_views_sql = open(os.path.join(template_path, "stvds_views.sql"),
+                           'r').read()
 
-    # Create the raster, raster3d and vector tables
+    # Create the raster, raster3d and vector tables SQL statements
     raster_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "raster")
     vector_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "vector")
     raster3d_tables_sql = map_tables_template_sql.replace(
         "GRASS_MAP", "raster3d")
 
     # Create the space-time raster, raster3d and vector dataset tables
+    # SQL statements
     strds_tables_sql = stds_tables_template_sql.replace("STDS", "strds")
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
+    core.message(_("Create temporal database: %s" % (database)))
 
-    if tgis_backed == "sqlite":
-
+    if tgis_backend == "sqlite":
         # We need to create the sqlite3 database path if it does not exists
         tgis_dir = os.path.dirname(database)
         if not os.path.exists(tgis_dir):
             os.makedirs(tgis_dir)
+        # Sqlite needs some trigger to emulate the foreign keys
+        sqlite3_delete_trigger_sql = open(os.path.join(template_path,
+                                                       "sqlite3_delete_trigger.sql"),
+                                                       'r').read()
 
-        # Connect to database
-        connection = dbmi.connect(database)
-        cursor = connection.cursor()
+    # Connect now to the database
+    if not dbif.connected:
+        dbif.connect()
 
-        sqlite3_delete_trigger_sql = open(os.path.join(get_sql_template_path(
-        ), "sqlite3_delete_trigger.sql"), 'r').read()
+    # Execute the SQL statements for sqlite
+    # Create the global tables for the native grass datatypes
+    dbif.execute_transaction(raster_tables_sql)
+    dbif.execute_transaction(raster_metadata_sql)
+    dbif.execute_transaction(raster_views_sql)
+    dbif.execute_transaction(vector_tables_sql)
+    dbif.execute_transaction(vector_metadata_sql)
+    dbif.execute_transaction(vector_views_sql)
+    dbif.execute_transaction(raster3d_tables_sql)
+    dbif.execute_transaction(raster3d_metadata_sql)
+    dbif.execute_transaction(raster3d_views_sql)
+    # Create the tables for the new space-time datatypes
+    dbif.execute_transaction(strds_tables_sql)
+    dbif.execute_transaction(strds_metadata_sql)
+    dbif.execute_transaction(strds_views_sql)
+    dbif.execute_transaction(stvds_tables_sql)
+    dbif.execute_transaction(stvds_metadata_sql)
+    dbif.execute_transaction(stvds_views_sql)
+    dbif.execute_transaction(str3ds_tables_sql)
+    dbif.execute_transaction(str3ds_metadata_sql)
+    dbif.execute_transaction(str3ds_views_sql)
 
-        # Execute the SQL statements for sqlite
-        # Create the global tables for the native grass datatypes
-        cursor.executescript(raster_tables_sql)
-        cursor.executescript(raster_metadata_sql)
-        cursor.executescript(raster_views_sql)
-        cursor.executescript(vector_tables_sql)
-        cursor.executescript(vector_metadata_sql)
-        cursor.executescript(vector_views_sql)
-        cursor.executescript(raster3d_tables_sql)
-        cursor.executescript(raster3d_metadata_sql)
-        cursor.executescript(raster3d_views_sql)
-        # Create the tables for the new space-time datatypes
-        cursor.executescript(strds_tables_sql)
-        cursor.executescript(strds_metadata_sql)
-        cursor.executescript(strds_views_sql)
-        cursor.executescript(stvds_tables_sql)
-        cursor.executescript(stvds_metadata_sql)
-        cursor.executescript(stvds_views_sql)
-        cursor.executescript(str3ds_tables_sql)
-        cursor.executescript(str3ds_metadata_sql)
-        cursor.executescript(str3ds_views_sql)
-        cursor.executescript(sqlite3_delete_trigger_sql)
-    elif tgis_backed == "pg":
-        # Connect to database
-        connection = dbmi.connect(database)
-        cursor = connection.cursor()
-        # Execute the SQL statements for postgresql
-        # Create the global tables for the native grass datatypes
-        cursor.execute(raster_tables_sql)
-        cursor.execute(raster_metadata_sql)
-        cursor.execute(raster_views_sql)
-        cursor.execute(vector_tables_sql)
-        cursor.execute(vector_metadata_sql)
-        cursor.execute(vector_views_sql)
-        cursor.execute(raster3d_tables_sql)
-        cursor.execute(raster3d_metadata_sql)
-        cursor.execute(raster3d_views_sql)
-        # Create the tables for the new space-time datatypes
-        cursor.execute(strds_tables_sql)
-        cursor.execute(strds_metadata_sql)
-        cursor.execute(strds_views_sql)
-        cursor.execute(stvds_tables_sql)
-        cursor.execute(stvds_metadata_sql)
-        cursor.execute(stvds_views_sql)
-        cursor.execute(str3ds_tables_sql)
-        cursor.execute(str3ds_metadata_sql)
-        cursor.execute(str3ds_views_sql)
+    if tgis_backend == "sqlite":
+        dbif.execute_transaction(sqlite3_delete_trigger_sql)
 
-    connection.commit()
-    cursor.close()
+    # Create the tgis metadata table to store the database
+    # initial configuration
+    # The metadata table content
+    metadata = {}
+    metadata["tgis_version"] = tgis_version
+    metadata["tgis_db_version"] = tgis_db_version
+    metadata["has_command_column"] = True
+    metadata["creation_time"] = datetime.today()
+    _create_tgis_metadata_table(metadata, dbif)
+
+    dbif.close()
+
+###############################################################################
+
+def _create_tgis_metadata_table(content, dbif=None):
+    """!Create the temporal gis metadata table which stores all metadata
+       information about the temporal database.
+
+       @param content The dictionary that stores the key:value metadata
+                      that should be stored in the metadata table
+       @param dbif The database interface to be used
+    """
+    dbif, connected = init_dbif(dbif)
+    statement = "CREATE TABLE tgis_metadata (key VARCHAR NOT NULL, value VARCHAR);\n";
+    dbif.execute_transaction(statement)
+
+    for key in content.keys():
+        statement = "INSERT INTO tgis_metadata (key, value) VALUES " + \
+                     "(\'%s\' , \'%s\');\n"%(str(key), str(content[key]))
+        dbif.execute_transaction(statement)
+
+    if connected:
+        dbif.close()
 
 ###############################################################################
 
@@ -366,7 +417,7 @@ class SQLDatabaseInterfaceConnection():
     def __init__(self):
         self.connected = False
         global tgis_backend
-        if tgis_backed == "sqlite":
+        if tgis_backend == "sqlite":
             self.dbmi = sqlite3
         else:
             self.dbmi = psycopg2
@@ -387,10 +438,10 @@ class SQLDatabaseInterfaceConnection():
 
            Supported backends are sqlite3 and postgresql
         """
-        init = get_temporal_dbmi_init_string()
+        self.database = get_temporal_dbmi_init_string()
         #print "Connect to",  self.database
         if self.dbmi.__name__ == "sqlite3":
-            self.connection = self.dbmi.connect(init,
+            self.connection = self.dbmi.connect(self.database,
                     detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
             self.connection.row_factory = self.dbmi.Row
             self.connection.isolation_level = None
@@ -398,7 +449,7 @@ class SQLDatabaseInterfaceConnection():
             self.cursor.execute("PRAGMA synchronous = OFF")
             self.cursor.execute("PRAGMA journal_mode = MEMORY")
         elif self.dbmi.__name__ == "psycopg2":
-            self.connection = self.dbmi.connect(init)
+            self.connection = self.dbmi.connect(self.database)
             #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
             self.cursor = self.connection.cursor(
                 cursor_factory = self.dbmi.extras.DictCursor)

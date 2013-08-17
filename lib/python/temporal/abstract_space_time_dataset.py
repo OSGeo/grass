@@ -1087,8 +1087,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 rows = self.get_registered_maps("id,start_time,end_time",
                                                 where, order, dbif)
                 has_bt_columns = False
-                core.warning(_("Old temporal database format. The top and "\
-                               "bottom column is missing in the views, using"\
+                core.warning(_("Old temporal database format detected. "
+                               "The top and "
+                               "bottom column is missing in the views, using"
                                "a work around."))
             except:
                 raise
@@ -1105,9 +1106,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if has_bt_columns:
                     map.set_spatial_extent_from_values(west=row["west"],
                                                        east=row["east"],
-                                           south=row["south"], top=row["top"],
-                                           north=row["north"],
-                                           bottom=row["bottom"])
+                                                       south=row["south"],
+                                                       top=row["top"],
+                                                       north=row["north"],
+                                                       bottom=row["bottom"])
                 # The slow work around
                 else:
                     map.spatial_extent.select(dbif)
