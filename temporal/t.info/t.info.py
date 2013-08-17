@@ -68,9 +68,12 @@ def main():
 
     # Make sure the temporal database exists
     tgis.init()
-    
-    dbif = tgis.SQLDatabaseInterfaceConnection()
-    
+
+    dbif, connected = tgis.init_dbif(None)
+
+
+    rows = tgis.get_tgis_metadata(dbif)
+
     if system and not shellstyle:
         #      0123456789012345678901234567890
         print " +------------------- Temporal DBMI backend information ----------------------+"
@@ -79,14 +82,20 @@ def main():
             tgis.get_temporal_dbmi_init_string())
         print " | SQL template path:.......... " + str(
             tgis.get_sql_template_path())
+        if rows:
+            for row in rows:
+                print " | %s .......... %s"%(row[0], row[1])
         print " +----------------------------------------------------------------------------+"
         return
     elif system:
-        print "dbmi_python_interface=" + str(dbif.dbmi.__name__)
-        print "dbmi_init_string=" + str(tgis.get_temporal_dbmi_init_string())
-        print "sql_template_path=" + str(tgis.get_sql_template_path())
+        print "dbmi_python_interface=\'" + str(dbif.dbmi.__name__) + "\'"
+        print "dbmi_init_string=\'" + str(tgis.get_temporal_dbmi_init_string()) + "\'"
+        print "sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'"
+        if rows:
+            for row in rows:
+                print "%s=\'%s\'"%(row[0], row[1])
         return
-        
+
     if not system and not name:
         grass.fatal(_("Please specify %s=") % ("name"))
 
