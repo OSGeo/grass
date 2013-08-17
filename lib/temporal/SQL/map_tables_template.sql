@@ -28,28 +28,28 @@ CREATE TABLE  GRASS_MAP_base (
   PRIMARY KEY (id)
 );
 
+CREATE INDEX GRASS_MAP_base_index ON GRASS_MAP_base (id);
+
 -- Relative valid time interval with start and end time
 CREATE TABLE  GRASS_MAP_relative_time (
   id VARCHAR NOT NULL,          -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
   start_time INTEGER,  -- The relative valid start time in 
   end_time INTEGER,    -- The relative valid end time in 
   unit VARCHAR,                 -- The relative time unit, available are "years, months, days, minutes, seconds"
-  PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE INDEX GRASS_MAP_relative_time_index ON GRASS_MAP_relative_time (start_time, end_time);
+CREATE INDEX GRASS_MAP_relative_time_index ON GRASS_MAP_relative_time (id, start_time, end_time);
 
 CREATE TABLE  GRASS_MAP_absolute_time (
   id VARCHAR NOT NULL,   -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
   start_time TIMESTAMP,  --  Start of the valid time, can be NULL if no time information is available
   end_time TIMESTAMP,    --  End of the valid time, can be NULL if no time information is available or valid time is a single point in time
   timezone VARCHAR,      -- The timezone of the valid time stored as string. This is currently not in use. Instead the timezone is set in the datetime strings 
-  PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE INDEX GRASS_MAP_absolute_time_index ON GRASS_MAP_absolute_time (start_time, end_time);
+CREATE INDEX GRASS_MAP_absolute_time_index ON GRASS_MAP_absolute_time (id, start_time, end_time);
 
 -- The spatial extent of a raster map
 
@@ -63,27 +63,7 @@ CREATE TABLE  GRASS_MAP_spatial_extent (
   top DOUBLE PRECISION NOT NULL,
   bottom DOUBLE PRECISION NOT NULL,
   proj VARCHAR,
-  PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
-
---CREATE TRIGGER update_GRASS_MAP_absolute_time AFTER UPDATE ON GRASS_MAP_absolute_time 
---  BEGIN
---    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
--- END;
-
---CREATE TRIGGER update_GRASS_MAP_relative_time AFTER UPDATE ON GRASS_MAP_relative_time 
---  BEGIN
---    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
-
-
---CREATE TRIGGER update_GRASS_MAP_spatial_extent AFTER UPDATE ON GRASS_MAP_spatial_extent 
---  BEGIN
---    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
+CREATE INDEX GRASS_MAP_spatial_extent_index ON GRASS_MAP_spatial_extent (id);

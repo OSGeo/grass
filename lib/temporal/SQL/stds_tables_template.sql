@@ -30,8 +30,7 @@ CREATE TABLE  STDS_relative_time (
   granularity INTEGER,            -- The granularity 
   unit VARCHAR,                   -- The relative time unit, available are "years, months, days, minutes, seconds"
   map_time VARCHAR,               -- The temporal type of the registered maps, may be interval, point or mixed
-  PRIMARY KEY (id),  
-  FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE  STDS_absolute_time (
@@ -41,8 +40,7 @@ CREATE TABLE  STDS_absolute_time (
   granularity VARCHAR,            -- The granularity "NNN seconds, NNN minutes, NNN hours, NNN days, NNN months, NNN years"
   timezone VARCHAR,      -- The timezone of the valid time stored as string. This is currently not in use. Instead the timezone is set in the datetime strings 
   map_time VARCHAR,               -- The temporal type of the registered maps, may be interval, point or mixed
-  PRIMARY KEY (id),  
-  FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE  STDS_spatial_extent (
@@ -54,27 +52,5 @@ CREATE TABLE  STDS_spatial_extent (
   top DOUBLE PRECISION,     -- The spatial top extent, derived from the registered maps
   bottom DOUBLE PRECISION,  -- The spatial bottom extent, derived from the registered maps
   proj VARCHAR,      -- The projection of the space time dataset (XY of LL)
-  PRIMARY KEY (id),  
-  FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
--- Uncommented due to performance issues
---CREATE TRIGGER update_STDS_abs_time AFTER UPDATE ON STDS_absolute_time 
---  BEGIN
---    UPDATE STDS_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE STDS_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
-
---CREATE TRIGGER update_STDS_rel_time AFTER UPDATE ON STDS_relative_time 
---  BEGIN
---    UPDATE STDS_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE STDS_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
-
---CREATE TRIGGER update_STDS_spatial_extent AFTER UPDATE ON STDS_spatial_extent 
---  BEGIN
---    UPDATE STDS_base SET modification_time = datetime("NOW") WHERE id = old.id;
---   UPDATE STDS_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
-

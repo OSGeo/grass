@@ -23,14 +23,5 @@ CREATE TABLE  str3ds_metadata (
   title VARCHAR,                -- Title of the space time 3D raster dataset
   description VARCHAR,          -- Detailed description of the space time 3D raster dataset
   command VARCHAR,              -- The command that was used to create the space time 3D raster dataset
-  PRIMARY KEY (id),  
-  FOREIGN KEY (id) REFERENCES  str3ds_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  str3ds_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
--- Uncommented due to performance issues
---CREATE TRIGGER update_str3ds_metadata AFTER UPDATE ON str3ds_metadata 
---  BEGIN
---    UPDATE str3ds_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE str3ds_base SET revision = (revision + 1) WHERE id = old.id;
---  END;

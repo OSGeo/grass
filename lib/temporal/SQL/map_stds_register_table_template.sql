@@ -19,20 +19,5 @@
 -- This table stores the names of the space-time datasets in which this map is registered 
 CREATE TABLE  TABLE_NAME_STDS_register (
   id VARCHAR NOT NULL, -- This column is a primary foreign key storing the STDS names
-  PRIMARY KEY (id),
-  FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
---CREATE TRIGGER TABLE_NAME_STDS_register_insert AFTER INSERT ON TABLE_NAME_STDS_register
---  BEGIN
---    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE GRASS_MAP_base.id = 'MAP_ID';
---    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE GRASS_MAP_base.id = 'MAP_ID';
---  END;
-
---CREATE TRIGGER TABLE_NAME_STDS_register_delete AFTER DELETE ON TABLE_NAME_STDS_register
---  BEGIN
---    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE GRASS_MAP_base.id = 'MAP_ID';
---    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE GRASS_MAP_base.id = 'MAP_ID';
---  END;
-
-

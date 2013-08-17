@@ -25,14 +25,5 @@ CREATE TABLE  stvds_metadata (
   islands INTEGER,        -- The number of islands accumulated from all registered maps (topological information)
   holes INTEGER,          -- The number of holes accumulated from all registered maps (topological information)
   volumes INTEGER,        -- The number of volumes accumulated from all registered maps (topological information)
-  PRIMARY KEY (id),  
-  FOREIGN KEY (id) REFERENCES  stvds_base (id) ON DELETE CASCADE
+  FOREIGN KEY (id) REFERENCES  stvds_base (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
--- Uncommented due to performance issues
---CREATE TRIGGER update_stvds_metadata AFTER UPDATE ON stvds_metadata 
---  BEGIN
---    UPDATE stvds_base SET modification_time = datetime("NOW") WHERE id = old.id;
---    UPDATE stvds_base SET revision = (revision + 1) WHERE id = old.id;
---  END;
