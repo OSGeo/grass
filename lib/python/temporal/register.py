@@ -296,8 +296,6 @@ def register_maps_in_space_time_dataset(
         if dbif.dbmi.__name__ == "sqlite3":
             if count % 100 == 0:
                 if statement is not None and statement != "":
-                    core.message(_("Registering maps in the temporal database")
-                                 )
                     dbif.execute_transaction(statement)
                     statement = ""
 
