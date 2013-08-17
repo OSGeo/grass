@@ -55,6 +55,7 @@
 #%end
 import grass.script as grass
 import grass.temporal as tgis
+import grass.pygrass.modules as pyg
 
 ############################################################################
 
@@ -128,19 +129,24 @@ def main():
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
             count = 1
+            name_list = []
             for map in maps:
                 map.select(dbif)
-                grass.run_command("g.remove", rast=map.get_name(), quiet=True)
+                name_list.append(map.get_name())
                 map_statement += map.delete(dbif=dbif, execute=False)
 
                 count += 1
                 # Delete every 100 maps
                 if count%100 == 0:
                     dbif.execute_transaction(map_statement)
+                    pyg.Module("g.remove", rast=name_list, quiet=True)
                     map_statement = ""
+                    name_list = []
 
             if map_statement:
                 dbif.execute_transaction(map_statement)
+            if name_list:
+                pyg.Module("g.remove", rast=name_list, quiet=True)
 
         statement += sp.delete(dbif=dbif, execute=False)
 
