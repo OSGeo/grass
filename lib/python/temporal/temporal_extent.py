@@ -330,6 +330,22 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | End time:................... 5
             | Relative time unit:......... years
 
+
+           >>> from datetime import datetime as dt
+           >>> A = AbsoluteTemporalExtent(start_time=dt(2001,1,10), end_time=dt(2003,1,1))
+           >>> B = AbsoluteTemporalExtent(start_time=dt(2005,1,10), end_time=dt(2008,1,1))
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            +-------------------- Absolute time -----------------------------------------+
+            | Start time:................. 2001-01-10 00:00:00
+            | End time:................... 2008-01-01 00:00:00
+
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            +-------------------- Absolute time -----------------------------------------+
+            | Start time:................. 2001-01-10 00:00:00
+            | End time:................... 2008-01-01 00:00:00
+
            @endcoe
         """
 
