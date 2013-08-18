@@ -194,7 +194,12 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         else:
             end = self.D["end_time"]
 
-        return AbstractTemporalExtent(start_time=start, end_time=end)
+        if issubclass(type(self), RelativeTemporalExtent):
+            return RelativeTemporalExtent(start_time=start, end_time=end, unit=self.get_unit())
+        elif issubclass(type(self), AbsoluteTemporalExtent):
+            return AbsoluteTemporalExtent(start_time=start, end_time=end, tz=self.get_timezone())
+        elif issubclass(type(self), AbstractTemporalExtent):
+            return AbstractTemporalExtent(start_time=start, end_time=end)
 
     def disjoint_union(self, extent):
         """!Creates a disjoint union with this temporal extent and the provided one.
@@ -309,6 +314,22 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 3
             | End time:................... 5
 
+           >>> A = RelativeTemporalExtent(start_time=5, end_time=None, unit="years" )
+           >>> B = RelativeTemporalExtent(start_time=3, end_time=None, unit="years" )
+           >>> inter = A.disjoint_union(B)
+           >>> inter.print_info()
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 3
+            | End time:................... 5
+            | Relative time unit:......... years
+
+           >>> inter = B.disjoint_union(A)
+           >>> inter.print_info()
+            +-------------------- Relative time -----------------------------------------+
+            | Start time:................. 3
+            | End time:................... 5
+            | Relative time unit:......... years
+
            @endcoe
         """
 
@@ -341,7 +362,12 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         else:
             end = self.D["end_time"]
 
-        return AbstractTemporalExtent(start_time=start, end_time=end)
+        if issubclass(type(self), RelativeTemporalExtent):
+            return RelativeTemporalExtent(start_time=start, end_time=end, unit=self.get_unit())
+        elif issubclass(type(self), AbsoluteTemporalExtent):
+            return AbsoluteTemporalExtent(start_time=start, end_time=end, tz=self.get_timezone())
+        elif issubclass(type(self), AbstractTemporalExtent):
+            return AbstractTemporalExtent(start_time=start, end_time=end)
 
     def union(self, extent):
         """!Creates a union with this temporal extent and the provided one.
