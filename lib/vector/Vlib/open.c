@@ -241,9 +241,15 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         else {
             char file_path[GPATH_MAX];
             
-            if (strcmp(Map->mapset, G_mapset()) != 0) {
-                G_warning(_("Temporary vector maps can be accessed only in the current mapset"));
-                return -1;
+            /* temporary map: reduce to current mapset if search path
+             * was set */
+            if (strcmp(Map->mapset, "") == 0)
+                Map->mapset = G_store(G_mapset());
+            else {
+                if (strcmp(Map->mapset, G_mapset()) != 0) {
+                    G_warning(_("Temporary vector maps can be accessed only in the current mapset"));
+                    return -1;
+                }
             }
             G_file_name(file_path, path, GV_HEAD_ELEMENT, Map->mapset);
             if (access(file_path, F_OK) != 0)
