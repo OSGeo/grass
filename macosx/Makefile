@@ -104,6 +104,7 @@ install-basic-macosx:
 		${GISBASE}/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) > ${INST_DIR_TARGET}/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 	sed -e 's#^\(GRASS_HOME.[^=]*\).*#\1= $(INST_DIR)#g' \
 		-e 's#$(GISBASE)#$(INST_DIR)#g' \
+		-e "s#-isysroot /.*MacOSX.*\.sdk##g" \
 		${GISBASE}/include/Make/Platform.make > ${INST_DIR_TARGET}/include/Make/Platform.make
 	sed -e 's#^\(ARCH_DISTDIR.[^=]*\).*#\1= $(INST_DIR)#g' \
 		-e 's#^\(ARCH_BINDIR.[^=]*\).*#\1= $(UNIX_BIN)#g' \
