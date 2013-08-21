@@ -48,28 +48,16 @@ def main():
 
     # Make sure the temporal database exists
     tgis.init()
-    
+
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    if name.find("@") >= 0:
-        id = name
-    else:
-        mapset = grass.gisenv()["MAPSET"]
-        id = name + "@" + mapset
-
-    stds = tgis.dataset_factory(type, id)
-
-    if stds.is_in_db(dbif) == False:
-        dbif.close()
-        grass.fatal(_("Space time dataset <%s> not found in temporal database") % (id))
-
-    stds.select(dbif)
+    stds = tgis.open_old_space_time_dataset(name, type, dbif)
     stds.snap(dbif=dbif)
-        
+
     stds.update_command_string(dbif=dbif)
     dbif.close()
-    
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()

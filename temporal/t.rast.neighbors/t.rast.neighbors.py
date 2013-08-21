@@ -92,33 +92,13 @@ def main():
 
     mapset = grass.gisenv()["MAPSET"]
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
-    sp = tgis.SpaceTimeRasterDataset(id)
-
-    if sp.is_in_db() == False:
-        dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
-
-    sp.select(dbif)
+    sp = tgis.open_old_space_time_dataset(input, "strds", dbif)
     dummy = sp.get_new_map_instance(None)
 
-    if output.find("@") >= 0:
-        out_id = output
-    else:
-        out_id = output + "@" + mapset
-
-    # The new space time raster dataset
-    new_sp = tgis.SpaceTimeRasterDataset(out_id)
-    if new_sp.is_in_db(dbif):
-        if not grass.overwrite():
-            dbif.close()
-            grass.fatal(_("Space time raster dataset <%s> is already in the "
-                          "database, use overwrite flag to overwrite") % out_id)
+    temporal_type, semantic_type, title, description = sp.get_initial_values()
+    new_sp = tgis.open_new_space_time_dataset(output, "strds", sp.get_temporal_type(),
+                                              title, description, semantic_type,
+                                              dbif, grass.overwrite(), dry=True)
 
     rows = sp.get_registered_maps("id,start_time", where, "start_time", dbif)
 
@@ -129,10 +109,10 @@ def main():
     count = 0
     proc_count = 0
     proc_list = []
-    
+
     num_rows = len(rows)
     new_maps = {}
-    
+
     for row in rows:
         count += 1
 
@@ -162,7 +142,7 @@ def main():
         proc_list[proc_count].start()
         proc_count += 1
 
-        # Join processes if the maximum number of processes are 
+        # Join processes if the maximum number of processes are
         # reached or the end of the loop is reached
         if proc_count == nprocs or proc_count == num_rows:
             proc_count = 0
@@ -180,23 +160,19 @@ def main():
 
         # Store the new maps
         new_maps[row["id"]] = new_map
-    
+
     grass.percent(0, num_rows, 1)
-    
-    # Insert the new space time dataset
-    if new_sp.is_in_db(dbif):
-        if grass.overwrite():
-            new_sp.delete(dbif)
-            new_sp = sp.get_new_instance(out_id)
-    
-    temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp.set_initial_values(
-        temporal_type, semantic_type, title, description)
-    new_sp.insert(dbif)
-    
+
+    new_sp = tgis.open_new_space_time_dataset(output, "strds",
+                                              sp.get_temporal_type(),
+                                              title, description,
+                                              semantic_type,
+                                              dbif, grass.overwrite(),
+                                              dry=False)
+
     # collect empty maps to remove them
     empty_maps = []
-    
+
     # Register the maps in the database
     count = 0
     for row in rows:
@@ -218,7 +194,7 @@ def main():
 
             old_map = sp.get_new_map_instance(row["id"])
             old_map.select(dbif)
-            
+
             # Set the time stamp
             if old_map.is_time_absolute():
                 start, end, tz = old_map.get_absolute_time()
@@ -230,11 +206,11 @@ def main():
             # Insert map in temporal database
             new_map.insert(dbif)
             new_sp.register_map(new_map, dbif)
-    
+
     # Update the spatio-temporal extent and the metadata table entries
     new_sp.update_from_registered_maps(dbif)
     grass.percent(num_rows, num_rows, 1)
-    
+
     # Remove empty maps
     if len(empty_maps) > 0:
         names = ""
@@ -245,16 +221,16 @@ def main():
             else:
                 names += ",%s" % (map.get_name())
             count += 1
-            
+
         grass.run_command("g.remove", rast=names, quiet=True)
 
-                
+
     dbif.close()
 
 def run_neighbors(input, output, method, size):
     """Helper function to run r.neighbors in parallel"""
-    return grass.run_command("r.neighbors", input=input, output=output, 
-                            method=method, size=size, overwrite=grass.overwrite(), 
+    return grass.run_command("r.neighbors", input=input, output=output,
+                            method=method, size=size, overwrite=grass.overwrite(),
                             quiet=True)
 
 

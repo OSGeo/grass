@@ -104,28 +104,14 @@ def main():
             dataset_name = line_list[0]
             dataset_list.append(dataset_name)
 
-    mapset = grass.gisenv()["MAPSET"]
-
     statement = ""
 
     for name in dataset_list:
         name = name.strip()
-        # Check for the mapset in name
-        if name.find("@") < 0:
-            id = name + "@" + mapset
-        else:
-            id = name
-
-        sp = tgis.dataset_factory(type, id)
-
-        if sp.is_in_db(dbif) == False:
-            dbif.close()
-            grass.fatal(_("Space time %s dataset <%s> not found")
-                        % (sp.get_new_map_instance(None).get_type(), id))
+        sp = tgis.open_old_space_time_dataset(name, type, dbif)
 
         if recursive and force:
             grass.message(_("Removing registered maps"))
-            sp.select(dbif)
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
             count = 1

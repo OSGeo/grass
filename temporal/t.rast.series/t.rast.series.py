@@ -5,7 +5,8 @@
 # MODULE:	t.rast.series
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Perform different aggregation algorithms from r.series on all or a selected subset of raster maps in a space time raster dataset
+# PURPOSE:	Perform different aggregation algorithms from r.series on all or a
+#          selected subset of raster maps in a space time raster dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -73,19 +74,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        mapset = grass.gisenv()["MAPSET"]
-        id = input + "@" + mapset
-
-    sp = tgis.SpaceTimeRasterDataset(id)
-
-    if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
-
-    sp.select()
+    sp = tgis.open_old_space_time_dataset(input, "strds")
 
     rows = sp.get_registered_maps("id", where, order, None)
 
@@ -101,7 +90,7 @@ def main():
         file.close()
 
         ret = grass.run_command("r.series", flags="z", file=filename,
-                                output=output, overwrite=grass.overwrite(), 
+                                output=output, overwrite=grass.overwrite(),
                                 method=method)
 
         if ret == 0 and not add_time:

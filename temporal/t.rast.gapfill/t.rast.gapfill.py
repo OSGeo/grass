@@ -49,7 +49,6 @@
 #%end
 
 from multiprocessing import Process
-import copy
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -64,26 +63,16 @@ def main():
     where = options["where"]
     nprocs = options["nprocs"]
 
+    mapset = grass.gisenv()["MAPSET"]
+
     # Make sure the temporal database exists
     tgis.init()
-
-    if input.find("@") >= 0:
-        id = input
-    else:
-        mapset = grass.gisenv()["MAPSET"]
-        id = input + "@" + mapset
 
     # We need a database interface
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = tgis.SpaceTimeRasterDataset(id)
-
-    if sp.is_in_db(dbif) == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") %
-                    (sp.get_new_map_instance(None).get_type(), id))
-
-    sp.select(dbif)
+    sp = tgis.open_old_space_time_dataset(input, "strds")
 
     maps = sp.get_registered_maps_as_objects_with_gaps(where, dbif)
 
@@ -107,7 +96,7 @@ def main():
                 else:
                     if _map.is_in_db(dbif):
                         overwrite_flags[_id] = True
-                        
+
 
             gap_list.append(_map)
 

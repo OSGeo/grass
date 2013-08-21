@@ -59,28 +59,14 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    #Get the current mapset to create the id of the space time dataset
-    if name.find("@") >= 0:
-        id = name
-    else:
-        mapset = grass.gisenv()["MAPSET"]
-        id = name + "@" + mapset
-
-    sp = tgis.dataset_factory(type, id)
-
-    if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
-
-    # Insert content from db
-    sp.select()
+    sp = tgis.open_old_space_time_dataset(name, type)
 
     # Get ordered map list
     maps = sp.get_registered_maps_as_objects(
         where=where, order="start_time", dbif=None)
-    
+
     spatial = None
-    
+
     if spatio_temporal_relations:
         if sp.get_type() == "strds":
             spatial = "2D"

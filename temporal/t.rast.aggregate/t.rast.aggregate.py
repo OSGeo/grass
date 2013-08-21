@@ -58,7 +58,6 @@
 #% description: Register Null maps
 #%end
 
-from multiprocessing import Process
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -83,47 +82,17 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = grass.gisenv()["MAPSET"]
-
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
-    sp = tgis.SpaceTimeRasterDataset(id)
-
-    if sp.is_in_db() == False:
-        dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
-
-    sp.select(dbif)
-
-    if output.find("@") >= 0:
-        out_id = output
-    else:
-        out_id = output + "@" + mapset
-
-    # The new space time raster dataset
-    new_sp = tgis.SpaceTimeRasterDataset(out_id)
-    if new_sp.is_in_db(dbif):
-        if grass.overwrite() == True:
-            new_sp.delete(dbif)
-            new_sp = tgis.SpaceTimeRasterDataset(out_id)
-        else:
-            dbif.close()
-            grass.fatal(_("Space time raster dataset <%s> is already in the "
-                          "database, use overwrite flag to overwrite") % out_id)
-
+    sp = tgis.open_old_space_time_dataset(input, "strds", dbif)
     temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp.set_initial_values(temporal_type, semantic_type, title, description)
-    new_sp.insert(dbif)
+    new_sp = tgis.open_new_space_time_dataset(output, "strds", temporal_type,
+                                              title, description, semantic_type,
+                                              dbif, grass.overwrite())
 
     rows = sp.get_registered_maps("id,start_time", where, "start_time", dbif)
 
     if not rows:
         dbif.close()
-        grass.fatal(_("Space time raster dataset <%s> is empty") % out_id)
+        grass.fatal(_("Space time raster dataset <%s> is empty") % input)
 
     # Modify the start time to fit the granularity
 

@@ -83,25 +83,10 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    #Get the current mapset to create the id of the space time dataset
-    mapset = grass.gisenv()["MAPSET"]
-
-    if name.find("@") >= 0:
-        id = name
-    else:
-        id = name + "@" + mapset
-
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    stds = tgis.dataset_factory(type, id)
-
-    if stds.is_in_db(dbif=dbif) == False:
-        dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            stds.get_new_map_instance(None).get_type(), id))
-
-    stds.select(dbif=dbif)
+    stds = tgis.open_old_space_time_dataset(name, type, dbif)
 
     update = False
     if title:
@@ -163,7 +148,7 @@ def main():
 
     if map_update or update:
         stds.update_from_registered_maps(dbif=dbif)
-    
+
     stds.update_command_string(dbif=dbif)
 
     dbif.close()

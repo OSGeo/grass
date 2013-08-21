@@ -84,34 +84,8 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = grass.gisenv()["MAPSET"]
-
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
-    sp = tgis.SpaceTimeVectorDataset(id)
-
-    if sp.is_in_db() == False:
-        dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
-
-    sp.select(dbif)
-
-    if strds.find("@") >= 0:
-        strds_id = strds
-    else:
-        strds_id = strds + "@" + mapset
-
-    strds_sp = tgis.SpaceTimeRasterDataset(strds_id)
-
-    if strds_sp.is_in_db() == False:
-        dbif.close()
-        grass.fatal(_("Space time raster dataset <%s> not found in temporal database") % (strds_id))
-
-    strds_sp.select(dbif)
+    sp = tgis.open_old_space_time_dataset(input, "stvds", dbif)
+    strds_sp = tgis.open_old_space_time_dataset(strds, "strds", dbif)
 
     if strds_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()
@@ -131,7 +105,6 @@ def main():
 
     rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time",
                                   tempwhere, "start_time", dbif)
-    dummy = tgis.VectorDataset(None)
 
     if not rows:
         dbif.close()
@@ -143,7 +116,6 @@ def main():
         end = row["end_time"]
         vectmap = row["name"] + "@" + row["mapset"]
         layer = row["layer"]
-        count = 0
 
         raster_maps = tgis.collect_map_names(
             strds_sp, dbif, start, end, sampling)
@@ -156,9 +128,9 @@ def main():
                 # Generate the temporary map name
                 aggreagated_map_name = "aggreagated_map_name_" + \
                     str(os.getpid())
-                new_map = tgis.aggregate_raster_maps(raster_maps, 
-                                                     aggreagated_map_name, 
-                                                     start, end, 0, method, 
+                new_map = tgis.aggregate_raster_maps(raster_maps,
+                                                     aggreagated_map_name,
+                                                     start, end, 0, method,
                                                      False, dbif)
                 aggreagated_map_name = aggreagated_map_name + "_0"
                 if new_map is None:
@@ -171,7 +143,7 @@ def main():
                 if column:
                     col_name = column
                 else:
-                    # Create a new column with the SQL compliant 
+                    # Create a new column with the SQL compliant
                     # name of the sampled raster map
                     col_name = rastermap.split("@")[0].replace(".", "_")
 
@@ -182,13 +154,13 @@ def main():
                     coltype = "INT"
 
                 if layer:
-                    ret = grass.run_command("v.db.addcolumn", 
-                                            map=vectmap, layer=layer, 
-                                            column="%s %s" % (col_name, coltype), 
+                    ret = grass.run_command("v.db.addcolumn",
+                                            map=vectmap, layer=layer,
+                                            column="%s %s" % (col_name, coltype),
                                             overwrite=grass.overwrite())
                 else:
-                    ret = grass.run_command("v.db.addcolumn", map=vectmap, 
-                                            column="%s %s" % (col_name, coltype), 
+                    ret = grass.run_command("v.db.addcolumn", map=vectmap,
+                                            column="%s %s" % (col_name, coltype),
                                             overwrite=grass.overwrite())
 
                 if ret != 0:
@@ -198,17 +170,17 @@ def main():
 
                 # Call v.what.rast
                 if layer:
-                    ret = grass.run_command("v.what.rast", map=vectmap, 
-                                            layer=layer, raster=rastermap, 
+                    ret = grass.run_command("v.what.rast", map=vectmap,
+                                            layer=layer, raster=rastermap,
                                             column=col_name, where=where)
                 else:
-                    ret = grass.run_command("v.what.rast", map=vectmap, 
-                                            raster=rastermap, column=col_name, 
+                    ret = grass.run_command("v.what.rast", map=vectmap,
+                                            raster=rastermap, column=col_name,
                                             where=where)
                 if ret != 0:
                     dbif.close()
                     grass.fatal(_("Unable to run v.what.rast for vector map "
-                                  "<%s> and raster map <%s>") % (vectmap, 
+                                  "<%s> and raster map <%s>") % (vectmap,
                                                                  rastermap))
 
                 if aggreagated_map_name:

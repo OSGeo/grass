@@ -80,36 +80,20 @@ def main():
 
     mapset = grass.gisenv()["MAPSET"]
 
-    if strds.find("@") >= 0:
-        strds_id = strds
-    else:
-        strds_id = strds + "@" + mapset
+    strds_sp = tgis.open_old_space_time_dataset(strds, "strds", dbif)
 
-    strds_sp = tgis.SpaceTimeRasterDataset(strds_id)
 
-    if strds_sp.is_in_db() == False:
-        dbif.close()
-        grass.fatal(_("Space time raster dataset <%s> not found") % (strds_id))
+    title = _("Observaion of space time raster dataset <%s>") % (strds_sp.get_id())
+    description= _("Observation of space time raster dataset <%s>"
+                                " with vector map <%s>") % (strds_sp.get_id(),
+                                                            input)
 
-    strds_sp.select(dbif)
-
-    if output.find("@") >= 0:
-        id = output
-    else:
-        id = output + "@" + mapset
-
-    out_sp = tgis.SpaceTimeVectorDataset(id)
-
-    if out_sp.is_in_db(dbif) == True and grass.overwrite() == False:
-        dbif.close()
-        grass.fatal(_("Dataset <%s> found in temporal database, "
-                      "use the overwrite flag to overwrite") % (id))
-
-    # Overwrite existing stvds
-    if out_sp.is_in_db(dbif) == True and grass.overwrite() == True:
-        out_sp.select(dbif)
-        out_sp.delete(dbif)
-        out_sp = tgis.SpaceTimeVectorDataset(id)
+    out_sp = tgis.open_new_space_time_dataset(output, "stvds",
+                                              strds_sp.get_temporal_type(),
+                                              title, description,
+                                              strds_sp.get_semantic_type(),
+                                              dbif,
+                                              grass.overwrite(), dry=True)
 
     # Select the raster maps
     rows = strds_sp.get_registered_maps(
@@ -149,25 +133,23 @@ def main():
 
     # We create a new vector map using the categories of the original map
     ret = grass.run_command("v.category", input=input, layer=layers,
-                            output=vectmap, option="transfer", 
+                            output=vectmap, option="transfer",
                             overwrite=grass.overwrite())
     if ret != 0:
         grass.fatal(_("Unable to create new layers for vector map <%s>")
                     % (vectmap))
 
     # Create the output space time vector dataset
-    out_sp.set_initial_values(strds_sp.get_temporal_type(),
-                              strds_sp.get_semantic_type(),
-                              _("Observaion of space time raster "
-                                "dataset <%s>") % (strds_id),
-                              _("Observation of space time raster dataset <%s>"
-                                " with vector map <%s>") % (strds_id, input))
-
-    out_sp.insert(dbif)
+    out_sp = tgis.open_new_space_time_dataset(output, "stvds",
+                                              strds_sp.get_temporal_type(),
+                                              title, description,
+                                              strds_sp.get_semantic_type(),
+                                              dbif, grass.overwrite(),
+                                              dry=False)
 
     dummy = out_sp.get_new_map_instance(None)
 
-    # Sample the space time raster dataset with the vector 
+    # Sample the space time raster dataset with the vector
     # map at specific layer with v.what.rast
     count = 1
     for row in rows:
@@ -178,7 +160,7 @@ def main():
         if column:
             col_name = column
         else:
-            # Create a new column with name of the 
+            # Create a new column with name of the
             # sampled space time raster dataset
             col_name = row["name"]
 
@@ -190,9 +172,9 @@ def main():
 
         # Try to add a column
         if vector_db and count in vector_db and vector_db[count]["table"]:
-            ret = grass.run_command("v.db.addcolumn", map=vectmap, 
-                                    layer=count, 
-                                    column="%s %s" % (col_name, coltype), 
+            ret = grass.run_command("v.db.addcolumn", map=vectmap,
+                                    layer=count,
+                                    column="%s %s" % (col_name, coltype),
                                     overwrite=grass.overwrite())
             if ret != 0:
                 dbif.close()
@@ -201,8 +183,8 @@ def main():
         else:
             # Try to add a new table
             grass.message("Add table to layer %i" % (count))
-            ret = grass.run_command("v.db.addtable", map=vectmap, layer=count, 
-                                    columns="%s %s" % (col_name, coltype), 
+            ret = grass.run_command("v.db.addtable", map=vectmap, layer=count,
+                                    columns="%s %s" % (col_name, coltype),
                                     overwrite=grass.overwrite())
             if ret != 0:
                 dbif.close()
@@ -211,7 +193,7 @@ def main():
 
         # Call v.what.rast
         ret = grass.run_command("v.what.rast", map=vectmap,
-                                layer=count, raster=rastmap, 
+                                layer=count, raster=rastmap,
                                 column=col_name, where=where)
         if ret != 0:
             dbif.close()
@@ -219,7 +201,7 @@ def main():
                           "with layer %i and raster map <%s>") % \
                         (vectmap, count, rastmap))
 
-        vect = out_sp.get_new_map_instance(dummy.build_id(vectmap, 
+        vect = out_sp.get_new_map_instance(dummy.build_id(vectmap,
                                                           mapset, str(count)))
         vect.load()
 
