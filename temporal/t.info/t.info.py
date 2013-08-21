@@ -42,7 +42,7 @@
 
 #%flag
 #% key: h
-#% description: Print history information in human readable shell style
+#% description: Print history information in human readable shell style for space time datasets
 #%end
 
 #%flag
@@ -61,7 +61,7 @@ import grass.temporal as tgis
 def main():
 
     name = options["input"]
-    type = options["type"]
+    type_ = options["type"]
     shellstyle = flags['g']
     system = flags['s']
     history = flags['h']
@@ -100,26 +100,25 @@ def main():
         grass.fatal(_("Please specify %s=") % ("name"))
 
     if name.find("@") >= 0:
-        id = name
+        id_ = name
     else:
-        mapset = grass.gisenv()["MAPSET"]
-        id = name + "@" + mapset
+        id_ = name + "@" + grass.gisenv()["MAPSET"]
 
-    ds = tgis.dataset_factory(type, id)
+    dataset = tgis.dataset_factory(type_, id_)
 
-    if ds.is_in_db() == False:
-        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
+    if dataset.is_in_db() == False:
+        grass.fatal(_("Dataset <%s> not found in temporal database") % (id_))
 
-    ds.select()
+    dataset.select()
 
-    if history == True:
-        ds.print_history()
+    if history == True and type in ["strds", "stvds", "str3ds"]:
+        dataset.print_history()
         return
 
     if shellstyle == True:
-        ds.print_shell_info()
+        dataset.print_shell_info()
     else:
-        ds.print_info()
+        dataset.print_info()
 
 if __name__ == "__main__":
     options, flags = grass.parser()

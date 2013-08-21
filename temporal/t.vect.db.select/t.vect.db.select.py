@@ -45,7 +45,6 @@
 
 import grass.script as grass
 import grass.temporal as tgis
-import grass.script.raster as raster
 
 ############################################################################
 
@@ -69,20 +68,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    mapset = grass.gisenv()["MAPSET"]
-
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
-    sp = tgis.SpaceTimeVectorDataset(id)
-
-    if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
-
-    sp.select()
+    sp = tgis.open_old_space_time_dataset(input, "stvds")
 
     rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time",
                                   tempwhere, "start_time", None)
@@ -91,13 +77,13 @@ def main():
     if rows:
         for row in rows:
             vector_name = "%s@%s" % (row["name"], row["mapset"])
-            # In case a layer is defined in the vector dataset, 
+            # In case a layer is defined in the vector dataset,
             # we override the option layer
             if row["layer"]:
                 layer = row["layer"]
 
-            select = grass.read_command("v.db.select", map=vector_name, 
-                                        layer=layer, columns=columns, 
+            select = grass.read_command("v.db.select", map=vector_name,
+                                        layer=layer, columns=columns,
                                         separator="%s" % (fs), where=where)
 
             if not select:
@@ -117,7 +103,7 @@ def main():
                             print col_names
                     else:
                         if row["end_time"]:
-                            print "%s%s%s%s%s" % (row["start_time"], fs, 
+                            print "%s%s%s%s%s" % (row["start_time"], fs,
                                                   row["end_time"], fs, entry)
                         else:
                             print "%s%s%s%s" % (row["start_time"],

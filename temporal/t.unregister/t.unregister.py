@@ -72,23 +72,7 @@ def main():
 
     # In case a space time dataset is specified
     if input:
-        # Check if the dataset name contains the mapset as well
-        if input.find("@") < 0:
-            id = input + "@" + mapset
-        else:
-            id = input
-
-        if type == "rast":
-            sp = tgis.dataset_factory("strds", id)
-        if type == "rast3d":
-            sp = tgis.dataset_factory("str3ds", id)
-        if type == "vect":
-            sp = tgis.dataset_factory("stvds", id)
-
-        if sp.is_in_db(dbif) == False:
-            dbif.close()
-            grass.fatal(_("Space time %s dataset <%s> not found")
-                        % (sp.get_new_map_instance(None).get_type(), id))
+        sp = tgis.open_old_space_time_dataset(input, type, dbif)
 
     maplist = []
 
@@ -139,7 +123,6 @@ def main():
         if map.is_in_db(dbif) == True:
             # Unregister from a single dataset
             if input:
-                sp.metadata.select(dbif)
                 # Collect SQL statements
                 statement += sp.unregister_map(
                     map=map, dbif=dbif, execute=False)
@@ -170,23 +153,13 @@ def main():
     # Update space time datasets
     grass.message(_("Unregister maps from space time dataset(s)"))
     if input:
-        sp.metadata.select(dbif)
         sp.update_from_registered_maps(dbif)
         sp.update_command_string(dbif=dbif)
     elif len(update_dict) > 0:
         count = 0
         for key in update_dict.keys():
             id = update_dict[key]
-            if type == "rast":
-                sp = tgis.dataset_factory("strds", id)
-            elif type == "rast3d":
-                sp = tgis.dataset_factory("str3ds", id)
-            elif type == "vect":
-                sp = tgis.dataset_factory("stvds", id)
-            else:
-                break
-
-            sp.metadata.select(dbif)
+            sp = tgis.open_old_space_time_dataset(id, type, dbif)
             sp.update_from_registered_maps(dbif)
             grass.percent(count, len(update_dict), 1)
             count += 1

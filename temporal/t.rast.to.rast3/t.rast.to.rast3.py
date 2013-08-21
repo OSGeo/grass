@@ -46,18 +46,7 @@ def main():
 
     mapset = grass.gisenv()["MAPSET"]
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
-    sp = tgis.SpaceTimeRasterDataset(id)
-
-    if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
-
-    sp.select()
+    sp = tgis.open_old_space_time_dataset(input, "strds")
 
     grass.use_temp_region()
 
@@ -70,12 +59,12 @@ def main():
     # This is the reference time to scale the z coordinate
     reftime = datetime(1900, 1, 1)
 
-    # We set top and bottom according to the start time in relation 
+    # We set top and bottom according to the start time in relation
     # to the date 1900-01-01 00:00:00
-    # In case of days, hours, minutes and seconds, a double number 
+    # In case of days, hours, minutes and seconds, a double number
     # is used to represent days and fracs of a day
 
-    # Space time voxel cubes with montly or yearly granularity can not be 
+    # Space time voxel cubes with montly or yearly granularity can not be
     # mixed with other temporal units
 
     # Compatible temporal units are : days, hours, minutes and seconds
@@ -85,7 +74,7 @@ def main():
     if sp.is_time_absolute():
         unit = granularity.split(" ")[1]
         granularity = float(granularity.split(" ")[0])
-        
+
         print "Gran from stds %0.15f"%(granularity)
 
         if unit == "years" or unit == "year":
@@ -155,7 +144,7 @@ def main():
 
     # Set the unit
     ret = grass.run_command("r3.support", map=output, vunit=unit,
-                            title=title, description=descr, 
+                            title=title, description=descr,
                             overwrite=grass.overwrite())
 
     # Register the space time voxel cube in the temporal GIS

@@ -34,6 +34,7 @@ t.info -g type=strds input=precip_abs1
 t.register --o type=rast -i input=precip_abs2 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=strds input=precip_abs2
 t.info -g type=strds input=precip_abs2
+t.info -h type=strds input=precip_abs2
 t.info type=rast input=prec_1
 t.info -g type=rast input=prec_1
 t.info type=rast input=prec_2
@@ -47,6 +48,7 @@ t.info -g type=str3ds input=precip_abs1
 t.register --o type=rast3d -i input=precip_abs2 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=str3ds input=precip_abs2
 t.info -g type=str3ds input=precip_abs2
+t.info -h type=str3ds input=precip_abs2
 t.info type=rast3 input=prec_1
 t.info -g type=rast3 input=prec_1
 t.info type=rast3 input=prec_2

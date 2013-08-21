@@ -115,35 +115,23 @@ def main():
     log = flags["g"]
     abslog = flags["a"]
     equi = flags["e"]
-    
+
     if raster == "":
         raster=None
-        
+
     if volume == "":
         volume = None
-        
+
     if rules == "":
         rules = None
-        
+
     if color == "":
         color = None
 
     # Make sure the temporal database exists
     tgis.init()
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        mapset = grass.gisenv()["MAPSET"]
-        id = input + "@" + mapset
-
-    sp = tgis.SpaceTimeRasterDataset(id)
-
-    if sp.is_in_db() == False:
-        grass.fatal(_("Space time %s dataset <%s> not found") % (
-            sp.get_new_map_instance(None).get_type(), id))
-
-    sp.select()
+    sp = tgis.open_old_space_time_dataset(input, "strds")
 
     rows = sp.get_registered_maps("id", None, None, None)
 
@@ -157,7 +145,7 @@ def main():
             file.write(string)
 
         file.close()
-        
+
         flags_=""
         if(remove):
             flags_+="r"
@@ -175,7 +163,7 @@ def main():
             flags_+="e"
 
         ret = grass.run_command("r.colors", flags=flags_, file=filename,
-                                color=color, raster=raster, volume=volume, 
+                                color=color, raster=raster, volume=volume,
                                 rules=rules, overwrite=grass.overwrite())
 
         if ret != 0:
