@@ -35,6 +35,7 @@ import tempfile
 
 from space_time_datasets import *
 from factory import *
+from open import *
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"
@@ -215,8 +216,8 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     """
             !Export space time datasets as tar archive with optional compression
 
-            This method should be used to export space time datasets 
-            of type raster and vector as tar archive that can be reimported 
+            This method should be used to export space time datasets
+            of type raster and vector as tar archive that can be reimported
             with the method import_stds().
 
             @param input The name of the space time dataset to export
@@ -226,31 +227,20 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
               - "gzip" GNU zip compression
               - "bzip2" Bzip compression
             @param workdir The working directory used for extraction and packing
-            @param where The temporal WHERE SQL statement to select a subset 
+            @param where The temporal WHERE SQL statement to select a subset
                           of maps from the space time dataset
             @param format_ The export format:
               - "GTiff" Geotiff format, only for raster maps
-              - "pack" The GRASS raster, 3D raster or vector Pack format, 
+              - "pack" The GRASS raster, 3D raster or vector Pack format,
                        this is the default setting
-              - "GML" GML file export format, only for vector maps, 
+              - "GML" GML file export format, only for vector maps,
                       v.out.ogr export option
             @param type_ The space time dataset type
               - "strds" Space time raster dataset
               - "str3ds" Space time 3D raster dataset
               - "stvds" Space time vector dataset
     """
-    mapset = core.gisenv()["MAPSET"]
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
-    sp = dataset_factory(type_, id)
-
-    if sp.is_in_db() == False:
-        core.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
-                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     # Save current working directory path
     old_cwd = os.getcwd()
@@ -259,14 +249,14 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     new_cwd = tempfile.mkdtemp(dir=workdir)
     os.chdir(new_cwd)
 
-    sp.select()
-
     if type_ == "strds":
         columns = "name,start_time,end_time,min,max,datatype"
     elif type_ == "stvds":
         columns = "name,start_time,end_time,layer"
     else:
         columns = "name,start_time,end_time"
+
+    sp = open_old_space_time_dataset(input, type_)
     rows = sp.get_registered_maps(columns, where, "start_time", None)
 
     if compression == "gzip":
@@ -329,7 +319,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     init_file.write(string)
     init_file.close()
 
-    metadata = core.read_command("t.info", type=type_, input=id)
+    metadata = core.read_command("t.info", type=type_, input=sp.get_id())
     metadata_file = open(metadata_file_name, "w")
     metadata_file.write(metadata)
     metadata_file.close()

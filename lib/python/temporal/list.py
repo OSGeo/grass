@@ -24,6 +24,7 @@ for details.
 
 from space_time_datasets import *
 from factory import *
+from open import *
 
 ###############################################################################
 
@@ -50,24 +51,13 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
             - "gran" List map using the granularity of the space time dataset,
                       columns are identical to deltagaps
         @param header Set True to print column names
-        @param gran The user defined granule to be used if method=gran is set, in case gran=None the 
+        @param gran The user defined granule to be used if method=gran is set, in case gran=None the
             granule of the space time dataset is used
     """
-    mapset = core.gisenv()["MAPSET"]
-
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
 
     dbif, connected = init_dbif(None)
-    
-    sp = dataset_factory(type, id)
 
-    if not sp.is_in_db(dbif=dbif):
-        core.fatal(_("Dataset <%s> not found in temporal database") % (id))
-
-    sp.select(dbif=dbif)
+    sp = open_old_space_time_dataset(input, type, dbif)
 
     if separator is None or separator == "":
         separator = "\t"
@@ -87,7 +77,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                 maps = sp.get_registered_maps_as_objects_by_granularity(gran=gran, dbif=dbif)
             else:
                 maps = sp.get_registered_maps_as_objects_by_granularity(dbif=dbif)
-            
+
         if header:
             string = ""
             string += "%s%s" % ("id", separator)

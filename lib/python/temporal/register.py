@@ -24,6 +24,7 @@ for details.
 
 from space_time_datasets import *
 from factory import *
+from open import *
 
 ###############################################################################
 
@@ -43,8 +44,8 @@ def register_maps_in_space_time_dataset(
        @param type The type of the maps rast, rast3d or vect
        @param name The name of the space time dataset
        @param maps A comma separated list of map names
-       @param file Input file one map with start and optional end time,
-                   one per line
+       @param file Input file, one map per line map with start and optional
+                   end time
        @param start The start date and time of the first raster map
                     (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                     format relative is integer 5)
@@ -83,35 +84,11 @@ def register_maps_in_space_time_dataset(
 
     # We may need the mapset
     mapset = core.gisenv()["MAPSET"]
+    dbif, connected = init_dbif(None)
 
     # The name of the space time dataset is optional
     if name:
-        # Check if the dataset name contains the mapset as well
-        if name.find("@") < 0:
-            id = name + "@" + mapset
-        else:
-            id = name
-
-        if type == "rast" or type == "raster":
-            sp = dataset_factory("strds", id)
-        elif type == "rast3d":
-            sp = dataset_factory("str3ds", id)
-        elif type == "vect" or type == "vector":
-            sp = dataset_factory("stvds", id)
-        else:
-            core.fatal(_("Unkown map type: %s") % (type))
-
-    dbif, connected = init_dbif(None)
-
-    if name:
-        # Read content from temporal database
-        sp.select(dbif)
-
-        if not sp.is_in_db(dbif):
-            dbif.close()
-            core.fatal(_("Space time %(sp)s dataset <%(name)s> no found") %
-                         {'sp': sp.get_new_map_instance(None).get_type(),
-                          'name': name})
+        sp = open_old_space_time_dataset(name, type, dbif)
 
         if sp.is_time_relative() and not unit:
             dbif.close()

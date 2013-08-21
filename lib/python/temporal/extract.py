@@ -13,6 +13,7 @@ for details.
 """
 
 from space_time_datasets import *
+from open import *
 from multiprocessing import Process
 
 ############################################################################
@@ -53,48 +54,15 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
     mapset = core.gisenv()["MAPSET"]
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
-    if type == "raster":
-        sp = SpaceTimeRasterDataset(id)
-    elif type == "raster3d":
-        sp = SpaceTimeRaster3DDataset(id)
-    elif type == "vector":
-        sp = SpaceTimeVectorDataset(id)
-
-    dummy = sp.get_new_map_instance(None)
-
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    if not sp.is_in_db(dbif):
-        dbif.close()
-        core.fatal(_("Space time %(type)s dataset <%(id)s> not found") % {
-                     'type': type, 'id': id})
-
-    if expression and not base:
-        dbif.close()
-        core.fatal(_("Please specify base="))
-
-    sp.select(dbif)
-
-    if output.find("@") >= 0:
-        out_id = output
-    else:
-        out_id = output + "@" + mapset
-
-    # The new space time dataset
-    new_sp = sp.get_new_instance(out_id)
-
-    if new_sp.is_in_db():
-        if not core.overwrite():
-            dbif.close()
-            core.fatal(_("Space time %(type)s dataset <%(id)s> is already in "
-                         "database, use overwrite flag to overwrite") % {
-                         'type': type, 'id': out_id})
+    sp = open_old_space_time_dataset(input, type, dbif)
+    dummy = sp.get_new_map_instance(None)
+    # Check the new stds
+    new_sp = open_new_space_time_dataset(output, type, sp.get_temporal_type(),
+                                         "None", "None", "mean", dbif,
+                                         core.overwrite(), dry=True)
     if type == "vector":
         rows = sp.get_registered_maps(
             "id,name,mapset,layer", where, "start_time", dbif)
@@ -198,16 +166,12 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
         core.percent(0, num_rows, 1)
 
-        # Insert the new space time dataset
-        if new_sp.is_in_db(dbif):
-            if core.overwrite():
-                new_sp.delete(dbif)
-                new_sp = sp.get_new_instance(out_id)
-
         temporal_type, semantic_type, title, description = sp.get_initial_values()
-        new_sp.set_initial_values(
-            temporal_type, semantic_type, title, description)
-        new_sp.insert(dbif)
+        new_sp = open_new_space_time_dataset(output, type,
+                                             sp.get_temporal_type(),
+                                             title, description,
+                                             semantic_type, dbif,
+                                             core.overwrite(), dry=False)
 
         # collect empty maps to remove them
         empty_maps = []

@@ -13,6 +13,7 @@ for details.
 """
 
 from space_time_datasets import *
+from open import *
 from multiprocessing import Process
 
 ############################################################################
@@ -82,24 +83,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
     input_name_list = inputs.split(",")
 
-    # Process the first input
-    if input_name_list[0].find("@") >= 0:
-        id = input_name_list[0]
-    else:
-        id = input_name_list[0] + "@" + mapset
-
-    if type == "raster":
-        first_input = SpaceTimeRasterDataset(id)
-    else:
-        first_input = SpaceTimeRaster3DDataset(id)
-
-    if not first_input.is_in_db(dbif):
-        dbif.close()
-        core.fatal(_("Space time %(t)s dataset <%(i)s> not found") % {'t': type,
-                                                                      'i': id})
-
-    # Fill the object with data from the temporal database
-    first_input.select(dbif)
+    first_input = open_old_space_time_dataset(input_name_list[0], type, dbif)
 
     # All additional inputs in reverse sorted order to avoid
     # wrong name substitution
@@ -109,38 +93,13 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
     input_list = []
 
     for input in input_name_list:
-
-        if input.find("@") >= 0:
-            id = input
-        else:
-            id = input + "@" + mapset
-
-        sp = first_input.get_new_instance(id)
-
-        if not sp.is_in_db(dbif):
-            dbif.close()
-            core.fatal(_("Space time %(t)s dataset <%(i)s> not "
-                         "found in temporal database") % {'t': type, 'i': id})
-
-        sp.select(dbif)
-
+        sp = open_old_space_time_dataset(input, type, dbif)
         input_list.append(copy.copy(sp))
 
-    # Create the new space time dataset
-    if output.find("@") >= 0:
-        out_id = output
-    else:
-        out_id = output + "@" + mapset
-
-    new_sp = first_input.get_new_instance(out_id)
-
-    # Check if in database
-    if new_sp.is_in_db(dbif):
-        if not core.overwrite():
-            dbif.close()
-            core.fatal(_("Space time %(t)s dataset <%(i)s> is already in "
-                         "database, use overwrite flag to overwrite") % {'t': type,
-                                                                         'i': out_id})
+    new_sp = open_new_space_time_dataset(output, type,
+                                         first_input.get_temporal_type(),
+                                         "New", "New dataset", "mean", dbif,
+                                         core.overwrite(), True)
 
     # Sample all inputs by the first input and create a sample matrix
     if spatial:
@@ -321,19 +280,12 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         # Register the new maps in the output space time dataset
         core.message(_("Start map registration in temporal database"))
 
-        # Overwrite an existing dataset if requested
-        if new_sp.is_in_db(dbif):
-            if core.overwrite():
-                new_sp.delete(dbif)
-                new_sp = first_input.get_new_instance(out_id)
-
-        # Copy the ids from the first input
         temporal_type, semantic_type, title, description = first_input.get_initial_values()
-        new_sp.set_initial_values(
-            temporal_type, semantic_type, title, description)
-        # Insert the dataset in the temporal database
-        new_sp.insert(dbif)
 
+        new_sp = open_new_space_time_dataset(output, type,
+                                         temporal_type, title, description,
+                                         semantic_type, dbif,
+                                         core.overwrite(), False)
         count = 0
 
         # collect empty maps to remove them
@@ -670,7 +622,7 @@ def _parse_td_operator(expr, is_time_absolute, first, current):
 
 
 def _parse_start_time_operator(expr, is_time_absolute, first, current):
-    """Parse the start_time() operator. This operator represent 
+    """Parse the start_time() operator. This operator represent
     the time difference between the start time of the sample space time
     raster dataset and the start time of the current sample interval or
     instance. The time is measured  in days and fraction of days for absolute
