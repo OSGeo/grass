@@ -25,6 +25,7 @@ for details.
 
 from space_time_datasets import *
 from factory import *
+from open import *
 
 ###############################################################################
 
@@ -45,21 +46,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = core.gisenv()["MAPSET"]
-
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
-    sp = dataset_factory(type, id)
-
-    if sp.is_in_db(dbif) == False:
-        dbif.close()
-        core.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
-                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
-
-    sp.select(dbif)
+    sp = open_old_space_time_dataset(input, "strds", dbif)
 
     rows = sp.get_registered_maps(
         "id,start_time,end_time", where, "start_time", dbif)

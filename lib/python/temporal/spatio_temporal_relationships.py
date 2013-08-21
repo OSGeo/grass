@@ -29,7 +29,7 @@ from ctypes import *
 ###############################################################################
 
 class SpatioTemporalTopologyBuilder(object):
-    """!This class is designed to build the spatio-temporal topology 
+    """!This class is designed to build the spatio-temporal topology
        of spatio-temporally related abstract dataset objects.
 
        The abstract dataset objects must be provided as a single list, or in two lists.
@@ -51,7 +51,7 @@ class SpatioTemporalTopologyBuilder(object):
         for map in tb:
             map.select(dbif)
             map.print_info()
-            
+
         # Same can be done with the existing map list
         # But be aware that this is might not be temporally ordered
         for map in maps:
@@ -69,7 +69,7 @@ class SpatioTemporalTopologyBuilder(object):
 
         # Dictionary like accessed
         map = tb["name@mapset"]
-        
+
         >>> # Example with two lists of maps
         >>> import grass.temporal as tgis
         >>> # Create two list of maps with equal time stamps
@@ -119,7 +119,7 @@ class SpatioTemporalTopologyBuilder(object):
         Map b7 has equal relation to map a7
         Map b8 has equal relation to map a8
         Map b9 has equal relation to map a9
-        
+
         @endcode
 
     """
@@ -155,15 +155,15 @@ class SpatioTemporalTopologyBuilder(object):
         return self._first
 
     def _build_internal_iteratable(self, maps, spatial):
-        """!Build an iteratable temporal topology structure for all maps in 
+        """!Build an iteratable temporal topology structure for all maps in
            the list and store the maps internally
 
-           Basically the "next" and "prev" relations will be set in the 
+           Basically the "next" and "prev" relations will be set in the
            temporal topology structure of each map
-           The maps will be added to the object, so they can be 
+           The maps will be added to the object, so they can be
            accessed using the iterator of this class
 
-           @param maps A sorted (by start_time)list of abstract_dataset 
+           @param maps A sorted (by start_time)list of abstract_dataset
                         objects with initiated temporal extent
         """
         self._build_iteratable(maps, spatial)
@@ -175,13 +175,13 @@ class SpatioTemporalTopologyBuilder(object):
         self._detect_first()
 
     def _build_iteratable(self, maps, spatial):
-        """!Build an iteratable temporal topology structure for 
+        """!Build an iteratable temporal topology structure for
            all maps in the list
 
-           Basically the "next" and "prev" relations will be set in 
+           Basically the "next" and "prev" relations will be set in
            the temporal topology structure of each map.
 
-           @param maps A sorted (by start_time)list of abstract_dataset 
+           @param maps A sorted (by start_time)list of abstract_dataset
                         objects with initiated temporal extent
         """
 #        for i in xrange(len(maps)):
@@ -195,7 +195,7 @@ class SpatioTemporalTopologyBuilder(object):
 #                    maps[i].set_next(maps[j])
 #                    break
 
-        # First we need to order the map list chronologically 
+        # First we need to order the map list chronologically
         sorted_maps = sorted(
             maps, key=AbstractDatasetComparisonKeyStartTime)
 
@@ -211,10 +211,11 @@ class SpatioTemporalTopologyBuilder(object):
                 map_.set_spatial_topology_build_true()
 
     def _map_to_rect(self, tree, map_, spatial=None):
-        """Use the temporal extent of a map to create and return a RTree rectange
+        """!Use the spatio-temporal extent of a map to create and
+           return a RTree rectange
 
            @param spatial This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east, 
+                          spatial can be None (no spatial topology), "2D" using west, east,
                           #south, north or "3D" using west, east, south, north, bottom, top
         """
         rect = vector.RTreeAllocRect(tree)
@@ -232,21 +233,21 @@ class SpatioTemporalTopologyBuilder(object):
             vector.RTreeSetRect1D(rect, tree, float(start), float(end))
         elif spatial == "2D":
             north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
-            vector.RTreeSetRect3D(rect, tree, west, east, south, north, 
+            vector.RTreeSetRect3D(rect, tree, west, east, south, north,
                                   float(start), float(end))
         elif spatial == "3D":
             north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
-            vector.RTreeSetRect4D(rect, tree, west, east, south, north, 
+            vector.RTreeSetRect4D(rect, tree, west, east, south, north,
                                   bottom, top, float(start), float(end))
 
         return rect
 
     def _build_rtree(self, maps, spatial=None):
-        """Build and return the 1-4 dimensional R*-Tree
+        """!Build and return the 1-4 dimensional R*-Tree
 
 
            @param spatial This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east, 
+                          spatial can be None (no spatial topology), "2D" using west, east,
                           south, north or "3D" using west, east, south, north, bottom, top
         """
         dim = 1
@@ -265,25 +266,25 @@ class SpatioTemporalTopologyBuilder(object):
         return tree
 
     def build(self, mapsA, mapsB=None, spatial=None):
-        """!Build the spatio-temporal topology structure between 
+        """!Build the spatio-temporal topology structure between
            one or two unordered lists of abstract dataset objects
 
-           This method builds the temporal or spatio-temporal topology from mapsA to 
+           This method builds the temporal or spatio-temporal topology from mapsA to
            mapsB and vice verse. The spatio-temporal topology structure of each map
            will be reseted and rebuild for mapsA and mapsB.
 
-           After building the temporal or spatio-temporal topology the modified 
+           After building the temporal or spatio-temporal topology the modified
            map objects of mapsA can be accessed
-           in the same way as a dictionary using there id. 
+           in the same way as a dictionary using there id.
            The implemented iterator assures
            the chronological iteration over the mapsA.
 
-           @param mapsA A list of abstract_dataset 
+           @param mapsA A list of abstract_dataset
                          objects with initiated spatio-temporal extent
-           @param mapsB An optional list of abstract_dataset 
+           @param mapsB An optional list of abstract_dataset
                          objects with initiated spatio-temporal extent
            @param spatial This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east, 
+                          spatial can be None (no spatial topology), "2D" using west, east,
                           south, north or "3D" using west, east, south, north, bottom, top
         """
 
@@ -524,12 +525,12 @@ def set_spatial_relationship(A, B, relation):
 ###############################################################################
 
 def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
-    """!Print the temporal relationships of the 
+    """!Print the temporal relationships of the
        map lists maps1 and maps2 to stdout.
 
-        @param maps1 A list of abstract_dataset 
+        @param maps1 A list of abstract_dataset
                       objects with initiated temporal extent
-        @param maps2 An optional list of abstract_dataset 
+        @param maps2 An optional list of abstract_dataset
                       objects with initiated temporal extent
         @param dbif The database interface to be used
     """
@@ -552,14 +553,14 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 ###############################################################################
 
 def print_spatio_temporal_topology_relationships(maps1, maps2=None, spatial="2D", dbif=None):
-    """!Print the temporal relationships of the 
+    """!Print the temporal relationships of the
        map lists maps1 and maps2 to stdout.
 
-        @param maps1 A list of abstract_dataset 
+        @param maps1 A list of abstract_dataset
                       objects with initiated temporal extent
-        @param maps2 An optional list of abstract_dataset 
+        @param maps2 An optional list of abstract_dataset
                       objects with initiated temporal extent
-        @param spatial The dimension of the spatial extent to be used: "2D" using west, east, 
+        @param spatial The dimension of the spatial extent to be used: "2D" using west, east,
                         south, north or "3D" using west, east, south, north, bottom, top
         @param dbif The database interface to be used
     """
@@ -585,9 +586,9 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     """!Count the temporal relations of a single list of maps or between two lists of maps
 
 
-        @param maps1 A list of abstract_dataset 
+        @param maps1 A list of abstract_dataset
                       objects with initiated temporal extent
-        @param maps2 A list of abstract_dataset 
+        @param maps2 A list of abstract_dataset
                       objects with initiated temporal extent
         @param dbif The database interface to be used
         @return A dictionary with counted temporal relationships
@@ -682,32 +683,32 @@ def create_temporal_relation_sql_where_statement(
         >>> # Relative time
         >>> start = 1
         >>> end = 2
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False)
         >>> create_temporal_relation_sql_where_statement(start, end)
         '((start_time >= 1 and start_time < 2) )'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=True)
         '((start_time >= 1 and start_time < 2) )'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_during=True)
         '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_overlap=True)
         '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_contain=True)
         '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_equal=True)
         '((start_time = 1 and end_time = 2))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_follows=True)
         '((start_time = 2))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_precedes=True)
         '((end_time = 1))'
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
         ... use_equal=True, use_follows=True, use_precedes=True)
         '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
@@ -715,32 +716,32 @@ def create_temporal_relation_sql_where_statement(
         >>> # Absolute time
         >>> start = datetime(2001, 1, 1, 12, 30)
         >>> end = datetime(2001, 3, 31, 14, 30)
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False)
         >>> create_temporal_relation_sql_where_statement(start, end)
         "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=True)
         "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_during=True)
         "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_overlap=True)
         "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_contain=True)
         "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_equal=True)
         "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_follows=True)
         "((start_time = '2001-03-31 14:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=False, use_precedes=True)
         "((end_time = '2001-01-01 12:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end, 
+        >>> create_temporal_relation_sql_where_statement(start, end,
         ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
         ... use_equal=True, use_follows=True, use_precedes=True)
         "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"

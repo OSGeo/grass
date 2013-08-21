@@ -195,9 +195,11 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             end = self.D["end_time"]
 
         if issubclass(type(self), RelativeTemporalExtent):
-            return RelativeTemporalExtent(start_time=start, end_time=end, unit=self.get_unit())
+            return RelativeTemporalExtent(start_time=start, end_time=end,
+                                          unit=self.get_unit())
         elif issubclass(type(self), AbsoluteTemporalExtent):
-            return AbsoluteTemporalExtent(start_time=start, end_time=end, timezone=self.get_timezone())
+            return AbsoluteTemporalExtent(start_time=start, end_time=end,
+                                          timezone=self.get_timezone())
         elif issubclass(type(self), AbstractTemporalExtent):
             return AbstractTemporalExtent(start_time=start, end_time=end)
 
@@ -379,9 +381,11 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             end = self.D["end_time"]
 
         if issubclass(type(self), RelativeTemporalExtent):
-            return RelativeTemporalExtent(start_time=start, end_time=end, unit=self.get_unit())
+            return RelativeTemporalExtent(start_time=start, end_time=end,
+                                          unit=self.get_unit())
         elif issubclass(type(self), AbsoluteTemporalExtent):
-            return AbsoluteTemporalExtent(start_time=start, end_time=end, timezone=self.get_timezone())
+            return AbsoluteTemporalExtent(start_time=start, end_time=end,
+                                          timezone=self.get_timezone())
         elif issubclass(type(self), AbstractTemporalExtent):
             return AbstractTemporalExtent(start_time=start, end_time=end)
 
