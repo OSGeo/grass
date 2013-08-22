@@ -277,6 +277,49 @@ class SpatioTemporalTopologyBuilder(object):
         ('STARTS', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
         ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
 
+        >>> mapsA = []
+        >>> mapsB = []
+        >>> for i in range(4):
+        ...     idA = "a%i@B"%(i)
+        ...     mapA = tgis.RasterDataset(idA)
+        ...     idB = "b%i@B"%(i)
+        ...     mapB = tgis.RasterDataset(idB)
+        ...     start = datetime.datetime(2000, 1, 1, 0, 0, i)
+        ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
+        ...     check = mapA.set_absolute_time(start, end)
+        ...     start = datetime.datetime(2000, 1, 1, 0, 0, i + 1)
+        ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 3)
+        ...     check = mapB.set_absolute_time(start, end)
+        ...     mapsA.append(mapA)
+        ...     mapsB.append(mapB)
+        >>> # Build the topology between the two map lists
+        >>> tb = SpatioTemporalTopologyBuilder()
+        >>> tb.build(mapsA, mapsB, None)
+        >>> # Check relations of mapsA
+        >>> for map in mapsA:
+        ...     print(map.get_temporal_extent_as_tuple())
+        ...     m = map.get_temporal_relations()
+        ...     for key in m.keys():
+        ...         if key not in ["NEXT", "PREV"]:
+        ...             print(key, m[key][0].get_temporal_extent_as_tuple())
+        (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
+        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3))
+        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+        (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4))
+        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 4), datetime.datetime(2000, 1, 1, 0, 0, 6)))
+        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5))
+        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 4), datetime.datetime(2000, 1, 1, 0, 0, 6)))
+        ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+
         @endcode
 
     """
@@ -383,8 +426,8 @@ class SpatioTemporalTopologyBuilder(object):
             end = start
 
         if map_.is_time_absolute():
-            start = time_delta_to_relative_time(start - self._timeref)
-            end = time_delta_to_relative_time(end - self._timeref)
+            start = time_delta_to_relative_time_seconds(start - self._timeref)
+            end = time_delta_to_relative_time_seconds(end - self._timeref)
 
         if spatial is None:
             vector.RTreeSetRect1D(rect, tree, float(start), float(end))
