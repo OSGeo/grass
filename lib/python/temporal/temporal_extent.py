@@ -844,7 +844,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         else:
             return False
 
-    def overlapped(self, extent):
+    def overlaps(self, extent):
         """!Return True if this temporal extent (A) overlapped the provided
            temporal extent (B)
            @verbatim
@@ -860,9 +860,16 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
            >>> B = AbstractTemporalExtent(start_time=6, end_time=8 )
-           >>> A.overlapped(B)
+           >>> A.overlaps(B)
            True
-           >>> B.overlapped(A)
+           >>> B.overlaps(A)
+           False
+
+           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> B = AbstractTemporalExtent(start_time=6, end_time=8 )
+           >>> A.overlaps(B)
+           False
+           >>> B.overlaps(A)
            False
 
            @endcode
@@ -877,7 +884,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         else:
             return False
 
-    def overlaps(self, extent):
+    def overlapped(self, extent):
         """!Return True if this temporal extent (A) overlapps the provided
            temporal extent (B)
            @verbatim
@@ -894,9 +901,16 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            >>> A = AbstractTemporalExtent(start_time=6, end_time=8 )
            >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> A.overlaps(B)
+           >>> A.overlapped(B)
            True
-           >>> B.overlaps(A)
+           >>> B.overlapped(A)
+           False
+
+           >>> A = AbstractTemporalExtent(start_time=6, end_time=8 )
+           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> A.overlapped(B)
+           False
+           >>> B.overlapped(A)
            False
 
            @endcode
