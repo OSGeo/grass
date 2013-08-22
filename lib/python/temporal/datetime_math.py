@@ -44,22 +44,45 @@ def time_delta_to_relative_time(delta):
 
 ###############################################################################
 
+
+def relative_time_to_time_delta_seconds(value):
+    """!Convert the double value representing seconds
+       into a timedelta object.
+    """
+
+    days = (value / 86400)
+    seconds = int(value % 86400)
+
+    return timedelta(days, seconds)
+
+###############################################################################
+
+
+def time_delta_to_relative_time_seconds(delta):
+    """!Convert the time delta into a
+       double value, representing seconds.
+    """
+
+    return float(delta.days * DAY_IN_SECONDS) + float(delta.seconds)
+
+###############################################################################
+
 def decrement_datetime_by_string(mydate, increment, mult=1):
 
     """!Return a new datetime object decremented with the provided
        relative dates specified as string.
        Additional a multiplier can be specified to multiply the increment
        before adding to the provided datetime object.
-       
+
        Usage:
-       
+
        @code
-         
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "31 days"
         >>> decrement_datetime_by_string(dt, string)
         datetime.datetime(2000, 12, 1, 0, 0)
-        
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "1 month"
         >>> decrement_datetime_by_string(dt, string)
@@ -69,7 +92,7 @@ def decrement_datetime_by_string(mydate, increment, mult=1):
         >>> string = "2 month"
         >>> decrement_datetime_by_string(dt, string)
         datetime.datetime(2000, 11, 1, 0, 0)
-        
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "24 months"
         >>> decrement_datetime_by_string(dt, string)
@@ -79,24 +102,24 @@ def decrement_datetime_by_string(mydate, increment, mult=1):
         >>> string = "48 months"
         >>> decrement_datetime_by_string(dt, string)
         datetime.datetime(1997, 1, 1, 0, 0)
-        
+
         >>> dt = datetime(2001, 6, 1, 0, 0, 0)
         >>> string = "5 months"
         >>> decrement_datetime_by_string(dt, string)
         datetime.datetime(2001, 1, 1, 0, 0)
-        
+
         >>> dt = datetime(2001, 6, 1, 0, 0, 0)
         >>> string = "7 months"
         >>> decrement_datetime_by_string(dt, string)
         datetime.datetime(2000, 11, 1, 0, 0)
-        
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "1 year"
         >>> decrement_datetime_by_string(dt, string)
         datetime.datetime(2000, 1, 1, 0, 0)
-        
+
         @endcode
-       
+
        @param mydate A datetime object to incremented
        @param increment A string providing increment information:
                   The string may include comma separated values of type seconds,
@@ -116,11 +139,11 @@ def increment_datetime_by_string(mydate, increment, mult=1):
        relative dates specified as string.
        Additional a multiplier can be specified to multiply the increment
        before adding to the provided datetime object.
-       
+
        Usage:
-       
+
        @code
-       
+
         >>> dt = datetime(2001, 9, 1, 0, 0, 0)
         >>> string = "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
         >>> increment_datetime_by_string(dt, string)
@@ -135,39 +158,39 @@ def increment_datetime_by_string(mydate, increment, mult=1):
         >>> string = "13 months"
         >>> increment_datetime_by_string(dt, string)
         datetime.datetime(2002, 12, 1, 0, 0)
-         
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "72 months"
         >>> increment_datetime_by_string(dt, string)
         datetime.datetime(2007, 1, 1, 0, 0)
-         
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "72 months"
         >>> increment_datetime_by_string(dt, string)
         datetime.datetime(2007, 1, 1, 0, 0)
-         
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "5 minutes"
         >>> increment_datetime_by_string(dt, string)
         datetime.datetime(2001, 1, 1, 0, 5)
-         
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "49 hours"
         >>> increment_datetime_by_string(dt, string)
         datetime.datetime(2001, 1, 3, 1, 0)
-         
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "3600 seconds"
         >>> increment_datetime_by_string(dt, string)
         datetime.datetime(2001, 1, 1, 1, 0)
-         
+
         >>> dt = datetime(2001, 1, 1, 0, 0, 0)
         >>> string = "30 days"
         >>> increment_datetime_by_string(dt, string)
         datetime.datetime(2001, 1, 31, 0, 0)
-        
+
         @endcode
-       
+
        @param mydate A datetime object to incremented
        @param increment A string providing increment information:
                   The string may include comma separated values of type seconds,
@@ -187,7 +210,7 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
        relative dates specified as string.
        Additional a multiplier can be specified to multiply the increment
        before adding to the provided datetime object.
-       
+
        @param mydate A datetime object to incremented
        @param increment A string providing increment information:
                   The string may include comma separated values of type seconds,
@@ -196,14 +219,14 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
                   with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
                   will result in the datetime 2003-02-18 12:05:00
        @param mult A multiplier, default is 1
-       @param sign Choose 1 for positive sign (incrementing) or -1 for negative 
-                   sign (decrementing). 
+       @param sign Choose 1 for positive sign (incrementing) or -1 for negative
+                   sign (decrementing).
        @return The new datetime object or none in case of an error
     """
     sign  = int(sign)
     if sign != 1 and sign != -1:
         return None
-    
+
     if increment:
 
         seconds = 0
@@ -248,9 +271,9 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
 
 ###############################################################################
 
-def modify_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, 
+def modify_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0,
                        minutes=0, seconds=0):
-    """!Return a new datetime object incremented with the provided 
+    """!Return a new datetime object incremented with the provided
        relative dates and times"""
 
     tdelta_seconds = timedelta(seconds=seconds)
@@ -317,7 +340,7 @@ def modify_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0,
         # Compute the number of days
         dt1 = dt1.replace(year=mydate.year + int(years))
         tdelta_years = dt1 - mydate
-        
+
     return mydate + tdelta_seconds + tdelta_minutes + tdelta_hours + \
         tdelta_days + tdelta_weeks + tdelta_months + tdelta_years
 
@@ -325,52 +348,52 @@ def modify_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0,
 
 
 def adjust_datetime_to_granularity(mydate, granularity):
-    """!Modify the datetime object to fit the given granularity    
-    
+    """!Modify the datetime object to fit the given granularity
+
         - Years will start at the first of Januar
         - Months will start at the first day of the month
         - Days will start at the first Hour of the day
         - Hours will start at the first minute of an hour
         - Minutes will start at the first second of a minute
-        
+
         Usage:
-        
+
         @code
-        
+
         >>> dt = datetime(2001, 8, 8, 12,30,30)
         >>> adjust_datetime_to_granularity(dt, "5 seconds")
         datetime.datetime(2001, 8, 8, 12, 30, 30)
-        
+
         >>> adjust_datetime_to_granularity(dt, "20 minutes")
         datetime.datetime(2001, 8, 8, 12, 30)
-        
+
         >>> adjust_datetime_to_granularity(dt, "20 minutes")
         datetime.datetime(2001, 8, 8, 12, 30)
-        
+
         >>> adjust_datetime_to_granularity(dt, "3 hours")
         datetime.datetime(2001, 8, 8, 12, 0)
-        
+
         >>> adjust_datetime_to_granularity(dt, "5 days")
         datetime.datetime(2001, 8, 8, 0, 0)
-        
+
         >>> adjust_datetime_to_granularity(dt, "2 weeks")
         datetime.datetime(2001, 8, 6, 0, 0)
-        
+
         >>> adjust_datetime_to_granularity(dt, "6 months")
         datetime.datetime(2001, 8, 1, 0, 0)
-        
+
         >>> adjust_datetime_to_granularity(dt, "2 years")
         datetime.datetime(2001, 1, 1, 0, 0)
-        
+
         >>> adjust_datetime_to_granularity(dt, "2 years, 3 months, 5 days, 3 hours, 3 minutes, 2 seconds")
         datetime.datetime(2001, 8, 8, 12, 30, 30)
-        
+
         >>> adjust_datetime_to_granularity(dt, "3 months, 5 days, 3 minutes")
         datetime.datetime(2001, 8, 8, 12, 30)
-        
+
         >>> adjust_datetime_to_granularity(dt, "3 weeks, 5 days")
         datetime.datetime(2001, 8, 8, 0, 0)
-        
+
         @endcode
     """
 
@@ -456,135 +479,135 @@ def adjust_datetime_to_granularity(mydate, granularity):
 
 
 def compute_datetime_delta(start, end):
-    """!Return a dictionary with the accumulated delta in year, month, day, 
+    """!Return a dictionary with the accumulated delta in year, month, day,
        hour, minute and second
-       
+
         Usage:
-        
+
         @code
-        
+
         >>> start = datetime(2001, 1, 1, 00,00,00)
         >>> end = datetime(2001, 1, 1, 00,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 0, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2001, 1, 1, 00,00,14)
         >>> end = datetime(2001, 1, 1, 00,00,44)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 0, 'second': 30, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2001, 1, 1, 00,00,44)
         >>> end = datetime(2001, 1, 1, 00,01,14)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 0, 'second': 30, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 1}
-        
+
         >>> start = datetime(2001, 1, 1, 00,00,30)
         >>> end = datetime(2001, 1, 1, 00,05,30)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 0, 'second': 300, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 5}
-        
+
         >>> start = datetime(2001, 1, 1, 00,00,00)
         >>> end = datetime(2001, 1, 1, 00,01,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 0, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 1}
-        
+
         >>> start = datetime(2011,10,31, 00,45,00)
         >>> end = datetime(2011,10,31, 01,45,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 60}
-        
+
         >>> start = datetime(2011,10,31, 00,45,00)
         >>> end = datetime(2011,10,31, 01,15,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 30}
-        
+
         >>> start = datetime(2011,10,31, 00,45,00)
         >>> end = datetime(2011,10,31, 12,15,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 12, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 690}
-        
+
         >>> start = datetime(2011,10,31, 00,00,00)
         >>> end = datetime(2011,10,31, 01,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,10,31, 00,00,00)
         >>> end = datetime(2011,11,01, 01,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 25, 'second': 0, 'max_days': 1, 'year': 0, 'day': 1, 'minute': 0}
-        
+
         >>> start = datetime(2011,10,31, 12,00,00)
         >>> end = datetime(2011,11,01, 06,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 18, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,11,01, 00,00,00)
         >>> end = datetime(2011,12,01, 01,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 721, 'month': 1, 'second': 0, 'max_days': 30, 'year': 0, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,11,01, 00,00,00)
         >>> end = datetime(2011,11,05, 00,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'second': 0, 'max_days': 4, 'year': 0, 'day': 4, 'minute': 0}
-        
+
         >>> start = datetime(2011,10,06, 00,00,00)
         >>> end = datetime(2011,11,05, 00,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'second': 0, 'max_days': 30, 'year': 0, 'day': 30, 'minute': 0}
-        
+
         >>> start = datetime(2011,12,02, 00,00,00)
         >>> end = datetime(2012,01,01, 00,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'second': 0, 'max_days': 30, 'year': 1, 'day': 30, 'minute': 0}
-        
+
         >>> start = datetime(2011,01,01, 00,00,00)
         >>> end = datetime(2011,02,01, 00,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 1, 'second': 0, 'max_days': 31, 'year': 0, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,12,01, 00,00,00)
         >>> end = datetime(2012,01,01, 00,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 1, 'second': 0, 'max_days': 31, 'year': 1, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,12,01, 00,00,00)
         >>> end = datetime(2012,06,01, 00,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 6, 'second': 0, 'max_days': 183, 'year': 1, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,06,01, 00,00,00)
         >>> end = datetime(2021,06,01, 00,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 120, 'second': 0, 'max_days': 3653, 'year': 10, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,06,01, 00,00,00)
         >>> end = datetime(2012,06,01, 12,00,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 8796, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,06,01, 00,00,00)
         >>> end = datetime(2012,06,01, 12,30,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 8796, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527790}
-        
+
         >>> start = datetime(2011,06,01, 00,00,00)
         >>> end = datetime(2012,06,01, 12,00,05)
         >>> compute_datetime_delta(start, end)
         {'hour': 8796, 'month': 12, 'second': 31665605, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
-        
+
         >>> start = datetime(2011,06,01, 00,00,00)
         >>> end = datetime(2012,06,01, 00,30,00)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527070}
-        
+
         >>> start = datetime(2011,06,01, 00,00,00)
         >>> end = datetime(2012,06,01, 00,00,05)
         >>> compute_datetime_delta(start, end)
         {'hour': 0, 'month': 12, 'second': 31622405, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
-        
+
         @endcode
-        
+
        @return A dictionary with year, month, day, hour, minute and second as keys()
     """
     comp = {}
@@ -672,14 +695,14 @@ def compute_datetime_delta(start, end):
 
 
 def string_to_datetime(time_string):
-    """!Convert a string into a datetime object 
-    
-        Supported ISO string formats are: 
+    """!Convert a string into a datetime object
+
+        Supported ISO string formats are:
         - YYYY-mm-dd
         - YYYY-mm-dd HH:MM:SS
-        
+
         Time zones are not supported
-        
+
         @param time_string The time string to convert
         @return datetime object or None in case of an error
     """
@@ -695,12 +718,12 @@ def string_to_datetime(time_string):
         core.error("Time zones are not supported "
                    "in the temporal database")
         return None
-        
+
     if time_string.find(":") > 0:
         time_format = "%Y-%m-%d %H:%M:%S"
     else:
         time_format = "%Y-%m-%d"
-  
+
     try:
         return  datetime.strptime(time_string, time_format)
     except:
@@ -720,7 +743,7 @@ def datetime_to_grass_datetime_string(dt):
 
     # Check for time zone info in the datetime object
     if dt.tzinfo is not None:
-        string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i" % (dt.day, 
+        string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i" % (dt.day,
                  month_names[dt.month], dt.year,
                  dt.hour, dt.minute, dt.second, dt.tzinfo._offset.seconds / 60)
     else:
