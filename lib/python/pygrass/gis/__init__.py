@@ -322,3 +322,51 @@ class Mapset(object):
 
     def path(self):
         return join(self.gisdbase, self.location, self.name)
+
+
+class VisibleMapset(object):
+    def __init__(self, mapset, location='', gisdbase=''):
+        self.mapset = mapset
+        self.location = Location(location, gisdbase)
+        self._list = []
+        self.spath = join(self.location.path(), self.mapset, 'SEARCH_PATH')
+
+    def __repr__(self):
+        return repr(self.read())
+
+    def __iter__(self):
+        for mapset in self.read():
+            yield mapset
+
+    def read(self):
+        with open(self.spath, "a+") as f:
+            lines = f.readlines()
+            #lines.remove('')
+            if lines:
+                return [l.strip() for l in lines]
+        lns = ['PERMANENT', ]
+        self.write(lns)
+        return lns
+
+    def write(self, mapsets):
+        with open(self.spath, "a+") as f:
+            ms = self.location.mapsets()
+            f.write('%s' % '\n'.join([m for m in mapsets if m in ms]))
+
+    def add(self, mapset):
+        if mapset in self.location:
+            with open(self.spath, "a+") as f:
+                f.write('\n%s' % mapset)
+        else:
+            raise TypeError('Mapset not found')
+
+    def remove(self, mapset):
+        mapsets = self.read()
+        mapsets.remove(mapset)
+        self.write(mapsets)
+
+    def extend(self, mapsets):
+        ms = self.location.mapsets()
+        final = self.read()
+        final.extend([m for m in mapsets if m in ms and m not in final])
+        self.write(final)
