@@ -62,7 +62,7 @@ def _import_raster_maps_from_geotiff(maplist, overr, exp, location, link):
         impflags += "e"
     for row in maplist:
         name = row["name"]
-        filename = str(row["name"]) + ".tif"
+        filename = row["filename"] + ".tif"
 
         if link:
             ret = core.run_command("r.external", input=filename,
@@ -76,10 +76,11 @@ def _import_raster_maps_from_geotiff(maplist, overr, exp, location, link):
                                    overwrite=core.overwrite())
 
         if ret != 0:
-            core.fatal(_("Unable to import/link raster map <%s>.") % name)
+            core.fatal(_("Unable to import/link raster map <%s> from file %s.") %(name, 
+                                                                     filename))
 
         # Set the color rules if present
-        filename = str(row["name"]) + ".color"
+        filename = row["filename"] + ".color"
         if os.path.isfile(filename):
             ret = core.run_command("r.colors", map=name,
                                    rules=filename,
@@ -97,7 +98,7 @@ def _import_raster_maps(maplist):
     impflags = "o"
     for row in maplist:
         name = row["name"]
-        filename = str(row["name"]) + ".pack"
+        filename = row["filename"] + ".pack"
         ret = core.run_command("r.unpack", input=filename,
                                output=name,
                                flags=impflags,
@@ -105,7 +106,8 @@ def _import_raster_maps(maplist):
                                verbose=True)
 
         if ret != 0:
-            core.fatal(_("Unable to unpack raster map <%s>.") % name)
+            core.fatal(_("Unable to unpack raster map <%s> from file %s.") % (name, 
+                                                                              filename))
 
 ############################################################################
 
@@ -116,7 +118,7 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
         impflags += "e"
     for row in maplist:
         name = row["name"]
-        filename = str(row["name"]) + ".xml"
+        filename = row["filename"] + ".xml"
 
         ret = core.run_command("v.in.ogr", dsn=filename,
                                output=name,
@@ -124,7 +126,8 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
                                overwrite=core.overwrite())
 
         if ret != 0:
-            core.fatal(_("Unable to import vector map <%s>.") % name)
+            core.fatal(_("Unable to import vector map <%s> from file %s.") % (name,
+                                                                              filename))
 
 ############################################################################
 
@@ -139,7 +142,7 @@ def _import_vector_maps(maplist):
         # Import only unique maps
         if name in imported_maps:
             continue
-        filename = name + ".pack"
+        filename = row["filename"] + ".pack"
         ret = core.run_command("v.unpack", input=filename,
                                output=name,
                                flags=impflags,
@@ -147,14 +150,15 @@ def _import_vector_maps(maplist):
                                verbose=True)
 
         if ret != 0:
-            core.fatal(_("Unable to unpack vector map <%s>.") % name)
+            core.fatal(_("Unable to unpack vector map <%s> from file %s.") % (name, 
+                                                                              filename))
 
         imported_maps[name] = name
 ############################################################################
 
 
 def import_stds(input, output, extrdir, title=None, descr=None, location=None,
-        link=False, exp=False, overr=False, create=False, stds_type="strds"):
+        link=False, exp=False, overr=False, create=False, stds_type="strds", base=None):
     """!Import space time datasets of type raster and vector
 
         @param input Name of the input archive file
@@ -173,6 +177,8 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
                       Do not import the space time datasets.
         @param stds_type The type of the space time dataset that
                          should be imported
+        @param base The base name of the new imported maps, it will be extended
+                    using a numerical index.
     """
 
     global raise_on_error
@@ -201,6 +207,8 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
     tar.extractall(path=extrdir)
     tar.close()
 
+    # We use a new list file name for map registration
+    new_list_file_name = list_file_name + "_new"
     # Save current working directory path
     old_cwd = os.getcwd()
 
@@ -260,6 +268,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         maplist = []
         mapset = core.gisenv()["MAPSET"]
         list_file = open(list_file_name, "r")
+        new_list_file = open(new_list_file_name, "w")
 
         # Read the map list from file
         line_count = 0
@@ -270,20 +279,32 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
 
             line_list = line.split(fs)
 
-            mapname = line_list[0].strip()
-            mapid = mapname + "@" + mapset
+            # The filename is actually the base name of the map
+            # that must be extended by the file suffix
+            filename = line_list[0].strip()
+            if base:
+                mapname = "%s_%i"%(base, line_count)
+                mapid= "%s@%s"%(mapname, mapset)
+            else:
+                mapname = filename
+                mapid = mapname + "@" + mapset
 
             row = {}
+            row["filename"] = filename
             row["name"] = mapname
             row["id"] = mapid
             row["start"] = line_list[1].strip()
             row["end"] = line_list[2].strip()
+            
+            new_list_file.write("%s%s%s%s%s\n"%(mapname,fs, row["start"], 
+                                              fs, row["end"]))
 
             maplist.append(row)
             line_count += 1
 
         list_file.close()
-
+        new_list_file.close()
+        
         # Read the init file
         fs = "="
         init = {}
@@ -323,22 +344,22 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         # Check the existence of the files
         if _format == "GTiff":
             for row in maplist:
-                filename = str(row["name"]) + ".tif"
+                filename = row["filename"] + ".tif"
                 if not os.path.exists(filename):
                     core.fatal(_("Unable to find geotiff raster file "
                                  "<%s> in archive.") % filename)
         elif _format == "GML":
             for row in maplist:
-                filename = str(row["name"]) + ".xml"
+                filename = row["filename"] + ".xml"
                 if not os.path.exists(filename):
                     core.fatal(_("Unable to find GML vector file "
                                  "<%s> in archive.") % filename)
         elif _format == "pack":
             for row in maplist:
                 if _type == "stvds":
-                    filename = str(row["name"].split(":")[0]) + ".pack"
+                    filename = str(row["filename"].split(":")[0]) + ".pack"
                 else:
-                    filename = str(row["name"]) + ".pack"
+                    filename = row["filename"] + ".pack"
                 if not os.path.exists(filename):
                     core.fatal(_("Unable to find GRASS package file "
                                  "<%s> in archive.") % filename)
@@ -397,7 +418,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         fs = "|"
         register_maps_in_space_time_dataset(
             type=sp.get_new_map_instance(None).get_type(),
-            name=output, file=list_file_name, start="file",
+            name=output, file=new_list_file_name, start="file",
             end="file", unit=relative_time_unit, dbif=None, fs=fs)
 
         os.chdir(old_cwd)
