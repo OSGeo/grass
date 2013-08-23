@@ -1,10 +1,65 @@
 <h2>DESCRIPTION</h2>
+This module is designed to import a space time raster dataset archive that where 
+exported with <a href="t.rast.export.html">t.rast.export</a>. 
 
-TBD.
+<h2>NOTE</h2>
+Optionally a base map name can be provided to avoid that existing raster maps 
+are overwritten by the map names that are used in the STRDS archive.
+
+<h2>EXAMPLE</h2>
+
+In this example we create 7 raster maps that will be registered in a single space time
+raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
+The names of the raster maps are stored in a text file that is used for raster map registration.
+We export the created space time raster dataset and will import it again.
+
+<div class="code"><pre>
+
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
+
+for map in ${MAPS} ; do
+    r.mapcalc --o expr="${map} = 1" 
+    echo ${map} >> map_list.txt 
+done
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i type=rast input=precipitation_daily \
+           file=map_list.txt start="2012-08-20" increment="1 days"
+
+t.rast.list precipitation_daily
+
+map_1   soeren  2012-09-03 00:00:00 2012-09-04 00:00:00
+map_2   soeren  2012-09-04 00:00:00 2012-09-05 00:00:00
+map_3   soeren  2012-09-05 00:00:00 2012-09-06 00:00:00
+map_4   soeren  2012-09-06 00:00:00 2012-09-07 00:00:00
+map_5   soeren  2012-09-07 00:00:00 2012-09-08 00:00:00
+map_6   soeren  2012-09-08 00:00:00 2012-09-09 00:00:00
+map_7   soeren  2012-09-09 00:00:00 2012-09-10 00:00:00
+
+t.rast.export input=precipitation_daily output=precipitation_daily.tar.gz \
+              compression=gzip
+t.rast.import input=precipitation_daily.tar.gz output=new_precipitation_daily \
+              base=new_map extrdir=/tmp
+              
+t.rast.list new_precipitation_daily
+
+new_map_0   soeren  2012-09-03 00:00:00 2012-09-04 00:00:00
+new_map_1   soeren  2012-09-04 00:00:00 2012-09-05 00:00:00
+new_map_2   soeren  2012-09-05 00:00:00 2012-09-06 00:00:00
+new_map_3   soeren  2012-09-06 00:00:00 2012-09-07 00:00:00
+new_map_4   soeren  2012-09-07 00:00:00 2012-09-08 00:00:00
+new_map_5   soeren  2012-09-08 00:00:00 2012-09-09 00:00:00
+new_map_6   soeren  2012-09-09 00:00:00 2012-09-10 00:00:00
+</div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="t.rast.export.html">t.rast.export</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
 </em>

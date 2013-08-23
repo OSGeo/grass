@@ -70,6 +70,9 @@
 #% description: Override projection (use location's projection)
 #%end
 
+#%option G_OPT_R_BASE
+#%end
+
 #%flag
 #% key: c
 #% description: Create the location specified by the "location" parameter and exit. Do not import the space time raster datasets.
@@ -88,6 +91,7 @@ def main():
     title = options["title"]
     descr = options["description"]
     location = options["location"]
+    base = options["base"]
     link = flags["l"]
     exp = flags["e"]
     overr = flags["o"]
@@ -96,7 +100,7 @@ def main():
     tgis.init()
 
     tgis.import_stds(input, output, extrdir, title, descr, location,
-                     link, exp, overr, create, "strds")
+                     link, exp, overr, create, "strds", base)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
