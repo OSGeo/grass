@@ -216,3 +216,26 @@ def r_export(rast, output='', fmt='png', **kargs):
         return output
     else:
         raise ValueError('Raster map does not exist.')
+
+
+def get_lib_path(modname, libname):
+    """Return the path of the libname contained in the module. ::
+
+        >>> get_lib_path(modname='r.modis', libname='libmodis')
+    """
+    from os.path import isdir, join
+    from os import getenv
+
+    if isdir(join(getenv('GISBASE'), 'etc', modname)):
+        path = join(os.getenv('GISBASE'), 'etc', modname)
+    elif getenv('GRASS_ADDON_BASE') and \
+            isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname)):
+        path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname)
+    elif getenv('GRASS_ADDON_BASE') and \
+            isdir(join(getenv('GRASS_ADDON_BASE'), modname, modname)):
+        path = join(os.getenv('GRASS_ADDON_BASE'), modname, modname)
+    elif isdir(join('..', libname)):
+        path = join('..', libname)
+    else:
+        path = None
+    return path
