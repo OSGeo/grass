@@ -69,8 +69,11 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
 
 
 def make_mapset(mapset, location=None, gisdbase=None):
-    if libgis.G__make_mapset(gisdbase, location, mapset) != 0:
+    res = libgis.G_make_mapset(gisdbase, location, mapset)
+    if res == -1:
         raise GrassError("I cannot create a new mapset.")
+    elif res == -2:
+        raise GrassError("Illegal name.")
 
 
 class Gisdbase(object):
@@ -208,6 +211,9 @@ class Location(object):
             return fnmatch.filter(mapsets, pattern)
         return mapsets
 
+    def path(self):
+        return join(self.gisdbase, self.name)
+
 
 class Mapset(object):
     """Mapset ::
@@ -226,6 +232,7 @@ class Mapset(object):
         self.gisdbase = gisdbase
         self.location = location
         self.name = mapset
+        self.visible = VisibleMapset(self.name, self.location, self.gisdbase)
 
     def _get_gisdb(self):
         return self._gisdb
@@ -311,4 +318,7 @@ class Mapset(object):
         """Delete the mapset"""
         if self.is_current():
             raise GrassError('The mapset is in use.')
-        shutil.rmtree(join(self.gisdbase, self.location, self.name))
+        shutil.rmtree(self.path())
+
+    def path(self):
+        return join(self.gisdbase, self.location, self.name)
