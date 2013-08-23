@@ -349,12 +349,12 @@ class VisibleMapset(object):
         return lns
 
     def write(self, mapsets):
-        with open(self.spath, "a+") as f:
+        with open(self.spath, "w+") as f:
             ms = self.location.mapsets()
             f.write('%s' % '\n'.join([m for m in mapsets if m in ms]))
 
     def add(self, mapset):
-        if mapset in self.location:
+        if mapset not in self.read() and mapset in self.location:
             with open(self.spath, "a+") as f:
                 f.write('\n%s' % mapset)
         else:
