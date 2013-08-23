@@ -106,6 +106,15 @@ class Parameter(object):
                                      (self.name, self.values))
             else:
                 self._value = value
+        elif self.type is str and isinstance(value, unicode):
+            if hasattr(self, 'values'):
+                if value in self.values:
+                    self._value = value
+                else:
+                    raise ValueError('The Parameter <%s>, must be one of: %r' %
+                                     (self.name, self.values))
+            else:
+                self._value = value
         else:
             str_err = 'The Parameter <%s>, require: %s, get: %s instead'
             raise TypeError(str_err % (self.name, self.typedesc, type(value)))
