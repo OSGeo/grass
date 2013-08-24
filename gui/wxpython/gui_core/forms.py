@@ -1245,9 +1245,37 @@ class CmdPanel(wx.Panel):
                                         flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                         border = 5)
                     else:
-                        which_sizer.Add(item = selection, proportion = 0,
-                                        flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
-                                        border = 5)
+                        if prompt in ('stds', 'strds', 'stvds', 'str3ds'):
+                            showButton = True
+                            try:
+                                # if matplotlib is there
+                                from timeline import frame
+                                showButton = True
+                            except ImportError:
+                                showButton = False
+                        else:
+                            showButton = False
+                        if showButton:
+                            iconTheme = UserSettings.Get(group='appearance', key='iconTheme', subkey='type')
+                            bitmap = wx.Bitmap(os.path.join(globalvar.ETCICONDIR, iconTheme, 'map-info.png'))
+                            bb = wx.BitmapButton(parent=which_panel, bitmap=bitmap)
+                            bb.Bind(wx.EVT_BUTTON, self.OnTimelineTool)
+                            bb.SetToolTipString(_("Show graphical representation of temporal extent of dataset(s) ."))
+                            p['wxId'].append(bb.GetId())
+
+                            hSizer = wx.BoxSizer(wx.HORIZONTAL)
+                            hSizer.Add(item=selection, proportion=0,
+                                       flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                       border=5)
+                            hSizer.Add(item=bb, proportion=0,
+                                       flag=wx.EXPAND|wx.BOTTOM | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                       border=5)
+                            which_sizer.Add(hSizer)
+                        else:
+                            which_sizer.Add(item=selection, proportion=0,
+                                            flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                            border=5)
+
                 # subgroup
                 elif prompt == 'subgroup':
                     selection = gselect.SubGroupSelect(parent = which_panel)
@@ -2084,7 +2112,24 @@ class CmdPanel(wx.Panel):
                     self.OnUpdateValues(event)
                     
                 dlg.Destroy()
-        
+
+    def OnTimelineTool(self, event):
+        """!Show Timeline Tool with dataset(s) from gselect.
+
+        TODO: update from gselect automatically        
+        """
+        myId = event.GetId()
+
+        for p in self.task.params:
+            if 'wxId' in p and myId in p['wxId']:
+                select = self.FindWindowById(p['wxId'][0])
+                if not select.GetValue():
+                    gcmd.GMessage(parent=self, message=_("No dataset given."))
+                    return
+                datasets = select.GetValue().split(',')
+                from timeline import frame
+                frame.run(parent=self, datasets=datasets)
+
     def OnUpdateSelection(self, event):
         """!Update dialog (layers, tables, columns, etc.)
         """
