@@ -2347,13 +2347,7 @@ class GUI:
         """
         # parse the interface decription
         if not self.grass_task:
-            enc = locale.getdefaultlocale()[1]
-            if enc and enc.lower() == "cp932":
-                p = re.compile('encoding="' + enc + '"', re.IGNORECASE)
-                tree = etree.fromstring(p.sub('encoding="utf-8"',
-                                              gtask.get_interface_description(cmd).decode(enc).encode('utf-8')))
-            else:
-                tree = etree.fromstring(gtask.get_interface_description(cmd))
+            tree = etree.fromstring(gtask.get_interface_description(cmd))
             self.grass_task = gtask.processTask(tree).get_task()
             
             for p in self.grass_task.params:

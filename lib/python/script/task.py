@@ -433,8 +433,27 @@ class processTask:
         """!Get grassTask instance"""
         return self.task
 
+def convert_xml_to_utf8(xml_text):
+    # enc = locale.getdefaultlocale()[1]
+    
+    # modify: fetch encoding from the interface description text(xml)
+    # e.g. <?xml version="1.0" encoding="GBK"?>
+    pattern = re.compile('<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
+    m = re.match(pattern, xml_text)
+    if m == None:
+        return xml_text
+    #
+    enc = m.groups()[0]
+    
+    # modify: change the encoding to "utf-8", for correct parsing
+    xml_text_utf8 = xml_text.decode(enc).encode("utf-8")
+    p = re.compile('encoding="' + enc + '"', re.IGNORECASE)
+    xml_text_utf8 = p.sub('encoding="utf-8"', xml_text_utf8)
+    
+    return xml_text_utf8
+
 def get_interface_description(cmd):
-    """!Returns the XML description for the GRASS cmd.
+    """!Returns the XML description for the GRASS cmd (force text encoding to "utf-8").
 
     The DTD must be located in $GISBASE/etc/grass-interface.dtd,
     otherwise the parser will not succeed.
@@ -471,21 +490,15 @@ def get_interface_description(cmd):
     # raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
     # "\n\nDetails: %(det)s") % { 'cmd': cmd, 'det' : decode(cmderr) }
     
-    return cmdout.replace('grass-interface.dtd', os.path.join(os.getenv('GISBASE'), 'etc', 'grass-interface.dtd'))
+    desc = cmdout.replace('grass-interface.dtd', os.path.join(os.getenv('GISBASE'), 'etc', 'grass-interface.dtd'))
+    return convert_xml_to_utf8(desc)
 
 def parse_interface(name, parser = processTask, blackList = None):
     """!Parse interface of given GRASS module
     
     @param name name of GRASS module to be parsed
     """
-    enc = locale.getdefaultlocale()[1]
-    if enc and enc.lower() == "cp932":
-        p = re.compile('encoding="' + enc + '"', re.IGNORECASE)
-        tree = etree.fromstring(p.sub('encoding="utf-8"',
-                                      get_interface_description(name).decode(enc).encode("utf-8")))
-    else:
-        tree = etree.fromstring(get_interface_description(name))
-    
+    tree = etree.fromstring(get_interface_description(name))
     return parser(tree, blackList = blackList).get_task()
 
 def command_info(cmd):
