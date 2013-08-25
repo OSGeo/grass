@@ -329,9 +329,10 @@ class TimelineFrame(wx.Frame):
 
     def OnRedraw(self, event):
         """!Required redrawing."""
-        datasets = self.datasetSelect.GetValue().strip().split(',')
+        datasets = self.datasetSelect.GetValue().strip()
         if not datasets:
             return
+        datasets = datasets.split(',')
         try:
             datasets = self._checkDatasets(datasets)
         except GException:
@@ -357,7 +358,7 @@ class TimelineFrame(wx.Frame):
                 self.axes2d.change_geometry(2, 1, 1)
                 if not self.axes3d:
                     # do not remove this import - unused but it is required for 3D
-#                    from mpl_toolkits.mplot3d import Axes3D  # pylint: disable=W0611
+                    from mpl_toolkits.mplot3d import Axes3D  # pylint: disable=W0611
                     self.axes3d = self.fig.add_subplot(2, 1, 2, projection='3d')
 
                 self.axes3d.set_visible(True)
