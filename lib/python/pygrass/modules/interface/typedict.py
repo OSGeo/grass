@@ -4,6 +4,7 @@ Created on Tue Apr  2 18:37:02 2013
 
 @author: pietro
 """
+from copy import deepcopy
 try:
     from collections import OrderedDict
 except ImportError:
@@ -44,6 +45,12 @@ class TypeDict(OrderedDict):
 
     def __call__(self):
         return [self.__getitem__(obj) for obj in self.__iter__()]
+
+    def __deepcopy__(self, memo):
+        obj = TypeDict(self._type)
+        for k, v in self.iteritems():
+            obj[k] = deepcopy(v)
+        return obj
 
     def used(self):
         key_dict = {}
