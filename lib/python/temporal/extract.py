@@ -58,11 +58,9 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
     dbif.connect()
 
     sp = open_old_space_time_dataset(input, type, dbif)
-    dummy = sp.get_new_map_instance(None)
     # Check the new stds
-    new_sp = open_new_space_time_dataset(output, type, sp.get_temporal_type(),
-                                         "None", "None", "mean", dbif,
-                                         core.overwrite(), dry=True)
+    new_sp = check_new_space_time_dataset(output, type, dbif,
+                                          core.overwrite())
     if type == "vector":
         rows = sp.get_registered_maps(
             "id,name,mapset,layer", where, "start_time", dbif)
@@ -97,9 +95,9 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     expr = expr.replace(sp.base.get_name(), row["id"])
 
                     # We need to build the id
-                    map_id = dummy.build_id(map_name, mapset)
+                    map_id = AbstractMapDataset.build_id(map_name, mapset)
                 else:
-                    map_id = dummy.build_id(map_name, mapset, row["layer"])
+                    map_id = AbstractMapDataset.build_id(map_name, mapset, row["layer"])
 
                 new_map = sp.get_new_map_instance(map_id)
 
@@ -171,7 +169,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                                              sp.get_temporal_type(),
                                              title, description,
                                              semantic_type, dbif,
-                                             core.overwrite(), dry=False)
+                                             core.overwrite())
 
         # collect empty maps to remove them
         empty_maps = []

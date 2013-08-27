@@ -96,10 +96,8 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         sp = open_old_space_time_dataset(input, type, dbif)
         input_list.append(copy.copy(sp))
 
-    new_sp = open_new_space_time_dataset(output, type,
-                                         first_input.get_temporal_type(),
-                                         "New", "New dataset", "mean", dbif,
-                                         core.overwrite(), True)
+    new_sp = check_new_space_time_dataset(output, type, dbif,
+                                         core.overwrite())
 
     # Sample all inputs by the first input and create a sample matrix
     if spatial:
@@ -285,7 +283,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         new_sp = open_new_space_time_dataset(output, type,
                                          temporal_type, title, description,
                                          semantic_type, dbif,
-                                         core.overwrite(), False)
+                                         core.overwrite())
         count = 0
 
         # collect empty maps to remove them

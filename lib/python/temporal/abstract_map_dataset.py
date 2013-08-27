@@ -166,7 +166,8 @@ class AbstractMapDataset(AbstractDataset):
         """
         return self.base.get_map_id()
 
-    def build_id(self, name, mapset, layer=None):
+    @staticmethod
+    def build_id(name, mapset, layer=None):
         """!Convenient method to build the unique identifier
 
             Existing layer and mapset definitions in the name
