@@ -71,6 +71,7 @@
 #%end
 
 #%option G_OPT_R_BASE
+#% required: no
 #%end
 
 #%flag
@@ -96,7 +97,7 @@ def main():
     exp = flags["e"]
     overr = flags["o"]
     create = flags["c"]
-    
+
     tgis.init()
 
     tgis.import_stds(input, output, extrdir, title, descr, location,
