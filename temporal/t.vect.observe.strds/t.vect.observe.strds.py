@@ -72,6 +72,8 @@ def main():
     if where == "" or where == " " or where == "\n":
         where = None
 
+    overwrite = grass.overwrite()
+
     # Make sure the temporal database exists
     tgis.init()
     # We need a database interface
@@ -88,12 +90,8 @@ def main():
                                 " with vector map <%s>") % (strds_sp.get_id(),
                                                             input)
 
-    out_sp = tgis.open_new_space_time_dataset(output, "stvds",
-                                              strds_sp.get_temporal_type(),
-                                              title, description,
-                                              strds_sp.get_semantic_type(),
-                                              dbif,
-                                              grass.overwrite(), dry=True)
+    out_sp = tgis.check_new_space_time_dataset(output, "stvds", dbif,
+                                               overwrite)
 
     # Select the raster maps
     rows = strds_sp.get_registered_maps(
@@ -134,7 +132,7 @@ def main():
     # We create a new vector map using the categories of the original map
     ret = grass.run_command("v.category", input=input, layer=layers,
                             output=vectmap, option="transfer",
-                            overwrite=grass.overwrite())
+                            overwrite=overwrite)
     if ret != 0:
         grass.fatal(_("Unable to create new layers for vector map <%s>")
                     % (vectmap))
@@ -144,8 +142,7 @@ def main():
                                               strds_sp.get_temporal_type(),
                                               title, description,
                                               strds_sp.get_semantic_type(),
-                                              dbif, grass.overwrite(),
-                                              dry=False)
+                                              dbif, overwrite)
 
     dummy = out_sp.get_new_map_instance(None)
 
@@ -175,7 +172,7 @@ def main():
             ret = grass.run_command("v.db.addcolumn", map=vectmap,
                                     layer=count,
                                     column="%s %s" % (col_name, coltype),
-                                    overwrite=grass.overwrite())
+                                    overwrite=overwrite)
             if ret != 0:
                 dbif.close()
                 grass.fatal(_("Unable to add column %s to vector map <%s> "
@@ -185,7 +182,7 @@ def main():
             grass.message("Add table to layer %i" % (count))
             ret = grass.run_command("v.db.addtable", map=vectmap, layer=count,
                                     columns="%s %s" % (col_name, coltype),
-                                    overwrite=grass.overwrite())
+                                    overwrite=overwrite)
             if ret != 0:
                 dbif.close()
                 grass.fatal(_("Unable to add table to vector map "
