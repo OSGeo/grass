@@ -98,9 +98,6 @@ def register_maps_in_space_time_dataset(
                          'sp': sp.get_new_map_instance(None).get_type(),
                          'name': name})
 
-    # We need a dummy map object to build the map ids
-    dummy = dataset_factory(type, None)
-
     maplist = []
 
     # Map names as comma separated string
@@ -113,7 +110,7 @@ def register_maps_in_space_time_dataset(
         # Build the map list again with the ids
         for count in range(len(maplist)):
             row = {}
-            mapid = dummy.build_id(maplist[count], mapset, None)
+            mapid = AbstractMapDataset.build_id(maplist[count], mapset, None)
 
             row["id"] = mapid
             maplist[count] = row
@@ -151,7 +148,7 @@ def register_maps_in_space_time_dataset(
             if start_time_in_file and not end_time_in_file:
                 row["start"] = line_list[1].strip()
 
-            row["id"] = dummy.build_id(mapname, mapset)
+            row["id"] = AbstractMapDataset.build_id(mapname, mapset)
 
             maplist.append(row)
 
