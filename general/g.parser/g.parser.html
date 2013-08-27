@@ -13,7 +13,7 @@
 <em><b>g.parser</b></em> - Provides automated parser, GUI, and help support for GRASS scipts.
 
 <h2>KEYWORDS</h2>
-general, support, scripts
+general, support, scripts, GUI
 
 <h2>SYNOPSIS</h2>
 <div id="name"><b>g.parser</b><br></div>
@@ -125,6 +125,10 @@ were used, you should be checking <tt>GRASS_OVERWRITE</tt> and/or
 script should behave the same way regardless of whether they were set
 by --o, --q or --v being passed to the script or set by other means.
 
+<p>In case that a GRASS module or script does not have any required
+options, executing the command without parameters will not open the
+respective parameter GUI dialog. The user can force a parameter dialog
+to be displayed using the --ui switch.
 
 <h2>AUTOMATED SCRIPT CREATION</h2>
 
