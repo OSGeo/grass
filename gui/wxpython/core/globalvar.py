@@ -116,7 +116,21 @@ DIALOG_LAYER_SIZE = (100, -1)
 DIALOG_COLOR_SIZE = (30, 30)
 
 MAP_WINDOW_SIZE = (800, 600)
-GM_WINDOW_SIZE = (525, 600)
+
+GM_WINDOW_MIN_SIZE = (525, 400)
+# small for ms window which wraps the menu
+# small for max os x which has the global menu
+# small for ubuntu when menuproxy is defined
+# not defined UBUNTU_MENUPROXY on linux means standard menu,
+# so the probably problem
+# UBUNTU_MENUPROXY= means ubuntu with disabled global menu [1]
+# use UBUNTU_MENUPROXY=0 to disbale global menu on ubuntu but in the same time
+# to get smaller lmgr
+# [1] https://wiki.ubuntu.com/DesktopExperienceTeam/ApplicationMenu#Troubleshooting
+if sys.platform in ('win32', 'darwin') or os.environ.get('UBUNTU_MENUPROXY'):
+    GM_WINDOW_SIZE = (GM_WINDOW_MIN_SIZE[0], 600)
+else:
+    GM_WINDOW_SIZE = (600, 600)
 
 if sys.platform == 'win32':
     BIN_EXT = '.exe'

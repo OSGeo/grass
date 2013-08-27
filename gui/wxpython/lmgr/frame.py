@@ -172,7 +172,7 @@ class GMFrame(wx.Frame):
         self._giface.updateMap.connect(self._updateCurrentMap)
 
         # minimal frame size
-        self.SetMinSize((globalvar.GM_WINDOW_SIZE[0], 400))
+        self.SetMinSize(globalvar.GM_WINDOW_MIN_SIZE)
 
         # AUI stuff
         self._auimgr.AddPane(self.notebook, wx.aui.AuiPaneInfo().
