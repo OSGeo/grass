@@ -6,7 +6,7 @@ Created on Thu Jul 12 10:23:15 2012
 
 """
 import interface
-from interface import Module
+from interface import Module, ParallelModuleQueue
 
 import grid
 from grid.grid import GridModule
