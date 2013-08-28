@@ -1,4 +1,6 @@
+rem
 rem Environmental variables for GRASS stand-alone installer
+rem
 
 set GRASS_HTML_BROWSER=explorer
 
