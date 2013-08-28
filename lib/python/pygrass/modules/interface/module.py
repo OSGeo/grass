@@ -312,12 +312,13 @@ class Module(object):
 
            @return The command string
         """
+        skip = ['stdin', 'stdout', 'stderr']
         args = [self.name, ]
         for key in self.inputs:
-            if self.inputs[key].value:
+            if key not in skip and self.inputs[key].value:
                 args.append(self.inputs[key].get_bash())
         for key in self.outputs:
-            if self.outputs[key].value:
+            if key not in skip and self.outputs[key].value:
                 args.append(self.outputs[key].get_bash())
         for flg in self.flags:
             if self.flags[flg].value:
