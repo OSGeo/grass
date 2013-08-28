@@ -50,7 +50,6 @@ import wx.lib.filebrowsebutton as filebrowse
 from core import globalvar
 
 import grass.script as grass
-import grass.temporal as tgis
 from   grass.script import task as gtask
 
 from gui_core.widgets  import ManageSettingsWidget
@@ -433,6 +432,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             return
         
         if element in ('stds', 'strds', 'str3ds', 'stvds'):
+            import grass.temporal as tgis
             filesdict = tgis.tlist_grouped(elementdict[element], element == 'stds')
         else:
             if globalvar.have_mlist:
@@ -653,6 +653,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         if 'type' in kargs:
             self.type = kargs['type']
             if self.type in ('stds', 'strds', 'str3ds', 'stvds'):
+                import grass.temporal as tgis
                 tgis.init()
         if 'mapsets' in kargs:
             self.mapsets = kargs['mapsets']
