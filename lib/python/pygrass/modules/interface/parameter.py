@@ -37,14 +37,24 @@ class Parameter(object):
         #
         if 'values' in diz:
             try:
-                # chek if it's a range string: "3-30"
+                # Check for integer ranges: "3-30"
                 isrange = re.match("(?P<min>\d+)-(?P<max>\d+)",
                                    diz['values'][0])
                 if isrange:
                     range_min, range_max = isrange.groups()
                     self.values = range(int(range_min), int(range_max) + 1)
+                    print(self.values)
                     self.isrange = diz['values'][0]
-                else:
+                # Check for float ranges: "0.0-1.0"
+                if not isrange:
+                    isrange = re.match("(?P<min>\d+.\d+)-(?P<max>\d+.\d+)",
+                                       diz['values'][0])
+                    if isrange:
+                        # We are not able to create range values from
+                        # floating point ranges
+                        self.isrange = diz['values'][0]
+                # No range was found
+                if not isrange:
                     self.values = [self.type(i) for i in diz['values']]
                     self.isrange = False
             except TypeError:
