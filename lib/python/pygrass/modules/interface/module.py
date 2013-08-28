@@ -3,6 +3,40 @@
 Created on Tue Apr  2 18:41:27 2013
 
 @author: pietro
+
+@code
+
+>>> import grass.pygrass.modules as pymod
+>>> import copy
+>>> region = pymod.Module("g.region")
+>>> region.flags["p"].value = True
+>>> region.flags["3"].value = True
+>>> region.get_bash()
+'g.region -p -3'
+>>> new_region = copy.deepcopy(region)
+>>> new_region.inputs["res"].value = "10"
+>>> new_region.get_bash()
+'g.region res=10 -p -3'
+
+>>> neighbors = pymod.Module("r.neighbors")
+>>> neighbors.inputs["input"].value = "mapA"
+>>> neighbors.outputs["output"].value = "mapB"
+>>> neighbors.inputs["size"].value = 5
+>>> neighbors.get_bash()
+'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
+
+>>> new_neighbors1 = copy.deepcopy(neighbors)
+>>> new_neighbors1.inputs["input"].value = "mapD"
+>>> new_neighbors1.inputs["size"].value = 3
+>>> new_neighbors1.get_bash()
+'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+
+>>> new_neighbors2 = copy.deepcopy(neighbors)
+>>> new_neighbors2(input="mapD", size=3, run_=False)
+>>> new_neighbors2.get_bash()
+'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+
+@endcode
 """
 
 from __future__ import print_function
@@ -227,6 +261,8 @@ class Module(object):
             return "%s.%s(%s)" % (prefix, name, params)
 
     def __str__(self):
+        """!Return the command string that can be executed in a shell
+        """
         return ' '.join(self.make_cmd())
 
     def __repr__(self):
@@ -249,6 +285,9 @@ class Module(object):
         return '\n'.join([head, params, DOC['flag_head'], flags, DOC['foot']])
 
     def get_dict(self):
+        """!Return a dictionary that includes the name, all valid
+            inputs, outputs and flags
+        """
         dic = {}
         dic['name'] = self.name
         dic['inputs'] = [(k, v.value) for k, v in self.inputs.items()
@@ -259,10 +298,17 @@ class Module(object):
         return dic
 
     def make_cmd(self):
+        """!Create the commdn string that can be exceuted in a shell
+
+           @return The command string
+        """
         args = [self.name, ]
-        for par in self.params_list:
-            if par.value is not None:
-                args.append(str(par))
+        for key in self.inputs:
+            if self.inputs[key].value:
+                args.append(self.inputs[key].get_bash())
+        for key in self.outputs:
+            if self.outputs[key].value:
+                args.append(self.outputs[key].get_bash())
         for flg in self.flags:
             if self.flags[flg].value:
                 args.append(str(self.flags[flg]))
@@ -296,3 +342,9 @@ class Module(object):
             stdout, stderr = self.popen.communicate(input=self.stdin)
             self.outputs['stdout'].value = stdout if stdout else ''
             self.outputs['stderr'].value = stderr if stderr else ''
+
+###############################################################################
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
