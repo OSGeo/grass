@@ -66,9 +66,11 @@
 #% description: Register Null maps
 #%end
 
-from multiprocessing import Process
+import copy
 import grass.script as grass
 import grass.temporal as tgis
+import grass.pygrass.modules as pymod
+
 
 ############################################################################
 
@@ -99,67 +101,48 @@ def main():
 
     if not maps:
         dbif.close()
-        grass.fatal(_("Space time raster dataset <%s> is empty") % sp.get_id())
+        grass.warning(_("Space time raster dataset <%s> is empty") % sp.get_id())
+        return
 
     new_sp = tgis.check_new_space_time_dataset(input, "strds", dbif=dbif,
                                                overwrite=overwrite)
+    # Configure the r.neighbor module
+    neighbor_module = pymod.Module("r.neighbors", input="dummy",
+                                   output="dummy", run_=False,
+                                   finish_=False, size=int(size),
+                                   method=method, overwrite=overwrite,
+                                   quiet=True)
+    # The module queue for parallel execution
+    process_queue = pymod.ParallelModuleQueue(int(nprocs))
 
     count = 0
-    proc_list = []
-
     num_maps = len(maps)
     new_maps = []
 
+    # run r.neighbors all selected maps
     for map in maps:
         count += 1
-
-        if count%10 == 0:
-            grass.percent(count, num_maps, 1)
-
         map_name = "%s_%i" % (base, count)
         new_map = tgis.open_new_map_dataset(map_name, None, mapset,
-                                       type="raster",
-                                       temporal_extent=map.get_temporal_extent(),
-                                       overwrite=overwrite, dbif=dbif)
-
-        proc_list.append(Process(target=run_neighbors,
-                                     args=(map.get_id(),map_name,
-                                           method,size, overwrite)))
-        proc_list[-1].start()
-
-        # Join processes if the maximum number of processes are
-        # reached or the end of the loop is reached
-        if len(proc_list) == nprocs:
-            for proc in proc_list:
-                proc.join()
-                if proc.exitcode != 0:
-                    dbif.close()
-                    grass.fatal(_("Error while neighborhood computation"))
-
-            # Empty process list
-            proc_list = []
-
-        # Initlialize and load the content of the map
+                                            type="raster",
+                                            temporal_extent=map.get_temporal_extent(),
+                                            overwrite=overwrite, dbif=dbif)
         new_maps.append(new_map)
 
-    for proc in proc_list:
-        proc.join()
-        if proc.exitcode != 0:
-            dbif.close()
-            grass.fatal(_("Error while computation"))
+        mod = copy.deepcopy(neighbor_module)
+        mod(input=map.get_id(), output=new_map.get_id())
+        print(mod.get_bash())
+        process_queue.put(mod)
 
-    grass.percent(1, 1, 1)
+    # Wait for unfinished processes
+    process_queue.wait()
 
     # Open the new space time raster dataset
-    temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp = tgis.open_new_space_time_dataset(output, "strds",
-                                              sp.get_temporal_type(),
-                                              title, description,
-                                              semantic_type,
-                                              dbif, overwrite)
-
-    # collect empty maps to remove them
+    ttype, stype, title, descr = sp.get_initial_values()
+    new_sp = tgis.open_new_space_time_dataset(output, "strds", ttype, title,
+                                              descr, stype, dbif, overwrite)
     num_maps = len(new_maps)
+    # collect empty maps to remove them
     empty_maps = []
 
     # Register the maps in the database
@@ -170,7 +153,7 @@ def main():
         if count%10 == 0:
             grass.percent(count, num_maps, 1)
 
-        # In case of a empty map continue, do not register empty maps
+        # Do not register empty maps
         map.load()
         if map.metadata.get_min() is None and \
             map.metadata.get_max() is None:
@@ -192,23 +175,14 @@ def main():
         count = 0
         for map in empty_maps:
             if count == 0:
+                count += 1
                 names += "%s" % (map.get_name())
             else:
                 names += ",%s" % (map.get_name())
-            count += 1
 
         grass.run_command("g.remove", rast=names, quiet=True)
 
     dbif.close()
-
-############################################################################
-
-def run_neighbors(input, output, method, size, overwrite):
-    """Helper function to run r.neighbors in parallel"""
-    return grass.run_command("r.neighbors", input=input, output=output,
-                            method=method, size=size,
-                            overwrite=overwrite,
-                            quiet=True)
 
 ############################################################################
 
