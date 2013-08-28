@@ -153,7 +153,7 @@ class Module(object):
             else:
                 self.outputs[par.name] = par
             if par.required:
-                self.required.append(par)
+                self.required.append(par.name)
 
         #
         # extract flags from the xml
@@ -236,10 +236,11 @@ class Module(object):
         #
         # check reqire parameters
         #
-        for par in self.required:
-            if par.value is None:
+        for key in self.required:
+            if ((key in self.inputs and self.inputs[key].value is None) or
+                    (key in self.outputs and self.outputs[key].value is None)):
                 raise ParameterError(
-                    "Required parameter <%s> not set." % par.name)
+                    "Required parameter <%s> not set." % key)
 
         #
         # check if execute
