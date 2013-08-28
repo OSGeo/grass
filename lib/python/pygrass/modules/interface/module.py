@@ -36,6 +36,15 @@ Created on Tue Apr  2 18:41:27 2013
 >>> new_neighbors2.get_bash()
 'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
+>>> neighbors = pymod.Module("r.neighbors")
+>>> neighbors.get_bash()
+'r.neighbors method=average size=3 quantile=0.5'
+
+>>> new_neighbors3 = copy.deepcopy(neighbors)
+>>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
+>>> new_neighbors3.get_bash()
+'r.neighbors input=mapA method=average size=3 quantile=0.5 output=mapB'
+
 @endcode
 """
 
