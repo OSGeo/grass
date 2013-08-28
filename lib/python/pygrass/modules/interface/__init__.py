@@ -10,4 +10,4 @@ import module
 import typedict
 import read
 
-from module import Module
+from module import Module, ParallelModuleQueue
