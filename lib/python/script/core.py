@@ -1331,7 +1331,7 @@ def mapsets(search_path=False):
 
 
 def create_location(dbase, location, epsg=None, proj4=None, filename=None,
-                    wkt=None, datum=None, datum_trans=None, desc=None):
+                    wkt=None, datum=None, datum_trans=None, desc=None, overwrite=False):
     """!Create new location
 
     Raise ScriptError on error.
@@ -1345,15 +1345,26 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
     @param datum GRASS format datum code
     @param datum_trans datum transformation parameters (used for epsg and proj4)
     @param desc description of the location (creates MYNAME file)
+    @param overwrite True to overwrite location if exists (WARNING: ALL DATA from existing location ARE DELETED!)
     """
     gisdbase = None
     if epsg or proj4 or filename or wkt:
         # FIXME: changing GISDBASE mid-session is not background-job safe
         gisdbase = gisenv()['GISDBASE']
         run_command('g.gisenv', set='GISDBASE=%s' % dbase)
+    # create dbase if not exists
     if not os.path.exists(dbase):
             os.mkdir(dbase)
 
+    # check if location already exists
+    if os.path.exists(os.path.join(dbase, location)):
+        if not overwrite:
+            warning(_("Location <%s> already exists. Operation canceled.") % location)
+            return
+        else:
+            warning(_("Location <%s> already exists and will be overwritten") % location)
+            shutil.rmtree(os.path.join(dbase, location))
+    
     kwargs = dict()
     if datum:
         kwargs['datum'] = datum
