@@ -471,9 +471,9 @@ class AnimationController(wx.EvtHandler):
         # determine position and sizes of bitmaps
         for i, (win, anim) in enumerate(zip(self.mapwindows, self.animations)):
             if anim.IsActive():
-                pos = tuple([pos1 + pos2 for pos1, pos2 in zip(win.GetPosition(), win.GetAdjustedPosition())])
+                pos = win.GetPosition()
                 animWinPos.append(pos)
-                animWinSize.append(win.GetAdjustedSize())
+                animWinSize.append(win.GetSize())
                 animWinIndex.append(i)
         
         images = []
