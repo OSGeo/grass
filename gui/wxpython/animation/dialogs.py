@@ -174,7 +174,7 @@ class SpeedDialog(wx.Dialog):
             choiceWidget.Append(item, cdata)
 
         if self.temporalMode == TemporalMode.TEMPORAL:
-            unit = self.timeGranularity.split()[1]
+            unit = self.timeGranularity[1]
             try:
                 index = timeUnits.index(unit)
             except ValueError:
@@ -202,7 +202,7 @@ class SpeedDialog(wx.Dialog):
             delta = self._timedelta(unit = unit, number = 1)
             seconds1 = self._total_seconds(delta)
 
-            number, unit = self.timeGranularity.split()
+            number, unit = self.timeGranularity
             number = float(number)
             delta = self._timedelta(unit = unit, number = number)
             seconds2 = self._total_seconds(delta)
@@ -223,7 +223,7 @@ class SpeedDialog(wx.Dialog):
             seconds1 = self._total_seconds(delta)
 
 
-            number, unit = self.timeGranularity.split()
+            number, unit = self.timeGranularity
             number = float(number)
             delta = self._timedelta(unit = unit, number = number)
             seconds2 = self._total_seconds(delta)
@@ -240,17 +240,17 @@ class SpeedDialog(wx.Dialog):
         self.speedChanged.emit(ms = ms)
 
     def _timedelta(self, unit, number):
-        if unit == "years":
+        if unit in "years":
             delta = datetime.timedelta(days = 365.25 * number)
-        elif unit == "months":
+        elif unit in "months":
             delta = datetime.timedelta(days = 30.4375 * number) # 365.25/12
-        elif unit == "days":
+        elif unit in "days":
             delta = datetime.timedelta(days = 1 * number)
-        elif unit == "hours":
+        elif unit in "hours":
             delta = datetime.timedelta(hours = 1 * number)
-        elif unit == "minutes":
+        elif unit in "minutes":
             delta = datetime.timedelta(minutes = 1 * number)
-        elif unit == "seconds":
+        elif unit in "seconds":
             delta = datetime.timedelta(seconds = 1 * number)
 
         return delta
