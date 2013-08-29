@@ -253,6 +253,8 @@ int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
 			      &hi->val, hi->r, hi->g, hi->b, colors);
     }
 
+    G_free(rule);
+
     /* null value and default color set up, if rules are set up by user */
     if (null.set)
 	Rast_set_null_value_color(null.r, null.g, null.b, colors);
