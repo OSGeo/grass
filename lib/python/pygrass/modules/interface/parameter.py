@@ -43,7 +43,6 @@ class Parameter(object):
                 if isrange:
                     range_min, range_max = isrange.groups()
                     self.values = range(int(range_min), int(range_max) + 1)
-                    print(self.values)
                     self.isrange = diz['values'][0]
                 # Check for float ranges: "0.0-1.0"
                 if not isrange:
