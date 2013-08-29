@@ -806,8 +806,10 @@ else
   LIBLAS=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
+  ac_save_cppflags="$CPPFLAGS"
   LIBS="$LIBS $LIBLAS_LIBS"
   CFLAGS="$CFLAGS $LIBLAS_CFLAGS"
+  CPPFLAGS="$CPPFLAGS $LIBLAS_INC"
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],,[
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
   AC_MSG_ERROR([*** Unable to locate libLAS library.])
@@ -815,6 +817,7 @@ else
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
+  CPPFLAGS=${ac_save_cppflags}
 
   AC_DEFINE(HAVE_LIBLAS)
 fi
