@@ -521,7 +521,7 @@ MAPSET: <UNKNOWN>
 def check_gui():
     global grass_gui, wxpython_base
     # Check if we are running X windows by checking the DISPLAY variable
-    if os.getenv('DISPLAY') or windows:
+    if os.getenv('DISPLAY') or windows or macosx:
         # Check if python is working properly
         if grass_gui == 'wxpython':
             nul = open(os.devnull, 'w')
