@@ -462,6 +462,8 @@ class TimeAnimationSlider(AnimationSliderBase):
         self.framesCount = len(timeLabels)
         self.slider.SetRange(0, self.framesCount - 1)
         self._setLabel()
+        # TODO: fix setting index values, until then:
+        self.indexField.Disable()
 
     def _setLabel(self):
         if self.timeLabels:

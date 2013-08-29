@@ -48,7 +48,7 @@ class TemporalManager(object):
         self.dataMode = None
         self.temporalType = None
 
-        self.granularityMode = GranularityMode.ONE_UNIT
+        self.granularityMode = GranularityMode.ORIGINAL
 
         # Make sure the temporal database exists
         tgis.init()
@@ -140,16 +140,17 @@ class TemporalManager(object):
         """!Returns temporal granularity of currently loaded timeseries."""
         if self.dataMode == DataMode.SIMPLE:
             gran = self.timeseriesInfo[self.timeseriesList[0]]['granularity']
-            if 'unit' in self.timeseriesInfo[self.timeseriesList[0]]: # relative
+            if 'unit' in self.timeseriesInfo[self.timeseriesList[0]]: # relative:
+                granNum = gran
+                unit = self.timeseriesInfo[self.timeseriesList[0]]['unit']
                 if self.granularityMode == GranularityMode.ONE_UNIT:
-                    gran = 1
-                gran = "%(gran)s %(unit)s" % {'gran': gran,
-                                              'unit': self.timeseriesInfo[self.timeseriesList[0]]['unit']}
-            elif self.granularityMode == GranularityMode.ONE_UNIT: # absolute
-                number, unit = gran.split()
-                gran = "1 %s" % unit
+                    granNum = 1
+            else:  # absolute
+                granNum, unit = gran.split()
+                if self.granularityMode == GranularityMode.ONE_UNIT: 
+                    granNum = 1
 
-            return gran
+            return (int(granNum), unit)
 
         if self.dataMode == DataMode.MULTIPLE:
             return self._getCommonGranularity()
@@ -162,17 +163,16 @@ class TemporalManager(object):
 
         if self.temporalType == TemporalType.ABSOLUTE:
             gran = tgis.compute_absolute_time_granularity(allMaps)
+            granNum, unit = gran.split()
             if self.granularityMode == GranularityMode.ONE_UNIT:
-                number, unit = gran.split()
-                gran = "1 %s" % unit
-            return gran
+                granNum = 1
+            return int(granNum), unit
         if self.temporalType == TemporalType.RELATIVE:
-            gran = tgis.compute_relative_time_granularity(allMaps)
+            unit = self.timeseriesInfo[self.timeseriesList[0]]['unit']
+            granNum = tgis.compute_relative_time_granularity(allMaps)
             if self.granularityMode == GranularityMode.ONE_UNIT:
-                gran = 1
-            gran = "%(gran)s %(unit)s" % {'gran': gran,
-                                          'unit': self.timeseriesInfo[self.timeseriesList[0]]['unit']}
-            return gran
+                granNum = 1
+            return (granNum, unit)
 
 
     def GetLabelsAndMaps(self):
@@ -214,17 +214,19 @@ class TemporalManager(object):
 
         listOfMaps = []
         timeLabels = []
-        gran = self.GetGranularity()
-        unit = None
-        if self.temporalType == TemporalType.ABSOLUTE and \
-           self.granularityMode == GranularityMode.ONE_UNIT:
-            gran, unit = gran.split()
-            gran = '%(one)d %(unit)s' % {'one': 1, 'unit': unit}
+        granNum, unit = self.GetGranularity()
+        if self.temporalType == TemporalType.ABSOLUTE:
+            if self.granularityMode == GranularityMode.ONE_UNIT:
+                gran = '%(one)d %(unit)s' % {'one': 1, 'unit': unit}
+            else:
+                gran = '%(num)d %(unit)s' % {'num': granNum, 'unit': unit}
 
         elif self.temporalType == TemporalType.RELATIVE:
             unit = self.timeseriesInfo[timeseries]['unit']
             if self.granularityMode == GranularityMode.ONE_UNIT:
                 gran = 1
+            else:
+                gran = granNum
         # start sampling - now it can be used for both interval and point data
         # after instance, there can be a gap or an interval
         # if it is a gap we remove it and put there the previous instance instead
@@ -244,15 +246,15 @@ class TemporalManager(object):
                 series = map.get_id()
 
                 start, end = map.get_temporal_extent_as_tuple()
-                if end:
-                    end = str(end)
-                if end is None:
+                if self.timeseriesInfo[timeseries]['map_time'] == 'point':
                     # point data
                     listOfMaps.append(series)
                     afterPoint = True
                     followsPoint = True
                     lastTimeseries = series
+                    end = None
                 else:
+                    end = str(end)
                     # interval data
                     if series:
                         # map exists, stop point mode
@@ -272,7 +274,6 @@ class TemporalManager(object):
                         else:
                             # append series which is None
                             listOfMaps.append(series)
-
                 timeLabels.append((str(start), end, unit))
 
         if self.temporalType == TemporalType.ABSOLUTE:
@@ -329,10 +330,10 @@ def test():
     from pprint import pprint
 
     temp = TemporalManager()
-
-    timeseries1 = 'precip_abs0'
-    timeseries2 = 'precip_abs2'
-    createAbsoluteInterval(timeseries1, timeseries2)
+#    timeseries = createAbsolutePoint()
+#    timeseries = createRelativePoint()
+#    timeseries1, timeseries2 = createAbsoluteInterval()
+    timeseries1, timeseries2 = createRelativeInterval()
 
     temp.AddTimeSeries(timeseries1, 'strds')
     temp.AddTimeSeries(timeseries2, 'strds')
@@ -351,7 +352,7 @@ def test():
 
 
 
-def createAbsoluteInterval(name1, name2):
+def createAbsoluteInterval():
     grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags = 'p3', quiet = True)
 
     grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite = True)
@@ -391,6 +392,8 @@ def createAbsoluteInterval(name1, name2):
        "temp_6|2002-05-01|2002-07-01\n"
        )
     fd.close()
+    name1 = 'absinterval1'
+    name2 = 'absinterval2'
     grass.run_command('t.unregister', type = 'rast',
                        maps='prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,temp_1,temp_2,temp_3,temp_4,temp_5,temp_6')
     for name, fname in zip((name1, name2), (n1, n2)):
@@ -399,7 +402,9 @@ def createAbsoluteInterval(name1, name2):
                           title="A test with input files", descr="A test with input files")
         grass.run_command('t.register', flags = 'i', input=name, file=fname, overwrite = True)
 
-def createRelativeInterval(name1, name2):
+    return name1, name2
+
+def createRelativeInterval():
     grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags = 'p3', quiet = True)
 
     grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite = True)
@@ -439,6 +444,8 @@ def createRelativeInterval(name1, name2):
         "temp_6|14|17\n"
        )
     fd.close()
+    name1 = 'relinterval1'
+    name2 = 'relinterval2'
     grass.run_command('t.unregister', type = 'rast',
                        maps='prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,temp_1,temp_2,temp_3,temp_4,temp_5,temp_6')
     for name, fname in zip((name1, name2), (n1, n2)):
@@ -446,8 +453,9 @@ def createRelativeInterval(name1, name2):
                           temporaltype='relative', output=name, 
                           title="A test with input files", descr="A test with input files")
         grass.run_command('t.register', flags = 'i', input = name, file = fname, unit = "years", overwrite = True)
+    return name1, name2
         
-def createAbsolutePoint(name):
+def createAbsolutePoint():
     grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags = 'p3', quiet = True)
 
     grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite = True)
@@ -468,11 +476,42 @@ def createAbsolutePoint(name):
        "prec_6|2001-09-01\n"
        )
     fd.close()
+    name = 'abspoint'
     grass.run_command('t.create', overwrite = True, type='strds',
                       temporaltype='absolute', output=name, 
                       title="A test with input files", descr="A test with input files")
 
     grass.run_command('t.register', flags = 'i', input=name, file=n1, overwrite = True)
+    return name
+
+def createRelativePoint():
+    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags = 'p3', quiet = True)
+
+    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite = True)
+    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite = True)
+    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite = True)
+    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite = True)
+    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite = True)
+    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite = True)
+
+    n1 = grass.read_command("g.tempfile", pid = 1, flags = 'd').strip()
+    fd = open(n1, 'w')
+    fd.write(
+       "prec_1|1\n"
+       "prec_2|3\n"
+       "prec_3|5\n"
+       "prec_4|7\n"
+       "prec_5|11\n"
+       "prec_6|13\n"
+       )
+    fd.close()
+    name = 'relpoint'
+    grass.run_command('t.create', overwrite = True, type='strds',
+                      temporaltype='relative', output=name,
+                      title="A test with input files", descr="A test with input files")
+
+    grass.run_command('t.register', unit="day", input=name, file=n1, overwrite = True)
+    return name
 
 if __name__ == '__main__':
 
