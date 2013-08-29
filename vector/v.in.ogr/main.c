@@ -1098,7 +1098,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (nogeom > 0)
-	    G_warning(_("%d %s without geometry"), nogeom,
+	    G_warning(_("%d %s without geometry skipped"), nogeom,
 		      nogeom == 1 ? "feature" : "features");
     }
 

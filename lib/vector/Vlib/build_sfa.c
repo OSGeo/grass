@@ -609,7 +609,7 @@ int add_geometry_ogr(struct Plus_head *plus,
 
 void build_ogr(struct Map_info *Map, int build)
 {
-    int iFeature, FID, npoints;
+    int iFeature, FID, npoints, nskipped;
     
     struct Format_info_ogr *ogr_info;
     
@@ -625,7 +625,7 @@ void build_ogr(struct Map_info *Map, int build)
 
     /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
     OGR_L_ResetReading(ogr_info->layer);
-    npoints = iFeature = 0;
+    npoints = iFeature = nskipped = 0;
     G_message(_("Registering primitives..."));
     while ((hFeature = OGR_L_GetNextFeature(ogr_info->layer)) != NULL) {
 	G_debug(3, "   Feature %d", iFeature);
@@ -634,15 +634,17 @@ void build_ogr(struct Map_info *Map, int build)
 	
 	hGeom = OGR_F_GetGeometryRef(hFeature);
 	if (hGeom == NULL) {
-	    G_warning(_("Feature %d without geometry skipped"), iFeature);
+	    G_debug(3, "Feature %d without geometry skipped", iFeature);
 	    OGR_F_Destroy(hFeature);
+            nskipped++;
 	    continue;
 	}
 	
 	FID = (int) OGR_F_GetFID(hFeature);
 	if (FID == OGRNullFID) {
-	    G_warning(_("OGR feature %d without ID skipped"), iFeature);
+	    G_debug(3, "OGR feature %d without ID skipped", iFeature);
 	    OGR_F_Destroy(hFeature);
+            nskipped++;
 	    continue;
 	}
 	G_debug(4, "    FID = %d", FID);
@@ -659,6 +661,10 @@ void build_ogr(struct Map_info *Map, int build)
     G_message(_("%d primitives registered"), Map->plus.n_lines);
     G_message(_("%d vertices registered"), npoints);
     
+    if (nskipped > 0)
+        G_warning(_("%d %s without geometry skipped"), nskipped,
+                  nskipped == 1 ? "feature" : "features");
+        
     Map->plus.built = GV_BUILD_BASE;
     
     free_parts(&parts);
