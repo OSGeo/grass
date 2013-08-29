@@ -112,6 +112,17 @@ class GRASSStartup(wx.Frame):
                                     style = wx.ALIGN_CENTRE)
         self.ldbase = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                     label = _("GIS Data Directory:"))
+        # no message at the beginning
+        self.lmessage = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                    label=_(""))
+        # It is not clear if all wx versions supports color, so try-except.
+        # The color itself may not be correct for all platforms/system settings
+        # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
+        # there is no 'warning' color.
+        try:
+            self.lmessage.SetForegroundColour(wx.Colour(255, 0, 0))
+        except AttributeError:
+            pass
         self.llocation = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                        label = _("Project location\n(projection/coordinate system)"),
                                        style = wx.ALIGN_CENTRE)
@@ -356,6 +367,11 @@ class GRASSStartup(wx.Frame):
                   flag = wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT | wx.EXPAND,
                   border = 20) # GISDBASE setting
+        # warning/error message
+        sizer.Add(item=self.lmessage,
+                  proportion=0,
+                  flag=wx.ALIGN_CENTER_VERTICAL |
+                  wx.ALIGN_LEFT| wx.LEFT | wx.RIGHT | wx.BOTTOM, border=8)
         sizer.Add(item = location_sizer, proportion = 1,
                   flag = wx.RIGHT | wx.LEFT | wx.EXPAND,
                   border = 1)
@@ -393,6 +409,28 @@ class GRASSStartup(wx.Frame):
                 rc.close()
         
         return grassrc
+
+    def _showWarning(self, text):
+        """Displays a warning message to the user.
+
+        There is no cleaning procedure. You should call _hideMessage when
+        you know that there is everything correct now.
+        """
+        self.lmessage.SetLabel(_("Warning: ") + text)
+
+    def _showError(self, text):
+        """Displays a error message to the user.
+
+        There is no cleaning procedure. You should call _hideMessage when
+        you know that there is everything correct now.
+        """
+        self.lmessage.SetLabel(_("Error: ") + text)
+
+    def _hideMessage(self):
+        """Clears/hides the error message."""
+        # we do no hide widget
+        # because we do not want the dialog to change the size
+        self.lmessage.SetLabel("")
 
     def GetRCValue(self, value):
         """!Return GRASS variable (read from GISRC)
@@ -663,12 +701,13 @@ class GRASSStartup(wx.Frame):
         self.lblocations.InsertItems(self.listOfLocations, 0)
 
         if len(self.listOfLocations) > 0:
+            self._hideMessage()
             self.lblocations.SetSelection(0)
         else:
             self.lblocations.SetSelection(wx.NOT_FOUND)
-            GWarning(_("No GRASS location found in '%s'.") % self.gisdbase,
-                     parent = self)
-        
+            self._showWarning(_("No GRASS location found in '%s'.")
+                              % self.gisdbase)
+
         return self.listOfLocations
 
     def UpdateMapsets(self, location):
@@ -771,9 +810,9 @@ class GRASSStartup(wx.Frame):
     def OnSetDatabase(self, event):
         """!Database set"""
         gisdbase = self.tgisdbase.GetValue()
+        self._hideMessage()
         if not os.path.exists(gisdbase):
-            GError(_("Path '%s' doesn't exist.") % gisdbase,
-                   parent = self)
+            self._showError(_("Path '%s' doesn't exist.") % gisdbase)
             return
         
         self.gisdbase = self.tgisdbase.GetValue()
