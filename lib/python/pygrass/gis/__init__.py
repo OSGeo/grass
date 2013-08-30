@@ -50,7 +50,6 @@ CHECK_IS = {"GISBASE": libgis.G_is_gisbase,
 
 
 def _check(value, path, type):
-    #import pdb; pdb.set_trace()
     if value and CHECK_IS[type](join(path, value)):
         return value
     elif value is '':
@@ -65,7 +64,7 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
     if location:
         libgis.G_setenv('LOCATION_NAME', location)
     if gisdbase:
-        libgis.G_setenv('GISDBASEE', gisdbase)
+        libgis.G_setenv('GISDBASE', gisdbase)
 
 
 def make_mapset(mapset, location=None, gisdbase=None):
