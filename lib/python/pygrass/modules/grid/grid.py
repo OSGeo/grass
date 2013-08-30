@@ -121,8 +121,9 @@ def get_cmd(cmdd):
     return cmd
 
 
-def cmd_exe((bbox, mapnames, msetname, cmd)):
+def cmd_exe(args):
     """Create a mapset, and execute a cmd inside."""
+    bbox, mapnames, msetname, cmd = args
     mset = Mapset()
     try:
         make_mapset(msetname)
