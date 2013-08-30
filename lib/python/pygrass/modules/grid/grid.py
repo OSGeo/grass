@@ -53,8 +53,8 @@ def copy_mapset(mapset, path):
     per_new = os.path.join(path, 'PERMANENT')
     map_old = mapset.path()
     map_new = os.path.join(path, mapset.name)
-    if not os.path.isdir(path):
-        os.makedirs(path)
+    if not os.path.isdir(per_new):
+        os.makedirs(per_new)
     if not os.path.isdir(map_new):
         os.mkdir(map_new)
     for f in (fi for fi in os.listdir(per_old) if fi.isupper()):
@@ -100,6 +100,7 @@ def copy_raster(rasters, src, dst, region=None):
         dst.current()
         rupck(input=file_dst, output=rast, overwrite=True)
         os.remove(file_dst)
+    return gisrc_src, gisrc_dst
 
 
 def get_cmd(cmdd):
@@ -201,10 +202,15 @@ class GridModule(object):
         self.start_col = start_col
         self.out_prefix = out_prefix
         self.n_mset = None
+        self.gisrc_src = self.gisrc_dst = None
         if move:
             self.n_mset = copy_mapset(self.mset, move)
-            copy_raster(select(self.module.inputs, 'raster'),
-                        self.mset, self.n_mset, region=self.region)
+            rasters = select(self.module.inputs, 'raster')
+            self.gisrc_src, self.gisrc_dst = copy_raster(rasters,
+                                                         self.mset,
+                                                         self.n_mset,
+                                                         region=self.region)
+
         self.bboxes = split_region_tiles(region=region,
                                          width=width, height=height,
                                          overlap=overlap)
