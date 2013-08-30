@@ -173,7 +173,7 @@ class History(object):
         libraster.Rast_append_history(self.c_hist,
                                       ctypes.c_char_p(str(obj)))
 
-    def appent_fmt(self, fmt, *args):
+    def append_fmt(self, fmt, *args):
         """Rast_append_format_history"""
         libraster.Rast_append_format_history(self.c_hist,
                                              ctypes.c_char_p(fmt),
