@@ -59,7 +59,6 @@ import grass.pygrass.modules as pyg
 
 ############################################################################
 
-
 def main():
 
     # Get the options
@@ -106,6 +105,9 @@ def main():
 
     statement = ""
 
+    # Create the pygrass Module object for g.remove
+    remove = pyg.Module("g.remove", quiet=True, run_=False)
+
     for name in dataset_list:
         name = name.strip()
         sp = tgis.open_old_space_time_dataset(name, type, dbif)
@@ -125,14 +127,14 @@ def main():
                 # Delete every 100 maps
                 if count%100 == 0:
                     dbif.execute_transaction(map_statement)
-                    pyg.Module("g.remove", rast=name_list, quiet=True)
+                    remove(rast=name_list, run_=True)
                     map_statement = ""
                     name_list = []
 
             if map_statement:
                 dbif.execute_transaction(map_statement)
             if name_list:
-                pyg.Module("g.remove", rast=name_list, quiet=True)
+                remove(rast=name_list, run_=True)
 
         statement += sp.delete(dbif=dbif, execute=False)
 
