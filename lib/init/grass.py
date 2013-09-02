@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 #############################################################################
 #
-# MODULE:       GRASS initialization (Python)
+# MODULE:       GRASS initialization script
 # AUTHOR(S):    Original author unknown - probably CERL
 #               Andreas Lange <andreas.lange rhein-main.de>
 #               Huidae Cho <grass4u gmail.com>
 #               Justin Hickey <jhickey hpcc.nectec.or.th>
 #               Markus Neteler <neteler osgeo.org>
-#               Hamish Bowman <hamish_b yahoo,com>
-#               Converted to Python (based on init.sh) by Glynn Clements
+#               Hamish Bowman <hamish_b yahoo.com>
+#
+#               GRASS 7: converted to Python (based on init.sh shell
+#               script from GRASS 6) by Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
-#               Luca Delucchi <lucadeluge@gmail.com>
+#               Luca Delucchi <lucadeluge gmail.com>
 # PURPOSE:      Sets up environment variables, parses any remaining
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
