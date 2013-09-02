@@ -585,15 +585,25 @@ def non_interactive(arg, geofile=None):
             l, mapset = os.path.split(l)
         l, location_name = os.path.split(l)
         gisdbase = l
-
+    
     if gisdbase and location_name and mapset:
         location = os.path.join(gisdbase, location_name, mapset)
 
+        # check if 'location_name' is a valid GRASS location
         if not os.access(os.path.join(location, "WIND"), os.R_OK):
-            if location_name == "PERMANENT":
-                fatal(_("<%s> is not a valid GRASS location") % location)
+            # 'location' is not a valid GRASS mapset, check if
+            # 'location_name' is a valid GRASS location
+            if not os.path.exists(os.path.join(gisdbase, location_name)):
+                fatal(_("Location <%s> doesn't exist") % os.path.join(gisdbase, location_name))
+            elif 'PERMANENT' not in os.listdir(os.path.join(gisdbase, location_name)) or \
+                    not os.path.isdir(os.path.join(gisdbase, location_name, 'PERMANENT')) or \
+                    not os.path.isfile((os.path.join(gisdbase, location_name, 'PERMANENT',
+                                                     'DEFAULT_WIND'))):
+                    fatal(_("<%s> is not a valid GRASS location") % \
+                              os.path.join(gisdbase, location_name))
             else:
-                # the user wants to create mapset on the fly
+                # 'location_name' is a valid GRASS location, the user
+                # wants to create mapset on the fly
                 if create_new:
                     if not os.access(os.path.join(os.path.join(gisdbase,
                                                                location_name,
@@ -637,7 +647,8 @@ def non_interactive(arg, geofile=None):
                         writefile(os.path.join(location, "WIND"), s)
                         message(_("Missing WIND file fixed"))
                 else:
-                    fatal(_("<%s> is not a valid GRASS location") % location)
+                    fatal(_("Mapset <%s> doesn't exist in GRASS location <%s>. "
+                            "A new mapset can be created by '-c' switch.") % (mapset, location_name))
 
         if os.access(gisrc, os.R_OK):
             kv = read_gisrc()
