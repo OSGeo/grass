@@ -1478,8 +1478,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # change parameters for item in layers list in render.Map
         self.ChangeLayer(layer)
         
-        # set region if auto-zooming is enabled
-        if dcmd and UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
+        # set region if auto-zooming is enabled or layer tree contains
+        # only one map layer
+        if dcmd and (len(self.GetVisibleLayers()) < 2 or \
+                         UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled')):
             mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
             if mapLayer.GetType() in ('raster', 'vector'):
                 render = UserSettings.Get(group = 'display', key = 'autoRendering', subkey = 'enabled')
