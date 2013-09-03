@@ -134,7 +134,7 @@ class LMToolsToolbar(BaseToolbar):
         icons = {
             'import'  : MetaIcon(img = 'layer-import',
                                  label = _('Import/link raster or vector data')),
-            'mapcalc' : MetaIcon(img = 'calculator',
+            'mapcalc' : MetaIcon(img = 'raster-calculator',
                                  label = _('Raster Map Calculator')),
             'modeler' : MetaIcon(img = 'modeler-main',
                                  label = _('Graphical Modeler')),
