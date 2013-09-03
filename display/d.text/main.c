@@ -101,7 +101,6 @@ int main(int argc, char **argv)
 	struct Flag *b;
 	struct Flag *r;
 	struct Flag *s;
-	struct Flag *c;
     } flag;
 
     /* options and flags */
@@ -255,9 +254,6 @@ int main(int argc, char **argv)
     flag.s->key = 's';
     flag.s->description = _("Font size is height in pixels");
 
-    flag.c = G_define_flag();
-    flag.c->key = 'c';
-    flag.c->description = _("Ignored (compatibility with d.text.freetype)");
 
     /* check command line */
     if (G_parser(argc, argv))
