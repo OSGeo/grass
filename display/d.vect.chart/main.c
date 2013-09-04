@@ -84,11 +84,8 @@ int main(int argc, char **argv)
     ctype_opt->description = _("Chart type");
     ctype_opt->guisection = _("Chart properties");
 
-    columns_opt = G_define_option();
-    columns_opt->key = "columns";
-    columns_opt->type = TYPE_STRING;
+    columns_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
     columns_opt->required = YES;
-    columns_opt->multiple = YES;
     columns_opt->description = _("Attribute columns containing data");
 
     sizecol_opt = G_define_option();
