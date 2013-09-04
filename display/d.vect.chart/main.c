@@ -71,8 +71,10 @@ int main(int argc, char **argv)
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->answer = "point,line,boundary,centroid";
+    type_opt->guisection = _("Selection");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->guisection = _("Selection");
 
     ctype_opt = G_define_option();
     ctype_opt->key = "ctype";
