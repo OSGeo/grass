@@ -379,7 +379,13 @@ class AnimationController(wx.EvtHandler):
         prov = self.bitmapProviders[animationData.windowIndex]
         prov.SetData(datasource = animationData.mapData, dataType=animationData.inputMapType)
 
-        self.bitmapProviders[animationData.windowIndex].Load()
+        prov.Load()
+        if animationData.legendCmd:
+            try:
+                bitmap = prov.LoadOverlay(animationData.legendCmd)
+                self.mapwindows[animationData.windowIndex].SetOverlay(bitmap)
+            except GException:
+                GError(message=_("Failed to display legend."))
 
     def _load3DData(self, animationData):
         prov = self.bitmapProviders[animationData.windowIndex]

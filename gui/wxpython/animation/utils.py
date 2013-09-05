@@ -93,6 +93,27 @@ def validateMapNames(names, etype):
                 raise GException(_("Map <%s> not found.") % name)
     return newNames
 
+
+def getRegisteredMaps(timeseries, etype):
+    """!Returns list of maps registered in dataset"""
+    timeseriesMaps = []
+    if etype == 'strds':
+        sp = tgis.SpaceTimeRasterDataset(ident=timeseries)
+    elif etype == 'stvds':
+        sp = tgis.SpaceTimeVectorDataset(ident=timeseries)
+
+    if sp.is_in_db() == False:
+        raise GException(_("Space time dataset <%s> not found.") % timeseries)
+        
+    sp.select()
+    rows = sp.get_registered_maps(columns="id", where=None, order="start_time", dbif=None)
+    timeseriesMaps = []
+    if rows:
+        for row in rows:
+            timeseriesMaps.append(row["id"])
+    return timeseriesMaps
+
+
 def ComputeScaledRect(sourceSize, destSize):
     """!Fits source rectangle into destination rectangle
     by scaling and centering.

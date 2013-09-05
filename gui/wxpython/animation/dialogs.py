@@ -23,22 +23,20 @@ import sys
 import wx
 import copy
 import datetime
-from wx.lib.newevent import NewEvent
 import wx.lib.filebrowsebutton as filebrowse
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
-import grass.temporal as tgis
-
 from core.gcmd import GMessage, GError, GException
 from core import globalvar
 from gui_core import gselect
 from gui_core.dialogs import MapLayersDialog, GetImageHandlers
+from gui_core.forms import GUI
 from core.settings import UserSettings
 from core.utils import _
 
-from utils import TemporalMode, validateTimeseriesName, validateMapNames
+from utils import TemporalMode, getRegisteredMaps, validateTimeseriesName, validateMapNames
 from nviztask import NvizTask
 
 from grass.pydispatch.signal import Signal
@@ -271,6 +269,7 @@ class InputDialog(wx.Dialog):
             self.SetTitle(_("Edit animation"))
 
         self.animationData = animationData
+        self._tmpLegendCmd = None
 
         self._layout()
         self.OnViewMode(event = None)
@@ -357,6 +356,15 @@ class InputDialog(wx.Dialog):
         self.addManyMapsButton = wx.BitmapButton(panel, id = wx.ID_ANY, bitmap = bitmap)
         self.addManyMapsButton.Bind(wx.EVT_BUTTON, self.OnAddMaps)
 
+        self.legend = wx.CheckBox(panel, label=_("Show raster legend"))
+        self.legend.SetValue(bool(self.animationData.legendCmd))
+        self.legendBtn = wx.Button(panel, label=_("Set options"))
+        self.legendBtn.Bind(wx.EVT_BUTTON, self.OnLegend)
+        tooltip = _("By default, legend is created for the first raster map in case of multiple maps "
+                    "and for the first raster map of space time raster dataset.")
+        self.legend.SetToolTipString(tooltip) 
+        self.legendBtn.SetToolTipString(tooltip)
+
         self.OnDataType(None)
         if self.animationData.inputData is None:
             self.dataSelect.SetValue('')
@@ -375,7 +383,12 @@ class InputDialog(wx.Dialog):
         hbox.Add(item = self.dataSelect, proportion = 1, flag = wx.ALIGN_CENTER)
         hbox.Add(item = self.addManyMapsButton, proportion = 0, flag = wx.LEFT, border = 5)
         dataBoxSizer.Add(item = hbox, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
-        
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.Add(item=self.legend, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL)
+        hbox.Add(item=self.legendBtn, proportion=0, flag=wx.LEFT, border=5)
+        dataBoxSizer.Add(item=hbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
+
         panel.SetSizerAndFit(dataBoxSizer)
         panel.SetAutoLayout(True)
 
@@ -446,6 +459,9 @@ class InputDialog(wx.Dialog):
             self.dataSelect.SetType(etype = etype, multiple = False)
             self.addManyMapsButton.Enable(False)
 
+        self.legend.Enable(etype in ('rast', 'strds'))
+        self.legendBtn.Enable(etype in ('rast', 'strds'))
+
         self.dataSelect.SetValue('')
 
     def OnAddMaps(self, event):
@@ -466,6 +482,45 @@ class InputDialog(wx.Dialog):
 
         dlg.Destroy()
 
+    def OnLegend(self, event):
+        """!Set options for legend"""
+        if self._tmpLegendCmd:
+            cmd = self._tmpLegendCmd 
+        elif self.animationData.legendCmd:
+            cmd = self.animationData.legendCmd
+        else:
+            cmd = ['d.legend', 'at=5,50,2,5']
+
+            mapName = self._getLegendMapHint()
+            if mapName:
+                cmd.append("map=%s" % mapName)
+
+        GUI(parent=self, modal=True).ParseCommand(cmd=cmd,
+                                                  completed=(self.GetOptData, '', ''))
+
+    def _getLegendMapHint(self):
+        """!Determine probable map"""
+        inputData = self.dataSelect.GetValue()
+        etype = self.dataChoice.GetClientData(self.dataChoice.GetSelection())
+        if etype == 'strds':
+            timeseries = validateTimeseriesName(inputData, etype=etype)
+            timeseriesMaps = getRegisteredMaps(timeseries, etype)
+            if len(timeseriesMaps):
+                return timeseriesMaps[0]
+        else:  # multiple raster
+            maps = inputData.split(',')
+            if len(maps):
+                return maps[0]
+
+        return None
+
+    def GetOptData(self, dcmd, layer, params, propwin):
+        """!Process decoration layer data"""
+        self._tmpLegendCmd = dcmd
+
+        if dcmd and not self.legend.IsChecked():
+            self.legend.SetValue(True)
+
     def _update(self):
         self.animationData.name = self.nameCtrl.GetValue()
         self.animationData.windowIndex = self.windowChoice.GetSelection()
@@ -475,6 +530,13 @@ class InputDialog(wx.Dialog):
         self.animationData.inputData = self.dataSelect.GetValue()
         sel = self.nDChoice.GetSelection()
         self.animationData.viewMode = self.nDChoice.GetClientData(sel)
+        if self._tmpLegendCmd:
+            if self.legend.IsChecked():
+                self.animationData.legendCmd = self._tmpLegendCmd
+        else:
+            if self.legend.IsChecked():
+                self.animationData.legendCmd = ['d.legend', 'at=5,50,2,5', 
+                                                'map=%s' % self._getLegendMapHint()]
 
         if self.threeDPanel.IsShown():
             self.animationData.workspaceFile = self.fileSelector.GetValue()
@@ -639,6 +701,7 @@ class AnimationData(object):
         self.nvizParameter = self._nvizParameters[0]
 
         self.workspaceFile = None
+        self.legendCmd = None
 
     def GetName(self):
         return self._name
@@ -691,21 +754,8 @@ class AnimationData(object):
             self.mapData = newNames
 
         elif self.inputMapType in ('strds', 'stvds'):
-            timeseries = validateTimeseriesName(data, etype = self.inputMapType)
-            if self.inputMapType == 'strds':
-                sp = tgis.SpaceTimeRasterDataset(ident = timeseries)
-            elif self.inputMapType == 'stvds':
-                sp = tgis.SpaceTimeVectorDataset(ident = timeseries)
-                
-            if sp.is_in_db() == False:
-                raise GException(_("Space time dataset <%s> not found.") % timeseries)
-        
-            sp.select()
-            rows = sp.get_registered_maps(columns = "id", where = None, order = "start_time", dbif = None)
-            timeseriesMaps = []
-            if rows:
-                for row in rows:
-                    timeseriesMaps.append(row["id"])
+            timeseries = validateTimeseriesName(data, etype=self.inputMapType)
+            timeseriesMaps = getRegisteredMaps(timeseries, self.inputMapType)
             self._inputData = timeseries
             self.mapData = timeseriesMaps
         else:
@@ -769,6 +819,14 @@ class AnimationData(object):
         return self._viewModes
 
     viewModes = property(fget = GetViewModes)
+    
+    def SetLegendCmd(self, cmd):
+        self._legendCmd = cmd
+
+    def GetLegendCmd(self):
+        return self._legendCmd
+
+    legendCmd = property(fget=GetLegendCmd, fset=SetLegendCmd)
 
     def GetNvizCommands(self):
         if not self.workspaceFile or not self.mapData:
