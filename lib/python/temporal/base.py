@@ -5,8 +5,8 @@
 Temporal GIS base classes to be used in other
 Python temporal gis packages.
 
-This packages includes all base classes to store basic information 
-like id, name, mapset creation and modification time as well as sql 
+This packages includes all base classes to store basic information
+like id, name, mapset creation and modification time as well as sql
 serialization and de-serialization and the sql database interface.
 
 Usage:
@@ -41,15 +41,14 @@ from core import *
 class DictSQLSerializer(object):
     def __init__(self):
         self.D = {}
-        self.dbif =  SQLDatabaseInterfaceConnection()
 
     def serialize(self, type, table, where=None):
-        """!Convert the internal dictionary into a string of semicolon 
-            separated SQL statements The keys are the column names and 
+        """!Convert the internal dictionary into a string of semicolon
+            separated SQL statements The keys are the column names and
             the values are the row entries
-            
+
             Usage:
-            
+
             \code
             >>> init()
             >>> t = DictSQLSerializer()
@@ -67,14 +66,16 @@ class DictSQLSerializer(object):
             ('UPDATE raster_base SET  name = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ?  ,mapset = ?  ,id = ? ;\\n', ('soil', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil@PERMANENT'))
             >>> t.serialize(type="UPDATE ALL", table="raster_base")
             ('UPDATE raster_base SET  name = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ?  ,mapset = ?  ,id = ? ;\\n', ('soil', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil@PERMANENT'))
-            
+
             @param type must be SELECT. INSERT, UPDATE
             @param table The name of the table to select, insert or update
             @param where The optional where statement
             @return a tuple containing the SQL string and the arguments
-            
+
             \endcode
         """
+
+        dbif =  SQLDatabaseInterfaceConnection()
 
         sql = ""
         args = []
@@ -109,12 +110,12 @@ class DictSQLSerializer(object):
             sql += ') VALUES ('
             for key in self.D.keys():
                 if count == 0:
-                    if self.dbif.dbmi.paramstyle == "qmark":
+                    if dbif.dbmi.paramstyle == "qmark":
                         sql += '?'
                     else:
                         sql += '%s'
                 else:
-                    if self.dbif.dbmi.paramstyle == "qmark":
+                    if dbif.dbmi.paramstyle == "qmark":
                         sql += ' ,?'
                     else:
                         sql += ' ,%s'
@@ -134,13 +135,13 @@ class DictSQLSerializer(object):
                 # Update only entries which are not None
                 if self.D[key] is not None:
                     if count == 0:
-                        if self.dbif.dbmi.paramstyle == "qmark":
+                        if dbif.dbmi.paramstyle == "qmark":
                             sql += ' %s = ? ' % key
                         else:
                             sql += ' %s ' % key
                             sql += '= %s '
                     else:
-                        if self.dbif.dbmi.paramstyle == "qmark":
+                        if dbif.dbmi.paramstyle == "qmark":
                             sql += ' ,%s = ? ' % key
                         else:
                             sql += ' ,%s ' % key
@@ -157,13 +158,13 @@ class DictSQLSerializer(object):
             sql += 'UPDATE ' + table + ' SET '
             for key in self.D.keys():
                 if count == 0:
-                    if self.dbif.dbmi.paramstyle == "qmark":
+                    if dbif.dbmi.paramstyle == "qmark":
                         sql += ' %s = ? ' % key
                     else:
                         sql += ' %s ' % key
                         sql += '= %s '
                 else:
-                    if self.dbif.dbmi.paramstyle == "qmark":
+                    if dbif.dbmi.paramstyle == "qmark":
                         sql += ' ,%s = ? ' % key
                     else:
                         sql += ' ,%s ' % key
@@ -177,7 +178,7 @@ class DictSQLSerializer(object):
         return sql, tuple(args)
 
     def deserialize(self, row):
-        """!Convert the content of the dbmi dictionary like row into the 
+        """!Convert the content of the dbmi dictionary like row into the
            internal dictionary
 
            @param row The dictionary like row to store in the internal dict
@@ -200,19 +201,19 @@ class DictSQLSerializer(object):
 class SQLDatabaseInterface(DictSQLSerializer):
     """!This class represents the SQL database interface
 
-       Functions to insert, select and update the internal 
+       Functions to insert, select and update the internal
        structure of this class in the temporal database are implemented.
-       This is the base class for raster, raster3d, vector and 
+       This is the base class for raster, raster3d, vector and
        space time datasets data management classes:
        - Identification information (base)
        - Spatial extent
        - Temporal extent
        - Metadata
-       
+
        Usage:
-       
+
        \code
-       
+
         >>> init()
         >>> t = SQLDatabaseInterface("raster", "soil@PERMANENT")
         >>> t.D["name"] = "soil"
@@ -239,14 +240,14 @@ class SQLDatabaseInterface(DictSQLSerializer):
         ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
         >>> t.get_update_all_statement_mogrified()
         "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
-        
+
         \endcode
     """
     def __init__(self, table=None, ident=None):
         """!Constructor of this class
 
            @param table The name of the table
-           @param ident The identifier (primary key) of this 
+           @param ident The identifier (primary key) of this
                          object in the database table
         """
         DictSQLSerializer.__init__(self)
@@ -255,7 +256,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         self.ident = ident
 
     def get_table_name(self):
-        """!Return the name of the table in which the internal 
+        """!Return the name of the table in which the internal
            data are inserted, updated or selected
            @return The name of the table
            """
@@ -271,7 +272,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def delete(self, dbif=None):
         """!Delete the entry of this object from the temporal database
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
         """
         sql = self.get_delete_statement()
@@ -296,7 +297,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def is_in_db(self, dbif=None):
         """!Check if this object is present in the temporal database
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
            @return True if this object is present in the temporal database, False otherwise
         """
@@ -321,17 +322,17 @@ class SQLDatabaseInterface(DictSQLSerializer):
         return True
 
     def get_select_statement(self):
-        """!Return the sql statement and the argument list in 
+        """!Return the sql statement and the argument list in
            database specific style
            @return The SELECT string
         """
-        return self.serialize("SELECT", self.get_table_name(), 
+        return self.serialize("SELECT", self.get_table_name(),
                               "WHERE id = \'" + str(self.ident) + "\'")
 
     def get_select_statement_mogrified(self, dbif=None):
         """!Return the select statement as mogrified string
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
            @return The SELECT string
         """
@@ -344,7 +345,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         """!Select the content from the temporal database and store it
            in the internal dictionary structure
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
         """
         sql, args = self.get_select_statement()
@@ -380,7 +381,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         return True
 
     def get_insert_statement(self):
-        """!Return the sql statement and the argument 
+        """!Return the sql statement and the argument
            list in database specific style
            @return The INSERT string"""
         return self.serialize("INSERT", self.get_table_name())
@@ -388,7 +389,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
     def get_insert_statement_mogrified(self, dbif=None):
         """!Return the insert statement as mogrified string
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
            @return The INSERT string
         """
@@ -401,7 +402,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         """!Serialize the content of this object and store it in the temporal
            database using the internal identifier
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
         """
         sql, args = self.get_insert_statement()
@@ -417,24 +418,24 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.close()
 
     def get_update_statement(self, ident=None):
-        """!Return the sql statement and the argument list 
+        """!Return the sql statement and the argument list
            in database specific style
-           
+
            @param ident The identifier to be updated, useful for renaming
            @return The UPDATE string
-           
+
            """
         if ident:
-            return self.serialize("UPDATE", self.get_table_name(), 
+            return self.serialize("UPDATE", self.get_table_name(),
                               "WHERE id = \'" + str(ident) + "\'")
         else:
-            return self.serialize("UPDATE", self.get_table_name(), 
+            return self.serialize("UPDATE", self.get_table_name(),
                               "WHERE id = \'" + str(self.ident) + "\'")
 
     def get_update_statement_mogrified(self, dbif=None, ident=None):
         """!Return the update statement as mogrified string
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
            @param ident The identifier to be updated, useful for renaming
            @return The UPDATE string
@@ -450,7 +451,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
            Only object entries which are exists (not None) are updated
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
            @param ident The identifier to be updated, useful for renaming
         """
@@ -470,23 +471,23 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.close()
 
     def get_update_all_statement(self, ident=None):
-        """!Return the sql statement and the argument 
+        """!Return the sql statement and the argument
            list in database specific style
-           
+
            @param ident The identifier to be updated, useful for renaming
            @return The UPDATE string
            """
         if ident:
-            return self.serialize("UPDATE ALL", self.get_table_name(), 
+            return self.serialize("UPDATE ALL", self.get_table_name(),
                               "WHERE id = \'" + str(ident) + "\'")
         else:
-            return self.serialize("UPDATE ALL", self.get_table_name(), 
+            return self.serialize("UPDATE ALL", self.get_table_name(),
                               "WHERE id = \'" + str(self.ident) + "\'")
 
     def get_update_all_statement_mogrified(self, dbif=None, ident=None):
         """!Return the update all statement as mogrified string
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
            @param ident The identifier to be updated, useful for renaming
            @return The UPDATE string
@@ -497,10 +498,10 @@ class SQLDatabaseInterface(DictSQLSerializer):
         return dbif.mogrify_sql_statement(self.get_update_all_statement(ident))
 
     def update_all(self, dbif=None, ident=None):
-        """!Serialize the content of this object, including None objects, 
+        """!Serialize the content of this object, including None objects,
         and update it in the temporal database using the internal identifier
 
-           @param dbif The database interface to be used, 
+           @param dbif The database interface to be used,
                         if None a temporary connection will be established
            @param ident The identifier to be updated, useful for renaming
         """
@@ -523,11 +524,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
 
 class DatasetBase(SQLDatabaseInterface):
-    """!This is the base class for all maps and spacetime datasets storing 
+    """!This is the base class for all maps and spacetime datasets storing
         basic identification information
-        
+
         Usage:
-        
+
         \code
 
         >>> init()
@@ -559,22 +560,22 @@ class DatasetBase(SQLDatabaseInterface):
         creator=soeren
         creation_time=2001-01-01 00:00:00
         temporal_type=absolute
-        
+
         \endcode
     """
-    
-    def __init__(self, table=None, ident=None, name=None, mapset=None, 
+
+    def __init__(self, table=None, ident=None, name=None, mapset=None,
                  creator=None, ctime=None,ttype=None):
         """!Constructor
-        
-            @param table The name of the temporal database table 
+
+            @param table The name of the temporal database table
                           that should be used to store the values
-            @param ident The unique identifier must be a combination of 
-                          the dataset name, layer name and the mapset 
+            @param ident The unique identifier must be a combination of
+                          the dataset name, layer name and the mapset
                           "name@mapset" or "name:layer@mapset"
                           used as as primary key in the temporal database
             @param name The name of the map or dataset
-            @param mapset The name of the mapset 
+            @param mapset The name of the mapset
             @param creator The name of the creator
             @param ctime The creation datetime object
             @param ttype The temporal type
@@ -602,8 +603,8 @@ class DatasetBase(SQLDatabaseInterface):
     def set_id(self, ident):
         """!Convenient method to set the unique identifier (primary key)
 
-           @param ident The unique identifier must be a combination 
-                         of the dataset name, layer name and the mapset 
+           @param ident The unique identifier must be a combination
+                         of the dataset name, layer name and the mapset
                          "name@mapset" or "name:layer@mapset"
         """
         self.ident = ident
@@ -653,7 +654,7 @@ class DatasetBase(SQLDatabaseInterface):
         self.D["creator"] = creator
 
     def set_ctime(self, ctime=None):
-        """!Set the creation time of the dataset, 
+        """!Set the creation time of the dataset,
            if nothing set the current time is used
 
            @param ctime The current time of type datetime
@@ -664,7 +665,7 @@ class DatasetBase(SQLDatabaseInterface):
             self.D["creation_time"] = ctime
 
     def set_ttype(self, ttype):
-        """!Set the temporal type of the dataset: absolute or relative, 
+        """!Set the temporal type of the dataset: absolute or relative,
            if nothing set absolute time will assumed
 
            @param ttype The temporal type of the dataset "absolute or relative"
@@ -696,7 +697,7 @@ class DatasetBase(SQLDatabaseInterface):
             return None
 
     def get_map_id(self):
-        """!Convenient method to get the unique map identifier 
+        """!Convenient method to get the unique map identifier
            without layer information
 
            @return the name of the vector map as "name@mapset"
@@ -822,24 +823,24 @@ class DatasetBase(SQLDatabaseInterface):
 
 class RasterBase(DatasetBase):
     """!Time stamped raster map base information class"""
-    def __init__(self, ident=None, name=None, mapset=None, creator=None, 
+    def __init__(self, ident=None, name=None, mapset=None, creator=None,
                  creation_time=None, temporal_type=None):
-        DatasetBase.__init__(self, "raster_base", ident, name, mapset, 
+        DatasetBase.__init__(self, "raster_base", ident, name, mapset,
                               creator, creation_time, temporal_type)
 
 
 class Raster3DBase(DatasetBase):
     """!Time stamped 3D raster map base information class"""
-    def __init__(self, ident=None, name=None, mapset=None, creator=None, 
+    def __init__(self, ident=None, name=None, mapset=None, creator=None,
                  creation_time=None, temporal_type=None,):
-        DatasetBase.__init__(self, "raster3d_base", ident, name, 
-                              mapset, creator, creation_time, 
+        DatasetBase.__init__(self, "raster3d_base", ident, name,
+                              mapset, creator, creation_time,
                               temporal_type)
 
 
 class VectorBase(DatasetBase):
     """!Time stamped vector map base information class"""
-    def __init__(self, ident=None, name=None, mapset=None, layer=None, 
+    def __init__(self, ident=None, name=None, mapset=None, layer=None,
                  creator=None, creation_time=None, temporal_type=None):
         DatasetBase.__init__(self, "vector_base", ident, name, mapset,
                               creator, creation_time, temporal_type)
@@ -861,14 +862,14 @@ class VectorBase(DatasetBase):
 
 class STDSBase(DatasetBase):
     """!Base class for space time datasets
-    
-       This class adds the semantic type member variable to the dataset 
+
+       This class adds the semantic type member variable to the dataset
        base class.
-       
+
     Usage:
 
     \code
-    
+
     >>> init()
     >>> t = STDSBase("stds", "soil@PERMANENT", semantic_type="average", creator="soeren", ctime=datetime(2001,1,1), ttype="absolute")
     >>> t.semantic_type
@@ -890,10 +891,10 @@ class STDSBase(DatasetBase):
     creation_time=2001-01-01 00:00:00
     temporal_type=absolute
     semantic_type=average
-    
+
     \endcode
     """
-    def __init__(self, table=None, ident=None, name=None, mapset=None, 
+    def __init__(self, table=None, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
                  ttype=None):
         DatasetBase.__init__(self, table, ident, name, mapset, creator,
@@ -914,7 +915,7 @@ class STDSBase(DatasetBase):
             return None
 
     semantic_type = property(fget=get_semantic_type, fset=set_semantic_type)
-    
+
     def print_info(self):
         """!Print information about this class in human readable style"""
         DatasetBase.print_info(self)
@@ -932,30 +933,30 @@ class STDSBase(DatasetBase):
 
 class STRDSBase(STDSBase):
     """!Space time raster dataset base information class"""
-    def __init__(self, ident=None, name=None, mapset=None, 
+    def __init__(self, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
                  ttype=None):
-        STDSBase.__init__(self, "strds_base", ident, name, mapset, 
+        STDSBase.__init__(self, "strds_base", ident, name, mapset,
                            semantic_type, creator, ctime,
                            ttype)
 
 
 class STR3DSBase(STDSBase):
     """!Space time 3D raster dataset base information class"""
-    def __init__(self, ident=None, name=None, mapset=None, 
+    def __init__(self, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
                  ttype=None):
-        STDSBase.__init__(self, "str3ds_base", ident, name, mapset, 
+        STDSBase.__init__(self, "str3ds_base", ident, name, mapset,
                            semantic_type, creator, ctime,
                            ttype)
 
 
 class STVDSBase(STDSBase):
     """!Space time vector dataset base information class"""
-    def __init__(self, ident=None, name=None, mapset=None, 
+    def __init__(self, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
                  ttype=None):
-        STDSBase.__init__(self, "stvds_base", ident, name, mapset, 
+        STDSBase.__init__(self, "stvds_base", ident, name, mapset,
                            semantic_type, creator, ctime,
                            ttype)
 

@@ -25,19 +25,18 @@ for details.
 from space_time_datasets import *
 from factory import *
 
-###############################################################################
 
-def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header, 
-                                 separator, method, spatial=False, 
+def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
+                                 separator, method, spatial=False,
                                  print_only=True):
-    """!Sample the input space time datasets with a sample 
-       space time dataset, return the created map matrix and optionally 
+    """!Sample the input space time datasets with a sample
+       space time dataset, return the created map matrix and optionally
        print the result to stdout
 
-        In case multiple maps are located in the current granule, 
+        In case multiple maps are located in the current granule,
         the map names are separated by comma.
 
-        In case a layer is present, the names map ids are extended 
+        In case a layer is present, the names map ids are extended
         in this form: "name:layer@mapset"
 
         Attention: Do not use the comma as separator for printing
@@ -48,13 +47,13 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
         @param sampler Name of a space time dataset used for temporal sampling
         @param header Set True to print column names
         @param separator The field separator character between the columns
-        @param method The method to be used for temporal sampling 
+        @param method The method to be used for temporal sampling
                        (start,during,contain,overlap,equal)
         @param spatial Perform spatial overlapping check
-        @param print_only If set True (default) then the result of the sampling will be 
-                    printed to stdout, if set to False the resulting map matrix 
-                    will be returned. 
-                    
+        @param print_only If set True (default) then the result of the sampling will be
+                    printed to stdout, if set to False the resulting map matrix
+                    will be returned.
+
         @return The map matrix or None if nothing found
     """
     mapset = core.gisenv()["MAPSET"]
@@ -105,7 +104,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
             mapmatrizes.append(mapmatrix)
 
     if len(mapmatrizes) > 0:
-        
+
         # Simply return the map matrix
         if not print_only:
             dbif.close()
@@ -166,5 +165,5 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
     dbif.close()
     if len(mapmatrizes) > 0:
         return mapmatrizes
-    
+
     return None

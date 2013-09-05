@@ -408,6 +408,7 @@ def _create_tgis_metadata_table(content, dbif=None):
 
 class SQLDatabaseInterfaceConnection():
     """!This class represents the database interface connection
+       and provides access to the chisen backend modules.
 
        The following DBMS are supported:
          - sqlite via the sqlite3 standard library
