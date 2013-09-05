@@ -114,12 +114,13 @@ class AnimationWindow(BufferedWindow):
         self.parent = parent
         self._pdc = wx.PseudoDC()
         self._overlay = None
+        self._tmpMousePos = None
 
         BufferedWindow.__init__(self, parent=parent, id=id, style=style)
         self.SetBackgroundColour(wx.BLACK)
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.Bind(wx.EVT_SIZE, self.OnSize)
-
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouseEvents)
 
     def Draw(self, dc):
         """!Draws bitmap."""
@@ -151,7 +152,10 @@ class AnimationWindow(BufferedWindow):
 
     def DrawOverlay(self):
         self._pdc.BeginDrawing()
+        self._pdc.SetId(1)
         self._pdc.DrawBitmap(bmp=self._overlay, x=0, y=0)
+        self._pdc.SetIdBounds(1, wx.Rect(0, 0, self._overlay.GetWidth(),
+                                         self._overlay.GetHeight()))
         self._pdc.EndDrawing()
 
     def SetOverlay(self, bitmap):
@@ -161,9 +165,7 @@ class AnimationWindow(BufferedWindow):
             if self._overlay:
                 self._pdc.RemoveAll()
             self._overlay = bitmap
-            self._pdc.BeginDrawing()
-            self._pdc.DrawBitmap(bmp=bitmap, x=0, y=0)
-            self._pdc.EndDrawing()
+            self.DrawOverlay()
         else:
             self._overlay = None
             self._pdc.RemoveAll()
@@ -175,6 +177,33 @@ class AnimationWindow(BufferedWindow):
         dc = wx.BufferedPaintDC(self, self._Buffer)
         if self._overlay:
             self._pdc.DrawToDC(dc)
+
+
+    def OnMouseEvents(self, event):
+        """!Handle mouse events."""
+        # If it grows larger, split it.
+        current = event.GetPosition()
+        if event.LeftDown():
+            self._dragid = None
+            idlist = self._pdc.FindObjects(current[0], current[1],
+                                           radius=10)
+            if 1 in idlist:
+                self._dragid = 1
+            self._tmpMousePos = current
+
+        elif event.LeftUp():
+            self._dragid = None
+            self._tmpMousePos = None
+
+        elif event.Dragging():
+            if self._dragid is None:
+                return
+            dx = current[0] - self._tmpMousePos[0]
+            dy = current[1] - self._tmpMousePos[1]
+            self._pdc.TranslateId(self._dragid, dx, dy)
+            self.UpdateDrawing()
+            self._tmpMousePos = current
+
 
 class BitmapProvider(object):
     """!Class responsible for loading data and providing bitmaps"""
