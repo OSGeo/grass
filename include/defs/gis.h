@@ -321,6 +321,8 @@ const char *G__home(void);
 
 /* ilist.c */
 void G_init_ilist(struct ilist *);
+void G_free_ilist(struct ilist *);
+struct ilist * G_new_ilist();
 void G_ilist_add(struct ilist *, int);
 
 /* intersect.c */
