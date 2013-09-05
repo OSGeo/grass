@@ -455,9 +455,9 @@ static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
     static int one_init = 0;
     
     if (!one_init) {
-	best_cut = (int *)malloc(t->ndims_alloc * sizeof(int));
-	best_side = (int *)malloc(t->ndims_alloc * sizeof(int));
-	one_init = 1;
+        best_cut = (int *)malloc(MAXLEVEL * sizeof(int));
+        best_side = (int *)malloc(MAXLEVEL * sizeof(int));
+        one_init = 1;
     }
 
     rect_0 = &(t->rect_0);
