@@ -320,6 +320,42 @@ class SpatioTemporalTopologyBuilder(object):
         ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
         ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
 
+        >>> mapsA = []
+        >>> for i in range(4):
+        ...     idA = "a%i@B"%(i)
+        ...     mapA = tgis.RasterDataset(idA)
+        ...     start = datetime.datetime(2000, 1, 1, 0, 0, i)
+        ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
+        ...     check = mapA.set_absolute_time(start, end)
+        ...     mapsA.append(mapA)
+        >>> tb = SpatioTemporalTopologyBuilder()
+        >>> tb.build(mapsA)
+        >>> # Check relations of mapsA
+        >>> for map in mapsA:
+        ...     print(map.get_temporal_extent_as_tuple())
+        ...     m = map.get_temporal_relations()
+        ...     for key in m.keys():
+        ...         if key not in ["NEXT", "PREV"]:
+        ...             print(key, m[key][0].get_temporal_extent_as_tuple())
+        (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
+        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
+        (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3))
+        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
+        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+        (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4))
+        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+        ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
+        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5))
+        ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+
         @endcode
 
     """
@@ -494,7 +530,7 @@ class SpatioTemporalTopologyBuilder(object):
 
         if mapsB == None:
             mapsB = mapsA
-            idetnical = True
+            identical = True
 
         for map_ in mapsA:
             map_.reset_topology()
@@ -505,15 +541,16 @@ class SpatioTemporalTopologyBuilder(object):
 
         tree = self. _build_rtree(mapsA, spatial)
 
+        list_ = gis.G_new_ilist()
+
         for j in xrange(len(mapsB)):
 
-            list_ = gis.ilist()
             rect = self._map_to_rect(tree, mapsB[j], spatial)
-            vector.RTreeSearch2(tree, rect, byref(list_))
+            vector.RTreeSearch2(tree, rect, list_)
             vector.RTreeFreeRect(rect)
 
-            for k in xrange(list_.n_values):
-                i = list_.value[k] - 1
+            for k in xrange(list_.contents.n_values):
+                i = list_.contents.value[k] - 1
 
                 # Get the temporal relationship
                 relation = mapsB[j].temporal_relation(mapsA[i])
@@ -529,6 +566,8 @@ class SpatioTemporalTopologyBuilder(object):
         self._build_internal_iteratable(mapsA, spatial)
         if not identical and mapsB != None:
             self._build_iteratable(mapsB, spatial)
+
+        gis.G_free_ilist(list_)
 
         vector.RTreeDestroyTree(tree)
 
@@ -550,16 +589,15 @@ class SpatioTemporalTopologyBuilder(object):
 ###############################################################################
 
 def set_temoral_relationship(A, B, relation):
-    if relation == "equal":
-        if B != A:
-            if not B.get_equal() or \
-            (B.get_equal() and \
-            A not in B.get_equal()):
-                B.append_equal(A)
-            if not A.get_equal() or \
-            (A.get_equal() and \
-            B not in A.get_equal()):
-                A.append_equal(B)
+    if relation == "equal" or relation == "equals":
+        if not B.get_equal() or \
+        (B.get_equal() and \
+        A not in B.get_equal()):
+            B.append_equal(A)
+        if not A.get_equal() or \
+        (A.get_equal() and \
+        B not in A.get_equal()):
+            A.append_equal(B)
     elif relation == "follows":
         if not B.get_follows() or \
             (B.get_follows() and \
@@ -658,15 +696,14 @@ def set_temoral_relationship(A, B, relation):
 def set_spatial_relationship(A, B, relation):
 
     if relation == "equivalent":
-        if B != A:
-            if not B.get_equivalent() or \
-            (B.get_equivalent() and \
-            A not in B.get_equivalent()):
-                B.append_equivalent(A)
-            if not A.get_equivalent() or \
-            (A.get_equivalent() and \
-            B not in A.get_equivalent()):
-                A.append_equivalent(B)
+        if not B.get_equivalent() or \
+        (B.get_equivalent() and \
+        A not in B.get_equivalent()):
+            B.append_equivalent(A)
+        if not A.get_equivalent() or \
+        (A.get_equivalent() and \
+        B not in A.get_equivalent()):
+            A.append_equivalent(B)
     elif relation == "overlap":
         if not B.get_overlap() or \
             (B.get_overlap() and \

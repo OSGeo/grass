@@ -484,6 +484,219 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """!Sample this space time dataset with the temporal topology
            of a second space time dataset
 
+           In case spatial is True, the spatial overlap between
+           temporal related maps is performed. Only
+           temporal related and spatial overlapping maps are returned.
+
+           Return all registered maps as ordered (by start_time) object list.
+           Each list entry is a list of map
+           objects which are potentially located in temporal relation to the
+           actual granule of the second space time dataset.
+
+           Each entry in the object list is a dict. The actual sampler
+           map and its temporal extent (the actual granule) and
+           the list of samples are stored:
+
+           @code
+           list = self.sample_by_dataset(stds=sampler, method=[
+               "during","overlap","contains","equal"])
+           for entry in list:
+               granule = entry["granule"]
+               maplist = entry["samples"]
+               for map in maplist:
+                   map.select()
+                   map.print_info()
+           @endcode
+
+           A valid temporal topology (no overlapping or inclusion allowed)
+           is needed to get correct results in case of gaps in the sample
+           dataset.
+
+           Gaps between maps are identified as unregistered maps with id==None.
+
+           The objects are initialized with their id's' and the spatio-temporal
+           extent (temporal type, start time, end time, west, east, south,
+           north, bottom and top).
+           In case more map information are needed, use the select()
+           method for each listed object.
+
+           @param stds The space time dataset to be used for temporal sampling
+           @param method This option specifies what sample method should be
+                         used. In case the registered maps are of temporal
+                         point type, only the start time is used for sampling.
+                         In case of mixed of interval data the user can chose
+                         between:
+
+                  - Example @code ["start", "during", "equals"] @endcode
+
+                  - start: Select maps of which the start time is
+                    located in the selection granule
+                    @verbatim
+                    map    :        s
+                    granule:  s-----------------e
+
+                    map    :        s--------------------e
+                    granule:  s-----------------e
+
+                    map    :        s--------e
+                    granule:  s-----------------e
+                    @endverbatim
+
+                  - contains: Select maps which are temporal
+                              during the selection granule
+                    @verbatim
+                    map    :     s-----------e
+                    granule:  s-----------------e
+                    @endverbatim
+
+                  - overlap: Select maps which temporal overlap
+                    the selection granule, this includes overlaps and overlapped
+                    @verbatim
+                    map    :     s-----------e
+                    granule:        s-----------------e
+
+                    map    :     s-----------e
+                    granule:  s----------e
+                    @endverbatim
+
+                  - during: Select maps which temporally contains
+                            the selection granule
+                    @verbatim
+                    map    :  s-----------------e
+                    granule:     s-----------e
+                    @endverbatim
+
+                  - equals: Select maps which temporally equal
+                    to the selection granule
+                    @verbatim
+                    map    :  s-----------e
+                    granule:  s-----------e
+                    @endverbatim
+
+                  - follows: Select maps which temporally follow
+                    the selection granule
+                    @verbatim
+                    map    :              s-----------e
+                    granule:  s-----------e
+                    @endverbatim
+
+                  - precedes: Select maps which temporally precedes
+                    the selection granule
+                    @verbatim
+                    map    :  s-----------e
+                    granule:              s-----------e
+                    @endverbatim
+
+                  All these methods can be combined. Method must be of
+                  type tuple including the identification strings.
+
+           @param spatial If set True additional the 2d spatial overlapping
+                          is used for selection -> spatio-temporal relation.
+                          The returned map objects will have temporal and
+                          spatial extents
+           @param dbif The database interface to be used
+
+           @return A list of lists of map objects or None in case nothing was
+                   found None
+        """
+
+        if self.get_temporal_type() != stds.get_temporal_type():
+            core.error(_("The space time datasets must be of "
+                         "the same temporal type"))
+            return None
+
+        if stds.get_map_time() != "interval":
+            core.error(_("The temporal map type of the sample "
+                         "dataset must be interval"))
+            return None
+
+        dbif, connected = init_dbif(dbif)
+        relations = copy.deepcopy(method)
+
+        # Tune the temporal relations
+        if "start" in relations:
+            if "overlapped" not in relations:
+                relations.append("overlapped")
+            if "starts" not in relations:
+                relations.append("starts")
+            if "started" not in relations:
+                relations.append("started")
+            if "finishes" not in relations:
+                relations.append("finishes")
+            if "contains" not in relations:
+                relations.append("contains")
+            if "equals" not in relations:
+                relations.append("equals")
+
+        if "overlap" in relations or "over" in relations:
+            if "overlapped" not in relations:
+                relations.append("overlapped")
+            if "overlaps" not in relations:
+                relations.append("overlaps")
+
+        if "contain" in relations:
+            if "contains" not in relations:
+                relations.append("contains")
+
+        # Remove start, equal, contain and overlap
+        relations = [relation.upper().strip() for relation in relations if relation \
+                    not in ["start", "overlap", "contain"]]
+
+        #print(relations)
+
+        tb = SpatioTemporalTopologyBuilder()
+        if spatial:
+            spatial = "2D"
+        else:
+            spatial = None
+
+        mapsA = self.get_registered_maps_as_objects(dbif=dbif)
+        mapsB = stds.get_registered_maps_as_objects_with_gaps(dbif=dbif)
+        tb.build(mapsB, mapsA, spatial)
+
+        obj_list = []
+        for map in mapsB:
+            result = {}
+            maplist = []
+            # Get map relations
+            map_relations = map.get_temporal_relations()
+            #print(map.get_temporal_extent_as_tuple())
+            #for key in map_relations.keys():
+            #    if key not in ["NEXT", "PREV"]:
+            #        print(key, map_relations[key][0].get_temporal_extent_as_tuple())
+
+            result["granule"] = map
+            # Append the maps that fullfill the relations
+            for relation in relations:
+                if relation in map_relations.keys():
+                    for sample_map in map_relations[relation]:
+                        if sample_map not in maplist:
+                            maplist.append(sample_map)
+
+            # Add an empty map if no map was found
+            if not maplist:
+                empty_map = self.get_new_map_instance(None)
+                empty_map.set_spatial_extent(map.get_spatial_extent())
+                empty_map.set_temporal_extent(map.get_temporal_extent())
+                maplist.append(empty_map)
+
+            result["samples"] = maplist
+
+            obj_list.append(result)
+
+        if connected:
+            dbif.close()
+
+        return obj_list
+
+
+    def sample_by_dataset_sql(self, stds, method=None, spatial=False, dbif=None):
+        """!Sample this space time dataset with the temporal topology
+           of a second space time dataset using SQL queries.
+
+           This function is very slow for huge large space time datasets
+           but can run several times in the same process without problems.
+
            The sample dataset must have "interval" as temporal map type,
            so all sample maps have valid interval time.
 
@@ -529,6 +742,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                          point type, only the start time is used for sampling.
                          In case of mixed of interval data the user can chose
                          between:
+                  - ["start", "during", "equals"]
 
                   - start: Select maps of which the start time is
                     located in the selection granule
@@ -543,15 +757,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     granule:  s-----------------e
                     @endverbatim
 
-                  - during: Select maps which are temporal
-                    during the selection granule
+                  - contains: Select maps which are temporal
+                              during the selection granule
                     @verbatim
                     map    :     s-----------e
                     granule:  s-----------------e
                     @endverbatim
 
                   - overlap: Select maps which temporal overlap
-                    the selection granule
+                    the selection granule, this includes overlaps and overlapped
                     @verbatim
                     map    :     s-----------e
                     granule:        s-----------------e
@@ -560,14 +774,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     granule:  s----------e
                     @endverbatim
 
-                  - contain: Select maps which temporally contain
-                    the selection granule
+                  - during: Select maps which temporally contains
+                            the selection granule
                     @verbatim
                     map    :  s-----------------e
                     granule:     s-----------e
                     @endverbatim
 
-                  - equal: Select maps which temporally equal
+                  - equals: Select maps which temporally equal
                     to the selection granule
                     @verbatim
                     map    :  s-----------e
@@ -591,7 +805,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                   All these methods can be combined. Method must be of
                   type tuple including the identification strings.
 
-           @param spatial If set True additional the spatial overlapping
+           @param spatial If set True additional the 2d spatial overlapping
                           is used for selection -> spatio-temporal relation.
                           The returned map objects will have temporal and
                           spatial extents
@@ -618,9 +832,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     use_during = True
                 if name == "overlap":
                     use_overlap = True
-                if name == "contain":
+                if name == "contain" or name == "contains":
                     use_contain = True
-                if name == "equal":
+                if name == "equal" or name == "equals":
                     use_equal = True
                 if name == "follows":
                     use_follows = True
@@ -916,6 +1130,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 next = start + gran
 
             map = first.get_new_instance(None)
+            map.set_spatial_extent_from_values(0,0,0,0,0,0)
             if first.is_time_absolute():
                 map.set_absolute_time(start, next, None)
             else:
@@ -1009,6 +1224,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         elif self.is_time_relative():
                             map.set_relative_time(start, end,
                                                  self.get_relative_time_unit())
+                        map.set_spatial_extent_from_values(0,0,0,0,0,0)
                         obj_list.append(copy.copy(map))
 
         if connected:
@@ -1076,23 +1292,24 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Older temporal databases have no bottom and top columns
         # in their views so we need a work around to set the full
         # spatial extent as well
-        has_bt_columns = True
-        try:
-            rows = self.get_registered_maps(
-                "id,start_time,end_time, west,east,south,north,bottom,top",
-                where, order, dbif)
-        except:
-            try:
-                dbif.rollback()
-                rows = self.get_registered_maps("id,start_time,end_time",
-                                                where, order, dbif)
-                has_bt_columns = False
-                core.warning(_("Old temporal database format detected. "
-                               "The top and "
-                               "bottom column is missing in the views, using"
-                               "a work around."))
-            except:
-                raise
+
+        rows = get_tgis_metadata(dbif)
+        db_version = 0
+
+        if rows:
+            for row in rows:
+                if row["key"] == "tgis_db_version":
+                    db_version = int(row["value"])
+
+        if db_version >= 1:
+            has_bt_columns = True
+            columns = "id,start_time,end_time, west,east,south,north,bottom,top"
+        else:
+            has_bt_columns = False
+            columns = "id,start_time,end_time, west,east,south,north"
+
+        rows = self.get_registered_maps(columns, where, order, dbif)
+
 
         if rows is not None:
             for row in rows:

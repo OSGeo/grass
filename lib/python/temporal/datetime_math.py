@@ -20,7 +20,6 @@ SECOND_AS_DAY = 1.1574074074074073e-05
 
 ###############################################################################
 
-
 def relative_time_to_time_delta(value):
     """!Convert the double value representing days
        into a timedelta object.
