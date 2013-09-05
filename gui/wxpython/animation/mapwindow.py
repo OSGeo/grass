@@ -21,10 +21,10 @@ import wx
 from multiprocessing import Process, Queue
 import tempfile
 import grass.script as grass
-from core.gcmd import RunCommand
+from core.gcmd import RunCommand, GException
 from core.debug import Debug
 from core.settings import UserSettings
-from core.utils import _
+from core.utils import _, CmdToTuple
 
 from grass.pydispatch.signal import Signal
 
@@ -71,7 +71,7 @@ class BufferedWindow(wx.Window):
         # The Buffer init is done here, to make sure the buffer is always
         # the same size as the Window
         #Size  = self.GetClientSizeTuple()
-        size  = self.ClientSize
+        size  = self.GetClientSize()
 
         # Make new offscreen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
@@ -112,6 +112,8 @@ class AnimationWindow(BufferedWindow):
         self.bitmap = wx.EmptyBitmap(1, 1)
         self.text = ''
         self.parent = parent
+        self._pdc = wx.PseudoDC()
+        self._overlay = None
 
         BufferedWindow.__init__(self, parent=parent, id=id, style=style)
         self.SetBackgroundColour(wx.BLACK)
@@ -146,6 +148,33 @@ class AnimationWindow(BufferedWindow):
         self.bitmap = bitmap
         self.text = text
         self.UpdateDrawing()
+
+    def DrawOverlay(self):
+        self._pdc.BeginDrawing()
+        self._pdc.DrawBitmap(bmp=self._overlay, x=0, y=0)
+        self._pdc.EndDrawing()
+
+    def SetOverlay(self, bitmap):
+        """!Sets overlay bitmap (legend)"""
+        Debug.msg(3, "AnimationWindow.SetOverlay()")
+        if bitmap:
+            if self._overlay:
+                self._pdc.RemoveAll()
+            self._overlay = bitmap
+            self._pdc.BeginDrawing()
+            self._pdc.DrawBitmap(bmp=bitmap, x=0, y=0)
+            self._pdc.EndDrawing()
+        else:
+            self._overlay = None
+            self._pdc.RemoveAll()
+        self.UpdateDrawing()
+
+    def OnPaint(self, event):
+        Debug.msg(5, "AnimationWindow.OnPaint()")
+        # All that is needed here is to draw the buffer to screen
+        dc = wx.BufferedPaintDC(self, self._Buffer)
+        if self._overlay:
+            self._pdc.DrawToDC(dc)
 
 class BitmapProvider(object):
     """!Class responsible for loading data and providing bitmaps"""
@@ -405,6 +434,30 @@ class BitmapProvider(object):
         grass.try_remove(tempFileFormat)
         os.environ.pop('GRASS_REGION')
 
+    def LoadOverlay(self, cmd):
+        """!Creates raster legend with d.legend
+
+        @param cmd d.legend command as a list
+
+        @return bitmap with legend
+        """
+        fileHandler, filename = tempfile.mkstemp(suffix=".png")
+        os.close(fileHandler)
+        # Set the environment variables for this process
+        _setEnvironment(self.imageWidth, self.imageHeight, filename, transparent=True)
+
+        Debug.msg(1, "Render raster legend " + str(filename))
+        cmdTuple = CmdToTuple(cmd)
+        returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
+
+        if returncode == 0:
+            bitmap = wx.Bitmap(filename, wx.BITMAP_TYPE_PNG)
+            return bitmap
+        else:
+            os.remove(filename)
+            raise GException(messages)
+
+
 def mapRenderProcess(mapType, mapname, width, height, fileQueue):
     """!Render raster or vector files as png image and write the 
        resulting png filename in the provided file queue
@@ -421,13 +474,7 @@ def mapRenderProcess(mapType, mapname, width, height, fileQueue):
     os.close(fileHandler)
     
     # Set the environment variables for this process
-    os.environ['GRASS_WIDTH'] = str(width) 
-    os.environ['GRASS_HEIGHT'] = str(height)
-    driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
-    os.environ['GRASS_RENDER_IMMEDIATE'] = driver
-    os.environ['GRASS_TRUECOLOR'] = "1" 
-    os.environ['GRASS_TRANSPARENT'] = "1"
-    os.environ['GRASS_PNGFILE'] = str(filename)
+    _setEnvironment(width, height, filename, transparent=False)
 
     if mapType in ('rast', 'strds'):
         Debug.msg(1, "Render raster image " + str(filename))
@@ -446,6 +493,21 @@ def mapRenderProcess(mapType, mapname, width, height, fileQueue):
 
     fileQueue.put(filename)
     
+
+def _setEnvironment(width, height, filename, transparent):
+    os.environ['GRASS_WIDTH'] = str(width)
+    os.environ['GRASS_HEIGHT'] = str(height)
+    driver = UserSettings.Get(group='display', key='driver', subkey='type')
+    os.environ['GRASS_RENDER_IMMEDIATE'] = driver
+    os.environ['GRASS_BACKGROUNDCOLOR'] = 'ffffff'
+    os.environ['GRASS_TRUECOLOR'] = "TRUE"
+    if transparent:
+        os.environ['GRASS_TRANSPARENT'] = "TRUE"
+    else:
+        os.environ['GRASS_TRANSPARENT'] = "FALSE"
+    os.environ['GRASS_PNGFILE'] = str(filename)
+
+
 class BitmapPool():
     """!Class storing bitmaps (emulates dictionary)"""
     def __init__(self):
