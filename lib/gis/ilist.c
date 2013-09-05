@@ -18,14 +18,46 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 
+/**
+ * \brief Free allocated memory of an integer list
+ *
+ * \param list The pointer to an integer list
+ *
+ * */
+void G_free_ilist(struct ilist *list)
+{
+    if(list->value)
+        G_free(list->value);
+    G_free(list);
+}
+
+/**
+ * \brief Return a new integer list.
+ * 
+ * G_fatal_error() will be invoked by the
+ * allocation function.
+ *
+ * \return list The pointer to a new allocated integer list
+ *
+ * */
+struct ilist * G_new_ilist()
+{
+    struct ilist *l = G_malloc(sizeof(struct ilist));
+    l->value = NULL;
+    G_init_ilist(l);
+    return l;
+}
+
 /** 
- * Init an integer list  
+ * \brief Init an integer list and free allocated memory
  *
  * \param list The pointer to an integer list
  *
  * */
 void G_init_ilist(struct ilist *list)
 {
+    if(list->value)
+        G_free(list->value);
     list->value = NULL;
     list->n_values = 0;
     list->alloc_values = 0;
