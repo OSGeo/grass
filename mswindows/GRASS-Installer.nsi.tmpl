@@ -682,7 +682,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'rem #$\r$\n'
 	FileWrite $0 'rem #########################################################################$\r$\n'
 	FileWrite $0 'rem #$\r$\n'
-	FileWrite $0 'rem # GRASS Initialization$\r$\n'
+	FileWrite $0 'rem # GRASS initialization bat script$\r$\n'
 	FileWrite $0 'rem #$\r$\n'
 	FileWrite $0 'rem #########################################################################$\r$\n'
 	FileWrite $0 '$\r$\n'
@@ -701,6 +701,8 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'cd "%USERPROFILE%"'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '"%GRASS_PYTHON%" "%GISBASE%\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" %*'
+	FileWrite $0 '$\r$\n$\r$\n'
+	FileWrite $0 'if %ERRORLEVEL% GEQ 1 pause'
 	FileClose $0
 	done_create_grass_command.bat:
 	
