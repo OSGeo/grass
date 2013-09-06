@@ -126,7 +126,9 @@ int readsites(void)
 	if(ltype == -2)
 	    break;
 
-	G_percent(Vect_get_next_line_id(&In), nlines, 2);
+	if (!(ltype & GV_POINTS))
+	    continue;
+	/* G_percent(Vect_get_next_line_id(&In), nlines, 2); */
 		
 	if (!All) {
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
@@ -141,6 +143,9 @@ int readsites(void)
 	}
 	else
 	    sites[nsites].coord.z = 0.0;
+
+	sites[nsites].sitenbr = nsites;
+	sites[nsites].refcnt = 0;
 
 	if (nsites > 1) {
 	    if (xmin > sites[nsites].coord.x)
@@ -160,10 +165,10 @@ int readsites(void)
 	nsites++;
     }
 
-    if (nsites < 3) {
+    if (nsites < 2) {
 	const char *name = Vect_get_full_name(&In);
 	Vect_close(&In);
-	G_fatal_error(_("Found %d points/centroids in <%s>, but at least 3 are needed"),
+	G_fatal_error(_("Found %d points/centroids in <%s>, but at least 2 are needed"),
 	              nsites, name);
     }
 
@@ -171,16 +176,6 @@ int readsites(void)
 	sites =
 	    (struct Site *)G_realloc(sites,
 				     (nsites) * sizeof(struct Site));
-
-    if (xmin == Box.W)
-	Box.W -= GRASS_EPSILON;
-    if (xmax == Box.E)
-	Box.E += GRASS_EPSILON;
-    if (ymin == Box.S)
-	Box.S -= GRASS_EPSILON;
-    if (ymax == Box.N)
-	Box.N += GRASS_EPSILON;
-
 
     qsort(sites, nsites, sizeof(struct Site), scomp);
     removeDuplicates();

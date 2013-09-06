@@ -33,7 +33,7 @@ int extend_line(double s, double n, double w, double e,
 {
     double nx, ny;		/* intersection coordinates */
 
-    if (x > w && x < e && y > s && y < n) {
+    if (x >= w && x <= e && y >= s && y <= n) {
 	/* vertical line? */
 	if (a == 0) {
 	    *c_x = knownPointAtLeft ? e : w;

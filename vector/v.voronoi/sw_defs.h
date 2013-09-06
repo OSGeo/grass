@@ -88,6 +88,7 @@ double dist(struct Site *, struct Site *);
 int makevertex(struct Site *);
 int deref(struct Site *);
 int ref(struct Site *);
+double d_ulp(double);
 
 /* sw_heap.c */
 int PQinsert(struct Halfedge *, struct Site *, double);

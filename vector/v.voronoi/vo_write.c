@@ -42,23 +42,43 @@ int write_ep(struct Edge *e)
 	    Vect_write_line(&Out, Type, Points, Cats);
 	}
 	else {
-	    int knownPointAtLeft;
+	    int knownPointAtLeft = -1;
 
 	    if (e->ep[le] != NULL) {
 		x1 = e->ep[le]->coord.x;
 		y1 = e->ep[le]->coord.y;
 		knownPointAtLeft = 1;
 	    }
-	    else {
+	    else if (e->ep[re] != NULL) {
 		x1 = e->ep[re]->coord.x;
 		y1 = e->ep[re]->coord.y;
 		knownPointAtLeft = 0;
 	    }
 
+	    if (knownPointAtLeft == -1) {
+
+		/*
+		G_warning("Dead edge!");
+		return 1;
+		*/
+		x2 = (e->reg[le]->coord.x + e->reg[re]->coord.x) / 2.0;
+		y2 = (e->reg[le]->coord.y + e->reg[re]->coord.y) / 2.0;
+		knownPointAtLeft = 0;
+		if (!extend_line(Box.S, Box.N, Box.W, Box.E,
+				 e->a, e->b, e->c, x2, y2, &x1, &y1,
+				 knownPointAtLeft)) {
+				     
+		    G_warning("Undefined edge, unable to extend line");
+		    
+		    return 0;
+		}
+		G_debug(0, "x1 = %g, y1 = %g, x2 = %g, y2 = %g", x1, y1, x2, y2);
+		knownPointAtLeft = 1;
+	    }
 	    if (extend_line(Box.S, Box.N, Box.W, Box.E,
 			    e->a, e->b, e->c, x1, y1, &x2, &y2,
-			    knownPointAtLeft)
-		) {
+			    knownPointAtLeft)) {
+
 		/* Don't write zero length */
 		if (x1 == x2 && y1 == y2)
 		    return 0;
