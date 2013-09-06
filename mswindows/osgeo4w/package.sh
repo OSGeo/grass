@@ -186,7 +186,13 @@ if [ -n "$PACKAGE" ]; then
 	$SRC/mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.bat.tmpl
     sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#@OSGEO4W_ROOT@#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
 	$SRC/mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.tmpl
-
+    
+    # bat files - unix2dos
+    unix2dos bin/${GRASS_EXECUTABLE}.bat.tmpl
+    unix2dos bin/${GRASS_EXECUTABLE}.tmpl
+    unix2dos etc/postinstall/${GRASS_EXECUTABLE}.bat
+    unix2dos etc/preremove/${GRASS_EXECUTABLE}.bat
+    
     # grass package
     tar -cjf $PDIR/grass$PACKAGE_NAME-$VERSION-$PACKAGE.tar.bz2 \
 	apps/grass/grass-$VERSION \
