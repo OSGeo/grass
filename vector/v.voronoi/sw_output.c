@@ -47,17 +47,9 @@ int out_bisector(struct Edge *e)
 
 int out_ep(struct Edge *e)
 {
-    static struct line_pnts *Points = NULL;
-    static struct line_cats *Cats = NULL;
-
-    if (!Points) {
-	Points = Vect_new_line_struct();
-	Cats = Vect_new_cats_struct();
-    }
-
-    if (!triangulate & plot)
+    if ((!triangulate) & plot)
 	clip_line(e);
-    if (!triangulate & !plot) {
+    if ((!triangulate) & !plot) {
 	/*
 	   fprintf (stdout,"e %d", e->edgenbr);
 	   fprintf (stdout," %d ", e->ep[le] != (struct Site *)NULL ? e->ep[le]->sitenbr : -1);
@@ -85,7 +77,7 @@ int out_vertex(struct Site *v)
 
 int out_site(struct Site *s)
 {
-    if (!triangulate & plot & !debug)
+    if ((!triangulate) & plot & (!debug))
 	circle(s->coord.x, s->coord.y, cradius);
 
     /*

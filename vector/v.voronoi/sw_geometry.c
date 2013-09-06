@@ -67,13 +67,15 @@ struct Edge *bisect(struct Site *s1, struct Site *s2)
 }
 
 /* single precision ULP */
-static double d_ulp(double d)
+double d_ulp(double d)
 {
     int exp;
 
-
     if (d == 0)
 	return GRASS_EPSILON;
+
+    if (d < 0)
+	d = fabs(d);
 
     d = frexp(d, &exp);
     exp -= 22;

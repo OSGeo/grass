@@ -107,12 +107,14 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct line_pnts *Points;
     struct line_cats *Cats;
+    struct bound_box box;
     int node, nnodes;
     COOR *coor;
     int verbose;
     int ncoor, acoor;
     int line, nlines, type, ctype, area, nareas;
     int err_boundaries, err_centr_out, err_centr_dupl, err_nocentr;
+    double snap_thresh;
 
     G_gisinit(argv[0]);
 
@@ -407,17 +409,33 @@ int main(int argc, char **argv)
     }
 
     /* cleaning part 2: snap */
+    /* TODO: adjust snapping treshold to ULP */
+    Vect_get_map_box(&Out, &box);
+    snap_thresh = fabs(box.W);
+    if (snap_thresh < fabs(box.E))
+	snap_thresh = fabs(box.E);
+    if (snap_thresh < fabs(box.N))
+	snap_thresh = fabs(box.N);
+    if (snap_thresh < fabs(box.S))
+	snap_thresh = fabs(box.S);
+    snap_thresh = d_ulp(snap_thresh);
+    
     if (err_nocentr || err_centr_dupl || err_centr_out) {
 	int nmod;
 
 	G_important_message(_("Cleaning output topology"));
-	Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL);
+	Vect_snap_lines(&Out, GV_BOUNDARY, snap_thresh, NULL);
 	do {
 	    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
 	    Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
 	    nmod =
 		Vect_clean_small_angles_at_nodes(&Out, GV_BOUNDARY, NULL);
 	} while (nmod > 0);
+
+	G_message(_("Removing dangles..."));
+	Vect_remove_dangles(&Out, GV_BOUNDARY, -1.0, NULL);
+	G_message(_("Removing bridges..."));
+	Vect_remove_bridges(&Out, NULL, NULL, NULL);
 
 	err_boundaries = 0;
 	nlines = Vect_get_num_lines(&Out);
