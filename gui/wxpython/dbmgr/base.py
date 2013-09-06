@@ -581,7 +581,7 @@ class VirtualAttributeList(wx.ListCtrl,
 
 class DbMgrBase:
     def __init__(self, id = wx.ID_ANY, mapdisplay = None,
-                 vectorName = None, item = None, log = None,
+                 vectorName = None, item = None, giface = None,
                  statusbar = None, 
                  **kwargs):
         """!Base class, which enables usage of separate pages of Attribute Table Manager 
@@ -625,7 +625,7 @@ class DbMgrBase:
         else:
             self.dbMgrData['editable'] = True
         
-        self.cmdLog = log    # self.parent.goutput
+        self.giface = giface
 
         # status bar log class
         self.log = Log(statusbar) # -> statusbar
@@ -744,7 +744,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         self.parentDbMgrBase = parentDbMgrBase
 
         self.log = self.parentDbMgrBase.log
-        self.cmdLog = self.parentDbMgrBase.cmdLog
+        self.giface = self.parentDbMgrBase.giface
 
         self.map = self.parentDbMgrBase.map
         self.mapdisplay = self.parentDbMgrBase.mapdisplay
@@ -1707,13 +1707,13 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             return
         else:
             # dialog to get file name
-            dlg = CreateNewVector(parent = self, title = _('Extract selected features'),
-                                  log = self.cmdLog,
-                                  cmd = (('v.extract',
-                                          { 'input' : self.dbMgrData['vectName'],
-                                            'cats' : ListOfCatsToRange(cats) },
-                                          'output')),
-                                  disableTable = True)
+            dlg = CreateNewVector(parent=self, title=_('Extract selected features'),
+                                  giface=self.giface,
+                                  cmd=(('v.extract',
+                                        {'input': self.dbMgrData['vectName'],
+                                         'cats': ListOfCatsToRange(cats)},
+                                        'output')),
+                                  disableTable=True)
             if not dlg:
                 return
             

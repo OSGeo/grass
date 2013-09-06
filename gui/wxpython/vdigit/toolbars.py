@@ -727,9 +727,9 @@ class VDigitToolbar(BaseToolbar):
                 openVectorMap = None
             dlg = CreateNewVector(self.parent,
                                   exceptMap=openVectorMap, giface=self._giface,
-                                  cmd = (('v.edit',
-                                          { 'tool' : 'create' },
-                                          'map')),
+                                  cmd=(('v.edit',
+                                        {'tool': 'create'},
+                                        'map')),
                                   disableAdd = True)
             
             if dlg and dlg.GetName():
