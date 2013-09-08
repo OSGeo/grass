@@ -699,7 +699,13 @@ void args_volume(struct GParams *params)
     params->isosurf_shine_const->description = _("Shininess value(s) for isosurfaces");
     params->isosurf_shine_const->guisection = _("Volumes");
     params->isosurf_shine_const->options = "0-255";
-    
+
+    params->isosurf_toggle_norm_dir = G_define_flag();
+    params->isosurf_toggle_norm_dir->key = 'n';
+    params->isosurf_toggle_norm_dir->description =
+	_("Toggles normal direction of all isosurfaces (changes light effect)");
+    params->isosurf_toggle_norm_dir->guisection = _("Volumes");
+
     /* slices */
     /* slice axis */
     params->slice = G_define_option();

@@ -108,6 +108,10 @@ int add_isosurfs(const struct GParams *params, nv_data *data)
 
 	nisosurfs = GVL_isosurf_num_isosurfs(id);
 
+	if (params->isosurf_toggle_norm_dir->answer) {
+	    GVL_isosurf_set_flags(id, nisosurfs-1, 1);
+	}
+
 	/* topography (level) */
 	if (GVL_isosurf_set_att_const(id, nisosurfs-1, ATT_TOPO, level) < 0) {
 	    G_fatal_error(_("Unable to set isosurface (%d) attribute (%d) of volume %d"),
