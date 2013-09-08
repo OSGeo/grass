@@ -103,7 +103,7 @@ int PQinitialize(void);
 int scomp(const void *, const void *);
 struct Site *nextone(void);
 int readsites(void);
-struct Site *readone(void);
+int readbounds(void);
 
 /* sw_memory.c */
 int freeinit(struct Freelist *, int);

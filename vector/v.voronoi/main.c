@@ -99,10 +99,10 @@ int main(int argc, char **argv)
     int i;
     int **cats, *ncats, nfields, *fields;
     struct {
-	struct Flag *line, *table;
+	struct Flag *line, *table, *area;
     } flag;
     struct {
-	struct Option *in, *out, *field;
+	struct Option *in, *out, *field, *segf;
     } opt;
     struct GModule *module;
     struct line_pnts *Points;
@@ -132,6 +132,18 @@ int main(int argc, char **argv)
     
     opt.out = G_define_standard_option(G_OPT_V_OUTPUT);
 
+    opt.segf = G_define_option();
+    opt.segf->type = TYPE_DOUBLE;
+    opt.segf->key = "segment";
+    opt.segf->answer = "0.25";
+    opt.segf->label = _("Factor to control boundary interpolation");
+    opt.segf->description = _("Applies to input areas only. Smaller values produce smoother output but can cause numerical instability.");
+
+    flag.area = G_define_flag();
+    flag.area->key = 'a';
+    flag.area->description =
+	_("Create Voronoi diagram for input areas");
+
     flag.line = G_define_flag();
     flag.line->key = 'l';
     flag.line->description =
@@ -147,7 +159,12 @@ int main(int argc, char **argv)
     else
 	Type = GV_BOUNDARY;
 
-    All = 0;
+    in_area = flag.area->answer;
+    segf = atof(opt.segf->answer);
+    if (segf < GRASS_EPSILON) {
+	segf = 0.25;
+	G_warning(_("Option '%s' is too small, set to %g"), opt.segf->key, segf);
+    }
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -167,7 +184,10 @@ int main(int argc, char **argv)
     freeinit(&sfl, sizeof(struct Site));
 
     G_message(_("Reading features..."));
-    readsites();
+    if (in_area)
+	readbounds();
+    else
+	readsites();
 
     Vect_open_new(&Out, opt.out->answer, 0);
 
@@ -482,6 +502,16 @@ int main(int argc, char **argv)
 	    }
 	}
     }
+
+    /* this is slow:
+    if (in_area) {
+	if (Type == GV_LINE)
+	    G_message(_("Merging lines ..."));
+	else
+	    G_message(_("Merging boundaries ..."));
+	Vect_merge_lines(&Out, Type, NULL, NULL);
+    }
+    */
 
     /* build clean topology */
     Vect_build_partial(&Out, GV_BUILD_NONE);

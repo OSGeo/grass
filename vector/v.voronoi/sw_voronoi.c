@@ -25,8 +25,11 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 	if (!PQempty())
 	    newintstar = PQ_min();
 
-	if (newsite != (struct Site *)NULL && (PQempty()
-					       || newsite->coord.y < newintstar.y || (newsite->coord.y == newintstar.y && newsite->coord.x < newintstar.x))) {	/* new site is smallest */
+	if (newsite != (struct Site *)NULL && 
+	    (PQempty() || newsite->coord.y < newintstar.y || 
+	    (newsite->coord.y == newintstar.y && 
+	    newsite->coord.x < newintstar.x))) {	/* new site is smallest */
+
 	    out_site(newsite);
 	    lbnd = ELleftbnd(&(newsite->coord));
 	    rbnd = ELright(lbnd);
@@ -54,9 +57,8 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 		   temp->coord.y == newsite->coord.y);
 	    newsite = temp;
 	}
-	else if (!PQempty())
+	else if (!PQempty()) {
 	    /* intersection is smallest */
-	{
 	    lbnd = PQextractmin();
 	    llbnd = ELleft(lbnd);
 	    rbnd = ELright(lbnd);

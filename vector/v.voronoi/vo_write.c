@@ -20,6 +20,9 @@ int write_ep(struct Edge *e)
 
     if (!triangulate) {
 	double x1, y1, x2, y2;
+	
+	if (in_area && e->reg[le]->sitenbr == e->reg[re]->sitenbr)
+	    return 0;
 
 	if (e->ep[le] != NULL && e->ep[re] != NULL) {	/* both end defined */
 	    x1 = e->ep[le]->coord.x;
