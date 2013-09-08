@@ -7,6 +7,7 @@
 struct GParams
 {
     struct Flag *mode_all;
+    struct Flag *isosurf_toggle_norm_dir;
 
     struct Option 
     /* surface */
