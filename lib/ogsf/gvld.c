@@ -108,7 +108,7 @@ int gvld_isosurf(geovol * gvl)
     unsigned int *ktrans, *curcolor;
     int pktransp = 0;
 
-    int *pos, *nz, *e_dl, tmp_pos, edge_pos[12];
+    int *pos, *nz, *e_dl, tmp_pos, edge_pos[13];
 
     GLdouble modelMatrix[16], projMatrix[16];
     GLint viewport[4];
