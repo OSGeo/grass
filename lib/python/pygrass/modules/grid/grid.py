@@ -20,9 +20,6 @@ from split import split_region_tiles
 from patch import patch_map
 
 
-_GREG = Module('g.region')
-
-
 def select(parms, ptype):
     """Select only a  certain type of parameters. ::
 
@@ -141,13 +138,14 @@ def cmd_exe(args):
             inputs[key] = mapnames[key]
         cmd['inputs'] = inputs.items()
         # set the region to the tile
-        _GREG(env_=env, rast=key)
+        sub.Popen(['g,region', 'rast=%s' % key], env=env).wait()
     else:
         #reg = Region() nsres=reg.nsres, ewres=reg.ewres,
         # set the computational region
-        _GREG(env_=env, **bbox)
+        lcmd = ['g.region', ]
+        lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.iteritems()])
+        sub.Popen(lcmd, env=env).wait()
     # run the grass command
-    #import ipdb; ipdb.set_trace()
     sub.Popen(get_cmd(cmd), env=env).wait()
 
 
