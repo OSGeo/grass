@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 	struct Flag *line, *table, *area;
     } flag;
     struct {
-	struct Option *in, *out, *field, *segf;
+	struct Option *in, *out, *field, *smooth;
     } opt;
     struct GModule *module;
     struct line_pnts *Points;
@@ -132,12 +132,12 @@ int main(int argc, char **argv)
     
     opt.out = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    opt.segf = G_define_option();
-    opt.segf->type = TYPE_DOUBLE;
-    opt.segf->key = "segment";
-    opt.segf->answer = "0.25";
-    opt.segf->label = _("Factor to control boundary interpolation");
-    opt.segf->description = _("Applies to input areas only. Smaller values produce smoother output but can cause numerical instability.");
+    opt.smooth = G_define_option();
+    opt.smooth->type = TYPE_DOUBLE;
+    opt.smooth->key = "smoothness";
+    opt.smooth->answer = "0.25";
+    opt.smooth->label = _("Factor for output smoothness");
+    opt.smooth->description = _("Applies to input areas only. Smaller values produce smoother output but can cause numerical instability.");
 
     flag.area = G_define_flag();
     flag.area->key = 'a';
@@ -160,10 +160,10 @@ int main(int argc, char **argv)
 	Type = GV_BOUNDARY;
 
     in_area = flag.area->answer;
-    segf = atof(opt.segf->answer);
+    segf = atof(opt.smooth->answer);
     if (segf < GRASS_EPSILON) {
 	segf = 0.25;
-	G_warning(_("Option '%s' is too small, set to %g"), opt.segf->key, segf);
+	G_warning(_("Option '%s' is too small, set to %g"), opt.smooth->key, segf);
     }
 
     Points = Vect_new_line_struct();
@@ -387,6 +387,7 @@ int main(int argc, char **argv)
     Vect_close(&In);
 
     /* cleaning part 1: count errors */
+    G_message(_("Searching for topology errors..."));
     G_set_verbose(0);
     Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
     G_set_verbose(verbose);
