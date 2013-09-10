@@ -59,11 +59,6 @@ int write_ep(struct Edge *e)
 	    }
 
 	    if (knownPointAtLeft == -1) {
-
-		/*
-		G_warning("Dead edge!");
-		return 1;
-		*/
 		x2 = (e->reg[le]->coord.x + e->reg[re]->coord.x) / 2.0;
 		y2 = (e->reg[le]->coord.y + e->reg[re]->coord.y) / 2.0;
 		knownPointAtLeft = 0;
@@ -75,7 +70,6 @@ int write_ep(struct Edge *e)
 		    
 		    return 0;
 		}
-		G_debug(0, "x1 = %g, y1 = %g, x2 = %g, y2 = %g", x1, y1, x2, y2);
 		knownPointAtLeft = 1;
 	    }
 	    if (extend_line(Box.S, Box.N, Box.W, Box.E,

@@ -215,7 +215,7 @@ double dist(struct Site *s, struct Site *t)
 
 int makevertex(struct Site *v)
 {
-    v->sitenbr = nvertices;
+    v->sitenbr = -1;
     nvertices++;
     out_vertex(v);
     return 0;

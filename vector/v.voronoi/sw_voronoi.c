@@ -102,6 +102,8 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 	e = lbnd->ELedge;
 	out_ep(e);
     }
+    
+    /* TODO: free memory */
 
     return 0;
 }
