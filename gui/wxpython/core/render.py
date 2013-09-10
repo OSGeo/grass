@@ -601,9 +601,9 @@ class Map(object):
         Debug.msg(2, "Map.ChangeMapSize(): width=%d, height=%d" % \
                       (self.width, self.height))
         
-    def GetRegion(self, rast = [], zoom = False, vect = [], regionName = None,
-                  n = None, s = None, e = None, w = None, default = False,
-                  update = False, add3d = False):
+    def GetRegion(self, rast=None, zoom=False, vect=None, rast3d=None, regionName=None,
+                  n=None, s=None, e=None, w=None, default=False,
+                  update=False, add3d=False):
         """!Get region settings (g.region -upgc)
         
         Optionally extent, raster or vector map layer can be given.
@@ -611,6 +611,7 @@ class Map(object):
         @param rast list of raster maps
         @param zoom zoom to raster map (ignore NULLs)
         @param vect list of vector maps
+        @param rast3d 3d raster map (not list, no support of multiple 3d rasters in g.region)
         @param regionName  named region or None
         @param n,s,e,w force extent
         @param default force default region settings
@@ -663,6 +664,9 @@ class Map(object):
         
         if vect:
             cmd['vect'] = ','.join(vect)
+
+        if rast3d:
+            cmd['rast3d'] = rast3d
         
         ret, reg, msg = RunCommand('g.region',
                                    read = True,
@@ -675,6 +679,9 @@ class Map(object):
                     "\n\n" + _("Details:") + " %s" % msg
             elif vect:
                 message = _("Unable to zoom to vector map <%s>.") % vect[0] + \
+                    "\n\n" + _("Details:") + " %s" % msg
+            elif rast3d:
+                message = _("Unable to zoom to 3d raster map <%s>.") % rast3d + \
                     "\n\n" + _("Details:") + " %s" % msg
             else:
                 message = _("Unable to get current geographic extent. "

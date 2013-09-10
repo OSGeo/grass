@@ -1542,12 +1542,15 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             return
         
         rast = []
+        rast3d = None
         vect = []
         updated = False
         for l in layers:
-            # only raster/vector layers are currently supported
+            # only one raster is used: g.region does not support multiple
             if l.type == 'raster':
                 rast.append(l.GetName())
+            elif l.type == '3d-raster':
+                rast3d = l.GetName()
             elif l.type == 'vector':
                 if hasattr(self, "digit") and \
                         self.toolbar.GetLayer() == l:
@@ -1562,10 +1565,11 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                     rast.append(rname)
             
         if not updated:
-            self.Map.GetRegion(rast = rast,
-                               vect = vect,
-                               zoom = ignoreNulls,
-                               update = True)
+            self.Map.GetRegion(rast=rast,
+                               rast3d=rast3d,
+                               vect=vect,
+                               zoom=ignoreNulls,
+                               update=True)
         
         self.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
                          self.Map.region['e'], self.Map.region['w'])
