@@ -1373,7 +1373,8 @@ class Map(object):
                                  'downloading' : [], # layers, which are downloading data
                                  'rendered' : [], # already rendered layers
                                  'range' : len(self.GetListOfLayers(active = True)) + 
-                                           len(self.GetListOfLayers(active = True, ltype = 'overlay'))}
+                                           len(self.GetListOfLayers(active = True, ltype = 'overlay')) -
+                                           len(self.GetListOfLayers(active = True, ltype = '3d-raster'))}
         else:
             if layer not in self.progressInfo['rendered']:
                 self.progressInfo['rendered'].append(layer)
