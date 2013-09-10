@@ -417,21 +417,32 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype != "command" and numSelected == 1:
             self.popupMenu.Append(self.popupID['rename'], text = _("Rename"))
             self.Bind(wx.EVT_MENU, self.OnRenameLayer, id = self.popupID['rename'])
+
+        # when multiple maps are selected of different types
+        # we cannot zoom or change region
+        # because g.region can handle only the same type
+        same = True
+        selected = self.GetSelectedLayers()
+        for layer in selected:
+            if self.GetLayerInfo(layer, key='type') != ltype:
+                same = False
+                break
         
         # map layer items
         if ltype not in ("group", "command"):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
-                self.popupMenu.Append(self.popupID['opacity'], text = _("Change opacity level"))
-                self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id = self.popupID['opacity'])
+                if ltype != '3d-raster':
+                    self.popupMenu.Append(self.popupID['opacity'], text=_("Change opacity level"))
+                    self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id=self.popupID['opacity'])
                 self.popupMenu.Append(self.popupID['properties'], text = _("Properties"))
                 self.Bind(wx.EVT_MENU, self.OnPopupProperties, id = self.popupID['properties'])
             
                 if ltype in ('raster', 'vector', '3d-raster') and self.lmgr.IsPaneShown('toolbarNviz'):
                     self.popupMenu.Append(self.popupID['nviz'], _("3D view properties"))
                     self.Bind (wx.EVT_MENU, self.OnNvizProperties, id = self.popupID['nviz'])
-            
-            if ltype in ('raster', 'vector', 'rgb'):
+
+            if same and ltype in ('raster', 'vector', 'rgb', '3d-raster'):
                 self.popupMenu.AppendSeparator()
                 self.popupMenu.Append(self.popupID['zoom'], text = _("Zoom to selected map(s)"))
                 self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToMap, id = self.popupID['zoom'])
@@ -519,10 +530,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
         # raster layers (specific items)
         elif mltype and mltype == "raster":
-            self.popupMenu.Append(self.popupID['zoom1'], text = _("Zoom to selected map(s) (ignore NULLs)"))
-            self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id = self.popupID['zoom1'])
-            self.popupMenu.Append(self.popupID['region1'], text = _("Set computational region from selected map(s) (ignore NULLs)"))
-            self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id = self.popupID['region1'])
+            if same:
+                self.popupMenu.Append(self.popupID['zoom1'], text=_("Zoom to selected map(s) (ignore NULLs)"))
+                self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id=self.popupID['zoom1'])
+                self.popupMenu.Append(self.popupID['region1'], text=_("Set computational region from selected map(s) (ignore NULLs)"))
+                self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id=self.popupID['region1'])
 
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
@@ -542,6 +554,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID['prof'])
                 self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
                 self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
+
+        elif mltype and mltype == '3d-raster':
+            if numSelected == 1:
+                self.popupMenu.AppendSeparator()
+                self.popupMenu.Append(self.popupID['color'], _("Set color table"))
+                self.Bind(wx.EVT_MENU, self.OnRasterColorTable, id=self.popupID['color'])
+                self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
+                self.Bind(wx.EVT_MENU, self.OnUnivariateStats, id=self.popupID['univar'])
+                self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
+                self.Bind(wx.EVT_MENU, self.OnMetadata, id=self.popupID['meta'])
         
         # web service layers (specific item)
         elif mltype and mltype == "wms":
@@ -584,6 +606,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             cmd = ['r.info']
         elif mltype == 'vector':
             cmd = ['v.info']
+        elif mltype == '3d-raster':
+            cmd = ['r3.info']
         cmd.append('map=%s' % mapLayer.GetName())
 
         # print output to command log area
@@ -631,6 +655,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # print output to command log area
         if len(cmd) > 1:
             cmd.append('-p')
+            if mltype == '3d-raster':
+                cmd.append('-3')
             self._giface.RunCmd(cmd, compReg = False)
 
     def OnProfile(self, event):
@@ -647,7 +673,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnRasterColorTable(self, event):
         """!Set color table for raster map"""
         name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
-        GUI(parent = self).ParseCommand(['r.colors',
+        ltype = self.GetLayerInfo(self.layer_selected, key='type')
+        if ltype == '3d-raster':
+            command = 'r3.colors'
+        else:
+            command = 'r.colors'
+        GUI(parent = self).ParseCommand([command,
                                          'map=%s' % name])
 
     def OnVectorColorTable(self, event):
@@ -674,7 +705,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnUnivariateStats(self, event):
         """!Univariate raster statistics"""
         name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
-        self._giface.RunCmd(['r.univar', 'map=%s' % name], switchPage = True)
+        ltype = self.GetLayerInfo(self.layer_selected, key='type')
+        if ltype == '3d-raster':
+            command = 'r3.univar'
+        else:
+            command = 'r.univar'
+        self._giface.RunCmd([command, 'map=%s' % name], switchPage=True)
 
     def OnStartEditing(self, event):
         """!Start editing vector map layer requested by the user
