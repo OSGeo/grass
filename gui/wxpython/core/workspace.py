@@ -370,11 +370,11 @@ class ProcessWorkspaceFile:
                                             nviz['vector']['points'])
                 
                 # height
-                self.__processLayerNvizNode(node_vpoints, 'height', int,
+                self.__processLayerNvizNode(node_vpoints, 'height', float,
                                             nviz['vector']['points'])
                 
                 # height
-                self.__processLayerNvizNode(node_vpoints, 'size', int,
+                self.__processLayerNvizNode(node_vpoints, 'size', float,
                                             nviz['vector']['points'])
                 
                 # thematic
