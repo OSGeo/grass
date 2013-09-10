@@ -340,6 +340,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         @param key cmd, type, ctrl, label, maplayer, propwin, vdigit, nviz
          (vdigit, nviz for map layers only)
         """
+        if not self.GetPyData(layer):
+            return None
         if key:
             return self.GetPyData(layer)[0][key]
         return self.GetPyData(layer)[0]
@@ -1529,7 +1531,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         itemList = ""
         for item in range(self.GetCount()):
             itemList += self.GetItemText(vislayer) + ','
-            if self.GetLayerInfo(vislayer, key='type') != 'group':
+            lType = self.GetLayerInfo(vislayer, key='type')
+            if lType and lType != 'group':
                 layers.append(self.GetLayerInfo(vislayer, key='maplayer'))
 
             if not self.GetNextVisible(vislayer):
