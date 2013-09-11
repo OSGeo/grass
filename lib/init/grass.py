@@ -495,16 +495,15 @@ def grass_intro():
     intro = r"""
 WELCOME TO GRASS %s
 
-   1) Have at your side all available GRASS tutorials
+   1) Have at your side all available GRASS GIS tutorials
 
    2) When working on your location, the following materials
       are extremely useful:
-      - A topo map of your area
+      - A topographic map of your area
       - Current catalog of available computer maps
 
-   3) Check the GRASS webpages for feedback mailinglists and more:
+   3) heck the GRASS GIS web pages for supporting mailing lists and more:
       http://grass.osgeo.org
-      http://www.grass-gis.org
 """ % grass_version
     sys.stderr.write(intro)
 
