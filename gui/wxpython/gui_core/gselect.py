@@ -1281,7 +1281,7 @@ class GdalSelect(wx.Panel):
         fileMask += '%s (*.zip;*.ZIP)|*.zip;*.ZIP|' % _('ZIP files')
         fileMask += '%s (*.gz;*.GZ)|*.gz;*.GZ|' % _('GZIP files')
         fileMask += '%s (*.tar;*.TAR)|*.tar;*.TAR|' % _('TAR files')
-        fileMask += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ|' % _('TARGZ files')
+        fileMask += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ' % _('TARGZ files')
         # only contains formats with extensions hardcoded    
 
         self.filePanel = wx.Panel(parent=self)
