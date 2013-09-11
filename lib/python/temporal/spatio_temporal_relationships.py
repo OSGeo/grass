@@ -693,14 +693,15 @@ def set_temoral_relationship(A, B, relation):
 def set_spatial_relationship(A, B, relation):
 
     if relation == "equivalent":
-        if not B.get_equivalent() or \
-        (B.get_equivalent() and \
-        A not in B.get_equivalent()):
-            B.append_equivalent(A)
-        if not A.get_equivalent() or \
-        (A.get_equivalent() and \
-        B not in A.get_equivalent()):
-            A.append_equivalent(B)
+	if A != B:
+            if not B.get_equivalent() or \
+            (B.get_equivalent() and \
+            A not in B.get_equivalent()):
+                B.append_equivalent(A)
+            if not A.get_equivalent() or \
+            (A.get_equivalent() and \
+            B not in A.get_equivalent()):
+                A.append_equivalent(B)
     elif relation == "overlap":
         if not B.get_overlap() or \
             (B.get_overlap() and \
