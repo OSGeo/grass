@@ -1297,7 +1297,7 @@ class NvizToolWindow(FN.FlatNotebook):
                              choices = [_("on surface(s):"),
                                         _("flat")])
         self.win['vector']['lines']['flat'] = display.GetId()
-        display.Bind(wx.EVT_CHOICE, self.OnVectorDisplay)
+        display.Bind(wx.EVT_CHOICE, self.OnVectorLinesMode)
         
         gridSizer.Add(item = display, flag = wx.ALIGN_CENTER_VERTICAL | 
                       wx.ALIGN_LEFT|wx.EXPAND, pos = (2, 1), span = (1,4))
@@ -1463,19 +1463,23 @@ class NvizToolWindow(FN.FlatNotebook):
         vertSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND, border = 0)
         # high
         gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Display on surface(s):")),
-                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=wx.StaticText(parent=panel, label=_("Display")),
+                      pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        display = wx.Choice(parent=panel)
+        self.win['vector']['points']['3d'] = display.GetId()
+        display.Bind(wx.EVT_CHOICE, self.OnVectorPointsMode)
+        gridSizer.Add(item=display,
+                      pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Height above surface:")),
-                      pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+                      pos = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL)
         
         surface = wx.CheckListBox(parent = panel, id = wx.ID_ANY, size = (-1, 60),
                                   choices = [], style = wx.LB_NEEDED_SB)
         surface.Bind(wx.EVT_CHECKLISTBOX, self.OnVectorSurface)
         self.win['vector']['points']['surface'] = surface.GetId()
         gridSizer.Add(item = surface, 
-                      pos = (1, 0), span = (3, 1),
+                      pos = (1, 0), span = (3, 2),
                       flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
         
         self._createControl(panel, data = self.win['vector']['points'], name = 'height', size = -1,
@@ -1486,11 +1490,11 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['vector']['points']['height']['text']).SetValue(0)
         
         gridSizer.Add(item = self.FindWindowById(self.win['vector']['points']['height']['slider']),
-                      pos = (2, 1),flag = wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)
+                      pos = (2, 2),flag = wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(item = self.FindWindowById(self.win['vector']['points']['height']['text']),
-                      pos = (3, 1),
+                      pos = (3, 2),
                       flag = wx.ALIGN_CENTER)
-        gridSizer.AddGrowableCol(1)
+        gridSizer.AddGrowableCol(2)
                     
         vertSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND, border = 0)
         boxSizer.Add(item = vertSizer, proportion = 1,
@@ -3424,7 +3428,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         event.Skip()
     
-    def OnVectorDisplay(self, event):
+    def OnVectorLinesMode(self, event):
         """!Display vector lines on surface/flat"""
         rasters = self.mapWindow.GetLayerNames('raster')
         if event.GetSelection() == 0: # surface
@@ -3487,7 +3491,32 @@ class NvizToolWindow(FN.FlatNotebook):
                         
         if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
-        
+
+    def OnVectorPointsMode(self, event):
+        rasters = self.mapWindow.GetLayerNames('raster')
+        if event.GetSelection() == 0: # surface
+            if len(rasters) < 1:
+                self.FindWindowById(self.win['vector']['points']['surface']).Enable(False)
+                self.FindWindowById(self.win['vector']['points']['flat']).SetSelection(1)
+                return
+
+            self.FindWindowById(self.win['vector']['points']['surface']).Enable(True)
+            # set first found surface
+            data = self.GetLayerData('vector')
+            data['vector']['points']['mode']['surface']['value'] = rasters
+            data['vector']['points']['mode']['3d'] = False
+            self.FindWindowById(self.win['vector']['points']['surface']).SetStringSelection( \
+                rasters[0])
+        else: # use z coordinate if 3d
+            data = self.GetLayerData('vector')
+            data['vector']['points']['mode']['3d'] = True
+            self.FindWindowById(self.win['vector']['points']['surface']).Enable(False)
+        data['vector']['points']['mode']['update'] = None
+
+        self.OnVectorPoints(event)
+
+        event.Skip()
+
     def OnVectorHeight(self, event):
         id = event.GetId()
         if id in self.win['vector']['lines']['height'].values():
@@ -4814,6 +4843,17 @@ class NvizToolWindow(FN.FlatNotebook):
                 win.SetValue(color)
             else:
                 win.SetValue(data['points'][prop]['value'])
+        win = self.FindWindowById(self.win['vector']['points']['3d'])
+        if vInfo['map3d']:
+            items = [_("on surface(s):"), _("as 3D")]
+        else:
+            items = [_("on surface")]
+        win.SetItems(items)
+        if data['points']['mode'].get('3d', False):
+            win.SetSelection(1)
+        else:
+            win.SetSelection(0)
+
 ##        self.OnCheckThematic(None)
         # height
         for type in ('slider', 'text'):

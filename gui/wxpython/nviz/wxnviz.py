@@ -1115,6 +1115,21 @@ class Nviz(object):
         
         return 1
         
+    def SetVectorPointZMode(self, id, zMode):
+        """!Set z mode (use z coordinate or not)
+        
+        @param id volume id
+        @param zMode bool
+
+        @return -1 on failure
+        @return 0 when no 3d
+        @return 1 on success
+        """
+        if not GP_site_exists(id):
+            return -1
+            
+        return GP_set_zmode(id, int(zMode))
+
     def AddIsosurface(self, id, level, isosurf_id = None):
         """!Add new isosurface
         
