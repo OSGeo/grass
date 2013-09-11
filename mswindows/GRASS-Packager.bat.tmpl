@@ -42,18 +42,6 @@ xcopy %GRASS_PREFIX% %PACKAGE_DIR% /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
-@echo Copy DLL libs to PACKAGE_DIR\extralib
-@echo -----------------------------------------------------------------------------------------------------------------------
-@echo.
-
-mkdir %PACKAGE_DIR%\extralib
-
-copy %OSGEO4W_PKG_DIR%\bin\*.dll %PACKAGE_DIR%\extralib
-del %PACKAGE_DIR%\extralib\msvcp*
-del %PACKAGE_DIR%\extralib\msvcr*
-
-@echo.
-@echo -----------------------------------------------------------------------------------------------------------------------
 @echo Copy extrabins to PACKAGE_DIR\extrabin
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
@@ -61,9 +49,11 @@ del %PACKAGE_DIR%\extralib\msvcr*
 mkdir %PACKAGE_DIR%\extrabin
 mkdir %PACKAGE_DIR%\extrabin\gdalplugins
 
-copy %OSGEO4W_PKG_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
+copy %OSGEO4W_PKG_DIR%\bin\* %PACKAGE_DIR%\extrabin
 xcopy %OSGEO4W_PKG_DIR%\bin\gdalplugins\* %PACKAGE_DIR%\extrabin\gdalplugins /S/V/F/I
-del %PACKAGE_DIR%\extrabin\apt*.exe
+del %PACKAGE_DIR%\extrabin\apt*
+del %PACKAGE_DIR%\extrabin\msvcp*
+del %PACKAGE_DIR%\extrabin\msvcr*
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
