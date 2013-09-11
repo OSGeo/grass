@@ -340,21 +340,17 @@ class SpatioTemporalTopologyBuilder(object):
         (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
         ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
         ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
         (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3))
         ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
         ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
         ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
-        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
         (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4))
         ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
-        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
         ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
-        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
         (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5))
         ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
         ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
 
         @endcode
 
@@ -590,14 +586,15 @@ class SpatioTemporalTopologyBuilder(object):
 
 def set_temoral_relationship(A, B, relation):
     if relation == "equal" or relation == "equals":
-        if not B.get_equal() or \
-        (B.get_equal() and \
-        A not in B.get_equal()):
-            B.append_equal(A)
-        if not A.get_equal() or \
-        (A.get_equal() and \
-        B not in A.get_equal()):
-            A.append_equal(B)
+	if A != B:
+            if not B.get_equal() or \
+            (B.get_equal() and \
+            A not in B.get_equal()):
+                B.append_equal(A)
+            if not A.get_equal() or \
+            (A.get_equal() and \
+            B not in A.get_equal()):
+                A.append_equal(B)
     elif relation == "follows":
         if not B.get_follows() or \
             (B.get_follows() and \
