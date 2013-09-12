@@ -543,7 +543,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'set GISBASE=$INSTALL_DIR$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem set path to freetype dll$\r$\n'
-	FileWrite $0 'set FREETYPEBASE=$INSTALL_DIR\extralib;$INSTALL_DIR\msys\bin;$INSTALL_DIR\lib$\r$\n'
+	FileWrite $0 'set FREETYPEBASE=$INSTALL_DIR\extrabin;$INSTALL_DIR\msys\bin;$INSTALL_DIR\lib$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem set dependecies path$\r$\n'
 	FileWrite $0 'set PATH=%FREETYPEBASE%;%PATH%$\r$\n'
@@ -821,7 +821,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'export GISBASE$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 '# Set the PATH variable$\r$\n'
-	FileWrite $0 'PATH="$$GISBASE/extrabin:$$GISBASE/extralib:$$PATH"$\r$\n'
+	FileWrite $0 'PATH="$$GISBASE/extrabin:$$PATH"$\r$\n'
 	FileWrite $0 'export PATH$\r$\n'
 	FileWrite $0 '# Set the PYTHONPATH variable$\r$\n'
 	FileWrite $0 'PYTHONPATH="$$GISBASE/etc/python:$$GISBASE/Python27:$$PYTHONPATH"$\r$\n'
@@ -946,7 +946,7 @@ Function DownloadInstallMSRuntime
 	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2005_x86.exe /q"
 	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2008_x86.exe /q"	
 	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe /q"
-	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTDIR\extralib"
+	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTDIR\extrabin"
 	Delete "$TEMP\$ARCHIVE_NAME"
 	RMDir /r "$TEMP\$ORIGINAL_UNTAR_FOLDER"
 	;the following doesn't work. Maybe because the installer is still running?
