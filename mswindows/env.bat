@@ -14,5 +14,5 @@ set GDAL_DATA=%GISBASE%\share\gdal
 set GEOTIFF_CSV=%GISBASE%\share\epsg_csv
 
 set PATH=%GISBASE%\msys\bin;%PATH%
-set PATH=%GISBASE%\extrabin;%GISBASE%\extralib;%PATH%
+set PATH=%GISBASE%\extrabin;%PATH%
 set PATH=%GISBASE%\bin;%PATH%
