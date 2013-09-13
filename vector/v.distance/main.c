@@ -384,7 +384,7 @@ int main(int argc, char *argv[])
 	/* set up steps to increase search box */
 	max_step = G_malloc(n_max_steps * sizeof(double));
 	/* first step always 0 */
-	max_step[0] = 0;
+	max_step[0] = (min < 0 ? 0 : min);
 
 	for (curr_step = 1; curr_step < n_max_steps - 1; curr_step++) {
 	    /* for 9 steps, this would be max / [128, 64, 32, 16, 8, 4, 2] */
@@ -627,6 +627,7 @@ int main(int argc, char *argv[])
 		     * to keep the number of hits low */
 		    while (curr_step < n_max_steps) {
 			box_edge = max_step[curr_step];
+			curr_step++;
 
 			if (box_edge < tmp_min)
 			    continue;
@@ -643,7 +644,6 @@ int main(int argc, char *argv[])
 			if (ntoareas)
 			    Vect_select_areas_by_box(&To, &box, aList);
 
-			curr_step++;
 			if (lList->n_values > 0 || aList->n_values > 0)
 			    break;
 		    }
@@ -661,8 +661,6 @@ int main(int argc, char *argv[])
 		    if (ntoareas)
 			Vect_select_areas_by_box(&To, &box, aList);
 		}
-
-		G_debug(3, "  %d lines in box", lList->n_values);
 
 		for (i = 0; i < lList->n_values; i++) {
 		    ttype = Vect_read_line(&To, TPoints, TCats, lList->id[i]);
@@ -899,6 +897,7 @@ int main(int argc, char *argv[])
 		     * to keep the number of hits low */
 		    while (curr_step < n_max_steps) {
 			box_edge = max_step[curr_step];
+			curr_step++;
 
 			if (box_edge < tmp_min)
 			    continue;
@@ -915,7 +914,6 @@ int main(int argc, char *argv[])
 			if (ntoareas)
 			    Vect_select_areas_by_box(&To, &box, aList);
 
-			curr_step++;
 			if (lList->n_values > 0 || aList->n_values > 0)
 			    break;
 		    }
