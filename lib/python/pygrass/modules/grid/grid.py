@@ -62,7 +62,7 @@ def copy_mapset(mapset, path):
     return Mapset(mapset.name, location, gisdbase)
 
 
-def copy_raster(rasters, src, dst, region=None):
+def copy_raster(rasters, src, dst, region=None, gisrc_dst=None):
     """Copy raster from one mapset to another, crop the raster to the region.
     """
     # set region
@@ -80,7 +80,9 @@ def copy_raster(rasters, src, dst, region=None):
 
     # get and set GISRC
     gisrc_src = os.environ['GISRC']
-    gisrc_dst = write_gisrc(dst.gisdbase, dst.location, dst.name)
+    gisrc_dst = gisrc_dst if gisrc_dst else write_gisrc(dst.gisdbase,
+                                                        dst.location,
+                                                        dst.name)
 
     pdst = dst.path()
     for rast in rasters:
@@ -185,7 +187,7 @@ class GridModule(object):
         >>> grd.run()
     """
     def __init__(self, cmd, width=None, height=None, overlap=0, processes=None,
-                 split=False, debug=False, region=None, move=None,
+                 split=False, debug=False, region=None, move=None, log=False,
                  start_row=0, start_col=0, out_prefix='',
                  *args, **kargs):
         kargs['run_'] = False
@@ -201,6 +203,7 @@ class GridModule(object):
         self.out_prefix = out_prefix
         self.n_mset = None
         self.gisrc_src = self.gisrc_dst = None
+        self.log = log
         if move:
             self.n_mset = copy_mapset(self.mset, move)
             rasters = select(self.module.inputs, 'raster')
@@ -288,6 +291,28 @@ class GridModule(object):
         if patch:
             self.patch()
 
+        if self.n_mset is not None:
+            # move the outputs to the original mapset
+            outputs = [self.out_prefix + o
+                       for o in select(self.module.outputs, 'raster')]
+            copy_raster(outputs, self.n_mset, self.mset, self.region,
+                        self.gisrc_src)
+
+        if self.log:
+            # record in the temp directory
+            from grass.lib.gis import G_tempfile
+            tmp, dummy = os.path.split(G_tempfile())
+            tmpdir = os.path.join(tmp, self.module.name)
+            for k in self.module.outputs:
+                par = self.module.outputs[k]
+                if par.typedesc == 'raster' and par.value:
+                    dirpath = os.path.join(tmpdir, par.name)
+                    if not os.path.isdir(dirpath):
+                        os.makedirs(dirpath)
+                    fp = open(os.path.join(dirpath,
+                                           self.out_prefix + par.value), 'w+')
+                    fp.close()
+
         if clean:
             self.clean_location()
             self.rm_tiles()
@@ -298,12 +323,12 @@ class GridModule(object):
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == 'raster' and otm.value:
-                patch_map(self.out_prefix + otm.value,
+                patch_map(otm.value,
                           self.mset.name, self.msetstr,
                           split_region_tiles(width=self.width,
                                              height=self.height),
                           self.module.flags.overwrite,
-                          self.start_row, self.start_col)
+                          self.start_row, self.start_col, self.out_prefix)
 
     def rm_tiles(self):
         """Remove all the tiles."""
