@@ -392,6 +392,14 @@ int main(int argc, char *argv[])
 	}
 	/* last step always max */
 	max_step[n_max_steps - 1] = max;
+	j = 1;
+	for (i = 1; i < n_max_steps; i++) {
+	    if (max_step[j - 1] < max_step[i]) {
+		max_step[j] = max_step[i];
+		j++;
+	    }
+	}
+	n_max_steps = j;
     }
     else {
 	max_step = G_malloc(sizeof(double));
