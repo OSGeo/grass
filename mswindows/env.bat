@@ -2,6 +2,8 @@ rem
 rem Environmental variables for GRASS stand-alone installer
 rem
 
+set GRASS_SH=%GISBASE%\msys\bin\sh.exe
+
 set GRASS_HTML_BROWSER=explorer
 
 set GRASS_PYTHON=%GISBASE%\extrabin\python.exe
