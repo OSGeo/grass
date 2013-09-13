@@ -1437,8 +1437,16 @@ class GMFrame(wx.Frame):
         """
         self._gconsole.RunCmd(['g.manual','-i'])
         
-    def OnIClass(self, event):
-        """!Start wxIClass tool"""
+    def OnIClass(self, event=None, cmd=None):
+        """!Start wxIClass tool
+
+        The parameters of all handlers which are associated with module
+        and contained in menu/toolboxes must be event and cmd.
+        When called from menu event is always None and cmd is the associated
+        command (list containing a module name and paremeters).
+        @todo This documentation is actually documentation of some component related
+        to gui_core/menu.py file.
+        """
         from iclass.frame import IClassMapFrame, haveIClass, errMsg
         if not haveIClass:
             GError(_('Unable to launch "Supervised Classification Tool".\n\n'
