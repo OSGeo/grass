@@ -38,10 +38,10 @@ def patch_row(rast, rasts, bboxes):
 
 
 def patch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
-              start_row=0, start_col=0):
+              start_row=0, start_col=0, prefix=''):
     """Patch raster using a bounding box list to trim the raster."""
     # Instantiate the RasterRow input objects
-    rast = RasterRow(raster, mapset)
+    rast = RasterRow(prefix + raster, mapset)
     rtype = RasterRow(name=raster, mapset=mset_str % (0, 0))
     rtype.open('r')
     rast.open('w', mtype=rtype.mtype, overwrite=overwrite)
@@ -61,4 +61,4 @@ def patch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
         for rast_ in rrast:
             rast_.close()
     rast.close()
-    #import ipdb; ipdb.set_trace()
+
