@@ -648,8 +648,8 @@ Section "GRASS" SecGRASS
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
 	"$INSTALL_DIR\etc\gui\icons\grass.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and CMD console"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} GUI with MSYS.lnk" "$INSTALL_DIR\${GRASS_COMMAND}_msys.bat" "-wx"\
-	"$INSTALL_DIR\etc\gui\icons\grass_msys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and MSYS UNIX console"
+	; CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} GUI with MSYS.lnk" "$INSTALL_DIR\${GRASS_COMMAND}_msys.bat" "-wx"\
+	; "$INSTALL_DIR\etc\gui\icons\grass_msys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and MSYS UNIX console"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE} Command Line.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-text"\
 	"$INSTALL_DIR\etc\gui\icons\grass_cmd.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} in text mode"
@@ -707,23 +707,26 @@ Section "GRASS" SecGRASS
 	done_create_grass_command.bat:
 	
 	;Create the grass_command_msys.bat
-	ClearErrors
-	FileOpen $0 $INSTALL_DIR\${GRASS_COMMAND}_msys.bat w
-	IfErrors done_create_grass_command_msys.bat
-	FileWrite $0 '@echo off$\r$\n'
-	FileWrite $0 'rem #########################################################################$\r$\n'
-	FileWrite $0 'rem #$\r$\n'
-	FileWrite $0 'rem # File dynamically created by NSIS installer script;$\r$\n'
-	FileWrite $0 'rem #$\r$\n'
-	FileWrite $0 'rem #########################################################################$\r$\n'
-	FileWrite $0 'rem #$\r$\n'
-	FileWrite $0 'rem # GRASS Initialization (MSYS)$\r$\n'
-	FileWrite $0 'rem #$\r$\n'
-	FileWrite $0 'rem #########################################################################$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 'set GISBASE=$INSTALL_DIR$\r$\n'
-	FileWrite $0 'set GRASS_SH=%GISBASE%\msys\bin\sh.exe$\r$\n'
-	FileWrite $0 '$\r$\n'
+        ;
+        ; disabled (really needed?)
+        ;
+	; ClearErrors
+	; FileOpen $0 $INSTALL_DIR\${GRASS_COMMAND}_msys.bat w
+	; IfErrors done_create_grass_command_msys.bat
+	; FileWrite $0 '@echo off$\r$\n'
+	; FileWrite $0 'rem #########################################################################$\r$\n'
+	; FileWrite $0 'rem #$\r$\n'
+	; FileWrite $0 'rem # File dynamically created by NSIS installer script;$\r$\n'
+	; FileWrite $0 'rem #$\r$\n'
+	; FileWrite $0 'rem #########################################################################$\r$\n'
+	; FileWrite $0 'rem #$\r$\n'
+	; FileWrite $0 'rem # GRASS Initialization (MSYS)$\r$\n'
+	; FileWrite $0 'rem #$\r$\n'
+	; FileWrite $0 'rem #########################################################################$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 'set GISBASE=$INSTALL_DIR$\r$\n'
+	; FileWrite $0 'set GRASS_SH=%GISBASE%\msys\bin\sh.exe$\r$\n'
+	; FileWrite $0 '$\r$\n'
 ;	${If} $R_HKLM_INSTALL_PATH != ""
 ;	FileWrite $0 'set PATH=$R_HKLM_INSTALL_PATH\bin;%PATH%$\r$\n'
 ;	FileWrite $0 '$\r$\n'
@@ -732,13 +735,13 @@ Section "GRASS" SecGRASS
 ;	FileWrite $0 'set PATH=$R_HKCU_INSTALL_PATH\bin;%PATH%$\r$\n'
 ;	FileWrite $0 '$\r$\n'
 ;	${EndIf}
-	FileWrite $0 'call "%GISBASE%\etc\env.bat"$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 'cd "%USERPROFILE%"'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '"%GRASS_PYTHON%" "%GISBASE%\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" %*'
-	FileClose $0
-	done_create_grass_command_msys.bat:
+	; FileWrite $0 'call "%GISBASE%\etc\env.bat"$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 'cd "%USERPROFILE%"'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 '"%GRASS_PYTHON%" "%GISBASE%\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" %*'
+	; FileClose $0
+	; done_create_grass_command_msys.bat:
 	
 	;Set the UNIX_LIKE GRASS Path
 	Var /GLOBAL UNIX_LIKE_DRIVE
@@ -780,78 +783,81 @@ Section "GRASS" SecGRASS
 	${EndIf}
 		
 	;create the $INSTALL_DIR\bin grass_command
-	ClearErrors
-	FileOpen $0 $INSTALL_DIR\${GRASS_COMMAND}.sh w
-	IfErrors done_create_grass_command
-	FileWrite $0 '#! /bin/sh$\r$\n'
-	FileWrite $0 '#########################################################################$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '# File dynamically created by NSIS installer script;$\r$\n'
-	FileWrite $0 '# Written by Marco Pasetti;$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '#########################################################################$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '# MODULE:   	GRASS Initialization$\r$\n'
-	FileWrite $0 '# AUTHOR(S):	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th$\r$\n'
-	FileWrite $0 '# PURPOSE:  	The source file for this shell script is in$\r$\n'
-	FileWrite $0 '#   	    	lib/init/grass.src and is the grass startup script. It$\r$\n'
-	FileWrite $0 '#   	    	requires a source file because the definition of GISBASE$\r$\n'
-	FileWrite $0 '#   	    	is not known until compile time and is substituted from the$\r$\n'
-	FileWrite $0 '#   	    	Makefile. Any command line options are passed to Init.sh.$\r$\n'
-	FileWrite $0 '# COPYRIGHT:  	(C) 2000-2010 by the GRASS Development Team$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '#             	This program is free software under the GNU General Public$\r$\n'
-	FileWrite $0 '#   	    	License (>=v2). Read the file COPYING that comes with GRASS$\r$\n'
-	FileWrite $0 '#   	    	for details.$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '#########################################################################$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '# Modified by Marco Pasetti$\r$\n'
-	FileWrite $0 '# added the export PATH instruction to let GRASS work from$\r$\n'
-	FileWrite $0 '# the MSYS environment in the dynamic NSIS installation$\r$\n'
-	FileWrite $0 '#$\r$\n'
-	FileWrite $0 '#########################################################################$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 'trap "echo '
-	FileWrite $0 "'User break!' ; "
-	FileWrite $0 'exit" 2 3 9 15$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '# Set the GISBASE variable$\r$\n'
-	FileWrite $0 'GISBASE="/$UNIX_LIKE_DRIVE$UNIX_LIKE_GRASS_PATH"$\r$\n'
-	FileWrite $0 'export GISBASE$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '# Set the PATH variable$\r$\n'
-	FileWrite $0 'PATH="$$GISBASE/extrabin:$$PATH"$\r$\n'
-	FileWrite $0 'export PATH$\r$\n'
-	FileWrite $0 '# Set the PYTHONPATH variable$\r$\n'
-	FileWrite $0 'PYTHONPATH="$$GISBASE/etc/python:$$GISBASE/Python27:$$PYTHONPATH"$\r$\n'
-	FileWrite $0 'export PYTHONPATH$\r$\n'
-	FileWrite $0 'PYTHONHOME="$INSTALL_DIR\Python27"$\r$\n'
-	FileWrite $0 'export PYTHONHOME$\r$\n'
-	FileWrite $0 'if [ -z "$$GRASS_PYTHON" ] ; then$\r$\n'
-	FileWrite $0 '   GRASS_PYTHON=python$\r$\n'
-	FileWrite $0 '   export GRASS_PYTHON$\r$\n'
-	FileWrite $0 'fi$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '# Set the GRASS_PROJSHARE variable$\r$\n'
-	FileWrite $0 'GRASS_PROJSHARE="$INSTALL_DIR\share\proj"$\r$\n'
-	FileWrite $0 'export GRASS_PROJSHARE$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '# Set the PROJ_LIB variable$\r$\n'
-	FileWrite $0 'PROJ_LIB="$INSTALL_DIR\share\proj"$\r$\n'
-	FileWrite $0 'export PROJ_LIB $\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '# Set the GDAL_DATA variable$\r$\n'
-	FileWrite $0 'GDAL_DATA="$INSTALL_DIR\share\gdal"$\r$\n'
-	FileWrite $0 'export GDAL_DATA$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '# Set the GEOTIFF_CSV variable$\r$\n'
-	FileWrite $0 'GEOTIFF_CSV="$INSTALL_DIR\share\epsg_csv"$\r$\n'
-	FileWrite $0 'export GEOTIFF_CSV$\r$\n'
-	FileWrite $0 '$\r$\n'
-	FileWrite $0 '"$$GRASS_PYTHON" "$$GISBASE/etc/grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "$$@"'
-	FileClose $0
-	done_create_grass_command:
+        ;
+        ;disabled (really needed?)
+        ;
+	; ClearErrors
+	; FileOpen $0 $INSTALL_DIR\${GRASS_COMMAND}.sh w
+	; IfErrors done_create_grass_command
+	; FileWrite $0 '#! /bin/sh$\r$\n'
+	; FileWrite $0 '#########################################################################$\r$\n'
+	; FileWrite $0 '#$\r$\n'
+	; FileWrite $0 '# File dynamically created by NSIS installer script;$\r$\n'
+	; FileWrite $0 '# Written by Marco Pasetti;$\r$\n'
+	; FileWrite $0 '#$\r$\n'
+	; FileWrite $0 '#########################################################################$\r$\n'
+	; FileWrite $0 '#$\r$\n'
+	; FileWrite $0 '# MODULE:   	GRASS Initialization$\r$\n'
+	; FileWrite $0 '# AUTHOR(S):	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th$\r$\n'
+	; FileWrite $0 '# PURPOSE:  	The source file for this shell script is in$\r$\n'
+	; FileWrite $0 '#   	    	lib/init/grass.src and is the grass startup script. It$\r$\n'
+	; FileWrite $0 '#   	    	requires a source file because the definition of GISBASE$\r$\n'
+	; FileWrite $0 '#   	    	is not known until compile time and is substituted from the$\r$\n'
+	; FileWrite $0 '#   	    	Makefile. Any command line options are passed to Init.sh.$\r$\n'
+	; FileWrite $0 '# COPYRIGHT:  	(C) 2000-2010 by the GRASS Development Team$\r$\n'
+	; FileWrite $0 '#$\r$\n'
+	; FileWrite $0 '#             	This program is free software under the GNU General Public$\r$\n'
+	; FileWrite $0 '#   	    	License (>=v2). Read the file COPYING that comes with GRASS$\r$\n'
+	; FileWrite $0 '#   	    	for details.$\r$\n'
+	; FileWrite $0 '#$\r$\n'
+	; FileWrite $0 '#########################################################################$\r$\n'
+	; FileWrite $0 '#$\r$\n'
+	; FileWrite $0 '# Modified by Marco Pasetti$\r$\n'
+	; FileWrite $0 '# added the export PATH instruction to let GRASS work from$\r$\n'
+	; FileWrite $0 '# the MSYS environment in the dynamic NSIS installation$\r$\n'
+	; FileWrite $0 '#$\r$\n'
+	; FileWrite $0 '#########################################################################$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 'trap "echo '
+	; FileWrite $0 "'User break!' ; "
+	; FileWrite $0 'exit" 2 3 9 15$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 '# Set the GISBASE variable$\r$\n'
+	; FileWrite $0 'GISBASE="/$UNIX_LIKE_DRIVE$UNIX_LIKE_GRASS_PATH"$\r$\n'
+	; FileWrite $0 'export GISBASE$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 '# Set the PATH variable$\r$\n'
+	; FileWrite $0 'PATH="$$GISBASE/extrabin:$$PATH"$\r$\n'
+	; FileWrite $0 'export PATH$\r$\n'
+	; FileWrite $0 '# Set the PYTHONPATH variable$\r$\n'
+	; FileWrite $0 'PYTHONPATH="$$GISBASE/etc/python:$$GISBASE/Python27:$$PYTHONPATH"$\r$\n'
+	; FileWrite $0 'export PYTHONPATH$\r$\n'
+	; FileWrite $0 'PYTHONHOME="$INSTALL_DIR\Python27"$\r$\n'
+	; FileWrite $0 'export PYTHONHOME$\r$\n'
+	; FileWrite $0 'if [ -z "$$GRASS_PYTHON" ] ; then$\r$\n'
+	; FileWrite $0 '   GRASS_PYTHON=python$\r$\n'
+	; FileWrite $0 '   export GRASS_PYTHON$\r$\n'
+	; FileWrite $0 'fi$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 '# Set the GRASS_PROJSHARE variable$\r$\n'
+	; FileWrite $0 'GRASS_PROJSHARE="$INSTALL_DIR\share\proj"$\r$\n'
+	; FileWrite $0 'export GRASS_PROJSHARE$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 '# Set the PROJ_LIB variable$\r$\n'
+	; FileWrite $0 'PROJ_LIB="$INSTALL_DIR\share\proj"$\r$\n'
+	; FileWrite $0 'export PROJ_LIB $\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 '# Set the GDAL_DATA variable$\r$\n'
+	; FileWrite $0 'GDAL_DATA="$INSTALL_DIR\share\gdal"$\r$\n'
+	; FileWrite $0 'export GDAL_DATA$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 '# Set the GEOTIFF_CSV variable$\r$\n'
+	; FileWrite $0 'GEOTIFF_CSV="$INSTALL_DIR\share\epsg_csv"$\r$\n'
+	; FileWrite $0 'export GEOTIFF_CSV$\r$\n'
+	; FileWrite $0 '$\r$\n'
+	; FileWrite $0 '"$$GRASS_PYTHON" "$$GISBASE/etc/grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "$$@"'
+	; FileClose $0
+	; done_create_grass_command:
 		
 	;Get the short form of the install path (to allow for paths with spaces)
 	VAR /GLOBAL INST_DIR_SHORT
