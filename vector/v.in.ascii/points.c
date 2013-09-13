@@ -298,7 +298,8 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    buf = (char *)G_malloc(rowlen + 1);
+    /* actually last 2 characters won't be read */
+    buf = (char *)G_malloc(rowlen + 2);
     db_init_string(&sql);
     db_init_string(&val);
 
@@ -307,7 +308,8 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 	Vect_hist_write(Map, buf2);
     }
 
-    while (G_getl2(buf, rowlen, ascii) != 0) {
+    /* rowlen + 2 to read till the end of line on both UNIX and Windows */
+    while (G_getl2(buf, rowlen + 2, ascii) != 0) {
 	int i, len;
 	double x, y, z;
 	char **tokens;
