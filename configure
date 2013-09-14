@@ -1321,7 +1321,7 @@ fi
 
 if test "$SVN_VERSION" != "no" ; then
    GRASS_VERSION_SVN=`$SVN_VERSION -c | cut -f2 -d:`
-   if test "$GRASS_VERSION_SVN" = "exported" ; then
+   if test "$GRASS_VERSION_SVN" = "exported" -o "$GRASS_VERSION_SVN" = "Unversioned directory" ; then
       GRASS_VERSION_SVN=
    fi
 fi
