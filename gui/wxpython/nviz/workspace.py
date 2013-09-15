@@ -147,12 +147,15 @@ class NvizSettings(object):
     def SetIsosurfaceDefaultProp(self):
         """!Set default isosurface properties"""
         data = dict()
-        for attr in ('shine', 'topo', 'transp', 'color'):
+        for attr in ('shine', 'topo', 'transp', 'color', 'inout'):
             data[attr] = {}
+            data[attr]['update'] = None
+            if attr == 'inout':
+                data[attr]['value'] = 0
+                continue                
             for key, value in UserSettings.Get(group = 'nviz', key = 'volume',
                                                subkey = attr).iteritems():
                 data[attr][key] = value
-            data[attr]['update'] = None
         return data
     
     def SetSliceDefaultProp(self):
