@@ -949,9 +949,14 @@ class ColumnSelect(wx.combo.ComboCtrl):
             dbInfo = VectorDBInfo(vector)
         
         try:
-            table = dbInfo.GetTable(int(layer))
+            try:
+                layer = int(layer)
+            except TypeError:
+                # assuming layer 1
+                layer = 1
+            table = dbInfo.GetTable(layer)
             columnchoices = dbInfo.GetTableDesc(table)
-            keyColumn = dbInfo.GetKeyColumn(int(layer))
+            keyColumn = dbInfo.GetKeyColumn(layer)
             columns = len(columnchoices.keys()) * ['']
             for key, val in columnchoices.iteritems():
                 columns[val['index']] = key
