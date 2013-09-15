@@ -126,7 +126,8 @@ def cleanup():
 
 
 def fatal(msg):
-    sys.exit(msg)
+    sys.stderr.write(msg + os.linesep)
+    sys.exit(_("Exiting..."))
 
 
 def message(msg):
@@ -590,66 +591,68 @@ def non_interactive(arg, geofile=None):
     if gisdbase and location_name and mapset:
         location = os.path.join(gisdbase, location_name, mapset)
 
-        # check if 'location_name' is a valid GRASS location
+        # check if 'location' is a valid GRASS location/mapset
         if not os.access(os.path.join(location, "WIND"), os.R_OK):
-            # 'location' is not a valid GRASS mapset, check if
-            # 'location_name' is a valid GRASS location
-            if not os.path.exists(os.path.join(gisdbase, location_name)):
-                fatal(_("Location <%s> doesn't exist") % os.path.join(gisdbase, location_name))
-            elif 'PERMANENT' not in os.listdir(os.path.join(gisdbase, location_name)) or \
-                    not os.path.isdir(os.path.join(gisdbase, location_name, 'PERMANENT')) or \
-                    not os.path.isfile((os.path.join(gisdbase, location_name, 'PERMANENT',
-                                                     'DEFAULT_WIND'))):
-                    fatal(_("<%s> is not a valid GRASS location") % \
-                              os.path.join(gisdbase, location_name))
-            else:
-                # 'location_name' is a valid GRASS location, the user
-                # wants to create mapset on the fly
-                if create_new:
-                    if not os.access(os.path.join(os.path.join(gisdbase,
-                                                               location_name,
-                                                               "PERMANENT",
-                                                               "DEFAULT_WIND")),
-                                                               os.F_OK):
-                        # create new location
-                        gisdbase = os.path.join(gisdbase, location_name)
-                        location_name = mapset
-                        mapset = "PERMANENT"
-                        if os.access(os.path.join(os.path.join(gisdbase,
-                                                               location_name,
-                                                               "PERMANENT",
-                                                               "DEFAULT_WIND")),
-                                                               os.F_OK):
-                            fatal(_("Failed to create new location. The " \
-                                    "location <%s> already exists." % location_name))
-
-                        if gfile('etc', 'python') not in sys.path:
-                            sys.path.append(gfile('etc', 'python'))
-
-                        from grass.script import core as grass
-
-                        try:
-                            if geofile and geofile.find('EPSG:') > -1:
-                                epsg = geofile.split(':', 1)[1]
-                                grass.create_location(gisdbase, location_name,
-                                                      epsg=epsg)
-                            else:
-                                grass.create_location(gisdbase, location_name,
-                                                      filename=geofile)
-                        except grass.ScriptError, e:
-                            fatal(e.value.strip('"').strip("'").replace('\\n',
-                                                                   os.linesep))
-                    else:
-                        # create new mapset
-                        os.mkdir(location)
-                        # copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
-                        s = readfile(os.path.join(gisdbase, location_name,
-                                                  "PERMANENT", "DEFAULT_WIND"))
-                        writefile(os.path.join(location, "WIND"), s)
-                        message(_("Missing WIND file fixed"))
+            if not create_new:
+                # 'location' is not valid, check if 'location_name' is
+                # a valid GRASS location
+                if not os.path.exists(os.path.join(gisdbase, location_name)):
+                    fatal(_("Location <%s> doesn't exist") % os.path.join(gisdbase, location_name))
+                elif 'PERMANENT' not in os.listdir(os.path.join(gisdbase, location_name)) or \
+                        not os.path.isdir(os.path.join(gisdbase, location_name, 'PERMANENT')) or \
+                        not os.path.isfile((os.path.join(gisdbase, location_name, 'PERMANENT',
+                                                         'DEFAULT_WIND'))):
+                        fatal(_("ERROR: <%s> is not a valid GRASS location") % \
+                                  os.path.join(gisdbase, location_name))
                 else:
                     fatal(_("Mapset <%s> doesn't exist in GRASS location <%s>. "
                             "A new mapset can be created by '-c' switch.") % (mapset, location_name))
+
+            else:
+                # 'location' is not valid, the user wants to create
+                # mapset on the fly
+                if not os.access(os.path.join(gisdbase, location_name,
+                                              "PERMANENT",
+                                              "DEFAULT_WIND"), os.F_OK):
+                    # 'location_name' is not a valid GRASS location,
+                    # create new location and 'PERMANENT' mapset
+                    gisdbase = os.path.join(gisdbase, location_name)
+                    location_name = mapset
+                    mapset = "PERMANENT"
+                    if os.access(os.path.join(os.path.join(gisdbase,
+                                                           location_name,
+                                                           "PERMANENT",
+                                                           "DEFAULT_WIND")),
+                                 os.F_OK):
+                        fatal(_("Failed to create new location. "
+                                "The location <%s> already exists." % location_name))
+                        
+                    if gfile('etc', 'python') not in sys.path:
+                        sys.path.append(gfile('etc', 'python'))
+                    from grass.script import core as grass
+                    
+                    try:
+                        if geofile and geofile.find('EPSG:') > -1:
+                            # create location using EPSG code
+                            epsg = geofile.split(':', 1)[1]
+                            grass.create_location(gisdbase, location_name,
+                                                      epsg=epsg)
+                        else:
+                            # create location using georeferenced file
+                            grass.create_location(gisdbase, location_name,
+                                                  filename=geofile)
+                    except grass.ScriptError, e:
+                        fatal(e.value.strip('"').strip("'").replace('\\n',
+                                                                   os.linesep))
+                else:
+                    # 'location_name' is a valid GRASS location,
+                    # create new mapset
+                    os.mkdir(location)
+                    # copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
+                    s = readfile(os.path.join(gisdbase, location_name,
+                                              "PERMANENT", "DEFAULT_WIND"))
+                    writefile(os.path.join(location, "WIND"), s)
+                    message(_("Missing WIND file fixed"))
 
         if os.access(gisrc, os.R_OK):
             kv = read_gisrc()
@@ -661,8 +664,8 @@ def non_interactive(arg, geofile=None):
         kv['MAPSET'] = mapset
         write_gisrc(kv)
     else:
-        fatal(_("GISDBASE, LOCATION_NAME and MAPSET variables not set properly"
-                ".\nInteractive startup needed."))
+        fatal(_("GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
+                "Interactive startup needed."))
 
 
 def set_data():
