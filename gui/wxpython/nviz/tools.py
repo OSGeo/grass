@@ -3949,19 +3949,19 @@ class NvizToolWindow(FN.FlatNotebook):
             level = isosurfData['topo']['value'] = round(self._get3dRange(name = layer.name)[0], 2)
         
             if sel < 0 or sel >= list.GetCount() - 1:
-                item = list.Append(item = "%s %s" % (_("Level"), str(level)))
+                item = list.Append(item=_("Level {level}").format(level=level))
             else:
-                list.Insert(item = "%s %s" % (_("Level"), str(level)),
-                            pos = sel+1) # append
+                list.Insert(item=_("Level {level}").format(level=level),
+                            pos=sel+1) # append
                 item = sel + 1
         else:
             sliceData = self.mapWindow.nvizDefault.SetSliceDefaultProp()
             axis = ("X", "Y", "Z")[sliceData['position']['axis']]
             if sel < 0 or sel >= list.GetCount() - 1:
-                item = list.Append(item = "%s %s" % (_("Slice parallel to"), axis))
+                item = list.Append(item=_("Slice parallel to {axis}").format(axis=axis))
             else:
-                list.Insert(item = "%s" % (_("Slice parallel to"), axis),
-                            pos = sel+1) # append
+                list.Insert(item=_("Slice parallel to {axis}").format(axis=axis),
+                            pos=sel+1) # append
                 item = sel + 1
         
         list.Check(item)
