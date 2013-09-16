@@ -11,7 +11,7 @@
  *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      collect raster map layers into an imagery group by assigning 
  *               them to user-named subgroups or other groups
- * COPYRIGHT:    (C) 2001-2007, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2007, 2011, 2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -35,7 +35,7 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k);
 static int remove_subgroup_files(char group[INAME_LEN],
 				 char subgroup[INAME_LEN], char **rasters,
 				 int k);
-
+static void print_subgroups(char *group, int simple);
 
 int main(int argc, char *argv[])
 {
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     int m, k = 0;
 
     struct Option *grp, *rast, *sgrp;
-    struct Flag *r, *l, *simple_flag;
+    struct Flag *r, *l, *s, *simple_flag;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -71,26 +71,32 @@ int main(int argc, char *argv[])
 
     r = G_define_flag();
     r->key = 'r';
-    r->description = _("Remove selected files from specified group or subgroup");
+    r->description =
+	_("Remove selected files from specified group or subgroup");
     r->guisection = _("Maps");
-    
+
     l = G_define_flag();
     l->key = 'l';
     l->description = _("List files from specified (sub)group");
     l->guisection = _("Print");
 
+    s = G_define_flag();
+    s->key = 's';
+    s->description = _("List subgroups from specified group");
+    s->guisection = _("Print");
+
     simple_flag = G_define_flag();
     simple_flag->key = 'g';
-    simple_flag->description =
-	_("List files from specified (sub)group (shell script style)");
+    simple_flag->description = _("Print in shell script style");
     simple_flag->guisection = _("Print");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
-    /* simple list implies list */
-    if (simple_flag->answer && !l->answer)
+    /* backward comaptibility -> simple list implied l flag list, if there was only l flag 
+       (with s flag added it is not clear, simple_flag is linked to both) */
+    if ((simple_flag->answer && !s->answer) && !l->answer)
 	l->answer = TRUE;
 
     /* Determine number of files to include */
@@ -101,7 +107,7 @@ int main(int argc, char *argv[])
 	k++;
     }
 
-    if (k < 1 && !l->answer)	/* remove if input is requirement */
+    if (k < 1 && !(l->answer || s->answer))	/* remove if input is requirement */
 	G_fatal_error(_("No input raster map(s) specified"));
 
     /* check if current mapset:  (imagery libs are very lacking in this dept)
@@ -120,7 +126,8 @@ int main(int argc, char *argv[])
 	/* Remove files from Group */
 
 	if (I_find_group(group) == 0) {
-	    G_fatal_error(_("Specified group does not exist in current mapset"));
+	    G_fatal_error(_
+			  ("Specified group does not exist in current mapset"));
 	}
 
 	if (sgrp->answer) {
@@ -135,31 +142,38 @@ int main(int argc, char *argv[])
 	}
     }
     else {
-	if (l->answer) {
+	if (l->answer || s->answer) {
 	    /* List raster maps in group */
 
 	    struct Ref ref;
 
 	    if (I_find_group(group) == 0) {
-		G_fatal_error(_("Specified group does not exist in current mapset"));
+		G_fatal_error(_
+			      ("Specified group does not exist in current mapset"));
 	    }
 
 	    if (sgrp->answer) {
 		/* list subgroup files */
 		I_get_subgroup_ref(group, sgrp->answer, &ref);
 		if (simple_flag->answer) {
-		    G_message(_("Subgroup <%s> of group <%s> references the following raster maps:"),
+		    G_message(_
+			      ("Subgroup <%s> of group <%s> references the following raster maps:"),
 			      sgrp->answer, group);
 		    I_list_subgroup_simple(&ref, stdout);
 		}
 		else
 		    I_list_subgroup(group, sgrp->answer, &ref, stdout);
 	    }
+	    else if (s->answer) {
+		print_subgroups(group, simple_flag->answer);
+	    }
 	    else {
 		/* list group files */
 		I_get_group_ref(group, &ref);
 		if (simple_flag->answer) {
-		    G_message(_("Group <%s> references the following raster maps:"), group);
+		    G_message(_
+			      ("Group <%s> references the following raster maps:"),
+			      group);
 		    I_list_group_simple(&ref, stdout);
 		}
 		else
@@ -169,7 +183,8 @@ int main(int argc, char *argv[])
 	else {
 	    /* Create or update Group REF */
 	    if (I_find_group(group) == 0)
-		G_verbose_message(_("Group <%s> does not yet exist. Creating..."),
+		G_verbose_message(_
+				  ("Group <%s> does not yet exist. Creating..."),
 				  group);
 
 	    if (sgrp->answer) {
@@ -188,10 +203,9 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
-    
+
     return EXIT_SUCCESS;
 }
-
 
 static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
 {
@@ -252,7 +266,8 @@ static int add_or_update_subgroup(char group[INAME_LEN],
 	/* Go through existing files to check for duplicates */
 	for (n = 0; n < ref.nfiles; n++) {
 	    if (strcmp(rasters[m], ref.file[n].name) == 0) {
-		G_message(_("Raster map <%s> exists in subgroup. Skipping..."),
+		G_message(_
+			  ("Raster map <%s> exists in subgroup. Skipping..."),
 			  G_fully_qualified_name(rasters[m], mapset));
 		skip = 1;
 		continue;
@@ -381,4 +396,47 @@ static int remove_subgroup_files(char group[INAME_LEN],
     }
 
     return 0;
+}
+
+static void print_subgroups(char *group, int simple)
+{
+    int subgs_num, i;
+    int len, tot_len;
+    int max;
+    char **subgs;
+
+    subgs = I_list_subgroups(group, &subgs_num);
+    if (simple)
+	for (i = 0; i < subgs_num; i++)
+	    fprintf(stdout, "%s\n", subgs[i]);
+    else {
+	if (subgs_num <= 0) {
+	    fprintf(stdout, _("Group <%s> does not contain any subgroup.\n"),
+		    group);
+	    return;
+	}
+	max = 0;
+	for (i = 0; i < subgs_num; i++) {
+	    len = strlen(subgs[i]) + 4;
+	    if (len > max)
+		max = len;
+	}
+	fprintf(stdout,
+		_("group <%s> references the following subgroups\n"), group);
+	fprintf(stdout, "-------------\n");
+	tot_len = 0;
+	for (i = 0; i < subgs_num; i++) {
+	    tot_len += max;
+	    if (tot_len > 78) {
+		fprintf(stdout, "\n");
+		tot_len = max;
+	    }
+	    fprintf(stdout, "%-*s", max, subgs[i]);
+	}
+	if (tot_len)
+	    fprintf(stdout, "\n");
+	fprintf(stdout, "-------------\n");
+    }
+    G_free(subgs);
+    return;
 }
