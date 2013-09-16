@@ -524,7 +524,8 @@ class GroupDialog(wx.Dialog):
         self.defaultGroup = defaultGroup
         self.currentGroup = self.defaultGroup
         self.dataChanged = False
-        
+        self.edit_subg = False
+
         self.bodySizer = self._createDialogBody()
         
         # buttons
@@ -572,7 +573,6 @@ class GroupDialog(wx.Dialog):
         # hide panel with subgroup, after min size is set
         self.subg_panel.Hide()
 
-
     def _createDialogBody(self):
         bodySizer = wx.BoxSizer(wx.VERTICAL)
     
@@ -609,7 +609,6 @@ class GroupDialog(wx.Dialog):
         self.subg_panel.SetSizer(subg_sizer)
 
         bodySizer.Add(item = self.subg_panel, flag = wx.TOP | wx.EXPAND, border = 5)
-
         
         bodySizer.AddSpacer(10)
         # layers in group
