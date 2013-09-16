@@ -92,6 +92,7 @@ int I_list_group(const char *, const struct Ref *, FILE *);
 int I_list_group_simple(const struct Ref *, FILE *);
 
 /* list_subgp.c */
+char ** I_list_subgroups(const char *, int *);
 int I_list_subgroup(const char *, const char *, const struct Ref *, FILE *);
 int I_list_subgroup_simple(const struct Ref *, FILE *);
 

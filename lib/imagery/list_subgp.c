@@ -1,19 +1,55 @@
 /*!
    \file list_subgp.c
-   
+
    \brief Imagery Library - List subgroup
- 
-   (C) 2001-2008 by the GRASS Development Team
-   
+
+   (C) 2001-2008,2013 by the GRASS Development Team
+
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
-   
+
    \author USA CERL
-*/
+ */
 
 #include <string.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
+
+/*!
+ * \brief Get list of subgroups which a group contatins.
+ *  
+ * \param group group name
+ * \param[out] subgs_num number of subgroups which the group contains
+ * \return array of subgroup names
+ */
+
+char **I_list_subgroups(const char *group, int *subgs_num)
+{
+    /* Unlike I_list_subgroup and I_list_subgroup_simple this function 
+       returns array of subgroup names, it does not use fprintf. 
+       This approach should make the function usable in more cases. */
+
+    char **subgs;
+    char *path[GPATH_MAX];
+    char *buf[GPATH_MAX];
+    const char *mapset;
+    struct stat sb;
+
+    *subgs_num = 0;
+
+    if (I_find_group(group) == 0)
+	return NULL;
+
+    mapset = G_mapset();
+    sprintf(buf, "group/%s/subgroup", group);
+    G_file_name(path, buf, "", mapset);
+
+    if (!G_lstat(path, &sb) == 0 || !S_ISDIR(sb.st_mode))
+	return NULL;
+
+    subgs = G__ls(path, subgs_num);
+    return subgs;
+}
 
 /*!
  * \brief Prints maps in a subgroup (fancy version)
@@ -45,7 +81,8 @@ int I_list_subgroup(const char *group,
 	    max = len;
     }
     fprintf(fd,
-	    _("subgroup <%s> of group <%s> references the following raster maps\n"),
+	    _
+	    ("subgroup <%s> of group <%s> references the following raster maps\n"),
 	    subgroup, group);
     fprintf(fd, "-------------\n");
     tot_len = 0;
