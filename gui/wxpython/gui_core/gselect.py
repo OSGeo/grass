@@ -1652,6 +1652,9 @@ class GdalSelect(wx.Panel):
             else:
                 self.dbWidgets[name].SetValue(data[1])
             self.dbWidgets['options'].SetValue(data[3])
+        
+        self.reloadDataRequired.emit(data=None)
+        self._reloadLayers()
 
     def OnSettingsSaving(self, name):
         """!Saving data"""
