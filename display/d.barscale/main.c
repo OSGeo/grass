@@ -62,11 +62,12 @@ int main(int argc, char **argv)
     northarrow = G_define_flag();
     northarrow->key = 'n';
     northarrow->description = _("Draw a north arrow only");
-
+    northarrow->guisection = _("Style");
+    
     no_text = G_define_flag();
     no_text->key = 't';
     no_text->description = _("Draw the scale bar without text");
-    no_text->guisection = "Text";
+    no_text->guisection = _("Text");
 
     barstyle = G_define_option();
     barstyle->key = "style";
@@ -74,6 +75,7 @@ int main(int argc, char **argv)
     barstyle->options =
 	"classic,line,solid,hollow,full_checker,part_checker,mixed_checker,tail_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
     barstyle->answer = "classic";
+    barstyle->guisection = _("Style");
 
     coords = G_define_option();
     coords->key = "at";
@@ -87,21 +89,19 @@ int main(int argc, char **argv)
     coords->description = _("(0,0) is lower-left of display frame");
 
     fg_color_opt = G_define_standard_option(G_OPT_C_FG);
-    fg_color_opt->key = "color";
     fg_color_opt->label = _("Bar scale, text, and north arrow color");
-    fg_color_opt->guisection = "Colors";
+    fg_color_opt->guisection = _("Colors");
 
     bg_color_opt = G_define_standard_option(G_OPT_C_BG);
-    bg_color_opt->key = "background_color";
     bg_color_opt->label = _("Background color (drawn behind the bar)");
-    bg_color_opt->guisection = "Colors";
+    bg_color_opt->guisection = _("Colors");
 
     text_placement = G_define_option();
     text_placement->key = "text_position";
     text_placement->description = _("Text position");
     text_placement->options = "under,over,left,right";
     text_placement->answer = "right";
-    text_placement->guisection = "Text";
+    text_placement->guisection = _("Text");
 
     fsize = G_define_option();
     fsize->key = "fontsize";
@@ -110,15 +110,14 @@ int main(int argc, char **argv)
     fsize->answer = "12";
     fsize->options = "1-360";
     fsize->description = _("Font size");
-    fsize->guisection = "Text";
+    fsize->guisection = _("Text");
 
     n_arrow = G_define_option();
     n_arrow->key = "north_arrow";
-    n_arrow->description = _("Only used when drawing a north arrow with the -n flag");
-    n_arrow->label = _("North arrow style");
+    n_arrow->description = _("North arrow style (used only with the -n flag)");
     n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9";
     n_arrow->answer = "1a";
-
+    n_arrow->guisection = _("Style");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
