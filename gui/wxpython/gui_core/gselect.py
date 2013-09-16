@@ -1131,10 +1131,10 @@ class SubGroupSelect(wx.ComboBox):
             name = group
             mapset = gisenv['MAPSET']
         
-        path = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'], mapset,
-                            'group', name, 'subgroup')
+        mlist = RunCommand('i.group', group=group,
+                           read=True, flags='sg').splitlines()
         try:
-            self.SetItems(os.listdir(path))
+            self.SetItems(mlist)
         except OSError:
             self.SetItems([])
         self.SetValue('')

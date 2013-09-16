@@ -44,13 +44,15 @@ from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
 
-from core             import globalvar
-from core.gcmd        import GError, RunCommand, GMessage
-from gui_core.gselect import LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
+from core import globalvar
+from core.gcmd import GError, RunCommand, GMessage
+from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
+                             OgrTypeSelect, GdalSelect, MapsetSelect, \
+                             SubGroupSelect
 from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator
-from core.utils       import GetValidLayerName, _
-from core.settings    import UserSettings, GetDisplayVectSettings
-from core.debug       import Debug
+from core.utils import GetValidLayerName, _
+from core.settings import UserSettings, GetDisplayVectSettings
+from core.debug import Debug
 
 class SimpleDialog(wx.Dialog):
     def __init__(self, parent, title, id = wx.ID_ANY,
@@ -521,7 +523,7 @@ class GroupDialog(wx.Dialog):
         self.parent = parent
         self.defaultGroup = defaultGroup
         self.currentGroup = self.defaultGroup
-        self.groupChanged = False
+        self.dataChanged = False
         
         self.bodySizer = self._createDialogBody()
         
@@ -567,21 +569,47 @@ class GroupDialog(wx.Dialog):
 
         # set dialog min size
         self.SetMinSize(self.GetSize())
-        
+        # hide panel with subgroup, after min size is set
+        self.subg_panel.Hide()
+
+
     def _createDialogBody(self):
         bodySizer = wx.BoxSizer(wx.VERTICAL)
     
         # group selection
         bodySizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                            label = _("Select the group you want to edit or "
-                                                     "enter name of new group:")),
+                                                     "enter name of new subgroup:")),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP, border = 10)
         self.groupSelect = Select(parent = self, type = 'group',
                                   mapsets = [grass.gisenv()['MAPSET']],
                                   size = globalvar.DIALOG_GSELECT_SIZE,
                                   fullyQualified = False) # searchpath?
-            
+    
         bodySizer.Add(item = self.groupSelect, flag = wx.TOP | wx.EXPAND, border = 5)
+
+        self.subg_chbox = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                      label = _("Edit/create subgroup"))
+        self.subg_chbox.SetValue(0)
+
+        bodySizer.Add(item = self.subg_chbox,
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP, border = 10)
+
+        self.subg_panel = wx.Panel(self)
+        subg_sizer = wx.BoxSizer(wx.VERTICAL)
+
+        subg_sizer.Add(item = wx.StaticText(parent=self.subg_panel, id = wx.ID_ANY,
+                       label = _("Select the subgroup you want to edit or enter name of new group:")),
+                       flag = wx.ALIGN_CENTER_VERTICAL)
+
+        self.subGroupSelect = SubGroupSelect(parent = self.subg_panel)
+
+        subg_sizer.Add(item=self.subGroupSelect, flag=wx.EXPAND, border = 5)
+
+        self.subg_panel.SetSizer(subg_sizer)
+
+        bodySizer.Add(item = self.subg_panel, flag = wx.TOP | wx.EXPAND, border = 5)
+
         
         bodySizer.AddSpacer(10)
         # layers in group
@@ -610,23 +638,29 @@ class GroupDialog(wx.Dialog):
         bodySizer.Add(item = self.infoLabel, 
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, border = 5)
         
-        # TODO: subgroup can have a different name than the group
-        # self.subGroup must be a text field, not a checkbox
-        #self.subGroup = wx.CheckBox(parent = self, id = wx.ID_ANY,
-        #                            label = _("Define also sub-group (same name as group)"))
-        #self.subGroup.SetValue(True) # most of imagery modules requires also subgroup
-        #bodySizer.Add(item = self.subGroup, flag = wx.BOTTOM | wx.EXPAND, border = 5)
-
         # bindings
         self.groupSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnGroupSelected)
         self.addLayer.Bind(wx.EVT_BUTTON, self.OnAddLayer)
         self.removeLayer.Bind(wx.EVT_BUTTON, self.OnRemoveLayer)
+        self.subg_chbox.Bind(wx.EVT_CHECKBOX, self.OnSubgChbox)
+        self.subGroupSelect.Bind(wx.EVT_TEXT, lambda event : self.SubGroupSelected())
         
         if self.defaultGroup:
             self.groupSelect.SetValue(self.defaultGroup)
         
         return bodySizer
         
+    def OnSubgChbox(self, event):
+        self.edit_subg = self.subg_chbox.GetValue()
+
+        if self.edit_subg:
+            self.subg_panel.Show()
+            self.SubGroupSelected()
+        else:
+            self.subg_panel.Hide()
+            self.GroupSelected()
+        self.Layout()
+
     def OnAddLayer(self, event):
         """!Add new layer to listbox"""
         dlg = MapLayersDialogForGroups(parent = self, title = _("Add selected map layers into group"))
@@ -639,15 +673,15 @@ class GroupDialog(wx.Dialog):
         for layer in layers:
             if layer not in self.GetLayers():
                 self.layerBox.Append(layer)
-                self.groupChanged = True
+                self.dataChanged = True
             
-    
+
     def OnRemoveLayer(self, event):
         """!Remove layer from listbox"""
         while self.layerBox.GetSelections():
             sel = self.layerBox.GetSelections()[0]
             self.layerBox.Delete(sel)
-            self.groupChanged = True
+            self.dataChanged = True
                 
     def GetLayers(self):
         """!Get layers"""
@@ -661,7 +695,7 @@ class GroupDialog(wx.Dialog):
     def GroupSelected(self):
         """!Group was selected, check if changes were apllied"""
         group = self.GetSelectedGroup()
-        if  self.currentGroup and self.groupChanged:
+        if  self.currentGroup and self.dataChanged:
             dlg = wx.MessageDialog(self, message = _("Group <%s> was changed, "
                                                      "do you want to apply changes?") % self.currentGroup,
                                    caption = _("Unapplied changes"),
@@ -676,20 +710,47 @@ class GroupDialog(wx.Dialog):
         if group in groups:
             maps = self.GetGroupLayers(group)
         
+        self.subGroupSelect.Insert(group)
+
         self.ShowGroupLayers(maps)
         self.currentGroup = group
-        self.groupChanged = False
+        self.dataChanged = False
         
         self.ClearNotification()
+
+    def SubGroupSelected(self):
+        """!Group was selected, check if changes were apllied"""
+        subgroup = self.subGroupSelect.GetValue().strip()
+        group = self.currentGroup
+        if  self.currentGroup and self.dataChanged:
+            dlg = wx.MessageDialog(self, message = _("Subgroup <%s> was changed, "
+                                                     "do you want to apply changes?") % self.currentGroup,
+                                   caption = _("Unapplied changes"),
+                                   style = wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT)
+            if dlg.ShowModal() == wx.ID_YES:
+                self.ApplyChanges()
+                
+            dlg.Destroy()
         
+        maps = list()
+        groups = self.GetExistGroups()
+        if group in groups:
+            maps = self.GetGroupLayers(group, subgroup)
+        
+        self.ShowGroupLayers(maps)
+        self.dataChanged = False
+        
+        self.currentSubgroup = subgroup
+        self.ClearNotification()
+
     def ShowGroupLayers(self, mapList):
         """!Show map layers in currently selected group"""
         self.layerBox.Set(mapList)
                 
-    def EditGroup(self, group):
+    def EditGroup(self, group, subgroup=None):
         """!Edit selected group"""
         layersNew = self.GetLayers()
-        layersOld = self.GetGroupLayers(group)
+        layersOld = self.GetGroupLayers(group, subgroup)
         
         add = []
         remove = []
@@ -702,10 +763,9 @@ class GroupDialog(wx.Dialog):
                 remove.append(layerOld)
                 
         kwargs = {}
-        # TODO: self.subGroup must be a text field
-        #if self.subGroup.IsChecked():
-        #    kwargs['subgroup'] = group
-        
+        if subgroup:
+            kwargs["subgroup"] = subgroup
+
         ret = None
         if remove:
             ret = RunCommand('i.group',
@@ -724,7 +784,7 @@ class GroupDialog(wx.Dialog):
                             
         return ret
         
-    def CreateNewGroup(self, group):
+    def CreateNewGroup(self, group, subgroup):
         """!Create new group"""
         layers = self.GetLayers()
         if not layers:
@@ -733,19 +793,26 @@ class GroupDialog(wx.Dialog):
             return 1
         
         kwargs = {}
-        # TODO: self.subGroup must be a text field
-        #if self.subGroup.IsChecked():
-        #    kwargs['subgroup'] = group
-        
-        return RunCommand('i.group',
+        if subgroup:
+            kwargs["subgroup"] = subgroup
+
+        ret = RunCommand('i.group',
                           parent = self,
                           group = group,
                           input = layers,
                           **kwargs)
-    
+        #update subgroup select
+        self.SubGroupSelect()
+        return ret
+
     def GetExistGroups(self):
         """!Returns existing groups in current mapset"""
         return grass.list_grouped('group')[grass.gisenv()['MAPSET']]
+
+    def GetExistSubgroups(self, group):
+        """!Returns existing subgroups in a group"""
+        return RunCommand('i.group', group=group,
+                           read=True, flags='sg').splitlines()
         
     def ShowResult(self, group, returnCode, create):
         """!Show if operation was successfull."""
@@ -770,14 +837,13 @@ class GroupDialog(wx.Dialog):
         """!Return currently selected group (without mapset)"""
         return self.groupSelect.GetValue().split('@')[0]
         
-    def GetGroupLayers(self, group):
+    def GetGroupLayers(self, group, subgroup=None):
         """!Get layers in group"""
         kwargs = dict()
         kwargs['group'] = group
-        # TODO: self.subGroup must be a text field
-        #if self.subGroup.IsChecked():
-        #    kwargs['subgroup'] = group
-        
+        if subgroup:
+            kwargs['subgroup'] = subgroup
+
         res = RunCommand('i.group',
                          parent = self,
                          flags = 'g',
@@ -797,17 +863,28 @@ class GroupDialog(wx.Dialog):
             GMessage(parent = self,
                      message = _("No group selected."))
             return False
+
+
+        if self.edit_subg and not self.currentSubgroup:
+            GMessage(parent = self,
+                     message = _("No subgroup selected."))
+            return 0
         
+        if self.edit_subg:
+            subgroup = self.currentSubgroup
+        else:
+            subgroup = None
+
         groups = self.GetExistGroups()
         if group in groups:
-            ret = self.EditGroup(group)
+            ret = self.EditGroup(group, subgroup)
             self.ShowResult(group = group, returnCode = ret, create = False)
             
         else:
-            ret = self.CreateNewGroup(group)
+            ret = self.CreateNewGroup(group, subgroup)
             self.ShowResult(group = group, returnCode = ret, create = True)
             
-        self.groupChanged = False
+        self.dataChanged = False
         
         return True
         
