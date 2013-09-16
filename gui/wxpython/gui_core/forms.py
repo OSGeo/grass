@@ -1063,7 +1063,7 @@ class CmdPanel(wx.Panel):
                                 cb = ColorTablesComboBox(parent=which_panel, value=p.get('default',''),
                                                          size=globalvar.DIALOG_COMBOBOX_SIZE,
                                                          choices=valuelist)
-                            elif self.task.name == 'd.barscale':
+                            elif self.task.name == 'd.barscale' and p['name'] in ('style', 'north_arrow'):
                                 if p['name'] == 'style':
                                     cb = BarscalesComboBox(parent=which_panel, value=p.get('default',''),
                                                            size=globalvar.DIALOG_COMBOBOX_SIZE,
