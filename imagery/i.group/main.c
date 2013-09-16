@@ -58,11 +58,9 @@ int main(int argc, char *argv[])
     grp = G_define_standard_option(G_OPT_I_GROUP);
     grp->description = _("Name of imagery group");
 
-    sgrp = G_define_option();
-    sgrp->key = "subgroup";
-    sgrp->type = TYPE_STRING;
+    sgrp = G_define_standard_option(G_OPT_I_SUBGROUP);
     sgrp->required = NO;
-    sgrp->description = _("Name of imagery sub-group");
+    sgrp->description = _("Name of imagery subgroup");
 
     rast = G_define_standard_option(G_OPT_R_INPUTS);
     rast->required = NO;	/* -l flag */
