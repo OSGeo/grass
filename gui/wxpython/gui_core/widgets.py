@@ -16,8 +16,12 @@ Classes:
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget
+ - widgets::PictureComboBox
+ - widgets::ColorTablesComboBox
+ - widgets::BarscalesComboBox
+ - widgets::NArrowsComboBox
 
-(C) 2008-2012 by the GRASS Development Team
+(C) 2008-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1187,10 +1191,10 @@ class ManageSettingsWidget(wx.Panel):
         
         return data
 
-class ColorTablesComboBox(wx.combo.OwnerDrawnComboBox):
-    """!ComboBox with drawn color tables (created by thumbnails.py).
-
-    Used in r(3).colors dialog.
+class PictureComboBox(wx.combo.OwnerDrawnComboBox):
+    """!Abstract class of ComboBox with pictures.
+    
+        Derived class has to specify has to specify _getPath method.
     """
     def OnDrawItem(self, dc, rect, item, flags):
         """!Overridden from OwnerDrawnComboBox.
@@ -1205,7 +1209,7 @@ class ColorTablesComboBox(wx.combo.OwnerDrawnComboBox):
         r.Deflate(3, 5)
 
         # for painting the items in the popup
-        bitmap = self.GetColorTableBitmap(self.GetString(item))
+        bitmap = self.GetPictureBitmap(self.GetString(item))
         if bitmap:
             dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) / 2)
         dc.DrawText(self.GetString(item),
@@ -1219,20 +1223,43 @@ class ColorTablesComboBox(wx.combo.OwnerDrawnComboBox):
         """
         return 24
 
-    def GetColorTableBitmap(self, colorTable):
-        """!Returns bitmap with colortable for given nacolor table name.
+    def GetPictureBitmap(self, name):
+        """!Returns bitmap for given picture name.
         
         @param colorTable name of color table        
         """
         if not hasattr(self, 'bitmaps'):
             self.bitmaps = {}
 
-        if colorTable in self.bitmaps:
-            return self.bitmaps[colorTable]
+        if name in self.bitmaps:
+            return self.bitmaps[name]
 
-        path = os.path.join(os.getenv("GISBASE"), "docs", "html", "Colortable_%s.png" % colorTable)
+        path = self._getPath(name)
         if os.path.exists(path):
             bitmap = wx.Bitmap(path)
-            self.bitmaps[colorTable] = bitmap
+            self.bitmaps[name] = bitmap
             return bitmap
         return None
+
+
+class ColorTablesComboBox(PictureComboBox):
+    """!ComboBox with drawn color tables (created by thumbnails.py).
+
+    Used in r(3).colors dialog."""
+    def _getPath(self, name):
+        return os.path.join(os.getenv("GISBASE"), "docs", "html", "Colortable_%s.png" % name)
+
+
+class BarscalesComboBox(PictureComboBox):
+    """!ComboBox with barscales for d.barscale."""
+    def _getPath(self, name):
+        return os.path.join(os.getenv("GISBASE"), "etc", "gui", "images", name + '.png')
+
+
+class NArrowsComboBox(PictureComboBox):
+    """!ComboBox with north arrows for d.barscale."""
+    def _getPath(self, name):
+        return os.path.join(os.getenv("GISBASE"), "etc", "gui", "images",
+                                      'symbols', 'n_arrows', 'n_arrow{name}.png'.format(name=name))
+    def OnMeasureItem(self, item):
+        return 32
