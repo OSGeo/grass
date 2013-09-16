@@ -1,36 +1,37 @@
 <h2>DESCRIPTION</h2>
 
-<em>g.list</em> allows the user to list user-specified, available
-and accessible files from <em>mapsets</em> under the user's current location.
+<em>g.list</em> allows the user to list user-specified, available and
+accessible files from <em>mapsets</em> under the user's current
+location.
 
 
 <h2>NOTES</h2>
 
-If unspecified, files of the specified <em>type</em> from all mapsets 
-in the user's current search path will be listed to standard output. To 
-find out which mapsets are in the cuurent search path, use 
-<em><a href="g.mapsets.html">'g.mapsets</a> -p'</em>.
+If unspecified, files of the specified <b>type</b> from all mapsets in
+the user's current search path will be listed to standard output. To
+find out which mapsets are in the curent search path, use
+<em><a href="g.mapsets.html">g.mapsets</a></em>.
 
-<p>If the <b>mapset</b> option is set to "." then only maps from the
-current mapset will be displayed.
+<p>
+If the <b>mapset</b> option is set to &quot;.&quot; then only files
+from the current mapset will be displayed.
 
-<p>If the user requests that files from a mapset to which
-access has been restricted (see
-<em><a href="g.access.html">g.access</a></em>)
-be listed, no files from this mapset will be listed.
-
+<p>
+If the user requests that files from a mapset to which access has been
+restricted (see <em><a href="g.access.html">g.access</a></em>) be
+listed, no files from this mapset will be listed.
 
 <h2>EXAMPLES</h2>
 
 List all raster maps:
-<br>
+
 <div class="code"><pre>
    g.list type=rast
 </pre></div>
 
 <p>
 List all raster and vector maps from mapset &quot;user&quot;:
-<br>
+
 <div class="code"><pre>
    g.list type=rast,vect mapset=user
 </pre></div>
@@ -38,10 +39,12 @@ List all raster and vector maps from mapset &quot;user&quot;:
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.access.html">g.access</a></em><br>
-<em><a href="g.mapsets.html">g.mapsets</a></em><br>
-<em><a href="g.mlist.html">g.mlist</a></em><br>
-<em><a href="i.group.html">i.group</a></em> for getting list of subgroups in group
+<em>
+<a href="g.access.html">g.access</a>,
+<a href="g.mapsets.html">g.mapsets</a>,
+<a href="g.mlist.html">g.mlist</a>,
+<a href="i.group.html">i.group</a>
+</em> 
 
 <h2>AUTHOR</h2>
 
@@ -49,4 +52,5 @@ Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
