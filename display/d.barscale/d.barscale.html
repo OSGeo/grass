@@ -1,32 +1,36 @@
 <h2>DESCRIPTION</h2>
  
-<em>d.barscale</em> displays a barscale on the graphics monitor 
-at the given screen coordinates. If no coordinates are given it
-will draw the barscale in the bottom left of the display.
-It can draw the scale or north arrow in a number of styles.
+<em>d.barscale</em> displays a barscale on the graphics monitor at the
+given screen coordinates. If no coordinates are given it will draw the
+barscale in the bottom left of the display. It can draw the scale or
+north arrow in a number of styles (see
+the <a href="http://grasswiki.osgeo.org/wiki/Cartography#Display_monitors">wiki
+page</a> for details).
 
+<p>
+If <b>-n</b> flag is given, <em>d.barscale</em> draws north arrow
+instead of the barscale. Style of north arrow can be controlled
+by <b>north_arrow</b> paramater.
 
 <h2>NOTE</h2>
 
 <em>d.barscale</em> will not work in Lat/Lon locations as the horizontal
-scale distance changes with latitude. Try <em>d.grid</em> instead.
+scale distance changes with latitude. Try <em><a href="d.grid.html">d.grid</a></em> instead.
 
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="d.graph.html">d.graph</a><br>
-<a href="d.grid.html">d.grid</a><br>
-<a href="d.legend.html">d.legend</a><br>
-<a href="g.region.html">g.region</a><br>
+<a href="d.graph.html">d.graph</a>,
+<a href="d.grid.html">d.grid</a>,
+<a href="d.legend.html">d.legend</a>,
+<a href="g.region.html">g.region</a>
 </em>
-
 
 <h2>AUTHOR</h2>
 
-unknown, but from USACE/CERL.<br>
+unknown, but from USA/CERL.<br>
 Major rewrite for GRASS 7 by Hamish Bowman
-
 
 <p>
 <i>Last changed: $Date$</i>
