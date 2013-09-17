@@ -156,7 +156,7 @@ class IClassToolbar(BaseToolbar):
         """!Toolbar data"""
         icons = iClassIcons
         return self._getToolbarData((("selectGroup", icons['selectGroup'],
-                                      self.parent.OnAddBands),
+                                      lambda event : self.parent.AddBands()),
                                       (None, ),
                                       ("classManager", icons['classManager'],
                                       self.parent.OnCategoryManager),
