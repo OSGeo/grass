@@ -13,7 +13,7 @@
  *               Jan-Oliver Wagner <jan intevation.de>
  *		 Major rewrite for GRASS 7 by Hamish Bowman, June 2013
  *
- * PURPOSE:      Displays a barscale or north arrow on graphics monitor
+ * PURPOSE:      Displays a barscale on graphics monitor
  *
  * COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
  *
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *fsize,
-		 *barstyle, *text_placement, *n_arrow;
-    struct Flag *feet, *northarrow, *no_text;
+		 *barstyle, *text_placement;
+    struct Flag *feet, *no_text;
     struct Cell_head W;
     double east, north;
     double fontsize;
@@ -53,17 +53,12 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
-    module->description = _("Displays a barscale or north arrow on the graphics monitor.");
+    module->description = _("Displays a barscale on the graphics monitor.");
 
     feet = G_define_flag();
     feet->key = 'f';
     feet->description = _("Use feet/miles instead of meters");
 
-    northarrow = G_define_flag();
-    northarrow->key = 'n';
-    northarrow->description = _("Draw a north arrow only");
-    northarrow->guisection = _("Style");
-    
     no_text = G_define_flag();
     no_text->key = 't';
     no_text->description = _("Draw the scale bar without text");
@@ -89,7 +84,7 @@ int main(int argc, char **argv)
     coords->description = _("(0,0) is lower-left of the display frame");
 
     fg_color_opt = G_define_standard_option(G_OPT_C_FG);
-    fg_color_opt->label = _("Bar scale, text, and north arrow color");
+    fg_color_opt->label = _("Bar scale and text color");
     fg_color_opt->guisection = _("Colors");
 
     bg_color_opt = G_define_standard_option(G_OPT_C_BG);
@@ -112,19 +107,12 @@ int main(int argc, char **argv)
     fsize->description = _("Font size");
     fsize->guisection = _("Text");
 
-    n_arrow = G_define_option();
-    n_arrow->key = "north_arrow";
-    n_arrow->description = _("North arrow style (used only with the -n flag)");
-    n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9";
-    n_arrow->answer = "1a";
-    n_arrow->guisection = _("Style");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
     G_get_window(&W);
-    if (W.proj == PROJECTION_LL && !northarrow->answer)
+    if (W.proj == PROJECTION_LL)
 	G_fatal_error(_("%s does not work with a latitude-longitude location"),
 		      argv[0]);
 
@@ -171,10 +159,6 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Programmer error"));
     }
 
-    if (northarrow->answer)
-	bar_style = STYLE_NONE;
-
-
     switch (text_placement->answer[0]) {
     case 'u':
 	text_position = TEXT_UNDER;
@@ -195,7 +179,7 @@ int main(int argc, char **argv)
     sscanf(coords->answers[0], "%lf", &east);
     sscanf(coords->answers[1], "%lf", &north);
 
-    fontsize = atoi(fsize->answer);
+    fontsize = atof(fsize->answer);
     if (no_text->answer)
 	fontsize = -1;
 
@@ -214,10 +198,7 @@ int main(int argc, char **argv)
     D_setup(0);
 
 
-    if (bar_style == STYLE_NONE)
-	draw_n_arrow(east, north, fontsize, n_arrow->answer);
-    else
-	draw_scale(east, north, bar_style, text_position, fontsize);
+    draw_scale(east, north, bar_style, text_position, fontsize);
 
 
     D_save_command(G_recreate_command());
