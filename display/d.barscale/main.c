@@ -78,7 +78,6 @@ int main(int argc, char **argv)
     coords->type = TYPE_DOUBLE;
     coords->answer = "0.0,5.0";
     coords->options = "0-100";
-    coords->required = YES;
     coords->label =
 	_("Screen coordinates of the rectangle's top-left corner");
     coords->description = _("(0,0) is lower-left of the display frame");
