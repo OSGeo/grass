@@ -1253,7 +1253,7 @@ class ColorTablesComboBox(PictureComboBox):
 class BarscalesComboBox(PictureComboBox):
     """!ComboBox with barscales for d.barscale."""
     def _getPath(self, name):
-        return os.path.join(os.getenv("GISBASE"), "etc", "gui", "images", name + '.png')
+        return os.path.join(os.getenv("GISBASE"), "etc", "gui", "images", "barscales", name + '.png')
 
 
 class NArrowsComboBox(PictureComboBox):
