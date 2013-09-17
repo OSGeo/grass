@@ -83,10 +83,12 @@ int main(int argc, char **argv)
     fsize->answer = "14";
     fsize->options = "1-360";
     fsize->description = _("Font size");
-
+    fsize->guisection = _("Text");
+    
     no_text = G_define_flag();
     no_text->key = 't';
     no_text->description = _("Draw the symbol without text");
+    no_text->guisection = _("Text");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
