@@ -83,7 +83,7 @@ int draw_n_arrow(double east, double north, double fontsize, char *n_arrow_num)
     line_color->b = (unsigned char)B;
     line_color->a = RGBA_COLOR_OPAQUE;
 
-    if (D_color_number_to_RGB(fg_color, &R, &G, &B) == 0)
+    if (D_color_number_to_RGB(bg_color, &R, &G, &B) == 0)
     	/* fall back to black on failure */
     	G_str_to_color(DEFAULT_FG_COLOR, &R, &G, &B);
     fill_color->r = (unsigned char)R;
