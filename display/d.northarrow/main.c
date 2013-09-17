@@ -29,10 +29,11 @@ int do_background = TRUE;
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *bg_color_opt, *fg_color_opt, *coords, *n_arrow, *fsize;
+    struct Option *bg_color_opt, *fg_color_opt, *coords, *n_arrow, *fsize,
+		 *width_opt;
     struct Flag *no_text;
     double east, north;
-    double fontsize;
+    double fontsize, line_width;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -69,6 +70,12 @@ int main(int argc, char **argv)
     bg_color_opt->answer = _("black");
     bg_color_opt->guisection = _("Colors");
 
+    width_opt = G_define_option();
+    width_opt->key = "width";
+    width_opt->type = TYPE_DOUBLE;
+    width_opt->answer = "0";
+    width_opt->description = _("Line width");
+
     fsize = G_define_option();
     fsize->key = "fontsize";
     fsize->type = TYPE_DOUBLE;
@@ -100,6 +107,12 @@ int main(int argc, char **argv)
     if (bg_color == 0)
 	do_background = FALSE;
 
+    line_width = atof(width_opt->answer);
+    if (line_width < 0)
+        line_width = 0;
+    else if (line_width > 72)
+        line_width = 72;
+
 
     if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected. "
@@ -107,7 +120,7 @@ int main(int argc, char **argv)
     D_setup(0);
 
 
-    draw_n_arrow(east, north, fontsize, n_arrow->answer);
+    draw_n_arrow(east, north, fontsize, n_arrow->answer, line_width);
 
 
     D_save_command(G_recreate_command());

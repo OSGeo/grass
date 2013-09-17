@@ -11,7 +11,8 @@
 #include <grass/glocale.h>
 #include "options.h"
 
-int draw_n_arrow(double east, double north, double fontsize, char *n_arrow_num)
+int draw_n_arrow(double east, double north, double fontsize,
+		 char *n_arrow_num, double line_width)
 {
     double x_pos, y_pos;
     double t, b, l, r;
@@ -34,6 +35,9 @@ int draw_n_arrow(double east, double north, double fontsize, char *n_arrow_num)
 
     x_pos = east * (r - l) / 100.;
     y_pos = (100. - north) * (b - t) / 100.;
+
+    if (line_width > 0)
+	D_line_width(line_width);
 
     if (fontsize > 0) {
     	/* draw the "N" */
@@ -154,6 +158,10 @@ int draw_n_arrow(double east, double north, double fontsize, char *n_arrow_num)
 
     S_stroke(Symb, symbol_size, 0.0, 0);
     D_symbol(Symb, x0, y0, line_color, fill_color);
+
+
+    if (line_width > 0)
+	D_line_width(0);
 
     G_free(Symb);
     G_free(line_color);
