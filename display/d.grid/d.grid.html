@@ -29,22 +29,33 @@ inside the active graphics frame.  (A command like
 entire contents of the active display frame, must be run to
 erase previously drawn grids from the display frame.)
 
-<p>If the user provides a 
-<em>-g</em> flag a geographic (projected) grid 
-will be drawn. With the <em>-g</em> flag the <em>size</em> 
-argument accepts both decimal degrees and colon separated 
+<p>
+If the user provides a <em>-g</em> flag a geographic (projected) grid
+will be drawn. With the <em>-g</em> flag the <em>size</em>
+argument accepts both decimal degrees and colon separated
 ddd:mm:ss coordinates (eg. <tt>00:30:00</tt> for half of a degree).
 
-<p>A geographic grid cannot be drawn for a <em>latitude/longitude</em> 
+<p>
+A geographic grid cannot be drawn for a <em>latitude/longitude</em> 
 or <em>XY</em> projection.
-<p>Colors may be standard named GRASS colors (red, green, aqua, etc.) or
+<p>
+Colors may be standard named GRASS colors (red, green, aqua, etc.) or
 a numerical R:G:B triplet, where component values range from 0-255.<br>
-<p>The grid drawing may be turned off by using the <em>-n</em> flag.<br>
+
+<p>
+The grid drawing may be turned off by using the <em>-n</em> flag.<br>
 The border drawing may be turned off by using the <em>-b</em> flag.<br>
 The coordinate text may be turned off by using the <em>-t</em> flag.<br>
 
+<p>
+To draw grid lines at different intervals, e.g. at high latitudes, you
+can run the module twice, once with <b>direction</b>=<i>east-west</i>
+at one interval <b>size</b>, and again with
+<b>direction</b>=<i>north-south</i> at another interval <b>size</b>.
+
 
 <h2>EXAMPLES</h2>
+
 To draw a red geographic grid with 30 minute grid spacing run 
 either of the following:
 <pre>
@@ -59,6 +70,7 @@ To draw a blue standard rectangular grid at a 500 (meter) spacing run the follow
   d.grid size=500 color=blue
 </pre>
 <br>
+
 
 <h2>SEE ALSO</h2>
 
@@ -79,4 +91,5 @@ Geogrid support: Bob Covill<br>
 Border support: Markus Neteler<br>
 Text and RGB support: Hamish Bowman<br>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
