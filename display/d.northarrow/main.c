@@ -65,6 +65,7 @@ int main(int argc, char **argv)
 
     bg_color_opt = G_define_standard_option(G_OPT_C_BG);
     bg_color_opt->label = _("Background color");
+    bg_color_opt->answer = _("black");
     bg_color_opt->guisection = _("Colors");
 
     fsize = G_define_option();
