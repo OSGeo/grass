@@ -501,9 +501,9 @@ class GroupPage(TitledPage):
     def OnMkGroup(self, event):
         """!Create new group in source location/mapset"""
         dlg = GroupDialog(parent = self, defaultGroup = self.xygroup)
-
+        dlg.DisableSubgroupEdit()
         dlg.ShowModal()
-        gr = dlg.GetSelectedGroup()
+        gr, s = dlg.GetSelectedGroup()
         if gr in dlg.GetExistGroups():
             self.xygroup = gr
         else:
