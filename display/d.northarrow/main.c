@@ -60,11 +60,12 @@ int main(int argc, char **argv)
     coords->description = _("(0,0) is lower-left of the display frame");
 
     fg_color_opt = G_define_standard_option(G_OPT_C_FG);
-    fg_color_opt->label = _("North arrow color");
+    fg_color_opt->label = _("Line color");
     fg_color_opt->guisection = _("Colors");
 
     bg_color_opt = G_define_standard_option(G_OPT_C_BG);
-    bg_color_opt->label = _("Background color");
+    bg_color_opt->key = "fill_color";
+    bg_color_opt->label = _("Fill color");
     bg_color_opt->answer = _("black");
     bg_color_opt->guisection = _("Colors");
 
