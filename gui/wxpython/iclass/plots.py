@@ -115,16 +115,17 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.SetVirtualSize(self.GetBestVirtualSize()) 
         self.Layout()
         
-    def UpdatePlots(self, group, currentCat, stats_data):
+    def UpdatePlots(self, group, subgroup, currentCat, stats_data):
         """!Update plots after new analysis
         
         @param group imagery group
+        @param subgroup imagery group
         @param currentCat currently selected category (class)
         @param stats_data StatisticsData instance (defined in statistics.py)
         """
         self.stats_data = stats_data
         self.currentCat = currentCat
-        self.bandList = self.parent.GetGroupLayers(group)
+        self.bandList = self.parent.GetGroupLayers(group, subgroup)
         
         graphType = self.plotSwitch.GetSelection()
 

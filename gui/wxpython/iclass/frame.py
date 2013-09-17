@@ -477,20 +477,23 @@ class IClassMapFrame(DoubleMapFrame):
         
         self.Render(self.GetFirstWindow())
         
-    def OnAddBands(self, event):
+    def AddBands(self):
         """!Add imagery group"""
-        dlg = IClassGroupDialog(self, group = self.group)
-        if dlg.ShowModal() == wx.ID_OK:
-            self.SetGroup(dlg.GetGroup())
-        dlg.Destroy()
+        dlg = IClassGroupDialog(self, group=self.g['group'])
         
-    def SetGroup(self, name):
-        """!Set imagery group"""
-        group = grass.find_file(name = name, element = 'group')
-        if group['name']:
-            self.group = group['name']
-        else:
-            GError(_("Group <%s> not found") % name, parent = self)
+        while True:
+            if dlg.ShowModal() == wx.ID_OK:
+                
+                if dlg.GetGroupBandsErr(parent=self):
+                    g, s = dlg.GetData()
+                    group = grass.find_file(name=g, element='group')
+                    self.g['group'] = group['name']
+                    self.g['subgroup'] = s
+                    break
+            else: 
+                break
+        
+        dlg.Destroy()
     
     def OnImportAreas(self, event):
         """!Import training areas"""
@@ -699,7 +702,7 @@ class IClassMapFrame(DoubleMapFrame):
                    "color varchar(11)",
                    "n_cells integer",]
                    
-        nbands = len(self.GetGroupLayers(self.group))
+        nbands = len(self.GetGroupLayers(self.g['group'], self.g['subgroup']))
         for statistic, format in (("min", "integer"), ("mean", "double precision"), ("max", "integer")):
             for i in range(nbands):
                 # 10 characters limit?
@@ -867,8 +870,8 @@ class IClassMapFrame(DoubleMapFrame):
         """!Run analysis and update plots"""
         if self.RunAnalysis():
             currentCat = self.GetCurrentCategoryIdx()
-            self.plotPanel.UpdatePlots(group = self.group, currentCat = currentCat,
-                                       stats_data = self.stats_data)
+            self.plotPanel.UpdatePlots(group = self.g['group'], subgroup = self.g['subgroup'], 
+                                       currentCat = currentCat, stats_data = self.stats_data)
         
     def RunAnalysis(self):
         """!Run analysis
@@ -876,7 +879,7 @@ class IClassMapFrame(DoubleMapFrame):
         Calls C functions to compute all statistics and creates raster maps.
         Signatures are created but signature file is not.
         """
-        if not self.CheckInput(group = self.group, vector = self.trainingAreaVector):
+        if not self.CheckInput(group = self.g['group'], vector = self.trainingAreaVector):
             return
             
         for statistic in self.cStatisticsDict.values():
@@ -885,9 +888,8 @@ class IClassMapFrame(DoubleMapFrame):
         
         # init Ref struct with the files in group */
         I_free_group_ref(self.refer)
-        # we expect the subgroup name to be the same as the group name
-        subgroup = self.group
-        if (not I_iclass_init_group(self.group, subgroup, self.refer)):
+
+        if (not I_iclass_init_group(self.g['group'], self.g["subgroup"], self.refer)):
             return False
         
         I_free_signatures(self.signatures)
@@ -910,7 +912,7 @@ class IClassMapFrame(DoubleMapFrame):
                                      stats.nstd)
             
             ret = I_iclass_analysis(statistics, self.refer, self.poMapInfo, "1",
-                                 self.group, stats.rasterName)
+                                 self.g['group'], stats.rasterName)
             if ret > 0:
                 # tests
                 self.cStatisticsDict[i] = statistics
@@ -939,7 +941,7 @@ class IClassMapFrame(DoubleMapFrame):
         
     def OnSaveSigFile(self, event):
         """!Asks for signature file name and saves it."""
-        if not self.group:
+        if not self.g['group']:
             GMessage(parent = self, message = _("No imagery group selected."))
             return
             
@@ -956,7 +958,10 @@ class IClassMapFrame(DoubleMapFrame):
                 qdlg.Destroy()
                 return
                     
-        dlg = IClassSignatureFileDialog(self, group = self.group, file = self.sigFile)
+        dlg = IClassSignatureFileDialog(self, 
+                                        group = self.g['group'], 
+                                        subgroup = self.g['subgroup'], 
+                                        file = self.sigFile)
         
         if dlg.ShowModal() == wx.ID_OK:
             if os.path.exists(dlg.GetFileName(fullPath = True)):
@@ -971,7 +976,7 @@ class IClassMapFrame(DoubleMapFrame):
                     qdlg.Destroy()
                     return
             self.sigFile = dlg.GetFileName()
-            self.WriteSignatures(self.signatures, self.group, self.sigFile)
+            self.WriteSignatures(self.signatures, self.g['group'], self.g['subgroup'], self.sigFile)
             
         dlg.Destroy()
         
@@ -979,7 +984,7 @@ class IClassMapFrame(DoubleMapFrame):
         """!Initialize variables and c structures neccessary for
         computing statistics.
         """
-        self.group = None
+        self.g = {'group' : None, 'subgroup' : None}
         self.sigFile = None
         
         self.stats_data = StatisticsData()
@@ -994,25 +999,26 @@ class IClassMapFrame(DoubleMapFrame):
         self.refer = pointer(refer_obj)
         I_init_group_ref(self.refer) # must be freed on exit
         
-    def WriteSignatures(self, signatures, group, filename):
+    def WriteSignatures(self, signatures, group, subgroup, filename):
         """!Writes current signatures to signature file
         
         @param signatures signature (c structure)
         @param group imagery group
         @param filename signature file name
         """
-        I_iclass_write_signatures(signatures, group, group, filename)
+        I_iclass_write_signatures(signatures, group, subgroup, filename)
                                         
     def CheckInput(self, group, vector):
         """!Check if input is valid"""
         # check if group is ok
+        #TODO check subgroup
         if not group:
             GMessage(parent = self,
                      message = _("No imagery group selected. "
                                  "Operation canceled."))
             return False
             
-        groupLayers = self.GetGroupLayers(group)
+        groupLayers = self.GetGroupLayers(self.g['group'], self.g['subgroup'])
             
         nLayers = len(groupLayers)
         if nLayers <= 1:
@@ -1056,15 +1062,19 @@ class IClassMapFrame(DoubleMapFrame):
                 count += 1
         return count
         
-    def GetGroupLayers(self, group):
+    def GetGroupLayers(self, group, subgroup=None):
         """!Get layers in subgroup (expecting same name for group and subgroup)
     
         @todo consider moving this function to core module for convenient
         """
+        kwargs = {}
+        if subgroup:
+            kwargs['subgroup'] = subgroup
+
         res = RunCommand('i.group',
                          flags = 'g',
-                         group = group, subgroup = group,
-                         read = True).strip()
+                         group = group,
+                         read = True, **kwargs).strip()
         if res.split('\n')[0]:
             return res.split('\n')
         return []

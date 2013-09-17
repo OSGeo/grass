@@ -28,7 +28,7 @@ import wx.lib.scrolledpanel as scrolled
 from core               import globalvar
 from core.utils import _
 from core.settings      import UserSettings
-from core.gcmd          import GMessage
+from core.gcmd          import GError, RunCommand, GMessage
 from gui_core.dialogs   import SimpleDialog, GroupDialog
 from gui_core           import gselect
 from gui_core.widgets   import SimpleValidator
@@ -38,7 +38,8 @@ import grass.script as grass
 
 class IClassGroupDialog(SimpleDialog):
     """!Dialog for imagery group selection"""
-    def __init__(self, parent, group = None, title = _("Select imagery group"), id = wx.ID_ANY):
+    def __init__(self, parent, group = None, subgroup = None, 
+                 title = _("Select imagery group"), id = wx.ID_ANY):
         """!
         Does post init and layout.
         
@@ -48,16 +49,33 @@ class IClassGroupDialog(SimpleDialog):
         """
         SimpleDialog.__init__(self, parent, title)
         
-        self.element = gselect.Select(parent = self.panel, type = 'group',
+        self.use_subg = True
+
+        self.groupSelect = gselect.Select(parent = self.panel, type = 'group',
                                       mapsets = [grass.gisenv()['MAPSET']],
                                       size = globalvar.DIALOG_GSELECT_SIZE,
                                       validator = SimpleValidator(callback = self.ValidatorCallback))
-        self.element.SetFocus()
+
+        self.subg_panel = wx.Panel(self.panel)
+        # TODO use when subgroup will be optional
+        #self.subg_chbox = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
+        #                              label = _("Use subgroup"))
+        self.subGroupSelect = gselect.SubGroupSelect(parent = self.subg_panel)
+
+        self.groupSelect.SetFocus()
         if group:
-            self.element.SetValue(group)
+            self.groupSelect.SetValue(group)
+            self.GroupSelected()
+        if subgroup:
+            self.subGroupSelect.SetValue(subgroup)
+
+
         self.editGroup = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                    label = _("Create/edit group..."))
+
         self.editGroup.Bind(wx.EVT_BUTTON, self.OnEditGroup)
+        self.groupSelect.GetTextCtrl().Bind(wx.EVT_TEXT, 
+                                           lambda event : wx.CallAfter(self.GroupSelected))
 
         self.warning = _("Name of imagery group is missing.")
         self._layout()
@@ -65,30 +83,148 @@ class IClassGroupDialog(SimpleDialog):
 
     def _layout(self):
         """!Do layout"""
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+
         self.dataSizer.Add(wx.StaticText(self.panel, id = wx.ID_ANY,
                                          label = _("Name of imagery group:")),
-                           proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
-        self.dataSizer.Add(self.element, proportion = 0,
+                                         proportion = 0, 
+                                         flag = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT,
+                                         border = 5)
+        self.dataSizer.Add(self.groupSelect, proportion = 0,
                       flag = wx.EXPAND | wx.ALL, border = 5)
+        
+        # TODO use when subgroup will be optional
+        #self.dataSizer.Add(self.subg_chbox, proportion = 0,
+        #              flag = wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border = 5)
+
+        subg_sizer = wx.BoxSizer(wx.VERTICAL)
+        subg_sizer.Add(wx.StaticText(self.subg_panel, id = wx.ID_ANY,
+                                    label = _("Name of imagery subgroup:")),
+                                    proportion = 0, flag = wx.EXPAND | wx.BOTTOM, 
+                                    border = 5)
+        subg_sizer.Add(self.subGroupSelect, proportion = 0,
+                       flag = wx.EXPAND)
+
+        self.subg_panel.SetSizer(subg_sizer)
+        self.dataSizer.Add(self.subg_panel, proportion = 0,
+                           flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
+
         self.dataSizer.Add(self.editGroup, proportion = 0,
                       flag = wx.ALL, border = 5)
+
         self.panel.SetSizer(self.sizer)
+
+        mainSizer.Add(self.panel, proportion = 1,
+                     flag = wx.ALL, border = 5)
+
+        self.SetSizer(mainSizer)
         self.sizer.Fit(self)
 
-    def GetGroup(self):
-        """!Returns selected group"""
-        return self.element.GetValue()
+        #TODO use when subgroup will be optional
+        #self.subg_panel.Show(False)
+        #self.subg_chbox.Bind(wx.EVT_CHECKBOX, self.OnSubgChbox)
+
+    def OnSubgChbox(self, event):
+        self.use_subg = self.subg_chbox.GetValue()
+
+        if self.use_subg:
+            self.subg_panel.Show()
+            #self.SubGroupSelected()
+        else:
+            self.subg_panel.Hide()
+            #self.GroupSelected()
+        self.SetMinSize(self.GetBestSize())
+        self.Layout()
+
+    def GetData(self):
+        """!Returns selected group and subgroup"""
+
+        if self.use_subg:
+            ret = (self.groupSelect.GetValue(), self.subGroupSelect.GetValue())
+        else:
+            ret = (self.groupSelect.GetValue(), None)
+
+        return ret
         
     def OnEditGroup(self, event):
         """!Launch edit group dialog"""
-        dlg = GroupDialog(parent = self, defaultGroup = self.element.GetValue())
+        g, s = self.GetData()
+        dlg = GroupDialog(parent=self, defaultGroup=g, defaultSubgroup=s)
 
         dlg.ShowModal()
-        gr = dlg.GetSelectedGroup()
+        gr, s = dlg.GetSelectedGroup()
         if gr in dlg.GetExistGroups():
-            self.element.SetValue(gr)
+            self.groupSelect.SetValue(gr)
+            self.GroupSelected()
+            wx.CallAfter(self.subGroupSelect.SetValue, s)
         dlg.Destroy()
         
+    def GroupSelected(self):
+        group = self.GetSelectedGroup()
+        self.subGroupSelect.Insert(group)
+
+    def GetSelectedGroup(self):
+        """!Return currently selected group (without mapset)"""
+        return self.groupSelect.GetValue().split('@')[0]
+
+    def GetGroupBandsErr(self, parent):
+        """!Get list of raster bands which are in the soubgroup of group with both having same name.
+           If the group does not exists or it does not contain any bands in subgoup with same name, 
+           error dialog is shown.
+        """
+        gr, s = self.GetData()
+
+        group = grass.find_file(name=gr, element='group')
+    
+        bands = []
+        g = group['name']
+    
+        if g:
+            if self.use_subg:
+                if s == '':
+                    GError(_("Please choose a subgroup."), parent=parent)
+                    return bands
+                if s not in self.GetSubgroups(g):
+                    GError(_("Subgroup <%s> not found in group <%s>") % (s, g), parent=parent)
+                    return bands
+
+            bands = self.GetGroupBands(g, s)
+            if not bands:
+                if self.use_subg:
+                    GError(_("No data found in subgroup <%s> of group <%s>.\n" \
+                             ".") \
+                               % (s, g), parent=parent)
+        
+                else:
+                    GError(_("No data found in group <%s>.\n" \
+                             ".") \
+                               % g, parent=parent)
+        else:
+            GError(_("Group <%s> not found") % gr, parent=parent)
+
+        return bands
+
+    def GetGroupBands(self, group, subgroup):
+        """!Get list of raster bands which are in the soubgroup of group with both having same name."""
+
+        kwargs = {}
+        if subgroup:
+            kwargs['subgroup'] = subgroup
+
+        res = RunCommand('i.group',
+                         flags='g',
+                         group=group,
+                         read = True, **kwargs).strip()
+        bands = None
+        if res.split('\n')[0]:
+            bands = res.split('\n')
+            
+        return bands
+
+    def GetSubgroups(self, group):
+        return RunCommand('i.group', group=group,
+                           read=True, flags='sg').splitlines()
+
 class IClassMapDialog(SimpleDialog):
     """!Dialog for adding raster/vector map"""
     def __init__(self, parent, title, element):
@@ -425,7 +561,8 @@ class CategoryListCtrl(wx.ListCtrl,
         return None
 
 class IClassSignatureFileDialog(wx.Dialog):
-    def __init__(self, parent, group, file = None, title = _("Save signature file"), id = wx.ID_ANY,
+    def __init__(self, parent, group, subgroup, 
+                 file = None, title = _("Save signature file"), id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
         """!Dialog for saving signature file
@@ -447,7 +584,7 @@ class IClassSignatureFileDialog(wx.Dialog):
                                          env['LOCATION_NAME'],
                                          env['MAPSET'],
                                          'group', group,
-                                         'subgroup', group,
+                                         'subgroup', subgroup,
                                          'sig')
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
