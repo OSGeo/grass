@@ -1137,7 +1137,6 @@ class SubGroupSelect(wx.ComboBox):
             self.SetItems(mlist)
         except OSError:
             self.SetItems([])
-        self.SetValue('')
 
 class FormatSelect(wx.Choice):
     def __init__(self, parent, srcType, ogr=False,

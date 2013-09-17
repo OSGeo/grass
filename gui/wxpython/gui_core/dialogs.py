@@ -513,7 +513,7 @@ class SavedRegion(wx.Dialog):
 
 class GroupDialog(wx.Dialog):
     """!Dialog for creating/editing groups"""
-    def __init__(self, parent = None, defaultGroup = None, 
+    def __init__(self, parent = None, defaultGroup = None,  defaultSubgroup = None, 
                  title = _("Create or edit imagery groups"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
                      
@@ -522,9 +522,9 @@ class GroupDialog(wx.Dialog):
                             
         self.parent = parent
         self.defaultGroup = defaultGroup
+        self.defaultSubgroup = defaultSubgroup
         self.currentGroup = self.defaultGroup
         self.dataChanged = False
-        self.edit_subg = False
 
         self.bodySizer = self._createDialogBody()
         
@@ -570,8 +570,6 @@ class GroupDialog(wx.Dialog):
 
         # set dialog min size
         self.SetMinSize(self.GetSize())
-        # hide panel with subgroup, after min size is set
-        self.subg_panel.Hide()
 
     def _createDialogBody(self):
         bodySizer = wx.BoxSizer(wx.VERTICAL)
@@ -590,7 +588,6 @@ class GroupDialog(wx.Dialog):
 
         self.subg_chbox = wx.CheckBox(parent = self, id = wx.ID_ANY,
                                       label = _("Edit/create subgroup"))
-        self.subg_chbox.SetValue(0)
 
         bodySizer.Add(item = self.subg_chbox,
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP, border = 10)
@@ -612,7 +609,7 @@ class GroupDialog(wx.Dialog):
         
         bodySizer.AddSpacer(10)
         # layers in group
-        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Raster maps in selected group:")),
+        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Raster maps in selected group (subgroup):")),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5)
         
         buttonSizer = wx.BoxSizer(wx.VERTICAL)
@@ -647,8 +644,26 @@ class GroupDialog(wx.Dialog):
         if self.defaultGroup:
             self.groupSelect.SetValue(self.defaultGroup)
         
-        return bodySizer
+        if self.defaultSubgroup is not None:
+            self.edit_subg = True
+            self.subg_chbox.SetValue(1)
+            self.subGroupSelect.SetValue(self.defaultSubgroup)
+        else:
+            self.edit_subg = False
+            self.subg_panel.Hide()
+            self.subg_chbox.SetValue(0)
         
+        return bodySizer
+    
+    def DisableSubgroupEdit(self):
+        """!Disable editation of subgroups in the dialog 
+        @todo used by gcp manager, maybe the gcp m should also support subgroups,
+        """
+        self.edit_subg = False
+        self.subg_panel.Hide()
+        self.subg_chbox.Hide()
+        self.Layout()
+    
     def OnSubgChbox(self, event):
         self.edit_subg = self.subg_chbox.GetValue()
 
@@ -658,6 +673,7 @@ class GroupDialog(wx.Dialog):
         else:
             self.subg_panel.Hide()
             self.GroupSelected()
+        self.SetMinSize(self.GetBestSize())
         self.Layout()
 
     def OnAddLayer(self, event):
@@ -693,7 +709,7 @@ class GroupDialog(wx.Dialog):
         
     def GroupSelected(self):
         """!Group was selected, check if changes were apllied"""
-        group = self.GetSelectedGroup()
+        group, s = self.GetSelectedGroup()
         if  self.currentGroup and self.dataChanged:
             dlg = wx.MessageDialog(self, message = _("Group <%s> was changed, "
                                                      "do you want to apply changes?") % self.currentGroup,
@@ -714,7 +730,9 @@ class GroupDialog(wx.Dialog):
         self.ShowGroupLayers(maps)
         self.currentGroup = group
         self.dataChanged = False
-        
+
+        if self.edit_subg:
+            self.SubGroupSelected()
         self.ClearNotification()
 
     def SubGroupSelected(self):
@@ -801,7 +819,7 @@ class GroupDialog(wx.Dialog):
                           input = layers,
                           **kwargs)
         #update subgroup select
-        self.SubGroupSelect()
+        self.SubGroupSelected()
         return ret
 
     def GetExistGroups(self):
@@ -834,8 +852,13 @@ class GroupDialog(wx.Dialog):
         
     def GetSelectedGroup(self):
         """!Return currently selected group (without mapset)"""
-        return self.groupSelect.GetValue().split('@')[0]
-        
+        g = self.groupSelect.GetValue().split('@')[0]
+        if self.edit_subg:
+            s = self.subGroupSelect.GetValue() 
+        else:
+            s = None
+        return g, s
+
     def GetGroupLayers(self, group, subgroup=None):
         """!Get layers in group"""
         kwargs = dict()
