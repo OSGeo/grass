@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 
     n_arrow = G_define_option();
     n_arrow->key = "style";
-    n_arrow->description = _("North arrow style (used only with the -n flag)");
-    n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9";
+    n_arrow->description = _("North arrow style");
+    n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9,fancy_compass,basic_compass";
     n_arrow->answer = "1a";
     n_arrow->guisection = _("Style");
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     fsize->key = "fontsize";
     fsize->type = TYPE_DOUBLE;
     fsize->required = NO;
-    fsize->answer = "12";
+    fsize->answer = "14";
     fsize->options = "1-360";
     fsize->description = _("Font size");
 
