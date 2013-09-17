@@ -28,6 +28,3 @@ extern int do_background;
 
 /* draw_scale.c */
 int draw_scale(double, double, int, int, double);
-
-/* draw_n_arrow.c */
-int draw_n_arrow(double, double, double, char *);
