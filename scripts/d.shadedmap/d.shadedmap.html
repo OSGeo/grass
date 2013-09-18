@@ -2,33 +2,57 @@
 
 <em>d.shadedmap</em> will drape a color raster map over a shaded relief map.
 
+
 <h2>NOTES</h2>
 
-refer to the <em>d.his</em> help page for more details; <em>d.shadedmap</em>
+Refer to the <em>d.his</em> help page for more details; <em>d.shadedmap</em>
 is simply a frontend to that module.
+<p>
+If the <b>output</b> option is given the rendering will be written to a
+new raster map. The <b>output</b> map does not respect the <b>brighten</b>
+parameter. <!-- at this time. -->
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-In this example, the aspect map in the North Carolina sample
-dataset location is used to hillshade the elevation map:
+In this example, the <tt>aspect</tt> map in the North Carolina sample
+dataset location is used to hillshade the <tt>elevation</tt> map:
 
 <div class="code"><pre>
 g.region rast=aspect -p
 d.shadedmap reliefmap=aspect drapemap=elevation
 </pre></div>
 
+In this next example, a shaded relief raster map is created in
+the Spearfish sample dataset and used to create a colorized hillshade
+raster map for later use:
+
+<div class="code"><pre>
+g.region rast=elevation.10m
+r.colors -e map=elevation.10m color=haxby
+r.shaded.relief elevation.10m
+
+d.shadedmap reliefmap=elevation.10m.shade drapemap=elevation.10m \
+   output=elevation.10m.shade.colorized
+
+r.colors -r map=elevation.10m
+</pre></div>
+
+
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="d.his.html">d.his</a>,
 <a href="g.pnmcomp.html">g.pnmcomp</a>,
-<a href="wxGUI.nviz.html">wxGUI 3D viewer</a>,
+<a href="r.his.html">r.his</a>,
 <a href="r.slope.aspect.html">r.slope.aspect</a>,
-<a href="r.shaded.relief.html">r.shaded.relief</a>
+<a href="r.shaded.relief.html">r.shaded.relief</a><br>
+<a href="wxGUI.nviz.html">wxGUI 3D viewer (NVIZ)</a>
 </em>
+
 
 <h2>AUTHORS</h2>
 
 Unknown; updated to GRASS 5.7 by Michael Barton
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
