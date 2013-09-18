@@ -71,6 +71,31 @@ int main(int argc, char **argv)
 	"classic,line,solid,hollow,full_checker,part_checker,mixed_checker,tail_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
     barstyle->answer = "classic";
     barstyle->guisection = _("Style");
+    G_asprintf((char **) &(barstyle->descriptions), 
+               "classic;%s;"
+               "line;%s;"
+               "solid;%s;"
+               "hollow;%s;"
+               "full_checker;%s;"
+               "part_checker;%s;"
+               "mixed_checker;%s;"
+               "tail_checker;%s;"
+               "up_ticks;%s;"
+               "down_ticks;%s;"
+               "both_ticks;%s;"
+               "arrow_ends;%s",
+               _("Classic style"),
+               _("Line style"),
+               _("Solid style"),
+               _("Hollow style"),
+               _("Full checker style"),
+               _("Part checker style"),
+               _("Mixed checker style"),
+               _("Tail checker style"),
+               _("Up ticks style"),
+               _("Down ticks style"),
+               _("Both ticks style"),
+               _("Arrow ends style"));
 
     coords = G_define_option();
     coords->key = "at";
