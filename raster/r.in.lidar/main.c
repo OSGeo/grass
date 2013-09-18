@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
     double variance, mean, skew, sumdev;
     int pth = 0;
     double trim = 0.0;
+    double res = 0.0;
 
     int j, k;
     int head_id, node_id;
@@ -140,8 +141,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *input_opt, *output_opt, *percent_opt, *type_opt;
     struct Option *method_opt, *zrange_opt, *zscale_opt;
-    struct Option *trim_opt, *pth_opt;
-    struct Flag *scan_flag, *shell_style, *over_flag;
+    struct Option *trim_opt, *pth_opt, *res_opt;
+    struct Flag *scan_flag, *shell_style, *over_flag, *extents_flag;
 
     LASReaderH LAS_reader;
     LASHeaderH LAS_header;
@@ -227,6 +228,18 @@ int main(int argc, char *argv[])
     trim_opt->description =
 	_("Discard <trim> percent of the smallest and <trim> percent of the largest observations");
     trim_opt->guisection = _("Statistic");
+
+    res_opt = G_define_option();
+    res_opt->key = "resolution";
+    res_opt->type = TYPE_DOUBLE;
+    res_opt->required = NO;
+    res_opt->description =
+	_("Output raster resolution");
+
+    extents_flag = G_define_flag();
+    extents_flag->key = 'e';
+    extents_flag->description =
+	_("Use input extents instead of region extents");
 
     over_flag = G_define_flag();
     over_flag->key = 'o';
@@ -509,6 +522,48 @@ int main(int argc, char *argv[])
 
 
     Rast_get_window(&region);
+
+
+    if (scan_flag->answer || extents_flag->answer) {
+	if (zrange_opt->answer)
+	    G_warning(_("zrange will not be taken into account during scan"));
+
+	scan_bounds(LAS_reader, shell_style->answer, extents_flag->answer,
+	            zscale, &region);
+
+	if (!extents_flag->answer) {
+	    LASHeader_Destroy(LAS_header);
+	    LASReader_Destroy(LAS_reader);
+
+	    exit(EXIT_SUCCESS);
+	}
+    }
+    
+    if (res_opt->answer) {
+	/* align to resolution */
+	res = atof(res_opt->answer);
+
+	if (!G_scan_resolution(res_opt->answer, &res, region.proj))
+	    G_fatal_error(_("Invalid input <%s=%s>"), res_opt->key, res_opt->answer);
+
+	if (res <= 0)
+	    G_fatal_error(_("Option '%s' must be > 0.0"), res_opt->key);
+	
+	region.ns_res = region.ew_res = res;
+
+	region.north = ceil(region.north / res) * res;
+	region.south = floor(region.south / res) * res;
+	region.east = ceil(region.east / res) * res;
+	region.west = floor(region.west / res) * res;
+
+	G_adjust_Cell_head(&region, 0, 0);
+    }
+    else if (extents_flag->answer) {
+	/* align to current region */
+	Rast_align_window(&region, &loc_wind);
+    }
+    Rast_set_output_window(&region);
+
     rows = (int)(region.rows * (percent / 100.0));
     cols = region.cols;
 
@@ -562,26 +617,13 @@ int main(int argc, char *argv[])
     }
 
 
-    if (scan_flag->answer) {
-	if (zrange_opt->answer)
-	    G_warning(_("zrange will not be taken into account during scan"));
-
-	scan_bounds(LAS_reader, shell_style->answer, zscale);
-
-	LASHeader_Destroy(LAS_header);
-	LASReader_Destroy(LAS_reader);
-
-	exit(EXIT_SUCCESS);
-    }
-
-
     /* open output map */
     out_fd = Rast_open_new(outmap, rtype);
 
     estimated_lines = LASHeader_GetPointRecordsCount(LAS_header);
 
     /* allocate memory for a single row of output data */
-    raster_row = Rast_allocate_buf(rtype);
+    raster_row = Rast_allocate_output_buf(rtype);
 
     G_message(_("Reading data ..."));
 
@@ -665,14 +707,6 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 
-
-	    /* too slow?
-	       if ( G_projection() == PROJECTION_LL ) {
-	       G_scan_easting( tokens[xcol-1], &x, region.proj);
-	       G_scan_northing( tokens[ycol-1], &y, region.proj);
-	       }
-	       else {
-	     */
 	    x = LASPoint_GetX(LAS_point);
 	    y = LASPoint_GetY(LAS_point);
 	    z = LASPoint_GetZ(LAS_point);
@@ -1094,7 +1128,8 @@ int main(int argc, char *argv[])
 
 
 
-int scan_bounds(LASReaderH LAS_reader, int shell_style, double zscale)
+int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents,
+		double zscale, struct Cell_head *region)
 {
     unsigned long line;
     int first;
@@ -1126,31 +1161,21 @@ int scan_bounds(LASReaderH LAS_reader, int shell_style, double zscale)
 	if (first) {
 	    min_x = x;
 	    max_x = x;
+	    min_y = y;
+	    max_y = y;
+	    min_z = z;
+	    max_z = z;
+	    first = FALSE;
 	}
 	else {
 	    if (x < min_x)
 		min_x = x;
 	    if (x > max_x)
 		max_x = x;
-	}
-
-	if (first) {
-	    min_y = y;
-	    max_y = y;
-	}
-	else {
 	    if (y < min_y)
 		min_y = y;
 	    if (y > max_y)
 		max_y = y;
-	}
-
-	if (first) {
-	    min_z = z;
-	    max_z = z;
-	    first = FALSE;
-	}
-	else {
 	    if (z < min_z)
 		min_z = z;
 	    if (z > max_z)
@@ -1158,19 +1183,27 @@ int scan_bounds(LASReaderH LAS_reader, int shell_style, double zscale)
 	}
     }
 
-    if (!shell_style) {
-	fprintf(stderr, _("Range:     min         max\n"));
-	fprintf(stdout, "x: %11f %11f\n", min_x, max_x);
-	fprintf(stdout, "y: %11f %11f\n", min_y, max_y);
-	fprintf(stdout, "z: %11f %11f\n", min_z * zscale, max_z * zscale);
-    }
-    else
-	fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
-		max_y, min_y, max_x, min_x, min_z * zscale, max_z * zscale);
+    if (!extents) {
+	if (!shell_style) {
+	    fprintf(stderr, _("Range:     min         max\n"));
+	    fprintf(stdout, "x: %11f %11f\n", min_x, max_x);
+	    fprintf(stdout, "y: %11f %11f\n", min_y, max_y);
+	    fprintf(stdout, "z: %11f %11f\n", min_z * zscale, max_z * zscale);
+	}
+	else
+	    fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
+		    max_y, min_y, max_x, min_x, min_z * zscale, max_z * zscale);
 
-    G_debug(1, "Processed %lu points.", line);
-    G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
-	    max_y, min_y, max_x, min_x);
+	G_debug(1, "Processed %lu points.", line);
+	G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
+		max_y, min_y, max_x, min_x);
+    }
+    else {
+	region->east = max_x;
+	region->west = min_x;
+	region->north = max_y;
+	region->south = min_y;
+    }
 
     return 0;
 }

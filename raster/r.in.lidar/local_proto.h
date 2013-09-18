@@ -41,7 +41,7 @@
 #define METHOD_TRIMMEAN   13
 
 /* main.c */
-int scan_bounds(LASReaderH, int, double);
+int scan_bounds(LASReaderH, int, int, double, struct Cell_head *);
 
 /* support.c */
 int blank_array(void *, int, int, RASTER_MAP_TYPE, int);
