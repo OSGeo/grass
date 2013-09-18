@@ -134,6 +134,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.img     = None   # wx.Image object (self.mapfile)
         # decoration overlays
         self.overlays = overlays
+        self._overlayNames = {0:  _("legend"), 1: _("scale bar"), 2: _("north arrow")}
         # images and their PseudoDC ID's for painting and dragging
         self.imagedict = {}   
         self.select = {}      # selecting/unselecting decorations for dragging
@@ -192,14 +193,30 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             event.Skip()
             return
 
+        # generate popup-menu
+        menu = wx.Menu()
+
         if not hasattr(self, "popupCopyCoordinates"):
             self.popupCopyCoordinates = wx.NewId()
             self.Bind(wx.EVT_MENU, self.OnCopyCoordinates, id = self.popupCopyCoordinates)
-
-        # generate popup-menu
-        menu = wx.Menu()
         menu.Append(self.popupCopyCoordinates, _("Copy coordinates to clipboard"))
 
+        pos = self.ScreenToClient(event.GetPosition())
+        idlist = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
+        if idlist and idlist[0] in (0, 1, 2):  # legend, scale bar, north arrow
+            self._hide = wx.NewId()
+            self.Bind(wx.EVT_MENU,
+                      lambda evt: self.overlayHidden.emit(overlayId=idlist[0]),
+                      id=self._hide)
+            menu.Append(self._hide,
+                        _("Hide {overlay}").format(overlay=self._overlayNames[idlist[0]]))
+
+            if idlist[0] == 0:
+                self._resizeLegend = wx.NewId()
+                self.Bind(wx.EVT_MENU,
+                      lambda evt: self.overlays[idlist[0]].StartResizing(),
+                      id=self._resizeLegend)
+                menu.Append(self._resizeLegend, _("Resize legend"))
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -581,7 +598,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         for overlay in self.Map.GetListOfLayers(ltype = "overlay", active = True):
             if overlay.mapfile is not None \
                and os.path.isfile(overlay.mapfile) and os.path.getsize(overlay.mapfile):
-                img = wx.Image(overlay.mapfile, wx.BITMAP_TYPE_ANY)
+                img = utils.autoCropImageFromFile(overlay.mapfile)
 
                 for key in self.imagedict.keys():
                     if self.imagedict[key]['id'] == overlay.id:

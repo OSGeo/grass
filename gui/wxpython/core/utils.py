@@ -1069,6 +1069,44 @@ def GuiModuleMain(mainfn):
         mainfn()
 
 
+def PilImageToWxImage(pilImage, copyAlpha = True):
+    """!Convert PIL image to wx.Image
+    
+    Based on http://wiki.wxpython.org/WorkingWithImages
+    """
+    import wx
+    hasAlpha = pilImage.mode[-1] == 'A'
+    if copyAlpha and hasAlpha :  # Make sure there is an alpha layer copy.
+        wxImage = wx.EmptyImage(*pilImage.size)
+        pilImageCopyRGBA = pilImage.copy()
+        pilImageCopyRGB = pilImageCopyRGBA.convert('RGB')    # RGBA --> RGB
+        pilImageRgbData = pilImageCopyRGB.tostring()
+        wxImage.SetData(pilImageRgbData)
+        wxImage.SetAlphaData(pilImageCopyRGBA.tostring()[3::4])  # Create layer and insert alpha values.
+
+    else :    # The resulting image will not have alpha.
+        wxImage = wx.EmptyImage(*pilImage.size)
+        pilImageCopy = pilImage.copy()
+        pilImageCopyRGB = pilImageCopy.convert('RGB')    # Discard any alpha from the PIL image.
+        pilImageRgbData = pilImageCopyRGB.tostring()
+        wxImage.SetData(pilImageRgbData)
+
+    return wxImage
+
+
+def autoCropImageFromFile(filename):
+    """!Loads image from file and crops it automatically.
+    
+    @param filename path to file
+    @return wx.Image instance
+    """
+    import Image
+    pilImage = Image.open(filename)
+    imageBox = pilImage.getbbox()
+    cropped = pilImage.crop(imageBox)
+    return PilImageToWxImage(cropped, copyAlpha=True)
+
+
 def isInRegion(regionA, regionB):
     """!Tests if 'regionA' is inside of 'regionB'.
 

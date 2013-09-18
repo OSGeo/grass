@@ -115,6 +115,8 @@ class MapWindowBase(object):
         self.mouseHandlerUnregistered = Signal('MapWindow.mouseHandlerUnregistered')
         # emitted after double click in pointer mode on legend, text, scalebar
         self.overlayActivated = Signal('MapWindow.overlayActivated')
+        # emitted when overlay should be hidden
+        self.overlayHidden = Signal('MapWindow.overlayHidden')
 
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing

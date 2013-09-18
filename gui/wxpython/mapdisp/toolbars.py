@@ -29,11 +29,11 @@ MapIcons =  {
                             label = _('Query raster/vector map(s)'),
                             desc = _('Query selected raster/vector map(s)')),
     'addBarscale': MetaIcon(img = 'scalebar-add',
-                            label = _('Add scalebar and north arrow')),
+                            label = _('Show/hide scale bar')),
     'addLegend'  : MetaIcon(img = 'legend-add',
-                            label = _('Add legend')),
+                            label = _('Show/hide legend')),
     'addNorthArrow': MetaIcon(img = 'north-arrow-add',
-                              label = _('North Arrow')),
+                              label = _('Show/hide north arrow')),
     'analyze'    : MetaIcon(img = 'layer-raster-analyze',
                             label = _('Analyze map'),
                             desc = _('Measuring, profiling, histogramming, ...')),
@@ -244,14 +244,11 @@ class MapToolbar(BaseToolbar):
     def OnDecoration(self, event):
         """!Decorations overlay menu
         """
-        if self.parent.IsPaneShown('3d'):
-            self._onMenu(((MapIcons["addNorthArrow"], self.parent.OnAddArrow),
-                          (MapIcons["addLegend"],     lambda evt: self.parent.AddLegend()),
-                          (MapIcons["addText"],       self.parent.OnAddText)))
-        else:
-            self._onMenu(((MapIcons["addBarscale"], lambda evt: self.parent.AddBarscale()),
-                          (MapIcons["addLegend"],   lambda evt: self.parent.AddLegend()),
-                          (MapIcons["addText"],     self.parent.OnAddText)))
+        self._onMenu(((MapIcons["addLegend"], lambda evt: self.parent.AddLegend()),
+                      (MapIcons["addBarscale"], lambda evt: self.parent.AddBarscale()),
+                      (MapIcons["addNorthArrow"], lambda evt: self.parent.AddArrow()),
+                      (MapIcons["addText"], self.parent.OnAddText)))
+
         
     def ExitToolbars(self):
         if self.parent.GetToolbar('vdigit'):

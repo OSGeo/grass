@@ -1998,7 +1998,7 @@ class Texture(object):
         self.width = self.image.GetWidth()
         self.height = self.image.GetHeight()
         self.id = overlayId
-        self.coords = list(coords)
+        self.coords = [0, 0]
         self.bounds = wx.Rect()
         self.active = True
         
