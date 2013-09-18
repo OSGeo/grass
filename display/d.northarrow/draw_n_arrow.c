@@ -67,7 +67,7 @@ int draw_n_arrow(double east, double north, double fontsize,
     	    D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 55);
     	    D_text("N");
 	    break;
-    	case 'b':
+    	case 'c':
     	    D_pos_abs(x_pos - (tr + tl) / 2, y_pos - 48.5);
     	    D_text("N");
     	    break;
@@ -129,7 +129,7 @@ int draw_n_arrow(double east, double north, double fontsize,
     case '9':
     	symbol_size = 17.;
     	break;
-    case 'b':
+    case 'c':
     	symbol_size = 80.;
     	break;
     case 'f':
@@ -142,7 +142,7 @@ int draw_n_arrow(double east, double north, double fontsize,
     x0 = D_d_to_u_col(x_pos);
     y0 = D_d_to_u_row(y_pos);
 
-    if (n_arrow_num[0] == 'b')
+    if (n_arrow_num[0] == 'c')
 	strcpy(icon, "n_arrows/compass");
     else if (n_arrow_num[0] == 'f')
 	strcpy(icon, "n_arrows/fancy_compass");
