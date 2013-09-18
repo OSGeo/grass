@@ -50,14 +50,14 @@ from gui_core.mapdisp   import SingleMapFrame
 from mapwin.base import MapWindowProperties
 from gui_core.query     import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
-from mapwin.decorations import DecorationDialog, TextLayerDialog, \
-    LegendController, BarscaleController, \
-    DECOR_DIALOG_LEGEND, DECOR_DIALOG_BARSCALE
+from mapwin.decorations import TextLayerDialog, \
+    LegendController, BarscaleController, ArrowController
 from modules.histogram  import HistogramFrame
 from wxplot.histogram   import HistogramPlotFrame
 from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
 from mapwin.analysis import ProfileController, MeasureDistanceController
+from gui_core.forms import GUI
 
 from mapdisp import statusbar as sb
 
@@ -160,10 +160,12 @@ class MapFrame(SingleMapFrame):
 
         # init decoration objects
         self.decorations = {}
-        self.legend = LegendController(self.Map)
-        self.barscale = BarscaleController(self.Map)
+        self.legend = LegendController(self.Map, self._giface)
+        self.barscale = BarscaleController(self.Map, self._giface)
+        self.arrow = ArrowController(self.Map, self._giface)
         self.decorations[self.legend.id] = self.legend
         self.decorations[self.barscale.id] = self.barscale
+        self.decorations[self.arrow.id] = self.arrow
 
         self.mapWindowProperties.autoRenderChanged.connect(
             lambda value:
@@ -178,6 +180,10 @@ class MapFrame(SingleMapFrame):
                                              overlays=self.decorations)
         self.MapWindow2D.mapQueried.connect(self.Query)
         self.MapWindow2D.overlayActivated.connect(self._activateOverlay)
+        self.MapWindow2D.overlayHidden.connect(self._hideOverlay)
+        self.MapWindow2D.overlayHidden.connect(self._hideOverlay)
+        for overlay in (self.legend, self.barscale, self.arrow):
+            overlay.overlayChanged.connect(lambda: self.MapWindow2D.UpdateMap(render=False, renderVector=False))
         self._setUpMapWindow(self.MapWindow2D)
 
         self.MapWindow2D.mouseHandlerUnregistered.connect(self.ResetPointer)
@@ -226,13 +232,9 @@ class MapFrame(SingleMapFrame):
         self.dialogs = {}
         self.dialogs['attributes'] = None
         self.dialogs['category'] = None
-        self.dialogs['barscale'] = None
-        self.dialogs['legend'] = None
         self.dialogs['vnet'] = None
         self.dialogs['query'] = None
 
-        self.decorationDialog = None # decoration/overlays
-        
         self.measureDistController = None
 
     def GetMapWindow(self):
@@ -360,6 +362,8 @@ class MapFrame(SingleMapFrame):
             self.MapWindow3D.ResetViewHistory()            
             self.MapWindow3D.UpdateView(None)
             self.MapWindow3D.overlayActivated.connect(self._activateOverlay)
+            self.MapWindow3D.overlayHidden.connect(self._hideOverlay)
+            self.legend.overlayChanged.connect(lambda: self.MapWindow3D.UpdateOverlays())
         else:
             self.MapWindow = self.MapWindow3D
             os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True, windres3 = True)
@@ -908,34 +912,50 @@ class MapFrame(SingleMapFrame):
         win.Update()
 
     def _activateOverlay(self, overlayId):
-        """!Launch decoratio dialog according to overlay id.
+        """!Launch decoration dialog according to overlay id.
 
         @param overlayId id of overlay        
         """
         if overlayId > 100:
             self.OnAddText(None)
         elif overlayId == 0:
-            self.AddBarscale()
+            self.AddLegend(showDialog=True)
         elif overlayId == 1:
-            self.AddLegend()
+            self.AddBarscale(showDialog=True)
+        elif overlayId == 2:
+            self.AddArrow(showDialog=True)
 
-    def AddBarscale(self, cmd = None, showDialog = True):
-        """!Handler for scale/arrow map decoration menu selection.
+    def _hideOverlay(self, overlayId):
+        """!Hide overlay.
+
+        @param overlayId id of overlay        
         """
+        self.decorations[overlayId].Hide()
+
+    def AddBarscale(self, cmd=None, showDialog=None):
+        """!Handler for scale bar map decoration menu selection."""
+        if self.IsPaneShown('3d'):
+            self.MapWindow3D.SetDrawScalebar((70, 70))
+            return
+
+        if self.barscale.IsShown() and showDialog is None:
+            self.barscale.Hide()
+            return
+
         if cmd:
             self.barscale.cmd = cmd
 
         if not showDialog:
             self.barscale.Show()
-            self.MapWindow.UpdateMap()
             return
 
         # Decoration overlay control dialog
-        if self.dialogs['barscale']:
-            if self.dialogs['barscale'].IsShown():
-                self.dialogs['barscale'].SetFocus()
+        if self.barscale.dialog:
+            if self.barscale.dialog.IsShown():
+                self.barscale.dialog.SetFocus()
+                self.barscale.dialog.Raise()
             else:
-                self.dialogs['barscale'].Show()
+                self.barscale.dialog.Show()
         else:
             # If location is latlon, only display north arrow (scale won't work)
             #        proj = self.Map.projinfo['proj']
@@ -945,23 +965,17 @@ class MapFrame(SingleMapFrame):
             #            barcmd = 'd.barscale'
 
             # decoration overlay control dialog
-            self.dialogs['barscale'] = \
-                DecorationDialog(parent=self, title=_('Scale and North arrow'),
-                                 giface=self._giface,
-                                 overlayController=self.barscale,
-                                 ddstyle=DECOR_DIALOG_BARSCALE,
-                                 size=(350, 200),
-                                 style=wx.DEFAULT_DIALOG_STYLE | wx.CENTRE)
+            GUI(parent=self, giface=self._giface, show=True,
+                modal=False).ParseCommand(self.barscale.cmd,
+                                          completed=(self.barscale.GetOptData, None, None))
 
-            self.dialogs['barscale'].CentreOnParent()
-            ### dialog cannot be show as modal - in the result d.barscale is not selectable
-            ### self.dialogs['barscale'].ShowModal()
-            self.dialogs['barscale'].Show()
         self.MapWindow.mouse['use'] = 'pointer'
 
-    def AddLegend(self, cmd = None, showDialog = True):
-        """!Handler for legend map decoration menu selection.
-        """
+    def AddLegend(self, cmd=None, showDialog=None):
+        """!Handler for legend map decoration menu selection."""
+        if self.legend.IsShown() and showDialog is None:
+            self.legend.Hide()
+            return
         if cmd:
             self.legend.cmd = cmd
         else:
@@ -971,32 +985,56 @@ class MapFrame(SingleMapFrame):
                     self.legend.cmd.append('map=%s' % layer.maplayer.name)
                     break
 
-        if not showDialog:
+        if not showDialog and self.legend.CmdIsValid():
             self.legend.Show()
-            self.MapWindow.UpdateMap()
             return
 
         # Decoration overlay control dialog
-        if self.dialogs['legend']:
-            if self.dialogs['legend'].IsShown():
-                self.dialogs['legend'].SetFocus()
+        if self.legend.dialog:
+            if self.legend.dialog.IsShown():
+                self.legend.dialog.SetFocus()
+                self.legend.dialog.Raise()
             else:
-                self.dialogs['legend'].Show()
+                self.legend.dialog.Show()
         else:
-            self.dialogs['legend'] = \
-                DecorationDialog(parent=self, title=_("Legend"),
-                                 overlayController=self.legend,
-                                 giface=self._giface, 
-                                 ddstyle=DECOR_DIALOG_LEGEND,
-                                 size=(350, 200),
-                                 style=wx.DEFAULT_DIALOG_STYLE | wx.CENTRE)
+            GUI(parent=self, giface=self._giface, show=True,
+                modal=False).ParseCommand(self.legend.cmd,
+                                          completed=(self.legend.GetOptData, None, None))
 
-            self.dialogs['legend'].CentreOnParent() 
-            ### dialog cannot be show as modal - in the result d.legend is not selectable
-            ### self.dialogs['legend'].ShowModal()
-            self.dialogs['legend'].Show()
         self.MapWindow.mouse['use'] = 'pointer'
-        
+
+    def AddArrow(self, cmd=None, showDialog=None):
+        """!Handler for north arrow menu selection."""
+        if self.IsPaneShown('3d'):
+            # here was opening of appearance page of nviz notebook
+            # but now moved to MapWindow3D where are other problematic nviz calls
+            self.MapWindow3D.SetDrawArrow((70, 70))
+            return
+
+        if self.arrow.IsShown() and showDialog is None:
+            self.arrow.Hide()
+            return
+        if cmd:
+            self.arrow.cmd = cmd
+
+        if not showDialog:
+            self.arrow.Show()
+            return
+
+        # Decoration overlay control dialog
+        if self.arrow.dialog:
+            if self.arrow.dialog.IsShown():
+                self.arrow.dialog.SetFocus()
+                self.arrow.dialog.Raise()
+            else:
+                self.arrow.dialog.Show()
+        else:
+            GUI(parent=self, giface=self._giface, show=True,
+                modal=False).ParseCommand(self.arrow.cmd,
+                                          completed=(self.arrow.GetOptData, None, None))
+
+        self.MapWindow.mouse['use'] = 'pointer'
+
     def OnAddText(self, event):
         """!Handler for text decoration menu selection.
         """
@@ -1047,13 +1085,6 @@ class MapFrame(SingleMapFrame):
                 self.MapWindow2D.UpdateMap(render = False, renderVector = False)
             
         self.MapWindow.mouse['use'] = 'pointer'
-    
-    def OnAddArrow(self, event):
-        """!Handler for north arrow menu selection.
-        """
-        # here was opening of appearance page of nviz notebook
-        # but now moved to MapWindow3D where are other problematic nviz calls
-        self.MapWindow3D.SetDrawArrow((70, 70))
         
     def GetOptData(self, dcmd, type, params, propwin):
         """!Callback method for decoration overlay command generated by

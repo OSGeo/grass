@@ -748,7 +748,7 @@ class TaskFrame(wx.Frame):
                                           'MapWindow'):
             # display decorations and 
             # pressing OK or cancel after setting layer properties
-            if self.task.name in ['d.barscale','d.legend','d.histogram'] \
+            if self.task.name in ['d.barscale','d.legend', 'd.northarrow', 'd.histogram'] \
                 or len(self.parent.GetLayerInfo(self.layer, key = 'cmd')) >=  1:
                 self.Hide()
             # canceled layer with nothing set
@@ -1063,12 +1063,12 @@ class CmdPanel(wx.Panel):
                                 cb = ColorTablesComboBox(parent=which_panel, value=p.get('default',''),
                                                          size=globalvar.DIALOG_COMBOBOX_SIZE,
                                                          choices=valuelist)
-                            elif self.task.name == 'd.barscale' and p['name'] in ('style', 'north_arrow'):
-                                if p['name'] == 'style':
+                            elif p['name'] == 'style' and self.task.name in ('d.barscale', 'd.northarrow'):
+                                if self.task.name == 'd.barscale':
                                     cb = BarscalesComboBox(parent=which_panel, value=p.get('default',''),
                                                            size=globalvar.DIALOG_COMBOBOX_SIZE,
                                                            choices=valuelist)
-                                elif p['name'] == 'north_arrow':
+                                elif self.task.name == 'd.northarrow':
                                     cb = NArrowsComboBox(parent=which_panel, value=p.get('default',''),
                                                          size=globalvar.DIALOG_COMBOBOX_SIZE,
                                                          choices=valuelist)

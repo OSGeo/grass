@@ -443,8 +443,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def GetLegendRect(self):
         """!Estimates legend size for dragging"""
         size = None
-        if 1 in self.overlays:
-            for param in self.overlays[1].cmd[1:]:
+        if 0 in self.overlays:
+            for param in self.overlays[0].cmd[1:]:
                 if param.startswith("at="):
                     size = map(int, param.split("=")[-1].split(','))
                     break
@@ -494,7 +494,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             Updates self.imagelist"""
         self.Map.ChangeMapSize(self.GetClientSize())
         self.Map.RenderOverlays(force = True)
-        
+
         # delete textures
         for texture in self.imagelist:
             # inactive overlays, remove text labels
@@ -509,7 +509,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     
         # update images (only legend so far)
         for oid, overlay in self.overlays.iteritems():
-            if not overlay.IsShown() or oid == 0: # 0 for barscale
+            if not overlay.IsShown() or oid in (1, 2): # 0 for barscale
                 continue
             if oid not in [t.GetId() for t in self.imagelist]: # new
                 self.CreateTexture(overlay = overlay.layer)
@@ -519,10 +519,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                         if not t.Corresponds(overlay):
                             self.imagelist.remove(t)
                             t = self.CreateTexture(overlay = overlay.layer)
-                        # always set coordinates, needed for synchr. 2D and 3D modes
-                        t.SetCoords(overlay.coords)
 
-                    
         # update text labels
         for textId in self.textdict.keys():
             if textId not in [t.GetId() for t in self.imagelist]:# new
@@ -536,6 +533,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                             t = self.CreateTexture(textId = textId)
                         # always set coordinates, needed for synchr. 2D and 3D modes
                         t.SetCoords(self.textdict[textId]['coords'])
+        self.Refresh()
             
     def CreateTexture(self, overlay = None, textId = None):
         """!Create texture from overlay image or from textdict"""
@@ -543,7 +541,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             texture = wxnviz.ImageTexture(filepath = overlay.mapfile, overlayId = overlay.id,
                                           coords = list(self.overlays[overlay.id].coords),
                                           cmd = overlay.GetCmd())
-            if overlay.id == 1: # legend
+            if overlay.id == 0: # legend
                 texture.SetBounds(self.GetLegendRect())
         else: # text
             coords, bbox, relCoords = self.TextBounds(self.textdict[textId])
@@ -741,8 +739,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if self.mouse['use'] == 'pointer':
             # get decoration or text id
             self.dragid = self.FindObjects(self.mouse['tmp'][0], self.mouse['tmp'][1],
-                                          self.hitradius)   
-                
+                                           self.hitradius)
         if self.mouse['use'] == 'fly':
             if not self.timerFly.IsRunning():
                 self.timerFly.Start(self.fly['interval'])
@@ -753,7 +750,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def OnDragging(self, event):
                 
         if self.mouse['use'] == 'pointer':
-            if self.dragid > 0:
+            if self.dragid >= 0:
                 self.DragItem(self.dragid, event.GetPositionTuple())
             
         if self.mouse['use'] == 'rotate':    
@@ -844,7 +841,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             
 
         elif self.mouse['use'] == 'pointer':
-            if self.dragid > 0:
+            if self.dragid >= 0:
                 dx = self.mouse['end'][0] - self.mouse['begin'][0]
                 dy = self.mouse['end'][1] - self.mouse['begin'][1]
                 if self.dragid < 99:
@@ -964,7 +961,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def DragItem(self, id, coords):
         """!Drag an overlay decoration item
         """
-        if not id: return
+        if id is None:
+            return
         Debug.msg (5, "GLWindow.DragItem(): id=%d" % id)
         x, y = self.mouse['tmp']
         dx = coords[0] - x
@@ -1268,6 +1266,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.decoration['scalebar'][-1]['position']['x'] = pos[0]
             self.decoration['scalebar'][-1]['position']['y'] = pos[1]
             self.Refresh(False)
+        self.lmgr.nviz.SetPage('decoration')
         
     def IsLoaded(self, item):
         """!Check if layer (item) is already loaded

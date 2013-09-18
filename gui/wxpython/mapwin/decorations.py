@@ -6,8 +6,8 @@
 Classes:
  - decorations::OverlayController
  - decorations::BarscaleController
+ - decorations::ArrowController
  - decorations::LegendController
- - decorations::DecorationDialog
  - decorations::TextLayerDialog
 
 (C) 2006-2013 by the GRASS Development Team
@@ -19,26 +19,30 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-from core.utils import GetLayerNameFromCmd, _
-from gui_core.forms import GUI
+from core.utils import _
 
-from grass.pydispatch.errors import DispatcherKeyError
+from grass.pydispatch.signal import Signal
 
 
 class OverlayController(object):
 
     """!Base class for decorations (barscale, legend) controller."""
 
-    def __init__(self, renderer):
+    def __init__(self, renderer, giface):
+        self._giface = giface
         self._renderer = renderer
         self._overlay = None
-        self._coords = [0, 0]
+        self._coords = None
         self._pdcType = 'image'
         self._propwin = None
         self._defaultAt = ''
         self._cmd = None   # to be set by user
         self._name = None  # to be defined by subclass
         self._id = None    # to be defined by subclass
+        self._dialog = None
+
+        # signals that overlay or its visibility changed
+        self.overlayChanged = Signal('OverlayController::overlayChanged')
 
     def SetCmd(self, cmd):
         hasAt = False
@@ -59,6 +63,9 @@ class OverlayController(object):
         self._coords = list(coords)
 
     def GetCoords(self):
+        if self._coords is None:  # initial position
+            x, y = self.GetPlacement((self._renderer.width, self._renderer.height))
+            self._coords = [x, y]
         return self._coords
 
     coords = property(fset=SetCoords, fget=GetCoords)
@@ -91,6 +98,14 @@ class OverlayController(object):
 
     layer = property(fget=GetLayer)
 
+    def GetDialog(self):
+        return self._dialog
+
+    def SetDialog(self, win):
+        self._dialog = win
+
+    dialog = property(fget=GetDialog, fset=SetDialog)
+
     def IsShown(self):
         if self._overlay and self._overlay.IsActive():
             return True
@@ -106,9 +121,28 @@ class OverlayController(object):
         else:
             self.Hide()
 
+        self.overlayChanged.emit()
+
     def Hide(self):
         if self._overlay:
             self._overlay.SetActive(False)
+        self.overlayChanged.emit()
+
+    def GetOptData(self, dcmd, layer, params, propwin):
+        """!Called after options are set through module dialog.
+
+        @param dcmd resulting command
+        @param layer not used
+        @param params module parameters (not used)
+        @param propwin dialog window
+        """
+        if not dcmd:
+            return
+
+        self._cmd = dcmd
+        self._dialog = propwin
+
+        self.Show()
 
     def _add(self):
         self._overlay = self._renderer.AddOverlay(id=self._id, ltype=self._name,
@@ -120,26 +154,73 @@ class OverlayController(object):
         self._renderer.ChangeOverlay(id=self._id, command=self._cmd,
                                      render=False)
 
+    def CmdIsValid(self):
+        """!If command is valid"""
+        return True
+
+    def GetPlacement(self, screensize):
+        """!Get coordinates where to place overlay in a reasonable way
+
+        @param screensize sreen size
+        """
+        for param in self._cmd:
+            if not param.startswith('at'):
+                continue
+            x, y = [float(number) for number in param.split('=')[1].split(',')]
+            x = int((x / 100.) * screensize[0])
+            y = int((1 - y / 100.) * screensize[1])
+
+            return x, y
+
 
 class BarscaleController(OverlayController):
 
-    def __init__(self, renderer):
-        OverlayController.__init__(self, renderer)
-        self._id = 0
+    def __init__(self, renderer, giface):
+        OverlayController.__init__(self, renderer, giface)
+        self._id = 1
         self._name = 'barscale'
-        self._defaultAt = 'at=0,95'
+        # different from default because the reference point is not in the middle
+        self._defaultAt = 'at=0,98'
         self._cmd = ['d.barscale', self._defaultAt]
+
+
+class ArrowController(OverlayController):
+
+    def __init__(self, renderer, giface):
+        OverlayController.__init__(self, renderer, giface)
+        self._id = 2
+        self._name = 'arrow'
+        # different from default because the reference point is not in the middle
+        self._defaultAt = 'at=85.0,25.0'
+        self._cmd = ['d.northarrow', self._defaultAt]
 
 
 class LegendController(OverlayController):
 
-    def __init__(self, renderer):
-        OverlayController.__init__(self, renderer)
-        self._id = 1
+    def __init__(self, renderer, giface):
+        OverlayController.__init__(self, renderer, giface)
+        self._id = 0
         self._name = 'legend'
         # TODO: synchronize with d.legend?
         self._defaultAt = 'at=5,50,2,5'
         self._cmd = ['d.legend', self._defaultAt]
+
+    def GetPlacement(self, screensize):
+        for param in self._cmd:
+            if not param.startswith('at'):
+                continue
+            b, t, l, r = [float(number) for number in param.split('=')[1].split(',')]  # pylint: disable-msg=W0612
+            x = int((l / 100.) * screensize[0])
+            y = int((1 - t / 100.) * screensize[1])
+
+            return x, y
+
+    def CmdIsValid(self):
+        for param in self._cmd:
+            param = param.split('=')
+            if param[0] == 'map' and len(param) == 2:
+                return True
+        return False
 
     def ResizeLegend(self, begin, end, screenSize):
         """!Resize legend according to given bbox coordinates."""
@@ -165,211 +246,27 @@ class LegendController(OverlayController):
                 self._cmd[i] = atStr
                 break
 
-        self._coords = [0, 0]
+        self._coords = None
         self.Show()
 
-
-DECOR_DIALOG_LEGEND = 0
-DECOR_DIALOG_BARSCALE = 1
-
-
-class DecorationDialog(wx.Dialog):
-
-    """!Controls setting options and displaying/hiding map overlay
-    decorations
-    """
-
-    def __init__(self, parent, title, giface, overlayController,
-                 ddstyle, **kwargs):
-
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, title, **kwargs)
-
-        self.parent = parent  # MapFrame
-        self._overlay = overlayController
-        self._ddstyle = ddstyle
-        self._giface = giface
-
-        sizer = wx.BoxSizer(wx.VERTICAL)
-
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        self.chkbox = wx.CheckBox(parent=self, id=wx.ID_ANY)
-        self.chkbox.SetValue(True)
-
-        if self._ddstyle == DECOR_DIALOG_LEGEND:
-            self.chkbox.SetLabel("Show legend")
-        else:
-            self.chkbox.SetLabel("Show scale and North arrow")
-
-        box.Add(item=self.chkbox, proportion=0,
-                flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-        sizer.Add(item=box, proportion=0,
-                  flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
-
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        optnbtn = wx.Button(parent=self, id=wx.ID_ANY, label=_("Set options"))
-        box.Add(item=optnbtn, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-        sizer.Add(item=box, proportion=0,
-                  flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
-        if self._ddstyle == DECOR_DIALOG_LEGEND:
-            box = wx.BoxSizer(wx.HORIZONTAL)
-            self.resizeBtn = wx.ToggleButton(
-                parent=self, id=wx.ID_ANY, label=_("Set size and position"))
-            self.resizeBtn.SetToolTipString(_("Click and drag on the map display to set legend "
-                                              "size and position and then press OK"))
-            self.resizeBtn.Disable()
-            toolSwitcher = self._giface.GetMapDisplay().GetToolSwitcher()
-            toolSwitcher.AddCustomToolToGroup(group='mouseUse', btnId=self.resizeBtn.GetId(),
-                                              toggleHandler=self.resizeBtn.SetValue)
-            toolSwitcher.toggleToolChanged.connect(self._toolChanged)
-            self.resizeBtn.Bind(wx.EVT_TOGGLEBUTTON, lambda evt: toolSwitcher.ToolChanged(evt.GetId()))
-
-            box.Add(item=self.resizeBtn, proportion=0,
-                    flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-            sizer.Add(item=box, proportion=0,
-                      flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
-
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        if self._ddstyle == DECOR_DIALOG_LEGEND:
-            labelText = _("Drag legend object with mouse in pointer mode to position.\n"
-                          "Double-click to change options.\n"
-                          "Define raster map name for legend in properties dialog.")
-        else:
-            labelText = _("Drag scale object with mouse in pointer mode to position.\n"
-                          "Double-click to change options.")
-
-        label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                              label=labelText)
-
-        box.Add(item=label, proportion=0,
-                flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
-        sizer.Add(item=box, proportion=0,
-                  flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
-
-        line = wx.StaticLine(
-            parent=self, id=wx.ID_ANY, size=(20, -1), style = wx.LI_HORIZONTAL)
-        sizer.Add(item=line, proportion=0,
-                  flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
-
-        # buttons
-        btnsizer = wx.StdDialogButtonSizer()
-
-        self.btnOK = wx.Button(parent=self, id=wx.ID_OK)
-        self.btnOK.SetDefault()
-        self.btnOK.Enable(self._ddstyle != DECOR_DIALOG_LEGEND)
-        btnsizer.AddButton(self.btnOK)
-
-        btnCancel = wx.Button(parent=self, id=wx.ID_CANCEL)
-        btnsizer.AddButton(btnCancel)
-        btnsizer.Realize()
-
-        sizer.Add(item=btnsizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
-
-        #
-        # bindings
-        #
-        optnbtn.Bind(wx.EVT_BUTTON, self.OnOptions)
-        btnCancel.Bind(wx.EVT_BUTTON, lambda evt: self.CloseDialog())
-        self.btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
-
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-
-        mapName, found = GetLayerNameFromCmd(self._overlay.cmd)
-        if found:
-            # enable 'OK' and 'Resize' button
-            self.btnOK.Enable()
-
-            # set title
-            self.SetTitle(_('Legend of raster map <%s>') %
-                          mapName)
-
-    def OnOptions(self, event):
-        """!Sets option for decoration map overlays
-        """
-        if self._overlay.propwin is None:
-            # build properties dialog
-            GUI(parent=self.parent).ParseCommand(cmd=self._overlay.cmd,
-                                                 completed=(self.GetOptData, self._overlay.name, ''))
-
-        else:
-            if self._overlay.propwin.IsShown():
-                self._overlay.propwin.SetFocus()
-            else:
-                self._overlay.propwin.Show()
-
-    def _toolChanged(self, id):
+    def StartResizing(self):
         """!Tool in toolbar or button itself were pressed"""
-        if id == self.resizeBtn.GetId():
-            if self.resizeBtn.GetValue():
-                # prepare for resizing
-                window = self._giface.GetMapWindow()
-                window.SetNamedCursor('cross')
-                window.mouse['use'] = None
-                window.mouse['box'] = 'box'
-                window.pen = wx.Pen(colour='Black', width=2, style=wx.SHORT_DASH)
-                window.mouseLeftUp.connect(self._resizeLegend)
-            else:
-                # stop resizing mode
-                self.DisconnectResizing()
-                self._giface.GetMapDisplay().GetMapToolbar().SelectDefault()
-        else:
-            # any other tool was pressed -> stop resizing mode
-            self.DisconnectResizing()
-
-    def DisconnectResizing(self):
-        if not self.parent.IsPaneShown('3d'):
-            try:            
-                self._giface.GetMapWindow().mouseLeftUp.disconnect(self._resizeLegend)
-            except DispatcherKeyError:
-                pass
-
-    def _resizeLegend(self, x, y):
-        """!Update legend after drawing new legend size (moved from BufferedWindow)"""
-        self._giface.GetMapDisplay().GetMapToolbar().SelectDefault()
-        self.DisconnectResizing()
-        # resize legend
+        # prepare for resizing
         window = self._giface.GetMapWindow()
+        window.SetNamedCursor('cross')
+        window.mouse['use'] = None
+        window.mouse['box'] = 'box'
+        window.pen = wx.Pen(colour='Black', width=2, style=wx.SHORT_DASH)
+        window.mouseLeftUp.connect(self._finishResizing)
+
+    def _finishResizing(self):
+        window = self._giface.GetMapWindow()
+        window.mouseLeftUp.disconnect(self._finishResizing)
         screenSize = window.GetClientSizeTuple()
-        self._overlay.ResizeLegend(window.mouse["begin"], window.mouse["end"], screenSize)
+        self.ResizeLegend(window.mouse["begin"], window.mouse["end"], screenSize)
+        self._giface.GetMapDisplay().GetMapToolbar().SelectDefault()
         # redraw
-        self._giface.updateMap.emit()
-
-    def CloseDialog(self):
-        """!Hide dialog"""
-        if self._ddstyle == DECOR_DIALOG_LEGEND and self.resizeBtn.GetValue():
-            self.DisconnectResizing()
-
-        self.Hide()
-
-    def OnOK(self, event):
-        """!Button 'OK' pressed"""
-        # enable or disable overlay
-        self._overlay.Show(self.chkbox.IsChecked())
-
-        # update map
-        if self.parent.IsPaneShown('3d'):
-            self.parent.MapWindow.UpdateOverlays()
-
-        self._giface.updateMap.emit()
-
-        # hide dialog
-        self.CloseDialog()
-
-    def GetOptData(self, dcmd, layer, params, propwin):
-        """!Process decoration layer data"""
-        if dcmd:
-            self._overlay.cmd = dcmd
-        self._overlay.propwin = propwin
-        if params:
-            self.btnOK.Enable()
-            if self._ddstyle == DECOR_DIALOG_LEGEND and not self.parent.IsPaneShown('3d'):
-                self.resizeBtn.Enable()
-
-    def Show(self, show=True):
-        if show and self._ddstyle == DECOR_DIALOG_LEGEND:
-            self.resizeBtn.Enable(not self.parent.IsPaneShown('3d'))
-        wx.Dialog.Show(self, show)
+        self.overlayChanged.emit()
 
 
 class TextLayerDialog(wx.Dialog):
@@ -440,7 +337,7 @@ class TextLayerDialog(wx.Dialog):
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(2, 0))
         self.rotation = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="", pos=(30, 50),
-                                    size = (75, -1), style = wx.SP_ARROW_KEYS)
+                                    size=(75, -1), style=wx.SP_ARROW_KEYS)
         self.rotation.SetRange(-360, 360)
         self.rotation.SetValue(int(self.currRot))
         box.Add(item=self.rotation,
@@ -467,7 +364,7 @@ class TextLayerDialog(wx.Dialog):
                        flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.ALL, border=5)
 
         line = wx.StaticLine(parent=self, id=wx.ID_ANY,
-                             size=(20, -1), style = wx.LI_HORIZONTAL)
+                             size=(20, -1), style=wx.LI_HORIZONTAL)
         self.sizer.Add(item=line, proportion=0,
                        flag=wx.EXPAND | wx.ALIGN_CENTRE | wx.ALL, border=5)
 
