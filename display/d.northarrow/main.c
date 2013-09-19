@@ -90,6 +90,15 @@ int main(int argc, char **argv)
     no_text->description = _("Draw the symbol without text");
     no_text->guisection = _("Text");
 
+/* TODO:
+     - add rotation= option to rotate the north arrow by an arbitrary amount.
+       do a bit of trig to figure out where to put the "N" (and rotate it too).
+     - add a -n flag to rotate to match true north instead of grid north.
+       Similar to 'g.region -n' but use the at=x,y coord for the convergence
+       angle calc. (assuming that's the center of the icon)
+ */
+
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
