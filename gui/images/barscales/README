@@ -1,0 +1,21 @@
+How to generate new scale bar thumbnail
+=======================================
+Expects North Carolina dataset. The thumbnail height should be 24 px.
+
+
+export GRASS_RENDER_IMMEDIATE=png
+export GRASS_TRUECOLOR=TRUE
+export GRASS_WIDTH=300
+export GRASS_HEIGHT=300
+g.region rast=elevation
+
+for STYLE in classic line solid hollow full_checker part_checker mixed_checker tail_checker up_ticks down_ticks both_ticks arrow_ends
+do
+	echo ${STYLE}
+	export GRASS_PNGFILE=${STYLE}.png
+	d.barscale style=${STYLE} at=20,20
+	mogrify -trim ${STYLE}.png
+	identify -format "%[fx:w]x%[fx:h]" ${STYLE}.png
+	convert ${STYLE}.png -gravity center -background white -extent 170x24  ${STYLE}.png
+	optipng -o5 ${STYLE}.png ${STYLE}.png --quiet
+done
