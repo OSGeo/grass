@@ -292,8 +292,7 @@ class RasterSegment(RasterAbstractBase):
         for row in xrange(self._rows):
             libraster.Rast_get_row(
                 self._fd, row_buffer.p, row, self._gtype)
-            libseg.segment_put_row(ctypes.byref(self.segment.c_seg),
-                                   row_buffer.p, row)
+            self.segment.put_row(row, row_buffer)
 
     @must_be_open
     def segment2map(self):
@@ -301,8 +300,7 @@ class RasterSegment(RasterAbstractBase):
         """
         row_buffer = Buffer((self._cols), self.mtype)
         for row in xrange(self._rows):
-            libseg.segment_get_row(ctypes.byref(self.segment.c_seg),
-                                   row_buffer.p, row)
+            row_buffer = self.segment.get_row(row, row_buffer)
             libraster.Rast_put_row(self._fd, row_buffer.p, self._gtype)
 
     @must_be_open
