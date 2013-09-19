@@ -143,7 +143,7 @@ int draw_n_arrow(double east, double north, double fontsize,
     y0 = D_d_to_u_row(y_pos);
 
     if (n_arrow_num[0] == 'b')
-	strcpy(icon, "n_arrows/compass");
+	strcpy(icon, "n_arrows/basic_compass");
     else if (n_arrow_num[0] == 'f')
 	strcpy(icon, "n_arrows/fancy_compass");
     else {
