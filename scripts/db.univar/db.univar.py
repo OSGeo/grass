@@ -155,16 +155,16 @@ def main():
     if not shellstyle:
         print ""
         print "Number of values: %d" % N
-        print "Minimum: %g" % minv
-        print "Maximum: %g" % maxv
-        print "Range: %g" % (maxv - minv)
+        print "Minimum: %.15g" % minv
+        print "Maximum: %.15g" % maxv
+        print "Range: %.15g" % (maxv - minv)
         print "-----"
-        print "Mean: %g" % (sum/N)
-        print "Arithmetic mean of absolute values: %g" % (sum3/N)
-        print "Variance: %g" % ((sum2 - sum*sum/N)/N)
-        print "Standard deviation: %g" % (math.sqrt((sum2 - sum*sum/N)/N))
-        print "Coefficient of variation: %g" % ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N))
-        print "Sum: %g" % sum
+        print "Mean: %.15g" % (sum/N)
+        print "Arithmetic mean of absolute values: %.15g" % (sum3/N)
+        print "Variance: %.15g" % ((sum2 - sum*sum/N)/N)
+        print "Standard deviation: %.15g" % (math.sqrt((sum2 - sum*sum/N)/N))
+        print "Coefficient of variation: %.15g" % ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N))
+        print "Sum: %.15g" % sum
         print "-----"
     else:
         print "n=%d" % N
@@ -226,29 +226,29 @@ def main():
     q50 = (q50a + q50b) / 2
 
     if not shellstyle:
-        print "1st Quartile: %g" % q25
-        print "Median (%s N): %g" % (eostr, q50)
-        print "3rd Quartile: %g" % q75
+        print "1st Quartile: %.15g" % q25
+        print "Median (%s N): %.15g" % (eostr, q50)
+        print "3rd Quartile: %.15g" % q75
         for i in range(len(perc)):
             if perc[i] == int(perc[i]): # integer
                 if int(perc[i]) % 10 == 1 and int(perc[i]) != 11:
-                    print "%dst Percentile: %g" % (int(perc[i]), pval[i])
+                    print "%dst Percentile: %.15g" % (int(perc[i]), pval[i])
                 elif int(perc[i]) % 10 == 2 and int(perc[i]) != 12:
-                    print "%dnd Percentile: %g" % (int(perc[i]), pval[i])
+                    print "%dnd Percentile: %.15g" % (int(perc[i]), pval[i])
                 elif int(perc[i]) % 10 == 3 and int(perc[i]) != 13:
-                    print "%drd Percentile: %g" % (int(perc[i]), pval[i])
+                    print "%drd Percentile: %.15g" % (int(perc[i]), pval[i])
                 else:
-                    print "%dth Percentile: %g" % (int(perc[i]), pval[i])
+                    print "%dth Percentile: %.15g" % (int(perc[i]), pval[i])
             else:
-                print "%.15g Percentile: %g" % (perc[i], pval[i])
+                print "%.15g Percentile: %.15g" % (perc[i], pval[i])
     else:
-        print "first_quartile=%g" % q25
-        print "median=%g" % q50
-        print "third_quartile=%g" % q75
+        print "first_quartile=%.15g" % q25
+        print "median=%.15g" % q50
+        print "third_quartile=%.15g" % q75
         for i in range(len(perc)):
             percstr = "%.15g" % perc[i]
             percstr = percstr.replace('.','_')
-            print "percentile_%s=%g" % (percstr, pval[i])
+            print "percentile_%s=%.15g" % (percstr, pval[i])
 
 if __name__ == "__main__":
     options, flags = grass.parser()
