@@ -1,71 +1,56 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.water.outlet</em> generates a watershed basin from a drainage
-direction map (from <em><a href="r.watershed.html">r.watershed</a></em>) and
-a set of coordinates representing the outlet point of watershed.
+direction map and a set of coordinates representing the outlet point
+of watershed.
 
-<h3>Selected Parameters</h3>
-<dl>
-
-<dt><b>input=</b><em>name</em> 
-
-<dd>Input map: drainage direction. Indicates the "aspect" for each 
-cell. Multiplying positive values by 45 will give the direction in 
-degrees that the surface runoff will travel from that cell. The 
-value -1 indicates that the cell is a depression area. 
-Other negative values indicate that 
-surface runoff is leaving the boundaries of the current geographic 
-region. The absolute value of these negative cells indicates the 
-direction of flow. This map is generated from 
+<p>
+Input drainage direction map indicates the &quot;aspect&quot; for each
+cell. Multiplying positive values by 45 will give the direction in
+degrees that the surface runoff will travel from that cell. The value
+-1 indicates that the cell is a depression area. Other negative values
+indicate that surface runoff is leaving the boundaries of the current
+geographic region. The absolute value of these negative cells
+indicates the direction of flow. This raster map is generated from
 <em><a href="r.watershed.html">r.watershed</a></em>.
 
-<dt><b>output=</b><em>name</em> 
-
-<dd>Output map: Values of one (1) indicate the watershed
-basin. Values of zero are not in the watershed basin.
-
-<dt><b>easting=</b><em>value</em> 
-
-<dd>Input value: Easting value of outlet point. 
-
-<dt><b>northing=</b><em>value</em> 
-
-<dd>Input value: Northing value of outlet point. 
-
-</dl>
+<p>
+Output raster map values of one (1) indicate the watershed
+basin. Values of zero (0) are not in the watershed basin.
 
 <h2>NOTES</h2>
 
-In the context of this program, a watershed basin is the
-region upstream of an outlet point. Thus, if the user
-chooses an outlet point on a hill slope, the resulting map
-will be a thin silver of land representing the overland
-slope uphill of the point.
+In the context of this program, a watershed basin is the region
+upstream of an outlet point. Thus, if the user chooses an outlet point
+on a hill slope, the resulting map will be a thin silver of land
+representing the overland slope uphill of the point.
 
 <h2>EXAMPLE</h2>
 
-A watershed in the North Carolina sample dataset region:
+A watershed in
+the <a href="http://grass.osgeo.org/download/sample-data/">North
+Carolina sample dataset</a> region:
 
 <div class="code"><pre>
 g.region rast=elev_lid792_1m -p
 # the watershed outlet position should be placed on a stream (from
 # accumulation map):
-r.watershed elev_lid792_1m thresh=5000 accum=accum_5K \
-  drain=draindir_5K output=basin_5K
-r.water.outlet input=draindir_5K output=basin_A30 \
-  east=638741.43125 north=220269.7
-d.mon x0
-d.rast accum_5K
-d.rast -o basin_A30
+r.watershed elev_lid792_1m thresh=5000 accum=accum_5K drain=draindir_5K basin=basin_5K
+r.water.outlet input=draindir_5K output=basin_A30 coord=638741.43125,220269.7
+
+d.mon wx0
+d.rast map=accum_5K
+d.rast map=basin_A30
 
 # overlay with transparency
-r.colors basin_A30 color=grey
+r.colors map=basin_A30 color=grey
 d.his h=accum_5K i=basin_A30
 </pre></div>
 
-<p><center>
+<p>
+<center>
 <img src="r_water_outlet.png" border=0><br>
-<i>Watershed draped over flow accumulation</i>
+<i>Figure: Watershed draped over flow accumulation</i>
 </center>
 
 <h2>SEE ALSO</h2>
@@ -81,4 +66,5 @@ d.his h=accum_5K i=basin_A30
 
 Charles Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

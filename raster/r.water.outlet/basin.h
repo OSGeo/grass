@@ -7,7 +7,10 @@
 #define AR_SIZE			16
 #define AR_INCR		64
 #define ABS(x)		(((x) < 0) ? -(x) : (x))
-#define MIN(x,y)	(((x) < (y)) ? (x) : (y))
+#ifdef MIN
+ #undef MIN
+ #define MIN(x,y)	(((x) < (y)) ? (x) : (y))
+#endif
 #define MAX_RAM		1000000
 #define SROW		11
 #define SCOL		10
