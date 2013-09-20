@@ -23,7 +23,7 @@ import wx
 from core.utils import _
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
-from iclass.dialogs import IClassMapDialog
+from iclass.dialogs import IClassMapDialog, ContrastColor
 from gui_core.forms import GUI
 
 import grass.script as grass
@@ -46,9 +46,7 @@ iClassIcons = {
         'importAreas' : MetaIcon(img = 'layer-import',
                             label = _('Import training areas from vector map')),
         'addRgb' : MetaIcon(img = 'layer-rgb-add',
-                            label = _('Add RGB map layer')),
-        'scatt_plot'    : MetaIcon(img = 'layer-raster-analyze',
-                                   label = _('Open Scatter Plot Tool (EXPERIMENTAL GSoC 2013)')),
+                            label = _('Add RGB map layer'))
         }
         
 class IClassMapToolbar(BaseToolbar):
@@ -117,17 +115,16 @@ class IClassMapToolbar(BaseToolbar):
                                      ("zoomBack", icons["zoomBack"],
                                       self.parent.OnZoomBack),
                                      ("zoomToMap", icons["zoomExtent"],
-                                      self.parent.OnZoomToMap),
-                                     (None, ),
-                                     ("scatt_plot", iClassIcons["scatt_plot"],
-                                      self.parent.OnScatterplot)
+                                      self.parent.OnZoomToMap)
                                     ))
 class IClassToolbar(BaseToolbar):
     """!IClass toolbar
     """
-    def __init__(self, parent):
+    def __init__(self, parent, stats_data):
         """!IClass toolbar constructor
         """
+        self.stats_data = stats_data
+
         BaseToolbar.__init__(self, parent)
         self.InitToolbar(self._toolbarData())
         
@@ -148,7 +145,12 @@ class IClassToolbar(BaseToolbar):
         
         self.combo.Bind(wx.EVT_COMBOBOX, self.OnStdChangeSelection)
         self.combo.Bind(wx.EVT_TEXT_ENTER, self.OnStdChangeText)
-        
+    
+        self.stats_data.statisticsAdded.connect(self.Update)
+        self.stats_data.statisticsDeleted.connect(self.Update)
+        self.stats_data.allStatisticsDeleted.connect(self.Update)
+        self.stats_data.statisticsSet.connect(self.Update)
+
         # realize the toolbar
         self.Realize()
         
@@ -171,13 +173,30 @@ class IClassToolbar(BaseToolbar):
                                       ("sigFile", icons['sigFile'],
                                       self.parent.OnSaveSigFile),
                                     ))
-                                    
+
+    def OnMotion(self, event):
+        print self.choice.GetStringSelection()
+                                
     def OnSelectCategory(self, event):
         idx = self.choice.GetSelection()
         cat = self.choice.GetClientData(idx)
-        
+
+        self._updateColor(cat)
         self.parent.CategoryChanged(currentCat = cat)
         
+    def _updateColor(self, cat):
+
+        if cat:
+            stat = self.stats_data.GetStatistics(cat)
+            back_c = wx.Colour(*map(int, stat.color.split(':')))
+            text_c = wx.Colour(*ContrastColor(back_c))
+        else:
+            back_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND)
+            text_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
+
+        self.choice.SetForegroundColour(text_c)
+        self.choice.SetBackgroundColour(back_c)
+
     def SetCategories(self, catNames, catIdx):
         self.choice.Clear()
         for name, idx in zip(catNames, catIdx):
@@ -231,6 +250,33 @@ class IClassToolbar(BaseToolbar):
     def EnableControls(self, enable = True):
         self.combo.Enable(enable)
         self.choice.Enable(enable)
+
+    def Update(self, *args, **kwargs):
+        name = self.GetSelectedCategoryName()
+        catNames = []
+
+        cats = self.stats_data.GetCategories()
+        for cat in cats:
+            stat = self.stats_data.GetStatistics(cat)
+            catNames.append(stat.name)
+        self.SetCategories(catNames = catNames, catIdx = cats)
+        if name in catNames:
+            self.choice.SetStringSelection(name)
+            cat = self.GetSelectedCategoryIdx()
+        elif catNames:
+            self.choice.SetSelection(0)
+            cat = self.GetSelectedCategoryIdx()
+        else:
+            cat = None
+
+        if self.choice.IsEmpty():
+            self.EnableControls(False)
+        else:
+            self.EnableControls(True)
+
+        self._updateColor(cat)
+        self.parent.CategoryChanged(cat)
+        # don't forget to update maps, histo, ...
         
 class IClassMapManagerToolbar(BaseToolbar):
     """!IClass toolbar
