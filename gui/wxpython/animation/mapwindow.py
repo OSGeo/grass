@@ -24,7 +24,7 @@ import grass.script as grass
 from core.gcmd import RunCommand, GException
 from core.debug import Debug
 from core.settings import UserSettings
-from core.utils import _, CmdToTuple
+from core.utils import _, CmdToTuple, autoCropImageFromFile
 
 from grass.pydispatch.signal import Signal
 
@@ -150,22 +150,30 @@ class AnimationWindow(BufferedWindow):
         self.text = text
         self.UpdateDrawing()
 
-    def DrawOverlay(self):
+    def DrawOverlay(self, x, y):
         self._pdc.BeginDrawing()
         self._pdc.SetId(1)
-        self._pdc.DrawBitmap(bmp=self._overlay, x=0, y=0)
-        self._pdc.SetIdBounds(1, wx.Rect(0, 0, self._overlay.GetWidth(),
+        self._pdc.DrawBitmap(bmp=self._overlay, x=x, y=y)
+        self._pdc.SetIdBounds(1, wx.Rect(x, y, self._overlay.GetWidth(),
                                          self._overlay.GetHeight()))
         self._pdc.EndDrawing()
 
-    def SetOverlay(self, bitmap):
-        """!Sets overlay bitmap (legend)"""
+    def SetOverlay(self, bitmap, xperc, yperc):
+        """!Sets overlay bitmap (legend)
+
+        @param bitmap instance of wx.Bitmap
+        @param xperc x coordinate of bitmap top left corner in % of screen
+        @param yperc y coordinate of bitmap top left corner in % of screen
+        """
         Debug.msg(3, "AnimationWindow.SetOverlay()")
         if bitmap:
             if self._overlay:
                 self._pdc.RemoveAll()
             self._overlay = bitmap
-            self.DrawOverlay()
+            size = self.GetClientSize()
+            x = xperc * size[0]
+            y = yperc * size[1]
+            self.DrawOverlay(x, y)
         else:
             self._overlay = None
             self._pdc.RemoveAll()
@@ -480,8 +488,7 @@ class BitmapProvider(object):
         returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
 
         if returncode == 0:
-            bitmap = wx.Bitmap(filename, wx.BITMAP_TYPE_PNG)
-            return bitmap
+            return wx.BitmapFromImage(autoCropImageFromFile(filename))
         else:
             os.remove(filename)
             raise GException(messages)

@@ -535,7 +535,8 @@ class InputDialog(wx.Dialog):
                 self.animationData.legendCmd = self._tmpLegendCmd
         else:
             if self.legend.IsChecked():
-                self.animationData.legendCmd = ['d.legend', 'at=5,50,2,5', 
+                self.animationData.legendCmd = ['d.legend', 
+                                                'at=5,50,2,5',
                                                 'map=%s' % self._getLegendMapHint()]
 
         if self.threeDPanel.IsShown():
