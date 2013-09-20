@@ -69,7 +69,6 @@ class IClassGroupDialog(SimpleDialog):
         if subgroup:
             self.subGroupSelect.SetValue(subgroup)
 
-
         self.editGroup = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                    label = _("Create/edit group..."))
 
@@ -158,7 +157,8 @@ class IClassGroupDialog(SimpleDialog):
             self.GroupSelected()
             wx.CallAfter(self.subGroupSelect.SetValue, s)
         dlg.Destroy()
-        
+        event.Veto()
+
     def GroupSelected(self):
         group = self.GetSelectedGroup()
         self.subGroupSelect.Insert(group)
@@ -337,7 +337,6 @@ class IClassCategoryManagerDialog(wx.Dialog):
     def OnClose(self, event):
         self.catList.DeselectAll()
         
-        self.catList.UpdateChoice()
         self.Hide()
         #if not isinstance(event, wx.CloseEvent):
             #self.Destroy()
@@ -404,11 +403,9 @@ class CategoryListCtrl(wx.ListCtrl,
                 GMessage(parent = self, message = _("Please use only ASCII characters."))
                 return
 
-
         cat = self.stats_data.GetCategories()[row]
         self.stats_data.GetStatistics(cat).SetStatistics(stats = {attr : text})
         
-        self.UpdateChoice()
         toolbar = self.mapWindow.toolbars['iClass']
         toolbar.choice.SetSelection(row)
         self.Select(row)
@@ -431,7 +428,6 @@ class CategoryListCtrl(wx.ListCtrl,
         self.stats_data.AddStatistics(cat, name, color)
         self.SetItemCount(len(self.stats_data.GetCategories()))
         
-        self.UpdateChoice()
         self.mapWindow.UpdateChangeState(changes = True)
                 
     def DeleteCategory(self):
@@ -452,32 +448,10 @@ class CategoryListCtrl(wx.ListCtrl,
             
         self.SetItemCount(len(self.stats_data.GetCategories()))
         
-        self.UpdateChoice()
         self.mapWindow.UpdateChangeState(changes = True)
         
         self.mapWindow.DeleteAreas(cats = del_cats)
-    
-    def UpdateChoice(self):
-        toolbar = self.mapWindow.toolbars['iClass']
-        name = toolbar.GetSelectedCategoryName()
-        catNames = []
-
-        cats = self.stats_data.GetCategories()
-        for cat in cats:
-            stat = self.stats_data.GetStatistics(cat)
-            catNames.append(stat.name)
-        toolbar.SetCategories(catNames = catNames, catIdx = cats)
-        if name in catNames:
-            toolbar.choice.SetStringSelection(name)
-        elif catNames:
-            toolbar.choice.SetSelection(0)
             
-        if toolbar.choice.IsEmpty():
-            toolbar.EnableControls(False)
-        else:
-            toolbar.EnableControls(True)
-        # don't forget to update maps, histo, ...
-        
     def GetSelectedIndices(self, state =  wx.LIST_STATE_SELECTED):
         indices = []
         lastFound = -1
@@ -494,7 +468,13 @@ class CategoryListCtrl(wx.ListCtrl,
         currentItem = event.m_itemIndex
         currentCol = event.m_col
         if currentCol == 1:
-            dlg = wx.ColourDialog(self)
+            col = self.OnGetItemText(currentItem, currentCol)
+            col = map(int, col.split(':'))
+
+            col_data =  wx.ColourData()
+            col_data.SetColour(wx.Colour(*col))
+
+            dlg = wx.ColourDialog(self, col_data)
             dlg.GetColourData().SetChooseFull(True)
 
             if dlg.ShowModal() == wx.ID_OK:
@@ -559,6 +539,31 @@ class CategoryListCtrl(wx.ListCtrl,
 
     def OnGetItemAttr(self, item):
         return None
+
+    def OnGetItemAttr(self, item):
+        """!Set correct class color for a item"""
+        back_c = wx.Colour(*map(int, self.OnGetItemText(item, 1).split(':')))
+        text_c = wx.Colour(*ContrastColor(back_c))
+
+        # if it is in scope of the method, gui falls, using self solved it 
+        self.l = wx.ListItemAttr(colText = text_c, colBack =  back_c)
+        return self.l
+    
+def ContrastColor(color):
+    """!Decides which value shoud have text to be contrast with backgroud color 
+        (bright bg -> black, dark bg -> white)
+
+    @todo could be useful by other apps, consider moving it into gui_core 
+    """
+    #gacek, http://stackoverflow.com/questions/1855884/determine-font-color-based-on-background-color
+    a = 1 - ( 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2])/255;
+
+    if a < 0.5:
+        d = 0
+    else:
+        d = 255 
+    # maybe return just bool if text shoud be dark or bright 
+    return (d, d, d)
 
 class IClassSignatureFileDialog(wx.Dialog):
     def __init__(self, parent, group, subgroup, 

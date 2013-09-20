@@ -64,6 +64,8 @@ from iclass.dialogs     import CategoryListCtrl, IClassCategoryManagerDialog,\
                                IClassExportAreasDialog, IClassMapDialog
 from iclass.plots       import PlotPanel
 
+from grass.pydispatch.signal import Signal
+
 class IClassMapFrame(DoubleMapFrame):
     """! wxIClass main frame
     
@@ -114,6 +116,16 @@ class IClassMapFrame(DoubleMapFrame):
             lambda:
             self.statusbarManager.statusbarItems['coordinates'].SetAdditionalInfo(None))
         self.SetSize(size)
+
+        #
+        #Signals
+        #
+
+        self.groupSet = Signal("IClassMapFrame.groupSet")
+        self.categoryChanged = Signal('IClassMapFrame.categoryChanged')
+
+        self.InitStatistics()
+
         #
         # Add toolbars
         #
@@ -162,9 +174,7 @@ class IClassMapFrame(DoubleMapFrame):
                                              Map = self.GetFirstMap())
         self.previewMapManager = MapManager(self, mapWindow = self.GetSecondWindow(),
                                             Map = self.GetSecondMap())
-                                           
-        self.InitStatistics()
-        
+                                                   
         self.changes = False
         self.exportVector = None
         
@@ -177,7 +187,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.dialogs['category']   = None
         
         # PyPlot init
-        self.plotPanel = PlotPanel(self, stats_data = self.stats_data)
+        self.plotPanel = PlotPanel(self, giface = self._giface, stats_data = self.stats_data)
                                    
         self._addPanes()
         self._mgr.Update()
@@ -237,7 +247,7 @@ class IClassMapFrame(DoubleMapFrame):
             return False
         
         return vectorName
-        
+    
     def RemoveTempVector(self):
         """!Removes temporary vector map with training areas"""
         ret = RunCommand(prog = 'g.remove',
@@ -282,7 +292,7 @@ class IClassMapFrame(DoubleMapFrame):
                               BestSize((self.toolbars[name].GetBestSize())))
                               
         if name == "iClass":
-            self.toolbars[name] = IClassToolbar(self)
+            self.toolbars[name] = IClassToolbar(self, stats_data=self.stats_data)
             
             self._mgr.AddPane(self.toolbars[name],
                               wx.aui.AuiPaneInfo().
@@ -334,11 +344,14 @@ class IClassMapFrame(DoubleMapFrame):
             self._addPaneMapWindow(name = 'preview')
             self._addPaneToolbar(name = 'iClassTrainingMapManager')
             self._addPaneMapWindow(name = 'training')
-        
+
+        # otherwise best size was ignored
+        self._mgr.SetDockSizeConstraint(0.5, 0.5) 
+
         self._mgr.AddPane(self.plotPanel, wx.aui.AuiPaneInfo().
                   Name("plots").Caption(_("Plots")).
                   Dockable(False).Floatable(False).CloseButton(False).
-                  Left().Layer(1).BestSize((400, -1)))
+                  Left().Layer(1).BestSize((310, -1)))
         
     def _addPaneToolbar(self, name):
         if name == 'iClassPreviewMapManager':
@@ -489,12 +502,14 @@ class IClassMapFrame(DoubleMapFrame):
                     group = grass.find_file(name=g, element='group')
                     self.g['group'] = group['name']
                     self.g['subgroup'] = s
+                    self.groupSet.emit(group=self.g['group'],
+                                       subgroup=self.g['subgroup'])
                     break
             else: 
                 break
         
         dlg.Destroy()
-    
+
     def OnImportAreas(self, event):
         """!Import training areas"""
         # check if we have any changes
@@ -771,17 +786,20 @@ class IClassMapFrame(DoubleMapFrame):
         
         Updates number of stddev, histograms, layer in preview display. 
         """
-        stat = self.stats_data.GetStatistics(currentCat)
-        nstd = stat.nstd
-        self.toolbars['iClass'].UpdateStddev(nstd)
-        
-        self.plotPanel.UpdateCategory(currentCat)
-        self.plotPanel.OnPlotTypeSelected(None)
+        if currentCat:
+          stat = self.stats_data.GetStatistics(currentCat)
+          nstd = stat.nstd
+          self.toolbars['iClass'].UpdateStddev(nstd)
+          
+          self.plotPanel.UpdateCategory(currentCat)
+          self.plotPanel.OnPlotTypeSelected(None)
                                    
-        name = stat.rasterName
-        name = self.previewMapManager.GetAlias(name)
-        if name:
-            self.previewMapManager.SelectLayer(name)
+          name = stat.rasterName
+          name = self.previewMapManager.GetAlias(name)
+          if name:
+              self.previewMapManager.SelectLayer(name)
+
+        self.categoryChanged.emit(cat = currentCat)
         
     def DeleteAreas(self, cats):
         """!Removes all training areas of given categories
@@ -808,12 +826,12 @@ class IClassMapFrame(DoubleMapFrame):
     def UpdateRasterName(self, newName, cat):
         """!Update alias of raster map when category name is changed"""
         origName = self.stats_data.GetStatistics(cat).rasterName
-        self.previewMapManager.SetAlias(origName, newName)
+        self.previewMapManager.SetAlias(origName, self._addSuffix(newName))
         
     def StddevChanged(self, cat, nstd):
         """!Standard deviation multiplier changed, rerender map, histograms"""
         stat = self.stats_data.GetStatistics(cat)
-        stat.nstd = nstd
+        stat.SetStatistics({"nstd" : nstd})
         
         if not stat.IsReady():
             return
@@ -925,7 +943,7 @@ class IClassMapFrame(DoubleMapFrame):
                 
                 self.ConvertToNull(name = stats.rasterName)
                 self.previewMapManager.AddLayer(name = stats.rasterName,
-                                                alias = stats.name, resultsLayer = True)
+                                                alias = self._addSuffix(stats.name), resultsLayer = True)
                 # write statistics
                 I_iclass_add_signature(self.signatures, statistics)
                 
@@ -938,7 +956,11 @@ class IClassMapFrame(DoubleMapFrame):
         
         self.UpdateChangeState(changes = False)
         return True
-        
+
+    def _addSuffix(self, name):
+        suffix = _('results')
+        return '_'.join((name, suffix))
+
     def OnSaveSigFile(self, event):
         """!Asks for signature file name and saves it."""
         if not self.g['group']:
@@ -1115,26 +1137,12 @@ class IClassMapFrame(DoubleMapFrame):
         self.GetFirstWindow().SetModePointer()
         self.GetSecondWindow().SetModePointer()
 
-    def OnScatterplot(self, event):
-        """!Init interactive scatterplot tools
-        """
-        if self.dialogs['scatt_plot']:
-            self.dialogs['scatt_plot'].Raise()
-            return
+    def GetMapManagers(self):
+      """!Get map managers of wxIClass 
 
-        try:
-          from scatt_plot.dialogs import ScattPlotMainDialog
-        except:
-          GError(parent  = self, message = _("The Scatter Plot Tool is not installed."))
-          return
-
-        self.dialogs['scatt_plot'] = ScattPlotMainDialog(parent=self, giface=self._giface, iclass_mapwin = self.GetFirstWindow())
-
-        scatt_mgr = self.dialogs['scatt_plot'].GetScattMgr()
-        scatt_mgr.DigitDataChanged(self.toolbars['vdigit'].mapLayer.GetName(), self.GetFirstWindow().GetDigit())
-
-        self.dialogs['scatt_plot'].CenterOnScreen()
-        self.dialogs['scatt_plot'].Show()
+      @return trainingMapManager, previewMapManager 
+      """
+      return self.trainingMapManager, self.previewMapManager
 
 class MapManager:
     """! Class for managing map renderer.
@@ -1178,7 +1186,6 @@ class MapManager:
         self.frame.Render(self.mapWindow)
         
         if alias is not None:
-            alias = self._addSuffix(alias)
             self.layerName[alias] = name
             name = alias
         else:
@@ -1235,7 +1242,11 @@ class MapManager:
                 self.toolbar.choice.SetSelection(0)
         
         self.frame.Render(self.mapWindow)
-        
+    
+    def Render(self):
+        """@todo giface shoud be used instead of this method"""
+        self.frame.Render(self.mapWindow)
+
     def RemoveLayer(self, name, idx):
         """!Removes layer from Map and update toolbar"""
         name = self.layerName[name]
@@ -1291,11 +1302,7 @@ class MapManager:
     def _changeOpacity(self, layer, opacity):
         self.map.ChangeOpacity(layer=layer, opacity=opacity)
         self.frame.Render(self.mapWindow)
-        
-    def _addSuffix(self, name):
-        suffix = _('results')
-        return '_'.join((name, suffix))
-        
+                
     def GetAlias(self, name):
         """!Returns alias for layer"""
         name =  [k for k, v in self.layerName.iteritems() if v == name]
@@ -1306,11 +1313,11 @@ class MapManager:
     def SetAlias(self, original, alias):
         name = self.GetAlias(original)
         if name:
-            self.layerName[self._addSuffix(alias)] = original
+            self.layerName[alias] = original
             del self.layerName[name]
             idx = self.toolbar.choice.FindString(name)
             if idx != wx.NOT_FOUND:
-                self.toolbar.choice.SetString(idx, self._addSuffix(alias))
+                self.toolbar.choice.SetString(idx, alias)
 
 def test():
     import core.render as render
