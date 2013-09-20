@@ -94,36 +94,25 @@ int dig_get_poly_points(int n_lines, struct line_pnts **LPoints,
  *
  * points must be closed polygon with first point = last point
  *
- * formula modified from:
- * Sunday, Daniel. 2002. Fast Polygon Area and Newell Normal Computation.
- * Journal of Graphics Tools; 7(2):9-13.
- *
  * returns signed area, positive for clockwise, negative for
  * counterclockwise, 0 for degenerate
  */
 int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
 {
-    int i, n = Points->n_points - 1;
+    int i;
     double *x, *y;
     double tot_area;
-
-    /* TODO: check if results are still accurate without pruning *Points first
-     * consecutive duplicate vertices should in theory result in wrong area size */
 
     x = Points->x;
     y = Points->y;
 
-    /* first point 0 == point n */
-    tot_area = y[0] * (x[1] - x[n - 1]);
-    for (i = 1; i < n; i++) {
-        tot_area += y[i] * (x[i + 1] - x[i - 1]);
-    }
-
-    /* tot_area = 0.0;
+    /* line integral: *Points do not need to be pruned */
+    /* surveyor's formula is more common, but more prone to
+     * fp precision limit errors, and *Points would need to be pruned */
+    tot_area = 0.0;
     for (i = 1; i < Points->n_points; i++) {
 	tot_area += (x[i] - x[i - 1]) * (y[i] + y[i - 1]);
-    } */
-
+    }
     *totalarea = 0.5 * tot_area;
 
     return (0);
