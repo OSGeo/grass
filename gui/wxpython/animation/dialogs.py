@@ -854,6 +854,9 @@ class ExportDialog(wx.Dialog):
         self.visvis = visvis
         self._layout()
 
+        # export animation
+        self.doExport = Signal('ExportDialog::doExport')
+
         wx.CallAfter(self._hideAll)
 
     def _layout(self):
@@ -1258,8 +1261,11 @@ class ExportDialog(wx.Dialog):
                 GError(parent = self, message = _("Export file is missing."))
                 return
 
-        self.EndModal(wx.ID_OK)
-           
+        # hide only to keep previous values
+        self.Hide()
+        self.doExport.emit(exportInfo=self.GetExportInformation(),
+                           decorations=self.GetDecorations())
+
     def GetDecorations(self):
         return self.decorations
 
