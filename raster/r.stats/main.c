@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
-    flag.a->description = _("Print area totals");
+    flag.a->description = _("Print area totals in square meters");
     flag.a->guisection = _("Print");
 
     flag.c = G_define_flag();
