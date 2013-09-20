@@ -3,7 +3,9 @@
      by M. Neteler 5/2004, 8/2005
   -->
 
-<b>Overview</b>
+<i>TODO: Update for this page for GRASS 7.</i>
+
+\section raster3dlib_Overview Overview
 
 The 3D Raster Volume Library is used for the <tt>r3.*</tt> and vector
 volume tools. The library uses a tile cache based approach to store
@@ -12,8 +14,6 @@ system of a volume is column and row compatible to the raster library
 and counts from the bottom to the top of the cube.
 
 \image html "volume_layout.png" "The volume coordinate system and tile layout of the 3D Raster Library"
-
-<b>TODO: update for GRASS7</b>
 
 \section Directory_Structure Directory Structure
 
@@ -1327,8 +1327,8 @@ The map structure of RASTER3D provides storage for the range.  The range of a ma
 updated every time a cell is written to the file. When an old map is opened the
 range is not automatically loaded. The application has to invoke
 <TT>Rast3d_range_load()</TT> (cf. Section 22.4.12)
- explicitly.  In
-addition to these function the application can also use the standard grass
+ explicitly.
+In addition to this function, the application can also use the standard GRASS
 functions to manipulate the range.
 
 <P>
@@ -1360,7 +1360,7 @@ Returns
 \subsection RASTER3D_Color_Support RASTER3D Color Support
 
 <P>
-Applications can use the standard grass functions to work with colors, except
+Applications can use the standard GRASS functions to work with colors, except
 for the file manipulations.
 
 <P>
@@ -1389,28 +1389,20 @@ int Rast3d_writeColors(char *name, char *mapset, struct Colors
 \subsection RASTER3D_Categories_Support RASTER3D Categories Support
 
 <P>
-Applications can use the standard grass functions to work with categories, 
+Applications can use the standard GRASS functions to work with categories, 
 except for the file manipulations.
 
 <P>
-int Rast3d_readCats(char *name, char *mapset, struct Categories *cats)
-Reads the categories file for map <EM>name</EM> in <EM>mapset</EM> and
-stores the categories in the <EM>cats</EM> structure.  See <EM>G_read_cats</EM>
-(Raster_Category_File) for details and return values.
-
-<P>
-int Rast3d_writeCats(char *name, struct Categories *cats) Writes the
-  categories stored in the <EM>cats</EM> structure into the categories file for
-  map <EM>name</EM> in the current mapset.  See <EM>G_write_cats</EM>
-  (Raster_Category_File) for details and return values.
-
+Function Rast3d_read_cats() reads the categories file for map and
+function Rast3d_write_cats() writes the
+categories the Categories structure into the categories file for a map.
 <P>
 
 
 \subsection RASTER3D_History_Support RASTER3D History Support
 
 <P>
-Applications can use the standard grass functions to work with histories, 
+Applications can use the standard GRASS functions to work with histories, 
 except for the file manipulations.
 
 <P>
