@@ -28,10 +28,11 @@ class PlotPanel(scrolled.ScrolledPanel):
     for each band and for one category. Coincidence plots show min max range
     of classes for each band.
     """
-    def __init__(self, parent, stats_data):
+    def __init__(self, parent, giface, stats_data):
         scrolled.ScrolledPanel.__init__(self, parent)
         
         self.SetupScrolling(scroll_x = False, scroll_y = True)
+        self._giface = giface
         self.parent = parent
         self.canvasList = []
         self.bandList = []
