@@ -212,6 +212,11 @@ class AnimationWindow(BufferedWindow):
             self.UpdateDrawing()
             self._tmpMousePos = current
 
+    def GetOverlayPos(self):
+        """!Returns x, y position in pixels"""
+        rect = self._pdc.GetIdBounds(1)
+        return rect.GetX(), rect.GetY()
+
 
 class BitmapProvider(object):
     """!Class responsible for loading data and providing bitmaps"""
