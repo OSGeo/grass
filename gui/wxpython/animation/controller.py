@@ -71,6 +71,8 @@ class AnimationController(wx.EvtHandler):
 
         self.timeTick = 200
 
+        self._dialogs = {}
+
     def SetAnimationToolbar(self, toolbar):
         self.animationToolbar = toolbar
 
@@ -458,18 +460,17 @@ class AnimationController(wx.EvtHandler):
         if not self.animationData:
             GMessage(parent = self.frame, message = _("No animation to export."))
             return
-        dlg = ExportDialog(self.frame, temporal = self.temporalMode,
-                           timeTick = self.timeTick, visvis = hasVisvis)
-        if dlg.ShowModal() == wx.ID_OK:
-            decorations = dlg.GetDecorations()
-            exportInfo = dlg.GetExportInformation()
-            dlg.Destroy()
+
+        if 'export' in self._dialogs:
+            self._dialogs['export'].Show()
+            self._dialogs['export'].Raise()
         else:
-            dlg.Destroy()
-            return
-
-        self._export(exportInfo, decorations)
-
+            dlg = ExportDialog(self.frame, temporal=self.temporalMode,
+                               timeTick=self.timeTick, visvis=hasVisvis)
+            dlg.doExport.connect(self._export)
+            self._dialogs['export'] = dlg
+            dlg.Show()
+        
     def _export(self, exportInfo, decorations):
         size = self.frame.animationPanel.GetSize()
         if self.temporalMode == TemporalMode.TEMPORAL:
