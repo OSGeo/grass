@@ -498,6 +498,17 @@ class AnimationController(wx.EvtHandler):
                 frameId = self.animations[animWinIndex[i]].GetFrame(frameIndex)
                 bitmap = self.bitmapProviders[animWinIndex[i]].GetBitmap(frameId)
                 im = wx.ImageFromBitmap(bitmap)
+
+                # add legend if used
+                legend = self.animationData[animWinIndex[i]].legendCmd
+                if legend:
+                    legendBitmap = self.bitmapProviders[animWinIndex[i]].LoadOverlay(legend)
+                    x, y = self.mapwindows[animWinIndex[i]].GetOverlayPos()
+                    legImage = wx.ImageFromBitmap(legendBitmap)
+                    # not so nice result, can we handle the transparency otherwise?
+                    legImage.ConvertAlphaToMask()
+                    im.Paste(legImage, x, y)
+
                 if im.GetSize() != animWinSize[i]:
                     im.Rescale(*animWinSize[i])
                 image.Paste(im, *animWinPos[i])
