@@ -5,6 +5,8 @@
 
 <i>TODO: Update for this page for GRASS 7.</i>
 
+\tableofcontents
+
 \section raster3dlib_Overview Overview
 
 The 3D Raster Volume Library is used for the <tt>r3.*</tt> and vector
@@ -1322,40 +1324,22 @@ int Rast3d_computeClippedTileDimensions(void *map, int tileIndex, int
 
 \subsection RASTER3D_Range_Support RASTER3D Range Support
 
-<P>
-The map structure of RASTER3D provides storage for the range.  The range of a map is
-updated every time a cell is written to the file. When an old map is opened the
-range is not automatically loaded. The application has to invoke
-<TT>Rast3d_range_load()</TT> (cf. Section 22.4.12)
- explicitly.
-In addition to this function, the application can also use the standard GRASS
-functions to manipulate the range.
+The map structure RASTER3D_Map provides storage for the range. The range of
+a map is updated every time a cell is written to the file. When an old map is
+opened the range is not automatically loaded. The application has to invoke
+Rast3d_range_load() explicitly. Alternatively, an application can use
+the Rast3d_read_range() function and FPRange structure to read the range.
 
-<P>
-int Rast3d_range_load(void *map)
-Loads the range into the range structure of <EM>map</EM>.
+Rast3d_range_min_max() is used to get the minimum and maximum values of the
+map range into integer.
 
-<P>
-Returns
-        1 ... if successful
-        0 ... otherwise.
+Rast3d_range_write() function stores the range in file and is invoked
+automatically when a new map is closed.
 
-<P>
-void Rast3d_range_min_max(void *map, double *min, double *max)
-        Returns in <EM>min</EM> and <EM>max</EM> the minimum and maximum values of
-        the range.
-
-<P>
-int Rast3d_range_write(void *map)
-Writes the range which is stored in the range structure of <EM>map</EM>. 
-(This function is invoked automatically when a new file is closed).
-
-<P>
-Returns
-        1 ... if successful
-        0 ... otherwise.
-
-<P>
+In addition to these functions, the application can also use some of the
+standard GRASS 2D raster functions to manipulate the floating point range. It
+is preferred to use <tt>Rast3d_</tt> functions if possible and importantly it is
+not possible to use functions for reading and writing.
 
 \subsection RASTER3D_Color_Support RASTER3D Color Support
 
