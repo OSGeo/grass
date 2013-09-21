@@ -1,0 +1,9 @@
+The r3_volume_layout.png was created from r3_volume_layout.xcf then resized to
+543x480 pixels. The original file is now r3_volume_layout_large.png (877x755).
+Unfortunatelly, the source file r3_volume_layout.xcf is probably broken.
+
+See also volume_tile_cell_generator.sh.
+
+The r3_volume_layout.png is used on several places in programming and user
+documentation. To find all usages use:
+ find . -name "*volume_layout*.png"
