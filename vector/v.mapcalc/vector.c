@@ -4,6 +4,7 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "list.h"
 #include "mapcalc.h"
 #include "vector.h"

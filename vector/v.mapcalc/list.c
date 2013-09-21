@@ -4,8 +4,9 @@
 #include <time.h>
 #if 0
 #include <dmalloc.h>
-#include <grass/gis.h>
 #endif
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include "list.h"
 
 LIST *listitem(size_t size);

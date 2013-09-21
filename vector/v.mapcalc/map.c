@@ -18,6 +18,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "list.h"
 #include "mapcalc.h"
 #include "map.h"
@@ -189,7 +190,7 @@ void printmap(SYMBOL * sym)
 
     map = (MAP *) sym->v.p;
     if (map->name)
-	sprintf(stdout, "\t%s\n", map->name);
+	fprintf(stdout, "\t%s\n", map->name);
 }
 
 void showmap(SYMBOL * sym)
