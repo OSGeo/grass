@@ -102,11 +102,9 @@ Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
 
 
 /*!
- * \brief 
+ * \brief Loads the range into the range structure of <em>map</em>.
  *
- *  Loads the range into the range structure of <em>map</em>.
- *
- *  \param map
+ *  \param map a pointer to a raster 3D map object
  *  \return 1 ... if successful
  *          0 ... otherwise.
  */
@@ -126,15 +124,12 @@ int Rast3d_range_load(RASTER3D_Map * map)
 
 
 /*!
- * \brief 
+ * \brief Returns in <em>min</em> and <em>max</em> the minimum and maximum values of
+ *        the range.
  *
- * Returns in <em>min</em> and <em>max</em> the minimum and maximum values of
- * the range.
- *
- *  \param map
- *  \param min
- *  \param max
- *  \return void
+ *  \param map a pointer to a raster 3D map object
+ *  \param min a pointer to a double to store minumim
+ *  \param max a pointer to a double to store maximum
  */
 
 void Rast3d_range_min_max(RASTER3D_Map * map, double *min, double *max)
@@ -191,7 +186,6 @@ static int writeRange(const char *name, struct FPRange *range)
  *  \return 1 ... if successful
  *          0 ... otherwise.
  */
-
 int Rast3d_range_write(RASTER3D_Map * map)
 {
     char path[GPATH_MAX];

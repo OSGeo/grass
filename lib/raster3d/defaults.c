@@ -21,7 +21,24 @@
 
 /*---------------------------------------------------------------------------*/
 
+/*!
+\brief Name of the environmental variable specifying that compression
+       should be used.
+
+       Setting the environmental variable to any value will cause that the
+       compression will be used (set when calling Rast3d_init_defaults
+       for the first time).
+
+       This environmental variable takes precedence before the environmental
+       variable specified by RASTER3D_COMPRESSION_ENV_VAR_NO.
+*/
 #define RASTER3D_COMPRESSION_ENV_VAR_YES "RASTER3D_USE_COMPRESSION"
+/*!
+\brief Name of the environmental variable specifying that compression
+       should not be used.
+
+       \see RASTER3D_COMPRESSION_ENV_VAR_YES
+*/
 #define RASTER3D_COMPRESSION_ENV_VAR_NO "RASTER3D_NO_COMPRESSION"
 
 #define RASTER3D_PRECISION_ENV_VAR "RASTER3D_PRECISION"
@@ -63,15 +80,16 @@ int g3d_vertical_unit_default = U_UNDEFINED;
  * \brief set compression mode
  *
  * <em>doCompress</em> should be one of RASTER3D_NO_COMPRESSION and
- * RASTER3D_COMPRESSION, <em>doRle</em> should be either RASTER3D_NO_RLE or
- * RASTER3D_USE_RLE, and <em>precision</em> should be either RASTER3D_MAX_PRECISION or
- * a positive integer.
+ * RASTER3D_COMPRESSION. <em>precision</em> should be either
+ * RASTER3D_MAX_PRECISION or a positive integer.
  *
- *  \param doCompress
- *  \param doLzw
- *  \param doRle
- *  \param precision
- *  \return void
+ * \note Note that older parameters <em>doLzw</em> and <em>doRle</em>
+ *       (RASTER3D_NO_RLE or RASTER3D_USE_RLE) are no longer in the API.
+ *
+ * Calls Rast3d_fatal_error() if a wrong parameter value is provided.
+ *
+ * \param doCompress specifies if a compression should be perfomed
+ * \param precision a precision of compression
  */
 
 void
@@ -95,13 +113,15 @@ Rast3d_set_compression_mode(int doCompress, int precision)
 
 
 /*!
- * \brief get compression mode
+ * \brief Gets compression mode
  *
- *  \param doCompress
- *  \param doLzw
- *  \param doRle
- *  \param precision
- *  \return void
+ * \param doCompress pointer to the integer where the compression mode will
+ *        be stored
+ * \param precision pointer to the integer where the precision mode will
+ *        be stored
+ *
+ * \see Rast3d_set_compression_mode, RASTER3D_COMPRESSION_ENV_VAR_YES,
+        RASTER3D_COMPRESSION_ENV_VAR_YES
  */
 
 void
