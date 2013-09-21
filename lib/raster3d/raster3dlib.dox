@@ -13,7 +13,7 @@ floating point values in abritrary order in a volume. The coordinate
 system of a volume is column and row compatible to the raster library
 and counts from the bottom to the top of the cube.
 
-\image html "volume_layout.png" "The volume coordinate system and tile layout of the 3D Raster Library"
+\image html "r3_volume_layout.png" "The volume coordinate system and tile layout of the 3D Raster Library"
 
 \section Directory_Structure Directory Structure
 
