@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "list.h"
 #include "mapcalc.h"
 #include "any.h"
