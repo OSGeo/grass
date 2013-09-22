@@ -17,6 +17,13 @@ static int read_old_colors(FILE *, struct Colors *);
 
 /*---------------------------------------------------------------------------*/
 
+/*!
+   \brief Removes the primary and/or secondary color file.
+
+   \todo Is <em>primary and/or secondary color file</em> still valid for 7?
+
+   \see G_remove_colr
+*/
 int Rast3d_remove_color(const char *name)
  /* adapted from G_remove_colr */
 {
@@ -25,8 +32,16 @@ int Rast3d_remove_color(const char *name)
 
 /*---------------------------------------------------------------------------*/
 
-int
-Rast3d_read_colors(const char *name, const char *mapset, struct Colors *colors)
+/*!
+   \brief Reads color file for map \p name in \p mapset into the Colors structure.
+
+   \param name 3D raster map name
+   \param mapset mapset name
+   \param colors colors to be associated with a map
+
+   \see Rast3d_write_colors, Rast_read_colors
+*/
+int Rast3d_read_colors(const char *name, const char *mapset, struct Colors *colors)
  /* adapted from Rast_read_colors */
 {
     const char *err;
@@ -321,8 +336,16 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
 
 /*---------------------------------------------------------------------------*/
 
-int
-Rast3d_write_colors(const char *name, const char *mapset, struct Colors *colors)
+/*!
+   \brief Writes the \p colors for map \p name in \p mapset into a color file.
+
+   \param name 3D raster map name
+   \param mapset mapset name
+   \param colors colors to be associated with a map
+
+   \see Rast3d_read_colors, Rast3d_remove_color, Rast_write_colors
+*/
+int Rast3d_write_colors(const char *name, const char *mapset, struct Colors *colors)
  /* adapted from Rast_write_colors */
 {
     FILE *fd;
