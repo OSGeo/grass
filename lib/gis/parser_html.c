@@ -239,11 +239,20 @@ void G__usage_html(void)
 		while (opt->opts[i]) {
 		    if (opt->descs[i]) {
 			fprintf(stdout, "<dd><b>");
-                        if (opt->gisprompt && strcmp(opt->gisprompt,
-                                                     "old,colortable,colortable") == 0) {
-                            fprintf(stdout, "<img width=\"80\" height=\"12\" "
-                                    "src=\"colortables/%s.png\" alt=\"%s\">",
-                                    opt->opts[i], opt->opts[i]);
+                        if (opt->gisprompt) {
+                            char *thumbnails = NULL;
+                            
+                            if (strcmp(opt->gisprompt,
+                                       "old,colortable,colortable") == 0)
+                                thumbnails = "colortables";
+                            else if (strcmp(opt->gisprompt,
+                                            "old,barscale,barscale") == 0)
+                                thumbnails = "barscales";
+                            
+                            if (thumbnails)
+                                fprintf(stdout, "<img width=\"80\" height=\"12\" "
+                                        "src=\"%s/%s.png\" alt=\"%s\">",
+                                        thumbnails, opt->opts[i], opt->opts[i]);
                         }
 			print_escaped_for_html(stdout, opt->opts[i]);
 			fprintf(stdout, "</b>: ");
