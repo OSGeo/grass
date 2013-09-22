@@ -70,6 +70,7 @@ int main(int argc, char **argv)
     barstyle->options =
 	"classic,line,solid,hollow,full_checker,part_checker,mixed_checker,tail_checker,up_ticks,down_ticks,both_ticks,arrow_ends";
     barstyle->answer = "classic";
+    barstyle->gisprompt = "old,barscale,barscale";
     barstyle->guisection = _("Style");
     G_asprintf((char **) &(barstyle->descriptions), 
                "classic;%s;"
