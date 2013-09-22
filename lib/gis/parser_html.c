@@ -3,7 +3,7 @@
   
   \brief GIS Library - Argument parsing functions (HTML output)
   
-  (C) 2001-2009, 2011-2012 by the GRASS Development Team
+  (C) 2001-2009, 2011-2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -12,6 +12,7 @@
 */
 
 #include <stdio.h>
+#include <string.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -234,10 +235,16 @@ void G__usage_html(void)
 
 	    if (opt->descs) {
 		int i = 0;
-
+                
 		while (opt->opts[i]) {
 		    if (opt->descs[i]) {
 			fprintf(stdout, "<dd><b>");
+                        if (opt->gisprompt && strcmp(opt->gisprompt,
+                                                     "old,colortable,colortable") == 0) {
+                            fprintf(stdout, "<img width=\"80\" height=\"12\" "
+                                    "src=\"colortables/%s.png\" alt=\"%s\">",
+                                    opt->opts[i], opt->opts[i]);
+                        }
 			print_escaped_for_html(stdout, opt->opts[i]);
 			fprintf(stdout, "</b>: ");
 			print_escaped_for_html(stdout, opt->descs[i]);
