@@ -1059,11 +1059,7 @@ class CmdPanel(wx.Panel):
                                             flag = wx.ADJUST_MINSIZE, border = 0)
                         else:
                             # list of values (combo)
-                            if p['name'] == 'color':
-                                cb = ColorTablesComboBox(parent=which_panel, value=p.get('default',''),
-                                                         size=globalvar.DIALOG_COMBOBOX_SIZE,
-                                                         choices=valuelist)
-                            elif p['name'] == 'style' and self.task.name in ('d.barscale', 'd.northarrow'):
+                            if p['name'] == 'style' and self.task.name in ('d.barscale', 'd.northarrow'):
                                 if self.task.name == 'd.barscale':
                                     cb = BarscalesComboBox(parent=which_panel, value=p.get('default',''),
                                                            size=globalvar.DIALOG_COMBOBOX_SIZE,
@@ -1152,7 +1148,8 @@ class CmdPanel(wx.Panel):
                                               'dbase',
                                               'coords',
                                               'file',
-                                              'dir'):
+                                              'dir',
+                                              'colortable'):
                     multiple = p.get('multiple', False)
                     if p.get('age', '') == 'new':
                         mapsets = [grass.gisenv()['MAPSET'],]
@@ -1570,7 +1567,21 @@ class CmdPanel(wx.Panel):
                                     proportion = 0,
                                     flag = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT, 
                                     border = 5)
-            
+                elif prompt == 'colortable':
+                    cb = ColorTablesComboBox(parent=which_panel, value=p.get('default',''),
+                                             size=globalvar.DIALOG_COMBOBOX_SIZE,
+                                             choices=valuelist)
+                    value = self._getValue(p)
+                    if value:
+                        cb.SetValue(value) # parameter previously set
+                    which_sizer.Add(item = cb, proportion = 0,
+                                    flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
+                    p['wxId'] = [cb.GetId(),]
+                    cb.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    cb.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    if p.get('guidependency', ''):
+                        cb.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
+                
             if self.parent.GetName() == 'MainFrame' and self.parent.modeler:
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
                                      label = _("Parameterized in model"))
