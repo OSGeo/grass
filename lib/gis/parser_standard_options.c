@@ -624,6 +624,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->options = G_color_rules_options();
 	Opt->description = _("Name of color table");
 	Opt->descriptions = G_color_rules_descriptions();
+        Opt->gisprompt = "old,colortable,colortable";
 	break;
 
     /* Spatio-temporal modules of the temporal GIS framework */
