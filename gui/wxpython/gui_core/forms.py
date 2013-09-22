@@ -1059,19 +1059,9 @@ class CmdPanel(wx.Panel):
                                             flag = wx.ADJUST_MINSIZE, border = 0)
                         else:
                             # list of values (combo)
-                            if p['name'] == 'style' and self.task.name in ('d.barscale', 'd.northarrow'):
-                                if self.task.name == 'd.barscale':
-                                    cb = BarscalesComboBox(parent=which_panel, value=p.get('default',''),
-                                                           size=globalvar.DIALOG_COMBOBOX_SIZE,
-                                                           choices=valuelist)
-                                elif self.task.name == 'd.northarrow':
-                                    cb = NArrowsComboBox(parent=which_panel, value=p.get('default',''),
-                                                         size=globalvar.DIALOG_COMBOBOX_SIZE,
-                                                         choices=valuelist)
-                            else:
-                                cb = wx.ComboBox(parent=which_panel, id=wx.ID_ANY, value=p.get('default',''),
-                                                 size=globalvar.DIALOG_COMBOBOX_SIZE,
-                                                 choices=valuelist, style=wx.CB_DROPDOWN)
+                            cb = wx.ComboBox(parent=which_panel, id=wx.ID_ANY, value=p.get('default',''),
+                                             size=globalvar.DIALOG_COMBOBOX_SIZE,
+                                             choices=valuelist, style=wx.CB_DROPDOWN)
                             if value:
                                 cb.SetValue(value) # parameter previously set
                             which_sizer.Add(item = cb, proportion = 0,
@@ -1149,7 +1139,9 @@ class CmdPanel(wx.Panel):
                                               'coords',
                                               'file',
                                               'dir',
-                                              'colortable'):
+                                              'colortable',
+                                              'barscale',
+                                              'northarrow'):
                     multiple = p.get('multiple', False)
                     if p.get('age', '') == 'new':
                         mapsets = [grass.gisenv()['MAPSET'],]
@@ -1567,10 +1559,20 @@ class CmdPanel(wx.Panel):
                                     proportion = 0,
                                     flag = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT, 
                                     border = 5)
-                elif prompt == 'colortable':
-                    cb = ColorTablesComboBox(parent=which_panel, value=p.get('default',''),
+                elif prompt in ('colortable', 'barscale', 'northarrow'):
+                    if prompt == 'colortable':
+                        cb = ColorTablesComboBox(parent=which_panel, value=p.get('default',''),
+                                                 size=globalvar.DIALOG_COMBOBOX_SIZE,
+                                                 choices=valuelist)
+                    elif prompt == 'barscale':
+                        cb = BarscalesComboBox(parent=which_panel, value=p.get('default',''),
+                                               size=globalvar.DIALOG_COMBOBOX_SIZE,
+                                               choices=valuelist)
+                    elif prompt == 'northarrow':
+                        cb = NArrowsComboBox(parent=which_panel, value=p.get('default',''),
                                              size=globalvar.DIALOG_COMBOBOX_SIZE,
                                              choices=valuelist)
+                    
                     value = self._getValue(p)
                     if value:
                         cb.SetValue(value) # parameter previously set
