@@ -15,18 +15,21 @@ default: multi
 # Insert thumbnail previews
 r.colors.tmp.html: $(BIN)/r.colors$(EXE) thumbnails
 	$(call htmldesc,$<,$@)
-	sed 's!^<dd><b>\([a-z0-9._]*\)</b>:!<dd><img width="80" height="12" src="Colortable_\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
+	sed 's!^<dd><b>\([a-z0-9._]*\)</b>:!<dd><img width="80" height="12" src="colortables/\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
 	mv -f "$@.tmp" "$@"
 	$(MAKE) thumbnails
 
 r3.colors.tmp.html: $(BIN)/r3.colors$(EXE) thumbnails
 	$(call htmldesc,$<,$@)
-	sed 's!^<dd><b>\([a-z0-9._]*\)</b>:!<dd><img width="80" height="12" src="Colortable_\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
+	sed 's!^<dd><b>\([a-z0-9._]*\)</b>:!<dd><img width="80" height="12" src="colortables/\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
 	mv -f "$@.tmp" "$@"
 	$(MAKE) thumbnails
 
-thumbnails: $(BIN)/r.mapcalc$(EXE)
+thumbnails: $(BIN)/r.mapcalc$(EXE) $(HTMLDIR)/colortables
 	-$(call run_grass, $(GRASS_HOME)/tools/thumbnails.py)
+
+$(HTMLDIR)/colortables: $(HTMLDIR)
+	$(MKDIR) $@
 
 $(BIN)/r.mapcalc$(EXE):
 	$(MAKE) -C ../r.mapcalc
