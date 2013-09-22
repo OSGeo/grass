@@ -18,11 +18,3 @@ $(HTMLDIR)/barscales/%.png: thumbnails/%.png | $(HTMLDIR)/barscales
 
 $(HTMLDIR)/barscales: $(HTMLDIR)
 	$(MKDIR) $@
-
-# insert thumbnail previews
-$(PGM).tmp.html: $(BIN)/$(PGM)$(EXE)
-	$(call htmldesc,$<,$@)
-	sed 's!^<dd><b>\([a-z0-9._]*\)</b>:!<dd><img width="80" height="12" src="barscales/\1.png"> <b>\1</b>:!' "$@" > "$@.tmp"
-	mv -f "$@.tmp" "$@"
-
-.INTERMEDIATE: $(PGM).tmp.html
