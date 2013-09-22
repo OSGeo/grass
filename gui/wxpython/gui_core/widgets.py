@@ -1247,7 +1247,7 @@ class ColorTablesComboBox(PictureComboBox):
 
     Used in r(3).colors dialog."""
     def _getPath(self, name):
-        return os.path.join(os.getenv("GISBASE"), "docs", "html", "Colortable_%s.png" % name)
+        return os.path.join(os.getenv("GISBASE"), "docs", "html", "colortables", "%s.png" % name)
 
 
 class BarscalesComboBox(PictureComboBox):
