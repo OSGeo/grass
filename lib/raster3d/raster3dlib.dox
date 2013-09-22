@@ -1343,32 +1343,13 @@ not possible to use functions for reading and writing.
 
 \subsection RASTER3D_Color_Support RASTER3D Color Support
 
-<P>
-Applications can use the standard GRASS functions to work with colors, except
-for the file manipulations.
+Applications can use the standard GRASS functions to work with colors,
+e.g. Rast_get_d_color_range(). However, the file manipulations must be handled
+using specialized raster 3D functions.
 
-<P>
-int Rast3d_removeColor(char *name)
-Removes the primary and/or secondary color file. See <EM>G_remove_colr</EM> for
-details.
-
-<P>
-Returns always 0.
-
-<P>
-int Rast3d_readColors(char *name, char *mapset, struct Colors
-   *colors) Reads color file for map <EM>name</EM> in <EM>mapset</EM> into the
-   <EM>colors</EM> structure.  See <EM>G_read_colors</EM>
-   (Raster_Color_Table) for details and return values.
-
-<P>
-int Rast3d_writeColors(char *name, char *mapset, struct Colors
-   *colors)Writes colors stored in <EM>colors</EM> structure into the color
-   file for map <EM>name</EM> in <EM>mapset</EM>.  See <EM>G_write_colors</EM>
-   (Raster_Color_Table) for
-   details and return values.
-
-<P>
+Rast3d_read_colors() function reads color file for a map into a Colors structure.
+Rast3d_write_colors() function stores colors in color files for a map and
+Rast3d_remove_color() function removes the color file.
 
 \subsection RASTER3D_Categories_Support RASTER3D Categories Support
 
