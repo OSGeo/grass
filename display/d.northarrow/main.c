@@ -49,7 +49,8 @@ int main(int argc, char **argv)
     n_arrow->options = "1a,1b,2,3,4,5,6,7a,7b,8a,8b,9,fancy_compass,basic_compass";
     n_arrow->answer = "1a";
     n_arrow->guisection = _("Style");
-
+    n_arrow->gisprompt = "old,northarrow,northarrow";
+    
     coords = G_define_option();
     coords->key = "at";
     coords->key_desc = "x,y";
