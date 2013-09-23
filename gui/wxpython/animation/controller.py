@@ -368,6 +368,7 @@ class AnimationController(wx.EvtHandler):
                 self._load2DData(animData)
             else:
                 self._load3DData(animData)
+            self._loadLegend(animData)
 
         # clear bitmapPool
         usedNames = []
@@ -382,7 +383,20 @@ class AnimationController(wx.EvtHandler):
         prov.SetData(datasource = animationData.mapData, dataType=animationData.inputMapType)
 
         prov.Load()
+
+    def _load3DData(self, animationData):
+        prov = self.bitmapProviders[animationData.windowIndex]
+        nviz = animationData.GetNvizCommands()
+        prov.SetData(datasource = nviz['commands'], 
+                     dataNames = animationData.mapData, dataType = 'nviz',
+                     suffix = animationData.nvizParameter,
+                     nvizRegion = nviz['region'])
+
+        self.bitmapProviders[animationData.windowIndex].Load()
+
+    def _loadLegend(self, animationData):
         if animationData.legendCmd:
+            prov = self.bitmapProviders[animationData.windowIndex]
             try:
                 # place legend
                 x, y = 0.1, 0.1
@@ -395,16 +409,6 @@ class AnimationController(wx.EvtHandler):
                 self.mapwindows[animationData.windowIndex].SetOverlay(bitmap, x, y)
             except GException:
                 GError(message=_("Failed to display legend."))
-
-    def _load3DData(self, animationData):
-        prov = self.bitmapProviders[animationData.windowIndex]
-        nviz = animationData.GetNvizCommands()
-        prov.SetData(datasource = nviz['commands'], 
-                     dataNames = animationData.mapData, dataType = 'nviz',
-                     suffix = animationData.nvizParameter,
-                     nvizRegion = nviz['region'])
-
-        self.bitmapProviders[animationData.windowIndex].Load()
 
     def EvaluateInput(self, animationData):
         stds = 0
