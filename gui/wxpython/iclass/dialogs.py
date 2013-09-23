@@ -157,7 +157,6 @@ class IClassGroupDialog(SimpleDialog):
             self.GroupSelected()
             wx.CallAfter(self.subGroupSelect.SetValue, s)
         dlg.Destroy()
-        event.Veto()
 
     def GroupSelected(self):
         group = self.GetSelectedGroup()
