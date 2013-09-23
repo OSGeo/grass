@@ -17,7 +17,7 @@ data processing with NumPy is much faster than iterating in Python
 (and NumPy would be an excellent candidate for acceleration via
 e.g. OpenCL or CUDA; I'm surprised it hasn't happened already).
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2011, 2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -27,17 +27,19 @@ This program is free software under the GNU General Public License
 
 import grass.script.core as grass
 
-from core.gcmd        import GError
-from core.debug       import Debug
-from core.settings    import UserSettings
+from grass.pydispatch.signal import Signal
+
+from core.gcmd import GError
+from core.debug import Debug
+from core.settings import UserSettings
 from core.utils import _
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 try:
-    from grass.lib.gis    import *
+    from grass.lib.gis import *
     from grass.lib.vector import *
-    from grass.lib.vedit  import *
-    from grass.lib.dbmi   import *
+    from grass.lib.vedit import *
+    from grass.lib.dbmi import *
 except ImportError:
     pass
 
@@ -176,7 +178,40 @@ class IVDigit:
         
         if self.poMapInfo:
             self.InitCats()
+
+        self.emit_signals = False
+
+        # signals which describes features changes during digitization, 
+        # activate them using EmitSignals method 
+
+        # currently implemented for functionality used by wx.iclass (for scatter plot)
         
+        # signals parameter description:
+        # old_bboxs - list of bboxes of boundary features, which covers changed areas
+        # it is bbox of old state (before edit)
+        # old_areas_cats - list of area categories of boundary features of old state (before edit)
+        # same position in both lists corresponds to same feature
+
+        # new_bboxs = list of bboxes of created features / after edit
+        # new_areas_cats list of areas cats of created features / after edit
+        # same position in both lists corresponds to same features
+
+        # for description of items in bbox and area_cats lists see return value of _getaAreaBboxCats
+
+        # TODO currently it is not possible to identify corresponded features
+        # in old and new lists (requires changed to vector updated format)
+        # TODO return feature type
+        
+        #TODO handle errors?
+        self.featureAdded = Signal('IVDigit.featureAdded')
+        self.areasDeleted = Signal('IVDigit.areasDeleted')
+        self.vertexMoved = Signal('IVDigit.vertexMoved')
+        self.vertexAdded = Signal('IVDigit.vertexAdded')
+        self.vertexRemoved = Signal('IVDigit.vertexRemoved')
+        self.featuresDeleted = Signal('IVDigit.featuresDeleted')
+        self.featuresMoved = Signal('IVDigit.featuresMoved')
+        self.lineEdited = Signal('IVDigit.lineEdited')
+
     def __del__(self):
         Debug.msg(1, "IVDigit.__del__()")
         Vect_destroy_line_struct(self.poPoints)
@@ -188,7 +223,12 @@ class IVDigit:
             Vect_close(self.poBgMapInfo)
             self.poBgMapInfo = self.popoBgMapInfo = None
             del self.bgMapInfo
-        
+     
+    def EmitSignals(self, emit):
+        """!Activate/deactivate signals which describes features changes during digitization.
+        """
+        self.emit_signals = emit
+
     def CloseBackgroundMap(self):
         """!Close background vector map"""
         if not self.poBgMapInfo:
@@ -394,7 +434,6 @@ class IVDigit:
         
         @return tuple (number of added features, feature ids)
         """
-        
         layer = self._getNewFeaturesLayer()
         cat = self._getNewFeaturesCat()
         
@@ -419,10 +458,15 @@ class IVDigit:
             return (-1, None)
         
         self.toolbar.EnableUndo()
-        
-        return self._addFeature(vtype, points, layer, cat,
-                                self._getSnapMode(), self._display.GetThreshold())
-    
+
+        ret = self._addFeature(vtype, points, layer, cat,
+                               self._getSnapMode(), self._display.GetThreshold())
+        if ret[0] > -1 and self.emit_signals:
+            self.featureAdded.emit(new_bboxs=[self._createBbox(points)], 
+                                   new_areas_cats=[[{layer : [cat]}, None]])
+
+        return ret
+
     def DeleteSelectedLines(self):
         """!Delete selected features
 
@@ -434,16 +478,27 @@ class IVDigit:
         # collect categories for deleting if requested
         deleteRec = UserSettings.Get(group = 'vdigit', key = 'delRecord', subkey = 'enabled')
         catDict = dict()
+
+        old_bboxs = []
+        old_areas_cats = []
         if deleteRec:
             for i in self._display.selected['ids']:
+                
                 if Vect_read_line(self.poMapInfo, None, self.poCats, i) < 0:
                     self._error.ReadLine(i)
                 
-                cats = self.poCats.contents
-                for j in range(cats.n_cats):
-                    if cats.field[j] not in catDict.keys():
-                        catDict[cats.field[j]] = list()
-                    catDict[cats.field[j]].append(cats.cat[j])
+                if self.emit_signals:
+                    ret = self._getLineAreaBboxCats(i)
+                    if ret:
+                        old_bboxs += ret[0]
+                        old_areas_cats += ret[1]
+                
+                # catDict was not used -> put into comment
+                #cats = self.poCats.contents
+                #for j in range(cats.n_cats):
+                #    if cats.field[j] not in catDict.keys():
+                #        catDict[cats.field[j]] = list()
+                #    catDict[cats.field[j]].append(cats.cat[j])
         
         poList = self._display.GetSelectedIList()
         nlines = Vedit_delete_lines(self.poMapInfo, poList)
@@ -456,7 +511,11 @@ class IVDigit:
                 self._deleteRecords(catDict)
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+
+            if self.emit_signals:
+                self.featuresDeleted.emit(old_bboxs=old_bboxs, 
+                                          old_areas_cats=old_areas_cats)
+
         return nlines
             
     def _deleteRecords(self, cats):
@@ -512,22 +571,220 @@ class IVDigit:
 
         @return number of deleted 
         """
+        if len(self._display.selected['ids']) < 1:
+            return 0
+        
         poList = self._display.GetSelectedIList()
         cList  = poList.contents
         
         nareas = 0
+        old_bboxs = []
+        old_areas_cats = []
+
         for i in range(cList.n_values):
+
             if Vect_get_line_type(self.poMapInfo, cList.value[i]) != GV_CENTROID:
                 continue
-            
+
+            if self.emit_signals:
+                area = Vect_get_centroid_area(self.poMapInfo, cList.value[i]);
+                if area > 0: 
+                    bbox, cats = self._getaAreaBboxCats(area)
+                    old_bboxs += bbox
+                    old_areas_cats += cats
+
             nareas += Vedit_delete_area_centroid(self.poMapInfo, cList.value[i])
         
         if nareas > 0:
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+            if self.emit_signals:
+                self.areasDeleted.emit(old_bboxs=old_bboxs, 
+                                       old_areas_cats=old_areas_cats)        
+
         return nareas
+   
+    def _getLineAreaBboxCats(self, ln_id):
+        """!Helper function
+
+        @param id of feature
+        @return None if the feature does not exists
+        @return list of @see _getaAreaBboxCats
+        """
+        ltype = Vect_read_line(self.poMapInfo, None, None, ln_id)
+
+        if ltype == GV_CENTROID:
+            #TODO centroid opttimization, can be edited also its area -> it will appear two times in new_ lists
+            return self._getCentroidAreaBboxCats(ln_id)
+        else: 
+            return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
+
+
+    def _getCentroidAreaBboxCats(self, centroid):
+        """!Helper function
+
+        @param id of an centroid 
+        @return None if area does not exists
+        @return see return of _getaAreaBboxCats
+        """
+        if not Vect_line_alive(self.poMapInfo, centroid):
+            return None
+
+        area = Vect_get_centroid_area(self.poMapInfo, centroid)  
+        if area > 0:
+            return self._getaAreaBboxCats(area)
+        else:
+            return None
+
+    def _getaAreaBboxCats(self, area):
+        """!Helper function
+
+        @param area area id
+        @return list of categories @see _getLineAreasCategories and 
+        list of bboxes @see _getBbox of area boundary features
+        """
+        po_b_list = Vect_new_list()
+        Vect_get_area_boundaries(self.poMapInfo, area, po_b_list);
+        b_list = po_b_list.contents
+
+        geoms = []
+        areas_cats = []
+
+        if b_list.n_values > 0:
+            for i_line in range(b_list.n_values):
+
+                line = b_list.value[i_line];
+
+                geoms.append(self._getBbox(abs(line)))
+                areas_cats.append(self._getLineAreasCategories(abs(line)))
+        
+        Vect_destroy_list(po_b_list);
+
+        return geoms, areas_cats
+
+    def _getLineAreasCategories(self, ln_id):
+        """!Helper function
+
+        @param line_id id of boundary feature 
+        @return categories of areas on the left, right side of the feature
+        @return format: [[{layer : [cat]}, None]] means:
+                area to the left (list of layers which has cats list as values), 
+                area to the right (no area there in this case (None)) 
+        @return [] the feature is not boundary or does not exists
+        """
+        if not Vect_line_alive (self.poMapInfo, ln_id):
+            return []
+
+        ltype = Vect_read_line(self.poMapInfo, None, None, ln_id)
+        if ltype != GV_BOUNDARY:
+            return []
+
+        cats = [None, None]
+
+        left = c_int()
+        right = c_int()
+
+        if Vect_get_line_areas(self.poMapInfo, ln_id, pointer(left), pointer(right)) == 1:
+            areas = [left.value, right.value]
+
+            for i, a in enumerate(areas):
+                if a > 0: 
+                    centroid = Vect_get_area_centroid(self.poMapInfo, a)
+                    if centroid <= 0:
+                        continue
+                    c = self._getCategories(centroid)
+                    if c:
+                        cats[i] = c
+
+        return cats
+
+    def _getCategories(self, ln_id):
+        """!Helper function
+
+        @param line_id id of feature
+        @return list of the feature categories [{layer : cats}, next layer...]
+        @return None feature does not exist
+        """
+        if not Vect_line_alive (self.poMapInfo, ln_id):
+            return none
+
+        poCats = Vect_new_cats_struct()
+        if Vect_read_line(self.poMapInfo, None, poCats, ln_id) < 0:
+            Vect_destroy_cats_struct(poCats)
+            return None
+
+        cCats = poCats.contents
+
+        cats = {}
+        for j in range(cCats.n_cats):
+            if cats.has_key(cCats.field[j]):
+                cats[cCats.field[j]].append(cCats.cat[j])
+            else:
+                cats[cCats.field[j]] = [cCats.cat[j]]
     
+        Vect_destroy_cats_struct(poCats)
+        return cats
+
+    def _getBbox(self, ln_id):
+        """!Helper function
+
+        @param line_id id of line feature
+        @return bbox bounding box of the feature
+        @return None feature does not exist
+        """
+        if not Vect_line_alive (self.poMapInfo, ln_id):
+            return None
+
+        poPoints = Vect_new_line_struct()
+        if Vect_read_line(self.poMapInfo, poPoints, None, ln_id) < 0:
+            Vect_destroy_line_struct(poPoints)
+            return []
+
+        geom = self._convertGeom(poPoints)
+        bbox = self._createBbox(geom)
+        Vect_destroy_line_struct(poPoints)
+        return bbox
+
+    def _createBbox(self, points):
+        """!Helper function
+
+        @param points list of points [(x, y), ...] to be bbox created for
+        @return bbox bounding box of points {'maxx':, 'maxy':, 'minx':, 'miny'}
+        """
+        bbox = {}
+        for pt in points:
+            if not bbox.has_key('maxy'):
+                bbox['maxy'] = pt[1]
+                bbox['miny'] = pt[1]
+                bbox['maxx'] = pt[0]
+                bbox['minx'] = pt[0]
+                continue
+                
+            if   bbox['maxy'] < pt[1]:
+                bbox['maxy'] = pt[1]
+            elif bbox['miny'] > pt[1]:
+                bbox['miny'] = pt[1]
+                
+            if   bbox['maxx'] < pt[0]:
+                bbox['maxx'] = pt[0]
+            elif bbox['minx'] > pt[0]:
+                bbox['minx'] = pt[0]
+        return bbox
+
+    def _convertGeom(self, poPoints):
+        """!Helper function
+            convert geom from ctypes line_pts to python list
+
+        @return coords in python list [(x, y),...] 
+        """
+        Points = poPoints.contents
+
+        pts_geom = []
+        for j in range(Points.n_points):
+            pts_geom.append((Points.x[j], Points.y[j]))
+
+        return pts_geom
+
     def MoveSelectedLines(self, move):
         """!Move selected features
 
@@ -536,16 +793,45 @@ class IVDigit:
         if not self._checkMap():
             return -1
         
+        nsel = len(self._display.selected['ids'])
+        if nsel < 1:
+            return -1   
+        
         thresh = self._display.GetThreshold()
         snap   = self._getSnapMode()
         
         poList = self._display.GetSelectedIList()
+
+        if self.emit_signals:
+            old_bboxs = []
+            old_areas_cats = []
+            for sel_id in self._display.selected['ids']:
+                ret = self._getLineAreaBboxCats(sel_id)
+                if ret:
+                    old_bboxs += ret[0]
+                    old_areas_cats += ret[1]
+        
+            Vect_set_updated(self.poMapInfo, 1)
+            n_up_lines_old = Vect_get_num_updated_lines(self.poMapInfo)
+        
         nlines = Vedit_move_lines(self.poMapInfo, self.popoBgMapInfo, int(self.poBgMapInfo is not None),
                                   poList,
                                   move[0], move[1], 0,
                                   snap, thresh)
+
         Vect_destroy_list(poList)
-        
+
+        if nlines > 0 and self.emit_signals:
+            new_bboxs = []
+            new_areas_cats = []
+            n_up_lines = Vect_get_num_updated_lines(self.poMapInfo)
+            for i in range(n_up_lines_old, n_up_lines):
+                new_id = Vect_get_updated_line(self.poMapInfo, i)
+                ret = self._getLineAreaBboxCats(new_id)
+                if ret:
+                    new_bboxs += ret[0]
+                    new_areas_cats += ret[1]
+
         if nlines > 0 and self._settings['breakLines']:
             for i in range(1, nlines):
                 self._breakLineAtIntersection(nlines + i, None, changeset)
@@ -553,7 +839,13 @@ class IVDigit:
         if nlines > 0:
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+            
+            if self.emit_signals:
+                self.featuresMoved.emit(new_bboxs=new_bboxs,
+                                        old_bboxs=old_bboxs, 
+                                        old_areas_cats=old_areas_cats, 
+                                        new_areas_cats=new_areas_cats)
+
         return nlines
 
     def MoveSelectedVertex(self, point, move):
@@ -571,12 +863,21 @@ class IVDigit:
         
         if len(self._display.selected['ids']) != 1:
             return -1
-        
-        Vect_reset_line(self.poPoints)
-        Vect_append_point(self.poPoints, point[0], point[1], 0.0)
-        
+
         # move only first found vertex in bbox 
         poList = self._display.GetSelectedIList()
+
+        if self.emit_signals:
+            cList = poList.contents
+            old_bboxs = [self._getBbox(cList.value[0])]
+            old_areas_cats = [self._getLineAreasCategories(cList.value[0])]
+
+            Vect_set_updated(self.poMapInfo, 1)
+            n_up_lines_old = Vect_get_num_updated_lines(self.poMapInfo)
+
+        Vect_reset_line(self.poPoints)
+        Vect_append_point(self.poPoints, point[0], point[1], 0.0)
+
         moved = Vedit_move_vertex(self.poMapInfo, self.popoBgMapInfo, int(self.poBgMapInfo is not None),
                                   poList, self.poPoints,
                                   self._display.GetThreshold(type = 'selectThresh'),
@@ -584,7 +885,17 @@ class IVDigit:
                                   move[0], move[1], 0.0,
                                   1, self._getSnapMode())
         Vect_destroy_list(poList)
-        
+
+        if moved > 0 and self.emit_signals:
+            n_up_lines = Vect_get_num_updated_lines(self.poMapInfo)
+
+            new_bboxs = []
+            new_areas_cats = []
+            for i in range(n_up_lines_old, n_up_lines):
+                new_id = Vect_get_updated_line(self.poMapInfo, i)
+                new_bboxs.append(self._getBbox(new_id))
+                new_areas_cats.append(self._getLineAreasCategories(new_id))
+
         if moved > 0 and self._settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
                                           None)
@@ -592,7 +903,13 @@ class IVDigit:
         if moved > 0:
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+
+            if self.emit_signals:
+                self.vertexMoved.emit(new_bboxs=new_bboxs,  
+                                      new_areas_cats=new_areas_cats, 
+                                      old_areas_cats=old_areas_cats, 
+                                      old_bboxs=old_bboxs)
+
         return moved
 
     def AddVertex(self, coords):
@@ -681,6 +998,10 @@ class IVDigit:
             self._error.ReadLine(line)
             return -1
         
+        if self.emit_signals:
+            old_bboxs = [self._getBbox(line)]
+            old_areas_cats = [self._getLineAreasCategories(line)]
+
         # build feature geometry
         Vect_reset_line(self.poPoints)
         for p in coords:
@@ -696,6 +1017,9 @@ class IVDigit:
         
         newline = Vect_rewrite_line(self.poMapInfo, line, ltype,
                                     self.poPoints, self.poCats)
+        if newline > 0 and self.emit_signals:
+            new_geom = [self._getBbox(newline)]
+            new_areas_cats = [self._getLineAreasCategories(newline)]
         
         if newline > 0 and self._settings['breakLines']:
             self._breakLineAtIntersection(newline, None)
@@ -703,7 +1027,13 @@ class IVDigit:
         if newline > 0:
             self._addChangeset()
             self.toolbar.EnableUndo()
-        
+    
+            if self.emit_signals:
+                self.lineEdited.emit(old_bboxs=old_bboxs, 
+                                     old_areas_cats=old_areas_cats, 
+                                     new_bboxs=new_bboxs, 
+                                     new_areas_cats=new_areas_cats)
+
         return newline
 
     def FlipLine(self):
@@ -1514,6 +1844,16 @@ class IVDigit:
             return 0
         
         poList  = self._display.GetSelectedIList()
+
+        if self.emit_signals:
+            cList = poList.contents
+            
+            old_bboxs = [self._getBbox(cList.value[0])]
+            old_areas_cats = [self._getLineAreasCategories(cList.value[0])]
+
+            Vect_set_updated(self.poMapInfo, 1)
+            n_up_lines_old = Vect_get_num_updated_lines(self.poMapInfo)
+
         Vect_reset_line(self.poPoints)
         Vect_append_point(self.poPoints, coords[0], coords[1], 0.0)
         
@@ -1525,15 +1865,35 @@ class IVDigit:
         else:
             ret = Vedit_remove_vertex(self.poMapInfo, poList,
                                       self.poPoints, thresh)
+
         Vect_destroy_list(poList)
+
+        if ret > 0 and self.emit_signals:
+            new_bboxs = []
+            new_areas_cats = []
+
+            n_up_lines = Vect_get_num_updated_lines(self.poMapInfo)
+            for i in range(n_up_lines_old, n_up_lines):
+                new_id = Vect_get_updated_line(self.poMapInfo, i)
+                new_areas_cats.append(self._getLineAreasCategories(new_id))
+                new_bboxs.append(self._getBbox(new_id))
         
         if not add and ret > 0 and self._settings['breakLines']:
             self._breakLineAtIntersection(Vect_get_num_lines(self.poMapInfo),
                                           None)
-        
+
         if ret > 0:
             self._addChangeset()
-                
+
+        if ret > 0 and self.emit_signals:
+            if add:
+                self.vertexAdded.emit(old_bboxs=old_bboxs, new_bboxs=new_bboxs)
+            else:
+                self.vertexRemoved.emit(old_bboxs=old_bboxs, 
+                                        new_bboxs=new_bboxs,
+                                        old_areas_cats=old_areas_cats,
+                                        new_areas_cats=new_areas_cats)
+
         return 1
     
     def GetLineCats(self, line):
