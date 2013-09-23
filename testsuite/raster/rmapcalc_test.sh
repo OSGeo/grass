@@ -125,7 +125,7 @@ check_exit_status $?
 ########### 2D raster INT tests ###########
 VALUE=1
 echo "INT/CELL test."
-r.mapcalc "$TMPNAME=1"
+r.mapcalc "$TMPNAME = 1"
 check_exit_status $?
 
 echo "Univariate statistics of INT/CELL test."
@@ -148,7 +148,7 @@ echo "##################################"
 ########### 2D raster FCELL tests ###########
 VALUE=1.1
 echo "FLOAT/FCELL test."
-r.mapcalc "$TMPNAME=$VALUE"
+r.mapcalc "$TMPNAME = $VALUE"
 check_exit_status $?
 
 echo "Univariate statistics of FLOAT/FCELL test."
