@@ -168,7 +168,8 @@ class RasterAbstractBase(object):
     * Implements color, history and category handling
     * Renaming, deletion, ...
     """
-    def __init__(self, name, mapset=""):
+    def __init__(self, name, mapset="",
+                 mode='r', mtype='FCELL', overwrite=False):
         """The constructor need at least the name of the map
         *optional* field is the `mapset`. ::
 
@@ -199,13 +200,13 @@ class RasterAbstractBase(object):
         self.hist = History()
         if self.exist():
             self.info = Info(self.name, self.mapset)
+        self.mode = mode
+        self.mtype = mtype
+        self.overwrite = overwrite
 
     def __enter__(self):
-        if self.exist():
-            self.open('r')
-            return self
-        else:
-            raise ValueError("Raster not found.")
+        self.open()
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
