@@ -351,7 +351,7 @@ class IClassMapFrame(DoubleMapFrame):
         self._mgr.AddPane(self.plotPanel, wx.aui.AuiPaneInfo().
                   Name("plots").Caption(_("Plots")).
                   Dockable(False).Floatable(False).CloseButton(False).
-                  Left().Layer(1).BestSize((310, -1)))
+                  Left().Layer(1).BestSize((335, -1)))
         
     def _addPaneToolbar(self, name):
         if name == 'iClassPreviewMapManager':
@@ -1260,8 +1260,8 @@ class MapManager:
             
     def SelectLayer(self, name):
         """!Moves selected layer to top"""
-        layers = self.map.GetListOfLayers(ltype = 'raster') + \
-                 self.map.GetListOfLayers(ltype = 'rgb')
+        layers = self.map.GetListOfLayers(ltype = 'rgb') + \
+                 self.map.GetListOfLayers(ltype = 'raster')
         idx = None
         for i, layer in enumerate(layers):
             if self.layerName[name] == layer.GetName():
