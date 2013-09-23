@@ -502,6 +502,12 @@ def _expandRuntimeModules(node):
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
     '<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings</keywords></module-item></items>'
+    >>> tree = etree.fromstring('<items>'
+    ...                         '<module-item name="m.proj"></module-item>'
+    ...                         '</items>')
+    >>> _expandRuntimeModules(tree)
+    >>> etree.tostring(tree)
+    '<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection</keywords></module-item></items>'
     """
     modules = node.findall('.//module-item')
     for module in modules:
@@ -632,12 +638,22 @@ def do_doctest_gettext_workaround():
     """Setups environment for doing a doctest with gettext usage.
 
     When using gettext with dynamically defined underscore function
-    (`_("For translation")`), doctest does not work properly. One option is to
-    use `import as` instead of dynamically defined underscore function but this
-    would require change all modules which are used by tested module. This
-    should be considered for the future. The second option is to define dummy
-    underscore function and one other function which creates the right
-    environment to satisfy all. This is done by this function.
+    (`_("For translation")`), doctest does not work properly.
+
+    One option is to use `import as` instead of dynamically defined underscore
+    function but this requires change all modules which are used by tested
+    module.
+
+    The second option is to define dummy underscore function and one other
+    function which creates the right environment to satisfy all. This is done
+    by this function. Moreover, `sys.displayhook` and also
+    `sys.__displayhook__` needs to be redefined too (the later one probably
+    should not be newer redefined but some cases just requires that).
+
+    GRASS specific note is that wxGUI switched to use imported underscore
+    function for translation. However, GRASS Python libraries still uses the
+    dynamically defined underscore function, so this workaround function is
+    still needed when you import something from GRASS Python libraries.
     """
     def new_displayhook(string):
         """A replacement for default `sys.displayhook`"""
@@ -649,6 +665,7 @@ def do_doctest_gettext_workaround():
         return string
 
     sys.displayhook = new_displayhook
+    sys.__displayhook__ = new_displayhook
 
     import __builtin__
     __builtin__._ = new_translator
@@ -689,7 +706,7 @@ def module_test():
     root = tree.getroot()
     tested = _getXMLString(root)
 
-    # for generatiing correct test file supposing that the implementation
+    # for generating correct test file supposing that the implementation
     # is now correct and working
     # run the normal test and check the difference before overwriting
     # the old correct test file
