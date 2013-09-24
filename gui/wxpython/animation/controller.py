@@ -495,6 +495,8 @@ class AnimationController(wx.EvtHandler):
                 animWinIndex.append(i)
         
         images = []
+        busy = wx.BusyInfo(message=_("Preparing export, please wait..."), parent=self.frame)
+        wx.Yield()
         for frameIndex in range(frameCount):
             image = wx.EmptyImage(*size)
             image.Replace(0, 0, 0, 255, 255, 255)
@@ -541,6 +543,7 @@ class AnimationController(wx.EvtHandler):
                 image.Paste(decImage, x, y)
 
             images.append(image)
+        del busy
 
         # export
         if exportInfo['method'] == 'sequence':
@@ -552,7 +555,7 @@ class AnimationController(wx.EvtHandler):
                                          exportInfo['format']['ext'])
                 image.SaveFile(os.path.join(exportInfo['directory'], filename), exportInfo['format']['type'])
 
-            busy.Destroy()
+            del busy
 
         elif exportInfo['method'] in ('gif', 'swf', 'avi'):
             pilImages = [WxImageToPil(image) for image in images]
