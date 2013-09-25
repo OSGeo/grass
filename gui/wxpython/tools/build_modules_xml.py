@@ -73,7 +73,6 @@ def get_module_metadata(name):
     >>> get_module_metadata('m.proj')
     ('Converts coordinates from one projection to another (cs2cs frontend).', ['miscellaneous', 'projection'])
     """
-    task = gtask.parse_interface(name)
     try:
         task = gtask.parse_interface(name)
     except:
