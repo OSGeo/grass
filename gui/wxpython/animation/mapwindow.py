@@ -179,6 +179,13 @@ class AnimationWindow(BufferedWindow):
             self._pdc.RemoveAll()
         self.UpdateDrawing()
 
+    def ClearOverlay(self):
+        """!Clear overlay (legend) """
+        Debug.msg(3, "AnimationWindow.ClearOverlay()")
+        self._overlay = None
+        self._pdc.RemoveAll()
+        self.UpdateDrawing()
+
     def OnPaint(self, event):
         Debug.msg(5, "AnimationWindow.OnPaint()")
         # All that is needed here is to draw the buffer to screen

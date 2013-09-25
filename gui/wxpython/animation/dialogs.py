@@ -530,6 +530,7 @@ class InputDialog(wx.Dialog):
         self.animationData.inputData = self.dataSelect.GetValue()
         sel = self.nDChoice.GetSelection()
         self.animationData.viewMode = self.nDChoice.GetClientData(sel)
+        self.animationData.legendCmd = None
         if self._tmpLegendCmd:
             if self.legend.IsChecked():
                 self.animationData.legendCmd = self._tmpLegendCmd
