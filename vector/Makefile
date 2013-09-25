@@ -27,7 +27,6 @@ SUBDIRS = \
 	v.in.ascii \
 	v.in.db \
 	v.in.dxf \
-	v.in.ply \
 	v.in.region \
 	v.in.sites \
 	v.kcv \
@@ -59,7 +58,6 @@ SUBDIRS = \
 	v.normal \
 	v.out.ascii \
 	v.out.dxf \
-	v.out.ply \
 	v.out.postgis \
 	v.out.pov \
 	v.out.svg \
