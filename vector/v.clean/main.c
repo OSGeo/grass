@@ -303,6 +303,9 @@ int main(int argc, char *argv[])
     native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
 
     if (!native) {
+	/* area cleaning tools might produce unexpected results for 
+	 * non-native vectors */
+	G_warning(_("Topological cleaning works best with native GRASS vector format"));
 	/* Copy attributes (OGR format) */
 	Vect_copy_map_dblinks(&In, &Out, TRUE);
     }
@@ -428,6 +431,8 @@ int main(int argc, char *argv[])
 	    count =
 		Vect_remove_small_areas(&Out, threshs[i], pErr, &size);
 	    if (flag.combine->answer && count > 0) {
+		Vect_build_partial(&Out, GV_BUILD_BASE);
+		G_message(SEP);
 		G_message(_("Tool: Merge boundaries"));
 		Vect_merge_lines(&Out, GV_BOUNDARY, NULL, pErr);
 	    }
