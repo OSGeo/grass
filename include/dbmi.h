@@ -17,7 +17,11 @@
 
 #define DB_VERSION "0"
 
+#ifdef HAVE_SQLITE
 #define DB_DEFAULT_DRIVER "sqlite"
+#else
+#define DB_DEFAULT_DRIVER "dbf"
+#endif
 
 /* DB Prodedure Numbers */
 #define DB_PROC_VERSION                 999
