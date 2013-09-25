@@ -449,16 +449,20 @@ int G_plot_polygon(const double *x, const double *y, int n)
     }
 
     /* check if perimeter has odd number of points */
-    if (st->np % 2)
+    if (st->np & 1) {
+	G_debug(1, "Weird internal error: perimeter has odd number of points");
 	return OUT_OF_SYNC;
+    }
 
     /* sort the edge points by col(x) and then by row(y) */
     qsort(st->P, st->np, sizeof(POINT), edge_order);
 
     /* plot */
     for (i = 1; i < st->np; i += 2) {
-	if (st->P[i].y != st->P[i - 1].y)
+	if (st->P[i].y != st->P[i - 1].y) {
+	    G_debug(1, "Weird internal error: edge leaves row");
 	    return OUT_OF_SYNC;
+	}
 	st->row_fill(st->P[i].y, st->P[i - 1].x + shift1, st->P[i].x + shift1);
     }
     if (st->window.proj == PROJECTION_LL) {	/* now do wrap-around, part 2 */
@@ -581,8 +585,10 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
     }				/* for() */
 
     /* check if perimeter has odd number of points */
-    if (st->np % 2)
+    if (st->np & 1) {
+	G_debug(1, "Weird internal error: perimeter has odd number of points");
 	return OUT_OF_SYNC;
+    }
 
     /* sort the edge points by col(x) and then by row(y) */
     qsort(st->P, st->np, sizeof(POINT), &edge_order);
@@ -590,8 +596,10 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
     /* plot */
     for (j = 0; j < rings; j++) {
 	for (i = 1; i < st->np; i += 2) {
-	    if (st->P[i].y != st->P[i - 1].y)
+	    if (st->P[i].y != st->P[i - 1].y) {
+		G_debug(1, "Weird internal error: edge leaves row");
 		return OUT_OF_SYNC;
+	    }
 	    st->row_fill(st->P[i].y, st->P[i - 1].x + shift1[j], st->P[i].x + shift1[j]);
 	}
 	if (st->window.proj == PROJECTION_LL) {	/* now do wrap-around, part 2 */
@@ -619,18 +627,26 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 
 static int edge(double x0, double y0, double x1, double y1)
 {
-    double m;
-    double dx, dy, x;
+    double m, d;
+    double x;
     int ystart, ystop;
-
+    int exp;
 
     /* tolerance to avoid FPE */
-    dx = x0 - x1;
-    dy = y0 - y1;
-    if (fabs(dy) < 1e-10)
-	return 1;
+    d = GRASS_EPSILON;
+    if (y0 != y1) {
+	if (fabs(y0) > fabs(y1))
+	    d = fabs(y0);
+	else
+	    d = fabs(y1);
 
-    m = (x0 - x1) / dy;
+	d = frexp(d, &exp);
+	exp -= 52;
+	d = ldexp(d, exp);
+    }
+
+    if (fabs(y0 - y1) < d)
+	return 1;
 
     if (y0 < y1) {
 	ystart = iceil(y0);
@@ -648,12 +664,14 @@ static int edge(double x0, double y0, double x1, double y1)
     if (ystart > ystop)
 	return 1;		/* does not cross center line of row */
 
+    m = (x0 - x1) / (y0 - y1);
     x = m * (ystart - y0) + x0;
     while (ystart <= ystop) {
 	if (!edge_point(x, ystart++))
 	    return 0;
 	x += m;
     }
+
     return 1;
 }
 
