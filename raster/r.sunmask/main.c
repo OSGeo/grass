@@ -297,12 +297,12 @@ int main(int argc, char *argv[])
 	sscanf(parm.opt4->answer, "%lf", &dazi);
     }
     else {
-	sscanf(parm.year->answer, "%i", &year);
-	sscanf(parm.month->answer, "%i", &month);
-	sscanf(parm.day->answer, "%i", &day);
-	sscanf(parm.hour->answer, "%i", &hour);
-	sscanf(parm.minutes->answer, "%i", &minutes);
-	sscanf(parm.seconds->answer, "%i", &seconds);
+	sscanf(parm.year->answer, "%d", &year);
+	sscanf(parm.month->answer, "%d", &month);
+	sscanf(parm.day->answer, "%d", &day);
+	sscanf(parm.hour->answer, "%d", &hour);
+	sscanf(parm.minutes->answer, "%d", &minutes);
+	sscanf(parm.seconds->answer, "%d", &seconds);
 	sscanf(parm.timezone->answer, "%lf", &timezone);
     }
 
