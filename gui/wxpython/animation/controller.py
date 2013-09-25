@@ -409,6 +409,8 @@ class AnimationController(wx.EvtHandler):
                 self.mapwindows[animationData.windowIndex].SetOverlay(bitmap, x, y)
             except GException:
                 GError(message=_("Failed to display legend."))
+        else:
+            self.mapwindows[animationData.windowIndex].ClearOverlay()
 
     def EvaluateInput(self, animationData):
         stds = 0
@@ -486,6 +488,7 @@ class AnimationController(wx.EvtHandler):
         animWinSize = []
         animWinPos = []
         animWinIndex = []
+        legends = [anim.legendCmd for anim in self.animationData]
         # determine position and sizes of bitmaps
         for i, (win, anim) in enumerate(zip(self.mapwindows, self.animations)):
             if anim.IsActive():
@@ -501,16 +504,16 @@ class AnimationController(wx.EvtHandler):
             image = wx.EmptyImage(*size)
             image.Replace(0, 0, 0, 255, 255, 255)
             # collect bitmaps of all windows and paste them into the one
-            for i in range(len(animWinSize)):
-                frameId = self.animations[animWinIndex[i]].GetFrame(frameIndex)
-                bitmap = self.bitmapProviders[animWinIndex[i]].GetBitmap(frameId)
+            for i in animWinIndex:
+                frameId = self.animations[i].GetFrame(frameIndex)
+                bitmap = self.bitmapProviders[i].GetBitmap(frameId)
                 im = wx.ImageFromBitmap(bitmap)
 
                 # add legend if used
-                legend = self.animationData[animWinIndex[i]].legendCmd
+                legend = legends[i]
                 if legend:
-                    legendBitmap = self.bitmapProviders[animWinIndex[i]].LoadOverlay(legend)
-                    x, y = self.mapwindows[animWinIndex[i]].GetOverlayPos()
+                    legendBitmap = self.bitmapProviders[i].LoadOverlay(legend)
+                    x, y = self.mapwindows[i].GetOverlayPos()
                     legImage = wx.ImageFromBitmap(legendBitmap)
                     # not so nice result, can we handle the transparency otherwise?
                     legImage.ConvertAlphaToMask()
