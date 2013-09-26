@@ -740,7 +740,9 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
 	if (writeout) {
 	    /* write node to sidx file */
 	    if (G_ftell(fp->file) != nextfreepos)
-		G_fatal_error("write sidx: wrong node position in file");
+		G_fatal_error("Unable to write spatial index. "
+                              "Wrong node position (%"PRI_OFF_T") in file (should be %"PRI_OFF_T").",
+                              G_ftell(fp->file), nextfreepos);
 
 	    /* write with dig__fwrite_port_* fns */
 	    dig__fwrite_port_I(&(s[top].sn->count), 1, fp);
@@ -855,8 +857,10 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
 	if (writeout) {
 	    /* write node to sidx file */
 	    if (G_ftell(fp->file) != nextfreepos)
-		G_fatal_error(_("Writing sidx: wrong node position in file"));
-
+		G_fatal_error("Unable to write spatial index. "
+                              "Wrong node position (%"PRI_OFF_T") in file (should be %"PRI_OFF_T").",
+                              G_ftell(fp->file), nextfreepos);
+            
 	    /* write with dig__fwrite_port_* fns */
 	    dig__fwrite_port_I(&(s[top].sn.count), 1, fp);
 	    dig__fwrite_port_I(&(s[top].sn.level), 1, fp);
