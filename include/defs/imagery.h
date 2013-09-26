@@ -111,6 +111,28 @@ FILE *I_fopen_group_ref_old(const char *);
 FILE *I_fopen_subgroup_ref_new(const char *, const char *);
 FILE *I_fopen_subgroup_ref_old(const char *, const char *);
 
+/* iscatt_structs.c */
+void I_sc_init_cats(struct scCats *, int, int);
+void I_sc_free_cats(struct scCats *);
+int I_sc_add_cat(struct scCats *);
+int I_sc_insert_scatt_data(struct scCats *, struct scdScattData *, int, int);
+
+void I_scd_init_scatt_data(struct scdScattData *, int, int, void *);
+
+/* iscatt_core.c */
+int I_compute_scatts(struct Cell_head *, struct scCats *, const char **, 
+	                 const char **, int, struct scCats *, const char **);
+
+int I_create_cat_rast(struct Cell_head *, const char *);
+int I_insert_patch_to_cat_rast(const char *, struct Cell_head *,  const char *);
+
+int I_id_scatt_to_bands(const int, const int, int *, int *);
+int I_bands_to_id_scatt(const int, const int, const int, int *);
+
+int I_merge_arrays(unsigned char *, unsigned char *, unsigned, unsigned, double);
+int I_apply_colormap(unsigned char *, unsigned char *, unsigned,  unsigned char *, unsigned char *);
+int I_rasterize(double *, int, unsigned char, struct Cell_head *, unsigned char *);
+
 /* sig.c */
 int I_init_signatures(struct Signature *, int);
 int I_new_signature(struct Signature *);
