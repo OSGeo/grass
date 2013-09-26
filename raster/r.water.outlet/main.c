@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     double N, E;
     int row, col, basin_fd, drain_fd;
     CELL *cell_buf;
-    char drain_name[GNAME_MAX], E_f, ba_f, N_f, errr;
+    char drain_name[GNAME_MAX];
     struct GModule *module;
     struct {
       struct Option *input, *output, *coords;
@@ -98,7 +98,6 @@ int main(int argc, char *argv[])
     }
 
     G_get_set_window(&window);
-    ba_f = N_f = E_f = errr = 0;
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
