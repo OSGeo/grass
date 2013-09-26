@@ -30,8 +30,8 @@ char **I_list_subgroups(const char *group, int *subgs_num)
        This approach should make the function usable in more cases. */
 
     char **subgs;
-    char *path[GPATH_MAX];
-    char *buf[GPATH_MAX];
+    char path[GPATH_MAX];
+    char buf[GPATH_MAX];
     const char *mapset;
     struct stat sb;
 
