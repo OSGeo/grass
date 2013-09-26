@@ -450,7 +450,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
 
     /* check if perimeter has odd number of points */
     if (st->np & 1) {
-	G_debug(1, "Weird internal error: perimeter has odd number of points");
+	G_warning("Weird internal error: perimeter has odd number of points");
 	return OUT_OF_SYNC;
     }
 
@@ -460,7 +460,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
     /* plot */
     for (i = 1; i < st->np; i += 2) {
 	if (st->P[i].y != st->P[i - 1].y) {
-	    G_debug(1, "Weird internal error: edge leaves row");
+	    G_warning("Weird internal error: edge leaves row");
 	    return OUT_OF_SYNC;
 	}
 	st->row_fill(st->P[i].y, st->P[i - 1].x + shift1, st->P[i].x + shift1);
@@ -586,7 +586,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 
     /* check if perimeter has odd number of points */
     if (st->np & 1) {
-	G_debug(1, "Weird internal error: perimeter has odd number of points");
+	G_warning("Weird internal error: perimeter has odd number of points");
 	return OUT_OF_SYNC;
     }
 
@@ -597,7 +597,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
     for (j = 0; j < rings; j++) {
 	for (i = 1; i < st->np; i += 2) {
 	    if (st->P[i].y != st->P[i - 1].y) {
-		G_debug(1, "Weird internal error: edge leaves row");
+		G_warning("Weird internal error: edge leaves row");
 		return OUT_OF_SYNC;
 	    }
 	    st->row_fill(st->P[i].y, st->P[i - 1].x + shift1[j], st->P[i].x + shift1[j]);
@@ -641,7 +641,7 @@ static int edge(double x0, double y0, double x1, double y1)
 	    d = fabs(y1);
 
 	d = frexp(d, &exp);
-	exp -= 52;
+	exp -= 53;
 	d = ldexp(d, exp);
     }
 
