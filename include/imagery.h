@@ -135,6 +135,63 @@ typedef struct
     
 } IClass_statistics;
 
+/* wx.iscatt backend */
+
+#define SC_SCATT_DATA          0 
+#define SC_SCATT_CONDITIONS    1
+
+/*! Holds list of all catagories. 
+    It can contain selected areas for scatter plots (SC_SCATT_CONDITIONS type) 
+    or computed scatter plots (SC_SCATT_DATA type).
+*/
+struct scCats 
+{
+    int type;        /*!< SC_SCATT_DATA -> computed scatter plots, SC_SCATT_CONDITIONS -> 
+                          set conditions for scatter plots to be computed */
+
+    int n_cats;      /*!< number of alocated categories */
+    
+    int n_bands;     /*!< number of analyzed bands */
+    int n_scatts;    /*!< number of possible scattter plots, which can be created from bands */
+
+    int   n_a_cats;  /*!< number of used/active categories */
+    int * cats_ids;  /*!< (cat_idx->cat_id) array index is internal idx (position in cats_arr) 
+                          and id is saved in it's position*/
+    int * cats_idxs; /*!< (cat_id->cat_idx) array index is id and internal idx is saved 
+                           in it's position*/
+
+    struct scScatts ** cats_arr; /*!< array of pointers to struct scScatts */
+};
+
+
+/*! Holds list of all scatter plots, which belongs to category. 
+*/
+struct scScatts
+{
+    int n_a_scatts;     /*!< number of used/active scatter plots*/
+    
+    int * scatts_bands; /*!< array of bands, which represents the scatter plots, 
+                             every scatter plot has assigned two bads
+                             (size of the array is n_a_scatts * 2 -> idx*2)*/
+    int * scatt_idxs;   /*!< (scatt_id->scatt_idx) internal idx of the scatter plot 
+                             (position in scatts_arr)*/
+
+    struct scdScattData ** scatts_arr; /*!< array of pointers to scdScattData */
+};
+
+/*! Holds scatter plot data.
+*/
+struct scdScattData
+{
+    int n_vals; /*!< Number of values in scatter plot 
+                     (length of b_conds_arr or scatt_vals_arr arrays). */
+
+    unsigned char  * b_conds_arr; /*!< array of selected areas 
+                                      (used for SC_SCATT_CONDITIONS type) otherwise NULL */
+    unsigned int  * scatt_vals_arr; /*!< array of computed areas 
+                                        (used for SC_SCATT_DATA type) otherwise NULL */
+};
+
 #define SIGNATURE_TYPE_MIXED 1
 
 #define GROUPFILE "CURGROUP"
