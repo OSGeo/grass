@@ -577,9 +577,8 @@ static inline int compute_scatts_from_chunk_row(struct Cell_head *region,
 			(b_2_row[i_rows_pix] -
 			 b_2_range.min) * b_1_range_size;
 		    if (array_idx < 0 || array_idx >= max_arr_idx) {
-			G_warning
-                _("Data inconsistent. "
-                  "Value computed for scatter plot is out of initialized range.");
+			G_warning(_("Data inconsistent. "
+				  "Value computed for scatter plot is out of initialized range."));
 			continue;
 		    }
             /* pixels meets condtion defined in scatter plot ->
