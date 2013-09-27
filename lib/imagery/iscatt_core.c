@@ -436,7 +436,6 @@ static inline void update_cat_scatt_plts(struct rast_row *bands_rows,
 /*!
    \brief Computes scatter plots data from bands_rows.
 
-   \param region analysis region
    \param scatt_conds pointer to scScatts struct of type SC_SCATT_CONDITIONS, 
    			       where are selected areas (condtitions) stored
    \param f_cats_rasts_conds file which stores selected areas (conditions) from
@@ -451,8 +450,7 @@ static inline void update_cat_scatt_plts(struct rast_row *bands_rows,
    \return  0 on success
    \return -1 on failure
  */
-static inline int compute_scatts_from_chunk_row(struct Cell_head *region,
-						struct scCats *scatt_conds,
+static inline int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 						FILE ** f_cats_rasts_conds,
 						struct rast_row *bands_rows,
 						struct scCats *scatts,
@@ -830,7 +828,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 				    bands_rows[band_id].null_row, i_row);
 	}
 	if (compute_scatts_from_chunk_row
-	    (region, scatt_conds, f_cats_rasts_conds, bands_rows, scatts,
+	    (scatt_conds, f_cats_rasts_conds, bands_rows, scatts,
 	     fd_cats_rasts) == -1) {
 	    free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
 				     			 bands_ids, fd_cats_rasts,
