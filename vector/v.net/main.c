@@ -138,8 +138,8 @@ int main(int argc, char **argv)
 	    int narcs;
 
 	    if (act == TOOL_CONNECT)
-		narcs = connect_arcs(In, Points, Out, nfield, thresh,
-		                     opt.snap_flag->answer);
+		narcs = connect_arcs(In, Points, Out, afield, nfield,
+		                     thresh, opt.snap_flag->answer);
 	    else
 		narcs = create_arcs(file_arcs, Points, Out, afield, nfield);
 

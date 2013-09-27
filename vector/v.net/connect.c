@@ -18,14 +18,16 @@
  * \return number of new arcs
  */
 int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
-		 struct Map_info *Out, int nfield, double thresh, int snap)
+		 struct Map_info *Out, int afield, int nfield,
+		 double thresh, int snap)
 {
     int narcs;
     int type, line, seg, i, ltype, broken;
     double px, py, pz, spdist, dist;
 
     struct line_pnts *Points, *Pline, *Pout;
-    struct line_cats *Cats, *Cline;
+    struct line_cats *Cats, *Cline, *Cnew;
+    int maxcat, findex, ncats;
 
     narcs = 0;
 
@@ -34,10 +36,16 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
     Pout = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     Cline = Vect_new_cats_struct();
+    Cnew = Vect_new_cats_struct();
 
     /* rewrite all primitives to output file */
     Vect_copy_map_lines(In, Out);
     Vect_build_partial(Out, GV_BUILD_BASE);
+    
+    findex = Vect_cidx_get_field_index(In, afield);
+    ncats = Vect_cidx_get_num_cats_by_index(In, findex);
+    Vect_cidx_get_cat_by_index(In, findex, ncats - 1, &maxcat, &type, &line);
+    
 
     /* go thorough all points in point map and write a new arcs if missing */
     while ((type = Vect_read_next_line(Pnts, Points, Cats)) >= 0) {
@@ -103,7 +111,10 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 		Vect_reset_line(Pout);
 		Vect_append_point(Pout, px, py, pz);
 		Vect_append_point(Pout, Points->x[0], Points->y[0], Points->z[0]);
-		Vect_write_line(Out, ltype, Pout, Cline);
+		maxcat++;
+		Vect_reset_cats(Cnew);
+		Vect_cat_set(Cnew, afield, maxcat);
+		Vect_write_line(Out, ltype, Pout, Cnew);
 
 		narcs++;
 	    }
@@ -122,6 +133,7 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
     Vect_destroy_line_struct(Pout);
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(Cline);
+    Vect_destroy_cats_struct(Cnew);
 
     return narcs;
 }

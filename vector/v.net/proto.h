@@ -24,7 +24,7 @@ void parse_arguments(const struct opt *,
 
 /* connect.c */
 int connect_arcs(struct Map_info *, struct Map_info *,
-		 struct Map_info *, int, double, int);
+		 struct Map_info *, int, int, double, int);
 
 /* nodes.c */
 int nodes(struct Map_info *, struct Map_info *, int,
