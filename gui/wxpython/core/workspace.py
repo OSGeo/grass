@@ -76,6 +76,11 @@ class ProcessWorkspaceFile:
         """!Get node text"""
         p = node.find(tag)
         if p is not None:
+            # if empty text is inside tag,
+            # etree returns None
+            if p.text is None:
+                return ''
+
             return normalize_whitespace(p.text)
         
         return default
