@@ -145,8 +145,8 @@ int main(int argc, char **argv)
     if (print->answer && shell_print->answer)
 	G_fatal_error(_("Please choose only one print style"));
 
+    Vect_set_open_level(1); /* no topology needed */
     if (print->answer || shell_print->answer || columns->answer) {
-	Vect_set_open_level(1); /* no topology needed */
 	Vect_open_old2(&Map, inopt->answer, "", field_opt->answer);
     }
     else {
