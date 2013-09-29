@@ -207,6 +207,8 @@ class IClassMapFrame(DoubleMapFrame):
         
     def OnCloseWindow(self, event):
         self.GetFirstWindow().GetDigit().CloseMap()
+        self.plotPanel.CloseWindow()
+
         self.Destroy()
         
     def __del__(self):
