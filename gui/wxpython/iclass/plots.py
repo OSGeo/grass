@@ -6,7 +6,7 @@
 Classes:
  - plots::PlotPanel
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2011,2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -19,11 +19,12 @@ import wx
 import wx.lib.plot as plot
 import wx.lib.scrolledpanel as scrolled
 from core.utils import _
+from core.gcmd import GError
 
 class PlotPanel(scrolled.ScrolledPanel):
     """!Panel for drawing multiple plots.
     
-    There are two types of plots: histograms and coincidence plots.
+    There are three types of plots: histograms, coincidence plots and scatter plots.
     Histograms show frequency of cell category values in training areas
     for each band and for one category. Coincidence plots show min max range
     of classes for each band.
@@ -40,25 +41,72 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.currentCat = None
         
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
-        
+
         self._createControlPanel()
-        
+        self._createPlotPanel()
+        self._createScatterPlotPanel()
+
         self.SetSizer(self.mainSizer)
         self.mainSizer.Fit(self)
         self.Layout()
-        
+
+    def CloseWindow(self):
+        if self.iscatt_panel:
+            self.iscatt_panel.CloseWindow()
+
+    def _createPlotPanel(self):
+
+        self.canvasPanel = wx.Panel(parent=self)
+        self.mainSizer.Add(item = self.canvasPanel, proportion = 1, flag = wx.EXPAND, border = 0)
+        self.canvasSizer = wx.BoxSizer(wx.VERTICAL)
+        self.canvasPanel.SetSizer(self.canvasSizer)
+
     def _createControlPanel(self):
         self.plotSwitch = wx.Choice(self, id = wx.ID_ANY,
                                      choices = [_("Histograms"),
-                                                _("Coincident plots")])
+                                                _("Coincident plots"),
+                                                _("Scatter plots")])
         self.mainSizer.Add(self.plotSwitch, proportion = 0, flag = wx.EXPAND|wx.ALL, border = 5)
         self.plotSwitch.Bind(wx.EVT_CHOICE, self.OnPlotTypeSelected)
-        
+    
+    def _createScatterPlotPanel(self):
+        """!Init interactive scatter plot tool
+        """
+        try:
+            from scatt_plot.frame import IClassIScattPanel
+            self.iscatt_panel = IClassIScattPanel(parent=self, 
+                                                  giface=self._giface, 
+                                                  iclass_mapwin = self.parent.GetFirstWindow())
+            self.mainSizer.Add(self.iscatt_panel, proportion = 1, flag = wx.EXPAND, border = 0)
+            self.iscatt_panel.Hide()
+        except ImportError as e:
+            self.scatt_error = _("Scatter plot functionality is disabled. Reason:\n" \
+                                 "Unable to import packages needed for scatter plot.\n%s" % e)
+            GError(self.scatt_error)
+            self.iscatt_panel = None
+
     def OnPlotTypeSelected(self, event):
         """!Plot type selected"""
+
+        if self.plotSwitch.GetSelection() in [0, 1]:
+            self.SetupScrolling(scroll_x = False, scroll_y = True)
+            if self.iscatt_panel:
+                self.iscatt_panel.Hide()
+            self.canvasPanel.Show()
+            self.Layout()
+
+        elif self.plotSwitch.GetSelection() == 2:
+            self.SetupScrolling(scroll_x = False, scroll_y = False)
+            if self.iscatt_panel:
+                self.iscatt_panel.Show()
+            else:
+                GError(self.scatt_error)
+            self.canvasPanel.Hide()
+            self.Layout()
+
         if self.currentCat is None:
             return
-        
+
         if self.plotSwitch.GetSelection() == 0:
             stat = self.stats_data.GetStatistics(self.currentCat)
             if not stat.IsReady():
@@ -67,7 +115,9 @@ class PlotPanel(scrolled.ScrolledPanel):
             self.DrawHistograms(stat)
         else:
             self.DrawCoincidencePlots()
-            
+
+        self.Layout()
+
     def StddevChanged(self):
         """!Standard deviation multiplier changed, redraw histograms"""
         if self.plotSwitch.GetSelection() == 0:
@@ -90,7 +140,7 @@ class PlotPanel(scrolled.ScrolledPanel):
             panel.Destroy()
             
         self.canvasList = []
-            
+
     def ClearPlots(self):
         """!Clears plot canvases"""
         for bandIdx in range(len(self.bandList)):
@@ -105,15 +155,15 @@ class PlotPanel(scrolled.ScrolledPanel):
     def CreatePlotCanvases(self):
         """!Create plot canvases according to the number of bands"""
         for band in self.bandList:
-            canvas = plot.PlotCanvas(self)
+            canvas = plot.PlotCanvas(self.canvasPanel)
             canvas.SetMinSize((-1, 140))
             canvas.SetFontSizeTitle(10)
             canvas.SetFontSizeAxis(8)
             self.canvasList.append(canvas)
             
-            self.mainSizer.Add(item = canvas, proportion = 1, flag = wx.EXPAND, border = 0)
-
-        self.SetVirtualSize(self.GetBestVirtualSize()) 
+            self.canvasSizer.Add(item = canvas, proportion = 1, flag = wx.EXPAND, border = 0)
+        
+        self.SetVirtualSize(self.GetBestVirtualSize())
         self.Layout()
         
     def UpdatePlots(self, group, subgroup, currentCat, stats_data):
@@ -140,7 +190,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         
     def UpdateCategory(self, cat):
         self.currentCat = cat
-        
+    
     def DrawCoincidencePlots(self):
         """!Draw coincidence plots"""
         for bandIdx in range(len(self.bandList)):
