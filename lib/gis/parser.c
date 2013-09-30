@@ -742,6 +742,15 @@ int G__uses_new_gisprompt(void)
     return 0;
 }
 
+/*!
+  \brief Print list of keywords (internal use only)
+
+  If <em>format</em> function is NULL than list of keywords is printed
+  comma-separated.
+
+  \param[out] fd file where to print
+  \param format pointer to print function
+*/
 void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
 {
     int i;
