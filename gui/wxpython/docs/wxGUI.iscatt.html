@@ -3,26 +3,26 @@
 
 <h2>DESCRIPTION</h2>
 
-<em>Interactive Scatter Plot Tool</em> allows to analyze group of raster maps. 
-    The tool is integrated into <em><a href="wxGUI.iclass.html">
-    Supervised Classification Tool (wx.iclass) </a></em> (see the screen shot bellow). 
-    Also it is possible to launch it from Map Display Window 
-    (Analyze map → Interactive Scatter Plot Tool). 
+<b>Interactive Scatter Plot Tool</b> allows to analyze group of raster
+maps. The tool is integrated into <em><a href="wxGUI.iclass.html">
+Supervised Classification Tool</a></em> (see the screen shot bellow).
+Also it is possible to launch it from Map Display Window (<tt>Analyze map
+&rarr; Interactive Scatter Plot Tool</tt>).
 
 The main idea of the tool is that everything is linked together 
 (scatter plots together and mapwindow with the scatter plots).
 
 The main feature of the tool is the interactivity, which allows user to: 
 <ul>
-  <li> work with multiple plots, which represents multiple raster bands combinations.
+  <li> work with multiple plots, which represents multiple raster bands combinations,
   </li>
   <li> highlight plotted points in open scatter plots according to currently 
-       chosen pixels for classes by it's training areas (supported only in wx.iclass)
+       chosen pixels for classes by it's training areas (supported only in <em>Supervised Classification Tool</em>),
   </li>
   <li> be able to define areas in plots and the tool will highlight pixels in 
-       map display window and corresponding points in other plots
+       map display window and corresponding points in other plots,
   </li>
-  <li> plot of confidence ellipses
+  <li> plot of confidence ellipses.
   </li>
 </ul>
 
@@ -35,7 +35,7 @@ The main feature of the tool is the interactivity, which allows user to:
 </center>
 
 If editing mode is activated (the green polygon tool in toolbar), the areas which were selected 
-in the scatter plots are highlighted. In the image you can see this area for scatter plot of bands B_6 B_7 inside the ellipse. 
+in the scatter plots are highlighted. In the image you can see this area for scatter plot of bands <tt>B_6, B_7</tt> inside the ellipse. 
 Opacity and color of the selected area can be set in settings. The area corresponds to the active class (in this case clouds). 
 Selected areas are subset of areas, which belongs to the category.
 <p>
@@ -60,13 +60,13 @@ The raster range can be lowered using <em><a href="r.rescale.html">r.rescale</a>
 <h2>KNOWN ISSUES</h2>
 
 Selection of areas in mapwindow is currently supported only if the tool was launched from 
-<em><a href="wxGUI.iclass.html">Supervised Classification Tool (wx.iclass) </a></em>
+<em><a href="wxGUI.iclass.html">Supervised Classification Tool</a></em>.
 
 <h2>SEE ALSO</h2>
 
 <em>
   <a href="wxGUI.html">wxGUI</a><br>
-  <a href="wxGUI.components.html">wxGUI components</a>
+  <a href="wxGUI.components.html">wxGUI components</a>,
   <a href="r.rescale.html">r.rescale</a><br>
 </em>
 
