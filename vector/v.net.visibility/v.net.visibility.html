@@ -9,16 +9,20 @@ in between them, i.e. the edge doesn't intersect any line or boundary
 in the vector map. This is useful to compute the sortest path in a
 vector map from any two points. To do this, first you need to compute
 the visibility graph and from it compute the shortest path using
-<em>v.net.path</em> or <em>d.path</em>.
+<em><a href="v.net.path.html">v.net.path</a></em>
+or <em><a href="d.path.html">d.path</a></em>.
 
+<p>
 <b>IMPORTANT: the algorithm doesn't work well with intersecting lines
 (that includes overlapping)</b>
 
-<p>
-If you compute a shortest path after computing the visibility graph you
-will notice that this path might go through a vertix of a line. If this
-is not wanted you might to run the map through <em>v.buffer</em> first
-whith a small value. Example:
+<h2>NOTES</h2>
+
+If you compute a shortest path after computing the visibility graph
+you will notice that this path might go through a vertix of a line. If
+this is not wanted you might to run the map
+through <em><a href="v.buffer.html">v.buffer</a></em> first whith a
+small value. Example:
 
 <div class="code"><pre>
 v.buffer input=map output=bufferedmap buffer=1 type=point,line,area,boundary
@@ -50,7 +54,9 @@ v.net.visibility input=map vis=vis_map output=new_vis_map \
       coordinate=25556200,6686400,25556400,6686600
 </pre></div>
 
-<h2>EXAMPLE 1</h2>
+<h2>EXAMPLES</h2>
+
+<h3>Example 1</h3>
 A simple example showing how to use the module
 <div class="code"><pre>
 v.net.visibility input=lines output=graph
@@ -58,8 +64,8 @@ d.vect graph
 d.vect lines col=red
 </pre></div>
 
-<h2>EXAMPLE 2</h2>
-An example on how to use <em>v.buffer</em> with the module 
+<h3>Example 2</h3>
+An example on how to use <em><a href="v.buffer.html">v.buffer</a></em> with the module 
 <div class="code"><pre>
 v.buffer input=lines output=buffered_lines buffer=1
 v.net.visibility input=buffered_lines output=graph
@@ -68,7 +74,7 @@ d.vect lines col=red
 </pre></div>
 
 
-<h2>EXAMPLE 3</h2>
+<h3>Example 3</h3>
 An example on how to use the coordinate parameter. This will compute the
 visibility graph of the vector map lines with the point 2555678,6686343
 <div class="code"><pre>
@@ -77,7 +83,7 @@ d.vect graph
 d.vect lines col=red
 </pre></div>
 
-<h2>EXAMPLE 4</h2>
+<h3>Example 4</h3>
 An example on how to use the coordinate parameter with the vis parameter.
 Here the vector map graph is computed then a new visibility graph is computed
 from it with the point 2555678,6686343 extra
@@ -93,12 +99,12 @@ d.vect lines col=red
 </pre></div>
 
 
-<h2>EXAMPLE 5</h2>
+<h3>Example 5</h3>
 An example for connections of points (Spearfish):
 <div class="code"><pre>
 v.net.visibility input=archsites output=graph
 g.region vect=archsites
-d.mon x0
+d.mon wx0
 d.vect graph
 d.vect archsites col=red
 </pre></div>
@@ -111,16 +117,19 @@ visible, some wrong edges are added.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.path.html">d.path</a></em>,
-<em><a href="v.net.html">v.net</a></em>,
-<em><a href="v.net.alloc.html">v.net.alloc</a></em>,
-<em><a href="v.net.iso.html">v.net.iso</a></em>,
-<em><a href="v.net.salesman.html">v.net.salesman</a></em>,
-<em><a href="v.net.steiner.html">v.net.steiner</a></em>,
-<em><a href="v.to.db.html">v.to.db</a></em>
+<em>
+<a href="d.path.html">d.path</a>,
+<a href="v.net.html">v.net</a>,
+<a href="v.net.alloc.html">v.net.alloc</a>,
+<a href="v.net.iso.html">v.net.iso</a>,
+<a href="v.net.salesman.html">v.net.salesman</a>,
+<a href="v.net.steiner.html">v.net.steiner</a>,
+<a href="v.to.db.html">v.to.db</a>
+</em>
 
 <h2>AUTHOR</h2>
 Maximilian Maldacker<br>
 Mentor: Wolf Bergenheim
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
