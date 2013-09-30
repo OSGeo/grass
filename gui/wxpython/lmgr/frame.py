@@ -992,7 +992,7 @@ class GMFrame(wx.Frame):
                                                vInfo['gdal'], vInfo['proj4'], vInfo['geos'], vInfo['sqlite'],
                                                platform.python_version(),
                                                wx.__version__,
-                                               _("Platform"), platform.platform(), osgeo4w),
+                                               _("Platform"), platform.platform().decode('utf8', errors='replace'), osgeo4w),
                                 priority = 2)
         self._gconsole.WriteCmdLog(' ')
     
