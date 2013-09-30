@@ -316,6 +316,7 @@ void print_escaped_for_html_options(FILE * f, const char *str)
 
 void print_escaped_for_html_keywords(FILE * f, const char * str)
 {
+#if 0 /* temporary disabled */
     /* HTML link only for second keyword */
     if (st->n_keys > 1 &&
         strcmp(st->module_info.keywords[1], str) == 0) {
@@ -333,7 +334,10 @@ void print_escaped_for_html_keywords(FILE * f, const char * str)
         fprintf(f, ".html\">%s</a>", str);
     }
     else {
+#endif
         fprintf(f, "%s", str);
+#if 0
     }
+#endif
 }
 #undef do_escape
