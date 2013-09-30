@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("network"));
     G_add_keyword(_("shortest path"));
     G_add_keyword(_("visibility"));
-    module->description = _("Visibility graph construction.");
+    module->description = _("Performs visibility graph construction.");
 
     /* define the arguments needed */
     input = G_define_standard_option(G_OPT_V_INPUT);
