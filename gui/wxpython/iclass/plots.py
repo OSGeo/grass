@@ -73,7 +73,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         """!Init interactive scatter plot tool
         """
         try:
-            from scatt_plot.frame import IClassIScattPanel
+            from iscatt.frame import IClassIScattPanel
             self.iscatt_panel = IClassIScattPanel(parent=self, 
                                                   giface=self._giface, 
                                                   iclass_mapwin = self.parent.GetFirstWindow())
