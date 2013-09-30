@@ -126,7 +126,7 @@ int mst(struct Map_info *Map, int *trms, int ntrms,	/* array of terminal, number
 	int sp,			/* Steiner point (node) to be tested with terminals, (0 = ignore) */
 	int rebuild)
 {				/* rebuild the sorted list of costs for terminals */
-    int i, j, node1, node2, ret, com1, com2, t1, t2, line;
+    int i, j, node1, node2, com1, com2, t1, t2, line;
     static int k;
     int tcpos, scpos;		/* current position in the term_costs / sp_costs */
     double tcst;
@@ -146,7 +146,7 @@ int mst(struct Map_info *Map, int *trms, int ntrms,	/* array of terminal, number
 	    for (j = i + 1; j < ntrms; j++) {
 		term_costs[k].term1 = i;
 		term_costs[k].term2 = j;
-		ret = get_node_costs(trms[i], trms[j], &tcst);
+		get_node_costs(trms[i], trms[j], &tcst);
 		term_costs[k].cost = tcst;
 		k++;
 	    }
@@ -164,7 +164,7 @@ int mst(struct Map_info *Map, int *trms, int ntrms,	/* array of terminal, number
 	for (i = 0; i < ntrms; i++) {
 	    sp_costs[i].term1 = -1;	/* not needed */
 	    sp_costs[i].term2 = i;
-	    ret = get_node_costs(sp, trms[i], &tcst);
+	    get_node_costs(sp, trms[i], &tcst);
 	    sp_costs[i].cost = tcst;
 	}
 	qsort((void *)sp_costs, ntrms, sizeof(COST), cmp);
@@ -292,7 +292,7 @@ int mst(struct Map_info *Map, int *trms, int ntrms,	/* array of terminal, number
 	if (AList != NULL) {
 	    node1 = trms[t1];
 	    node2 = trms[t2];
-	    ret = Vect_net_shortest_path(Map, node1, node2, List, NULL);
+	    Vect_net_shortest_path(Map, node1, node2, List, NULL);
 	    for (j = 0; j < List->n_values; j++) {
 		Vect_list_append(AList, abs(List->value[j]));
 	    }
@@ -346,11 +346,11 @@ int main(int argc, char **argv)
     G_add_keyword(_("network"));
     G_add_keyword(_("steiner tree"));
     module->label =
-	_("Create Steiner tree for the network and given terminals");
+	_("Creates Steiner tree for the network and given terminals.");
     module->description =
 	_("Note that 'Minimum Steiner Tree' problem is NP-hard "
 	  "and heuristic algorithm is used in this module so "
-	  "the result may be sub optimal");
+	  "the result may be sub optimal.");
 
     map = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_V_OUTPUT);
