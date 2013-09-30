@@ -1470,11 +1470,11 @@ class ImportDialog(wx.Dialog):
                 cmd.append('-n')
 
             llist.AddLayer(ltype='raster',
-                           name=name, checked=False,
+                           name=name, checked=True,
                            cmd=cmd)
         else:
             llist.AddLayer(ltype='vector',
-                           name=name, checked=False,
+                           name=name, checked=True,
                            cmd=['d.vect',
                                 'map=%s' % name] + GetDisplayVectSettings())
 
