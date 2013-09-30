@@ -19,8 +19,9 @@
 
 #include "parser_local_proto.h"
 
-static void print_escaped_for_html(FILE * f, const char *str);
-static void print_escaped_for_html_options(FILE * f, const char *str);
+static void print_escaped_for_html(FILE *, const char *);
+static void print_escaped_for_html_options(FILE *, const char *);
+static void print_escaped_for_html_keywords(FILE * , const char *);
 
 /*!
   \brief Print module usage description in HTML format.
@@ -66,7 +67,7 @@ void G__usage_html(void)
 
     fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
-	G__print_keywords(stdout, NULL);
+	G__print_keywords(stdout, print_escaped_for_html_keywords);
 	fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
@@ -310,6 +311,29 @@ void print_escaped_for_html_options(FILE * f, const char *str)
 	default:
 	    fputc(*s, f);
 	}
+    }
+}
+
+void print_escaped_for_html_keywords(FILE * f, const char * str)
+{
+    /* HTML link only for second keyword */
+    if (st->n_keys > 1 &&
+        strcmp(st->module_info.keywords[1], str) == 0) {
+    
+        const char *s;
+        
+        fprintf(f, "<a href=\"topic_");
+        for (s = str; *s; s++) {
+            switch (*s) {
+                do_escape(' ', "_");
+            default:
+                fputc(*s, f);
+            }
+        }
+        fprintf(f, ".html\">%s</a>", str);
+    }
+    else {
+        fprintf(f, "%s", str);
     }
 }
 #undef do_escape
