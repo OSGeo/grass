@@ -285,7 +285,7 @@ class BitmapProvider(object):
         """!Sets size when size of related window changes."""
         self.imageWidth, self.imageHeight = width, height
 
-    def _createNoDataBitmap(self, width, height):
+    def _createNoDataBitmap(self, width, height, text="No data"):
         """!Creates 'no data' bitmap.
 
         Used when requested bitmap is not available (loading data was not successful) or 
@@ -295,7 +295,7 @@ class BitmapProvider(object):
         dc = wx.MemoryDC()
         dc.SelectObject(bitmap)
         dc.Clear()
-        text = _("No data")
+        text = _(text)
         dc.SetFont(wx.Font(pointSize = 40, family = wx.FONTFAMILY_SCRIPT,
                            style = wx.FONTSTYLE_NORMAL, weight = wx.FONTWEIGHT_BOLD))
         tw, th = dc.GetTextExtent(text)
@@ -424,7 +424,8 @@ class BitmapProvider(object):
                     # Unfortunately the png files must be read here, 
                     # since the swig wx objects can not be serialized by the Queue object :(
                     if filename == None:
-                        self.bitmapPool[name_list[i]] = wx.EmptyBitmap(imageWidth, imageHeight)
+                        self.bitmapPool[name_list[i]] = self._createNoDataBitmap(imageWidth, imageHeight,
+                                                                                 text="Failed to render")
                     else:
                         self.bitmapPool[name_list[i]] = wx.BitmapFromImage(wx.Image(filename))
                         os.remove(filename)
@@ -535,6 +536,7 @@ def mapRenderProcess(mapType, mapname, width, height, fileQueue):
         return
 
     if returncode != 0:
+        grass.warning("Rendering failed:\n" + messages)
         fileQueue.put(None)
         os.remove(filename)
         return
