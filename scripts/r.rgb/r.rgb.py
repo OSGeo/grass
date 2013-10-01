@@ -27,9 +27,6 @@
 #% required: no
 #%end
 
-import sys
-import os
-import string
 import grass.script as grass
 
 def main():
@@ -40,7 +37,7 @@ def main():
 	grass.fatal(_("Raster map <%s> not found") % input)
 
     if not output:
-	output = input
+	output = input.split('@')[0]
 
     expr = ';'.join(["${output}.r = r#${input}",
 		     "${output}.g = g#${input}",
