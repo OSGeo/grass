@@ -35,14 +35,21 @@
 import sys
 from grass.script import core as grass
 
+
 def main():
     # if no output filename, output to stdout
     output = options['output']
-    if not output:
-        output = '-'
+    sep = options['separator']
 
-    ret = grass.run_command("r.stats", flags="1gn", input=options['input'],
-                            sep=options['separator'], output=output)
+    parameters = dict(flags="1gn",
+                      input=options['input'])
+    if output:
+        parameters.update(output=output)
+    # windows don't like pipe so we don't include it in the command explicitly
+    if sep != '|':
+        parameters.update(separator=sep)
+
+    ret = grass.run_command("r.stats", **parameters)
     sys.exit(ret)
 
 if __name__ == "__main__":
