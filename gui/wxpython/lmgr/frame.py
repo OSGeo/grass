@@ -975,6 +975,9 @@ class GMFrame(wx.Frame):
             osgeo4w = ''
         
         self._gconsole.WriteCmdLog(_("System Info"))
+        # platform from UTF-8 conversion was added because of Fedora 19
+        # which has the name Schrodinger's cat (umlaut and special ' character)
+        # which appears in the platform.platform() string
         self._gconsole.WriteLog("%s: %s\n"
                                 "%s: %s\n"
                                 "%s: %s\n"
