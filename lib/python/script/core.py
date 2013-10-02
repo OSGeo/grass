@@ -144,6 +144,112 @@ def get_commands():
     return set(cmd), scripts
 
 
+# replacement for which function from shutil (not available in all versions)
+# from http://hg.python.org/cpython/file/6860263c05b3/Lib/shutil.py#l1068
+# added because of Python scripts running Python scripts on MS Windows
+# see also ticket #2008 which is unrelated but same function was proposed
+def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
+    """Given a command, mode, and a PATH string, return the path which
+    conforms to the given mode on the PATH, or None if there is no such
+    file.
+
+    `mode` defaults to os.F_OK | os.X_OK. `path` defaults to the result
+    of os.environ.get("PATH"), or can be overridden with a custom search
+    path.
+
+    """
+    # Check that a given file can be accessed with the correct mode.
+    # Additionally check that `file` is not a directory, as on Windows
+    # directories pass the os.access check.
+    def _access_check(fn, mode):
+        return (os.path.exists(fn) and os.access(fn, mode)
+                and not os.path.isdir(fn))
+
+    # If we're given a path with a directory part, look it up directly rather
+    # than referring to PATH directories. This includes checking relative to the
+    # current directory, e.g. ./script
+    if os.path.dirname(cmd):
+        if _access_check(cmd, mode):
+            return cmd
+        return None
+
+    if path is None:
+        path = os.environ.get("PATH", os.defpath)
+    if not path:
+        return None
+    path = path.split(os.pathsep)
+
+    if sys.platform == "win32":
+        # The current directory takes precedence on Windows.
+        if not os.curdir in path:
+            path.insert(0, os.curdir)
+
+        # PATHEXT is necessary to check on Windows.
+        pathext = os.environ.get("PATHEXT", "").split(os.pathsep)
+        # See if the given file matches any of the expected path extensions.
+        # This will allow us to short circuit when given "python.exe".
+        # If it does match, only test that one, otherwise we have to try
+        # others.
+        if any(cmd.lower().endswith(ext.lower()) for ext in pathext):
+            files = [cmd]
+        else:
+            files = [cmd + ext for ext in pathext]
+    else:
+        # On other platforms you don't have things like PATHEXT to tell you
+        # what file suffixes are executable, so just pass on cmd as-is.
+        files = [cmd]
+
+    seen = set()
+    for dir in path:
+        normdir = os.path.normcase(dir)
+        if not normdir in seen:
+            seen.add(normdir)
+            for thefile in files:
+                name = os.path.join(dir, thefile)
+                if _access_check(name, mode):
+                    return name
+    return None
+
+
+# Added because of scripts calling scripts on MS Windows.
+# Module name (here cmd) differs from the file name (does not have extension).
+# Additionally, we don't run scripts using system executable mechanism,
+# so we need the full path name.
+# However, scripts are on the PATH and '.PY' in in PATHEXT, so we can use
+# shutil.which to get the full file path. Addons are on PATH too.
+# An alternative to which function call would be to check the script path and
+# addons path. This is proposed improvement for the future.
+# Another alternative is to check some global list of scripts but this list
+# needs to be created first. The question is what is less expensive.
+# Note that getting the full path is only part of the solution,
+# the other part is to use the right Python as an executable and pass the full
+# script path as a parameter.
+# Nevertheless, it is unclear on which places which extensions are added.
+# This function also could skip the check for platform but depends
+# how will be used, this is most general but not most effective.
+def get_real_command(cmd):
+    """!Returns the real file commad for a module (cmd)
+
+    For Python scripts on MS Windows it returns full path to the script
+    and adds a '.py' extension.
+    For other cases it just returns a module (name).
+    So, you can just use this function for all without further check.
+
+    >>> get_real_command('g.region')
+    'g.region'
+    """
+    if sys.platform == 'win32':
+        # we in fact expect pure module name (without extension)
+        # so, lets remove extension
+        if os.path.splitext(cmd)[1] == '.py':
+            cmd = cmd[:-3]
+        full_path = shutil_which(cmd + '.py')
+        if full_path:
+            return full_path
+
+    return cmd
+
+
 def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
                  **options):
     """!Return a list of strings suitable for use as the args parameter to
@@ -221,6 +327,13 @@ def start_command(prog, flags="", overwrite=False, quiet=False,
             options[opt] = val
 
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
+    # using Python executable to run the module if it is a script
+    # expecting at least module name at first position
+    # cannot use make_command for this now because it is used in GUI
+    if sys.platform == "win32":
+        args[0] = get_real_command(args[0])
+        if args[0].endswith('.py'):
+            args.insert(0, sys.executable)
 
     if debug_level() > 0:
         sys.stderr.write("D1/%d: %s.start_command(): %s\n" % (debug_level(),
@@ -370,6 +483,14 @@ def exec_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
 
     """
     args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
+    # using Python executable to run the module if it is a script
+    # expecting at least module name at first position
+    # cannot use make_command for this now because it is used in GUI
+    if sys.platform == "win32":
+        args[0] = get_real_command(args[0])
+        if args[0].endswith('.py'):
+            args.insert(0, sys.executable)
+
     if env == None:
         env = os.environ
     os.execvpe(prog, args, env)
