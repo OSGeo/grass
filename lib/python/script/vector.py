@@ -239,9 +239,11 @@ def vector_db_select(map, layer = 1, **kwargs):
                   { 'layer' : layer, 'map' : map })
         return { 'columns' : [], 'values' : {} }
         
+    include_key = True
     if 'columns' in kwargs:
         if key not in kwargs['columns'].split(','):
             # add key column if missing
+            include_key = False
             debug("Adding key column to the output")
             kwargs['columns'] += ',' + key
     
@@ -260,11 +262,18 @@ def vector_db_select(map, layer = 1, **kwargs):
         if not columns:
             columns = line.split('|')
             key_index = columns.index(key)
+            # discard key column
+            if not include_key:
+                 columns = columns[:-1]
             continue
         
         value = line.split('|')
         key_value = int(value[key_index])
-        values[key_value] = line.split('|')
+        if not include_key:
+            # discard key column
+            values[key_value] = value[:-1]
+        else:
+            values[key_value] = value
     
     return { 'columns' : columns,
              'values' : values }
