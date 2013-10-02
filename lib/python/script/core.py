@@ -327,13 +327,6 @@ def start_command(prog, flags="", overwrite=False, quiet=False,
             options[opt] = val
 
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
-    # using Python executable to run the module if it is a script
-    # expecting at least module name at first position
-    # cannot use make_command for this now because it is used in GUI
-    if sys.platform == "win32":
-        args[0] = get_real_command(args[0])
-        if args[0].endswith('.py'):
-            args.insert(0, sys.executable)
 
     if debug_level() > 0:
         sys.stderr.write("D1/%d: %s.start_command(): %s\n" % (debug_level(),
@@ -483,13 +476,6 @@ def exec_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
 
     """
     args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
-    # using Python executable to run the module if it is a script
-    # expecting at least module name at first position
-    # cannot use make_command for this now because it is used in GUI
-    if sys.platform == "win32":
-        args[0] = get_real_command(args[0])
-        if args[0].endswith('.py'):
-            args.insert(0, sys.executable)
 
     if env == None:
         env = os.environ
