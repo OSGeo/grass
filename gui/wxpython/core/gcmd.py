@@ -533,16 +533,21 @@ class CommandThread(Thread):
         self.startTime = time.time()
 
         # TODO: replace ugly hack below
+        # this cannot be replaced it can be only improved
+        # also unifying this with 3 other places in code would be nice
+        # changing from one chdir to get_real_command function
         args = self.cmd
         if sys.platform == 'win32':
-            ext = os.path.splitext(self.cmd[0])[1] == globalvar.SCT_EXT
-            if ext or self.cmd[0] in globalvar.grassScripts[globalvar.SCT_EXT]:
-                os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
-                if not ext:
-                    args = [sys.executable, self.cmd[0] + globalvar.SCT_EXT] + self.cmd[1:]
-                else:
-                    args = [sys.executable, self.cmd[0]] + self.cmd[1:]
-        
+            if os.path.splitext(args[0])[1] == globalvar.SCT_EXT:
+                args[0] = args[0][:-3]
+            # using Python executable to run the module if it is a script
+            # expecting at least module name at first position
+            # cannot use make_command for this now because it is used in GUI
+            # The same code is in grass.script.core already twice.
+            args[0] = grass.get_real_command(args[0])
+            if args[0].endswith('.py'):
+                args.insert(0, sys.executable)
+ 
         try:
             self.module = Popen(args,
                                 stdin = subprocess.PIPE,
