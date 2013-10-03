@@ -524,6 +524,8 @@ class GroupDialog(wx.Dialog):
         self.defaultGroup = defaultGroup
         self.defaultSubgroup = defaultSubgroup
         self.currentGroup = self.defaultGroup
+        self.currentSubgroup = self.defaultGroup
+
         self.dataChanged = False
 
         self.bodySizer = self._createDialogBody()
@@ -665,14 +667,17 @@ class GroupDialog(wx.Dialog):
         self.Layout()
     
     def OnSubgChbox(self, event):
-        self.edit_subg = self.subg_chbox.GetValue()
-
-        if self.edit_subg:
+        if not self.edit_subg:
             self.subg_panel.Show()
+            self._checkGroupChange()
             self.SubGroupSelected()
         else:
             self.subg_panel.Hide()
+            self._checkSubgroupChange()
             self.GroupSelected()
+            
+        self.edit_subg = self.subg_chbox.GetValue()
+
         self.SetMinSize(self.GetBestSize())
         self.Layout()
 
@@ -705,21 +710,15 @@ class GroupDialog(wx.Dialog):
     def OnGroupSelected(self, event):
         """!Text changed in group selector"""
         # callAfter must be called to close popup before other actions
-        wx.CallAfter(self.GroupSelected)
-        
+        wx.CallAfter(self.GroupSel)
+     
+    def GroupSel(self):
+        self._checkGroupChange()
+        self.GroupSelected()
+
     def GroupSelected(self):
         """!Group was selected, check if changes were apllied"""
         group, s = self.GetSelectedGroup()
-        if  self.currentGroup and self.dataChanged:
-            dlg = wx.MessageDialog(self, message = _("Group <%s> was changed, "
-                                                     "do you want to apply changes?") % self.currentGroup,
-                                   caption = _("Unapplied changes"),
-                                   style = wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT)
-            if dlg.ShowModal() == wx.ID_YES:
-                self.ApplyChanges()
-                
-            dlg.Destroy()
-        
         maps = list()
         groups = self.GetExistGroups()
         if group in groups:
@@ -729,18 +728,15 @@ class GroupDialog(wx.Dialog):
 
         self.ShowGroupLayers(maps)
         self.currentGroup = group
-        self.dataChanged = False
 
         if self.edit_subg:
+            self._checkSubgroupChange()
             self.SubGroupSelected()
         self.ClearNotification()
 
-    def SubGroupSelected(self):
-        """!Group was selected, check if changes were apllied"""
-        subgroup = self.subGroupSelect.GetValue().strip()
-        group = self.currentGroup
+    def _checkGroupChange(self):
         if  self.currentGroup and self.dataChanged:
-            dlg = wx.MessageDialog(self, message = _("Subgroup <%s> was changed, "
+            dlg = wx.MessageDialog(self, message = _("Group <%s> was changed, "
                                                      "do you want to apply changes?") % self.currentGroup,
                                    caption = _("Unapplied changes"),
                                    style = wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT)
@@ -748,6 +744,24 @@ class GroupDialog(wx.Dialog):
                 self.ApplyChanges()
                 
             dlg.Destroy()
+        self.dataChanged = False
+
+    def _checkSubgroupChange(self):
+        if self.currentSubgroup and self.dataChanged:
+            dlg = wx.MessageDialog(self, message = _("Subgroup <%s> was changed, "
+                                                     "do you want to apply changes?") % self.currentSubgroup,
+                                   caption = _("Unapplied changes"),
+                                   style = wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT)
+            if dlg.ShowModal() == wx.ID_YES:
+                self.ApplyChanges()
+                
+            dlg.Destroy()
+        self.dataChanged = False
+
+    def SubGroupSelected(self):
+        """!Group was selected, check if changes were apllied"""
+        subgroup = self.subGroupSelect.GetValue().strip()
+        group = self.currentGroup
         
         maps = list()
         groups = self.GetExistGroups()
@@ -755,7 +769,6 @@ class GroupDialog(wx.Dialog):
             maps = self.GetGroupLayers(group, subgroup)
         
         self.ShowGroupLayers(maps)
-        self.dataChanged = False
         
         self.currentSubgroup = subgroup
         self.ClearNotification()
