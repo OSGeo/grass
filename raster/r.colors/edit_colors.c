@@ -119,6 +119,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     flag.w->key = 'w';
     flag.w->description =
         _("Only write new color table if one doesn't already exist");
+    flag.w->guisection = _("Define");
 
     flag.l = G_define_flag();
     flag.l->key = 'l';
