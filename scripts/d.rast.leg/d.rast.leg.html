@@ -9,18 +9,18 @@ frame remains active when the program finishes.
 <h2>NOTES</h2>
 
 The legend may be flipped with the <b>-f</b> flag.
-<p>If the <b>num_of_lines</b> parameter is not given then the legend frame will 
+<p>If the <b>lines</b> parameter is not given then the legend frame will 
 display as many lines as number of categories in the map, otherwise, it 
-will display the first <b>num_of_lines</b> minus 1 categories with the
+will display the first <b>lines</b> minus 1 categories with the
 rest being truncated.
-<p>The user may adjust the <b>num_of_lines</b> parameter or
+<p>The user may adjust the <b>lines</b> parameter or
 the size of graphics window to get an appropriate result.
 
-<p>The user may specify a second raster map with the <b>rast</b> parameter from
+<p>The user may specify a second raster map with the <b>raster</b> parameter from
 which the legend is generated. This is useful to visualize (time) series of
 raster maps with a common static legend instead of the default dynamic legend.
 <p>To remove all frames when clearing the display, use
-"<em><tt>d.erase -f</tt></em>".
+<tt>d.erase -f</tt>.
 
 <h2>EXAMPLE</h2>
 
@@ -45,4 +45,5 @@ d.rast.leg landclass96
 Jianping Xu, Scott Madry, Rutgers University<br>
 Markus Neteler
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
