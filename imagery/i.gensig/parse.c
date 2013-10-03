@@ -19,9 +19,11 @@ int parse(int argc, char *argv[], struct parms *parms)
 
     sigfile = G_define_option();
     sigfile->key = "signaturefile";
-    sigfile->description = _("Name for output file containing result signatures");
-    sigfile->required = YES;
     sigfile->type = TYPE_STRING;
+    sigfile->key_desc = "name";
+    sigfile->required = YES;
+    sigfile->gisprompt = "old,sig,sigfile";
+    sigfile->description = _("Name for output file containing result signatures");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

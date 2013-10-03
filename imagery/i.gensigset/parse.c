@@ -11,16 +11,18 @@ int parse(int argc, char *argv[], struct parms *parms)
     trainingmap = G_define_standard_option(G_OPT_R_MAP);
     trainingmap->key = "trainingmap";
     trainingmap->description = _("Ground truth training map");
-    
+
     group = G_define_standard_option(G_OPT_I_GROUP);
 
     subgroup = G_define_standard_option(G_OPT_I_SUBGROUP);
 
     sigfile = G_define_option();
     sigfile->key = "signaturefile";
-    sigfile->description = _("Name for output file containing result signatures");
-    sigfile->required = YES;
     sigfile->type = TYPE_STRING;
+    sigfile->key_desc = "name";
+    sigfile->required = YES;
+    sigfile->gisprompt = "old,sig,sigfile";
+    sigfile->description = _("Name for output file containing result signatures");
 
     maxsig = G_define_option();
     maxsig->key = "maxsig";
