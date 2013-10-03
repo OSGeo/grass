@@ -104,6 +104,9 @@ def main():
         grass.fatal(_("Raster map <%s> not found in mapset search path") % rast)
 
     s = grass.read_command('d.info', flags = 'f')
+    if not s:
+        sys.exit(1)
+    
     f = tuple([float(x) for x in s.split()[1:5]])
     
     grass.run_command('d.erase')
