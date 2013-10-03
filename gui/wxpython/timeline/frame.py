@@ -280,8 +280,8 @@ class TimelineFrame(wx.Frame):
         plots = []
         lookUp = LookUp(self.timeData)
         for i, name in enumerate(self.datasets):
+            yticksNames.append(name[0])  # just name; with mapset it would be long
             name = name[0] + '@' + name[1]
-            yticksNames.append(name)
             yticksPos.append(i)
             barData = []
             pointData = []
@@ -484,13 +484,15 @@ def InfoFormat(timeData, datasetName, mapIndex):
     """!Formats information about dataset"""
     text = []
     etype = timeData[datasetName]['elementType']
+    name, mapset = datasetName.split('@')
     if etype == 'strds':
-        text.append(_("Space time raster dataset: %s") % datasetName)
+        text.append(_("Space time raster dataset: %s") % name)
     elif etype == 'stvds':
-        text.append(_("Space time vector dataset: %s") % datasetName)
+        text.append(_("Space time vector dataset: %s") % name)
     elif etype == 'str3ds':
-        text.append(_("Space time 3D raster dataset: %s") % datasetName)
+        text.append(_("Space time 3D raster dataset: %s") % name)
 
+    text.append(_("Mapset: %s") % mapset)
     text.append(_("Map name: %s") % timeData[datasetName]['names'][mapIndex])
     text.append(_("Start time: %s") % timeData[datasetName]['start_datetime'][mapIndex])
     text.append(_("End time: %s") % timeData[datasetName]['end_datetime'][mapIndex])
