@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
     parm.out_sig->type = TYPE_STRING;
     parm.out_sig->key_desc = "name";
     parm.out_sig->required = YES;
+    parm.out_sig->gisprompt = "old,sig,sigfile";
     parm.out_sig->description = _("Name for output file containing result signatures");
 
     parm.class = G_define_option();
