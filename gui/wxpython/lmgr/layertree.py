@@ -986,7 +986,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == 'wms':            
             self.SetItemImage(layer, self.ws_icon)
             self.SetItemText(layer, '%s %s' % (_('wms'), label))
-    
+        else:
+            self.SetItemImage(layer, self.cmd_icon)
+            self.SetItemText(layer, '%s %s' % (_('unknown'), label))
+        
         self.first = False
         
         if ltype != 'group':
