@@ -21,9 +21,13 @@
 
 	element added 2008/04
 -->
-<!ELEMENT layer_manager ANY>
+<!ELEMENT layer_manager (cwd?)>
 <!-- window dimenstion (x, y (ur), width, heigth -->
 <!ATTLIST layer_manager  dim       CDATA   #IMPLIED>
+
+<!--    value of current working directory
+-->
+<!ELEMENT cwd         (#PCDATA)>
 
 <!--    a display element defines map layer connected to given
 	map display widnow
