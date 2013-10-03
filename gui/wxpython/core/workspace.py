@@ -36,9 +36,9 @@ class ProcessWorkspaceFile:
         #
         # layer manager properties
         #
-        self.layerManager = {}
-        self.layerManager['pos']  = None # window position
-        self.layerManager['size'] = None # window size
+        self.layerManager = { 'pos' : None,  # window position
+                              'size' : None, # window size
+                              'cwd' : None } # current working directory
         
         #
         # list of mapdisplays
@@ -100,6 +100,10 @@ class ProcessWorkspaceFile:
                     self.layerManager['size'] = (posVal[2], posVal[3])
                 except:
                     pass
+            # current working directory
+            cwdPath = self.__getNodeText(node_lm, 'cwd')
+            if cwdPath:
+               self.layerManager['cwd'] = cwdPath 
         
         #
         # displays
@@ -582,7 +586,11 @@ class WriteWorkspaceFile(object):
                                                               windowSize[0],
                                                               windowSize[1]
                                                               ))
-        
+        self.indent += 4
+        cwdPath = self.lmgr.GetCwdPath()
+        if cwdPath:
+            file.write('%s<cwd>%s</cwd>\n' % (' ' * self.indent, cwdPath))
+        self.indent -= 4
         file.write('%s</layer_manager>\n' % (' ' * self.indent))
         
         # list of displays

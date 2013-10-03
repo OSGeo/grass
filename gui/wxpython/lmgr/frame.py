@@ -94,6 +94,7 @@ class GMFrame(wx.Frame):
         self.currentPageNum  = None       # currently selected page number for layer tree notebook
         self.workspaceFile = workspace    # workspace file
         self.workspaceChanged = False     # track changes in workspace
+        self.cwdPath = None               # current working directory
 
         wx.Frame.__init__(self, parent = parent, id = id, size = size,
                           style = style, **kwargs)
@@ -939,12 +940,13 @@ class GMFrame(wx.Frame):
         dlg = wx.DirDialog(parent = self, message = _("Choose a working directory"),
                             defaultPath = os.getcwd(), style = wx.DD_CHANGE_DIR)
 
-        cwd_path = ''
         if dlg.ShowModal() == wx.ID_OK:
-            cwd_path = dlg.GetPath()
+            self.cwdPath = dlg.GetPath() # is saved in the workspace
 
-        # save path to somewhere ?
-
+    def GetCwdPath(self):
+        """!Get current working directory or None"""
+        return self.cwdPath
+    
     def OnNewVector(self, event):
         """!Create new vector map layer"""
         dlg = CreateNewVector(self, giface=self._giface,
@@ -1132,6 +1134,10 @@ class GMFrame(wx.Frame):
                 self.SetPosition(gxwXml.layerManager['pos'])
             if gxwXml.layerManager['size']:
                 self.SetSize(gxwXml.layerManager['size'])
+            if gxwXml.layerManager['cwd']:
+                self.cwdPath = gxwXml.layerManager['cwd']
+                if os.path.isdir(self.cwdPath):
+                    os.chdir(self.cwdPath)
         
         #
         # start map displays first (list of layers can be empty)
