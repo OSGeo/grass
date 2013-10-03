@@ -678,8 +678,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             command = 'r3.colors'
         else:
             command = 'r.colors'
-        GUI(parent = self).ParseCommand([command,
-                                         'map=%s' % name])
+        GUI(parent = self, giface = self._giface).ParseCommand([command,
+                                                                'map=%s' % name])
 
     def OnVectorColorTable(self, event):
         """!Set color table for vector map"""

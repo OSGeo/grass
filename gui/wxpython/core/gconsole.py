@@ -604,7 +604,8 @@ class GConsole(wx.EvtHandler):
     def OnCmdDone(self, event):
         """!Command done (or aborted)
 
-        Sends signal mapCreated if map is recognized in output parameters.
+        Sends signal mapCreated if map is recognized in output
+        parameters or for specific modules (as r.colors).
         """
         # Process results here
         try:
@@ -654,10 +655,13 @@ class GConsole(wx.EvtHandler):
             task = None
             return
 
+        name = task.get_name()
         for p in task.get_options()['params']:
             prompt = p.get('prompt', '')
             if prompt in ('raster', 'vector', '3d-raster') and \
-                    p.get('age', 'old') == 'new' and \
+                    (p.get('age', 'old') == 'new' or 
+                     # TODO: do it better (?)
+                     name in ('r.colors', 'r3.colors', 'v.colors')) and \
                     p.get('value', None):
                 name = p.get('value')
                 if '@' not in name:
