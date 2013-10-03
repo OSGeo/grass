@@ -1750,11 +1750,17 @@ class GMFrame(wx.Frame):
     def OnMapCreated(self, name, ltype, add=None):
         """!Decides wheter the map should be added to layer tree."""
         if add is None:
+            # add new map into layer if globally enabled
             if UserSettings.Get(group = 'cmd',
                                 key = 'addNewLayer', subkey = 'enabled'):
                 self.AddOrUpdateMap(name, ltype)
         elif add:
+            # add new map into layer tree
             self.AddOrUpdateMap(name, ltype)
+        else:
+            # update the map
+            display = self.GetMapDisplay()
+            display.GetWindow().UpdateMap(render = True)
 
     def AddOrUpdateMap(self, mapName, ltype):
         """!Add map layer or update"""

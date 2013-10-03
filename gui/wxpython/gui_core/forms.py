@@ -648,10 +648,16 @@ class TaskFrame(wx.Frame):
             wx.FutureCall(2000, self.Close)
 
     def OnMapCreated(self, name, ltype):
+        """!Map created or changed
+
+        @param name map name
+        @param ltype layer type (prompt value)
+        """
         if hasattr(self, "addbox") and self.addbox.IsChecked():
             add = True
         else:
             add = False
+        
         if self._giface:
             self._giface.mapCreated.emit(name=name, ltype=ltype, add=add)
     
