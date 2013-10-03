@@ -169,7 +169,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                     if not mapset:
                         found = False
                 else:
-                    mapset = grass.gisenv()['MAPSET']
+                    mapset = '' # grass.gisenv()['MAPSET']
             mapsets[i] = mapset
             
         # update dcmd
