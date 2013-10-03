@@ -43,6 +43,7 @@ from core.render      import Map
 from gui_core.forms   import GUI
 from core.debug       import Debug as Debug
 from core.settings    import UserSettings
+from gui_core.widgets import ColorTablesComboBox
 
 class RulesPanel:
     def __init__(self, parent, mapType, attributeType, properties, panelWidth = 180):
@@ -416,9 +417,8 @@ class ColorTable(wx.Frame):
                                                      startDirectory = os.getcwd(), fileMode = wx.SAVE,
                                                      changeCallback = self.OnSaveRulesFile)
 
-        colorTable = wx.Choice(parent = parent, id = wx.ID_ANY, size = (200, -1),
-                               choices = utils.GetColorTables(),
-                               name = "colorTableChoice")
+        colorTable = ColorTablesComboBox(parent = parent, size=globalvar.DIALOG_COMBOBOX_SIZE,
+                               choices = utils.GetColorTables(), name="colorTableChoice")
         self.btnSet = wx.Button(parent = parent, id = wx.ID_ANY, label = _("&Set"), name = 'btnSet')
         self.btnSet.Bind(wx.EVT_BUTTON, self.OnSetTable)
         self.btnSet.Enable(False)
@@ -577,7 +577,7 @@ class ColorTable(wx.Frame):
         
     def OnSetTable(self, event):
         """!Load pre-defined color table"""
-        ct = self.FindWindowByName("colorTableChoice").GetStringSelection()
+        ct = self.FindWindowByName("colorTableChoice").GetValue()
         # save original color table
         ctOriginal = RunCommand('r.colors.out', read = True, map = self.inmap, rules = '-')
         # set new color table
