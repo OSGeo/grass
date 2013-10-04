@@ -1100,7 +1100,7 @@ def autoCropImageFromFile(filename):
     @param filename path to file
     @return wx.Image instance
     """
-    import Image
+    from PIL import Image
     pilImage = Image.open(filename)
     imageBox = pilImage.getbbox()
     cropped = pilImage.crop(imageBox)
