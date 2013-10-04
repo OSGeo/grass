@@ -359,7 +359,9 @@ class BitmapProvider(object):
         count = 0
         maxLength = 0
         for raster, name in zip(rasters, names):
-            if not(name in self.bitmapPool and force is False):
+            if not force and name in self.bitmapPool and \
+               self.bitmapPool[name].GetSize() == (self.imageWidth, self.imageHeight):
+                continue
                 count += 1
                 if len(raster) > maxLength:
                     maxLength = len(raster)
@@ -400,7 +402,8 @@ class BitmapProvider(object):
         for mapname, name in zip(maps, names):
             count += 1
 
-            if name in self.bitmapPool and force is False:
+            if not force and name in self.bitmapPool and \
+               self.bitmapPool[name].GetSize() == (self.imageWidth, self.imageHeight):
                 continue
 
             # Queue object for interprocess communication
