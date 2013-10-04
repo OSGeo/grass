@@ -528,6 +528,18 @@ class GroupDialog(wx.Dialog):
 
         self.dataChanged = False
 
+        # signaling edit subgroup / group mode
+        self.edit_subg = False
+
+        # sungroup maps dict value - ischecked
+        self.subgmaps = {}
+
+        # list of group maps
+        self.gmaps = []
+
+        # pattern chosen for filtering
+        self.flt_pattern = ''
+
         self.bodySizer = self._createDialogBody()
         
         # buttons
@@ -561,7 +573,7 @@ class GroupDialog(wx.Dialog):
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10) 
         
         mainSizer.Add(item = btnSizer, proportion = 0,
-                      flag = wx.ALL | wx.ALIGN_RIGHT, border = 10)
+                      flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.ALIGN_RIGHT, border = 10)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -572,14 +584,21 @@ class GroupDialog(wx.Dialog):
 
         # set dialog min size
         self.SetMinSize(self.GetSize())
+        self.SetSize((-1, 400))
 
     def _createDialogBody(self):
         bodySizer = wx.BoxSizer(wx.VERTICAL)
-    
+        #TODO same text in MapLayersDialogBase
+
+        filter_tooltip = _("Put here a regular expression."
+                           " Characters '.*' stand for anything,"
+                           " character '^' stands for the beginning"
+                           " and '$' for the end.")
+
         # group selection
         bodySizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                           label = _("Select the group you want to edit or "
-                                                     "enter name of new subgroup:")),
+                                           label = _("Select existing group or "
+                                                     "enter name of new group:")),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP, border = 10)
         self.groupSelect = Select(parent = self, type = 'group',
                                   mapsets = [grass.gisenv()['MAPSET']],
@@ -598,65 +617,153 @@ class GroupDialog(wx.Dialog):
         subg_sizer = wx.BoxSizer(wx.VERTICAL)
 
         subg_sizer.Add(item = wx.StaticText(parent=self.subg_panel, id = wx.ID_ANY,
-                       label = _("Select the subgroup you want to edit or enter name of new group:")),
+                       label = _("Select exising subgroup or "
+                                 "enter name of new subgroup:")),
                        flag = wx.ALIGN_CENTER_VERTICAL)
 
         self.subGroupSelect = SubGroupSelect(parent = self.subg_panel)
 
-        subg_sizer.Add(item=self.subGroupSelect, flag=wx.EXPAND, border = 5)
+        subg_sizer.Add(item=self.subGroupSelect, flag=wx.EXPAND | wx.TOP, border = 5)
 
         self.subg_panel.SetSizer(subg_sizer)
 
         bodySizer.Add(item = self.subg_panel, flag = wx.TOP | wx.EXPAND, border = 5)
         
         bodySizer.AddSpacer(10)
-        # layers in group
-        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Raster maps in selected group (subgroup):")),
-                      flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5)
-        
+
         buttonSizer = wx.BoxSizer(wx.VERTICAL)
-        listSizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.layerBox = wx.ListBox(parent = self,  id = wx.ID_ANY, size = (-1, 150),
+        # layers in group
+        self.gListPanel = wx.Panel(self)
+
+        gListSizer  = wx.GridBagSizer(vgap=2, hgap=2)
+        gListSizer.AddGrowableCol(1)
+        gListSizer.AddGrowableRow(1)
+
+        gListSizer.Add(item = wx.StaticText(parent = self.gListPanel, label = _("Pattern:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (0,0))
+        
+        self.gfilter = wx.TextCtrl(parent=self.gListPanel, id=wx.ID_ANY,
+                                  value="",
+                                  size=(250,-1))
+        self.gfilter.SetToolTipString(filter_tooltip)
+        
+
+        gListSizer.Add(item=self.gfilter,
+                       flag=wx.EXPAND,
+                       pos=(0,1))
+
+        gListSizer.Add(item = wx.StaticText(parent = self.gListPanel, 
+                                           label = _("List of maps:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5, pos=(1,0))
+
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.gLayerBox = wx.ListBox(parent = self.gListPanel,  id = wx.ID_ANY, size = (-1, 150),
                                    style = wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
-        listSizer.Add(item = self.layerBox, proportion = 1, flag = wx.EXPAND)
+        sizer.Add(item = self.gLayerBox, proportion = 1, flag = wx.EXPAND)
         
-        self.addLayer = wx.Button(self, id = wx.ID_ADD)
+        self.addLayer = wx.Button(self.gListPanel, id = wx.ID_ADD)
         self.addLayer.SetToolTipString(_("Select map layers and add them to the list."))
         buttonSizer.Add(item = self.addLayer, flag = wx.BOTTOM, border = 10)
         
-        self.removeLayer = wx.Button(self, id = wx.ID_REMOVE)
+        self.removeLayer = wx.Button(self.gListPanel, id = wx.ID_REMOVE)
         self.removeLayer.SetToolTipString(_("Remove selected layer(s) from list."))
         buttonSizer.Add(item = self.removeLayer)
-        listSizer.Add(item = buttonSizer, flag = wx.LEFT, border = 5)
+        sizer.Add(item = buttonSizer, flag = wx.LEFT, border = 5)
         
-        bodySizer.Add(item = listSizer, proportion = 1, flag = wx.EXPAND)
+        gListSizer.Add(item=sizer, flag=wx.EXPAND, pos=(1,1))
+
+        self.gListPanel.SetSizer(gListSizer)
+        bodySizer.Add(item=self.gListPanel, proportion=1, flag=wx.EXPAND)
         
-        self.infoLabel = wx.StaticText(parent = self, id = wx.ID_ANY)
+        # layers in subgroup
+        self.subgListPanel = wx.Panel(self)
+
+        subgListSizer  = wx.GridBagSizer(vgap=2, hgap=2)
+        subgListSizer.AddGrowableCol(1)
+        subgListSizer.AddGrowableRow(1)
+
+        subgListSizer.Add(item = wx.StaticText(parent = self.subgListPanel, label = _("Pattern:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (0,0))
+        
+        self.subgfilter = wx.TextCtrl(parent=self.subgListPanel, id=wx.ID_ANY,
+                                  value="",
+                                  size=(250,-1))
+        self.subgfilter.SetToolTipString(filter_tooltip)
+        
+        subgListSizer.Add(item=self.subgfilter,
+                      flag=wx.EXPAND,
+                      pos=(0,1))
+
+        subgListSizer.Add(item = wx.StaticText(parent = self.subgListPanel, 
+                                           label = _("List of maps:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5, pos=(1,0))
+
+        self.subgListBox = wx.CheckListBox(parent = self.subgListPanel, id = wx.ID_ANY,
+                                           size = (250, 100))
+        self.subgListBox.SetToolTipString(_("Check maps from group to be included into subgroup."))
+
+        subgListSizer.Add(item=self.subgListBox, flag=wx.EXPAND, pos=(1,1))
+
+        self.subgListPanel.SetSizer(subgListSizer)
+        bodySizer.Add(item=self.subgListPanel, proportion=1, flag=wx.EXPAND)
+
+        self.infoLabel = wx.StaticText(parent=self, id=wx.ID_ANY)
         bodySizer.Add(item = self.infoLabel, 
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, border = 5)
-        
+
         # bindings
+        self.gfilter.Bind(wx.EVT_TEXT, self.OnGroupFilter)
+        self.subgfilter.Bind(wx.EVT_TEXT, self.OnSubgroupFilter)
+        self.subgListBox.Bind(wx.EVT_CHECKLISTBOX, self.OnSubgLayerCheck)
         self.groupSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnGroupSelected)
         self.addLayer.Bind(wx.EVT_BUTTON, self.OnAddLayer)
         self.removeLayer.Bind(wx.EVT_BUTTON, self.OnRemoveLayer)
         self.subg_chbox.Bind(wx.EVT_CHECKBOX, self.OnSubgChbox)
         self.subGroupSelect.Bind(wx.EVT_TEXT, lambda event : self.SubGroupSelected())
-        
+
         if self.defaultGroup:
             self.groupSelect.SetValue(self.defaultGroup)
         
         if self.defaultSubgroup is not None:
-            self.edit_subg = True
-            self.subg_chbox.SetValue(1)
             self.subGroupSelect.SetValue(self.defaultSubgroup)
+            self.subg_chbox.SetValue(1)
+            self.SubgChbox(True)
         else:
-            self.edit_subg = False
-            self.subg_panel.Hide()
             self.subg_chbox.SetValue(0)
+            self.SubgChbox(False)
         
         return bodySizer
-    
+
+    def OnSubgroupFilter(self, event):
+        text = event.GetString()
+        self.gfilter.ChangeValue(text)
+        self.flt_pattern = text 
+
+        self.FilterGroup()
+        self.FilterSubgroup()
+
+        event.Skip()
+
+    def OnGroupFilter(self, event):
+        text = event.GetString()
+        self.subgfilter.ChangeValue(text)
+        self.flt_pattern = text
+
+        self.FilterGroup()
+        self.FilterSubgroup()
+
+        event.Skip()
+
+    def OnSubgLayerCheck(self, event):
+        idx = event.GetInt()
+        m = self.subgListBox.GetString(idx)
+        self.subgmaps[m] = self.subgListBox.IsChecked(idx)
+        self.dataChanged = True
+
     def DisableSubgroupEdit(self):
         """!Disable editation of subgroups in the dialog 
         @todo used by gcp manager, maybe the gcp m should also support subgroups,
@@ -664,21 +771,39 @@ class GroupDialog(wx.Dialog):
         self.edit_subg = False
         self.subg_panel.Hide()
         self.subg_chbox.Hide()
+        self.subgListBox.Hide()
+
         self.Layout()
     
     def OnSubgChbox(self, event):
-        if not self.edit_subg:
-            self.subg_panel.Show()
-            self._checkGroupChange()
+        edit_subg = self.subg_chbox.GetValue()
+        self.SubgChbox(edit_subg)
+
+    def SubgChbox(self, edit_subg):
+        self._checkChange()
+        if edit_subg:
+            self.edit_subg = edit_subg
+
             self.SubGroupSelected()
+            self._subgroupLayout()
         else:
-            self.subg_panel.Hide()
-            self._checkSubgroupChange()
+            self.edit_subg = edit_subg
+
             self.GroupSelected()
-            
-        self.edit_subg = self.subg_chbox.GetValue()
+            self._groupLayout()
 
         self.SetMinSize(self.GetBestSize())
+
+    def _groupLayout(self):
+        self.subg_panel.Hide()
+        self.subgListPanel.Hide()
+        self.gListPanel.Show()
+        self.Layout()
+
+    def _subgroupLayout(self):
+        self.subg_panel.Show()
+        self.subgListPanel.Show()
+        self.gListPanel.Hide()
         self.Layout()
 
     def OnAddLayer(self, event):
@@ -691,33 +816,41 @@ class GroupDialog(wx.Dialog):
         
         layers = dlg.GetMapLayers()
         for layer in layers:
-            if layer not in self.GetLayers():
-                self.layerBox.Append(layer)
+            if layer not in self.gmaps:
+                self.gLayerBox.Append(layer)
+                self.gmaps.append(layer)
                 self.dataChanged = True
             
 
     def OnRemoveLayer(self, event):
         """!Remove layer from listbox"""
-        while self.layerBox.GetSelections():
-            sel = self.layerBox.GetSelections()[0]
-            self.layerBox.Delete(sel)
+        while self.gLayerBox.GetSelections():
+            sel = self.gLayerBox.GetSelections()[0]
+            m = self.gLayerBox.GetString(sel)
+            self.gLayerBox.Delete(sel)
+            self.gmaps.remove(m)
             self.dataChanged = True
                 
     def GetLayers(self):
         """!Get layers"""
-        return self.layerBox.GetItems()
+        if self.edit_subg:
+            layers = []
+            for maps, sel in self.subgmaps.iteritems():
+                if sel:
+                    layers.append(maps)
+        else:
+            layers = self.gmaps[:]
+
+        return layers
         
     def OnGroupSelected(self, event):
         """!Text changed in group selector"""
         # callAfter must be called to close popup before other actions
-        wx.CallAfter(self.GroupSel)
-     
-    def GroupSel(self):
-        self._checkGroupChange()
-        self.GroupSelected()
+        wx.CallAfter(self.GroupSelected)
 
     def GroupSelected(self):
         """!Group was selected, check if changes were apllied"""
+        self._checkChange()
         group, s = self.GetSelectedGroup()
         maps = list()
         groups = self.GetExistGroups()
@@ -725,14 +858,82 @@ class GroupDialog(wx.Dialog):
             maps = self.GetGroupLayers(group)
         
         self.subGroupSelect.Insert(group)
+        
+        self.gmaps = maps
+        maps = self._filter(maps)
 
         self.ShowGroupLayers(maps)
         self.currentGroup = group
 
+        self.SubGroupSelected()
+        self.ClearNotification()
+
+    def FilterGroup(self):
+        maps = self._filter(self.gmaps)
+        self.ShowGroupLayers(maps)
+
+    def FilterSubgroup(self):
+        maps = self._filter(self.gmaps)
+        self.subgListBox.Set(maps)
+
+        for i, m in enumerate(maps):
+            if m in self.subgmaps.iterkeys() and self.subgmaps[m]:
+                self.subgListBox.Check(i)
+
+    def SubGroupSelected(self):
+        """!Subgroup was selected, check if changes were apllied"""
+        self._checkChange()
+
+        subgroup = self.subGroupSelect.GetValue().strip()
+        group = self.currentGroup
+        
+        gmaps = list()
+        groups = self.GetExistGroups()
+
+        self.subgmaps = {}
+        if group in groups:
+            gmaps = self.GetGroupLayers(group)
+            if subgroup:
+                maps = self.GetGroupLayers(group, subgroup)
+                for m in maps:
+                    if m in gmaps:
+                        self.subgmaps[m] = True
+                    else:
+                        self.subgmaps[m] = False
+
+        gmaps = self._filter(gmaps)
+        self.subgListBox.Set(gmaps)
+
+        for i, m in enumerate(gmaps):
+            if self.subgmaps.has_key(m):
+                self.subgListBox.Check(i)
+            else:
+                self.subgListBox.Check(i, False)
+
+        self.currentSubgroup = subgroup
+        self.ClearNotification()
+
+    def _filter(self, data):
+        """!Apply filter for strings in data list"""
+        flt_data = []
+        if len(self.flt_pattern) == 0:
+            flt_data = data[:]
+            return flt_data
+        
+        for dt in data:
+            try:
+                if re.compile(self.flt_pattern).search(dt):
+                    flt_data.append(dt)
+            except:
+                pass
+
+        return flt_data
+
+    def _checkChange(self):
         if self.edit_subg:
             self._checkSubgroupChange()
-            self.SubGroupSelected()
-        self.ClearNotification()
+        else:
+            self._checkGroupChange()
 
     def _checkGroupChange(self):
         if  self.currentGroup and self.dataChanged:
@@ -758,24 +959,9 @@ class GroupDialog(wx.Dialog):
             dlg.Destroy()
         self.dataChanged = False
 
-    def SubGroupSelected(self):
-        """!Group was selected, check if changes were apllied"""
-        subgroup = self.subGroupSelect.GetValue().strip()
-        group = self.currentGroup
-        
-        maps = list()
-        groups = self.GetExistGroups()
-        if group in groups:
-            maps = self.GetGroupLayers(group, subgroup)
-        
-        self.ShowGroupLayers(maps)
-        
-        self.currentSubgroup = subgroup
-        self.ClearNotification()
-
     def ShowGroupLayers(self, mapList):
         """!Show map layers in currently selected group"""
-        self.layerBox.Set(mapList)
+        self.gLayerBox.Set(mapList)
                 
     def EditGroup(self, group, subgroup=None):
         """!Edit selected group"""
@@ -1075,6 +1261,7 @@ class MapLayersDialogBase(wx.Dialog):
                       pos = (2,1), span = (1, 2))
 
         self.filter.SetFocus()
+        #TODO same text in GroupDialog
         self.filter.SetToolTipString(_("Put here a regular expression."
                                        " Characters '.*' stand for anything,"
                                        " character '^' stands for the beginning"
