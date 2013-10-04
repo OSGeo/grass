@@ -32,9 +32,9 @@ int main(int argc, char *argv[])
     struct History history;
     struct GModule *module;
     char *desc;
-    
+
     struct Cell_head cellhd;
-    
+
     void *inrast, *outrast;
     int infd, outfd;
     void *ptr;
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("Landsat"));
     G_add_keyword(_("atmospheric correction"));
     module->overwrite = TRUE;
-    
+
     /* It defines the different parameters */
     input_prefix = G_define_option();
     input_prefix->key = "input_prefix";
@@ -100,20 +100,20 @@ int main(int argc, char *argv[])
     sensor->key = "sensor";
     sensor->type = TYPE_STRING;
     sensor->label = _("Spacecraft sensor");
-    sensor->description = _("Required only if 'metfile' not given (recommended for sanity)");
+    sensor->description =
+	_("Required only if 'metfile' not given (recommended for sanity)");
     sensor->options = "mss1,mss2,mss3,mss4,mss5,tm4,tm5,tm7,ot8";
     desc = NULL;
     G_asprintf(&desc,
-	        "mss1;%s;mss2;%s;mss3;%s;mss4;%s;mss5;%s;tm4;%s;tm5;%s;tm7;%s;ot8;%s",
-	        _("Landsat-1 MSS"),
-	        _("Landsat-2 MSS"),
-	        _("Landsat-3 MSS"),
-	        _("Landsat-4 MSS"),
-	        _("Landsat-5 MSS"),
-	        _("Landsat-4 TM"),
-	        _("Landsat-5 TM"),
-	        _("Landsat-7 ETM+"),
-		_("Landsat_8 OLI/TIRS"));
+	       "mss1;%s;mss2;%s;mss3;%s;mss4;%s;mss5;%s;tm4;%s;tm5;%s;tm7;%s;ot8;%s",
+	       _("Landsat-1 MSS"),
+	       _("Landsat-2 MSS"),
+	       _("Landsat-3 MSS"),
+	       _("Landsat-4 MSS"),
+	       _("Landsat-5 MSS"),
+	       _("Landsat-4 TM"),
+	       _("Landsat-5 TM"),
+	       _("Landsat-7 ETM+"), _("Landsat_8 OLI/TIRS"));
     sensor->descriptions = desc;
     sensor->required = NO;
     sensor->guisection = _("Metadata");
@@ -195,20 +195,19 @@ int main(int argc, char *argv[])
     lsatmet->type = TYPE_STRING;
     lsatmet->required = NO;
     lsatmet->multiple = YES;
-    lsatmet->label = 	_("return value stored for a given metadata");
+    lsatmet->label = _("return value stored for a given metadata");
     lsatmet->description = _("Required only if 'metfile' and -p given");
-    lsatmet->options = "number,creation,date,sun_elev,sensor,bands,sunaz,time";
+    lsatmet->options =
+	"number,creation,date,sun_elev,sensor,bands,sunaz,time";
     desc = NULL;
     G_asprintf(&desc,
-	        "number;%s;creation;%s;date;%s;sun_elev;%s;sensor;%s;bands;%s;sunaz;%s;time;%s",
-	        _("Landsat Number"),
-	        _("Creation timestamp"),
-	        _("Date"),
-	        _("Sun Elevation"),
-	        _("Sensor"),
-	        _("Bands count"),
-	        _("Sun Zenith Angle"),
-		_("Time"));
+	       "number;%s;creation;%s;date;%s;sun_elev;%s;sensor;%s;bands;%s;sunaz;%s;time;%s",
+	       _("Landsat Number"),
+	       _("Creation timestamp"),
+	       _("Date"),
+	       _("Sun Elevation"),
+	       _("Sensor"),
+	       _("Bands count"), _("Sun Zenith Angle"), _("Time"));
     lsatmet->descriptions = desc;
     lsatmet->guisection = _("Settings");
 
@@ -272,8 +271,8 @@ int main(int argc, char *argv[])
     /* Unnecessary because G_zero filled, but for sanity */
     lsat.flag = NOMETADATAFILE;
     if (met != NULL) {
-        lsat.flag = METADATAFILE;
-        lsat_metadata(met, &lsat);
+	lsat.flag = METADATAFILE;
+	lsat_metadata(met, &lsat);
 	if (print_meta->answer) {
 	    char *lsatmeta;
 
@@ -283,46 +282,46 @@ int main(int argc, char *argv[])
 
 	    for (i = 0; lsatmet->answers[i] != NULL; i++) {
 		lsatmeta = lsatmet->answers[i];
-		
+
 		if (strcmp(lsatmeta, "number") == 0) {
-		    fprintf(stdout,"number=%d\n",lsat.number);
+		    fprintf(stdout, "number=%d\n", lsat.number);
 		}
 		if (strcmp(lsatmeta, "creation") == 0) {
-		    fprintf(stdout,"creation=%s\n",lsat.creation);
+		    fprintf(stdout, "creation=%s\n", lsat.creation);
 		}
 		if (strcmp(lsatmeta, "date") == 0) {
-		    fprintf(stdout,"date=%s\n",lsat.date);
+		    fprintf(stdout, "date=%s\n", lsat.date);
 		}
 		if (strcmp(lsatmeta, "sun_elev") == 0) {
-		    fprintf(stdout,"sun_elev=%f\n",lsat.sun_elev);
+		    fprintf(stdout, "sun_elev=%f\n", lsat.sun_elev);
 		}
 		if (strcmp(lsatmeta, "sunaz") == 0) {
-		    fprintf(stdout,"sunaz=%f\n",lsat.sun_az);
+		    fprintf(stdout, "sunaz=%f\n", lsat.sun_az);
 		}
 		if (strcmp(lsatmeta, "sensor") == 0) {
-		    fprintf(stdout,"sensor=%s\n",lsat.sensor);
+		    fprintf(stdout, "sensor=%s\n", lsat.sensor);
 		}
 		if (strcmp(lsatmeta, "bands") == 0) {
-		    fprintf(stdout,"bands=%d\n",lsat.bands);
+		    fprintf(stdout, "bands=%d\n", lsat.bands);
 		}
 		if (strcmp(lsatmet->answer, "time") == 0) {
-		    fprintf(stdout,"%f\n",lsat.time);
+		    fprintf(stdout, "%f\n", lsat.time);
 		}
 	    }
 	    exit(EXIT_SUCCESS);
 	}
-        G_debug(1, "lsat.number = %d, lsat.sensor = [%s]",
-	        lsat.number, lsat.sensor);
-        
-        if (!lsat.sensor || lsat.number > 8 || lsat.number < 1)
-            G_fatal_error(_("Failed to identify satellite"));
+	G_debug(1, "lsat.number = %d, lsat.sensor = [%s]",
+		lsat.number, lsat.sensor);
 
-        G_debug(1, "Landsat-%d %s with data set in met file [%s]",
-	        lsat.number, lsat.sensor, met);
+	if (!lsat.sensor || lsat.number > 8 || lsat.number < 1)
+	    G_fatal_error(_("Failed to identify satellite"));
 
-        /* Overwrite solar elevation of metadata file */
-        if (elev->answer != NULL)
-            lsat.sun_elev = atof(elev->answer);
+	G_debug(1, "Landsat-%d %s with data set in met file [%s]",
+		lsat.number, lsat.sensor, met);
+
+	/* Overwrite solar elevation of metadata file */
+	if (elev->answer != NULL)
+	    lsat.sun_elev = atof(elev->answer);
     }
     /* Data from date and solar elevation */
     else if (adate->answer == NULL || elev->answer == NULL) {
@@ -330,32 +329,32 @@ int main(int argc, char *argv[])
 		      adate->key, elev->key);
     }
     else {
-        /* Need gain */
+	/* Need gain */
 	if (strcmp(sensorname, "tm7") == 0) {
-            if (bgain->answer == NULL || strlen(bgain->answer) != 9)
-                G_fatal_error(_("Landsat-7 requires band gain with 9 (H/L) data"));
-            set_ETM(&lsat, bgain->answer);
-        }
-        /* Not need gain */
+	    if (bgain->answer == NULL || strlen(bgain->answer) != 9)
+		G_fatal_error(_("Landsat-7 requires band gain with 9 (H/L) data"));
+	    set_ETM(&lsat, bgain->answer);
+	}
+	/* Not need gain */
 	else if (strcmp(sensorname, "ot8") == 0)
 	    set_LDCM(&lsat);
-        else if (strcmp(sensorname, "tm5") == 0)
-            set_TM5(&lsat);
-        else if (strcmp(sensorname, "tm4") == 0)
-            set_TM4(&lsat);
-        else if (strcmp(sensorname, "mss5") == 0)
-            set_MSS5(&lsat);
-        else if (strcmp(sensorname, "mss4") == 0)
-            set_MSS4(&lsat);
-        else if (strcmp(sensorname, "mss3") == 0)
-            set_MSS3(&lsat);
-        else if (strcmp(sensorname, "mss2") == 0)
-            set_MSS2(&lsat);
-        else if (strcmp(sensorname, "mss1") == 0)
-            set_MSS1(&lsat);
-        else
-            G_fatal_error(_("Unknown satellite type (defined by '%s')"),
-	                  sensor->key);
+	else if (strcmp(sensorname, "tm5") == 0)
+	    set_TM5(&lsat);
+	else if (strcmp(sensorname, "tm4") == 0)
+	    set_TM4(&lsat);
+	else if (strcmp(sensorname, "mss5") == 0)
+	    set_MSS5(&lsat);
+	else if (strcmp(sensorname, "mss4") == 0)
+	    set_MSS4(&lsat);
+	else if (strcmp(sensorname, "mss3") == 0)
+	    set_MSS3(&lsat);
+	else if (strcmp(sensorname, "mss2") == 0)
+	    set_MSS2(&lsat);
+	else if (strcmp(sensorname, "mss1") == 0)
+	    set_MSS1(&lsat);
+	else
+	    G_fatal_error(_("Unknown satellite type (defined by '%s')"),
+			  sensor->key);
     }
 
     /*****************************************
@@ -458,13 +457,13 @@ int main(int argc, char *argv[])
     }
 
     /* unnecessary or necessary with more checking as acquisition date,... 
-    if (strlen(lsat.creation) == 0)
-	G_fatal_error(_("Unknown production date (defined by '%s')"), pdate->key);
-    */
+       if (strlen(lsat.creation) == 0)
+       G_fatal_error(_("Unknown production date (defined by '%s')"), pdate->key);
+     */
 
     if (G_verbose() > G_verbose_std()) {
 	fprintf(stderr, " LANDSAT: %d SENSOR: %s\n", lsat.number,
-	        lsat.sensor);
+		lsat.sensor);
 	fprintf(stderr, " ACQUISITION DATE %s [production date %s]\n",
 		lsat.date, lsat.creation);
 	fprintf(stderr, "   Earth-sun distance    = %.8lf\n", lsat.dist_es);
@@ -522,22 +521,23 @@ int main(int argc, char *argv[])
     G_message(_("Calculating..."));
     for (i = 0; i < lsat.bands; i++) {
 	sprintf(band_in, "%s%d", inputname,
-	        (named->answer ? lsat.band[i].number : lsat.band[i].code));
+		(named->answer ? lsat.band[i].number : lsat.band[i].code));
 	sprintf(band_out, "%s%d", outputname, lsat.band[i].code);
-	
+
 	if ((infd = Rast_open_old(band_in, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), band_in);
-	
+
 	if (G_find_raster2(band_out, "")) {
 	    if (overwrite) {
-		G_warning(_("Raster map <%s> already exists and will be overwritten"), band_out);
+		G_warning(_("Raster map <%s> already exists and will be overwritten"),
+			  band_out);
 	    }
 	    else {
 		G_warning(_("Raster map <%s> exists. Skipping."), band_out);
 		continue;
 	    }
 	}
-	
+
 	in_data_type = Rast_get_map_type(infd);
 	Rast_get_cellhd(band_in, "", &cellhd);
 
@@ -559,9 +559,9 @@ int main(int argc, char *argv[])
 	ncols = Rast_window_cols();
 	/* ================================================================= */
 	G_important_message(_("Writing %s of <%s> to <%s>..."),
-		            (frad->answer ? _("radiance")
-		             : (lsat.band[i].thermal) ? _("temperature")
-			        : _("reflectance")), band_in, band_out);
+			    (frad->answer ? _("radiance")
+			     : (lsat.band[i].thermal) ? _("temperature")
+			     : _("reflectance")), band_in, band_out);
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 
@@ -636,8 +636,8 @@ int main(int argc, char *argv[])
 	/* Append a string to the 'history' structure */
 	Rast_append_format_history(&history,
 				   " %s of Landsat-%d %s (method %s)",
-				   (frad->answer ? "Radiance" : 
-				    (lsat.band[i].thermal ? "Temperature" : 
+				   (frad->answer ? "Radiance" :
+				    (lsat.band[i].thermal ? "Temperature" :
 				     "Reflectance")),
 				   lsat.number, lsat.sensor, metho->answer);
 	Rast_append_history(&history,
