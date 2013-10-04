@@ -1096,6 +1096,8 @@ double earth_sun(char *date)
     R4 = ln_calc_series(earth_radius_r4, RADIUS_R4, t);
     R5 = ln_calc_series(earth_radius_r5, RADIUS_R5, t);
 
-    return (R0 + R1 * t + R2 * t * t + R3 * t * t * t + R4 * t * t * t * t +
-	    R5 * t * t * t * t * t);
+    return (R0 +
+	    R1 * t +
+	    R2 * t * t +
+	    R3 * t * t * t + R4 * t * t * t * t + R5 * t * t * t * t * t);
 }

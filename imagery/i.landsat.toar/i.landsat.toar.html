@@ -14,7 +14,7 @@ needed the gain (high or low) of the nine respective bands.
 <p>
 Optionally (recommended), the data can be read from metadata file
 (.met or MTL.txt) for all Landsat MSS, TM, ETM+ and OLI/TIRS. However,
-if the solar elevation is given the value of the metadata file are
+if the solar elevation is given the value of the metadata file is
 overwritten. This is necessary when the data in the .met file is
 incorrect or not accurate. Also, if acquisition or production dates are
 not found in the metadata file then the command line values are used.
@@ -59,26 +59,6 @@ Then, to calculate <b>at-sensor reflectance</b> the equations are:
 where, <em>d</em> is the earth-sun distance in astronomical
 units, <em>e</em> is the solar elevation angle, and <em>Esun</em> is
 the mean solar exoatmospheric irradiance in W/(m&sup2; * &micro;m).
-
-<h2>Corrected at-sensor values (method=corrected)</h2>
-
-At-sensor reflectance values range from zero to one, whereas at-sensor
-radiance must be greater or equal to zero. However, since Lmin can be
-a negative number then the at-sensor values can also be negative. To
-avoid these possible negative values and set the minimum possible
-values at-sensor to zero, this method corrects the radiance to output
-a corrected at-sensor values using the equations (not for thermal
-bands):
-<ul>
-  <li> radiance = (uncorrected_radiance - Lmin) </li>
-  <li> reflectance = radiance / sun_radiance </li>
-</ul>
-
-<p>
-<b>Note</b>: Other possibility to avoid negative values is set to zero
-this values (radiance and/or reflectance), but this option is ease
-with uncorrected method
-and <em><a href="r.mapcalc.html">r.mapcalc</a></em>.
 
 <h2>Simplified at-surface values (method=dos[1-4])</h2>
 
@@ -204,10 +184,9 @@ i.landsat.toar input_prefix=203_30. output_prefix=_toar \
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="i.aster.toar.html">i.aster.toar</a>,
-<a href="i.atcorr.html">i.atcorr</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.in.gdal.html">r.in.gdal</a>
+  <a href="i.atcorr.html">i.atcorr</a>,
+  <a href="r.mapcalc.html">r.mapcalc</a>,
+  <a href="r.in.gdal.html">r.in.gdal</a>
 </em>
 
 <h2>AUTHOR</h2>
