@@ -5,9 +5,9 @@
 
 #include "landsat.h"
 
-#define PI   M_PI
-#define R2D  180. / M_PI
-#define D2R  M_PI / 180.
+#define PI  M_PI
+#define R2D 180./M_PI
+#define D2R M_PI/180.
 
 /****************************************************************************
  * PURPOSE: Calibrated Digital Number to at-satellite Radiance
@@ -30,7 +30,7 @@ double lsat_rad2ref(double rad, band_data * band)
  *****************************************************************************/
 double lsat_rad2temp(double rad, band_data * band)
 {
-    return (double)(band->K2 / log((band->K1 / rad) + 1.0));
+    return (double)(band->K2 / log((band->K1 / rad) + 1.));
 }
 
 /****************************************************************************
@@ -43,15 +43,15 @@ double lsat_rad2temp(double rad, band_data * band)
  *         i : band number
  *    method : level of atmospheric correction
  *   percent : percent of solar irradiance in path radiance
- *       dos : digital number of dark object for DOS
+ *      dark : digital number of  object for DOS
   *****************************************************************************/
 
 #define abs(x)	(((x)>0)?(x):(-x))
 
 void lsat_bandctes(lsat_data * lsat, int i, char method,
-		   double percent, int dos, double rayleigh)
+		   double percent, int dark, double rayleigh)
 {
-    double pi_d2, sin_e, cos_v, rad_sun;
+    double pi_d2, sin_e, cos_v;
 
     /* TAUv  = at. transmittance surface-sensor */
     /* TAUz  = at. transmittance sun-surface    */
@@ -63,9 +63,9 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
     cos_v = (double)(cos(D2R * (lsat->number < 4 ? 9.2 : 8.2)));
 
     /** Global irradiance on the sensor.
-	Radiance to reflectance coefficient, only NO thermal bands.
-	K1 and K2 variables are also utilized as thermal constants
-    */
+	 * Radiance to reflectance coefficient, only NO thermal bands.
+	 * K1 and K2 variables are also utilized as thermal constants
+     */
     if (lsat->band[i].thermal == 0) {
 	switch (method) {
 	case DOS2:
@@ -97,10 +97,11 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 	case DOS4:
 	    {
 		double Ro =
-		    (lsat->band[i].lmax - lsat->band[i].lmin) * (dos -
-								 lsat->band
-								 [i].qcalmin)
-		    / (lsat->band[i].qcalmax - lsat->band[i].qcalmin) +
+		    (lsat->band[i].lmax - lsat->band[i].lmin) * (dark -
+								 lsat->
+								 band[i].
+								 qcalmin) /
+		    (lsat->band[i].qcalmax - lsat->band[i].qcalmin) +
 		    lsat->band[i].lmin;
 		double Tv = 1.;
 		double Tz = 1.;
@@ -112,10 +113,10 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 		    Lp = Ro -
 			percent * TAUv * (lsat->band[i].esun * sin_e * TAUz +
 					  PI * Lp) / pi_d2;
-		    Tz = 1 - (4 * pi_d2 * Lp) / (lsat->band[i].esun * sin_e);
+		    Tz = 1. -
+			(4. * pi_d2 * Lp) / (lsat->band[i].esun * sin_e);
 		    Tv = exp(sin_e * log(Tz) / cos_v);
 		    /* G_message("TAUv = %.5f (%.5f), TAUz = %.5f (%.5f) and Edown = %.5f\n", TAUv, Tv, TAUz, Tz, PI * Lp ); */
-		    /* } while( abs(TAUv - Tv) > 0.0000001 || abs(TAUz - Tz) > 0.0000001); */
 		} while (TAUv != Tv && TAUz != Tz);
 		TAUz = (Tz < 1. ? Tz : 1.);
 		TAUv = (Tv < 1. ? Tv : 1.);
@@ -128,41 +129,43 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 	    Edown = 0.;
 	    break;
 	}
-	rad_sun = TAUv * (lsat->band[i].esun * sin_e * TAUz + Edown) / pi_d2;
+	lsat->band[i].K2 = 0.;
+	lsat->band[i].K1 = TAUv * (lsat->band[i].esun * sin_e * TAUz + Edown) / pi_d2;	/* rad_sun */
 	if (method > DOS)
 	    G_verbose_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n",
 			      TAUv, TAUz, Edown);
-
-	lsat->band[i].K1 = rad_sun;
-	lsat->band[i].K2 = 0.;
     }
 
     /** Digital number to radiance coefficients.
-	Without atmospheric calibration for thermal bands.
-    */
-    lsat->band[i].gain = ((lsat->band[i].lmax - lsat->band[i].lmin) /
-			  (lsat->band[i].qcalmax - lsat->band[i].qcalmin));
+	 * Without atmospheric calibration for thermal bands.
+     */
+    lsat->band[i].gain =
+	(lsat->band[i].lmax - lsat->band[i].lmin) / (lsat->band[i].qcalmax -
+						     lsat->band[i].qcalmin);
 
     if (method == UNCORRECTED || lsat->band[i].thermal) {
 	/* L = G * (DN - Qmin) + Lmin
-	   -> bias = Lmin - G * Qmin    */
+	 *  -> bias = Lmin - G * Qmin    
+	 */
 	lsat->band[i].bias =
 	    (lsat->band[i].lmin - lsat->band[i].gain * lsat->band[i].qcalmin);
     }
-    else {
-	if (method == CORRECTED) {
-	    /* L = G * (DN - Qmin) + Lmin - Lmin
-	       -> bias = - G * Qmin */
-	    lsat->band[i].bias =
-		-(lsat->band[i].gain * lsat->band[i].qcalmin);
-	    /* Another possibility is cut when rad < 0 */
-	}
-	else if (method > DOS) {
-	    /* L = Lsat - Lpath =
-	       G * DNsat + B - (G * dark + B - p * rad_sun) =
-	       G * DNsat - G * dark + p * rad_sun
-	       -> bias = p * rad_sun - G * dark */
-	    lsat->band[i].bias = percent * rad_sun - lsat->band[i].gain * dos;
-	}
+    /*
+       else {
+       if (method == CORRECTED) {
+       // L = G * (DN - Qmin) + Lmin - Lmin
+       -> bias = - G * Qmin *
+       lsat->band[i].bias =
+       -(lsat->band[i].gain * lsat->band[i].qcalmin);
+       // Another possibility is cut when rad < 0 *
+       }
+     */
+    else if (method > DOS) {
+	/* L = Lsat - Lpath = G * DNsat + B - (G *  + B - p * rad_sun) 
+	 *   = G * DNsat - G *  + p * rad_sun
+	 *  -> bias = p * rad_sun - G 
+	 */
+	lsat->band[i].bias =
+	    percent * lsat->band[i].K1 - lsat->band[i].gain * dark;
     }
 }

@@ -25,38 +25,38 @@
 
 typedef struct
 {
-    int number;			/* Band number                   */
-    int code;			/* Band code                     */
+    int number;			/* Band number */
+    int code;			/* Band code */
 
-    double wavemax, wavemin;	/* Wavelength in µm              */
+    double wavemax, wavemin;	/* Wavelength in µm */
 
-    double esun;		/* Mean solar irradiance         */
-    double lmax, lmin;		/* Spectral radiance             */
-    double qcalmax, qcalmin;	/* Quantized calibrated pixel    */
+    double esun;		/* Mean solar irradiance */
+    double lmax, lmin;		/* Spectral radiance */
+    double qcalmax, qcalmin;	/* Quantized calibrated pixel */
 
-    char thermal;		/* Flag to thermal band          */
-    double gain, bias;		/* Gain and Bias of sensor       */
-    double K1, K2;		/* Thermal calibration or
-				   Rad2Ref constants             */
-
+    char thermal;		/* Flag to thermal band */
+    double gain, bias;		/* Gain and Bias of sensor */
+    double K1, K2;		/* Thermal calibration 
+				 * or Rad2Ref constants */
 } band_data;
 
 typedef struct
 {
-    int flag;
-    unsigned char number;	/* Landsat number                */
+    int flag;			/* Line-data or file-data */
+    unsigned char number;	/* Landsat number */
 
-    char creation[11];		/* Image production date         */
-    char date[11];		/* Image acquisition date        */
+    char creation[11];		/* Image production date */
+    char date[11];		/* Image acquisition date */
+    double time;		/* Image acquisition time */
 
-    double dist_es;		/* Distance Earth-Sun            */
-    double sun_elev;		/* Sun elevation                 */
-    double sun_az;		/* Sun Azimuth                   */
-    double time;		/* Image Acquisition Time        */
+    double dist_es;		/* Distance Earth-Sun */
+    double sun_elev;		/* Sun elevation */
+    double sun_az;		/* Sun azimuth */
 
-    char sensor[10];		/* Type of sensor: MSS, TM, ETM+, OLI/TIRS */
-    int bands;			/* Total number of bands         */
-    band_data band[MAX_BANDS];	/* Data for each band            */
+    char sensor[10];		/* Sensor: MSS, TM, ETM+, OLI/TIRS */
+    int bands;			/* Total number of bands */
+    band_data band[MAX_BANDS];	/* Data for each band */
+
 } lsat_data;
 
 

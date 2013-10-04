@@ -17,6 +17,6 @@ void set_TM5(lsat_data *);
 
 void set_ETM(lsat_data *, char[]);
 
-void set_LDCM(lsat_data *);
+void set_OLI(lsat_data *);
 
 #endif
