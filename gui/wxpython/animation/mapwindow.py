@@ -362,9 +362,9 @@ class BitmapProvider(object):
             if not force and name in self.bitmapPool and \
                self.bitmapPool[name].GetSize() == (self.imageWidth, self.imageHeight):
                 continue
-                count += 1
-                if len(raster) > maxLength:
-                    maxLength = len(raster)
+            count += 1
+            if len(raster) > maxLength:
+                maxLength = len(raster)
 
         return count, maxLength
 
