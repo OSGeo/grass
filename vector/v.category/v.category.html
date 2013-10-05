@@ -39,8 +39,15 @@ is reported at the end.
 an area without a centroid; in this case, the module places new
 centroids in areas automatically.
 
-<p>The <b>cat</b> parameter is only used with <b>option</b>=<i>add</i> and
-<b>option</b>=<i>sum</i>.
+<p>The <b>cat</b> parameter is only used with <b>option</b>=<i>add</i>, 
+<b>option</b>=<i>sum</i> and <b>option</b>=<i>del</i>.
+
+<p>Categories can be deleted for the given layer with <em>option=del</em>. 
+If <b>cat</b> is set to <i>-1</i>, all categories for the given layer 
+are deleted. If <b>cat</b> is zero or positive, only this category value 
+will be deleted. By default, <b>cat</b> is set to <i>1</i> which means 
+that only categories of value <i>1</i> will be deleted. 
+
 
 <p>The <b>ids</b> parameter specifies the list of feature IDs to which the
 operation is performed; by default, all vector feature ids are processed. 
@@ -73,7 +80,7 @@ all         1379          1       1379
 <h3>Delete all vector categories in layer 1</h3>
 
 <div class="code"><pre>
-v.category input=testmap output=outmap option=del
+v.category input=testmap output=outmap option=del cat=-1
 </pre></div>
 
 <h3>Add vector categories in layer 1 with step=2</h3>
