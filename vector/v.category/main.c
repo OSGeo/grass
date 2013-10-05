@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 	       "print;%s;"
 	       "layers;%s",
 	       _("add a new category"),
-	       _("delete category (-1 to delete all categories of given layer)"),
+	       _("delete category (cat=-1 to delete all categories of given layer)"),
 	       _("change layer number (e.g. layer=3,1 changes layer 3 to layer 1)"),
 	       _("add the value specified by cat option to the current category value"),
 	       _("copy values from one layer to another (e.g. layer=1,2,3 copies values from layer 1 to layer 2 and 3)"),
@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
 		    n = TCats->n_cats;
 		    for (i = 0; i < n; i++) {
 			scat = TCats->cat[i];
-			for (i = 0; i < nfields; i++) {
+			for (i = 1; i < nfields; i++) {
 			    if (Vect_cat_set(Cats, fields[i], scat) > 0) {
 				G_debug(4, "Copy cat %i of field %i to into field %i", scat, fields[0], fields[i]);
 			    }
