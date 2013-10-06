@@ -269,9 +269,13 @@ int main(int argc, char *argv[])
     }
 
     /* Open LAS file*/
+    /* TODO: don't crash on cmd line if file not found. This test still fails */
     LAS_reader = LASReader_Create(infile);
+    if (LAS_reader == NULL) {
+	G_fatal_error(_("Unable to open file <%s>"), infile);
+    }
+    
     LAS_header = LASReader_GetHeader(LAS_reader);
-
     if  (LAS_header == NULL) {
 	G_fatal_error(_("Input file <%s> is not a LAS LiDAR point cloud"),
 	                infile);
