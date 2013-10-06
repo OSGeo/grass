@@ -2316,9 +2316,10 @@ class GUI:
                                        { 'cmd' : cmd[0],
                                          'key' : key })
                         continue
+                    multiple = element['multiple']
                     element = element['element']
-                    
-                    if element in ['cell', 'vector']:
+                    # do we need to find mapset for each of multiple maps?
+                    if element in ['cell', 'vector'] and not multiple:
                         # mapname -> mapname@mapset
                         try:
                             name, mapset = value.split('@')
