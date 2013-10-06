@@ -1,24 +1,28 @@
 <h2>DESCRIPTION</h2>
 
-The <em>r.in.lidar</em> module will load and bin LAS LiDAR point clouds
+The <em>r.in.lidar</em> module loads and bins LAS LiDAR point clouds
 into a new raster map. The user may choose from a variety of statistical
 methods in creating the new raster.
 
 <p>
-Please note that the current region extents and resolution are used for
-the import. It is therefore recommended to first use the <em>-s</em>
-flag to get the extents of the LiDAR point cloud to be imported, then
-adjust the current region accordingly, and only then proceed with the
-actual import.
+Since the creation of raster maps depends on the computational 
+region settings (extent and resolution), as default the current 
+region extents and resolution are used for the import. When using 
+the <em>-e</em> flag along with the <em>resolution=value</em> 
+parameter, the region extents are based on new dataset. It is therefore
+recommended to first use the <em>-s</em> flag to get the extents of the
+LiDAR point cloud to be imported, then adjust the current region or the
+<em>resolution</em> parameter accordingly, and only then proceed with
+the actual import.
 
 <p>
-<em>r.in.lidar</em> is designed for processing massive point cloud datasets,
-for example raw LiDAR or sidescan sonar swath data. It has been tested with
-datasets as large as tens of billion of points (705GB in a single file).
- <!-- Doug Newcomb, US Fish & Wildlife Service -->
+<em>r.in.lidar</em> is designed for processing massive point cloud 
+datasets, for example raw LiDAR or sidescan sonar swath data. It has 
+been tested with large datasets (see below for memory management 
+notes).
 
 <p>
-Available statistics for populating the raster are:<br>
+Available statistics for populating the output raster map are:<br>
 <ul>
 <li>
 <table>
@@ -46,30 +50,25 @@ Available statistics for populating the raster are:<br>
 
 <h2>NOTES</h2>
 
-<h3>Gridded data</h3>
+<h3>LAS file import preparations</h3>
 
-If data is known to be on a regular grid <em>r.in.lidar</em> can reconstruct
-the map perfectly as long as some care is taken to set up the region
-correctly and that the data's native map projection is used. A typical
-method would involve determining the grid resolution either by examining
-the data's associated documentation or by studying the text file. Next scan
-the data with <em>r.in.lidar</em>'s <b>-s</b> (or <b>-g</b>) flag to find the
-input data's bounds. GRASS uses the cell-center raster convention where
-data points fall within the center of a cell, as opposed to the grid-node
-convention. Therefore you will need to grow the region out by half a cell
-in all directions beyond what the scan found in the file. After the region
-bounds and resolution are set correctly with <em>g.region</em>, run
-<em>r.in.lidar</em> using the <i>n</i> method and verify that n=1 at all places.
-<em>r.univar</em> can help. Once you are confident that the region exactly
-matches the data proceed to run <em>r.in.lidar</em> using one of the <i>mean,
-min, max</i>, or <i>median</i> methods. With n=1 throughout, the result
-should be identical regardless of which of those methods are used.
+Since the <em>r.in.lidar</em> generates a raster map through binning 
+from the original LiDAR points, the target computational region 
+extent and resolution have to be determined. A typical workflow 
+would involve the examination of the LAS data's associated 
+documentation or the scan of the LAS data file with
+<em>r.in.lidar</em>'s <b>-s</b> (or <b>-g</b>) flag to find the input
+data's bounds.<br>
+Another option is to automatically set the region extents based on the
+LAS dataset (<b>-e</b> flag) along with the target raster resolution using
+the <em>resolution</em> parameter.
 
 
 <h3>Memory use</h3>
 
 While the <b>input</b> file can be arbitrarily large, <em>r.in.lidar</em>
-will use a large amount of system memory for large raster regions (10000x10000).
+will use a large amount of system memory (RAM) for large raster regions
+(&gt; 10000x10000 pixels).
 If the module refuses to start complaining that there isn't enough memory,
 use the <b>percent</b> parameter to run the module in several passes.
 In addition using a less precise map format (<tt>CELL</tt> [integer] or
