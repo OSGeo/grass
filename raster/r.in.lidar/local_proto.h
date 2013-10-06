@@ -41,6 +41,7 @@
 #define METHOD_TRIMMEAN   13
 
 /* main.c */
+void print_lasinfo(LASHeaderH, LASSRSH);
 int scan_bounds(LASReaderH, int, int, double, struct Cell_head *);
 
 /* support.c */

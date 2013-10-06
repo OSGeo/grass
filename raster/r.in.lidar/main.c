@@ -91,8 +91,6 @@ int add_node(int head, double z)
     }
 }
 
-
-
 int main(int argc, char *argv[])
 {
     int out_fd;
@@ -142,8 +140,9 @@ int main(int argc, char *argv[])
     struct Option *input_opt, *output_opt, *percent_opt, *type_opt;
     struct Option *method_opt, *zrange_opt, *zscale_opt;
     struct Option *trim_opt, *pth_opt, *res_opt;
-    struct Flag *scan_flag, *shell_style, *over_flag, *extents_flag;
+    struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag;
 
+    /* LAS */
     LASReaderH LAS_reader;
     LASHeaderH LAS_header;
     LASSRSH LAS_srs;
@@ -162,11 +161,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     G_add_keyword(_("LIDAR"));
     module->description =
-	_("Create a raster map from LAS LiDAR points using univariate statistics.");
+	_("Creates a raster map from LAS LiDAR points using univariate statistics.");
 
     input_opt = G_define_standard_option(G_OPT_F_INPUT);
-    input_opt->description =
-	_("LiDAR LAS input file");
+    input_opt->label = _("LAS input file");
+    input_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
 
     output_opt = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -236,6 +235,12 @@ int main(int argc, char *argv[])
     res_opt->description =
 	_("Output raster resolution");
 
+    print_flag = G_define_flag();
+    print_flag->key = 'p';
+    print_flag->description =
+	_("Print LAS file info and exit");
+    print_flag->suppress_required = YES;
+
     extents_flag = G_define_flag();
     extents_flag->key = 'e';
     extents_flag->description =
@@ -282,6 +287,18 @@ int main(int argc, char *argv[])
     }
 
     LAS_srs = LASHeader_GetSRS(LAS_header);
+
+    /* Print LAS header */
+    if (print_flag->answer) {
+	/* print... */
+	print_lasinfo(LAS_header, LAS_srs);
+
+	LASSRS_Destroy(LAS_srs);
+	LASHeader_Destroy(LAS_header);
+	LASReader_Destroy(LAS_reader);
+
+	exit(EXIT_SUCCESS);
+    }
 
     /* Fetch input map projection in GRASS form. */
     proj_info = NULL;
@@ -1130,6 +1147,73 @@ int main(int argc, char *argv[])
 
 }
 
+void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
+{
+    char *las_srs_proj4 = LASSRS_GetProj4(LAS_srs);
+    int las_point_format = LASHeader_GetDataFormatId(LAS_header);
+
+    fprintf(stdout, "\nUsing LAS Library Version '%s'\n\n",
+                    LAS_GetFullVersion());
+    fprintf(stdout, "LAS File Version:                  %d.%d\n",
+                    LASHeader_GetVersionMajor(LAS_header),
+                    LASHeader_GetVersionMinor(LAS_header));
+    fprintf(stdout, "System ID:                         '%s'\n",
+                    LASHeader_GetSystemId(LAS_header));
+    fprintf(stdout, "Generating Software:               '%s'\n",
+                    LASHeader_GetSoftwareId(LAS_header));
+    fprintf(stdout, "File Creation Day/Year:            %d/%d\n",
+                    LASHeader_GetCreationDOY(LAS_header),
+		    LASHeader_GetCreationYear(LAS_header));
+    fprintf(stdout, "Point Data Format:                 %d\n",
+                    las_point_format);
+    fprintf(stdout, "Number of Point Records:           %d\n",
+                    LASHeader_GetPointRecordsCount(LAS_header));
+    fprintf(stdout, "Number of Points by Return:        %d %d %d %d %d\n",
+                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 0),
+                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 1),
+                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 2),
+                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 3),
+                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 4));
+    fprintf(stdout, "Scale Factor X Y Z:                %g %g %g\n",
+                    LASHeader_GetScaleX(LAS_header),
+                    LASHeader_GetScaleY(LAS_header),
+                    LASHeader_GetScaleZ(LAS_header));
+    fprintf(stdout, "Offset X Y Z:                      %g %g %g\n",
+                    LASHeader_GetOffsetX(LAS_header),
+                    LASHeader_GetOffsetY(LAS_header),
+                    LASHeader_GetOffsetZ(LAS_header));
+    fprintf(stdout, "Min X Y Z:                         %g %g %g\n",
+                    LASHeader_GetMinX(LAS_header),
+                    LASHeader_GetMinY(LAS_header),
+                    LASHeader_GetMinZ(LAS_header));
+    fprintf(stdout, "Max X Y Z:                         %g %g %g\n",
+                    LASHeader_GetMaxX(LAS_header),
+                    LASHeader_GetMaxY(LAS_header),
+                    LASHeader_GetMaxZ(LAS_header));
+    if (las_srs_proj4 && strlen(las_srs_proj4) > 0) {
+	fprintf(stdout, "Spatial Reference:\n");
+	fprintf(stdout, "%s\n", las_srs_proj4);
+    }
+    else {
+	fprintf(stdout, "Spatial Reference:                 None\n");
+    }
+    
+    fprintf(stdout, "\nData Fields:\n");
+    fprintf(stdout, "  'X'\n  'Y'\n  'Z'\n  'Intensity'\n  'Return Number'\n");
+    fprintf(stdout, "  'Number of Returns'\n  'Scan Direction'\n");
+    fprintf(stdout, "  'Flighline Edge'\n  'Classification'\n  'Scan Angle Rank'\n");
+    fprintf(stdout, "  'User Data'\n  'Point Source ID'\n");
+    if (las_point_format == 1 || las_point_format == 3 || las_point_format == 4 || las_point_format == 5) {
+	fprintf(stdout, "  'GPS Time'\n");
+    }
+    if (las_point_format == 2 || las_point_format == 3 || las_point_format == 5) {
+	fprintf(stdout, "  'Red'\n  'Green'\n  'Blue'\n");
+    }
+    fprintf(stdout, "\n");
+    fflush(stdout);
+
+    return;
+}
 
 
 int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents,
