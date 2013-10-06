@@ -19,17 +19,10 @@
 #% keywords: geometry
 #% keywords: statistics
 #%end
-#%flag
-#% key: r
-#% description: Reverse sort the result
-#%end
-#%flag
-#% key: s
-#% description: Sort the result
-#%end
 #%option G_OPT_V_MAP
 #%end
 #%option G_OPT_V_FIELD
+#% guisection: Selection
 #%end
 #%option
 #% key: option
@@ -40,6 +33,13 @@
 #%end
 #%option G_OPT_M_UNITS
 #% options: miles,feet,meters,kilometers,acres,hectares,percent
+#%end
+#%option
+#% key: sort
+#% type: string
+#% description: Sort the result
+#% options: asc,desc
+#% descriptions: asc;Sort in ascending order;desc;Sort in descending order
 #%end
 
 import sys
@@ -56,9 +56,6 @@ def uniq(l):
     return result
 
 def main():
-    if flags['r'] and flags['s']:
-	grass.fatal(_("Either -r or -s flag"))
-
     mapname = options['map']
     option = options['option']
     layer = options['layer']
@@ -70,6 +67,7 @@ def main():
 	grass.fatal(_("Vector map '%s' not found in mapset search path.") % mapname)
 
     colnames = grass.vector_columns(mapname, layer, getDict = False, stderr = nuldev)
+    
     if not colnames:
 	colnames = ['cat']
 
@@ -88,7 +86,6 @@ def main():
 	unitsp = None
 
     # NOTE: we suppress -1 cat and 0 cat
-
     if colnames:
 	p = grass.pipe_command('v.db.select', quiet = True, flags='c', map = mapname, layer = layer)
 	records1 = []
@@ -122,7 +119,7 @@ def main():
 	    fields = line.rstrip('\r\n').split('|')
 	    if fields[0] in ['cat', '-1', '0']:
 		continue
-	    records2.append([int(fields[0])] + fields[1:])
+	    records2.append([int(fields[0])] + fields[1:-1] + [float(fields[-1])])
 	p.wait()
 	records2.sort()
 
@@ -169,13 +166,13 @@ def main():
 	records4 = [float(r[-1]) * 100 / areatot for r in records3]
 	records3 = [r1 + [r4] for r1, r4 in zip(records1, records4)]
 
-    if flags['s']:
-	# sort
-	records3.sort(key = lambda r: (r[0], r[-1]))
-    elif flags['r']:
-	# reverse sort
-	records3.sort(key = lambda r: (r[0], r[-1]), reverse = True)
-
+    # sort results
+    if options['sort']:
+        if options['sort'] == 'asc':
+            records3.sort(key = lambda r: r[-1])
+        else:
+            records3.sort(key = lambda r: r[-1], reverse = True)
+    
     for r in records3:
 	sys.stdout.write('|'.join(map(str,r)) + '\n')
 
