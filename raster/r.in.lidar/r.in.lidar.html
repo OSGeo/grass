@@ -9,11 +9,13 @@ Since the creation of raster maps depends on the computational
 region settings (extent and resolution), as default the current 
 region extents and resolution are used for the import. When using 
 the <em>-e</em> flag along with the <em>resolution=value</em> 
-parameter, the region extents are based on new dataset. It is therefore
+parameter, the region extents will be based on new dataset. It is therefore
 recommended to first use the <em>-s</em> flag to get the extents of the
-LiDAR point cloud to be imported, then adjust the current region or the
-<em>resolution</em> parameter accordingly, and only then proceed with
-the actual import.
+LiDAR point cloud to be imported, then adjust the current region extent
+and resolution accordingly, and only then proceed with the actual import.
+Another option is to automatically set the region extents based on the
+LAS dataset itself along with the desired raster resolution. See below
+for details.
 
 <p>
 <em>r.in.lidar</em> is designed for processing massive point cloud 
@@ -60,8 +62,8 @@ documentation or the scan of the LAS data file with
 <em>r.in.lidar</em>'s <b>-s</b> (or <b>-g</b>) flag to find the input
 data's bounds.<br>
 Another option is to automatically set the region extents based on the
-LAS dataset (<b>-e</b> flag) along with the target raster resolution using
-the <em>resolution</em> parameter.
+LAS dataset extent (<b>-e</b> flag) along with the desired raster
+resolution using the <em>resolution</em> parameter.
 
 
 <h3>Memory use</h3>
@@ -89,32 +91,75 @@ preserving data precision and limiting system resource consumption.
 
 <h3>Setting region bounds and resolution</h3>
 
-You can use the <b>-s</b> scan flag to find the extent of the input data
-(and thus point density) before performing the full import. Use
-<em>g.region</em> to adjust the region bounds to match. The <b>-g</b> shell
-style flag prints the extent suitable as parameters for <em>g.region</em>.
-A suitable resolution can be found by dividing the number of input points
-by the area covered. e.g.
+Using the <b>-s</b> scan flag, the extent of the input data (and thus
+point density) is printed. To check this is recommended before performing
+the full import. The <b>-g</b> shell style flag prints the extent suitable
+as command line parameters for <em>g.region</em>.<br>
+A simpler option is to automatically set the region extents based on the
+LAS dataset (<b>-e</b> flag) along with the target raster resolution using
+the <em>resolution</em> parameter. Also here it is recommended to verify
+and optimize the resulting region settings with <em>g.region</em> prior
+to importing the dataset.
+
+<p>
+For the output raster map, a <b>suitable resolution</b> can be found by
+dividing the number of input points by the area covered (this requires
+an iterative approach as outlined here):
 
 <div class="code"><pre>
-  wc -l inputfile.txt
-  g.region -p
-  # points_per_cell = n_points / (rows * cols)
+# North Carolina (http://grass.osgeo.org/sampledata/north_carolina/points.las)
 
-  g.region -e
-  # UTM location:
+# print LAS metadata (Number of Points)
+r.in.lidar -p input=points.las
+#   Number of Point Records: 1287775
+
+# scan for LAS points cloud extent
+r.in.lidar -sg input=points.las output=dummy -o
+# n=2193507.740000 s=2190053.450000 e=6070237.920000 w=6066629.860000 b=-3.600000 t=906.000000
+
+# set computation region to this extent
+g.region n=2193507.740000 s=2190053.450000 e=6070237.920000 w=6066629.860000 -p
+
+# print resulting extent
+g.region -p
+#  rows:       3454
+#  cols:       3608
+
+# points_per_cell = n_points / (rows * cols)
+# Here: 1287775 / (3454 * 3608) = 0.1033359 LiDAR points/raster cell
+# As this is too low, we need to select a lower raster resolution
+
+g.region res=5 -ap
+#  rows:       692
+#  cols:       723
+#  Now: 1287775 / (692 * 723) = 2.573923 LiDAR points/raster cell
+
+# import as mean
+r.in.lidar input=points.las output=lidar_dem_mean method=mean -o
+
+# import as max
+r.in.lidar input=points.las output=lidar_dem_max method=max -o
+
+# import as p'th percentile of the values
+r.in.lidar input=points.las output=lidar_dem_percentile_95 \
+           method=percentile pth=95 -o
+</pre></div>
+
+<center>
+<img src="r_in_lidar_dem_mean3D.jpg" alt="Mean value DEM in perspective view"><br>
+<i>Mean value DEM in perspective view, imported from LAS file</i>
+</center>
+
+<p>
+Further hints: how to calculate number of LiDAR points/square meter:
+<div class="code"><pre>
+g.region -e
+  # Metric location:
   # points_per_sq_m = n_points / (ns_extent * ew_extent)
 
   # Lat/Lon location:
   # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
-
-<p>
-If you only intend to interpolate the data with <em>r.to.vect</em> and
-<em>v.surf.rst</em>, then there is little point to setting the region
-resolution so fine that you only catch one data point per cell -- you might
-as well use "<tt>v.in.ascii&nbsp;-zbt</tt>" directly.
-
 
 <h3>Filtering</h3>
 
@@ -135,7 +180,7 @@ for filtering outliers on relatively flat terrain.
 In varied terrain the user may find that <em>min</em> maps make for a good
 noise filter as most LIDAR noise is from premature hits. The <em>min</em> map
 may also be useful to find the underlying topography in a forested or urban
-environment if the cells are over sampled.
+environment if the cells are oversampled.
 
 <p>
 The user can use a combination of <em>r.in.lidar</em> <b>output</b> maps to create
@@ -145,33 +190,21 @@ map. [In this example the user may want to include a lower bound filter in
 <em>r.neighbors</em> to smooth the stddev map before further use.]
 
 
-<h3>Interpolation into a DEM</h3>
-
-The vector engine's topological abilities introduce a finite memory overhead
-per vector point which will limit the size a vector map relative to 
-available RAM. If you want more, use the <em>r.to.vect</em>
-<b>-b</b> flag to skip building topology. Without topology, however, all
-you'll be able to do with the vector map is display with <em>d.vect</em> and
-interpolate with <em>v.surf.rst</em>.
-Run <em>r.univar</em> on your raster map to check the number of non-NULL cells
-and adjust bounds and/or resolution as needed before proceeding.
-
-<p>
-Typical commands to create a DEM using a regularized spline fit:
-<div class="code"><pre>
-  r.univar lidar_min
-  r.to.vect -z feature=point in=lidar_min out=lidar_min_pt
-  v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
-</pre></div>
-
-Typical commands to create a DEM using bsplines:
-<div class="code"><pre>
-  r.resamp.bspline in=lidar_min out=lidar_min.bspline
-</pre></div>
-<br>
-
 <h2>EXAMPLE</h2>
 
+North Carolina sample dataset: Import of the 
+<a href="http://grass.osgeo.org/sampledata/north_carolina/points.las">sample LAS file</a>
+into the existing mapset:
+
+<div class="code"><pre>
+# set the computational region automatically, raster resolution for binning is 5m
+r.in.lidar -e -o input=points.las resolution=5 output=lidar_dem_mean
+g.region rast=lidar_dem_mean -p
+r.univar lidar_dem_mean
+</pre></div>
+
+<p>
+Serpent Mound dataset:
 This example is analogous to the example used in the GRASS wiki page for
 <a href="http://grasswiki.osgeo.org/wiki/LIDAR#Import_LAS_as_raster_DEM">importing LAS as raster DEM</a>.
 <p>The sample LAS data are in the file "Serpent Mound Model LAS Data.las", 
@@ -179,26 +212,25 @@ available at
 <a href="http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las">appliedimagery.com</a>
 
 <div class="code"><pre>
-  # using v.in.lidar to print file info and to create a new location
+# print LAS file info
+r.in.lidar -p input="Serpent Mound Model LAS Data.las"
 
-  # print LAS file info
-  v.in.lidar -p input="Serpent Mound Model LAS Data.las"
+# using v.in.lidar to create a new location
+# create location with projection information of the LAS data
+v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
 
-  # create location with projection information of the LAS data
-  v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
+# quit and restart GRASS in the newly created location "Serpent_Mound"
 
-  # quit and restart GRASS in the newly created location "Serpent_Mound"
+# scan the extents of the LAS data
+r.in.lidar -sg input="Serpent Mound Model LAS Data.las"
 
-  # scan the extents of the LAS data
-  r.in.lidar -sg input="Serpent Mound Model LAS Data.las"
+# set the region to the extents of the LAS data, align to resolution
+g.region n=4323641.57 s=4320942.61 w=289020.90 e=290106.02 res=1 -ap
 
-  # set the region to the extents of the LAS data, align to resolution
-  g.region n=4323641.57 s=4320942.61 w=289020.90 e=290106.02 res=1 -ap
-
-  # import as raster DEM
-  r.in.lidar input="Serpent Mound Model LAS Data.las" output=Serpent_Mound_Model_LAS_Data method=mean
+# import as raster DEM
+r.in.lidar input="Serpent Mound Model LAS Data.las" \
+           output=Serpent_Mound_Model_LAS_Data method=mean
 </pre></div>
-<br>
 
 
 <h2>TODO</h2>
@@ -206,17 +238,16 @@ available at
 <ul>
 <li> Support for multiple map output from a single run.<br>
      <tt>method=string[,string,...] output=name[,name,...]</tt>
+<li> add option to import only one, not all returns</li>
+<!-- not really:
 <li> Merge with r.in.xyz.
+-->
      <!-- Bob Covill has supplied patches for MBIO interface already -->
 </ul>
 
 <h2>BUGS</h2>
 
 <ul>
-<li> <em>n</em> map sum can be ever-so-slightly more than `<tt>wc -l</tt>`
-  with e.g. <tt>percent=10</tt> or less.
-  <br>Cause unknown.
-
 <li> <em>n</em> map <tt>percent=100</tt> and <tt>percent=xx</tt> maps
   differ slightly (point will fall above/below the segmentation line)
   <br>Investigate with "<tt>r.mapcalc diff = bin_n.100 - bin_n.33</tt>" etc.
@@ -232,32 +263,19 @@ Development Team.
 
 <h2>SEE ALSO</h2>
 
-<i>
-<a href="g.region.html">g.region</a><br>
-<a href="m.proj.html">m.proj</a><br>
-<a href="r.in.xyz.html">r.in.xyz</a><br>
-<a href="r.fillnulls.html">r.fillnulls</a><br>
-<a href="r.in.ascii.html">r.in.ascii</a><br>
-<a href="r.mapcalc.html">r.mapcalc</a><br>
-<a href="r.neighbors.html">r.neighbors</a><br>
-<a href="r.out.xyz.html">r.out.xyz</a><br>
-<a href="r.to.rast3.html">r.to.rast3</a><br>
-<a href="r.to.vect.html">r.to.vect</a><br>
-<a href="r.univar.html">r.univar</a><br>
-<a href="v.in.lidar.html">v.in.lidar</a><br>
-<a href="v.in.ascii.html">v.in.ascii</a><br>
-<a href="v.surf.rst.html">v.surf.rst</a><br>
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.in.xyz.html">r.in.xyz</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.univar.html">r.univar</a>,
+<a href="v.in.lidar.html">v.in.lidar</a>
 <br>
 <a href="v.lidar.correction.html">v.lidar.correction</a>,
 <a href="v.lidar.edgedetection.html">v.lidar.edgedetection</a>,
 <a href="v.lidar.growing.html">v.lidar.growing</a>,
 <a href="v.outlier.html">v.outlier</a>,
 <a href="v.surf.bspline.html">v.surf.bspline</a>
-</i>
-<p><i><a href="http://www.ivarch.com/programs/pv.shtml">pv</a></i>
- - The UNIX pipe viewer utility
-<br><br>
-
+</em>
 
 <h2>AUTHORS</h2>
 
