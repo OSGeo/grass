@@ -106,9 +106,8 @@ For the output raster map, a <b>suitable resolution</b> can be found by
 dividing the number of input points by the area covered (this requires
 an iterative approach as outlined here):
 
+<!-- points.las is from California -->
 <div class="code"><pre>
-# North Carolina (http://grass.osgeo.org/sampledata/north_carolina/points.las)
-
 # print LAS metadata (Number of Points)
 r.in.lidar -p input=points.las
 #   Number of Point Records: 1287775
@@ -192,12 +191,10 @@ map. [In this example the user may want to include a lower bound filter in
 
 <h2>EXAMPLE</h2>
 
-North Carolina sample dataset: Import of the 
-<a href="http://grass.osgeo.org/sampledata/north_carolina/points.las">sample LAS file</a>
-into the existing mapset:
+Import of a LAS file into an existing location/mapset (metric):
 
 <div class="code"><pre>
-# set the computational region automatically, raster resolution for binning is 5m
+# set the computational region automatically, resol. for binning is 5m
 r.in.lidar -e -o input=points.las resolution=5 output=lidar_dem_mean
 g.region rast=lidar_dem_mean -p
 r.univar lidar_dem_mean
