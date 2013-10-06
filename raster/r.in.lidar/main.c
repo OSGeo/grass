@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
     extents_flag = G_define_flag();
     extents_flag->key = 'e';
     extents_flag->description =
-	_("Use input extents instead of region extents");
+	_("Extend region extents based on new dataset");
 
     over_flag = G_define_flag();
     over_flag->key = 'o';
