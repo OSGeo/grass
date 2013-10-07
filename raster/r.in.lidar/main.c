@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <math.h>
 #include <sys/types.h>
 #include <grass/gis.h>
@@ -273,8 +274,11 @@ int main(int argc, char *argv[])
 	scan_flag->answer = 1; /* pointer not int, so set = shell_style->answer ? */
     }
 
+    /* Don't crash on cmd line if file not found */
+    if (access(infile, F_OK) != 0) {
+	G_fatal_error(_("Input file <%s> does not exist"), infile);
+    }
     /* Open LAS file*/
-    /* TODO: don't crash on cmd line if file not found. This test still fails */
     LAS_reader = LASReader_Create(infile);
     if (LAS_reader == NULL) {
 	G_fatal_error(_("Unable to open file <%s>"), infile);
