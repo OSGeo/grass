@@ -61,7 +61,6 @@ struct Edge *bisect(struct Site *s1, struct Site *s2)
     }
 
     newedge->edgenbr = nedges;
-    out_bisector(newedge);
     nedges++;
     return (newedge);
 }
@@ -196,7 +195,7 @@ int endpoint(struct Edge *e, int lr, struct Site *s)
     ref(s);
     if (e->ep[re - lr] == (struct Site *)NULL)
 	return -1;
-    out_ep(e);
+    write_ep(e);
     deref(e->reg[le]);
     deref(e->reg[re]);
     makefree((struct Freenode *)e, &efl);
@@ -217,7 +216,6 @@ int makevertex(struct Site *v)
 {
     v->sitenbr = -1;
     nvertices++;
-    out_vertex(v);
     return 0;
 }
 

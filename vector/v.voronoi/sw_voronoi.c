@@ -6,7 +6,7 @@
    Performance suffers if they are wrong; better to make nsites,
    deltax, and deltay too big than too small.  (?) */
 
-int voronoi(int triangulate, struct Site *(*nextsite) (void))
+int voronoi(struct Site *(*nextsite) (void))
 {
     struct Site *newsite, *bot, *top, *temp, *p;
     struct Site *v;
@@ -17,7 +17,6 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 
     PQinitialize();
     bottomsite = (*nextsite) ();
-    out_site(bottomsite);
     ELinitialize();
 
     newsite = (*nextsite) ();
@@ -30,7 +29,6 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 	    (newsite->coord.y == newintstar.y && 
 	    newsite->coord.x < newintstar.x))) {	/* new site is smallest */
 
-	    out_site(newsite);
 	    lbnd = ELleftbnd(&(newsite->coord));
 	    rbnd = ELright(lbnd);
 	    bot = rightreg(lbnd);
@@ -65,7 +63,6 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 	    rrbnd = ELright(rbnd);
 	    bot = leftreg(lbnd);
 	    top = rightreg(rbnd);
-	    out_triple(bot, top, rightreg(lbnd));
 
 	    v = lbnd->vertex;
 	    makevertex(v);
@@ -100,7 +97,7 @@ int voronoi(int triangulate, struct Site *(*nextsite) (void))
 
     for (lbnd = ELright(ELleftend); lbnd != ELrightend; lbnd = ELright(lbnd)) {
 	e = lbnd->ELedge;
-	out_ep(e);
+	write_ep(e);
     }
     
     /* TODO: free memory */

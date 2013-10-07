@@ -197,12 +197,11 @@ int main(int argc, char **argv)
     siteidx = 0;
     geominit();
 
-    triangulate = 0;
     plot = 0;
     debug = 0;
 
     G_message(_("Processing Voronoi triangulation..."));
-    voronoi(triangulate, nextone);
+    voronoi(nextone);
 
     /* Close free ends by current region */
     verbose = G_verbose();

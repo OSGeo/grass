@@ -46,7 +46,7 @@ struct Halfedge
     struct Halfedge *PQnext;
 };
 
-extern int triangulate, sorted, plot, debug, mode3d;
+extern int sorted, plot, debug, mode3d;
 extern struct Site *sites;
 extern int nsites;
 extern int siteidx;
@@ -111,18 +111,13 @@ char *getfree(struct Freelist *);
 int makefree(struct Freenode *, struct Freelist *);
 char *myalloc(unsigned);
 
-/* sw_output.c */
-int openpl(void);
-int line(int, int, int, int);
-int circle(int, int, int);
-int range(int, int, int, int);
-int out_bisector(struct Edge *);
-int out_ep(struct Edge *);
-int out_vertex(struct Site *);
-int out_site(struct Site *);
-int out_triple(struct Site *, struct Site *, struct Site *);
-int plotinit(void);
-int clip_line(struct Edge *);
-
 /* sw_voronoi.c */
-int voronoi(int, struct Site *(*)(void));
+int voronoi(struct Site *(*)(void));
+
+/* vo_extend.c */
+int extend_line(double, double, double, double, double, double, double,
+		double, double, double *, double *, int);
+
+/* vo_write.c */
+int write_ep(struct Edge *);
+
