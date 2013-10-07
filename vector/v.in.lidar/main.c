@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
 
     /* Don't crash on cmd line if file not found */
     if (access(in_opt->answer, F_OK) != 0) {
-	G_fatal_error(_("Input file <%s> does not exist"), infile);
+	G_fatal_error(_("Input file <%s> does not exist"), in_opt->answer);
     }
     /* Open LAS file*/
     LAS_reader = LASReader_Create(in_opt->answer);
