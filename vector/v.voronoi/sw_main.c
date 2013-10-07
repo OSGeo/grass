@@ -8,7 +8,7 @@
 #include "sw_defs.h"
 #include "defs.h"
 
-int triangulate, sorted, plot, debug, mode3d;
+int sorted, plot, debug, mode3d;
 struct Site *sites;
 int nsites;
 int siteidx;

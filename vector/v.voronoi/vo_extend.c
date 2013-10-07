@@ -3,7 +3,6 @@
 #include <grass/vector.h>
 #include "sw_defs.h"
 #include "defs.h"
-#include "write.h"
 
 /*-extend_line()  finds coordinates along the boundary of a window
  *                  that also lie on a specified line (ax+by=c). The
@@ -34,14 +33,14 @@ int extend_line(double s, double n, double w, double e,
     double nx, ny;		/* intersection coordinates */
 
     if (x >= w && x <= e && y >= s && y <= n) {
-	/* vertical line? */
+	/* horizontal line? */
 	if (a == 0) {
 	    *c_x = knownPointAtLeft ? e : w;
 	    *c_y =  y;
 	    return 1;
 	}
 
-	/* horizontal line? */
+	/* vertical line? */
 	if (b == 0) {
 	    *c_x = x;
 	    *c_y = knownPointAtLeft ? s : n;
