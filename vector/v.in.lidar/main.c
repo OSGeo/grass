@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
@@ -228,6 +229,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    /* Don't crash on cmd line if file not found */
+    if (access(in_opt->answer, F_OK) != 0) {
+	G_fatal_error(_("Input file <%s> does not exist"), infile);
+    }
     /* Open LAS file*/
     LAS_reader = LASReader_Create(in_opt->answer);
     LAS_header = LASReader_GetHeader(LAS_reader);
