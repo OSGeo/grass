@@ -34,11 +34,11 @@
 #define ADEV       7		/* Average deviation     */
 #define VARIANCE1  8		/* Variance              */
 #define STDDEV1    9		/* Standard deviation    */
-#define SKEWNESS1 10		/* Skewnes               */
+#define SKEWNESS1 10		/* Skewness              */
 #define KURTOSIS1 11		/* Kurtosis              */
 #define VARIANCE2 12		/* Variance              */
 #define STDDEV2   13		/* Standard deviation    */
-#define SKEWNESS2 14		/* Skewnes               */
+#define SKEWNESS2 14		/* Skewness              */
 #define KURTOSIS2 15		/* Kurtosis              */
 
 struct menu
@@ -65,7 +65,7 @@ struct menu menu[] = {
     {"kurtosis",  KURTOSIS1, "Kurtosis of values in specified objects"},
     {"variance2", VARIANCE2, "(2-pass) Variance of values in specified objects"},
     {"stddev2",   STDDEV2,   "(2-pass) Standard deviation of values in specified objects"},
-    {"skewness2", SKEWNESS2, "(2-pass) Skewnes of values in specified objects"},
+    {"skewness2", SKEWNESS2, "(2-pass) Skewness of values in specified objects"},
     {"kurtosis2", KURTOSIS2, "(2-pass) Kurtosis of values in specified objects"},
     {0, 0, 0}
 };
