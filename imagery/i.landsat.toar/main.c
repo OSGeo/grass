@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     char *desc;
 
-    struct Cell_head cellhd;
+    struct Cell_head cellhd, orig_cellhd;
 
     void *inrast, *outrast;
     int infd, outfd;
@@ -245,6 +245,8 @@ int main(int argc, char *argv[])
 
     overwrite = G_check_overwrite(argc, argv);
 
+    Rast_get_window(&orig_cellhd);
+
     G_zero(&lsat, sizeof(lsat));
 
     if (adate->answer != NULL) {
@@ -397,10 +399,10 @@ int main(int argc, char *argv[])
 		hist[q] = 0L;
 
 	    sprintf(band_in, "%s%d", inputname, lsat.band[i].code);
+	    Rast_get_cellhd(band_in, "", &cellhd);
+	    Rast_set_window(&cellhd);
 	    if ((infd = Rast_open_old(band_in, "")) < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"), band_in);
-	    Rast_get_cellhd(band_in, "", &cellhd);
-	    G_set_window(&cellhd);
 
 	    in_data_type = Rast_get_map_type(infd);
 	    if (in_data_type < 0)
@@ -535,6 +537,9 @@ int main(int argc, char *argv[])
 		(named->answer ? lsat.band[i].number : lsat.band[i].code));
 	sprintf(band_out, "%s%d", outputname, lsat.band[i].code);
 
+	/* set same size as original band raster */
+	Rast_get_cellhd(band_in, "", &cellhd);
+	Rast_set_window(&cellhd);
 	if ((infd = Rast_open_old(band_in, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), band_in);
 
@@ -552,10 +557,6 @@ int main(int argc, char *argv[])
 	in_data_type = Rast_get_map_type(infd);
 	if (in_data_type < 0)
 	    G_fatal_error(_("Unable to read data type of raster map <%s>"), band_in);
-	Rast_get_cellhd(band_in, "", &cellhd);
-
-	/* set same size as original band raster */
-	G_set_window(&cellhd);
 
 	/* controlling, if we can write the raster */
 	if (G_legal_filename(band_out) < 0)
@@ -722,6 +723,7 @@ int main(int argc, char *argv[])
 	else
 	    Rast_write_units(band_out, "unitless");
     }
+    Rast_set_window(&orig_cellhd);
 
     exit(EXIT_SUCCESS);
 }
