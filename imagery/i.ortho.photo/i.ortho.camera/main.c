@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 
     if (G_find_file2("camera", camera, G_mapset())) {
 	/* use existing camera file */
-	if (I_get_cam_info(camera, &cam_info))
+	if (!I_get_cam_info(camera, &cam_info))
 	    G_fatal_error(_("Can not read camera file '%s'"), camera);
 
 	if (cam_name && strcmp(cam_name, cam_info.cam_name)) {
@@ -179,6 +179,7 @@ int main(int argc, char *argv[])
     }
 
     /* fiducials */
+    cam_info.num_fid = 0;
     if (fid_opt->answers) {
 	int i, fid_no;
 	double Xf, Yf;
