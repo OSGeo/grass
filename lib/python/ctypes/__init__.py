@@ -12,6 +12,7 @@ __all__ = [
     'proj',
     'raster3d',
     'raster',
+    'rtree',
     'stats',
     'vector',
     'vedit'

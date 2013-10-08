@@ -9,7 +9,7 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 DOXNAME=
 DOXINPUT=grasspython.dox
 
-MODULES = date gis raster gmath proj imagery vector display stats \
+MODULES = date gis raster gmath proj imagery vector rtree display stats \
 	dbmi raster3d arraystats cluster vedit ogsf nviz segment rowio
 
 date_LIBS       = $(DATETIMELIB)
@@ -19,6 +19,7 @@ gmath_LIBS      = $(GMATHLIB)
 proj_LIBS       = $(GPROJLIB)
 imagery_LIBS    = $(IMAGERYLIB)
 vector_LIBS     = $(VECTORLIB)
+rtree_LIBS      = $(RTREELIB)
 display_LIBS    = $(DISPLAYLIB)
 stats_LIBS      = $(STATSLIB)
 dbmi_LIBS       = $(DBMILIB)
@@ -37,7 +38,8 @@ raster_HDRS     = raster.h defs/raster.h
 gmath_HDRS      = gmath.h defs/gmath.h
 proj_HDRS       = gprojects.h defs/gprojects.h
 imagery_HDRS    = imagery.h defs/imagery.h
-vector_HDRS     = vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h rtree.h
+vector_HDRS     = vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h 
+rtree_HDRS	= rtree.h
 display_HDRS    = display.h defs/display.h
 stats_HDRS      = stats.h defs/stats.h
 dbmi_HDRS       = dbmi.h defs/dbmi.h

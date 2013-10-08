@@ -23,6 +23,7 @@ for details.
 from abstract_dataset import *
 from datetime_math import *
 import grass.lib.vector as vector
+import grass.lib.rtree as rtree
 import grass.lib.gis as gis
 from ctypes import *
 
@@ -450,7 +451,7 @@ class SpatioTemporalTopologyBuilder(object):
                           spatial can be None (no spatial topology), "2D" using west, east,
                           #south, north or "3D" using west, east, south, north, bottom, top
         """
-        rect = vector.RTreeAllocRect(tree)
+        rect = rtree.RTreeAllocRect(tree)
 
         start, end = map_.get_temporal_extent_as_tuple()
 
@@ -462,14 +463,14 @@ class SpatioTemporalTopologyBuilder(object):
             end = time_delta_to_relative_time_seconds(end - self._timeref)
 
         if spatial is None:
-            vector.RTreeSetRect1D(rect, tree, float(start), float(end))
+            rtree.RTreeSetRect1D(rect, tree, float(start), float(end))
         elif spatial == "2D":
             north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
-            vector.RTreeSetRect3D(rect, tree, west, east, south, north,
+            rtree.RTreeSetRect3D(rect, tree, west, east, south, north,
                                   float(start), float(end))
         elif spatial == "3D":
             north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
-            vector.RTreeSetRect4D(rect, tree, west, east, south, north,
+            rtree.RTreeSetRect4D(rect, tree, west, east, south, north,
                                   bottom, top, float(start), float(end))
 
         return rect
@@ -488,12 +489,12 @@ class SpatioTemporalTopologyBuilder(object):
         if spatial == "3D":
             dim = 4
 
-        tree = vector.RTreeCreateTree(-1, 0, dim)
+        tree = rtree.RTreeCreateTree(-1, 0, dim)
 
         for i in xrange(len(maps)):
 
             rect = self._map_to_rect(tree, maps[i], spatial)
-            vector.RTreeInsertRect(rect, i + 1, tree)
+            rtree.RTreeInsertRect(rect, i + 1, tree)
 
         return tree
 
@@ -543,7 +544,7 @@ class SpatioTemporalTopologyBuilder(object):
 
             rect = self._map_to_rect(tree, mapsB[j], spatial)
             vector.RTreeSearch2(tree, rect, list_)
-            vector.RTreeFreeRect(rect)
+            rtree.RTreeFreeRect(rect)
 
             for k in xrange(list_.contents.n_values):
                 i = list_.contents.value[k] - 1
@@ -565,7 +566,7 @@ class SpatioTemporalTopologyBuilder(object):
 
         gis.G_free_ilist(list_)
 
-        vector.RTreeDestroyTree(tree)
+        rtree.RTreeDestroyTree(tree)
 
     def __iter__(self):
         start_ = self._first
