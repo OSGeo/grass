@@ -86,8 +86,8 @@ evi2 ( redchan, nirchan )
 <div class="code"><pre>
 GARI: green atmospherically resistant vegetation index
 
-GARI = ( nirchan - (greenchan-(bluechan - redchan))) / 
-( nirchan- (greenchan-(bluechan - redchan)))
+GARI = ( nirchan - (greenchan - (bluechan - redchan))) / 
+( nirchan - (greenchan + (bluechan - redchan)))
 gari( redchan, nirchan, bluechan, greenchan )
 </pre></div>
 
