@@ -614,7 +614,8 @@ class EditDialog(wx.Dialog):
         self.listbox.Clear()
         for anim in self.animationData:
             self.listbox.Append(anim.name, clientData = anim)
-        self.listbox.SetSelection(0)
+        if self.animationData:
+            self.listbox.SetSelection(0)
 
     def _getNextIndex(self):
         indices = [anim.windowIndex for anim in self.animationData]
