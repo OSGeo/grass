@@ -1659,37 +1659,49 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         if tmpreg:
             os.environ["GRASS_REGION"] = tmpreg
         
-    def ZoomToSaved(self):
-        """!Set display geometry to match extents in
-        saved region file
+    def SetRegion(self, zoomOnly=True):
+        """!Set display extents/compulational region from named region
+        file.
+
+        @param zoomOnly zoom to named region only (computational region is not saved)
         """
+        if zoomOnly:
+            label = _('Zoom to saved region extents')
+        else:
+            label = _('Set compulational region from named region')
         dlg = SavedRegion(parent = self,
-                          title = _("Zoom to saved region extents"),
+                          title = label,
                           loadsave = 'load')
         
         if dlg.ShowModal() == wx.ID_CANCEL or not dlg.GetName():
             dlg.Destroy()
             return
         
-        if not grass.find_file(name = dlg.GetName(), element = 'windows')['name']:
-            wx.MessageBox(parent = self,
-                          message = _("Region <%s> not found. Operation canceled.") % dlg.GetName(),
-                          caption = _("Error"), style = wx.ICON_ERROR | wx.OK | wx.CENTRE)
+        region = dlg.GetName()
+        if not grass.find_file(name = region, element = 'windows')['name']:
+            GError(parent = self,
+                   message = _("Region <%s> not found. Operation canceled.") % region)
             dlg.Destroy()
             return
         
-        self.Map.GetRegion(regionName = dlg.GetName(),
-                           update = True)
-        
         dlg.Destroy()
         
-        self.ZoomHistory(self.Map.region['n'],
-                         self.Map.region['s'],
-                         self.Map.region['e'],
-                         self.Map.region['w'])
+        if zoomOnly:
+            self.Map.GetRegion(regionName = region,
+                               update = True)
+            
+            self.ZoomHistory(self.Map.region['n'],
+                             self.Map.region['s'],
+                             self.Map.region['e'],
+                             self.Map.region['w'])
+        else:
+            # set computation region from named region file
+            RunCommand('g.region',
+                       parent = self,
+                       region = region)
         
         self.UpdateMap()
-                
+
     def SaveRegion(self, display = True):
         """!Save display extents/compulational region to named region
         file.

@@ -436,7 +436,7 @@ class MapFrame(SingleMapFrame):
         """!Set display geometry to match extents in
         saved region file
         """
-        self.MapWindow.ZoomToSaved()
+        self.MapWindow.SetRegion(zoomOnly=True)
         
     def OnDisplayToWind(self, event):
         """!Set computational region (WIND file) to match display
