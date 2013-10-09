@@ -7,7 +7,7 @@ double ga_ri(double redchan,double nirchan,double bluechan,double greenchan)
 {
     double result;
     {
-        result = (nirchan - (greenchan - (bluechan - redchan)))/(nirchan - (greenchan - (bluechan + redchan)));
+        result = (nirchan - (greenchan - (bluechan - redchan)))/(nirchan - (greenchan + (bluechan - redchan)));
     }
     return result;
 }
