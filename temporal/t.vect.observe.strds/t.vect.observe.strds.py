@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:       t.vect.oberve.rast
+# MODULE:       t.vect.observe.strds
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Observe specific locations in a space time raster dataset over a period of time using vector points
@@ -99,7 +99,7 @@ def main():
 
     if not rows:
         dbif.close()
-        grass.fatal(_("Space time vector dataset <%s> is empty") %
+        grass.fatal(_("Space time raster dataset <%s> is empty") %
                     out_sp.get_id())
 
     num_rows = len(rows)
@@ -126,7 +126,6 @@ def main():
         else:
             layers += ",%i" % (layer)
 
-    # Use the name of the space time vector dataset as new vector name
     vectmap = vector_output
 
     # We create a new vector map using the categories of the original map
