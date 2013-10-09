@@ -1117,13 +1117,19 @@ class MapFrame(SingleMapFrame):
         """!Set display geometry to match extents in
         saved region file
         """
-        self.MapWindow.ZoomToSaved()
+        self.MapWindow.SetRegion(zoomOnly=True)
         
-    def OnDisplayToWind(self, event):
+    def OnSetDisplayToWind(self, event):
         """!Set computational region (WIND file) to match display
         extents
         """
         self.MapWindow.DisplayToWind()
+
+    def OnSetWindToRegion(self, event):
+        """!Set computational region (WIND file) from named region
+        file
+        """
+        self.MapWindow.SetRegion(zoomOnly=False)
  
     def OnSaveDisplayRegion(self, event):
         """!Save display extents to named region file.
@@ -1143,13 +1149,19 @@ class MapFrame(SingleMapFrame):
         for label, handler in ((_('Zoom to computational region'), self.OnZoomToWind),
                                (_('Zoom to default region'), self.OnZoomToDefault),
                                (_('Zoom to saved region'), self.OnZoomToSaved),
-                               (_('Set computational region from display extent'), self.OnDisplayToWind),
+                               (None, None),
+                               (_('Set computational region from display extent'), self.OnSetDisplayToWind),
+                               (_('Set computational region from named region'), self.OnSetWindToRegion),
+                               (None, None),
                                (_('Save display geometry to named region'), self.OnSaveDisplayRegion),
                                (_('Save computational region to named region'), self.OnSaveWindRegion)):
-            mid = wx.MenuItem(zoommenu, wx.ID_ANY, label)
-            zoommenu.AppendItem(mid)
-            self.Bind(wx.EVT_MENU, handler, mid)
-            
+            if label:
+                mid = wx.MenuItem(zoommenu, wx.ID_ANY, label)
+                zoommenu.AppendItem(mid)
+                self.Bind(wx.EVT_MENU, handler, mid)
+            else:
+                zoommenu.AppendSeparator()
+        
         # Popup the menu. If an item is selected then its handler will
         # be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
