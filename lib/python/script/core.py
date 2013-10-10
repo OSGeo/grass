@@ -810,11 +810,11 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=","):
 def compare_key_value_text_files(filename_a, filename_b, sep=":",
                                  val_sep=",", precision=0.000001):
     """
-    !Compare two key-value text two files
+    !Compare two key-value text files
 
     This method will print a warning in case keys that are present in the first
     file are not present in the second one.
-    The comparison method tries to convert the values into there native format
+    The comparison method tries to convert the values into their native format
     (float, int or string) to allow correct comparison.
 
     An example key-value text file may have this content:
@@ -829,7 +829,7 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
     @param filenmae_b name of the second key-value text file
     @param sep character that separates the keys and values, default is ":"
     @param val_sep character that separates the values of a single key, default is ","
-    @param precision precision with which the floating point values are compares
+    @param precision precision with which the floating point values are compared
 
     @return True if full or almost identical, False if different
     """
