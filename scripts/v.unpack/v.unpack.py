@@ -98,13 +98,26 @@ def main():
     # check projection compatibility in a rather crappy way
     loc_proj = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')
     loc_proj_units = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')
-    if not grass.compare_key_value_text_files(os.path.join(tmp_dir,'PROJ_INFO'), loc_proj) or \
-       not grass.compare_key_value_text_files(os.path.join(tmp_dir,'PROJ_UNITS'), loc_proj_units):
+    
+    diff_result_1 = diff_result_2 = None
+    if not grass.compare_key_value_text_files(os.path.join(tmp_dir,'PROJ_INFO'), loc_proj):
+        diff_result_1 = grass.diff_files(os.path.join(tmp_dir,'PROJ_INFO'), loc_proj)
+
+    if not grass.compare_key_value_text_files(os.path.join(tmp_dir,'PROJ_UNITS'), loc_proj_units):
+        diff_result_2 = grass.diff_files(os.path.join(tmp_dir,'PROJ_UNITS'), loc_proj_units)
+    
+    if diff_result_1 or diff_result_2:
         if flags['o']:
             grass.warning(_("Projection information does not match. Proceeding..."))
         else:
+            if diff_result_1:
+                grass.warning(_("Difference between PROJ_INFO file of packed map "
+                                "and of current location:\n{diff}").format(diff=''.join(diff_result_1)))
+            if diff_result_2:
+                grass.warning(_("Difference between PROJ_UNITS file of packed map "
+                                "and of current location:\n{diff}").format(diff=''.join(diff_result_2)))
             grass.fatal(_("Projection information does not match. Aborting."))
-    
+
     # new db
     fromdb = os.path.join(tmp_dir, 'db.sqlite')
     # copy file

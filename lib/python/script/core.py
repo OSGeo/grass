@@ -866,6 +866,23 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
                                            'a': len(dict_a)})
     return True
 
+def diff_files(filename_a, filename_b):
+    """!Diffs two text files and returns difference.
+
+    @param filename_a first file path    
+    @param filename_b second file path
+    
+    @return list of strings
+    """
+    import difflib
+    differ = difflib.Differ()
+    fh_a = open(filename_a, 'r')
+    fh_b = open(filename_b, 'r')
+    result = list(differ.compare(fh_a.readlines(),
+                                 fh_b.readlines()))
+    return result
+
+
 # interface to g.gisenv
 
 

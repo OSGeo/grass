@@ -88,11 +88,27 @@ def main():
     os.chdir(data_name)
     
     # check projection compatibility in a rather crappy way
-    if not grass.compare_key_value_text_files('PROJ_INFO', os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')) or \
-            not grass.compare_key_value_text_files('PROJ_UNITS', os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')):
+    diff_result_1 = diff_result_2 = None
+    proj_info_file_1 = 'PROJ_INFO'
+    proj_info_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')
+    if not grass.compare_key_value_text_files(proj_info_file_1, proj_info_file_2):
+        diff_result_1 = grass.diff_files(proj_info_file_1, proj_info_file_2)
+
+    proj_units_file_1 = 'PROJ_UNITS'
+    proj_units_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')
+    if not grass.compare_key_value_text_files(proj_units_file_1, proj_units_file_2):
+        diff_result_2 = grass.diff_files(proj_units_file_1, proj_units_file_2)
+    
+    if diff_result_1 or diff_result_2:
         if flags['o']:
             grass.warning(_("Projection information does not match. Proceeding..."))
         else:
+            if diff_result_1:
+                grass.warning(_("Difference between PROJ_INFO file of packed map "
+                                "and of current location:\n{diff}").format(diff=''.join(diff_result_1)))
+            if diff_result_2:
+                grass.warning(_("Difference between PROJ_UNITS file of packed map "
+                                "and of current location:\n{diff}").format(diff=''.join(diff_result_2)))
             grass.fatal(_("Projection information does not match. Aborting."))
     
     # install in $MAPSET

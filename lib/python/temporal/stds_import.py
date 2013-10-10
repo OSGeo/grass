@@ -230,6 +230,9 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
                 core.warning(_("Projection information does not match. "
                                "Proceeding..."))
             else:
+                diff = ''.join(core.diff_files(temp_name, proj_name))
+                core.warning(_("Difference between PROJ_INFO file of imported map "
+                               "and of current location:\n{diff}").format(diff=diff))
                 core.fatal(_("Projection information does not match. Aborting."))
 
     # Create a new location based on the projection information and switch
