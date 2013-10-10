@@ -203,8 +203,10 @@ int main(int argc, char *argv[])
 
             mapset = substitute_mapset(*ptr);
 
-            if (G_is_mapset_in_search_path(mapset))
+            if (G_is_mapset_in_search_path(mapset)) {
+                G_message(_("Mapset <%s> already in the path"), mapset);
                 continue;
+            }
             
             if (G__mapset_permissions(mapset) < 0)
                 G_fatal_error(_("Mapset <%s> not found"), mapset);
