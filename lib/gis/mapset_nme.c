@@ -102,6 +102,7 @@ void G__create_alt_search_path(void)
     st->path2.names = st->path.names;
 
     st->path.count = 0;
+    st->initialized = 0;
 }
 
 /*!
