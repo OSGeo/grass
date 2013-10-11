@@ -608,6 +608,11 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    (dfToMeters == 1.))
 	    G_asprintf(&pszUnitsName, "meter");
 
+	if ((G_strcasecmp(pszUnitsName, "metre") == 0))
+	    G_asprintf(&pszUnitsName, "meter");
+	if ((G_strcasecmp(pszUnitsName, "kilometre") == 0))
+	    G_asprintf(&pszUnitsName, "kilometer");
+
 	G_set_key_value("unit", pszUnitsName, *projunits);
 
 	/* Attempt at plural formation (WKT format doesn't store plural
