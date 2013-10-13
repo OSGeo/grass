@@ -470,3 +470,109 @@ int thin_skeleton(double thresh)
 
     return 0;
 }
+
+int tie_up(void)
+{
+    int i;
+    int node;
+    int nlines;
+    double xmin, ymin, x, y;
+    double dx, dy, dist, distmin;
+    struct line_pnts *Points;
+    struct line_pnts **IPoints;
+    struct line_cats *Cats;
+    int isl_allocated;
+    int area, isle, n_isles;
+    int ntied = 0;
+ 
+    Points = Vect_new_line_struct();
+    isl_allocated = 10;
+    IPoints = G_malloc(isl_allocated * sizeof(struct line_pnts *));
+    for (i = 0; i < isl_allocated; i++)
+	IPoints[i] = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+
+    IPoints = NULL;
+
+
+    for (node = 1; node <= Vect_get_num_nodes(&Out); node++) {
+	if (!Vect_node_alive(&Out, node))
+	    continue;
+	nlines = Vect_get_node_n_lines(&Out, node);
+	
+	if (nlines > 1)
+	    continue;
+
+	Vect_get_node_coor(&Out, node, &x, &y, NULL);
+
+	/* find area for this node */
+	area = Vect_find_area(&In, x, y);
+	
+	if (area == 0)
+	    G_fatal_error(_("Node is outside any input area"));
+
+	/* get area outer ring */
+	Vect_get_area_points(&In, area, Points);
+
+	/* get area inner rings */
+	n_isles = Vect_get_area_num_isles(&In, area);
+	if (n_isles > isl_allocated) {
+	    IPoints = (struct line_pnts **)
+		G_realloc(IPoints, (1 + n_isles) * sizeof(struct line_pnts *));
+	    for (i = isl_allocated; i < n_isles; i++)
+		IPoints[i] = Vect_new_line_struct();
+	    isl_allocated = n_isles;
+	}
+	for (isle = 0; isle < n_isles; isle++) {
+	    Vect_get_isle_points(&In, Vect_get_area_isle(&In, area, isle),
+	                         IPoints[isle]);
+	}
+
+	distmin = 1. / 0.; /* +inf */
+	xmin = x;
+	ymin = y;
+
+	/* find closest point to outer ring */
+	/* must be an existing vertex */
+	for (i = 0; i < Points->n_points - 1; i++) {
+	    dx = x - Points->x[i];
+	    dy = y - Points->y[i];
+	    
+	    dist = dx * dx + dy * dy;
+	    
+	    if (distmin > dist) {
+		distmin = dist;
+		xmin = Points->x[i];
+		ymin = Points->y[i];
+	    }
+	}
+
+	/* find closest point to inner rings */
+	/* must be an existing vertex */
+	for (isle = 0; isle < n_isles; isle++) {
+	    for (i = 0; i < IPoints[isle]->n_points - 1; i++) {
+		dx = x - IPoints[isle]->x[i];
+		dy = y - IPoints[isle]->y[i];
+		
+		dist = dx * dx + dy * dy;
+		
+		if (distmin > dist) {
+		    distmin = dist;
+		    xmin = IPoints[isle]->x[i];
+		    ymin = IPoints[isle]->y[i];
+		}
+	    }
+	}
+
+	if (xmin != x && ymin != y) {
+	    Vect_get_area_cats(&In, area, Cats);
+	    Vect_reset_line(Points);
+	    Vect_append_point(Points, xmin, ymin, 0);
+	    Vect_append_point(Points, x, y, 0);
+	    Vect_write_line(&Out, GV_LINE, Points, Cats);
+	    ntied++;
+	}
+    }
+   
+    return ntied;
+}
