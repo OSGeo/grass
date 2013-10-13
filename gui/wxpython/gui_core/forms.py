@@ -1500,7 +1500,7 @@ class CmdPanel(wx.Panel):
                         
                         btnLoad = wx.Button(parent = which_panel, id = wx.ID_ANY, label = _("&Load"))
                         btnLoad.Bind(wx.EVT_BUTTON, self.OnFileLoad)
-                        btnSave = wx.Button(parent = which_panel, id = wx.ID_SAVEAS)
+                        btnSave = wx.Button(parent = which_panel, id = wx.ID_ANY, label = _("&Save as"))
                         btnSave.Bind(wx.EVT_BUTTON, self.OnFileSave)
                         
                         which_sizer.Add(item = wx.StaticText(parent = which_panel, id = wx.ID_ANY,
@@ -1819,7 +1819,13 @@ class CmdPanel(wx.Panel):
             return
         
         data = ''
-        f = open(path, "r")
+        try:
+            f = open(path, "r")
+        except IOError, e:
+            gcmd.GError(parent = self, showTraceback = False,
+                        message = _("Unable to load file.\n\nReason: %s") % e)
+            return
+        
         try:
             data = f.read()
         finally:
