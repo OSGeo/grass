@@ -6,7 +6,7 @@
 Classes:
  - layertree::LayerTree
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -623,6 +623,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # print output to command log area
         self._giface.RunCmd(cmd)
+        
+        # re-render map display
+        self._giface.GetMapWindow().UpdateMap(render=True)
 
     def OnSetCompRegFromMap(self, event):
         """!Set computational region from selected raster/vector map
@@ -658,7 +661,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if mltype == '3d-raster':
                 cmd.append('-3')
             self._giface.RunCmd(cmd, compReg = False)
-
+        
+        # re-render map display
+        self._giface.GetMapWindow().UpdateMap(render=True)
+            
     def OnProfile(self, event):
         """!Plot profile of given raster map layer"""
         mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
