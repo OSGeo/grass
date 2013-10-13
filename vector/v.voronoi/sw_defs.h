@@ -71,6 +71,7 @@ int clean_topo(void);
 
 /* skeleton.c */
 int thin_skeleton(double);
+int tie_up(void);
 
 /* sw_edgelist.c */
 int ELinitialize(void);

@@ -233,6 +233,7 @@ int main(int argc, char **argv)
     if (skeleton) {
 	G_message(_("Thin skeletons ..."));
 	thin_skeleton(thresh);
+	tie_up();
     }
     else {
 	/* Close free ends by current region */
