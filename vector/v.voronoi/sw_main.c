@@ -34,6 +34,7 @@ struct Map_info In, Out;
 int Type;
 int Field;
 int in_area;
+int skeleton;
 double segf;
 
 int nsites_alloc;

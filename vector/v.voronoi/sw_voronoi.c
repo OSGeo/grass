@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <grass/gis.h>
 #include "sw_defs.h"
 
 /* implicit parameters: nsites, sqrt_nsites, xmin, xmax, ymin, ymax,
@@ -14,6 +15,7 @@ int voronoi(struct Site *(*nextsite) (void))
     int pm;
     struct Halfedge *lbnd, *rbnd, *llbnd, *rrbnd, *bisector;
     struct Edge *e;
+    int counter = 0;
 
     PQinitialize();
     bottomsite = (*nextsite) ();
@@ -28,6 +30,8 @@ int voronoi(struct Site *(*nextsite) (void))
 	    (PQempty() || newsite->coord.y < newintstar.y || 
 	    (newsite->coord.y == newintstar.y && 
 	    newsite->coord.x < newintstar.x))) {	/* new site is smallest */
+
+	    G_percent(counter++, nsites, 2);
 
 	    lbnd = ELleftbnd(&(newsite->coord));
 	    rbnd = ELright(lbnd);
@@ -95,12 +99,7 @@ int voronoi(struct Site *(*nextsite) (void))
 	    break;
     }
 
-    for (lbnd = ELright(ELleftend); lbnd != ELrightend; lbnd = ELright(lbnd)) {
-	e = lbnd->ELedge;
-	write_ep(e);
-    }
-    
-    /* TODO: free memory */
+    G_percent(1, 1, 1);
 
     return 0;
 }

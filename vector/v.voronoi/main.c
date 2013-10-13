@@ -7,9 +7,10 @@
  *               Andrea Aime <aaime libero.it>
  *               Radim Blazek <radim.blazek gmail.com> (GRASS 5.1 v.voronoi) 
  *               Glynn Clements <glynn gclements.plus.com>,  
- *               Markus Neteler <neteler itc.it>
+ *               Markus Neteler <neteler itc.it>,
+ *               Markus Metz
  * PURPOSE:      produce a Voronoi diagram using vector points
- * COPYRIGHT:    (C) 1993-2006, 2001 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1993-2006, 2001, 2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -50,6 +51,8 @@ typedef struct
 {
     double x, y;
 } COOR;
+
+
 
 int cmp(void *a, void *b)
 {
@@ -99,22 +102,20 @@ int main(int argc, char **argv)
     int i;
     int **cats, *ncats, nfields, *fields;
     struct {
-	struct Flag *line, *table, *area;
-    } flag;
-    struct {
-	struct Option *in, *out, *field, *smooth;
+	struct Option *in, *out, *field, *smooth, *thin;
     } opt;
+    struct {
+	struct Flag *line, *table, *area, *skeleton;
+    } flag;
     struct GModule *module;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    struct bound_box box;
     int node, nnodes;
     COOR *coor;
     int verbose;
     int ncoor, acoor;
-    int line, nlines, type, ctype, area, nareas;
-    int err_boundaries, err_centr_out, err_centr_dupl, err_nocentr;
-    double snap_thresh;
+    int line, nlines, type, ctype;
+    double thresh;
 
     G_gisinit(argv[0]);
 
@@ -137,12 +138,26 @@ int main(int argc, char **argv)
     opt.smooth->key = "smoothness";
     opt.smooth->answer = "0.25";
     opt.smooth->label = _("Factor for output smoothness");
-    opt.smooth->description = _("Applies to input areas only. Smaller values produce smoother output but can cause numerical instability.");
+    opt.smooth->description = _("Applies to input areas only. "
+                                "Smaller values produce smoother output but can cause numerical instability.");
+
+    opt.thin = G_define_option();
+    opt.thin->type = TYPE_DOUBLE;
+    opt.thin->key = "thin";
+    opt.thin->answer = "-1";
+    opt.thin->label = _("Maximum dangle length of skeletons");
+    opt.thin->description = _("Applies only to skeleton extraction. "
+                                "Default = -1 will extract the center line.");
 
     flag.area = G_define_flag();
     flag.area->key = 'a';
     flag.area->description =
 	_("Create Voronoi diagram for input areas");
+
+    flag.skeleton = G_define_flag();
+    flag.skeleton->key = 's';
+    flag.skeleton->description =
+	_("Extract skeletons for input areas");
 
     flag.line = G_define_flag();
     flag.line->key = 'l';
@@ -165,6 +180,11 @@ int main(int argc, char **argv)
 	segf = 0.25;
 	G_warning(_("Option '%s' is too small, set to %g"), opt.smooth->key, segf);
     }
+    thresh = atof(opt.thin->answer);
+    
+    skeleton = flag.skeleton->answer;
+    if (skeleton)
+	Type = GV_LINE;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -184,7 +204,7 @@ int main(int argc, char **argv)
     freeinit(&sfl, sizeof(struct Site));
 
     G_message(_("Reading features..."));
-    if (in_area)
+    if (in_area || skeleton)
 	readbounds();
     else
 	readsites();
@@ -200,72 +220,79 @@ int main(int argc, char **argv)
     plot = 0;
     debug = 0;
 
-    G_message(_("Processing Voronoi triangulation..."));
+    G_message(_("Voronoi triangulation for %d points..."), nsites);
     voronoi(nextone);
+    G_message(_("Writing edges..."));
+    vo_write();
 
-    /* Close free ends by current region */
     verbose = G_verbose();
     G_set_verbose(0);
     Vect_build_partial(&Out, GV_BUILD_BASE);
     G_set_verbose(verbose);
 
-    ncoor = 0;
-    acoor = 100;
-    coor = (COOR *) G_malloc(sizeof(COOR) * acoor);
+    if (skeleton) {
+	G_message(_("Thin skeletons ..."));
+	thin_skeleton(thresh);
+    }
+    else {
+	/* Close free ends by current region */
+	ncoor = 0;
+	acoor = 100;
+	coor = (COOR *) G_malloc(sizeof(COOR) * acoor);
 
-    nnodes = Vect_get_num_nodes(&Out);
-    for (node = 1; node <= nnodes; node++) {
-	double x, y;
+	nnodes = Vect_get_num_nodes(&Out);
+	for (node = 1; node <= nnodes; node++) {
+	    double x, y;
 
-	if (Vect_get_node_n_lines(&Out, node) < 2) {	/* add coordinates */
-	    Vect_get_node_coor(&Out, node, &x, &y, NULL);
+	    if (Vect_get_node_n_lines(&Out, node) < 2) {	/* add coordinates */
+		Vect_get_node_coor(&Out, node, &x, &y, NULL);
 
-	    if (ncoor == acoor - 5) {	/* always space for 5 region corners */
-		acoor += 100;
-		coor = (COOR *) G_realloc(coor, sizeof(COOR) * acoor);
+		if (ncoor == acoor - 5) {	/* always space for 5 region corners */
+		    acoor += 100;
+		    coor = (COOR *) G_realloc(coor, sizeof(COOR) * acoor);
+		}
+
+		coor[ncoor].x = x;
+		coor[ncoor].y = y;
+		ncoor++;
 	    }
-
-	    coor[ncoor].x = x;
-	    coor[ncoor].y = y;
-	    ncoor++;
 	}
+
+	/* Add region corners */
+	coor[ncoor].x = Box.W;
+	coor[ncoor].y = Box.S;
+	ncoor++;
+	coor[ncoor].x = Box.E;
+	coor[ncoor].y = Box.S;
+	ncoor++;
+	coor[ncoor].x = Box.E;
+	coor[ncoor].y = Box.N;
+	ncoor++;
+	coor[ncoor].x = Box.W;
+	coor[ncoor].y = Box.N;
+	ncoor++;
+
+	/* Sort */
+	qsort(coor, ncoor, sizeof(COOR), (void *)cmp);
+
+	/* add last (first corner) */
+	coor[ncoor].x = Box.W;
+	coor[ncoor].y = Box.S;
+	ncoor++;
+
+	for (i = 1; i < ncoor; i++) {
+	    if (coor[i].x == coor[i - 1].x && coor[i].y == coor[i - 1].y)
+		continue;		/* duplicate */
+
+	    Vect_reset_line(Points);
+	    Vect_append_point(Points, coor[i].x, coor[i].y, 0.0);
+	    Vect_append_point(Points, coor[i - 1].x, coor[i - 1].y, 0.0);
+	    Vect_write_line(&Out, Type, Points, Cats);
+	}
+
+	G_free(coor);
     }
 
-    /* Add region corners */
-    coor[ncoor].x = Box.W;
-    coor[ncoor].y = Box.S;
-    ncoor++;
-    coor[ncoor].x = Box.E;
-    coor[ncoor].y = Box.S;
-    ncoor++;
-    coor[ncoor].x = Box.E;
-    coor[ncoor].y = Box.N;
-    ncoor++;
-    coor[ncoor].x = Box.W;
-    coor[ncoor].y = Box.N;
-    ncoor++;
-
-    /* Sort */
-    qsort(coor, ncoor, sizeof(COOR), (void *)cmp);
-
-    /* add last (first corner) */
-    coor[ncoor].x = Box.W;
-    coor[ncoor].y = Box.S;
-    ncoor++;
-
-    for (i = 1; i < ncoor; i++) {
-	if (coor[i].x == coor[i - 1].x && coor[i].y == coor[i - 1].y)
-	    continue;		/* duplicate */
-
-	Vect_reset_line(Points);
-	Vect_append_point(Points, coor[i].x, coor[i].y, 0.0);
-	Vect_append_point(Points, coor[i - 1].x, coor[i - 1].y, 0.0);
-	Vect_write_line(&Out, Type, Points, Cats);
-    }
-
-    G_free(coor);
-
-    /* Copy input points as centroids */
     nfields = Vect_cidx_get_num_fields(&In);
     cats = (int **)G_malloc(nfields * sizeof(int *));
     ncats = (int *)G_malloc(nfields * sizeof(int));
@@ -278,7 +305,8 @@ int main(int argc, char **argv)
 	fields[i] = Vect_cidx_get_field_number(&In, i);
     }
 
-    if (flag.line->answer)
+    /* Copy input points */
+    if (Type == GV_LINE)
 	ctype = GV_POINT;
     else
 	ctype = GV_CENTROID;
@@ -298,8 +326,8 @@ int main(int argc, char **argv)
 	if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
 	    continue;
 
-	Vect_write_line(&Out, ctype, Points, Cats);
-
+	if (!skeleton)
+	    Vect_write_line(&Out, ctype, Points, Cats);
 
 	for (i = 0; i < Cats->n_cats; i++) {
 	    int f, j;
@@ -382,136 +410,10 @@ int main(int argc, char **argv)
 	}
     }
 
-
     Vect_close(&In);
-
-    /* cleaning part 1: count errors */
-    G_message(_("Searching for topology errors..."));
-    G_set_verbose(0);
-    Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
-    G_set_verbose(verbose);
-    err_boundaries = err_centr_out = err_centr_dupl = err_nocentr = 0;
-    nlines = Vect_get_num_lines(&Out);
-    for (line = 1; line <= nlines; line++) {
-
-	if (!Vect_line_alive(&Out, line))
-	    continue;
-
-	type = Vect_get_line_type(&Out, line);
-	if (type == GV_BOUNDARY) {
-	    int left, right;
-
-	    Vect_get_line_areas(&Out, line, &left, &right);
-
-	    if (left == 0 || right == 0) {
-		G_debug(3, "line = %d left = %d right = %d", line, 
-			left, right);
-		err_boundaries++;
-	    }
-	}
-	if (type == GV_CENTROID) {
-	    area = Vect_get_centroid_area(&Out, line);
-	    if (area == 0)
-		err_centr_out++;
-	    else if (area < 0)
-		err_centr_dupl++;
-	}
-    }
-
-    err_nocentr = 0;
-    nareas = Vect_get_num_areas(&Out);
-    for (area = 1; area <= nareas; area++) {
-	if (!Vect_area_alive(&Out, area))
-	    continue;
-	line = Vect_get_area_centroid(&Out, area);
-	if (line == 0)
-	    err_nocentr++;
-    }
-
-    /* cleaning part 2: snap */
-    /* TODO: adjust snapping treshold to ULP */
-    Vect_get_map_box(&Out, &box);
-    snap_thresh = fabs(box.W);
-    if (snap_thresh < fabs(box.E))
-	snap_thresh = fabs(box.E);
-    if (snap_thresh < fabs(box.N))
-	snap_thresh = fabs(box.N);
-    if (snap_thresh < fabs(box.S))
-	snap_thresh = fabs(box.S);
-    snap_thresh = d_ulp(snap_thresh);
     
-    if (err_nocentr || err_centr_dupl || err_centr_out) {
-	int nmod;
-
-	G_important_message(_("Cleaning output topology"));
-	Vect_snap_lines(&Out, GV_BOUNDARY, snap_thresh, NULL);
-	do {
-	    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
-	    Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
-	    nmod =
-		Vect_clean_small_angles_at_nodes(&Out, GV_BOUNDARY, NULL);
-	} while (nmod > 0);
-
-	G_message(_("Removing dangles..."));
-	Vect_remove_dangles(&Out, GV_BOUNDARY, -1.0, NULL);
-	G_message(_("Removing bridges..."));
-	Vect_remove_bridges(&Out, NULL, NULL, NULL);
-
-	err_boundaries = 0;
-	nlines = Vect_get_num_lines(&Out);
-	for (line = 1; line <= nlines; line++) {
-
-	    if (!Vect_line_alive(&Out, line))
-		continue;
-
-	    type = Vect_get_line_type(&Out, line);
-	    if (type == GV_BOUNDARY) {
-		int left, right;
-
-		Vect_get_line_areas(&Out, line, &left, &right);
-
-		if (left == 0 || right == 0) {
-		    G_debug(3, "line = %d left = %d right = %d", line, 
-			    left, right);
-		    err_boundaries++;
-		}
-	    }
-	}
-    }
-    /* cleaning part 3: remove remaining incorrect boundaries */
-    if (err_boundaries) {
-	G_important_message(_("Removing incorrect boundaries from output"));
-	nlines = Vect_get_num_lines(&Out);
-	for (line = 1; line <= nlines; line++) {
-
-	    if (!Vect_line_alive(&Out, line))
-		continue;
-
-	    type = Vect_get_line_type(&Out, line);
-	    if (type == GV_BOUNDARY) {
-		int left, right;
-
-		Vect_get_line_areas(&Out, line, &left, &right);
-
-		/* &&, not ||, no typo */
-		if (left == 0 && right == 0) {
-		    G_debug(3, "line = %d left = %d right = %d", line, 
-			    left, right);
-		    Vect_delete_line(&Out, line);
-		}
-	    }
-	}
-    }
-
-    /* this is slow:
-    if (in_area) {
-	if (Type == GV_LINE)
-	    G_message(_("Merging lines ..."));
-	else
-	    G_message(_("Merging boundaries ..."));
-	Vect_merge_lines(&Out, Type, NULL, NULL);
-    }
-    */
+    if (Type == GV_BOUNDARY)
+	clean_topo();
 
     /* build clean topology */
     Vect_build_partial(&Out, GV_BUILD_NONE);
@@ -519,5 +421,6 @@ int main(int argc, char **argv)
     Vect_close(&Out);
 
     G_done_msg(" ");
+
     exit(EXIT_SUCCESS);
 }
