@@ -1584,7 +1584,7 @@ class CmdPanel(wx.Panel):
                         cb.SetValue(value) # parameter previously set
                     which_sizer.Add(item = cb, proportion = 0,
                                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
-                    p['wxId'] = [cb.GetId(),]
+                    p['wxId'] = [cb.GetTextCtrl().GetId(),]
                     cb.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                     cb.Bind(wx.EVT_TEXT, self.OnSetValue)
                     if p.get('guidependency', ''):
