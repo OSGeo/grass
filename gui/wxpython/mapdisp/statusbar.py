@@ -289,6 +289,12 @@ class SbManager:
         """!Toggle status text
         """
         self.Update()
+        if event.GetSelection() == 3: # use something better than magic numbers
+            # show computation region extent by default
+            self.statusbarItems['region'].SetValue(True)
+            # redraw map if auto-rendering is enabled
+            if self.mapFrame.IsAutoRendered():
+                self.mapFrame.OnRender(None)
         
     def SetMode(self, modeIndex):
         """!Sets current mode
@@ -465,7 +471,6 @@ class SbShowRegion(SbItem):
         self._properties.showRegion = value
         SbItem.SetValue(self, value)
         self._connectShowRegion()
-
 
 class SbAlignExtent(SbItem):
     """!Checkbox to select zoom behavior.
