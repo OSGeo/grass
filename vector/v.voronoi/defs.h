@@ -5,4 +5,5 @@ extern struct Map_info In, Out;
 extern int Type;
 extern int Field;
 extern int in_area;
+extern int skeleton;
 extern double segf;

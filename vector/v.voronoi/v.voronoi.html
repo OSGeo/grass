@@ -1,61 +1,69 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.voronoi</em> uses an existing vector points map (<b>input</b>) to create
-a Voronoi diagram (Thiessen polygons) in a new vector map (<b>output</b>).
-<p>The bounds of the output map are limited by the current region.
-(see <em>g.region</em>)
-<p>
-<br>
-Voronoi diagram and Delaunay triangulation example:
-<center>
-<img src="v_voronoi_delaunay.png" border="1"><br>
-<table border="0" width="590">
-<tr><td><center>
-<i>Delaunay Triangulation (left pane), Voronoi diagram (center pane),
-and both (right pane)</i>
-</center></td></tr>
-</table>
-</center>
+<em>v.voronoi</em> creates a Voronoi diagram (Thiessen polygons) from 
+points or centroids. 
+<p>The bounds of the output map are limited by the current region 
+(see <em><a href="g.region.html">g.region</a></em>).
 
+<p>
+The <em>-a</em> flag can be used to create a Voronoi diagram for areas.
+
+<p>
+The <em>-s</em> flag can be used to extract the center line of areas or 
+skeletons of areas with <em>thin</em> >= 0. Smaller values for the 
+<em>thin</em> option will preserve more detail, while negative values 
+will extract only the center line.
 
 <h2>NOTES</h2>
 
 Voronoi diagrams may be used for nearest-neighbor flood filling.
 Give the centroids attributes (start with
 <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>),
-then optionally convert to a raster map with
+then optionally convert the result to a raster map with
 <em><a href="v.to.rast.html">v.to.rast</a></em>.
 
 
 <h2>EXAMPLE</h2>
 
-Commands used with the Spearfish dataset to create the above figure.
+<h4>Voronoi diagram for points</h4>
+This example uses the hospitals in the North Carolina dataset.
 <div class="code"><pre>
-  g.region n=4927250 s=4919400 w=588650 e=594850
-  d.frame -c fr=one at=0,100,0,33.3333
-  d.frame -c fr=two at=0,100,33.3333,66.6667
-  d.frame -c fr=three at=0,100,66.6667,100
-
-  v.delaunay -lr in=archsites out=arch_delaunay
-  d.frame -s one
-  d.vect arch_delaunay
-  d.vect archsites color=red fcolor=red size=5 icon=basic/circle
-
-  v.voronoi -l in=archsites out=arch_voronoi
-  d.frame -s two
-  d.vect arch_voronoi type=line
-  d.vect archsites color=red fcolor=red size=5 icon=basic/circle
-
-  d.frame -s three
-  d.vect arch_voronoi type=line
-  d.vect arch_delaunay color=blue
-  d.vect archsites color=red fcolor=red size=5 icon=basic/circle
+  g.region -p rast=elev_state_500m
+  v.voronoi in=hospitals out=hospitals_voronoi
 </pre></div>
 
+Result:
+<center>
+<img src="v_voronoi_points.png" border="0"><br>
+<i>Voronoi diagram for hospitals in North Carolina</i>
+</center>
 
-<h2>BUGS</h2>
-Only attribute table of field 1 is copied. 
+<h4>Voronoi diagram for areas</h4>
+This example uses urban areas in the North Carolina dataset.
+<div class="code"><pre>
+  g.region -p n=162500 s=80000 w=727000 e=846000 res=500
+  v.voronoi in=urbanarea out=urbanarea_voronoi -a
+</pre></div>
 
+Result:
+<center>
+<img src="v_voronoi_areas.png" border="0"><br>
+<i>Voronoi diagram for urban areas in North Carolina</i>
+</center>
+
+<h4>Skeletons and center lines of areas</h4>
+This example uses urban areas in the North Carolina dataset.
+<div class="code"><pre>
+  g.region -p n=161000 s=135500 w=768500 e=805500 res=500
+  v.voronoi in=urbanarea out=urbanarea_centerline -s
+  v.voronoi in=urbanarea out=urbanarea_skeleton -s thin=2000
+</pre></div>
+
+Result:
+<center>
+<img src="v_voronoi_skeleton.png" border="0"><br>
+<i>Skeleton (blue) and center line (red) for urban areas in North Carolina</i>
+</center>
 
 <h2>REFERENCES</h2>
 <em>Steve J. Fortune,  (1987).  A Sweepline Algorithm for
@@ -73,6 +81,7 @@ Only attribute table of field 1 is copied.
 <h2>AUTHORS</h2>
 James Darrell McCauley, Purdue University<br>
 GRASS 5 update, improvements: <a href="mailto:aaime@libero.it">Andrea Aime</a>, Modena, Italy<br>
-GRASS 5.7 update: Radim Blazek
+GRASS 5.7 update: Radim Blazek<br>
+Markus Metz
 
 <p><i>Last changed: $Date$</i>

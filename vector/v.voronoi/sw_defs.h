@@ -66,6 +66,12 @@ extern struct Halfedge *PQhash;
 extern int PQcount;
 extern int PQmin;
 
+/* clean_topo.c */
+int clean_topo(void);
+
+/* skeleton.c */
+int thin_skeleton(double);
+
 /* sw_edgelist.c */
 int ELinitialize(void);
 struct Halfedge *HEcreate(struct Edge *, int);
@@ -119,5 +125,6 @@ int extend_line(double, double, double, double, double, double, double,
 		double, double, double *, double *, int);
 
 /* vo_write.c */
+int vo_write(void);
 int write_ep(struct Edge *);
 
