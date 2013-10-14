@@ -6,7 +6,7 @@ and functions.
 
 <h3>PROGRAM USE</h3>
 
-<em>r.mapcalc</em> expects its input to have the form:
+<em>r.mapcalc</em> expression have the form:
 <p><b>result =</b><em> expression</em>
 <p>where <em>result</em> is the name of a raster map layer
 to contain the result of the calculation and
@@ -38,23 +38,15 @@ r.mapcalc 'foo=1'
 Sorry, &lt;foo&gt; is not a valid parameter
 </pre></div>
 
-If no options are given, it manufactures "file=-" (which reads from
-stdin), so you can continue to use e.g.:
-
-<div class="code"><pre>
-r.mapcalc &lt; file
-</pre></div>
-or:
-<div class="code"><pre>
-r.mapcalc &lt;&lt;EOF
-foo = 1
-EOF
-</pre></div>
-But unless you need compatibility with previous versions, use file=
+To read command from the file, use file=
 explicitly, e.g.:
 
 <div class="code"><pre>
 r.mapcalc file=file
+</pre></div>
+or:
+<div class="code"><pre>
+r.mapcalc file=- &lt; file
 </pre></div>
 or:
 <div class="code"><pre>
@@ -69,7 +61,7 @@ and in the history file for <em>result</em>.
 <p>Some characters have special meaning to the command shell. If the user
 is entering input to <em>r.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
-<p>
+
 
 <h3>OPERATORS AND ORDER OF PRECEDENCE</h3>
 The following operators are supported:
@@ -464,6 +456,9 @@ unknown quantity. E.g. if x and y are both unknown, then the values of
 values, the user doesn't know whether or not they both have the same value.
 
 <h2>NOTES</h2>
+
+<h3>Usage from command line</h3>
+<p>
 Extra care must be taken if the expression is given on the command line.
 Some characters have special meaning to the UNIX shell.
 These include, among others:
@@ -474,6 +469,8 @@ These include, among others:
 </pre></div>
 Without the quotes, the *, which has special meaning to the UNIX shell,
 would be altered and <em>r.mapcalc</em> would see something other than the *.
+
+<h3>Multiple computations</h3>
 <p>
 In general, it's preferable to do as much as possible in each
 r.mapcalc command. E.g. rather than:
@@ -491,6 +488,35 @@ r.mapcalc command. E.g. rather than:
         EOF
 </pre></div>
 <p>as the latter will read each input map only once.
+
+<h3>Backwards compatibility</h3>
+<p>
+For the backwards compatibility with GRASS 6, 
+if no options are given, it manufactures <tt>file=-</tt> (which reads from
+stdin), so you can continue to use e.g.:
+<div class="code"><pre>
+r.mapcalc &lt; file
+</pre></div>
+or:
+<div class="code"><pre>
+r.mapcalc &lt;&lt;EOF
+foo = 1
+EOF
+</pre></div>
+But unless you need compatibility with previous versions, use <tt>file=</tt>
+explicitly, as stated above.
+<p>
+If your map name contains uppercase letter or a dot, which are not
+allowed to be in module option names, your <em>r.mapcalc</em> command will
+be valid also without quotes:
+<div class="code"><pre>
+r.mapcalc elevation_A=1
+r.mapcalc elevation.1=1
+</pre></div>
+However, do not use this syntax and and use quotes as states above.
+Using quotes is both backwards compatible and valid in the future.
+
+<h3>Interactive input in command line</h3>
 <p>For formulas that the user enters from standard input
 (rather than from the command line), a line continuation feature now exists.
 If the user adds a backslash to the end of an input line, <em>r.mapcalc</em> assumes that
@@ -504,7 +530,37 @@ the formula will be placed into the history file for the <em>result</em> map.
 the command line, the program will not warn the user not to overwrite
 existing map layers.  Users should therefore take care to assign program
 outputs raster map names that do not yet exist in their current mapsets.
-<p>The environment variable GRASS_RND_SEED is read to initialise the
+
+<h3>Raster MASK handling</h3>
+<p>
+<em>r.mapcalc</em> follows the common GRASS behavior of raster MASK handling,
+so the MASK is only applied when reading an existing GRASS raster map.
+This implies that the the command:
+<div class="code"><pre>
+r.mapcalc "elevation_exaggerated = 3 * elevation"
+</pre></div>
+will create a masked map if MASK is active.
+
+<p>
+However, when you are creating a map which is not based on any map,
+e.g. a constant map:
+<div class="code"><pre>
+r.mapcalc "base_height = 200"
+</pre></div>
+the created raster map is limited only by a computation region
+but it is not limited by a MASK.
+This expected because, as mentioned above, MASK is only applied when reading,
+not when writing a raster map.
+If you want the MASK to be applied, you can use the if statement, e.g.:
+<div class="code"><pre>
+r.mapcalc "base_height = if(MASK, 200, null())"
+</pre></div>
+When testing your MASK-related expressions keep in mind that when MASK is active
+you don't see data in masked areas even if they are not NULL.
+See <em><a href="r.mask.html">r.mask</a></em> for details.
+
+<h3>Random number generator initialization</h3>
+<p>The environment variable GRASS_RND_SEED is read to initialize the
 random number generator.
 
 <h2>EXAMPLES</h2>
