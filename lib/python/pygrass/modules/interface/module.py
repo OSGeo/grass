@@ -60,6 +60,7 @@ from flag import Flag
 from typedict import TypeDict
 from read import GETFROMTAG, DOC
 
+
 class ParallelModuleQueue(object):
     """!This class is designed to run an arbitrary number of pygrass Module
        processes in parallel.
@@ -170,10 +171,11 @@ class ParallelModuleQueue(object):
                 proc.outputs['stderr'].value = stderr if stderr else ''
 
                 if proc.popen.returncode != 0:
-                    GrassError(("Error running module %s")%(proc.name))
+                    GrassError(("Error running module %s") % (proc.name))
 
         self._list = self._num_procs * [None]
         self._proc_count = 0
+
 
 class Module(object):
     """
@@ -348,19 +350,19 @@ class Module(object):
                 raise ParameterError('%s is not a valid parameter.' % key)
 
         #
-        # check reqire parameters
-        #
-        for key in self.required:
-            if ((key in self.inputs and self.inputs[key].value is None) or
-                    (key in self.outputs and self.outputs[key].value is None)):
-                raise ParameterError(
-                    "Required parameter <%s> not set." % key)
-
-        #
         # check if execute
         #
         if self.run_:
+            #
+            # check reqire parameters
+            #
+            for k in self.required:
+                if ((k in self.inputs and self.inputs[k].value is None) or
+                        (k in self.outputs and self.outputs[k].value is None)):
+                    msg = "Required parameter <%s> not set."
+                    raise ParameterError(msg % key)
             self.run()
+
 
     def get_bash(self):
         return ' '.join(self.make_cmd())
