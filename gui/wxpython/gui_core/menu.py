@@ -142,6 +142,10 @@ class SearchModuleWindow(wx.Panel):
         self._search.showSearchResult.connect(lambda result: self._tree.Select(result))
         self._search.showNotification.connect(self.showNotification)
         
+        self._helpText = wx.StaticText(parent=self, id=wx.ID_ANY,
+                                       label="Press Enter for next match, Ctrl+Enter to run command")
+        self._helpText.SetForegroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        
         # buttons
         self._btnRun = wx.Button(self, id=wx.ID_OK, label=_("&Run"))
         self._btnRun.SetToolTipString(_("Run selected module from the tree"))
@@ -178,6 +182,9 @@ class SearchModuleWindow(wx.Panel):
         
         sizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.ALIGN_RIGHT | wx.BOTTOM | wx.RIGHT, border = 5)
+        
+        sizer.Add(item=self._helpText,
+                  proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
         
         sizer.Fit(self)
         sizer.SetSizeHints(self)
