@@ -492,9 +492,6 @@ int tie_up(void)
 	IPoints[i] = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    IPoints = NULL;
-
-
     for (node = 1; node <= Vect_get_num_nodes(&Out); node++) {
 	if (!Vect_node_alive(&Out, node))
 	    continue;
@@ -523,9 +520,9 @@ int tie_up(void)
 		IPoints[i] = Vect_new_line_struct();
 	    isl_allocated = n_isles;
 	}
-	for (isle = 0; isle < n_isles; isle++) {
-	    Vect_get_isle_points(&In, Vect_get_area_isle(&In, area, isle),
-	                         IPoints[isle]);
+	for (i = 0; i < n_isles; i++) {
+	    Vect_get_isle_points(&In, Vect_get_area_isle(&In, area, i),
+	                         IPoints[i]);
 	}
 
 	distmin = 1. / 0.; /* +inf */

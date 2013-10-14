@@ -324,11 +324,12 @@ int main(int argc, char **argv)
 	if (!(type & GV_POINTS))
 	    continue;
 
-	if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
-	    continue;
-
 	if (!skeleton)
+	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
+		continue;
+
 	    Vect_write_line(&Out, ctype, Points, Cats);
+	}
 
 	for (i = 0; i < Cats->n_cats; i++) {
 	    int f, j;
