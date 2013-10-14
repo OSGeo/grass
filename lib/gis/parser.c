@@ -914,13 +914,9 @@ static void set_option(const char *string)
     for (at_opt = &st->first_option; at_opt; at_opt = at_opt->next_opt) {
 	if (!at_opt->key)
 	    continue;
-#if 1
+
 	if (!match_option(the_key, at_opt->key))
 	    continue;
-#else
-	if (strncmp(the_key, at_opt->key, key_len))
-	    continue;
-#endif
 
 	got_one++;
 	opt = at_opt;
@@ -1147,7 +1143,6 @@ static int check_double(const char *ans, const char **opts)
 
 static int check_string(const char *ans, const char **opts, int *result)
 {
-    int len = strlen(ans);
     int found = 0;
     int i;
 
@@ -1157,7 +1152,7 @@ static int check_string(const char *ans, const char **opts, int *result)
     for (i = 0; opts[i]; i++) {
 	if (strcmp(ans, opts[i]) == 0)
 	    return 0;
-	if (strncmp(ans, opts[i], len) == 0) {
+	if (match_option(ans, opts[i])) {
 	    *result = i;
 	    found++;
 	}
