@@ -324,7 +324,7 @@ int main(int argc, char **argv)
 	if (!(type & GV_POINTS))
 	    continue;
 
-	if (!skeleton)
+	if (!skeleton) {
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
 		continue;
 
