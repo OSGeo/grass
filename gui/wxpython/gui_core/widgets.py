@@ -860,9 +860,13 @@ class SearchModuleWidget(wx.Panel):
         """!Search module by keywords or description"""
         value = self._search.GetValue()
         if len(value) <= 2:
-            self.showNotification.emit(message=_("Searching, please type more characters."))
-            return
-        commands = self._searchModule(keys=self._searchKeys, value=value)
+            if len(value) == 0: # reset
+                commands = self._searchModule(keys=['command'], value='')
+            else:
+                self.showNotification.emit(message=_("Searching, please type more characters."))
+                return
+        else:
+            commands = self._searchModule(keys=self._searchKeys, value=value)
         if self._showChoice:
             self._searchChoice.SetItems(commands)
             if commands:
@@ -877,15 +881,23 @@ class SearchModuleWidget(wx.Panel):
         event.Skip()
 
     def _searchModule(self, keys, value):
+        """!Search modules by keys
+
+        @param keys list of keys
+        @param value patter to match
+        """
         nodes = set()
         for key in keys:
             nodes.update(self._model.SearchNodes(key=key, value=value))
-
+        
         nodes = list(nodes)
         nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
         self._results = nodes
         self._resultIndex = -1
-        return [node.data['command'] for node in nodes if node.data['command']]
+        commands = [node.data['command'] for node in nodes if node.data['command']]
+        commands.sort() # return sorted list of commands (TODO: sort in better way)
+        
+        return commands
         
     def OnSelectModule(self, event):
         """!Module selected from choice, update command prompt"""
