@@ -535,26 +535,30 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id=self.popupID['zoom1'])
                 self.popupMenu.Append(self.popupID['region1'], text=_("Set computational region from selected map(s) (ignore NULLs)"))
                 self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id=self.popupID['region1'])
-
+            
+            self.popupMenu.AppendSeparator()
+            
             if numSelected == 1:
-                self.popupMenu.AppendSeparator()
                 self.popupMenu.Append(self.popupID['export'], text = _("Export"))
                 self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['r.out.gdal',
                                                                             'input=%s' % mapLayer.GetName()]),
                           id = self.popupID['export'])
-            
+                
                 self.popupMenu.AppendSeparator()
-                self.popupMenu.Append(self.popupID['color'], _("Set color table"))
-                self.Bind (wx.EVT_MENU, self.OnRasterColorTable, id = self.popupID['color'])
-                self.popupMenu.Append(self.popupID['hist'], _("Histogram"))
-                self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
-                self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
-                self.Bind (wx.EVT_MENU, self.OnUnivariateStats, id = self.popupID['univar'])
+                
+            self.popupMenu.Append(self.popupID['color'], _("Set color table"))
+            self.Bind (wx.EVT_MENU, self.OnRasterColorTable, id = self.popupID['color'])
+            self.popupMenu.Append(self.popupID['hist'], _("Histogram"))
+            self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
+            self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
+            self.Bind (wx.EVT_MENU, self.OnUnivariateStats, id = self.popupID['univar'])
+
+            if numSelected == 1:
                 self.popupMenu.Append(self.popupID['prof'], _("Profile"))
                 self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID['prof'])
                 self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
                 self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
-
+            
         elif mltype and mltype == '3d-raster':
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
@@ -677,16 +681,22 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.mapdisplay.Profile(rasters=[mapLayer.GetName()])
 
     def OnRasterColorTable(self, event):
-        """!Set color table for raster map"""
-        name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
-        ltype = self.GetLayerInfo(self.layer_selected, key='type')
-        if ltype == '3d-raster':
-            command = 'r3.colors'
-        else:
-            command = 'r.colors'
-        GUI(parent = self, giface = self._giface).ParseCommand([command,
-                                                                'map=%s' % name])
-
+        """!Set color table for 2D/3D raster map"""
+        raster2d = []
+        raster3d = []
+        for layer in self.GetSelectedLayers():
+            if self.GetLayerInfo(layer, key='type') == '3d-raster':
+                raster3d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
+            else:
+                raster2d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
+        
+        if raster2d:
+            GUI(parent = self, giface = self._giface).ParseCommand(['r.colors',
+                                                                    'map=%s' % ','.join(raster2d)])
+        if raster3d:
+            GUI(parent = self, giface = self._giface).ParseCommand(['r3.colors',
+                                                                    'map=%s' % ','.join(raster3d)])
+            
     def OnVectorColorTable(self, event):
         """!Set color table for vector map"""
         name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
@@ -696,27 +706,35 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnHistogram(self, event):
         """!Plot histogram for given raster map layer
         """
-        mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
-        if not mapLayer.GetName():
+        rasterList = []
+        for layer in self.GetSelectedLayers():
+            rasterList.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
+
+        if not rasterList:
             GError(parent = self,
                    message = _("Unable to display histogram of "
                                "raster map. No map name defined."))
             return
         
-        win = HistogramPlotFrame(parent = self, rasterList = [mapLayer.GetName()])
-        
+        win = HistogramPlotFrame(parent = self, rasterList = rasterList)
         win.CentreOnScreen()
         win.Show()
                 
     def OnUnivariateStats(self, event):
-        """!Univariate raster statistics"""
-        name = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
-        ltype = self.GetLayerInfo(self.layer_selected, key='type')
-        if ltype == '3d-raster':
-            command = 'r3.univar'
-        else:
-            command = 'r.univar'
-        self._giface.RunCmd([command, 'map=%s' % name], switchPage=True)
+        """!Univariate 2D/3D raster statistics"""
+        raster2d = []
+        raster3d = []
+        for layer in self.GetSelectedLayers():
+            if self.GetLayerInfo(layer, key='type') == '3d-raster':
+                raster3d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
+            else:
+                raster2d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
+        
+        if raster2d:
+            self._giface.RunCmd(['r.univar', 'map=%s' % ','.join(raster2d)], switchPage=True)
+        
+        if raster3d:
+            self._giface.RunCmd(['r3.univar', 'map=%s' % ','.join(raster3d)], switchPage=True)
 
     def OnStartEditing(self, event):
         """!Start editing vector map layer requested by the user
