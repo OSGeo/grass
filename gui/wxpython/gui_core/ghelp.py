@@ -35,7 +35,7 @@ import grass.script as grass
 from core             import globalvar
 from core.utils import _
 from core.gcmd        import GError, DecodeString
-from gui_core.widgets import FormListbook, ScrolledPanel
+from gui_core.widgets import FormNotebook, ScrolledPanel
 from core.debug       import Debug
 
 
@@ -52,7 +52,7 @@ class AboutWindow(wx.Frame):
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         # notebook
-        self.aboutNotebook = FormListbook(self.panel, style = wx.BK_LEFT)
+        self.aboutNotebook = FormNotebook(self.panel, style = wx.BK_LEFT)
         
         for title, win in ((_("Info"), self._pageInfo()),
                            (_("Copyright"), self._pageCopyright()),
