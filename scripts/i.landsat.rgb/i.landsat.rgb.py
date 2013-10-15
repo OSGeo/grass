@@ -112,7 +112,7 @@ def set_colors(map, v0, v1):
 	"100% white\n"
 	]
     rules = ''.join(rules)
-    grass.write_command('r.colors', map = map, rules = '-', stdin = rules)
+    grass.write_command('r.colors', map = map, rules = '-', stdin = rules, quiet = True)
 
 
 def main():
@@ -135,18 +135,18 @@ def main():
 
     if full:
 	for i in [red, green, blue]:
-	    grass.run_command('r.colors', map = i, color = 'grey')
+	    grass.run_command('r.colors', map = i, color = 'grey', quiet = True)
 	sys.exit(0)
 
     if reset:
 	for i in [red, green, blue]:
-	    grass.run_command('r.colors', map = i, color = 'grey255')
+	    grass.run_command('r.colors', map = i, color = 'grey255', quiet = True)
 	sys.exit(0)
 
 
     if not preserve:
         if do_mp:
-            grass.message(_("Processing ..."))
+            grass.message(_("Processing..."))
 	    # set up jobs and launch them
 	    proc = {}
 	    conn = {}
@@ -156,7 +156,8 @@ def main():
 				     args = (i, ['2', brightness],
 				     conn[i],))
 		proc[i].start()
-
+            grass.percent(1, 2, 1)
+            
 	    # collect results and wait for jobs to finish
 	    for i in [red, green, blue]:
 		output_pipe, input_pipe = conn[i]
@@ -165,10 +166,10 @@ def main():
 		input_pipe.close()
 		proc[i].join()
 		set_colors(i, v0, v1)
-
+            grass.percent(1, 1, 1)
 	else:
 	    for i in [red, green, blue]:
-	        grass.message(_("Processing <%s>...") % i)
+	        grass.message(_("Processing..."))
 	        (v0, v1) = get_percentile(i, ['2', brightness])
 	        grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
 	        set_colors(i, v0, v1)
@@ -178,7 +179,7 @@ def main():
 	all_min = 999999
 
 	if do_mp:
-	    grass.message(_("Processing ..."))
+	    grass.message(_("Processing..."))
 	    # set up jobs and launch jobs
 	    proc = {}
 	    conn = {}
@@ -188,7 +189,8 @@ def main():
 				     args = (i, ['2', brightness],
 				     conn[i],))
 		proc[i].start()
-
+            grass.percent(1, 2, 1)
+            
 	    # collect results and wait for jobs to finish
 	    for i in [red, green, blue]:
 		output_pipe, input_pipe = conn[i]
@@ -198,9 +200,10 @@ def main():
 		proc[i].join()
 		all_min = min(all_min, v0)
 		all_max = max(all_max, v1)
+            grass.percent(1, 1, 1)
 	else:
 	    for i in [red, green, blue]:
-		grass.message(_("Processing <%s>...") % i)
+		grass.message(_("Processing..."))
 		(v0, v1) = get_percentile(i, ['2', brightness])
 		grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
 		all_min = min(all_min, v0)
