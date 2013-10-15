@@ -1464,9 +1464,9 @@ class CmdPanel(wx.Panel):
                     except:
                         fExt = None
                     if not fExt:
-                        fMask = '*.*'
+                        fMask = '*'
                     else:
-                        fMask = '%s files (*%s)|*%s|Files (*.*)|*.*' % (fExt[1:].upper(), fExt, fExt)
+                        fMask = '%s files (*%s)|*%s|Files (*)|*' % (fExt[1:].upper(), fExt, fExt)
                     fbb = filebrowse.FileBrowseButton(parent = which_panel, id = wx.ID_ANY, fileMask = fMask,
                                                       size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
                                                       dialogTitle = _('Choose %s') % \
