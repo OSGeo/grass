@@ -17,7 +17,7 @@ from grass.pygrass.modules import Module
 from grass.pygrass.functions import get_mapset_raster
 
 from split import split_region_tiles
-from patch import patch_map
+from patch import rpatch_map
 
 
 def select(parms, ptype):
@@ -62,9 +62,40 @@ def copy_mapset(mapset, path):
     return Mapset(mapset.name, location, gisdbase)
 
 
-def copy_raster(rasters, src, dst, region=None, gisrc_dst=None):
-    """Copy raster from one mapset to another, crop the raster to the region.
+def copy_groups(groups, src, dst, gisrc_dst=None, region=None):
+    """Copy groupd from one mapset to another, crop the raster to the region.
     """
+    env = os.environ.copy()
+    # set region
+    if region:
+        region.set_current()
+
+    # instantiate modules
+    get_grp = Module('i.group', flags='lg', stdout_=sub.PIPE, run_=False)
+    set_grp = Module('i.group')
+    get_grp.run_ = True
+
+    # get and set GISRC
+    gisrc_src = env['GISRC']
+    gisrc_dst = gisrc_dst if gisrc_dst else write_gisrc(dst.gisdbase,
+                                                        dst.location,
+                                                        dst.name)
+
+    for grp in groups:
+        # change gisdbase to src
+        env['GISRC'] = gisrc_src
+        get_grp(group=grp, env_=env)
+        rasts = get_grp.outputs.stdout.split()
+        # change gisdbase to dst
+        env['GISRC'] = gisrc_dst
+        set_grp(group=grp, input=rasts, env_=env)
+    return gisrc_src, gisrc_dst
+
+
+def copy_rasters(rasters, src, dst, gisrc_dst=None, region=None):
+    """Copy rasters from one mapset to another, crop the raster to the region.
+    """
+    env = os.environ.copy()
     # set region
     if region:
         region.set_current()
@@ -79,7 +110,7 @@ def copy_raster(rasters, src, dst, region=None, gisrc_dst=None):
     rm = Module('g.remove')
 
     # get and set GISRC
-    gisrc_src = os.environ['GISRC']
+    gisrc_src = env['GISRC']
     gisrc_dst = gisrc_dst if gisrc_dst else write_gisrc(dst.gisdbase,
                                                         dst.location,
                                                         dst.name)
@@ -87,17 +118,51 @@ def copy_raster(rasters, src, dst, region=None, gisrc_dst=None):
     pdst = dst.path()
     for rast in rasters:
         # change gisdbase to src
-        os.environ['GISRC'] = gisrc_src
-        src.current()
+        env['GISRC'] = gisrc_src
         name = nam % rast
-        mpclc(expression=expr % (name, rast), overwrite=True)
+        mpclc(expression=expr % (name, rast), overwrite=True, env_=env)
         file_dst = "%s.pack" % os.path.join(pdst, name)
-        rpck(input=name, output=file_dst, overwrite=True)
-        rm(rast=name)
+        rpck(input=name, output=file_dst, overwrite=True, env_=env)
+        rm(rast=name, env_=env)
         # change gisdbase to dst
-        os.environ['GISRC'] = gisrc_dst
-        dst.current()
-        rupck(input=file_dst, output=rast, overwrite=True)
+        env['GISRC'] = gisrc_dst
+        rupck(input=file_dst, output=rast, overwrite=True, env_=env)
+        os.remove(file_dst)
+    return gisrc_src, gisrc_dst
+
+
+def copy_vectors(vectors, src, dst, gisrc_dst=None, region=None):
+    """Copy vectors from one mapset to another, crop the raster to the region.
+    """
+    env = os.environ.copy()
+    # set region
+    if region:
+        region.set_current()
+
+    nam = "copy%d__%s" % (id(dst), '%s')
+
+    # instantiate modules
+    vpck = Module('v.pack')
+    vupck = Module('v.unpack')
+    rm = Module('g.remove')
+
+    # get and set GISRC
+    gisrc_src = env['GISRC']
+    gisrc_dst = gisrc_dst if gisrc_dst else write_gisrc(dst.gisdbase,
+                                                        dst.location,
+                                                        dst.name)
+
+    pdst = dst.path()
+    for vect in vectors:
+        # change gisdbase to src
+        env['GISRC'] = gisrc_src
+        name = nam % vect
+        file_dst = "%s.pack" % os.path.join(pdst, name)
+        vpck(input=name, output=file_dst, overwrite=True, env_=env)
+        rm(vect=name, env_=env)
+        # change gisdbase to dst
+        env['GISRC'] = gisrc_dst
+        vupck(input=file_dst, output=vect, overwrite=True, env_=env)
         os.remove(file_dst)
     return gisrc_src, gisrc_dst
 
@@ -123,7 +188,7 @@ def get_cmd(cmdd):
 
 def cmd_exe(args):
     """Create a mapset, and execute a cmd inside."""
-    bbox, mapnames, msetname, cmd = args
+    bbox, mapnames, msetname, cmd, groups = args
     mset = Mapset()
     try:
         make_mapset(msetname)
@@ -147,8 +212,12 @@ def cmd_exe(args):
         lcmd = ['g.region', ]
         lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.iteritems()])
         sub.Popen(lcmd, env=env).wait()
+    if groups:
+        src, dst = copy_groups(groups, mset, ms, env['GISRC'])
     # run the grass command
     sub.Popen(get_cmd(cmd), env=env).wait()
+    # remove temp GISRC
+    os.remove(env['GISRC'])
 
 
 class GridModule(object):
@@ -165,7 +234,7 @@ class GridModule(object):
         Height of the tile, in pixel.
     overlap: integer
         Overlap between tiles, in pixel.
-    nthreads: number of threads
+    processes: number of threads
         Default value is equal to the number of processor available.
     split: boolean
         If True use r.tile to split all the inputs.
@@ -204,13 +273,17 @@ class GridModule(object):
         self.n_mset = None
         self.gisrc_src = self.gisrc_dst = None
         self.log = log
-        if move:
-            self.n_mset = copy_mapset(self.mset, move)
+        self.move = move
+        if self.move:
+            self.n_mset = copy_mapset(self.mset, self.move)
             rasters = select(self.module.inputs, 'raster')
-            self.gisrc_src, self.gisrc_dst = copy_raster(rasters,
-                                                         self.mset,
-                                                         self.n_mset,
-                                                         region=self.region)
+            self.gisrc_src, self.gisrc_dst = copy_rasters(rasters,
+                                                          self.mset,
+                                                          self.n_mset,
+                                                          region=self.region)
+            vectors = select(self.module.inputs, 'vector')
+            copy_vectors(vectors, self.mset, self.n_mset,
+                         gisrc_dst=self.gisrc_dst, region=self.region)
 
         self.bboxes = split_region_tiles(region=region,
                                          width=width, height=height,
@@ -221,9 +294,10 @@ class GridModule(object):
             self.split()
         self.debug = debug
 
-    def clean_location(self):
+    def clean_location(self, location=None):
         """Remove all created mapsets."""
-        mapsets = Location().mapsets(self.msetstr.split('_')[0] + '_*')
+        location = location if location else Location()
+        mapsets = location.mapsets(self.msetstr.split('_')[0] + '_*')
         for mset in mapsets:
             Mapset(mset).delete()
 
@@ -245,6 +319,7 @@ class GridModule(object):
         works = []
         reg = Region()
         cmd = self.module.get_dict()
+        groups = [g for g in select(self.module.inputs, 'group')]
         for row, box_row in enumerate(self.bboxes):
             for col, box in enumerate(box_row):
                 inms = None
@@ -262,7 +337,7 @@ class GridModule(object):
                 works.append((bbox, inms,
                               self.msetstr % (self.start_row + row,
                                               self.start_col + col),
-                              cmd))
+                              cmd, groups))
         return works
 
     def define_mapset_inputs(self):
@@ -288,15 +363,17 @@ class GridModule(object):
             if not result.successful():
                 raise RuntimeError
 
+        self.mset.current()
+
         if patch:
             self.patch()
 
         if self.n_mset is not None:
-            # move the outputs to the original mapset
-            outputs = [self.out_prefix + o
-                       for o in select(self.module.outputs, 'raster')]
-            copy_raster(outputs, self.n_mset, self.mset, self.region,
-                        self.gisrc_src)
+            # move the raster outputs to the original mapset
+            routputs = [self.out_prefix + o
+                        for o in select(self.module.outputs, 'raster')]
+            copy_rasters(routputs, self.n_mset, self.mset,
+                         self.gisrc_src, self.region)
 
         if self.log:
             # record in the temp directory
@@ -314,21 +391,29 @@ class GridModule(object):
                     fp.close()
 
         if clean:
+            self.mset.current()
             self.clean_location()
             self.rm_tiles()
+            if self.n_mset:
+                gisdbase, location = os.path.split(self.move)
+                self.clean_location(Location(location, gisdbase))
+                # rm temporary gis_rc
+                os.remove(self.gisrc_dst)
+                self.gisrc_dst = None
+                sht.rmtree(os.path.join(self.move, 'PERMANENT'))
+                sht.rmtree(os.path.join(self.move, self.mset.name))
 
     def patch(self):
         """Patch the final results."""
         # patch all the outputs
+        bboxes = split_region_tiles(width=self.width, height=self.height)
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == 'raster' and otm.value:
-                patch_map(otm.value,
-                          self.mset.name, self.msetstr,
-                          split_region_tiles(width=self.width,
-                                             height=self.height),
-                          self.module.flags.overwrite,
-                          self.start_row, self.start_col, self.out_prefix)
+                rpatch_map(otm.value,
+                           self.mset.name, self.msetstr, bboxes,
+                           self.module.flags.overwrite,
+                           self.start_row, self.start_col, self.out_prefix)
 
     def rm_tiles(self):
         """Remove all the tiles."""
