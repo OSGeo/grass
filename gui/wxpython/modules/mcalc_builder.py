@@ -6,7 +6,7 @@
 Classes:
  - mcalc_builder::MapCalcFrame
 
-(C) 2008, 2011-2012 by the GRASS Development Team
+(C) 2008, 2011-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -450,7 +450,6 @@ class MapCalcFrame(wx.Frame):
     def _addSomething(self, what):
         """!Inserts operators, map names, and functions into text area
         """
-        self.text_mcalc.SetFocus()
         mcalcstr  = self.text_mcalc.GetValue()
         position  = self.text_mcalc.GetInsertionPoint()
         
@@ -467,7 +466,7 @@ class MapCalcFrame(wx.Frame):
         newmcalcstr += what + ' ' + mcalcstr[position:]
         
         self.text_mcalc.SetValue(newmcalcstr)
-        if len(what) > 1:
+        if len(what) > 0:
             match = re.search(pattern="\(.*\)", string=what)
             if match:
                 position_offset += match.start() + 1
@@ -476,6 +475,7 @@ class MapCalcFrame(wx.Frame):
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
         self.text_mcalc.Update()
+        self.text_mcalc.SetFocus()
         
     def OnMCalcRun(self,event):
         """!Builds and runs r.mapcalc statement
