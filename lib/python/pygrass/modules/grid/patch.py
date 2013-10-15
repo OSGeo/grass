@@ -22,7 +22,7 @@ def get_start_end_index(bbox_list):
     return ss_list
 
 
-def patch_row(rast, rasts, bboxes):
+def rpatch_row(rast, rasts, bboxes):
     """Patch a row of bound boxes."""
     sei = get_start_end_index(bboxes)
     # instantiate two buffer
@@ -37,8 +37,8 @@ def patch_row(rast, rasts, bboxes):
         rast.put_row(rbuff)
 
 
-def patch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
-              start_row=0, start_col=0, prefix=''):
+def rpatch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
+               start_row=0, start_col=0, prefix=''):
     """Patch raster using a bounding box list to trim the raster."""
     # Instantiate the RasterRow input objects
     rast = RasterRow(prefix + raster, mapset)
@@ -55,10 +55,9 @@ def patch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
                                                        start_col + col)))
             rrasts[-1].open('r')
         rasts.append(rrasts)
-        patch_row(rast, rrasts, rbbox)
+        rpatch_row(rast, rrasts, rbbox)
 
     for rrast in rasts:
         for rast_ in rrast:
             rast_.close()
     rast.close()
-
