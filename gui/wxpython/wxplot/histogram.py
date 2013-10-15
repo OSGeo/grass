@@ -7,7 +7,7 @@ Classes:
  - histogram::HistogramPlotFrame
  - histogram::HistogramPlotToolbar
 
-(C) 2011 by the GRASS Development Team
+(C) 2011-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -118,15 +118,12 @@ class HistogramPlotFrame(BasePlotFrame):
         # update title
         #
         if self.maptype == 'group':
-            self.ptitle = _('Histogram of %s') % self.group.split('@')[0] 
+            self.ptitle = _('Histogram of image group <%s>') % self.group
         else: 
-            rastText = ''
-            for r in self.rasterList:
-                rs = r.split('@')[0]
-                rastText += '%s, ' % rs
-            rastText = rastText.rstrip(', ')
-            self.ptitle = _('Histogram of %s') % rastText
-
+            if len(self.rasterList) == 1:
+                self.ptitle = _('Histogram of raster map <%s>') % self.rasterList[0]
+            else:
+                self.ptitle = _('Histogram of selected raster maps')
         
         #
         # set xlabel based on first raster map in list to be histogrammed
@@ -200,6 +197,7 @@ class HistogramPlotFrame(BasePlotFrame):
                                self.raster[r]['pcolor'][1],
                                self.raster[r]['pcolor'][2],
                                255)
+                
                 self.raster[r]['pline'] = plot.PolyLine(self.raster[r]['datalist'],
                                                         colour = col,
                                                         width = self.raster[r]['pwidth'],
@@ -261,7 +259,7 @@ class HistogramPlotToolbar(BaseToolbar):
                                       self.parent.OnDrag),
                                      ('zoom', BaseIcons['zoomIn'],
                                       self.parent.OnZoom),
-                                     ('unzoom', BaseIcons['zoomBack'],
+                                     ('unzoom', BaseIcons['zoomExtent'],
                                       self.parent.OnRedraw),
                                      (None, ),
                                      ('statistics', PlotIcons['statistics'],

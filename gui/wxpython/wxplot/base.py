@@ -193,7 +193,7 @@ class BasePlotFrame(wx.Frame):
             if ret['units'] not in ('(none)', '"none"', '', None):
                 rdict[r]['units'] = ret['units']
             
-            rdict[r]['plegend'] = r.split('@')[0]
+            rdict[r]['plegend'] = r   # use fully-qualified names
             rdict[r]['datalist'] = [] # list of cell value,frequency pairs for plotting histogram
             rdict[r]['pline'] = None
             rdict[r]['datatype'] = ret['datatype']
