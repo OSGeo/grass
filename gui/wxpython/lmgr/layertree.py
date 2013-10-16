@@ -404,7 +404,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
                         'region', 'export', 'attr', 'edit0', 'edit1', 'save_ws',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
-                        'color', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy'):
+                        'color', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy',
+                        'report'):
                 self.popupID[key] = wx.NewId()
         
         # get current mapset
@@ -565,7 +566,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
             self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
             self.Bind (wx.EVT_MENU, self.OnUnivariateStats, id = self.popupID['univar'])
-
+            self.popupMenu.Append(self.popupID['report'], text = _("Report raster statistics"))
+            self.Bind(wx.EVT_MENU, self.OnReportStats, id = self.popupID['report'])
+            
             if numSelected == 1:
                 self.popupMenu.Append(self.popupID['prof'], _("Profile"))
                 self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID['prof'])
@@ -816,6 +819,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if raster3d:
             self._giface.RunCmd(['r3.univar', 'map=%s' % ','.join(raster3d)], switchPage=True)
 
+    def OnReportStats(self, event):
+        """!Print 2D statistics"""
+        rasters = []
+        # TODO: Implement self.GetSelectedLayers(ltype='raster')
+        for layer in self.GetSelectedLayers():
+            if self.GetLayerInfo(layer, key='type') == 'raster':
+                rasters.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
+        
+        if rasters:
+            self._giface.RunCmd(['r.report', 'map=%s' % ','.join(rasters), 'units=h,c,p'], switchPage=True)
+        
     def OnStartEditing(self, event):
         """!Start editing vector map layer requested by the user
         """
