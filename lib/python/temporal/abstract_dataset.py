@@ -378,6 +378,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
             @return The SQL insert statement in case execute=False, or an empty string otherwise
         """
 
+        if self.get_mapset() != get_current_mapset():
+            core.fatal(_("Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database."
+                         " The mapset of the dataset does not match the current mapset")%\
+                         {"ds":self.get_id(), "type":self.get_type()})
+
         dbif, connected = init_dbif(dbif)
 
         # Build the INSERT SQL statement
@@ -407,6 +412,12 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            @param ident The identifier to be updated, useful for renaming
            @return The SQL update statement in case execute=False, or an empty string otherwise
         """
+
+        if self.get_mapset() != get_current_mapset():
+            core.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
+                         " The mapset of the dataset does not match the current mapset")%\
+                                 {"ds":self.get_id(), "type":self.get_type()})
+
 
         dbif, connected = init_dbif(dbif)
 
@@ -439,6 +450,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            @param ident The identifier to be updated, useful for renaming
            @return The SQL update statement in case execute=False, or an empty string otherwise
         """
+
+        if self.get_mapset() != get_current_mapset():
+            core.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
+                         " The mapset of the dataset does not match the current mapset")%\
+                         {"ds":self.get_id(), "type":self.get_type()})
 
         dbif, connected = init_dbif(dbif)
 

@@ -52,7 +52,7 @@ class RasterDataset(AbstractMapDataset):
         >>> grass.run_command("r.mapcalc", overwrite=True,
         ... expression="strds_map_test_case = 1")
         0
-        >>> mapset = grass.gisenv()["MAPSET"]
+        >>> mapset = get_current_mapset()
         >>> name = "strds_map_test_case"
         >>> identifier = "%s@%s" % (name, mapset)
         >>> rmap = RasterDataset(identifier)

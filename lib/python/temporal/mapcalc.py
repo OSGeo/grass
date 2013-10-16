@@ -79,7 +79,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
 
     input_name_list = inputs.split(",")
 

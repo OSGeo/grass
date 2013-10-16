@@ -42,7 +42,7 @@ def open_old_space_time_dataset(name, type, dbif=None):
        @param dbif The optional database interface to be used
 
     """
-    mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
 
     # Check if the dataset name contains the mapset as well
     if name.find("@") < 0:
@@ -93,7 +93,7 @@ def check_new_space_time_dataset(name, type, dbif=None, overwrite=False):
 
     #Get the current mapset to create the id of the space time dataset
 
-    mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
 
     if name.find("@") < 0:
         id = name + "@" + mapset
@@ -175,16 +175,13 @@ def open_new_space_time_dataset(name, type, temporaltype, title, descr, semantic
 
 ############################################################################
 
-def check_new_map_dataset(name, layer=None, mapset=None,
-                          type="raster", overwrite=False, dbif=None):
+def check_new_map_dataset(name, layer=None, type="raster", 
+                          overwrite=False, dbif=None):
     """!Check if a new map dataset of a specific type can be created in
         the temporal database
 
        @param name The name of the new map dataset
        @param layer The layer of the new map dataset
-       @param mapset The current mapset the new map dataset is created in,
-                     this argument is optional, if not provided g.gisenv
-                     will be called to reveive the current mapset
        @param type The type of the new map dataset (raster, vector, raster3d)
        @param dbif The temporal database interface to be used
        @param overwrite Flag to allow overwriting
@@ -193,8 +190,7 @@ def check_new_map_dataset(name, layer=None, mapset=None,
 
        This function will raise a ScriptError in case of an error.
     """
-    if not mapset:
-        mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
 
     dbif, connected = init_dbif(dbif)
     map_id = AbstractMapDataset.build_id(name, mapset, layer)
@@ -215,7 +211,7 @@ def check_new_map_dataset(name, layer=None, mapset=None,
 
 ############################################################################
 
-def open_new_map_dataset(name, layer=None, mapset=None, type="raster",
+def open_new_map_dataset(name, layer=None, type="raster",
                          temporal_extent=None, overwrite=False,
                          dbif=None):
     """!Create a new map dataset object of a specific type that can be
@@ -223,9 +219,6 @@ def open_new_map_dataset(name, layer=None, mapset=None, type="raster",
 
        @param name The name of the new map dataset
        @param layer The layer of the new map dataset
-       @param mapset The current mapset the new map dataset is created in,
-                     this argument is optional, if not provided g.gisenv
-                     will be called to reveive the current mapset
        @param type The type of the new map dataset (raster, vector, raster3d)
        @param dbif The temporal database interface to be used
        @param overwrite Flag to allow overwriting
@@ -235,12 +228,10 @@ def open_new_map_dataset(name, layer=None, mapset=None, type="raster",
        This function will raise a ScriptError in case of an error.
     """
 
-    if not mapset:
-        mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
 
     dbif, connected = init_dbif(dbif)
-    new_map = check_new_map_dataset(name, layer, mapset, "raster",
-                                    overwrite, dbif)
+    new_map = check_new_map_dataset(name, layer, "raster", overwrite, dbif)
 
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):

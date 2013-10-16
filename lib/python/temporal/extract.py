@@ -52,7 +52,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
     if expression and not base:
         core.fatal(_("You need to specify the base name of new created maps"))
 
-    mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
 
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
