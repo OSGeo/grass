@@ -32,7 +32,7 @@ from grass.script import core as grass
 from grass.script import vector as gvector
 
 from core                 import globalvar
-from gui_core.dialogs     import SqlQueryFrame, SetOpacityDialog
+from gui_core.dialogs     import SqlQueryFrame, SetOpacityDialog, TextEntryDialog
 from gui_core.forms       import GUI
 from mapdisp.frame        import MapFrame
 from core.render          import Map
@@ -42,12 +42,12 @@ from wxplot.profile       import ProfileFrame
 from core.debug           import Debug
 from core.settings        import UserSettings, GetDisplayVectSettings
 from vdigit.main          import haveVDigit
-from core.gcmd            import GWarning, GError
+from core.gcmd            import GWarning, GError, RunCommand
 from gui_core.toolbars    import BaseIcons
 from icons.icon           import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
+from gui_core.widgets import GenericValidator
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
-
 
 TREE_ITEM_HEIGHT = 25
 
@@ -404,9 +404,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
                         'region', 'export', 'attr', 'edit0', 'edit1', 'save_ws',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
-                        'color', 'hist', 'univar', 'prof', 'properties', 'sql'):
+                        'color', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy'):
                 self.popupID[key] = wx.NewId()
         
+        # get current mapset
+        currentMapset = grass.gisenv()['MAPSET']
+
         self.popupMenu = wx.Menu()
         
         numSelected = len(self.GetSelections())
@@ -463,6 +466,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                                         'input=%s' % mapLayer.GetName()]),
                       id = self.popupID['export'])
             
+            lmapset = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetMapset()
+            if lmapset != currentMapset:
+                self.popupMenu.Append(self.popupID['copy'], text = _("Make a copy in the current mapset"))
+                self.Bind(wx.EVT_MENU, self.OnCopyMap, id = self.popupID['copy'])
+            
             self.popupMenu.AppendSeparator()
 
             self.popupMenu.Append(self.popupID['color'], _("Set color table"))
@@ -506,7 +514,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.popupMenu.Append(self.popupID['sql'], text = _("SQL Spatial Query"))
                     self.Bind(wx.EVT_MENU, self.OnSqlQuery, id = self.popupID['sql'])
             
-            if layer.GetMapset() != grass.gisenv()['MAPSET']:
+            if layer.GetMapset() != currentMapset:
                 # only vector map in current mapset can be edited
                 self.popupMenu.Enable (self.popupID['edit0'], False)
                 self.popupMenu.Enable (self.popupID['edit1'], False)
@@ -543,6 +551,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['r.out.gdal',
                                                                             'input=%s' % mapLayer.GetName()]),
                           id = self.popupID['export'])
+
+                lmapset = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetMapset()
+                if lmapset != currentMapset:
+                    self.popupMenu.Append(self.popupID['copy'], text = _("Make a copy in the current mapset"))
+                    self.Bind(wx.EVT_MENU, self.OnCopyMap, id = self.popupID['copy'])
                 
                 self.popupMenu.AppendSeparator()
                 
@@ -703,6 +716,73 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         GUI(parent = self, centreOnParent = False).ParseCommand(['v.colors',
                                                                  'map=%s' % name])
         
+    def _mapNameValidationFailed(self, ctrl):
+        message = _("Name <%(name)s> is not a valid name for GRASS map. "
+                    "Please use only ASCII characters excluding %(chars)s "
+                    "and space.") % {'name': ctrl.GetValue(), 'chars': '/"\'@,=*~'}
+        GError(parent=self, message=message, caption=_("Invalid name"))
+
+    def OnCopyMap(self, event):
+        """!Copy selected map into current mapset"""
+        layer = self.GetSelectedLayer()
+        ltype = self.GetLayerInfo(layer, key='type')
+        lnameSrc = self.GetLayerInfo(layer, key = 'maplayer').GetName()
+        
+        if ltype == 'raster':
+            key = 'rast'
+            label = _('Raster map')
+        elif ltype == 'vector':
+            key = 'vect'
+            label = _('Vector map')
+        elif ltype == '3d-raster':
+            key = 'rast3d'
+            label = _('3D raster map')
+        else:
+            GError(_("Unsupported map type <%s>") % ltype, parent = self)
+            return
+        
+        # TODO: replace by New[Raster|Vector]Dialog
+        dlg = TextEntryDialog(parent = self,
+                              message = _('Enter name for the new %s in the current mapset:') % label.lower(),
+                              caption = _('Make a copy of %s <%s>') % (label.lower(), lnameSrc),
+                              defaultValue = lnameSrc.split('@')[0],
+                              validator = GenericValidator(grass.legal_name, self._mapNameValidationFailed),
+                              size = (700, -1))
+        if dlg.ShowModal() == wx.ID_OK:
+            lnameDst = dlg.GetValue()
+            dlg.Destroy()
+        else:
+            dlg.Destroy()
+            return
+        
+        currentMapset = grass.gisenv()['MAPSET']
+        # check if map already exists
+        if lnameDst in grass.list_grouped(key)[currentMapset]:
+            dlgOw = wx.MessageDialog(parent = self, message = _("%s <%s> already exists "
+                                                                "in the current mapset. "
+                                                                "Do you want to overwrite it?") % (label, lnameDst),
+                                     caption = _("Overwrite?"),
+                                     style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlgOw.ShowModal() != wx.ID_YES:
+                return
+        
+        kwargs = {key : '%s,%s' % (lnameSrc, lnameDst)}
+        if 0 != RunCommand('g.copy', overwrite = True, **kwargs):
+            GError(_("Unable to make copy of <%s>") % lnameSrc,
+                   parent=self)
+            return
+        
+        if '@' in lnameDst:
+            mapsetDst = lnameDst.split('@')[1]
+            if mapsetDst != currentMapset:
+                GError(_("Unable to make copy of <%s>. Mapset <%s> is not current mapset.") % \
+                           (lnameSrc, mapsetDst))
+                return
+            
+        lnameDst += '@' + currentMapset
+        # add copied map to the layer tree
+        self.AddLayer(ltype, lname = lnameDst, lcmd = ['d.%s' % key, 'map=%s' % lnameDst])
+
     def OnHistogram(self, event):
         """!Plot histogram for given raster map layer
         """
