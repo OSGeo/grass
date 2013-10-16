@@ -269,7 +269,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
 
         fs = "|"
         maplist = []
-        mapset = core.gisenv()["MAPSET"]
+        mapset = get_current_mapset()
         list_file = open(list_file_name, "r")
         new_list_file = open(new_list_file_name, "w")
 
@@ -284,7 +284,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
 
             # The filename is actually the base name of the map
             # that must be extended by the file suffix
-            filename = line_list[0].strip()
+            filename = line_list[0].strip().split(":")[0]
             if base:
                 mapname = "%s_%i"%(base, line_count)
                 mapid= "%s@%s"%(mapname, mapset)

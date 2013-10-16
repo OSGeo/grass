@@ -50,6 +50,9 @@ try:
 except:
     pass
 
+# Uncomment this to raise and exception in case of a fatal error
+# core.set_raise_on_error(True)
+
 # Global variable that defines the backend
 # of the temporal GIS
 # It can either be "sqlite" or "pg"
@@ -64,6 +67,30 @@ tgis_version=1
 # Increase this value in case of backward incompatible changes
 # temporal database SQL layout
 tgis_db_version=1
+
+# We need to access the current mapset quite often in the framework, so we make
+# global variable that will be initiated when init() is called
+current_mapset=None
+
+###############################################################################
+
+def get_current_mapset():
+    """!Return the current mapset
+
+       This is the fastest way to receive the current mapset.
+       The current mapset is set by init() and stored in a global variable.
+       This function provides access to this global variable.
+    """
+    global current_mapset
+    return current_mapset
+
+def _set_current_mapset():
+    """!This functions set the global current mapset variable to the current mapset
+    by calling g.gisenv. 
+    """
+    global current_mapset
+    current_mapset = core.gisenv()["MAPSET"]
+
 
 ###############################################################################
 
@@ -177,6 +204,9 @@ def init():
     """
     # We need to set the correct database backend from the environment variables
     global tgis_backend
+
+    # Set the global variable current_mapset for fast mapset access 
+    _set_current_mapset()
 
     core.run_command("t.connect", flags="c")
     kv = core.parse_command("t.connect", flags="pg")
@@ -541,6 +571,37 @@ class SQLDatabaseInterfaceConnection():
 
                 return statement
 
+    def check_table(self, table_name):
+        """!Check if a table exists in the temporal database
+        
+           @param table_name The name of the table to be checked for existance
+           @return True if the table exists, False otherwise
+        """
+        table_exists = False
+        connected = False
+        if not self.connected:
+            self.connect()
+            connected = True
+
+        # Check if the database already exists
+        if self.dbmi.__name__ == "sqlite3":
+
+            self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='%s';"%table_name)
+            name = self.cursor.fetchone()
+            if name and name[0] == table_name:
+                table_exists = True
+        else:
+            # Check for raster_base table
+            self.cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables "
+                    "WHERE table_name=%s)", ('%s'%table_name,))
+            if self.cursor.fetchone()[0]:
+                table_exists = True
+
+        if connected:
+            self.close()
+
+        return table_exists
+        
     def execute_transaction(self, statement):
         """!Execute a transactional SQL statement
 

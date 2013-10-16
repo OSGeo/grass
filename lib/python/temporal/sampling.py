@@ -56,7 +56,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
 
         @return The map matrix or None if nothing found
     """
-    mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
 
     # Make a method list
     method = method.split(",")

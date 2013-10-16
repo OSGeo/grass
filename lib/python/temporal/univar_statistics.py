@@ -46,7 +46,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = open_old_space_time_dataset(input, "strds", dbif)
+    sp = open_old_space_time_dataset(input, type, dbif)
 
     rows = sp.get_registered_maps(
         "id,start_time,end_time", where, "start_time", dbif)
@@ -123,7 +123,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
 
     if input.find("@") >= 0:
         id = input

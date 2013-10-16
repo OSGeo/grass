@@ -410,7 +410,13 @@ class AbstractMapDataset(AbstractDataset):
                   map, None in case or time instance
            @param timezone Thee timezone of the map (not used)
            @param dbif The database interface to be used
-        """
+           """
+           
+        if self.get_mapset() != get_current_mapset():
+            core.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
+                         " The mapset of the dataset does not match the current mapset")%\
+                         {"ds":self.get_id(), "type":self.get_type()})
+            
         dbif, connected = init_dbif(dbif)
 
         self.set_absolute_time(start_time, end_time, timezone)
@@ -439,7 +445,6 @@ class AbstractMapDataset(AbstractDataset):
            @return True for success and False otherwise
 
         """
-
         if not self.check_relative_time_unit(unit):
             if self.get_layer() is not None:
                 core.error(_("Unsupported relative time unit type for %(type)s"
@@ -497,6 +502,11 @@ class AbstractMapDataset(AbstractDataset):
            @param unit The relative time unit
            @param dbif The database interface to be used
         """
+        if self.get_mapset() != get_current_mapset():
+            core.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
+                         " The mapset of the dataset does not match the current mapset")%\
+                         {"ds":self.get_id(), "type":self.get_type()})
+
         dbif, connected = init_dbif(dbif)
 
         if self.set_relative_time(start_time, end_time, unit):
@@ -799,7 +809,11 @@ class AbstractMapDataset(AbstractDataset):
            @return The SQL statements if execute=False, else an empty string,
                    None in case of a failure
         """
-
+        if self.get_mapset() != get_current_mapset():
+            core.fatal(_("Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database."
+                         " The mapset of the dataset does not match the current mapset")%\
+                         {"ds":self.get_id(), "type":self.get_type()})
+            
         dbif, connected = init_dbif(dbif)
         statement = ""
 
@@ -814,7 +828,7 @@ class AbstractMapDataset(AbstractDataset):
 
             # Remove the strds register table
             if self.get_stds_register() is not None:
-                statement += "DROP TABLE " + self.get_stds_register() + ";\n"
+                statement += "DROP TABLE IF EXISTS " + self.get_stds_register() + ";\n"
 
             # Commented because of performance issue calling g.message thousend times
             #core.verbose(_("Delete %s dataset <%s> from temporal database")
@@ -866,7 +880,12 @@ class AbstractMapDataset(AbstractDataset):
         #    core.verbose(_("Unregister %(type)s map <%(map)s> "
         #                   "from space time datasets"
         #                 % {'type':self.get_type(), 'map':self.get_map_id()}))
-
+        
+        if self.get_mapset() != get_current_mapset():
+            core.fatal(_("Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database."
+                         " The mapset of the dataset does not match the current mapset")%\
+                         {"ds":self.get_id(), "type":self.get_type()})
+            
         statement = ""
         dbif, connected = init_dbif(dbif)
 

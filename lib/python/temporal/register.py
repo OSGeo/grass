@@ -83,7 +83,7 @@ def register_maps_in_space_time_dataset(
                                                            'f': "file"})
 
     # We may need the mapset
-    mapset = core.gisenv()["MAPSET"]
+    mapset = get_current_mapset()
     dbif, connected = init_dbif(None)
 
     # The name of the space time dataset is optional
