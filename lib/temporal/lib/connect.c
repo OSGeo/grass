@@ -47,7 +47,7 @@ char *tgis_get_database_name(void)
 }
 
 /*!
-  \brief Set default Temporal GIS DB connection settings
+  \brief Set Temporal GIS DB connection settings
 
   This function sets environmental variables as TGISDB_DRIVER, TGISDB_DATABASE.
 
