@@ -15,6 +15,38 @@
 #include <grass/temporal.h>
 
 /*!
+ * \brief Get TGIS driver name
+ * 
+ * \return pointer to TGIS driver name
+ * \return NULL if not set
+ */
+char *tgis_get_driver_name(void)
+{
+    const char *drv;
+    
+    if ((drv = G__getenv2("TGISDB_DRIVER", G_VAR_MAPSET)))
+        return G_store(drv);
+    
+    return NULL;
+}
+
+/*!
+ * \brief Get TGIS database name
+ * 
+ * \return pointer to TGIS database name
+ * \return NULL if not set
+ */
+char *tgis_get_database_name(void)
+{
+    const char *drv;
+    
+    if ((drv = G__getenv2("TGISDB_DATABASE", G_VAR_MAPSET)))
+        return G_store(drv);
+    
+    return NULL;
+}
+
+/*!
   \brief Set default Temporal GIS DB connection settings
 
   This function sets environmental variables as TGISDB_DRIVER, TGISDB_DATABASE.
