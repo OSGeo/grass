@@ -63,8 +63,8 @@ class AboutWindow(wx.Frame):
                            (_("Translators"), self._pageTranslators()),
                            (_("Translation status"), self._pageStats())):
             self.aboutNotebook.AddPage(page = win, text = title)
-        self.aboutNotebook.Refresh()
         wx.CallAfter(self.aboutNotebook.SetSelection, 0)
+        wx.CallAfter(self.aboutNotebook.Refresh)
         
         # buttons
         self.btnClose = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
