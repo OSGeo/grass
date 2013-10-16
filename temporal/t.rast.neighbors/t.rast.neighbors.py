@@ -94,8 +94,6 @@ def main():
 
     overwrite = grass.overwrite()
 
-    mapset = grass.gisenv()["MAPSET"]
-
     sp = tgis.open_old_space_time_dataset(input, "strds", dbif)
     maps = sp.get_registered_maps_as_objects(where=where, dbif=dbif)
 
@@ -123,8 +121,7 @@ def main():
     for map in maps:
         count += 1
         map_name = "%s_%i" % (base, count)
-        new_map = tgis.open_new_map_dataset(map_name, None, mapset,
-                                            type="raster",
+        new_map = tgis.open_new_map_dataset(map_name, None, type="raster",
                                             temporal_extent=map.get_temporal_extent(),
                                             overwrite=overwrite, dbif=dbif)
         new_maps.append(new_map)
