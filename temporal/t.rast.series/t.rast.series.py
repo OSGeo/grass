@@ -55,6 +55,12 @@
 #% description: Do not assign the space time raster dataset start and end time to the output map
 #%end
 
+#%flag
+#% key: n
+#% description: Propagate NULLs
+#%end
+
+
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -70,6 +76,7 @@ def main():
     order = options["order"]
     where = options["where"]
     add_time = flags["t"]
+    nulls = flags["n"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -89,7 +96,11 @@ def main():
 
         file.close()
 
-        ret = grass.run_command("r.series", flags="z", file=filename,
+        flag = "z"
+        if nulls:
+            flag += "n"
+
+        ret = grass.run_command("r.series", flags=flag, file=filename,
                                 output=output, overwrite=grass.overwrite(),
                                 method=method)
 

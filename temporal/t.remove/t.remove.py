@@ -120,7 +120,11 @@ def main():
             name_list = []
             for map in maps:
                 map.select(dbif)
-                name_list.append(map.get_name())
+                # We may have multiple layer for a single map, hence we need
+                # to avoid multiple deletation of the same map,
+                # but the database entries are still present and must be removed
+                if map.get_name() not in name_list:
+                    name_list.append(map.get_name())
                 map_statement += map.delete(dbif=dbif, execute=False)
 
                 count += 1
@@ -134,7 +138,12 @@ def main():
             if map_statement:
                 dbif.execute_transaction(map_statement)
             if name_list:
-                remove(rast=name_list, run_=True)
+                if type == "strds":
+                    remove(rast=name_list, run_=True)
+                if type == "stvds":
+                    remove(vect=name_list, run_=True)
+                if type == "str3ds":
+                    remove(rast3d=name_list, run_=True)
 
         statement += sp.delete(dbif=dbif, execute=False)
 

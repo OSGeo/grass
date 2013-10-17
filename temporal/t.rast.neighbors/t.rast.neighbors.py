@@ -110,6 +110,7 @@ def main():
                                    finish_=False, size=int(size),
                                    method=method, overwrite=overwrite,
                                    quiet=True)
+
     # The module queue for parallel execution
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
 
