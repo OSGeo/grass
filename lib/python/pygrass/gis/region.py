@@ -193,9 +193,9 @@ class Region(object):
 
     #----------MAGIC METHODS----------
     def __repr__(self):
-        return 'Region(n=%g, s=%g, e=%g, w=%g, nsres=%g, ewres=%g)' % (
-               self.north, self.south, self.east, self.west,
-               self.nsres, self.ewres)
+        rg = 'Region(north=%g, south=%g, east=%g, west=%g, nsres=%g, ewres=%g)'
+        return rg % (self.north, self.south, self.east, self.west,
+                     self.nsres, self.ewres)
 
     def _repr_html_(self):
         return dict2html(dict(self.items()), keys=self.keys(),
