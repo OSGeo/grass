@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "test_g3d_lib.h"
+#include "test_raster3d_lib.h"
 #include "grass/interpf.h"
 
 static int test_coordinate_transform(void);
@@ -14,15 +14,15 @@ int unit_test_coordinate_transform(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running g3d coordinate transform unit tests ++"));
+    G_message(_("\n++ Running raster3d coordinate transform unit tests ++"));
 
     sum += test_coordinate_transform();
     sum += test_region();
 
     if (sum > 0)
-	G_warning(_("\n-- g3d coordinate transform unit tests failure --"));
+	G_warning(_("\n-- raster3d coordinate transform unit tests failure --"));
     else
-	G_message(_("\n-- g3d coordinate transform unit tests finished successfully --"));
+	G_message(_("\n-- raster3d coordinate transform unit tests finished successfully --"));
 
     return sum;
 }
@@ -39,7 +39,7 @@ int test_coordinate_transform(void)
     RASTER3D_Region region, default_region;
     RASTER3D_Map *map = NULL;
     
-    /* We need to set up a specific region for the new g3d map.
+    /* We need to set up a specific region for the new raster3d map.
      * First we safe the default region. */
     Rast3d_get_window(&default_region);
     Rast3d_region_copy(&region, &default_region);

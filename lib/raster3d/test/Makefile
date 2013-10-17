@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../..
 
-PGM=test.g3d.lib
+PGM=test.raster3d.lib
 
 LIBES = $(GISLIB) $(RASTER3DLIB) $(RASTERLIB) 
 DEPENDENCIES = $(GISDEP) $(RASTER3DDEP) $(RASTERDEP)

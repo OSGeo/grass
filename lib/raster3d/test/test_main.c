@@ -1,7 +1,7 @@
 
 /*****************************************************************************
 *
-* MODULE:       Grass g3d Library
+* MODULE:       Grass raster3d Library
 * AUTHOR(S):    Soeren Gebbert, Braunschweig (GER) Jun 2011
 * 		        soerengebbert <at> googlemail <dot> com
 *               
@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "test_g3d_lib.h"
+#include "test_raster3d_lib.h"
 
 /*- Parameters and global variables -----------------------------------------*/
 typedef struct {
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 
     module = G_define_module();
     module->description
-            = _("Performs unit and integration tests for the g3d library");
+            = _("Performs unit and integration tests for the raster3d library");
 
     /* Get parameters from user */
     set_params();
@@ -174,9 +174,9 @@ int main(int argc, char *argv[]) {
     }
     
     if (returnstat != 0)
-        G_warning("Errors detected while testing the g3d lib");
+        G_warning("Errors detected while testing the raster3d lib");
     else
-        G_message("\n-- g3d lib tests finished successfully --");
+        G_message("\n-- raster3d lib tests finished successfully --");
 
     return (returnstat);
 }

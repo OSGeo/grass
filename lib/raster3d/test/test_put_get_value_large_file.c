@@ -1,7 +1,7 @@
 
 /*****************************************************************************
 *
-* MODULE:       Grass g3d Library
+* MODULE:       Grass raster3d Library
 * AUTHOR(S):    Soeren Gebbert, Braunschweig (GER) Jun 2011
 * 		        soerengebbert <at> googlemail <dot> com
 *               
@@ -16,7 +16,7 @@
 *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
-#include "test_g3d_lib.h"
+#include "test_raster3d_lib.h"
 #include "grass/interpf.h"
 
 #define EPSILON 0.000000001
@@ -34,7 +34,7 @@ int unit_test_put_get_value_large_file(int depths, int rows, int cols, int tile_
 {
     int sum = 0;
 
-    G_message(_("\n++ Running g3d put/get value large file unit tests ++"));
+    G_message(_("\n++ Running raster3d put/get value large file unit tests ++"));
 
     sum += test_large_file_random(depths, rows, cols, tile_size);
     sum += test_large_file_sparse_random(depths, rows, cols, tile_size);
@@ -45,9 +45,9 @@ int unit_test_put_get_value_large_file(int depths, int rows, int cols, int tile_
 
 
     if (sum > 0)
-	G_warning(_("\n-- g3d put/get value large file unit tests failure --"));
+	G_warning(_("\n-- raster3d put/get value large file unit tests failure --"));
     else
-	G_message(_("\n-- g3d put/get value large file unit tests finished successfully --"));
+	G_message(_("\n-- raster3d put/get value large file unit tests finished successfully --"));
 
     return sum;
 }
@@ -65,7 +65,7 @@ int test_large_file(int depths, int rows, int cols, int tile_size)
     RASTER3D_Region region;
     RASTER3D_Map *map = NULL;
     
-    /* We need to set up a specific region for the new g3d map.
+    /* We need to set up a specific region for the new raster3d map.
      * First we safe the default region. */
     Rast3d_get_window(&region);
     
@@ -150,7 +150,7 @@ int test_large_file_zeros(int depths, int rows, int cols, int tile_size)
     RASTER3D_Region region;
     RASTER3D_Map *map = NULL;
 
-    /* We need to set up a specific region for the new g3d map.
+    /* We need to set up a specific region for the new raster3d map.
      * First we safe the default region. */
     Rast3d_get_window(&region);
 
@@ -232,7 +232,7 @@ int test_large_file_random(int depths, int rows, int cols, int tile_size)
     RASTER3D_Region region;
     RASTER3D_Map *map = NULL;
 
-    /* We need to set up a specific region for the new g3d map.
+    /* We need to set up a specific region for the new raster3d map.
      * First we safe the default region. */
     Rast3d_get_window(&region);
 
@@ -332,7 +332,7 @@ int test_large_file_sparse_random(int depths, int rows, int cols, int tile_size)
     RASTER3D_Region region;
     RASTER3D_Map *map = NULL;
 
-    /* We need to set up a specific region for the new g3d map.
+    /* We need to set up a specific region for the new raster3d map.
      * First we safe the default region. */
     Rast3d_get_window(&region);
 
