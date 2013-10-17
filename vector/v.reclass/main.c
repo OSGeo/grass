@@ -157,6 +157,7 @@ int main(int argc, char *argv[])
 	    dbTable *table;
 	    struct field_info *NewFi;
 	    dbDriver *Driver2;
+	    int foundnull;
 
 	    db_init_string(&stmt);
 	    db_init_string(&stmt2);
@@ -243,9 +244,12 @@ int main(int argc, char *argv[])
 	    cvarr.ctype = DB_C_TYPE_INT;
 
 	    newval = 0;
+	    foundnull = 0;
 
 	    /* fetch the data */
 	    for (i = 0; i < nrows; i++) {
+		int isnull;
+
 		if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
 		    G_fatal_error(_("Unable to fetch data from table <%s>"),
 				  Fi->table);
@@ -253,12 +257,17 @@ int main(int argc, char *argv[])
 
 		column = db_get_table_column(table, 1);
 		value = db_get_column_value(column);
+		isnull = db_test_value_isnull(value);
 
-		if (db_test_value_isnull(value))
-		    db_set_value_string(value, "");
+		if (i == 0 || (!foundnull && isnull) ||
+		    (!isnull && strcmp(db_get_value_string(value),
+				       db_get_string(&lastval)) != 0)) {
 
-		if (i == 0 || strcmp(db_get_value_string(value),
-					db_get_string(&lastval)) != 0) {
+		    if (!foundnull && isnull) {
+		        foundnull = 1;
+			db_set_value_string(value, "");
+		    }
+
 		    newval++;
 		    db_set_string(&lastval, db_get_value_string(value));
 		    G_debug(3, "  newval = %d string = %s", newval,
