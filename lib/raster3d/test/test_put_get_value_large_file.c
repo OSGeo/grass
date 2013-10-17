@@ -34,7 +34,7 @@ int unit_test_put_get_value_large_file(int depths, int rows, int cols, int tile_
 {
     int sum = 0;
 
-    G_message(_("\n++ Running raster3d put/get value large file unit tests ++"));
+    G_message("\n++ Running raster3d put/get value large file unit tests ++");
 
     sum += test_large_file_random(depths, rows, cols, tile_size);
     sum += test_large_file_sparse_random(depths, rows, cols, tile_size);
@@ -45,9 +45,9 @@ int unit_test_put_get_value_large_file(int depths, int rows, int cols, int tile_
 
 
     if (sum > 0)
-	G_warning(_("\n-- raster3d put/get value large file unit tests failure --"));
+	G_warning("\n-- raster3d put/get value large file unit tests failure --");
     else
-	G_message(_("\n-- raster3d put/get value large file unit tests finished successfully --"));
+	G_message("\n-- raster3d put/get value large file unit tests finished successfully --");
 
     return sum;
 }

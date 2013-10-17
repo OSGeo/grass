@@ -40,58 +40,59 @@ void set_params(void) {
     param.unit->type = TYPE_STRING;
     param.unit->required = NO;
     param.unit->options = "coord,putget,large";
-    param.unit->description = _("Choose the unit tests to run");
+    param.unit->description = "Choose the unit tests to run";
 
     param.integration = G_define_option();
     param.integration->key = "integration";
     param.integration->type = TYPE_STRING;
     param.integration->required = NO;
     param.integration->options = "";
-    param.integration->description = _("Choose the integration tests to run");
+    param.integration->description = "Choose the integration tests to run";
 
     param.depths = G_define_option();
     param.depths->key = "depths";
     param.depths->type = TYPE_INTEGER;
     param.depths->required = NO;
     param.depths->answer = "20";
-    param.depths->description = _("The number of depths to be used for the large file put/get value test");
+    param.depths->description = "The number of depths to be used for the large file put/get value test";
 
     param.rows = G_define_option();
     param.rows->key = "rows";
     param.rows->type = TYPE_INTEGER;
     param.rows->required = NO;
     param.rows->answer = "5400";
-    param.rows->description = _("The number of rows to be used for the large file put/get value test");
+    param.rows->description = "The number of rows to be used for the large file put/get value test";
 
     param.cols = G_define_option();
     param.cols->key = "cols";
     param.cols->type = TYPE_INTEGER;
     param.cols->required = NO;
     param.cols->answer = "10800";
-    param.cols->description = _("The number of columns to be used for the large file put/get value test");
+    param.cols->description = "The number of columns to be used for the large file put/get value test";
 
     param.tile_size = G_define_option();
     param.tile_size->key = "tile_size";
     param.tile_size->type = TYPE_INTEGER;
     param.tile_size->required = NO;
     param.tile_size->answer = "32";
-    param.tile_size->description = _("The tile size in kilo bytes to be used for the large file put/get value test. Set the tile size to 2048 and the number of row*cols*depths > 130000 to reproduce the tile rle error.");
+    param.tile_size->description = "The tile size in kilo bytes to be used for the large file put/get value test. Set the tile size to 2048 and the number of row*cols*depths > 130000 to reproduce the tile rle error.";
 
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
-    param.testunit->description = _("Run all unit tests");
+    param.testunit->description = "Run all unit tests";
 
     param.testint = G_define_flag();
     param.testint->key = 'i';
-    param.testint->description = _("Run all integration tests");
+    param.testint->description = "Run all integration tests";
 
     param.full = G_define_flag();
     param.full->key = 'a';
-    param.full->description = _("Run all unit and integration tests");
+    param.full->description = "Run all unit and integration tests";
 
     param.compression = G_define_flag();
     param.compression->key = 'l';
-    param.compression->description = _("Switch zip compression on");}
+    param.compression->description = "Switch zip compression on";
+}
 
 /* ************************************************************************* */
 /* ************************************************************************* */
@@ -108,7 +109,7 @@ int main(int argc, char *argv[]) {
 
     module = G_define_module();
     module->description
-            = _("Performs unit and integration tests for the raster3d library");
+            = "Performs unit and integration tests for the raster3d library";
 
     /* Get parameters from user */
     set_params();
