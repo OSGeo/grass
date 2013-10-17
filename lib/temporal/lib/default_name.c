@@ -38,28 +38,10 @@ const char *tgis_get_default_driver_name(void)
 */
 char *tgis_get_default_database_name(void)
 {
-    int n;
-    const char *name = NULL, *value = NULL;
-    char *location = NULL, *gisbase = NULL;
     char default_connection[2048];
 
-    for (n = 0; (name = G__env_name(n)); n++) {
-        value = (char *)G__getenv(name);
-        if (value) {
-            if (G_strcasecmp("GISDBASE", name) == 0)
-                gisbase = G_store(value);
-            if (G_strcasecmp("LOCATION_NAME", name) == 0)
-                location = G_store(value);
-        }
-    }
-
-    G_snprintf(default_connection, 2048, "%s/%s/%s", gisbase, location,
+    G_snprintf(default_connection, 2048, "%s/%s/%s", G_gisdbase(), G_location(),
                TGISDB_DEFAULT_SQLITE_PATH);
-
-    if(location)
-        G_free(location);
-    if(gisbase)
-        G_free(gisbase);
 
     return G_store(default_connection);
 }

@@ -42,13 +42,14 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
         Attention: Do not use the comma as separator for printing
 
         @param intype  Type of the input space time dataset (strds, stvds or str3ds)
-        @param sampletype Type of the sample space time dataset (strds, stvds or str3ds)
-        @param inputs Name or comma separated names of space time datasets
+        @param sampletype Type of the sample space time datasets (strds, stvds or str3ds)
+        @param inputs Name or comma separated names of space time datasets or a list of map names
         @param sampler Name of a space time dataset used for temporal sampling
         @param header Set True to print column names
         @param separator The field separator character between the columns
         @param method The method to be used for temporal sampling
-                       (start,during,contain,overlap,equal)
+                       (start,during,contain,overlap,equal) as comma separated string
+                       or as a list of methods
         @param spatial Perform spatial overlapping check
         @param print_only If set True (default) then the result of the sampling will be
                     printed to stdout, if set to False the resulting map matrix
@@ -59,13 +60,16 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
     mapset = get_current_mapset()
 
     # Make a method list
-    method = method.split(",")
+    if not issubclass(type(method), type([])):
+        method = method.split(",")
 
     # Split the inputs
-    input_list = inputs.split(",")
+    if not issubclass(type(inputs), type([])):
+        inputs = inputs.split(",")
+
     sts = []
 
-    for input in input_list:
+    for input in inputs:
         if input.find("@") >= 0:
             id = input
         else:
