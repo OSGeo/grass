@@ -35,7 +35,7 @@ int unit_test_put_get_value()
 {
     int sum = 0;
 
-    G_message(_("\n++ Running raster3d put/get value unit tests ++"));
+    G_message("\n++ Running raster3d put/get value unit tests ++");
 
     //sum += test_put_get_value_dcell();
     //sum += test_put_get_value_fcell();
@@ -43,9 +43,9 @@ int unit_test_put_get_value()
 
 
     if (sum > 0)
-	G_warning(_("\n-- raster3d put/get value unit tests failure --"));
+	G_warning("\n-- raster3d put/get value unit tests failure --");
     else
-	G_message(_("\n-- raster3d put/get value unit tests finished successfully --"));
+	G_message("\n-- raster3d put/get value unit tests finished successfully --");
 
     return sum;
 }

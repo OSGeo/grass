@@ -14,15 +14,15 @@ int unit_test_coordinate_transform(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running raster3d coordinate transform unit tests ++"));
+    G_message("\n++ Running raster3d coordinate transform unit tests ++");
 
     sum += test_coordinate_transform();
     sum += test_region();
 
     if (sum > 0)
-	G_warning(_("\n-- raster3d coordinate transform unit tests failure --"));
+	G_warning("\n-- raster3d coordinate transform unit tests failure --");
     else
-	G_message(_("\n-- raster3d coordinate transform unit tests finished successfully --"));
+	G_message("\n-- raster3d coordinate transform unit tests finished successfully --");
 
     return sum;
 }
