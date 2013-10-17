@@ -88,6 +88,8 @@ class Parameter(object):
         return self._value
 
     def _set_value(self, value):
+        values_error = 'The Parameter <%s>, must be a python list ' \
+                       'containing one or more of the following values: %r'
         if value is None:
             self._value = value
         elif isinstance(value, list) or isinstance(value, tuple):
@@ -111,8 +113,7 @@ class Parameter(object):
                 elif value in self.values:
                     self._value = value
                 else:
-                    raise ValueError('The Parameter <%s>, must be one of: %r' %
-                                     (self.name, self.values))
+                    raise ValueError(values_error % (self.name, self.values))
             else:
                 self._value = value
         elif self.type is str and isinstance(value, unicode):
@@ -120,8 +121,7 @@ class Parameter(object):
                 if value in self.values:
                     self._value = value
                 else:
-                    raise ValueError('The Parameter <%s>, must be one of: %r' %
-                                     (self.name, self.values))
+                    raise ValueError(values_error % (self.name, self.values))
             else:
                 self._value = value
         else:
