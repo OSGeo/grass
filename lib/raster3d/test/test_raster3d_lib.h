@@ -1,7 +1,7 @@
 
 /*****************************************************************************
 *
-* MODULE:       Grass g3d Library
+* MODULE:       Grass raster3d Library
 * AUTHOR(S):    Soeren Gebbert, Braunschweig (GER) Jun 2011
 *               soerengebbert <at> googlemail <dot> com
 *               

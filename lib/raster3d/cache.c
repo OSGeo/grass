@@ -56,8 +56,10 @@ static int initCacheRead(RASTER3D_Map * map, int nCached)
 static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 {
     RASTER3D_Map *map = closure;
-    size_t index, nBytes;
-    size_t pos, offs, offsLast;
+    int index;
+    size_t nBytes;
+    size_t offs, offsLast;
+    long int pos;
 
     pos = map->index[tileIndex];
 
@@ -121,7 +123,7 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 	return 0;
     }
 
-    index = *((int *)((unsigned char *)xdr + nBytes));
+    index = *((int*)((unsigned char *)xdr + nBytes));
     map->index[index] = -pos - 2;
 
     map->cachePosLast--;

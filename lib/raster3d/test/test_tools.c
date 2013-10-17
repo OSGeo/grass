@@ -1,7 +1,7 @@
 
 /*****************************************************************************
 *
-* MODULE:       Grass g3d Library
+* MODULE:       Grass raster3d Library
 * AUTHOR(S):    Soeren Gebbert, Braunschweig (GER) Jun 2011
 * 	            soerengebbert <at> googlemail <dot> com
 *               
@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "test_g3d_lib.h"
+#include "test_raster3d_lib.h"
 #include <sys/time.h>
 
 /* *************************************************************** */

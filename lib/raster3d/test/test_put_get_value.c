@@ -1,7 +1,7 @@
 
 /*****************************************************************************
 *
-* MODULE:       Grass g3d Library
+* MODULE:       Grass raster3d Library
 * AUTHOR(S):    Soeren Gebbert, Braunschweig (GER) Jun 2011
 * 		        soerengebbert <at> googlemail <dot> com
 *               
@@ -16,7 +16,7 @@
 *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
-#include "test_g3d_lib.h"
+#include "test_raster3d_lib.h"
 #include "grass/interpf.h"
 
 static int test_put_get_value_dcell(void);
@@ -35,7 +35,7 @@ int unit_test_put_get_value()
 {
     int sum = 0;
 
-    G_message(_("\n++ Running g3d put/get value unit tests ++"));
+    G_message(_("\n++ Running raster3d put/get value unit tests ++"));
 
     //sum += test_put_get_value_dcell();
     //sum += test_put_get_value_fcell();
@@ -43,9 +43,9 @@ int unit_test_put_get_value()
 
 
     if (sum > 0)
-	G_warning(_("\n-- g3d put/get value unit tests failure --"));
+	G_warning(_("\n-- raster3d put/get value unit tests failure --"));
     else
-	G_message(_("\n-- g3d put/get value unit tests finished successfully --"));
+	G_message(_("\n-- raster3d put/get value unit tests finished successfully --"));
 
     return sum;
 }
@@ -67,7 +67,7 @@ int test_put_get_value_dcell(void)
     RASTER3D_Region region;
     RASTER3D_Map *map = NULL;
     
-    /* We need to set up a specific region for the new g3d map.
+    /* We need to set up a specific region for the new raster3d map.
      * First we safe the default region. */
     Rast3d_get_window(&region);
     
@@ -211,7 +211,7 @@ int test_put_get_value_fcell(void)
     RASTER3D_Region region;
     RASTER3D_Map *map = NULL;
     
-    /* We need to set up a specific region for the new g3d map.
+    /* We need to set up a specific region for the new raster3d map.
      * First we safe the default region. */
     Rast3d_get_window(&region);
     
@@ -337,7 +337,7 @@ int test_put_get_value_resampling(void)
     RASTER3D_Region window;
     RASTER3D_Map *map = NULL;
     
-    /* We need to set up a specific region for the new g3d map.
+    /* We need to set up a specific region for the new raster3d map.
      * First we safe the default region. */
     Rast3d_get_window(&region);
     
