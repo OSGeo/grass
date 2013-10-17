@@ -1143,7 +1143,9 @@ static int check_double(const char *ans, const char **opts)
 
 static int check_string(const char *ans, const char **opts, int *result)
 {
+    int len = strlen(ans);
     int found = 0;
+    int prefix = 0;
     int i;
 
     if (!opts)
@@ -1152,8 +1154,14 @@ static int check_string(const char *ans, const char **opts, int *result)
     for (i = 0; opts[i]; i++) {
 	if (strcmp(ans, opts[i]) == 0)
 	    return 0;
-	if (match_option(ans, opts[i])) {
+	if (strncmp(ans, opts[i], len) == 0) {
 	    *result = i;
+	    found++;
+	    prefix++;
+	}
+	if (match_option(ans, opts[i])) {
+	    if (!found)
+		*result = i;
 	    found++;
 	}
     }
@@ -1161,7 +1169,11 @@ static int check_string(const char *ans, const char **opts, int *result)
     switch (found) {
     case 0: return OUT_OF_RANGE;
     case 1: return REPLACED;
-    default: return AMBIGUOUS;
+    default:
+	switch (prefix) {
+	case 1: return REPLACED;
+	default: return AMBIGUOUS;
+	}
     }
 }
 
