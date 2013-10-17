@@ -133,11 +133,14 @@ def get_temporal_dbmi_init_string():
     grassenv = core.gisenv()
     global tgis_backend
     if tgis_backend == "sqlite":
+        # We substitute GRASS variables if they are located in the database string
+        # This behavior is in conjunction with db.connect 
         if "database" in kv:
             string = kv["database"]
             string = string.replace("$GISDBASE", grassenv["GISDBASE"])
             string = string.replace(
                 "$LOCATION_NAME", grassenv["LOCATION_NAME"])
+            string = string.replace("$MAPSET", grassenv["MAPSET"])
             return string
         else:
             core.fatal(_("Unable to initialize the temporal GIS DBMI "
