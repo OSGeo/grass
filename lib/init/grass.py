@@ -1346,7 +1346,6 @@ clear_screen()
 
 # Display the version and license info
 if batch_job:
-    say_hello()
     grass_gui = 'text'
     clear_screen()
     clean_temp()
