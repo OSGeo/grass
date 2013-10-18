@@ -47,10 +47,10 @@
 #%option
 #% key: format
 #% type: string
-#% description: The export format of a single raster map. Supported are GeoTIFF via r.out.gdal and the GRASS package format of r.pack.
+#% description: The export format of a single raster map. Supported are GTiff, AAIGrid via r.out.gdal and the GRASS package format of r.pack.
 #% required: no
 #% multiple: no
-#% options: GTiff,pack
+#% options: GTiff,AAIGrid,pack
 #% answer: GTiff
 #%end
 
