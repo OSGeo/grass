@@ -36,7 +36,7 @@ t.create type=strds temporaltype=absolute output=precip_abs1 title="A test with 
 # The first @test
 t.register -i type=rast input=precip_abs1 file="${n1}"
 
-t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 format=GTiff workdir=test
+t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 format=AAIGrid workdir=test
 t.rast.export input=precip_abs1 output=strds_export.tar.gz compression=gzip format=GTiff workdir=test
 t.rast.export input=precip_abs1 output=strds_export.tar compression=no format=GTiff workdir=test
 t.rast.export input=precip_abs1 output=strds_export_pack.tar compression=no format=pack workdir=test
