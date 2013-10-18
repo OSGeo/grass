@@ -54,7 +54,7 @@ imported_maps = {}
 ############################################################################
 
 
-def _import_raster_maps_from_geotiff(maplist, overr, exp, location, link):
+def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_):
     impflags = ""
     if overr:
         impflags += "o"
@@ -62,7 +62,12 @@ def _import_raster_maps_from_geotiff(maplist, overr, exp, location, link):
         impflags += "e"
     for row in maplist:
         name = row["name"]
-        filename = row["filename"] + ".tif"
+        if format_ == "GTiff":
+            filename = row["filename"] + ".tif"
+        elif format_=="AAIGrid":
+            filename = row["filename"] + ".asc"
+            if not overr:
+                impflags += "o"
 
         if link:
             ret = core.run_command("r.external", input=filename,
@@ -333,33 +338,39 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         if line_count != int(init["number_of_maps"]):
             core.fatal(_("Number of maps mismatch in init and list file."))
 
-        _format = "GTiff"
-        _type = "strds"
+        format_ = "GTiff"
+        type_ = "strds"
 
         if "stds_type" in init:
-            _type = init["stds_type"]
+            type_ = init["stds_type"]
         if "format" in init:
-            _format = init["format"]
+            format_ = init["format"]
 
-        if stds_type != _type:
+        if stds_type != type_:
             core.fatal(_("The archive file is of wrong space time dataset type"))
 
         # Check the existence of the files
-        if _format == "GTiff":
+        if format_ == "GTiff":
             for row in maplist:
                 filename = row["filename"] + ".tif"
                 if not os.path.exists(filename):
                     core.fatal(_("Unable to find geotiff raster file "
                                  "<%s> in archive.") % filename)
-        elif _format == "GML":
+        elif format_ == "AAIGrid":
+            for row in maplist:
+                filename = row["filename"] + ".asc"
+                if not os.path.exists(filename):
+                    core.fatal(_("Unable to find AAIGrid raster file "
+                                 "<%s> in archive.") % filename)
+        elif format_ == "GML":
             for row in maplist:
                 filename = row["filename"] + ".xml"
                 if not os.path.exists(filename):
                     core.fatal(_("Unable to find GML vector file "
                                  "<%s> in archive.") % filename)
-        elif _format == "pack":
+        elif format_ == "pack":
             for row in maplist:
-                if _type == "stvds":
+                if type_ == "stvds":
                     filename = str(row["filename"].split(":")[0]) + ".pack"
                 else:
                     filename = row["filename"] + ".pack"
@@ -371,24 +382,24 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
 
         # Check the space time dataset
         id = output + "@" + mapset
-        sp = dataset_factory(_type, id)
+        sp = dataset_factory(type_, id)
         if sp.is_in_db() and core.overwrite() == False:
             core.fatal(_("Space time %(t)s dataset <%(sp)s> is already in the "
-                         "database. Use the overwrite flag.") % {'t': _type,
+                         "database. Use the overwrite flag.") % {'t': type_,
                                                                  'sp': sp.get_id()})
 
         # Import the maps
-        if _type == "strds":
-            if _format == "GTiff":
-                _import_raster_maps_from_geotiff(
-                    maplist, overr, exp, location, link)
-            if _format == "pack":
+        if type_ == "strds":
+            if format_ == "GTiff" or format_ == "AAIGrid":
+                _import_raster_maps_from_gdal(
+                    maplist, overr, exp, location, link, format_)
+            if format_ == "pack":
                 _import_raster_maps(maplist)
-        elif _type == "stvds":
-            if _format == "GML":
+        elif type_ == "stvds":
+            if format_ == "GML":
                 _import_vector_maps_from_gml(
                     maplist, overr, exp, location, link)
-            if _format == "pack":
+            if format_ == "pack":
                 _import_vector_maps(maplist)
 
         # Create the space time dataset
