@@ -52,7 +52,7 @@ exported_maps = {}
 ############################################################################
 
 
-def _export_raster_maps_as_geotiff(rows, tar, list_file, new_cwd, fs):
+def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
     for row in rows:
         name = row["name"]
         start = row["start_time"]
@@ -65,24 +65,31 @@ def _export_raster_maps_as_geotiff(rows, tar, list_file, new_cwd, fs):
         string = "%s%s%s%s%s\n" % (name, fs, start, fs, end)
         # Write the filename, the start_time and the end_time
         list_file.write(string)
-        # Export the raster map with r.out.gdal as tif
-        out_name = name + ".tif"
-        if datatype == "CELL":
-            nodata = max_val + 1
-            if nodata < 256 and min_val >= 0:
-                gdal_type = "Byte"
-            elif nodata < 65536 and min_val >= 0:
-                gdal_type = "UInt16"
-            elif min_val >= 0:
-                gdal_type = "UInt32"
+
+        if format_ == "GTiff":
+            # Export the raster map with r.out.gdal as tif
+            out_name = name + ".tif"
+            if datatype == "CELL":
+                nodata = max_val + 1
+                if nodata < 256 and min_val >= 0:
+                    gdal_type = "Byte"
+                elif nodata < 65536 and min_val >= 0:
+                    gdal_type = "UInt16"
+                elif min_val >= 0:
+                    gdal_type = "UInt32"
+                else:
+                    gdal_type = "Int32"
+                ret = core.run_command("r.out.gdal", flags="c", input=name,
+                                    output=out_name, nodata=nodata,
+                                    type=gdal_type, format="GTiff")
             else:
-                gdal_type = "Int32"
-            ret = core.run_command("r.out.gdal", flags="c", input=name,
-                                   output=out_name, nodata=nodata,
-                                   type=gdal_type, format="GTiff")
-        else:
-            ret = core.run_command("r.out.gdal", flags="c",
-                                   input=name, output=out_name, format="GTiff")
+                ret = core.run_command("r.out.gdal", flags="c",
+                                    input=name, output=out_name, format="GTiff")
+        elif format_ == "AAIGrid":
+            # Export the raster map with r.out.gdal as Arc/Info ASCII Grid
+            out_name = name + ".asc"
+            ret = core.run_command("r.out.gdal", flags="c", input=name, output=out_name, format="AAIGrid")
+            
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
@@ -102,7 +109,6 @@ def _export_raster_maps_as_geotiff(rows, tar, list_file, new_cwd, fs):
         tar.add(out_name)
 
 ############################################################################
-
 
 def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
     for row in rows:
@@ -125,7 +131,6 @@ def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
         tar.add(name + ".pack")
 
 ############################################################################
-
 
 def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
     for row in rows:
@@ -153,7 +158,6 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
         tar.add(name + ".xsd")
 
 ############################################################################
-
 
 def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
     for row in rows:
@@ -198,7 +202,7 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
         string = "%s%s%s%s%s\n" % (name, fs, start, fs, end)
         # Write the filename, the start_time and the end_time
         list_file.write(string)
-        # Export the raster map with r3.pack
+        # Export the raster 3d map with r3.pack
         ret = core.run_command("r3.pack", input=name, flags="c")
         if ret != 0:
             shutil.rmtree(new_cwd)
@@ -231,6 +235,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
                           of maps from the space time dataset
             @param format_ The export format:
               - "GTiff" Geotiff format, only for raster maps
+              - "AAIGrid" Arc/Info ASCII Grid format, only for raster maps
               - "pack" The GRASS raster, 3D raster or vector Pack format,
                        this is the default setting
               - "GML" GML file export format, only for vector maps,
@@ -274,9 +279,9 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
 
     if rows:
         if type_ == "strds":
-            if format_ == "GTiff":
-                _export_raster_maps_as_geotiff(
-                    rows, tar, list_file, new_cwd, fs)
+            if format_ == "GTiff" or format_ == "AAIGrid":
+                _export_raster_maps_as_gdal(
+                    rows, tar, list_file, new_cwd, fs, format_)
             else:
                 _export_raster_maps(rows, tar, list_file, new_cwd, fs)
         elif type_ == "stvds":
