@@ -896,7 +896,8 @@ static void set_option(const char *string)
 {
     struct Option *at_opt = NULL;
     struct Option *opt = NULL;
-    int got_one;
+    int found;
+    int prefix;
     size_t key_len;
     char the_key[KEYLENGTH];
     char *ptr, *err;
@@ -909,35 +910,39 @@ static void set_option(const char *string)
     string++;
 
     /* Find option with best keyword match */
-    got_one = 0;
+    found = 0;
+    prefix = 0;
     key_len = strlen(the_key);
     for (at_opt = &st->first_option; at_opt; at_opt = at_opt->next_opt) {
 	if (!at_opt->key)
 	    continue;
 
-	if (!match_option(the_key, at_opt->key))
-	    continue;
-
-	got_one++;
-	opt = at_opt;
-
-	/* changed 1/15/91 -dpg   old code is in parser.old */
-	/* overide ambiguous check, if we get an exact match */
-	if (strlen(at_opt->key) == key_len) {
+        if (strcmp(the_key, at_opt->key) == 0) {
 	    opt = at_opt;
-	    got_one = 1;
-	    break;
+	    found = 1;
+	    break; 
+	}
+
+        if (strncmp(the_key, at_opt->key, key_len) == 0) {
+	    opt = at_opt;
+	    found++;
+	    prefix++;
+	}
+	else if (match_option(the_key, at_opt->key)) {
+	    if (!found)
+		opt = at_opt;
+	    found++;
 	}
     }
 
-    if (got_one > 1) {
+    if (found > 1 && prefix > 1) {
 	G_asprintf(&err, _("Sorry, <%s=> is ambiguous"), the_key);
 	append_error(err);
 	return;
     }
 
     /* If there is no match, complain */
-    if (got_one == 0) {
+    if (found == 0) {
 	G_asprintf(&err, _("Sorry, <%s> is not a valid parameter"), the_key);
 	append_error(err);
 	return;
@@ -1159,7 +1164,7 @@ static int check_string(const char *ans, const char **opts, int *result)
 	    found++;
 	    prefix++;
 	}
-	if (match_option(ans, opts[i])) {
+	else if (match_option(ans, opts[i])) {
 	    if (!found)
 		*result = i;
 	    found++;
