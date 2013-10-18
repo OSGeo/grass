@@ -386,7 +386,7 @@ class AnalyzedData:
         #TODO show some warning
         for b in self.bands[:]:
             i = self._getRasterInfo(b)
-            if i["datatype"] != "CELL":
+            if not i:
                 self.bands.remove(b)
                 continue
             self.bands_info[b] = i
@@ -414,6 +414,8 @@ class AnalyzedData:
                 continue
             k, v = b.split("=")
             if k == "datatype":
+                if v != "CELL":
+                    return None
                 pass
             elif k in ['rows', 'cols', 'cells', 'min', 'max']:
                 v = int(v)
