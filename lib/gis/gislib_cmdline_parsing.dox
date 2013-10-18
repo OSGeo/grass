@@ -16,7 +16,7 @@ Published under GNU Free Documentation License
 
 This section describes a standard mechanism for
 command line parsing in GRASS. The system is usually referred as
-<em>parser</em> or <em>g.parser</em> (because of the related
+<em>parser</em>, G_parser() or <em>g.parser</em> (because of the related
 \gmod{g.parser} module).
 Use of the provided set of functions will standardize
 GRASS modules that expect command line arguments, creating a family of
@@ -819,11 +819,11 @@ and flags are defined by the function G_define_standard_flag().
 Both the options and flags are defined dynamically, so to get see
 the values of all members you need to open the file parser_standard_options.c.
 
-The function G_define_standard_option() accepts one value of an enum
-defined in the file gis.h. When the G_define_standard_option() function
+The function G_define_standard_option() accepts one value of an STD_OPT
+enum defined in the file gis.h. When the G_define_standard_option() function
 calls the G_define_option() function, so there is no need to call
 it separately. The same applies also for standard flags which
-uses the G_define_standard_flag() function.
+uses the G_define_standard_flag() function and STD_OPT enum.
 
 Besides name and value standard options also defines label, description
 allowed values, their descriptions etc. The similar applies for the

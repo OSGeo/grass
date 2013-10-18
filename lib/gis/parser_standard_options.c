@@ -22,13 +22,19 @@
   \brief Create standardised Option structure.
   
   This function will create a standardised Option structure defined by
-  parameter <i>opt</i>. A list of valid parameters bellow. It
-  allocates memory for the Option structure and returns a pointer to
-  this memory.
-  
+  parameter <i>opt</i>.
+
+  Valid parameters are defined by the STD_OPT enum in the file gis.h.
+  A list of valid parameter values sorted to groups is bellow.
+
+  This function allocates memory for the Option structure and returns a
+  pointer to this memory.
+
   If an invalid parameter was specified a empty Option structure will
   be returned (not NULL).
-  
+
+
+  \par List of STD_OPT values sorted by module group
   - database:
    - G_OPT_DB_SQL
    - G_OPT_DB_WHERE
@@ -113,10 +119,10 @@
    - G_OPT_MAP_TYPE
    - G_OPT_T_TYPE
    - G_OPT_T_WHERE
- 
-   \param opt type of Option struct to create
-   
-   \return pointer to an Option struct
+
+  \param opt type of Option struct to create specified by STD_OPT enum
+
+  \return pointer to an Option struct
 */
 struct Option *G_define_standard_option(int opt)
 {
@@ -809,8 +815,8 @@ struct Option *G_define_standard_option(int opt)
   - G_FLG_V_TABLE  (do not create attribute table)
   - G_FLG_V_TOPO   (do not build topology)
 
-  \param flag type of Flag struct to create
-  
+  \param flag type of Flag struct to create specified by STD_FLG enum.
+
   \return pointer to an Flag struct
 */
 struct Flag *G_define_standard_flag(int flag)
