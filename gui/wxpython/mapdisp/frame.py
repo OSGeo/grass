@@ -726,11 +726,20 @@ class MapFrame(SingleMapFrame):
         else:
             self.dialogs['query'] = QueryDialog(parent = self, data = result)
             self.dialogs['query'].Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
+            self.dialogs['query'].redirectOutput.connect(self._onRedirectQueryOutput)
             self.dialogs['query'].Show()
 
     def _oncloseQueryDialog(self, event):
         self.dialogs['query'] = None
         event.Skip()
+
+    def _onRedirectQueryOutput(self, output, style='log'):
+        """!Writes query output into console"""
+        # TODO: fix switching tab
+        if style == 'log':
+            self._giface.WriteLog(output)
+        elif style == 'cmd':
+            self._giface.WriteCmdLog(output)
 
     def _queryHighlight(self, vectQuery):
         """!Highlight category from query."""

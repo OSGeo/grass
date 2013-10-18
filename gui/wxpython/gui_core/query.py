@@ -26,12 +26,17 @@ from core.utils import _
 from gui_core.treeview import TreeListView
 from core.treemodel import TreeModel, DictNode
 
+from grass.pydispatch.signal import Signal
+
 class QueryDialog(wx.Dialog):
     def __init__(self, parent, data = None):
         wx.Dialog.__init__(self, parent, id = wx.ID_ANY,
                            title = _("Query results"),
                            size = (420, 400),
                            style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+        # send query output to console
+        self.redirectOutput = Signal('QueryDialog.redirectOutput')
+
         self.data = data
 
         self.panel = wx.Panel(self, id = wx.ID_ANY)
@@ -61,13 +66,17 @@ class QueryDialog(wx.Dialog):
         copy = wx.Button(self.panel, id = wx.ID_ANY, label = _("Copy all to clipboard"))
         copy.Bind(wx.EVT_BUTTON, self.Copy)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.redirect = wx.CheckBox(self.panel, label=_("Redirect to console"))
+        self.redirect.SetValue(False)
+        self.redirect.Bind(wx.EVT_CHECKBOX, lambda evt: self._onRedirect(evt.IsChecked()))
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.Add(item=self.redirect, proportion=0, flag=wx.EXPAND | wx.RIGHT, border=5)
         hbox.AddStretchSpacer(1)
-        hbox.Add(item = copy, proportion = 0, flag = wx.EXPAND | wx.RIGHT, border = 5)
-        hbox.Add(item = close, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 0)
+        hbox.Add(item=copy, proportion=0, flag=wx.EXPAND | wx.RIGHT, border=5)
+        hbox.Add(item=close, proportion=0, flag=wx.EXPAND | wx.ALL, border=0)
 
-        self.mainSizer.Add(item = hbox, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.mainSizer.Add(item=hbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         self.panel.SetSizer(self.mainSizer)
         self.mainSizer.Fit(self.panel)
         # for Windows
@@ -79,6 +88,9 @@ class QueryDialog(wx.Dialog):
         self._model = QueryTreeBuilder(self.data, column=self._colNames[1])
         self.tree.SetModel(self._model)
         self.tree.SetExpansionState(state)
+
+        if self.redirect.IsChecked():
+            self.redirectOutput.emit(output=self._textToRedirect())
 
     def Copy(self, event):
         text = printResults(self._model, self._colNames[1])
@@ -127,6 +139,22 @@ class QueryDialog(wx.Dialog):
         for id in ids:
             self.Unbind(wx.EVT_MENU, id=id)
 
+    def _onRedirect(self, redirect):
+        """!Emits instructions to redirect query results.
+        
+        @param redirect True to start redirecting, False to stop        
+        """
+        if redirect:
+            self.redirectOutput.emit(output=_("Query results:"), style='cmd')
+            self.redirectOutput.emit(output=self._textToRedirect())
+        else:
+            self.redirectOutput.emit(output=_(" "), style='cmd')
+
+    def _textToRedirect(self):
+        text = printResults(self._model, self._colNames[1])
+        text += '\n' + "-"* 50 + '\n'
+        return text
+
     def _cutLabel(self, label):
         limit = 15
         if len(label) > limit:
@@ -143,6 +171,8 @@ class QueryDialog(wx.Dialog):
             wx.TheClipboard.Close()
 
     def OnClose(self, event):
+        if self.redirect.IsChecked():
+            self._onRedirect(False)
         self.Destroy()
         event.Skip()
 
@@ -178,7 +208,8 @@ def printResults(model, valueCol):
     @param valueCol column name with value to be printed
     """
     def printTree(node, textList, valueCol, indent=0):
-        textList.append(indent*' ' + node.label + ': ' + node.data.get(valueCol, ''))
+        if node.data.get(valueCol, '') or node.children:
+            textList.append(indent*' ' + node.label + ': ' + node.data.get(valueCol, ''))
         for child in node.children:
             printTree(node=child, textList=textList, valueCol=valueCol, indent=indent + 2)
     
@@ -194,8 +225,7 @@ def PrepareQueryResults(coordinates, result):
     Adds coordinates, improves vector results tree structure.
     """
     data = []
-    data.append({_("east"): coordinates[0]})
-    data.append({_("north"): coordinates[1]})
+    data.append({_("east, north"): ", ".join(map(str, coordinates))})
     for part in result:
         if 'Map' in part:
             itemText = part['Map']
