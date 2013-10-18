@@ -312,10 +312,10 @@ int main(int argc, char **argv)
 	    fprintf(out, "east=%s\n", tmp1);
 	    fprintf(out, "west=%s\n", tmp2);
 
-	    G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
+	    G_format_resolution(cellhd.ns_res, tmp3, -1);
 	    fprintf(out, "nsres=%s\n", tmp3);
 
-	    G_format_resolution(cellhd.ew_res, tmp3, cellhd.proj);
+	    G_format_resolution(cellhd.ew_res, tmp3, -1);
 	    fprintf(out, "ewres=%s\n", tmp3);
 
             fprintf(out, "rows=%d\n", cellhd.rows);
