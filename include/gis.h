@@ -174,97 +174,120 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #  define G_DEV_NULL "/dev/null"
 #endif
 
+/*!
+  \typedef STD_OPT
+  \brief Standard option identifiers (enum)
+
+  Identifies of all recognized standard options.
+
+  The term <em>old</em> in the descriptions means existing map which
+  is supposed to exist before the module is called.
+  On the other hand, the term <em>new</em> in the descriptions means
+  that the map is not supposed to exist and that module will create one.
+
+  Used by the G_parser() system.
+*/
+
 /**/ typedef enum
 {
     G_OPT_UNDEFINED,
-    G_OPT_DB_SQL,		/* SQL statements */
-    G_OPT_DB_WHERE,		/* SQL where conditions */
-    G_OPT_DB_TABLE,		/* table name */
-    G_OPT_DB_DRIVER,		/* driver name */
-    G_OPT_DB_DATABASE,		/* database name */
-    G_OPT_DB_SCHEMA,            /* database schema */
-    G_OPT_DB_COLUMN,		/* one attr column */
-    G_OPT_DB_COLUMNS,		/* one or more attr columns */
-    G_OPT_DB_KEYCOLUMN,         /* key column */
+    G_OPT_DB_SQL,		/*!< SQL statements */
+    G_OPT_DB_WHERE,		/*!< SQL where conditions */
+    G_OPT_DB_TABLE,		/*!< table name */
+    G_OPT_DB_DRIVER,		/*!< driver name */
+    G_OPT_DB_DATABASE,		/*!< database name */
+    G_OPT_DB_SCHEMA,            /*!< database schema */
+    G_OPT_DB_COLUMN,		/*!< one attr column */
+    G_OPT_DB_COLUMNS,		/*!< one or more attr columns */
+    G_OPT_DB_KEYCOLUMN,         /*!< key column */
 
-    G_OPT_I_GROUP,		/* old input imagery group */
-    G_OPT_I_SUBGROUP,		/* old input imagery subgroup */
-    G_OPT_R_INPUT,		/* old input raster map */
-    G_OPT_R_INPUTS,		/* old input raster maps */
-    G_OPT_R_OUTPUT,		/* new output raster map */
-    G_OPT_R_MAP,		/* old input raster map */
-    G_OPT_R_MAPS,		/* old input rasters map */
-    G_OPT_R_BASE,		/* old input base raster map */
-    G_OPT_R_COVER,		/* old input cover raster map */
-    G_OPT_R_ELEV,		/* old input elevation raster map */
-    G_OPT_R_ELEVS,		/* old input elevation raster maps */
-    G_OPT_R_INTERP_TYPE,        /* interpolation type */
+    G_OPT_I_GROUP,		/*!< old input imagery group */
+    G_OPT_I_SUBGROUP,		/*!< old input imagery subgroup */
+    G_OPT_R_INPUT,		/*!< old input raster map */
+    G_OPT_R_INPUTS,		/*!< old input raster maps */
+    G_OPT_R_OUTPUT,		/*!< new output raster map */
+    G_OPT_R_MAP,		/*!< old input raster map */
+    G_OPT_R_MAPS,		/*!< old input rasters map */
+    G_OPT_R_BASE,		/*!< old input base raster map */
+    G_OPT_R_COVER,		/*!< old input cover raster map */
+    G_OPT_R_ELEV,		/*!< old input elevation raster map */
+    G_OPT_R_ELEVS,		/*!< old input elevation raster maps */
+    G_OPT_R_INTERP_TYPE,        /*!< interpolation type */
 
-    G_OPT_R3_INPUT,		/* old input raster3d map */
-    G_OPT_R3_INPUTS,		/* old input raster3d maps */
-    G_OPT_R3_OUTPUT,		/* new output raster3d map */
-    G_OPT_R3_MAP,		/* old input raster3d map */
-    G_OPT_R3_MAPS,		/* old input raster3d maps */
-    G_OPT_R3_TYPE,              /* Type (FCELL or DCELL) of a new created raster3d map */
-    G_OPT_R3_PRECISION,         /* The precision of the new generated raster3d map */
-    G_OPT_R3_TILE_DIMENSION,    /* The tile dimension of a new generated raster3d map */
-    G_OPT_R3_COMPRESSION,       /* The kind of compression of a new created raster3d map */
+    G_OPT_R3_INPUT,		/*!< old input raster3d map */
+    G_OPT_R3_INPUTS,		/*!< old input raster3d maps */
+    G_OPT_R3_OUTPUT,		/*!< new output raster3d map */
+    G_OPT_R3_MAP,		/*!< old input raster3d map */
+    G_OPT_R3_MAPS,		/*!< old input raster3d maps */
+    G_OPT_R3_TYPE,              /*!< Type (FCELL or DCELL) of a new created raster3d map */
+    G_OPT_R3_PRECISION,         /*!< The precision of the new generated raster3d map */
+    G_OPT_R3_TILE_DIMENSION,    /*!< The tile dimension of a new generated raster3d map */
+    G_OPT_R3_COMPRESSION,       /*!< The kind of compression of a new created raster3d map */
 
-    G_OPT_V_INPUT,		/* old input vector map */
-    G_OPT_V_INPUTS,		/* old input vector maps */
-    G_OPT_V_OUTPUT,		/* new output vector map */
-    G_OPT_V_MAP,		/* old input vector map */
-    G_OPT_V_MAPS,		/* old input vector maps */
-    G_OPT_V_TYPE,		/* primitive type */
-    G_OPT_V3_TYPE,		/* primitive type, 2D and 3D */
-    G_OPT_V_FIELD,		/* layer number (layers used to be called fields) */
-    G_OPT_V_FIELD_ALL,		/* layer number (layers used to be called fields) */
-    G_OPT_V_CAT,		/* one category */
-    G_OPT_V_CATS,		/* more categories */
-    G_OPT_V_ID, 		/* one feature id */
-    G_OPT_V_IDS,		/* more feature ids */
+    G_OPT_V_INPUT,		/*!< old input vector map */
+    G_OPT_V_INPUTS,		/*!< old input vector maps */
+    G_OPT_V_OUTPUT,		/*!< new output vector map */
+    G_OPT_V_MAP,		/*!< old input vector map */
+    G_OPT_V_MAPS,		/*!< old input vector maps */
+    G_OPT_V_TYPE,		/*!< primitive type */
+    G_OPT_V3_TYPE,		/*!< primitive type, 2D and 3D */
+    G_OPT_V_FIELD,		/*!< layer number (layers used to be called fields) */
+    G_OPT_V_FIELD_ALL,		/*!< layer number (layers used to be called fields) */
+    G_OPT_V_CAT,		/*!< one category */
+    G_OPT_V_CATS,		/*!< more categories */
+    G_OPT_V_ID, 		/*!< one feature id */
+    G_OPT_V_IDS,		/*!< more feature ids */
 
-    G_OPT_F_INPUT,		/* old input file */
-    G_OPT_F_OUTPUT,		/* new output file */
-    G_OPT_F_SEP,		/* data field separator */
+    G_OPT_F_INPUT,		/*!< old input file */
+    G_OPT_F_OUTPUT,		/*!< new output file */
+    G_OPT_F_SEP,		/*!< data field separator */
 
-    G_OPT_C_FG,			/* foreground color */
-    G_OPT_C_BG,			/* background color */
+    G_OPT_C_FG,			/*!< foreground color */
+    G_OPT_C_BG,			/*!< background color */
 
-    G_OPT_M_UNITS,              /* units */
-    G_OPT_M_DATATYPE,           /* datatype */
-    G_OPT_M_MAPSET,             /* mapset */
-    G_OPT_M_COORDS,             /* coordinates */
-    G_OPT_M_COLR,               /* color rules */
-    G_OPT_M_DIR,                /* directory input */    
+    G_OPT_M_UNITS,              /*!< units */
+    G_OPT_M_DATATYPE,           /*!< datatype */
+    G_OPT_M_MAPSET,             /*!< mapset */
+    G_OPT_M_COORDS,             /*!< coordinates */
+    G_OPT_M_COLR,               /*!< color rules */
+    G_OPT_M_DIR,                /*!< directory input */    
 
-    G_OPT_STDS_INPUT,           /* old input space time dataset of type strds, str3ds or stvds */
-    G_OPT_STDS_INPUTS,          /* old input space time datasets */
-    G_OPT_STDS_OUTPUT,          /* new output space time dataset */
-    G_OPT_STRDS_INPUT,          /* old input space time raster dataset */
-    G_OPT_STRDS_INPUTS,         /* old input space time raster datasets */
-    G_OPT_STRDS_OUTPUT,         /* new output space time raster dataset */
-    G_OPT_STR3DS_INPUT,         /* old input space time raster3d dataset */
-    G_OPT_STR3DS_INPUTS,        /* old input space time raster3d datasets */
-    G_OPT_STR3DS_OUTPUT,        /* new output space time raster3d dataset */
-    G_OPT_STVDS_INPUT,          /* old input space time vector dataset */
-    G_OPT_STVDS_INPUTS,         /* old input space time vector datasets */
-    G_OPT_STVDS_OUTPUT,         /* new output space time vector dataset */
-    G_OPT_MAP_INPUT,            /* old input map of type raster, vector or raster3d  */
-    G_OPT_MAP_INPUTS,           /* old input maps of type raster, vector or raster3d  */
-    G_OPT_STDS_TYPE,            /* the type of a space time dataset: strds, str3ds, stvds */ 
-    G_OPT_MAP_TYPE,             /* The type of an input map: raster, vect, rast3d */
-    G_OPT_T_TYPE,               /* The temporal type of a space time dataset */
-    G_OPT_T_WHERE,              /* A temporal GIS framework SQL WHERE statement */
-    G_OPT_T_SAMPLE,             /* Temporal sample methods */
+    G_OPT_STDS_INPUT,           /*!< old input space time dataset of type strds, str3ds or stvds */
+    G_OPT_STDS_INPUTS,          /*!< old input space time datasets */
+    G_OPT_STDS_OUTPUT,          /*!< new output space time dataset */
+    G_OPT_STRDS_INPUT,          /*!< old input space time raster dataset */
+    G_OPT_STRDS_INPUTS,         /*!< old input space time raster datasets */
+    G_OPT_STRDS_OUTPUT,         /*!< new output space time raster dataset */
+    G_OPT_STR3DS_INPUT,         /*!< old input space time raster3d dataset */
+    G_OPT_STR3DS_INPUTS,        /*!< old input space time raster3d datasets */
+    G_OPT_STR3DS_OUTPUT,        /*!< new output space time raster3d dataset */
+    G_OPT_STVDS_INPUT,          /*!< old input space time vector dataset */
+    G_OPT_STVDS_INPUTS,         /*!< old input space time vector datasets */
+    G_OPT_STVDS_OUTPUT,         /*!< new output space time vector dataset */
+    G_OPT_MAP_INPUT,            /*!< old input map of type raster, vector or raster3d  */
+    G_OPT_MAP_INPUTS,           /*!< old input maps of type raster, vector or raster3d  */
+    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */ 
+    G_OPT_MAP_TYPE,             /*!< The type of an input map: raster, vect, rast3d */
+    G_OPT_T_TYPE,               /*!< The temporal type of a space time dataset */
+    G_OPT_T_WHERE,              /*!< A temporal GIS framework SQL WHERE statement */
+    G_OPT_T_SAMPLE,             /*!< Temporal sample methods */
 
 } STD_OPT;
+
+/*!
+  \typedef STD_FLG
+  \brief  Standard flag identifiers (enum)
+
+  Identifies of all recognized standard flags.
+
+  Used by the G_parser() system.
+*/
 
 /**/ typedef enum
 {
     G_FLG_UNDEFINED,
-    G_FLG_V_TABLE,		/* do not create attribute table */
-    G_FLG_V_TOPO,               /* do not build topology */
+    G_FLG_V_TABLE,		/*!< do not create attribute table */
+    G_FLG_V_TOPO,               /*!< do not build topology */
 } STD_FLG;
 
 /* Message format */
@@ -298,21 +321,26 @@ static const char *GRASS_copyright __attribute__ ((unused))
 */
 #define GV_KEY_COLUMN    "cat"
 
-/* Element types */
+/*!
+  \brief Element types identifiers (enum)
+
+  Identifies various element types. Element can be raster map,
+  vector map, etc.
+*/
 enum
 {				/* Dir */
-    G_ELEMENT_RASTER = 1,	/* cell */
-    G_ELEMENT_RASTER3D = 2,	/* 3dcell */
-    G_ELEMENT_VECTOR = 3,	/* vector */
-    G_ELEMENT_OLDVECTOR = 4,	/* GRASS < 5.7 vector */
-    G_ELEMENT_ASCIIVECTOR = 5,	/* ASCII vector */
-    G_ELEMENT_ICON = 6,		/* icon */
-    G_ELEMENT_LABEL = 7,	/* labels */
-    G_ELEMENT_SITE = 8,		/* sites */
-    G_ELEMENT_REGION = 9,	/* region */
-    G_ELEMENT_REGION3D = 10,	/* 3dregion */
-    G_ELEMENT_GROUP = 11,	/* group */
-    G_ELEMENT_3DVIEW = 12	/* 3dview */
+    G_ELEMENT_RASTER = 1,	/*!< cell */
+    G_ELEMENT_RASTER3D = 2,	/*!< 3dcell */
+    G_ELEMENT_VECTOR = 3,	/*!< vector */
+    G_ELEMENT_OLDVECTOR = 4,	/*!< GRASS < 5.7 vector */
+    G_ELEMENT_ASCIIVECTOR = 5,	/*!< ASCII vector */
+    G_ELEMENT_ICON = 6,		/*!< icon */
+    G_ELEMENT_LABEL = 7,	/*!< labels */
+    G_ELEMENT_SITE = 8,		/*!< sites */
+    G_ELEMENT_REGION = 9,	/*!< region */
+    G_ELEMENT_REGION3D = 10,	/*!< 3dregion */
+    G_ELEMENT_GROUP = 11,	/*!< group */
+    G_ELEMENT_3DVIEW = 12	/*!< 3dview */
 };
 
 /*=========================== Typedefs/Structures ==========================*/
@@ -417,56 +445,81 @@ struct Key_Value
     char **value;
 };
 
-struct Option			/* Structure that stores option info */
+/*!
+  \brief Structure that stores option information
+
+  The descriptions member contains pairs of option and option
+  descriptions separated by semicolon ';'.
+  For example, when options member is set using:
+  \code
+  opt->options = "break,rmdupl"
+  \endcode
+  the descriptions member should be set to:
+  \verbatim
+  "break;break lines on intersections;"
+  "rmdupl;remove duplicates"
+  \endverbatim
+
+  Parsed descriptions are stored in the same order as options.
+
+  GUI dependency is a list of options (separated by commas) to be updated
+  if the value is changed.
+
+  Used by the G_parser() system.
+*/
+struct Option
 {
-    const char *key;		/* Key word used on command line    */
-    int type;			/* Option type                      */
-    int required;		/* REQUIRED or OPTIONAL             */
-    int multiple;		/* Multiple entries OK              */
-    const char *options;	/* Approved values or range or NULL */
-    const char **opts;		/* NULL or NULL terminated array of parsed options */
-    const char *key_desc;	/* one word describing the key      */
-    const char *label;		/* Optional short label, used in GUI as item label */
-    const char *description;	/* String describing option         */
-    const char *descriptions;	/* ';' separated pairs of option and option descriptions */
-    /* For example: (with ->options = "break,rmdupl")
-     * "break;break lines on intersections;"
-     * "rmdupl;remove duplicates"
-     */
-    const char **descs;		/* parsed descriptions, array of either NULL or string */
-    /* in the same order as options */
-    char *answer;		/* Option answer                    */
-    const char *def;		/* Where original answer gets saved */
-    char **answers;		/* Option answers (for multiple=YES) */
-    struct Option *next_opt;	/* Pointer to next option struct    */
-    const char *gisprompt;	/* Interactive prompt guidance      */
-    const char *guisection;	/* GUI Layout guidance: ';' delimited heirarchical tree position */
-    const char *guidependency;  /* GUI dependency, list of options
-				   (separated by commas) to be updated
-				   if the value is chanched */
-    int (*checker)(const char *);/* Routine to check answer or NULL  */
+    const char *key;		/*!< Key word used on command line */
+    int type;			/*!< Option type */
+    int required;		/*!< REQUIRED or OPTIONAL */
+    int multiple;		/*!< Multiple entries OK */
+    const char *options;	/*!< Approved values or range or NULL */
+    const char **opts;		/*!< NULL or NULL terminated array of parsed options */
+    const char *key_desc;	/*!< one word describing the key */
+    const char *label;		/*!< Optional short label, used in GUI as item label */
+    const char *description;	/*!< String describing option */
+    const char *descriptions;	/*!< ';' separated pairs of option and option descriptions */
+    const char **descs;		/*!< parsed descriptions, array of either NULL or string */
+    char *answer;		/*!< Option answer */
+    const char *def;		/*!< Where original answer gets saved */
+    char **answers;		/*!< Option answers (for multiple=YES) */
+    struct Option *next_opt;	/*!< Pointer to next option struct */
+    const char *gisprompt;	/*!< Interactive prompt guidance */
+    const char *guisection;	/*!< GUI Layout guidance: ';' delimited hierarchical tree position */
+    const char *guidependency;  /*!< GUI dependency */
+    int (*checker)(const char *);/*!< Routine to check answer or NULL  */
     int count;
 };
 
-struct Flag			/* Structure that stores flag info  */
+/*!
+  \brief Structure that stores flag info
+
+  Used by the G_parser() system.
+*/
+struct Flag
 {
-    char key;			/* Key char used on command line    */
-    char answer;		/* Stores flag state: 0/1           */
-    char suppress_required;	/* Suppresses checking of required options */
-    const char *label;		/* Optional short label, used in GUI as item label */
-    const char *description;	/* String describing flag meaning   */
-    const char *guisection;	/* GUI Layout guidance: ';' delimited heirarchical tree position */
-    struct Flag *next_flag;	/* Pointer to next flag struct      */
+    char key;			/*!< Key char used on command line */
+    char answer;		/*!< Stores flag state: 0/1 */
+    char suppress_required;	/*!< Suppresses checking of required options */
+    const char *label;		/*!< Optional short label, used in GUI as item label */
+    const char *description;	/*!< String describing flag meaning   */
+    const char *guisection;	/*!< GUI Layout guidance: ';' delimited hierarchical tree position */
+    struct Flag *next_flag;	/*!< Pointer to next flag struct */
 };
 
-struct GModule			/* Structure that stores module info  */
+/*!
+  \brief Structure that stores module info
+
+  Used by the G_parser() system.
+*/
+struct GModule
 {
-    const char *label;		/* Optional short description for GUI */
-    const char *description;	/* String describing module */
-    const char **keywords;	/* Keywords describing module */
-    /* further items are possible: author(s), version */
-    int overwrite;		/* overwrite old files */
-    int verbose;		/* print all information about progress and so on */
+    const char *label;		/*!< Optional short description for GUI */
+    const char *description;	/*!< String describing module */
+    const char **keywords;	/*!< Keywords describing module */
+    /* further items are possible: author(s), version, year */
+    int overwrite;		/*!< overwrite old files */
+    int verbose;		/*!< print all information about progress and so on */
 };
 
 struct TimeStamp
