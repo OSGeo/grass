@@ -7,9 +7,9 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \tableofcontents
 
+\par Subpages
 
-\par Subpages:
-- \subpage Command_Line_Parsing
+- \subpage gislib_cmdline_parsing
 
 This chapter is divided as follows:
 
