@@ -1,30 +1,52 @@
-/*
-\page Command_Line_Parsing Command Line Parsing
+/*!
+\page gislib_cmdline_parsing Command Line Parsing
+
+<!--
+extracted form gislib.dox and improved by Vaclav Petras, 2013
+
+Copyright 2004-2013 by the GRASS Development Team
+
+Published under GNU Free Documentation License
+-->
+
+\tableofcontents
 
 
-The following routines provide a standard mechanism for command line
-parsing. Use of the provided set of routines will standardize GRASS
-commands that expect command line arguments, creating a family of
-GRASS modules that is easy for users to learn. As soon as a GRASS user
+\section gislibcmd_Introduction Introduction
+
+This section describes a standard mechanism for
+command line parsing in GRASS. The system is usually referred as
+<em>parser</em> or <em>g.parser</em> (because of the related
+\gmod{g.parser} module).
+Use of the provided set of functions will standardize
+GRASS modules that expect command line arguments, creating a family of
+GRASS modules that is easy for users to learn.
+
+The standardization is important because as soon as a GRASS user
 familiarizes himself with the general form of command line input as
 defined by the parser, it will greatly simplify the necessity of
 remembering or at least guessing the required command line arguments
-for any GRASS command. It is strongly recommended that GRASS
-programmers use this set of routines for all command line
+for any GRASS command. It is strongly recommended, almost mandatory,
+that GRASS programmers use this set of functions for all command line
 parsing. With their use, the programmer is freed from the burden of
 generating user interface code for every command. The parser will
 limit the programmer to a pre-defined look and feel, but limiting the
-interface is well worth the shortened user learning curve.
+interface is well worth the shortened user learning curve. Moreover,
+system enables to generate module interface descriptions which can
+be used by GUI to generate a graphical interface for a module.
 
-\subsection Description Description
+\note There are also standard options and flags which ensures even
+better standardization of names, values and descriptions.
 
 
-The GRASS parser is a collection of five subroutines which use two
-structures that are defined in the GRASS "gis.h" header file. These
-structures allow the programmer to define the options and flags that
-make up the valid command line input of a GRASS command.
+\section gislibcmd_Description Description
 
-The parser routines behave in one of three ways:
+The GRASS parser is a collection of functions and
+structures that are defined in the GRASS gis.h header file. These
+structures and functions allow the programmer to define the options and
+flags that make up the valid command line input of a GRASS command.
+
+The parser functions behave in one of three ways:
 
 <ul>
 <li> If no command line arguments are entered by the user, the parser
@@ -45,67 +67,78 @@ by the user, the parser executes the command with the given options
 and flags.
 </ul>
 
-\subsection Structures Structures
+\note Python modules uses the same system but instead of functions
+and structures, comments in files are used to define options and flags.
 
-The parser routines described below use two structures as defined in
-the GRASS "gis.h" header file.
 
-This is a basic list of members of the <b>Option</b> and <b>Flag</b>
+\section Parser_Interface Parser interface
+
+The parser functions described below use two structures as defined in
+the GRASS gis.h header file.
+
+This is a basic list of members of the Option and Flag
 structures. A comprehensive description of all elements of these two
 structures and their possible values can be found in
-\ref Full_Structure_Members_Description.
+\ref Complete_Structure_Members_Description.
 
 \subsection Option_structure Option structure
 
-
-These are the basic members of the <em>Option</em> structure.
+The basic usage of the Option structure is as follows.
+You create a pointer to the Option structure.
 
 \code
-struct Option *opt; /* to declare a command line option */
+struct Option *opt;
 \endcode
 
-Structure Member Description of Member:
+And then you call G_define_option() function which allocates memory for
+the Option structure and returns a pointer to it.
 
- - <i>opt->key</i> - Option name that user will use
- - <i>opt->description</i> - Option description that is shown to the user
- - <i>opt->type</i> - Variable type of the user's answer to the option
- - <i>opt->required</i> - Is this option required on the command line? (Boolean)
+\code
+opt = G_define_option();
+\endcode
+
+Then you set the structure members, basic members are:
+
+ - <tt>key</tt> - Option name that user will use
+ - <tt>description</tt> - Option description that is shown to the user
+ - <tt>type</tt> - Variable type of the user's answer to the option
+ - <tt>required</tt> - If this option is required on the command line?
+
+For full list of members see Option structure documentation.
+
 
 \subsection Flag_structure Flag structure
 
-These are the basic members of the Flag structure.
+The basic usage of the Flag structure is as follows.
+You create a pointer to the Flag structure.
 
 \code
-struct Flag *flag; /* to declare a command line flag */
+struct Flag *flag;
 \endcode
 
-Structure Member Description of Member:
+And then you call G_define_flag() function which allocates memory for
+the Flag structure and returns a pointer to it.
 
- - <i>flag->key</i> - Single letter used for flag name
- - <i>flag->description</i> - Flag description that is shown to the user
+\code
+flag = G_define_flag()
+\endcode
+
+Then you set the structure members, basic members are:
+
+ - <tt>key</tt> - Single letter used for flag name
+ - <tt>description</tt> - Flag description that is shown to the user
+
+For full list of members see Flag structure documentation.
 
 
-\subsection Parser_Routines Parser Routines
+\subsection Running_Parser Running Parser
 
-Associated with the parser are five routines that are automatically
-included in the GRASS Makefile process. The Makefile process is
-documented in \ref Compiling_and_Installing_GRASS_Modules.
-
- - G_define_option()
-
-Returns <i>Option</i> structure. Allocates memory for the Option structure
-and returns a pointer to this memory.
-
- - G_define_flag()
-
-Allocates memory for the <i>Flag</i> structure and returns a pointer
-to this memory.
-
- - G_parser()
+To process and check the command line parameters of you module,
+you need to call G_parser() function.
 
 The command line parameters <i>argv</i> and the number of parameters
-<i>argc</i> from the main() routine are passed directly to
-G_parser(). G_parser() accepts the command line input
+<i>argc</i> from the main() routine are should be passed directly to
+G_parser() function. G_parser() function accepts the command line input
 entered by the user, and parses this input according to the input
 options and/or flags that were defined by the programmer.
 
@@ -113,7 +146,13 @@ G_parser() returns 0 if successful. If not successful, a usage
 statement is displayed that describes the expected and/or required
 options and flags and a non-zero value is returned.
 
- - G_usage()
+
+\subsection Parser_Additional_checks Additional checks of command line parameters
+
+When a G_parser() function is not sufficient to check all the details
+about the options and flags and their combinations, programmer has
+to add additional checks which are needed. If these checks are not
+successful programmer can call G_usage() function.
 
 Calls to G_usage() allow the programmer to print the usage message at
 any time. This will explain the allowed and required command line
@@ -132,33 +171,41 @@ succeed, but the programmer can then call G_usage() to print
 the standard usage message and print additional information about how
 the two options work together.
 
- - G_disable_interactive()
 
-When a user calls a command with no arguments on the command line, the
-parser will enter its own standardized interactive session in which
-all flags and options are presented to the user for input. A call to
-G_disable_interactive() disables the parser's interactive prompting.
+\subsection Parser_Displaying_multiple_answers Displaying multiple answers default values
 
-<b>Note:</b> Displaying multiple answers default values (new in GRASS
-5, see d.zoom for example).
+Providing multiple default values (answers) for option with allows
+multiple values is possible using:
 
 \code
 char *def[] = {"One", "Two", "Last", NULL};
 
 opt->multiple = YES;
 opt->answers  = def;
-if (G_parser(argc, argv))
-    exit(EXIT_FAILURE);
 \endcode
 
-The programmer may not forget last NULL value. 
+The programmer may not forget last NULL value.
+
+<em>New in GRASS 5.</em>
 
 
-\subsection Parser_Programming_Examples Parser Programming Examples
+\subsection Parser_Disabling_interactive Disabling interactive mode
+
+This is mainly historical feature which enables to disable interactive
+prompting in command line.
+
+When a user calls a command with no arguments on the command line, the
+parser will enter its own standardized interactive session in which
+all flags and options are presented to the user for input. A call to
+G_disable_interactive() disables the parser's interactive prompting.
+
+
+\section Parser_Programming_Examples Parser Programming Examples
 
 The use of the parser in the programming process is demonstrated
 here. Both a basic step by step example and full code example are
 presented.
+
 
 \subsection Step_by_Step_Use_of_the_Parser Step by Step Use of the Parser
 
@@ -166,14 +213,15 @@ presented.
 These are the four basic steps to follow to implement the use of the
 GRASS parser in a GRASS command:
 
-<b>(1) Allocate memory for Flags and Options:</b>
-
-Flags and Options are pointers to structures allocated through the
-parser routines G_define_option() and G_define_flag() as
-defined in \ref Parser_Routines.
+\subsubsection gislib_cmdline_Allocate Allocate memory for Flags and Options
+Options and flags are pointers to structures (Option and Flag structures)
+allocated through the parser functions G_define_option() and G_define_flag()
+as described in \ref Parser_Interface.
 
 \code
 #include <grass/gis.h>;   /* The standard GRASS include file */
+
+/* ... */
 
 struct Option *opt;       /* Establish an Option pointer for each option */
 struct Flag *flag;        /* Establish a Flag pointer for each option */
@@ -183,7 +231,8 @@ opt = G_define_option();  /* Request a pointer to memory for each option */
 flag = G_define_flag();   /* Request a pointer to memory for each flag */
 \endcode
 
-<b>(2) Define members of Flag and Option structures:</b>
+
+\subsubsection gislib_cmdline_Define Define members of Flag and Option structures
 
 The programmer should define the characteristics of each option and
 flag desired as outlined by the following example:
@@ -198,45 +247,58 @@ flag->key = "t";                     /* Single letter name for flag */
 flag->description = _("Flag test");  /* The flag description is "Flag test" */
 \endcode
 
-<b>Note:</b> There are more options defined later in \ref
-Complete_Structure_Members_Table.
+\note There are more options defined in \ref Complete_Structure_Members_Table.
+You should for sure explore <tt>label</tt> member, <tt>options</tt> member
+and <tt>multiple</tt> member.
 
-<b>(3) Call the parser:</b>
+
+\subsubsection gislib_cmdline_Call Call the parser
 
 \code
 int main(int argc, char *argv[]); /* command line args passed into main() */
 
-if (G_parser(argc, argv))         /* Returns 0 if successful, non-zero otherwise */
+/* ... options and flags definitions */
+
+if (G_parser(argc, argv))    /* Returns 0 if successful, non-zero otherwise */
       exit(EXIT_FAILURE);
+
+/* ... additional checks */
+
+/* ... module code */
 \endcode
 
-<b>(4) Extracting information from the parser structures:</b>
+
+\subsubsection gislib_cmdline_Extracting Extracting information from the parser structures
+
+The following lines will extract the information form option and flag
+and print it to the standard output.
 
 \code
 fprintf(stdout, "For the option "%s" you chose: <%s>\n", opt->description, opt->answer);
 fprintf(stdout, "The flag "-%s" is %s set.\n", flag->key, flag->answer ? "" : "not");
 \endcode
 
-<b>(5) Running the example program</b>
 
-Once such a module has been compiled (for example to the default
-executable file <tt>a.out</tt> , execution will result in the following
-user interface scenarios. Lines that begin with '$' imply user entered
-commands on the command line.
+\subsubsection gislib_cmdline_Running Running the example program
+
+Once such a module has been compiled
+(see \ref Compiling_and_Installing_GRASS_Modules), execution will result
+in the following user interface scenarios. Lines that begin with '$' (dollar sign)
+imply user entered commands on the command line.
 
 \verbatim
-$ a.out help
+$ r.mysample --help
 \endverbatim
 
 This is a standard user call for basic help information on the
-module. The command line options (in this case, "help") are sent to
-the parser via G_parser(). The parser recognizes the "help"
+module. The command line options (in this case, <tt>--help</tt>) are sent to
+the parser via G_parser(). The parser recognizes the <tt>--help</tt>
 command line option and returns a list of options and/or flags that
 are applicable for the specific command. Note how the programmer
 provided option and flag information is captured in the output.
 
 \verbatim
-a.out [-t] option=name
+r.mysample [-t] option=name
 
 Flags:
 -t Flag test
@@ -248,7 +310,7 @@ option Option test
 Now the following command is executed:
 
 \verbatim
-# a.out -t
+# r.mysample -t
 \endverbatim
 
 This command line does not contain the required option. Note that the
@@ -260,7 +322,7 @@ Required parameter <option> not set (Option test).
 
 Usage:
 
-a.out[-t] option=name
+r.mysample [-t] option=name
 
 
 Flags:
@@ -270,26 +332,28 @@ Parameters:
 option Option test
 \endverbatim
 
-The following commands are correct and equivalent. The parser provides no 
-error messages and the module executes normally:
+The following commands are correct and equivalent:
 
 \verbatim
-# a.out option=Hello -t
+$ r.mysample option=Hello -t
+$ r.mysample -t option=Hello
+\endverbatim
 
-# a.out -t option=Hello
+The parser provides no  error messages and the module executes normally:
 
+\verbatim
 For the option "Option test" you chose: Hello
 The flag "-t" is set.
 \endverbatim
 
-\subsection Full_Module_Example Full Module Example
 
+\subsection gislibcmd_Full_Module_Example Full Module Example
 
 The following code demonstrates some of the basic capabilities of the
 parser. To compile this code, create this Makefile and run the
 <tt>make</tt> command (see \ref Compiling_and_Installing_GRASS_Modules).
 
-\code
+\verbatim
 MODULE_TOPDIR = ../..
 
 PGM = r.mysample
@@ -300,12 +364,13 @@ DEPENDENCIES = $(GISDEP)
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: cmd
-\endcode
+\endverbatim
 
-The <tt>sample.c</tt> code follows. You might experiment with this code to 
+The sample C code follows (the usual name of the file with the main
+function is <tt>%main.c</tt>. You might experiment with this code to
 familiarize yourself with the parser.
 
-<b>Note:</b> This example includes some of the advanced structure
+\note This example includes some of the advanced structure
 members described in \ref Complete_Structure_Members_Table.
 
 \code
@@ -360,9 +425,16 @@ int main(int argc, char *argv[])
 }
 \endcode
 
-\subsection Complete_Structure_Members_Table Complete Structure Members Table
+\note This example defines option for coordinates in its own way to
+demonstrate usage of particular parser features. However, it must be noted
+that there is standardized option G_OPT_M_COORDS which should be used for
+coordinates.
 
-\subsubsection memtabFlag struct Flag
+
+\section Complete_Structure_Members_Table Complete Structure Members Table
+
+
+\subsection memtabFlag struct Flag
 
 <table>
 <tr>
@@ -395,7 +467,7 @@ int main(int argc, char *argv[])
 </tr>
 </table>
 
-\subsubsection memtabOption struct Option
+\subsection memtabOption struct Option
 
 <table>
 <tr>
@@ -514,8 +586,8 @@ int main(int argc, char *argv[])
 </tr>
 </table>
 
-\subsection Description_of_Complex_Structure_Members Description of Complex Structure Members 
 
+\section Description_of_Complex_Structure_Members Description of Complex Structure Members 
 
 What follows are explanations of possibly confusing structure
 members. It is intended to clarify and supplement the structures table
@@ -553,8 +625,8 @@ NULL value by G_parser().
 As an example, please review the use of answer members in the structures 
 implemented in \ref Full_Module_Example.
 
-\subsection Multiple_and_Answers_Members Multiple and Answers Members
 
+\subsection Multiple_and_Answers_Members Multiple and Answers Members
 
 The functionality of the answers structure member is reliant on the 
 programmer's definition of the multiple structure member. If the multiple 
@@ -737,10 +809,94 @@ flags to obtain a machine-readable description of the module's
 interface. How the GUI interprets this is up to the GUI.
 
 
-\subsection Common_Questions Common Questions
+\section gislibcmd_Standard_options Standard options
+
+There are standard options which ensures consistency in names
+and values of options. There are also standard flags which does the same.
+
+Options are defined by the G_define_standard_option() function
+and flags are defined by the function G_define_standard_flag().
+Both the options and flags are defined dynamically, so to get see
+the values of all members you need to open the file parser_standard_options.c.
+
+The function G_define_standard_option() accepts one value of an enum
+defined in the file gis.h. When the G_define_standard_option() function
+calls the G_define_option() function, so there is no need to call
+it separately. The same applies also for standard flags which
+uses the G_define_standard_flag() function.
+
+Besides name and value standard options also defines label, description
+allowed values, their descriptions etc. The similar applies for the
+flags, too. After defining a standard option or flag you can still change
+individual parameters to exactly fit your needs.
 
 
- - "How is automatic prompting turned off?"
+\section gislibcmd_FAQ Command line parsing FAQ
+
+
+\par Can the user mix options and flags?
+
+Yes. Options and flags can be given in any order.
+
+
+\par In what order does the parser present options and flags?
+
+Flags and options are presented by the usage message in the order that
+the programmer defines them using calls to G_define_option()
+and G_define_flag().
+
+
+\par Is a user required to use full option names?
+
+No. Users are required to type in only as many characters of an option name 
+as is necessary to make the option choice unambiguous. If, for example, 
+there are two options, "input=" and "output=", the following would be 
+valid command line arguments:
+
+\verbatim
+# command i=map1 o=map2
+
+# command in=map1 out=map2
+\endverbatim
+
+
+\par Are options standardized at all?
+
+Yes. There are a few conventions. Options which identify a single input map 
+are usually "map=", not "raster=" or "vector=". In the case of an 
+input and output map the convention is: "input=xx output=yy". By passing 
+the 'help' option to existing GRASS commands, it is likely that you will 
+find other conventions. The desire is to make it as easy as possible for the 
+user to remember (or guess correctly) what the command line syntax is for a 
+given command.
+
+To ensure maximal consistency, the most common options such as the options
+named above are defined as standard options and are available through
+G_define_standard_option() function. For flags you can use G_define_standard_flag()
+function.
+
+\par How does a programmer query for coordinates?
+
+There is standardized option G_OPT_M_COORDS which should be used for
+coordinates.
+
+See the source code for the GRASS commands <tt>r.drain</tt> or
+<tt>r.cost</tt> for examples.
+
+
+\par How does a programmer define that the option is a set of values?
+
+For any user input that requires a set of arguments (like a pair of
+map coordinates) the programmer specifies the number of arguments in
+the key_desc member of the Option structure. For example, if
+opt-&gt;key_desc was set to "x,y", the parser will require that the
+user enter a pair of arguments separated only by a comma.
+
+\note There is standardized option G_OPT_M_COORDS which should be used for
+coordinates.
+
+
+\par How is automatic prompting turned off?
 
 GRASS 4.0 introduced a new method for driving GRASS interactive and
 non-interactive modules as described in \ref
@@ -756,49 +912,6 @@ In such a situation, the parser's default interaction will never be
 seen by the user. A programmer using the parser is able to avoid the
 front-end's default search for a fully interactive version of the
 command by placing a call to G_disable_interactive() before
-calling G_parser() (see \ref Parser_Routines for details).
-
- - "Can the user mix options and flags?"
-
-Yes. Options and flags can be given in any order.
-
- - "In what order does the parser present options and flags?"
-
-Flags and options are presented by the usage message in the order that
-the programmer defines them using calls to G_define_option()
-and G_define_flag().
-
- - "How does a programmer query for coordinates?"
-
-For any user input that requires a set of arguments (like a pair of
-map coordinates,) the programmer specifies the number of arguments in
-the key_desc member of the Option structure. For example, if
-opt-&gt;key_desc was set to "x,y", the parser will require that the
-user enter a pair of arguments separated only by a comma. See the
-source code for the GRASS commands <tt>r.drain</tt> or <tt>r.cost</tt>
-for examples.
-
- - "Is a user required to use full option names?"
-
-No. Users are required to type in only as many characters of an option name 
-as is necessary to make the option choice unambiguous. If, for example, 
-there are two options, "input=" and "output=", the following would be 
-valid command line arguments:
-
-\verbatim
-# command i=map1 o=map2
-
-# command in=map1 out=map2
-\endverbatim
-
- - "Are options standardized at all?"
-
-Yes. There are a few conventions. Options which identify a single input map 
-are usually "map=", not "raster=" or "vector=". In the case of an 
-input and output map the convention is: "input=xx output=yy". By passing 
-the 'help' option to existing GRASS commands, it is likely that you will 
-find other conventions. The desire is to make it as easy as possible for the 
-user to remember (or guess correctly) what the command line syntax is for a 
-given command.
+calling G_parser() (see \ref Parser_Interface for details).
 
 */
