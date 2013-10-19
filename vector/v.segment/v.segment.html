@@ -47,20 +47,24 @@ that distance can be used as the along-line offset.
 
 <h2>EXAMPLES</h2>
 
-Spearfish location:
+The examples may be used in the North Carolina sample location.
+<p>
 
+Example: Extract line segment from 400m to 5000m from beginning 
+of line 1:
 <div class="code"><pre>
 # extract lines from railroad map:
-v.extract railroads out=myrr list=1
+v.extract railroads out=myrr cats=1
 
 # join segments into polyline and reassign category numbers
 v.build.polylines myrr out=myrr_pol
 v.category myrr_pol out=myrailroads option=add
 
 # zoom to an area of interest
-g.region n=4928200 s=4921100 w=605600 e=613200
+g.region vector=myrailroads -p
 
 # show line, category, direction (to find the beginning)
+d.mon wx0
 d.vect myrailroads disp=shape,cat,dir lsize=12
 
 # extract line segment from 400m to 5000m from beginning of line 1
@@ -72,12 +76,17 @@ d.vect myrailroads_segl col=green width=2
 # set node at 5000m from beginning of line 1
 echo "P 1 1 5000" | v.segment myrailroads out=myrailroads_segp
 d.vect myrailroads_segp icon=basic/circle color=red fcolor=red size=5
+</pre></div>
+<center>
+<img src="v_segment_subline.jpg"><br>
+Extract line segment from 400m to 5000m from beginning
+of line 1
+</center>
 
-# get points from a text file
-cat mypoints.txt | v.segment myrailroads out=myrailroads_mypoints
-
-# create parallel 1km long line segments along first 8km of track,
-# offset 500m to the left of the tracks.
+<p>
+Example: Create parallel 1km long line segments along first 8km of 
+track, offset 500m to the left of the tracks.
+<div class="code"><pre>
 v.segment myrailroads out=myrailroads_segl_side &lt;&lt; EOF
 L 1 1 1000 2000 -500
 L 2 1 3000 4000 -500
@@ -87,26 +96,49 @@ EOF
 d.erase
 d.vect myrailroads disp=shape,dir
 d.vect -c myrailroads_segl_side width=2
+</pre></div>
 
-# A series of points, spaced every 2km along the tracks
+<p>
+Example: A series of points, spaced every 2km along the tracks
+<div class="code"><pre>
 v.segment myrailroads out=myrailroads_pt2km &lt;&lt; EOF
 P 1 1 1000
 P 2 1 3000
 P 3 1 5000
 P 4 1 7000
 EOF
+d.erase
+d.vect myrailroads disp=shape,dir
 d.vect myrailroads_pt2km icon=basic/circle color=blue fcolor=blue size=5
+</pre></div>
+<center>
+<img src="v_segment_spaced_points.jpg"><br>
+A series of points, spaced every 2km along the tracks
+</center>
 
-# A series of points, spaced every 2km along the tracks, offset 500m to the right
+<p>
+Example: A series of points, spaced every 2km along the tracks, offset 500m to the right
+<div class="code"><pre>
 v.segment myrailroads out=myrailroads_pt2kmO500m &lt;&lt; EOF
 P 1 1 1000 500
 P 2 1 3000 500
 P 3 1 5000 500
 P 4 1 7000 500
 EOF
+d.erase
+d.vect myrailroads disp=shape,dir
 d.vect myrailroads_pt2kmO500m icon=basic/circle color=aqua fcolor=aqua size=5
+</pre></div>
+<center>
+<img src="v_segment_spaced_right_points.jpg"><br>
+A series of points, spaced every 2km along the tracks, offset 500m to the right
+</center>
 
-# A series of points, spaced every 10% of the line's length along the tracks from the end of the line up to the middle point, offset 500m to the right
+<p>
+Example: A series of points, spaced every 10% of the line's length along the
+tracks from the end of the line up to the middle point, offset 500m to the right
+
+<div class="code"><pre>
 v.segment myrailroads out=myrailroads_pt10pctO500m &lt;&lt; EOF
 P 1 1  -0% 500
 P 1 1 -10% 500
@@ -115,9 +147,15 @@ P 3 1 -30% 500
 P 4 1 -40% 500
 P 4 1 -50% 500
 EOF
+d.erase
+d.vect myrailroads disp=shape,dir
 d.vect myrailroads_pt10pctO500m icon=basic/circle color=red fcolor=black size=5
 </pre></div>
-
+<center>
+<img src="v_segment_spaced_percent_points.jpg"><br>
+A series of points, spaced every 10% of the line's length along the
+tracks from the end of the line up to the middle point, offset 500m to the right
+</center>
 
 <h2>BUGS</h2>
 There is a problem with side-offset parallel line generation for inside corners.
