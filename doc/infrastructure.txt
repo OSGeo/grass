@@ -1,6 +1,8 @@
 How the GRASS Webserver and related infrastructure works
 
-written by M. Neteler, $Date$
+written by M. Neteler
+Last changed: $Date$
+
 
 Related Wiki documents:
 * http://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo
@@ -26,17 +28,12 @@ Maintainer: M. Neteler
 ** Wiki backup, via rsync to http://josef.fsv.cvut.cz/WIKI/grass-osgeo/index.php/Main_Page
 
 * Web pages:
-** hosted in SVN server (developers can modify, see
-   http://trac.osgeo.org/grass/wiki/WebPagesManagement),
-   downloaded to Web server via cronjob hourly
-** written in simple PHP/HTML (just include() statement for menus)
-** mirrored to selected tier-1 sites via rsync (hardcoded IPs to avoid
-   that too many sites connect at grass.osgeo.org)
-** tier-1 sites are mirrored via rsync to tier-2 mirrors (no hardcoded IPs)
-** RSS feed: rss.xml file stored in SVN-Web
-** TODO: To be migrated to CMS or whatever: http://grass.osgeo.org/wiki/Web_site
+** CMSMS: http://grass.osgeo.org/home/imprint/
+** mirrored from Wroclav university via httrack (tier-1),
+   then offered as rsync mirror (tier-2) to other mirror sites
+** RSS feed: offered by CMSMS
 
-* i18N translation statistics (http://grass.osgeo.org/devel/i18n.php#statistics)
+* i18N translation statistics (http://grass.osgeo.org/development/translations/#statistics)
 ** based in Linux weekly snapshot
 ** GRASS version is coded in devel/i18n_stats.inc
 
@@ -50,6 +47,7 @@ Maintainer: M. Neteler
 ** generated during compilation of weekly Linux binary snapshot
 
 * GRASS programmer's manual (http://grass.osgeo.org/programming7/)
+** HTML: cronjob run Wednesday morning California time
 ** HTML: cronjob run Saturday morning California time
 ** disabled: PDF: cronjob run Saturday morning California time
 
@@ -59,16 +57,11 @@ Maintainer: M. Neteler
 ** text file parsed by PHP page and shown as table
 
 * GRASS user map
-** GDF server is creating PNG output via Mapserver
-** fetched every three hours via cronjob from http://mapserver.gdf-hannover.de/tmp/
+** under development
 
 * GRASS-Mapserver demo
 ** currently broken after grass.osgeo.org update
-
-* Search engine (TODO!!)
-** htdig runs once a week
-** searchgrass.inc contains selective entries (SVN-Web)
-** TODO: To be migrated to OSGeo server 12/2007
+** something is on the OSGeo Adhoc Virtual machine
 
 * FTP server
 ** no longer available due to security risk
@@ -80,13 +73,13 @@ Maintainer: M. Neteler
     User -> grass-web at lists osgeo.org -> greylisting -> Mailman
 
 * Backup of mailing lists (mbox files) (TODO!!)
-** manually done by MN and Intevation (into freegis.org FTP space)
-** nightly backup at OSGeo.org
+** manually done by MN 
+** nightly backup at OSGeo.org, bacula
 ** TODO: Establish solution via local cp on lists.osgeo.org (SAC ticket todo)
 
 * Web statistics
 ** See URL at http://wiki.osgeo.org/wiki/Project_Stats
-** OSGeo: awstats (http://grass.osgeo.org/logs-bin/awstats.pl?config=grass.osgeo.org)
+** OSGeo: awstats (http://grass.osgeo.org/stats/awstats.pl)
 *** configuration at: /etc/awstats/awstats.grass.osgeo.org.conf
 ***                   /etc/httpd/conf.d/sites/grass.osgeo.org.conf
 *** httpd logs: /var/log/httpd/grass_*
@@ -100,7 +93,6 @@ Summary: The system should run almost autonomously.
 == GRASS Mailing lists ==
 
 Maintainer: Markus Neteler
-
 
 Available lists:
 
@@ -119,18 +111,18 @@ Available lists:
    grass-web 		GRASS website mailing list
    grass-windows 	winGRASS - Using GRASS on MS-Windows systems mailing list
 
-* UNUSED: at FBK-irst (http://grass.fbk.eu/mailman/admin/):
+* OLD, UNUSED: at FBK-irst (http://grass.fbk.eu/mailman/admin/):
    grass-commit-addons          Mailing list to distribute GRASS Addons-SVN commits
 
 Notes:
 * grass-announce:
   * moderated by M. Neteler
   * has monthly password reminder disabled to avoid leakage into publicly archived lists
-* grass-qa is receiving posts from the GRASS Quality Control System at
-  Ecole Polytechnique de Montreal, Canada. Not open for other postings.
 * grass-commit is receiving posts from the GRASS SVN at osgeo.org.
   Not open for other postings.
 * grass-web is an open list (posting without subscription possible) with (Google) spam filter
+* OLD, UNUSED: grass-qa is receiving posts from the GRASS Quality Control System at
+  Ecole Polytechnique de Montreal, Canada. Not open for other postings.
 
 
 == GRASS Wiki ==
@@ -138,7 +130,8 @@ Notes:
 Maintainer: Markus Neteler
 
 * http://grass.osgeo.org
-* Mediawiki, sponsored by Telascience.org (San Diego)
+* Mediawiki
+* mirrored at CZ Tech University
 * requires registration to keep spammers out
 
 Summary: The system should run almost autonomous. An eye must be
@@ -147,7 +140,7 @@ Summary: The system should run almost autonomous. An eye must be
 == GRASS IRC ==
 
 Channel: irc://irc.freenode.net/grass
-Web based client: http://irc.telascience.org/
+Web based client: See http://grasswiki.osgeo.org/wiki/IRC
 
 * channel owner: Alessandro Frigeri <afrigeri unipg.it> ("geoalf")
 * quasi guru: Markus Neteler ("markusN")
@@ -168,6 +161,17 @@ Maintainer: OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
 
 == GRASS Bugtracker ==
 
+Current bugtracker (Jan 2008 - today):
+  * http://trac.osgeo.org/grass/report
+  * Trac
+  * posts new bugs and comments to grass-dev list
+
+Old bugtracker (Jan 2007 - Dec 2008):
+  * http://wald.intevation.org/tracker/?group_id=21
+  * gforce, sponsored by Intevation GmbH, Germany
+  * spamassasin spamfilter locally, bogofilter at grass-dev list
+  * needs 'noreply*wald.intevation.org' to be enabled as alias in Mailman
+
 Very old bugtracker (Dec 2000 - Dec 2006):
   * https://intevation.de/rt/webrt?q_queue=grass
   * webRT, sponsored by Intevation GmbH, Germany
@@ -175,21 +179,11 @@ Very old bugtracker (Dec 2000 - Dec 2006):
   * reports are directly sent to GRASS Developers mailing list for notification
   * TODO: migrate to trac
 
-Old bugtracker (Jan 2007 - Dec 2008):
-  * http://wald.intevation.org/tracker/?group_id=21
-  * gforce, sponsored by Intevation GmbH, Germany
-  * spamassasin spamfilter locally, bogofilter at grass-dev list
-  * needs 'noreply*wald.intevation.org' to be enabled as alias in Mailman
-  * TODO: migrate to trac
-
-New bugtracker (Jan 2008 - today):
-  * http://trac.osgeo.org/grass/report
-  * Trac
-  * posts new bugs and comments to grass-dev list
-
-== GRASS Quality Control ==
+== OLD: GRASS Quality Control ==
 
 Maintainer: Prof. Giulio Antoniol
+
+- offline -
 
 * http://web.soccerlab.polymtl.ca/grass-evolution/grass-browsers/grass-index-en.html
   implemented and sponsored by Ecole Polytechnique de Montreal, Canada
