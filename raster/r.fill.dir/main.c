@@ -184,7 +184,7 @@ int main(int argc, char **argv)
     fd = open(tempfile2, O_RDWR | O_CREAT, 0666);	/* dirn */
     fm = open(tempfile3, O_RDWR | O_CREAT, 0666);	/* problems */
 
-    G_message(_("Reading input elevation raste map..."));
+    G_message(_("Reading input elevation raster map..."));
     for (i = 0; i < nrows; i++) {
 	G_percent(i, nrows, 2);
 	get_row(map_id, in_buf, i);
