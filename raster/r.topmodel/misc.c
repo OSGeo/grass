@@ -79,12 +79,12 @@ void top_index(void)
 
     if (map.topidx) {
 	sprintf(input, "input=%s", map.topidx);
-	sprintf(input, "nsteps=%d", misc.nidxclass);
 	sprintf(output, "output=%s", file.idxstats);
+	sprintf(nsteps, "nsteps=%d", misc.nidxclass);
 
-	G_verbose_message("r.stats -Anc %s %s %s ...", input, nsteps, output);
+	G_verbose_message("r.stats -Anc %s %s %s ...", input, output, nsteps);
 
-	if (G_spawn("r.stats", "r.stats", "-Anc", input, nsteps, output, NULL) != 0)
+	if (G_spawn("r.stats", "r.stats", "-Anc", input, output, nsteps, NULL) != 0)
 	    G_fatal_error("r.stats failed");
     }
 }
