@@ -1,4 +1,3 @@
-
 /***************************************************************
  *
  * MODULE:       v.segment
@@ -6,10 +5,11 @@
  * AUTHOR(S):    Radim Blazek
  *               Hamish Bowman (offset bits)
  *               OGR support by Martin Landa <landa.martin gmail.com>
+ *               Reversed & percent offsets by Huidae Cho <grass4u gmail.com>
  *               
  * PURPOSE:      Generate segments or points from input map and segments read from stdin 
  *               
- * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -27,6 +27,11 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
+int read_point_input(char *buf, char *stype, int *id, int *lcat, double *offset,
+		double *side_offset, int *rev, int *pct);
+int read_line_input(char *buf, char *stype, int *id, int *lcat,
+		double *offset1, double *offset2, double *side_offset,
+		int *rev1, int *pct1, int *rev2, int *pct2);
 int find_line(struct Map_info *Map, int lfield, int cat);
 void offset_pt_90(double *, double *, double, double);
 
@@ -106,6 +111,7 @@ int main(int argc, char **argv)
     lines_written = 0;
 
     while (1) {
+	int rev1, rev2, pct1, pct2;
 
 	if (!file_opt->answer) {
 	    if (fgets(buf, sizeof(buf), stdin) == NULL)
@@ -124,16 +130,14 @@ int main(int argc, char **argv)
 
 	switch (buf[0]) {
 	case 'P':
-	    side_offset = 0;
-	    ret =
-		sscanf(buf, "%c %d %d %lf %lf", &stype, &id, &lcat, &offset1,
-		       &side_offset);
-	    if (ret < 4) {
+	    if (!read_point_input(buf, &stype, &id, &lcat, &offset1,
+				    &side_offset, &rev1, &pct1)) {
 		G_warning(_("Unable to read input: %s"), buf);
 		break;
 	    }
 	    points_read++;
-	    G_debug(2, "point: %d %d %f %f", id, lcat, offset1, side_offset);
+	    G_debug(2, "point: %d %d %s%f%s %f", id, lcat, rev1 ? "-" : "",
+			    offset1, pct1 ? "%" : "", side_offset);
 
 
 	    /* OK, write point */
@@ -144,11 +148,16 @@ int main(int argc, char **argv)
 	    }
 
 	    Vect_read_line(&In, LPoints, LCats, line);
-	    ret =
-		Vect_point_on_line(LPoints, offset1, &x, &y, &z, &angle,
-				   NULL);
+
+	    len = Vect_line_length(LPoints);
+	    if (pct1)
+		offset1 = len * offset1 / 100.0;
+	    if (rev1)
+		offset1 = len - offset1;
+
+	    ret = Vect_point_on_line(LPoints, offset1, &x, &y, &z, &angle,
+			    NULL);
 	    if (ret == 0) {
-		len = Vect_line_length(LPoints);
 		G_warning(_("Unable to get point on line: cat = %d offset = %f "
 			   "(line length = %.15g)\n%s"), lcat, offset1, len,
 			  buf);
@@ -165,16 +174,16 @@ int main(int argc, char **argv)
 	    points_written++;
 	    break;
 	case 'L':
-	    side_offset = 0;
-	    ret = sscanf(buf, "%c %d %d %lf %lf %lf", &stype, &id, &lcat,
-			 &offset1, &offset2, &side_offset);
-	    if (ret < 5) {
+	    if (!read_line_input(buf, &stype, &id, &lcat, &offset1, &offset2,
+				    &side_offset, &rev1, &pct1, &rev2, &pct2)) {
 		G_warning(_("Unable to read input: %s"), buf);
 		break;
 	    }
 	    lines_read++;
-	    G_debug(2, "line: %d %d %f %f %f", id, lcat, offset1, offset2,
-		    side_offset);
+	    G_debug(2, "line: %d %d %s%f%s %s%f%s %f", id, lcat,
+			    rev1 ? "-" : "", offset1, pct1 ? "%" : "",
+			    rev2 ? "-" : "", offset2, pct2 ? "%" : "",
+			    side_offset);
 
 	    line = find_line(&In, lfield, lcat);
 	    if (line == 0) {
@@ -185,6 +194,23 @@ int main(int argc, char **argv)
 	    Vect_read_line(&In, LPoints, LCats, line);
 
 	    len = Vect_line_length(LPoints);
+	    if (pct1)
+	        offset1 = len * offset1 / 100.0;
+	    if (rev1)
+	        offset1 = len - offset1;
+	    if (pct2)
+	        offset2 = len * offset2 / 100.0;
+	    if (rev2)
+	        offset2 = len - offset2;
+
+	    if (offset1 > offset2) {
+		double tmp;
+
+		tmp = offset1;
+		offset1 = offset2;
+		offset2 = tmp;
+	    }
+
 	    if (offset2 > len) {
 		G_warning(_("End of segment > line length -> cut"));
 		offset2 = len;
@@ -237,6 +263,89 @@ int main(int argc, char **argv)
     exit(EXIT_SUCCESS);
 }
 
+int read_point_input(char *buf, char *stype, int *id, int *lcat, double *offset,
+		double *side_offset, int *rev, int *pct)
+{
+    char offsetbuf[100];
+    int ret;
+    char *p;
+
+    *side_offset = 0;
+    *rev = 0;
+    *pct = 0;
+
+    ret = sscanf(buf, "%c %d %d %[.0-9%-] %lf", stype, id, lcat, offsetbuf,
+		    side_offset);
+    
+    if (ret < 4) {
+	return 0;
+    }
+
+    p = offsetbuf;
+    if (offsetbuf[0] == '-') {
+        *rev = 1;
+        p++;
+    }
+    if (offsetbuf[strlen(offsetbuf)-1] == '%') {
+        *pct = 1;
+        offsetbuf[strlen(offsetbuf)-1] = '\0';
+    }
+    if (sscanf(p, "%lf", offset) != 1) {
+        return 0;
+    }
+
+    return 1;
+}
+
+int read_line_input(char *buf, char *stype, int *id, int *lcat,
+		double *offset1, double *offset2, double *side_offset,
+		int *rev1, int *pct1, int *rev2, int *pct2)
+{
+    char offset1buf[100];
+    char offset2buf[100];
+    int ret;
+    char *p;
+
+    *side_offset = 0;
+    *rev1 = 0;
+    *pct1 = 0;
+    *rev2 = 0;
+    *pct2 = 0;
+
+    ret = sscanf(buf, "%c %d %d %[.0-9%-] %[.0-9%-] %lf", stype, id, lcat,
+		    offset1buf, offset2buf, side_offset);
+    if (ret < 5) {
+        return 0;
+    }
+
+    p = offset1buf;
+    if (offset1buf[0] == '-') {
+        *rev1 = 1;
+        p++;
+    }
+    if (offset1buf[strlen(offset1buf)-1] == '%') {
+        *pct1 = 1;
+        offset1buf[strlen(offset1buf)-1] = '\0';
+    }
+    if (sscanf(p, "%lf", offset1) != 1) {
+        return 0;
+    }
+
+    p = offset2buf;
+    if (offset2buf[0] == '-') {
+        *rev2 = 1;
+        p++;
+    }
+    if (offset2buf[strlen(offset2buf)-1] == '%') {
+        *pct2 = 1;
+        offset2buf[strlen(offset2buf)-1] = '\0';
+    }
+    if (sscanf(p, "%lf", offset2) != 1) {
+        return 0;
+    }
+
+    return 1;
+}
 
 /* Find line by cat, returns 0 if not found */
 int find_line(struct Map_info *Map, int lfield, int lcat)

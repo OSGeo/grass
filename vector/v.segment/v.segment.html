@@ -9,12 +9,18 @@ P &lt;point id&gt;   &lt;line cat&gt; &lt;offset&gt; [&lt;side offset&gt;]
 L &lt;segment id&gt; &lt;line cat&gt; &lt;start offset&gt; &lt;end offset&gt; [&lt;side offset&gt;]
 </pre></div>
 
+The offsets can be percent values of the line length. If the offsets are
+negative, they start from the end node of the line. -0 means the end of the
+line.
+
 <h3>EXAMPLE</h3>
 
 The user could send to <tt>stdin</tt> something like:
 <div class="code"><pre>
 P 1 356 24.56
 P 2 495 12.31
+P 3 500 -12.31
+P 4 510 -20%
 ...
 </pre></div>
 (pipe or redirect from file into the command).<br>
@@ -23,18 +29,20 @@ P 2 495 12.31
 <h2>NOTES</h2>
 
 A segment is only created for the first line found of the specified category.
-<p>Points are generated along the lines at the given distance(s) from the
-beginning of the vector line.
+<p>Points are generated along the lines at the given distance(s) or percent(s)
+of the line length from the beginning or end, if offsets are negative, of the
+vector line.
 <p>The side offset is the orthogonal distance from the line. Positive side
 offsets are to the right side of the line going forward, negative offsets
 are to the left (<em>d.vect</em> with <em>display=shape,dir</em> shows
 the direction of vector lines). As the segment distance is measured along the
 original line, side-offset lines will be longer than the start-end segment distance
 for outside corners of curving lines, and shorter for inside corners.
-<p>All offsets are measured in map units (see "<em>g.proj -p</em>").
-<p>To place a point in the middle of a line, the <em>v.to.db</em> module may be
-used to find the line's length. Then half of that distance can be used as the
-along-line offset.
+<p>All offsets are measured in map units (see "<em>g.proj -p</em>") or percents
+of the line length, if followed by a % character.
+<p>To place a point in the middle of a line, 50% offset can be used or the
+<em>v.to.db</em> module may be used to find the line's length. Then half of
+that distance can be used as the along-line offset.
 
 
 <h2>EXAMPLES</h2>
@@ -97,6 +105,17 @@ P 3 1 5000 500
 P 4 1 7000 500
 EOF
 d.vect myrailroads_pt2kmO500m icon=basic/circle color=aqua fcolor=aqua size=5
+
+# A series of points, spaced every 10% of the line's length along the tracks from the end of the line up to the middle point, offset 500m to the right
+v.segment myrailroads out=myrailroads_pt10pctO500m &lt;&lt; EOF
+P 1 1  -0% 500
+P 1 1 -10% 500
+P 2 1 -20% 500
+P 3 1 -30% 500
+P 4 1 -40% 500
+P 4 1 -50% 500
+EOF
+d.vect myrailroads_pt10pctO500m icon=basic/circle color=red fcolor=black size=5
 </pre></div>
 
 
