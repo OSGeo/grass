@@ -23,7 +23,7 @@ void gregion(void)
 
 	G_verbose_message("g.region %s ...", buf);
 
-	if (G_spawn("g.region", "g.region", "--quiet", buf, NULL) != 0)
+	if (G_spawn("g.region", "g.region", buf, NULL) != 0)
 	    G_fatal_error("g.region failed");
     }
 }
@@ -39,9 +39,9 @@ void depressionless(void)
     sprintf(elev, "output=%s", map.fill);
     sprintf(dir, "outdir=%s", map.dir);
 
-    G_verbose_message("r.fill.dir %s %s %s", input, elev, dir);
+    G_verbose_message("r.fill.dir %s %s %s ...", input, elev, dir);
 
-    if (G_spawn("r.fill.dir", "r.fill.dir", "--quiet", input, elev, dir, NULL) != 0)
+    if (G_spawn("r.fill.dir", "r.fill.dir", input, elev, dir, NULL) != 0)
 	G_fatal_error("r.fill.dir failed");
 
     map.elev = map.fill;
@@ -56,7 +56,7 @@ void basin_elevation(void)
 	    map.belev, map.basin, map.basin, map.elev);
     G_verbose_message("r.mapcalc \"%s\" ...", buf);
 
-    if (G_spawn("r.mapcalc", "r.mapcalc", "--quiet", buf, NULL) != 0)
+    if (G_spawn("r.mapcalc", "r.mapcalc", buf, NULL) != 0)
 	G_fatal_error("r.mapcalc failed");
 }
 
@@ -73,7 +73,7 @@ void top_index(void)
 
 	G_verbose_message("r.topidx %s %s ...", input, output);
 
-	if (G_spawn("r.topidx", "r.topidx", "--quiet", input, output, NULL) != 0)
+	if (G_spawn("r.topidx", "r.topidx", input, output, NULL) != 0)
 	    G_fatal_error("r.topidx failed");
     }
 
