@@ -4,9 +4,9 @@ New raster map layers can be created which are arithmetic expressions
 involving existing raster map layers, integer or floating point constants,
 and functions.
 
-<h2>PROGRAM USE</h2>
+<h3>PROGRAM USE</h3>
 
-<em>r3.mapcalc</em> expects its input to have the form:
+<em>r3.mapcalc</em> expression have the form:
 <p><b>result =</b><em> expression</em>
 <p>where <em>result</em> is the name of a raster map layer
 to contain the result of the calculation and
@@ -69,9 +69,9 @@ and in the history file for <em>result</em>.
 <p>Some characters have special meaning to the command shell. If the user
 is entering input to <em>r3.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
-<p>
 
-<h2>OPERATORS AND ORDER OF PRECEDENCE</h2>
+
+<h3>OPERATORS AND ORDER OF PRECEDENCE</h3>
 The following operators are supported:
 <div class="code"><pre>
      Operator   Meaning                    Type        Precedence
@@ -112,9 +112,10 @@ Division by 0 and modulus by 0 are acceptable and give a NULL result.
 The logical operators give a 1 result if the comparison is true, 0 otherwise.
 <p><p>
 
-<h2>3D GRID NAMES</h2>
-Anything in the expression which is not a number, operator, or function
-name is taken to be a 3D grid name. Examples:
+<h3>3D GRID NAMES</h3>
+Anything in the expression which is not a number, operator, or function name
+is taken to be a 3D grid name.
+Examples:
 <p><div class="code"><pre>
 volume
 x3
@@ -160,7 +161,7 @@ method of overriding the mapset search path is common to all GRASS commands,
 not just <em>r3.mapcalc</em>.)
 <p>
 
-<h2>THE NEIGHBORHOOD MODIFIER</h2>
+<h3>THE NEIGHBORHOOD MODIFIER</h3>
 3D grids are data base files stored in voxel format, i.e., three-dimensional
 matrices of float/double values. In <em>r3.mapcalc</em>, 3D grids may be
 followed by a <em>neighborhood</em> modifier that specifies a relative offset
@@ -177,7 +178,7 @@ grid or across multiple 3D grids.
 
 <p>
 
-<h2>FUNCTIONS</h2>
+<h3>FUNCTIONS</h3>
 The functions currently supported are listed in the table below.
 The type of the result is indicated in the last column.
 <em>F</em>
@@ -246,7 +247,7 @@ Internal variables:
 Note, that the row(), col() and depth() indexing starts with 1. 
 
 
-<h2>FLOATING POINT VALUES IN THE EXPRESSION</h2>
+<h3>FLOATING POINT VALUES IN THE EXPRESSION</h3>
 Floating point numbers are allowed in the expression. A floating point
 number is a number which contains a decimal point:
 <div class="code"><pre>
@@ -270,7 +271,7 @@ produce a floating-point result, as will using float():
 </pre></div>
 
 
-<h2>NULL support</h2>
+<h3>NULL support</h3>
 <ul>
 <li>Division by zero should result in NULL. 
 <li>Modulus by zero should result in NULL. 
@@ -315,7 +316,7 @@ on-the-fly, use the isnull() test function in a if-statement.
 <p>Example: The users wants the NULL-valued cells to be treated like zeros. To
 add maps A and B (where B contains NULLs) to get a map C the user can use a
 construction like:<p><div class="code"><pre>
-C=A + if(isnull(B),0,B)
+C = A + if(isnull(B),0,B)
 </pre></div>
 <p><b>NULL and conditions:</b>
 <p>For the one argument form:
@@ -371,6 +372,105 @@ unknown quantity. E.g. if x and y are both unknown, then the values of
 values, the user doesn't know whether or not they both have the same value.
 
 
+<h2>NOTES</h2>
+
+<h3>Usage from command line</h3>
+
+Extra care must be taken if the expression is given on the command line.
+Some characters have special meaning to the UNIX shell.
+These include, among others:
+<p>* ( ) &gt; &amp; |
+<p>It is advisable to put single quotes around the expression; e.g.:
+<div class="code"><pre>
+'result = volume * 2'
+</pre></div>
+Without the quotes, the *, which has special meaning to the UNIX shell,
+would be altered and <em>r3.mapcalc</em> would see something other than the *.
+
+<h3>Multiple computations</h3>
+<p>
+In general, it's preferable to do as much as possible in each
+r3.mapcalc command using multi-line input.
+
+<h3>Backwards compatibility</h3>
+
+For the backwards compatibility with GRASS 6, 
+<!-- check wording: -->
+if no options are given, it manufactures <tt>file=-</tt> (which reads from
+stdin), so you can continue to use e.g.:
+<div class="code"><pre>
+r3.mapcalc &lt; file
+</pre></div>
+or:
+<div class="code"><pre>
+r3.mapcalc &lt;&lt;EOF
+foo = 1
+EOF
+</pre></div>
+But unless you need compatibility with previous GRASS GIS versions, use <tt>file=</tt>
+explicitly, as stated above.
+<p>
+When the map name contains uppercase letter(s) or a dot which are not
+allowed to be in module option names, the <em>r3.mapcalc</em> command will
+be valid also without quotes:
+<div class="code"><pre>
+r3.mapcalc volume_A=1
+r3.mapcalc volume.1=1
+</pre></div>
+However, this syntax is not recommended as quotes as stated above more safe.
+Using quotes is both backwards compatible and valid in future.
+
+<h3>Interactive input in command line</h3>
+
+For formulas that the user enters from standard input
+(rather than from the command line), a line continuation feature now exists.
+If the user adds a backslash to the end of an input line, <em>r3.mapcalc</em> assumes that
+the formula being entered by the user continues on to the next input line.
+There is no limit to the possible number of input lines
+or to the length of a formula.
+<p>If the <em>r333.mapcalc</em> formula entered by the user is very long,
+the map title will contain only some of it, but most (if not all) of
+the formula will be placed into the history file for the <em>result</em> map.
+<p>When the user enters input to <em>r3.mapcalc</em> non-interactively on
+the command line, the program will not warn the user not to overwrite
+existing map layers.  Users should therefore take care to assign program
+outputs raster map names that do not yet exist in their current mapsets.
+
+<h3>3D GRID MASK handling</h3>
+<p>
+<em>r3.mapcalc</em> follows the common GRASS behavior of raster MASK handling,
+so the MASK is only applied when reading an existing GRASS raster map.
+This implies that, for example, the command:
+<div class="code"><pre>
+r3.mapcalc "volume_amplified = volume * 3"
+</pre></div>
+create a map respecting the masked pixels if MASK is active.
+
+<p>
+However, when creating a map which is not based on any map,
+e.g. a map from a constant:
+<div class="code"><pre>
+r3.mapcalc "volume_const = 200.0"
+</pre></div>
+the created raster map is limited only by a computation region
+but it is not affected by an active MASK.
+This is expected because, as mentioned above, MASK is only applied when reading,
+not when writing a raster map.
+<p>
+If also in this case the MASK should be applied, an if() statement including the
+MASK should be used, e.g.:
+<div class="code"><pre>
+r3.mapcalc "volume_const = if(MASK, 200.0, null())"
+</pre></div>
+
+When testing MASK related expressions keep in mind that when MASK is active
+you don't see data in masked areas even if they are not NULL.
+See <em><a href="r.mask.html">r.mask</a></em> for details.
+
+<h3>Random number generator initialization</h3>
+<p>The environment variable GRASS_RND_SEED is read to initialize the
+random number generator.
+
 <h2>EXAMPLES</h2>
 To compute the average of two 3D grids
 <em>a</em> and <em>b</em>:
@@ -398,12 +498,13 @@ To change all values below 5 to NULL:
 <div class="code"><pre>
 newmap = if(map&lt;5, null(), 5)
 </pre></div>
-The graph function allows users to specify a x-y conversion using 
+The graph() function allows users to specify a x-y conversion using 
 pairs of x,y coordinates.
 In some situations a transformation from one value to another is not
 easily established mathematically, but can be represented by a 2-D
-graph.  The graph() function provides the opportunity to accomplish
-this.  An x-axis value is provided to the graph function along with
+graph and then linearly interpolated. The graph() function provides
+the opportunity to accomplish this.
+An x-axis value is provided to the graph function along with
 the associated graph represented by a series of x,y pairs.  The x
 values must be monotonically increasing (each larger than or equal to
 the previous).  The graph function linearly interpolates between
@@ -417,36 +518,12 @@ newmap = graph(map, 1,10, 2,25, 3,50)
 X (map) values supplied and y (newmap) values returned:
 <div class="code"><pre>
 0, 10
-1, 10,
-1.5, 16.5
+1, 10
+1.5, 17.5
 2.9, 47.5
 4, 50
 100, 50
 </pre></div>
-
-
-<h2>NOTES</h2>
-Extra care must be taken if the expression is given on the command line.
-Some characters have special meaning to the UNIX shell.
-These include, among others:
-<p>* ( ) &gt; &amp; |
-<p>It is advisable to put single quotes around the expression; e.g.:
-<div class="code"><pre>
-'result = elevation * 2'
-</pre></div>
-Without the quotes, the *, which has special meaning to the UNIX shell,
-would be altered and <em>r3.mapcalc</em> would see something other than the *.
-<p>For formulas that the user enters from standard input (rather than from
-the command line), a line continuation feature now exists. If the user
-adds \e to the end of an input line, <em>r3.mapcalc</em> assumes that the
-formula being entered by the user continues on to the next input line.
-There is no limit to the possible number of input lines or to the length
-of a formula.
-<p>If the <em>r3.mapcalc</em> formula entered by the user is very long, the
-map title will contain only some of it, but most (if not all) of the formula
-will be placed into the history file for the <em>result</em> map.
-<p>The environment variable GRASS_RND_SEED is read to initialise the
-random number generator.
 
 
 <h2>BUGS</h2>
@@ -476,6 +553,11 @@ Construction Engineering Research Laboratory (March/1991).
 r.mapcalc Program Tutorial</a></b>, by Marji Larson, Michael Shapiro and Scott
 Tweddale, U.S. Army Construction Engineering Research Laboratory (December
 1991)
+<p>
+Neteler, M. (2001): Volume modelling of soils using GRASS GIS 3D tools. - in: 
+Brovelli, M. (ed.)(2001): The Geomatics Workbook N. 2. Politecnico di Milano,
+Italy (ISSN 1591-092X) (<a href="http://geomatica.como.polimi.it/workbooks/n2/articoli/mn2.pdf">PDF</a>)
+
 <p><em><a href="r.mapcalc.html">r.mapcalc</a></em>
 
 
