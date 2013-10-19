@@ -70,6 +70,7 @@ int main(int argc, char **argv)
     
     file_opt = G_define_standard_option(G_OPT_F_INPUT);
     file_opt->key = "file";
+    file_opt->required = NO;
     file_opt->label = _("Name of file containing segment rules");
     file_opt->description = _("'-' for standard input");
 
@@ -86,7 +87,7 @@ int main(int argc, char **argv)
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 G_FATAL_EXIT);
 
-    if (strcmp(file_opt->answer, "-")) {
+    if (file_opt->answer && strcmp(file_opt->answer, "-") != 0) {
 	/* open input file */
 	if ((in_file = fopen(file_opt->answer, "r")) == NULL)
 	    G_fatal_error(_("Unable to open input file <%s>"),
