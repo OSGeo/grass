@@ -455,10 +455,11 @@ unknown quantity. E.g. if x and y are both unknown, then the values of
 "x == y" and "x != y" are also unknown; if they both have unknown
 values, the user doesn't know whether or not they both have the same value.
 
+
 <h2>NOTES</h2>
 
 <h3>Usage from command line</h3>
-<p>
+
 Extra care must be taken if the expression is given on the command line.
 Some characters have special meaning to the UNIX shell.
 These include, among others:
@@ -490,8 +491,9 @@ r.mapcalc command. E.g. rather than:
 <p>as the latter will read each input map only once.
 
 <h3>Backwards compatibility</h3>
-<p>
+
 For the backwards compatibility with GRASS 6, 
+<!-- check wording: -->
 if no options are given, it manufactures <tt>file=-</tt> (which reads from
 stdin), so you can continue to use e.g.:
 <div class="code"><pre>
@@ -503,21 +505,22 @@ r.mapcalc &lt;&lt;EOF
 foo = 1
 EOF
 </pre></div>
-But unless you need compatibility with previous versions, use <tt>file=</tt>
+But unless you need compatibility with previous GRASS GIS versions, use <tt>file=</tt>
 explicitly, as stated above.
 <p>
-If your map name contains uppercase letter or a dot, which are not
-allowed to be in module option names, your <em>r.mapcalc</em> command will
+When the map name contains uppercase letter(s) or a dot which are not
+allowed to be in module option names, the <em>r.mapcalc</em> command will
 be valid also without quotes:
 <div class="code"><pre>
 r.mapcalc elevation_A=1
 r.mapcalc elevation.1=1
 </pre></div>
-However, do not use this syntax and and use quotes as states above.
-Using quotes is both backwards compatible and valid in the future.
+However, this syntax is not recommended as quotes as stated above more safe.
+Using quotes is both backwards compatible and valid in future.
 
 <h3>Interactive input in command line</h3>
-<p>For formulas that the user enters from standard input
+
+For formulas that the user enters from standard input
 (rather than from the command line), a line continuation feature now exists.
 If the user adds a backslash to the end of an input line, <em>r.mapcalc</em> assumes that
 the formula being entered by the user continues on to the next input line.
@@ -535,27 +538,30 @@ outputs raster map names that do not yet exist in their current mapsets.
 <p>
 <em>r.mapcalc</em> follows the common GRASS behavior of raster MASK handling,
 so the MASK is only applied when reading an existing GRASS raster map.
-This implies that the the command:
+This implies that, for example, the command:
 <div class="code"><pre>
-r.mapcalc "elevation_exaggerated = 3 * elevation"
+r.mapcalc "elevation_exaggerated = elevation * 3"
 </pre></div>
-will create a masked map if MASK is active.
+create a map respecting the masked pixels if MASK is active.
 
 <p>
-However, when you are creating a map which is not based on any map,
-e.g. a constant map:
+However, when creating a map which is not based on any map,
+e.g. a map from a constant:
 <div class="code"><pre>
-r.mapcalc "base_height = 200"
+r.mapcalc "base_height = 200.0"
 </pre></div>
 the created raster map is limited only by a computation region
-but it is not limited by a MASK.
-This expected because, as mentioned above, MASK is only applied when reading,
+but it is not affected by an active MASK.
+This is expected because, as mentioned above, MASK is only applied when reading,
 not when writing a raster map.
-If you want the MASK to be applied, you can use the if statement, e.g.:
+<p>
+If also in this case the MASK should be applied, an if() statement including the
+MASK should be used, e.g.:
 <div class="code"><pre>
-r.mapcalc "base_height = if(MASK, 200, null())"
+r.mapcalc "base_height = if(MASK, 200.0, null())"
 </pre></div>
-When testing your MASK-related expressions keep in mind that when MASK is active
+
+When testing MASK related expressions keep in mind that when MASK is active
 you don't see data in masked areas even if they are not NULL.
 See <em><a href="r.mask.html">r.mask</a></em> for details.
 
@@ -616,8 +622,6 @@ X (map) values supplied and y (newmap) values returned:
 4, 50
 100, 50
 </pre></div>
-
-
 
 
 <h2>BUGS</h2>
