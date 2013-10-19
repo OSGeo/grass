@@ -36,8 +36,8 @@ void depressionless(void)
     char dir[GPATH_MAX];
 
     sprintf(input, "input=%s", map.elev);
-    sprintf(elev, "elev=%s", map.fill);
-    sprintf(dir, "dir=%s", map.dir);
+    sprintf(elev, "output=%s", map.fill);
+    sprintf(dir, "outdir=%s", map.dir);
 
     G_verbose_message("r.fill.dir %s %s %s", input, elev, dir);
 
