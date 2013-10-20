@@ -1168,10 +1168,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if self.render['quick'] is False:
             self.parent.GetProgressBar().Show()
             self.parent.GetProgressBar().SetRange(2)
-            self.parent.GetProgressBar().SafeSetValue(0)
+            self.parent.GetProgressBar().SetValue(0)
         
         if self.render['quick'] is False:
-            self.parent.GetProgressBar().SafeSetValue(1)
+            self.parent.GetProgressBar().SetValue(1)
             self._display.Draw(False, -1)
             if self.saveHistory:
                 self.ViewHistory(view = self.view, iview = self.iview)
@@ -1207,7 +1207,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         stop = time.clock()
         
         if self.render['quick'] is False:
-            self.parent.GetProgressBar().SafeSetValue(2)
+            self.parent.GetProgressBar().SetValue(2)
             # hide process bar
             self.parent.GetProgressBar().Hide()
         
