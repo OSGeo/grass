@@ -9,15 +9,6 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-
->>> import grass.script as grass
-
->>> grass.run_command("r3.mapcalc", overwrite=True, expression="str3ds_map_test_case = 1")
-0
->>> grass.run_command("v.random", overwrite=True, output="stvds_map_test_case",
-... n=100, zmin=0, zmax=100, flags="z", column="elevation")
-0
-
 @author Soeren Gebbert
 """
 import getpass
@@ -52,15 +43,19 @@ class RasterDataset(AbstractMapDataset):
         >>> grass.run_command("r.mapcalc", overwrite=True,
         ... expression="strds_map_test_case = 1")
         0
+        >>> grass.run_command("r.timestamp", map="strds_map_test_case", 
+        ...                   date="15 jan 1999")
+        0
         >>> mapset = get_current_mapset()
         >>> name = "strds_map_test_case"
         >>> identifier = "%s@%s" % (name, mapset)
         >>> rmap = RasterDataset(identifier)
-        >>> rmap.set_absolute_time(start_time=datetime(2001,1,1),
-        ...                        end_time=datetime(2012,1,1))
-        True
         >>> rmap.map_exists()
         True
+        >>> rmap.read_timestamp_from_grass()
+        True
+        >>> rmap.get_temporal_extent_as_tuple()
+        (datetime.datetime(1999, 1, 15, 0, 0), None)
         >>> rmap.load()
         >>> rmap.spatial_extent.print_info()
          +-------------------- Spatial extent ----------------------------------------+
@@ -72,8 +67,8 @@ class RasterDataset(AbstractMapDataset):
          | Bottom:..................... 0.0
         >>> rmap.absolute_time.print_info()
          +-------------------- Absolute time -----------------------------------------+
-         | Start time:................. 2001-01-01 00:00:00
-         | End time:................... 2012-01-01 00:00:00
+         | Start time:................. 1999-01-15 00:00:00
+         | End time:................... None
         >>> rmap.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... CELL
@@ -95,6 +90,9 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap.get_type()
         'raster'
         >>> rmap.get_stds_register()
+        >>> rmap.set_absolute_time(start_time=datetime(2001,1,1),
+        ...                        end_time=datetime(2012,1,1))
+        True
         >>> rmap.get_absolute_time()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0), None)
         >>> rmap.get_temporal_extent_as_tuple()
@@ -211,10 +209,31 @@ class RasterDataset(AbstractMapDataset):
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
         """
-        if G_has_raster_timestamp(self.get_name(), self.get_mapset()):
+        if libgis.G_has_raster_timestamp(self.get_name(), self.get_mapset()):
             return True
         else:
             return False
+
+    def read_timestamp_from_grass(self):
+        """!Read the timestamp of this map from the map metadata
+           in the grass file system based spatial database and
+           set the internal time stamp that should be insert/updated
+           in the temporal database.
+        """
+
+        if not self.has_grass_timestamp():
+            return False
+
+        ts = libgis.TimeStamp()
+        check = libgis.G_read_raster_timestamp(self.get_name(), self.get_mapset(),
+                                               byref(ts))
+
+        if check < 1:
+            core.error(_("Unable to read timestamp file "
+                         "for raster map <%s>" % (self.get_map_id())))
+            return False
+        
+        return self._set_timestamp_from_grass(ts)
 
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata in
@@ -376,7 +395,92 @@ class Raster3DDataset(AbstractMapDataset):
     """!Raster3d dataset class
 
        This class provides functions to select, update, insert or delete raster3d
-       map information and valid time stamps into the SQL temporal database.
+       map information and valid time stamps into the SQL temporal database.       
+       
+       Usage:
+
+        @code
+
+        >>> import grass.script as grass
+        >>> init()
+        >>> grass.use_temp_region()
+        >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
+        ... t=100.0, b=0.0, res=10.0)
+        0
+        >>> grass.run_command("r3.mapcalc", overwrite=True, 
+        ...                   expression="str3ds_map_test_case = 1")
+        0
+        >>> grass.run_command("r3.timestamp", map="str3ds_map_test_case", 
+        ...                   date="15 jan 1999")
+        0
+        >>> mapset = get_current_mapset()
+        >>> name = "str3ds_map_test_case"
+        >>> identifier = "%s@%s" % (name, mapset)
+        >>> r3map = Raster3DDataset(identifier)
+        >>> r3map.map_exists()
+        True
+        >>> r3map.read_timestamp_from_grass()
+        True
+        >>> r3map.get_temporal_extent_as_tuple()
+        (datetime.datetime(1999, 1, 15, 0, 0), None)
+        >>> r3map.load()
+        >>> r3map.spatial_extent.print_info()
+         +-------------------- Spatial extent ----------------------------------------+
+         | North:...................... 80.0
+         | South:...................... 0.0
+         | East:.. .................... 120.0
+         | West:....................... 0.0
+         | Top:........................ 100.0
+         | Bottom:..................... 0.0
+        >>> r3map.absolute_time.print_info()
+         +-------------------- Absolute time -----------------------------------------+
+         | Start time:................. 1999-01-15 00:00:00
+         | End time:................... None
+        >>> r3map.metadata.print_info()
+         +-------------------- Metadata information ----------------------------------+
+         | Datatype:................... DCELL
+         | Number of columns:.......... 8
+         | Number of rows:............. 12
+         | Number of cells:............ 960
+         | North-South resolution:..... 10.0
+         | East-west resolution:....... 10.0
+         | Minimum value:.............. 1.0
+         | Maximum value:.............. 1.0
+         | Number of depths:........... 10
+         | Top-Bottom resolution:...... 10.0
+         | STR3DS register table ...... None
+
+        >>> newmap = r3map.get_new_instance("new@PERMANENT")
+        >>> isinstance(newmap, Raster3DDataset)
+        True
+        >>> newstr3ds = r3map.get_new_stds_instance("new@PERMANENT")
+        >>> isinstance(newstr3ds, SpaceTimeRaster3DDataset)
+        True
+        >>> r3map.get_type()
+        'raster3d'
+        >>> r3map.get_stds_register()
+        >>> r3map.set_absolute_time(start_time=datetime(2001,1,1),
+        ...                        end_time=datetime(2012,1,1))
+        True
+        >>> r3map.get_absolute_time()
+        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0), None)
+        >>> r3map.get_temporal_extent_as_tuple()
+        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
+        >>> r3map.get_name()
+        'str3ds_map_test_case'
+        >>> r3map.get_mapset() == mapset
+        True
+        >>> r3map.get_temporal_type()
+        'absolute'
+        >>> r3map.get_spatial_extent_as_tuple()
+        (80.0, 0.0, 120.0, 0.0, 100.0, 0.0)
+        >>> r3map.is_time_absolute()
+        True
+        >>> r3map.is_time_relative()
+        False
+        >>> grass.run_command("g.remove", rast3d=name)
+        0
+        >>> grass.del_temp_region()
     """
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)
@@ -486,11 +590,33 @@ class Raster3DDataset(AbstractMapDataset):
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
         """
-        if G_has_raster3d_timestamp(self.get_name(), self.get_mapset()):
+        if libgis.G_has_raster3d_timestamp(self.get_name(), self.get_mapset()):
             return True
         else:
             return False
 
+
+    def read_timestamp_from_grass(self):
+        """!Read the timestamp of this map from the map metadata
+           in the grass file system based spatial database and
+           set the internal time stamp that should be insert/updated
+           in the temporal database.
+        """
+
+        if not self.has_grass_timestamp():
+            return False
+
+        ts = libgis.TimeStamp()
+        check = libgis.G_read_raster3d_timestamp(self.get_name(), self.get_mapset(),
+                                               byref(ts))
+
+        if check < 1:
+            core.error(_("Unable to read timestamp file "
+                         "for 3D raster map <%s>" % (self.get_map_id())))
+            return False
+        
+        return self._set_timestamp_from_grass(ts)
+        
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata
         in the grass file system based spatial database.
@@ -654,6 +780,85 @@ class VectorDataset(AbstractMapDataset):
 
        This class provides functions to select, update, insert or delete vector
        map information and valid time stamps into the SQL temporal database.
+       
+       Usage:
+
+        @code
+
+        >>> import grass.script as grass
+        >>> init()
+        >>> grass.use_temp_region()
+        >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
+        ... t=1.0, b=0.0, res=10.0)
+        0
+        >>> grass.run_command("v.random", overwrite=True, output="stvds_map_test_case",
+        ... n=100, zmin=0, zmax=100, flags="z", column="elevation")
+        0
+        >>> grass.run_command("v.timestamp", map="stvds_map_test_case", 
+        ...                   date="15 jan 1999")
+        0
+        >>> mapset = get_current_mapset()
+        >>> name = "stvds_map_test_case"
+        >>> identifier = "%s@%s" % (name, mapset)
+        >>> vmap = VectorDataset(identifier)
+        >>> vmap.map_exists()
+        True
+        >>> vmap.read_timestamp_from_grass()
+        True
+        >>> vmap.get_temporal_extent_as_tuple()
+        (datetime.datetime(1999, 1, 15, 0, 0), None)
+        >>> vmap.load()
+        >>> vmap.absolute_time.print_info()
+         +-------------------- Absolute time -----------------------------------------+
+         | Start time:................. 1999-01-15 00:00:00
+         | End time:................... None
+        >>> vmap.metadata.print_info()
+         +-------------------- Metadata information ----------------------------------+
+         | STVDS register table ....... None
+         | Is map 3d .................. True
+         | Number of points ........... 100
+         | Number of lines ............ 0
+         | Number of boundaries ....... 0
+         | Number of centroids ........ 0
+         | Number of faces ............ 0
+         | Number of kernels .......... 0
+         | Number of primitives ....... 100
+         | Number of nodes ............ 0
+         | Number of areas ............ 0
+         | Number of islands .......... 0
+         | Number of holes ............ 0
+         | Number of volumes .......... 0
+        >>> newmap = vmap.get_new_instance("new@PERMANENT")
+        >>> isinstance(newmap, VectorDataset)
+        True
+        >>> newstvds = vmap.get_new_stds_instance("new@PERMANENT")
+        >>> isinstance(newstvds, SpaceTimeVectorDataset)
+        True
+        >>> vmap.get_type()
+        'vector'
+        >>> vmap.get_stds_register()
+        >>> vmap.set_absolute_time(start_time=datetime(2001,1,1),
+        ...                        end_time=datetime(2012,1,1))
+        True
+        >>> vmap.get_absolute_time()
+        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0), None)
+        >>> vmap.get_temporal_extent_as_tuple()
+        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
+        >>> vmap.get_name()
+        'stvds_map_test_case'
+        >>> vmap.get_mapset() == mapset
+        True
+        >>> vmap.get_temporal_type()
+        'absolute'
+        >>> vmap.is_time_absolute()
+        True
+        >>> vmap.is_time_relative()
+        False
+        >>> grass.run_command("g.remove", vect=name)
+        0
+        >>> grass.del_temp_region()
+
+        @endcode
     """
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)
@@ -732,12 +937,36 @@ class VectorDataset(AbstractMapDataset):
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
         """
-        if G_has_vector_timestamp(self.get_name(), self.get_layer(),
+        if libgis.G_has_vector_timestamp(self.get_name(), self.get_layer(),
                                   self.get_mapset()):
             return True
         else:
             return False
 
+
+    def read_timestamp_from_grass(self):
+        """!Read the timestamp of this map from the map metadata
+           in the grass file system based spatial database and
+           set the internal time stamp that should be insert/updated
+           in the temporal database.
+        """
+
+        if not self.has_grass_timestamp():
+            return False
+
+        ts = libgis.TimeStamp()
+        check = libgis.G_read_vector_timestamp(self.get_name(), 
+                                               self.get_layer(),
+                                               self.get_mapset(),
+                                               byref(ts))
+
+        if check < 1:
+            core.error(_("Unable to read timestamp file "
+                         "for vector map <%s>" % (self.get_map_id())))
+            return False
+        
+        return self._set_timestamp_from_grass(ts)
+        
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata in
            the grass file system based spatial database.
