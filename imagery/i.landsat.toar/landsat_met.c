@@ -26,7 +26,7 @@ static void chrncpy(char *dest, char src[], int n)
     dest[i] = '\0';
 }
 
-inline void date_replace_slash(char *str)
+static void date_replace_slash(char *str)
 {
     while (*str) {
 	if (*str == '/')
