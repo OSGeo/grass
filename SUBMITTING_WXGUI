@@ -131,6 +131,10 @@ care of following rules:
 
       where `maplabel` can be 'raster map' or '3D raster map'
 
+      When using AddGrowableCol/AddGrowableRow with sizers, put it after
+      adding widgets into the sizer, not just after creating of the sizer
+      (needed for wxPython >= 2.9).
+
 
 9.  Use tools such as pylint and pep8 to check your code (both style and
     correctness). Just note that default settings of these tools is not fully
