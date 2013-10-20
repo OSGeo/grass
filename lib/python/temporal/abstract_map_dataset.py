@@ -14,6 +14,9 @@ for details.
 """
 from abstract_dataset import *
 from datetime_math import *
+import grass.lib.date as libdate
+import grass.lib.gis as libgis
+import ctypes
 
 
 class AbstractMapDataset(AbstractDataset):
@@ -89,6 +92,7 @@ class AbstractMapDataset(AbstractDataset):
         raise ImplementationError(
             "This method must be implemented in the subclasses")
 
+
     @abstractmethod
     def has_grass_timestamp(self):
         """!Check if a grass file based time stamp exists for this map.
@@ -101,6 +105,91 @@ class AbstractMapDataset(AbstractDataset):
         """!Write the timestamp of this map into the map metadata
            in the grass file system based spatial database.
         """
+
+    @abstractmethod
+    def read_timestamp_from_grass(self):
+        """!Read the timestamp of this map from the map metadata
+           in the grass file system based spatial database and
+           set the internal time stamp that should be insert/updated
+           in the temporal database.
+        """
+
+    def _set_timestamp_from_grass(self, ts):
+        """!Set the timestamp of this map from the map metadata
+           in the grass file system based spatial database and
+           set the internal time stamp that should be insert/updated
+           in the temporal database.
+           
+           @param ts The timetsamp to be set, is of type libgis.TimeStamp()
+        """
+        
+        if not self.has_grass_timestamp():
+            return False
+
+        dt1 = libgis.DateTime()
+        dt2 = libgis.DateTime()
+        count = ctypes.c_int()
+
+        libgis.G_get_timestamps(ctypes.byref(ts), 
+                                ctypes.byref(dt1), 
+                                ctypes.byref(dt2), 
+                                ctypes.byref(count))
+                                 
+        
+        if dt1.mode == libdate.DATETIME_ABSOLUTE:
+            pdt1 = None
+            pdt2 = None
+            if count >= 1:
+                pdt1 = datetime(int(dt1.year), int(dt1.month), int(dt1.day), 
+                                int(dt1.hour), int(dt1.minute), 
+                                int(dt1.second))
+            if count == 2:
+                pdt2 = datetime(int(dt2.year), int(dt2.month), int(dt2.day), 
+                                int(dt2.hour), int(dt2.minute), 
+                                int(dt2.second))
+
+            # ATTENTION: We ignore the time zone
+            # TODO: Write time zone support
+            self.set_absolute_time(pdt1, pdt2, None)
+        else:
+            unit = None
+            start = None
+            end = None
+            if count >= 1:
+                if dt1.year > 0:
+                    unit = "years"
+                    start = dt1.year
+                elif dt1.month > 0:
+                    unit = "months"
+                    start = dt1.month
+                elif dt1.day > 0:
+                    unit = "days"
+                    start = dt1.day
+                elif dt1.hour > 0:
+                    unit = "hours"
+                    start = dt1.hour
+                elif dt1.minute > 0:
+                    unit = "minutess"
+                    start = dt1.minutes
+                elif dt1.seconds > 0:
+                    unit = "seconds"
+                    start = dt1.seconds
+            if count == 2:
+                if dt2.year > 0:
+                    end = dt2.year
+                elif dt2.month > 0:
+                    end = dt2.month
+                elif dt2.day > 0:
+                    end = dt2.day
+                elif dt2.hour > 0:
+                    end = dt2.hour
+                elif dt2.minute > 0:
+                    end = dt2.minutes
+                elif dt2.seconds > 0:
+                    end = dt2.seconds
+            self.set_relative_time(start, end, unit)
+ 
+        return True
 
     @abstractmethod
     def remove_timestamp_from_grass(self):
@@ -344,42 +433,50 @@ class AbstractMapDataset(AbstractDataset):
            @param end_time a datetime object specifying the end time of the
                            map, None in case or time instance
            @param timezone Thee timezone of the map (not used)
+           
+           @return True for success and False otherwise
         """
         if start_time and not isinstance(start_time, datetime):
             if self.get_layer() is not None:
-                core.fatal(_("Start time must be of type datetime for %(type)s"
+                core.error(_("Start time must be of type datetime for %(type)s"
                              " map <%(id)s> with layer: %(l)s") % {
                              'type': self.get_type(), 'id': self.get_map_id(),
                              'l': self.get_layer()})
+                return False
             else:
-                core.fatal(_("Start time must be of type datetime for "
+                core.error(_("Start time must be of type datetime for "
                              "%(type)s map <%(id)s>") % {
                              'type': self.get_type(), 'id': self.get_map_id()})
+                return False
 
         if end_time and not isinstance(end_time, datetime):
             if self.get_layer():
-                core.fatal(_("End time must be of type datetime for %(type)s "
+                core.error(_("End time must be of type datetime for %(type)s "
                              "map <%(id)s> with layer: %(l)s") % {
                              'type': self.get_type(), 'id': self.get_map_id(),
                              'l': self.get_layer()})
+                return False
             else:
-                core.fatal(_("End time must be of type datetime for "
+                core.error(_("End time must be of type datetime for "
                              "%(type)s map <%(id)s>") % {
                              'type': self.get_type(), 'id': self.get_map_id()})
+                return False
 
         if start_time is not None and end_time is not None:
             if start_time > end_time:
                 if self.get_layer():
-                    core.fatal(_("End time must be greater than start time for"
+                    core.error(_("End time must be greater than start time for"
                                  " %(type)s map <%(id)s> with layer: %(l)s") % {
                                  'type': self.get_type(),
                                  'id': self.get_map_id(),
                                  'l': self.get_layer()})
+                    return False
                 else:
-                    core.fatal(_("End time must be greater than start time "
+                    core.error(_("End time must be greater than start time "
                                  "for %(type)s map <%(id)s>") % {
                                  'type': self.get_type(),
                                  'id': self.get_map_id()})
+                    return False
             else:
                 # Do not create an interval in case start and end time are
                 # equal
@@ -417,16 +514,16 @@ class AbstractMapDataset(AbstractDataset):
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
             
-        dbif, connected = init_dbif(dbif)
 
-        self.set_absolute_time(start_time, end_time, timezone)
-        self.absolute_time.update_all(dbif)
-        self.base.update(dbif)
+        if self.set_absolute_time(start_time, end_time, timezone):
+            dbif, connected = init_dbif(dbif)
+            self.absolute_time.update_all(dbif)
+            self.base.update(dbif)
 
-        if connected:
-            dbif.close()
-
-        self.write_timestamp_to_grass()
+            if connected:
+                dbif.close()
+    
+            self.write_timestamp_to_grass()
 
     def set_relative_time(self, start_time, end_time, unit):
         """!Set the relative time interval
@@ -507,16 +604,15 @@ class AbstractMapDataset(AbstractDataset):
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 
-        dbif, connected = init_dbif(dbif)
-
         if self.set_relative_time(start_time, end_time, unit):
+            dbif, connected = init_dbif(dbif)
             self.relative_time.update_all(dbif)
             self.base.update(dbif)
 
-        if connected:
-            dbif.close()
-
-        self.write_timestamp_to_grass()
+            if connected:
+                dbif.close()
+    
+            self.write_timestamp_to_grass()
 
     def set_temporal_extent(self, extent):
         """!Convenient method to set the temporal extent from a temporal extent object
