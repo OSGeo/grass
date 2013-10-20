@@ -1564,7 +1564,9 @@ class ImportDialog(wx.Dialog):
         self.btn_run.SetToolTipString(_("Import selected layers"))
         self.btn_run.SetDefault()
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
-        
+
+        self.Bind(wx.EVT_CLOSE, lambda evt: self.Destroy())
+
     def doLayout(self):
         """!Do layout"""
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
