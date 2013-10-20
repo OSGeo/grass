@@ -637,8 +637,6 @@ class GroupDialog(wx.Dialog):
         self.gListPanel = wx.Panel(self)
 
         gListSizer  = wx.GridBagSizer(vgap=2, hgap=2)
-        gListSizer.AddGrowableCol(1)
-        gListSizer.AddGrowableRow(1)
 
         gListSizer.Add(item = wx.StaticText(parent = self.gListPanel, label = _("Pattern:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
@@ -674,6 +672,8 @@ class GroupDialog(wx.Dialog):
         sizer.Add(item = buttonSizer, flag = wx.LEFT, border = 5)
         
         gListSizer.Add(item=sizer, flag=wx.EXPAND, pos=(1,1))
+        gListSizer.AddGrowableCol(1)
+        gListSizer.AddGrowableRow(1)
 
         self.gListPanel.SetSizer(gListSizer)
         bodySizer.Add(item=self.gListPanel, proportion=1, flag=wx.EXPAND)
@@ -682,8 +682,6 @@ class GroupDialog(wx.Dialog):
         self.subgListPanel = wx.Panel(self)
 
         subgListSizer  = wx.GridBagSizer(vgap=2, hgap=2)
-        subgListSizer.AddGrowableCol(1)
-        subgListSizer.AddGrowableRow(1)
 
         subgListSizer.Add(item = wx.StaticText(parent = self.subgListPanel, label = _("Pattern:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
@@ -707,6 +705,8 @@ class GroupDialog(wx.Dialog):
         self.subgListBox.SetToolTipString(_("Check maps from group to be included into subgroup."))
 
         subgListSizer.Add(item=self.subgListBox, flag=wx.EXPAND, pos=(1,1))
+        subgListSizer.AddGrowableCol(1)
+        subgListSizer.AddGrowableRow(1)
 
         self.subgListPanel.SetSizer(subgListSizer)
         bodySizer.Add(item=self.subgListPanel, proportion=1, flag=wx.EXPAND)
