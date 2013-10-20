@@ -4,7 +4,7 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-void getcells(void)
+void read_cells(void)
 {
     int fd, i, j;
     RASTER_MAP_TYPE data_type;
@@ -13,10 +13,10 @@ void getcells(void)
     struct Cell_head inhead;
     char buf_wrns[32], buf_wrew[32], buf_mrns[32], buf_mrew[32];
 
-    fd = Rast_open_old(iname, "");
+    fd = Rast_open_old(input, "");
 
     data_type = Rast_get_map_type(fd);
-    Rast_get_cellhd(iname, "", &inhead);
+    Rast_get_cellhd(input, "", &inhead);
 
     if (data_type == CELL_TYPE)
 	ccell = (CELL *) G_malloc(sizeof(CELL) * window.cols);
@@ -77,13 +77,12 @@ void getcells(void)
     Rast_close(fd);
 }
 
-
-void putcells(void)
+void write_cells(void)
 {
     int fd, i;
     struct History history;
 
-    fd = Rast_open_new(oname, DCELL_TYPE);
+    fd = Rast_open_new(output, DCELL_TYPE);
 
     G_message(_("Writing topographic index map..."));
 
@@ -94,7 +93,7 @@ void putcells(void)
     G_percent(i, window.rows, 2);
     Rast_close(fd);
 
-    Rast_short_history(oname, "raster", &history);
-    Rast_set_history(&history, HIST_DATSRC_1, iname);
-    Rast_write_history(oname, &history);
+    Rast_short_history(output, "raster", &history);
+    Rast_set_history(&history, HIST_DATSRC_1, input);
+    Rast_write_history(output, &history);
 }

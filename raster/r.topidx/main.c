@@ -10,7 +10,7 @@
  * PURPOSE:      Creates topographic index map from elevation map.
  *               Based on GRIDATB.FOR.
  *
- * COPYRIGHT:    (C) 2000-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -41,10 +41,12 @@ int main(int argc, char **argv)
     module->description =
 	_("Creates topographic index map from elevation raster map.");
 
-    params.input = G_define_standard_option(G_OPT_R_INPUT);
+    params.input = G_define_standard_option(G_OPT_R_ELEV);
+    params.input->key = "input";
 
     params.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    
+    params.output->description = _("Name for output topographic index map");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -53,15 +55,15 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
 		      G_program_name());
 
-    iname = params.input->answer;
-    oname = params.output->answer;
+    input = params.input->answer;
+    output = params.output->answer;
 
     G_get_window(&window);
 
-    getcells();
+    read_cells();
     initialize();
-    atanb();
-    putcells();
+    calculate_atanb();
+    write_cells();
 
     exit(EXIT_SUCCESS);
 }

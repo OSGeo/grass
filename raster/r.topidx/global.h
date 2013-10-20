@@ -15,12 +15,13 @@
 #define GLOBAL extern
 #endif
 
-GLOBAL char *iname, *oname;
+GLOBAL char *input, *output;
 GLOBAL struct Cell_head window;
 GLOBAL DCELL **cell;
 GLOBAL DCELL **atb, **a;
 
-void getcells(void);
-void putcells(void);
+void read_cells(void);
+void write_cells(void);
+void calculate_statistics(void);
 void initialize(void);
-void atanb(void);
+void calculate_atanb(void);

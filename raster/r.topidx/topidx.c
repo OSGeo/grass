@@ -25,8 +25,7 @@ void initialize(void)
     }
 }
 
-
-void atanb(void)
+void calculate_atanb(void)
 {
     int i, j, k, snatb;
     int iter, ncells, nroute, nslp;
