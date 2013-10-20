@@ -37,6 +37,10 @@ int main(int argc, char **argv)
 	struct Option *ntopidxclasses;
 	struct Option *outtopidxstats;
     } params;
+    struct
+    {
+	struct Flag *preprocess;
+    } flags;
 
     /* Initialize GRASS and parse command line */
     G_gisinit(argv[0]);
@@ -89,7 +93,7 @@ int main(int argc, char **argv)
     params.topidx->label =
 	_("Name of input topographic index ln(a/tanB) raster map");
     params.topidx->description =
-	    _("Must be clipped to the catchment boundary. Used for generating outtopidxstats.");
+	_("Must be clipped to the catchment boundary. Used for generating outtopidxstats.");
     params.topidx->required = NO;
     params.topidx->guisection = _("Preprocess");
 
@@ -97,7 +101,7 @@ int main(int argc, char **argv)
     params.ntopidxclasses->key = "ntopidxclasses";
     params.ntopidxclasses->label = _("Number of topographic index classes");
     params.ntopidxclasses->description =
-	    _("Used for generating outtopidxstats.");
+	_("Used for generating outtopidxstats.");
     params.ntopidxclasses->type = TYPE_INTEGER;
     params.ntopidxclasses->required = NO;
     params.ntopidxclasses->answer = "30";
@@ -108,9 +112,15 @@ int main(int argc, char **argv)
     params.outtopidxstats->label =
 	_("Name for output topographic index statistics file");
     params.outtopidxstats->description =
-	    _("Requires topidx and ntopidxclasses.");
+	_("Requires topidx and ntopidxclasses.");
     params.outtopidxstats->required = NO;
     params.outtopidxstats->guisection = _("Preprocess");
+
+    flags.preprocess = G_define_flag();
+    flags.preprocess->key = 'p';
+    flags.preprocess->description =
+	_("Preprocess only and stop after generating outtopidxstats");
+    flags.preprocess->suppress_required = YES;
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -149,6 +159,9 @@ int main(int argc, char **argv)
 	G_warning(_("Ignoring outtopidxstats because topidx is not specified."));
     }
 
+    if (flags.preprocess->answer)
+        exit(EXIT_SUCCESS);
+
     /* Read required files */
     read_input();
 
@@ -158,5 +171,5 @@ int main(int argc, char **argv)
     /* Write outputs */
     write_output();
 
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
