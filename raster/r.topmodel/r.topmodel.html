@@ -2,37 +2,43 @@
 
 <b><em>r.topmodel</em></b> simulates TOPMODEL which is a physically based
 hydrologic model.
-<p>Note: (i) means input; (o) means output; (o/i) means input or output
-<p>The <b>-i</b> flag indicates that input data are given for (o/i).  Without this
-flag, all inputs (i) and intermediate outputs (o/i) should be given.  For
-example, [belevation] map will be created from [elevation] and [basin] in every
-run.  However, given the same [elevation] and [basin], [belevation] output will
-be the same all the time, so r.topmodel can directly take [belevation] as an
-input with this flag to save time.
-<p>
+
 <h3>Selected Parameters:</h3>
 
 <dl>
-<dt><b>depressionless</b> map is created as follows:</dt>
-<dd><div class="code"><pre>
-r.fill.dir input=elevation elev=depressionless dir=direction type=grass
-</pre></div>
-This option can be omitted if [elevation] map is already depressionless.
+<dt><b>qobs</b></dt>
+<dd>Compare simulated flows with observed flows and calculate the model
+efficiency.
 </dd>
 
-<dt><b>belevation</b> map is created from [elevation] with [basin] mask applied:</dt>
-<dd><div class="code"><pre>
-r.mapcalc "belevation = if(basin == 0 || isnull(basin), null(), elevation)"
-</pre></div></dd>
+<dt><b>timestep</b></dt>
+<dd>
+If a time step is specified, output will be generated for the specific time
+step in addition to the summary and total flows at the outlet. This parameter
+can be combined with topidxclass to specify a time step and topographic index
+class at the same time. If no topidxclass is given, output will be generated
+for all the topographic index classes.
+</dd>
 
-<dt><b>topidx</b> map is created as follows:</dt>
-<dd><div class="code"><pre>
-r.topidx input=elevation output=topidx
-</pre></div></dd>
+<dt><b>topidxclass</b></dt>
+<dd>
+If a topographic index class is specified, output will be generated for the
+given topographic index class. This parameter can be combined with timestep. If
+no timestep is given, output will be generated for all the time steps.
+</dd>
 
-<dt><b>qobs</b></dt>
-<dd>Compare simulated flows with observed flows and calculate model
-efficiency.
+<dt><b>topidx</b>, <b>ntopidxclasses</b>, <b>outtopidxstats</b></dt>
+<dd>
+The <b>topidx</b> map can optionally be used for creating a new topographic
+index statistics file. This map has to be already clipped to the catchment
+boundary. The entire range of topographic index values will be divided into
+<b>ntopidxclasses</b> and the number of cells in each class will be reported in
+the <b>outtopidxstats</b> file using the following command:
+<div class="code"><pre>
+r.stats -Anc input=[topidx] output=[outtopidxstats] nsteps=[ntopidxclasses]
+</pre></div>
+These three parameters can be omitted unless new topidxstats file needs to be
+created.
 </dd>
 </dl>
 
@@ -42,7 +48,8 @@ efficiency.
 K. Beven, R. Lamb, P. Quinn, R. Romanowicz, and J. Freer.
 TOPMODEL, in V.P. Singh (Ed.). Computer Models of Watershed Hydrology.
 Water Resources Publications, 1995.
-<p>S.C. Liaw, Streamflow simulation using a physically based hydrologic
+<p>
+S.C. Liaw, Streamflow simulation using a physically based hydrologic
 model in humid forested watersheds (Dissertation).
 Colorado State University, CO. p163, 1988.
 
@@ -58,10 +65,9 @@ Colorado State University, CO. p163, 1988.
 
 <h2>AUTHORS</h2>
 
-Main algorithm sources are rewritten in C based on TMOD9502.FOR.
-<br>
-Thanks to Keith Beven.
-<p>GRASS port by <a href="mailto:grass4u@gmail com">Huidae Cho</a><br>
+<a href="mailto:grass4u@gmail com">Huidae Cho</a><br>
 Hydro Laboratory, Kyungpook National University, South Korea
+<p>
+Based on TMOD9502.FOR by Keith Beven.
 
 <p><i>Last changed: $Date$</i>
