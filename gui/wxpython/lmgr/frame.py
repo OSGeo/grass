@@ -1600,18 +1600,12 @@ class GMFrame(wx.Frame):
         dcmd = tree.GetLayerInfo(layer, key = 'cmd')
         if not dcmd:
             return
-        
-        busy = wx.BusyInfo(message = _("Please wait, loading attribute data..."),
-                           parent = self)
-        wx.Yield()
-        
+
         dbmanager = AttributeManager(parent = self, id = wx.ID_ANY,
                                      size = wx.Size(500, 300),
                                      item = layer, log = self._gconsole,
                                      selection = selection)
-        
-        busy.Destroy()
-        
+
         # register ATM dialog
         self.dialogs['atm'].append(dbmanager)
         

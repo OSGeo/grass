@@ -87,6 +87,9 @@ class AttributeManager(wx.Frame, DbMgrBase):
                                  "You can define new connection in "
                                  "'Manage layers' tab.") % self.dbMgrData['vectName'])
         
+        busy = wx.BusyInfo(message=_("Please wait, loading attribute data..."),
+                           parent=self.parent)
+        wx.SafeYield()
         self.CreateStatusBar(number = 1)
 
         self.notebook = GNotebook(self.panel, style = globalvar.FNPageDStyle)
@@ -106,7 +109,8 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.CreateDbMgrPage(parent = self, pageName = 'manageLayer')
         self.notebook.AddPage(page = self.pages['manageLayer'], text = _("Manage layers"),
                               name = 'layers')
-                
+        del busy
+
         if selection:
             wx.CallAfter(self.notebook.SetSelectionByName, selection)
         else:
