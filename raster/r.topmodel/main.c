@@ -162,13 +162,13 @@ int main(int argc, char **argv)
     if (flags.preprocess->answer)
         exit(EXIT_SUCCESS);
 
-    /* Read required files */
+    /* Read input */
     read_input();
 
-    /* Implement TOPMODEL */
+    /* Run TOPMODEL */
     run_topmodel();
 
-    /* Write outputs */
+    /* Write output */
     write_output();
 
     exit(EXIT_SUCCESS);
