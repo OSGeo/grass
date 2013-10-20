@@ -1,8 +1,9 @@
+#include <math.h>
+#include <grass/raster.h>
 #include "global.h"
 
-
 /* The Green-and-Ampt Model */
-double get_f(double t, double R)
+double calculate_f(double t, double R)
 {
     static double cumf = 0.0, f_ = 0.0;
     static char ponding = 0;
