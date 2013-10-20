@@ -371,7 +371,7 @@ void write_output(void)
 
     if (misc.timestep || misc.topidxclass) {
 	fprintf(fp, "\n");
-	fprintf(fp, "Given ");
+	fprintf(fp, "For ");
 	if (misc.timestep)
 	    fprintf(fp, "timestep: %5d", misc.timestep);
 	if (misc.timestep && misc.topidxclass)
