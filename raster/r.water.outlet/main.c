@@ -69,8 +69,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("watershed"));
 	
     opt.input = G_define_standard_option(G_OPT_R_INPUT);
+    opt.input->description = _("Name of input drainage direction map");
 
     opt.output = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt.output->description = _("Name for output watershed basin map");
     
     opt.coords = G_define_standard_option(G_OPT_M_COORDS);
     opt.coords->description = _("Coordinates of outlet point");
