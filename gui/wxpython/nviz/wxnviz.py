@@ -70,7 +70,7 @@ def print_progress(value):
     if progress:
         if not progress.GetRange() == 100:
             progress.SetRange(100)
-        progress.SafeSetValue(value)
+        progress.SetValue(value)
     else:
         print value
     
