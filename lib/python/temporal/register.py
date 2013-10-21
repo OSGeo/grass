@@ -177,26 +177,25 @@ def register_maps_in_space_time_dataset(
 
         # Put the map into the database
         if not map.is_in_db(dbif):
-            is_in_db = False
             # Break in case no valid time is provided
-            if start == "" or start is None:
+            if (start == "" or start is None) and not map.has_grass_timestamp():
                 dbif.close()
                 if map.get_layer():
                     core.fatal(_("Unable to register %(t)s map <%(id)s> with "
-                                 "layer %(l)s. The map has no valid time and "
+                                 "layer %(l)s. The map has timestamp and "
                                  "the start time is not set.") % {
                                  't': map.get_type(), 'id': map.get_map_id(),
                                  'l': map.get_layer()})
                 else:
                     core.fatal(_("Unable to register %(t)s map <%(id)s>. The"
-                                 " map has no valid time and the start time "
+                                 " map has no timestamp and the start time "
                                  "is not set.") % {'t': map.get_type(),
                                                    'id': map.get_map_id()})
-
-            if unit:
-                map.set_time_to_relative()
-            else:
-                map.set_time_to_absolute()
+            if start != "" and start != None:
+                if unit:
+                    map.set_time_to_relative()
+                else:
+                    map.set_time_to_absolute()
 
         else:
             is_in_db = True
@@ -246,6 +245,11 @@ def register_maps_in_space_time_dataset(
 
         # Load the data from the grass file database
         map.load()
+
+        # Try to read an existing time stamp from the grass spatial database
+        # in case this map wasn't already registered in the temporal database
+        if not is_in_db:
+            map.read_timestamp_from_grass()
 
         # Set the valid time
         if start:

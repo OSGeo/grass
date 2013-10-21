@@ -1,24 +1,33 @@
 <h2>DESCRIPTION</h2>
 
-The module <em>t.register</em> is designed to register raster, 3D raster and 
+The module <em>t.register</em> is designed to register raster, 3D raster and
 vector maps in the temporal database and in specific space time datasets.
 This module must be used to assign time stamps to raster, 3D raster and vector maps.
 The existing timestamp modules <a href="r.timestamp.html">r.timestamp</a>,
-<a href="r3.timestamp.html">r3.timestamp</a> and <a href="v.timestamp.html">v.timestamp</a> 
-should not be used, since they do not register the maps in the temporal database of GRASS.
+<a href="r3.timestamp.html">r3.timestamp</a> and <a href="v.timestamp.html">v.timestamp</a>
+do not register the maps in the temporal database of GRASS. However, timestamps that have been
+created with these modules can be read and used by <em>t.register</em>. This works only for
+maps that are not already registered in the temporal database.
 <p>
-This module supports absolute and relative time. Maps can be registered by command line argument 
+This module supports absolute and relative time. Maps can be registered by command line argument
 (a list of comma separated map names) or using an input file.
 The start time, the end time and a temporal increment can be provided by command line
 or in the input file.
 End time and increment are mutual exclusive.
-The user can register single maps or a list of maps at once. Maps can be registered in several 
-space time datasets using the same time stamp.
+The user can register single maps or a list of maps at once. Maps can be registered in several
+space time datasets using the same timestamp.
 <p>
 Start time and end time with absolute time must be provided using the format <b>yyyy-mm-dd HH:MM:SS +HHMM</b>.
 It is supported to specify only the date <b>yyyy-mm-dd</b>.
 In case of relative time the temporal unit (years, months, days, hours, minutes or seconds) must be provided.
 The relative start time, end time and the increment are integers.
+
+<h2>Note</h2>
+The timestamps of registred maps will be stored in the temporal
+database and in the metadata of the grass maps in the spatial database. This assures
+that timestamps can always be accessed with <em>(r|r3|v).timestamp</em> and the temporal
+modules. Timestamps should only be modified with <em>t.register</em> because
+the <em>(r|r3|v).timestamp</em> modules have no access to the temporal database.
 
 <p>
 
@@ -56,23 +65,58 @@ prec_6|2002-04-01|2002-07-01
 <h2>EXAMPLE</h2>
 
 In this example we create 6 raster maps that will be registered in a single space time
-raster dataset named <em>precip_abs</em> using a monthly temporal granularity. The -i flag generates interval time.
+raster dataset named <em>precip_abs</em> using a monthly temporal granularity.
+The -i flag generates interval time. The generated timestamps will be
+inspected using <em>r.timestamp</em> and t.rast.list.
+We will register an additional map with
+a timetsamp that was set with <em>r.timestamp</em>.
 
 <div class="code"><pre>
-r.mapcalc --o expr="prec_1 = 100"
-r.mapcalc --o expr="prec_2 = 200"
-r.mapcalc --o expr="prec_3 = 300"
-r.mapcalc --o expr="prec_4 = 400"
-r.mapcalc --o expr="prec_5 = 500"
-r.mapcalc --o expr="prec_6 = 600"
+r.mapcalc expr="prec_1 = 100"
+r.mapcalc expr="prec_2 = 200"
+r.mapcalc expr="prec_3 = 300"
+r.mapcalc expr="prec_4 = 400"
+r.mapcalc expr="prec_5 = 500"
+r.mapcalc expr="prec_6 = 600"
 
-t.create --o type=strds temporaltype=absolute \
-    output=precip_abs title="Eexample" \
+t.create type=strds temporaltype=absolute \
+    output=precip_abs title="Example" \
     descr="Example"
 
 t.register -i type=rast input=precip_abs \
     maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
     start="2001-01-01" increment="1 months"
+
+r.timestamp prec_1
+1 Jan 2001 00:00:00 / 1 Feb 2001 00:00:00
+
+r.timestamp prec_2
+1 Feb 2001 00:00:00 / 1 Mar 2001 00:00:00
+
+t.rast.list input=precip_abs
+
+prec_1	test2	2001-01-01 00:00:00	2001-02-01 00:00:00
+prec_2	test2	2001-02-01 00:00:00	2001-03-01 00:00:00
+prec_3	test2	2001-03-01 00:00:00	2001-04-01 00:00:00
+prec_4	test2	2001-04-01 00:00:00	2001-05-01 00:00:00
+prec_5	test2	2001-05-01 00:00:00	2001-06-01 00:00:00
+prec_6	test2	2001-06-01 00:00:00	2001-07-01 00:00:00
+
+r.mapcalc expr="prec_7 = 700"
+r.timestamp map=prec_7 date="1 jul 2001 / 1 aug 2001"
+
+t.register type=rast input=precip_abs maps=prec_7
+
+t.rast.list input=precip_abs
+
+prec_1	test2	2001-01-01 00:00:00	2001-02-01 00:00:00
+prec_2	test2	2001-02-01 00:00:00	2001-03-01 00:00:00
+prec_3	test2	2001-03-01 00:00:00	2001-04-01 00:00:00
+prec_4	test2	2001-04-01 00:00:00	2001-05-01 00:00:00
+prec_5	test2	2001-05-01 00:00:00	2001-06-01 00:00:00
+prec_6	test2	2001-06-01 00:00:00	2001-07-01 00:00:00
+prec_7	test2	2001-07-01 00:00:00	2001-08-01 00:00:00
+
 </pre></div>
 
 

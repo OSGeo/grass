@@ -119,10 +119,10 @@ class AbstractMapDataset(AbstractDataset):
            in the grass file system based spatial database and
            set the internal time stamp that should be insert/updated
            in the temporal database.
-           
+
            @param ts The timetsamp to be set, is of type libgis.TimeStamp()
         """
-        
+
         if not self.has_grass_timestamp():
             return False
 
@@ -130,22 +130,22 @@ class AbstractMapDataset(AbstractDataset):
         dt2 = libgis.DateTime()
         count = ctypes.c_int()
 
-        libgis.G_get_timestamps(ctypes.byref(ts), 
-                                ctypes.byref(dt1), 
-                                ctypes.byref(dt2), 
+        libgis.G_get_timestamps(ctypes.byref(ts),
+                                ctypes.byref(dt1),
+                                ctypes.byref(dt2),
                                 ctypes.byref(count))
-                                 
-        
+
+
         if dt1.mode == libdate.DATETIME_ABSOLUTE:
             pdt1 = None
             pdt2 = None
-            if count >= 1:
-                pdt1 = datetime(int(dt1.year), int(dt1.month), int(dt1.day), 
-                                int(dt1.hour), int(dt1.minute), 
+            if count.value >= 1:
+                pdt1 = datetime(int(dt1.year), int(dt1.month), int(dt1.day),
+                                int(dt1.hour), int(dt1.minute),
                                 int(dt1.second))
-            if count == 2:
-                pdt2 = datetime(int(dt2.year), int(dt2.month), int(dt2.day), 
-                                int(dt2.hour), int(dt2.minute), 
+            if count.value == 2:
+                pdt2 = datetime(int(dt2.year), int(dt2.month), int(dt2.day),
+                                int(dt2.hour), int(dt2.minute),
                                 int(dt2.second))
 
             # ATTENTION: We ignore the time zone
@@ -188,7 +188,7 @@ class AbstractMapDataset(AbstractDataset):
                 elif dt2.seconds > 0:
                     end = dt2.seconds
             self.set_relative_time(start, end, unit)
- 
+
         return True
 
     @abstractmethod
@@ -433,7 +433,7 @@ class AbstractMapDataset(AbstractDataset):
            @param end_time a datetime object specifying the end time of the
                            map, None in case or time instance
            @param timezone Thee timezone of the map (not used)
-           
+
            @return True for success and False otherwise
         """
         if start_time and not isinstance(start_time, datetime):
@@ -508,12 +508,12 @@ class AbstractMapDataset(AbstractDataset):
            @param timezone Thee timezone of the map (not used)
            @param dbif The database interface to be used
            """
-           
+
         if self.get_mapset() != get_current_mapset():
             core.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
-            
+
 
         if self.set_absolute_time(start_time, end_time, timezone):
             dbif, connected = init_dbif(dbif)
@@ -522,7 +522,7 @@ class AbstractMapDataset(AbstractDataset):
 
             if connected:
                 dbif.close()
-    
+
             self.write_timestamp_to_grass()
 
     def set_relative_time(self, start_time, end_time, unit):
@@ -611,7 +611,7 @@ class AbstractMapDataset(AbstractDataset):
 
             if connected:
                 dbif.close()
-    
+
             self.write_timestamp_to_grass()
 
     def set_temporal_extent(self, extent):
@@ -909,7 +909,7 @@ class AbstractMapDataset(AbstractDataset):
             core.fatal(_("Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
-            
+
         dbif, connected = init_dbif(dbif)
         statement = ""
 
@@ -976,12 +976,12 @@ class AbstractMapDataset(AbstractDataset):
         #    core.verbose(_("Unregister %(type)s map <%(map)s> "
         #                   "from space time datasets"
         #                 % {'type':self.get_type(), 'map':self.get_map_id()}))
-        
+
         if self.get_mapset() != get_current_mapset():
             core.fatal(_("Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
-            
+
         statement = ""
         dbif, connected = init_dbif(dbif)
 
