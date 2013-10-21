@@ -499,7 +499,7 @@ void connect_db(struct Format_info_pg *pg_info)
     G_debug(2, "   PQconnectdb(): %s", pg_info->conninfo);
     if (PQstatus(pg_info->conn) == CONNECTION_BAD)
         G_fatal_error("%s\n%s",
-                      _("Connection ton PostgreSQL database failed."),
+                      _("Connection to PostgreSQL database failed."),
                       PQerrorMessage(pg_info->conn));
     
     /* print notice messages only on verbose level */
