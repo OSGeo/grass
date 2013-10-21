@@ -171,11 +171,13 @@ def get_mapset(gisrc_src, gisrc_dst):
         copy_special_mapset_files(path_src, path_dst)
     src = Mapset(msrc, lsrc, gsrc)
     dst = Mapset(mdst, ldst, gdst)
-    dst.visible.extend(src.visible)
+    visible = [m for m in src.visible]
+    visible.append(src.name)
+    dst.visible.extend(visible)
     return src, dst
 
 
-def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
+def copy_groups(groups, gisrc_src, gisrc_dst, region=None, cp_rasts=False):
     """Copy group from one mapset to another, crop the raster to the region.
 
     Parameters
@@ -211,7 +213,8 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
         env['GISRC'] = gisrc_src
         get_grp(group=grp, env_=env)
         rasts = get_grp.outputs.stdout.split()
-        copy_rasters(rasts, gisrc_src, gisrc_dst, region=region)
+        if cp_rasts:
+            copy_rasters(rasts, gisrc_src, gisrc_dst, region=region)
         # change gisdbase to dst
         env['GISRC'] = gisrc_dst
         set_grp(group=grp,
@@ -411,7 +414,7 @@ def cmd_exe(args):
     None.
     """
     bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups = args
-    get_mapset(gisrc_src, gisrc_dst)
+    src, dst = get_mapset(gisrc_src, gisrc_dst)
     env = os.environ.copy()
     env['GISRC'] = gisrc_dst
     if mapnames:
@@ -428,7 +431,8 @@ def cmd_exe(args):
         lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.iteritems()])
         sub.Popen(lcmd, env=env).wait()
     if groups:
-        copy_groups(groups, gisrc_src, gisrc_dst)
+        cp_rasts = src.gisdbase != dst.gisdbase or src.location != dst.location
+        copy_groups(groups, gisrc_src, gisrc_dst, cp_rasts=cp_rasts)
     # run the grass command
     sub.Popen(get_cmd(cmd), env=env).wait()
     # remove temp GISRC
