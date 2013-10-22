@@ -123,17 +123,17 @@ class GrassInterface:
         """
         raise NotImplementedError()
 
-    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         """!Writes message related to start or end of the command.
         """
         raise NotImplementedError()
 
-    def WriteWarning(self, line):
+    def WriteWarning(self, text):
         """!Writes warning message for the user.
         """
         raise NotImplementedError()
 
-    def WriteError(self, line):
+    def WriteError(self, text):
         """!Writes error message for the user."""
         raise NotImplementedError()
 
@@ -236,16 +236,16 @@ class StandaloneGrassInterface():
                  notification=Notification.HIGHLIGHT):
         self._write(grass.message, text)
 
-    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         if pid:
-            line = '(' + str(pid) + ') ' + line
-        self._write(grass.message, line)
+            text = '(' + str(pid) + ') ' + text
+        self._write(grass.message, text)
 
-    def WriteWarning(self, line):
-        self._write(grass.warning, line)
+    def WriteWarning(self, text):
+        self._write(grass.warning, text)
 
-    def WriteError(self, line):
-        self._write(grass.error, line)
+    def WriteError(self, text):
+        self._write(grass.error, text)
 
     def _write(self, function, text):
         orig = os.getenv("GRASS_MESSAGE_FORMAT")

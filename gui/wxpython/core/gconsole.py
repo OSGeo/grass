@@ -396,29 +396,29 @@ class GConsole(wx.EvtHandler):
         """!Generic method for writing log message in
         given style
 
-        @param line text line
+        @param text text line
         @param notification form of notification
         """
         self.writeLog.emit(text=text, wrap=wrap,
                           notification=notification)
 
-    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         """!Write message in selected style
 
-        @param line message to be printed
+        @param text message to be printed
         @param pid process pid or None
         @param notification form of notification
         """
-        self.writeCmdLog.emit(line=line, pid=pid,
+        self.writeCmdLog.emit(text=text, pid=pid,
                               notification=notification)
 
-    def WriteWarning(self, line):
+    def WriteWarning(self, text):
         """!Write message in warning style"""
-        self.writeWarning.emit(line=line)
+        self.writeWarning.emit(text=text)
 
-    def WriteError(self, line):
+    def WriteError(self, text):
         """!Write message in error style"""
-        self.writeError.emit(line=line)
+        self.writeError.emit(text=text)
 
     def RunCmd(self, command, compReg=True, skipInterface=False,
                onDone=None, onPrepare=None, userData=None, notification=Notification.MAKE_VISIBLE):

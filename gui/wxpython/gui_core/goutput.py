@@ -334,24 +334,24 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.contentChanged.emit(notification=notification)
         
-    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         """!Write message in selected style
         
-        @param line message to be printed
+        @param text message to be printed
         @param pid process pid or None
         @param switchPage True to switch page
         """
         if pid:
-            line = '(' + str(pid) + ') ' + line
-        self.WriteLog(line, style = self.cmdOutput.StyleCommand, notification=notification)
+            text = '(' + str(pid) + ') ' + text
+        self.WriteLog(text, style=self.cmdOutput.StyleCommand, notification=notification)
 
-    def WriteWarning(self, line):
+    def WriteWarning(self, text):
         """!Write message in warning style"""
-        self.WriteLog(line, style = self.cmdOutput.StyleWarning, notification=Notification.MAKE_VISIBLE)
+        self.WriteLog(text, style=self.cmdOutput.StyleWarning, notification=Notification.MAKE_VISIBLE)
 
-    def WriteError(self, line):
+    def WriteError(self, text):
         """!Write message in error style"""
-        self.WriteLog(line, style = self.cmdOutput.StyleError, notification=Notification.MAKE_VISIBLE)
+        self.WriteLog(text, style=self.cmdOutput.StyleError, notification=Notification.MAKE_VISIBLE)
 
     def OnOutputClear(self, event):
         """!Clear content of output window"""

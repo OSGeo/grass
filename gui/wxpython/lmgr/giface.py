@@ -153,14 +153,14 @@ class LayerManagerGrassInterface(object):
         self.lmgr._gconsole.WriteLog(text=text, wrap=wrap, 
                                      notification=notification)
 
-    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
-        self.lmgr._gconsole.WriteCmdLog(line=line, pid=pid, notification=notification)
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
+        self.lmgr._gconsole.WriteCmdLog(text=text, pid=pid, notification=notification)
 
-    def WriteWarning(self, line):
-        self.lmgr._gconsole.WriteWarning(line = line)
+    def WriteWarning(self, text):
+        self.lmgr._gconsole.WriteWarning(text=text)
 
-    def WriteError(self, line):
-        self.lmgr._gconsole.WriteError(line = line)
+    def WriteError(self, text):
+        self.lmgr._gconsole.WriteError(text=text)
 
     def GetLayerTree(self):
         return self.lmgr.GetLayerTree()
