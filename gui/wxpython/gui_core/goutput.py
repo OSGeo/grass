@@ -305,7 +305,9 @@ class GConsoleWindow(wx.SplitterWindow):
     def WriteLog(self, text, style=None, wrap=None,
                  notification=Notification.HIGHLIGHT):
         """!Generic method for writing log message in 
-        given style
+        given style. 
+
+        Emits contentChanged signal.
 
         @param line text line
         @param style text style (see GStc)
@@ -421,7 +423,9 @@ class GConsoleWindow(wx.SplitterWindow):
             self.cmdOutput.Unbind(stc.EVT_STC_PAINTED)
 
     def OnCmdOutput(self, event):
-        """!Print command output
+        """!Prints command output.
+
+        Emits contentChanged signal.
         """
         message = event.text
         type  = event.type

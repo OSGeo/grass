@@ -48,6 +48,7 @@ from icons.icon           import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
 from gui_core.widgets import GenericValidator
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
+from core.giface import Notification
 
 TREE_ITEM_HEIGHT = 25
 
@@ -642,7 +643,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                'zoom=%s' % mapLayer.GetName()]
         
         # print output to command log area
-        self._giface.RunCmd(cmd)
+        self._giface.RunCmd(cmd, notification=Notification.HIGHLIGHT)
         
         # re-render map display
         self._giface.GetMapWindow().UpdateMap(render=True)
@@ -680,7 +681,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             cmd.append('-p')
             if mltype == '3d-raster':
                 cmd.append('-3')
-            self._giface.RunCmd(cmd, compReg = False)
+            self._giface.RunCmd(cmd, compReg = False,
+                                notification=Notification.HIGHLIGHT)
         
         # re-render map display
         self._giface.GetMapWindow().UpdateMap(render=True)
