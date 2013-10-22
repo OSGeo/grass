@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 """
 
 from grass.pydispatch.signal import Signal
+from core.giface import Notification
 
 
 class Layer(object):
@@ -145,15 +146,15 @@ class LayerManagerGrassInterface(object):
 
     def Help(self, entry):
         cmdlist = ['g.manual', 'entry=%s' % entry]
-        self.RunCmd(cmdlist, compReg = False, switchPage = False)
+        self.RunCmd(cmdlist, compReg = False, notification=Notification.NO_NOTIFICATION)
 
     def WriteLog(self, text, wrap = None,
-                 switchPage = False, priority = 1):
-        self.lmgr._gconsole.WriteLog(text = text, wrap = wrap, switchPage = switchPage,
-                                   priority = priority)
+                 notification=Notification.HIGHLIGHT):
+        self.lmgr._gconsole.WriteLog(text=text, wrap=wrap, 
+                                     notification=notification)
 
-    def WriteCmdLog(self, line, pid = None, switchPage = True):
-        self.lmgr._gconsole.WriteCmdLog(line = line, pid = pid, switchPage = switchPage)
+    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
+        self.lmgr._gconsole.WriteCmdLog(line=line, pid=pid, notification=notification)
 
     def WriteWarning(self, line):
         self.lmgr._gconsole.WriteWarning(line = line)

@@ -16,9 +16,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-from core.gconsole import GConsole, \
-    EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
-    EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
 from core.utils import _
 
 import grass.script as grass
@@ -27,6 +24,19 @@ from grass.pydispatch.signal import Signal
 
 # to disable Abstract class not referenced
 #pylint: disable=R0921
+
+
+class Notification:
+    """!Enum class for notifications suggestions.
+
+    Can be used for log messages, commands, warnings, errors.
+    The value is the suggestion how user should be notified
+    about the new message.
+    """
+    NO_NOTIFICATION = 0
+    HIGHLIGHT = 1
+    MAKE_VISIBLE = 2
+    RAISE_WINDOW = 3
 
 
 class Layer(object):
@@ -108,24 +118,18 @@ class GrassInterface:
         """
         raise NotImplementedError()
 
-    def WriteLog(self, text, wrap=None, switchPage=False, priority=1):
+    def WriteLog(self, text, wrap=None, notification=Notification.HIGHLIGHT):
         """!Writes log message.
-
-        @note It is not clear how the switchPage and priority should work.
-        @note Use priority rather than switchPage, switchPage will be removed.
         """
         raise NotImplementedError()
 
-    def WriteCmdLog(self, line, pid=None, switchPage=True):
+    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
         """!Writes message related to start or end of the command.
         """
         raise NotImplementedError()
 
     def WriteWarning(self, line):
         """!Writes warning message for the user.
-
-        Currently used also for important messages for user.
-        Overlaps with log message with high priority.
         """
         raise NotImplementedError()
 
@@ -189,6 +193,10 @@ class StandaloneGrassInterface():
         # Signal emitted to request updating of map
         self.updateMap = Signal('StandaloneGrassInterface.updateMap')
 
+        from core.gconsole import GConsole, \
+            EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, \
+            EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
+
         self._gconsole = GConsole()
         self._gconsole.Bind(EVT_CMD_PROGRESS, self._onCmdProgress)
         self._gconsole.Bind(EVT_CMD_OUTPUT, self._onCmdOutput)
@@ -219,20 +227,20 @@ class StandaloneGrassInterface():
         grass.percent(event.value, 100, 1)
         event.Skip()
 
-    def RunCmd(self, command, compReg=True, switchPage=False, skipInterface=False,
-               onDone=None, onPrepare=None, userData=None, priority=1):
-        self._gconsole.RunCmd(command=command, compReg=compReg, switchPage=switchPage,
+    def RunCmd(self, command, compReg=True, skipInterface=False,
+               onDone=None, onPrepare=None, userData=None, notification=Notification.MAKE_VISIBLE):
+        self._gconsole.RunCmd(command=command, compReg=compReg,
                               skipInterface=skipInterface, onDone=onDone,
-                              onPrepare=onPrepare, userData=userData, priority=priority)
+                              onPrepare=onPrepare, userData=userData, notification=notification)
 
     def Help(self, entry):
         self._gconsole.RunCmd(['g.manual', 'entry=%s' % entry])
 
     def WriteLog(self, text, wrap=None,
-                 switchPage=False, priority=1):
+                 notification=Notification.HIGHLIGHT):
         self._write(grass.message, text)
 
-    def WriteCmdLog(self, line, pid=None, switchPage=True):
+    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
         if pid:
             line = '(' + str(pid) + ') ' + line
         self._write(grass.message, line)

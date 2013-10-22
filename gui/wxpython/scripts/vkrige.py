@@ -41,6 +41,7 @@ from core import gconsole
 from gui_core import goutput
 from core.settings import UserSettings
 from gui_core.widgets import GNotebook
+from core.giface import Notification
 #import help
 
 import wx
@@ -105,10 +106,10 @@ class KrigingPanel(wx.Panel):
         self.outpage = self.RPackagesBook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         self._gconsole.Bind(gconsole.EVT_CMD_RUN,
                             lambda event:
-                                self._switchPageHandler(event = event, priority = 2))
+                                self._switchPageHandler(event=event, notification=Notification.MAKE_VISIBLE))
         self._gconsole.Bind(gconsole.EVT_CMD_DONE,
                             lambda event:
-                                self._switchPageHandler(event = event, priority = 3))
+                                self._switchPageHandler(event=event, notification=Notification.RAISE_WINDOW))
         self.RPackagesBook.SetSelection(0)
         KrigingSizer.Add(self.RPackagesBook, proportion = 1, flag = wx.EXPAND)
         
@@ -250,24 +251,26 @@ class KrigingPanel(wx.Panel):
         # give it to the output console
         #@FIXME: it runs the command as a NEW instance. Reimports data, recalculates variogram fit..
         #otherwise I can use Controller() and mimic RunCmd behaviour.
-        self._gconsole.RunCmd(command, switchPage = True)
+        self._gconsole.RunCmd(command)
     
     def OnVarianceCBChecked(self, event):
         self.OutputVarianceMapName.Enable(event.IsChecked())
 
-    def _switchPageHandler(self, event, priority):
-        self._switchPage(priority = priority)
+    def _switchPageHandler(self, event, notification):
+        self._switchPage(notification=notification)
         event.Skip()
 
-    def _switchPage(self, priority):
-        """!Manages @c 'output' notebook page according to priority."""
-        if priority == 1:
+    def _switchPage(self, notification):
+        """!Manages @c 'output' notebook page according to event notification."""
+        if notification == Notification.HIGHLIGHT:
             self.RPackagesBook.HighlightPageByName('output')
-        if priority >= 2:
+        if notification == Notification.MAKE_VISIBLE:
             self.RPackagesBook.SetSelectionByName('output')
-        if priority >= 3:
+        if notification == Notification.RAISE_WINDOW:
+            self.RPackagesBook.SetSelectionByName('output')
             self.SetFocus()
             self.Raise()
+
 
 class KrigingModule(wx.Frame):
     """ Kriging module for GRASS GIS. Depends on R and its packages gstat and geoR. """

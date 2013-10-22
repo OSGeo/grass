@@ -1801,7 +1801,7 @@ class GdalImportDialog(ImportDialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self._giface.RunCmd(cmd, switchPage = True, onDone = self.AddLayers)
+            self._giface.RunCmd(cmd, onDone=self.AddLayers)
         
         if popOGR:
             os.environ.pop('GRASS_VECTOR_OGR')
@@ -1963,7 +1963,7 @@ class DxfImportDialog(ImportDialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self._giface.RunCmd(cmd, switchPage = True, onDone = self.AddLayers)
+            self._giface.RunCmd(cmd, onDone=self.AddLayers)
         
         self.Close()
 

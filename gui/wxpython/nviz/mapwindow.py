@@ -44,6 +44,7 @@ from nviz.animation     import Animation
 from nviz               import wxnviz
 from core.globalvar     import CheckWxVersion
 from core.utils         import str2rgb, _
+from core.giface import Notification
 
 wxUpdateProperties, EVT_UPDATE_PROP  = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW  = NewEvent()
@@ -2550,7 +2551,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     
     def OnNvizCmd(self):
         """!Generate and write command to command output"""
-        self.log.WriteLog(self.NvizCmdCommand(), priority = 3)
+        self.log.WriteLog(self.NvizCmdCommand(), notification=Notification.RAISE_WINDOW)
         
     def SaveToFile(self, FileName, FileType, width, height):
         """!This draws the DC to a buffer that can be saved to a file.
