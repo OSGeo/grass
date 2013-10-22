@@ -29,14 +29,13 @@ if gui_wx_path not in sys.path:
 
 import wx
 from   wx import stc
-from wx.lib.newevent import NewEvent
 
 from grass.pydispatch.signal import Signal
 
 from core.gcmd       import GError, EncodeString
 from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
-    EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR, Notification
+    Notification
 from gui_core.prompt import GPromptSTC
 from core.settings   import UserSettings
 from core.utils import _
@@ -94,22 +93,11 @@ class GConsoleWindow(wx.SplitterWindow):
         self._gconsole.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
         self._gconsole.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self._gconsole.Bind(EVT_CMD_DONE, self.OnCmdDone)
-        self._gconsole.Bind(EVT_WRITE_LOG,
-                            lambda event:
-                                self.WriteLog(text = event.text,
-                                              wrap = event.wrap,
-                                              notification=event.notification))
-        self._gconsole.Bind(EVT_WRITE_CMD_LOG,
-                            lambda event:
-                                self.WriteCmdLog(line = event.line,
-                                                 pid = event.pid,
-                                                 notification=event.notification))
-        self._gconsole.Bind(EVT_WRITE_WARNING,
-                            lambda event:
-                                self.WriteWarning(line = event.line))
-        self._gconsole.Bind(EVT_WRITE_ERROR,
-                            lambda event:
-                                self.WriteError(line = event.line))
+
+        self._gconsole.writeLog.connect(self.WriteLog)
+        self._gconsole.writeCmdLog.connect(self.WriteCmdLog)
+        self._gconsole.writeWarning.connect(self.WriteWarning)
+        self._gconsole.writeError.connect(self.WriteError)
 
         # text control for command output
         self.cmdOutput = GStc(parent = self.panelOutput, id = wx.ID_ANY, margin = margin,
