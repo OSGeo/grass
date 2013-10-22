@@ -193,21 +193,17 @@ class StandaloneGrassInterface():
         # Signal emitted to request updating of map
         self.updateMap = Signal('StandaloneGrassInterface.updateMap')
 
+        # workaround, standalone grass interface should be moved to sep. file
         from core.gconsole import GConsole, \
-            EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, \
-            EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
+            EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
 
         self._gconsole = GConsole()
         self._gconsole.Bind(EVT_CMD_PROGRESS, self._onCmdProgress)
         self._gconsole.Bind(EVT_CMD_OUTPUT, self._onCmdOutput)
-        self._gconsole.Bind(EVT_WRITE_LOG,
-                            lambda event: self.WriteLog(text=event.text))
-        self._gconsole.Bind(EVT_WRITE_CMD_LOG,
-                            lambda event: self.WriteCmdLog(line=event.line))
-        self._gconsole.Bind(EVT_WRITE_WARNING,
-                            lambda event: self.WriteWarning(line=event.line))
-        self._gconsole.Bind(EVT_WRITE_ERROR,
-                            lambda event: self.WriteError(line=event.line))
+        self._gconsole.writeLog.connect(self.WriteLog)
+        self._gconsole.writeCmdLog.connect(self.WriteCmdLog)
+        self._gconsole.writeWarning.connect(self.WriteWarning)
+        self._gconsole.writeError.connect(self.WriteError)
 
     def _onCmdOutput(self, event):
         """!Print command output"""

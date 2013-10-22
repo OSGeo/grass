@@ -325,13 +325,6 @@ class GStderr:
             wx.PostEvent(self.receiver, evt)
 
 
-# events related to messages
-# TODO: create separete class for handling messages?
-gWriteLog, EVT_WRITE_LOG = NewEvent()
-gWriteCmdLog, EVT_WRITE_CMD_LOG = NewEvent()
-gWriteWarning, EVT_WRITE_WARNING = NewEvent()
-gWriteError, EVT_WRITE_ERROR = NewEvent()
-
 # Occurs when an ignored command is called.
 # Attribute cmd contains command (as a list).
 gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
@@ -352,6 +345,14 @@ class GConsole(wx.EvtHandler):
         # Signal when some map is created or updated by a module.
         # attributes: name: map name, ltype: map type,
         self.mapCreated = Signal('GConsole.mapCreated')
+        # emitted when log message should be written
+        self.writeLog = Signal('GConsole.writeLog')
+        # emitted when command log message should be written
+        self.writeCmdLog = Signal('GConsole.writeCmdLog')
+        # emitted when warning message should be written
+        self.writeWarning = Signal('GConsole.writeWarning')
+        # emitted when error message should be written
+        self.writeError = Signal('GConsole.writeError')
 
         self._guiparent = guiparent
         self._giface = giface
@@ -398,9 +399,8 @@ class GConsole(wx.EvtHandler):
         @param line text line
         @param notification form of notification
         """
-        event = gWriteLog(text=text, wrap=wrap,
+        self.writeLog.emit(text=text, wrap=wrap,
                           notification=notification)
-        wx.PostEvent(self, event)
 
     def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
         """!Write message in selected style
@@ -409,19 +409,16 @@ class GConsole(wx.EvtHandler):
         @param pid process pid or None
         @param notification form of notification
         """
-        event = gWriteCmdLog(line=line, pid=pid,
-                             notification=notification)
-        wx.PostEvent(self, event)
+        self.writeCmdLog.emit(line=line, pid=pid,
+                              notification=notification)
 
     def WriteWarning(self, line):
         """!Write message in warning style"""
-        event = gWriteWarning(line=line)
-        wx.PostEvent(self, event)
+        self.writeWarning.emit(line=line)
 
     def WriteError(self, line):
         """!Write message in error style"""
-        event = gWriteError(line=line)
-        wx.PostEvent(self, event)
+        self.writeError.emit(line=line)
 
     def RunCmd(self, command, compReg=True, skipInterface=False,
                onDone=None, onPrepare=None, userData=None, notification=Notification.MAKE_VISIBLE):
