@@ -36,7 +36,7 @@ from grass.pydispatch.signal import Signal
 from core.gcmd       import GError, EncodeString
 from core.gconsole   import GConsole, \
     EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
-    EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
+    EVT_WRITE_LOG, EVT_WRITE_CMD_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR, Notification
 from gui_core.prompt import GPromptSTC
 from core.settings   import UserSettings
 from core.utils import _
@@ -46,11 +46,6 @@ from gui_core.widgets import SearchModuleWidget
 GC_EMPTY = 0
 GC_SEARCH = 1
 GC_PROMPT = 2
-
-
-# occurs when a content of console output window was changed
-# some similar event exists in GConsole this will be not neccessary
-gGcContentChanged, EVT_GC_CONTENT_CHANGED = NewEvent()
 
 
 class GConsoleWindow(wx.SplitterWindow):
@@ -86,6 +81,10 @@ class GConsoleWindow(wx.SplitterWindow):
 
         # signal which requests showing of a notification
         self.showNotification = Signal("GConsoleWindow.showNotification")
+        # signal emitted when text appears in the console
+        # parameter 'notification' suggests form of notification (according to
+        # core.giface.Notification)
+        self.contentChanged = Signal("GConsoleWindow.contentChanged")
 
         # progress bar
         self.progressbar = wx.Gauge(parent = self.panelProgress, id = wx.ID_ANY,
@@ -99,13 +98,12 @@ class GConsoleWindow(wx.SplitterWindow):
                             lambda event:
                                 self.WriteLog(text = event.text,
                                               wrap = event.wrap,
-                                              switchPage = event.switchPage,
-                                              priority = event.priority))
+                                              notification=event.notification))
         self._gconsole.Bind(EVT_WRITE_CMD_LOG,
                             lambda event:
                                 self.WriteCmdLog(line = event.line,
                                                  pid = event.pid,
-                                                 switchPage = event.switchPage))
+                                                 notification=event.notification))
         self._gconsole.Bind(EVT_WRITE_WARNING,
                             lambda event:
                                 self.WriteWarning(line = event.line))
@@ -116,7 +114,6 @@ class GConsoleWindow(wx.SplitterWindow):
         # text control for command output
         self.cmdOutput = GStc(parent = self.panelOutput, id = wx.ID_ANY, margin = margin,
                                wrap = None)
-        self.cmdOutput.Bind(stc.EVT_STC_CHANGE, self.OnStcChanged)
 
         # search & command prompt
         # move to the if below
@@ -305,19 +302,15 @@ class GConsoleWindow(wx.SplitterWindow):
 
         return self.panelOutput
 
-    def WriteLog(self, text, style = None, wrap = None,
-                 switchPage = False, priority = 1):
+    def WriteLog(self, text, style=None, wrap=None,
+                 notification=Notification.HIGHLIGHT):
         """!Generic method for writing log message in 
         given style
 
         @param line text line
         @param style text style (see GStc)
         @param stdout write to stdout or stderr
-        @param switchPage for backward compatibility
-        (replace by priority: False=1, True=2)
-        @param priority priority of this message
-        (0=no priority, 1=normal, 2=medium, 3=high)
-        also not clear how deal with this
+        @param notification form of notification
         """
 
         self.cmdOutput.SetStyle()
@@ -348,8 +341,10 @@ class GConsoleWindow(wx.SplitterWindow):
             self.cmdOutput.SetStyling(p2 - p1, style)
         
         self.cmdOutput.EnsureCaretVisible()
+
+        self.contentChanged.emit(notification=notification)
         
-    def WriteCmdLog(self, line, pid = None, switchPage = True):
+    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
         """!Write message in selected style
         
         @param line message to be printed
@@ -358,15 +353,15 @@ class GConsoleWindow(wx.SplitterWindow):
         """
         if pid:
             line = '(' + str(pid) + ') ' + line
-        self.WriteLog(line, style = self.cmdOutput.StyleCommand, switchPage = switchPage)
+        self.WriteLog(line, style = self.cmdOutput.StyleCommand, notification=notification)
 
     def WriteWarning(self, line):
         """!Write message in warning style"""
-        self.WriteLog(line, style = self.cmdOutput.StyleWarning, switchPage = True)
+        self.WriteLog(line, style = self.cmdOutput.StyleWarning, notification=Notification.MAKE_VISIBLE)
 
     def WriteError(self, line):
         """!Write message in error style"""
-        self.WriteLog(line, style = self.cmdOutput.StyleError, switchPage = True)
+        self.WriteLog(line, style = self.cmdOutput.StyleError, notification=Notification.MAKE_VISIBLE)
 
     def OnOutputClear(self, event):
         """!Clear content of output window"""
@@ -427,16 +422,16 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def OnCmdOutput(self, event):
         """!Print command output
-
-        Posts event EVT_OUTPUT_TEXT with priority attribute set to 1.
         """
         message = event.text
         type  = event.type
 
         self.cmdOutput.AddStyledMessage(message, type)
 
-        # documenting old behavior/implementation:
-        # add elipses if not active
+        if event.type in ('warning', 'error'):
+            self.contentChanged.emit(notification=Notification.MAKE_VISIBLE)
+        else:
+            self.contentChanged.emit(notification=Notification.HIGHLIGHT)
 
     def OnCmdProgress(self, event):
         """!Update progress message info"""
@@ -505,10 +500,6 @@ class GConsoleWindow(wx.SplitterWindow):
     def _hideProgress(self):
         self.outputSizer.Hide(self.panelProgress)
         self.outputSizer.Layout()
-        
-    def OnStcChanged(self, event):
-        newEvent = gGcContentChanged()
-        wx.PostEvent(self, newEvent)
 
     def ResetFocus(self):
         """!Reset focus"""

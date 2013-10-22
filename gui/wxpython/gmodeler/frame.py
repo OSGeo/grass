@@ -36,7 +36,7 @@ from core                 import globalvar
 from core.utils import _
 from gui_core.widgets     import GNotebook
 from core.gconsole        import GConsole, \
-    EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE, EVT_CMD_RUN, EVT_CMD_DONE
+    EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from gui_core.goutput     import GConsoleWindow
 from core.debug           import Debug
 from core.gcmd            import GMessage, GException, GWarning, GError, RunCommand
@@ -49,6 +49,7 @@ from gmodeler.menudata    import ModelerMenuData
 from gui_core.forms       import GUI
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
 from gmodeler.toolbars    import ModelerToolbar
+from core.giface import Notification
 
 from gmodeler.model       import *
 from gmodeler.dialogs     import *
@@ -114,11 +115,9 @@ class ModelFrame(wx.Frame):
 
         # here events are binded twice
         self._gconsole.Bind(EVT_CMD_RUN,
-                                lambda event:
-                                    self._switchPageHandler(event = event, priority = 2))
+            lambda event: self._switchPageHandler(event=event, notification=Notification.MAKE_VISIBLE))
         self._gconsole.Bind(EVT_CMD_DONE,
-                                lambda event:
-                                    self._switchPageHandler(event = event, priority = 3))
+            lambda event: self._switchPageHandler(event=event, notification=Notification.RAISE_WINDOW))
         self.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
@@ -705,17 +704,18 @@ class ModelFrame(wx.Frame):
         
         self.canvas.Refresh()
 
-    def _switchPageHandler(self, event, priority):
-        self._switchPage(priority = priority)
+    def _switchPageHandler(self, event, notification):
+        self._switchPage(notification=notification)
         event.Skip()
 
-    def _switchPage(self, priority):
-        """!Manages @c 'output' notebook page according to event priority."""
-        if priority == 1:
+    def _switchPage(self, notification):
+        """!Manages @c 'output' notebook page according to event notification."""
+        if notification == Notification.HIGHLIGHT:
             self.notebook.HighlightPageByName('output')
-        if priority >= 2:
+        if notification == Notification.MAKE_VISIBLE:
             self.notebook.SetSelectionByName('output')
-        if priority >= 3:
+        if notification == Notification.RAISE_WINDOW:
+            self.notebook.SetSelectionByName('output')
             self.SetFocus()
             self.Raise()
 
@@ -1554,8 +1554,7 @@ class PythonPanel(wx.Panel):
             mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
             os.chmod(self.filename, mode | stat.S_IXUSR)
         
-        self.parent._gconsole.RunCmd([fd.name], switchPage = True,
-                                     skipInterface = True, onDone = self.OnDone)
+        self.parent._gconsole.RunCmd([fd.name], skipInterface=True, onDone=self.OnDone)
         
         event.Skip()
 

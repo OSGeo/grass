@@ -58,6 +58,7 @@ from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
 from mapwin.analysis import ProfileController, MeasureDistanceController
 from gui_core.forms import GUI
+from core.giface import Notification
 
 from mapdisp import statusbar as sb
 
@@ -336,7 +337,7 @@ class MapFrame(SingleMapFrame):
         # erase map window
         self.MapWindow.EraseMap()
         
-        self._giface.WriteCmdLog(_("Starting 3D view mode..."))
+        self._giface.WriteCmdLog(_("Starting 3D view mode..."), notification=Notification.HIGHLIGHT)
         self.SetStatusText(_("Please wait, loading data..."), 0)
         
         # create GL window
@@ -410,7 +411,9 @@ class MapFrame(SingleMapFrame):
                                                        key = 'statusbarMode',
                                                        subkey = 'selection'))
         self.SetStatusText(_("Please wait, unloading data..."), 0)
-        self._giface.WriteCmdLog(_("Switching back to 2D view mode..."))
+        # unloading messages from library cause highlight anyway
+        self._giface.WriteCmdLog(_("Switching back to 2D view mode..."),
+                                 notification=Notification.NO_NOTIFICATION)
         if self.MapWindow3D:
             self.MapWindow3D.OnClose(event = None)
         # switch from MapWindowGL to MapWindow
@@ -735,9 +738,8 @@ class MapFrame(SingleMapFrame):
 
     def _onRedirectQueryOutput(self, output, style='log'):
         """!Writes query output into console"""
-        # TODO: fix switching tab
         if style == 'log':
-            self._giface.WriteLog(output)
+            self._giface.WriteLog(output, notification=Notification.MAKE_VISIBLE)
         elif style == 'cmd':
             self._giface.WriteCmdLog(output)
 

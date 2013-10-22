@@ -53,10 +53,9 @@ from gui_core.widgets      import GNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
-from core.gconsole         import GConsole, \
-    EVT_CMD_OUTPUT, EVT_IGNORED_CMD_RUN, EVT_IMPORTANT_CMD_RUN, \
-    EVT_WRITE_LOG, EVT_WRITE_WARNING, EVT_WRITE_ERROR
-from gui_core.goutput      import GConsoleWindow, EVT_GC_CONTENT_CHANGED, GC_SEARCH, GC_PROMPT
+from core.gconsole         import GConsole, EVT_IGNORED_CMD_RUN
+from core.giface           import Notification
+from gui_core.goutput      import GConsoleWindow, GC_SEARCH, GC_PROMPT
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
@@ -292,33 +291,12 @@ class GMFrame(wx.Frame):
         self.goutput.showNotification.connect(lambda message: self.SetStatusText(message))
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
+        self.goutput.contentChanged.connect(
+            lambda notification: self._switchPage(notification))
 
-        # EVT_CMD_OUTPUT and EVT_GC_CONTENT_CHANGED are similar but should be distinct
-        # (logging/messages may be splited from GConsole commad running interface)
-        # thus, leaving this bind here
-        self._gconsole.Bind(EVT_CMD_OUTPUT,
-                                lambda event:
-                                    self._switchPageHandler(event = event, priority = 1))
-        self._gconsole.Bind(EVT_IMPORTANT_CMD_RUN,
-                            lambda event:
-                                self._switchPageHandler(event = event, priority = 2))
         self._gconsole.Bind(EVT_IGNORED_CMD_RUN,
                             lambda event: self.RunSpecialCmd(event.cmd))
-        # if you are chnaging GConsoleWindow to GConsole and
-        # EVT_GC_CONTENT_CHANGED to somthing like EVT_LOG_OUTPUT
-        # you are doing right
-        self.goutput.Bind(EVT_GC_CONTENT_CHANGED,
-                          lambda event:
-                              self._switchPageHandler(event = event, priority = 1))
-        self._gconsole.Bind(EVT_WRITE_LOG,
-                            lambda event:
-                                self._switchPageHandler(event = event, priority = event.priority))
-        self._gconsole.Bind(EVT_WRITE_WARNING,
-                            lambda event:
-                                self._switchPageHandler(event = event, priority = 2))
-        self._gconsole.Bind(EVT_WRITE_ERROR,
-                            lambda event:
-                                self._switchPageHandler(event = event, priority = 2))
+
         self._setCopyingOfSelectedText()
         
         # create 'search module' notebook page
@@ -596,17 +574,18 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
-    def _switchPageHandler(self, event, priority):
-        self._switchPage(priority = priority)
+    def _switchPageHandler(self, event, notification):
+        self._switchPage(notification=notification)
         event.Skip()
 
-    def _switchPage(self, priority):
-        """!Manages @c 'output' notebook page according to event priority."""
-        if priority == 1:
+    def _switchPage(self, notification):
+        """!Manages @c 'output' notebook page according to event notification."""
+        if notification == Notification.HIGHLIGHT:
             self.notebook.HighlightPageByName('output')
-        if priority >= 2:
+        if notification == Notification.MAKE_VISIBLE:
             self.notebook.SetSelectionByName('output')
-        if priority >= 3:
+        if notification == Notification.RAISE_WINDOW:
+            self.notebook.SetSelectionByName('output')
             self.SetFocus()
             self.Raise()
 
@@ -868,7 +847,7 @@ class GMFrame(wx.Frame):
                 SetAddOnPath(os.pathsep.join(addonPath), key = 'PATH')
         
         self._gconsole.WriteCmdLog(_("Launching script '%s'...") % filename)
-        self._gconsole.RunCmd([filename], switchPage = True)
+        self._gconsole.RunCmd([filename])
         
     def OnChangeLocation(self, event):
         """Change current location"""
@@ -999,7 +978,7 @@ class GMFrame(wx.Frame):
                                                platform.python_version(),
                                                wx.__version__,
                                                _("Platform"), platform.platform().decode('utf8', 'replace'), osgeo4w),
-                                priority = 2)
+                                notification=Notification.MAKE_VISIBLE)
         self._gconsole.WriteCmdLog(' ')
     
     def OnAboutGRASS(self, event):

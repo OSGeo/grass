@@ -48,6 +48,7 @@ from gui_core.dialogs  import GroupDialog
 from core.gcmd         import RunCommand, GMessage, GError, GWarning
 from core.settings     import UserSettings
 from gcp.mapdisplay    import MapFrame
+from core.giface import Notification
 
 from location_wizard.wizard   import TitledPage as TitledPage
 
@@ -1446,7 +1447,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             for vect in vectlist:
                 self.outname = str(vect.split('@')[0]) + self.extension
                 self._giface.WriteLog(text = _('Transforming <%s>...') % vect,
-                                             switchPage = True)
+                                      notification=Notification.MAKE_VISIBLE)
                 ret = msg = ''
                 
                 busy = wx.BusyInfo(message=_("Rectifying vector map <%s>, please wait...") % vect,

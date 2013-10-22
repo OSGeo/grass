@@ -606,7 +606,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
         cmd = ['v.build',
                'map=%s' % mapLayer.GetName()]
-        self._giface.RunCmd(cmd, switchPage = True)
+        self._giface.RunCmd(cmd)
 
     def OnSqlQuery(self, event):
         """!Show SQL query window for PostGIS layers
@@ -631,7 +631,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         cmd.append('map=%s' % mapLayer.GetName())
 
         # print output to command log area
-        self._giface.RunCmd(cmd, switchPage = True)
+        self._giface.RunCmd(cmd)
 
     def OnSetCompRegFromRaster(self, event):
         """!Set computational region from selected raster map (ignore NULLs)"""
@@ -814,10 +814,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 raster2d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
         
         if raster2d:
-            self._giface.RunCmd(['r.univar', 'map=%s' % ','.join(raster2d)], switchPage=True)
+            self._giface.RunCmd(['r.univar', 'map=%s' % ','.join(raster2d)])
         
         if raster3d:
-            self._giface.RunCmd(['r3.univar', 'map=%s' % ','.join(raster3d)], switchPage=True)
+            self._giface.RunCmd(['r3.univar', 'map=%s' % ','.join(raster3d)])
 
     def OnReportStats(self, event):
         """!Print 2D statistics"""
@@ -828,7 +828,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 rasters.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
         
         if rasters:
-            self._giface.RunCmd(['r.report', 'map=%s' % ','.join(rasters), 'units=h,c,p'], switchPage=True)
+            self._giface.RunCmd(['r.report', 'map=%s' % ','.join(rasters), 'units=h,c,p'])
         
     def OnStartEditing(self, event):
         """!Start editing vector map layer requested by the user

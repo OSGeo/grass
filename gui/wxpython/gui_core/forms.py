@@ -98,6 +98,7 @@ from core             import utils
 from core.utils import _
 from core.settings    import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
+from core.giface import Notification
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
@@ -1761,10 +1762,10 @@ class CmdPanel(wx.Panel):
             self.goutput = GConsoleWindow(parent = self.notebook, gconsole = self._gconsole, margin = False)
             self._gconsole.Bind(EVT_CMD_RUN,
                                 lambda event:
-                                    self._switchPageHandler(event = event, priority = 2))
+                                    self._switchPageHandler(event=event, notification=Notification.MAKE_VISIBLE))
             self._gconsole.Bind(EVT_CMD_DONE,
                                 lambda event:
-                                    self._switchPageHandler(event = event, priority = 3))
+                                    self._switchPageHandler(event = event, notification=Notification.RAISE_WINDOW))
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         else:
             self.goutput = None
@@ -1999,17 +2000,18 @@ class CmdPanel(wx.Panel):
             # event is somehow propagated?
             event.StopPropagation()
 
-    def _switchPageHandler(self, event, priority):
-        self._switchPage(priority = priority)
+    def _switchPageHandler(self, event, notification):
+        self._switchPage(notification=notification)
         event.Skip()
 
-    def _switchPage(self, priority):
-        """!Manages @c 'output' notebook page according to event priority."""
-        if priority == 1:
+    def _switchPage(self, notification):
+        """!Manages @c 'output' notebook page according to event notification."""
+        if notification == Notification.HIGHLIGHT:
             self.notebook.HighlightPageByName('output')
-        if priority >= 2:
+        if notification == Notification.MAKE_VISIBLE:
             self.notebook.SetSelectionByName('output')
-        if priority >= 3:
+        if notification == Notification.RAISE_WINDOW:
+            self.notebook.SetSelectionByName('output')
             self.SetFocus()
             self.Raise()
 

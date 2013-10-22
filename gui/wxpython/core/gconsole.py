@@ -43,6 +43,7 @@ from core.utils import _
 from gui_core.forms import GUI
 from core.debug import Debug
 from core.settings import UserSettings
+from core.giface import Notification
 
 
 wxCmdOutput, EVT_CMD_OUTPUT = NewEvent()
@@ -115,7 +116,7 @@ class CmdThread(threading.Thread):
         os.environ['GRASS_MESSAGE_FORMAT'] = 'gui'
         while True:
             requestId, args, kwds = self.requestQ.get()
-            for key in ('callable', 'onDone', 'onPrepare', 'userData'):
+            for key in ('callable', 'onDone', 'onPrepare', 'userData', 'notification'):
                 if key in kwds:
                     vars()[key] = kwds[key]
                     del kwds[key]
@@ -139,7 +140,8 @@ class CmdThread(threading.Thread):
 
                 # run command
                 event = wxCmdRun(cmd=args[0],
-                                 pid=requestId)
+                                 pid=requestId,
+                                 notification=vars()['notification'])
 
                 wx.PostEvent(self.receiver, event)
 
@@ -199,7 +201,8 @@ class CmdThread(threading.Thread):
                                   time=requestTime,
                                   pid=requestId,
                                   onDone=vars()['onDone'],
-                                  userData=vars()['userData'])
+                                  userData=vars()['userData'],
+                                  notification=vars()['notification'])
 
                 # send event
                 wx.PostEvent(self.receiver, event)
@@ -333,13 +336,6 @@ gWriteError, EVT_WRITE_ERROR = NewEvent()
 # Attribute cmd contains command (as a list).
 gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
 
-# Occurs when important command is called.
-# Determined by switchPage and priority parameters of GConsole.RunCmd()
-# currently used only for Layer Manager
-# because others (forms and gmodeler) just wants to see all commands
-# (because commands are the main part of their work)
-gImportantCmdRun, EVT_IMPORTANT_CMD_RUN = NewEvent()
-
 
 class GConsole(wx.EvtHandler):
     """!
@@ -395,29 +391,26 @@ class GConsole(wx.EvtHandler):
                 sys.stderr = sys.__stderr__
 
     def WriteLog(self, text, style=None, wrap=None,
-                 switchPage=False, priority=1):
+                 notification=Notification.HIGHLIGHT):
         """!Generic method for writing log message in
         given style
 
         @param line text line
-        @param switchPage for backward compatibility
-        (replace by priority: False=1, True=2)
-        @param priority priority of this message
-        (0=no priority, 1=normal, 2=medium, 3=high)
+        @param notification form of notification
         """
         event = gWriteLog(text=text, wrap=wrap,
-                          switchPage=switchPage, priority=priority)
+                          notification=notification)
         wx.PostEvent(self, event)
 
-    def WriteCmdLog(self, line, pid=None, switchPage=True):
+    def WriteCmdLog(self, line, pid=None, notification=Notification.MAKE_VISIBLE):
         """!Write message in selected style
 
         @param line message to be printed
         @param pid process pid or None
-        @param switchPage True to switch page
+        @param notification form of notification
         """
         event = gWriteCmdLog(line=line, pid=pid,
-                             switchPage=switchPage)
+                             notification=notification)
         wx.PostEvent(self, event)
 
     def WriteWarning(self, line):
@@ -430,8 +423,8 @@ class GConsole(wx.EvtHandler):
         event = gWriteError(line=line)
         wx.PostEvent(self, event)
 
-    def RunCmd(self, command, compReg=True, switchPage=False, skipInterface=False,
-               onDone=None, onPrepare=None, userData=None, priority=1):
+    def RunCmd(self, command, compReg=True, skipInterface=False,
+               onDone=None, onPrepare=None, userData=None, notification=Notification.MAKE_VISIBLE):
         """!Run command typed into console command prompt (GPrompt).
 
         @todo Document the other event.
@@ -443,13 +436,9 @@ class GConsole(wx.EvtHandler):
         (according to ignoredCmdPattern) is run.
         For example, see layer manager which handles d.* on its own.
 
-        @todo replace swichPage and priority by parameter 'silent' or 'important'
-        also possible solution is RunCmdSilently and RunCmdWithoutNotifyingAUser
-
         @param command command given as a list (produced e.g. by utils.split())
         @param compReg True use computation region
-        @param switchPage switch to output page
-        @param priority command importance - possible replacement for switchPage
+        @param notification form of notification
         @param skipInterface True to do not launch GRASS interface
         parser when command has no arguments given
         @param onDone function to be called when command is finished
@@ -527,13 +516,6 @@ class GConsole(wx.EvtHandler):
                         print >> sys.stderr, e
                     return
 
-                # documenting old behavior/implementation:
-                # switch and focus if required
-                # important commad
-                # TODO: add also user data, cmd, ... to the event?
-                importantEvent = gImportantCmdRun()
-                wx.PostEvent(self, importantEvent)
-
                 # activate computational region (set with g.region)
                 # for all non-display commands.
                 if compReg:
@@ -547,7 +529,8 @@ class GConsole(wx.EvtHandler):
                                       stderr=self.cmdStdErr,
                                       onDone=onDone, onPrepare=onPrepare,
                                       userData=userData,
-                                      env=os.environ.copy())
+                                      env=os.environ.copy(),
+                                      notification=notification)
                 self.cmdOutputTimer.Start(50)
 
                 # deactivate computational region and return to display settings
@@ -572,7 +555,8 @@ class GConsole(wx.EvtHandler):
                                       stdout=self.cmdStdOut,
                                       stderr=self.cmdStdErr,
                                       onDone=onDone, onPrepare=onPrepare,
-                                      userData=userData)
+                                      userData=userData,
+                                      notification=notification)
             self.cmdOutputTimer.Start(50)
 
     def GetLog(self, err=False):
@@ -598,7 +582,8 @@ class GConsole(wx.EvtHandler):
 
     def OnCmdRun(self, event):
         """!Run command"""
-        self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
+        self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)),
+                         notification=event.notification)
         event.Skip()
 
     def OnCmdDone(self, event):
@@ -628,7 +613,8 @@ class GConsole(wx.EvtHandler):
         else:
             msg = _('Command finished')
 
-        self.WriteCmdLog('(%s) %s (%s)' % (str(time.ctime()), msg, stime))
+        self.WriteCmdLog('(%s) %s (%s)' % (str(time.ctime()), msg, stime),
+                         notification=event.notification)
 
         if event.onDone:
             event.onDone(cmd=event.cmd, returncode=event.returncode)

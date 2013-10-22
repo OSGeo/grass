@@ -23,6 +23,7 @@ import wx
 
 from core.utils import _
 import core.units as units
+from core.giface import Notification
 
 from grass.pydispatch.signal import Signal
 
@@ -279,6 +280,6 @@ class MeasureDistanceController(AnalysisControllerBase):
                    _('total distance'), strtotdist, tdunits,
                    '-' * 60)
 
-        self._giface.WriteLog(mstring, priority=2)
+        self._giface.WriteLog(mstring, notification=Notification.MAKE_VISIBLE)
 
         return dist
