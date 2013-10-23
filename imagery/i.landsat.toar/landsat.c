@@ -87,8 +87,7 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 		double t;
 
 		t = 2. / (lsat->band[i].wavemax + lsat->band[i].wavemin);
-		t = 0.008569 * t * t * t * t * (1 + 0.0113 * t * t +
-						0.000013 * t * t * t * t);
+		t = 0.008569 * t * t * t * t * (1 + 0.0113 * t * t + 0.000013 * t * t * t * t);
 		TAUv = exp(-t / cos_v);
 		TAUz = exp(-t / sin_e);
 		Edown = rayleigh;
@@ -110,13 +109,9 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 		do {
 		    TAUz = Tz;
 		    TAUv = Tv;
-		    Lp = Ro -
-			percent * TAUv * (lsat->band[i].esun * sin_e * TAUz +
-					  PI * Lp) / pi_d2;
-		    Tz = 1. -
-			(4. * pi_d2 * Lp) / (lsat->band[i].esun * sin_e);
+		    Lp = Ro - percent * TAUv * (lsat->band[i].esun * sin_e * TAUz + PI * Lp) / pi_d2;
+		    Tz = 1. - (4. * pi_d2 * Lp) / (lsat->band[i].esun * sin_e);
 		    Tv = exp(sin_e * log(Tz) / cos_v);
-		    /* G_message("TAUv = %.5f (%.5f), TAUz = %.5f (%.5f) and Edown = %.5f\n", TAUv, Tv, TAUz, Tz, PI * Lp ); */
 		} while (TAUv != Tv && TAUz != Tz);
 		TAUz = (Tz < 1. ? Tz : 1.);
 		TAUv = (Tv < 1. ? Tv : 1.);
@@ -130,42 +125,27 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 	    break;
 	}
 	lsat->band[i].K2 = 0.;
-	lsat->band[i].K1 = TAUv * (lsat->band[i].esun * sin_e * TAUz + Edown) / pi_d2;	/* rad_sun */
+	lsat->band[i].K1 = TAUv * (lsat->band[i].esun * sin_e * TAUz + Edown) / pi_d2;
 	if (method > DOS)
-	    G_verbose_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n",
-			      TAUv, TAUz, Edown);
+	    G_verbose_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n", TAUv, TAUz, Edown);
     }
 
     /** Digital number to radiance coefficients.
 	 * Without atmospheric calibration for thermal bands.
      */
-    lsat->band[i].gain =
-	(lsat->band[i].lmax - lsat->band[i].lmin) / (lsat->band[i].qcalmax -
-						     lsat->band[i].qcalmin);
+    lsat->band[i].gain = (lsat->band[i].lmax - lsat->band[i].lmin) / (lsat->band[i].qcalmax - lsat->band[i].qcalmin);
 
     if (method == UNCORRECTED || lsat->band[i].thermal) {
 	/* L = G * (DN - Qmin) + Lmin
 	 *  -> bias = Lmin - G * Qmin    
 	 */
-	lsat->band[i].bias =
-	    (lsat->band[i].lmin - lsat->band[i].gain * lsat->band[i].qcalmin);
+	lsat->band[i].bias = (lsat->band[i].lmin - lsat->band[i].gain * lsat->band[i].qcalmin);
     }
-    /*
-       else {
-       if (method == CORRECTED) {
-       // L = G * (DN - Qmin) + Lmin - Lmin
-       -> bias = - G * Qmin *
-       lsat->band[i].bias =
-       -(lsat->band[i].gain * lsat->band[i].qcalmin);
-       // Another possibility is cut when rad < 0 *
-       }
-     */
     else if (method > DOS) {
 	/* L = Lsat - Lpath = G * DNsat + B - (G *  + B - p * rad_sun) 
 	 *   = G * DNsat - G *  + p * rad_sun
 	 *  -> bias = p * rad_sun - G 
 	 */
-	lsat->band[i].bias =
-	    percent * lsat->band[i].K1 - lsat->band[i].gain * dark;
+	lsat->band[i].bias = percent * lsat->band[i].K1 - lsat->band[i].gain * dark;
     }
 }

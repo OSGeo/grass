@@ -97,13 +97,66 @@ The values are,
     TAUz = exp[-t/sin(e)], Esky = PI * radiance_dark </li>
 </ul>
 
-<b>Attention</b>: Output radiance remain untouched (i.e. no set to
-0. when it is negative) then they are possible negative
-values. However, output reflectance is set to 0. when is obtained a
-negative value.
+<b>Attention</b>: Output radiance remain untouched (i.e. no set to 0.0
+when it is negative) then they are possible negative values. However,
+output reflectance is set to 0.0 when is obtained a negative value.
 
 <h2>NOTES</h2>
 
+<h3>On Landsat-8 metadata file </h3>
+
+NASA reports a structure of the L1G Metadata file 
+(<a href="http://landsat.usgs.gov/documents/LDCM-DFCB-004.pdf‎">LDCM-DFCB-004.pdf</a>) 
+for Landsat Data Continuity Mission (i.e. Landsat-8).
+
+<p>
+NASA retains in MIN_MAX_RADIANCE group the necessary information 
+to transform Digital Numbers (DN) in radiance values. Then, 
+<em>i.landsat.toar</em> replaces the possible standard values with the 
+metadata values. The results match with the values reported by the 
+metada file in RADIOMETRIC_RESCALING group.
+
+<p>
+Also, NASA reports the same values of reflectance for all bands 
+in max-min values and in gain-bias values. This is strange that all 
+bands have the same range of reflectance. Also, they wrote in the 
+web page as to calculate reflectance directly from DN, first with 
+RADIOMETRIC_RESCALING values and second divided by sin(sun_elevation).
+
+<p>
+This is a simple rescaling 
+
+<ul>
+  <li> reflectance = radiance / sun_radiance = (DN * RADIANCE_MULT + RADIANCE_ADD) / sun_radiance</li>
+  <li> now reflectance = DN * REFLECTANCE_MULT + REFLECTANCE_ADD </li>
+  <li> then REFLECTANCE_MULT = RADIANCE_MULT / sun_radiance </li>
+  <li> and REFLECTANCE_ADD = RADIANCE_ADD / sun_radiance </li>
+</ul>
+
+<p>
+The problem arises when we need ESUN values (not provided) to 
+compute sun_radiance and DOS. We assume that REFLECTANCE_MAXIMUM 
+corresponds to the RADIANCE_MAXIMUM, then
+
+<ul>
+  <li> REFLECTANCE_MAXIMUM / sin(e) = RADIANCE_MAXIMUM / sun_radiance</li>
+  <li> Esun = (PI * d^2) * RADIANCE_MAXIMUM / REFLECTANCE_MAXIMUM </li>
+</ul>
+
+where <em>d</em> is the earth-sun distance provided by metadata file 
+or computed inside the program.
+
+<p>
+The <em>i.landsat.toar</em> reverts back the NASA rescaling to continue 
+using Lmax, Lmin, and Esun values to compute the constant to convert 
+DN to radiance and radiance to reflectance with the "traditional" 
+equations and simple atmospheric corrections.
+
+<b>Attention</b>: When MAXIMUM values are not provided,
+<em>i.landsat.toar</em> tries to calculate Lmax, Lmin, and Esun from 
+RADIOMETRIC_RESCALING (in tests the results were the same).
+
+<h3>Calibration constants</h3>
 In verbose mode (flag <b>--verbose</b>), the program write basic
 satellite data and the parameters used in the transformations.
 
@@ -148,6 +201,13 @@ or
 i.landsat.toar input_prefix=203_30. output_prefix=_toar \
   sensor=tm7 product_date=2004-06-07 date=2001-06-20 \
   sun_elevation=64.3242970 gain="HHHLHLHHL"
+</pre></div>
+
+or
+
+<div class="code"><pre>
+i.landsat.toar input_prefix=LC80160352013134LGN03_B output_prefix=toar \
+  metfile=LC80160352013134LGN03_MTL.txt sensor=oli8 date=2013-05-14
 </pre></div>
 
 <h2>REFERENCES</h2>
