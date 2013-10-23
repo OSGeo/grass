@@ -224,7 +224,6 @@ int main(int argc, char *argv[])
     named->description =
 	_("Input raster maps use as extension the number of the band instead the code");
 
-    /* define the different flags */
     print_meta = G_define_flag();
     print_meta->key = 'p';
     print_meta->description = _("Print output metadata info");
@@ -429,10 +428,9 @@ int main(int argc, char *argv[])
 			ptr = (void *)((DCELL *) inrast + col);
 			q = (int)*((DCELL *) ptr);
 			break;
-		   default:
-		        ptr = NULL;
-		        q = -1.;
-			break;
+		    default:
+			ptr = NULL;
+			q = -1.;
 		    }
 		    if (!Rast_is_null_value(ptr, in_data_type) &&
 			q >= lsat.band[i].qcalmin &&
@@ -599,7 +597,6 @@ int main(int argc, char *argv[])
 		default:
 		    ptr = NULL;
 		    qcal = -1.;
-		    break;
 		}
 		if (Rast_is_null_value(ptr, in_data_type) ||
 		    qcal < lsat.band[i].qcalmin) {
@@ -635,8 +632,8 @@ int main(int argc, char *argv[])
 
 
 	G_free(inrast);
-	G_free(outrast);
 	Rast_close(infd);
+	G_free(outrast);
 	Rast_close(outfd);
 
 
