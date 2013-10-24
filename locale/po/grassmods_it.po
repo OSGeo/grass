@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-10 01:08+0200\n"
-"PO-Revision-Date: 2013-10-15 10:08+0100\n"
+"PO-Revision-Date: 2013-10-23 09:20+0100\n"
 "Last-Translator: az\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -2334,7 +2334,7 @@ msgstr "Numero di livelli da utilizzare per ogni componente"
 #: ../vector/v.vol.rst/main.c:394 ../vector/v.vol.rst/main.c:400
 #: ../vector/v.vol.rst/main.c:406
 msgid "Outputs"
-msgstr ""
+msgstr "Output"
 
 #: ../raster/r.watershed/front/main.c:138
 #, fuzzy
@@ -5836,27 +5836,27 @@ msgstr "Mappa <%s> non valida"
 #: ../raster/r.mapcalc/expression.c:258
 #, c-format
 msgid "Undefined function '%s'"
-msgstr "Funzione '%s' non definita"
+msgstr ""
 
 #: ../raster/r.mapcalc/expression.c:263
 #, c-format
 msgid "Too few arguments (%d) to function %s()"
-msgstr "Troppi pochi argomenti  (%d) per la funzione %s()"
+msgstr ""
 
 #: ../raster/r.mapcalc/expression.c:267
 #, c-format
 msgid "Too many arguments (%d) to function %s()"
-msgstr "Troppi argomenti  (%d) per la funzione %s()"
+msgstr ""
 
 #: ../raster/r.mapcalc/expression.c:271
 #, c-format
 msgid "Incorrect argument types to function %s()"
-msgstr "Tipi di argomento per la funzione %s() non corretti"
+msgstr ""
 
 #: ../raster/r.mapcalc/expression.c:274
 #, c-format
 msgid "Internal error for function %s()"
-msgstr "Errore interno per la funzione %s()"
+msgstr ""
 
 #: ../raster/r.mapcalc/expression.c:449
 #, c-format
@@ -9559,23 +9559,23 @@ msgstr ""
 #: ../raster/r.li/r.li.daemon/daemon.c:365
 #, c-format
 msgid "The configuration file can be used only with \t\t\t%s rasterfile"
-msgstr ""
+msgstr "Il file di configurazione può essere usato solo con \t\t\t%s rasterfile"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:372
 msgid "Illegal configuration file (sample area)"
-msgstr ""
+msgstr "File di configurazione non valido (area campione)"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:406
 msgid "Too many units to place"
-msgstr ""
+msgstr "Troppe unità da posizionare"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:475
 msgid "Too many strats for raster map"
-msgstr ""
+msgstr "Troppi strati per la mappa raster"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:509
 msgid "Illegal areas disposition"
-msgstr ""
+msgstr "Disposizione di aree non valida"
 
 #: ../raster/r.li/r.li.daemon/daemon.c:578
 msgid "Cannot make lseek"
@@ -9734,19 +9734,19 @@ msgstr "Il numero delle mappe di input e di elevazione non è lo stesso"
 
 #: ../raster/r.to.rast3elev/main.c:165
 msgid "The value to fill the upper cells, default is null"
-msgstr ""
+msgstr "Il valore per riempire la cella superiore, il default è zero"
 
 #: ../raster/r.to.rast3elev/main.c:172
 msgid "The value to fill the lower cells, default is null"
-msgstr ""
+msgstr "Il valore per riempire la cella inferiore, il default è zero"
 
 #: ../raster/r.to.rast3elev/main.c:185
 msgid "Use the input map values to fill the upper cells"
-msgstr ""
+msgstr "Usa valori della mappa di input per riempire le celle superiori"
 
 #: ../raster/r.to.rast3elev/main.c:190
 msgid "Use the input map values to fill the lower cells"
-msgstr ""
+msgstr "Usa valori della mappa di input per riempire le celle superiori"
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.cross.rast/main.c:109
 #: ../raster3d/r3.out.netcdf/main.c:116 ../raster3d/r3.out.ascii/main.c:121
@@ -9776,7 +9776,7 @@ msgstr "Calcolo dell'angolo dell'orizzonte da un modello digitale di elevazione.
 
 #: ../raster/r.horizon/main.c:183
 msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation:  1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction.  The input for this is the angle (in degrees), which is measured  counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
-msgstr "Calcola l'angolo dell'altezza dell'orizzonte da un modello di elevazione digitiale. Il modulo ha due modalità di operare: 1. Calcola l'intero orizzonte attorno ad un singolo punto le cui coordinate sono date con l'opzione 'coord'. Altezza dell'orizzonte (in radianti). 2. Calcola una o due mappe raster dell'altezza dell'orizzonte in una singola direzione. L'input per questo è l'angolo (in gradi), che è misurato in senso antiorario con est=0, nord=90 etc. L'output è l'altezza dell'orizzonte in radianti."
+msgstr ""
 
 #: ../raster/r.horizon/main.c:197 ../raster/r.sun/main.c:256
 msgid "Name of the input elevation raster map [meters]"
@@ -9784,7 +9784,7 @@ msgstr "Nome della mappa raster di elevazione di input [metri]"
 
 #: ../raster/r.horizon/main.c:206
 msgid "Direction in which you want to know the horizon height"
-msgstr "Direzione lungo la quale vuoi conoscere l'altezza dell'orizzonte."
+msgstr ""
 
 #: ../raster/r.horizon/main.c:214 ../raster/r.sun/main.c:383
 msgid "Angle step size for multidirectional horizon [degrees]"
@@ -9792,31 +9792,31 @@ msgstr ""
 
 #: ../raster/r.horizon/main.c:222
 msgid "For horizon rasters, read from the DEM an extra buffer around the present region"
-msgstr "Per raster di orizzonte, legge dal DEM un buffer extra attorno alla presente regione"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:230
 msgid "For horizon rasters, read from the DEM an extra buffer eastward the present region"
-msgstr "Per raster di orizzonte, legge dal DEM un buffer extra in direzione est attorno alla presente regione"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:238
 msgid "For horizon rasters, read from the DEM an extra buffer westward the present region"
-msgstr "Per raster di orizzonte, legge dal DEM un buffer extra in direzione ovest attorno alla presente regione"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:246
 msgid "For horizon rasters, read from the DEM an extra buffer northward the present region"
-msgstr "Per raster di orizzonte, legge dal DEM un buffer extra in direzione nord attorno alla presente regione"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:254
 msgid "For horizon rasters, read from the DEM an extra buffer southward the present region"
-msgstr "Per raster di orizzonte, legge dal DEM un buffer extra in direzione sud attorno alla presente regione"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:262
 msgid "The maximum distance to consider when finding the horizon height"
-msgstr "La massima distanza da considerare nel trovare l'altezza dell'orizzonte"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:271
 msgid "Prefix of the horizon raster output maps"
-msgstr "Prefisso delle mappe raster di orizzonte in output"
+msgstr ""
 
 #: ../raster/r.horizon/main.c:281
 msgid "Coordinate for which you want to calculate the horizon"
@@ -10497,7 +10497,7 @@ msgstr "fallito"
 
 #: ../raster/r.profile/main.c:53
 msgid "Outputs the raster map layer values lying on user-defined line(s)."
-msgstr ""
+msgstr "Dà in output valori di layer raster giacenti su linea(e) definite dall'utente."
 
 #: ../raster/r.profile/main.c:61
 msgid "Name of file for output (use output=- for stdout)"
@@ -11032,7 +11032,7 @@ msgstr "Esci senza creare una mappa??"
 
 #: ../raster/r.digit/main.c:46
 msgid "Interactive tool used to draw and save vector features on a graphics monitor using a pointing device (mouse) and save to a raster map."
-msgstr ""
+msgstr "Strumento interattivo usato per disegnare e salvare feature vettoriali su monitor grafico usando un puntatore (mouse) e per salvare in una mappa raster."
 
 #: ../raster/r.digit/main.c:55
 msgid "Display commands to be used for canvas backdrop (separated by ';')"
@@ -11410,7 +11410,7 @@ msgstr "Scrittura del file world"
 
 #: ../raster/r.out.png/main.c:425 ../raster/r.out.tiff/main.c:420
 msgid "Got null file name"
-msgstr ""
+msgstr "Ricevuto nome file nullo"
 
 #: ../raster/r.out.png/main.c:427 ../raster/r.out.tiff/main.c:422
 msgid "Got null region struct"
@@ -11453,7 +11453,7 @@ msgstr ""
 
 #: ../raster/r.out.tiff/main.c:180
 msgid "Color map for palette must have less than 256 colors for the available range of data"
-msgstr ""
+msgstr "La mappa di colore per la palette deve avere meno di 256 colori per l'intervallo di dati disponibile"
 
 #: ../raster/r.out.tiff/main.c:194
 #, c-format
@@ -11521,7 +11521,7 @@ msgstr "file vettoriale da creare"
 
 #: ../raster/r.resample/main.c:57
 msgid "GRASS raster map layer data resampling capability."
-msgstr ""
+msgstr "Capacità di ricampionamento dati del layer di mappa raster GRASS."
 
 #: ../raster/r.resample/main.c:66
 msgid "Name of an input layer"
@@ -11725,11 +11725,11 @@ msgstr "Nome del raster contenente il risultato della classificazione"
 
 #: ../raster/r.kappa/main.c:83
 msgid "Name of raster map containing reference classes"
-msgstr ""
+msgstr "Nome della mappa raster contenente le classi di riferimento"
 
 #: ../raster/r.kappa/main.c:88
 msgid "Name for output file containing error matrix and kappa"
-msgstr ""
+msgstr "Nome per il file di output contenente matrice di errore e kappa"
 
 #: ../raster/r.kappa/main.c:89
 #, fuzzy
@@ -11738,7 +11738,7 @@ msgstr "Se non è dato legge dallo tandard input"
 
 #: ../raster/r.kappa/main.c:96
 msgid "Title for error matrix and kappa"
-msgstr ""
+msgstr "Titolo per matrice di errore e kappa"
 
 #: ../raster/r.kappa/main.c:102
 msgid "Wide report"
@@ -11915,7 +11915,7 @@ msgstr "Nessuna regola specificata. La mappa raster <%s> non è stata creata"
 
 #: ../raster/r.neighbors/main.c:146
 msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
-msgstr ""
+msgstr "Rende ogni valore di categoria della cella una funzione dei valori di categoria delle celle attorno ad essa, e raccoglie i nuovi valori di cella in un layer raster di output."
 
 #: ../raster/r.neighbors/main.c:156
 #, fuzzy
@@ -25709,7 +25709,7 @@ msgstr ""
 
 #: ../imagery/i.points/main.c:99
 msgid "Mark ground control points on image to be rectified."
-msgstr "Marca i punti di controllo a terra (GCP) sull'immagine da rettificare."
+msgstr ""
 
 #: ../imagery/i.group/main.c:55
 #, fuzzy
@@ -41561,33 +41561,8 @@ msgstr "Nome del valore del coefficiente n di Manning"
 #~ msgid "Mean Manning's \t= %f\n"
 #~ msgstr "Manning medio \t= %f\n"
 
-#~ msgid ""
-#~ "r.mapcalc - Raster map layer data calculator\n"
-#~ "\n"
-#~ "usage: r.mapcalc '<map>=<expression>'\n"
-#~ "\n"
-#~ "r.mapcalc performs arithmetic on raster map layers.\n"
-#~ "\n"
-#~ "New raster map layers can be created which are arithmetic expressions\n"
-#~ "involving existing raster map layers, integer or floating point constants,\n"
-#~ "and functions.\n"
-#~ " \n"
-#~ "For more information use 'g.manual r.mapcalc'\n"
-#~ msgstr ""
-#~ "r.mapcalc - Calcolatore di dati di mappe raster\n"
-#~ "\n"
-#~ "uso: r.mapcalc '<mappa>=<espressione>'\n"
-#~ "\n"
-#~ "r.mapcalc svolge calcoli aritmetici su mappe raster.\n"
-#~ "\n"
-#~ "Possono essere create nuove mappe raster che siano espressioni aritmetiche\n"
-#~ "di mappe raster esistenti, costanti intere o reali,\n"
-#~ "e funzioni.\n"
-#~ " \n"
-#~ "Per maggiori informazioni usare 'g.manual r.mapcalc'\n"
+#~ msgid "Unused; retained for compatibility purposes, will be removed in future"
+#~ msgstr "Inutilizzato; mantenuto per motivi di compatibilità, sarà rimosso in futuro"
 
-#~ msgid "Floating point error(s) occured in the calculation"
-#~ msgstr "Errore(i) di floating point avvenuti durante il calcolo"
-
-#~ msgid "Write raster values as z coordinate. Table is not created. Currently supported only for points."
-#~ msgstr "Scrive valori raster come coordinate z. Non viene creata una tabella. Attualmente è supportato solo per punti."
+#~ msgid "Calculate error matrix and kappa parameter for accuracy assessment of classification result."
+#~ msgstr "Calcola matrice di errore e parametro kappa per valutare l'accuratezza del risultato della classificazione."
