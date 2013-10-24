@@ -23,7 +23,6 @@ static struct state {
 	int count;
 	int size;
     } path, path2;
-    int initialized;
 } state;
 
 static struct state *st = &state;
@@ -55,8 +54,12 @@ void G_get_list_of_mapsets(void)
     FILE *fp;
     const char *cur;
 
-    if (G_is_initialized(&st->initialized))
+    if (st->path.count > 0)
 	return;
+
+    st->path.count = 0;
+    st->path.size = 0;
+    st->path.names = NULL;
 
     cur = G_mapset();
     new_mapset(cur);
@@ -77,8 +80,6 @@ void G_get_list_of_mapsets(void)
 	if (strcmp(perm, cur) != 0 && G__mapset_permissions(perm) >= 0)
 	    new_mapset(perm);
     }
-
-    G_initialize_done(&st->initialized);
 }
 
 static void new_mapset(const char *name)
@@ -102,7 +103,6 @@ void G__create_alt_search_path(void)
     st->path2.names = st->path.names;
 
     st->path.count = 0;
-    st->initialized = 0;
 }
 
 /*!
