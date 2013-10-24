@@ -1143,7 +1143,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 else:
                     wxPen = "default"
             else:
-                if (gcp[5] > self.rmsthresh):
+                if (self.mapcoordlist[key][5] > self.rmsthresh):
                     wxPen = "highest"
                 else:
                     wxPen = "default"
@@ -1657,9 +1657,8 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         # SD
         if GCPcount > 0:
-            sum_fwd_err /= GCPcount
-            self.rmsmean = sum_fwd_err /GCPcount
-            self.rmssd = (((sumsq_fwd_err/GCPcount) - self.rmsmean**2)**0.5)
+            self.rmsmean = sum_fwd_err / GCPcount
+            self.rmssd = ((sumsq_fwd_err - self.rmsmean**2)**0.5)
             self.rmsthresh = self.rmsmean + sdfactor * self.rmssd
         else:
             self.rmsthresh = 0
