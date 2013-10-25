@@ -753,6 +753,7 @@ def install_extension_other(name):
     if classchar != 'wx':
         makeCmd = ['make',
                    'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
+                   'RUN_GISRC=%s' % os.environ['GISRC'],
                    'BIN=%s' % dirs['bin'],
                    'HTMLDIR=%s' % dirs['html'],
                    'RESTDIR=%s' % dirs['rest'],
