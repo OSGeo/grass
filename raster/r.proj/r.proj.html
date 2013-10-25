@@ -250,7 +250,7 @@ r.proj input=elevation location=ll_wgs84 mapset=user1 memory=800
 # In the source location, use v.in.region to generate a bounding box around the
 # region of interest:
 
-v.in.region output=bounds type=area
+v.in.region -d output=bounds type=area
 
 # Now switch to the target location and import the vector bounding box 
 # (you can run v.proj -l to get a list of vector maps in the source location):
