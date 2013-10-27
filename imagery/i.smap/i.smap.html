@@ -23,6 +23,7 @@ classification which classifies each pixel separately,
 but requires somewhat less computation. This mode is selected with
 the <b>-m</b> flag (see <a href="#mflag.html">below</a>).
 
+
 <h2>OPTIONS</h2>
 
 <h3>Flags:</h3>
@@ -33,10 +34,6 @@ the <b>-m</b> flag (see <a href="#mflag.html">below</a>).
 Normal operation is to use SMAP estimation (see
 <a href="#notes">NOTES</a>).
 
-<dt><b>-q</b> 
-<dd>Run quietly, without printing messages about program
-progress.  Without this flag, messages will be printed (to
-stderr) as the program progresses.
 </dl>
 
 <h3>Parameters:</h3>
@@ -105,6 +102,7 @@ categories on the ground.
 
 </dl>
 
+
 <h2>INTERACTIVE MODE</h2>
 
 If none of the arguments are specified on the command line,
@@ -143,6 +141,7 @@ using e.g. r.mapcalc:
 r.mapcalc "MASKed_map = classification_results"
 </pre></div>
 
+
 <h2>EXAMPLE</h2>
 
 Supervised classification of LANDSAT
@@ -173,6 +172,7 @@ d.rast.leg lsat7_2002_smap_classes
 r.kappa -w classification=lsat7_2002_smap_classes reference=training
 </pre></div>
 
+
 <h2>REFERENCES</h2>
 
 <ul>
@@ -191,6 +191,7 @@ pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.
 <em>IEEE Trans. on Geoscience and Remote Sensing, 33(6): 1313-1316.</em>
 </ul>
 
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -208,6 +209,7 @@ to generate the signature file required by this program
 <a href="i.smap.html">i.smap</a>,
 <a href="r.kappa.html">r.kappa</a>
 </em>
+
 
 <h2>AUTHORS</h2>
 
