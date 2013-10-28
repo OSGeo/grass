@@ -44,6 +44,53 @@ def findfiles(dirpath, match=None):
     return res
 
 
+def findmaps(type, pattern=None, mapset='', location='', gisdbase=''):
+    """Return a list of tuple contining the names of the:
+        * map
+        * mapset,
+        * location,
+        * gisdbase
+
+    """
+    from grass.pygrass.gis import Gisdbase, Location, Mapset
+
+    def find_in_location(type, pattern, location):
+        res = []
+        for msetname in location.mapsets():
+            mset = Mapset(msetname, location.name, location.gisdbase)
+            res.extend([(m, mset.name, mset.location, mset.gisdbase)
+                        for m in mset.glist(type, pattern)])
+        return res
+
+    def find_in_gisdbase(type, pattern, gisdbase):
+        res = []
+        for loc in gisdbase.locations():
+            res.extend(find_in_location(type, pattern,
+                                        Location(loc, gisdbase.name)))
+        return res
+
+    if gisdbase and location and mapset:
+        mset = Mapset(mapset, location, gisdbase)
+        return [(m, mset.name, mset.location, mset.gisdbase)
+                for m in mset.glist(type, pattern)]
+    elif gisdbase and location:
+        loc = Location(location, gisdbase)
+        return find_in_location(type, pattern, loc)
+    elif gisdbase:
+        gis = Gisdbase(gisdbase)
+        return find_in_gisdbase(type, pattern, gis)
+    elif location:
+        loc = Location(location)
+        return find_in_location(type, pattern, loc)
+    elif mapset:
+        mset = Mapset(mapset)
+        return [(m, mset.name, mset.location, mset.gisdbase)
+                for m in mset.glist(type, pattern)]
+    else:
+        gis = Gisdbase()
+        return find_in_gisdbase(type, pattern, gis)
+
+
 def remove(oldname, maptype):
     """Remove a map"""
     grasscore.run_command('g.remove', quiet=True,
