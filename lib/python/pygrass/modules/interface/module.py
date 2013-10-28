@@ -52,6 +52,7 @@ from __future__ import print_function
 import subprocess
 from itertools import izip_longest
 from xml.etree.ElementTree import fromstring
+import time
 
 
 from grass.pygrass.errors import GrassError, ParameterError
@@ -298,6 +299,7 @@ class Module(object):
         diz['name'] = 'stderr'
         self.outputs['stderr'] = Parameter(diz=diz)
         self.popen = None
+        self.time = None
 
         if args or kargs:
             self.__call__(*args, **kargs)
@@ -460,6 +462,7 @@ class Module(object):
         if self.outputs['stderr'].value:
             self.stderr_ = self.outputs['stderr'].value
         cmd = self.make_cmd()
+        start = time.time()
         self.popen = subprocess.Popen(cmd,
                                       stdin=self.stdin_,
                                       stdout=self.stdout_,
@@ -469,6 +472,7 @@ class Module(object):
             stdout, stderr = self.popen.communicate(input=self.stdin)
             self.outputs['stdout'].value = stdout if stdout else ''
             self.outputs['stderr'].value = stderr if stderr else ''
+            self.time = time.time() - start
 
 ###############################################################################
 
