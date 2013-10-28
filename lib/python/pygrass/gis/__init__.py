@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python2.7
 from __future__ import print_function
-#import os
 from os import listdir
-from os.path import join
+from os.path import join, exists, isdir
 import shutil
 import ctypes as ct
 import fnmatch
@@ -182,12 +181,9 @@ class Location(object):
             raise KeyError('Mapset: %s does not exist' % mapset)
 
     def __iter__(self):
-        for mapset in libgis.G_available_mapsets():
-            mapset_name = ct.cast(mapset, ct.c_char_p).value
-            if mapset_name and libgis.G__mapset_permissions(mapset):
-                yield mapset_name
-            else:
-                break
+        lpath = self.path()
+        return (m for m in listdir(lpath)
+                if (isdir(join(lpath, m)) and _check(m, lpath, "MAPSET")))
 
     def __len__(self):
         return len(self.mapsets())
@@ -198,7 +194,7 @@ class Location(object):
     def __repr__(self):
         return 'Location(%r)' % self.name
 
-    def mapsets(self, pattern=None):
+    def mapsets(self, pattern=None, permissions=True):
         """Return a list of the available mapsets. ::
 
             >>> location = Location()
@@ -206,6 +202,9 @@ class Location(object):
             ['PERMANENT', 'user1']
         """
         mapsets = [mapset for mapset in self]
+        if permissions:
+            mapsets = [mapset for mapset in mapsets
+                       if libgis.G__mapset_permissions(mapset)]
         if pattern:
             return fnmatch.filter(mapsets, pattern)
         return mapsets
