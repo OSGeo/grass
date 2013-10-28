@@ -14,7 +14,7 @@ from grass.script.setup import write_gisrc
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
-from grass.pygrass.functions import get_mapset_raster
+from grass.pygrass.functions import get_mapset_raster, findmaps
 
 from grass.pygrass.modules.grid.split import split_region_tiles
 from grass.pygrass.modules.grid.patch import rpatch_map
@@ -177,7 +177,7 @@ def get_mapset(gisrc_src, gisrc_dst):
     return src, dst
 
 
-def copy_groups(groups, gisrc_src, gisrc_dst, region=None, cp_rasts=False):
+def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     """Copy group from one mapset to another, crop the raster to the region.
 
     Parameters
@@ -202,23 +202,29 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None, cp_rasts=False):
 
     """
     env = os.environ.copy()
-
     # instantiate modules
     get_grp = Module('i.group', flags='lg', stdout_=sub.PIPE, run_=False)
     set_grp = Module('i.group')
     get_grp.run_ = True
+    rmloc = lambda r: r.split('@')[0] if '@' in r else r
 
+    src = read_gisrc(gisrc_src)
+    dst = read_gisrc(gisrc_dst)
+    rm = True if src[2] != dst[2] else False
+    all_rasts = [r[0]
+                 for r in findmaps('rast', location=dst[1], gisdbase=dst[2])]
     for grp in groups:
         # change gisdbase to src
         env['GISRC'] = gisrc_src
         get_grp(group=grp, env_=env)
-        rasts = get_grp.outputs.stdout.split()
-        if cp_rasts:
-            copy_rasters(rasts, gisrc_src, gisrc_dst, region=region)
+        rasts = [r for r in get_grp.outputs.stdout.split()]
         # change gisdbase to dst
         env['GISRC'] = gisrc_dst
+        rast2cp = [r for r in rasts if rmloc(r) not in all_rasts]
+        if rast2cp:
+            copy_rasters(rast2cp, gisrc_src, gisrc_dst, region=region)
         set_grp(group=grp,
-                input=[r.split('@')[0] if '@' in r else r for r in rasts],
+                input=[rmloc(r) for r in rasts] if rast2cp or rm else rasts,
                 env_=env)
 
 
@@ -281,7 +287,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
     if region:
         set_region(region, gisrc_src, gisrc_dst, env)
 
-    path_dst = os.path.join(*read_gisrc(gisrc_dst))
+    path_dst = os.path.join(*read_gisrc(gisrc_dst)[::-1])
     nam = "copy%d__%s" % (id(gisrc_dst), '%s')
 
     # instantiate modules
@@ -431,8 +437,7 @@ def cmd_exe(args):
         lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.iteritems()])
         sub.Popen(lcmd, env=env).wait()
     if groups:
-        cp_rasts = src.gisdbase != dst.gisdbase or src.location != dst.location
-        copy_groups(groups, gisrc_src, gisrc_dst, cp_rasts=cp_rasts)
+        copy_groups(groups, gisrc_src, gisrc_dst)
     # run the grass command
     sub.Popen(get_cmd(cmd), env=env).wait()
     # remove temp GISRC
@@ -509,7 +514,6 @@ class GridModule(object):
             if groups:
                 copy_groups(groups, self.gisrc_src, self.gisrc_dst,
                             region=self.region)
-
         self.bboxes = split_region_tiles(region=region,
                                          width=width, height=height,
                                          overlap=overlap)
@@ -526,10 +530,16 @@ class GridModule(object):
 
     def clean_location(self, location=None):
         """Remove all created mapsets."""
-        location = location if location else Location()
+        if location is None:
+            if self.n_mset:
+                self.n_mset.current()
+            location = Location()
+
         mapsets = location.mapsets(self.msetstr.split('_')[0] + '_*')
         for mset in mapsets:
             Mapset(mset).delete()
+        if self.n_mset and self.n_mset.is_current():
+            self.mset.current()
 
     def split(self):
         """Split all the raster inputs using r.tile"""
@@ -644,6 +654,9 @@ class GridModule(object):
     def patch(self):
         """Patch the final results."""
         bboxes = split_region_tiles(width=self.width, height=self.height)
+        loc = Location()
+        mset = loc[self.mset.name]
+        mset.visible.extend(loc.mapsets())
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == 'raster' and otm.value:
