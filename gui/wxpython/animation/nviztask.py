@@ -177,6 +177,9 @@ class NvizTask:
 
         for value in series:
             self.task.set_param(paramName, value)
+            # FIXME: we assume we want always default color map
+            if paramName == 'elevation_map':
+                self.task.set_param('color_map', '')
             self.task.set_flag('overwrite', True)
             self.task.set_param('output', 'tobechanged')
             cmd = self.task.get_cmd(ignoreErrors = False, ignoreRequired = False, ignoreDefault = True)
