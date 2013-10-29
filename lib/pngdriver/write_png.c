@@ -1,10 +1,42 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <png.h>
 
 #include <grass/gis.h>
 #include "pngdriver.h"
+
+
+static void write_data(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+    png_size_t check;
+    FILE *fp;
+
+    if (png_ptr == NULL )
+	return;
+
+    fp = (FILE *) png_get_io_ptr(png_ptr);
+    if ( fp == NULL )
+        return;
+
+    check = fwrite(data, 1, length, fp);
+
+    if (check != length)
+	G_fatal_error("PNG: Write Error");
+}
+
+static void output_flush(png_structp png_ptr)
+{
+    FILE *fp;
+
+    if (png_ptr == NULL )
+	return;
+
+    fp = (FILE *) png_get_io_ptr(png_ptr);
+    if ( fp == NULL )
+	return;
+
+    fflush( fp );
+}
 
 void write_png(void)
 {
@@ -34,7 +66,7 @@ void write_png(void)
     if (!output)
 	G_fatal_error("PNG: couldn't open output file %s", png.file_name);
 
-    png_init_io(png_ptr, output);
+    png_set_write_fn(png_ptr, output, write_data, output_flush);
 
     png_set_IHDR(png_ptr, info_ptr,
 		 png.width, png.height, 8,

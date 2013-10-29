@@ -114,6 +114,7 @@ static void load_library(void)
 	"libgdal1.7.0.so",
 # endif
 # ifdef _WIN32
+	"gdal110.dll",
 	"gdal19.dll",
 	"gdal18.dll",
 	"gdal17.dll",
@@ -143,7 +144,7 @@ static void init_gdal(void)
 {
     load_library();
 
-# ifdef _WIN32
+# if defined(_WIN32) && !defined(_WIN64)
     pGDALAllRegister = get_symbol("_GDALAllRegister@0");
     pGDALOpen = get_symbol("_GDALOpen@8");
     pGDALClose = get_symbol("_GDALClose@4");
