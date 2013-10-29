@@ -55,7 +55,7 @@ void get_stats(struct rr_state *theState)
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    theState->nCells = nrows * ncols;
+    theState->nCells = (long) nrows * ncols;
     theState->nNulls = 0;
     set_min(NULL, 0, &theState->min);
     set_max(NULL, 0, &theState->max);
