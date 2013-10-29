@@ -16,7 +16,7 @@ void Rast_get_window(struct Cell_head *window)
 
     if (R__.split_window)
 	G_fatal_error(_("Internal error: Rast_get_window() called with split window."
-			"Use Rast_get_input_window() or Rast_get_output_window() instead."));
+			" Use Rast_get_input_window() or Rast_get_output_window() instead."));
 
     *window = R__.wr_window;
 }
@@ -75,7 +75,7 @@ int Rast_window_rows(void)
 
     if (R__.split_window)
 	G_fatal_error(_("Internal error: Rast_window_rows() called with split window."
-			"Use Rast_input_window_rows() or Rast_output_window_rows() instead."));
+			" Use Rast_input_window_rows() or Rast_output_window_rows() instead."));
 
     return R__.wr_window.rows;
 }
@@ -110,7 +110,7 @@ int Rast_window_cols(void)
 
     if (R__.split_window)
 	G_fatal_error(_("Internal error: Rast_window_cols() called with split window."
-			"Use Rast_input_window_cols() or Rast_output_window_cols() instead."));
+			" Use Rast_input_window_cols() or Rast_output_window_cols() instead."));
 
     return R__.wr_window.cols;
 }
