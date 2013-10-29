@@ -6,6 +6,28 @@
 #include <grass/gis.h>
 #include "pngdriver.h"
 
+static void read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+  png_size_t check;
+  FILE *fp;
+
+  if (png_ptr == NULL )
+    return;
+
+  fp = (FILE *) png_get_io_ptr(png_ptr);
+
+  if ( fp == NULL )
+    return;
+
+  /* fread() returns 0 on error, so it is OK to store this in a png_size_t
+   * instead of an int, which is what fread() actually returns.
+   */
+  check = fread(data, 1, length, fp);
+
+  if (check != length)
+    G_fatal_error("PNG: Read Error");
+}
+
 void read_png(void)
 {
     static jmp_buf jbuf;
@@ -34,7 +56,7 @@ void read_png(void)
     if (!input)
 	G_fatal_error("PNG: couldn't open output file %s", png.file_name);
 
-    png_init_io(png_ptr, input);
+    png_set_read_fn(png_ptr, input, read_data);
 
     png_read_info(png_ptr, info_ptr);
 
