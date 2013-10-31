@@ -134,7 +134,7 @@ def get_mapset_raster(mapname, mapset=''):
     'PERMANENT'
 
     """
-    return libgis.G_find_raster(mapname, mapset)
+    return libgis.G_find_raster2(mapname, mapset)
 
 
 def get_mapset_vector(mapname, mapset=''):
@@ -144,7 +144,7 @@ def get_mapset_vector(mapname, mapset=''):
     'PERMANENT'
 
     """
-    return libgis.G_find_vector(mapname, mapset)
+    return libgis.G_find_vector2(mapname, mapset)
 
 
 def is_clean_name(name):
