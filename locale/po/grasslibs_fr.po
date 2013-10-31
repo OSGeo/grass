@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-30 22:30+0100\n"
-"PO-Revision-Date: 2013-10-27 19:18+0100\n"
+"PO-Revision-Date: 2013-10-31 01:11+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: French <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -302,9 +302,9 @@ msgid "%d points without category. Unable to determine color rules for features 
 msgstr ""
 
 #: ../lib/ogsf/gsd_prim.c:146
-#, fuzzy, c-format
+#, c-format
 msgid "Color Material: %d"
-msgstr "Couleur de matériel : %d"
+msgstr "Couleur d'élément : %d"
 
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
@@ -461,7 +461,7 @@ msgstr "Erreur de récupération de la plage pour la légende"
 #: ../lib/ogsf/gsd_legend.c:385
 #, fuzzy
 msgid "Unable to show discrete FP range (use list"
-msgstr "Impossible d'afficher une plage FP discrète (utilisation d'une liste"
+msgstr "Impossible d'afficher une plage flottante discrète (utilisation d'une liste"
 
 #: ../lib/ogsf/gsd_legend.c:501
 msgid "Too many categories to show as discrete!"
@@ -4098,7 +4098,6 @@ msgid "Unable to open select cursor: %s"
 msgstr "Impossible d'ouvrir le curseur de sélection: %s"
 
 #: ../lib/vector/neta/spanningtree.c:104
-#, fuzzy
 msgid "Computing minimum spanning tree..."
 msgstr "Calcul de l'arbre couvrant de poids minimal ..."
 
@@ -4500,7 +4499,6 @@ msgid "Area of size = 0.0 ignored"
 msgstr "Surface de taille = 0.0 ignorée"
 
 #: ../lib/vector/Vlib/build.c:199
-#, fuzzy
 msgid "Request to find area outside nonexistent isle"
 msgstr "Requête pour trouver des surfaces à l'extérieur d'une île non-existante"
 
@@ -6714,9 +6712,8 @@ msgid "Negative value of smoothing detected: sm must be >= 0"
 msgstr "Valeur négative détectée pour le lissage : sm doit être >= 0"
 
 #: ../lib/rst/interp_float/vinput2d.c:235
-#, fuzzy
 msgid "Strip exists with insufficient data"
-msgstr "la bande existe avec des données insuffisantes"
+msgstr "Les données de la bande sont insuffisantes"
 
 #: ../lib/rst/interp_float/vinput2d.c:249
 #, c-format
@@ -7045,7 +7042,6 @@ msgid "Variable '%s' not set"
 msgstr "GISRC - variable sans valeur"
 
 #: ../lib/gis/gisinit.c:51 ../lib/gis/gisinit.c:83
-#, fuzzy
 msgid "Incompatible library version for module. You need to rebuild GRASS or untangle multiple installations."
 msgstr "Version de librairie incompatible pour le module. Vous devez recompiler GRASS ou gérer les versions multiples."
 
@@ -7064,14 +7060,12 @@ msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "Système non initialisé. Le développeur a oublié d'appeler G_gisinit()."
 
 #: ../lib/gis/seek.c:52 ../lib/gis/seek.c:58
-#, fuzzy
 msgid "Unable to seek"
-msgstr "Impossible d'ouvrir %s"
+msgstr "Recherche impossible"
 
 #: ../lib/gis/seek.c:56
-#, fuzzy
 msgid "Seek offset out of range"
-msgstr "Index de couche en dehors des limites"
+msgstr "Index de recherche en dehors des limites"
 
 #: ../lib/gis/adj_cellhd.c:42 ../lib/gis/adj_cellhd.c:191
 msgid "Illegal n-s resolution value"
@@ -10626,6 +10620,11 @@ msgstr "Echec lors de la conversion de l'attribut."
 #~ msgid "Unable to open vector database definition file '%s'"
 #~ msgstr "impossible d'ouvrir le fichier de définition de base de données pour le vecteur '%s'"
 
-#, fuzzy
 #~ msgid "Next edge was visited but it is not the first one !!! breaking loop"
-#~ msgstr "Le somment suivant a déjà été visité mais n'est pas le premier !!! rupture de la boucle"
+#~ msgstr "Le somment suivant a déjà été visité mais n'est pas le premier !!! Interruption de la boucle"
+
+#~ msgid "Unable to spawn the 'wish' program"
+#~ msgstr "Impossible de générer le programme 'whish'"
+
+#~ msgid "The raster map <%s@%s> is empty"
+#~ msgstr "La couche raster <%s@%s> est vide"

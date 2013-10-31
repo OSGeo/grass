@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-30 22:30+0100\n"
-"PO-Revision-Date: 2013-10-25 09:48+0100\n"
+"PO-Revision-Date: 2013-10-30 23:42+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -1348,7 +1348,7 @@ msgstr "%(features)d primitives (%(points)d points)"
 
 #: ../gui/wxpython/nviz/tools.py:4848
 msgid "as 3D"
-msgstr ""
+msgstr "en 3D"
 
 #: ../gui/wxpython/nviz/tools.py:4850
 msgid "on surface"
