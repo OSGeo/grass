@@ -46,13 +46,9 @@ int main(int argc, char **argv)
     G_add_keyword(_("miscellaneous"));
     G_add_keyword(_("measurement"));
 
-    coords = G_define_option();
-    coords->key = "coords";
-    coords->description = _("Vertex coordinates");
-    coords->type = TYPE_DOUBLE;
+    coords = G_define_standard_option(G_OPT_M_COORDS);
     coords->required = YES;
     coords->multiple = YES;
-    coords->key_desc = "x,y";
 
     units = G_define_standard_option(G_OPT_M_UNITS);
     units->label = _("Units");
