@@ -161,7 +161,7 @@ void calculate_flows(void)
 
 	if (params.infex) {
 	    misc.f[i] = input.dt *
-		calculate_f((i + 1) * input.dt, input.R[i] / input.dt);
+		    calculate_infiltration(i + 1, input.R[i] / input.dt);
 	    misc.fex[i] = input.R[i] - misc.f[i];
 	    R = misc.f[i];
 	}
@@ -266,7 +266,7 @@ void calculate_flows(void)
 }
 
 /* Objective function for hydrograph suggested by Servet and Dezetter(1991) */
-double calculate_Em(void)
+double calculate_efficiency(void)
 {
     int i;
     double Em, numerator, denominator;
@@ -311,7 +311,7 @@ void calculate_others(void)
     misc.Qt_mean /= input.ntimesteps;
 
     if (file.qobs) {
-	misc.Em = calculate_Em();
+	misc.Em = calculate_efficiency();
 	for (i = 0; i < input.ntimesteps; i++) {
 	    if (!i || misc.Qobs_peak < misc.Qobs[i]) {
 		misc.Qobs_peak = misc.Qobs[i];

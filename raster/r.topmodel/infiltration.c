@@ -1,13 +1,14 @@
 #include <math.h>
-#include <grass/raster.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include "global.h"
 
 /* The Green-and-Ampt Model */
-double calculate_f(double t, double R)
+double calculate_infiltration(int timestep, double R)
 {
     static double cumf = 0.0, f_ = 0.0;
     static char ponding = 0;
-    double f, f1, f2, fc, R2, cnst, pt, psi_dtheta, sum;
+    double t, f, f1, f2, fc, R2, cnst, pt, psi_dtheta, sum;
     int factorial;
     int i, j;
 
@@ -20,6 +21,7 @@ double calculate_f(double t, double R)
 	return 0.0;
     }
 
+    t = timestep * input.dt;
     f1 = cnst = pt = 0.0;
     psi_dtheta = params.psi * params.dtheta;
     if (!ponding) {
@@ -66,10 +68,11 @@ double calculate_f(double t, double R)
 	    if (fabs(f) < TOLERANCE)
 		break;
 	}
-	if (i == MAXITER) {
-	    Rast_set_d_null_value(&f, 1);
-	    return f;
-	}
+	if (i == MAXITER)
+	    G_warning(
+		_("Maximum number of iterations exceeded at timestep %d!"),
+		timestep);
+
 	pt = t - input.dt + (f_ - cumf) / R;
 	if (pt > t) {
 	    f = R;
@@ -108,10 +111,9 @@ double calculate_f(double t, double R)
 	if (fabs(f) < TOLERANCE)
 	    break;
     }
-    if (i == MAXITER) {
-	Rast_set_d_null_value(&f, 1);
-	return f;
-    }
+    if (i == MAXITER)
+	G_warning(_("Maximum number of iterations exceeded at timestep %d!"),
+			timestep);
 
     if (f_ < cumf + R * input.dt) {
 	f = (f_ - cumf) / input.dt;
