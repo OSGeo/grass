@@ -24,12 +24,12 @@ void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats);
 double calculate_lambda(void);
 void initialize(void);
 void calculate_flows(void);
-double calculate_Em(void);
+double calculate_efficiency(void);
 void calculate_others(void);
 void run_topmodel(void);
 
 /* infiltration.c */
-double calculate_f(double t, double R);
+double calculate_infiltration(int timestep, double R);
 
 
 /* Topographic index statistics file */
