@@ -1164,16 +1164,16 @@ class GMFrame(wx.Frame):
             
             displayId += 1
             mapdisp.Show() # show mapdisplay
-    
-        maptree = None 
-        selected = [] # list of selected layers
+
+        maptree = None
+        selectList = []  # list of selected layers
         # 
         # load list of map layers
         #
         for layer in gxwXml.layers:
             display = layer['display']
             maptree = self.notebookLayers.GetPage(display).maptree
-            
+
             newItem = maptree.AddLayer(ltype = layer['type'],
                                        lname = layer['name'],
                                        lchecked = layer['checked'],
@@ -1182,17 +1182,17 @@ class GMFrame(wx.Frame):
                                        lgroup = layer['group'],
                                        lnviz = layer['nviz'],
                                        lvdigit = layer['vdigit'])
-            
-            if layer.has_key('selected'):
-                if layer['selected']:
-                    selected.append((maptree, newItem))
-                else:
-                    maptree.SelectItem(newItem, select = False)
-            
-        for maptree, layer in selected:
-            if not maptree.IsSelected(layer):
-                maptree.SelectItem(layer, select = True)
-                
+
+            if 'selected' in layer:
+                selectList.append((maptree, newItem, layer['selected']))
+
+        for maptree, layer, selected in selectList:
+            if selected:
+                if not layer.IsSelected():
+                    maptree.SelectItem(layer, select=True)
+            else:
+                maptree.SelectItem(layer, select=False)
+
         busy.Destroy()
             
         for idx, mdisp in enumerate(mapdisplay):
