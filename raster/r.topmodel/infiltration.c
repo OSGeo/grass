@@ -12,15 +12,6 @@ double calculate_infiltration(int timestep, double R)
     int factorial;
     int i, j;
 
-
-    /* reset if there is no rainfall */
-    if (R <= 0.0) {
-	cumf = 0.0;
-	f = 0.0;
-	ponding = 0;
-	return 0.0;
-    }
-
     t = timestep * input.dt;
     f1 = cnst = pt = 0.0;
     psi_dtheta = params.psi * params.dtheta;
@@ -44,12 +35,9 @@ double calculate_infiltration(int timestep, double R)
 	    (psi_dtheta + f2) / (1 - exp(f2 / params.m));
 	/* rainfall intensity is less than infiltration rate. all
 	 * rainfall will be infiltrated. */
-	if (f2 == 0.0 || R2 > R) {
-	    df = R;
-	    cumf += df * input.dt;
-	    ponding = 0;
-	    return df;
-	}
+	if (f2 == 0.0 || R2 > R)
+	    goto cont2;
+
 	/* rainfall intensity is greater than infiltration rate. */
 	f = cumf + R2 * input.dt;
 	for (i = 0; i < MAXITER; i++) {
@@ -65,7 +53,7 @@ double calculate_infiltration(int timestep, double R)
 		f = (f + f1) / 2.0;
 		df = f - f2;
 	    }
-	    if (fabs(df) < TOLERANCE)
+	    if (fabs(df) <= TOLERANCE)
 		break;
 	}
 	if (i == MAXITER)
@@ -74,12 +62,9 @@ double calculate_infiltration(int timestep, double R)
 		timestep);
 
 	pt = t - input.dt + (f - cumf) / R;
-	if (pt > t) {
-	    df = R;
-	    cumf += df * input.dt;
-	    ponding = 0;
-	    return df;
-	}
+	if (pt > t)
+	    goto cont2;
+
       cont1:
 	cnst = 0.0;
 	factorial = 1;
@@ -120,8 +105,13 @@ double calculate_infiltration(int timestep, double R)
 	cumf = f;
 	/* initial guess for next time step */
 	f += df * input.dt;
+	return df;
     }
 
+cont2:
+    df = R;
+    cumf += df * input.dt;
+    ponding = 0;
 
     return df;
 }
