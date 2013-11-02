@@ -6,9 +6,9 @@
 /* The Green-and-Ampt Model */
 double calculate_infiltration(int timestep, double R)
 {
-    static double cumf = 0.0, f_ = 0.0;
+    static double cumf = 0.0, f = 0.0;
     static char ponding = 0;
-    double t, f, f1, f2, fc, R2, cnst, pt, psi_dtheta, sum;
+    double t, df, f1, f2, fc, R2, cnst, pt, psi_dtheta, sum;
     int factorial;
     int i, j;
 
@@ -16,7 +16,7 @@ double calculate_infiltration(int timestep, double R)
     /* reset if there is no rainfall */
     if (R <= 0.0) {
 	cumf = 0.0;
-	f_ = 0.0;
+	f = 0.0;
 	ponding = 0;
 	return 0.0;
     }
@@ -32,7 +32,7 @@ double calculate_infiltration(int timestep, double R)
 	    /* rainfall intensity is greater than infiltration
 	     * rate, so ponding starts */
 	    if (R2 < R) {
-		f_ = cumf;
+		f = cumf;
 		pt = t - input.dt;
 		ponding = 1;
 		goto cont1;
@@ -45,57 +45,57 @@ double calculate_infiltration(int timestep, double R)
 	/* rainfall intensity is less than infiltration rate. all
 	 * rainfall will be infiltrated. */
 	if (f2 == 0.0 || R2 > R) {
-	    f = R;
-	    cumf += f * input.dt;
+	    df = R;
+	    cumf += df * input.dt;
 	    ponding = 0;
-	    return f;
+	    return df;
 	}
 	/* rainfall intensity is greater than infiltration rate. */
-	f_ = cumf + R2 * input.dt;
+	f = cumf + R2 * input.dt;
 	for (i = 0; i < MAXITER; i++) {
 	    R2 = -params.K0 / params.m *
-		(psi_dtheta + f_) / (1 - exp(f_ / params.m));
+		(psi_dtheta + f) / (1 - exp(f / params.m));
 	    if (R2 > R) {
-		f1 = f_;
-		f_ = (f_ + f2) / 2.0;
-		f = f_ - f1;
+		f1 = f;
+		f = (f + f2) / 2.0;
+		df = f - f1;
 	    }
 	    else {
-		f2 = f_;
-		f_ = (f_ + f1) / 2.0;
-		f = f_ - f2;
+		f2 = f;
+		f = (f + f1) / 2.0;
+		df = f - f2;
 	    }
-	    if (fabs(f) < TOLERANCE)
+	    if (fabs(df) < TOLERANCE)
 		break;
 	}
 	if (i == MAXITER)
 	    G_warning(
-		_("Maximum number of iterations exceeded at timestep %d!"),
+		_("Maximum number of iterations exceeded at timestep %d."),
 		timestep);
 
-	pt = t - input.dt + (f_ - cumf) / R;
+	pt = t - input.dt + (f - cumf) / R;
 	if (pt > t) {
-	    f = R;
-	    cumf += f * input.dt;
+	    df = R;
+	    cumf += df * input.dt;
 	    ponding = 0;
-	    return f;
+	    return df;
 	}
       cont1:
 	cnst = 0.0;
 	factorial = 1;
-	fc = (f_ + psi_dtheta);
+	fc = f + psi_dtheta;
 	for (j = 1; j <= NTERMS; j++) {
 	    factorial *= j;
 	    cnst += pow(fc / params.m, (double)j) / (double)(j * factorial);
 	}
 	cnst = log(fc) - (log(fc) + cnst) / exp(psi_dtheta / params.m);
-	f_ += R * (t - pt) / 2.0;
+	f += R * (t - pt) / 2.0;
 	ponding = 1;
     }
 
     /* Newton-Raphson */
     for (i = 0; i < MAXITER; i++) {
-	fc = f_ + psi_dtheta;
+	fc = f + psi_dtheta;
 	sum = 0.0;
 	factorial = 1;
 	for (j = 1; j <= NTERMS; j++) {
@@ -105,23 +105,23 @@ double calculate_infiltration(int timestep, double R)
 	f1 = -(log(fc) - (log(fc) + sum) /
 	       exp(psi_dtheta / params.m) - cnst) /
 	    (params.K0 / params.m) - (t - pt);
-	f2 = (exp(f_ / params.m) - 1.0) / (fc * params.K0 / params.m);
-	f = -f1 / f2;
-	f_ += f;
-	if (fabs(f) < TOLERANCE)
+	f2 = (exp(f / params.m) - 1.0) / (fc * params.K0 / params.m);
+	df = -f1 / f2;
+	f += df;
+	if (fabs(df) <= TOLERANCE)
 	    break;
     }
     if (i == MAXITER)
-	G_warning(_("Maximum number of iterations exceeded at timestep %d!"),
+	G_warning(_("Maximum number of iterations exceeded at timestep %d."),
 			timestep);
 
-    if (f_ < cumf + R * input.dt) {
-	f = (f_ - cumf) / input.dt;
-	cumf = f_;
+    if (f < cumf + R * input.dt) {
+	df = (f - cumf) / input.dt;
+	cumf = f;
 	/* initial guess for next time step */
-	f_ += f * input.dt;
+	f += df * input.dt;
     }
 
 
-    return f;
+    return df;
 }
