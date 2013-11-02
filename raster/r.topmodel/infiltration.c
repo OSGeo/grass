@@ -12,6 +12,14 @@ double calculate_infiltration(int timestep, double R)
     int factorial;
     int i, j;
 
+    /* reset if there is no rainfall */
+    if (R <= 0.0) {
+	cumf = 0.0;
+	f = 0.0;
+	ponding = 0;
+	return 0.0;
+    }
+
     t = timestep * input.dt;
     f1 = cnst = pt = 0.0;
     psi_dtheta = params.psi * params.dtheta;
