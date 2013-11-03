@@ -805,9 +805,11 @@ class ItemListCtrl(ModelListCtrl):
             else:
                 bId = action.GetBlockId()
                 if not bId:
-                    bId = ''
+                    bId = _('No')
+                else:
+                    bId = _("Yes")
                 self.itemDataMap[i] = [action.GetName(),
-                                       ','.join(map(str, bId)),
+                                       bId,
                                        action.GetLog()]
             
             i += 1
