@@ -2134,7 +2134,7 @@ if __name__ == "__main__":
                     cond += condText
                 self.fd.write('%s:\n' % cond)
                 self.indent += 4
-                for action in item.GetItems():
+                for action in item.GetItems(self.model.GetItems(objType=ModelAction)):
                     self._writePythonItem(action, ignoreBlock = False, variables = [condVar])
                 self.indent -= 4
             else: # ModelCondition
