@@ -596,7 +596,10 @@ class ModelFrame(wx.Frame):
                                 'to'   : None }
         
     def OnDefineLoop(self, event):
-        """!Define new loop in the model"""
+        """!Define new loop in the model
+
+        @todo: move to ModelCanvas?
+        """
         self.ModelChanged()
         
         width, height = self.canvas.GetSize()
@@ -611,7 +614,10 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh()
         
     def OnDefineCondition(self, event):
-        """!Define new condition in the model"""
+        """!Define new condition in the model
+
+        @todo: move to ModelCanvas?
+        """
         self.ModelChanged()
         
         width, height = self.canvas.GetSize()
