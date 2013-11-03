@@ -409,7 +409,7 @@ class ModelItemDialog(wx.Dialog):
         
         self.itemList = ItemCheckListCtrl(parent = self.panel,
                                           window = self,
-                                          columns = [_("ID"), _("Name"),
+                                          columns = [_("Name"),
                                                      _("Command")],
                                           shape = shape)
         self.itemList.Populate(self.parent.GetModel().GetItems())
@@ -511,7 +511,7 @@ class ModelConditionDialog(ModelItemDialog):
                                         label=" %s " % _("List of items in 'else' block"))
         self.itemListElse = ItemCheckListCtrl(parent = self.panel,
                                               window = self,
-                                              columns = [_("ID"), _("Name"),
+                                              columns = [_("Name"),
                                                          _("Command")],
                                               shape = shape)
         self.itemListElse.SetName('ElseBlockList')
@@ -580,7 +580,7 @@ class ModelConditionDialog(ModelItemDialog):
 
 class ModelListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin,
-                    listmix.TextEditMixin,
+#                    listmix.TextEditMixin,
                     listmix.ColumnSorterMixin):
     def __init__(self, parent, columns, id = wx.ID_ANY,
                  style = wx.LC_REPORT | wx.BORDER_NONE |
@@ -597,7 +597,7 @@ class ModelListCtrl(wx.ListCtrl,
         
         wx.ListCtrl.__init__(self, parent, id = id, style = style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
-        listmix.TextEditMixin.__init__(self)
+#        listmix.TextEditMixin.__init__(self)
         listmix.ColumnSorterMixin.__init__(self, 4)
         
         i = 0
@@ -787,16 +787,15 @@ class ItemListCtrl(ModelListCtrl):
             shapeItems = list()
         
         i = 0
-        if len(self.columns) == 3: # ItemCheckList
+        if len(self.columns) == 2: # ItemCheckList
             checked = list()
         for action in data:
             if isinstance(action, ModelData) or \
                     action == self.shape:
                 continue
             
-            if len(self.columns) == 3:
-                self.itemDataMap[i] = [str(action.GetId()),
-                                       action.GetName(),
+            if len(self.columns) == 2:
+                self.itemDataMap[i] = [action.GetName(),
                                        action.GetLog()]
                 aId = action.GetBlockId()
                 if action.GetId() in shapeItems:
@@ -807,8 +806,7 @@ class ItemListCtrl(ModelListCtrl):
                 bId = action.GetBlockId()
                 if not bId:
                     bId = ''
-                self.itemDataMap[i] = [str(action.GetId()),
-                                       action.GetName(),
+                self.itemDataMap[i] = [action.GetName(),
                                        ','.join(map(str, bId)),
                                        action.GetLog()]
             
@@ -817,23 +815,21 @@ class ItemListCtrl(ModelListCtrl):
         self.itemCount = len(self.itemDataMap.keys())
         self.DeleteAllItems()
         i = 0
-        if len(self.columns) == 3:
-            for aid, name, desc in self.itemDataMap.itervalues():
-                index = self.InsertStringItem(sys.maxint, aid)
-                self.SetStringItem(index, 0, aid)
-                self.SetStringItem(index, 1, name)
-                self.SetStringItem(index, 2, desc)
+        if len(self.columns) == 2:
+            for name, desc in self.itemDataMap.itervalues():
+                index = self.InsertStringItem(sys.maxint, str(i))
+                self.SetStringItem(index, 0, name)
+                self.SetStringItem(index, 1, desc)
                 self.SetItemData(index, i)
                 if checked[i]:
                     self.CheckItem(index, True)
                 i += 1
         else:
-            for aid, name, inloop, desc in self.itemDataMap.itervalues():
-                index = self.InsertStringItem(sys.maxint, aid)
-                self.SetStringItem(index, 0, aid)
-                self.SetStringItem(index, 1, name)
-                self.SetStringItem(index, 2, inloop)
-                self.SetStringItem(index, 3, desc)
+            for name, inloop, desc in self.itemDataMap.itervalues():
+                index = self.InsertStringItem(sys.maxint, str(i))
+                self.SetStringItem(index, 0, name)
+                self.SetStringItem(index, 1, inloop)
+                self.SetStringItem(index, 2, desc)
                 self.SetItemData(index, i)
                 i += 1
                 
@@ -847,14 +843,12 @@ class ItemListCtrl(ModelListCtrl):
             self.DeleteItem(item)
             del self.itemDataMap[item]
             
-            aId = self.GetItem(item, 0).GetText()
-            action = model.GetItem(int(aId))
+            action = model.GetItem(item+1) # action indeces starts at 1
             if not action:
                 item = self.GetFirstSelected()
                 continue
             
-            model.RemoveItem(action)
-            canvas.GetDiagram().RemoveShape(action)
+            canvas.RemoveShapes([action])
             self.frame.ModelChanged()
             
             item = self.GetFirstSelected()
@@ -863,22 +857,6 @@ class ItemListCtrl(ModelListCtrl):
         
         event.Skip()
     
-    def OnRemoveAll(self, event):
-        """!Remove all variable(s) from the model"""
-        deleteDialog = wx.MessageBox(parent=self,
-                                     message=_("Selected data records (%d) will permanently deleted "
-                                               "from table. Do you want to delete them?") % \
-                                         (len(self.listOfSQLStatements)),
-                                     caption=_("Delete records"),
-                                     style=wx.YES_NO | wx.CENTRE)
-        if deleteDialog != wx.YES:
-            return False
-        
-        self.DeleteAllItems()
-        self.itemDataMap = dict()
-
-        self.parent.UpdateModelVariables()
-
     def OnEndEdit(self, event):
         """!Finish editing of item"""
         itemIndex = event.GetIndex()
@@ -886,62 +864,69 @@ class ItemListCtrl(ModelListCtrl):
         
         self.itemDataMap[itemIndex][columnIndex] = event.GetText()
         
-        aId = int(self.GetItem(itemIndex, 0).GetText())
-        action = self.frame.GetModel().GetItem(aId)
+        action = self.frame.GetModel().GetItem(itemIndex)
         if not action:
             event.Veto()
-        if columnIndex == 0:
-            action.SetId(int(event.GetText()))
         
         self.frame.ModelChanged()
 
     def OnReload(self, event = None):
         """!Reload list of actions"""
-        self.Populate(self.frame.GetModel().GetItems())
+        self.Populate(self.frame.GetModel().GetItems(objType=ModelAction))
 
     def OnRightUp(self, event):
         """!Mouse right button up"""
         if self.disablePopup:
             return
         
-        if not hasattr(self, "popupID1"):
-            self.popupID1 = wx.NewId()
-            self.popupID2 = wx.NewId()
-            self.popupID3 = wx.NewId()
-            self.popupID4 = wx.NewId()
-            self.Bind(wx.EVT_MENU, self.OnRemove,    id = self.popupID1)
-            self.Bind(wx.EVT_MENU, self.OnRemoveAll, id = self.popupID2)
-            self.Bind(wx.EVT_MENU, self.OnReload,    id = self.popupID3)
-            self.Bind(wx.EVT_MENU, self.OnNormalize, id = self.popupID4)
+        if not hasattr(self, "popupId"):
+            self.popupID = dict()
+            self.popupID['remove'] = wx.NewId()
+            self.popupID['reload'] = wx.NewId()
+            self.Bind(wx.EVT_MENU, self.OnRemove,    id = self.popupID['remove'])
+            self.Bind(wx.EVT_MENU, self.OnReload,    id = self.popupID['reload'])
 
         # generate popup-menu
         menu = wx.Menu()
-        menu.Append(self.popupID1, _("Delete selected"))
-        menu.Append(self.popupID2, _("Delete all"))
+        menu.Append(self.popupID['remove'], _("Delete selected"))
         if self.GetFirstSelected() == -1:
-            menu.Enable(self.popupID1, False)
-            menu.Enable(self.popupID2, False)
-        
+            menu.Enable(self.popupID['remove'], False)
         menu.AppendSeparator()
-        menu.Append(self.popupID4, _("Normalize"))
-        menu.Append(self.popupID3, _("Reload"))
+        menu.Append(self.popupID['reload'], _("Reload"))
         
         self.PopupMenu(menu)
         menu.Destroy()
     
-    def OnNormalize(self, event):
-        """!Update id of actions"""
-        model = self.frame.GetModel()
-        
-        aId = 1
-        for item in model.GetItems():
-            item.SetId(aId)
-            aId += 1
-        
-        self.OnReload(None)
-        self.frame.GetCanvas().Refresh()
-        self.frame.ModelChanged()
+    def MoveItems(self, items, up):
+        """!Move items in the list
 
+        @param items list of items to move
+        @param up True to move up otherwise down
+        """
+        if len(items) < 1:
+            return
+        
+        if items[0] == 0 and up:
+            del items[0]
+        if len(items) < 1:
+            return
+        
+        if items[-1] == len(self.itemDataMap.keys())-1 and not up:
+            del items[-1]
+        if len(items) < 1:
+            return
+
+        model = self.frame.GetModel()        
+        modelActions = model.GetItems(objType=ModelAction)
+        idxList = dict()
+        for i in items:
+            idxList[model.GetItemIndex(modelActions[i])] =  model.GetItemIndex(modelActions[i-1])
+        
+        # reorganize model items
+        model.ReorderItems(idxList)
+        model.Normalize()
+        self.Populate(model.GetItems(objType=ModelAction))
+        
 class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
     def __init__(self, parent, shape, columns, window = None, **kwargs):
         self.parent = parent
@@ -949,7 +934,7 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
         
         ItemListCtrl.__init__(self, parent, columns, disablePopup = True, **kwargs)
         listmix.CheckListCtrlMixin.__init__(self)
-        self.SetColumnWidth(0, 50)
+        self.SetColumnWidth(0, 100)
         
         self.shape  = shape
         
@@ -969,12 +954,12 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
         """!Get list of selected actions"""
         ids = { 'checked'   : list(),
                 'unchecked' : list() }
+        # action ids start at 1
         for i in range(self.GetItemCount()):
-            iId = int(self.GetItem(i, 0).GetText())
             if self.IsChecked(i):
-                ids['checked'].append(iId)
+                ids['checked'].append(i+1)
             else:
-                ids['unchecked'].append(iId)
+                ids['unchecked'].append(i+1)
             
         return ids
 
