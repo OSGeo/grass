@@ -111,10 +111,24 @@ class Model(object):
         return len(self.GetItems())
 
     def ReorderItems(self, idxList):
+        items = list()
         for oldIdx, newIdx in idxList.iteritems():
             item = self.items.pop(oldIdx)
+            items.append(item)
             self.items.insert(newIdx, item)
+            nextItem = self.items[newIdx+1]
+            items.append(nextItem)
+            x = item.GetX()
+            y = item.GetY()
+            item.SetX(nextItem.GetX())
+            item.SetY(nextItem.GetY())
+            nextItem.SetX(x)
+            nextItem.SetY(y)
 
+        dc = wx.ClientDC(self.canvas)
+        for item in items:
+            item.MoveLinks(dc)
+            
     def Normalize(self):
         iId = 1
         for item in self.items:
