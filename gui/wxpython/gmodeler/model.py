@@ -53,7 +53,7 @@ from grass.script import task as gtask
 class Model(object):
     """!Class representing the model"""
     def __init__(self, canvas = None):
-        self.items      = list() # list of actions/loops/...
+        self.items   = list() # list of ordered items (action/loop/condition)
         
         # model properties
         self.properties = { 'name'        : _("model"),
@@ -68,7 +68,7 @@ class Model(object):
     def GetCanvas(self):
         """!Get canvas or None"""
         return self.canvas
-    
+
     def GetItems(self, objType = None):
         """!Get list of model items
 
@@ -83,8 +83,8 @@ class Model(object):
                 result.append(item)
         
         return result
-
-    def GetItem(self, aId):
+    
+    def GetItem(self, aId, objType=None):
         """!Get item of given id
 
         @param aId item id
@@ -92,13 +92,17 @@ class Model(object):
         @return Model* instance
         @return None if no item found
         """
-        ilist = self.GetItems()
+        ilist = self.GetItems(objType)
         for item in ilist:
             if item.GetId() == aId:
                 return item
-        
+
         return None
 
+    def GetItemIndex(self, item):
+        """!Return list index of given item"""
+        return self.items.index(item)
+    
     def GetNumItems(self, actionOnly = False):
         """!Get number of items"""
         if actionOnly:
@@ -106,6 +110,17 @@ class Model(object):
         
         return len(self.GetItems())
 
+    def ReorderItems(self, idxList):
+        for oldIdx, newIdx in idxList.iteritems():
+            item = self.items.pop(oldIdx)
+            self.items.insert(newIdx, item)
+
+    def Normalize(self):
+        iId = 1
+        for item in self.items:
+            item.SetLabel(iId)
+            iId += 1
+        
     def GetNextId(self):
         """!Get next id (data ignored)
 
@@ -138,7 +153,7 @@ class Model(object):
     def Reset(self):
         """!Reset model"""
         self.items = list()
-        
+
     def RemoveItem(self, item):
         """!Remove item from model
         
@@ -147,8 +162,7 @@ class Model(object):
         relList = list()
         upList = list()
         
-        if not isinstance(item, ModelData):
-            self.items.remove(item)
+        self.items.remove(item)
         
         if isinstance(item, ModelAction):
             for rel in item.GetRelations():
@@ -323,15 +337,10 @@ class Model(object):
 
         # define loops & if/else items
         for loop in gxmXml.loops:
-            alist = list()
-            for aId in loop['items']:
-                action = self.GetItem(aId)
-                alist.append(action)
-            
-            loopItem = self.GetItem(loop['id'])
-            loopItem.SetItems(alist)
-            
-            for action in loopItem.GetItems():
+            loopItem = self.GetItem(loop['id'], objType=ModelLoop)
+            loopItem.SetItems(loop['items'])
+            for idx in loop['items']:
+                action = self.GetItem(idx, objType=ModelAction)
                 action.SetBlock(loopItem)
         
         for condition in gxmXml.conditions:
@@ -348,18 +357,16 @@ class Model(object):
                 for action in items[b]:
                     action.SetBlock(conditionItem)
         
-    def AddItem(self, newItem):
+    def AddItem(self, newItem, pos = -1):
         """!Add item to the list"""
-        iId = newItem.GetId()
-        
-        i  = 0
+        if pos != -1:
+            self.items.insert(pos, newItem)
+        else:
+            self.items.append(newItem)
+        i = 1
         for item in self.items:
-            if item.GetId() > iId:
-                self.items.insert(i, newItem)
-                return
+            item.SetLabel(i)
             i += 1
-        
-        self.items.append(newItem)
         
     def IsValid(self):
         """Return True if model is valid"""
@@ -621,9 +628,8 @@ class Model(object):
                 params['variables']['params'].append(varDict)
                                 
                 for var in vlist:
-                    for action in item.GetItems():
-                        if not isinstance(action, ModelAction) or \
-                                not action.IsEnabled():
+                    for action in item.GetItems(self.GetItems()):
+                        if not action.IsEnabled():
                             continue
                         
                         varDict['value'] = var
@@ -767,7 +773,7 @@ class Model(object):
 
 class ModelObject(object):
     def __init__(self, id = -1):
-        self.id   = id
+        self.id   = id     # internal id, should be not changed
         self.rels = list() # list of ModelRelations
         
         self.isEnabled = True
@@ -779,7 +785,11 @@ class ModelObject(object):
     def GetId(self):
         """!Get id"""
         return self.id
-    
+
+    def SetId(self, id):
+        """!Set id"""
+        self.id = id
+
     def AddRelation(self, rel):
         """!Record new relation
         """
@@ -925,15 +935,13 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         pen.SetWidth(width)
         self.SetPen(pen)
 
-    def SetId(self, id):
-        """!Set id"""
-        self.id = id
+    def SetLabel(self, idx=-1):
         cmd = self.task.get_cmd(ignoreErrors = True)
+        self.ClearText()
         if cmd and len(cmd) > 0:
-            self.ClearText()
-            self.AddText('(%d) %s' % (self.id, cmd[0]))
+            self.AddText('(%d) %s' % (idx, cmd[0]))
         else:
-            self.AddText('(%d) <<%s>>' % (self.id, _("unknown")))
+            self.AddText('(%d) <<%s>>' % (idx, _("unknown")))
         
     def SetProperties(self, params, propwin):
         """!Record properties dialog"""
@@ -1335,15 +1343,20 @@ class ModelItem(ModelObject):
         ModelObject.__init__(self, id)
         self.parent  = parent
         self.text    = text
-        self.items   = items  # list of items in the loop
+        self.itemIds = list() # unordered
         
     def GetText(self):
         """!Get loop text"""
         return self.text
 
-    def GetItems(self):
-        """!Get items (id)"""
-        return self.items
+    def GetItems(self, items):
+        """!Get sorted items by id"""
+        result = list()
+        for item in items:
+            if item.GetId() in self.itemIds:
+                result.append(item)
+        
+        return result
 
     def SetId(self, id):
         """!Set loop id"""
@@ -1371,9 +1384,10 @@ class ModelItem(ModelObject):
         self.rels = list()
    
 class ModelLoop(ModelItem, ogl.RectangleShape):
-    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '', items = []):
+    def __init__(self, parent, x, y, id=-1, idx=-1, width = None, height = None, text = '', items = []):
         """!Defines a loop"""
         ModelItem.__init__(self, parent, x, y, id, width, height, text, items)
+        self.cond = text
         
         if not width:
             width = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'width'))
@@ -1388,10 +1402,6 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
             self.SetCornerRadius(100)
-            if text:
-                self.AddText('(' + str(self.id) + ') ' + text)
-            else:
-                self.AddText('(' + str(self.id) + ')')
         
         self._setBrush()
         
@@ -1407,6 +1417,13 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         wxColor = wx.Colour(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
 
+    def SetLabel(self, idx=-1):
+        self.ClearText()
+        if self.cond:
+            self.AddText('(%d) %s' % (idx, self.cond))
+        else:
+            self.AddText('(%d)' % (idx))
+                         
     def Enable(self, enabled = True):
         """!Enable/disable action"""
         for item in self.items:
@@ -1425,7 +1442,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
     
     def SetItems(self, items):
         """!Set items (id)"""
-        self.items = items
+        self.itemIds = items
 
     def OnDraw(self, dc):
         """!Draw loop in canvas"""

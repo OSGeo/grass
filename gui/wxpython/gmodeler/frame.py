@@ -907,7 +907,7 @@ class ModelFrame(wx.Frame):
     def DefineLoop(self, loop):
         """!Define loop with given list of items"""
         parent = loop
-        items = loop.GetItems()
+        items = loop.GetItems(self.GetModel().GetItems())
         if not items:
             return
         
@@ -928,7 +928,7 @@ class ModelFrame(wx.Frame):
             parent = item
         
         # close loop
-        item = loop.GetItems()[-1]
+        item = items[-1]
         rel = ModelRelation(parent = self, fromShape = item, toShape = loop)
         loop.AddRelation(rel)
         self.AddLine(rel)
@@ -1138,14 +1138,16 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             dlg.CentreOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 shape.SetText(dlg.GetCondition())
+                model = self.frame.GetModel()
+                modelActions = model.GetItems(objType=ModelAction)
                 ids = dlg.GetItems()
                 for b in ids.keys():
                     alist = list()
-                    for aId in ids[b]['unchecked']:
-                        action = self.frame.GetModel().GetItem(aId)
+                    for idx in ids[b]['unchecked']:
+                        action = modelActions[idx]
                         action.UnSetBlock(shape)
-                    for aId in ids[b]['checked']:
-                        action = self.frame.GetModel().GetItem(aId)
+                    for idx in ids[b]['checked']:
+                        action = modelActions[idx]
                         action.SetBlock(shape)
                         if action:
                             alist.append(action)
@@ -1464,8 +1466,14 @@ class ItemPanel(wx.Panel):
                                     label=" %s " % _("List of items - right-click to delete"))
         
         self.list = ItemListCtrl(parent = self,
-                                 columns = [_("ID"), _("Name"), _("In block"),
+                                 columns = [_("Name"), _("In block"),
                                             _("Command / Condition")])
+        
+        self.btnMoveUp = wx.Button(parent=self, id=wx.ID_UP)
+        self.btnMoveDown = wx.Button(parent=self, id=wx.ID_DOWN)
+        
+        self.btnMoveUp.Bind(wx.EVT_BUTTON, self.OnMoveItemsUp)
+        self.btnMoveDown.Bind(wx.EVT_BUTTON, self.OnMoveItemsDown)
         
         self._layout()
 
@@ -1475,10 +1483,17 @@ class ItemPanel(wx.Panel):
         listSizer.Add(item = self.list, proportion = 1,
                       flag = wx.EXPAND)
         
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item = listSizer, proportion = 1,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+        manageSizer = wx.BoxSizer(wx.VERTICAL)
+        manageSizer.Add(item=self.btnMoveUp, border = 5, flag = wx.ALL)
+        manageSizer.Add(item=self.btnMoveDown, border = 5,
+                        flag = wx.LEFT | wx.RIGHT)
         
+        mainSizer = wx.BoxSizer(wx.HORIZONTAL)
+        mainSizer.Add(item = listSizer, proportion = 1,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 3)
+        mainSizer.Add(item = manageSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 3)
+
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
         
@@ -1486,6 +1501,40 @@ class ItemPanel(wx.Panel):
         """!Reload list of variables"""
         self.list.OnReload(None)
 
+    def _getSelectedItems(self):
+        """!Get list of selected items, indeces start at 0"""
+        items = []
+        current = -1
+        while True:
+            next = self.list.GetNextSelected(current)
+            if next == -1:
+                break
+            items.append(next)
+            current = next
+        
+        if not items:
+            GMessage(_("No items to selected."), parent = self)
+            
+        return items
+    
+    def OnMoveItemsUp(self, event):
+        """!Item moved up, update action ids"""
+        items = self._getSelectedItems()
+        if not items:
+            return
+        self.list.MoveItems(items, up = True)
+        self.parent.GetCanvas().Refresh()
+        self.parent.ModelChanged()
+
+    def OnMoveItemsDown(self, event):
+        """!Item moved up, update action ids"""
+        items = self._getSelectedItems()
+        if not items:
+            return
+        self.list.MoveItems(items, up = False)
+        self.parent.GetCanvas().Refresh()
+        self.parent.ModelChanged()
+    
 class PythonPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
                  **kwargs):
