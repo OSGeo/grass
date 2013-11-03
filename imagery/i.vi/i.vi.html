@@ -22,78 +22,117 @@ parameters.
   <li>WDVI: Weighted Difference Vegetation Index</li>
 </ul>
 
-<em>Warning to the new remote sensing users</em>
-<p>Vegetation Indices are often considered the entry point of remote sensing for Earth land monitoring. They are suffering from their success, in terms that often people tend to harvest satellite images from online sources and use them directly in this module.
+<h3>Background for users new to remote sensing</h3>
 
-<em>If you are in this situation please read the following</em>
-<p>Satellite imagery is often stored in Digital Number (DN) for storage purpose, Landsat is stored in 8bit values (ranging from 0 to 255), other satellites maybe stored in 10 or 16 bits. Get to know about your satellite data. Once you covered this knowledge and that you are sure the data is in DN, this implies that your imagery is not corrected. What this means is that the image is what the satellite sees at its position and altitude in space. This is not the ground reality yet. We call this data at the satellite. Encoded in the 8bits (or more) is the amount of energy sensed by the sensor inside the satellite platform. This energy is called radiance-at-sensor. Generally, satellites image providers encode the radiance-at-sensor into 8bit (or more) through an affine transform equation (y=ax+b). If you are using Landsat imagery, look at the i.landsat.toar for an easy way to transform DN to radiance-at-sensor. If you are using Aster data, try i.aster.toar module.
+Vegetation Indices are often considered the entry point of remote 
+sensing for Earth land monitoring. They are suffering from their 
+success, in terms that often people tend to harvest satellite images 
+from online sources and use them directly in this module.
+<p>
+From Digital number to Radiance:<br>
+Satellite imagery is commonly stored in Digital Number (DN) for 
+storage purposes; e.g., Landsat5 data is stored in 8bit values 
+(ranging from 0 to 255), other satellites maybe stored in 10 or 16 
+bits. If the data is provided in DN, this implies that this imagery 
+is "uncorrected". What this means is that the image is what the 
+satellite sees at its position and altitude in space (stored in DN). 
+This is not the signal at ground yet. We call this data at-satellite 
+or at-sensor. Encoded in the 8bits (or more) is the amount of energy 
+sensed by the sensor inside the satellite platform. This energy is 
+called radiance-at-sensor. Generally, satellites image providers 
+encode the radiance-at-sensor into 8bit (or more) through an affine 
+transform equation (y=ax+b). In case of using Landsat imagery, look 
+at the <em>i.landsat.toar</em> for an easy way to transform DN to 
+radiance-at-sensor. If using Aster data, try the <em>i.aster.toar</em> 
+module.
 
-<p>Finally, once you have the radiance at sensor, you still have the atmosphere between the sensor and the surface vagetation. You need to correct the atmospheric interaction with the sun energy that the vegetation reflects back into space. This can be done in two ways for landsat. The simple way is within i.landsat.toar, look for DOS correction. The more accurate way is by using i.atcorr (which works for many satellite sensors). Get to know this last one if you intend to stay around remote sensing some time. Once you have completed the use of an atmospheric correction on the energy sensed by the satellite, you can call your data by the name of surface reflectance. Surface reflectance is ranging from 0.0 to 1.0 theoretically (and absolutely). This level of data correction is the proper level of correction to use with this Vegetation Index module. 
+<p>
+From Radiance to Reflectance:<br>
+Finally, once having obtained the radiance at sensor values, still 
+the atmosphere is between sensor and Earth's surface. This fact 
+needs to be corrected to account for the atmospheric interaction 
+with the sun energy that the vegetation reflects back into space. 
+This can be done in two ways for Landsat. The simple way is through 
+<em>i.landsat.toar</em>, use e.g. the DOS correction. The more 
+accurate way is by using <em>i.atcorr</em> (which works for many 
+satellite sensors). Once the atmospheric correction has been applied 
+to the satellite data, data vales are called surface reflectance. 
+Surface reflectance is ranging from 0.0 to 1.0 theoretically (and 
+absolutely). This level of data correction is the proper level of 
+correction to use with <em>i.vi</em>.
 
+<h3>Vegetation Indices</h3>
 
-<div class="code"><pre>
 ARVI: Atmospheric Resistant Vegetation Index 
-
+<p>
 ARVI is resistant to atmospheric effects (in comparison to 
 the NDVI) and is accomplished by a self correcting process 
 for the atmospheric effect in the red channel, using the 
 difference in the radiance between the blue and the red 
-channels.(Kaufman and Tanre 1996).
+channels (Kaufman and Tanre 1996).
+
+<div class="code"><pre>
 ARVI = (nirchan - (2.0*redchan - bluechan)) / 
-( nirchan + (2.0*redchan - bluechan))
+    ( nirchan + (2.0*redchan - bluechan))
 arvi( redchan, nirchan, bluechan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 DVI: Difference Vegetation Index
 
+<div class="code"><pre>
 DVI = ( nirchan - redchan )
 dvi( redchan, nirchan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 EVI: Enhanced Vegetation Index
+<p>
+The enhanced vegetation index (EVI) is an optimized index designed 
+to enhance the vegetation signal with improved sensitivity in high 
+biomass regions and improved vegetation monitoring through a 
+de-coupling of the canopy background signal and a reduction in 
+atmosphere influences (Huete A.R., Liu H.Q., Batchily K., van Leeuwen 
+W. (1997). A comparison of vegetation indices global set of TM 
+images for EOS-MODIS. Remote Sensing of Environment, 59:440-451).
 
-The enhanced vegetation index (EVI) is an optimized index designed to enhance
-the vegetation signal with improved sensitivity in high biomass regions and
-improved vegetation monitoring through a de-coupling of the canopy background
-signal and a reduction in atmosphere influences.
-
-Huete A.R., Liu H.Q., Batchily K., vanLeeuwen W. (1997). 
-A comparison of vegetation indices global set of TM images for 
-EOS-MODIS. Remote Sensing of Environment, 59:440-451.
-
+<div class="code"><pre>
 EVI = 2.5 * ( nirchan - redchan ) / 
-( nirchan + 6.0 * redchan - 7.5 * bluechan + 1.0 )
+    ( nirchan + 6.0 * redchan - 7.5 * bluechan + 1.0 )
 evi( bluechan, redchan, nirchan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 EVI2: Enhanced Vegetation Index 2
+<p>
+A 2-band EVI (EVI2), without a blue band, which has the best 
+similarity with the 3-band EVI, particularly when atmospheric 
+effects are insignificant and data quality is good (Zhangyan Jiang ; 
+Alfredo R. Huete ; Youngwook Kim and Kamel Didan 2-band enhanced 
+vegetation index without a blue band and its application to AVHRR 
+data. Proc. SPIE 6679, Remote Sensing and Modeling of Ecosystems for 
+Sustainability IV, 667905 (october 09, 2007)
+<a href="http://dx.doi.org/10.1117/12.734933">doi:10.1117/12.734933</a>).
 
-A 2-band EVI (EVI2), without a blue band, which has the best
-similarity with the 3-band EVI, particularly when atmospheric
-effects are insignificant and data quality is good. 
-
-Zhangyan Jiang ; Alfredo R. Huete ; Youngwook Kim and Kamel Didan
-2-band enhanced vegetation index without a blue band and its application to AVHRR data.
-Proc. SPIE 6679, Remote Sensing and Modeling of Ecosystems for Sustainability IV, 667905 (october 09, 2007) <a href="http://dx.doi.org/10.1117/12.734933">doi:10.1117/12.734933</a>
+<div class="code"><pre>
 EVI2 = 2.5 * ( nirchan - redchan ) / 
-( nirchan + 2.4 * redchan + 1.0 )
-evi2 ( redchan, nirchan )
+    ( nirchan + 2.4 * redchan + 1.0 )
+evi2( redchan, nirchan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 GARI: green atmospherically resistant vegetation index
 
+<div class="code"><pre>
 GARI = ( nirchan - (greenchan - (bluechan - redchan))) / 
 ( nirchan - (greenchan + (bluechan - redchan)))
 gari( redchan, nirchan, bluechan, greenchan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 GEMI: Global Environmental Monitoring Index
 
+<div class="code"><pre>
 GEMI = (( (2*((nirchan * nirchan)-(redchan * redchan))+
 1.5*nirchan+0.5*redchan) / (nirchan + redchan + 0.5)) * 
 (1 - 0.25 * (2*((nirchan * nirchan)-(redchan * redchan))
@@ -102,97 +141,109 @@ GEMI = (( (2*((nirchan * nirchan)-(redchan * redchan))+
 gemi( redchan, nirchan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 GVI: Green Vegetation Index
 
+<div class="code"><pre>
 GVI = ( -0.2848 * bluechan - 0.2435 * greenchan - 
 0.5436 * redchan + 0.7243 * nirchan + 0.0840 * chan5chan-
 0.1800 * chan7chan)
 gvi( bluechan, greenchan, redchan, nirchan, chan5chan, chan7chan)
 </pre></div>
 
-<div class="code"><pre>
+<p>
 IPVI: Infrared Percentage Vegetation Index 
 
+<div class="code"><pre>
 IPVI = nirchan/(nirchan+redchan)
 ipvi( redchan, nirchan )
 </pre></div>
 
-<div class="code"><pre>
 MSAVI2: second Modified Soil Adjusted Vegetation Index
 
+<div class="code"><pre>
 MSAVI2 = (1/2)*(2(NIR+1)-sqrt((2*NIR+1)^2-8(NIR-red)))
 msavi2( redchan, nirchan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 MSAVI: Modified Soil Adjusted Vegetation Index
 
+<div class="code"><pre>
 MSAVI = s(NIR-s*red-a) / (a*NIR+red-a*s+X*(1+s*s))	
+msavi( redchan, nirchan )
+</pre></div>
 where a is the soil line intercept, s is the
 soil line slope, and X 	is an adjustment factor
 which is set to minimize soil noise (0.08 in 
-original papers).			
-msavi( redchan, nirchan )
-</pre></div>
+original papers).
 
-<div class="code"><pre>
+<p>
 NDVI: Normalized Difference Vegetation Index
 
-Data Type Band Numbers ([IR, Red]) 
-TM Bands= [4,3] 
+<div class="code"><pre>
+Data Type Band Numbers ([NIR, Red]) 
 MSS Bands = [7, 5] 
+TM1-5,7 Bands= [4,3] 
+TM8 Bands= [5,4] 
 AVHRR Bands = [2, 1] 
 SPOT XS Bands = [3, 2] 
 AVIRIS Bands = [51, 29] 
-(AVHRR) NDVI = (channel 2 - channel 1) / (channel 2 + channel 1)
+
+NDVI = (NIR - Red) / (NIR + Red)
 </pre></div>
 
-<div class="code"><pre>
+<p>
 PVI: Perpendicular Vegetation Index
 
+<div class="code"><pre>
 PVI = sin(a)NIR-cos(a)red 
-for a isovegetation lines (lines of equal vegetation)
-would all be parallel to the soil line therefore a=1
 pvi( redchan, nirchan )
 </pre></div>
+for a isovegetation lines (lines of equal vegetation)
+would all be parallel to the soil line therefore a=1.
 
-<div class="code"><pre>
+<p>
 SAVI: Soil Adjusted Vegetation Index
 
+<div class="code"><pre>
 SAVI = ((1.0+0.5)*(nirchan - redchan)) / (nirchan + redchan +0.5)
 savi( redchan, nirchan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 SR: Simple Vegetation ratio
 
+<div class="code"><pre>
 SR = (nirchan/redchan)
 sr( redchan, nirchan )
 </pre></div>
 
-<div class="code"><pre>
+<p>
 VARI: Visible Atmospherically Resistant Index
 
-VARI = (green - red ) / (green + red - blue)
-it was designed to introduce an atmospheric self-correction 
-Gitelson A.A., Kaufman Y.J., Stark R., Rundquist D., 2002.
-Novel algorithms for estimation of vegetation fraction 
-Remote Sensing of Environment (80), pp76-87. 
-</pre></div>
+VARI was designed to introduce an atmospheric self-correction 
+(Gitelson A.A., Kaufman Y.J., Stark R., Rundquist D., 2002. Novel 
+algorithms for estimation of vegetation fraction Remote Sensing of 
+Environment (80), pp76-87.)
 
 <div class="code"><pre>
+VARI = (green - red ) / (green + red - blue)
+</pre></div>
+
+<p>
 WDVI: Weighted Difference Vegetation Index
 
+<div class="code"><pre>
 WDVI = nirchan - a * redchan
 if(soil_weight_line == None):
-a = 1.0 #slope of soil line
+   a = 1.0 #slope of soil line
 wdvi( redchan, nirchan, soil_line_weight )
 </pre></div>
 
 <h2>NOTES</h2>
 
-Originally from kepler.gps.caltech.edu
+Originally from kepler.gps.caltech.edu:
 <p>A FAQ on Vegetation in Remote Sensing<br>
 Written by Terrill W. Ray, Div. of Geological and Planetary Sciences,
 California Institute of Technology, email: terrill@mars1.gps.caltech.edu
