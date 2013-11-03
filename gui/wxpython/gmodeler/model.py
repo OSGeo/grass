@@ -1990,7 +1990,7 @@ class WriteModelFile:
         if text:
             self.fd.write('%s<condition>%s</condition>\n' %
                           (' ' * self.indent, self._filterValue(text)))
-        for item in loop.GetItems():
+        for item in loop.GetItems(self.model.GetItems(objType=ModelAction)):
             self.fd.write('%s<item>%d</item>\n' %
                           (' ' * self.indent, item.GetId()))
         self.indent -= 4
