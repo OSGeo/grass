@@ -128,6 +128,11 @@ class Model(object):
         dc = wx.ClientDC(self.canvas)
         for item in items:
             item.MoveLinks(dc)
+            for mo in item.GetBlock():
+                if isinstance(mo, ModelLoop):
+                    self.canvas.parent.DefineLoop(mo)
+                elif isinstance(mo, ModelCondition):
+                    self.canvas.parent.DefineCondition(mo)
             
     def Normalize(self):
         iId = 1
