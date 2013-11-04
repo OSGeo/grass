@@ -755,7 +755,8 @@ EXCLUDE_PATTERNS       = */test/* \
                          */testsuite/* \
                          */test_* \
                          */test.* \
-                         */*local_proto.h
+                         */*local_proto.h \
+                         */g.gui.*.py
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
