@@ -142,6 +142,8 @@ class LMToolsToolbar(BaseToolbar):
                                  label = _('Georectifier')),
             'composer': MetaIcon(img = 'print-compose',
                                  label = _('Cartographic Composer')),
+            'script-load': MetaIcon(img = 'script-load',
+                                 label = _('Launch user-defined script')),
             }
         
         return self._getToolbarData((('importMap', icons["import"],
@@ -154,7 +156,10 @@ class LMToolsToolbar(BaseToolbar):
                                      ('modeler', icons["modeler"],
                                       self.parent.OnGModeler),
                                      ('mapOutput', icons['composer'],
-                                      self.parent.OnPsMap)
+                                      self.parent.OnPsMap),
+                                     (None, ),
+                                     ('script-load', icons['script-load'],
+                                      self.parent.OnRunScript),
                                      ))
 
 class LMMiscToolbar(BaseToolbar):
