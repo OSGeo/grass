@@ -57,18 +57,19 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     if header == True:
-        print "id" + fs + "start" + fs + "end" + fs + "mean" + fs + \
-            "min" + fs + "max" + fs,
-        print "mean_of_abs" + fs + "stddev" + fs + "variance" + fs,
+        string = ""
+        string += "id" + fs + "start" + fs + "end" + fs + "mean" + fs
+        string += "min" + fs + "max" + fs
+        string += "mean_of_abs" + fs + "stddev" + fs + "variance" + fs
+        string += "coeff_var" + fs + "sum" + fs + "null_cells" + fs + "cells"
         if extended == True:
-            print "coeff_var" + fs + "sum" + fs + \
-                "null_cells" + fs + "cells" + fs,
-            print "first_quartile" + fs + "median" + fs + \
-                "third_quartile" + fs + "percentile_90"
-        else:
-            print "coeff_var" + fs + "sum" + fs + "null_cells" + fs + "cells"
+            string += "first_quartile" + fs + "median" + fs
+            string += "third_quartile" + fs + "percentile_90"
+
+        print string
 
     for row in rows:
+        string = ""
         id = row["id"]
         start = row["start_time"]
         end = row["end_time"]
@@ -83,20 +84,16 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
         elif type == "str3ds":
             stats = core.parse_command("r3.univar", map=id, flags=flag)
 
-        print str(id) + fs + str(start) + fs + str(end),
-        print fs + str(stats["mean"]) + fs + str(stats["min"]) + \
-            fs + str(stats["max"]) + fs + str(stats["mean_of_abs"]),
-        print fs + str(stats["stddev"]) + fs + str(stats["variance"]) + \
-            fs + str(stats["coeff_var"]) + fs + str(stats["sum"]),
-
-        if extended == True:
-            print fs + str(stats["null_cells"]) + fs + str(
-                stats["cells"]) + fs,
-            print str(stats["first_quartile"]) + fs + str(stats["median"]) + \
-                  fs + str(stats["third_quartile"]) + \
-                  fs + str(stats["percentile_90"])
-        else:
-            print fs + str(stats["null_cells"]) + fs + str(stats["cells"])
+        string += str(id) + fs + str(start) + fs + str(end)
+        string += fs + str(stats["mean"]) + fs + str(stats["min"])
+        string += fs + str(stats["max"]) + fs + str(stats["mean_of_abs"])
+        string += fs + str(stats["stddev"]) + fs + str(stats["variance"])
+        string += fs + str(stats["coeff_var"]) + fs + str(stats["sum"])
+        string += fs + str(stats["null_cells"]) + fs + str(stats["cells"]) + fs
+        if extended == True:            
+            string += str(stats["first_quartile"]) + fs + str(stats["median"])
+            string += fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
+        print string
 
     dbif.close()
 
