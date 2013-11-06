@@ -45,7 +45,7 @@ void set_params()
     param.null_val->type = TYPE_DOUBLE;
     param.null_val->required = NO;
     param.null_val->description = _("Value to represent no data cell");
-    param.null_val->answer = "-10.0";
+    param.null_val->answer = "-99999.99";
 
     param.elev = G_define_option();
     param.elev->key = "elevation2d";

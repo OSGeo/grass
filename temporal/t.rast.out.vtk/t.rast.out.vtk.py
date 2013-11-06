@@ -46,7 +46,7 @@
 #% description: Value to represent no data cell
 #% required: no
 #% multiple: no
-#% answer: -10.0
+#% answer: -99999.99
 #%end
 
 #%flag
