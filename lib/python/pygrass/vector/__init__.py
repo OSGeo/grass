@@ -6,6 +6,8 @@ Created on Tue Jul 17 08:51:53 2012
 """
 import grass.lib.vector as libvect
 from vector_type import VTYPE
+from grass.script.core import gisenv
+import os
 
 #
 # import pygrass modules
@@ -196,6 +198,38 @@ class Vector(Info):
         else:
             # return offset into file where the feature starts (on level 1)
             geo_obj.offset = result
+
+    @must_be_open
+    def has_color_table(self):
+        """Return if vector has color table associated in file system;
+        Color table stored in the vector's attribute table well be not checked
+
+        Examples
+        --------
+        >>> cens = Vector('census')
+        >>> cens.open()
+        >>> cens.has_color_table()
+        False
+
+        >>> cens.close()
+        >>> from grass.pygrass.functions import copy, remove
+        >>> copy('census','mycensus','vect')
+        >>> from grass.pygrass.modules.shortcuts import vector as v
+        >>> v.colors(map='mycensus', color='population', column='TOTAL_POP')
+
+        >>> mycens = Vector('mycensus')
+        >>> mycens.open()
+        >>> mycens.has_color_table()
+        True
+        >>> mycens.close()
+        >>> remove('mycensus', 'vect')
+        """
+        path = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
+                            self.mapset, 'vector', self.name, 'colr')
+        if os.path.exists(path):
+            return True
+        else:
+            return False
 
 
 #=============================================
