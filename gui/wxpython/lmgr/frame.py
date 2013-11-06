@@ -791,7 +791,7 @@ class GMFrame(wx.Frame):
         tree.OnStartEditing(None)
         
     def OnRunScript(self, event):
-        """!Run script"""
+        """!Run user-defined script"""
         # open dialog and choose script file
         dlg = wx.FileDialog(parent = self, message = _("Choose script file to run"),
                             defaultDir = os.getcwd(),
@@ -845,9 +845,26 @@ class GMFrame(wx.Frame):
                                    style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
                 SetAddOnPath(os.pathsep.join(addonPath), key = 'PATH')
+            dlg.Destroy()
         
         self._gconsole.WriteCmdLog(_("Launching script '%s'...") % filename)
-        self._gconsole.RunCmd([filename])
+        # check if the script has an interface (avoid double-launching
+        # of the script)
+        skipInterface = True
+        try:
+            sfile = open(filename, "r")
+            for line in sfile.readlines():
+                if len(line) < 2:
+                    continue
+                if line[0] is '#' and line[1] is '%':
+                    skipInterface = False
+                    break
+        except IOError:
+            pass
+        finally:
+            sfile.close()
+        
+        self._gconsole.RunCmd([filename], skipInterface=skipInterface)
         
     def OnChangeLocation(self, event):
         """Change current location"""
