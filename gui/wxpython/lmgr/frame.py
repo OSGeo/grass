@@ -848,7 +848,7 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
         
         self._gconsole.WriteCmdLog(_("Launching script '%s'...") % filename)
-        self._gconsole.RunCmd([filename], skipInterface=skipInterface)
+        self._gconsole.RunCmd([filename])
         
     def OnChangeLocation(self, event):
         """Change current location"""
