@@ -536,6 +536,24 @@ class GConsole(wx.EvtHandler):
         else:
             # Send any other command to the shell. Send output to
             # console output window
+            #
+            # Check if the script has an interface (avoid double-launching
+            # of the script)
+            skipInterface = True
+            if os.path.splitext(command[0])[1] in ('.py', '.sh'):
+                try:
+                    sfile = open(command[0], "r")
+                    for line in sfile.readlines():
+                        if len(line) < 2:
+                            continue
+                        if line[0] is '#' and line[1] is '%':
+                            skipInterface = False
+                            break
+                except IOError:
+                    pass
+                finally:
+                    sfile.close()
+            
             if len(command) == 1 and not skipInterface:
                 try:
                     task = gtask.parse_interface(command[0])

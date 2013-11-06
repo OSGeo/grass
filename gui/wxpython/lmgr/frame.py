@@ -848,22 +848,6 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
         
         self._gconsole.WriteCmdLog(_("Launching script '%s'...") % filename)
-        # check if the script has an interface (avoid double-launching
-        # of the script)
-        skipInterface = True
-        try:
-            sfile = open(filename, "r")
-            for line in sfile.readlines():
-                if len(line) < 2:
-                    continue
-                if line[0] is '#' and line[1] is '%':
-                    skipInterface = False
-                    break
-        except IOError:
-            pass
-        finally:
-            sfile.close()
-        
         self._gconsole.RunCmd([filename], skipInterface=skipInterface)
         
     def OnChangeLocation(self, event):
