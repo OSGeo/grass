@@ -97,15 +97,21 @@ void G_begin_ellipsoid_polygon_area(double a, double e2)
  * straight line.  For two consecutive vertices of the polygon, 
  * (lat_1, long1) and (lat_2,long_2), the line joining them (i.e., the
  * polygon's side) is defined by:
- *                                     lat_2  -  lat_1 
- *     lat = lat_1 + (long - long_1) * ---------------
- *                                     long_2 - long_1
+ *
+ \verbatim
+                                     lat_2  -  lat_1 
+     lat = lat_1 + (long - long_1) * ---------------
+                                     long_2 - long_1
+ \endverbatim
+ *
  * where long_1 < long < long_2.
  *   The values of QbarA, etc., are determined by the integration of
  * the Q function.  Into www.integral-calculator.com, paste this 
  * expression :
  *
- * sin(x)+ (2/3)e^2(sin(x))^3 + (3/5)e^4(sin(x))^5 + (4/7)e^6(sin(x))^7
+ \verbatim
+ sin(x)+ (2/3)e^2(sin(x))^3 + (3/5)e^4(sin(x))^5 + (4/7)e^6(sin(x))^7
+ \endverbatim
  *
  * and you'll get their values.  (Last checked 30 Oct 2013). 
  *
