@@ -2229,17 +2229,27 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         tlist = self.FindWindowById(self.layerPage[self.selLayer]['tableData'])
         
         item = tlist.GetFirstSelected()
-        
+        countSelected = tlist.GetSelectedItemCount()
         if UserSettings.Get(group = 'atm', key = 'askOnDeleteRec', subkey = 'enabled'):
+            # if the user select more columns to delete, all the columns name
+            # will appear the the warning dialog
+            if tlist.GetSelectedItemCount() > 1:
+                deleteColumns = "columns '%s'" % tlist.GetItemText(item)
+                while item != -1:
+                    item = tlist.GetNextSelected(item)
+                    if item != -1:
+                        deleteColumns += ", '%s'" % tlist.GetItemText(item)
+            else:
+                deleteColumns = "column '%s'" % tlist.GetItemText(item)
             deleteDialog = wx.MessageBox(parent = self,
-                                         message = _("Selected column '%s' will PERMANENTLY removed "
+                                         message = _("Selected column %s will PERMANENTLY removed "
                                                    "from table. Do you want to drop the column?") % \
-                                             (tlist.GetItemText(item)),
+                                             (deleteColumns),
                                          caption = _("Drop column(s)"),
                                          style = wx.YES_NO | wx.CENTRE)
             if deleteDialog != wx.YES:
                 return False
-        
+        item = tlist.GetFirstSelected()
         while item != -1:
             self.listOfCommands.append(('v.db.dropcolumn',
                                         { 'map' : self.dbMgrData['vectName'],
