@@ -3,7 +3,7 @@
  *
  * \brief GIS Library - Polygon area calculation routines.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2013 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -55,7 +55,7 @@ static double Qbar(double x)
  * eccentricity squared <i>e2</i>.
  *
  * \param a semi-major axis
- * \param e2 ellipsoid eccentricity
+ * \param e2 ellipsoid eccentricity squared
  */
 
 void G_begin_ellipsoid_polygon_area(double a, double e2)
@@ -89,8 +89,30 @@ void G_begin_ellipsoid_polygon_area(double a, double e2)
  * <i>n</i> pairs of <i>lat,long</i> vertices for latitude-longitude 
  * grids.
  *
- * <b>Note:</b> This routine assumes grid lines on the connecting the 
- * vertices (as opposed to geodesics).
+ * <b>Note:</b> This routine computes the area of a polygon on the
+ * ellipsoid.  The sides of the polygon are rhumb lines and, in general,
+ * not geodesics.  Each side is actually defined by a linear relationship
+ * between latitude and longitude, i.e., on a rectangular/equidistant
+ * cylindrical/Plate Carr{'e}e grid, the side would appear as a
+ * straight line.  For two consecutive vertices of the polygon, 
+ * (lat_1, long1) and (lat_2,long_2), the line joining them (i.e., the
+ * polygon's side) is defined by:
+ *                                     lat_2  -  lat_1 
+ *     lat = lat_1 + (long - long_1) * ---------------
+ *                                     long_2 - long_1
+ * where long_1 < long < long_2.
+ *   The values of QbarA, etc., are determined by the integration of
+ * the Q function.  Into www.integral-calculator.com, paste this 
+ * expression :
+ *
+ * sin(x)+ (2/3)e^2(sin(x))^3 + (3/5)e^4(sin(x))^5 + (4/7)e^6(sin(x))^7
+ *
+ * and you'll get their values.  (Last checked 30 Oct 2013). 
+ *
+ * This function correctly computes (within the limits of the series
+ * approximation) the area of a quadrilateral on the ellipsoid when
+ * two of its sides run along meridians and the other two sides run
+ * along parallels of latitude.
  *
  * \param lon array of longitudes
  * \param lat array of latitudes
