@@ -3,8 +3,15 @@
 <em>i.tasscap</em> calculates Tasseled Cap (Kauth Thomas, TC) transformation
 for LANDSAT-TM data (TM4, TM5, TM7).
 
-<!-- ok, but what is Tasseled Cap ? -->
-
+The tasseled cap transformation is effectively a compression method to
+reduce multiple spectral data into a few bands. The method was originally
+developed for understanding important phenomena of crop development in
+spectral space (Kauth and Thomas 1976).
+<p>
+Tasseled cap coefficients for Landsat 7 ETM+ at-satellite reflectance
+(C. Huang et al., 2001), the conversion can be achieved with
+<em>i.landsat.toar</em>.
+<p>
 The following TC components are generated:
 
 <ul>
@@ -29,7 +36,8 @@ i.tasscap -7 band1=lsat7_2002_10 band2=lsat7_2002_20 \
 
 Results:
 
-<p><center>
+<p>
+<center>
   <table border=1>
   <tr>
     <td align=center>
@@ -73,6 +81,8 @@ Results:
 <ul>
 <li>LANDSAT-4/LANDSAT-5: TC-factor changed to CRIST et al. 1986,
                       Proc. IGARSS 1986, p.1467
+<li>Crist, E. P., 1985, A TM tasseled cap equivalent transformation for reflectance
+    factor data, Remote Sensing of Environment, 17: 301-306.
 <li>LANDSAT-7: TASSCAP factors cited from:
   DERIVATION OF A TASSELED CAP TRANSFORMATION BASED ON LANDSAT 7 AT-SATELLITE REFLECTANCE
   Chengquan Huang, Bruce Wylie, Limin Yang, Collin Homer and Gregory Zylstra Raytheon ITSS, 
