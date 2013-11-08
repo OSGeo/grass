@@ -632,7 +632,7 @@ def non_interactive(arg, geofile=None):
                     from grass.script import core as grass
                     
                     try:
-                        if geofile and geofile.find('EPSG:') > -1:
+                        if geofile and geofile.upper().find('EPSG:') > -1:
                             # create location using EPSG code
                             epsg = geofile.split(':', 1)[1]
                             grass.create_location(gisdbase, location_name,
