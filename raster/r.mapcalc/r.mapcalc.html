@@ -565,6 +565,19 @@ When testing MASK related expressions keep in mind that when MASK is active
 you don't see data in masked areas even if they are not NULL.
 See <em><a href="r.mask.html">r.mask</a></em> for details.
 
+<h3>eval function</h3>
+If the output of the computation should be only one map
+but the expression is so complex that it is better to split it
+to several expressions, the <tt>eval</tt> function can be used:
+<div class="code"><pre>
+r.mapcalc &gt;&gt;EOF
+eval(elev_200 = elevation - 200, \
+     elev_5 = 5 * elevation, \
+     elev_p = pow(elev_5, 2))
+elevation_result = (0.5 * elev_200) + 0.8 * elev_p
+EOF
+</pre></div>
+
 <h3>Random number generator initialization</h3>
 <p>The environment variable GRASS_RND_SEED is read to initialize the
 random number generator.
