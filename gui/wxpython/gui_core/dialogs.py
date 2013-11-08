@@ -551,7 +551,7 @@ class GroupDialog(wx.Dialog):
         btnApply.SetToolTipString(_("Apply changes to selected group"))
         btnClose.SetToolTipString(_("Close dialog, changes are not applied"))
 
-        btnOk.SetDefault()
+        #btnOk.SetDefault()
         
         # sizers & do layout
         # btnSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -636,11 +636,18 @@ class GroupDialog(wx.Dialog):
         # layers in group
         self.gListPanel = wx.Panel(self)
 
-        gListSizer  = wx.GridBagSizer(vgap=2, hgap=2)
+        gListSizer  = wx.GridBagSizer(vgap=3, hgap=2)
+
+        self.g_sel_all = wx.CheckBox(parent=self.gListPanel, id=wx.ID_ANY,
+                                  label=_("Select all"))
+
+        gListSizer.Add(item=self.g_sel_all,
+                       flag=wx.ALIGN_CENTER_VERTICAL,
+                       pos=(0,1))
 
         gListSizer.Add(item = wx.StaticText(parent = self.gListPanel, label = _("Pattern:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
-                      pos = (0,0))
+                      pos = (1,0))
         
         self.gfilter = wx.TextCtrl(parent=self.gListPanel, id=wx.ID_ANY,
                                   value="",
@@ -650,11 +657,11 @@ class GroupDialog(wx.Dialog):
 
         gListSizer.Add(item=self.gfilter,
                        flag=wx.EXPAND,
-                       pos=(0,1))
+                       pos=(1,1))
 
         gListSizer.Add(item = wx.StaticText(parent = self.gListPanel, 
                                            label = _("List of maps:")),
-                      flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5, pos=(1,0))
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5, pos=(2,0))
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -671,9 +678,9 @@ class GroupDialog(wx.Dialog):
         buttonSizer.Add(item = self.removeLayer)
         sizer.Add(item = buttonSizer, flag = wx.LEFT, border = 5)
         
-        gListSizer.Add(item=sizer, flag=wx.EXPAND, pos=(1,1))
+        gListSizer.Add(item=sizer, flag=wx.EXPAND, pos=(2,1))
         gListSizer.AddGrowableCol(1)
-        gListSizer.AddGrowableRow(1)
+        gListSizer.AddGrowableRow(2)
 
         self.gListPanel.SetSizer(gListSizer)
         bodySizer.Add(item=self.gListPanel, proportion=1, flag=wx.EXPAND)
@@ -681,11 +688,19 @@ class GroupDialog(wx.Dialog):
         # layers in subgroup
         self.subgListPanel = wx.Panel(self)
 
-        subgListSizer  = wx.GridBagSizer(vgap=2, hgap=2)
+        subgListSizer  = wx.GridBagSizer(vgap=3, hgap=2)
 
-        subgListSizer.Add(item = wx.StaticText(parent = self.subgListPanel, label = _("Pattern:")),
+        # select toggle
+        self.subg_sel_all = wx.CheckBox(parent=self.subgListPanel, id=wx.ID_ANY,
+                                  label=_("Select all"))
+
+        subgListSizer.Add(item=self.subg_sel_all,
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(0,1))
+
+        subgListSizer.Add(item = wx.StaticText(parent=self.subgListPanel, label=_("Pattern:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
-                      pos = (0,0))
+                      pos = (1,0))
         
         self.subgfilter = wx.TextCtrl(parent=self.subgListPanel, id=wx.ID_ANY,
                                   value="",
@@ -694,19 +709,19 @@ class GroupDialog(wx.Dialog):
         
         subgListSizer.Add(item=self.subgfilter,
                       flag=wx.EXPAND,
-                      pos=(0,1))
+                      pos=(1,1))
 
         subgListSizer.Add(item = wx.StaticText(parent = self.subgListPanel, 
                                            label = _("List of maps:")),
-                      flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5, pos=(1,0))
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5, pos=(2,0))
 
         self.subgListBox = wx.CheckListBox(parent = self.subgListPanel, id = wx.ID_ANY,
                                            size = (250, 100))
         self.subgListBox.SetToolTipString(_("Check maps from group to be included into subgroup."))
 
-        subgListSizer.Add(item=self.subgListBox, flag=wx.EXPAND, pos=(1,1))
+        subgListSizer.Add(item=self.subgListBox, flag=wx.EXPAND, pos=(2,1))
         subgListSizer.AddGrowableCol(1)
-        subgListSizer.AddGrowableRow(1)
+        subgListSizer.AddGrowableRow(2)
 
         self.subgListPanel.SetSizer(subgListSizer)
         bodySizer.Add(item=self.subgListPanel, proportion=1, flag=wx.EXPAND)
@@ -718,12 +733,15 @@ class GroupDialog(wx.Dialog):
         # bindings
         self.gfilter.Bind(wx.EVT_TEXT, self.OnGroupFilter)
         self.subgfilter.Bind(wx.EVT_TEXT, self.OnSubgroupFilter)
+        self.gLayerBox.Bind(wx.EVT_LISTBOX, self.OnGLayerCheck)
         self.subgListBox.Bind(wx.EVT_CHECKLISTBOX, self.OnSubgLayerCheck)
         self.groupSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnGroupSelected)
         self.addLayer.Bind(wx.EVT_BUTTON, self.OnAddLayer)
         self.removeLayer.Bind(wx.EVT_BUTTON, self.OnRemoveLayer)
         self.subg_chbox.Bind(wx.EVT_CHECKBOX, self.OnSubgChbox)
         self.subGroupSelect.Bind(wx.EVT_TEXT, lambda event : self.SubGroupSelected())
+        self.subg_sel_all.Bind(wx.EVT_CHECKBOX, self.OnSubgSelAll)
+        self.g_sel_all.Bind(wx.EVT_CHECKBOX, self.OnGSelAll)
 
         if self.defaultGroup:
             self.groupSelect.SetValue(self.defaultGroup)
@@ -737,6 +755,47 @@ class GroupDialog(wx.Dialog):
             self.SubgChbox(False)
         
         return bodySizer
+
+    def OnGLayerCheck(self, event):
+        self._checkGSellAll()
+
+    def OnSubgSelAll(self, event):
+        check = event.Checked()
+        for item in range(self.subgListBox.GetCount()):
+            self.CheckSubgItem(item, check)
+            
+        event.Skip()
+
+    def OnGSelAll(self, event):
+        check = event.Checked()
+        if not check:
+            self.gLayerBox.DeselectAll()
+        else:
+            for item in range(self.subgListBox.GetCount()):
+                self.gLayerBox.Select(item)
+
+        event.Skip()
+
+    def _checkGSellAll(self):
+        check = False
+
+        nsel = len(self.gLayerBox.GetSelections())
+        if self.gLayerBox.GetCount() == nsel and \
+           self.gLayerBox.GetCount() != 0:
+            check = True
+
+        self.g_sel_all.SetValue(check)
+
+    def _checkSubGSellAll(self):
+        not_all_checked = False
+        if self.subgListBox.GetCount() == 0:
+            not_all_checked = True
+        else:
+            for item in range(self.subgListBox.GetCount()):
+                if not self.subgListBox.IsChecked(item):
+                    not_all_checked = True
+        
+        self.subg_sel_all.SetValue(not not_all_checked)
 
     def OnSubgroupFilter(self, event):
         text = event.GetString()
@@ -763,6 +822,13 @@ class GroupDialog(wx.Dialog):
         m = self.subgListBox.GetString(idx)
         self.subgmaps[m] = self.subgListBox.IsChecked(idx)
         self.dataChanged = True
+        self._checkSubGSellAll()
+
+    def CheckSubgItem(self, idx, val):
+        m = self.subgListBox.GetString(idx)
+        self.subgListBox.Check(idx, val)
+        self.subgmaps[m] = val
+        self.dataChanged = val
 
     def DisableSubgroupEdit(self):
         """!Disable editation of subgroups in the dialog 
@@ -868,9 +934,12 @@ class GroupDialog(wx.Dialog):
         self.SubGroupSelected()
         self.ClearNotification()
 
+        self._checkGSellAll()
+
     def FilterGroup(self):
         maps = self._filter(self.gmaps)
         self.ShowGroupLayers(maps)
+        self._checkGSellAll()
 
     def FilterSubgroup(self):
         maps = self._filter(self.gmaps)
@@ -879,6 +948,8 @@ class GroupDialog(wx.Dialog):
         for i, m in enumerate(maps):
             if m in self.subgmaps.iterkeys() and self.subgmaps[m]:
                 self.subgListBox.Check(i)
+
+        self._checkSubGSellAll()
 
     def SubGroupSelected(self):
         """!Subgroup was selected, check if changes were apllied"""
@@ -910,6 +981,7 @@ class GroupDialog(wx.Dialog):
             else:
                 self.subgListBox.Check(i, False)
 
+        self._checkSubGSellAll()
         self.currentSubgroup = subgroup
         self.ClearNotification()
 
