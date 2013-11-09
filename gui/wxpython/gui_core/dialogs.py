@@ -763,7 +763,8 @@ class GroupDialog(wx.Dialog):
         check = event.Checked()
         for item in range(self.subgListBox.GetCount()):
             self.CheckSubgItem(item, check)
-            
+            self.dataChanged = True
+
         event.Skip()
 
     def OnGSelAll(self, event):
