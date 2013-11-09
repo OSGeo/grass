@@ -403,10 +403,10 @@ int main(int argc, char *argv[])
 			    }
 			}
 		    }
-		    Vect_write_line(&Out, type, Points, Cats);
 		    nmodified++;
 		}
 	    }
+	    Vect_write_line(&Out, type, Points, Cats);
 	}
 	Vect_destroy_cats_struct(TCats);
 	break;
