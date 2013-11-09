@@ -1,33 +1,41 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.mlist</em> searches for data files matching a pattern given by
-wildcards or POSIX Extended Regular Expressions.
+wildcards or POSIX Extended Regular Expressions. It is is an extended
+version of <em><a href="g.list.html">g.list</a></em>.
 
-<p>See the <em>g.list</em> help page for discussion of module options.
+<p>
+See also the <em>g.list</em> help page for discussion of some module
+options.
 
+<h2>NOTES</h2>
+
+The output of <em>g.mlist</em> may be useful for other programs' parameter
+input (e.g. time series for <em><a href="r.series.html">r.series</a></em>)
+when used with <em>separator=comma</em>.
 
 <h2>EXAMPLES</h2>
 
 List all available GRASS data base files:
 <div class="code"><pre>
-  g.mlist type=all
+g.mlist type=all
 </pre></div>
 
 List all raster and vector maps:
 <div class="code"><pre>
-  g.mlist type=rast,vect
+g.mlist type=rast,vect
 </pre></div>
 
 <h3>Wildcards:</h3>
 
 List all vector maps starting with letter "r":
 <div class="code"><pre>
-  g.mlist type=vect pattern="r*"
+g.mlist type=vect pattern="r*"
 </pre></div>
 
 List certain raster maps with one variable character/number:
 <div class="code"><pre>
-  g.mlist type=rast pattern="N45E00?.meters"
+g.mlist type=rast pattern="N45E00?.meters"
 </pre></div>
 
 Use of <em>exclude</em> parameter:
@@ -53,37 +61,43 @@ Use of <em>exclude</em> parameter:
 
 <h3>Regular expressions:</h3>
 
-Print out all soils map with "soils" in their name:
+List all soil maps starting with "soils" in their name:
 <div class="code"><pre>
-  g.mlist -r type=rast pattern='^soils'
+g.mlist -r type=rast pattern='^soils'
 </pre></div>
 
-Print out "tmp" if "tmp" raster map exists:
+List "tmp" if "tmp" raster map exists:
 <div class="code"><pre>
-  g.mlist -r pattern='^tmp$'
+g.mlist -r pattern='^tmp$'
 </pre></div>
 
-Print out "tmp0" ..."tmp9" if corresponding vector map exists
- (each map name linewise):
+List "tmp0" ..."tmp9" if corresponding vector map exists (each map name linewise):
 <div class="code"><pre>
-  g.mlist -r type=vect pattern='^tmp[0-9]$'
+g.mlist -r type=vect pattern='^tmp[0-9]$'
 </pre></div>
 
-Print out "tmp0" ..."tmp9" if corresponding vector map exists
- (each map name comma separated):
+List "tmp0" ..."tmp9" if corresponding vector map exists (each map name comma separated):
 <div class="code"><pre>
-  g.mlist -r type=vect separator=, pattern='^tmp[0-9]$'
+g.mlist -r type=vect separator=comma pattern='^tmp[0-9]$'
 </pre></div>
 
-This may be useful for other programs' parameter input 
-(e.g. <em><a href="r.series.html">r.series</a></em>).
 
+<h3>Extended regular expressions:</h3>
+
+List all precipitation maps for the years 1997-2012, comma separated:
+<div class="code"><pre>
+g.mlist -e type=rast separator=comma pattern="precip_total.(199[7-9]|200[0-9]|201[0-2]).sum"
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.list.html">g.list</a></em>
-<p><a href="http://en.wikipedia.org/wiki/Regular_expression">Regular expressions</a>
-(aka regex) -  from Wikipedia, the free encyclopedia
+<em>
+<a href="g.list.html">g.list</a>,
+<a href="r.series.html">r.series</a>
+</em>
+<p>
+<a href="http://en.wikipedia.org/wiki/Regular_expression">Regular expressions</a>
+(aka regex) - from Wikipedia, the free encyclopedia
 
 
 <h2>AUTHOR</h2>
@@ -91,4 +105,5 @@ This may be useful for other programs' parameter input
 Huidae Cho<br>
 grass4u@gmail.com
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
