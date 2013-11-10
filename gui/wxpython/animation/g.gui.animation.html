@@ -44,6 +44,14 @@ so please be sure your computational region is set to the geographic extent of m
 You can change the computational region (using <a href="g.region.html">g.region</a>)
 and then reload the maps to update the animation.
 
+<h2>EXAMPLES</h2>
+
+
+Load a series of raster maps into the Animation Tool:
+<div class="code"><pre>
+g.gui.animation rast=`g.mlist type=rast mapset=. sep=comma pattern="precip*"`
+</pre></div>
+
 <h2>TODO</h2>
 <ul>
   <li>export animation</li>
@@ -68,6 +76,8 @@ and then reload the maps to update the animation.
   <a href="g.gui.psmap.html">g.gui.psmap</a>,
   <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>,
   <a href="g.gui.vdigit.html">g.gui.vdigit</a>
+  <br>
+  <a href="g.mlist.html">g.mlist</a>,
 </em>
 
 
