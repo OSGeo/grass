@@ -2065,7 +2065,7 @@ import sys
 import os
 import atexit
 
-import grass.script as grass
+from grass.script import parser, run_command
 """)
         
         # cleanup()
