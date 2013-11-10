@@ -50,10 +50,10 @@ from gui_core.forms       import GUI
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
 from gmodeler.toolbars    import ModelerToolbar
 from core.giface import Notification
+from gui_core.pystc       import PyStc
 
 from gmodeler.model       import *
 from gmodeler.dialogs     import *
-from gmodeler.pystc       import PyStc
 
 from grass.script import core as grass
 
