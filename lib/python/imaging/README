@@ -1,0 +1,40 @@
+General
+=======
+This is a part of visvis library [1], specifically visvis.vvmovie.
+The files are from the visvis-1.8 version.
+
+[1] https://code.google.com/p/visvis/
+
+Changes
+=======
+In images2avi, the image format for temporary files is changed
+from JPG to PNG, to improve the resulting AVI. This makes the size larger,
+however the JPG format is unsuitable for maps in general.
+
+--- imaging/images2avi.py	2013-11-09 21:46:28.000000000 -0500
++++ visvis-1.8/vvmovie/images2avi.py	2012-04-25 17:15:40.000000000 -0400
+@@ -79,7 +79,7 @@
+     
+     # Determine temp dir and create images
+     tempDir = os.path.join( os.path.expanduser('~'), '.tempIms')
+-    images2ims.writeIms( os.path.join(tempDir, 'im*.png'), images)
++    images2ims.writeIms( os.path.join(tempDir, 'im*.jpg'), images)
+     
+     # Determine formatter
+     N = len(images)
+@@ -93,7 +93,7 @@
+     
+     # Compile command to create avi
+     command = "ffmpeg -r %i %s " % (int(fps), inputOptions)
+-    command += "-i im%s.png " % (formatter,)
++    command += "-i im%s.jpg " % (formatter,)
+     command += "-g 1 -vcodec %s %s " % (encoding, outputOptions) 
+     command += "output.avi"
+     
+Questions
+=========
+Should we make these files PEP8 compliant? This would make
+merging of possible changes from visvis more difficult.
+
+
+
