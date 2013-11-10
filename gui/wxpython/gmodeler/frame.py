@@ -1122,16 +1122,17 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             dlg.CentreOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                 shape.SetText(dlg.GetCondition())
-                alist = list()
+                model = self.frame.GetModel()
                 ids = dlg.GetItems()
+                alist = list()
                 for aId in ids['unchecked']:
-                    action = self.frame.GetModel().GetItem(aId)
+                    action = model.GetItem(aId, objType=ModelAction)
                     action.UnSetBlock(shape)
                 for aId in ids['checked']:
-                    action = self.frame.GetModel().GetItem(aId)
+                    action = model.GetItem(aId, objType=ModelAction)
                     action.SetBlock(shape)
                     if action:
-                        alist.append(action)
+                        alist.append(aId)
                 shape.SetItems(alist)
                 self.frame.DefineLoop(shape)
                 self.frame.SetStatusText(shape.GetLog(), 0)
@@ -1145,18 +1146,17 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             if dlg.ShowModal() == wx.ID_OK:
                 shape.SetText(dlg.GetCondition())
                 model = self.frame.GetModel()
-                modelActions = model.GetItems(objType=ModelAction)
                 ids = dlg.GetItems()
                 for b in ids.keys():
                     alist = list()
-                    for idx in ids[b]['unchecked']:
-                        action = modelActions[idx]
+                    for aId in ids[b]['unchecked']:
+                        action = model.GetItem(aId, objType=ModelAction)
                         action.UnSetBlock(shape)
-                    for idx in ids[b]['checked']:
-                        action = modelActions[idx]
+                    for aId in ids[b]['checked']:
+                        action = model.GetItem(aId, objType=ModelAction)
                         action.SetBlock(shape)
                         if action:
-                            alist.append(action)
+                            alist.append(aId)
                     shape.SetItems(alist, branch = b)
                 self.frame.DefineCondition(shape)
             self.frame.GetCanvas().Refresh()
@@ -1328,7 +1328,8 @@ class VariablePanel(wx.Panel):
         
         self.list = VariableListCtrl(parent = self,
                                      columns = [_("Name"), _("Data type"),
-                                                _("Default value"), _("Description")])
+                                                _("Default value"), _("Description")],
+                                     frame = self.parent)
         
         # add new category
         self.addBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
@@ -1473,7 +1474,8 @@ class ItemPanel(wx.Panel):
         
         self.list = ItemListCtrl(parent = self,
                                  columns = [_("Name"), _("In loop"),
-                                            _("Command")])
+                                            _("Command")],
+                                 frame = self.parent)
         
         self.btnMoveUp = wx.Button(parent=self, id=wx.ID_UP)
         self.btnMoveDown = wx.Button(parent=self, id=wx.ID_DOWN)
