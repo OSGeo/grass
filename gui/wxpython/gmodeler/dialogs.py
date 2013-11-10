@@ -408,10 +408,11 @@ class ModelItemDialog(wx.Dialog):
                                     value = shape.GetText())
         
         self.itemList = ItemCheckListCtrl(parent = self.panel,
-                                          window = self,
                                           columns = [_("Name"),
                                                      _("Command")],
-                                          shape = shape)
+                                          shape = shape,
+                                          frame = parent)
+        
         self.itemList.Populate(self.parent.GetModel().GetItems())
         
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
@@ -582,7 +583,7 @@ class ModelListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin,
 #                    listmix.TextEditMixin,
                     listmix.ColumnSorterMixin):
-    def __init__(self, parent, columns, id = wx.ID_ANY,
+    def __init__(self, parent, columns, frame, id = wx.ID_ANY,
                  style = wx.LC_REPORT | wx.BORDER_NONE |
                  wx.LC_SORT_ASCENDING |wx.LC_HRULES |
                  wx.LC_VRULES, **kwargs):
@@ -590,10 +591,7 @@ class ModelListCtrl(wx.ListCtrl,
         self.parent = parent
         self.columns = columns
         self.shape = None
-        try:
-            self.frame  = parent.parent
-        except AttributeError:
-            self.frame = None
+        self.frame  = frame
         
         wx.ListCtrl.__init__(self, parent, id = id, style = style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
@@ -755,11 +753,11 @@ class VariableListCtrl(ModelListCtrl):
         menu.Destroy()
 
 class ItemListCtrl(ModelListCtrl):
-    def __init__(self, parent, columns, disablePopup = False, **kwargs):
+    def __init__(self, parent, columns, frame, disablePopup = False, **kwargs):
         """!List of model actions"""
         self.disablePopup = disablePopup
-                
-        ModelListCtrl.__init__(self, parent, columns, **kwargs)
+
+        ModelListCtrl.__init__(self, parent, columns, frame, **kwargs)
         self.SetColumnWidth(1, 100)
         self.SetColumnWidth(2, 65)
         
@@ -782,7 +780,8 @@ class ItemListCtrl(ModelListCtrl):
                 else:
                     shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['if'])
             else:
-                shapeItems = map(lambda x: x.GetId(), self.shape.GetItems())
+                shapeItems = map(lambda x: x.GetId(),
+                                 self.shape.GetItems(self.frame.GetModel().GetItems(objType=ModelAction)))
         else:
             shapeItems = list()
         
@@ -930,11 +929,12 @@ class ItemListCtrl(ModelListCtrl):
         self.Populate(model.GetItems(objType=ModelAction))
         
 class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
-    def __init__(self, parent, shape, columns, window = None, **kwargs):
+    def __init__(self, parent, shape, columns, frame, **kwargs):
         self.parent = parent
-        self.window = window
+        self.frame  = frame
         
-        ItemListCtrl.__init__(self, parent, columns, disablePopup = True, **kwargs)
+        ItemListCtrl.__init__(self, parent, columns, frame,
+                              disablePopup = True, **kwargs)
         listmix.CheckListCtrlMixin.__init__(self)
         self.SetColumnWidth(0, 100)
         
