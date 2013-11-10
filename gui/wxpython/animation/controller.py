@@ -16,20 +16,9 @@ This program is free software under the GNU General Public License
 import os
 import wx
 
-try:
-    import visvis.vvmovie as vv
-    hasVisvis = True
-except ImportError:
-    # if visvis.vvmovie is in grass python library
-    # import grass.visvis as vv
-    # 
-    # question: if integrate visvis, if integrate visvis.vvmovie or only 
-    # images2swf.py, images2gif.py?
-    hasVisvis = False
-
 from core.gcmd import GException, GError, GMessage
 from core.utils import _
-import grass.script as grass
+from grass.imaging import writeAvi, writeGif, writeIms, writeSwf
 
 from temporal_manager import TemporalManager
 from dialogs import InputDialog, EditDialog, AnimationData, ExportDialog
@@ -472,7 +461,7 @@ class AnimationController(wx.EvtHandler):
             self._dialogs['export'].Raise()
         else:
             dlg = ExportDialog(self.frame, temporal=self.temporalMode,
-                               timeTick=self.timeTick, visvis=hasVisvis)
+                               timeTick=self.timeTick)
             dlg.doExport.connect(self._export)
             self._dialogs['export'] = dlg
             dlg.Show()
@@ -549,55 +538,31 @@ class AnimationController(wx.EvtHandler):
         del busy
 
         # export
-        if exportInfo['method'] == 'sequence':
-            busy = wx.BusyInfo(message = _("Exporting images, please wait..."), parent = self.frame)
-            wx.Yield()
-            zeroPadding = len(str(len(images)))
-            for i, image in enumerate(images):
-                filename = "%s_%s.%s" % (exportInfo['prefix'], str(i + 1).zfill(zeroPadding),
-                                         exportInfo['format']['ext'])
-                image.SaveFile(os.path.join(exportInfo['directory'], filename), exportInfo['format']['type'])
-
+        pilImages = [WxImageToPil(image) for image in images]
+        busy = wx.BusyInfo(message=_("Exporting animation, please wait..."),
+                           parent=self.frame)
+        wx.Yield()
+        try:
+            if exportInfo['method'] == 'sequence':
+                filename = os.path.join(exportInfo['directory'],
+                                        exportInfo['prefix'] + '.' + exportInfo['format'].lower())
+                writeIms(filename=filename, images=pilImages)
+            elif exportInfo['method'] == 'gif':
+                writeGif(filename=exportInfo['file'], images=pilImages,
+                            duration=self.timeTick / float(1000), repeat=True)
+            elif exportInfo['method'] == 'swf':
+                writeSwf(filename=exportInfo['file'], images=pilImages,
+                            duration=self.timeTick / float(1000), repeat=True)
+            elif exportInfo['method'] == 'avi':
+                writeAvi(filename=exportInfo['file'], images=pilImages,
+                            duration=self.timeTick / float(1000),
+                            encoding=exportInfo['encoding'],
+                            inputOptions='-sameq')
+        except Exception, e:
             del busy
-
-        elif exportInfo['method'] in ('gif', 'swf', 'avi'):
-            pilImages = [WxImageToPil(image) for image in images]
-            
-
-            busy = wx.BusyInfo(message = _("Exporting animation, please wait..."), parent = self.frame)
-            wx.Yield()
-            try:
-                if exportInfo['method'] == 'gif':
-                    vv.writeGif(filename = exportInfo['file'], images = pilImages,
-                                duration = self.timeTick / float(1000), repeat = True)
-                elif exportInfo['method'] == 'swf':
-                    vv.writeSwf(filename = exportInfo['file'], images = pilImages,
-                                duration = self.timeTick / float(1000), repeat = True)
-                elif exportInfo['method'] == 'avi':
-                    vv.writeAvi(filename = exportInfo['file'], images = pilImages,
-                                duration = self.timeTick / float(1000),
-                                encoding = exportInfo['encoding'],
-                                inputOptions = '-sameq')
-            except Exception, e:
-                del busy
-                GError(parent = self.frame, message = str(e))
-                return
-            del busy
-
-
-            # image.SaveFile('/home/anna/testy/grass/export/export_%s.png' % frameIndex, wx.BITMAP_TYPE_PNG)
-
-
-            
-
-
-        
-
-        # for anim in self.animationData
-
-
-        
-
+            GError(parent=self.frame, message=str(e))
+            return
+        del busy
 
 #def test():
 #    import grass.script as grass

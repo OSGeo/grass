@@ -846,14 +846,13 @@ class AnimationData(object):
 
 
 class ExportDialog(wx.Dialog):
-    def __init__(self, parent, temporal, timeTick, visvis):
+    def __init__(self, parent, temporal, timeTick):
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = _("Export animation"),
                            style = wx.DEFAULT_DIALOG_STYLE)
         self.decorations = []
 
         self.temporal = temporal
         self.timeTick = timeTick
-        self.visvis = visvis
         self._layout()
 
         # export animation
@@ -1006,18 +1005,8 @@ class ExportDialog(wx.Dialog):
         panel = wx.Panel(notebook, id = wx.ID_ANY)
         borderSizer = wx.BoxSizer(wx.VERTICAL)
 
-        if not self.visvis:
-            isVisvisText = wx.StaticText(panel, id = wx.ID_ANY,
-                                     label = _("To enable export to GIF and SWF, please install visvis library."))
-            isVisvisText.Wrap(400)
-            borderSizer.Add(item = isVisvisText, proportion = 0,
-                            flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.ALL, border = 5)
-
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
-        if not self.visvis:
-            choices = [_("image sequence")]
-        else:
-            choices = [_("image sequence"), _("animated GIF"), _("SWF"), _("AVI")]
+        choices = [_("image sequence"), _("animated GIF"), _("SWF"), _("AVI")]
         self.formatChoice = wx.Choice(parent = panel, id = wx.ID_ANY,
                                       choices = choices)
         self.formatChoice.Bind(wx.EVT_CHOICE, lambda event: self.ChangeFormat(event.GetSelection()))
@@ -1037,13 +1026,10 @@ class ExportDialog(wx.Dialog):
         # panel for image sequence
         imSeqPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
         prefixLabel = wx.StaticText(imSeqPanel, id = wx.ID_ANY, label = _("File prefix:"))
-        self.prefixCtrl = wx.TextCtrl(imSeqPanel, id = wx.ID_ANY, value = _("animation"))
+        self.prefixCtrl = wx.TextCtrl(imSeqPanel, id = wx.ID_ANY, value = _("animation_"))
         formatLabel = wx.StaticText(imSeqPanel, id = wx.ID_ANY, label = _("File format:"))
-        self.imSeqFormatChoice = wx.Choice(imSeqPanel, id = wx.ID_ANY)
-        wildcard, ltype = GetImageHandlers(wx.EmptyImage(10, 10))
-        formats = [format for format in wildcard.split('|') if 'file' in format]
-        for format, cdata in zip(formats, ltype):
-            self.imSeqFormatChoice.Append(format, cdata)
+        imageTypes = ['PNG', 'JPEG', 'GIF', 'TIFF', 'PPM', 'BMP']
+        self.imSeqFormatChoice = wx.Choice(imSeqPanel, choices=imageTypes)
         self.imSeqFormatChoice.SetSelection(0)
         self.dirBrowse = filebrowse.DirBrowseButton(parent = imSeqPanel, id = wx.ID_ANY,
                                                     labelText = _("Directory:"),
@@ -1277,7 +1263,7 @@ class ExportDialog(wx.Dialog):
             info['method'] = 'sequence'
             info['directory'] = self.dirBrowse.GetValue()
             info['prefix'] = self.prefixCtrl.GetValue()
-            info['format'] = self.imSeqFormatChoice.GetClientData(self.imSeqFormatChoice.GetSelection())
+            info['format'] = self.imSeqFormatChoice.GetStringSelection()
 
         elif self.formatChoice.GetSelection() == 1:
             info['method'] = 'gif'
