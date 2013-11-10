@@ -921,13 +921,21 @@ class ItemListCtrl(ModelListCtrl):
         modelActions = model.GetItems(objType=ModelAction)
         idxList = dict()
         for i in items:
-            idxList[model.GetItemIndex(modelActions[i])] =  model.GetItemIndex(modelActions[i-1])
+            if up:
+                idx = i-1
+            else:
+                idx = i+1
+            idxList[model.GetItemIndex(modelActions[i])] = model.GetItemIndex(modelActions[idx])
         
         # reorganize model items
         model.ReorderItems(idxList)
         model.Normalize()
         self.Populate(model.GetItems(objType=ModelAction))
         
+        # re-selected originaly selected item
+        for item in idxList.itervalues():
+            self.SetItemState(item,  wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
+
 class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
     def __init__(self, parent, shape, columns, frame, **kwargs):
         self.parent = parent
