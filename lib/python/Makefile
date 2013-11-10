@@ -7,7 +7,7 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 PYDIR = $(ETC)/python/grass
 
-SUBDIRS = script ctypes temporal pygrass pydispatch
+SUBDIRS = script ctypes temporal pygrass pydispatch imaging
 
 default: $(PYDIR)/__init__.py
 	$(MAKE) subdirs
