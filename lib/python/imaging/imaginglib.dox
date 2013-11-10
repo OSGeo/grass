@@ -1,0 +1,33 @@
+/*! \page imaging Python library for animations
+
+
+\tableofcontents
+
+
+\section imagingIntro Introduction
+Library python.imaging is a third-party python library for animations.
+It comes from visvis project (https://code.google.com/p/visvis/), version 1.8.
+Library contains 4 main files: images2avi.py, images2gif.py, images2ims.py, images2swf.py for exporting
+AVI video file, animated GIF, series of images and SWF file format, respectively.
+There are functions for reading/writing those formats (writeAvi(), readAvi(), writeGif(), readGif(),
+writeIms(), readIms(), writeSwf(), readSwf()). Library requires PIL (Python Imaging Library) and numpy packages.
+The input of all write functions are PIL images.
+
+Please read README in library's directory.
+
+Example:
+
+\code{.py}
+from grass.imaging import writeIms
+...
+writeIms(filename=path/to/directory/anim.png, images=myPILImagesList)
+\endcode
+
+This creates files anim1.png, anim2.png, ... in path/to/directory.
+
+
+\section imagingAuthors Authors
+
+Almar Klein (see licence in header of library files)
+
+*/
