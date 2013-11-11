@@ -405,6 +405,7 @@ class SimpleAnimationSlider(AnimationSliderBase):
         self.framesCount = count
         if self.framesCount > 1:
             self.slider.SetRange(0, self.framesCount - 1)
+            self.EnableSlider(True)
         else:
             self.EnableSlider(False)
         self._setLabel()
@@ -467,6 +468,7 @@ class TimeAnimationSlider(AnimationSliderBase):
         self.framesCount = len(timeLabels)
         if self.framesCount > 1:
             self.slider.SetRange(0, self.framesCount - 1)
+            self.EnableSlider(True)
         else:
             self.EnableSlider(False)
         self._setLabel()
