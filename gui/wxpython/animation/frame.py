@@ -347,6 +347,8 @@ class AnimationSliderBase(wx.Panel):
         self.callbackFrameIndexChanged = callback
 
     def EnableSlider(self, enable = True):
+        if enable and self.framesCount <= 1:
+            enable = False  # we don't want to enable it
         self.enable = enable
         self.slider.Enable(enable)
         self.indexField.Enable(enable)
@@ -401,7 +403,10 @@ class SimpleAnimationSlider(AnimationSliderBase):
 
     def _setFrames(self, count):
         self.framesCount = count
-        self.slider.SetRange(0, self.framesCount - 1)
+        if self.framesCount > 1:
+            self.slider.SetRange(0, self.framesCount - 1)
+        else:
+            self.EnableSlider(False)
         self._setLabel()
 
     def _setLabel(self):
@@ -460,7 +465,10 @@ class TimeAnimationSlider(AnimationSliderBase):
     def _setFrames(self, timeLabels):
         self.timeLabels = timeLabels
         self.framesCount = len(timeLabels)
-        self.slider.SetRange(0, self.framesCount - 1)
+        if self.framesCount > 1:
+            self.slider.SetRange(0, self.framesCount - 1)
+        else:
+            self.EnableSlider(False)
         self._setLabel()
         # TODO: fix setting index values, until then:
         self.indexField.Disable()
