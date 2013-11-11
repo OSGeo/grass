@@ -4,8 +4,10 @@ Created on Tue Jun 26 12:38:48 2012
 
 @author: pietro
 """
+import itertools
 import fnmatch
 import os
+from sqlite3 import OperationalError
 
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -91,20 +93,19 @@ def findmaps(type, pattern=None, mapset='', location='', gisdbase=''):
         return find_in_gisdbase(type, pattern, gis)
 
 
-def remove(oldname, maptype):
+def remove(oldname, maptype, **kwargs):
     """Remove a map"""
-    grasscore.run_command('g.remove', quiet=True,
-                          **{maptype: '{old}'.format(old=oldname)})
+    kwargs.update({maptype: '{old}'.format(old=oldname)})
+    grasscore.run_command('g.remove', quiet=True, **kwargs)
 
 
-def rename(oldname, newname, maptype):
+def rename(oldname, newname, maptype, **kwargs):
     """Rename a map"""
-    grasscore.run_command('g.rename', quiet=True,
-                          **{maptype: '{old},{new}'.format(old=oldname,
-                                                           new=newname), })
+    kwargs.update({maptype: '{old},{new}'.format(old=oldname, new=newname), })
+    grasscore.run_command('g.rename', quiet=True, **kwargs)
 
 
-def copy(existingmap, newmap, maptype):
+def copy(existingmap, newmap, maptype, **kwargs):
     """Copy a map
 
     >>> copy('census', 'mycensus', 'vect')
@@ -112,9 +113,8 @@ def copy(existingmap, newmap, maptype):
     >>> remove('mynewcensus', 'vect')
 
     """
-    grasscore.run_command('g.copy', quiet=True,
-                          **{maptype: '{old},{new}'.format(old=existingmap,
-                                                           new=newmap), })
+    kwargs.update({maptype: '{old},{new}'.format(old=existingmap, new=newmap)})
+    grasscore.run_command('g.copy', quiet=True, **kwargs)
 
 
 def getenv(env):
@@ -286,3 +286,47 @@ def get_lib_path(modname, libname):
     else:
         path = None
     return path
+
+
+def split_in_chunk(iterable, lenght=10):
+    """Split a list in chunk.
+
+    >>> for chunk in split_in_chunk(range(25)): print chunk
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    [20, 21, 22, 23, 24]
+    >>> for chunk in split_in_chunk(range(25), 3): print chunk
+    [0, 1, 2]
+    [3, 4, 5]
+    [6, 7, 8]
+    [9, 10, 11]
+    [12, 13, 14]
+    [15, 16, 17]
+    [18, 19, 20]
+    [21, 22, 23]
+    [24]
+    """
+    it = iter(iterable)
+    while True:
+        chunk = tuple(itertools.islice(it, lenght))
+        if not chunk:
+            return
+        yield chunk
+
+
+def table_exist(cursor, table_name):
+    """Return True if the table exist False otherwise"""
+    try:
+        # sqlite
+        cursor.execute("SELECT name FROM sqlite_master"
+                       " WHERE type='table' AND name='%s';" % table_name)
+    except OperationalError:
+        try:
+            # pg
+            cursor.execute("SELECT EXISTS(SELECT * FROM "
+                           "information_schema.tables "
+                           "WHERE table_name=%s)" % table_name)
+        except OperationalError:
+            return False
+    one = cursor.fetchone() if cursor else None
+    return True if one and one[0] else False
