@@ -118,7 +118,7 @@ class SwipeMainToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data"""
         return self._getToolbarData((("addRaster", swipeIcons['addRast'],
-                                      self.parent.OnSelectRasters),
+                                      self.parent.OnSelectLayers),
                                      (None, ),
                                      ("tools", swipeIcons['tools'],
                                       self.OnToolMenu)

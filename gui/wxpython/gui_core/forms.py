@@ -751,7 +751,7 @@ class TaskFrame(wx.Frame):
         self.dialogClosing.emit()
         if self.get_dcmd and \
                 self.parent and \
-                self.parent.GetName() in ('LayerTree',
+                self.parent.GetName() in ('LayerTree', 'SimpleLayerManager',
                                           'MapWindow'):
             # display decorations and 
             # pressing OK or cancel after setting layer properties
