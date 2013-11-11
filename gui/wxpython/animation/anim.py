@@ -51,6 +51,8 @@ class Animation(wx.EvtHandler):
 
     def GetFrame(self, index):
         """!Returns animation frame"""
+        if len(self.frames) <= 1:  # special case handling (only 1 map)
+            return self.frames[0]
         return self.frames[index]
 
     def GetCount(self):
@@ -100,7 +102,7 @@ class Animation(wx.EvtHandler):
         if not self.IsActive():
             return
         self.currentIndex = 0
-        self.callbackEndAnimation(self.currentIndex, self.frames[self.currentIndex])
+        self.callbackEndAnimation(self.currentIndex, self.GetFrame(self.currentIndex))
 
     def _arrivedToEnd(self):
         """!Decides which action to do after animation end (stop, repeat)."""
@@ -129,7 +131,7 @@ class Animation(wx.EvtHandler):
         if not self.IsActive():
             return
 
-        self.callbackUpdateFrame(self.currentIndex, self.frames[self.currentIndex])
+        self.callbackUpdateFrame(self.currentIndex, self.GetFrame(self.currentIndex))
         if self.orientation == Orientation.FORWARD:
             self.currentIndex += 1
             if self.currentIndex == self.count:
@@ -144,7 +146,7 @@ class Animation(wx.EvtHandler):
         if not self.IsActive():
             return
         self.currentIndex = index
-        self.callbackUpdateFrame(self.currentIndex, self.frames[self.currentIndex])
+        self.callbackUpdateFrame(self.currentIndex, self.GetFrame(self.currentIndex))
 
     def PreviousFrameIndex(self):
         if not self.IsActive():
