@@ -29,6 +29,7 @@ from mapdisp            import statusbar as sb
 from core.debug         import Debug
 from core.gcmd          import GError, GMessage
 from core.utils import _
+from core.layerlist import LayerListToRendererConverter
 
 from mapswipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
 from mapswipe.mapwindow import SwipeBufferedWindow
@@ -97,6 +98,8 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self.rasters = {'first': None, 'second': None}
 
+        self._inputDialog = None
+
         # default action in map toolbar
         self.GetMapToolbar().SelectDefault()
 
@@ -143,7 +146,7 @@ class SwipeMapFrame(DoubleMapFrame):
         self.splitter.SplitVertically(self.firstMapWindow, self.secondMapWindow, 0)
         self.splitter.Init()
         if not (self.rasters['first'] and self.rasters['second']):
-            self.OnSelectRasters(event = None)
+            self.OnSelectLayers(event=None)
         
     def InitStatusbar(self):
         """!Init statusbar (default items)."""
@@ -336,28 +339,66 @@ class SwipeMapFrame(DoubleMapFrame):
         self.secondMap.region = self.firstMap.region
         self.Render(self.GetSecondWindow())
 
-    def OnSelectRasters(self, event):
-        """!Choose raster maps and rerender."""
-        dlg = SwipeMapDialog(self, first = self.rasters['first'], second = self.rasters['second'])
-        dlg.CentreOnParent()
-        if dlg.ShowModal() == wx.ID_OK:
-            maps = dlg.GetValues()
-            res1 = self.SetFirstRaster(name = maps[0])
-            res2 = self.SetSecondRaster(name = maps[1])
+    def OnSelectLayers(self, event):
+        if self._inputDialog is None:
+            dlg = SwipeMapDialog(self, first=self.rasters['first'],
+                                 second=self.rasters['second'],
+                                 firstLayerList=None, secondLayerList=None)
+            dlg.applyChanges.connect(self.OnApplyInputChanges)
+            # connect to convertor object to convert to Map
+            # store reference to convertor is needed otherwise it would be discarded
+            self._firstConverter = self._connectSimpleLmgr(dlg.GetFirstSimpleLmgr(),
+                                                           self.GetFirstMap())
+            self._secondConverter = self._connectSimpleLmgr(dlg.GetSecondSimpleLmgr(),
+                                                            self.GetSecondMap())
+            self._inputDialog = dlg
+            dlg.CentreOnParent()
+            dlg.Show()
+        else:
+            if self._inputDialog.IsShown():
+                self._inputDialog.Raise()
+                self._inputDialog.SetFocus()
+            else:
+                self._inputDialog.Show()
 
-            if not (res1 and res2):
+    def _connectSimpleLmgr(self, lmgr, renderer):
+        converter = LayerListToRendererConverter(renderer)
+        lmgr.opacityChanged.connect(converter.ChangeLayerOpacity)
+        lmgr.cmdChanged.connect(converter.ChangeLayerCmd)
+        lmgr.layerAdded.connect(converter.AddLayer)
+        lmgr.layerRemoved.connect(converter.RemoveLayer)
+        lmgr.layerActivated.connect(converter.ChangeLayerActive)
+        lmgr.layerMovedUp.connect(converter.MoveLayerUp)
+        lmgr.layerMovedDown.connect(converter.MoveLayerDown)
+        lmgr.anyChange.connect(self._simpleLmgrChanged)
+        return converter
+
+    def _simpleLmgrChanged(self):
+        if self.IsAutoRendered():
+            self.OnRender(event=None)
+
+    def OnApplyInputChanges(self):
+        first, second = self._inputDialog.GetValues()
+        if self._inputDialog.IsSimpleMode():
+            self.rasters['first'], self.rasters['second'] = first, second
+            res1 = self.SetFirstRaster(name=self.rasters['first'])
+            res2 = self.SetSecondRaster(name=self.rasters['second'])
+            if not (res1 and res2) and first and second:
                 message = ''
                 if not res1:
-                    message += _("Map <%s> not found. ") % maps[0]
+                    message += _("Map <%s> not found. ") % self.rasters['first']
                 if not res2:
-                    message += _("Map <%s> not found.") % maps[1]
-                GError(parent = self, message = message)
-                dlg.Destroy()
-            self.SetRasterNames()
+                    message += _("Map <%s> not found.") % self.rasters['second']
+                    GError(parent = self, message = message)
+                    return
             self.ZoomToMap()
+        else:
+            LayerListToRendererConverter(self.GetFirstMap()).ConvertAll(first)
+            LayerListToRendererConverter(self.GetSecondMap()).ConvertAll(second)
 
-        dlg.Destroy()
-        self.OnRender(event = None)
+        self.SetRasterNames()
+        if self.IsAutoRendered():
+            self.OnRender(event=None)
 
     def SetFirstRaster(self, name):
         """!Set raster map to first Map"""
@@ -551,10 +592,14 @@ class SwipeMapFrame(DoubleMapFrame):
         self.SendSizeEvent()
 
     def SetRasterNames(self):
-        if self.rasters['first']:
-            self.GetFirstWindow().SetRasterNameText(self.rasters['first'], 101)
-        if self.rasters['second']:
-            self.GetSecondWindow().SetRasterNameText(self.rasters['second'], 102)
+        if self._inputDialog.IsSimpleMode():
+            if self.rasters['first']:
+                self.GetFirstWindow().SetRasterNameText(self.rasters['first'], 101)
+            if self.rasters['second']:
+                self.GetSecondWindow().SetRasterNameText(self.rasters['second'], 102)
+        else:
+            self.GetFirstWindow().SetRasterNameText('', 101)
+            self.GetSecondWindow().SetRasterNameText('', 102)
 
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
