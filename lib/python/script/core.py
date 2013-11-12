@@ -88,6 +88,12 @@ def decode(string):
 
     return string
 
+def encode(string):
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        return string.encode(enc)
+
+    return string
 
 def _make_val(val):
     if isinstance(val, types.StringType) or \
@@ -324,6 +330,8 @@ def start_command(prog, flags="", overwrite=False, quiet=False,
         if opt in _popen_args:
             popts[opt] = val
         else:
+            if isinstance(val, unicode):
+                val = encode(val)
             options[opt] = val
 
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)

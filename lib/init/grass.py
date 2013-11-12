@@ -33,6 +33,8 @@ import subprocess
 import re
 import platform
 import tempfile
+import codecs 
+import locale 
 
 # Variables substituted during build process
 if 'GISBASE' in os.environ:
@@ -135,15 +137,24 @@ def message(msg):
     sys.stderr.flush()
 
 
+def openfile(path, mode='r'):
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        f = codecs.open(path, encoding=enc, mode=mode)
+    else:
+        f = open(path, mode)
+
+    return f
+    
 def readfile(path):
-    f = open(path, 'r')
+    f = openfile(path, 'r')
     s = f.read()
     f.close()
     return s
 
 
 def writefile(path, s):
-    f = open(path, 'w')
+    f = openfile(path, 'w')
     f.write(s)
     f.close()
 
@@ -238,6 +249,7 @@ def create_tmp():
         tmp = os.getenv('TMP')
     if not tmp:
         tmp = tempfile.gettempdir()
+    
     if tmp:
         tmpdir = os.path.join(tmp, "grass7-%(user)s-%(lock)s" % {'user': user,
                                                              'lock': gis_lock})
@@ -265,7 +277,11 @@ def create_gisrc():
     global gisrc, gisrcrc
     # Set the session grassrc file
     gisrc = os.path.join(tmpdir, "gisrc")
-    os.environ['GISRC'] = gisrc
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        os.environ['GISRC'] = gisrc.encode(enc)
+    else:
+        os.environ['GISRC'] = gisrc
 
     # remove invalid GISRC file to avoid disturbing error messages:
     try:
@@ -284,7 +300,7 @@ def create_gisrc():
 def read_gisrc():
     kv = {}
     try:
-        f = open(gisrc, 'r')
+        f = openfile(gisrc, 'r')
     except IOError:
         return kv
 
@@ -298,7 +314,7 @@ def read_gisrc():
 
 def read_env_file(path):
     kv = {}
-    f = open(path, 'r')
+    f = openfile(path, 'r')
     for line in f:
         k, v = line.split(':', 1)
         kv[k.strip()] = v.strip()
@@ -307,7 +323,7 @@ def read_env_file(path):
 
 
 def write_gisrc(kv):
-    f = open(gisrc, 'w')
+    f = openfile(gisrc, 'w')
     for k, v in kv.iteritems():
         f.write("%s: %s\n" % (k, v))
     f.close()
@@ -819,6 +835,10 @@ def check_lock():
 
     # Check for concurrent use
     lockfile = os.path.join(location, ".gislock")
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        lockfile = lockfile.encode(enc)
+    
     ret = call([gfile("etc", "lock"), lockfile, "%d" % os.getpid()])
     if ret == 0:
         msg = None
@@ -989,7 +1009,7 @@ def csh_startup():
     try_remove(cshrc)
     try_remove(tcshrc)
 
-    f = open(cshrc, 'w')
+    f = openfile(cshrc, 'w')
     f.write("set home = %s\n" % userhome)
     f.write("set history = 3000 savehist = 3000  noclobber ignoreeof\n")
     f.write("set histfile = %s\n" % os.path.join(os.getenv('HOME'),
@@ -1046,7 +1066,7 @@ def bash_startup():
     bashrc = os.path.join(home, ".bashrc")
     try_remove(bashrc)
 
-    f = open(bashrc, 'w')
+    f = openfile(bashrc, 'w')
     f.write("test -r ~/.alias && . ~/.alias\n")
     if os.getenv('ISISROOT'):
         f.write("PS1='ISIS-GRASS %s (%s):\w > '\n" % (grass_version, location_name))
@@ -1115,7 +1135,7 @@ def grep(string,list):
 
 def print_params():
     plat = gfile(gisbase, 'include', 'Make', 'Platform.make')
-    fileplat = open(plat)
+    fileplat = openfile(plat, 'r')
     linesplat = fileplat.readlines()
     fileplat.close()
 
@@ -1131,7 +1151,7 @@ def print_params():
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         elif arg == 'build':
             build = os.path.join(gisbase,'include','grass','confparms.h')
-            filebuild = open(build)
+            filebuild = openfile(build, 'r')
             val = filebuild.readline()
             filebuild.close()
             sys.stdout.write("%s\n" % val.strip().strip('"').strip())
@@ -1140,7 +1160,7 @@ def print_params():
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         elif arg == 'revision':
             rev = os.path.join(gisbase,'include','grass','gis.h')
-            filerev = open(rev)
+            filerev = openfile(rev, 'r')
             linesrev = filerev.readlines()
             val = grep('#define GIS_H_VERSION', linesrev)
             filerev.close()
@@ -1169,6 +1189,10 @@ def get_username():
                 pass
         if not user:
             user = "user_%d" % os.getuid()
+    
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        user = user.decode(enc)
 
 
 def parse_cmdline():
