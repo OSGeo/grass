@@ -16,3 +16,4 @@ import raster
 import vector
 import modules
 import shell
+import messages
