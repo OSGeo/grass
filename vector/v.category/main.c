@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *option_opt, *type_opt;
     struct Option *cat_opt, *field_opt, *step_opt, *id_opt;
-    struct Flag *shell;
+    struct Flag *shell, *nodb;
     FREPORT **freps;
     int nfreps, rtype, fld;
     char *desc;
@@ -137,6 +137,11 @@ int main(int argc, char *argv[])
     shell->key = 'g';
     shell->label = _("Shell script style, currently only for report");
     shell->description = _("Format: layer type count min max");
+    
+    nodb = G_define_flag();
+    nodb->key = 'n';
+    nodb->label = _("Avoid to copy the attribute table");
+    nodb->description = _("Avoid to copy the attribute table in the database");
 
     G_gisinit(argv[0]);
 
@@ -757,19 +762,21 @@ int main(int argc, char *argv[])
     }
 
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
-	option == O_SUM || option == O_TRANS) {
-	G_message(_("Copying attribute table(s)..."));
-        if (Vect_copy_tables(&In, &Out, 0))
-            G_warning(_("Failed to copy attribute table to output map"));
+        option == O_SUM || option == O_TRANS){
+        if (!nodb->answer){
+	    G_message(_("Copying attribute table(s)..."));
+            if (Vect_copy_tables(&In, &Out, 0))
+                G_warning(_("Failed to copy attribute table to output map"));
+	}
 	Vect_build(&Out);
 	Vect_close(&Out);
-
-	if (option == O_TRANS && nmodified > 0)
-	    for(i = 1; i < nfields; i++)
-		G_important_message(_("Categories copied from layer %d to layer %d"),
-				fields[0], fields[i]);
-	G_done_msg(_("%d features modified."), nmodified);
     }
+
+    if (option == O_TRANS && nmodified > 0)
+        for(i = 1; i < nfields; i++)
+	    G_important_message(_("Categories copied from layer %d to layer %d"),
+		                  fields[0], fields[i]);
+    G_done_msg(_("%d features modified."), nmodified);
     Vect_close(&In);
 
     exit(EXIT_SUCCESS);
