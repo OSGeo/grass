@@ -21,7 +21,7 @@
 #include <grass/gis.h>
 
 
-#define BUFFSIZE 256
+#define BUFFSIZE 1024
 
 #define METHOD_N           1
 #define METHOD_MIN         2
