@@ -557,7 +557,7 @@ class AnimationController(wx.EvtHandler):
                 writeAvi(filename=exportInfo['file'], images=pilImages,
                             duration=self.timeTick / float(1000),
                             encoding=exportInfo['encoding'],
-                            inputOptions='-sameq')
+                            inputOptions=exportInfo['options'])
         except Exception, e:
             del busy
             GError(parent=self.frame, message=str(e))
