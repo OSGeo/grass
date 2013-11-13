@@ -120,7 +120,9 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
        @param dbif The temporal database interface to use
     """
 
-    core.verbose(_("Aggregate %s raster maps") % (len(inputs)))
+    msgr = get_tgis_message_interface()
+
+    msgr.verbose(_("Aggregate %s raster maps") % (len(inputs)))
     output = "%s_%i" % (base, count)
 
     mapset = libgis.G_mapset()
@@ -134,11 +136,11 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
             new_map.delete(dbif)
             new_map = RasterDataset(map_id)
         else:
-            core.error(_("Raster map <%s> is already in temporal database, " \
+            msgr.error(_("Raster map <%s> is already in temporal database, " \
                          "use overwrite flag to overwrite"))
             return
 
-    core.verbose(_("Compute aggregation of maps between %(st)s - %(end)s" % {
+    msgr.verbose(_("Compute aggregation of maps between %(st)s - %(end)s" % {
                    'st': str(start), 'end': str(end)}))
 
     # Create the r.series input file

@@ -2043,12 +2043,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             statement += map.metadata.get_update_statement_mogrified(dbif)
 
             if map.get_layer():
-                core.verbose(_("Created register table <%s> for "
+                self.msgr.verbose(_("Created register table <%s> for "
                                "%s map <%s> with layer %s") %
                                 (map_register_table, map.get_type(),
                                  map.get_map_id(), map.get_layer()))
             else:
-                core.verbose(_("Created register table <%s> for %s map <%s>") %
+                self.msgr.verbose(_("Created register table <%s> for %s map <%s>") %
                                 (map_register_table, map.get_type(),
                                  map.get_map_id()))
 

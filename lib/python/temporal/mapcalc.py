@@ -80,6 +80,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
     dbif.connect()
 
     mapset = get_current_mapset()
+    msgr = get_tgis_message_interface()
 
     input_name_list = inputs.split(",")
 
@@ -101,9 +102,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
     # Sample all inputs by the first input and create a sample matrix
     if spatial:
-        core.message(_("Start spatio-temporal sampling"))
+        msgr.message(_("Start spatio-temporal sampling"))
     else:
-        core.message(_("Start temporal sampling"))
+        msgr.message(_("Start temporal sampling"))
     map_matrix = []
     id_list = []
     sample_map_list = []
@@ -120,7 +121,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
             # In case samples are not found
             if not list and len(list) == 0:
                 dbif.close()
-                core.message(_("No samples found for map calculation"))
+                msgr.message(_("No samples found for map calculation"))
                 return 0
 
             # The fist entries are the samples
@@ -147,7 +148,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                     continue
 
                 if len(maplist) > 1:
-                    core.warning(_("Found more than a single map in a sample "
+                    msgr.warning(_("Found more than a single map in a sample "
                                    "granule. Only the first map is used for "
                                    "computation. Use t.rast.aggregate.ds to "
                                    "create synchronous raster datasets."))
@@ -165,7 +166,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
         if list is None:
             dbif.close()
-            core.message(_("No maps in input dataset"))
+            msgr.message(_("No maps in input dataset"))
             return 0
 
         map_name_list = []
@@ -181,7 +182,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
     if len(map_matrix) > 0:
 
-        core.message(_("Start mapcalc computation"))
+        msgr.message(_("Start mapcalc computation"))
 
         count = 0
         # Get the number of samples
@@ -231,7 +232,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                     new_map.delete(dbif)
                     new_map = first_input.get_new_map_instance(map_id)
                 else:
-                    core.error(_("Map <%s> is already in temporal database, "
+                    msgr.error(_("Map <%s> is already in temporal database, "
                                  "use overwrite flag to overwrite"))
                     continue
 
@@ -251,7 +252,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
             map_list.append(new_map)
 
-            #core.verbose(_("Apply mapcalc expression: \"%s\"") % expr)
+            msgr.verbose(_("Apply mapcalc expression: \"%s\"") % expr)
 
             # Start the parallel r.mapcalc computation
             if type == "raster":
@@ -276,7 +277,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                 proc_list = []
 
         # Register the new maps in the output space time dataset
-        core.message(_("Start map registration in temporal database"))
+        msgr.message(_("Start map registration in temporal database"))
 
         temporal_type, semantic_type, title, description = first_input.get_initial_values()
 
