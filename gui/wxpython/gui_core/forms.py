@@ -2420,16 +2420,31 @@ class GrassGUIApp(wx.App):
         
         return True
 
+
+USAGE_MESSAGE = """Usage:
+    {name} <grass module>
+    {name} <full path to file>
+    python {name} <grass module>
+Test:
+    python {name} test
+    python {name} g.region
+    python {name} "g.region -p"
+    python {name} temporal/t.list/t.list.py"""
+
+
 if __name__ == "__main__":
     
     if len(sys.argv) == 1:
-        sys.exit(_("usage: %s <grass command>") % sys.argv[0])
-    
+        sys.exit(_(USAGE_MESSAGE).format(name=sys.argv[0]))
+
     if sys.argv[1] !=  'test':
-        q = wx.LogNull()
+        q = wx.LogNull()        
+        from core.debug import Debug
+        Debug.msg(1, "forms.py called using command: %s" % sys.argv[1])
         cmd = utils.split(sys.argv[1])
         task = gtask.grassTask(gcmd.GetRealCmd(cmd[0]))
         task.set_options(cmd[1:])
+        Debug.msg(1, "forms.py opening form for: %s" % task.get_cmd())
         app = GrassGUIApp(task)
         app.MainLoop()
     else: #Test
@@ -2437,12 +2452,15 @@ if __name__ == "__main__":
         if os.getenv("GISBASE") is not None:
             task = gtask.grassTask("d.vect")
             task.get_param('map')['value'] = "map_name"
-            task.get_flag('v')['value'] = True
+            task.get_flag('i')['value'] = True
             task.get_param('layer')['value'] = 1
             task.get_param('bcolor')['value'] = "red"
-            assert ' '.join(task.get_cmd()) == "d.vect -v map = map_name layer = 1 bcolor = red"
+            # the default parameter display is added automatically
+            assert ' '.join(task.get_cmd()) == "d.vect -i map=map_name layer=1 display=shape bcolor=red"
+            print "Creation of task successful"
         # Test interface building with handmade grassTask,
         # possibly outside of a GRASS session.
+        print "Now creating a module dialog (task frame)"
         task = gtask.grassTask()
         task.name = "TestTask"
         task.description = "This is an artificial grassTask() object intended for testing purposes."
@@ -2452,30 +2470,42 @@ if __name__ == "__main__":
             "name" : "text",
             "description" : "Descriptions go into tooltips if labels are present, like this one",
             "label" : "Enter some text",
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "hidden_text",
             "description" : "This text should not appear in the form",
-            "hidden" : True
+            "hidden" : True,
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "text_default",
             "description" : "Enter text to override the default",
-            "default" : "default text"
+            "default" : "default text",
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "text_prefilled",
             "description" : "You should see a friendly welcome message here",
-            "value" : "hello, world"
+            "value" : "hello, world",
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "plain_color",
             "description" : "This is a plain color, and it is a compulsory parameter",
             "required" : False,
             "gisprompt" : True,
-            "prompt" : "color"
+            "prompt" : "color",
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "transparent_color",
             "description" : "This color becomes transparent when set to none",
             "guisection" : "tab",
             "gisprompt" : True,
-            "prompt" : "color"
+            "prompt" : "color",
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "multi",
             "description" : "A multiple selection",
@@ -2485,40 +2515,52 @@ if __name__ == "__main__":
             'multiple': u'yes',
             'type': u'string',
             'value': '',
-            'values': ['red', 'green', u'yellow', u'blue', u'purple', u'other']
+            'values': ['red', 'green', u'yellow', u'blue', u'purple', u'other'],
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "single",
             "description" : "A single multiple-choice selection",
             'values': ['red', 'green', u'yellow', u'blue', u'purple', u'other'],
-            "guisection" : "tab"
+            "guisection" : "tab",
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "large_multi",
             "description" : "A large multiple selection",
             "gisprompt" : False,
             "multiple" : "yes",
             # values must be an array of strings
-            "values" : utils.str2rgb.keys() + map(str, utils.str2rgb.values())
+            "values" : utils.str2rgb.keys() + map(str, utils.str2rgb.values()),
+            "key_desc": ["value"],
+            "values_desc": []
             },{
             "name" : "a_file",
             "description" : "A file selector",
             "gisprompt" : True,
-            "element" : "file"
+            "element" : "file",
+            "key_desc": ["value"],
+            "values_desc": []
             }
             ]
         task.flags = [
             {
             "name" : "a",
             "description" : "Some flag, will appear in Main since it is required",
-            "required" : True
+            "required" : True,
+            "value" : False,
+            "suppress_required": False
             },{
             "name" : "b",
             "description" : "pre-filled flag, will appear in options since it is not required",
-            "value" : True
+            "value" : True,
+            "suppress_required": False
             },{
             "name" : "hidden_flag",
             "description" : "hidden flag, should not be changeable",
             "hidden" : "yes",
-            "value" : True
+            "value" : True,
+            "suppress_required": False
             }
             ]
         q = wx.LogNull()
