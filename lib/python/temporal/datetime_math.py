@@ -693,6 +693,40 @@ def compute_datetime_delta(start, end):
 ###############################################################################
 
 
+def check_datetime_string(time_string):
+    """!Check if  a string can be converted into a datetime object
+
+        Supported ISO string formats are:
+        - YYYY-mm-dd
+        - YYYY-mm-dd HH:MM:SS
+
+        Time zones are not supported
+
+        @param time_string The time string to be checked for conversion
+        @return datetime object or an error message string in case of an error
+    """
+
+    # BC is not supported
+    if time_string.find("bc") > 0:
+        return _("Dates Before Christ are not supported")
+
+    # BC is not supported
+    if time_string.find("+") > 0:
+        return _("Time zones are not supported")
+
+    if time_string.find(":") > 0:
+        time_format = "%Y-%m-%d %H:%M:%S"
+    else:
+        time_format = "%Y-%m-%d"
+
+    try:
+        return  datetime.strptime(time_string, time_format)
+    except:
+        return _("Unable to parse time string: %s"%time_string)
+
+###############################################################################
+
+
 def string_to_datetime(time_string):
     """!Convert a string into a datetime object
 
@@ -705,29 +739,13 @@ def string_to_datetime(time_string):
         @param time_string The time string to convert
         @return datetime object or None in case of an error
     """
-
-    # BC is not supported
-    if time_string.find("bc") > 0:
-        core.error("Dates Before Christ are not supported "
-                   "in the temporal database")
+    time_object = check_datetime_string(time_string)
+    if not isinstance(time_object, datetime):
+        core.error(time_object)
         return None
 
-    # BC is not supported
-    if time_string.find("+") > 0:
-        core.error("Time zones are not supported "
-                   "in the temporal database")
-        return None
+    return time_object
 
-    if time_string.find(":") > 0:
-        time_format = "%Y-%m-%d %H:%M:%S"
-    else:
-        time_format = "%Y-%m-%d"
-
-    try:
-        return  datetime.strptime(time_string, time_format)
-    except:
-        core.error("Unable to parse time string: %s"%time_string)
-        return None
 
 
 ###############################################################################

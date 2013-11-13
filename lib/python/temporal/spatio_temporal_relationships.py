@@ -36,7 +36,9 @@ class SpatioTemporalTopologyBuilder(object):
        The abstract dataset objects must be provided as a single list, or in two lists.
 
         Example:
+
         @code
+
         # We have a space time raster dataset and build a map list
         # from all registered maps ordered by start time
         maps = strds.get_registered_maps_as_objects()
@@ -587,7 +589,7 @@ class SpatioTemporalTopologyBuilder(object):
 
 def set_temoral_relationship(A, B, relation):
     if relation == "equal" or relation == "equals":
-	if A != B:
+        if A != B:
             if not B.get_equal() or \
             (B.get_equal() and \
             A not in B.get_equal()):
@@ -694,7 +696,7 @@ def set_temoral_relationship(A, B, relation):
 def set_spatial_relationship(A, B, relation):
 
     if relation == "equivalent":
-	if A != B:
+        if A != B:
             if not B.get_equivalent() or \
             (B.get_equivalent() and \
             A not in B.get_equivalent()):
@@ -788,7 +790,8 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
 ###############################################################################
 
-def print_spatio_temporal_topology_relationships(maps1, maps2=None, spatial="2D", dbif=None):
+def print_spatio_temporal_topology_relationships(maps1, maps2=None,
+                                                 spatial="2D", dbif=None):
     """!Print the temporal relationships of the
        map lists maps1 and maps2 to stdout.
 
@@ -839,7 +842,7 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     relations = None
 
     for _map in tb:
-        if relations != None:
+        if relations is not None:
             r = _map.get_number_of_relations()
             for k in r.keys():
                 relations[k] += r[k]

@@ -438,7 +438,7 @@ class AbstractMapDataset(AbstractDataset):
         """
         if start_time and not isinstance(start_time, datetime):
             if self.get_layer() is not None:
-                core.error(_("Start time must be of type datetime for %(type)s"
+                self.msgr.error(_("Start time must be of type datetime for %(type)s"
                              " map <%(id)s> with layer: %(l)s") % {
                              'type': self.get_type(), 'id': self.get_map_id(),
                              'l': self.get_layer()})
@@ -451,13 +451,13 @@ class AbstractMapDataset(AbstractDataset):
 
         if end_time and not isinstance(end_time, datetime):
             if self.get_layer():
-                core.error(_("End time must be of type datetime for %(type)s "
+                self.msgr.error(_("End time must be of type datetime for %(type)s "
                              "map <%(id)s> with layer: %(l)s") % {
                              'type': self.get_type(), 'id': self.get_map_id(),
                              'l': self.get_layer()})
                 return False
             else:
-                core.error(_("End time must be of type datetime for "
+                self.msgr.error(_("End time must be of type datetime for "
                              "%(type)s map <%(id)s>") % {
                              'type': self.get_type(), 'id': self.get_map_id()})
                 return False
@@ -465,14 +465,14 @@ class AbstractMapDataset(AbstractDataset):
         if start_time is not None and end_time is not None:
             if start_time > end_time:
                 if self.get_layer():
-                    core.error(_("End time must be greater than start time for"
+                    self.msgr.error(_("End time must be greater than start time for"
                                  " %(type)s map <%(id)s> with layer: %(l)s") % {
                                  'type': self.get_type(),
                                  'id': self.get_map_id(),
                                  'l': self.get_layer()})
                     return False
                 else:
-                    core.error(_("End time must be greater than start time "
+                    self.msgr.error(_("End time must be greater than start time "
                                  "for %(type)s map <%(id)s>") % {
                                  'type': self.get_type(),
                                  'id': self.get_map_id()})
@@ -544,12 +544,12 @@ class AbstractMapDataset(AbstractDataset):
         """
         if not self.check_relative_time_unit(unit):
             if self.get_layer() is not None:
-                core.error(_("Unsupported relative time unit type for %(type)s"
+                self.msgr.error(_("Unsupported relative time unit type for %(type)s"
                              " map <%(id)s> with layer %(l)s: %(u)s") % {
                              'type': self.get_type(), 'id': self.get_id(),
                              'l': self.get_layer(), 'u': unit})
             else:
-                core.error(_("Unsupported relative time unit type for %(type)s"
+                self.msgr.error(_("Unsupported relative time unit type for %(type)s"
                              " map <%(id)s>: %(u)s") % {
                              'type': self.get_type(), 'id': self.get_id(),
                              'u': unit})
@@ -558,12 +558,12 @@ class AbstractMapDataset(AbstractDataset):
         if start_time is not None and end_time is not None:
             if int(start_time) > int(end_time):
                 if self.get_layer() is not None:
-                    core.error(_("End time must be greater than start time for"
+                    self.msgr.error(_("End time must be greater than start time for"
                                  " %(type)s map <%(id)s> with layer %(l)s") % \
                                  {'type': self.get_type(), 'id': self.get_id(),
                                   'l': self.get_layer()})
                 else:
-                    core.error(_("End time must be greater than start time for"
+                    self.msgr.error(_("End time must be greater than start time for"
                                  " %(type)s map <%(id)s>") % {
                                  'type': self.get_type(), 'id': self.get_id()})
                 return False
@@ -867,18 +867,18 @@ class AbstractMapDataset(AbstractDataset):
             if end is not None:
                 if start >= end:
                     if self.get_layer() is not None:
-                        core.error(_("Map <%(id)s> with layer %(layer)s has "
+                        self.msgr.error(_("Map <%(id)s> with layer %(layer)s has "
                                      "incorrect time interval, start time is "
                                      "greater than end time") % {
                                      'id': self.get_map_id(),
                                      'layer': self.get_layer()})
                     else:
-                        core.error(_("Map <%s> has incorrect time interval, "
+                        self.msgr.error(_("Map <%s> has incorrect time interval, "
                                      "start time is greater than end time") % \
                                    (self.get_map_id()))
                     return False
         else:
-            core.error(_("Map <%s> has incorrect start time") %
+            self.msgr.error(_("Map <%s> has incorrect start time") %
                        (self.get_map_id()))
             return False
 
@@ -926,9 +926,9 @@ class AbstractMapDataset(AbstractDataset):
             if self.get_stds_register() is not None:
                 statement += "DROP TABLE IF EXISTS " + self.get_stds_register() + ";\n"
 
-            # Commented because of performance issue calling g.message thousend times
-            #core.verbose(_("Delete %s dataset <%s> from temporal database")
-            #             % (self.get_type(), self.get_id()))
+
+            self.msgr.verbose(_("Delete %s dataset <%s> from temporal database")
+                         % (self.get_type(), self.get_id()))
 
             # Delete yourself from the database, trigger functions will
             # take care of dependencies
@@ -966,16 +966,16 @@ class AbstractMapDataset(AbstractDataset):
            @return The SQL statements if execute=False, else an empty string
         """
 
-        # Commented because of performance issue calling g.message thousend times
-        #if self.get_layer() is not None:
-        #    core.verbose(_("Unregister %(type)s map <%(map)s> with "
-        #                   "layer %(layer)s from space time datasets" % \
-        #                 {'type':self.get_type(), 'map':self.get_map_id(),
-        #                  'layer':self.get_layer()}))
-        #else:
-        #    core.verbose(_("Unregister %(type)s map <%(map)s> "
-        #                   "from space time datasets"
-        #                 % {'type':self.get_type(), 'map':self.get_map_id()}))
+
+        if self.get_layer() is not None:
+            self.msgr.verbose(_("Unregister %(type)s map <%(map)s> with "
+                           "layer %(layer)s from space time datasets" % \
+                         {'type':self.get_type(), 'map':self.get_map_id(),
+                          'layer':self.get_layer()}))
+        else:
+            self.msgr.verbose(_("Unregister %(type)s map <%(map)s> "
+                           "from space time datasets"
+                         % {'type':self.get_type(), 'map':self.get_map_id()}))
 
         if self.get_mapset() != get_current_mapset():
             core.fatal(_("Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database."
@@ -1032,7 +1032,7 @@ class AbstractMapDataset(AbstractDataset):
                 dbif.cursor.execute(sql)
                 rows = dbif.cursor.fetchall()
         except:
-            core.error(_("Unable to select space time dataset register table "
+            self.msgr.error(_("Unable to select space time dataset register table "
                          "<%s>") % (self.get_stds_register()))
 
         if connected:
