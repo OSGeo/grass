@@ -40,6 +40,8 @@ from utils import TemporalMode, getRegisteredMaps, validateTimeseriesName, valid
 from nviztask import NvizTask
 
 from grass.pydispatch.signal import Signal
+import grass.script.core as gcore
+
 
 class SpeedDialog(wx.Dialog):
     def __init__(self, parent, title = _("Adjust speed of animation"),
@@ -1019,7 +1021,7 @@ class ExportDialog(wx.Dialog):
         helpSizer = wx.BoxSizer(wx.HORIZONTAL)
         helpSizer.AddStretchSpacer(1)
         self.formatPanelSizer = wx.BoxSizer(wx.VERTICAL)
-        helpSizer.Add(self.formatPanelSizer, proportion = 5)
+        helpSizer.Add(self.formatPanelSizer, proportion=5, flag=wx.EXPAND)
         borderSizer.Add(helpSizer, proportion = 1, flag = wx.EXPAND)
         self.formatPanels = []
 
@@ -1087,6 +1089,12 @@ class ExportDialog(wx.Dialog):
 
         # panel for avi
         aviPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
+        ffmpeg = gcore.find_program('ffmpeg', '--help')
+        if not ffmpeg:
+            warning = _("Program 'ffmpeg' was not found.\nPlease install it first "
+                        "and make sure\nit's in the PATH variable.")
+            warningLabel = wx.StaticText(parent=aviPanel, label=warning)
+            warningLabel.SetForegroundColour(wx.RED)
         self.aviBrowse = filebrowse.FileBrowseButton(parent = aviPanel, id = wx.ID_ANY,
                                                      fileMask = "AVI file (*.avi)|*.avi",
                                                      labelText = _("AVI file:"),
@@ -1095,11 +1103,22 @@ class ExportDialog(wx.Dialog):
                                                      startDirectory = os.getcwd(), fileMode = wx.SAVE)
         encodingLabel = wx.StaticText(parent = aviPanel, id = wx.ID_ANY, label = _("Video codec:"))
         self.encodingText = wx.TextCtrl(parent = aviPanel, id = wx.ID_ANY, value = 'mpeg4')
+        optionsLabel = wx.StaticText(parent=aviPanel, label=_("Additional options:"))
+        self.optionsText = wx.TextCtrl(parent=aviPanel)
+        self.optionsText.SetToolTipString(_("Consider adding '-sameq' or '-qscale 1' "
+                                            "if not satisfied with video quality. "
+                                            "Options depend on ffmpeg version."))
         aviGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
         aviGridSizer.AddGrowableCol(1)
         aviGridSizer.Add(self.aviBrowse, pos = (0, 0), span = (1, 2), flag = wx.EXPAND)
         aviGridSizer.Add(encodingLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         aviGridSizer.Add(self.encodingText, pos = (1, 1), flag = wx.EXPAND)
+        aviGridSizer.Add(optionsLabel, pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        aviGridSizer.Add(self.optionsText, pos=(2, 1), flag=wx.EXPAND)
+        if not ffmpeg:
+            aviGridSizer.Add(warningLabel, pos=(3, 0), span=(1, 2),
+                             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+
         aviPanel.SetSizer(aviGridSizer)
         aviGridSizer.Fit(aviPanel)
 
@@ -1277,6 +1296,7 @@ class ExportDialog(wx.Dialog):
             info['method'] = 'avi'
             info['file'] = self.aviBrowse.GetValue()
             info['encoding'] = self.encodingText.GetValue()
+            info['options'] = self.optionsText.GetValue()
 
         return info
 
