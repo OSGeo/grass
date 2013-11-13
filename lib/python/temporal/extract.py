@@ -53,6 +53,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
         core.fatal(_("You need to specify the base name of new created maps"))
 
     mapset = get_current_mapset()
+    msgr = get_tgis_message_interface()
 
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
@@ -108,25 +109,25 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                         new_map.delete(dbif)
                         new_map = sp.get_new_map_instance(map_id)
                     else:
-                        core.error(_("Map <%s> is already in temporal database"
+                        msgr.error(_("Map <%s> is already in temporal database"
                                      ", use overwrite flag to overwrite") %
                                     (new_map.get_map_id()))
                         continue
 
                 # Add process to the process list
                 if type == "raster":
-                    #core.verbose(_("Apply r.mapcalc expression: \"%s\"")
-                    #             % expr)
+                    msgr.verbose(_("Apply r.mapcalc expression: \"%s\"")
+                                 % expr)
                     proc_list.append(Process(target=run_mapcalc2d,
                                              args=(expr,)))
                 elif type == "raster3d":
-                    #core.verbose(_("Apply r3.mapcalc expression: \"%s\"")
-                    #             % expr)
+                    msgr.verbose(_("Apply r3.mapcalc expression: \"%s\"")
+                                 % expr)
                     proc_list.append(Process(target=run_mapcalc3d,
                                              args=(expr,)))
                 elif type == "vector":
-                    #core.verbose(_("Apply v.extract where statement: \"%s\"")
-                    #             % expression)
+                    msgr.verbose(_("Apply v.extract where statement: \"%s\"")
+                                 % expression)
                     if row["layer"]:
                         proc_list.append(Process(target=run_vector_extraction,
                                                  args=(row["name"] + "@" + \
