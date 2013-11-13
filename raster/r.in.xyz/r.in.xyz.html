@@ -189,8 +189,8 @@ and adjust bounds and/or resolution as needed before proceeding.
 Typical commands to create a DEM using a regularized spline fit:
 <div class="code"><pre>
   r.univar lidar_min
-  r.to.vect -z feature=point in=lidar_min out=lidar_min_pt
-  v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
+  r.to.vect -z type=point in=lidar_min out=lidar_min_pt
+  v.surf.rst in=lidar_min_pt elev=lidar_min.rst
 </pre></div>
 
 
@@ -215,9 +215,9 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
     # check number of non-null cells (try and keep under a few million)
   r.univar lidar_min | grep '^n:'
     # convert to points 
-  r.to.vect -z feature=point in=lidar_min out=lidar_min_pt
+  r.to.vect -z type=point in=lidar_min out=lidar_min_pt
     # interpolate using a regularized spline fit
-  v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
+  v.surf.rst in=lidar_min_pt elev=lidar_min.rst
     # set color scale to something interesting
   r.colors lidar_min.rst rule=bcyr -n -e
     # prepare a 1:1:1 scaled version for NVIZ visualization (for lat/lon input)
@@ -301,4 +301,5 @@ New Zealand</i><br>
 Extended by Volker Wichmann to support the aggregate functions
 <i>median, percentile, skewness</i> and <i>trimmed mean</i>.
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
