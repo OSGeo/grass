@@ -572,7 +572,7 @@ int main(int argc, char *argv[])
     /* allocate memory for a single row of output data */
     raster_row = Rast_allocate_buf(rtype);
 
-    G_message(_("Reading data ..."));
+    G_message(_("Reading input data..."));
 
     count_total = 0;
 
@@ -783,9 +783,10 @@ int main(int argc, char *argv[])
 
 
 	/* calc stats and output */
-	G_message(_("Writing to map ..."));
+	G_message(_("Writing to output raster map..."));
 	for (row = 0; row < rows; row++) {
 
+            G_percent(row, rows, 5);
 	    switch (method) {
 	    case METHOD_N:	/* n is a straight copy */
 		Rast_raster_cpy(raster_row,
