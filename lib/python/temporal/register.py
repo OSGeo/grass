@@ -192,6 +192,13 @@ def register_maps_in_space_time_dataset(
                                  "is not set.") % {'t': map.get_type(),
                                                    'id': map.get_map_id()})
             if start != "" and start != None:
+                # We need to check if the time is absolute and the unit was specified
+                time_object = check_datetime_string(start)
+                if isinstance(time_object, datetime) and unit:
+                    core.fatal(_("%(u)s= can only be set for relative time") % {'u': "maps"})
+                if not isinstance(time_object, datetime) and not unit:
+                    core.fatal(_("%(u)s= must be set in case of relative time stamps") % {'u': "maps"})
+
                 if unit:
                     map.set_time_to_relative()
                 else:

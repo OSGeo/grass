@@ -43,6 +43,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
     def __init__(self):
         SpatialTopologyDatasetConnector.__init__(self)
         TemporalTopologyDatasetConnector.__init__(self)
+        self.msgr = get_tgis_message_interface()
 
     def reset_topology(self):
         """!Reset any information about temporal topology"""

@@ -601,12 +601,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if self.get_temporal_type() != stds.get_temporal_type():
-            core.error(_("The space time datasets must be of "
+            self.msgr.error(_("The space time datasets must be of "
                          "the same temporal type"))
             return None
 
         if stds.get_map_time() != "interval":
-            core.error(_("The temporal map type of the sample "
+            self.msgr.error(_("The temporal map type of the sample "
                          "dataset must be interval"))
             return None
 
@@ -847,12 +847,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             use_equal = True
 
         if self.get_temporal_type() != stds.get_temporal_type():
-            core.error(_("The space time datasets must be of "
+            self.msgr.error(_("The space time datasets must be of "
                          "the same temporal type"))
             return None
 
         if stds.get_map_time() != "interval":
-            core.error(_("The temporal map type of the sample "
+            self.msgr.error(_("The temporal map type of the sample "
                          "dataset must be interval"))
             return None
 
@@ -1299,7 +1299,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if rows:
             for row in rows:
                 if row["key"] == "tgis_db_version":
-                    db_version = int(row["value"])
+                    db_version = int(float(row["value"]))
 
         if db_version >= 1:
             has_bt_columns = True
@@ -1387,7 +1387,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             except:
                 if connected:
                     dbif.close()
-                core.error(_("Unable to get map ids from register table <%s>")
+                self.msgr.error(_("Unable to get map ids from register table <%s>")
                            % (self.get_map_register()))
                 raise
 
@@ -1467,7 +1467,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
         if maps is None:
             return None
- 
+
         if not check_granularity_string(gran, maps[-1].get_temporal_type()):
             core.error(_("Wrong granularity format: %s" % (gran)))
             return None
@@ -1502,7 +1502,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             ({"ds":self.get_id()}, {"type":self.get_type()}))
 
         if not check_granularity_string(gran, self.get_temporal_type()):
-            core.error(_("Wrong granularity format: %s" % (gran)))
+            self.msgr.error(_("Wrong granularity format: %s" % (gran)))
             return False
 
         dbif, connected = init_dbif(dbif)
@@ -1762,12 +1762,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            @param ident The new identifier "name@mapset"
            @param dbif The database interface to be used
         """
-        
+
         if self.get_mapset() != get_current_mapset():
             core.fatal(_("Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database."
             " The mapset of the dataset does not match the current mapset")%\
             ({"ds":self.get_id()}, {"type":self.get_type()}))
-            
+
         dbif, connected = init_dbif(dbif)
 
         # SELECT all needed information from the database
@@ -1825,12 +1825,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # First we need to check if maps are registered in this dataset and
         # unregister them
 
-        # Commented because of performance issue calling g.message thousend
-        # times
-        # core.verbose(_("Delete space time %s  dataset <%s> from temporal "
-        #               "database") % \
-        #             (self.get_new_map_instance(ident=None).get_type(),
-        #              self.get_id()))
+        self.msgr.verbose(_("Delete space time %s  dataset <%s> from temporal "
+                      "database") % \
+                    (self.get_new_map_instance(ident=None).get_type(),
+                     self.get_id()))
 
         if self.get_mapset() != get_current_mapset():
             core.fatal(_("Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database."
@@ -1844,7 +1842,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.metadata.select(dbif)
 
         if self.get_map_register() is not None:
-            core.verbose(_("Drop map register table: %s") % (
+            self.msgr.verbose(_("Drop map register table: %s") % (
                 self.get_map_register()))
             rows = self.get_registered_maps("id", None, None, dbif)
             # Unregister each registered map in the table
@@ -1901,19 +1899,18 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             dbif.close()
             core.fatal(_("Only maps with absolute or relative valid time can "
                          "be registered"))
-        # Commented because of performance issue calling g.message thousend
-        # times
-        #if map.get_layer():
-        #    core.verbose(_("Register %s map <%s> with layer %s in space "
-        #                   "time %s dataset <%s>") % (map.get_type(),
-        #                                              map.get_map_id(),
-        #                                              map.get_layer(),
-        #                                              map.get_type(),
-        #                                              self.get_id()))
-        #else:
-        #    core.verbose(_("Register %s map <%s> in space time %s "
-        #                   "dataset <%s>") % (map.get_type(), map.get_map_id(),
-        #                                      map.get_type(), self.get_id()))
+
+        if map.get_layer():
+            self.msgr.verbose(_("Register %s map <%s> with layer %s in space "
+                           "time %s dataset <%s>") % (map.get_type(),
+                                                      map.get_map_id(),
+                                                      map.get_layer(),
+                                                      map.get_type(),
+                                                      self.get_id()))
+        else:
+            self.msgr.verbose(_("Register %s map <%s> in space time %s "
+                           "dataset <%s>") % (map.get_type(), map.get_map_id(),
+                                              map.get_type(), self.get_id()))
 
         # First select all data from the database
         map.select(dbif)
@@ -1964,10 +1961,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.set_relative_time_unit(map_rel_time_unit)
             statement += self.relative_time.get_update_all_statement_mogrified(
                 dbif)
-            # Commented because of performance issue calling g.message thousend times
-            #core.verbose(_("Set temporal unit for space time %s dataset "
-            #               "<%s> to %s") % (map.get_type(), self.get_id(),
-            #                                map_rel_time_unit))
+
+            self.msgr.verbose(_("Set temporal unit for space time %s dataset "
+                           "<%s> to %s") % (map.get_type(), self.get_id(),
+                                            map_rel_time_unit))
 
         stds_rel_time_unit = self.get_relative_time_unit()
 
@@ -2000,7 +1997,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 dbif.cursor.execute(sql, (map_id,))
                 row = dbif.cursor.fetchone()
             except:
-                core.warning(_("Error in strds_register_table request"))
+                self.msgr.warning(_("Error in strds_register_table request"))
                 raise
 
             if row is not None and row[0] == map_id:
@@ -2008,11 +2005,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     dbif.close()
 
                 if map.get_layer() is not None:
-                    core.warning(_("Map <%(map)s> with layer %(l)s is already "
+                    self.msgr.warning(_("Map <%(map)s> with layer %(l)s is already "
                                    "registered.") % {'map': map.get_map_id(),
                                                      'l': map.get_layer()})
                 else:
-                    core.warning(_("Map <%s> is already registered.") % (
+                    self.msgr.warning(_("Map <%s> is already registered.") % (
                                  map.get_map_id()))
                 return False
 
@@ -2045,16 +2042,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             map.set_stds_register(map_register_table)
             statement += map.metadata.get_update_statement_mogrified(dbif)
 
-            # Commented because of performance issue calling g.message thousend times
-            #if map.get_layer():
-            #    core.verbose(_("Created register table <%s> for "
-            #                   "%s map <%s> with layer %s") %
-            #                    (map_register_table, map.get_type(),
-            #                     map.get_map_id(), map.get_layer()))
-            #else:
-            #    core.verbose(_("Created register table <%s> for %s map <%s>") %
-            #                    (map_register_table, map.get_type(),
-            #                     map.get_map_id()))
+            if map.get_layer():
+                core.verbose(_("Created register table <%s> for "
+                               "%s map <%s> with layer %s") %
+                                (map_register_table, map.get_type(),
+                                 map.get_map_id(), map.get_layer()))
+            else:
+                core.verbose(_("Created register table <%s> for %s map <%s>") %
+                                (map_register_table, map.get_type(),
+                                 map.get_map_id()))
 
         # We need to create the table and register it
         if stds_register_table is None:
@@ -2078,10 +2074,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.set_map_register(stds_register_table)
             statement += self.metadata.get_update_statement_mogrified(dbif)
 
-            # Commented because of performance issue calling g.message thousend times
-            #core.verbose(_("Created register table <%s> for space "
-            #               "time %s  dataset <%s>") %
-            #              (stds_register_table, map.get_type(), self.get_id()))
+            self.msgr.verbose(_("Created register table <%s> for space "
+                           "time %s  dataset <%s>") %
+                          (stds_register_table, map.get_type(), self.get_id()))
 
         # We need to execute the statement at this time
         if statement != "":
@@ -2167,14 +2162,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         map_register_table = map.get_stds_register()
         stds_register_table = self.get_map_register()
 
-        # Commented because of performance issue calling g.message thousend times
-        #if map.get_layer() is not None:
-        #    core.verbose(_("Unregister %s map <%s> with layer %s") % \
-        #                 (map.get_type(), map.get_map_id(), map.get_layer()))
-        #else:
-        #    core.verbose(_("Unregister %s map <%s>") % (
-        #        map.get_type(), map.get_map_id()))
-
         # Check if the map is registered in the space time raster dataset
         if map_register_table is not None:
             if dbif.dbmi.paramstyle == "qmark":
@@ -2190,13 +2177,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # Break if the map is not registered
             if row is None:
                 if map.get_layer() is not None:
-                    core.warning(_("Map <%(map)s> with layer %(l)s is not "
+                    self.msgr.warning(_("Map <%(map)s> with layer %(l)s is not "
                                    "registered in space time dataset "
                                    "<%(base)s>") % {'map': map.get_map_id(),
                                                     'l': map.get_layer(),
                                                     'base': self.base.get_id()})
                 else:
-                    core.warning(_("Map <%(map)s> is not registered in space "
+                    self.msgr.warning(_("Map <%(map)s> is not registered in space "
                                    "time dataset <%(base)s>") % {
                                    'map': map.get_map_id(),
                                    'base': self.base.get_id()})
@@ -2262,7 +2249,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 
-        core.verbose(_("Update metadata, spatial and temporal extent from "
+        self.msgr.verbose(_("Update metadata, spatial and temporal extent from "
                        "all registered maps of <%s>") % (self.get_id()))
 
         # Nothing to do if the register is not present

@@ -43,7 +43,7 @@ class RasterDataset(AbstractMapDataset):
         >>> grass.run_command("r.mapcalc", overwrite=True,
         ... expression="strds_map_test_case = 1")
         0
-        >>> grass.run_command("r.timestamp", map="strds_map_test_case", 
+        >>> grass.run_command("r.timestamp", map="strds_map_test_case",
         ...                   date="15 jan 1999")
         0
         >>> mapset = get_current_mapset()
@@ -229,10 +229,10 @@ class RasterDataset(AbstractMapDataset):
                                                byref(ts))
 
         if check < 1:
-            core.error(_("Unable to read timestamp file "
+            self.msgr.error(_("Unable to read timestamp file "
                          "for raster map <%s>" % (self.get_map_id())))
             return False
-        
+
         return self._set_timestamp_from_grass(ts)
 
     def write_timestamp_to_grass(self):
@@ -248,11 +248,11 @@ class RasterDataset(AbstractMapDataset):
         check = libgis.G_write_raster_timestamp(self.get_name(), byref(ts))
 
         if check == -1:
-            core.error(_("Unable to create timestamp file "
+            self.msgr.error(_("Unable to create timestamp file "
                          "for raster map <%s>" % (self.get_map_id())))
 
         if check == -2:
-            core.error(_("Invalid datetime in timestamp for raster map <%s>" %
+            self.msgr.error(_("Invalid datetime in timestamp for raster map <%s>" %
                          (self.get_map_id())))
 
     def remove_timestamp_from_grass(self):
@@ -395,8 +395,8 @@ class Raster3DDataset(AbstractMapDataset):
     """!Raster3d dataset class
 
        This class provides functions to select, update, insert or delete raster3d
-       map information and valid time stamps into the SQL temporal database.       
-       
+       map information and valid time stamps into the SQL temporal database.
+
        Usage:
 
         @code
@@ -407,10 +407,10 @@ class Raster3DDataset(AbstractMapDataset):
         >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
         ... t=100.0, b=0.0, res=10.0)
         0
-        >>> grass.run_command("r3.mapcalc", overwrite=True, 
+        >>> grass.run_command("r3.mapcalc", overwrite=True,
         ...                   expression="str3ds_map_test_case = 1")
         0
-        >>> grass.run_command("r3.timestamp", map="str3ds_map_test_case", 
+        >>> grass.run_command("r3.timestamp", map="str3ds_map_test_case",
         ...                   date="15 jan 1999")
         0
         >>> mapset = get_current_mapset()
@@ -611,12 +611,12 @@ class Raster3DDataset(AbstractMapDataset):
                                                byref(ts))
 
         if check < 1:
-            core.error(_("Unable to read timestamp file "
+            self.msgr.error(_("Unable to read timestamp file "
                          "for 3D raster map <%s>" % (self.get_map_id())))
             return False
-        
+
         return self._set_timestamp_from_grass(ts)
-        
+
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata
         in the grass file system based spatial database.
@@ -630,11 +630,11 @@ class Raster3DDataset(AbstractMapDataset):
         check = libgis.G_write_raster3d_timestamp(self.get_name(), byref(ts))
 
         if check == -1:
-            core.error(_("Unable to create timestamp file "
+            self.msgr.error(_("Unable to create timestamp file "
                          "for raster3d map <%s>" % (self.get_map_id())))
 
         if check == -2:
-            core.error(_("Invalid datetime in timestamp "
+            self.msgr.error(_("Invalid datetime in timestamp "
                          "for raster3d map <%s>" % (self.get_map_id())))
 
     def remove_timestamp_from_grass(self):
@@ -645,7 +645,7 @@ class Raster3DDataset(AbstractMapDataset):
         check = libgis.G_remove_raster3d_timestamp(self.get_name())
 
         if check == -1:
-            core.error(_("Unable to remove timestamp for raster3d map <%s>" %
+            self.msgr.error(_("Unable to remove timestamp for raster3d map <%s>" %
                          (self.get_name())))
 
     def map_exists(self):
@@ -780,7 +780,7 @@ class VectorDataset(AbstractMapDataset):
 
        This class provides functions to select, update, insert or delete vector
        map information and valid time stamps into the SQL temporal database.
-       
+
        Usage:
 
         @code
@@ -794,7 +794,7 @@ class VectorDataset(AbstractMapDataset):
         >>> grass.run_command("v.random", overwrite=True, output="stvds_map_test_case",
         ... n=100, zmin=0, zmax=100, flags="z", column="elevation")
         0
-        >>> grass.run_command("v.timestamp", map="stvds_map_test_case", 
+        >>> grass.run_command("v.timestamp", map="stvds_map_test_case",
         ...                   date="15 jan 1999")
         0
         >>> mapset = get_current_mapset()
@@ -955,18 +955,18 @@ class VectorDataset(AbstractMapDataset):
             return False
 
         ts = libgis.TimeStamp()
-        check = libgis.G_read_vector_timestamp(self.get_name(), 
+        check = libgis.G_read_vector_timestamp(self.get_name(),
                                                self.get_layer(),
                                                self.get_mapset(),
                                                byref(ts))
 
         if check < 1:
-            core.error(_("Unable to read timestamp file "
+            self.msgr.error(_("Unable to read timestamp file "
                          "for vector map <%s>" % (self.get_map_id())))
             return False
-        
+
         return self._set_timestamp_from_grass(ts)
-        
+
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata in
            the grass file system based spatial database.
@@ -981,11 +981,11 @@ class VectorDataset(AbstractMapDataset):
             self.get_name(), self.get_layer(), byref(ts))
 
         if check == -1:
-            core.error(_("Unable to create timestamp file "
+            self.msgr.error(_("Unable to create timestamp file "
                          "for vector map <%s>" % (self.get_map_id())))
 
         if check == -2:
-            core.error(_("Invalid datetime in timestamp for vector map <%s>" %
+            self.msgr.error(_("Invalid datetime in timestamp for vector map <%s>" %
                          (self.get_map_id())))
 
     def remove_timestamp_from_grass(self):
@@ -998,7 +998,7 @@ class VectorDataset(AbstractMapDataset):
             self.get_name(), self.get_layer())
 
         if check == -1:
-            core.error(_("Unable to remove timestamp for vector map <%s>" %
+            self.msgr.error(_("Unable to remove timestamp for vector map <%s>" %
                          (self.get_name())))
 
     def map_exists(self):
@@ -1043,7 +1043,7 @@ class VectorDataset(AbstractMapDataset):
             # faces, kernels is still available
             libvector.Vect_set_open_level(1)  # no topology
             with_topo = False
-            core.message(_("Open map without topology support"))
+            self.msgr.message(_("Open map without topology support"))
             if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
                 core.fatal(_("Unable to open vector map <%s>" %
                              (libvector.Vect_get_full_name(byref(Map)))))
