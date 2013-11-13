@@ -313,14 +313,8 @@ int main(int argc, char *argv[])
 	scan_flag->answer = 1; /* pointer not int, so set = shell_style->answer ? */
     }
 
-    fs = delim_opt->answer;
-    if (strcmp(fs, "\\t") == 0)
-	fs = "\t";
-    if (strcmp(fs, "tab") == 0)
-	fs = "\t";
-    if (strcmp(fs, "space") == 0)
-	fs = " ";
-
+    fs = G_option_to_separator(delim_opt);
+    
     xcol = atoi(xcol_opt->answer);
     ycol = atoi(ycol_opt->answer);
     zcol = atoi(zcol_opt->answer);
