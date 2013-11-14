@@ -218,7 +218,8 @@ class SearchModuleWindow(wx.Panel):
 
     def OnKeyUp(self, event):
         """!Key or key combination pressed"""
-        if event.ControlDown() and event.GetKeyCode() == wx.WXK_RETURN:
+        if event.ControlDown() and \
+                event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER):
             self.Run()
         
     def OnItemSelected(self, node):
