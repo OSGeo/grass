@@ -1,16 +1,27 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.what.rast</em> reads raster value for each point in the vector and updates <b>col</b> 
-column in vector attribute table by this value. The column should be type
-number (integer, float, double, ... ).
+<em>v.what.rast</em> reads the raster value for each point in the vector map
+and updates <b>column</b> in the vector attribute table by this value. The
+column should be type number (integer, float, double, ... ).
 <br>
-If more points have the same category, attribute value is set to NULL.
-If raster values is NULL, attribute value is set to NULL.
+If multiple points have the same category, the attribute value is set to NULL.
+If the raster value is NULL, then attribute value is set to NULL.
+<p>
+If the <b>-p</b> flag is used, then the attribute table is not updated
+and the results are printed to <tt>stdout</tt>.
+
 
 <h2>NOTES</h2>
 
 <em>v.what.rast</em> operates on the attribute table. To modify the vector
 geometry instead, use <em>v.drape</em>.
+<p>
+Categories and values are output unsorted with the print flag. To sort them
+pipe the output of this module into the UNIX <tt>sort</tt> tool
+(<tt>sort&nbsp;-n</tt>). If you need coordinates, after sorting use
+<em>v.out.ascii</em> and the UNIX <tt>paste</tt> tool
+(<tt>paste&nbsp;-d'|'</tt>).
+
 
 <h2>EXAMPLES</h2>
 
@@ -44,6 +55,7 @@ v.db.select pnts
 v.univar map=pnts column=heights type=point
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -54,6 +66,7 @@ v.univar map=pnts column=heights type=point
 <a href="v.rast.stats.html">v.rast.stats</a>,
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
+
 
 <h2>AUTHOR</h2>
 Radim Blazek

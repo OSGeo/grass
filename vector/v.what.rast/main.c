@@ -2,12 +2,14 @@
  *
  * MODULE:       v.what.rast
  *  
- * AUTHOR(S):    Radim Blazek (using r.what)
- *               Michael Shapiro, U.S. Army Construction Engineering Research Laboratory (r.what)
- *                
+ * AUTHOR(S):    Radim Blazek (adapted from r.what)
+ *               Michael Shapiro, U.S. Army Construction Engineering
+ *                 Research Laboratory (r.what)
+ *               Hamish Bowman, University of Otago, NZ (interpolation)
+ *
  *  PURPOSE:      Query raster map
  *                
- *  COPYRIGHT:    (C) 2001, 2011 by the GRASS Development Team
+ *  COPYRIGHT:    (C) 2001-2013 by the GRASS Development Team
  * 
  *                This program is free software under the GNU General
  *                Public License (>=v2).  Read the file COPYING that
@@ -43,6 +45,7 @@ int main(int argc, char *argv[])
     {
 	struct Option *vect, *rast, *field, *col, *where;
     } opt;
+    struct Flag *print_flag;
     int Cache_size;
     struct order *cache;
     int cur_row;
@@ -87,18 +90,27 @@ int main(int argc, char *argv[])
     opt.rast->description = _("Name of existing raster map to be queried");
 
     opt.col = G_define_standard_option(G_OPT_DB_COLUMN);
-    opt.col->required = YES;
+    opt.col->required = NO;	/* YES, but suppress_required only for this option */
     opt.col->description =
 	_("Name of attribute column to be updated with the query result");
 
     opt.where = G_define_standard_option(G_OPT_DB_WHERE);
 
+    print_flag = G_define_flag();
+    print_flag->key = 'p';
+    print_flag->description =
+	_("Print categories and values instead of updating the database");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     db_init_string(&stmt);
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+
+    if (!print_flag->answer && !opt.col->answer)
+	G_fatal_error(_("Required parameter <%s> not set"), opt.col->key);
 
     G_get_window(&window);
     Vect_region_box(&window, &box);	/* T and B set to +/- PORT_DOUBLE_MAX */
@@ -109,6 +121,7 @@ int main(int argc, char *argv[])
 
     field = Vect_get_field_number(&Map, opt.field->answer);
 
+    /* FIXME: if print flag is used then a database doesn't need to exist */
     Fi = Vect_get_field(&Map, field);
     if (Fi == NULL)
 	G_fatal_error(_("Database connection not defined for layer %d"),
@@ -136,20 +149,22 @@ int main(int argc, char *argv[])
        G_fatal_error ( "Cannot read category file");
      */
 
-    /* Check column type */
-    col_type = db_column_Ctype(driver, Fi->table, opt.col->answer);
+    if (!print_flag->answer) {
+	/* Check column type */
+	col_type = db_column_Ctype(driver, Fi->table, opt.col->answer);
 
-    if (col_type == -1)
-	G_fatal_error(_("Column <%s> not found"), opt.col->answer);
+	if (col_type == -1)
+	    G_fatal_error(_("Column <%s> not found"), opt.col->answer);
 
-    if (col_type != DB_C_TYPE_INT && col_type != DB_C_TYPE_DOUBLE)
-	G_fatal_error(_("Column type not supported"));
+	if (col_type != DB_C_TYPE_INT && col_type != DB_C_TYPE_DOUBLE)
+	    G_fatal_error(_("Column type not supported"));
 
-    if (out_type == CELL_TYPE && col_type == DB_C_TYPE_DOUBLE)
-	G_warning(_("Raster type is integer and column type is float"));
+	if (out_type == CELL_TYPE && col_type == DB_C_TYPE_DOUBLE)
+	    G_warning(_("Raster type is integer and column type is float"));
 
-    if (out_type != CELL_TYPE && col_type == DB_C_TYPE_INT)
-	G_warning(_("Raster type is float and column type is integer, some data lost!!"));
+	if (out_type != CELL_TYPE && col_type == DB_C_TYPE_INT)
+	    G_warning(_("Raster type is float and column type is integer, some data lost!!"));
+    }
 
     /* Read vector points to cache */
     Cache_size = Vect_get_num_primitives(&Map, GV_POINTS);
@@ -216,6 +231,7 @@ int main(int argc, char *argv[])
 	    cache[++i] = cache[j];
 	else
 	    cache[i].count++;
+
     point_cnt = i + 1;
 
     G_debug(1, "%d vector points left after removal of duplicates",
@@ -264,98 +280,136 @@ int main(int argc, char *argv[])
     }				/* point loop */
     Rast_close(fd);
 
-    /* Update table from cache */
-    G_debug(1, "Updating db table");
 
-    /* select existing categories to array (array is sorted) */
-    select = db_select_int(driver, Fi->table, Fi->key, NULL, &catexst);
+    if (print_flag->answer) {
+	dupl_cnt = 0;
 
-    db_begin_transaction(driver);
+	G_message("%s|value", Fi->key);
 
-    norec_cnt = update_cnt = upderr_cnt = dupl_cnt = 0;
-
-    G_message("Update vector attributes...");
-    for (point = 0; point < point_cnt; point++) {
-	if (cache[point].count > 1) {
-	    G_warning(_("More points (%d) of category %d, value set to 'NULL'"),
-		      cache[point].count, cache[point].cat);
-	    dupl_cnt++;
-	}
-
-	G_percent(point, point_cnt, 2);
-
-	/* category exist in DB ? */
-	cex =
-	    (int *)bsearch((void *)&(cache[point].cat), catexst, select,
-			   sizeof(int), srch_cat);
-	if (cex == NULL) {	/* cat does not exist in DB */
-	    norec_cnt++;
-	    G_warning(_("No record for category %d in table <%s>"),
-		      cache[point].cat, Fi->table);
-	    continue;
-	}
-
-	sprintf(buf, "update %s set %s = ", Fi->table, opt.col->answer);
-
-	db_set_string(&stmt, buf);
-
-	if (out_type == CELL_TYPE) {
-	    if (cache[point].count > 1 ||
-		Rast_is_c_null_value(&cache[point].value)) {
-		sprintf(buf, "NULL");
+	for (point = 0; point < point_cnt; point++) {
+	    if (cache[point].count > 1) {
+		G_warning(_("Multiple points (%d) of category %d, value set to 'NULL'"),
+			  cache[point].count, cache[point].cat);  /* TODO: improve message */
+		dupl_cnt++;
 	    }
-	    else {
-		sprintf(buf, "%d ", cache[point].value);
-	    }
-	}
-	else {			/* FCELL or DCELL */
-	    if (cache[point].count > 1 ||
-		Rast_is_d_null_value(&cache[point].dvalue)) {
-		sprintf(buf, "NULL");
-	    }
-	    else {
-		sprintf(buf, "%.*g", width, cache[point].dvalue);
-	    }
-	}
-	db_append_string(&stmt, buf);
 
-	sprintf(buf, " where %s = %d", Fi->key, cache[point].cat);
-	db_append_string(&stmt, buf);
-	/* user provides where condition: */
-	if (opt.where->answer) {
-	    sprintf(buf, " AND %s", opt.where->answer);
-	    db_append_string(&stmt, buf);
-	}
-	G_debug(3, db_get_string(&stmt));
+	    fprintf(stdout, "%d|", cache[point].cat);
 
-	/* Update table */
-	if (db_execute_immediate(driver, &stmt) == DB_OK) {
-	    update_cnt++;
-	}
-	else {
-	    upderr_cnt++;
+	    if (out_type == CELL_TYPE) {
+		if (cache[point].count > 1 ||
+		    Rast_is_c_null_value(&cache[point].value)) {
+		    fprintf(stdout, "*");
+		}
+		else
+		    fprintf(stdout, "%d", cache[point].value);
+	    }
+	    else {		/* FCELL or DCELL */
+		if (cache[point].count > 1 ||
+		    Rast_is_d_null_value(&cache[point].dvalue)) {
+		    fprintf(stdout, "*");
+		}
+		else
+		    fprintf(stdout, "%.*g", width, cache[point].dvalue);
+	    }
+	    fprintf(stdout, "\n");
 	}
     }
-    G_percent(1, 1, 1);
+    else {
+	/* Update table from cache */
+	G_debug(1, "Updating db table");
 
-    G_debug(1, "Committing DB transaction");
-    db_commit_transaction(driver);
+	/* select existing categories to array (array is sorted) */
+	select = db_select_int(driver, Fi->table, Fi->key, NULL, &catexst);
 
-    G_free(catexst);
-    db_close_database_shutdown_driver(driver);
-    db_free_string(&stmt);
+	db_begin_transaction(driver);
+
+	norec_cnt = update_cnt = upderr_cnt = dupl_cnt = 0;
+
+	G_message("Update vector attributes...");
+	for (point = 0; point < point_cnt; point++) {
+	    if (cache[point].count > 1) {
+		G_warning(_("Multiple points (%d) of category %d, value set to 'NULL'"),
+			  cache[point].count, cache[point].cat);
+		dupl_cnt++;
+	    }
+
+	    G_percent(point, point_cnt, 2);
+
+	    /* category exist in DB ? */
+	    cex =
+		(int *)bsearch((void *)&(cache[point].cat), catexst, select,
+			       sizeof(int), srch_cat);
+	    if (cex == NULL) {	/* cat does not exist in DB */
+		norec_cnt++;
+		G_warning(_("No record for category %d in table <%s>"),
+			  cache[point].cat, Fi->table);
+		continue;
+	    }
+
+	    sprintf(buf, "update %s set %s = ", Fi->table, opt.col->answer);
+
+	    db_set_string(&stmt, buf);
+
+	    if (out_type == CELL_TYPE) {
+		if (cache[point].count > 1 ||
+		    Rast_is_c_null_value(&cache[point].value)) {
+		    sprintf(buf, "NULL");
+		}
+		else
+		    sprintf(buf, "%d ", cache[point].value);
+	    }
+	    else {		/* FCELL or DCELL */
+		if (cache[point].count > 1 ||
+		    Rast_is_d_null_value(&cache[point].dvalue)) {
+		    sprintf(buf, "NULL");
+		}
+		else
+		    sprintf(buf, "%.*g", width, cache[point].dvalue);
+	    }
+	    db_append_string(&stmt, buf);
+
+	    sprintf(buf, " where %s = %d", Fi->key, cache[point].cat);
+	    db_append_string(&stmt, buf);
+	    /* user provides where condition: */
+	    if (opt.where->answer) {
+		sprintf(buf, " AND %s", opt.where->answer);
+		db_append_string(&stmt, buf);
+	    }
+	    G_debug(3, db_get_string(&stmt));
+
+	    /* Update table */
+	    if (db_execute_immediate(driver, &stmt) == DB_OK) {
+		update_cnt++;
+	    }
+	    else {
+		upderr_cnt++;
+	    }
+	}
+	G_percent(1, 1, 1);
+
+	G_debug(1, "Committing DB transaction");
+	db_commit_transaction(driver);
+
+	G_free(catexst);
+	db_close_database_shutdown_driver(driver);
+	db_free_string(&stmt);
+    }
 
     /* Report */
     G_verbose_message(_("%d categories loaded from table"), select);
     G_verbose_message(_("%d categories loaded from vector"), point_cnt);
-    G_verbose_message(_("%d categories from vector missing in table"),
-		      norec_cnt);
+    if (!print_flag->answer)
+	G_verbose_message(_("%d categories from vector missing in table"),
+			  norec_cnt);
     if (dupl_cnt > 0)
 	G_message(_("%d duplicate categories in vector"), dupl_cnt);
-    if (upderr_cnt > 0)
-	G_warning(_("%d update errors"), upderr_cnt);
 
-    G_done_msg(_("%d records updated."), update_cnt);
+    if (!print_flag->answer) {
+	if (upderr_cnt > 0)
+	    G_warning(_("%d update errors"), upderr_cnt);
+
+	G_done_msg(_("%d records updated."), update_cnt);
+    }
 
     exit(EXIT_SUCCESS);
 }
