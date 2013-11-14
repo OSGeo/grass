@@ -39,7 +39,8 @@ int main(int argc, char *argv[])
     int width;
     int row, col;
     char buf[2000];
-    struct {
+    struct
+    {
 	struct Option *vect, *rast, *field, *col, *where;
     } opt;
     int Cache_size;
@@ -168,7 +169,7 @@ int main(int argc, char *argv[])
 	G_debug(4, "line = %d type = %d", i, type);
 
 	G_percent(i, nlines, 2);
-	
+
 	/* check type */
 	if (!(type & GV_POINTS))
 	    continue;		/* Points only */
@@ -282,7 +283,7 @@ int main(int argc, char *argv[])
 	}
 
 	G_percent(point, point_cnt, 2);
-	
+
 	/* category exist in DB ? */
 	cex =
 	    (int *)bsearch((void *)&(cache[point].cat), catexst, select,
@@ -336,7 +337,7 @@ int main(int argc, char *argv[])
 	}
     }
     G_percent(1, 1, 1);
-    
+
     G_debug(1, "Committing DB transaction");
     db_commit_transaction(driver);
 
@@ -347,13 +348,14 @@ int main(int argc, char *argv[])
     /* Report */
     G_verbose_message(_("%d categories loaded from table"), select);
     G_verbose_message(_("%d categories loaded from vector"), point_cnt);
-    G_verbose_message(_("%d categories from vector missing in table"), norec_cnt);
+    G_verbose_message(_("%d categories from vector missing in table"),
+		      norec_cnt);
     if (dupl_cnt > 0)
 	G_message(_("%d duplicate categories in vector"), dupl_cnt);
     if (upderr_cnt > 0)
 	G_warning(_("%d update errors"), upderr_cnt);
 
     G_done_msg(_("%d records updated."), update_cnt);
-        
+
     exit(EXIT_SUCCESS);
 }
