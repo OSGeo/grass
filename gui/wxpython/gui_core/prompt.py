@@ -557,7 +557,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
             self.ShowStatusText('')
             
-        elif event.GetKeyCode() == wx.WXK_RETURN and \
+        elif event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER) and \
                 self.AutoCompActive() == False:
             # run command on line when <return> is pressed
             self._runCmd(self.GetCurLine()[0].strip())
