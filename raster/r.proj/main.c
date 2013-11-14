@@ -207,7 +207,8 @@ int main(int argc, char **argv)
     list = G_define_flag();
     list->key = 'l';
     list->description = _("List raster maps in input location and exit");
-
+    list->guisection = _("Print");
+    
     nocrop = G_define_flag();
     nocrop->key = 'n';
     nocrop->description = _("Do not perform region cropping optimization");
@@ -216,13 +217,13 @@ int main(int argc, char **argv)
     print_bounds->key = 'p';
     print_bounds->description =
 	_("Print input map's bounds in the current projection and exit");
-    print_bounds->guisection = _("Target");
+    print_bounds->guisection = _("Print");
     
     gprint_bounds = G_define_flag();
     gprint_bounds->key = 'g';
     gprint_bounds->description =
 	_("Print input map's bounds in the current projection and exit (shell style)");
-    gprint_bounds->guisection = _("Target");
+    gprint_bounds->guisection = _("Print");
 
     /* The parser checks if the map already exists in current mapset,
        we switch out the check and do it
