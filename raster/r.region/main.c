@@ -58,21 +58,17 @@ int main(int argc, char *argv[])
     flag.cur = G_define_flag();
     flag.cur->key = 'c';
     flag.cur->description = _("Set from current region");
+    flag.cur->guisection = _("Existing");
 
     flag.dflt = G_define_flag();
     flag.dflt->key = 'd';
     flag.dflt->description = _("Set from default region");
+    flag.dflt->guisection = _("Existing");
 
     /* parameters */
 
-    parm.map = G_define_option();
-    parm.map->key = "map";
-    parm.map->key_desc = "name";
-    parm.map->required = YES;
-    parm.map->multiple = NO;
-    parm.map->type = TYPE_STRING;
-    parm.map->gisprompt = "old,cell,raster";
-    parm.map->description = _("Raster map to change");
+    parm.map = G_define_standard_option(G_OPT_R_MAP);
+    parm.map->description = _("Name of raster map to change");
 
     parm.region = G_define_option();
     parm.region->key = "region";
@@ -82,18 +78,21 @@ int main(int argc, char *argv[])
     parm.region->type = TYPE_STRING;
     parm.region->description = _("Set region from named region");
     parm.region->gisprompt = "old,windows,region";
-
+    parm.region->guisection = _("Existing");
+    
     parm.raster = G_define_standard_option(G_OPT_R_MAP);
     parm.raster->key = "raster";
     parm.raster->required = NO;
     parm.raster->multiple = NO;
     parm.raster->description = _("Set region to match this raster map");
+    parm.raster->guisection = _("Existing");
 
     parm.vect = G_define_standard_option(G_OPT_V_MAP);
     parm.vect->key = "vector";
     parm.vect->required = NO;
     parm.vect->multiple = NO;
     parm.vect->description = _("Set region to match this vector map");
+    parm.vect->guisection = _("Existing");
 
     parm.view = G_define_option();
     parm.view->key = "3dview";
@@ -103,6 +102,7 @@ int main(int argc, char *argv[])
     parm.view->type = TYPE_STRING;
     parm.view->description = _("Set region to match this 3dview file");
     parm.view->gisprompt = "old,3d.view,3d view";
+    parm.view->guisection = _("Existing");
 
     parm.north = G_define_option();
     parm.north->key = "n";
@@ -111,6 +111,7 @@ int main(int argc, char *argv[])
     parm.north->multiple = NO;
     parm.north->type = TYPE_STRING;
     parm.north->description = _("Value for the northern edge");
+    parm.north->guisection = _("Bounds");
 
     parm.south = G_define_option();
     parm.south->key = "s";
@@ -119,6 +120,7 @@ int main(int argc, char *argv[])
     parm.south->multiple = NO;
     parm.south->type = TYPE_STRING;
     parm.south->description = _("Value for the southern edge");
+    parm.south->guisection = _("Bounds");
 
     parm.east = G_define_option();
     parm.east->key = "e";
@@ -127,6 +129,7 @@ int main(int argc, char *argv[])
     parm.east->multiple = NO;
     parm.east->type = TYPE_STRING;
     parm.east->description = _("Value for the eastern edge");
+    parm.east->guisection = _("Bounds");
 
     parm.west = G_define_option();
     parm.west->key = "w";
@@ -135,12 +138,14 @@ int main(int argc, char *argv[])
     parm.west->multiple = NO;
     parm.west->type = TYPE_STRING;
     parm.west->description = _("Value for the western edge");
-
+    parm.west->guisection = _("Bounds");
+    
     parm.align = G_define_standard_option(G_OPT_R_MAP);
     parm.align->key = "align";
     parm.align->required = NO;
     parm.align->multiple = NO;
     parm.align->description = _("Raster map to align to");
+    parm.align->guisection = _("Existing");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
