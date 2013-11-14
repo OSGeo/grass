@@ -2444,7 +2444,7 @@ if __name__ == "__main__":
         cmd = utils.split(sys.argv[1])
         task = gtask.grassTask(gcmd.GetRealCmd(cmd[0]))
         task.set_options(cmd[1:])
-        Debug.msg(1, "forms.py opening form for: %s" % task.get_cmd())
+        Debug.msg(1, "forms.py opening form for: %s" % task.get_cmd(ignoreErrors=True))
         app = GrassGUIApp(task)
         app.MainLoop()
     else: #Test
