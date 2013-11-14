@@ -646,7 +646,7 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map</label>
+        <label>Reproject raster map from different location</label>
       </module-item>
       <module-item name="r.tileset">
         <label>Tiling</label>
@@ -1135,7 +1135,7 @@
         <label>Rectify vector map</label>
       </module-item>
       <module-item name="v.proj">
-        <label>Reproject vector map</label>
+        <label>Reproject vector map from different location</label>
       </module-item>
       <separator/>
       <module-item name="v.support">
