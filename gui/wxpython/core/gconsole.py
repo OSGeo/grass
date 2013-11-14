@@ -549,10 +549,9 @@ class GConsole(wx.EvtHandler):
                         if line[0] is '#' and line[1] is '%':
                             skipInterface = False
                             break
+                    sfile.close()
                 except IOError:
                     pass
-                finally:
-                    sfile.close()
             
             if len(command) == 1 and not skipInterface:
                 try:
