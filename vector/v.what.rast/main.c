@@ -20,12 +20,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <grass/raster.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-
 #include "local_proto.h"
 
 int main(int argc, char *argv[])
@@ -33,11 +31,11 @@ int main(int argc, char *argv[])
     int i, j, nlines, type, field, cat;
     int fd;
 
-    /* struct Categories RCats; *//* TODO */
+    /* struct Categories RCats; */ /* TODO */
     struct Cell_head window;
     RASTER_MAP_TYPE out_type;
-    CELL *cell;
-    DCELL *dcell;
+    CELL *cell_row, *prev_c_row, *next_c_row;
+    DCELL *dcell_row, *prev_d_row, *next_d_row;
     int width;
     int row, col;
     char buf[2000];
@@ -45,7 +43,7 @@ int main(int argc, char *argv[])
     {
 	struct Option *vect, *rast, *field, *col, *where;
     } opt;
-    struct Flag *print_flag;
+    struct Flag *interp_flag, *print_flag;
     int Cache_size;
     struct order *cache;
     int cur_row;
@@ -95,6 +93,11 @@ int main(int argc, char *argv[])
 	_("Name of attribute column to be updated with the query result");
 
     opt.where = G_define_standard_option(G_OPT_DB_WHERE);
+
+    interp_flag = G_define_flag();
+    interp_flag->key = 'i';
+    interp_flag->description =
+	_("Interpolate values from the nearest four cells");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
@@ -209,6 +212,10 @@ int main(int argc, char *argv[])
 
 	cache[point_cnt].row = row;
 	cache[point_cnt].col = col;
+	if (interp_flag->answer) {
+	    cache[point_cnt].x = Points->x[0];
+	    cache[point_cnt].y = Points->y[0];
+	}
 	cache[point_cnt].cat = cat;
 	cache[point_cnt].count = 1;
 	point_cnt++;
@@ -250,9 +257,22 @@ int main(int argc, char *argv[])
 
     /* Allocate space for raster row */
     if (out_type == CELL_TYPE)
-	cell = Rast_allocate_c_buf();
+	cell_row = Rast_allocate_c_buf();
     else
-	dcell = Rast_allocate_d_buf();
+	dcell_row = Rast_allocate_d_buf();
+
+    if (interp_flag->answer) {
+	if (out_type == CELL_TYPE) {
+	    prev_c_row = Rast_allocate_c_buf();
+	    next_c_row = Rast_allocate_c_buf();
+	}
+	else {
+	    prev_d_row = Rast_allocate_d_buf();
+	    next_d_row = Rast_allocate_d_buf();
+	}
+
+	G_begin_distance_calculations();
+    }
 
     /* Extract raster values from file and store in cache */
     G_debug(1, "Extracting raster values");
@@ -264,18 +284,228 @@ int main(int argc, char *argv[])
 	    continue;		/* duplicate cats */
 
 	if (cur_row != cache[point].row) {
-	    if (out_type == CELL_TYPE)
-		Rast_get_c_row(fd, cell, cache[point].row);
-	    else
-		Rast_get_d_row(fd, dcell, cache[point].row);
+	    if (out_type == CELL_TYPE) {
+		Rast_get_c_row(fd, cell_row, cache[point].row);
+
+		if (interp_flag->answer) {
+		    if (cache[point].row <= 0)
+			Rast_set_null_value(prev_c_row, window.cols,
+					    out_type);
+		    else
+			Rast_get_c_row(fd, prev_c_row, cache[point].row - 1);
+
+		    if (cache[point].row + 1 > window.rows - 1)
+			Rast_set_null_value(next_c_row, window.cols,
+					    out_type);
+		    else
+			Rast_get_c_row(fd, next_c_row, cache[point].row + 1);
+		}
+	    }
+	    else {
+		Rast_get_d_row(fd, dcell_row, cache[point].row);
+
+		if (interp_flag->answer) {
+		    if (cache[point].row <= 0)
+			Rast_set_null_value(prev_d_row, window.cols,
+					    out_type);
+		    else
+			Rast_get_d_row(fd, prev_d_row, cache[point].row - 1);
+
+		    if (cache[point].row + 1 > window.rows - 1)
+			Rast_set_null_value(next_d_row, window.cols,
+					    out_type);
+		    else
+			Rast_get_d_row(fd, next_d_row, cache[point].row + 1);
+		}
+	    }
 	}
 	cur_row = cache[point].row;
 
-	if (out_type == CELL_TYPE) {
-	    cache[point].value = cell[cache[point].col];
+	if (!interp_flag->answer) {
+	    if (out_type == CELL_TYPE)
+		cache[point].value = cell_row[cache[point].col];
+	    else
+		cache[point].dvalue = dcell_row[cache[point].col];
 	}
 	else {
-	    cache[point].dvalue = dcell[cache[point].col];
+	    /* do four-way IDW */
+	    /* TODO: optimize, parallelize, and function-ize! */
+	    double distance[4], weight[4];
+	    double weightsum, valweight;
+	    int col_offset, row_offset;
+
+	    weightsum = valweight = 0;
+
+
+	    if (cache[point].x <
+		Rast_col_to_easting(cache[point].col,
+				    &window) + window.ew_res / 2)
+		col_offset = -1;
+	    else
+		col_offset = +1;
+
+	    if (cache[point].y >
+		Rast_row_to_northing(cache[point].row,
+				     &window) - window.ns_res / 2)
+		row_offset = -1;
+	    else
+		row_offset = +1;
+
+	    distance[0] = G_distance(cache[point].x, cache[point].y,
+				     Rast_col_to_easting(cache[point].col,
+							 &window) +
+				     window.ew_res / 2,
+				     Rast_row_to_northing(cache[point].row,
+							  &window) -
+				     window.ns_res / 2);
+
+	    distance[1] = G_distance(cache[point].x, cache[point].y,
+				     Rast_col_to_easting(cache[point].col +
+							 col_offset,
+							 &window) +
+				     window.ew_res / 2,
+				     Rast_row_to_northing(cache[point].row,
+							  &window) -
+				     window.ns_res / 2);
+
+	    if (row_offset == -1) {
+		distance[2] = G_distance(cache[point].x, cache[point].y,
+					 Rast_col_to_easting(cache[point].
+							     col + col_offset,
+							     &window) +
+					 window.ew_res / 2,
+					 Rast_row_to_northing(cache[point].
+							      row - 1,
+							      &window) -
+					 window.ns_res / 2);
+		distance[3] =
+		    G_distance(cache[point].x, cache[point].y,
+			       Rast_col_to_easting(cache[point].col,
+						   &window) +
+			       window.ew_res / 2,
+			       Rast_row_to_northing(cache[point].row - 1,
+						    &window) -
+			       window.ns_res / 2);
+	    }
+	    else {
+		distance[2] = G_distance(cache[point].x, cache[point].y,
+					 Rast_col_to_easting(cache[point].
+							     col + col_offset,
+							     &window) +
+					 window.ew_res / 2,
+					 Rast_row_to_northing(cache[point].
+							      row + 1,
+							      &window) -
+					 window.ns_res / 2);
+		distance[3] =
+		    G_distance(cache[point].x, cache[point].y,
+			       Rast_col_to_easting(cache[point].col,
+						   &window) +
+			       window.ew_res / 2,
+			       Rast_row_to_northing(cache[point].row + 1,
+						    &window) -
+			       window.ns_res / 2);
+	    }
+
+
+	    if (out_type == CELL_TYPE) {
+
+		CELL nearby_c_val[4];
+
+		/* avoid infinite weights */
+		if (distance[0] < GRASS_EPSILON) {
+		    cache[point].value = cell_row[cache[point].col];
+		    continue;
+		}
+
+		nearby_c_val[0] = cell_row[cache[point].col];
+
+		if (cache[point].col + col_offset < 0 ||
+		    cache[point].col + col_offset >= window.cols)	/* UNTESTED */
+		    Rast_set_null_value(&nearby_c_val[1], 1, out_type);	/* UNTESTED */
+		else
+		    nearby_c_val[1] = cell_row[cache[point].col + col_offset];
+
+		if (row_offset == -1) {
+		    if (cache[point].col + col_offset < 0 ||
+			cache[point].col + col_offset >= window.cols)
+			Rast_set_null_value(&nearby_c_val[2], 1, out_type);
+		    else
+			nearby_c_val[2] =
+			    prev_c_row[cache[point].col + col_offset];
+
+		    nearby_c_val[3] = prev_c_row[cache[point].col];
+		}
+		else {
+		    if (cache[point].col + col_offset < 0 ||
+			cache[point].col + col_offset >= window.cols)
+			Rast_set_null_value(&nearby_c_val[2], 1, out_type);
+		    else
+			nearby_c_val[2] =
+			    next_c_row[cache[point].col + col_offset];
+
+		    nearby_c_val[3] = next_c_row[cache[point].col];
+		}
+
+		for (i = 0; i < 4; i++) {
+		    if (!Rast_is_null_value(&nearby_c_val[i], out_type)) {
+			weight[i] = 1.0 / (distance[i] * distance[i]);
+			weightsum += weight[i];
+			valweight += weight[i] * nearby_c_val[i];
+		    }
+		}
+
+		cache[point].value = valweight / weightsum;
+	    }
+	    else {
+		DCELL nearby_d_val[4];
+
+		/* avoid infinite weights */
+		if (distance[0] < GRASS_EPSILON) {
+		    cache[point].dvalue = dcell_row[cache[point].col];
+		    continue;
+		}
+
+		nearby_d_val[0] = dcell_row[cache[point].col];
+
+		if (cache[point].col + col_offset < 0 ||
+		    cache[point].col + col_offset >= window.cols)
+		    Rast_set_null_value(&nearby_d_val[1], 1, out_type);
+		else
+		    nearby_d_val[1] =
+			dcell_row[cache[point].col + col_offset];
+
+		if (row_offset == -1) {
+		    if (cache[point].col + col_offset < 0 ||
+			cache[point].col + col_offset >= window.cols)
+			Rast_set_null_value(&nearby_d_val[2], 1, out_type);
+		    else
+			nearby_d_val[2] =
+			    prev_d_row[cache[point].col + col_offset];
+
+		    nearby_d_val[3] = prev_d_row[cache[point].col];
+		}
+		else {
+		    if (cache[point].col + col_offset < 0 ||
+			cache[point].col + col_offset >= window.cols)
+			Rast_set_null_value(&nearby_d_val[2], 1, out_type);
+		    else
+			nearby_d_val[2] =
+			    next_d_row[cache[point].col + col_offset];
+
+		    nearby_d_val[3] = next_d_row[cache[point].col];
+		}
+
+		for (i = 0; i < 4; i++) {
+		    if (!Rast_is_null_value(&nearby_d_val[i], out_type)) {
+			weight[i] = 1.0 / (distance[i] * distance[i]);
+			weightsum += weight[i];
+			valweight += weight[i] * nearby_d_val[i];
+		    }
+		}
+
+		cache[point].dvalue = valweight / weightsum;
+	    }
 	}
     }				/* point loop */
     Rast_close(fd);

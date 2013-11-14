@@ -6,6 +6,7 @@ struct order
     int count;			/* nuber of points with category 'cat' */
     int row;
     int col;
+    double x, y;		/* used with interp flag */
     CELL value;
     DCELL dvalue;		/* used for FCELL and DCELL */
 };
