@@ -1,40 +1,46 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.oif</em> calculates the Optimum Index Factor for LANDSAT TM bands 1,2,3,4,5 and 7.
-<p>The Optimum Index Factor is calculated to determine the band combination which
-shows the maximum information when combined into a composite image. The bands
-comprising the highest scoring combination from <em>i.oif</em> are used as the 
-three color channels required for <em>d.rgb</em> or <em>r.composite</em>.
+<em>i.oif</em> calculates the Optimum Index Factor for 
+multi-spectral satellite imagery.
+
+<p>
+The Optimum Index Factor (OIF) determines the three-band combination 
+that maximizes the variability (information) in a multi-spectral 
+scene. The index is a ratio of the total variance (standard 
+deviation) within and the correlation between all possible band 
+combinations. The bands that comprise the highest scoring 
+combination from <em>i.oif</em> are used as the three color channels 
+required for <em>d.rgb</em> or <em>r.composite</em>.
+
 <p>The analysis is saved to a file in the current directory called "i.oif.result".
 
 
 <h2>NOTES</h2>
 
-Colour Composites in BGR order: important band combinations (example: 
-234 in BGR order means: B=2, G=3, R=4):
+Landsat TM:
+Colour Composites in BGR order as important Landsat TM band combinations
+(example: 234 in BGR order means: B=2, G=3, R=4):
 
 <ul>
-<li> 123: near natural ("true") colour; however, because of correlation of
-the 3 bands in visible spectrum, this combination contains not much more
-info than is contained in single band.
-
-<li> 234: sensitive to green vegetation (portrayed as red), coniferous as
-distinctly darker red than deciduous forests. Roads and water bodies are clear.
-
-<li> 243: green vegetation is green but coniferous forests aren't as clear as
-the 234 combination.
-
-<li> 247: one of the best for info pertaining to forestry. Good for operation
-scale mapping of recent harvest areas and road construction.
-
-<li> 345: contains one band from each of the main reflective units (vis, nir,
-shortwave infra). Green vegetation is green and the shortwave band shows
-vegetational stress and mortality. Roads are less evident as band 3 is blue.
-
-<li> 347: similar to 345 but depicts burned areas better.
-<li> 354: appears more like a colour infrared photo.
-<li> 374: similar to 354.
-<li> 457: shows soil texture classes (clay, loam, sandy).
+<li> 123: near natural ("true") colour; however, because of 
+correlation of the 3 bands in visible spectrum, this combination 
+contains not much more info than is contained in single band.</li>
+<li> 234: sensitive to green vegetation (portrayed as red), 
+coniferous as distinctly darker red than deciduous forests. Roads 
+and water bodies are clear.</li>
+<li> 243: green vegetation is green but coniferous forests aren't as 
+clear as the 234 combination.</li>
+<li> 247: one of the best for info pertaining to forestry. Good for 
+operation scale mapping of recent harvest areas and road 
+construction.</li>
+<li> 345: contains one band from each of the main reflective units 
+(vis, nir, shortwave infra). Green vegetation is green and the 
+shortwave band shows vegetational stress and mortality. Roads are 
+less evident as band 3 is blue.</li>
+<li> 347: similar to 345 but depicts burned areas better.</li>
+<li> 354: appears more like a colour infrared photo.</li>
+<li> 374: similar to 354.</li>
+<li> 457: shows soil texture classes (clay, loam, sandy).</li>
 </ul>
 
 <p>
@@ -56,7 +62,8 @@ i.oif image1=lsat7_2002_10 image2=lsat7_2002_20 image3=lsat7_2002_30 \
 
 <h2>REFERENCE</h2>
 
-Jensen, 1996. Introductory digital image processing. Prentice Hall, p.98. ISBN 0-13-205840-5
+Jensen, 1996. Introductory digital image processing. Prentice Hall, 
+p.98. ISBN 0-13-205840-5
 
 
 <h2>SEE ALSO</h2>
@@ -69,7 +76,7 @@ Jensen, 1996. Introductory digital image processing. Prentice Hall, p.98. ISBN 0
 </em>
 
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Markus Neteler, ITC-Irst, Trento, Italy<br>
 Updated to GRASS 5.7 by Michael Barton, Arizona State University
