@@ -17,7 +17,7 @@
       <subtoolbox name="Export3DRasterMaps"/>
       <subtoolbox name="ExportDatabaseTable"/>
       <separator/>
-      <subtoolbox name="LinkExternalFormats"/>
+      <subtoolbox name="ExternalFormats"/>
       <separator/>
       <subtoolbox name="ManageMapsAndVolumes"/>
       <subtoolbox name="MapTypeConversions"/>
@@ -472,8 +472,8 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="LinkExternalFormats">
-    <label>Link external formats</label>
+  <toolbox name="ExternalFormats">
+    <label>External formats</label>
     <items>
       <wxgui-item name="LinkExternalRasterData"/>
       <wxgui-item name="LinkExternalVectorData"/>
