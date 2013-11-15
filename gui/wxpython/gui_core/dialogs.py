@@ -1939,7 +1939,7 @@ class GdalOutputDialog(wx.Dialog):
     def _layout(self):
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
         
-        dialogSizer.Add(item = self.dsnInput, proportion = 0,
+        dialogSizer.Add(item = self.dsnInput, proportion = 1,
                         flag = wx.EXPAND)
 
         btnSizer = wx.BoxSizer(orient = wx.HORIZONTAL)
@@ -1958,7 +1958,7 @@ class GdalOutputDialog(wx.Dialog):
         self.panel.SetSizer(dialogSizer)
         dialogSizer.Fit(self.panel)
 
-        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 225, self.GetBestSize()[1])
+        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 225, self.GetBestSize()[1] + 35)
         self.SetMinSize(size)
         self.SetSize((size.width, size.height))
         self.Layout()
