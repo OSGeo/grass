@@ -1178,6 +1178,9 @@ class GdalSelect(wx.Panel):
                  exclude=None):
         """!Widget for selecting GDAL/OGR datasource, format
         
+        @todo Split into GdalSelect and OgrSelect and optionally to
+        GdalSelectOutput, OgrSelectOutput
+        
         @param parent parent window
         @param ogr    use OGR selector instead of GDAL
         @param dest   True for output (destination)
@@ -1186,6 +1189,7 @@ class GdalSelect(wx.Panel):
         """
         self.parent = parent
         self.ogr = ogr
+        self.link = link
         self.dest = dest 
         self._sourceType = None
 
@@ -1214,14 +1218,9 @@ class GdalSelect(wx.Panel):
         self.sourceMap = { 'file'   : -1,
                            'dir'    : -1,
                            'db'     : -1,
-                           'db-pg'  : -1,
                            'pro'    : -1,
                            'native' : -1 }
         idx = 0
-        if ogr and (link or dest):
-            extraLabel = " (OGR)"
-        else:
-            extraLabel = ""
         if dest:
             sources.append(_("Native"))
             self.sourceMap['native'] = idx
@@ -1229,24 +1228,21 @@ class GdalSelect(wx.Panel):
         if exclude is None:
             exclude = []
         if 'file' not in exclude:
-            sources.append(_("File") + extraLabel)
+            sources.append(_("File"))
             self.sourceMap['file'] = idx
             idx += 1
         if 'directory' not in exclude:
-            sources.append(_("Directory") + extraLabel)
+            sources.append(_("Directory"))
             self.sourceMap['dir'] = idx
             idx += 1
         if 'database' not in exclude:
-            sources.append(_("Database") + extraLabel)
+            sources.append(_("Database"))
             self.sourceMap['db'] = idx
             idx += 1
         if 'protocol' not in exclude:
-            sources.append(_("Protocol") + extraLabel)
+            sources.append(_("Protocol"))
             self.sourceMap['pro'] = idx
             idx += 1
-        if 'database' not in exclude and ogr and (link or dest):
-            sources.append(_("PostGIS (PG)"))
-            self.sourceMap['db-pg'] = idx
         self.sourceMapByIdx = {}
         for name, idx in self.sourceMap.items():
             self.sourceMapByIdx[ idx ] = name
@@ -1355,6 +1351,15 @@ class GdalSelect(wx.Panel):
         self.dbWidgets['text'].Bind(wx.EVT_TEXT, self.OnUpdate)
         self.dbWidgets['textLabel1'] = wx.StaticText(parent=self.dbPanel, label=_("Name:"))
         self.dbWidgets['textLabel2'] = wx.StaticText(parent=self.dbPanel, label=_("Name:"))
+        self.dbWidgets['featType'] = wx.RadioBox(parent=self.dbPanel, id=wx.ID_ANY, 
+                                                 label = " %s " % _("Feature type:"),
+                                                 choices = [_("simple features"), _("topological")],
+                                                 majorDimension=2,
+                                                 style = wx.RA_SPECIFY_COLS)
+        if dest:
+            self.dbWidgets['featType'].Disable()
+        else:
+            self.dbWidgets['featType'].Hide()
         browse = filebrowse.DirBrowseButton(parent=self.dbPanel, id=wx.ID_ANY, 
                                             size=globalvar.DIALOG_GSELECT_SIZE,
                                             labelText=_('Directory:'),
@@ -1394,12 +1399,29 @@ class GdalSelect(wx.Panel):
                 sourceType = 'dir'
 
         if self.dest:
-            wx.CallAfter(self._postInit, sourceType,
-                         current['format'], current.get('dsn', ''), current.get('options', ''))
+            wx.CallAfter(self._postInit, sourceType, current)
 
-
-    def _postInit(self, sourceType, format, dsn, options):
+    def _postInit(self, sourceType, data):
         """!Fill in default values."""
+        format = data.get('format', '')
+        pg = 'conninfo' in data.keys()
+        if pg:
+            dsn=''
+            for item in data.get('conninfo').split(' '):
+                k, v = item.split('=')
+                if k == 'dbname':
+                    dsn=v
+                    break
+            optList = list()
+            for k, v in data.iteritems():
+                if k in ('format', 'conninfo', 'topology'):
+                    continue
+                optList.append('%s=%s' % (k, v))
+            options = ','.join(optList)
+        else:
+            dsn = data.get('dsn')
+            options = data.get('options', '')
+        
         self.SetSourceType(sourceType)
         self.source.SetSelection(self.sourceMap[sourceType])
 
@@ -1416,6 +1438,8 @@ class GdalSelect(wx.Panel):
             if name == 'choice':
                 if dsn in self.dbWidgets[name].GetItems():
                     self.dbWidgets[name].SetStringSelection(dsn)
+                if 'topology' in data.keys():
+                    self.dbWidgets['featType'].SetSelection(1)
             else:
                 self.dbWidgets[name].SetValue(dsn)
 
@@ -1441,6 +1465,7 @@ class GdalSelect(wx.Panel):
             sizer.Add(item=self.fileWidgets['options'],
                       flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
                       pos=(1, 1))
+
         else:
             self.fileWidgets['options'].Hide()
         self.filePanel.SetSizer(sizer)
@@ -1470,7 +1495,13 @@ class GdalSelect(wx.Panel):
                       pos = (2, 0))
             sizer.Add(item=self.dirWidgets['options'],
                       flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
-                      pos=(2, 1), span=(1, 3))
+                      pos=(2, 1))
+            helpBtn = wx.Button(parent=self.dirPanel, id=wx.ID_HELP)
+            helpBtn.Bind(wx.EVT_BUTTON, self.OnHelp)
+            sizer.Add(item=helpBtn,
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
+                      pos=(2, 2))
+
             self.dirWidgets['extensionLabel'].Hide()
             self.dirWidgets['extension'].Hide()
         else:
@@ -1479,7 +1510,7 @@ class GdalSelect(wx.Panel):
         self.dirPanel.SetSizer(sizer)
 
         # database
-        sizer = wx.GridBagSizer(vgap=1, hgap=10)
+        sizer = wx.GridBagSizer(vgap=1, hgap=5)
         sizer.Add(item=wx.StaticText(parent=self.dbPanel,
                                        label = _("Format:")),
                           flag=wx.ALIGN_CENTER_VERTICAL,
@@ -1492,10 +1523,10 @@ class GdalSelect(wx.Panel):
                   pos=(1, 0))
         sizer.Add(item=self.dbWidgets['text'],
                   flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
-                  pos=(1, 1))
+                  pos=(1, 1), span=(1, 2))
         sizer.Add(item=self.dbWidgets['browse'],
                   flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
-                  pos=(2, 0), span=(1, 2))
+                  pos=(2, 0), span=(1, 3))
         sizer.Add(item=self.dbWidgets['dirbrowse'],
                   flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
                   pos=(3, 0), span=(1, 2))
@@ -1504,16 +1535,25 @@ class GdalSelect(wx.Panel):
                   pos=(4, 0))
         sizer.Add(item=self.dbWidgets['choice'],
                   flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
-                  pos=(4, 1))
+                  pos=(4, 1), span=(1, 2))
         if self.dest:
+            sizer.Add(item=self.dbWidgets['featType'],
+                      pos=(0, 2), flag=wx.EXPAND)
+
             sizer.Add(item=wx.StaticText(parent=self.dbPanel,
                                          label = _("Creation options:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (5, 0))
             sizer.Add(item=self.dbWidgets['options'],
                       flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
-                      pos=(5, 1))
-        
+                      pos=(5, 1), span=(1, 2))
+            
+            # help button
+            helpBtn = wx.Button(parent=self.dbPanel, id=wx.ID_HELP)
+            helpBtn.Bind(wx.EVT_BUTTON, self.OnHelp)
+            sizer.Add(item=helpBtn,
+                      pos=(5, 3))
+            
         else:
             self.dbWidgets['options'].Hide()
 
@@ -1591,7 +1631,7 @@ class GdalSelect(wx.Panel):
         self.changingSizer.Show(item=self.nativePanel, show=(sourceType == 'native'))
         self.changingSizer.Show(item=self.dirPanel, show=(sourceType == 'dir'))
         self.changingSizer.Show(item=self.protocolPanel, show=(sourceType == 'pro'))
-        self.changingSizer.Show(item=self.dbPanel, show=(sourceType in ('db', 'db-pg')))
+        self.changingSizer.Show(item=self.dbPanel, show=(sourceType is 'db'))
 
         self.changingSizer.Layout()
 
@@ -1604,17 +1644,13 @@ class GdalSelect(wx.Panel):
                     self.dbWidgets['format'].SetSelection(0)
             self.dbWidgets['format'].Enable()
 
-        if sourceType == 'db-pg':
-            self.dbWidgets['format'].SetItems(['PostgreSQL'])
-            self.dbWidgets['format'].SetSelection(0)
-            self.dbWidgets['format'].Disable()
-
-        if sourceType in ('db','db-pg'):
+        if sourceType == 'db':
             db = self.dbWidgets['format'].GetStringSelection()
             self.SetDatabase(db)
 
-        self.reloadDataRequired.emit(data=None)
-        self._reloadLayers()
+        if not self.dest:
+            self.reloadDataRequired.emit(data=None)
+            self._reloadLayers()
 
     def OnSettingsChanged(self, data):
         """!User changed setting"""
@@ -1637,7 +1673,7 @@ class GdalSelect(wx.Panel):
         elif data[0] == 'pro':
             self.protocolWidgets['text'].SetValue(data[2])
             self.protocolWidgets['options'].SetValue(data[3])
-        elif data[0] in ('db', 'db-pg'):
+        elif data[0] == 'db':
             name = self._getCurrentDbWidgetName()
             if name =='choice':
                 if len(data[1].split(':', 1)) > 1:
@@ -1652,8 +1688,9 @@ class GdalSelect(wx.Panel):
                 self.dbWidgets[name].SetValue(data[1])
             self.dbWidgets['options'].SetValue(data[3])
         
-        self.reloadDataRequired.emit(data=None)
-        self._reloadLayers()
+        if not self.dest:
+            self.reloadDataRequired.emit(data=None)
+            self._reloadLayers()
 
     def OnSettingsSaving(self, name):
         """!Saving data"""
@@ -1682,7 +1719,7 @@ class GdalSelect(wx.Panel):
     def GetDsn(self):
         """!Get datasource name
         """
-        if self._sourceType in ('db', 'db-pg'):
+        if self._sourceType == 'db':
             if self.dbWidgets['format'].GetStringSelection() in ('PostgreSQL',
                                                                  'PostGIS Raster driver'):
 
@@ -1725,18 +1762,20 @@ class GdalSelect(wx.Panel):
         showDirbrowse = db in ('FileGDB')
         showChoice = db in ('PostgreSQL','PostGIS WKT Raster driver',
                             'PostGIS Raster driver')
-
+        enableFeatType = self.dest and self.ogr and db in ('PostgreSQL')
         showText = not(showBrowse or showChoice or showDirbrowse)
+        
         sizer.Show(self.dbWidgets['browse'], show=showBrowse)
         sizer.Show(self.dbWidgets['dirbrowse'], show=showDirbrowse)
         sizer.Show(self.dbWidgets['choice'], show=showChoice)
         sizer.Show(self.dbWidgets['textLabel2'], show=showChoice)
         sizer.Show(self.dbWidgets['text'], show=showText)
         sizer.Show(self.dbWidgets['textLabel1'], show=showText)
+        self.dbWidgets['featType'].Enable(enableFeatType)
         if showChoice:
             # try to get list of PG databases
             dbNames = RunCommand('db.databases', quiet=True, read=True,
-                            driver='pg').splitlines()
+                                 driver='pg').splitlines()
             if dbNames is not None:
                 self.dbWidgets['choice'].SetItems(sorted(dbNames))
                 self.dbWidgets['choice'].SetSelection(0)
@@ -1763,7 +1802,8 @@ class GdalSelect(wx.Panel):
 
     def OnUpdate(self, event):
         """!Update required - load layers."""
-        self._reloadLayers()
+        if not self.dest:
+            self._reloadLayers()
 
         event.Skip()
 
@@ -1839,7 +1879,7 @@ class GdalSelect(wx.Panel):
             format = self.dirWidgets['format'].GetStringSelection()
         elif self._sourceType == 'pro':
             format = self.protocolWidgets['format'].GetStringSelection()
-        elif self._sourceType in ('db', 'db-pg'):
+        elif self._sourceType == 'db':
             format = self.dbWidgets['format'].GetStringSelection()
         else:
             format = ''
@@ -1858,11 +1898,36 @@ class GdalSelect(wx.Panel):
             options = self.dirWidgets['options'].GetValue()
         elif self._sourceType == 'pro':
             options = self.protocolWidgets['options'].GetValue()
-        elif self._sourceType in ('db', 'db-pg'):
-            options = self.dbWidgets['options'].GetValue()
+        elif self._sourceType == 'db':
+            if self.dbWidgets['featType'].GetSelection() == 1:
+                options = 'topology=yes '
+            else:
+                options = ''
+            options += self.dbWidgets['options'].GetValue()
+            
+        return options.strip()
 
-        return options
-
+    def OnHelp(self, event):
+        """!Show related manual page"""
+        cmd = ''
+        if self.dest:
+            if self.ogr:
+                cmd = 'v.external.out'
+            else:
+                cmd = 'r.external.out'
+        else:
+            if self.link:
+                if self.ogr:
+                    cmd = 'v.external'
+                else:
+                    cmd =  'r.external'
+            else:
+                if self.ogr:
+                    cmd = 'v.in.ogr'
+                else:
+                    cmd = 'r.in.gdal'
+        
+        RunCommand('g.manual', entry = cmd)
 
 class ProjSelect(wx.ComboBox):
     """!Widget for selecting input raster/vector map used by
