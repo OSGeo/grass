@@ -12,10 +12,12 @@ void define_options(struct params *params, struct flags *flags)
     params->type->options =
 	"point,line,boundary,centroid,area,face,kernel,auto";
     params->type->answer = "auto";
-    
+    params->type->guisection = _("Selection");
+
     params->layer = G_define_standard_option(G_OPT_V_FIELD);
     params->layer->description = NULL;
-    
+    params->layer->guisection = _("Selection");
+
     params->dsn = G_define_option();
     params->dsn->key = "dsn";
     params->dsn->type = TYPE_STRING;
@@ -33,7 +35,7 @@ void define_options(struct params *params, struct flags *flags)
         _("Name for output PostGIS layer");
     params->olayer->description = 
         _("If not specified, input name is used");
-    params->olayer->guisection = _("Output settings");
+    params->olayer->guisection = _("Creation");
 
     params->olink = G_define_standard_option(G_OPT_V_OUTPUT);
     params->olink->key = "olink";
@@ -55,25 +57,25 @@ void define_options(struct params *params, struct flags *flags)
     params->opts->multiple = YES;
     params->opts->type = TYPE_STRING;
     params->opts->key_desc = "key=value";
-    params->opts->guisection = _("Output settings");
+    params->opts->guisection = _("Creation");
 
     flags->table = G_define_flag();
     flags->table->key = 't';
     flags->table->description =
         _("Don't export attribute table");
-    flags->table->guisection = _("Output settings");
+    flags->table->guisection = _("Creation");
 
     flags->topo = G_define_flag();
     flags->topo->key = 'l';
     flags->topo->description =
         _("Export PostGIS topology instead of simple features");
-    flags->topo->guisection = _("Output settings");
+    flags->topo->guisection = _("Creation");
 
     flags->force2d = G_define_flag();
     flags->force2d->key = '2';
     flags->force2d->label = _("Force 2D output even if input is 3D ");
     flags->force2d->description = _("Useful if input is 3D but all z coordinates are identical");
-    flags->force2d->guisection = _("Output settings");
+    flags->force2d->guisection = _("Creation");
 
 }
 
