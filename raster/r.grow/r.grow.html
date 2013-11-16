@@ -26,7 +26,8 @@ The formula is given by:
 Cells grown using this metric would form isolines of distance that are
 circular from a given point, with the distance given by the <b>radius</b>.
 
-<p>The <i>Manhattan metric</i>, or <i>Taxicab geometry</i>, is a form of geometry in 
+<p>
+The <i>Manhattan metric</i>, or <i>Taxicab geometry</i>, is a form of geometry in 
 which the usual metric of Euclidean geometry is replaced by a new 
 metric in which the distance between two points is the sum of the (absolute) 
 differences of their coordinates. The name alludes to the grid layout of 
@@ -40,13 +41,15 @@ The formula is given by:
 where cells grown using this metric would form isolines of distance that are
 rhombus-shaped from a given point. 
 
-<p>The <i>Maximum metric</i> is given by the formula
+<p>
+The <i>Maximum metric</i> is given by the formula
 
 <div class="code"><pre>d(dx,dy) = max(abs(dx),abs(dy))</pre></div>
 
 where the isolines of distance from a point are squares.
 
-<p>If there are two cells which are equal candidates to grow into an empty space, 
+<p>
+If there are two cells which are equal candidates to grow into an empty space, 
 <em>r.grow</em> will choose the northernmost candidate; if there are multiple 
 candidates with the same northing, the westernmost is chosen. 
 
@@ -69,13 +72,20 @@ g.remove inverse,inverse.grown
 
 
 <h2>SEE ALSO</h2>
+
 <em>
-<a href="r.buffer.html">r.buffer</a>,<br>
-<a href="r.grow.distance.html">r.grow.distance</a>,<br>
+<a href="r.buffer.html">r.buffer</a>,
+<a href="r.grow.distance.html">r.grow.distance</a>
+</em>
+
+<p>
+<em>
+<a href="r.distance.html">r.distance</a>,
 <a href="r.patch.html">r.patch</a>
 </em>
 
-<p><em><a href="http://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry: Euclidean Metric</a></em><br>
+<p>
+<em><a href="http://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry: Euclidean Metric</a></em><br>
 <em><a href="http://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry: Manhattan Metric</a></em>
 
 
@@ -83,6 +93,8 @@ g.remove inverse,inverse.grown
 
 Marjorie Larson, 
 U.S. Army Construction Engineering Research Laboratory
-<p>Glynn Clements
+<p>
+Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
