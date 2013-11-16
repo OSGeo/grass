@@ -124,7 +124,9 @@ int main(int argc, char *argv[])
 
     field = Vect_get_field_number(&Map, opt.field->answer);
 
-    /* FIXME: if print flag is used then a database doesn't need to exist */
+    /* FIXME: if the print flag is used then a database doesn't
+	need to exist and the map doesn't need to be in the
+	current mapset. Topology should be optional too. */
     Fi = Vect_get_field(&Map, field);
     if (Fi == NULL)
 	G_fatal_error(_("Database connection not defined for layer %d"),
