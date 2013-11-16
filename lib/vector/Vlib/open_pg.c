@@ -491,16 +491,26 @@ int drop_table(struct Format_info_pg *pg_info)
 /*!
   \brief Establish PG connection (pg_info->conninfo)
 
+  Check if DB is spatial as defined by PostGIS.
+
   \param pg_info pointer to Format_info_pg
 */
 void connect_db(struct Format_info_pg *pg_info)
 {
+    char stmt[DB_SQL_MAX];
+
     pg_info->conn = PQconnectdb(pg_info->conninfo);
     G_debug(2, "   PQconnectdb(): %s", pg_info->conninfo);
     if (PQstatus(pg_info->conn) == CONNECTION_BAD)
         G_fatal_error("%s\n%s",
                       _("Connection to PostgreSQL database failed."),
                       PQerrorMessage(pg_info->conn));
+
+    sprintf(stmt, "SELECT COUNT(*) FROM pg_tables WHERE tablename = 'spatial_ref_sys'");
+    if (Vect__execute_get_value_pg(pg_info->conn, stmt) != 1) {
+        PQfinish(pg_info->conn);
+        G_fatal_error(_("Spatial-enabled PostGIS database is required"));
+    }
     
     /* print notice messages only on verbose level */
     PQsetNoticeProcessor(pg_info->conn, notice_processor, NULL);
