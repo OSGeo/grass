@@ -45,6 +45,7 @@ void define_options(struct params *params, struct flags *flags)
     params->olink->description = 
         _("If not specified, the vector link is not created. "
           "The link can be also manually created by 'v.external' module.");
+    params->olink->guisection = _("Creation");
 
     params->opts = G_define_option();
     params->opts->key = "options";
