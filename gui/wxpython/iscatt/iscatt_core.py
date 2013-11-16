@@ -38,6 +38,11 @@ import grass.script as grass
 from core_c import CreateCatRast, ComputeScatts, UpdateCatRast, \
                    Rasterize, SC_SCATT_DATA, SC_SCATT_CONDITIONS
 
+MAX_SCATT_SIZE = 4100 * 4100
+WARN_SCATT_SIZE = 2000 * 2000
+MAX_NCELLS = 65536 * 65536
+WARN_NCELLS = 12000 * 12000
+
 class Core:
     """!Represents scatter plot backend.
     """
@@ -53,12 +58,16 @@ class Core:
     def SetData(self, bands):
         """Set bands for analysis.
         """
-        self.an_data.Create(bands)
+        ret = self.an_data.Create(bands)
+        if not ret:
+            return False
 
         n_bands = len(self.GetBands())
 
         self.scatts_dt.Create(n_bands)
         self.scatt_conds_dt.Create(n_bands)
+
+        return True
 
     def AddCategory(self, cat_id):
         self.scatts_dt.AddCategory(cat_id)
@@ -371,61 +380,25 @@ class AnalyzedData:
         return self.region
 
     def Create(self, bands):
-        self.bands = bands
+        self.bands = bands[:]
         self.region = None
 
-        ret, region, msg = RunCommand("g.region",
-                                      flags = "gp",
-                                      getErrorMsg = True,
-                                      read = True)
-
-        if  ret != 0:
-            raise GException("g.region failed:\n%s" % msg)
+        self.region = GetRegion()
+        if self.region["rows"] * self.region["cols"] > MAX_NCELLS:
+            GException("too big region")
 
         self.bands_info = {}
-        #TODO show some warning
+
         for b in self.bands[:]:
-            i = self._getRasterInfo(b)
-            if not i:
-                self.bands.remove(b)
-                continue
+            i = GetRasterInfo(b)
+
+            if i is None:
+                GException("raster %s is not CELL type" % (b))
+    
             self.bands_info[b] = i
             #TODO check size of raster
 
-        self.region = self._parseRegion(region)
-
-    def _getRasterInfo(self, rast):
-        """
-        """
-        ret, out, msg = RunCommand("r.info",
-                                    map = rast,
-                                    flags = "rg",
-                                    getErrorMsg = True,
-                                    read = True)
-
-        if  ret != 0:
-            raise GException("r.info failed:\n%s" % msg)
-
-        out = out.split("\n")
-        raster_info = {} 
-
-        for b in out:
-            if not b.strip():
-                continue
-            k, v = b.split("=")
-            if k == "datatype":
-                if v != "CELL":
-                    return None
-                pass
-            elif k in ['rows', 'cols', 'cells', 'min', 'max']:
-                v = int(v)
-            else:
-                v = float(v)
-
-            raster_info[k] = v
-
-        raster_info['range'] = raster_info['max'] - raster_info['min'] + 1
-        return raster_info
+        return True
 
     def GetBands(self):
         return self.bands
@@ -433,21 +406,6 @@ class AnalyzedData:
     def GetBandInfo(self, band_id):
         band = self.bands[band_id]
         return self.bands_info[band]
-
-    def _parseRegion(self, region_str):
-
-        region = {}
-        region_str = region_str.splitlines()
-
-        for param in region_str:
-            k, v = param.split("=")
-            if k in ["rows", "cols", "cells"]:
-                v = int(v)
-            else:
-                v = float(v)
-            region[k] = v
-
-        return region
 
 class ScattPlotsCondsData:
     """!Data structure for selected areas in scatter plot(condtions).
@@ -837,3 +795,60 @@ def idBandsToidScatt(band_1_id, band_2_id, n_bands):
     scatt_id = (band_1_id * (2 * n_b1 + 1) - band_1_id * band_1_id) / 2 + band_2_id - band_1_id - 1
 
     return scatt_id
+
+def GetRegion():
+    ret, region, msg = RunCommand("g.region",
+                                  flags = "gp",
+                                  getErrorMsg = True,
+                                  read = True)
+
+    if ret != 0:
+        raise GException("g.region failed:\n%s" % msg)
+
+    return _parseRegion(region)
+
+def _parseRegion(region_str):
+
+    region = {}
+    region_str = region_str.splitlines()
+
+    for param in region_str:
+        k, v = param.split("=")
+        if k in ["rows", "cols", "cells"]:
+            v = int(v)
+        else:
+            v = float(v)
+        region[k] = v
+
+    return region
+
+def GetRasterInfo(rast):
+    ret, out, msg = RunCommand("r.info",
+                                map = rast,
+                                flags = "rg",
+                                getErrorMsg = True,
+                                read = True)
+
+    if  ret != 0:
+        raise GException("r.info failed:\n%s" % msg)
+
+    out = out.split("\n")
+    raster_info = {} 
+
+    for b in out:
+        if not b.strip():
+            continue
+        k, v = b.split("=")
+        if k == "datatype":
+            if v != "CELL":
+                return None
+            pass
+        elif k in ['rows', 'cols', 'cells', 'min', 'max']:
+            v = int(v)
+        else:
+            v = float(v)
+
+        raster_info[k] = v
+
+    raster_info['range'] = raster_info['max'] - raster_info['min'] + 1
+    return raster_info
