@@ -34,14 +34,15 @@ from gui_core.dialogs import SimpleDialog
 
 class AddScattPlotDialog(wx.Dialog):
 
-    def __init__(self, parent, bands, added_scatts_ids, id  = wx.ID_ANY):
+    def __init__(self, parent, bands, check_bands_callback, id  = wx.ID_ANY):
         wx.Dialog.__init__(self, parent, title = ("Add scatter plots"), id = id)
 
-        self.added_scatts_ids = added_scatts_ids
         self.bands = bands
 
         self.x_band = None
         self.y_band = None
+
+        self.chb_callback = check_bands_callback
 
         self.added_bands_ids = []
         self.sel_bands_ids = []
@@ -185,17 +186,13 @@ class AddScattPlotDialog(wx.Dialog):
             GMessage(parent=self, message=_("Selected bands must be different."))
             return
 
-        scatt_id = idBandsToidScatt(b_x, b_y, len(self.bands))
-        if scatt_id in self.added_scatts_ids:
-            GMessage(parent=self, 
-                     message=_("Scatter plot with same band combination (regardless x y order) " 
-                               "is already displayed."))
-            return
-
         if [b_x, b_y] in self.sel_bands_ids or [b_y, b_x] in self.sel_bands_ids:
             GMessage(parent=self, 
                      message=_("Scatter plot with same bands combination (regardless x y order) " 
                                "has been already added into the list."))
+            return
+
+        if not self.chb_callback(b_x, b_y):
             return
 
         self.sel_bands_ids.append([b_x, b_y])

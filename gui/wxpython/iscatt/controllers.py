@@ -30,10 +30,11 @@ import threading
 import Queue
 from core.gconsole import EVT_CMD_DONE
 
-from core.gcmd import GException, GError, GMessage, RunCommand
+from core.gcmd import GException, GError, GMessage, RunCommand, GWarning
 from core.settings import UserSettings
 from core.gconsole import wxCmdRun, wxCmdDone, wxCmdPrepare
-from iscatt.iscatt_core import Core, idBandsToidScatt
+from iscatt.iscatt_core import Core, idBandsToidScatt, GetRasterInfo, GetRegion, \
+MAX_SCATT_SIZE, WARN_SCATT_SIZE, MAX_NCELLS, WARN_NCELLS
 from iscatt.dialogs import AddScattPlotDialog, ExportCategoryRaster
 
 from iclass.dialogs import IClassGroupDialog
@@ -148,8 +149,35 @@ class ScattsManager:
         else:
             show_add=False
 
+        self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands)))
+        self.all_bands = bands
+
+        self.region = GetRegion()
+        ncells = self.region["rows"] * self.region["cols"]
+
+        if ncells > MAX_NCELLS:
+            del self.busy
+            self.data_set = True
+            return
+
+        self.bands = bands[:]
+        self.bands_info = {}
+        valid_bands = []
+    
+        for b in self.bands[:]:
+            i = GetRasterInfo(b)
+
+            self.bands_info[b] = i
+            if i is not None:
+                valid_bands.append(b)
+
+        for i, b in enumerate(valid_bands):
+            # name : index in core bands - 
+            # if not in core bands (not CELL type) -> index = -1 
+            self.all_bands_to_bands[b] = i
+
         self.thread.Run(callable=self.core.SetData, 
-                        bands=bands, 
+                        bands=valid_bands, 
                         ondone=self.SetDataDone, 
                         userdata={"show_add" : show_add})
 
@@ -157,6 +185,11 @@ class ScattsManager:
         del self.busy
         self.data_set = True
 
+        todo = event.ret
+        self.bad_bands = event.ret
+        bands = self.core.GetBands()
+
+        self.bad_rasts = event.ret
         self.cats_mgr.SetData()
         if event.userdata['show_add']:
           self.AddScattPlot()
@@ -183,16 +216,42 @@ class ScattsManager:
         #    added_bands_ids.append[idBandsToidScatt(scatt_id)]
 
         self.digit_conn.Update()
-        dlg = AddScattPlotDialog(parent = self.guiparent, 
-                                 bands = bands,
-                                 added_scatts_ids = self.plots.keys())
+
+        ncells = self.region["rows"] * self.region["cols"]
+        if ncells > MAX_NCELLS:
+            GError(_(parent=self.guiparent,
+                     mmessage=_("Interactive Scatter Plot Tool can not be used.\n"
+                                "Number of cells (rows*cols) <%d> in current region" 
+                                "is higher than maximum limit <%d>.\n\n"
+                                "You can reduce number of cells in current region using <g.region> command."
+                       % (ncells, MAX_NCELLS))))
+            return
+        elif ncells > WARN_NCELLS:
+            dlg = wx.MessageDialog(
+                     parent=self.guiparent, 
+                     message=_("Number of cells (rows*cols) <%d> in current region is "
+                               "higher than recommended threshold <%d>.\n"
+                               "It is strongly advised to reduce number of cells "
+                               "in current region bellow recommend threshold.\n "
+                               "It can be done by <g.region> command.\n\n" 
+                               "Do you want to continue using "
+                               "Interactive Scatter Plot Tool with this region?" 
+                     % (ncells, WARN_NCELLS)), 
+                     style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)
+            ret = dlg.ShowModal()
+            if ret != wx.ID_YES:
+                return
+                
+        dlg = AddScattPlotDialog(parent=self.guiparent, 
+                                 bands=self.all_bands,
+                                 check_bands_callback=self.CheckBands)
+
         if dlg.ShowModal() == wx.ID_OK:
 
             scatt_ids = []
             sel_bands = dlg.GetBands()
 
             for b_1, b_2 in sel_bands:
-           
                 transpose = False
                 if b_1 > b_2:
                     transpose = True
@@ -200,18 +259,76 @@ class ScattsManager:
                     b_2 = b_1
                     b_1 = tmp_band
 
-                scatt_id = idBandsToidScatt(b_1, b_2, len(bands))
+                b_1_id = self.all_bands_to_bands[self.all_bands[b_1]]
+                b_2_id = self.all_bands_to_bands[self.all_bands[b_2]]
+
+                scatt_id = idBandsToidScatt(b_1_id, b_2_id, len(bands))
                 if self.plots.has_key(scatt_id):
                     continue
 
                 self.plots[scatt_id] = {'transpose' : transpose,
                                         'scatt' : None}
                 scatt_ids.append(scatt_id)
-        
+            
             self._addScattPlot(scatt_ids)
             
         dlg.Destroy()
-         
+     
+    def CheckBands(self, b_1, b_2):
+        bands = self.core.GetBands()
+        added_scatts_ids = self.plots.keys()
+
+        b_1_id = self.all_bands_to_bands[self.all_bands[b_1]]
+        b_2_id = self.all_bands_to_bands[self.all_bands[b_1]]
+
+        scatt_id = idBandsToidScatt(b_1_id, b_2_id, len(bands))
+        
+        if scatt_id in added_scatts_ids:
+            GWarning(parent=self.guiparent, 
+                     message=_("Scatter plot with same band combination (regardless x y order) " 
+                               "is already displayed."))
+            return False
+
+        b_1_name =  self.all_bands[b_1]
+        b_2_name =  self.all_bands[b_2]
+
+        b_1_i = self.bands_info[b_1_name]
+        b_2_i = self.bands_info[b_2_name]
+
+        err = ""
+        for b in [b_1_name, b_2_name]:
+            if self.bands_info[b] is None:
+                err += _("Band <%s> is not CELL (integer) type.\n" % self.all_bands[b_1])
+        if err:
+            GMessage(parent=self.guiparent, 
+                     message=_("Scatter plot cannot be added.\n" + err))
+            return False
+
+        mrange = b_1_i['range'] * b_2_i['range']
+        if mrange > MAX_SCATT_SIZE:
+            GWarning(parent=self.guiparent,
+                     message=_("Scatter plot cannot be added.\n"
+                               "Multiple of bands ranges <%s:%d * %s:%d = %d> " 
+                               "is higher than maximum limit <%d>.\n" 
+                                  % (b_1_name, b_1_i['range'], b_1_name, b_2_i['range'], 
+                                  mrange, MAX_SCATT_SIZE)))
+            return False
+        elif mrange > WARN_SCATT_SIZE:
+            dlg = wx.MessageDialog(parent = self.guiparent,
+                     message=_("Multiple of bands ranges <%s:%d * %s:%d = %d> " 
+                               "is higher than recommended limit <%d>.\n" 
+                               "It is strongly advised to reduce range extend of bands" 
+                               "(e. g. using r.rescale) bellow recommended threshold.\n\n"
+                               "Do you really want to add this scatter plot?" 
+                                % (b_1_name, b_1_i['range'], b_1_name, b_2_i['range'], 
+                                   mrange, WARN_SCATT_SIZE)), 
+                     style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)
+            ret = dlg.ShowModal()
+            if ret != wx.ID_YES:
+                return False  
+
+        return True
+        
     def _addScattPlot(self, scatt_ids):
         self.render_mgr.NewRunningProcess()
         self.thread.Run(callable=self.core.AddScattPlots,
@@ -283,11 +400,11 @@ class ScattsManager:
         sel_cat_id = self.cats_mgr.GetSelectedCat()
         if not sel_cat_id:
             dlg = wx.MessageDialog(parent = self.guiparent,
-                      message = _("In order to select arrea in scatter plot, "
+                      message=_("In order to select arrea in scatter plot, "
                                   "you have to select class first.\n\n"
                                   "There is no class yet, "
                                   "do you want to create one?"),
-                      caption = _("No class selected"),
+                      caption=_("No class selected"),
                       style = wx.YES_NO)
             if dlg.ShowModal() == wx.ID_YES:
                 self.iclass_conn.EmptyCategories()
@@ -422,8 +539,6 @@ class PlotsRenderingManager:
             if self.scatt_mgr.pol_sel_mode[0]:
                 self._getSelectedAreas(cats, i_scatt_id, scatt_dt, cats_attrs)
 
-
-
             scatt['scatt'].Plot(cats_order=cats,
                                 scatts=scatt_dt, 
                                 ellipses=ellipses_dt, 
@@ -513,8 +628,8 @@ class CategoriesManager:
         return True
 
     def _addCategory(self, cat_id):
-        self.scatt_mgr.thread.Run(callable = self.core.AddCategory, 
-                                  cat_id = cat_id)
+        self.scatt_mgr.thread.Run(callable=self.core.AddCategory, 
+                                  cat_id=cat_id)
 
     def SetData(self):
 
@@ -522,8 +637,8 @@ class CategoriesManager:
             return
 
         for cat_id in self.cats_ids:
-            self.scatt_mgr.thread.Run(callable = self.core.AddCategory, 
-                                      cat_id = cat_id)
+            self.scatt_mgr.thread.Run(callable=self.core.AddCategory, 
+                                      cat_id=cat_id)
 
     def AddCategory(self, cat_id = None, name = None, color = None, nstd = None):
 
