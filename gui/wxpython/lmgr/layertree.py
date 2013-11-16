@@ -406,7 +406,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         'region', 'export', 'attr', 'edit0', 'edit1', 'save_ws',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
                         'color', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy',
-                        'report'):
+                        'report', 'export-pg'):
                 self.popupID[key] = wx.NewId()
         
         # get current mapset
@@ -463,10 +463,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # vector layers (specific items)
         if mltype and mltype == "vector" and numSelected == 1:
             self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID['export'], text = _("Export"))
+            self.popupMenu.Append(self.popupID['export'], text = _("Export common formats"))
             self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.out.ogr',
                                                                         'input=%s' % mapLayer.GetName()]),
                       id = self.popupID['export'])
+            self.popupMenu.Append(self.popupID['export-pg'], text = _("Export PostGIS"))
+            self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.out.postgis',
+                                                                        'input=%s' % mapLayer.GetName()]),
+                      id = self.popupID['export-pg'])
             
             lmapset = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetMapset()
             if lmapset != currentMapset:
