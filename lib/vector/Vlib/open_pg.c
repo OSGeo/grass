@@ -511,7 +511,16 @@ void connect_db(struct Format_info_pg *pg_info)
         PQfinish(pg_info->conn);
         G_fatal_error(_("Spatial-enabled PostGIS database is required"));
     }
-    
+
+    if (pg_info->toposchema_name) {
+        /* check if topology schema exists */
+        sprintf(stmt, "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'topology'");
+        if (Vect__execute_get_value_pg(pg_info->conn, stmt) == 0) {
+            PQfinish(pg_info->conn);
+            G_fatal_error(_("PostGIS Topology extension not found in the database"));
+        }
+    }
+
     /* print notice messages only on verbose level */
     PQsetNoticeProcessor(pg_info->conn, notice_processor, NULL);
 
