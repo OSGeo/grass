@@ -207,7 +207,27 @@ This corresponds to the following 3x3 matrix:
     -------
 </pre>
 
-<p>
+The way that weights are used depends upon the specific aggregate
+(<b>method</b>) being used.
+
+However, most of the aggregates have the property that multiplying all
+of the weights by the same factor won't change the final result (an
+exception is <b>method=count</b>).
+
+Also, most (if not all) of them have the properties that an integer
+weight of N is equivalent to N occurrences of the cell value, and
+having all weights equal to one produces the same result as when
+weights are not used.
+
+When weights are used, the calculation for <b>method=average</b> is:
+
+<pre>
+  sum(w[i]*x[i]) / sum(w[i])
+</pre>
+
+In the case where all weights are zero, this will end up with both the
+numerator and denominator to zero, which produces a NULL result.
+
 <h3>FLAGS</h3>
 <dl>
 <dt><b>-a</b> 
@@ -287,6 +307,14 @@ for <em>average</em> neighborhood function output,
 whether or not the color file makes sense for the output
 will be dependent on the input data values.)
 
+<!-- TODO
+<h2>EXAMPLES</h2>
+
+<div class="code"><pre>
+r.neighbors 
+</pre></div>
+
+-->
 
 <h2>SEE ALSO</h2>
 
