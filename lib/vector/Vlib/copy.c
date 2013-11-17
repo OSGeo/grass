@@ -82,7 +82,8 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
         G_fatal_error(_("Unable to copy features. Input vector map <%s> is not open"),
                       Vect_get_full_name(In));
 
-    format = Vect_maptype(Out);
+    format = Out->format; /* do not use Vect_maptype(), we need native
+                             format for temporary maps here */
     topo = TOPO_NONE;
     if (format == GV_FORMAT_NATIVE) {
         topo = TOPO_NATIVE;
