@@ -116,8 +116,12 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     struct P_line *Line;
     struct bound_box lbox, mbox;
 
+    struct Format_info_pg *pg_info;
+    
     G_debug(3, "V2_read_next_line_pg()");
 
+    pg_info = &(Map->fInfo.pg);
+    
     if (Map->constraint.region_flag)
         Vect_get_constraint_box(Map, &mbox);
 
@@ -142,8 +146,9 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
             }
         }
 
-        if (Line->type == GV_CENTROID) {
-            G_debug(4, "Centroid");
+        if (!pg_info->toposchema_name &&
+            Line->type == GV_CENTROID) {
+            G_debug(4, "Determine centroid for simple features");
 
             if (line_p != NULL) {
                 int i, found;
@@ -263,7 +268,7 @@ int V1_read_line_pg(struct Map_info *Map,
         get_feature(pg_info, fid, -1);
 
         if (pg_info->cache.sf_type == SF_NONE) {
-            G_warning(_("Feature %d without geometry skipped"), fid);
+            G_warning(_("Feature %ld without geometry skipped"), fid);
             return -1;
         }
 
@@ -338,15 +343,8 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     if (!line_p && !line_c)
         return Line->type;
 
-    if (line_c) {
-        Vect_reset_cats(line_c);
-        Vect_cat_set(line_c, 1, (int) Line->offset);
-    }
-
-    if (!line_p)
-        return Line->type;
-    
-    Vect_reset_line(line_p);
+    if (line_p)
+        Vect_reset_line(line_p);
     if (Line->type == GV_CENTROID && !pg_info->toposchema_name) {
         /* simple features access: get centroid from sidx */
         return get_centroid(Map, line, line_p);
@@ -368,8 +366,21 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     }
     if (0 > (int)pg_info->cache.sf_type) /* -1 || - 2 */
         return -1;
-    
-    Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);
+
+    if (line_c) {
+        int cat;
+
+        Vect_reset_cats(line_c);
+        if (!pg_info->toposchema_name) /* simple features access */
+            cat = (int) Line->offset;
+        else                           /* PostGIS Topology (cats are cached) */
+            cat = pg_info->cache.lines_cats[0];
+        if (cat != -1)
+            Vect_cat_set(line_c, 1, cat);
+    }
+
+    if (line_p)
+        Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);
     
     return Line->type;
 #else
@@ -422,7 +433,7 @@ int read_next_line_pg(struct Map_info *Map,
             sf_type = get_feature(pg_info, -1, -1);
             
             if (sf_type == SF_NONE) {
-                G_warning(_("Feature %d without geometry skipped"), pg_info->cache.fid);
+                G_warning(_("Feature %ld without geometry skipped"), pg_info->cache.fid);
                 return -1;
             }
 
@@ -467,8 +478,15 @@ int read_next_line_pg(struct Map_info *Map,
         if (line_p)
             Vect_append_points(line_p, iline, GV_FORWARD);
 
-        if (line_c)
-            Vect_cat_set(line_c, 1, (int)pg_info->cache.fid);
+        if (line_c) {
+            int cat;
+            if (!pg_info->toposchema_name) /* simple features access */
+                cat = (int)pg_info->cache.fid;
+            else                           /* PostGIS Topology (cats are cached) */
+                cat = pg_info->cache.lines_cats[pg_info->cache.lines_next];
+            if (cat != -1)
+                Vect_cat_set(line_c, 1, cat);
+        }
 
         pg_info->cache.lines_next++;
 
@@ -597,10 +615,19 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
                                                     FALSE, force_type,
                                                     &(pg_info->cache), NULL);
     
+    /* cache also categories (only for PostGIS Topology) */
+    if (pg_info->toposchema_name) {
+        if (!PQgetisnull(pg_info->res, pg_info->next_line, 3))
+            pg_info->cache.lines_cats[pg_info->cache.lines_next] =
+                atoi(PQgetvalue(pg_info->res, pg_info->next_line, 3)); 
+        else
+            pg_info->cache.lines_cats[pg_info->cache.lines_next] = -1; /* no cat */
+    }
+
     /* set feature id */
     if (fid < 0) {
         pg_info->cache.fid =
-            atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
+            atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1)); 
         pg_info->next_line++;
     }
     else {
@@ -1154,26 +1181,31 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
         /* TODO: optimize SQL statement (for points/centroids) */
         sprintf(stmt,
                 "DECLARE %s CURSOR FOR "
-                "SELECT geom,fid,type FROM ("
-                "SELECT node_id AS fid,geom, %d AS type FROM \"%s\".node WHERE "
-                "containing_face IS NULL AND node_id NOT IN "
-                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
-                "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-                "\"%s\".edge GROUP BY end_node) AS foo) UNION ALL SELECT "
-                "node_id AS fid,geom, %d AS type FROM \"%s\".node WHERE "
-                "containing_face IS NOT NULL AND node_id NOT IN "
-                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
-                "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
-                "\"%s\".edge GROUP BY end_node) AS foo) "
-                "UNION ALL SELECT edge_id AS fid, geom, %d AS type FROM \"%s\".edge WHERE "
-                "left_face = 0 AND right_face = 0 UNION ALL SELECT edge_id AS fid, geom, %d AS type FROM "
-                "\"%s\".edge WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY type,fid",
-                pg_info->cursor_name, GV_POINT,
-                pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name,
-                GV_CENTROID, pg_info->toposchema_name, pg_info->toposchema_name, pg_info->toposchema_name,
-                GV_LINE, pg_info->toposchema_name, GV_BOUNDARY, pg_info->toposchema_name);
+                "SELECT geom,id,type,fid FROM ("
+                "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.fid AS fid FROM \"%s\".node AS tt "
+                "LEFT JOIN \"%s\" AS ft ON (%s).type = 1 AND (%s).id = node_id "
+                "WHERE containing_face IS NULL AND node_id NOT IN "
+                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge GROUP BY start_node UNION ALL "
+                "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS foo) UNION ALL "
+                "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.fid AS fid FROM \"%s\".node AS tt "
+                "LEFT JOIN \"%s\" AS ft ON (%s).type = 3 AND (%s).id = containing_face "
+                "WHERE containing_face IS NOT NULL AND node_id NOT IN "
+                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge GROUP BY start_node UNION ALL "
+                "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS foo) UNION ALL "
+                "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.fid AS fid FROM \"%s\".edge AS tt "
+                "LEFT JOIN \"%s\" AS ft ON (%s).type = 2 AND (%s).id = edge_id "
+                "WHERE left_face = 0 AND right_face = 0 UNION ALL "
+                "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.fid AS fid FROM \"%s\".edge AS tt "
+                "LEFT JOIN \"%s\" AS ft ON (%s).type = 2 AND (%s).id = edge_id "
+                "WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY type,id",
+                pg_info->cursor_name, 
+                GV_POINT, pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column, pg_info->topogeom_column,
+                pg_info->toposchema_name, pg_info->toposchema_name,
+                GV_CENTROID, pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column, pg_info->topogeom_column,
+                pg_info->toposchema_name, pg_info->toposchema_name,
+                GV_LINE, pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column, pg_info->topogeom_column,
+                GV_BOUNDARY, pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column, pg_info->topogeom_column);
     }
-    
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
@@ -1333,13 +1365,19 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
         
         if (type & GV_POINTS) {
             sprintf(stmt,
-                    "SELECT geom,containing_face FROM \"%s\".node WHERE node_id = %d",
-                    pg_info->toposchema_name, fid);
+                    "SELECT tt.geom,tt.containing_face,ft.fid FROM \"%s\".node AS tt "
+                    "LEFT JOIN \"%s\" AS ft ON (%s).type = 1 and (%s).id = edge_id "
+                    "WHERE node_id = %d",
+                    pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column,
+                    pg_info->topogeom_column, fid);
         }
         else {
             sprintf(stmt,
-                    "SELECT geom,left_face,right_face FROM \"%s\".edge WHERE edge_id = %d",
-                    pg_info->toposchema_name, fid);
+                    "SELECT tt.geom,tt.left_face,tt.right_face,ft.fid FROM \"%s\".edge AS tt "
+                    "LEFT JOIN \"%s\" AS ft ON (%s).type = 2 and (%s).id = edge_id "
+                    "WHERE edge_id = %d",
+                    pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column,
+                    pg_info->topogeom_column, fid);
         }
     }
     G_debug(3, "SQL: %s", stmt);
@@ -1440,16 +1478,20 @@ void reallocate_cache(struct Format_info_cache *cache, int num)
                                                   sizeof(struct line_pnts *));
     cache->lines_types = (int *)G_realloc(cache->lines_types,
                                           cache->lines_alloc * sizeof(int));
+    cache->lines_cats = (int *)G_realloc(cache->lines_cats,
+                                         cache->lines_alloc * sizeof(int));
 
     if (cache->lines_alloc > 1) {
         for (i = cache->lines_alloc - num; i < cache->lines_alloc; i++) {
             cache->lines[i] = Vect_new_line_struct();
             cache->lines_types[i] = -1;
+            cache->lines_cats[i] = -1;
         }
     }
     else {
         cache->lines[0] = Vect_new_line_struct();
         cache->lines_types[0] = -1;
+        cache->lines_cats[0] = -1;
     }
 }
 
