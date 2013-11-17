@@ -1572,13 +1572,13 @@ int get_centroid(struct Map_info *Map, int centroid,
 
 void error_tuples(struct Format_info_pg *pg_info)
 {
+    Vect__execute_pg(pg_info->conn, "ROLLBACK");
+    G_warning(_("Unable to read features. Reason:\n%s"),
+              PQresultErrorMessage(pg_info->res));
+
     if (pg_info->res) {
         PQclear(pg_info->res);
         pg_info->res = NULL;
     }
-    
-    Vect__execute_pg(pg_info->conn, "ROLLBACK");
-    G_warning(_("Unable to read PostGIS features\n%s"),
-              PQresultErrorMessage(pg_info->res));
 }
 #endif
