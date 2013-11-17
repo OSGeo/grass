@@ -1231,7 +1231,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
                 pg_info->toposchema_name);
     else
         sprintf(stmt, "SELECT node.node_id,geom,lines,angles FROM \"%s\".node AS node "
-                "join \"%s\".%s AS node_grass ON node.node_id = node_grass.node_id "
+                "JOIN \"%s\".%s AS node_grass ON node.node_id = node_grass.node_id "
                 "ORDER BY node_id", pg_info->toposchema_name, pg_info->toposchema_name,
                 TOPO_TABLE_NODE);
     G_debug(2, "SQL: %s", stmt);

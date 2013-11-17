@@ -474,6 +474,10 @@ struct Format_info_cache {
     */
     int *lines_types;
     /*!
+      \brief List of line cats (used only for PostGIS Topology access)
+    */
+    int *lines_cats;
+    /*!
       \brief Number of allocated lines in cache
     */
     int lines_alloc;
