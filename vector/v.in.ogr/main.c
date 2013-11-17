@@ -77,7 +77,8 @@ int main(int argc, char *argv[])
     /* Vector */
     struct Map_info Map, Tmp, *Out;
     int cat;
-
+    int delete_table = FALSE; /* for external output format only */
+    
     /* Attributes */
     struct field_info *Fi = NULL;
     dbDriver *driver = NULL;
@@ -1094,7 +1095,6 @@ int main(int argc, char *argv[])
 
 	if (!flag.notab->answer) {
 	    db_commit_transaction(driver);
-	    db_close_database_shutdown_driver(driver);
 	}
 
 	if (nogeom > 0)
@@ -1414,8 +1414,18 @@ int main(int argc, char *argv[])
 	}
     }
 
+    delete_table = Vect_maptype(&Map) != GV_FORMAT_NATIVE;
     Vect_close(&Map);
-
+    if (delete_table) {
+        sprintf(buf, "drop table %s", Fi->table);
+        db_set_string(&sql, buf);
+        if (db_execute_immediate(driver, &sql) != DB_OK) {
+            G_fatal_error(_("Unable to drop table: '%s'"),
+                          db_get_string(&sql));
+        }
+    }
+    db_close_database_shutdown_driver(driver);
+    
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
