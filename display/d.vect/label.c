@@ -17,14 +17,18 @@ int display_label(struct Map_info *Map, int type,
     struct line_cats *Cats;
     int ogr_centroids;
 
+    const struct Format_info *finfo;
+    
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
     Vect_rewind(Map);
 
     ogr_centroids = FALSE;
+    finfo = Vect_get_finfo(Map);
     if (Vect_maptype(Map) == GV_FORMAT_OGR ||
-	Vect_maptype(Map) == GV_FORMAT_POSTGIS) {
+	(Vect_maptype(Map) == GV_FORMAT_POSTGIS &&
+         finfo->pg.toposchema_name == NULL)) {
 	if (Vect_level(Map) < 2)
 	    G_warning(_("Topology level required for drawing centroids "
 			"for OGR layers"));
