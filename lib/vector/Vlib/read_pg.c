@@ -1366,7 +1366,7 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
         if (type & GV_POINTS) {
             sprintf(stmt,
                     "SELECT tt.geom,tt.containing_face,ft.fid FROM \"%s\".node AS tt "
-                    "LEFT JOIN \"%s\" AS ft ON (%s).type = 1 and (%s).id = edge_id "
+                    "LEFT JOIN \"%s\" AS ft ON (%s).type = 1 and (%s).id = node_id "
                     "WHERE node_id = %d",
                     pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column,
                     pg_info->topogeom_column, fid);
