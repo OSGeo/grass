@@ -46,11 +46,24 @@ and then reload the maps to update the animation.
 
 <h2>EXAMPLES</h2>
 
-
-Load a series of raster maps into the Animation Tool:
 <div class="code"><pre>
-g.gui.animation rast=`g.mlist type=rast mapset=. sep=comma pattern="precip*"`
+g.gui.animation rast=rmap1,rmap2,rmap3
+
+g.gui.animation vect=vmap1,vmap2,vmap3
 </pre></div>
+
+The loading of a series of maps into the Animation Tool can be simplified
+with <em>g.mlist</em>:
+<div class="code"><pre>
+g.gui.animation rast=`g.mlist type=rast mapset=. separator=comma pattern="precip*"`
+</pre></div>
+
+Using extended regular expressions, the list of a series of raster maps can be subset by
+e.g., numeric range (here: precipitation for the years 1997-2012):
+<div class="code"><pre>
+g.gui.animation rast=`g.mlist -e type=rast mapset=. separator=comma pattern="precip_total.(199[7-9]|200[0-9]|201[0-2]).sum"`
+</pre></div>
+
 
 <h2>TODO</h2>
 <ul>
