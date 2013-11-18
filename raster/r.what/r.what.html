@@ -33,56 +33,66 @@ pairs directly. The maximum number of pairs will be limited by your system's
 maximum input line length (e.g. 4096 characters).
 
 <div class="code"><pre>
-g.region rast=soils,aspect
-r.what map=soils,aspect coordinates=635342.21,7654321.09,653324.88,7563412.42
+g.region rast=landuse96_28m,aspect -p
+r.what map=landuse96_28m,aspect coordinates=633614.08,224125.12,632972.36,225382.87 -f
 
-635342.21|7654321.09|45|21
-653324.88|7563412.42|44|20
+633614.08|224125.12||2|Low Intensity Developed|209.5939|209 degrees ccw from east
+632972.36|225382.87||15|Southern Yellow Pine|140.7571|140 degrees ccw from east
 </pre></div>
 
 <h3>Input coordinates given as a vector points map</h3>
 
 Coordinates can be read from exising vector points map by
-specifing <b>points</b> option. Other features then points or
-centroids are ignored.
+specifing <b>points</b> option. Other features than points or
+centroids are ignored. Example: query North Carolina county number for
+each community college:
 
 <div class="code"><pre>
-r.what map=soils,aspect points=bugsites
-</pre></div>
+g.region rast=boundary_county_500m -p
+r.what map=boundary_county_500m points=comm_colleges
 
+145096.859150|154534.264884||39
+616341.437150|146049.750884||51
+...
+</pre></div>
 
 <h3>Input from a text file containing coordinates</h3>
 
 The contents of an ASCII text file can be redirected to <em>r.what</em>
 as follows. If we have a file called <i>input_coord.txt</i> containing the
-coordinates and labels given in the example above:
+whitespace separated coordinates and optionally labels, the resulting 
+raster map values are extracted:
 
 <div class="code"><pre>
-r.what map=soils,aspect &lt; input_coord.txt
+cat input_coord.txt 
+633614.08 224125.12 site 1
+632972.36 225382.87 site 2
 
-635342.21|7654321.09|site 1|45|21
-653324.88|7563412.42|site 2|44|20
+r.what map=landuse96_28m,aspect &lt; input_coord.txt
+
+633614.08|224125.12|site 1|2|209.5939
+632972.36|225382.87|site 2|15|140.7571
 </pre></div>
 
 <h3>Input from standard input on the command line</h3>
 
-Input coordinates may be given directly from standard input (<tt>stdin</tt>), for example
-(input data appears between the "<tt>EOF</tt>" markers):
+Input coordinates may be given directly from standard input (<tt>stdin</tt>),
+for example (input data appears between the "<tt>EOF</tt>" markers):
 
 <div class="code"><pre>
-r.what map=soils,aspect &lt;&lt; EOF
-635342.21 7654321.09 site 1
-653324.88 7563412.42 site 2
+r.what map=landuse96_28m,aspect &lt;&lt; EOF
+633614.08 224125.12 site 1
+632972.36 225382.87 site 2
 EOF
 
-635342.21|7654321.09|site 1|45|21
-653324.88|7563412.42|site 2|44|20
+633614.08|224125.12|site 1|2|209.5939
+632972.36|225382.87|site 2|15|140.7571
 </pre></div>
 
 <div class="code"><pre>
-echo "635342.21 7654321.09" | r.what map=soils,aspect
+echo "633614.08 224125.12" | r.what map=landuse96_28m,aspect
 
-635342.21|7654321.09|45|21
+633614.08|224125.12||2|209.5939
 </pre></div>
 
 <h3>Input coordinates piped from another program</h3>
@@ -93,7 +103,12 @@ point coordinates are piped from the
 <em><a href="v.out.ascii.html">v.out.ascii</a></em> module. 
 
 <div class="code"><pre>
-v.out.ascii bugsites separator=space | r.what map=soils,aspect
+v.out.ascii comm_colleges separator=space | r.what map=boundary_county_500m
+
+145096.8591495|154534.26488388|1|39
+616341.4371495|146049.75088388|2|51
+410595.7191495|174301.82888388|3|71
+...
 </pre></div>
 
 <h3>Output containing raster map category labels</h3>
@@ -102,13 +117,13 @@ Here we use the <b>-f</b> label flag to enable the output of category labels
 associated with the raster cell(s), as well as values (categorical maps only).
 
 <div class="code"><pre>
-r.what -f map=soils,aspect &lt;&lt; EOF
-635342.21 7654321.09 site 1
-653324.88 7563412.42 site 2
+r.what -f map=landuse96_28m,aspect &lt;&lt; EOF
+633614.08 224125.12 site 1
+632972.36 225382.87 site 2
 EOF
 
-635342.21|7654321.09|site 1|45|NaC|21|30 degrees NW 
-653324.88|7563412.42|site 2|44|NdC|20|15 degrees NW 
+633614.08|224125.12|site 1|2|Low Intensity Developed|209.5939|209 degrees ccw from east
+632972.36|225382.87|site 2|15|Southern Yellow Pine|140.7571|140 degrees ccw from east
 </pre></div>
 
 <h2>NOTE</h2>
@@ -120,6 +135,7 @@ The maximum number of raster map layers that can be queried at one time is 400.
 
 <ul>
   <li>Add <b>file</b> option</li>
+  <li>Fix <b>400 maps</b> limit</li>
 </ul>
 
 <h2>SEE ALSO</h2>
