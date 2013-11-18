@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
 {
     int i, j;
     int nfiles;
+    char *name;
     int fd[NFILES];
     struct Categories cats[NFILES];
     struct Cell_head window;
@@ -70,7 +71,7 @@ int main(int argc, char *argv[])
     char buffer[1024];
     char **ptr;
     struct _opt {
-        struct Option *input, *cache, *null, *coords, *fs, *points;
+        struct Option *input, *cache, *null, *coords, *fs, *points, *output;
     } opt;
     struct _flg {
 	struct Flag *label, *cache, *cat_int, *color, *header;
@@ -100,6 +101,7 @@ int main(int argc, char *argv[])
     module->description =
 	_("Queries raster maps on their category values and category labels.");
 
+    /* TODO: should be G_OPT_R_INPUTS for consistency but needs overall change where used */
     opt.input = G_define_standard_option(G_OPT_R_MAPS);
     opt.input->description = _("Name of existing raster map(s) to query");
 
@@ -121,6 +123,11 @@ int main(int argc, char *argv[])
     opt.null->description = _("Char string to represent no data cell");
     opt.null->guisection = _("Print");
     
+    opt.output = G_define_standard_option(G_OPT_F_OUTPUT);
+    opt.output->required = NO;
+    opt.output->description =
+	_("Name for output file (if omitted or \"-\" output to stdout)");
+
     opt.fs = G_define_standard_option(G_OPT_F_SEP);
     opt.fs->guisection = _("Print");
 
@@ -160,6 +167,13 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    name = opt.output->answer;
+    if (name != NULL && strcmp(name, "-") != 0) {
+	if (NULL == freopen(name, "w", stdout)) {
+	    G_fatal_error(_("Unable to open file <%s> for writing"), name);
+	}
+    }
 
     tty = isatty(0);
 
