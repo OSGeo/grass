@@ -467,10 +467,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.out.ogr',
                                                                         'input=%s' % mapLayer.GetName()]),
                       id = self.popupID['export'])
+            if 'v.out.ogr' not in globalvar.grassCmd:
+                self.popupMenu.Enable(self.popupID['export'], False)
+
             self.popupMenu.Append(self.popupID['export-pg'], text = _("Export PostGIS"))
             self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.out.postgis',
                                                                         'input=%s' % mapLayer.GetName()]),
                       id = self.popupID['export-pg'])
+            if 'v.out.postgis' not in globalvar.grassCmd:
+                self.popupMenu.Enable(self.popupID['export-pg'], False)
             
             lmapset = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetMapset()
             if lmapset != currentMapset:
