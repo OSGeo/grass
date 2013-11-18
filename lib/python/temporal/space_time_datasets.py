@@ -12,13 +12,7 @@ for details.
 @author Soeren Gebbert
 """
 import getpass
-from ctypes import *
-import grass.lib.gis as libgis
-import grass.lib.raster as libraster
-import grass.lib.vector as libvector
-import grass.lib.raster3d as libraster3d
-import grass.script as grass
-
+import logging
 from abstract_map_dataset import *
 from abstract_space_time_dataset import *
 
@@ -40,11 +34,11 @@ class RasterDataset(AbstractMapDataset):
         >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
         ... t=1.0, b=0.0, res=10.0)
         0
-        >>> grass.run_command("r.mapcalc", overwrite=True,
+        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True,
         ... expression="strds_map_test_case = 1")
         0
         >>> grass.run_command("r.timestamp", map="strds_map_test_case",
-        ...                   date="15 jan 1999")
+        ...                   date="15 jan 1999", quiet=True)
         0
         >>> mapset = get_current_mapset()
         >>> name = "strds_map_test_case"
@@ -110,7 +104,7 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap.is_time_relative()
         False
 
-        >>> grass.run_command("g.remove", rast=name)
+        >>> grass.run_command("g.remove", rast=name, quiet=True)
         0
         >>> grass.del_temp_region()
 
@@ -208,150 +202,92 @@ class RasterDataset(AbstractMapDataset):
 
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
+
+           @return True if success, False on error
         """
-        if libgis.G_has_raster_timestamp(self.get_name(), self.get_mapset()):
-            return True
-        else:
-            return False
+        return self.ciface.has_raster_timestamp(self.get_name(),
+                                                self.get_mapset())
 
     def read_timestamp_from_grass(self):
         """!Read the timestamp of this map from the map metadata
            in the grass file system based spatial database and
            set the internal time stamp that should be insert/updated
            in the temporal database.
+
+           @return True if success, False on error
         """
 
         if not self.has_grass_timestamp():
             return False
 
-        ts = libgis.TimeStamp()
-        check = libgis.G_read_raster_timestamp(self.get_name(), self.get_mapset(),
-                                               byref(ts))
+        check, dates = self.ciface.read_raster_timestamp(self.get_name(),
+                                                      self.get_mapset(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
                          "for raster map <%s>" % (self.get_map_id())))
             return False
 
-        return self._set_timestamp_from_grass(ts)
+        if len(dates) == 2:
+            self.set_absolute_time(dates[0], dates[1], None)
+        else:
+            self.set_relative_time(dates[0], dates[1], dates[2])
+
+        return True
 
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata in
            the grass file system based spatial database.
 
            Internally the libgis API functions are used for writing
+
+           @return True if success, False on error
         """
-
-        ts = libgis.TimeStamp()
-
-        libgis.G_scan_timestamp(byref(ts), self._convert_timestamp())
-        check = libgis.G_write_raster_timestamp(self.get_name(), byref(ts))
+        check = self.ciface.write_raster_timestamp(self.get_name(),
+                                                   self.get_mapset(),
+                                                   self._convert_timestamp())
 
         if check == -1:
             self.msgr.error(_("Unable to create timestamp file "
                          "for raster map <%s>" % (self.get_map_id())))
+            return False
 
         if check == -2:
             self.msgr.error(_("Invalid datetime in timestamp for raster map <%s>" %
                          (self.get_map_id())))
+            return False
+
+        if check == -3:
+            self.msgr.error(_("Internal error"))
+            return False
+
+        return True
 
     def remove_timestamp_from_grass(self):
         """!Remove the timestamp from the grass file system based
            spatial database
 
            Internally the libgis API functions are used for removal
+
+           @return True if success, False on error
         """
-        check = libgis.G_remove_raster_timestamp(self.get_name())
+        check = self.ciface.remove_raster_timestamp(self.get_name(),
+                                                    self.get_mapset())
 
         if check == -1:
-            core.error(_("Unable to remove timestamp for raster map <%s>" %
+            self.msgr.error(_("Unable to remove timestamp for raster map <%s>" %
                          (self.get_name())))
+            return False
+
+        return True
 
     def map_exists(self):
         """!Return True in case the map exists in the grass spatial database
 
            @return True if map exists, False otherwise
         """
-        mapset = libgis.G_find_raster(self.get_name(), self.get_mapset())
-
-        if not mapset:
-            return False
-
-        return True
-
-    def read_info(self):
-        """!Read the raster map info from the file system and store the content
-           into a dictionary
-
-           This method uses the ctypes interface to the gis and raster libraries
-           to read the map metadata information
-        """
-
-        kvp = {}
-
-        name = self.get_name()
-        mapset = self.get_mapset()
-
-        if not self.map_exists():
-            core.fatal(_("Raster map <%s> not found" % name))
-
-        # Read the region information
-        region = libgis.Cell_head()
-        libraster.Rast_get_cellhd(name, mapset, byref(region))
-
-        kvp["north"] = region.north
-        kvp["south"] = region.south
-        kvp["east"] = region.east
-        kvp["west"] = region.west
-        kvp["nsres"] = region.ns_res
-        kvp["ewres"] = region.ew_res
-        kvp["rows"] = region.cols
-        kvp["cols"] = region.rows
-
-        maptype = libraster.Rast_map_type(name, mapset)
-
-        if maptype == libraster.DCELL_TYPE:
-            kvp["datatype"] = "DCELL"
-        elif maptype == libraster.FCELL_TYPE:
-            kvp["datatype"] = "FCELL"
-        elif maptype == libraster.CELL_TYPE:
-            kvp["datatype"] = "CELL"
-
-        # Read range
-        if libraster.Rast_map_is_fp(name, mapset):
-            range = libraster.FPRange()
-            libraster.Rast_init_fp_range(byref(range))
-            ret = libraster.Rast_read_fp_range(name, mapset, byref(range))
-            if ret < 0:
-                core.fatal(_("Unable to read range file"))
-            if ret == 2:
-                kvp["min"] = None
-                kvp["max"] = None
-            else:
-                min = libgis.DCELL()
-                max = libgis.DCELL()
-                libraster.Rast_get_fp_range_min_max(
-                    byref(range), byref(min), byref(max))
-                kvp["min"] = min.value
-                kvp["max"] = max.value
-        else:
-            range = libraster.Range()
-            libraster.Rast_init_range(byref(range))
-            ret = libraster.Rast_read_range(name, mapset, byref(range))
-            if ret < 0:
-                core.fatal(_("Unable to read range file"))
-            if ret == 2:
-                kvp["min"] = None
-                kvp["max"] = None
-            else:
-                min = libgis.CELL()
-                max = libgis.CELL()
-                libraster.Rast_get_range_min_max(
-                    byref(range), byref(min), byref(max))
-                kvp["min"] = min.value
-                kvp["max"] = max.value
-
-        return kvp
+        return self.ciface.raster_map_exists(self.get_name(),
+                                             self.get_mapset())
 
     def load(self):
         """!Load all info from an existing raster map into the internal s
@@ -360,20 +296,16 @@ class RasterDataset(AbstractMapDataset):
         # Fill base information
         self.base.set_creator(str(getpass.getuser()))
 
-        # Get the data from an existing raster map
-
-        if get_use_ctypes_map_access() == True:
-            kvp = self.read_info()
-        else:
-            kvp = grass.raster_info(self.get_id())
+        kvp = self.ciface.read_raster_info(self.get_name(),
+                                           self.get_mapset())
 
         # Fill spatial extent
-
-        self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],
-                                east=kvp["east"], west=kvp["west"])
+        self.set_spatial_extent_from_values(north=kvp["north"],
+                                            south=kvp["south"],
+                                            east=kvp["east"],
+                                            west=kvp["west"])
 
         # Fill metadata
-
         self.metadata.set_nsres(kvp["nsres"])
         self.metadata.set_ewres(kvp["ewres"])
         self.metadata.set_datatype(kvp["datatype"])
@@ -405,13 +337,13 @@ class Raster3DDataset(AbstractMapDataset):
         >>> init()
         >>> grass.use_temp_region()
         >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
-        ... t=100.0, b=0.0, res=10.0)
+        ... t=100.0, b=0.0, res=10.0, res3=10.0)
         0
-        >>> grass.run_command("r3.mapcalc", overwrite=True,
+        >>> grass.run_command("r3.mapcalc", overwrite=True, quiet=True,
         ...                   expression="str3ds_map_test_case = 1")
         0
         >>> grass.run_command("r3.timestamp", map="str3ds_map_test_case",
-        ...                   date="15 jan 1999")
+        ...                   date="15 jan 1999", quiet=True)
         0
         >>> mapset = get_current_mapset()
         >>> name = "str3ds_map_test_case"
@@ -478,7 +410,7 @@ class Raster3DDataset(AbstractMapDataset):
         True
         >>> r3map.is_time_relative()
         False
-        >>> grass.run_command("g.remove", rast3d=name)
+        >>> grass.run_command("g.remove", rast3d=name, quiet=True)
         0
         >>> grass.del_temp_region()
     """
@@ -589,151 +521,89 @@ class Raster3DDataset(AbstractMapDataset):
 
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
-        """
-        if libgis.G_has_raster3d_timestamp(self.get_name(), self.get_mapset()):
-            return True
-        else:
-            return False
 
+           @return True if success, False on error
+        """
+        return self.ciface.has_raster3d_timestamp(self.get_name(),
+                                                self.get_mapset())
 
     def read_timestamp_from_grass(self):
         """!Read the timestamp of this map from the map metadata
            in the grass file system based spatial database and
            set the internal time stamp that should be insert/updated
            in the temporal database.
+
+           @return True if success, False on error
         """
 
         if not self.has_grass_timestamp():
             return False
 
-        ts = libgis.TimeStamp()
-        check = libgis.G_read_raster3d_timestamp(self.get_name(), self.get_mapset(),
-                                               byref(ts))
+        check, dates = self.ciface.read_raster3d_timestamp(self.get_name(),
+                                                      self.get_mapset(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
                          "for 3D raster map <%s>" % (self.get_map_id())))
             return False
 
-        return self._set_timestamp_from_grass(ts)
+        if len(dates) == 2:
+            self.set_absolute_time(dates[0], dates[1], None)
+        else:
+            self.set_relative_time(dates[0], dates[1], dates[2])
+
+        return True
 
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata
         in the grass file system based spatial database.
 
            Internally the libgis API functions are used for writing
+
+           @return True if success, False on error
         """
-
-        ts = libgis.TimeStamp()
-
-        libgis.G_scan_timestamp(byref(ts), self._convert_timestamp())
-        check = libgis.G_write_raster3d_timestamp(self.get_name(), byref(ts))
+        check = self.ciface.write_raster3d_timestamp(self.get_name(),
+                                                     self.get_mapset(),
+                                                     self._convert_timestamp())
 
         if check == -1:
             self.msgr.error(_("Unable to create timestamp file "
-                         "for raster3d map <%s>" % (self.get_map_id())))
+                         "for 3D raster map <%s>" % (self.get_map_id())))
+            return False
 
         if check == -2:
-            self.msgr.error(_("Invalid datetime in timestamp "
-                         "for raster3d map <%s>" % (self.get_map_id())))
+            self.msgr.error(_("Invalid datetime in timestamp for 3D raster map <%s>" %
+                         (self.get_map_id())))
+            return False
+
+        if check == -3:
+            self.msgr.error(_("Internal error"))
+            return False
+
+        return True
 
     def remove_timestamp_from_grass(self):
         """!Remove the timestamp from the grass file system based spatial database
 
-           Internally the libgis API functions are used for removal
+           @return True if success, False on error
         """
-        check = libgis.G_remove_raster3d_timestamp(self.get_name())
+        check = self.ciface.remove_raster3d_timestamp(self.get_name(),
+                                                      self.get_mapset())
 
         if check == -1:
-            self.msgr.error(_("Unable to remove timestamp for raster3d map <%s>" %
+            self.msgr.error(_("Unable to remove timestamp for raster map <%s>" %
                          (self.get_name())))
+            return False
+
+        return True
 
     def map_exists(self):
         """!Return True in case the map exists in the grass spatial database
 
            @return True if map exists, False otherwise
         """
-        mapset = libgis.G_find_raster3d(self.get_name(), self.get_mapset())
-
-        if not mapset:
-            return False
-
-        return True
-
-    def read_info(self):
-        """!Read the raster3d map info from the file system and store the content
-           into a dictionary
-
-           This method uses the ctypes interface to the gis and raster3d libraries
-           to read the map metadata information
-        """
-
-        kvp = {}
-
-        name = self.get_name()
-        mapset = self.get_mapset()
-
-        if not self.map_exists():
-            core.fatal(_("Raster3d map <%s> not found" % name))
-
-        # Read the region information
-        region = libraster3d.RASTER3D_Region()
-        libraster3d.Rast3d_read_region_map(name, mapset, byref(region))
-
-        kvp["north"] = region.north
-        kvp["south"] = region.south
-        kvp["east"] = region.east
-        kvp["west"] = region.west
-        kvp["nsres"] = region.ns_res
-        kvp["ewres"] = region.ew_res
-        kvp["tbres"] = region.tb_res
-        kvp["rows"] = region.cols
-        kvp["cols"] = region.rows
-        kvp["depths"] = region.depths
-        kvp["top"] = region.top
-        kvp["bottom"] = region.bottom
-
-        # We need to open the map, this function returns a void pointer
-        # but we may need the correct type which is RASTER3D_Map, hence
-        # the casting
-        g3map = cast(libraster3d.Rast3d_open_cell_old(name, mapset,
-                     libraster3d.RASTER3D_DEFAULT_WINDOW,
-                     libraster3d.RASTER3D_TILE_SAME_AS_FILE,
-                     libraster3d.RASTER3D_NO_CACHE),
-                     POINTER(libraster3d.RASTER3D_Map))
-
-        if not g3map:
-            core.fatal(_("Unable to open 3D raster map <%s>" % (name)))
-
-        maptype = libraster3d.Rast3d_file_type_map(g3map)
-
-        if maptype == libraster.DCELL_TYPE:
-            kvp["datatype"] = "DCELL"
-        elif maptype == libraster.FCELL_TYPE:
-            kvp["datatype"] = "FCELL"
-
-        # Read range
-        min = libgis.DCELL()
-        max = libgis.DCELL()
-        ret = libraster3d.Rast3d_range_load(g3map)
-        if not ret:
-            core.fatal(_("Unable to load range of 3D raster map <%s>" %
-                         (name)))
-        libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
-
-        if min.value != min.value:
-            kvp["min"] = None
-        else:
-            kvp["min"] = float(min.value)
-        if max.value != max.value:
-            kvp["max"] = None
-        else:
-            kvp["max"] = float(max.value)
-
-        if not libraster3d.Rast3d_close(g3map):
-            G_fatal_error(_("Unable to close 3D raster map <%s>" % (name)))
-
-        return kvp
+        return self.ciface.raster3d_map_exists(self.get_name(),
+                                               self.get_mapset())
 
     def load(self):
         """!Load all info from an existing raster3d map into the internal structure"""
@@ -742,13 +612,8 @@ class Raster3DDataset(AbstractMapDataset):
         self.base.set_creator(str(getpass.getuser()))
 
         # Fill spatial extent
-
-        # Get the data from an existing 3D raster map
-
-        if get_use_ctypes_map_access() == True:
-            kvp = self.read_info()
-        else:
-            kvp = grass.raster3d_info(self.get_id())
+        kvp = self.ciface.read_raster3d_info(self.get_name(),
+                                           self.get_mapset())
 
         self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],
                                 east=kvp["east"], west=kvp["west"],
@@ -792,10 +657,10 @@ class VectorDataset(AbstractMapDataset):
         ... t=1.0, b=0.0, res=10.0)
         0
         >>> grass.run_command("v.random", overwrite=True, output="stvds_map_test_case",
-        ... n=100, zmin=0, zmax=100, flags="z", column="elevation")
+        ... n=100, zmin=0, zmax=100, flags="z", column="elevation", quiet=True)
         0
         >>> grass.run_command("v.timestamp", map="stvds_map_test_case",
-        ...                   date="15 jan 1999")
+        ...                   date="15 jan 1999", quiet=True)
         0
         >>> mapset = get_current_mapset()
         >>> name = "stvds_map_test_case"
@@ -854,7 +719,7 @@ class VectorDataset(AbstractMapDataset):
         True
         >>> vmap.is_time_relative()
         False
-        >>> grass.run_command("g.remove", vect=name)
+        >>> grass.run_command("g.remove", vect=name, quiet=True)
         0
         >>> grass.del_temp_region()
 
@@ -937,11 +802,9 @@ class VectorDataset(AbstractMapDataset):
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
         """
-        if libgis.G_has_vector_timestamp(self.get_name(), self.get_layer(),
-                                  self.get_mapset()):
-            return True
-        else:
-            return False
+        return self.ciface.has_vector_timestamp(self.get_name(),
+                                                self.get_mapset(),
+                                                self.get_layer())
 
 
     def read_timestamp_from_grass(self):
@@ -954,18 +817,20 @@ class VectorDataset(AbstractMapDataset):
         if not self.has_grass_timestamp():
             return False
 
-        ts = libgis.TimeStamp()
-        check = libgis.G_read_vector_timestamp(self.get_name(),
-                                               self.get_layer(),
-                                               self.get_mapset(),
-                                               byref(ts))
+        check, dates = self.ciface.read_vector_timestamp(self.get_name(),
+                                                      self.get_mapset(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
                          "for vector map <%s>" % (self.get_map_id())))
             return False
 
-        return self._set_timestamp_from_grass(ts)
+        if len(dates) == 2:
+            self.set_absolute_time(dates[0], dates[1], None)
+        else:
+            self.set_relative_time(dates[0], dates[1], dates[2])
+
+        return True
 
     def write_timestamp_to_grass(self):
         """!Write the timestamp of this map into the map metadata in
@@ -973,20 +838,22 @@ class VectorDataset(AbstractMapDataset):
 
            Internally the libgis API functions are used for writing
         """
-
-        ts = libgis.TimeStamp()
-
-        libgis.G_scan_timestamp(byref(ts), self._convert_timestamp())
-        check = libgis.G_write_vector_timestamp(
-            self.get_name(), self.get_layer(), byref(ts))
+        check = self.ciface.write_vector_timestamp(self.get_name(),
+                                                   self.get_mapset(),
+                                                   self._convert_timestamp(),
+                                                   self.get_layer())
 
         if check == -1:
             self.msgr.error(_("Unable to create timestamp file "
                          "for vector map <%s>" % (self.get_map_id())))
+            return False
 
         if check == -2:
             self.msgr.error(_("Invalid datetime in timestamp for vector map <%s>" %
                          (self.get_map_id())))
+            return False
+
+        return True
 
     def remove_timestamp_from_grass(self):
         """!Remove the timestamp from the grass file system based spatial
@@ -994,121 +861,24 @@ class VectorDataset(AbstractMapDataset):
 
            Internally the libgis API functions are used for removal
         """
-        check = libgis.G_remove_vector_timestamp(
-            self.get_name(), self.get_layer())
+        check = self.ciface.remove_vector_timestamp(self.get_name(),
+                                                    self.get_mapset())
 
         if check == -1:
             self.msgr.error(_("Unable to remove timestamp for vector map <%s>" %
                          (self.get_name())))
+            return False
+
+        return True
 
     def map_exists(self):
         """!Return True in case the map exists in the grass spatial database
 
            @return True if map exists, False otherwise
         """
-        mapset = libgis.G_find_vector(self.get_name(), self.get_mapset())
+        return self.ciface.vector_map_exists(self.get_name(),
+                                             self.get_mapset())
 
-        if not mapset:
-            return False
-
-        return True
-
-    def read_info(self):
-        """!Read the vector map info from the file system and store the content
-           into a dictionary
-
-           This method uses the ctypes interface to the vector libraries
-           to read the map metadata information
-        """
-
-        kvp = {}
-
-        name = self.get_name()
-        mapset = self.get_mapset()
-
-        if not self.map_exists():
-            core.fatal(_("Vector map <%s> not found" % name))
-
-        # The vector map structure
-        Map = libvector.Map_info()
-
-        # We open the maps always in topology mode first
-        libvector.Vect_set_open_level(2)
-        with_topo = True
-
-        # Code lend from v.info main.c
-        if libvector.Vect_open_old_head2(byref(Map), name, mapset, "1") < 2:
-            # force level 1, open fully
-            # NOTE: number of points, lines, boundaries, centroids,
-            # faces, kernels is still available
-            libvector.Vect_set_open_level(1)  # no topology
-            with_topo = False
-            self.msgr.message(_("Open map without topology support"))
-            if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
-                core.fatal(_("Unable to open vector map <%s>" %
-                             (libvector.Vect_get_full_name(byref(Map)))))
-
-        # Release the vector spatial index memory when closed
-        libvector.Vect_set_release_support(byref(Map))
-
-        # Read the extent information
-        bbox = libvector.bound_box()
-        libvector.Vect_get_map_box(byref(Map), byref(bbox))
-
-        kvp["north"] = bbox.N
-        kvp["south"] = bbox.S
-        kvp["east"] = bbox.E
-        kvp["west"] = bbox.W
-        kvp["top"] = bbox.T
-        kvp["bottom"] = bbox.B
-
-        kvp["map3d"] = bool(libvector.Vect_is_3d(byref(Map)))
-
-        # Read number of features
-        if with_topo:
-            kvp["points"] = libvector.Vect_get_num_primitives(
-                byref(Map), libvector.GV_POINT)
-            kvp["lines"] = libvector.Vect_get_num_primitives(
-                byref(Map), libvector.GV_LINE)
-            kvp["boundaries"] = libvector.Vect_get_num_primitives(
-                byref(Map), libvector.GV_BOUNDARY)
-            kvp["centroids"] = libvector.Vect_get_num_primitives(
-                byref(Map), libvector.GV_CENTROID)
-            kvp["faces"] = libvector.Vect_get_num_primitives(
-                byref(Map), libvector.GV_FACE)
-            kvp["kernels"] = libvector.Vect_get_num_primitives(
-                byref(Map), libvector.GV_KERNEL)
-
-            # Summarize the primitives
-            kvp["primitives"] = kvp["points"] + kvp["lines"] + \
-                kvp["boundaries"] + kvp["centroids"]
-            if kvp["map3d"]:
-                kvp["primitives"] += kvp["faces"] + kvp["kernels"]
-
-            # Read topology information
-            kvp["nodes"] = libvector.Vect_get_num_nodes(byref(Map))
-            kvp["areas"] = libvector.Vect_get_num_areas(byref(Map))
-            kvp["islands"] = libvector.Vect_get_num_islands(byref(Map))
-            kvp["holes"] = libvector.Vect_get_num_holes(byref(Map))
-            kvp["volumes"] = libvector.Vect_get_num_primitives(
-                byref(Map), libvector.GV_VOLUME)
-        else:
-            kvp["points"] = None
-            kvp["lines"] = None
-            kvp["boundaries"] = None
-            kvp["centroids"] = None
-            kvp["faces"] = None
-            kvp["kernels"] = None
-            kvp["primitives"] = None
-            kvp["nodes"] = None
-            kvp["areas"] = None
-            kvp["islands"] = None
-            kvp["holes"] = None
-            kvp["volumes"] = None
-
-        libvector.Vect_close(byref(Map))
-
-        return kvp
 
     def load(self):
         """!Load all info from an existing vector map into the internal
@@ -1119,10 +889,8 @@ class VectorDataset(AbstractMapDataset):
 
         # Get the data from an existing vector map
 
-        if get_use_ctypes_map_access() == True:
-            kvp = self.read_info()
-        else:
-            kvp = grass.vector_info(self.get_map_id())
+        kvp = self.ciface.read_vector_info(self.get_name(),
+                                           self.get_mapset())
 
         # Fill spatial extent
         self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],

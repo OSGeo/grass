@@ -14,9 +14,6 @@ for details.
 """
 from abstract_dataset import *
 from datetime_math import *
-import grass.lib.date as libdate
-import grass.lib.gis as libgis
-import ctypes
 
 
 class AbstractMapDataset(AbstractDataset):
@@ -44,6 +41,7 @@ class AbstractMapDataset(AbstractDataset):
 
     def __init__(self):
         AbstractDataset.__init__(self)
+        self.ciface = get_tgis_c_library_interface()
 
     @abstractmethod
     def get_new_stds_instance(self, ident):
@@ -114,83 +112,6 @@ class AbstractMapDataset(AbstractDataset):
            in the temporal database.
         """
 
-    def _set_timestamp_from_grass(self, ts):
-        """!Set the timestamp of this map from the map metadata
-           in the grass file system based spatial database and
-           set the internal time stamp that should be insert/updated
-           in the temporal database.
-
-           @param ts The timetsamp to be set, is of type libgis.TimeStamp()
-        """
-
-        if not self.has_grass_timestamp():
-            return False
-
-        dt1 = libgis.DateTime()
-        dt2 = libgis.DateTime()
-        count = ctypes.c_int()
-
-        libgis.G_get_timestamps(ctypes.byref(ts),
-                                ctypes.byref(dt1),
-                                ctypes.byref(dt2),
-                                ctypes.byref(count))
-
-
-        if dt1.mode == libdate.DATETIME_ABSOLUTE:
-            pdt1 = None
-            pdt2 = None
-            if count.value >= 1:
-                pdt1 = datetime(int(dt1.year), int(dt1.month), int(dt1.day),
-                                int(dt1.hour), int(dt1.minute),
-                                int(dt1.second))
-            if count.value == 2:
-                pdt2 = datetime(int(dt2.year), int(dt2.month), int(dt2.day),
-                                int(dt2.hour), int(dt2.minute),
-                                int(dt2.second))
-
-            # ATTENTION: We ignore the time zone
-            # TODO: Write time zone support
-            self.set_absolute_time(pdt1, pdt2, None)
-        else:
-            unit = None
-            start = None
-            end = None
-            if count >= 1:
-                if dt1.year > 0:
-                    unit = "years"
-                    start = dt1.year
-                elif dt1.month > 0:
-                    unit = "months"
-                    start = dt1.month
-                elif dt1.day > 0:
-                    unit = "days"
-                    start = dt1.day
-                elif dt1.hour > 0:
-                    unit = "hours"
-                    start = dt1.hour
-                elif dt1.minute > 0:
-                    unit = "minutess"
-                    start = dt1.minutes
-                elif dt1.seconds > 0:
-                    unit = "seconds"
-                    start = dt1.seconds
-            if count == 2:
-                if dt2.year > 0:
-                    end = dt2.year
-                elif dt2.month > 0:
-                    end = dt2.month
-                elif dt2.day > 0:
-                    end = dt2.day
-                elif dt2.hour > 0:
-                    end = dt2.hour
-                elif dt2.minute > 0:
-                    end = dt2.minutes
-                elif dt2.seconds > 0:
-                    end = dt2.seconds
-            self.set_relative_time(start, end, unit)
-
-        return True
-
     @abstractmethod
     def remove_timestamp_from_grass(self):
         """!Remove the timestamp from the grass file
@@ -202,12 +123,6 @@ class AbstractMapDataset(AbstractDataset):
         """!Return True in case the map exists in the grass spatial database
 
            @return True if map exists, False otherwise
-        """
-
-    @abstractmethod
-    def read_info(self):
-        """!Read the map info from the grass file system based database and
-           store the content into a dictionary
         """
 
     @abstractmethod

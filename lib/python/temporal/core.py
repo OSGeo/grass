@@ -37,6 +37,7 @@ for details.
 import os
 import grass.script.core as core
 from datetime import datetime
+from c_libraries_interface import *
 # Import all supported database backends
 # Ignore import errors since they are checked later
 try:
@@ -104,10 +105,8 @@ def _set_current_mapset(mapset=None):
 # provides a fast and exit safe interface to the C-library message functions
 message_interface=None
 
-def _set_tgis_message_interface():
-    """!Set the global mesage interface variable
-
-       @param messenger The grass.pyhrass.message.Messenger() object
+def _init_tgis_message_interface():
+    """!Initiate the global mesage interface
     """
     global message_interface
     from grass.pygrass import messages
@@ -122,6 +121,29 @@ def get_tgis_message_interface():
     """
     global message_interface
     return message_interface
+
+###############################################################################
+
+# The global variable that stores the C-library interface object that
+# provides a fast and exit safe interface to the C-library libgis,
+# libraster, libraster3d and libvector functions
+c_library_interface=None
+
+def _init_tgis_c_library_interface():
+    """!Set the global C-library interface variable that
+       provides a fast and exit safe interface to the C-library libgis,
+       libraster, libraster3d and libvector functions
+    """
+    global c_library_interface
+    c_library_interface = CLibrariesInterface()
+
+def get_tgis_c_library_interface():
+    """!Return the C-library interface that
+       provides a fast and exit safe interface to the C-library libgis,
+       libraster, libraster3d and libvector functions
+    """
+    global c_library_interface
+    return c_library_interface
 
 ###############################################################################
 
@@ -197,38 +219,6 @@ def get_temporal_dbmi_init_string(kv=None, grassenv=None):
 
 ###############################################################################
 
-# This variable specifies if the ctypes interface to the grass
-# libraries should be used to read map specific data. If set to False
-# the grass scripting library will be used to get map informations.
-# The advantage of the ctypes inteface is speed, the disadvantage is that
-# the GRASS C functions may call G_fatal_error() which exits the process.
-# That is not catchable in Python.
-use_ctypes_map_access = True
-
-def set_use_ctypes_map_access(use_ctype = True):
-    """!Define the map access method for the temporal GIS library
-
-       Using ctypes to read map metadata is much faster
-       then using the grass.script interface that calls grass modules.
-       The disadvantage is that GRASS C-library function will call
-       G_fatal_error() that will exit the calling process.
-
-       GUI developer should set this flag to False.
-
-       @param use_ctype True use ctypes interface, False use grass.script interface
-    """
-    global use_ctypes_map_access
-    use_ctypes_map_access = use_ctype
-
-###############################################################################
-
-def get_use_ctypes_map_access():
-    """!Return true if ctypes is used for map access """
-    global use_ctypes_map_access
-    return use_ctypes_map_access
-
-###############################################################################
-
 def get_sql_template_path():
     base = os.getenv("GISBASE")
     base_etc = os.path.join(base, "etc")
@@ -255,7 +245,9 @@ def init():
     # Set the global variable current_mapset for fast mapset access
     _set_current_mapset(grassenv["MAPSET"])
     # Start the GRASS message interface server
-    _set_tgis_message_interface()
+    _init_tgis_message_interface()
+    # Start the C-library interface server
+    _init_tgis_c_library_interface()
 
     msgr = get_tgis_message_interface()
 

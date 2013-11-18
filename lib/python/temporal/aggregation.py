@@ -24,7 +24,6 @@ for details.
 """
 
 from space_time_datasets import *
-import grass.lib.gis as libgis
 
 ###############################################################################
 
@@ -125,7 +124,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
     msgr.verbose(_("Aggregate %s raster maps") % (len(inputs)))
     output = "%s_%i" % (base, count)
 
-    mapset = libgis.G_mapset()
+    mapset = get_current_mapset()
     map_id = output + "@" + mapset
     new_map = RasterDataset(map_id)
 

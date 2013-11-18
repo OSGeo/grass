@@ -24,3 +24,4 @@ from stds_export import *
 from stds_import import *
 from mapcalc import *
 from univar_statistics import *
+from c_libraries_interface import *
