@@ -56,6 +56,27 @@ r.what map=boundary_county_500m points=comm_colleges
 ...
 </pre></div>
 
+
+<h3>Input coordinates given as a vector points map, output into CSV file</h3>
+
+Coordinates can be read from exising vector points map by
+specifing <b>points</b> option. Other features than points or
+centroids are ignored. The output is stored in a CSV file including header
+row. Example: query North Carolina county number for each community college:
+
+<div class="code"><pre>
+g.region rast=boundary_county_500m -p
+r.what map=boundary_county_500m points=comm_colleges \
+       separator=comma output=result.csv -n
+       
+cat result.csv 
+easting,northing,site_name,boundary_county_500m
+145096.859150,154534.264884,,39
+616341.437150,146049.750884,,51
+410595.719150,174301.828884,,71
+...
+</pre></div>
+
 <h3>Input from a text file containing coordinates</h3>
 
 The contents of an ASCII text file can be redirected to <em>r.what</em>
@@ -134,7 +155,6 @@ The maximum number of raster map layers that can be queried at one time is 400.
 <h2>TODO</h2>
 
 <ul>
-  <li>Add <b>file</b> option</li>
   <li>Fix <b>400 maps</b> limit</li>
 </ul>
 
