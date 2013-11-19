@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 import os
 import difflib
 import codecs
+import sys
 
 import wx
 import wx.stc
@@ -392,9 +393,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             try:
                 if self.toComplete['entity'] == 'command': 
                     for command in globalvar.grassCmd:
-                        if command.find(self.toComplete['cmd']) == 0:
-                            dotNumber = list(self.toComplete['cmd']).count('.') 
-                            self.autoCompList.append(command.split('.',dotNumber)[-1])
+                        try:
+                            if command.find(self.toComplete['cmd']) == 0:
+                                dotNumber = list(self.toComplete['cmd']).count('.') 
+                                self.autoCompList.append(command.split('.',dotNumber)[-1])
+                        except UnicodeDecodeError, e: # TODO: fix it
+                            sys.stderr.write(DecodeString(command) + ": " + unicode(e))
+                            
             except (KeyError, TypeError):
                 return
             self.ShowList()
