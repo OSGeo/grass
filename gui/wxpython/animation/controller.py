@@ -387,14 +387,17 @@ class AnimationController(wx.EvtHandler):
         if animationData.legendCmd:
             prov = self.bitmapProviders[animationData.windowIndex]
             try:
-                # place legend
-                x, y = 0.1, 0.1
                 bitmap = prov.LoadOverlay(animationData.legendCmd)
-                for param in animationData.legendCmd:
-                    if param.startswith('at'):
-                        b, t, l, r = param.split('=')[1].split(',')
-                        x, y = float(l) / 100., 1 - float(t) / 100.
-                        break
+                # place legend
+                try:
+                    from PIL import Image
+                    for param in animationData.legendCmd:
+                        if param.startswith('at'):
+                            b, t, l, r = param.split('=')[1].split(',')
+                            x, y = float(l) / 100., 1 - float(t) / 100.
+                            break
+                except ImportError:
+                    x, y = 0, 0
                 self.mapwindows[animationData.windowIndex].SetOverlay(bitmap, x, y)
             except GException:
                 GError(message=_("Failed to display legend."))
