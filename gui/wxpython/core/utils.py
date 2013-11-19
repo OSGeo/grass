@@ -1096,15 +1096,21 @@ def PilImageToWxImage(pilImage, copyAlpha = True):
 
 def autoCropImageFromFile(filename):
     """!Loads image from file and crops it automatically.
-    
+
+    If PIL is not installed, it does not crop it.
+
     @param filename path to file
     @return wx.Image instance
     """
-    from PIL import Image
-    pilImage = Image.open(filename)
-    imageBox = pilImage.getbbox()
-    cropped = pilImage.crop(imageBox)
-    return PilImageToWxImage(cropped, copyAlpha=True)
+    try:
+        from PIL import Image
+        pilImage = Image.open(filename)
+        imageBox = pilImage.getbbox()
+        cropped = pilImage.crop(imageBox)
+        return PilImageToWxImage(cropped, copyAlpha=True)
+    except ImportError:
+        import wx
+        return wx.Image(filename)
 
 
 def isInRegion(regionA, regionB):

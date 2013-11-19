@@ -22,6 +22,11 @@ import wx
 from core.utils import _
 
 from grass.pydispatch.signal import Signal
+try:
+    from PIL import Image
+    hasPIL = True
+except ImportError:
+    hasPIL = False
 
 
 class OverlayController(object):
@@ -163,6 +168,10 @@ class OverlayController(object):
 
         @param screensize sreen size
         """
+        if not hasPIL:
+            self._giface.WriteWarning(_("Please install Python Imaging Library (PIL)\n"
+                                        "for better control of legend and other decorations."))
+            return 0, 0
         for param in self._cmd:
             if not param.startswith('at'):
                 continue
@@ -206,6 +215,10 @@ class LegendController(OverlayController):
         self._cmd = ['d.legend', self._defaultAt]
 
     def GetPlacement(self, screensize):
+        if not hasPIL:
+            self._giface.WriteWarning(_("Please install Python Imaging Library (PIL)\n"
+                                        "for better control of legend and other decorations."))
+            return 0, 0
         for param in self._cmd:
             if not param.startswith('at'):
                 continue
