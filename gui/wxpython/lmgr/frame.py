@@ -396,7 +396,10 @@ class GMFrame(wx.Frame):
                               location = location,
                               mapset = 'PERMANENT') != 0:
                     return
-                
+
+                # close current workspace and create new one
+                self.OnWorkspaceClose()
+                self.OnWorkspaceNew()
                 GMessage(parent = self,
                          message = _("Current location is <%(loc)s>.\n"
                                      "Current mapset is <%(mapset)s>.") % \
@@ -867,7 +870,7 @@ class GMFrame(wx.Frame):
                           mapset = mapset) != 0:
                 return # error reported
             
-            # close workspace
+            # close current workspace and create new one
             self.OnWorkspaceClose()
             self.OnWorkspaceNew()
             GMessage(parent = self,
