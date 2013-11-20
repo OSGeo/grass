@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *option_opt, *type_opt;
     struct Option *cat_opt, *field_opt, *step_opt, *id_opt;
-    struct Flag *shell, *nodb;
+    struct Flag *shell, *notab;
     FREPORT **freps;
     int nfreps, rtype, fld;
     char *desc;
@@ -138,10 +138,8 @@ int main(int argc, char *argv[])
     shell->label = _("Shell script style, currently only for report");
     shell->description = _("Format: layer type count min max");
     
-    nodb = G_define_flag();
-    nodb->key = 'n';
-    nodb->label = _("Avoid to copy the attribute table");
-    nodb->description = _("Avoid to copy the attribute table in the database");
+    notab = G_define_standard_flag(G_FLG_V_TABLE);
+    notab->description = _("Do not copy attribute table(s)");
 
     G_gisinit(argv[0]);
 
@@ -763,7 +761,7 @@ int main(int argc, char *argv[])
 
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
         option == O_SUM || option == O_TRANS){
-        if (!nodb->answer){
+        if (!notab->answer){
 	    G_message(_("Copying attribute table(s)..."));
             if (Vect_copy_tables(&In, &Out, 0))
                 G_warning(_("Failed to copy attribute table to output map"));
