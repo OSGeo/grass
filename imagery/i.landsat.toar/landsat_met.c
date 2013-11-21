@@ -57,6 +57,7 @@ void get_metformat(const char metadata[], char *key, char value[])
     value[i] = '\0';
 }
 
+/* future implementation
 double get_metdouble(const char metadata[], char *format, int code, char value[])
 {
     char key[MAX_STR];
@@ -65,6 +66,7 @@ double get_metdouble(const char metadata[], char *format, int code, char value[]
     get_metformat(metadata, key, value);
     return atof(value);			    
 }
+*/
 
 
 /* NEW Metadata Files */
@@ -85,6 +87,7 @@ void get_mtlformat(const char metadata[], char *key, char value[])
     value[i] = '\0';
 }
 
+/* future implementation
 double get_mtldouble(const char metadata[], char *format, int code, char value[])
 {
     char key[MAX_STR];
@@ -93,7 +96,7 @@ double get_mtldouble(const char metadata[], char *format, int code, char value[]
     get_mtlformat(metadata, key, value);
     return atof(value);			    
 }
-
+*/
 
 
 /****************************************************************************
@@ -106,9 +109,8 @@ void lsat_metadata(char *metafile, lsat_data * lsat)
     char mtldata[METADATA_SIZE];
     char key[MAX_STR], value[MAX_STR];
     void (*get_mtldata) (const char[], char *, char[]);
-    void (*get_mtlreal) (const char[], char *, int, char[]);
+    /* void (*get_mtlreal) (const char[], char *, int, char[]); */
     int i, j, ver_mtl;
-    double X2;
 
     /* store metadata in ram */
     if ((f = fopen(metafile, "r")) == NULL)
@@ -117,7 +119,8 @@ void lsat_metadata(char *metafile, lsat_data * lsat)
     (void)fclose(f);
 
     /* set version of the metadata file */
-    /* get_mtldata = (strstr(mtldata, " VALUE ") != NULL) ? get_metformat : get_mtlformat; */
+    get_mtldata = (strstr(mtldata, " VALUE ") != NULL) ? get_metformat : get_mtlformat;
+    /* future implementation
     if (strstr(mtldata, " VALUE ") != NULL)
     {
 	get_mtldata = get_metformat;
@@ -128,6 +131,7 @@ void lsat_metadata(char *metafile, lsat_data * lsat)
 	get_mtldata = get_mtlformat;
 	get_mtlreal = get_mtldouble;
     }
+    */
     ver_mtl = (strstr(mtldata, "QCALMAX_BAND") != NULL) ? 0 : 1;
 
     /* Fill with product metadata */
@@ -310,18 +314,20 @@ void lsat_metadata(char *metafile, lsat_data * lsat)
 		    if (lsat->band[i].thermal) {
 			sprintf(key, "K1_CONSTANT_BAND_%d", lsat->band[i].code);
 			get_mtldata(mtldata, key, value);
-			lsat->band[i].K1 = atof(value);
+			if (value[0] != '\0')
+			    lsat->band[i].K1 = atof(value);
 			sprintf(key, "K2_CONSTANT_BAND_%d", lsat->band[i].code);
 			get_mtldata(mtldata, key, value);
-			lsat->band[i].K2 = atof(value);
+			if (value[0] != '\0')
+			    lsat->band[i].K2 = atof(value);
 		    }
 		    else if (lsat->number == 8)
 		    {
 			/* ESUN from  REFLECTANCE and RADIANCE ADD_BAND */
 			sprintf(key, "REFLECTANCE_MAXIMUM_BAND_%d", lsat->band[i].code);
 			get_mtldata(mtldata, key, value);
-			X2 = atof(value);
-			lsat->band[i].esun = (double)(PI * lsat->dist_es * lsat->dist_es * lsat->band[i].lmax) / X2;
+			if (value[0] != '\0')
+			    lsat->band[i].esun = (double)(PI * lsat->dist_es * lsat->dist_es * lsat->band[i].lmax) / atof(value);
 		    }
 		}
 		if (lsat->number == 8)
