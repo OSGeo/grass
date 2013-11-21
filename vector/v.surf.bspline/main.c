@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *stepE_opt,
 	*stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt, *mask_opt,
 	*memory_opt, *solver, *error, *iter;
-    struct Flag *cross_corr_flag, *spline_step_flag, *withz_flag;
+    struct Flag *cross_corr_flag, *spline_step_flag;
 
     struct Reg_dimens dims;
     struct Cell_head elaboration_reg, original_reg;
@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     dbCatValArray cvarr;
 
+    int with_z;
     int nrec, ctype = 0;
     struct field_info *Fi;
     dbDriver *driver, *driver_cats;
@@ -104,11 +105,6 @@ int main(int argc, char *argv[])
     spline_step_flag->label = _("Estimate point density and distance");
     spline_step_flag->description =
 	_("Estimate point density and distance for the input vector points within the current region extends and quit");
-
-    withz_flag = G_define_flag();
-    withz_flag->key = 'z';
-    withz_flag->description = _("Use z coordinates for approximation (3D vector maps only)");
-    withz_flag->guisection = _("Settings");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->label = _("Name of input vector point map");
@@ -173,10 +169,10 @@ int main(int argc, char *argv[])
     lambda_f_opt->guisection = _("Settings");
 
     col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    col_opt->key = "column";
     col_opt->required = NO;
-    col_opt->description =
-	_("Name of attribute column with values to approximate");
+    col_opt->label =
+	_("Name of the attribute column with values to be used for approximation");
+    col_opt->description = _("If not given and input is 3D vector map then z-coordinates are used.");
     col_opt->guisection = _("Settings");
 
     solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
@@ -256,20 +252,26 @@ int main(int argc, char *argv[])
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
 	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
-    
-    bspline_field = Vect_get_field_number(&In, dfield_opt->answer);
+
+    bspline_field = 0; /* assume 3D input */
     bspline_column = col_opt->answer;
 
-    /* check availability of z values */
-    if (withz_flag->answer && !Vect_is_3d(&In)) {
-	G_fatal_error(_("Input vector is not 3D, can not use z coordinates"));
+    with_z = !bspline_column && Vect_is_3d(&In);
+    
+    if (Vect_is_3d(&In)) {
+        if (!with_z)
+            G_verbose_message(_("Input is 3D: using attribute values instead of z-coordinates for approximation"));
+        else
+            G_verbose_message(_("Input is 3D: using z-coordinates for approximation"));
     }
-    else if (!withz_flag->answer && (bspline_field <= 0 || bspline_column == NULL))
-	G_fatal_error(_("Option '%s' with z values or '-%c' flag must be given"),
-                      col_opt->key, withz_flag->key);
+    else { /* 2D */
+        if (!bspline_column)
+            G_fatal_error(_("Input vector map is 2D. Parameter <%s> required."), col_opt->key);
+    }
 
-    if (withz_flag->answer)
-	bspline_field = 0;
+    if (!with_z) {
+        bspline_field = Vect_get_field_number(&In, dfield_opt->answer);
+    }
 
     /* Estimate point density and mean distance for current region */
     if (spline_step_flag->answer) {
@@ -364,6 +366,7 @@ int main(int argc, char *argv[])
 
     /* read z values from attribute table */
     if (bspline_field > 0) {
+        G_message(_("Reading values from attribute table..."));
 	db_CatValArray_init(&cvarr);
 	Fi = Vect_get_field(&In, bspline_field);
 	if (Fi == NULL)
@@ -388,7 +391,7 @@ int main(int argc, char *argv[])
 	if (nrec < 0)
 	    G_fatal_error(_("Unable to select data from table"));
 
-	G_message(_("[%d] records selected from table"), nrec);
+	G_verbose_message(_("%d records selected from table"), nrec);
 
 	db_close_database_shutdown_driver(driver_cats);
     }
@@ -604,7 +607,7 @@ int main(int argc, char *argv[])
 	    subregion_col++;
 	    subregion++;
 	    if (nsubregions > 1)
-		G_message(_("Subregion %d of %d..."), subregion, nsubregions);
+		G_message(_("Processing subregion %d of %d..."), subregion, nsubregions);
             
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
