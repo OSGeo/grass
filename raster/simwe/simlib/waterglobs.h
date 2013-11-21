@@ -2,7 +2,7 @@
 #define __WATERGLOBS_H__
 
 #define EPS     1.e-7
-#define MAXW    70000
+#define MAXW    7000000
 #define UNDEF	-9999
 
 #include <grass/raster.h>
