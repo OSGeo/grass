@@ -56,11 +56,10 @@ smooth the interpolation. With a small <b>lambda_i</b>, the
 interpolated surface closely follows observation points; a larger
 value will produce a smoother interpolation.
 
-<p>The input can be a 2D or 3D vector points map. If <b>-z</b> is
-given or <b>layer</b> is 0 the z-value of a 3D map is used for
-interpolation. If <b>layer</b> &gt; 0, the user must specify an
-attribute column to used for interpolation using the <b>column</b>
-argument (2D or 3D map).
+<p>The input can be a 2D or 3D vector points map. If input is 3D
+and <b>column</b> is not given than z-coordinates are used for
+interpolation. Parameter <b>column</b> is required when input is 2D
+vector map.
 
 <p><em>v.surf.bspline</em> can produce a <b>raster_output</b> OR
 a <b>output</b> (but NOT simultaneously). Note that topology is not
@@ -125,7 +124,7 @@ v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surfac
 An output map of vector points will be created, corresponding to the
 sparse vector map, with interpolated values.
 
-<h3>Using attribute values instead Z-coordinates</h3>
+<h3>Using attribute values instead z-coordinates</h3>
 
 <div class="code"><pre>
 v.surf.bspline input=point_vector raster=interpolate_surface layer=1 column=attrib_column
@@ -134,10 +133,10 @@ v.surf.bspline input=point_vector raster=interpolate_surface layer=1 column=attr
 The interpolation will be done using the values
 in <i>attrib_column</i>, in the table associated with layer 1.
 
-<h3>North carolina location example using Z-coordinates for interpolation</h3>
+<h3>North carolina location example using z-coordinates for interpolation</h3>
 
 <div class="code"><pre>
-v.surf.bspline input=elev_lid792_bepts@PERMANENT raster=elev_lid792_rast sie=5 sin=5 method=bicubic lambda_i=0.1 -z
+v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast sie=5 sin=5 method=bicubic lambda_i=0.1
 </pre></div>
 
 
