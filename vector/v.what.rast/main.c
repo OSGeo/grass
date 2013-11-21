@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 
     /* Open vector */
     Vect_set_open_level(2);
-    Vect_open_old2(&Map, opt.vect->answer, "", opt.field->answer);
+    Vect_open_old2(&Map, opt.vect->answer, G_mapset(), opt.field->answer);
 
     field = Vect_get_field_number(&Map, opt.field->answer);
 
