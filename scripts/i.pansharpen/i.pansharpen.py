@@ -103,8 +103,7 @@ def main():
     outg = grass.core.find_file('%s_green' % out)
     outr = grass.core.find_file('%s_red' % out)
         
-    if (outb['name'] != '' or outg['name'] != '' or outr['name'] != '') and \
-        (not grass.overwrite() and not flags['o']):
+    if (outb['name'] != '' or outg['name'] != '' or outr['name'] != '') and not grass.overwrite():
         grass.warning(_('Maps with selected output prefix names already exist. \
                         Delete them or use overwrite flag'))
         return
