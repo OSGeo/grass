@@ -427,9 +427,6 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def OnCmdProgress(self, event):
         """!Update progress message info"""
-        if not self.outputSizer.IsShown(self.panelProgress):
-            self.outputSizer.Show(self.panelProgress)
-            self.outputSizer.Layout()
         self.progressbar.SetValue(event.value)
         event.Skip()
 
@@ -480,6 +477,8 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def OnCmdRun(self, event):
         """!Run command"""
+        self.outputSizer.Show(self.panelProgress)
+        self.outputSizer.Layout()
         event.Skip()
 
     def OnCmdDone(self, event):
