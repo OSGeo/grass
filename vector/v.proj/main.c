@@ -106,13 +106,13 @@ int main(int argc, char *argv[])
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
-    flag.list->description = _("List vector maps in input location and exit");
+    flag.list->description = _("List vector maps in input mapset and exit");
 
     flag.transformz = G_define_flag();
     flag.transformz->key = 'z';
     flag.transformz->description = _("3D vector maps only");
     flag.transformz->label =
-	_("Assume z co-ordinate is ellipsoidal height and "
+	_("Assume z coordinate is ellipsoidal height and "
 	  "transform if possible");
     flag.transformz->guisection = _("Target");
 

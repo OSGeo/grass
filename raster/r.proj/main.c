@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 
     list = G_define_flag();
     list->key = 'l';
-    list->description = _("List raster maps in input location and exit");
+    list->description = _("List raster maps in input mapset and exit");
     list->guisection = _("Print");
     
     nocrop = G_define_flag();
