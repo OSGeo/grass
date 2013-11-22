@@ -52,7 +52,7 @@ static int load_plus_head(struct Format_info_pg *, struct Plus_head *);
 static void notice_processor(void *, const char *);
 static char **scan_array(const char *);
 static int remap_node(const struct Format_info_offset *, int);
-static int remap_line(const struct Plus_head*, int);
+static int remap_line(const struct Plus_head*, int, int);
 #endif
 
 /*!
@@ -948,7 +948,7 @@ struct P_area *read_p_area(struct Plus_head *plus, int n,
     }
 
     /* set centroid */
-    area->centroid = remap_line(plus, centroid);
+    area->centroid = remap_line(plus, centroid, GV_CENTROID);
     
     G_free_tokens(lines);
     G_free_tokens(isles);
@@ -1567,15 +1567,16 @@ int remap_node(const struct Format_info_offset *offset, int node)
 /*!
   \brief Get line id from offset
 
-  \todo speed up
+  \todo Do it better, speed up
 
   \param plus pointer to Plus_head struct
   \param line line to find
+  \param type line type
 
   \return line id
   \return -1 not found
 */
-int remap_line(const struct Plus_head* plus, int line)
+int remap_line(const struct Plus_head* plus, int line, int type)
 {
     int i;
     
@@ -1584,7 +1585,7 @@ int remap_line(const struct Plus_head* plus, int line)
     for (i = 1; i <= plus->n_lines; i++) {
         Line = plus->Line[i];
         
-        if (!Line)
+        if (!Line || Line->type != type)
             continue;
         
         if ((int) Line->offset == line)

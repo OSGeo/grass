@@ -617,9 +617,13 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
     
     /* cache also categories (only for PostGIS Topology) */
     if (pg_info->toposchema_name) {
-        if (!PQgetisnull(pg_info->res, pg_info->next_line, 3))
+        int col_idx;
+
+        col_idx = type & GV_POINTS ? 2 : 3;
+            
+        if (!PQgetisnull(pg_info->res, pg_info->next_line, col_idx))
             pg_info->cache.lines_cats[pg_info->cache.lines_next] =
-                atoi(PQgetvalue(pg_info->res, pg_info->next_line, 3)); 
+                atoi(PQgetvalue(pg_info->res, pg_info->next_line, col_idx)); 
         else
             pg_info->cache.lines_cats[pg_info->cache.lines_next] = -1; /* no cat */
     }
@@ -1364,19 +1368,33 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
         }
         
         if (type & GV_POINTS) {
+            int topotype;
+            char *nodeid;
+            
+            if (type == GV_POINT) {
+                topotype = 1;
+                nodeid = pg_info->fid_column;
+            }
+            else { /* assuming GV_CENTROID */
+                topotype = 3;
+                nodeid = "containing_face";
+            }
+            
             sprintf(stmt,
-                    "SELECT tt.geom,tt.containing_face,ft.fid FROM \"%s\".node AS tt "
-                    "LEFT JOIN \"%s\" AS ft ON (%s).type = 1 and (%s).id = node_id "
+                    "SELECT tt.geom,tt.containing_face,ft.%s FROM \"%s\".node AS tt "
+                    "LEFT JOIN \"%s\" AS ft ON (%s).type = %d and (%s).id = %s "
                     "WHERE node_id = %d",
-                    pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column,
-                    pg_info->topogeom_column, fid);
+                    pg_info->fid_column, pg_info->toposchema_name,
+                    pg_info->table_name, pg_info->topogeom_column,
+                    topotype, pg_info->topogeom_column, nodeid, fid);
         }
         else {
             sprintf(stmt,
-                    "SELECT tt.geom,tt.left_face,tt.right_face,ft.fid FROM \"%s\".edge AS tt "
+                    "SELECT tt.geom,tt.left_face,tt.right_face,ft.%s FROM \"%s\".edge AS tt "
                     "LEFT JOIN \"%s\" AS ft ON (%s).type = 2 and (%s).id = edge_id "
                     "WHERE edge_id = %d",
-                    pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column,
+                    pg_info->fid_column,  pg_info->toposchema_name, 
+                    pg_info->table_name, pg_info->topogeom_column,
                     pg_info->topogeom_column, fid);
         }
     }
