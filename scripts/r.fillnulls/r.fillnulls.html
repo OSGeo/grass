@@ -1,9 +1,12 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.fillnulls</em> fills NULL pixels (no data areas) in input map and
-stores filled map to a new output map. The fill data are interpolated 
-from the no data area boundaries buffer using <em>v.surf.rst</em>  or 
-<em>v.surf.bspline</em> spline interpolation.
+<em>r.fillnulls</em> fills NULL pixels (no data areas) in input raster
+map and stores filled data to a new output raster map. The fill areas
+are interpolated from the no data area boundaries buffer
+using <em><a href="v.surf.rst.html">v.surf.rst</a></em> regularized
+spline interpolation with tension (<b>method=rst</b>) or
+<em><a href="r.resamp.bspline.html">r.resamp.bspline</a></em> cubic or
+linear spline interpolation with Tykhonov regularization.
 
 <h2>NOTES</h2>
 
@@ -26,17 +29,18 @@ may pay attention to below notes.
 If interpolation fails, temporary raster and vector maps are left in place to allow
 unfilled map hole (NULL area) identification and manual repair.
 
-<h2>NOTES</h2>
+<p>
+When using the default RST method, the algorithm is based
+on <em><a href="v.surf.rst.html">v.surf.rst</a></em> regularized
+splines with tension interpolation module which interpolates the
+raster cell values for NULL data areas from the boundary values of the
+NULL data area. An eventual raster MASK is respected during the NULL
+data area(s) filling. The interpolated values are patched into the
+NULL data area(s) of the input map and saved into a new raster map.
 
-When using the default RST method, the algorithm is based on <em>v.surf.rst</em>
-regularized splines with tension interpolation module which interpolates the
-raster cell values for NULL data areas from the boundary values of the NULL
-data area. An eventual raster MASK is respected during the NULL data area(s)
-filling. The interpolated values are patched into the NULL data area(s) of
-the input map and saved into a new raster map.
-
-Otherwise, either the bilinear or bicubic method can be selected (based on
-<em>v.surf.bspline</em>). 
+Otherwise, either the linear or cubic spline interpolation with
+Tykhonov regularization can be selected (based on
+<em><a href="r.resamp.bspline.html">r.resamp.bspline</a></em>). 
 
 <h2>WARNING</h2>
 
@@ -44,11 +48,13 @@ Depending on the shape of the NULL data area(s) problems may occur due to an
 insufficient number of input cell values for the interpolation process. Most
 problems will occur if a NULL data area reaches a large amount of the map
 boundary. The user will have to carefully check the result using
-<em>r.mapcalc</em> (generating a difference map to the
-input map and applying the "differences" color table with <em>r.colors</em>)
-and/or <em>d.what.rast</em> to query individual cell values.
+<em><a href="r.mapcalc.html">r.mapcalc</a></em> (generating a
+difference map to the input map and applying the
+&quot;differences&quot; color table
+with <em><a href="r.colors.html">r.colors</a></em>) and/or to query
+individual cell values.
 
-<h2>WARNING</h2>
+<p>
 RST method stores temporary maps on hard disk. It will require at least as much
 free space as one extra input raster map takes.
 
@@ -72,40 +78,41 @@ d.histogram elev_srtm_30m_complete
 d.rast elev_srtm_30m_complete
 </pre></div>
 
+<h2>REFERENCES</h2>
+<ul>
+<li> Mitas, L., Mitasova, H., 1999, Spatial Interpolation. In: P.Longley,
+M.F. Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information
+Systems: Principles, Techniques, Management and Applications, Wiley,
+pp.481-492
+
+<li>Mitasova H., Mitas L.,&nbsp; Brown W.M.,&nbsp; D.P. Gerdes, I.
+Kosinovsky, Baker, T.1995, Modeling spatially and temporally distributed
+phenomena: New methods and tools for GRASS GIS. <i>International Journal of
+GIS</i>, 9 (4), special issue on Integrating GIS and Environmental modeling,
+433-446.
+
+<li><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/lmg.rev1.ps">Mitasova H.
+and Mitas L. 1993</a>: Interpolation by Regularized Spline with Tension: I.
+Theory and Implementation, <i>Mathematical Geology</i> 25, 641-655.
+
+<li><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/hmg.rev1.ps">Mitasova H.
+and Hofierka L. 1993</a>: Interpolation by Regularized Spline with Tension:
+II. Application to Terrain Modeling and Surface Geometry Analysis,
+<i>Mathematical Geology</i> 25, 657-667.
+</ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="r.fill.dir.html">r.fill.dir</a>, 
 <a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="v.surf.bspline.html">v.surf.bspline</a>, 
+<a href="r.resamp.bspline.html">r.resamp.bspline</a>, 
 <a href="v.surf.rst.html">v.surf.rst</a>
 </em>
 
-<h2>REFERENCES</h2>
-<p> Mitas, L., Mitasova, H., 1999, Spatial Interpolation. In: P.Longley,
-M.F. Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information
-Systems: Principles, Techniques, Management and Applications, Wiley,
-pp.481-492
-
-<p>Mitasova H., Mitas L.,&nbsp; Brown W.M.,&nbsp; D.P. Gerdes, I.
-Kosinovsky, Baker, T.1995, Modeling spatially and temporally distributed
-phenomena: New methods and tools for GRASS GIS. <i>International Journal of
-GIS</i>, 9 (4), special issue on Integrating GIS and Environmental modeling,
-433-446.
-
-<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/lmg.rev1.ps">Mitasova H.
-and Mitas L. 1993</a>: Interpolation by Regularized Spline with Tension: I.
-Theory and Implementation, <i>Mathematical Geology</i> 25, 641-655.
-
-<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/hmg.rev1.ps">Mitasova H.
-and Hofierka L. 1993</a>: Interpolation by Regularized Spline with Tension:
-II. Application to Terrain Modeling and Surface Geometry Analysis,
-<i>Mathematical Geology</i> 25, 657-667.
-
 <h2>AUTHORS</h2>
-r.fillnulls: Markus Neteler, University of Hannover  and Fondazione Edmund Mach
-<p>and authors of v.surf.rst<br>
+Markus Neteler, University of Hannover  and Fondazione Edmund Mach<br>
 Improvement by Hamish Bowman, NZ
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

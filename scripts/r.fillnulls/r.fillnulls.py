@@ -34,6 +34,14 @@
 #%option G_OPT_R_OUTPUT
 #%end
 #%option
+#% key: method
+#% type: string
+#% description: Interpolation method
+#% required: yes
+#% options: linear,cubic,rst
+#% answer: rst
+#%end
+#%option
 #% key: tension
 #% type: double
 #% description: Spline tension parameter
@@ -75,14 +83,6 @@
 #% answer : 300
 #% options : 2-10000
 #% guisection: RST options
-#%end
-#%option
-#% key: method
-#% type: string
-#% description: Interpolation method
-#% required : yes
-#% options : linear,cubic,rst
-#% answer : rst
 #%end
 
 import sys
