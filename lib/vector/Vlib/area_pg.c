@@ -92,9 +92,16 @@ PGresult *build_stmt(const struct Plus_head *plus, const struct Format_info_pg *
         sprintf(buf_id, "%d", (int) BLine->offset);
         strcat(stmt_id, buf_id);
     }
+    /* Not really working - why?
     G_asprintf(&stmt, "SELECT geom FROM \"%s\".edge_data WHERE edge_id IN (%s) "
                "ORDER BY POSITION(edge_id::text in '%s')", pg_info->toposchema_name,
                stmt_id, stmt_id);
+    */
+    G_asprintf(&stmt, "SELECT geom FROM \"%s\".edge_data AS t "
+               "JOIN (SELECT id, row_number() over() AS id_sorter FROM "
+               "(SELECT UNNEST(ARRAY[%s]) AS id) AS y) x ON "
+               "t.edge_id in (%s) AND x.id = t.edge_id "
+               "ORDER BY x.id_sorter", pg_info->toposchema_name, stmt_id, stmt_id);
     G_free(stmt_id);
     
     G_debug(2, "SQL: %s", stmt);
