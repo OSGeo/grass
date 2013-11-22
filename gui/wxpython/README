@@ -10,6 +10,7 @@ $Date$
  	Python ElementTree (only for Python 2.4)
  wxPython  >= 2.8.10.1
  NumPy     >= 1.0.4
+ PIL       >= 1.1.7
 
 
 2 - STARTUP WITH GRASS INITIALIZATION
