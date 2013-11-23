@@ -120,7 +120,10 @@ int main(int argc, char *argv[])
 
     /* Open vector */
     Vect_set_open_level(2);
-    Vect_open_old2(&Map, opt.vect->answer, G_mapset(), opt.field->answer);
+    if (print_flag->answer)
+	Vect_open_old2(&Map, opt.vect->answer, "", opt.field->answer);
+    else
+	Vect_open_old2(&Map, opt.vect->answer, G_mapset(), opt.field->answer);
 
     field = Vect_get_field_number(&Map, opt.field->answer);
 
@@ -632,15 +635,14 @@ int main(int argc, char *argv[])
     }
 
     /* Report */
-    G_verbose_message(_("%d categories loaded from table"), select);
     G_verbose_message(_("%d categories loaded from vector"), point_cnt);
-    if (!print_flag->answer)
-	G_verbose_message(_("%d categories from vector missing in table"),
-			  norec_cnt);
     if (dupl_cnt > 0)
 	G_message(_("%d duplicate categories in vector"), dupl_cnt);
 
     if (!print_flag->answer) {
+	G_verbose_message(_("%d categories loaded from table"), select);
+	G_verbose_message(_("%d categories from vector missing in table"),
+			  norec_cnt);
 	if (upderr_cnt > 0)
 	    G_warning(_("%d update errors"), upderr_cnt);
 
