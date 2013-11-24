@@ -3,6 +3,10 @@
 
 #include <grass/vector.h>
 
+/*! Cache type (see Format_info_cache) */
+#define CACHE_FEATURE 0
+#define CACHE_MAP     1
+
 /* Internal vector library subroutines which are not part of public
    API*/
 
