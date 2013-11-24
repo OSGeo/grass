@@ -16,6 +16,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 #endif
