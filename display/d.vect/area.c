@@ -79,7 +79,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 		    continue;
 	    }
 	}
-	
+
 	custom_rgb = FALSE;
 		
 	found = FALSE;
@@ -134,7 +134,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 	Vect_get_area_points(Map, area, APoints);
 	G_debug(3, "\tn_points = %d", APoints->n_points);
 	if (APoints->n_points < 3) {
-	    G_warning(_("Invalid area %d skipped"), area);
+	    G_warning(_("Invalid area %d skipped (not enough points)"), area);
 	    continue;
 	}
 	Vect_reset_line(Points);
