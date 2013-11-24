@@ -138,7 +138,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
 		--with-odbc \
 	        --with-cairo \
-		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include/cairo
+		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include/cairo \
+                --with-postgres
 
 	touch mswindows/osgeo4w/configure-stamp
 fi
