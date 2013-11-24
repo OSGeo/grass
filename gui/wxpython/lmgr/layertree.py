@@ -131,6 +131,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.optpage = {}                    # dictionary of notebook option pages for each map layer
         self.saveitem = {}                   # dictionary to preserve layer attributes for drag and drop
         self.first = True                    # indicates if a layer is just added or not
+        self.firstNewLayer = True            # indicates if first layer has been newly added to the layer tree
         self.flag = ''                       # flag for drag and drop hittest
         # layer change requires a rerendering
         # (used to request rendering only when layer changes are finished)
@@ -1290,7 +1291,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
-        self.Map.SetLayers(self.GetVisibleLayers())
+        nlayers = self.GetVisibleLayers()
+        if not nlayers:
+            self.firstNewLayer = True # layer tree is empty
+        self.Map.SetLayers(nlayers)
         
         if self.mapdisplay.GetToolbar('vdigit'):
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool = True)
@@ -1650,13 +1654,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # set region if auto-zooming is enabled or layer tree contains
         # only one map layer
-        if dcmd and (len(self.GetVisibleLayers()) < 2 or \
-                         UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled')):
-            mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
-            if mapLayer.GetType() in ('raster', 'vector'):
-                render = UserSettings.Get(group = 'display', key = 'autoRendering', subkey = 'enabled')
-                self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
-                                                    render = render)
+        if dcmd:
+            if self.firstNewLayer or \
+                    UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
+                mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
+                if mapLayer.GetType() in ('raster', 'vector'):
+                    render = UserSettings.Get(group = 'display', key = 'autoRendering', subkey = 'enabled')
+                    self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
+                                                        render = render)
+            
+            self.firstNewLayer = False # first layer has been already
+                                       # added to the layer tree
         
         # update nviz session        
         if self.lmgr.IsPaneShown('toolbarNviz') and dcmd:
