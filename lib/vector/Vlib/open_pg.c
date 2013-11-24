@@ -1368,7 +1368,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         sprintf(stmt,
                 "SELECT node_id,tt.geom,containing_face,ft.%s FROM "
                 "\"%s\".node AS tt LEFT JOIN \"%s\" AS ft ON "
-                "(%s).type = 3 AND (%s).id = containing_face WHERE containing_face"
+                "(%s).type = 3 AND (%s).id = containing_face WHERE containing_face "
                 "IS NOT NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
