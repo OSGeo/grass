@@ -8,9 +8,6 @@
 
 #define CURSOR_PAGE 500
 
-#define CACHE_FEATURE 0
-#define CACHE_MAP     1
-
 /*! Topological access */
 #define TOPO_SCHEMA "topology"
 #define TOPO_ID     "topology_id"
