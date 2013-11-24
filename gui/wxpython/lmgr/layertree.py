@@ -514,17 +514,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind(wx.EVT_MENU, self.OnTopology, id = self.popupID['topo'])
 
             # determine format
-            if layer and layer.GetType() == 'vector':
-                if 'info' not in self.GetLayerInfo(self.layer_selected):
-                    info = grass.parse_command('v.info',
-                                               flags = 'e',
-                                               map = layer.GetName())
-                    self.SetLayerInfo(self.layer_selected, key = 'info', value = info)
-                info = self.GetLayerInfo(self.layer_selected, key = 'info')
-                if info and info['format'] != 'native' and \
-                        info['format'].split(',')[1] == 'PostgreSQL':
-                    self.popupMenu.Append(self.popupID['sql'], text = _("SQL Spatial Query"))
-                    self.Bind(wx.EVT_MENU, self.OnSqlQuery, id = self.popupID['sql'])
+            # if layer and layer.GetType() == 'vector':
+            #     if 'info' not in self.GetLayerInfo(self.layer_selected):
+            #         info = grass.parse_command('v.info',
+            #                                    flags = 'e',
+            #                                    map = layer.GetName())
+            #         self.SetLayerInfo(self.layer_selected, key = 'info', value = info)
+            #     info = self.GetLayerInfo(self.layer_selected, key = 'info')
+            #     if info and info['format'] != 'native' and \
+            #             info['format'].split(',')[1] == 'PostgreSQL':
+            #         self.popupMenu.Append(self.popupID['sql'], text = _("SQL Spatial Query"))
+            #         self.Bind(wx.EVT_MENU, self.OnSqlQuery, id = self.popupID['sql'])
             
             if layer.GetMapset() != currentMapset:
                 # only vector map in current mapset can be edited
