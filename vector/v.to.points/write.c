@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
