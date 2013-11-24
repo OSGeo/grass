@@ -19,6 +19,8 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 #endif
@@ -34,7 +36,6 @@
 int V1_close_pg(struct Map_info *Map)
 {
 #ifdef HAVE_POSTGRES
-    int i;
     struct Format_info_pg *pg_info;
 
     G_debug(3, "V2_close_pg() name = %s mapset = %s", Map->name, Map->mapset);
@@ -77,13 +78,8 @@ int V1_close_pg(struct Map_info *Map)
         db_close_database_shutdown_driver(pg_info->dbdriver);
     }
 
-    /* free allocated space */
-    for (i = 0; i < pg_info->cache.lines_alloc; i++) {
-        Vect_destroy_line_struct(pg_info->cache.lines[i]);
-    }
-    if (pg_info->cache.lines)
-        G_free(pg_info->cache.lines);
-
+    Vect__free_cache(&(pg_info->cache));
+    
     G_free(pg_info->db_name);
     G_free(pg_info->schema_name);
     G_free(pg_info->geom_column);

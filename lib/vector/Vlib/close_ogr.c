@@ -22,6 +22,8 @@
 #include <ogr_api.h>
 #endif
 
+#include "local_proto.h"
+
 /*!
   \brief Close vector map (OGR dsn & layer) on level 1
 
@@ -33,8 +35,6 @@
 int V1_close_ogr(struct Map_info *Map)
 {
 #ifdef HAVE_OGR
-    int i;
-
     struct Format_info_ogr *ogr_info;
     
     G_debug(3, "V1_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
@@ -58,13 +58,8 @@ int V1_close_ogr(struct Map_info *Map)
 
     /* destroy OGR datasource */
     OGR_DS_Destroy(ogr_info->ds);
-    
-    /* destroy lines in cache */
-    for (i = 0; i < ogr_info->cache.lines_alloc; i++) {
-	Vect_destroy_line_struct(ogr_info->cache.lines[i]);
-    }
-    G_free(ogr_info->cache.lines);
-    G_free(ogr_info->cache.lines_types);
+
+    Vect__free_cache(&(ogr_info->cache));
     
     /* close DB connection (for atgtributes) */
     if (ogr_info->dbdriver) {

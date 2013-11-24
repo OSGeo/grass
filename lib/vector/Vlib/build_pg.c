@@ -547,8 +547,10 @@ int write_nodes(const struct Plus_head *plus,
     const struct Format_info_offset *offset;
 
     offset = &(pg_info->offset);
-    if (plus->n_nodes != offset->array_num)
+    if (plus->n_nodes != offset->array_num) {
+        G_warning(_("Unable to write nodes, offset array mismatch"));
         return -1;
+    }
     
     stmt_size = 2 * DB_SQL_MAX + 512;
     stmt = (char *) G_malloc(stmt_size);
@@ -575,6 +577,7 @@ int write_nodes(const struct Plus_head *plus,
                 "%d, '{%s}', '{%s}')", pg_info->toposchema_name, TOPO_TABLE_NODE,
                 node_id, stmt_lines, stmt_angles);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            G_warning(_("Unable to write nodes"));
             return -1;
         }
     }

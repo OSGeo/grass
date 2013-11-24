@@ -42,7 +42,9 @@ int V1_rewind_pg(struct Map_info *Map)
     pg_info->next_line = 0;
 
     /* reset cache */
-    pg_info->cache.lines_num = pg_info->cache.lines_next = 0;
+    if (pg_info->cache.ctype != CACHE_MAP)
+        pg_info->cache.lines_num = 0;
+    pg_info->cache.lines_next = 0;
     pg_info->cache.fid = -1;
 
     /* close DB cursor if necessary */
