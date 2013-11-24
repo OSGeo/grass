@@ -292,6 +292,21 @@ int Vect_save_frmt(struct Map_info *Map)
     return 1;
 }
 
+/*! Free memory of line cache
+
+  \param cache pointer to lines cache to be freed
+*/
+void Vect__free_cache(struct Format_info_cache *cache) {
+    int i;
+    /* destroy lines in cache */
+    for (i = 0; i < cache->lines_alloc; i++) {
+	Vect_destroy_line_struct(cache->lines[i]);
+    }
+    G_free(cache->lines);
+    G_free(cache->lines_types);
+    G_free(cache->lines_cats);
+}
+
 void unlink_file(const struct Map_info *Map, const char *name)
 {
     char *path;

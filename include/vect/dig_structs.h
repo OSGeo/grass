@@ -465,8 +465,13 @@ struct Format_info_cache {
     /*!
       \brief Lines array
       
-      Some features requires more allocated lines (eg. polygon
+      Some simple features require more allocated lines (eg. polygon
       with more rings, multipoint, or geometrycollection)
+
+      Line cache is also used for PostGIS Topology to store single
+      topological element (ctype == CACHE_FEATURE) or all elements
+      from the map (ctype == CACHE_MAP) to avoid random access which
+      is very costly.
     */
     struct line_pnts **lines;
     /*!
@@ -497,6 +502,12 @@ struct Format_info_cache {
       \brief Simple feature type (currently used only by PG format)
     */
     SF_FeatureType sf_type;
+    /*! 
+      \brief Cache type
+
+      Currenly used only by PostGIS Topology which allows to cache the
+      whole map (CACHE_MAP) */
+    int ctype;
 };
 
 /*!

@@ -51,7 +51,7 @@ static int geometry_collection_from_wkb(const unsigned char *, int, int, int,
                                         struct Format_info_cache *,
                                         struct feat_parts *);
 static int error_corrupted_data(const char *);
-static void reallocate_cache(struct Format_info_cache *, int);
+static void reallocate_cache(struct Format_info_cache *, int, int);
 static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
 static int get_centroid(struct Map_info *, int, struct line_pnts *);
 static void error_tuples(struct Format_info_pg *);
@@ -319,7 +319,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
                     struct line_cats *line_c, int line)
 {
 #ifdef HAVE_POSTGRES
-    int fid;
+    int fid, cache_idx;
     
     struct Format_info_pg *pg_info;
     struct P_line *Line;
@@ -357,8 +357,18 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         fid = pg_info->offset.array[Line->offset];
 
     /* read feature */
-    get_feature(pg_info, fid, Line->type);
-    
+    if (pg_info->cache.ctype == CACHE_MAP) {
+        cache_idx = line - 1;
+        
+        if (pg_info->cache.lines_types[cache_idx] != Line->type)
+            G_warning(_("Feature %d: unexpected type (%d) - should be %d"), 
+                      line, pg_info->cache.lines_types[cache_idx], Line->type);
+    }
+    else {
+        get_feature(pg_info, fid, Line->type);
+        cache_idx = 0;
+    }
+
     /* check sf type */
     if (pg_info->cache.sf_type == SF_NONE) {
         G_warning(_("Feature %d without geometry skipped"), line);
@@ -371,16 +381,31 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         int cat;
 
         Vect_reset_cats(line_c);
-        if (!pg_info->toposchema_name) /* simple features access */
+        if (!pg_info->toposchema_name) { /* simple features access */
             cat = (int) Line->offset;
-        else                           /* PostGIS Topology (cats are cached) */
-            cat = pg_info->cache.lines_cats[0];
-        if (cat != -1)
+        }
+        else {                           /* PostGIS Topology (cats are cached) */
+            cat = pg_info->cache.lines_cats[cache_idx];
+            if (cat == 0) { /* not cached yet */
+                int col_idx;
+
+                Vect__select_line_pg(pg_info, fid, Line->type);
+             
+                col_idx = Line->type & GV_POINTS ? 2 : 3;
+                
+                if (!PQgetisnull(pg_info->res, 0, col_idx))
+                    cat = pg_info->cache.lines_cats[cache_idx] =
+                        atoi(PQgetvalue(pg_info->res, 0, col_idx)); 
+                else
+                    pg_info->cache.lines_cats[cache_idx] = -1; /* no cat */   
+            }
+        }
+        if (cat > 0)
             Vect_cat_set(line_c, 1, cat);
     }
 
     if (line_p)
-        Vect_append_points(line_p, pg_info->cache.lines[0], GV_FORWARD);
+        Vect_append_points(line_p, pg_info->cache.lines[cache_idx], GV_FORWARD);
     
     return Line->type;
 #else
@@ -428,7 +453,8 @@ int read_next_line_pg(struct Map_info *Map,
             Vect_reset_cats(line_c);
 
         /* read feature to cache if necessary */
-        while (pg_info->cache.lines_next == pg_info->cache.lines_num) {
+        while (pg_info->cache.ctype != CACHE_MAP &&
+               pg_info->cache.lines_next == pg_info->cache.lines_num) {
             /* cache feature -> line_p & line_c */
             sf_type = get_feature(pg_info, -1, -1);
             
@@ -480,11 +506,24 @@ int read_next_line_pg(struct Map_info *Map,
 
         if (line_c) {
             int cat;
-            if (!pg_info->toposchema_name) /* simple features access */
+            if (!pg_info->toposchema_name) { /* simple features access */
                 cat = (int)pg_info->cache.fid;
-            else                           /* PostGIS Topology (cats are cached) */
+            }
+            else {                           /* PostGIS Topology (cats are cached) */
                 cat = pg_info->cache.lines_cats[pg_info->cache.lines_next];
-            if (cat != -1)
+                if (cat == 0) { /* not cached yet */
+                    int col_idx;
+                    
+                    col_idx = itype & GV_POINTS ? 2 : 3;
+                
+                    if (!PQgetisnull(pg_info->res, pg_info->cache.lines_next, col_idx))
+                        cat = pg_info->cache.lines_cats[Map->next_line-1] =
+                        atoi(PQgetvalue(pg_info->res, pg_info->cache.lines_next, col_idx)); 
+                    else
+                        pg_info->cache.lines_cats[Map->next_line-1] = -1; /* no cat */ 
+                }
+            }
+            if (cat > 0)
                 Vect_cat_set(line_c, 1, cat);
         }
 
@@ -663,8 +702,7 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
     *nbytes = length - 1;
     for (i = 0; i < (*nbytes); i++) {
         wkb_data[i] =
-            (unsigned
-             char)((hex_data[2 * i] >
+            (unsigned char)((hex_data[2 * i] >
                     'F' ? hex_data[2 * i] - 0x57 : hex_data[2 * i] >
                     '9' ? hex_data[2 * i] - 0x37 : hex_data[2 * i] -
                     0x30) << 4);
@@ -707,7 +745,10 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
     SF_FeatureType ftype;
 
     /* reset cache */
-    cache->lines_num = 0;
+    if (cache->ctype == CACHE_MAP)
+        cache->lines_num++;
+    else
+        cache->lines_num = 1;
     cache->fid = -1;
     /* next to be read from cache */
     cache->lines_next = 0;
@@ -782,28 +823,32 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
        more lines require eg. polygon with more rings, multi-features
        or geometry collections
      */
-    if (!cache->lines) {
-        reallocate_cache(cache, 1);
+    if (cache->ctype == CACHE_MAP) {
+        reallocate_cache(cache, 1, TRUE);
     }
-
+    else {
+        if (!cache->lines) {
+            reallocate_cache(cache, 1, FALSE);
+        }
+    }
+    
     ret = -1;
     if (ftype == SF_POINT) {
-        cache->lines_num = 1;
-        cache->lines_types[0] = force_type == GV_CENTROID ? force_type : GV_POINT;
+        cache->lines_types[cache->lines_num-1] = force_type == GV_CENTROID ? force_type : GV_POINT;
         ret = point_from_wkb(wkb_data, nbytes, byte_order,
-                             is3D, cache->lines[0]);
+                             is3D, cache->lines[cache->lines_num-1]);
         add_fpart(fparts, ftype, 0, 1);
     }
     else if (ftype == SF_LINESTRING) {
-        cache->lines_num = 1;
-        cache->lines_types[0] = force_type == GV_BOUNDARY ? force_type : GV_LINE;
+        cache->lines_types[cache->lines_num-1] = force_type == GV_BOUNDARY ? force_type : GV_LINE;
         ret = linestring_from_wkb(wkb_data, nbytes, byte_order,
-                                  is3D, cache->lines[0], FALSE);
+                                  is3D, cache->lines[cache->lines_num-1], FALSE);
         add_fpart(fparts, ftype, 0, 1);
     }
     else if (ftype == SF_POLYGON && !skip_polygon) {
         int nrings;
 
+        cache->lines_num = 0; /* reset before reading rings */
         ret = polygon_from_wkb(wkb_data, nbytes, byte_order,
                                is3D, cache, &nrings);
         add_fpart(fparts, ftype, 0, nrings);
@@ -988,7 +1033,7 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes,
     }
 
     /* reallocate space for islands if needed */
-    reallocate_cache(cache, *nrings);
+    reallocate_cache(cache, *nrings, FALSE);
     cache->lines_num += *nrings;
 
     /* each ring has a minimum of 4 bytes (point count) */
@@ -1072,7 +1117,7 @@ int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes,
         nbytes -= data_offset;
 
     /* reallocate space for parts if needed */
-    reallocate_cache(cache, nparts);
+    reallocate_cache(cache, nparts, FALSE);
 
     /* get parts */
     for (ipart = 0; ipart < nparts; ipart++) {
@@ -1476,14 +1521,14 @@ int Vect__execute_get_value_pg(PGconn *conn, const char *stmt)
 /*!
    \brief Reallocate lines cache
  */
-void reallocate_cache(struct Format_info_cache *cache, int num)
+void reallocate_cache(struct Format_info_cache *cache, int num, int incr)
 {
     int i;
 
-    if (cache->lines_alloc >= num)
+    if (!incr && cache->lines_alloc >= num)
         return;
 
-    if (!cache->lines) {
+    if (!incr && !cache->lines) {
         /* most of features requires only one line cache */
         cache->lines_alloc = 1;
     }

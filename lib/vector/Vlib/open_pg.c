@@ -20,11 +20,14 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 
-struct edge_data {
+struct line_data {
     int id;
+    int fid;
     int start_node;
     int end_node;
     int left_face;
@@ -42,7 +45,7 @@ static struct P_node *read_p_node(struct Plus_head *, int, int,
                                   const char *, const char *, const char *,
                                   struct Format_info_pg *);
 static struct P_line *read_p_line(struct Plus_head *, int,
-                                  const struct edge_data *,
+                                  const struct line_data *,
                                   struct Format_info_cache *);
 static struct P_area *read_p_area(struct Plus_head *, int,
                                   const char *, int, const char *);
@@ -52,7 +55,8 @@ static int load_plus_head(struct Format_info_pg *, struct Plus_head *);
 static void notice_processor(void *, const char *);
 static char **scan_array(const char *);
 static int remap_node(const struct Format_info_offset *, int);
-static int remap_line(const struct Plus_head*, int, int);
+static int remap_line(const struct Plus_head*, off_t, int);
+static void reset_cache(struct Format_info_cache *);
 #endif
 
 /*!
@@ -137,7 +141,7 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     if (!found) {
         G_warning(_("Feature table <%s> not found in 'geometry_columns'"),
                   pg_info->table_name);
-        return -1;
+        return 0; /* avoid calling G_fatal_error() */
     }
 
     /* check for topo schema */
@@ -805,10 +809,10 @@ struct P_node *read_p_node(struct Plus_head *plus, int n,
   \return NULL on error
 */
 struct P_line *read_p_line(struct Plus_head *plus, int n,
-                           const struct edge_data *data,
+                           const struct line_data *data,
                            struct Format_info_cache *cache)
 {
-    int tp, itype;
+    int tp;
     struct P_line *line;
     
     struct line_pnts *points;
@@ -875,14 +879,10 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
         }
     }
 
-    /* update spatial index */
-    Vect__cache_feature_pg(data->wkb_geom, FALSE, FALSE, cache, NULL);
-    itype = cache->lines_types[0];
-    if ((line->type & GV_POINTS && itype != GV_POINT) ||
-        (line->type & GV_LINES  && itype != GV_LINE))
-        G_warning(_("Inconsistency in topology: line %d - unexpected feature type"), n);
-    
-    points = cache->lines[0];
+    Vect__cache_feature_pg(data->wkb_geom, FALSE, tp, cache, NULL);
+    cache->lines_cats[cache->lines_num-1] = data->fid > 0 ? data->fid : -1;
+
+    points = cache->lines[cache->lines_num-1];
     dig_line_box(points, &box);
     dig_spidx_add_line(plus, n, &box);
 
@@ -949,7 +949,7 @@ struct P_area *read_p_area(struct Plus_head *plus, int n,
 
     /* set centroid */
     area->centroid = remap_line(plus, centroid, GV_CENTROID);
-    
+
     G_free_tokens(lines);
     G_free_tokens(isles);
 
@@ -1194,7 +1194,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
 {
     int i, side, line, id, ntuples;
     char stmt[DB_SQL_MAX];
-    struct edge_data line_data;
+    struct line_data line_data;
     
     struct Format_info_pg *pg_info;
     struct Format_info_offset *offset;
@@ -1217,7 +1217,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     
     Points = Vect_new_line_struct();
     List = Vect_new_list();
-        
+    
     /* read nodes (GRASS Topo)
        note: standalone nodes (ie. points/centroids) are ignored
     */
@@ -1276,18 +1276,25 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     */
     if (pg_info->topo_geo_only)
         sprintf(stmt,
-                "SELECT node_id,geom FROM \"%s\".node WHERE containing_face "
+                "SELECT tt.node_id,tt.geom,ft.%s FROM \"%s\".node AS tt "
+                "LEFT JOIN \"%s\" AS ft ON "
+                "(%s).type = 1 AND (%s).id = node_id WHERE containing_face "
                 "IS NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
                 "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
-                pg_info->toposchema_name, pg_info->toposchema_name,
+                "fid", pg_info->toposchema_name, pg_info->table_name,
+                pg_info->topogeom_column, pg_info->topogeom_column, pg_info->toposchema_name,
                 pg_info->toposchema_name);
     else
         sprintf(stmt,
-                "SELECT node.node_id,geom FROM \"%s\".node AS node WHERE node_id NOT IN "
+                "SELECT tt.node_id,tt.geom,ft.%s "
+                "FROM \"%s\".node AS tt LEFT JOIN \"%s\" AS ft ON "
+                "(%s).type = 1 AND (%s).id = node_id WHERE node_id NOT IN "
                 "(SELECT node_id FROM \"%s\".%s) AND containing_face IS NULL ORDER BY node_id",
-                pg_info->toposchema_name, pg_info->toposchema_name, TOPO_TABLE_NODE);
+                "fid", pg_info->toposchema_name,  pg_info->table_name,
+                pg_info->topogeom_column, pg_info->topogeom_column,
+                pg_info->toposchema_name, TOPO_TABLE_NODE);
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
@@ -1300,12 +1307,17 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         return -1;
     }
     
+    reset_cache(&(pg_info->cache));
+    pg_info->cache.ctype = CACHE_MAP; /* experimental - cache all features */
+    
     ntuples = PQntuples(res); /* plus->n_plines */
-    G_zero(&line_data, sizeof(struct edge_data));
+    G_zero(&line_data, sizeof(struct line_data));
     for (i = 0; i < ntuples; i++) {
         /* process standalone nodes (PostGIS Topo) */
         line_data.id = atoi(PQgetvalue(res, i, 0));
         line_data.wkb_geom = (char *) PQgetvalue(res, i, 1);
+        line_data.fid = atoi(PQgetvalue(res, i, 2)); /* feature id */
+
         read_p_line(plus, i + 1, &line_data, &(pg_info->cache));
     }
     PQclear(res);
@@ -1314,10 +1326,12 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
        -> lines
        -> boundaries
     */
-    sprintf(stmt,
-            "SELECT edge_id,start_node,end_node,left_face,right_face,geom "
-            "FROM \"%s\".edge ORDER BY edge_id",
-            pg_info->toposchema_name);
+    sprintf(stmt, /* fix fid column */
+            "SELECT edge_id,start_node,end_node,left_face,right_face,tt.geom,ft.%s "
+            "FROM \"%s\".edge AS tt LEFT JOIN \"%s\" AS ft ON (%s).type = 2 AND "
+            "(%s).id = edge_id ORDER BY edge_id",
+            "fid", pg_info->toposchema_name, pg_info->table_name,
+            pg_info->topogeom_column, pg_info->topogeom_column);
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
@@ -1339,7 +1353,8 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         line_data.left_face  = atoi(PQgetvalue(res, i, 3));
         line_data.right_face = atoi(PQgetvalue(res, i, 4));
         line_data.wkb_geom   = (char *) PQgetvalue(res, i, 5);
-        
+        line_data.fid        = atoi(PQgetvalue(res, i, 6)); /* feature id */
+
         id = plus->n_plines + i + 1; /* points already registered */
         read_p_line(plus, id, &line_data, &(pg_info->cache));
         /* TODO: update category index */
@@ -1351,19 +1366,27 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     */
     if (pg_info->topo_geo_only)
         sprintf(stmt,
-                "SELECT node_id,geom,containing_face FROM \"%s\".node WHERE containing_face "
+                "SELECT node_id,tt.geom,containing_face,ft.%s FROM "
+                "\"%s\".node AS tt LEFT JOIN \"%s\" AS ft ON "
+                "(%s).type = 3 AND (%s).id = containing_face WHERE containing_face"
                 "IS NOT NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
                 "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
-                pg_info->toposchema_name, pg_info->toposchema_name,
+                "fid", pg_info->toposchema_name, pg_info->table_name,
+                pg_info->topogeom_column, pg_info->topogeom_column,
+                pg_info->toposchema_name,
                 pg_info->toposchema_name);
     else
         sprintf(stmt,
-                "SELECT node.node_id,geom,containing_face FROM \"%s\".node AS node WHERE "
+                "SELECT tt.node_id,tt.geom,containing_face,ft.%s FROM "
+                "\"%s\".node AS tt LEFT JOIN \"%s\" AS ft ON "
+                "(%s).type = 3 AND (%s).id = containing_face WHERE "
                 "node_id NOT IN (SELECT node_id FROM \"%s\".%s) AND containing_face "
                 "IS NOT NULL ORDER BY node_id",
-                pg_info->toposchema_name, pg_info->toposchema_name, TOPO_TABLE_NODE);
+                "fid", pg_info->toposchema_name, pg_info->table_name,
+                pg_info->topogeom_column, pg_info->topogeom_column,
+                pg_info->toposchema_name, TOPO_TABLE_NODE);
     G_debug(2, "SQL: %s", stmt);
     res = PQexec(pg_info->conn, stmt);
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
@@ -1376,12 +1399,13 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         return -1;
     }
     
-    G_zero(&line_data, sizeof(struct edge_data));
+    G_zero(&line_data, sizeof(struct line_data));
     id = plus->n_plines + plus->n_llines + plus->n_blines + 1;
     for (i = 0; i < plus->n_clines; i++) {
         line_data.id = atoi(PQgetvalue(res, i, 0)); 
         line_data.wkb_geom = (char *)PQgetvalue(res, i, 1);
         line_data.left_face = atoi(PQgetvalue(res, i, 2)); /* face id */
+        line_data.fid = atoi(PQgetvalue(res, i, 3)); /* feature id */
         /* area id and face id can be different */
         
         read_p_line(plus, id + i, &line_data, &(pg_info->cache));
@@ -1431,6 +1455,12 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         for (i = 0; i < plus->n_areas; i++) {
             read_p_area(plus, i + 1, (char *)PQgetvalue(res, i, 1),
                         atoi(PQgetvalue(res, i, 2)), (char *)PQgetvalue(res, i, 3));
+            
+            /* update spatial index -- needed ?
+            Vect_get_area_points(Map, i+1, Points);
+            dig_line_box(Points, &box);
+            dig_spidx_add_area(&(Map->plus), i+1, &box);
+            */
         }
         PQclear(res);
     }
@@ -1463,6 +1493,12 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         for (i = 0; i < plus->n_isles; i++) {
             read_p_isle(plus, i + 1, (char *)PQgetvalue(res, i, 1),
                         atoi(PQgetvalue(res, i, 2)));
+
+            /* update spatial index -- needed ?
+            Vect_get_isle_points(Map, i+1, Points);
+            dig_line_box(Points, &box);
+            dig_spidx_add_isle(&(Map->plus), i+1, &box);
+            */
         }
         PQclear(res);
     }
@@ -1544,8 +1580,6 @@ char **scan_array(const char *sarray)
 /*!
   \brief Get node id from offset
 
-  \todo speed up
-
   \param offset pointer to Format_info_offset struct
   \param node node to find
 
@@ -1554,44 +1588,53 @@ char **scan_array(const char *sarray)
 */
 int remap_node(const struct Format_info_offset *offset, int node)
 {
+    /* probably not needed
     int i;
-    
-    for (i = 0; i < offset->array_num; i++) {
+    for (i = node-1; i < offset->array_num; i++) {
         if (offset->array[i] == node)
-            return i + 1; /* node id starts at 1 */
+            return i + 1; 
     }
-
+    
     return -1;
+    */
+
+    return offset->array[node-1];
 }
 
 /*!
   \brief Get line id from offset
 
-  \todo Do it better, speed up
-
   \param plus pointer to Plus_head struct
-  \param line line to find
+  \param offset line offset
   \param type line type
 
   \return line id
   \return -1 not found
 */
-int remap_line(const struct Plus_head* plus, int line, int type)
+int remap_line(const struct Plus_head* plus, off_t offset, int type)
 {
     int i;
     
     struct P_line *Line;
     
-    for (i = 1; i <= plus->n_lines; i++) {
+    for (i = (int) offset; i <= plus->n_lines; i++) {
         Line = plus->Line[i];
         
         if (!Line || Line->type != type)
             continue;
         
-        if ((int) Line->offset == line)
+        if ((int) Line->offset == offset)
             return i;
     }
 
     return -1;
+}
+
+/*! Reset lines cache */
+void reset_cache(struct Format_info_cache *cache)
+{
+    Vect__free_cache(cache);
+    G_zero(cache, sizeof(struct Format_info_cache));
+    cache->fid = -1;
 }
 #endif

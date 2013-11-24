@@ -85,7 +85,8 @@ int Vect_get_isle_points(const struct Map_info *Map,
     G_debug(3, "  n_lines = %d", Isle->n_lines);
 
     if (Map->format == GV_FORMAT_POSTGIS &&
-        Map->fInfo.pg.toposchema_name) {
+        Map->fInfo.pg.toposchema_name &&
+        Map->fInfo.pg.cache.ctype != CACHE_MAP) {
 #ifdef HAVE_POSTGRES
         /* PostGIS Topology */
         return Vect__get_area_points_pg(Map, Isle->lines, Isle->n_lines, BPoints);
@@ -456,7 +457,8 @@ int Vect__get_area_points(const struct Map_info *Map, const plus_t *lines, int n
                           struct line_pnts *BPoints)
 {
     if (Map->format == GV_FORMAT_POSTGIS &&
-        Map->fInfo.pg.toposchema_name) {
+        Map->fInfo.pg.toposchema_name &&
+        Map->fInfo.pg.cache.ctype != CACHE_MAP) {
 #ifdef HAVE_POSTGRES
         /* PostGIS Topology */
         return Vect__get_area_points_pg(Map, lines, n_lines, BPoints);
