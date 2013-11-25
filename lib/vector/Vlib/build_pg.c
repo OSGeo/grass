@@ -183,6 +183,8 @@ int build_topo(struct Map_info *Map, int build)
            insert new faces (4)
            update edges (5)
         */
+
+        G_message(_("Cleaning-up topology schema..."));
         /* 1) reset centroids to '0' (universal face) */
         sprintf(stmt, "UPDATE \"%s\".node SET containing_face = 0 WHERE "
                 "containing_face IS NOT NULL", pg_info->toposchema_name);
