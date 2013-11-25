@@ -88,6 +88,13 @@
 /*! \brief PostGIS format */
 #define GV_FORMAT_POSTGIS          3
 
+/*! \brief GRASS topology - native format */
+#define GV_TOPO_NATIVE             0
+/*! \brief Pseudo-topology - external simple features (OGR/PostGIS) format */
+#define GV_TOPO_PSEUDO             1
+/*! \brief PostGIS topology - external PostGIS format */
+#define GV_TOPO_POSTGIS            2
+
 /*! \brief One table linked to vector map */
 #define GV_1TABLE  0
 /*! \brief More tables linked to vector map */
