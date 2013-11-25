@@ -170,6 +170,7 @@ char *Vect_get_finfo_layer_name(const struct Map_info *);
 const char *Vect_get_finfo_format_info(const struct Map_info *);
 const char *Vect_get_finfo_geometry_type(const struct Map_info *);
 const struct Format_info *Vect_get_finfo(const struct Map_info *);
+int Vect_get_finfo_topology_info(const struct Map_info *, char **, char **, int*);
 int Vect_is_3d(const struct Map_info *);
 int Vect_set_organization(struct Map_info *, const char *);
 const char *Vect_get_organization(const struct Map_info *);

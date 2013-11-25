@@ -6,7 +6,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2010, 2012 by the GRASS Development Team
+   (C) 2001-2013 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -97,7 +97,7 @@ char *Vect_get_finfo_layer_name(const struct Map_info *Map)
 }
 
 /*!
-  \brief Get format info (relevant only for non-native formats)
+  \brief Get format info as string (relevant only for non-native formats)
 
   \param Map pointer to Map_info structure
   
@@ -130,7 +130,7 @@ const char *Vect_get_finfo_format_info(const struct Map_info *Map)
 }
 
 /*!
-  \brief Get geometry type (relevant only for non-native formats)
+  \brief Get geometry type as string (relevant only for non-native formats)
 
   Note: All inner spaces are removed, function returns feature type in
   lowercase.
@@ -231,4 +231,50 @@ const struct Format_info* Vect_get_finfo(const struct Map_info *Map)
         return &(Map->fInfo);
 
     return NULL;
+}
+
+/*!
+  \brief Get topology type (relevant only for non-native formats)
+
+  \param Map pointer to Map_info structure
+  \param[out] toposchema Topology schema name or NULL
+  \param[out] topogeom   TopoGeometry column name or NULL
+  \param[out] topo_geo_only TRUE for Topo-Geo data model or NULL
+
+  \return GV_TOPO_NATIVE for native format
+  \return GV_TOPO_PSEUDO for pseudo-topology
+  \return GV_TOPO_POSTGIS for PostGIS Topology
+*/
+int Vect_get_finfo_topology_info(const struct Map_info *Map,
+                                 char **toposchema, char **topogeom, int* topo_geo_only)
+{
+    if (Map->format == GV_FORMAT_OGR ||
+        Map->format == GV_FORMAT_OGR_DIRECT) {
+#ifndef HAVE_OGR
+        G_warning(_("GRASS is not compiled with OGR support"));
+#else
+        return GV_TOPO_PSEUDO;
+#endif
+    }
+    
+    if (Map->format == GV_FORMAT_POSTGIS) {
+        const struct Format_info_pg *pg_info;
+
+        pg_info = &(Map->fInfo.pg);
+        if (pg_info->toposchema_name) {
+            if (toposchema)
+                *toposchema = G_store(pg_info->toposchema_name);
+            if (topogeom)
+                *topogeom = G_store(pg_info->topogeom_column);
+            if (topo_geo_only)
+                *topo_geo_only = pg_info->topo_geo_only;
+            
+            return GV_TOPO_POSTGIS;
+        }
+        else {
+            return GV_TOPO_PSEUDO;
+        }
+    }
+
+    return GV_TOPO_NATIVE;
 }
