@@ -346,8 +346,9 @@ int Vect_open_topo_pg(struct Map_info *Map, int head_only)
     
     /* free and init plus structure */
     dig_init_plus(plus);
-    plus->Spidx_new = TRUE;
-    
+    plus->Spidx_new = TRUE;   /* force to create new spatial index */
+    plus->update_cidx = TRUE; /* force to update category index */
+
     return Vect__load_plus_pg(Map, head_only);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -779,7 +780,8 @@ struct P_node *read_p_node(struct Plus_head *plus, int n,
         node->z = 0.0;
     
     /* update spatial index */
-    dig_spidx_add_node(plus, n, node->x, node->y, node->z);
+    if (plus->Spidx_new)
+        dig_spidx_add_node(plus, n, node->x, node->y, node->z);
     
     if (plus->uplist.do_uplist)
         /* collect updated nodes if requested */
@@ -812,11 +814,8 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
                            const struct line_data *data,
                            struct Format_info_cache *cache)
 {
-    int tp;
+    int tp, cat;
     struct P_line *line;
-    
-    struct line_pnts *points;
-    struct bound_box box;
     
     if (data->start_node == 0 && data->end_node == 0) {
         if (data->left_face == 0)
@@ -880,12 +879,22 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
     }
 
     Vect__cache_feature_pg(data->wkb_geom, FALSE, tp, cache, NULL);
-    cache->lines_cats[cache->lines_num-1] = data->fid > 0 ? data->fid : -1;
+    cat = cache->lines_cats[cache->lines_num-1] = data->fid > 0 ? data->fid : -1;
 
-    points = cache->lines[cache->lines_num-1];
-    dig_line_box(points, &box);
-    dig_spidx_add_line(plus, n, &box);
-
+    /* update spatial index */
+    if (plus->Spidx_new) {
+        struct line_pnts *points;
+        struct bound_box box;
+    
+        points = cache->lines[cache->lines_num-1];
+        dig_line_box(points, &box);
+        dig_spidx_add_line(plus, n, &box);
+    }
+    
+    /* update category index */
+    if (plus->update_cidx)
+        dig_cidx_add_cat(plus, cat > 0 ? 1 : 0, cat > 0 ? cat : 0, n, tp);
+    
     if (plus->uplist.do_uplist) {
         /* collect updated lines if requested */
         dig_line_add_updated(plus, n);
@@ -1202,6 +1211,7 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
     struct P_line *Line;
     struct line_pnts *Points;
     struct ilist *List;
+    struct bound_box box;
     
     PGresult *res;
   
@@ -1357,7 +1367,6 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
 
         id = plus->n_plines + i + 1; /* points already registered */
         read_p_line(plus, id, &line_data, &(pg_info->cache));
-        /* TODO: update category index */
     }
     PQclear(res);
 
@@ -1433,6 +1442,8 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
         }
     }
     else {
+        int cat;
+        
         /* read areas from 'area_grass' table */
         sprintf(stmt,
                 "SELECT area_id,lines,centroid,isles FROM \"%s\".%s ORDER BY area_id",
@@ -1456,11 +1467,18 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
             read_p_area(plus, i + 1, (char *)PQgetvalue(res, i, 1),
                         atoi(PQgetvalue(res, i, 2)), (char *)PQgetvalue(res, i, 3));
             
-            /* update spatial index -- needed ?
-            Vect_get_area_points(Map, i+1, Points);
-            dig_line_box(Points, &box);
-            dig_spidx_add_area(&(Map->plus), i+1, &box);
-            */
+            if (plus->Spidx_new) {
+                /* update spatial index */
+                Vect_get_area_points(Map, i+1, Points);
+                dig_line_box(Points, &box);
+                dig_spidx_add_area(&(Map->plus), i+1, &box);
+            }
+
+            if (plus->update_cidx) {
+                /* update category index */
+                cat = pg_info->cache.lines_cats[plus->Area[i+1]->centroid-1];
+                dig_cidx_add_cat(plus, cat > 0 ? 1 : 0, cat > 0 ? cat : 0, i+1, GV_AREA);
+            }
         }
         PQclear(res);
     }
@@ -1494,11 +1512,12 @@ int Vect__load_plus_pg(struct Map_info *Map, int head_only)
             read_p_isle(plus, i + 1, (char *)PQgetvalue(res, i, 1),
                         atoi(PQgetvalue(res, i, 2)));
 
-            /* update spatial index -- needed ?
-            Vect_get_isle_points(Map, i+1, Points);
-            dig_line_box(Points, &box);
-            dig_spidx_add_isle(&(Map->plus), i+1, &box);
-            */
+            if (plus->Spidx_new) {
+                /* update spatial index */
+                Vect_get_isle_points(Map, i+1, Points);
+                dig_line_box(Points, &box);
+                dig_spidx_add_isle(&(Map->plus), i+1, &box);
+            }
         }
         PQclear(res);
     }
