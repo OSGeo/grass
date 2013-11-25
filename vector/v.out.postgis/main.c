@@ -154,6 +154,7 @@ int main(int argc, char *argv[])
     Vect_close(&In);
 
     /* build topology for output map */
+    Vect_build_partial(&Out, GV_BUILD_NONE);
     if (Vect_build(&Out) != 1)
         G_fatal_error(_("Building %s topology failed"),
                       flags.topo->answer ? "PostGIS" : "pseudo");
@@ -168,7 +169,7 @@ int main(int argc, char *argv[])
                    Vect_get_name(&Out));
     else
         G_done_msg(_("%d primitives written to <%s>."),
-                   Vect_get_num_lines(&Out), Vect_get_finfo_geometry_type(&Out),
+                   Vect_get_num_lines(&Out), 
                    Vect_get_name(&Out));
     
     /* close output map */
