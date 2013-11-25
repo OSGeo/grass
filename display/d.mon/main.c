@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/display.h>
 #include <grass/glocale.h>
 
 #include "proto.h"
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
     struct Option *start_opt, *select_opt, *stop_opt, *output_opt,
       *width_opt, *height_opt, *bgcolor_opt;
     struct Flag *list_flag, *selected_flag, *select_flag, *release_flag, 
-	*cmd_flag, *truecolor_flag;
+        *cmd_flag, *truecolor_flag, *update_flag;
     
     int nopts, ret;
     const char *mon;
@@ -105,13 +106,19 @@ int main(int argc, char *argv[])
 
     release_flag = G_define_flag();
     release_flag->key = 'r';
-    release_flag->description = _("Release currently selected monitor and exit");
+    release_flag->description = _("Release and stop currently selected monitor and exit");
     release_flag->guisection = _("Manage");
 
     truecolor_flag = G_define_flag();
     truecolor_flag->key = 't';
     truecolor_flag->description = _("Disable true colors");
-    truecolor_flag->guisection = _("Manage");
+    truecolor_flag->guisection = _("Settings");
+
+    update_flag = G_define_flag();
+    update_flag->key = 'u';
+    update_flag->label = _("Open output file in update mode");
+    update_flag->description = _("Requires --overwrite flag. If not given the output file is overwritten.");
+    update_flag->guisection = _("Settings");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -132,6 +139,7 @@ int main(int argc, char *argv[])
 	    else if (mon) { /* release */
 		G_unsetenv("MONITOR");
 		G_verbose_message(_("Monitor <%s> released"), mon); 
+                ret = stop_mon(mon);
 	    }
 	}
 	else
@@ -161,10 +169,19 @@ int main(int argc, char *argv[])
 	(!start_opt->answer || strncmp(start_opt->answer, "wx", 2) == 0))
 	G_warning(_("Option <%s> ignored"), output_opt->key);
     
-    if (start_opt->answer)
+    if (start_opt->answer) {
 	ret = start_mon(start_opt->answer, output_opt->answer, !select_flag->answer,
 			width_opt->answer, height_opt->answer, bgcolor_opt->answer,
 			!truecolor_flag->answer);
+        if (output_opt->answer && !update_flag->answer) {
+            if (D_open_driver() != 0)
+                G_fatal_error(_("No graphics device selected. "
+                                "Use d.mon to select graphics device."));
+            D_setup_unity(0);
+            D_erase(bgcolor_opt->answer);
+            D_close_driver();
+        }
+    }
     
     if (stop_opt->answer)
 	ret = stop_mon(stop_opt->answer);
