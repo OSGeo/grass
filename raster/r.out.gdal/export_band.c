@@ -187,6 +187,8 @@ int exact_checks(GDALDataType export_datatype,
 	ret = -1;
     }
 
+    Rast_close(fd);
+
     G_free(bufer);
 
     return ret;
