@@ -2005,5 +2005,9 @@ class IVDigit:
         @return feature type as string (point, linestring, polygon)
         @return None for native format
         """
-        return Vect_get_finfo_geometry_type(self.poMapInfo)
+        topoFormat = Vect_get_finfo_topology_info(self.poMapInfo, None, None, None)
+        if topoFormat == GV_TOPO_PSEUDO:
+            return Vect_get_finfo_geometry_type(self.poMapInfo)
+        
+        return ''
         
