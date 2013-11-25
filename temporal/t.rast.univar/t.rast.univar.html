@@ -1,6 +1,96 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+<em>t.rast.univar</em> calculate univariate statistics from the non-null cells
+for each registered raster map of a space time raster dataset.
+<p>
+By default it return the name of the map, the start and end date of dataset and
+the following values: mean, minimum and maximum vale, mean_of_abs,
+standard deviation, variance,coeff_var, number of null cells, total number of cell.
+<p>
+Using the <em>e</em> flag it can calculate also extended statistics: first quartile,
+median value, third quartile and percentile 90.
+
+<div class="code"><pre>
+
+MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
+maxn=10
+
+for map in ${MAPS} ; do
+    r.mapcalc --o expr="${map} = rand(0,$maxn)" 
+    echo ${map} >> map_list.txt 
+    maxn=`expr $maxn + 10`
+done
+
+t.create type=strds temporaltype=absolute \
+         output=precipitation_daily \
+         title="Daily precipitation" \
+         description="Test dataset with daily precipitation"
+
+t.register -i type=rast input=precipitation_daily \
+           file=map_list.txt start="2012-08-20" increment="1 days"
+
+t.info type=strds input=precipitation_daily
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ precipitation_daily@ecad90_sample_tmodules
+ | Name: ...................... precipitation_daily
+ | Mapset: .................... ecad90_sample_tmodules
+ | Creator: ................... lucadelu
+ | Creation time: ............. 2013-11-08 10:38:18.782948
+ | Temporal type: ............. absolute
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-08-27 00:00:00
+ | End time:................... 2012-09-03 00:00:00
+ | Granularity:................ 1 day
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 75.5
+ | South:...................... 25.25
+ | East:.. .................... 75.5
+ | West:....................... -40.5
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... precipitation_daily_ecad90_sample_tmodules_raster_register
+ | North-South resolution min:. 0.25
+ | North-South resolution max:. 0.25
+ | East-west resolution min:... 0.25
+ | East-west resolution max:... 0.25
+ | Minimum value min:.......... 0.0
+ | Minimum value max:.......... 0.0
+ | Maximum value min:.......... 9.0
+ | Maximum value max:.......... 69.0
+ | Number of registered maps:.. 7
+ |
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Command history:
+ | # 2013-11-08 10:38:18 
+ | t.create type="strds" temporaltype="absolute"
+ |     output="precipitation_daily" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | # 2013-11-08 10:38:26 
+ | t.register -i type="rast" input="precipitation_daily"
+ |     file="map_list.txt" start="2012-08-20" increment="1 days"
+ |
+ +----------------------------------------------------------------------------+
+
+ 
+t.rast.univar -eh precipitation_daily
+id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|first_quartile|median|third_quartile|percentile_90
+map_1@ecad90_sample_tmodules|2012-08-27 00:00:00|2012-08-28 00:00:00|4.50559701492537|0|9|4.50559701492537|2.87457821791815|8.2631999309295|63.8001625177694|420210|0|93264|2|5|7|9
+map_2@ecad90_sample_tmodules|2012-08-28 00:00:00|2012-08-29 00:00:00|9.48865585863784|0|19|9.48865585863784|5.7779859624471|33.3851217822358|60.8936191651129|884950|0|93264|4|9|15|18
+map_3@ecad90_sample_tmodules|2012-08-29 00:00:00|2012-08-30 00:00:00|14.47868416538|0|29|14.47868416538|8.63325210721546|74.5330419467402|59.6273253052818|1350340|0|93264|7|14|22|26
+map_4@ecad90_sample_tmodules|2012-08-30 00:00:00|2012-08-31 00:00:00|19.4582046663236|0|39|19.4582046663236|11.5783111835479|134.05728986307|59.5034916226703|1814750|0|93264|9|19|29|36
+map_5@ecad90_sample_tmodules|2012-08-31 00:00:00|2012-09-01 00:00:00|24.4868330759993|0|49|24.4868330759993|14.3850752287166|206.930389335835|58.7461644552805|2283740|0|93264|12|24|37|44
+map_6@ecad90_sample_tmodules|2012-09-01 00:00:00|2012-09-02 00:00:00|29.4854391833934|0|59|29.4854391833934|17.2796032004376|298.584686764572|58.6038522029873|2749930|0|93264|15|30|44|53
+map_7@ecad90_sample_tmodules|2012-09-02 00:00:00|2012-09-03 00:00:00|34.4274318064848|0|69|34.4274318064848|20.2238928524934|409.005842109134|58.7435419701681|3210840|0|93264|17|34|52|63
+
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
