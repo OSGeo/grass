@@ -20,6 +20,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
 
@@ -156,6 +158,10 @@ int build_topo(struct Map_info *Map, int build)
     if (build < GV_BUILD_BASE)
         return 1; /* nothing to print */
     
+    /* cache features to speed-up random access (when attaching isles
+       to areas) */
+    if (build >= GV_BUILD_BASE)
+        pg_info->cache.ctype = CACHE_MAP;
     /* update TopoGeometry based on GRASS-like topology */
     Vect_build_nat(Map, build);
     
@@ -547,6 +553,10 @@ int write_nodes(const struct Plus_head *plus,
     const struct Format_info_offset *offset;
 
     offset = &(pg_info->offset);
+    
+    if (offset->array_num < 1) /* nothing to write */
+        return 0;
+    
     if (plus->n_nodes != offset->array_num) {
         G_warning(_("Unable to write nodes, offset array mismatch"));
         return -1;

@@ -362,6 +362,9 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     if (pg_info->cache.ctype == CACHE_MAP) {
         cache_idx = line - 1;
         
+        if (cache_idx >= pg_info->cache.lines_num)
+            G_fatal_error(_("Requesting invalid feature from cache (%d). Number of features in cache: %d"),
+                          cache_idx, pg_info->cache.lines_num);
         if (pg_info->cache.lines_types[cache_idx] != Line->type)
             G_warning(_("Feature %d: unexpected type (%d) - should be %d"), 
                       line, pg_info->cache.lines_types[cache_idx], Line->type);
@@ -455,8 +458,7 @@ int read_next_line_pg(struct Map_info *Map,
             Vect_reset_cats(line_c);
 
         /* read feature to cache if necessary */
-        while (pg_info->cache.ctype != CACHE_MAP &&
-               pg_info->cache.lines_next == pg_info->cache.lines_num) {
+        while (pg_info->cache.lines_next == pg_info->cache.lines_num) {
             /* cache feature -> line_p & line_c */
             sf_type = get_feature(pg_info, -1, -1);
             
@@ -529,7 +531,7 @@ int read_next_line_pg(struct Map_info *Map,
                 Vect_cat_set(line_c, 1, cat);
         }
 
-        pg_info->cache.lines_next++;
+        pg_info->cache.lines_next++; /* read next line from cache */
 
         return itype;
     }
@@ -749,11 +751,12 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
     /* reset cache */
     if (cache->ctype == CACHE_MAP)
         cache->lines_num++;
-    else
+    else {
+        /* next to be read from cache */
+        cache->lines_next = 0;
         cache->lines_num = 1;
+    }
     cache->fid = -1;
-    /* next to be read from cache */
-    cache->lines_next = 0;
 
     if (fparts)
         fparts->n_parts = 0;
@@ -865,8 +868,10 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
         G_warning(_("Unsupported feature type %d"), ftype);
     }
 
-    /* read next feature from cache */
-    cache->lines_next = 0;
+    if (cache->ctype != CACHE_MAP) {
+        /* read next feature from cache */
+        cache->lines_next = 0;
+    }
 
     /* G_free(wkb_data); */
 
