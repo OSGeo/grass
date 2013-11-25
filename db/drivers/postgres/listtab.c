@@ -21,17 +21,18 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 	vschemacol;
     dbString *list;
     PGresult *rest, *resv;
-    char buf[1000];
+    char buf[DB_SQL_MAX];
 
     *tlist = NULL;
     *tcount = 0;
 
 
     /* Get table names */
-    rest =
-	PQexec(pg_conn,
-	       "select * from pg_tables where tablename !~ 'pg_*' order by tablename");
-
+    sprintf(buf, "SELECT * FROM pg_tables WHERE schemaname %s "
+            " ('pg_catalog', 'information_schema') ORDER BY tablename", system ? "IN" : "NOT IN");
+    G_debug(2, "SQL: %s", buf);
+    
+    rest = PQexec(pg_conn, buf);
     if (!rest || PQresultStatus(rest) != PGRES_TUPLES_OK) {
 	db_d_append_error("%s\n%s",
 			  _("Unable to select table names."),
@@ -54,10 +55,11 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 
 
     /* Get view names */
-    resv =
-	PQexec(pg_conn,
-	       "SELECT * FROM pg_views WHERE schemaname NOT IN ('pg_catalog','information_schema') AND viewname !~ '^pg_'");
-
+    sprintf(buf, "SELECT * FROM pg_views WHERE schemaname %s "
+            " ('pg_catalog', 'information_schema') ORDER BY viewname", system ? "IN" : "NOT IN");
+    G_debug(2, "SQL: %s", buf);
+    
+    resv = PQexec(pg_conn, buf);
     if (!resv || PQresultStatus(resv) != PGRES_TUPLES_OK) {
 	db_d_append_error("%s\n%s",
 			  _("Unable to select view names."),
