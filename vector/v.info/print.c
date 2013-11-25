@@ -228,8 +228,10 @@ void print_shell(const struct Map_info *Map)
 
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
+        int topo_format;
+        char *toposchema_name, *topogeom_column;
         const struct Format_info *finfo;
-        
+
         finfo = Vect_get_finfo(Map);
         
         fprintf(stdout, "format=%s,%s\n",
@@ -242,11 +244,12 @@ void print_shell(const struct Map_info *Map)
                 finfo->pg.geom_column);
         fprintf(stdout, "feature_type=%s\n",
                 Vect_get_finfo_geometry_type(Map));
-        if (finfo->pg.toposchema_name) {
+        topo_format = Vect_get_finfo_topology_info(Map, &toposchema_name, &topogeom_column, NULL);
+        if (topo_format == GV_TOPO_POSTGIS) {
             fprintf(stdout, "pg_topo_schema=%s\n",
-                    finfo->pg.toposchema_name);
+                    toposchema_name);
             fprintf(stdout, "pg_topo_column=%s\n",
-                    finfo->pg.topogeom_column);
+                    topogeom_column);
         }
     }
     else {
@@ -278,15 +281,13 @@ void print_info(const struct Map_info *Map)
 {
     int i, map_type;
     char line[1024];
-    char tmp1[1024], tmp2[1024];
     char timebuff[256];
     struct TimeStamp ts;
     int time_ok, first_time_ok, second_time_ok;
     struct bound_box box;
-    int utm_zone;
-   
+    char tmp1[1024], tmp2[1024];
+    
     time_ok = first_time_ok = second_time_ok = FALSE;
-    utm_zone = -1;
     map_type = Vect_maptype(Map);
     
     /* Check the Timestamp */
@@ -363,6 +364,10 @@ void print_info(const struct Map_info *Map)
         printline(line);
     }
     else if (map_type == GV_FORMAT_POSTGIS) {
+        int topo_format;
+        char *toposchema_name, *topogeom_column;
+        int topo_geo_only;
+
         const struct Format_info *finfo;
 
         finfo = Vect_get_finfo(Map);
@@ -378,6 +383,7 @@ void print_info(const struct Map_info *Map)
         sprintf(line, "%-17s%s", _("DB name:"),
                 Vect_get_finfo_dsn_name(Map));
         printline(line);
+
         sprintf(line, "%-17s%s", _("Geometry column:"),
                 finfo->pg.geom_column);
         printline(line);
@@ -385,14 +391,20 @@ void print_info(const struct Map_info *Map)
         sprintf(line, "%-17s%s", _("Feature type:"),
                 Vect_get_finfo_geometry_type(Map));
         printline(line);
-        if (finfo->pg.toposchema_name) {
+
+
+        
+        topo_format = Vect_get_finfo_topology_info(Map,
+                                                   &toposchema_name, &topogeom_column,
+                                                   &topo_geo_only);
+        if (topo_format == GV_TOPO_POSTGIS) {
             sprintf(line, "%-17s%s (%s %s%s)", _("Topology:"), "PostGIS",
-                    _("schema:"), finfo->pg.toposchema_name,
-                    finfo->pg.topo_geo_only ? ", topo-geo-only: yes" : "");
+                    _("schema:"), toposchema_name,
+                    topo_geo_only ? ", topo-geo-only: yes" : "");
             printline(line);
 
             sprintf(line, "%-17s%s", _("Topology column:"),
-                    finfo->pg.topogeom_column);
+                    topogeom_column);
         }
         else
             sprintf(line, "%-17s%s", _("Topology:"), "pseudo (simple features)");
@@ -467,6 +479,8 @@ void print_info(const struct Map_info *Map)
     /* this differs from r.info in that proj info IS taken from the map here, not the location settings */
     /* Vect_get_proj_name() and _zone() are typically unset?! */
     if (G_projection() == PROJECTION_UTM) {
+        int utm_zone;
+
         utm_zone = Vect_get_zone(Map);
         if (utm_zone < 0 || utm_zone > 60)
             strcpy(tmp1, _("invalid"));
