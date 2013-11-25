@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
     
-    /* Try to open input GRASS raster.. */
+    /* Find input GRASS raster.. */
     mapset = G_find_raster2(input->answer, "");
 
     if (mapset != NULL) {
