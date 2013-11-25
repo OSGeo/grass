@@ -445,6 +445,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
 	}
     }
 
+    Rast_close(fd);
+
     G_free(bufer);
 
     return ret;
