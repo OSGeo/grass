@@ -1485,7 +1485,8 @@ int Vect__execute_pg(PGconn * conn, const char *stmt)
     if (!result || PQresultStatus(result) != PGRES_COMMAND_OK) {
         PQclear(result);
         
-        G_warning(_("Execution failed: %s"), PQerrorMessage(conn));
+        G_warning(_("Execution failed: %s\nReason: %s"), stmt,
+                  PQerrorMessage(conn));
         return -1;
     }
 
@@ -1515,7 +1516,8 @@ int Vect__execute_get_value_pg(PGconn *conn, const char *stmt)
         PQntuples(result) != 1) {
         PQclear(result);
 
-        G_warning(_("Execution failed: %s"), PQerrorMessage(conn));
+        G_warning(_("Execution failed: %s\nReason: %s"), stmt,
+                  PQerrorMessage(conn));
         return -1;
     }
 
