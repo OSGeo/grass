@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("PCA"));
     module->description = _("Principal components analysis (PCA) "
 			    "for image processing.");
+    module->overwrite = 1;
 
     /* Define options */
     opt_in = G_define_standard_option(G_OPT_R_INPUTS);
