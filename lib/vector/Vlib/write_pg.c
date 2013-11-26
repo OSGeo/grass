@@ -862,17 +862,19 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     }
     
     /* change constraints to deferrable initially deferred */
-    if (-1 == set_constraint_to_deferrable(pg_info, "node", "face_exists",
-                                           "containing_face", "face", "face_id") ||
-        -1 == set_constraint_to_deferrable(pg_info, "edge_data", "end_node_exists",
-                                           "end_node", "node", "node_id") ||
-        -1 == set_constraint_to_deferrable(pg_info, "edge_data", "left_face_exists",
-                                           "left_face", "face", "face_id") ||
-        -1 == set_constraint_to_deferrable(pg_info, "edge_data", "right_face_exists",
-                                           "right_face", "face", "face_id") ||
-        -1 == set_constraint_to_deferrable(pg_info, "edge_data", "start_node_exists",
-                                           "start_node", "node", "node_id"))
-        return -1;
+    if (!pg_info->topo_geo_only) {
+        if (-1 == set_constraint_to_deferrable(pg_info, "node", "face_exists",
+                                               "containing_face", "face", "face_id") ||
+            -1 == set_constraint_to_deferrable(pg_info, "edge_data", "end_node_exists",
+                                               "end_node", "node", "node_id") ||
+            -1 == set_constraint_to_deferrable(pg_info, "edge_data", "left_face_exists",
+                                               "left_face", "face", "face_id") ||
+            -1 == set_constraint_to_deferrable(pg_info, "edge_data", "right_face_exists",
+                                               "right_face", "face", "face_id") ||
+            -1 == set_constraint_to_deferrable(pg_info, "edge_data", "start_node_exists",
+                                               "start_node", "node", "node_id"))
+            return -1;
+    }
 
     /* create additional tables in topological schema to store
        GRASS topology in DB */
@@ -2748,7 +2750,7 @@ int set_constraint_to_deferrable(struct Format_info_pg *pg_info,
             "FOREIGN KEY (%s) REFERENCES \"%s\".%s (%s) "
             "DEFERRABLE INITIALLY DEFERRED",
             pg_info->toposchema_name, table, constraint, column,
-            pg_info->toposchema_name, ref_table);
+            pg_info->toposchema_name, ref_table, ref_column);
     if (-1 == Vect__execute_pg(pg_info->conn, stmt)) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
