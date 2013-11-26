@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     field_opt->guisection = _("Selection");
 
     type_opt = G_define_standard_option(G_OPT_V3_TYPE);
-    type_opt->answer = "point,line,area,face";
+    type_opt->answer = "point,line,centroid,face";
     type_opt->guisection = _("Selection");
 
     id_opt = G_define_standard_option(G_OPT_V_IDS);
