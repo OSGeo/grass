@@ -104,6 +104,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("texture"));
     module->description =
 	_("Generate images with textural features from a raster map.");
+    module->overwrite = 1;
 
     /* Define the different options */
 
