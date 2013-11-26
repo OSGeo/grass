@@ -68,6 +68,8 @@ static int update_topo_edge(struct Map_info *, int);
 static int update_topo_face(struct Map_info *, int);
 static int add_line_to_topo_pg(struct Map_info *, off_t, int, const struct line_pnts *);
 static int delete_line_from_topo_pg(struct Map_info *, int, int, const struct line_pnts *);
+static int set_constraint_to_deferrable(struct Format_info_pg *, const char *, const char *,
+                                        const char *, const char *, const char *);
 #endif
 
 static struct line_pnts *Points;
@@ -315,7 +317,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
     }
 
     if (offset >= pg_info->offset.array_num) {
-        G_warning(_("Invalid offset (%d)"), offset);
+        G_warning(_("Invalid offset (%ld)"), offset);
         return -1;
     }
 
@@ -832,16 +834,11 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
             pg_info->toposchema_name, pg_info->schema_name,
             pg_info->table_name, pg_info->geom_column, tolerance,
             with_z == WITH_Z ? "t" : "f");
-    G_debug(2, "SQL: %s", stmt);
-
-    result = PQexec(pg_info->conn, stmt);
-    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
-        G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+    pg_info->toposchema_id = Vect__execute_get_value_pg(pg_info->conn, stmt);
+    if (pg_info->toposchema_id == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
-    /* store toposchema id */
-    pg_info->toposchema_id = atoi(PQgetvalue(result, 0, 0));
 
     /* add topo column to the feature table */
     G_verbose_message(_("Adding new topology column <%s>..."),
@@ -850,14 +847,32 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
             "'%s', '%s')", pg_info->toposchema_name, pg_info->schema_name,
             pg_info->table_name, pg_info->topogeom_column,
             get_sftype(pg_info->feature_type));
-    G_debug(2, "SQL: %s", stmt);
-
-    result = PQexec(pg_info->conn, stmt);
-    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
-        G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+    if (-1 == Vect__execute_get_value_pg(pg_info->conn, stmt)) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
+
+    /* create index on topo column */
+    sprintf(stmt, "CREATE INDEX \"%s_%s_idx\" ON %s (((%s).id))",
+            pg_info->table_name, pg_info->topogeom_column,
+            pg_info->table_name, pg_info->topogeom_column);
+    if (-1 == Vect__execute_pg(pg_info->conn, stmt)) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+    
+    /* change constraints to deferrable initially deferred */
+    if (-1 == set_constraint_to_deferrable(pg_info, "node", "face_exists",
+                                           "containing_face", "face", "face_id") ||
+        -1 == set_constraint_to_deferrable(pg_info, "edge_data", "end_node_exists",
+                                           "end_node", "node", "node_id") ||
+        -1 == set_constraint_to_deferrable(pg_info, "edge_data", "left_face_exists",
+                                           "left_face", "face", "face_id") ||
+        -1 == set_constraint_to_deferrable(pg_info, "edge_data", "right_face_exists",
+                                           "right_face", "face", "face_id") ||
+        -1 == set_constraint_to_deferrable(pg_info, "edge_data", "start_node_exists",
+                                           "start_node", "node", "node_id"))
+        return -1;
 
     /* create additional tables in topological schema to store
        GRASS topology in DB */
@@ -874,7 +889,8 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
         }
 
         sprintf(stmt, "ALTER TABLE \"%s\".%s ADD CONSTRAINT node_exists "
-                "FOREIGN KEY (node_id) REFERENCES \"%s\".node (node_id)",
+                "FOREIGN KEY (node_id) REFERENCES \"%s\".node (node_id) "
+                "DEFERRABLE INITIALLY DEFERRED",
                 pg_info->toposchema_name, TOPO_TABLE_NODE, pg_info->toposchema_name);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -2714,4 +2730,30 @@ int delete_line_from_topo_pg(struct Map_info *Map, int line, int type,
     return 0;
 }
 
+int set_constraint_to_deferrable(struct Format_info_pg *pg_info,
+                                 const char *table, const char *constraint,
+                                 const char *column, const char *ref_table,
+                                 const char *ref_column)
+{
+    char stmt[DB_SQL_MAX];
+    
+    sprintf(stmt, "ALTER TABLE \"%s\".%s DROP CONSTRAINT %s",
+            pg_info->toposchema_name, table, constraint);
+    if (-1 == Vect__execute_pg(pg_info->conn, stmt)) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+    
+    sprintf(stmt, "ALTER TABLE \"%s\".%s ADD CONSTRAINT %s "
+            "FOREIGN KEY (%s) REFERENCES \"%s\".%s (%s) "
+            "DEFERRABLE INITIALLY DEFERRED",
+            pg_info->toposchema_name, table, constraint, column,
+            pg_info->toposchema_name, ref_table);
+    if (-1 == Vect__execute_pg(pg_info->conn, stmt)) {
+        Vect__execute_pg(pg_info->conn, "ROLLBACK");
+        return -1;
+    }
+
+    return 0;
+}
 #endif

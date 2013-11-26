@@ -172,6 +172,8 @@ int build_topo(struct Map_info *Map, int build)
     if (Vect__execute_pg(pg_info->conn, "BEGIN"))
         return 0;
     
+    Vect__execute_pg(pg_info->conn, "SET CONSTRAINTS ALL DEFERRED");
+        
     /* write full node topo info to DB if requested */
     if (!pg_info->topo_geo_only) {
         write_nodes(plus, pg_info);
@@ -390,7 +392,7 @@ int build_topogeom_stmt(const struct Format_info_pg *pg_info,
             pg_info->schema_name, pg_info->table_name,
             pg_info->topogeom_column, pg_info->toposchema_id,
             topo_id, topogeom_type, pg_info->topogeom_column, fid);
-
+    
     return 1;
 }
 
