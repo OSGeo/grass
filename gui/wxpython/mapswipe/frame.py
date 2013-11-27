@@ -592,7 +592,7 @@ class SwipeMapFrame(DoubleMapFrame):
         self.SendSizeEvent()
 
     def SetRasterNames(self):
-        if self._inputDialog.IsSimpleMode():
+        if not self._inputDialog or self._inputDialog.IsSimpleMode():
             if self.rasters['first']:
                 self.GetFirstWindow().SetRasterNameText(self.rasters['first'], 101)
             if self.rasters['second']:
