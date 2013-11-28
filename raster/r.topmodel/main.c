@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 	struct Option *topidxstats;
 	struct Option *input;
 	struct Option *output;
-	struct Option *qobs;
+	struct Option *obsflow;
 	struct Option *timestep;
 	struct Option *topidxclass;
 	struct Option *topidx;
@@ -68,10 +68,10 @@ int main(int argc, char **argv)
     params.output = G_define_standard_option(G_OPT_F_OUTPUT);
     params.output->description = _("Name for output file");
 
-    params.qobs = G_define_standard_option(G_OPT_F_INPUT);
-    params.qobs->key = "qobs";
-    params.qobs->description = _("Name of observed flow file");
-    params.qobs->required = NO;
+    params.obsflow = G_define_standard_option(G_OPT_F_INPUT);
+    params.obsflow->key = "obsflow";
+    params.obsflow->description = _("Name of observed flow file");
+    params.obsflow->required = NO;
 
     params.timestep = G_define_option();
     params.timestep->key = "timestep";
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     file.topidxstats = params.topidxstats->answer;
     file.input = params.input->answer;
     file.output = params.output->answer;
-    file.qobs = params.qobs->answer;
+    file.obsflow = params.obsflow->answer;
 
     if (!params.timestep->answer)
 	params.timestep->answer = "0";

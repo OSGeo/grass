@@ -173,9 +173,9 @@ void read_input(void)
     fclose(fp);
 
     /* Read Qobs file */
-    if (file.qobs) {
-	if ((fp = fopen(file.qobs, "r")) == NULL)
-	    G_fatal_error(_("Unable to open input file <%s>"), file.qobs);
+    if (file.obsflow) {
+	if ((fp = fopen(file.obsflow, "r")) == NULL)
+	    G_fatal_error(_("Unable to open input file <%s>"), file.obsflow);
 
 	misc.Qobs = (double *)G_malloc(input.ntimesteps * sizeof(double));
 
@@ -223,7 +223,7 @@ void write_output(void)
 	    ltime->tm_year, ltime->tm_mon, ltime->tm_mday,
 	    ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
     fprintf(fp, "#\n");
-    if (file.qobs) {
+    if (file.obsflow) {
 	fprintf(fp, "# %-15s Model efficiency\n", "Em:");
 	fprintf(fp, "# %-15s Peak observed Q\n"
 		"# %77s\n", "Qobs_peak:", "[m^3/timestep]");
@@ -296,7 +296,7 @@ void write_output(void)
 
     fprintf(fp, "\n");
 
-    if (file.qobs) {
+    if (file.obsflow) {
 	fprintf(fp, "%-16s ", "Em:");
 	if (!Rast_is_d_null_value(&misc.Em))
 	    fprintf(fp, "%10.5lf\n", misc.Em);
