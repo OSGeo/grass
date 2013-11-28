@@ -37,7 +37,7 @@ void read_input(void)
     topidxstats.Aatb_r = NULL;
     misc.ncells = 0;
 
-    for (i = 0, j = 0; !feof(fp);) {
+    for (i = 0; !feof(fp);) {
 	double atb;
 	double Aatb_r;
 
@@ -45,16 +45,16 @@ void read_input(void)
 
 	if (sscanf(buf, "%lf %lf", &atb, &Aatb_r) == 2) {
 	    topidxstats.atb = (double *)G_realloc(topidxstats.atb,
-			    (j + 1) * sizeof(double));
+			    (i + 1) * sizeof(double));
 	    topidxstats.Aatb_r = (double *)G_realloc(topidxstats.Aatb_r,
-			    (j + 1) * sizeof(double));
-	    topidxstats.atb[j] = atb;
-	    topidxstats.Aatb_r[j] = Aatb_r;
-	    misc.ncells += (int)topidxstats.Aatb_r[j++];
+			    (i + 1) * sizeof(double));
+	    topidxstats.atb[i] = atb;
+	    topidxstats.Aatb_r[i] = Aatb_r;
+	    misc.ncells += (int)topidxstats.Aatb_r[i++];
 	}
     }
 
-    misc.ntopidxclasses = j;
+    misc.ntopidxclasses = i;
 
     fclose(fp);
 
@@ -127,21 +127,23 @@ void read_input(void)
 	    break;
     }
 
-    for (; !feof(fp);) {
+    params.d = NULL;
+    params.Ad_r = NULL;
+
+    for (i = 0; !feof(fp);) {
+	double d;
+	double Ad_r;
+
 	get_line(fp, buf);
 
-	if (sscanf(buf, "%d", &(params.nch)) == 1)
-	    break;
-    }
-
-    params.d = (double *)G_malloc(params.nch * sizeof(double));
-    params.Ad_r = (double *)G_malloc(params.nch * sizeof(double));
-
-    for (i = 0; i < params.nch && !feof(fp);) {
-	get_line(fp, buf);
-
-	if (sscanf(buf, "%lf %lf", &(params.d[i]), &(params.Ad_r[i])) == 2)
-	    i++;
+	if (sscanf(buf, "%lf %lf", &d, &Ad_r) == 2) {
+	    params.d = (double *)G_realloc(params.d,
+			    (i + 1) * sizeof(double));
+	    params.Ad_r = (double *)G_realloc(params.Ad_r,
+			    (i + 1) * sizeof(double));
+	    params.d[i] = d;
+	    params.Ad_r[i++] = Ad_r;
+	}
     }
 
     params.nch = i;
