@@ -80,7 +80,7 @@ struct file
     char *topidxstats;
     char *input;
     char *output;
-    char *qobs;
+    char *obsflow;
 };
 
 /* Miscellaneous TOPMODEL variables */

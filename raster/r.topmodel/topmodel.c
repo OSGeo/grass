@@ -310,7 +310,7 @@ void calculate_others(void)
     }
     misc.Qt_mean /= input.ntimesteps;
 
-    if (file.qobs) {
+    if (file.obsflow) {
 	misc.Em = calculate_efficiency();
 	for (i = 0; i < input.ntimesteps; i++) {
 	    if (!i || misc.Qobs_peak < misc.Qobs[i]) {
