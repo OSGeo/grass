@@ -366,6 +366,8 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
     if not ret:
         return data
     
+    # parse `v.what -g` output is a nightmare
+    # TODO: change `v.what -g` format or add parsable format (e.g. XML)
     dict_attrb = None
     dict_map = None
     dict_layer = None
@@ -389,13 +391,16 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
             dict_layer = None
             dict_attrb = None
         elif key == 'Layer':
-            # attach the last the previous Layer
-            if dict_layer is not None:
-                dict_main = copy.copy(dict_map)
-                dict_main.update(dict_layer)
-                data.append(dict_main)
-            dict_layer = { key: int(value) }
-            dict_attrb = None
+            if not dict_attrb:
+                # attach the last the previous Layer
+                if dict_layer is not None:
+                    dict_main = copy.copy(dict_map)
+                    dict_main.update(dict_layer)
+                    data.append(dict_main)
+                dict_layer = { key: int(value) }
+                dict_attrb = None
+            else:
+                dict_attrb[key] = value
         elif key == 'Key_column':
             dict_layer[key] = value
             dict_attrb = dict()
