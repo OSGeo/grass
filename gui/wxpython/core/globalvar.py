@@ -162,9 +162,15 @@ def UpdateGRASSAddOnCommands(eList = None):
         Debug.msg(1, "Number of removed AddOn commands: %d", len(eList))
 
     nCmd = 0
+    pathList = os.getenv('PATH', '').split(os.pathsep)
     for path in addonPath.split(os.pathsep):
         if not os.path.exists(path) or not os.path.isdir(path):
             continue
+        
+        # check if addon is in the path
+        if pathList and path not in pathList:
+            os.environ['PATH'] = path + os.pathsep + os.environ['PATH']
+        
         for fname in os.listdir(path):
             if fname in ['docs', 'modules.xml']:
                 continue
