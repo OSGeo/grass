@@ -1249,29 +1249,31 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
         sprintf(stmt,
                 "DECLARE %s CURSOR FOR "
                 "SELECT geom,id,type,fid FROM ("
-                "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.fid AS fid FROM \"%s\".node AS tt "
-                "LEFT JOIN \"%s\" AS ft ON (%s).type = 1 AND (%s).id = node_id "
+                "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".node AS tt "
+                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 1 AND (%s).id = node_id "
                 "WHERE containing_face IS NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge GROUP BY start_node UNION ALL "
                 "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS foo) UNION ALL "
-                "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.fid AS fid FROM \"%s\".node AS tt "
-                "LEFT JOIN \"%s\" AS ft ON (%s).type = 3 AND (%s).id = containing_face "
+                "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".node AS tt "
+                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 3 AND (%s).id = containing_face "
                 "WHERE containing_face IS NOT NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge GROUP BY start_node UNION ALL "
                 "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS foo) UNION ALL "
-                "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.fid AS fid FROM \"%s\".edge AS tt "
-                "LEFT JOIN \"%s\" AS ft ON (%s).type = 2 AND (%s).id = edge_id "
+                "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".edge AS tt "
+                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 AND (%s).id = edge_id "
                 "WHERE left_face = 0 AND right_face = 0 UNION ALL "
-                "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.fid AS fid FROM \"%s\".edge AS tt "
-                "LEFT JOIN \"%s\" AS ft ON (%s).type = 2 AND (%s).id = edge_id "
+                "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".edge AS tt "
+                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 AND (%s).id = edge_id "
                 "WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY type,id",
                 pg_info->cursor_name, 
-                GV_POINT, pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column, pg_info->topogeom_column,
-                pg_info->toposchema_name, pg_info->toposchema_name,
-                GV_CENTROID, pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column, pg_info->topogeom_column,
-                pg_info->toposchema_name, pg_info->toposchema_name,
-                GV_LINE, pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column, pg_info->topogeom_column,
-                GV_BOUNDARY, pg_info->toposchema_name, pg_info->table_name, pg_info->topogeom_column, pg_info->topogeom_column);
+                GV_POINT, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->topogeom_column, pg_info->topogeom_column, pg_info->toposchema_name, pg_info->toposchema_name,
+                GV_CENTROID, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->topogeom_column, pg_info->topogeom_column, pg_info->toposchema_name, pg_info->toposchema_name,
+                GV_LINE, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->topogeom_column, pg_info->topogeom_column,
+                GV_BOUNDARY, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->topogeom_column, pg_info->topogeom_column);
     }
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -1445,19 +1447,19 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
             
             sprintf(stmt,
                     "SELECT tt.geom,tt.containing_face,ft.%s FROM \"%s\".node AS tt "
-                    "LEFT JOIN \"%s\" AS ft ON (%s).type = %d and (%s).id = %s "
+                    "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = %d and (%s).id = %s "
                     "WHERE node_id = %d",
                     pg_info->fid_column, pg_info->toposchema_name,
-                    pg_info->table_name, pg_info->topogeom_column,
+                    pg_info->schema_name, pg_info->table_name, pg_info->topogeom_column,
                     topotype, pg_info->topogeom_column, nodeid, fid);
         }
         else {
             sprintf(stmt,
                     "SELECT tt.geom,tt.left_face,tt.right_face,ft.%s FROM \"%s\".edge AS tt "
-                    "LEFT JOIN \"%s\" AS ft ON (%s).type = 2 and (%s).id = edge_id "
+                    "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 and (%s).id = edge_id "
                     "WHERE edge_id = %d",
                     pg_info->fid_column,  pg_info->toposchema_name, 
-                    pg_info->table_name, pg_info->topogeom_column,
+                    pg_info->schema_name, pg_info->table_name, pg_info->topogeom_column,
                     pg_info->topogeom_column, fid);
         }
     }
