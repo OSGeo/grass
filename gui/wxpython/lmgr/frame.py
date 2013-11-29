@@ -1200,7 +1200,8 @@ class GMFrame(wx.Frame):
         busy.Destroy()
             
         for idx, mdisp in enumerate(mapdisplay):
-            mdisp.MapWindow2D.UpdateMap()
+            ### avoid double-rendering when loading workspace
+            ### mdisp.MapWindow2D.UpdateMap()
             # nviz
             if gxwXml.displays[idx]['viewMode'] == '3d':
                 mdisp.AddNviz()
