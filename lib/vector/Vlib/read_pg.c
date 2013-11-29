@@ -459,6 +459,12 @@ int read_next_line_pg(struct Map_info *Map,
 
         /* read feature to cache if necessary */
         while (pg_info->cache.lines_next == pg_info->cache.lines_num) {
+            if (pg_info->cache.ctype == CACHE_MAP &&
+                pg_info->cache.fid == -2) {
+                /* stop reading - last cached line */
+                return -2;
+            }
+            
             /* cache feature -> line_p & line_c */
             sf_type = get_feature(pg_info, -1, -1);
             
@@ -467,8 +473,11 @@ int read_next_line_pg(struct Map_info *Map,
                 return -1;
             }
 
-            if ((int)sf_type < 0)       /* -1 || - 2 */
+            if ((int)sf_type < 0) {      /* -1 || - 2 */
+                if (pg_info->cache.ctype == CACHE_MAP)
+                    pg_info->cache.fid = -2; /* last line cached */
                 return (int)sf_type;
+            }
 
             if (sf_type == SF_UNKNOWN || sf_type == SF_NONE) {
                 G_warning(_("Feature without geometry. Skipped."));
@@ -481,9 +490,13 @@ int read_next_line_pg(struct Map_info *Map,
             Map->head.last_offset = pg_info->cache.fid;
         }
 
-        /* get data from cache */
-        itype = pg_info->cache.lines_types[pg_info->cache.lines_next];
-        iline = pg_info->cache.lines[pg_info->cache.lines_next];
+        /* get data from cache, skip dead lines (NULL) */
+        do {
+            itype = pg_info->cache.lines_types[pg_info->cache.lines_next];
+            iline = pg_info->cache.lines[pg_info->cache.lines_next];
+
+            pg_info->cache.lines_next++; /* read next line from cache */
+        } while (iline == NULL);
 
         G_debug(4, "read next cached line %d (type = %d)",
                 pg_info->cache.lines_next, itype);
@@ -514,15 +527,15 @@ int read_next_line_pg(struct Map_info *Map,
                 cat = (int)pg_info->cache.fid;
             }
             else {                           /* PostGIS Topology (cats are cached) */
-                cat = pg_info->cache.lines_cats[pg_info->cache.lines_next];
+                cat = pg_info->cache.lines_cats[pg_info->cache.lines_next-1];
                 if (cat == 0) { /* not cached yet */
                     int col_idx;
                     
                     col_idx = itype & GV_POINTS ? 2 : 3;
                 
-                    if (!PQgetisnull(pg_info->res, pg_info->cache.lines_next, col_idx))
+                    if (!PQgetisnull(pg_info->res, pg_info->cache.lines_next-1, col_idx))
                         cat = pg_info->cache.lines_cats[Map->next_line-1] =
-                        atoi(PQgetvalue(pg_info->res, pg_info->cache.lines_next, col_idx)); 
+                        atoi(PQgetvalue(pg_info->res, pg_info->cache.lines_next-1, col_idx)); 
                     else
                         pg_info->cache.lines_cats[Map->next_line-1] = -1; /* no cat */ 
                 }
@@ -530,8 +543,6 @@ int read_next_line_pg(struct Map_info *Map,
             if (cat > 0)
                 Vect_cat_set(line_c, 1, cat);
         }
-
-        pg_info->cache.lines_next++; /* read next line from cache */
 
         return itype;
     }

@@ -305,7 +305,19 @@ void Vect__free_cache(struct Format_info_cache *cache) {
     G_free(cache->lines);
     G_free(cache->lines_types);
     G_free(cache->lines_cats);
+
+    G_zero(cache, sizeof(struct Format_info_cache));
 }
+
+/*! Free memory of offset array
+
+  \param cache pointer to offset array to be freed
+*/
+void Vect__free_offset(struct Format_info_offset *offset)
+{
+    G_free(offset->array);
+    G_zero(offset, sizeof(struct Format_info_offset));
+}   
 
 void unlink_file(const struct Map_info *Map, const char *name)
 {

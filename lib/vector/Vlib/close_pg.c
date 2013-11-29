@@ -137,7 +137,7 @@ int V2_close_pg(struct Map_info *Map)
         G_warning(_("Unable to save feature index file for vector map <%s>"),
                   Map->name);
 
-    G_free(Map->fInfo.pg.offset.array);
+    Vect__free_offset(&(Map->fInfo.pg.offset));
 
     return 0;
 #else

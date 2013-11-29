@@ -366,6 +366,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
 int V2_delete_line_pg(struct Map_info *Map, int line)
 {
 #ifdef HAVE_POSTGRES
+    int ret;
     struct Format_info_pg *pg_info;
 
     pg_info = &(Map->fInfo.pg);
@@ -395,7 +396,9 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
             G_warning(_("Attempt to access dead feature %d"), line);
             return -1;
         }
-            
+         
+        Vect__execute_pg(pg_info->conn, "BEGIN");
+   
         if (Line->type & GV_POINTS) {
             table_name = keycolumn = "node";
         }
@@ -441,9 +444,23 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return -1;
         }
+
+        if (pg_info->cache.ctype == CACHE_MAP) {
+            /* delete from cache */
+            
+            Vect_destroy_line_struct(pg_info->cache.lines[line-1]);
+            pg_info->cache.lines[line-1] = NULL;
+            pg_info->cache.lines_types[line-1] = 0;
+            pg_info->cache.lines_cats[line-1] = 0;
+        }
         
         /* update topology */
-        return delete_line_from_topo_pg(Map, line, type, Points);
+        ret = delete_line_from_topo_pg(Map, line, type, Points);
+
+        if (ret == 0)
+            Vect__execute_pg(pg_info->conn, "COMMIT");
+        
+        return ret;
     }
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -781,8 +798,6 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     char stmt[DB_SQL_MAX];
     char *def_file;
     
-    PGresult *result;
-    
     def_file = getenv("GRASS_VECTOR_PGFILE");
     
     /* read default values from PG file*/
@@ -899,7 +914,27 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
             return -1;
         }
 
-        /* (2) create 'area_grass' (see P_area struct)
+        /* (2) create 'line_grass' (see P_line struct)
+           
+        */
+        sprintf(stmt, "CREATE TABLE \"%s\".%s (line_id SERIAL PRIMARY KEY, "
+                "left_area integer, right_area integer)",
+                pg_info->toposchema_name, TOPO_TABLE_LINE);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+
+        sprintf(stmt, "ALTER TABLE \"%s\".%s ADD CONSTRAINT line_exists "
+                "FOREIGN KEY (line_id) REFERENCES \"%s\".edge_data (edge_id) "
+                "DEFERRABLE INITIALLY DEFERRED",
+                pg_info->toposchema_name, TOPO_TABLE_LINE, pg_info->toposchema_name);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+
+        /* (3) create 'area_grass' (see P_area struct)
            
            todo: add constraints for lines, centtroid and isles
         */
@@ -911,7 +946,7 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
             return -1;
         }
 
-        /* (3) create 'isle_grass' (see P_isle struct)
+        /* (4) create 'isle_grass' (see P_isle struct)
            
            todo: add constraints for lines and area
         */
@@ -2675,8 +2710,6 @@ int add_line_to_topo_pg(struct Map_info *Map, off_t offset, int type,
 /*!
   \brief Delete line from native and PostGIS topology
 
-  \todo Implement deleting nodes on request
-  
   \param Map vector map
   \param line feature id to remove from topo
   \param type feature type
@@ -2688,46 +2721,43 @@ int add_line_to_topo_pg(struct Map_info *Map, off_t offset, int type,
 int delete_line_from_topo_pg(struct Map_info *Map, int line, int type,
                              const struct line_pnts *Points)
 {
+    int N1, N2, node_id;
+    char stmt[DB_SQL_MAX];
+    
+    struct Format_info_pg *pg_info;
+    struct P_node *Node;
+
+    pg_info = &(Map->fInfo.pg);
+    
     Vect_reset_updated(Map);
+
+    Vect_get_line_nodes(Map, line, &N1, &N2);
     if (0 != V2__delete_line_from_topo_nat(Map, line, type, Points, NULL))
         return -1;
     
-    /* disabled: remove isolated nodes when closing the map
-       note: node id cannot be used as node_id
-       
-       delete nodes from 'node' table
-
-    int n_nodes;
-    char stmt[DB_SQL_MAX];
-
-    struct Format_info_pg *pg_info;
-    struct Plus_head *plus;
-
-    pg_info = &(Map->fInfo.pg);
-    plus    = &(Map->plus);
-    
-    n_nodes = Vect_get_num_updated_nodes(Map);
-    if (n_nodes > 0) {
-        int i, node;
-        
-        for (i = 0; i < n_nodes; i++) {
-            node = Vect_get_updated_node(Map, i);
-            if (node > 0 || plus->Node[abs(node)] != NULL)
-                continue; 
-            
-            node = abs(node);
-            G_debug(3, "delete node %d from 'node' table", node);
-            
-            sprintf(stmt, "DELETE FROM \"%s\".\"node\" WHERE node_id = %d",
-                    pg_info->toposchema_name, node);
-            if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
-                G_warning(_("Unable to delete node %d"), node);
-                Vect__execute_pg(pg_info->conn, "ROLLBACK");
-                return -1;
-            }
+    Node = Map->plus.Node[N1];
+    if (!Node || Node->n_lines == 0) {
+        node_id = pg_info->offset.array[N1-1];
+        sprintf(stmt, "DELETE FROM \"%s\".\"node\" WHERE node_id = %d",
+                pg_info->toposchema_name, node_id);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            G_warning(_("Unable to delete node %d"), node_id);
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
         }
     }
-    */
+
+    Node = Map->plus.Node[N2];
+    if (!Node || Node->n_lines == 0) {
+        node_id = pg_info->offset.array[N2-1];
+        sprintf(stmt, "DELETE FROM \"%s\".\"node\" WHERE node_id = %d",
+                pg_info->toposchema_name, node_id);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            G_warning(_("Unable to delete node %d"), node_id);
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+        }
+    }
 
     return 0;
 }

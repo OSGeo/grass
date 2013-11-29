@@ -516,7 +516,7 @@ void V2__delete_area_cats_from_cidx_nat(struct Map_info *Map, int area)
     if (!Cats)
 	Cats = Vect_new_cats_struct();
 
-    V2_read_line_nat(Map, NULL, Cats, Area->centroid);
+    Vect_read_line(Map, NULL, Cats, Area->centroid);
 
     for (i = 0; i < Cats->n_cats; i++) {
 	dig_cidx_del_cat(&(Map->plus), Cats->field[i], Cats->cat[i], area,
