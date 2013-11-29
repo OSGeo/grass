@@ -181,10 +181,8 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     struct P_isle *Isle;
     struct P_area *Area;
     struct P_topo_b *topo;
-    double size, cur_size;
     struct bound_box box, *abox;
     static struct boxlist *List = NULL;
-    static struct line_pnts *APoints;
     static BOX_SIZE *size_list;
     static int alloc_size_list = 0;
 
@@ -202,7 +200,6 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 
     if (!List) {
 	List = Vect_new_boxlist(1);
-	APoints = Vect_new_line_struct();
 	alloc_size_list = 10;
 	size_list = G_malloc(alloc_size_list * sizeof(BOX_SIZE));
     }
@@ -259,7 +256,6 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     }
 
     sel_area = 0;
-    size = cur_size = -1;
     for (i = 0; i < List->n_values; i++) {
 	area = size_list[i].i;
 	G_debug(3, "area = %d", area);
@@ -861,10 +857,10 @@ int Vect_build_partial(struct Map_info *Map, int build)
     }
 
     if (build > GV_BUILD_NONE) {
+        Map->level = LEVEL_2;
 	G_verbose_message(_("Topology was built"));
     }
 
-    Map->level = LEVEL_2;
     plus->mode = GV_MODE_WRITE;
 
     if (build == GV_BUILD_ALL) {
