@@ -61,6 +61,9 @@ struct feat_parts
 /* area_pg.c */
 int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int, struct line_pnts *);
 
+/* build_pg.c */
+int Vect__clean_grass_db_topo(struct Format_info_pg *);
+
 /* read_pg.c */
 SF_FeatureType Vect__cache_feature_pg(const char *, int, int,
                                       struct Format_info_cache *,
