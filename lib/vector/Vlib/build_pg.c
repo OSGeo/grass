@@ -31,6 +31,7 @@ static int save_map_bbox(const struct Format_info_pg *, const struct bound_box*)
 static int create_topo_grass(const struct Format_info_pg *);
 static int has_topo_grass(const struct Format_info_pg *);
 static int write_nodes(const struct Plus_head *, const struct Format_info_pg *);
+static int write_lines(const struct Plus_head *, const struct Format_info_pg *);
 static int write_areas(const struct Plus_head *, const struct Format_info_pg *);
 static int write_isles(const struct Plus_head *, const struct Format_info_pg *);
 static void build_stmt_id(const void *, int, int, const struct Plus_head *, char **, size_t *);
@@ -160,8 +161,30 @@ int build_topo(struct Map_info *Map, int build)
     
     /* cache features to speed-up random access (when attaching isles
        to areas) */
-    if (build >= GV_BUILD_BASE)
+    if (build >= GV_BUILD_BASE) {
         pg_info->cache.ctype = CACHE_MAP;
+        if (Map->mode == GV_MODE_RW &&
+            pg_info->cache.lines_num > 0) {
+
+            /* read line cache from scratch when map is open in update
+             * mode, before building native topology read nodes from
+             * PostGIS Topology */
+
+            /* clean-up spatial a category indeces */
+            dig_free_plus(&(Map->plus));
+            dig_init_plus(&(Map->plus));
+            plus->Spidx_new = TRUE;   
+            plus->update_cidx = TRUE; 
+
+            /* reset cache for reading features */
+            Vect__free_cache(&(pg_info->cache));
+
+            /* force loading nodes from DB to get up-to-date node
+             * offsets */
+            Vect__free_offset(&(pg_info->offset));
+            Map->plus.n_nodes = Vect__load_map_nodes_pg(Map, TRUE);
+        }
+    }
     /* update TopoGeometry based on GRASS-like topology */
     Vect_build_nat(Map, build);
     
@@ -177,6 +200,7 @@ int build_topo(struct Map_info *Map, int build)
     /* write full node topo info to DB if requested */
     if (!pg_info->topo_geo_only) {
         write_nodes(plus, pg_info);
+        write_lines(plus, pg_info);
     }
 
     /* update faces from GRASS Topology */
@@ -600,6 +624,70 @@ int write_nodes(const struct Plus_head *plus,
     G_free(stmt_angles);
     G_free(stmt);
     
+    return 0;
+}
+
+/*!
+  \brief Insert lines into 'line_grass' table
+  
+  Writes (see P_line struct) - only for boundaries:
+   - left, right area
+
+  Already stored in Topo-Geo:
+   - edge_id, left_face, right_face
+   
+  \param plus pointer to Plus_head struct
+  \param pg_info pointer to Format_info_pg struct
+
+  \return 0 on success
+  \return -1 on error
+*/
+int write_lines(const struct Plus_head *plus,
+                const struct Format_info_pg *pg_info)
+{
+    int i, row, offset;
+    char stmt[DB_SQL_MAX];
+
+    const struct P_line *Line;
+    const struct P_topo_b *topo;
+    
+    PGresult *res;
+    
+    sprintf(stmt, "SELECT edge_id FROM \"%s\".edge_data WHERE "
+            "left_face != 0 OR right_face != 0 ORDER BY edge_id",
+            pg_info->toposchema_name);
+    G_debug(2, "SQL: %s", stmt);
+    res = PQexec(pg_info->conn, stmt);
+    if (!res || PQresultStatus(res) != PGRES_TUPLES_OK ||
+        (PQntuples(res) > 0 && PQntuples(res) != plus->n_blines)) {
+        G_warning(_("Inconsistency in topology: number of "
+                    "boundaries %d (should be %d)"),
+                  PQntuples(res), plus->n_blines);
+        if (res)
+            PQclear(res);
+        return -1;
+    }
+    
+    for (row = 0, i = 1; i <= plus->n_lines; i++) {
+        Line = plus->Line[i];
+        if (!Line || Line->type != GV_BOUNDARY)
+            continue; 
+
+        if (Line->offset == 0L)
+            offset = atoi(PQgetvalue(res, row++, 0));
+        else
+            offset = (int)Line->offset;
+        
+        topo = (struct P_topo_b *)Line->topo;
+        sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
+                "%d, %d, %d)", pg_info->toposchema_name, TOPO_TABLE_LINE,
+                offset, topo->left, topo->right);
+        if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            G_warning(_("Unable to write lines"));
+            return -1;
+        }
+    }
+
     return 0;
 }
 

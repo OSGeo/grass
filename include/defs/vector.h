@@ -477,7 +477,6 @@ int Vect_coor_info(const struct Map_info *, struct Coor_info *);
 const char *Vect_maptype_info(const struct Map_info *);
 int Vect_maptype(const struct Map_info *);
 int Vect_open_topo(struct Map_info *, int);
-int Vect_open_topo_pg(struct Map_info *, int);
 int Vect_save_topo(struct Map_info *);
 int Vect_open_sidx(struct Map_info *, int);
 int Vect_save_sidx(struct Map_info *);

@@ -322,7 +322,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         ret = -1;
         if (Map->format == GV_FORMAT_POSTGIS)
             /* try to read full-topology for PostGIS links */
-            ret = Vect_open_topo_pg(Map, head_only);
+          ret = Vect__open_topo_pg(Map, head_only, update);
         
         if (ret != 0) {
             /* read topology for native format
@@ -361,6 +361,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                     level = 1;
                 }
         }
+
         /* open category index */
         if (level >= 2) {
             ret = Vect_cidx_open(Map, head_only);
@@ -1268,7 +1269,7 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     }
 
     Plus->Spidx_built = TRUE;
-
+    
     return 0;
 }
 

@@ -44,10 +44,11 @@ int V1_rewind_pg(struct Map_info *Map)
     pg_info->next_line = 0;
 
     /* reset cache */
-    if (pg_info->cache.ctype != CACHE_MAP)
+    if (pg_info->cache.ctype != CACHE_MAP) {
         pg_info->cache.lines_num = 0;
+        pg_info->cache.fid = -1;
+    }
     pg_info->cache.lines_next = 0;
-    pg_info->cache.fid = -1;
 
     /* close DB cursor if necessary */
     return Vect__close_cursor_pg(pg_info);

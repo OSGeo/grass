@@ -104,7 +104,7 @@ int V2_close_ogr(struct Map_info *Map)
 	G_warning(_("Unable to save feature index file for vector map <%s>"),
 		  Map->name);
     
-    G_free(ogr_info->offset.array);
+    Vect__free_offset(&(ogr_info->offset));
     
     return 0;
 #else
