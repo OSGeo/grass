@@ -1659,9 +1659,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
                 mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
                 if mapLayer.GetType() in ('raster', 'vector'):
-                    render = UserSettings.Get(group = 'display', key = 'autoRendering', subkey = 'enabled')
                     self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
-                                                        render = render)
+                                                        render = False)
             
             self.firstNewLayer = False # first layer has been already
                                        # added to the layer tree
