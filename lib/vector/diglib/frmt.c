@@ -121,6 +121,8 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
                 finfo->pg.schema_name = G_store(ptr);
             if (G_strcasecmp(buf1, "TABLE") == 0)
                 finfo->pg.table_name = G_store(ptr);
+            if (G_strcasecmp(buf1, "FID") == 0)
+                finfo->pg.fid_column = G_store(ptr);
         }
 #endif
     }
@@ -130,6 +132,12 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
     if (frmt == GV_FORMAT_POSTGIS &&
         !finfo->pg.schema_name) {
         finfo->pg.schema_name = G_store("public");
+    }
+
+    /* if fid column not defined, use default value */
+    if (frmt == GV_FORMAT_POSTGIS &&
+        !finfo->pg.fid_column) {
+        finfo->pg.fid_column = G_store(GV_PG_FID_COLUMN);
     }
 #endif
 
