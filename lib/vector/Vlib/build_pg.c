@@ -184,6 +184,12 @@ int build_topo(struct Map_info *Map, int build)
         }
     }
 
+    if (plus->built >= GV_BUILD_BASE &&
+        pg_info->cache.lines_num < 1) {
+        /* features are not cached, build from scratch */
+        Vect_build_partial(Map, GV_BUILD_NONE);
+    }
+
     if (plus->built < GV_BUILD_BASE) {
         /* force loading nodes from DB to get up-to-date node
          * offsets, see write_nodes() for details */
