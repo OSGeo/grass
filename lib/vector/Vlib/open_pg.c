@@ -1501,7 +1501,7 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
                 "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
-                "fid", pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
                 pg_info->topogeom_column, pg_info->topogeom_column, pg_info->toposchema_name,
                 pg_info->toposchema_name);
     else
@@ -1510,7 +1510,7 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
                 "FROM \"%s\".node AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON "
                 "(%s).type = 1 AND (%s).id = node_id WHERE node_id NOT IN "
                 "(SELECT node_id FROM \"%s\".%s) AND containing_face IS NULL ORDER BY node_id",
-                "fid", pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
                 pg_info->topogeom_column, pg_info->topogeom_column,
                 pg_info->toposchema_name, TOPO_TABLE_NODE);
     G_debug(2, "SQL: %s", stmt);
@@ -1542,19 +1542,19 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
        -> boundaries
     */
     if (pg_info->topo_geo_only)
-        sprintf(stmt, /* TODO: fix fid column! */
+        sprintf(stmt, 
                 "SELECT edge_id,start_node,end_node,left_face,right_face AS right_area,tt.geom,ft.%s "
                 "FROM \"%s\".edge AS tt LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 AND "
                 "(%s).id = edge_id ORDER BY edge_id",
-                "fid", pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
                 pg_info->topogeom_column, pg_info->topogeom_column);
     else
-        sprintf(stmt, /* TODO: fix fid column! */
+        sprintf(stmt, 
                 "SELECT edge_id,start_node,end_node,left_area,right_area,tt.geom,ft.%s "
                 "FROM \"%s\".edge AS tt LEFT JOIN \"%s\".\"%s\" ON "
                 "edge_id = line_id LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 AND "
                 "(%s).id = edge_id ORDER BY edge_id",
-                "fid", pg_info->toposchema_name, pg_info->toposchema_name, TOPO_TABLE_LINE,
+                pg_info->fid_column, pg_info->toposchema_name, pg_info->toposchema_name, TOPO_TABLE_LINE,
                 pg_info->schema_name, pg_info->table_name, pg_info->topogeom_column,
                 pg_info->topogeom_column);
         
@@ -1598,7 +1598,7 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
                 "GROUP BY start_node UNION ALL SELECT end_node AS node FROM "
                 "\"%s\".edge GROUP BY end_node) AS foo) ORDER BY node_id",
-                "fid", pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
                 pg_info->topogeom_column, pg_info->topogeom_column,
                 pg_info->toposchema_name,
                 pg_info->toposchema_name);
@@ -1609,7 +1609,7 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
                 "(%s).type = 3 AND (%s).id = containing_face WHERE "
                 "node_id NOT IN (SELECT node_id FROM \"%s\".%s) AND containing_face "
                 "IS NOT NULL ORDER BY node_id",
-                "fid", pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+                pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
                 pg_info->topogeom_column, pg_info->topogeom_column,
                 pg_info->toposchema_name, TOPO_TABLE_NODE);
     G_debug(2, "SQL: %s", stmt);
