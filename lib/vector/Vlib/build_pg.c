@@ -132,7 +132,7 @@ int Vect_build_pg(struct Map_info *Map, int build)
 */
 int build_topo(struct Map_info *Map, int build)
 {
-    int line, type, s;
+    int line, type, s, n_nodes;
     int area, nareas, isle, nisles;
     int face[2];
     char stmt[DB_SQL_MAX];
@@ -162,7 +162,10 @@ int build_topo(struct Map_info *Map, int build)
     /* cache features to speed-up random access (when attaching isles
        to areas) */
     if (build >= GV_BUILD_BASE) {
-        pg_info->cache.ctype = CACHE_MAP;
+        /* clean-up GRASS topology tables in DB */
+        if (!pg_info->topo_geo_only)
+            Vect__clean_grass_db_topo(&(Map->fInfo.pg));
+        
         if (Map->mode == GV_MODE_RW &&
             pg_info->cache.lines_num > 0) {
 
@@ -178,16 +181,29 @@ int build_topo(struct Map_info *Map, int build)
 
             /* reset cache for reading features */
             Vect__free_cache(&(pg_info->cache));
-
-            /* force loading nodes from DB to get up-to-date node
-             * offsets */
-            Vect__free_offset(&(pg_info->offset));
-            Map->plus.n_nodes = Vect__load_map_nodes_pg(Map, TRUE);
         }
     }
+
+    if (plus->built < GV_BUILD_BASE) {
+        /* force loading nodes from DB to get up-to-date node
+         * offsets, see write_nodes() for details */
+        Vect__free_offset(&(pg_info->offset));
+
+        pg_info->cache.ctype = CACHE_FEATURE; /* do not cache nodes */
+        n_nodes = Map->plus.n_nodes = Vect__load_map_nodes_pg(Map, TRUE);
+        Vect__free_cache(&(pg_info->cache));
+    }
+
+    if (build > GV_BUILD_BASE)
+        pg_info->cache.ctype = CACHE_MAP; /* cache all features */
+
     /* update TopoGeometry based on GRASS-like topology */
     Vect_build_nat(Map, build);
     
+    if (n_nodes != Map->plus.n_nodes) 
+        G_warning(_("Inconsistency in topology: number of nodes %d (should be %d)"),
+                  Map->plus.n_nodes, n_nodes);
+
     /* store map boundig box in DB */
     save_map_bbox(pg_info, &(plus->box));
     
@@ -886,6 +902,44 @@ void build_stmt_id(const void *array, int nitems, int is_int, const struct Plus_
 
     *stmt = stmt_id;
     *stmt_size = stmt_id_size;
+}
+
+/*!
+  \brief Clean-up GRASS Topology tables
+
+  \param pg_info pointer to Format_info_pg pg_info
+
+  \return 0 on success
+  \return -1 on error
+*/
+int Vect__clean_grass_db_topo(struct Format_info_pg *pg_info)
+{
+    char stmt[DB_SQL_MAX];
+
+    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
+            pg_info->toposchema_name, TOPO_TABLE_NODE);
+    if (-1 == Vect__execute_pg(pg_info->conn, stmt))
+        return -1;
+    
+    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
+            pg_info->toposchema_name, TOPO_TABLE_LINE);
+    if (-1 == Vect__execute_pg(pg_info->conn, stmt))
+        return -1;
+
+    
+    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
+            pg_info->toposchema_name, TOPO_TABLE_AREA);
+    if (-1 == Vect__execute_pg(pg_info->conn, stmt))
+        return -1;
+
+    
+    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
+            pg_info->toposchema_name, TOPO_TABLE_ISLE);
+    if (-1 == Vect__execute_pg(pg_info->conn, stmt))
+        return -1;
+
+
+    return 0;
 }
 
 #endif

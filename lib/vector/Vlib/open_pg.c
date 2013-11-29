@@ -322,7 +322,7 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
   
   \param[in,out] Map pointer to Map_info structure
   \param head_only TRUE to read only header
-  \param update TRUE for update mode (reloading topology)
+  \param update TRUE to clean GRASS topology in update mode
 
   \return 0 on success
   \return 1 topology layer does not exist
@@ -352,28 +352,10 @@ int Vect__open_topo_pg(struct Map_info *Map, int head_only, int update)
     
     ret = Vect__load_plus_pg(Map, head_only);
 
-    /* clean-up GRASS-like topology tables on update mode */
-    if (update && !pg_info->topo_geo_only && ret == 0) {
-        char stmt[DB_SQL_MAX];
+    if (update)
+        Vect__clean_grass_db_topo(pg_info);
 
-        sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
-                pg_info->toposchema_name, TOPO_TABLE_NODE);
-        Vect__execute_pg(pg_info->conn, stmt);
-
-        sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
-                pg_info->toposchema_name, TOPO_TABLE_LINE);
-        Vect__execute_pg(pg_info->conn, stmt);
-
-        sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
-                pg_info->toposchema_name, TOPO_TABLE_AREA);
-        Vect__execute_pg(pg_info->conn, stmt);
-
-        sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
-                pg_info->toposchema_name, TOPO_TABLE_ISLE);
-        Vect__execute_pg(pg_info->conn, stmt);
-    }
-
-    return 0;
+    return ret;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
