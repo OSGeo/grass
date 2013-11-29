@@ -868,9 +868,9 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
     }
 
     /* create index on topo column */
-    sprintf(stmt, "CREATE INDEX \"%s_%s_idx\" ON %s (((%s).id))",
-            pg_info->table_name, pg_info->topogeom_column,
-            pg_info->table_name, pg_info->topogeom_column);
+    sprintf(stmt, "CREATE INDEX \"%s_%s_%s_idx\" ON \"%s\".\"%s\" (((%s).id))",
+            pg_info->schema_name, pg_info->table_name, pg_info->topogeom_column,
+            pg_info->schema_name, pg_info->table_name, pg_info->topogeom_column);
     if (-1 == Vect__execute_pg(pg_info->conn, stmt)) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
