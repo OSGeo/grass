@@ -25,6 +25,8 @@
 
 #include "proto.h"
 
+static void error_handler_err(void *p);
+
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out, Err, *pErr;
@@ -276,18 +278,13 @@ int main(int argc, char *argv[])
 
     with_z = Vect_is_3d(&In);
     
-    if (0 > Vect_open_new(&Out, opt.out->answer, with_z)) {
-	Vect_close(&In);
-	exit(EXIT_FAILURE);
-    }
+    Vect_open_new(&Out, opt.out->answer, with_z);
+    Vect_set_error_handler_io(&In, &Out);
 
     if (opt.err->answer) {
 	Vect_set_open_level(2);
-	if (0 > Vect_open_new(&Err, opt.err->answer, with_z)) {
-	    Vect_close(&In);
-	    Vect_close(&Out);
-	    exit(EXIT_FAILURE);
-	}
+	Vect_open_new(&Err, opt.err->answer, with_z);
+        G_add_error_handler(error_handler_err, &Err);
 	pErr = &Err;
     }
     else {
@@ -492,4 +489,18 @@ int main(int argc, char *argv[])
     }
 
     exit(EXIT_SUCCESS);
+}
+
+void error_handler_err(void *p)
+{
+    char *name;
+    struct Map_info *Err;
+    
+    Err = (struct Map_info *) p;
+
+    if (Err && Err->open == VECT_OPEN_CODE) {
+	name = G_store(Err->name);
+	Vect_delete(name);
+	G_free(name);
+    }
 }
