@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
     struct context ctx;
     const char *filename;
     int standard_output;
+    int separator_nul;
     
     ctx.module = NULL;
     ctx.option = NULL;
@@ -40,8 +41,8 @@ int main(int argc, char *argv[])
     ctx.first_flag = NULL;
     ctx.state = S_TOPLEVEL;
 
-    standard_output = translate_output = FALSE;
-    
+    standard_output = translate_output = separator_nul = FALSE;
+
     /* Detect request to get strings to translate from a file */
     /* It comes BEFORE the filename to completely avoid confusion with parser.c behaviours */
     if (argc >= 2 && (strcmp(argv[1], "-t") == 0)) {
@@ -53,6 +54,13 @@ int main(int argc, char *argv[])
     if (argc >= 2 && (strcmp(argv[1], "-s") == 0)) {
 	/* write to stdout rather than re-invoking */
 	standard_output = TRUE;
+	argv++, argc--;
+    }
+
+    if (argc >= 2 && (strcmp(argv[1], "-n") == 0)) {
+	/* write to stdout with NUL as separator */
+	standard_output = TRUE;
+	separator_nul = TRUE;
 	argv++, argc--;
     }
 
@@ -135,6 +143,6 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     return standard_output
-	? print_options(&ctx)
+	? print_options(&ctx, separator_nul ? '\0' : '\n')
 	: reinvoke_script(&ctx, filename);
 }

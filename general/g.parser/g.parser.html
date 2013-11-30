@@ -22,6 +22,8 @@
 <dd>Print strings for translation</dd>
 <dt><b>-s</b></dt>
 <dd>Write option values to stdout instead of reinvoking script</dd>
+<dt><b>-n</b></dt>
+<dd>Write option values to stdout separated by nulls</dd>
 </dl>
 
 <h2>DESCRIPTION</h2>
@@ -34,7 +36,7 @@ script can very quickly be made into a full-fledged GRASS module.
 
 <h2>OPTIONS</h2>
 
-Unless the <b>-s</b> switch is used, the arguments are stored in
+Unless the <b>-s</b> or <b>-n</b> switch is used, the arguments are stored in
 environment variables for use in your scripts. These variables are
 named "GIS_FLAG_&lt;NAME&gt;" for flags and "GIS_OPT_&lt;NAME&gt;" for
 options. The names of variables are converted to upper case. For
@@ -47,7 +49,7 @@ and the value of flag with key <b>f</b> will be available in variable
 For flags, the value will be "1" if the flag was given, and "0" otherwise.
 
 <p>
-If the <b>-s</b> switch is used, the options and flags are written to
+If the <b>-s</b> or <b>-n</b> switch is used, the options and flags are written to
 stdout in the form <em>opt_&lt;name&gt;=&lt;value&gt;</em> and
 <em>flag_&lt;name&gt;=&lt;value&gt;</em>, preceded by the string
 <b>@ARGS_PARSED@</b>. If this string doesn't appear as the first line
@@ -55,6 +57,10 @@ of stdout, it indicates that the script was invoked with a switch such
 as <b>--html-description</b>. In this case, the data written by
 <em>g.parser</em> to stdout should be copied to the script's stdout
 verbatim.
+
+If the <b>-s</b> switch is used, the options and flags are separated
+by newlines. If the <b>-n</b> switch is used, the options and flags
+are separated by null characters.
 
 <p>
 Typical header definitions are as follows:
