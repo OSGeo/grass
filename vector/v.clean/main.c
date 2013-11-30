@@ -292,7 +292,6 @@ int main(int argc, char *argv[])
     }
 
     /* Copy input to output */
-    G_message(_("Copying vector features..."));
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
