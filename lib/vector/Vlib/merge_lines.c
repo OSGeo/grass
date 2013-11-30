@@ -87,6 +87,8 @@ int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
     struct line_cats *MCats, *Cats;
     struct P_line *Line;
 
+    type &= GV_LINES;
+
     if (!(type & GV_LINES)) {
 	G_warning
 	    ("Merging is done with lines or boundaries only, not with other types");
