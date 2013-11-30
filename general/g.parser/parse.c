@@ -228,27 +228,29 @@ void parse_option(struct context *ctx, const char *cmd, const char *arg)
 	    cmd, ctx->line);
 }
 
-int print_options(const struct context *ctx)
+int print_options(const struct context *ctx, int sep)
 {
     struct Option *option;
     struct Flag *flag;
     const char *overwrite = getenv("GRASS_OVERWRITE");
     const char *verbose = getenv("GRASS_VERBOSE");
 
-    printf("@ARGS_PARSED@\n");
+    printf("@ARGS_PARSED@%c", sep);
 
     if (overwrite)
-	printf("GRASS_OVERWRITE=%s\n", overwrite);
+	printf("GRASS_OVERWRITE=%s%c", overwrite, sep);
 
     if (verbose)
-	printf("GRASS_VERBOSE=%s\n", verbose);
+	printf("GRASS_VERBOSE=%s%c", verbose, sep);
 
     for (flag = ctx->first_flag; flag; flag = flag->next_flag)
-	printf("flag_%c=%d\n", flag->key, flag->answer ? 1 : 0);
+	printf("flag_%c=%d%c", flag->key, flag->answer ? 1 : 0, sep);
 
     for (option = ctx->first_option; option; option = option->next_opt)
-	printf("opt_%s=%s\n", option->key,
-	       option->answer ? option->answer : "");
+	printf("opt_%s=%s%c", option->key,
+	       option->answer ? option->answer : "", sep);
+
+    fflush(stdout);
 
     return EXIT_SUCCESS;
 }

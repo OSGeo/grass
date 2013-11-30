@@ -595,7 +595,6 @@ def _parse_opts(lines):
     options = {}
     flags = {}
     for line in lines:
-        line = line.rstrip('\r\n')
         if not line:
             break
         try:
@@ -645,11 +644,11 @@ def parser():
         else:
             argv[0] = os.path.join(sys.path[0], name)
 
-    p = Popen(['g.parser', '-s'] + argv, stdout=PIPE)
+    p = Popen(['g.parser', '-n'] + argv, stdout=PIPE)
     s = p.communicate()[0]
-    lines = s.splitlines()
+    lines = s.split('\0')
 
-    if not lines or lines[0].rstrip('\r\n') != "@ARGS_PARSED@":
+    if not lines or lines[0] != "@ARGS_PARSED@":
         sys.stdout.write(s)
         sys.exit(p.returncode)
 
