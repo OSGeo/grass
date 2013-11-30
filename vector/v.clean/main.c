@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     flag.combine = G_define_flag();
     flag.combine->key = 'c';
     flag.combine->description =
-	_("Combine tools with recommended follow-up tools.");
+	_("Combine tools with recommended follow-up tools");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
