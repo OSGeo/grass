@@ -161,6 +161,10 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
     double nodex, nodey;
     int a_is_ref, b_is_ref, break_a, break_b;
 
+    type &= GV_LINES;
+    if (!type)
+	return 0;
+
     APoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
     Points = Vect_new_line_struct();
