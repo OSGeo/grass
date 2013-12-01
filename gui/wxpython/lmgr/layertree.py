@@ -1614,7 +1614,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         if not lname:
             lname  = self.GetLayerInfo(item, key = 'label')
-        opacity  = int(mapLayer.GetOpacity(float = True) * 100)
+        opacity  = int(mapLayer.GetOpacity() * 100)
         if not lname:
             dcmd    = self.GetLayerInfo(item, key = 'cmd')
             lname, found = GetLayerNameFromCmd(dcmd, layerType = mapLayer.GetType(),
@@ -1739,7 +1739,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif type != 'group':
             if self.GetPyData(item) is not None:
                 cmdlist = self.GetLayerInfo(item, key = 'cmd')
-                opac = self.GetLayerInfo(item, key = 'maplayer').GetOpacity(float = True)
+                opac = self.GetLayerInfo(item, key = 'maplayer').GetOpacity()
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
                 # determine layer name

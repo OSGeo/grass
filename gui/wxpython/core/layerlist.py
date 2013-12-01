@@ -70,7 +70,7 @@ class LayerList(object):
         return layers
 
     def AddNewLayer(self, name, mapType, cmd, active=True, hidden=False,
-                    opacity=100, label=None, pos=0):
+                    opacity=1, label=None, pos=0):
         """!Creates new layer and adds it to the list (insert to the first position).
 
         @param ltype layer type (raster, vector, 3d-raster, ...)
@@ -255,18 +255,18 @@ class Layer(object):
     def GetOpacity(self):
         """!Returns opacity value.
 
-        @return opacity as integer between 0 and 100
+        @return opacity as float between 0 and 1
         """
-        return int(self._opacity * 100)
+        return self._opacity
 
     def SetOpacity(self, opacity):
         """!Sets opacity of the layer.
 
-        @param opacity integer between 0 and 100
+        @param opacity float between 0 and 1
         """
-        if not (0 <= opacity <= 100) or opacity != int(opacity):
-            raise ValueError("Opacity must be an integer between 0 and 100, not {op}.".format(op=opacity))
-        self._opacity = opacity / 100.
+        if not (0 <= opacity <= 1):
+            raise ValueError("Opacity value must be between 0 and 1, not {op}.".format(op=opacity))
+        self._opacity = opacity
 
     opacity = property(fget=GetOpacity, fset=SetOpacity)
 
@@ -324,7 +324,7 @@ class LayerListToRendererConverter:
     def ChangeLayerOpacity(self, index, layer):
         """!Changes layer opacity in renderer."""
         rLayer = self._getRendererLayer(index)
-        self._renderer.ChangeLayer(rLayer, opacity=layer.opacity / 100.)
+        self._renderer.ChangeLayer(rLayer, opacity=layer.opacity)
 
     def ChangeLayerCmd(self, index, layer):
         """!Changes layer cmd in renderer."""
@@ -363,7 +363,7 @@ class LayerListToRendererConverter:
             mapType = '3d-raster'
         self._renderer.AddLayer(ltype=mapType, command=layer.cmd,
                                 name=layer.name, active=layer.active,
-                                hidden=False, opacity=layer.opacity / 100.,
+                                hidden=False, opacity=layer.opacity,
                                 render=True, pos=-1)
 
     def RemoveLayer(self, index):

@@ -218,18 +218,13 @@ class Layer(object):
             return 'cell'
         return self.type
     
-    def GetOpacity(self, float = False):
+    def GetOpacity(self):
         """
         Get layer opacity level
         
-        @param float get opacity level in <0,1> otherwise <0,100>
-        
-        @return opacity level
+        @return opacity level (<0, 1>)
         """
-        if float:
-            return self.opacity
-        
-        return int (self.opacity * 100)
+        return self.opacity
 
     def GetName(self, fullyQualified = True):
         """!Get map layer name

@@ -1584,7 +1584,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             if self.parent and self.mapdisplay.tree and \
                     self.dbMgrData['treeItem']:
                 maptree = self.mapdisplay.tree
-                opacity = maptree.GetLayerInfo(self.dbMgrData['treeItem'], key = 'maplayer').GetOpacity(float = True)
+                opacity = maptree.GetLayerInfo(self.dbMgrData['treeItem'], key = 'maplayer').GetOpacity()
                 self.qlayer.SetOpacity(opacity)
             if zoom:
                 keyColumn = self.dbMgrData['mapDBInfo'].layers[self.selLayer]['key']

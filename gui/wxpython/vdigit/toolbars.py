@@ -857,7 +857,7 @@ class VDigitToolbar(BaseToolbar):
             self.MapWindow.UpdateMap(render = True)
         
         # respect opacity
-        opacity = mapLayer.GetOpacity(float = True)
+        opacity = mapLayer.GetOpacity()
         
         if opacity < 1.0:
             alpha = int(opacity * 255)

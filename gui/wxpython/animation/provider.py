@@ -519,7 +519,7 @@ class BitmapComposer:
         _setEnvironment(self.imageWidth, self.imageHeight, filename,
                         transparent=False, bgcolor=bgcolor)
 
-        opacities = [str(op / 100.) for op in opacities]
+        opacities = [str(op) for op in opacities]
         bgcolor = ':'.join([str(part) for part in bgcolor])
         returncode, messages = RunCommand('g.pnmcomp',
                                           getErrorMsg=True,

@@ -2139,10 +2139,12 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         return data
 
 class SetOpacityDialog(wx.Dialog):
-    """!Set opacity of map layers"""
+    """!Set opacity of map layers.
+    Dialog expects opacity between 0 and 1 and returns this range, too.    
+    """
     def __init__(self, parent, id = wx.ID_ANY, title = _("Set Map Layer Opacity"),
                  size = wx.DefaultSize, pos = wx.DefaultPosition,
-                 style = wx.DEFAULT_DIALOG_STYLE, opacity = 100):
+                 style = wx.DEFAULT_DIALOG_STYLE, opacity = 1):
 
         self.parent = parent    # GMFrame
         self.opacity = opacity  # current opacity
@@ -2156,7 +2158,7 @@ class SetOpacityDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(vgap = 5, hgap = 5)
-        self.value = wx.Slider(panel, id = wx.ID_ANY, value = self.opacity,
+        self.value = wx.Slider(panel, id = wx.ID_ANY, value = int(self.opacity * 100),
                                style = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | \
                                    wx.SL_TOP | wx.SL_LABELS,
                                minValue = 0, maxValue = 100,
