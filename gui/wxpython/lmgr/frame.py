@@ -1468,8 +1468,15 @@ class GMFrame(wx.Frame):
                 if tree.GetLayerInfo(layer, key = 'type') == 'raster':
                     rasters.append(tree.GetLayerInfo(layer, key = 'maplayer').GetName())
             if len(rasters) >= 2:
-                frame.SetAnimations(raster = [rasters, None, None, None])
-
+                from core.layerlist import LayerList
+                from animation.data import AnimLayer
+                layerList = LayerList()
+                layer = AnimLayer()
+                layer.mapType = 'rast'
+                layer.name = ','.join(rasters)
+                layer.cmd = ['d.rast', 'map=']
+                layerList.AddLayer(layer)
+                frame.SetAnimations([layerList, None, None, None])
 
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools

@@ -27,12 +27,13 @@ import grass.script as grass
 import grass.temporal as tgis
 from core.gcmd import GException
 from core.utils import _
-from utils import validateTimeseriesName, TemporalType
+from animation.utils import validateTimeseriesName, TemporalType
 
 
 class DataMode:
     SIMPLE = 1
     MULTIPLE = 2
+
 
 class GranularityMode:
     ONE_UNIT = 1
@@ -60,7 +61,7 @@ class TemporalManager(object):
     def SetTemporalType(self, ttype):
         self._temporalType = ttype
 
-    temporalType = property(fget = GetTemporalType, fset = SetTemporalType)
+    temporalType = property(fget=GetTemporalType, fset=SetTemporalType)
 
     def AddTimeSeries(self, timeseries, etype):
         """!Add space time dataset
@@ -90,12 +91,10 @@ class TemporalManager(object):
         ret, message = self._setTemporalState()
         if not ret:
             raise GException(message)
-        if message: # warning
+        if message:  # warning
             return message
 
         return None
-
-
 
     def _setTemporalState(self):
         # check for absolute x relative
@@ -106,13 +105,14 @@ class TemporalManager(object):
             else:
                 relative += 1
         if bool(absolute) == bool(relative):
-            message = _("It is not allowed to display data with different temporal types (absolute and relative).")
+            message = _("It is not allowed to display data with different "
+                        "temporal types (absolute and relative).")
             return False, message
         if absolute:
             self.temporalType = TemporalType.ABSOLUTE
         else:
             self.temporalType = TemporalType.RELATIVE
-            
+
         # check for units for relative type
         if relative:
             units = set()
@@ -130,9 +130,10 @@ class TemporalManager(object):
             else:
                 point += 1
         if bool(interval) == bool(point):
-            message = _("You are going to display data with different temporal types of maps (interval and point)."
+            message = _("You are going to display data with different "
+                        "temporal types of maps (interval and point)."
                         " It is recommended to use data of one temporal type to avoid confusion.")
-            return True, message # warning
+            return True, message  # warning
 
         return True, None
 
@@ -140,14 +141,14 @@ class TemporalManager(object):
         """!Returns temporal granularity of currently loaded timeseries."""
         if self.dataMode == DataMode.SIMPLE:
             gran = self.timeseriesInfo[self.timeseriesList[0]]['granularity']
-            if 'unit' in self.timeseriesInfo[self.timeseriesList[0]]: # relative:
+            if 'unit' in self.timeseriesInfo[self.timeseriesList[0]]:  # relative:
                 granNum = gran
                 unit = self.timeseriesInfo[self.timeseriesList[0]]['unit']
                 if self.granularityMode == GranularityMode.ONE_UNIT:
                     granNum = 1
             else:  # absolute
                 granNum, unit = gran.split()
-                if self.granularityMode == GranularityMode.ONE_UNIT: 
+                if self.granularityMode == GranularityMode.ONE_UNIT:
                     granNum = 1
 
             return (int(granNum), unit)
@@ -174,25 +175,34 @@ class TemporalManager(object):
                 granNum = 1
             return (granNum, unit)
 
-
     def GetLabelsAndMaps(self):
         """!Returns time labels and map names.
         """
         mapLists = []
         labelLists = []
+        labelListSet = set()
         for dataset in self.timeseriesList:
             grassLabels, listOfMaps = self._getLabelsAndMaps(dataset)
             mapLists.append(listOfMaps)
-            labelLists.append(grassLabels)
+            labelLists.append(tuple(grassLabels))
+            labelListSet.update(grassLabels)
+        # combine all timeLabels and fill missing maps with None
+        # BUT this does not work properly if the datasets have
+        # no temporal overlap! We would need to sample all datasets
+        # by a temporary dataset, I don't know how it would work with point data
+        if self.temporalType == TemporalType.ABSOLUTE:
+            # ('1996-01-01 00:00:00', '1997-01-01 00:00:00', 'year'),
+            timestamps = sorted(list(labelListSet), key=lambda x: x[0])
+        else:
+            # ('15', '16', u'years'),
+            timestamps = sorted(list(labelListSet), key=lambda x: float(x[0]))
 
-        # choose longest time interval and fill missing maps with None
-        timestamps = max(labelLists, key = len)
         newMapLists = []
         for mapList, labelList in zip(mapLists, labelLists):
             newMapList = [None] * len(timestamps)
             i = 0
             # compare start time
-            while timestamps[i][0] != labelList[0][0]: # compare
+            while timestamps[i][0] != labelList[0][0]:  # compare
                 i += 1
             newMapList[i:i + len(mapList)] = mapList
             newMapLists.append(newMapList)
@@ -208,7 +218,7 @@ class TemporalManager(object):
         for both interval and point data.
         """
         sp = tgis.dataset_factory(self.timeseriesInfo[timeseries]['etype'], timeseries)
-        if sp.is_in_db() == False:
+        if sp.is_in_db() is False:
             raise GException(_("Space time dataset <%s> not found.") % timeseries)
         sp.select()
 
@@ -231,11 +241,11 @@ class TemporalManager(object):
         # after instance, there can be a gap or an interval
         # if it is a gap we remove it and put there the previous instance instead
         # however the first gap must be removed to avoid duplication
-        maps = sp.get_registered_maps_as_objects_by_granularity(gran = gran)
+        maps = sp.get_registered_maps_as_objects_by_granularity(gran=gran)
         if maps and len(maps) > 0:
             lastTimeseries = None
-            followsPoint = False # indicates that we are just after finding a point
-            afterPoint = False # indicates that we are after finding a point
+            followsPoint = False  # indicates that we are just after finding a point
+            afterPoint = False  # indicates that we are after finding a point
             for mymap in maps:
                 if isinstance(mymap, list):
                     if len(mymap) > 0:
@@ -276,9 +286,6 @@ class TemporalManager(object):
                             listOfMaps.append(series)
                 timeLabels.append((str(start), end, unit))
 
-        if self.temporalType == TemporalType.ABSOLUTE:
-            timeLabels = self._pretifyTimeLabels(timeLabels)
-
         return timeLabels, listOfMaps
 
     def _pretifyTimeLabels(self, labels):
@@ -312,7 +319,7 @@ class TemporalManager(object):
         sp.select()
         # Get ordered map list
         maps = sp.get_registered_maps_as_objects()
-        
+
         if not sp.check_temporal_topology(maps):
             raise GException(_("Topology of Space time dataset %s is invalid." % id))
 
@@ -325,6 +332,7 @@ class TemporalManager(object):
         infoDict[id]['granularity'] = sp.get_granularity()
         infoDict[id]['map_time'] = sp.get_map_time()
         infoDict[id]['maps'] = maps
+
 
 def test():
     from pprint import pprint
@@ -344,84 +352,87 @@ def test():
     except GException, e:
         print e
         return
-    
+
     print '///////////////////////////'
     gran = temp.GetGranularity()
     print "granularity: " + str(gran)
     pprint (temp.GetLabelsAndMaps())
 
 
-
 def createAbsoluteInterval():
-    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags = 'p3', quiet = True)
+    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10,
+                      flags='p3', quiet=True)
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite = True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite = True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite = True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite = True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite = True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite = True)
+    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    grass.mapcalc(exp="temp_1 = rand(0, 550)", overwrite = True)
-    grass.mapcalc(exp="temp_2 = rand(0, 450)", overwrite = True)
-    grass.mapcalc(exp="temp_3 = rand(0, 320)", overwrite = True)
-    grass.mapcalc(exp="temp_4 = rand(0, 510)", overwrite = True)
-    grass.mapcalc(exp="temp_5 = rand(0, 300)", overwrite = True)
-    grass.mapcalc(exp="temp_6 = rand(0, 650)", overwrite = True)
+    grass.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
+    grass.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
+    grass.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
+    grass.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
+    grass.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
+    grass.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid = 1, flags = 'd').strip()
+    n1 = grass.read_command("g.tempfile", pid=1, flags='d').strip()
     fd = open(n1, 'w')
     fd.write(
-       "prec_1|2001-01-01|2001-02-01\n"
-       "prec_2|2001-04-01|2001-05-01\n"
-       "prec_3|2001-05-01|2001-09-01\n"
-       "prec_4|2001-09-01|2002-01-01\n"
-       "prec_5|2002-01-01|2002-05-01\n"
-       "prec_6|2002-05-01|2002-07-01\n"
-       )
+        "prec_1|2001-01-01|2001-02-01\n"
+        "prec_2|2001-04-01|2001-05-01\n"
+        "prec_3|2001-05-01|2001-09-01\n"
+        "prec_4|2001-09-01|2002-01-01\n"
+        "prec_5|2002-01-01|2002-05-01\n"
+        "prec_6|2002-05-01|2002-07-01\n"
+    )
     fd.close()
 
-    n2 = grass.read_command("g.tempfile", pid = 2, flags = 'd').strip()
+    n2 = grass.read_command("g.tempfile", pid=2, flags='d').strip()
     fd = open(n2, 'w')
     fd.write(
-       "temp_1|2000-10-01|2001-01-01\n"
-       "temp_2|2001-04-01|2001-05-01\n"
-       "temp_3|2001-05-01|2001-09-01\n"
-       "temp_4|2001-09-01|2002-01-01\n"
-       "temp_5|2002-01-01|2002-05-01\n"
-       "temp_6|2002-05-01|2002-07-01\n"
-       )
+        "temp_1|2000-10-01|2001-01-01\n"
+        "temp_2|2001-04-01|2001-05-01\n"
+        "temp_3|2001-05-01|2001-09-01\n"
+        "temp_4|2001-09-01|2002-01-01\n"
+        "temp_5|2002-01-01|2002-05-01\n"
+        "temp_6|2002-05-01|2002-07-01\n"
+    )
     fd.close()
     name1 = 'absinterval1'
     name2 = 'absinterval2'
-    grass.run_command('t.unregister', type = 'rast',
-                       maps='prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,temp_1,temp_2,temp_3,temp_4,temp_5,temp_6')
+    grass.run_command('t.unregister', type='rast',
+                      maps='prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,'
+                      'temp_1,temp_2,temp_3,temp_4,temp_5,temp_6')
     for name, fname in zip((name1, name2), (n1, n2)):
-        grass.run_command('t.create', overwrite = True, type='strds',
-                          temporaltype='absolute', output=name, 
+        grass.run_command('t.create', overwrite=True, type='strds',
+                          temporaltype='absolute', output=name,
                           title="A test with input files", descr="A test with input files")
-        grass.run_command('t.register', flags = 'i', input=name, file=fname, overwrite = True)
+        grass.run_command('t.register', flags='i', input=name, file=fname, overwrite=True)
 
     return name1, name2
 
+
 def createRelativeInterval():
-    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags = 'p3', quiet = True)
+    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10,
+                      flags='p3', quiet=True)
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite = True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite = True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite = True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite = True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite = True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite = True)
+    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    grass.mapcalc(exp="temp_1 = rand(0, 550)", overwrite = True)
-    grass.mapcalc(exp="temp_2 = rand(0, 450)", overwrite = True)
-    grass.mapcalc(exp="temp_3 = rand(0, 320)", overwrite = True)
-    grass.mapcalc(exp="temp_4 = rand(0, 510)", overwrite = True)
-    grass.mapcalc(exp="temp_5 = rand(0, 300)", overwrite = True)
-    grass.mapcalc(exp="temp_6 = rand(0, 650)", overwrite = True)
+    grass.mapcalc(exp="temp_1 = rand(0, 550)", overwrite=True)
+    grass.mapcalc(exp="temp_2 = rand(0, 450)", overwrite=True)
+    grass.mapcalc(exp="temp_3 = rand(0, 320)", overwrite=True)
+    grass.mapcalc(exp="temp_4 = rand(0, 510)", overwrite=True)
+    grass.mapcalc(exp="temp_5 = rand(0, 300)", overwrite=True)
+    grass.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid = 1, flags = 'd').strip()
+    n1 = grass.read_command("g.tempfile", pid=1, flags='d').strip()
     fd = open(n1, 'w')
     fd.write(
         "prec_1|1|4\n"
@@ -430,92 +441,94 @@ def createRelativeInterval():
         "prec_4|10|11\n"
         "prec_5|11|14\n"
         "prec_6|14|17\n"
-       )
+    )
     fd.close()
 
-    n2 = grass.read_command("g.tempfile", pid = 2, flags = 'd').strip()
+    n2 = grass.read_command("g.tempfile", pid=2, flags='d').strip()
     fd = open(n2, 'w')
     fd.write(
-        "temp_1|1|4\n"
-        "temp_2|4|7\n"
+        "temp_1|5|6\n"
+        "temp_2|6|7\n"
         "temp_3|7|10\n"
         "temp_4|10|11\n"
-        "temp_5|11|14\n"
-        "temp_6|14|17\n"
-       )
+        "temp_5|11|18\n"
+        "temp_6|19|22\n"
+    )
     fd.close()
     name1 = 'relinterval1'
     name2 = 'relinterval2'
-    grass.run_command('t.unregister', type = 'rast',
-                       maps='prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,temp_1,temp_2,temp_3,temp_4,temp_5,temp_6')
+    grass.run_command('t.unregister', type='rast',
+                      maps='prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,'
+                      'temp_1,temp_2,temp_3,temp_4,temp_5,temp_6')
     for name, fname in zip((name1, name2), (n1, n2)):
-        grass.run_command('t.create', overwrite = True, type='strds',
-                          temporaltype='relative', output=name, 
+        grass.run_command('t.create', overwrite=True, type='strds',
+                          temporaltype='relative', output=name,
                           title="A test with input files", descr="A test with input files")
-        grass.run_command('t.register', flags = 'i', input = name, file = fname, unit = "years", overwrite = True)
+        grass.run_command('t.register', flags='i', input=name, file=fname, unit="years", overwrite=True)
     return name1, name2
-        
+
+
 def createAbsolutePoint():
-    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags = 'p3', quiet = True)
+    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10,
+                      flags='p3', quiet=True)
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite = True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite = True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite = True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite = True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite = True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite = True)
+    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid = 1, flags = 'd').strip()
+    n1 = grass.read_command("g.tempfile", pid=1, flags='d').strip()
     fd = open(n1, 'w')
     fd.write(
-       "prec_1|2001-01-01\n"
-       "prec_2|2001-03-01\n"
-       "prec_3|2001-04-01\n"
-       "prec_4|2001-05-01\n"
-       "prec_5|2001-08-01\n"
-       "prec_6|2001-09-01\n"
-       )
+        "prec_1|2001-01-01\n"
+        "prec_2|2001-03-01\n"
+        "prec_3|2001-04-01\n"
+        "prec_4|2001-05-01\n"
+        "prec_5|2001-08-01\n"
+        "prec_6|2001-09-01\n"
+    )
     fd.close()
     name = 'abspoint'
-    grass.run_command('t.create', overwrite = True, type='strds',
-                      temporaltype='absolute', output=name, 
+    grass.run_command('t.create', overwrite=True, type='strds',
+                      temporaltype='absolute', output=name,
                       title="A test with input files", descr="A test with input files")
 
-    grass.run_command('t.register', flags = 'i', input=name, file=n1, overwrite = True)
+    grass.run_command('t.register', flags='i', input=name, file=n1, overwrite=True)
     return name
 
+
 def createRelativePoint():
-    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags = 'p3', quiet = True)
+    grass.run_command('g.region', s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10,
+                      flags='p3', quiet=True)
 
-    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite = True)
-    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite = True)
-    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite = True)
-    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite = True)
-    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite = True)
-    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite = True)
+    grass.mapcalc(exp="prec_1 = rand(0, 550)", overwrite=True)
+    grass.mapcalc(exp="prec_2 = rand(0, 450)", overwrite=True)
+    grass.mapcalc(exp="prec_3 = rand(0, 320)", overwrite=True)
+    grass.mapcalc(exp="prec_4 = rand(0, 510)", overwrite=True)
+    grass.mapcalc(exp="prec_5 = rand(0, 300)", overwrite=True)
+    grass.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
-    n1 = grass.read_command("g.tempfile", pid = 1, flags = 'd').strip()
+    n1 = grass.read_command("g.tempfile", pid=1, flags='d').strip()
     fd = open(n1, 'w')
     fd.write(
-       "prec_1|1\n"
-       "prec_2|3\n"
-       "prec_3|5\n"
-       "prec_4|7\n"
-       "prec_5|11\n"
-       "prec_6|13\n"
-       )
+        "prec_1|1\n"
+        "prec_2|3\n"
+        "prec_3|5\n"
+        "prec_4|7\n"
+        "prec_5|11\n"
+        "prec_6|13\n"
+    )
     fd.close()
     name = 'relpoint'
-    grass.run_command('t.create', overwrite = True, type='strds',
+    grass.run_command('t.create', overwrite=True, type='strds',
                       temporaltype='relative', output=name,
                       title="A test with input files", descr="A test with input files")
 
-    grass.run_command('t.register', unit="day", input=name, file=n1, overwrite = True)
+    grass.run_command('t.register', unit="day", input=name, file=n1, overwrite=True)
     return name
 
 if __name__ == '__main__':
 
     test()
-
-
-

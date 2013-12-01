@@ -6,12 +6,12 @@
 Classes:
  - nviztask::NvizTask
 
-(C) 2012 by the GRASS Development Team
+(C) 2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Anna Kratochvilova <kratochanna gmail.com>
+@author Anna Petrasova <kratochanna gmail.com>
 """
 
 import os
@@ -19,8 +19,7 @@ import sys
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
-    import elementtree.ElementTree as etree # Python <= 2.4
-from pprint import pprint
+    import elementtree.ElementTree as etree  # Python <= 2.4
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
@@ -29,7 +28,7 @@ from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
 from core.utils import GetLayerNameFromCmd, CmdToTuple, _
 from grass.script import task as gtask
-from grass.script import core as grass
+
 
 class NvizTask:
     def __init__(self):
@@ -42,7 +41,7 @@ class NvizTask:
         self.filename = filename
         try:
             gxwXml = ProcessWorkspaceFile(etree.parse(self.filename))
-        except Exception, e:
+        except Exception:
             raise GException(_("Reading workspace file <%s> failed.\n"
                                "Invalid file, unable to parse XML document.") % filename)
         # for display in gxwXml.displays:
@@ -71,20 +70,19 @@ class NvizTask:
 
             if not layer['nviz']:
                 continue
-            layerName, found = GetLayerNameFromCmd(layer['cmd'], fullyQualified = False,
-                                                   param = 'map')
+            layerName, found = GetLayerNameFromCmd(layer['cmd'], fullyQualified=False,
+                                                   param='map')
             if not found:
                 continue
 
             if 'surface' in layer['nviz']:
-                self._processSurface(layer['nviz']['surface'], mapName = layerName)
-
+                self._processSurface(layer['nviz']['surface'], mapName=layerName)
 
     def _processSurface(self, surface, mapName):
         self._setMultiTaskParam('elevation_map', mapName)
 
         # attributes like color, shine, transparency
-        attributes = ('color', 'shine', 'transp') # mask missing
+        attributes = ('color', 'shine', 'transp')  # mask missing
         parameters = (('color_map', 'color'),
                      ('shininess_map', 'shininess_value'),
                      ('transparency_map', 'transparency_value'))
@@ -128,7 +126,7 @@ class NvizTask:
 
     def _processState(self, state):
         color = state['view']['background']['color']
-        self.task.set_param('bgcolor', self._join(color, delim = ':'))
+        self.task.set_param('bgcolor', self._join(color, delim=':'))
         self.task.set_param('position', self._join((state['view']['position']['x'],
                                                     state['view']['position']['y'])))
         self.task.set_param('height', state['iview']['height']['value'])
@@ -141,20 +139,17 @@ class NvizTask:
                                                  state['iview']['focus']['z'])))
         self.task.set_param('light_position', self._join((state['light']['position']['x'],
                                                           state['light']['position']['y'],
-                                                          state['light']['position']['z']/100.)))
+                                                          state['light']['position']['z'] / 100.)))
         color = state['light']['color'][:3]
-        self.task.set_param('light_color', self._join(color, delim = ':'))
+        self.task.set_param('light_color', self._join(color, delim=':'))
         self.task.set_param('light_brightness', int(state['light']['bright']))
         self.task.set_param('light_ambient', state['light']['ambient'])
-
-
-        
 
     def _setMultiTaskParam(self, param, value):
         last = self.task.get_param(param)['value']
         self.task.set_param(param, self._join((last, value)))
 
-    def _join(self, toJoin, delim = ','):
+    def _join(self, toJoin, delim=','):
         toJoin = filter(self._ignore, toJoin)
         return delim.join(map(str, toJoin))
 
@@ -168,12 +163,21 @@ class NvizTask:
         # params = self.task.get_list_params()
         # parameter with 'map' name
         # params = filter(lambda x: 'map' in x, params)
-        return ('elevation_map', 'color_map', 'vline','vpoint')
+        return ('elevation_map', 'color_map', 'vline', 'vpoint')
 
-    def GetCommandSeries(self, series, paramName):
+    def GetCommandSeries(self, layerList, paramName):
         commands = []
         if not self.task:
             return commands
+
+        if len(layerList) > 1:
+            raise GException(_("Please add only one layer in the list."))
+            return
+        layer = layerList[0]
+        if hasattr(layer, 'maps'):
+            series = layer.maps
+        else:
+            raise GException(_("No map series nor space-time dataset is added."))
 
         for value in series:
             self.task.set_param(paramName, value)
@@ -182,8 +186,8 @@ class NvizTask:
                 self.task.set_param('color_map', '')
             self.task.set_flag('overwrite', True)
             self.task.set_param('output', 'tobechanged')
-            cmd = self.task.get_cmd(ignoreErrors = False, ignoreRequired = False, ignoreDefault = True)
-            commands.append(CmdToTuple(cmd))
+            cmd = self.task.get_cmd(ignoreErrors=False, ignoreRequired=False, ignoreDefault=True)
+            commands.append(cmd)
 
         return commands
 
@@ -192,29 +196,25 @@ class NvizTask:
             return None
         self.task.set_flag('overwrite', True)
         self.task.set_param('output', 'tobechanged')
-        cmd = self.task.get_cmd(ignoreErrors = False, ignoreRequired = False, ignoreDefault = True)
+        cmd = self.task.get_cmd(ignoreErrors=False, ignoreRequired=False, ignoreDefault=True)
         return CmdToTuple(cmd)
 
     def GetRegion(self):
         return self.region
 
 
-
 def test():
-
     nviz = NvizTask('/home/anna/testy/nviz/t12.gxw')
     # nviz = NvizState('/home/anna/testy/nviz/t3.gxw')
-    
+
     # cmd = nviz.GetCommand()
-    cmds = nviz.GetCommandSeries(['aspect','elevation'], 'color_map')
+    cmds = nviz.GetCommandSeries(['aspect', 'elevation'], 'color_map')
     for cmd in cmds:
         print cmd
-        returncode, message = RunCommand(getErrorMsg = True, prog = cmd[0], **cmd[1])
+        returncode, message = RunCommand(getErrorMsg=True, prog=cmd[0], **cmd[1])
         print returncode, message
 
 
 if __name__ == '__main__':
 
     test()
-
-

@@ -6,17 +6,18 @@
 Classes:
  - anim::Animation
 
-(C) 2012 by the GRASS Development Team
+(C) 2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Anna Kratochvilova <kratochanna gmail.com>
+@author Anna Petrasova <kratochanna gmail.com>
 """
 
 import wx
 from utils import Orientation, ReplayMode
 from core.utils import _
+
 
 class Animation(wx.EvtHandler):
     """!Animation class specifies which frame to show at which instance."""
@@ -28,7 +29,7 @@ class Animation(wx.EvtHandler):
         # states
         self.orientation = Orientation.FORWARD
         self.replayMode = ReplayMode.ONESHOT
-        
+
         self.callbackUpdateFrame = None
         self.callbackEndAnimation = None
         self.callbackOrientationChanged = None
@@ -59,7 +60,7 @@ class Animation(wx.EvtHandler):
         """!Get frame count."""
         return len(self.frames)
 
-    count = property(fget = GetCount)
+    count = property(fget=GetCount)
 
     def GetReplayMode(self):
         """!Returns replay mode (loop)."""
@@ -68,7 +69,7 @@ class Animation(wx.EvtHandler):
     def SetReplayMode(self, mode):
         self._replayMode = mode
 
-    replayMode = property(fset = SetReplayMode, fget = GetReplayMode)
+    replayMode = property(fset=SetReplayMode, fget=GetReplayMode)
 
     def GetOrientation(self):
         return self._orientation
@@ -76,7 +77,7 @@ class Animation(wx.EvtHandler):
     def SetOrientation(self, mode):
         self._orientation = mode
 
-    orientation = property(fset = SetOrientation, fget = GetOrientation)
+    orientation = property(fset=SetOrientation, fget=GetOrientation)
 
     def SetCallbackUpdateFrame(self, callback):
         """!Sets function to be called when updating frame."""
@@ -92,7 +93,7 @@ class Animation(wx.EvtHandler):
 
     def Start(self):
         if not self.IsActive():
-            return 
+            return
 
     def Pause(self, paused):
         if not self.IsActive():
@@ -116,14 +117,14 @@ class Animation(wx.EvtHandler):
                 self.currentIndex = 0
             elif self.replayMode == ReplayMode.REVERSE:
                 self.orientation = Orientation.BACKWARD
-                self.currentIndex = self.count - 2 # -1
+                self.currentIndex = self.count - 2  # -1
                 self.callbackOrientationChanged(Orientation.BACKWARD)
         else:
             if self.replayMode == ReplayMode.REPEAT:
                 self.currentIndex = self.count - 1
             elif self.replayMode == ReplayMode.REVERSE:
                 self.orientation = Orientation.FORWARD
-                self.currentIndex = 1 # 0
+                self.currentIndex = 1  # 0
                 self.callbackOrientationChanged(Orientation.FORWARD)
 
     def Update(self):
@@ -140,7 +141,7 @@ class Animation(wx.EvtHandler):
             self.currentIndex -= 1
             if self.currentIndex == -1:
                 self._arrivedToEnd()
-                
+
     def FrameChangedFromOutside(self, index):
         """!Let the animation know that frame was changed from outside."""
         if not self.IsActive():
@@ -188,5 +189,3 @@ class Animation(wx.EvtHandler):
 #
 #if __name__ == '__main__':
 #    test()
-
-

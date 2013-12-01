@@ -7,16 +7,17 @@ Classes:
  - dialogs::SpeedDialog
  - dialogs::InputDialog
  - dialogs::EditDialog
- - dialogs::AnimationData
  - dialogs::ExportDialog
+ - dialogs::AnimSimpleLayerManager
+ - dialogs::AddTemporalLayerDialog
 
 
-(C) 2012 by the GRASS Development Team
+(C) 2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Anna Kratochvilova <kratochanna gmail.com>
+@author Anna Petrasova <kratochanna gmail.com>
 """
 import os
 import sys
@@ -30,25 +31,28 @@ if __name__ == '__main__':
 
 from core.gcmd import GMessage, GError, GException
 from core import globalvar
-from gui_core import gselect
 from gui_core.dialogs import MapLayersDialog, GetImageHandlers
 from gui_core.forms import GUI
 from core.settings import UserSettings
 from core.utils import _
+from gui_core.gselect import Select
 
-from utils import TemporalMode, getRegisteredMaps, validateTimeseriesName, validateMapNames
-from nviztask import NvizTask
+from animation.utils import TemporalMode, getRegisteredMaps
+from animation.data import AnimationData, AnimLayer
+from animation.toolbars import AnimSimpleLmgrToolbar, SIMPLE_LMGR_STDS
+from gui_core.simplelmgr import SimpleLayerManager, \
+    SIMPLE_LMGR_RASTER, SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_TB_TOP
 
 from grass.pydispatch.signal import Signal
 import grass.script.core as gcore
 
 
 class SpeedDialog(wx.Dialog):
-    def __init__(self, parent, title = _("Adjust speed of animation"),
-                 temporalMode = None, minimumDuration = 20, timeGranularity = None,
-                 initialSpeed = 200):#, framesCount = None
-        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
-                           style = wx.DEFAULT_DIALOG_STYLE)
+    def __init__(self, parent, title=_("Adjust speed of animation"),
+                 temporalMode=None, minimumDuration=20, timeGranularity=None,
+                 initialSpeed=200):
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title,
+                           style=wx.DEFAULT_DIALOG_STYLE)
         # signal emitted when speed has changed; has attribute 'ms'
         self.speedChanged = Signal('SpeedDialog.speedChanged')
         self.minimumDuration = minimumDuration
@@ -71,7 +75,7 @@ class SpeedDialog(wx.Dialog):
     def GetTimeGranularity(self):
         return self._timeGranularity
 
-    timeGranularity = property(fset = SetTimeGranularity, fget = GetTimeGranularity)
+    timeGranularity = property(fset=SetTimeGranularity, fget=GetTimeGranularity)
 
     def SetTemporalMode(self, mode):
         self._temporalMode = mode
@@ -80,7 +84,7 @@ class SpeedDialog(wx.Dialog):
     def GetTemporalMode(self):
         return self._temporalMode
 
-    temporalMode = property(fset = SetTemporalMode, fget = GetTemporalMode)
+    temporalMode = property(fset=SetTemporalMode, fget=GetTemporalMode)
 
     def _layout(self):
         """!Layout window"""
@@ -88,53 +92,53 @@ class SpeedDialog(wx.Dialog):
         #
         # simple mode
         #
-        self.nontemporalBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                           label = ' %s ' % _("Simple mode"))
+        self.nontemporalBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
+                                           label=' %s ' % _("Simple mode"))
         box = wx.StaticBoxSizer(self.nontemporalBox, wx.VERTICAL)
-        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        labelDuration = wx.StaticText(self, id = wx.ID_ANY, label = _("Frame duration:"))
-        labelUnits = wx.StaticText(self, id = wx.ID_ANY, label = _("ms"))
-        self.spinDuration = wx.SpinCtrl(self, id = wx.ID_ANY, min = self.minimumDuration, 
-                                        max = 10000, initial = self.defaultSpeed)
+        labelDuration = wx.StaticText(self, id=wx.ID_ANY, label=_("Frame duration:"))
+        labelUnits = wx.StaticText(self, id=wx.ID_ANY, label=_("ms"))
+        self.spinDuration = wx.SpinCtrl(self, id=wx.ID_ANY, min=self.minimumDuration,
+                                        max=10000, initial=self.defaultSpeed)
         # TODO total time
 
-        gridSizer.Add(item = labelDuration, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        gridSizer.Add(item = self.spinDuration, pos = (0, 1), flag = wx.ALIGN_CENTER)
-        gridSizer.Add(item = labelUnits, pos = (0, 2), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        gridSizer.Add(item=labelDuration, pos=(0, 0), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        gridSizer.Add(item=self.spinDuration, pos=(0, 1), flag = wx.ALIGN_CENTER)
+        gridSizer.Add(item=labelUnits, pos=(0, 2), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         gridSizer.AddGrowableCol(0)
 
-        box.Add(item = gridSizer, proportion = 1, border = 5, flag = wx.ALL | wx.EXPAND)
+        box.Add(item=gridSizer, proportion=1, border=5, flag=wx.ALL | wx.EXPAND)
         self.nontemporalSizer = gridSizer
-        mainSizer.Add(item = box, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
+        mainSizer.Add(item=box, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         #
         # temporal mode
         #
-        self.temporalBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                        label = ' %s ' % _("Temporal mode"))
+        self.temporalBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
+                                        label=' %s ' % _("Temporal mode"))
         box = wx.StaticBoxSizer(self.temporalBox, wx.VERTICAL)
-        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        labelTimeUnit = wx.StaticText(self, id = wx.ID_ANY, label = _("Time unit:"))
-        labelDuration = wx.StaticText(self, id = wx.ID_ANY, label = _("Duration of time unit:"))
-        labelUnits = wx.StaticText(self, id = wx.ID_ANY, label = _("ms"))
-        self.spinDurationTemp = wx.SpinCtrl(self, id = wx.ID_ANY, min = self.minimumDuration,
-                                            max = 10000, initial = self.defaultSpeed)
-        self.choiceUnits = wx.Choice(self, id = wx.ID_ANY)
+        labelTimeUnit = wx.StaticText(self, id=wx.ID_ANY, label=_("Time unit:"))
+        labelDuration = wx.StaticText(self, id=wx.ID_ANY, label=_("Duration of time unit:"))
+        labelUnits = wx.StaticText(self, id=wx.ID_ANY, label=_("ms"))
+        self.spinDurationTemp = wx.SpinCtrl(self, id=wx.ID_ANY, min=self.minimumDuration,
+                                            max=10000, initial=self.defaultSpeed)
+        self.choiceUnits = wx.Choice(self, id=wx.ID_ANY)
 
         # TODO total time
 
-        gridSizer.Add(item = labelTimeUnit, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        gridSizer.Add(item = self.choiceUnits, pos = (0, 1), flag = wx.ALIGN_CENTER | wx.EXPAND)
-        gridSizer.Add(item = labelDuration, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        gridSizer.Add(item = self.spinDurationTemp, pos = (1, 1), flag = wx.ALIGN_CENTER | wx.EXPAND)
-        gridSizer.Add(item = labelUnits, pos = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        gridSizer.Add(item=labelTimeUnit, pos=(0, 0), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        gridSizer.Add(item=self.choiceUnits, pos=(0, 1), flag = wx.ALIGN_CENTER | wx.EXPAND)
+        gridSizer.Add(item=labelDuration, pos=(1, 0), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        gridSizer.Add(item=self.spinDurationTemp, pos=(1, 1), flag = wx.ALIGN_CENTER | wx.EXPAND)
+        gridSizer.Add(item=labelUnits, pos=(1, 2), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         gridSizer.AddGrowableCol(1)
 
         self.temporalSizer = gridSizer
-        box.Add(item = gridSizer, proportion = 1, border = 5, flag = wx.ALL | wx.EXPAND)
-        mainSizer.Add(item = box, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
-        
+        box.Add(item=gridSizer, proportion=1, border=5, flag=wx.ALL | wx.EXPAND)
+        mainSizer.Add(item=box, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+
         self.btnOk = wx.Button(self, wx.ID_OK)
         self.btnApply = wx.Button(self, wx.ID_APPLY)
         self.btnCancel = wx.Button(self, wx.ID_CANCEL)
@@ -143,16 +147,16 @@ class SpeedDialog(wx.Dialog):
         self.btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
         self.btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
         self.btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-        self.Bind(wx.EVT_CLOSE,  self.OnCancel)
+        self.Bind(wx.EVT_CLOSE, self.OnCancel)
         # button sizer
         btnStdSizer = wx.StdDialogButtonSizer()
         btnStdSizer.AddButton(self.btnOk)
         btnStdSizer.AddButton(self.btnApply)
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
-        
-        mainSizer.Add(item = btnStdSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border = 5)
+
+        mainSizer.Add(item=btnStdSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -199,12 +203,12 @@ class SpeedDialog(wx.Dialog):
         if self.temporalMode == TemporalMode.TEMPORAL:
             index = self.choiceUnits.GetSelection()
             unit = self.choiceUnits.GetClientData(index)
-            delta = self._timedelta(unit = unit, number = 1)
+            delta = self._timedelta(unit=unit, number=1)
             seconds1 = self._total_seconds(delta)
 
             number, unit = self.timeGranularity
             number = float(number)
-            delta = self._timedelta(unit = unit, number = number)
+            delta = self._timedelta(unit=unit, number=number)
             seconds2 = self._total_seconds(delta)
             value = timeTick
             ms = value * seconds1 / float(seconds2)
@@ -219,39 +223,38 @@ class SpeedDialog(wx.Dialog):
         elif self.temporalMode == TemporalMode.TEMPORAL:
             index = self.choiceUnits.GetSelection()
             unit = self.choiceUnits.GetClientData(index)
-            delta = self._timedelta(unit = unit, number = 1)
+            delta = self._timedelta(unit=unit, number=1)
             seconds1 = self._total_seconds(delta)
-
 
             number, unit = self.timeGranularity
             number = float(number)
-            delta = self._timedelta(unit = unit, number = number)
+            delta = self._timedelta(unit=unit, number=number)
             seconds2 = self._total_seconds(delta)
 
             value = self.spinDurationTemp.GetValue()
             ms = value * seconds2 / float(seconds1)
             if ms < self.minimumDuration:
-                GMessage(parent = self, message = _("Animation speed is too high."))
+                GMessage(parent=self, message=_("Animation speed is too high."))
                 return
             self.lastAppliedValueTemp = self.spinDurationTemp.GetValue()
         else:
             return
 
-        self.speedChanged.emit(ms = ms)
+        self.speedChanged.emit(ms=ms)
 
     def _timedelta(self, unit, number):
         if unit in "years":
-            delta = datetime.timedelta(days = 365.25 * number)
+            delta = datetime.timedelta(days=365.25 * number)
         elif unit in "months":
-            delta = datetime.timedelta(days = 30.4375 * number) # 365.25/12
+            delta = datetime.timedelta(days=30.4375 * number)  # 365.25/12
         elif unit in "days":
-            delta = datetime.timedelta(days = 1 * number)
+            delta = datetime.timedelta(days=1 * number)
         elif unit in "hours":
-            delta = datetime.timedelta(hours = 1 * number)
+            delta = datetime.timedelta(hours=1 * number)
         elif unit in "minutes":
-            delta = datetime.timedelta(minutes = 1 * number)
+            delta = datetime.timedelta(minutes=1 * number)
         elif unit in "seconds":
-            delta = datetime.timedelta(seconds = 1 * number)
+            delta = datetime.timedelta(seconds=1 * number)
 
         return delta
 
@@ -263,8 +266,8 @@ class SpeedDialog(wx.Dialog):
 
 class InputDialog(wx.Dialog):
     def __init__(self, parent, mode, animationData):
-        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY,
-                           style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY,
+                           style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         if mode == 'add':
             self.SetTitle(_("Add new animation"))
         elif mode == 'edit':
@@ -274,49 +277,53 @@ class InputDialog(wx.Dialog):
         self._tmpLegendCmd = None
 
         self._layout()
-        self.OnViewMode(event = None)
+        self.OnViewMode(event=None)
 
     def _layout(self):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.windowChoice = wx.Choice(self, id = wx.ID_ANY,
-                                      choices = [_("top left"), _("top right"),
-                                                 _("bottom left"), _("bottom right")])
+        self.windowChoice = wx.Choice(self, id=wx.ID_ANY,
+                                      choices=[_("top left"), _("top right"),
+                                               _("bottom left"), _("bottom right")])
         self.windowChoice.SetSelection(self.animationData.windowIndex)
 
-        self.nameCtrl = wx.TextCtrl(self, id = wx.ID_ANY, value = self.animationData.name)
+        self.nameCtrl = wx.TextCtrl(self, id=wx.ID_ANY, value=self.animationData.name)
 
-        self.nDChoice = wx.Choice(self, id = wx.ID_ANY)
+        self.nDChoice = wx.Choice(self, id=wx.ID_ANY)
         mode = self.animationData.viewMode
         index = 0
         for i, (viewMode, viewModeName) in enumerate(self.animationData.viewModes):
-            self.nDChoice.Append(viewModeName, clientData = viewMode)
+            self.nDChoice.Append(viewModeName, clientData=viewMode)
             if mode == viewMode:
                 index = i
 
         self.nDChoice.SetSelection(index)
-        # TODO
-        self.nDChoice.SetToolTipString(_(""))
+        self.nDChoice.SetToolTipString(_("Select 2D or 3D view"))
         self.nDChoice.Bind(wx.EVT_CHOICE, self.OnViewMode)
 
-        gridSizer = wx.FlexGridSizer(cols = 2, hgap = 5, vgap = 5)
-        gridSizer.Add(item = wx.StaticText(self, id = wx.ID_ANY, label = _("Name:")),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = self.nameCtrl, proportion = 1, flag = wx.EXPAND)
-        gridSizer.Add(item = wx.StaticText(self, id = wx.ID_ANY, label = _("Window position:")),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = self.windowChoice, proportion = 1, flag = wx.ALIGN_RIGHT)
-        gridSizer.Add(item = wx.StaticText(self, id = wx.ID_ANY, label = _("View mode:")),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = self.nDChoice, proportion = 1, flag = wx.ALIGN_RIGHT)
+        gridSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
+        gridSizer.Add(item=wx.StaticText(self, id=wx.ID_ANY, label=_("Name:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=self.nameCtrl, proportion=1, flag=wx.EXPAND)
+        gridSizer.Add(item=wx.StaticText(self, id=wx.ID_ANY, label=_("Window position:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=self.windowChoice, proportion=1, flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(item=wx.StaticText(self, id=wx.ID_ANY, label=_("View mode:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=self.nDChoice, proportion=1, flag=wx.ALIGN_RIGHT)
         gridSizer.AddGrowableCol(0, 1)
         gridSizer.AddGrowableCol(1, 1)
-        mainSizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
+        mainSizer.Add(item=gridSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        label = _("For 3D animation, please select only one space-time dataset\n"
+                  "or one series of map layers.")
+        self.warning3DLayers = wx.StaticText(self, label=label)
+        self.warning3DLayers.SetForegroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        mainSizer.Add(item=self.warning3DLayers, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
         self.dataPanel = self._createDataPanel()
         self.threeDPanel = self._create3DPanel()
-        mainSizer.Add(item = self.dataPanel, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
-        mainSizer.Add(item = self.threeDPanel, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
+        mainSizer.Add(item=self.dataPanel, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
+        mainSizer.Add(item=self.threeDPanel, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
 
         # buttons
         self.btnOk = wx.Button(self, wx.ID_OK)
@@ -328,67 +335,68 @@ class InputDialog(wx.Dialog):
         btnStdSizer.AddButton(self.btnOk)
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
-        
-        mainSizer.Add(item = btnStdSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border = 5)
+
+        mainSizer.Add(item=btnStdSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
 
     def _createDataPanel(self):
-        panel = wx.Panel(self, id = wx.ID_ANY)
-        dataStBox = wx.StaticBox(parent = panel, id = wx.ID_ANY,
-                               label = ' %s ' % _("Data"))
-        dataBoxSizer = wx.StaticBoxSizer(dataStBox, wx.VERTICAL)
-
-        self.dataChoice = wx.Choice(panel, id = wx.ID_ANY)
-        self._setMapTypes()
-        self.dataChoice.Bind(wx.EVT_CHOICE, self.OnDataType)
-
-        self.dataSelect = gselect.Select(parent = panel, id = wx.ID_ANY,
-                                           size = globalvar.DIALOG_GSELECT_SIZE)
-
-
-        iconTheme = UserSettings.Get(group = 'appearance', key = 'iconTheme', subkey = 'type')
-        bitmapPath = os.path.join(globalvar.ETCICONDIR, iconTheme, 'layer-open.png')
-        if os.path.isfile(bitmapPath) and os.path.getsize(bitmapPath):
-            bitmap = wx.Bitmap(name = bitmapPath)
-        else:
-            bitmap = wx.ArtProvider.GetBitmap(id = wx.ART_MISSING_IMAGE, client = wx.ART_TOOLBAR)
-        self.addManyMapsButton = wx.BitmapButton(panel, id = wx.ID_ANY, bitmap = bitmap)
-        self.addManyMapsButton.Bind(wx.EVT_BUTTON, self.OnAddMaps)
+        panel = wx.Panel(self)
+        slmgrSizer = wx.BoxSizer(wx.VERTICAL)
+        self._layerList = copy.deepcopy(self.animationData.layerList)
+        self.simpleLmgr = AnimSimpleLayerManager(parent=panel,
+                                                 layerList=self._layerList,
+                                                 modal=True)
+        self.simpleLmgr.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0], 120))
+        slmgrSizer.Add(self.simpleLmgr, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.legend = wx.CheckBox(panel, label=_("Show raster legend"))
         self.legend.SetValue(bool(self.animationData.legendCmd))
         self.legendBtn = wx.Button(panel, label=_("Set options"))
-        self.legendBtn.Bind(wx.EVT_BUTTON, self.OnLegend)
-        tooltip = _("By default, legend is created for the first raster map in case of multiple maps "
-                    "and for the first raster map of space time raster dataset.")
-        self.legend.SetToolTipString(tooltip) 
-        self.legendBtn.SetToolTipString(tooltip)
-
-        self.OnDataType(None)
-        if self.animationData.inputData is None:
-            self.dataSelect.SetValue('')
-        else:
-            self.dataSelect.SetValue(self.animationData.inputData)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(item = wx.StaticText(panel, wx.ID_ANY, label = _("Input data type:")),
-                proportion = 1, flag = wx.ALIGN_CENTER_VERTICAL)
-        hbox.Add(item = self.dataChoice, proportion = 1, flag = wx.EXPAND)
-        dataBoxSizer.Add(item = hbox, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        # hbox.Add(item = wx.StaticText(panel, wx.ID_ANY, label = _("Input data:")),
-        #         proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
-        hbox.Add(item = self.dataSelect, proportion = 1, flag = wx.ALIGN_CENTER)
-        hbox.Add(item = self.addManyMapsButton, proportion = 0, flag = wx.LEFT, border = 5)
-        dataBoxSizer.Add(item = hbox, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
+        self.legend.Bind(wx.EVT_CHECKBOX, self.OnLegend)
+        self.legendBtn.Bind(wx.EVT_BUTTON, self.OnLegendProperties)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.Add(item=self.legend, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL)
         hbox.Add(item=self.legendBtn, proportion=0, flag=wx.LEFT, border=5)
+        slmgrSizer.Add(item=hbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
+
+        panel.SetSizerAndFit(slmgrSizer)
+        panel.SetAutoLayout(True)
+
+        return panel
+
+    def _create3DPanel(self):
+        panel = wx.Panel(self, id=wx.ID_ANY)
+        dataStBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
+                                 label=' %s ' % _("3D view parameters"))
+        dataBoxSizer = wx.StaticBoxSizer(dataStBox, wx.VERTICAL)
+
+        # workspace file
+        self.fileSelector = \
+            filebrowse.FileBrowseButton(parent=panel, id=wx.ID_ANY,
+                                        size=globalvar.DIALOG_GSELECT_SIZE,
+                                        labelText=_("Workspace file:"),
+                                        dialogTitle=_("Choose workspace file to "
+                                                      "import 3D view parameters"),
+                                        buttonText=_('Browse'),
+                                        startDirectory=os.getcwd(), fileMode=0,
+                                        fileMask="GRASS Workspace File (*.gxw)|*.gxw")
+        if self.animationData.workspaceFile:
+            self.fileSelector.SetValue(self.animationData.workspaceFile)
+        self.paramLabel = wx.StaticText(panel, wx.ID_ANY, label=_("Parameter for animation:"))
+        self.paramChoice = wx.Choice(panel, id=wx.ID_ANY, choices=self.animationData.nvizParameters)
+        self.paramChoice.SetStringSelection(self.animationData.nvizParameter)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.Add(item=self.fileSelector, proportion=1, flag=wx.EXPAND | wx.ALIGN_CENTER)
+        dataBoxSizer.Add(item=hbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
+
+        hbox = wx.BoxSizer(wx.HORIZONTAL)
+        hbox.Add(item=self.paramLabel, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL)
+        hbox.Add(item=self.paramChoice, proportion=1, flag=wx.EXPAND)
         dataBoxSizer.Add(item=hbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
 
         panel.SetSizerAndFit(dataBoxSizer)
@@ -396,98 +404,31 @@ class InputDialog(wx.Dialog):
 
         return panel
 
-    def _create3DPanel(self):
-        panel = wx.Panel(self, id = wx.ID_ANY)
-        dataStBox = wx.StaticBox(parent = panel, id = wx.ID_ANY,
-                                 label = ' %s ' % _("3D view parameters"))
-        dataBoxSizer = wx.StaticBoxSizer(dataStBox, wx.VERTICAL)
-
-        # workspace file
-        self.fileSelector = filebrowse.FileBrowseButton(parent = panel, id = wx.ID_ANY, 
-                                                    size = globalvar.DIALOG_GSELECT_SIZE,
-                                                    labelText = _("Workspace file:"),
-                                                    dialogTitle = _("Choose workspace file to import 3D view parameters"),
-                                                    buttonText = _('Browse'),
-                                                    startDirectory = os.getcwd(), fileMode = 0,
-                                                    fileMask = "GRASS Workspace File (*.gxw)|*.gxw")
-        if self.animationData.workspaceFile:
-            self.fileSelector.SetValue(self.animationData.workspaceFile)
-        self.paramLabel = wx.StaticText(panel, wx.ID_ANY, label = _("Parameter for animation:"))
-        self.paramChoice = wx.Choice(panel, id = wx.ID_ANY, choices = self.animationData.nvizParameters)
-        self.paramChoice.SetStringSelection(self.animationData.nvizParameter)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(item = self.fileSelector, proportion = 1, flag = wx.EXPAND | wx.ALIGN_CENTER)
-        dataBoxSizer.Add(item = hbox, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(item = self.paramLabel, proportion = 1, flag = wx.ALIGN_CENTER_VERTICAL)
-        hbox.Add(item = self.paramChoice, proportion = 1, flag = wx.EXPAND)
-        dataBoxSizer.Add(item = hbox, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
-        
-        panel.SetSizerAndFit(dataBoxSizer)
-        panel.SetAutoLayout(True)
-
-        return panel
-
-    def _setMapTypes(self, view2d = True):
-        index = 0
-
-        inputTypes = self.animationData.inputMapTypes
-        self.dataChoice.Clear()
-        for i, (itype, itypeName) in enumerate(inputTypes):
-            self.dataChoice.Append(itypeName, clientData = itype)
-            if itype == self.animationData.inputMapType:
-                index = i
-        self.dataChoice.SetSelection(index)
-
     def OnViewMode(self, event):
         mode = self.nDChoice.GetSelection()
         self.Freeze()
+        self.simpleLmgr.Activate3D(mode == 1)
+        self.warning3DLayers.Show(mode == 1)
         sizer = self.threeDPanel.GetContainingSizer()
-        sizer.Show(self.threeDPanel, mode != 0, True)
+        sizer.Show(self.threeDPanel, mode == 1, True)
         sizer.Layout()
-        self._setMapTypes(mode == 0)
         self.Layout()
         self.Fit()
         self.Thaw()
 
-    def OnDataType(self, event):
-        etype = self.dataChoice.GetClientData(self.dataChoice.GetSelection())
-        if etype in ('rast', 'vect'):
-            self.dataSelect.SetType(etype = etype, multiple = True)
-            self.addManyMapsButton.Enable(True)
-        else:
-            self.dataSelect.SetType(etype = etype, multiple = False)
-            self.addManyMapsButton.Enable(False)
-
-        self.legend.Enable(etype in ('rast', 'strds'))
-        self.legendBtn.Enable(etype in ('rast', 'strds'))
-
-        self.dataSelect.SetValue('')
-
-    def OnAddMaps(self, event):
-        # TODO: fix dialog
-        etype = self.dataChoice.GetClientData(self.dataChoice.GetSelection())
-        index = 0
-        if etype == 'vect':
-            index = 2
-            
-        dlg = MapLayersDialog(self, title = _("Select raster maps for animation"))
-        dlg.applyAddingMapLayers.connect(lambda mapLayers:
-                                         self.dataSelect.SetValue(','.join(mapLayers)))
-        dlg.layerType.SetSelection(index)
-        dlg.LoadMapLayers(dlg.GetLayerType(cmd = True),
-                           dlg.mapset.GetStringSelection())
-        if dlg.ShowModal() == wx.ID_OK:
-            self.dataSelect.SetValue(','.join(dlg.GetMapLayers()))
-
-        dlg.Destroy()
-
     def OnLegend(self, event):
+        if not self.legend.IsChecked():
+            return
+        if self._tmpLegendCmd or self.animationData.legendCmd:
+            return
+        cmd = ['d.legend', 'at=5,50,2,5']
+        GUI(parent=self, modal=True).ParseCommand(cmd=cmd,
+                                                  completed=(self.GetOptData, '', ''))
+
+    def OnLegendProperties(self, event):
         """!Set options for legend"""
         if self._tmpLegendCmd:
-            cmd = self._tmpLegendCmd 
+            cmd = self._tmpLegendCmd
         elif self.animationData.legendCmd:
             cmd = self.animationData.legendCmd
         else:
@@ -500,47 +441,39 @@ class InputDialog(wx.Dialog):
         GUI(parent=self, modal=True).ParseCommand(cmd=cmd,
                                                   completed=(self.GetOptData, '', ''))
 
-    def _getLegendMapHint(self):
-        """!Determine probable map"""
-        inputData = self.dataSelect.GetValue()
-        etype = self.dataChoice.GetClientData(self.dataChoice.GetSelection())
-        if etype == 'strds':
-            timeseries = validateTimeseriesName(inputData, etype=etype)
-            timeseriesMaps = getRegisteredMaps(timeseries, etype)
-            if len(timeseriesMaps):
-                return timeseriesMaps[0]
-        else:  # multiple raster
-            maps = inputData.split(',')
-            if len(maps):
-                return maps[0]
-
-        return None
-
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process decoration layer data"""
-        self._tmpLegendCmd = dcmd
+        if dcmd:
+            self._tmpLegendCmd = dcmd
 
-        if dcmd and not self.legend.IsChecked():
-            self.legend.SetValue(True)
+            if not self.legend.IsChecked():
+                self.legend.SetValue(True)
+        else:
+            if not self._tmpLegendCmd and not self.animationData.legendCmd:
+                self.legend.SetValue(False)
 
     def _update(self):
+        if self.nDChoice.GetSelection() == 1 and len(self._layerList) > 1:
+            raise GException(_("Only one series or space-time "
+                               "dataset is accepted for 3D mode."))
+        hasSeries = False
+        for layer in self._layerList:
+            if layer.active and hasattr(layer, 'maps'):
+                hasSeries = True
+                break
+        if not hasSeries:
+            raise GException(_("No map series or space-time dataset added."))
+
+        self.animationData.layerList = self._layerList
         self.animationData.name = self.nameCtrl.GetValue()
         self.animationData.windowIndex = self.windowChoice.GetSelection()
 
-        sel = self.dataChoice.GetSelection()
-        self.animationData.inputMapType = self.dataChoice.GetClientData(sel)
-        self.animationData.inputData = self.dataSelect.GetValue()
         sel = self.nDChoice.GetSelection()
         self.animationData.viewMode = self.nDChoice.GetClientData(sel)
         self.animationData.legendCmd = None
         if self._tmpLegendCmd:
             if self.legend.IsChecked():
                 self.animationData.legendCmd = self._tmpLegendCmd
-        else:
-            if self.legend.IsChecked():
-                self.animationData.legendCmd = ['d.legend', 
-                                                'at=5,50,2,5',
-                                                'map=%s' % self._getLegendMapHint()]
 
         if self.threeDPanel.IsShown():
             self.animationData.workspaceFile = self.fileSelector.GetValue()
@@ -552,13 +485,13 @@ class InputDialog(wx.Dialog):
             self._update()
             self.EndModal(wx.ID_OK)
         except (GException, ValueError, IOError) as e:
-            GError(message = str(e), showTraceback = False, caption = _("Invalid input"))
+            GError(message=str(e), showTraceback=False, caption=_("Invalid input"))
 
 
 class EditDialog(wx.Dialog):
     def __init__(self, parent, evalFunction, animationData, maxAnimations):
-        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY,
-                           style = wx.DEFAULT_DIALOG_STYLE)
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY,
+                           style=wx.DEFAULT_DIALOG_STYLE)
         self.animationData = copy.deepcopy(animationData)
         self.eval = evalFunction
         self.SetTitle(_("Add, edit or remove animations"))
@@ -569,31 +502,35 @@ class EditDialog(wx.Dialog):
 
     def _layout(self):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox (parent = self, id = wx.ID_ANY, label = " %s " % _("List of animations"))
+        box = wx.StaticBox (parent=self, id=wx.ID_ANY, label=" %s " % _("List of animations"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        gridBagSizer = wx.GridBagSizer (hgap = 5, vgap = 5)
+        gridBagSizer = wx.GridBagSizer (hgap=5, vgap=5)
         gridBagSizer.AddGrowableCol(0)
         # gridBagSizer.AddGrowableCol(1,1)
-        
-        self.listbox = wx.ListBox(self, id = wx.ID_ANY, choices = [], style = wx.LB_SINGLE|wx.LB_NEEDED_SB)
+
+        self.listbox = wx.ListBox(self, id=wx.ID_ANY, choices=[], style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
         self.listbox.Bind(wx.EVT_LISTBOX_DCLICK, self.OnEdit)
 
-        self.addButton = wx.Button(self, id = wx.ID_ANY, label = _("Add"))
+        self.addButton = wx.Button(self, id=wx.ID_ANY, label=_("Add"))
         self.addButton.Bind(wx.EVT_BUTTON, self.OnAdd)
-        self.editButton = wx.Button(self, id = wx.ID_ANY, label = _("Edit"))
+        self.editButton = wx.Button(self, id=wx.ID_ANY, label=_("Edit"))
         self.editButton.Bind(wx.EVT_BUTTON, self.OnEdit)
-        self.removeButton = wx.Button(self, id = wx.ID_ANY, label = _("Remove"))
+        self.removeButton = wx.Button(self, id=wx.ID_ANY, label=_("Remove"))
         self.removeButton.Bind(wx.EVT_BUTTON, self.OnRemove)
-        
+
         self._updateListBox()
-        
-        gridBagSizer.Add(self.listbox, pos = (0,0), span = (3, 1), flag = wx.ALIGN_CENTER_VERTICAL| wx.EXPAND, border = 0)
-        gridBagSizer.Add(self.addButton, pos = (0,1), flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, border = 0)
-        gridBagSizer.Add(self.editButton, pos = (1,1), flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, border = 0)
-        gridBagSizer.Add(self.removeButton, pos = (2,1), flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, border = 0)
-        sizer.Add(gridBagSizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
-        mainSizer.Add(item = sizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL, border = 5)
+
+        gridBagSizer.Add(self.listbox, pos=(0, 0), span = (3, 1),
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+        gridBagSizer.Add(self.addButton, pos=(0, 1),
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+        gridBagSizer.Add(self.editButton, pos=(1, 1),
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+        gridBagSizer.Add(self.removeButton, pos=(2, 1),
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+        sizer.Add(gridBagSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        mainSizer.Add(item=sizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=5)
 
         # buttons
         self.btnOk = wx.Button(self, wx.ID_OK)
@@ -605,9 +542,9 @@ class EditDialog(wx.Dialog):
         btnStdSizer.AddButton(self.btnOk)
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
-        
-        mainSizer.Add(item = btnStdSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border = 5)
+
+        mainSizer.Add(item=btnStdSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -615,7 +552,7 @@ class EditDialog(wx.Dialog):
     def _updateListBox(self):
         self.listbox.Clear()
         for anim in self.animationData:
-            self.listbox.Append(anim.name, clientData = anim)
+            self.listbox.Append(anim.name, clientData=anim)
         if self.animationData:
             self.listbox.SetSelection(0)
 
@@ -629,21 +566,20 @@ class EditDialog(wx.Dialog):
     def OnAdd(self, event):
         windowIndex = self._getNextIndex()
         if windowIndex is None:
-            GMessage(self, message = _("Maximum number of animations is %d.") % self.maxAnimations)
+            GMessage(self, message=_("Maximum number of animations is %d.") % self.maxAnimations)
             return
         animData = AnimationData()
         # number of active animations
         animationIndex = len(self.animationData)
         animData.SetDefaultValues(windowIndex, animationIndex)
-        dlg = InputDialog(parent = self, mode = 'add', animationData = animData)
+        dlg = InputDialog(parent=self, mode='add', animationData=animData)
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
         dlg.Destroy()
         self.animationData.append(animData)
-        
-        self._updateListBox()
 
+        self._updateListBox()
 
     def OnEdit(self, event):
         index = self.listbox.GetSelection()
@@ -651,7 +587,7 @@ class EditDialog(wx.Dialog):
             return
 
         animData = self.listbox.GetClientData(index)
-        dlg = InputDialog(parent = self, mode = 'edit', animationData = animData)
+        dlg = InputDialog(parent=self, mode='edit', animationData=animData)
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
@@ -666,7 +602,7 @@ class EditDialog(wx.Dialog):
 
         animData = self.listbox.GetClientData(index)
         self.animationData.remove(animData)
-        
+
         self._updateListBox()
 
     def GetResult(self):
@@ -675,182 +611,23 @@ class EditDialog(wx.Dialog):
     def OnOk(self, event):
         indices = set([anim.windowIndex for anim in self.animationData])
         if len(indices) != len(self.animationData):
-            GError(parent = self, message = _("More animations are using one window."
-                                                " Please select different window for each animation."))
+            GError(parent=self, message=_("More animations are using one window."
+                                          " Please select different window for each animation."))
             return
         try:
             temporalMode, tempManager = self.eval(self.animationData)
         except GException, e:
-            GError(parent = self, message = e.value, showTraceback = False)
+            GError(parent=self, message=e.value, showTraceback=False)
             return
         self.result = (self.animationData, temporalMode, tempManager)
 
         self.EndModal(wx.ID_OK)
 
 
-class AnimationData(object):
-    def __init__(self):
-        self._inputMapTypes = [('rast', _("Multiple raster maps")),
-                               ('vect', _("Multiple vector maps")),
-                               ('strds', _("Space time raster dataset")),
-                               ('stvds', _("Space time vector dataset"))]
-        self._inputMapType = 'rast'
-        self.inputData = None
-        self.mapData = None
-        self._viewModes = [('2d', _("2D view")),
-                           ('3d', _("3D view"))]
-        self.viewMode = '2d'
-
-        self.nvizTask = NvizTask()
-        self._nvizParameters = self.nvizTask.ListMapParameters()
-        self.nvizParameter = self._nvizParameters[0]
-
-        self.workspaceFile = None
-        self.legendCmd = None
-
-    def GetName(self):
-        return self._name
-
-    def SetName(self, name):
-        if name == '':
-            raise ValueError(_("No animation name selected."))
-        self._name = name
-
-    name = property(fget = GetName, fset = SetName)
-
-    def GetWindowIndex(self):
-        return self._windowIndex
-
-    def SetWindowIndex(self, windowIndex):
-        self._windowIndex = windowIndex
-
-    windowIndex = property(fget = GetWindowIndex, fset = SetWindowIndex)
-
-    def GetInputMapTypes(self):
-        return self._inputMapTypes
-
-    inputMapTypes = property(fget = GetInputMapTypes)
-
-    def GetInputMapType(self):
-        return self._inputMapType
-        
-    def SetInputMapType(self, itype):
-        if itype in [each[0] for each in self.inputMapTypes]:
-            self._inputMapType = itype
-        else:
-            raise ValueError("Bad input type.")
-
-    inputMapType = property(fget = GetInputMapType, fset = SetInputMapType)
-
-    def GetInputData(self):
-        return self._inputData
-
-    def SetInputData(self, data):
-        if data == '':
-            raise ValueError(_("No data selected."))
-        if data is None:
-            self._inputData = data
-            return
-
-        if self.inputMapType in ('rast', 'vect'):
-            maps = data.split(',')
-            newNames = validateMapNames(maps, self.inputMapType)
-            self._inputData = ','.join(newNames)
-            self.mapData = newNames
-
-        elif self.inputMapType in ('strds', 'stvds'):
-            timeseries = validateTimeseriesName(data, etype=self.inputMapType)
-            timeseriesMaps = getRegisteredMaps(timeseries, self.inputMapType)
-            self._inputData = timeseries
-            self.mapData = timeseriesMaps
-        else:
-            self._inputData = data
-
-    inputData = property(fget = GetInputData, fset = SetInputData)
-
-    def SetMapData(self, data):
-        self._mapData = data
-
-    def GetMapData(self):
-        return self._mapData
-
-    mapData = property(fget = GetMapData, fset = SetMapData)
-
-    def GetWorkspaceFile(self):
-        return self._workspaceFile
-
-    def SetWorkspaceFile(self, fileName):
-        if fileName is None:
-            self._workspaceFile = None
-            return
-
-        if fileName == '':
-            raise ValueError(_("No workspace file selected."))
-
-        if not os.path.exists(fileName):
-            raise IOError(_("File %s not found") % fileName)
-        self._workspaceFile = fileName
-
-        self.nvizTask.Load(self.workspaceFile)
-
-    workspaceFile = property(fget = GetWorkspaceFile, fset = SetWorkspaceFile)
-
-    def SetDefaultValues(self, windowIndex, animationIndex):
-        self.windowIndex = windowIndex
-        self.name = _("Animation %d") % (animationIndex + 1)
-
-    def GetNvizParameters(self):
-        return self._nvizParameters
-
-    nvizParameters = property(fget = GetNvizParameters)
-
-    def GetNvizParameter(self):
-        return self._nvizParameter
-
-    def SetNvizParameter(self, param):
-        self._nvizParameter = param
-
-    nvizParameter = property(fget = GetNvizParameter, fset = SetNvizParameter)
-
-    def GetViewMode(self):
-        return self._viewMode
-
-    def SetViewMode(self, mode):
-        self._viewMode = mode
-
-    viewMode = property(fget = GetViewMode, fset = SetViewMode)
-
-    def GetViewModes(self):
-        return self._viewModes
-
-    viewModes = property(fget = GetViewModes)
-    
-    def SetLegendCmd(self, cmd):
-        self._legendCmd = cmd
-
-    def GetLegendCmd(self):
-        return self._legendCmd
-
-    legendCmd = property(fget=GetLegendCmd, fset=SetLegendCmd)
-
-    def GetNvizCommands(self):
-        if not self.workspaceFile or not self.mapData:
-            return []
-
-        cmds = self.nvizTask.GetCommandSeries(series = self.mapData, paramName = self.nvizParameter)
-        region = self.nvizTask.GetRegion()
-
-        return {'commands': cmds, 'region': region}
-
-    def __repr__(self):
-        return "%s(%r)" % (self.__class__, self.__dict__)
-
-
-
 class ExportDialog(wx.Dialog):
     def __init__(self, parent, temporal, timeTick):
-        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = _("Export animation"),
-                           style = wx.DEFAULT_DIALOG_STYLE)
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=_("Export animation"),
+                           style=wx.DEFAULT_DIALOG_STYLE)
         self.decorations = []
 
         self.temporal = temporal
@@ -863,14 +640,13 @@ class ExportDialog(wx.Dialog):
         wx.CallAfter(self._hideAll)
 
     def _layout(self):
-        notebook = wx.Notebook(self, id = wx.ID_ANY)
+        notebook = wx.Notebook(self, id=wx.ID_ANY)
         mainSizer = wx.BoxSizer(wx.VERTICAL)
 
-        notebook.AddPage(page = self._createExportFormatPanel(notebook), text = _("Format"))
-        notebook.AddPage(page = self._createDecorationsPanel(notebook), text = _("Decorations"))
-        mainSizer.Add(item = notebook, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border = 5)
-
+        notebook.AddPage(page=self._createExportFormatPanel(notebook), text=_("Format"))
+        notebook.AddPage(page=self._createDecorationsPanel(notebook), text=_("Decorations"))
+        mainSizer.Add(item=notebook, proportion=0,
+                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
 
         self.btnExport = wx.Button(self, wx.ID_OK)
         self.btnExport.SetLabel(_("Export"))
@@ -884,9 +660,9 @@ class ExportDialog(wx.Dialog):
         btnStdSizer.AddButton(self.btnExport)
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
-        
-        mainSizer.Add(item = btnStdSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border = 5)
+
+        mainSizer.Add(item=btnStdSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
         self.SetSizer(mainSizer)
 
         # set the longest option to fit
@@ -898,24 +674,25 @@ class ExportDialog(wx.Dialog):
         mainSizer.Fit(self)
 
     def _createDecorationsPanel(self, notebook):
-        panel = wx.Panel(notebook, id = wx.ID_ANY)
+        panel = wx.Panel(notebook, id=wx.ID_ANY)
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self._createDecorationsList(panel), proportion = 0, flag = wx.ALL | wx.EXPAND, border = 10)
-        sizer.Add(self._createDecorationsProperties(panel), proportion = 0, flag = wx.ALL | wx.EXPAND, border = 10)
+        sizer.Add(self._createDecorationsList(panel), proportion=0, flag=wx.ALL | wx.EXPAND, border=10)
+        sizer.Add(self._createDecorationsProperties(panel), proportion=0, flag=wx.ALL | wx.EXPAND, border=10)
         panel.SetSizer(sizer)
         sizer.Fit(panel)
         return panel
 
     def _createDecorationsList(self, panel):
-        gridBagSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         gridBagSizer.AddGrowableCol(0)
-        
-        self.listbox = wx.ListBox(panel, id = wx.ID_ANY, choices = [], style = wx.LB_SINGLE|wx.LB_NEEDED_SB)
+
+        self.listbox = wx.ListBox(panel, id=wx.ID_ANY, choices=[],
+                                  style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
         self.listbox.Bind(wx.EVT_LISTBOX, self.OnSelectionChanged)
 
-        gridBagSizer.Add(self.listbox, pos = (0, 0), span = (4, 1),
-                         flag = wx.ALIGN_CENTER_VERTICAL| wx.EXPAND, border = 0)
+        gridBagSizer.Add(self.listbox, pos=(0, 0), span=(4, 1),
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
 
         buttonNames = ['time', 'image', 'text']
         buttonLabels = [_("Add time stamp"), _("Add image"), _("Add text")]
@@ -923,14 +700,14 @@ class ExportDialog(wx.Dialog):
         for buttonName, buttonLabel in zip(buttonNames, buttonLabels):
             if buttonName == 'time' and self.temporal == TemporalMode.NONTEMPORAL:
                 continue
-            btn = wx.Button(panel, id = wx.ID_ANY, name = buttonName, label = buttonLabel)
-            btn.Bind(wx.EVT_BUTTON, lambda evt, temp = buttonName: self.OnAddDecoration(evt, temp))
-            gridBagSizer.Add(btn, pos = (i ,1), flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, border = 0)
+            btn = wx.Button(panel, id=wx.ID_ANY, name=buttonName, label=buttonLabel)
+            btn.Bind(wx.EVT_BUTTON, lambda evt, temp=buttonName: self.OnAddDecoration(evt, temp))
+            gridBagSizer.Add(btn, pos=(i, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
             i += 1
-        removeButton = wx.Button(panel, id = wx.ID_ANY, label = _("Remove"))
+        removeButton = wx.Button(panel, id=wx.ID_ANY, label=_("Remove"))
         removeButton.Bind(wx.EVT_BUTTON, self.OnRemove)
-        gridBagSizer.Add(removeButton, pos = (i, 1), flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, border = 0)
-        
+        gridBagSizer.Add(removeButton, pos=(i, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+
         return gridBagSizer
 
     def _createDecorationsProperties(self, panel):
@@ -942,177 +719,177 @@ class ExportDialog(wx.Dialog):
         else:
             label = _("Add image or text decoration by one of the buttons above.")
 
-        label = wx.StaticText(panel, id = wx.ID_ANY, label = label)
+        label = wx.StaticText(panel, id=wx.ID_ANY, label=label)
         label.Wrap(400)
-        self.informBox.Add(label, proportion = 1, flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border = 5)
-        self.hidevbox.Add(self.informBox, proportion = 0, flag = wx.EXPAND | wx.BOTTOM, border = 5)
-        
+        self.informBox.Add(label, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border=5)
+        self.hidevbox.Add(self.informBox, proportion=0, flag=wx.EXPAND | wx.BOTTOM, border=5)
+
         # font
         self.fontBox = wx.BoxSizer(wx.HORIZONTAL)
-        self.fontBox.Add(wx.StaticText(panel, id = wx.ID_ANY, label = _("Font settings:")),
-                         proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border = 5)
-        self.sampleLabel = wx.StaticText(panel, id = wx.ID_ANY, label = _("Sample text"))
-        self.fontBox.Add(self.sampleLabel, proportion = 1,
-                         flag = wx.ALIGN_CENTER | wx.RIGHT | wx.LEFT, border = 5)
-        fontButton = wx.Button(panel, id = wx.ID_ANY, label = _("Set font"))
+        self.fontBox.Add(wx.StaticText(panel, id=wx.ID_ANY, label=_("Font settings:")),
+                         proportion=0, flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border=5)
+        self.sampleLabel = wx.StaticText(panel, id=wx.ID_ANY, label=_("Sample text"))
+        self.fontBox.Add(self.sampleLabel, proportion=1,
+                         flag=wx.ALIGN_CENTER | wx.RIGHT | wx.LEFT, border=5)
+        fontButton = wx.Button(panel, id=wx.ID_ANY, label=_("Set font"))
         fontButton.Bind(wx.EVT_BUTTON, self.OnFont)
-        self.fontBox.Add(fontButton, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
-        self.hidevbox.Add(self.fontBox, proportion = 0, flag = wx.EXPAND | wx.BOTTOM, border = 5)
+        self.fontBox.Add(fontButton, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
+        self.hidevbox.Add(self.fontBox, proportion=0, flag=wx.EXPAND | wx.BOTTOM, border=5)
 
         # image
         self.imageBox = wx.BoxSizer(wx.HORIZONTAL)
         filetype, ltype = GetImageHandlers(wx.EmptyImage(10, 10))
-        self.browse = filebrowse.FileBrowseButton(parent = panel, id = wx.ID_ANY, fileMask = filetype,
-                                                  labelText = _("Image file:"),
-                                                  dialogTitle = _('Choose image file'),
-                                                  buttonText = _('Browse'),
-                                                  startDirectory = os.getcwd(), fileMode = wx.OPEN,
-                                                  changeCallback = self.OnSetImage)
-        self.imageBox.Add(self.browse, proportion = 1, flag = wx.EXPAND)
-        self.hidevbox.Add(self.imageBox, proportion = 0, flag = wx.EXPAND | wx.BOTTOM, border = 5)
+        self.browse = filebrowse.FileBrowseButton(parent=panel, id=wx.ID_ANY, fileMask=filetype,
+                                                  labelText=_("Image file:"),
+                                                  dialogTitle=_('Choose image file'),
+                                                  buttonText=_('Browse'),
+                                                  startDirectory=os.getcwd(), fileMode=wx.OPEN,
+                                                  changeCallback=self.OnSetImage)
+        self.imageBox.Add(self.browse, proportion=1, flag=wx.EXPAND)
+        self.hidevbox.Add(self.imageBox, proportion=0, flag=wx.EXPAND | wx.BOTTOM, border=5)
         # text
         self.textBox = wx.BoxSizer(wx.HORIZONTAL)
-        self.textBox.Add(wx.StaticText(panel, id = wx.ID_ANY, label = _("Text:")),
-                         proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border = 5)
-        self.textCtrl = wx.TextCtrl(panel, id = wx.ID_ANY)
+        self.textBox.Add(wx.StaticText(panel, id=wx.ID_ANY, label=_("Text:")),
+                         proportion=0, flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border=5)
+        self.textCtrl = wx.TextCtrl(panel, id=wx.ID_ANY)
         self.textCtrl.Bind(wx.EVT_TEXT, self.OnText)
-        self.textBox.Add(self.textCtrl, proportion = 1, flag = wx.EXPAND)
-        self.hidevbox.Add(self.textBox, proportion = 0, flag = wx.EXPAND)
+        self.textBox.Add(self.textCtrl, proportion=1, flag=wx.EXPAND)
+        self.hidevbox.Add(self.textBox, proportion=0, flag=wx.EXPAND)
 
         self.posBox = self._positionWidget(panel)
-        self.hidevbox.Add(self.posBox, proportion = 0, flag = wx.EXPAND | wx.TOP, border = 5)
+        self.hidevbox.Add(self.posBox, proportion=0, flag=wx.EXPAND | wx.TOP, border=5)
         return self.hidevbox
 
     def _positionWidget(self, panel):
-        grid = wx.GridBagSizer(vgap = 5, hgap = 5)
-        label = wx.StaticText(panel, id = wx.ID_ANY, label = _("Placement as percentage of"
+        grid = wx.GridBagSizer(vgap=5, hgap=5)
+        label = wx.StaticText(panel, id=wx.ID_ANY, label=_("Placement as percentage of"
                               " screen coordinates (X: 0, Y: 0 is top left):"))
         label.Wrap(400)
-        self.spinX = wx.SpinCtrl(panel, id = wx.ID_ANY, min = 0, max = 100, initial = 10)
-        self.spinY = wx.SpinCtrl(panel, id = wx.ID_ANY, min = 0, max = 100, initial = 10)
-        self.spinX.Bind(wx.EVT_SPINCTRL,  lambda evt, temp = 'X': self.OnPosition(evt, temp))
-        self.spinY.Bind(wx.EVT_SPINCTRL,  lambda evt, temp = 'Y': self.OnPosition(evt, temp))
-        
-        grid.Add(label, pos = (0, 0), span = (1, 4), flag = wx.EXPAND)
-        grid.Add(wx.StaticText(panel, id = wx.ID_ANY, label = _("X:")), pos = (1, 0),
+        self.spinX = wx.SpinCtrl(panel, id=wx.ID_ANY, min=0, max=100, initial=10)
+        self.spinY = wx.SpinCtrl(panel, id=wx.ID_ANY, min=0, max=100, initial=10)
+        self.spinX.Bind(wx.EVT_SPINCTRL, lambda evt, temp='X': self.OnPosition(evt, temp))
+        self.spinY.Bind(wx.EVT_SPINCTRL, lambda evt, temp='Y': self.OnPosition(evt, temp))
+
+        grid.Add(label, pos=(0, 0), span = (1, 4), flag = wx.EXPAND)
+        grid.Add(wx.StaticText(panel, id=wx.ID_ANY, label=_("X:")), pos=(1, 0),
                  flag = wx.ALIGN_CENTER_VERTICAL)
-        grid.Add(wx.StaticText(panel, id = wx.ID_ANY, label = _("Y:")), pos = (1, 2),
+        grid.Add(wx.StaticText(panel, id=wx.ID_ANY, label=_("Y:")), pos=(1, 2),
                  flag = wx.ALIGN_CENTER_VERTICAL)
-        grid.Add(self.spinX, pos = (1, 1))
-        grid.Add(self.spinY, pos = (1, 3))
+        grid.Add(self.spinX, pos=(1, 1))
+        grid.Add(self.spinY, pos=(1, 3))
 
         return grid
 
     def _createExportFormatPanel(self, notebook):
-        panel = wx.Panel(notebook, id = wx.ID_ANY)
+        panel = wx.Panel(notebook, id=wx.ID_ANY)
         borderSizer = wx.BoxSizer(wx.VERTICAL)
 
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
         choices = [_("image sequence"), _("animated GIF"), _("SWF"), _("AVI")]
-        self.formatChoice = wx.Choice(parent = panel, id = wx.ID_ANY,
-                                      choices = choices)
+        self.formatChoice = wx.Choice(parent=panel, id=wx.ID_ANY,
+                                      choices=choices)
         self.formatChoice.Bind(wx.EVT_CHOICE, lambda event: self.ChangeFormat(event.GetSelection()))
-        hSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Export to:")),
-                   proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 2)
-        hSizer.Add(item = self.formatChoice, proportion = 1,
-                   flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.ALL, border = 2)
-        borderSizer.Add(item = hSizer, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 3)
+        hSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Export to:")),
+                   proportion=0, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=2)
+        hSizer.Add(item=self.formatChoice, proportion=1,
+                   flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND | wx.ALL, border=2)
+        borderSizer.Add(item=hSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
 
         helpSizer = wx.BoxSizer(wx.HORIZONTAL)
         helpSizer.AddStretchSpacer(1)
         self.formatPanelSizer = wx.BoxSizer(wx.VERTICAL)
         helpSizer.Add(self.formatPanelSizer, proportion=5, flag=wx.EXPAND)
-        borderSizer.Add(helpSizer, proportion = 1, flag = wx.EXPAND)
+        borderSizer.Add(helpSizer, proportion=1, flag=wx.EXPAND)
         self.formatPanels = []
 
         # panel for image sequence
-        imSeqPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
-        prefixLabel = wx.StaticText(imSeqPanel, id = wx.ID_ANY, label = _("File prefix:"))
-        self.prefixCtrl = wx.TextCtrl(imSeqPanel, id = wx.ID_ANY, value = _("animation_"))
-        formatLabel = wx.StaticText(imSeqPanel, id = wx.ID_ANY, label = _("File format:"))
+        imSeqPanel = wx.Panel(parent=panel, id=wx.ID_ANY)
+        prefixLabel = wx.StaticText(imSeqPanel, id=wx.ID_ANY, label=_("File prefix:"))
+        self.prefixCtrl = wx.TextCtrl(imSeqPanel, id=wx.ID_ANY, value=_("animation_"))
+        formatLabel = wx.StaticText(imSeqPanel, id=wx.ID_ANY, label=_("File format:"))
         imageTypes = ['PNG', 'JPEG', 'GIF', 'TIFF', 'PPM', 'BMP']
         self.imSeqFormatChoice = wx.Choice(imSeqPanel, choices=imageTypes)
         self.imSeqFormatChoice.SetSelection(0)
-        self.dirBrowse = filebrowse.DirBrowseButton(parent = imSeqPanel, id = wx.ID_ANY,
-                                                    labelText = _("Directory:"),
-                                                     dialogTitle = _("Choose directory for export"),
-                                                     buttonText = _("Browse"),
-                                                     startDirectory = os.getcwd())
+        self.dirBrowse = filebrowse.DirBrowseButton(parent=imSeqPanel, id=wx.ID_ANY,
+                                                    labelText=_("Directory:"),
+                                                    dialogTitle=_("Choose directory for export"),
+                                                    buttonText=_("Browse"),
+                                                    startDirectory=os.getcwd())
 
-        dirGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        dirGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         dirGridSizer.AddGrowableCol(1)
-        dirGridSizer.Add(prefixLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        dirGridSizer.Add(self.prefixCtrl, pos = (0, 1), flag = wx.EXPAND)
-        dirGridSizer.Add(formatLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        dirGridSizer.Add(self.imSeqFormatChoice, pos = (1, 1), flag = wx.EXPAND)
-        dirGridSizer.Add(self.dirBrowse, pos = (2, 0), flag = wx.EXPAND, span = (1, 2))
+        dirGridSizer.Add(prefixLabel, pos=(0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        dirGridSizer.Add(self.prefixCtrl, pos=(0, 1), flag = wx.EXPAND)
+        dirGridSizer.Add(formatLabel, pos=(1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        dirGridSizer.Add(self.imSeqFormatChoice, pos=(1, 1), flag = wx.EXPAND)
+        dirGridSizer.Add(self.dirBrowse, pos=(2, 0), flag = wx.EXPAND, span = (1, 2))
         imSeqPanel.SetSizer(dirGridSizer)
         dirGridSizer.Fit(imSeqPanel)
 
-        self.formatPanelSizer.Add(item = imSeqPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.formatPanelSizer.Add(item=imSeqPanel, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         self.formatPanels.append(imSeqPanel)
 
         # panel for gif
-        gifPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
+        gifPanel = wx.Panel(parent=panel, id=wx.ID_ANY)
 
-        self.gifBrowse = filebrowse.FileBrowseButton(parent = gifPanel, id = wx.ID_ANY,
-                                                     fileMask = "GIF file (*.gif)|*.gif",
-                                                     labelText = _("GIF file:"),
-                                                     dialogTitle = _("Choose file to save animation"),
-                                                     buttonText = _("Browse"),
-                                                     startDirectory = os.getcwd(), fileMode = wx.SAVE)
-        gifGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        self.gifBrowse = filebrowse.FileBrowseButton(parent=gifPanel, id=wx.ID_ANY,
+                                                     fileMask="GIF file (*.gif)|*.gif",
+                                                     labelText=_("GIF file:"),
+                                                     dialogTitle=_("Choose file to save animation"),
+                                                     buttonText=_("Browse"),
+                                                     startDirectory=os.getcwd(), fileMode=wx.SAVE)
+        gifGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         gifGridSizer.AddGrowableCol(0)
-        gifGridSizer.Add(self.gifBrowse, pos = (0, 0), flag = wx.EXPAND)
+        gifGridSizer.Add(self.gifBrowse, pos=(0, 0), flag = wx.EXPAND)
         gifPanel.SetSizer(gifGridSizer)
         gifGridSizer.Fit(gifPanel)
 
-        self.formatPanelSizer.Add(item = gifPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.formatPanelSizer.Add(item=gifPanel, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         self.formatPanels.append(gifPanel)
 
         # panel for swf
-        swfPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
-        self.swfBrowse = filebrowse.FileBrowseButton(parent = swfPanel, id = wx.ID_ANY,
-                                                     fileMask = "SWF file (*.swf)|*.swf",
-                                                     labelText = _("SWF file:"),
-                                                     dialogTitle = _("Choose file to save animation"),
-                                                     buttonText = _("Browse"),
-                                                     startDirectory = os.getcwd(), fileMode = wx.SAVE)
-        swfGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        swfPanel = wx.Panel(parent=panel, id=wx.ID_ANY)
+        self.swfBrowse = filebrowse.FileBrowseButton(parent=swfPanel, id=wx.ID_ANY,
+                                                     fileMask="SWF file (*.swf)|*.swf",
+                                                     labelText=_("SWF file:"),
+                                                     dialogTitle=_("Choose file to save animation"),
+                                                     buttonText=_("Browse"),
+                                                     startDirectory=os.getcwd(), fileMode=wx.SAVE)
+        swfGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         swfGridSizer.AddGrowableCol(0)
-        swfGridSizer.Add(self.swfBrowse, pos = (0, 0), flag = wx.EXPAND)
+        swfGridSizer.Add(self.swfBrowse, pos=(0, 0), flag = wx.EXPAND)
         swfPanel.SetSizer(swfGridSizer)
         swfGridSizer.Fit(swfPanel)
 
-        self.formatPanelSizer.Add(item = swfPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.formatPanelSizer.Add(item=swfPanel, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         self.formatPanels.append(swfPanel)
 
         # panel for avi
-        aviPanel = wx.Panel(parent = panel, id = wx.ID_ANY)
+        aviPanel = wx.Panel(parent=panel, id=wx.ID_ANY)
         ffmpeg = gcore.find_program('ffmpeg', '--help')
         if not ffmpeg:
             warning = _("Program 'ffmpeg' was not found.\nPlease install it first "
                         "and make sure\nit's in the PATH variable.")
             warningLabel = wx.StaticText(parent=aviPanel, label=warning)
             warningLabel.SetForegroundColour(wx.RED)
-        self.aviBrowse = filebrowse.FileBrowseButton(parent = aviPanel, id = wx.ID_ANY,
-                                                     fileMask = "AVI file (*.avi)|*.avi",
-                                                     labelText = _("AVI file:"),
-                                                     dialogTitle = _("Choose file to save animation"),
-                                                     buttonText = _("Browse"),
-                                                     startDirectory = os.getcwd(), fileMode = wx.SAVE)
-        encodingLabel = wx.StaticText(parent = aviPanel, id = wx.ID_ANY, label = _("Video codec:"))
-        self.encodingText = wx.TextCtrl(parent = aviPanel, id = wx.ID_ANY, value = 'mpeg4')
+        self.aviBrowse = filebrowse.FileBrowseButton(parent=aviPanel, id=wx.ID_ANY,
+                                                     fileMask="AVI file (*.avi)|*.avi",
+                                                     labelText=_("AVI file:"),
+                                                     dialogTitle=_("Choose file to save animation"),
+                                                     buttonText=_("Browse"),
+                                                     startDirectory=os.getcwd(), fileMode=wx.SAVE)
+        encodingLabel = wx.StaticText(parent=aviPanel, id=wx.ID_ANY, label=_("Video codec:"))
+        self.encodingText = wx.TextCtrl(parent=aviPanel, id=wx.ID_ANY, value='mpeg4')
         optionsLabel = wx.StaticText(parent=aviPanel, label=_("Additional options:"))
         self.optionsText = wx.TextCtrl(parent=aviPanel)
         self.optionsText.SetToolTipString(_("Consider adding '-sameq' or '-qscale 1' "
                                             "if not satisfied with video quality. "
                                             "Options depend on ffmpeg version."))
-        aviGridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        aviGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         aviGridSizer.AddGrowableCol(1)
-        aviGridSizer.Add(self.aviBrowse, pos = (0, 0), span = (1, 2), flag = wx.EXPAND)
-        aviGridSizer.Add(encodingLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        aviGridSizer.Add(self.encodingText, pos = (1, 1), flag = wx.EXPAND)
+        aviGridSizer.Add(self.aviBrowse, pos=(0, 0), span = (1, 2), flag = wx.EXPAND)
+        aviGridSizer.Add(encodingLabel, pos=(1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        aviGridSizer.Add(self.encodingText, pos=(1, 1), flag = wx.EXPAND)
         aviGridSizer.Add(optionsLabel, pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         aviGridSizer.Add(self.optionsText, pos=(2, 1), flag=wx.EXPAND)
         if not ffmpeg:
@@ -1122,24 +899,24 @@ class ExportDialog(wx.Dialog):
         aviPanel.SetSizer(aviGridSizer)
         aviGridSizer.Fit(aviPanel)
 
-        self.formatPanelSizer.Add(item = aviPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        self.formatPanelSizer.Add(item=aviPanel, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         self.formatPanels.append(aviPanel)
 
         fpsSizer = wx.BoxSizer(wx.HORIZONTAL)
         fps = 1000 / self.timeTick
-        fpsSizer.Add(wx.StaticText(panel, id = wx.ID_ANY, label = _("Current frame rate: %.2f fps") % fps),
-                     proportion = 1, flag = wx.EXPAND)
-        borderSizer.Add(fpsSizer, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 5)
+        fpsSizer.Add(wx.StaticText(panel, id=wx.ID_ANY, label=_("Current frame rate: %.2f fps") % fps),
+                     proportion=1, flag=wx.EXPAND)
+        borderSizer.Add(fpsSizer, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
         panel.SetSizer(borderSizer)
         borderSizer.Fit(panel)
-        self.ChangeFormat(index = 0)
+        self.ChangeFormat(index=0)
 
         return panel
 
     def ChangeFormat(self, index):
         for i, panel in enumerate(self.formatPanels):
-            self.formatPanelSizer.Show(item = panel, show = (i == index))
+            self.formatPanelSizer.Show(item=panel, show=(i == index))
         self.formatPanelSizer.Layout()
 
     def OnFont(self, event):
@@ -1149,21 +926,20 @@ class ExportDialog(wx.Dialog):
             return
         cdata = self.listbox.GetClientData(index)
         font = cdata['font']
-        
+
         fontdata = wx.FontData()
         fontdata.EnableEffects(True)
         fontdata.SetColour('black')
         fontdata.SetInitialFont(font)
-        
+
         dlg = wx.FontDialog(self, fontdata)
-        
+
         if dlg.ShowModal() == wx.ID_OK:
             newfontdata = dlg.GetFontData()
             font = newfontdata.GetChosenFont()
             self.sampleLabel.SetFont(font)
             cdata['font'] = font
             self.Layout()
-
 
     def OnPosition(self, event, coord):
         index = self.listbox.GetSelection()
@@ -1194,7 +970,7 @@ class ExportDialog(wx.Dialog):
 
         self._updateListBox()
         self.listbox.SetSelection(self.listbox.GetCount() - 1)
-        self.OnSelectionChanged(event = None)
+        self.OnSelectionChanged(event=None)
 
     def OnSelectionChanged(self, event):
         index = self.listbox.GetSelection()
@@ -1235,37 +1011,37 @@ class ExportDialog(wx.Dialog):
 
         decData = self.listbox.GetClientData(index)
         self.decorations.remove(decData)
-        
+
         self._updateListBox()
         if self.listbox.GetCount():
             self.listbox.SetSelection(0)
-            self.OnSelectionChanged(event = None)
+            self.OnSelectionChanged(event=None)
 
     def OnExport(self, event):
         for decor in self.decorations:
             if decor['name'] == 'image':
                 if not os.path.exists(decor['file']):
                     if decor['file']:
-                        GError(parent = self, message = _("File %s not found.") % decor['file'])
+                        GError(parent=self, message=_("File %s not found.") % decor['file'])
                     else:
-                        GError(parent = self, message = _("Decoration image file is missing."))
+                        GError(parent=self, message=_("Decoration image file is missing."))
                     return
 
         if self.formatChoice.GetSelection() == 0:
             name = self.dirBrowse.GetValue()
             if not os.path.exists(name):
                 if name:
-                    GError(parent = self, message = _("Directory %s not found.") % name)
+                    GError(parent=self, message=_("Directory %s not found.") % name)
                 else:
-                    GError(parent = self, message = _("Export directory is missing."))
+                    GError(parent=self, message=_("Export directory is missing."))
                 return
         elif self.formatChoice.GetSelection() == 1:
             if not self.gifBrowse.GetValue():
-                GError(parent = self, message = _("Export file is missing."))
+                GError(parent=self, message=_("Export file is missing."))
                 return
         elif self.formatChoice.GetSelection() == 2:
             if not self.swfBrowse.GetValue():
-                GError(parent = self, message = _("Export file is missing."))
+                GError(parent=self, message=_("Export file is missing."))
                 return
 
         # hide only to keep previous values
@@ -1304,7 +1080,7 @@ class ExportDialog(wx.Dialog):
         self.listbox.Clear()
         names = {'time': _("Time stamp"), 'image': _("Image"), 'text': _("Text")}
         for decor in self.decorations:
-            self.listbox.Append(names[decor['name']], clientData = decor)
+            self.listbox.Append(names[decor['name']], clientData=decor)
 
     def _hideAll(self):
         self.hidevbox.Show(self.fontBox, False)
@@ -1314,37 +1090,277 @@ class ExportDialog(wx.Dialog):
         self.hidevbox.Show(self.informBox, True)
         self.hidevbox.Layout()
 
+
+class AnimSimpleLayerManager(SimpleLayerManager):
+    """!Simple layer manager for animation tool.
+    Allows to add space-time dataset or series of maps.
+    """
+    def __init__(self, parent, layerList,
+                 lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_VECTOR |
+                 SIMPLE_LMGR_TB_TOP | SIMPLE_LMGR_STDS,
+                 toolbarCls=AnimSimpleLmgrToolbar, modal=True):
+        SimpleLayerManager.__init__(self, parent, layerList, lmgrStyle, toolbarCls, modal)
+
+    def OnAddStds(self, event):
+        """!Opens dialog for specifying temporal dataset.
+        Dummy layer is added first."""
+        layer = AnimLayer()
+        layer.hidden = True
+        self._layerList.AddLayer(layer)
+        self.SetStdsProperties(layer)
+        event.Skip()
+
+    def SetStdsProperties(self, layer):
+        dlg = AddTemporalLayerDialog(parent=self, layer=layer)
+        # first get hidden property, it's altered afterwards
+        hidden = layer.hidden
+        if dlg.ShowModal() == wx.ID_OK:
+            layer = dlg.GetLayer()
+            if hidden:
+                signal = self.layerAdded
+            else:
+                signal = self.cmdChanged
+            signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
+        else:
+            if hidden:
+                self._layerList.RemoveLayer(layer)
+        dlg.Destroy()
+        self._update()
+        self.anyChange.emit()
+
+    def _layerChangeProperties(self, layer):
+        """!Opens new module dialog or recycles it."""
+        if layer in self._dialogs:
+            dlg = self._dialogs[layer]
+            if dlg.IsShown():
+                dlg.Raise()
+                dlg.SetFocus()
+            else:
+                dlg.Show()
+        else:
+            if not hasattr(layer, 'maps'):
+                GUI(parent=self, giface=None,
+                    modal=self._modal).ParseCommand(cmd=layer.cmd,
+                                                    completed=(self.GetOptData, layer, ''))
+            else:
+                self.SetStdsProperties(layer)
+
+    def Activate3D(self, activate=True):
+        """!Activates/deactivates certain tool depending on 2D/3D view."""
+        self._toolbar.EnableTools(['addRaster', 'addVector',
+                                   'opacity', 'up', 'down'], not activate)
+
+
+class AddTemporalLayerDialog(wx.Dialog):
+    """!Dialog for adding space-time dataset/ map series."""
+    def __init__(self, parent, layer, title=_("Add space-time dataset layer")):
+        wx.Dialog.__init__(self, parent=parent, title=title)
+
+        self.layer = layer
+        self._mapType = None
+        self._name = None
+        self._cmd = None
+
+        self.tselect = Select(parent=self, type='strds')
+        iconTheme = UserSettings.Get(group='appearance', key='iconTheme', subkey='type')
+        bitmapPath = os.path.join(globalvar.ETCICONDIR, iconTheme, 'layer-open.png')
+        if os.path.isfile(bitmapPath) and os.path.getsize(bitmapPath):
+            bitmap = wx.Bitmap(name=bitmapPath)
+        else:
+            bitmap = wx.ArtProvider.GetBitmap(id=wx.ART_MISSING_IMAGE, client=wx.ART_TOOLBAR)
+        self.addManyMapsButton = wx.BitmapButton(self, bitmap=bitmap)
+        self.addManyMapsButton.Bind(wx.EVT_BUTTON, self._onAddMaps)
+
+        types = [('rast', _("Multiple raster maps")),
+                 ('vect', _("Multiple vector maps")),
+                 ('strds', _("Space time raster dataset")),
+                 ('stvds', _("Space time vector dataset"))]
+        self._types = dict(types)
+
+        self.tchoice = wx.Choice(parent=self)
+        for type_, text in types:
+            self.tchoice.Append(text, clientData=type_)
+
+        self.editBtn = wx.Button(parent=self, label='Set properties')
+
+        self.okBtn = wx.Button(parent=self, id=wx.ID_OK)
+        self.cancelBtn = wx.Button(parent=self, id=wx.ID_CANCEL)
+
+        self.okBtn.Bind(wx.EVT_BUTTON, self._onOK)
+        self.editBtn.Bind(wx.EVT_BUTTON, self._onProperties)
+        self.tchoice.Bind(wx.EVT_CHOICE,
+                          lambda evt: self._setType())
+        self.tselect.Bind(wx.EVT_TEXT,
+                          lambda evt: self._datasetChanged())
+
+        if self.layer.mapType:
+            self._setType(self.layer.mapType)
+        else:
+            self._setType('rast')
+        if self.layer.name:
+            self.tselect.SetValue(self.layer.name)
+        if self.layer.cmd:
+            self._cmd = self.layer.cmd
+
+        self._layout()
+        self.SetSize(self.GetBestSize())
+
+    def _layout(self):
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        bodySizer = wx.BoxSizer(wx.VERTICAL)
+        typeSizer = wx.BoxSizer(wx.HORIZONTAL)
+        selectSizer = wx.BoxSizer(wx.HORIZONTAL)
+        typeSizer.Add(wx.StaticText(self, label=_("Input data type:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        typeSizer.AddStretchSpacer()
+        typeSizer.Add(self.tchoice)
+        bodySizer.Add(typeSizer, flag=wx.EXPAND | wx.BOTTOM, border=5)
+
+        selectSizer.Add(self.tselect, flag=wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, border=5)
+        selectSizer.Add(self.addManyMapsButton, flag=wx.EXPAND)
+        bodySizer.Add(selectSizer, flag=wx.BOTTOM, border=5)
+        bodySizer.Add(self.editBtn, flag=wx.BOTTOM, border=5)
+        mainSizer.Add(bodySizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
+
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.okBtn)
+        btnSizer.AddButton(self.cancelBtn)
+        btnSizer.Realize()
+
+        mainSizer.Add(btnSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=10)
+
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+
+    def _datasetChanged(self):
+        if self._name != self.tselect.GetValue():
+            self._name = self.tselect.GetValue()
+            self._cmd = None
+
+    def _setType(self, typeName=None):
+        if typeName:
+            self.tchoice.SetStringSelection(self._types[typeName])
+            self.tselect.SetType(typeName)
+            if typeName in ('strds', 'stvds'):
+                self.tselect.SetType(typeName, multiple=False)
+                self.addManyMapsButton.Disable()
+            else:
+                self.tselect.SetType(typeName, multiple=True)
+                self.addManyMapsButton.Enable()
+            self._mapType = typeName
+            self.tselect.SetValue('')
+        else:
+            typeName = self.tchoice.GetClientData(self.tchoice.GetSelection())
+            if typeName in ('strds', 'stvds'):
+                self.tselect.SetType(typeName, multiple=False)
+                self.addManyMapsButton.Disable()
+            else:
+                self.tselect.SetType(typeName, multiple=True)
+                self.addManyMapsButton.Enable()
+            if typeName != self._mapType:
+                self._cmd = None
+                self._mapType = typeName
+                self.tselect.SetValue('')
+
+    def _createDefaultCommand(self):
+        cmd = []
+        if self._mapType in ('rast', 'strds'):
+            cmd.append('d.rast')
+        elif self._mapType in ('vect', 'stvds'):
+            cmd.append('d.vect')
+        if self._name:
+            if self._mapType in ('rast', 'vect'):
+                cmd.append('map={}'.format(self._name.split(',')[0]))
+            else:
+                try:
+                    maps = getRegisteredMaps(self._name, etype=self._mapType)
+                    if maps:
+                        cmd.append('map={}'.format(maps[0]))
+                except gcore.ScriptError, e:
+                    GError(parent=self, message=str(e), showTraceback=False)
+                    return None
+        return cmd
+
+    def _onAddMaps(self, event):
+        dlg = MapLayersDialog(self, title=_("Select raster/vector maps."))
+        dlg.applyAddingMapLayers.connect(lambda mapLayers:
+                                         self.tselect.SetValue(','.join(mapLayers)))
+        index = 0 if self._mapType == 'rast' else 1
+        dlg.layerType.SetSelection(index)
+        dlg.LoadMapLayers(dlg.GetLayerType(cmd=True),
+                          dlg.mapset.GetStringSelection())
+        if dlg.ShowModal() == wx.ID_OK:
+            self.tselect.SetValue(','.join(dlg.GetMapLayers()))
+
+        dlg.Destroy()
+
+    def _onProperties(self, event):
+        self._checkInput()
+        if self._cmd:
+            GUI(parent=self, show=True, modal=True).ParseCommand(cmd=self._cmd,
+                                                                 completed=(self._getOptData, '', ''))
+
+    def _checkInput(self):
+        if not self.tselect.GetValue():
+            GMessage(parent=self, message=_("Please select maps or dataset first."))
+            return
+
+        if not self._cmd:
+            self._cmd = self._createDefaultCommand()
+
+    def _getOptData(self, dcmd, layer, params, propwin):
+        if dcmd:
+            self._cmd = dcmd
+
+    def _onOK(self, event):
+        self._checkInput()
+        if self._cmd:
+            try:
+                self.layer.hidden = False
+                self.layer.mapType = self._mapType
+                self.layer.name = self._name
+                self.layer.cmd = self._cmd
+                event.Skip()
+            except (GException, gcore.ScriptError), e:
+                GError(parent=self, message=str(e))
+
+    def GetLayer(self):
+        return self.layer
+
+
 def test():
     import wx.lib.inspection
 
-    import grass.script as grass
-
     app = wx.PySimpleApp()
 
-    testExport()
+#    testTemporalLayer()
+#    testAnimLmgr()
+    testAnimInput()
     # wx.lib.inspection.InspectionTool().Show()
-
-    
 
     app.MainLoop()
 
+
 def testAnimInput():
     anim = AnimationData()
-    anim.SetDefaultValues(animationIndex = 0, windowIndex = 0)
+    anim.SetDefaultValues(animationIndex=0, windowIndex=0)
 
-    dlg = InputDialog(parent = None, mode = 'add', animationData = anim)
+    dlg = InputDialog(parent=None, mode='add', animationData=anim)
     dlg.Show()
+
 
 def testAnimEdit():
     anim = AnimationData()
-    anim.SetDefaultValues(animationIndex = 0, windowIndex = 0)
+    anim.SetDefaultValues(animationIndex=0, windowIndex=0)
 
-    dlg = EditDialog(parent = None, animationData = [anim])
+    dlg = EditDialog(parent=None, animationData=[anim])
     dlg.Show()
 
+
 def testExport():
-    dlg = ExportDialog(parent = None, temporal = TemporalMode.TEMPORAL,
-                       timeTick = 200, visvis = True)
+    dlg = ExportDialog(parent=None, temporal=TemporalMode.TEMPORAL,
+                       timeTick=200)
     if dlg.ShowModal() == wx.ID_OK:
         print dlg.GetDecorations()
         print dlg.GetExportInformation()
@@ -1353,6 +1369,28 @@ def testExport():
         dlg.Destroy()
 
 
-if __name__ == '__main__':
+def testTemporalLayer():
+    frame = wx.Frame(None)
+    frame.Show()
+    layer = AnimLayer()
+    dlg = AddTemporalLayerDialog(parent=frame, layer=layer)
+    if dlg.ShowModal() == wx.ID_OK:
+        layer = dlg.GetLayer()
+        print layer.name, layer.cmd, layer.mapType
+        dlg.Destroy()
+    else:
+        dlg.Destroy()
 
+
+def testAnimLmgr():
+    from core.layerlist import LayerList
+
+    frame = wx.Frame(None)
+    mgr = AnimSimpleLayerManager(parent=frame, layerList=LayerList())
+    frame.mgr = mgr
+    frame.Show()
+
+
+if __name__ == '__main__':
+    gcore.set_raise_on_error(True)
     test()
