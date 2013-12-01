@@ -60,22 +60,21 @@ import grass.script as grass
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
-from core.settings import UserSettings
 from core.globalvar import CheckWxVersion
-from core.giface import StandaloneGrassInterface
 from core.utils import _, GuiModuleMain
+from core.layerlist import LayerList
 from animation.frame import AnimationFrame, MAX_COUNT
+from animation.data import AnimLayer
+
 
 def main():
     rast = options['rast']
     vect = options['vect']
     strds = options['strds']
     stvds = options['stvds']
-    
-    dataType=None
-    inputs=None
-    numInputs=0
-    
+
+    numInputs = 0
+
     if rast:
         numInputs += 1
     if vect:
@@ -85,33 +84,47 @@ def main():
     if stvds:
         numInputs += 1
 
-    if  numInputs > 1:
+    if numInputs > 1:
         grass.fatal(_("Options 'rast', 'vect', 'strds' and 'stvds' are mutually exclusive."))
 
+    layerList = LayerList()
     if rast:
-        inputs = [rast.split(',')] + [None] * (MAX_COUNT - 1)
-        dataType='rast'
+        layer = AnimLayer()
+        layer.mapType = 'rast'
+        layer.name = rast
+        layer.cmd = ['d.rast', 'map={}'.format(rast.split(',')[0])]
+        layerList.AddLayer(layer)
     if vect:
-        inputs = [vect.split(',')] + [None] * (MAX_COUNT - 1)
-        dataType='vect'
+        layer = AnimLayer()
+        layer.mapType = 'vect'
+        layer.name = vect
+        layer.cmd = ['d.vect', 'map={}'.format(rast.split(',')[0])]
+        layerList.AddLayer(layer)
     if strds:
-        inputs = [strds] + [None] * (MAX_COUNT - 1)
-        dataType='strds'
+        layer = AnimLayer()
+        layer.mapType = 'strds'
+        layer.name = strds
+        layer.cmd = ['d.rast', 'map=']
+        layerList.AddLayer(layer)
     if stvds:
-        inputs = [stvds] + [None] * (MAX_COUNT - 1)
-        dataType='stvds'
+        layer = AnimLayer()
+        layer.mapType = 'stvds'
+        layer.name = stvds
+        layer.cmd = ['d.vect', 'map=']
+        layerList.AddLayer(layer)
 
     app = wx.PySimpleApp()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
 
-    frame = AnimationFrame(parent = None)
+    frame = AnimationFrame(parent=None)
     frame.CentreOnScreen()
     frame.Show()
-    frame.SetAnimations(inputs = inputs, dataType = dataType)
+    if len(layerList) >= 1:
+        frame.SetAnimations([layerList] + [None] * (MAX_COUNT - 1))
     app.MainLoop()
 
 if __name__ == '__main__':
     options, flags = grass.parser()
-    
+
     GuiModuleMain(main)

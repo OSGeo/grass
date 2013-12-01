@@ -49,7 +49,8 @@ class SimpleLayerManager(wx.Panel):
     """!Simple layer manager class provides similar functionality to
     Layertree, but it's just list, not tree."""
     def __init__(self, parent, layerList,
-                 lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_LEFT):
+                 lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_LEFT,
+                 toolbarCls=None, modal=False):
         wx.Panel.__init__(self, parent=parent, name='SimpleLayerManager')
 
         self._style = lmgrStyle
@@ -57,9 +58,14 @@ class SimpleLayerManager(wx.Panel):
         self._checkList = wx.CheckListBox(self, style=wx.LB_EXTENDED)
         # dialog windows held separately
         self._dialogs = {}
-        self._toolbar = SimpleLmgrToolbar(self, lmgrStyle=self._style)
+        if not toolbarCls:
+            toolbarCls = SimpleLmgrToolbar
+        self._toolbar = toolbarCls(self, lmgrStyle=self._style)
 
         self._auimgr = wx.aui.AuiManager(self)
+        
+        self._modal = modal
+        
 
         # needed in order not to change selection when moving layers
         self._blockSelectionChanged = False
@@ -81,6 +87,7 @@ class SimpleLayerManager(wx.Panel):
 
         self._layout()
         self.SetMinSize((200, -1))
+        self._update()
 
     def _layout(self):
         self._auimgr.AddPane(self._checkList,
@@ -132,16 +139,17 @@ class SimpleLayerManager(wx.Panel):
         Dummy layer is added first."""
         cmd = ['d.rast']
         layer = self.AddRaster(name='', cmd=cmd, hidden=True, dialog=None)
-        GUI(parent=self, giface=None, modal=True).ParseCommand(cmd=cmd,
-                                                   completed=(self.GetOptData, layer, ''))
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(cmd=cmd,
+                                                    completed=(self.GetOptData, layer, ''))
         event.Skip()
 
     def OnAddVector(self, event):
         """!Opens d.vect dialog and adds layer.
         Dummy layer is added first."""
         cmd = ['d.vect']
+
         layer = self.AddVector(name='', cmd=cmd, hidden=True, dialog=None)
-        GUI(parent=self, giface=None, modal=True).ParseCommand(cmd=cmd,
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(cmd=cmd,
                                                    completed=(self.GetOptData, layer, ''))
         event.Skip()
 
@@ -150,7 +158,7 @@ class SimpleLayerManager(wx.Panel):
         Dummy layer is added first."""
         cmd = ['d.rast3d']
         layer = self.AddRast3d(name='', cmd=cmd, hidden=True, dialog=None)
-        GUI(parent=self, giface=None, modal=True).ParseCommand(cmd=cmd,
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(cmd=cmd,
                                                    completed=(self.GetOptData, layer, ''))
         event.Skip()
 
@@ -160,7 +168,7 @@ class SimpleLayerManager(wx.Panel):
         for layer in layers:
             self.layerRemoved.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
             self._layerList.RemoveLayer(layer)
-            if self._dialogs[layer]:
+            if layer in self._dialogs and self._dialogs[layer]:
                 self._dialogs[layer].Destroy()
         self._update()
         self.anyChange.emit()
@@ -208,8 +216,8 @@ class SimpleLayerManager(wx.Panel):
 
     def _layerChangeProperties(self, layer):
         """!Opens new module dialog or recycles it."""
-        dlg = self._dialogs[layer]
-        if dlg is not None:
+        if layer in self._dialogs:
+            dlg = self._dialogs[layer]
             if dlg.IsShown():
                 dlg.Raise()
                 dlg.SetFocus()
@@ -217,7 +225,7 @@ class SimpleLayerManager(wx.Panel):
                 dlg.Show()
         else:
             GUI(parent=self, giface=None,
-                modal=False).ParseCommand(cmd=layer.cmd,
+                modal=self._modal).ParseCommand(cmd=layer.cmd,
                                           completed=(self.GetOptData, layer, ''))
 
     def OnLayerChangeOpacity(self, event):
@@ -351,7 +359,7 @@ class SimpleLmgrToolbar(BaseToolbar):
             direction = wx.TB_HORIZONTAL
         BaseToolbar.__init__(self, parent, style=wx.NO_BORDER | direction)
 
-        self.InitToolbar(self._toolbarData())
+        self.InitToolbar(self._getToolbarData(self._toolbarData()))
 
         # realize the toolbar
         self.Realize()
@@ -381,7 +389,7 @@ class SimpleLmgrToolbar(BaseToolbar):
             data.insert(0, ('addRaster', BaseIcons['addRast'],
                             self.parent.OnAddRaster))
 
-        return self._getToolbarData(data)
+        return data
 
 
 icons = {

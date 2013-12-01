@@ -6,12 +6,12 @@
 Classes:
  - controller::AnimationController
 
-(C) 2012 by the GRASS Development Team
+(C) 2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Anna Kratochvilova <kratochanna gmail.com>
+@author Anna Petrasova <kratochanna gmail.com>
 """
 import os
 import wx
@@ -20,12 +20,15 @@ from core.gcmd import GException, GError, GMessage
 from core.utils import _
 from grass.imaging import writeAvi, writeGif, writeIms, writeSwf
 
-from temporal_manager import TemporalManager
-from dialogs import InputDialog, EditDialog, AnimationData, ExportDialog
-from utils import TemporalMode, Orientation, RenderText, WxImageToPil
+from animation.temporal_manager import TemporalManager
+from animation.dialogs import InputDialog, EditDialog, ExportDialog
+from animation.utils import TemporalMode, Orientation, RenderText, WxImageToPil, \
+    sampleCmdMatrixAndCreateNames, layerListToCmdsMatrix, HashCmds
+from animation.data import AnimationData
+
 
 class AnimationController(wx.EvtHandler):
-    def __init__(self, frame, sliders, animations, mapwindows, providers, bitmapPool):
+    def __init__(self, frame, sliders, animations, mapwindows, provider, bitmapPool, mapFilesPool):
         wx.EvtHandler.__init__(self)
 
         self.mapwindows = mapwindows
@@ -38,14 +41,17 @@ class AnimationController(wx.EvtHandler):
         self.temporalMode = None
         self.animationData = []
 
-        self.timer = wx.Timer(self, id = wx.NewId())
+        self.timer = wx.Timer(self, id=wx.NewId())
 
         self.animations = animations
         self.bitmapPool = bitmapPool
-        self.bitmapProviders = providers
-        for anim, win, provider in zip(self.animations, self.mapwindows, self.bitmapProviders):
-            anim.SetCallbackUpdateFrame(lambda index, dataId, win = win, provider = provider : self.UpdateFrame(index, win, provider, dataId))
-            anim.SetCallbackEndAnimation(lambda index, dataId, win = win, provider = provider: self.UpdateFrameEnd(index, win, provider, dataId))
+        self.mapFilesPool = mapFilesPool
+        self.bitmapProvider = provider
+        for anim, win in zip(self.animations, self.mapwindows):
+            anim.SetCallbackUpdateFrame(
+                lambda index, dataId, win=win: self.UpdateFrame(index, win, dataId))
+            anim.SetCallbackEndAnimation(
+                lambda index, dataId, win=win: self.UpdateFrameEnd(index, win, dataId))
             anim.SetCallbackOrientationChanged(self.OrientationChangedInReverseMode)
 
         for slider in self.sliders.values():
@@ -75,8 +81,8 @@ class AnimationController(wx.EvtHandler):
             self.timer.Start(self._timeTick)
         self.DisableSliderIfNeeded()
 
-    timeTick = property(fget = GetTimeTick, fset = SetTimeTick)
-        
+    timeTick = property(fget=GetTimeTick, fset=SetTimeTick)
+
     def OnTimerTick(self, event):
         for anim in self.animations:
             anim.Update()
@@ -102,7 +108,7 @@ class AnimationController(wx.EvtHandler):
             if not self.timer.IsRunning():
                 self.timer.Start(self.timeTick)
                 self.DisableSliderIfNeeded()
-        
+
         for anim in self.animations:
             anim.Pause(paused)
 
@@ -114,20 +120,20 @@ class AnimationController(wx.EvtHandler):
         for anim in self.animations:
             anim.Stop()
 
-    def UpdateFrameEnd(self, index, win, provider, dataId):
+    def UpdateFrameEnd(self, index, win, dataId):
         if self.timer.IsRunning():
             self.timer.Stop()
             self.DisableSliderIfNeeded()
 
         self.animationToolbar.Stop()
-        
-        self.UpdateFrame(index, win, provider, dataId)
 
-    def UpdateFrame(self, index, win, provider, dataId):
-        bitmap = provider.GetBitmap(dataId)
+        self.UpdateFrame(index, win, dataId)
+
+    def UpdateFrame(self, index, win, dataId):
+        bitmap = self.bitmapProvider.GetBitmap(dataId)
         if dataId is None:
             dataId = ''
-        win.DrawBitmap(bitmap, dataId)
+        win.DrawBitmap(bitmap)
         # self.frame.SetStatusText(dataId)
         self.slider.UpdateFrame(index)
 
@@ -151,7 +157,6 @@ class AnimationController(wx.EvtHandler):
             self.slider.EnableSlider(False)
         else:
             self.slider.EnableSlider(True)
-            
 
     def OrientationChangedInReverseMode(self, mode):
         if mode == Orientation.FORWARD:
@@ -167,14 +172,13 @@ class AnimationController(wx.EvtHandler):
         for anim in self.animations:
             anim.orientation = mode
 
-
     def SetTemporalMode(self, mode):
         self._temporalMode = mode
 
     def GetTemporalMode(self):
         return self._temporalMode
 
-    temporalMode = property(fget = GetTemporalMode, fset = SetTemporalMode)
+    temporalMode = property(fget=GetTemporalMode, fset=SetTemporalMode)
 
     def GetTimeGranularity(self):
         if self.temporalMode == TemporalMode.TEMPORAL:
@@ -187,9 +191,8 @@ class AnimationController(wx.EvtHandler):
         # if self.timer.IsRunning():
         #     running = True
         self.EndAnimation()
-
-        dlg = EditDialog(parent = self.frame, evalFunction = self.EvaluateInput,
-                          animationData = self.animationData, maxAnimations = len(self.animations))
+        dlg = EditDialog(parent=self.frame, evalFunction=self.EvaluateInput,
+                         animationData=self.animationData, maxAnimations=len(self.animations))
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
@@ -206,9 +209,10 @@ class AnimationController(wx.EvtHandler):
             if windowIndex not in indices:
                 found = True
                 break
-                
+
         if not found:
-            GMessage(parent = self.frame, message = _("Maximum number of animations is %s.") % len(self.animations))
+            GMessage(parent=self.frame,
+                     message=_("Maximum number of animations is %s.") % len(self.animations))
             return
 
         # running = False
@@ -221,20 +225,20 @@ class AnimationController(wx.EvtHandler):
         # number of active animations
         animationIndex = len([anim for anim in self.animations if anim.IsActive()])
         animData.SetDefaultValues(windowIndex, animationIndex)
-        dlg = InputDialog(parent = self.frame, mode = 'add', animationData = animData)
+        dlg = InputDialog(parent=self.frame, mode='add', animationData=animData)
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
         dlg.Destroy()
         # check compatibility
         if animData.windowIndex in indices:
-            GMessage(parent = self.frame, message = _("More animations are using one window."
-                                                      " Please select different window for each animation."))
+            GMessage(parent=self.frame, message=_("More animations are using one window."
+                                                  " Please select different window for each animation."))
             return
         try:
             temporalMode, tempManager = self.EvaluateInput(self.animationData + [animData])
         except GException, e:
-            GError(parent = self.frame, message = e.value, showTraceback = False)
+            GError(parent=self.frame, message=e.value, showTraceback=False)
             return
         # if ok, set temporal mode
         self.temporalMode = temporalMode
@@ -244,41 +248,28 @@ class AnimationController(wx.EvtHandler):
         self.animationData.append(animData)
         self._setAnimations()
 
-    def SetAnimations(self, inputs=None, dataType=None):
+    def SetAnimations(self, layerLists):
         """!Set animation data directly.
 
-        @param raster list of lists of raster maps or None
-        @param strds list of strds or None
-        @param inputs list of lists of raster maps or vector maps, 
-               or a space time raster or vector dataset
-        @param dataType The type of the input data must be one of 'rast', 'vect', 'strds' or 'strds'
+        @param layerLists list of layerLists
         """
         try:
             animationData = []
             for i in range(len(self.animations)):
-                if inputs is not None and inputs[i]:
-                    if dataType == 'rast' or dataType == 'vect':
-                        if type(inputs[i]) == list:
-                            anim = AnimationData()
-                            anim.SetDefaultValues(i, i)
-                            anim.inputMapType = dataType
-                            anim.inputData = ','.join(inputs[i])
-                            animationData.append(anim)
-                    elif dataType == 'strds' or dataType == 'stvds':
-                        anim = AnimationData()
-                        anim.SetDefaultValues(i, i)
-                        anim.inputMapType = dataType
-                        anim.inputData = inputs[i]
-                        animationData.append(anim)
+                if layerLists[i]:
+                    anim = AnimationData()
+                    anim.SetDefaultValues(i, i)
+                    anim.SetLayerList(layerLists[i])
+                    animationData.append(anim)
 
         except (GException, ValueError, IOError) as e:
-            GError(parent = self.frame, message = str(e),
-                   showTraceback = False, caption = _("Invalid input"))
+            GError(parent=self.frame, message=str(e),
+                   showTraceback=False, caption=_("Invalid input"))
             return
         try:
             temporalMode, tempManager = self.EvaluateInput(animationData)
         except GException, e:
-            GError(parent = self.frame, message = e.value, showTraceback = False)
+            GError(parent=self.frame, message=e.value, showTraceback=False)
             return
         self.animationData = animationData
         self.temporalManager = tempManager
@@ -288,15 +279,19 @@ class AnimationController(wx.EvtHandler):
     def _setAnimations(self):
         indices = [anim.windowIndex for anim in self.animationData]
 
-        self._updateWindows(activeIndices = indices)
+        self._updateWindows(activeIndices=indices)
 
         if self.temporalMode == TemporalMode.TEMPORAL:
             timeLabels, mapNamesDict = self.temporalManager.GetLabelsAndMaps()
         else:
             timeLabels, mapNamesDict = None, None
-
-        self._updateSlider(timeLabels = timeLabels)
-        self._updateAnimations(activeIndices = indices, mapNamesDict = mapNamesDict)
+        for anim in self.animationData:
+            if anim.viewMode == '2d':
+                anim.cmdMatrix = layerListToCmdsMatrix(anim.layerList)
+            else:
+                anim.cmdMatrix = [(cmd,) for cmd in anim.GetNvizCommands()['commands']]
+        self._updateSlider(timeLabels=timeLabels)
+        self._updateAnimations(activeIndices=indices, mapNamesDict=mapNamesDict)
         wx.Yield()
         self._updateBitmapData()
         # if running:
@@ -305,11 +300,11 @@ class AnimationController(wx.EvtHandler):
         # else:
         self.EndAnimation()
 
-    def _updateSlider(self, timeLabels = None):
+    def _updateSlider(self, timeLabels=None):
         if self.temporalMode == TemporalMode.NONTEMPORAL:
             self.frame.SetSlider('nontemporal')
             self.slider = self.sliders['nontemporal']
-            frameCount = len(self.animationData[0].mapData) # should be the same for all
+            frameCount = self.animationData[0].mapCount
             self.slider.SetFrames(frameCount)
         elif self.temporalMode == TemporalMode.TEMPORAL:
             self.frame.SetSlider('temporal')
@@ -320,14 +315,14 @@ class AnimationController(wx.EvtHandler):
             self.frame.SetSlider(None)
             self.slider = None
 
-    def _updateAnimations(self, activeIndices, mapNamesDict = None):
+    def _updateAnimations(self, activeIndices, mapNamesDict=None):
         if self.temporalMode == TemporalMode.NONTEMPORAL:
             for i in range(len(self.animations)):
                 if i not in activeIndices:
                     self.animations[i].SetActive(False)
                     continue
                 anim = [anim for anim in self.animationData if anim.windowIndex == i][0]
-                self.animations[i].SetFrames(anim.mapData)
+                self.animations[i].SetFrames([HashCmds(cmdList) for cmdList in anim.cmdMatrix])
                 self.animations[i].SetActive(True)
         else:
             for i in range(len(self.animations)):
@@ -335,7 +330,9 @@ class AnimationController(wx.EvtHandler):
                     self.animations[i].SetActive(False)
                     continue
                 anim = [anim for anim in self.animationData if anim.windowIndex == i][0]
-                self.animations[i].SetFrames(mapNamesDict[anim.inputData])
+                identifiers = sampleCmdMatrixAndCreateNames(anim.cmdMatrix,
+                                                            mapNamesDict[anim.firstStdsNameType[0]])
+                self.animations[i].SetFrames(identifiers)
                 self.animations[i].SetActive(True)
 
     def _updateWindows(self, activeIndices):
@@ -347,48 +344,33 @@ class AnimationController(wx.EvtHandler):
                 self.frame.RemoveWindow(windowIndex)
 
     def _updateBitmapData(self):
-        # unload data:
-        for prov in self.bitmapProviders:
-            prov.Unload()
+        # unload previous data
+        self.bitmapProvider.Unload()
 
-        # load data
+        # load new data
         for animData in self.animationData:
             if animData.viewMode == '2d':
-                self._load2DData(animData)
+                self._set2DData(animData)
             else:
                 self._load3DData(animData)
             self._loadLegend(animData)
+        self.bitmapProvider.Load(nprocs=4)
+        # clear pools
+        self.bitmapPool.Clear()
+        self.mapFilesPool.Clear()
 
-        # clear bitmapPool
-        usedNames = []
-        for prov in self.bitmapProviders:
-            names = prov.GetDataNames()
-            if names:
-                usedNames.extend(names)
-        self.bitmapPool.Clear(usedNames)
-
-    def _load2DData(self, animationData):
-        prov = self.bitmapProviders[animationData.windowIndex]
-        prov.SetData(datasource = animationData.mapData, dataType=animationData.inputMapType)
-
-        prov.Load()
+    def _set2DData(self, animationData):
+        opacities = [layer.opacity for layer in animationData.layerList if layer.active]
+        self.bitmapProvider.SetCmds(animationData.cmdMatrix, opacities)
 
     def _load3DData(self, animationData):
-        prov = self.bitmapProviders[animationData.windowIndex]
         nviz = animationData.GetNvizCommands()
-        prov.SetData(datasource = nviz['commands'], 
-                     dataNames = animationData.mapData, dataType = 'nviz',
-                     suffix = animationData.nvizParameter,
-                     nvizRegion = nviz['region'])
-
-        self.bitmapProviders[animationData.windowIndex].Load()
+        self.bitmapProvider.SetCmds3D(nviz['commands'], nviz['region'])
 
     def _loadLegend(self, animationData):
         if animationData.legendCmd:
-            prov = self.bitmapProviders[animationData.windowIndex]
             try:
-                bitmap = prov.LoadOverlay(animationData.legendCmd)
-                # place legend
+                bitmap = self.bitmapProvider.LoadOverlay(animationData.legendCmd)
                 try:
                     from PIL import Image
                     for param in animationData.legendCmd:
@@ -411,14 +393,14 @@ class AnimationController(wx.EvtHandler):
         tempManager = None
         windowIndex = []
         for anim in animationData:
-
-            mapCount.add(len(anim.mapData))
+            for layer in anim.layerList:
+                if layer.active and hasattr(layer, 'maps'):
+                    if layer.mapType in ('strds', 'stvds'):
+                        stds += 1
+                    else:
+                        maps += 1
+                    mapCount.add(len(layer.maps))
             windowIndex.append(anim.windowIndex)
-
-            if anim.inputMapType in ('rast', 'vect'):
-                maps += 1
-            elif anim.inputMapType in ('strds', 'stvds'):
-                stds += 1
 
         if maps and stds:
             temporalMode = TemporalMode.NONTEMPORAL
@@ -436,27 +418,24 @@ class AnimationController(wx.EvtHandler):
             tempManager = TemporalManager()
             # these raise GException:
             for anim in animationData:
-                if anim.inputMapType not in ('strds', 'stvds'):
-                    continue
-                tempManager.AddTimeSeries(anim.inputData, anim.inputMapType)
+                tempManager.AddTimeSeries(*anim.firstStdsNameType)
+
             message = tempManager.EvaluateInputData()
             if message:
-                GMessage(parent = self.frame, message = message)
+                GMessage(parent=self.frame, message=message)
 
         return temporalMode, tempManager
 
     def Reload(self):
         self.EndAnimation()
 
-        activeIndices = [anim.windowIndex for anim in self.animationData]
-        for index in activeIndices:
-            self.bitmapProviders[index].Load(force = True)
+        self.bitmapProvider.Load(force=True)
 
         self.EndAnimation()
 
     def Export(self):
         if not self.animationData:
-            GMessage(parent = self.frame, message = _("No animation to export."))
+            GMessage(parent=self.frame, message=_("No animation to export."))
             return
 
         if 'export' in self._dialogs:
@@ -468,14 +447,14 @@ class AnimationController(wx.EvtHandler):
             dlg.doExport.connect(self._export)
             self._dialogs['export'] = dlg
             dlg.Show()
-        
+
     def _export(self, exportInfo, decorations):
         size = self.frame.animationPanel.GetSize()
         if self.temporalMode == TemporalMode.TEMPORAL:
             timeLabels, mapNamesDict = self.temporalManager.GetLabelsAndMaps()
             frameCount = len(timeLabels)
         else:
-            frameCount = len(self.animationData[0].mapData) # should be the same for all
+            frameCount = self.animationData[0].mapCount  # should be the same for all
 
         animWinSize = []
         animWinPos = []
@@ -488,7 +467,7 @@ class AnimationController(wx.EvtHandler):
                 animWinPos.append(pos)
                 animWinSize.append(win.GetSize())
                 animWinIndex.append(i)
-        
+
         images = []
         busy = wx.BusyInfo(message=_("Preparing export, please wait..."), parent=self.frame)
         wx.Yield()
@@ -498,13 +477,13 @@ class AnimationController(wx.EvtHandler):
             # collect bitmaps of all windows and paste them into the one
             for i in animWinIndex:
                 frameId = self.animations[i].GetFrame(frameIndex)
-                bitmap = self.bitmapProviders[i].GetBitmap(frameId)
+                bitmap = self.bitmapProvider.GetBitmap(frameId)
                 im = wx.ImageFromBitmap(bitmap)
 
                 # add legend if used
                 legend = legends[i]
                 if legend:
-                    legendBitmap = self.bitmapProviders[i].LoadOverlay(legend)
+                    legendBitmap = self.bitmapProvider.LoadOverlay(legend)
                     x, y = self.mapwindows[i].GetOverlayPos()
                     legImage = wx.ImageFromBitmap(legendBitmap)
                     # not so nice result, can we handle the transparency otherwise?
@@ -525,11 +504,11 @@ class AnimationController(wx.EvtHandler):
                     timeLabel = timeLabels[frameIndex]
                     if timeLabel[1]:
                         text = _("%(from)s %(dash)s %(to)s") % \
-                                {'from': timeLabel[0], 'dash': u"\u2013", 'to': timeLabel[1]}
+                            {'from': timeLabel[0], 'dash': u"\u2013", 'to': timeLabel[1]}
                     else:
                         text = _("%(start)s %(unit)s") % \
-                                {'start': timeLabel[0], 'unit': timeLabel[2]}
-                    
+                            {'start': timeLabel[0], 'unit': timeLabel[2]}
+
                     decImage = RenderText(text, decoration['font']).ConvertToImage()
                 elif decoration['name'] == 'text':
                     text = decoration['text']
@@ -552,42 +531,17 @@ class AnimationController(wx.EvtHandler):
                 writeIms(filename=filename, images=pilImages)
             elif exportInfo['method'] == 'gif':
                 writeGif(filename=exportInfo['file'], images=pilImages,
-                            duration=self.timeTick / float(1000), repeat=True)
+                         duration=self.timeTick / float(1000), repeat=True)
             elif exportInfo['method'] == 'swf':
                 writeSwf(filename=exportInfo['file'], images=pilImages,
-                            duration=self.timeTick / float(1000), repeat=True)
+                         duration=self.timeTick / float(1000), repeat=True)
             elif exportInfo['method'] == 'avi':
                 writeAvi(filename=exportInfo['file'], images=pilImages,
-                            duration=self.timeTick / float(1000),
-                            encoding=exportInfo['encoding'],
-                            inputOptions=exportInfo['options'])
+                         duration=self.timeTick / float(1000),
+                         encoding=exportInfo['encoding'],
+                         inputOptions=exportInfo['options'])
         except Exception, e:
             del busy
             GError(parent=self.frame, message=str(e))
             return
         del busy
-
-#def test():
-#    import grass.script as grass
-#    import wx
-#    app = wx.PySimpleApp()
-#    wx.InitAllImageHandlers()
-#    # app.MainLoop()
-#
-#    bitmaps = {}
-#    rasters = ['elevation.dem']
-#    # rasters = ['streams']
-#    # rasters = grass.read_command("g.mlist", type = 'rast', fs = ',', quiet = True).strip().split(',')
-#
-#    # print nrows, ncols
-#    size = (300,100)
-#    newSize, scale = ComputeScale(size)
-#    # print scale
-#    LoadRasters(rasters = rasters, bitmaps = bitmaps, scale = scale, size = newSize)
-#
-#    for b in bitmaps.keys():
-#        bitmaps[b].SaveFile('/home/anna/testy/ctypes/' + b + '.png', wx.BITMAP_TYPE_PNG)
-#
-#if __name__ == '__main__':
-#
-#    test()
