@@ -247,8 +247,7 @@ class SimpleLayerManager(wx.Panel):
 
     def _setLayerOpacity(self, layer, value):
         """!Sets layer's opacity.'"""
-        # * 100 to be compatible, should be changes everywhere to 0-100 range
-        layer.opacity = int(value * 100)
+        layer.opacity = value 
         self._update()
         self.opacityChanged.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
         self.anyChange.emit()
@@ -259,9 +258,9 @@ class SimpleLayerManager(wx.Panel):
         active = []
         selected = []
         for layer in self._layerList:
-            if layer.opacity < 100:
+            if layer.opacity < 1:
                 items.append("{name} (opacity {opacity}%)".format(name=layer.name,
-                                                                  opacity=layer.opacity))
+                                                                  opacity=int(layer.opacity * 100)))
             else:
                 items.append(layer.name)
             active.append(layer.IsActive())

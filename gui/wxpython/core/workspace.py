@@ -697,7 +697,7 @@ class WriteWorkspaceFile(object):
             else:
                 cmd = mapTree.GetLayerInfo(item, key = 'maplayer').GetCmd(string = False)
                 name = mapTree.GetItemText(item).replace(os.linesep, '\\n')
-                opacity = maplayer.GetOpacity(float = True)
+                opacity = maplayer.GetOpacity()
                 # remove 'opacity' part
                 if opacity < 1:
                     name = name.split('(', -1)[0].strip()
