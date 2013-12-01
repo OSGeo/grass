@@ -3,17 +3,20 @@
 <h2>DESCRIPTION</h2>
 
 The <b>Animation Tool</b> is a <em><a href="wxGUI.html">wxGUI</a></em> component
-for animating a series of GRASS raster maps or a space time raster dataset (created by t.* modules).
+for animating series of GRASS raster or vector maps or space time datasets (created by t.* modules).
 
 <p>
 Animation Tool allows you to:
 
 <ul>
   <li>display up to 4 synchronized animations</li>
+  <li>each animation can consist of base map layer(s) and (multiple) series in arbitrary order
+      (for example, raising water level with elevation)</li>
   <li>control the animation speed</li>
   <li>interactively change active frame using a slider</li>
   <li>visualize space time datasets with unequally spaced intervals</li>
-  <li>animate 3d view (partially implemented)</li>
+  <li>animate 3d view (partially implemented, not supported on Windows)</li>
+  <li>export animation as a series of images, animated GIF, AVI or SWF</li>
 </ul>
 
 <p>
@@ -50,10 +53,12 @@ and then reload the maps to update the animation.
 g.gui.animation rast=rmap1,rmap2,rmap3
 
 g.gui.animation vect=vmap1,vmap2,vmap3
+
+g.gui.animation strds=precipitation_2000_2010
 </pre></div>
 
 The loading of a series of maps into the Animation Tool can be simplified
-with <em>g.mlist</em>:
+with <em>g.mlist</em> (back ticks syntax works for Linux and Mac only):
 <div class="code"><pre>
 g.gui.animation rast=`g.mlist type=rast mapset=. separator=comma pattern="precip*"`
 </pre></div>
@@ -66,9 +71,11 @@ g.gui.animation rast=`g.mlist -e type=rast mapset=. separator=comma pattern="pre
 
 
 <h2>TODO</h2>
+Enable to set:
 <ul>
-  <li>export animation</li>
-  <li>...</li>
+  <li>date/time format</li>
+  <li>background color</li>
+  <li>number of processes for parallel rendering</li>
 </ul>
 
 
