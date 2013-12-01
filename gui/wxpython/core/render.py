@@ -408,7 +408,7 @@ class Map(object):
         self.progressInfo = None
 
         # GRASS environment variable (for rendering)
-        self.env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
+        self.env = {"GRASS_BACKGROUNDCOLOR" : "000000",
                "GRASS_PNG_COMPRESSION" : "0",
                "GRASS_TRUECOLOR"       : "TRUE",
                "GRASS_TRANSPARENT"     : "TRUE",
