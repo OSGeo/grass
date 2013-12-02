@@ -19,6 +19,9 @@ int option_to_display(const struct Option *opt)
 	case 'c':
 	    display |= DISP_CAT;
 	    break;
+	case 'v':
+	    display |= DISP_VERT;
+	    break;
 	case 't':
 	    display |= DISP_TOPO;
 	    break;
