@@ -36,8 +36,7 @@ typedef struct
 #define DISP_TOPO  0x04
 #define DISP_VERT  0x08
 #define DISP_DIR   0x10
-#define DISP_ATTR  0x20
-#define DISP_ZCOOR 0x40
+#define DISP_ZCOOR 0x20
 
 #define RENDER_DP	2
 #define RENDER_DPC	3

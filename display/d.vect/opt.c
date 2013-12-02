@@ -28,9 +28,6 @@ int option_to_display(const struct Option *opt)
 	case 'd':
 	    display |= DISP_DIR;
 	    break;
-	case 'a':
-	    display |= DISP_ATTR;
-	    break;
 	case 'z':
 	    display |= DISP_ZCOOR;
 	    break;
