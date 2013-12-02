@@ -59,5 +59,8 @@ void option_to_where(struct Map_info *, struct cat_list *, const char *);
 /* topo.c */
 int display_topo(struct Map_info *, int, LATTR *, double);
 
+/* vertex.c */
+int display_vert(struct Map_info *, int, LATTR *, double);
+
 /* zcoor.c */
 int display_zcoor(struct Map_info *, int, LATTR *);

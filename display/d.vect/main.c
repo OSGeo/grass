@@ -86,14 +86,15 @@ int main(int argc, char **argv)
     display_opt->required = YES;
     display_opt->multiple = YES;
     display_opt->answer = "shape";
-    display_opt->options = "shape,cat,topo,dir,attr,zcoor";
+    display_opt->options = "shape,cat,topo,vert,dir,attr,zcoor";
     display_opt->description = _("Display");
     desc = NULL;
     G_asprintf(&desc,
-	       "shape;%s;cat;%s;topo;%s;dir;%s;attr;%s;zcoor;%s",
+	       "shape;%s;cat;%s;topo;%s;vert;%s;dir;%s;attr;%s;zcoor;%s",
 	       _("Display geometry of features"),
 	       _("Display category numbers of features"),
 	       _("Display topology information (nodes, edges)"),
+               _("Display verteces of features"),
 	       _("Display direction of linear features"),
 	       _("Display selected attribute based on 'attrcolumn'"),
 	       _("Display z-coordinate of features (only for 3D vector maps)"));
@@ -473,6 +474,9 @@ int main(int argc, char **argv)
 
 	if (display & DISP_ZCOOR)
 	    stat += display_zcoor(&Map, type, &lattr);
+
+	if (display & DISP_VERT)
+            stat += display_vert(&Map, type, &lattr, size);
 
 	if (display & DISP_TOPO)
             stat += display_topo(&Map, type, &lattr, size);
