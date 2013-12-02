@@ -248,7 +248,7 @@ def HashCmd(cmd):
 
 def HashCmds(cmds):
     """!Returns a hash from list of commands."""
-    name = '_'.join([item for sublist in cmds for item in sublist])
+    name = ';'.join([item for sublist in cmds for item in sublist])
     return hashlib.sha1(name).hexdigest()
 
 
