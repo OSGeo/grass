@@ -346,7 +346,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             if (ret == 1) {     /* sidx file is not available */
                 G_debug(1, "sidx file for vector '%s' not available.",
                         Vect_get_full_name(Map));
-                level = 1;
+                if (!Map->fInfo.pg.toposchema_name) /* optional for PostGIS Topology */
+                  level = 1;
             }
             else if (ret == -1) {
                 G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
@@ -369,8 +370,10 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                 G_debug(1,
                         "cidx file for vector '%s' not available.",
                         Vect_get_full_name(Map));
-                dig_free_plus(&(Map->plus));    /* free topology */
-                level = 1;
+                if (!Map->fInfo.pg.toposchema_name) /* optional for PostGIS Topology */ {
+                    dig_free_plus(&(Map->plus));    /* free topology */
+                    level = 1;
+                }
             }
             else if (ret == -1) {       /* file exists, but cannot be opened */
                 G_fatal_error(_("Unable to open category index file for vector map <%s>"),

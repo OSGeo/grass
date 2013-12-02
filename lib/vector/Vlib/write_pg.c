@@ -70,6 +70,7 @@ static int add_line_to_topo_pg(struct Map_info *, off_t, int, const struct line_
 static int delete_line_from_topo_pg(struct Map_info *, int, int, const struct line_pnts *);
 static int set_constraint_to_deferrable(struct Format_info_pg *, const char *, const char *,
                                         const char *, const char *, const char *);
+static dbDriver *open_db(struct Format_info_pg *, const struct field_info *);
 #endif
 
 static struct line_pnts *Points;
@@ -579,27 +580,16 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
         const char *colname;
 
         dbString dbtable_name;
-        dbHandle handle;
+
         dbDriver *driver;
         dbTable *table;
         dbColumn *column;
 
         db_init_string(&dbtable_name);
-        db_init_handle(&handle);
 
-        pg_info->dbdriver = driver = db_start_driver(Fi->driver);
-        if (!driver) {
-            G_warning(_("Unable to start driver <%s>"), Fi->driver);
+        driver = open_db(pg_info, Fi);
+        if (driver == NULL)
             return -1;
-        }
-        db_set_handle(&handle, Fi->database, NULL);
-        if (db_open_database(driver, &handle) != DB_OK) {
-            G_warning(_("Unable to open database <%s> by driver <%s>"),
-                      Fi->database, Fi->driver);
-            db_close_database_shutdown_driver(driver);
-            pg_info->dbdriver = NULL;
-            return -1;
-        }
 
         /* describe table */
         db_set_string(&dbtable_name, Fi->table);
@@ -1314,6 +1304,8 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
             /* check for attributes */
             Fi = Vect_get_dblink(Map, 0);
             if (Fi) {
+                if (!pg_info->dbdriver)
+                    open_db(pg_info, Fi);
                 if (!Vect_cat_get(cats, Fi->number, &cat))
                     G_warning(_("No category defined for layer %d"), Fi->number);
                 if (cats->n_cats > 1) {
@@ -1359,6 +1351,14 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
+
+    if (pg_info->cache.ctype == CACHE_MAP) {
+        /* add line to the cache */
+        Vect__reallocate_cache(&(pg_info->cache), 1, TRUE);
+        pg_info->cache.lines[line-1] = Vect_new_line_struct();
+        pg_info->cache.lines_types[line-1] = type;
+        pg_info->cache.lines_cats[line-1] = cat;
+   }
 
     /* update offset array for nodes */    
     if (is_node) {
@@ -1885,7 +1885,9 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
     }
 
     stmt = NULL;
-    if (Fi && cat > -1) { /* write attributes (simple features and topology elements) */
+    if (Fi && strcmp(pg_info->table_name, Fi->table) != 0 && /* skip PostGIS Topology in write mode */
+        cat > -1) {
+        /* write attributes (simple features and topology elements) */
         int col, ncol, more;
         int sqltype, ctype, is_fid;
         char buf_val[DB_SQL_MAX], buf_tmp[DB_SQL_MAX];
@@ -1906,7 +1908,7 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                 cat);
         G_debug(4, "SQL: %s", buf);
         db_set_string(&dbstmt, buf);
-
+        
         /* prepare INSERT statement */
         sprintf(buf, "INSERT INTO \"%s\".\"%s\" (",
                 pg_info->schema_name, pg_info->table_name);
@@ -2731,6 +2733,9 @@ int delete_line_from_topo_pg(struct Map_info *Map, int line, int type,
     
     Vect_reset_updated(Map);
 
+    if (!(type & GV_LINES))
+        return 0;
+
     Vect_get_line_nodes(Map, line, &N1, &N2);
     if (0 != V2__delete_line_from_topo_nat(Map, line, type, Points, NULL))
         return -1;
@@ -2787,5 +2792,37 @@ int set_constraint_to_deferrable(struct Format_info_pg *pg_info,
     }
 
     return 0;
+}
+
+/*!
+  \brief Open database connection with attribute table
+
+  \param pg_info pointer to Format_info_pg struct
+  \param Fi pointer to field_info struct 
+
+  \return pointer to dbDriver on succes
+  \return NULL on failure
+*/
+dbDriver *open_db(struct Format_info_pg *pg_info, const struct field_info *Fi) {
+    dbDriver *driver;
+    dbHandle handle;
+    
+    db_init_handle(&handle);
+    
+    pg_info->dbdriver = driver = db_start_driver(Fi->driver);
+    if (!driver) {
+        G_warning(_("Unable to start driver <%s>"), Fi->driver);
+        return NULL;
+    }
+    db_set_handle(&handle, Fi->database, NULL);
+    if (db_open_database(driver, &handle) != DB_OK) {
+        G_warning(_("Unable to open database <%s> by driver <%s>"),
+                  Fi->database, Fi->driver);
+        db_close_database_shutdown_driver(driver);
+        pg_info->dbdriver = NULL;
+        return NULL;
+    }
+
+    return pg_info->dbdriver;
 }
 #endif

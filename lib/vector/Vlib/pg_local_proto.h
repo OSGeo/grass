@@ -74,6 +74,7 @@ int Vect__close_cursor_pg(struct Format_info_pg *);
 int Vect__select_line_pg(struct Format_info_pg *, int, int);
 int Vect__execute_pg(PGconn *, const char *);
 int Vect__execute_get_value_pg(PGconn *, const char *);
+void Vect__reallocate_cache(struct Format_info_cache *, int, int);
 
 /* write_pg.c */
 off_t V2__write_node_pg(struct Map_info *, const struct line_pnts *);

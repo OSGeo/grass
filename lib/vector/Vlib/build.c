@@ -832,7 +832,10 @@ int Vect_build_partial(struct Map_info *Map, int build)
      * so that lines will be read by V1_read_ (all lines) */
     Map->level = LEVEL_1; /* may be not needed, because V1_read is used
                              directly by Vect_build_ */
-    if (Map->format != GV_FORMAT_OGR_DIRECT)
+
+    if (Map->format != GV_FORMAT_OGR_DIRECT &&
+        !(Map->format == GV_FORMAT_POSTGIS && Map->fInfo.pg.toposchema_name))
+        /* don't write support files for OGR direct and PostGIS Topology */
 	Map->support_updated = TRUE;
 
     if (!Map->plus.Spidx_built)

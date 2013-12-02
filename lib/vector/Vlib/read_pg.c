@@ -53,7 +53,6 @@ static int geometry_collection_from_wkb(const unsigned char *, int, int, int,
                                         struct Format_info_cache *,
                                         struct feat_parts *);
 static int error_corrupted_data(const char *);
-static void reallocate_cache(struct Format_info_cache *, int, int);
 static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
 static int get_centroid(struct Map_info *, int, struct line_pnts *);
 static void error_tuples(struct Format_info_pg *);
@@ -840,11 +839,11 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
        or geometry collections
      */
     if (cache->ctype == CACHE_MAP) {
-        reallocate_cache(cache, 1, TRUE);
+        Vect__reallocate_cache(cache, 1, TRUE);
     }
     else {
         if (!cache->lines) {
-            reallocate_cache(cache, 1, FALSE);
+            Vect__reallocate_cache(cache, 1, FALSE);
         }
     }
     
@@ -1051,7 +1050,7 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes,
     }
 
     /* reallocate space for islands if needed */
-    reallocate_cache(cache, *nrings, FALSE);
+    Vect__reallocate_cache(cache, *nrings, FALSE);
     cache->lines_num += *nrings;
 
     /* each ring has a minimum of 4 bytes (point count) */
@@ -1135,7 +1134,7 @@ int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes,
         nbytes -= data_offset;
 
     /* reallocate space for parts if needed */
-    reallocate_cache(cache, nparts, FALSE);
+    Vect__reallocate_cache(cache, nparts, FALSE);
 
     /* get parts */
     for (ipart = 0; ipart < nparts; ipart++) {
@@ -1543,7 +1542,7 @@ int Vect__execute_get_value_pg(PGconn *conn, const char *stmt)
 /*!
    \brief Reallocate lines cache
  */
-void reallocate_cache(struct Format_info_cache *cache, int num, int incr)
+void Vect__reallocate_cache(struct Format_info_cache *cache, int num, int incr)
 {
     int i;
 
