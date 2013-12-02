@@ -320,10 +320,11 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         
         /* open topo */
         ret = -1;
+#ifdef HAVE_POSTGRES
         if (Map->format == GV_FORMAT_POSTGIS)
             /* try to read full-topology for PostGIS links */
           ret = Vect__open_topo_pg(Map, head_only, update);
-        
+#endif        
         if (ret != 0) {
             /* read topology for native format
                read pseudo-topology for OGR/PostGIS links */
