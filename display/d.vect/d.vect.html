@@ -16,8 +16,8 @@ you only want to show active areas limit the features with, e.g.,
 d.vect map=vector_map cats=1-999999
 </pre></div>
 
-<p>In order to display attributes in the map, <tt>display=attr</tt> must be
-specified in addition to the column name (<b>attrcolumn</b> parameter).
+<p>In order to display attributes in the map, <b>attrcolumn</b> must
+be specified.
 
 <p>Colors may be specified
 by <em><a href="v.colors.html">v.colors</a></em> as a color table or
@@ -72,10 +72,10 @@ Spearfish examples:
 d.vect map=roads display=shape,cat lcolor=green
 
 # display randomly colorized soils map with attributes
-d.vect -c map=soils display=attr attrcolumn=label
+d.vect -c map=soils attrcolumn=label
 
 # display randomly colorized selected vectors from soils map
-d.vect -c map=soils where="label='VBF'" display=shape,attr attrcolumn=label
+d.vect -c map=soils where="label='VBF'" display=shape attrcolumn=label
 </pre></div>
 
 <p>3D points, 3D lines and 3D polygons colorized according to z height:
