@@ -313,7 +313,8 @@ class BitmapRenderer:
             if cmd[0] == 'm.nviz.image':
                 p = Process(target=self.RenderProcess3D, args=(cmd, regionFor3D, bgcolor, q))
             else:
-                p = Process(target=self.RenderProcess2D, args=(cmd, bgcolor, q))
+                p = Process(target=RenderProcess2D,
+                            args=(self.imageWidth, self.imageHeight, self._tempDir, cmd, bgcolor, q))
             p.start()
 
             queue_list.append(q)
@@ -344,67 +345,6 @@ class BitmapRenderer:
         self._isRendering = False
         return not stopped
 
-    def RenderProcess2D(self, cmd, bgcolor, fileQueue):
-        """!Render raster or vector files as ppm image and write the
-           resulting ppm filename in the provided file queue
-
-        @param cmd d.rast/d.vect command as a list
-        @param bgcolor background color as a tuple of 3 values 0 to 255
-        @param fileQueue the inter process communication queue
-        storing the file name of the image
-        """
-        Debug.msg(3, "BitmapRenderer.RenderProcess2D: cmd={}".format(cmd))
-
-        filename = GetFileFromCmd(self._tempDir, cmd)
-        transparency = True
-
-        # Set the environment variables for this process
-        _setEnvironment(self.imageWidth, self.imageHeight, filename,
-                        transparent=transparency, bgcolor=bgcolor)
-
-        Debug.msg(1, "Render image to file " + str(filename))
-        cmdTuple = CmdToTuple(cmd)
-        returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
-        if returncode != 0:
-            gcore.warning("Rendering failed:\n" + messages)
-            fileQueue.put(None)
-            os.remove(filename)
-            return
-
-        fileQueue.put(filename)
-
-    def RenderProcess3D(self, cmd, region, bgcolor, fileQueue):
-        """!Renders image with m.nviz.image and writes the
-           resulting ppm filename in the provided file queue
-
-        @param cmd m.nviz.image command as a list
-        @param bgcolor background color as a tuple of 3 values 0 to 255
-        @param fileQueue the inter process communication queue
-        storing the file name of the image
-        """
-        Debug.msg(3, "BitmapRenderer.RenderProcess3D: cmd={}".format(cmd))
-
-        filename = GetFileFromCmd(self._tempDir, cmd)
-        os.environ['GRASS_REGION'] = gcore.region_env(**region)
-
-        Debug.msg(1, "Render image to file " + str(filename))
-        cmdTuple = CmdToTuple(cmd)
-        cmdTuple[1]['output'] = os.path.splitext(filename)[0]
-        # set size
-        cmdTuple[1]['size'] = '%d,%d' % (self.imageWidth, self.imageHeight)
-        # set format
-        cmdTuple[1]['format'] = 'ppm'
-        cmdTuple[1]['bgcolor'] = bgcolor = ':'.join([str(part) for part in bgcolor])
-        returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
-        if returncode != 0:
-            gcore.warning("Rendering failed:\n" + messages)
-            fileQueue.put(None)
-            os.environ.pop('GRASS_REGION')
-            return
-
-        os.environ.pop('GRASS_REGION')
-        fileQueue.put(filename)
-
     def RequestStopRendering(self):
         """!Requests to stop rendering."""
         if self._isRendering:
@@ -413,11 +353,11 @@ class BitmapRenderer:
 
 class BitmapComposer:
     """!Class which handles the composition of image files with g.pnmcomp."""
-    def __init__(self, tmpDir, mapFilesPool, bitmapPool,
+    def __init__(self, tempDir, mapFilesPool, bitmapPool,
                  imageWidth, imageHeight):
         self._mapFilesPool = mapFilesPool
         self._bitmapPool = bitmapPool
-        self._tmpDir = tmpDir
+        self._tempDir = tempDir
         self.imageWidth = imageWidth
         self.imageHeight = imageHeight
 
@@ -462,8 +402,9 @@ class BitmapComposer:
             # Queue object for interprocess communication
             q = Queue()
             # The separate render process
-            p = Process(target=self.CompositeProcess,
-                        args=(cmdList, opacityList, bgcolor, q))
+            p = Process(target=CompositeProcess,
+                        args=(self.imageWidth, self.imageHeight, self._tempDir,
+                              cmdList, opacityList, bgcolor, q))
             p.start()
 
             queue_list.append(q)
@@ -497,53 +438,121 @@ class BitmapComposer:
 
         self._isComposing = False
 
-    def CompositeProcess(self, cmdList, opacities, bgcolor, fileQueue):
-        """!Performs the composition of image ppm files and writes the
-           resulting ppm filename in the provided file queue
-
-        @param cmdList list of d.rast/d.vect commands
-        @param opacities list of opacities
-        @param bgcolor background color as a tuple of 3 values 0 to 255
-        @param fileQueue the inter process communication queue
-        storing the file name of the image
-        """
-        Debug.msg(3, "BitmapComposer.CompositeProcess")
-
-        maps = []
-        masks = []
-        for cmd in cmdList:
-            maps.append(GetFileFromCmd(self._tmpDir, cmd))
-            masks.append(GetFileFromCmd(self._tmpDir, cmd, 'pgm'))
-        filename = GetFileFromCmds(self._tmpDir, cmdList)
-        # Set the environment variables for this process
-        _setEnvironment(self.imageWidth, self.imageHeight, filename,
-                        transparent=False, bgcolor=bgcolor)
-
-        opacities = [str(op) for op in opacities]
-        bgcolor = ':'.join([str(part) for part in bgcolor])
-        returncode, messages = RunCommand('g.pnmcomp',
-                                          getErrorMsg=True,
-                                          overwrite=True,
-                                          input='%s' % ",".join(reversed(maps)),
-                                          mask='%s' % ",".join(reversed(masks)),
-                                          opacity='%s' % ",".join(reversed(opacities)),
-                                          bgcolor=bgcolor,
-                                          width=self.imageWidth,
-                                          height=self.imageHeight,
-                                          output=filename)
-
-        if returncode != 0:
-            gcore.warning("Rendering composite failed:\n" + messages)
-            fileQueue.put(None)
-            os.remove(filename)
-            return
-
-        fileQueue.put(filename)
-
     def RequestStopComposing(self):
         """!Requests to stop the composition."""
         if self._isComposing:
             self._stopComposing = True
+
+
+def RenderProcess2D(imageWidth, imageHeight, tempDir, cmd, bgcolor, fileQueue):
+    """!Render raster or vector files as ppm image and write the
+       resulting ppm filename in the provided file queue
+
+    @param imageWidth image width
+    @param imageHeight image height
+    @param tempDir directory for rendering
+    @param cmd d.rast/d.vect command as a list
+    @param bgcolor background color as a tuple of 3 values 0 to 255
+    @param fileQueue the inter process communication queue
+    storing the file name of the image
+    """
+
+    filename = GetFileFromCmd(tempDir, cmd)
+    transparency = True
+
+    # Set the environment variables for this process
+    _setEnvironment(imageWidth, imageHeight, filename,
+                    transparent=transparency, bgcolor=bgcolor)
+
+    cmdTuple = CmdToTuple(cmd)
+    returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
+    if returncode != 0:
+        gcore.warning("Rendering failed:\n" + messages)
+        fileQueue.put(None)
+        os.remove(filename)
+        return
+
+    fileQueue.put(filename)
+
+
+def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, fileQueue):
+    """!Renders image with m.nviz.image and writes the
+       resulting ppm filename in the provided file queue
+
+    @param imageWidth image width
+    @param imageHeight image height
+    @param tempDir directory for rendering
+    @param cmd m.nviz.image command as a list
+    @param bgcolor background color as a tuple of 3 values 0 to 255
+    @param fileQueue the inter process communication queue
+    storing the file name of the image
+    """
+
+    filename = GetFileFromCmd(tempDir, cmd)
+    os.environ['GRASS_REGION'] = gcore.region_env(**region)
+
+    Debug.msg(1, "Render image to file " + str(filename))
+    cmdTuple = CmdToTuple(cmd)
+    cmdTuple[1]['output'] = os.path.splitext(filename)[0]
+    # set size
+    cmdTuple[1]['size'] = '%d,%d' % (imageWidth, imageHeight)
+    # set format
+    cmdTuple[1]['format'] = 'ppm'
+    cmdTuple[1]['bgcolor'] = bgcolor = ':'.join([str(part) for part in bgcolor])
+    returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
+    if returncode != 0:
+        gcore.warning("Rendering failed:\n" + messages)
+        fileQueue.put(None)
+        os.environ.pop('GRASS_REGION')
+        return
+
+    os.environ.pop('GRASS_REGION')
+    fileQueue.put(filename)
+
+
+def CompositeProcess(imageWidth, imageHeight, tempDir, cmdList, opacities, bgcolor, fileQueue):
+    """!Performs the composition of image ppm files and writes the
+       resulting ppm filename in the provided file queue
+
+    @param imageWidth image width
+    @param imageHeight image height
+    @param tempDir directory for rendering
+    @param cmdList list of d.rast/d.vect commands
+    @param opacities list of opacities
+    @param bgcolor background color as a tuple of 3 values 0 to 255
+    @param fileQueue the inter process communication queue
+    storing the file name of the image
+    """
+
+    maps = []
+    masks = []
+    for cmd in cmdList:
+        maps.append(GetFileFromCmd(tempDir, cmd))
+        masks.append(GetFileFromCmd(tempDir, cmd, 'pgm'))
+    filename = GetFileFromCmds(tempDir, cmdList)
+    # Set the environment variables for this process
+    _setEnvironment(imageWidth, imageHeight, filename,
+                    transparent=False, bgcolor=bgcolor)
+
+    opacities = [str(op) for op in opacities]
+    bgcolor = ':'.join([str(part) for part in bgcolor])
+    returncode, stdout, messages = read2_command('g.pnmcomp',
+                                                 overwrite=True,
+                                                 input='%s' % ",".join(reversed(maps)),
+                                                 mask='%s' % ",".join(reversed(masks)),
+                                                 opacity='%s' % ",".join(reversed(opacities)),
+                                                 bgcolor=bgcolor,
+                                                 width=imageWidth,
+                                                 height=imageHeight,
+                                                 output=filename)
+
+    if returncode != 0:
+        gcore.warning("Rendering composite failed:\n" + messages)
+        fileQueue.put(None)
+        os.remove(filename)
+        return
+
+    fileQueue.put(filename)
 
 
 class DictRefCounter:
