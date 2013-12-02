@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 	_("Layer number for labels (default: the given layer number)");
     
     attrcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    attrcol_opt->key = "attrcolumn";
+    attrcol_opt->key = "attribute_column";
     attrcol_opt->multiple = NO;	/* or fix attr.c, around line 102 */
     attrcol_opt->guisection = _("Labels");
     attrcol_opt->description = _("Name of column to be displayed as a label");
