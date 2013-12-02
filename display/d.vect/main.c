@@ -213,7 +213,7 @@ int main(int argc, char **argv)
     attrcol_opt->key = "attrcolumn";
     attrcol_opt->multiple = NO;	/* or fix attr.c, around line 102 */
     attrcol_opt->guisection = _("Labels");
-    attrcol_opt->description = _("Name of column to be displayed");
+    attrcol_opt->description = _("Name of column to be displayed as a label");
 
     lcolor_opt = G_define_option();
     lcolor_opt->key = "lcolor";
