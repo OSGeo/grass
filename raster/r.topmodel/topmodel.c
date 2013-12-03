@@ -127,7 +127,7 @@ void calculate_flows(void)
     int i, j, k;
     double Aatb_r;
     double R;
-    double _qo, _qv;
+    double qo, qv;
 
 
     misc.S = (double **)G_malloc(input.ntimesteps * sizeof(double *));
@@ -203,21 +203,21 @@ void calculate_flows(void)
 		misc.Suz[i][j] = misc.S[i][j];
 	    }
 
-	    _qv = 0.0;
+	    qv = 0.0;
 	    if (misc.S[i][j] > 0.0) {
-		_qv = (params.td > 0.0 ?
+		qv = (params.td > 0.0 ?
 		       misc.Suz[i][j] /
 		       (misc.S[i][j] * params.td) * input.dt
 		       : -params.td * params.K0 *
 		       exp(-misc.S[i][j] / params.m));
-		if (_qv > misc.Suz[i][j])
-		    _qv = misc.Suz[i][j];
-		misc.Suz[i][j] -= _qv;
+		if (qv > misc.Suz[i][j])
+		    qv = misc.Suz[i][j];
+		misc.Suz[i][j] -= qv;
 		if (misc.Suz[i][j] < ZERO)
 		    misc.Suz[i][j] = 0.0;
-		_qv *= Aatb_r;
+		qv *= Aatb_r;
 	    }
-	    misc.qv[i][j] = _qv;
+	    misc.qv[i][j] = qv;
 	    misc.qv[i][misc.ntopidxclasses] += misc.qv[i][j];
 
 	    misc.Ea[i][j] = 0.0;
@@ -229,17 +229,17 @@ void calculate_flows(void)
 	    }
 	    misc.Srz[i][j] += misc.Ea[i][j];
 
-	    _qo = 0.0;
+	    qo = 0.0;
 	    if (j > 0) {
 		if (misc.ex[i][j] > 0.0)
-		    _qo = topidxstats.Aatb_r[j] *
+		    qo = topidxstats.Aatb_r[j] *
 			(misc.ex[i][j - 1] + misc.ex[i][j]) / 2.0;
 		else if (misc.ex[i][j - 1] > 0.0)
-		    _qo = Aatb_r * misc.ex[i][j - 1] /
+		    qo = Aatb_r * misc.ex[i][j - 1] /
 			(misc.ex[i][j - 1] -
 			 misc.ex[i][j]) * misc.ex[i][j - 1] / 2.0;
 	    }
-	    misc.qo[i][j] = _qo;
+	    misc.qo[i][j] = qo;
 	    misc.qo[i][misc.ntopidxclasses] += misc.qo[i][j];
 
 	    misc.qt[i][j] = misc.qo[i][j] + misc.qs[i];
