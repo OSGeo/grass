@@ -1130,20 +1130,12 @@ class AnimSimpleLayerManager(SimpleLayerManager):
 
     def _layerChangeProperties(self, layer):
         """!Opens new module dialog or recycles it."""
-        if layer in self._dialogs:
-            dlg = self._dialogs[layer]
-            if dlg.IsShown():
-                dlg.Raise()
-                dlg.SetFocus()
-            else:
-                dlg.Show()
+        if not hasattr(layer, 'maps'):
+            GUI(parent=self, giface=None,
+                modal=self._modal).ParseCommand(cmd=layer.cmd,
+                                                completed=(self.GetOptData, layer, ''))
         else:
-            if not hasattr(layer, 'maps'):
-                GUI(parent=self, giface=None,
-                    modal=self._modal).ParseCommand(cmd=layer.cmd,
-                                                    completed=(self.GetOptData, layer, ''))
-            else:
-                self.SetStdsProperties(layer)
+            self.SetStdsProperties(layer)
 
     def Activate3D(self, activate=True):
         """!Activates/deactivates certain tool depending on 2D/3D view."""

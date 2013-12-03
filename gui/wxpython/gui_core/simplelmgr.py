@@ -56,8 +56,6 @@ class SimpleLayerManager(wx.Panel):
         self._style = lmgrStyle
         self._layerList = layerList
         self._checkList = wx.CheckListBox(self, style=wx.LB_EXTENDED)
-        # dialog windows held separately
-        self._dialogs = {}
         if not toolbarCls:
             toolbarCls = SimpleLmgrToolbar
         self._toolbar = toolbarCls(self, lmgrStyle=self._style)
@@ -65,7 +63,9 @@ class SimpleLayerManager(wx.Panel):
         self._auimgr = wx.aui.AuiManager(self)
         
         self._modal = modal
-        
+        # d.* dialogs are recreated each time, attempt to hide it resulted
+        # in completely mysterious memory corruption and crash when opening
+        # any dialog with stock labels (wx.ID_OK and so on)
 
         # needed in order not to change selection when moving layers
         self._blockSelectionChanged = False
@@ -168,8 +168,6 @@ class SimpleLayerManager(wx.Panel):
         for layer in layers:
             self.layerRemoved.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
             self._layerList.RemoveLayer(layer)
-            if layer in self._dialogs and self._dialogs[layer]:
-                self._dialogs[layer].Destroy()
         self._update()
         self.anyChange.emit()
         event.Skip()
@@ -216,17 +214,9 @@ class SimpleLayerManager(wx.Panel):
 
     def _layerChangeProperties(self, layer):
         """!Opens new module dialog or recycles it."""
-        if layer in self._dialogs:
-            dlg = self._dialogs[layer]
-            if dlg.IsShown():
-                dlg.Raise()
-                dlg.SetFocus()
-            else:
-                dlg.Show()
-        else:
-            GUI(parent=self, giface=None,
-                modal=self._modal).ParseCommand(cmd=layer.cmd,
-                                          completed=(self.GetOptData, layer, ''))
+        GUI(parent=self, giface=None,
+            modal=self._modal).ParseCommand(cmd=layer.cmd,
+                                            completed=(self.GetOptData, layer, ''))
 
     def OnLayerChangeOpacity(self, event):
         """!Opacity of a layer is changing."""
@@ -280,7 +270,6 @@ class SimpleLayerManager(wx.Panel):
         """!Handler for module dialogs."""
         if dcmd:
             layer.cmd = dcmd
-            self._dialogs[layer] = propwin
             layer.selected = True
             mapName, found = GetLayerNameFromCmd(dcmd)
             if found:
@@ -307,7 +296,6 @@ class SimpleLayerManager(wx.Panel):
         layer = self._layerList.AddNewLayer(name=name, mapType='rast',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
-        self._dialogs[layer] = dialog
         return layer
 
     def AddRast3d(self, name, cmd, hidden, dialog):
@@ -315,7 +303,6 @@ class SimpleLayerManager(wx.Panel):
         layer = self._layerList.AddNewLayer(name=name, mapType='rast3d',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
-        self._dialogs[layer] = dialog
         return layer
 
     def AddVector(self, name, cmd, hidden, dialog):
@@ -323,7 +310,6 @@ class SimpleLayerManager(wx.Panel):
         layer = self._layerList.AddNewLayer(name=name, mapType='vect',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
-        self._dialogs[layer] = dialog
         return layer
 
     def GetLayerInfo(self, layer, key):
@@ -338,8 +324,6 @@ class SimpleLayerManager(wx.Panel):
     def Delete(self, layer):
         """!Just for compatibility, should be removed in the future"""
         self._layerList.RemoveLayer(layer)
-        if self._dialogs[layer]:
-            self._dialogs[layer].Destroy()
 
 
 class SimpleLmgrToolbar(BaseToolbar):
