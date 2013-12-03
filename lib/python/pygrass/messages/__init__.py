@@ -14,8 +14,21 @@ for details.
 @author Soeren Gebbert
 """
 
+import sys
 import grass.lib.gis as libgis
 from multiprocessing import Process, Lock, Pipe
+
+class FatalError(Exception):
+    """!This error will be raised in case raise_on_error was set True
+       when creating the messenger object.
+    """
+    def __init__(self, msg):
+        self.value = msg
+
+    def __str__(self):
+        return self.value
+
+
 
 def message_server(lock, conn):
     """!The GRASS message server function designed to be a target for
@@ -57,7 +70,7 @@ def message_server(lock, conn):
         data = conn.recv()
         message_type = data[0]
 
-        # Only one process is allowed to write to stdout
+        # Only one process is allowed to write to stderr
         lock.acquire()
 
         # Stop the pipe and the infinite loop
@@ -129,12 +142,27 @@ class Messenger(object):
        WARNING: Ohh
        ERROR: Ohh no
 
+       >>> msgr = Messenger()
+       >>> msgr.fatal("Ohh no no no!")
+       Traceback (most recent call last):
+         File "__init__.py", line 239, in fatal
+           sys.exit(1)
+       SystemExit: 1
+
+       >>> msgr = Messenger(raise_on_error=True)
+       >>> msgr.fatal("Ohh no no no!")
+       Traceback (most recent call last):
+         File "__init__.py", line 241, in fatal
+           raise FatalError(message)
+       FatalError: Ohh no no no!
+
        @endcode
     """
-    def __init__(self):
+    def __init__(self, raise_on_error=False):
         self.client_conn = None
         self.server_conn = None
         self.server = None
+        self.raise_on_error = raise_on_error
         self.start_server()
 
     def __del__(self):
@@ -159,7 +187,7 @@ class Messenger(object):
         self.warning("Needed to restart the messenger server")
 
     def message(self, message):
-        """!Send a message to stdout
+        """!Send a message to stderr
 
            G_message() will be called in the messenger server process
         """
@@ -167,7 +195,7 @@ class Messenger(object):
         self.client_conn.send(["INFO", message])
 
     def verbose(self, message):
-        """!Send a verbose message to stdout
+        """!Send a verbose message to stderr
 
            G_verbose_message() will be called in the messenger server process
         """
@@ -175,7 +203,7 @@ class Messenger(object):
         self.client_conn.send(["VERBOSE", message])
 
     def important(self, message):
-        """!Send an important message to stdout
+        """!Send an important message to stderr
 
            G_important_message() will be called in the messenger server process
         """
@@ -183,7 +211,7 @@ class Messenger(object):
         self.client_conn.send(["IMPORTANT", message])
 
     def warning(self, message):
-        """!Send a warning message to stdout
+        """!Send a warning message to stderr
 
            G_warning() will be called in the messenger server process
         """
@@ -191,7 +219,7 @@ class Messenger(object):
         self.client_conn.send(["WARNING", message])
 
     def error(self, message):
-        """!Send an error message to stdout
+        """!Send an error message to stderr
 
            G_important_message() with an additional "ERROR:" string at
            the start will be called in the messenger server process
@@ -199,8 +227,25 @@ class Messenger(object):
         self._check_restart_server()
         self.client_conn.send(["ERROR", message])
 
+    def fatal(self, message):
+        """!Send an error message to stderr, call sys.exit(1) or raise FatalError 
+
+           This function emulates the behavior of G_fatal_error(). It prints
+           an error message to stderr and calls sys.exit(1). If raise_on_error
+           is set True while creating the messenger object, a FatalError 
+           exception will be raised instead of calling sys.exit(1).
+        """
+        self._check_restart_server()
+        self.client_conn.send(["ERROR", message])
+        self.stop()
+
+        if self.raise_on_error is True:
+            raise FatalError(message)
+        else:
+            sys.exit(1)
+
     def debug(self, level, message):
-        """!Send a debug message to stdout
+        """!Send a debug message to stderr
 
            G_debug() will be called in the messenger server process
         """
@@ -208,7 +253,7 @@ class Messenger(object):
         self.client_conn.send(["DEBUG", level, message])
 
     def percent(self, n, d, s):
-        """!Send a percentage to stdout
+        """!Send a percentage to stderr
 
            G_percent() will be called in the messenger server process
         """
