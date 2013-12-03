@@ -36,6 +36,8 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
+import xml.sax.saxutils as saxutils
+
 import wx
 from wx.lib import ogl
 
@@ -1817,10 +1819,12 @@ class WriteModelFile:
         self._footer()
 
     def _filterValue(self, value):
-        """!Make value XML-valid"""
-        value = value.replace('<', '&lt;')
-        value = value.replace('>', '&gt;')
-        
+        """!Escapes value to be stored in XML.
+
+        @param value string to be escaped as XML
+        @returns a XML-valid string
+        """
+        value = saxutils.escape(value)
         return value
         
     def _header(self):
