@@ -64,18 +64,19 @@ algorithm.
 
 <h2>EXAMPLES</h2>
 
-<!-- TODO: find better data -->
-Spearfish example (we simulate 3D soil range data):
+<!-- TODO: find better data. This example is nonsensical :-) -->
+Spearfish example (we first simulate 3D soil range data):
 
 <div class="code"><pre>
 g.region -dp
 # define volume
-g.region res=50 tbres=50 b=0 t=1500 -ap3
+g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3
 
-# random elevation extraction (2D)
+### First part: generate synthetic 3D data (true 3D soil data preferred)
+# generate random positions from elevation map (2D)
 r.random elevation.10m vector_output=elevrand n=200
 
-# conversion to 3D
+# generate synthetic values
 v.db.addcolumn elevrand col="x double precision, y double precision"
 v.to.db elevrand option=coor col=x,y
 v.db.select elevrand
@@ -90,8 +91,9 @@ v.db.dropcolumn elevrand_3d col=x
 v.db.dropcolumn elevrand_3d col=y
 v.db.dropcolumn elevrand_3d col=value
 
-# add attribute to interpolate
+# add attribute to have data available for 3D interpolation
 # (Soil range types taken from the USDA Soil Survey)
+d.mon wx0
 d.rast soils.range
 d.vect elevrand_3d
 v.db.addcolumn elevrand_3d col="soilrange integer"
@@ -101,16 +103,23 @@ v.what.rast elevrand_3d col=soilrange rast=soils.range
 v.db.update elevrand_3d col=soilrange value=NULL where="soilrange=0"
 v.db.select elevrand_3d
 
-# interpolate volume
-v.vol.rst elevrand_3d wcol=soilrange elev=soilrange zmult=100
+# optionally: check 3D points in Paraview
+v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point dp=2
+paraview --data=elevrand_3d.vtk
 
-# visualize
-nviz elevation.10m vol=soilrange
+### Second part: 3D interpolation from 3D point data
+# interpolate volume to "soilrange" voxel map
+v.vol.rst input=elevrand_3d wcol=soilrange elev=soilrange zmult=100
 
-# export to Paraview
-r.out.vtk elevation.10m out=elev.vtk
-r3.out.vtk elevrand_3d out=volume.vtk
-paraview
+# visualize I: in GRASS GIS wxGUI
+g.gui
+# load: 2D raster map: elevation.10m
+#       3D raster map: soilrange
+
+# visualize II: export to Paraview
+r.mapcalc "bottom = 0.0"
+r3.out.vtk -s input=soilrange top=elevation.10m bottom=bottom dp=2 output=volume.vtk
+paraview --data=volume.vtk
 </pre></div>
 
 
