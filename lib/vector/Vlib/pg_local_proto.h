@@ -68,7 +68,7 @@ int Vect__clean_grass_db_topo(struct Format_info_pg *);
 SF_FeatureType Vect__cache_feature_pg(const char *, int, int,
                                       struct Format_info_cache *,
                                       struct feat_parts *);
-int Vect__open_cursor_next_line_pg(struct Format_info_pg *, int);
+int Vect__open_cursor_next_line_pg(struct Format_info_pg *, int, int);
 int Vect__open_cursor_line_pg(struct Format_info_pg *, int, int);
 int Vect__close_cursor_pg(struct Format_info_pg *);
 int Vect__select_line_pg(struct Format_info_pg *, int, int);
@@ -80,6 +80,9 @@ void Vect__reallocate_cache(struct Format_info_cache *, int, int);
 off_t V2__write_node_pg(struct Map_info *, const struct line_pnts *);
 off_t V2__write_area_pg(struct Map_info *, const struct line_pnts **, int,
                         const struct line_cats *);
+int V2__update_area_pg(struct Map_info *, const struct line_pnts **, int,
+                       int);
+
 int Vect__insert_face_pg(struct Map_info *, int);
 
 /* open_pg.c */

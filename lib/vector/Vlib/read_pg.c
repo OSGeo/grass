@@ -41,7 +41,7 @@ static unsigned int wkb_data_length;
 
 static int read_next_line_pg(struct Map_info *,
                              struct line_pnts *, struct line_cats *, int);
-SF_FeatureType get_feature(struct Format_info_pg *, int, int);
+SF_FeatureType get_feature(struct Map_info *, int, int);
 static unsigned char *hex_to_wkb(const char *, int *);
 static int point_from_wkb(const unsigned char *, int, int, int,
                           struct line_pnts *);
@@ -266,7 +266,7 @@ int V1_read_line_pg(struct Map_info *Map,
 
         G_debug(3, "read (%s) feature (fid = %ld) to cache",
                 pg_info->table_name, fid);
-        get_feature(pg_info, fid, -1);
+        get_feature(Map, fid, -1);
 
         if (pg_info->cache.sf_type == SF_NONE) {
             G_warning(_("Feature %ld without geometry skipped"), fid);
@@ -369,7 +369,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
                       line, pg_info->cache.lines_types[cache_idx], Line->type);
     }
     else {
-        get_feature(pg_info, fid, Line->type);
+        get_feature(Map, fid, Line->type);
         cache_idx = 0;
     }
 
@@ -465,7 +465,7 @@ int read_next_line_pg(struct Map_info *Map,
             }
             
             /* cache feature -> line_p & line_c */
-            sf_type = get_feature(pg_info, -1, -1);
+            sf_type = get_feature(Map, -1, -1);
             
             if (sf_type == SF_NONE) {
                 G_warning(_("Feature %ld without geometry skipped"), pg_info->cache.fid);
@@ -554,18 +554,22 @@ int read_next_line_pg(struct Map_info *Map,
 
    Geometry is stored in lines cache.
 
-   \param[in,out] pg_info pointer to Format_info_pg struct
+   \param[in,out] Map pointer to Map_info struct
    \param fid feature id to be read (-1 for next)
    \param type feature type (GV_POINT, GV_LINE, ...) - use only for topological access
    
    \return simple feature type (SF_POINT, SF_LINESTRING, ...)
    \return -1 on error
  */
-SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
+SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
 {
     int seq_type;
     int force_type; /* force type (GV_BOUNDARY or GV_CENTROID) for topo access only */
     char *data;
+    
+    struct Format_info_pg *pg_info;
+
+    pg_info = &(Map->fInfo.pg);
     
     if (!pg_info->geom_column && !pg_info->topogeom_column) {
         G_warning(_("No geometry or topo geometry column defined"));
@@ -573,7 +577,7 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
     }
     if (fid < 1) { /* sequantial access */
         if (pg_info->cursor_name == NULL &&
-            Vect__open_cursor_next_line_pg(pg_info, FALSE) != 0)
+            Vect__open_cursor_next_line_pg(pg_info, FALSE, Map->plus.built) != 0)
         return -1;
     }
     else {         /* random access */
@@ -670,15 +674,17 @@ SF_FeatureType get_feature(struct Format_info_pg *pg_info, int fid, int type)
     
     /* cache also categories (only for PostGIS Topology) */
     if (pg_info->toposchema_name) {
-        int col_idx;
+        int cat, col_idx;
 
-        col_idx = type & GV_POINTS ? 2 : 3;
+        col_idx = fid < 0 ? 3 : 2; /* TODO: dermine col_idx for random access */
             
         if (!PQgetisnull(pg_info->res, pg_info->next_line, col_idx))
-            pg_info->cache.lines_cats[pg_info->cache.lines_next] =
-                atoi(PQgetvalue(pg_info->res, pg_info->next_line, col_idx)); 
+            cat = atoi(PQgetvalue(pg_info->res, pg_info->next_line, col_idx)); 
         else
-            pg_info->cache.lines_cats[pg_info->cache.lines_next] = -1; /* no cat */
+            cat = -1; /* no cat */
+        pg_info->cache.lines_cats[pg_info->cache.lines_next] = cat;
+        G_debug(3, "line=%d, type=%d -> cat=%d", pg_info->cache.lines_next+1,
+                pg_info->cache.lines_types[pg_info->cache.lines_next], cat);
     }
 
     /* set feature id */
@@ -1223,7 +1229,7 @@ int error_corrupted_data(const char *msg)
   \return 0 on success
   \return -1 on failure
 */
-int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all)
+int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all, int built_level)
 {
     char stmt[DB_SQL_MAX];
     
@@ -1243,7 +1249,7 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
                 pg_info->table_name, pg_info->fid_column);
     }
     else {
-        /* topology access (geom,fid,type) */
+        /* topology access (geom,id,fid,type) */
         /* TODO: optimize SQL statement (for points/centroids) */
         sprintf(stmt,
                 "DECLARE %s CURSOR FOR "
@@ -1254,7 +1260,7 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge GROUP BY start_node UNION ALL "
                 "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS foo) UNION ALL "
                 "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".node AS tt "
-                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 3 AND (%s).id = containing_face "
+                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 3 AND (%s).id = %s "
                 "WHERE containing_face IS NOT NULL AND node_id NOT IN "
                 "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge GROUP BY start_node UNION ALL "
                 "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS foo) UNION ALL "
@@ -1268,7 +1274,9 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
                 GV_POINT, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
                 pg_info->topogeom_column, pg_info->topogeom_column, pg_info->toposchema_name, pg_info->toposchema_name,
                 GV_CENTROID, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column, pg_info->toposchema_name, pg_info->toposchema_name,
+                pg_info->topogeom_column, pg_info->topogeom_column, 
+                built_level >= GV_BUILD_CENTROIDS ? "containing_face" : "node_id",
+                pg_info->toposchema_name, pg_info->toposchema_name,
                 GV_LINE, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
                 pg_info->topogeom_column, pg_info->topogeom_column,
                 GV_BOUNDARY, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,

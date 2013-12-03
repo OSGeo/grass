@@ -329,7 +329,7 @@ void build_pg(struct Map_info *Map, int build)
     G_zero(&fparts, sizeof(struct feat_parts));
     
     /* get all features */
-    if (Vect__open_cursor_next_line_pg(pg_info, TRUE) != 0)
+    if (Vect__open_cursor_next_line_pg(pg_info, TRUE, Map->plus.built) != 0)
         return;
     
     /* scan records */
