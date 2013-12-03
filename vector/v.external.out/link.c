@@ -13,7 +13,7 @@ void make_link(const char *dsn_opt,
 {
     int use_ogr;
     char *filename, *pg_schema, *pg_fid, *pg_geom_name, *dsn;
-    char *pg_spatial_index, *pg_primary_key, *pg_topo;
+    char *pg_spatial_index, *pg_primary_key, *pg_topo, *pg_sf;
     FILE *fp;
     
     struct Key_Value *key_val;
@@ -99,6 +99,10 @@ void make_link(const char *dsn_opt,
         if (pg_topo) {
 	    check_option_on_off("topology", &pg_topo);
 	}
+        pg_sf = get_option_pg(options, "simple_feature");
+        if (pg_sf) {
+	    check_option_on_off("simple_feature", &pg_topo);
+	}
     }
     /* add key/value items */
     if (dsn) {
@@ -127,6 +131,8 @@ void make_link(const char *dsn_opt,
 	    G_set_key_value("primary_key", pg_primary_key, key_val);
 	if (pg_topo)
 	    G_set_key_value("topology", pg_topo, key_val);
+	if (pg_sf)
+	    G_set_key_value("simple_feature", pg_topo, key_val);
     }
     
     /* save file - OGR or PG */

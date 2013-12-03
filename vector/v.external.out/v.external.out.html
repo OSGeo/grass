@@ -66,13 +66,15 @@ Options relevant only to topological output (<tt>TOPOLOGY=YES</tt>):
   see <a href="http://www.postgis.net/docs/manual-2.0/CreateTopology.html">CreateTopology</a>
   function for defails, default: <tt>0</tt></li>
   <li><tt>TOPO_GEO_ONLY=YES|NO</tt> - store in PostGIS Topology schema
-  only data relevant to Topo-Geo data model (relevant only
-  for <tt>TOPOLOGY=YES</tt>), default: <tt>NO</tt></li>
+  only data relevant to Topo-Geo data model, default: <tt>NO</tt></li>
+  <li><tt>SIMPLE_FEATURE=YES|NO</tt> - build simple features geometry
+  in <tt>GEOMETRY_NAME</tt> column from topogeometry data, default:
+  NO</li>
 </ul>
 
 <p>
 Creation <b>options</b> are comma-separated pairs
-(<tt>key=value</tt>), the options are case-insensitive.
+(<tt>key=value</tt>), the options are case-insensitive, eg. <tt>options=&quot;SCHEMA=myschema,FID=cat&quot;</tt>.
 
 <h2>EXAMPLES</h2>
 
