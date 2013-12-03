@@ -415,9 +415,13 @@ int build_topo(struct Map_info *Map, int build)
         
         /* build simple features from topogeometry data */
         p = G_find_key_value("simple_feature", key_val);
-        if (p && G_strcasecmp(p, "yes") == 0)
+        if (p && G_strcasecmp(p, "yes") == 0) {
+            if (build > GV_BUILD_BASE)
+                Map->level = LEVEL_2; /* force level to avoid errors */
+            
             if (create_simple_feature_from_topo(Map) != 0)
                 return 0;
+        }
 
         G_free_key_value(key_val);
     }

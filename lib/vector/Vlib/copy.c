@@ -484,12 +484,15 @@ int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
         Vect_reset_cats(Cats);
         if (field > 0) {
             cat = Vect_get_area_cat(In, area, field);
+            /* skip area without category in given layer
             if (cat == -1) {
                 nskipped++;
-                continue; /* skip area without category in given layer */
+                continue; 
             }
-            
-            Vect_cat_set(Cats, field, cat);
+            */
+
+            if (cat > 0)
+                Vect_cat_set(Cats, field, cat);
         }
 
         /* skip isles */
