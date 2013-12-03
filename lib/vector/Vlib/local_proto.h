@@ -18,6 +18,9 @@ int Vect__get_area_points_nat(const struct Map_info *, const plus_t *, int, stru
 void Vect__free_cache(struct Format_info_cache *);
 void Vect__free_offset(struct Format_info_offset *);
 
+/* copy.c */
+int Vect__copy_areas(const struct Map_info *, int, struct Map_info *);
+
 /* map.c */
 int Vect__delete(const char *, int);
 

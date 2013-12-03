@@ -516,6 +516,61 @@ off_t V2__write_area_pg(struct Map_info *Map,
 }
 
 /*!
+   \brief Updates simple features geometry from GRASS-like topo
+
+   \param Map pointer to Map_info structure
+   \param points feature geometry (exterior + interior rings)
+   \param nparts number of parts including exterior ring
+   \param cat area category
+   
+   \return 0 on success
+   \return -1 on error
+*/
+int V2__update_area_pg(struct Map_info *Map, 
+                         const struct line_pnts **points, int nparts,
+                         int cat)
+{
+    int part, npoints;
+    char *stmt, *geom_data;
+
+    struct Format_info_pg *pg_info;
+
+    pg_info = &(Map->fInfo.pg);
+
+    for (part = 0; part < nparts; part++) { 
+        npoints = points[part]->n_points - 1;
+        if (points[part]->x[0] != points[part]->x[npoints] ||
+            points[part]->y[0] != points[part]->y[npoints] ||
+            points[part]->z[0] != points[part]->z[npoints]) {
+            G_warning(_("Boundary is not closed. Skipping."));
+            return -1;
+        }
+    }
+    
+    geom_data = line_to_wkb(pg_info, points, nparts, GV_AREA, Vect_is_3d(Map));
+    if (!geom_data)
+        return -1;
+    
+    stmt = NULL;
+    G_asprintf(&stmt, "UPDATE \"%s\".\"%s\" SET %s = '%s'::GEOMETRY WHERE %s = %d",
+            pg_info->schema_name, pg_info->table_name, pg_info->geom_column,
+            geom_data, pg_info->fid_column,
+            cat);
+    if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
+        /* rollback transaction */
+        Vect__execute_pg(pg_info->conn, "ROLLBACK"); 
+        G_free(geom_data);
+        G_free(stmt);
+        return -1;
+    }
+
+    G_free(geom_data);
+    G_free(stmt);
+
+    return 0;
+}
+
+/*!
   \brief Create new feature table
 
   \param pg_info pointer to Format_info_pg
@@ -559,6 +614,8 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
             p = G_find_key_value("primary_key", key_val);
             if (p && G_strcasecmp(p, "no") == 0)
                 primary_key = FALSE;
+
+            G_free_key_value(key_val);
         }
     }
     
@@ -824,6 +881,14 @@ int create_topo_schema(struct Format_info_pg *pg_info, int with_z)
         if (p && G_strcasecmp(p, "yes") == 0)
             pg_info->topo_geo_only = TRUE;
         G_debug(1, "PG: topo_geo_only :%d", pg_info->topo_geo_only);
+
+        /* build simple features from topogeometry data */
+        p = G_find_key_value("simple_feature", key_val);
+        if (p && G_strcasecmp(p, "yes") == 0)
+            pg_info->topo_geo_only = TRUE;
+        G_debug(1, "PG: topo_geo_only :%d", pg_info->topo_geo_only);
+
+        G_free_key_value(key_val);
     }
 
     /* begin transaction (create topo schema) */
@@ -1689,8 +1754,8 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
         wkb_data = point_to_wkb(byte_order, points[0], with_z, &nbytes);
     else if (type == GV_LINE)
         wkb_data = linestring_to_wkb(byte_order, points[0], with_z, &nbytes);
-    else if (type & (GV_BOUNDARY | GV_FACE)) {
-        if (!pg_info->toposchema_name) {
+    else if (type & (GV_BOUNDARY | GV_FACE | GV_AREA)) {
+        if (!pg_info->toposchema_name || type == GV_AREA) {
             /* PostGIS simple feature access */
             wkb_data = polygon_to_wkb(byte_order, points, nparts,
                                       with_z, &nbytes);
@@ -1839,6 +1904,7 @@ int write_feature(struct Map_info *Map, int line, int type,
         return -1;
     }
     G_free(geom_data);
+    G_free(stmt);
     
     return pg_info->toposchema_name ? topo_id : 0;
 }

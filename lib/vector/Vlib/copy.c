@@ -43,7 +43,6 @@ static int copy_nodes(const struct Map_info *, struct Map_info *);
 static int copy_line_nodes(const struct Map_info *, int, int, struct line_pnts *,
                            struct Map_info *);
 static int is_isle(const struct Map_info *, int);
-static int copy_areas(const struct Map_info *, int, struct Map_info *);
 
 /*!
    \brief Copy all alive vector features from input vector map to
@@ -125,7 +124,7 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
 
         if (topo == TOPO_NONE) {
             /* copy areas - external formats and simple features access only */
-            ret += copy_areas(In, field, Out);
+            ret += Vect__copy_areas(In, field, Out);
         }
     }
     else {
@@ -460,7 +459,7 @@ int is_isle(const struct Map_info *Map, int area)
   \return 0 on success
   \return 1 on error
 */
-int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
+int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
 {
     int i, area, nareas, cat, isle, nisles, nparts_alloc, nskipped;
     struct line_pnts **Points;
@@ -526,11 +525,22 @@ int copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
             Vect_get_isle_points(In, isle, Points[i + 1]);
         }
         
-        if (0 > V2__write_area_sfa(Out, (const struct line_pnts **) Points,
-                                   nisles + 1, Cats)) {
-            G_warning(_("Writing area %d failed"), area);
-            return -1;
+        if (In != Out) {
+            if (0 > V2__write_area_sfa(Out, (const struct line_pnts **) Points,
+                                       nisles + 1, Cats)) {
+                G_warning(_("Writing area %d failed"), area);
+                return -1;
+            }
         }
+#ifdef HAVE_POSTGRES
+        else { /* building simple features geometry from topogeometry data */
+            if (0 > V2__update_area_pg(Out, (const struct line_pnts **) Points,
+                                        nisles + 1, cat)) {
+                G_warning(_("Writing area %d failed"), area);
+                return -1;
+            }
+        }
+#endif
     }
 
     if (nskipped > 0)

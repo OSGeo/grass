@@ -35,6 +35,7 @@ static int write_lines(const struct Plus_head *, const struct Format_info_pg *);
 static int write_areas(const struct Plus_head *, const struct Format_info_pg *);
 static int write_isles(const struct Plus_head *, const struct Format_info_pg *);
 static void build_stmt_id(const void *, int, int, const struct Plus_head *, char **, size_t *);
+static int create_simple_feature_from_topo(struct Map_info *);
 #endif
 
 /*!
@@ -136,6 +137,7 @@ int build_topo(struct Map_info *Map, int build)
     int area, nareas, isle, nisles;
     int face[2];
     char stmt[DB_SQL_MAX];
+    char *def_file;
     
     struct Plus_head *plus;
     struct Format_info_pg *pg_info;
@@ -395,6 +397,31 @@ int build_topo(struct Map_info *Map, int build)
     if (Vect__execute_pg(pg_info->conn, "COMMIT") == -1)
         return 0;
 
+    /* check if we want to create simple features from topogeometry
+       data */
+    def_file = getenv("GRASS_VECTOR_PGFILE");
+    
+    if (G_find_file2("", def_file ? def_file : "PG", G_mapset())) {
+        FILE *fp;
+        const char *p;
+        
+        struct Key_Value *key_val;
+        fp = G_fopen_old("", def_file ? def_file : "PG", G_mapset());
+        if (!fp) {
+            G_fatal_error(_("Unable to open PG file"));
+        }
+        key_val = G_fread_key_value(fp);
+        fclose(fp);
+        
+        /* build simple features from topogeometry data */
+        p = G_find_key_value("simple_feature", key_val);
+        if (p && G_strcasecmp(p, "yes") == 0)
+            if (create_simple_feature_from_topo(Map) != 0)
+                return 0;
+
+        G_free_key_value(key_val);
+    }
+    
     return 1;
 }
 
@@ -948,4 +975,48 @@ int Vect__clean_grass_db_topo(struct Format_info_pg *pg_info)
     return 0;
 }
 
+/*!
+  \brief Create simple features geometry from topogeometry data
+
+  \param Map pointer to Map_info struct 
+
+  \return 0 on success
+  \return -1 on error
+*/
+int create_simple_feature_from_topo(struct Map_info *Map)
+{
+    char stmt[DB_SQL_MAX];
+
+    struct Format_info_pg *pg_info;
+
+    pg_info = &(Map->fInfo.pg);
+
+    G_debug(1, "build_simple_feature_from_topo(): %d", pg_info->feature_type);
+    
+    G_message(_("Create simple features topology from topogeometry data..."));
+    Vect__execute_pg(pg_info->conn, "BEGIN");
+    if (pg_info->feature_type == SF_POINT ||
+        pg_info->feature_type == SF_LINESTRING) {
+        sprintf(stmt, "UPDATE \"%s\".\"%s\" SET %s = (SELECT geom FROM \"%s\".node "
+                "WHERE node_id = (%s).id)", pg_info->schema_name, pg_info->table_name,
+                pg_info->geom_column, pg_info->toposchema_name, pg_info->topogeom_column);
+
+        if(Vect__execute_pg(pg_info->conn, stmt) == -1) {
+            Vect__execute_pg(pg_info->conn, "ROLLBACK");
+            return -1;
+
+        }
+    }
+    else if (pg_info->feature_type == SF_POLYGON) {
+        Vect__copy_areas(Map, 1, Map);
+    }
+    else {
+        G_warning(_("Unable to build simple features from topogeometry data. "
+                    "Unsupported type %d."), pg_info->feature_type);
+    }
+ 
+    Vect__execute_pg(pg_info->conn, "COMMIT");
+
+    return 0;
+}
 #endif
