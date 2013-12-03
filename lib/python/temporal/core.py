@@ -105,12 +105,15 @@ def _set_current_mapset(mapset=None):
 # provides a fast and exit safe interface to the C-library message functions
 message_interface=None
 
-def _init_tgis_message_interface():
+def _init_tgis_message_interface(raise_on_error=False):
     """!Initiate the global mesage interface
+
+       @param raise_on_error If True raise a FatalError exception in case of a fatal error,
+                             call sys.exit(1) otherwise
     """
     global message_interface
     from grass.pygrass import messages
-    message_interface = messages.Messenger()
+    message_interface = messages.Messenger(raise_on_error)
 
 def get_tgis_message_interface():
     """!Return the temporal GIS message interface which is of type
@@ -226,7 +229,7 @@ def get_sql_template_path():
 
 ###############################################################################
 
-def init():
+def init(raise_on_error=False):
     """!This function set the correct database backend from the environmental variables
        and creates the grass location database structure for raster,
        vector and raster3d maps as well as for the space-time datasets strds,
@@ -234,6 +237,10 @@ def init():
 
         ATTENTION: This functions must be called before any spatio-temporal processing
                    can be started
+
+       @param raise_on_error If True raise a FatalError exception in case of a fatal error,
+                             call sys.exit(1) otherwise
+
     """
     # We need to set the correct database backend from the environment variables
     global tgis_backend
@@ -245,7 +252,7 @@ def init():
     # Set the global variable current_mapset for fast mapset access
     _set_current_mapset(grassenv["MAPSET"])
     # Start the GRASS message interface server
-    _init_tgis_message_interface()
+    _init_tgis_message_interface(raise_on_error)
     # Start the C-library interface server
     _init_tgis_c_library_interface()
 

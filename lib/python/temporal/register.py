@@ -41,8 +41,32 @@ def register_maps_in_space_time_dataset(
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
+       @code
+
+        >>> import grass.script as grass
+        >>> import grass.temporal as tgis
+        >>> grass.use_temp_region()
+        >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
+        ... t=1.0, b=0.0, res=10.0)
+        0
+        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True, expression="register_map_1 = 1")
+        0
+        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True, expression="register_map_2 = 2")
+        0
+        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True, expression="register_map_3 = 3")
+        0
+        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True, expression="register_map_4 = 4")
+        0
+        >>> tgis.init(True)
+        >>> tgis.register_maps_in_space_time_dataset(type="strds", name=None, 
+        ...               maps="register_map_1,register_map_2,register_map_3,register_map_4",
+        ...               start="2001-01-01", increment="1 day", interval=True)
+
+       @endcode
+
        @param type The type of the maps rast, rast3d or vect
-       @param name The name of the space time dataset
+       @param name The name of the space time dataset. Maps will be registered in the
+                   temporal database if the name was set to None
        @param maps A comma separated list of map names
        @param file Input file, one map per line map with start and optional
                    end time
@@ -65,23 +89,31 @@ def register_maps_in_space_time_dataset(
 
     start_time_in_file = False
     end_time_in_file = False
+    msgr = get_tgis_message_interface()
+
+    # Make sure the arguments are of type string
+    if start != "" and start is not None:
+        start = str(start)
+    if end != "" and end is not None:
+        end = str(end)
+    if increment != "" and increment is not None:
+        increment = str(increment)
 
     if maps and file:
-        core.fatal(_("%(m)s= and %(f)s= are mutually exclusive") % {'m': "maps",
+        msgr.fatal(_("%(m)s= and %(f)s= are mutually exclusive") % {'m': "maps",
                                                                     'f': "file"})
 
     if end and increment:
-        core.fatal(_("%(e)s= and %(i)s= are mutually exclusive") % {'e': "end",
+        msgr.fatal(_("%(e)s= and %(i)s= are mutually exclusive") % {'e': "end",
                    'i': "increment"})
 
     if end and not start:
-        core.fatal(_("Please specify %(st)s= and %(e)s=") % {'st': "start_time",
+        msgr.fatal(_("Please specify %(st)s= and %(e)s=") % {'st': "start_time",
                                                              'e': "end_time"})
 
     if not maps and not file:
-        core.fatal(_("Please specify %(m)s= or %(f)s=") % {'m': "maps",
+        msgr.fatal(_("Please specify %(m)s= or %(f)s=") % {'m': "maps",
                                                            'f': "file"})
-
     # We may need the mapset
     mapset = get_current_mapset()
     dbif, connected = init_dbif(None)
@@ -92,7 +124,7 @@ def register_maps_in_space_time_dataset(
 
         if sp.is_time_relative() and not unit:
             dbif.close()
-            core.fatal(_("Space time %(sp)s dataset <%(name)s> with relative"
+            msgr.fatal(_("Space time %(sp)s dataset <%(name)s> with relative"
                          " time found, but no relative unit set for %(sp)s "
                          "maps") % {
                          'sp': sp.get_new_map_instance(None).get_type(),
@@ -158,11 +190,11 @@ def register_maps_in_space_time_dataset(
     # Store the ids of datasets that must be updated
     datatsets_to_modify = {}
 
-    core.message(_("Gathering map informations"))
+    msgr.message(_("Gathering map informations"))
 
     for count in range(len(maplist)):
         if count % 50 == 0:
-            core.percent(count, num_maps, 1)
+            msgr.percent(count, num_maps, 1)
 
         # Get a new instance of the map type
         map = dataset_factory(type, maplist[count]["id"])
@@ -181,13 +213,13 @@ def register_maps_in_space_time_dataset(
             if (start == "" or start is None) and not map.has_grass_timestamp():
                 dbif.close()
                 if map.get_layer():
-                    core.fatal(_("Unable to register %(t)s map <%(id)s> with "
+                    msgr.fatal(_("Unable to register %(t)s map <%(id)s> with "
                                  "layer %(l)s. The map has timestamp and "
                                  "the start time is not set.") % {
                                  't': map.get_type(), 'id': map.get_map_id(),
                                  'l': map.get_layer()})
                 else:
-                    core.fatal(_("Unable to register %(t)s map <%(id)s>. The"
+                    msgr.fatal(_("Unable to register %(t)s map <%(id)s>. The"
                                  " map has no timestamp and the start time "
                                  "is not set.") % {'t': map.get_type(),
                                                    'id': map.get_map_id()})
@@ -195,9 +227,9 @@ def register_maps_in_space_time_dataset(
                 # We need to check if the time is absolute and the unit was specified
                 time_object = check_datetime_string(start)
                 if isinstance(time_object, datetime) and unit:
-                    core.fatal(_("%(u)s= can only be set for relative time") % {'u': "maps"})
+                    msgr.fatal(_("%(u)s= can only be set for relative time") % {'u': "unit"})
                 if not isinstance(time_object, datetime) and not unit:
-                    core.fatal(_("%(u)s= must be set in case of relative time stamps") % {'u': "maps"})
+                    msgr.fatal(_("%(u)s= must be set in case of relative time stamps") % {'u': "unit"})
 
                 if unit:
                     map.set_time_to_relative()
@@ -209,14 +241,14 @@ def register_maps_in_space_time_dataset(
             # Check the overwrite flag
             if not core.overwrite():
                 if map.get_layer():
-                    core.warning(_("Map is already registered in temporal "
+                    msgr.warning(_("Map is already registered in temporal "
                                    "database. Unable to update %(t)s map "
                                    "<%(id)s> with layer %(l)s. Overwrite flag"
                                    " is not set.") % {'t': map.get_type(),
                                                       'id': map.get_map_id(),
                                                       'l': str(map.get_layer())})
                 else:
-                    core.warning(_("Map is already registered in temporal "
+                    msgr.warning(_("Map is already registered in temporal "
                                    "database. Unable to update %(t)s map "
                                    "<%(id)s>. Overwrite flag is not set.") % {
                                    't': map.get_type(), 'id': map.get_map_id()})
@@ -239,13 +271,13 @@ def register_maps_in_space_time_dataset(
                 if name and map.get_temporal_type() != sp.get_temporal_type():
                     dbif.close()
                     if map.get_layer():
-                        core.fatal(_("Unable to update %(t)s map <%(id)s> "
+                        msgr.fatal(_("Unable to update %(t)s map <%(id)s> "
                                      "with layer %(l)s. The temporal types "
                                      "are different.") % {'t': map.get_type(),
                                                         'id': map.get_map_id(),
                                                         'l': map.get_layer()})
                     else:
-                        core.fatal(_("Unable to update %(t)s map <%(id)s>. "
+                        msgr.fatal(_("Unable to update %(t)s map <%(id)s>. "
                                      "The temporal types are different.") %
                                      {'t': map.get_type(),
                                       'id': map.get_map_id()})
@@ -288,26 +320,26 @@ def register_maps_in_space_time_dataset(
         if name:
             map_object_list.append(map)
 
-    core.percent(num_maps, num_maps, 1)
+    msgr.percent(num_maps, num_maps, 1)
 
     if statement is not None and statement != "":
-        core.message(_("Register maps in the temporal database"))
+        msgr.message(_("Register maps in the temporal database"))
         dbif.execute_transaction(statement)
 
     # Finally Register the maps in the space time dataset
     if name and map_object_list:
         count = 0
         num_maps = len(map_object_list)
-        core.message(_("Register maps in the space time raster dataset"))
+        msgr.message(_("Register maps in the space time raster dataset"))
         for map in map_object_list:
             if count % 50 == 0:
-                core.percent(count, num_maps, 1)
+                msgr.percent(count, num_maps, 1)
             sp.register_map(map=map, dbif=dbif)
             count += 1
 
     # Update the space time tables
     if name and map_object_list:
-        core.message(_("Update space time raster dataset"))
+        msgr.message(_("Update space time raster dataset"))
         sp.update_from_registered_maps(dbif)
         sp.update_command_string(dbif=dbif)
 
@@ -326,7 +358,7 @@ def register_maps_in_space_time_dataset(
     if connected == True:
         dbif.close()
 
-    core.percent(num_maps, num_maps, 1)
+    msgr.percent(num_maps, num_maps, 1)
 
 
 ###############################################################################
@@ -354,10 +386,12 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
                         time and an increment is provided
     """
 
+    msgr = get_tgis_message_interface()
+
     if ttype == "absolute":
         start_time = string_to_datetime(start)
         if start_time is None:
-            core.fatal(_("Unable to convert string \"%s\"into a "
+            msgr.fatal(_("Unable to convert string \"%s\"into a "
                          "datetime object") % (start))
         end_time = None
 
@@ -365,7 +399,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
             end_time = string_to_datetime(end)
             if end_time is None:
                 dbif.close()
-                core.fatal(_("Unable to convert string \"%s\"into a "
+                msgr.fatal(_("Unable to convert string \"%s\"into a "
                              "datetime object") % (end))
 
         # Add the increment
@@ -373,21 +407,21 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
             start_time = increment_datetime_by_string(
                 start_time, increment, mult)
             if start_time is None:
-                core.fatal(_("Error in increment computation"))
+                msgr.fatal(_("Error in increment computation"))
             if interval:
                 end_time = increment_datetime_by_string(
                     start_time, increment, 1)
                 if end_time is None:
-                    core.fatal(_("Error in increment computation"))
-        # Commented because of performance issue calling g.message thousend times
-        #if map.get_layer():
-        #    core.verbose(_("Set absolute valid time for map <%(id)s> with "
-        #                   "layer %(layer)s to %(start)s - %(end)s") %
-        #                 {'id': map.get_map_id(), 'layer': map.get_layer(),
-        #                  'start': str(start_time), 'end': str(end_time)})
-        #else:
-        #    core.verbose(_("Set absolute valid time for map <%s> to %s - %s") %
-        #                 (map.get_map_id(), str(start_time), str(end_time)))
+                    msgr.fatal(_("Error in increment computation"))
+
+        if map.get_layer():
+            msgr.verbose(_("Set absolute valid time for map <%(id)s> with "
+                           "layer %(layer)s to %(start)s - %(end)s") %
+                         {'id': map.get_map_id(), 'layer': map.get_layer(),
+                          'start': str(start_time), 'end': str(end_time)})
+        else:
+            msgr.verbose(_("Set absolute valid time for map <%s> to %s - %s") %
+                         (map.get_map_id(), str(start_time), str(end_time)))
 
         map.set_absolute_time(start_time, end_time, None)
     else:
@@ -402,15 +436,21 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
             if interval:
                 end_time = start_time + int(increment)
 
-        # Commented because of performance issue calling g.message thousend times
-        #if map.get_layer():
-        #    core.verbose(_("Set relative valid time for map <%s> with layer %s "
-        #                   "to %i - %s with unit %s") %
-        #                 (map.get_map_id(), map.get_layer(), start_time,
-        #                  str(end_time), unit))
-        #else:
-        #    core.verbose(_("Set relative valid time for map <%s> to %i - %s "
-        #                   "with unit %s") % (map.get_map_id(), start_time,
-        #                                      str(end_time), unit))
+        if map.get_layer():
+            msgr.verbose(_("Set relative valid time for map <%s> with layer %s "
+                           "to %i - %s with unit %s") %
+                         (map.get_map_id(), map.get_layer(), start_time,
+                          str(end_time), unit))
+        else:
+            msgr.verbose(_("Set relative valid time for map <%s> to %i - %s "
+                           "with unit %s") % (map.get_map_id(), start_time,
+                                              str(end_time), unit))
 
         map.set_relative_time(start_time, end_time, unit)
+
+
+###############################################################################
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
