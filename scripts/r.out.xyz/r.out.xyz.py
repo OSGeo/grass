@@ -23,7 +23,8 @@
 #% keywords: ASCII
 #% keywords: conversion
 #%end
-#%option G_OPT_R_INPUT
+#%option G_OPT_R_INPUTS
+#% multiple: yes
 #%end
 #%option G_OPT_F_OUTPUT
 #% description: Name for output file (if omitted or "-" output to stdout)

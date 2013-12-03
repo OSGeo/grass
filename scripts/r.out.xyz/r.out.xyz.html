@@ -2,18 +2,24 @@
 
 The <em>r.out.xyz</em> module exports a raster map as a list of x,y,z
 values into an ASCII text file.
-<p>
+
 <h2>NOTES</h2>
 
 This module will not export x,y coordinates for raster cells containing
 a NULL value. This includes cells masked by a raster MASK.
-<p>This module, as all GRASS raster modules, will export cells based on the
+<p>
+This module, as all GRASS raster modules, will export cells based on the
 current region settings. See the <em>g.region</em> module for details.
-<p>The <em>r.out.ascii</em> module should be used to export an array (of
+<p>
+The <em>r.out.ascii</em> module should be used to export an array (of
 size row x column) containing z values.
-<p><em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1gn</tt>".
+<p>
+<em>r.out.xyz</em> can combine several input raster maps, which can be 
+convenient when it comes to e.g. produce ASCII point cloud files.
+<p>
+<em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1gn</tt>".
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 In this example, a LiDAR elevation map in the
 North Carolina sample dataset location is exported to CSV format.
@@ -21,6 +27,24 @@ North Carolina sample dataset location is exported to CSV format.
 <div class="code"><pre>
 g.region rast=elev_lid792_1m -p
 r.out.xyz input=elev_lid792_1m output=elev_lid792_1m.csv separator=","
+</pre></div>
+
+<p>
+In this example, elevation data from the North Carolina dataset are
+exported along with R,G,B triplet of the related orthophoto into a
+combined file (requires the import of the supplementary high-resolution
+<a href="http://grass.osgeo.org/sampledata/north_carolina/ortho2010_t792_subset_20cm.tif">color orthophoto</a>, here called "ortho2010_t792"):
+
+<div class="code"><pre>
+g.region rast=elev_lid792_1m res=1 -a -p
+r.out.xyz input=elev_lid792_1m,ortho2010_t792.red,ortho2010_t792.green,ortho2010_t792.blue \
+        separator=space output=pointcloud.asc
+
+# validate: X Y Z R G B
+head -n 3 pointcloud.asc
+638300.5 220749.5 126.338218689 78 84 71
+638301.5 220749.5 126.3381958008 93 101 86
+638302.5 220749.5 126.3414840698 68 77 59
 </pre></div>
 
 <h2>TODO</h2>
