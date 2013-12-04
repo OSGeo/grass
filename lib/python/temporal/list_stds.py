@@ -14,7 +14,7 @@ tgis.register_maps_in_space_time_dataset(type, name, maps)
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -56,6 +56,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
     """
 
     dbif, connected = init_dbif(None)
+    msgr = get_tgis_message_interface()
 
     sp = open_old_space_time_dataset(input, type, dbif)
 
@@ -97,7 +98,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                 if len(maps[0]) > 0:
                     first_time, dummy = maps[0][0].get_temporal_extent_as_tuple()
                 else:
-                    core.warning(_("Empty map list."))
+                    msgr.warning(_("Empty map list."))
                     return
             else:
                 first_time, dummy = maps[0].get_temporal_extent_as_tuple()
@@ -108,7 +109,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                     if len(mymap) > 0:
                         map = mymap[0]
                     else:
-                        core.fatal(_("Empty entry in map list, this should not happen."))
+                        msgr.fatal(_("Empty entry in map list, this should not happen."))
                 else:
                     map = mymap
 

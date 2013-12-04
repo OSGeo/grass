@@ -14,7 +14,7 @@ tgis.register_maps_in_space_time_dataset(type, name, maps)
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -42,6 +42,7 @@ def open_old_space_time_dataset(name, type, dbif=None):
 
     """
     mapset = get_current_mapset()
+    msgr = get_tgis_message_interface()
 
     # Check if the dataset name contains the mapset as well
     if name.find("@") < 0:
@@ -56,13 +57,13 @@ def open_old_space_time_dataset(name, type, dbif=None):
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)
     else:
-        core.fatal(_("Unkown type: %s") % (type))
+        msgr.fatal(_("Unkown type: %s") % (type))
 
     dbif, connected = init_dbif(dbif)
 
     if not sp.is_in_db(dbif):
         dbif.close()
-        core.fatal(_("Space time %(sp)s dataset <%(name)s> no found") %
+        msgr.fatal(_("Space time %(sp)s dataset <%(name)s> no found") %
                      {'sp': sp.get_new_map_instance(None).get_type(),
                       'name': name})
 
@@ -93,13 +94,14 @@ def check_new_space_time_dataset(name, type, dbif=None, overwrite=False):
     #Get the current mapset to create the id of the space time dataset
 
     mapset = get_current_mapset()
+    msgr = get_tgis_message_interface()
 
     if name.find("@") < 0:
         id = name + "@" + mapset
     else:
         n, m = name.split("@")
         if mapset != m:
-            core.fatal(_("Space time datasets can only be created in the "
+            msgr.fatal(_("Space time datasets can only be created in the "
                          "current mapset"))
         id = name
 
@@ -116,7 +118,7 @@ def check_new_space_time_dataset(name, type, dbif=None, overwrite=False):
     dbif, connected = init_dbif(dbif)
 
     if sp.is_in_db(dbif) and overwrite is False:
-        core.fatal(_("Space time %(sp)s dataset <%(name)s> is already in the"
+        msgr.fatal(_("Space time %(sp)s dataset <%(name)s> is already in the"
                       " database. Use the overwrite flag.") % {
                       'sp': sp.get_new_map_instance(None).get_type(),
                       'name': name})
@@ -148,10 +150,11 @@ def open_new_space_time_dataset(name, type, temporaltype, title, descr, semantic
        This function will raise a ScriptError in case of an error.
     """
     dbif, connected = init_dbif(dbif)
+    msgr = get_tgis_message_interface()
     sp =  check_new_space_time_dataset(name, type, dbif, overwrite)
 
     if sp.is_in_db(dbif):
-        core.warning(_("Overwrite space time %(sp)s dataset <%(name)s> and "
+        msgr.warning(_("Overwrite space time %(sp)s dataset <%(name)s> and "
                        "unregister all maps.") % {
                        'sp': sp.get_new_map_instance(None).get_type(),
                        'name': name})
@@ -159,7 +162,7 @@ def open_new_space_time_dataset(name, type, temporaltype, title, descr, semantic
         sp.delete(dbif)
         sp = sp.get_new_instance(id)
 
-    core.verbose(_("Create new space time %s dataset.") %
+    msgr.verbose(_("Create new space time %s dataset.") %
                    sp.get_new_map_instance(None).get_type())
 
     sp.set_initial_values(temporal_type=temporaltype, semantic_type=semantic,
@@ -190,6 +193,7 @@ def check_new_map_dataset(name, layer=None, type="raster",
        This function will raise a ScriptError in case of an error.
     """
     mapset = get_current_mapset()
+    msgr = get_tgis_message_interface()
 
     dbif, connected = init_dbif(dbif)
     map_id = AbstractMapDataset.build_id(name, mapset, layer)
@@ -200,7 +204,7 @@ def check_new_map_dataset(name, layer=None, type="raster",
         if not overwrite:
             if connected:
                 dbif.close()
-            core.fatal(_("Map <%s> is already in temporal database,"
+            msgr.fatal(_("Map <%s> is already in temporal database,"
                          " use overwrite flag to overwrite") % (map_id))
 
     if connected:

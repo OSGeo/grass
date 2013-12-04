@@ -24,7 +24,7 @@ tgis.import_stds(input, output, extrdir, title, descr, location,
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -36,7 +36,6 @@ import os
 import os.path
 import tarfile
 
-import core
 from space_time_datasets import *
 from register import *
 import factory

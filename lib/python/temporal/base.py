@@ -24,7 +24,7 @@ Usage:
 
 @endcode
 
-(C) 2011-2012 by the GRASS Development Team
+(C) 2011-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -254,6 +254,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         self.table = table  # Name of the table, set in the subclass
         self.ident = ident
+        self.msgr = get_tgis_message_interface()
 
     def get_table_name(self):
         """!Return the name of the table in which the internal
@@ -375,7 +376,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if len(row) > 0:
             self.deserialize(row)
         else:
-            core.fatal(_("Object <%s> not found in the temporal database")
+            self.msgr.fatal(_("Object <%s> not found in the temporal database")
                        % self.get_id())
 
         return True
@@ -456,7 +457,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
            @param ident The identifier to be updated, useful for renaming
         """
         if self.ident is None:
-            raise IOError("Missing identifer")
+            self.msgr.fatal(_("Missing identifer"))
 
         sql, args = self.get_update_statement(ident)
         #print sql
@@ -506,7 +507,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
            @param ident The identifier to be updated, useful for renaming
         """
         if self.ident is None:
-            raise IOError("Missing identifer")
+            self.msgr.fatal(_("Missing identifer"))
 
         sql, args = self.get_update_all_statement(ident)
         #print sql
@@ -616,7 +617,7 @@ class DatasetBase(SQLDatabaseInterface):
                 self.set_mapset(mapset)
                 self.set_name(name)
             else:
-                core.fatal(_("Wrong identifier, the mapset is missing"))
+                self.msgr.fatal(_("Wrong identifier, the mapset is missing"))
             if name.find(":") >= 0:
                 name, layer = ident.split(":")
                 self.set_layer(layer)

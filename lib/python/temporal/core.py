@@ -27,7 +27,7 @@ Usage:
 
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2011-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -196,6 +196,7 @@ def get_temporal_dbmi_init_string(kv=None, grassenv=None):
         grassenv = core.gisenv()
 
     global tgis_backend
+    msgr = get_tgis_message_interface()
 
     if tgis_backend == "sqlite":
         # We substitute GRASS variables if they are located in the database string
@@ -208,7 +209,7 @@ def get_temporal_dbmi_init_string(kv=None, grassenv=None):
             string = string.replace("$MAPSET", grassenv["MAPSET"])
             return string
         else:
-            core.fatal(_("Unable to initialize the temporal GIS DBMI "
+            msgr.fatal(_("Unable to initialize the temporal GIS DBMI "
                          "interface. Use t.connect to specify the driver "
                          "and the database string"))
     elif tgis_backend == "pg":
@@ -216,7 +217,7 @@ def get_temporal_dbmi_init_string(kv=None, grassenv=None):
             string = kv["database"]
             return string
     else:
-        core.fatal(_("Unable to initialize the temporal GIS DBMI "
+        msgr.fatal(_("Unable to initialize the temporal GIS DBMI "
                      "interface. Use t.connect to specify the driver "
                      "and the database string"))
 
@@ -276,7 +277,7 @@ def init(raise_on_error=False):
                 raise
             dbmi = psycopg2
         else:
-            core.fatal(_("Unable to initialize the temporal DBMI interface. Use "
+            msgr.fatal(_("Unable to initialize the temporal DBMI interface. Use "
                          "t.connect to specify the driver and the database string"))
             dbmi = sqlite3
     else:
@@ -356,6 +357,7 @@ def create_temporal_database(dbif, database):
     global tgis_db_version
 
     template_path = get_sql_template_path()
+    msgr = get_tgis_message_interface()
 
     # Read all SQL scripts and templates
     map_tables_template_sql = open(os.path.join(
@@ -406,7 +408,7 @@ def create_temporal_database(dbif, database):
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
-    core.message(_("Create temporal database: %s" % (database)))
+    msgr.message(_("Create temporal database: %s" % (database)))
 
     if tgis_backend == "sqlite":
         # We need to create the sqlite3 database path if it does not exists
@@ -499,6 +501,8 @@ class SQLDatabaseInterfaceConnection():
             self.dbmi = sqlite3
         else:
             self.dbmi = psycopg2
+
+        msgr = get_tgis_message_interface()
 
     def rollback(self):
         """
@@ -676,7 +680,7 @@ class SQLDatabaseInterfaceConnection():
         except:
             if connected:
                 self.close()
-            core.error(_("Unable to execute transaction:\n %(sql)s" % \
+            msgr.error(_("Unable to execute transaction:\n %(sql)s" % \
                          {"sql":statement}))
             raise
 

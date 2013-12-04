@@ -12,7 +12,7 @@ for details.
 @author Soeren Gebbert
 """
 from datetime import datetime, date, time, timedelta
-import grass.script.core as core
+from core import *
 import copy
 
 DAY_IN_SECONDS = 86400
@@ -243,8 +243,9 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
             inclist.append(incpart.strip().split(" "))
 
         for inc in inclist:
+            msgr = get_tgis_message_interface()
             if len(inc) < 2:
-                core.error(_("Wrong increment format: %s") % (increment))
+                msgr.error(_("Wrong increment format: %s") % (increment))
                 return None
             if inc[1].find("seconds") >= 0 or inc[1].find("second") >= 0:
                 seconds = sign * mult * int(inc[0])
@@ -261,7 +262,7 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
             elif inc[1].find("years") >= 0 or inc[1].find("year") >= 0:
                 years = sign * mult * int(inc[0])
             else:
-                core.error(_("Wrong increment format: %s") % (increment))
+                msgr.error(_("Wrong increment format: %s") % (increment))
                 return None
 
         return modify_datetime(mydate, years, months, weeks, days, hours, minutes, seconds)
@@ -436,7 +437,8 @@ def adjust_datetime_to_granularity(mydate, granularity):
             elif inc[1].find("years") >= 0 or inc[1].find("year") >= 0:
                 has_years = True
             else:
-                core.error(_("Wrong granularity format: %s") % (granularity))
+                msgr = get_tgis_message_interface()
+                msgr.error(_("Wrong granularity format: %s") % (granularity))
                 return None
 
         if has_seconds:
@@ -746,7 +748,8 @@ def string_to_datetime(time_string):
 
     time_object = check_datetime_string(time_string)
     if not isinstance(time_object, datetime):
-        core.error(time_object)
+        msgr = get_tgis_message_interface()
+        msgr.error(str(time_object))
         return None
 
     return time_object

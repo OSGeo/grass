@@ -14,7 +14,7 @@ tgis.register_maps_in_space_time_dataset(type, name, maps)
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -22,9 +22,7 @@ for details.
 @author Soeren Gebbert
 """
 
-from space_time_datasets import *
 from factory import *
-
 
 def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
                                  separator, method, spatial=False,
@@ -58,6 +56,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
         @return The map matrix or None if nothing found
     """
     mapset = get_current_mapset()
+    msgr = get_tgis_message_interface()
 
     # Make a method list
     if not issubclass(type(method), type([])):
@@ -90,11 +89,11 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
 
     for st in sts:
         if st.is_in_db(dbif) == False:
-            core.fatal(_("Dataset <%s> not found in temporal database") % (st.get_id()))
+            msgr.fatal(_("Dataset <%s> not found in temporal database") % (st.get_id()))
         st.select(dbif)
 
     if sst.is_in_db(dbif) == False:
-        core.fatal(_("Dataset <%s> not found in temporal database") % (sid))
+        msgr.fatal(_("Dataset <%s> not found in temporal database") % (sid))
 
     sst.select(dbif)
 
