@@ -22,7 +22,6 @@ for details.
 @author Soeren Gebbert
 """
 
-from space_time_datasets import *
 from factory import *
 
 ###############################################################################

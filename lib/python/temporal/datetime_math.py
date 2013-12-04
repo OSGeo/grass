@@ -737,8 +737,13 @@ def string_to_datetime(time_string):
         Time zones are not supported
 
         @param time_string The time string to convert
-        @return datetime object or None in case of an error
+        @return datetime object or None in case the string 
+                         could not be converted
     """
+
+    if not isinstance(time_string, str):
+        return None
+
     time_object = check_datetime_string(time_string)
     if not isinstance(time_object, datetime):
         core.error(time_object)

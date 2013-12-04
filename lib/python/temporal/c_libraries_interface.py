@@ -549,11 +549,11 @@ def _convert_timestamp_from_grass(ts):
                 unit = "hours"
                 start = dt1.hour
             elif dt1.minute > 0:
-                unit = "minutess"
-                start = dt1.minutes
-            elif dt1.seconds > 0:
+                unit = "minutes"
+                start = dt1.minute
+            elif dt1.second > 0:
                 unit = "seconds"
-                start = dt1.seconds
+                start = dt1.second
         if count == 2:
             if dt2.year > 0:
                 end = dt2.year
@@ -564,9 +564,9 @@ def _convert_timestamp_from_grass(ts):
             elif dt2.hour > 0:
                 end = dt2.hour
             elif dt2.minute > 0:
-                end = dt2.minutes
-            elif dt2.seconds > 0:
-                end = dt2.seconds
+                end = dt2.minute
+            elif dt2.second > 0:
+                end = dt2.second
         return (start, end, unit)
 
 ###############################################################################
@@ -635,11 +635,11 @@ class CLibrariesInterface(object):
        0
        >>> grass.run_command("v.random", output="test", n=10, overwrite=True, quiet=True)
        0
-       >>> grass.run_command("r.timestamp", map="test", date='12 Mar 1995', overwrite=True, quiet=True)
+       >>> grass.run_command("r.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
        0
-       >>> grass.run_command("r3.timestamp", map="test", date='12 Mar 1995', overwrite=True, quiet=True)
+       >>> grass.run_command("r3.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
        0
-       >>> grass.run_command("v.timestamp", map="test", date='12 Mar 1995', overwrite=True, quiet=True)
+       >>> grass.run_command("v.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
        0
 
 
@@ -658,11 +658,11 @@ class CLibrariesInterface(object):
        ...     if res[0]:
        ...         print str(res[1][0]), str(res[1][0])
        ...         ciface.remove_raster_timestamp("test", tgis.get_current_mapset())
-       1995-03-12 00:00:00 1995-03-12 00:00:00
+       1995-03-12 10:34:40 1995-03-12 10:34:40
        1
        >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
        False
-       >>> ciface.write_raster_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999")
+       >>> ciface.write_raster_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
        1
        >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
        True
@@ -682,11 +682,11 @@ class CLibrariesInterface(object):
        ...     if res[0]:
        ...         print str(res[1][0]), str(res[1][0])
        ...         ciface.remove_raster3d_timestamp("test", tgis.get_current_mapset())
-       1995-03-12 00:00:00 1995-03-12 00:00:00
+       1995-03-12 10:34:40 1995-03-12 10:34:40
        1
        >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
        False
-       >>> ciface.write_raster3d_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999")
+       >>> ciface.write_raster3d_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
        1
        >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
        True
@@ -707,11 +707,11 @@ class CLibrariesInterface(object):
        ...     if res[0]:
        ...         print str(res[1][0]), str(res[1][0])
        ...         ciface.remove_vector_timestamp("test", tgis.get_current_mapset())
-       1995-03-12 00:00:00 1995-03-12 00:00:00
+       1995-03-12 10:34:40 1995-03-12 10:34:40
        1
        >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
        False
-       >>> ciface.write_vector_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999")
+       >>> ciface.write_vector_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
        1
        >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
        True
