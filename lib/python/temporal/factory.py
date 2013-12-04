@@ -14,7 +14,7 @@ tgis.register_maps_in_space_time_dataset(type, name, maps)
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -47,7 +47,8 @@ def dataset_factory(type, id):
     elif type == "vect" or type == "vector":
         sp = VectorDataset(id)
     else:
-        core.error(_("Unknown dataset type: %s") % type)
+        msgr = get_tgis_message_interface()
+        msgr.error(_("Unknown dataset type: %s") % type)
         return None
 
     return sp

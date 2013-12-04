@@ -15,7 +15,7 @@ tgis.aggregate_raster_maps(dataset, mapset, inputs, base, start, end,
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -158,7 +158,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     if ret != 0:
         dbif.close()
-        core.fatal(_("Error while r.series computation"))
+        msgr.fatal(_("Error while r.series computation"))
 
     # Read the raster map data
     new_map.load()

@@ -6,7 +6,7 @@
 Temporal GIS related functions to be used in temporal GIS Python library package.
 
 
-(C) 2011-2012 by the GRASS Development Team
+(C) 2011-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -380,7 +380,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         """
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database."
+            self.msgr.fatal(_("Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 
@@ -415,7 +415,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         """
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
+            self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                                  {"ds":self.get_id(), "type":self.get_type()})
 
@@ -453,7 +453,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         """
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
+            self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 

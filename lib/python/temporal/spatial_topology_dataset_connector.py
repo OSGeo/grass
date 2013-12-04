@@ -10,7 +10,7 @@ Usage:
 >>> import grass.temporal as tgis
 >>> tmr = tgis.SpatialTopologyDatasetConnector()
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.

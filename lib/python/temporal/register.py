@@ -14,7 +14,7 @@ tgis.register_maps_in_space_time_dataset(type, name, maps)
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -390,12 +390,12 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
                     msgr.fatal(_("Error in increment computation"))
 
         if map.get_layer():
-            msgr.verbose(_("Set absolute valid time for map <%(id)s> with "
+            msgr.debug(1, _("Set absolute valid time for map <%(id)s> with "
                            "layer %(layer)s to %(start)s - %(end)s") %
                          {'id': map.get_map_id(), 'layer': map.get_layer(),
                           'start': str(start_time), 'end': str(end_time)})
         else:
-            msgr.verbose(_("Set absolute valid time for map <%s> to %s - %s") %
+            msgr.debug(1, _("Set absolute valid time for map <%s> to %s - %s") %
                          (map.get_map_id(), str(start_time), str(end_time)))
 
         map.set_absolute_time(start_time, end_time, None)
@@ -412,12 +412,12 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
                 end_time = start_time + int(increment)
 
         if map.get_layer():
-            msgr.verbose(_("Set relative valid time for map <%s> with layer %s "
+            msgr.debug(1, _("Set relative valid time for map <%s> with layer %s "
                            "to %i - %s with unit %s") %
                          (map.get_map_id(), map.get_layer(), start_time,
                           str(end_time), unit))
         else:
-            msgr.verbose(_("Set relative valid time for map <%s> to %i - %s "
+            msgr.debug(1, _("Set relative valid time for map <%s> to %i - %s "
                            "with unit %s") % (map.get_map_id(), start_time,
                                               str(end_time), unit))
 

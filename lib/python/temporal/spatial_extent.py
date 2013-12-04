@@ -31,7 +31,7 @@ Usage:
 
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -122,7 +122,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """
 
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute "
+            self.msgr.error(_("Projections are different. Unable to compute "
                          "overlapping_2d for spatial extents"))
             return False
 
@@ -533,7 +533,7 @@ class SpatialExtent(SQLDatabaseInterface):
         @return True or False
         """
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute "
+            self.msgr.error(_("Projections are different. Unable to compute "
                          "is_in_2d for spatial extents"))
             return False
 
@@ -673,7 +673,7 @@ class SpatialExtent(SQLDatabaseInterface):
         @return True or False
         """
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute "
+            self.msgr.error(_("Projections are different. Unable to compute "
                          "equivalent_2d for spatial extents"))
             return False
 
@@ -780,7 +780,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """
 
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute cover_2d for spatial extents"))
+            self.msgr.error(_("Projections are different. Unable to compute cover_2d for spatial extents"))
             return False
 
         # Exclude equivalent_2d
@@ -851,7 +851,7 @@ class SpatialExtent(SQLDatabaseInterface):
         @return True or False
         """
         if self.get_projection() != extent.get_projection():
-            core.error(_("Projections are different. Unable to compute "
+            self.msgr.error(_("Projections are different. Unable to compute "
                          "cover for spatial extents"))
             return False
 
@@ -1701,7 +1701,7 @@ class SpatialExtent(SQLDatabaseInterface):
            (top == bottom or top - bottom = 1) the area is returned"""
 
         if self.get_projection() == "LL":
-            core.error(_("Volume computation is not supported "
+            self.msgr.error(_("Volume computation is not supported "
                          "for LL projections"))
 
         area = self.get_area()
@@ -1719,7 +1719,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """!Compute the area of the extent, extent in z direction is ignored"""
 
         if self.get_projection() == "LL":
-            core.error(_("Area computation is not supported "
+            self.msgr.error(_("Area computation is not supported "
                          "for LL projections"))
 
         bbox = self.get_spatial_extent_as_tuple()

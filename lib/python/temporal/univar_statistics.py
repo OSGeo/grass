@@ -15,7 +15,7 @@ tgis.print_gridded_dataset_univar_statistics(
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -23,8 +23,6 @@ for details.
 @author Soeren Gebbert
 """
 
-from space_time_datasets import *
-from factory import *
 from open_stds import *
 
 ###############################################################################

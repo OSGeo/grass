@@ -4,7 +4,7 @@
 
 Temporal GIS related functions to be used in Python scripts.
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -48,12 +48,12 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
     """
 
     # Check the parameters
+    msgr = get_tgis_message_interface()
 
     if expression and not base:
-        core.fatal(_("You need to specify the base name of new created maps"))
+        msgr.fatal(_("You need to specify the base name of new created maps"))
 
     mapset = get_current_mapset()
-    msgr = get_tgis_message_interface()
 
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
@@ -72,7 +72,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
     if rows:
         num_rows = len(rows)
 
-        core.percent(0, num_rows, 1)
+        msgr.percent(0, num_rows, 1)
 
         # Run the mapcalc expression
         if expression:
@@ -84,7 +84,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                 count += 1
 
                 if count % 10 == 0:
-                    core.percent(count, num_rows, 1)
+                    msgr.percent(count, num_rows, 1)
 
                 map_name = "%s_%i" % (base, count)
 
@@ -155,7 +155,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
                     if exitcodes != 0:
                         dbif.close()
-                        core.fatal(_("Error while computation"))
+                        msgr.fatal(_("Error while computation"))
 
                     # Empty process list
                     proc_list = []
@@ -163,7 +163,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                 # Store the new maps
                 new_maps[row["id"]] = new_map
 
-        core.percent(0, num_rows, 1)
+        msgr.percent(0, num_rows, 1)
 
         temporal_type, semantic_type, title, description = sp.get_initial_values()
         new_sp = open_new_space_time_dataset(output, type,
@@ -181,7 +181,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
             count += 1
 
             if count % 10 == 0:
-                core.percent(count, num_rows, 1)
+                msgr.percent(count, num_rows, 1)
 
             old_map = sp.get_new_map_instance(row["id"])
             old_map.select(dbif)
@@ -227,7 +227,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
         # Update the spatio-temporal extent and the metadata table entries
         new_sp.update_from_registered_maps(dbif)
 
-        core.percent(num_rows, num_rows, 1)
+        msgr.percent(num_rows, num_rows, 1)
 
         # Remove empty maps
         if len(empty_maps) > 0:

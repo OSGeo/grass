@@ -6,7 +6,7 @@
 Temporal GIS related functions to be used in temporal GIS Python
 library package.
 
-(C) 2011-2012 by the GRASS Development Team
+(C) 2011-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -19,7 +19,6 @@ from temporal_granularity import *
 from spatio_temporal_relationships import *
 
 ###############################################################################
-
 
 class AbstractSpaceTimeDataset(AbstractDataset):
     """!Abstract space time dataset class
@@ -151,7 +150,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         elif temporal_type == "relative":
             self.base.set_ttype("relative")
         else:
-            core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
+            self.msgr.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
         self.base.set_semantic_type(semantic_type)
         self.metadata.set_title(title)
@@ -266,14 +265,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         check = check_granularity_string(granularity, temporal_type)
         if not check:
-            core.fatal(_("Wrong granularity: \"%s\"") % str(granularity))
+            self.msgr.fatal(_("Wrong granularity: \"%s\"") % str(granularity))
 
         if temporal_type == "absolute":
             self.base.set_ttype("absolute")
         elif temporal_type == "relative":
             self.base.set_ttype("relative")
         else:
-            core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
+            self.msgr.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
         self.temporal_extent.set_granularity(granularity)
 
@@ -294,7 +293,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if temporal_type == "relative":
             if not self.check_relative_time_unit(unit):
-                core.fatal(_("Unsupported temporal unit: %s") % (unit))
+                self.msgr.fatal(_("Unsupported temporal unit: %s") % (unit))
             self.relative_time.set_unit(unit)
 
     def get_map_time(self):
@@ -977,7 +976,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         check = check_granularity_string(gran, self.get_temporal_type())
         if not check:
-            core.fatal(_("Wrong granularity: \"%s\"") % str(gran))
+            self.msgr.fatal(_("Wrong granularity: \"%s\"") % str(gran))
 
         start, end = self.get_temporal_extent_as_tuple()
 
@@ -1469,7 +1468,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             return None
 
         if not check_granularity_string(gran, maps[-1].get_temporal_type()):
-            core.error(_("Wrong granularity format: %s" % (gran)))
+            self.msgr.error(_("Wrong granularity format: %s" % (gran)))
             return None
 
         for map in maps:
@@ -1497,7 +1496,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         """
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database."
+            self.msgr.fatal(_("Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database."
             " The mapset of the dataset does not match the current mapset")%\
             ({"ds":self.get_id()}, {"type":self.get_type()}))
 
@@ -1664,7 +1663,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database."
+            self.msgr.fatal(_("Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database."
             " The mapset of the dataset does not match the current mapset")%\
             ({"ds":self.get_id()}, {"type":self.get_type()}))
 
@@ -1764,7 +1763,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database."
+            self.msgr.fatal(_("Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database."
             " The mapset of the dataset does not match the current mapset")%\
             ({"ds":self.get_id()}, {"type":self.get_type()}))
 
@@ -1831,7 +1830,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      self.get_id()))
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database."
+            self.msgr.fatal(_("Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 
@@ -1842,7 +1841,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.metadata.select(dbif)
 
         if self.get_map_register() is not None:
-            self.msgr.verbose(_("Drop map register table: %s") % (
+            self.msgr.debug(1, _("Drop map register table: %s") % (
                 self.get_map_register()))
             rows = self.get_registered_maps("id", None, None, dbif)
             # Unregister each registered map in the table
@@ -1889,7 +1888,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to register map in dataset <%(ds)s> of type %(type)s."
+            self.msgr.fatal(_("Unable to register map in dataset <%(ds)s> of type %(type)s."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 
@@ -1897,7 +1896,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if map.is_in_db(dbif) == False:
             dbif.close()
-            core.fatal(_("Only maps with absolute or relative valid time can "
+            self.msgr.fatal(_("Only maps with absolute or relative valid time can "
                          "be registered"))
 
         if map.get_layer():
@@ -1917,10 +1916,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if not map.check_for_correct_time():
             if map.get_layer():
-                core.fatal(_("Map <%(id)s> with layer %(l)s has invalid time")
+                self.msgr.fatal(_("Map <%(id)s> with layer %(l)s has invalid time")
                            % {'id': map.get_map_id(), 'l': map.get_layer()})
             else:
-                core.fatal(_("Map <%s> has invalid time") % (map.get_map_id()))
+                self.msgr.fatal(_("Map <%s> has invalid time") % (map.get_map_id()))
 
         map_id = map.base.get_id()
         map_name = map.base.get_name()
@@ -1943,12 +1942,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Check temporal types
         if stds_ttype != map_ttype:
             if map.get_layer():
-                core.fatal(_("Temporal type of space time dataset <%(id)s> and"
+                self.msgr.fatal(_("Temporal type of space time dataset <%(id)s> and"
                              " map <%(map)s> with layer %(l)s are different") \
                              % {'id': self.get_id(), 'map': map.get_map_id(),
                                 'l': map.get_layer()})
             else:
-                core.fatal(_("Temporal type of space time dataset <%(id)s> and"
+                self.msgr.fatal(_("Temporal type of space time dataset <%(id)s> and"
                              " map <%(map)s> are different") % {
                              'id': self.get_id(), 'map': map.get_map_id()})
 
@@ -1962,7 +1961,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             statement += self.relative_time.get_update_all_statement_mogrified(
                 dbif)
 
-            self.msgr.verbose(_("Set temporal unit for space time %s dataset "
+            self.msgr.debug(1, _("Set temporal unit for space time %s dataset "
                            "<%s> to %s") % (map.get_type(), self.get_id(),
                                             map_rel_time_unit))
 
@@ -1971,19 +1970,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Check the relative time unit
         if self.is_time_relative() and (stds_rel_time_unit != map_rel_time_unit):
             if map.get_layer():
-                core.fatal(_("Relative time units of space time dataset "
+                self.msgr.fatal(_("Relative time units of space time dataset "
                              "<%(id)s> and map <%(map)s> with layer %(l)s are"
                              " different") % {'id': self.get_id(),
                                               'map': map.get_map_id(),
                                               'l': map.get_layer()})
             else:
-                core.fatal(_("Relative time units of space time dataset "
+                self.msgr.fatal(_("Relative time units of space time dataset "
                              "<%(id)s> and map <%(map)s> are different") % \
                              {'id': self.get_id(), 'map': map.get_map_id()})
 
         if stds_mapset != map_mapset:
             dbif.close()
-            core.fatal(_("Only maps from the same mapset can be registered"))
+            self.msgr.fatal(_("Only maps from the same mapset can be registered"))
 
         # Check if map is already registered
         if stds_register_table is not None:
@@ -2043,12 +2042,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             statement += map.metadata.get_update_statement_mogrified(dbif)
 
             if map.get_layer():
-                self.msgr.verbose(_("Created register table <%s> for "
+                self.msgr.debug(1, _("Created register table <%s> for "
                                "%s map <%s> with layer %s") %
                                 (map_register_table, map.get_type(),
                                  map.get_map_id(), map.get_layer()))
             else:
-                self.msgr.verbose(_("Created register table <%s> for %s map <%s>") %
+                self.msgr.debug(1, _("Created register table <%s> for %s map <%s>") %
                                 (map_register_table, map.get_type(),
                                  map.get_map_id()))
 
@@ -2074,7 +2073,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.set_map_register(stds_register_table)
             statement += self.metadata.get_update_statement_mogrified(dbif)
 
-            self.msgr.verbose(_("Created register table <%s> for space "
+            self.msgr.debug(1, _("Created register table <%s> for space "
                            "time %s  dataset <%s>") %
                           (stds_register_table, map.get_type(), self.get_id()))
 
@@ -2147,7 +2146,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to unregister map from dataset <%(ds)s> of type %(type)s in the temporal database."
+            self.msgr.fatal(_("Unable to unregister map from dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 
@@ -2245,7 +2244,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if self.get_mapset() != get_current_mapset():
-            core.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
+            self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 
