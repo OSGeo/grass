@@ -72,6 +72,7 @@ class Filters(object):
         self._where = None
         self._orderby = None
         self._limit = None
+        self._groupby = None
 
     def __repr__(self):
         return "Filters(%r)" % self.get_sql()
@@ -103,6 +104,13 @@ class Filters(object):
             self._limit = 'LIMIT {number}'.format(number=number)
         return self
 
+    def group_by(self, groupby):
+        """Create the group by condition"""
+        if not isinstance(groupby, str):
+            groupby = ', '.join(groupby)
+        self._groupby = 'GROUP BY {groupby}'.format(groupby=groupby)
+        return self
+
     def get_sql(self):
         """Return the SQL query"""
         sql_list = list()
@@ -112,6 +120,8 @@ class Filters(object):
 
         if self._where is not None:
             sql_list.append(self._where)
+        if self._groupby is not None:
+            sql_list.append(self._groupby)
         if self._orderby is not None:
             sql_list.append(self._orderby)
         if self._limit is not None:
@@ -124,6 +134,7 @@ class Filters(object):
         self._where = None
         self._orderby = None
         self._limit = None
+        self._groupby = None
 
 
 class Columns(object):
