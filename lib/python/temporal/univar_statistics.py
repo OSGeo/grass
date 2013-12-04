@@ -25,7 +25,7 @@ for details.
 
 from space_time_datasets import *
 from factory import *
-from open import *
+from open_stds import *
 
 ###############################################################################
 

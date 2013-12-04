@@ -13,7 +13,7 @@ for details.
 """
 
 from space_time_datasets import *
-from open import *
+from open_stds import *
 from multiprocessing import Process
 
 ############################################################################

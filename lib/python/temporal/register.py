@@ -22,9 +22,7 @@ for details.
 @author Soeren Gebbert
 """
 
-from space_time_datasets import *
-from factory import *
-from open import *
+from open_stds import *
 
 ###############################################################################
 
@@ -40,29 +38,6 @@ def register_maps_in_space_time_dataset(
 
        It takes care of the correct update of the space time datasets from all
        registered maps.
-
-       @code
-
-        >>> import grass.script as grass
-        >>> import grass.temporal as tgis
-        >>> grass.use_temp_region()
-        >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
-        ... t=1.0, b=0.0, res=10.0)
-        0
-        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True, expression="register_map_1 = 1")
-        0
-        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True, expression="register_map_2 = 2")
-        0
-        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True, expression="register_map_3 = 3")
-        0
-        >>> grass.run_command("r.mapcalc", overwrite=True, quiet=True, expression="register_map_4 = 4")
-        0
-        >>> tgis.init(True)
-        >>> tgis.register_maps_in_space_time_dataset(type="strds", name=None, 
-        ...               maps="register_map_1,register_map_2,register_map_3,register_map_4",
-        ...               start="2001-01-01", increment="1 day", interval=True)
-
-       @endcode
 
        @param type The type of the maps rast, rast3d or vect
        @param name The name of the space time dataset. Maps will be registered in the
