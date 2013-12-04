@@ -191,7 +191,7 @@ class Layer(object):
 
         self._mapTypes = ['rast', 'vect', 'rast3d']
         self._internalTypes = {'rast': 'cell',
-                               'vect': 'vector',
+                               'vect': 'vect',
                                'rast3d': 'grid3'}
 
     def GetName(self):
