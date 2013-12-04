@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *start_opt, *select_opt, *stop_opt, *output_opt,
-      *width_opt, *height_opt, *bgcolor_opt;
+        *width_opt, *height_opt, *bgcolor_opt, *res_opt;
     struct Flag *list_flag, *selected_flag, *select_flag, *release_flag, 
         *cmd_flag, *truecolor_flag, *update_flag;
     
@@ -63,17 +63,27 @@ int main(int argc, char *argv[])
 
     width_opt = G_define_option();
     width_opt->key = "width";
-    width_opt->description = _("Width for display monitor if not set by GRASS_WIDTH");
+    width_opt->label = _("Width for display monitor if not set by GRASS_WIDTH");
+    width_opt->description = _("Default value: 640");
     width_opt->type = TYPE_INTEGER;
     width_opt->key_desc = "value";
     width_opt->guisection = _("Settings");
 
     height_opt = G_define_option();
     height_opt->key = "height";
-    height_opt->description = _("Height for display monitor if not set by GRASS_HEIGHT");
+    height_opt->label = _("Height for display monitor if not set by GRASS_HEIGHT");
+    height_opt->description = _("Default value: 480");
     height_opt->type = TYPE_INTEGER;
     height_opt->key_desc = "value";
     height_opt->guisection = _("Settings");
+
+    res_opt = G_define_option();
+    res_opt->key = "resolution";
+    res_opt->label = _("Dimensions of display monitor versus current size");
+    res_opt->description = _("Example: resolution=2 enlarge display monitor twice to 1280x960"); 
+    res_opt->type = TYPE_INTEGER;
+    res_opt->key_desc = "value";
+    res_opt->guisection = _("Settings");
 
     bgcolor_opt = G_define_standard_option(G_OPT_C_BG);
     bgcolor_opt->guisection = _("Settings");
@@ -170,8 +180,20 @@ int main(int argc, char *argv[])
 	G_warning(_("Option <%s> ignored"), output_opt->key);
     
     if (start_opt->answer) {
+        int width, height;
+
+        width = width_opt->answer ? atoi(width_opt->answer) : 640;
+        height = height_opt->answer ? atoi(height_opt->answer) : 480;
+        if (res_opt->answer) {
+            int res;
+            
+            res = atoi(res_opt->answer);
+            width *= res;
+            height *= res;
+        }
+
 	ret = start_mon(start_opt->answer, output_opt->answer, !select_flag->answer,
-			width_opt->answer, height_opt->answer, bgcolor_opt->answer,
+			width, height, bgcolor_opt->answer,
 			!truecolor_flag->answer);
         if (output_opt->answer && !update_flag->answer) {
             if (D_open_driver() != 0)

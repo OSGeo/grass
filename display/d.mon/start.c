@@ -8,7 +8,7 @@
 
 static void start(const char *, const char *);
 static void start_wx(const char *, const char *, const char *,
-		     const char *, const char *, const char *);
+		     const char *, int, int);
 
 /* start file-based monitor */
 void start(const char *name, const char *output)
@@ -26,10 +26,10 @@ void start(const char *name, const char *output)
 /* start wxGUI display monitor */
 void start_wx(const char *name, const char *tempfile,
 	      const char *env_value, const char *cmd_value,
-	      const char *width, const char *height)
+	      int width, int height)
 {
     char progname[GPATH_MAX];
-    char *env_name, *map_value;
+    char *env_name, *map_value, str_width[1024], str_height[1024];
 
     env_name = NULL;
     G_asprintf(&env_name, "MONITOR_%s_MAPFILE", name);
@@ -40,12 +40,22 @@ void start_wx(const char *name, const char *tempfile,
     G_debug(3, "       mapfile = %s", map_value);
 
     sprintf(progname, "%s/etc/gui/wxpython/mapdisp/main.py", G_gisbase());
+    if (width > 0)
+        sprintf(str_width, "%d", width);
+    else
+        str_width[0] = '\0';
+    if (height > 0)
+        sprintf(str_height, "%d", height);
+    else
+        str_height[0] = '\0';
+
     G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
-	       name, map_value, cmd_value, env_value, width ? width : "", height ? height : "", SF_BACKGROUND, NULL);
+	       name, map_value, cmd_value, env_value,
+               str_width, str_height, SF_BACKGROUND, NULL);
 }
 
 int start_mon(const char *name, const char *output, int select,
-	      const char *width, const char *height, const char *bgcolor,
+	      int width, int height, const char *bgcolor,
 	      int truecolor)
 {
     const char *curr_mon;
@@ -70,11 +80,11 @@ int start_mon(const char *name, const char *output, int select,
     sprintf(buf, "GRASS_PNG_READ=TRUE\n");
     write(env_fd, buf, strlen(buf));
     if (width) {
-	sprintf(buf, "GRASS_WIDTH=%s\n", width);
+	sprintf(buf, "GRASS_WIDTH=%d\n", width);
 	write(env_fd, buf, strlen(buf));
     }
     if (height) {
-	sprintf(buf, "GRASS_HEIGHT=%s\n", height);
+	sprintf(buf, "GRASS_HEIGHT=%d\n", height);
 	write(env_fd, buf, strlen(buf));
     }
     if (bgcolor) {
