@@ -718,6 +718,9 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
     case (SF_POLYGON25D):
         geom_type = "POLYGONZ";
         break;
+    case (SF_UNKNOWN):
+        geom_type = "GEOMETRY";
+        break;
     default:
         G_warning(_("Unsupported feature type %d"), pg_info->feature_type);
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -1065,6 +1068,7 @@ int create_pg_layer(struct Map_info *Map, int type)
             pg_info->conninfo, pg_info->table_name, type);
 
     /* determine geometry type */
+    
     switch (type) {
     case GV_POINT:
         pg_info->feature_type = SF_POINT;
@@ -1078,7 +1082,10 @@ int create_pg_layer(struct Map_info *Map, int type)
     case GV_FACE:
         pg_info->feature_type = SF_POLYGON25D;
         break;
-    default:
+    case -2:
+        pg_info->feature_type = SF_UNKNOWN;
+        break;
+    default: 
         G_warning(_("Unsupported geometry type (%d)"), type);
         return -1;
     }
@@ -1149,6 +1156,8 @@ char *get_sftype(SF_FeatureType sftype)
         return "LINE";
     else if (sftype == SF_POLYGON)
         return "POLYGON";
+    else if (sftype == SF_UNKNOWN || sftype == SF_GEOMETRYCOLLECTION)
+        return "COLLECTION";
     else
         G_warning(_("Unsupported feature type %d"), sftype);
     
