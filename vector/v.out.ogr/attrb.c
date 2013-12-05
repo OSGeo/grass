@@ -29,7 +29,8 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
     /* Reset */
     if (!doatt) {
 	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, GV_KEY_COLUMN);
-	OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
+        if (ogrfieldnum > -1)
+            OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
 	/* doatt reset moved into have cat loop as the table needs to be
 	   open to know the OGR field ID. Hopefully this has no ill consequences */
     }
