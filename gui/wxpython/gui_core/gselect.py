@@ -809,7 +809,6 @@ class LayerSelect(wx.ComboBox):
 
         if vector:
             layers = GetVectorNumberOfLayers(vector)
-
         elif dsn:
             ret = RunCommand('v.in.ogr',
                              read = True,
@@ -916,7 +915,8 @@ class ColumnSelect(wx.combo.ComboCtrl):
                  param = None, **kwargs):
         self.defaultValue = value
         self.param = param
-        
+        self.columns = []
+
         wx.combo.ComboCtrl.__init__(self, parent, id, size = size, **kwargs)
         self.GetChildren()[0].SetName("ColumnSelect")
         self.GetChildren()[0].type = type
@@ -928,13 +928,20 @@ class ColumnSelect(wx.combo.ComboCtrl):
         if vector:
             self.InsertColumns(vector, layer)
         self.GetChildren()[0].Bind(wx.EVT_KEY_UP, self.OnKeyUp)
-     
+   
+    def GetColumns(self):
+        return self.columns
+
     def OnKeyUp(self, event):
         """!Shows popupwindow if down arrow key is released"""
         if event.GetKeyCode() == wx.WXK_DOWN and not self.IsPopupShown():
             self.ShowPopup() 
         else:
             event.Skip()
+
+    def Clear(self):
+        self.tcp.DeleteAllItems()
+        self.SetValue('')
 
     def InsertColumns(self, vector, layer, excludeKey = False, excludeCols = None, type = None, dbInfo = None):
         """!Insert columns for a vector attribute table into the columns combobox
@@ -947,7 +954,7 @@ class ColumnSelect(wx.combo.ComboCtrl):
         """
         if not dbInfo:
             dbInfo = VectorDBInfo(vector)
-        
+
         try:
             try:
                 layer = int(layer)
@@ -957,35 +964,35 @@ class ColumnSelect(wx.combo.ComboCtrl):
             table = dbInfo.GetTable(layer)
             columnchoices = dbInfo.GetTableDesc(table)
             keyColumn = dbInfo.GetKeyColumn(layer)
-            columns = len(columnchoices.keys()) * ['']
+            self.columns = len(columnchoices.keys()) * ['']
             for key, val in columnchoices.iteritems():
-                columns[val['index']] = key
+                self.columns[val['index']] = key
             if excludeKey: # exclude key column
-                columns.remove(keyColumn)
+                self.columns.remove(keyColumn)
             if excludeCols: # exclude key column
                 for key in columnchoices.iterkeys():
                     if key in excludeCols:
-                        columns.remove(key)
+                        self.columns.remove(key)
             if type: # only selected column types
                 for key, value in columnchoices.iteritems():
                     if value['type'] not in type:
                         try:
-                            columns.remove(key)
+                            self.columns.remove(key)
                         except ValueError:
                             pass
         except (KeyError, ValueError):
-            columns = list()
+            self.columns[:] = []   
 
         # update list
         self.tcp.DeleteAllItems()
-        for col in columns:
+        for col in self.columns:
             self.tcp.AddItem(col)
 
         self.SetValue(self.defaultValue)
         
         if self.param:
             value = self.param.get('value', '')
-            if value != '' and value in columns:
+            if value != '' and value in self.columns:
                 self.SetValue(value)
         
     def InsertTableColumns(self, table, driver=None, database=None):
@@ -995,7 +1002,7 @@ class ColumnSelect(wx.combo.ComboCtrl):
         @param driver driver name
         @param database database name
         """
-        columns = list()
+        self.columns[:] = []
         
         ret = RunCommand('db.columns',
                          read = True,
@@ -1004,17 +1011,17 @@ class ColumnSelect(wx.combo.ComboCtrl):
                          table = table)
         
         if ret:
-            columns = ret.splitlines()
+            self.columns = ret.splitlines()
         
         # update list
         self.tcp.DeleteAllItems()
         self.SetValue(self.defaultValue)
         
-        for col in columns:
+        for col in self.columns:
             self.tcp.AddItem(col)
         if self.param:
             value = self.param.get('value', '')
-            if value != '' and value in columns:
+            if value != '' and value in self.columns:
                 self.SetValue(value)
 
 class DbaseSelect(wx.lib.filebrowsebutton.DirBrowseButton):

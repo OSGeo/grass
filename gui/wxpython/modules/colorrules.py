@@ -967,9 +967,10 @@ class VectorColorTable(ColorTable):
         
         # additional bindings for vector color management
         self.Bind(wx.EVT_COMBOBOX, self.OnLayerSelection, self.layerSelect)
-        self.Bind(wx.EVT_COMBOBOX, self.OnSourceColumnSelection, self.sourceColumn)
-        self.Bind(wx.EVT_COMBOBOX, self.OnFromColSelection, self.fromColumn)
-        self.Bind(wx.EVT_COMBOBOX, self.OnToColSelection, self.toColumn)
+
+        self.sourceColumn.Bind(wx.EVT_TEXT, self.OnSourceColumnSelection)
+        self.fromColumn.Bind(wx.EVT_TEXT, self.OnFromColSelection)
+        self.toColumn.Bind(wx.EVT_TEXT, self.OnToColSelection)
         self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.addColumn)
         
         self._initLayer()
@@ -1148,8 +1149,8 @@ class VectorColorTable(ColorTable):
     def OnCheckColumn(self, event):
         """!Use color column instead of color table"""
         if self.useColumn.GetValue():
-            self.properties['loadColumn'] = self.fromColumn.GetStringSelection()
-            self.properties['storeColumn'] = self.toColumn.GetStringSelection()
+            self.properties['loadColumn'] = self.fromColumn.GetValue()
+            self.properties['storeColumn'] = self.toColumn.GetValue()
             self.fromColumn.Enable(True)
             self.toColumn.Enable(True)
             self.colorTable = False
@@ -1219,6 +1220,7 @@ class VectorColorTable(ColorTable):
         # check for db connection
         self.dbInfo = VectorDBInfo(self.inmap)
         enable = True
+
         if not len(self.dbInfo.layers): # no connection
             if not (self.version7 and self.attributeType == 'color'): # otherwise it doesn't matter
                 wx.CallAfter(self.NoConnection, self.inmap)
@@ -1305,8 +1307,8 @@ class VectorColorTable(ColorTable):
         self.sourceColumn.InsertColumns(vector = self.inmap, layer = vlayer,
                                         type = ['integer', 'double precision'], dbInfo = self.dbInfo,
                                         excludeCols = ['tmpColumn'])
-        self.sourceColumn.SetStringSelection('cat')
-        self.properties['sourceColumn'] = self.sourceColumn.GetString(0)
+        self.sourceColumn.SetValue('cat')
+        self.properties['sourceColumn'] = self.sourceColumn.GetValue()
         
         if self.attributeType == 'color':
             type = ['character']
@@ -1317,12 +1319,16 @@ class VectorColorTable(ColorTable):
         self.toColumn.InsertColumns(vector = self.inmap, layer = vlayer, type = type,
                                     dbInfo = self.dbInfo, excludeCols = ['tmpColumn'])
         
-        found = self.fromColumn.FindString(self.columnsProp[self.attributeType]['name'])
+        v = self.columnsProp[self.attributeType]['name']
+        found = False
+        if v in self.fromColumn.GetColumns():
+            found = True
+
         if found != wx.NOT_FOUND:
-            self.fromColumn.SetSelection(found)
-            self.toColumn.SetSelection(found)
-            self.properties['loadColumn'] = self.fromColumn.GetString(found)
-            self.properties['storeColumn'] = self.toColumn.GetString(found)
+            self.fromColumn.SetValue(v)
+            self.toColumn.SetValue(v)
+            self.properties['loadColumn'] = v
+            self.properties['storeColumn'] = v
         else:
             self.properties['loadColumn'] = ''
             self.properties['storeColumn'] = ''
@@ -1338,7 +1344,7 @@ class VectorColorTable(ColorTable):
     
     def OnAddColumn(self, event):
         """!Add GRASS(RGB,SIZE,WIDTH) column if it doesn't exist"""
-        if self.columnsProp[self.attributeType]['name'] not in self.fromColumn.GetItems():
+        if self.columnsProp[self.attributeType]['name'] not in self.fromColumn.GetColumns():
             if self.version7:
                 modul = 'v.db.addcolumn'
             else:
@@ -1350,8 +1356,8 @@ class VectorColorTable(ColorTable):
                                                   self.columnsProp[self.attributeType]['type1']))
             self.toColumn.InsertColumns(self.inmap, self.properties['layer'],
                                         type = self.columnsProp[self.attributeType]['type2'])
-            self.toColumn.SetStringSelection(self.columnsProp[self.attributeType]['name'])
-            self.properties['storeColumn'] = self.toColumn.GetStringSelection()
+            self.toColumn.SetValue(self.columnsProp[self.attributeType]['name'])
+            self.properties['storeColumn'] = self.toColumn.GetValue()
             
             self.LoadTable()
         else:
