@@ -356,6 +356,8 @@ int Vect__open_topo_pg(struct Map_info *Map, int head_only, int update)
     if (update)
         Vect__clean_grass_db_topo(pg_info);
 
+    plus->cidx_up_to_date = TRUE;  /* category index built from topo */
+
     return ret;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
