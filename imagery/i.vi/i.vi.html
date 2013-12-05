@@ -122,10 +122,16 @@ evi2( redchan, nirchan )
 
 <p>
 GARI: green atmospherically resistant vegetation index
+<p>
+The formula was actually defined:
+Gitelson, Anatoly A.; Kaufman, Yoram J.; Merzlyak, Mark N. (1996)
+Use of a green channel in remote sensing of global vegetation from EOS-
+MODIS, Remote Sensing of Environment 58 (3), 289-298.
+<a href="http://dx.doi.org/10.1016/s0034-4257(96)00072-7">doi:10.1016/s0034-4257(96)00072-7</a>
 
 <div class="code"><pre>
 GARI = ( nirchan - (greenchan - (bluechan - redchan))) / 
-( nirchan - (greenchan + (bluechan - redchan)))
+( nirchan + (greenchan - (bluechan - redchan)))
 gari( redchan, nirchan, bluechan, greenchan )
 </pre></div>
 
