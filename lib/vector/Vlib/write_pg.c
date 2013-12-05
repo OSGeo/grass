@@ -1960,8 +1960,7 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
     }
 
     stmt = NULL;
-    if (Fi && strcmp(pg_info->table_name, Fi->table) != 0 && /* skip PostGIS Topology in write mode */
-        cat > -1) {
+    if (Fi && cat > -1) {
         /* write attributes (simple features and topology elements) */
         int col, ncol, more;
         int sqltype, ctype, is_fid;
