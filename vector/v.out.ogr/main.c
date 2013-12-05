@@ -958,8 +958,9 @@ int main(int argc, char *argv[])
     if (noatt > 0)
 	G_warning(_("%d features without attributes were written"), noatt);
     if (nocatskip > 0)
-	G_message(_("%d features found without category were skipped"),
-		  nocatskip);
+	G_warning(_("%d features without category were skipped. "
+                    "Features without category are written only when -%c flag is given."),
+		  nocatskip, flags.cat->key);
 
     /* Enable this? May be confusing that for area type are not reported
      *    all boundaries/centroids.
@@ -969,6 +970,8 @@ int main(int argc, char *argv[])
        G_warning ("%d features of different type skip", fskip);
      */
 
+    if (fout < 1)
+        G_warning(_("Output layer is empty, no features written"));
     G_done_msg(_("%d features (%s type) written to <%s> (%s format)."), fout,
                OGRGeometryTypeToName(wkbtype),
 	       options.layer->answer, options.format->answer);
