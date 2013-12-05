@@ -177,8 +177,9 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    if (num_types == 0)
-		G_fatal_error(_("Unable to determine input map's vector feature type(s)."));
+	    if (num_types == 0) {
+		G_warning(_("Unable to determine input map's vector feature type(s)."));
+            }
 	}
     }
 
@@ -387,12 +388,6 @@ int main(int argc, char *argv[])
     }
 
     G_debug(1, "Requested to export %d features", num_to_export);
-
-    if (num_to_export < 1) {
-	G_warning(_("Nothing to export"));
-	exit(EXIT_SUCCESS);
-    }
-
 
     /* Open OGR DSN */
     G_debug(2, "driver count = %d", OGRGetDriverCount());
