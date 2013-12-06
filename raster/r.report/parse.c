@@ -19,6 +19,7 @@ int parse_command_line(int argc, char *argv[])
 	struct Option *outfile;
 	struct Option *nv;
 	struct Option *nsteps;
+        struct Option *sort;
     } parms;
     struct
     {
@@ -36,27 +37,34 @@ int parse_command_line(int argc, char *argv[])
     } flags;
 
     parms.cell = G_define_standard_option(G_OPT_R_MAPS);
-    parms.cell->description = _("Raster map(s) to report on");
+    parms.cell->description = _("Name of raster map(s) to report on");
 
     parms.units = G_define_option();
     parms.units->key = "units";
     parms.units->type = TYPE_STRING;
     parms.units->required = NO;
     parms.units->multiple = YES;
-    parms.units->description = _("Units");
+    parms.units->description = _("Units to report");
     desc = NULL;
     G_asprintf(&desc,
 	       "mi;%s;me;%s;k;%s;a;%s;h;%s;c;%s;p;%s",
-	       _("miles"),
-	       _("meters"),
-	       _("kilometers"),
-	       _("acres"),
-	       _("hectares"),
-	       _("cell counts"),
+	       _("area in square miles"),
+	       _("area in square meters"),
+	       _("area in square kilometers"),
+	       _("area in acres"),
+	       _("area in hectares"),
+	       _("number of cells"),
 	       _("percent cover"));
     parms.units->descriptions = desc;
     parms.units->options = "mi,me,k,a,h,c,p";
-    parms.units->guisection = _("Output settings");
+    parms.units->guisection = _("Statistics");
+
+    parms.outfile = G_define_standard_option(G_OPT_F_OUTPUT);
+    parms.outfile->required = NO;
+    parms.outfile->label =
+	_("Name for output file to hold the report");
+    parms.outfile->description =
+	_("If no output given report is printed to standard output");
 
     parms.nv = G_define_option();
     parms.nv->key = "null";
@@ -64,7 +72,7 @@ int parse_command_line(int argc, char *argv[])
     parms.nv->required = NO;
     parms.nv->multiple = NO;
     parms.nv->answer = "*";
-    parms.nv->description = _("Character representing no data cell value");
+    parms.nv->description = _("String representing no data cell value");
     parms.nv->guisection = _("Formatting");
 
     parms.pl = G_define_option();
@@ -85,15 +93,6 @@ int parse_command_line(int argc, char *argv[])
     parms.pw->description = pw_desc;
     parms.pw->guisection = _("Formatting");
 
-    parms.outfile = G_define_standard_option(G_OPT_F_OUTPUT);
-    parms.outfile->key = "output";
-    parms.outfile->required = NO;
-    parms.outfile->label =
-	_("Name for output file to hold the report");
-    parms.outfile->description =
-	_("If no output given report is printed to standard output");
-    parms.outfile->guisection = _("Output settings");
-
     parms.nsteps = G_define_option();
     parms.nsteps->key = "nsteps";
     parms.nsteps->type = TYPE_INTEGER;
@@ -101,8 +100,22 @@ int parse_command_line(int argc, char *argv[])
     parms.nsteps->multiple = NO;
     parms.nsteps->answer = "255";
     parms.nsteps->description =
-	_("Number of fp subranges to collect stats from");
-    parms.nsteps->guisection = _("FP maps");
+	_("Number of floating-point subranges to collect stats from");
+    parms.nsteps->guisection = _("Floating point");
+
+    parms.sort = G_define_option();
+    parms.sort->key = "sort";
+    parms.sort->type = TYPE_STRING;
+    parms.sort->required = NO;
+    parms.sort->multiple = NO;
+    parms.sort->label = _("Sort output statistics by cell counts");
+    parms.sort->description = _("Default: sorted by categories or intervals");
+    parms.sort->options = "asc,desc";
+    G_asprintf((char **)&(parms.sort->descriptions),
+               "asc;%s;desc;%s",
+               _("Sort by cell counts in ascending order"),
+               _("Sort by cell counts in descending order"));
+    parms.sort->guisection = _("Formatting");
 
     flags.h = G_define_flag();
     flags.h->key = 'h';
@@ -122,21 +135,23 @@ int parse_command_line(int argc, char *argv[])
     flags.n = G_define_flag();
     flags.n->key = 'n';
     flags.n->description = _("Filter out all no data cells");
+    flags.n->guisection = _("No data");
 
     flags.N = G_define_flag();
     flags.N->key = 'N';
     flags.N->description = _("Filter out cells where all maps have no data");
+    flags.N->guisection = _("No data");
 
     flags.C = G_define_flag();
     flags.C->key = 'C';
-    flags.C->description = _("Report for cats fp ranges (fp maps only)");
-    flags.C->guisection = _("FP maps");
+    flags.C->description = _("Report for cats floating-point ranges (floating-point maps only)");
+    flags.C->guisection = _("Floating point");
 
     flags.i = G_define_flag();
     flags.i->key = 'i';
     flags.i->description =
-	_("Read fp map as integer (use map's quant rules)");
-    flags.i->guisection = _("FP maps");
+	_("Read floating-point map as integer (use map's quant rules)");
+    flags.i->guisection = _("Floating point");
 
     /* hidden feature.
      * if first arg is >file just run r.stats into this file and quit
@@ -202,6 +217,22 @@ int parse_command_line(int argc, char *argv[])
 	}
     }
     no_data_str = parms.nv->answer;
+
+    /* determine sorting method */
+    do_sort = SORT_DEFAULT; /* sort by cats by default */
+    if (parms.sort->answer) {
+        switch(parms.sort->answer[0]) {
+        case 'a':
+            do_sort = SORT_ASC;
+            break;
+        case 'd':
+            do_sort = SORT_DESC;
+            break;
+        default:
+            G_debug(1, "Sorting by '%s' not supported", parms.sort->answer);
+            break;
+        }
+    }
 
     return 0;
 }

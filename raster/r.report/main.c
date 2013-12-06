@@ -6,8 +6,9 @@
  *               Roberto Flor <flor itc.it>
  *               Jachym Cepicky <jachym les-ejk.cz>, 
  *               Jan-Oliver Wagner <jan intevation.de>
+ *               Sort option by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Reports statistics for raster map(s).
- * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -36,10 +37,10 @@ int masking = 1;
 int use_formfeed;
 int nlines;
 int with_headers = 1;
-int verbose = 1;
 int e_format;
 int no_nulls;
 int no_nulls_all;
+int do_sort = SORT_DEFAULT;
 
 char *stats_file;
 char *no_data_str;
