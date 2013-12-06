@@ -202,14 +202,14 @@ int main(int argc, char *argv[])
 
     flag.n = G_define_flag();
     flag.n->key = 'n';
-    flag.n->description = _("Suppress reporting of any NULLs");
-    flag.n->guisection = _("NULLs");
+    flag.n->description = _("Suppress reporting of any no-data");
+    flag.n->guisection = _("No data");
 
     flag.N = G_define_flag();
     flag.N->key = 'N';
     flag.N->description =
-	_("Suppress reporting of NULLs when all values are NULL");
-    flag.N->guisection = _("NULLs");
+	_("Suppress reporting of no-data when all values are no-data");
+    flag.N->guisection = _("No data");
 
     flag.C = G_define_flag();
     flag.C->key = 'C';
