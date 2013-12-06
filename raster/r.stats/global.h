@@ -1,6 +1,10 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
+#define SORT_DEFAULT 0
+#define SORT_ASC     1
+#define SORT_DESC    2
+
 extern char *no_data_str;
 extern int nfiles;
 extern int nrows;
@@ -12,11 +16,11 @@ extern DCELL *DMAX, *DMIN;
 extern CELL NULL_CELL;
 extern int (*get_row) ();
 
-extern char fs[2];
+extern char *fs;
 extern struct Categories *labels;
 
 /* cell_stats.c */
-int cell_stats(int[], int, int, int, int, char *);
+int cell_stats(int[], int, int, int, int, int, char *);
 
 /* raw_stats.c */
 int raw_stats(int[], int, int, int);
@@ -28,7 +32,6 @@ struct Node *NewNode(double);
 void fix_max_fp_val(CELL *, int);
 void reset_null_vals(CELL *, int);
 int update_cell_stats(CELL **, int, double);
-int node_compare(const void *, const void *);
-int sort_cell_stats(void);
+int sort_cell_stats(int);
 int print_node_count(void);
 int print_cell_stats(char *, int, int, int, int, char *);

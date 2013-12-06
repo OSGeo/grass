@@ -180,7 +180,7 @@ int update_cell_stats(CELL ** cell, int ncols, double area)
     return 0;
 }
 
-int node_compare(const void *pp, const void *qq)
+static int node_compare(const void *pp, const void *qq)
 {
     struct Node *const *p = pp, *const *q = qq;
     register int i, x;
@@ -191,22 +191,50 @@ int node_compare(const void *pp, const void *qq)
     for (i = nfiles; --i >= 0;)
 	if (x = (*a++ - *b++), x)
 	    return x;
+
     return 0;
 }
 
-int sort_cell_stats(void)
+static int node_compare_count_asc(const void *pp, const void *qq)
+{
+    struct Node *const *p = pp, *const *q = qq;
+    long a, b;
+    
+    a = (*p)->count;
+    b = (*q)->count;
+
+    return (a - b);
+}
+
+static int node_compare_count_desc(const void *pp, const void *qq)
+{
+    struct Node *const *p = pp, *const *q = qq;
+    long a, b;
+    
+    a = (*p)->count;
+    b = (*q)->count;
+
+    return (b - a);
+}
+
+int sort_cell_stats(int do_sort)
 {
     struct Node **q, *p;
 
     if (node_count <= 0)
 	return 0;
 
-    G_free(hashtable);		/* make a bit more room */
+    G_free(hashtable); /* make a bit more room */
     sorted_list = (struct Node **)G_calloc(node_count, sizeof(struct Node *));
     for (q = sorted_list, p = node_list; p; p = p->list)
 	*q++ = p;
 
-    qsort(sorted_list, node_count, sizeof(struct Node *), node_compare);
+    if (do_sort == SORT_DEFAULT)
+        qsort(sorted_list, node_count, sizeof(struct Node *), node_compare);
+    else if (do_sort == SORT_ASC)
+        qsort(sorted_list, node_count, sizeof(struct Node *), node_compare_count_asc);
+    else if (do_sort == SORT_DESC)
+        qsort(sorted_list, node_count, sizeof(struct Node *), node_compare_count_desc);
 
     return 0;
 }
@@ -329,7 +357,7 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
 	    if (with_counts)
 		fprintf(stdout, "%s%ld", fs, (long)node->count);
 	    if (with_percents)
-		fprintf(stdout, "%s%6.2f%%", fs,
+		fprintf(stdout, "%s%.2f%%", fs,
 			(double)100 * node->count / total_count);
 	    fprintf(stdout, "\n");
 	}
