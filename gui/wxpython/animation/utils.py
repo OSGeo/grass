@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 import os
 import wx
 import hashlib
+from multiprocessing import cpu_count
 try:
     from PIL import Image
     hasPIL = True
@@ -309,3 +310,13 @@ def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries):
             namesList.append(None)
     assert(j == len(cmdMatrix) - 1)
     return namesList
+
+
+def getCpuCount():
+    """!Returns number of available cpus.
+    If fails, default (4) is returned.
+    """
+    try:
+        return cpu_count()
+    except NotImplementedError:
+        return 4

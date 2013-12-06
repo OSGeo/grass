@@ -23,7 +23,7 @@ from grass.imaging import writeAvi, writeGif, writeIms, writeSwf
 from animation.temporal_manager import TemporalManager
 from animation.dialogs import InputDialog, EditDialog, ExportDialog
 from animation.utils import TemporalMode, Orientation, RenderText, WxImageToPil, \
-    sampleCmdMatrixAndCreateNames, layerListToCmdsMatrix, HashCmds
+    sampleCmdMatrixAndCreateNames, layerListToCmdsMatrix, HashCmds, getCpuCount
 from animation.data import AnimationData
 
 
@@ -354,7 +354,7 @@ class AnimationController(wx.EvtHandler):
             else:
                 self._load3DData(animData)
             self._loadLegend(animData)
-        self.bitmapProvider.Load(nprocs=4)
+        self.bitmapProvider.Load(nprocs=getCpuCount())
         # clear pools
         self.bitmapPool.Clear()
         self.mapFilesPool.Clear()
@@ -429,7 +429,7 @@ class AnimationController(wx.EvtHandler):
     def Reload(self):
         self.EndAnimation()
 
-        self.bitmapProvider.Load(force=True)
+        self.bitmapProvider.Load(nprocs=getCpuCount(), force=True)
 
         self.EndAnimation()
 
