@@ -11,6 +11,7 @@
   (>=v2). Read the file COPYING that comes with GRASS for details.
   
   \author Radim Blazek
+  \author Some contribution by Martin Landa <landa.martin gmail.com>
 */
 
 #include <stdlib.h>
@@ -245,7 +246,7 @@ int Vect_cidx_get_type_count(const struct Map_info *Map, int field, int type)
 }
 
 /*!
-  \brief Get number of categories for given layer and category index 
+  \brief Get category, feature type and id for given layer and category index 
   
   \param Map pointer to Map_info structure
   \param field_index layer index
@@ -271,6 +272,40 @@ int Vect_cidx_get_cat_by_index(const struct Map_info *Map, int field_index,
     *id = Map->plus.cidx[field_index].cat[cat_index][2];
 
     return 1;
+}
+
+/*!
+  \brief Get list of unique categories for given layer index
+
+  \param Map pointer to Map_info structure
+  \param field_index layer index
+  \param[out] list output list of cats
+  
+  \return 1 on success
+  \return 0 on error
+*/
+int Vect_cidx_get_unique_cats_by_index(struct Map_info *Map, int field_index, struct ilist *list)
+{
+    int c;
+    struct Cat_index *ci;
+
+    check_status(Map);
+    check_index(Map, field_index);
+
+    ci = &(Map->plus.cidx[field_index]);
+    
+    /* force sorting index -- really needed? */
+    dig_cidx_sort(&(Map->plus));
+
+    Vect_reset_list(list);
+    if (ci->n_cats > 0)
+        Vect_list_append(list, ci->cat[0][0]);
+    for (c = 1; c < ci->n_cats; c++) {
+        if (ci->cat[c][0] != ci->cat[c - 1][0])
+            Vect_list_append(list, ci->cat[c][0]);
+    }
+    
+    return list->n_values == ci->n_ucats ? 1 : 0;
 }
 
 /*!
