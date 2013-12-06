@@ -152,6 +152,7 @@ int Vect_cidx_get_type_count_by_index(const struct Map_info *, int, int, int *,
 int Vect_cidx_get_type_count(const struct Map_info *, int, int);
 int Vect_cidx_get_cat_by_index(const struct Map_info *, int, int, int *, int *,
                                int *);
+int Vect_cidx_get_unique_cats_by_index(struct Map_info *, int, struct ilist *);
 int Vect_cidx_find_next(const struct Map_info *, int, int, int, int, int *, int *);
 void Vect_cidx_find_all(const struct Map_info *, int, int, int, struct ilist *);
 int Vect_cidx_dump(const struct Map_info *, FILE *);
