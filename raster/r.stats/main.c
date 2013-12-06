@@ -7,9 +7,10 @@
  *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      calculates the area present in each of the categories of
+ *               Sort parameter by Martin Landa <landa.martin gmail.com>
+ * PURPOSE:      Calculates the area present in each of the categories of
  *               user-selected raster map layer(s)
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,6 +22,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/glocale.h>
+
 #include "global.h"
 
 char *no_data_str;
@@ -34,14 +36,13 @@ DCELL *DMAX, *DMIN;
 CELL NULL_CELL;
 int (*get_row) ();
 
-char fs[2];
+char *fs;
 struct Categories *labels;
 
 int main(int argc, char *argv[])
 {
     int *fd;
     char **names;
-    char **ptr;
     char *name;
 
     /* flags */
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
     int with_counts;
     int with_areas;
     int with_labels;
+    int do_sort;
 
     /* printf format */
     char fmt[20];
@@ -94,6 +96,7 @@ int main(int argc, char *argv[])
 				   NOTE: when -C flag is used, and there are 
 				   explicit fp ranges in cats or when the map 
 				   is int, nsteps is ignored */
+        struct Option *sort;    /* sort by cell counts */
     } option;
 
     G_gisinit(argv[0]);
@@ -102,7 +105,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
     module->description =
-	_("Generates area statistics for raster map layers.");
+	_("Generates area statistics for raster map.");
 
     /* Define the different options */
 
@@ -116,6 +119,19 @@ int main(int argc, char *argv[])
     option.fs = G_define_standard_option(G_OPT_F_SEP);
     option.fs->answer = "space";
 
+    option.sort = G_define_option();
+    option.sort->key = "sort";
+    option.sort->type = TYPE_STRING;
+    option.sort->required = NO;
+    option.sort->multiple = NO;
+    option.sort->label = _("Sort output statistics by cell counts");
+    option.sort->description = _("Default: sorted by categories or intervals)");
+    option.sort->options = "asc,desc";
+    G_asprintf((char **)&(option.sort->descriptions),
+               "asc;%s;desc;%s",
+               _("Sort by cell counts in ascending order"),
+               _("Sort by cell counts in descending order"));
+    
     option.nv = G_define_option();
     option.nv->key = "nv";
     option.nv->type = TYPE_STRING;
@@ -131,18 +147,9 @@ int main(int argc, char *argv[])
     option.nsteps->multiple = NO;
     option.nsteps->answer = "255";
     option.nsteps->description =
-	_("Number of fp subranges to collect stats from");
+	_("Number of floating-point subranges to collect stats from");
 
     /* Define the different flags */
-
-    flag.one = G_define_flag();
-    flag.one->key = '1';
-    flag.one->description = _("One cell (range) per line");
-
-    flag.A = G_define_flag();
-    flag.A->key = 'A';
-    flag.A->description = _("Print averaged values instead of intervals");
-    flag.A->guisection = _("Print");
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
@@ -151,14 +158,18 @@ int main(int argc, char *argv[])
 
     flag.c = G_define_flag();
     flag.c->key = 'c';
-    flag.c->description = _("Print cell counts");
+    flag.c->description = _("Print cell counts (sortable)");
     flag.c->guisection = _("Print");
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
     flag.p->description =
-	_("Print APPROXIMATE percents (total percent may not be 100%)");
+	_("Print approximate (total percent may not be 100%) percents");
     flag.p->guisection = _("Print");
+
+    flag.one = G_define_flag();
+    flag.one->key = '1';
+    flag.one->description = _("One cell (range) per line");
 
     flag.l = G_define_flag();
     flag.l->key = 'l';
@@ -175,9 +186,14 @@ int main(int argc, char *argv[])
     flag.x->description = _("Print x and y (column and row)");
     flag.x->guisection = _("Print");
 
+    flag.A = G_define_flag();
+    flag.A->key = 'A';
+    flag.A->description = _("Print averaged values instead of intervals (floating-point maps only)");
+    flag.A->guisection = _("Print");
+
     flag.r = G_define_flag();
     flag.r->key = 'r';
-    flag.r->description = _("Print raw indexes of fp ranges (fp maps only)");
+    flag.r->description = _("Print raw indexes of floating-point ranges (floating-point maps only)");
     flag.r->guisection = _("Print");
 
     flag.n = G_define_flag();
@@ -191,11 +207,11 @@ int main(int argc, char *argv[])
 
     flag.C = G_define_flag();
     flag.C->key = 'C';
-    flag.C->description = _("Report for cats fp ranges (fp maps only)");
+    flag.C->description = _("Report for cats floating-point ranges (floating-point maps only)");
 
     flag.i = G_define_flag();
     flag.i->key = 'i';
-    flag.i->description = _("Read fp map as integer (use map's quant rules)");
+    flag.i->description = _("Read floating-point map as integer (use map's quant rules)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -230,6 +246,22 @@ int main(int argc, char *argv[])
     with_areas = flag.a->answer;
     with_labels = flag.l->answer;
 
+    /* determine sorting method */
+    do_sort = SORT_DEFAULT; /* sort by cats by default */
+    if (option.sort->answer) {
+        switch(option.sort->answer[0]) {
+        case 'a':
+            do_sort = SORT_ASC;
+            break;
+        case 'd':
+            do_sort = SORT_DESC;
+            break;
+        default:
+            G_debug(1, "Sorting by '%s' not supported", option.sort->answer);
+            break;
+        }
+    }
+
     no_nulls = flag.n->answer;
     no_nulls_all = flag.N->answer;
     no_data_str = option.nv->answer;
@@ -241,28 +273,16 @@ int main(int argc, char *argv[])
 	raw_data = 1;
 
     /* get field separator */
-    strcpy(fs, " ");
-    if (option.fs->answer) {
-	if (strcmp(option.fs->answer, "space") == 0)
-	    *fs = ' ';
-	else if (strcmp(option.fs->answer, "tab") == 0)
-	    *fs = '\t';
-	else if (strcmp(option.fs->answer, "\\t") == 0)
-	    *fs = '\t';
-	else
-	    *fs = *option.fs->answer;
-    }
-
+    fs = G_option_to_separator(option.fs);
 
     /* open all raster maps */
     if (option.cell->answers[0] == NULL)
 	G_fatal_error(_("Raster map not found"));
 
     names = option.cell->answers;
-    ptr = option.cell->answers;
 
-    for (; *ptr != NULL; ptr++) {
-	name = *ptr;
+    for (; *names != NULL; names++) {
+	name = *names;
 	fd = (int *)G_realloc(fd, (nfiles + 1) * sizeof(int));
 	is_fp = (int *)G_realloc(is_fp, (nfiles + 1) * sizeof(int));
 	DMAX = (DCELL *) G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
@@ -350,8 +370,8 @@ int main(int argc, char *argv[])
     if (raw_data)
 	raw_stats(fd, with_coordinates, with_xy, with_labels);
     else
-	cell_stats(fd, with_percents, with_counts, with_areas, with_labels,
-		   fmt);
+	cell_stats(fd, with_percents, with_counts, with_areas, do_sort,
+                   with_labels, fmt);
 
     exit(EXIT_SUCCESS);
 }
