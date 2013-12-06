@@ -110,6 +110,7 @@ int main(int argc, char *argv[])
     /* Define the different options */
 
     option.cell = G_define_standard_option(G_OPT_R_INPUTS);
+    option.cell->description = _("Name of raster map(s) to report on");
 
     option.output = G_define_standard_option(G_OPT_F_OUTPUT);
     option.output->required = NO;
@@ -118,20 +119,8 @@ int main(int argc, char *argv[])
 
     option.fs = G_define_standard_option(G_OPT_F_SEP);
     option.fs->answer = "space";
+    option.fs->guisection = _("Formatting");
 
-    option.sort = G_define_option();
-    option.sort->key = "sort";
-    option.sort->type = TYPE_STRING;
-    option.sort->required = NO;
-    option.sort->multiple = NO;
-    option.sort->label = _("Sort output statistics by cell counts");
-    option.sort->description = _("Default: sorted by categories or intervals)");
-    option.sort->options = "asc,desc";
-    G_asprintf((char **)&(option.sort->descriptions),
-               "asc;%s;desc;%s",
-               _("Sort by cell counts in ascending order"),
-               _("Sort by cell counts in descending order"));
-    
     option.nv = G_define_option();
     option.nv->key = "nv";
     option.nv->type = TYPE_STRING;
@@ -139,6 +128,7 @@ int main(int argc, char *argv[])
     option.nv->multiple = NO;
     option.nv->answer = "*";
     option.nv->description = _("String representing no data cell value");
+    option.nv->guisection = _("Formatting");
 
     option.nsteps = G_define_option();
     option.nsteps->key = "nsteps";
@@ -148,70 +138,88 @@ int main(int argc, char *argv[])
     option.nsteps->answer = "255";
     option.nsteps->description =
 	_("Number of floating-point subranges to collect stats from");
+    option.nsteps->guisection = _("Floating point");
+    
+    option.sort = G_define_option();
+    option.sort->key = "sort";
+    option.sort->type = TYPE_STRING;
+    option.sort->required = NO;
+    option.sort->multiple = NO;
+    option.sort->label = _("Sort output statistics by cell counts");
+    option.sort->description = _("Default: sorted by categories or intervals");
+    option.sort->options = "asc,desc";
+    G_asprintf((char **)&(option.sort->descriptions),
+               "asc;%s;desc;%s",
+               _("Sort by cell counts in ascending order"),
+               _("Sort by cell counts in descending order"));
+    option.sort->guisection = _("Formatting");
 
     /* Define the different flags */
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
     flag.a->description = _("Print area totals in square meters");
-    flag.a->guisection = _("Print");
+    flag.a->guisection = _("Statistics");
 
     flag.c = G_define_flag();
     flag.c->key = 'c';
     flag.c->description = _("Print cell counts (sortable)");
-    flag.c->guisection = _("Print");
+    flag.c->guisection = _("Statistics");
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
     flag.p->description =
 	_("Print approximate (total percent may not be 100%) percents");
-    flag.p->guisection = _("Print");
+    flag.p->guisection = _("Statistics");
+
+    flag.l = G_define_flag();
+    flag.l->key = 'l';
+    flag.l->description = _("Print category labels");
 
     flag.one = G_define_flag();
     flag.one->key = '1';
     flag.one->description = _("One cell (range) per line");
 
-    flag.l = G_define_flag();
-    flag.l->key = 'l';
-    flag.l->description = _("Print category labels");
-    flag.l->guisection = _("Print");
-
     flag.g = G_define_flag();
     flag.g->key = 'g';
     flag.g->description = _("Print grid coordinates (east and north)");
-    flag.g->guisection = _("Print");
+    flag.g->guisection = _("Coordinates");
 
     flag.x = G_define_flag();
     flag.x->key = 'x';
     flag.x->description = _("Print x and y (column and row)");
-    flag.x->guisection = _("Print");
+    flag.x->guisection = _("Coordinates");
 
     flag.A = G_define_flag();
     flag.A->key = 'A';
     flag.A->description = _("Print averaged values instead of intervals (floating-point maps only)");
-    flag.A->guisection = _("Print");
+    flag.A->guisection = _("Floating point");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description = _("Print raw indexes of floating-point ranges (floating-point maps only)");
-    flag.r->guisection = _("Print");
+    flag.r->guisection = _("Floating point");
 
     flag.n = G_define_flag();
     flag.n->key = 'n';
     flag.n->description = _("Suppress reporting of any NULLs");
+    flag.n->guisection = _("NULLs");
 
     flag.N = G_define_flag();
     flag.N->key = 'N';
     flag.N->description =
 	_("Suppress reporting of NULLs when all values are NULL");
+    flag.N->guisection = _("NULLs");
 
     flag.C = G_define_flag();
     flag.C->key = 'C';
     flag.C->description = _("Report for cats floating-point ranges (floating-point maps only)");
+    flag.C->guisection = _("Floating point");
 
     flag.i = G_define_flag();
     flag.i->key = 'i';
     flag.i->description = _("Read floating-point map as integer (use map's quant rules)");
+    flag.i->guisection = _("Floating point");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
