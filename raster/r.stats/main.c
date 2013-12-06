@@ -202,13 +202,12 @@ int main(int argc, char *argv[])
 
     flag.n = G_define_flag();
     flag.n->key = 'n';
-    flag.n->description = _("Suppress reporting of any no-data");
+    flag.n->description = _("Do not report no data value");
     flag.n->guisection = _("No data");
 
     flag.N = G_define_flag();
     flag.N->key = 'N';
-    flag.N->description =
-	_("Suppress reporting of no-data when all values are no-data");
+    flag.N->description = _("Do not report cells where all maps have no data");
     flag.N->guisection = _("No data");
 
     flag.C = G_define_flag();

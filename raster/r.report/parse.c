@@ -134,12 +134,12 @@ int parse_command_line(int argc, char *argv[])
 
     flags.n = G_define_flag();
     flags.n->key = 'n';
-    flags.n->description = _("Filter out all no data cells");
+    flags.n->description = _("Do not report no data value");
     flags.n->guisection = _("No data");
 
     flags.N = G_define_flag();
     flags.N->key = 'N';
-    flags.N->description = _("Filter out cells where all maps have no data");
+    flags.N->description = _("Do not report cells where all maps have no data");
     flags.N->guisection = _("No data");
 
     flags.C = G_define_flag();
