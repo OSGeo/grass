@@ -54,6 +54,11 @@ int get_stats(void)
 	argv[argc++] = SF_MODE_OUT;
 	argv[argc++] = stats_file;
 
+        if (do_sort == SORT_ASC)
+            argv[argc++] = "sort=asc";
+        else if (do_sort == SORT_DESC)
+            argv[argc++] = "sort=desc";
+        
 	for (i = 0; i < nlayers; i++) {
 	    char *name = G_fully_qualified_name(layers[i].name, layers[i].mapset);
 	    char *buf = G_malloc(6 + strlen(name) + 1);

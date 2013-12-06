@@ -7,6 +7,10 @@
 
 #include <grass/raster.h>
 
+#define SORT_DEFAULT 0
+#define SORT_ASC     1
+#define SORT_DESC    2
+
 extern struct Cell_head window;
 
 struct _layer_
@@ -57,6 +61,7 @@ extern int with_headers;
 extern int e_format;
 extern int no_nulls;
 extern int no_nulls_all;
+extern int do_sort;
 
 extern char *stats_file;
 extern char *no_data_str;
