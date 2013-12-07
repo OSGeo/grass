@@ -174,7 +174,7 @@ void read_input(void)
     input.ntimesteps = i;
     fclose(fp);
 
-    /* Read Qobs file */
+    /* Read obsflow file */
     if (file.obsflow) {
 	if ((fp = fopen(file.obsflow, "r")) == NULL)
 	    G_fatal_error(_("Unable to open input file <%s>"), file.obsflow);

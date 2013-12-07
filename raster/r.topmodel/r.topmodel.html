@@ -6,9 +6,102 @@ hydrologic model.
 <h3>Selected Parameters:</h3>
 
 <dl>
+<dt><b>parameters</b></dt>
+<dd>
+This file contains TOPMODEL parameters that describe the study area. Any lines
+starting with a # sign or empty lines are ignored.
+<div class="code"><pre>
+# Subcatchment name
+Subcatchment 1
+
+################################################################################
+# A [m^2]: Total subcatchment area
+3.31697E+07
+
+################################################################################
+# qs0 [m/h]:	Initial subsurface flow per unit area
+#		  "The first streamflow input is assumed to represent
+#		  only the subsurface flow contribution in the watershed."
+#								- S. C. Liaw
+# lnTe [ln(m^2/h)]: Areal average of ln(T0) = ln(Te)
+# m [m]:	Scaling parameter
+# Sr0 [m]:	Initial root zone storage deficit
+# Srmax [m]:	Maximum root zone storage deficit
+# td [h]:	Unsaturated zone time delay per unit storage deficit
+#		  if greater than 0.
+#  OR
+# -alpha:	Effective vertical hydraulic gradient if not greater than 0.
+#		  For example, -10 means alpha = 10.
+# vch [m/h]:	Main channel routing velocity
+# vr [m/h]:	Internal subcatchment routing velocity
+
+#     qs0      lnTe         m       Sr0     Srmax  td/alpha       vch        vr
+ 0.000075        4.    0.0125    0.0025     0.041       60.    20000.    10000.
+
+################################################################################
+# infex:	Calculate infiltration excess if not zero (integer)
+# K0 [m/h]:	Surface hydraulic conductivity
+# psi [m]:	Wetting front suction
+# dtheta:	Water content change across the wetting front
+
+#   infex         K       psi    dtheta
+        0        2.       0.1       0.1
+
+################################################################################
+# d [m]:	Distance from catchment
+#		  The first value should be the mainstream distance from
+#		  the subcatchment outlet to the catchment outlet.
+# Ad_r:		Cumulative area ratio of subcatchment (0.0 to 1.0)
+#		  The first and last values should be 0 and 1, respectively.
+
+#   d  Ad_r
+    0   0.0
+ 1000   0.2
+ 2000   0.4
+ 3000   0.6
+ 4000   0.8
+ 5000   1.0
+</pre></div>
+</dd>
+
+<dt><b>input</b><dt>
+<dd>
+This file contains observed weather data.
+<div class="code"><pre>
+# ntimesteps:   Number of time steps
+# dt [h]:       Time increment per time step
+
+# ntimesteps   dt
+365            24
+
+################################################################################
+# R [m/dt]:     Rainfall
+# Ep [m/dt]:    Potential evapotranspiration
+
+# R             Ep
+0.000033        0.000000
+0.000053        0.011938
+0.004821        0.000000
+.
+.
+.
+</pre></div>
+</dd>
+
 <dt><b>obsflow</b></dt>
-<dd>Compare simulated flows with observed flows and calculate the model
-efficiency.
+<dd>
+Compare simulated flows with observed flows and calculate the model
+efficiency. This file contains observed flow data and the number of records
+should match the number of time steps (ntimesteps in the input file).
+<div class="code"><pre>
+# Qobs [m^3/dt]: Observed flow per time step
+2568918.24
+1668573.562
+1039800.24
+.
+.
+.
+</pre></div>
 </dd>
 
 <dt><b>timestep</b></dt>
