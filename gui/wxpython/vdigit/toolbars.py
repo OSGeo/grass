@@ -28,6 +28,7 @@ from core.gcmd          import GError, RunCommand
 from core.utils import _
 from icons.icon         import MetaIcon
 from iclass.digit       import IClassVDigit
+from core.giface        import Notification
 
 class VDigitToolbar(BaseToolbar):
     """!Toolbar for digitization
@@ -903,7 +904,8 @@ class VDigitToolbar(BaseToolbar):
                 # some signal (DigitizerEnded) can be emitted here
                 lmgr._giface.GetProgress().SetValue(0)
                 lmgr.GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
-                                                    self.mapLayer.GetName())
+                                                    self.mapLayer.GetName(),
+                                                notification=Notification.HIGHLIGHT)
             # re-active layer 
             if self.parent.tree:
                 item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
