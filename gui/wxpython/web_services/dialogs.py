@@ -771,7 +771,7 @@ class SaveWMSLayerDialog(wx.Dialog):
     """
     def __init__(self, parent, layer, giface):
         
-        wx.Dialog.__init__(self, parent = parent, title = ("Save web service layer"), id = wx.ID_ANY)
+        wx.Dialog.__init__(self, parent = parent, title = ("Save web service layer as raster map"), id = wx.ID_ANY)
 
         self.layer = layer
         self._giface = giface
@@ -788,7 +788,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.labels = {}
         self.params = {}
 
-        self.labels['output'] = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Name for output raster layer:"))
+        self.labels['output'] = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Name for output raster map:"))
 
         self.params['output'] = Select(parent = self, type = 'rast', mapsets = [grass.gisenv()['MAPSET']],
                                        size = globalvar.DIALOG_GSELECT_SIZE)
@@ -803,7 +803,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.region_types['named'] = wx.RadioButton(parent = self, id = wx.ID_ANY, label = 'Named region')
 
         self.overwrite  = wx.CheckBox(parent = self, id = wx.ID_ANY,
-                                      label = _("Overwrite existing layer"))
+                                      label = _("Overwrite existing raster map"))
 
         self.named_reg_panel = wx.Panel(parent = self, id = wx.ID_ANY)
         self.labels['region'] = wx.StaticText(parent = self.named_reg_panel, id = wx.ID_ANY, 
@@ -817,7 +817,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.btn_close.SetToolTipString(_("Close dialog"))
         
         self.btn_ok = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Save layer"))
-        self.btn_ok.SetToolTipString(_("Add web service layer"))     
+        self.btn_ok.SetToolTipString(_("Save web service layer as raster map"))     
 
         # statusbar
         self.statusbar = wx.StatusBar(parent = self, id = wx.ID_ANY)
