@@ -404,7 +404,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if not hasattr (self, "popupID"):
             self.popupID = dict()
             for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
-                        'region', 'export', 'attr', 'edit0', 'edit1', 'save_ws',
+                        'region', 'export', 'attr', 'edit', 'save_ws',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
                         'color', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy',
                         'report', 'export-pg'):
@@ -502,22 +502,25 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.OnVectorColorTable, id = self.popupID['color'])
 
             item = wx.MenuItem(self.popupMenu, id = self.popupID['attr'], text = _("Show attribute data"))
-            item.SetBitmap(MetaIcon(img = 'layer-raster-profile').GetBitmap(self.bmpsize))
+            item.SetBitmap(MetaIcon(img = 'table').GetBitmap(self.bmpsize))
             self.popupMenu.AppendItem(item)
             self.Bind(wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id = self.popupID['attr'])
 
-            item = wx.MenuItem(self.popupMenu, id = self.popupID['edit0'], text = _("Start editing"))
+            digitToolbar = self.mapdisplay.GetToolbar('vdigit')
+            if digitToolbar:
+                vdigitLayer = digitToolbar.GetLayer()
+            else:
+                vdigitLayer = None
+            layer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
+            if vdigitLayer is not layer:
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['edit'], text = _("Start editing"))
+                self.Bind (wx.EVT_MENU, self.OnStartEditing, id = self.popupID['edit'])
+            else:
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['edit'], text = _("Stop editing"))
+                self.Bind (wx.EVT_MENU, self.OnStopEditing,  id = self.popupID['edit'])
             item.SetBitmap(MetaIcon(img = 'edit').GetBitmap(self.bmpsize))
             self.popupMenu.AppendItem(item)
-
-            self.popupMenu.Append(self.popupID['edit1'], text = _("Stop editing"))
-            self.popupMenu.Enable(self.popupID['edit1'], False)
-            self.Bind (wx.EVT_MENU, self.OnStartEditing, id = self.popupID['edit0'])
-            self.Bind (wx.EVT_MENU, self.OnStopEditing,  id = self.popupID['edit1'])
             
-            layer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
-            # enable editing only for vector map layers available in the current mapset
-            digitToolbar = self.mapdisplay.GetToolbar('vdigit')
             if digitToolbar:
                 # background vector map
                 self.popupMenu.Append(self.popupID['bgmap'],
@@ -546,21 +549,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             if layer.GetMapset() != currentMapset:
                 # only vector map in current mapset can be edited
-                self.popupMenu.Enable (self.popupID['edit0'], False)
-                self.popupMenu.Enable (self.popupID['edit1'], False)
+                self.popupMenu.Enable (self.popupID['edit'], False)
                 self.popupMenu.Enable (self.popupID['topo'], False)
             elif digitToolbar and digitToolbar.GetLayer():
                 # vector map already edited
                 vdigitLayer = digitToolbar.GetLayer()
                 if vdigitLayer is layer:
-                    self.popupMenu.Enable(self.popupID['edit0'],  False)
-                    self.popupMenu.Enable(self.popupID['edit1'],  True)
                     self.popupMenu.Enable(self.popupID['remove'], False)
                     self.popupMenu.Enable(self.popupID['bgmap'],  False)
                     self.popupMenu.Enable(self.popupID['topo'],   False)
                 else:
-                    self.popupMenu.Enable(self.popupID['edit0'], False)
-                    self.popupMenu.Enable(self.popupID['edit1'], False)
                     self.popupMenu.Enable(self.popupID['bgmap'], True)
             
             item = wx.MenuItem(self.popupMenu, id = self.popupID['meta'], text = _("Metadata"))
