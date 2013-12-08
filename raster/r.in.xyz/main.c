@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     char *fs;			/* field delim */
     off_t filesize;
     int linesize;
-    long estimated_lines;
+    unsigned long estimated_lines;
     int from_stdin;
     int can_seek;
 
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
     G_add_keyword("ASCII");
     G_add_keyword(_("LIDAR"));
     module->description =
-	_("Create a raster map from an assemblage of many coordinates using univariate statistics.");
+	_("Creates a raster map from an assemblage of many coordinates using univariate statistics.");
 
     input_opt = G_define_standard_option(G_OPT_F_INPUT);
     input_opt->description =
