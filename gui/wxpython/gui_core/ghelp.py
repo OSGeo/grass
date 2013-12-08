@@ -42,7 +42,7 @@ from core.debug       import Debug
 class AboutWindow(wx.Frame):
     """!Create custom About Window
     """
-    def __init__(self, parent, size = (650, 460), 
+    def __init__(self, parent, size = (770, 460), 
                  title = _('About GRASS GIS'), **kwargs):
         wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, title = title, size = size, **kwargs)
         
