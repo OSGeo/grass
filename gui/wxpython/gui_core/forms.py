@@ -906,9 +906,10 @@ class CmdPanel(wx.Panel):
                 if f['name'] == vq:
                     chk.SetValue(True)
                     f['value'] = True
-            elif f['name'] == 'overwrite' and 'value' not in f:
-                chk.SetValue(UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'))
+            
+            if f['name'] == 'overwrite':
                 f['value'] = UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled')
+                chk.SetValue(f['value'])
                 
         #
         # parameters
