@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     input.acc->label = _("Name of input accumulation raster map");
     input.acc->required = NO;
     input.acc->description =
-	_("Stream extraction will use provided accumulation instead of calculating it a new");
+	_("Stream extraction will use provided accumulation instead of calculating it anew");
     input.acc->guisection = _("Input options");
 
     input.depression = G_define_standard_option(G_OPT_R_INPUT);
