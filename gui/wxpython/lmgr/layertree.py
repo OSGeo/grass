@@ -191,53 +191,53 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         trart = wx.ArtProvider.GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
         self.folder = il.Add(trart)
         
-        bmpsize = (16, 16)
-        trgif = BaseIcons["addRast"].GetBitmap(bmpsize)
+        self.bmpsize = (16, 16)
+        trgif = BaseIcons["addRast"].GetBitmap(self.bmpsize)
         self.rast_icon = il.Add(trgif)
         
-        trgif = LMIcons["addRast3d"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRast3d"].GetBitmap(self.bmpsize)
         self.rast3d_icon = il.Add(trgif)
         
-        trgif = LMIcons["addRgb"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRgb"].GetBitmap(self.bmpsize)
         self.rgb_icon = il.Add(trgif)
         
-        trgif = LMIcons["addHis"].GetBitmap(bmpsize)
+        trgif = LMIcons["addHis"].GetBitmap(self.bmpsize)
         self.his_icon = il.Add(trgif)
         
-        trgif = LMIcons["addShaded"].GetBitmap(bmpsize)
+        trgif = LMIcons["addShaded"].GetBitmap(self.bmpsize)
         self.shaded_icon = il.Add(trgif)
         
-        trgif = LMIcons["addRArrow"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRArrow"].GetBitmap(self.bmpsize)
         self.rarrow_icon = il.Add(trgif)
         
-        trgif = LMIcons["addRNum"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRNum"].GetBitmap(self.bmpsize)
         self.rnum_icon = il.Add(trgif)
         
-        trgif = BaseIcons["addVect"].GetBitmap(bmpsize)
+        trgif = BaseIcons["addVect"].GetBitmap(self.bmpsize)
         self.vect_icon = il.Add(trgif)
         
-        trgif = LMIcons["addThematic"].GetBitmap(bmpsize)
+        trgif = LMIcons["addThematic"].GetBitmap(self.bmpsize)
         self.theme_icon = il.Add(trgif)
         
-        trgif = LMIcons["addChart"].GetBitmap(bmpsize)
+        trgif = LMIcons["addChart"].GetBitmap(self.bmpsize)
         self.chart_icon = il.Add(trgif)
         
-        trgif = LMIcons["addGrid"].GetBitmap(bmpsize)
+        trgif = LMIcons["addGrid"].GetBitmap(self.bmpsize)
         self.grid_icon = il.Add(trgif)
         
-        trgif = LMIcons["addGeodesic"].GetBitmap(bmpsize)
+        trgif = LMIcons["addGeodesic"].GetBitmap(self.bmpsize)
         self.geodesic_icon = il.Add(trgif)
         
-        trgif = LMIcons["addRhumb"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRhumb"].GetBitmap(self.bmpsize)
         self.rhumb_icon = il.Add(trgif)
         
-        trgif = LMIcons["addLabels"].GetBitmap(bmpsize)
+        trgif = LMIcons["addLabels"].GetBitmap(self.bmpsize)
         self.labels_icon = il.Add(trgif)
         
-        trgif = LMIcons["addCmd"].GetBitmap(bmpsize)
+        trgif = LMIcons["addCmd"].GetBitmap(self.bmpsize)
         self.cmd_icon = il.Add(trgif)
 
-        trgif = LMIcons["wsImport"].GetBitmap(bmpsize)
+        trgif = LMIcons["wsImport"].GetBitmap(self.bmpsize)
         self.ws_icon = il.Add(trgif)
         
         self.AssignImageList(il)
@@ -414,10 +414,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         currentMapset = grass.gisenv()['MAPSET']
 
         self.popupMenu = wx.Menu()
-        
+
         numSelected = len(self.GetSelections())
         
-        self.popupMenu.Append(self.popupID['remove'], text = _("Remove"))
+        item = wx.MenuItem(self.popupMenu, id = self.popupID['remove'], text = _("Remove"))
+        item.SetBitmap(MetaIcon(img = 'layer-remove').GetBitmap(self.bmpsize))
+        self.popupMenu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.lmgr.OnDeleteLayer, id = self.popupID['remove'])
         
         if ltype != "command" and numSelected == 1:
@@ -439,9 +441,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
                 if ltype != '3d-raster':
-                    self.popupMenu.Append(self.popupID['opacity'], text=_("Change opacity level"))
+                    item = wx.MenuItem(self.popupMenu, id = self.popupID['opacity'], text=_("Change opacity level"))
+                    item.SetBitmap(MetaIcon(img = 'layer-opacity').GetBitmap(self.bmpsize))
+                    self.popupMenu.AppendItem(item)
                     self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id=self.popupID['opacity'])
-                self.popupMenu.Append(self.popupID['properties'], text = _("Properties"))
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['properties'], text = _("Properties"))
+                item.SetBitmap(MetaIcon(img = 'options').GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
                 self.Bind(wx.EVT_MENU, self.OnPopupProperties, id = self.popupID['properties'])
             
                 if ltype in ('raster', 'vector', '3d-raster') and self.lmgr.IsPaneShown('toolbarNviz'):
@@ -450,9 +456,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
             if same and ltype in ('raster', 'vector', 'rgb', '3d-raster'):
                 self.popupMenu.AppendSeparator()
-                self.popupMenu.Append(self.popupID['zoom'], text = _("Zoom to selected map(s)"))
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['zoom'], text = _("Zoom to selected map(s)"))
+                item.SetBitmap(MetaIcon(img = 'zoom-layer').GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
                 self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToMap, id = self.popupID['zoom'])
-                self.popupMenu.Append(self.popupID['region'], text = _("Set computational region from selected map(s)"))
+                
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['region'], text = _("Set computational region from selected map(s)"))
+                item.SetBitmap(MetaIcon(img = 'region').GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
                 self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id = self.popupID['region'])
         
         # specific items
@@ -464,7 +475,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # vector layers (specific items)
         if mltype and mltype == "vector" and numSelected == 1:
             self.popupMenu.AppendSeparator()
-            self.popupMenu.Append(self.popupID['export'], text = _("Export common formats"))
+            item = wx.MenuItem(self.popupMenu, id = self.popupID['export'], text = _("Export common formats"))
+            item.SetBitmap(MetaIcon(img = 'layer-export').GetBitmap(self.bmpsize))
+            self.popupMenu.AppendItem(item)
             self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.out.ogr',
                                                                         'input=%s' % mapLayer.GetName()]),
                       id = self.popupID['export'])
@@ -488,10 +501,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID['color'], _("Set color table"))
             self.Bind (wx.EVT_MENU, self.OnVectorColorTable, id = self.popupID['color'])
 
-            self.popupMenu.Append(self.popupID['attr'], text = _("Show attribute data"))
+            item = wx.MenuItem(self.popupMenu, id = self.popupID['attr'], text = _("Show attribute data"))
+            item.SetBitmap(MetaIcon(img = 'layer-raster-profile').GetBitmap(self.bmpsize))
+            self.popupMenu.AppendItem(item)
             self.Bind(wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id = self.popupID['attr'])
 
-            self.popupMenu.Append(self.popupID['edit0'], text = _("Start editing"))
+            item = wx.MenuItem(self.popupMenu, id = self.popupID['edit0'], text = _("Start editing"))
+            item.SetBitmap(MetaIcon(img = 'edit').GetBitmap(self.bmpsize))
+            self.popupMenu.AppendItem(item)
+
             self.popupMenu.Append(self.popupID['edit1'], text = _("Stop editing"))
             self.popupMenu.Enable(self.popupID['edit1'], False)
             self.Bind (wx.EVT_MENU, self.OnStartEditing, id = self.popupID['edit0'])
@@ -545,9 +563,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.popupMenu.Enable(self.popupID['edit1'], False)
                     self.popupMenu.Enable(self.popupID['bgmap'], True)
             
-            self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
+            item = wx.MenuItem(self.popupMenu, id = self.popupID['meta'], text = _("Metadata"))
+            item.SetBitmap(MetaIcon(img = 'layer-info').GetBitmap(self.bmpsize))
+            self.popupMenu.AppendItem(item)
             self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
-            
+        
         # raster layers (specific items)
         elif mltype and mltype == "raster":
             if same:
@@ -559,7 +579,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupMenu.AppendSeparator()
             
             if numSelected == 1:
-                self.popupMenu.Append(self.popupID['export'], text = _("Export"))
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['export'], text = _("Export"))
+                item.SetBitmap(MetaIcon(img = 'layer-export').GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
                 self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['r.out.gdal',
                                                                             'input=%s' % mapLayer.GetName()]),
                           id = self.popupID['export'])
@@ -573,17 +595,31 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 
             self.popupMenu.Append(self.popupID['color'], _("Set color table"))
             self.Bind (wx.EVT_MENU, self.OnRasterColorTable, id = self.popupID['color'])
-            self.popupMenu.Append(self.popupID['hist'], _("Histogram"))
+
+            item = wx.MenuItem(self.popupMenu, id = self.popupID['hist'], text = _("Histogram"))
+            item.SetBitmap(MetaIcon(img = 'layer-raster-histogram').GetBitmap(self.bmpsize))
+            self.popupMenu.AppendItem(item)
             self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
-            self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
+
+            item = wx.MenuItem(self.popupMenu, id = self.popupID['univar'], text = _("Univariate raster statistics"))
+            item.SetBitmap(MetaIcon(img = 'raster-stats').GetBitmap(self.bmpsize))
+            self.popupMenu.AppendItem(item)
             self.Bind (wx.EVT_MENU, self.OnUnivariateStats, id = self.popupID['univar'])
-            self.popupMenu.Append(self.popupID['report'], text = _("Report raster statistics"))
+
+            item = wx.MenuItem(self.popupMenu, id = self.popupID['report'], text = _("Report raster statistics"))
+            item.SetBitmap(MetaIcon(img = 'stats').GetBitmap(self.bmpsize))
+            self.popupMenu.AppendItem(item)
             self.Bind(wx.EVT_MENU, self.OnReportStats, id = self.popupID['report'])
             
             if numSelected == 1:
-                self.popupMenu.Append(self.popupID['prof'], _("Profile"))
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['prof'], text = _("Profile"))
+                item.SetBitmap(MetaIcon(img = 'layer-raster-profile').GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
                 self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID['prof'])
-                self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
+
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['meta'], text = _("Metadata"))
+                item.SetBitmap(MetaIcon(img = 'layer-info').GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
                 self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
             
         elif mltype and mltype == '3d-raster':
@@ -591,10 +627,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.AppendSeparator()
                 self.popupMenu.Append(self.popupID['color'], _("Set color table"))
                 self.Bind(wx.EVT_MENU, self.OnRasterColorTable, id=self.popupID['color'])
-                self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
-                self.Bind(wx.EVT_MENU, self.OnUnivariateStats, id=self.popupID['univar'])
-                self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
-                self.Bind(wx.EVT_MENU, self.OnMetadata, id=self.popupID['meta'])
+                
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['univar'], text = _("Univariate raster statistics"))
+                item.SetBitmap(MetaIcon(img = 'stats').GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
+                self.Bind (wx.EVT_MENU, self.OnUnivariateStats, id = self.popupID['univar'])
+                 
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['meta'], text = _("Metadata"))
+                item.SetBitmap(MetaIcon(img = 'layer-info').GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
+                self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
         
         # web service layers (specific item)
         elif mltype and mltype == "wms":
