@@ -460,6 +460,7 @@ class TaskFrame(wx.Frame):
         self._gconsole = self.notebookpanel._gconsole
         if self._gconsole:
             self._gconsole.mapCreated.connect(self.OnMapCreated)
+            self._gconsole.updateMap.connect(lambda: self._giface.updateMap.emit())
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
             self.goutput.showNotification.connect(lambda message: self.SetStatusText(message))
@@ -795,6 +796,7 @@ class CmdPanel(wx.Panel):
         wx.Panel.__init__(self, parent, id = id, *args, **kwargs)
 
         self.mapCreated = Signal
+        self.updateMap  = Signal
 
         # Determine tab layout
         sections = []
