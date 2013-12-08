@@ -4,7 +4,7 @@
   
   \brief GIS Library - Tokenize strings
   
-  (C) 2001-2008, 2011 by the GRASS Development Team
+  (C) 2001-2008, 2011-2013 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -17,6 +17,7 @@
 #include <grass/gis.h>
 
 static char **tokenize(const char *, const char *, const char *);
+static char **tokenize_strtok(const char *, const char *);
 
 /*!
   \brief Tokenize string
@@ -46,7 +47,7 @@ static char **tokenize(const char *, const char *, const char *);
 */
 char **G_tokenize(const char *buf, const char *delim)
 {
-    return tokenize(buf, delim, NULL);
+    return tokenize_strtok(buf, delim);
 }
 
 /*!
@@ -85,6 +86,31 @@ char **G_tokenize2(const char *buf, const char *delim, const char *valchar)
     return tokenize(buf, delim, valchar);
 }
 
+/* strtok-based version of tokenize subroutine */
+char **tokenize_strtok(const char *buf, const char *delim)
+{
+    int i;
+    char **tokens;
+    char *p, *ptr;
+
+    p = G_store(buf);
+
+    i = 0;
+    tokens = (char **) G_malloc (sizeof (char *));
+    ptr = strtok(p, delim);
+    tokens[i] = ptr;
+    i++;
+    while(ptr != NULL) {
+        tokens = (char **) G_realloc(tokens, sizeof(char*) * (i + 1));
+        ptr = strtok(NULL, delim);
+        tokens[i] = ptr;
+        i++;
+    } 
+    
+    return tokens;
+}
+
+/* own version of tokenize subroutine */
 char **tokenize(const char *buf, const char *delim, const char *inchar)
 {
     int i, invalue;
