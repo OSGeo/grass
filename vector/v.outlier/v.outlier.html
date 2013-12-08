@@ -8,6 +8,15 @@ an absolute value more than the given threshold from a fixed value,
 reckoned from its surroundings by the interpolation, are considered as
 an outlier, and hence are removed.
 
+<p>
+The <em>filter</em> option specifies if all outliers will be removed
+(default), or only positive or only negative outliers. Filtering out
+only positive outliers can be useful to filter out vegetation returns
+(e.g. from forest canopies) from LIDAR point clouds, in order to
+extract Digital Terrain Models. Filtering out only negative outliers
+can be useful to estimate vegetation height.
+
+<p>
 There is a flag to create a vector that can be visualizated by
 qgis. That means that topology is build and the z coordinate is
 considered as a category.

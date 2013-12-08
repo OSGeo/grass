@@ -15,7 +15,7 @@ P_Outlier(struct Map_info *, /**/
 	  struct bound_box, /**/
 	  double **, /**/
 	  double *, /**/
-	  double, /**/ double, /**/ int *, /**/ int, /**/ dbDriver *,  /**/ char *);
+	  double, /**/ double, /**/ int *, /**/ int, /**/ dbDriver *, /**/ char *);
 
 int Insert_Outlier(double, /**/ int, /**/ dbDriver *, /**/ char *);
 
@@ -23,4 +23,7 @@ int UpDate_Outlier(double, /**/ int, /**/ dbDriver *, /**/ char *);
 
 int Select_Outlier(double *, /**/ int, /**/ dbDriver *, /**/ char *);
 
+void P_set_outlier_fn(int);
 int P_is_outlier(double);
+int P_is_outlier_p(double);
+int P_is_outlier_n(double);
