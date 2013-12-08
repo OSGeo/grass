@@ -345,6 +345,8 @@ class GConsole(wx.EvtHandler):
         # Signal when some map is created or updated by a module.
         # attributes: name: map name, ltype: map type,
         self.mapCreated = Signal('GConsole.mapCreated')
+        # emitted when map display should be re-render
+        self.updateMap = Signal('GConsole.updateMap')
         # emitted when log message should be written
         self.writeLog = Signal('GConsole.writeLog')
         # emitted when command log message should be written
@@ -663,11 +665,13 @@ class GConsole(wx.EvtHandler):
                      # TODO: do it better (?)
                      name in ('r.colors', 'r3.colors', 'v.colors')) and \
                     p.get('value', None):
-                name = p.get('value')
-                if '@' not in name:
-                    name = name + '@' + grass.gisenv()['MAPSET']
-                self.mapCreated.emit(name=name, ltype=prompt)
-
+                lname = p.get('value')
+                if '@' not in lname:
+                    lname += '@' + grass.gisenv()['MAPSET']
+                self.mapCreated.emit(name=lname, ltype=prompt)
+        if name == 'r.mask':
+            self.updateMap.emit()
+        
         event.Skip()
 
     def OnProcessPendingOutputWindowEvents(self, event):
