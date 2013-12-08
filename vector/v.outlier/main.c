@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int last_row, last_column, flag_auxiliar = FALSE;
+    int filter_mode;
 
     int *lineVect;
     double *TN, *Q, *parVect;	/* Interpolating and least-square vectors */
@@ -50,7 +51,7 @@ int main(int argc, char *argv[])
     /* Structs' declarations */
     struct Map_info In, Out, Outlier, Qgis;
     struct Option *in_opt, *out_opt, *outlier_opt, *qgis_opt, *stepE_opt,
-	*stepN_opt, *lambda_f_opt, *Thres_O_opt;
+	*stepN_opt, *lambda_f_opt, *Thres_O_opt, *filter_opt;
     struct Flag *spline_step_flag;
     struct GModule *module;
 
@@ -125,6 +126,14 @@ int main(int argc, char *argv[])
     Thres_O_opt->description = _("Threshold for the outliers");
     Thres_O_opt->answer = "50";
 
+    filter_opt = G_define_option();
+    filter_opt->key = "filter";
+    filter_opt->type = TYPE_STRING;
+    filter_opt->required = NO;
+    filter_opt->description = _("Filtering option");
+    filter_opt->options = "both,positive,negative";
+    filter_opt->answer = "both";
+
     /* Parsing */
     G_gisinit(argv[0]);
 
@@ -141,6 +150,13 @@ int main(int argc, char *argv[])
     stepE = atof(stepE_opt->answer);
     lambda = atof(lambda_f_opt->answer);
     Thres_Outlier = atof(Thres_O_opt->answer);
+
+    filter_mode = 0;
+    if (strcmp(filter_opt->answer, "positive") == 0)
+	filter_mode = 1;
+    else if (strcmp(filter_opt->answer, "negative") == 0)
+	filter_mode = -1;
+    P_set_outlier_fn(filter_mode);
 
     flag_auxiliar = FALSE;
 
@@ -402,11 +418,13 @@ int main(int argc, char *argv[])
 		if (qgis_opt->answer)
 		    P_Outlier(&Out, &Outlier, &Qgis, elaboration_reg,
 			      general_box, overlap_box, obsVect, parVect,
-			      mean, dims.overlap, lineVect, npoints, driver, table_name);
+			      mean, dims.overlap, lineVect, npoints,
+			      driver, table_name);
 		else
 		    P_Outlier(&Out, &Outlier, NULL, elaboration_reg,
 			      general_box, overlap_box, obsVect, parVect,
-			      mean, dims.overlap, lineVect, npoints, driver, table_name);
+			      mean, dims.overlap, lineVect, npoints,
+			      driver, table_name);
 
 
 		G_free_vector(parVect);

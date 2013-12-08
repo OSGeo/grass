@@ -4,6 +4,20 @@
 #include <math.h>
 #include "outlier.h"
 
+typedef int (*outlier_fn)(double);
+
+static outlier_fn is_outlier;
+
+void P_set_outlier_fn(int filter_mode)
+{
+    if (filter_mode < 0)
+	is_outlier = P_is_outlier_n;
+    else if (filter_mode > 0)
+	is_outlier = P_is_outlier_p;
+    else
+	is_outlier = P_is_outlier;
+}
+
 extern double Thres_Outlier;
 
 void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
@@ -19,6 +33,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
     extern double stepN, stepE;
     struct line_pnts *point;
     struct line_cats *categories;
+
 
     point = Vect_new_line_struct();
     categories = Vect_new_cats_struct();
@@ -46,7 +61,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 		residual = *point->z - interpolation;
 
-		if (FALSE == P_is_outlier(residual)) {
+		if (FALSE == is_outlier(residual)) {
 		    Vect_write_line(Out, GV_POINT, point, categories);
 		    Vect_cat_set(categories, 1, (int)*point->z);
 		    if (Qgis)
@@ -109,7 +124,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 			residual = *point->z - interpolation;
 
-			if (FALSE == P_is_outlier(residual)) {
+			if (FALSE == is_outlier(residual)) {
 			    Vect_write_line(Out, GV_POINT, point, categories);
 			    Vect_cat_set(categories, 1, (int)*point->z);
 			    if (Qgis)
@@ -147,7 +162,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 			residual = *point->z - interpolation;
 
-			if (FALSE == P_is_outlier(residual)) {
+			if (FALSE == is_outlier(residual)) {
 			    Vect_write_line(Out, GV_POINT, point, categories);
 			    Vect_cat_set(categories, 1, (int)*point->z);
 			    if (Qgis)
@@ -171,7 +186,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 			residual = *point->z - interpolation;
 
-			if (FALSE == P_is_outlier(residual)) {
+			if (FALSE == is_outlier(residual)) {
 			    Vect_write_line(Out, GV_POINT, point, categories);
 			    Vect_cat_set(categories, 1, (int)*point->z);
 			    if (Qgis)
@@ -282,6 +297,22 @@ int Select_Outlier(double *Interp, int line_num, dbDriver * driver,
 int P_is_outlier(double pippo)
 {
     if (fabs(pippo) < Thres_Outlier)
+	return FALSE;
+
+    return TRUE;
+}
+
+int P_is_outlier_p(double pippo)
+{
+    if (pippo < Thres_Outlier)
+	return FALSE;
+
+    return TRUE;
+}
+
+int P_is_outlier_n(double pippo)
+{
+    if (pippo > Thres_Outlier)
 	return FALSE;
 
     return TRUE;
