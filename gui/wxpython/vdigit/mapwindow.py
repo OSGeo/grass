@@ -722,7 +722,7 @@ class VDigitWindow(BufferedMapWindow):
         pos1 = self.Pixel2Cell(self.mouse['begin'])
         
         pointOnLine = self.digit.GetDisplay().SelectLineByPoint(pos1)['point']
-        if pointOnLine['line'] == -1:
+        if not pointOnLine:
             return
         
         if self.toolbar.GetAction() in ["splitLine", "addVertex"]:
