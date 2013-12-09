@@ -250,7 +250,7 @@ class BaseToolbar(wx.ToolBar):
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def CreateSelectionButton(self):
+    def CreateSelectionButton(self, tooltip = _("Select graphics tool")):
         """!Add button to toolbar for selection of graphics drawing mode.
 
         Button must be custom (not toolbar tool) to set smaller width.
@@ -262,7 +262,7 @@ class BaseToolbar(wx.ToolBar):
             bitmap = wx.ArtProvider.GetBitmap(id = wx.ART_MISSING_IMAGE, client = wx.ART_TOOLBAR)
         button =  wx.BitmapButton(parent = self, id = wx.ID_ANY, size = ((-1, self.GetSize()[1])),
                                   bitmap = bitmap, style = wx.NO_BORDER)
-        button.SetToolTipString(_("Select graphics tool"))
+        button.SetToolTipString(tooltip)
 
         return button
 
