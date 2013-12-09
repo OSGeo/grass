@@ -70,6 +70,7 @@ class SimpleDialog(wx.Dialog):
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnOK     = wx.Button(parent = self.panel, id = wx.ID_OK)
         self.btnOK.SetDefault()
+                
         self.__layout()
         self.warning = _("Required item is not set.")
 
@@ -91,7 +92,7 @@ class SimpleDialog(wx.Dialog):
         
         # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
         self.sizer.Add(item = btnSizer, proportion = 0,
-                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+                       flag = wx.EXPAND | wx.ALL, border = 5)
 
     def ValidatorCallback(self, win):
         GMessage(parent = self, message = self.warning)

@@ -56,11 +56,10 @@ class IClassGroupDialog(SimpleDialog):
                                       size = globalvar.DIALOG_GSELECT_SIZE,
                                       validator = SimpleValidator(callback = self.ValidatorCallback))
 
-        self.subg_panel = wx.Panel(self.panel)
         # TODO use when subgroup will be optional
         #self.subg_chbox = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
         #                              label = _("Use subgroup"))
-        self.subGroupSelect = gselect.SubGroupSelect(parent = self.subg_panel)
+        self.subGroupSelect = gselect.SubGroupSelect(parent = self.panel)
 
         self.groupSelect.SetFocus()
         if group:
@@ -82,8 +81,6 @@ class IClassGroupDialog(SimpleDialog):
 
     def _layout(self):
         """!Do layout"""
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-
         self.dataSizer.Add(wx.StaticText(self.panel, id = wx.ID_ANY,
                                          label = _("Name of imagery group:")),
                                          proportion = 0, 
@@ -96,27 +93,17 @@ class IClassGroupDialog(SimpleDialog):
         #self.dataSizer.Add(self.subg_chbox, proportion = 0,
         #              flag = wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border = 5)
 
-        subg_sizer = wx.BoxSizer(wx.VERTICAL)
-        subg_sizer.Add(wx.StaticText(self.subg_panel, id = wx.ID_ANY,
-                                    label = _("Name of imagery subgroup:")),
-                                    proportion = 0, flag = wx.EXPAND | wx.BOTTOM, 
-                                    border = 5)
-        subg_sizer.Add(self.subGroupSelect, proportion = 0,
-                       flag = wx.EXPAND)
-
-        self.subg_panel.SetSizer(subg_sizer)
-        self.dataSizer.Add(self.subg_panel, proportion = 0,
-                           flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
+        self.dataSizer.Add(wx.StaticText(self.panel, id = wx.ID_ANY,
+                                         label = _("Name of imagery subgroup:")),
+                           proportion = 0, flag = wx.EXPAND | wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT,
+                           border = 5)
+        self.dataSizer.Add(self.subGroupSelect, proportion = 0,
+                       flag = wx.EXPAND | wx.ALL, border = 5)
 
         self.dataSizer.Add(self.editGroup, proportion = 0,
                       flag = wx.ALL, border = 5)
 
         self.panel.SetSizer(self.sizer)
-
-        mainSizer.Add(self.panel, proportion = 1,
-                     flag = wx.ALL, border = 5)
-
-        self.SetSizer(mainSizer)
         self.sizer.Fit(self)
 
         #TODO use when subgroup will be optional
