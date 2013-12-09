@@ -323,7 +323,7 @@ class IClassMapFrame(DoubleMapFrame):
                                                 digitClass=IClassVDigit, giface=self._giface,
                                                 tools = ['addArea', 'moveVertex', 'addVertex',
                                                          'removeVertex', 'editLine', 'moveLine',
-                                                         'deleteLine', 'deleteArea',
+                                                         'deleteArea',
                                                          'undo', 'redo'])
             self._mgr.AddPane(self.toolbars[name],
                               wx.aui.AuiPaneInfo().

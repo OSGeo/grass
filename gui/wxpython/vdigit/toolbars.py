@@ -81,9 +81,14 @@ class VDigitToolbar(BaseToolbar):
         
         # custom button for digitization of area/boundary/centroid
         # TODO: could this be somehow generalized?
-        self.areaButton = self.CreateSelectionButton()
-        self.areaButtonId = self.InsertControl(5, self.areaButton)
-        self.areaButton.Bind(wx.EVT_BUTTON, self.OnAddAreaMenu)
+        nAreaTools = 0
+        if self.tools and 'addBoundary' in self.tools: nAreaTools += 1
+        if self.tools and 'addCentroid' in self.tools: nAreaTools += 1
+        if self.tools and 'addArea' in self.tools: nAreaTools += 1
+        if nAreaTools != 1:
+            self.areaButton = self.CreateSelectionButton(_("Select area/boundary/centroid tool"))
+            self.areaButtonId = self.InsertControl(5, self.areaButton)
+            self.areaButton.Bind(wx.EVT_BUTTON, self.OnAddAreaMenu)
         
         # realize toolbar
         self.Realize()
@@ -119,16 +124,16 @@ class VDigitToolbar(BaseToolbar):
                                          label = _('Digitize new centroid'),
                                          desc = _('Left: new point')),
             'addArea'         : MetaIcon(img = 'polygon-create',
-                                         label = _('Digitize new area'),
+                                         label = _('Digitize new area (boundary without category)'),
                                          desc = _('Left: new point')),
             'addVertex'       : MetaIcon(img = 'vertex-create',
-                                         label = _('Add new vertex'),
+                                         label = _('Add new vertex to line or boundary'),
                                          desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
             'deleteLine'      : MetaIcon(img = 'line-delete',
-                                         label = _('Delete feature(s)'),
+                                         label = _('Delete selected point(s), line(s), boundary(ies) or centroid(s)'),
                                          desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
             'deleteArea'      : MetaIcon(img = 'polygon-delete',
-                                         label = _('Delete area(s)'),
+                                         label = _('Delete selected area(s)'),
                                          desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
             'displayAttr'     : MetaIcon(img = 'attributes-display',
                                          label = _('Display/update attributes'),
@@ -137,16 +142,16 @@ class VDigitToolbar(BaseToolbar):
                                          label = _('Display/update categories'),
                                          desc = _('Left: Select')),
             'editLine'        : MetaIcon(img = 'line-edit',
-                                         label = _('Edit line/boundary'),
+                                         label = _('Edit selected line/boundary'),
                                          desc = _('Left: new point; Ctrl+Left: undo last point; Right: close line')),
             'moveLine'        : MetaIcon(img = 'line-move',
-                                         label = _('Move feature(s)'),
+                                         label = _('Move selected point(s), line(s), boundary(ies) or centroid(s)'),
                                          desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
             'moveVertex'      : MetaIcon(img = 'vertex-move',
-                                         label = _('Move vertex'),
+                                         label = _('Move selected vertex'),
                                          desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
             'removeVertex'    : MetaIcon(img = 'vertex-delete',
-                                         label = _('Remove vertex'),
+                                         label = _('Remove selected vertex'),
                                          desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
             'settings'        : BaseIcons['settings'].SetLabel(_('Digitization settings')),
             'quit'            : BaseIcons['quit'].SetLabel(label = _('Quit digitizer'),
@@ -179,6 +184,14 @@ class VDigitToolbar(BaseToolbar):
             data.append(("addArea", self.icons["addArea"],
                         self.OnAddAreaTool,
                         wx.ITEM_CHECK))
+        if not self.tools or 'deleteLine' in self.tools:
+            data.append(("deleteLine", self.icons["deleteLine"],
+                         self.OnDeleteLine,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'deleteArea' in self.tools:
+            data.append(("deleteArea", self.icons["deleteArea"],
+                         self.OnDeleteArea,
+                         wx.ITEM_CHECK))
         if not self.tools or 'moveVertex' in self.tools:            
             data.append(("moveVertex", self.icons["moveVertex"],
                          self.OnMoveVertex,
@@ -198,14 +211,6 @@ class VDigitToolbar(BaseToolbar):
         if not self.tools or 'moveLine' in self.tools:
             data.append(("moveLine", self.icons["moveLine"],
                          self.OnMoveLine,
-                         wx.ITEM_CHECK))
-        if not self.tools or 'deleteLine' in self.tools:
-            data.append(("deleteLine", self.icons["deleteLine"],
-                         self.OnDeleteLine,
-                         wx.ITEM_CHECK))
-        if not self.tools or 'deleteArea' in self.tools:
-            data.append(("deleteArea", self.icons["deleteArea"],
-                         self.OnDeleteArea,
                          wx.ITEM_CHECK))
         if not self.tools or 'displayCats' in self.tools:
             data.append(("displayCats", self.icons["displayCats"],
