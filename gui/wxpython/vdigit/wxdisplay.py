@@ -245,7 +245,18 @@ class DisplayDriver:
         
         Debug.msg(1, "_drawObject(): line=%d type=%d npoints=%d", robj.fid, robj.type, robj.npoints)
         brush = None
-        if self._isSelected(robj.fid):
+        if robj.type == TYPE_AREA and \
+                self._isSelected(Vect_get_area_centroid(self.poMapInfo, robj.fid)):
+            pdc = self.dcTmp
+
+            pen = wx.TRANSPARENT_PEN
+            brush = wx.TRANSPARENT_BRUSH
+            
+            dcId = 1
+            self.topology['highlight'] += 1
+            if not self._drawSelected:
+                return
+        elif robj.type != TYPE_AREA and self._isSelected(robj.fid):
             pdc = self.dcTmp
             if self.settings['highlightDupl']['enabled'] and self._isDuplicated(robj.fid):
                 pen = wx.Pen(self.settings['highlightDupl']['color'], self.settings['lineWidth'], wx.SOLID)
