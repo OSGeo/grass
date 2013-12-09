@@ -28,7 +28,6 @@ from core.utils     import ListOfCatsToRange, _
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
 from gui_core       import gselect
-from vdigit.wxdigit import GV_CENTROID
 
 class VDigitWindow(BufferedMapWindow):
     """!A Buffered window extended for vector digitizer.
