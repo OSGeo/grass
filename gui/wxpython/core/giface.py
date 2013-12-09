@@ -256,6 +256,9 @@ class StandaloneGrassInterface():
     def GetLayerList(self):
         raise NotImplementedError()
 
+    def GetLayerTree(self):
+        return None
+
     def GetMapDisplay(self):
         """!Get current map display.
         """
