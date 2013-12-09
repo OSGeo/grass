@@ -243,17 +243,14 @@ class DisplayDriver:
         if not self.dc or not self.dcTmp:
             return -1
         
-        Debug.msg(3, "_drawObject(): line=%d type=%d npoints=%d", robj.fid, robj.type, robj.npoints)
+        Debug.msg(1, "_drawObject(): line=%d type=%d npoints=%d", robj.fid, robj.type, robj.npoints)
         brush = None
         if self._isSelected(robj.fid):
             pdc = self.dcTmp
-            if robj.type == TYPE_AREA:
-                return 1
-            else:
-                if self.settings['highlightDupl']['enabled'] and self._isDuplicated(robj.fid):
-                    pen = wx.Pen(self.settings['highlightDupl']['color'], self.settings['lineWidth'], wx.SOLID)
-                else:            
-                    pen = wx.Pen(self.settings['highlight'], self.settings['lineWidth'], wx.SOLID)
+            if self.settings['highlightDupl']['enabled'] and self._isDuplicated(robj.fid):
+                pen = wx.Pen(self.settings['highlightDupl']['color'], self.settings['lineWidth'], wx.SOLID)
+            else:            
+                pen = wx.Pen(self.settings['highlight'], self.settings['lineWidth'], wx.SOLID)
                     
             dcId = 1
             self.topology['highlight'] += 1
@@ -262,6 +259,7 @@ class DisplayDriver:
         else:
             pdc = self.dc
             pen, brush = self._definePen(robj.type)
+
             dcId = 0
         
         pdc.SetPen(pen)        
@@ -508,13 +506,14 @@ class DisplayDriver:
         
         return False
     
-    def SelectLinesByBox(self, bbox, drawSeg = False, poMapInfo = None):
+    def SelectLinesByBox(self, bbox, ltype = None, drawSeg = False, poMapInfo = None):
         """!Select vector objects by given bounding box
         
         If line id is already in the list of selected lines, then it will
         be excluded from this list.
         
         @param bbox bounding box definition
+        @param ltype feature type or None for default
         @param drawSeg True to draw segments of line
         @param poMapInfo use external Map_info, None for self.poMapInfo
 
@@ -545,9 +544,11 @@ class DisplayDriver:
         Vect_append_point(poBbox, x1, y2, 0.0)
         Vect_append_point(poBbox, x1, y1, 0.0)
         
+        if not ltype:
+            ltype = self._getSelectType()
         Vect_select_lines_by_polygon(poMapInfo, poBbox,
                                      0, None, # isles
-                                     self._getSelectType(), poList)
+                                     ltype, poList)
         
         flist = poList.contents
         nlines = flist.n_values
@@ -580,7 +581,32 @@ class DisplayDriver:
         
         return nlines
 
-    def SelectLineByPoint(self, point, poMapInfo = None):
+    def SelectAreaByPoint(self, point, poMapInfo = None):
+        thisMapInfo = poMapInfo is None
+        if not poMapInfo:
+            poMapInfo = self.poMapInfo
+        
+        if not poMapInfo:
+            return { 'area' : -1, 'centroid': -1 }
+        
+        if thisMapInfo:
+            self._drawSelected = True
+
+        box = bound_box()
+        for area in range(1, Vect_get_num_areas(poMapInfo)+1):
+            Vect_get_area_box(poMapInfo, area, byref(box))
+            if Vect_point_in_area(point[0], point[1], poMapInfo, area, byref(box)) == 1:
+                centroid = Vect_get_area_centroid(poMapInfo, area)
+                if not self._isSelected(centroid):
+                    self.selected['ids'].append(centroid)
+                else:
+                    self.selected['ids'].remove(centroid)
+                
+                return { 'area' : area, 'centroid' : centroid}
+        
+        return { 'area' : -1, 'centroid': -1 }
+            
+    def SelectLineByPoint(self, point, ltype = None, poMapInfo = None):
         """!Select vector feature by given point in given
         threshold
    
@@ -588,6 +614,7 @@ class DisplayDriver:
         all segments are stores.
         
         @param point points coordinates (x, y)
+        @param ltype feature type or None for default
         @param poMapInfo use external Map_info, None for self.poMapInfo
 
         @return dict {'line' : feature id, 'point' : point on line}
@@ -606,9 +633,11 @@ class DisplayDriver:
         
         poFound = Vect_new_list()
         
+        if ltype is None:
+            ltype  = self._getSelectType()
         lineNearest = Vect_find_line_list(poMapInfo, point[0], point[1], 0,
-                                           self._getSelectType(), self.GetThreshold(), self.is3D,
-                                           None, poFound)
+                                          ltype, self.GetThreshold(), self.is3D,
+                                          None, poFound)
         Debug.msg(1, "DisplayDriver.SelectLineByPoint() found = %d", lineNearest)
         
         if lineNearest > 0:
