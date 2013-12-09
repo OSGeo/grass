@@ -6,7 +6,7 @@
 Classes:
  - mapwindow::VDigitWindow
 
-(C) 2011 by the GRASS Development Team
+(C) 2011-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -28,6 +28,7 @@ from core.utils     import ListOfCatsToRange, _
 from core.globalvar import QUERYLAYER
 from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplicatesDialog
 from gui_core       import gselect
+from vdigit.wxdigit import GV_CENTROID
 
 class VDigitWindow(BufferedMapWindow):
     """!A Buffered window extended for vector digitizer.
@@ -493,6 +494,7 @@ class VDigitWindow(BufferedMapWindow):
                         "queryLine", "breakLine", "typeConv"]:
             # various tools -> unselected selected features
             self.digit.GetDisplay().SetSelected([])
+            
             if action in ["moveLine", "moveVertex", "editLine"] and \
                     hasattr(self, "moveInfo"):
                 del self.moveInfo
@@ -599,7 +601,7 @@ class VDigitWindow(BufferedMapWindow):
         if action in ("moveVertex",
                       "editLine"):
             if len(self.digit.GetDisplay().GetSelected()) == 0:
-                nselected = self.digit.GetDisplay().SelectLineByPoint(pos1)['point']
+                nselected = int(self.digit.GetDisplay().SelectLineByPoint(pos1)['line'] != -1)
                 
                 if action == "editLine":
                     try:
@@ -633,7 +635,7 @@ class VDigitWindow(BufferedMapWindow):
                         "copyAttrs"):
             if not hasattr(self, "copyCatsIds"):
                 # 'from' -> select by point
-                nselected = self.digit.GetDisplay().SelectLineByPoint(pos1)['point']
+                nselected = int(self.digit.GetDisplay().SelectLineByPoint(pos1)['line'] != -1)
                 if nselected:
                     self.copyCatsList = self.digit.GetDisplay().GetSelected()
             else:
@@ -642,8 +644,7 @@ class VDigitWindow(BufferedMapWindow):
                 # return number of selected features (by box/point)
                 nselected = self.digit.GetDisplay().SelectLinesByBox((pos1, pos2))
                 if nselected == 0:
-                    if self.digit.GetDisplay().SelectLineByPoint(pos1) is not None:
-                        nselected = 1
+                    nselected = int(self.digit.GetDisplay().SelectLineByPoint(pos1)['line'] != -1)
                         
                 if nselected > 0:
                     self.copyCatsIds = self.digit.GetDisplay().GetSelected()
@@ -660,17 +661,19 @@ class VDigitWindow(BufferedMapWindow):
                     len(self.digit.GetDisplay().GetSelected()) > 0:
                 nselected = 0
             else:
-                if action == 'moveLine':
-                    drawSeg = True
+                if action == 'deleteArea':
+                    nselected = int(self.digit.GetDisplay().SelectAreaByPoint(pos1)['area'] != -1)
                 else:
-                    drawSeg = False
-                
-                nselected = self.digit.GetDisplay().SelectLinesByBox(bbox = (pos1, pos2),
-                                                                     drawSeg = drawSeg)
-                if nselected == 0:
-                    if self.digit.GetDisplay().SelectLineByPoint(pos1) is not None:
-                        nselected = 1
-        
+                    if action == 'moveLine':
+                        drawSeg = True
+                    else:
+                        drawSeg = False
+                        
+                    nselected = self.digit.GetDisplay().SelectLinesByBox(bbox = (pos1, pos2),
+                                                                         drawSeg = drawSeg)
+                    if nselected == 0:
+                        nselected = int(self.digit.GetDisplay().SelectLineByPoint(pos1)['line'] != -1)
+
         if nselected > 0:
             if action in ("moveLine", "moveVertex") and \
                     hasattr(self, "moveInfo"):
@@ -707,7 +710,7 @@ class VDigitWindow(BufferedMapWindow):
         
         else: # no vector object found
             if not (action in ("moveLine",
-                                                 "moveVertex") and \
+                               "moveVertex") and \
                         hasattr(self, "moveInfo") and \
                         len(self.moveInfo['id']) > 0):
                 # avoid left-click when features are already selected
@@ -720,7 +723,7 @@ class VDigitWindow(BufferedMapWindow):
         pos1 = self.Pixel2Cell(self.mouse['begin'])
         
         pointOnLine = self.digit.GetDisplay().SelectLineByPoint(pos1)['point']
-        if not pointOnLine:
+        if pointOnLine['line'] == -1:
             return
         
         if self.toolbar.GetAction() in ["splitLine", "addVertex"]:
@@ -817,6 +820,9 @@ class VDigitWindow(BufferedMapWindow):
         
     def _onLeftUp(self, event):
         """!Left mouse button released"""
+        if event.ControlDown():
+            return
+        
         if hasattr(self, "moveInfo"):
             if len(self.digit.GetDisplay().GetSelected()) == 0:
                 self.moveInfo['begin'] = self.Pixel2Cell(self.mouse['begin']) # left down
