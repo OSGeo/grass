@@ -193,6 +193,7 @@ class AnimationController(wx.EvtHandler):
         self.EndAnimation()
         dlg = EditDialog(parent=self.frame, evalFunction=self.EvaluateInput,
                          animationData=self.animationData, maxAnimations=len(self.animations))
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
@@ -226,6 +227,7 @@ class AnimationController(wx.EvtHandler):
         animationIndex = len([anim for anim in self.animations if anim.IsActive()])
         animData.SetDefaultValues(windowIndex, animationIndex)
         dlg = InputDialog(parent=self.frame, mode='add', animationData=animData)
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
