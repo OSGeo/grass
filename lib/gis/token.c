@@ -47,7 +47,7 @@ static char **tokenize_strtok(const char *, const char *);
 */
 char **G_tokenize(const char *buf, const char *delim)
 {
-    return tokenize_strtok(buf, delim);
+    return tokenize(buf, delim, NULL);
 }
 
 /*!
