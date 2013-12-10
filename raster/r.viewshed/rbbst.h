@@ -96,7 +96,7 @@ TreeNode *search_for_node_with_key(RBTree * rbt, double key);
 double find_max_gradient_within_key(RBTree * rbt, double key, double angle, double gradient);
 
 /*LT: not sure if this is correct */
-int is_empty(RBTree * t);
+int rbtree_is_empty(RBTree * t);
 
 
 

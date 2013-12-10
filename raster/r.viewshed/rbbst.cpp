@@ -104,7 +104,7 @@ RBTree *create_tree(TreeValue tv)
 }
 
 /*LT: not sure if this is correct */
-int is_empty(RBTree * t)
+int rbtree_is_empty(RBTree * t)
 {
     assert(t);
     return (t->root == NIL);

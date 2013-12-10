@@ -53,11 +53,11 @@ encodeDirectionMFD(const genericWindow<elevation_type>& elevwin,
   
   if(!is_nodata(elevwin.get())) {
     dir = 0;
-    if (elevwin.get(5) < elevwin.get() && !is_void(elevwin.get(5))) dir |= 1;
-    if (elevwin.get(3) < elevwin.get() && !is_void(elevwin.get(3))) dir |= 16;
+    if (elevwin.get(5) < elevwin.get() && !elevation_type_is_void(elevwin.get(5))) dir |= 1;
+    if (elevwin.get(3) < elevwin.get() && !elevation_type_is_void(elevwin.get(3))) dir |= 16;
     for(int i=0; i<3; i++) {
-      if(elevwin.get(i) < elevwin.get() && !is_void(elevwin.get(i))) dir |= 32<<i;
-      if(elevwin.get(i+6) < elevwin.get() && !is_void(elevwin.get(6+i))) dir |= 8>>i;
+      if(elevwin.get(i) < elevwin.get() && !elevation_type_is_void(elevwin.get(i))) dir |= 32<<i;
+      if(elevwin.get(i+6) < elevwin.get() && !elevation_type_is_void(elevwin.get(6+i))) dir |= 8>>i;
     }
   }
   

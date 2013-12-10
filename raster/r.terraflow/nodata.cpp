@@ -73,7 +73,7 @@ is_nodata(float x) {
 
 
 int
-is_void(elevation_type el) {
+elevation_type_is_void(elevation_type el) {
   return (el == nodataType::ELEVATION_NODATA);
 }
 

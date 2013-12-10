@@ -89,7 +89,7 @@ StatusList *create_status_struct();
 void delete_status_structure(StatusList * sl);
 
 /*returns true is it is empty */
-int is_empty(StatusList * sl);
+int status_list_is_empty(StatusList * sl);
 
 
 /*delete the statusNode with the given key */
