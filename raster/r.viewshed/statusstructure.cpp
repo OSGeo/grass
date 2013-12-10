@@ -292,7 +292,7 @@ double find_max_gradient_in_status_struct(StatusList * sl, double dist, double a
     assert(sl);
     /*note: if there is nothing in the status struccture, it means this
        cell is VISIBLE */
-    if (is_empty(sl))
+    if (status_list_is_empty(sl))
 	return SMALLEST_GRADIENT;
     /*it is also possible that the status structure is not empty, but
        there are no events with key < dist ---in this case it returns
@@ -301,9 +301,9 @@ double find_max_gradient_in_status_struct(StatusList * sl, double dist, double a
 }
 
 /*returns true if it is empty */
-int is_empty(StatusList * sl)
+int status_list_is_empty(StatusList * sl)
 {
     assert(sl);
-    return (is_empty(sl->rbt) ||
+    return (rbtree_is_empty(sl->rbt) ||
 	    sl->rbt->root->value.maxGradient == SMALLEST_GRADIENT);
 }

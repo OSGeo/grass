@@ -37,7 +37,7 @@
 int is_nodata(elevation_type el);
 int is_nodata(int x);
 int is_nodata(float x);
-int is_void(elevation_type el);
+int elevation_type_is_void(elevation_type el);
 
 
 class nodataType : public ijBaseType {
