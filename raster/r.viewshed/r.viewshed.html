@@ -172,6 +172,28 @@ REFERENCES below.
 
 <h3>An example:</h3>
 
+Compute viewshed from the point with coordinates 638728.087167, 220609.261501
+which is 5 meters above ground (using NC dataset):
+
+<div class="code"><pre>
+g.region rast=elev_lid792_1m
+r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed coordinates=638728.087167,220609.261501 obs_elev=5
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<img src="r.viewshed.png" border=0><br>
+<i>Flow accumulation</i>
+</div>
+<!--
+image generated using
+d.mon wx0
+d.rast elev_lid792_1m
+d.rast elev_lid792_1m_viewshed
+save image to files
+crop the background using Gimp or ImageMagic
+mogrify -trim *.png
+some bounding box problems noticed when opening mogrify result in Gimp
+-->
 
 Using the Spearfish dataset:  calculating the viewpoint from the top
 of a mountain:
@@ -187,8 +209,8 @@ r.viewshed input=elevation.10m output=viewshed coordinate=598869,4916642 mem=800
 <ul>
 
    <li>Computing Visibility on Terrains in External Memory. Herman
-	 Haverkort, Laura Toma and Yi Zhuang. To appear in <em>ACM Journal
-	 on Experimental Algorithmics</em>.
+	 Haverkort, Laura Toma and Yi Zhuang. In <em>ACM Journal
+	 on Experimental Algorithmics (JEA)</em> 13 (2009).
 	 
 	 <li><a
 	 href="http://www.siam.org/proceedings/alenex/2007/alx07_002haverkorth.pdf">
