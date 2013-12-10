@@ -573,6 +573,7 @@ class EditDialog(wx.Dialog):
         animationIndex = len(self.animationData)
         animData.SetDefaultValues(windowIndex, animationIndex)
         dlg = InputDialog(parent=self, mode='add', animationData=animData)
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
@@ -588,6 +589,7 @@ class EditDialog(wx.Dialog):
 
         animData = self.listbox.GetClientData(index)
         dlg = InputDialog(parent=self, mode='edit', animationData=animData)
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
@@ -933,7 +935,7 @@ class ExportDialog(wx.Dialog):
         fontdata.SetInitialFont(font)
 
         dlg = wx.FontDialog(self, fontdata)
-
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             newfontdata = dlg.GetFontData()
             font = newfontdata.GetChosenFont()
@@ -1114,6 +1116,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         dlg = AddTemporalLayerDialog(parent=self, layer=layer)
         # first get hidden property, it's altered afterwards
         hidden = layer.hidden
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             layer = dlg.GetLayer()
             if hidden:
@@ -1282,6 +1285,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         dlg.layerType.SetSelection(index)
         dlg.LoadMapLayers(dlg.GetLayerType(cmd=True),
                           dlg.mapset.GetStringSelection())
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             self.tselect.SetValue(','.join(dlg.GetMapLayers()))
 
