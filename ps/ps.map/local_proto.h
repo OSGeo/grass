@@ -42,9 +42,8 @@ int read_header_file(const char *);
 /* do_labels.c */
 int do_labels(int);
 
-#ifdef _STDIO_H
 int do_label(FILE *, int);
-#endif
+
 /* do_masking.c */
 int do_masking(void);
 
@@ -271,9 +270,8 @@ int add_to_session(int, char *);
 int accept(void);
 int reject(void);
 
-#ifdef _STDIO_H
 int print_session(FILE *);
-#endif
+
 /* show_scale.c */
 int show_scale(void);
 
@@ -299,9 +297,8 @@ int yesno(char *, char *);
 int eps_bbox(char *, double *, double *, double *, double *);
 int eps_trans(double, double, double, double, double, double, double, double,
 	      double *, double *);
-#ifdef _STDIO_H
+
 int eps_save(FILE *, char *, char *);
 int eps_draw_saved(char *, double, double, double, double);
 int eps_draw(FILE *, char *, double, double, double, double);
 int pat_save(FILE *, char *, char *);
-#endif
