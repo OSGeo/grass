@@ -13,10 +13,7 @@
 #ifndef  DIG___STRUCTS___
 #define DIG___STRUCTS___
 
-/*  this file depends on <stdio.h> */
-#ifndef _STDIO_H
 #include <stdio.h>
-#endif
 
 #include <sys/types.h>
 

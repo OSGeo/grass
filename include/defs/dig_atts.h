@@ -1,6 +1,4 @@
-#ifndef _STDIO_H
 #include <stdio.h>
-#endif
 
 /*
    #define              WRITE_ATT_FORMAT        "%c  %12.2lf  %12.2lf  %8d"

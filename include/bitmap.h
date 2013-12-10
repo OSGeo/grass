@@ -33,9 +33,7 @@ struct BMlink
     struct BMlink *next;
 };
 
-#ifndef _STDIO_H
 #include <stdio.h>
-#endif
 
 #include <grass/defs/bitmap.h>
 
