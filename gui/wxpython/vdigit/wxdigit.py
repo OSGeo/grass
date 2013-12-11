@@ -1822,6 +1822,10 @@ class IVDigit:
 
         self._addChangeset()
         
+        if ftype & GV_AREA:
+            # len(fids) == 1 -> no new area
+            return (len(fids)-1, fids)
+        
         return (len(fids), fids)
     
     def _ModifyLineVertex(self, coords, add = True):
