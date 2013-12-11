@@ -344,13 +344,14 @@ class VDigitToolbar(BaseToolbar):
     def OnAddAreaTool(self, event):
         """!Area tool activated."""
         Debug.msg (2, "VDigitToolbar.OnAddAreaTool()")
+        
         # we need the previous id
         if 'type' not in self.action or \
-                self.action['type'] in ('addArea', ''): # default action
+                self.action['type'] in ('area', ''): # default action
             self.OnAddArea(event)
-        elif self.action['type'] == 'addBoundary':
+        elif self.action['type'] == 'boundary':
             self.OnAddBoundary(event)
-        elif self.action['type'] == 'addCentroid':
+        elif self.action['type'] == 'centroid':
             self.OnAddCentroid(event)
 
     def OnAddAreaMenu(self, event):
