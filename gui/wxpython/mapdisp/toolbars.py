@@ -159,6 +159,8 @@ class MapToolbar(BaseToolbar):
                                       wx.ITEM_CHECK),
                                      ('zoomExtent', BaseIcons['zoomExtent'],
                                       self.parent.OnZoomToMap),
+                                     ('zoomRegion', BaseIcons['zoomRegion'],
+                                      self.parent.OnZoomToWind),
                                      ('zoomBack', BaseIcons['zoomBack'],
                                       self.parent.OnZoomBack),
                                      ('zoomMenu', BaseIcons['zoomMenu'],
