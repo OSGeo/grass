@@ -231,7 +231,11 @@ class IClassMapFrame(DoubleMapFrame):
         vectorPath = grass.tempfile(create = False)
         
         return 'trAreas' + os.path.basename(vectorPath).replace('.','')
-                
+
+    def SetGroup(self, group, subgroup):
+        """!Set group and subgroup manually"""
+        self.g = {'group' : group, 'subgroup' : subgroup}
+
     def CreateTempVector(self):
         """!Create temporary vector map for training areas"""
         vectorName = self._getTempVectorName()

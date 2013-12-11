@@ -5,7 +5,7 @@
 # AUTHOR(S): Anna Kratochvilova, Vaclav Petras
 # PURPOSE:   The Map Swipe is a wxGUI component which allows the user to
 #            interactively compare two maps  
-# COPYRIGHT: (C) 2012 by Anna Kratochvilova, and the GRASS Development Team
+# COPYRIGHT: (C) 2012-2013 by Anna Kratochvilova, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -33,6 +33,9 @@
 #% description: Maximize window
 #%end
 #%option G_OPT_I_GROUP
+#% required: no
+#%end
+#%option G_OPT_I_SUBGROUP
 #% required: no
 #%end
 #%option G_OPT_R_MAP
@@ -65,15 +68,23 @@ from core.utils import _, GuiModuleMain
 from iclass.frame import IClassMapFrame
 
 def main():
-    group_name = map_name = trainingmap_name = None
+    group_name = subgroup_name = map_name = trainingmap_name = None
+
     if options['group']:
+        if not options['subgroup']:
+            grass.fatal(_("Name of subgroup required"))
         group_name = grass.find_file(name = options['group'], element = 'group')['name']
         if not group_name:
             grass.fatal(_("Group <%s> not found") % options['group'])
+        if options['subgroup'] not in grass.read_command('i.group', group = group_name, flags = 'sg').splitlines():
+            grass.fatal(_("Subgroup <%s> not found") % options['subgroup'])
+        subgroup_name = options['subgroup']
+    
     if options['map']:
         map_name = grass.find_file(name = options['map'], element = 'cell')['fullname']
         if not map_name:
             grass.fatal(_("Raster map <%s> not found") % options['map'])
+    
     if options['trainingmap']:
         trainingmap_name = grass.find_file(name = options['trainingmap'], element = 'vector')['fullname']
         if not trainingmap_name:
@@ -97,7 +108,7 @@ def main():
     if not flags['m']:
         frame.CenterOnScreen()
     if group_name:
-        frame.SetGroup(group_name) 
+        frame.SetGroup(group_name, subgroup_name) 
     if map_name:
         giface.WriteLog(_("Loading raster map <%s>...") % map_name)
         frame.trainingMapManager.AddLayer(map_name)
