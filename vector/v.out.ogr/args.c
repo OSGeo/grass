@@ -6,38 +6,29 @@ void parse_args(int argc, char **argv,
 		struct Options *options, struct Flags *flags)
 {
     options->input = G_define_standard_option(G_OPT_V_INPUT);
+    options->input->label = _("Name of input vector map to export");
+    
+    options->field = G_define_standard_option(G_OPT_V_FIELD);
+    options->field->guisection = _("Selection");
 
     options->type = G_define_standard_option(G_OPT_V3_TYPE);
     options->type->options =
 	"point,line,boundary,centroid,area,face,kernel,auto";
     options->type->answer = "auto";
-
     options->type->label = _("Feature type(s)");
     options->type->description =
 	_("Combination of types is not supported "
 	  "by all output formats. Default is to use first type found in input vector map.");
     options->type->guisection = _("Selection");
 
-    options->field = G_define_standard_option(G_OPT_V_FIELD);
-    options->field->guisection = _("Selection");
-
     options->dsn = G_define_option();
     options->dsn->key = "dsn";
     options->dsn->type = TYPE_STRING;
     options->dsn->required = YES;
-    options->dsn->label = _("OGR output datasource name");
+    options->dsn->label = _("Name of output OGR datasource");
     options->dsn->description =
-	_("For example: ESRI Shapefile: filename or directory for storage");
-
-    options->layer = G_define_option();
-    options->layer->key = "olayer";
-    options->layer->type = TYPE_STRING;
-    options->layer->required = NO;
-    options->layer->label =
-	_("OGR layer name. If not specified, input name is used.");
-    options->layer->description =
-	_("For example: ESRI Shapefile: shapefile name");
-    options->layer->guisection = _("Creation");
+	_("For example: ESRI Shapefile: filename or directory for storage\n"
+          "\tPostGIS database: connection string");
 
     options->format = G_define_option();
     options->format->key = "format";
@@ -48,6 +39,28 @@ void parse_args(int argc, char **argv,
     options->format->options = OGR_list_write_drivers();
     options->format->description = _("Data format to write");
     
+    options->layer = G_define_option();
+    options->layer->key = "olayer";
+    options->layer->type = TYPE_STRING;
+    options->layer->required = NO;
+    options->layer->label =
+	_("Name for output OGR layer. If not specified, input name is used");
+    options->layer->description =
+	_("For example: ESRI Shapefile: shapefile name\n"
+          "\tPostGIS database: table name");
+    options->layer->guisection = _("Creation");
+
+    options->otype = G_define_standard_option(G_OPT_V_TYPE);
+    options->otype->key = "otype";
+    options->otype->options = "line,boundary";
+    options->otype->answer = "";
+    options->otype->description = _("Optionally change default output type");
+    G_asprintf((char **) &options->otype->descriptions,
+	       "line;%s;boundary;%s",
+	       _("export area boundaries as linestrings"),
+               _("export lines as polygons"));
+    options->otype->guisection = _("Creation");
+
     options->dsco = G_define_option();
     options->dsco->key = "dsco";
     options->dsco->type = TYPE_STRING;
@@ -70,7 +83,7 @@ void parse_args(int argc, char **argv,
 
     flags->update = G_define_flag();
     flags->update->key = 'u';
-    flags->update->description = _("Open an existing datasource for update");
+    flags->update->description = _("Open an existing OGR datasource for update");
 
     flags->append = G_define_flag();
     flags->append->key = 'a';
@@ -107,10 +120,16 @@ void parse_args(int argc, char **argv,
     flags->poly->description = _("Export lines as polygons");
     flags->poly->guisection = _("Creation");
 
+    flags->multi = G_define_flag();
+    flags->multi->key = 'm';
+    flags->multi->description =
+	_("Export vector data as multi-features");
+    flags->multi->guisection = _("Creation");
+
     flags->new = G_define_flag();
     flags->new->key = 'n';
     flags->new->description =
-	_("Create a new empty OGR layer in defined OGR datasource "
+	_("Create a new empty layer in defined OGR datasource "
 	  "and exit. Nothing is read from input.");
     flags->new->guisection = _("Creation");
     

@@ -1,67 +1,109 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.out.ogr</em> converts GRASS vector data to
-<a href="http://www.gdal.org/ogr/">OGR</a> format. 
-OGR (Simple Features Library) is part of the 
-<a href="http://www.gdal.org">GDAL</a> library, so you need to
-install gdal to use <em>v.out.ogr</em>. 
-
-<h3>Supported OGR Vector Formats</h3>
-
-<a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI Shapefile</a><br>
-<a href="http://www.gdal.org/ogr/drv_csv.html">CSV</a><br>
-<a href="http://www.gdal.org/ogr/drv_gml.html">GML</a><br>
-<a href="http://www.gdal.org/ogr/drv_kml.html">KML</a><br>
-<a href="http://www.gdal.org/ogr/drv_mitab.html">Mapinfo File</a><br>
-<a href="http://www.gdal.org/ogr/drv_pg.html">PostgreSQL/PostGIS</a><br>
-<a href="http://www.gdal.org/ogr/drv_tiger.html">TIGER</a>
+<em>v.out.ogr</em> converts GRASS vector map layer to any of the
+supported <a href="http://www.gdal.org/ogr/">OGR</a> vector formats
+(like a Esri Shapefile, SpatiaLite or GML).
 
 <p>
-For further available drivers go 
+OGR (Simple Features Library) is part of the
+<a href="http://www.gdal.org">GDAL</a> library, so you need to
+install this library to use <em>v.out.ogr</em>. 
+
+<p>
+The OGR library supports many various formats including:
+
+<ul>
+  <li><a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI Shapefile</a></li>
+  <li><a href="http://www.gdal.org/ogr/drv_pg.html">PostGIS</a></li>
+  <li><a href="http://www.gdal.org/ogr/drv_sqlite.html">SpatiaLite</a></li>
+  <li><a href="http://www.gdal.org/ogr/drv_csv.html">CSV</a></li>
+  <li><a href="http://www.gdal.org/ogr/drv_gml.html">GML</a></li>
+  <li><a href="http://www.gdal.org/ogr/drv_kml.html">KML</a></li>
+  <li><a href="http://www.gdal.org/ogr/drv_mitab.html">Mapinfo File</a></li>
+  <li><a href="http://www.gdal.org/ogr/drv_tiger.html">TIGER</a></li>
+  <li>... and many others</li>
+</ul>
+
+<p>
+For further available other supported formats go 
 <a href="http://www.gdal.org/ogr/ogr_formats.html">here</a>.
 
 <h2>NOTES</h2>
 
-By default, islands will appear as holes inside surrounding areas.
-To export areas with holes into, e.g., a Shapefile, and make the 
-holes appear as filled areas, the flag <em>-c</em> has to be used.
-<p>The "-z" flag can be used to automatically export a 3D map to a 3D Shapefile, instead 
-of setting the correct <em>lco=</em> option manually.
+By default, islands will appear as holes inside surrounding areas. To
+export polygons with holes into, e.g., a Esri Shapefile, and make the
+holes appear as filled areas, the flag <b>-c</b> has to be used.
+
+<p>
+<em>v.out.ogr</em> exports 3D vector data as 2.5D simple features if
+possible (not supported by all formats). For exporting 3D vector data
+as 2D simple features, use <b>-2</b> flag.
+
+<p>
+By default, <em>v.out.ogr</em> converts GRASS vector data to single
+simple features. If GRASS features has more categories defined in
+given <b>layer</b>, then the features is exported several times. GRASS
+features without category are skipped by default. To export features
+also without category, the <b>-c</b> flag must be given.
+
+<p>
+When <b>-m</b> flag is given, <em>v.out.ogr</em> export GRASS vector
+data as multi-features based on their category(ies). Multi-feature is
+formed by GRASS features with the same category. When <b>-c</b> flag
+is given, the module also export GRASS features without category as
+one multi-feature. Note that multi-features are not supported by all
+formats.
 
 <h2>EXAMPLES</h2>
 
-<h3>Export to Shapefile</h3>
+<h3>Export to Esri Shapefile</h3>
 
 Export lines from GRASS vector map to Shapefile format:
+
 <div class="code"><pre>
 v.out.ogr input=lines type=line dsn=lines.shp
 </pre></div>
-<p>Export areas from GRASS vector map to Shapefile format, converting
-islands (holes) to filled areas (generates /tmp/testogr.shp and related files):
+
+<p>
+Export areas from GRASS vector map to Shapefile format, converting
+islands (holes) to filled polygons:
+
 <div class="code"><pre>
 v.out.ogr -c input=areas_islands type=area dsn=areas_islands.shp
 </pre></div>
-<p>Export 3D lines from GRASS vector map to Shapefile format:
+
+<p>
+Export 3D lines from GRASS vector map to Shapefile format:
+
 <div class="code"><pre>
 v.out.ogr input=lines_3d type=line dsn=lines_3d.shp lco="SHPT=ARCZ"
 </pre></div>
-<p>Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile format
+
+<p>
+Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile format
+
 <div class="code"><pre>
 v.out.ogr points_3d type=point dsn=points_3d.shp lco="SHPT=POINTZ"
 </pre></div>
-<p>Export 3D faces from GRASS vector map to Shapefile format:
+
+<p>
+Export 3D faces from GRASS vector map to Shapefile format:
 <div class="code"><pre>
 v.out.ogr input=objects_3d type=face dsn=faces_3d.shp lco="SHPT=POLYGONZ"
 </pre></div>
-<p>Export 3D faces from GRASS vector map to Shapefile format, automatic 3D setting:
+
+<p>
+Export 3D faces from GRASS vector map to Shapefile format, automatic 3D setting:
+
 <div class="code"><pre>
-v.out.ogr input=objects_3d type=face dsn=faces_3d.shp -z"
+v.out.ogr input=objects_3d type=face dsn=faces_3d.shp"
 </pre></div>
 
 <h3>Export to GML</h3>
 
 Export lines from GRASS vector map to GML format
- (generates /tmp/testogr.gml file with layer 'testogr'):
+ (generates '/tmp/testogr.gml' file with layer 'testogr'):
+
 <div class="code"><pre>
 v.out.ogr input=multi type=line dsn=/tmp/testogr.gml olayer=testogr format=GML 
 </pre></div>
@@ -69,24 +111,29 @@ v.out.ogr input=multi type=line dsn=/tmp/testogr.gml olayer=testogr format=GML
 <h3>Export to PostgreSQL/PostGIS</h3>
 
 Export areas from GRASS vector map directly to PostGIS:
+
 <div class="code"><pre>
-v.out.ogr input=polygons type=area \
-          dsn="PG:host=localhost dbname=postgis user=postgres" \
-          olayer=polymap format=PostgreSQL
+v.out.ogr input=polygons type=area dsn="PG:host=localhost dbname=postgis user=postgres" olayer=polymap format=PostgreSQL
 </pre></div>
+
+<i>Note:</i> For exporting GRASS vector data to PostGIS database
+should be used <em><a href="v.out.postgis.html">v.out.postgis</a></em>
+module. This module supports beside simple features also topological
+format PostGIS Topology.
 
 <h3>Export to KML (Google Earth)</h3>
 
-<b>Example 1 (Latitude-Longitude location):</b><br>
+<p>
 Export faces (3D vectors) from GRASS vector map to KML format for Google Earth:
+
 <div class="code"><pre>
-v.out.ogr input=buildings_3d dsn=buildings_3d.kml olayer=buildings_3d \
-          format=KML type=face
+v.out.ogr input=buildings_3d dsn=buildings_3d.kml olayer=buildings_3d format=KML type=face
 </pre></div>
 
-<p><b>Example 2 (Latitude-Longitude location):</b><br>
+<p>
 Generate and export GRASS vector "asteroid" map (faces, 3D vectors) to
- KML format for Google Earth:
+KML format for Google Earth:
+
 <div class="code"><pre>
 # near Raleigh (NC, USA)
 g.region n=35.73952587 s=35.73279182 w=-78.68263928 e=-78.67499517
@@ -102,32 +149,35 @@ v.patch input=random3d_a,random3d_b output=random3d
 v.hull input=random3d output="random3d_hull"
 
 # export to KML 3D
-v.out.ogr input=random3d_hull dsn=random3d_hull.kml format=KML \
-          type=face dsco="AltitudeMode=absolute"
+v.out.ogr input=random3d_hull dsn=random3d_hull.kml format=KML type=face dsco="AltitudeMode=absolute"
 
 # now open KML file 'random3d_hull.kml' in Google Earth or NASA WorldWind or ...
 </pre></div>
 
-
 <h2>REFERENCES</h2>
 
-<a href="http://www.gdal.org/ogr/">OGR vector library</a>
-<br>
-<a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a>
-documentation
-
+<ul>
+<li><a href="http://www.gdal.org/ogr/">OGR vector library</a></li>
+<li><a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a>
+  documentation</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.out.postgis.html">v.out.postgis</a>,
 <a href="db.out.ogr.html">db.out.ogr</a>,
 <a href="v.external.html">v.external</a>,
+<a href="v.external.out.html">v.external.out</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>
 </em>
 
 <h2>AUTHORS</h2>
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
-Some contributions: Markus Neteler, Martin Landa
-<p><i>Last changed: $Date$</i>
+Some contributions: Markus Neteler<br>
+Multi-feature support by Martin Landa, Czech Technical University in Prague, 2013
+
+<p>
+<i>Last changed: $Date$</i>
 
