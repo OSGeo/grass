@@ -36,3 +36,38 @@ void create_ogr_layer(const char *dsn, const char *format, const char *layer,
 	G_fatal_error(_("Creation of OGR layer <%s> failed"), layer);
     }
 }
+
+OGRwkbGeometryType get_multi_wkbtype(OGRwkbGeometryType wkbtype)
+{
+    OGRwkbGeometryType multiwkbtype;
+
+    switch (wkbtype) {
+    case wkbPoint:
+        multiwkbtype = wkbMultiPoint;
+        break;
+    case wkbLineString:
+        multiwkbtype = wkbMultiLineString;
+        break;
+    case wkbPolygon:
+        multiwkbtype = wkbMultiPolygon;
+        break;
+    default:
+        multiwkbtype = wkbGeometryCollection;
+        break;
+    }
+
+    return multiwkbtype;
+}
+
+OGRwkbGeometryType get_wkbtype(int type, int otype)
+{
+    if (type == GV_POINT || type == GV_KERNEL ||
+        (type == GV_CENTROID && otype & GV_CENTROID))
+        return wkbPoint;
+    else if (type & GV_LINES)
+        return wkbLineString;
+    else if (type == GV_FACE)
+        return wkbPolygon25D;
+
+    return wkbGeometryCollection;
+}

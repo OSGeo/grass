@@ -2,9 +2,9 @@
 
 #include "local_proto.h"
 
-int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
+int mk_att(int cat, struct field_info *Fi, dbDriver *driver, int ncol,
 	   int *colctype, const char **colname, int doatt, int nocat,
-	   OGRFeatureH Ogr_feature, int *noatt, int *fout)
+	   OGRFeatureH Ogr_feature, int *noatt)
 {
     int j, ogrfieldnum;
     int more;
@@ -44,8 +44,7 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 	    sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key, cat);
 	    G_debug(2, "SQL: %s", buf);
 	    db_set_string(&dbstring, buf);
-	    if (db_open_select_cursor
-			    (Driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
+	    if (db_open_select_cursor (driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
 		    G_fatal_error(_("Cannot select attributes for cat = %d"),
 		  cat);
 	    }
@@ -143,7 +142,6 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 	/* G_warning ("Line without cat of layer %d", field); */
 	nocat++;
     }
-    (*fout)++;
 
     /*
     db_free_string(&dbstring);
