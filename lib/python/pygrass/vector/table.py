@@ -798,7 +798,7 @@ class DBlinks(object):
         if force:
             link = self.by_name(key)
             table = link.table()
-            table.drop()
+            table.drop(force=force)
         if isinstance(key, str):
             key = self.from_name_to_num(key)
         libvect.Vect_map_del_dblink(self.c_mapinfo, key)
@@ -882,7 +882,7 @@ class Table(object):
             name = self.name
         used = db_table_in_vector(name)
         if len(used) > 0:
-            warning(_("Deleting table <%s> which is attached to following map(s):") % table)
+            warning(_("Deleting table <%s> which is attached to following map(s):") % name)
             for vect in used:
                 warning("%s" % vect)
             if not force:
