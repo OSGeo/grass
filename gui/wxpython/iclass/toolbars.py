@@ -109,6 +109,8 @@ class IClassMapToolbar(BaseToolbar):
                                      ("zoomOut", icons["zoomOut"],
                                       self.parent.OnZoomOut,
                                       wx.ITEM_CHECK),
+                                     ("zoomRegion", icons["zoomRegion"],
+                                      self.parent.OnZoomToWind),
                                      ("zoomMenu", icons["zoomMenu"],
                                       self.parent.OnZoomMenu),
                                      (None, ),

@@ -446,9 +446,7 @@ class IClassMapFrame(DoubleMapFrame):
         # Add items to the menu
 
         i = 0
-        for label, handler in ((_('Zoom to computational region'), self.OnZoomToWind),
-                               (None, None),
-                               (_('Adjust Training Area Display to Preview Display'), self.OnZoomToPreview),
+        for label, handler in ((_('Adjust Training Area Display to Preview Display'), self.OnZoomToPreview),
                                (_('Adjust Preview display to Training Area Display'), self.OnZoomToTraining),
                                (_("Display synchronization ON"), lambda event: self.SetBindRegions(True)),
                                (_("Display synchronization OFF"), lambda event: self.SetBindRegions(False))):
