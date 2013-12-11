@@ -1157,8 +1157,7 @@ class MapFrame(SingleMapFrame):
         """
         zoommenu = wx.Menu()
         
-        for label, handler in ((_('Zoom to computational region'), self.OnZoomToWind),
-                               (_('Zoom to default region'), self.OnZoomToDefault),
+        for label, handler in ((_('Zoom to default region'), self.OnZoomToDefault),
                                (_('Zoom to saved region'), self.OnZoomToSaved),
                                (None, None),
                                (_('Set computational region from display extent'), self.OnSetDisplayToWind),
