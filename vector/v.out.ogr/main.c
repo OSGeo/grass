@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 	    options.layer->answer = G_store(options.input->answer);
     }
 
-    if (flags.poly->answer) {
+    if (ftype == GV_BOUNDARY) {
         if (!flags.multi->answer)
             wkbtype = wkbPolygon;
         else
@@ -668,7 +668,7 @@ int main(int argc, char *argv[])
         G_message(_("Exporting %d features..."), Vect_get_num_primitives(&In, otype));
 
         n_feat += export_lines(&In, field, otype, flags.multi->answer ? TRUE : FALSE,
-                               donocat, flags.poly->answer ? TRUE : FALSE,
+                               donocat, ftype == GV_BOUNDARY ? TRUE : FALSE,
                                Ogr_featuredefn, Ogr_layer,
                                Fi, Driver, ncol, colctype, 
                                colname, doatt, flags.nocat->answer ? TRUE : FALSE,
