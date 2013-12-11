@@ -28,7 +28,7 @@ void parse_args(int argc, char **argv,
     options->dsn->label = _("Name of output OGR datasource");
     options->dsn->description =
 	_("For example: ESRI Shapefile: filename or directory for storage\n"
-          "\tPostGIS database: connection string");
+          "\t\t\tPostGIS database: connection string");
 
     options->format = G_define_option();
     options->format->key = "format";
@@ -47,7 +47,7 @@ void parse_args(int argc, char **argv,
 	_("Name for output OGR layer. If not specified, input name is used");
     options->layer->description =
 	_("For example: ESRI Shapefile: shapefile name\n"
-          "\tPostGIS database: table name");
+          "\t\t\tPostGIS database: table name");
     options->layer->guisection = _("Creation");
 
     options->otype = G_define_standard_option(G_OPT_V_TYPE);
@@ -114,11 +114,6 @@ void parse_args(int argc, char **argv,
                               "(applies to Shapefile output only)");
     flags->force2d->description = _("Useful if input is 3D but all z coordinates are identical");
     flags->force2d->guisection = _("Creation");
-
-    flags->poly = G_define_flag();
-    flags->poly->key = 'p';
-    flags->poly->description = _("Export lines as polygons");
-    flags->poly->guisection = _("Creation");
 
     flags->multi = G_define_flag();
     flags->multi->key = 'm';
