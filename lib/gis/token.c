@@ -17,7 +17,6 @@
 #include <grass/gis.h>
 
 static char **tokenize(const char *, const char *, const char *);
-static char **tokenize_strtok(const char *, const char *);
 
 /*!
   \brief Tokenize string
@@ -86,31 +85,6 @@ char **G_tokenize2(const char *buf, const char *delim, const char *valchar)
     return tokenize(buf, delim, valchar);
 }
 
-/* strtok-based version of tokenize subroutine */
-char **tokenize_strtok(const char *buf, const char *delim)
-{
-    int i;
-    char **tokens;
-    char *p, *ptr;
-
-    p = G_store(buf);
-
-    i = 0;
-    tokens = (char **) G_malloc (sizeof (char *));
-    ptr = strtok(p, delim);
-    tokens[i] = ptr;
-    i++;
-    while(ptr != NULL) {
-        tokens = (char **) G_realloc(tokens, sizeof(char*) * (i + 1));
-        ptr = strtok(NULL, delim);
-        tokens[i] = ptr;
-        i++;
-    } 
-    
-    return tokens;
-}
-
-/* own version of tokenize subroutine */
 char **tokenize(const char *buf, const char *delim, const char *inchar)
 {
     int i, invalue;
