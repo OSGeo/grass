@@ -603,8 +603,9 @@ class Link(object):
 
     driver = property(fget=_get_driver, fset=_set_driver)
 
-    def __init__(self, layer=1, name=None, table=None, key=None,
-                 database=None, driver=None, c_fieldinfo=None):
+    def __init__(self, layer=1, name=None, table=None, key='cat',
+                 database='$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
+                 driver='sqlite', c_fieldinfo=None):
         if c_fieldinfo is not None:
             self.c_fieldinfo = c_fieldinfo
         else:
