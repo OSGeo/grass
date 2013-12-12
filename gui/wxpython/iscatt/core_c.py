@@ -69,17 +69,9 @@ def MergeArrays(merged_arr, overlay_arr, alpha):
 
     I_merge_arrays(merged_p, overlay_p, merged_arr.shape[0], merged_arr.shape[1], alpha)
 
-def MergeArrays(merged_arr, overlay_arr, alpha):
-    if merged_arr.shape != overlay_arr.shape:
-        GException("MergeArrays: merged_arr.shape != overlay_arr.shape")
-
-    c_uint8_p = POINTER(c_uint8)
-    merged_p = merged_arr.ctypes.data_as(c_uint8_p)
-    overlay_p = overlay_arr.ctypes.data_as(c_uint8_p)
-
-    I_merge_arrays(merged_p, overlay_p, merged_arr.shape[0], merged_arr.shape[1], alpha)
-
 def ComputeScatts(region, scatt_conds, bands, n_bands, scatts, cats_rasts_conds, cats_rasts):
+    _memmapToFileNames(scatts)
+    _memmapToFileNames(scatt_conds)
 
     q = Queue()
     p = Process(target=_computeScattsProcess, args=(region, scatt_conds, bands, 
@@ -89,6 +81,20 @@ def ComputeScatts(region, scatt_conds, bands, n_bands, scatts, cats_rasts_conds,
     p.join()
     
     return ret[0], ret[1]
+
+#_memmapToFileNames and _fileNamesToMemmap are  workaround for older numpy version, 
+# where memmap objects are not pickable,
+# and therefore cannot be passed to process spawned by multiprocessing module
+def _memmapToFileNames(data):
+
+    for k, v in data.iteritems(): 
+        if v.has_key('np_vals'):
+            data[k]['np_vals'] = v['np_vals'].filename()
+
+def _fileNamesToMemmap(data):
+    for k, v in data.iteritems(): 
+        if v.has_key('np_vals'):
+            data[k]['np_vals'] = np.memmap(filename=v['np_vals'])
 
 def UpdateCatRast(patch_rast, region, cat_rast):
     q = Queue()
@@ -106,7 +112,9 @@ def CreateCatRast(region, cat_rast):
 def _computeScattsProcess(region, scatt_conds, bands, n_bands, scatts, 
                           cats_rasts_conds, cats_rasts, output_queue):
 
-    #TODO names for types not 0 and 1?
+    _fileNamesToMemmap(scatts)
+    _fileNamesToMemmap(scatt_conds)
+
     sccats_c, cats_rasts_c, refs = _getComputationStruct(scatts, cats_rasts, 
                                                          SC_SCATT_DATA, n_bands)
     scatt_conds_c, cats_rasts_conds_c, refs2 = _getComputationStruct(scatt_conds, cats_rasts_conds, 
