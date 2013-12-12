@@ -213,12 +213,17 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             c = None
 
         q = Queue()
+        _rendDtMemmapsToFiles(self.rend_dt)
         p = Process(target=MergeImg, args=(cats_order, scatts, styles, 
                                            self.rend_dt, q))
         p.start()
         merged_img, self.full_extend, self.rend_dt = q.get()
         p.join()
         
+
+        _rendDtFilesToMemmaps(self.rend_dt)
+        merged_img = np.memmap(filename=merged_img['dt'], shape=merged_img['sh'])
+
         #merged_img, self.full_extend = MergeImg(cats_order, scatts, styles, None)
         self.axes.clear()
         self.axes.axis('equal')
@@ -406,6 +411,8 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
 def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
+        _rendDtFilesToMemmaps(rend_dt)
+
         init = True
         merged_img = None
         merge_tmp = grass.tempfile()
@@ -449,8 +456,10 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 rend_dt[cat_id] = {}
                 if cat_id != 0:
                     rend_dt[cat_id]['color'] = styles[cat_id]['color']
+                
                 rend_dt[cat_id]['dt'] = np.memmap(grass.tempfile(), dtype='uint8', mode='w+', 
                                                                     shape=(sh[0], sh[1], 4))
+
                 #colored_cat = np.zeros(dtype='uint8', )
                 ApplyColormap(masked_cat, masked_cat.mask, cmap, rend_dt[cat_id]['dt'])
 
@@ -481,7 +490,26 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 del c_img_a
             """
 
+        _rendDtMemmapsToFiles(rend_dt)
+
+        merged_img = {'dt' : merged_img.filename, 'sh' : merged_img.shape} 
         output_queue.put((merged_img, full_extend, rend_dt))
+
+#_rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy versions,
+# where memmap objects are not pickable  
+def _rendDtMemmapsToFiles(rend_dt):
+
+    for k, v in rend_dt.iteritems():
+        if v.has_key('dt'):
+            rend_dt[k]['sh'] = v['dt'].shape
+            rend_dt[k]['dt'] = v['dt'].filename
+
+def _rendDtFilesToMemmaps(rend_dt):
+
+    for k, v in rend_dt.iteritems():
+        if v.has_key('dt'):
+            rend_dt[k]['dt'] = np.memmap(filename=v['dt'], shape=v['sh'])
+            del rend_dt[k]['sh']
 
 def _renderCat(cat_id, rend_dt, scatt, styles):
     return True

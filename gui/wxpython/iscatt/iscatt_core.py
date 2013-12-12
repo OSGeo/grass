@@ -483,7 +483,7 @@ class ScattPlotsCondsData:
 
         shape = (b_i['b2']['max'] - b_i['b2']['min'] + 1, b_i['b1']['max'] - b_i['b1']['min'] + 1)
 
-        np_vals = np.memmap(grass.tempfile(), dtype=self.dtype, mode='w+', shape = shape)
+        np_vals = np.memmap(grass.tempfile(), dtype=self.dtype, mode='w+', shape=shape)
 
         self.cats[cat_id][scatt_id] = {'np_vals' : np_vals}
 
