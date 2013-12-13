@@ -706,6 +706,12 @@ void args_volume(struct GParams *params)
 	_("Toggles normal direction of all isosurfaces (changes light effect)");
     params->isosurf_toggle_norm_dir->guisection = _("Volumes");
 
+    params->draw_volume_box = G_define_flag();
+    params->draw_volume_box->key = 'b';
+    params->draw_volume_box->description =
+	_("Draw volume box");
+    params->draw_volume_box->guisection = _("Volumes");
+
     /* slices */
     /* slice axis */
     params->slice = G_define_option();

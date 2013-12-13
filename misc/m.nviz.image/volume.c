@@ -61,6 +61,9 @@ int load_rasters3d(const struct GParams *params, nv_data *data)
 	}
     
 	GVL_set_trans(id, x, y, z);
+	if (params->draw_volume_box->answer) {
+	    GVL_set_draw_wire(id, 1);
+	}
     }
 
     return 1;
