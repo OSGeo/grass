@@ -20,7 +20,6 @@
 #define __3SCAN_H
 
 #include <iostream>
-using namespace std;
 
 #include <grass/iostream/ami.h>
 #include "types.h"

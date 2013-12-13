@@ -28,7 +28,6 @@
 #include <ostream.h>
 #endif
 
-using namespace std;
 
 #include <grass/iostream/ami.h>
 

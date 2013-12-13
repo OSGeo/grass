@@ -20,7 +20,6 @@
 #define SORTUTILS_H
 
 #include <fstream>
-using namespace std;
 
 #include <grass/iostream/ami.h>
 #include "common.h"

@@ -42,7 +42,6 @@
 
 #include <cstring>
 #include <iostream>
-using namespace std;
 
 template<class T>
 class MEM_STREAM {

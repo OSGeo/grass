@@ -38,7 +38,6 @@
 
 #include <assert.h>
 #include <iostream>
-using namespace std;
 
 template<class T> 
 class queue {

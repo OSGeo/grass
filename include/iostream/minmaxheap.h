@@ -47,7 +47,6 @@
 #endif
 
 #include <sstream>
-using namespace std;
 
 #include "mm_utils.h"
 #include "ami_config.h"  //for SAVE_MEMORY flag

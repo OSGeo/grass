@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
-using namespace std;
 
 /* initial range guesstimate */
 #define UNION_INITIAL_SIZE 2000
