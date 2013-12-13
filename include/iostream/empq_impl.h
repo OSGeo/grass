@@ -39,7 +39,6 @@
 
 #include <ostream>
 #include <vector>
-using namespace std;
 
 #include "empq.h"
 

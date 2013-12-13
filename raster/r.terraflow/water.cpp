@@ -19,7 +19,6 @@
 
 #include <assert.h>
 #include <iostream>
-using namespace std;
 
 #include <grass/iostream/ami.h>
 

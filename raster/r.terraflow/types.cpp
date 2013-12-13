@@ -37,8 +37,8 @@ ijBaseType::compare(const ijBaseType &a, const ijBaseType &b) {
 
 
 
-ostream&
-operator << (ostream& s, const ijBaseType &p) {
+std::ostream&
+operator << (std::ostream& s, const ijBaseType &p) {
   return s << "(" << p.i << "," << p.j << ")";
 }
 

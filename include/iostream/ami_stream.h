@@ -51,7 +51,12 @@
 
 #include <cstring>
 #include <iostream>
-using namespace std;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::ostream;
+using std::ofstream;
+using std::istream;
 
 extern "C" {
 #include <grass/gis.h>

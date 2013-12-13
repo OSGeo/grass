@@ -98,7 +98,7 @@ long long get_active_str_size_bytes(GridHeader * hd)
     G_verbose_message(_(" (key=%d, ptr=%d, total node=%d B)"),
 	   (int)sizeof(TreeValue),
 	   (int)sizeof(TreeNode *), (int)sizeof(TreeNode));
-    sizeBytes = sizeof(TreeNode) * max(hd->ncols, hd->nrows);
+    sizeBytes = sizeof(TreeNode) * std::max(hd->ncols, hd->nrows);
     G_verbose_message(_(" Total= %lld B"), sizeBytes);
     return sizeBytes;
 }
@@ -292,7 +292,7 @@ double find_max_gradient_in_status_struct(StatusList * sl, double dist, double a
     assert(sl);
     /*note: if there is nothing in the status struccture, it means this
        cell is VISIBLE */
-    if (status_list_is_empty(sl))
+    if (is_empty(sl))
 	return SMALLEST_GRADIENT;
     /*it is also possible that the status structure is not empty, but
        there are no events with key < dist ---in this case it returns
@@ -301,9 +301,9 @@ double find_max_gradient_in_status_struct(StatusList * sl, double dist, double a
 }
 
 /*returns true if it is empty */
-int status_list_is_empty(StatusList * sl)
+int is_empty(StatusList * sl)
 {
     assert(sl);
-    return (rbtree_is_empty(sl->rbt) ||
+    return (is_empty(sl->rbt) ||
 	    sl->rbt->root->value.maxGradient == SMALLEST_GRADIENT);
 }

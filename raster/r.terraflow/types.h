@@ -21,7 +21,6 @@
 
 #include <limits.h>
 #include <iostream>
-using namespace std;
 
 
 /* input parameters type */
@@ -118,7 +117,7 @@ public:
   friend int operator!=(const ijBaseType &a, const ijBaseType &b) {
 	return (compare(a,b) != 0);
   }
-  friend ostream& operator << (ostream& s, const ijBaseType &p);
+  friend std::ostream& operator << (std::ostream& s, const ijBaseType &p);
   static int compare(const ijBaseType &a, const ijBaseType &b);
 };
 
