@@ -10,15 +10,30 @@
 #include <cmath>
 #include <limits>
 #include <iomanip>
+
+using std::string;
+
+using std::ios;
+using std::ifstream;
+using std::ofstream;
+using std::ostringstream;
+using std::cin;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::setprecision;
+using std::setw;
+using std::ends;
+
+using std::numeric_limits;
+
 #include "Output.h"
-using namespace std;
+
 
 #ifndef M_PI
 #define M_PI 3.1415926535897932384626433832795
 #endif /* M_PI */
 #define M_PI2 6.283185307179586476925286766559
-#define MIN(X,Y) ((X) <= (Y) ? (X) : (Y))
-#define ROUND(X) ((X) - (int)(X) < 0.5 ? (int)(X) : (int)((X)+1))
 
 const long int nt	= 26;
 
