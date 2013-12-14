@@ -34,10 +34,11 @@ db.tables -p
 
 <h3>ODBC</h3>
 
-Network storage: (may require the use of <em><a href=db.login.html>db.login</a></em>):
+Network storage, database tables stored in database "mydb"
+(may require the use of <em><a href=db.login.html>db.login</a></em>):
 <br> 
 <div class="code"><pre>
-db.connect driver=odbc database=gtest
+db.connect driver=odbc database=mydb
 db.login user=myname [pass=secret]
 db.connect -p
 db.tables -p
@@ -46,7 +47,8 @@ db.tables -p
 
 <h3>PostgreSQL</h3>
 
-Network storage: (may require the use of <em><a href=db.login.html>db.login</a></em>):
+Network storage, database tables stored in database "mydb"
+(may require the use of <em><a href=db.login.html>db.login</a></em>):
 <br>
 <div class="code"><pre>
 db.connect driver=pg database="host=myserver.itc.it,dbname=mydb"
@@ -58,7 +60,8 @@ db.tables -p
 
 <h3>PostgreSQL with different port</h3>
 
-Network storage: (may require the use of <em><a href=db.login.html>db.login</a></em>):
+Network storage, database tables stored in database "mydb"
+(may require the use of <em><a href=db.login.html>db.login</a></em>):
 <br>
 <div class="code"><pre>
 db.connect driver=pg database="host=myserver.itc.it,dbname=mydb,port=6666"
@@ -82,7 +85,8 @@ db.tables -p
 
 <h3>MySQL (external server)</h3>
 
-Network storage: (may require the use of <em><a href=db.login.html>db.login</a></em>):
+Network storage, database tables stored in database "mydb"
+(may require the use of <em><a href=db.login.html>db.login</a></em>):
 <br>
 <div class="code"><pre>
 db.connect driver=mysql database="host=myserver.itc.it,dbname=mydb"
