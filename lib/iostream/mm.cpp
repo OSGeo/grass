@@ -41,7 +41,9 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
-using namespace std;
+using std::cout;
+using std::cerr;
+using std::endl;
 
 //#include <mm.h>
 #include <grass/iostream/mm.h>

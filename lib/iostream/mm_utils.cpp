@@ -38,7 +38,6 @@
 #include <ctype.h>
 #include <ostream>
 #include <iostream>
-using namespace std;
 #include <stdio.h>
 
 //#include <mm.h>
