@@ -168,6 +168,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
         """!Sets text label with map name."""
         self.textdict[textId] = {'bbox': wx.Rect(), 'coords': [10, 10],
                                  'font': self.GetFont(), 'color': wx.BLACK,
+                                 'background' : wx.LIGHT_GREY,
                                  'rotation': 0, 'text': name,
                                  'active': True}
 
