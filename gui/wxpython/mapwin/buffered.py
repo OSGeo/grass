@@ -343,6 +343,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             w, h = self.GetFullTextExtent(img['text'])[0:2]
             pdc.SetFont(img['font'])
             pdc.SetTextForeground(img['color'])
+            if 'background' in img:
+                pdc.SetBackgroundMode(wx.SOLID)
+                pdc.SetTextBackground(img['background'])
             coords, bbox = self.TextBounds(img)
             if rotation == 0:
                 pdc.DrawText(img['text'], coords[0], coords[1])
