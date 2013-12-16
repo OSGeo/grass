@@ -311,7 +311,7 @@ class UpdateThread(Thread):
                 
                 self.data[win.Insert] = { 'group' : group,
                                           'subgroup' : subgroup}
-            
+                
             elif name == 'LocationSelect':
                 pDbase = self.task.get_param('dbase', element = 'element', raiseError = False)
                 if pDbase:
@@ -1637,7 +1637,7 @@ class CmdPanel(wx.Panel):
         pColumn = []
         pGroup = None
         pSubGroup = None
-        pSigFile = None
+        pSigFile = []
         pDbase = None
         pLocation = None
         pMapset = None
@@ -1677,7 +1677,7 @@ class CmdPanel(wx.Panel):
             elif prompt == 'subgroup':
                 pSubGroup = p
             elif prompt == 'sigfile':
-                pSigFile = p
+                pSigFile.append(p)
             elif prompt == 'dbase':
                 pDbase = p
             elif prompt == 'location':
@@ -1688,10 +1688,13 @@ class CmdPanel(wx.Panel):
         # collect ids
         pColumnIds = []
         for p in pColumn:
-            pColumnIds +=  p['wxId']
+            pColumnIds += p['wxId']
         pLayerIds = []
         for p in pLayer:
-            pLayerIds +=  p['wxId']
+            pLayerIds += p['wxId']
+        pSigFileIds = []
+        for p in pSigFile:
+            pSigFileIds += p['wxId']
         
         # set wxId-bindings
         if pMap:
@@ -1714,8 +1717,8 @@ class CmdPanel(wx.Panel):
         
         if pGroup and pSubGroup:
             if pSigFile:
-                pGroup['wxId-bind'] = copy.copy(pSigFile['wxId']) + pSubGroup['wxId']
-                pSubGroup['wxId-bind'] = pSigFile['wxId']
+                pGroup['wxId-bind'] = pSigFileIds + pSubGroup['wxId']
+                pSubGroup['wxId-bind'] = pSigFileIds
             else:
                 pGroup['wxId-bind'] = pSubGroup['wxId']
         
