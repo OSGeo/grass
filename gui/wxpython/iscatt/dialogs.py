@@ -35,7 +35,7 @@ from gui_core.dialogs import SimpleDialog
 class AddScattPlotDialog(wx.Dialog):
 
     def __init__(self, parent, bands, check_bands_callback, id  = wx.ID_ANY):
-        wx.Dialog.__init__(self, parent, title = ("Add scatter plots"), id = id)
+        wx.Dialog.__init__(self, parent, title = _("Add scatter plots"), id = id)
 
         self.bands = bands
 
@@ -69,11 +69,11 @@ class AddScattPlotDialog(wx.Dialog):
                                     style = wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
 
         # buttons
-        self.btn_add = wx.Button(parent=self, id=wx.ID_ANY, label = _("Add"))
-        self.btn_remove = wx.Button(parent=self, id=wx.ID_ANY, label = _("Remove"))
+        self.btn_add = wx.Button(parent=self, id=wx.ID_ADD)
+        self.btn_remove = wx.Button(parent=self, id=wx.ID_REMOVE)
         
         self.btn_close = wx.Button(parent=self, id=wx.ID_CANCEL)        
-        self.btn_ok = wx.Button(parent=self, id=wx.ID_OK, label = _("&OK"))
+        self.btn_ok = wx.Button(parent=self, id=wx.ID_OK)
 
         self._layout()
 
@@ -91,14 +91,14 @@ class AddScattPlotDialog(wx.Dialog):
                                                     sel = self.band_2_ch))
 
 
-        dialogSizer.Add(item=self.btn_add, proportion=0,  flag = wx.TOP, border = 5)
+        dialogSizer.Add(item=self.btn_add, proportion=0,  flag = wx.TOP | wx.ALIGN_RIGHT, border = 5)
 
         box = wx.StaticBox(self, id = wx.ID_ANY,
                            label = " %s " % _("Bands of scatter plots to be added (x y):"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         sizer.Add(item=self.scattsBox, proportion=1, flag=wx.EXPAND | wx.TOP, border=5)
-        sizer.Add(item=self.btn_remove, proportion=0, flag=wx.TOP, border = 5)
+        sizer.Add(item=self.btn_remove, proportion=0, flag=wx.TOP | wx.ALIGN_RIGHT, border = 5)
 
         dialogSizer.Add(item=sizer, proportion=1,  flag = wx.EXPAND | wx.TOP, border = 5)
 
