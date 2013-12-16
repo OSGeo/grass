@@ -243,7 +243,7 @@ class DisplayDriver:
         if not self.dc or not self.dcTmp:
             return -1
         
-        Debug.msg(1, "_drawObject(): line=%d type=%d npoints=%d", robj.fid, robj.type, robj.npoints)
+        Debug.msg(3, "_drawObject(): line=%d type=%d npoints=%d", robj.fid, robj.type, robj.npoints)
         brush = None
         if robj.type == TYPE_AREA and \
                 self._isSelected(Vect_get_area_centroid(self.poMapInfo, robj.fid)):
