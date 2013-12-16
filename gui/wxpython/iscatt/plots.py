@@ -349,6 +349,16 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         if x1 == x2 or y1 == y2:
             return
 
+        if x1 > x2:
+            tmp = x1 
+            x1 = x2
+            x2 = tmp
+
+        if y1 > y2:
+            tmp = y1 
+            y1 = y2
+            y2 = tmp
+
         self.axes.axis((x1, x2, y1, y2))
         #self.axes.set_xlim(x1, x2)#, auto = True)
         #self.axes.set_ylim(y1, y2)#, auto = True)
