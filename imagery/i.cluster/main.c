@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
     parm.seed_sig->required = NO;
     parm.seed_sig->type = TYPE_STRING;
     parm.seed_sig->key_desc = "name";
+    parm.seed_sig->gisprompt = "old,sig,sigfile";
     parm.seed_sig->description = _("Name of file containing initial signatures");
 
     parm.sample_interval = G_define_option();
