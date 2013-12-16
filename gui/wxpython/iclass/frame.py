@@ -1102,7 +1102,8 @@ class IClassMapFrame(DoubleMapFrame):
                          group = group,
                          read = True, **kwargs).strip()
         if res.split('\n')[0]:
-            return res.split('\n')
+            return sorted(res.split('\n'))
+        
         return []
     
     def ConvertToNull(self, name):
