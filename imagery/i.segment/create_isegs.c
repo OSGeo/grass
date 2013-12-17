@@ -241,7 +241,7 @@ int region_growing(struct globals *globals)
 
     while (t < globals->end_t && n_merges > 1) {
 
-	G_message(_("Pass %d:"), ++t);
+	G_message(_("Processing pass %d..."), ++t);
 
 	n_merges = 0;
 	globals->candidate_count = 0;
@@ -509,6 +509,7 @@ int region_growing(struct globals *globals)
 		}    /* end pathflag */
 	    }    /* next col */
 	}    /* next row */
+        G_percent(1, 1, 1);
 
 	/* finished one pass for processing candidate pixels */
 	G_verbose_message("%d merges", n_merges);
@@ -520,7 +521,7 @@ int region_growing(struct globals *globals)
     if (n_merges > 1)
 	G_message(_("Segmentation processes stopped at %d due to reaching max iteration limit, more merges may be possible"), t);
     else
-	G_message(_("Segmentation converged after %d iterations."), t);
+	G_message(_("Segmentation converged after %d iterations"), t);
 
 
     /* ****************************************************************************************** */
@@ -528,7 +529,7 @@ int region_growing(struct globals *globals)
     /* ****************************************************************************************** */
     
     if (globals->min_segment_size > 1) {
-	G_message(_("Merging segments smaller than %d cells"), globals->min_segment_size);
+	G_message(_("Merging segments smaller than %d cells..."), globals->min_segment_size);
 
 	threshold = globals->alpha * globals->alpha;
 

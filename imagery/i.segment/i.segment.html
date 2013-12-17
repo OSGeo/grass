@@ -41,26 +41,27 @@ parameter, segments with a smaller pixel count will be merged with
 their most similar neighbor even if the similarity is greater than 
 the threshold.
 <p>
-The threshold must be larger than 0.0 and smaller than 1.0. A threshold 
+The <b>threshold</b> must be larger than 0.0 and smaller than 1.0. A threshold 
 of 0 would allow only identical valued pixels to be merged, while a 
 threshold of 1 would allow everything to be merged. Initial empirical 
 tests indicate threshold values of 0.01 to 0.05 are reasonable values 
 to start. It is recommended to start with a low value, e.g. 0.01, and 
 then perform hierachical segmentation by using the output of the last 
-run as seeds for the next run.
+run as <b>seeds</b> for the next run.
 
 <h4>Calculation Formulas</h4>
 Both Euclidean and Manhattan distances use the normal definition, 
 considering each raster in the image group as a dimension.
 
-In future, the distance calculation will also take into account the 
+In future, the distance calculation will also take into account the
 shape characteristics of the segments. The normal distances are then
-multiplied by the input radiometric weight. Next an additional 
-contribution is added: (1-radioweight) * {smoothness * smoothness 
-weight + compactness * (1-smoothness weight)}, where compactness = 
-Perimeter Length / sqrt( Area ) and smoothness = Perimeter 
-Length / Bounding Box. The perimeter length is estimated as the 
-number of pixel sides the segment has.
+multiplied by the input radiometric weight. Next an additional
+contribution is added: <tt>(1-radioweight) * {smoothness * smoothness
+weight + compactness * (1-smoothness weight)}</tt>,
+where <tt>compactness = Perimeter Length / sqrt( Area )</tt>
+and <tt>smoothness = Perimeter Length / Bounding Box</tt>. The
+perimeter length is estimated as the number of pixel sides the segment
+has.
 
 <h3>Seeds</h3>
 The seeds map can be used to provide either seed pixels (random or 
@@ -103,47 +104,54 @@ final pass, the threshold is ignored for any segments smaller then
 the set size, thus forcing very small segments to merge with their 
 most similar neighbor.
 
-<h2>EXAMPLES</h2>
+<h2>EXAMPLE</h2>
 This example uses the ortho photograph included in the NC Sample 
 Dataset. Set up an imagery group:
 <div class="code"><pre>
 i.group group=ortho_group input=ortho_2001_t792_1m@PERMANENT
 </pre></div>
 
-<p>Set the region to a smaller test region.
+<p>Set the region to a smaller test region (resolution taken from
+input ortho photograph).
 
 <div class="code"><pre>
-g.region -p n=220446 s=220075 e=639151 w=638592
+g.region -p rast=ortho_2001_t792_1m n=220446 s=220075 e=639151 w=638592
 </pre></div>
 
 Try out a low threshold and check the results.
 <div class="code"><pre>
 i.segment group=ortho_group output=ortho_segs_l1 threshold=0.02
 </pre></div>
-<p></p>
+
+<center>
+<img src="ortho_segs_l1.jpg">
+</center>
+
+<p>
 From a visual inspection, it seems this results in too many segments. 
 Increasing the threshold, using the previous results as seeds, 
 and setting a minimum size of 2:
 <div class="code"><pre>
-i.segment group=ortho_group output=ortho_segs_l2 threshold=0.05 \
-          seeds=ortho_segs_l1 min=2
+i.segment group=ortho_group output=ortho_segs_l2 threshold=0.05 seeds=ortho_segs_l1 min=2
 
-i.segment group=ortho_group output=ortho_segs_l3 threshold=0.1 \
-          seeds=ortho_segs_l2
+i.segment group=ortho_group output=ortho_segs_l3 threshold=0.1 seeds=ortho_segs_l2
 
-i.segment group=ortho_group output=ortho_segs_l4 threshold=0.2 \
-          seeds=ortho_segs_l3
+i.segment group=ortho_group output=ortho_segs_l4 threshold=0.2 seeds=ortho_segs_l3
 
-i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 \
-          seeds=ortho_segs_l4
+i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 seeds=ortho_segs_l4
 </pre></div>
+
+<center>
+<img src="ortho_segs_l2_l5.jpg">
+</center>
+
 <p>
-The output ortho_segs_l4 with threshold=0.2 still has too many segments, 
-but the output with threshold=0.3 has too few segments. A threshold 
-value of 0.25 seems to be a good choice. There is also some noise in 
-the image, lets next force all segments smaller than 10 pixels to be 
-merged into their most similar neighbor (even if they are less similar 
-than required by our threshold):
+The output <tt>ortho_segs_l4</tt> with <b>threshold</b>=0.2 still has
+too many segments, but the output with <b>threshold</b>=0.3 has too few
+segments. A threshold value of 0.25 seems to be a good choice. There
+is also some noise in the image, lets next force all segments smaller
+than 10 pixels to be merged into their most similar neighbor (even if
+they are less similar than required by our threshold):
 
 <p>Set the region to match the entire map(s) in the group.
 <div class="code"><pre>
@@ -151,22 +159,26 @@ g.region -p rast=ortho_2001_t792_1m@PERMANENT
 </pre></div>
 
 <p>
-Run i.segment on the full map:
+Run <em>i.segment</em> on the full map:
 
 <div class="code"><pre>
-i.segment group=ortho_group output=ortho_segs_final \
-          threshold=0.25 min=10
+i.segment group=ortho_group output=ortho_segs_final threshold=0.25 min=10
 </pre></div>
+
+<center>
+<img src="ortho_segs_final.jpg">
+</center>
+
 <p>
-Processing the entire ortho image with nearly 10 million pixels took 
-about 20 minutes for the final run.
+Processing the entire ortho image with nearly 10 million pixels took
+about 450 times more then for the final run.
 
 <h2>TODO</h2>
 <h3>Functionality</h3>
 <ul>
 <li>Further testing of the shape characteristics (smoothness, 
 compactness), if it looks good it should be added.
-<b>in progress</b></li>
+(<b>in progress</b>)</li>
 <li>Malahanobis distance for the similarity calculation.</li>
 </ul>
 <h3>Use of Segmentation Results</h3>
