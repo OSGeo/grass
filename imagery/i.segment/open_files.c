@@ -202,6 +202,7 @@ int open_files(struct globals *globals)
 	    }
 	}
     }
+    G_percent(1, 1, 1);
     G_debug(1, "nrows: %d, min row: %d, max row %d",
 	       globals->nrows, globals->row_min, globals->row_max);
     G_debug(1, "ncols: %d, min col: %d, max col %d",

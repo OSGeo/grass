@@ -28,7 +28,7 @@ int write_output(struct globals *globals)
 
     G_debug(1, "start data transfer from segmentation file to raster");
 
-    G_message(_("Writing out segment IDs"));
+    G_message(_("Writing out segment IDs..."));
     maxid = 0;
     for (row = 0; row < globals->nrows; row++) {
 
@@ -49,7 +49,8 @@ int write_output(struct globals *globals)
 	}
 	Rast_put_row(out_fd, outbuf, CELL_TYPE);
     }
-
+    G_percent(1, 1, 1);
+    
     /* close and save segment id file */
     Rast_close(out_fd);
     G_free(outbuf);
