@@ -247,7 +247,6 @@ sed -i -e 's+\(a href="\)\([^#\.h]\)+\1../../grass64/manuals/html64_user/\2+'
   <li> v.* - <a href="#v">vector</a> commands
   <li> <a href="wxGUI.html">wxGUI</a> - GUI frontend (wxPython)
   <li> <a href="nviz.html">NVIZ</a> - <i>n</i>-dimensional visualization suite
-  <li> <a href="xganim.html">xganim</a> - raster map slideshow viewer
 EOF
 
 
@@ -388,7 +387,6 @@ cat << EOF > "${TMP}.tex"
 \item [v.{*}]vector commands
 \item [wxGUI]GUI frontend (wxPython)
 \item [NVIZ]$n$-dimensional visualization suite
-\item [xganim]raster map slideshow viewer
 EOF
 
 

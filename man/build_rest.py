@@ -85,7 +85,6 @@ Display/Graphical User Interfaces
         Display commands manual <display>
         Display drivers <displaydrivers>
         nviz 3D visualization and animation tool <wxGUI.Nviz>
-        xganim tool for animating a raster map series <xganim>
 
 
 Raster and 3D raster processing
@@ -217,8 +216,6 @@ r"""
 |`nviz <wxGUI.Nviz.html>`_    | `visualization suite`         |
 +-----------------------------+-------------------------------+
 |`wxGUI <wxGUI.html>`_        | `wxPython-based GUI frontend` |
-+-----------------------------+-------------------------------+
-|`xganim <xganim.html>`_      | `raster map slideshow`        |
 +-----------------------------+-------------------------------+
 
 """

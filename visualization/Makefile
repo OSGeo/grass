@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ..
 
-SUBDIRS = xganim \
+SUBDIRS = \
 	ximgview \
 	wximgview
 
