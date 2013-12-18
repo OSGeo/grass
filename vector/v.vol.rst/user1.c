@@ -440,7 +440,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {
+	    for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -490,7 +490,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {
+	    for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -540,7 +540,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	/* changed by AV */
+	    for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -590,7 +590,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	/* changed by AV */
+	    for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -640,7 +640,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {
+	    for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -690,7 +690,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {
+	    for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -740,7 +740,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {
+	    for (y = nsizr - 1; y >= 0; y--) {  /* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
