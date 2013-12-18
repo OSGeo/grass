@@ -201,7 +201,6 @@ r""" ]
 <tr><td>&nbsp;&nbsp;<a href="full_index.html#v">v.*</a> </td><td>vector commands</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="wxGUI.Nviz.html">nviz</a> </td><td>visualization suite</td></tr>
 <tr><td>&nbsp;&nbsp;<a href="wxGUI.html">wxGUI</a> </td><td>wxPython-based GUI frontend</td></tr>
-<tr><td>&nbsp;&nbsp;<a href="xganim.html">xganim</a> </td><td>raster map slideshow</td></tr>
 </table>
 """
 #"
