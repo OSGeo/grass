@@ -235,7 +235,7 @@ class VNETPointsData:
         self.data = []
         self.cols = { "name" : ['use', 'type', 'topology', 'e', 'n'],
                       "label" : [_('use'), _('type'), _('topology'), 'e', 'n'],
-                      "type" :  [None, [_(""), _("Start point"), _("End Point")], None, float, float],#TDO
+                      "type" :  [None, ["", _("Start point"), _("End Point")], None, float, float],#TDO
                       "def_vals" : [False, 0, "new point", 0, 0]  
                     }
 
