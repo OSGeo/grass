@@ -61,7 +61,7 @@ class SimpleLayerManager(wx.Panel):
         self._toolbar = toolbarCls(self, lmgrStyle=self._style)
 
         self._auimgr = wx.aui.AuiManager(self)
-        
+
         self._modal = modal
         # d.* dialogs are recreated each time, attempt to hide it resulted
         # in completely mysterious memory corruption and crash when opening
@@ -73,6 +73,7 @@ class SimpleLayerManager(wx.Panel):
         self._checkList.Bind(wx.EVT_LISTBOX, lambda evt: self._selectionChanged())
         self._checkList.Bind(wx.EVT_LISTBOX_DCLICK, self.OnLayerChangeProperties)
         self._checkList.Bind(wx.EVT_CHECKLISTBOX, self.OnLayerChecked)
+        self._checkList.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
 
         # signal emitted when somethin in layer list changes
         self.opacityChanged = Signal('SimpleLayerManager.opacityChanged')
@@ -120,6 +121,42 @@ class SimpleLayerManager(wx.Panel):
         selected = self._checkList.GetSelections()
         for i, layer in enumerate(self._layerList):
             layer.Select(i in selected)
+
+    def OnContextMenu(self, event):
+        """!Show context menu.
+
+        So far offers only copying layer list to clipboard
+        """
+        if len(self._layerList) < 1:
+            event.Skip()
+            return
+
+        menu = wx.Menu()
+        llist = [layer.name for layer in self._layerList]
+        texts = [','.join(llist), ','.join(reversed(llist))]
+        labels = [_("Copy map names to clipboard (top to bottom)"),
+                  _("Copy map names to clipboard (bottom to top)")]
+        for label, text in zip(labels, texts):
+            id = wx.NewId()
+            self.Bind(wx.EVT_MENU, lambda evt, t=text, id=id: self._copyText(t), id=id)
+
+            menu.Append(id, label)
+
+        # show the popup menu
+        self.PopupMenu(menu)
+        menu.Destroy()
+        event.Skip()
+
+    def _copyText(self, text):
+        """!Helper function for copying
+
+        TODO: move to utils?        
+        """
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            do.SetText(text)
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
 
     def OnLayerChecked(self, event):
         """!Layer was (un)checked, update layer's info."""
