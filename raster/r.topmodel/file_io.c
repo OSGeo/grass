@@ -10,7 +10,6 @@ void get_line(FILE * fp, char *buffer)
 {
     char *str;
 
-
     buffer[0] = 0;
     fscanf(fp, "%[^\n]", buffer);
     getc(fp);
@@ -28,7 +27,6 @@ void read_input(void)
     int i, j;
     double x;
 
-
     /* Read topographic index statistics file */
     if ((fp = fopen(file.topidxstats, "r")) == NULL)
 	G_fatal_error(_("Unable to open input file <%s>"), file.topidxstats);
@@ -42,7 +40,6 @@ void read_input(void)
 	double Aatb_r;
 
 	get_line(fp, buf);
-
 	if (sscanf(buf, "%lf %lf", &atb, &Aatb_r) == 2) {
 	    topidxstats.atb = (double *)G_realloc(topidxstats.atb,
 			    (i + 1) * sizeof(double));
@@ -55,7 +52,6 @@ void read_input(void)
     }
 
     misc.ntopidxclasses = i;
-
     fclose(fp);
 
     for (i = 0; i < misc.ntopidxclasses; i++)
@@ -74,14 +70,12 @@ void read_input(void)
 	}
     }
 
-
     /* Read parameters file */
     if ((fp = fopen(file.params, "r")) == NULL)
 	G_fatal_error(_("Unable to open input file <%s>"), file.params);
 
     for (; !feof(fp);) {
 	get_line(fp, buf);
-
 	i = strlen(buf) - 1;
 	for (; i >= 0; i--) {
 	    if (buf[i] != ' ' && buf[i] != '\t') {
@@ -96,34 +90,72 @@ void read_input(void)
 
     for (; !feof(fp);) {
 	get_line(fp, buf);
-
 	if (sscanf(buf, "%lf", &(params.A)) == 1)
 	    break;
     }
-
     for (; !feof(fp);) {
 	get_line(fp, buf);
-
-	if (sscanf(buf, "%lf %lf %lf %lf %lf %lf %lf %lf",
-		   &(params.qs0), &(params.lnTe),
-		   &(params.m), &(params.Sr0),
-		   &(params.Srmax), &(params.td),
-		   &(params.vch), &(params.vr)) == 8)
+	if (sscanf(buf, "%lf", &(params.qs0)) == 1)
 	    break;
     }
-
     if (params.qs0 == 0.0) {
 	fclose(fp);
-	G_fatal_error("parameters.qs0 can not be 0.0");
+	G_fatal_error("parameters.qs0 cannot be 0.0");
 	exit(EXIT_FAILURE);
     }
-
     for (; !feof(fp);) {
 	get_line(fp, buf);
-
-	if (sscanf(buf, "%d %lf %lf %lf",
-		   &(params.infex), &(params.K0),
-		   &(params.psi), &(params.dtheta)) == 4)
+	if (sscanf(buf, "%lf", &(params.lnTe)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.m)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.Sr0)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.Srmax)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.td)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.vch)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.vr)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%d", &(params.infex)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.K0)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.psi)) == 1)
+	    break;
+    }
+    for (; !feof(fp);) {
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf", &(params.dtheta)) == 1)
 	    break;
     }
 
@@ -135,10 +167,8 @@ void read_input(void)
 	double Ad_r;
 
 	get_line(fp, buf);
-
 	if (sscanf(buf, "%lf %lf", &d, &Ad_r) == 2) {
-	    params.d = (double *)G_realloc(params.d,
-			    (i + 1) * sizeof(double));
+	    params.d = (double *)G_realloc(params.d, (i + 1) * sizeof(double));
 	    params.Ad_r = (double *)G_realloc(params.Ad_r,
 			    (i + 1) * sizeof(double));
 	    params.d[i] = d;
@@ -149,26 +179,30 @@ void read_input(void)
     params.nch = i;
     fclose(fp);
 
-
     /* Read input file */
     if ((fp = fopen(file.input, "r")) == NULL)
 	G_fatal_error(_("Unable to open input file <%s>"), file.input);
 
     for (; !feof(fp);) {
 	get_line(fp, buf);
-
-	if (sscanf(buf, "%d %lf", &(input.ntimesteps), &(input.dt)) == 2)
+	if (sscanf(buf, "%lf", &(input.dt)) == 1)
 	    break;
     }
 
-    input.R = (double *)G_malloc(input.ntimesteps * sizeof(double));
-    input.Ep = (double *)G_malloc(input.ntimesteps * sizeof(double));
+    input.R = NULL;
+    input.Ep = NULL;
 
-    for (i = 0; i < input.ntimesteps && !feof(fp);) {
+    for (i = 0; !feof(fp);) {
+	double R;
+	double Ep;
+
 	get_line(fp, buf);
-
-	if (sscanf(buf, "%lf %lf", &(input.R[i]), &(input.Ep[i])) == 2)
-	    i++;
+	if (sscanf(buf, "%lf %lf", &R, &Ep) == 2) {
+	    input.R = (double *)G_realloc(input.R, (i + 1) * sizeof(double));
+	    input.Ep = (double *)G_realloc(input.Ep, (i + 1) * sizeof(double));
+	    input.R[i] = R;
+	    input.Ep[i++] = Ep;
+	}
     }
 
     input.ntimesteps = i;
@@ -183,15 +217,13 @@ void read_input(void)
 
 	for (i = 0; i < input.ntimesteps && !feof(fp);) {
 	    get_line(fp, buf);
-
 	    if (sscanf(buf, "%lf", &(misc.Qobs[i])) == 1)
 		i++;
 	}
 
-	input.ntimesteps = (input.ntimesteps < i ? input.ntimesteps : i);
+	input.ntimesteps = (i < input.ntimesteps ? i : input.ntimesteps);
 	fclose(fp);
     }
-
 
     if (!(misc.timestep > 0 && misc.timestep < input.ntimesteps + 1))
 	misc.timestep = 0;
@@ -209,13 +241,11 @@ void write_output(void)
     int st, et, si, ei;
     int i, j;
 
-
     time(&tloc);
     ltime = localtime(&tloc);
 
     ltime->tm_year += 1900;
     ltime->tm_mon++;
-
 
     if ((fp = fopen(file.output, "w")) == NULL)
 	G_fatal_error(_("Unable to open output file <%s>"), file.output);
@@ -295,7 +325,6 @@ void write_output(void)
 	fprintf(fp, "# %-15s Excess flow from a fully saturated "
 		"area per unit area\n" "# %77s\n", "ex:", "[m/timestep]");
     }
-
     fprintf(fp, "\n");
 
     if (file.obsflow) {
