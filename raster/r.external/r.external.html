@@ -4,12 +4,30 @@
 raster map layer, from any GDAL supported raster map format, with an optional 
 title. The file is not imported but just registered as GRASS raster map.
 
+<h2>NOTES</h2>
+
+In essence, <em>r.external</em> creates a read-only link to the 
+original dataset which is only valid if the original dataset remains 
+at the originally indicated directory and filename.
+
+<h2>NULL data handling</h2>
+
+GDAL-linked (<em>r.external</em>) maps do not have or use a NULL 
+bitmap, hence <em>r.null</em> cannot manipulate them directly. Here 
+NULL cells are those whose value matches the value reported by the 
+GDALGetRasterNoDataValue() function.
+
+To apply the GDAL-linked the user need to either create a MASK (e.g. 
+with <em>r.mask</em>) and then "apply" it using e.g. <em>r.resample</em>,
+or use <em>r.mapcalc</em> to create a copy with the appropriate categories
+changed to NULL (if() condition).
+
 <h2>EXAMPLES</h2>
 
 <h3>RGB Orthophoto from GeoTIFF</h3>
 
 <div class="code"><pre>
-# import of all channels:
+# import of all channels (each channel will become a GRASS raster map):
 r.external  /home/user/data/maps/059100.tif out=ortho
 g.region rast=ortho.3 -p
 d.rgb r=ortho.1 g=ortho.2 b=ortho.3
