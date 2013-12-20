@@ -352,7 +352,7 @@ int main(int argc, char **argv)
 	}
 
 	if (eflag->answer) {
-	    fprintf(out, "title=%s (%s)\n", cats_ok ? cats.title :
+	    fprintf(out, "title=\"%s (%s)\"\n", cats_ok ? cats.title :
 		    "??", hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
 
 	    fprintf(out, "units=%s\n", units ? units : "\"none\"");
