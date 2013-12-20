@@ -357,6 +357,9 @@ int main(int argc, char **argv)
 
 	    fprintf(out, "units=%s\n", units ? units : "\"none\"");
 	    fprintf(out, "vertical_datum=%s\n", vdatum ? vdatum : "\"none\"");
+	    fprintf(out, "source1=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1) : "\"none\"");
+	    fprintf(out, "source2=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2) : "\"none\"");
+	    fprintf(out, "description=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_KEYWRD) : "\"none\"");
 
 	    if (time_ok && (first_time_ok || second_time_ok)) {
 
