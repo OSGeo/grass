@@ -63,8 +63,9 @@ depending on the time step, complexity of terrain, land cover and size of the ar
 Output walker, water depth and discharge maps can be saved during simulation using 
 the time series flag <i>-t</i> and <i>outiter</i> parameter 
 defining the time step in minutes for writing output files. 
-Files are saved with a suffix representing time since the start of simulation in seconds 
-(e.g. wdepth.500, wdepth.1000).
+Files are saved with a suffix representing time since the start of simulation in minutes 
+(e.g. wdepth.05, wdepth.10).
+<!-- TODO add example of registering outputs into temporal framework when  #2146 is fixed -->
 Monitoring of water depth at specific points is supported. A vector map with observation points and
 a path to a logfile must be provided. For each point in the vector map which is located in
 the computational region the water depth is logged each time step in the logfile. The logfile is
