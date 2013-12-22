@@ -80,7 +80,6 @@ struct file
     char *topidxstats;
     char *input;
     char *output;
-    char *obsflow;
 };
 
 /* Miscellaneous TOPMODEL variables */
@@ -90,8 +89,6 @@ struct misc
     int ncells;
     /* Number of topographic index classes */
     int ntopidxclasses;
-    /* Model efficiency */
-    double Em;
     int ndelays;
     int nreaches;
     double lnTe;
@@ -100,9 +97,7 @@ struct misc
     double lambda;
     double qss;
     double qs0;
-    double Qobs_peak;
     double Qt_peak;
-    double Qobs_mean;
     double Qt_mean;
     int tobs_peak;
     int tt_peak;
@@ -111,7 +106,6 @@ struct misc
     /* misc.nreach's */
     double *Ad;
     /* input.ntimestep's */
-    double *Qobs;
     double *Qt;
     double *qs;			/* spatially constant? */
     double *S_mean;

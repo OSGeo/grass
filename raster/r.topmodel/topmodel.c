@@ -1,5 +1,4 @@
 #include <math.h>
-#include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/spawn.h>
 #include "global.h"
@@ -24,23 +23,20 @@ void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
 double calculate_lambda(void)
 {
     int i;
-    double retval;
+    double lambda;
 
-
-    retval = 0.0;
+    lambda = 0.0;
     for (i = 1; i < misc.ntopidxclasses; i++)
-	retval += topidxstats.Aatb_r[i] *
+	lambda += topidxstats.Aatb_r[i] *
 	    (topidxstats.atb[i] + topidxstats.atb[i - 1]) / 2.0;
 
-
-    return retval;
+    return lambda;
 }
 
 void initialize(void)
 {
     int i, j, t;
     double A1, A2;
-
 
     misc.lambda = calculate_lambda();
     misc.lnTe = params.lnTe + log(input.dt);
@@ -117,9 +113,6 @@ void initialize(void)
 	A1 += misc.Ad[i];
 	misc.Qt[misc.ndelays + i] = misc.qs0 * (params.A - A1);
     }
-
-
-    return;
 }
 
 void calculate_flows(void)
@@ -128,7 +121,6 @@ void calculate_flows(void)
     double Aatb_r;
     double R;
     double qo, qv;
-
 
     misc.S = (double **)G_malloc(input.ntimesteps * sizeof(double *));
     misc.Ea = (double **)G_malloc(input.ntimesteps * sizeof(double *));
@@ -261,45 +253,6 @@ void calculate_flows(void)
 	}
     }
 
-
-    return;
-}
-
-/* Objective function for hydrograph suggested by Servet and Dezetter(1991) */
-double calculate_efficiency(void)
-{
-    int i;
-    double Em, numerator, denominator;
-
-
-    misc.Qobs_mean = 0.0;
-    numerator = 0.0;
-    for (i = 0; i < input.ntimesteps; i++) {
-	misc.Qobs_mean += misc.Qobs[i];
-	numerator += pow(misc.Qobs[i] - misc.Qt[i], 2.0);
-    }
-    misc.Qobs_mean /= input.ntimesteps;
-
-    denominator = 0.0;
-    for (i = 0; i < input.ntimesteps; i++)
-	denominator += pow(misc.Qobs[i] - misc.Qobs_mean, 2.0);
-
-    if (denominator == 0.0) {
-	G_warning("Em can not be resolved due to constant observed Q");
-	Rast_set_d_null_value(&Em, 1);
-    }
-    else {
-	Em = 1.0 - numerator / denominator;
-    }
-
-    return Em;
-}
-
-void calculate_others(void)
-{
-    int i;
-
-
     misc.Qt_mean = 0.0;
     for (i = 0; i < input.ntimesteps; i++) {
 	misc.Qt_mean += misc.Qt[i];
@@ -309,25 +262,10 @@ void calculate_others(void)
 	}
     }
     misc.Qt_mean /= input.ntimesteps;
-
-    if (file.obsflow) {
-	misc.Em = calculate_efficiency();
-	for (i = 0; i < input.ntimesteps; i++) {
-	    if (!i || misc.Qobs_peak < misc.Qobs[i]) {
-		misc.Qobs_peak = misc.Qobs[i];
-		misc.tobs_peak = i + 1;
-	    }
-	}
-    }
-
-    return;
 }
 
 void run_topmodel(void)
 {
     initialize();
     calculate_flows();
-    calculate_others();
-
-    return;
 }
