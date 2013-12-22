@@ -228,7 +228,7 @@ void write_output(void)
     if ((fp = fopen(file.output, "w")) == NULL)
 	G_fatal_error(_("Unable to open output file <%s>"), file.output);
 
-    fprintf(fp, "# r.topmodel output file for \"%s\"\n", params.name);
+    fprintf(fp, "# r.topmodel output file for %s\n", params.name);
     fprintf(fp, "# Run time: %.4d-%.2d-%.2d %.2d:%.2d:%.2d\n",
 	    ltime->tm_year, ltime->tm_mon, ltime->tm_mday,
 	    ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
