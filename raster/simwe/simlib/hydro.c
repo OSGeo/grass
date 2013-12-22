@@ -457,7 +457,15 @@ void main_loop(void)
 	    erod(gama);
     }
     /*                       ........ end of iblock loop */
-    
+
+    /* Write final maps here because we know the last time stamp here */
+    if (ts == 0) {
+        conn = (double)nblock / (double)iblock;
+        itime = (int)(i * deltap * timec);
+        ii = output_data(itime, conn);
+        if (ii != 1)
+	    G_fatal_error(_("Cannot write raster maps"));
+    }
     /* Close the observation logfile */
     if(points.is_open)
         fclose(points.output);

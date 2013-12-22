@@ -428,7 +428,7 @@ int main(int argc, char *argv[])
      * to real timesec in seconds */
     timesec = timesec * 60.0;
     iterout = iterout * 60.0;
-    if ((timesec / iterout) > 100.0)
+    if ((timesec / iterout) > 100.0 && ts == 1)
 	G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
@@ -467,12 +467,6 @@ int main(int argc, char *argv[])
     seeds(rand1, rand2);
     grad_check();
     main_loop();
-
-    if (ts == 0) {
-	ii = output_data(0, 1.);
-	if (ii != 1)
-	    G_fatal_error(_("Cannot write raster maps"));
-    }
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

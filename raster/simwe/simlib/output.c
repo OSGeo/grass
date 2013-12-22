@@ -13,15 +13,15 @@
 #include <grass/waterglobs.h>
 
 
-static void output_walker_as_vector(int tt, int ndigit);
+static void output_walker_as_vector(int tt_minutes, int ndigit, struct TimeStamp *timestamp);
 
 /* This function was added by Soeren 8. Mar 2011     */
 /* It replaces the site walker output implementation */
 /* Only the 3d coordinates of the walker are stored. */
-void output_walker_as_vector(int tt, int ndigit)
+void output_walker_as_vector(int tt_minutes, int ndigit, struct TimeStamp *timestamp)
 {
     char buf[GNAME_MAX + 10];
-    char *outwalk_time = NULL; 
+    char *outwalk_time = NULL;
     double x, y, z;
     struct Map_info Out;
     struct line_pnts *Points;
@@ -32,7 +32,7 @@ void output_walker_as_vector(int tt, int ndigit)
 
 	/* In case of time series we extent the output name with the time value */
 	if (ts == 1) {
-	    G_snprintf(buf, sizeof(buf), "%s_%.*d", outwalk, ndigit, tt);
+	    G_snprintf(buf, sizeof(buf), "%s_%.*d", outwalk, ndigit, tt_minutes);
 	    outwalk_time = G_store(buf);
 	    Vect_open_new(&Out, outwalk_time, WITH_Z);
 	    G_message("Writing %i walker into vector file %s", nstack, outwalk_time);
@@ -62,6 +62,10 @@ void output_walker_as_vector(int tt, int ndigit)
                 
         Vect_destroy_line_struct(Points);
         Vect_destroy_cats_struct(Cats);
+        if (ts == 1)
+            G_write_vector_timestamp(outwalk_time, "1", timestamp);
+        else
+            G_write_vector_timestamp(outwalk, "1", timestamp);
     }
     
     return;
@@ -80,30 +84,40 @@ int output_data(int tt, double ft)
     float gsmax = 0, dismax = 0., gmax = 0., ermax = -1.e+12, ermin = 1.e+12;
     struct Colors colors;
     struct History hist, hist1;	/* hist2, hist3, hist4, hist5 */
+    struct TimeStamp timestamp;
     char *depth0 = NULL, *disch0 = NULL, *err0 = NULL;
     char *conc0 = NULL, *flux0 = NULL;
     char *erdep0 = NULL;
     const char *mapst = NULL;
     char *type;
     char buf[GNAME_MAX + 10];
+    char timestamp_buf[15];
     int ndigit;
+    int timemin;
+    int tt_minutes;
     FCELL dat1, dat2;
     float a1, a2;
 
+    timemin = (int)(timesec / 60. + 0.5);
     ndigit = 2;
     /* more compact but harder to read: 
 	ndigit = (int)floor(log10(timesec)) + 2 */
-    if (timesec >= 10)
+    if (timemin >= 100)
 	ndigit = 3;
-    if (timesec >= 100)
+    if (timemin >= 1000)
 	ndigit = 4;
-    if (timesec >= 1000)
+    if (timemin >= 10000)
 	ndigit = 5;
-    if (timesec >= 10000)
-	ndigit = 6;
-    
+
+    /* Convert to minutes */
+    tt_minutes = (int)(tt / 60. + 0.5);
+
+    /* Create timestamp */
+    sprintf(timestamp_buf, "%d minutes", tt_minutes);
+    G_scan_timestamp(&timestamp, timestamp_buf);
+
     /* Write the output walkers */
-    output_walker_as_vector(tt, ndigit);
+    output_walker_as_vector(tt_minutes, ndigit, &timestamp);
 
     Rast_set_window(&cellhd);
 
@@ -117,7 +131,7 @@ int output_data(int tt, double ft)
     if (depth) {
 	depth_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    G_snprintf(buf, sizeof(buf), "%s.%.*d", depth, ndigit, tt);
+	    G_snprintf(buf, sizeof(buf), "%s.%.*d", depth, ndigit, tt_minutes);
 	    depth0 = G_store(buf);
 	    depth_fd = Rast_open_fp_new(depth0);
 	}
@@ -128,7 +142,7 @@ int output_data(int tt, double ft)
     if (disch) {
 	disch_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    G_snprintf(buf, sizeof(buf),"%s.%.*d", disch, ndigit, tt);
+	    G_snprintf(buf, sizeof(buf),"%s.%.*d", disch, ndigit, tt_minutes);
 	    disch0 = G_store(buf);
 	    disch_fd = Rast_open_fp_new(disch0);
 	}
@@ -139,7 +153,7 @@ int output_data(int tt, double ft)
     if (err) {
 	err_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    G_snprintf(buf, sizeof(buf), "%s.%.*d", err, ndigit, tt);
+	    G_snprintf(buf, sizeof(buf), "%s.%.*d", err, ndigit, tt_minutes);
 	    err0 = G_store(buf);
 	    err_fd = Rast_open_fp_new(err0);
 	}
@@ -150,7 +164,7 @@ int output_data(int tt, double ft)
     if (conc) {
 	conc_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    G_snprintf(buf, sizeof(buf), "%s.%.*d", conc, ndigit, tt);
+	    G_snprintf(buf, sizeof(buf), "%s.%.*d", conc, ndigit, tt_minutes);
 	    conc0 = G_store(buf);
 	    conc_fd = Rast_open_fp_new(conc0);
 	}
@@ -161,7 +175,7 @@ int output_data(int tt, double ft)
     if (flux) {
 	flux_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    G_snprintf(buf, sizeof(buf), "%s.%.*d", flux, ndigit, tt);
+	    G_snprintf(buf, sizeof(buf), "%s.%.*d", flux, ndigit, tt_minutes);
 	    flux0 = G_store(buf);
 	    flux_fd = Rast_open_fp_new(flux0);
 	}
@@ -172,7 +186,7 @@ int output_data(int tt, double ft)
     if (erdep) {
 	erdep_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    G_snprintf(buf, sizeof(buf), "%s.%.*d", erdep, ndigit, tt);
+	    G_snprintf(buf, sizeof(buf), "%s.%.*d", erdep, ndigit, tt_minutes);
 	    erdep0 = G_store(buf);
 	    erdep_fd = Rast_open_fp_new(erdep0);
 	}
@@ -509,6 +523,11 @@ int output_data(int tt, double ft)
 	    Rast_write_history(depth0, &hist);
 	else
 	    Rast_write_history(depth, &hist);
+
+	if (ts == 1)
+	    G_write_raster_timestamp(depth0, &timestamp);
+	else
+	    G_write_raster_timestamp(depth, &timestamp);
     }
 
     if (disch) {
@@ -546,6 +565,11 @@ int output_data(int tt, double ft)
 	    Rast_write_history(disch0, &hist);
 	else
 	    Rast_write_history(disch, &hist);
+
+	if (ts == 1)
+	    G_write_raster_timestamp(disch0, &timestamp);
+	else
+	    G_write_raster_timestamp(disch, &timestamp);
     }
 
     if (flux) {
@@ -582,6 +606,11 @@ int output_data(int tt, double ft)
 	    Rast_write_history(flux0, &hist);
 	else
 	    Rast_write_history(flux, &hist);
+
+	if (ts == 1)
+	    G_write_raster_timestamp(flux0, &timestamp);
+	else
+	    G_write_raster_timestamp(flux, &timestamp);
     }
 
     return 1;
