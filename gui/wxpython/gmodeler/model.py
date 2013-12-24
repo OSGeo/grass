@@ -48,6 +48,7 @@ from core.gcmd           import GMessage, GException, GError, RunCommand, Encode
 from core.settings       import UserSettings
 from gui_core.forms      import GUI, CmdPanel
 from gui_core.widgets    import GNotebook
+from gmodeler.giface import GraphicalModelerGrassInterface
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -2285,7 +2286,8 @@ class ModelParamDialog(wx.Dialog):
         task.flags  = params['flags']
         task.params = params['params']
         
-        panel = CmdPanel(parent = self, id = wx.ID_ANY, task = task)
+        panel = CmdPanel(parent = self, id = wx.ID_ANY, task = task,
+                         giface = GraphicalModelerGrassInterface(self.parent.GetModel()))
         self.tasks.append(task)
         
         return panel

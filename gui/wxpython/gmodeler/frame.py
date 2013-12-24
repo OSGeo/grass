@@ -51,7 +51,7 @@ from gmodeler.preferences import PreferencesDialog, PropertiesDialog
 from gmodeler.toolbars    import ModelerToolbar
 from core.giface import Notification
 from gui_core.pystc       import PyStc
-
+from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model       import *
 from gmodeler.dialogs     import *
 
@@ -1108,8 +1108,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame.ModelChanged()
         shape = self.GetShape()
         if isinstance(shape, ModelAction):
-            module = GUI(parent = self.frame, show = True).ParseCommand(shape.GetLog(string = False),
-                                                                        completed = (self.frame.GetOptData, shape, shape.GetParams()))
+            gmodule = GUI(parent = self.frame, show = True,
+                          giface = GraphicalModelerGrassInterface(self.frame.GetModel()))
+            module = gmodule.ParseCommand(shape.GetLog(string = False),
+                                          completed = (self.frame.GetOptData, shape, shape.GetParams()))
         
         elif isinstance(shape, ModelData):
             dlg = ModelDataDialog(parent = self.frame, shape = shape)
