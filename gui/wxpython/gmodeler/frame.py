@@ -1475,6 +1475,7 @@ class ItemPanel(wx.Panel):
         self.list = ItemListCtrl(parent = self,
                                  columns = [_("Name"), _("In loop"),
                                             _("Command")],
+                                 columnsNotEditable = [1, 2],
                                  frame = self.parent)
         
         self.btnMoveUp = wx.Button(parent=self, id=wx.ID_UP)

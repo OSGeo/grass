@@ -581,9 +581,9 @@ class ModelConditionDialog(ModelItemDialog):
 
 class ModelListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin,
-#                    listmix.TextEditMixin,
+                    listmix.TextEditMixin,
                     listmix.ColumnSorterMixin):
-    def __init__(self, parent, columns, frame, id = wx.ID_ANY,
+    def __init__(self, parent, columns, frame, id = wx.ID_ANY, columnsNotEditable = [],
                  style = wx.LC_REPORT | wx.BORDER_NONE |
                  wx.LC_SORT_ASCENDING |wx.LC_HRULES |
                  wx.LC_VRULES, **kwargs):
@@ -592,10 +592,11 @@ class ModelListCtrl(wx.ListCtrl,
         self.columns = columns
         self.shape = None
         self.frame  = frame
-        
+        self.columnNotEditable = columnsNotEditable
+
         wx.ListCtrl.__init__(self, parent, id = id, style = style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
-#        listmix.TextEditMixin.__init__(self)
+        listmix.TextEditMixin.__init__(self)
         listmix.ColumnSorterMixin.__init__(self, 4)
         
         i = 0
@@ -615,7 +616,12 @@ class ModelListCtrl(wx.ListCtrl,
                 
     def OnBeginEdit(self, event):
         """!Editing of item started"""
-        event.Allow()
+        if self.columnNotEditable and event.m_col in self.columnNotEditable:
+            event.Veto()
+            self.SetItemState(event.m_itemIndex,
+                              wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
+        else:
+            event.Allow()
 
     def OnEndEdit(self, event):
         """!Finish editing of item"""
