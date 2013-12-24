@@ -392,10 +392,6 @@ class TaskFrame(wx.Frame):
         self.task     = task_description
         self.parent   = parent             # LayerTree | Modeler | None | ...
         self._giface  = giface
-        if parent and parent.GetName() == 'Modeler':
-            self.modeler = self.parent
-        else:
-            self.modeler = None
 
         self.dialogClosing = Signal('TaskFrame.dialogClosing')
         
@@ -549,7 +545,7 @@ class TaskFrame(wx.Frame):
         accelTable = wx.AcceleratorTable(accelTableList)
         self.SetAcceleratorTable(accelTable)
         
-        if self.parent and not self.modeler:
+        if self._giface and self._giface.GetLayerTree():
             addLayer = False
             for p in self.task.params:
                 if p.get('age', 'old') == 'new' and \
@@ -671,7 +667,7 @@ class TaskFrame(wx.Frame):
 
     def OnApply(self, event):
         """!Apply the command"""
-        if self.modeler:
+        if self._giface and hasattr(self._giface, "_model"):
             cmd = self.createCmd(ignoreErrors = True, ignoreRequired = True)
         else:
             cmd = self.createCmd()
@@ -887,7 +883,7 @@ class CmdPanel(wx.Panel):
             f['wxId'] = [ chk.GetId(), ]
             chk.Bind(wx.EVT_CHECKBOX, self.OnSetValue)
             
-            if self.parent.GetName() == 'MainFrame' and self.parent.modeler:
+            if self.parent.GetName() == 'MainFrame' and (self._giface and hasattr(self._giface, "_model")):
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
                                      label = _("Parameterized in model"))
                 parChk.SetName('ModelParam')
@@ -1182,8 +1178,8 @@ class CmdPanel(wx.Panel):
                                     element_dict = {'rast': 'strds', 'vect': 'stvds', 'rast3d': 'str3ds'}
                                     elem = element_dict[type_param.get('default')]
                         
-                        if self.parent.modeler:
-                            extraItems = {_('Graphical Modeler') : self.parent.modeler.GetModel().GetMaps(p.get('prompt'))}
+                        if self._giface and hasattr(self._giface, "_model"):
+                            extraItems = {_('Graphical Modeler') : self._giface.GetLayerList(p.get('prompt'))}
                         else:
                             extraItems = None
                         selection = gselect.Select(parent = which_panel, id = wx.ID_ANY,
@@ -1594,7 +1590,7 @@ class CmdPanel(wx.Panel):
                     if p.get('guidependency', ''):
                         cb.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
                 
-            if self.parent.GetName() == 'MainFrame' and self.parent.modeler:
+            if self.parent.GetName() == 'MainFrame' and (self._giface and hasattr(self._giface, "_model")):
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
                                      label = _("Parameterized in model"))
                 parChk.SetName('ModelParam')

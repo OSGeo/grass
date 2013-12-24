@@ -36,7 +36,6 @@ from gui_core.widgets     import SearchModuleWidget, SimpleValidator
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import SimpleDialog, MapLayersDialogForModeler
 from gui_core.prompt      import GPromptSTC
-from gui_core.forms       import CmdPanel
 from gui_core.gselect     import Select, ElementSelect
 from gmodeler.model       import *
 from lmgr.menudata        import LayerManagerMenuData
