@@ -675,8 +675,10 @@ class ModelFrame(wx.Frame):
                 self.GetOptData(dcmd = action.GetLog(string = False), layer = action,
                                 params = action.GetParams(), propwin = None)
             else:
-                GUI(parent = self, show = True).ParseCommand(action.GetLog(string = False),
-                                                             completed = (self.GetOptData, action, action.GetParams()))
+                gmodule = GUI(parent = self, show = True,
+                              giface = GraphicalModelerGrassInterface(self.model))
+                gmodule.ParseCommand(action.GetLog(string = False),
+                                     completed = (self.GetOptData, action, action.GetParams()))
         elif win and not win.IsShown():
             win.Show()
         
@@ -1110,8 +1112,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         if isinstance(shape, ModelAction):
             gmodule = GUI(parent = self.frame, show = True,
                           giface = GraphicalModelerGrassInterface(self.frame.GetModel()))
-            module = gmodule.ParseCommand(shape.GetLog(string = False),
-                                          completed = (self.frame.GetOptData, shape, shape.GetParams()))
+            gmodule.ParseCommand(shape.GetLog(string = False),
+                                 completed = (self.frame.GetOptData, shape, shape.GetParams()))
         
         elif isinstance(shape, ModelData):
             dlg = ModelDataDialog(parent = self.frame, shape = shape)
