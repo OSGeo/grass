@@ -227,7 +227,11 @@ class Model(object):
         maps = list()
         for data in self.GetData():
             if prompt == data.GetPrompt():
-                maps.append(data.GetValue())
+                mapName = data.GetValue()
+                if not mapName or mapName[0] is '%':
+                    continue # skip variables
+                maps.append(mapName)
+        
         return maps
 
     def GetData(self):
