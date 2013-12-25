@@ -1129,7 +1129,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             dlg = ModelLoopDialog(parent = self.frame, shape = shape)
             dlg.CentreOnParent()
             if dlg.ShowModal() == wx.ID_OK:
-                shape.SetText(dlg.GetCondition())
+                shape.SetLabel(dlg.GetCondition())
                 model = self.frame.GetModel()
                 ids = dlg.GetItems()
                 alist = list()
@@ -1152,7 +1152,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             dlg = ModelConditionDialog(parent = self.frame, shape = shape)
             dlg.CentreOnParent()
             if dlg.ShowModal() == wx.ID_OK:
-                shape.SetText(dlg.GetCondition())
+                shape.SetLabel(dlg.GetCondition())
                 model = self.frame.GetModel()
                 ids = dlg.GetItems()
                 for b in ids.keys():

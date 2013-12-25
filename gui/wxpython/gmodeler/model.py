@@ -349,7 +349,7 @@ class Model(object):
                                  y = loop['pos'][1],
                                  width = loop['size'][0],
                                  height = loop['size'][1],
-                                 text = loop['text'],
+                                 label = loop['text'],
                                  id = loop['id'])
             self.AddItem(loopItem)
 
@@ -360,7 +360,7 @@ class Model(object):
                                            y = condition['pos'][1],
                                            width = condition['size'][0],
                                            height = condition['size'][1],
-                                           text = condition['text'],
+                                           label = condition['text'],
                                            id = condition['id'])
             self.AddItem(conditionItem)
 
@@ -429,7 +429,7 @@ class Model(object):
                     if var not in variables:
                         report = True
                         for item in filter(lambda x: isinstance(x, ModelLoop), action.GetBlock()):
-                            if var in item.GetText():
+                            if var in item.GetLabel():
                                 report = False
                                 break
                         if report:
@@ -612,7 +612,7 @@ class Model(object):
                     continue
                 self.RunAction(item, params, log, onDone)
             elif isinstance(item, ModelLoop):
-                cond = item.GetText()
+                cond = item.GetLabel()
                 # substitute variables in condition
                 variables = self.GetVariables()
                 for variable in variables:
@@ -802,8 +802,9 @@ class Model(object):
         return result
 
 class ModelObject(object):
-    def __init__(self, id = -1):
+    def __init__(self, id = -1, label = ''):
         self.id   = id     # internal id, should be not changed
+        self.label = ''
         self.rels = list() # list of ModelRelations
         
         self.isEnabled = True
@@ -811,7 +812,15 @@ class ModelObject(object):
         
     def __del__(self):
         pass
-    
+
+    def GetLabel(self):
+        """!Get label"""
+        return self.label
+
+    def SetLabel(self, label=''):
+        """!Set label"""
+        self.label = label
+        
     def GetId(self):
         """!Get id"""
         return self.id
@@ -897,11 +906,10 @@ class ModelAction(ModelObject, ogl.RectangleShape):
     """!Action class (GRASS module)"""
     def __init__(self, parent, x, y, id = -1, cmd = None, task = None,
                  width = None, height = None, label = None, comment = ''):
-        ModelObject.__init__(self, id)
+        ModelObject.__init__(self, id, label)
         
         self.parent  = parent
         self.task    = task
-        self.label   = label
         self.comment = comment
 
         if not width:
@@ -1394,17 +1402,12 @@ class ModelRelation(ogl.LineShape):
         self.param = param
 
 class ModelItem(ModelObject):
-    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '', items = []):
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, label = '', items = []):
         """!Abstract class for loops and conditions"""
-        ModelObject.__init__(self, id)
+        ModelObject.__init__(self, id, label)
         self.parent  = parent
-        self.text    = text
         self.itemIds = list() # unordered
         
-    def GetText(self):
-        """!Get loop text"""
-        return self.text
-
     def GetItems(self, items):
         """!Get sorted items by id"""
         result = list()
@@ -1418,16 +1421,16 @@ class ModelItem(ModelObject):
         """!Set loop id"""
         self.id = id
 
-    def SetText(self, cond):
+    def SetLabel(self, label):
         """!Set loop text (condition)"""
-        self.text = cond
+        self.label = label
         self.ClearText()
-        self.AddText('(' + str(self.id) + ') ' + self.text)
+        self.AddText('(' + str(self.id) + ') ' + self.label)
 
     def GetLog(self):
         """!Get log info"""
-        if self.text:
-            return _("Condition: ") + self.text
+        if self.label:
+            return _("Condition: ") + self.label
         else:
             return _("Condition: not defined")
 
@@ -1440,10 +1443,9 @@ class ModelItem(ModelObject):
         self.rels = list()
    
 class ModelLoop(ModelItem, ogl.RectangleShape):
-    def __init__(self, parent, x, y, id=-1, idx=-1, width = None, height = None, text = '', items = []):
+    def __init__(self, parent, x, y, id=-1, idx=-1, width = None, height = None, label = '', items = []):
         """!Defines a loop"""
-        ModelItem.__init__(self, parent, x, y, id, width, height, text, items)
-        self.cond = text
+        ModelItem.__init__(self, parent, x, y, id, width, height, label, items)
         
         if not width:
             width = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'width'))
@@ -1473,12 +1475,13 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         wxColor = wx.Colour(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
 
-    def SetLabel(self, idx=-1):
+    def SetLabel(self, label=''):
+        self.label = label
         self.ClearText()
-        if self.cond:
-            self.AddText('(%d) %s' % (idx, self.cond))
+        if self.label:
+            self.AddText('(%d) %s' % (self.id, self.label))
         else:
-            self.AddText('(%d)' % (idx))
+            self.AddText('(%d)' % (self.id))
                          
     def Enable(self, enabled = True):
         """!Enable/disable action"""
@@ -2035,7 +2038,7 @@ class WriteModelFile:
         self.fd.write('%s<loop id="%d" pos="%d,%d" size="%d,%d">\n' % \
                           (' ' * self.indent, loop.GetId(), loop.GetX(), loop.GetY(),
                            loop.GetWidth(), loop.GetHeight()))
-        text = loop.GetText()
+        text = loop.GetLabel()
         self.indent += 4
         if text:
             self.fd.write('%s<condition>%s</condition>\n' %
@@ -2052,7 +2055,7 @@ class WriteModelFile:
         self.fd.write('%s<if-else id="%d" pos="%d,%d" size="%d,%d">\n' % \
                           (' ' * self.indent, condition.GetId(), condition.GetX(), condition.GetY(),
                            bbox[0], bbox[1]))
-        text = condition.GetText()
+        text = condition.GetLabel()
         self.indent += 4
         if text:
             self.fd.write('%s<condition>%s</condition>\n' %
@@ -2165,7 +2168,7 @@ if __name__ == "__main__":
         elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
             # substitute condition
             variables = self.model.GetVariables()
-            cond = item.GetText()
+            cond = item.GetLabel()
             for variable in variables:
                 pattern = re.compile('%' + variable)
                 if pattern.search(cond):

@@ -404,7 +404,7 @@ class ModelItemDialog(wx.Dialog):
         self.condBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("Condition"))
         self.condText = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
-                                    value = shape.GetText())
+                                    value = shape.GetLabel())
         
         self.itemList = ItemCheckListCtrl(parent = self.panel,
                                           columns = [_("Label"),
@@ -560,7 +560,7 @@ class ModelConditionDialog(ModelItemDialog):
         if flag is False:
             return
         
-        aId = int(self.itemListIf.GetItem(index, 0).GetText())
+        aId = int(self.itemListIf.GetItem(index, 0).GetLabel())
         if aId in self.itemListElse.GetItems()['checked']:
             self.itemListElse.CheckItemById(aId, False)
             
@@ -569,7 +569,7 @@ class ModelConditionDialog(ModelItemDialog):
         if flag is False:
             return
         
-        aId = int(self.itemListElse.GetItem(index, 0).GetText())
+        aId = int(self.itemListElse.GetItem(index, 0).GetLabel())
         if aId in self.itemListIf.GetItems()['checked']:
             self.itemListIf.CheckItemById(aId, False)
         
@@ -720,7 +720,7 @@ class VariableListCtrl(ModelListCtrl):
         """!Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
-        nameOld = self.GetItem(itemIndex, 0).GetText()
+        nameOld = self.GetItem(itemIndex, 0).GetLabel()
 
         if columnIndex == 0: # TODO
             event.Veto()
@@ -981,7 +981,7 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
     def CheckItemById(self, aId, flag):
         """!Check/uncheck given item by id"""
         for i in range(self.GetItemCount()):
-            iId = int(self.GetItem(i, 0).GetText())
+            iId = int(self.GetItem(i, 0).GetLabel())
             if iId == aId:
                 self.CheckItem(i, flag)
                 break
