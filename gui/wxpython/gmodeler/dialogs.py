@@ -333,7 +333,7 @@ class ModelRelationDialog(wx.Dialog):
                                                label = _("Command:")),
                           pos = (0, 0))
             gridSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                               label = shape.GetName()),
+                                               label = shape.GetLabel()),
                           pos = (0, 1))
             gridSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                                label = _("Option:")),
@@ -780,7 +780,7 @@ class ItemListCtrl(ModelListCtrl):
         
         if self.shape:
             if isinstance(self.shape, ModelCondition):
-                if self.GetName() == 'ElseBlockList':
+                if self.GetLabel() == 'ElseBlockList':
                     shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['else'])
                 else:
                     shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['if'])
@@ -799,7 +799,7 @@ class ItemListCtrl(ModelListCtrl):
                 continue
             
             if len(self.columns) == 2:
-                self.itemDataMap[i] = [action.GetName(),
+                self.itemDataMap[i] = [action.GetLabel(),
                                        action.GetLog()]
                 aId = action.GetBlockId()
                 if action.GetId() in shapeItems:
@@ -812,7 +812,7 @@ class ItemListCtrl(ModelListCtrl):
                     bId = _('No')
                 else:
                     bId = _("Yes")
-                self.itemDataMap[i] = [action.GetName(),
+                self.itemDataMap[i] = [action.GetLabel(),
                                        bId,
                                        action.GetLog()]
             
@@ -867,13 +867,13 @@ class ItemListCtrl(ModelListCtrl):
         """!Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
-        
         self.itemDataMap[itemIndex][columnIndex] = event.GetText()
-        
-        action = self.frame.GetModel().GetItem(itemIndex)
+        action = self.frame.GetModel().GetItem(itemIndex + 1)
         if not action:
             event.Veto()
-        
+            return
+
+        action.SetLabel(label = event.GetText())
         self.frame.ModelChanged()
 
     def OnReload(self, event = None):
@@ -959,7 +959,7 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
         
     def OnCheckItem(self, index, flag):
         """!Item checked/unchecked"""
-        name = self.GetName()
+        name = self.GetLabel()
         if name == 'IfBlockList' and self.window:
             self.window.OnCheckItemIf(index, flag)
         elif name == 'ElseBlockList' and self.window:
