@@ -305,7 +305,8 @@ class Model(object):
                                      height = action['size'][1],
                                      task = action['task'],
                                      id = action['id'],
-                                     label = action['label'])
+                                     label = action['label'],
+                                     comment = action['comment'])
             
             if action['disabled']:
                 actionItem.Enable(False)
@@ -895,12 +896,13 @@ class ModelObject(object):
 class ModelAction(ModelObject, ogl.RectangleShape):
     """!Action class (GRASS module)"""
     def __init__(self, parent, x, y, id = -1, cmd = None, task = None,
-                 width = None, height = None, label = None):
+                 width = None, height = None, label = None, comment = ''):
         ModelObject.__init__(self, id)
         
         self.parent  = parent
         self.task    = task
         self.label   = label
+        self.comment = comment
 
         if not width:
             width = UserSettings.Get(group='modeler', key='action', subkey=('size', 'width'))
@@ -985,7 +987,15 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         
         self.ClearText()
         self.AddText('(%d) %s' % (idx, label))
-                
+
+    def SetComment(self, comment):
+        """!Set comment"""
+        self.comment = comment
+
+    def GetComment(self):
+        """!Get comment"""
+        return self.comment
+
     def SetProperties(self, params, propwin):
         """!Record properties dialog"""
         self.task.params = params['params']
@@ -1666,13 +1676,19 @@ class ProcessModelFile:
             
             aId = int(action.get('id', -1))
             label = action.get('name')
+            comment = action.find('comment')
+            if comment is not None:
+                commentString = comment.text
+            else:
+                commentString = ''
             
             self.actions.append({ 'pos'      : pos,
                                   'size'     : size,
                                   'task'     : task,
                                   'id'       : aId,
                                   'disabled' : disabled,
-                                  'label'    : label})
+                                  'label'    : label,
+                                  'comment'  : commentString})
             
     def _getDim(self, node):
         """!Get position and size of shape"""
@@ -1933,6 +1949,9 @@ class WriteModelFile:
                           (' ' * self.indent, action.GetId(), EncodeString(action.GetLabel()), action.GetX(), action.GetY(),
                            action.GetWidth(), action.GetHeight()))
         self.indent += 4
+        comment = action.GetComment()
+        if comment:
+            self.fd.write('%s<comment>%s</comment>\n' % (' ' * self.indent, EncodeString(comment)))
         self.fd.write('%s<task name="%s">\n' % (' ' * self.indent, action.GetLog(string = False)[0]))
         self.indent += 4
         if not action.IsEnabled():

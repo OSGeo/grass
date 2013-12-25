@@ -100,7 +100,7 @@ class ModelFrame(wx.Frame):
         self.canvas = ModelCanvas(self)
         self.canvas.SetBackgroundColour(wx.WHITE)
         self.canvas.SetCursor(self.cursors["default"])
-        
+
         self.model = Model(self.canvas)
         
         self.variablePanel = VariablePanel(parent = self)
@@ -121,7 +121,7 @@ class ModelFrame(wx.Frame):
         self.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
-
+        
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
         self.notebook.AddPage(page = self.variablePanel, text=_('Variables'), name = 'variables')
@@ -1001,7 +1001,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.SetScrollbars(20, 20, 2000/20, 2000/20)
         
         self.Bind(wx.EVT_CHAR,  self.OnChar)
-        
+
     def OnChar(self, event):
         """!Key pressed"""
         kc = event.GetKeyCode()
@@ -1201,7 +1201,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         if not hasattr (self, "popupID"):
             self.popupID = dict()
             for key in ('remove', 'enable', 'addPoint',
-                        'delPoint', 'intermediate', 'props', 'id'):
+                        'delPoint', 'intermediate', 'props', 'id',
+                        'label', 'comment'):
                 self.popupID[key] = wx.NewId()
         
         # record coordinates
@@ -1222,7 +1223,12 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             else:
                 popupMenu.Append(self.popupID['enable'], text=_('Enable'))
                 self.frame.Bind(wx.EVT_MENU, self.OnEnable, id = self.popupID['enable'])
-        
+            popupMenu.AppendSeparator()
+            popupMenu.Append(self.popupID['label'], text=_('Set label'))
+            self.frame.Bind(wx.EVT_MENU, self.OnSetLabel, id = self.popupID['label'])
+            popupMenu.Append(self.popupID['comment'], text=_('Set comment'))
+            self.frame.Bind(wx.EVT_MENU, self.OnSetComment, id = self.popupID['comment'])
+
         if isinstance(shape, ModelRelation):
             popupMenu.AppendSeparator()
             popupMenu.Append(self.popupID['addPoint'], text=_('Add control point'))
@@ -1264,7 +1270,29 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape.Enable(enable)
         self.frame.ModelChanged()
         self.frame.canvas.Refresh()
-        
+
+    def OnSetLabel(self, event):
+        shape = self.GetShape()
+        dlg = wx.TextEntryDialog(parent = self.frame, message = _("Label:"), caption = _("Set label"),
+                                 defaultValue = shape.GetLabel())
+        if dlg.ShowModal() == wx.ID_OK:
+            label = dlg.GetValue()
+            shape.SetLabel(label)
+            self.frame.ModelChanged()
+            self.frame.itemPanel.Update()
+            self.frame.canvas.Refresh()
+        dlg.Destroy()
+    
+    def OnSetComment(self, event):
+        shape = self.GetShape()
+        dlg = wx.TextEntryDialog(parent = self.frame, message = _("Comment:"), caption = _("Set comment"),
+                                 defaultValue = shape.GetComment(), style = wx.OK | wx.CANCEL | wx.CENTRE | wx.TE_MULTILINE)
+        if dlg.ShowModal() == wx.ID_OK:
+            comment = dlg.GetValue()
+            shape.SetComment(comment)
+            self.frame.ModelChanged()
+        dlg.Destroy()
+
     def _onSelectShape(self, shape):
         canvas = shape.GetCanvas()
         dc = wx.ClientDC(canvas)
