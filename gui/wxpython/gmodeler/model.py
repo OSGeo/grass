@@ -352,7 +352,7 @@ class Model(object):
                                  label = loop['text'],
                                  id = loop['id'])
             self.AddItem(loopItem)
-
+        
         # load conditions
         for condition in gxmXml.conditions:
             conditionItem = ModelCondition(parent = self, 
@@ -395,7 +395,6 @@ class Model(object):
         i = 1
         for item in self.items:
             item.SetId(i)
-            item.SetLabel()
             i += 1
         
     def IsValid(self):
@@ -942,7 +941,8 @@ class ModelAction(ModelObject, ogl.RectangleShape):
             self._setPen()
             self._setBrush()
             self.SetId(id)
-        
+            self.SetLabel(label)
+
         if self.task:
             self.SetValid(self.task.get_options())
         
@@ -1189,8 +1189,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
             self._setBrush()
-            
-            self._setText()
+            self.SetLabel()
             
     def IsIntermediate(self):
         """!Checks if data item is intermediate"""
@@ -1310,7 +1309,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         pen.SetWidth(width)
         self.SetPen(pen)
         
-    def _setText(self):
+    def SetLabel(self):
         """!Update text"""
         self.ClearText()
         name = []
@@ -1326,7 +1325,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         """!Update action"""
         self._setBrush()
         self._setPen()
-        self._setText()
+        self.SetLabel()
 
 class ModelRelation(ogl.LineShape):
     """!Data - action relation"""
@@ -1421,7 +1420,7 @@ class ModelItem(ModelObject):
         """!Set loop id"""
         self.id = id
 
-    def SetLabel(self, label):
+    def SetLabel(self, label=''):
         """!Set loop text (condition)"""
         self.label = label
         self.ClearText()
@@ -1460,7 +1459,8 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
             self.SetCornerRadius(100)
-        
+            self.SetLabel(label)
+
         self._setBrush()
         
     def _setBrush(self):
@@ -1475,14 +1475,6 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         wxColor = wx.Colour(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
 
-    def SetLabel(self, label=''):
-        self.label = label
-        self.ClearText()
-        if self.label:
-            self.AddText('(%d) %s' % (self.id, self.label))
-        else:
-            self.AddText('(%d)' % (self.id))
-                         
     def Enable(self, enabled = True):
         """!Enable/disable action"""
         for item in self.items:
@@ -1495,10 +1487,6 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
     def Update(self):
         self._setBrush()
         
-    def GetLabel(self):
-        """!Get name"""
-        return _("loop")
-    
     def SetItems(self, items):
         """!Set items (id)"""
         self.itemIds = items
@@ -2038,11 +2026,11 @@ class WriteModelFile:
         self.fd.write('%s<loop id="%d" pos="%d,%d" size="%d,%d">\n' % \
                           (' ' * self.indent, loop.GetId(), loop.GetX(), loop.GetY(),
                            loop.GetWidth(), loop.GetHeight()))
-        text = loop.GetLabel()
         self.indent += 4
-        if text:
+        cond = loop.GetLabel()
+        if cond:
             self.fd.write('%s<condition>%s</condition>\n' %
-                          (' ' * self.indent, self._filterValue(text)))
+                          (' ' * self.indent, self._filterValue(cond)))
         for item in loop.GetItems(self.model.GetItems(objType=ModelAction)):
             self.fd.write('%s<item>%d</item>\n' %
                           (' ' * self.indent, item.GetId()))
