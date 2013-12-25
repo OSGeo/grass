@@ -407,7 +407,7 @@ class ModelItemDialog(wx.Dialog):
                                     value = shape.GetText())
         
         self.itemList = ItemCheckListCtrl(parent = self.panel,
-                                          columns = [_("Name"),
+                                          columns = [_("Label"),
                                                      _("Command")],
                                           shape = shape,
                                           frame = parent)
