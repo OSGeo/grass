@@ -560,7 +560,7 @@ class ModelConditionDialog(ModelItemDialog):
         if flag is False:
             return
         
-        aId = int(self.itemListIf.GetItem(index, 0).GetLabel())
+        aId = int(self.itemListIf.GetItem(index, 0).GetText())
         if aId in self.itemListElse.GetItems()['checked']:
             self.itemListElse.CheckItemById(aId, False)
             
@@ -569,7 +569,7 @@ class ModelConditionDialog(ModelItemDialog):
         if flag is False:
             return
         
-        aId = int(self.itemListElse.GetItem(index, 0).GetLabel())
+        aId = int(self.itemListElse.GetItem(index, 0).GetText())
         if aId in self.itemListIf.GetItems()['checked']:
             self.itemListIf.CheckItemById(aId, False)
         
@@ -720,7 +720,7 @@ class VariableListCtrl(ModelListCtrl):
         """!Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
-        nameOld = self.GetItem(itemIndex, 0).GetLabel()
+        nameOld = self.GetItem(itemIndex, 0).GetText()
 
         if columnIndex == 0: # TODO
             event.Veto()
@@ -780,7 +780,7 @@ class ItemListCtrl(ModelListCtrl):
         
         if self.shape:
             if isinstance(self.shape, ModelCondition):
-                if self.GetLabel() == 'ElseBlockList':
+                if self.GetText() == 'ElseBlockList':
                     shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['else'])
                 else:
                     shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['if'])
@@ -981,7 +981,7 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
     def CheckItemById(self, aId, flag):
         """!Check/uncheck given item by id"""
         for i in range(self.GetItemCount()):
-            iId = int(self.GetItem(i, 0).GetLabel())
+            iId = int(self.GetItem(i, 0).GetText())
             if iId == aId:
                 self.CheckItem(i, flag)
                 break

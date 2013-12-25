@@ -612,6 +612,7 @@ class Model(object):
                 self.RunAction(item, params, log, onDone)
             elif isinstance(item, ModelLoop):
                 cond = item.GetLabel()
+                
                 # substitute variables in condition
                 variables = self.GetVariables()
                 for variable in variables:
@@ -1249,7 +1250,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         @param value
         """
         self.value = value
-        self._setText()
+        self.SetLabel()
         for direction in ('from', 'to'):
             for rel in self.GetRelations(direction):
                 if direction == 'from':
