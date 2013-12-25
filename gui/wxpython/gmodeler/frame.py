@@ -1505,7 +1505,7 @@ class ItemPanel(wx.Panel):
                                     label=" %s " % _("List of items - right-click to delete"))
         
         self.list = ItemListCtrl(parent = self,
-                                 columns = [_("Name"), _("In loop"),
+                                 columns = [_("Label"), _("In loop"),
                                             _("Command")],
                                  columnsNotEditable = [1, 2],
                                  frame = self.parent)
