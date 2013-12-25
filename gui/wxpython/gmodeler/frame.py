@@ -1000,15 +1000,19 @@ class ModelCanvas(ogl.ShapeCanvas):
         
         self.SetScrollbars(20, 20, 2000/20, 2000/20)
         
-        self.Bind(wx.EVT_CHAR,  self.OnChar)
+        self.Bind(wx.EVT_KEY_UP,  self.OnKeyUp)
+        self.Bind(wx.EVT_LEFT_DOWN,  self.OnLeftDown)
 
-    def OnChar(self, event):
+    def OnKeyUp(self, event):
         """!Key pressed"""
         kc = event.GetKeyCode()
-        diagram = self.GetDiagram()
         if kc == wx.WXK_DELETE:
             self.RemoveSelected()
         
+    def OnLeftDown(self, evt):
+        self.SetFocus()
+        evt.Skip()
+
     def RemoveSelected(self):
         """!Remove selected shapes"""
         self.parent.ModelChanged()
