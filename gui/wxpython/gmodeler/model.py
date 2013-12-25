@@ -140,7 +140,8 @@ class Model(object):
     def Normalize(self):
         iId = 1
         for item in self.items:
-            item.SetLabel(iId)
+            item.SetId(iId)
+            item.SetLabel()
             iId += 1
         
     def GetNextId(self):
@@ -303,7 +304,8 @@ class Model(object):
                                      width = action['size'][0],
                                      height = action['size'][1],
                                      task = action['task'],
-                                     id = action['id'])
+                                     id = action['id'],
+                                     label = action['label'])
             
             if action['disabled']:
                 actionItem.Enable(False)
@@ -391,7 +393,8 @@ class Model(object):
             self.items.append(newItem)
         i = 1
         for item in self.items:
-            item.SetLabel(i)
+            item.SetId(i)
+            item.SetLabel()
             i += 1
         
     def IsValid(self):
@@ -518,7 +521,7 @@ class Model(object):
         @param onPrepare on-prepare method
         @param statusbar wx.StatusBar instance or None
         """
-        name = item.GetName()
+        name = item.GetLabel()
         if name in params:
             paramsOrig = item.GetParams(dcopy = True)
             item.MergeParams(params[name])
@@ -774,7 +777,7 @@ class Model(object):
         for action in self.GetItems(objType = ModelAction):
             if not action.IsEnabled():
                 continue
-            name   = action.GetName()
+            name   = action.GetLabel()
             params = action.GetParams()
             for f in params['flags']:
                 if f.get('parameterized', False):
@@ -891,12 +894,14 @@ class ModelObject(object):
     
 class ModelAction(ModelObject, ogl.RectangleShape):
     """!Action class (GRASS module)"""
-    def __init__(self, parent, x, y, id = -1, cmd = None, task = None, width = None, height = None):
+    def __init__(self, parent, x, y, id = -1, cmd = None, task = None,
+                 width = None, height = None, label = None):
         ModelObject.__init__(self, id)
         
         self.parent  = parent
         self.task    = task
-        
+        self.label   = label
+
         if not width:
             width = UserSettings.Get(group='modeler', key='action', subkey=('size', 'width'))
         if not height:
@@ -961,14 +966,26 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         pen.SetWidth(width)
         self.SetPen(pen)
 
-    def SetLabel(self, idx=-1):
-        cmd = self.task.get_cmd(ignoreErrors = True)
-        self.ClearText()
-        if cmd and len(cmd) > 0:
-            self.AddText('(%d) %s' % (idx, cmd[0]))
+    def SetLabel(self, label=None):
+        """!Set label
+
+        @param label if None use command string instead
+        """
+        if label:
+            self.label = label 
+        elif self.label:
+            label = self.label
         else:
-            self.AddText('(%d) <<%s>>' % (idx, _("unknown")))
+            try:
+                label = self.task.get_cmd(ignoreErrors = True)[0]
+            except:
+                label = _("unknown")
         
+        idx = self.GetId()
+        
+        self.ClearText()
+        self.AddText('(%d) %s' % (idx, label))
+                
     def SetProperties(self, params, propwin):
         """!Record properties dialog"""
         self.task.params = params['params']
@@ -1028,8 +1045,11 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         
         return cmd
     
-    def GetName(self):
+    def GetLabel(self):
         """!Get name"""
+        if self.label:
+            return self.label
+        
         cmd = self.task.get_cmd(ignoreErrors = True)
         if cmd and len(cmd) > 0:
             return cmd[0]
@@ -1100,7 +1120,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         """!Find data item by name"""
         for rel in self.GetRelations():
             data = rel.GetData()
-            if name == rel.GetName() and name in data.GetName():
+            if name == rel.GetLabel() and name in data.GetLabel():
                 return data
         
         return None
@@ -1177,17 +1197,17 @@ class ModelData(ModelObject, ogl.EllipseShape):
         """!Get logging info"""
         name = list()
         for rel in self.GetRelations():
-            name.append(rel.GetName())
+            name.append(rel.GetLabel())
         if name:
             return '/'.join(name) + '=' + self.value + ' (' + self.prompt + ')'
         else:
             return self.value + ' (' + self.prompt + ')'
 
-    def GetName(self):
+    def GetLabel(self):
         """!Get list of names"""
         name = list()
         for rel in self.GetRelations():
-            name.append(rel.GetName())
+            name.append(rel.GetLabel())
         
         return name
     
@@ -1221,7 +1241,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
                     action = rel.GetFrom()
                 
                 task = GUI(show = None).ParseCommand(cmd = action.GetLog(string = False))
-                task.set_param(rel.GetName(), self.value)
+                task.set_param(rel.GetLabel(), self.value)
                 action.SetParams(params = task.get_options())
         
     def GetPropDialog(self):
@@ -1277,7 +1297,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self.ClearText()
         name = []
         for rel in self.GetRelations():
-            name.append(rel.GetName())
+            name.append(rel.GetLabel())
         self.AddText('/'.join(name))
         if self.value:
             self.AddText(self.value)
@@ -1330,7 +1350,7 @@ class ModelRelation(ogl.LineShape):
         
         return None
     
-    def GetName(self):
+    def GetLabel(self):
         """!Get parameter name"""
         return self.param
     
@@ -1462,7 +1482,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
     def Update(self):
         self._setBrush()
         
-    def GetName(self):
+    def GetLabel(self):
         """!Get name"""
         return _("loop")
     
@@ -1509,7 +1529,7 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
             else:
                 self.AddText('(' + str(self.id) + ')')
 
-    def GetName(self):
+    def GetLabel(self):
         """!Get name"""
         return _("if-else")
 
@@ -1645,12 +1665,14 @@ class ProcessModelFile:
                 task = None
             
             aId = int(action.get('id', -1))
+            label = action.get('name')
             
             self.actions.append({ 'pos'      : pos,
                                   'size'     : size,
                                   'task'     : task,
                                   'id'       : aId,
-                                  'disabled' : disabled })
+                                  'disabled' : disabled,
+                                  'label'    : label})
             
     def _getDim(self, node):
         """!Get position and size of shape"""
@@ -1908,7 +1930,7 @@ class WriteModelFile:
     def _action(self, action):
         """!Write actions"""
         self.fd.write('%s<action id="%d" name="%s" pos="%d,%d" size="%d,%d">\n' % \
-                          (' ' * self.indent, action.GetId(), action.GetName(), action.GetX(), action.GetY(),
+                          (' ' * self.indent, action.GetId(), EncodeString(action.GetLabel()), action.GetX(), action.GetY(),
                            action.GetWidth(), action.GetHeight()))
         self.indent += 4
         self.fd.write('%s<task name="%s">\n' % (' ' * self.indent, action.GetLog(string = False)[0]))
@@ -1973,7 +1995,7 @@ class WriteModelFile:
                     else:
                         aid  = rel.GetFrom().GetId()
                     self.fd.write('%s<relation dir="%s" id="%d" name="%s">\n' % \
-                                      (' ' * self.indent, ft, aid, rel.GetName()))
+                                      (' ' * self.indent, ft, aid, rel.GetLabel()))
                     self.indent += 4
                     for point in rel.GetLineControlPoints()[1:-1]:
                         self.fd.write('%s<point>\n' % (' ' * self.indent))
