@@ -2167,7 +2167,7 @@ if __name__ == "__main__":
                         value = '"' + value + '"'
                     cond = pattern.sub(value, cond)
             if isinstance(item, ModelLoop):
-                condVar, condText = map(lambda x: x.strip(), re.split('\s*in\s*', cond))
+                condVar, condText = map(lambda x: x.strip(), re.split('\s* in \s*', cond))
                 cond = "%sfor %s in " % (' ' * self.indent, condVar)
                 if condText[0] == '`' and condText[-1] == '`':
                     task = GUI(show = None).ParseCommand(cmd = utils.split(condText[1:-1]))
