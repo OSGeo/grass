@@ -18,11 +18,15 @@
 
 <!--    an action defines action properties (usually GRASS modules)
 -->
-<!ELEMENT action (task)>
+<!ELEMENT action (comment?, task)>
 <!ATTLIST action id	CDATA #REQUIRED>
 <!ATTLIST action name	CDATA #REQUIRED>
 <!ATTLIST action pos	CDATA #REQUIRED>
 <!ATTLIST action size	CDATA #REQUIRED>
+
+<!--    action comment
+-->
+<!ELEMENT comment         (#PCDATA)>
 
 <!--	a task describes the interface of a single
 	GRASS command
