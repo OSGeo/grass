@@ -62,7 +62,7 @@ class PsMapFrame(wx.Frame):
         wx.Frame.__init__(self, parent = parent, id = id, title = title, name = "PsMap", **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         #menubar
-        self.menubar = Menu(parent = self, model = PsMapMenuData().GetModel())
+        self.menubar = Menu(parent = self, model = PsMapMenuData().GetModel(separators=True))
         self.SetMenuBar(self.menubar)
         #toolbar
 
