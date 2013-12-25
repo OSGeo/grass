@@ -637,7 +637,8 @@ class Model(object):
                         cond = pattern.sub(value, cond)
                 
                 # split condition
-                condVar, condText = map(lambda x: x.strip(), re.split('\s*in\s*', cond))
+                ### TODO: this part needs some better solution
+                condVar, condText = map(lambda x: x.strip(), re.split('\s* in \s*', cond))
                 pattern = re.compile('%' + condVar)
                 ### for vars()[condVar] in eval(condText): ?
                 vlist = list()
