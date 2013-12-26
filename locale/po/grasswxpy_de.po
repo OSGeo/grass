@@ -2019,7 +2019,7 @@ msgstr "Name nicht angegeben, Einstellungen werden nicht gespeichert."
 
 #: ../gui/wxpython/web_services/dialogs.py:354
 #, python-format
-msgid "Connectig to <%s>..."
+msgid "Connecting to <%s>..."
 msgstr ""
 
 #: ../gui/wxpython/web_services/dialogs.py:420
