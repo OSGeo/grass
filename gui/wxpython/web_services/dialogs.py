@@ -351,7 +351,7 @@ class WSDialogBase(wx.Dialog):
             self.Layout()
             self.Fit()
 
-        self.statusbar.SetStatusText(_("Connectig to <%s>..." % self.server.GetValue().strip()))
+        self.statusbar.SetStatusText(_("Connecting to <%s>..." % self.server.GetValue().strip()))
 
         # number of panels already connected
         self.finished_panels_num = 0

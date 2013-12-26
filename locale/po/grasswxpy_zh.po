@@ -2088,7 +2088,7 @@ msgstr ""
 
 #: ../gui/wxpython/web_services/dialogs.py:354
 #, fuzzy, python-format
-msgid "Connectig to <%s>..."
+msgid "Connecting to <%s>..."
 msgstr "通过DEM计算阴影..."
 
 #: ../gui/wxpython/web_services/dialogs.py:420
