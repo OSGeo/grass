@@ -125,7 +125,8 @@ class AnalysisControllerBase:
         self._oldMouseUse = self._mapWindow.mouse['use']
         self._oldCursor = self._mapWindow.GetNamedCursor()
 
-        self._registeredGraphics = self._mapWindow.RegisterGraphicsToDraw(graphicsType='line')
+        self._registeredGraphics = self._mapWindow.RegisterGraphicsToDraw(graphicsType='line',
+                                                                          mapCoords=False)
 
         self._connectAll()
 

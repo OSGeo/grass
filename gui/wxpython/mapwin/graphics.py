@@ -26,7 +26,7 @@ from core.utils import _
 class GraphicsSet:
 
     def __init__(self, parentMapWin, graphicsType,
-                 setStatusFunc=None, drawFunc=None):
+                 setStatusFunc=None, drawFunc=None, mapCoords=True):
         """!Class, which contains instances of GraphicsSetItem and
             draws them For description of parameters look at method
             RegisterGraphicsToDraw in BufferedWindow class.
@@ -45,6 +45,7 @@ class GraphicsSet:
         self.graphicsType = graphicsType
         self.parentMapWin = parentMapWin
         self.setStatusFunc = setStatusFunc
+        self.mapCoords = mapCoords
 
         if drawFunc:
             self.drawFunc = drawFunc
@@ -87,7 +88,10 @@ class GraphicsSet:
                 else:
                     self.parentMapWin.pen = self.pens["default"]
 
-                coords = self.parentMapWin.Cell2Pixel(item.GetCoords())
+                if self.mapCoords:
+                    coords = self.parentMapWin.Cell2Pixel(item.GetCoords())
+                else:
+                    coords = item.GetCoords()
                 size = self.properties["size"]
 
                 self.properties["text"]['coords'] = [coords[0] + size, coords[1] + size, size, size]
@@ -104,7 +108,11 @@ class GraphicsSet:
                     self.parentMapWin.polypen = self.pens[item.GetPropertyVal("penName")]
                 else:
                     self.parentMapWin.polypen = self.pens["default"]
-                coords = item.GetCoords()
+
+                if self.mapCoords:
+                    coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
+                else:
+                    coords = item.GetCoords()
 
                 self.drawFunc(pdc=pdc,
                               polycoords=coords)
@@ -114,7 +122,10 @@ class GraphicsSet:
                     pen = self.pens[item.GetPropertyVal("penName")]
                 else:
                     pen = self.pens["default"]
-                coords = item.GetCoords()
+                if self.mapCoords:
+                    coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
+                else:
+                    coords = item.GetCoords()
 
                 self.drawFunc(pdc=pdc, pen=pen, 
                               point1=coords[0],
