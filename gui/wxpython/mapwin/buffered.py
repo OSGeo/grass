@@ -322,7 +322,16 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                     y2 = max(ylist)
                     pdc.SetIdBounds(drawid, wx.Rect(x1,y1,x2,y2))
                     # self.ovlcoords[drawid] = [x1,y1,x2,y2]
-        
+
+        elif pdctype == 'circle': # draw circle
+            if pen:
+                pdc.SetPen(pen)
+                pdc.SetBrush(wx.TRANSPARENT_BRUSH)
+                radius = abs(coords[2] - coords[0]) / 2
+                pdc.DrawCircle(max(coords[0], coords[2]) - radius,
+                               max(coords[1], coords[3]) - radius, radius=radius)
+                pdc.SetIdBounds(drawid, wx.Rect(coords[0], coords[1], coords[2], coords[3]))
+
         elif pdctype == 'point': # draw point
             if pen:
                 pdc.SetPen(pen)
@@ -942,7 +951,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         @todo implement rotation
 
         @param pdc PseudoDC
-        @param coords center coordinates
+        @param coords center coordinates (pixel coordinates)
         @param rotation rotate symbol
         @param text draw also text (text, font, color, rotation)
         @param textAlign alignment (default 'lower-right')
@@ -978,16 +987,29 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """!Draw rectangle (not filled) in PseudoDC
 
         @param pdc PseudoDC
-        @param point1 top left corner (map coordinates)
-        @param point2 bottom right corner (map coordinates)
+        @param point1 top left corner (pixel coordinates)
+        @param point2 bottom right corner (pixel coordinates)
         @param pen pen
         """
         Debug.msg(4, "BufferedWindow.DrawRectangle(): pdc=%s, point1=%s, point2=%s" % \
                   (pdc, point1, point2))
-        x1, y1 = self.Cell2Pixel(point1)
-        x2, y2 = self.Cell2Pixel(point2)
-        coords = [x1, y1, x2, y2]
+        coords = [point1[0], point1[1], point2[0], point2[1]]
         self.lineid = self.Draw(pdc, drawid=None, pdctype='box', coords=coords, pen=pen)
+        return self.lineid
+
+    def DrawCircle(self, pdc, coords, radius, pen=None):
+        """!Draw circle (not filled) in PseudoDC
+
+        @param pdc PseudoDC
+        @param coords center (pixel coordinates)
+        @param radius radius
+        @param pen pen
+        """
+        Debug.msg(4, "BufferedWindow.DrawCircle(): pdc=%s, coords=%s, radius=%s" %
+                  (pdc, coords, radius))
+        newcoords = [coords[0] - radius, coords[1] - radius,
+                     coords[0] + radius, coords[1] + radius]
+        self.lineid = self.Draw(pdc, drawid=None, pdctype='circle', coords=newcoords, pen=pen)
         return self.lineid
 
     def _computeZoomToPointAndRecenter(self, position, zoomtype):
@@ -1805,7 +1827,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """!Get render.Map() instance"""
         return self.Map
 
-    def RegisterGraphicsToDraw(self, graphicsType, setStatusFunc = None, drawFunc = None):
+    def RegisterGraphicsToDraw(self, graphicsType, setStatusFunc=None, drawFunc=None,
+                               mapCoords=True):
         """! This method registers graphics to draw.
         
         @param type (string) - graphics type: "point", "line" or "rectangle"
@@ -1817,13 +1840,15 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         @param drawFunc (function reference) - defines own function for drawing
                             If function is not defined DrawCross method is used for type "point",
                             DrawLines method for type "line", DrawRectangle for "rectangle".
-                            
+        @param mapCoords True if map coordinates should be set by user, otherwise pixels
+
         @return reference to GraphicsSet, which was added.
         """
-        item = GraphicsSet(parentMapWin = self, 
-                           graphicsType = graphicsType, 
-                           setStatusFunc = setStatusFunc, 
-                           drawFunc = drawFunc)
+        item = GraphicsSet(parentMapWin=self, 
+                           graphicsType=graphicsType, 
+                           setStatusFunc=setStatusFunc, 
+                           drawFunc=drawFunc,
+                           mapCoords=mapCoords)
         self.graphicsSetList.append(item)
         
         return item
