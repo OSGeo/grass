@@ -165,8 +165,10 @@ class SwipeMiscToolbar(BaseToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        return self._getToolbarData((("help", BaseIcons['help'],
+        return self._getToolbarData((("settings", BaseIcons['settings'],
+                                      self.parent.OnPreferences),
+                                     ("help", BaseIcons['help'],
                                       self.parent.OnHelp),
-                                    ("quit", swipeIcons['quit'],
+                                     ("quit", swipeIcons['quit'],
                                       self.parent.OnCloseWindow),
                                      ))

@@ -451,7 +451,7 @@ class GMFrame(wx.Frame):
 
     def OnMapSwipe(self, event):
         """!Launch Map Swipe"""
-        win = SwipeMapFrame(parent = self)
+        win = SwipeMapFrame(parent=self, giface=self._giface)
 
         rasters = []
         tree = self.GetLayerTree()

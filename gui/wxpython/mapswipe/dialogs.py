@@ -16,13 +16,17 @@ This program is free software under the GNU General Public License
 
 import copy
 import wx
+import wx.lib.scrolledpanel as SP
+import wx.lib.colourselect as csel
 
-from core               import globalvar
+from core import globalvar
 from core.utils import _
-from gui_core           import gselect
-from gui_core.widgets   import SimpleValidator
-from core.gcmd          import GMessage
+from gui_core import gselect
+from gui_core.widgets import SimpleValidator
+from gui_core.preferences import PreferencesBaseDialog
+from core.gcmd import GMessage
 from core.layerlist import LayerList
+from core.settings import UserSettings
 from gui_core.simplelmgr import SimpleLayerManager, SIMPLE_LMGR_RASTER, \
    SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_TB_LEFT, SIMPLE_LMGR_TB_RIGHT
 
@@ -207,3 +211,89 @@ class SwipeMapDialog(wx.Dialog):
 
     def GetSecondSimpleLmgr(self):
         return self._secondLmgr
+
+
+class PreferencesDialog(PreferencesBaseDialog):
+    """!Mapswipe preferences dialog"""
+    def __init__(self, parent, giface, title=_("Map Swipe settings"),
+                 settings=UserSettings):
+        PreferencesBaseDialog.__init__(self, parent=parent, giface=giface, title=title,
+                                       settings=settings, size=(-1, 300))
+
+        # create notebook pages
+        self._createMirrorModePage(self.notebook)
+
+        self.SetMinSize(self.GetBestSize())
+        self.SetSize(self.size)
+
+    def _createMirrorModePage(self, notebook):
+        """!Create notebook page for general settings"""
+        panel = SP.ScrolledPanel(parent=notebook)
+        panel.SetupScrolling(scroll_x=False, scroll_y=True)
+        notebook.AddPage(page=panel, text=_("Mirror mode"))
+
+        border = wx.BoxSizer(wx.VERTICAL)
+        box = wx.StaticBox(parent=panel, label=" %s " % _("Mirrored cursor"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+
+        row = 0
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Color:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        color = csel.ColourSelect(parent=panel,
+                                  colour=UserSettings.Get(group='mapswipe',
+                                                          key='cursor', subkey='color'),
+                                  size=globalvar.DIALOG_COLOR_SIZE)
+        color.SetName('GetColour')
+        self.winId['mapswipe:cursor:color'] = color.GetId()
+
+        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Shape:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        cursors = wx.Choice(parent=panel,
+                            choices=self.settings.Get(group='mapswipe', key='cursor',
+                                                      subkey=['type', 'choices'], internal=True),
+                            name="GetSelection")
+        cursors.SetSelection(self.settings.Get(group='mapswipe', key='cursor',
+                                               subkey=['type', 'selection']))
+        self.winId['mapswipe:cursor:type:selection'] = cursors.GetId()
+
+        gridSizer.Add(item=cursors, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                      pos=(row, 1))
+
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Line width:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        width = wx.SpinCtrl(parent=panel, min=1, max=10,
+                            initial=self.settings.Get(group='mapswipe', key='cursor',
+                                                      subkey='width'),
+                            name="GetValue")
+        self.winId['mapswipe:cursor:width'] = width.GetId()
+
+        gridSizer.Add(item=width, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                      pos=(row, 1))
+
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Size:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        size = wx.SpinCtrl(parent=panel, min=4, max=50,
+                           initial=self.settings.Get(group='mapswipe', key='cursor',
+                                                     subkey='size'),
+                           name="GetValue")
+        self.winId['mapswipe:cursor:size'] = size.GetId()
+
+        gridSizer.Add(item=size, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                      pos=(row, 1))
+
+        gridSizer.AddGrowableCol(1)
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
+        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        panel.SetSizer(border)
+
+        return panel
