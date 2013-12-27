@@ -220,33 +220,9 @@ class PreferencesBaseDialog(wx.Dialog):
                 self.settings.Set(group, value, key, [subkey, subkey1])
             else:
                 self.settings.Set(group, value, key, subkey)
-        
-        if self.parent.GetName() == 'Modeler':
-            return True
-        
-        #
-        # update default window dimension
-        #
-        if self.settings.Get(group = 'general', key = 'defWindowPos', subkey = 'enabled') is True:
-            dim = ''
-            # layer manager
-            pos = self.parent.GetPosition()
-            size = self.parent.GetSize()
-            dim = '%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
-            # opened displays
-            for mapdisp in self._giface.GetAllMapDisplays():
-                pos  = mapdisp.GetPosition()
-                size = mapdisp.GetSize()
-
-                # window size must be larger than zero
-                if size[0] > 0 and size[1] > 0:
-                    dim += ',%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
-
-            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = dim)
-        else:
-            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = '')
 
         return True
+
 
 class PreferencesDialog(PreferencesBaseDialog):
     """!User preferences dialog"""
@@ -1352,6 +1328,33 @@ class PreferencesDialog(PreferencesBaseDialog):
         epsgCode.Bind(wx.EVT_TEXT_ENTER, self.OnSetEpsgCode)
         
         return panel
+
+    def _updateSettings(self):
+        if not PreferencesBaseDialog._updateSettings(self):
+            return False
+        #
+        # update default window dimension
+        #
+        if self.settings.Get(group = 'general', key = 'defWindowPos', subkey = 'enabled') is True:
+            dim = ''
+            # layer manager
+            pos = self.parent.GetPosition()
+            size = self.parent.GetSize()
+            dim = '%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
+            # opened displays
+            for mapdisp in self._giface.GetAllMapDisplays():
+                pos  = mapdisp.GetPosition()
+                size = mapdisp.GetSize()
+
+                # window size must be larger than zero
+                if size[0] > 0 and size[1] > 0:
+                    dim += ',%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
+
+            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = dim)
+        else:
+            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = '')
+
+        return True
 
     def OnCheckColorTable(self, event):
         """!Set/unset default color table"""

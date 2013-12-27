@@ -21,6 +21,7 @@ import wx
 
 from core.debug import Debug
 from core.utils import _
+from core.settings import UserSettings
 from mapwin.buffered import BufferedMapWindow
 
 
@@ -182,10 +183,25 @@ class SwipeBufferedWindow(BufferedMapWindow):
         end = (self.mouse['end'][0] + offsetX, self.mouse['end'][1] + offsetY)
         super(SwipeBufferedWindow, self).MouseDraw(pdc, begin, end)
 
-    def DrawMouseCross(self, coords):
+    def DrawMouseCursor(self, coords):
         """!Draw moving cross."""
         self.pdcTmp.ClearId(self.lineid)
-        self.lineid = self.DrawCross(pdc = self.pdcTmp, coords = coords, size = 10, pen = wx.BLACK_PEN)
+        color = UserSettings.Get(group='mapswipe', key='cursor', subkey='color')
+        cursType = UserSettings.Get(group='mapswipe', key='cursor', subkey=['type', 'selection'])
+        size = UserSettings.Get(group='mapswipe', key='cursor', subkey='size')
+        width = UserSettings.Get(group='mapswipe', key='cursor', subkey='width')
+        if cursType == 0:
+            self.lineid = self.DrawCross(pdc=self.pdcTmp, coords=coords, size=size,
+                                         pen=wx.Pen(wx.Colour(*color), width))
+        elif cursType == 1:
+            self.lineid = self.DrawRectangle(pdc=self.pdcTmp,
+                                             point1=(coords[0] - size / 2, coords[1] - size / 2),
+                                             point2=(coords[0] + size / 2, coords[1] + size / 2),
+                                             pen=wx.Pen(wx.Colour(*color), width))
+        elif cursType == 2:
+            self.lineid = self.DrawCircle(pdc=self.pdcTmp,
+                                          coords=coords, radius=size / 2,
+                                          pen=wx.Pen(wx.Colour(*color), width))
 
 
 class _MouseEvent(wx.PyCommandEvent):

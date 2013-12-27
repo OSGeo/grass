@@ -33,7 +33,7 @@ from core.layerlist import LayerListToRendererConverter
 
 from mapswipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
 from mapswipe.mapwindow import SwipeBufferedWindow
-from mapswipe.dialogs   import SwipeMapDialog
+from mapswipe.dialogs   import SwipeMapDialog, PreferencesDialog
 
 
 class SwipeMapFrame(DoubleMapFrame):
@@ -99,6 +99,7 @@ class SwipeMapFrame(DoubleMapFrame):
         self.rasters = {'first': None, 'second': None}
 
         self._inputDialog = None
+        self._preferencesDialog = None
 
         # default action in map toolbar
         self.GetMapToolbar().SelectDefault()
@@ -117,9 +118,9 @@ class SwipeMapFrame(DoubleMapFrame):
             return
         coords = event.GetPosition()
         if showInFirst:
-            self.firstMapWindow.DrawMouseCross(coords = coords)
+            self.firstMapWindow.DrawMouseCursor(coords=coords)
         else:
-            self.secondMapWindow.DrawMouseCross(coords = coords)
+            self.secondMapWindow.DrawMouseCursor(coords=coords)
 
         event.Skip()
 
@@ -611,6 +612,14 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def OnHelp(self, event):
         self._giface.Help(entry = 'wxGUI.mapswipe')
+
+    def OnPreferences(self, event):
+        if not self._preferencesDialog:
+            dlg = PreferencesDialog(parent=self, giface=self._giface)
+            self._preferencesDialog = dlg
+            self._preferencesDialog.CenterOnParent()
+
+        self._preferencesDialog.ShowModal()
 
     def OnCloseWindow(self, event):
         self.GetFirstMap().Clean()

@@ -789,6 +789,16 @@ class Settings:
                         },
                     },
                 },
+            'mapswipe' : {
+                'cursor': {
+                    'color': (0, 0, 0, 255),
+                    'size': 12,
+                    'width': 1,
+                    'type': {
+                        'selection': 0,
+                        }
+                    },
+                },
             }
 
         # quick fix, http://trac.osgeo.org/grass/ticket/1233
@@ -883,7 +893,12 @@ class Settings:
                                                                        _("histogram"))
         self.internalSettings['vdigit']['bgmap'] = {}
         self.internalSettings['vdigit']['bgmap']['value'] = ''
-        
+
+        self.internalSettings['mapswipe']['cursor']['type'] = {}
+        self.internalSettings['mapswipe']['cursor']['type']['choices'] = (_("cross"),
+                                                                          _("box"),
+                                                                          _("circle"))
+
     def ReadSettingsFile(self, settings = None):
         """!Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
