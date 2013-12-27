@@ -7,7 +7,8 @@ established.
 Dissolving (optional) is based on the output categories. If 2 adjacent
 areas have the same output category, the boundary is removed.
 
-<p>If <b>cats</b>, <b>file</b>, <b>random</b> or <b>where</b> options are not
+<p>
+If <b>cats</b>, <b>file</b>, <b>random</b> or <b>where</b> options are not
 specified, all features of given type and layer are
 extracted. Categories are not changed in that case.
 
@@ -20,27 +21,31 @@ is normally held in the area's centroid) you must first use
 
 <h2>EXAMPLES</h2>
 
+The examples are intended for the North Carolina sample dataset:
+
 <h3>Extract areas by category number with dissolving #1:</h3>
 <div class="code"><pre>
-v.extract -d cats=1,2,3,4 input=soils output=soil_groupa type=area new=0
+v.extract -d cats=1,2,3,4 input=soils_wake output=soil_groupa type=area new=0
 </pre></div>
 
-<p>produces a new vector <b>soil_groupa</b>, containing those areas from vector
+<p>
+produces a new vector <b>soil_groupa</b>, containing those areas from vector
 <b>soils</b> which have category numbers <b>1 thru 4</b>; any common boundaries are
 dissolved, and all areas in the new map will be assigned category number 0.
 
 <h3>Extract areas by category number with dissolving #2:</h3>
 <div class="code"><pre>
-v.extract -d cats=1-4 input=soils output=soil_groupa type=area new=-1
+v.extract -d cats=1-4 input=soils_wake output=soil_groupa type=area new=-1
 </pre></div>
-<p>produces a new vector map <b>soil_groupa</b> containing the areas from vector
+<p>
+produces a new vector map <b>soil_groupa</b> containing the areas from vector
 <b>soils</b> which have categories <b>1 thru 4</b>. Any common boundaries are
 dissolved, all areas in the new map will retain their original category
 numbers 1 thru 4, since <b>new</b> was set to -1.
 
 <h3>Extract all areas and assign the same category to all:</h3>
 <div class="code"><pre>
-v.extract input=soils output=soil_groupa type=area new=1
+v.extract input=soils_wake output=soil_groupa type=area new=1
 </pre></div>
 <p>
 produces a new vector map <b>soil_groupa</b> containing all areas from
@@ -49,7 +54,8 @@ map will be assigned category number 1.
 
 <h3>Extract vectors with SQL:</h3>
 <div class="code"><pre>
-v.extract input=markveggy.shp output=markveggy.1 new=13 where="(VEGTYPE = 'Wi') or (VEGTYPE = 'PS') or (PRIME_TYPE='Wi')"
+v.extract input=markveggy.shp output=markveggy.1 new=13 \
+  where="(VEGTYPE = 'Wi') or (VEGTYPE = 'PS') or (PRIME_TYPE='Wi')"
 </pre></div>
 <p>
 produces a new vector map with category number 13 if the SQL statement is
@@ -57,59 +63,62 @@ fulfilled.
 
 <h3>Extract vector features which have the given field empty:</h3>
 <div class="code"><pre>
-v.extract input=forest output=forest_gaps where="CANOPY is NULL"
+v.extract input=lakes output=lakes_gaps where="FTYPE is NULL"                    
 </pre></div>
 
 <h3>Extract vector features which have the given field not empty:</h3>
 <div class="code"><pre>
-v.extract input=forest output=forest_canopy where="CANOPY not NULL"
+v.extract input=lakes output=lakes_ftype where="FTYPE not NULL"
 </pre></div>
 
 <h3>Reverse extracting (behaves like selective vector objects deleting):</h3>
 
-Remove unreferenced stations from the GlobalSOD database:
+Remove meteorological stations from map which are located above 1000m:
 <div class="code"><pre>
 # check what to delete:
-v.db.select gsod_stationlist where="latitude &lt; -91"
+v.db.select precip_30ynormals where="elev &gt; 1000"
 
 # perform reverse selection
-v.extract -r gsod_stationlist out=gsod_stationlist_clean where="latitude &lt; -91"
+v.extract -r input=precip_30ynormals output=precip_30ynormals_lowland \
+  where="elev &gt; 1000"
 
-v.db.select gsod_stationlist_clean
+# verify
+v.db.select precip_30ynormals_lowland
 </pre></div>
 
 
 <h3>Dissolving based on column attributes:</h3>
 <div class="code"><pre>
 # check column names:
-v.info -c polbnda_italy
+v.info -c zipcodes_wake
 
 # reclass based on desired column:
-v.reclass polbnda_italy out=polbnda_italy_recl_nam col=vmap_nam
+v.reclass input=zipcodes_wake output=zipcodes_wake_recl_nam column=ZIPNAME
 
 # verify:
-v.info -c polbnda_italy_recl_nam
-v.db.select polbnda_italy_recl_nam
+v.info -c zipcodes_wake_recl_nam
+v.db.select zipcodes_wake_recl_nam
 
 # dissolve:
-v.extract -d polbnda_italy_recl_nam out=pol_italy_regions
+v.extract -d input=zipcodes_wake_recl_nam output=zipcodes_wake_regions
 </pre></div>
 <p>
-produces a new vector map with common boundaries dissolved where the reclassed
+This produces a new vector map with common boundaries dissolved where the reclassed
 attributes of adjacent (left/right) areas are identical.
 
 <h3>Remove islands from polygon map</h3>
 <div class="code"><pre>
-v.extract in=map_with_islands out=maps_without_islands cats=1-99999
+v.extract input=map_with_islands output=maps_without_islands cats=1-99999
 # and/or
 v.extract -d in=map_with_islands out=maps_without_islands
 </pre></div>
 
 <h3>Extract 3 random areas from geology map</h3>
-<p><div class="code"><pre>
+<p>
+<div class="code"><pre>
 v.extract input=geology output=random_geology type=area random=3
 </pre></div>
-will create new map with three random categories matching areas.
+This creates a new map with three random categories matching areas.
 Note that there may be more than one feature with the same category.
 
 <h2>SEE ALSO</h2>
