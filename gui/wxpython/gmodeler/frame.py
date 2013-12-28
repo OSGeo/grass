@@ -959,10 +959,11 @@ class ModelFrame(wx.Frame):
 
     def DefineCondition(self, condition):
         """!Define if-else statement with given list of items"""
-        parent = condition
-        items = condition.GetItems()
+        items = condition.GetItems(self.model.GetItems(objType=ModelAction))
         if not items['if'] and not items['else']:
             return
+        
+        parent = condition
         
         # remove defined relations first
         for rel in condition.GetRelations():
@@ -1136,11 +1137,12 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 alist = list()
                 for aId in ids['unchecked']:
                     action = model.GetItem(aId, objType=ModelAction)
-                    action.UnSetBlock(shape)
+                    if action:
+                        action.UnSetBlock(shape)
                 for aId in ids['checked']:
                     action = model.GetItem(aId, objType=ModelAction)
-                    action.SetBlock(shape)
                     if action:
+                        action.SetBlock(shape)
                         alist.append(aId)
                 shape.SetItems(alist)
                 self.frame.DefineLoop(shape)
