@@ -183,6 +183,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # signal which requests showing of a notification
         self.showNotification = Signal('GPromptSTC.showNotification')
 
+        # signal to notify selected command
+        self.commandSelected = Signal('GPromptSTC.commandSelected')
+        
     def OnTextSelectionChanged(self, event):
         """!Copy selected text to clipboard and skip event.
         The same function is in GStc class (goutput.py).
@@ -200,6 +203,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 nodes = self._menuModel.SearchNodes(key='command', value=item)
                 desc = ''
                 if nodes:
+                    self.commandSelected.emit(command=item)
                     desc = nodes[0].data['description']
             except KeyError:
                 desc = '' 
@@ -269,6 +273,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
     def SetTextAndFocus(self, text):
         pos = len(text)
+        self.commandSelected.emit(command=text)
         self.SetText(text)
         self.SetSelectionStart(pos)
         self.SetCurrentPos(pos)

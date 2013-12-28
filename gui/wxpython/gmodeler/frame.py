@@ -650,10 +650,11 @@ class ModelFrame(wx.Frame):
         
         # add action to canvas
         x, y = self.canvas.GetNewShapePos()
+        label, comment = self.searchDialog.GetLabel()
         action = ModelAction(self.model, cmd = cmd,
                              x = x + self._randomShift(),
                              y = y + self._randomShift(),
-                             id = self.model.GetNextId())
+                             id = self.model.GetNextId(), label = label, comment = comment)
         overwrite = self.model.GetProperties().get('overwrite', None)
         if overwrite is not None:
             action.GetTask().set_flag('overwrite', overwrite)
