@@ -15,7 +15,7 @@ Classes:
  - dialogs::ItemListCtrl
  - dialogs::ItemCheckListCtrl
 
-(C) 2010-2011 by the GRASS Development Team
+(C) 2010-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -138,7 +138,7 @@ class ModelDataDialog(SimpleDialog):
             self.Destroy()
 
 class ModelSearchDialog(wx.Dialog):
-    def __init__(self, parent, title = _("Add new GRASS module to the model"),
+    def __init__(self, parent, title = _("Add GRASS command to the model"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """!Graphical modeler module search window
         
@@ -158,18 +158,24 @@ class ModelSearchDialog(wx.Dialog):
         
         self.cmdBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                    label=" %s " % _("Command"))
+        self.labelBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                   label=" %s " % _("Label and comment"))
         
         # menu data for search widget and prompt
         menuModel = LayerManagerMenuData()
         
         self.cmd_prompt = GPromptSTC(parent = self, menuModel = menuModel.GetModel(), updateCmdHistory = False)
         self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
+        self.cmd_prompt.commandSelected.connect(lambda command: self.label.SetValue(command))
         self.search = SearchModuleWidget(parent = self.panel,
                                          model = menuModel.GetModel(),
                                          showTip = True)
         self.search.moduleSelected.connect(lambda name:
                                            self.cmd_prompt.SetTextAndFocus(name + ' '))
         wx.CallAfter(self.cmd_prompt.SetFocus)
+        
+        self.label = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
+        self.comment = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY, style =  wx.TE_MULTILINE)
         
         self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
         self.btnOk     = wx.Button(self.panel, wx.ID_OK)
@@ -180,12 +186,24 @@ class ModelSearchDialog(wx.Dialog):
         
         self._layout()
         
-        self.SetSize((500, 275))
+        self.SetSize((500, -1))
 
     def _layout(self):
         cmdSizer = wx.StaticBoxSizer(self.cmdBox, wx.VERTICAL)
         cmdSizer.Add(item = self.cmd_prompt, proportion = 1,
                      flag = wx.EXPAND)
+        labelSizer = wx.StaticBoxSizer(self.labelBox, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer (hgap = 5, vgap = 5)
+        gridSizer.AddGrowableCol(1)
+        gridSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                           label = _("Label:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
+        gridSizer.Add(item = self.label, pos = (0, 1), flag =  wx.EXPAND)
+        gridSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                           label = _("Comment:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL, pos = (1, 0))
+        gridSizer.Add(item = self.comment, pos = (1, 1), flag =  wx.EXPAND)
+        labelSizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND)
         
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
@@ -197,11 +215,13 @@ class ModelSearchDialog(wx.Dialog):
                       flag = wx.EXPAND | wx.ALL, border = 3)
         mainSizer.Add(item = cmdSizer, proportion = 1,
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
+        mainSizer.Add(item = labelSizer, proportion = 1,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
         mainSizer.Add(item = btnSizer, proportion = 0,
                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
         
         self.panel.SetSizer(mainSizer)
-        mainSizer.Fit(self.panel)
+        mainSizer.Fit(self)
         
         self.Layout()
 
@@ -224,6 +244,10 @@ class ModelSearchDialog(wx.Dialog):
         """!Get command"""
         return self._command
 
+    def GetLabel(self):
+        """!Get label and comment"""
+        return self.label.GetValue(), self.comment.GetValue()
+    
     def ValidateCmd(self, cmd):
         if len(cmd) < 1:
             GError(parent = self,
