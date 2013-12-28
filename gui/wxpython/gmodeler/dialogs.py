@@ -534,10 +534,9 @@ class ModelConditionDialog(ModelItemDialog):
         self.listBoxElse = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                         label=" %s " % _("List of items in 'else' block"))
         self.itemListElse = ItemCheckListCtrl(parent = self.panel,
-                                              window = self,
-                                              columns = [_("Name"),
+                                              columns = [_("Label"),
                                                          _("Command")],
-                                              shape = shape)
+                                              shape = shape, frame = parent)
         self.itemListElse.SetName('ElseBlockList')
         self.itemListElse.Populate(self.parent.GetModel().GetItems())
         
@@ -787,6 +786,8 @@ class ItemListCtrl(ModelListCtrl):
         self.disablePopup = disablePopup
 
         ModelListCtrl.__init__(self, parent, columns, frame, **kwargs)
+        self.itemIdMap = list()
+        
         self.SetColumnWidth(1, 100)
         self.SetColumnWidth(2, 65)
         
@@ -801,16 +802,17 @@ class ItemListCtrl(ModelListCtrl):
     def Populate(self, data):
         """!Populate the list"""
         self.itemDataMap = dict()
+        self.itemIdMap = list()
         
         if self.shape:
+            items = self.frame.GetModel().GetItems(objType=ModelAction)
             if isinstance(self.shape, ModelCondition):
-                if self.GetText() == 'ElseBlockList':
-                    shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['else'])
+                if self.GetLabel() == 'ElseBlockList':
+                    shapeItems = map(lambda x: x.GetId(), self.shape.GetItems(items)['else'])
                 else:
-                    shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['if'])
+                    shapeItems = map(lambda x: x.GetId(), self.shape.GetItems(items)['if'])
             else:
-                shapeItems = map(lambda x: x.GetId(),
-                                 self.shape.GetItems(self.frame.GetModel().GetItems(objType=ModelAction)))
+                shapeItems = map(lambda x: x.GetId(), self.shape.GetItems(items))
         else:
             shapeItems = list()
         
@@ -821,6 +823,8 @@ class ItemListCtrl(ModelListCtrl):
             if isinstance(action, ModelData) or \
                     action == self.shape:
                 continue
+            
+            self.itemIdMap.append(action.GetId())
             
             if len(self.columns) == 2:
                 self.itemDataMap[i] = [action.GetLabel(),
@@ -993,12 +997,13 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
         """!Get list of selected actions"""
         ids = { 'checked'   : list(),
                 'unchecked' : list() }
+        
         # action ids start at 1
         for i in range(self.GetItemCount()):
             if self.IsChecked(i):
-                ids['checked'].append(i+1)
+                ids['checked'].append(self.itemIdMap[i])
             else:
-                ids['unchecked'].append(i+1)
+                ids['unchecked'].append(self.itemIdMap[i])
             
         return ids
 

@@ -1407,17 +1407,7 @@ class ModelItem(ModelObject):
         """!Abstract class for loops and conditions"""
         ModelObject.__init__(self, id, label)
         self.parent  = parent
-        self.itemIds = list() # unordered
         
-    def GetItems(self, items):
-        """!Get sorted items by id"""
-        result = list()
-        for item in items:
-            if item.GetId() in self.itemIds:
-                result.append(item)
-        
-        return result
-
     def SetId(self, id):
         """!Set loop id"""
         self.id = id
@@ -1447,7 +1437,8 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
     def __init__(self, parent, x, y, id=-1, idx=-1, width = None, height = None, label = '', items = []):
         """!Defines a loop"""
         ModelItem.__init__(self, parent, x, y, id, width, height, label, items)
-        
+        self.itemIds = list() # unordered        
+
         if not width:
             width = UserSettings.Get(group='modeler', key='loop', subkey=('size', 'width'))
         if not height:
@@ -1488,7 +1479,16 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         
     def Update(self):
         self._setBrush()
+
+    def GetItems(self, items):
+        """!Get sorted items by id"""
+        result = list()
+        for item in items:
+            if item.GetId() in self.itemIds:
+                result.append(item)
         
+        return result
+
     def SetItems(self, items):
         """!Set items (id)"""
         self.itemIds = items
@@ -1500,10 +1500,11 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         ogl.RectangleShape.OnDraw(self, dc)
 
 class ModelCondition(ModelItem, ogl.PolygonShape):
-    def __init__(self, parent, x, y, id = -1, width = None, height = None, text = '',
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, label = '',
                  items = { 'if' : [], 'else' : [] }):
         """!Defines a if-else condition"""
-        ModelItem.__init__(self, parent, x, y, id, width, height, text, items)
+        ModelItem.__init__(self, parent, x, y, id, width, height, label, items)
+        self.itemIds = {'if' : [], 'else': []}
         
         if not width:
             self.width = UserSettings.Get(group='modeler', key='if-else', subkey=('size', 'width'))
@@ -1527,8 +1528,8 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
             self.SetX(x)
             self.SetY(y)
             self.SetPen(wx.BLACK_PEN)
-            if text:
-                self.AddText('(' + str(self.id) + ') ' + text)
+            if label:
+                self.AddText('(' + str(self.id) + ') ' + label)
             else:
                 self.AddText('(' + str(self.id) + ')')
 
@@ -1544,6 +1545,17 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
         """!Get object height"""
         return self.height
 
+    def GetItems(self, items):
+        """!Get sorted items by id"""
+        result = {'if' : [], 'else': []}
+        for item in items:
+            if item.GetId() in self.itemIds['if']:
+                result['if'].append(item)
+            elif item.GetId() in self.itemIds['else']:
+                result['else'].append(item)
+        
+        return result
+
     def SetItems(self, items, branch = 'if'):
         """!Set items (id)
 
@@ -1551,7 +1563,7 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
         @param branch 'if' / 'else'
         """
         if branch in ['if', 'else']:
-            self.items[branch] = items
+            self.itemIds[branch] = items
 
 class ProcessModelFile:
     """!Process GRASS model file (gxm)"""
