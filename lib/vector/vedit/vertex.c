@@ -27,7 +27,7 @@
   \param move_first move only first vertex found in the bounding box
   \param snap snapping mode (see vedit.h)
   
-  \return number of moved verteces
+  \return number of moved vertices
   \return -1 on error
 */
 int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
@@ -188,7 +188,7 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap,
   \param coord points location
   \param thresh find line in given threshold
   
-  \return number of add verteces
+  \return number of add vertices
   \return -1 on error
 */
 int Vedit_add_vertex(struct Map_info *Map, struct ilist *List,

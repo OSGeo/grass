@@ -13,7 +13,7 @@ int display_vert(struct Map_info *Map, int type, LATTR *lattr, double dsize)
 
     msize = dsize * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0));	/* do it better */
     
-    G_debug(1, "display verteces:");
+    G_debug(1, "display vertices:");
     Points = Vect_new_line_struct();
 
     D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
