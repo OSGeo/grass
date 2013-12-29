@@ -55,6 +55,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("editing"));
+    G_add_keyword(_("node"));
+    G_add_keyword(_("vertex"));
     module->description = _("Edits a vector map, allows adding, deleting "
 			    "and modifying selected vector features.");
 
