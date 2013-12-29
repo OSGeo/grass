@@ -56,7 +56,7 @@ Joint Research Centre of the European Commission, based on bits of the r.sun mod
 #define DISTANCE1(x1, x2, y1, y2) (sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)))
 
 
-FILE *fw;
+FILE *fp;
 
 const double pihalf = M_PI * 0.5;
 const double twopi = M_PI * 2.;
@@ -70,6 +70,7 @@ const char *horizon = NULL;
 const char *mapset = NULL;
 const char *per;
 char shad_filename[GNAME_MAX];
+char *outfile;
 
 struct Cell_head cellhd;
 struct Key_value *in_proj_info, *in_unit_info;
@@ -163,7 +164,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Option *elevin, *dist, *coord, *direction, *horizon, *step,
-	    *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff, *maxdistance;
+	    *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff, *maxdistance, *output;
     } parm;
 
     struct
@@ -289,6 +290,11 @@ int main(int argc, char *argv[])
     parm.dist->description = _("Sampling distance step coefficient (0.5-1.5)");
     parm.dist->guisection = _("Output options");
 
+    parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
+    parm.output->required = NO;
+    parm.output->answer = "-";
+    parm.output->description =
+        _("Name of file for output (use output=- for stdout)");
 
     flag.degreeOutput = G_define_flag();
     flag.degreeOutput->key = 'd';
@@ -350,6 +356,15 @@ int main(int argc, char *argv[])
 	   xcoord = (int) ((xcoord-xmin)/stepx);
 	   ycoord = (int) ((ycoord-ymin)/stepy);
 	 */
+         
+	/* Open ASCII file for output or stdout */
+	outfile = parm.output->answer;
+
+	if ((strcmp("-", outfile)) == 0) {
+	    fp = stdout;
+	}
+	else if (NULL == (fp = fopen(outfile, "w")))
+	     G_fatal_error(_("Unable to open file <%s>"), outfile);
     }
 
     if (parm.direction->answer != NULL)
@@ -765,8 +780,8 @@ void calculate_shadow()
 
     angle = (single_direction * deg2rad) + pihalf;
 
-
     maxlength = fixedMaxLength;
+    fprintf(fp, "azimuth,horizon_height\n");
 
     for (i = 0; i < printCount; i++) {
 
@@ -814,9 +829,7 @@ void calculate_shadow()
 	stepsinangle = stepxy * delt_nor / delt_dist;
 	stepcosangle = stepxy * delt_east / delt_dist;
 
-
 	shadow_angle = horizon_height();
-
 
 	if (degreeOutput) {
 	    shadow_angle *= rad2deg;
@@ -827,7 +840,7 @@ void calculate_shadow()
 	else if (printangle >= 360.)
 	    printangle -= 360;
 
-	G_message("%lf,%lf", printangle, shadow_angle);
+	fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
 
 	angle += dfr_rad;
 
@@ -1060,6 +1073,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	z_orig = zp = z[yindex][xindex];
 
 	calculate_shadow();
+        fclose(fp);
 
     }
     else {
