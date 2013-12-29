@@ -25,6 +25,9 @@ from core.settings  import UserSettings
 from core.gcmd      import EncodeString, GetDefaultEncoding
 from nviz.main      import NvizSettings
 
+from grass.script import core as gcore
+
+
 class ProcessWorkspaceFile:
     def __init__(self, tree):
         """!A ElementTree handler for the GXW XML file, as defined in
@@ -149,6 +152,7 @@ class ProcessWorkspaceFile:
                     "pos"            : pos,
                     "size"           : size,
                     "extent"         : extent,
+                    "tbres"          : display.get('tbres', '0'),
                     "alignExtent"    : bool(int(display.get('alignExtent', "0"))),
                     "constrainRes"   : bool(int(display.get('constrainRes', "0"))),
                     "projection"     : projection,
@@ -275,175 +279,295 @@ class ProcessWorkspaceFile:
         """
         # init nviz layer properties
         nviz = {}
-        if node_nviz.find('surface') is not None: # -> raster
+        if node_nviz.find('surface') is not None:  # -> raster
             nviz['surface'] = {}
             for sec in ('attribute', 'draw', 'position'):
                 nviz['surface'][sec] = {}
+            self.__processLayerNvizSurface(nviz, node_nviz.find('surface'))
+        elif node_nviz.find('volume') is not None:  # -> raster
+            nviz['volume'] = {}
+            for sec in ('attribute', 'draw', 'position'):
+                nviz['volume'][sec] = {}
+            self.__processLayerNvizVolume(nviz, node_nviz.find('volume'))
         elif node_nviz.find('vlines') is not None or \
-                node_nviz.find('vpoints') is not None: # -> vector
+                node_nviz.find('vpoints') is not None:  # -> vector
             nviz['vector'] = {}
             for sec in ('lines', 'points'):
                 nviz['vector'][sec] = {}
-        
-        if 'surface' in nviz:
-            node_surface = node_nviz.find('surface')
-            # attributes
-            for attrb in node_surface.findall('attribute'):
-                tagName = str(attrb.tag)
-                attrbName = attrb.get('name', '')
-                dc = nviz['surface'][tagName][attrbName] = {}
-                if attrb.get('map', '0') == '0':
-                    dc['map'] = False
-                else:
-                    dc['map'] = True
-                value = self.__getNodeText(attrb, 'value')
-                try:
-                    dc['value'] = int(value)
-                except ValueError:
-                    try:
-                        dc['value'] = float(value)
-                    except ValueError:
-                        dc['value'] = str(value)
-            
-            # draw
-            node_draw = node_surface.find('draw')
-            if node_draw is not None:
-                tagName = str(node_draw.tag)
-                nviz['surface'][tagName]['all'] = False
-                nviz['surface'][tagName]['mode'] = {}
-                nviz['surface'][tagName]['mode']['value'] = -1 # to be calculated
-                nviz['surface'][tagName]['mode']['desc'] = {}
-                nviz['surface'][tagName]['mode']['desc']['shading'] = \
-                    str(node_draw.get('shading', ''))
-                nviz['surface'][tagName]['mode']['desc']['style'] = \
-                    str(node_draw.get('style', ''))
-                nviz['surface'][tagName]['mode']['desc']['mode'] = \
-                    str(node_draw.get('mode', ''))
-                
-                # resolution
-                for node_res in node_draw.findall('resolution'):
-                    resType = str(node_res.get('type', ''))
-                    if 'resolution' not in nviz['surface']['draw']:
-                        nviz['surface']['draw']['resolution'] = {}
-                    value = int(self.__getNodeText(node_res, 'value'))
-                    nviz['surface']['draw']['resolution'][resType] = value
-                
-                # wire-color
-                node_wire_color = node_draw.find('wire_color')
-                if node_wire_color is not None:
-                    nviz['surface']['draw']['wire-color'] = {}
-                    value = str(self.__getNodeText(node_wire_color, 'value'))
-                    nviz['surface']['draw']['wire-color']['value'] = value
-                
-            # position
-            node_pos = node_surface.find('position')
-            if node_pos is not None:
-                dc = nviz['surface']['position'] = {}
-                for coor in ['x', 'y', 'z']:
-                    node = node_pos.find(coor)
-                    if node is None:
-                        continue
-                    value = int(self.__getNodeText(node_pos, coor))
-                    dc[coor] = value
-            
-        elif 'vector' in nviz:
-            # vpoints
-            node_vpoints = node_nviz.find('vpoints')
-            if node_vpoints is not None:
-                marker = str(node_vpoints.get('marker', ''))
-                markerId = list(UserSettings.Get(group='nviz', key='vector',
-                                                 subkey=['points', 'marker'], internal=True)).index(marker)
-                nviz['vector']['points']['marker'] = { 'value' : markerId }
-                
-                node_mode = node_vpoints.find('mode')
-                if node_mode is not None:
-                    nviz['vector']['points']['mode'] = {}
-                    nviz['vector']['points']['mode']['type'] = str(node_mode.get('type', 'surface'))
-                    nviz['vector']['points']['mode']['surface'] = {}
-                    nviz['vector']['points']['mode']['surface']['value'] = []
-                    nviz['vector']['points']['mode']['surface']['show'] = []
-                    
-                    # map
-                    for node_map in node_mode.findall('map'):
-                        nviz['vector']['points']['mode']['surface']['value'].append(
-                            self.__processLayerNvizNode(node_map, 'name', str))
-                        nviz['vector']['points']['mode']['surface']['show'].append(bool(
-                            self.__processLayerNvizNode(node_map, 'checked', int)))
-                
-                # color
-                self.__processLayerNvizNode(node_vpoints, 'color', str,
-                                            nviz['vector']['points'])
-                
-                # width
-                self.__processLayerNvizNode(node_vpoints, 'width', int,
-                                            nviz['vector']['points'])
-                
-                # height
-                self.__processLayerNvizNode(node_vpoints, 'height', float,
-                                            nviz['vector']['points'])
-                
-                # height
-                self.__processLayerNvizNode(node_vpoints, 'size', float,
-                                            nviz['vector']['points'])
-                
-                # thematic
-                node_thematic = node_vpoints.find('thematic')
-                thematic = nviz['vector']['points']['thematic'] = {}
-                thematic['rgbcolumn'] = self.__processLayerNvizNode(node_thematic, 'rgbcolumn', str)
-                thematic['sizecolumn'] = self.__processLayerNvizNode(node_thematic, 'sizecolumn', str)
-                for col in ('rgbcolumn', 'sizecolumn'):
-                    if thematic[col] == 'None':
-                        thematic[col] = None
-                thematic['layer'] = self.__processLayerNvizNode(node_thematic, 'layer', int)
-                for use in ('usecolor', 'usesize', 'usewidth'):
-                    if node_thematic.get(use, ''):
-                        thematic[use] = int(node_thematic.get(use, '0'))
-                
-            # vlines
-            node_vlines = node_nviz.find('vlines')
-            if node_vlines is not None:
-                node_mode = node_vlines.find('mode')
-                if node_mode is not None:
-                    nviz['vector']['lines']['mode'] = {}
-                    nviz['vector']['lines']['mode']['type'] = str(node_mode.get('type', ''))
-                    nviz['vector']['lines']['mode']['surface'] = {}
-                    nviz['vector']['lines']['mode']['surface']['value'] = []
-                    nviz['vector']['lines']['mode']['surface']['show'] = []
-                    
-                    # map
-                    for node_map in node_mode.findall('map'):
-                        nviz['vector']['lines']['mode']['surface']['value'].append(
-                            self.__processLayerNvizNode(node_map, 'name', str))
-                        nviz['vector']['lines']['mode']['surface']['show'].append(bool(
-                            self.__processLayerNvizNode(node_map, 'checked', int)))
-                
-                # color
-                self.__processLayerNvizNode(node_vlines, 'color', str,
-                                            nviz['vector']['lines'])
-                
-                # width
-                self.__processLayerNvizNode(node_vlines, 'width', int,
-                                            nviz['vector']['lines'])
-                
-                # height
-                self.__processLayerNvizNode(node_vlines, 'height', int,
-                                            nviz['vector']['lines'])
-                
-                # thematic
-                node_thematic = node_vlines.find('thematic')
-                thematic = nviz['vector']['lines']['thematic'] = {}
-                thematic['rgbcolumn'] = self.__processLayerNvizNode(node_thematic, 'rgbcolumn', str)
-                thematic['sizecolumn'] = self.__processLayerNvizNode(node_thematic, 'sizecolumn', str)
-                for col in ('rgbcolumn', 'sizecolumn'):
-                    if thematic[col] == 'None':
-                        thematic[col] = None
-                thematic['layer'] = self.__processLayerNvizNode(node_thematic, 'layer', int)
-                for use in ('usecolor', 'usesize', 'usewidth'):
-                    if node_thematic.get(use, ''):
-                        thematic[use] = int(node_thematic.get(use, '0'))
-            
+            if node_nviz.find('vlines'):
+                self.__processLayerNvizVectorLines(nviz, node_nviz.find('vlines'))
+            if node_nviz.find('vpoints'):
+                self.__processLayerNvizVectorPoints(nviz, node_nviz.find('vpoints'))
+
         return nviz
-    
+
+    def __processLayerNvizSurface(self, nvizData, nodeSurface):
+        """!Process 3D layer settings - surface
+
+        @param nodeData nviz data dict
+        @param nodeSurface nviz surface node
+        """
+        # attributes
+        for attrb in nodeSurface.findall('attribute'):
+            tagName = str(attrb.tag)
+            attrbName = attrb.get('name', '')
+            dc = nvizData['surface'][tagName][attrbName] = {}
+            if attrb.get('map', '0') == '0':
+                dc['map'] = False
+            else:
+                dc['map'] = True
+            value = self.__getNodeText(attrb, 'value')
+            try:
+                dc['value'] = int(value)
+            except ValueError:
+                try:
+                    dc['value'] = float(value)
+                except ValueError:
+                    dc['value'] = str(value)
+
+        # draw
+        node_draw = nodeSurface.find('draw')
+        if node_draw is not None:
+            tagName = str(node_draw.tag)
+            nvizData['surface'][tagName]['all'] = False
+            nvizData['surface'][tagName]['mode'] = {}
+            nvizData['surface'][tagName]['mode']['value'] = -1  # to be calculated
+            nvizData['surface'][tagName]['mode']['desc'] = {}
+            nvizData['surface'][tagName]['mode']['desc']['shading'] = \
+                str(node_draw.get('shading', ''))
+            nvizData['surface'][tagName]['mode']['desc']['style'] = \
+                str(node_draw.get('style', ''))
+            nvizData['surface'][tagName]['mode']['desc']['mode'] = \
+                str(node_draw.get('mode', ''))
+
+            # resolution
+            for node_res in node_draw.findall('resolution'):
+                resType = str(node_res.get('type', ''))
+                if 'resolution' not in nvizData['surface']['draw']:
+                    nvizData['surface']['draw']['resolution'] = {}
+                value = int(self.__getNodeText(node_res, 'value'))
+                nvizData['surface']['draw']['resolution'][resType] = value
+
+            # wire-color
+            node_wire_color = node_draw.find('wire_color')
+            if node_wire_color is not None:
+                nvizData['surface']['draw']['wire-color'] = {}
+                value = str(self.__getNodeText(node_wire_color, 'value'))
+                nvizData['surface']['draw']['wire-color']['value'] = value
+        # position
+        node_pos = nodeSurface.find('position')
+        if node_pos is not None:
+            dc = nvizData['surface']['position']
+            for coor in ['x', 'y', 'z']:
+                node = node_pos.find(coor)
+                if node is None:
+                    continue
+                value = int(self.__getNodeText(node_pos, coor))
+                dc[coor] = value
+
+    def __processLayerNvizVolume(self, nvizData, nodeVolume):
+        """!Process 3D layer settings - volume
+
+        @param nodeData nviz data dict
+        @param nodeVolume nviz volume node
+        """
+        # attributes
+        for attrb in nodeVolume.findall('attribute'):
+            tagName = str(attrb.tag)
+            attrbName = attrb.get('name', '')
+            dc = nvizData['volume'][tagName][attrbName] = {}
+            if attrb.get('map') == '0':
+                dc['map'] = False
+            elif attrb.get('map') == '1':
+                dc['map'] = True
+            else:
+                dc['map'] = None
+            value = self.__getNodeText(attrb, 'value')
+            try:
+                dc['value'] = int(value)
+            except ValueError:
+                try:
+                    dc['value'] = float(value)
+                except ValueError:
+                    dc['value'] = str(value)
+
+        # draw
+        node_draw = nodeVolume.find('draw')
+        if node_draw is not None:
+            node_box = node_draw.find('box')
+            if node_box is not None:
+                nvizData['volume']['draw']['box'] = {}
+                enabled = bool(int(self.__getNodeText(node_box, 'enabled')))
+                nvizData['volume']['draw']['box']['enabled'] = enabled
+            node_mode = node_draw.find('mode')
+            if node_mode is not None:
+                nvizData['volume']['draw']['mode'] = {}
+                desc = self.__getNodeText(node_mode, 'desc')
+                value = int(self.__getNodeText(node_mode, 'value'))
+                nvizData['volume']['draw']['mode']['desc'] = desc
+                nvizData['volume']['draw']['mode']['value'] = value
+            node_res = node_draw.find('resolution')
+            if node_res is not None:
+                nvizData['volume']['draw']['resolution'] = {}
+                for vol_type in ('isosurface', 'slice'):
+                    nd = node_res.find(vol_type)
+                    value = int(self.__getNodeText(nd, 'value'))
+                    nvizData['volume']['draw']['resolution'][vol_type] = {'value': value}
+            node_shading = node_draw.find('shading')
+            if node_shading is not None:
+                nvizData['volume']['draw']['shading'] = {}
+                for vol_type in ('isosurface', 'slice'):
+                    nd = node_shading.find(vol_type)
+                    value = int(self.__getNodeText(nd, 'value'))
+                    desc = self.__getNodeText(nd, 'desc')
+                    nvizData['volume']['draw']['shading'][vol_type] = {'value': value, 'desc': desc}
+
+        nvizData['volume']['isosurface'] = []
+        for isosurfaceNode in nodeVolume.findall('isosurface'):
+            isoDict = {}
+            for att in ('topo', 'transp', 'shine', 'color'):
+                attNode = isosurfaceNode.find(att)
+                if attNode is not None:
+                    isMap = attNode.find('map').text
+                    value = attNode.find('value').text
+                    if not isMap:
+                        isoDict[att] = {'map': None}
+                        isoDict[att]['value'] = float(value)
+                    elif isMap == '1':
+                        isoDict[att] = {'map': True}
+                        isoDict[att]['value'] = value
+                    else:
+                        isoDict[att] = {'map': False}
+                        isoDict[att]['value'] = float(value)
+            inout = isosurfaceNode.find('inout')
+            if inout is not None:
+                isoDict['inout'] = {'value': int(float(inout.find('value').text))}
+            nvizData['volume']['isosurface'].append(isoDict)
+            
+        nvizData['volume']['slice'] = []
+        for sliceNode in nodeVolume.findall('slice'):
+            sliceDict = {}
+            sliceDict['transp'] = {'value': int(sliceNode.find('transp').find('value').text)}
+            sliceDict['position'] = {}
+            for child in sliceNode.find('position'):
+                if child.tag == 'axis':
+                    sliceDict['position'][child.tag] = int(child.text)
+                else:
+                    sliceDict['position'][child.tag] = float(child.text)
+            nvizData['volume']['slice'].append(sliceDict)
+  
+        # position
+        node_pos = nodeVolume.find('position')
+        if node_pos is not None:
+            dc = nvizData['volume']['position']
+            for coor in ['x', 'y', 'z']:
+                node = node_pos.find(coor)
+                if node is None:
+                    continue
+                value = int(self.__getNodeText(node_pos, coor))
+                dc[coor] = value
+
+    def __processLayerNvizVectorPoints(self, nvizData, nodePoints):
+        """!Process 3D layer settings - vector points
+
+        @param nodeData nviz data dict
+        @param nodeVector nviz vector points node
+        """
+        marker = str(nodePoints.get('marker', ''))
+        markerId = list(UserSettings.Get(group='nviz', key='vector',
+                                         subkey=['points', 'marker'], internal=True)).index(marker)
+        nvizData['vector']['points']['marker'] = {'value': markerId}
+
+        node_mode = nodePoints.find('mode')
+        if node_mode is not None:
+            nvizData['vector']['points']['mode'] = {}
+            nvizData['vector']['points']['mode']['type'] = str(node_mode.get('type', 'surface'))
+            nvizData['vector']['points']['mode']['surface'] = {}
+            nvizData['vector']['points']['mode']['surface']['value'] = []
+            nvizData['vector']['points']['mode']['surface']['show'] = []
+
+            # map
+            for node_map in node_mode.findall('map'):
+                nvizData['vector']['points']['mode']['surface']['value'].append(
+                    self.__processLayerNvizNode(node_map, 'name', str))
+                nvizData['vector']['points']['mode']['surface']['show'].append(bool(
+                    self.__processLayerNvizNode(node_map, 'checked', int)))
+
+        # color
+        self.__processLayerNvizNode(nodePoints, 'color', str,
+                                    nvizData['vector']['points'])
+
+        # width
+        self.__processLayerNvizNode(nodePoints, 'width', int,
+                                    nvizData['vector']['points'])
+
+        # height
+        self.__processLayerNvizNode(nodePoints, 'height', float,
+                                    nvizData['vector']['points'])
+
+        # height
+        self.__processLayerNvizNode(nodePoints, 'size', float,
+                                    nvizData['vector']['points'])
+
+        # thematic
+        node_thematic = nodePoints.find('thematic')
+        thematic = nvizData['vector']['points']['thematic'] = {}
+        thematic['rgbcolumn'] = self.__processLayerNvizNode(node_thematic, 'rgbcolumn', str)
+        thematic['sizecolumn'] = self.__processLayerNvizNode(node_thematic, 'sizecolumn', str)
+        for col in ('rgbcolumn', 'sizecolumn'):
+            if thematic[col] == 'None':
+                thematic[col] = None
+        thematic['layer'] = self.__processLayerNvizNode(node_thematic, 'layer', int)
+        for use in ('usecolor', 'usesize', 'usewidth'):
+            if node_thematic.get(use, ''):
+                thematic[use] = int(node_thematic.get(use, '0'))
+
+    def __processLayerNvizVectorLines(self, nvizData, nodeLines):
+        """!Process 3D layer settings - vector lines
+
+        @param nodeData nviz data dict
+        @param nodeVector nviz vector lines node
+        """
+        node_mode = nodeLines.find('mode')
+        if node_mode is not None:
+            nvizData['vector']['lines']['mode'] = {}
+            nvizData['vector']['lines']['mode']['type'] = str(node_mode.get('type', ''))
+            nvizData['vector']['lines']['mode']['surface'] = {}
+            nvizData['vector']['lines']['mode']['surface']['value'] = []
+            nvizData['vector']['lines']['mode']['surface']['show'] = []
+
+            # map
+            for node_map in node_mode.findall('map'):
+                nvizData['vector']['lines']['mode']['surface']['value'].append(
+                    self.__processLayerNvizNode(node_map, 'name', str))
+                nvizData['vector']['lines']['mode']['surface']['show'].append(bool(
+                    self.__processLayerNvizNode(node_map, 'checked', int)))
+
+        # color
+        self.__processLayerNvizNode(nodeLines, 'color', str,
+                                    nvizData['vector']['lines'])
+
+        # width
+        self.__processLayerNvizNode(nodeLines, 'width', int,
+                                    nvizData['vector']['lines'])
+
+        # height
+        self.__processLayerNvizNode(nodeLines, 'height', int,
+                                    nvizData['vector']['lines'])
+
+        # thematic
+        node_thematic = nodeLines.find('thematic')
+        thematic = nvizData['vector']['lines']['thematic'] = {}
+        thematic['rgbcolumn'] = self.__processLayerNvizNode(node_thematic, 'rgbcolumn', str)
+        thematic['sizecolumn'] = self.__processLayerNvizNode(node_thematic, 'sizecolumn', str)
+        for col in ('rgbcolumn', 'sizecolumn'):
+            if thematic[col] == 'None':
+                thematic[col] = None
+        thematic['layer'] = self.__processLayerNvizNode(node_thematic, 'layer', int)
+        for use in ('usecolor', 'usesize', 'usewidth'):
+            if node_thematic.get(use, ''):
+                thematic[use] = int(node_thematic.get(use, '0'))
+
     def __processLayerNvizNode(self, node, tag, cast, dc = None):
         """!Process given tag nviz/vector"""
         node_tag = node.find(tag)
@@ -598,6 +722,7 @@ class WriteWorkspaceFile(object):
             dispName = self.lmgr.GetLayerNotebook().GetPageText(page)
             mapTree = self.lmgr.GetLayerNotebook().GetPage(page).maptree
             region = mapTree.GetMap().GetCurrentRegion()
+            compRegion = gcore.region(region3d=True)
             mapdisp = mapTree.GetMapDisplay()
             
             displayPos = mapdisp.GetPosition()
@@ -613,7 +738,8 @@ class WriteWorkspaceFile(object):
                        'alignExtent="%d" '
                        'constrainRes="%d" '
                        'dim="%d,%d,%d,%d" '
-                       'extent="%f,%f,%f,%f" '
+                       'extent="%f,%f,%f,%f,%f,%f" '
+                       'tbres="%f" '  # needed only for animation tool
                        'viewMode="%s" >\n' % (' ' * self.indent,
                                               dispName.encode('utf8'),
                                               int(mapdisp.mapWindowProperties.autoRender),
@@ -629,6 +755,9 @@ class WriteWorkspaceFile(object):
                                               region['s'],
                                               region['e'],
                                               region['n'],
+                                              compRegion['b'],
+                                              compRegion['t'],
+                                              compRegion['tbres'],
                                               viewmode
                                               ))
             # projection statusbar info
@@ -749,6 +878,8 @@ class WriteWorkspaceFile(object):
                     self.file.write('%s<nviz>\n' % (' ' * self.indent))
                     if maplayer.type == 'raster':
                         self.__writeNvizSurface(nviz['surface'])
+                    if maplayer.type == '3d-raster':
+                        self.__writeNvizVolume(nviz['volume'])
                     elif maplayer.type == 'vector':
                         self.__writeNvizVector(nviz['vector'])
                     self.file.write('%s</nviz>\n' % (' ' * self.indent))
@@ -828,6 +959,134 @@ class WriteWorkspaceFile(object):
 
         self.indent -= 4
         self.file.write('%s</surface>\n' % (' ' * self.indent))
+        self.indent -= 4
+
+    def __writeNvizVolume(self, data):
+        """!Save Nviz volume layer properties to workspace
+
+        @param data Nviz layer properties
+        """
+        if 'object' not in data:  # skip disabled
+            return
+        self.indent += 4
+        self.file.write('%s<volume>\n' % (' ' * self.indent))
+        self.indent += 4
+        for attrb in data.iterkeys():
+            if len(data[attrb]) < 1:  # skip empty attributes
+                continue
+            if attrb == 'object':
+                continue
+
+            if attrb == 'attribute':
+                for name in data[attrb].iterkeys():
+                    # surface attribute
+                    if data[attrb][name]['map'] is None:
+                        continue
+                    self.file.write('%s<%s name="%s" map="%d">\n' %
+                                   (' ' * self.indent, attrb, name, data[attrb][name]['map']))
+                    self.indent += 4
+                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, data[attrb][name]['value']))
+                    self.indent -= 4
+                    # end tag
+                    self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
+
+            # draw mode
+            if attrb == 'draw':
+                self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
+
+                self.indent += 4
+                for att in ('resolution', 'shading'):
+                    if att in data[attrb]:
+                        self.file.write('%s<%s>\n' % (' ' * self.indent, att))
+                        for type in ('isosurface', 'slice'):
+                            self.indent += 4
+                            self.file.write('%s<%s>\n' % (' ' * self.indent, type))
+                            self.indent += 4
+                            self.file.write('%s<value>%d</value>\n' % (' ' * self.indent,
+                                                                       data[attrb][att][type]['value']))
+                            if att == 'shading':
+                                self.file.write('%s<desc>%s</desc>\n' % (' ' * self.indent,
+                                                                         data[attrb][att][type]['desc']))
+                            self.indent -= 4
+                            self.file.write('%s</%s>\n' % (' ' * self.indent, type))
+                            self.indent -= 4
+                        self.file.write('%s</%s>\n' % (' ' * self.indent, att))
+
+                if 'box' in data[attrb]:
+                    self.file.write('%s<box>\n' % (' ' * self.indent))
+                    self.indent += 4
+                    self.file.write('%s<enabled>%d</enabled>\n' % (' ' * self.indent, data[attrb]['box']['enabled']))
+                    self.indent -= 4
+                    self.file.write('%s</box>\n' % (' ' * self.indent))
+
+                if 'mode' in data[attrb]:
+                    self.file.write('%s<mode>\n' % (' ' * self.indent))
+                    self.indent += 4
+                    self.file.write('%s<desc>%s</desc>\n' % (' ' * self.indent, data[attrb]['mode']['desc']))
+                    self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, data[attrb]['mode']['value']))
+                    self.indent -= 4
+                    self.file.write('%s</mode>\n' % (' ' * self.indent))
+                self.indent -= 4
+
+            # position
+            elif attrb == 'position':
+                self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
+                for tag in ('x', 'y', 'z'):
+                    self.indent += 4
+                    self.file.write('%s<%s>%d</%s>\n' % (' ' * self.indent, tag,
+                                                         data[attrb].get(tag, 0), tag))
+                    self.indent -= 4
+            if attrb == 'isosurface':
+                for isosurface in data[attrb]:
+                    self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
+                    for name in isosurface.iterkeys():
+                        self.indent += 4
+                        self.file.write('%s<%s>\n' % (' ' * self.indent, name))
+                        for att in isosurface[name].iterkeys():
+                            if isosurface[name][att] is True:
+                                val = '1'
+                            elif isosurface[name][att] is False:
+                                val = '0'
+                            else:
+                                try:
+                                    val = '%f' % float(isosurface[name][att])
+                                except ValueError:
+                                    val = '%s' % isosurface[name][att]
+                                except TypeError:  # None
+                                    val = ''
+                            self.indent += 4
+                            self.file.write(('%s<%s>' % (' ' * self.indent, att)) + val)
+                            self.file.write('</%s>\n' % att)
+                            self.indent -= 4
+                        # end tag
+                        self.file.write('%s</%s>\n' % (' ' * self.indent, name))
+                        self.indent -= 4
+                    self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
+
+            if attrb == 'slice':
+                for slice_ in data[attrb]:
+                    self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
+                    for name in slice_.iterkeys():
+                        self.indent += 4
+                        self.file.write('%s<%s>\n' % (' ' * self.indent, name))
+                        for att in slice_[name].iterkeys():
+                            if att in ('map', 'update'):
+                                continue
+                            val = slice_[name][att]
+                            self.indent += 4
+                            self.file.write(('%s<%s>' % (' ' * self.indent, att)) + str(val))
+                            self.file.write('</%s>\n' % att)
+                            self.indent -= 4
+                        # end tag
+                        self.file.write('%s</%s>\n' % (' ' * self.indent, name))
+                        self.indent -= 4
+                    self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
+            if attrb not in ('attribute', 'isosurface', 'slice'):
+                # end tag
+                self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
+
+        self.indent -= 4
+        self.file.write('%s</volume>\n' % (' ' * self.indent))
         self.indent -= 4
 
     def __writeNvizVector(self, data):

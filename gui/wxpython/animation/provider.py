@@ -202,7 +202,7 @@ class BitmapProvider:
             self.compositionFinished.emit()
         if self._cmds3D:
             for cmd in self._cmds3D:
-                self._bitmapPool[HashCmd(cmd)] = \
+                self._bitmapPool[HashCmds([cmd])] = \
                     wx.Bitmap(GetFileFromCmd(self._tempDir, cmd))
 
         self.mapsLoaded.emit()
@@ -311,7 +311,9 @@ class BitmapRenderer:
             q = Queue()
             # The separate render process
             if cmd[0] == 'm.nviz.image':
-                p = Process(target=self.RenderProcess3D, args=(cmd, regionFor3D, bgcolor, q))
+                p = Process(target=RenderProcess3D,
+                            args=(self.imageWidth, self.imageHeight, self._tempDir,
+                                  cmd, regionFor3D, bgcolor, q))
             else:
                 p = Process(target=RenderProcess2D,
                             args=(self.imageWidth, self.imageHeight, self._tempDir, cmd, bgcolor, q))
@@ -489,9 +491,9 @@ def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
     """
 
     filename = GetFileFromCmd(tempDir, cmd)
-    os.environ['GRASS_REGION'] = gcore.region_env(**region)
-
+    os.environ['GRASS_REGION'] = gcore.region_env(region3d=True, **region)
     Debug.msg(1, "Render image to file " + str(filename))
+
     cmdTuple = CmdToTuple(cmd)
     cmdTuple[1]['output'] = os.path.splitext(filename)[0]
     # set size

@@ -397,7 +397,7 @@ class AnimationController(wx.EvtHandler):
         for anim in animationData:
             for layer in anim.layerList:
                 if layer.active and hasattr(layer, 'maps'):
-                    if layer.mapType in ('strds', 'stvds'):
+                    if layer.mapType in ('strds', 'stvds', 'str3ds'):
                         stds += 1
                     else:
                         maps += 1

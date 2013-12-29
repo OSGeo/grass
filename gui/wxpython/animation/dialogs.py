@@ -434,10 +434,6 @@ class InputDialog(wx.Dialog):
         else:
             cmd = ['d.legend', 'at=5,50,2,5']
 
-            mapName = self._getLegendMapHint()
-            if mapName:
-                cmd.append("map=%s" % mapName)
-
         GUI(parent=self, modal=True).ParseCommand(cmd=cmd,
                                                   completed=(self.GetOptData, '', ''))
 
@@ -1102,6 +1098,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
                  SIMPLE_LMGR_TB_TOP | SIMPLE_LMGR_STDS,
                  toolbarCls=AnimSimpleLmgrToolbar, modal=True):
         SimpleLayerManager.__init__(self, parent, layerList, lmgrStyle, toolbarCls, modal)
+        self._3dActivated = False
 
     def OnAddStds(self, event):
         """!Opens dialog for specifying temporal dataset.
@@ -1113,7 +1110,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         event.Skip()
 
     def SetStdsProperties(self, layer):
-        dlg = AddTemporalLayerDialog(parent=self, layer=layer)
+        dlg = AddTemporalLayerDialog(parent=self, layer=layer, volume=self._3dActivated)
         # first get hidden property, it's altered afterwards
         hidden = layer.hidden
         dlg.CenterOnParent()
@@ -1144,11 +1141,13 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         """!Activates/deactivates certain tool depending on 2D/3D view."""
         self._toolbar.EnableTools(['addRaster', 'addVector',
                                    'opacity', 'up', 'down'], not activate)
+        self._3dActivated = activate
 
 
 class AddTemporalLayerDialog(wx.Dialog):
     """!Dialog for adding space-time dataset/ map series."""
-    def __init__(self, parent, layer, title=_("Add space-time dataset layer")):
+    def __init__(self, parent, layer, volume=False,
+                 title=_("Add space-time dataset layer")):
         wx.Dialog.__init__(self, parent=parent, title=title)
 
         self.layer = layer
@@ -1168,8 +1167,13 @@ class AddTemporalLayerDialog(wx.Dialog):
 
         types = [('rast', _("Multiple raster maps")),
                  ('vect', _("Multiple vector maps")),
+                 ('rast3d', _("Multiple 3D raster maps")),
                  ('strds', _("Space time raster dataset")),
-                 ('stvds', _("Space time vector dataset"))]
+                 ('stvds', _("Space time vector dataset")),
+                 ('str3ds', _("Space time 3D raster dataset"))]
+        if not volume:
+            del types[5]
+            del types[2]
         self._types = dict(types)
 
         self.tchoice = wx.Choice(parent=self)
@@ -1237,7 +1241,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         if typeName:
             self.tchoice.SetStringSelection(self._types[typeName])
             self.tselect.SetType(typeName)
-            if typeName in ('strds', 'stvds'):
+            if typeName in ('strds', 'stvds', 'str3ds'):
                 self.tselect.SetType(typeName, multiple=False)
                 self.addManyMapsButton.Disable()
             else:
@@ -1247,7 +1251,7 @@ class AddTemporalLayerDialog(wx.Dialog):
             self.tselect.SetValue('')
         else:
             typeName = self.tchoice.GetClientData(self.tchoice.GetSelection())
-            if typeName in ('strds', 'stvds'):
+            if typeName in ('strds', 'stvds', 'str3ds'):
                 self.tselect.SetType(typeName, multiple=False)
                 self.addManyMapsButton.Disable()
             else:
@@ -1264,8 +1268,10 @@ class AddTemporalLayerDialog(wx.Dialog):
             cmd.append('d.rast')
         elif self._mapType in ('vect', 'stvds'):
             cmd.append('d.vect')
+        elif self._mapType in ('rast3d', 'str3ds'):
+            cmd.append('d.rast3d')
         if self._name:
-            if self._mapType in ('rast', 'vect'):
+            if self._mapType in ('rast', 'vect', 'rast3d'):
                 cmd.append('map={}'.format(self._name.split(',')[0]))
             else:
                 try:
@@ -1281,7 +1287,13 @@ class AddTemporalLayerDialog(wx.Dialog):
         dlg = MapLayersDialog(self, title=_("Select raster/vector maps."))
         dlg.applyAddingMapLayers.connect(lambda mapLayers:
                                          self.tselect.SetValue(','.join(mapLayers)))
-        index = 0 if self._mapType == 'rast' else 1
+        if self._mapType == 'rast':
+            index = 0
+        elif self._mapType == 'vect':
+            index = 2
+        else:  # rast3d
+            index = 1
+
         dlg.layerType.SetSelection(index)
         dlg.LoadMapLayers(dlg.GetLayerType(cmd=True),
                           dlg.mapset.GetStringSelection())
