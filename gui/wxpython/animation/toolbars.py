@@ -25,7 +25,7 @@ from gui_core.simplelmgr import SimpleLmgrToolbar
 from animation.anim import ReplayMode
 
 ganimIcons = {
-    'speed': MetaIcon(img='settings', label=_("Change animation speed")),
+    'speed': MetaIcon(img='move', label=_("Change animation speed")),
     'playForward': MetaIcon(img='execute', label=_("Play forward")),
     'playBack': MetaIcon(img='player-back', label=_("Play back")),
     'stop': MetaIcon(img='player-stop', label=_("Stop")),
@@ -215,7 +215,9 @@ class MiscToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """!Toolbar data"""
-        return self._getToolbarData((("help", BaseIcons['help'],
+        return self._getToolbarData((("settings", BaseIcons['settings'],
+                                      self.parent.OnPreferences),
+                                     ("help", BaseIcons['help'],
                                       self.parent.OnHelp),
                                      ("quit", BaseIcons['quit'],
                                       self.parent.OnCloseWindow),

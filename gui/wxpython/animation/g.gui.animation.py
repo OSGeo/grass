@@ -62,6 +62,7 @@ if __name__ == '__main__':
 
 from core.globalvar import CheckWxVersion
 from core.utils import _, GuiModuleMain
+from core.giface import StandaloneGrassInterface
 from core.layerlist import LayerList
 from animation.frame import AnimationFrame, MAX_COUNT
 from animation.data import AnimLayer
@@ -117,7 +118,7 @@ def main():
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
 
-    frame = AnimationFrame(parent=None)
+    frame = AnimationFrame(parent=None, giface=StandaloneGrassInterface())
     frame.CentreOnScreen()
     frame.Show()
     if len(layerList) >= 1:
