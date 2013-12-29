@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 	       _("Display geometry of features"),
 	       _("Display category numbers of features"),
 	       _("Display topology information (nodes, edges)"),
-               _("Display verteces of features"),
+               _("Display vertices of features"),
 	       _("Display direction of linear features"),
 	       _("Display z-coordinate of features (only for 3D vector maps)"));
     display_opt->descriptions = desc;
