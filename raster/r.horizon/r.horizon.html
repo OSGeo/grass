@@ -93,6 +93,9 @@ raster will be constructed as <i>horizon_</i>NNN , where NNN counts
 upwards from 0 to total number of directions. If you use <b>r.horizon</b>
 in the single point mode this option will be ignored. 
 
+<p>The <i>output</i> parameter allows to save the resulting horizon
+angles in a comma separated ASCII file (single point mode only). If
+you use <b>r.horizon</b> in the raster mode this option will be ignored.
 
 <p>At the moment the elevation and maximum distance must be measured in meters, 
 even if you use geographical coordinates (longitude/latitude). If your 
@@ -119,7 +122,6 @@ actually are. It also accounts for the changes of angles towards
 cardinal directions caused by the projection (see above). 
 
 
-
 <h2>EXAMPLES</h2>
 
 The examples are intended for the North Carolina sample dataset:
@@ -131,8 +133,9 @@ r.horizon elev_in=elevation direction=215 horizon_step=0 bufferzone=200 \
     coordinate=638871.6,223384.4 maxdistance=5000
 
 # determine horizon values starting at 90 deg (North), step size of 5 deg:
+# save result in CSV file
 r.horizon elev_in=elevation direction=90 horizon_step=5 bufferzone=200 \
-    coordinate=638871.6,223384.4 maxdistance=5000
+    coordinate=638871.6,223384.4 maxdistance=5000 output=horizon.csv
 </pre></div>
 
 
