@@ -37,7 +37,7 @@ from animation.provider import BitmapProvider, BitmapPool, \
 from animation.controller import AnimationController
 from animation.anim import Animation
 from animation.toolbars import MainToolbar, AnimationToolbar, MiscToolbar
-from animation.dialogs import SpeedDialog
+from animation.dialogs import SpeedDialog, PreferencesDialog
 from animation.utils import Orientation, ReplayMode, TemporalType
 
 
@@ -48,11 +48,11 @@ gcore.set_raise_on_error(True)
 
 
 class AnimationFrame(wx.Frame):
-    def __init__(self, parent=None, title=_("Animation tool"),
+    def __init__(self, parent, giface, title=_("Animation tool"),
                  rasters=None, timeseries=None):
         wx.Frame.__init__(self, parent, title=title,
                           style=wx.DEFAULT_FRAME_STYLE, size=(800, 600))
-
+        self._giface = giface
         self.SetClientSize(self.GetSize())
         self.iconsize = (16, 16)
 
@@ -108,6 +108,7 @@ class AnimationFrame(wx.Frame):
 
         self.dialogs = dict()
         self.dialogs['speed'] = None
+        self.dialogs['preferences'] = None
 
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -285,6 +286,14 @@ class AnimationFrame(wx.Frame):
                 maxWidth, maxHeight = w, h
         self.provider.WindowSizeChanged(maxWidth, maxHeight)
         event.Skip()
+
+    def OnPreferences(self, event):
+        if not self.dialogs['preferences']:
+            dlg = PreferencesDialog(parent=self, giface=self._giface)
+            self.dialogs['preferences'] = dlg
+            dlg.CenterOnParent()
+
+        self.dialogs['preferences'].ShowModal()
 
     def OnHelp(self, event):
         RunCommand('g.manual',

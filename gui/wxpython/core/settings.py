@@ -799,6 +799,17 @@ class Settings:
                         }
                     },
                 },
+            'animation': {
+                'bgcolor': {
+                    'color': (255, 255, 255, 255),
+                    },
+                'temporal': {
+                    'format': '%Y-%m-%d %H:%M:%S',
+                    'nodata': {
+                        'enable': False
+                        },
+                    },
+                },
             }
 
         # quick fix, http://trac.osgeo.org/grass/ticket/1233

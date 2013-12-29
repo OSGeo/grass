@@ -19,10 +19,11 @@ import wx
 from core.gcmd import GException, GError, GMessage
 from core.utils import _
 from grass.imaging import writeAvi, writeGif, writeIms, writeSwf
+from core.settings import UserSettings
 
 from animation.temporal_manager import TemporalManager
 from animation.dialogs import InputDialog, EditDialog, ExportDialog
-from animation.utils import TemporalMode, Orientation, RenderText, WxImageToPil, \
+from animation.utils import TemporalMode, TemporalType, Orientation, RenderText, WxImageToPil, \
     sampleCmdMatrixAndCreateNames, layerListToCmdsMatrix, HashCmds, getCpuCount
 from animation.data import AnimationData
 
@@ -131,10 +132,12 @@ class AnimationController(wx.EvtHandler):
 
     def UpdateFrame(self, index, win, dataId):
         bitmap = self.bitmapProvider.GetBitmap(dataId)
-        if dataId is None:
-            dataId = ''
-        win.DrawBitmap(bitmap)
-        # self.frame.SetStatusText(dataId)
+        if not UserSettings.Get(group='animation', key='temporal',
+                                subkey=['nodata', 'enable']):
+            if dataId is not None:
+                win.DrawBitmap(bitmap)
+        else:
+            win.DrawBitmap(bitmap)
         self.slider.UpdateFrame(index)
 
     def SliderChanging(self, index):
@@ -356,7 +359,8 @@ class AnimationController(wx.EvtHandler):
             else:
                 self._load3DData(animData)
             self._loadLegend(animData)
-        self.bitmapProvider.Load(nprocs=getCpuCount())
+        color = UserSettings.Get(group='animation', key='bgcolor', subkey='color')
+        self.bitmapProvider.Load(nprocs=getCpuCount(), bgcolor=color)
         # clear pools
         self.bitmapPool.Clear()
         self.mapFilesPool.Clear()
@@ -431,7 +435,8 @@ class AnimationController(wx.EvtHandler):
     def Reload(self):
         self.EndAnimation()
 
-        self.bitmapProvider.Load(nprocs=getCpuCount(), force=True)
+        color = UserSettings.Get(group='animation', key='bgcolor', subkey='color')
+        self.bitmapProvider.Load(nprocs=getCpuCount(), bgcolor=color, force=True)
 
         self.EndAnimation()
 
@@ -479,7 +484,12 @@ class AnimationController(wx.EvtHandler):
             # collect bitmaps of all windows and paste them into the one
             for i in animWinIndex:
                 frameId = self.animations[i].GetFrame(frameIndex)
-                bitmap = self.bitmapProvider.GetBitmap(frameId)
+                if not UserSettings.Get(group='animation', key='temporal',
+                                        subkey=['nodata', 'enable']):
+                    if frameId is not None:
+                        bitmap = self.bitmapProvider.GetBitmap(frameId)
+                else:
+                    bitmap = self.bitmapProvider.GetBitmap(frameId)
                 im = wx.ImageFromBitmap(bitmap)
 
                 # add legend if used
@@ -504,12 +514,15 @@ class AnimationController(wx.EvtHandler):
                     decImage = wx.Image(decoration['file'])
                 elif decoration['name'] == 'time':
                     timeLabel = timeLabels[frameIndex]
-                    if timeLabel[1]:
+                    if timeLabel[1]:  # interval
                         text = _("%(from)s %(dash)s %(to)s") % \
-                            {'from': timeLabel[0], 'dash': u"\u2013", 'to': timeLabel[1]}
+                                {'from': timeLabel[0], 'dash': u"\u2013", 'to': timeLabel[1]}
                     else:
-                        text = _("%(start)s %(unit)s") % \
-                            {'start': timeLabel[0], 'unit': timeLabel[2]}
+                        if self.temporalManager.GetTemporalType() == TemporalType.ABSOLUTE:
+                            text = timeLabel[0]
+                        else:
+                            text = _("%(start)s %(unit)s") % \
+                                    {'start': timeLabel[0], 'unit': timeLabel[2]}
 
                     decImage = RenderText(text, decoration['font']).ConvertToImage()
                 elif decoration['name'] == 'text':

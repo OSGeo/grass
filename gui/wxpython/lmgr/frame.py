@@ -1457,7 +1457,7 @@ class GMFrame(wx.Frame):
         """
         from animation.frame import AnimationFrame
 
-        frame = AnimationFrame(parent = self)
+        frame = AnimationFrame(parent=self, giface=self._giface)
         frame.CentreOnScreen()
         frame.Show()
 

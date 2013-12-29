@@ -25,6 +25,8 @@ import wx
 import copy
 import datetime
 import wx.lib.filebrowsebutton as filebrowse
+import wx.lib.scrolledpanel as SP
+import wx.lib.colourselect as csel
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
@@ -32,6 +34,7 @@ if __name__ == '__main__':
 from core.gcmd import GMessage, GError, GException
 from core import globalvar
 from gui_core.dialogs import MapLayersDialog, GetImageHandlers
+from gui_core.preferences import PreferencesBaseDialog
 from gui_core.forms import GUI
 from core.settings import UserSettings
 from core.utils import _
@@ -1335,6 +1338,135 @@ class AddTemporalLayerDialog(wx.Dialog):
 
     def GetLayer(self):
         return self.layer
+
+
+class PreferencesDialog(PreferencesBaseDialog):
+    """!Animation preferences dialog"""
+    def __init__(self, parent, giface, title=_("Animation Tool settings"),
+                 settings=UserSettings):
+        PreferencesBaseDialog.__init__(self, parent=parent, giface=giface, title=title,
+                                       settings=settings, size=(-1, 270))
+
+        self._timeFormats = ['%Y-%m-%d %H:%M:%S',  # 2013-12-29 11:16:26
+                             '%Y-%m-%d',  # 2013-12-29
+                             '%c',  # Sun Dec 29 11:16:26 2013 (locale-dependent)
+                             '%x',  # 12/29/13 (locale-dependent)
+                             '%X',  # 11:16:26 (locale-dependent)
+                             '%b %d, %Y',  # Dec 29, 2013
+                             '%B %d, %Y',  # December 29, 2013
+                             '%B, %Y',  # December 2013
+                             '%I:%M %p',  # 11:16 AM
+                             '%I %p',  # 11 AM
+                             ]
+        self._format = None
+        # create notebook pages
+        self._createGeneralPage(self.notebook)
+        self._createTemporalPage(self.notebook)
+
+        self.SetMinSize(self.GetBestSize())
+        self.SetSize(self.size)
+
+    def _createGeneralPage(self, notebook):
+        """!Create notebook page for general settings"""
+        panel = SP.ScrolledPanel(parent=notebook)
+        panel.SetupScrolling(scroll_x=False, scroll_y=True)
+        notebook.AddPage(page=panel, text=_("General"))
+
+        border = wx.BoxSizer(wx.VERTICAL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+
+        row = 0
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Background color:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        color = csel.ColourSelect(parent=panel,
+                                  colour=UserSettings.Get(group='animation',
+                                                          key='bgcolor', subkey='color'),
+                                  size=globalvar.DIALOG_COLOR_SIZE)
+        color.SetName('GetColour')
+        self.winId['animation:bgcolor:color'] = color.GetId()
+
+        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        gridSizer.AddGrowableCol(1)
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
+        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        panel.SetSizer(border)
+
+        return panel
+
+    def _createTemporalPage(self, notebook):
+        """!Create notebook page for temporal settings"""
+        panel = SP.ScrolledPanel(parent=notebook)
+        panel.SetupScrolling(scroll_x=False, scroll_y=True)
+        notebook.AddPage(page=panel, text=_("Time"))
+
+        border = wx.BoxSizer(wx.VERTICAL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
+
+        row = 0
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Absolute time format:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        self.tempFormat = wx.ComboBox(parent=panel, name='GetValue')
+        self.tempFormat.SetItems(self._timeFormats)
+        self.tempFormat.SetValue(self.settings.Get(group='animation', key='temporal',
+                                                   subkey='format'))
+        self.winId['animation:temporal:format'] = self.tempFormat.GetId()
+        gridSizer.Add(item=self.tempFormat, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+        self.infoTimeLabel = wx.StaticText(parent=panel)
+        self.tempFormat.Bind(wx.EVT_COMBOBOX, lambda evt: self._setTimeFormat(self.tempFormat.GetValue()))
+        self.tempFormat.Bind(wx.EVT_TEXT, lambda evt: self._setTimeFormat(self.tempFormat.GetValue()))
+        self.tempFormat.SetToolTipString(_("Click and then press key up or down to preview "
+                                           "different date and time formats. "
+                                           "Type custom format string."))
+        row += 1
+        gridSizer.Add(item=self.infoTimeLabel, pos=(row, 0), span=(1, 2),
+                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        self._setTimeFormat(self.tempFormat.GetValue())
+
+        row += 1
+        link = wx.HyperlinkCtrl(panel, id=wx.ID_ANY, label=_("Learn more about formatting options"),
+                                url="http://docs.python.org/2/library/datetime.html#"
+                                "strftime-and-strptime-behavior")
+        link.SetNormalColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        link.SetVisitedColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        gridSizer.Add(item=link, pos=(row, 0), span=(1, 2),
+                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+
+        row += 2
+        noDataCheck = wx.CheckBox(panel, label=_("Display instances with no data"))
+        noDataCheck.SetToolTipString(_("When animating instant-based data which have irregular timestamps "
+                                       "you can display 'no data frame' (checked option) or "
+                                       "keep last frame."))
+        noDataCheck.SetValue(self.settings.Get(group='animation', key='temporal',
+                                               subkey=['nodata', 'enable']))
+        self.winId['animation:temporal:nodata:enable'] = noDataCheck.GetId()
+        gridSizer.Add(item=noDataCheck, pos=(row, 0), span=(1, 2),
+                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+
+        gridSizer.AddGrowableCol(1)
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
+        border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        panel.SetSizer(border)
+
+        return panel
+
+    def _setTimeFormat(self, formatString):
+        now = datetime.datetime.now()
+        try:
+            label = datetime.datetime.strftime(now, formatString)
+            self._format = formatString
+        except ValueError:
+            label = _("Invalid")
+        self.infoTimeLabel.SetLabel(label)
+        self.infoTimeLabel.GetContainingSizer().Layout()
+
+    def _updateSettings(self):
+        self.tempFormat.SetValue(self._format)
+        return PreferencesBaseDialog._updateSettings(self)
 
 
 def test():

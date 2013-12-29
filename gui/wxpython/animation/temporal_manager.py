@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import datetime
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
@@ -27,6 +28,7 @@ import grass.script as grass
 import grass.temporal as tgis
 from core.gcmd import GException
 from core.utils import _
+from core.settings import UserSettings
 from animation.utils import validateTimeseriesName, TemporalType
 
 
@@ -191,11 +193,10 @@ class TemporalManager(object):
         # no temporal overlap! We would need to sample all datasets
         # by a temporary dataset, I don't know how it would work with point data
         if self.temporalType == TemporalType.ABSOLUTE:
-            # ('1996-01-01 00:00:00', '1997-01-01 00:00:00', 'year'),
             timestamps = sorted(list(labelListSet), key=lambda x: x[0])
         else:
-            # ('15', '16', u'years'),
-            timestamps = sorted(list(labelListSet), key=lambda x: float(x[0]))
+            timestamps = sorted(list(labelListSet), key=lambda x: x[0])
+
 
         newMapLists = []
         for mapList, labelList in zip(mapLists, labelLists):
@@ -211,6 +212,15 @@ class TemporalManager(object):
         for i, dataset in enumerate(self.timeseriesList):
             mapDict[dataset] = newMapLists[i]
 
+        if self.temporalType == TemporalType.ABSOLUTE:
+            # ('1996-01-01 00:00:00', '1997-01-01 00:00:00', 'year'),
+            formatString = UserSettings.Get(group='animation', key='temporal', subkey='format')
+            timestamps = [(datetime.datetime.strftime(st, formatString),
+                          datetime.datetime.strftime(end, formatString)
+                          if end is not None else None, unit) for (st, end, unit) in timestamps]
+        else:
+            # ('15', '16', u'years'),
+            timestamps = [(str(st), str(end), unit) for st, end, unit in timestamps]
         return timestamps, mapDict
 
     def _getLabelsAndMaps(self, timeseries):
@@ -264,7 +274,7 @@ class TemporalManager(object):
                     lastTimeseries = series
                     end = None
                 else:
-                    end = str(end)
+                    end = end
                     # interval data
                     if series:
                         # map exists, stop point mode
@@ -284,7 +294,7 @@ class TemporalManager(object):
                         else:
                             # append series which is None
                             listOfMaps.append(series)
-                timeLabels.append((str(start), end, unit))
+                timeLabels.append((start, end, unit))
 
         return timeLabels, listOfMaps
 
