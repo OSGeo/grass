@@ -1158,7 +1158,7 @@ class GMFrame(wx.Frame):
                     
             # set extent if defined
             if display['extent']:
-                w, s, e, n = display['extent']
+                w, s, e, n, b, t = display['extent']
                 region = maptree.Map.region = maptree.Map.GetRegion(w = w, s = s, e = e, n = n)
                 mapdisp.GetWindow().ResetZoomHistory()
                 mapdisp.GetWindow().ZoomHistory(region['n'],

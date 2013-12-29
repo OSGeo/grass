@@ -61,7 +61,9 @@ class NvizTask:
         for display in root.displays:
             if display['viewMode'] == '3d':
                 self.region['w'], self.region['s'],\
-                self.region['e'], self.region['n'] = display['extent']
+                self.region['e'], self.region['n'],\
+                self.region['b'], self.region['t'] = display['extent']
+                self.region['tbres'] = display['tbres']
 
     def _processLayers(self, layers):
         for layer in layers:
@@ -77,6 +79,8 @@ class NvizTask:
 
             if 'surface' in layer['nviz']:
                 self._processSurface(layer['nviz']['surface'], mapName=layerName)
+            if 'volume' in layer['nviz']:
+                self._processVolume(layer['nviz']['volume'], mapName=layerName)
 
     def _processSurface(self, surface, mapName):
         self._setMultiTaskParam('elevation_map', mapName)
@@ -124,6 +128,68 @@ class NvizTask:
         value = ','.join(pos)
         self._setMultiTaskParam('surface_position', value)
 
+    def _processVolume(self, volume, mapName):
+        self._setMultiTaskParam('volume', mapName)
+
+        if volume['draw']['box']['enabled']:
+            self.task.set_flag('b', True)
+
+        # isosurfaces
+        isosurfaces = volume['isosurface']
+        if isosurfaces:
+            res_value = volume['draw']['resolution']['isosurface']['value']
+            self._setMultiTaskParam('volume_resolution', res_value)
+            for isosurface in isosurfaces:
+                attributes = ('topo', 'color', 'shine', 'transp')
+                parameters = ((None, 'isosurf_level'),
+                              ('isosurf_color_map', 'isosurf_color_value'),
+                              ('isosurf_shininess_map', 'isosurf_shininess_value'),
+                              ('isosurf_transparency_map', 'isosurf_transparency_value'))
+                for attr, params in zip(attributes, parameters):
+                    mapname = None
+                    const = None
+                    if attr in isosurface:
+                        if isosurface[attr]['map']:
+                            mapname = isosurface[attr]['value']
+                        else:
+                            const = float(isosurface[attr]['value'])
+                    else:
+                        if attr == 'transp':
+                            const = 0
+                        elif attr == 'color':
+                            mapname = mapName
+
+                    if mapname:
+                        self._setMultiTaskParam(params[0], mapname)
+                    else:
+                        if attr == 'topo':
+                            # TODO: we just assume it's the first volume, what to do else?
+                            self._setMultiTaskParam(params[1], '1:' + str(const))
+                        else:
+                            self._setMultiTaskParam(params[1], const)
+                if isosurface['inout']['value']:
+                    self.task.set_flag('n', True)
+        # slices
+        slices = volume['slice']
+        if slices:
+            res_value = volume['draw']['resolution']['slice']['value']
+            self._setMultiTaskParam('volume_resolution', res_value)
+            for slice_ in slices:
+                self._setMultiTaskParam('slice_transparency', slice_['transp']['value'])
+                axis = slice_['position']['axis']
+                self._setMultiTaskParam('slice', '1:' + 'xyz'[axis])
+                pos = slice_['position']
+                coords = pos['x1'], pos['x2'], pos['y1'], pos['y2'], pos['z1'], pos['z2']
+                self._setMultiTaskParam('slice_position', ','.join([str(c) for c in coords]))
+
+        # position
+        pos = []
+        for coor in ('x', 'y', 'z'):
+            pos.append(str(volume['position'][coor]))
+            value = ','.join(pos)
+
+        self._setMultiTaskParam('volume_position', value)
+
     def _processState(self, state):
         color = state['view']['background']['color']
         self.task.set_param('bgcolor', self._join(color, delim=':'))
@@ -163,7 +229,7 @@ class NvizTask:
         # params = self.task.get_list_params()
         # parameter with 'map' name
         # params = filter(lambda x: 'map' in x, params)
-        return ('elevation_map', 'color_map', 'vline', 'vpoint')
+        return ('elevation_map', 'color_map', 'vline', 'vpoint', 'volume')
 
     def GetCommandSeries(self, layerList, paramName):
         commands = []
