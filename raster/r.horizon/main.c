@@ -24,8 +24,9 @@ Joint Research Centre of the European Commission, based on bits of the r.sun mod
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 #include <stdio.h>
@@ -57,16 +58,14 @@ Joint Research Centre of the European Commission, based on bits of the r.sun mod
 
 FILE *fw;
 
-const double rad2deg = 180. / M_PI;
-const double deg2rad = M_PI / 180.;
 const double pihalf = M_PI * 0.5;
-const double twopi = 2. * M_PI;
+const double twopi = M_PI * 2.;
 const double invEarth = 1. / EARTHRADIUS;
-
+const double deg2rad = M_PI / 180.;
+const double rad2deg = 180. / M_PI;
 const double minAngle = DEG;
 
 const char *elevin;
-const char *latin = NULL;
 const char *horizon = NULL;
 const char *mapset = NULL;
 const char *per;
@@ -141,7 +140,8 @@ void setMode(int val)
 int ll_correction = FALSE;
 double coslatsq;
 
-/* use G_distance() instead ??!?! */
+/* why not use G_distance() here which switches to geodesic/great
+  circle distance as needed? */
 double distance(double x1, double x2, double y1, double y2)
 {
     if (ll_correction) {
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 	 " counterclockwise with east=0, north=90 etc. The output is the horizon height in radians.");
 
     parm.elevin = G_define_option();
-    parm.elevin->key = "elevin";
+    parm.elevin->key = "elev_in";
     parm.elevin->type = TYPE_STRING;
     parm.elevin->required = YES;
     parm.elevin->gisprompt = "old,cell,raster";
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     parm.direction->guisection = _("Input options");
 
     parm.step = G_define_option();
-    parm.step->key = "horizonstep";
+    parm.step->key = "horizon_step";
     parm.step->type = TYPE_DOUBLE;
     parm.step->required = NO;
     parm.step->description =
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
 
 
     parm.coord = G_define_option();
-    parm.coord->key = "coord";
+    parm.coord->key = "coordinate";
     parm.coord->type = TYPE_DOUBLE;
     parm.coord->key_desc = "east,north";
     parm.coord->required = NO;
@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
     parm.coord->guisection = _("Output options");
 
     parm.dist = G_define_option();
-    parm.dist->key = "dist";
+    parm.dist->key = "distance";
     parm.dist->type = TYPE_DOUBLE;
     parm.dist->answer = DIST;
     parm.dist->required = NO;
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
 	setMode(SINGLE_POINT);
 	if (sscanf(parm.coord->answer, "%lf,%lf", &xcoord, &ycoord) != 2) {
 	    G_fatal_error(
-		_("Can't read the coordinates from the \"coord\" option."));
+		_("Can't read the coordinates from the \"coordinate\" option."));
 	}
 
 	/* Transform the coordinates to row/column */
@@ -423,6 +423,7 @@ int main(int argc, char *argv[])
 
 
     sscanf(parm.dist->answer, "%lf", &dist);
+    if (dist < 0.5 || dist > 1.5 ) G_fatal_error(_("The distance value must be 0.5-1.5. Aborting."));
 
     stepxy = dist * 0.5 * (stepx + stepy);
     distxy = dist;
@@ -469,8 +470,7 @@ int main(int argc, char *argv[])
 
     if ((in_proj_info = G_get_projinfo()) == NULL)
 	G_fatal_error(
-	    _("Can't get projection info of current location: "
-	      "please set latitude via 'lat' or 'latin' option!"));
+	    _("Can't get projection info of current location"));
 
     if ((in_unit_info = G_get_projunits()) == NULL)
 	G_fatal_error(_("Can't get projection units of current location"));
@@ -495,6 +495,7 @@ int main(int argc, char *argv[])
 
 
     INPUT();
+    G_debug(3, "calculate() starts...");
     calculate(xcoord, ycoord, (int)(ebufferZone / stepx),
 	      (int)(wbufferZone / stepx), (int)(sbufferZone / stepy),
 	      (int)(nbufferZone / stepy));
@@ -826,7 +827,7 @@ void calculate_shadow()
 	else if (printangle >= 360.)
 	    printangle -= 360;
 
-	G_message("%lf, %lf", printangle, shadow_angle);
+	G_message("%lf,%lf", printangle, shadow_angle);
 
 	angle += dfr_rad;
 
@@ -1212,6 +1213,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		}
 	    }
 
+        G_debug(3, "OUTGR() starts...");
 	    OUTGR(cellhd.rows, cellhd.cols);
 
 	    /* empty array */

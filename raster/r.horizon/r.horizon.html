@@ -9,11 +9,12 @@ outline in one of two modes:
 heights in the specified directions from the given point. The results are
 written to the stdout.
 <li> raster: in this case the output is
-one or more rasters, with each point in a raster giving the horizon
+one or more raster maps, with each point in a raster giving the horizon
 height in a specific direction. One raster is created for each direction.
 </ul>
 
-<p>The directions are given as azimuthal angles (in degrees), with
+<p>
+The directions are given as azimuthal angles (in degrees), with
 the angle starting with 0 towards East and moving counterclockwise
 (North is 90, etc.). The calculation takes into account the actual
 projection, so the angles are corrected for direction distortions
@@ -34,37 +35,40 @@ not applied.
 
 
 <h3>Input parameters:</h3>
-<p>The <I>elevin</I> parameter is an input elevation raster map. If
+<p>The <i>elev_in</i> parameter is an input elevation raster map. If
 the buffer options are used (see below), this raster should extend
 over the area that accommodate the presently defined region plus
 defined buffer zones. 
 
-<p>The <I>horizonstep</I> parameter gives the angle step (in degrees)
+<p>The <i>horizon_step</i> parameter gives the angle step (in degrees)
 between successive azimuthal directions for the calculation of the
-horizon. Thus, a value of 5 for the <I>horizonstep</I> will give a total of
-360/5=72 directions (72 rasters if used in the raster mode). 
+horizon. Thus, a value of 5 for the <i>horizon_step</i> will give a total of
+360/5=72 directions (72 raster maps if used in the raster mode). 
 
-<p>The <I>direction</I> parameter gives the initial direction of the
+<p>The <i>direction</i> parameter gives the initial direction of the
 first output. This parameter acts as an direction angle offset. For
 example, if you want to get horizon angles for directions 45 and 225
-degrees, the <I>direction</I> should be set to 45 and <I>horizonstep</I> to
+degrees, the <i>direction</i> should be set to 45 and <i>horizon_step</i> to
 180. If you only want one single direction, use this parameter to
-specify desired direction of horizon angle, and set the <I>horizonstep</I>
-size to 0 degrees. 
+specify desired direction of horizon angle, and set the <i>horizon_step</i>
+size to 0 degrees. Otherwise all angles for a given starting <i>direction</i>
+with step of <i>horizon_step</i> are calculated.
 
-<p>The <I>dist </I>controls the sampling distance step size for the
+<p>The <i>distance</i> controls the sampling distance step size for the
 search for horizon along the line of sight. The default value is 1.0
 meaning that the step size will be taken from the raster resolution.
 Setting the value below 1.0 might slightly improve results for
 directions apart from the cardinal ones, but increasing the
 processing load of the search algorithm. 
 
-<p>The <I>maxdistance</I> value gives a maximum distance to move away
+<p>The <i>maxdistance</i> value gives a maximum distance to move away
 from the origin along the line of sight in order to search for the
 horizon height. The smaller this value the faster the calculation but
 the higher the risk that you may miss a terrain feature that can
-contribute significantly to the horizon outline.
-<p>The <I>coord</I> parameter takes a pair of easting-northing values
+contribute significantly to the horizon outline. Note that a viewshed
+can be calculated with <em>r.viewshed</em>.
+
+<p>The <i>coordinate</i> parameter takes a pair of easting-northing values
 in the current coordinate system and calculates the values of angular
 height of the horizon around this point. To achieve the
 consistency of the results, the point coordinate is
@@ -76,16 +80,16 @@ since it may not see some significant terrain features which could
 have contributed to the horizon, because these features are outside
 the region. There are to options how to set the size of the buffer
 that is used to increase the area of the horizon analysis. The
-<I>bufferzone</I> parameter allows you to specify the same size of
-buffer for all cardinal directions and the parameters <I>e_buff</I>,
-<I>n_buff</I>, <I>s_buff</I>, and <I>w_buff</I> allow you to specify
+<i>bufferzone</i> parameter allows you to specify the same size of
+buffer for all cardinal directions and the parameters <i>e_buff</i>,
+<i>n_buff</i>, <i>s_buff</i>, and <i>w_buff</i> allow you to specify
 a buffer size individually for each of the four directions. The
 buffer parameters influence only size of the read elevation map,
 while the analysis in the raster mode will be done only for the
 area specified by the current region definition.
-<p>The <I>horizon </I>parameter gives the prefix of the output
+<p>The <i>horizon </i>parameter gives the prefix of the output
 horizon raster maps. The raster name of each horizon direction
-raster will be constructed as <I>horizon_</I>NNN , where NNN counts
+raster will be constructed as <i>horizon_</i>NNN , where NNN counts
 upwards from 0 to total number of directions. If you use <b>r.horizon</b>
 in the single point mode this option will be ignored. 
 
@@ -106,30 +110,37 @@ sight &quot;hits&quot; the terrain. If so, the angle is increased to
 allow the line of sight to pass just above the terrain at that point.
 This is continued until the line of sight reaches a height that is
 higher than any point in the region or until it reaches the border of
-the region (see also the <I>bufferzone,e_buff</I>, <I>n_buff</I>,
-<I>s_buff</I>, and <I>w_buff</I>). The the number of lines of sight (azimuth 
-directions) is determined from the <I>direction</I> and
-<I>horizonstep</I> parameters. The method takes into account the curvature
+the region (see also the <i>bufferzone,e_buff</i>, <i>n_buff</i>,
+<i>s_buff</i>, and <i>w_buff</i>). The the number of lines of sight (azimuth 
+directions) is determined from the <i>direction</i> and
+<i>horizon_step</i> parameters. The method takes into account the curvature
 of the Earth whereby remote features will seem to be lower than they
 actually are. It also accounts for the changes of angles towards
 cardinal directions caused by the projection (see above). 
 
 
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-Single point mode:
+The examples are intended for the North Carolina sample dataset:
+<p>
+Single point mode (output of horizon angles CCW from East):
 <div class="code"><pre>
-r.horizon elevin=DEM horizonstep=30 direction=15 bufferzone=200 \
-    coord=47.302,7.365 dist=0.7 &gt; horizon.out
+# determine horizon angle in 225 degree direction:
+r.horizon elev_in=elevation direction=215 horizon_step=0 bufferzone=200 \
+    coordinate=638871.6,223384.4 maxdistance=5000
+
+# determine horizon values starting at 90 deg (North), step size of 5 deg:
+r.horizon elev_in=elevation direction=90 horizon_step=5 bufferzone=200 \
+    coordinate=638871.6,223384.4 maxdistance=5000
 </pre></div>
 
 
-Raster map mode (for r.sun):
+Raster map mode (output maps "horangle*" become input for <em>r.sun</em>):
 <div class="code"><pre>
 # we put a bufferzone of 10% of maxdistance around the study area
-r.horizon elevin=DEM horizonstep=30 bufferzone=200 horizon=horangle \
-    dist=0.7 maxdistance=2000
+r.horizon elev_in=elevation horizon_step=30 bufferzone=200 horizon=horangle \
+    maxdistance=5000
 </pre></div>
 
 
@@ -138,7 +149,8 @@ r.horizon elevin=DEM horizonstep=30 bufferzone=200 horizon=horangle \
 <em>
 <a href="r.sun.html">r.sun</a>,
 <a href="r.sunmask.html">r.sunmask</a>,
-<a href="r.los.html">r.los</a></em>
+<a href="r.los.html">r.los</a>,
+<a href="r.viewshed.html">r.viewshed</a></em>
 
 
 <h2>REFERENCES</h2>
@@ -181,4 +193,4 @@ European Commission, Ispra, Italy
 <a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a> 
 </ADDRESS>
 
-<p><I>Last changed: $Date$</I> 
+<p><i>Last changed: $Date$</i> 
