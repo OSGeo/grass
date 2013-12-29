@@ -54,7 +54,7 @@ def main():
 	    r = grass.write_command('db.execute', input = '-', stdin = sql + '\n')
 	else:
 	    resf = file(result, 'w')
-	    r = grass.write_command('db.select', flags = 'c', stdin = sql + '\n', stdout = resf)
+	    r = grass.write_command('db.select', input = '-', flags = 'c', stdin = sql + '\n', stdout = resf)
 	    resf.close()
 
 	if r != 0:
