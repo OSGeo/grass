@@ -253,19 +253,19 @@ memory_bytes = rows*cols*((IR*4+horizon_steps)/num_partitions  + OR*4)
 
 <h2>EXAMPLES</h2>
 
-Spearfish example (considering also cast shadows):
+North Carolina example (considering also cast shadows):
 <div class="code"><pre>
-g.region rast=elevation.dem -p
+g.region rast=elevation -p
 
-# calculate horizons
-# (we put a bufferzone of 10% of maxdistance around the study area)
-r.horizon elev_in=elevation.dem horizon_step=30 bufferzone=200 horizon=horangle distance_step=0.7 maxdistance=2000
+# calculate horizon angles (to speed up the subsequent r.sun calculation)
+r.horizon elev_in=elevation horizon_step=30 bufferzone=200 horizon=horangle \
+    maxdistance=5000
 
 # slope + aspect
-r.slope.aspect elevation=elevation.dem aspect=aspect.dem slope=slope.dem
+r.slope.aspect elevation=elevation aspect=aspect.dem slope=slope.dem
 
-# calculate global radiation for day 180 at 14:00hrs
-r.sun elevation.dem horizon=horangle horizon_step=30 asp_in=aspect.dem \
+# calculate global radiation for day 180 at 14:00hrs, using r.horizon output
+r.sun elev_in=elevation horizon=horangle horizon_step=30 asp_in=aspect.dem \
       slope_in=slope.dem glob_rad=global_rad day=180 time=14
 </pre></div>
 
@@ -279,11 +279,11 @@ in non-leap years):
 g.region rast=elev_ned_30m -p
 
 # considering cast shadows
-r.sun elev_ned_30m lin=2.5 alb=0.2 day=172 \
+r.sun elev_in=elev_ned_30m lin=2.5 alb=0.2 day=172 \
       beam_rad=b172 diff_rad=d172 \
       refl_rad=r172 insol_time=it172
 
-d.mon x0
+d.mon wx0
 # show irradiation raster map [Wh.m-2.day-1]
 d.rast.leg b172
 # show insolation time raster map [h]
@@ -340,7 +340,7 @@ Academic Publishers. (Appendix explains formula;
 <a href="http://www.grassbook.org/">r.sun script download</a>)
 <li>
 Page, J. ed. (1986). Prediction of solar radiation on inclined surfaces. Solar
-energy R&amp;D in the European Community, series F &#8211; Solar radiation data,
+energy R&amp;D in the European Community, series F - Solar radiation data,
 Dordrecht (D. Reidel), 3, 71, 81-83. 
 <li>
 Page, J., Albuisson, M., Wald, L. (2001). The European solar radiation atlas:
@@ -351,7 +351,7 @@ ESRA - European Solar radiation Atlas - with respect to the Heliosat method.
 Solar energy, 68, 33-48. 
 <li>
 Scharmer, K., Greif, J., eds., (2000). The European solar radiation atlas,
-Vol. 2: Database and exploitation software. Paris (Les Presses de l&#8217; &Eacute;cole
+Vol. 2: Database and exploitation software. Paris (Les Presses de l'&Eacute;cole
 des Mines).
 <li>
 Joint Research Centre: <a href="http://re.jrc.ec.europa.eu/pvgis/">GIS solar radiation database for Europe</a> and 
