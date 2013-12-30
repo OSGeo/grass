@@ -1205,7 +1205,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
             self.SetCanvas(self.parent)
             self.SetX(x)
             self.SetY(y)
-            self.SetPen(wx.BLACK_PEN)
+            self._setPen()
             self._setBrush()
             self.SetLabel()
             
@@ -1218,10 +1218,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self.intermediate = im
   
     def OnDraw(self, dc):
-        pen = wx.Pen(wx.BLACK, 1, wx.SOLID)
-        if self.intermediate:
-            pen.SetStyle(wx.SHORT_DASH)
-        self.SetPen(pen)
+        self._setPen()
         
         ogl.EllipseShape.OnDraw(self, dc)
         
@@ -1320,8 +1317,12 @@ class ModelData(ModelObject, ogl.EllipseShape):
         else:
             width = int(UserSettings.Get(group = 'modeler', key = 'action',
                                          subkey = ('width', 'default')))
-            
-        pen = wx.Pen(wx.BLACK, width, wx.SOLID)
+        if self.intermediate:
+            style = wx.DOT
+        else:
+            style = wx.SOLID
+        
+        pen = wx.Pen(wx.BLACK, width, style)
         self.SetPen(pen)
         
     def SetLabel(self):
