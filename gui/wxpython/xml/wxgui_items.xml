@@ -13,6 +13,7 @@
     <related-module>g.gui.gmodeler</related-module>
     <description>Launch Graphical modeler</description>
     <keywords>general,gui,graphical modeler,workflow</keywords>
+    <icon>modeler-main</icon>
   </wxgui-item>
   <wxgui-item name="RunModel">
     <label>Run model</label>

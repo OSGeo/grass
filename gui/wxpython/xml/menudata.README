@@ -27,4 +27,5 @@ menuitem breakdown:
 	     the <command> module's module->keywords.  [do not edit]
 	     (G_add_keyword() in GRASS 7+)
 
+<icon>      optional icon to be shown in the menu
 

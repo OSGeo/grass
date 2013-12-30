@@ -7,7 +7,7 @@ Classes:
  - menu::Menu
  - menu::SearchModuleWindow
 
-(C) 2010-2012 by the GRASS Development Team
+(C) 2010-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -27,6 +27,7 @@ from core.gcmd         import EncodeString
 from core.utils import _
 from gui_core.widgets  import SearchModuleWidget
 from gui_core.treeview import CTreeView
+from icons.icon import MetaIcon
 
 from grass.pydispatch.signal import Signal
 
@@ -37,6 +38,7 @@ class Menu(wx.MenuBar):
         self.parent = parent
         self.model = model
         self.menucmd = dict()
+        self.bmpsize = (16, 16)
 
         for child in self.model.root.children:
             self.Append(self._createMenu(child), child.label)
@@ -52,6 +54,7 @@ class Menu(wx.MenuBar):
             else:
                 data = child.data.copy()
                 data.pop('label')
+                
                 self._createMenuItem(menu, label=child.label, **data)
         
         self.parent.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
@@ -59,7 +62,7 @@ class Menu(wx.MenuBar):
         return menu
 
     def _createMenuItem(self, menu, label, description, handler, command, keywords,
-                        shortcut = '', wxId = wx.ID_ANY, kind = wx.ITEM_NORMAL):
+                        shortcut = '', icon = '', wxId = wx.ID_ANY, kind = wx.ITEM_NORMAL):
         """!Creates menu items
         There are three menu styles (menu item text styles).
         1 -- label only, 2 -- label and cmd name, 3 -- cmd name only
@@ -76,7 +79,10 @@ class Menu(wx.MenuBar):
         if shortcut:
             label += '\t' + shortcut
         
-        menuItem = menu.Append(wxId, label, helpString, kind)
+        menuItem = wx.MenuItem(menu, wxId, label, helpString, kind)
+        if icon:
+            menuItem.SetBitmap(MetaIcon(img = icon).GetBitmap(self.bmpsize))
+        menu.AppendItem(menuItem)
         
         self.menucmd[menuItem.GetId()] = command
         
