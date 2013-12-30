@@ -7,7 +7,7 @@ Classes:
  - preferences::PreferencesDialog
  - preferences::PropertiesDialog
 
-(C) 2010-2012 by the GRASS Development Team
+(C) 2010-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -36,6 +36,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self._createActionPage(self.notebook)
         self._createDataPage(self.notebook)
         self._createLoopPage(self.notebook)
+        self._createCommentPage(self.notebook)
         
         self.SetMinSize(self.GetBestSize())
         self.SetSize(self.size)
@@ -81,7 +82,7 @@ class PreferencesDialog(PreferencesBaseDialog):
     def _createActionPage(self, notebook):
         """!Create notebook page for action settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
-        notebook.AddPage(page = panel, text = _("Action"))
+        notebook.AddPage(page = panel, text = _("Command"))
         
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
@@ -387,6 +388,91 @@ class PreferencesDialog(PreferencesBaseDialog):
                              initial = self.settings.Get(group='modeler', key='loop', subkey=('size', 'height')))
         height.SetName('GetValue')
         self.winId['modeler:loop:size:height'] = height.GetId()
+        
+        gridSizer.Add(item = height,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+        
+        gridSizer.AddGrowableCol(0)
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
+                
+        panel.SetSizer(border)
+        
+        return panel
+
+    def _createCommentPage(self, notebook):
+        """!Create notebook page for comment settings"""
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        notebook.AddPage(page = panel, text = _("Comment"))
+        
+        # colors
+        border = wx.BoxSizer(wx.VERTICAL)
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Color"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
+        
+        row = 0
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Valid:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        vColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='comment', subkey='color'),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        vColor.SetName('GetColour')
+        self.winId['modeler:comment:color'] = vColor.GetId()
+        
+        gridSizer.Add(item = vColor,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+        
+        gridSizer.AddGrowableCol(0)
+        sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
+        
+        # size
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Shape size"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
+
+        row = 0
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Width:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        
+        width = wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
+                            min = 0, max = 500,
+                            initial = self.settings.Get(group='modeler', key='comment', subkey=('size', 'width')))
+        width.SetName('GetValue')
+        self.winId['modeler:comment:size:width'] = width.GetId()
+        
+        gridSizer.Add(item = width,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Height:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        
+        height = wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
+                             min = 0, max = 500,
+                             initial = self.settings.Get(group='modeler', key='comment', subkey=('size', 'height')))
+        height.SetName('GetValue')
+        self.winId['modeler:comment:size:height'] = height.GetId()
         
         gridSizer.Add(item = height,
                       flag = wx.ALIGN_RIGHT |
