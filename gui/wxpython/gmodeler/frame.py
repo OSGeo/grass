@@ -713,6 +713,28 @@ class ModelFrame(wx.Frame):
         
         self.canvas.Refresh()
 
+    def OnAddComment(self, event):
+        """!Add comment to the model"""
+        dlg = wx.TextEntryDialog(parent = self, message = _("Comment:"), caption = _("Add comment"),
+                                 style = wx.OK | wx.CANCEL | wx.CENTRE | wx.TE_MULTILINE)
+        if dlg.ShowModal() == wx.ID_OK:
+            comment = dlg.GetValue()
+            if not comment:
+                GError(_("Empty comment. Nothing to add to the model."), parent = self)
+            else:
+                x, y = self.canvas.GetNewShapePos()
+                commentObj = ModelComment(self.model, x = x + self._randomShift(), y = y + self._randomShift(),
+                                          id = self.model.GetNextId(), label = comment)
+                self.canvas.diagram.AddShape(commentObj)
+                commentObj.Show(True)
+                self._addEvent(commentObj)
+                self.model.AddItem(commentObj)
+                
+                self.canvas.Refresh()
+                self.ModelChanged()
+        
+        dlg.Destroy()
+        
     def _switchPageHandler(self, event, notification):
         self._switchPage(notification=notification)
         event.Skip()
@@ -869,6 +891,12 @@ class ModelFrame(wx.Frame):
             
             # connect items in the condition
             self.DefineCondition(item)
+        
+        # load comments
+        for item in self.model.GetItems(objType = ModelComment):
+            self._addEvent(item)
+            self.canvas.diagram.AddShape(item)
+            item.Show(True)
         
         # load variables
         self.variablePanel.Update()

@@ -12,12 +12,13 @@ Classes:
  - model::ModelItem
  - model::ModelLoop
  - model::ModelCondition
+ - model::ModelComment
  - model::ProcessModelFile
  - model::WriteModelFile
  - model::WritePythonFile
  - model::ModelParamDialog
 
-(C) 2010-2012 by the GRASS Development Team
+(C) 2010-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -296,7 +297,7 @@ class Model(object):
         self.properties = gxmXml.properties
         self.variables  = gxmXml.variables
         
-        # load model.GetActions()
+        # load actions
         for action in gxmXml.actions:
             actionItem = ModelAction(parent = self, 
                                      x = action['pos'][0],
@@ -311,11 +312,11 @@ class Model(object):
             if action['disabled']:
                 actionItem.Enable(False)
             
-            self.AddItem(actionItem)
+            self.AddItem(actionItem, pos = actionItem.GetId()-1)
             
             actionItem.SetValid(actionItem.GetTask().get_options())
             actionItem.GetLog() # substitute variables (-> valid/invalid)
-        
+
         # load data & relations
         for data in gxmXml.data:
             dataItem = ModelData(parent = self, 
@@ -329,6 +330,7 @@ class Model(object):
             
             for rel in data['rels']:
                 actionItem = self.FindAction(rel['id'])
+                
                 if rel['dir'] == 'from':
                     relation = ModelRelation(parent = self, fromShape = dataItem,
                                              toShape = actionItem, param = rel['name'])
@@ -351,7 +353,7 @@ class Model(object):
                                  height = loop['size'][1],
                                  label = loop['text'],
                                  id = loop['id'])
-            self.AddItem(loopItem)
+            self.AddItem(loopItem, pos = loopItem.GetId()-1)
         
         # load conditions
         for condition in gxmXml.conditions:
@@ -362,7 +364,7 @@ class Model(object):
                                            height = condition['size'][1],
                                            label = condition['text'],
                                            id = condition['id'])
-            self.AddItem(conditionItem)
+            self.AddItem(conditionItem, pos = conditionItem.GetId()-1)
 
         # define loops & if/else items
         for loop in gxmXml.loops:
@@ -385,6 +387,18 @@ class Model(object):
             for b in items.keys():
                 for action in items[b]:
                     action.SetBlock(conditionItem)
+
+        # load comments
+        for comment in gxmXml.comments:
+            commentItem = ModelComment(parent = self, 
+                                       x = comment['pos'][0],
+                                       y = comment['pos'][1],
+                                       width = comment['size'][0],
+                                       height = comment['size'][1],
+                                       id = comment['id'],
+                                       label = comment['text'])
+            
+            self.AddItem(commentItem, pos = commentItem.GetId()-1)
         
     def AddItem(self, newItem, pos = -1):
         """!Add item to the list"""
@@ -392,10 +406,10 @@ class Model(object):
             self.items.insert(pos, newItem)
         else:
             self.items.append(newItem)
-        i = 1
-        for item in self.items:
-            item.SetId(i)
-            i += 1
+        # i = 1
+        # for item in self.items:
+        #     item.SetId(i)
+        #     i += 1
         
     def IsValid(self):
         """Return True if model is valid"""
@@ -912,7 +926,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         self.parent  = parent
         self.task    = task
         self.comment = comment
-
+        
         if not width:
             width = UserSettings.Get(group='modeler', key='action', subkey=('size', 'width'))
         if not height:
@@ -939,10 +953,8 @@ class ModelAction(ModelObject, ogl.RectangleShape):
             self.SetCanvas(self.parent)
             self.SetX(x)
             self.SetY(y)
-            self.SetPen(wx.BLACK_PEN)
             self._setPen()
             self._setBrush()
-            self.SetId(id)
             self.SetLabel(label)
 
         if self.task:
@@ -974,8 +986,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         else:
             width = int(UserSettings.Get(group='modeler', key='action',
                                          subkey=('width', 'default')))
-        pen = self.GetPen()
-        pen.SetWidth(width)
+        pen = wx.Pen(wx.BLACK, width, wx.SOLID)
         self.SetPen(pen)
 
     def SetLabel(self, label=None):
@@ -1202,12 +1213,9 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self.intermediate = im
   
     def OnDraw(self, dc):
-        pen = self.GetPen()
-        pen.SetWidth(1)
+        pen = wx.Pen(wx.BLACK, 1, wx.SOLID)
         if self.intermediate:
             pen.SetStyle(wx.SHORT_DASH)
-        else:
-            pen.SetStyle(wx.SOLID)
         self.SetPen(pen)
         
         ogl.EllipseShape.OnDraw(self, dc)
@@ -1307,8 +1315,8 @@ class ModelData(ModelObject, ogl.EllipseShape):
         else:
             width = int(UserSettings.Get(group = 'modeler', key = 'action',
                                          subkey = ('width', 'default')))
-        pen = self.GetPen()
-        pen.SetWidth(width)
+            
+        pen = wx.Pen(wx.BLACK, width, wx.SOLID)
         self.SetPen(pen)
         
     def SetLabel(self):
@@ -1389,9 +1397,7 @@ class ModelRelation(ogl.LineShape):
     
     def _setPen(self):
         """!Set pen"""
-        pen = self.GetPen()
-        pen.SetWidth(1)
-        pen.SetStyle(wx.SOLID)
+        pen = wx.Pen(wx.BLACK, 1, wx.SOLID)
         self.SetPen(pen)
         
     def OnDraw(self, dc):
@@ -1565,6 +1571,53 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
         if branch in ['if', 'else']:
             self.itemIds[branch] = items
 
+class ModelComment(ModelObject, ogl.RectangleShape):
+    def __init__(self, parent, x, y, id = -1, width = None, height = None, label = ''):
+        """!Defines a model comment"""
+        ModelObject.__init__(self, id, label)
+
+        if not width:
+            width = UserSettings.Get(group='modeler', key='comment', subkey=('size', 'width'))
+        if not height:
+            height = UserSettings.Get(group='modeler', key='comment', subkey=('size', 'height'))
+        
+        if parent.GetCanvas():
+            ogl.RectangleShape.__init__(self, width, height)
+            self.SetCanvas(parent)
+            self.SetX(x)
+            self.SetY(y)
+            self._setPen()
+            self._setBrush()
+            self.SetLabel(label)
+
+    def _setBrush(self, running = False):
+        """!Set brush"""
+        color = UserSettings.Get(group='modeler', key='comment',
+                                     subkey='color')
+        wxColor = wx.Colour(color[0], color[1], color[2])
+        self.SetBrush(wx.Brush(wxColor))
+
+    def _setPen(self):
+        """!Set pen"""
+        pen = wx.Pen(wx.BLACK, 1, wx.DOT)
+        self.SetPen(pen)
+
+    def SetLabel(self, label=None):
+        """!Set label
+
+        @param label if None use command string instead
+        """
+        if label:
+            self.label = label 
+        elif self.label:
+            label = self.label
+        else:
+            label = ''
+        idx = self.GetId()
+        
+        self.ClearText()
+        self.AddText('(%d) %s' % (idx, label))
+
 class ProcessModelFile:
     """!Process GRASS model file (gxm)"""
     def __init__(self, tree):
@@ -1581,7 +1634,8 @@ class ProcessModelFile:
         self.data    = list()
         self.loops   = list()
         self.conditions = list()
-        
+        self.comments = list()
+
         self._processWindow()
         self._processProperties()
         self._processVariables()
@@ -1664,7 +1718,8 @@ class ProcessModelFile:
         self._processActions()
         self._processLoops()
         self._processConditions()
-        
+        self._processComments()
+
     def _processActions(self):
         """!Process model file"""
         for action in self.root.findall('action'):
@@ -1694,7 +1749,7 @@ class ProcessModelFile:
                                   'disabled' : disabled,
                                   'label'    : label,
                                   'comment'  : commentString})
-            
+
     def _getDim(self, node):
         """!Get position and size of shape"""
         pos = size = None
@@ -1837,6 +1892,18 @@ class ProcessModelFile:
                                      'text'    : text,
                                      'id'      : int(node.get('id', -1)),
                                      'items'   : aid })
+
+    def _processComments(self):
+        """!Process model comments"""
+        for node in self.root.findall('comment'):
+            pos, size = self._getDim(node)
+            text = self._filterValue(node.text)
+
+            self.comments.append({ 'pos'     : pos,
+                                   'size'    : size,
+                                   'text'    : text,
+                                   'id'      : int(node.get('id', -1)),
+                                   'text'    : text })
         
 class WriteModelFile:
     """!Generic class for writing model file"""
@@ -1947,6 +2014,8 @@ class WriteModelFile:
                 self._loop(item)
             elif isinstance(item, ModelCondition):
                 self._condition(item)
+            elif isinstance(item, ModelComment):
+                self._comment(item)
         
     def _action(self, action):
         """!Write actions"""
@@ -2076,6 +2145,12 @@ class WriteModelFile:
         
         self.indent -= 4
         self.fd.write('%s</if-else>\n' % (' ' * self.indent))
+
+    def _comment(self, comment):
+        """!Write comment"""
+        self.fd.write('%s<comment id="%d" pos="%d,%d" size="%d,%d">%s</comment>\n' % \
+                          (' ' * self.indent, comment.GetId(), comment.GetX(), comment.GetY(),
+                           comment.GetWidth(), comment.GetHeight(), EncodeString(comment.GetLabel())))
         
 class WritePythonFile:
     def __init__(self, fd, model):
@@ -2192,7 +2267,7 @@ if __name__ == "__main__":
                 for action in item.GetItems(self.model.GetItems(objType=ModelAction)):
                     self._writePythonItem(action, ignoreBlock = False, variables = [condVar])
                 self.indent -= 4
-            else: # ModelCondition
+            if isinstance(item, ModelCondition):
                 self.fd.write('%sif %s:\n' % (' ' * self.indent, cond))
                 self.indent += 4
                 condItems = item.GetItems()
@@ -2205,6 +2280,8 @@ if __name__ == "__main__":
                     for action in condItems['else']:
                         self._writePythonItem(action, ignoreBlock = False)
                 self.indent += 4
+        if isinstance(item, ModelComment):
+            self._writePythonComment(item)
         
     def _writePythonAction(self, item, variables = []):
         """!Write model action to Python file"""
@@ -2251,6 +2328,11 @@ if __name__ == "__main__":
             ret += ")"
         
         return ret
+
+    def _writePythonComment(self, item):
+        """!Write model comment to Python file"""
+        for line in item.GetLabel().splitlines():
+            self.fd.write('#' + line + '\n')
 
 class ModelParamDialog(wx.Dialog):
     def __init__(self, parent, params, id = wx.ID_ANY, title = _("Model parameters"),

@@ -788,6 +788,13 @@ class Settings:
                         'height' : 40,
                         },
                     },
+                'comment' : {
+                    'color' : (255, 233, 208, 255), # light yellow
+                    'size' : {
+                        'width' : 200,
+                        'height' : 100,
+                        },
+                    },
                 },
             'mapswipe' : {
                 'cursor': {

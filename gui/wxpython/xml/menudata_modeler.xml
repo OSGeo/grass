@@ -95,6 +95,12 @@
 	  <shortcut>Ctrl+I</shortcut>
 	</menuitem>
 	<menuitem>
+	  <label>Add comment</label>
+	  <help>Adds comment to model</help>
+	  <handler>OnAddComment</handler>
+	  <shortcut>Ctrl+#</shortcut>
+	</menuitem>
+	<menuitem>
 	  <label>Remove item</label>
 	  <help>Remove action/data from model</help>
 	  <handler>OnRemoveItem</handler>
