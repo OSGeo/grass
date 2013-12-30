@@ -6,6 +6,7 @@
     <handler>OnGCPManager</handler>
     <related-module>g.gui.gcp</related-module>
     <description>Manage Ground Control Points for Georectification</description>
+    <icon>georectify</icon>
   </wxgui-item>
   <wxgui-item name="GraphicalModeler">
     <label>Graphical modeler</label>
@@ -33,6 +34,7 @@
     <related-module>g.gui.psmap</related-module>
     <description>Launch Cartographic Composer</description>
     <keywords>postscript,printing</keywords>
+    <icon>print-compose</icon>
   </wxgui-item>
   <wxgui-item name="MapSwipe">
     <label>Map Swipe</label>
