@@ -986,7 +986,12 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         else:
             width = int(UserSettings.Get(group='modeler', key='action',
                                          subkey=('width', 'default')))
-        pen = wx.Pen(wx.BLACK, width, wx.SOLID)
+        if self.isEnabled:
+            style = wx.SOLID
+        else:
+            style = wx.DOT
+        
+        pen = wx.Pen(wx.BLACK, width, style)
         self.SetPen(pen)
 
     def SetLabel(self, label=None):
