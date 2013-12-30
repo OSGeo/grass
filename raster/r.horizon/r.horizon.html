@@ -43,7 +43,7 @@ defined buffer zones.
 <p>The <i>horizon_step</i> parameter gives the angle step (in degrees)
 between successive azimuthal directions for the calculation of the
 horizon. Thus, a value of 5 for the <i>horizon_step</i> will give a total of
-360/5=72 directions (72 raster maps if used in the raster mode). 
+360/5=72 directions (72 raster maps if used in the raster map mode). 
 
 <p>The <i>direction</i> parameter gives the initial direction of the
 first output. This parameter acts as an direction angle offset. For
@@ -95,7 +95,7 @@ in the single point mode this option will be ignored.
 
 <p>The <i>output</i> parameter allows to save the resulting horizon
 angles in a comma separated ASCII file (single point mode only). If
-you use <b>r.horizon</b> in the raster mode this option will be ignored.
+you use <b>r.horizon</b> in the raster map mode this option will be ignored.
 
 <p>At the moment the elevation and maximum distance must be measured in meters, 
 even if you use geographical coordinates (longitude/latitude). If your 
@@ -124,8 +124,10 @@ cardinal directions caused by the projection (see above).
 
 <h2>EXAMPLES</h2>
 
-The examples are intended for the North Carolina sample dataset:
-<p>
+The examples are intended for the North Carolina sample dataset.
+
+<h3>Single point mode</h3>
+
 Single point mode (output of horizon angles CCW from East):
 <div class="code"><pre>
 # determine horizon angle in 225 degree direction:
@@ -136,8 +138,21 @@ r.horizon elev_in=elevation direction=215 horizon_step=0 bufferzone=200 \
 # save result in CSV file
 r.horizon elev_in=elevation direction=90 horizon_step=5 bufferzone=200 \
     coordinate=638871.6,223384.4 maxdistance=5000 output=horizon.csv
+
+# test point near high way intersection
+g.region n=223540 s=220820 w=634650 e=638780 res=10 -p
+r.horizon elev_in=elevation direction=0 horizon_step=5 bufferzone=200 \
+    coordinate=636483.54,222176.25 maxdistance=5000 -d output=horizon.csv
 </pre></div>
 
+<img src="rhorizon_shaded_dem_point.png"><br>
+Test point near high way intersection (North Carolina sample dataset)
+<p>
+<img src="rhorizon_singlepoint_plot.png"><br>
+Horizon angles for test point (CCW from East)
+<p>
+
+<h3>Raster map mode</h3>
 
 Raster map mode (output maps "horangle*" become input for <em>r.sun</em>):
 <div class="code"><pre>
