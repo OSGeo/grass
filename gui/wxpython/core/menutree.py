@@ -90,7 +90,7 @@ class MenuTreeModelBuilder:
     def _createItem(self, item, node):
         if item.tag == 'separator':
             data = dict(label='', description='', handler='',
-                        command='', keywords='', shortcut='', wxId='')
+                        command='', keywords='', shortcut='', wxId='', icon='')
             self.model.AppendNode(parent=node, label='', data=data)
         elif item.tag == 'menuitem':
             origLabel = _(item.find('label').text)
@@ -100,6 +100,7 @@ class MenuTreeModelBuilder:
             keywords = item.find('keywords') # optional
             shortcut = item.find('shortcut') # optional
             wxId     = item.find('id')       # optional
+            icon     = item.find('icon')     # optional
             if gcmd != None:
                 gcmd = gcmd.text
             else:
@@ -120,6 +121,10 @@ class MenuTreeModelBuilder:
                 wxId = eval('wx.' + wxId.text)
             else:
                 wxId = wx.ID_ANY
+            if icon != None:
+                icon = icon.text
+            else:
+                icon = ''
             label = origLabel
             if gcmd:
                 if self.menustyle == 1:
@@ -127,7 +132,7 @@ class MenuTreeModelBuilder:
                 elif self.menustyle == 2:
                     label = '      [' + gcmd + ']'
             data = dict(label=origLabel, description=desc, handler=handler,
-                        command=gcmd, keywords=keywords, shortcut=shortcut, wxId=wxId)
+                        command=gcmd, keywords=keywords, shortcut=shortcut, wxId=wxId, icon=icon)
             self.model.AppendNode(parent=node, label=label, data=data)
         elif item.tag == 'menu':
             self._createMenu(item, node)
