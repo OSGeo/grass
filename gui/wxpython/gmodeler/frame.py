@@ -1224,7 +1224,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 self.frame.DefineLoop(mo)
             elif isinstance(mo, ModelCondition):
                 self.frame.DefineCondition(mo)
-        
+
+        shape = self.GetShape()
+        canvas = shape.GetCanvas()
+        canvas.Refresh()
+
     def OnEndSize(self, x, y):
         """!Resize shape"""
         self.frame.ModelChanged()
