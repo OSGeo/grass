@@ -1056,8 +1056,6 @@ class ModelAction(ModelObject, ogl.DividedShape):
         self.regionComment.SetText(comment)
         self.SetRegionSizes()
         self.ReformatRegions()
-        self.Refresh()
-        self.GetCanvas.Refresh()
 
     def GetComment(self):
         """!Get comment"""
