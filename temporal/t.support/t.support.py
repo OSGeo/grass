@@ -130,10 +130,10 @@ def main():
             else:
                 # Delete the map from the temporal database
                 # We need to update all effected space time datasets
-                rows = map.get_registered_datasets(dbif)
-                if rows:
-                    for row in rows:
-                        dataset_dict[row["id"]] = row["id"]
+                datasets = map.get_registered_datasets(dbif)
+                if datasets:
+                    for dataset in datasets:
+                        dataset_dict[dataset] = dataset
                 # Collect the delete statements
                 statement += map.delete(dbif=dbif, update=False, execute=False)
 

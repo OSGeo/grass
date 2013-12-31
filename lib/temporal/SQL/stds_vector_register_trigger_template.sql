@@ -1,6 +1,0 @@
---#############################################################################
--- This SQL script is for now a placeholder, till the vector metadata
--- concept is clear
---
--- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
---#############################################################################

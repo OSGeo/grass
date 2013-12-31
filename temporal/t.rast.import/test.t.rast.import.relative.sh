@@ -35,7 +35,7 @@ t.create type=strds temporaltype=relative output=precip_rel \
     title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register -i type=rast input=precip_rel file="${n1}"  unit="years" 
+t.register type=rast input=precip_rel file="${n1}"  unit="years" 
 
 t.rast.export input=precip_rel output=strds_export.tar.bz2 compression=bzip2 format=GTiff workdir=test
 t.rast.export input=precip_rel output=strds_export.tar.gz compression=gzip format=GTiff workdir=test

@@ -523,7 +523,6 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
 ###############################################################################
 
-
 class DatasetBase(SQLDatabaseInterface):
     """!This is the base class for all maps and spacetime datasets storing
         basic identification information
@@ -552,15 +551,15 @@ class DatasetBase(SQLDatabaseInterface):
          | Name: ...................... soil
          | Mapset: .................... PERMANENT
          | Creator: ................... soeren
-         | Creation time: ............. 2001-01-01 00:00:00
          | Temporal type: ............. absolute
+         | Creation time: ............. 2001-01-01 00:00:00
         >>> t.print_shell_info()
         id=soil@PERMANENT
         name=soil
         mapset=PERMANENT
         creator=soeren
-        creation_time=2001-01-01 00:00:00
         temporal_type=absolute
+        creation_time=2001-01-01 00:00:00
 
         \endcode
     """
@@ -597,9 +596,6 @@ class DatasetBase(SQLDatabaseInterface):
         self.set_creator(creator)
         self.set_ctime(ctime)
         self.set_ttype(ttype)
-        # Commented out for performance reasons
-        #self.set_mtime(mtime)
-        #self.set_revision(revision)
 
     def set_id(self, ident):
         """!Convenient method to set the unique identifier (primary key)
@@ -675,17 +671,6 @@ class DatasetBase(SQLDatabaseInterface):
             self.D["temporal_type"] = "absolute"
         else:
             self.D["temporal_type"] = ttype
-
-#    def set_mtime(self, mtime=None):
-#       """!Set the modification time of the map, if nothing set the current time is used"""
-#       if mtime == None:
-#            self.D["modification_time"] = datetime.now()
-#       else:
-#            self.D["modification_time"] = mtime
-
-#    def set_revision(self, revision=1):
-#       """!Set the revision of the map: if nothing set revision 1 will assumed"""
-#       self.D["revision"] = revision
 
     def get_id(self):
         """!Convenient method to get the unique identifier (primary key)
@@ -766,22 +751,6 @@ class DatasetBase(SQLDatabaseInterface):
         else:
             return None
 
-#    def get_mtime(self):
-#       """!Get the modification time of the map, datatype is datetime
-#          @return None if not found"""
-#       if self.D.has_key("modification_time"):
-#           return self.D["modification_time"]
-#       else:
-#           return None
-
-#    def get_revision(self):
-#       """!Get the revision of the map
-#          @return None if not found"""
-#       if self.D.has_key("revision"):
-#           return self.D["revision"]
-#       else:
-#           return None
-
     # Properties of this class
     id = property(fget=get_id, fset=set_id)
     map_id = property(fget=get_map_id, fset=None)
@@ -801,10 +770,8 @@ class DatasetBase(SQLDatabaseInterface):
         if self.get_layer():
             print " | Layer:...................... " + str(self.get_layer())
         print " | Creator: ................... " + str(self.get_creator())
-        print " | Creation time: ............. " + str(self.get_ctime())
         print " | Temporal type: ............. " + str(self.get_ttype())
-#        print " | Modification time: ......... " + str(self.get_mtime())
-#        print " | Revision in database: ...... " + str(self.get_revision())
+        print " | Creation time: ............. " + str(self.get_ctime())
 
     def print_shell_info(self):
         """!Print information about this class in shell style"""
@@ -814,10 +781,8 @@ class DatasetBase(SQLDatabaseInterface):
         if self.get_layer():
             print "layer=" + str(self.get_layer())
         print "creator=" + str(self.get_creator())
-        print "creation_time=" + str(self.get_ctime())
         print "temporal_type=" + str(self.get_ttype())
-#        print "modification_time=" + str(self.get_mtime())
-#        print "revision=" + str(self.get_revision())
+        print "creation_time=" + str(self.get_ctime())
 
 ###############################################################################
 
@@ -872,7 +837,7 @@ class STDSBase(DatasetBase):
     \code
 
     >>> init()
-    >>> t = STDSBase("stds", "soil@PERMANENT", semantic_type="average", creator="soeren", ctime=datetime(2001,1,1), ttype="absolute")
+    >>> t = STDSBase("stds", "soil@PERMANENT", semantic_type="average", creator="soeren", ctime=datetime(2001,1,1), ttype="absolute", mtime=datetime(2001,1,1))
     >>> t.semantic_type
     'average'
     >>> t.print_info()
@@ -881,31 +846,41 @@ class STDSBase(DatasetBase):
      | Name: ...................... soil
      | Mapset: .................... PERMANENT
      | Creator: ................... soeren
-     | Creation time: ............. 2001-01-01 00:00:00
      | Temporal type: ............. absolute
+     | Creation time: ............. 2001-01-01 00:00:00
+     | Modification time:.......... 2001-01-01 00:00:00
      | Semantic type:.............. average
     >>> t.print_shell_info()
     id=soil@PERMANENT
     name=soil
     mapset=PERMANENT
     creator=soeren
-    creation_time=2001-01-01 00:00:00
     temporal_type=absolute
+    creation_time=2001-01-01 00:00:00
+    modification_time=2001-01-01 00:00:00
     semantic_type=average
 
     \endcode
     """
     def __init__(self, table=None, ident=None, name=None, mapset=None,
                  semantic_type=None, creator=None, ctime=None,
-                 ttype=None):
+                 ttype=None, mtime=None):
         DatasetBase.__init__(self, table, ident, name, mapset, creator,
                               ctime, ttype)
 
         self.set_semantic_type(semantic_type)
+        self.set_mtime(mtime)
 
     def set_semantic_type(self, semantic_type):
         """!Set the semantic type of the space time dataset"""
         self.D["semantic_type"] = semantic_type
+        
+    def set_mtime(self, mtime=None):
+       """!Set the modification time of the space time dataset, if nothing set the current time is used"""
+       if mtime == None:
+            self.D["modification_time"] = datetime.now()
+       else:
+            self.D["modification_time"] = mtime
 
     def get_semantic_type(self):
         """!Get the semantic type of the space time dataset
@@ -914,6 +889,14 @@ class STDSBase(DatasetBase):
             return self.D["semantic_type"]
         else:
             return None
+            
+    def get_mtime(self):
+       """!Get the modification time of the space time dataset, datatype is datetime
+          @return None if not found"""
+       if self.D.has_key("modification_time"):
+           return self.D["modification_time"]
+       else:
+           return None
 
     semantic_type = property(fget=get_semantic_type, fset=set_semantic_type)
 
@@ -921,12 +904,14 @@ class STDSBase(DatasetBase):
         """!Print information about this class in human readable style"""
         DatasetBase.print_info(self)
         #      0123456789012345678901234567890
+        print " | Modification time:.......... " + str(self.get_mtime())
         print " | Semantic type:.............. " + str(
             self.get_semantic_type())
 
     def print_shell_info(self):
         """!Print information about this class in shell style"""
         DatasetBase.print_shell_info(self)
+        print "modification_time=" + str(self.get_mtime())
         print "semantic_type=" + str(self.get_semantic_type())
 
 ###############################################################################
@@ -960,6 +945,101 @@ class STVDSBase(STDSBase):
         STDSBase.__init__(self, "stvds_base", ident, name, mapset,
                            semantic_type, creator, ctime,
                            ttype)
+
+###############################################################################
+
+class AbstractSTDSRegister(SQLDatabaseInterface):
+    """!This is the base class for all maps to store the space time datasets
+       as comma separated string in which they are registered
+
+        Usage:
+
+        \code
+
+        >>> init()
+        >>> t = AbstractSTDSRegister("raster", "soil@PERMANENT", "A@P,B@P,C@P")
+        >>> t.id
+        'soil@PERMANENT'
+        >>> t.registered_stds
+        'A@P,B@P,C@P'
+
+        \endcode
+    """
+
+    def __init__(self, table=None, ident=None, registered_stds=None):
+        """!Constructor
+
+            @param table The name of the temporal database table
+                          that should be used to store the values
+            @param ident The unique identifier must be a combination of
+                          the dataset name, layer name and the mapset
+                          "name@mapset" or "name:layer@mapset"
+                          used as as primary key in the temporal database
+            @param stds A comma separted list of space time dataset ids
+        """
+
+        SQLDatabaseInterface.__init__(self, table, ident)
+
+        self.set_id(ident)
+        self.set_registered_stds(registered_stds)
+
+    def set_id(self, ident):
+        """!Convenient method to set the unique identifier (primary key)
+
+           @param ident The unique identifier must be a combination
+                         of the dataset name, layer name and the mapset
+                         "name@mapset" or "name:layer@mapset"
+        """
+        self.ident = ident
+        self.D["id"] = ident
+
+    def set_registered_stds(self, registered_stds):
+        """!Get the comma separated list of space time datasets ids
+           in which this map is registered
+           @param registered_stds A comma separated list of space time dataset ids
+                                  in which this map is registered
+        """
+        self.D["registered_stds"] = registered_stds
+
+    def get_id(self):
+        """!Convenient method to get the unique identifier (primary key)
+
+           @return None if not found
+        """
+        if "id" in self.D:
+            return self.D["id"]
+        else:
+            return None
+
+    def get_registered_stds(self):
+        """!Get the comma separated list of space time datasets ids
+           in which this map is registered
+           @return None if not found"""
+        if "registered_stds" in self.D:
+            return self.D["registered_stds"]
+        else:
+            return None
+
+    # Properties of this class
+    id = property(fget=get_id, fset=set_id)
+    registered_stds = property(fget=get_registered_stds, fset=set_registered_stds)
+
+###############################################################################
+
+class RasterSTDSRegister(AbstractSTDSRegister):
+    """!Time stamped raster map base information class"""
+    def __init__(self, ident=None, registered_stds=None):
+        AbstractSTDSRegister.__init__(self, "raster_stds_register", ident, registered_stds)
+
+class Raster3DSTDSRegister(AbstractSTDSRegister):
+    """!Time stamped 3D raster map base information class"""
+    def __init__(self, ident=None, registered_stds=None):
+        AbstractSTDSRegister.__init__(self, "raster3d_stds_register", ident, registered_stds)
+
+class VectorSTDSRegister(AbstractSTDSRegister):
+    """!Time stamped vector map base information class"""
+    def __init__(self, ident=None, registered_stds=None):
+        AbstractSTDSRegister.__init__(self, "vector_stds_register", ident, registered_stds)
 
 ###############################################################################
 

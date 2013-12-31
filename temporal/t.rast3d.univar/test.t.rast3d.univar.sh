@@ -15,6 +15,7 @@ r3.mapcalc --o expr="prec_6 = rand(0, 650)"
 
 t.create --o type=str3ds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 t.register type=rast3d --v -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-15 12:05:45" increment="14 days"
+t.info type=str3ds input=precip_abs1
 
 # The first @test
 t.rast3d.univar -he input=precip_abs1 

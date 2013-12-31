@@ -49,3 +49,4 @@ UPDATE str3ds_metadata SET tbres_max =
        (SELECT max(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
     		(SELECT id FROM SPACETIME_NAME_raster3d_register)
        ) WHERE id = 'SPACETIME_ID';
+

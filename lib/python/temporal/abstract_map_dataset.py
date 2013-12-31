@@ -15,7 +15,6 @@ for details.
 from abstract_dataset import *
 from datetime_math import *
 
-
 class AbstractMapDataset(AbstractDataset):
     """!This is the base class for all maps (raster, vector, raster3d).
 
@@ -50,27 +49,6 @@ class AbstractMapDataset(AbstractDataset):
 
            @param ident The identifier of the space time dataset
            @return The new space time dataset instance
-        """
-
-    @abstractmethod
-    def get_stds_register(self):
-        """!Return the space time dataset register table name
-
-            Maps can be registered in several different space time datasets.
-            This method returns the name of the register table in the
-            temporal database.
-
-            @return The name of the stds register table
-        """
-
-    @abstractmethod
-    def set_stds_register(self, name):
-        """!Set the space time dataset register table name.
-
-           This table stores all space time datasets in
-           which this map is registered.
-
-           @param name The name of the register table
         """
 
     def check_resolution_with_current_region(self):
@@ -141,7 +119,7 @@ class AbstractMapDataset(AbstractDataset):
         start = ""
 
         if self.is_time_absolute():
-            start_time, end_time, tz = self.get_absolute_time()
+            start_time, end_time = self.get_absolute_time()
             start = datetime_to_grass_datetime_string(start_time)
             if end_time is not None:
                 end = datetime_to_grass_datetime_string(end_time)
@@ -212,6 +190,7 @@ class AbstractMapDataset(AbstractDataset):
         self.temporal_extent.print_self()
         self.spatial_extent.print_self()
         self.metadata.print_self()
+        self.stds_register.print_self()
 
     def print_info(self):
         """!Print information about this object in human readable style"""
@@ -244,9 +223,9 @@ class AbstractMapDataset(AbstractDataset):
                     string += "\n | ............................ "
                     count = 0
                 if count == 0:
-                    string += ds["id"]
+                    string += ds
                 else:
-                    string += ",%s" % ds["id"]
+                    string += ",%s" % ds
                 count += 1
         print " | Registered datasets ........ " + string
         print " +----------------------------------------------------------------------------+"
@@ -263,9 +242,9 @@ class AbstractMapDataset(AbstractDataset):
         if datasets is not None:
             for ds in datasets:
                 if count == 0:
-                    string += ds["id"]
+                    string += ds
                 else:
-                    string += ",%s" % ds["id"]
+                    string += ",%s" % ds
                 count += 1
             print "registered_datasets=" + string
 
@@ -278,7 +257,9 @@ class AbstractMapDataset(AbstractDataset):
 
            This functions assures that the timestamp is written to the
            grass file system based database in addition to the temporal
-           database entry.
+           database entry. The stds register table will be created as well.
+           Hence maps can only be registered in a space time dataset, when
+           they were inserted in the temporal database beforehand.
 
            @param dbif The database interface to be used
            @param execute If True the SQL statements will be executed.
@@ -287,8 +268,9 @@ class AbstractMapDataset(AbstractDataset):
            @return The SQL insert statement in case execute=False, or an
                    empty string otherwise
         """
-        self.write_timestamp_to_grass()
-        return AbstractDataset.insert(self, dbif, execute)
+        if get_enable_timestamp_write():
+            self.write_timestamp_to_grass()
+        return AbstractDataset.insert(self, dbif=dbif, execute=execute)
 
     def update(self, dbif=None, execute=True):
         """!Update the map content in the database from the internal structure
@@ -305,7 +287,8 @@ class AbstractMapDataset(AbstractDataset):
            @return The SQL insert statement in case execute=False, or an
                    empty string otherwise
         """
-        self.write_timestamp_to_grass()
+        if get_enable_timestamp_write():
+            self.write_timestamp_to_grass()
         return AbstractDataset.update(self, dbif, execute)
 
     def update_all(self, dbif=None, execute=True):
@@ -323,7 +306,8 @@ class AbstractMapDataset(AbstractDataset):
             @return The SQL insert statement in case execute=False, or an
                     empty string otherwise
         """
-        self.write_timestamp_to_grass()
+        if get_enable_timestamp_write():
+            self.write_timestamp_to_grass()
         return AbstractDataset.update_all(self, dbif, execute)
 
     def set_time_to_absolute(self):
@@ -334,7 +318,7 @@ class AbstractMapDataset(AbstractDataset):
         """!Set the temporal type to relative"""
         self.base.set_ttype("relative")
 
-    def set_absolute_time(self, start_time, end_time=None, timezone=None):
+    def set_absolute_time(self, start_time, end_time=None):
         """!Set the absolute time with start time and end time
 
             The end time is optional and must be set to None in case of time
@@ -347,7 +331,6 @@ class AbstractMapDataset(AbstractDataset):
                              map
            @param end_time a datetime object specifying the end time of the
                            map, None in case or time instance
-           @param timezone Thee timezone of the map (not used)
 
            @return True for success and False otherwise
         """
@@ -401,12 +384,10 @@ class AbstractMapDataset(AbstractDataset):
         self.base.set_ttype("absolute")
         self.absolute_time.set_start_time(start_time)
         self.absolute_time.set_end_time(end_time)
-        self.absolute_time.set_timezone(timezone)
 
         return True
 
-    def update_absolute_time(self, start_time, end_time=None,
-                             timezone=None, dbif=None):
+    def update_absolute_time(self, start_time, end_time=None, dbif=None):
         """!Update the absolute time
 
            The end time is optional and must be set to None in case of time
@@ -420,17 +401,16 @@ class AbstractMapDataset(AbstractDataset):
                   the map
            @param end_time a datetime object specifying the end time of the
                   map, None in case or time instance
-           @param timezone Thee timezone of the map (not used)
            @param dbif The database interface to be used
            """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
 
 
-        if self.set_absolute_time(start_time, end_time, timezone):
+        if self.set_absolute_time(start_time, end_time):
             dbif, connected = init_dbif(dbif)
             self.absolute_time.update_all(dbif)
             self.base.update(dbif)
@@ -438,7 +418,8 @@ class AbstractMapDataset(AbstractDataset):
             if connected:
                 dbif.close()
 
-            self.write_timestamp_to_grass()
+            if get_enable_timestamp_write():
+                self.write_timestamp_to_grass()
 
     def set_relative_time(self, start_time, end_time, unit):
         """!Set the relative time interval
@@ -514,7 +495,7 @@ class AbstractMapDataset(AbstractDataset):
            @param unit The relative time unit
            @param dbif The database interface to be used
         """
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -527,7 +508,8 @@ class AbstractMapDataset(AbstractDataset):
             if connected:
                 dbif.close()
 
-            self.write_timestamp_to_grass()
+            if get_enable_timestamp_write():
+                self.write_timestamp_to_grass()
 
     def set_temporal_extent(self, extent):
         """!Convenient method to set the temporal extent from a temporal extent object
@@ -550,11 +532,11 @@ class AbstractMapDataset(AbstractDataset):
            (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
 
            >>> map1 = tgis.VectorDataset("A@P")
-           >>> check = map1.set_absolute_time(datetime.datetime(2000,5,5), datetime.datetime(2005,6,6), None)
+           >>> check = map1.set_absolute_time(datetime.datetime(2000,5,5), datetime.datetime(2005,6,6))
            >>> print map1.get_temporal_extent_as_tuple()
            (datetime.datetime(2000, 5, 5, 0, 0), datetime.datetime(2005, 6, 6, 0, 0))
            >>> map2 = tgis.RasterDataset("B@P")
-           >>> check = map2.set_absolute_time(datetime.datetime(1990,1,1), datetime.datetime(1999,8,1), None)
+           >>> check = map2.set_absolute_time(datetime.datetime(1990,1,1), datetime.datetime(1999,8,1))
            >>> print map2.get_temporal_extent_as_tuple()
            (datetime.datetime(1990, 1, 1, 0, 0), datetime.datetime(1999, 8, 1, 0, 0))
            >>> map2.set_temporal_extent(map1.get_temporal_extent())
@@ -573,9 +555,8 @@ class AbstractMapDataset(AbstractDataset):
         elif issubclass(type(extent), AbsoluteTemporalExtent):
             start = extent.get_start_time()
             end = extent.get_end_time()
-            tz = extent.get_timezone()
 
-            self.set_absolute_time(start, end, tz)
+            self.set_absolute_time(start, end)
 
     def temporal_buffer(self, increment, update=False, dbif=None):
         """!Create a temporal buffer based on an increment
@@ -655,7 +636,7 @@ class AbstractMapDataset(AbstractDataset):
         """
 
         if self.is_time_absolute():
-            start, end, tz = self.get_absolute_time()
+            start, end = self.get_absolute_time()
 
             new_start = decrement_datetime_by_string(start, increment)
             if end == None:
@@ -664,9 +645,9 @@ class AbstractMapDataset(AbstractDataset):
                 new_end = increment_datetime_by_string(end, increment)
 
             if update:
-                self.update_absolute_time(new_start, new_end, tz, dbif=dbif)
+                self.update_absolute_time(new_start, new_end, dbif=dbif)
             else:
-                self.set_absolute_time(new_start, new_end, tz)
+                self.set_absolute_time(new_start, new_end)
         else:
             start, end, unit = self.get_relative_time()
             new_start = start - increment
@@ -774,7 +755,7 @@ class AbstractMapDataset(AbstractDataset):
     def check_for_correct_time(self):
         """!Check for correct time"""
         if self.is_time_absolute():
-            start, end, tz = self.get_absolute_time()
+            start, end= self.get_absolute_time()
         else:
             start, end, unit = self.get_relative_time()
 
@@ -820,7 +801,7 @@ class AbstractMapDataset(AbstractDataset):
            @return The SQL statements if execute=False, else an empty string,
                    None in case of a failure
         """
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -837,11 +818,6 @@ class AbstractMapDataset(AbstractDataset):
             statement += self.unregister(
                 dbif=dbif, update=update, execute=False)
 
-            # Remove the strds register table
-            if self.get_stds_register() is not None:
-                statement += "DROP TABLE IF EXISTS " + self.get_stds_register() + ";\n"
-
-
             self.msgr.verbose(_("Delete %s dataset <%s> from temporal database")
                          % (self.get_type(), self.get_id()))
 
@@ -851,6 +827,7 @@ class AbstractMapDataset(AbstractDataset):
 
         if execute:
             dbif.execute_transaction(statement)
+            statement = ""
 
         # Remove the timestamp from the file system
         self.remove_timestamp_from_grass()
@@ -859,9 +836,6 @@ class AbstractMapDataset(AbstractDataset):
 
         if connected:
             dbif.close()
-
-        if execute:
-            return ""
 
         return statement
 
@@ -883,16 +857,16 @@ class AbstractMapDataset(AbstractDataset):
 
 
         if self.get_layer() is not None:
-            self.msgr.debug(1, _("Unregister %(type)s map <%(map)s> with "
+            self.msgr.debug(1, "Unregister %(type)s map <%(map)s> with "
                            "layer %(layer)s from space time datasets" % \
                          {'type':self.get_type(), 'map':self.get_map_id(),
-                          'layer':self.get_layer()}))
+                          'layer':self.get_layer()})
         else:
-            self.msgr.debug(1, _("Unregister %(type)s map <%(map)s> "
+            self.msgr.debug(1, "Unregister %(type)s map <%(map)s> "
                            "from space time datasets"
-                         % {'type':self.get_type(), 'map':self.get_map_id()}))
+                         % {'type':self.get_type(), 'map':self.get_map_id()})
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -901,59 +875,143 @@ class AbstractMapDataset(AbstractDataset):
         dbif, connected = init_dbif(dbif)
 
         # Get all datasets in which this map is registered
-        rows = self.get_registered_datasets(dbif)
+        datasets = self.get_registered_datasets(dbif)
 
         # For each stds in which the map is registered
-        if rows is not None:
-            for row in rows:
-                # Create a space time dataset object to remove the map
-                # from its register
-                stds = self.get_new_stds_instance(row["id"])
-                stds.metadata.select(dbif)
-                statement += stds.unregister_map(self, dbif, False)
-                # Take care to update the space time dataset after
-                # the map has been unregistered
-                if update == True and execute == True:
-                    stds.update_from_registered_maps(dbif)
+        if datasets is not None:
+            for dataset in datasets:
+                    # Create a space time dataset object to remove the map
+                    # from its register
+                    stds = self.get_new_stds_instance(dataset)
+                    stds.metadata.select(dbif)
+                    statement += stds.unregister_map(self, dbif, False)
+                    # Take care to update the space time dataset after
+                    # the map has been unregistered
+                    if update == True and execute == True:
+                        stds.update_from_registered_maps(dbif)
 
         if execute:
             dbif.execute_transaction(statement)
+            statement = ""
 
         if connected:
             dbif.close()
-
-        if execute:
-            return ""
 
         return statement
 
     def get_registered_datasets(self, dbif=None):
         """!Return all space time dataset ids in which this map is registered
-           as dictionary like rows with column "id" or None if this map is not
+           as as a list of strings, or None if this map is not
            registered in any space time dataset.
 
            @param dbif The database interface to be used
-           @return The SQL rows with the ids of all space time datasets in
+           @return A list of ids of all space time datasets in
                    which this map is registered
         """
         dbif, connected = init_dbif(dbif)
 
-        rows = None
+        self.stds_register.select(dbif)
+        datasets = self.stds_register.get_registered_stds()
 
-        try:
-            if self.get_stds_register() is not None:
-                # Select all stds tables in which this map is registered
-                sql = "SELECT id FROM " + self.get_stds_register()
-                dbif.cursor.execute(sql)
-                rows = dbif.cursor.fetchall()
-        except:
-            self.msgr.error(_("Unable to select space time dataset register table "
-                         "<%s>") % (self.get_stds_register()))
+        if datasets is not None and datasets != "" and datasets.find("@") >= 0:
+            datasets = datasets.split(",")
+        else:
+            datasets = None
 
         if connected:
-            dbif.close()
+            dbif.close
 
-        return rows
+        return datasets
+
+    def add_dataset_to_register(self, stds_id, dbif=None, execute=True):
+        """!Add a new space time dataset to the register
+
+           @param stds_id The id of the space time dataset to be registered
+           @param dbif The database interface to be used
+           @param execute If True the SQL INSERT table statements
+                          will be executed.
+                          If False the prepared SQL statements are
+                          returned and must be executed by the caller.
+
+           @return The SQL statements if execute=False, else an empty string
+        """
+        dbif, connected = init_dbif(dbif=dbif)
+
+        datasets = self.get_registered_datasets(dbif=dbif)
+
+        if stds_id is None or stds_id == "":
+            return ""
+
+        # Check if no datasets are present
+        if datasets is None:
+            datasets = []
+
+        # Check if the dataset is already present
+        if stds_id in datasets:
+            if connected:
+                dbif.close
+            return ""
+
+        datasets.append(stds_id)
+
+        self.stds_register.set_registered_stds(",".join(datasets))
+
+        statement = ""
+
+        if execute is True:
+            self.stds_register.update(dbif=dbif)
+        else:
+            statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
+
+        if connected:
+            dbif.close
+
+        return statement
+
+
+    def remove_dataset_from_register(self, stds_id, dbif=None, execute=True):
+        """!Remove a space time dataset from the register
+
+           @param stds_id The id of the space time dataset to removed from the registered
+           @param dbif The database interface to be used
+           @param execute If True the SQL INSERT table statements
+                          will be executed.
+                          If False the prepared SQL statements are
+                          returned and must be executed by the caller.
+
+           @return The SQL statements if execute=False, else an empty string
+        """
+        dbif, connected = init_dbif(dbif)
+
+        datasets = self.get_registered_datasets(dbif=dbif)
+
+        # Check if no datasets are present
+        if datasets is None:
+            if connected:
+                dbif.close
+            return ""
+
+        # Check if the dataset is already present
+        if stds_id not in datasets:
+            if connected:
+                dbif.close
+            return ""
+
+        datasets.remove(stds_id)
+
+        self.stds_register.set_registered_stds(",".join(datasets))
+
+        statement = ""
+
+        if execute is True:
+            self.stds_register.update(dbif=dbif)
+        else:
+            statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
+
+        if connected:
+            dbif.close
+
+        return statement
 
 ###############################################################################
 

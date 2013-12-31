@@ -15,6 +15,12 @@ from datetime import datetime, date, time, timedelta
 from core import *
 import copy
 
+try:
+    import dateutil.parser as parser
+    has_dateutil = True
+except:
+    has_dateutil = False
+
 DAY_IN_SECONDS = 86400
 SECOND_AS_DAY = 1.1574074074074073e-05
 
@@ -708,6 +714,24 @@ def check_datetime_string(time_string):
         @return datetime object or an error message string in case of an error
     """
 
+    global has_dateutil
+        
+    if has_dateutil:
+        # First check if there is only a single number, which specifies relative time.
+        # dateutil will interprete a single number as a valid time string, so we have
+        # to catch this case beforehand
+        try:
+            value = int(time_string)
+            return _("Time string seems to specify relative time")
+        except ValueError:
+            pass
+        
+        try:
+            time_object = parser.parse(time_string)
+        except Exception as inst:
+            time_object = str(inst)
+        return time_object
+        
     # BC is not supported
     if time_string.find("bc") > 0:
         return _("Dates Before Christ are not supported")
@@ -732,11 +756,13 @@ def check_datetime_string(time_string):
 def string_to_datetime(time_string):
     """!Convert a string into a datetime object
 
-        Supported ISO string formats are:
+        In case datutil is not installed the supported ISO string formats are:
         - YYYY-mm-dd
         - YYYY-mm-dd HH:MM:SS
-
-        Time zones are not supported
+        - Time zones are not supported
+        
+        If dateutil is installed, all string formats of the dateutil module
+        are supported, as well as time zones
 
         @param time_string The time string to convert
         @return datetime object or None in case the string 
@@ -754,23 +780,47 @@ def string_to_datetime(time_string):
 
     return time_object
 
-
-
 ###############################################################################
 
 
 def datetime_to_grass_datetime_string(dt):
-    """!Convert a python datetime object into a GRASS datetime string"""
-
+    """!Convert a python datetime object into a GRASS datetime string
+    
+    @code
+    
+    >>> import grass.temporal as tgis
+    >>> import dateutil.parser as parser
+    >>> dt = parser.parse("2011-01-01 10:00:00 +01:30")
+    >>> tgis.datetime_to_grass_datetime_string(dt)
+    '01 jan 2011 10:00:00 +0090'
+    >>> dt = parser.parse("2011-01-01 10:00:00 +02:30")
+    >>> tgis.datetime_to_grass_datetime_string(dt)
+    '01 jan 2011 10:00:00 +0150'
+    >>> dt = parser.parse("2011-01-01 10:00:00 +12:00")
+    >>> tgis.datetime_to_grass_datetime_string(dt)
+    '01 jan 2011 10:00:00 +0720'
+    >>> dt = parser.parse("2011-01-01 10:00:00 -01:30")
+    >>> tgis.datetime_to_grass_datetime_string(dt)
+    '01 jan 2011 10:00:00 -0090'
+    
+    @endcode
+    """
     # GRASS datetime month names
     month_names = ["", "jan", "feb", "mar", "apr", "may", "jun",
                    "jul", "aug", "sep", "oct", "nov", "dec"]
 
     # Check for time zone info in the datetime object
     if dt.tzinfo is not None:
+        
+        tz = dt.tzinfo.utcoffset(0)
+        if tz.seconds > 86400 / 2:
+            tz = (tz.seconds - 86400) / 60
+        else:
+            tz = tz.seconds/60
+            
         string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i" % (dt.day,
                  month_names[dt.month], dt.year,
-                 dt.hour, dt.minute, dt.second, dt.tzinfo._offset.seconds / 60)
+                 dt.hour, dt.minute, dt.second, tz)
     else:
         string = "%.2i %s %.4i %.2i:%.2i:%.2i" % (dt.day, month_names[
             dt.month], dt.year, dt.hour, dt.minute, dt.second)

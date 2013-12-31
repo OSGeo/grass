@@ -238,8 +238,8 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
             # Set the time stamp
             if sample_map_list[i].is_time_absolute():
-                start, end, tz = sample_map_list[i].get_absolute_time()
-                new_map.set_absolute_time(start, end, tz)
+                start, end = sample_map_list[i].get_absolute_time()
+                new_map.set_absolute_time(start, end)
             else:
                 start, end, unit = sample_map_list[i].get_relative_time()
                 new_map.set_relative_time(start, end, unit)
@@ -422,7 +422,7 @@ def _parse_start_operators(expr, is_time_absolute, current):
        * start_second() - The second of the start time [0 - 59]
     """
 
-    start, end, tz = current.get_absolute_time()
+    start, end = current.get_absolute_time()
     msgr = get_tgis_message_interface()
 
     if expr.find("start_year()") >= 0:
@@ -505,7 +505,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
        null()
     """
 
-    start, end, tz = current.get_absolute_time()
+    start, end = current.get_absolute_time()
     msgr = get_tgis_message_interface()
 
     if expr.find("end_year()") >= 0:
@@ -608,7 +608,7 @@ def _parse_td_operator(expr, is_time_absolute, first, current):
     if expr.find("td()") >= 0:
         td = "null()"
         if is_time_absolute:
-            start, end, tz = current.get_absolute_time()
+            start, end = current.get_absolute_time()
             if end != None:
                 td = time_delta_to_relative_time(end - start)
         else:
@@ -630,8 +630,8 @@ def _parse_start_time_operator(expr, is_time_absolute, first, current):
     time, and in relative units in case of relative time."""
     if expr.find("start_time()") >= 0:
         if is_time_absolute:
-            start1, end, tz = first.get_absolute_time()
-            start, end, tz = current.get_absolute_time()
+            start1, end = first.get_absolute_time()
+            start, end = current.get_absolute_time()
             x = time_delta_to_relative_time(start - start1)
         else:
             start1, end, unit = first.get_relative_time()
@@ -656,8 +656,8 @@ def _parse_end_time_operator(expr, is_time_absolute, first, current):
     if expr.find("end_time()") >= 0:
         x = "null()"
         if is_time_absolute:
-            start1, end, tz = first.get_absolute_time()
-            start, end, tz = current.get_absolute_time()
+            start1, end = first.get_absolute_time()
+            start, end = current.get_absolute_time()
             if end:
                 x = time_delta_to_relative_time(end - start1)
         else:

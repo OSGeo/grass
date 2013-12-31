@@ -34,7 +34,13 @@ for details.
 
 @author Soeren Gebbert
 """
+import sys, traceback
 import os
+import locale
+# i18N
+import gettext
+gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
+
 import grass.script.core as core
 from datetime import datetime
 from c_libraries_interface import *
@@ -51,8 +57,25 @@ try:
 except:
     pass
 
-# Uncomment this to raise and exception in case of a fatal error
-# core.set_raise_on_error(True)
+###############################################################################
+
+# Profiling function provided by the temporal framework
+def profile_function(func):
+    do_profiling = os.getenv("GRASS_TGIS_PROFILE")
+    
+    if do_profiling is not None:
+        import cProfile, pstats, StringIO
+        pr = cProfile.Profile()
+        pr.enable()
+        func()
+        pr.disable()
+        s = StringIO.StringIO()
+        sortby = 'cumulative'
+        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        ps.print_stats()
+        print s.getvalue()
+    else:
+        func()
 
 # Global variable that defines the backend
 # of the temporal GIS
@@ -62,12 +85,12 @@ tgis_backend = None
 # The version of the temporal framework
 # this value must be an integer larger than 0
 # Increase this value in case of backward incompatible changes in the TGIS API
-tgis_version=1
+tgis_version=2
 # The version of the temporal database since framework and database version can differ
 # this value must be an integer larger than 0
 # Increase this value in case of backward incompatible changes
 # temporal database SQL layout
-tgis_db_version=1
+tgis_db_version=2
 
 # We need to access the current mapset quite often in the framework, so we make
 # global variable that will be initiated when init() is called
@@ -98,6 +121,54 @@ def _set_current_mapset(mapset=None):
         mapset = core.gisenv()["MAPSET"]
 
     current_mapset = mapset
+
+###############################################################################
+
+# If this global variable is set True, then maps can only be registered in space time datasets
+# with the same mapset. In addition, only maps in the current mapset can be inserted, updated or deleted from
+# the temporal database. 
+# Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_MAPSET_CHECK=True"
+# ATTENTION: Be aware to face corrupted temporal database in case this global variable is set to False.
+#            This feature is highly experimental and violates the grass permission guidance.
+enable_mapset_check = True
+# If this global variable is set True, the timestamps of maps will be written as textfiles
+# for each map that will be inserted or updated in the temporal database using the C-library 
+# timestamp interface.
+# Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_TIMESTAMP_WRITE=True"
+# ATTENTION: Be aware to face corrupted temporal database in case this global variable is set to False.
+#            This feature is highly experimental and violates the grass permission guidance.
+enable_timestamp_write = True
+
+def get_enable_mapset_check():
+    """!Return True if the mapsets should be checked while insert, updatem delete requests
+       and space time dataset registration.
+       
+       If this global variable is set True, then maps can only be registered in space time datasets
+       with the same mapset. In addition, only maps in the current mapset can be inserted, updated or deleted from
+       the temporal database. 
+       Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_MAPSET_CHECK=True"
+       
+       ATTENTION: Be aware to face corrupted temporal database in case this global variable is set to False.
+                  This feature is highly experimental and violates the grass permission guidance.
+    """
+    global enable_mapset_check
+    return enable_mapset_check
+    
+def get_enable_timestamp_write():
+    """!Return True if the map timestamps should be written to the spatial database metadata as well.
+    
+       If this global variable is set True, the timestamps of maps will be written as textfiles
+       for each map that will be inserted or updated in the temporal database using the C-library 
+       timestamp interface.
+       Overwrite this global variable by: g.gisenv set="TGIS_DISABLE_TIMESTAMP_WRITE=True"
+       
+       ATTENTION: Be aware that C-libraries can not access timestamp informations if they are not
+                  written as spatial database metadata, hence modules that make use of timestamps 
+                  using the C-library interface will not work with maps that were created without 
+                  writing the timestamps.
+    """
+    global enable_timestamp_write
+    return enable_timestamp_write
 
 ###############################################################################
 
@@ -159,6 +230,15 @@ def get_tgis_version():
 
 ###############################################################################
 
+def get_tgis_db_version():
+    """!Get the verion number of the temporal framework
+       @return The version number of the temporal framework as string
+    """
+    global tgis_db_version
+    return tgis_db_version
+
+###############################################################################
+
 def get_tgis_metadata(dbif=None):
     """!Return the tgis metadata table as a list of rows (dicts)
                or None if not present
@@ -190,6 +270,9 @@ def get_temporal_dbmi_init_string(kv=None, grassenv=None):
        @param kv dictionary generated by grass.script.parse_command("t.connect", flags="pg")
        @param grassenv Grass environemntal variables created by grass.script.gisenv()
     """
+
+    global temporal_dbmi_init_string
+
     if kv == None:
         kv = core.parse_command("t.connect", flags="pg")
     if grassenv == None:
@@ -207,6 +290,7 @@ def get_temporal_dbmi_init_string(kv=None, grassenv=None):
             string = string.replace(
                 "$LOCATION_NAME", grassenv["LOCATION_NAME"])
             string = string.replace("$MAPSET", grassenv["MAPSET"])
+            temporal_dbmi_init_string = string
             return string
         else:
             msgr.fatal(_("Unable to initialize the temporal GIS DBMI "
@@ -215,6 +299,7 @@ def get_temporal_dbmi_init_string(kv=None, grassenv=None):
     elif tgis_backend == "pg":
         if "database" in kv:
             string = kv["database"]
+            temporal_dbmi_init_string = string
             return string
     else:
         msgr.fatal(_("Unable to initialize the temporal GIS DBMI "
@@ -230,34 +315,64 @@ def get_sql_template_path():
 
 ###############################################################################
 
-def init(raise_on_error=False):
-    """!This function set the correct database backend from the environmental variables
+def init():
+    """!This function set the correct database backend from GRASS environmental variables
        and creates the grass location database structure for raster,
        vector and raster3d maps as well as for the space-time datasets strds,
-       str3ds and stvds in case it not exists.
+       str3ds and stvds in case it does not exists.
+       
+       Several global variables are initiated and the messenger and C-library interface
+       subprocesses are spawned.
+       
+       The following g.gisenv variables are checked:
+        - TGIS_RAISE_ON_ERROR
+        - TGIS_DISABLE_MAPSET_CHECK
+        - TGIS_DISABLE_TIMESTAMP_WRITE
+        
+       The following environmental variables are checked:
+        - GRASS_TGIS_PROFILE
 
         ATTENTION: This functions must be called before any spatio-temporal processing
                    can be started
-
-       @param raise_on_error If True raise a FatalError exception in case of a fatal error,
-                             call sys.exit(1) otherwise
-
     """
     # We need to set the correct database backend from the environment variables
     global tgis_backend
-
+    global enable_mapset_check
+    global enable_timestamp_write
+    
     core.run_command("t.connect", flags="c")
     kv = core.parse_command("t.connect", flags="pg")
     grassenv = core.gisenv()
+    raise_on_error = False
 
+    # Check the g.gisenv variable TGIS_RAISE_ON_ERROR
+    if grassenv.has_key("TGIS_RAISE_ON_ERROR"):
+        if grassenv["TGIS_RAISE_ON_ERROR"] == "True" or grassenv["TGIS_RAISE_ON_ERROR"] == "1":
+            raise_on_error = True
+            
     # Set the global variable current_mapset for fast mapset access
     _set_current_mapset(grassenv["MAPSET"])
     # Start the GRASS message interface server
     _init_tgis_message_interface(raise_on_error)
     # Start the C-library interface server
     _init_tgis_c_library_interface()
-
+    
     msgr = get_tgis_message_interface()
+    msgr.debug(1, "Inititate the temporal database")
+    
+    if raise_on_error is True:
+        msgr.warning("TGIS_RAISE_ON_ERROR is True")
+
+    # Set the mapset check and the timestamp write
+    if grassenv.has_key("TGIS_DISABLE_MAPSET_CHECK"):
+        if grassenv["TGIS_DISABLE_MAPSET_CHECK"] == "True" or grassenv["TGIS_DISABLE_MAPSET_CHECK"] == "1":
+            enable_mapset_check = False
+            msgr.warning("TGIS_DISABLE_MAPSET_CHECK is True")
+
+    if grassenv.has_key("TGIS_DISABLE_TIMESTAMP_WRITE"):
+        if grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"] == "True" or grassenv["TGIS_DISABLE_TIMESTAMP_WRITE"] == "1":
+            enable_timestamp_write = False
+            msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
 
     if "driver" in kv:
         if kv["driver"] == "sqlite":
@@ -309,35 +424,24 @@ def init(raise_on_error=False):
         if dbif.cursor.fetchone()[0]:
             db_exists = True
 
-    if db_exists:
-        # Check if we have to add the command column
-        add_command_col = True
-        rows = get_tgis_metadata(dbif)
-        if rows:
-            for row in rows:
-                if row["key"] == "tgis_db_version":
-                    version = int(row["value"])
-                    if version >= 1:
-                        add_command_col = False
-
-        if add_command_col:
-            # Try to add the command column to the space time dataset metadata tables
-            # this is due backward compatibility with old databases
-            try:
-                dbif.cursor.execute('ALTER TABLE strds_metadata ADD COLUMN command VARCHAR;')
-            except:
-                pass
-            try:
-                dbif.cursor.execute('ALTER TABLE str3ds_metadata ADD COLUMN command VARCHAR;')
-            except:
-                pass
-            try:
-                dbif.cursor.execute('ALTER TABLE stvds_metadata ADD COLUMN command VARCHAR;')
-            except:
-                pass
-
     if db_exists == True:
+        
+        # Check the version of the temporal database
+        # This version works only with database of version 2
         dbif.close()
+        dbif.connect()
+        metadata = get_tgis_metadata(dbif)
+        dbif.close()
+        if metadata is None:
+            msgr.fatal(_("Unable to receiving temporal database metadata. Your temporal database is not supported."))
+        
+        for entry in metadata:
+            if "tgis_version" in entry and entry[1] != str(get_tgis_version()):
+                msgr.fatal(_("Unsupported temporal database. Version mismatch.\n"
+                "Supported temporal API version is: %(api)i")%({"api":get_tgis_version()}))
+            if "tgis_db_version" in entry and entry[1] != str(get_tgis_db_version()):
+                msgr.fatal(_("Unsupported temporal database. Version mismatch.\n"
+                "Supported temporal database version is: %(tdb)i")%( {"tdb":get_tgis_db_version()}))
         return
 
     create_temporal_database(dbif, database)
@@ -415,10 +519,19 @@ def create_temporal_database(dbif, database):
         tgis_dir = os.path.dirname(database)
         if not os.path.exists(tgis_dir):
             os.makedirs(tgis_dir)
-        # Sqlite needs some trigger to emulate the foreign keys
-        sqlite3_delete_trigger_sql = open(os.path.join(template_path,
-                                                       "sqlite3_delete_trigger.sql"),
-                                                       'r').read()
+        # Set up the trigger that takes care of
+        # the correct deletion of entries across the different tables
+        delete_trigger_sql = open(os.path.join(template_path,
+                                               "sqlite3_delete_trigger.sql"),
+                                               'r').read()
+        indexes_sql = open(os.path.join(template_path, "sqlite3_indexes.sql"), 'r').read()
+    else:
+        # Set up the trigger that takes care of
+        # the correct deletion of entries across the different tables
+        delete_trigger_sql = open(os.path.join(template_path,
+                                            "postgresql_delete_trigger.sql"),
+                                            'r').read()
+        indexes_sql = open(os.path.join(template_path, "postgresql_indexes.sql"), 'r').read()
 
     # Connect now to the database
     if not dbif.connected:
@@ -446,8 +559,10 @@ def create_temporal_database(dbif, database):
     dbif.execute_transaction(str3ds_metadata_sql)
     dbif.execute_transaction(str3ds_views_sql)
 
-    if tgis_backend == "sqlite":
-        dbif.execute_transaction(sqlite3_delete_trigger_sql)
+    # The delete trigger
+    dbif.execute_transaction(delete_trigger_sql)
+    # The indexes
+    dbif.execute_transaction(indexes_sql)
 
     # Create the tgis metadata table to store the database
     # initial configuration
@@ -455,7 +570,6 @@ def create_temporal_database(dbif, database):
     metadata = {}
     metadata["tgis_version"] = tgis_version
     metadata["tgis_db_version"] = tgis_db_version
-    metadata["has_command_column"] = True
     metadata["creation_time"] = datetime.today()
     _create_tgis_metadata_table(metadata, dbif)
 
@@ -502,7 +616,7 @@ class SQLDatabaseInterfaceConnection():
         else:
             self.dbmi = psycopg2
 
-        msgr = get_tgis_message_interface()
+        self.msgr = get_tgis_message_interface()
 
     def rollback(self):
         """
@@ -521,7 +635,6 @@ class SQLDatabaseInterfaceConnection():
            Supported backends are sqlite3 and postgresql
         """
         self.database = get_temporal_dbmi_init_string()
-        #print "Connect to",  self.database
         if self.dbmi.__name__ == "sqlite3":
             self.connection = self.dbmi.connect(self.database,
                     detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
@@ -680,8 +793,7 @@ class SQLDatabaseInterfaceConnection():
         except:
             if connected:
                 self.close()
-            msgr.error(_("Unable to execute transaction:\n %(sql)s" % \
-                         {"sql":statement}))
+            self.msgr.error(_("Unable to execute transaction:\n %(sql)s" % {"sql":statement}))
             raise
 
         if connected:

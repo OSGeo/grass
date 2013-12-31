@@ -105,11 +105,6 @@ def main():
                                 method=method)
 
         if ret == 0 and not add_time:
-            if sp.is_time_absolute():
-                start_time, end_time, tz = sp.get_absolute_time()
-            else:
-                start_time, end_time, unit = sp.get_relative_time()
-
             # Create the time range for the output map
             if output.find("@") >= 0:
                 id = output
@@ -119,11 +114,7 @@ def main():
 
             map = sp.get_new_map_instance(id)
             map.load()
-
-            if sp.is_time_absolute():
-                map.set_absolute_time(start_time, end_time, tz)
-            else:
-                map.set_relative_time(start_time, end_time, unit)
+            map.set_temporal_extent(sp.get_temporal_extent())
 
             # Register the map in the temporal database
             if map.is_in_db():

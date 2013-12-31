@@ -148,6 +148,13 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         """
 
     @abstractmethod
+    def is_stds(self):
+        """!Return True if this class is a space time dataset
+
+           @return True if this class is a space time dataset, False otherwise
+        """
+
+    @abstractmethod
     def get_type(self):
         """!Return the type of this class as string
 
@@ -224,6 +231,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         self.temporal_extent.set_id(ident)
         self.spatial_extent.set_id(ident)
         self.metadata.set_id(ident)
+        if self.is_stds() is False:
+            self.stds_register.set_id(ident)
 
     def get_id(self):
         """!Return the unique identifier of the dataset
@@ -257,23 +266,20 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
     def get_absolute_time(self):
         """!Returns the start time, the end
-           time and the timezone of the map as tuple
-
-           @attention: The timezone is currently not used.
+           time of the map as tuple
 
            The start time is of type datetime.
 
            The end time is of type datetime in case of interval time,
            or None on case of a time instance.
 
-           @return A tuple of (start_time, end_time, timezone)
+           @return A tuple of (start_time, end_time)
         """
 
         start = self.absolute_time.get_start_time()
         end = self.absolute_time.get_end_time()
-        tz = self.absolute_time.get_timezone()
 
-        return (start, end, tz)
+        return (start, end)
 
     def get_relative_time(self):
         """!Returns the start time, the end
@@ -353,6 +359,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         self.temporal_extent.select(dbif)
         self.spatial_extent.select(dbif)
         self.metadata.select(dbif)
+        if self.is_stds() is False:
+            self.stds_register.select(dbif)
 
         if connected:
             dbif.close()
@@ -379,7 +387,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
             @return The SQL insert statement in case execute=False, or an empty string otherwise
         """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -391,6 +399,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         statement += self.temporal_extent.get_insert_statement_mogrified(dbif)
         statement += self.spatial_extent.get_insert_statement_mogrified(dbif)
         statement += self.metadata.get_insert_statement_mogrified(dbif)
+        if self.is_stds() is False:
+            statement += self.stds_register.get_insert_statement_mogrified(dbif)
 
         if execute:
             dbif.execute_transaction(statement)
@@ -414,7 +424,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            @return The SQL update statement in case execute=False, or an empty string otherwise
         """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                                  {"ds":self.get_id(), "type":self.get_type()})
@@ -429,6 +439,9 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         statement += self.spatial_extent.get_update_statement_mogrified(dbif,
                                                                         ident)
         statement += self.metadata.get_update_statement_mogrified(dbif, ident)
+
+        if self.is_stds() is False:
+            statement += self.stds_register.get_update_statement_mogrified(dbif, ident)
 
         if execute:
             dbif.execute_transaction(statement)
@@ -452,7 +465,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
            @return The SQL update statement in case execute=False, or an empty string otherwise
         """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -466,6 +479,9 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         statement += self.spatial_extent.get_update_all_statement_mogrified(
             dbif, ident)
         statement += self.metadata.get_update_all_statement_mogrified(dbif, ident)
+
+        if self.is_stds() is False:
+            statement += self.stds_register.get_update_all_statement_mogrified(dbif, ident)
 
         if execute:
             dbif.execute_transaction(statement)

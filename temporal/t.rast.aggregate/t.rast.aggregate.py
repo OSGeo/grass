@@ -126,7 +126,7 @@ def main():
             if new_map:
                 # Set the time stamp and write it to the raster map
                 if sp.is_time_absolute():
-                    new_map.set_absolute_time(start, end, None)
+                    new_map.set_absolute_time(start, end)
                 else:
                     new_map.set_relative_time(start,
                                               end, sp.get_relative_time_unit())
@@ -138,6 +138,8 @@ def main():
                 count += 1
 
     # Update the spatio-temporal extent and the raster metadata table entries
+    new_sp.set_aggregation_type(method)
+    new_sp.metadata.update(dbif)
     new_sp.update_from_registered_maps(dbif)
 
     dbif.close()

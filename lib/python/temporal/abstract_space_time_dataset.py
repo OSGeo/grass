@@ -125,7 +125,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
         self.metadata.print_history()
 
-    def set_initial_values(self, temporal_type, semantic_type,
+    def set_initial_values(self, temporal_type, semantic_type=None,
                            title=None, description=None):
         """!Set the initial values of the space time dataset
 
@@ -156,6 +156,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.metadata.set_title(title)
         self.metadata.set_description(description)
         self.metadata.set_command(self.create_command_string())
+
+    def set_aggregation_type(self, aggregation_type):
+        """!Set the aggregation type of the space time dataset
+
+           @param aggregation_type The aggregation type of the space time dataset
+        """
+        self.metadata.set_aggregation_type(aggregation_type)
 
     def update_command_string(self, dbif=None):
         """!Append the current command string to any existing command string
@@ -296,6 +303,70 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 self.msgr.fatal(_("Unsupported temporal unit: %s") % (unit))
             self.relative_time.set_unit(unit)
 
+    def insert(self, dbif=None, execute=True):
+        """!Insert the space time dataset content into the database from the internal
+           structure
+
+           The map register table will be created, so that maps
+           can be registered.
+
+           @param dbif The database interface to be used
+           @param execute If True the SQL statements will be executed.
+                          If False the prepared SQL statements are
+                          returned and must be executed by the caller.
+           @return The SQL insert statement in case execute=False, or an
+                   empty string otherwise
+        """
+
+        dbif, connected = init_dbif(dbif)
+
+        # We need to create the register table if it does not exists
+        stds_register_table = self.get_map_register()
+
+        # Create the map register table
+        sql_path = get_sql_template_path()
+        statement = ""
+
+        # We need to create the map register table
+        if stds_register_table is None:
+            # Create table name
+            stds_register_table = self.create_map_register_name()
+            # Assure that the table and index do not exist
+            #dbif.execute_transaction("DROP INDEX IF EXISTS %s; DROP TABLE IF EXISTS   %s;"%(stds_register_table + "_index", stds_register_table))
+
+            # Read the SQL template
+            sql = open(os.path.join(sql_path,
+                                    "stds_map_register_table_template.sql"),
+                                    'r').read()
+            map_type = self.get_new_map_instance(None).get_type()
+            stds_name = self.get_name() + "_" + self.get_mapset()
+
+            # Create a raster, raster3d or vector tables
+            sql = sql.replace("GRASS_MAP", map_type)
+            sql = sql.replace("SPACETIME_NAME", stds_name)
+            statement += sql
+
+            if dbif.dbmi.__name__ == "sqlite3":
+                statement += "CREATE INDEX %s_index ON %s (id);"%(stds_register_table, stds_register_table)
+
+            # Set the map register table name
+            self.set_map_register(stds_register_table)
+
+            self.msgr.debug(1, _("Created register table <%s> for space "
+                           "time %s  dataset <%s>") %
+                          (stds_register_table, self.get_new_map_instance(None).get_type(), self.get_id()))
+
+        statement += AbstractDataset.insert(self, dbif=dbif, execute=False)
+
+        if execute:
+            dbif.execute_transaction(statement)
+            statement = ""
+
+        if connected:
+            dbif.close()
+
+        return statement
+
     def get_map_time(self):
         """!Return the type of the map time, interval, point, mixed or invalid
         """
@@ -329,7 +400,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         for i in range(len(maps)):
             # Check for point and interval data
             if maps[i].is_time_absolute():
-                start, end, tz = maps[i].get_absolute_time()
+                start, end = maps[i].get_absolute_time()
             if maps[i].is_time_relative():
                 start, end, unit = maps[i].get_relative_time()
 
@@ -1131,7 +1202,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             map = first.get_new_instance(None)
             map.set_spatial_extent_from_values(0,0,0,0,0,0)
             if first.is_time_absolute():
-                map.set_absolute_time(start, next, None)
+                map.set_absolute_time(start, next)
             else:
                 map.set_relative_time(start, next, first.get_relative_time_unit())
 
@@ -1495,7 +1566,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                    granularity
 
         """
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database."
             " The mapset of the dataset does not match the current mapset")%\
             ({"ds":self.get_id()}, {"type":self.get_type()}))
@@ -1662,7 +1733,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database."
             " The mapset of the dataset does not match the current mapset")%\
             ({"ds":self.get_id()}, {"type":self.get_type()}))
@@ -1738,7 +1809,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             datasets = map.get_registered_datasets(dbif)
             if datasets:
                 for dataset in datasets:
-                    datatsets_to_modify[dataset["id"]] = dataset["id"]
+                    datatsets_to_modify[dataset] = dataset
 
         self.update_from_registered_maps(dbif)
 
@@ -1762,12 +1833,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            @param dbif The database interface to be used
         """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database."
             " The mapset of the dataset does not match the current mapset")%\
             ({"ds":self.get_id()}, {"type":self.get_type()}))
 
         dbif, connected = init_dbif(dbif)
+
+        if dbif.dbmi.__name__ != "sqlite3":
+            self.msgr.fatal(_("Renaming of space time datasets is not supported for PostgreSQL."))
 
         # SELECT all needed information from the database
         self.select(dbif)
@@ -1790,16 +1864,22 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Get the update statement, we update the table entry of the old
         # identifier
         statement = self.update(dbif, execute=False, ident=old_ident)
+
         # We need to rename the raster register table
-        statement += "ALTER TABLE %s RENAME TO \"%s\";\n" % \
-                     (old_map_register_table, new_map_register_table)
+        statement += "ALTER TABLE %s RENAME TO \"%s\";\n" % (old_map_register_table, 
+                                                             new_map_register_table)
+
+        # We need to take care of the stds index in the sqlite3 database
+        if dbif.dbmi.__name__ == "sqlite3":
+            statement += "DROP INDEX %s_index;\n" % (old_map_register_table)
+            statement += "CREATE INDEX %s_index ON %s (id);"%(new_map_register_table, 
+                                                              new_map_register_table)
 
         # We need to rename the space time dataset in the maps register table
         if maps:
             for map in maps:
-                map.select()
-                statement += "UPDATE %s SET id = \"%s\" WHERE id = \"%s\";\n"%\
-                             (map.get_stds_register(), ident, old_ident)
+                map.remove_dataset_from_register(stds_id=old_ident, dbif=dbif)
+                map.add_dataset_to_register(stds_id=ident, dbif=dbif)
 
         # Execute the accumulated statements
         dbif.execute_transaction(statement)
@@ -1829,7 +1909,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     (self.get_new_map_instance(ident=None).get_type(),
                      self.get_id()))
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -1871,6 +1951,42 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return statement
 
+    def is_map_registered(self, map_id, dbif=None):
+        """!Check if a map is registered in the space time dataset
+        
+           @param map_id The map id
+           @param dbif The database interface to be used
+           @return True if success, False otherwise
+        """
+        stds_register_table = self.get_map_register()
+        
+        dbif, connected = init_dbif(dbif)
+        
+        is_registered = False
+        
+        # Check if map is already registered
+        if stds_register_table is not None:
+            if dbif.dbmi.paramstyle == "qmark":
+                sql = "SELECT id FROM " + \
+                    stds_register_table + " WHERE id = (?)"
+            else:
+                sql = "SELECT id FROM " + \
+                    stds_register_table + " WHERE id = (%s)"
+            try:
+                dbif.cursor.execute(sql, (map_id,))
+                row = dbif.cursor.fetchone()
+            except:
+                self.msgr.warning(_("Error in register table request"))
+                raise
+            
+            if row is not None and row[0] == map_id:
+                is_registered = True
+                
+        if connected == True:
+            dbif.close()
+
+        return is_registered
+        
     def register_map(self, map, dbif=None):
         """!Register a map in the space time dataset.
 
@@ -1880,14 +1996,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             In case the map is already registered this function
             will break with a warning and return False.
 
-            This method raises a ScriptError in case of a fatal error
+            This method raises a FatalError exception in case of a fatal error
 
            @param map The AbstractMapDataset object that should be registered
            @param dbif The database interface to be used
            @return True if success, False otherwise
         """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to register map in dataset <%(ds)s> of type %(type)s."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -1896,19 +2012,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if map.is_in_db(dbif) == False:
             dbif.close()
-            self.msgr.fatal(_("Only maps with absolute or relative valid time can "
-                         "be registered"))
+            self.msgr.fatal(_("Only a map that was inserted in the temporal database"
+                              " can be registered in a space time dataset"))
 
         if map.get_layer():
-            self.msgr.verbose(_("Register %s map <%s> with layer %s in space "
-                           "time %s dataset <%s>") % (map.get_type(),
-                                                      map.get_map_id(),
-                                                      map.get_layer(),
-                                                      map.get_type(),
-                                                      self.get_id()))
+            self.msgr.debug(1, "Register %s map <%s> with layer %s in space "
+                           "time %s dataset <%s>" % (map.get_type(),
+                                                     map.get_map_id(),
+                                                     map.get_layer(),
+                                                     map.get_type(),
+                                                     self.get_id()))
         else:
-            self.msgr.verbose(_("Register %s map <%s> in space time %s "
-                           "dataset <%s>") % (map.get_type(), map.get_map_id(),
+            self.msgr.debug(1, "Register %s map <%s> in space time %s "
+                           "dataset <%s>" % (map.get_type(), map.get_map_id(),
                                               map.get_type(), self.get_id()))
 
         # First select all data from the database
@@ -1921,17 +2037,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             else:
                 self.msgr.fatal(_("Map <%s> has invalid time") % (map.get_map_id()))
 
+        # Get basic info
         map_id = map.base.get_id()
-        map_name = map.base.get_name()
         map_mapset = map.base.get_mapset()
-        map_register_table = map.get_stds_register()
         map_rel_time_unit = map.get_relative_time_unit()
         map_ttype = map.get_temporal_type()
 
-        #print "Map register table", map_register_table
-
-        # Get basic info
-        stds_name = self.base.get_name()
         stds_mapset = self.base.get_mapset()
         stds_register_table = self.get_map_register()
         stds_ttype = self.get_temporal_type()
@@ -1985,128 +2096,20 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.msgr.fatal(_("Only maps from the same mapset can be registered"))
 
         # Check if map is already registered
-        if stds_register_table is not None:
-            if dbif.dbmi.paramstyle == "qmark":
-                sql = "SELECT id FROM " + \
-                    stds_register_table + " WHERE id = (?)"
+        if self.is_map_registered(map_id, dbif=dbif):
+            if map.get_layer() is not None:
+                self.msgr.warning(_("Map <%(map)s> with layer %(l)s is already "
+                                "registered.") % {'map': map.get_map_id(),
+                                                    'l': map.get_layer()})
             else:
-                sql = "SELECT id FROM " + \
-                    stds_register_table + " WHERE id = (%s)"
-            try:
-                dbif.cursor.execute(sql, (map_id,))
-                row = dbif.cursor.fetchone()
-            except:
-                self.msgr.warning(_("Error in strds_register_table request"))
-                raise
+                self.msgr.warning(_("Map <%s> is already registered.") % (
+                                map.get_map_id()))
+            return False
 
-            if row is not None and row[0] == map_id:
-                if connected == True:
-                    dbif.close()
-
-                if map.get_layer() is not None:
-                    self.msgr.warning(_("Map <%(map)s> with layer %(l)s is already "
-                                   "registered.") % {'map': map.get_map_id(),
-                                                     'l': map.get_layer()})
-                else:
-                    self.msgr.warning(_("Map <%s> is already registered.") % (
-                                 map.get_map_id()))
-                return False
-
-        # Create tables
-        sql_path = get_sql_template_path()
-
-        # We need to create the map raster register table precedes we can
-        # register the map
-        if map_register_table is None:
-            # Create a unique id
-            uuid_rand = "map_" + str(uuid.uuid4()).replace("-", "")
-
-            map_register_table = uuid_rand + "_" + \
-                self.get_type() + "_register"
-
-            # Read the SQL template
-            sql = open(os.path.join(sql_path,
-                                    "map_stds_register_table_template.sql"),
-                                    'r').read()
-            # Create the raster, raster3d and vector tables
-            sql = sql.replace("GRASS_MAP", map.get_type())
-            sql = sql.replace("MAP_NAME", map_name + "_" + map_mapset)
-            sql = sql.replace("TABLE_NAME", uuid_rand)
-            sql = sql.replace("MAP_ID", map_id)
-            sql = sql.replace("STDS", self.get_type())
-
-            statement += sql
-
-            # Set the stds register table name and put it into the DB
-            map.set_stds_register(map_register_table)
-            statement += map.metadata.get_update_statement_mogrified(dbif)
-
-            if map.get_layer():
-                self.msgr.debug(1, _("Created register table <%s> for "
-                               "%s map <%s> with layer %s") %
-                                (map_register_table, map.get_type(),
-                                 map.get_map_id(), map.get_layer()))
-            else:
-                self.msgr.debug(1, _("Created register table <%s> for %s map <%s>") %
-                                (map_register_table, map.get_type(),
-                                 map.get_map_id()))
-
-        # We need to create the table and register it
-        if stds_register_table is None:
-            # Create table name
-            stds_register_table = self.create_map_register_name()
-            # Assure that the table and index do not exist
-            dbif.execute_transaction("DROP INDEX IF EXISTS %s; DROP TABLE IF EXISTS  %s;"%(stds_register_table + "_index", stds_register_table))
-
-            # Read the SQL template
-            sql = open(os.path.join(sql_path,
-                                    "stds_map_register_table_template.sql"),
-                                    'r').read()
-            # Create the raster, raster3d and vector tables
-            sql = sql.replace("GRASS_MAP", map.get_type())
-            sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset)
-            sql = sql.replace("SPACETIME_ID", self.base.get_id())
-            sql = sql.replace("STDS", self.get_type())
-            statement += sql
-
-            # Set the map register table name and put it into the DB
-            self.set_map_register(stds_register_table)
-            statement += self.metadata.get_update_statement_mogrified(dbif)
-
-            self.msgr.debug(1, _("Created register table <%s> for space "
-                           "time %s  dataset <%s>") %
-                          (stds_register_table, map.get_type(), self.get_id()))
-
-        # We need to execute the statement at this time
-        if statement != "":
-            dbif.execute_transaction(statement)
-
-        statement = ""
-
-        # Register the stds in the map stds register table
-        # Check if the entry is already there
-        if dbif.dbmi.paramstyle == "qmark":
-            sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
-        else:
-            sql = "SELECT id FROM " + map_register_table + " WHERE id = %s"
-        try:
-            dbif.cursor.execute(sql, (self.base.get_id(),))
-            row = dbif.cursor.fetchone()
-        except:
-            row = None
-
-        # In case of no entry make a new one
-        if row is None:
-            if dbif.dbmi.paramstyle == "qmark":
-                sql = "INSERT INTO " + map_register_table + \
-                    " (id) " + "VALUES (?);\n"
-            else:
-                sql = "INSERT INTO " + map_register_table + \
-                    " (id) " + "VALUES (%s);\n"
-
-            statement += dbif.mogrify_sql_statement(
-                (sql, (self.base.get_id(),)))
-
+        # Register the stds in the map stds register table column
+        statement += map.add_dataset_to_register(stds_id=self.base.get_id(), 
+                                                 dbif=dbif, execute=False)
+        
         # Now put the raster name in the stds map register table
         if dbif.dbmi.paramstyle == "qmark":
             sql = "INSERT INTO " + stds_register_table + \
@@ -2114,6 +2117,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         else:
             sql = "INSERT INTO " + stds_register_table + \
                 " (id) " + "VALUES (%s);\n"
+                
 
         statement += dbif.mogrify_sql_statement((sql, (map_id,)))
 
@@ -2145,7 +2149,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                    string, None in case of a failure
         """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to unregister map from dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -2154,53 +2158,29 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         dbif, connected = init_dbif(dbif)
 
-        # First select needed data from the database
-        map.metadata.select(dbif)
-
-        map_id = map.get_id()
-        map_register_table = map.get_stds_register()
-        stds_register_table = self.get_map_register()
-
         # Check if the map is registered in the space time raster dataset
-        if map_register_table is not None:
-            if dbif.dbmi.paramstyle == "qmark":
-                sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
+        if self.is_map_registered(map.get_id(), dbif) is False:
+            if map.get_layer() is not None:
+                self.msgr.warning(_("Map <%(map)s> with layer %(l)s is not "
+                                "registered in space time dataset "
+                                "<%(base)s>") % {'map': map.get_map_id(),
+                                'l': map.get_layer(), 'base': self.base.get_id()})
             else:
-                sql = "SELECT id FROM " + map_register_table + " WHERE id = %s"
-            try:
-                dbif.cursor.execute(sql, (self.base.get_id(),))
-                row = dbif.cursor.fetchone()
-            except:
-                row = None
+                self.msgr.warning(_("Map <%(map)s> is not registered in space "
+                                "time dataset <%(base)s>") % {'map': map.get_map_id(),
+                                'base': self.base.get_id()})
+            if connected == True:
+                dbif.close()
+            return ""
 
-            # Break if the map is not registered
-            if row is None:
-                if map.get_layer() is not None:
-                    self.msgr.warning(_("Map <%(map)s> with layer %(l)s is not "
-                                   "registered in space time dataset "
-                                   "<%(base)s>") % {'map': map.get_map_id(),
-                                                    'l': map.get_layer(),
-                                                    'base': self.base.get_id()})
-                else:
-                    self.msgr.warning(_("Map <%(map)s> is not registered in space "
-                                   "time dataset <%(base)s>") % {
-                                   'map': map.get_map_id(),
-                                   'base': self.base.get_id()})
-                if connected == True:
-                    dbif.close()
-                return ""
-
-        # Remove the space time raster dataset from the raster dataset register
-        if map_register_table is not None:
-            if dbif.dbmi.paramstyle == "qmark":
-                sql = "DELETE FROM " + map_register_table + " WHERE id = ?;\n"
-            else:
-                sql = "DELETE FROM " + map_register_table + " WHERE id = %s;\n"
-
-            statement += dbif.mogrify_sql_statement(
-                (sql, (self.base.get_id(),)))
-
-        # Remove the raster map from the space time raster dataset register
+        # Remove the space time dataset from the dataset register
+        # We need to execute the statement here, otherwise the space time dataset will not be
+        # removed correctly
+        map.remove_dataset_from_register(self.base.get_id(), 
+                                                      dbif=dbif, execute=True)
+        
+        # Remove the map from the space time dataset register
+        stds_register_table = self.get_map_register()
         if stds_register_table is not None:
             if dbif.dbmi.paramstyle == "qmark":
                 sql = "DELETE FROM " + stds_register_table + " WHERE id = ?;\n"
@@ -2208,10 +2188,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = "DELETE FROM " + \
                     stds_register_table + " WHERE id = %s;\n"
 
-            statement += dbif.mogrify_sql_statement((sql, (map_id,)))
+            statement += dbif.mogrify_sql_statement((sql, ( map.get_id(),)))
 
         if execute:
             dbif.execute_transaction(statement)
+            statement = ""
 
         if connected:
             dbif.close()
@@ -2219,13 +2200,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # decrease the counter
         self.map_counter -= 1
 
-        if execute:
-            return ""
-
         return statement
 
     def update_from_registered_maps(self, dbif=None):
-        """!This methods updates the spatial and temporal extent as well as
+        """!This methods updates the modification time, the spatial and temporal extent as well as
            type specific metadata. It should always been called after maps
            are registered or unregistered/deleted from the space time dataset.
 
@@ -2236,14 +2214,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
            will be used. If the end time is earlier than the maximum start
            time, it will be replaced by the maximum start time.
 
-           An other solution to automate this is to use the deactivated trigger
-           in the SQL files. But this will result in a huge performance issue
-           in case many maps are registered (>1000).
-
            @param dbif The database interface to be used
         """
 
-        if self.get_mapset() != get_current_mapset():
+        if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
             self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
                          " The mapset of the dataset does not match the current mapset")%\
                          {"ds":self.get_id(), "type":self.get_type()})
@@ -2301,7 +2275,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.select()
 
         if self.is_time_absolute():
-            start_time, end_time, tz = self.get_absolute_time()
+            start_time, end_time = self.get_absolute_time()
         else:
             start_time, end_time, unit = self.get_relative_time()
 
@@ -2418,6 +2392,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.temporal_extent.set_map_time(None)
             self.temporal_extent.set_granularity(None)
         self.temporal_extent.update_all(dbif)
+        
+        # Set the modification time
+        self.base.set_mtime(datetime.now())
+        self.base.update(dbif)
 
         if connected:
             dbif.close()

@@ -20,7 +20,7 @@ class TestRegisterFunctions(unittest.TestCase):
     def setUpClass(cls):
         """!Initiate the temporal GIS and set the region
         """
-        tgis.init(True)
+        tgis.init()
         grass.overwrite = True
         grass.use_temp_region()
         ret = grass.run_command("g.region", n=80.0, s=0.0, e=120.0, 
@@ -51,19 +51,19 @@ class TestRegisterFunctions(unittest.TestCase):
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
         map.select()
-        start, end, tz = map.get_absolute_time()
+        start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
         map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
         map.select()
-        start, end, tz = map.get_absolute_time()
+        start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
         strds = tgis.SpaceTimeRasterDataset("register_test@" + tgis.get_current_mapset())
         strds.select()
-        start, end, tz = strds.get_absolute_time()
+        start, end = strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
@@ -79,13 +79,13 @@ class TestRegisterFunctions(unittest.TestCase):
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
         map.select()
-        start, end, tz = map.get_absolute_time()
+        start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 2))
 
         map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
         map.select()
-        start, end, tz = map.get_absolute_time()
+        start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
@@ -98,12 +98,12 @@ class TestRegisterFunctions(unittest.TestCase):
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
         map.select()
-        start, end, tz = map.get_absolute_time()
+        start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 10, 30, 1))
 
         map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
         map.select()
-        start, end, tz = map.get_absolute_time()
+        start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 18, 30, 1))
 
     def test_relative_time_strds(self):
@@ -140,6 +140,8 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(start, 0)
         self.assertEqual(end, 2)
         self.assertEqual(unit, "day")
+        
+        strds.print_info()
 
         ret = grass.run_command("t.remove", input="register_test") 
         self.assertEqual(ret, 0)
