@@ -1666,6 +1666,13 @@ class ModelComment(ModelObject, ogl.RectangleShape):
         self.ClearText()
         self.AddText('(%d) %s' % (idx, label))
 
+    def GetComment(self):
+        return self.GetLabel()
+
+    def SetComment(self, comment):
+        self.SetLabel(comment)
+        self.GetCanvas().Refresh()
+
 class ProcessModelFile:
     """!Process GRASS model file (gxm)"""
     def __init__(self, tree):
