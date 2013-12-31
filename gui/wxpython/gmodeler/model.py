@@ -917,7 +917,7 @@ class ModelObject(object):
         
         return ret
     
-class ModelAction(ModelObject, ogl.RectangleShape):
+class ModelAction(ModelObject, ogl.DividedShape):
     """!Action class (GRASS module)"""
     def __init__(self, parent, x, y, id = -1, cmd = None, task = None,
                  width = None, height = None, label = None, comment = ''):
@@ -948,7 +948,13 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         self.isParameterized = False
         
         if self.parent.GetCanvas():
-            ogl.RectangleShape.__init__(self, width, height)
+            ogl.DividedShape.__init__(self, width, height)
+        
+            self.regionLabel = ogl.ShapeRegion()
+            self.regionLabel.SetFormatMode(ogl.FORMAT_CENTRE_HORIZ | ogl.FORMAT_CENTRE_VERT)
+            self.AddRegion(self.regionLabel)
+            
+            self.regionComment = None
             
             self.SetCanvas(self.parent)
             self.SetX(x)
@@ -956,6 +962,11 @@ class ModelAction(ModelObject, ogl.RectangleShape):
             self._setPen()
             self._setBrush()
             self.SetLabel(label)
+            if comment:
+                self.SetComment(comment)
+            
+            self.SetRegionSizes()
+            self.ReformatRegions()
 
         if self.task:
             self.SetValid(self.task.get_options())
@@ -994,6 +1005,23 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         pen = wx.Pen(wx.BLACK, width, style)
         self.SetPen(pen)
 
+    def ReformatRegions(self):
+        rnum = 0
+        canvas = self.parent.GetCanvas()
+        
+        dc = wx.ClientDC(canvas)  # used for measuring
+
+        for region in self.GetRegions():
+            text = region.GetText()
+            self.FormatText(dc, text, rnum)
+            rnum += 1
+
+    def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
+        ogl.DividedShape.OnSizingEndDragLeft(self, pt, x, y, keys, attch)
+        self.SetRegionSizes()
+        self.ReformatRegions()
+        self.GetCanvas().Refresh()
+
     def SetLabel(self, label=None):
         """!Set label
 
@@ -1010,13 +1038,26 @@ class ModelAction(ModelObject, ogl.RectangleShape):
                 label = _("unknown")
         
         idx = self.GetId()
-        
-        self.ClearText()
-        self.AddText('(%d) %s' % (idx, label))
+        self.regionLabel.SetText('(%d) %s' % (idx, label))
 
     def SetComment(self, comment):
         """!Set comment"""
+        if self.regionComment is None:
+            self.SetHeight(self.GetHeight() * 2)
+            self.regionComment = ogl.ShapeRegion()
+            self.regionComment.SetFormatMode(ogl.FORMAT_CENTRE_HORIZ)
+            font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            font.SetStyle(wx.ITALIC)
+            self.regionComment.SetFont(font)
+            self.AddRegion(self.regionComment)
+            self.regionLabel.SetProportions(0.0, 0.3)
+            
         self.comment = comment
+        self.regionComment.SetText(comment)
+        self.SetRegionSizes()
+        self.ReformatRegions()
+        self.Refresh()
+        self.GetCanvas.Refresh()
 
     def GetComment(self):
         """!Get comment"""
@@ -1592,6 +1633,9 @@ class ModelComment(ModelObject, ogl.RectangleShape):
             self.SetCanvas(parent)
             self.SetX(x)
             self.SetY(y)
+            font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            font.SetStyle(wx.ITALIC)
+            self.SetFont(font)
             self._setPen()
             self._setBrush()
             self.SetLabel(label)
