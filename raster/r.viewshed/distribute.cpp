@@ -52,8 +52,8 @@ extern "C"
 #include <grass/iostream/ami.h>
 
 
-/*note: MAX_STREAM_OPEN defined in IOStream/include/ami_stream.h, which
-   is included by ami.h  */
+/*note: MAX_STREAMS_OPEN defined in include/iostream/ami_stream.h
+  which is included by ami.h  */
 
 #include "distribute.h"
 #include "viewshed.h"
