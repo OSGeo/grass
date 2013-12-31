@@ -12,7 +12,6 @@
 
 -- GRASS_MAP is a placeholder for specific map type: raster, raster3d or vector
 
---PRAGMA foreign_keys = ON;
 
 CREATE TABLE  GRASS_MAP_base (
   id VARCHAR NOT NULL,                  -- The id (PK) is the unique identifier for all tables, it is based on name (layer) and mapset (name(:layer)@mapset) and is used as primary key
@@ -22,39 +21,29 @@ CREATE TABLE  GRASS_MAP_base (
   creator VARCHAR NOT NULL,
   temporal_type VARCHAR,                -- The temporal type of the grass map "absolute" or "relative" or NULL in case no time stamp is available
   creation_time TIMESTAMP NOT NULL,      -- The time of creation of the grass map
--- Uncommented due to performance issues
---  modification_time TIMESTAMP NOT NULL,  -- The time of the last modification of the grass map
---  revision SMALLINT NOT NULL,           -- The revision number
   PRIMARY KEY (id)
 );
 
-CREATE INDEX GRASS_MAP_base_index ON GRASS_MAP_base (id);
-
 -- Relative valid time interval with start and end time
 CREATE TABLE  GRASS_MAP_relative_time (
-  id VARCHAR NOT NULL,          -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
+  id VARCHAR NOT NULL,          -- The id (PK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
   start_time INTEGER,  -- The relative valid start time in 
   end_time INTEGER,    -- The relative valid end time in 
   unit VARCHAR,                 -- The relative time unit, available are "years, months, days, minutes, seconds"
-  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (id)
 );
-
-CREATE INDEX GRASS_MAP_relative_time_index ON GRASS_MAP_relative_time (id, start_time, end_time);
 
 CREATE TABLE  GRASS_MAP_absolute_time (
-  id VARCHAR NOT NULL,   -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
+  id VARCHAR NOT NULL,   -- The id (PK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary key
   start_time TIMESTAMP,  --  Start of the valid time, can be NULL if no time information is available
   end_time TIMESTAMP,    --  End of the valid time, can be NULL if no time information is available or valid time is a single point in time
-  timezone VARCHAR,      -- The timezone of the valid time stored as string. This is currently not in use. Instead the timezone is set in the datetime strings 
-  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (id)
 );
-
-CREATE INDEX GRASS_MAP_absolute_time_index ON GRASS_MAP_absolute_time (id, start_time, end_time);
 
 -- The spatial extent of a raster map
 
 CREATE TABLE  GRASS_MAP_spatial_extent (
-  id VARCHAR NOT NULL,                  -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreigen key
+  id VARCHAR NOT NULL,                  -- The id (PK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary key
   -- below is the spatial extent of the map
   north DOUBLE PRECISION NOT NULL,
   south DOUBLE PRECISION NOT NULL,
@@ -63,7 +52,13 @@ CREATE TABLE  GRASS_MAP_spatial_extent (
   top DOUBLE PRECISION NOT NULL,
   bottom DOUBLE PRECISION NOT NULL,
   proj VARCHAR,
-  FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (id)
 );
 
-CREATE INDEX GRASS_MAP_spatial_extent_index ON GRASS_MAP_spatial_extent (id);
+-- We have a specific table that stores the space time dataset ids in which the maps a registered
+
+CREATE TABLE  GRASS_MAP_stds_register (
+  id VARCHAR NOT NULL,                  -- The id (PK) is the unique identifier for all tables, it is based on name (layer) and mapset (name(:layer)@mapset) and is used as primary key
+  registered_stds VARCHAR,              -- This column stores the names of all space time datasets in which a specific map is registered
+  PRIMARY KEY (id)
+);

@@ -10,8 +10,7 @@
 -- The metadata table 
 
 CREATE TABLE  vector_metadata (
-  id VARCHAR NOT NULL,    -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
-  stvds_register VARCHAR, -- The name of the table storing all space-time vector datasets in which this map is registered
+  id VARCHAR NOT NULL,    -- The id (PK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary key
   is_3d BOOLEAN,          -- This is 1 if the vector map is 3d and 0 otherwise 
   points INTEGER,         -- The number of points
   lines INTEGER,          -- The number of lines
@@ -25,7 +24,8 @@ CREATE TABLE  vector_metadata (
   islands INTEGER,        -- The number of islands (topological information)
   holes INTEGER,          -- The number of holes (topological information)
   volumes INTEGER,        -- The number of volumes (topological information)
-  FOREIGN KEY (id) REFERENCES  vector_base (id) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (id)
 );
 
-CREATE INDEX vector_metadata_index ON vector_metadata (id);
+
+

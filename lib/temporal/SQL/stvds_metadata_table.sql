@@ -4,10 +4,8 @@
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
 --#############################################################################
 
---PRAGMA foreign_keys = ON;
-
 CREATE TABLE  stvds_metadata (
-  id VARCHAR NOT NULL,    -- Name of the space-time vector dataset, this is the primary foreign key
+  id VARCHAR NOT NULL,    -- Name of the space-time vector dataset, this is the primary key
   vector_register VARCHAR,-- The id of the table in which the vector maps are registered for this dataset
   number_of_maps INTEGER, -- The number of registered vector maps
   title VARCHAR,          -- Title of the space-time vector dataset
@@ -24,6 +22,7 @@ CREATE TABLE  stvds_metadata (
   areas INTEGER,          -- The number of areas accumulated from all registered maps (topological information)
   islands INTEGER,        -- The number of islands accumulated from all registered maps (topological information)
   holes INTEGER,          -- The number of holes accumulated from all registered maps (topological information)
-  volumes INTEGER,        -- The number of volumes accumulated from all registered maps (topological information)
-  FOREIGN KEY (id) REFERENCES  stvds_base (id) ON DELETE CASCADE ON UPDATE CASCADE
+  volumes INTEGER,        -- The number of volumes accumulated from all registered maps (topological information)           -- The command that was used to create the space time raster dataset
+  PRIMARY KEY (id)
 );
+

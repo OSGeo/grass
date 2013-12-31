@@ -135,7 +135,7 @@ def main():
                 # Store all unique dataset ids in a dictionary
                 if datasets:
                     for dataset in datasets:
-                        update_dict[dataset["id"]] = dataset["id"]
+                        update_dict[dataset] = dataset
                 # Collect SQL statements
                 statement += map.delete(dbif=dbif, update=False, execute=False)
         else:
@@ -170,4 +170,5 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    main()
+    
+    tgis.profile_function(main)

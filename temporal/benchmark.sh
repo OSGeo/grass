@@ -11,7 +11,9 @@ export GRASS_OVERWRITE=1
 MAP_LIST="map_list.txt"
 rm ${MAP_LIST}
 
-NUM_MAPS=50000
+NUM_MAPS=10000
+
+echo "### Generate raster maps"
 
 count=1
 while [ $count -lt ${NUM_MAPS} ]; do
@@ -21,18 +23,39 @@ while [ $count -lt ${NUM_MAPS} ]; do
     count=$((count + 1))
 done
 
-t.create type=strds temporaltype=absolute output=benchmark1 title="Benchmark1" descr="Benchmark1 dataset"
-t.create type=strds temporaltype=absolute output=benchmark2 title="Benchmark2" descr="Benchmark2 dataset"
+echo "### Create space time datasets"
+
+time t.create type=strds temporaltype=absolute output=bench1 title="Bench1" descr="Bench1"
+time t.create type=strds temporaltype=absolute output=bench2 title="Bench2" descr="Bench2"
+time t.create type=strds temporaltype=absolute output=bench3 title="Bench3" descr="Bench3"
+time t.create type=strds temporaltype=absolute output=bench4 title="Bench4" descr="Bench4"
 
 echo "### Register maps"
-time t.register -i input=benchmark1  file=${MAP_LIST} start="2001-01-01 00:00:00" increment="1 hours"
-time t.register -i input=benchmark2  file=${MAP_LIST} start="2001-01-01 00:00:00" increment="1 hours"
+time t.register -i input=bench1  file=${MAP_LIST} start="2001-01-01 00:00:00" increment="1 day"
+echo "### Register maps again"
+time t.register input=bench2  file=${MAP_LIST}
+echo "### Register maps again"
+time t.register input=bench3  file=${MAP_LIST}
+echo "### Register maps again"
+time t.register input=bench4  file=${MAP_LIST}
 
 echo "### List maps"
-time t.rast.list input=benchmark1 column=name,start_time > "/dev/null"
-time t.rast.list input=benchmark2 column=name,start_time > "/dev/null"
+time t.rast.list input=bench1 column=name,start_time > "/dev/null"
+time t.rast.list input=bench2 column=name,start_time > "/dev/null"
+time t.rast.list input=bench3 column=name,start_time,end_time \
+    where="start_time > '2001-01-01'" > "/dev/null"
+time t.rast.list input=bench4 column=name,start_time,end_time,min,max \
+    where="start_time > '2001-01-01'" > "/dev/null"
+
+echo "### STRDS Infos"
+t.info bench1
+t.info bench2
+t.info bench3
+t.info bench4
 
 echo "### Remove STRDS and maps"
-time t.remove -rf type=strds input=benchmark1
-echo "### Remove STRDS"
-time t.remove type=strds input=benchmark2
+time t.remove type=strds input=bench1
+time t.remove type=strds input=bench2
+time t.remove type=strds input=bench3
+time t.remove -rf type=strds input=bench4
+

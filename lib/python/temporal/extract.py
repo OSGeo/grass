@@ -210,12 +210,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                                 continue
 
                     # Set the time stamp
-                    if old_map.is_time_absolute():
-                        start, end, tz = old_map.get_absolute_time()
-                        new_map.set_absolute_time(start, end, tz)
-                    else:
-                        start, end, unit = old_map.get_relative_time()
-                        new_map.set_relative_time(start, end, unit)
+                    new_map.set_temporal_extent(old_map.get_temporal_extent())
 
                     # Insert map in temporal database
                     new_map.insert(dbif)

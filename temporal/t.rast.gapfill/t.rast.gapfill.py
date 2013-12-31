@@ -162,17 +162,17 @@ def main():
         id = _map.get_id()
         if overwrite_flags[id] == True:
             if _map.is_time_absolute():
-                start, end, tz = _map.get_absolute_time()
+                start, end = _map.get_absolute_time()
                 if _map.is_in_db():
                     _map.delete(dbif)
                 _map = sp.get_new_map_instance(id)
-                _map.set_absolute_time(start, end, tz)
+                _map.set_absolute_time(start, end)
             else:
                 start, end, unit = _map.get_relative_time()
                 if _map.is_in_db():
                     _map.delete(dbif)
                 _map = sp.get_new_map_instance(id)
-                _map.set_relative_time(start, end, tz)
+                _map.set_relative_time(start, end, unit)
         _map.load()
         _map.insert(dbif)
         sp.register_map(_map, dbif)

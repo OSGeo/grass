@@ -239,9 +239,10 @@ def register_maps_in_space_time_dataset(
 
             # Save the datasets that must be updated
             datasets = map.get_registered_datasets(dbif)
-            if datasets:
+            if datasets is not None:
                 for dataset in datasets:
-                    datatsets_to_modify[dataset["id"]] = dataset["id"]
+                    if dataset != "":
+                        datatsets_to_modify[dataset] = dataset
 
                 if name and map.get_temporal_type() != sp.get_temporal_type():
                     dbif.close()
@@ -398,7 +399,7 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
             msgr.debug(1, _("Set absolute valid time for map <%s> to %s - %s") %
                          (map.get_map_id(), str(start_time), str(end_time)))
 
-        map.set_absolute_time(start_time, end_time, None)
+        map.set_absolute_time(start_time, end_time)
     else:
         start_time = int(start)
         end_time = None

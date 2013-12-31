@@ -64,3 +64,4 @@ UPDATE STDS_spatial_extent SET proj =
        (SELECT min(proj) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN 
     		(SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
        ) WHERE id = 'SPACETIME_ID';
+

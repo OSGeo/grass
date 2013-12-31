@@ -198,8 +198,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             return RelativeTemporalExtent(start_time=start, end_time=end,
                                           unit=self.get_unit())
         elif issubclass(type(self), AbsoluteTemporalExtent):
-            return AbsoluteTemporalExtent(start_time=start, end_time=end,
-                                          timezone=self.get_timezone())
+            return AbsoluteTemporalExtent(start_time=start, end_time=end)
         elif issubclass(type(self), AbstractTemporalExtent):
             return AbstractTemporalExtent(start_time=start, end_time=end)
 
@@ -384,8 +383,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             return RelativeTemporalExtent(start_time=start, end_time=end,
                                           unit=self.get_unit())
         elif issubclass(type(self), AbsoluteTemporalExtent):
-            return AbsoluteTemporalExtent(start_time=start, end_time=end,
-                                          timezone=self.get_timezone())
+            return AbsoluteTemporalExtent(start_time=start, end_time=end)
         elif issubclass(type(self), AbstractTemporalExtent):
             return AbstractTemporalExtent(start_time=start, end_time=end)
 
@@ -1053,64 +1051,37 @@ class AbsoluteTemporalExtent(AbstractTemporalExtent):
 
         start_time and end_time must be of type datetime
     """
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None,
-                 timezone=None):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None):
 
         AbstractTemporalExtent.__init__(
             self, table, ident, start_time, end_time)
-
-        self.set_timezone(timezone)
-
-    def set_timezone(self, timezone):
-        """!Set the timezone of the map, the timezone is of type string.
-           Timezones are not supported yet, instead the timezone
-           is set in the datetime string as offset in minutes.
-        """
-        self.D["timezone"] = timezone
-
-    def get_timezone(self):
-        """!Get the timezone of the map
-           Timezones are not supported yet, instead the timezone
-           is set in the datetime string as offset in minutes.
-           @return None if not found"""
-        if "timezone" in self.D:
-            return self.D["timezone"]
-        else:
-            return None
-
-    timezone = property(fget=get_timezone, fset=set_timezone)
 
     def print_info(self):
         """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Absolute time -----------------------------------------+"
         AbstractTemporalExtent.print_info(self)
-        #print " | Timezone:................... " + str(self.get_timezone())
 
     def print_shell_info(self):
         """!Print information about this class in shell style"""
         AbstractTemporalExtent.print_shell_info(self)
-        #print "timezone=" + str(self.get_timezone())
 
 ###############################################################################
 
 class RasterAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None,
-                 timezone=None):
+    def __init__(self, ident=None, start_time=None, end_time=None):
         AbsoluteTemporalExtent.__init__(self, "raster_absolute_time",
-            ident, start_time, end_time, timezone)
+            ident, start_time, end_time)
 
 class Raster3DAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None,
-                 timezone=None):
+    def __init__(self, ident=None, start_time=None, end_time=None):
         AbsoluteTemporalExtent.__init__(self, "raster3d_absolute_time",
-            ident, start_time, end_time, timezone)
+            ident, start_time, end_time)
 
 class VectorAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None,
-                 timezone=None):
+    def __init__(self, ident=None, start_time=None, end_time=None):
         AbsoluteTemporalExtent.__init__(self, "vector_absolute_time",
-            ident, start_time, end_time, timezone)
+            ident, start_time, end_time)
 
 ###############################################################################
 
@@ -1154,9 +1125,9 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         @endcode
     """
     def __init__(self, table=None, ident=None, start_time=None, end_time=None,
-                 granularity=None, timezone=None, map_time=None):
+                 granularity=None, map_time=None):
         AbsoluteTemporalExtent.__init__(
-            self, table, ident, start_time, end_time, timezone)
+            self, table, ident, start_time, end_time)
 
         self.set_granularity(granularity)
         self.set_map_time(map_time)
@@ -1221,23 +1192,23 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
 class STRDSAbsoluteTime(STDSAbsoluteTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
-                 granularity=None, timezone=None):
+                 granularity=None):
         STDSAbsoluteTime.__init__(self, "strds_absolute_time",
-            ident, start_time, end_time, granularity, timezone)
+            ident, start_time, end_time, granularity)
 
 
 class STR3DSAbsoluteTime(STDSAbsoluteTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
-                 granularity=None, timezone=None):
+                 granularity=None):
         STDSAbsoluteTime.__init__(self, "str3ds_absolute_time",
-            ident, start_time, end_time, granularity, timezone)
+            ident, start_time, end_time, granularity)
 
 
 class STVDSAbsoluteTime(STDSAbsoluteTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
-                 granularity=None, timezone=None):
+                 granularity=None):
         STDSAbsoluteTime.__init__(self, "stvds_absolute_time",
-            ident, start_time, end_time, granularity, timezone)
+            ident, start_time, end_time, granularity)
 
 ###############################################################################
 
@@ -1278,7 +1249,7 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
 
         AbstractTemporalExtent.__init__(
             self, table, ident, start_time, end_time)
-        self.D["unit"] = unit
+        self.set_unit(unit)
 
     def set_unit(self, unit):
         """!Set the unit of the relative time. Valid units are:

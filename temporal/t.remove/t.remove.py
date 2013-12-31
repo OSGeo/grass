@@ -53,6 +53,7 @@
 #% key: f
 #% description: Force recursive removing
 #%end
+
 import grass.script as grass
 import grass.temporal as tgis
 import grass.pygrass.modules as pyg
@@ -154,4 +155,5 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    main()
+    
+    tgis.profile_function(main)

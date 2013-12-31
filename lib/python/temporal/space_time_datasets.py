@@ -73,7 +73,6 @@ class RasterDataset(AbstractMapDataset):
          | East-west resolution:....... 10.0
          | Minimum value:.............. 1.0
          | Maximum value:.............. 1.0
-         | STRDS register table ....... None
 
         >>> newmap = rmap.get_new_instance("new@PERMANENT")
         >>> isinstance(newmap, RasterDataset)
@@ -83,12 +82,11 @@ class RasterDataset(AbstractMapDataset):
         True
         >>> rmap.get_type()
         'raster'
-        >>> rmap.get_stds_register()
         >>> rmap.set_absolute_time(start_time=datetime(2001,1,1),
         ...                        end_time=datetime(2012,1,1))
         True
         >>> rmap.get_absolute_time()
-        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0), None)
+        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
         >>> rmap.get_temporal_extent_as_tuple()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
         >>> rmap.get_name()
@@ -114,6 +112,13 @@ class RasterDataset(AbstractMapDataset):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
+    def is_stds(self):
+        """!Return True if this class is a space time dataset
+
+           @return True if this class is a space time dataset, False otherwise
+        """
+        return False
+        
     def get_type(self):
         return 'raster'
 
@@ -125,16 +130,6 @@ class RasterDataset(AbstractMapDataset):
         """!Return a new space time dataset instance in which maps
         are stored with the type of this class"""
         return SpaceTimeRasterDataset(ident)
-
-    def get_stds_register(self):
-        """!Return the space time dataset register table name in which stds
-        are listed in which this map is registered"""
-        return self.metadata.get_strds_register()
-
-    def set_stds_register(self, name):
-        """!Set the space time dataset register table name in which stds
-        are listed in which this map is registered"""
-        self.metadata.set_strds_register(name)
 
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents 2d overlap"""
@@ -199,6 +194,7 @@ class RasterDataset(AbstractMapDataset):
         self.relative_time = RasterRelativeTime(ident=ident)
         self.spatial_extent = RasterSpatialExtent(ident=ident)
         self.metadata = RasterMetadata(ident=ident)
+        self.stds_register = RasterSTDSRegister(ident=ident)
 
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
@@ -229,7 +225,7 @@ class RasterDataset(AbstractMapDataset):
             return False
 
         if len(dates) == 2:
-            self.set_absolute_time(dates[0], dates[1], None)
+            self.set_absolute_time(dates[0], dates[1])
         else:
             self.set_relative_time(dates[0], dates[1], dates[2])
 
@@ -380,7 +376,6 @@ class Raster3DDataset(AbstractMapDataset):
          | Maximum value:.............. 1.0
          | Number of depths:........... 10
          | Top-Bottom resolution:...... 10.0
-         | STR3DS register table ...... None
 
         >>> newmap = r3map.get_new_instance("new@PERMANENT")
         >>> isinstance(newmap, Raster3DDataset)
@@ -390,12 +385,11 @@ class Raster3DDataset(AbstractMapDataset):
         True
         >>> r3map.get_type()
         'raster3d'
-        >>> r3map.get_stds_register()
         >>> r3map.set_absolute_time(start_time=datetime(2001,1,1),
         ...                        end_time=datetime(2012,1,1))
         True
         >>> r3map.get_absolute_time()
-        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0), None)
+        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
         >>> r3map.get_temporal_extent_as_tuple()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
         >>> r3map.get_name()
@@ -418,6 +412,13 @@ class Raster3DDataset(AbstractMapDataset):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
+    def is_stds(self):
+        """!Return True if this class is a space time dataset
+
+           @return True if this class is a space time dataset, False otherwise
+        """
+        return False
+        
     def get_type(self):
         return "raster3d"
 
@@ -429,16 +430,6 @@ class Raster3DDataset(AbstractMapDataset):
         """!Return a new space time dataset instance in which maps
         are stored with the type of this class"""
         return SpaceTimeRaster3DDataset(ident)
-
-    def get_stds_register(self):
-        """!Return the space time dataset register table name in
-        which stds are listed in which this map is registered"""
-        return self.metadata.get_str3ds_register()
-
-    def set_stds_register(self, name):
-        """!Set the space time dataset register table name in
-        which stds are listed in which this map is registered"""
-        self.metadata.set_str3ds_register(name)
 
     def spatial_overlapping(self, dataset):
         """!Return True if the spatial extents overlap"""
@@ -518,6 +509,7 @@ class Raster3DDataset(AbstractMapDataset):
         self.relative_time = Raster3DRelativeTime(ident=ident)
         self.spatial_extent = Raster3DSpatialExtent(ident=ident)
         self.metadata = Raster3DMetadata(ident=ident)
+        self.stds_register = Raster3DSTDSRegister(ident=ident)
 
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
@@ -548,7 +540,7 @@ class Raster3DDataset(AbstractMapDataset):
             return False
 
         if len(dates) == 2:
-            self.set_absolute_time(dates[0], dates[1], None)
+            self.set_absolute_time(dates[0], dates[1])
         else:
             self.set_relative_time(dates[0], dates[1], dates[2])
 
@@ -679,7 +671,6 @@ class VectorDataset(AbstractMapDataset):
          | End time:................... None
         >>> vmap.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
-         | STVDS register table ....... None
          | Is map 3d .................. True
          | Number of points ........... 100
          | Number of lines ............ 0
@@ -701,12 +692,11 @@ class VectorDataset(AbstractMapDataset):
         True
         >>> vmap.get_type()
         'vector'
-        >>> vmap.get_stds_register()
         >>> vmap.set_absolute_time(start_time=datetime(2001,1,1),
         ...                        end_time=datetime(2012,1,1))
         True
         >>> vmap.get_absolute_time()
-        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0), None)
+        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
         >>> vmap.get_temporal_extent_as_tuple()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
         >>> vmap.get_name()
@@ -729,6 +719,13 @@ class VectorDataset(AbstractMapDataset):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
+    def is_stds(self):
+        """!Return True if this class is a space time dataset
+
+           @return True if this class is a space time dataset, False otherwise
+        """
+        return False
+        
     def get_type(self):
         return "vector"
 
@@ -740,16 +737,6 @@ class VectorDataset(AbstractMapDataset):
         """!Return a new space time dataset instance in which maps
         are stored with the type of this class"""
         return SpaceTimeVectorDataset(ident)
-
-    def get_stds_register(self):
-        """!Return the space time dataset register table name in
-        which stds are listed in which this map is registered"""
-        return self.metadata.get_stvds_register()
-
-    def set_stds_register(self, name):
-        """!Set the space time dataset register table name in
-        which stds are listed in which this map is registered"""
-        self.metadata.set_stvds_register(name)
 
     def get_layer(self):
         """!Return the layer"""
@@ -798,6 +785,7 @@ class VectorDataset(AbstractMapDataset):
         self.relative_time = VectorRelativeTime(ident=ident)
         self.spatial_extent = VectorSpatialExtent(ident=ident)
         self.metadata = VectorMetadata(ident=ident)
+        self.stds_register = VectorSTDSRegister(ident=ident)
 
     def has_grass_timestamp(self):
         """!Check if a grass file bsased time stamp exists for this map.
@@ -826,7 +814,7 @@ class VectorDataset(AbstractMapDataset):
             return False
 
         if len(dates) == 2:
-            self.set_absolute_time(dates[0], dates[1], None)
+            self.set_absolute_time(dates[0], dates[1])
         else:
             self.set_relative_time(dates[0], dates[1], dates[2])
 
@@ -920,6 +908,13 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
 
+    def is_stds(self):
+        """!Return True if this class is a space time dataset
+
+           @return True if this class is a space time dataset, False otherwise
+        """
+        return True
+        
     def get_type(self):
         return "strds"
 
@@ -993,6 +988,13 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
 
+    def is_stds(self):
+        """!Return True if this class is a space time dataset
+
+           @return True if this class is a space time dataset, False otherwise
+        """
+        return True
+        
     def get_type(self):
         return "str3ds"
 
@@ -1085,6 +1087,13 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
     def __init__(self, ident):
         AbstractSpaceTimeDataset.__init__(self, ident)
 
+    def is_stds(self):
+        """!Return True if this class is a space time dataset
+
+           @return True if this class is a space time dataset, False otherwise
+        """
+        return True
+        
     def get_type(self):
         return "stvds"
 

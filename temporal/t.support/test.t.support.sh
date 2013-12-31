@@ -28,6 +28,7 @@ t.info type=strds input=precip_rel1
 t.support --v type=strds input=precip_rel1 title="Test support" descr="This is the support test strds" semantictype=max
 t.info type=strds input=precip_rel1
 
+
 # Check metadata update
 t.info type=strds input=precip_abs1
 t.support --v type=strds input=precip_abs1 title="Test support" descr="This is the support test strds" semantictype=mean

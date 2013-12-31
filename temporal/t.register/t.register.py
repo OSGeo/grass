@@ -118,8 +118,10 @@ def main():
         type=type, name=name, maps=maps, file=file, start=start, end=end,
         unit=unit, increment=increment, dbif=None, interval=interval, fs=fs)
 
+
 ###############################################################################
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    main()
+ 
+    tgis.profile_function(main)
