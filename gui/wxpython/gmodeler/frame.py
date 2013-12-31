@@ -1262,9 +1262,12 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             else:
                 popupMenu.Append(self.popupID['enable'], text=_('Enable'))
                 self.frame.Bind(wx.EVT_MENU, self.OnEnable, id = self.popupID['enable'])
+        if isinstance(shape, ModelAction) or isinstance(shape, ModelComment):
             popupMenu.AppendSeparator()
+        if isinstance(shape, ModelAction):
             popupMenu.Append(self.popupID['label'], text=_('Set label'))
             self.frame.Bind(wx.EVT_MENU, self.OnSetLabel, id = self.popupID['label'])
+        if isinstance(shape, ModelAction) or isinstance(shape, ModelComment):
             popupMenu.Append(self.popupID['comment'], text=_('Set comment'))
             self.frame.Bind(wx.EVT_MENU, self.OnSetComment, id = self.popupID['comment'])
 
