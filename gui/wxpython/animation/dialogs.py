@@ -39,6 +39,7 @@ from gui_core.forms import GUI
 from core.settings import UserSettings
 from core.utils import _
 from gui_core.gselect import Select
+from gui_core.widgets import FloatValidator
 
 from animation.utils import TemporalMode, getRegisteredMaps
 from animation.data import AnimationData, AnimLayer
@@ -283,50 +284,11 @@ class InputDialog(wx.Dialog):
         self.OnViewMode(event=None)
 
     def _layout(self):
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-
-        self.windowChoice = wx.Choice(self, id=wx.ID_ANY,
-                                      choices=[_("top left"), _("top right"),
-                                               _("bottom left"), _("bottom right")])
-        self.windowChoice.SetSelection(self.animationData.windowIndex)
-
-        self.nameCtrl = wx.TextCtrl(self, id=wx.ID_ANY, value=self.animationData.name)
-
-        self.nDChoice = wx.Choice(self, id=wx.ID_ANY)
-        mode = self.animationData.viewMode
-        index = 0
-        for i, (viewMode, viewModeName) in enumerate(self.animationData.viewModes):
-            self.nDChoice.Append(viewModeName, clientData=viewMode)
-            if mode == viewMode:
-                index = i
-
-        self.nDChoice.SetSelection(index)
-        self.nDChoice.SetToolTipString(_("Select 2D or 3D view"))
-        self.nDChoice.Bind(wx.EVT_CHOICE, self.OnViewMode)
-
-        gridSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
-        gridSizer.Add(item=wx.StaticText(self, id=wx.ID_ANY, label=_("Name:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=self.nameCtrl, proportion=1, flag=wx.EXPAND)
-        gridSizer.Add(item=wx.StaticText(self, id=wx.ID_ANY, label=_("Window position:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=self.windowChoice, proportion=1, flag=wx.ALIGN_RIGHT)
-        gridSizer.Add(item=wx.StaticText(self, id=wx.ID_ANY, label=_("View mode:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item=self.nDChoice, proportion=1, flag=wx.ALIGN_RIGHT)
-        gridSizer.AddGrowableCol(0, 1)
-        gridSizer.AddGrowableCol(1, 1)
-        mainSizer.Add(item=gridSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
-        label = _("For 3D animation, please select only one space-time dataset\n"
-                  "or one series of map layers.")
-        self.warning3DLayers = wx.StaticText(self, label=label)
-        self.warning3DLayers.SetForegroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
-        mainSizer.Add(item=self.warning3DLayers, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
-
-        self.dataPanel = self._createDataPanel()
-        self.threeDPanel = self._create3DPanel()
-        mainSizer.Add(item=self.dataPanel, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
-        mainSizer.Add(item=self.threeDPanel, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
+        self.notebook = wx.Notebook(parent=self, style=wx.BK_DEFAULT)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        self.notebook.AddPage(self._createGeneralPage(self.notebook), _("General"))
+        self.notebook.AddPage(self._createAdvancedPage(self.notebook), _("Advanced"))
+        sizer.Add(self.notebook, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
 
         # buttons
         self.btnOk = wx.Button(self, wx.ID_OK)
@@ -339,20 +301,71 @@ class InputDialog(wx.Dialog):
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
 
-        mainSizer.Add(item=btnStdSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+        sizer.Add(item=btnStdSizer, proportion=0,
+                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT, border=5)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
 
-        self.SetSizer(mainSizer)
-        mainSizer.Fit(self)
+    def _createGeneralPage(self, parent):
+        panel = wx.Panel(parent=parent)
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
 
-    def _createDataPanel(self):
-        panel = wx.Panel(self)
+        self.windowChoice = wx.Choice(panel, id=wx.ID_ANY,
+                                      choices=[_("top left"), _("top right"),
+                                               _("bottom left"), _("bottom right")])
+        self.windowChoice.SetSelection(self.animationData.windowIndex)
+
+        self.nameCtrl = wx.TextCtrl(panel, id=wx.ID_ANY, value=self.animationData.name)
+
+        self.nDChoice = wx.Choice(panel, id=wx.ID_ANY)
+        mode = self.animationData.viewMode
+        index = 0
+        for i, (viewMode, viewModeName) in enumerate(self.animationData.viewModes):
+            self.nDChoice.Append(viewModeName, clientData=viewMode)
+            if mode == viewMode:
+                index = i
+
+        self.nDChoice.SetSelection(index)
+        self.nDChoice.SetToolTipString(_("Select 2D or 3D view"))
+        self.nDChoice.Bind(wx.EVT_CHOICE, self.OnViewMode)
+
+        gridSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
+        gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Name:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=self.nameCtrl, proportion=1, flag=wx.EXPAND)
+        gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Window position:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=self.windowChoice, proportion=1, flag=wx.ALIGN_RIGHT)
+        gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("View mode:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=self.nDChoice, proportion=1, flag=wx.ALIGN_RIGHT)
+        gridSizer.AddGrowableCol(0, 1)
+        gridSizer.AddGrowableCol(1, 1)
+        mainSizer.Add(item=gridSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        label = _("For 3D animation, please select only one space-time dataset\n"
+                  "or one series of map layers.")
+        self.warning3DLayers = wx.StaticText(panel, label=label)
+        self.warning3DLayers.SetForegroundColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        mainSizer.Add(item=self.warning3DLayers, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
+
+        self.dataPanel = self._createDataPanel(panel)
+        self.threeDPanel = self._create3DPanel(panel)
+        mainSizer.Add(item=self.dataPanel, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
+        mainSizer.Add(item=self.threeDPanel, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
+
+        panel.SetSizer(mainSizer)
+        mainSizer.Fit(panel)
+
+        return panel
+
+    def _createDataPanel(self, parent):
+        panel = wx.Panel(parent)
         slmgrSizer = wx.BoxSizer(wx.VERTICAL)
         self._layerList = copy.deepcopy(self.animationData.layerList)
         self.simpleLmgr = AnimSimpleLayerManager(parent=panel,
                                                  layerList=self._layerList,
                                                  modal=True)
-        self.simpleLmgr.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0], 120))
+        self.simpleLmgr.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0], 80))
         slmgrSizer.Add(self.simpleLmgr, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.legend = wx.CheckBox(panel, label=_("Show raster legend"))
@@ -371,8 +384,8 @@ class InputDialog(wx.Dialog):
 
         return panel
 
-    def _create3DPanel(self):
-        panel = wx.Panel(self, id=wx.ID_ANY)
+    def _create3DPanel(self, parent):
+        panel = wx.Panel(parent, id=wx.ID_ANY)
         dataStBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
                                  label=' %s ' % _("3D view parameters"))
         dataBoxSizer = wx.StaticBoxSizer(dataStBox, wx.VERTICAL)
@@ -407,16 +420,92 @@ class InputDialog(wx.Dialog):
 
         return panel
 
+    def _createAdvancedPage(self, parent):
+        panel = wx.Panel(parent=parent)
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        box = wx.StaticBox(parent=panel, label=" %s " % _("Animate region change (2D view only)"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+        gridSizer.Add(wx.StaticText(panel, label=_("Start region:")),
+                      pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        self.stRegion = Select(parent=panel, type='region', size=(200, -1))
+        if self.animationData.startRegion:
+            self.stRegion.SetValue(self.animationData.startRegion)
+        gridSizer.Add(self.stRegion, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+
+        self.endRegRadio = wx.RadioButton(panel, label=_("End region:"), style=wx.RB_GROUP)
+        gridSizer.Add(self.endRegRadio, pos=(1, 0), flag=wx.EXPAND)
+        self.endRegion = Select(parent=panel, type='region', size=(200, -1))
+        gridSizer.Add(self.endRegion, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+        self.zoomRadio = wx.RadioButton(panel, label=_("Zoom value:"))
+        self.zoomRadio.SetToolTipString(_("N-S/E-W distances in map units used to "
+                                          "gradually reduce region."))
+        gridSizer.Add(self.zoomRadio, pos=(2, 0), flag=wx.EXPAND)
+
+        zoomSizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.zoomNS = wx.TextCtrl(panel, validator=FloatValidator())
+        self.zoomEW = wx.TextCtrl(panel, validator=FloatValidator())
+        zoomSizer.Add(wx.StaticText(panel, label=_("N-S:")), proportion=0,
+                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=3)
+        zoomSizer.Add(self.zoomNS, proportion=1, flag=wx.LEFT, border=3)
+        zoomSizer.Add(wx.StaticText(panel, label=_("E-W:")), proportion=0,
+                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=3)
+        zoomSizer.Add(self.zoomEW, proportion=1, flag=wx.LEFT, border=3)
+        gridSizer.Add(zoomSizer, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+        if self.animationData.endRegion:
+            self.endRegRadio.SetValue(True)
+            self.zoomRadio.SetValue(False)
+            self.endRegion.SetValue(self.animationData.endRegion)
+        if self.animationData.zoomRegionValue:
+            self.endRegRadio.SetValue(False)
+            self.zoomRadio.SetValue(True)
+            zoom = self.animationData.zoomRegionValue
+            self.zoomNS.SetValue(str(zoom[0]))
+            self.zoomEW.SetValue(str(zoom[1]))
+
+        self.endRegRadio.Bind(wx.EVT_RADIOBUTTON, lambda evt: self._enableRegionWidgets())
+        self.zoomRadio.Bind(wx.EVT_RADIOBUTTON, lambda evt: self._enableRegionWidgets())
+        self._enableRegionWidgets()
+
+        gridSizer.AddGrowableCol(1)
+        sizer.Add(gridSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
+        mainSizer.Add(sizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
+
+        panel.SetSizer(mainSizer)
+        mainSizer.Fit(panel)
+
+        return panel
+
+    def _enableRegionWidgets(self):
+        """!Enables/disables region widgets
+        according to which radiobutton is active."""
+        endReg = self.endRegRadio.GetValue()
+        self.endRegion.Enable(endReg)
+        self.zoomNS.Enable(not endReg)
+        self.zoomEW.Enable(not endReg)
+
     def OnViewMode(self, event):
         mode = self.nDChoice.GetSelection()
         self.Freeze()
         self.simpleLmgr.Activate3D(mode == 1)
         self.warning3DLayers.Show(mode == 1)
+
+        # disable region widgets for 3d
+        regSizer = self.stRegion.GetContainingSizer()
+        for child in regSizer.GetChildren():
+            if child.IsSizer():
+                for child_ in child.GetSizer().GetChildren():
+                    child_.GetWindow().Enable(mode != 1)
+            elif child.IsWindow():
+                child.GetWindow().Enable(mode != 1)
+        self._enableRegionWidgets()
+
+        # update layout
         sizer = self.threeDPanel.GetContainingSizer()
         sizer.Show(self.threeDPanel, mode == 1, True)
         sizer.Layout()
-        self.Layout()
-        self.Fit()
         self.Thaw()
 
     def OnLegend(self, event):
@@ -478,6 +567,31 @@ class InputDialog(wx.Dialog):
             self.animationData.workspaceFile = self.fileSelector.GetValue()
         if self.threeDPanel.IsShown():
             self.animationData.nvizParameter = self.paramChoice.GetStringSelection()
+        # region (2d only)
+        if self.animationData.viewMode == '3d':
+            self.animationData.startRegion = None
+            self.animationData.endRegion = None
+            self.animationData.zoomRegionValue = None
+            return
+        isEnd = self.endRegRadio.GetValue() and self.endRegion.GetValue()
+        isZoom = self.zoomRadio.GetValue() and self.zoomNS.GetValue() and self.zoomEW.GetValue()
+        isStart = self.stRegion.GetValue()
+        condition = bool(isStart) + bool(isZoom) + bool(isEnd)
+        if condition == 1:
+            raise GException(_("Region information is not complete"))
+        elif condition == 2:
+            self.animationData.startRegion = isStart
+            if isEnd:
+                self.animationData.endRegion = self.endRegion.GetValue()
+                self.animationData.zoomRegionValue = None
+            else:
+                self.animationData.zoomRegionValue = (float(self.zoomNS.GetValue()),
+                                                      float(self.zoomEW.GetValue()))
+                self.animationData.endRegion = None
+        else:
+            self.animationData.startRegion = None
+            self.animationData.endRegion = None
+            self.animationData.zoomRegionValue = None
 
     def OnOk(self, event):
         try:

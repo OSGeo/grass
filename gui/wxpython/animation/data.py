@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 import os
+import copy
 
 from grass.script import core as gcore
 
@@ -24,7 +25,7 @@ from core.utils import _
 from core.gcmd import GException
 from animation.nviztask import NvizTask
 from animation.utils import validateMapNames, getRegisteredMaps, \
-    checkSeriesCompatibility, validateTimeseriesName
+    checkSeriesCompatibility, validateTimeseriesName, interpolate
 from core.layerlist import LayerList, Layer
 import grass.temporal as tgis
 
@@ -49,6 +50,11 @@ class AnimationData(object):
 
         self.workspaceFile = None
         self.legendCmd = None
+
+        self._startRegion = None
+        self._endRegion = None
+        self._zoomRegionValue = None
+        self._regions = None
 
     def GetName(self):
         return self._name
@@ -179,6 +185,77 @@ class AnimationData(object):
         region = self.nvizTask.GetRegion()
 
         return {'commands': cmds, 'region': region}
+
+    def SetStartRegion(self, region):
+        self._startRegion = region
+
+    def GetStartRegion(self):
+        return self._startRegion
+
+    startRegion = property(fset=SetStartRegion, fget=GetStartRegion)
+
+    def SetEndRegion(self, region):
+        self._endRegion = region
+
+    def GetEndRegion(self):
+        return self._endRegion
+
+    endRegion = property(fset=SetEndRegion, fget=GetEndRegion)
+
+    def SetZoomRegionValue(self, value):
+        self._zoomRegionValue = value
+
+    def GetZoomRegionValue(self):
+        return self._zoomRegionValue
+
+    zoomRegionValue = property(fset=SetZoomRegionValue, fget=GetZoomRegionValue)
+
+    def GetRegions(self):
+        self._computeRegions(self._mapCount, self._startRegion,
+                             self._endRegion, self._zoomRegionValue)
+        return self._regions
+
+    def _computeRegions(self, count, startRegion, endRegion=None, zoomValue=None):
+        """Computes regions based on start region and end region or zoom value
+        for each of the animation frames."""
+        currRegion = dict(gcore.region())  # cast to dict, otherwise deepcopy error
+        del currRegion['cells']
+        del currRegion['cols']
+        del currRegion['rows']
+        regions = []
+        for i in range(self._mapCount):
+            if endRegion or zoomValue:
+                regions.append(copy.copy(currRegion))
+            else:
+                regions.append(None)
+        if not startRegion:
+            self._regions = regions
+            return
+
+        startRegionDict = gcore.parse_key_val(gcore.read_command('g.region', flags='gu',
+                                                                 region=startRegion),
+                                              val_type=float)
+        if endRegion:
+            endRegionDict = gcore.parse_key_val(gcore.read_command('g.region', flags='gu',
+                                                                   region=endRegion),
+                                                val_type=float)
+            for key in ('n', 's', 'e', 'w'):
+                values = interpolate(startRegionDict[key], endRegionDict[key], self._mapCount)
+                for value, region in zip(values, regions):
+                    region[key] = value
+
+        elif zoomValue:
+            for i in range(self._mapCount):
+                regions[i]['n'] -= zoomValue[0] * i
+                regions[i]['e'] -= zoomValue[1] * i
+                regions[i]['s'] += zoomValue[0] * i
+                regions[i]['w'] += zoomValue[1] * i
+
+                # handle cases when north < south and similarly EW
+                if regions[i]['n'] < regions[i]['s'] or \
+                   regions[i]['e'] < regions[i]['w']:
+                        regions[i] = regions[i - 1]
+        self._regions = regions
 
     def __repr__(self):
         return "%s(%r)" % (self.__class__, self.__dict__)

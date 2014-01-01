@@ -327,7 +327,9 @@ class AnimationController(wx.EvtHandler):
                     self.animations[i].SetActive(False)
                     continue
                 anim = [anim for anim in self.animationData if anim.windowIndex == i][0]
-                self.animations[i].SetFrames([HashCmds(cmdList) for cmdList in anim.cmdMatrix])
+                regions = anim.GetRegions()
+                self.animations[i].SetFrames([HashCmds(cmdList, region)
+                                              for cmdList, region in zip(anim.cmdMatrix, regions)])
                 self.animations[i].SetActive(True)
         else:
             for i in range(len(self.animations)):
@@ -335,8 +337,10 @@ class AnimationController(wx.EvtHandler):
                     self.animations[i].SetActive(False)
                     continue
                 anim = [anim for anim in self.animationData if anim.windowIndex == i][0]
+                regions = anim.GetRegions()
                 identifiers = sampleCmdMatrixAndCreateNames(anim.cmdMatrix,
-                                                            mapNamesDict[anim.firstStdsNameType[0]])
+                                                            mapNamesDict[anim.firstStdsNameType[0]],
+                                                            regions)
                 self.animations[i].SetFrames(identifiers)
                 self.animations[i].SetActive(True)
 
@@ -367,7 +371,8 @@ class AnimationController(wx.EvtHandler):
 
     def _set2DData(self, animationData):
         opacities = [layer.opacity for layer in animationData.layerList if layer.active]
-        self.bitmapProvider.SetCmds(animationData.cmdMatrix, opacities)
+        regions = animationData.GetRegions()
+        self.bitmapProvider.SetCmds(animationData.cmdMatrix, opacities, regions)
 
     def _load3DData(self, animationData):
         nviz = animationData.GetNvizCommands()

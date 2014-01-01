@@ -242,26 +242,30 @@ def WxImageToPil(image):
     return pilImage
 
 
-def HashCmd(cmd):
-    """!Returns a hash from command given as a list."""
+def HashCmd(cmd, region):
+    """!Returns a hash from command given as a list and a region as a dict."""
     name = '_'.join(cmd)
+    if region:
+        name += str(sorted(region.items()))
     return hashlib.sha1(name).hexdigest()
 
 
-def HashCmds(cmds):
-    """!Returns a hash from list of commands."""
+def HashCmds(cmds, region):
+    """!Returns a hash from list of commands and regions as dicts."""
     name = ';'.join([item for sublist in cmds for item in sublist])
+    if region:
+        name += str(sorted(region.items()))
     return hashlib.sha1(name).hexdigest()
 
 
-def GetFileFromCmd(dirname, cmd, extension='ppm'):
-    """!Returns file path created as a hash from command."""
-    return os.path.join(dirname, HashCmd(cmd) + '.' + extension)
+def GetFileFromCmd(dirname, cmd, region, extension='ppm'):
+    """!Returns file path created as a hash from command and region."""
+    return os.path.join(dirname, HashCmd(cmd, region) + '.' + extension)
 
 
-def GetFileFromCmds(dirname, cmds, extension='ppm'):
-    """!Returns file path created as a hash from list of commands."""
-    return os.path.join(dirname, HashCmds(cmds) + '.' + extension)
+def GetFileFromCmds(dirname, cmds, region, extension='ppm'):
+    """!Returns file path created as a hash from list of commands and regions."""
+    return os.path.join(dirname, HashCmds(cmds, region) + '.' + extension)
 
 
 def layerListToCmdsMatrix(layerList):
@@ -295,7 +299,7 @@ def layerListToCmdsMatrix(layerList):
     return zip(*cmdsForComposition)
 
 
-def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries):
+def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries, regions):
     """!Applies information from temporal sampling
     to the command matrix."""
     namesList = []
@@ -306,7 +310,7 @@ def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries):
             if lastName != name:
                 lastName = name
                 j += 1
-            namesList.append(HashCmds(cmdMatrix[j]))
+            namesList.append(HashCmds(cmdMatrix[j], regions[j]))
         else:
             namesList.append(None)
     assert(j == len(cmdMatrix) - 1)
@@ -321,3 +325,29 @@ def getCpuCount():
         return cpu_count()
     except NotImplementedError:
         return 4
+
+
+def interpolate(start, end, count):
+    """!Interpolates values between start and end.
+
+    @param start start value (float)
+    @param end end value (float)
+    @param count total number of values including start and end
+
+    >>> interpolate(0, 10, 5)
+    [0, 2.5, 5.0, 7.5, 10]
+    >>> interpolate(10, 0, 5)
+    [10, 7.5, 5.0, 2.5, 0]
+    """
+    step = (end - start) / float(count - 1)
+    values = []
+    if start < end:
+        while start < end:
+            values.append(start)
+            start += step
+    else:
+        while end < start:
+            values.append(start)
+            start += step
+    values.append(end)
+    return values
