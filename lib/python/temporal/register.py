@@ -97,7 +97,7 @@ def register_maps_in_space_time_dataset(
     if name:
         sp = open_old_space_time_dataset(name, type, dbif)
 
-        if sp.is_time_relative() and not unit:
+        if sp.is_time_relative() and (start or end) and not unit:
             dbif.close()
             msgr.fatal(_("Space time %(sp)s dataset <%(name)s> with relative"
                          " time found, but no relative unit set for %(sp)s "

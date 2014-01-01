@@ -35,17 +35,18 @@ class TestRegisterFunctions(unittest.TestCase):
         ret += grass.run_command("r.mapcalc", overwrite=True, quiet=True, 
                           expression="register_map_2 = 2")
         self.assertEqual(ret, 0)
+        
+        
+        self.strds_abs = tgis.open_new_space_time_dataset(name="register_test_abs", type="strds", temporaltype="absolute", 
+                                            title="Test strds", descr="Test strds", semantic="field")
+        self.strds_rel = tgis.open_new_space_time_dataset(name="register_test_rel", type="strds", temporaltype="relative", 
+                                            title="Test strds", descr="Test strds", semantic="field")
 
-    def test_absolute_time_strds(self):
+    def test_absolute_time_strds_1(self):
         """!Test the registration of maps with absolute time in a
            space time raster dataset
         """
-        ret = grass.run_command("t.create", output="register_test", 
-                                title="Test strds", description="Test strds",
-                                temporaltype="absolute")
-        self.assertEqual(ret, 0)
-
-        tgis.register_maps_in_space_time_dataset(type="rast", name="register_test", 
+        tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_abs.get_name(), 
                  maps="register_map_1,register_map_2",
                  start="2001-01-01", increment="1 day", interval=True)
 
@@ -61,14 +62,45 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-        strds = tgis.SpaceTimeRasterDataset("register_test@" + tgis.get_current_mapset())
-        strds.select()
-        start, end = strds.get_absolute_time()
+        self.strds_abs.select()
+        start, end = self.strds_abs.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-        ret = grass.run_command("t.remove", input="register_test") 
-        self.assertEqual(ret, 0)
+        self.strds_abs.print_info()
+
+    def test_absolute_time_strds_2(self):
+        """!Test the registration of maps with absolute time in a
+           space time raster dataset.
+           The timestamps are set using the C-Interface beforehand, so that the register function needs
+           to read the timetsamp from the map metadata.
+        """
+
+        ciface = tgis.get_tgis_c_library_interface()
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001/2 Jan 2001")
+        ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "2 Jan 2001/3 Jan 2001")
+
+        tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_abs.get_name(), 
+                                                 maps="register_map_1,register_map_2")
+
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map.select()
+        start, end = map.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 2))
+
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map.select()
+        start, end = map.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 2))
+        self.assertEqual(end, datetime.datetime(2001, 1, 3))
+
+        self.strds_abs.select()
+        start, end = self.strds_abs.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 3))
+
+        self.strds_abs.print_info()
 
     def test_absolute_time_1(self):
         """!Test the registration of maps with absolute time
@@ -106,19 +138,37 @@ class TestRegisterFunctions(unittest.TestCase):
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 18, 30, 1))
 
-    def test_relative_time_strds(self):
+    def test_absolute_time_3(self):
+        """!Test the registration of maps with absolute time. 
+           The timestamps are set using the C-Interface beforehand, so that the register function needs
+           to read the timetsamp from the map metadata.
+        """
+                 
+        ciface = tgis.get_tgis_c_library_interface()
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001 10:30:01")
+        ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1 Jan 2001 18:30:01")
+
+        tgis.register_maps_in_space_time_dataset(type="rast", name=None, 
+                 maps="register_map_1,register_map_2")
+                 
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map.select()
+        start, end = map.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1, 10, 30, 1))
+
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map.select()
+        start, end = map.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1, 18, 30, 1))
+
+    def test_relative_time_strds_1(self):
         """!Test the registration of maps with relative time in a
            space time raster dataset
         """
-        ret = grass.run_command("t.create", output="register_test", 
-                                title="Test strds", description="Test strds",
-                                temporaltype="relative")
-        self.assertEqual(ret, 0)
 
-
-        tgis.register_maps_in_space_time_dataset(type="rast", name="register_test", 
-                 maps="register_map_1,register_map_2",
-                 start=0, increment=1, unit="day", interval=True)
+        tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_rel.get_name(), 
+                                                 maps="register_map_1,register_map_2", start=0, 
+                                                 increment=1, unit="day", interval=True)
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
         map.select()
@@ -134,18 +184,48 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(end, 2)
         self.assertEqual(unit, "day")
 
-        strds = tgis.SpaceTimeRasterDataset("register_test@" + tgis.get_current_mapset())
-        strds.select()
-        start, end, unit = strds.get_relative_time()
+        self.strds_rel.select()
+        start, end, unit = self.strds_rel.get_relative_time()
         self.assertEqual(start, 0)
         self.assertEqual(end, 2)
         self.assertEqual(unit, "day")
         
-        strds.print_info()
+        self.strds_rel.print_info()
 
-        ret = grass.run_command("t.remove", input="register_test") 
-        self.assertEqual(ret, 0)
+    def test_relative_time_strds_2(self):
+        """!Test the registration of maps with relative time in a
+           space time raster dataset. The timetsamps are set for the maps using the 
+           C-interface before registration.
+        """
+        ciface = tgis.get_tgis_c_library_interface()
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1000000 seconds/1500000 seconds")
+        ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1500000 seconds/2000000 seconds")
 
+        tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_rel.get_name(), 
+                                                 maps="register_map_1,register_map_2")
+
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map.select()
+        start, end, unit = map.get_relative_time()
+        self.assertEqual(start, 1000000)
+        self.assertEqual(end, 1500000)
+        self.assertEqual(unit, "seconds")
+
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map.select()
+        start, end, unit = map.get_relative_time()
+        self.assertEqual(start, 1500000)
+        self.assertEqual(end, 2000000)
+        self.assertEqual(unit, "seconds")
+
+        self.strds_rel.select()
+        start, end, unit = self.strds_rel.get_relative_time()
+        self.assertEqual(start, 1000000)
+        self.assertEqual(end, 2000000)
+        self.assertEqual(unit, "seconds")
+        
+        self.strds_rel.print_info()
+        
     def test_relative_time_1(self):
         """!Test the registration of maps with relative time
         """
@@ -172,27 +252,55 @@ class TestRegisterFunctions(unittest.TestCase):
         """
         tgis.register_maps_in_space_time_dataset(type="rast", name=None, 
                  maps="register_map_1,register_map_2",
-                 start=1000000, increment=500000, unit="second", interval=True)
+                 start=1000000, increment=500000, unit="seconds", interval=True)
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1000000)
         self.assertEqual(end, 1500000)
-        self.assertEqual(unit, "second")
+        self.assertEqual(unit, "seconds")
 
         map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
         map.select()
         start, end, unit = map.get_relative_time()
         self.assertEqual(start, 1500000)
         self.assertEqual(end, 2000000)
-        self.assertEqual(unit, "second")
+        self.assertEqual(unit, "seconds")
+
+    def test_relative_time_3(self):
+        """!Test the registration of maps with relative time. The timetsamps are set beforhand using
+           the C-interface.
+        """
+        ciface = tgis.get_tgis_c_library_interface()
+        ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1000000 seconds/1500000 seconds")
+        ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1500000 seconds/2000000 seconds")
+        
+        tgis.register_maps_in_space_time_dataset(type="rast", name=None, 
+                 maps="register_map_1,register_map_2")
+
+        map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
+        map.select()
+        start, end, unit = map.get_relative_time()
+        self.assertEqual(start, 1000000)
+        self.assertEqual(end, 1500000)
+        self.assertEqual(unit, "seconds")
+
+        map = tgis.RasterDataset("register_map_2@" + tgis.get_current_mapset())
+        map.select()
+        start, end, unit = map.get_relative_time()
+        self.assertEqual(start, 1500000)
+        self.assertEqual(end, 2000000)
+        self.assertEqual(unit, "seconds")
 
     def tearDown(self):
         """!Remove maps from temporal database
         """
-        ret = grass.run_command("t.unregister", maps="register_map_1,register_map_2")
+        ret = grass.run_command("t.unregister", maps="register_map_1,register_map_2", quiet=True)
+        ret = grass.run_command("g.remove", rast="register_map_1,register_map_2", quiet=True)
         self.assertEqual(ret, 0)
+        self.strds_abs.delete()
+        self.strds_rel.delete()
 
     @classmethod
     def tearDownClass(cls):
