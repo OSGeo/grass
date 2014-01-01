@@ -514,8 +514,7 @@ def _convert_timestamp_from_grass(ts):
                             byref(dt1),
                             byref(dt2),
                             byref(count))
-
-
+    
     if dt1.mode == libdate.DATETIME_ABSOLUTE:
         pdt1 = None
         pdt2 = None
@@ -535,7 +534,7 @@ def _convert_timestamp_from_grass(ts):
         unit = None
         start = None
         end = None
-        if count >= 1:
+        if count.value >= 1:
             if dt1.year > 0:
                 unit = "years"
                 start = dt1.year
@@ -554,7 +553,7 @@ def _convert_timestamp_from_grass(ts):
             elif dt1.second > 0:
                 unit = "seconds"
                 start = dt1.second
-        if count == 2:
+        if count.value == 2:
             if dt2.year > 0:
                 end = dt2.year
             elif dt2.month > 0:
