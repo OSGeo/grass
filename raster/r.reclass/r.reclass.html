@@ -61,16 +61,22 @@ a reclass map to a regular raster map layer as well:
 <p>where <em>raster_map</em> is the name to be given to the new raster map,
 and <em>reclass_map</em> is an existing reclass map.
 
-<p>Because <em>r.reclass</em> generates a table referencing some original
-raster map layer rather than creating a reclassed raster map layer,
-a <em>r.reclass</em> map layer will no longer be accessible if
-the original raster map layer upon which it was based is later removed.
+<p>Because <em>r.reclass</em> generates internally simply a table by
+referencing some original raster map layer rather than creating a full
+new reclassed raster map layer, a <em>r.reclass</em> map layer will
+no longer be accessible if the original raster map layer, upon which
+it was based, is later removed. Therefore, attempting to remove a
+raster map layer from which a <em>r.reclass</em> has been derived
+is only possible if the original map is removed first.
+Alternatively, a <em>r.reclass</em> map can be removed including 
+its base map by using <p><em><a href="g.mremove.html">g.mremove</a></em>'s
+<b>-b</b> flag.
 
 <p>A <em>r.reclass</em> map is not a true raster map layer.
 Rather, it is a table of reclassification values which reference the
 input raster map layer.  Therefore, users who wish to retain reclassified
 map layers must also save the original input raster map layers
-from which they were generated. Alternatively r.recode can be used.
+from which they were generated. Alternatively <em>r.recode</em> can be used.
 
 <p>Category values which are not explicitly reclassified to a new value
 by the user will be reclassified to NULL.
@@ -183,9 +189,11 @@ In this case the labels are assigned exactly as in the two previous examples.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.resample.html">r.resample</a></em>,
-<em><a href="r.rescale.html">r.rescale</a></em>,
-<em><a href="r.recode.html">r.recode</a></em>
+<em>
+<a href="r.resample.html">r.resample</a>,
+<a href="r.rescale.html">r.rescale</a>,
+<a href="r.recode.html">r.recode</a>
+</em>
 
 
 <h2>AUTHORS</h2>
