@@ -57,6 +57,8 @@ try:
 except:
     pass
 
+import atexit
+
 ###############################################################################
 
 # Profiling function provided by the temporal framework
@@ -312,6 +314,20 @@ def get_sql_template_path():
     base = os.getenv("GISBASE")
     base_etc = os.path.join(base, "etc")
     return os.path.join(base_etc, "sql")
+
+###############################################################################
+
+def stop_subprocesses():
+    """!Stop the messenger and C-interface subprocesses
+    """
+    global message_interface
+    global c_library_interface
+    if message_interface:
+        message_interface.stop()
+    if c_library_interface:
+        c_library_interface.stop()
+
+atexit.register(stop_subprocesses)
 
 ###############################################################################
 

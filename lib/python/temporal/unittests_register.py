@@ -27,7 +27,7 @@ class TestRegisterFunctions(unittest.TestCase):
                                 w=0.0, t=1.0, b=0.0, res=10.0)
 
     def setUp(self):
-        """!Create the test maps
+        """!Create the test maps and the space time raster datasets
         """
         ret = 0
         ret += grass.run_command("r.mapcalc", overwrite=True, quiet=True, 

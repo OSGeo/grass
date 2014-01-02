@@ -61,7 +61,6 @@ def register_maps_in_space_time_dataset(
                        time and an increment is provided
        @param fs Field separator used in input file
     """
-
     start_time_in_file = False
     end_time_in_file = False
     msgr = get_tgis_message_interface()

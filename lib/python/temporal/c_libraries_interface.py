@@ -571,9 +571,10 @@ def _convert_timestamp_from_grass(ts):
 ###############################################################################
 
 def _stop(lock, conn, data):
-	conn.close()
-	lock.release()
-	sys.exit()
+    conn.close()
+    lock.release()
+    libgis.G_debug(1, "Stop C-interface server")
+    sys.exit()
 
 ###############################################################################
 
@@ -595,6 +596,7 @@ def c_library_server(lock, conn):
     functions[RPCDefs.MAP_EXISTS] = _map_exists
 
     libgis.G_gisinit("c_library_server")
+    libgis.G_debug(1, "Start C-interface server")
 
     while True:
         # Avoid busy waiting
