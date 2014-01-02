@@ -14,6 +14,7 @@ for details.
 @author Soeren Gebbert
 """
 
+import logging
 import sys
 import grass.lib.gis as libgis
 from multiprocessing import Process, Lock, Pipe
@@ -27,8 +28,6 @@ class FatalError(Exception):
 
     def __str__(self):
         return self.value
-
-
 
 def message_server(lock, conn):
     """!The GRASS message server function designed to be a target for
@@ -64,6 +63,8 @@ def message_server(lock, conn):
        - Debug: ["DEBUG", level, "MESSAGE"]
        - Percent: ["PERCENT", n, d, s]
     """
+    libgis.G_debug(1, "Start messenger server")
+    
     while True:
         # Avoid busy waiting
         conn.poll(None)
@@ -77,7 +78,8 @@ def message_server(lock, conn):
         if message_type == "STOP":
             conn.close()
             lock.release()
-            return
+            libgis.G_debug(1, "Stop messenger server")
+            sys.exit()
 
         message = data[1]
 
