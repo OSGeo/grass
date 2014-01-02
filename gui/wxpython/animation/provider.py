@@ -739,6 +739,8 @@ def test():
     from core.layerlist import LayerList, Layer
     from animation.data import AnimLayer
     from animation.utils import layerListToCmdsMatrix
+    import grass.temporal as tgis
+    tgis.init()
 
     layerList = LayerList()
     layer = AnimLayer()

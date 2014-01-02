@@ -26,6 +26,7 @@ import tempfile
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 import grass.script as gcore
+import grass.temporal as tgis
 from core import globalvar
 from gui_core.widgets import IntegerValidator
 from core.gcmd import RunCommand
@@ -57,6 +58,9 @@ class AnimationFrame(wx.Frame):
         self.iconsize = (16, 16)
 
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
+
+        # Make sure the temporal database exists
+        tgis.init()
 
         self.animations = [Animation() for i in range(MAX_COUNT)]
         self.windows = []

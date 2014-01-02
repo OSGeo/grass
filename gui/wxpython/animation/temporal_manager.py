@@ -53,9 +53,6 @@ class TemporalManager(object):
 
         self.granularityMode = GranularityMode.ORIGINAL
 
-        # Make sure the temporal database exists
-        tgis.init()
-
     def GetTemporalType(self):
         """!Get temporal type (TemporalType.ABSOLUTE, TemporalType.RELATIVE)"""
         return self._temporalType
@@ -346,6 +343,8 @@ class TemporalManager(object):
 
 def test():
     from pprint import pprint
+    # Make sure the temporal database exists
+    tgis.init()
 
     temp = TemporalManager()
 #    timeseries = createAbsolutePoint()

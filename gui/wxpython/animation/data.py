@@ -268,7 +268,6 @@ class AnimLayer(Layer):
         Layer.__init__(self)
         self._mapTypes.extend(['strds', 'stvds', 'str3ds'])
         self._maps = []
-        tgis.init()
 
     def SetName(self, name):
         if not self.hidden:
