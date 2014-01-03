@@ -37,10 +37,10 @@ from core import *
 
 ###############################################################################
 
-
 class DictSQLSerializer(object):
     def __init__(self):
         self.D = {}
+        self.dbmi_paramstyle = get_tgis_dbmi_paramstyle()
 
     def serialize(self, type, table, where=None):
         """!Convert the internal dictionary into a string of semicolon
@@ -75,7 +75,6 @@ class DictSQLSerializer(object):
             \endcode
         """
 
-        dbif =  SQLDatabaseInterfaceConnection()
 
         sql = ""
         args = []
@@ -110,12 +109,12 @@ class DictSQLSerializer(object):
             sql += ') VALUES ('
             for key in self.D.keys():
                 if count == 0:
-                    if dbif.dbmi.paramstyle == "qmark":
+                    if self.dbmi_paramstyle == "qmark":
                         sql += '?'
                     else:
                         sql += '%s'
                 else:
-                    if dbif.dbmi.paramstyle == "qmark":
+                    if self.dbmi_paramstyle == "qmark":
                         sql += ' ,?'
                     else:
                         sql += ' ,%s'
@@ -135,13 +134,13 @@ class DictSQLSerializer(object):
                 # Update only entries which are not None
                 if self.D[key] is not None:
                     if count == 0:
-                        if dbif.dbmi.paramstyle == "qmark":
+                        if self.dbmi_paramstyle == "qmark":
                             sql += ' %s = ? ' % key
                         else:
                             sql += ' %s ' % key
                             sql += '= %s '
                     else:
-                        if dbif.dbmi.paramstyle == "qmark":
+                        if self.dbmi_paramstyle == "qmark":
                             sql += ' ,%s = ? ' % key
                         else:
                             sql += ' ,%s ' % key
@@ -158,13 +157,13 @@ class DictSQLSerializer(object):
             sql += 'UPDATE ' + table + ' SET '
             for key in self.D.keys():
                 if count == 0:
-                    if dbif.dbmi.paramstyle == "qmark":
+                    if self.dbmi_paramstyle == "qmark":
                         sql += ' %s = ? ' % key
                     else:
                         sql += ' %s ' % key
                         sql += '= %s '
                 else:
-                    if dbif.dbmi.paramstyle == "qmark":
+                    if self.dbmi_paramstyle == "qmark":
                         sql += ' ,%s = ? ' % key
                     else:
                         sql += ' ,%s ' % key
