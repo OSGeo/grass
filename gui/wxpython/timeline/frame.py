@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import wx
+import signal
 from math import ceil
 from itertools import cycle
 import numpy as np
@@ -73,12 +74,33 @@ class TimelineFrame(wx.Frame):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=_("Timeline Tool"))
 
         tgis.init()
+        self.is_standalone = False
+        # Check if a parent exists. The module g.gui.timeline runs in stand alone mode
+        # in case there is no parent. 
+        if parent is None:
+            self.is_standalone = True
         self.datasets = []
         self.timeData = {}
         self._layout()
         self.temporalType = None
         self.unit = None
+        # We create a database interface here to speedup the GUI
+        self.dbif = tgis.SQLDatabaseInterfaceConnection()
+        self.dbif.connect()
 
+    def __del__(self):
+        """!Close the database interface and stop the messenger and C-interface
+           subprocesses.
+        """
+        if self.dbif.connected is True:
+            self.dbif.close()
+        tgis.stop_subprocesses()
+        # We need to kill the child process explicitely to avoid 
+        # orphaned g.gui.timeline stand-alone processes. 
+        if self.is_standalone is True:
+            pid = os.getpid()
+            os.kill(pid, signal.SIGQUIT) #or signal.SIGKILL 
+        
     def _layout(self):
         """!Creates the main panel with all the controls on it:
              * mpl canvas
@@ -145,15 +167,16 @@ class TimelineFrame(wx.Frame):
         self.timeData = {}
         mode = None
         unit = None
+
         for series in timeseries:
             name = series[0] + '@' + series[1]
             etype = series[2]
             sp = tgis.dataset_factory(etype, name)
-            if not sp.is_in_db():
+            if not sp.is_in_db(dbif=self.dbif):
                 GError(self, message=_("Dataset <%s> not found in temporal database") % (name))
                 return
 
-            sp.select()
+            sp.select(dbif=self.dbif)
 
             self.timeData[name] = {}
             self.timeData[name]['elementType'] = series[2]
@@ -167,8 +190,8 @@ class TimelineFrame(wx.Frame):
                 return
 
             # check topology
-            maps = sp.get_registered_maps_as_objects()
-            self.timeData[name]['validTopology'] = sp.check_temporal_topology(maps)
+            maps = sp.get_registered_maps_as_objects(dbif=self.dbif)
+            self.timeData[name]['validTopology'] = sp.check_temporal_topology(maps=maps, dbif=self.dbif)
 
             self.timeData[name]['temporalMapType'] = sp.get_map_time()  # point/interval
             self.timeData[name]['unit'] = None  # only with relative
@@ -194,7 +217,7 @@ class TimelineFrame(wx.Frame):
                                 'north', 'south', 'west', 'east'])
 
             rows = sp.get_registered_maps(columns=columns, where=None,
-                                          order='start_time', dbif=None)
+                                          order='start_time', dbif=self.dbif)
             if rows is None:
                 rows = []
             for row in rows:
@@ -385,7 +408,7 @@ class TimelineFrame(wx.Frame):
         @return (mapName, mapset, type)
         """
         validated = []
-        tDict = tgis.tlist_grouped('stds', group_type=True)
+        tDict = tgis.tlist_grouped('stds', group_type=True, dbif=self.dbif)
         # nested list with '(map, mapset, etype)' items
         allDatasets = [[[(map, mapset, etype) for map in maps]
                      for etype, maps in etypesDict.iteritems()]
