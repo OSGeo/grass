@@ -56,7 +56,7 @@ typedef struct _tgisMapList
     /*!
       \brief Array of tgisMap struct's
     */
-    tgisMap **a;
+    tgisMap **values;
     /*!
       \brief Number of tgisMap struct's in the list
     */
@@ -74,7 +74,7 @@ tgisMapList * tgis_new_map_list();
 /*! Insert a new map to the map list */
 void tgis_map_list_insert(tgisMapList *list, char *name, char*mapset, struct TimeStamp *ts);
 /*! Add a new map to the map list */
-void tgis_map_list_add(tgisMap *map);
+void tgis_map_list_add(tgisMapList *list, tgisMap *map);
 
 /*!Spatio temporal extent as double values
  
@@ -113,7 +113,7 @@ typedef struct _tgisDatasetList
     /*!
       \brief Array of tgisDataset structs
     */
-    struct _tgisDataset **a;
+    struct _tgisDataset **values;
     /*!
       \brief Number of tgisDataset structs in the list
     */
