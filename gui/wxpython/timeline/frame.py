@@ -29,7 +29,6 @@ try:
     # backend.
     matplotlib.use('WXAgg')
     from matplotlib.figure import Figure
-    import matplotlib.pyplot as plt
     from matplotlib.backends.backend_wxagg import \
         FigureCanvasWxAgg as FigCanvas, \
         NavigationToolbar2WxAgg as NavigationToolbar
@@ -392,13 +391,6 @@ class TimelineFrame(wx.Frame):
                     self.axes3d = None
                 self.axes2d.change_geometry(1, 1, 1)
                 self.canvas.draw()
-
-        if check_version(1, 1, 0):
-            # not working, maybe someone is more lucky
-            try:
-                plt.tight_layout()
-            except:
-                pass
 
     def _checkDatasets(self, datasets):
         """!Checks and validates datasets.
