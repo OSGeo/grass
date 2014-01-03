@@ -411,7 +411,7 @@ as the cut-off value. This only works with SFD, not with MFD.
   # <i>Thinning is required before converting raster lines to vector</i>
   r.thin in=rwater.course out=rwater.course.Thin
   r.colors -gn rwater.course.Thin color=grey
-  r.to.vect in=rwater.course.Thin out=rwater_course feature=line
+  r.to.vect in=rwater.course.Thin out=rwater_course type=line
   v.db.dropcolumn map=rwater_course column=label
 </pre></div>
 <!-- can't set line attribute to catchment it is in as v.what.rast and 
@@ -425,7 +425,7 @@ as the cut-off value. This only works with SFD, not with MFD.
 Create watershed basins map and convert to a vector polygon map
 <div class="code"><pre>
   r.watershed elev=elevation.dem basin=rwater.basin thresh=15000
-  r.to.vect -s in=rwater.basin out=rwater_basins feature=area
+  r.to.vect -s in=rwater.basin out=rwater_basins type=area
   v.db.dropcolumn map=rwater_basins column=label
   v.db.renamecolumn map=rwater_basins column=value,catchment
 </pre></div>
