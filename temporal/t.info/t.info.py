@@ -78,8 +78,8 @@ def main():
         #      0123456789012345678901234567890
         print " +------------------- Temporal DBMI backend information ----------------------+"
         print " | DBMI Python interface:...... " + str(dbif.dbmi.__name__)
-        print " | DBMI init string:........... " + str(
-            tgis.get_temporal_dbmi_init_string())
+        print " | Temporal database string:... " + str(
+            tgis.get_tgis_database_string())
         print " | SQL template path:.......... " + str(
             tgis.get_sql_template_path())
         if rows:
@@ -89,7 +89,7 @@ def main():
         return
     elif system:
         print "dbmi_python_interface=\'" + str(dbif.dbmi.__name__) + "\'"
-        print "dbmi_init_string=\'" + str(tgis.get_temporal_dbmi_init_string()) + "\'"
+        print "dbmi_init_string=\'" + str(tgis.get_tgis_database_string()) + "\'"
         print "sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'"
         if rows:
             for row in rows:
