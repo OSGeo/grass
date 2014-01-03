@@ -22,16 +22,7 @@ or it can be launched from the console.
 
 2. Copy directory ./doc/gui/wxpython/example to ./gui/wxpython/example
 
-3. Now you should be able to run Example Tool as a standalone 
-application in GRASS environment. Start GRASS GIS and start application:
-
-    > python ./gui/wxpython/example/frame.py
-
-If you want to add Example Tool in the compilation.
-
-4. Move file ./gui/wxpython/example/wxGUI.Example.html to ./gui/wxpython/docs/
-
-5. Edit ./gui/wxpython/Makefile:
+3. Edit ./gui/wxpython/Makefile:
 
  SRCFILES := $(wildcard icons/*.* scripts/* xml/*) \
 -	$(wildcard core/* dbmgr/* gcp/* gmodeler/* ... \
@@ -40,12 +31,18 @@ If you want to add Example Tool in the compilation.
 -PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr gcp gmodeler ... \
 +PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr example gcp gmodeler ... \
 
-6. Run make (in ./gui/wxpython)
-    
+4. Run make (in ./gui/wxpython)
+
+Now you can start the application by running
+
+$ g.gui.example
+
+from terminal or wxGUI command console. Try also g.gui.example --help.
+
 If you want to access Example Tool from Layer Manager menu, there are
 a few more things to be done.
 
-7. Edit ./gui/wxpython/xml/menudata.xml. Add following code to appropriate place:
+5. Edit ./gui/wxpython/xml/menudata.xml. Add following code to appropriate place:
 
     <menuitem>
       <label>Example</label>
@@ -54,20 +51,17 @@ a few more things to be done.
       <handler>OnExample</handler>
     </menuitem>
     
-8. Add folowing event handler to class GMFrame in ./gui/wxpython/lmgr/frame.py:
+6. Add folowing event handler to class GMFrame in ./gui/wxpython/lmgr/frame.py:
 
     def OnExample(self, event):
         """!Launch ExampleTool"""
-        win = ExampleMapFrame(parent = self)
+        from example.frame import ExampleMapFrame
+        win = ExampleMapFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         
         win.Show()
-        
-and don't forget to insert following line at the beginning of the file:
 
-    from example.frame import ExampleMapFrame
-
-9. Run make again.
+7. Run make again.
 
 
 Note

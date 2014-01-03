@@ -8,12 +8,12 @@ Classes:
  - toolbars::ExampleMainToolbar
  - toolbars::ExampleMiscToolbar
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2011-2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Anna Kratochvilova <kratochanna gmail.com>
+@author Anna Petrasova <kratochanna gmail.com>
 """
 
 import wx
@@ -25,22 +25,23 @@ from icons.icon import MetaIcon
 class ExampleMapToolbar(BaseToolbar):
     """!Map toolbar (to control map zoom and rendering)
     """
-    def __init__(self, parent):
+    def __init__(self, parent, toolSwitcher):
         """!Map toolbar constructor
         """
-        BaseToolbar.__init__(self, parent)
-        
+        BaseToolbar.__init__(self, parent, toolSwitcher)
+
         self.InitToolbar(self._toolbarData())
 
         # realize the toolbar
         self.Realize()
-        
-        self.action = { 'id' : self.pan }
-        self.defaultAction = { 'id' : self.pan,
-                               'bind' : self.parent.OnPan }
-        
+
+        self._default = self.pan
+
+        for tool in (self.pan, self.zoomIn, self.zoomOut):
+            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
+
         self.EnableTool(self.zoomBack, False)
-        
+
     def _toolbarData(self):
         """!Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
@@ -52,10 +53,10 @@ class ExampleMapToolbar(BaseToolbar):
                                       self.parent.OnRender),
                                      ("erase", icons["erase"],
                                       self.parent.OnErase),
-                                     (None, ), # creates separator
+                                     (None, ),  # creates separator
                                      ("pan", icons["pan"],
                                       self.parent.OnPan,
-                                      wx.ITEM_CHECK), # toggle tool
+                                      wx.ITEM_CHECK),  # toggle tool
                                      ("zoomIn", icons["zoomIn"],
                                       self.parent.OnZoomIn,
                                       wx.ITEM_CHECK),
@@ -67,8 +68,9 @@ class ExampleMapToolbar(BaseToolbar):
                                       self.parent.OnZoomBack),
                                      ("zoomToMap", icons["zoomExtent"],
                                       self.parent.OnZoomToMap),
-                                    ))
-                                    
+                                     ))
+
+
 class ExampleMainToolbar(BaseToolbar):
     """!Toolbar with tools related to application functionality
     """
@@ -76,18 +78,19 @@ class ExampleMainToolbar(BaseToolbar):
         """!Toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
-        
+
         self.InitToolbar(self._toolbarData())
-        
+
         # realize the toolbar
         self.Realize()
-        
+
     def _toolbarData(self):
         """!Toolbar data"""
         return self._getToolbarData((("addRaster", BaseIcons['addRast'],
                                       self.parent.OnSelectRaster),
-                                    ))
-        
+                                     ))
+
+
 class ExampleMiscToolbar(BaseToolbar):
     """!Toolbar with miscellaneous tools related to app
     """
@@ -95,11 +98,11 @@ class ExampleMiscToolbar(BaseToolbar):
         """!Toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
-        
+
         self.InitToolbar(self._toolbarData())
         # realize the toolbar
         self.Realize()
-        
+
     def _toolbarData(self):
         """!Toolbar data"""
         icons = BaseIcons
