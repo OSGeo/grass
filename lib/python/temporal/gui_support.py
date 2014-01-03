@@ -18,7 +18,7 @@ from factory import *
 
 ###############################################################################
 
-def tlist_grouped(type, group_type = False):
+def tlist_grouped(type, group_type = False, dbif=None):
     """!List of temporal elements grouped by mapsets.
 
     Returns a dictionary where the keys are mapset 
@@ -36,6 +36,7 @@ def tlist_grouped(type, group_type = False):
     @return directory of mapsets/elements
     """
     result = {}
+    dbif, connected = init_dbif(dbif)
     
     mapset = None
     if type == 'stds':
@@ -44,7 +45,7 @@ def tlist_grouped(type, group_type = False):
         types = [type]
     for type in types:
         try:
-            tlist_result = tlist(type)
+            tlist_result = tlist(type=type, dbif=dbif)
         except core.ScriptError, e:
             warning(e)
             continue
@@ -70,11 +71,14 @@ def tlist_grouped(type, group_type = False):
             else:
                 result[mapset].append(name)
 
+    if connected is True:
+        dbif.close()
+
     return result
 
 ###############################################################################
 
-def tlist(type):
+def tlist(type, dbif=None):
     """!Return a list of space time datasets of absolute and relative time
      
     @param type element type (strds, str3ds, stvds)
@@ -83,9 +87,7 @@ def tlist(type):
     """
     id = None
     sp = dataset_factory(type, id)
-
-    dbif = SQLDatabaseInterfaceConnection()
-    dbif.connect()
+    dbif, connected = init_dbif(dbif)
 
     output = []
     temporal_type = ["absolute", 'relative']
@@ -107,6 +109,8 @@ def tlist(type):
         for row in rows:
             for col in row:
                 output.append(str(col))
-    dbif.close()
+
+    if connected is True:
+        dbif.close()
 
     return output

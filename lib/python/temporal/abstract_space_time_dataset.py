@@ -477,7 +477,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             maps = self.get_registered_maps_as_objects(
                 where=None, order="start_time", dbif=dbif)
 
-        return count_temporal_topology_relationships(maps)
+        return count_temporal_topology_relationships(maps1=maps, dbif=dbif)
 
     def check_temporal_topology(self, maps=None, dbif=None):
         """!Check the temporal topology of all maps of the current space time
@@ -516,7 +516,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             maps = self.get_registered_maps_as_objects(
                 where=None, order="start_time", dbif=dbif)
 
-        relations = count_temporal_topology_relationships(maps)
+        relations = count_temporal_topology_relationships(maps1=maps, dbif=dbif)
 
         if relations == None:
             return False
@@ -2272,7 +2272,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         dbif.execute_transaction(sql_script)
 
         # Read and validate the selected end time
-        self.select()
+        self.select(dbif)
 
         if self.is_time_absolute():
             start_time, end_time = self.get_absolute_time()
