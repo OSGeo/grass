@@ -2167,8 +2167,7 @@ class CmdPanel(wx.Panel):
                     return
                 datasets = select.GetValue().split(',')
                 from timeline import frame
-                gcmd.RunCommand('g.gui.timeline', inputs=datasets)
-#                frame.run(parent=self, datasets=datasets)
+                frame.run(parent=self, datasets=datasets)
 
     def OnUpdateSelection(self, event):
         """!Update dialog (layers, tables, columns, etc.)
