@@ -33,7 +33,7 @@ r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <=43,1,null())"
 r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
 d.rast.leg forests_p_dens7
 
-r.to.vect forests out=forests feature=area
+r.to.vect forests out=forests type=area
 d.vect forests type=boundary
 </pre></div>
 
