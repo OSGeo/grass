@@ -282,6 +282,8 @@ class ModelSearchDialog(wx.Dialog):
     def Reset(self):
         """!Reset dialog"""
         self.search.Reset()
+        self.label.SetValue('')
+        self.comment.SetValue('')
         self.cmd_prompt.OnCmdErase(None)
         self.cmd_prompt.SetFocus()
 
