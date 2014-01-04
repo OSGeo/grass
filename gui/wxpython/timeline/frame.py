@@ -94,12 +94,7 @@ class TimelineFrame(wx.Frame):
         if self.dbif.connected is True:
             self.dbif.close()
         tgis.stop_subprocesses()
-        # We need to kill the child process explicitely to avoid 
-        # orphaned g.gui.timeline stand-alone processes. 
-        if self.is_standalone is True:
-            pid = os.getpid()
-            os.kill(pid, signal.SIGQUIT) #or signal.SIGKILL 
-        
+
     def _layout(self):
         """!Creates the main panel with all the controls on it:
              * mpl canvas
