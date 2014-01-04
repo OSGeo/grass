@@ -858,6 +858,7 @@ class MapFrame(SingleMapFrame):
         if not self.measureDistController:
             self.measureDistController = MeasureDistanceController(self._giface,
                                                                    mapWindow=self.GetMapWindow())
+            self._toolSwitcher.toggleToolChanged.connect(lambda: self.measureDistController.Stop())
         self.measureDistController.Start()
 
     def OnProfile(self, event):
