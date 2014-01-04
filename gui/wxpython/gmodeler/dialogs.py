@@ -790,7 +790,8 @@ class ItemListCtrl(ModelListCtrl):
         ModelListCtrl.__init__(self, parent, columns, frame, **kwargs)
         self.itemIdMap = list()
         
-        self.SetColumnWidth(1, 100)
+        self.SetColumnWidth(0, 100)
+        self.SetColumnWidth(1, 75)
         self.SetColumnWidth(2, 65)
         
     def GetListCtrl(self):

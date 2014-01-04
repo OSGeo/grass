@@ -1084,7 +1084,17 @@ class ModelCanvas(ogl.ShapeCanvas):
                 yNew += yBox * 3
 
         return xNew, yNew
-    
+
+    def GetShapesSelected(self):
+        """!Get list of selected shapes"""
+        selected = list()
+        diagram = self.GetDiagram()
+        for shape in diagram.GetShapeList():
+            if shape.Selected():
+                selected.append(shape)
+
+        return selected
+
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
     def __init__(self, log, frame):
@@ -1098,6 +1108,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape = self.GetShape()
         canvas = shape.GetCanvas()
         dc = wx.ClientDC(canvas)
+        
         # probably does nothing, removed from wxPython 2.9
         # canvas.PrepareDC(dc)
         
@@ -1128,7 +1139,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 del self.frame.defineRelation
         
         # select object
-        self._onSelectShape(shape)
+        self._onSelectShape(shape, append = True if keys == 1 else False)
         
         if hasattr(shape, "GetLog"):
             self.log.SetStatusText(shape.GetLog(), 0)
@@ -1335,7 +1346,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             self.frame.ModelChanged()
         dlg.Destroy()
 
-    def _onSelectShape(self, shape):
+    def _onSelectShape(self, shape, append=False):
         canvas = shape.GetCanvas()
         dc = wx.ClientDC(canvas)
         
@@ -1346,9 +1357,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             shapeList = canvas.GetDiagram().GetShapeList()
             toUnselect = list()
             
-            for s in shapeList:
-                if s.Selected():
-                    toUnselect.append(s)
+            if not append:
+                for s in shapeList:
+                    if s.Selected():
+                        toUnselect.append(s)
             
             shape.Select(True, dc)
             
