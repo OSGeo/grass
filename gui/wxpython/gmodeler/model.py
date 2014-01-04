@@ -1473,7 +1473,8 @@ class ModelItem(ModelObject):
 
     def SetLabel(self, label=''):
         """!Set loop text (condition)"""
-        self.label = label
+        if label:
+            self.label = label
         self.ClearText()
         self.AddText('(' + str(self.id) + ') ' + self.label)
 
