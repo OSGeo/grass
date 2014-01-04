@@ -1039,6 +1039,8 @@ class ModelAction(ModelObject, ogl.DividedShape):
         
         idx = self.GetId()
         self.regionLabel.SetText('(%d) %s' % (idx, label))
+        self.SetRegionSizes()
+        self.ReformatRegions()
 
     def SetComment(self, comment):
         """!Set comment"""
