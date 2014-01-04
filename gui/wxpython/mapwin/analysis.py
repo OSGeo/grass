@@ -205,6 +205,8 @@ class MeasureDistanceController(AnalysisControllerBase):
         return wx.Pen(colour='green', width=2, style=wx.SHORT_DASH)
 
     def Stop(self, restore=True):
+        if not self.IsActive():
+            return
         AnalysisControllerBase.Stop(self, restore=restore)
 
         self._giface.WriteCmdLog(_('Measuring finished'))
@@ -213,6 +215,8 @@ class MeasureDistanceController(AnalysisControllerBase):
         """!Init measurement routine that calculates map distance
         along transect drawn on map display
         """
+        if self.IsActive():
+            return
         AnalysisControllerBase.Start(self)
         self._totaldist = 0.0  # total measured distance
 
