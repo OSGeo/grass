@@ -967,7 +967,7 @@ class ItemListCtrl(ModelListCtrl):
         
         # reorganize model items
         model.ReorderItems(idxList)
-        model.Normalize()
+        ### model.Normalize()
         self.Populate(model.GetItems(objType=ModelAction))
         
         # re-selected originaly selected item
