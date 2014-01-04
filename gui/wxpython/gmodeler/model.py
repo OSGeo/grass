@@ -840,9 +840,15 @@ class ModelObject(object):
         """!Get id"""
         return self.id
 
-    def SetId(self, id):
+    def SetId(self, newId):
         """!Set id"""
-        self.id = id
+        if self.inBlock:
+            for loop in self.inBlock:
+                # update block item
+                loop.UpdateItem(self.id, newId)
+        
+        self.id = newId
+
 
     def AddRelation(self, rel):
         """!Record new relation
@@ -1546,6 +1552,12 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         """!Set items (id)"""
         self.itemIds = items
 
+    def UpdateItem(self, oldId, newId):
+        """!Update item in the list"""
+        idx = self.itemIds.index(oldId)
+        if idx != -1:
+            self.itemIds[idx] = newId
+        
     def OnDraw(self, dc):
         """!Draw loop in canvas"""
         self._setBrush()
