@@ -1421,7 +1421,7 @@ class ModelRelation(ogl.LineShape):
             self.fromShape.rels.remove(self)
         if self in self.toShape.rels:
             self.toShape.rels.remove(self)
-        
+
     def GetFrom(self):
         """!Get id of 'from' shape"""
         return self.fromShape
@@ -1479,7 +1479,17 @@ class ModelItem(ModelObject):
         """!Abstract class for loops and conditions"""
         ModelObject.__init__(self, id, label)
         self.parent  = parent
+
+    def _setPen(self):
+        """!Set pen"""
+        if self.isEnabled:
+            style = wx.SOLID
+        else:
+            style = wx.DOT
         
+        pen = wx.Pen(wx.BLACK, 1, style)
+        self.SetPen(pen)
+
     def SetId(self, id):
         """!Set loop id"""
         self.id = id
@@ -1523,12 +1533,11 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
             self.SetCanvas(self.parent)
             self.SetX(x)
             self.SetY(y)
-            self.SetPen(wx.BLACK_PEN)
+            self._setPen()
+            self._setBrush()
             self.SetCornerRadius(100)
             self.SetLabel(label)
 
-        self._setBrush()
-        
     def _setBrush(self):
         """!Set brush"""
         if not self.isEnabled:
@@ -1543,14 +1552,16 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
 
     def Enable(self, enabled = True):
         """!Enable/disable action"""
-        for item in self.items:
-            if not isinstance(item, ModelAction):
-                continue
-            item.Enable(enabled)
+        for idx in self.itemIds:
+            item = self.parent.FindAction(idx)
+            if item:
+                item.Enable(enabled)
         
         ModelObject.Enable(self, enabled)
-        
+        self.Update()
+
     def Update(self):
+        self._setPen()
         self._setBrush()
 
     def GetItems(self, items):
