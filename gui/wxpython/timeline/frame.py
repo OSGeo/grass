@@ -73,11 +73,6 @@ class TimelineFrame(wx.Frame):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=_("Timeline Tool"))
 
         tgis.init()
-        self.is_standalone = False
-        # Check if a parent exists. The module g.gui.timeline runs in stand alone mode
-        # in case there is no parent. 
-        if parent is None:
-            self.is_standalone = True
         self.datasets = []
         self.timeData = {}
         self._layout()
