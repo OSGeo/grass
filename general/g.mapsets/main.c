@@ -67,9 +67,7 @@ int main(int argc, char *argv[])
     module->description = _("Affects the user's access to data existing "
                             "under the other mapsets in the current location.");
 
-    opt.mapset = G_define_option();
-    opt.mapset->key = "mapset";
-    opt.mapset->type = TYPE_STRING;
+    opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
     opt.mapset->required = YES;
     opt.mapset->multiple = YES;
     opt.mapset->description = _("Name(s) of existing mapset(s) to add/remove or set");
