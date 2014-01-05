@@ -37,8 +37,10 @@ MapIcons =  {
     'analyze'    : MetaIcon(img = 'layer-raster-analyze',
                             label = _('Analyze map'),
                             desc = _('Measuring, profiling, histogramming, ...')),
-    'measure'    : MetaIcon(img = 'measure-length',
-                            label = _('Measure distance')),
+    'measureDistance': MetaIcon(img='measure-length',
+                                label=_('Measure distance')),
+    'measureArea' : MetaIcon(img='area-measure',
+                             label=_('Measure area')),
     'profile'    : MetaIcon(img = 'layer-raster-profile',
                             label = _('Profile surface map')),
     'scatter'    : MetaIcon(img = 'layer-raster-profile',
@@ -236,7 +238,8 @@ class MapToolbar(BaseToolbar):
     def OnAnalyze(self, event):
         """!Analysis tools menu
         """
-        self._onMenu(((MapIcons["measure"],     self.parent.OnMeasure),
+        self._onMenu(((MapIcons["measureDistance"], self.parent.OnMeasureDistance),
+                      (MapIcons["measureArea"], self.parent.OnMeasureArea),
                       (MapIcons["profile"],     self.parent.OnProfile),
                       (MapIcons["scatter"],     self.parent.OnScatterplot),
                       (MapIcons["histogram"],   self.parent.OnHistogramPyPlot),

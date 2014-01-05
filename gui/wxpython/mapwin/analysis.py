@@ -23,9 +23,11 @@ import wx
 
 from core.utils import _
 import core.units as units
+from core.gcmd import RunCommand
 from core.giface import Notification
 
 from grass.pydispatch.signal import Signal
+import grass.script.core as gcore
 
 
 class AnalysisControllerBase:
@@ -40,6 +42,7 @@ class AnalysisControllerBase:
         self._mapWindow = mapWindow
 
         self._registeredGraphics = None
+        self._graphicsType = None
 
         self._oldMouseUse = None
         self._oldCursor = None
@@ -74,6 +77,7 @@ class AnalysisControllerBase:
         # draw
         self._mapWindow.ClearLines()
         self._registeredGraphics.Draw(pdc=self._mapWindow.pdcTmp)
+        self._mapWindow.Refresh()
         wx.Yield()
 
         self._doAnalysis(coords)
@@ -111,7 +115,7 @@ class AnalysisControllerBase:
         # unregister
         self._mapWindow.UnregisterGraphicsToDraw(self._registeredGraphics)
         self._registeredGraphics = None
-        self._mapWindow.Refresh()
+        self._mapWindow.UpdateMap(render=False)
 
         if restore:
             # restore mouse['use'] and cursor to the state before measuring starts
@@ -125,8 +129,8 @@ class AnalysisControllerBase:
         self._oldMouseUse = self._mapWindow.mouse['use']
         self._oldCursor = self._mapWindow.GetNamedCursor()
 
-        self._registeredGraphics = self._mapWindow.RegisterGraphicsToDraw(graphicsType='line',
-                                                                          mapCoords=False)
+        self._registeredGraphics = self._mapWindow.RegisterGraphicsToDraw(graphicsType=self._graphicsType,
+                                                                          mapCoords=True)
 
         self._connectAll()
 
@@ -150,6 +154,7 @@ class ProfileController(AnalysisControllerBase):
         AnalysisControllerBase.__init__(self, giface=giface, mapWindow=mapWindow)
 
         self.transectChanged = Signal('ProfileController.transectChanged')
+        self._graphicsType = 'line'
 
     def _doAnalysis(self, coords):
         """!Informs profile dialog that profile changed.
@@ -183,6 +188,7 @@ class MeasureDistanceController(AnalysisControllerBase):
         self._projInfo = self._mapWindow.Map.projinfo
         self._totaldist = 0.0  # total measured distance
         self._useCtypes = False
+        self._graphicsType = 'line'
 
     def _doAnalysis(self, coords):
         """!New point added.
@@ -226,12 +232,12 @@ class MeasureDistanceController(AnalysisControllerBase):
         # TODO: mixed 'switching' and message? no, measuring handles 'swithing' on its own
         self._giface.WriteWarning(_('Click and drag with left mouse button '
                                     'to measure.%s'
-                                    'Double click with left button to clear.') % \
-                                    (os.linesep))
+                                    'Double click with left button to clear.') %
+                                   (os.linesep))
         if self._projInfo['proj'] != 'xy':
             mapunits = self._projInfo['units']
             self._giface.WriteCmdLog(_('Measuring distance') + ' ('
-                                      + mapunits + '):')
+                                     + mapunits + '):')
         else:
             self._giface.WriteCmdLog(_('Measuring distance:'))
 
@@ -288,3 +294,72 @@ class MeasureDistanceController(AnalysisControllerBase):
         self._giface.WriteLog(mstring, notification=Notification.MAKE_VISIBLE)
 
         return dist
+
+
+class MeasureAreaController(AnalysisControllerBase):
+    """!Class controls measuring area in map display."""
+    def __init__(self, giface, mapWindow):
+        AnalysisControllerBase.__init__(self, giface=giface, mapWindow=mapWindow)
+        self._graphicsType = 'polygon'
+
+    def _doAnalysis(self, coords):
+        """!New point added.
+
+        @param coords east north coordinates as a list
+        """
+        self.MeasureArea(coords)
+
+    def _disconnectAll(self):
+        self._mapWindow.mouseLeftDown.disconnect(self._start)
+        self._mapWindow.mouseLeftUp.disconnect(self._addPoint)
+        self._mapWindow.mouseDClick.disconnect(self.Stop)
+
+    def _connectAll(self):
+        self._mapWindow.mouseLeftDown.connect(self._start)
+        self._mapWindow.mouseLeftUp.connect(self._addPoint)
+        self._mapWindow.mouseDClick.connect(self.Stop)
+
+    def _getPen(self):
+        return wx.Pen(colour='green', width=2, style=wx.SOLID)
+
+    def Stop(self, restore=True):
+        if not self.IsActive():
+            return
+        AnalysisControllerBase.Stop(self, restore=restore)
+
+        self._giface.WriteCmdLog(_('Measuring finished'))
+
+    def Start(self):
+        """!Init measurement routine that calculates area of polygon
+        drawn on map display.
+        """
+        if self.IsActive():
+            return
+        AnalysisControllerBase.Start(self)
+
+        self._giface.WriteWarning(_('Click and drag with left mouse button '
+                                    'to measure.%s'
+                                    'Double click with left button to clear.') %
+                                   (os.linesep))
+        self._giface.WriteCmdLog(_('Measuring area:'))
+
+    def MeasureArea(self, coords):
+        """!Calculate area and print to output window.
+
+        @param coords list of E, N coordinates
+        """
+        # TODO: make sure appending first point is needed for m.measure
+        coordinates = coords + [coords[0]]
+        coordinates = ','.join([str(item) for sublist in coordinates for item in sublist])
+        result = RunCommand('m.measure', flags='g', coordinates=coordinates, read=True).strip()
+        result = gcore.parse_key_val(result)
+        if 'units' not in result:
+            self._giface.WriteWarning(_("Units not recognized, measurement failed."))
+            unit = ''
+        else:
+            unit = result['units'].split(',')[1]
+        if 'area' not in result:
+            text = _("Area: {area} {unit}\n").format(area=0, unit=unit)
+        else:
+            text = _("Area: {area} {unit}\n").format(area=result['area'], unit=unit)
+        self._giface.WriteLog(text, notification=Notification.MAKE_VISIBLE)

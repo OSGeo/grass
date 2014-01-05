@@ -56,7 +56,8 @@ from modules.histogram  import HistogramFrame
 from wxplot.histogram   import HistogramPlotFrame
 from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
-from mapwin.analysis import ProfileController, MeasureDistanceController
+from mapwin.analysis import ProfileController, MeasureDistanceController, \
+    MeasureAreaController
 from gui_core.forms import GUI
 from core.giface import Notification
 
@@ -236,7 +237,7 @@ class MapFrame(SingleMapFrame):
         self.dialogs['vnet'] = None
         self.dialogs['query'] = None
 
-        self.measureDistController = None
+        self.measureController = None
 
     def GetMapWindow(self):
         return self.MapWindow
@@ -854,12 +855,21 @@ class MapFrame(SingleMapFrame):
         else:
             return cmd
 
-    def OnMeasure(self, event):
-        if not self.measureDistController:
-            self.measureDistController = MeasureDistanceController(self._giface,
-                                                                   mapWindow=self.GetMapWindow())
-            self._toolSwitcher.toggleToolChanged.connect(lambda: self.measureDistController.Stop())
-        self.measureDistController.Start()
+    def OnMeasureDistance(self, event):
+        self._onMeasure(MeasureDistanceController)
+
+    def OnMeasureArea(self, event):
+        self._onMeasure(MeasureAreaController)
+
+    def _onMeasure(self, controller):
+        """!Starts measurement mode.
+
+        @param controller measurement class (MeasureDistanceController, MeasureAreaController)
+        """
+        self.measureController = controller(self._giface, mapWindow=self.GetMapWindow())
+        # assure that the mode is ended and lines are cleared whenever other tool is selected
+        self._toolSwitcher.toggleToolChanged.connect(lambda: self.measureController.Stop())
+        self.measureController.Start()
 
     def OnProfile(self, event):
         """!Launch profile tool

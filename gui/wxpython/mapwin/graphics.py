@@ -63,10 +63,13 @@ class GraphicsSet:
             self.drawFunc = self.parentMapWin.DrawCross
 
         elif self.graphicsType == "line":
-            self.drawFunc = self.parentMapWin.DrawLines
+            self.drawFunc = self.parentMapWin.DrawPolylines
 
         elif self.graphicsType == "rectangle":
             self.drawFunc = self.parentMapWin.DrawRectangle
+
+        elif self.graphicsType == "polygon":
+            self.drawFunc = self.parentMapWin.DrawPolygon
 
     def Draw(self, pdc):
         """!Draws all containing items.
@@ -75,6 +78,7 @@ class GraphicsSet:
         """
         itemOrderNum = 0
         for item in self.itemsList:
+            self._clearId(pdc, item.GetId())
             if self.setStatusFunc is not None:
                 self.setStatusFunc(item, itemOrderNum)
 
@@ -98,24 +102,24 @@ class GraphicsSet:
                 self.properties["text"]['color'] = self.parentMapWin.pen.GetColour()
                 self.properties["text"]['text'] = item.GetPropertyVal("label")
 
-                self.drawFunc(pdc=pdc,
+                self.drawFunc(pdc=pdc, drawid=item.GetId(),
                               coords=coords,
                               text=self.properties["text"],
                               size=self.properties["size"])
 
             elif self.graphicsType == "line":
                 if item.GetPropertyVal("penName"):
-                    self.parentMapWin.polypen = self.pens[item.GetPropertyVal("penName")]
+                    pen = self.pens[item.GetPropertyVal("penName")]
                 else:
-                    self.parentMapWin.polypen = self.pens["default"]
+                    pen = self.pens["default"]
 
                 if self.mapCoords:
                     coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=pdc,
-                              polycoords=coords)
+                self.drawFunc(pdc=pdc, pen=pen,
+                              coords=coords, drawid=item.GetId())
              
             elif self.graphicsType == "rectangle":
                 if item.GetPropertyVal("penName"):
@@ -127,9 +131,22 @@ class GraphicsSet:
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=pdc, pen=pen, 
+                self.drawFunc(pdc=pdc, pen=pen, drawid=item.GetId(),
                               point1=coords[0],
                               point2=coords[1])
+
+            elif self.graphicsType == "polygon":
+                if item.GetPropertyVal("penName"):
+                    pen = self.pens[item.GetPropertyVal("penName")]
+                else:
+                    pen = self.pens["default"]
+                if self.mapCoords:
+                    coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
+                else:
+                    coords = item.GetCoords()
+
+                self.drawFunc(pdc=pdc, pen=pen, 
+                              coords=coords, drawid=item.GetId())
             itemOrderNum += 1
 
     def AddItem(self, coords, penName=None, label=None, hide=False):
@@ -282,6 +299,13 @@ class GraphicsSet:
         except ValueError:
             return None
 
+    def _clearId(self, pdc, drawid):
+        """!Clears old object before drawing new object."""
+        try:
+            pdc.ClearId(drawid)
+        except:
+            pass
+
 
 class GraphicsSetItem:
 
@@ -305,6 +329,7 @@ class GraphicsSetItem:
         self.properties = {"penName": penName,
                            "hide": hide,
                            "label": label}
+        self.id = wx.NewId()
 
     def SetPropertyVal(self, propName, propVal):
         """!Set property value
@@ -354,3 +379,8 @@ class GraphicsSetItem:
         @returns coordinates
         """
         return self.coords
+
+    def GetId(self):
+        """!Get item id (drawing id).
+        """
+        return self.id
