@@ -139,6 +139,17 @@ class Model(object):
                     self.canvas.parent.DefineCondition(mo)
             
     def Normalize(self):
+        # check for inconsistecies
+        for idx in range(1, len(self.items)):
+            if not self.items[idx].GetBlock() and \
+                    isinstance(self.items[idx-1], ModelLoop):
+                # swap action not-in-block with previously defined
+                # loop
+                itemPrev = self.items[idx-1]
+                self.items[idx-1] = self.items[idx]
+                self.items[idx] = itemPrev
+        
+        # update ids
         iId = 1
         for item in self.items:
             item.SetId(iId)
@@ -1096,7 +1107,9 @@ class ModelAction(ModelObject, ogl.DividedShape):
                     variables.append(p.get('name', ''))
             else:
                 variables = self.parent.GetVariables()
-            for variable in variables:
+
+            # order variables by length
+            for variable in sorted(variables, key=len, reverse=True):
                 pattern= re.compile('%' + variable)
                 value = ''
                 if substitute and 'variables' in substitute:
