@@ -2300,17 +2300,17 @@ def cleanup():
 """)
         if rast:
             self.fd.write(
-r"""    grass.run_command('g.remove',
+r"""    run_command('g.remove',
                       rast=%s)
 """ % ','.join(map(lambda x: "'" + x + "'", rast)))
         if vect:
             self.fd.write(
-r"""    grass.run_command('g.remove',
+r"""    run_command('g.remove',
                       vect = %s)
 """ % ','.join(map(lambda x: "'" + x + "'", vect)))
         if rast3d:
             self.fd.write(
-r"""    grass.run_command('g.remove',
+r"""    run_command('g.remove',
                       rast3d = %s)
 """ % ','.join(map(lambda x: "'" + x + "'", rast3d)))
         if not rast and not vect and not rast3d:
@@ -2325,7 +2325,7 @@ r"""    grass.run_command('g.remove',
         self.fd.write(
 r"""
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = parser()
     atexit.register(cleanup)
     sys.exit(main())
 """)
@@ -2380,7 +2380,7 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables = []):
         """!Write model action to Python file"""
         task = GUI(show = None).ParseCommand(cmd = item.GetLog(string = False, substitute = self.model.GetVariables()))
-        strcmd = "%sgrass.run_command(" % (' ' * self.indent)
+        strcmd = "%srun_command(" % (' ' * self.indent)
         self.fd.write(strcmd + self._getPythonActionCmd(task, len(strcmd), variables) + '\n')
         
     def _getPythonActionCmd(self, task, cmdIndent, variables = []):
@@ -2403,12 +2403,16 @@ if __name__ == "__main__":
             value = p.get('value', None)
             if name and value:
                 ptype = p.get('type', 'string')
-                if value[0] == '%':
-                    params.append("%s = %s" % (name, value[1:]))
-                elif ptype == 'string':
-                    params.append('%s = "%s"' % (name, value))
-                else:
+                foundVar = False
+                for var in variables:
+                    if '%' + var in value:
+                        value = self._substituteVariable(value, var)
+                        foundVar = True
+                
+                if foundVar or ptype != 'string':
                     params.append("%s = %s" % (name, value))
+                else:
+                    params.append('%s = "%s"' % (name, value))
         
         ret += '"%s"' % task.get_name()
         if flags:
@@ -2427,6 +2431,28 @@ if __name__ == "__main__":
         """!Write model comment to Python file"""
         for line in item.GetLabel().splitlines():
             self.fd.write('#' + line + '\n')
+
+    def _substituteVariable(self, string, variable):
+        """!Substitute variable in the string
+
+        @param string string to be modified
+        @param variable variable to be substituted
+        
+        @return modified string
+        """
+        result = ''
+        ss = re.split(r"%"+variable, string)
+        if len(ss) == 2:
+            return variable
+        
+        for s in ss:
+            if not s:
+                result += '+%s+' % variable
+            else:
+                result += '"' + s + '"'
+        
+        return result.strip('+')
+
 
 class ModelParamDialog(wx.Dialog):
     def __init__(self, parent, params, id = wx.ID_ANY, title = _("Model parameters"),
