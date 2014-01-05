@@ -26,7 +26,7 @@ Classes:
  - gselect::CoordinatesSelect
  - gselect::SignatureSelect
 
-(C) 2007-2013 by the GRASS Development Team 
+(C) 2007-2014 by the GRASS Development Team 
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -185,7 +185,6 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         self.seltree.Bind(wx.EVT_TREE_DELETE_ITEM, lambda x: None)
         self.seltree.Bind(wx.EVT_TREE_BEGIN_DRAG, lambda x: None)
         self.seltree.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, lambda x: None)
-        
 
     def GetControl(self):
         return self.seltree
@@ -248,6 +247,13 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
             root = self.seltree.AddRoot("<hidden root>")
         self.seltree.AppendItem(root, text = value)
 
+    def SetItems(self, items):
+        root = self.seltree.GetRootItem()
+        if not root:
+            root = self.seltree.AddRoot("<hidden root>")
+        for item in items:
+            self.seltree.AppendItem(root, text = item)
+        
     def OnKeyUp(self, event):
         """!Enable to select items using keyboard
         """
@@ -1060,17 +1066,17 @@ class LocationSelect(wx.ComboBox):
         else:
             self.SetItems([])
         
-class MapsetSelect(wx.ComboBox):
+class MapsetSelect(wx.combo.ComboCtrl):
     """!Widget for selecting GRASS mapset"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
                  gisdbase = None, location = None, setItems = True,
-                 searchPath = False, new = False, skipCurrent = False, **kwargs):
+                 searchPath = False, new = False, skipCurrent = False, multiple = False, **kwargs):
         style = 0
-        if not new:
+        if not new and not multiple:
             style = wx.CB_READONLY
         
-        super(MapsetSelect, self).__init__(parent, id, size = size, 
-                                           style = style, **kwargs)
+        wx.combo.ComboCtrl.__init__(self, parent, id, size = size, 
+                                    style = style, **kwargs)
         self.searchPath  = searchPath
         self.skipCurrent = skipCurrent
         
@@ -1085,8 +1091,12 @@ class MapsetSelect(wx.ComboBox):
         else:
             self.location = location
         
+        self.tcp = ListCtrlComboPopup()
+        self.SetPopupControl(self.tcp)
+        self.tcp.SetData(multiple = multiple)
+        
         if setItems:
-            self.SetItems(self._getMapsets())
+            self.tcp.SetItems(self._getMapsets())
         
     def UpdateItems(self, location, dbase = None):
         """!Update list of mapsets for given location

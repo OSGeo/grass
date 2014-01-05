@@ -1381,8 +1381,10 @@ class CmdPanel(wx.Panel):
                                 new = False
                             else:
                                 new = True
+                            
                             win = gselect.MapsetSelect(parent = which_panel,
-                                                       value = value, new = new)
+                                                       value = value, new = new,
+                                                       multiple = p.get('multiple', False))
                             win.Bind(wx.EVT_COMBOBOX,     self.OnUpdateSelection)
                             win.Bind(wx.EVT_COMBOBOX,     self.OnSetValue) 
                             win.Bind(wx.EVT_TEXT,         self.OnSetValue)
