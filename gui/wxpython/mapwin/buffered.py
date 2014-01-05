@@ -323,6 +323,17 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                     pdc.SetIdBounds(drawid, wx.Rect(x1,y1,x2,y2))
                     # self.ovlcoords[drawid] = [x1,y1,x2,y2]
 
+        elif pdctype == 'polygon':
+            if pen:
+                pdc.SetPen(pen)
+                pdc.SetBrush(wx.TRANSPARENT_BRUSH)
+                pdc.DrawPolygon(points=coords)
+                x = min(coords, key=lambda x: x[0])[0]
+                y = min(coords, key=lambda x: x[1])[1]
+                w = max(coords, key=lambda x: x[0])[0] - x
+                h = max(coords, key=lambda x: x[1])[1] - y
+                pdc.SetIdBounds(drawid, wx.Rect(x, y, w, h))
+
         elif pdctype == 'circle': # draw circle
             if pen:
                 pdc.SetPen(pen)
@@ -944,8 +955,24 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         
         return -1
 
+    def DrawPolylines(self, pdc, coords, pen, drawid=None):
+        """!Draw polyline in PseudoDC.
+        
+        This is similar to DrawLines but this is used with GraphicsSet,
+        coordinates should be always in pixels.
+        
+        @param pdc PseudoDC
+        @param coords list of coordinates (pixel coordinates)
+        @param pen pen to be used
+        @param drawid id of the drawn object (used by PseudoDC)
+        """
+        Debug.msg (4, "BufferedWindow.DrawPolylines(): coords=%s" % coords)
+        self.lineId = self.Draw(pdc, drawid=None, pdctype='polyline', coords=coords, pen=pen)
+
+        return self.lineid
+
     def DrawCross(self, pdc, coords, size, rotation = 0, pen = None,
-                  text = None, textAlign = 'lr', textOffset = (5, 5)):
+                  text = None, textAlign = 'lr', textOffset = (5, 5), drawid=None):
         """!Draw cross in PseudoDC
 
         @todo implement rotation
@@ -956,19 +983,19 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         @param text draw also text (text, font, color, rotation)
         @param textAlign alignment (default 'lower-right')
         @param textOffset offset for text (from center point)
+        @param drawid id of the drawn object (used by PseudoDC)
         """
         Debug.msg(4, "BufferedWindow.DrawCross(): pdc=%s, coords=%s, size=%d" % \
                   (pdc, coords, size))
         coordsCross = ((coords[0] - size, coords[1], coords[0] + size, coords[1]),
                        (coords[0], coords[1] - size, coords[0], coords[1] + size))
 
-        self.lineid = wx.NewId()
         for lineCoords in coordsCross:
-            self.Draw(pdc, drawid = self.lineid, pdctype = 'line', coords = lineCoords, pen = pen)
-        
+            self.lineid = self.Draw(pdc, drawid=drawid, pdctype='line', coords=lineCoords, pen=pen)
+
         if not text:
             return self.lineid
-        
+
         if textAlign == 'ul':
             coord = [coords[0] - textOffset[0], coords[1] - textOffset[1], 0, 0]
         elif textAlign == 'ur':
@@ -983,33 +1010,47 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         
         return self.lineid
 
-    def DrawRectangle(self, pdc, point1, point2, pen=None):
+    def DrawRectangle(self, pdc, point1, point2, pen, drawid=None):
         """!Draw rectangle (not filled) in PseudoDC
 
         @param pdc PseudoDC
         @param point1 top left corner (pixel coordinates)
         @param point2 bottom right corner (pixel coordinates)
         @param pen pen
+        @param drawid id of the drawn object (used by PseudoDC)
         """
         Debug.msg(4, "BufferedWindow.DrawRectangle(): pdc=%s, point1=%s, point2=%s" % \
                   (pdc, point1, point2))
         coords = [point1[0], point1[1], point2[0], point2[1]]
-        self.lineid = self.Draw(pdc, drawid=None, pdctype='box', coords=coords, pen=pen)
+        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='box', coords=coords, pen=pen)
         return self.lineid
 
-    def DrawCircle(self, pdc, coords, radius, pen=None):
+    def DrawCircle(self, pdc, coords, radius, pen, drawid=None):
         """!Draw circle (not filled) in PseudoDC
 
         @param pdc PseudoDC
         @param coords center (pixel coordinates)
         @param radius radius
         @param pen pen
+        @param drawid id of the drawn object (used by PseudoDC)
         """
         Debug.msg(4, "BufferedWindow.DrawCircle(): pdc=%s, coords=%s, radius=%s" %
                   (pdc, coords, radius))
         newcoords = [coords[0] - radius, coords[1] - radius,
                      coords[0] + radius, coords[1] + radius]
-        self.lineid = self.Draw(pdc, drawid=None, pdctype='circle', coords=newcoords, pen=pen)
+        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='circle', coords=newcoords, pen=pen)
+        return self.lineid
+
+    def DrawPolygon(self, pdc, coords, pen, drawid=None):
+        """!Draws polygon from a list of points (do not append the first point)
+
+        @param pdc PseudoDC
+        @param coords list of coordinates (pixel coordinates)
+        @param pen pen
+        @param drawid id of the drawn object (used by PseudoDC)
+        """
+        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='polygon',
+                                coords=coords, pen=pen)
         return self.lineid
 
     def _computeZoomToPointAndRecenter(self, position, zoomtype):
