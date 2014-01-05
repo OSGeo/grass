@@ -11,7 +11,7 @@ Classes:
  - frame::ItemPanel
  - frame::PythonPanel
 
-(C) 2010-2012 by the GRASS Development Team
+(C) 2010-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -672,7 +672,8 @@ class ModelFrame(wx.Frame):
         # show properties dialog
         win = action.GetPropDialog()
         if not win:
-            if action.IsValid():
+            cmdLength = len(action.GetLog(string=False))
+            if cmdLength > 1 and action.IsValid():
                 self.GetOptData(dcmd = action.GetLog(string = False), layer = action,
                                 params = action.GetParams(), propwin = None)
             else:
