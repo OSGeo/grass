@@ -42,4 +42,5 @@ def must_be_open(method):
             return method(self, *args, **kargs)
         else:
             warning(_("The map is close!"))
+    wrapper.__doc__ = method.__doc__
     return wrapper
