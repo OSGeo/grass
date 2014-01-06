@@ -77,7 +77,7 @@ class Info(object):
         >>> cens.close()
 
     """
-    def __init__(self, name, mapset='', layer=None):
+    def __init__(self, name, mapset='', layer=None, mode='r'):
         self._name = None
         self._mapset = None
         # Set map name and mapset
@@ -89,13 +89,11 @@ class Info(object):
         self.overwrite = False
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
         self.layer = layer
+        self.mode = mode
 
-    def __enter__(self):
-        if self.exist():
-            self.open('r')
-            return self
-        else:
-            raise ValueError('Vector not found.')
+    def __enter__(self, *args, **kwargs):
+        self.open(*args, **kwargs)
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
@@ -279,7 +277,7 @@ class Info(object):
         """Return if the Vector is open"""
         return is_open(self.c_mapinfo)
 
-    def open(self, mode='r', layer=1, overwrite=None,
+    def open(self, mode=None, layer=1, overwrite=None,
              # parameters valid only if mode == 'w'
              tab_name='', tab_cols=None, link_name=None, link_key='cat',
              link_db='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
@@ -315,25 +313,26 @@ class Info(object):
         See more examples in the documentation of the ``read`` and ``write``
         methods.
         """
+        self.mode = mode if mode else self.mode
         # check if map exists or not
-        if not self.exist() and mode != 'w':
+        if not self.exist() and self.mode != 'w':
             raise OpenError("Map <%s> not found." % self._name)
         if libvect.Vect_set_open_level(self._topo_level) != 0:
             raise OpenError("Invalid access level.")
         # update the overwrite attribute
         self.overwrite = overwrite if overwrite is not None else self.overwrite
         # check if the mode is valid
-        if mode not in ('r', 'rw', 'w'):
+        if self.mode not in ('r', 'rw', 'w'):
             raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
 
         # check if the map exist
-        if self.exist() and mode in ('r', 'rw'):
+        if self.exist() and self.mode in ('r', 'rw'):
             # open in READ mode
-            if mode == 'r':
+            if self.mode == 'r':
                 openvect = libvect.Vect_open_old2(self.c_mapinfo, self.name,
                                                   self.mapset, str(layer))
             # open in READ and WRITE mode
-            elif mode == 'rw':
+            elif self.mode == 'rw':
                 openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
                                                      self.mapset, str(layer))
 
@@ -341,7 +340,7 @@ class Info(object):
             self.dblinks = DBlinks(self.c_mapinfo)
 
         # If it is opened in write mode
-        if mode == 'w':
+        if self.mode == 'w':
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name,
                                              libvect.WITHOUT_Z)
             self.dblinks = DBlinks(self.c_mapinfo)
@@ -379,7 +378,7 @@ class Info(object):
                      'by_polygon': PolygonFinder(self.c_mapinfo, self.table,
                                                  self.writable), }
 
-    def close(self):
+    def close(self, build=False):
         """Method to close the Vector"""
         if hasattr(self, 'table') and self.table is not None:
             self.table.conn.close()
@@ -387,8 +386,9 @@ class Info(object):
             if libvect.Vect_close(self.c_mapinfo) != 0:
                 str_err = 'Error when trying to close the map with Vect_close'
                 raise GrassError(str_err)
-            if (self.c_mapinfo.contents.mode == libvect.GV_MODE_RW or
-                    self.c_mapinfo.contents.mode == libvect.GV_MODE_WRITE):
+            if ((self.c_mapinfo.contents.mode == libvect.GV_MODE_RW or
+                    self.c_mapinfo.contents.mode == libvect.GV_MODE_WRITE) and
+                    build):
                 self.build()
 
     def remove(self):
