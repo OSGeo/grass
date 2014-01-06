@@ -57,7 +57,8 @@ def rpatch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
         rasts.append(rrasts)
         rpatch_row(rast, rrasts, rbbox)
 
-    for rrast in rasts:
-        for rast_ in rrast:
-            rast_.close()
+        for rst in rrasts:
+            rst.close()
+            del(rst)
+
     rast.close()
