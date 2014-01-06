@@ -159,17 +159,17 @@ class BboxFinder(AbstractFinder):
                             table=self.table, writable=self.writable)
 
     @must_be_open
-    def areas(self, bbox, bbox_list=False):
+    def areas(self, bbox, boxlist=None, bboxlist_only=False):
         """Find the nearest area. Vect_find_area"""
-        found = BoxList()
+        boxlist = boxlist if boxlist else BoxList()
         if libvect.Vect_select_areas_by_box(self.c_mapinfo, bbox.c_bbox,
-                                            found.c_boxlist):
-            if bbox_list:
-                return found
+                                            boxlist.c_boxlist):
+            if bboxlist_only:
+                return boxlist
             else:
                 return (Area(v_id=a_id, c_mapinfo=self.c_mapinfo,
                              table=self.table, writable=self.writable)
-                        for a_id in found.ids)
+                        for a_id in boxlist.ids)
         return []
 
     @must_be_open
