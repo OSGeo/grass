@@ -57,9 +57,11 @@ const char *G_database_unit_name(int plural)
 	if (!name)
 	    return plural ? _("units") : _("unit");
 	
-	if (strcasecmp(name, "meter") == 0 || strcasecmp(name, "meters") == 0)
+	if (strcasecmp(name, "meter") == 0 || strcasecmp(name, "metre") == 0 
+            || strcasecmp(name, "meters") == 0 || strcasecmp(name, "metres") == 0)
 	    units = U_METERS;
-	else if (strcasecmp(name, "kilometer") == 0 || strcasecmp(name, "kilometers") == 0)
+	else if (strcasecmp(name, "kilometer") == 0 || strcasecmp(name, "kilometre") == 0
+                 || strcasecmp(name, "kilometers") == 0 || strcasecmp(name, "kilometres") == 0)
 	    units = U_KILOMETERS;
 	else if (strcasecmp(name, "acre") == 0 || strcasecmp(name, "acres") == 0)
 	    units = U_ACRES;
@@ -72,7 +74,7 @@ const char *G_database_unit_name(int plural)
 	else if (strcasecmp(name, "degree") == 0 || strcasecmp(name, "degrees") == 0)
 	    units = U_DEGREES;
 	else
-	    units = U_UNDEFINED;
+	    units = U_UNKNOWN;
     }
     
     return G_get_units_name(units, plural, FALSE);
