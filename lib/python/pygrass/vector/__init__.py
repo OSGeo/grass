@@ -6,18 +6,19 @@ Created on Tue Jul 17 08:51:53 2012
 """
 import grass.lib.vector as libvect
 from vector_type import VTYPE
-from grass.script.core import gisenv
-import os
+from os.path import join, exists
 
 #
 # import pygrass modules
 #
 from grass.pygrass.errors import GrassError, must_be_open
+from grass.pygrass.gis import Location
 
 from geometry import GEOOBJ as _GEOOBJ
 from geometry import read_line, read_next_line
+from geometry import Area as _Area
 from abstract import Info
-from basic import Bbox, Cats
+from basic import Bbox, Cats, Ilist
 
 
 _NUMOF = {"areas": libvect.Vect_get_num_areas,
@@ -56,9 +57,9 @@ class Vector(Info):
 
     ..
     """
-    def __init__(self, name, mapset=''):
+    def __init__(self, name, mapset='', *args, **kwargs):
         # Set map name and mapset
-        super(Vector, self).__init__(name, mapset)
+        super(Vector, self).__init__(name, mapset, *args, **kwargs)
         self._topo_level = 1
         self._class_name = 'Vector'
         self.overwrite = False
@@ -188,6 +189,9 @@ class Vector(Info):
             cats = Cats(geo_obj.c_cats)
             cats.reset()
             cats.set(self.n_lines, self.layer)
+
+        if geo_obj.gtype == _Area.gtype:
+            result = self._write_area(geo_obj)
         result = libvect.Vect_write_line(self.c_mapinfo, geo_obj.gtype,
                                          geo_obj.c_points, geo_obj.c_cats)
         if result == -1:
@@ -361,7 +365,7 @@ class VectorTopo(Vector):
         return output
 
     @must_be_open
-    def viter(self, vtype):
+    def viter(self, vtype, idonly=False):
         """Return an iterator of vector features
 
         ::
@@ -388,10 +392,13 @@ class VectorTopo(Vector):
         """
         if vtype in _GEOOBJ.keys():
             if _GEOOBJ[vtype] is not None:
+                ids = (indx for indx in xrange(1, self.number_of(vtype) + 1))
+                if idonly:
+                    return ids
                 return (_GEOOBJ[vtype](v_id=indx, c_mapinfo=self.c_mapinfo,
                                        table=self.table,
                                        writable=self.writable)
-                        for indx in xrange(1, self.number_of(vtype) + 1))
+                        for indx in ids)
         else:
             keys = "', '".join(sorted(_GEOOBJ.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
@@ -418,11 +425,32 @@ class VectorTopo(Vector):
         libvect.Vect_rewind(self.c_mapinfo)
 
     @must_be_open
-    def cat(self, cat_id):
+    def cat(self, cat_id, vtype, layer=None, generator=False):
         """Return the geometry features with category == cat_id.
+
+        Parameters
+        ----------
+        cat_id : integer
+            Integer with the category number.
+        vtype : string
+            String of the type of geometry feature that we are looking for.
+        layer : integer, optional
+            Integer of the layer that will be used.
+        generator : bool, optional
+            If True return a generator otherwise it return a list of features.
         """
-        return self.read(libvect.Vect_get_line_cat(self.c_mapinfo,
-                                                   cat_id, self.layer))
+        if vtype not in _GEOOBJ:
+            keys = "', '".join(sorted(_GEOOBJ.keys()))
+            raise ValueError("vtype not supported, use one of: '%s'" % keys)
+        Obj = _GEOOBJ[vtype]
+        ilist = Ilist()
+        libvect.Vect_cidx_find_all(self.c_mapinfo,
+                                   layer if layer else self.layer,
+                                   Obj.gtype, cat_id, ilist.c_ilist)
+        if generator:
+            return (Obj(v_id=v_id, c_mapinfo=self.c_mapinfo) for v_id in ilist)
+        else:
+            return [Obj(v_id=v_id, c_mapinfo=self.c_mapinfo) for v_id in ilist]
 
     @must_be_open
     def read(self, feature_id):
@@ -510,7 +538,16 @@ class VectorTopo(Vector):
             raise GrassError("I can not find the Bbox.")
         return bbox
 
-    def close(self, release=True):
+    @must_be_open
+    def select_by_bbox(self, bbox):
+        """Return the BBox of the vecor map
+        """
+        bbox = Bbox()
+        if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
+            raise GrassError("I can not find the Bbox.")
+        return bbox
+
+    def close(self, build=True, release=True):
         """Close the VectorTopo map, if release is True, the memory
         occupied by spatial index is released"""
         if release:
