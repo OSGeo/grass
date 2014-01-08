@@ -15,6 +15,8 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
+import os
+
 from grass.pydispatch.signal import Signal
 from core.giface import Notification
 
@@ -144,8 +146,10 @@ class LayerManagerGrassInterface(object):
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
 
-    def Help(self, entry):
+    def Help(self, entry, online=False):
         cmdlist = ['g.manual', 'entry=%s' % entry]
+        if online:
+            cmdlist.append('-o')
         self.RunCmd(cmdlist, compReg = False, notification=Notification.NO_NOTIFICATION)
 
     def WriteLog(self, text, wrap = None,
