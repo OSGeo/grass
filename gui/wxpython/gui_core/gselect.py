@@ -159,6 +159,9 @@ class VectorSelect(Select):
 
 class ListCtrlComboPopup(wx.combo.ComboPopup):
     """!Create a list ComboBox using TreeCtrl with hidden root.
+
+    @todo: use event.EventObject instead of hardcoding (see forms.py)
+    https://groups.google.com/forum/#!topic/wxpython-users/pRz6bi0k0XY
     """    
     # overridden ComboPopup methods
     def Init(self):
@@ -1072,8 +1075,9 @@ class MapsetSelect(wx.combo.ComboCtrl):
                  gisdbase = None, location = None, setItems = True,
                  searchPath = False, new = False, skipCurrent = False, multiple = False, **kwargs):
         style = 0
-        if not new and not multiple:
-            style = wx.CB_READONLY
+        ### disabled, read-only widget has no TextCtrl children (TODO: rewrite)
+        ### if not new and not multiple:
+        ###     style = wx.CB_READONLY
         
         wx.combo.ComboCtrl.__init__(self, parent, id, size = size, 
                                     style = style, **kwargs)

@@ -1362,8 +1362,9 @@ class CmdPanel(wx.Panel):
                                                        param = p,
                                                        multiple =  p.get('multiple', False))
                         
-                            # A gselect.ColumnSelect is a combobox with two children: a textctl and a popupwindow;
-                            # we target the textctl here
+                            # A gselect.ColumnSelect is a combobox
+                            # with two children: a textctl and a
+                            # popupwindow; we target the textctl here
                             textWin = win.GetTextCtrl()
                             p['wxId'] = [ textWin.GetId(), ]
                             
@@ -1385,9 +1386,11 @@ class CmdPanel(wx.Panel):
                             win = gselect.MapsetSelect(parent = which_panel,
                                                        value = value, new = new,
                                                        multiple = p.get('multiple', False))
-                            win.Bind(wx.EVT_COMBOBOX,     self.OnUpdateSelection)
-                            win.Bind(wx.EVT_COMBOBOX,     self.OnSetValue) 
-                            win.Bind(wx.EVT_TEXT,         self.OnSetValue)
+                            textWin = win.GetTextCtrl()
+                            p['wxId'] = [ textWin.GetId(), ]
+                            
+                            textWin.Bind(wx.EVT_TEXT, self.OnSetValue)
+                            win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             
                         elif prompt == 'dbase':
                             win = gselect.DbaseSelect(parent = which_panel,
