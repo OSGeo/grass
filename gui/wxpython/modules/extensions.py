@@ -9,7 +9,7 @@ Classes:
  - extensions::UninstallExtensionWindow
  - extensions::CheckListExtension
 
-(C) 2008-2013 by the GRASS Development Team
+(C) 2008-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -40,7 +40,7 @@ class InstallExtensionWindow(wx.Frame):
         self.parent = parent
         self._giface = giface
         self.options = dict() # list of options
-        
+
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
@@ -109,6 +109,7 @@ class InstallExtensionWindow(wx.Frame):
         self.btnHelp.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.tree.selectionChanged.connect(self.OnItemSelected)
         self.tree.itemActivated.connect(self.OnItemActivated)
+        self.tree.contextMenu.connect(self.OnContextMenu)
 
         wx.CallAfter(self._fetch)
         
@@ -197,6 +198,24 @@ class InstallExtensionWindow(wx.Frame):
         self.SetStatusText("", 0)
         wx.EndBusyCursor()
 
+    def OnContextMenu(self, node):
+        if not hasattr (self, "popupID"):
+            self.popupID = dict()
+            for key in ('install', 'help'):
+                self.popupID[key] = wx.NewId()
+        
+        data = node.data
+        if data and 'command' in data:
+            self.popupMenu = wx.Menu()
+            self.popupMenu.Append(self.popupID['install'], text = _("Install"))
+            self.Bind(wx.EVT_MENU, self.OnInstall, id = self.popupID['install'])
+            self.popupMenu.AppendSeparator()
+            self.popupMenu.Append(self.popupID['help'], text = _("Show manual page"))
+            self.Bind(wx.EVT_MENU, self.OnItemHelp, id = self.popupID['help'])
+            
+            self.PopupMenu(self.popupMenu)
+            self.popupMenu.Destroy()
+
     def OnItemActivated(self, node):
         data = node.data
         if data and 'command' in data:
@@ -217,6 +236,13 @@ class InstallExtensionWindow(wx.Frame):
             globalvar.UpdateGRASSAddOnCommands()
             toolboxesOutdated()
 
+    def OnItemHelp(self, event):
+        item = self.tree.GetSelected()
+        if not item or 'command' not in item[0].data:
+            return
+        
+        self._giface.Help(entry=item[0].data['command'], online=True)
+
     def OnHelp(self, event):
         self._giface.Help(entry='g.extension')
 
@@ -229,7 +255,6 @@ class InstallExtensionWindow(wx.Frame):
         else:
             self.SetStatusText(data.get('description', ''), 0)
             self.btnInstall.Enable(True)
-
 
 class ExtensionTreeModelBuilder:
     """!Tree model of available extensions."""
