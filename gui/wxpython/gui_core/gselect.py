@@ -1128,7 +1128,13 @@ class MapsetSelect(wx.combo.ComboCtrl):
             mlist.remove(gisenv['MAPSET'])
         
         return mlist
-    
+
+    def GetStringSelection(self):
+        return self.GetValue()
+
+    def SetStringSelection(self, text):
+        return self.SetValue(text)
+
 class SubGroupSelect(wx.ComboBox):
     """!Widget for selecting subgroups"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
