@@ -244,7 +244,8 @@ class PointsList(wx.ListCtrl,
         self.itemDataMap[key][colNum] = cellVal
         index = self._findIndex(key)
 
-        self.SetStringItem(index, colNum, str(cellVal))
+        if index != -1:
+            self.SetStringItem(index, colNum, str(cellVal))
 
     def _findIndex(self, key):
         """!Find index for key"""
