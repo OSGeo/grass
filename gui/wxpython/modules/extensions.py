@@ -6,7 +6,7 @@
 Classes:
  - extensions::InstallExtensionWindow
  - extensions::ExtensionTreeModelBuilder
- - extensions::UninstallExtensionWindow
+ - extensions::ManageExtensionWindow
  - extensions::CheckListExtension
 
 (C) 2008-2014 by the GRASS Development Team
@@ -26,7 +26,7 @@ import wx
 from grass.script import task as gtask
 
 from core             import globalvar
-from core.gcmd        import GError, RunCommand, GException
+from core.gcmd        import GError, RunCommand, GException, GMessage
 from core.utils       import SetAddOnPath, _
 from core.menutree    import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl, SearchModuleWidget
@@ -348,9 +348,9 @@ class ExtensionTreeModelBuilder:
                                     'keywords': '',
                                     'description': ''}        
         
-class UninstallExtensionWindow(wx.Frame):
+class ManageExtensionWindow(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
-                 title = _("Uninstall GRASS Addons extensions"), **kwargs):
+                 title = _("Manage installed GRASS Addons extensions"), **kwargs):
         self.parent = parent
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
@@ -364,12 +364,15 @@ class UninstallExtensionWindow(wx.Frame):
         self.extList = CheckListExtension(parent = self.panel)
 
         # buttons
-        self.btnUninstall = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                    label = _("&Uninstall"))
+        self.btnUninstall = wx.Button(parent = self.panel, id = wx.ID_REMOVE)
         self.btnUninstall.SetToolTipString(_("Uninstall selected AddOns extensions"))
+        self.btnUpdate = wx.Button(parent = self.panel, id = wx.ID_REFRESH)
+        self.btnUpdate.SetToolTipString(_("Reinstall selected AddOns extensions"))
+
         self.btnClose = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
         
         self.btnUninstall.Bind(wx.EVT_BUTTON, self.OnUninstall)
+        self.btnUpdate.Bind(wx.EVT_BUTTON, self.OnUpdate)
         self.btnClose.Bind(wx.EVT_BUTTON, lambda evt: self.Close())
         
         self._layout()
@@ -385,6 +388,7 @@ class UninstallExtensionWindow(wx.Frame):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(item = self.btnClose, proportion = 0,
                      flag = wx.RIGHT, border = 5)
+        btnSizer.Add(item = self.btnUpdate, proportion = 0, flag=wx.RIGHT, border=5)
         btnSizer.Add(item = self.btnUninstall, proportion = 0)
         
         sizer.Add(item = extSizer, proportion = 1,
@@ -397,13 +401,20 @@ class UninstallExtensionWindow(wx.Frame):
         
         self.Layout()
 
-    def OnUninstall(self, event):
-        """!Uninstall selected extensions"""
+    def _getSelectedExtensions(self):
         eList = self.extList.GetExtensions()
         if not eList:
-            GError(_("No extension selected for removal. "
-                     "Operation canceled."),
-                   parent = self)
+            GMessage(_("No extension selected. "
+                       "Operation canceled."),
+                     parent = self)
+            return []
+        
+        return eList
+
+    def OnUninstall(self, event):
+        """!Uninstall selected extensions"""
+        eList = self._getSelectedExtensions()
+        if not eList:
             return
         
         for ext in eList:
@@ -426,6 +437,17 @@ class UninstallExtensionWindow(wx.Frame):
         globalvar.UpdateGRASSAddOnCommands(eList)
         toolboxesOutdated()
 
+    def OnUpdate(self, event):
+        """!Update selected extensions"""
+        eList = self._getSelectedExtensions()
+        if not eList:
+            return
+        
+        log = self.parent.GetLogWindow()
+        
+        for ext in eList:
+            log.RunCmd(['g.extension', 'extension=%s' % ext,
+                        'operation=add'])
         
 class CheckListExtension(GListCtrl):
     """!List of mapset/owner/group"""

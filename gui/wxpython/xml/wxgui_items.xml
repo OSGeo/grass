@@ -285,11 +285,11 @@
     <description>Installs new extension from GRASS AddOns SVN repository.</description>
     <keywords>general,installation,extensions</keywords>
   </wxgui-item>
-  <wxgui-item name="UninstallExtension">
-    <label>Uninstall extension</label>
-    <handler>OnUninstallExtension</handler>
+  <wxgui-item name="ManageExtension">
+    <label>Manage installed extension</label>
+    <handler>OnManageExtension</handler>
     <related-module>g.extension</related-module>
-    <description>Removes installed GRASS AddOns extension.</description>
+    <description>Updates or removes installed GRASS AddOns extension(s).</description>
     <keywords>general,installation,extensions</keywords>
   </wxgui-item>
   <wxgui-item name="ManageRasterColorRulesInteractively">

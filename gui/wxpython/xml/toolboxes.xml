@@ -593,10 +593,7 @@
     <label>Addons extensions</label>
     <items>
       <wxgui-item name="InstallExtensionFromAddons"/>
-      <module-item name="g.extension.rebuild.all">
-        <label>Update installed extensions</label>
-      </module-item>
-      <wxgui-item name="UninstallExtension"/>
+      <wxgui-item name="ManageExtension"/>
     </items>
   </toolbox>
   <toolbox name="DevelopRasterMap">

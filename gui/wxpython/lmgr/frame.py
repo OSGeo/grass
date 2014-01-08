@@ -65,7 +65,7 @@ from gmodeler.frame        import ModelFrame
 from psmap.frame           import PsMapFrame
 from core.debug            import Debug
 from gui_core.ghelp        import AboutWindow
-from modules.extensions    import InstallExtensionWindow, UninstallExtensionWindow
+from modules.extensions    import InstallExtensionWindow, ManageExtensionWindow
 from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar
 from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell          import PyShellWindow
@@ -1399,9 +1399,9 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
         
-    def OnUninstallExtension(self, event):
+    def OnManageExtension(self, event):
         """!Uninstall extension"""
-        win = UninstallExtensionWindow(self, size = (650, 300))
+        win = ManageExtensionWindow(self, size = (650, 300))
         win.CentreOnScreen()
         win.Show()
 
