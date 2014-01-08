@@ -17,7 +17,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-/* #define DEGUG_RMAREA */
+#define DEGUG_RMAREA
 
 int Vect_remove_small_areas_nat(struct Map_info *, double,
                                 struct Map_info *, double *);
@@ -562,6 +562,7 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 		    new_isle = Vect_build_line_area(Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
 		    if (new_isle < 0) {
 			Vect_list_append(IList, -new_isle);
+		    }
 		    else {
 			/* should not happen */
 			G_warning(_("Failed to build new isle"));
