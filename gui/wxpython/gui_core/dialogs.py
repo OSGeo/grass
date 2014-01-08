@@ -1354,8 +1354,9 @@ class MapLayersDialogBase(wx.Dialog):
         
         bodySizer.AddGrowableCol(1)
         bodySizer.AddGrowableRow(3)
+        
         # bindings
-        self.mapset.Bind(wx.EVT_COMBOBOX, self.OnChangeParams)
+        self.mapset.Bind(wx.EVT_TEXT, self.OnChangeParams)
         self.layers.Bind(wx.EVT_RIGHT_DOWN, self.OnMenu)
         self.filter.Bind(wx.EVT_TEXT, self.OnFilter)
         self.toggle.Bind(wx.EVT_CHECKBOX, self.OnToggle)
