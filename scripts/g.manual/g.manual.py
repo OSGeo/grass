@@ -34,6 +34,11 @@
 #% key: m
 #% description: Display as MAN text page instead of HTML page in browser
 #%end
+#%flag
+#% key: o
+#% label: Display online manuals instead of locally installed
+#% description: Use online manuals available at http://grass.osgeo.org website. This flag has no effect when displaying MAN text pages.
+#%end
 #%option
 #% key: entry
 #% type: string
@@ -43,25 +48,35 @@
 
 import sys
 import os
+import urllib
+
 from grass.script import core as grass
 
 def start_browser(entry):
     if browser != 'xdg-open' and not grass.find_program(browser):
         grass.fatal(_("Browser '%s' not found") % browser)
 
-    path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
-    if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
-        path = os.path.join(os.getenv('GRASS_ADDON_BASE'), 'docs', 'html', entry + '.html')
+    if flags['o']:
+        major,minor,patch = grass.version()['version'].split('.')
+        url_path = 'http://grass.osgeo.org/grass%s%s/manuals/%s.html' % (major,minor,entry)
+        if urllib.urlopen(url_path).getcode() != 200:
+            url_path = 'http://grass.osgeo.org/grass%s%s/manuals/addons/%s.html' % (major,minor,entry)
+    else:
+        path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
+        if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
+            path = os.path.join(os.getenv('GRASS_ADDON_BASE'), 'docs', 'html', entry + '.html')
     
-    if not os.path.exists(path):
-        grass.fatal(_("No HTML manual page entry for '%s'") % entry)
-
+        if not os.path.exists(path):
+            grass.fatal(_("No HTML manual page entry for '%s'") % entry)
+    
+        url_path = 'file://' + path
+    
     grass.verbose(_("Starting browser '%(browser)s' for manual"
                     " entry '%(entry)s'...")
                   % dict(browser=browser_name, entry=entry))
 
     try:
-        os.execlp(browser, browser_name, "file://%s" % (path))
+        os.execlp(browser, browser_name, url_path)
     except OSError:
         grass.fatal(_("Error starting browser '%(browser)s' for HTML file"
                       " '%(path)s'") % dict(browser=browser, path=path))
