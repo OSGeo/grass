@@ -89,7 +89,7 @@ def main():
         return
     elif system:
         print "dbmi_python_interface=\'" + str(dbif.dbmi.__name__) + "\'"
-        print "dbmi_init_string=\'" + str(tgis.get_tgis_database_string()) + "\'"
+        print "dbmi_string=\'" + str(tgis.get_tgis_database_string()) + "\'"
         print "sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'"
         if rows:
             for row in rows:
