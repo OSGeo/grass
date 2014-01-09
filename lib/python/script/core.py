@@ -588,6 +588,14 @@ def set_raise_on_error(raise_exp=True):
     raise_on_error = raise_exp
     return tmp_raise
 
+
+def get_raise_on_error():
+    """!Return True if a ScriptError exception is raised instead of calling
+       sys.exit(1) in case a fatal error was invoked with fatal()
+    """
+    global raise_on_error
+    return raise_on_error
+
 # interface to g.parser
 
 

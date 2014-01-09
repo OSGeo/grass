@@ -157,6 +157,22 @@ class Messenger(object):
          File "__init__.py", line 241, in fatal
            raise FatalError(message)
        FatalError: Ohh no no no!
+       
+       >>> msgr = Messenger(raise_on_error=True)
+       >>> msgr.set_raise_on_error(False)
+       >>> msgr.fatal("Ohh no no no!")
+       Traceback (most recent call last):
+         File "__init__.py", line 239, in fatal
+           sys.exit(1)
+       SystemExit: 1
+
+       >>> msgr = Messenger(raise_on_error=False)
+       >>> msgr.set_raise_on_error(True)
+       >>> msgr.fatal("Ohh no no no!")
+       Traceback (most recent call last):
+         File "__init__.py", line 241, in fatal
+           raise FatalError(message)
+       FatalError: Ohh no no no!
 
        @endcode
     """
@@ -272,6 +288,25 @@ class Messenger(object):
         if self.client_conn is not None:
             self.client_conn.close()
 
+    def set_raise_on_error(self, raise_on_error=True):
+        """!Set the fatal error behavior
+        
+           - If raise_on_error == True, a FatalError exception will be raised if fatal() is called
+           - If raise_on_error == False, sys.exit(1) will be invoked if fatal() is called
+        
+           @param raise_on_error If True a FatalError exception will be raised instead 
+                 of calling sys.exit(1)
+        """
+        self.raise_on_error = raise_on_error
+    
+    def get_raise_on_error(self):
+        """!Get the fatal error behavior
+        
+           @return True if a FatalError exception will be raised 
+                   or False if sys.exit(1) will be called in case of invoking fatal()
+        """
+        return self.raise_on_error
+            
     def test_fatal_error(self, message):
         """!Force the messenger server to call G_fatal_error()
         """
