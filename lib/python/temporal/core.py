@@ -262,6 +262,68 @@ def get_tgis_c_library_interface():
 
 ###############################################################################
 
+# Set this variable True to raise a FatalError exception 
+# in case a fatal error occurs using the messenger interface 
+raise_on_error = False
+
+def set_raise_on_error(raise_exp=True):
+    """!Define behaviour on fatal error, invoked using the tgis messenger
+    interface (msgr.fatal())
+    
+    The messenger interface will be restarted using the new error policy
+
+    @param raise_exp True to raise a FatalError exception instead of calling
+    sys.exit(1) when using the tgis messenger interface
+    
+    @code
+    
+    >>> import grass.temporal as tgis
+    >>> tgis.init()
+    >>> ignore = tgis.set_raise_on_error(False)
+    >>> msgr = tgis.get_tgis_message_interface()
+    >>> tgis.get_raise_on_error()
+    False
+    >>> msgr.fatal("Ohh no no no!")
+    Traceback (most recent call last):
+      File "__init__.py", line 239, in fatal
+        sys.exit(1)
+    SystemExit: 1
+       
+    >>> tgis.set_raise_on_error(True)
+    False
+    >>> msgr.fatal("Ohh no no no!")
+    Traceback (most recent call last):
+      File "__init__.py", line 241, in fatal
+        raise FatalError(message)
+    FatalError: Ohh no no no!
+    
+    @endcode
+
+    @return current status
+    """
+    global raise_on_error
+    tmp_raise = raise_on_error
+    raise_on_error = raise_exp
+
+    global message_interface
+    if message_interface:
+        message_interface.set_raise_on_error(raise_on_error)
+    else:
+        _init_tgis_message_interface(raise_on_error)
+
+    return tmp_raise
+
+
+def get_raise_on_error():
+    """!Return True if a FatalError exception is raised instead of calling
+       sys.exit(1) in case a fatal error was invoked with msgr.fatal()
+    """
+    global raise_on_error
+    return raise_on_error
+
+
+###############################################################################
+
 def get_tgis_version():
     """!Get the verion number of the temporal framework
        @return The version number of the temporal framework as string
@@ -377,6 +439,7 @@ def init():
     global tgis_database
     global tgis_database_string
     global tgis_dbmi_paramstyle
+    global raise_on_error
     global enable_mapset_check
     global enable_timestamp_write
     global current_mapset
@@ -399,6 +462,11 @@ def init():
     if os.getenv("GRASS_TGIS_RAISE_ON_ERROR") is not None:
         raise_on_error = True
 
+    # Check if the script library raises on error, 
+    # if so we do the same
+    if core.get_raise_on_error() is True:
+        raise_on_error = True
+        
     # Start the GRASS message interface server
     _init_tgis_message_interface(raise_on_error)
     # Start the C-library interface server
