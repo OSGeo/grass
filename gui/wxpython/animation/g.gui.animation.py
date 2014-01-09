@@ -56,6 +56,7 @@ import sys
 import wx
 
 import grass.script as grass
+import grass.temporal as tgis
 
 if __name__ == '__main__':
     sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
@@ -84,9 +85,16 @@ def main():
         numInputs += 1
     if stvds:
         numInputs += 1
+        
 
     if numInputs > 1:
         grass.fatal(_("Options 'rast', 'vect', 'strds' and 'stvds' are mutually exclusive."))
+        
+    if numInputs > 0:
+        # We need to initialize the temporal framework in case
+        # a space time dataset was set on the command line so that
+        # the AnimLayer() class works correctly
+        tgis.init()
 
     layerList = LayerList()
     if rast:
