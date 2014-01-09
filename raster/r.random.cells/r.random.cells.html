@@ -38,8 +38,20 @@ using <em>r.2Dcorrelogram</em> with
 zero, the <b>output</b> map will number each non-masked cell from 1 to the
 number of non-masked cells in the study region. -->
 
+<h2>EXAMPLE</h2>
+
+North Carolina sample dataset example:
+
+<div class="code"><pre>
+g.region n=228500 s=215000 w=630000 e=645000 res=100 -p
+r.random.cells output=random_500m distance=500
+
+# optionally set 0 to NULL
+r.null random_500m setnull=0
+</pre></div>
+
 <h2>REFERENCES</h2>
-Random Field Software for GRASS by Chuck Ehlschlaeger
+Random Field Software for GRASS GIS by Chuck Ehlschlaeger
 
 <p>  As part of my dissertation, I put together several programs that help
 GRASS (4.1 and beyond) develop uncertainty models of spatial data. I hope
@@ -49,7 +61,7 @@ use:
 <ul>
 <li> Ehlschlaeger, C.R., Shortridge, A.M., Goodchild, M.F., 1997. 
  Visualizing spatial data uncertainty using animation. 
- Computers & Geosciences 23, 387-395. doi:10.1016/S0098-3004(97)00005-8</li>
+ Computers &amp; Geosciences 23, 387-395. doi:10.1016/S0098-3004(97)00005-8</li>
 
 <li><a href="http://www.geo.hunter.cuny.edu/~chuck/paper.html">Modeling
 Uncertainty in Elevation Data for Geographical Analysis</a>, by
