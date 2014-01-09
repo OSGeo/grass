@@ -357,7 +357,6 @@ def init():
        - MAPSET
        - LOCATION_NAME
        - GISDBASE
-       - TGIS_RAISE_ON_ERROR
        - TGIS_DISABLE_MAPSET_CHECK
        - TGIS_DISABLE_TIMESTAMP_WRITE
 
@@ -367,6 +366,7 @@ def init():
 
        The following environmental variables are checked:
         - GRASS_TGIS_PROFILE
+        - GRASS_TGIS_RAISE_ON_ERROR
 
         ATTENTION: This functions must be called before any spatio-temporal processing
                    can be started
@@ -395,10 +395,9 @@ def init():
     current_location = grassenv["LOCATION_NAME"]
     current_gisdbase = grassenv["GISDBASE"]
 
-    # Check the g.gisenv variable TGIS_RAISE_ON_ERROR
-    if grassenv.has_key("TGIS_RAISE_ON_ERROR"):
-        if grassenv["TGIS_RAISE_ON_ERROR"] == "True" or grassenv["TGIS_RAISE_ON_ERROR"] == "1":
-            raise_on_error = True
+    # Check environment variable GRASS_TGIS_RAISE_ON_ERROR
+    if os.getenv("GRASS_TGIS_RAISE_ON_ERROR") is not None:
+        raise_on_error = True
 
     # Start the GRASS message interface server
     _init_tgis_message_interface(raise_on_error)
@@ -406,9 +405,6 @@ def init():
     _init_tgis_c_library_interface()
     msgr = get_tgis_message_interface()
     msgr.debug(1, "Inititate the temporal database")
-
-    if raise_on_error is True:
-        msgr.warning("TGIS_RAISE_ON_ERROR is True")
 
     # Set the mapset check and the timestamp write
     if grassenv.has_key("TGIS_DISABLE_MAPSET_CHECK"):
@@ -491,24 +487,41 @@ def init():
 
     if db_exists == True:
         # Check the version of the temporal database
-        # This version works only with database of version 2
         dbif.close()
         dbif.connect()
         metadata = get_tgis_metadata(dbif)
         dbif.close()
         if metadata is None:
-            msgr.fatal(_("Unable to receiving temporal database metadata. Your temporal database is not supported."))
-
+            msgr.fatal(_("Unable to receiving temporal database metadata.\n"
+                         "Your temporal database is not supported.\n"
+                         "Please remove your temporal database. A new one will be cerated automatically.\n"
+                         "Current temporal database info:%(info)s")%({"info":get_database_info_string()}))
         for entry in metadata:
             if "tgis_version" in entry and entry[1] != str(get_tgis_version()):
                 msgr.fatal(_("Unsupported temporal database. Version mismatch.\n"
-                "Supported temporal API version is: %(api)i")%({"api":get_tgis_version()}))
+                             "Supported temporal API version is: %(api)i.\n"
+                             "Please update your GRASS installation to the latest svn version.\n"
+                             "Current temporal database info:%(info)s")%({"api":get_tgis_version(), 
+                                                                          "info":get_database_info_string()}))
             if "tgis_db_version" in entry and entry[1] != str(get_tgis_db_version()):
                 msgr.fatal(_("Unsupported temporal database. Version mismatch.\n"
-                "Supported temporal database version is: %(tdb)i")%( {"tdb":get_tgis_db_version()}))
+                             "Supported temporal database version is: %(tdb)i\n"
+                             "Please remove your old temporal database. \n"
+                             "A new one will be created automatically.\n"
+                             "Current temporal database info:%(info)s")%({"tdb":get_tgis_version(), 
+                                                                          "info":get_database_info_string()}))
         return
 
     create_temporal_database(dbif)
+
+###############################################################################
+
+def get_database_info_string():
+    dbif = SQLDatabaseInterfaceConnection()
+    
+    info  = "\nDBMI interface:..... " + str(dbif.dbmi.__name__)
+    info += "\nTemporal database:.. " + str( get_tgis_database_string())
+    return info
 
 ###############################################################################
 
