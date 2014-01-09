@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-30 22:30+0100\n"
-"PO-Revision-Date: 2013-10-31 01:11+0100\n"
+"PO-Revision-Date: 2014-01-01 11:06+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: French <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -326,8 +326,9 @@ msgid "Tried to pop an empty stack"
 msgstr "A tenté de dépiler une mémoire vide"
 
 #: ../lib/ogsf/gsd_surf.c:1742
+#, fuzzy
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
-msgstr ""
+msgstr "Non concordance des points de surface de coupe. Vérifiez les résolutions."
 
 #: ../lib/ogsf/gsdrape.c:207
 msgid "Unable to process vector map - out of memory"
@@ -5733,8 +5734,9 @@ msgid "Next edge was visited (left) but it is not the first one !!! breaking loo
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:648
+#, fuzzy
 msgid "side != 0 feature not implemented"
-msgstr ""
+msgstr "fonctionnalité side != 0 non implémentée"
 
 #: ../lib/vector/Vlib/buffer2.c:890 ../lib/vector/Vlib/buffer2.c:937
 msgid "zero area size"
