@@ -12,6 +12,8 @@ SUBDIRS = \
 	t.sample \
 	t.register \
 	t.unregister \
+	t.rast.accumulate \
+	t.rast.accdetect \
 	t.rast.aggregate \
 	t.rast.aggregate.ds \
 	t.rast.colors \

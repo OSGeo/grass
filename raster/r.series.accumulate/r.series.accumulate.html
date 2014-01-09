@@ -1,0 +1,109 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.series.accumulate</em> calculates (accumulated) raster value means, growing degree days (GDDs) or
+Winkler indices's from several input maps.
+<p>
+The formula for calculating the raster value means
+<div class="code"><pre>
+    value = average
+</pre></div>
+The formula for calculating GDDs is
+<div class="code"><pre>
+    value = (max + min) / 2 - lower
+</pre></div>
+The formula for calculating the Winkler index is
+<div class="code"><pre>
+    value = average - lower
+</pre></div>
+with <em>min</em> being the minimum value, <em>max</em>
+the maximum value and <em>average</em> the average value.
+The <em>min</em>, <em>max</em> and <em>average</em> values
+are automatically calculated from the input maps.
+<p>
+The <em>shift</em> and <em>scale</em> values are applied directly to the 
+input values. The <em>lower</em> and <em>upper</em> maps, as well as the <em>range</em>
+options are applied to constrain the accumulation. In case the <em>lower</em> and <em>upper</em>
+maps are not provided the <em>limits</em> option with default values will be applied.
+<p>
+Any <em>min</em>, <em>max</em> and <em>average</em> values
+above the <em>upper</em> values are set to <em>upper</em>, and any
+<em>min</em>, <em>max</em> and <em>average</em> values below the 
+<em>lower</em> values are set to <em>lower</em>, or in case of <em>mean</em>
+computation to 0 (zero). Negative results are set to 0 (zero). 
+<p>
+If an existing map is provided with the <em>basemap</em> option, the
+values of this map are added to the output, thus accumulating means, GDDs or winkler indices's.
+
+<h2>NOTES</h2>
+
+The <em>scale</em> and <em>shift</em> parameters are used to transform 
+input values with
+<div class="code"><pre>
+    new = old * scale + shift
+</pre></div>
+<p>
+With the <em>-n</em> flag, any cell for which any of the 
+corresponding input cells are NULL is automatically set to NULL 
+(NULL propagation) and the accumulated value is not calculated.
+<p>
+Without the <em>-n</em> flag, all non-NULL cells are used for calculation.
+<p>
+If the <em>range=</em> option is given, any values which fall outside 
+that range will be treated as if they were NULL. Note that the range is 
+applied to the scaled and shifted input data. The <em>range</em> 
+parameter can be set to <em>low,high</em> thresholds: 
+values outside of this range are treated as NULL (i.e., they will be 
+ignored by most aggregates, or will cause the result to be NULL if -n 
+is given). The <em>low,high</em> thresholds are floating point, so use 
+<em>-inf</em> or <em>inf</em> for a single threshold (e.g., 
+<em>range=0,inf</em> to ignore negative values, or 
+<em>range=-inf,-200.4</em> to ignore values above -200.4).
+<p>
+The number of input raster maps to be processed is given by the limit of the 
+operating system. For example, both the hard and soft limits are 
+typically 1024. The soft limit can be changed with e.g. 
+<tt>ulimit -n 1500</tt> (UNIX-based operating systems) but not higher 
+than the hard limit. If it is too low, you can as superuser add an 
+entry in
+
+<div class="code"><pre>
+/etc/security/limits.conf
+# &lt;domain&gt;      &lt;type&gt;  &lt;item&gt;         &lt;value&gt;
+your_username  hard    nofile          1500
+</pre></div>
+
+This would raise the hard limit to 1500 file. Be warned that more
+files open need more RAM.
+
+<p>
+Use the <em>file</em> option to analyze large amount of raster maps 
+without hitting open files limit and the size limit of command line 
+arguments. The computation is slower than the <em>input</em> option 
+method. For every sinlge row in the output map(s) all input maps are 
+opened and closed. The amount of RAM will rise linear with the 
+number of specified input maps. The input and file options are 
+mutually exclusive. Input is a text file with a new line separated 
+list of raster map names and optional weights. As separator between 
+the map name and the weight the character | must be used.
+
+<h2>EXAMPLES</h2>
+
+Example with MODIS Land Surface Temperature, transforming values from 
+Kelvin * 50 to degrees Celsius:
+<div class="code"><pre>
+r.series.accumulate in=MOD11A1.Day,MOD11A1.Night,MYD11A1.Day,MYD11A1.Night out=MCD11A1.GDD \
+      scale=0.02 shift=-273.15 limits=10,30
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a href="r.series.html">r.series</a>,
+<a href="g.mlist.html">g.mlist</a>,
+<a href="g.region.html">g.region</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Markus Metz and Soeren Gebbert (based on r.series)
+
+<p><i>Last changed: $Date: 2012-07-03 23:47:59 +0200 (Di, 03. Jul 2012) $</i>
