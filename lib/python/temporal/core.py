@@ -65,7 +65,7 @@ import atexit
 def profile_function(func):
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
     
-    if do_profiling is not None:
+    if do_profiling is "True" or do_profiling is "1":
         import cProfile, pstats, StringIO
         pr = cProfile.Profile()
         pr.enable()
@@ -108,7 +108,7 @@ tgis_version=2
 # this value must be an integer larger than 0
 # Increase this value in case of backward incompatible changes
 # temporal database SQL layout
-tgis_db_version=2
+tgis_db_version=3
 
 # We need to know the parameter style of the database backend
 tgis_dbmi_paramstyle = None
@@ -427,8 +427,8 @@ def init():
        - temporal GIS database (set by t.connect database=)
 
        The following environmental variables are checked:
-        - GRASS_TGIS_PROFILE
-        - GRASS_TGIS_RAISE_ON_ERROR
+        - GRASS_TGIS_PROFILE (True, False, 1, 0)
+        - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
         ATTENTION: This functions must be called before any spatio-temporal processing
                    can be started
@@ -459,7 +459,7 @@ def init():
     current_gisdbase = grassenv["GISDBASE"]
 
     # Check environment variable GRASS_TGIS_RAISE_ON_ERROR
-    if os.getenv("GRASS_TGIS_RAISE_ON_ERROR") is not None:
+    if os.getenv("GRASS_TGIS_RAISE_ON_ERROR") is "True" or os.getenv("GRASS_TGIS_RAISE_ON_ERROR") is "1":
         raise_on_error = True
 
     # Check if the script library raises on error, 
