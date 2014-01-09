@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("sampling"));
     G_add_keyword(_("random"));
+    G_add_keyword(_("autocorrelation"));
     module->description =
 	_("Generates random cell values with spatial dependence.");
 
