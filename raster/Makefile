@@ -88,6 +88,7 @@ SUBDIRS = \
 	r.rescale.eq \
 	r.ros \
 	r.series \
+	r.series.accumulate \
 	r.series.interp \
 	r.shaded.relief \
 	r.slope.aspect \
