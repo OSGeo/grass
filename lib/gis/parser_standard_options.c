@@ -93,12 +93,13 @@
    - G_OPT_C_BG
 
   - misc
+   - G_OPT_M_DIR
    - G_OPT_M_UNITS
    - G_OPT_M_DATATYPE
    - G_OPT_M_MAPSET
    - G_OPT_M_COORDS
    - G_OPT_M_COLR
-   - G_OPT_M_DIR
+   - G_OPT_M_REGION
 
   - temporal GIS framework
    - G_OPT_STDS_INPUT
@@ -632,6 +633,15 @@ struct Option *G_define_standard_option(int opt)
 	Opt->descriptions = G_color_rules_descriptions();
         Opt->gisprompt = "old,colortable,colortable";
 	break;
+
+    case G_OPT_M_REGION:
+        Opt->key = "region";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = NO;
+        Opt->gisprompt = "old,windows,region";
+        Opt->description = _("Name of saved region");
+        break;
 
     /* Spatio-temporal modules of the temporal GIS framework */
     case G_OPT_STDS_INPUT:
