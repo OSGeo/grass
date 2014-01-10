@@ -2373,6 +2373,7 @@ if __name__ == "__main__":
                     for action in condItems['else']:
                         self._writePythonItem(action, ignoreBlock = False)
                 self.indent += 4
+        self.fd.write('\n')
         if isinstance(item, ModelComment):
             self._writePythonComment(item)
         
