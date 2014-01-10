@@ -156,14 +156,8 @@ int main(int argc, char *argv[])
 
     /* parameters */
 
-    parm.region = G_define_option();
-    parm.region->key = "region";
-    parm.region->key_desc = "name";
-    parm.region->required = NO;
-    parm.region->multiple = NO;
-    parm.region->type = TYPE_STRING;
+    parm.region = G_define_standard_option(G_OPT_M_REGION);
     parm.region->description = _("Set current region from named region");
-    parm.region->gisprompt = "old,windows,region";
     parm.region->guisection = _("Existing");
 
     parm.raster = G_define_standard_option(G_OPT_R_MAP);
