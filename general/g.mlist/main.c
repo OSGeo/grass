@@ -273,7 +273,8 @@ static void make_list(
 
 	if (!add_mapset) {
 	    const char *mapset2 = G_find_file2(element, name, "");
-	    need_mapset = strcmp(mapset, mapset2) != 0;
+            if (mapset2)
+                need_mapset = strcmp(mapset, mapset2) != 0;
 	}
 	if (add_mapset || need_mapset)
 	    fprintf(stdout, "@%s", mapset);
