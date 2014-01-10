@@ -215,8 +215,11 @@ static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
 
     for (m = 0; m < k; m++) {
 	skip = 0;
-	if ((mapset = G_find_raster(rasters[m], "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), rasters[m]);
+	if ((mapset = G_find_raster(rasters[m], "")) == NULL) {
+	    G_warning(_("Raster map <%s> not found. Skipped."), rasters[m]);
+            skip = 1;
+            continue;
+        }
 
 	G_message(_("Adding raster map <%s> to group"),
 		  G_fully_qualified_name(rasters[m], mapset));
@@ -224,7 +227,7 @@ static int add_or_update_group(char group[INAME_LEN], char **rasters, int k)
 	/* Go through existing files to check for duplicates */
 	for (n = 0; n < ref.nfiles; n++) {
 	    if (strcmp(rasters[m], ref.file[n].name) == 0) {
-		G_message(_("Raster map <%s> exists in group. Skipping..."),
+		G_message(_("Raster map <%s> exists in group. Skipped."),
 			  G_fully_qualified_name(rasters[m], mapset));
 		skip = 1;
 		continue;
@@ -254,9 +257,12 @@ static int add_or_update_subgroup(char group[INAME_LEN],
 
     for (m = 0; m < k; m++) {
 	skip = 0;
-	if ((mapset = G_find_raster(rasters[m], "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"),
-			  G_fully_qualified_name(rasters[m], mapset));
+	if ((mapset = G_find_raster(rasters[m], "")) == NULL) {
+            G_warning(_("Raster map <%s> not found. Skipped."),
+                      rasters[m]);
+            skip = 1;
+            continue;
+        }
 
 	G_message(_("Adding raster map <%s> to subgroup"),
 		  G_fully_qualified_name(rasters[m], mapset));
