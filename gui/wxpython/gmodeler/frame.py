@@ -119,7 +119,7 @@ class ModelFrame(wx.Frame):
         self._gconsole.Bind(EVT_CMD_DONE,
             lambda event: self._switchPageHandler(event=event, notification=Notification.RAISE_WINDOW))
         self.Bind(EVT_CMD_RUN, self.OnCmdRun)
-        self.Bind(EVT_CMD_DONE, self.OnCmdDone)
+        self._gconsole.Bind(EVT_CMD_DONE, self.OnCmdDone) # rewrite default method to avoid hiding progress bar
         self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
         
         self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
@@ -235,6 +235,7 @@ class ModelFrame(wx.Frame):
         
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
+        self.goutput.GetProgressBar().SetValue(0)
         try:
             action = self.GetModel().GetItems()[event.pid]
             if hasattr(action, "task"):
@@ -486,7 +487,10 @@ class ModelFrame(wx.Frame):
         self.model.Run(self._gconsole, self.OnDone, parent = self)
         
     def OnDone(self, cmd, returncode):
-        """!Computation finished"""
+        """!Computation finished
+
+        @todo: not called -- must be fixed
+        """
         self.SetStatusText('', 0)
         # restore original files
         if hasattr(self.model, "fileInput"):
