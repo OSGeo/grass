@@ -371,6 +371,17 @@ class ModelFrame(wx.Frame):
         self.modelChanged = False
         self.SetTitle(self.baseTitle)
         
+    def GetModelFile(self, ext=True):
+        """!Get model file
+
+        @param ext False to avoid extension
+        """
+        if not self.modelFile:
+            return ''
+        if ext:
+            return self.modelFile
+        return os.path.splitext(self.modelFile)[0]
+    
     def OnModelOpen(self, event):
         """!Load model from file"""
         filename = ''
@@ -1720,6 +1731,7 @@ class PythonPanel(wx.Panel):
         filename = ''
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose file to save"),
+                            defaultFile = self.parent.GetModelFile(ext=False) + '.py',
                             defaultDir = os.getcwd(),
                             wildcard = _("Python script (*.py)|*.py"),
                             style = wx.FD_SAVE)
