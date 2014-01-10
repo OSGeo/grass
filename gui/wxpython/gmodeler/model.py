@@ -2256,11 +2256,26 @@ class WritePythonFile:
         self.indent = 4
 
         self._writePython()
+
+    def _getStandardizedOption(self, string):
+        if string == 'raster':
+            return 'G_OPT_R_MAP'
+        elif string == 'vector':
+            return 'G_OPT_V_MAP'
+        elif string == 'mapset':
+            return 'G_OPT_M_MAPSET'
+        elif string == 'file':
+            return 'G_OPT_F_INPUT'
+        elif string == 'region':
+            return 'G_OPT_M_REGION'
         
+        return ''
+
     def _writePython(self):
         """!Write model to file"""
         properties = self.model.GetProperties()
         
+        # header
         self.fd.write(
 r"""#!/usr/bin/env python
 #
@@ -2282,6 +2297,29 @@ r"""#!/usr/bin/env python
        time.asctime(),
        '#' * 77))
         
+        # UI
+        self.fd.write(
+r"""
+#%%module
+#%% description: %s
+#%%end
+""" % (EncodeString(' '.join(properties['description'].splitlines()))))
+
+        variables = self.model.GetVariables()
+        for key, data in variables.iteritems():
+            otype = self._getStandardizedOption(data['type'])
+            self.fd.write(
+r"""
+#%%option %s
+#%% key: %s
+#%% description: %s
+#%% required: yes
+""" % (otype, key, data['description']))
+            if 'value' in data:
+                self.fd.write("#%% answer: %s\n" % data['value'])
+            self.fd.write("#% end\n")
+        
+        # import modules
         self.fd.write(
 r"""
 import sys
@@ -2317,7 +2355,7 @@ r"""    run_command('g.remove',
         
         self.fd.write("\ndef main():\n")
         for item in self.model.GetItems():
-            self._writePythonItem(item)
+            self._writePythonItem(item, variables = self.model.GetVariables())
         
         self.fd.write("\n    return 0\n")
         
@@ -2329,7 +2367,7 @@ if __name__ == "__main__":
     sys.exit(main())
 """)
         
-    def _writePythonItem(self, item, ignoreBlock = True, variables = []):
+    def _writePythonItem(self, item, ignoreBlock = True, variables = {}):
         """!Write model object to Python file"""
         if isinstance(item, ModelAction):
             if ignoreBlock and item.GetBlockId(): # ignore items in loops of conditions
@@ -2337,9 +2375,8 @@ if __name__ == "__main__":
             self._writePythonAction(item, variables = variables)
         elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
             # substitute condition
-            variables = self.model.GetVariables()
             cond = item.GetLabel()
-            for variable in variables:
+            for variable in self.model.GetVariables():
                 pattern = re.compile('%' + variable)
                 if pattern.search(cond):
                     value = variables[variable].get('value', '')
@@ -2357,8 +2394,10 @@ if __name__ == "__main__":
                     cond += condText
                 self.fd.write('%s:\n' % cond)
                 self.indent += 4
+                variablesLoop = variables.copy()
+                variablesLoop[condVar] = None
                 for action in item.GetItems(self.model.GetItems(objType=ModelAction)):
-                    self._writePythonItem(action, ignoreBlock = False, variables = [condVar])
+                    self._writePythonItem(action, ignoreBlock = False, variables = variablesLoop)
                 self.indent -= 4
             if isinstance(item, ModelCondition):
                 self.fd.write('%sif %s:\n' % (' ' * self.indent, cond))
@@ -2377,13 +2416,13 @@ if __name__ == "__main__":
         if isinstance(item, ModelComment):
             self._writePythonComment(item)
         
-    def _writePythonAction(self, item, variables = []):
+    def _writePythonAction(self, item, variables = {}):
         """!Write model action to Python file"""
-        task = GUI(show = None).ParseCommand(cmd = item.GetLog(string = False, substitute = self.model.GetVariables()))
+        task = GUI(show = None).ParseCommand(cmd = item.GetLog(string = False))
         strcmd = "%srun_command(" % (' ' * self.indent)
         self.fd.write(strcmd + self._getPythonActionCmd(task, len(strcmd), variables) + '\n')
         
-    def _getPythonActionCmd(self, task, cmdIndent, variables = []):
+    def _getPythonActionCmd(self, task, cmdIndent, variables = {}):
         opts = task.get_options()
         
         ret = ''
@@ -2404,11 +2443,13 @@ if __name__ == "__main__":
             if name and value:
                 ptype = p.get('type', 'string')
                 foundVar = False
-                for var in variables:
-                    if '%' + var in value:
-                        value = self._substituteVariable(value, var)
-                        foundVar = True
                 
+                for var in sorted(variables, key=len, reverse=True):
+                    data = variables[var]
+                    if '%' + var in value:
+                        value = self._substituteVariable(value, var, data)
+                        foundVar = True
+
                 if foundVar or ptype != 'string':
                     params.append("%s = %s" % (name, value))
                 else:
@@ -2432,22 +2473,33 @@ if __name__ == "__main__":
         for line in item.GetLabel().splitlines():
             self.fd.write('#' + line + '\n')
 
-    def _substituteVariable(self, string, variable):
+    def _substituteVariable(self, string, variable, data):
         """!Substitute variable in the string
 
         @param string string to be modified
         @param variable variable to be substituted
+        @param data data related to the variable
         
         @return modified string
         """
         result = ''
-        ss = re.split(r"%"+variable, string)
-        if len(ss) == 2:
-            return variable
+        ss = re.split("\w*(%"+variable+")w*", string)
+
+        if not ss[0]:
+            if data:
+                return "options['%s']" % variable
+            else:
+                return variable
         
         for s in ss:
-            if not s:
-                result += '+%s+' % variable
+            if s == '"':
+                continue
+            
+            if s == '%' + variable:
+                if data:
+                    result += "+options['%s']+" % variable
+                else:
+                    result += '+%s+' % variable
             else:
                 result += '"' + s + '"'
         
