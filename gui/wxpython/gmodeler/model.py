@@ -767,7 +767,7 @@ class Model(object):
                                     'idx'    : idx }
             for name, values in self.variables.iteritems():
                 gtype = values.get('type', 'string')
-                if gtype in ('raster', 'vector', 'mapset', 'file'):
+                if gtype in ('raster', 'vector', 'mapset', 'file', 'region'):
                     gisprompt = True
                     prompt = gtype
                     if gtype == 'raster':

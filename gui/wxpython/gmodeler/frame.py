@@ -1444,6 +1444,7 @@ class VariablePanel(wx.Panel):
                                          _("string"),
                                          _("raster"),
                                          _("vector"),
+                                         _("region"),
                                          _("mapset"),
                                          _("file")])
         self.type.SetSelection(2) # string
