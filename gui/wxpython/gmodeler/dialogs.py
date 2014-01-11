@@ -605,12 +605,10 @@ class ModelConditionDialog(ModelItemDialog):
 
 class ModelListCtrl(wx.ListCtrl,
                     listmix.ListCtrlAutoWidthMixin,
-                    listmix.TextEditMixin,
-                    listmix.ColumnSorterMixin):
+                    listmix.TextEditMixin):
     def __init__(self, parent, columns, frame, id = wx.ID_ANY, columnsNotEditable = [],
                  style = wx.LC_REPORT | wx.BORDER_NONE |
-                 wx.LC_SORT_ASCENDING |wx.LC_HRULES |
-                 wx.LC_VRULES, **kwargs):
+                 wx.LC_HRULES | wx.LC_VRULES, **kwargs):
         """!List of model variables"""
         self.parent = parent
         self.columns = columns
@@ -621,8 +619,7 @@ class ModelListCtrl(wx.ListCtrl,
         wx.ListCtrl.__init__(self, parent, id = id, style = style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
-        listmix.ColumnSorterMixin.__init__(self, 4)
-        
+
         i = 0
         for col in columns:
             self.InsertColumn(i, col)
@@ -651,6 +648,10 @@ class ModelListCtrl(wx.ListCtrl,
         """!Finish editing of item"""
         pass
     
+    def GetListCtrl(self):
+        """!Used by ColumnSorterMixin"""
+        return self
+    
     def OnColClick(self, event):
         """!Click on column header (order by)"""
         event.Skip()
@@ -662,10 +663,6 @@ class VariableListCtrl(ModelListCtrl):
 
         self.SetColumnWidth(2, 200) # default value
 
-    def GetListCtrl(self):
-        """!Used by ColumnSorterMixin"""
-        return self
-    
     def GetData(self):
         """!Get list data"""
         return self.itemDataMap
@@ -794,10 +791,6 @@ class ItemListCtrl(ModelListCtrl):
         self.SetColumnWidth(1, 75)
         self.SetColumnWidth(2, 65)
         
-    def GetListCtrl(self):
-        """!Used by ColumnSorterMixin"""
-        return self
-    
     def GetData(self):
         """!Get list data"""
         return self.itemDataMap
