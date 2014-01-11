@@ -1122,9 +1122,9 @@ class MapsetSelect(wx.combo.ComboCtrl):
             self.gisdbase = dbase
         self.location = location
         if location:
-            self.SetItems(self._getMapsets())
+            self.tcp.SetItems(self._getMapsets())
         else:
-            self.SetItems([])
+            self.tcp.SetItems([])
      
     def _getMapsets(self):
         if self.searchPath:
@@ -1144,10 +1144,22 @@ class MapsetSelect(wx.combo.ComboCtrl):
         return mlist
 
     def GetStringSelection(self):
+        """!For backward compatibility. MapsetSelect changed to allow
+        multiple selection, this required to change super-class from
+        wx.ComboBox to wx.combo.ComboCtrl"""
         return self.GetValue()
 
     def SetStringSelection(self, text):
+        """!For backward compatibility. MapsetSelect changed to allow
+        multiple selection, this required to change super-class from
+        wx.ComboBox to wx.combo.ComboCtrl"""
         return self.SetValue(text)
+
+    def SetItems(self, items):
+        """!For backward compatibility. MapsetSelect changed to allow
+        multiple selection, this required to change super-class from
+        wx.ComboBox to wx.combo.ComboCtrl"""
+        self.tcp.SetItems(items)
 
 class SubGroupSelect(wx.ComboBox):
     """!Widget for selecting subgroups"""
