@@ -56,8 +56,6 @@ def main():
     
     outfile = os.path.join(outfile_path, outfile_base)
     
-    print outfile
-
     global tmp
     tmp = grass.tempdir()
     tmp_dir = os.path.join(tmp, infile)
