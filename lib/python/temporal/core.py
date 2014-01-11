@@ -267,7 +267,7 @@ def get_tgis_c_library_interface():
 raise_on_error = False
 
 def set_raise_on_error(raise_exp=True):
-    """!Define behaviour on fatal error, invoked using the tgis messenger
+    """!Define behavior on fatal error, invoked using the tgis messenger
     interface (msgr.fatal())
     
     The messenger interface will be restarted using the new error policy
@@ -406,7 +406,7 @@ atexit.register(stop_subprocesses)
 
 ###############################################################################
 
-def init():
+def init(raise_fatal_error=False):
     """!This function set the correct database backend from GRASS environmental variables
        and creates the grass temporal database structure for raster,
        vector and raster3d maps as well as for the space-time datasets strds,
@@ -432,6 +432,13 @@ def init():
 
         ATTENTION: This functions must be called before any spatio-temporal processing
                    can be started
+                   
+        @param raise_fatal_error Set this True to assure that the init() function 
+                                 does not kill a persistent process like the GUI.
+                                 
+                                 If set True a grass.pygrass.messages.FatalError 
+                                 exception will be raised in case a fatal error occurs 
+                                 in the init process, otherwise sys.exit(1) will be called.
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
@@ -445,13 +452,14 @@ def init():
     global current_mapset
     global current_location
     global current_gisdbase
+    
+    raise_on_error = raise_fatal_error
 
     # We must run t.connect at first to create the temporal database and to
     # get the environmental variables
     core.run_command("t.connect", flags="c")
     kv = core.parse_command("t.connect", flags="pg")
     grassenv = core.gisenv()
-    raise_on_error = False
 
     # Set the global variable for faster access
     current_mapset = grassenv["MAPSET"]
@@ -459,7 +467,7 @@ def init():
     current_gisdbase = grassenv["GISDBASE"]
 
     # Check environment variable GRASS_TGIS_RAISE_ON_ERROR
-    if os.getenv("GRASS_TGIS_RAISE_ON_ERROR") is "True" or os.getenv("GRASS_TGIS_RAISE_ON_ERROR") is "1":
+    if os.getenv("GRASS_TGIS_RAISE_ON_ERROR") == "True" or os.getenv("GRASS_TGIS_RAISE_ON_ERROR") == "1":
         raise_on_error = True
 
     # Check if the script library raises on error, 
@@ -472,7 +480,7 @@ def init():
     # Start the C-library interface server
     _init_tgis_c_library_interface()
     msgr = get_tgis_message_interface()
-    msgr.debug(1, "Inititate the temporal database")
+    msgr.debug(1, "Initiate the temporal database")
 
     # Set the mapset check and the timestamp write
     if grassenv.has_key("TGIS_DISABLE_MAPSET_CHECK"):

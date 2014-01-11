@@ -72,7 +72,7 @@ class TimelineFrame(wx.Frame):
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=_("Timeline Tool"))
 
-        tgis.init()
+        tgis.init(True)
         self.datasets = []
         self.timeData = {}
         self._layout()

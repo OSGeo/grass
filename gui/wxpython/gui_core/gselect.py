@@ -51,6 +51,8 @@ from core import globalvar
 
 import grass.script as grass
 from   grass.script import task as gtask
+from grass.pygrass import messages
+import grass.temporal as tgis
 
 from gui_core.widgets  import ManageSettingsWidget
 
@@ -334,6 +336,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         self.extraItems = dict()
         
         self.SetFilter(None)
+        self.tgis_error = False
     
     def SetFilter(self, filter):
         """!Set filter for GIS elements, see e.g. VectorSelect"""
@@ -441,8 +444,10 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             return
         
         if element in ('stds', 'strds', 'str3ds', 'stvds'):
-            import grass.temporal as tgis
-            filesdict = tgis.tlist_grouped(elementdict[element], element == 'stds')
+            if self.tgis_error is False:
+                filesdict = tgis.tlist_grouped(elementdict[element], element == 'stds')
+            else:
+                filesdict = None
         else:
             if globalvar.have_mlist:
                 filesdict = grass.mlist_grouped(elementdict[element],
@@ -662,8 +667,13 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         if 'type' in kargs:
             self.type = kargs['type']
             if self.type in ('stds', 'strds', 'str3ds', 'stvds'):
-                import grass.temporal as tgis
-                tgis.init()
+                # Initiate the temporal framework. Catch database error
+                # and set the error flag for the stds listing.
+                try:
+                    tgis.init(True)
+                except messages.FatalError, e:
+                    sys.stderr.write("Temporal GIS error:\n%s" % e)
+                    self.tgis_error = True
         if 'mapsets' in kargs:
             self.mapsets = kargs['mapsets']
         if 'nmaps' in kargs:
