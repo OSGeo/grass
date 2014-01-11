@@ -357,7 +357,7 @@ class LocationPage(TitledPage):
         #
         self.Bind(wx.EVT_RADIOBOX, self.OnMaptype, self.rb_maptype)
         self.Bind(wx.EVT_COMBOBOX, self.OnLocation, self.cb_location)
-        self.Bind(wx.EVT_COMBOBOX, self.OnMapset, self.cb_mapset)
+        self.cb_mapset.Bind(wx.EVT_TEXT, self.OnMapset)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         # self.Bind(wx.EVT_CLOSE, self.parent.Cleanup)
