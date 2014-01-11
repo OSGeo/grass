@@ -74,7 +74,7 @@ def main():
             grass.fatal(_("option <output>: <%s> exists.") % outfile)
     
     grass.message(_("Packing <%s> to <%s>...") % (gfile['fullname'], outfile))
-    basedir = os.path.sep.join(gfile['file'].split(os.path.sep)[:-2])
+    basedir = os.path.sep.join(os.path.normpath(gfile['file']).split(os.path.sep)[:-2])
     olddir  = os.getcwd()
     
     # copy elements
