@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     parm.input = G_define_standard_option(G_OPT_F_INPUT);
     parm.input->label =
 	_("Name of input file to be imported");
-    parm.input->description = _("-' for standard input");
+    parm.input->description = _("'-' for standard input");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
