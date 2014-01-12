@@ -187,6 +187,9 @@ class UpdateThread(Thread):
                 continue
             
             name = win.GetName()
+            
+            ### @todo: replace name by isinstance() and signals
+
             pBind = self.task.get_param(uid, element = 'wxId', raiseError = False)
             if pBind:
                 pBind['value'] = ''
@@ -1387,7 +1390,7 @@ class CmdPanel(wx.Panel):
                                                        value = value, new = new,
                                                        multiple = p.get('multiple', False))
                             textWin = win.GetTextCtrl()
-                            p['wxId'] = [ textWin.GetId(), ]
+                            p['wxId'] = [ win.GetId(), ]
                             
                             textWin.Bind(wx.EVT_TEXT, self.OnSetValue)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
