@@ -1093,7 +1093,6 @@ class MapsetSelect(wx.combo.ComboCtrl):
                                     style = style, **kwargs)
         self.searchPath  = searchPath
         self.skipCurrent = skipCurrent
-        
         self.SetName("MapsetSelect")
         if not gisdbase:
             self.gisdbase = grass.gisenv()['GISDBASE']
@@ -1121,6 +1120,9 @@ class MapsetSelect(wx.combo.ComboCtrl):
         if dbase:
             self.gisdbase = dbase
         self.location = location
+        
+        self.tcp.DeleteAllItems()
+        
         if location:
             self.tcp.SetItems(self._getMapsets())
         else:
@@ -1159,6 +1161,7 @@ class MapsetSelect(wx.combo.ComboCtrl):
         """!For backward compatibility. MapsetSelect changed to allow
         multiple selection, this required to change super-class from
         wx.ComboBox to wx.combo.ComboCtrl"""
+        self.tcp.DeleteAllItems()
         self.tcp.SetItems(items)
 
 class SubGroupSelect(wx.ComboBox):
