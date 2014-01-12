@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
 
     parm.cats = G_define_standard_option(G_OPT_V_CATS);
     parm.cats->multiple = YES;
+    parm.cats->guisection = _("Selection");
 
     parm.vals = G_define_option();
     parm.vals->key = "vals";
@@ -67,6 +68,7 @@ int main(int argc, char *argv[])
     parm.vals->required = NO;
     parm.vals->label = _("Comma separated value list");
     parm.vals->description = _("Example: 1.4,3.8,13");
+    parm.vals->guisection = _("Selection");
 
     parm.fs = G_define_standard_option(G_OPT_F_SEP);
     parm.fs->answer = "tab";
@@ -76,12 +78,14 @@ int main(int argc, char *argv[])
     parm.raster->required = NO;
     parm.raster->description =
 	_("Raster map from which to copy category table");
+    parm.raster->guisection = _("Define");
 
     parm.file = G_define_standard_option(G_OPT_F_INPUT);
     parm.file->key = "rules";
     parm.file->required = NO;
     parm.file->description =
 	_("File containing category label rules (or \"-\" to read from stdin)");
+    parm.file->guisection = _("Define");
 
     parm.fmt_str = G_define_option();
     parm.fmt_str->key = "format";
