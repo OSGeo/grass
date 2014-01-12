@@ -61,6 +61,12 @@ int main(int argc, char **argv)
 
     covermap = G_define_standard_option(G_OPT_R_COVER);
 
+    method = G_define_option();
+    method->key = "method";
+    method->type = TYPE_STRING;
+    method->required = YES;
+    method->description = _("Method of object-based statistic");
+
     for (o_method = 0; menu[o_method].name; o_method++) {
 	if (o_method)
 	    strcat(methods, ",");
@@ -68,13 +74,18 @@ int main(int argc, char **argv)
 	    *(methods) = 0;
 	strcat(methods, menu[o_method].name);
     }
+    method->options = G_store(methods);
 
-    method = G_define_option();
-    method->key = "method";
-    method->type = TYPE_STRING;
-    method->required = YES;
-    method->description = _("Method of object-based statistic");
-    method->options = methods;
+    for (o_method = 0; menu[o_method].name; o_method++) {
+	if (o_method)
+	    strcat(methods, ";");
+	else
+	    *(methods) = 0;
+	strcat(methods, menu[o_method].name);
+	strcat(methods, ";");
+	strcat(methods, menu[o_method].text);
+    }
+    method->descriptions = G_store(methods);
 
     outputmap = G_define_standard_option(G_OPT_R_OUTPUT);
     outputmap->description = _("Resultant raster map");
