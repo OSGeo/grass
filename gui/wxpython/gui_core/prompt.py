@@ -298,54 +298,51 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """!Determines which part of command (flags, parameters) should
         be completed at current cursor position"""
         entry = self.GetTextLeft()
-        toComplete = dict()
+        toComplete = dict(cmd=None, entity=None)
         try:
             cmd = entry.split()[0].strip()
         except IndexError:
-            return None
+            return toComplete
         
         try:
             splitted = utils.split(str(entry))
         except ValueError: # No closing quotation error
-            return None
-        if len(splitted) > 1:
-            if cmd in globalvar.grassCmd:
-                toComplete['cmd'] = cmd
-                if entry[-1] == ' ':
-                    words = entry.split(' ')
-                    if any(word.startswith('-') for word in words):
-                        toComplete['entity'] = 'params'
-                    else:
-                        toComplete['entity'] = 'params+flags'
+            return toComplete
+        if len(splitted) > 0 and cmd in globalvar.grassCmd:
+            toComplete['cmd'] = cmd
+            if entry[-1] == ' ':
+                words = entry.split(' ')
+                if any(word.startswith('-') for word in words):
+                    toComplete['entity'] = 'params'
                 else:
-                    # get word left from current position
-                    word = self.GetWordLeft(withDelimiter = True)
-                    
-                    if word[0] == '=' and word[-1] == '@':
-                        toComplete['entity'] = 'mapsets'
-                    elif word[0] == '=':
-                        # get name of parameter
-                        paramName = self.GetWordLeft(withDelimiter = False, ignoredDelimiter = '=').strip('=')
-                        if paramName:
-                            try:
-                                param = self.cmdDesc.get_param(paramName)
-                            except (ValueError, AttributeError):
-                                return None
-                        else:
-                            return None
-                        
-                        if param['values']:
-                            toComplete['entity'] = 'param values'
-                        elif param['prompt'] == 'raster' and param['element'] == 'cell':
-                            toComplete['entity'] = 'raster map'
-                        elif param['prompt'] == 'vector' and param['element'] == 'vector':
-                            toComplete['entity'] = 'vector map'
-                    elif word[0] == '-':
-                        toComplete['entity'] = 'flags'
-                    elif word[0] == ' ':
-                        toComplete['entity'] = 'params'
+                    toComplete['entity'] = 'params+flags'
             else:
-                return None
+                # get word left from current position
+                word = self.GetWordLeft(withDelimiter = True)
+                
+                if word[0] == '=' and word[-1] == '@':
+                    toComplete['entity'] = 'mapsets'
+                elif word[0] == '=':
+                    # get name of parameter
+                    paramName = self.GetWordLeft(withDelimiter = False, ignoredDelimiter = '=').strip('=')
+                    if paramName:
+                        try:
+                            param = self.cmdDesc.get_param(paramName)
+                        except (ValueError, AttributeError):
+                            return toComplete
+                    else:
+                        return toComplete
+                    
+                    if param['values']:
+                        toComplete['entity'] = 'param values'
+                    elif param['prompt'] == 'raster' and param['element'] == 'cell':
+                        toComplete['entity'] = 'raster map'
+                    elif param['prompt'] == 'vector' and param['element'] == 'vector':
+                        toComplete['entity'] = 'vector map'
+                elif word[0] == '-':
+                    toComplete['entity'] = 'flags'
+                elif word[0] == ' ':
+                    toComplete['entity'] = 'params'
         else:
             toComplete['entity'] = 'command'
             toComplete['cmd'] = cmd
@@ -393,8 +390,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.InsertText(pos, '.')
             self.CharRight()
             self.toComplete = self.EntityToComplete()
-            if self.toComplete is None:
-                return
             try:
                 if self.toComplete['entity'] == 'command': 
                     for command in globalvar.grassCmd:
@@ -433,14 +428,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.InsertText(pos, '=')
             self.CharRight()
             self.toComplete = self.EntityToComplete()
-            if self.toComplete and 'entity' in self.toComplete:
-                if self.toComplete['entity'] == 'raster map':
-                    self.autoCompList = self.mapList['raster']
-                elif self.toComplete['entity'] == 'vector map':
-                    self.autoCompList = self.mapList['vector']
-                elif self.toComplete['entity'] == 'param values':
-                    param = self.GetWordLeft(withDelimiter = False, ignoredDelimiter='=').strip(' =')
-                    self.autoCompList = self.cmdDesc.get_param(param)['values']
+            if self.toComplete['entity'] == 'raster map':
+                self.autoCompList = self.mapList['raster']
+            elif self.toComplete['entity'] == 'vector map':
+                self.autoCompList = self.mapList['vector']
+            elif self.toComplete['entity'] == 'param values':
+                param = self.GetWordLeft(withDelimiter = False, ignoredDelimiter='=').strip(' =')
+                self.autoCompList = self.cmdDesc.get_param(param)['values']
             self.ShowList()
         
         # complete mapset ('@')
@@ -450,7 +444,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.CharRight()
             self.toComplete = self.EntityToComplete()
             
-            if self.toComplete and self.toComplete['entity'] == 'mapsets':
+            if self.toComplete['entity'] == 'mapsets':
                 self.autoCompList = self.mapsetList
             self.ShowList()
             
@@ -458,8 +452,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         elif event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown():
             self.autoCompList = list()
             self.toComplete = self.EntityToComplete()
-            if self.toComplete is None:
-                return 
 
             #complete command
             if self.toComplete['entity'] == 'command':
