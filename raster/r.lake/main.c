@@ -149,12 +149,14 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
+    G_add_keyword(_("hazard"));
+    G_add_keyword(_("flood"));
     module->description = _("Fills lake at given point to given level.");
 
     tmap_opt = G_define_standard_option(G_OPT_R_ELEV);
 
     wlvl_opt = G_define_option();
-    wlvl_opt->key = "wl";
+    wlvl_opt->key = "water_level";
     wlvl_opt->description = _("Water level");
     wlvl_opt->type = TYPE_DOUBLE;
     wlvl_opt->required = YES;
@@ -163,18 +165,19 @@ int main(int argc, char *argv[])
     lake_opt->key = "lake";
     lake_opt->required = NO;
 
-    sdxy_opt = G_define_option();
-    sdxy_opt->key = "xy";
-    sdxy_opt->description = _("Seed point coordinates");
-    sdxy_opt->type = TYPE_DOUBLE;
-    sdxy_opt->key_desc = "east,north";
+    sdxy_opt = G_define_standard_option(G_OPT_M_COORDS);
+    sdxy_opt->label = _("Seed point coordinates");
+    sdxy_opt->description = _("Either this coordinates pair or a seed"
+	" map have to be specified");
     sdxy_opt->required = NO;
     sdxy_opt->multiple = NO;
 
     smap_opt = G_define_standard_option(G_OPT_R_MAP);
     smap_opt->key = "seed";
+    smap_opt->label =
+	_("Input raster map with given starting point(s) (at least 1 cell > 0)");
     smap_opt->description =
-	_("Name of input raster map with given starting point(s) (at least 1 cell > 0)");
+	_("Either this parameter or a coordinates pair have to be specified");
     smap_opt->required = NO;
 
     negative_flag = G_define_flag();
@@ -233,7 +236,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Seed point outside the current region"));
     }
 
-    /* Open terran map */
+    /* Open terrain map */
     in_terran_fd = Rast_open_old(terrainmap, "");
 
     /* Open seed map */
