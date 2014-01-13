@@ -136,7 +136,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;General</h3>
       <ul>
-      <li><a href="grass7.html">GRASS startup manual page</a></li>
+      <li><a href="grass7.html">GRASS GIS startup manual page</a></li>
       <li><a href="general.html">General commands manual</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Miscellaneous&nbsp;&amp;&nbsp;Variables</h3>
