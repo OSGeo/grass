@@ -108,6 +108,8 @@ struct Option *define_standard_option(const char *name)
 	key = G_OPT_M_MAPSET;
     else if (G_strcasecmp(name, "G_OPT_M_COORDS") == 0)
 	key = G_OPT_M_COORDS;
+    else if (G_strcasecmp(name, "G_OPT_M_REGION") == 0)
+	key = G_OPT_M_REGION;
     else if (G_strcasecmp(name, "G_OPT_V_MAP") == 0)
 	key = G_OPT_V_MAP;
     else if (G_strcasecmp(name, "G_OPT_STDS_INPUT") == 0)
