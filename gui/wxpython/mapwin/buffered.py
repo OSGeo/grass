@@ -1376,7 +1376,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
             # TODO: put delimiter in settings and apply also for Go to in statusbar
-            delim = ';'
+            delim = ','
             do.SetText(str(e) + delim + str(n))
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
