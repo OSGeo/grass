@@ -1390,7 +1390,7 @@ class CmdPanel(wx.Panel):
                                                        value = value, new = new,
                                                        multiple = p.get('multiple', False))
                             textWin = win.GetTextCtrl()
-                            p['wxId'] = [ win.GetId(), ]
+                            p['wxId'] = [ textWin.GetId(), win.GetId() ]
                             
                             textWin.Bind(wx.EVT_TEXT, self.OnSetValue)
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
