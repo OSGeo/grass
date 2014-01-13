@@ -16,27 +16,43 @@ r.mapcalc expr="map_a = rand(0, 15)"
 r.mapcalc expr="map_b = rand(1, 14)"
 r.mapcalc expr="map_c = rand(2, 13)"
 
+# BEDD with lower limit map and upper limit value
+r.series.accumulate basemap=basemap input=map_a lower=lower limits=5,10 \
+                    output=test_accu_0 method=bedd -f --verbose 
+# GDD with lower limit map
 r.series.accumulate basemap=basemap input=map_a lower=lower \
-                    output=test_accu_1 upper=upper method=gdd -f --verbose 
-
+                    output=test_accu_1 method=gdd -f --verbose 
+# Winkler with lower limit map
 r.series.accumulate basemap=basemap input=map_a lower=lower \
-                    output=test_accu_2 upper=upper method=winkler -f --verbose 
-
-r.series.accumulate basemap=basemap input=map_a lower=lower \
-                    output=test_accu_3 upper=upper method=mean --verbose 
-
+                    output=test_accu_2 method=gdd -a -f --verbose 
+# Mean
+r.series.accumulate basemap=basemap input=map_a \
+                    output=test_accu_3  method=mean --verbose 
+# Average
+r.series.accumulate basemap=basemap input=map_a \
+                    output=test_accu_3  method=mean -a --verbose 
+# GDD with lower limit value
 r.series.accumulate basemap=basemap input=map_a,map_b,map_c limits=5,10 \
                     output=test_accu_4 method=gdd -f --verbose 
-
+# Winkler with  multiple maps, lower limit value
+r.series.accumulate basemap=basemap input=map_a,map_b,map_c limits=5,10 \
+                    output=test_accu_5 method=bedd -a -f --verbose 
+# BEDD with  multiple maps, lower limit map and upper limit value
 r.series.accumulate basemap=basemap input=map_a,map_b,map_c lower=lower limits=5,10 \
-                    output=test_accu_5 method=winkler -f --verbose 
-
-r.series.accumulate basemap=basemap input=map_a,map_b,map_c lower=lower limits=5,10 \
-                    output=test_accu_6 range=6,9 method=mean --verbose 
+                    output=test_accu_6 method=bedd -f --verbose 
+# BEDD with multiple maps, lower limit map and upper limit map
+r.series.accumulate basemap=basemap input=map_a,map_b,map_c lower=lower upper=upper \
+                    output=test_accu_7 method=bedd -f --verbose 
+# Mean with range multiple maps
+r.series.accumulate basemap=basemap input=map_a,map_b,map_c \
+                    output=test_accu_8 range=6,9 method=mean --verbose 
+# Mean with range
+r.series.accumulate basemap=basemap input=map_a, \
+                    output=test_accu_9 range=6,9 method=mean --verbose
 
 # Test for correct results
 for map in `g.mlist type=rast pattern=test_accu_*` ; do
-    r.out.ascii input=${map} output=${map}.txt dp=2
+    r.out.ascii input=${map} output=${map}.ref dp=2
 done
 
 for i in `ls test_accu_*.txt` ; do

@@ -112,7 +112,7 @@
 #% key: method
 #% type: string
 #% description: This method will be applied to compute the accumulative values from the input maps
-#% options: mean,gdd,winkler
+#% options: mean,gdd,bedd,huglin
 #% answer: mean
 #% required: no
 #% multiple: no

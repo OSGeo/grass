@@ -1,21 +1,50 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.series.accumulate</em> calculates (accumulated) raster value means, growing degree days (GDDs) or
-Winkler indices's from several input maps.
+<em>r.series.accumulate</em> calculates (accumulated) raster value using growing degree days (GDDs)/Winkler indices's,
+Biologically Effective Degree Days (BEDD), Huglin heliothermal indices or an average approach from several input maps.
 <p>
-The formula for calculating the raster value means
+The flag <b>-a</b> determines the average computation of the input raster maps. 
+In case the flag is not set, the average calculation is:
 <div class="code"><pre>
-    value = average
+    average = (min + max) / 2
 </pre></div>
-The formula for calculating GDDs is
+In case the flag was set, the calculation changes to arithmetic mean
 <div class="code"><pre>
-    value = (max + min) / 2 - lower
+    average = sum(input maps) / (number of input maps)
 </pre></div>
-The formula for calculating the Winkler index is
+<p>
+<b>GDD</b> Growing Degree Days are calculated as
 <div class="code"><pre>
-    value = average - lower
+    gdd = average - lower
 </pre></div>
-with <em>min</em> being the minimum value, <em>max</em>
+<p>
+In case the <b>-a</b> is set, the Winkler indices are calculated instead of GDD,
+usually accumulated for the period April 1<sup>st</sup> to October 
+31<sup>st</sup> (northern hemisphere) or the period October 
+1<sup>st</sup> to April 30<sup>th</sup> 
+(southern hemisphere).
+<p>
+<b>BEDDs</b> Biologically Effective Degree Days are calculated as
+<div class="code"><pre>
+    bedd = average - lower
+</pre></div>
+with an optional upper <em>cutoff</em> applied to the average instead of 
+the temperature values.
+<p>
+The <b>Huglin heliothermal index</b> is calculated as
+<div class="code"><pre>
+    huglin = (average + max) / 2 - lower
+</pre></div>
+usually accumulated for the period April 1<sup>st</sup> to September 
+30<sup>th</sup> (northern hemisphere) or the period September 
+1<sup>st</sup> to April 30<sup>th</sup> (southern hemisphere).
+<p>
+<b>Mean</b> raster values are calculated as
+<div class="code"><pre>
+    mean = average
+</pre></div>
+<p>
+For all formulas is <em>min</em> the minimum value, <em>max</em>
 the maximum value and <em>average</em> the average value.
 The <em>min</em>, <em>max</em> and <em>average</em> values
 are automatically calculated from the input maps.
@@ -25,14 +54,9 @@ input values. The <em>lower</em> and <em>upper</em> maps, as well as the <em>ran
 options are applied to constrain the accumulation. In case the <em>lower</em> and <em>upper</em>
 maps are not provided the <em>limits</em> option with default values will be applied.
 <p>
-Any <em>min</em>, <em>max</em> and <em>average</em> values
-above the <em>upper</em> values are set to <em>upper</em>, and any
-<em>min</em>, <em>max</em> and <em>average</em> values below the 
-<em>lower</em> values are set to <em>lower</em>, or in case of <em>mean</em>
-computation to 0 (zero). Negative results are set to 0 (zero). 
-<p>
+
 If an existing map is provided with the <em>basemap</em> option, the
-values of this map are added to the output, thus accumulating means, GDDs or winkler indices's.
+values of this map are added to the output.
 
 <h2>NOTES</h2>
 
@@ -45,6 +69,8 @@ input values with
 With the <em>-n</em> flag, any cell for which any of the 
 corresponding input cells are NULL is automatically set to NULL 
 (NULL propagation) and the accumulated value is not calculated.
+<p>
+Negative results are set to 0 (zero). 
 <p>
 Without the <em>-n</em> flag, all non-NULL cells are used for calculation.
 <p>

@@ -27,6 +27,8 @@
 #define METHOD_GDD 1
 #define METHOD_MEAN 2
 #define METHOD_WINKLER 3
+#define METHOD_BEDD 4
+#define METHOD_HUGLIN 5
 
 struct map_info
 {
@@ -53,7 +55,7 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-        struct Flag *nulls, *lazy, *float_output;
+        struct Flag *avg, *nulls, *lazy, *float_output;
     } flag;
     int i;
     int num_inputs, max_inputs;
@@ -70,6 +72,7 @@ int main(int argc, char *argv[])
     DCELL dcell_null;
     RASTER_MAP_TYPE out_type;
     int out_size;
+    char *desc = NULL;
     
     G_gisinit(argv[0]);
     
@@ -77,16 +80,19 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("series"));
     G_add_keyword(_("accumulation"));
-    module->description = _("Calculates (accumulated) raster value means, growing degree days (GDDs) or Winkler indices from several input maps.");
-    
+    module->description =
+    _("Makes each output cell value a accumulation"
+      "function of the values assigned to the corresponding cells "
+      "in the input raster map layers.");
+
     parm.basemap = G_define_standard_option(G_OPT_R_INPUT);
     parm.basemap->key = "basemap";
     parm.basemap->description = _("Existing map to be added to output");
     parm.basemap->required = NO;
-    
+
     parm.input = G_define_standard_option(G_OPT_R_INPUTS);
     parm.input->required = NO;
-    
+
     parm.file = G_define_standard_option(G_OPT_F_INPUT);
     parm.file->key = "file";
     parm.file->description = _("Input file with raster map names, one per line");
@@ -112,12 +118,12 @@ int main(int argc, char *argv[])
     parm.lower = G_define_standard_option(G_OPT_R_INPUT);
     parm.lower->key = "lower";
     parm.lower->required = NO;
-    parm.lower->description = _("The raster map specifying the lower accumulation limit");
+    parm.lower->description = _("The raster map specifying the lower accumulation limit, also called baseline");
     
     parm.upper = G_define_standard_option(G_OPT_R_INPUT);
     parm.upper->key = "upper";
     parm.upper->required = NO;
-    parm.upper->description = _("The raster map specifying the upper accumulation limit");
+    parm.upper->description = _("The raster map specifying the upper accumulation limit, also called cutoff. Only applied to BEDD computation.");
     
     parm.range = G_define_option();
     parm.range->key = "range";
@@ -135,10 +141,23 @@ int main(int argc, char *argv[])
     parm.method = G_define_option();
     parm.method->key = "method";
     parm.method->type = TYPE_STRING;
-    parm.method->options = "mean,gdd,winkler";
-    parm.method->answer = "mean";
-    parm.method->description = _("This method will be applied to compute the accumulative values from the input maps");
+    parm.method->multiple = NO;
+    parm.method->required = NO;
+    parm.method->options = "gdd,bedd,huglin,mean";
+    parm.method->answer = "gdd";
+    parm.method->label = "This method will be applied to compute the accumulative values from the input maps";
+    G_asprintf(&desc,
+           "gdd;%s;mean;%s;bedd;%s;huglin;%s",
+           _("Growing Degree Days or Winkler indices: depending on the chosen average computation set with -a flag"),
+           _("Mean: either (min + max) / 2 or sum(input maps)/(number of input maps) set with -a flag"),
+           _("Biologically Effective Degree Days"),
+           _("Huglin Heliothermal index"));
+    parm.method->descriptions = desc;
     
+    flag.avg = G_define_flag();
+    flag.avg->key = 'a';
+    flag.avg->description = _("Use arithmetical mean instead of (min + max ) / 2");
+
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
     flag.nulls->description = _("Propagate NULLs");
@@ -157,15 +176,16 @@ int main(int argc, char *argv[])
     lo = -1.0 / 0.0;    /* -inf */
     hi =  1.0 / 0.0;    /* inf */
     
+    method = METHOD_GDD;
     if (G_strncasecmp(parm.method->answer, "gdd", 3) == 0)
         method = METHOD_GDD;
-    
-    if (G_strncasecmp(parm.method->answer, "mean", 4) == 0)
+    else if (G_strncasecmp(parm.method->answer, "mean", 4) == 0)
         method = METHOD_MEAN;
-    
-    if (G_strncasecmp(parm.method->answer, "winkler", 7) == 0)
-        method = METHOD_WINKLER;
-    
+    else if (G_strncasecmp(parm.method->answer, "bedd", 4) == 0)
+        method = METHOD_BEDD;
+    else if (G_strncasecmp(parm.method->answer, "huglin", 7) == 0)
+        method = METHOD_HUGLIN;
+
     if (parm.range->answer) {
         lo = atof(parm.range->answers[0]);
         hi = atof(parm.range->answers[1]);
@@ -336,7 +356,7 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("'%s'=%f must be > '%s'=%f"), parm.upper->key, upper,
                               parm.lower->key, lower);
                 
-                min = dcell_null;
+            min = dcell_null;
             max = dcell_null;
             avg = 0;
             
@@ -351,19 +371,16 @@ int main(int argc, char *argv[])
                         null = 1;
                     }
                     else  {
-                        if (method == METHOD_MEAN || method == METHOD_WINKLER)
-                            avg += v;
-                        else if (method == METHOD_GDD) {
-                            if (min > v || Rast_is_d_null_value(&min))
-                                min = v;
-                            if (max < v || Rast_is_d_null_value(&max))
-                                max = v;
-                        }
+                        avg += v;
+                        if (min > v || Rast_is_d_null_value(&min))
+                            min = v;
+                        if (max < v || Rast_is_d_null_value(&max))
+                            max = v;
                         non_null++;
                     }
                 }
             }
-            
+
             if (!non_null || (null && flag.nulls->answer)) {
                 if (basemap)
                     value = basemap->buf[col];
@@ -371,51 +388,34 @@ int main(int argc, char *argv[])
                     value = dcell_null;
             }
             else {
+                /* Compute mean or average */
+                if (flag.avg->answer) {
+                    avg /= non_null;
+                }
+                else {
+                    avg = (min + max) / 2.;
+                }
                 switch(method) {
-                    case METHOD_WINKLER:
-                        
-                        avg /= non_null;
-                        
-                        if (avg < lower)
-                            avg = lower;
-                        else if (avg > upper)
-                            avg = upper;
-                        
-                        value = avg - lower;
-                        
-                        if (value < 0.)
-                            value = 0.;
-                        
+                    case METHOD_HUGLIN:
+                        avg = (avg + max) / 2;
                         break;
-                    case METHOD_GDD:
-                        
-                        if (min < lower)
-                            min = lower;
-                        else if (min > upper)
-                            min = upper;
-                        if (max < lower)
-                            max = lower;
-                        else if (max > upper)
-                            max = upper;
-                        
-                        value = (min + max) / 2. - lower;
-                        
-                        if (value < 0.)
-                            value = 0.;
-                        
+                    case METHOD_BEDD:
+                        if(avg > upper)
+                            avg = upper;
+                        break;
+                    case METHOD_MEAN:
+                        value = avg;
                         break;
                     default:
-                        
-                        avg /= non_null;
-                        
-                        if (avg < lower)
-                            avg = 0.0;
-                        else if (avg > upper)
-                            avg = upper;
-                        
-                        value = avg;
+                        /* Winkler or GDD index computation is the default */
+                        break;
                 }
-                
+                if(method != METHOD_MEAN)
+                        value = avg - lower;
+
+                if (value < 0.)
+                    value = 0.;
+
                 if (basemap)
                     value += basemap->buf[col];
             }

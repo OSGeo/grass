@@ -25,6 +25,8 @@ then maps that temporally overlap the actual granules, until
 maps are detected that have a temporal contain relation. 
 If no maps are found or lower/upper STRDS are not defined, then the <b>limits</b> option is used, eg. <b>limits=10,30</b>.
 <p>
+The <b>upper</b> <b>limit</b> is only used in the Biologically Effective Degree Days calculation.
+<p>
 The options <b>shift</b>, <b>scale</b> and <b>method</b> are passed to 
 <a href="r.series.accumulate.html">r.series.accumulate</a>. 
 Please refer to the manual page of <a href="r.series.accumulate.html">r.series.accumulate</a>
@@ -71,13 +73,14 @@ g.region -p zoom=`t.rast.list input=temperature_mean_1990_2000_daily_celsius col
 #
 # available here: http://extension.unh.edu/agric/gddays/docs/growch.pdf
 
-# Now we compute the GDD from 1990 - 2000 for each year (12 month cycle) with
+# Now we compute the Biologically Effective Degree Days 
+# from 1990 - 2000 for each year (12 month cycle) with
 # a granularity of one day. Base temperature is 10°C, upper limit is 30°C.
 # Hence the accumulation starts at 10°C and does not accumulate values above 30°C. 
 t.rast.accumulate input="temperature_mean_1990_2000_daily_celsius" \
       output="temperature_mean_1990_2000_daily_celsius_accumulated_10_30" \
       limits="10,30" start="1990-01-01" stop="2000-01-01" cycle="12 months" \
-      base="temp_acc_daily_10_30" method="gdd"
+      base="temp_acc_daily_10_30" method="bedd"
 
 #############################################################################
 #### ACCUMULATION PATTERN DETECTION #########################################
