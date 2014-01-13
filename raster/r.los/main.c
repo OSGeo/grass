@@ -102,12 +102,9 @@ int main(int argc, char *argv[])
 
     opt7 = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    opt3 = G_define_option();
-    opt3->key = "coordinate";
-    opt3->type = TYPE_STRING;
+    opt3 = G_define_standard_option(G_OPT_M_COORDS);
     opt3->required = YES;
-    opt3->key_desc = "x,y";
-    opt3->description = _("Coordinate identifying the viewing position");
+    opt3->description = _("Coordinates of the viewing position");
 
     opt2 = G_define_standard_option(G_OPT_R_COVER);
     opt2->key = "patt_map";
