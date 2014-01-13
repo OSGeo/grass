@@ -75,13 +75,16 @@ int main(int argc, char **argv)
     if (db_open_database(driver, &handle) != DB_OK)
 	G_fatal_error(_("Unable to open database <%s>"), parms.database);
     G_add_error_handler(error_handler, driver);
-    
+
     if (parms.sql) {
         /* parms.sql */
         db_set_string(&stmt, parms.sql);
         ret = db_execute_immediate(driver, &stmt);
     }
     else { /* parms.input */
+        /* perform execution in one transaction if possible */
+        db_begin_transaction(driver);
+        
         while (get_stmt(fd, &stmt)) {
             if (stmt_is_empty(&stmt))
                 continue;
@@ -101,6 +104,8 @@ int main(int argc, char **argv)
                 }
             }
         }
+
+        db_commit_transaction(driver);
     }
     
     db_close_database(driver);
