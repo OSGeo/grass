@@ -32,6 +32,15 @@ appropriate, but can cause errors the input vector crosses the datum line
 at 180E/W. In this case wrapping of east coordinates to -180,180 needs 
 to be disabled with the <b>-w</b> flag.
 
+<p>
+In order to preserve spatial detail, it is recommended to densify linear 
+features with <em><a href="v.split.html">v.split</a></em> before 
+reprojecting. Depending on the source and target CRS 
+(Coordinate Reference System), geometries can be substantially 
+deformed (straight lines become curves, squares become trapezoids, etc). 
+In these cases densification of linear features can help to avoid 
+topological errors.
+
 <h2>EXAMPLES</h2>
 
 <div class="code"><pre>
