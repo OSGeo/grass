@@ -24,7 +24,7 @@ See also http://www.python.org/dev/peps/pep-0008/
 
 1.  Instructions for the GRASS script parser can be found in the g.parser 
     module's help page.
-    http://grass.osgeo.org/grass70/manuals/html70_user/g.parser.html
+    http://grass.osgeo.org/grass70/manuals/g.parser.html
 
 
 2.  Use the directory structure to place your script appropriately into
