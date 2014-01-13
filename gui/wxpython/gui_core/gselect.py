@@ -51,7 +51,11 @@ from core import globalvar
 
 import grass.script as grass
 from   grass.script import task as gtask
-from grass.pygrass import messages
+try:
+    from grass.pygrass import messages
+except ImportError, e:
+    print >> sys.stderr, _("Unable to import pyGRASS: %s\n"
+                           "Some functionality will be not accessible") % e
 import grass.temporal as tgis
 
 from gui_core.widgets  import ManageSettingsWidget

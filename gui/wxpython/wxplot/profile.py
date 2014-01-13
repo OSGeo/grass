@@ -20,7 +20,10 @@ import sys
 import math
 
 import wx
-import wx.lib.plot as plot
+try:
+    import wx.lib.plot as plot
+except ImportError, e:
+    print >> sys.stderr, e
 
 import grass.script as grass
 from core.utils import _

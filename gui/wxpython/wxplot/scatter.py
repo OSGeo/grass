@@ -18,7 +18,10 @@ This program is free software under the GNU General Public License
 import sys
 
 import wx
-import wx.lib.plot as plot
+try:
+    import wx.lib.plot as plot
+except ImportError, e:
+    print >> sys.stderr, e
 
 import grass.script as grass
 

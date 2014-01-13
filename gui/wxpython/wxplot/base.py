@@ -19,7 +19,10 @@ import os
 import sys
 
 import wx
-import wx.lib.plot as plot
+try:
+    import wx.lib.plot as plot
+except ImportError, e:
+    print >> sys.stderr, e
 
 from core.globalvar    import ETCICONDIR
 from core.settings     import UserSettings
