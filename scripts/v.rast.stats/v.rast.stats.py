@@ -224,6 +224,7 @@ def main():
                       zones = rastertmp, percentile = percentile, sep = ';')
 
     first_line = 1
+    f.write("BEGIN TRANSACTION\n")
     for line in p.stdout:
 	if first_line:
 	    first_line = 0
@@ -250,6 +251,7 @@ def main():
 		i += 1
 
 	f.write(" WHERE %s=%s;\n" % (fi['key'], vars[0]))
+    f.write("COMMIT\n")
 
     p.wait()
     f.close()
