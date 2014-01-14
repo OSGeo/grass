@@ -6,6 +6,7 @@
 # AUTHOR(S):	Markus Neteler
 #		converted to Python by Glynn Clements
 #		speed up by Markus Metz
+#           add column choose by Luca Delucchi
 # PURPOSE:	Calculates univariate statistics from a GRASS raster map
 #		only for areas covered by vector objects on a per-category base
 # COPYRIGHT:	(C) 2005-2010 by the GRASS Development Team
@@ -48,6 +49,15 @@
 #% required : yes
 #%end
 #%option
+#% key: method
+#% type: string
+#% description: The methods to use
+#% required: no
+#% multiple: yes
+#% options: number,minimum,maximum,range,mean,stddev,variance,coeff_var,sum
+#% answer: number,minimum,maximum,range,mean,stddev,variance,coeff_var,sum
+#%end
+#%option
 #% key: percentile
 #% type: integer
 #% description: Percentile to calculate (requires extended statistics flag)
@@ -61,18 +71,23 @@ import os
 import atexit
 import grass.script as grass
 
+
+# TODO it is not used, could we remove it?
 def has_column(vector, col):
-    return 
+    return
+
 
 def cleanup():
     if rastertmp:
-	grass.run_command('g.remove', rast = rastertmp, quiet = True)
-    grass.run_command('g.remove', rast = 'MASK', quiet = True, stderr = nuldev)
+        grass.run_command('g.remove', rast=rastertmp, quiet=True)
+    grass.run_command('g.remove', rast='MASK', quiet=True, stderr=nuldev)
     if mask_found:
-	grass.message(_("Restoring previous MASK..."))
-	grass.run_command('g.rename', rast = (tmpname + "_origmask", 'MASK'), quiet = True)
+        grass.message(_("Restoring previous MASK..."))
+        grass.run_command('g.rename', rast=(tmpname + "_origmask", 'MASK'),
+                          quiet=True)
 #    for f in [tmp, tmpname, sqltmp]:
 #	grass.try_remove(f)
+
 
 def main():
     global tmp, sqltmp, tmpname, nuldev, vector, mask_found, rastertmp
@@ -91,6 +106,7 @@ def main():
     vector = options['vector']
     layer = options['layer']
     percentile = options['percentile']
+    basecols = options['method'].split(',')
 
     ### setup enviro vars ###
     env = grass.gisenv()
@@ -98,13 +114,13 @@ def main():
 
     vs = vector.split('@')
     if len(vs) > 1:
-	vect_mapset = vs[1]
+        vect_mapset = vs[1]
     else:
-	vect_mapset = mapset
+        vect_mapset = mapset
 
     # does map exist in CURRENT mapset?
     if vect_mapset != mapset or not grass.find_file(vector, 'vector', mapset)['file']:
-	grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
+        grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
     vector = vs[0]
 
@@ -112,89 +128,93 @@ def main():
 
     # check the input raster map
     if not grass.find_file(raster, 'cell')['file']:
-	grass.fatal(_("Raster map <%s> not found") % raster)
+        grass.fatal(_("Raster map <%s> not found") % raster)
 
     # check presence of raster MASK, put it aside
     mask_found = bool(grass.find_file('MASK', 'cell')['file'])
     if mask_found:
-	grass.message(_("Raster MASK found, temporarily disabled"))
-	grass.run_command('g.rename', rast = ('MASK', tmpname + "_origmask"), quiet = True)
+        grass.message(_("Raster MASK found, temporarily disabled"))
+        grass.run_command('g.rename', rast=('MASK', tmpname + "_origmask"),
+                          quiet=True)
 
     # save current settings:
     grass.use_temp_region()
 
     # Temporarily aligning region resolution to $RASTER resolution
     # keep boundary settings
-    grass.run_command('g.region', align = raster)
+    grass.run_command('g.region', align=raster)
 
     # prepare raster MASK
-    if grass.run_command('v.to.rast', input = vector, output = rastertmp,
-			 use = 'cat', quiet = True) != 0:
-	grass.fatal(_("An error occurred while converting vector to raster"))
+    if grass.run_command('v.to.rast', input=vector, output=rastertmp,
+                         use='cat', quiet=True) != 0:
+        grass.fatal(_("An error occurred while converting vector to raster"))
 
     # dump cats to file to avoid "too many argument" problem:
-    p = grass.pipe_command('r.category', map = rastertmp, sep = ';', quiet = True)
+    p = grass.pipe_command('r.category', map=rastertmp, sep=';', quiet=True)
     cats = []
+
     for line in p.stdout:
-	cats.append(line.rstrip('\r\n').split(';')[0])
+        cats.append(line.rstrip('\r\n').split(';')[0])
     p.wait()
 
     number = len(cats)
     if number < 1:
-	grass.fatal(_("No categories found in raster map"))
+        grass.fatal(_("No categories found in raster map"))
 
     # check if DBF driver used, in this case cut to 10 chars col names:
     try:
-        fi = grass.vector_db(map = vector)[int(layer)]
+        fi = grass.vector_db(map=vector)[int(layer)]
     except KeyError:
-	grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
+        grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
     # we need this for non-DBF driver:
     dbfdriver = fi['driver'] == 'dbf'
 
     # Find out which table is linked to the vector map on the given layer
     if not fi['table']:
-	grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
+        grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
 
-    basecols = ['n', 'min', 'max', 'range', 'mean', 'stddev', 'variance', 'cf_var', 'sum']
+    # replaced by user choiche 
+    #basecols = ['n', 'min', 'max', 'range', 'mean', 'stddev', 'variance', 'cf_var', 'sum']
 
     # we need at least three chars to distinguish [mea]n from [med]ian
     # so colprefix can't be longer than 6 chars with DBF driver
     if dbfdriver:
-	colprefix = colprefix[:6]
+        colprefix = colprefix[:6]
 
     # do extended stats?
     if flags['e']:
-	# namespace is limited in DBF but the % value is important
-	if dbfdriver:
-	    perccol = "per" + percentile
-	else:
-	    perccol = "percentile_" + percentile
-	extracols = ['first_quartile', 'median', 'third_quartile'] + [perccol]
+        # namespace is limited in DBF but the % value is important
+        if dbfdriver:
+            perccol = "per" + percentile
+        else:
+            perccol = "percentile_" + percentile
+        extracols = ['first_quartile', 'median', 'third_quartile'] + [perccol]
     else:
-	extracols = []
+        extracols = []
 
     addcols = []
     for i in basecols + extracols:
-	# check if column already present
-	currcolumn = ("%s_%s" % (colprefix, i))
-	if dbfdriver:
-	    currcolumn = currcolumn[:10]
+        # check if column already present
+        currcolumn = ("%s_%s" % (colprefix, i))
+        if dbfdriver:
+            currcolumn = currcolumn[:10]
 
-	if currcolumn in grass.vector_columns(vector, layer).keys():
-	    if not flags['c']:
-		grass.fatal((_("Cannot create column <%s> (already present). ") % currcolumn) +
-			    _("Use -c flag to update values in this column."))
-	else:
-	    if i == "n":
-		coltype = "INTEGER"
-	    else:
-		coltype = "DOUBLE PRECISION"
-	    addcols.append(currcolumn + ' ' + coltype)
+        if currcolumn in grass.vector_columns(vector, layer).keys():
+            if not flags['c']:
+                grass.fatal((_("Cannot create column <%s> (already present). ") % currcolumn) +
+                             _("Use -c flag to update values in this column."))
+        else:
+            if i == "n":
+                coltype = "INTEGER"
+            else:
+                coltype = "DOUBLE PRECISION"
+            addcols.append(currcolumn + ' ' + coltype)
 
     if addcols:
-	grass.verbose(_("Adding columns '%s'") % addcols)
-	if grass.run_command('v.db.addcolumn', map = vector, columns = addcols, layer=layer) != 0:
-	    grass.fatal(_("Adding columns failed. Exiting."))
+        grass.verbose(_("Adding columns '%s'") % addcols)
+        if grass.run_command('v.db.addcolumn', map=vector, columns=addcols,
+                             layer=layer) != 0:
+            grass.fatal(_("Adding columns failed. Exiting."))
 
     # calculate statistics:
     grass.message(_("Processing data (%d categories)...") % number)
@@ -204,71 +224,72 @@ def main():
 
     colnames = []
     for var in basecols + extracols:
-	colname = '%s_%s' % (colprefix, var)
-	if dbfdriver:
-	    colname = colname[:10]
-	colnames.append(colname)
+        colname = '%s_%s' % (colprefix, var)
+        if dbfdriver:
+            colname = colname[:10]
+        colnames.append(colname)
 
     ntabcols = len(colnames)
 
     # do extended stats?
     if flags['e']:
-	extstat = 'e'
+        extstat = 'e'
     else:
-	extstat = ""
-	
+        extstat = ""
+
     f = file(sqltmp, 'w')
 
     # do the stats
-    p = grass.pipe_command('r.univar', flags = 't' + 'g' + extstat, map = raster, 
-                      zones = rastertmp, percentile = percentile, sep = ';')
+    p = grass.pipe_command('r.univar', flags='t' + 'g' + extstat, map=raster,
+                           zones=rastertmp, percentile=percentile, sep=';')
 
     first_line = 1
+    variables = {'number': 2, 'minimum': 4, 'maximum': 5, 'range': 6,
+                 'mean': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
+                 'sum': 12, 'first_quartile': 14, 'median': 15,
+                 'third_quartile': 16, perccol: 17 }
+
     f.write("BEGIN TRANSACTION\n")
     for line in p.stdout:
-	if first_line:
-	    first_line = 0
-	    continue
+        if first_line:
+            first_line = 0
+            continue
 
-	vars = line.rstrip('\r\n').split(';')
+        vars = line.rstrip('\r\n').split(';')
 
-	f.write("UPDATE %s SET" % fi['table'])
-	i = 2
-	first_var = 1
-	for colname in colnames:
-	    value = vars[i]
-	    # convert nan, +nan, -nan to NULL
-	    if value.lower().endswith('nan'):
-		value = 'NULL'
-	    if not first_var:
-		f.write(" , ")
-	    else:
-		first_var = 0
-	    f.write(" %s=%s" % (colname, value))
-	    i += 1
-	    # skip n_null_cells, mean_of_abs, sum_of_abs
-	    if i == 3 or i == 8 or i == 13:
-		i += 1
+        f.write("UPDATE %s SET" % fi['table'])
+        first_var = 1
+        for colname in colnames:
+            variable = colname.replace("%s_" % colprefix, '')
+            i = variables[variable]
+            value = vars[i]
+            # convert nan, +nan, -nan to NULL
+            if value.lower().endswith('nan'):
+                value = 'NULL'
+            if not first_var:
+                f.write(" , ")
+            else:
+                first_var = 0
+            f.write(" %s=%s" % (colname, value))
 
-	f.write(" WHERE %s=%s;\n" % (fi['key'], vars[0]))
+        f.write(" WHERE %s=%s;\n" % (fi['key'], vars[0]))
+
     f.write("COMMIT\n")
-
     p.wait()
     f.close()
 
     grass.message(_("Updating the database ..."))
-    exitcode = grass.run_command('db.execute', input = sqltmp,
-				 database = fi['database'], driver = fi['driver'])
+    exitcode = grass.run_command('db.execute', input=sqltmp,
+                                 database=fi['database'], driver=fi['driver'])
 
-    grass.run_command('g.remove', rast = 'MASK', quiet = True, stderr = nuldev)
+    grass.run_command('g.remove', rast='MASK', quiet=True, stderr=nuldev)
 
     if exitcode == 0:
-	grass.message((_("Statistics calculated from raster map <%s>") % raster) +
-		      (_(" and uploaded to attribute table of vector map <%s>.") % vector))
+        grass.message((_("Statistics calculated from raster map <%s>") % raster) +
+                      (_(" and uploaded to attribute table of vector map <%s>.") % vector))
     else:
-	grass.warning(_("Failed to upload statistics to attribute table of vector map <%s>.") % vector)
-    
-    
+        grass.warning(_("Failed to upload statistics to attribute table of vector map <%s>.") % vector)
+
     sys.exit(exitcode)
 
 if __name__ == "__main__":
