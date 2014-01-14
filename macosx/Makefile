@@ -43,8 +43,6 @@ install-macosx: INST_DIR_TARGET = ${INST_DIR}
 install-macosx: PREFIX_TARGET = ${prefix}
 install-macosx: install-macosxapp install-basic-macosx macosx-support-dir bundle-macosx
 	echo ${ARCH_DISTDIR}/${MACOSX_APP_NAME}
-	@# help file package
-	${LN_DIR} "${INST_DIR_TARGET}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}
 
 # create a packagemaker installer package.
 # pretty much the same as install, but needs intermediate install location

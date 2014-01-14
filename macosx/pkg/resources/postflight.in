@@ -14,14 +14,6 @@ mkdir -p "$MACOSX_SUPPDIR/Modules/lib"
 mkdir -p "$MACOSX_SUPPDIR/Modules/etc"
 mkdir -p "$MACOSX_SUPPDIR/Modules/docs/html"
 
-# help
-
-/bin/ln -sfh "$INST_DIR/docs/html" "/Library/Documentation/Help/GRASS-$GRASS_VER"
-
-# modbuild
-
-#cp -Rf "$PACKAGE_PATH/Contents/Resources/modbuild" "$MACOSX_SUPPDIR"
-
 # compile python - use python version GRASS was compiled for
 
 pyver_want="@PYVER@"
