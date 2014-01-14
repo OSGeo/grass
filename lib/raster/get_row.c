@@ -919,11 +919,13 @@ static void embed_mask(char *flags, int row)
 	return;
     }
 
-    if (R__.fileinfo[R__.mask_fd].reclass_flag)
+    if (R__.fileinfo[R__.mask_fd].reclass_flag) {
+	embed_nulls(R__.mask_fd, mask_buf, row, CELL_TYPE, 0, 0);
 	do_reclass_int(R__.mask_fd, mask_buf, 1);
+    }
 
     for (i = 0; i < R__.rd_window.cols; i++)
-	if (mask_buf[i] == 0)
+	if (mask_buf[i] == 0 || Rast_is_c_null_value(&mask_buf[i]))
 	    flags[i] = 1;
 
     G__freea(mask_buf);
