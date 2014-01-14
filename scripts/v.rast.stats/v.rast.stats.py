@@ -72,11 +72,6 @@ import atexit
 import grass.script as grass
 
 
-# TODO it is not used, could we remove it?
-def has_column(vector, col):
-    return
-
-
 def cleanup():
     if rastertmp:
         grass.run_command('g.remove', rast=rastertmp, quiet=True)
@@ -173,7 +168,7 @@ def main():
     if not fi['table']:
         grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
 
-    # replaced by user choiche 
+    # replaced by user choiche
     #basecols = ['n', 'min', 'max', 'range', 'mean', 'stddev', 'variance', 'cf_var', 'sum']
 
     # we need at least three chars to distinguish [mea]n from [med]ian
@@ -182,6 +177,8 @@ def main():
         colprefix = colprefix[:6]
 
     # do extended stats?
+    # by default perccol variable is used only for "variables" variable
+    perccol = "percentile"
     if flags['e']:
         # namespace is limited in DBF but the % value is important
         if dbfdriver:
@@ -193,12 +190,14 @@ def main():
         extracols = []
 
     addcols = []
+    colnames = []
     for i in basecols + extracols:
         # check if column already present
         currcolumn = ("%s_%s" % (colprefix, i))
         if dbfdriver:
             currcolumn = currcolumn[:10]
 
+        colnames.append(currcolumn)
         if currcolumn in grass.vector_columns(vector, layer).keys():
             if not flags['c']:
                 grass.fatal((_("Cannot create column <%s> (already present). ") % currcolumn) +
@@ -222,15 +221,6 @@ def main():
     # get rid of any earlier attempts
     grass.try_remove(sqltmp)
 
-    colnames = []
-    for var in basecols + extracols:
-        colname = '%s_%s' % (colprefix, var)
-        if dbfdriver:
-            colname = colname[:10]
-        colnames.append(colname)
-
-    ntabcols = len(colnames)
-
     # do extended stats?
     if flags['e']:
         extstat = 'e'
@@ -244,10 +234,12 @@ def main():
                            zones=rastertmp, percentile=percentile, sep=';')
 
     first_line = 1
+    
+    # dictionary with name of methods and position in "r.univar -gt"  output
     variables = {'number': 2, 'minimum': 4, 'maximum': 5, 'range': 6,
                  'mean': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
                  'sum': 12, 'first_quartile': 14, 'median': 15,
-                 'third_quartile': 16, perccol: 17 }
+                 'third_quartile': 16, perccol: 17}
 
     f.write("BEGIN TRANSACTION\n")
     for line in p.stdout:
