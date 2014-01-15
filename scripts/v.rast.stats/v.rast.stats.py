@@ -175,6 +175,8 @@ def main():
     # so colprefix can't be longer than 6 chars with DBF driver
     if dbfdriver:
         colprefix = colprefix[:6]
+        variables_dbf = {}
+        
 
     # do extended stats?
     # by default perccol variable is used only for "variables" variable
@@ -196,6 +198,7 @@ def main():
         currcolumn = ("%s_%s" % (colprefix, i))
         if dbfdriver:
             currcolumn = currcolumn[:10]
+            variables_dbf[currcolumn.replace("%s_" % colprefix, '')] = i
 
         colnames.append(currcolumn)
         if currcolumn in grass.vector_columns(vector, layer).keys():
@@ -240,8 +243,8 @@ def main():
                  'mean': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
                  'sum': 12, 'first_quartile': 14, 'median': 15,
                  'third_quartile': 16, perccol: 17}
-
-    f.write("BEGIN TRANSACTION\n")
+    if not dbfdriver:
+        f.write("BEGIN TRANSACTION\n")
     for line in p.stdout:
         if first_line:
             first_line = 0
@@ -253,6 +256,8 @@ def main():
         first_var = 1
         for colname in colnames:
             variable = colname.replace("%s_" % colprefix, '')
+            if dbfdriver:
+                variable = variables_dbf[variable]
             i = variables[variable]
             value = vars[i]
             # convert nan, +nan, -nan to NULL
@@ -265,8 +270,8 @@ def main():
             f.write(" %s=%s" % (colname, value))
 
         f.write(" WHERE %s=%s;\n" % (fi['key'], vars[0]))
-
-    f.write("COMMIT\n")
+    if not dbfdriver:
+        f.write("COMMIT\n")
     p.wait()
     f.close()
 
