@@ -29,10 +29,6 @@
 #% key: c
 #% description: Continue if upload column(s) already exist
 #%end
-#%flag
-#% key: e
-#% description: Calculate extended statistics
-#%end
 #%option G_OPT_V_MAP
 #%end
 #%option G_OPT_V_FIELD
@@ -53,8 +49,8 @@
 #% description: The methods to use
 #% required: no
 #% multiple: yes
-#% options: number,minimum,maximum,range,average,stddev,variance,coeff_var,sum
-#% answer: number,minimum,maximum,range,average,stddev,variance,coeff_var,sum
+#% options: number,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
+#% answer: number,minimum,maximum,range,average,stddev,variance,coeff_var,sum,first_quartile,median,third_quartile,percentile
 #%end
 #%option
 #% key: percentile
@@ -176,32 +172,39 @@ def main():
         colprefix = colprefix[:6]
         variables_dbf = {}
 
-    # do extended stats?
     # by default perccol variable is used only for "variables" variable
     perccol = "percentile"
-    if flags['e']:
+    perc = None
+    for b in basecols:
+        if b.startswith('p'):
+            perc = b
+    if perc:
         # namespace is limited in DBF but the % value is important
         if dbfdriver:
             perccol = "per" + percentile
         else:
             perccol = "percentile_" + percentile
-        extracols = ['first_quartile', 'median', 'third_quartile'] + [perccol]
-    else:
-        extracols = []
+        percindex = basecols.index(perc)
+        basecols[percindex] = perccol
 
     # dictionary with name of methods and position in "r.univar -gt"  output
     variables = {'number': 2, 'minimum': 4, 'maximum': 5, 'range': 6,
                  'average': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
                  'sum': 12, 'first_quartile': 14, 'median': 15,
                  'third_quartile': 16, perccol: 17}
+    # this list is used to set the 'e' flag for r.univar
+    extracols = ['first_quartile', 'median', 'third_quartile', perccol]
     addcols = []
     colnames = []
-    for i in basecols + extracols:
+    extstat = ""
+    for i in basecols:
         # this check the complete name of out input that should be truncated
         for k in variables.keys():
             if i in k:
                 i = k
                 break
+        if i in extracols:
+            extstat = 'e'
         # check if column already present
         currcolumn = ("%s_%s" % (colprefix, i))
         if dbfdriver:
@@ -231,12 +234,6 @@ def main():
 
     # get rid of any earlier attempts
     grass.try_remove(sqltmp)
-
-    # do extended stats?
-    if flags['e']:
-        extstat = 'e'
-    else:
-        extstat = ""
 
     f = file(sqltmp, 'w')
 
