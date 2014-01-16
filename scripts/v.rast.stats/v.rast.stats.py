@@ -54,8 +54,8 @@
 #% description: The methods to use
 #% required: no
 #% multiple: yes
-#% options: number,minimum,maximum,range,mean,stddev,variance,coeff_var,sum
-#% answer: number,minimum,maximum,range,mean,stddev,variance,coeff_var,sum
+#% options: number,minimum,maximum,range,average,stddev,variance,coeff_var,sum
+#% answer: number,minimum,maximum,range,average,stddev,variance,coeff_var,sum
 #%end
 #%option
 #% key: percentile
@@ -176,7 +176,6 @@ def main():
     if dbfdriver:
         colprefix = colprefix[:6]
         variables_dbf = {}
-        
 
     # do extended stats?
     # by default perccol variable is used only for "variables" variable
@@ -191,9 +190,19 @@ def main():
     else:
         extracols = []
 
+    # dictionary with name of methods and position in "r.univar -gt"  output
+    variables = {'number': 2, 'minimum': 4, 'maximum': 5, 'range': 6,
+                 'average': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
+                 'sum': 12, 'first_quartile': 14, 'median': 15,
+                 'third_quartile': 16, perccol: 17}
     addcols = []
     colnames = []
     for i in basecols + extracols:
+        # this check the complete name of out input that should be truncated
+        for k in variables.keys():
+            if i in k:
+                i = k
+                break
         # check if column already present
         currcolumn = ("%s_%s" % (colprefix, i))
         if dbfdriver:
@@ -237,12 +246,7 @@ def main():
                            zones=rastertmp, percentile=percentile, sep=';')
 
     first_line = 1
-    
-    # dictionary with name of methods and position in "r.univar -gt"  output
-    variables = {'number': 2, 'minimum': 4, 'maximum': 5, 'range': 6,
-                 'mean': 7, 'stddev': 9, 'variance': 10, 'coeff_var': 11,
-                 'sum': 12, 'first_quartile': 14, 'median': 15,
-                 'third_quartile': 16, perccol: 17}
+
     if not dbfdriver:
         f.write("BEGIN TRANSACTION\n")
     for line in p.stdout:
