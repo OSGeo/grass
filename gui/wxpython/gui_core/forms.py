@@ -1653,7 +1653,7 @@ class CmdPanel(wx.Panel):
                 options = guidep.split(',')
                 for opt in options:
                     pOpt = self.task.get_param(opt, element = 'name', raiseError = False)
-                    if id:
+                    if pOpt and id:
                         if 'wxId-bind' not in p:
                             p['wxId-bind'] = list()
                         p['wxId-bind'] +=  pOpt['wxId']
