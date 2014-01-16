@@ -97,7 +97,7 @@ def main():
 
     raster = options['raster']
     colprefix = options['column_prefix']
-    vector = options['vector']
+    vector = options['map']
     layer = options['layer']
     percentile = options['percentile']
     basecols = options['method'].split(',')
