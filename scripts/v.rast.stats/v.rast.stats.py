@@ -34,7 +34,6 @@
 #% description: Calculate extended statistics
 #%end
 #%option G_OPT_V_MAP
-#% key: vector
 #%end
 #%option G_OPT_V_FIELD
 #%end
