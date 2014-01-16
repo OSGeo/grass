@@ -33,6 +33,7 @@ SUBDIRS = \
 	t.rast3d.mapcalc \
 	t.rast3d.univar \
 	t.rename \
+	t.select \
 	t.snap \
 	t.shift \
 	t.vect.list \
