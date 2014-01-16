@@ -25,3 +25,4 @@ from stds_import import *
 from mapcalc import *
 from univar_statistics import *
 from c_libraries_interface import *
+from temporal_algebra import *
