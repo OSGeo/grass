@@ -53,7 +53,8 @@ imported_maps = {}
 ############################################################################
 
 
-def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_):
+def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_, 
+                                  set_current_region=False):
     impflags = ""
     if overr:
         impflags += "o"
@@ -93,10 +94,14 @@ def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_):
                 core.fatal(_("Unable to set the color rules for "
                              "raster map <%s>.") % name)
 
+    # Set the computational region from the last map imported
+    if set_current_region is True:
+        core.run_command("g.region", rast=name)
+
 ############################################################################
 
 
-def _import_raster_maps(maplist):
+def _import_raster_maps(maplist, set_current_region=False):
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -112,6 +117,10 @@ def _import_raster_maps(maplist):
         if ret != 0:
             core.fatal(_("Unable to unpack raster map <%s> from file %s.") % (name, 
                                                                               filename))
+
+    # Set the computational region from the last map imported
+    if set_current_region is True:
+        core.run_command("g.region", rast=name)
 
 ############################################################################
 
@@ -162,7 +171,8 @@ def _import_vector_maps(maplist):
 
 
 def import_stds(input, output, extrdir, title=None, descr=None, location=None,
-        link=False, exp=False, overr=False, create=False, stds_type="strds", base=None):
+        link=False, exp=False, overr=False, create=False, stds_type="strds", 
+        base=None, set_current_region=False):
     """!Import space time datasets of type raster and vector
 
         @param input Name of the input archive file
@@ -390,10 +400,10 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         # Import the maps
         if type_ == "strds":
             if format_ == "GTiff" or format_ == "AAIGrid":
-                _import_raster_maps_from_gdal(
-                    maplist, overr, exp, location, link, format_)
+                _import_raster_maps_from_gdal(maplist, overr, exp, location, 
+                                              link, format_, set_current_region)
             if format_ == "pack":
-                _import_raster_maps(maplist)
+                _import_raster_maps(maplist, set_current_region)
         elif type_ == "stvds":
             if format_ == "GML":
                 _import_vector_maps_from_gml(

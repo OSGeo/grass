@@ -56,6 +56,11 @@
 #%end
 
 #%flag
+#% key: r
+#% description: Set the current region from the last map that was imported
+#%end
+
+#%flag
 #% key: l
 #% description: Link the raster files using r.external
 #%end
@@ -93,6 +98,7 @@ def main():
     descr = options["description"]
     location = options["location"]
     base = options["base"]
+    set_current_region = flags["r"]
     link = flags["l"]
     exp = flags["e"]
     overr = flags["o"]
@@ -101,7 +107,8 @@ def main():
     tgis.init()
 
     tgis.import_stds(input, output, extrdir, title, descr, location,
-                     link, exp, overr, create, "strds", base)
+                     link, exp, overr, create, "strds", base, 
+                     set_current_region)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
