@@ -282,7 +282,7 @@ def main():
     grass.run_command('g.remove', rast='MASK', quiet=True, stderr=nuldev)
 
     if exitcode == 0:
-        grass.message((_("Statistics calculated from raster map <%s>") % raster) +
+        grass.verbose((_("Statistics calculated from raster map <%s>") % raster) +
                       (_(" and uploaded to attribute table of vector map <%s>.") % vector))
     else:
         grass.warning(_("Failed to upload statistics to attribute table of vector map <%s>.") % vector)
