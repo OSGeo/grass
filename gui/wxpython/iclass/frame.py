@@ -567,12 +567,12 @@ class IClassMapFrame(DoubleMapFrame):
         
         wx.BeginBusyCursor()
         wx.Yield()
-
+        
         # close, build, copy and open again the temporary vector
         digitClass = self.GetFirstWindow().GetDigit()
         
         # open vector map to be imported
-        if digitClass.OpenMap(vector) is None:
+        if digitClass.OpenMap(vector, update=False) is None:
             GError(parent = self, message = _("Unable to open vector map <%s>") % vector)
             return
         

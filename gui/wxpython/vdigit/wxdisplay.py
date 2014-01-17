@@ -884,16 +884,18 @@ class DisplayDriver:
         @return 0 on success
         @return non-zero on error
         """
-        ret = 0
-        if self.poMapInfo:
+        if not self.poMapInfo:
+            return 0
+
+        if self.poMapInfo.contents.mode == GV_MODE_RW:
             # rebuild topology
             Vect_build_partial(self.poMapInfo, GV_BUILD_NONE)
             Vect_build(self.poMapInfo)
 
-            # close map and store topo/cidx
-            ret = Vect_close(self.poMapInfo)
-            del self.mapInfo
-            self.poMapInfo = self.mapInfo = None
+        # close map and store topo/cidx
+        ret = Vect_close(self.poMapInfo)
+        del self.mapInfo
+        self.poMapInfo = self.mapInfo = None
         
         return ret
     

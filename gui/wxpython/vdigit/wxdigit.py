@@ -1611,7 +1611,7 @@ class IVDigit:
         """!Get display driver instance"""
         return self._display
     
-    def OpenMap(self, name, tmp = False):
+    def OpenMap(self, name, update=True, tmp = False):
         """!Open vector map for editing
         
         @param map name of vector map to be set up
@@ -1624,7 +1624,7 @@ class IVDigit:
         else:
             mapset = grass.gisenv()['MAPSET']
         
-        self.poMapInfo = self._display.OpenMap(str(name), str(mapset), True, tmp)
+        self.poMapInfo = self._display.OpenMap(str(name), str(mapset), update, tmp)
         
         if self.poMapInfo:
             self.InitCats()
