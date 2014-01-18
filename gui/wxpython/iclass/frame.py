@@ -736,44 +736,53 @@ class IClassMapFrame(DoubleMapFrame):
             wx.EndBusyCursor()
             return False
         
+        try:
+            dbInfo =  grass.vector_db(vectorName)[1]
+        except KeyError:
+            wx.EndBusyCursor()
+            return False
+        
+        dbFile = tempfile.NamedTemporaryFile(mode = 'w+b')
+        if dbInfo['driver'] != 'dbf':
+            dbFile.write("BEGIN\n")
         # populate table
         for cat in self.stats_data.GetCategories():
             stat = self.stats_data.GetStatistics(cat)
             
-            self._runDBUpdate(map = vectorName, column = "class", value = stat.name, cat = cat)
-            self._runDBUpdate(map = vectorName, column = "color", value = stat.color, cat = cat)
+            self._runDBUpdate(dbFile, table = dbInfo['table'], column = "class", value = stat.name, cat = cat)
+            self._runDBUpdate(dbFile, table = dbInfo['table'], column = "color", value = stat.color, cat = cat)
             
             if not stat.IsReady():
                 continue
                 
-            self._runDBUpdate(map = vectorName, column = "n_cells",value = stat.ncells, cat = cat)
+            self._runDBUpdate(dbFile, table = dbInfo['table'], column = "n_cells",value = stat.ncells, cat = cat)
             
             for i in range(nbands):
-                self._runDBUpdate(map = vectorName, column = "band%d_min" % (i + 1), value = stat.bands[i].min, cat = cat)
-                self._runDBUpdate(map = vectorName, column = "band%d_mean" % (i + 1), value = stat.bands[i].mean, cat = cat)
-                self._runDBUpdate(map = vectorName, column = "band%d_max" % (i + 1), value = stat.bands[i].max, cat = cat)
+                self._runDBUpdate(dbFile, table = dbInfo['table'], column = "band%d_min" % (i + 1), value = stat.bands[i].min, cat = cat)
+                self._runDBUpdate(dbFile, table = dbInfo['table'], column = "band%d_mean" % (i + 1), value = stat.bands[i].mean, cat = cat)
+                self._runDBUpdate(dbFile, table = dbInfo['table'], column = "band%d_max" % (i + 1), value = stat.bands[i].max, cat = cat)
                 
+        if dbInfo['driver'] != 'dbf':
+            dbFile.write("COMMIT\n")
+
+        if 0 != RunCommand('db.execute', input=dbFile.name):
+            wx.EndBusyCursor()
+            return False
+
         wx.EndBusyCursor()
         return True
     
-    def _runDBUpdate(self, map, column, value, cat):
-        """!Helper function for calling v.db.update.
+    def _runDBUpdate(self, tmpFile, table, column, value, cat):
+        """!Helper function for UPDATE statement
         
-        @param map vector map name
+        @param tmpFile file where to write UPDATE statements
+        @param table table name
         @param column name of updated column
         @param value new value
         @param cat which category to update
-        
-        @return returncode (0 is OK)
         """
-        ret = RunCommand('v.db.update',
-                        map = map,
-                        layer = 1,
-                        column = column,
-                        value = value,
-                        where = "cat = %d" % cat)
-                            
-        return ret
+        tmpFile.write("UPDATE %s SET %s = %s WHERE cat = %d\n" %
+                      (table, column, value, cat))
         
     def OnCategoryManager(self, event):
         """!Show category management dialog"""
