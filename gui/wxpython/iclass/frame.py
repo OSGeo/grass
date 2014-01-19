@@ -21,6 +21,7 @@ import os
 import sys
 import copy
 import tempfile
+import types
 from core.utils import _
 
 if __name__ == "__main__":
@@ -742,7 +743,7 @@ class IClassMapFrame(DoubleMapFrame):
             wx.EndBusyCursor()
             return False
         
-        dbFile = tempfile.NamedTemporaryFile(mode = 'w+b')
+        dbFile = tempfile.NamedTemporaryFile(mode = 'w')
         if dbInfo['driver'] != 'dbf':
             dbFile.write("BEGIN\n")
         # populate table
@@ -764,8 +765,9 @@ class IClassMapFrame(DoubleMapFrame):
                 
         if dbInfo['driver'] != 'dbf':
             dbFile.write("COMMIT\n")
-
-        if 0 != RunCommand('db.execute', input=dbFile.name):
+        dbFile.file.flush()
+        
+        if 0 != RunCommand('db.execute', input=dbFile.name, driver=dbInfo['driver'], database=dbInfo['database']):
             wx.EndBusyCursor()
             return False
 
@@ -781,8 +783,12 @@ class IClassMapFrame(DoubleMapFrame):
         @param value new value
         @param cat which category to update
         """
-        tmpFile.write("UPDATE %s SET %s = %s WHERE cat = %d\n" %
-                      (table, column, value, cat))
+        if type(value) == (types.IntType, types.FloatType):
+            tmpFile.write("UPDATE %s SET %s = %d WHERE cat = %d\n" %
+                          (table, column, value, cat))
+        else:
+            tmpFile.write("UPDATE %s SET %s = '%s' WHERE cat = %d\n" %
+                          (table, column, value, cat))
         
     def OnCategoryManager(self, event):
         """!Show category management dialog"""
