@@ -483,7 +483,7 @@ G_matrix_LU_solve(const mat_struct * mt1, mat_struct ** xmat0,
 	    integer *perm, res_info;
 	    integer num_eqns, nrhs, lda, ldb;
 
-	    perm = (integer *) G_malloc(wmat->rows);
+	    perm = (integer *) G_malloc(wmat->rows * sizeof(integer));
 
 	    /* Set fields to pass to fortran routine */
 	    num_eqns = (integer) mt1->rows;
