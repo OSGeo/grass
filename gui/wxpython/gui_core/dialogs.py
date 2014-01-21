@@ -618,7 +618,7 @@ class GroupDialog(wx.Dialog):
         subg_sizer = wx.BoxSizer(wx.VERTICAL)
 
         subg_sizer.Add(item = wx.StaticText(parent=self.subg_panel, id = wx.ID_ANY,
-                       label = _("Select exising subgroup or "
+                       label = _("Select existing subgroup or "
                                  "enter name of new subgroup:")),
                        flag = wx.ALIGN_CENTER_VERTICAL)
 
