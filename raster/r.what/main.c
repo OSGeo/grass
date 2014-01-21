@@ -307,8 +307,8 @@ int main(int argc, char *argv[])
                             else {
                                 east = Points->x[0];
                                 north = Points->y[0];
-                                sprintf(cache[point_cnt].east_buf, "%f", east);
-                                sprintf(cache[point_cnt].north_buf, "%f", north);
+                                sprintf(cache[point_cnt].east_buf, "%.15g", east);
+                                sprintf(cache[point_cnt].north_buf, "%.15g", north);
                             }
                         }
                         else {
@@ -357,10 +357,12 @@ int main(int argc, char *argv[])
 			if (dcol == window.cols)
 			    dcol--;
 
-			cache[point_cnt].row = (int)drow;
-			cache[point_cnt].col = (int)dcol;
-			cache[point_cnt].point = point_cnt;
-			point_cnt++;
+			if (!done) {
+			    cache[point_cnt].row = (int)drow;
+			    cache[point_cnt].col = (int)dcol;
+			    cache[point_cnt].point = point_cnt;
+			    point_cnt++;
+			}
 		    }
 		}
 	    }
