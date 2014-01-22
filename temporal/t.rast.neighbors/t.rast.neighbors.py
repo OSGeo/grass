@@ -49,7 +49,14 @@
 #% answer: average
 #%end
 
-#%option G_OPT_R_BASE
+#%option
+#% key: basename
+#% type: string
+#% label: Base name of the new generated output maps"
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+#% required: yes
+#% multiple: no
+#% gisprompt:
 #%end
 
 #%option
@@ -81,7 +88,7 @@ def main():
     output = options["output"]
     where = options["where"]
     size = options["size"]
-    base = options["base"]
+    base = options["basename"]
     register_null = flags["n"]
     method = options["method"]
     nprocs = options["nprocs"]

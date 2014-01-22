@@ -27,11 +27,13 @@
 #%end
 
 #%option
-#% key: base
+#% key: basename
 #% type: string
-#% description: Base name of the interpolated raster maps. This name will be extended with a numerical prefix
+#% label: Base name of the new generated output maps"
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 #% required: yes
 #% multiple: no
+#% gisprompt:
 #%end
 
 #%option
@@ -59,7 +61,7 @@ def main():
 
     # Get the options
     input = options["input"]
-    base = options["base"]
+    base = options["basename"]
     where = options["where"]
     nprocs = options["nprocs"]
 

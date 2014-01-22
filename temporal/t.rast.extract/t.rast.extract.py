@@ -38,9 +38,10 @@
 #%end
 
 #%option
-#% key: base
+#% key: basename
 #% type: string
-#% description: The base name of the new created raster maps. This name will be extended with a numerical prefix
+#% label: Base name of the new generated output maps"
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 #% required: no
 #% multiple: no
 #% gisprompt:
@@ -74,7 +75,7 @@ def main():
     output = options["output"]
     where = options["where"]
     expression = options["expression"]
-    base = options["base"]
+    base = options["basename"]
     nprocs = int(options["nprocs"])
     register_null = flags["n"]
 
