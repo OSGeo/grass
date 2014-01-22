@@ -579,6 +579,17 @@ EOF
 </pre></div>
 This example uses unix-like <tt>&lt;&lt; EOF</tt> syntax to provide
 input to <em>r.mapcalc</em>.
+<p>
+Note that the temporary variables (maps) are not created
+and thus it does not matter whether they exists or not.
+In the example above, if map <tt>elev_200</tt> exists it will not be
+overwritten and no error will be generated.
+The reason is that the name <tt>elev_200</tt> now denotes the temporary
+variable (map) and not the existing map.
+The following parts of the expression will use the temporary <tt>elev_200</tt>
+and the existing <tt>elev_200</tt> will be left intact and will not be used.
+If a user want to use the existing map, the name of the temporary variable
+(map) must be changed.
 
 <h3>Random number generator initialization</h3>
 <p>The environment variable GRASS_RND_SEED is read to initialize the
