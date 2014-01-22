@@ -10,7 +10,8 @@
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
 <h2>NAME</h2>
-<em><b>g.parser</b></em>
+<em><b>g.parser</b></em> - Provides full parser support for GRASS
+scripts.
 
 <h2>SYNOPSIS</h2>
 <b>g.parser help</b><br>
@@ -21,9 +22,9 @@
 <dt><b>-t</b></dt>
 <dd>Print strings for translation</dd>
 <dt><b>-s</b></dt>
-<dd>Write option values to stdout instead of reinvoking script</dd>
+<dd>Write option values to standard output instead of reinvoking script</dd>
 <dt><b>-n</b></dt>
-<dd>Write option values to stdout separated by nulls</dd>
+<dd>Write option values to standard output separated by null character</dd>
 </dl>
 
 <h2>DESCRIPTION</h2>
@@ -50,12 +51,12 @@ For flags, the value will be "1" if the flag was given, and "0" otherwise.
 
 <p>
 If the <b>-s</b> or <b>-n</b> switch is used, the options and flags are written to
-stdout in the form <em>opt_&lt;name&gt;=&lt;value&gt;</em> and
+standard output in the form <em>opt_&lt;name&gt;=&lt;value&gt;</em> and
 <em>flag_&lt;name&gt;=&lt;value&gt;</em>, preceded by the string
 <b>@ARGS_PARSED@</b>. If this string doesn't appear as the first line
-of stdout, it indicates that the script was invoked with a switch such
+of standard output, it indicates that the script was invoked with a switch such
 as <b>--html-description</b>. In this case, the data written by
-<em>g.parser</em> to stdout should be copied to the script's stdout
+<em>g.parser</em> to standard output should be copied to the script's standard output
 verbatim.
 
 If the <b>-s</b> switch is used, the options and flags are separated
@@ -85,6 +86,30 @@ Typical header definitions are as follows:
 With <tt>{NULL}</tt> it is possible to suppress a predefined <tt>description</tt>
 or <tt>label</tt>.
 
+<p>
+The parsers allows to use predefined <em>standardized options and
+flags</em>, see the list
+of <a href="http://grass.osgeo.org/programming7/parser__standard__options_8c.html#a1a5da9db1229a9bbc59d16ae84540bb8">options</a> and <a href="http://grass.osgeo.org/programming7/parser__standard__options_8c.html#ad081e95e5d4dc3daab9c820d962e6902">flags</a>
+in the programmer manual. Eg. the option
+
+<div class="code"><pre>
+#%option
+#% key: raster
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster input map
+#% required : yes
+#%end
+</pre></div>
+
+can be easily defined as
+
+<div class="code"><pre>
+#%option G_OPT_R_MAP
+#% key: raster
+#%end
+</pre></div>
+
 <h2>NOTES</h2>
 
 An option can be instructed to allow multiple inputs by adding the
@@ -102,10 +127,10 @@ done
 </pre></div>
 
 <p>
-A "<tt>guisection</tt>" field may be added to each option and flag to specify
-that the options should appear in multiple tabs in the auto-generated GUI.
-Any options without a <tt>guisection</tt> field go into the "Options" tab.
-For example:
+A "<tt>guisection</tt>" field may be added to each option and flag to
+specify that the options should appear in multiple tabs in the
+auto-generated GUI.  Any options without a <tt>guisection</tt> field
+go into the "Required" or "Options" tab.  For example:
 <pre>#% guisection: tabname</pre>
 would put that option in a tab named <i>tabname</i>.
 
@@ -117,16 +142,17 @@ added to an <b>input</b> option would create the usage summary
 <tt>[input=filename]</tt>.
 
 <p>
-If a script is run with --o, G_parser() will
+If a script is run with <b>--o</b>, the parser will
 set <tt>GRASS_OVERWRITE=1</tt>, which has the same effect as passing
---o to every module which is run from the script. Similarly, passing
---q or --v will set <tt>GRASS_VERBOSE</tt> to 0 or 3 respectively,
-which has the same effect as passing --q or --v to every module which
-is run from the script.  Rather than checking whether --o, --q or --v
+<b>--o</b> to every module which is run from the script. Similarly, passing
+<b>--q</b> or <b>--v</b> will set <tt>GRASS_VERBOSE</tt> to 0 or 3 respectively,
+which has the same effect as passing <b>--q</b> or <b>--v</b> to every module which
+is run from the script.  Rather than checking whether <b>--o</b>, <b>--q</b> or <b>--v</b>
 were used, you should be checking <tt>GRASS_OVERWRITE</tt> and/or
-<tt>GRASS_VERBOSE</tt> instead. If those variables are set, the
-script should behave the same way regardless of whether they were set
-by --o, --q or --v being passed to the script or set by other means.
+<tt>GRASS_VERBOSE</tt> instead. If those variables are set, the script
+should behave the same way regardless of whether they were set
+by <b>--o</b>, <b>--q</b> or <b>--v</b> being passed to the script or
+set by other means.
 
 
 <h2>AUTOMATED SCRIPT CREATION</h2>
@@ -190,7 +216,7 @@ g.parser -t somescriptfile
 </pre></div>
 
 <em>g.parser</em> will print the text of the translatable options to
-<tt>stdout</tt>, one per line, and exit. This is for internal use within
+standard output, one per line, and exit. This is for internal use within
 the build system to prepare GRASS scripts for translation.
 
 
@@ -200,7 +226,100 @@ All examples below autogenerate the graphical user interface when invoked
 without parameters of flags:
 
 <p>
+<center>
 <img src="g_parser_test.png" alt="Autogenerated GUI window">
+</center>
+
+<p>
+To run properly, the script needs to be copied into a directory listed
+in <tt>$GRASS_ADDON_PATH</tt> environmental variable with the
+executable flag being set. 
+
+<p>
+The script will provide a GUI (as above) and the following usage help
+text:
+
+<div class="code"><pre>
+test.py|sh|pl --help
+
+Description:
+ g.parser test script (python)
+
+Usage:
+ test.sh [-f] raster=string vector=string [option1=string]
+   [--verbose] [--quiet]
+
+Flags:
+  -f   A flag
+ --v   Verbose module output
+ --q   Quiet module output
+
+Parameters:
+   raster   Raster input map
+   vector   Vector input map
+  option1   An option
+</pre></div>
+
+<h3>Example code for Python</h3>
+
+<div class="code"><pre>
+#!/usr/bin/env python
+
+# g.parser demo script for python programing
+
+#%module
+#%  description: g.parser test script (python)
+#%end
+#%flag
+#%  key: f
+#%  description: A flag
+#%end
+#%option G_OPT_R_MAP
+#% key: raster
+#%end
+#%option G_OPT_V_MAP
+#% key: vector
+#%end
+#%option
+#%  key: option1
+#%  type: string
+#%  description: An option
+#%  required : no
+#%end
+
+import os
+import sys
+
+import grass.script as grass
+
+def main():
+    flag_f = flags['f']
+    option1 = options['option1']
+    raster = options['raster']
+    vector = options['vector']
+
+    #### add your code here ####
+
+    if flag_f:
+        print "Flag -f set"
+    else:
+        print "Flag -f not set"
+
+    # test if parameter present:
+    if option1:
+        print "Value of option1 option: '%s'" % option1
+
+    print "Value of raster option: '%s'" % raster
+    print "Value of vector option: '%s'" % vector
+
+    #### end of your code ####
+
+    return 0
+
+if __name__ == "__main__":
+    options, flags = grass.parser()
+    sys.exit(main())
+</pre></div>
 
 <h3>Example code for SHELL</h3>
 
@@ -216,19 +335,11 @@ without parameters of flags:
 #%  key: f
 #%  description: A flag
 #%end
-#%option
+#%option G_OPT_R_MAP
 #% key: raster
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Raster input map
-#% required : yes
 #%end
-#%option
+#%option G_OPT_V_MAP
 #% key: vector
-#% type: string
-#% gisprompt: old,vector,vector
-#% description: Vector input map
-#% required : yes
 #%end
 #%option
 #% key: option1
@@ -265,125 +376,6 @@ echo "Value of GIS_OPT_VECTOR: '$GIS_OPT_VECTOR'"
 
 </pre></div>
 
-To run properly, the script needs to be copied into $GISBASE/scripts/
-with the executable flag being set. The script will provide a GUI
-(as above) and the following usage help text:
-
-<div class="code"><pre>
-test.sh --help
-
-Description:
- g.parser test script (python)
-
-Usage:
- test.sh [-f] raster=string vector=string [option1=string]
-   [--verbose] [--quiet]
-
-Flags:
-  -f   A flag
- --v   Verbose module output
- --q   Quiet module output
-
-Parameters:
-   raster   Raster input map
-   vector   Vector input map
-  option1   An option
-</pre></div>
-
-
-<h3>Example code for Python</h3>
-
-<div class="code"><pre>
-#!/usr/bin/env python
-
-# g.parser demo script for python programing
-
-#%module
-#%  description: g.parser test script (python)
-#%end
-#%flag
-#%  key: f
-#%  description: A flag
-#%end
-#%option
-#%  key: raster
-#%  type: string
-#%  gisprompt: old,cell,raster
-#%  description: Raster input map
-#%  required : yes
-#%end
-#%option
-#%  key: vector
-#%  type: string
-#%  gisprompt: old,vector,vector
-#%  description: Vector input map
-#%  required : yes
-#%end
-#%option
-#%  key: option1
-#%  type: string
-#%  description: An option
-#%  required : no
-#%end
-
-import os
-import sys
-
-import grass.script as grass
-
-def main():
-    flag_f = flags['f']
-    option1 = options['option1']
-    raster = options['raster']
-    vector = options['vector']
-    #### add your code here ####
-
-    if flag_f:
-        print "Flag -f set"
-    else:
-        print "Flag -f not set"
-
-    # test if parameter present:
-    if option1:
-        print "Value of option1= option: '%s'" % option1
-
-    print "Value of raster= option: '%s'" % raster
-    print "Value of vector= option: '%s'" % vector
-
-    #### end of your code ####
-
-    return 0
-
-if __name__ == "__main__":
-    options, flags = grass.parser()
-    main()
-</pre></div>
-
-The <tt>test.py</tt> script will provide a GUI (as above) and the
-following usage help text:
-
-<div class="code"><pre>
-./test.py --help
-
-Description:
- g.parser test script (python)
-
-Usage:
- test1.py [-f] raster=string vector=string [option1=string]
-   [--verbose] [--quiet]
-
-Flags:
-  -f   A flag
- --v   Verbose module output
- --q   Quiet module output
-
-Parameters:
-   raster   Raster input map
-   vector   Vector input map
-  option1   An option
-</pre></div>
-
-
 <h3>Example code for Perl</h3>
 
 <div class="code"><pre>
@@ -400,19 +392,11 @@ use strict;
 #%  key: f
 #%  description: A flag
 #%end
-#%option
+#%option G_OPT_R_MAP
 #% key: raster
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Raster input map
-#% required : yes
 #%end
-#%option
+#%option G_OPT_V_MAP
 #% key: vector
-#% type: string
-#% gisprompt: old,vector,vector
-#% description: Vector input map
-#% required : yes
 #%end
 #%option
 #% key: option1
@@ -426,7 +410,6 @@ if ( !$ENV{'GISBASE'} ) {
     exit 1;
 }
 
- 
 if( $ARGV[0] ne '@ARGS_PARSED@' ){
     my $arg = "";
     for (my $i=0; $i < @ARGV;$i++) {
@@ -453,10 +436,6 @@ printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
 
 </pre></div>
 
-The <tt>test.pl</tt> script will provide a GUI and usage help text similar
-to the other examples above.
-
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -465,7 +444,8 @@ to the other examples above.
   <a href="g.tempfile.html">g.tempfile</a>
 </em>
 
-and the <tt>SUBMITTING_SCRIPTS</tt> file in the GRASS source code.
+and <a href="http://svn.osgeo.org/grass/grass/trunk/SUBMITTING_PYTHON">SUBMITTING_PYTHON</a>
+file in the GRASS source code.
 <p>
 Related Wiki pages:
 <a href="http://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages">Using GRASS with other programming languages</a>
@@ -476,5 +456,8 @@ Glynn Clements
 
 <p>
 <i>Last changed: $Date$</i>
+<hr>
+<p><a href="index.html">Main index</a> - <a href="full_index.html">Full index</a></p>
+<p>&copy; 2003-2014 <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS 7.0.svn Reference Manual</p>
 </body>
 </html>
