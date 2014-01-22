@@ -9,17 +9,18 @@ The algorithm underlying <em>r.viewshed</em> minimizes both the CPU
 operations and the transfer of data between main memory and disk; as a
 result <em>r.viewshed</em> runs fast on very large rasters.
 
-<h3>Options and flags:</h3>
+<h2>NOTES</h2>
 
-To run <em>r.viewshed</em>, the user must specify an input map name,
-an output map name, and the location of the viewpoint.  
+To run <em>r.viewshed</em>, the user must specify an input elevation
+map name, an output raster map name, and the location of the
+viewpoint.
 
-<p>Viewpoint (<em>coordinate</em> parameter): For the time being the viewpoint
-is assumed to be located inside the terrain.  The viewpoint location is
+<p>For the time being the viewpoint (<b>coordinates</b> parameter) is
+assumed to be located inside the terrain.  The viewpoint location is
 given in map coordinates.
 
-<p>Output: The output map may have one of three possible formats,
-based on which flags are set.
+<p>The output raster map may have one of three possible formats, based
+on which flags are set.
 
 <p>
 By default, if no flag is set, the output is in angle-mode, and
@@ -35,7 +36,7 @@ regard to the viewpoint, in degrees, if the point is visible.
 If the <b>-b</b> flag is set, the output is in boolean-mode, and each point
 in the output map is marked as:
 <ul>
-  <li> 0 if the point is Nodata/null or not visible
+  <li> 0 if the point is no-data/null or not visible
   <li> 1 if the point is visible.
 </ul>
 
@@ -45,47 +46,48 @@ If the <b>-e</b> flag is set, the output is in elevation-mode, and each point
 in the output map is marked as:
 <!-- Check & FIXME -->
 <ul>
-  <li> Nodata (null), if the respective point in the elevation map is Nodata (null) 
+  <li> no-data (null), if the respective point in the elevation map is no-data (null) 
   <li> -1, if the point is not visible
   <li> the difference in elevation between the point and the viewpoint, if the point is visible.
 </ul>
 
 <p>
 If you wish to identify the area of the map which is within the search
-radius but not visible, a combination of <em>r.buffer</em> and
-<em>r.mapcalc</em> can be used to create a negative of the viewshed map.
+radius but not visible, a combination of <em><a href="r.buffer.html">r.buffer</a></em> and
+<em><a href="r.mapcalc.html">r.mapcalc</a></em> can be used to create
+a negative of the viewshed map.
 
 
 
 <p>
-Curvature of the earth: By default the elevations are not adjusted for
-the curvature of the earth. The user can turn this on with flag
+By default the elevations are not adjusted for the curvature of the
+earth. The user can turn this on with flag
 <b>-c</b>.
 
 <p>
-Observer elevation: By default the observer is assumed to have
-height=0 above the terrain.  The user can change this using option
-<em>obs_elev=...</em>. The value entered is in the same units
-as the elevation.
+By default the observer is assumed to have height 1.75 map units above
+the terrain.  The user can change this using option
+<b>obs_elev</b>. The value entered is in the same units as the
+elevation.
 
 <p>
-Target elevation: By default the target is assumed to have
-height=0 above the terrain.  The user can change this using option
-<em>tgt_elev=...</em> to determine if objects of a given height would be 
+By default the target is assumed to have height 0 map units above the
+terrain.  The user can change this using option
+<b>tgt_elev</b> to determine if objects of a given height would be
 visible. The value entered is in the same units as the elevation.
 
 <p>
-Maximum visibility distance: By default there is no restriction on
-the maximum distance to which the observer can see.  The user can set
-a maximum distance of visibility using option <em>max_dist=...</em>.
-The value entered is in the same units as the cell size of the raster.
+By default there is no restriction on the maximum distance to which
+the observer can see.  The user can set a maximum distance of
+visibility using option <b>max_dist</b>.  The value entered is in the
+same units as the cell size of the raster.
 
 <p>
 Main memory usage: By default <em>r.viewshed</em> assumes it has
 500MB of main memory, and sets up its internal data structures so that
 it does not require more than this amount of RAM.  The user can set
 the amount of memory used by the program by setting the
-<em>memory_usage</em> to the number of MB of memory they would like to
+<b>memory_usage</b> to the number of MB of memory they would like to
 be used.
 
 
@@ -107,9 +109,7 @@ free memory may result in <em>r.viewshed</em> running in internal mode
 and using virtual memory, which is slower than the external mode.
 
 
-
-
-<h3>The algorithm:</h3>
+<h3>The algorithm</h3>
 
 <em>r.viewshed</em> uses the following model for determining
 visibility: The height of a cell is assumed to be variable, and the 
@@ -170,7 +170,7 @@ REFERENCES below.
 </table>
 
 
-<h3>An example:</h3>
+<h2>EXAMPLES</h2>
 
 Compute viewshed from the point with coordinates 638728.087167, 220609.261501
 which is 5 meters above ground (using NC dataset):
@@ -213,7 +213,7 @@ r.viewshed input=elevation.10m output=viewshed coordinate=598869,4916642 mem=800
 	 on Experimental Algorithmics (JEA)</em> 13 (2009).
 	 
 	 <li><a
-	 href="http://www.siam.org/proceedings/alenex/2007/alx07_002haverkorth.pdf">
+	 href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.4282&rep=rep1&type=pdf">
 	 Computing Visibility on Terrains in External Memory</a>. Herman
 	 Haverkort, Laura Toma and Yi Zhuang. In the <em>Proceedings of
 	 the 9th Workshop on Algorithm Engineering and Experiments /
