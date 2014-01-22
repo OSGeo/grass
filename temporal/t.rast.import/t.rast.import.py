@@ -26,6 +26,16 @@
 #%option G_OPT_STRDS_OUTPUT
 #%end
 
+#%option
+#% key: basename
+#% type: string
+#% label: Base name of the new generated output maps"
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+#% required: no
+#% multiple: no
+#% gisprompt:
+#%end
+
 #%option G_OPT_M_DIR
 #% key: extrdir
 #% description: Path to the extraction directory
@@ -75,9 +85,6 @@
 #% description: Override projection (use location's projection)
 #%end
 
-#%option G_OPT_R_BASE
-#% required: no
-#%end
 
 #%flag
 #% key: c
@@ -97,7 +104,7 @@ def main():
     title = options["title"]
     descr = options["description"]
     location = options["location"]
-    base = options["base"]
+    base = options["basename"]
     set_current_region = flags["r"]
     link = flags["l"]
     exp = flags["e"]

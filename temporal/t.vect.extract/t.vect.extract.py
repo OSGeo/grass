@@ -40,11 +40,13 @@
 #%end
 
 #%option
-#% key: base
+#% key: basename
 #% type: string
-#% description: Base name of the new created vector maps
+#% label: Base name of the new generated output maps"
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 #% required: no
 #% multiple: no
+#% gisprompt:
 #%end
 
 #%option
@@ -77,7 +79,7 @@ def main():
     expression = options["expression"]
     layer = options["layer"]
     type = options["type"]
-    base = options["base"]
+    base = options["basename"]
     nprocs = int(options["nprocs"])
     register_null = flags["n"]
 

@@ -79,7 +79,14 @@
 #% multiple: no
 #%end
 
-#%option G_OPT_R_BASE
+#%option
+#% key: basename
+#% type: string
+#% label: Base name of the new generated output maps"
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+#% required: yes
+#% multiple: no
+#% gisprompt:
 #%end
 
 #%option
@@ -124,7 +131,7 @@ def main():
     input = options["input"]
     start = options["start"]
     stop = options["stop"]
-    base = options["base"]
+    base = options["basename"]
     cycle = options["cycle"]
     offset = options["offset"]
     minimum = options["minimum"]

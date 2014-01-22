@@ -342,10 +342,15 @@ void G__wps_print_process_description(void)
                     else
                         max = 1;
                 }
-
+                
+                if(opt->label) {
+                    title = opt->label;
+		}
                 if (opt->description) {
-                    title = opt->description;
-                    abstract = opt->description;
+		    if(!opt->label)
+			title = opt->description;
+		    else
+			abstract = opt->description;
                 }
                 if (opt->def) {
                     value = opt->def;
@@ -367,12 +372,13 @@ void G__wps_print_process_description(void)
 		   data_type == TYPE_STDS || data_type == TYPE_PLAIN_TEXT)
                 {
                     /* 2048 is the maximum size of the map in mega bytes */
-                    wps_print_complex_input(min, max, identifier, title, NULL, 2048, data_type);
+                    wps_print_complex_input(min, max, identifier, title, abstract, 2048, data_type);
                 }
                 else
                 {
                     /* The keyword array is missused for options, type means the type of the value (integer, float ... )*/
-                    wps_print_literal_input_output(WPS_INPUT, min, max, identifier, title, NULL, type, 0, keywords, num_keywords, value, TYPE_OTHER);
+                    wps_print_literal_input_output(WPS_INPUT, min, max, identifier, title, 
+						    abstract, type, 0, keywords, num_keywords, value, TYPE_OTHER);
                 }
             }
 	    opt = opt->next_opt;
@@ -477,18 +483,27 @@ void G__wps_print_process_description(void)
 		}
 		G_free(top);
 	    }
-            /* Only single module output is supported */
-            if(is_output == 1 && opt->multiple == NO)
+            /* Only single module output is supported!! */
+            if(is_output == 1)
             {
+		if(opt->multiple == YES)
+		    G_warning(_("Multiple outputs are not supported by WPS 1.0.0"));
                 identifier = opt->key;
+ 
+                if(opt->label) {
+                    title = opt->label;
+		}
                 if (opt->description) {
-                    title = opt->description;
-                    abstract = opt->description;
-                }
+		    if(!opt->label)
+			title = opt->description;
+		    else
+			abstract = opt->description;
+		}
+
                 if(data_type == TYPE_RASTER || data_type == TYPE_VECTOR || 
 		   data_type == TYPE_STRDS  || data_type == TYPE_STVDS || 
 		   data_type == TYPE_STDS  || data_type == TYPE_PLAIN_TEXT) {
-                    wps_print_complex_output(identifier, title, NULL, data_type);
+                    wps_print_complex_output(identifier, title, abstract, data_type);
                     found_output = 1;
                 }
             }
