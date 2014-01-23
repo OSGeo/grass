@@ -4,7 +4,8 @@ New raster map layers can be created which are arithmetic expressions
 involving existing raster map layers, integer or floating point constants,
 and functions.
 
-<h3>PROGRAM USE</h3>
+
+<h3>Program use</h3>
 
 <em>r.mapcalc</em> expression have the form:
 <p><b>result =</b><em> expression</em>
@@ -63,7 +64,8 @@ is entering input to <em>r.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
 
 
-<h3>OPERATORS AND ORDER OF PRECEDENCE</h3>
+<h3>Operators and order of precedence</h3>
+
 The following operators are supported:
 <div class="code"><pre>
      Operator   Meaning                    Type        Precedence
@@ -104,7 +106,9 @@ Division by 0 and modulus by 0 are acceptable and give a NULL result.
 The logical operators give a 1 result if the comparison is true, 0 otherwise.
 <p><p>
 
-<h3>RASTER MAP LAYER NAMES</h3>
+
+<h3>Raster map layer names</h3>
+
 Anything in the expression which is not a number, operator, or function name
 is taken to be a raster map layer name.
 Examples:
@@ -155,7 +159,9 @@ result = x@PERMANENT / y@SOILS
 GRASS commands, not just <em>r.mapcalc</em>.)
 <p>
 
-<h3>THE NEIGHBORHOOD MODIFIER</h3>
+
+<h3>The neighborhood modifier</h3>
+
 Maps and images are data base files stored in raster format, i.e.,
 two-dimensional matrices of integer values.
 In <em>r.mapcalc</em>, maps may be followed by a <em>neighborhood</em> modifier that
@@ -169,7 +175,9 @@ This syntax permits the development of neighborhood-type filters within a single
 map or across multiple maps.
 <p>
 
-<h3>RASTER MAP LAYER VALUES FROM THE CATEGORY FILE</h3>
+
+<h3>Raster map layer values from the category file</h3>
+
 Sometimes it is desirable to use a value associated with a category's
 <em>label</em> instead of the category value itself.  If a raster
 map layer name is preceded by the <b>@</b>
@@ -204,7 +212,8 @@ with a number or is missing, it will be represented by NULL
 (no data) in the resulting raster map. 
 
 
-<h3>GREY SCALE EQUIVALENTS AND COLOR SEPARATES</h3>
+<h3>Grey scale equivalents and color separates</h3>
+
 It is often helpful to manipulate the colors assigned to map categories.
 This is particularly useful when the spectral properties of cells have meaning
 (as with imagery data), or when the map category values represent real
@@ -265,7 +274,9 @@ red
 </pre></div>
 <p>
 
-<h3>FUNCTIONS</h3>
+
+<h3>Functions</h3>
+
 The functions currently supported are listed in the table below.
 The type of the result is indicated in the last column.
 <em>F</em>
@@ -331,7 +342,8 @@ Internal variables:
 Note, that the row() and col() indexing starts with 1.
 
 
-<h3>FLOATING POINT VALUES IN THE EXPRESSION</h3>
+<h3>Floating point values in the expression</h3>
+
 Floating point numbers are allowed in the expression. A floating point
 number is a number which contains a decimal point:
 <div class="code"><pre>
@@ -356,6 +368,7 @@ produce a floating-point result, as will using float():
 
 
 <h3>NULL support</h3>
+
 <ul>
 <li>Division by zero should result in NULL. 
 <li>Modulus by zero should result in NULL. 
@@ -463,7 +476,9 @@ values, the user doesn't know whether or not they both have the same value.
 Extra care must be taken if the expression is given on the command line.
 Some characters have special meaning to the UNIX shell.
 These include, among others:
+<div class="code"><pre>
 <p>* ( ) &gt; &amp; |
+</pre></div>
 <p>It is advisable to put single quotes around the expression; e.g.:
 <div class="code"><pre>
 'result = elevation * 2'
@@ -650,12 +665,14 @@ X (map) values supplied and y (newmap) values returned:
 </pre></div>
 
 
-<h2>BUGS</h2>
-Continuation lines must end with a \ and have NO trailing white space
-(blanks or tabs).  If the user does leave white space at the end of
+<h2>KNOWN ISSUES</h2>
+
+Continuation lines must end with a <tt>\</tt> and have <em>no</em> trailing
+white space (blanks or tabs).
+If the user does leave white space at the end of
 continuation lines, the error messages produced by <em>r.mapcalc</em> will
 be meaningless and the equation will not work as the user intended.
-This is important for the eval() function.
+This is particularly important for the <tt>eval()</tt> function.
 <p><!-- STILL TRUE ??-->
 Currently, there is no comment mechanism in <em>r.mapcalc</em>.
 Perhaps adding a capability that would cause the entire line to be
@@ -664,11 +681,23 @@ as if it were not present, would do the trick.
 <p>The function should require the user to type "end" or "exit" instead
 of simply a blank line. This would make separation of multiple scripts
 separable by white space.
-<p>r.mapcalc does not print a warning in case of operations on NULL cells.
-It is left to the user to utilize the isnull() function.
+<p><em>r.mapcalc</em> does not print a warning in case of operations on
+NULL cells. It is left to the user to utilize the <tt>isnull()</tt> function.
 
 
 <h2>SEE ALSO</h2>
+
+<p><em>
+<a href="g.region.html">g.region</a>,
+<a href="r.bitpattern.html">r.bitpattern</a>,
+<a href="r.blend.html">r.blend</a>,
+<a href="r.colors.html">r.colors</a>,
+<a href="r.fillnulls.html">r.fillnulls</a>
+</em>
+
+
+<h2>REFERENCES</h2>
+
 <b><a href="http://grass.osgeo.org/uploads/grass/history_docs/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
 Processing</a></b>, by Michael Shapiro and Jim Westervelt, U.S. Army
 Construction Engineering Research Laboratory (March/1991).
@@ -680,13 +709,6 @@ Tweddale, U.S. Army Construction Engineering Research Laboratory (December
 <p>Grey scale conversion is based on the C.I.E. x,y,z system where y represents
 luminance.  See "Fundamentals of Digital Image Processing,"
 by Anil K. Jain (Prentice Hall, NJ, 1989; p 67).
-<p><em>
-<a href="g.region.html">g.region</a>,
-<a href="r.bitpattern.html">r.bitpattern</a>,
-<a href="r.blend.html">r.blend</a>,
-<a href="r.colors.html">r.colors</a>,
-<a href="r.fillnulls.html">r.fillnulls</a>
-</em>
 
 
 <h2>AUTHORS</h2>
