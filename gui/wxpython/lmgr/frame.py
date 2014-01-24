@@ -967,7 +967,7 @@ class GMFrame(wx.Frame):
         self._gconsole.WriteLog("%s: %s\n"
                                 "%s: %s\n"
                                 "%s: %s\n"
-                                "%s: %s (%s)\n"
+                                # "%s: %s (%s)\n"
                                 "GDAL/OGR: %s\n"
                                 "PROJ.4: %s\n"
                                 "GEOS: %s\n"
@@ -977,7 +977,7 @@ class GMFrame(wx.Frame):
                                 "%s: %s%s\n"% (_("GRASS version"), vInfo['version'],
                                                _("GRASS SVN Revision"), vInfo['revision'],
                                                _("Build Date"), vInfo['build_date'],
-                                               _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
+                                               # _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
                                                vInfo['gdal'], vInfo['proj4'], vInfo['geos'], vInfo['sqlite'],
                                                platform.python_version(),
                                                wx.__version__,
