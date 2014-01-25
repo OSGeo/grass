@@ -5,18 +5,30 @@ display frame on the graphics monitor.
 
 <h2>EXAMPLE</h2>
 
-Display raster map &quot;elevation&quot; (only values between 75 and 80):
+Display raster map &quot;elevation&quot;:
+<div class="code"><pre>
+d.rast map=elevation
+</pre></div>
+
+Display raster map &quot;elevation&quot; but only values between 75 and 80:
 
 <div class="code"><pre>
 d.rast map=elevation values=75-80
+</pre></div>
+
+Display raster map &quot;landuse96_28m&quot; but only categories 1 and 2:
+
+<div class="code"><pre>
+d.rast landuse96_28m values=1,2
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
   <a href="d.rast.arrow.html">d.rast.arrow</a>,
-  <a href="d.rast.leg.html">d.rast.leg</a>,
   <a href="d.rast.num.html">d.rast.num</a>,
+  <a href="d.rast.leg.html">d.rast.leg</a>,
+  <a href="d.legend.html">d.legend</a>,
   <a href="d.mon.html">d.mon</a>,
   <a href="d.erase.html">d.erase</a>,
   <a href="d.vect.html">d.vect</a>
