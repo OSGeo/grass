@@ -143,7 +143,7 @@ def main():
 	tileout = output
 
     zipfile = infile + ".hgt.zip"
-    hgtfile = infile + ".hgt"
+    hgtfile = os.path.join(fdir, tile[:7] + ".hgt")
     if os.path.isfile(zipfile):
         #### check if we have unzip
 	if not grass.find_program('unzip'):
@@ -178,7 +178,7 @@ def main():
     in_temp = True
 
     zipfile = tile + ".hgt.zip"
-    hgtfile = tile + ".hgt"
+    hgtfile = tile[:7] + ".hgt"
     bilfile = tile + ".bil"
 
     if is_zip:
