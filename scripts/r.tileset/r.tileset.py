@@ -208,10 +208,10 @@ def bboxesIntersect(bbox_1, bbox_2):
     bi_b2 = (bbox_2['e'], bbox_2['n'])
     cin = [False, False]
     for i in (0, 1):
-        if (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b2[i]) or \
+        if (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b1[i]) or \
                (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b2[i]) or \
-               (bi_a1[i] <= bi_b1[i] and bi_a1[i] >= bi_b2[i]) or \
-               (bi_a2[i] <= bi_b1[i] and bi_a2[i] >= bi_b2[i]):
+               (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a1[i]) or \
+               (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a2[i]):
             cin[i] = True
     
     if cin[0] and cin[1]:
@@ -351,12 +351,12 @@ def main():
     xi = 0
     tile_bbox = { 'w' : -1, 's': -1, 'e' : -1, 'n' : -1 }
     while xi < ximax:
-        tile_bbox['w'] = min_x + (xi * tile_size[0] / tileset_size[0]) * span_x
-        tile_bbox['e'] = min_x + ((xi + 1) * tile_size_overlap[0] / tileset_size[0]) * span_x
+        tile_bbox['w'] = float(min_x) + (float(xi) * float(tile_size[0]) / float(tileset_size[0])) * float(span_x)
+        tile_bbox['e'] = float(min_x) + (float(xi + 1) * float(tile_size_overlap[0]) / float(tileset_size[0])) * float(span_x)
 	yi = 0
         while yi < yimax:
-            tile_bbox['s'] = min_y + (yi * tile_size[1] / tileset_size[1]) * span_y
-            tile_bbox['n'] = min_y + ((yi + 1) * tile_size_overlap[1] / tileset_size[1]) * span_y
+            tile_bbox['s'] = float(min_y) + (float(yi) * float(tile_size[1]) / float(tileset_size[1])) * float(span_y)
+            tile_bbox['n'] = float(min_y) + (float(yi + 1) * float(tile_size_overlap[1]) / float(tileset_size[1])) * float(span_y)
             tile_bbox_points = bboxToPoints(tile_bbox)
             tile_dest_bbox_points = projectPoints(tile_bbox_points,
                                                   source = srs_source,
