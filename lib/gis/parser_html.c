@@ -128,6 +128,7 @@ void G__usage_html(void)
     if (new_prompt)
 	fprintf(stdout, " [--<b>overwrite</b>] ");
 
+    fprintf(stdout, " [--<b>help</b>] ");
     fprintf(stdout, " [--<b>verbose</b>] ");
     fprintf(stdout, " [--<b>quiet</b>] ");
 
@@ -164,6 +165,9 @@ void G__usage_html(void)
 	    fprintf(stdout, "<dd>%s</dd>\n",
 		    _("Allow output files to overwrite existing files"));
 	}
+
+	fprintf(stdout, "<dt><b>--help</b></dt>\n");
+	fprintf(stdout, "<dd>%s</dd>\n", _("Print usage summary"));
 
 	fprintf(stdout, "<dt><b>--verbose</b></dt>\n");
 	fprintf(stdout, "<dd>%s</dd>\n", _("Verbose module output"));

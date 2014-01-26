@@ -331,6 +331,13 @@ void G__usage_xml(void)
 	fprintf(stdout, "\t</flag>\n");
     }
 
+    /* help */
+    fprintf(stdout, "\t<flag name=\"%s\">\n", "help");
+    fprintf(stdout, "\t\t<description>\n\t\t\t");
+    print_escaped_for_xml(stdout, _("Print usage summary"));
+    fprintf(stdout, "\n\t\t</description>\n");
+    fprintf(stdout, "\t</flag>\n");
+
     /* verbose */
     fprintf(stdout, "\t<flag name=\"%s\">\n", "verbose");
     fprintf(stdout, "\t\t<description>\n\t\t\t");

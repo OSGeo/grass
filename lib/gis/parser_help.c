@@ -155,6 +155,9 @@ static void usage(FILE *fp, int markers)
 	len = show(fp, item, len);
     }
 
+    strcpy(item, " [--help]");
+    len = show(fp, item, len);
+
     strcpy(item, " [--verbose]");
     len = show(fp, item, len);
 
@@ -193,6 +196,7 @@ static void usage(FILE *fp, int markers)
 	fprintf(fp, " --o   %s\n",
 		_("Allow output files to overwrite existing files"));
 
+    fprintf(fp, " --h   %s\n", _("Print usage summary"));
     fprintf(fp, " --v   %s\n", _("Verbose module output"));
     fprintf(fp, " --q   %s\n", _("Quiet module output"));
 

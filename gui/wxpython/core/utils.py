@@ -496,12 +496,12 @@ def CmdTupleToList(cmd):
     if 'flags' in cmd[1]:
         for flag in cmd[1]['flags']:
             cmdList.append('-' + flag)
-    for flag in ('verbose', 'quiet', 'overwrite'):
+    for flag in ('help', 'verbose', 'quiet', 'overwrite'):
         if flag in cmd[1] and cmd[1][flag] is True:
             cmdList.append('--' + flag)
     
     for k, v in cmd[1].iteritems():
-        if k in ('flags', 'verbose', 'quiet', 'overwrite'):
+        if k in ('flags', 'help', 'verbose', 'quiet', 'overwrite'):
             continue
         cmdList.append('%s=%s' % (k, v))
             
@@ -519,7 +519,7 @@ def CmdToTuple(cmd):
             dcmd[str(key)] = str(value).replace('"', '')
         elif item[:2] == '--': # long flags
             flag = item[2:]
-            if flag in ('verbose', 'quiet', 'overwrite'):
+            if flag in ('help', 'verbose', 'quiet', 'overwrite'):
                 dcmd[str(flag)] = True
         elif len(item) == 2 and item[0] == '-': # -> flags
             if 'flags' not in dcmd:
