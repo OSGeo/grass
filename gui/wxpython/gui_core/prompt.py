@@ -404,8 +404,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 return
             self.ShowList()
 
-        # complete flags after pressing '-'       
-        elif event.GetKeyCode() == 45 and not event.ShiftDown(): 
+        # complete flags after pressing '-'
+        elif (event.GetKeyCode() == 45 and not event.ShiftDown()) \
+                or event.GetKeyCode() == wx.WXK_NUMPAD_SUBTRACT \
+                or event.GetKeyCode() == wx.WXK_SUBTRACT:
             self.autoCompList = list()
             entry = self.GetTextLeft()
             self.InsertText(pos, '-')
