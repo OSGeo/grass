@@ -256,8 +256,8 @@ class VectorTopo(Vector):
         False
 
     """
-    def __init__(self, name, mapset=''):
-        super(VectorTopo, self).__init__(name, mapset)
+    def __init__(self, name, mapset='', *args, **kwargs):
+        super(VectorTopo, self).__init__(name, mapset, *args, **kwargs)
         self._topo_level = 2
         self._class_name = 'VectorTopo'
 
