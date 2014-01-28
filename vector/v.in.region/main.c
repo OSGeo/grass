@@ -115,7 +115,6 @@ int main(int argc, char **argv)
     Vect_append_point(Points, window.west, window.south, 0.0);
 
     if (type == GV_AREA) {
-        Vect_cat_set(Cats, 1, cat);
 
 	Vect_write_line(&Out, GV_BOUNDARY, Points, Cats);
 
@@ -123,6 +122,7 @@ int main(int argc, char **argv)
 	Vect_append_point(Points, (window.west + window.east) / 2,
 			  (window.south + window.north) / 2, 0.0);
 
+	Vect_cat_set(Cats, 1, cat);
 	Vect_write_line(&Out, GV_CENTROID, Points, Cats);
     }
     else {			/* GV_LINE */
