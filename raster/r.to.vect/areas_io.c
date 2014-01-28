@@ -210,8 +210,6 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
 	x = cell_head.west + (p->col - dx) * cell_head.ew_res;
 	total++;
 	Vect_append_point(points, x, y, 0.0);
-
-	/* G_free (last); */
     }				/* end of for i */
 
     y = cell_head.north - (double)p->row * cell_head.ns_res;
@@ -220,15 +218,13 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
     Vect_append_point(points, x, y, 0.0);
 
     /* strip out the duplicate points from the list */
-    y = cell_head.north - (double)p->row * cell_head.ns_res;
-    x = cell_head.west + (double)p->col * cell_head.ew_res;
-    total++;
-    Vect_append_point(points, x, y, 0.0);
+    Vect_line_prune(points);
+    G_debug(3, "removed duplicates: %d", total - points->n_points);
 
     /* write files */
     Vect_write_line(&Map, GV_BOUNDARY, points, Cats);
 
-    /* now free all thwe pointers */
+    /* now free all the pointers */
     p = line_begin;
 
     for (i = 1; i < n; i++) {

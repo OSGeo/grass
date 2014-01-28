@@ -141,6 +141,9 @@ int extract_areas(void)
 
     G_free(a_list);
     G_free(e_list);
+    G_free(v_list);
+    G_free(buffer[0]);
+    G_free(buffer[1]);
 
     return 0;
 }				/* extract_areas */
