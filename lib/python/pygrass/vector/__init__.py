@@ -228,12 +228,9 @@ class Vector(Info):
         >>> mycens.close()
         >>> remove('mycensus', 'vect')
         """
-        path = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
-                            self.mapset, 'vector', self.name, 'colr')
-        if os.path.exists(path):
-            return True
-        else:
-            return False
+        loc = Location()
+        path = join(loc.path(), self.mapset, 'vector', self.name, 'colr')
+        return True if exists(path) else False
 
 
 #=============================================
