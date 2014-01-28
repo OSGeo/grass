@@ -6,9 +6,9 @@
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
  *               Anna Kratochvilova (Google SoC 2011)
  *               
- * PURPOSE:      Renders GIS data in 3D space.
+ * PURPOSE:      Renders GIS data in 3D space from the command line.
  *               
- * COPYRIGHT:    (C) 2008, 2010-2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     double vp_height, z_exag;	/* calculated viewpoint height, z-exag */
     int width, height;		/* output image size */
     char *output_name;
-    
+
     nv_data data;
     struct render_window *offscreen;
 
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     offscreen = Nviz_new_render_window();
     Nviz_init_render_window(offscreen);
     if (Nviz_create_render_window(offscreen, NULL, width, height) == -1)
-        G_fatal_error(_("Unable to render data"));
+	G_fatal_error(_("Unable to render data"));
     Nviz_make_current_render_window(offscreen);
 
     /* initialize nviz data */
@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
 
     /* load raster maps (surface topography) & set attributes (map/constant) */
     load_rasters(params, &data);
+
     /* set draw mode of loaded surfaces */
     surface_set_draw_mode(params);
 
@@ -138,8 +139,7 @@ int main(int argc, char *argv[])
     else {
 	z_exag = Nviz_get_exag();
 	G_verbose_message(_("Vertical exaggeration not given, using calculated "
-			    "value %.0f"),
-			  z_exag);
+			   "value %.0f"), z_exag);
     }
     Nviz_change_exag(&data, z_exag);
 
@@ -148,10 +148,10 @@ int main(int argc, char *argv[])
     }
     else {
 	double min, max;
+
 	Nviz_get_exag_height(&vp_height, &min, &max);
 	G_verbose_message(_("Viewpoint height not given, using calculated "
-			    "value %.0f"),
-			  vp_height);
+			    "value %.0f"), vp_height);
     }
     Nviz_set_viewpoint_height(vp_height);
 
@@ -159,21 +159,21 @@ int main(int argc, char *argv[])
 				atof(params->pos->answers[1]));
     Nviz_set_viewpoint_twist(atoi(params->twist->answer));
     Nviz_set_viewpoint_persp(atoi(params->persp->answer));
+
     if (params->focus->answer) {
-    Nviz_set_focus(&data, atof(params->focus->answers[0]),
-                          atof(params->focus->answers[1]), 
-                          atof(params->focus->answers[2]));
+	Nviz_set_focus(&data, atof(params->focus->answers[0]),
+		       atof(params->focus->answers[1]),
+		       atof(params->focus->answers[2]));
     }
 
     /* set lights */
     Nviz_set_light_position(&data, 1,
 			    atof(params->light_pos->answers[0]),
 			    atof(params->light_pos->answers[1]),
-			    atof(params->light_pos->answers[2]),
-			    0.0);
+			    atof(params->light_pos->answers[2]), 0.0);
     Nviz_set_light_bright(&data, 1,
 			  atoi(params->light_bright->answer) / 100.0);
-    if(G_str_to_color(params->light_color->answer, &red, &grn, &blu) != 1) {
+    if (G_str_to_color(params->light_color->answer, &red, &grn, &blu) != 1) {
 	red = grn = blu = 255;
     }
     Nviz_set_light_color(&data, 1, red, grn, blu);
@@ -183,11 +183,12 @@ int main(int argc, char *argv[])
     /* define fringes */
     if (params->fringe->answer) {
 	int nw, ne, sw, se;
-	
+
 	i = 0;
 	nw = ne = sw = se = 0;
-	while(params->fringe->answers[i]) {
+	while (params->fringe->answers[i]) {
 	    const char *edge = params->fringe->answers[i++];
+
 	    if (strcmp(edge, "nw") == 0)
 		nw = 1;
 	    else if (strcmp(edge, "ne") == 0)
@@ -197,29 +198,33 @@ int main(int argc, char *argv[])
 	    else if (strcmp(edge, "se") == 0)
 		se = 1;
 	}
-	Nviz_new_fringe(&data, -1, Nviz_color_from_str(params->fringe_color->answer),
+	Nviz_new_fringe(&data, -1,
+			Nviz_color_from_str(params->fringe_color->answer),
 			atof(params->fringe_elev->answer), nw, ne, sw, se);
     }
 
     /* draw north arrow */
     if (params->north_arrow->answer) {
-	
+
 	if (!params->north_arrow_size->answer)
 	    size = Nviz_get_longdim(&data) / 8.;
 	else
 	    size = atof(params->north_arrow_size->answer);
 
 	Nviz_set_arrow(&data, atoi(params->north_arrow->answers[0]),
-			      atoi(params->north_arrow->answers[1]),
-			      size, Nviz_color_from_str(params->north_arrow_color->answer));
+		       atoi(params->north_arrow->answers[1]),
+		       size,
+		       Nviz_color_from_str(params->north_arrow_color->
+					   answer));
 	Nviz_draw_arrow(&data);
     }
 
     GS_clear(data.bgcolor);
 
     /* cutting planes */
-    if(params->cplane->answer)
-        draw_cplane(params, &data);
+    if (params->cplane->answer)
+	draw_cplane(params, &data);
+
     /* draw */
     Nviz_draw_all(&data);
 

@@ -10,38 +10,39 @@ struct GParams
     struct Flag *isosurf_toggle_norm_dir;
     struct Flag *draw_volume_box;
 
-    struct Option 
-    /* surface */
-    *elev_map, *elev_const, *color_map, *color_const,
+    struct Option
+	/* surface */
+     *elev_map, *elev_const, *color_map, *color_const,
 	*mask_map, *transp_map, *transp_const, *shine_map, *shine_const,
 	*emit_map, *emit_const,
-    /* surface draw mode */
-	*mode, *res_fine, *res_coarse, *style, *shade, *wire_color, *surface_pos,
-    /* vector lines */
-	*vlines, *vline_width, *vline_color, *vline_mode, *vline_height, *vline_pos,
-	*vline_layer, *vline_color_column, *vline_width_column,
-    /* vector points */
-	*vpoints, *vpoint_size, *vpoint_mode, *vpoint_marker, *vpoint_color,
+	/* surface draw mode */
+     *mode, *res_fine, *res_coarse, *style, *shade, *wire_color, *surface_pos,
+	/* vector lines */
+     *vlines, *vline_width, *vline_color, *vline_mode, *vline_height,
+	*vline_pos, *vline_layer, *vline_color_column, *vline_width_column,
+	/* vector points */
+     *vpoints, *vpoint_size, *vpoint_mode, *vpoint_marker, *vpoint_color,
 	*vpoint_width, *vpoint_pos, *vpoint_layer, *vpoint_size_column,
 	*vpoint_marker_column, *vpoint_color_column, *vpoint_width_column,
-    /* volumes */
-	*volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
-	*isosurf_color_map, *isosurf_color_const, *isosurf_transp_map, *isosurf_transp_const,
-	*isosurf_shine_map, *isosurf_shine_const, *slice_pos, *slice, *slice_transp,
-    /* misc */
-	*exag, *bgcolor,
-    /* cutting planes */
-       *cplane, *cplane_pos, *cplane_rot, *cplane_tilt, *cplane_shading,
-    /* viewpoint */
-	*pos, *height, *persp, *twist, *focus,
-    /* output */
-	*output, *format, *size,
-    /* lighting */
-	*light_pos, *light_color, *light_bright, *light_ambient,
-    /* fringe */
-	*fringe, *fringe_color, *fringe_elev,
-    /* north arrow */
-	*north_arrow, *north_arrow_size, *north_arrow_color;
+	/* volumes */
+     *volume, *volume_mode, *volume_shade, *volume_pos, *volume_res,
+	*isosurf_level, *isosurf_color_map, *isosurf_color_const,
+	*isosurf_transp_map, *isosurf_transp_const, *isosurf_shine_map,
+	*isosurf_shine_const, *slice_pos, *slice, *slice_transp,
+	/* misc */
+     *exag, *bgcolor,
+	/* cutting planes */
+     *cplane, *cplane_pos, *cplane_rot, *cplane_tilt, *cplane_shading,
+	/* viewpoint */
+     *pos, *height, *persp, *twist, *focus,
+	/* output */
+     *output, *format, *size,
+	/* lighting */
+     *light_pos, *light_color, *light_bright, *light_ambient,
+	/* fringe */
+     *fringe, *fringe_color, *fringe_elev,
+	/* north arrow */
+     *north_arrow, *north_arrow_size, *north_arrow_color;
 };
 
 /* args.c */
