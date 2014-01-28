@@ -860,6 +860,9 @@ class CmdPanel(wx.Panel):
         #
         visible_flags = [ f for f in self.task.flags if not f.get('hidden', False) == True ]
         for f in visible_flags:
+            # we don't want another help (checkbox appeared in r58783)
+            if f['name'] == 'help':
+                continue
             which_sizer = tabsizer[ f['guisection'] ]
             which_panel = tab[ f['guisection'] ]
             # if label is given: description -> tooltip
