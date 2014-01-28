@@ -98,5 +98,19 @@ int extract_points(int z_flag)
 
     G_percent(row, n_rows, 2);
 
+    switch (data_type) {
+    case CELL_TYPE:
+	G_free(cellbuf);
+	break;
+    case FCELL_TYPE:
+	G_free(fcellbuf);
+	break;
+    case DCELL_TYPE:
+	G_free(dcellbuf);
+	break;
+    }
+    
+    Vect_destroy_line_struct(points);
+
     return (1);
 }

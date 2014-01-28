@@ -176,6 +176,11 @@ int extract_lines(void)
 	}
     }
 
+    G_free(top);
+    G_free(middle);
+    G_free(bottom);
+    G_free(v_list);
+
     return 0;
 }
 
