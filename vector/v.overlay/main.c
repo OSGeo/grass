@@ -31,6 +31,8 @@
 
 #include "local.h"
 
+void copy_table(struct Map_info *, struct Map_info *, int, int);
+
 int main(int argc, char *argv[])
 {
     int i, j, input, line, nlines, operator;
@@ -190,7 +192,7 @@ int main(int argc, char *argv[])
 
     /* Create dblinks */
     if (ofield[0] > 0) {
-	Fi = Vect_default_field_info(&Out, ofield[0], NULL, GV_1TABLE);
+	Fi = Vect_default_field_info(&Out, ofield[0], NULL, GV_MTABLE);
     }
 
     db_init_string(&sql);
@@ -578,20 +580,15 @@ int main(int argc, char *argv[])
 	db_close_database_shutdown_driver(driver);
     }
     if (ofield[0] < 1 && !table_flag->answer) {
-	int otype;
 	
-	if (type[0] == GV_AREA)
-	    otype = GV_CENTROID;
-	else
-	    otype = GV_LINE;
-	
+	/* TODO: copy only valid attributes */
 	/* copy attributes from ainput */
 	if (ofield[1] > 0 && field[0] > 0) {
-	    Vect_copy_table(&In[0], &Out, field[0], ofield[1], NULL, otype);
+	    copy_table(&In[0], &Out, field[0], ofield[1]);
 	}
 	/* copy attributes from binput */
 	if (ofield[2] > 0 && field[1] > 0 && ofield[1] != ofield[2]) {
-	    Vect_copy_table(&In[1], &Out, field[1], ofield[2], NULL, otype);
+	    copy_table(&In[1], &Out, field[1], ofield[2]);
 	}
     }
 
@@ -602,4 +599,19 @@ int main(int argc, char *argv[])
     G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
+}
+
+void copy_table(struct Map_info *In, struct Map_info *Out, int infield, 
+                int outfield)
+{
+    struct ilist *list;
+    int findex;
+    
+    list = Vect_new_list();
+    findex = Vect_cidx_get_field_index(Out, outfield);
+    
+    Vect_cidx_get_unique_cats_by_index(Out, findex, list);
+    Vect_copy_table_by_cats(In, Out, infield, outfield, NULL, GV_MTABLE, list->value, list->n_values);
+    
+    Vect_destroy_list(list);
 }
