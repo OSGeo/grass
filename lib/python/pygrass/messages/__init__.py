@@ -318,11 +318,11 @@ class Messenger(object):
 
 
 def get_msgr(_instance=[None, ]):
-    """!Return a Messenger instance. ::
+    """!Return a Messenger instance.
 
     @return the Messenger instance.
+    @code ::
 
-        @code
         >>> msgr0 = get_msgr()
         >>> msgr1 = get_msgr()
         >>> msgr2 = Messenger()
