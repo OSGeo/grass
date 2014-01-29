@@ -93,30 +93,34 @@ int main(int argc, char *argv[])
     map = G_define_standard_option(G_OPT_R_INPUT);
     vect = G_define_standard_option(G_OPT_V_OUTPUT);
 
+    step = G_define_option();
+    step->key = "step";
+    step->type = TYPE_DOUBLE;
+    step->required = NO;
+    step->description = _("Increment between contour levels");
+    step->guisection = _("Contour levels");
+
     levels = G_define_option();
     levels->key = "levels";
     levels->type = TYPE_DOUBLE;
     levels->required = NO;
     levels->multiple = YES;
     levels->description = _("List of contour levels");
+    levels->guisection = _("Contour levels");
 
     min = G_define_option();
     min->key = "minlevel";
     min->type = TYPE_DOUBLE;
     min->required = NO;
     min->description = _("Minimum contour level");
+    min->guisection = _("Contour levels");
 
     max = G_define_option();
     max->key = "maxlevel";
     max->type = TYPE_DOUBLE;
     max->required = NO;
     max->description = _("Maximum contour level");
-
-    step = G_define_option();
-    step->key = "step";
-    step->type = TYPE_DOUBLE;
-    step->required = NO;
-    step->description = _("Increment between contour levels");
+    max->guisection = _("Contour levels");
 
     cut = G_define_option();
     cut->key = "cut";
@@ -130,7 +134,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (!levels->answers && !step->answer) {
-	G_fatal_error(_("Neither \"levels\" nor \"step\" parameter specified."));
+        G_fatal_error(_("Neither <%s> nor <%s> option must be specified"),
+                      levels->key, step->key);
     }
 
     name = map->answer;
