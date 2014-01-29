@@ -193,7 +193,10 @@ int main(int argc, char *argv[])
     n_cut = atoi(cut->answer);
     contour(lev, nlevels, Map, z_array, Wind, n_cut);
 
+    G_message(_("Writing attributes..."));
     /* Write levels */
+
+    db_begin_transaction(Driver);
     for (i = 0; i < nlevels; i++) {
 	sprintf(buf, "insert into %s values ( %d, %e )", Fi->table, i + 1,
 		lev[i]);
@@ -205,6 +208,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to insert new record: '%s'"), db_get_string(&sql));
 	}
     }
+    db_commit_transaction(Driver);
 
     db_close_database_shutdown_driver(Driver);
 
