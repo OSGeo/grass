@@ -13,11 +13,10 @@ for details.
 
 @author Soeren Gebbert
 """
-
-import logging
 import sys
 import grass.lib.gis as libgis
 from multiprocessing import Process, Lock, Pipe
+
 
 class FatalError(Exception):
     """!This error will be raised in case raise_on_error was set True
@@ -28,6 +27,7 @@ class FatalError(Exception):
 
     def __str__(self):
         return self.value
+
 
 def message_server(lock, conn):
     """!The GRASS message server function designed to be a target for
@@ -64,7 +64,7 @@ def message_server(lock, conn):
        - Percent: ["PERCENT", n, d, s]
     """
     libgis.G_debug(1, "Start messenger server")
-    
+
     while True:
         # Avoid busy waiting
         conn.poll(None)
@@ -107,6 +107,7 @@ def message_server(lock, conn):
             libgis.G_fatal_error(message)
 
         lock.release()
+
 
 class Messenger(object):
     """!Fast and exit-safe interface to GRASS C-library message functions
@@ -157,7 +158,7 @@ class Messenger(object):
          File "__init__.py", line 241, in fatal
            raise FatalError(message)
        FatalError: Ohh no no no!
-       
+
        >>> msgr = Messenger(raise_on_error=True)
        >>> msgr.set_raise_on_error(False)
        >>> msgr.fatal("Ohh no no no!")
@@ -190,7 +191,7 @@ class Messenger(object):
         self.client_conn, self.server_conn = Pipe()
         self.lock = Lock()
         self.server = Process(target=message_server, args=(self.lock,
-                                                          self.server_conn))
+                                                           self.server_conn))
         self.server.daemon = True
         self.server.start()
 
@@ -246,11 +247,11 @@ class Messenger(object):
         self.client_conn.send(["ERROR", message])
 
     def fatal(self, message):
-        """!Send an error message to stderr, call sys.exit(1) or raise FatalError 
+        """!Send an error message to stderr, call sys.exit(1) or raise FatalError
 
            This function emulates the behavior of G_fatal_error(). It prints
            an error message to stderr and calls sys.exit(1). If raise_on_error
-           is set True while creating the messenger object, a FatalError 
+           is set True while creating the messenger object, a FatalError
            exception will be raised instead of calling sys.exit(1).
         """
         self._check_restart_server()
@@ -282,7 +283,7 @@ class Messenger(object):
         """!Stop the messenger server and close the pipe
         """
         if self.server is not None and self.server.is_alive():
-            self.client_conn.send(["STOP",])
+            self.client_conn.send(["STOP", ])
             self.server.join(5)
             self.server.terminate()
         if self.client_conn is not None:
@@ -290,23 +291,23 @@ class Messenger(object):
 
     def set_raise_on_error(self, raise_on_error=True):
         """!Set the fatal error behavior
-        
+
            - If raise_on_error == True, a FatalError exception will be raised if fatal() is called
            - If raise_on_error == False, sys.exit(1) will be invoked if fatal() is called
-        
-           @param raise_on_error If True a FatalError exception will be raised instead 
+
+           @param raise_on_error If True a FatalError exception will be raised instead
                  of calling sys.exit(1)
         """
         self.raise_on_error = raise_on_error
-    
+
     def get_raise_on_error(self):
         """!Get the fatal error behavior
-        
-           @return True if a FatalError exception will be raised 
+
+           @return True if a FatalError exception will be raised
                    or False if sys.exit(1) will be called in case of invoking fatal()
         """
         return self.raise_on_error
-            
+
     def test_fatal_error(self, message):
         """!Force the messenger server to call G_fatal_error()
         """
@@ -314,6 +315,26 @@ class Messenger(object):
         self._check_restart_server()
         self.client_conn.send(["FATAL", message])
         time.sleep(1)
+
+
+def get_msgr(_instance=[None, ]):
+    """!Return a Messenger instance. ::
+
+    @return the Messenger instance.
+
+        @code
+        >>> msgr0 = get_msgr()
+        >>> msgr1 = get_msgr()
+        >>> msgr2 = Messenger()
+        >>> msgr0 is msgr1
+        True
+        >>> msgr0 is msgr2
+        False
+    """
+    if not _instance[0]:
+        _instance[0] = Messenger()
+    return _instance[0]
+
 
 if __name__ == "__main__":
     import doctest
