@@ -290,6 +290,17 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Unable to create table <%s>"),
 			      fi_out->table);
 	    }
+
+	    /* do not allow duplicate keys */
+	    if (db_create_index2(driver_out, fi_out->table, fi_out->key) != DB_OK)
+		G_warning(_("Unable to create index"));
+
+	    if (db_grant_on_table
+		(driver_out, fi_out->table, DB_PRIV_SELECT,
+		 DB_GROUP | DB_PUBLIC) != DB_OK)
+		G_fatal_error(_("Unable to grant privileges on table <%s>"),
+			      fi_out->table);
+
 	    Vect_map_add_dblink(&OutMap, 1, NULL, fi_out->table,
 				fi_in->key, fi_out->database, fi_out->driver);
 	}
