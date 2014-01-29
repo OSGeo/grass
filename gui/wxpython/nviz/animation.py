@@ -48,7 +48,7 @@ class Animation:
         self.mapWindow = mapWindow
         self.actions = {'record': self.Record,
                         'play': self.Play}
-        self.formats = ['ppm', 'tif']   # currently supported formats
+        self.formats = ['tif', 'ppm']   # currently supported formats
         self.mode = 'record'            # current mode (record, play, save)
         self.paused = False             # recording/replaying paused
         self.currentFrame = 0           # index of current frame
@@ -180,12 +180,24 @@ class Animation:
         w, h = self.mapWindow.GetClientSizeTuple()
         toolWin = self.mapWindow.GetToolWin()
         
+        formatter = ':04.0f'
+        n = len(self.animationList)
+        if n < 10:
+            formatter = ':01.0f'
+        elif n < 100:
+            formatter = ':02.0f'
+        elif n < 1000:
+            formatter = ':03.0f'
+
         self.currentFrame = 0
         self.mode = 'save'
         for params in self.animationList:
             if not self.stopSaving:
                 self.UpdateView(params)
-                filename = prefix + "_" + str(self.currentFrame) + '.' + self.formats[format]
+                number = ('{frame' + formatter +'}').format(frame=self.currentFrame)
+                filename = "{prefix}_{number}.{ext}".format(prefix=prefix,
+                                                            number=number,
+                                                            ext=self.formats[format])
                 filepath = os.path.join(path, filename)
                 self.mapWindow.SaveToFile(FileName = filepath, FileType = self.formats[format],
                                                   width = w, height = h)
