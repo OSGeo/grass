@@ -470,8 +470,8 @@ int main(int argc, char *argv[])
 		G_fatal_error(error_msg);
 	    }
 	    else {
-		G_message(_("Projection of input dataset and current location "
-			   "appear to match"));
+		G_verbose_message(_("Projection of input dataset and current location "
+                                    "appear to match"));
 	    }
 	}
     }
@@ -1027,6 +1027,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 
 	G_percent(row, nrows, 2);
     }				/* end AVHRR */
+    G_percent(1, 1, 1);
+
     /* -------------------------------------------------------------------- */
     /*      Cleanup                                                         */
     /* -------------------------------------------------------------------- */
