@@ -25,7 +25,7 @@ Maps and space time datasets are represented as objects in the temporal framewor
 
 \section PythonTGISPackages Library
 
-Core functionality such as the database interface connection to sqlite3 
+Core functionality such as the initialization function, the database interface connection to sqlite3 
 and postgresql as well as the creation of the temporal database are defined here:
 
 - python::temporal::core
@@ -50,6 +50,10 @@ handling and representation:
 - python::temporal::abstract_map_dataset
 - python::temporal::abstract_space_time_dataset
 
+The RPC C-library interface for exit safe and fast access to raster, vector and 3D raster informations:
+
+- python::temporal::c_libraries_interface
+
 All dataset classes that are used in the GRASS temporal modules are specified
 here:
 
@@ -71,7 +75,8 @@ space time datasets are defined here:
 - python::temporal::create
 - python::temporal::extract
 - python::temporal::factory
-- python::temporal::list
+- python::temporal::open_stds
+- python::temporal::list_stds
 - python::temporal::mapcalc
 - python::temporal::register
 - python::temporal::sampling
@@ -79,13 +84,20 @@ space time datasets are defined here:
 - python::temporal::stds_import
 - python::temporal::univar_statistics
 
+Spatio-temporal algebra classes for space time raster and vector datasets are defined in:
+
+- python::temporal::temporal_algebra
+- python::temporal::temporal_vector_algebra
+- python::temporal::temporal_vector_operator
+
 Two helper functions to support the listing of space time datasets in the automatically generated GUI:
 
 - python::temporal::gui_support
 
-Lots of unit tests:
+Unittests:
 
-- python::temporal::unit_tests
+- python::temporal::unittests_register
+
 
 \section PythonTGISExamples Examples
 

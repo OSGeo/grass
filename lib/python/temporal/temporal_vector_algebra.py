@@ -758,8 +758,9 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     # Create result space time dataset.
                     resultstds = open_new_space_time_dataset(t[1], self.stdstype, \
                                                                 'absolute', t[1], t[1], \
-                                                                'mean', None, \
-                                                                overwrite = grass.overwrite())
+                                                                None, None, \
+                                                                overwrite = grass.overwrite(),
+                                                                dbif=dbif)
                     for map_i in register_list:
                         # Check if modules should be executed from command list.
                         if "cmd_list" in dir(map_i):
