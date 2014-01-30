@@ -26,3 +26,5 @@ from mapcalc import *
 from univar_statistics import *
 from c_libraries_interface import *
 from temporal_algebra import *
+from temporal_vector_algebra import *
+from temporal_vector_operator import *

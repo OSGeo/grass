@@ -2,12 +2,12 @@
 
 Temporal algebra parser class
 
-(C) 2013 by the GRASS Development Team
+(C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Thomas Leppelt and Soeren Gebbert
+@authors Thomas Leppelt and Soeren Gebbert
 
 @code
 
@@ -659,13 +659,9 @@ class TemporalAlgebraParser(object):
         self.run = run
         self.debug = debug
         self.pid = pid
-        self.lexer = TemporalAlgebraLexer()
-        self.lexer.build()
         # Intermediate vector map names
         self.names = {}
         # Count map names
-        self.count = 0
-        self.parser = yacc.yacc(module=self, debug=False)
         self.spatial = spatial
         self.null = null
         self.mapset = get_current_mapset()
@@ -679,6 +675,10 @@ class TemporalAlgebraParser(object):
             self.dbif.close()
 
     def parse(self, expression, stdstype = 'strds', basename = None):
+        self.lexer = TemporalAlgebraLexer()
+        self.lexer.build()
+        self.parser = yacc.yacc(module=self, debug=self.debug)
+
         self.count = 0
         self.stdstype = stdstype
         self.basename = basename
@@ -1685,19 +1685,21 @@ class TemporalAlgebraParser(object):
                                                         'mean', None, \
                                                         overwrite = grass.overwrite())
             if isinstance(t[3], list):
-                dbif, connect = init_dbif(None)
                 num = len(t[3])
                 count = 0
-                for map in t[3]:
-                    map.select()
-                    #map.update()
-                    resultstds.register_map(map, dbif)
-                    count += 1
-                    if count % 10 == 0:
-                        self.msgr.percent(count, num, 1)
+                if num > 0:
+                    dbif, connected = init_dbif(None)
+                    for map in t[3]:
+                        map.select(dbif=dbif)
+                        #map.update()
+                        resultstds.register_map(map, dbif=dbif)
+                        count += 1
+                        if count % 10 == 0:
+                            self.msgr.percent(count, num, 1)
 
-                resultstds.update_from_registered_maps(dbif)
-                dbif.close()
+                    resultstds.update_from_registered_maps(dbif=dbif)
+                    if connected:
+                        dbif.close()
             t[0] = t[3]
 
         if self.debug:
@@ -2248,7 +2250,6 @@ class TemporalAlgebraParser(object):
             elif len(t) == 7:
                 print t[3] + "* = tshift(", t[3], ",", t[5], ")"
             t[0] = t[3] + "*"
-
 
     # Handle errors.
     def p_error(self, t):
