@@ -172,6 +172,12 @@ def register_maps_in_space_time_dataset(
 
         # Get a new instance of the map type
         map = dataset_factory(type, maplist[count]["id"])
+        
+        if map.map_exists() is not True:
+            msgr.fatal(_("Unable to update %(t)s map <%(id)s>. "
+                            "The map does not exists.") %
+                            {'t': map.get_type(),
+                            'id': map.get_map_id()})
 
         # Use the time data from file
         if "start" in maplist[count]:
