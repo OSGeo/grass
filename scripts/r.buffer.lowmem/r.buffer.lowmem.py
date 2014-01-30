@@ -115,7 +115,8 @@ def main():
     grass.message(_("Extracting buffers (2/2)..."))
     grass.mapcalc(exp, output = output, input = temp_src, dist = temp_dist)
 
-    p = grass.feed_command('r.category', map = output, rules = '-')
+    p = grass.feed_command('r.category', map = output,
+                           separator=':', rules = '-')
     p.stdin.write("1:distances calculated from these locations\n")
     d0 = "0"
     for n, d in enumerate(distances):
