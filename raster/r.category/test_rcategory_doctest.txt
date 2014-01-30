@@ -8,27 +8,27 @@ python -m doctest -v doctest.txt
 Data preparation
 ================
 
->>> run_command('r.mapcalc', expression='test = rand(1 , 3)')
+>>> run_command('r.mapcalc', expression='test = if(col() < 3, col(), 2)')
 0
->>> print(read_command('r.info', map='test',flags='r'))
+>>> print(read_command('r.info', map='test', flags='r'))
 min=1
 max=2
 <BLANKLINE>
->>> run_command('r.mapcalc', expression='test_14 = rand(1 , 5)')
+>>> run_command('r.mapcalc', expression='test_14 = if(col() < 5, col(), 4)')
 0
->>> print(read_command('r.info', map='test_14',flags='r'))
+>>> print(read_command('r.info', map='test_14', flags='r'))
 min=1
 max=4
 <BLANKLINE>
->>> run_command('r.mapcalc', expression='test_d = double(rand(0 , 10))/2')
+>>> run_command('r.mapcalc', expression='test_d = if(col() < 5, col() / 2., 4.5)')
 0
->>> print(read_command('r.info', map='test_d',flags='r'))
-min=0
+>>> print(read_command('r.info', map='test_d', flags='r'))
+min=0.5
 max=4.5
 <BLANKLINE>
 
 
-Basic tnput and output
+Basic input and output
 ======================
 
 >>> write_command('r.category', map='test', rules='-', separator=':', stdin="""
@@ -122,6 +122,105 @@ trees
 2
 &
 water
+<BLANKLINE>
+
+
+Separators in input
+===================
+
+>>> write_command('r.category', map='test', separator='comma', rules='-', stdin="""
+... 1,treesA
+... 2,waterA
+... """)
+0
+>>> print(read_command('r.category', map='test', separator='space'))
+1 treesA
+2 waterA
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator=',', rules='-', stdin="""
+... 1,treesB
+... 2,waterB
+... """)
+0
+>>> print(read_command('r.category', map='test', separator='space'))
+1 treesB
+2 waterB
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator='|', rules='-', stdin="""
+... 1|treesC
+... 2|waterC
+... """)
+0
+>>> print(read_command('r.category', map='test', separator=' '))
+1 treesC
+2 waterC
+<BLANKLINE>
+
+Multi words input
+=================
+
+>>> write_command('r.category', map='test', separator='|', rules='-', stdin="""
+... 1|small trees
+... 2|deep water
+... """)
+0
+>>> print(read_command('r.category', map='test', separator=' '))
+1 small trees
+2 deep water
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator='tab', rules='-', stdin="""
+... 1\tvery small trees
+... 2\tvery deep water
+... """)
+0
+>>> print(read_command('r.category', map='test', separator=':'))
+1:very small trees
+2:very deep water
+<BLANKLINE>
+
+
+Extreme and incorrect inputs
+============================
+
+Some of these commands should not work and return 1.
+
+>>> write_command('r.category', map='test', separator='comma', rules='-', stdin="""
+... 1,trees, very green
+... 2,water, very deep
+... """)
+1
+
+>>> write_command('r.category', map='test', separator='|', rules='-', stdin="""
+... 1|trees, very green
+... 2|water, very deep
+... """)
+0
+>>> print(read_command('r.category', map='test', separator='space'))
+1 trees, very green
+2 water, very deep
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator='tab', rules='-', stdin="""
+... 1\tvery green trees
+... 2\tvery deep\t water
+... """)
+1
+>>> print(read_command('r.category', map='test', separator='space'))
+1 trees, very green
+2 water, very deep
+<BLANKLINE>
+
+>>> write_command('r.category', map='test', separator=' ', rules='-', stdin="""
+... 1 very green
+... 2 very deep
+... """)
+1
+>>> print(read_command('r.category', map='test', separator='space'))
+1 trees, very green
+2 water, very deep
 <BLANKLINE>
 
 
