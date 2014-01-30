@@ -31,7 +31,7 @@ max=4.5
 Basic tnput and output
 ======================
 
->>> write_command('r.category', map='test', rules='-', stdin="""
+>>> write_command('r.category', map='test', rules='-', separator=':', stdin="""
 ... 1:trees
 ... 2:water
 ... """)
@@ -44,8 +44,8 @@ Input and output with default separator
 =======================================
 
 >>> write_command('r.category', map='test', rules='-', stdin="""
-... 1:trees
-... 2:water
+... 1\ttrees
+... 2\twater
 ... """)
 0
 >>> read_command('r.category', map='test', separator='tab')
@@ -57,7 +57,7 @@ Tabs needs a special treatment.
 Category range
 ==============
 
->>> write_command('r.category', map='test_14', rules='-', stdin="""
+>>> write_command('r.category', map='test_14', separator=':', rules='-', stdin="""
 ... 1:trees
 ... 2:4:buildings
 ... """)
@@ -76,7 +76,7 @@ More importantly, the output of r.category is wrong but here we are expecting th
 Floating point maps
 ===================
 
->>> write_command('r.category', map='test_d', rules='-', stdin="""
+>>> write_command('r.category', map='test_d', separator=':', rules='-', stdin="""
 ... 0:1.5:trees
 ... 1.5:3:buildings
 ... """)

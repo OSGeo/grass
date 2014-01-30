@@ -39,7 +39,7 @@ another program.
 The <b>rules</b> option allows the user to assign category labels from values
 found in a file. The label can refer to a single category, range of
 categories, floating point value, or a range of floating point values.
-The format is given as follows.
+The format is given as follows (when separator is set to colon).
 <div class="code"><pre>
 cat:Label
 val1:val2:Label
@@ -141,17 +141,13 @@ values in the output.
 <dl>
 <dt>Example defining category labels:
 <dd><div class="code"><pre>
-r.category diseasemap rules=- &lt;&lt; EOF
+r.category diseasemap separator=: rules=- &lt;&lt; EOF
 1:potential absence
 2:potential presence
 EOF
 </pre></div>
 <p>sets the categoy values 1 and 2 to respective text labels.
 </dl>
-
-<h2>TODO</h2>
-
-Respect the <b>separator=</b> field separator setting for input rules.
 
 
 <h2>SEE ALSO</h2>
