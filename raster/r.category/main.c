@@ -156,9 +156,12 @@ int main(int argc, char *argv[])
 	}
 
 	/* load cats from rules file */
-	/*  TODO: respect fs= */
 	if (parm.file->answer) {
 	    FILE *fp;
+	    char **tokens;
+	    int ntokens;
+	    char *e1;
+	    char *e2;
 
 	    if (strcmp("-", parm.file->answer) == 0) {
 		from_stdin = TRUE;
@@ -174,18 +177,41 @@ int main(int argc, char *argv[])
 	    Rast_init_cats("", &cats);
 
 	    for (;;) {
-		char buf[1024], label[1024];
+		char buf[1024];
 		DCELL d1, d2;
+		int parse_error = 0;
 
 		if (!G_getl2(buf, sizeof(buf), fp))
 		    break;
 
-		if (sscanf(buf, "%lf:%lf:%[^\n]", &d1, &d2, label) == 3)
-		    Rast_set_d_cat(&d1, &d2, label, &cats);
-		else if (sscanf(buf, "%lf:%[^\n]", &d1, label) == 2)
-		    Rast_set_d_cat(&d1, &d1, label, &cats);
-	    }
+		tokens = G_tokenize(buf, fs);
+		ntokens = G_number_of_tokens(tokens);
 
+		if (ntokens == 3) {
+		    d1 = strtod(tokens[0], &e1);
+		    d2 = strtod(tokens[1], &e2);
+		    if (*e1 == 0 && *e2 == 0)
+			Rast_set_d_cat(&d1, &d2, tokens[2], &cats);
+		    else
+			parse_error = 1;
+		}
+		else if (ntokens == 2) {
+		    d1 = strtod(tokens[0], &e1);
+		    if (*e1 == 0)
+			Rast_set_d_cat(&d1, &d1, tokens[1], &cats);
+		    else
+			parse_error = 1;
+		}
+		else if (!strlen(buf))
+		    continue;
+		else
+		    parse_error = 1;
+
+		if (parse_error)
+		    G_fatal_error(_("Incorrect format of input rules. "
+				    "Check separators. Invalid line is:\n%s"), buf);
+	    }
+	    G_free_tokens(tokens);
 	    Rast_write_cats(name, &cats);
 
 	    if (!from_stdin)
