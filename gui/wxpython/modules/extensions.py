@@ -70,7 +70,7 @@ class InstallExtensionWindow(wx.Frame):
             task = gtask.parse_interface('g.extension.py')
         else:
             task = gtask.parse_interface('g.extension')
-        ignoreFlags = ['l', 'c', 'g', 'a', 'f', 't', 'quiet']
+        ignoreFlags = ['l', 'c', 'g', 'a', 'f', 't', 'help', 'quiet']
         if sys.platform == 'win32':
             ignoreFlags.append('d')
             ignoreFlags.append('i')
