@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     char *outmap;
     char input[GNAME_MAX*2+8];
     char output[GNAME_MAX+8];
-    const char *args[4];
+    const char *args[5];
     struct Popen stats_child, reclass_child;
     struct Categories cover_cats;
     FILE *stats, *reclass;
@@ -106,7 +106,8 @@ int main(int argc, char *argv[])
     args[0] = "r.reclass";
     args[1] = input;
     args[2] = output;
-    args[3] = NULL;
+    args[3] = "rules=-";
+    args[4] = NULL;
 
     reclass = G_popen_write(&reclass_child, "r.reclass", args);
 
