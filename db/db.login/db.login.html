@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.login</em> sets user and optionally also password for
-connection to the selected <b>database</b> through DB <b>driver</b>.
+<em>db.login</em> sets the user name and optionally also a password for
+the connection to the selected <b>database</b> through the DB <b>driver</b>.
 
 <h2>NOTE</h2>
 
@@ -14,24 +14,27 @@ file.
 
 <h2>EXAMPLES</h2>
 
-Username specified only:
+Only username specified (password will be interactively queried
+to remain invisible):
 
 <div class="code"><pre>
 db.login user=bacava
 </pre></div>
 
-<p>Username and password specified (note that the command
+<p>
+Username and password specified (note that the command
 lines history will store the password in this way):
 
 <div class="code"><pre>
-db.login user=bacava pass=secret
+db.login user=bacava password=secret
 </pre></div>
 
-<p>Username and empty password specified (note that the command
+<p>
+Username and empty password specified (note that the command
 lines history will store the password in this way):
 
 <div class="code"><pre>
-db.login user=bacava pass=""
+db.login user=bacava password=""
 </pre></div>
 
 <h2>SEE ALSO</h2>
