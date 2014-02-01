@@ -1,30 +1,33 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.login</em> sets user/password for driver/database.
+<em>db.login</em> sets user and optionally also password for
+connection to the selected <b>database</b> through DB <b>driver</b>.
 
 <h2>NOTE</h2>
 
-This is only related to SQL database backends (PostgreSQL, MySQL etc).
-The passwords are stored in a hidden file in the user account ('home' 
-directory) called <em>.grasslogin6</em>. Only the file owner
-can access this file.
+This is only related to SQL database backends
+like <a href="grass-pg.html">PostgreSQL</a>, <a href="grass-mysql.html">MySQL</a>
+or <a href="grass-odbc.html">ODBC</a>. The passwords are stored in a
+hidden unencrypted file in the user account ('home' directory)
+called <em>.grass7/dblogin</em>. Only the file owner can access this
+file.
 
 <h2>EXAMPLES</h2>
 
-Example 1: Username specified, password will be invisibly queried interactively:
+Username specified only:
 
 <div class="code"><pre>
 db.login user=bacava
 </pre></div>
 
-<p>Example 2: Username and password specified (note that the command
+<p>Username and password specified (note that the command
 lines history will store the password in this way):
 
 <div class="code"><pre>
 db.login user=bacava pass=secret
 </pre></div>
 
-<p>Example 3: Username and empty password specified (note that the command
+<p>Username and empty password specified (note that the command
 lines history will store the password in this way):
 
 <div class="code"><pre>
@@ -37,8 +40,12 @@ db.login user=bacava pass=""
 <a href="db.test.html">db.test</a>
 </em>
 
+<p>
+<a href="sql.html">SQL support in GRASS GIS</a>
+
 <h2>AUTHOR</h2>
 
 Radim Blazek
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

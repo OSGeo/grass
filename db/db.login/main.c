@@ -6,7 +6,7 @@
  *               Glynn Clements <glynn gclements.plus.com>
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      Store db login settings
- * COPYRIGHT:    (C) 2004-2009, 2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     user->type = TYPE_STRING;
     user->required = NO;
     user->multiple = NO;
-    user->description = _("Username");
+    user->description = _("Username to set for DB connection");
     user->guisection = _("Settings");
     
     password = G_define_option();
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     password->type = TYPE_STRING;
     password->required = NO;
     password->multiple = NO;
-    password->description = _("Password");
+    password->description = _("Password to set for DB connection");
     password->guisection = _("Settings");
 
     if (G_parser(argc, argv))
