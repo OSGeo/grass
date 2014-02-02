@@ -49,7 +49,7 @@ To display 3D view animation follow these steps:
 <h2>NOTE</h2>
 The Animation Tool follows the computational region settings,
 so please be sure your computational region is set to the geographic extent of maps you are animating.
-You can change the computational region (using <a href="g.region.html">g.region</a>)
+You can change the computational region (using <em><a href="g.region.html">g.region</a></em>)
 and then reload the maps to update the animation.
 
 <h2>EXAMPLES</h2>
@@ -63,7 +63,7 @@ g.gui.animation strds=precipitation_2000_2010
 </pre></div>
 
 The loading of a series of maps into the Animation Tool can be simplified
-with <em>g.mlist</em> (back ticks syntax works for Linux and Mac only):
+with <em><a href="g.mlist.html">g.mlist<a></em> (back ticks syntax works for Linux and Mac only):
 <div class="code"><pre>
 g.gui.animation rast=`g.mlist type=rast mapset=. separator=comma pattern="precip*"`
 </pre></div>
@@ -93,18 +93,12 @@ Enable to set:
 
 <p>
 <em>
-  <a href="g.gui.html">g.gui</a>,
-  <a href="g.gui.dbmgr.html">g.gui.dbmgr</a>,
-  <a href="g.gui.gmodeler.html">g.gui.gmodeler</a>,
-  <a href="g.gui.iclass.html">g.gui.iclass</a>,
-  <a href="g.gui.mapswipe.html">g.gui.mapswipe</a>,
-  <a href="g.gui.psmap.html">g.gui.psmap</a>,
-  <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>,
-  <a href="g.gui.vdigit.html">g.gui.vdigit</a>
-  <br>
-  <a href="g.mlist.html">g.mlist</a>,
+  <a href="g.gui.timeline.html">g.gui.timeline</a>,
+  <a href="g.mlist.html">g.mlist</a>
 </em>
 
+<p>
+See also related <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Animation_Tool">wiki page</a>.
 
 <h2>AUTHOR</h2>
 
