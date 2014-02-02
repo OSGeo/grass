@@ -291,7 +291,7 @@ class HistogramFrame(wx.Frame):
         # setting to None but honestly we do not handle no map case
         # TODO: when self.mapname is None content of map window is showed
         self.mapname = None
-        layers = self._giface.GetLayerList().GetSelectedLayers()
+        layers = self._giface.GetLayerList().GetSelectedLayers(checkedOnly=False)
         if len(layers) > 0:
             self.mapname = layers[0].maplayer.name
 
@@ -321,6 +321,7 @@ class HistogramFrame(wx.Frame):
             self.SetHistLayer(self.mapname, None)
         else:
             self.OnErase(None)
+            wx.CallAfter(self.OnOptions, None)
 
     def InitDisplay(self):
         """!Initialize histogram display, set dimensions and region
