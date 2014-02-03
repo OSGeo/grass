@@ -21,6 +21,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "../r.li.daemon/daemon.h"
+#include "../r.li.daemon/defs.h"
 
 int main(int argc, char *argv[])
 {
