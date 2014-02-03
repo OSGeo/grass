@@ -382,7 +382,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	    /* watch out for trying to display mega cats */
 	    if (is_fp && !Listnum) {
 		discrete = 0;	/* maybe later do stats & allow if few #s */
-		G_warning(_("Unable to show discrete FP range (use list"));
+		G_warning(_("Unable to show discrete FP range (use list)"));
 		return (-1);
 	    }
 	    if (numlabs < MAX_LEGEND)
