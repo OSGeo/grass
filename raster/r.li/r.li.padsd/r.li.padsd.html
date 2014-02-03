@@ -1,4 +1,5 @@
 <h2>DESCRIPTION</h2>
+
 <em>r.li.padsd</em> (patch area distribution standard deviation) calculates as:<br>
 <img src="rlipadsd_formula.png"> <br>
 with:<br>
@@ -8,6 +9,23 @@ with:<br>
   <li><b>N<small>patch</small></b>: number of patch<br></li>
 </ul>
 
+<h2>NOTES</h2>
+
+Do not use absolute path names for the <b>output</b> map/file.
+If the "moving window" method was selected in <b>r.li.setup</b>, then the
+output will be a raster map, otherwise an ASCII file will be generated in
+the <tt>~/.r.li/output/</tt> folder.
+<p>
+If input raster is not full of null values <em>r.li.padsd</em> returns a
+value >=0 that is PADsd. <br>
+If input raster is full of null values <em>r.li.padsd</em> returns -1. <br>
+If you want to have null values instead run <br>
+<div class="code"><pre>
+r.null setnull=-1 input=my_map
+</pre></div>
+
+after index calculation.
+
 <h2>EXAMPLES</h2>
 To calculate mean pixel attribute index on map my_map, using
 my_conf configuration file and saving results in
@@ -15,19 +33,6 @@ my_out file run:<br>
 <div class="code"><pre>
 r.li.padsd input=my_map conf=my_conf output=my_out
 </pre></div>
-
-<h2>NOTES</h2>
-Do not use absolute path names for output files. They are raster if
-moving window disposition was selected, otherwise they are in
-~/.r.li/output folder.<br>
-If input raster is not full of null values r.li.padsd returns a value &gt;=0 that is PADsd. <br>
-If input raster is full of null values r.li.padsd returns -1. <br>
-If you want to have null values instead run <br>
-<div class="code"><pre>
-r.null setnull=-1 map=my_map
-</pre></div>
-
-after index calculation.
 
 <h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
@@ -43,4 +48,5 @@ Gen. Tech. Rep. PNW-351.
 Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

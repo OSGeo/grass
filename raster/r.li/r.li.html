@@ -9,64 +9,59 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
-
 <h2>NAME</h2>
 
 <em><b>r.li</b></em> - Landscape structure analysis package overview.
 
-
 <h2>KEYWORDS</h2>
-raster, landscape structure analysis, landscape metrics, landscape pattern, landscape analysis
+
+raster, landscape structure analysis, overview, landscape metrics, landscape pattern, landscape analysis
 
 
 <h2>DESCRIPTION</h2>
 
-The <em>r.li</em> suite is a toolset for multiscale analysis of landscape
-structure. It aims at replacing the <em>r.le</em> suite of modules
-through a client-server, multiprocess implementation. External software
-for quantitative measures of landscape structure is for example FRAGSTATS
-(McGarigal and Marks 1995).
+The <em>r.li</em> suite is a toolset for multiscale analysis of landscape structure.
+It aims at replacing the <em>r.le</em> suite of modules through a client-server,
+multiprocess implementation. External software for quantitative measures of landscape
+structure is for example FRAGSTATS (McGarigal and Marks 1995).
 <p>
-The <em>r.li</em> suite offers a set of patch and diversity indices. It
-supports analysis of landscapes composed of a mosaic of patches, but,
-more generally, the modules work with any two-dimensional raster map
-whose cell values are integer (e.g., 1, 2) or floating point (e.g., 1.1,
-3.2) values. The <em>r.li.setup</em> module has options for controlling
-the shape, size, number, and distribution of sampling areas used to
-collect information about the landscape structure. Sampling area shapes
-can be the entire map or a moving window of square, rectangular or with
-circular shape. The size of sampling areas can be changed, so that the
-landscape can be analyzed at a variety of spatial scales simultaneously.
-Sampling areas may be distributed across the landscape in a random,
-systematic, or stratified-random manner, or as a moving window.
+The <em>r.li</em> suite offers a set of patch and diversity indices.
+It supports analysis of landscapes composed of a mosaic of
+patches, but, more generally, the modules work with any two-dimensional
+raster map whose cell values are integer (e.g., 1, 2) or floating point
+(e.g., 1.1, 3.2) values. The <em>r.li.setup</em> module has options for
+controlling the shape, size, number, and distribution of sampling
+areas used to collect information about the landscape structure.
+Sampling area shapes can be the entire map or a moving
+window of square, rectangular or with circular shape. The size of
+sampling areas can be changed, so that the landscape can be analyzed
+at a variety of spatial scales simultaneously. Sampling areas may be
+distributed across the landscape in a random, systematic, or
+stratified-random manner, or as a moving window.
 <p>
 The <em>r.li</em> modules can calculate a number of measures that produce
-single values as output (e.g. mean patch size in the sampling area), as
-well as measures that produce a distribution of values as output (e.g.
-frequency distribution of patch sizes in the sampling area). The results
-are stored as raster maps.
+single values as output (e.g. mean patch size in the sampling area),
+as well as measures that produce a distribution of values as output
+(e.g. frequency distribution of patch sizes in the sampling area). The
+results are stored as raster maps.
 
 <p>
-The general procedure to calculate an index from a raster map is
-two-fold:
+The general procedure to calculate an index from a raster map is two-fold:
 
 <ol>
-<li>run <em>r.li.setup</em>: create a configuration file selecting the
-    parts of raster to analyze.
+<li>run <em>r.li.setup</em>: create a configuration file selecting the parts of
+    raster to analyze.
 
-<li>run <em>r.li.'index'</em> (e.g., <em>r.li.patchdensity</em>) for
-    calculate the selected index using on the areas selected on
-    configuration file.
+<li>run <em>r.li.'index'</em> (e.g., <em>r.li.patchdensity</em>) for calculate the selected
+    index using on the areas selected on configuration file.
 </ol>
 
+<h2>NOTE</h2>
 
-<h2>NOTES</h2>
-
-Also the <em>r.li.daemon</em> has a main function and it can be run, but
-it is only a template for development of new indices.
+Also the <em>r.li.daemon</em> has a main function and it can be run, but it is only a
+template for development of new indices.
 <!-- mhh ??: -->
-The function itself has no meaning, it can only be used for debugging.
-
+The function itself has no meaning, it can be used only for debug.
 
 <h2>EXAMPLE</h2>
 
@@ -81,10 +76,10 @@ Spearfish region, using a 5x5 moving window, follow this procedure:
   r.li.setup
 </pre></div>
   <li> The main <em>r.li.setup</em> window is displayed, click on "New"
-  <li> Now it is displayed the new configuration window, enter the
-	configuration file name (e.g., "my_conf", do not use absolute
-	paths)  and the name of raster map (e.g., "geology"). The other
-	fields are not needed for this configuration.
+  <li> Now it is displayed the new configuration window,
+	enter the configuration file name (e.g., "my_conf", do not use absolute paths) 
+	and the name of raster map (e.g., "geology").
+	The other fields are not needed for this configuration.
   <li> Click on "Setup sampling frame", select "Whole maplayer" and click "OK"
   <li> Click on "Setup sampling areas", select "Moving window" and click "OK"
   <li> Click on "Use keyboard to enter moving window dimension"
@@ -124,7 +119,6 @@ program rescale it automatically. For instance if you have selected a
 5x5 sample area on 100x100 raster map, and you use the same
 configuration file on a 200x200 raster map, then the sample area is
 10x10.
-
 
 <h2>SEE ALSO</h2>
 

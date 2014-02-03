@@ -1,4 +1,5 @@
 <h2>DESCRIPTION</h2>
+
 <em>r.li.renyi</em> 
 calculates the "renyi's diversity index" as:<br>
 <img src="r_li_renyi.png"> <br>
@@ -12,37 +13,28 @@ with: <br>
 </ul>
 
 <h2>NOTES</h2>
-Do not use absolute path names for output files. They are raster if
-moving window disposition was selected, otherwise they are in
-<tt>~/.r.li/output/</tt> folder.
-<br>
-If the input raster contains NULL value cells, <em>r.li.renyi</em>
-returns -1 for these cells. <br>
+
+Do not use absolute path names for the <b>output</b> map/file.
+If the "moving window" method was selected in <b>r.li.setup</b>, then the
+output will be a raster map, otherwise an ASCII file will be generated in
+the <tt>~/.r.li/output/</tt> folder.
+<p>
+
+If input raster contain NULL values <em>r.li.renyi</em> returns -1.<br>
 If you want to keep NULL values instead, run subsequently on the resulting map:
-<br>
 <div class="code"><pre>
-r.null setnull=-1 map=my_map
+r.null setnull=-1 input=my_map
 </pre></div>
+after index calculation.
 
 <h2>EXAMPLES</h2>
+
 To calculate Renyi's diversity index on map "my_map", using the
 previously created "my_conf" configuration file (<em>r.li.setup</em>)
 and saving results in "my_out" raster map, run:<br>
 <div class="code"><pre>
-r.li.renyi map=my_map conf=my_conf output=my_out alpha=0.6
+r.li.renyi input=my_map conf=my_conf output=my_out alpha=0.6
 </pre></div>
-
-<h2>NOTES</h2>
-Do not use absolute path names for output files. They are raster if
-moving window disposition was selected, otherwise they are in
-~/.r.li/output folder. <br>
-
-If input raster is full of null values <em>r.li.renyi</em> returns -1.<br>
-If you want to have null values instead run <br>
-<div class="code"><pre>
-r.null setnull=-1 map=my_map
-</pre></div>
-after index calculation.
 
 <h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
@@ -56,8 +48,10 @@ Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a
 </em>
 
 <h2>AUTHORS</h2>
-Luca Delucchi and Duccio Rocchini, Fondazione E. Mach (Italy), based on the <em>r.li.shannon</em> code
-developed by Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
+Luca Delucchi and Duccio Rocchini, Fondazione E. Mach (Italy), based on
+the <em>r.li.shannon</em> code developed by Serena Pallecchi student of
+Computer Science University of Pisa (Italy).<br>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
 
