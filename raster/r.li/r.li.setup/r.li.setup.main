@@ -88,7 +88,7 @@ proc setupSamplingArea {widget} {
 	frame $widget.samplingArea.choice
 	pack $widget.samplingArea.choice
 	set selection ""
-	radiobutton $widget.samplingArea.choice.whole -text "Whole maplayer" -relief flat -variable selection -value whole -width 40 -anchor w 
+	radiobutton $widget.samplingArea.choice.whole -text "Whole map layer" -relief flat -variable selection -value whole -width 40 -anchor w 
 	radiobutton $widget.samplingArea.choice.regions -text "Regions" -relief flat -variable selection -value regions -width 40 -anchor w
 	radiobutton $widget.samplingArea.choice.units -text "Sample units" -relief flat -variable selection -value units -width 40 -anchor w
 	radiobutton $widget.samplingArea.choice.window -text "Moving window" -relief flat -variable selection -value window -width 40 -anchor w
@@ -130,7 +130,7 @@ proc setupSamplingFrame {widget} {
 	pack $widget.samplingFrame.choice
 	# choice selection
 	set selection ""
-	radiobutton $widget.samplingFrame.choice.whole -text "Whole maplayer" -relief flat -variable selection -value whole -width 25 -anchor w
+	radiobutton $widget.samplingFrame.choice.whole -text "Whole map layer" -relief flat -variable selection -value whole -width 25 -anchor w
 	radiobutton $widget.samplingFrame.choice.keyboard -text "Keyboard setting" -relief flat -variable selection -value keyboard -width 25 -anchor w
 	radiobutton $widget.samplingFrame.choice.mouse -text "Draw the sampling frame" -relief flat -variable selection -value mouse -width 25 -anchor w
 	pack $widget.samplingFrame.choice.whole $widget.samplingFrame.choice.keyboard $widget.samplingFrame.choice.mouse
