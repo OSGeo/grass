@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-30 22:30+0100\n"
-"PO-Revision-Date: 2014-01-01 11:06+0100\n"
+"PO-Revision-Date: 2014-02-03 07:52+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: French <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -326,9 +326,8 @@ msgid "Tried to pop an empty stack"
 msgstr "A tenté de dépiler une mémoire vide"
 
 #: ../lib/ogsf/gsd_surf.c:1742
-#, fuzzy
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
-msgstr "Non concordance des points de surface de coupe. Vérifiez les résolutions."
+msgstr "Non concordance des points de surfaces de coupe. Vérifiez les résolutions."
 
 #: ../lib/ogsf/gsdrape.c:207
 msgid "Unable to process vector map - out of memory"
@@ -4446,22 +4445,19 @@ msgid "%d new boundaries"
 msgstr "%d nouveaux contours"
 
 #: ../lib/vector/Vlib/snap.c:213
-#, fuzzy
 msgid "Snap vertices Pass 1: select points"
 msgstr "Accrochage des sommets passe 1 : sélection des points"
 
 #: ../lib/vector/Vlib/snap.c:267
-#, fuzzy
 msgid "Snap vertices Pass 2: assign anchor vertices"
 msgstr "Accrochage des sommets passe 2 : assignation des ancrages de sommets"
 
 #: ../lib/vector/Vlib/snap.c:336
-#, fuzzy
 msgid "Snap vertices Pass 3: snap to assigned points"
-msgstr "Accrochage des sommets pass 3 : accrochage sur les points assignés"
+msgstr "Accrochage des sommets passe 3 : accrochage sur les points assignés"
 
 #: ../lib/vector/Vlib/snap.c:518
-#, fuzzy, c-format
+#, c-format
 msgid "Snapped vertices: %d"
 msgstr "Sommets accrochés : %d"
 
@@ -5734,9 +5730,8 @@ msgid "Next edge was visited (left) but it is not the first one !!! breaking loo
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:648
-#, fuzzy
 msgid "side != 0 feature not implemented"
-msgstr "fonctionnalité side != 0 non implémentée"
+msgstr "fonction side != 0 non implémentée"
 
 #: ../lib/vector/Vlib/buffer2.c:890 ../lib/vector/Vlib/buffer2.c:937
 msgid "zero area size"
@@ -5756,8 +5751,9 @@ msgid "%d errors in category string"
 msgstr ""
 
 #: ../lib/vector/Vlib/array.c:142 ../lib/vector/Vlib/array.c:267
+#, fuzzy
 msgid "Mixed area and other type requested for vector array"
-msgstr ""
+msgstr "Mélange de surface et d'autre type demandé pour le vecteur"
 
 #: ../lib/vector/Vlib/array.c:152 ../lib/vector/Vlib/array.c:175
 #: ../lib/vector/Vlib/array.c:304 ../lib/vector/Vlib/array.c:336
@@ -6649,9 +6645,9 @@ msgid "Taking too long to find points for interpolation - please change the regi
 msgstr "Recherche de points pour l'interpolation trop longue -- merci de changer la région pour la zone où se trouvent vos points. Poursuite des calculs ..."
 
 #: ../lib/rst/interp_float/interp2d.c:214
-#, c-format
+#, fuzzy, c-format
 msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
-msgstr ""
+msgstr "Dépassement - augmentation de la tension suggérée. Le dépassement se produit à la cellule (%d,%d), valeur Z %f, zmin %f, zmax %f."
 
 #: ../lib/rst/interp_float/input2d.c:48
 #, c-format
