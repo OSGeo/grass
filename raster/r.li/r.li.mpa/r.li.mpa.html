@@ -13,6 +13,23 @@ with:<br>
   </li>
 </ul>
 
+<h2>NOTES</h2>
+
+Do not use absolute path names for the <b>output</b> map/file.
+If the "moving window" method was selected in <b>r.li.setup</b>, then the
+output will be a raster map, otherwise an ASCII file will be generated in
+the <tt>~/.r.li/output/</tt> folder.
+<p>
+If input raster is full of null values r.li.mpa consider to
+have 0 patch.<br>
+If area is 0 r.li.mpa returns -1; it is possible only if the
+raster is masked <br>
+If you want to have null values instead run <br>
+<div class="code"><pre>
+r.null setnull=-1 input=my_map
+</pre></div>
+after index calculation.
+
 <h2>EXAMPLES</h2>
 To calculate mean pixel attribute index on map my_map, using
 my_conf configuration file and saving results in
@@ -21,19 +38,10 @@ my_out file run:<br>
 r.li.mpa input=my_map conf=my_conf output=my_out
 </pre></div>
 
-<h2>NOTES</h2>
-Do not use absolute path names for output files. They are raster if
-moving window disposition was selected, otherwise they are in
-~/.r.li/output folder.<br>
-If input raster is full of null values r.li.mpa consider to
-have 0 patch.<br>
-If area is 0 r.li.mpa returns -1; it is possible only if the
-raster is masked <br>
-If you want to have null values instead run <br>
-<div class="code"><pre>
-r.null setnull=-1 map=my_map
-</pre></div>
-after index calculation.
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>SEE ALSO</h2>
 <em>

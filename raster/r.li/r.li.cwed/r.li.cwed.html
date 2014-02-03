@@ -17,6 +17,26 @@ The input file have a row for each couple of patch type that we want to
 consider in the calculation. Each row must to have this syntax:<br>
 <small>patchType1,patchType2,dissimilarityBetweenPatchType1andPatchType2</small><br>
 
+
+<h2>NOTES</h2>
+
+Do not use absolute path names for the <b>output</b> map/file.
+If the "moving window" method was selected in <b>r.li.setup</b>, then the
+output will be a raster map, otherwise an ASCII file will be generated in
+the <tt>~/.r.li/output/</tt> folder.
+<p>
+<br>
+If the raster is full of null value it is considered to have 0 patch and CWED=0.
+If Area is 0 r.li.cwed returns -1. This is possible
+only if the map is masked.<br>
+If you want to have null values instead run <br>
+<div class="code"><pre>
+r.null setnull=-1 input=my_map
+</pre></div>
+after index calculation.<br>
+<br>
+
+
 <h2>EXAMPLES</h2>
 To calculate mean pixel attribute index on map my_map, using
 my_conf configuration file and saving results in
@@ -31,21 +51,6 @@ r.li.cwed input=my_map conf=my_conf path=my_file output=my_out
 56,12,0.54<br>
 23,66,0.99<br>
 
-<h2>NOTES</h2>
-Do not use absolute path names for output files. They are raster if
-moving window disposition was selected, otherwise they are in
-~/.r.li/output folder.
-<br>
-If the raster is full of null value it is considered to have 0 patch and CWED=0.
-If Area is 0 r.li.cwed returns -1. This is possible
-only if the map is masked.<br>
-If you want to have null values instead run <br>
-<div class="code"><pre>
-r.null setnull=-1 map=my_map
-</pre></div>
-after index calculation.<br>
-<br>
-
 <h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
@@ -53,13 +58,14 @@ Gen. Tech. Rep. PNW-351.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.li.html">r.li</A></em> package overview <br>
-<em><a href="r.li.daemon.html">r.li.daemon</A></em><br>
-<em><a href="r.li.setup.html">r.li.setup</A></em>
+<em><a href="r.li.html">r.li</a></em> package overview <br>
+<em><a href="r.li.daemon.html">r.li.daemon</a></em><br>
+<em><a href="r.li.setup.html">r.li.setup</a></em>
 
 <h2>AUTHORS</h2>
 Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
 
