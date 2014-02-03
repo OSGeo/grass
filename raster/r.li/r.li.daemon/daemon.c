@@ -56,8 +56,6 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
     struct list *l;
     msg m, doneJob;
 
-    /* int perc=0; */
-
     g = (struct g_area *) G_malloc(sizeof(struct g_area));
     g->maskname = NULL;
     l = (struct list*) G_malloc(sizeof(struct list));
@@ -208,7 +206,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 
     token = strtok(buf, " ");
     if (strcmp("SAMPLINGFRAME", token) != 0)
-	G_fatal_error(_("Unable to parse configuration file"));
+	G_fatal_error(_("Unable to parse configuration file (sampling frame)"));
 
     rel_x = atof(strtok(NULL, "|"));
     rel_y = atof(strtok(NULL, "|"));
@@ -288,7 +286,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
     else if (strcmp("MASKEDSAMPLEAREA", token) == 0) {
 	double rel_sa_x, rel_sa_y, rel_sa_rl, rel_sa_cl;
 	int aid = 1;
-	char maskname[GNAME_MAX];
+	char maskname[GNAME_MAX] = {'\0'};
 
 	do {
 	    rel_sa_x = atof(strtok(NULL, "|"));
@@ -296,7 +294,6 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 	    rel_sa_rl = atof(strtok(NULL, "|"));
 	    rel_sa_cl = atof(strtok(NULL, "|"));
 	    strcpy(maskname, strtok(NULL, "\n"));
-
 	    if (rel_sa_x == -1 && rel_sa_y == -1) {
 		/* runtime disposition */
 		int sa_rl, sa_cl;
@@ -336,7 +333,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
     else if (strcmp("MASKEDOVERLAYAREA", token) == 0) {
 	double sa_n, sa_s, sa_w, sa_e;
 	int aid = 1;
-	char maskname[GNAME_MAX];
+	char maskname[GNAME_MAX] = { '\0' };
 	msg m;
 
 	do {
@@ -347,10 +344,24 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 	    sa_w = atof(strtok(NULL, "\n"));
 
 	    m.type = MASKEDAREA;
-	    m.f.f_ma.x = (int)rint((cellhd.north - sa_n) * cellhd.ns_res);
-	    m.f.f_ma.y = (int)rint((cellhd.west + sa_w) * cellhd.ew_res);
-	    m.f.f_ma.rl = (int)rint((sa_n - sa_s) * cellhd.ns_res);
-	    m.f.f_ma.cl = (int)rint((sa_e - sa_w) * cellhd.ew_res);
+
+	    struct Cell_head window;
+	    /* Get the window setting. g.region rast=<input raster> */
+	    G_get_window(&window);
+	    /* Each input overlay area from input vector are converted to raster
+	    via v.to.rast. See r.li.setup/sample_area_vector.sh. This is to used 
+	    only for reading the region (NS, EW). */
+
+	    /* Get start x and y position of masked overlay raster with respect 
+	    to input raster region from window. 
+	    sa_n, sa_e are read from configuration file. */
+	    m.f.f_ma.x = (int)G_easting_to_col(sa_e, &window);
+	    m.f.f_ma.y = (int)G_northing_to_row(sa_n, &window);
+
+	    /* Get row count and column count of overlay raster */
+	    m.f.f_ma.rl = (int)rint((sa_n - sa_s) / cellhd.ns_res);
+	    m.f.f_ma.cl = (int)rint((sa_e - sa_w) / cellhd.ew_res);
+
 	    m.f.f_ma.aid = aid;
 	    strcpy(m.f.f_ma.mask, maskname);
 	    aid++;
@@ -358,18 +369,20 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 	}
 	while ((token = strtok(NULL, " ")) != NULL &&
 	       (strcmp(token, "MASKEDOVERLAYAREA") == 0));
+
 	if (strcmp(token, "RASTERMAP") != 0)
 	    G_fatal_error(_("Irregular maskedoverlay areas definition"));
+
 	token = strtok(NULL, "\n");
-	if (strcmp(token, raster) != 0)
+	if (strcmp(token, raster_) != 0)
 	    G_fatal_error(_("The configuration file can be used only with \
-			%s rasterfile"), token);
+			%s rasterfile and not with %s "), token, raster_);
 	close(setup);
 	return NORMAL;
-
     }
     else
-	G_fatal_error(_("Illegal configuration file (sample area)"));
+	G_fatal_error(_("Unable to parse configuration file (sample area)"));
+
     close(setup);
     return ERROR;
 }
@@ -472,7 +485,7 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
 	r_strat_len = (int)rint(g->rows / r_strat);
 	c_strat_len = (int)rint(g->cols / c_strat);
 	if (r_strat_len < g->rl || c_strat_len < g->cl)
-	    G_fatal_error(_("Too many strats for raster map"));
+	    G_fatal_error(_("Too many stratified random sample for raster map"));
 	loop = r_strat * c_strat;
 	srandom(0);
 	for (i = 0; i < loop; i++) {

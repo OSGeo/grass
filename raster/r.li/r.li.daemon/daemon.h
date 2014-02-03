@@ -20,6 +20,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include "list.h"
+#include "defs.h"
 
 
 /**
