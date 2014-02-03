@@ -158,7 +158,7 @@ switch $selection {
 		if { $env(RASTER) != "" } then {
 			exec echo "SAMPLINGFRAME 0|0|1|1" >> $tmp.set
 			updateSF_Environment
-			tk_messageBox -message "Whole maplayer set as sampling frame" -type ok
+			tk_messageBox -message "Whole map layer set as sampling frame" -type ok
 			$button configure -state disabled
 		} else {
 			tk_messageBox -message "Please set raster name first" -type ok -icon error
@@ -232,7 +232,7 @@ switch $selection {
 		set rl [expr double($env(SF_RL)) /double($rows) ]
 		set cl [expr double($env(SF_CL)) /double($cols) ]
 		exec echo "SAMPLEAREA $x|$y|$rl|$cl" >> $tmp.set
-		tk_messageBox -message "Whole maplayer set as sampling area" -type ok
+		tk_messageBox -message "Whole map layer set as sampling area" -type ok
 	}
 	regions {
 	setSampleRegions $widget
@@ -373,7 +373,7 @@ proc saveWindow {sel number1 number2 number3 maskname widget} {
 				set cl [expr double($number1) /double($cols) ]
 				exec echo "SAMPLEAREA -1|-1|$rl|$cl" >> $env(TMP).set
 				exec  echo "MOVINGWINDOW" >> $env(TMP).set
-				tk_messageBox -message " Moving Windows Setted "  -type ok
+				tk_messageBox -message " Moving Windows Set "  -type ok
 				destroy $widget
 			}
 		} else {
@@ -392,7 +392,7 @@ proc saveWindow {sel number1 number2 number3 maskname widget} {
 				set rl [expr double($env(CIR_RL)) /double($rows)]
 				set cl [expr double($env(CIR_CL)) /double($cols)]
 				exec echo "MASKEDSAMPLEAREA -1|-1|$rl|$cl|$maskname" >> $env(TMP).set
-				tk_messageBox -message " Moving Windows Setted "  -type ok
+				tk_messageBox -message " Moving Windows Set "  -type ok
 				exec  echo "MOVINGWINDOW" >> $env(TMP).set
 				destroy $widget
 				}
