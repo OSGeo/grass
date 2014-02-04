@@ -23,7 +23,9 @@ htmlfiles = glob.glob1(path, '*.html')
 for fname in htmlfiles:
     fil = open(os.path.join(path, fname))
     # TODO maybe move to Python re (regex)
-    lines=fil.readlines()
+    lines = fil.readlines()
+    # remove empty lines
+    lines = [x for x in lines if x != '\n']
     try:
         index_keys = lines.index('<h2>KEYWORDS</h2>\n') + 1
         index_desc = lines.index('<h2>NAME</h2>\n') + 1
@@ -63,6 +65,5 @@ for key, values in sorted(keywords.iteritems()):
     keywordsfile.write(keyword_line)
 
 keywordsfile.write("</dl>\n")
-write_html_footer(keywordsfile, "index.html", year)  
+write_html_footer(keywordsfile, "index.html", year)
 keywordsfile.close()
-    
