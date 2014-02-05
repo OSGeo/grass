@@ -56,7 +56,6 @@ try:
 except ImportError, e:
     print >> sys.stderr, _("Unable to import pyGRASS: %s\n"
                            "Some functionality will be not accessible") % e
-import grass.temporal as tgis
 
 from gui_core.widgets  import ManageSettingsWidget
 
@@ -449,6 +448,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         
         if element in ('stds', 'strds', 'str3ds', 'stvds'):
             if self.tgis_error is False:
+                import grass.temporal as tgis
                 filesdict = tgis.tlist_grouped(elementdict[element], element == 'stds')
             else:
                 filesdict = None
@@ -673,6 +673,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             if self.type in ('stds', 'strds', 'str3ds', 'stvds'):
                 # Initiate the temporal framework. Catch database error
                 # and set the error flag for the stds listing.
+                import grass.temporal as tgis
                 try:
                     tgis.init(True)
                 except messages.FatalError, e:
