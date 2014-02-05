@@ -242,8 +242,9 @@ class Module(object):
             # call the command with --interface-description
             get_cmd_xml = subprocess.Popen([cmd, "--interface-description"],
                                            stdout=subprocess.PIPE)
-        except OSError:
-            str_err = "Module %r not found, please check that the module exist"
+        except OSError as e:
+            print("OSError error({0}): {1}".format(e.errno, e.strerror))
+            str_err = "Error running: `%s --interface-description`."
             raise GrassError(str_err % self.name)
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
