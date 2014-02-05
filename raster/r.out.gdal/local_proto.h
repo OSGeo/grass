@@ -61,4 +61,8 @@ int exact_checks(GDALDataType, const char *, const char *,
                  struct Cell_head *, RASTER_MAP_TYPE, double,
 		 const char *, int);
 
+/* attr.c */
+int export_attr(GDALDatasetH, int, const char *, 
+		const char *, RASTER_MAP_TYPE);
+
 #endif /* __LOCAL_PROTO_H__ */
