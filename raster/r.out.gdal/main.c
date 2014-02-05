@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 {
 
     struct GModule *module;
-    struct Flag *flag_l, *flag_c, *flag_f;
+    struct Flag *flag_l, *flag_c, *flag_f, *flag_t;
     struct Option *input, *format, *type, *output, *createopt, *metaopt,
 	*nodataopt;
 
@@ -140,6 +140,11 @@ int main(int argc, char *argv[])
     flag_c->label = _("Do not write GDAL standard colortable");
     flag_c->description = _("Only applicable to Byte or UInt16 data types.");
     flag_c->guisection = _("Creation");
+
+    flag_t = G_define_flag();
+    flag_t->key = 't';
+    flag_t->label = _("Write raster attribute table");
+    flag_t->description = _("Some export formats may not be supported.");
 
     flag_f = G_define_flag();
     flag_f->key = 'f';
@@ -588,6 +593,11 @@ int main(int argc, char *argv[])
 	if (retval == -1) {
 	    G_warning(_("Unable to export raster map <%s>"),
 		      ref.file[band].name);
+	}
+	else if (flag_t->answer) {
+	    retval = export_attr(hCurrDS, band + 1, ref.file[band].name,
+	     ref.file[band].mapset, maptype);
+
 	}
     }
 
