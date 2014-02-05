@@ -43,6 +43,10 @@
 #include <errno.h>
 #include <unistd.h>
 
+extern "C" {
+#include <grass/gis.h>
+}
+
 //#include <ami_stream.h>
 #include <grass/iostream/ami_stream.h>
 
@@ -81,19 +85,11 @@ ami_single_temp_name(const std::string& base, char* tmp_path) {
   }
   sprintf(tmp_path, "%s/%s_XXXXXX", base_dir, base.c_str());
 
-#ifdef __MINGW32__
-  fd = mktemp(tmp_path) ? open(tmp_path, O_CREAT|O_EXCL|O_RDWR, 0600) : -1;
-#else
-  fd = mkstemp(tmp_path);
-#endif
+  fd = G_mkstemp(tmp_path, O_RDWR, 0600);
 
   if (fd == -1) {
     cerr <<  "ami_single_temp_name: ";
-#ifdef __MINGW32__
-    perror("mktemp failed: ");
-#else
-    perror("mkstemp failed: ");
-#endif
+    perror("G_mkstemp() failed: ");
     assert(0);
     exit(1);
   }
