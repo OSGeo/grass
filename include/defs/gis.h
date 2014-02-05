@@ -623,6 +623,11 @@ char *G_tempfile(void);
 char *G__tempfile(int);
 void G__temp_element(char *);
 
+/* mkstemp.c */
+char *G_mktemp(char *);
+int G_mkstemp(char *, int, int);
+FILE *G_mkstemp_fp(char *, int, int);
+
 /* timestamp.c */
 void G_init_timestamp(struct TimeStamp *);
 void G_set_timestamp(struct TimeStamp *, const struct DateTime *);
