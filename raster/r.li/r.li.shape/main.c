@@ -75,10 +75,13 @@ int shape_index(int fd, char **par, struct area_entry *ad, double *result)
     if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
 	    return 0;
+
 	mask_buf = malloc(ad->cl * sizeof(int));
+
 	for (i = 0; i < ad->rl; i++) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
 		return 0;
+
 	    for (k = 0; k < ad->cl; k++) {
 		if (mask_buf[k] == 0) {
 		    null_count++;
@@ -87,7 +90,7 @@ int shape_index(int fd, char **par, struct area_entry *ad, double *result)
 	}
     }
 
-    /*calculate distance */
+    /* calculate distance */
     G_begin_distance_calculations();
     /* EW Dist at North edge */
     EW_DIST1 = G_distance(hd.east, hd.north, hd.west, hd.north);
