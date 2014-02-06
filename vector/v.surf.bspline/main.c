@@ -156,9 +156,9 @@ int main(int argc, char *argv[])
     type_opt->answer = "linear";
     type_opt->guisection = _("Settings");
     G_asprintf((char **) &(type_opt->descriptions),
-	       "linear;%s;cubic;%s",
-	       _("Linear interpolation"),
-	       _("Cubic interpolation"));
+	       "bilinear;%s;bicubic;%s",
+	       _("Bilinear interpolation"),
+	       _("Bicubic interpolation"));
 
     lambda_f_opt = G_define_option();
     lambda_f_opt->key = "lambda_i";

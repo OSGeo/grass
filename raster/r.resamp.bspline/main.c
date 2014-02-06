@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("resample"));
     G_add_keyword(_("interpolation"));
     module->description =
-	_("Performs cubic or linear spline interpolation with Tykhonov regularization.");
+	_("Performs bilinear or bicubic spline interpolation with Tykhonov regularization.");
 
     in_opt = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -117,13 +117,13 @@ int main(int argc, char *argv[])
 
     method_opt = G_define_standard_option(G_OPT_R_INTERP_TYPE);
     method_opt->description = _("Spline interpolation algorithm");
-    method_opt->options = "linear,cubic";
-    method_opt->answer = "cubic";
+    method_opt->options = "bilinear,bicubic";
+    method_opt->answer = "bicubic";
     method_opt->guisection = _("Settings");
     G_asprintf((char **) &(method_opt->descriptions),
-	       "linear;%s;cubic;%s",
-	       _("Linear interpolation"),
-	       _("Cubic interpolation"));
+	       "bilinear;%s;bicubic;%s",
+	       _("Bilinear interpolation"),
+	       _("Bicubic interpolation"));
 
     lambda_f_opt = G_define_option();
     lambda_f_opt->key = "lambda";

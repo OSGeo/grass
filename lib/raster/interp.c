@@ -199,11 +199,11 @@ int Rast_option_to_interp_type(const struct Option *option)
         if (strcmp(option->answer, "nearest") == 0) {
             interp_type = INTERP_NEAREST;
         }
-        else if (strcmp(option->answer, "linear") == 0) {
-            interp_type = INTERP_LINEAR;
+        else if (strcmp(option->answer, "bilinear") == 0) {
+            interp_type = INTERP_BILINEAR;
         }
-        else if (strcmp(option->answer, "cubic") == 0) {
-            interp_type = INTERP_CUBIC;
+        else if (strcmp(option->answer, "bicubic") == 0) {
+            interp_type = INTERP_BICUBIC;
         }
     }
 
