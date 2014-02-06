@@ -82,17 +82,17 @@ int main(int argc, char *argv[])
     rastout = G_define_standard_option(G_OPT_R_OUTPUT);
 
     method = G_define_standard_option(G_OPT_R_INTERP_TYPE);
-    method->options = "nearest,linear,cubic,lanczos";
-    method->answer = "linear";
+    method->options = "nearest,bilinear,bicubic,lanczos";
+    method->answer = "bilinear";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (G_strcasecmp(method->answer, "nearest") == 0)
 	neighbors = 1;
-    else if (G_strcasecmp(method->answer, "linear") == 0)
+    else if (G_strcasecmp(method->answer, "bilinear") == 0)
 	neighbors = 2;
-    else if (G_strcasecmp(method->answer, "cubic") == 0)
+    else if (G_strcasecmp(method->answer, "bicubic") == 0)
 	neighbors = 4;
     else if (G_strcasecmp(method->answer, "lanczos") == 0)
 	neighbors = 5;

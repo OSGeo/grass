@@ -18,8 +18,8 @@
 */
 #define INTERP_UNKNOWN   0
 #define INTERP_NEAREST   1		/* nearest neighbor interpolation  */
-#define INTERP_LINEAR    2		/* linear interpolation            */
-#define INTERP_CUBIC     3		/* cubic interpolation             */
+#define INTERP_BILINEAR  2		/* bilinear interpolation          */
+#define INTERP_BICUBIC   3		/* bicubic interpolation           */
 
 /*** typedefs ***/
 typedef int RASTER_MAP_TYPE;
