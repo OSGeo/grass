@@ -75,8 +75,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("resample"));
+    G_add_keyword(_("interpolation"));
     module->description =
-	_("Resamples raster map layers to a finer grid using interpolation.");
+	_("Resamples raster map to a finer grid using interpolation.");
 
     rastin = G_define_standard_option(G_OPT_R_INPUT);
     rastout = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -84,7 +85,8 @@ int main(int argc, char *argv[])
     method = G_define_standard_option(G_OPT_R_INTERP_TYPE);
     method->options = "nearest,bilinear,bicubic,lanczos";
     method->answer = "bilinear";
-
+    method->guisection = _("Method");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
