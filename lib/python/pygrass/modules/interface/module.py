@@ -53,6 +53,7 @@ import subprocess
 from itertools import izip_longest
 from xml.etree.ElementTree import fromstring
 import time
+import sys
 
 
 from grass.pygrass.errors import GrassError, ParameterError
@@ -241,7 +242,8 @@ class Module(object):
         try:
             # call the command with --interface-description
             get_cmd_xml = subprocess.Popen([cmd, "--interface-description"],
-                                           stdout=subprocess.PIPE)
+                                           stdout=subprocess.PIPE,
+                                           shell=(sys.platform == "win32"))
         except OSError as e:
             print("OSError error({0}): {1}".format(e.errno, e.strerror))
             str_err = "Error running: `%s --interface-description`."
@@ -468,7 +470,8 @@ class Module(object):
                                       stdin=self.stdin_,
                                       stdout=self.stdout_,
                                       stderr=self.stderr_,
-                                      env=self.env_)
+                                      env=self.env_,
+                                      shell=(sys.platform == "win32"))
         if self.finish_:
             stdout, stderr = self.popen.communicate(input=self.stdin)
             self.outputs['stdout'].value = stdout if stdout else ''
