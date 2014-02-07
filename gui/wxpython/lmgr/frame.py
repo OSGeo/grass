@@ -1798,15 +1798,15 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay(show = True)
         
-        self._popupMenu((('layerRast3d', self.OnAddRaster3D),
+        self._popupMenu((('layer3d-raster', self.OnAddRaster3D),
                          (None, None),
                          ('layerRgb',    self.OnAddRasterRGB),
                          ('layerHis',    self.OnAddRasterHIS),
                          (None, None),
                          ('layerShaded', self.OnAddRasterShaded),
                          (None, None),
-                         ('layerRArrow', self.OnAddRasterArrow),
-                         ('layerRNum',   self.OnAddRasterNum)))
+                         ('layerRastarrow', self.OnAddRasterArrow),
+                         ('layerRastnum',   self.OnAddRasterNum)))
         
         # show map display
         self.GetMapDisplay().Show()
@@ -1826,8 +1826,8 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay(show = True)
 
-        self._popupMenu((('layerThematic', self.OnAddVectorTheme),
-                         ('layerChart',    self.OnAddVectorChart)))
+        self._popupMenu((('layerThememap', self.OnAddVectorTheme),
+                         ('layerThemechart',    self.OnAddVectorChart)))
         
         # show map display
         self.GetMapDisplay().Show()
