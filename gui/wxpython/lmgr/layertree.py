@@ -70,23 +70,23 @@ LMIcons = {
                             label = _('Add command layer')),
     'quit'       : MetaIcon(img = 'quit',
                             label = _('Quit')),
-    'layerRast'    : MetaIcon(img = 'layer-raster-add',
+    'layerRaster'    : MetaIcon(img = 'layer-raster-add',
                             label = _('Add raster map layer')),
     'layerRgb'     : MetaIcon(img = 'layer-rgb-add',
                             label = _('Add RGB map layer')),
     'layerHis'     : MetaIcon(img = 'layer-his-add',
                                     label = _('Add HIS map layer')),
     'layerShaded'  : MetaIcon(img = 'layer-shaded-relief-add',
-                            label = _('Add shaded relief map layer')),
-    'layerRArrow'  : MetaIcon(img = 'layer-aspect-arrow-add',
+                              label = _('Add shaded relief map layer')),
+    'layerRastarrow'  : MetaIcon(img = 'layer-aspect-arrow-add',
                             label = _('Add raster flow arrows')),
-    'layerRNum'    : MetaIcon(img = 'layer-cell-cats-add',
+    'layerRastnum'    : MetaIcon(img = 'layer-cell-cats-add',
                             label = _('Add raster cell numbers')),
-    'layerVect'    : MetaIcon(img = 'layer-vector-add',
+    'layerVector'    : MetaIcon(img = 'layer-vector-add',
                             label = _('Add vector map layer')),
-    'layerThematic': MetaIcon(img = 'layer-vector-thematic-add',
+    'layerThememap': MetaIcon(img = 'layer-vector-thematic-add',
                             label = _('Add thematic area (choropleth) map layer')),
-    'layerChart'   : MetaIcon(img = 'layer-vector-chart-add',
+    'layerThemechart'   : MetaIcon(img = 'layer-vector-chart-add',
                             label = _('Add thematic chart layer')),
     'layerGrid'    : MetaIcon(img = 'layer-grid-add',
                             label = _('Add grid layer')),
@@ -96,10 +96,10 @@ LMIcons = {
                             label = _('Add rhumbline layer')),
     'layerLabels'  : MetaIcon(img = 'layer-label-add',
                             label = _('Add labels')),
-    'layerRast3d'  : MetaIcon(img = 'layer-raster3d-add',
+    'layer3d-raster'  : MetaIcon(img = 'layer-raster3d-add',
                             label = _('Add 3D raster map layer'),
                             desc  =  _('Note that 3D raster data are rendered only in 3D view mode')),
-    'layerWS'      :  MetaIcon(img = 'layer-wms-add',
+    'layerWMS'      :  MetaIcon(img = 'layer-wms-add',
                             label = _('Add WMS layer.')),
     'layerOptions'  : MetaIcon(img = 'options',
                                label = _('Set options'))
@@ -210,16 +210,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def _setIcons(self, il):
         self._icon = {}
-        for iconName in ("layerRast", "layerRast3d", "layerRgb",
-                         "layerHis", "layerShaded", "layerRArrow",
-                         "layerRNum", "layerVect", "layerThematic",
-                         "layerChart", "layerGrid", "layerGeodesic",
+        for iconName in ("layerRaster", "layer3d-raster", "layerRgb",
+                         "layerHis", "layerShaded", "layerRastarrow",
+                         "layerRastnum", "layerVector", "layerThememap",
+                         "layerThemechart", "layerGrid", "layerGeodesic",
                          "layerRhumb", "layerLabels", "layerCmd",
-                         "layerWS"):
+                         "layerWMS"):
             iconKey = iconName[len("layer"):].lower()
             icon = LMIcons[iconName].GetBitmap(self.bmpsize)
             self._icon[iconKey] = il.Add(icon)
-        
+            
     def _getSelectedLayer(self):
         """!Get selected layer.
 
@@ -261,8 +261,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         return None
 
-    def _setIcon(self, item):
-        pass
+    def _setIcon(self, item, iconName):
+        self.SetItemImage(item, self._icon[iconName])
         
     def _setGradient(self, iType = None):
         """!Set gradient for items
@@ -1072,62 +1072,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         wx.CallAfter(self.CheckItem, layer, checked)
         
         # add text and icons for each layer ltype
-        label =  _('(double click to set properties)') + ' ' * 15
-        if ltype == 'raster':
-            self.SetItemImage(layer, self._icon['rast'])
-            self.SetItemText(layer, '%s %s' % (_('raster'), label))
-        elif ltype == '3d-raster':
-            self.SetItemImage(layer, self._icon['rast3d'])
-            self.SetItemText(layer, '%s %s' % (_('3D raster'), label))
-        elif ltype == 'rgb':
-            self.SetItemImage(layer, self._icon['rgb'])
-            self.SetItemText(layer, '%s %s' % (_('RGB'), label))
-        elif ltype == 'his':
-            self.SetItemImage(layer, self._icon['his'])
-            self.SetItemText(layer, '%s %s' % (_('HIS'), label))
-        elif ltype == 'shaded':
-            self.SetItemImage(layer, self._icon['shaded'])
-            self.SetItemText(layer, '%s %s' % (_('shaded relief'), label))
-        elif ltype == 'rastnum':
-            self.SetItemImage(layer, self._icon['rnum'])
-            self.SetItemText(layer, '%s %s' % (_('raster cell numbers'), label))
-        elif ltype == 'rastarrow':
-            self.SetItemImage(layer, self._icon['rarrow'])
-            self.SetItemText(layer, '%s %s' % (_('raster flow arrows'), label))
-        elif ltype == 'vector':
-            self.SetItemImage(layer, self._icon['vect'])
-            self.SetItemText(layer, '%s %s' % (_('vector'), label))
-        elif ltype == 'thememap':
-            self.SetItemImage(layer, self._icon['theme'])
-            self.SetItemText(layer, '%s %s' % (_('thematic area (choropleth) map'), label))
-        elif ltype == 'themechart':
-            self.SetItemImage(layer, self._icon['chart'])
-            self.SetItemText(layer, '%s %s' % (_('thematic charts'), label))
-        elif ltype == 'grid':
-            self.SetItemImage(layer, self._icon['grid'])
-            self.SetItemText(layer, '%s %s' % (_('grid'), label))
-        elif ltype == 'geodesic':
-            self.SetItemImage(layer, self._icon['geodesic'])
-            self.SetItemText(layer, '%s %s' % (_('geodesic line'), label))
-        elif ltype == 'rhumb':
-            self.SetItemImage(layer, self._icon['rhumb'])
-            self.SetItemText(layer, '%s %s' % (_('rhumbline'), label))
-        elif ltype == 'labels':
-            self.SetItemImage(layer, self._icon['labels'])
-            self.SetItemText(layer, '%s %s' % (_('vector labels'), label))
-        elif ltype == 'command':
+        if ltype == 'command':
             self.SetItemImage(layer, self._icon['cmd'])
         elif ltype == 'group':
             self.SetItemImage(layer, self.folder, CT.TreeItemIcon_Normal)
             self.SetItemImage(layer, self.folder_open, CT.TreeItemIcon_Expanded)
             self.SetItemText(layer, grouptext)
-        elif ltype == 'wms':            
-            self.SetItemImage(layer, self._icon['ws'])
-            self.SetItemText(layer, '%s %s' % (_('wms'), label))
         else:
-            self.SetItemImage(layer, self._icon['cmd'])
-            self.SetItemText(layer, '%s %s' % (_('unknown'), label))
-        
+            self.SetItemImage(layer, self._icon[ltype])
+            # do not use title() - will not work with ltype == '3d-raster'
+            self.SetItemText(layer, '%s %s' % (LMIcons["layer"+ltype[0].upper()+ltype[1:]].GetLabel(),
+                                               _('(double click to set properties)') + ' ' * 15))
+            
         if ltype != 'group':
             if lcmd and len(lcmd) > 1:
                 cmd = lcmd
