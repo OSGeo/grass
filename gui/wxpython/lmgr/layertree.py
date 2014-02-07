@@ -131,7 +131,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.optpage = {}                    # dictionary of notebook option pages for each map layer
         self.saveitem = {}                   # dictionary to preserve layer attributes for drag and drop
         self.first = True                    # indicates if a layer is just added or not
-        self.firstNewLayer = True            # indicates if first layer has been newly added to the layer tree
         self.flag = ''                       # flag for drag and drop hittest
         # layer change requires a rerendering
         # (used to request rendering only when layer changes are finished)
@@ -1042,8 +1041,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         return
                 item = self.GetNextVisible(item)
         
-        self.first = True
-        
         selectedLayer = self.GetSelectedLayer()
         # deselect active item
         if selectedLayer:
@@ -1094,7 +1091,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                             text = '', ct_type = 1, wnd = ctrl)
         else: # add first layer to the layer tree (first child of root)
             layer = self.PrependItem(parent = self.root, text = '', ct_type = 1, wnd = ctrl)
-
+        
         # layer is initially unchecked as inactive (beside 'command')
         # use predefined value if given
         if lchecked is not None:
@@ -1162,8 +1159,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetItemImage(layer, self.cmd_icon)
             self.SetItemText(layer, '%s %s' % (_('unknown'), label))
         
-        self.first = False
-        
         if ltype != 'group':
             if lcmd and len(lcmd) > 1:
                 cmd = lcmd
@@ -1218,6 +1213,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # run properties dialog if no properties given
             if len(cmd) == 0:
                 self.PropertiesDialog(layer, show = True)
+            else:
+                self.first = False
         
         else: # group
             self.SetPyData(layer, ({'cmd'      : None,
@@ -1242,7 +1239,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             if ltype == 'group':
                 self.OnRenameLayer(None)
-                
+
+        
         return layer
 
     def PropertiesDialog(self, layer, show = True):
@@ -1335,7 +1333,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.rerender = True
         nlayers = self.GetVisibleLayers()
         if not nlayers:
-            self.firstNewLayer = True # layer tree is empty
+            self.first = True # layer tree is empty
         self.Map.SetLayers(nlayers)
         
         if self.mapdisplay.GetToolbar('vdigit'):
@@ -1383,8 +1381,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     child = self.GetNextSibling(child)
             else:
                 mapLayer = self.GetLayerInfo(item, key = 'maplayer')
-                if not digitToolbar or \
-                       (digitToolbar and digitToolbar.GetLayer() != mapLayer):
+                if mapLayer and (not digitToolbar or \
+                       (digitToolbar and digitToolbar.GetLayer() != mapLayer)):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
         
@@ -1697,15 +1695,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # set region if auto-zooming is enabled or layer tree contains
         # only one map layer
         if dcmd:
-            if self.firstNewLayer or \
+            if self.first or \
                     UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
                 mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
                 if mapLayer.GetType() in ('raster', 'vector'):
                     self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
                                                         render = False)
             
-            self.firstNewLayer = False # first layer has been already
-                                       # added to the layer tree
+            self.first = False # first layer has been already added to
+                               # the layer tree
         
         # update nviz session        
         if self.lmgr.IsPaneShown('toolbarNviz') and dcmd:
