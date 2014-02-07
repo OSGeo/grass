@@ -757,7 +757,7 @@ class VDigitWindow(BufferedMapWindow):
         if UserSettings.Get(group = 'vdigit', key = 'bgmap',
                             subkey = 'value', internal = True) == '':
             # no background map -> copy from current vector map layer
-            nselected = self.bdigit.GetDisplay().SelectLinesByBox((pos1, pos2))
+            nselected = self.digit.GetDisplay().SelectLinesByBox((pos1, pos2))
             
             if nselected > 0:
                 # highlight selected features
