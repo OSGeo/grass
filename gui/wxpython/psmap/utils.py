@@ -21,7 +21,7 @@ import string
 from math import ceil, floor, sin, cos, pi
 
 try:
-    import Image as PILImage
+    from PIL import Image as PILImage
     havePILImage = True
 except ImportError:
     havePILImage = False
