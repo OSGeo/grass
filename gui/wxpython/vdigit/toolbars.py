@@ -20,7 +20,7 @@ from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 from gui_core.toolbars  import BaseToolbar, BaseIcons
-from gui_core.dialogs   import CreateNewVector
+from gui_core.dialogs   import CreateNewVector, VectorDialog
 from vdigit.preferences import VDigitSettingsDialog
 from core.debug         import Debug
 from core.settings      import UserSettings
@@ -556,6 +556,30 @@ class VDigitToolbar(BaseToolbar):
         
     def OnCopy(self, event):
         """!Copy selected features from (background) vector map"""
+        if not self.digit:
+            GError(_("No vector map open for editing."), self.parent)
+            return
+        
+        # select background map
+        dlg = VectorDialog(self.parent, title = _("Select background vector map"),
+                           layerTree = self.layerTree)
+        if dlg.ShowModal() != wx.ID_OK:
+            dlg.Destroy()
+            return
+        
+        mapName = dlg.GetName(full=True)
+        dlg.Destroy()
+        
+        # close open background map if any
+        if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
+                            internal = True):
+            self.digit.CloseBackgroundMap()
+        
+        # open background map for reading
+        UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
+                         value = str(mapName), internal = True)
+        self.digit.OpenBackgroundMap(mapName)
+        
         if self.action['desc'] == 'copyLine': # select previous action
             self.ToggleTool(self.addPoint, True)
             self.ToggleTool(self.additionalTools, False)
@@ -902,6 +926,11 @@ class VDigitToolbar(BaseToolbar):
                                         "vector map <%s>...") % self.mapLayer.GetName(),
                                       0)
             self.digit.CloseMap()
+
+            # close open background map if any
+            if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
+                                internal = True):
+                self.digit.CloseBackgroundMap()
             
             # TODO: replace by giface
             lmgr = self.parent.GetLayerManager()

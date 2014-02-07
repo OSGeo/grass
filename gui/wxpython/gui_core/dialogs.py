@@ -7,6 +7,7 @@ List of classes:
  - dialogs::SimpleDialog
  - dialogs::LocationDialog
  - dialogs::MapsetDialog
+ - dialogs::VectorDialog
  - dialogs::NewVectorDialog
  - dialogs::SavedRegion
  - dialogs::GroupDialog
@@ -183,8 +184,53 @@ class MapsetDialog(SimpleDialog):
 
     def GetMapset(self):
         return self.element.GetValue()
-    
-class NewVectorDialog(SimpleDialog):
+
+class VectorDialog(SimpleDialog):
+    def __init__(self, parent, title = _("Select vector map"), layerTree = None):
+        """!Dialog for selecting existing vector map
+
+        @param parent parent window
+        @param title window title
+        @param layerTree show only vector maps in given layer tree if not None
+        
+        @return dialog instance
+        """
+        SimpleDialog.__init__(self, parent, title)
+        
+        self.element = Select(parent = self.panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
+                              type = 'vector', layerTree = layerTree,
+                              validator = SimpleValidator(callback = self.ValidatorCallback))
+        self.element.SetFocus()
+        
+        self.warning = _("Name of vector map is missing.")
+        wx.CallAfter(self._layout)
+        
+    def _layout(self):
+        """!Do layout"""
+        self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                label = _("Name of vector map:")),
+                           proportion = 0, flag = wx.ALL, border = 1)
+        self.dataSizer.Add(item = self.element, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL, border = 1)
+        
+        self.panel.SetSizer(self.sizer)
+        self.sizer.Fit(self)
+
+    def GetName(self, full = False):
+        """!Get name of vector map to be created
+
+        @param full True to get fully qualified name
+        """
+        name = self.element.GetValue()
+        if full:
+            if '@' in name:
+                return name
+            else:
+                return name + '@' + grass.gisenv()['MAPSET']
+        
+        return name.split('@', 1)[0]
+
+class NewVectorDialog(VectorDialog):
     def __init__(self, parent, title = _("Create new vector map"),
                  disableAdd = False, disableTable = False, showType = False):
         """!Dialog for creating new vector map
@@ -197,18 +243,15 @@ class NewVectorDialog(SimpleDialog):
         
         @return dialog instance
         """
-        SimpleDialog.__init__(self, parent, title)
+        VectorDialog.__init__(self, parent, title)
         
-        self.element = Select(parent = self.panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
-                              type = 'vector', mapsets = [grass.gisenv()['MAPSET'],],
-                              validator = SimpleValidator(callback = self.ValidatorCallback))
-        self.element.SetFocus()
         # determine output format
         if showType:
             self.ftype = OgrTypeSelect(parent = self, panel = self.panel)
         else:
             self.ftype = None
         
+        # create attribute table
         self.table = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                  label = _("Create attribute table"))
         self.table.SetValue(True)
@@ -235,8 +278,6 @@ class NewVectorDialog(SimpleDialog):
         self.table.Bind(wx.EVT_CHECKBOX, self.OnTable)
         
         self.warning = _("Name of new vector map is missing.")
-        self._layout()
-        self.SetMinSize(self.GetSize())
         
     def OnTable(self, event):
         if self.keycol:
@@ -275,20 +316,7 @@ class NewVectorDialog(SimpleDialog):
         
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
-
-    def GetName(self, full = False):
-        """!Get name of vector map to be created
-
-        @param full True to get fully qualified name
-        """
-        name = self.element.GetValue()
-        if full:
-            if '@' in name:
-                return name
-            else:
-                return name + '@' + grass.gisenv()['MAPSET']
-        
-        return name.split('@', 1)[0]
+        self.SetMinSize(self.GetSize())
 
     def GetKey(self):
         """!Get key column name"""
