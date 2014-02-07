@@ -49,12 +49,11 @@ Created on Tue Apr  2 18:41:27 2013
 """
 
 from __future__ import print_function
-import subprocess
 from itertools import izip_longest
 from xml.etree.ElementTree import fromstring
 import time
 
-
+from grass.script.core import Popen, PIPE
 from grass.pygrass.errors import GrassError, ParameterError
 from parameter import Parameter
 from flag import Flag
@@ -240,8 +239,7 @@ class Module(object):
         self.name = cmd
         try:
             # call the command with --interface-description
-            get_cmd_xml = subprocess.Popen([cmd, "--interface-description"],
-                                           stdout=subprocess.PIPE)
+            get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
         except OSError as e:
             print("OSError error({0}): {1}".format(e.errno, e.strerror))
             str_err = "Error running: `%s --interface-description`."
@@ -457,18 +455,18 @@ class Module(object):
         """
         if self.inputs['stdin'].value:
             self.stdin = self.inputs['stdin'].value
-            self.stdin_ = subprocess.PIPE
+            self.stdin_ = PIPE
         if self.outputs['stdout'].value:
             self.stdout_ = self.outputs['stdout'].value
         if self.outputs['stderr'].value:
             self.stderr_ = self.outputs['stderr'].value
         cmd = self.make_cmd()
         start = time.time()
-        self.popen = subprocess.Popen(cmd,
-                                      stdin=self.stdin_,
-                                      stdout=self.stdout_,
-                                      stderr=self.stderr_,
-                                      env=self.env_)
+        self.popen = Popen(cmd,
+                           stdin=self.stdin_,
+                           stdout=self.stdout_,
+                           stderr=self.stderr_,
+                           env=self.env_)
         if self.finish_:
             stdout, stderr = self.popen.communicate(input=self.stdin)
             self.outputs['stdout'].value = stdout if stdout else ''
