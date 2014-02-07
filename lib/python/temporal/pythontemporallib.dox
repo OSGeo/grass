@@ -72,7 +72,6 @@ aggregation, extraction, map calculation, statistics as well as import and expor
 space time datasets are defined here:
 
 - python::temporal::aggregation
-- python::temporal::create
 - python::temporal::extract
 - python::temporal::factory
 - python::temporal::open_stds
