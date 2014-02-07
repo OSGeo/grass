@@ -791,7 +791,16 @@ class GMFrame(wx.Frame):
         if not dcmd:
             return
         
-        tree.OnStartEditing(None)
+        digitToolbar = self.GetMapDisplay().GetToolbar('vdigit')
+        if digitToolbar:
+            stopOnly = False
+            if mapLayer is digitToolbar.GetLayer():
+                stopOnly = True
+            tree.OnStopEditing(None) # TODO: change to signal
+            if stopOnly:
+                return
+        
+        tree.OnStartEditing(None) # TODO: change to signal
         
     def OnRunScript(self, event):
         """!Run user-defined script"""
