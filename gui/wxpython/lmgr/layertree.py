@@ -43,7 +43,6 @@ from core.debug           import Debug
 from core.settings        import UserSettings, GetDisplayVectSettings
 from vdigit.main          import haveVDigit
 from core.gcmd            import GWarning, GError, RunCommand
-from gui_core.toolbars    import BaseIcons
 from icons.icon           import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
 from gui_core.widgets import GenericValidator
@@ -67,36 +66,40 @@ LMIcons = {
                             label = _('Set vector output format')),
     'wmsImport'  : MetaIcon(img = 'layer-wms-add',
                             label = _('Import data from WMS server')),
-    'addCmd'     : MetaIcon(img = 'layer-command-add',
+    'layerCmd'     : MetaIcon(img = 'layer-command-add',
                             label = _('Add command layer')),
     'quit'       : MetaIcon(img = 'quit',
                             label = _('Quit')),
-    'addRgb'     : MetaIcon(img = 'layer-rgb-add',
+    'layerRast'    : MetaIcon(img = 'layer-raster-add',
+                            label = _('Add raster map layer')),
+    'layerRgb'     : MetaIcon(img = 'layer-rgb-add',
                             label = _('Add RGB map layer')),
-    'addHis'     : MetaIcon(img = 'layer-his-add',
+    'layerHis'     : MetaIcon(img = 'layer-his-add',
                                     label = _('Add HIS map layer')),
-    'addShaded'  : MetaIcon(img = 'layer-shaded-relief-add',
+    'layerShaded'  : MetaIcon(img = 'layer-shaded-relief-add',
                             label = _('Add shaded relief map layer')),
-    'addRArrow'  : MetaIcon(img = 'layer-aspect-arrow-add',
+    'layerRArrow'  : MetaIcon(img = 'layer-aspect-arrow-add',
                             label = _('Add raster flow arrows')),
-    'addRNum'    : MetaIcon(img = 'layer-cell-cats-add',
+    'layerRNum'    : MetaIcon(img = 'layer-cell-cats-add',
                             label = _('Add raster cell numbers')),
-    'addThematic': MetaIcon(img = 'layer-vector-thematic-add',
+    'layerVect'    : MetaIcon(img = 'layer-vector-add',
+                            label = _('Add vector map layer')),
+    'layerThematic': MetaIcon(img = 'layer-vector-thematic-add',
                             label = _('Add thematic area (choropleth) map layer')),
-    'addChart'   : MetaIcon(img = 'layer-vector-chart-add',
+    'layerChart'   : MetaIcon(img = 'layer-vector-chart-add',
                             label = _('Add thematic chart layer')),
-    'addGrid'    : MetaIcon(img = 'layer-grid-add',
+    'layerGrid'    : MetaIcon(img = 'layer-grid-add',
                             label = _('Add grid layer')),
-    'addGeodesic': MetaIcon(img = 'shortest-distance',
+    'layerGeodesic': MetaIcon(img = 'shortest-distance',
                             label = _('Add geodesic line layer')),
-    'addRhumb'   : MetaIcon(img = 'shortest-distance',
+    'layerRhumb'   : MetaIcon(img = 'shortest-distance',
                             label = _('Add rhumbline layer')),
-    'addLabels'  : MetaIcon(img = 'layer-label-add',
+    'layerLabels'  : MetaIcon(img = 'layer-label-add',
                             label = _('Add labels')),
-    'addRast3d'  : MetaIcon(img = 'layer-raster3d-add',
+    'layerRast3d'  : MetaIcon(img = 'layer-raster3d-add',
                             label = _('Add 3D raster map layer'),
                             desc  =  _('Note that 3D raster data are rendered only in 3D view mode')),
-    'wsImport'  :  MetaIcon(img = 'layer-wms-add',
+    'layerWS'      :  MetaIcon(img = 'layer-wms-add',
                             label = _('Add WMS layer.')),
     'layerOptions'  : MetaIcon(img = 'options',
                                label = _('Set options'))
@@ -183,62 +186,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.SetPyData(self.root, (None, None))
         
         # create image list to use with layer tree
+        self.bmpsize = (16, 16)
         il = wx.ImageList(16, 16, mask = False)
-        
         trart = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_OTHER, (16, 16))
         self.folder_open = il.Add(trart)
         trart = wx.ArtProvider.GetBitmap(wx.ART_FOLDER, wx.ART_OTHER, (16, 16))
         self.folder = il.Add(trart)
-        
-        self.bmpsize = (16, 16)
-        trgif = BaseIcons["addRast"].GetBitmap(self.bmpsize)
-        self.rast_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addRast3d"].GetBitmap(self.bmpsize)
-        self.rast3d_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addRgb"].GetBitmap(self.bmpsize)
-        self.rgb_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addHis"].GetBitmap(self.bmpsize)
-        self.his_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addShaded"].GetBitmap(self.bmpsize)
-        self.shaded_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addRArrow"].GetBitmap(self.bmpsize)
-        self.rarrow_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addRNum"].GetBitmap(self.bmpsize)
-        self.rnum_icon = il.Add(trgif)
-        
-        trgif = BaseIcons["addVect"].GetBitmap(self.bmpsize)
-        self.vect_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addThematic"].GetBitmap(self.bmpsize)
-        self.theme_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addChart"].GetBitmap(self.bmpsize)
-        self.chart_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addGrid"].GetBitmap(self.bmpsize)
-        self.grid_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addGeodesic"].GetBitmap(self.bmpsize)
-        self.geodesic_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addRhumb"].GetBitmap(self.bmpsize)
-        self.rhumb_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addLabels"].GetBitmap(self.bmpsize)
-        self.labels_icon = il.Add(trgif)
-        
-        trgif = LMIcons["addCmd"].GetBitmap(self.bmpsize)
-        self.cmd_icon = il.Add(trgif)
-
-        trgif = LMIcons["wsImport"].GetBitmap(self.bmpsize)
-        self.ws_icon = il.Add(trgif)
-        
+        self._setIcons(il)
         self.AssignImageList(il)
 
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED,   self.OnActivateLayer)
@@ -254,6 +208,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
         self.Bind(wx.EVT_MOTION,                self.OnMotion)
 
+    def _setIcons(self, il):
+        self._icon = {}
+        for iconName in ("layerRast", "layerRast3d", "layerRgb",
+                         "layerHis", "layerShaded", "layerRArrow",
+                         "layerRNum", "layerVect", "layerThematic",
+                         "layerChart", "layerGrid", "layerGeodesic",
+                         "layerRhumb", "layerLabels", "layerCmd",
+                         "layerWS"):
+            iconKey = iconName[len("layer"):].lower()
+            icon = LMIcons[iconName].GetBitmap(self.bmpsize)
+            self._icon[iconKey] = il.Add(icon)
+        
     def _getSelectedLayer(self):
         """!Get selected layer.
 
@@ -295,6 +261,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         return None
 
+    def _setIcon(self, item):
+        pass
+        
     def _setGradient(self, iType = None):
         """!Set gradient for items
 
@@ -1105,58 +1074,58 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # add text and icons for each layer ltype
         label =  _('(double click to set properties)') + ' ' * 15
         if ltype == 'raster':
-            self.SetItemImage(layer, self.rast_icon)
+            self.SetItemImage(layer, self._icon['rast'])
             self.SetItemText(layer, '%s %s' % (_('raster'), label))
         elif ltype == '3d-raster':
-            self.SetItemImage(layer, self.rast3d_icon)
+            self.SetItemImage(layer, self._icon['rast3d'])
             self.SetItemText(layer, '%s %s' % (_('3D raster'), label))
         elif ltype == 'rgb':
-            self.SetItemImage(layer, self.rgb_icon)
+            self.SetItemImage(layer, self._icon['rgb'])
             self.SetItemText(layer, '%s %s' % (_('RGB'), label))
         elif ltype == 'his':
-            self.SetItemImage(layer, self.his_icon)
+            self.SetItemImage(layer, self._icon['his'])
             self.SetItemText(layer, '%s %s' % (_('HIS'), label))
         elif ltype == 'shaded':
-            self.SetItemImage(layer, self.shaded_icon)
+            self.SetItemImage(layer, self._icon['shaded'])
             self.SetItemText(layer, '%s %s' % (_('shaded relief'), label))
         elif ltype == 'rastnum':
-            self.SetItemImage(layer, self.rnum_icon)
+            self.SetItemImage(layer, self._icon['rnum'])
             self.SetItemText(layer, '%s %s' % (_('raster cell numbers'), label))
         elif ltype == 'rastarrow':
-            self.SetItemImage(layer, self.rarrow_icon)
+            self.SetItemImage(layer, self._icon['rarrow'])
             self.SetItemText(layer, '%s %s' % (_('raster flow arrows'), label))
         elif ltype == 'vector':
-            self.SetItemImage(layer, self.vect_icon)
+            self.SetItemImage(layer, self._icon['vect'])
             self.SetItemText(layer, '%s %s' % (_('vector'), label))
         elif ltype == 'thememap':
-            self.SetItemImage(layer, self.theme_icon)
+            self.SetItemImage(layer, self._icon['theme'])
             self.SetItemText(layer, '%s %s' % (_('thematic area (choropleth) map'), label))
         elif ltype == 'themechart':
-            self.SetItemImage(layer, self.chart_icon)
+            self.SetItemImage(layer, self._icon['chart'])
             self.SetItemText(layer, '%s %s' % (_('thematic charts'), label))
         elif ltype == 'grid':
-            self.SetItemImage(layer, self.grid_icon)
+            self.SetItemImage(layer, self._icon['grid'])
             self.SetItemText(layer, '%s %s' % (_('grid'), label))
         elif ltype == 'geodesic':
-            self.SetItemImage(layer, self.geodesic_icon)
+            self.SetItemImage(layer, self._icon['geodesic'])
             self.SetItemText(layer, '%s %s' % (_('geodesic line'), label))
         elif ltype == 'rhumb':
-            self.SetItemImage(layer, self.rhumb_icon)
+            self.SetItemImage(layer, self._icon['rhumb'])
             self.SetItemText(layer, '%s %s' % (_('rhumbline'), label))
         elif ltype == 'labels':
-            self.SetItemImage(layer, self.labels_icon)
+            self.SetItemImage(layer, self._icon['labels'])
             self.SetItemText(layer, '%s %s' % (_('vector labels'), label))
         elif ltype == 'command':
-            self.SetItemImage(layer, self.cmd_icon)
+            self.SetItemImage(layer, self._icon['cmd'])
         elif ltype == 'group':
             self.SetItemImage(layer, self.folder, CT.TreeItemIcon_Normal)
             self.SetItemImage(layer, self.folder_open, CT.TreeItemIcon_Expanded)
             self.SetItemText(layer, grouptext)
         elif ltype == 'wms':            
-            self.SetItemImage(layer, self.ws_icon)
+            self.SetItemImage(layer, self._icon['ws'])
             self.SetItemText(layer, '%s %s' % (_('wms'), label))
         else:
-            self.SetItemImage(layer, self.cmd_icon)
+            self.SetItemImage(layer, self._icon['cmd'])
             self.SetItemText(layer, '%s %s' % (_('unknown'), label))
         
         if ltype != 'group':
