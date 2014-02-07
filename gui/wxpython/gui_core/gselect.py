@@ -73,7 +73,7 @@ class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                  type = None, multiple = False, nmaps = 1,
                  mapsets = None, updateOnPopup = True, onPopup = None,
-                 fullyQualified = True, extraItems = {},
+                 fullyQualified = True, extraItems = {}, layerTree = None,
                  validator = wx.DefaultValidator):
         """!Custom control to create a ComboBox with a tree control to
         display and select GIS elements within acessible mapsets.
@@ -89,6 +89,7 @@ class Select(wx.combo.ComboCtrl):
         @param onPopup function to be called on Popup
         @param fullyQualified True to provide fully qualified names (map@mapset)
         @param extraItems extra items to add (given as dictionary) - see gmodeler for usage
+        @param layerTree show only elements from given layer tree if not None
         @param validator validator for TextCtrl
         """
         wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size, validator=validator)
@@ -102,7 +103,7 @@ class Select(wx.combo.ComboCtrl):
             self.tcp.SetData(type = type, mapsets = mapsets,
                              multiple = multiple, nmaps = nmaps,
                              updateOnPopup = updateOnPopup, onPopup = onPopup,
-                             fullyQualified = fullyQualified, extraItems = extraItems)
+                             fullyQualified = fullyQualified, extraItems = extraItems, layerTree = layerTree)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
     def OnKeyDown(self, event):
@@ -170,10 +171,13 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
     """    
     # overridden ComboPopup methods
     def Init(self):
-        self.value = [] # for multiple is False -> len(self.value) in [0,1]
+        self.value = []            # for multiple is False ->
+                                   # len(self.value) in [0,1]
         self.curitem = None
         self.multiple = False
         self.updateOnPopup = True
+        self.filterItems = []      # limit items based on this list,
+                                   # see layerTree parameter
 
     def Create(self, parent):
         self.seltree = wx.TreeCtrl(parent, style=wx.TR_HIDE_ROOT
@@ -318,7 +322,14 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
             self.multiple = kargs['multiple']
         if 'onPopup' in kargs:
             self.onPopup = kargs['onPopup']
-
+        if kargs.get('layerTree', None):
+            self.filterItems = [] # reset
+            ltype = kargs['type']
+            for layer in kargs['layerTree'].GetVisibleLayers(skipDigitized = True):
+                if layer.GetType() != ltype:
+                    continue
+                self.filterItems.append(layer.GetName())
+        
     def DeleteAllItems(self):
         """!Delete all items in popup"""
         self.seltree.DeleteAllItems()
@@ -547,6 +558,9 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         for elem in elist:
             if elem != '':
                 fullqElem = elem + '@' + mapset
+                if self.filterItems and fullqElem not in self.filterItems:
+                    continue # skip items missed in self.filterItems
+                
                 if elements is not None:
                     if (exclude and fullqElem in elements) or \
                             (not exclude and fullqElem not in elements):
@@ -566,6 +580,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             parent = root
 
         data = {'node': node, 'mapset': mapset}
+        
         item = self.seltree.AppendItem(parent, text = value, data = wx.TreeItemData(data))
         return item
 

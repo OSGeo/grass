@@ -521,15 +521,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             item.SetBitmap(MetaIcon(img = 'edit').GetBitmap(self.bmpsize))
             self.popupMenu.AppendItem(item)
             
-            if digitToolbar:
+            ### removed from layer tree
+            #  if digitToolbar:
                 # background vector map
-                self.popupMenu.Append(self.popupID['bgmap'],
-                                      text = _("Use as background vector map for digitizer"),
-                                      kind = wx.ITEM_CHECK)
-                self.Bind(wx.EVT_MENU, self.OnSetBgMap, id = self.popupID['bgmap'])
-                if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                                    internal = True) == layer.GetName():
-                    self.popupMenu.Check(self.popupID['bgmap'], True)
+                # self.popupMenu.Append(self.popupID['bgmap'],
+                #                       text = _("Use as background vector map for digitizer"),
+                #                       kind = wx.ITEM_CHECK)
+                # self.Bind(wx.EVT_MENU, self.OnSetBgMap, id = self.popupID['bgmap'])
+                # if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
+                #                     internal = True) == layer.GetName():
+                #     self.popupMenu.Check(self.popupID['bgmap'], True)
             
             self.popupMenu.Append(self.popupID['topo'], text = _("Rebuild topology"))
             self.Bind(wx.EVT_MENU, self.OnTopology, id = self.popupID['topo'])
@@ -921,23 +922,24 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         self._setGradient()
         self.RefreshLine(self.layer_selected)
+
+    ### unused since r58937
+    # def OnSetBgMap(self, event):
+    #     """!Set background vector map for editing sesstion"""
+    #     digit = self.mapdisplay.GetWindow().digit
+    #     if event.IsChecked():
+    #         mapName = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
+    #         UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
+    #                          value = str(mapName), internal = True)
+    #         digit.OpenBackgroundMap(mapName)
+    #         self._setGradient('bgmap')
+    #     else:
+    #         UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
+    #                          value = '', internal = True)
+    #         digit.CloseBackgroundMap()
+    #         self._setGradient()
         
-    def OnSetBgMap(self, event):
-        """!Set background vector map for editing sesstion"""
-        digit = self.mapdisplay.GetWindow().digit
-        if event.IsChecked():
-            mapName = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
-            UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                             value = str(mapName), internal = True)
-            digit.OpenBackgroundMap(mapName)
-            self._setGradient('bgmap')
-        else:
-            UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                             value = '', internal = True)
-            digit.CloseBackgroundMap()
-            self._setGradient()
-        
-        self.RefreshLine(self.layer_selected)
+    #     self.RefreshLine(self.layer_selected)
 
     def OnPopupProperties (self, event):
         """!Popup properties dialog"""
@@ -1734,7 +1736,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if nlayers < 2:
                     mapWin.ResetView()
 
-    def GetVisibleLayers(self):
+    def GetVisibleLayers(self, skipDigitized=False):
         # make a list of visible layers
         layers = []
 
@@ -1743,12 +1745,19 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if not vislayer or self.GetPyData(vislayer) is None:
             return layers
 
+        vdigitLayer = None
+        if skipDigitized:
+            digitToolbar = self.mapdisplay.GetToolbar('vdigit')
+            if digitToolbar:
+                vdigitLayer = digitToolbar.GetLayer()
+        
         itemList = ""
         for item in range(self.GetCount()):
             itemList += self.GetItemText(vislayer) + ','
             lType = self.GetLayerInfo(vislayer, key='type')
-            if lType and lType != 'group':
-                layers.append(self.GetLayerInfo(vislayer, key='maplayer'))
+            mapLayer = self.GetLayerInfo(vislayer, key='maplayer')
+            if lType and lType != 'group' and mapLayer is not vdigitLayer:
+                layers.append(mapLayer)
 
             if not self.GetNextVisible(vislayer):
                 break
