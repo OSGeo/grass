@@ -102,7 +102,9 @@ LMIcons = {
     'layerWMS'      :  MetaIcon(img = 'layer-wms-add',
                             label = _('Add WMS layer.')),
     'layerOptions'  : MetaIcon(img = 'options',
-                               label = _('Set options'))
+                               label = _('Set options')),
+    'layerEdited'     : MetaIcon(img = 'edit',
+                               label = _("Editing mode"))
     }
 
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
@@ -215,7 +217,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                          "layerRastnum", "layerVector", "layerThememap",
                          "layerThemechart", "layerGrid", "layerGeodesic",
                          "layerRhumb", "layerLabels", "layerCmd",
-                         "layerWMS"):
+                         "layerWMS", "layerEdited"):
             iconKey = iconName[len("layer"):].lower()
             icon = LMIcons[iconName].GetBitmap(self.bmpsize)
             self._icon[iconKey] = il.Add(icon)
@@ -261,7 +263,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         return None
 
-    def _setIcon(self, item, iconName):
+    def SetItemIcon(self, item, iconName=None):
+        if not iconName:
+            iconName = self.GetLayerInfo(item, key = 'maplayer').GetType()
         self.SetItemImage(item, self._icon[iconName])
         
     def _setGradient(self, iType = None):
@@ -854,12 +858,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnStartEditing(self, event):
         """!Start editing vector map layer requested by the user
         """
-        try:
-            maplayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
-        except:
-            event.Skip()
-            return
-        
+        mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
         if not haveVDigit:
             from vdigit import errorMsg
             
@@ -871,25 +870,28 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         if not self.mapdisplay.GetToolbar('vdigit'): # enable tool
             self.mapdisplay.AddToolbar('vdigit')
+
         else: # tool already enabled
             pass
         
         # mark layer as 'edited'
-        self.mapdisplay.toolbars['vdigit'].StartEditing(maplayer)
+        self.mapdisplay.toolbars['vdigit'].StartEditing(mapLayer)
         
+    def StartEditing(self, layerItem):
         self._setGradient('vdigit')
-        self.RefreshLine(self.layer_selected)
+        if layerItem:
+            self.SetItemIcon(layerItem, 'edited')
+            self.RefreshLine(layerItem)
         
     def OnStopEditing(self, event):
         """!Stop editing the current vector map layer
         """
-        maplayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
-        
         self.mapdisplay.toolbars['vdigit'].OnExit()
-        # here was dead code to enable vdigit button in toolbar
 
+    def StopEditing(self, layerItem):
         self._setGradient()
-        self.RefreshLine(self.layer_selected)
+        self.SetItemIcon(layerItem)
+        self.RefreshLine(layerItem)
 
     ### unused since r58937
     # def OnSetBgMap(self, event):
