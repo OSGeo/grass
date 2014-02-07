@@ -1798,15 +1798,15 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay(show = True)
         
-        self._popupMenu((('addRast3d', self.OnAddRaster3D),
+        self._popupMenu((('layerRast3d', self.OnAddRaster3D),
                          (None, None),
-                         ('addRgb',    self.OnAddRasterRGB),
-                         ('addHis',    self.OnAddRasterHIS),
+                         ('layerRgb',    self.OnAddRasterRGB),
+                         ('layerHis',    self.OnAddRasterHIS),
                          (None, None),
-                         ('addShaded', self.OnAddRasterShaded),
+                         ('layerShaded', self.OnAddRasterShaded),
                          (None, None),
-                         ('addRArrow', self.OnAddRasterArrow),
-                         ('addRNum',   self.OnAddRasterNum)))
+                         ('layerRArrow', self.OnAddRasterArrow),
+                         ('layerRNum',   self.OnAddRasterNum)))
         
         # show map display
         self.GetMapDisplay().Show()
@@ -1826,8 +1826,8 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay(show = True)
 
-        self._popupMenu((('addThematic', self.OnAddVectorTheme),
-                         ('addChart',    self.OnAddVectorChart)))
+        self._popupMenu((('layerThematic', self.OnAddVectorTheme),
+                         ('layerChart',    self.OnAddVectorChart)))
         
         # show map display
         self.GetMapDisplay().Show()
@@ -1848,12 +1848,12 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay(show = True)
 
-        self._popupMenu((('addGrid',     self.OnAddGrid),
-                         ('addLabels',   self.OnAddLabels),
-                         ('addGeodesic', self.OnAddGeodesic),
-                         ('addRhumb',    self.OnAddRhumb),
+        self._popupMenu((('layerGrid',     self.OnAddGrid),
+                         ('layerLabels',   self.OnAddLabels),
+                         ('layerGeodesic', self.OnAddGeodesic),
+                         ('layerRhumb',    self.OnAddRhumb),
                          (None, None),
-                         ('addCmd',      self.OnAddCommand)))
+                         ('layerCmd',      self.OnAddCommand)))
         
         # show map display
         self.GetMapDisplay().Show()
