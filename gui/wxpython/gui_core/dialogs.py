@@ -473,9 +473,9 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
     # return fully qualified map name
     if '@' not in outmap:
         outmap += '@' + grass.gisenv()['MAPSET']
-        
-    if giface:
-        giface.WriteLog(_("New vector map <%s> created") % outmap)
+    
+    # if giface:
+    #     giface.WriteLog(_("New vector map <%s> created") % outmap)
         
     return dlg
 
