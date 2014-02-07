@@ -56,6 +56,7 @@
 
 #define MAX_TILE_LENGTH 512
 
+#undef howmany
 #define	howmany(x, y)	(((x)+((y)-1))/(y))
 #define	streq(a,b)	(strcmp(a,b) == 0)
 
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
     int in;
     struct rasterfile h;
     struct Option *inopt, *outopt, *compopt;
-    struct Flag *pflag, *lflag, *tflag, *wflag;
+    struct Flag *pflag, *lflag, *wflag; /* *tflag, */
     CELL *cell, *cellptr, *cells[MAX_TILE_LENGTH];
     struct Cell_head cellhd;
     struct GModule *module;
