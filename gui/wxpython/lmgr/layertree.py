@@ -1100,7 +1100,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             checked = True
         
         self.forceCheck = True
-        self.CheckItem(layer, checked = checked)
+        wx.CallAfter(self.CheckItem, layer, checked)
         
         # add text and icons for each layer ltype
         label =  _('(double click to set properties)') + ' ' * 15
