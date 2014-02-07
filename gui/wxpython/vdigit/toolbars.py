@@ -6,7 +6,7 @@
 List of classes:
  - toolbars::VDigitToolbar
 
-(C) 2007-2013 by the GRASS Development Team
+(C) 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -34,10 +34,9 @@ class VDigitToolbar(BaseToolbar):
     """!Toolbar for digitization
     """
     def __init__(self, parent, toolSwitcher, MapWindow, digitClass, giface,
-                 tools=[], layerTree=None):
+                 tools=[]):
         self.MapWindow     = MapWindow
         self.Map           = MapWindow.GetMap() # Map class instance
-        self.layerTree     = layerTree  # reference to layer tree associated to map display
         self.tools         = tools
         self.digitClass    = digitClass
         BaseToolbar.__init__(self, parent, toolSwitcher)
@@ -45,6 +44,11 @@ class VDigitToolbar(BaseToolbar):
         self._giface       = giface
         
         self.editingStarted = Signal("VDigitToolbar.editingStarted")
+        self.editingStopped = Signal("VDigitToolbar.editingStopped")
+        layerTree = self._giface.GetLayerTree()
+        if layerTree:
+            self.editingStarted.connect(layerTree.StartEditing)
+            self.editingStopped.connect(layerTree.StopEditing)
 
         # currently selected map layer for editing (reference to MapLayer instance)
         self.mapLayer = None
@@ -562,7 +566,7 @@ class VDigitToolbar(BaseToolbar):
         
         # select background map
         dlg = VectorDialog(self.parent, title = _("Select background vector map"),
-                           layerTree = self.layerTree)
+                           layerTree = self._giface.GetLayerTree())
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
@@ -768,7 +772,7 @@ class VDigitToolbar(BaseToolbar):
             
             if dlg and dlg.GetName():
                 # add layer to map layer tree
-                if self.layerTree:
+                if self._giface.GetLayerTree():
                     mapName = dlg.GetName() + '@' + grass.gisenv()['MAPSET']
                     self._giface.GetLayerList().AddLayer(ltype='vector',
                                                          name=mapName,
@@ -808,7 +812,7 @@ class VDigitToolbar(BaseToolbar):
         
         event.Skip()
         
-    def StartEditing (self, mapLayer):
+    def StartEditing(self, mapLayer):
         """!Start editing selected vector map layer.
 
         @param mapLayer MapLayer to be edited
@@ -893,8 +897,15 @@ class VDigitToolbar(BaseToolbar):
         if opacity < 1.0:
             alpha = int(opacity * 255)
             self.digit.GetDisplay().UpdateSettings(alpha = alpha)
-        
-        self.editingStarted.emit(vectMap = mapLayer.GetName(), digit = self.digit)
+
+        # emit signal
+        layerTree = self._giface.GetLayerTree()
+        if layerTree:
+            item = layerTree.FindItemByData('maplayer', self.mapLayer)
+        else:
+            item = None
+        self.editingStarted.emit(vectMap = mapLayer.GetName(), digit = self.digit, layerItem = item)
+
         return True
 
     def StopEditing(self):
@@ -903,6 +914,8 @@ class VDigitToolbar(BaseToolbar):
         @return True on success
         @return False on failure
         """
+        item = None
+        
         if self.combo:
             self.combo.SetValue (_('Select vector map'))
         
@@ -932,19 +945,15 @@ class VDigitToolbar(BaseToolbar):
                                 internal = True):
                 self.digit.CloseBackgroundMap()
             
-            # TODO: replace by giface
-            lmgr = self.parent.GetLayerManager()
-            if lmgr:
-                # here was dead code to enable vdigit button in toolbar
-                # some signal (DigitizerEnded) can be emitted here
-                lmgr._giface.GetProgress().SetValue(0)
-                lmgr.GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
-                                                    self.mapLayer.GetName(),
-                                                notification=Notification.HIGHLIGHT)
-            # re-active layer 
-            if self.parent.tree:
-                item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
-                if item and self.parent.tree.IsItemChecked(item):
+            self._giface.GetProgress().SetValue(0)
+            self._giface.WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
+                                         self.mapLayer.GetName(),
+                                     notification=Notification.HIGHLIGHT)
+            # re-active layer
+            layerTree = self._giface.GetLayerTree()
+            if layerTree:
+                item = layerTree.FindItemByData('maplayer', self.mapLayer)
+                if item and layerTree.IsItemChecked(item):
                     self.Map.ChangeLayerActive(self.mapLayer, True)
         
         # change cursor
@@ -959,11 +968,13 @@ class VDigitToolbar(BaseToolbar):
         
         del self.digit
         del self.MapWindow.digit
+
+        self.editingStopped.emit(layerItem = item)
         
         self.mapLayer = None
         
         self.MapWindow.redrawAll = True
-        
+
         return True
     
     def UpdateListOfLayers (self, updateTool = False):
