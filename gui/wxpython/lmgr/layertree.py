@@ -99,7 +99,7 @@ LMIcons = {
     'layer3d-raster'  : MetaIcon(img = 'layer-raster3d-add',
                             label = _('Add 3D raster map layer'),
                             desc  =  _('Note that 3D raster data are rendered only in 3D view mode')),
-    'layerWMS'      :  MetaIcon(img = 'layer-wms-add',
+    'layerWms'      :  MetaIcon(img = 'layer-wms-add',
                             label = _('Add WMS layer.')),
     'layerOptions'  : MetaIcon(img = 'options',
                                label = _('Set options')),
@@ -217,7 +217,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                          "layerRastnum", "layerVector", "layerThememap",
                          "layerThemechart", "layerGrid", "layerGeodesic",
                          "layerRhumb", "layerLabels", "layerCmd",
-                         "layerWMS", "layerEdited"):
+                         "layerWms", "layerEdited"):
             iconKey = iconName[len("layer"):].lower()
             icon = LMIcons[iconName].GetBitmap(self.bmpsize)
             self._icon[iconKey] = il.Add(icon)
