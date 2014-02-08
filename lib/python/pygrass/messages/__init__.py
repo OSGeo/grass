@@ -317,7 +317,7 @@ class Messenger(object):
         time.sleep(1)
 
 
-def get_msgr(_instance=[None, ]):
+def get_msgr(_instance=[None, ], raise_on_error=False):
     """!Return a Messenger instance.
 
     @return the Messenger instance.
@@ -332,7 +332,7 @@ def get_msgr(_instance=[None, ]):
         False
     """
     if not _instance[0]:
-        _instance[0] = Messenger()
+        _instance[0] = Messenger(raise_on_error)
     return _instance[0]
 
 
