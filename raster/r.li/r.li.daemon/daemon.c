@@ -99,6 +99,7 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
 	    G_fatal_error(_("Cannot create random access file"));
     }
     else {
+	/* text file output */
 	/* check if ~/.grass7/ exists */
 	sprintf(out, "%s/.grass7/", G_home());
 	doneDir = G_mkdir(out);
@@ -139,20 +140,22 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
 	    result = doneJob.f.f_d.res;
 	    /* output */
 	    if (parsed != MVWIN) {
+		/* text file output */
 		print_Output(res, doneJob);
 	    }
 	    else {
-		/*raster output */
+		/* raster output */
 		raster_Output(random_access, doneJob.f.f_d.aid, g,
 			      doneJob.f.f_d.res);
 	    }
 	}
 	else {
 	    if (parsed != MVWIN) {
+		/* text file output */
 		error_Output(res, doneJob);
 	    }
 	    else {
-		/* printf("todo "); fflush(stdout); */
+		/* printf("todo"); fflush(stdout); */
 		/* TODO write to raster NULL ??? */
 	    }
 	}
@@ -172,6 +175,9 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
 	Rast_short_history(output, "raster", &history);
 	Rast_command_history(&history);
 	Rast_write_history(output, &history);
+    } else {
+	/* text file output */
+	G_message("Result written to ASCII file <%s>", out);
     }
 
     return 1;
