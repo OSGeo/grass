@@ -69,21 +69,13 @@ f_path="$GISBASE/etc/r.li.setup"
 
 # Check if we are in a GRASS session
 if test "$GISBASE" = ""; then
-   echo "You must be in GRASS GIS to run this program." >&2
+   echo "You must be in GRASS GIS to run this program." 1>&2
    exit 1
  fi
 
 if [ "$1" != "@ARGS_PARSED@" ] ; then
    exec g.parser "$0" "$@"
 fi
-
-
-# open x1 Xmonitor
-d.mon stop=x1
-d.mon start=x1
-
-
-g.region rast=$GIS_OPT_raster
 
 #### create temporary file
 TMP="`g.tempfile pid=$$`"
@@ -92,20 +84,50 @@ if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
     exit 1
 fi
 
-#saving starting values
-g.region -g | grep "n=" | cut -f2 -d'=' > $TMP.var
-read s_n < $TMP.var
-g.region -g | grep "s=" | cut -f2 -d'=' > $TMP.var
-read s_s < $TMP.var
-g.region -g | grep "e=" | cut -f2 -d'=' > $TMP.var
-read s_e < $TMP.var
-g.region -g | grep "w=" | cut -f2 -d'=' > $TMP.var
-read s_w < $TMP.var
-g.region -g | grep "nsres=" | cut -f2 -d'=' > $TMP.var
-read s_nsres < $TMP.var
-g.region -g | grep "ewres=" | cut -f2 -d'=' > $TMP.var
-read s_ewres < $TMP.var
-echo "START $s_n|$s_s|$s_e|$s_w|$s_nsres|$s_ewres" >> $GIS_OPT_conf
+cleanup()
+{
+   # remove temporary region
+   eval `g.findfile elem=windows file="tmp_rli_sq.$$" | grep '^name='`
+   if [ -n "$name" ] ; then
+      g.region region="tmp_rli_sq.$$"
+      g.remove region="tmp_rli_sq.$$" --quiet
+   fi
+
+   rm -f "$TMP" "$TMP.var" 
+}
+trap "cleanup" 2 3 15
+
+
+# find a free Xmonitor
+XMON=x1
+for i in 1 2 3 4 5 6 7 ; do
+   result=`d.mon -L | grep -w "^x$i"`
+   if [ `echo "$result" | grep -c 'not'` -eq 1 ] ; then
+      XMON="x$i"
+      break
+   fi
+done
+
+# open the Xmonitor
+d.mon stop="$XMON"
+d.mon start="$XMON"
+
+
+# setup internal region
+#  (WIND_OVERRIDE is already present by the main r.li.setup script)
+g.region save="tmp_rli_sq.$$"
+g.region rast="$GIS_OPT_raster"
+
+# store starting values
+eval `g.region -g`
+s_n="$n"
+s_s="$s"
+s_e="$e"
+s_w="$w"
+s_nsres="$nsres"
+s_ewres="$ewres"
+
+echo "START $s_n|$s_s|$s_e|$s_w|$s_nsres|$s_ewres" >> "$GIS_OPT_conf"
 
 # show the sampling frame
 if [ "$GIS_FLAG_f" -eq 1 ] ; then
@@ -122,41 +144,42 @@ if [ -n "$GIS_OPT_site" ] ; then
     d.vect map="$GIS_OPT_site" color=red fcolor=red size=5 icon=basic/circle
 fi
 
-# let draw area
+# have the user selected the area of interest with the mouse
+
+# TODO: popup message? (d.menu: "Draw box now: [ok]")
+######
+#d.menu bcolor=aqua tcolor=black << EOF
+#.T 20
+#.L 20
+#Next select area with mouse
+#          [ Ok ]
+#EOF
+######
+
 d.zoom
 
+
 # ask if the selected area is right
-name="$TMP"  # file where write the answer
+name="$TMP.var"  # temp file where the answer is written to by the tcl pop-up
 export name
 
+# ask if it's ok, save 0,1 to the "$name" tmp file
 "$GRASS_WISH" "$f_path/square_query"
 
 read ok < "$TMP.var"
 
 if [ "$ok" -eq 0 ] ; then
     echo "NO" >> "$GIS_OPT_conf"
-fi
-
-if [ $ok -eq 1 ] ; then
-    #write the square boundaries
-    g.region -g | grep "n=" | cut -f2 -d'=' > $TMP.var
-    read n < $TMP.var
-    g.region -g | grep "s=" | cut -f2 -d'=' > $TMP.var
-    read s < $TMP.var
-    g.region -g | grep "e=" | cut -f2 -d'=' > $TMP.var
-    read e < $TMP.var
-    g.region -g | grep "w=" | cut -f2 -d'=' > $TMP.var
-    read w < $TMP.var
-    g.region -g | grep "nsres=" | cut -f2 -d'=' > $TMP.var
-    read nsres < $TMP.var
-    g.region -g | grep "ewres=" | cut -f2 -d'=' > $TMP.var
-    read ewres < $TMP.var
-    echo "SQUAREAREA $n|$s|$e|$w|$nsres|$ewres" >> $GIS_OPT_conf
+elif [ "$ok" -eq 1 ] ; then
+    # write the square boundaries
+    eval `g.region -g`
+    echo "SQUAREAREA $n|$s|$e|$w|$nsres|$ewres" >> "$GIS_OPT_conf"
+else
+    g.message -e "Unable to ascertain if the selected area was ok or not"
 fi
 
 # close the Xmonitor
-d.mon stop=x1
+d.mon stop="$XMON"
 
-# clean tmp files
-rm -f $TMP*
-
+# clean tmp files and temporary region
+cleanup
