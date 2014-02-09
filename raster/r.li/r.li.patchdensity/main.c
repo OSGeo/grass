@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-	/**add other options for index parameters here */
+	/** add other options for index parameters here */
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

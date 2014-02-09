@@ -146,7 +146,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     double t;
     double logaritmo;
 
-    /*add to compute the number of class */
+    /* add to compute the number of class */
     long *array_copy;
     int totNumClass = 1;
     double logTotNumClass;

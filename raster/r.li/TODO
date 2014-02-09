@@ -17,7 +17,7 @@ GRASS 6
 
 A few remaining things should be done soon:
 - add relevant references
-- use english variable names in C code
+- use English variable names in C code
 
 Please change the examples to Spearfish wherever possible:
 
