@@ -390,10 +390,7 @@ try:
 except:
     pass
 
-import re
-import sys
 import os
-import grass.pygrass.modules as pygrass
 import grass.script as grass
 from space_time_datasets import *
 from factory import *
@@ -608,6 +605,7 @@ class TemporalAlgebraLexer(object):
              print tok
 
 ###############################################################################
+
 class GlobalTemporalVar(object):
     """ This class handles global temporal variable conditional expressions,
         like start_doy() == 3.
@@ -650,10 +648,22 @@ class GlobalTemporalVar(object):
 
         return(valuelist)
 
+    def __str__(self):
+        return str(self.tfunc) + str(self.compop) + str(self.value)
+
 ###############################################################################
 
 class TemporalAlgebraParser(object):
     """The temporal algebra class"""
+
+    # Get the tokens from the lexer class
+    tokens = TemporalAlgebraLexer.tokens
+
+    # Setting equal precedence level for select and hash operations.
+    precedence = (
+        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'), # 1
+        ('left', 'AND', 'OR', 'T_COMP_OPERATOR'), #2
+        )
 
     def __init__(self, pid=None, run = True, debug = False, spatial = False, null = False):
         self.run = run
@@ -674,11 +684,12 @@ class TemporalAlgebraParser(object):
         if self.dbif.connected:
             self.dbif.close()
 
-    def parse(self, expression, stdstype = 'strds', basename = None):
+    def parse(self, expression, stdstype = 'strds', basename = None, overwrite=False):
         self.lexer = TemporalAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)
 
+        self.overwrite = overwrite
         self.count = 0
         self.stdstype = stdstype
         self.basename = basename
@@ -701,14 +712,87 @@ class TemporalAlgebraParser(object):
         self.names[name] = name
         return name
 
-    # Get the tokens from the lexer class
-    tokens = TemporalAlgebraLexer.tokens
+    def generate_new_map(self, base_map, bool_op = 'and', copy = True):
+        """!Generate a new map using the spatio-temporal extent of the base map
 
-    # Setting equal precedence level for select and hash operations.
-    precedence = (
-        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'), # 1
-        ('left', 'AND', 'OR', 'T_COMP_OPERATOR'), #2
-        )
+           @param base_map This map is used to create the new map
+        """
+        # Generate an intermediate name for the result map list.
+        name = self.generate_map_name()
+        # Check for mapset in given stds input.
+        mapname = name + "@" + self.mapset
+        # Create new map based on the related map list.
+        map_new = base_map.get_new_instance(mapname)
+        # Set initial map extend of new vector map.
+        self.overlay_map_extent(map_new, base_map, bool_op = bool_op, copy = copy)
+
+        return map_new
+
+    def overlay_map_extent(self, mapA, mapB, bool_op = None, temp_op = '=',
+                            copy = False):
+        """!Compute the spatio-temporal extent of two topological related maps
+
+           @param mapA The first map
+           @param mapB The second maps
+           @param bool_op The boolean operator specifying the spatial extent
+                  operation (intersection, union, disjoint union)
+           @param temp_op The temporal operator specifying the temporal
+                  extent operation (intersection, union, disjoint union)
+           @param copy Specifies if the temporal extent of mapB should be
+                  copied to mapA
+           @return 0 if there is no overlay
+        """
+        returncode = 1
+        if copy:
+            map_extent_temporal = mapB.get_temporal_extent()
+            map_extent_spatial = mapB.get_spatial_extent()
+            # Set initial map extend of new vector map.
+            mapA.set_spatial_extent(map_extent_spatial)
+            mapA.set_temporal_extent(map_extent_temporal)
+            if "cmd_list" in dir(mapB):
+                mapA.cmd_list = mapB.cmd_list
+        else:
+            # Calculate spatial extent for different overlay operations.
+            if bool_op == 'and':
+                overlay_ext = mapA.spatial_intersection(mapB)
+                if overlay_ext != None:
+                    mapA.set_spatial_extent(overlay_ext)
+                else:
+                    returncode = 0
+            elif bool_op in ['or', 'xor']:
+                overlay_ext = mapA.spatial_union(mapB)
+                if overlay_ext != None:
+                    mapA.set_spatial_extent(overlay_ext)
+                else:
+                    returncode = 0
+            elif bool_op == 'disor':
+                overlay_ext = mapA.spatial_disjoint_union(mapB)
+                if overlay_ext != None:
+                    mapA.set_spatial_extent(overlay_ext)
+                else:
+                    returncode = 0
+
+            # Calculate temporal extent for different temporal operators.
+            if temp_op == '&':
+                temp_ext = mapA.temporal_intersection(mapB)
+                if temp_ext != None:
+                    mapA.set_temporal_extent(temp_ext)
+                else:
+                    returncode = 0
+            elif temp_op == '|':
+                temp_ext = mapA.temporal_union(mapB)
+                if temp_ext != None:
+                    mapA.set_temporal_extent(temp_ext)
+                else:
+                    returncode = 0
+            elif temp_op == '+':
+                temp_ext = mapA.temporal_disjoint_union(mapB)
+                if temp_ext != None:
+                    mapA.set_temporal_extent(temp_ext)
+                else:
+                    returncode = 0
+
+        return(returncode)
 
     ######################### Temporal functions ##############################
 
@@ -1671,6 +1755,7 @@ class TemporalAlgebraParser(object):
             return(inverselist)
         else:
             return(resultlist)
+
     ###########################################################################
 
     def p_statement_assign(self, t):
@@ -1682,8 +1767,8 @@ class TemporalAlgebraParser(object):
         if self.run:
             resultstds = open_new_space_time_dataset(t[1], self.stdstype, \
                                                         self.temporaltype, "", "", \
-                                                        'mean', None, \
-                                                        overwrite = grass.overwrite())
+                                                        'mean', dbif=self.dbif, \
+                                                        overwrite = self.overwrite)
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
@@ -1702,9 +1787,11 @@ class TemporalAlgebraParser(object):
                         dbif.close()
             t[0] = t[3]
 
+        else:
+            t[0] = t[3]
+
         if self.debug:
             print t[1], "=", t[3]
-            t[0] = t[3]
 
     def p_stds_1(self, t):
         # Definition of a space time dataset
@@ -1780,11 +1867,12 @@ class TemporalAlgebraParser(object):
                     map_i.map_value = gvar
 
             t[0] = maplist
+        else:
+            t[0] = "td(" + str(t[3]) + ")"
 
         if self.debug:
-            print "td(" + t[3] + ")"
+            print "td(" + str(t[3]) + ")"
 
-            t[0] = "td(" + t[3] + ")"
 
     def p_t_time_var(self, t):
         # Temporal variables that return a double or integer value
@@ -1862,13 +1950,14 @@ class TemporalAlgebraParser(object):
                 gvar.compop = t[4]
                 gvar.value  = t[5]
                 t[0] = gvar
+        else:
+            t[0] = True
 
         if self.debug:
             if len(t) == 6:
                 print t[1], t[4], t[5]
             if len(t) == 4:
                 print t[1], t[2], t[3]
-            t[0] = True
 
     def p_t_var_expr_time1(self, t):
         # Examples:
@@ -1889,10 +1978,11 @@ class TemporalAlgebraParser(object):
             gvar.compop = t[4]
             gvar.value  = t[5]
             t[0] = gvar
+        else:
+            t[0] = True
 
         if self.debug:
             print t[1], t[4], t[5]
-            t[0] = True
 
     def p_t_var_expr_time2(self, t):
         """
@@ -1911,11 +2001,12 @@ class TemporalAlgebraParser(object):
             gvar.compop = reverseop[t[2]]
             gvar.value  = t[1]
             t[0] = gvar
+        else:
+            t[0] = True
 
         if self.debug:
             print(t[4])
             print t[1], t[4], t[5]
-            t[0] = True
 
     def p_t_var_expr_comp(self, t):
         """
@@ -1934,10 +2025,11 @@ class TemporalAlgebraParser(object):
             resultlist.append(tvarexprB)
 
             t[0] = resultlist
+        else:
+            t[0] = True
 
         if self.debug:
             print t[1], t[2] + t[3], t[4]
-            t[0] = True
 
     def p_t_var_expr_comp_op(self, t):
         """
@@ -1958,10 +2050,11 @@ class TemporalAlgebraParser(object):
             resultlist.append(tvarexprB)
 
             t[0] = resultlist
+        else:
+            t[0] = True
 
         if self.debug:
             print t[1], t[2], t[3]
-            t[0] = True
 
     def p_expr_t_select(self, t):
         # Temporal equal selection
@@ -1984,10 +2077,11 @@ class TemporalAlgebraParser(object):
             selectlist = self.perform_temporal_selection(maplistA, maplistB)
             # Return map list.
             t[0] = selectlist
+        else:
+            t[0] = t[1] + "*"
 
         if self.debug:
             print t[1] + "* = ", t[1], t[2], t[3]
-            t[0] = t[1] + "*"
 
     def p_expr_t_not_select(self, t):
         # Temporal equal selection
@@ -2009,10 +2103,11 @@ class TemporalAlgebraParser(object):
                                                          inverse = True)
             # Return map list.
             t[0] = selectlist
+        else:
+            t[0] = t[1] + "*"
 
         if self.debug:
             print t[1] + "* = ", t[1], t[2], t[3]
-            t[0] = t[1] + "*"
 
 
     def p_expr_t_select_operator(self, t):
@@ -2050,10 +2145,11 @@ class TemporalAlgebraParser(object):
 
             # Return map list.
             t[0] = selectlist
+        else:
+            t[0] = t[1] + "*"
 
         if self.debug:
             print t[1] + "* = ", t[1], t[2], t[3]
-            t[0] = t[1] + "*"
 
 
     def p_expr_condition_if(self, t):
@@ -2074,10 +2170,11 @@ class TemporalAlgebraParser(object):
             resultlist   = self.check_stds(thenresult, clear = True)
             # Return resulting map list.
             t[0] = resultlist
+        else:
+            t[0] = t[5] + "*"
 
         if self.debug:
-            print t[5] + "* = ", "if condition", t[3], ' then ', t[5]
-            t[0] = t[5] + "*"
+            print str(t[5]) + "* = ", "if condition", str(t[3]), ' then ', str(t[5])
 
     def p_expr_condition_if_relation(self, t):
         # Examples
@@ -2098,10 +2195,11 @@ class TemporalAlgebraParser(object):
             resultlist   = self.check_stds(thenresult, clear = True)
             # Return resulting map list.
             t[0] = resultlist
+        else:
+            t[0] = t[7] + "*"
 
         if self.debug:
-            print t[5] + "* = ", "if condition", t[3], ' then ', t[5]
-            t[0] = t[5] + "*"
+            print "result* = ", "if ", str(t[3]),  "condition", str(t[5]), " then ", str(t[7])
 
     def p_expr_condition_elif(self, t):
         # Examples
@@ -2130,10 +2228,11 @@ class TemporalAlgebraParser(object):
             resultlist   = self.check_stds(resultlist, clear = True)
             # Return resulting map list.
             t[0] = resultlist
+        else:
+            t[0] = t[5] + "*"
 
         if self.debug:
-            print t[5] + "* = ", "if condition", t[3], " then ", t[5], ' else ', t[7]
-            t[0] = t[5] + "*"
+            print str(t[5]) + "* = ", "if condition", str(t[3]), " then ", str(t[5]), ' else ', str(t[7])
 
     def p_expr_condition_elif_relation(self, t):
         # Examples
@@ -2165,14 +2264,17 @@ class TemporalAlgebraParser(object):
             resultlist   = self.check_stds(resultlist, clear = True)
             # Return resulting map list.
             t[0] = resultlist
+        else:
+            if t[5]:
+                t[0] = str(t[7])
+            else:
+                t[0] = str(t[9])
 
         if self.debug:
             if t[5]:
-                print t[7], "* = ", "if condition", t[5], " then ", t[7], ' else ', t[9]
-                t[0] = str(t[7])
+                print str(t[7]), "* = ", "if condition", str(t[5]), " then ", str(t[7]), ' else ', str(t[9])
             else:
-                print t[9], "* = ", "if condition", t[5], " then ", t[7], ' else ', t[9]
-                t[0] = str(t[9])
+                print str(t[9]), "* = ", "if condition", str(t[5]), " then ", str(t[7]), ' else ', str(t[9])
 
     def p_expr_t_buff(self, t):
         # Examples
@@ -2196,13 +2298,14 @@ class TemporalAlgebraParser(object):
                 # Perform buffering.
                 map.temporal_buffer(increment)
             t[0] = bufflist
+        else:
+            t[0] = t[3] + "*"
 
         if self.debug:
             if len(t) == 10:
-                print t[3] + "* = buff_t(", t[3], "," , '"', t[6], t[7], '"', ")"
+                print str(t[3]) + "* = buff_t(", str(t[3]), "," , '"', str(t[6]), str(t[7]), '"', ")"
             elif len(t) == 7:
-                print t[3] + "* = buff_t(", t[3], ",", t[5], ")"
-            t[0] = t[3] + "*"
+                print str(t[3]) + "* = buff_t(", str(t[3]), ",", str(t[5]), ")"
 
     def p_expr_t_snap(self, t):
         # Examples
@@ -2217,10 +2320,11 @@ class TemporalAlgebraParser(object):
             # Perform snapping.
             snaplist = AbstractSpaceTimeDataset.snap_map_list(maplist)
             t[0] = snaplist
+        else:
+            t[0] = t[3] + "*"
 
         if self.debug:
-            print t[3] + "* = tsnap(", t[3], ")"
-            t[0] = t[3] + "*"
+            print str(t[3]) + "* = tsnap(", str(t[3]), ")"
 
     def p_expr_t_shift(self, t):
         # Examples
@@ -2243,13 +2347,14 @@ class TemporalAlgebraParser(object):
             # Perform shifting.
             shiftlist = AbstractSpaceTimeDataset.shift_map_list(maplist, increment)
             t[0] = shiftlist
+        else:
+            t[0] = t[3] + "*"
 
         if self.debug:
             if len(t) == 10:
-                print t[3] + "* = tshift(", t[3], "," , '"', t[6], t[7], '"', ")"
+                print str(t[3]) + "* = tshift(", str(t[3]), "," , '"', str(t[6]), str(t[7]), '"', ")"
             elif len(t) == 7:
-                print t[3] + "* = tshift(", t[3], ",", t[5], ")"
-            t[0] = t[3] + "*"
+                print str(t[3]) + "* = tshift(", str(t[3]), ",", str(t[5]), ")"
 
     # Handle errors.
     def p_error(self, t):
@@ -2261,5 +2366,3 @@ class TemporalAlgebraParser(object):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-

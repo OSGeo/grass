@@ -419,17 +419,7 @@ for details.
 @endcode
 """
 
-try:
-    import ply.yacc as yacc
-except:
-    pass
-
 import grass.pygrass.modules as pygrass
-import grass.script as grass
-from space_time_datasets import *
-from factory import *
-from open_stds import *
-import copy
 from temporal_vector_operator import *
 from temporal_algebra import *
 
@@ -482,6 +472,8 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
             t.type = 'NAME'
         return t
 
+##############################################################################
+
 class TemporalVectorAlgebraParser(TemporalAlgebraParser):
     """The temporal algebra class"""
 
@@ -504,13 +496,14 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self.m_mremove = pygrass.Module('g.mremove', quiet=True, run_=False)
         self.m_buffer = pygrass.Module('v.buffer', quiet=True, run_=False)
 
-    def parse(self, expression, stdstype = 'strds', basename = None):
+    def parse(self, expression, basename = None, overwrite = False):
         self.lexer = TemporalVectorAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)
 
+        self.overwrite = overwrite
         self.count = 0
-        self.stdstype = stdstype
+        self.stdstype = "stvds"
         self.basename = basename
         self.expression = expression
         self.parser.parse(expression)
@@ -613,59 +606,15 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
            @param copy Specifies if the temporal extent of mapB should be
                   copied to mapA
         """
-        returncode = 1
-        if copy:
-            map_extent_temporal = mapB.get_temporal_extent()
-            map_extent_spatial = mapB.get_spatial_extent()
-            # Set initial map extend of new vector map.
-            mapA.set_spatial_extent(map_extent_spatial)
-            mapA.set_temporal_extent(map_extent_temporal)
-            if "cmd_list" in dir(mapB):
-                mapA.cmd_list = mapB.cmd_list
-        else:
-            # Calculate spatial extent for different overlay operations.
-            if bool_op == 'and':
-                overlay_ext = mapA.spatial_intersection(mapB)
-                if overlay_ext != None:
-                    mapA.set_spatial_extent(overlay_ext)
-                else:
-                    returncode = 0
-            elif bool_op in ['or', 'xor']:
-                overlay_ext = mapA.spatial_union(mapB)
-                if overlay_ext != None:
-                    mapA.set_spatial_extent(overlay_ext)
-                else:
-                    returncode = 0
-            elif bool_op == 'disor':
-                overlay_ext = mapA.spatial_disjoint_union(mapB)
-                if overlay_ext != None:
-                    mapA.set_spatial_extent(overlay_ext)
-                else:
-                    returncode = 0
+        returncode = TemporalAlgebraParser.overlay_map_extent(self, mapA, mapB,
+                                                              bool_op, temp_op,
+                                                              copy)
+        if not copy and returncode == 1:
             # Conditional append of command list.
             if "cmd_list" in dir(mapA) and "cmd_list" in dir(mapB):
                 mapA.cmd_list = mapA.cmd_list + mapB.cmd_list
             elif "cmd_list" not in dir(mapA) and "cmd_list" in dir(mapB):
                 mapA.cmd_list = mapB.cmd_list
-            # Calculate temporal extent for different temporal operators.
-            if temp_op == '&':
-                temp_ext = mapA.temporal_intersection(mapB)
-                if temp_ext != None:
-                    mapA.set_temporal_extent(temp_ext)
-                else:
-                    returncode = 0
-            elif temp_op == '|':
-                temp_ext = mapA.temporal_union(mapB)
-                if temp_ext != None:
-                    mapA.set_temporal_extent(temp_ext)
-                else:
-                    returncode = 0
-            elif temp_op == '+':
-                temp_ext = mapA.temporal_disjoint_union(mapB)
-                if temp_ext != None:
-                    mapA.set_temporal_extent(temp_ext)
-                else:
-                    returncode = 0
 
         return(returncode)
 
@@ -688,7 +637,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     # Check if resultmap names exist in GRASS database.
                     vectorname = self.basename + "_" + str(i)
                     vectormap = VectorDataset(vectorname + "@" + get_current_mapset())
-                    if vectormap.map_exists() and grass.overwrite() == False:
+                    if vectormap.map_exists() and self.overwrite == False:
                         self.msgr.fatal(_("Error vector maps with basename %s exist. "
                                       "Use --o flag to overwrite existing file") \
                                       %(vectorname))
@@ -741,10 +690,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             newident = self.basename + "_" + str(count)
                             m = copy.deepcopy(self.m_rename)
                             m.inputs["vect"].value = (map_i.get_name(),newident)
-                            m.flags["overwrite"].value = grass.overwrite()
+                            m.flags["overwrite"].value = self.overwrite
                             m.run()
                             #m(vect = (map_i.get_name(),newident), \
-                            #    overwrite = grass.overwrite)
+                            #    overwrite = self.overwrite)
                             map_i.set_id(newident + "@" + mapset)
                             count += 1
                             register_list.append(map_i)
@@ -758,16 +707,16 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     resultstds = open_new_space_time_dataset(t[1], self.stdstype, \
                                                                 'absolute', t[1], t[1], \
                                                                 "temporal vector algebra", dbif=dbif,
-                                                                overwrite = grass.overwrite())
+                                                                overwrite = self.overwrite)
                     for map_i in register_list:
                         # Check if modules should be executed from command list.
                         if "cmd_list" in dir(map_i):
                             # Get meta data from grass database.
                             map_i.load()
-                            if map_i.is_in_db(dbif=dbif) and grass.overwrite():
+                            if map_i.is_in_db(dbif=dbif) and self.overwrite:
                                 # Update map in temporal database.
                                 map_i.update_all(dbif=dbif)
-                            elif map_i.is_in_db(dbif=dbif) and grass.overwrite() == False:
+                            elif map_i.is_in_db(dbif=dbif) and self.overwrite == False:
                                 # Raise error if map exists and no overwrite flag is given.
                                 self.msgr.fatal(_("Error vector map %s exist in temporal database. "
                                                   "Use overwrite flag.  : \n%s") \
@@ -788,14 +737,6 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         dbif.close()
                 self.remove_intermediate_vector_maps()
             t[0] = register_list
-
-        if self.debug:
-            if isinstance(t[3], list):
-                for map_i in t[3]:
-                    print(map_i.get_id())
-            else:
-                print(t[1] + " = " + str(t[3]))
-            t[0] = t[3]
 
     def p_overlay_operation(self, t):
         """
@@ -826,7 +767,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         if self.run:
             t[0] = self.create_overlay_operations(maplistA, maplistB, ("EQUAL",), "=", t[2])
-        if self.debug:
+        else:
             t[0] = t[1]
 
     def p_overlay_operation_relation(self, t):
@@ -843,7 +784,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         if self.run:
             t[0] = self.create_overlay_operations(maplistA, maplistB, relations, temporal, function)
-        if self.debug:
+        else:
             t[0] = t[1]
 
     def create_overlay_operations(self, maplistA, maplistB, relations, temporal, function):
@@ -875,15 +816,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             resultlist = []
             for map_i in topolist:
                 # Generate an intermediate name for the result map list.
-                name = self.generate_map_name()
-                # Get mapset input.
-                mapset = get_current_mapset()
-                # Check for mapset in given stds input.
-                mapname = name + "@" + mapset
-                # Create new map based on the related map list.
-                map_new = map_i.get_new_instance(mapname)
-                # Set initial map extend of new vector map.
-                self.overlay_map_extent(map_new, map_i, bool_op = opname, copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op=opname,
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Loop over temporal related maps and create overlay modules.
@@ -915,14 +849,14 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 m.inputs["ainput"].value = str(mapainput)
                                 m.inputs["binput"].value = str(mapbinput)
                                 m.outputs["output"].value = name
-                                m.flags["overwrite"].value = grass.overwrite()
+                                m.flags["overwrite"].value = self.overwrite
                             else:
                                 patchinput = str(mapainput) + ',' + str(mapbinput)
                                 m = copy.deepcopy(self.m_patch)
                                 m.run_ = False
                                 m.inputs["input"].value = patchinput
                                 m.outputs["output"].value = name
-                                m.flags["overwrite"].value = grass.overwrite()
+                                m.flags["overwrite"].value = self.overwrite
                             # Conditional append of module command.
                             if "cmd_list" in dir(map_new):
                                 map_new.cmd_list.append(m)
@@ -952,16 +886,9 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             resultlist = []
 
             for map_i in bufflist:
-                # Generate an intermediate name
-                name = self.generate_map_name()
-                # Get mapset input.
-                mapset = get_current_mapset()
-                # Check for mapset in given stds input.
-                mapname = name + "@" + mapset
-                # Create new map based on the related map list.
-                map_new = map_i.get_new_instance(mapname)
-                # Set initial map extend of new vector map.
-                self.overlay_map_extent(map_new, map_i, copy = True)
+                # Generate an intermediate name for the result map list.
+                map_new = self.generate_new_map(base_map=map_i, bool_op=None,
+                                                copy=True)
                 # Change spatial extent based on buffer size.
                 map_new.spatial_buffer(float(t[5]))
                 # Check buff type.
@@ -976,8 +903,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 m.inputs["type"].value = buff_type
                 m.inputs["input"].value = str(map_i.get_id())
                 m.inputs["distance"].value = float(t[5])
-                m.outputs["output"].value = name
-                m.flags["overwrite"].value = grass.overwrite()
+                m.outputs["output"].value = map_new.get_name()
+                m.flags["overwrite"].value = self.overwrite
 
                 # Conditional append of module command.
                 if "cmd_list" in dir(map_new):
@@ -987,9 +914,6 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 resultlist.append(map_new)
 
             t[0] = resultlist
-
-        if self.debug:
-            pass
 
     def p_buff_function(self, t):
         """buff_function    : BUFF_POINT
@@ -1008,5 +932,3 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-
