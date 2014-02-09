@@ -28,3 +28,7 @@ from c_libraries_interface import *
 from temporal_algebra import *
 from temporal_vector_algebra import *
 from temporal_vector_operator import *
+from temporal_raster_operator import *
+from temporal_raster_base_algebra import *
+from temporal_raster_algebra import *
+from temporal_raster3d_algebra import *

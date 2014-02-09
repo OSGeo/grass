@@ -30,7 +30,7 @@ def open_old_space_time_dataset(name, type, dbif=None):
     """!This function opens an existing space time dataset and return the
        created and intialized object of the specified type.
 
-       This function will raise a ScriptError in case the type is wrong,
+       This function will call exit() or raise a grass.pygrass.messages.FatalError in case the type is wrong,
        or the space time dataset was not found.
 
        @param name The name of the space time dataset, if the name does not
@@ -112,7 +112,7 @@ def check_new_space_time_dataset(name, type, dbif=None, overwrite=False):
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)
     else:
-        core.error(_("Unkown type: %s") % (type))
+        msgr.error(_("Unkown type: %s") % (type))
         return None
 
     dbif, connected = init_dbif(dbif)
@@ -142,12 +142,10 @@ def open_new_space_time_dataset(name, type, temporaltype, title, descr, semantic
        @param semantic Semantical information
        @param dbif The temporal database interface to be used
        @param overwrite Flag to allow overwriting
-       @param dry Do not create the space time dataset in the temporal database,
-                  make a dry run with including all checks
 
        @return The new created space time dataset
 
-       This function will raise a ScriptError in case of an error.
+       This function will raise a FatalError in case of an error.
     """
     dbif, connected = init_dbif(dbif)
     msgr = get_tgis_message_interface()
@@ -177,7 +175,7 @@ def open_new_space_time_dataset(name, type, temporaltype, title, descr, semantic
 
 ############################################################################
 
-def check_new_map_dataset(name, layer=None, type="raster", 
+def check_new_map_dataset(name, layer=None, type="raster",
                           overwrite=False, dbif=None):
     """!Check if a new map dataset of a specific type can be created in
         the temporal database
