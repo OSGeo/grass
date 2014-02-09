@@ -9,25 +9,33 @@
 #%option
 #% key: raster
 #% type: string
+#% gisprompt: old,cell,raster
+#% key_desc: name
 #% description: Raster map to to analyse
 #% required: yes
 #%end
 #%option
 #% key: vector
 #% type: string
+#% gisprompt: old,vector,vector
+#% key_desc: name
 #% description: Vector map to overlay
 #% required: no
 #%end
 #%option
 #% key: site
 #% type: string
+#% gisprompt: old,vector,vector
+#% key_desc: name
 #% description: Vector points map to overlay
 #% required: no
 #%end
 #%option
 #% key: config
 #% type: string
-#% description: Name of configuration file where insert areas
+#% gisprompt: new_file,file,output
+#% key_desc: filename
+#% description: Name of configuration file where areas are to be saved
 #% required: yes
 #%end
 #%option
@@ -90,19 +98,45 @@ if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
     exit 1
 fi
 
+cleanup()
+{
+   # remove temporary region
+   eval `g.findfile elem=windows file="tmp_rli_selmsk.$$" | grep '^name='`
+   if [ -n "$name" ] ; then
+      g.region region="tmp_rli_selmsk.$$"
+      g.remove region="tmp_rli_selmsk.$$" --quiet
+   fi
 
-# FIXME: use WIND_OVERRIDE
+   rm -f "$TMP" "$TMP".val
+}
+trap "cleanup" 2 3 15
 
-# show the sampling frame
+
+# setup internal region
+#  (WIND_OVERRIDE is already present by the main r.li.setup script)
+g.region save="tmp_rli_selmsk.$$"
+
+# ?show the sampling frame
 if [ "$GIS_FLAG_f" -eq 1 ] ; then
-    g.region n="$GIS_OPT_north" s="$GIS_OPT_south" e="$GIS_OPT_east" w="$GIS_OPT_west"
+    g.region n="$GIS_OPT_north" s="$GIS_OPT_south" \
+	     e="$GIS_OPT_east" w="$GIS_OPT_west"
 else
     g.region rast="$GIS_OPT_raster"
 fi
 
-# open x1 Xmonitor
-d.mon stop=x1
-d.mon start=x1
+# find a free Xmonitor
+XMON=x1
+for i in 1 2 3 4 5 6 7 ; do
+   result=`d.mon -L | grep -w "^x$i"`
+   if [ `echo "$result" | grep -c 'not'` -eq 1 ] ; then
+      XMON="x$i"
+      break
+   fi
+done
+
+# open the Xmonitor
+d.mon stop="$XMON"
+d.mon start="$XMON"
 
 d.rast -o map="$GIS_OPT_raster"
 
@@ -110,7 +144,7 @@ if [ -n "$GIS_OPT_vector" ] ; then
     d.vect map="$GIS_OPT_vector"
 fi
 if [ -n "$GIS_OPT_site" ] ; then 
-    d.vect map="$GIS_OPT_site"
+    d.vect map="$GIS_OPT_site" color=red fcolor=red size=5 icon=basic/circle
 fi
 
 # setup for drawing area
@@ -127,56 +161,49 @@ r.digit output="tmp_rli_mask.$$" < "$RDIG_INSTR"
 # show the selected area
 d.rast -o map="tmp_rli_mask.$$"
 
-name=$$.val
+name="$TMP.val"
 export name
 
+# ask if it's ok, save 0,1 to "$name" temp file
 "$GRASS_WISH" "$f_path/area_query"
-    cat $name | cut -f1 -d ' ' > $name.var
-    read ok < $name.var
-    cat $name | cut -f2 -d' ' > $name.var
-    r_name=""
-    read r_name < $name.var
-    if [ $ok -eq 1 ] ; then
-	r.to.vect input="$$" output="v$$" feature=area
-	g.region vect="v$$"
-	v.to.rast input="v$$" output=$r_name value=1 use=val
-	#write info in configuration file
-	g.region -g| grep "n=" | cut -f2 -d'='> $name.var
-	read north < $name.var
-	g.region -g| grep "s=" | cut -f2 -d'='  > $name.var
-	read south < $name.var
-	g.region -g| grep "e=" | cut -f2 -d'=' > $name.var
-	read east < $name.var
-	g.region -g| grep "w=" | cut -f2 -d'=' > $name.var
-	read west < $name.var
-	echo "SAMPLEAREAMASKED $r_name $north|$south|$east|$west" >>\
-	    $GIS_OPT_conf
-	#remove tmp raster and vector
-	g.remove rast=$$
-	g.remove vect=v$$
-        #rm -f "$GISDBASE"/"$LOCATION"/"$MAPSET"/cats/"$$" 
-	#rm -f "$GISDBASE"/"$LOCATION"/"$MAPSET"/cell/"$$" 
-	#rm -f "$GISDBASE"/"$LOCATION"/"$MAPSET"/cellhd/"$$" 
-	#rm -fR "$GISDBASE"/"$LOCATION"/"$MAPSET"/cell_misc/"$$" 
-	#rm -f  "$GISDBASE"/"$LOCATION"/"$MAPSET"/colr/"$$" 
-	#rm -f "$GISDBASE"/"$LOCATION"/"$MAPSET"/hist/"$$" 
-	#rm -fR "$GISDBASE"/"$LOCATION"/"$MAPSET"/vector/"v$$"
-	echo DROP TABLE "v$$" | db.execute
-	
-	if [ $GIS_FLAG_f -eq 1 ] ; then
-	    g.region n=$GIS_OPT_north s=$GIS_OPT_south e=$GIS_OPT_east w=$GIS_OPT_west
-	else
-	    g.region rast=$GIS_OPT_raster
-	fi
 
+ok=`cat "$name" | cut -f1 -d ' '`
+r_name=`cat "$name" | cut -f2 -d' '`
+
+
+if [ "$ok" -eq 1 ] ; then
+    # r.mask + 'g.region zoom= align=' + 'r.mapcalc cropmap=map' would be cleaner?
+    r.to.vect input="tmp_rli_mask.$$" output="tmp_rli_mask_v$$" feature=area
+    g.region vect="tmp_rli_mask_v$$"
+    v.to.rast input="tmp_rli_mask_v$$" output="$r_name" value=1 use=val
+
+    # write info in configuration file
+    eval `g.region -g`
+    north="$n"
+    south="$s"
+    east="$e"
+    west="$w"
+
+    echo "SAMPLEAREAMASKED $r_name $north|$south|$east|$west" >> \
+	    "$GIS_OPT_conf"
+
+    # remove tmp raster and vector
+    g.remove rast="tmp_rli_mask.$$" --quiet
+    g.remove vect="tmp_rli_mask_v$$" --quiet
+
+    if [ "$GIS_FLAG_f" -eq 1 ] ; then
+    	g.region n="$GIS_OPT_north" s="$GIS_OPT_south" \
+    		    e="$GIS_OPT_east" w="$GIS_OPT_west"
     else
-	echo 0 >> $GIS_OPT_conf
+    	g.region rast="$GIS_OPT_raster"
     fi
 
-d.mon stop=x1
+else
+    echo 0 >> "$GIS_OPT_conf"
+fi
+
+
+d.mon stop="$XMON"
 
 # clean tmp files
-#FIXME: use g.tempfile
-rm -f "$$"*
-rm -f "$TMP"*
-
+cleanup
