@@ -377,7 +377,8 @@ button .r -text "Remove" -width 8 -command {
 	button .removeconf.buttons.y -text "Yes" -width 8 -command { 
 	      if { [ catch { exec rm $env(HOME)/.grass7/r.li/$selection } ] } then { 
 		tk_messageBox -message "'$selection' Not deleted" -type ok -icon error} else {
-		tk_messageBox -message "$selection  deleted" -type ok
+		#annoying "deleted" messageBox
+		#tk_messageBox -message "$selection  deleted" -type ok
 		openDir .files "~/.grass7/r.li"
 		destroy .removeconf}
 	}
