@@ -43,7 +43,7 @@
 #% description: Activate spatial topology.
 #%end
 
-import grass.script as grass
+import grass.script
 import grass.temporal as tgis
 import sys
 
@@ -58,13 +58,13 @@ def main():
         import ply.lex as lex
         import ply.yacc as yacc
     except:
-        grass.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."))
+        grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."))
 
     tgis.init(True)
     p = tgis.TemporalVectorAlgebraParser(run = True, debug=False, spatial = spatial)
-    p.parse(expression, stdstype, basename)
+    p.parse(expression, basename, grass.script.overwrite())
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = grass.script.parser()
     sys.exit(main())
 
