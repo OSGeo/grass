@@ -137,7 +137,7 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
 	    double result;
 
 	    result = doneJob.f.f_d.res;
-	    /*output */
+	    /* output */
 	    if (parsed != MVWIN) {
 		print_Output(res, doneJob);
 	    }

@@ -68,6 +68,7 @@ void worker_init(char *r, int f(int, char **, struct area_entry *, double *), ch
 
     /* read data type to allocate cache */
     data_type = Rast_map_type(raster, "");
+
     /* calculate rows in cache */
     switch (data_type) {
     case CELL_TYPE:{
@@ -242,6 +243,7 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
 	if (write(mask_fd, buf, cl * sizeof(int)) < 0)
 	    return NULL;
     }
+
     close(mask_fd);
     return G_store(tmp_file);
 }
