@@ -178,7 +178,7 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    buf_sup = RLI_get_cell_raster_row(fd, j - 1 + ad->y, ad);
 
 
-	if ((j + 1) < ad->rl) {	/*not last row */
+	if ((j + 1) < ad->rl) {	/* not last row */
 	    buf_inf = RLI_get_cell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
@@ -198,7 +198,7 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    }
 
 
-	    if ((j + 1) < ad->rl) {	/*not last row */
+	    if ((j + 1) < ad->rl) {	/* not last row */
 		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
 		    G_fatal_error("reading mask_inf");
 		    return RLI_ERRORE;
@@ -433,7 +433,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	    buf_sup = RLI_get_dcell_raster_row(fd, j - 1 + ad->y, ad);
 
 
-	if ((j + 1) < ad->rl) {	/*not last row */
+	if ((j + 1) < ad->rl) {	/* not last row */
 
 	    buf_inf = RLI_get_dcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
@@ -456,7 +456,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	    }
 
 
-	    if ((j + 1) < ad->rl) {	/*not last row */
+	    if ((j + 1) < ad->rl) {	/* not last row */
 		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
 		    G_fatal_error("reading mask_inf");
 		    return RLI_ERRORE;
@@ -684,7 +684,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	if (j > 0)		/* not first row */
 	    buf_sup = RLI_get_fcell_raster_row(fd, j - 1 + ad->y, ad);
 
-	if ((j + 1) < ad->rl) {	/*not last row */
+	if ((j + 1) < ad->rl) {	/* not last row */
 
 	    buf_inf = RLI_get_fcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
@@ -706,7 +706,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 		return RLI_ERRORE;
 	    }
 
-	    if ((j + 1) < ad->rl) {	/*not last row */
+	    if ((j + 1) < ad->rl) {	/* not last row */
 		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
 		    G_fatal_error("reading mask_inf");
 		    return RLI_ERRORE;
