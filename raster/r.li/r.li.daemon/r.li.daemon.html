@@ -32,12 +32,13 @@ To write a new index only two steps are needed:
 	folder, which contains all index declarations. This function must be of this kind:
 	<br><div class="code"><pre>
         int index(int fd, char ** par, area_des ad, double * result)
-	</pre></div><br>
+	</pre></div>
+	<br>
 	where: <ul>
-			<li><i>fd</i> is the raster map descriptor
-			<li><i>par</i> is a matrix for special parameter (like argv in main)
-			<li><i>ad</i> is the area descriptor 
-			<li><i>result</i> is where to put the index calculation result
+		    <li><i>fd</i> is the raster map descriptor
+		    <li><i>par</i> is a matrix for special parameter (like argv in main)
+		    <li><i>ad</i> is the area descriptor 
+		    <li><i>result</i> is where to put the index calculation result
 		</ul>
 	This function has to return 1 on success and 0 otherwise. <br><br>
 	<li>
@@ -57,6 +58,7 @@ To write a new index only two steps are needed:
 </ol>
 Compile it using a changed Makefile based on the file for <em>r.li.patchdensity</em>.
 
+
 <h2>NOTES</h2>
 
 Using GRASS library function to access raster rows can slow down moving windows 
@@ -68,6 +70,7 @@ RLI_get_dcell_row(int, int, area_des)
 </pre></div><br>
 to use an ad hoc build memory management developed to speed up the system.
 The documentation is in doxygen files.
+
 
 <h2>SEE ALSO</h2>
 
@@ -82,6 +85,7 @@ McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
+
 <h2>AUTHORS</h2>
 
 Claudio Porta and Lucio Davide Spano, students of Computer Science 
@@ -95,6 +99,11 @@ Read the COPYING file that comes with GRASS for details.
 <i>Last changed: $Date$</i>
 
 <hr>
-<p><a href="index.html">Main index</a> - <a href="raster.html">Raster index</a> - <a href="topics.html">Topics index</a> - <a href="keywords.html">Keywords Index</a> - <a href="full_index.html">Full index</a>
+<p><a href="index.html">Main index</a>
+ - <a href="raster.html">Raster index</a>
+ - <a href="topics.html">Topics index</a>
+ - <a href="keywords.html">Keywords Index</a>
+ - <a href="full_index.html">Full index</a>
+
 </body>
 </html>

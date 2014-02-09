@@ -33,7 +33,7 @@ raster map whose cell values are integer (e.g., 1, 2) or floating point
 controlling the shape, size, number, and distribution of sampling
 areas used to collect information about the landscape structure.
 Sampling area shapes can be the entire map or a moving
-window of square, rectangular or with circular shape. The size of
+window of square, rectangular or circular shape. The size of
 sampling areas can be changed, so that the landscape can be analyzed
 at a variety of spatial scales simultaneously. Sampling areas may be
 distributed across the landscape in a random, systematic, or
@@ -52,21 +52,26 @@ The general procedure to calculate an index from a raster map is two-fold:
 <li>run <em>r.li.setup</em>: create a configuration file selecting the parts of
     raster to analyze.
 
-<li>run <em>r.li.'index'</em> (e.g., <em>r.li.patchdensity</em>) for calculate the selected
-    index using on the areas selected on configuration file.
+<li>run one or more of the <em>r.li.<b>[index]</b></em> modules (e.g.,
+    <em>r.li.<b>patchdensity</b></em>) to calculate the selected index
+    using on the areas selected on configuration file.
 </ol>
+
 
 <h2>NOTE</h2>
 
-Also the <em>r.li.daemon</em> has a main function and it can be run, but it is only a
-template for development of new indices.
+The <em>r.li.daemon</em> module also has a "main" function front-end
+which can be run, but it is only a template for development of new
+indices so not built by default.
 <!-- mhh ??: -->
-The function itself has no meaning, it can be used only for debug.
+The function itself has no meaning, it is only useful as an example and 
+for debugging. 
+
 
 <h2>EXAMPLE</h2>
 
-To calculate a patch density index on a whole 'geology' raster map in the
-Spearfish region, using a 5x5 moving window, follow this procedure:
+Calculate a patch density index on the entire 'geology' raster map
+in the Spearfish sample dataset, using a 5x5 moving window:
 
 <ol>
 <li> CREATE A NEW CONFIGURATION FILE
@@ -76,14 +81,17 @@ Spearfish region, using a 5x5 moving window, follow this procedure:
   r.li.setup
 </pre></div>
   <li> The main <em>r.li.setup</em> window is displayed, click on "New"
-  <li> Now it is displayed the new configuration window,
+  <li> The new configuration window is now displayed, enter the
+	configuration file name (e.g., "my_conf", do not use absolute paths)
+  
+  Now it is displayed the new configuration window,
 	enter the configuration file name (e.g., "my_conf", do not use absolute paths) 
 	and the name of raster map (e.g., "geology").
 	The other fields are not needed for this configuration.
-  <li> Click on "Setup sampling frame", select "Whole maplayer" and click "OK"
+  <li> Click on "Setup sampling frame", select "Whole map layer" and click "OK"
   <li> Click on "Setup sampling areas", select "Moving window" and click "OK"
   <li> Click on "Use keyboard to enter moving window dimension"
-  <li> Select "Rectangle" and enter 5 on "heigth" and "width" fields
+  <li> Select "Rectangle" and enter 5 in the "height" and "width" fields
   <li> Click on "Save settings"
   <li> Close the <em>r.li.setup</em> window
   </ol>

@@ -23,9 +23,6 @@
 #include "defs.h"
 
 
-/**
- * \brief number of r.li.workers to use
- */
 #define NORMAL 1
 #define MVWIN 2
 #define GEN 3
