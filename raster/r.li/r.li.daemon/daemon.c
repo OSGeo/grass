@@ -371,6 +371,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 	    aid++;
 	    insertNode(l, m);
 	}
+
 	while ((token = strtok(NULL, " ")) != NULL &&
 	       (strcmp(token, "MASKEDOVERLAYAREA") == 0));
 

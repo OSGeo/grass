@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 #
 # This script selects a square area using the mouse
 #
@@ -6,7 +6,7 @@
 # Read the COPYING file that comes with GRASS for details.
 #
 
-#%Module 
+#%Module
 #% description: Select a rectangular area
 #%End
 #%option
@@ -55,7 +55,7 @@
 #% required: no
 #%end
 #%option
-#% key: west 
+#% key: west
 #% type: string
 #% description: Western edge (use only with the 'f' flag)
 #% required: no
@@ -93,7 +93,7 @@ cleanup()
       g.remove region="tmp_rli_sq.$$" --quiet
    fi
 
-   rm -f "$TMP" "$TMP.var" 
+   rm -f "$TMP" "$TMP.var"
 }
 trap "cleanup" 2 3 15
 
@@ -108,9 +108,7 @@ for i in 1 2 3 4 5 6 7 ; do
    fi
 done
 
-# open the Xmonitor
-d.mon stop="$XMON"
-d.mon start="$XMON"
+d.mon start="$XMON" --quiet
 
 
 # setup internal region
@@ -135,12 +133,13 @@ if [ "$GIS_FLAG_f" -eq 1 ] ; then
 	     e="$GIS_OPT_east" w="$GIS_OPT_west"
 fi
 
-d.rast -o map="$GIS_OPT_raster"
+d.rast -o map="$GIS_OPT_raster" --quiet
 
 if [ -n "$GIS_OPT_vector" ] ; then
-    d.vect map="$GIS_OPT_vector"
+    d.vect map="$GIS_OPT_vector" type=area fcolor=none width=2
 fi
-if [ -n "$GIS_OPT_site" ] ; then 
+if [ -n "$GIS_OPT_site" ] ; then
+    d.vect map="$GIS_OPT_site" color=black fcolor=black size=9 icon=basic/circle
     d.vect map="$GIS_OPT_site" color=red fcolor=red size=5 icon=basic/circle
 fi
 
@@ -156,6 +155,7 @@ fi
 #EOF
 ######
 
+# note if user right clicks to quit without zooming the whole frame is used.
 d.zoom
 
 
@@ -166,12 +166,17 @@ export name
 # ask if it's ok, save 0,1 to the "$name" tmp file
 "$GRASS_WISH" "$f_path/square_query"
 
-read ok < "$TMP.var"
+if [ -e "$name" ] ; then
+   read ok < "$name"
+else
+   ok="-999"
+fi
 
 if [ "$ok" -eq 0 ] ; then
     echo "NO" >> "$GIS_OPT_conf"
 elif [ "$ok" -eq 1 ] ; then
     # write the square boundaries
+    # TODO: is range (0-1, 0-1) valid or a bug?
     eval `g.region -g`
     echo "SQUAREAREA $n|$s|$e|$w|$nsres|$ewres" >> "$GIS_OPT_conf"
 else
@@ -179,7 +184,7 @@ else
 fi
 
 # close the Xmonitor
-d.mon stop="$XMON"
+d.mon stop="$XMON" --quiet
 
 # clean tmp files and temporary region
 cleanup

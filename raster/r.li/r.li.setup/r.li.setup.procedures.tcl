@@ -7,8 +7,8 @@
  #update sample frame environment variables
  proc updateSF_Environment { } {
  	global env
- 	exec g.region rast=$env(RASTER) 
-	exec g.region -g > $env(TMP).tmp 
+ 	exec g.region rast=$env(RASTER)
+	exec g.region -g > $env(TMP).tmp
 	set n [ exec cat $env(TMP).tmp | grep "n=" | cut -f2 -d= ]
 	set s [ exec cat $env(TMP).tmp | grep "s=" | head -n 1 | cut -f2 -d= ]
 	set w [ exec cat $env(TMP).tmp | grep "w=" | cut -f2 -d= ]
@@ -26,18 +26,18 @@
 	file delete $env(TMP).tmp
 	#debug line
 	#tk_messageBox -message "$env(SF_N)|$env(SF_S)|$env(SF_W)|$env(SF_E)|$env(SF_NSRES)|$env(SF_EWRES)|"
-	
+
  }
- 
- 
- #shows the instruction for drawing squares 
+
+
+ #shows the instruction for drawing squares
  proc squareInstruction {} {
  	toplevel .instruction
 	wm title .instruction "\[r.li.setup\] Commands"
 	#wm maxsize .instruction 300 200
 	frame .instruction.txt
-	pack .instruction.txt 
-	text .instruction.txt.t -font Helvetica -height 12 
+	pack .instruction.txt
+	text .instruction.txt.t -font Helvetica -height 12
 	.instruction.txt.t tag configure big -font {Helvetica 16 bold}
 	.instruction.txt.t tag configure normal -font {Helvetica 14}
 	.instruction.txt.t insert end "Mouse buttons functions \n \n" big
@@ -55,14 +55,14 @@
 	#.instruction.txt configure -state disabled
 	return .instruction
  }
- 
+
  proc vectorInstruction {} {
  	toplevel .instruction
 	wm title .instruction "\[r.li.setup\] Commands"
 	#wm maxsize .instruction 300 200
 	frame .instruction.txt
-	pack .instruction.txt 
-	text .instruction.txt.t -font Helvetica -height 12 
+	pack .instruction.txt
+	text .instruction.txt.t -font Helvetica -height 12
 	.instruction.txt.t tag configure big -font {Helvetica 16 bold}
 	.instruction.txt.t tag configure normal -font {Helvetica 14}
 	.instruction.txt.t insert end "Mouse buttons functions \n \n" big
@@ -80,14 +80,14 @@
 	#.instruction.txt configure -state disabled
 	return .instruction
  }
- 
+
  proc circleInstruction {} {
  	toplevel .instruction
 	wm title .instruction "\[r.li.setup\] Commands"
 	#wm maxsize .instruction 300 200
 	frame .instruction.txt
-	pack .instruction.txt 
-	text .instruction.txt.t -font Helvetica -height 12 
+	pack .instruction.txt
+	text .instruction.txt.t -font Helvetica -height 12
 	.instruction.txt.t tag configure big -font {Helvetica 16 bold}
 	.instruction.txt.t tag configure normal -font {Helvetica 14}
 	.instruction.txt.t insert end "Mouse buttons functions \n \n" big
@@ -116,15 +116,15 @@
 	pack .fileBrowser.top -side top -fill y -anchor center
 	listbox .fileBrowser.top.listbox -selectmode single
 	openDir .fileBrowser.top.listbox $path
-	pack .fileBrowser.top.listbox -expand 1 -fill both -padx 7 -pady 7 
+	pack .fileBrowser.top.listbox -expand 1 -fill both -padx 7 -pady 7
 	#browser buttons
 	frame .fileBrowser.buttons
 	pack .fileBrowser.buttons -side bottom -pady 2 -anchor center
 	button .fileBrowser.buttons.open -text "Open" -command {set selection [fileSelect .fileBrowser .fileBrowser.top.listbox $p_entry]}
 	pack .fileBrowser.buttons.open
- 
+
  }
- 
+
  proc fileSelect {widget listbox entry} {
  set selection [$listbox get [$listbox curselection]]
 		switch [file type $selection] {
@@ -137,10 +137,10 @@
 		}
 	}
 }
- 
- 
- 
- #Open the specified directory 
+
+
+
+ #Open the specified directory
  proc openDir {listbox newpath} {
     catch {cd $newpath}
     $listbox delete 0 end
@@ -174,12 +174,12 @@ switch $selection {
 	} else {
 		set ins [squareInstruction]
 		tkwait window $ins
-		catch { exec $env(F_PATH)/square_mouse_selection.sh raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$tmp.tmp } 
+		catch { exec $env(F_PATH)/square_mouse_selection.sh raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$tmp.tmp >@stdout 2>@stderr }
 		set ok ""
 		catch {set ok [exec cat $tmp.tmp | grep "SQUAREAREA" | cut -f1 -d\ ]}
 		if { $ok == "SQUAREAREA" } then {
 			#sampling frame accepted
-			set start [exec cat $tmp.tmp | grep "START" | cut -f2 -d\ ] 
+			set start [exec cat $tmp.tmp | grep "START" | cut -f2 -d\ ]
 			scan $start %f|%f|%f|%f|%f|%f s_n s_s s_e s_w s_nres s_sres
 			set square [exec cat $tmp.tmp | grep "SQUAREAREA" | cut -f2 -d\ ]
 			#resolution north-south
@@ -191,11 +191,11 @@ switch $selection {
 			set env(SF_S) $s
 			set env(SF_E) $e
 			set env(SF_W) $w
-			set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+			set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 			set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\|  ]
 			# calulating area coordinates
-			set env(SF_Y) [expr abs(round(($s_n - $n) / $nres)) ] 
-			set env(SF_X) [expr abs(round(($s_w - $w) / $sres)) ] 
+			set env(SF_Y) [expr abs(round(($s_n - $n) / $nres)) ]
+			set env(SF_X) [expr abs(round(($s_w - $w) / $sres)) ]
 			set env(SF_RL) [expr abs(round(($n - $s) / $nres)) ]
 			set env(SF_CL) [expr abs(round(($e - $w) / $sres)) ]
 			set env(SF_NSRES) $nres
@@ -206,12 +206,12 @@ switch $selection {
 			set cl [ expr double($env(SF_CL)) / double($cols) ]
 			#debug line
 			#tk_messageBox -message "$x|$y|$rl|$cl"
-			exec echo "SAMPLINGFRAME $x|$y|$rl|$cl" >> $tmp.set 
+			exec echo "SAMPLINGFRAME $x|$y|$rl|$cl" >> $tmp.set
 			tk_messageBox -message "Selected area set as sampling frame" -type ok
 			file delete $tmp.tmp
 			$button configure -state disabled
 		} else {
-			tk_messageBox -message "Warning sampling frame not set" -type ok -icon warning
+			tk_messageBox -message "Warning: sampling frame not set" -type ok -icon warning
 		}
 	}
 	}
@@ -225,7 +225,7 @@ global env
 set tmp $env(TMP)
 switch $selection {
 	whole {
-		set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+		set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 		set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 		set x [expr double($env(SF_X)) / double($cols) ]
 		set y [expr double($env(SF_Y)) / double($rows) ]
@@ -246,8 +246,8 @@ switch $selection {
 	vector {
 		tk_messageBox -message "WARNING: this configuration file will work only on $env(RASTER) raster map" -type ok -icon warning
 		#TODO change here
-		if { $env(RASTER) != "" && $env(VECTOR) != "" && $env(CONF) != "" } then { 
-			catch { exec  $env(F_PATH)/sample_area_vector.sh  raster=$env(RASTER) vector=$env(VECTOR) conf=$env(TMP).set } 
+		if { $env(RASTER) != "" && $env(VECTOR) != "" && $env(CONF) != "" } then {
+			catch { exec  $env(F_PATH)/sample_area_vector.sh  raster=$env(RASTER) vector=$env(VECTOR) sites=$env(SITE) conf=$env(TMP).set >@stdout 2>@stderr }
 		} else {
 			tk_messageBox -message "Please set configuration file name, raster map and vector file to overlay" -type ok -icon error
 		}
@@ -259,84 +259,84 @@ switch $selection {
 # defines sampling units distribuition
 proc defineSamplingUnits {selec rl cl maskname} {
 	global env
-	set tmp $env(TMP) 
+	set tmp $env(TMP)
 	#da modificare qua per le proiezioni
 	switch $selec {
-	
+
 		nonoverlapping {
-			toplevel .dialog 
+			toplevel .dialog
 			wm title .dialog " Random Nonoverlapping "
-			wm minsize .dialog 300 150
-		
+			wm minsize .dialog 300 100
+
 			frame .dialog.scale
 			pack .dialog.scale
-			label .dialog.scale.label1 -text " What number of Sampling Units to use?"
+			label .dialog.scale.label1 -text "\n How many Sampling Units to use?"
 			entry .dialog.scale.e1 -width 5 -textvariable number1
-			grid .dialog.scale.label1 .dialog.scale.e1   -padx 3
-			
+			grid .dialog.scale.label1 .dialog.scale.e1  -padx 3
+
 			button .dialog.button -text " Ok " -command {
 				if  { $number1!="" && ![catch { exec printf %i $number1 }]} then {
 					exec echo "RANDOMNONOVERLAPPING $number1" >> $env(TMP).set
-					tk_messageBox -message "Sampling units distribuition set as Random Nonoverlapping" -type ok
+					tk_messageBox -message "Sampling units distribuition set to Random Nonoverlapping" -type ok
 					set number1 ""
 					destroy .dialog
 				} else {
 					tk_messageBox -message "Please type integer value" -type ok -icon error
-				} 
+				}
 			}
-			pack .dialog.button
+			pack .dialog.button -pady 3
 		}
-		
-		contiguous { 
+
+		contiguous {
 			exec echo "SYSTEMATICCONTIGUOUS " >> $env(TMP).set
-			tk_messageBox -message "Sampling units distribuition set as Systematic Contiguous" -type ok
+			tk_messageBox -message "Sampling units distribuition set to Systematic Contiguous" -type ok
 		}
-		
-		noncontiguous { 
-			toplevel .dialog 
+
+		noncontiguous {
+			toplevel .dialog
 			wm title .dialog " Systematic non contiguous "
 			wm minsize .dialog 300 150
-		
+
 			frame .dialog.scale
 			pack .dialog.scale
 			label .dialog.scale.label1 -text " Insert distance between units"
 			entry .dialog.scale.e1 -width 5 -textvariable number1
 			grid .dialog.scale.label1 .dialog.scale.e1   -padx 3
-		
+
 	       		button .dialog.button -text " Ok " -command {
 			if  { $number1!="" && ![catch { exec printf %i $number1 }]} then {
 				exec echo "SYSTEMATICNONCONTIGUOUS $number1" >> $env(TMP).set
-				tk_messageBox -message "Sampling units distribuition set as Systematic Non Contiguous" -type ok
+				tk_messageBox -message "Sampling units distribuition set to Systematic Non Contiguous" -type ok
 				set number1 ""
 				destroy .dialog
 			} else {
 				tk_messageBox -message "Please type integer value" -type ok -icon error
 			}
 		}
-		pack .dialog.button	
+		pack .dialog.button
 		}
-		
-		random { 
-			toplevel .dialog 
+
+		random {
+			toplevel .dialog
 			wm title .dialog " Stratified Random "
 			wm minsize .dialog 300 150
-		
+
 			frame .dialog.scale
 			pack .dialog.scale
 			label .dialog.scale.label1 -text " Insert number of row strates "
 			entry .dialog.scale.e1 -width 5 -textvariable number1
 			grid .dialog.scale.label1 .dialog.scale.e1   -padx 3
-			
+
 			frame .dialog.scale2
 			pack .dialog.scale2
 			label .dialog.scale2.label2 -text " Insert number of column strates "
 			entry .dialog.scale2.e2 -width 5 -textvariable number2
 			grid .dialog.scale2.label2 .dialog.scale2.e2   -padx 3
-		
+
 	       		button .dialog.button -text " Ok " -command {
 			if  { $number1!="" && $number2!="" && ![catch { exec printf %i%i $number1 $number2 }]} then {
 				exec echo "STRATIFIEDRANDOM $number1|$number2" >> $env(TMP).set
-				tk_messageBox -message "Sampling units distribuition set as Stratified random" -type ok
+				tk_messageBox -message "Sampling units distribuition set to Stratified random" -type ok
 				set number1 ""
 				destroy .dialog
 			} else {
@@ -345,8 +345,8 @@ proc defineSamplingUnits {selec rl cl maskname} {
 		}
 		pack .dialog.button
 		}
-		
-		sites { 
+
+		sites {
 			if { $env(RASTER) == "" || $env(SITE) == "" } then {
 				tk_messageBox -message "Please set raster and site file names first" -icon error
 			} else {
@@ -367,7 +367,7 @@ proc saveWindow {sel number1 number2 number3 maskname widget} {
 			#check if we have integers
 			tk_messageBox -message "Type integer values" -type ok -icon error
 			} else {
-				set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+				set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 				set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 				set rl [expr double($number2) / double($rows) ]
 				set cl [expr double($number1) /double($cols) ]
@@ -380,14 +380,14 @@ proc saveWindow {sel number1 number2 number3 maskname widget} {
 			tk_messageBox -message "Set all entries first" -type ok -icon error
 			}
 		}
-		circle { 
+		circle {
 			if  { $number3 != "" } then {
 				if { [catch { exec printf %i $number3 }]  } then {
 				#check if we have integers
 				tk_messageBox -message "Type integer values" -type ok -icon error
 			} else {
 				circleMask $number3 $maskname
-				set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+				set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 				set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\|  ]
 				set rl [expr double($env(CIR_RL)) /double($rows)]
 				set cl [expr double($env(CIR_CL)) /double($cols)]
@@ -413,19 +413,19 @@ proc drawRegions { number } {
 		set ins [vectorInstruction]
 		tkwait window $ins
 		while { $i < $number } {
-		 	catch { exec $env(F_PATH)/masked_area_selection.sh -f north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
+		 	catch { exec $env(F_PATH)/masked_area_selection.sh -f north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp >@stdout 2>@stderr }
 			set ok ""
 			catch {set ok [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f1 -d\ ]}
 			if { $ok == "SAMPLEAREAMASKED" } then {
-				#region accepted 
+				#region accepted
 				incr i
 				set r_name [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f2 -d\ ]
 				set square [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f3 -d\ ]
 				scan $square %f|%f|%f|%f n s e w
-				set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+				set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 				set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\|  ]
-				set abs_y [expr $env(SF_Y) + abs(round(($env(SF_N) - $n) / $env(SF_NSRES))) ] 
-				set abs_x [expr $env(SF_X)+ abs(round(($env(SF_W) - $w) / $env(SF_EWRES))) ] 
+				set abs_y [expr $env(SF_Y) + abs(round(($env(SF_N) - $n) / $env(SF_NSRES))) ]
+				set abs_x [expr $env(SF_X)+ abs(round(($env(SF_W) - $w) / $env(SF_EWRES))) ]
 				set abs_rl [expr abs(round(($n - $s) / $env(SF_NSRES))) ]
 				set abs_cl [expr abs(round(($e - $w) / $env(SF_EWRES))) ]
 				#debug line
@@ -436,16 +436,16 @@ proc drawRegions { number } {
 				set cl [ expr double($abs_cl) / double($cols) ]
 				#debug line
 				#tk_messageBox -message "$x|$y|$rl|$cl"
-				exec echo "MASKEDSAMPLEAREA $x|$y|$rl|$cl|$r_name" >> $env(TMP).set 
+				exec echo "MASKEDSAMPLEAREA $x|$y|$rl|$cl|$r_name" >> $env(TMP).set
 				tk_messageBox -message "Selected region saved as sampling area" -type ok
 				file delete $env(TMP).tmp
 			} else {
 				tk_messageBox -message "Please redraw region number $i" -type ok -icon warning
 			}
 		}
-		  
-		 
-		
+
+
+
 	}
 }
 
@@ -463,13 +463,13 @@ proc drawMouseUnits { num sel } {
 				tk_messageBox -message "Please enter a raster map and a configuration file name first" -type ok -icon error
 			} else {
 				while { $i < $num } {
-					catch { exec $env(F_PATH)/square_mouse_selection.sh -f north=$env(SF_N) south=$env(SF_S) east=$env(SF_E) west=$env(SF_W) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp } 
+					catch { exec $env(F_PATH)/square_mouse_selection.sh -f north=$env(SF_N) south=$env(SF_S) east=$env(SF_E) west=$env(SF_W) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp >@stdout 2>@stderr }
 					set ok ""
 					catch {set ok [exec cat $env(TMP).tmp | grep "SQUAREAREA" | cut -f1 -d\ ]}
 					if { $ok == "SQUAREAREA" } then {
 						#sampling area accepted
 						incr i
-						set start [exec cat $env(TMP).tmp | grep "START" | cut -f2 -d\ ] 
+						set start [exec cat $env(TMP).tmp | grep "START" | cut -f2 -d\ ]
 						scan $start %f|%f|%f|%f|%f|%f s_n s_s s_e s_w s_nres s_sres
 						set square [exec cat $env(TMP).tmp | grep "SQUAREAREA" | cut -f2 -d\ ]
 						#resolution north-south
@@ -477,11 +477,11 @@ proc drawMouseUnits { num sel } {
 						#resolution east-west
 						set sres ""
 						scan $square %f|%f|%f|%f|%f|%f n s e w nres sres
-						set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+						set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 						set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\|  ]
 						# calulating area coordinates
-						set abs_y [expr abs(round(($s_n - $n) / $nres)) ] 
-						set abs_x [expr abs(round(($s_w - $w) / $sres)) ] 
+						set abs_y [expr abs(round(($s_n - $n) / $nres)) ]
+						set abs_x [expr abs(round(($s_w - $w) / $sres)) ]
 						set abs_rl [expr abs(round(($n - $s) / $nres)) ]
 						set abs_cl [expr abs(round(($e - $w) / $sres)) ]
 						#debug line
@@ -492,12 +492,12 @@ proc drawMouseUnits { num sel } {
 						set cl [ expr double($abs_cl) / double($cols) ]
 						#debug line
 						#tk_messageBox -message "$x|$y|$rl|$cl"
-						exec echo "SAMPLEAREA $x|$y|$rl|$cl" >> $env(TMP).set 
+						exec echo "SAMPLEAREA $x|$y|$rl|$cl" >> $env(TMP).set
 						tk_messageBox -message "Selected area saved as sample area" -type ok
 						file delete $env(TMP).tmp
 					} else {
-						tk_messageBox -message "Warning sampling area not set" -type ok -icon warning
-					}	
+						tk_messageBox -message "Warning: sampling area not set" -type ok -icon warning
+					}
 				}
 			}
 		}
@@ -507,19 +507,19 @@ proc drawMouseUnits { num sel } {
 			set ins [circleInstruction]
 			tkwait window $ins
 			while { $i < $num } {
-		 		catch { exec $env(F_PATH)/masked_area_selection.sh -f -c north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
+		 		catch { exec $env(F_PATH)/masked_area_selection.sh -f -c north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp >@stdout 2>@stderr }
 				set ok ""
 				catch {set ok [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f1 -d\ ]}
 				if { $ok == "SAMPLEAREAMASKED" } then {
-					#region accepted 
+					#region accepted
 					incr i
 					set r_name [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f2 -d\ ]
 					set square [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f3 -d\ ]
 					scan $square %f|%f|%f|%f n s e w
-					set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+					set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 					set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\|  ]
-					set abs_y [expr $env(SF_Y) + abs(round(($env(SF_N) - $n) / $env(SF_NSRES))) ] 
-					set abs_x [expr $env(SF_X)+ abs(round(($env(SF_W) - $w) / $env(SF_EWRES))) ] 
+					set abs_y [expr $env(SF_Y) + abs(round(($env(SF_N) - $n) / $env(SF_NSRES))) ]
+					set abs_x [expr $env(SF_X)+ abs(round(($env(SF_W) - $w) / $env(SF_EWRES))) ]
 					set abs_rl [expr abs(round(($n - $s) / $env(SF_NSRES))) ]
 					set abs_cl [expr abs(round(($e - $w) / $env(SF_EWRES))) ]
 					#debug line
@@ -530,7 +530,7 @@ proc drawMouseUnits { num sel } {
 					set cl [ expr double($abs_cl) / double($cols) ]
 					#debug line
 					#tk_messageBox -message "$x|$y|$rl|$cl"
-					exec echo "MASKEDSAMPLEAREA $x|$y|$rl|$cl|$r_name" >> $env(TMP).set 
+					exec echo "MASKEDSAMPLEAREA $x|$y|$rl|$cl|$r_name" >> $env(TMP).set
 					tk_messageBox -message "Selection saved as sampling area" -type ok
 					file delete $env(TMP).tmp
 				} else {
@@ -539,12 +539,12 @@ proc drawMouseUnits { num sel } {
 			}
 		}
 	}
-	
+
 }
 
 #draw moving window with mouse
 proc drawMouseWindow { sel } {
-	global env 
+	global env
 	#rectangular or circular window
 	switch $sel {
 		rectangle {
@@ -555,13 +555,13 @@ proc drawMouseWindow { sel } {
 				tk_messageBox -message "Please enter a raster map and a configuration file name first" -type ok -icon error
 			} else {
 				while { $i == 0 } {
-					catch { exec $env(F_PATH)/square_mouse_selection.sh -f north=$env(SF_N) south=$env(SF_S) east=$env(SF_E) west=$env(SF_W) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp } 
+					catch { exec $env(F_PATH)/square_mouse_selection.sh -f north=$env(SF_N) south=$env(SF_S) east=$env(SF_E) west=$env(SF_W) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp >@stdout 2>@stderr }
 					set ok ""
 					catch {set ok [exec cat $env(TMP).tmp | grep "SQUAREAREA" | cut -f1 -d\ ]}
 					if { $ok == "SQUAREAREA" } then {
 						#moving window accepted
 						incr i
-						set start [exec cat $env(TMP).tmp | grep "START" | cut -f2 -d\ ] 
+						set start [exec cat $env(TMP).tmp | grep "START" | cut -f2 -d\ ]
 						scan $start %f|%f|%f|%f|%f|%f s_n s_s s_e s_w s_nres s_sres
 						set square [exec cat $env(TMP).tmp | grep "SQUAREAREA" | cut -f2 -d\ ]
 						#resolution north-south
@@ -569,7 +569,7 @@ proc drawMouseWindow { sel } {
 						#resolution east-west
 						set sres ""
 						scan $square %f|%f|%f|%f|%f|%f n s e w nres sres
-						set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+						set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 						set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\|  ]
 						#calculating moving window width and length
 						set abs_rl [expr abs(round(($n - $s) / $nres)) ]
@@ -581,14 +581,14 @@ proc drawMouseWindow { sel } {
 						#debug line
 						#tk_messageBox -message "$x|$y|$rl|$cl"
 						exec echo "MOVINGWINDOW" >> $env(TMP).set
-						exec echo "SAMPLEAREA -1|-1|$rl|$cl" >> $env(TMP).set 
+						exec echo "SAMPLEAREA -1|-1|$rl|$cl" >> $env(TMP).set
 						tk_messageBox -message "Moving window set" -type ok
 						file delete $env(TMP).tmp
 					} else {
 						tk_messageBox -message "Moving window not set" -type ok -icon warning
-					}	
+					}
 				}
-			}	
+			}
 		}
 		circle {
 			#circulars areas
@@ -596,16 +596,16 @@ proc drawMouseWindow { sel } {
 			set ins [circleInstruction]
 			tkwait window $ins
 			while { $i == 0 } {
-		 		catch { exec $env(F_PATH)/masked_area_selection.sh -f -c north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
+		 		catch { exec $env(F_PATH)/masked_area_selection.sh -f -c north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp >@stdout 2>@stderr }
 				set ok ""
 				catch {set ok [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f1 -d\ ]}
 				if { $ok == "SAMPLEAREAMASKED" } then {
-					#region accepted 
+					#region accepted
 					incr i
 					set r_name [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f2 -d\ ]
 					set square [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f3 -d\ ]
 					scan $square %f|%f|%f|%f n s e w
-					set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+					set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 					set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\|  ]
 					set abs_rl [expr abs(round(($n - $s) / $env(SF_NSRES))) ]
 					set abs_cl [expr abs(round(($e - $w) / $env(SF_EWRES))) ]
@@ -616,20 +616,20 @@ proc drawMouseWindow { sel } {
 					#debug line
 					#tk_messageBox -message "$x|$y|$rl|$cl"
 					exec echo "MOVINGWINDOW" >> $env(TMP).set
-					exec echo "MASKEDSAMPLEAREA -1|-1|$rl|$cl|$r_name" >> $env(TMP).set 
+					exec echo "MASKEDSAMPLEAREA -1|-1|$rl|$cl|$r_name" >> $env(TMP).set
 					tk_messageBox -message "Moving window set" -type ok
 					file delete $env(TMP).tmp
 				} else {
 					tk_messageBox -message "Moving window not set" -type ok -icon warning
 				}
 			}
-		}	
+		}
 	}
 }
 
 #create a circle mask for the keyboard circle selection
 proc circleMask { radius name} {
-	global env 
+	global env
 	exec g.region rast=$env(RASTER)
 	exec g.region -m > $env(TMP).tmp
 	set nsres [ exec cat $env(TMP).tmp | grep "nsres=" | cut -f2 -d= ]
@@ -638,7 +638,7 @@ proc circleMask { radius name} {
 	set xcell [expr round((2 * $radius) / $ewres) ]
 	set ycell [expr round((2 * $radius) / $nsres) ]
 	#to create a good raster circle the center of the circle have to be
-	#in the center of a cell, then we need an odd number of cells... 
+	#in the center of a cell, then we need an odd number of cells...
 	if { [ expr $xcell % 2 ] == 0 } then {
 		incr xcell
 	}
@@ -653,33 +653,33 @@ proc circleMask { radius name} {
 	set southEdge [expr double($env(SF_N) - ($ycell * $env(SF_NSRES)))]
 	#restrict region
 	exec g.region n=$env(SF_N) s=$southEdge e=$easthEdge w=$env(SF_W)
-	set xcenter [exec g.region -c | grep "region center easting:" | cut -f2 -d: | tr -d " "]
-	set ycenter [exec g.region -c | grep "region center northing:" | cut -f2 -d: | tr -d " "]
+	set xcenter [exec g.region -c | grep "center easting:" | cut -f2 -d: | tr -d " "]
+	set ycenter [exec g.region -c | grep "center northing:" | cut -f2 -d: | tr -d " "]
 	#debug line
 	#tk_messageBox -message "$xcenter , $ycenter $env(SF_N) $southEdge $env(SF_W) $easthEdge"
 	#creating circle
 	catch {exec r.circle -b output=$name coordinate=$xcenter,$ycenter max=$radius }
 	file delete $env(TMP).tmp
-} 
+}
 
-#set sample units from a site file 
+#set sample units from a site file
 
 proc centerOverSites { rl cl name} {
-	global env 
+	global env
 	if { $env(SITE) == "" || $env(RASTER) == "" } then {
 		tk_messageBox -message "Please set raster and site file name first" -type ok -icon error
 	} else {
 		#raster boundaries
-		exec g.region rast=$env(RASTER) 
-		exec g.region -g > $env(TMP).tmp 
-		set rows [exec  r.info map=$env(RASTER) | grep "Rows" | tr -d " " |   cut -f 2 -d: | cut -f 1 -d\| ]
+		exec g.region rast=$env(RASTER)
+		exec g.region -g > $env(TMP).tmp
+		set rows [exec r.info map=$env(RASTER) | grep "Rows" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
 		set cols [exec r.info map=$env(RASTER) | grep "Columns" | tr -d " " | cut -f 2 -d: | cut -f 1 -d\| ]
-		#create ascii site file 
+		#create ascii site file
 		exec v.out.ascii input=$env(SITE) output=$env(TMP).asc format=point
-		#counting points 
+		#counting points
 		set num [exec cat $env(TMP).asc | grep -c "" ]
 		set i 0
-		
+
 		# inserting point if they are into sample frame
 		while { $i < $num } {
 			incr i
@@ -696,7 +696,7 @@ proc centerOverSites { rl cl name} {
 			}
 			if { $ok == "TRUE" } then {
 				#the point is into sample frame
-				#calculating what cell contains this point 
+				#calculating what cell contains this point
 				set p_c [expr int( abs($x - $env(SF_W)) / $env(SF_EWRES))]
 				set p_r [expr int( abs($y - $env(SF_N)) / $env(SF_NSRES))]
 				#debug line
@@ -704,7 +704,7 @@ proc centerOverSites { rl cl name} {
 				#the point is the center of the rectangle, we have to see if the rectangle is into sample frame
 				set rl_delta [expr int( $rl/2)]
 				set cl_delta [expr int( $cl/2)]
-				set n_diff [expr ($p_r - $rl_delta) - $env(SF_Y)] 
+				set n_diff [expr ($p_r - $rl_delta) - $env(SF_Y)]
 				set s_diff [expr ($env(SF_Y) + $env(SF_RL)) - ($p_r + $rl_delta +1) ]
 				set e_diff [expr ($env(SF_X) + $env(SF_CL)) - ($p_c + $cl_delta + 1) ]
 				set w_diff [expr ($p_c - $cl_delta) - $env(SF_X)]
@@ -723,33 +723,33 @@ proc centerOverSites { rl cl name} {
 					}
 				}
 			}
-				
+
 		}
-	file delete $env(TMP).tmp $env(TMP).line $env(TMP).asc 
-	
-	} 
+	file delete $env(TMP).tmp $env(TMP).line $env(TMP).asc
+
+	}
 }
 
 proc saveSettings { widget } {
 	global env
-	
+
 	#write the sample frame
-	exec cat $env(TMP).set | grep "SAMPLINGFRAME " | tail -n 1 > $env(CONF) 
+	exec cat $env(TMP).set | grep "SAMPLINGFRAME " | tail -n 1 > $env(CONF)
 	#write sampling areas
-	catch  { exec cat $env(TMP).set | grep "SAMPLEAREA " >> $env(CONF) } 
+	catch  { exec cat $env(TMP).set | grep "SAMPLEAREA " >> $env(CONF) }
 	catch { exec cat $env(TMP).set | grep "MASKEDSAMPLEAREA " >> $env(CONF) }
 	set overlay 0
 	catch { set overlay [ exec cat $env(TMP).set | grep "MASKEDOVERLAYAREA " -c ] }
 	if { $overlay != 0 } then {
-		exec cat $env(TMP).set | grep "MASKEDOVERLAYAREA " >> $env(CONF) 
+		exec cat $env(TMP).set | grep "MASKEDOVERLAYAREA " >> $env(CONF)
 		exec echo "RASTERMAP $env(RASTER)" >> $env(CONF)
 		exec echo "VECTORMAP $env(VECTOR)" >> $env(CONF)
 	}
 	#write disposition line
-	catch { exec cat $env(TMP).set | grep "MOVINGWINDOW" >> $env(CONF) } 
-	catch { exec cat $env(TMP).set | grep "RANDOMNONOVERLAPPING " >> $env(CONF) } 
+	catch { exec cat $env(TMP).set | grep "MOVINGWINDOW" >> $env(CONF) }
+	catch { exec cat $env(TMP).set | grep "RANDOMNONOVERLAPPING " >> $env(CONF) }
 	catch { exec cat $env(TMP).set | grep "SYSTEMATICCONTIGUOUS " >> $env(CONF) }
-	catch { exec cat $env(TMP).set | grep "SYSTEMATICNONCONTIGUOUS " >> $env(CONF) } 
+	catch { exec cat $env(TMP).set | grep "SYSTEMATICNONCONTIGUOUS " >> $env(CONF) }
 	catch { exec cat $env(TMP).set | grep "STRATIFIEDRANDOM " >> $env(CONF)  }
 	file delete $env(TMP).set
 	destroy $widget
