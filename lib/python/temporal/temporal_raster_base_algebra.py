@@ -96,7 +96,6 @@ for details.
 @endcode
 """
 
-import grass.pygrass.modules as pygrass
 from temporal_raster_operator import *
 from temporal_algebra import *
 

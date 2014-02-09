@@ -11,6 +11,7 @@ for details.
 
 """
 
+import grass.pygrass.modules as pygrass
 from temporal_raster_base_algebra import *
 
 ###############################################################################
