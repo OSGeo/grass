@@ -57,7 +57,7 @@
 #% required: no
 #%end
 #%option
-#% key: west 
+#% key: west
 #% type: string
 #% description: Western edge (use only with the 'f' flag)
 #% required: no
@@ -134,32 +134,33 @@ for i in 1 2 3 4 5 6 7 ; do
    fi
 done
 
-# open the Xmonitor
-d.mon stop="$XMON"
-d.mon start="$XMON"
+d.mon start="$XMON" --quiet
 
-d.rast -o map="$GIS_OPT_raster"
+d.rast -o map="$GIS_OPT_raster" --quiet
 
 if [ -n "$GIS_OPT_vector" ] ; then
-    d.vect map="$GIS_OPT_vector"
+    d.vect map="$GIS_OPT_vector" type=area fcolor=none width=2
 fi
-if [ -n "$GIS_OPT_site" ] ; then 
+if [ -n "$GIS_OPT_site" ] ; then
+    d.vect map="$GIS_OPT_site" color=black fcolor=black size=9 icon=basic/circle
     d.vect map="$GIS_OPT_site" color=red fcolor=red size=5 icon=basic/circle
 fi
 
 # setup for drawing area
 if [ "$GIS_FLAG_c" -eq 1 ] ; then
    RDIG_INSTR="$f_path/circle.txt"
+   STYLE="circle"
 else
    RDIG_INSTR="$f_path/polygon.txt"
+   STYLE="polygon"
 fi
 
 # feed options to r.digit
-r.digit output="tmp_rli_mask.$$" < "$RDIG_INSTR"
+r.digit output="tmp_rli_mask.$$" --quiet < "$RDIG_INSTR"
 
 
 # show the selected area
-d.rast -o map="tmp_rli_mask.$$"
+d.rast -o map="tmp_rli_mask.$$" --quiet
 
 name="$TMP.val"
 export name
@@ -172,10 +173,11 @@ r_name=`cat "$name" | cut -f2 -d' '`
 
 
 if [ "$ok" -eq 1 ] ; then
+    mask_name="rli_samp_${STYLE}_${r_name}"
     # r.mask + 'g.region zoom= align=' + 'r.mapcalc cropmap=map' would be cleaner?
-    r.to.vect input="tmp_rli_mask.$$" output="tmp_rli_mask_v$$" feature=area
+    r.to.vect input="tmp_rli_mask.$$" output="tmp_rli_mask_v$$" feature=area --quiet
     g.region vect="tmp_rli_mask_v$$"
-    v.to.rast input="tmp_rli_mask_v$$" output="$r_name" value=1 use=val
+    v.to.rast input="tmp_rli_mask_v$$" output="$mask_name" use=val value=1  --quiet
 
     # write info in configuration file
     eval `g.region -g`
@@ -184,7 +186,7 @@ if [ "$ok" -eq 1 ] ; then
     east="$e"
     west="$w"
 
-    echo "SAMPLEAREAMASKED $r_name $north|$south|$east|$west" >> \
+    echo "SAMPLEAREAMASKED $mask_name $north|$south|$east|$west" >> \
 	    "$GIS_OPT_conf"
 
     # remove tmp raster and vector
@@ -203,7 +205,7 @@ else
 fi
 
 
-d.mon stop="$XMON"
+d.mon stop="$XMON" --quiet
 
 # clean tmp files
 cleanup

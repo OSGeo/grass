@@ -89,13 +89,13 @@ proc setupSamplingArea {widget} {
 	pack $widget.samplingArea.choice
 	set selection ""
 	radiobutton $widget.samplingArea.choice.whole -text "Whole map layer" -relief flat -variable selection -value whole -width 40 -anchor w 
-	radiobutton $widget.samplingArea.choice.regions -text "Regions" -relief flat -variable selection -value regions -width 40 -anchor w
-	radiobutton $widget.samplingArea.choice.units -text "Sample units" -relief flat -variable selection -value units -width 40 -anchor w
+	radiobutton $widget.samplingArea.choice.regions -text "Regions (digitize polygons with mouse)" -relief flat -variable selection -value regions -width 40 -anchor w
+	radiobutton $widget.samplingArea.choice.units -text "Sample units (digitize box or circular areas\nwith mouse or define using keyboard)" -relief flat -variable selection -value units -width 40 -anchor w
 	radiobutton $widget.samplingArea.choice.window -text "Moving window" -relief flat -variable selection -value window -width 40 -anchor w
 	set vectorAreas [exec cat $env(TMP).set | grep "SAMPLINGFRAME" | tail -n 1 | cut -f2 -d " "]
 	if { $vectorAreas == "0|0|1|1"} then {
-		#inserting select areas from the overlayed vector map
-		radiobutton $widget.samplingArea.choice.vector -text "Select areas from the overlayed vector map" -relief flat -variable selection -value vector -width 40 -anchor w
+		#inserting select areas from the overlaid vector map
+		radiobutton $widget.samplingArea.choice.vector -text "Select areas from the overlaid vector map" -relief flat -variable selection -value vector -width 40 -anchor w
 		pack $widget.samplingArea.choice.whole $widget.samplingArea.choice.regions $widget.samplingArea.choice.units $widget.samplingArea.choice.window $widget.samplingArea.choice.vector
 	} else {
 		pack $widget.samplingArea.choice.whole $widget.samplingArea.choice.regions $widget.samplingArea.choice.units $widget.samplingArea.choice.window
@@ -172,8 +172,8 @@ proc createNewConfiguration {} {
 	frame .newConf.frame -relief flat
 	pack .newConf.frame -side top -fill y -anchor center
 
-	set names {{} {Configuration file name:} {Raster map to use to select areas:} {[Vector map to overlay:]}\
-	 {[Site file to overlay:]} }
+	set names {{} {Configuration file name:} {Raster map to use to select areas:} {[Vector areas map to overlay:]}\
+	 {[Vector points map to overlay:]} }
 	label .newConf.frame.label1 -text [lindex $names 1] -anchor e
 	entry .newConf.frame.entry1 -width 35 -textvariable env(CONF)
 	grid .newConf.frame.label1 .newConf.frame.entry1 -sticky ew -pady 2 -padx 1
@@ -203,15 +203,15 @@ proc createNewConfiguration {} {
 	# insert buttons
 	frame .newConf.buttons -relief flat
 	pack .newConf.buttons -side bottom -anchor center -pady 2
-	button .newConf.buttons.save -text "Save settings" -state disabled -command {
+	button .newConf.buttons.save -text "3. Save settings" -state disabled -command {
 		saveSettings .newConf
 		}
-	button .newConf.buttons.s_area -text "Setup sampling areas" -state disabled -command {
+	button .newConf.buttons.s_area -text "2. Setup sampling areas" -state disabled -command {
 		setupSamplingArea .newConf
 		.newConf.buttons.save configure -state active
 		.newConf.buttons.s_area configure -state disabled
 	}
-	button .newConf.buttons.s_frame -text "Setup sampling frame" -command {
+	button .newConf.buttons.s_frame -text "1. Setup sampling frame" -command {
 		setupSamplingFrame .newConf
 		.newConf.buttons.s_frame configure -state disabled
 	} 
@@ -239,7 +239,7 @@ proc setSampleUnits {widget} {
 	frame $widget.newUni.button
 	pack $widget.newUni.button -side left -anchor w 
 	#buttons
-	button $widget.newUni.button.b2 -text " Use keyboard to enter sampling units dimension " -width 50 -command {
+	button $widget.newUni.button.b2 -text " Use keyboard to define sampling units dimension " -width 50 -command {
 		 setKeyboardUnit 
 		 $setSampleUnits.newUni.button.b2 configure -state disabled
 		 $setSampleUnits.newUni.button.b3 configure -state disabled
@@ -273,7 +273,7 @@ proc setMovWindow {widget} {
 	frame $widget.newWin.button
 	pack $widget.newWin.button -side left -anchor w 
 	#buttons
-	button $widget.newWin.button.b2 -text " Use keyboard to enter moving window dimension " -width 50 -command {
+	button $widget.newWin.button.b2 -text " Use keyboard to define moving window dimension " -width 50 -command {
 		 setKeyboardWindow 
 		 $setMovWindow.newWin.button.b2 configure -state disabled
 		 $setMovWindow.newWin.button.b3 configure -state disabled
@@ -366,8 +366,8 @@ button .r -text "Remove" -width 8 -command {
 	wm title .removeconf "\[r.li.setup\] Remove Window"
 	
 	# new top label
-	label .removeconf.topLabel -text "Are You sure to remove the ' $selection ' file ?"
-        pack .removeconf.topLabel -side top
+	label .removeconf.topLabel -text "Are you sure to remove the '$selection' file ?"
+        pack .removeconf.topLabel -side top -pady 10 -padx 10
 	
 	# create new frame
 	frame .removeconf.buttons -relief flat
@@ -377,8 +377,7 @@ button .r -text "Remove" -width 8 -command {
 	button .removeconf.buttons.y -text "Yes" -width 8 -command { 
 	      if { [ catch { exec rm $env(HOME)/.grass7/r.li/$selection } ] } then { 
 		tk_messageBox -message "'$selection' Not deleted" -type ok -icon error} else {
-		#annoying "deleted" messageBox
-		#tk_messageBox -message "$selection  deleted" -type ok
+		tk_messageBox -message "'$selection' deleted." -type ok
 		openDir .files "~/.grass7/r.li"
 		destroy .removeconf}
 	}
@@ -386,7 +385,7 @@ button .r -text "Remove" -width 8 -command {
 	# create no button
 	button .removeconf.buttons.n -text "No" -width 8 -command { destroy .removeconf
 	openDir .files "~/.grass7/r.li"}
-	grid .removeconf.buttons.y  .removeconf.buttons.n
+	grid .removeconf.buttons.y  .removeconf.buttons.n -padx 2 -pady 10
 	}
 }
 

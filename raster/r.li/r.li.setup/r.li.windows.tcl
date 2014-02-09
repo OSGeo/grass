@@ -153,7 +153,7 @@ proc setKeyboardUnit {} {
 	label .kUni.scale.label4 -text " What radius size (in meters) for each sampling unit?" -state disabled
 	entry .kUni.scale.e4 -width 5 -textvariable number4 -state disabled
 	grid .kUni.scale.label4 .kUni.scale.e4 -pady 20 -padx 3
-	label .kUni.scale.label5 -text " Name for the circle mask" -state disabled
+	label .kUni.scale.label5 -text " Name for the circle mask raster map" -state disabled
 	entry .kUni.scale.e5 -width 15 -textvariable maskname -state disabled 
 	grid .kUni.scale.label5 .kUni.scale.e5  -padx 3
 	
@@ -196,6 +196,7 @@ proc setKeyboardUnit {} {
 				#check if we have integers
 				tk_messageBox -message "Type integer values or set raster map name" -type ok -icon error
 			} else {
+				set maskname "rli_circlemask_$maskname"
 				circleMask $number4 $maskname
 				defineSamplingUnits $selec $env(CIR_RL) $env(CIR_RL) $maskname
 				if { $selec != "sites" } then {
@@ -393,7 +394,7 @@ proc loadConfiguration { filename } {
 		label .load.info.l1 -text "The sampling areas are defined only for $rname file"
 		pack .load.info.l1
 		set vname [exec cat $filename | grep "VECTORMAP " | cut -f2 -d\ ]
-		label .load.info.l2 -text "The overlayed vector file is $vname"
+		label .load.info.l2 -text "The overlaid vector file is $vname"
 		pack .load.info.l2
 	} else {
 		#extract sample areas

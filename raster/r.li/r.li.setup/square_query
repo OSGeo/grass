@@ -12,17 +12,17 @@
     global env
     wm title . "Select this area"
     wm minsize . 250 100
-    label .label -text "Is this area ok?"
+    label .label -text "\nIs this area ok?"
     pack .label 
     frame .buttons
     pack .buttons
     set val ""
     button .buttons.ok -text "Ok" -command {
-	exec echo 1 > $env(name).var
+	exec echo 1 > $env(name)
 	destroy .
     }
     button .buttons.no -text "No" -command {
-	exec echo 0 > $env(name).var
+	exec echo 0 > $env(name)
 	destroy .
     }
-    grid .buttons.ok .buttons.no
+    grid .buttons.ok .buttons.no -padx 3 -pady 3
