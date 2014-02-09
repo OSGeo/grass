@@ -52,7 +52,7 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
     int res;
     int i, doneDir, mv_fd, random_access;
 
-    /*int mv_rows, mv_cols; */
+    /* int mv_rows, mv_cols; */
     struct list *l;
     msg m, doneJob;
 
@@ -152,7 +152,8 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
 		error_Output(res, doneJob);
 	    }
 	    else {
-		/*printf("todo ");fflush(stdout); *//* TODO scrivere su raster NULL ??? */
+		/* printf("todo "); fflush(stdout); */
+		/* TODO write to raster NULL ??? */
 	    }
 	}
     }
