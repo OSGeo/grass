@@ -1,21 +1,25 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.what</em>
-Outputs the category number value(s) associated with user-specified location(s) 
-in user-specified vector map layer(s).  This module was derived from the
-<em>d.what.vect</em> module by removing all interactive code and
-modification of the output for easy parsing. Using the <em>-g</em> flag
-generates script-style output which is easily parsable.
-<p>
-This module always reports standard acres, even when the location uses
-US Survey feet as the map unit.
-
+<em>v.what</em> outputs the category number value(s) associated with 
+user-specified location(s) in user-specified vector map layer(s).  
+This module was derived from the <em>d.what.vect</em> module by 
+removing all interactive code and modification of the output for 
+easy parsing. Using the <em>-g</em> flag generates script-style 
+output which is easily parsable.
 
 <h2>EXAMPLE</h2>
 
-Spearfish example:
+North Carolina sample dataset example:
+<p>
+Query polygon at given position:
 <div class="code"><pre>
-v.what fields east_north=599121.75,4922981.125
+v.what zipcodes_wake coordinates=637502.25,221744.25
+</pre></div>
+
+<p>
+Find closest hospital to given position within given distance (search radius):
+<div class="code"><pre>
+v.what hospitals coordinates=542690.4,204802.7 distance=2000000
 </pre></div>
 
 
