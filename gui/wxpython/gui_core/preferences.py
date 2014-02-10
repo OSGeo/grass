@@ -49,7 +49,7 @@ from core.gcmd     import RunCommand
 from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, StoreEnvVariable, _
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
-from gui_core.widgets import IntegerValidator
+from gui_core.widgets import IntegerValidator, ColorTablesComboBox
 from core.debug       import Debug
 
 class PreferencesBaseDialog(wx.Dialog):
@@ -917,9 +917,9 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(item = rasterCTCheck, flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
         
-        rasterCTName = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
-                               choices = GetColorTables(),
-                               name = "GetStringSelection")
+        rasterCTName = ColorTablesComboBox(parent=panel, size=globalvar.DIALOG_COMBOBOX_SIZE,
+                                           choices=GetColorTables(),
+                                           name="GetStringSelection")
         rasterCTName.SetStringSelection(self.settings.Get(group = 'rasterLayer', key = 'colorTable', subkey = 'selection'))
         self.winId['rasterLayer:colorTable:selection'] = rasterCTName.GetId()
         if not rasterCTCheck.IsChecked():
