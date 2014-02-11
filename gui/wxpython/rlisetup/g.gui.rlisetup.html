@@ -6,6 +6,62 @@ The <b>RLi Setup</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
 component which allows the user to create a configuration file
 for <em>r.li</em> modules.
 
+<!-- TODO: merge in material from raster/r.li/r.li.setup/r.li.setup.html -->
+
+<h2>EXAMPLES</h2>
+
+<h3>Moving window analysis on full region</h3>
+
+<i>TODO: update to new g.gui dialog:</i>
+
+Example for a 7x7 moving window analysis on full region:
+
+Click on "New", then:
+<ul>
+ <li> Configuration file name: "movwindow7"</li>
+ <li> Raster map name to use to select areas: "forests"</li>
+</ul>
+
+1. Setup sampling frame:
+<ul>
+<li> Define a sampling frame (region for analysis): "Whole map layer", then "OK"</li>
+</ul>
+
+2. Setup sampling frame
+<ul>
+<li> Define sampling areas: "Moving window", then "OK"</li>
+<li> Then click on "Use keyboard to define moving window dimension"</li>
+</ul>
+
+Select type of shape:
+<ul>
+<li> [x] Rectangular</li>
+<li> Width size (in cells)?: "7"</li>
+<li> Height size (in cells)?: "7"</li>
+<li> Then "Save settings"</li>
+</ul>
+
+3. Save settings: click on button
+<br>
+(4.) Close
+<p>
+Now an anaysis can be performed using one of the analytical modules, e.g.
+<div class="code"><pre>
+r.li.patchdensity input=forests conf=movwindow7 output=forests_p_dens7
+</pre></div>
+
+The result is a new raster map "forests_p_dens7".
+<br>
+See the respective modules for further examples.
+
+<!-- TODO: add configuration example which results in ASCII output rather than raster map -->
+
+<h2>NOTES</h2>
+
+Configuration files are raster map independent because areas are
+saved using relative coordinates.
+
+
 <h2>SEE ALSO</h2>
 
 <em>
