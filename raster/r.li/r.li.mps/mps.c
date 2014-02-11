@@ -6,7 +6,7 @@
  *
  *   This program is free software under the GPL (>=v2)
  *   Read the COPYING file that comes with GRASS for details.
- *       
+ *
  */
 
 #include <stdlib.h>
@@ -26,7 +26,6 @@
 int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result);
 int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *result);
 int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *result);
-
 
 int main(int argc, char *argv[])
 {
@@ -60,10 +59,8 @@ int main(int argc, char *argv[])
 }
 
 
-
 int meanPatchSize(int fd, char **par, struct area_entry *ad, double *result)
 {
-
     int ris = 0;
     double indice = 0;
     struct Cell_head hd;
@@ -91,14 +88,14 @@ int meanPatchSize(int fd, char **par, struct area_entry *ad, double *result)
 	    G_fatal_error("data type unknown");
 	    return RLI_ERRORE;
 	}
+
     }
-    if (ris != RLI_OK) {
-	return RLI_ERRORE;
-    }
+    if (ris != RLI_OK)
+	  return RLI_ERRORE;
 
     *result = indice;
-    return RLI_OK;
 
+    return RLI_OK;
 }
 
 
@@ -133,10 +130,7 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
 
     avlID_tree albero = NULL;
-
     avlID_table *array;
-
-
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -469,7 +463,7 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
 
     G_free(mask_patch_corr);
 
-    G_free(buf_sup);
+    /* G_free(buf_sup); */   /* <-- why not free it? */
     return RLI_OK;
 }
 
@@ -478,16 +472,13 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 {
     DCELL *buf;
     DCELL *buf_sup;
-
     DCELL corrCell;
     DCELL precCell;
     DCELL supCell;
-
     int i, j;
     int mask_fd = -1, *mask_buf;
     int ris = 0;
     int masked = FALSE;
-
     long npatch = 0;
     long tot = 0;
     long zero = 0;
@@ -497,7 +488,6 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
     long doppi = 0;
     long *mask_patch_sup;
     long *mask_patch_corr;
-
     double indice = 0;
     double area = 0;		/*if all cells are null area=0 */
     double areaCorrect = 0;
@@ -1158,7 +1148,6 @@ int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 	    }
 	}
 
-
 	array = G_malloc(npatch * sizeof(avlID_tableRow));
 	if (array == NULL) {
 	    G_fatal_error("malloc array failed");
@@ -1203,8 +1192,8 @@ int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 
 
     if (masked)
-	G_free(mask_buf);
-
+	  G_free(mask_buf);
+/* TODO: fix if? */
     G_free(mask_patch_corr);
 
     return RLI_OK;
