@@ -22,6 +22,11 @@ present the statistics for each category and the totals for each unit
 column. Note that the statistics is always computed in the current
 geographical region.
 
+<p>
+When multiple (typically two) raster maps are specified, cross-tabulation
+table for each combination of categories in the raster maps will be computed
+and formatted in a human-readable way (see example).
+
 <h2>NOTES</h2>
 
 <!--
@@ -50,7 +55,8 @@ category. No-data are not reported (see <b>-n</b> flag).
 
 <div class="code"><pre>
 r.report -n map=geology_30m units=mi,a sort=desc
-
+</pre></div>
+<div class="code"><pre>
 +-----------------------------------------------------------------------------+
 |                         RASTER MAP CATEGORY REPORT                          |
 |LOCATION: nc_spm_08_grass7                           Fri Dec  6 17:00:21 2013|
@@ -81,7 +87,50 @@ r.report -n map=geology_30m units=mi,a sort=desc
 |-----------------------------------------------------------------------------|
 |TOTAL                                                  | 77.606534|49,668.182|
 +-----------------------------------------------------------------------------+
-</div>
+</pre></div>
+Report areas for each category of land use for each zipcode (included only part of the table):
+
+<div class="code"><pre>
+r.report map=zipcodes@PERMANENT,landclass96@PERMANENT units=h,p
+</pre></div>
+<div class="code"><pre>
++-----------------------------------------------------------------------------+
+|                         RASTER MAP CATEGORY REPORT                          |
+|LOCATION: nc_spm_08_latest                           Tue Feb 11 10:10:46 2014|
+|-----------------------------------------------------------------------------|
+|          north: 228527.25    east: 644971                                   |
+|REGION    south: 215018.25    west: 629980                                   |
+|          res:        28.5    res:    28.5                                   |
+|-----------------------------------------------------------------------------|
+|MASK: none                                                                   |
+|-----------------------------------------------------------------------------|
+|MAPS: South West Wake: Zipcode areas derived from vector map (zipcodes@PERMAN|
+|        South-West Wake county: Simplified landuse classes (landclass96@PERMA|
+|-----------------------------------------------------------------------------|
+|                   Category Information                    |          |   %  |
+|    #|description                                          |  hectares| cover|
+|-----------------------------------------------------------------------------|
+|27511|CARY                                                 |  1053.813|  5.20|
+|     |-----------------------------------------------------|----------|------|
+|     |1|developed. . . . . . . . . . . . . . . . . . . . . |   197.214| 18.71|
+|     |3|herbaceous . . . . . . . . . . . . . . . . . . . . |    25.017|  2.37|
+|     |4|shrubland. . . . . . . . . . . . . . . . . . . . . |    58.563|  5.56|
+|     |5|forest . . . . . . . . . . . . . . . . . . . . . . |   771.313| 73.19|
+|     |6|water. . . . . . . . . . . . . . . . . . . . . . . |     1.625|  0.15|
+|     |*|no data. . . . . . . . . . . . . . . . . . . . . . |     0.081|  0.01|
+|-----------------------------------------------------------|----------|------|
+|27513|CARY                                                 |   204.525|  1.01|
+|     |-----------------------------------------------------|----------|------|
+|     |1|developed. . . . . . . . . . . . . . . . . . . . . |    32.571| 15.93|
+|     |3|herbaceous . . . . . . . . . . . . . . . . . . . . |     6.011|  2.94|
+|     |4|shrubland. . . . . . . . . . . . . . . . . . . . . |    51.659| 25.26|
+|     |5|forest . . . . . . . . . . . . . . . . . . . . . . |   114.284| 55.88|
+|-----------------------------------------------------------|----------|------|
+...
+|-----------------------------------------------------------------------------|
+|TOTAL                                                      |22,968.900|100.00|
++-----------------------------------------------------------------------------+
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
