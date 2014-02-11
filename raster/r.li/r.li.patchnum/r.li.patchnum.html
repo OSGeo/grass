@@ -1,7 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.patchnum</em> is a patch index for r.li program.<br>
-It calculates the function <br>
+<em>r.li.patchnum</em> calculates the "patch number index" as:<br>
 <I> f(sample_area)= Patch_Number </I><br>
 This index is calculated using a 4 neighbour algorithm<br>
 
@@ -12,30 +11,38 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>~/.grass7/r.li/output/</tt> folder.
 <p>
-An that is full of null values is considered to have zero patch. <br>
-If you want to have null values instead run <br>
+<!-- TODO verify: -->
+If the input raster map contains only NULL values then it is considered to have zero patch. <br>
+If you want to keep NULL values, run subsequently on the resulting map:
 <div class="code"><pre>
 r.null setnull=0 input=my_map
 </pre></div>
-after index calculation.<br>
+after index calculation.
 
 <h2>EXAMPLES</h2>
-To calculate patch number index on map my_map, using 
-<em>my_conf</em> configuration file and saving results in
-my_out file run:
+To calculate patch number index on map <em>my_map</em>, using
+<em>my_conf</em> configuration file (previously defined with
+<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
-r.li.patchnumber input=my_map conf=my_conf out=my_out
+r.li.patchnum input=my_map conf=my_conf out=my_out
+
+# forest map example:
+g.region rast=landcover.30m -p
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+r.li.patchnum input=forests conf=movwindow7 out=forests_patchnum_mov7
+r.univar forests_patchnum_mov7
 </pre></div>
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.setup.html">r.li.setup</a>
+</em>
 
 <h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
-
-<h2>SEE ALSO</h2>
-<em><a href="r.li.html">r.li</a></em> package overview <br>
-<em><a href="r.li.daemon.html">r.li.daemon</a></em><br>
-<em><a href="r.li.setup.html">r.li.setup</a></em>
 
 <h2>AUTHORS</h2>
 Claudio Porta and Lucio Davide Spano, students of Computer Science 

@@ -1,12 +1,13 @@
 <h2>DESCRIPTION</h2>
-<em>r.li.dominance</em>
-calculates the "dominance's diversity index" as:<br>
-<img src="rliDominance_formula.png"> <br>
-with: <br>
+
+<em>r.li.dominance</em> calculates the "dominance diversity index" as:<br>
+<img src="rliDominance_formula.png" alt="rliDominance formula"> <br>
+with:
 <ul>
- <li><b>m</b>: number of different patch type<br>  </li>
- <li><b>i</b>: patch type<br></li>
- <li><b>p<small><small>i</small></small></b>: proportion of the landscape occupied by patch type i<br></li>
+<li><b>i</b>: patch type</li>
+<li><b>m</b>: number of different patch types</li>
+<li><b>p<small><small>i</small></small></b>: proportion of the landscape
+  occupied by patch type <i>i</i> </li>
 </ul>
 
 <h2>NOTES</h2>
@@ -16,32 +17,43 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>~/.grass7/r.li/output/</tt> folder.
 <p>
-If input raster is full of null values r.li.dominance returns -1.<br>
-If you want to have null values instead run <br>
+<!-- TODO: verify next: -->
+If the input raster map contains only NULL values then <em>r.li.dominance</em>
+returns -1.<br>
+If you want to change these -1 values to NULL, run subsequently on the resulting map:
 <div class="code"><pre>
 r.null setnull=-1 input=my_map
 </pre></div>
 after index calculation.
 
 <h2>EXAMPLES</h2>
-To calculate dominance's diversity index on map my_map, using
-my_conf configuration file and saving results in my_out file run:<br>
+To calculate the dominance diversity index on map <em>my_map</em>, using
+<em>my_conf</em> configuration file (previously defined with
+<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
 r.li.dominance input=my_map conf=my_conf output=my_out
+
+# forest map example:
+g.region rast=landcover.30m -p
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+r.li.dominance input=forests conf=movwindow7 out=forests_dominance_mov7
+r.univar forests_dominance_mov7
 </pre></div>
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.setup.html">r.li.setup</a>
+</em>
 
 <h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
-<h2>SEE ALSO</h2>
-<em>
-<a href="r.li.html">r.li</a>
-</em>
-
 <h2>AUTHORS</h2>
 Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i></p>

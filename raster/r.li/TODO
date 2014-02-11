@@ -19,11 +19,21 @@ A few remaining things should be done soon:
 - add relevant references
 - use English variable names in C code
 
-Please change the examples to Spearfish wherever possible:
+Please change the examples to North Carolina wherever possible:
+
 
 # Spearfish
 g.region rast=landcover.30m -p
-r.mapcalc "forests=if(landcover.30m >= 41 && landcover.30m <=43,1,null())"
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+d.mon wx0
+d.rast forests
+
+# g.gui.rlisetup:
+# created as described in EXAMPLES, moving window, in gui/wxgui/rlisetup/g.gui.rlisetup.html:
+echo "SAMPLINGFRAME 0|0|1|1
+SAMPLEAREA -1|-1|0.015021459227467811|0.011058451816745656
+MOVINGWINDOW" > $HOME/.grass7/r.li/movwindow7
+
 r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
 d.rast.leg forests_p_dens7
 
@@ -45,5 +55,9 @@ r.info -r forests_p_dens7
 min=19.841270
 max=19.841270
 # -> all cells are 19.841270 ?!
+
+---------
+
+Add example which results in an ASCII output file
 
 

@@ -1,20 +1,21 @@
-
 <h2>DESCRIPTION</h2>
+
 <em>r.li.edgedensity </em>calculates:<br>
 <br>
 <ul>
-   <li> the density of all the edge of patch i<br>
-	<img src="rliEdgeDensity_formula1.png"><br>
-	or<br><br></li>
-   <li> the density of all the edge in the sampling area if i isn't specified<br>
-	<img src="rliEdgeDensity_formula2.png"><br></li></ul>
+   <li> the density of all the edge of patch i
+	<img alt="rliEdgeDensity formula1" src="rliEdgeDensity_formula1.png">
+	, or
+   <li> the density of all the edge in the sampling area if i isn't specified,
+	<img alt="rliEdgeDensity formula2" src="rliEdgeDensity_formula2.png">
+</ul>
 <p>with:
 <ul>
-  <li><b>k</b>: patch type<br></li>
-  <li><b>m</b>: number of patch type<br> </li>
-  <li><b>n</b>: number of edge segment of patch type k</li>
-  <li><b>e<small><small>ik </small></small></b>:total length of edge in landscape involving patch type k</li>
-  <li> <b>Area</b>: total landscape area<br>
+<li><b>k</b>: patch type</li>
+<li><b>m</b>: number of patch types</li>
+<li><b>n</b>: number of edge segments of patch type k</li>
+<li><b>e<small><small>ik </small></small></b>:total length of edge in landscape involving patch type k</li>
+<li> <b>Area</b>: total landscape area</li>
 </ul>
 
 <h2>NOTES</h2>
@@ -24,40 +25,48 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>~/.grass7/r.li/output/</tt> folder.
 <p>
-If input raster is full of null values <em>r.li.edgedensity</em> consider to have 0
-patch.<br>
-If area is 0 <em>r.li.edgedensity</em> returns -1; this is possible only if input
+<!-- TODO: verify next: -->
+If the input raster map contains only NULL values then <em>r.li.edgedensity</em>
+consider to have 0 patches.<br>
+If area is 0 <em>r.li.edgedensity</em> returns -1; this is only possible if input
 raster is masked.
-If you want to have null values instead run <br>
+If you want to change these -1 values to NULL, run subsequently on the resulting map:
 <div class="code"><pre>
 r.null setnull=-1 input=my_map
 </pre></div>
 after index calculation.
 
 <h2>EXAMPLES</h2>
-To calculate edge density index on map my_map, using
-my_conf configuration file and saving results in
-my_out file run:<br>
+To calculate the edge density index on map <em>my_map</em>, using
+<em>my_conf</em> configuration file (previously defined with
+<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
 r.li.edgedensity input=my_map conf=my_conf output=my_out
 </pre></div>
 
 To calculate edge density index of patch_type 34, using
-my_conf configuration file and on map my_map, saving results in my_out
+"my_conf" configuration file and on map "my_map", saving results in "my_out"
 file run:<br>
 <div class="code"><pre>
 r.li.edgedensity input=my_map conf=my_conf output=my_out patch_type=34
+
+# forest map example:
+g.region rast=landcover.30m -p
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+r.li.edgedensity input=forests conf=movwindow7 out=forests_edgedens_mov7
+r.univar forests_edgedens_mov7
 </pre></div>
 
 <h2>SEE ALSO</h2>
 <em>
-<a href="r.li.html">r.li</a>
+<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.setup.html">r.li.setup</a>
 </em>
 
 <h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351.
+Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
 Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
@@ -65,4 +74,3 @@ Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
 
 <p>
 <i>Last changed: $Date$</i>
-

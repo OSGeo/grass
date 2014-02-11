@@ -2,14 +2,14 @@
 
 <em>r.li.padcv</em> (patch area distribution coefficient of variation) calculates
 as:<br>
-<img src="rlipadcv_formula1.png"> <br>
+<img src="rlipadcv_formula1.png" alt="rlipadcv formula"> <br>
 with:<br>
 <ul>
- <li><b>SD</b>: standard deviation of patch area size    <br>
-  <img src="rlipadcv_formula2.png"> <br></li>
-  <li><b>MPS</b>: mean patch area size<br></li>
-  <li><b>a<small><small>i</small></small></b>: area of patch i<br></li>
-  <li><b>N<small>patch</small></b>: number of patch<br></li>
+ <li><b>SD</b>: standard deviation of patch area size
+  <img src="rlipadcv_formula2.png">  </li>
+  <li><b>MPS</b>: mean patch area size </li>
+  <li><b>a<small><small>i</small></small></b>: area of patch i</li>
+  <li><b>N<small>patch</small></b>: number of patch</li>
 </ul>
 
 <h2>NOTES</h2>
@@ -19,31 +19,38 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>~/.grass7/r.li/output/</tt> folder.
 <p>
-If input raster is not full of null values r.li.padcv returns a value &gt;=0 that is PADcv. <br>
-If input raster is full of null values r.li.padcv returns -1. <br>
-If you want to have null values instead run <br>
+If input raster is not full of null values <em>r.li.padcv</em> returns a value &gt;=0 that is PADcv. <br>
+If the input raster map contains only NULL values then <em>r.li.padcv</em> returns -1. <br>
+If you want to change these -1 values to NULL, run subsequently on the resulting map:
 <div class="code"><pre>
 r.null setnull=-1 input=my_map
 </pre></div>
 after index calculation.
 
 <h2>EXAMPLES</h2>
-To calculate mean pixel attribute index on map my_map, using
-my_conf configuration file and saving results in
-my_out file run:<br>
+To calculate patch area distribution coefficient of variation index on map <em>my_map</em>, using
+<em>my_conf</em> configuration file (previously defined with
+<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
 r.li.padcv input=my_map conf=my_conf output=my_out
+
+# forest map example:
+g.region rast=landcover.30m -p
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+r.li.padcv input=forests conf=movwindow7 out=forests_padcv_mov7
+r.univar forests_padcv_mov7
 </pre></div>
 
 <h2>SEE ALSO</h2>
 <em>
-<a href="r.li.html">r.li</a>
+<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.setup.html">r.li.setup</a>
 </em>
 
 <h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351.
+Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
 Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
@@ -51,4 +58,3 @@ Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
 
 <p>
 <i>Last changed: $Date$</i>
-
