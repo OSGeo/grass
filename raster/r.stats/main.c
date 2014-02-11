@@ -220,8 +220,10 @@ int main(int argc, char *argv[])
     flag.i->description = _("Read floating-point map as integer (use map's quant rules)");
     flag.i->guisection = _("Floating point");
 
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     name = option.output->answer;
     if (name != NULL && strcmp(name, "-") != 0) {
@@ -277,7 +279,7 @@ int main(int argc, char *argv[])
     with_coordinates = flag.g->answer;
     with_xy = flag.x->answer;
     if (with_coordinates || with_xy)
-	raw_data = 1;
+	raw_data = TRUE;
 
     /* get field separator */
     fs = G_option_to_separator(option.fs);
@@ -296,6 +298,7 @@ int main(int argc, char *argv[])
 	DMIN = (DCELL *) G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
 
 	fd[nfiles] = Rast_open_old(name, "");
+
 	if (!as_int)
 	    is_fp[nfiles] = Rast_map_is_fp(name, "");
 	else {

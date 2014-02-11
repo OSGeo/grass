@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 #include "global.h"
 
 int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
@@ -18,13 +19,16 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
     /* allocate i/o buffers for each raster map */
     rast = (void **)G_calloc(nfiles, sizeof(void *));
     rastp = (void **)G_calloc(nfiles, sizeof(void *));
+
     map_type = (RASTER_MAP_TYPE *) G_calloc(nfiles, sizeof(RASTER_MAP_TYPE));
+
     for (i = 0; i < nfiles; i++) {
 	/* if fp map and report real data, not cat indexes, set type to DCELL */
 	if (is_fp[i] && !raw_output && !as_int)
-	    map_type[i] = DCELL_TYPE;
+	    map_type[i] = Rast_get_map_type(fd[i]);
 	else
 	    map_type[i] = CELL_TYPE;
+
 	rast[i] = Rast_allocate_buf(map_type[i]);
     }
 
@@ -90,9 +94,18 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 			fprintf(stdout, "%s%s", fs,
 				Rast_get_c_cat((CELL *) rastp[i], &labels[i]));
 		}
-		else {		/* floating point cell */
-
-		    sprintf(str1, "%.10f", *((DCELL *) rastp[i]));
+		else if (map_type[i] == FCELL_TYPE) {
+		    sprintf(str1, "%.8g", *((FCELL *) rastp[i]));
+		    G_trim_decimal(str1);
+		    G_strip(str1);
+		    fprintf(stdout, "%s%s", i ? fs : "", str1);
+		    if (with_labels)
+			fprintf(stdout, "%s%s", fs,
+				Rast_get_f_cat((FCELL *) rastp[i],
+						   &labels[i]));
+		}
+		else if (map_type[i] == DCELL_TYPE) {
+		    sprintf(str1, "%.16g", *((DCELL *) rastp[i]));
 		    G_trim_decimal(str1);
 		    G_strip(str1);
 		    fprintf(stdout, "%s%s", i ? fs : "", str1);
@@ -101,6 +114,9 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels)
 				Rast_get_d_cat((DCELL *) rastp[i],
 						   &labels[i]));
 		}
+		else
+		    G_fatal_error(_("Invalid map type"));
+
 		rastp[i] =
 		    G_incr_void_ptr(rastp[i], Rast_cell_size(map_type[i]));
 	    }
