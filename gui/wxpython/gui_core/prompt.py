@@ -175,6 +175,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # bindings
         #
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
+        self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPressed)
         self.Bind(wx.stc.EVT_STC_AUTOCOMP_SELECTION, self.OnItemSelected)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemChanged)
@@ -375,16 +376,73 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         if len(self.autoCompList) > 0:
             self.autoCompList.sort()
             self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))    
-        
+
     def OnKeyPressed(self, event):
-        """!Key press capture for autocompletion, calltips, and command history
+        """!Key pressed capture special treatment for tabulator to show help"""
+        pos = self.GetCurrentPos()
+        if event.GetKeyCode() == wx.WXK_TAB:
+            # show GRASS command calltips (to hide press 'ESC')
+            entry = self.GetTextLeft()
+            try:
+                cmd = entry.split()[0].strip()
+            except IndexError:
+                cmd = ''
+
+            if cmd not in globalvar.grassCmd:
+                return
+
+            info = gtask.command_info(GetRealCmd(cmd))
+
+            self.CallTipSetBackground("#f4f4d1")
+            self.CallTipSetForeground("BLACK")
+            self.CallTipShow(pos, info['usage'] + '\n\n' + info['description'])
+        elif event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER) and \
+                not self.AutoCompActive():
+            # run command on line when <return> is pressed
+            self._runCmd(self.GetCurLine()[0].strip())
+        elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and \
+                not self.AutoCompActive():
+            # Command history using up and down
+            if len(self.cmdbuffer) < 1:
+                return
+
+            self.DocumentEnd()
+
+            # move through command history list index values
+            if event.GetKeyCode() == wx.WXK_UP:
+                self.cmdindex = self.cmdindex - 1
+            if event.GetKeyCode() == wx.WXK_DOWN:
+                self.cmdindex = self.cmdindex + 1
+            if self.cmdindex < 0:
+                self.cmdindex = 0
+            if self.cmdindex > len(self.cmdbuffer) - 1:
+                self.cmdindex = len(self.cmdbuffer) - 1
+
+            try:
+                txt = self.cmdbuffer[self.cmdindex]
+            except KeyError:
+                txt = ''
+
+            # clear current line and insert command history
+            self.DelLineLeft()
+            self.DelLineRight()
+            pos = self.GetCurrentPos()
+            self.InsertText(pos, txt)
+            self.LineEnd()
+
+            self.ShowStatusText('')
+        else:
+            event.Skip()
+
+    def OnChar(self, event):
+        """!Key char capture for autocompletion, calltips, and command history
 
         @todo event.ControlDown() for manual autocomplete
         """
         # keycodes used: "." = 46, "=" = 61, "-" = 45 
         pos = self.GetCurrentPos()
         # complete command after pressing '.'
-        if event.GetKeyCode() == 46 and not event.ShiftDown():
+        if event.GetKeyCode() == 46:
             self.autoCompList = list()
             entry = self.GetTextLeft()
             self.InsertText(pos, '.')
@@ -405,7 +463,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.ShowList()
 
         # complete flags after pressing '-'
-        elif (event.GetKeyCode() == 45 and not event.ShiftDown()) \
+        elif (event.GetKeyCode() == 45) \
                 or event.GetKeyCode() == wx.WXK_NUMPAD_SUBTRACT \
                 or event.GetKeyCode() == wx.WXK_SUBTRACT:
             self.autoCompList = list()
@@ -425,7 +483,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.ShowList()
             
         # complete map or values after parameter
-        elif event.GetKeyCode() == 61 and not event.ShiftDown():
+        elif event.GetKeyCode() == 61:
             self.autoCompList = list()
             self.InsertText(pos, '=')
             self.CharRight()
@@ -440,7 +498,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.ShowList()
         
         # complete mapset ('@')
-        elif event.GetKeyCode() == 50 and event.ShiftDown():
+        elif event.GetKeyCode() == 64:
             self.autoCompList = list()
             self.InsertText(pos, '@')
             self.CharRight()
@@ -511,61 +569,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 
             self.ShowList()
 
-        elif event.GetKeyCode() == wx.WXK_TAB:
-            # show GRASS command calltips (to hide press 'ESC')
-            entry = self.GetTextLeft()
-            try:
-                cmd = entry.split()[0].strip()
-            except IndexError:
-                cmd = ''
-            
-            if cmd not in globalvar.grassCmd:
-                return
-            
-            info = gtask.command_info(GetRealCmd(cmd))
-            
-            self.CallTipSetBackground("#f4f4d1")
-            self.CallTipSetForeground("BLACK")
-            self.CallTipShow(pos, info['usage'] + '\n\n' + info['description'])
-            
-            
-        elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and \
-                 not self.AutoCompActive():
-            # Command history using up and down   
-            if len(self.cmdbuffer) < 1:
-                return
-            
-            self.DocumentEnd()
-            
-            # move through command history list index values
-            if event.GetKeyCode() == wx.WXK_UP:
-                self.cmdindex = self.cmdindex - 1
-            if event.GetKeyCode() == wx.WXK_DOWN:
-                self.cmdindex = self.cmdindex + 1
-            if self.cmdindex < 0:
-                self.cmdindex = 0
-            if self.cmdindex > len(self.cmdbuffer) - 1:
-                self.cmdindex = len(self.cmdbuffer) - 1
-            
-            try:
-                txt = self.cmdbuffer[self.cmdindex]
-            except KeyError:
-                txt = ''
-            
-            # clear current line and insert command history    
-            self.DelLineLeft()
-            self.DelLineRight()
-            pos = self.GetCurrentPos()            
-            self.InsertText(pos,txt)
-            self.LineEnd()
-
-            self.ShowStatusText('')
-            
-        elif event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER) and \
-                self.AutoCompActive() == False:
-            # run command on line when <return> is pressed
-            self._runCmd(self.GetCurLine()[0].strip())
-                        
         elif event.GetKeyCode() == wx.WXK_SPACE:
             items = self.GetTextLeft().split()
             if len(items) == 1:
