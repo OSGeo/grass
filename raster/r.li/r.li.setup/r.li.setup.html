@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.li.setup</em>  creates and shows configuration files for the 
-others <em>r.li</em> modules. For a general introduction, see 
+other analytical <em>r.li</em> modules. For a general introduction, see 
 <a href="r.li.html">r.li</a>.
 <br>
 The configurations are raster map independent, 
@@ -49,11 +49,11 @@ The startup window shows your configuration files, you can:
  rectangles with differents colors (green for the raster map, red for 
  the sample frame and blue for the sample areas), and other notes 
  (disposition of sample areas etc). The configuration file is saved 
- in <tt>~/.r.li/history/my_conf</tt> (the file name can be defined by 
+ in <tt>$HOME/.grass7/r.li/my_conf</tt> (the file name can be defined by 
  the user). The output can either be a new raster map (in case of 
  using a "moving window" analysis) or be an ASCII text file (when not 
  performing a "moving window" analysis) containing the result which 
- is then saved to the folder <tt>~/.grass7/r.li/output/</tt>.
+ is then saved to the folder <tt>$HOME/.grass7/r.li/output/</tt>.
  <br>
  <!-- TODO: applies to all output or only ASCII output?? -->
  All dimensions are percentages of raster rows or columns.</li>
@@ -143,18 +143,22 @@ The startup window shows your configuration files, you can:
   <li><em><b>Close</b></em> module window.</li>
 </ol>
 
+<h2>NOTES</h2>
+
+Configuration files are raster map independent because areas are saved using
+relative coordinates.
+
 <h2>EXAMPLES</h2>
 
 <h3>Moving window analysis on full region</h3>
 
-Example for a 7x7 moving window analysis on full region:
-
+Example for a 7x7 moving window analysis on full region, the output 
+is a raster map:
+<p>
+Click on "New", then:
 <ul>
-<li> Click on "New"</li>
- <ul>
-  <li> Configuration file name: "movwindow7"</li>
-  <li> Raster map name to use to select areas: "forests"</li>
- </ul>
+ <li> Configuration file name: "movwindow7"</li>
+ <li> Raster map name to use to select areas: "forests"</li>
 </ul>
 
 1. Setup sampling frame:
@@ -166,15 +170,14 @@ Example for a 7x7 moving window analysis on full region:
 <ul>
 <li> Define sampling areas: "Moving window", then "OK"</li>
 <li> Then click on "Use keyboard to define moving window dimension"</li>
+</ul>
+
+Select type of shape:
 <ul>
- <li>Select type of shape</li>
- <ul>
-  <li> [x] Rectangular</li>
-  <li> Width size (in cells)?: "7"</li>
-  <li> Height size (in cells)?: "7"</li>
-  <li> Then "Save settings"</li>
- </ul>
- </ul>
+<li> [x] Rectangular</li>
+<li> Width size (in cells)?: "7"</li>
+<li> Height size (in cells)?: "7"</li>
+<li> Then "Save settings"</li>
 </ul>
 
 3. Save settings: click on button
@@ -183,19 +186,51 @@ Example for a 7x7 moving window analysis on full region:
 <p>
 Now an anaysis can be performed using one of the analytical modules, e.g.
 <div class="code"><pre>
+g.region rast=forests -p
 r.li.patchdensity input=forests conf=movwindow7 output=forests_p_dens7
+r.univar forests_p_dens7
 </pre></div>
 
-The result is a new raster map "forests_p_dens7".
+The result is the new raster map "forests_p_dens7" which shows (in this example)
+the patch density of the forest areas.
 <br>
 See the respective modules for further examples.
 
-<!-- TODO: add configuration example which results in ASCII output rather than raster map -->
 
-<h2>NOTES</h2>
+<h3>Whole region analysis</h3>
 
-Configuration files are raster map independent because areas are saved using 
-relative coordinates.
+<!-- TODO: find a better example and briefly explain the meaning of result --> 
+Example for a whole region analysis, the output is a text file:
+
+Click on "New", then:
+<ul>
+ <li> Configuration file name: "whole_region"</li>
+ <li> Raster map name to use to select areas: "lsat7_2000_40"</li>
+</ul>
+
+1. Setup sampling frame:
+<ul>
+<li> Define a sampling frame (region for analysis): "Whole map layer", then "OK"</li>
+</ul>
+
+2. Setup sampling frame
+<ul>
+<li> Define sampling areas: "Whole map layer", then "OK"</li>
+</ul>
+
+3. Save settings: click on button
+<br>
+(4.) Close
+<p>
+Now an anaysis can be performed using one of the analytical modules, e.g.
+<div class="code"><pre>
+g.region rast=lsat7_2002_40 -p
+r.li.shannon input=lsat7_2000_40 conf=whole_region output=lsat7_2000_40_shannon
+</pre></div>
+
+The result is the new text file "forests_p_dens7" (stored in folder <tt>$HOME/.r.li/output/</tt>.
+<br>
+See the respective modules for further examples.
 
 
 <h2>SEE ALSO</h2>
@@ -219,7 +254,7 @@ Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a
 Claudio Porta and Lucio Davide Spano, students of Computer Science<br>
 University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI)<br>
-Rebuild of <em>r.le.setup</em> from William L. Baker
+Rewritten from <em>r.le.setup</em> by William L. Baker
 
 <p>
 <i>Last changed: $Date$</i>
