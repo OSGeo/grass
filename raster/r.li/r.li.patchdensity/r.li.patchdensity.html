@@ -1,8 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.patchdensity</em> is a patch index for <em>r.li</em> suite.
-It calculates the function:
-
+<em>r.li.patchdensity</em> calculates the "patch density index" as:
 <div class="code"><pre>
 f(sample_area) = (Patch_Number/Area) * 1000000
 </pre></div>
@@ -17,25 +15,22 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>~/.grass7/r.li/output/</tt> folder.
 <p>
+<!-- TODO: verify next: -->
 A map of NULL values is considered to have zero patches. <br>
-If you want to have null values instead run <br>
-<div class="code"><pre>
-r.null setnull=0 map=my_out
-</pre></div>
-after index calculation.<br>
-<!-- next ??????: -->
 If raster area is 0, <em>r.li.patchdensity</em> returns -1. This is only
-possible if the raster is masked.
+possible if the raster is masked.<br>
+If you want to change these -1 values to NULL, run subsequently on the resulting map:
+<div class="code"><pre>
+r.null setnull=-1 input=my_out
+</pre></div>
+after index calculation.
 
 <h2>EXAMPLES</h2>
-
 To calculate patch density index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
-<em>r.li.setup</em>) and saving results in the raster map
-<em>my_out</em>, run:
-
+<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
-r.li.patchdensity input=my_map conf=my_conf out=my_out
+r.li.patchdensity input=my_map conf=my_conf output=my_out
 </pre></div>
 
 <p>
@@ -50,15 +45,20 @@ r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43, 1, null())"
 r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
 d.rast.leg forests_p_dens7
 
-r.to.vect forests out=forests type=area
+r.to.vect forests out=forests feature=area
 d.vect forests type=boundary
 </pre></div>
 
 <h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.setup.html">r.li.setup</a>
+</em>
 
-<em><a href="r.li.html">r.li</a></em> package overview <br>
-<em><a href="r.li.daemon.html">r.li.daemon</a></em><br>
-<em><a href="r.li.setup.html">r.li.setup</a></em>
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
 

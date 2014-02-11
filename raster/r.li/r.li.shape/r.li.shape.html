@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
-<em>r.li.shape</em> is a patch index for r.li program.<br>
-It calculates the function <br>
+
+<em>r.li.shape</em> calculates the "shape index" as:<br>
 <I> f(sample_area)= Area </I><br>
 
 <h2>NOTES</h2>
@@ -10,27 +10,35 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>~/.grass7/r.li/output/</tt> folder.
 <p>
-	
-If the input raster contains NULL value cells, <em>r.li.shape</em>
-returns -1 for these cells. <br>
-If you want to keep NULL values instead, run subsequently on the resulting map:
-<br>
+<!-- TODO: verify next: -->
+If the input raster map contains only NULL values then <em>r.li.shape</em>
+returns -1.<br>
+<!-- does that mean the program exit code or raster values?? -->
+If you want to change these -1 values to NULL, run subsequently on the resulting map:
 <div class="code"><pre>
 r.null setnull=-1 input=my_map
 </pre></div>
+after index calculation.
 
 <h2>EXAMPLES</h2>
-To calculate area index on map my_map, using 
-<em>my_conf</em> configuration file and saving results in
-my_out file run:
+To calculate the shape index on map <em>my_map</em>, using
+<em>my_conf</em> configuration file (previously defined with
+<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
-r.li.shape input=my_map conf=my_conf out=my_out
+r.li.shape input=my_map conf=my_conf output=my_out
+
+# forest map example:
+g.region rast=landcover.30m -p
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+r.li.shape input=forests conf=movwindow7 out=forests_shape_mov7
+r.univar forests_shape_mov7
 </pre></div>
 
 <h2>SEE ALSO</h2>
-<em><a href="r.li.html">r.li</a></em> package overview <br>
-<em><a href="r.li.daemon.html">r.li.daemon</a></em><br>
-<em><a href="r.li.setup.html">r.li.setup</a></em>
+<em>
+<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.setup.html">r.li.setup</a>
+</em>
 
 <h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern

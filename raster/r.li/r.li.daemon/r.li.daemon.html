@@ -32,13 +32,12 @@ To write a new index only two steps are needed:
 	folder, which contains all index declarations. This function must be of this kind:
 	<br><div class="code"><pre>
         int index(int fd, char ** par, area_des ad, double * result)
-	</pre></div>
-	<br>
+	</pre></div><br>
 	where: <ul>
-		    <li><i>fd</i> is the raster map descriptor
-		    <li><i>par</i> is a matrix for special parameter (like argv in main)
-		    <li><i>ad</i> is the area descriptor 
-		    <li><i>result</i> is where to put the index calculation result
+			<li><i>fd</i> is the raster map descriptor
+			<li><i>par</i> is a matrix for special parameter (like argv in main)
+			<li><i>ad</i> is the area descriptor 
+			<li><i>result</i> is where to put the index calculation result
 		</ul>
 	This function has to return 1 on success and 0 otherwise. <br><br>
 	<li>
@@ -58,7 +57,6 @@ To write a new index only two steps are needed:
 </ol>
 Compile it using a changed Makefile based on the file for <em>r.li.patchdensity</em>.
 
-
 <h2>NOTES</h2>
 
 Using GRASS library function to access raster rows can slow down moving windows 
@@ -75,8 +73,7 @@ The documentation is in doxygen files.
 <h2>SEE ALSO</h2>
 
 <em><a href="http://grass.osgeo.org/gdp/landscape/r_le_manual5.pdf">old r.le manual</a></em><br>
-<em><a href="r.li.html">r.li</a></em> package overview <br>
-<em><a href="r.li.patchdensity.html">r.li.patchdensity</a></em>,
+<em><a href="r.li.html">r.li</a></em> - package overview <br>
 <em><a href="r.li.setup.html">r.li.setup</a></em>
 
 
@@ -85,13 +82,12 @@ McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
-
 <h2>AUTHORS</h2>
 
 Claudio Porta and Lucio Davide Spano, students of Computer Science 
 University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI)<br>
-Rebuild of r.le.setup from William L. Baker
+Rewritten from "r.le.setup" by William L. Baker
 This program is free software under the GPL (>=v2)
 Read the COPYING file that comes with GRASS for details.
 

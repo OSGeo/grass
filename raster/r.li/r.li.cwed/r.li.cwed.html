@@ -1,20 +1,22 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.cwed</em> (contrast weighted edge density) calculates the edge density
-between patch types specified:
-<p><img src="rlicwed_formula.png"> 
+<em>r.li.cwed</em> (contrast weighted edge density) calculates the
+edge density between patch types specified: <!-- TODO fix grammar -->
+<p><img src="rlicwed_formula.png" alt="rlicwed formula"> 
 <p>with:
 
 <ul>
-<li> <b>k</b>: attribute<br>
-<li> <b>m</b>: number of non-null attributes in the sampling area<br>
-<li> <b>e<small><small>ik</small></small></b>: total length of edge in landscape between patch types i and k<br>
-<li><b> d<small><small>ik</small></small></b>: dissimilarity (edge contrast weight) between patch types i and k<br>
+<li> <b>k</b>: attribute</li>
+<li> <b>m</b>: number of non-null attributes in the sampling area</li>
+<li> <b>e<small><small>ik</small></small></b>: total length of edge in 
+ landscape between patch types i and k</li>
+<li><b> d<small><small>ik</small></small></b>: dissimilarity (edge contrast
+ weight) between patch types i and k</li>
 <li> <b>Area</b>: total landscape area<br>
 </ul><br>
 
-The input file have a row for each couple of patch type that we want to
-consider in the calculation. Each row must to have this syntax:<br>
+The input file contains a row for each couple of patch type that we want to
+consider in the calculation. Each row must be saved using this syntax:<br>
 <small>patchType1,patchType2,dissimilarityBetweenPatchType1andPatchType2</small><br>
 
 
@@ -25,53 +27,47 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>~/.grass7/r.li/output/</tt> folder.
 <p>
-<br>
-If the raster is full of null value it is considered to have 0 patch and CWED=0.
-If Area is 0 r.li.cwed returns -1. This is possible
-only if the map is masked.<br>
-If you want to have null values instead run <br>
+<!-- TODO: verify next: -->
+If the input raster map contains only NULL values it is considered to
+have 0 patch and CWED=0. If Area is 0 <em>r.li.cwed</em> returns -1.
+This is only possible if the map is masked.<br>
+If you want to change these -1 values to NULL, run subsequently on the resulting map:
 <div class="code"><pre>
 r.null setnull=-1 input=my_map
 </pre></div>
-after index calculation.<br>
-<br>
-
+after index calculation.
 
 <h2>EXAMPLES</h2>
-
-To calculate mean pixel attribute index on map my_map, using
-my_conf configuration file and saving results in
-my_out file run:<br>
+To calculate the contrast weighted edge density index on map <em>my_map</em>, using
+<em>my_conf</em> configuration file (previously defined with
+<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
-r.li.cwed input=my_map conf=my_conf path=my_file output=my_out
+r.li.cwed input=my_map conf=my_conf path=my_file output=my_out \
+          path=/path/to/weights.csv
 </pre></div>
 
-<br>Example of input file:<br>
-12,16,0.65<br>
-44,123,0.32<br>
-56,12,0.54<br>
-23,66,0.99<br>
-
-
-<h2>REFERENCES</h2>
-
-McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
-analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351.
-
+<br>Example for input "weights.csv" file:
+<pre>
+12,16,0.65
+44,123,0.32
+56,12,0.54
+23,66,0.99
+</pre>
 
 <h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.setup.html">r.li.setup</a>
+</em>
 
-<em><a href="r.li.html">r.li</a></em> package overview <br>
-<em><a href="r.li.daemon.html">r.li.daemon</a></em><br>
-<em><a href="r.li.setup.html">r.li.setup</a></em>
-
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
-
 Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
 
 <p>
-<i>Last changed: $Date$</i>
-
+<i>Last changed: $Date$</i></p>
