@@ -21,6 +21,7 @@ raster, landscape structure analysis, overview, landscape metrics, landscape pat
 <h2>DESCRIPTION</h2>
 
 The <em>r.li</em> suite is a toolset for multiscale analysis of landscape structure.
+<!-- rephrase reference to r.le which is long time ago ...-->
 It aims at replacing the <em>r.le</em> suite of modules through a client-server,
 multiprocess implementation. External software for quantitative measures of landscape
 structure is for example FRAGSTATS (McGarigal and Marks 1995).
@@ -63,29 +64,31 @@ The general procedure to calculate an index from a raster map is two-fold:
 The <em>r.li.daemon</em> module also has a "main" function front-end
 which can be run, but it is only a template for development of new
 indices so not built by default.
-<!-- mhh ??: -->
+<!-- mhh ??: 
 The function itself has no meaning, it is only useful as an example and 
-for debugging. 
-
+for debugging.
+-->
 
 <h2>EXAMPLE</h2>
 
 Calculate a patch density index on the entire 'geology' raster map
 in the Spearfish sample dataset, using a 5x5 moving window:
 
+<!-- TODO: update to new wxGUI: -->
+
 <ol>
 <li> CREATE A NEW CONFIGURATION FILE
   <ol>
   <li> run 
 <div class="code"><pre>
-  r.li.setup
+  g.gui.rlisetup
 </pre></div>
   <li> The main <em>r.li.setup</em> window is displayed, click on "New"
   <li> The new configuration window is now displayed, enter the
 	configuration file name (e.g., "my_conf", do not use absolute paths)
   
-  Now it is displayed the new configuration window,
-	enter the configuration file name (e.g., "my_conf", do not use absolute paths) 
+  Now the new configuration window is displayed.
+	Enter the configuration file name (e.g., "my_conf", do not use absolute paths) 
 	and the name of raster map (e.g., "geology").
 	The other fields are not needed for this configuration.
   <li> Click on "Setup sampling frame", select "Whole map layer" and click "OK"
@@ -202,9 +205,7 @@ Gen. Tech. Rep. PNW-351
 
 <h2>AUTHORS</h2>
 
-<a href="mailto:porta@cli.di.unipi.it">Claudio Porta</a> and 
-<a href="mailto:spano@cli.di.unipi.it">Lucio Davide Spano</a>,
- students of Computer Science 
+Claudio Porta and Lucio Davide Spano, students of Computer Science,
 University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI)<br>
 
@@ -217,6 +218,6 @@ Commission from Faunalia Pontedera (PI)<br>
  - <a href="topics.html">Topics index</a>
  - <a href="keywords.html">Keywords Index</a>
  - <a href="full_index.html">Full index</a>
-<p>&copy; 2003-2014 <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS 7.0.svn Reference Manual</p>
+<p>&copy; 2008-2014 <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS 7.0.svn Reference Manual</p>
 </body>
 </html>

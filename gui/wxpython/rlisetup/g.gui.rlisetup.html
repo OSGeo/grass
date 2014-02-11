@@ -2,20 +2,32 @@
 <!-- meta page index: wxGUI -->
 <h2>DESCRIPTION</h2>
 
-The <b>RLi Setup</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
+The <b>g.gui.rlisetup</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
 component which allows the user to create a configuration file
-for <em>r.li</em> modules.
+for the analytical <em>r.li</em> modules. For a general introduction, see 
+<a href="r.li.html">r.li</a>.
+<br>
+The configurations are raster map independent, it means that you can use
+a file created on a raster map for analyze any other you have. <br>
+The program is completely interactive and uses a GUI to help you 
+in your choices.
+<p>
+TODO: merge in material from GRASS GIS 6 (raster/r.li/r.li.setup/r.li.setup.html)
 
-<!-- TODO: merge in material from raster/r.li/r.li.setup/r.li.setup.html -->
+<h2>NOTES</h2>
+
+Configuration files are raster map independent because areas are saved using
+relative coordinates.
 
 <h2>EXAMPLES</h2>
 
 <h3>Moving window analysis on full region</h3>
 
-<i>TODO: update to new g.gui dialog:</i>
-
-Example for a 7x7 moving window analysis on full region:
-
+<i>TODO: update examples to new g.gui.rlisetup dialog:</i>
+<p>
+Example for a 7x7 moving window analysis on full region, the output 
+is a raster map:
+<p>
 Click on "New", then:
 <ul>
  <li> Configuration file name: "movwindow7"</li>
@@ -47,43 +59,79 @@ Select type of shape:
 <p>
 Now an anaysis can be performed using one of the analytical modules, e.g.
 <div class="code"><pre>
+g.region rast=forests -p
 r.li.patchdensity input=forests conf=movwindow7 output=forests_p_dens7
+r.univar forests_p_dens7
 </pre></div>
 
-The result is a new raster map "forests_p_dens7".
+The result is the new raster map "forests_p_dens7" which shows (in this example)
+the patch density of the forest areas.
 <br>
 See the respective modules for further examples.
 
-<!-- TODO: add configuration example which results in ASCII output rather than raster map -->
 
-<h2>NOTES</h2>
+<h3>Whole region analysis</h3>
 
-Configuration files are raster map independent because areas are
-saved using relative coordinates.
+<!-- TODO: find a better example and briefly explain the meaning of result --> 
+Example for a whole region analysis, the output is a text file:
+
+Click on "New", then:
+<ul>
+ <li> Configuration file name: "whole_region"</li>
+ <li> Raster map name to use to select areas: "lsat7_2000_40"</li>
+</ul>
+
+1. Setup sampling frame:
+<ul>
+<li> Define a sampling frame (region for analysis): "Whole map layer", then "OK"</li>
+</ul>
+
+2. Setup sampling frame
+<ul>
+<li> Define sampling areas: "Whole map layer", then "OK"</li>
+</ul>
+
+3. Save settings: click on button
+<br>
+(4.) Close
+<p>
+Now an anaysis can be performed using one of the analytical modules, e.g.
+<div class="code"><pre>
+g.region rast=lsat7_2002_40 -p
+r.li.shannon input=lsat7_2000_40 conf=whole_region output=lsat7_2000_40_shannon
+</pre></div>
+
+The result is the new text file "forests_p_dens7" (stored in folder <tt>$HOME/.r.li/output/</tt>.
+<br>
+See the respective modules for further examples.
 
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.daemon.html">r.li.daemon</a>
+</em>
+<p>
+<em>
+<a href="http://grass.osgeo.org/gdp/landscape/r_le_manual5.pdf">Old r.le suite manual</a>
+</em>
+<p>
+<em>
   <a href="wxGUI.html">wxGUI</a><br>
   <a href="wxGUI.components.html">wxGUI components</a>
 </em>
 
-<p>
-<em>
-  <a href="g.gui.html">g.gui</a>,
-  <a href="g.gui.animation.html">g.gui.animation</a>,
-  <a href="g.gui.dbmgr.html">g.gui.dbmgr</a>,
-  <a href="g.gui.gmodeler.html">g.gui.gmodeler</a>,
-  <a href="g.gui.iclass.html">g.gui.iclass</a>,
-  <a href="g.gui.mapswipe.html">g.gui.mapswipe</a>,
-  <a href="g.gui.psmap.html">g.gui.psmap</a>,
-  <a href="g.gui.vdigit.html">g.gui.vdigit</a>
-</em>
+
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHOR</h2>
 
-Luca Delucchi
+Luca Delucchi<br>
+Rewritten from <em>r.li.setup</em> by Claudio Porta and Lucio Davide Spano
 
 <p>
 <i>$Date$</i>
