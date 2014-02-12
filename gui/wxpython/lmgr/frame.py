@@ -645,6 +645,10 @@ class GMFrame(wx.Frame):
                 self.GetMapDisplay().AddLegend(showDialog = True)
         elif layertype == 'redraw':
             self.GetMapDisplay().OnRender(None)
+        elif layertype == 'export':
+            GUI(parent=self, show=False).ParseCommand(command,
+                                                      completed=(self.GetMapDisplay().DOutFileOptData,
+                                                                 '', ''))
         else:
             # add layer into layer tree
             lname, found = GetLayerNameFromCmd(command, fullyQualified = True,
