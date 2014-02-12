@@ -45,11 +45,13 @@ class VDigitToolbar(BaseToolbar):
         
         self.editingStarted = Signal("VDigitToolbar.editingStarted")
         self.editingStopped = Signal("VDigitToolbar.editingStopped")
+        self.editingBgMap = Signal("VDigitToolbar.editingBgMap")
         layerTree = self._giface.GetLayerTree()
         if layerTree:
             self.editingStarted.connect(layerTree.StartEditing)
             self.editingStopped.connect(layerTree.StopEditing)
-
+            self.editingBgMap.connect(layerTree.SetBgMapForEditing)
+            
         # currently selected map layer for editing (reference to MapLayer instance)
         self.mapLayer = None
         # list of vector layers from Layer Manager (only in the current mapset)
@@ -575,15 +577,18 @@ class VDigitToolbar(BaseToolbar):
         dlg.Destroy()
         
         # close open background map if any
-        if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                            internal = True):
+        bgMap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
+                                 internal = True)
+        if bgMap:
             self.digit.CloseBackgroundMap()
-        
+            self.editingBgMap.emit(mapName = bgMap, unset=True)
+
         # open background map for reading
         UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
                          value = str(mapName), internal = True)
         self.digit.OpenBackgroundMap(mapName)
-        
+        self.editingBgMap.emit(mapName = mapName)
+
         if self.action['desc'] == 'copyLine': # select previous action
             self.ToggleTool(self.addPoint, True)
             self.ToggleTool(self.additionalTools, False)
@@ -941,9 +946,11 @@ class VDigitToolbar(BaseToolbar):
             self.digit.CloseMap()
 
             # close open background map if any
-            if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                                internal = True):
+            bgMap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
+                                     internal = True)
+            if bgMap:
                 self.digit.CloseBackgroundMap()
+                self.editingBgMap.emit(mapName = bgMap, unset=True)
             
             self._giface.GetProgress().SetValue(0)
             self._giface.WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \

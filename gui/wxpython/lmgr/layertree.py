@@ -103,8 +103,10 @@ LMIcons = {
                             label = _('Add WMS layer.')),
     'layerOptions'  : MetaIcon(img = 'options',
                                label = _('Set options')),
-    'layerEdited'     : MetaIcon(img = 'edit',
-                               label = _("Editing mode"))
+    'layerEdited'     : MetaIcon(img = 'layer-edit',
+                               label = _("Editing mode")),
+    'layerBgmap'     : MetaIcon(img = 'layer-bottom',
+                               label = _("Background vector map"))
     }
 
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
@@ -217,7 +219,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                          "layerRastnum", "layerVector", "layerThememap",
                          "layerThemechart", "layerGrid", "layerGeodesic",
                          "layerRhumb", "layerLabels", "layerCmd",
-                         "layerWms", "layerEdited"):
+                         "layerWms", "layerEdited", "layerBgmap"):
             iconKey = iconName[len("layer"):].lower()
             icon = LMIcons[iconName].GetBitmap(self.bmpsize)
             self._icon[iconKey] = il.Add(icon)
@@ -893,23 +895,20 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.SetItemIcon(layerItem)
         self.RefreshLine(layerItem)
 
-    ### unused since r58937
-    # def OnSetBgMap(self, event):
-    #     """!Set background vector map for editing sesstion"""
-    #     digit = self.mapdisplay.GetWindow().digit
-    #     if event.IsChecked():
-    #         mapName = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetName()
-    #         UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
-    #                          value = str(mapName), internal = True)
-    #         digit.OpenBackgroundMap(mapName)
-    #         self._setGradient('bgmap')
-    #     else:
-    #         UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
-    #                          value = '', internal = True)
-    #         digit.CloseBackgroundMap()
-    #         self._setGradient()
+    def SetBgMapForEditing(self, mapName, unset=False):
+        try:
+            layerItem = self.FindItemByData('name', mapName)[0]
+        except IndexError:
+             return
         
-    #     self.RefreshLine(self.layer_selected)
+        if not unset:
+            self._setGradient('bgmap')
+            self.SetItemIcon(layerItem, 'bgmap')
+        else:
+            self._setGradient()
+            self.SetItemIcon(layerItem)
+        
+        self.RefreshLine(layerItem)
 
     def OnPopupProperties (self, event):
         """!Popup properties dialog"""
