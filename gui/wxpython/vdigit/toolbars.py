@@ -16,7 +16,7 @@ This program is free software under the GNU General Public License
 """
 import wx
 
-from grass.script import core as grass
+from grass import script as grass
 from grass.pydispatch.signal import Signal
 
 from gui_core.toolbars  import BaseToolbar, BaseIcons
@@ -822,6 +822,19 @@ class VDigitToolbar(BaseToolbar):
 
         @param mapLayer MapLayer to be edited
         """
+        if grass.vector_info(mapLayer.GetName())['level'] != 2:
+            dlg = wx.MessageDialog(parent = self.MapWindow,
+                                   message = _("Topology for vector map <%s> is not available. "
+                                               "Topology is required by digitizer.\nDo you want to "
+                                               "rebuild topology (takes some time) and open the vector map "
+                                               "for editing?") % mapLayer.GetName(),
+                                   caption=_("Digitizer error"),
+                                   style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
+            if dlg.ShowModal() == wx.ID_YES:
+                RunCommand('v.build', map=mapLayer.GetName())
+            else:
+                return
+        
         # deactive layer
         self.Map.ChangeLayerActive(mapLayer, False)
         
