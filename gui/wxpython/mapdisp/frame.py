@@ -550,17 +550,7 @@ class MapFrame(SingleMapFrame):
     def SaveToFile(self, event):
         """!Save map to image
         """
-        if self.IsPaneShown('3d'):
-            filetype = "TIF file (*.tif)|*.tif|PPM file (*.ppm)|*.ppm"
-            ltype = [{ 'ext' : 'tif', 'type' : 'tif' },
-                     { 'ext' : 'ppm', 'type' : 'ppm' }]
-        else:
-            img = self.MapWindow.img
-            if not img:
-                GMessage(parent = self,
-                         message = _("Nothing to render (empty map). Operation canceled."))
-                return
-            filetype, ltype = GetImageHandlers(img)
+        filetype, ltype = self._prepareSaveToFile()
         
         # get size
         dlg = ImageSizeDialog(self)
@@ -594,6 +584,64 @@ class MapFrame(SingleMapFrame):
                                       width, height)
             
         dlg.Destroy()
+
+    def DOutFile(self, command):
+        """!Saves map to image by running d.out.file from gui or d.mon.
+        Command is expected to be validated by parser.        
+        """
+        filetype, ltype = self._prepareSaveToFile()
+        width, height = self.MapWindow.GetClientSize()
+        for param in command[1:]:
+            p, val = param.split('=')
+            if p == 'format':  # must be there
+                if self.IsPaneShown('3d'):
+                    extType = 'ppm'
+                else:
+                    extType = val
+            if p == 'output':  # must be there
+                name = val
+            elif p == 'size':
+                width, height = val.split(',')
+
+        base, ext = os.path.splitext(name)
+        if not ext:
+            name = base + '.' + extType
+        elif ext[1:] != extType:
+            extType = ext[1:]
+
+        if self.IsPaneShown('3d'):
+            bitmapType = 'ppm'
+        else:
+            bitmapType = wx.BITMAP_TYPE_PNG  # default type
+        for each in ltype:
+            if each['ext'] == extType:
+                bitmapType = each['type']
+                break
+        self.MapWindow.SaveToFile(name, bitmapType, int(width), int(height))
+
+    def DOutFileOptData(self, dcmd, layer, params, propwin):
+        """!Dummy function which is called when d.out.file is called
+        and returns parsed and validated command which is then passed
+        to DOutFile method."""
+        if not dcmd:
+            return
+
+        self.DOutFile(dcmd)
+
+    def _prepareSaveToFile(self):
+        """!Get wildcards and format extensions."""
+        if self.IsPaneShown('3d'):
+            filetype = "TIF file (*.tif)|*.tif|PPM file (*.ppm)|*.ppm"
+            ltype = [{ 'ext' : 'tif', 'type' : 'tif' },
+                     { 'ext' : 'ppm', 'type' : 'ppm' }]
+        else:
+            img = self.MapWindow.img
+            if not img:
+                GMessage(parent = self,
+                         message = _("Nothing to render (empty map). Operation canceled."))
+                return
+            filetype, ltype = GetImageHandlers(img)
+        return filetype, ltype
 
     def PrintMenu(self, event):
         """

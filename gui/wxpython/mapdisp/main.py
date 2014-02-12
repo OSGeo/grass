@@ -47,6 +47,8 @@ from grass.script  import core as grass
 from core.debug    import Debug
 from core.settings import UserSettings
 
+from grass.pydispatch.signal import Signal
+
 # for standalone app
 monFile = { 'cmd' : None,
             'map' : None,
@@ -85,6 +87,8 @@ class DMonMap(Map):
 
         # generated file for g.pnmcomp output for rendering the map
         self.mapfile = monFile['map'] + '.ppm'
+        # signal sent when d.out.file appears in cmd file, attribute is cmd
+        self.saveToFile = Signal('DMonMap.saveToFile')
 
     def GetLayersFromCmdFile(self):
         """!Get list of map layers from cmdfile
@@ -96,15 +100,26 @@ class DMonMap(Map):
 
         try:
             fd = open(self.cmdfile, 'r')
+            lines = fd.readlines()
+            fd.close()
+            # detect d.out.file, delete the line from the cmd file and export graphics
+            if lines[-1].startswith('d.out.file'):
+                dOutFileCmd = lines[-1].strip()
+                fd = open(self.cmdfile, 'w')
+                fd.writelines(lines[:-1])
+                fd.close()
+                self.saveToFile.emit(cmd=utils.split(dOutFileCmd))
+                return
+
             existingLayers = self.GetListOfLayers()
 
             # holds new rendreing order for every layer in existingLayers
             layersOrder = [-1] * len(self.GetListOfLayers())
 
             # next number in rendering order
-            next_layer = 0;
+            next_layer = 0
 
-            for line in fd.readlines():
+            for line in lines:
                 cmd = utils.split(line.strip())
                 ltype = None
 
@@ -176,8 +191,6 @@ class DMonMap(Map):
             grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
                               { 'cmd' : self.cmdfile, 'det' : e })
             return
-
-        fd.close()
 
         self._giface.updateMap.emit()
 
@@ -355,6 +368,7 @@ class MapApp(wx.App):
         giface._mapframe = self.mapFrm
         # self.SetTopWindow(Map)
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
+        self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
         self.mapFrm.Show()
         
         if __name__ == "__main__":
