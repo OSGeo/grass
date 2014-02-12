@@ -204,8 +204,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 first = token.split("=")[0]
                 second = ""
 
+                flag = 0
                 for t in token.split("=")[1:]:
-                    second += t
+                    if flag == 0:
+                        second += t
+                        flag = 1
+                    else:
+                        second += "=" + t
 
                 token = "%s=\"%s\"" % (first, second)
 

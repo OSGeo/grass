@@ -2358,8 +2358,11 @@ class TemporalAlgebraParser(object):
 
     # Handle errors.
     def p_error(self, t):
-        raise SyntaxError("syntax error on line %d near '%s' expression '%s'" %
-            (t.lineno, t.value, self.expression))
+        if t:
+            raise SyntaxError("syntax error on line %d, token %s near '%s' expression '%s'" %
+                             (t.lineno, t.type, t.value, self.expression))
+        else:
+            raise SyntaxError("Unexpected syntax error")
 
 ###############################################################################
 

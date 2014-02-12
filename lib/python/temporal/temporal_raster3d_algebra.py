@@ -19,10 +19,10 @@ from temporal_raster_base_algebra import *
 class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
     """The temporal raster algebra class"""
 
-    def __init__(self, pid=None, run=False, debug=True, spatial = False):
-        TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial)
+    def __init__(self, pid=None, run=False, debug=True, spatial = False, nprocs = 1):
+        TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs)
 
-        self.m_mapcalc = pygrass.Module('r3.mapcalc')
+        self.m_mapcalc = pymod.Module('r3.mapcalc')
 
     def parse(self, expression, basename = None, overwrite=False):
         self.lexer = TemporalRasterAlgebraLexer()
