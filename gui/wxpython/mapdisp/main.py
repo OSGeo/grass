@@ -103,7 +103,7 @@ class DMonMap(Map):
             lines = fd.readlines()
             fd.close()
             # detect d.out.file, delete the line from the cmd file and export graphics
-            if lines[-1].startswith('d.out.file'):
+            if len(lines) > 0 and lines[-1].startswith('d.out.file'):
                 dOutFileCmd = lines[-1].strip()
                 fd = open(self.cmdfile, 'w')
                 fd.writelines(lines[:-1])
