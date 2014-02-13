@@ -34,6 +34,7 @@ typedef AVL_tableRow *AVL_table;
 
 /* prototype of functions */
 avl_tree avl_make(const generic_cell k, const long n);
+void avl_destroy(avl_tree root);
 avl_node *avl_find(const avl_tree root, const generic_cell k);
 int avl_add(avl_tree * root, const generic_cell k, const long n);
 long avl_to_array(avl_node * root, long i, AVL_table * a);
