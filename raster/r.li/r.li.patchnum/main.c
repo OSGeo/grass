@@ -59,26 +59,39 @@ int main(int argc, char *argv[])
 
 int patch_number(int fd, char **par, struct area_entry *ad, double *result)
 {
-    CELL *buf, *sup;
-    int count = 0, i, j, connected = 0, complete_line = 1, other_above = 0;
+    CELL *buf, *sup, *cnull;
+    CELL pid, old_pid, *pid_curr, *pid_sup, *ctmp;
+    int count, i, j, k, connected, other_above;
     struct Cell_head hd;
-    CELL complete_value;
-    int mask_fd = -1, *mask_buf, *mask_sup, null_count = 0;
+    int mask_fd, *mask_buf, null_count;
 
-    Rast_set_c_null_value(&complete_value, 1);
     Rast_get_cellhd(ad->raster, "", &hd);
 
-    sup = Rast_allocate_c_buf();
+    cnull = Rast_allocate_c_buf();
+    Rast_set_c_null_value(cnull, Rast_window_cols());
+    sup = cnull;
+
+    /* initialize patch ids */
+    pid_curr = Rast_allocate_c_buf();
+    Rast_set_c_null_value(pid_curr, Rast_window_cols());
+    pid_sup = Rast_allocate_c_buf();
+    Rast_set_c_null_value(pid_sup, Rast_window_cols());
 
     /* open mask if needed */
+    mask_fd = -1;
+    mask_buf = NULL;
+    null_count = 0;
     if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
 	    return 0;
-	mask_buf = malloc(ad->cl * sizeof(int));
-	mask_sup = malloc(ad->cl * sizeof(int));
+	mask_buf = G_malloc(ad->cl * sizeof(int));
     }
 
-    /*calculate number of patch */
+    /* calculate number of patches */
+    count = 0;
+    connected = 0;
+    other_above = 0;
+    pid = 0;
 
     for (i = 0; i < ad->rl; i++) {
 	buf = RLI_get_cell_raster_row(fd, i + ad->y, ad);
@@ -87,95 +100,93 @@ int patch_number(int fd, char **par, struct area_entry *ad, double *result)
 	}
 	/* mask values */
 	if (ad->mask == 1) {
-	    int k;
-
-	    if (i > 0) {
-		int *tmp;
-
-		tmp = mask_sup;
-		mask_buf = mask_sup;
-	    }
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
 		return 0;
 	    for (k = 0; k < ad->cl; k++) {
 		if (mask_buf[k] == 0) {
-		    Rast_set_c_null_value(mask_buf + k, 1);
+		    Rast_set_c_null_value(&buf[k + ad->x], 1);
 		    null_count++;
 		}
 	    }
-
 	}
+	
+	ctmp = pid_sup;
+	pid_sup = pid_curr;
+	pid_curr = ctmp;
+	Rast_set_c_null_value(pid_curr, Rast_window_cols());
 
+	connected = 0;
+	other_above = 1;
+	for (j = 0; j < ad->cl; j++) {
+	    
+	    if (Rast_is_null_value(&(buf[j + ad->x]), CELL_TYPE)) {
+		connected = 0;
+		other_above = 1;
+		continue;
+	    }
 
-	if (complete_line) {
-	    if (!Rast_is_null_value(&(buf[ad->x]), CELL_TYPE) &&
-		buf[ad->x] != complete_value)
-		count++;
-
-	    for (j = 0; j < ad->cl - 1; j++) {
-
-		if (buf[j + ad->x] != buf[j + 1 + ad->x]) {
-		    complete_line = 0;
-		    if (!Rast_is_null_value(&(buf[j + 1 + ad->x]), CELL_TYPE)
-			&& buf[j + 1 + ad->x] != complete_value)
-			count++;
+	    if (sup[j + ad->x] == buf[j + ad->x]) {
+		
+		if (!connected) {
+		    pid_curr[j + ad->x] = pid_sup[j + ad->x];
 		}
-
-	    }
-	    if (complete_line) {
-		complete_value = buf[ad->x];
-	    }
-	}
-	else {
-	    complete_line = 1;
-	    connected = 0;
-	    other_above = 0;
-	    for (j = 0; j < ad->cl; j++) {
-		if (sup[j + ad->x] == buf[j + ad->x]) {
-		    connected = 1;
-		    if (other_above) {
-			other_above = 0;
+		
+		if (pid_curr[j + ad->x] != pid_sup[j + ad->x]) {
+		    if (connected) {
 			count--;
 		    }
-		}
-		else {
-		    if (connected &&
-			!Rast_is_null_value(&(buf[j + ad->x]), CELL_TYPE))
-			other_above = 1;
-		}
-		if (j < ad->cl - 1 && buf[j + ad->x] != buf[j + 1 + ad->x]) {
-		    complete_line = 0;
-		    if (!connected &&
-			!Rast_is_null_value(&(buf[j + ad->x]), CELL_TYPE)) {
-
-			count++;
-			connected = 0;
-			other_above = 0;
+		    if (other_above) {
+			pid_curr[j + ad->x] = pid_sup[j + ad->x];
+			for (k = j + ad->x - 1; k >= ad->x; k--) {
+			    if (buf[k] != buf[j + ad->x])
+				break;
+			    pid_curr[k] = pid_sup[j + ad->x];
+			}
 		    }
 		    else {
-			connected = 0;
-			other_above = 0;
+			old_pid = pid_sup[j + ad->x];
+			pid_sup[j + ad->x] = pid_curr[j + ad->x];
+			
+			for (k = j + 1; k < ad->cl; k++) {
+			    if (pid_sup[k + ad->x] == old_pid) {
+				pid_sup[k + ad->x] = pid_curr[j + ad->x];
+			    }
+			}
 		    }
 		}
+
+		other_above = 0;
+		connected = 1;
 	    }
-	    if (!connected &&
-		sup[ad->cl - 1 + ad->x] != buf[ad->cl - 1 + ad->x]) {
-		if (!Rast_is_null_value
-		    (&(buf[ad->cl - 1 + ad->x]), CELL_TYPE)) {
-		    count++;
-		    complete_line = 0;
+
+	    if (!connected) {
+		count++;
+		pid++;
+		pid_curr[j + ad->x] = pid;
+	    }
+
+	    if (j < ad->cl - 1) {
+		if (buf[j + ad->x] == buf[j + 1 + ad->x]) {
+		    
+		    connected = 1;
+		    pid_curr[j + 1 + ad->x] = pid_curr[j + ad->x];
+		}
+		else {
+		    other_above = 1;
+		    connected = 0;
 		}
 	    }
-
-	    if (complete_line)
-		complete_value = buf[ad->x];
-
 	}
-
     }
 
     *result = count;
 
-    G_free(sup);
+    if (ad->mask == 1) {
+	G_free(mask_buf);
+    }
+    G_free(cnull);
+    G_free(pid_curr);
+    G_free(pid_sup);
+
     return RLI_OK;
 }
