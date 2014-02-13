@@ -73,6 +73,8 @@ void worker_init(char *r, int f(int, char **, struct area_entry *, double *), ch
     switch (data_type) {
     case CELL_TYPE:{
 	    cache_rows = CACHESIZE / (hd.cols * sizeof(CELL));
+	    if (cache_rows < 4)
+		cache_rows = 4;
 	    cm->cache = G_malloc(cache_rows * sizeof(CELL *));
 	    cm->contents = G_malloc(cache_rows * sizeof(int));
 	    cm->used = 0;
@@ -80,6 +82,8 @@ void worker_init(char *r, int f(int, char **, struct area_entry *, double *), ch
 	} break;
     case DCELL_TYPE:{
 	    cache_rows = CACHESIZE / (hd.cols * sizeof(DCELL));
+	    if (cache_rows < 4)
+		cache_rows = 4;
 	    dm->cache = G_malloc(cache_rows * sizeof(DCELL *));
 	    dm->contents = G_malloc(cache_rows * sizeof(int));
 	    dm->used = 0;
@@ -87,6 +91,8 @@ void worker_init(char *r, int f(int, char **, struct area_entry *, double *), ch
 	} break;
     case FCELL_TYPE:{
 	    cache_rows = CACHESIZE / (hd.cols * sizeof(FCELL));
+	    if (cache_rows < 4)
+		cache_rows = 4;
 	    fm->cache = G_malloc(cache_rows * sizeof(FCELL *));
 	    fm->contents = G_malloc(cache_rows * sizeof(int));
 	    fm->used = 0;
@@ -94,6 +100,7 @@ void worker_init(char *r, int f(int, char **, struct area_entry *, double *), ch
 	} break;
     }
     ad->data_type = data_type;
+    ad->rc = cache_rows;
     ad->cm = cm;
     ad->fm = fm;
     ad->dm = dm;
@@ -144,34 +151,34 @@ void worker_process(msg * ret, msg * m)
     }
 
     /* memory menagement */
-    if (ad->rl > used) {
+    if (ad->rc > used) {
 	/* allocate cache */
 	int i;
 
 	switch (data_type) {
 	case CELL_TYPE:{
-		for (i = 0; i < (ad->rl - used); i++) {
+		for (i = 0; i < (ad->rc - used); i++) {
 		    cm->cache[used + i] = Rast_allocate_c_buf();
 		}
 	    }
 	    break;
 	case DCELL_TYPE:{
-		for (i = 0; i < ad->rl - used; i++) {
+		for (i = 0; i < ad->rc - used; i++) {
 		    dm->cache[used + i] = Rast_allocate_d_buf();
 		}
 	    }
 	    break;
 	case FCELL_TYPE:{
-		for (i = 0; i < ad->rl - used; i++) {
+		for (i = 0; i < ad->rc - used; i++) {
 		    fm->cache[used + i] = Rast_allocate_f_buf();
 		}
 	    }
 	    break;
 	}
-	cm->used = ad->rl;
-	dm->used = ad->rl;
-	fm->used = ad->rl;
-	used = ad->rl;
+	cm->used = ad->rc;
+	dm->used = ad->rc;
+	fm->used = ad->rc;
+	used = ad->rc;
     }
 
     /* calculate function */
@@ -245,6 +252,10 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
     }
 
     close(mask_fd);
+    
+    G_free(buf);
+    G_free(old);
+    
     return G_store(tmp_file);
 }
 
@@ -252,7 +263,7 @@ CELL *RLI_get_cell_raster_row(int fd, int row, struct area_entry *ad)
 {
     int hash;
 
-    hash = row % ad->rl;
+    hash = row % ad->rc;
     if (ad->cm->contents[hash] == row)
 	return ad->cm->cache[hash];
     else {
@@ -267,7 +278,7 @@ DCELL *RLI_get_dcell_raster_row(int fd, int row, struct area_entry *ad)
 {
     int hash;
 
-    hash = row % ad->rl;
+    hash = row % ad->rc;
     if (ad->dm->contents[hash] == row)
 	return ad->dm->cache[hash];
     else {
@@ -282,7 +293,7 @@ FCELL *RLI_get_fcell_raster_row(int fd, int row, struct area_entry *ad)
 {
     int hash;
 
-    hash = row % ad->rl;
+    hash = row % ad->rc;
     if (ad->fm->contents[hash] == row)
 	return ad->fm->cache[hash];
     else {
