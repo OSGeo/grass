@@ -364,7 +364,7 @@ class MapFrame(SingleMapFrame):
             self.MapWindow3D.UpdateView(None)
             self.MapWindow3D.overlayActivated.connect(self._activateOverlay)
             self.MapWindow3D.overlayHidden.connect(self._hideOverlay)
-            self.legend.overlayChanged.connect(lambda: self.MapWindow3D.UpdateOverlays())
+            self.legend.overlayChanged.connect(self.MapWindow3D.UpdateOverlays)
         else:
             self.MapWindow = self.MapWindow3D
             os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True, windres3 = True)
@@ -431,6 +431,7 @@ class MapFrame(SingleMapFrame):
         # TODO: here we end because self.MapWindow3D is None for a while
         self._giface.updateMap.disconnect(self.MapWindow3D.UpdateMap)
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
+        self.legend.overlayChanged.disconnect(self.MapWindow3D.UpdateOverlays)
 
         self.MapWindow.UpdateMap()
         self._mgr.Update()
@@ -988,7 +989,7 @@ class MapFrame(SingleMapFrame):
         if overlayId > 100:
             self.OnAddText(None)
         elif overlayId == 0:
-            self.AddLegend(showDialog=True)
+            self.AddLegend(cmd=self.legend.cmd, showDialog=True)
         elif overlayId == 1:
             self.AddBarscale(showDialog=True)
         elif overlayId == 2:
@@ -1051,7 +1052,20 @@ class MapFrame(SingleMapFrame):
             layers = self._giface.GetLayerList().GetSelectedLayers()
             for layer in layers:
                 if layer.type == 'raster':
-                    self.legend.cmd.append('map=%s' % layer.maplayer.name)
+                    isMap = False
+                    # replace map
+                    for i, legendParam in enumerate(self.legend.cmd[1:]):
+                        idx = i + 1
+                        param, val = legendParam.split('=')
+                        if param == 'map':
+                            self.legend.cmd[idx] = 'map={rast}'.format(rast=layer.maplayer.name)
+                            isMap = True
+                        elif param in ('use', 'range'):
+                            # clear range or use to avoid problems
+                            del self.legend.cmd[idx]
+
+                    if not isMap:  # for the first time
+                        self.legend.cmd.append('map=%s' % layer.maplayer.name)
                     break
 
         if not showDialog and self.legend.CmdIsValid():
@@ -1059,13 +1073,15 @@ class MapFrame(SingleMapFrame):
             return
 
         # Decoration overlay control dialog
+        # always create new one to avoid problem when switching between maps
         if self.legend.dialog:
             if self.legend.dialog.IsShown():
                 self.legend.dialog.SetFocus()
                 self.legend.dialog.Raise()
             else:
-                self.legend.dialog.Show()
-        else:
+                self.legend.dialog.Destroy()
+                self.legend.dialog = None
+        if not self.legend.dialog:
             GUI(parent=self, giface=self._giface, show=True,
                 modal=False).ParseCommand(self.legend.cmd,
                                           completed=(self.legend.GetOptData, None, None))
