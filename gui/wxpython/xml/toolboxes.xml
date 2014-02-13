@@ -17,9 +17,9 @@
       <subtoolbox name="Export3DRasterMaps"/>
       <subtoolbox name="ExportDatabaseTable"/>
       <separator/>
-      <subtoolbox name="ExternalFormats"/>
+      <subtoolbox name="LinkExternalData"/>
       <separator/>
-      <subtoolbox name="ManageMapsAndVolumes"/>
+      <subtoolbox name="ManageMaps"/>
       <subtoolbox name="MapTypeConversions"/>
       <separator/>
       <wxgui-item name="Georectify"/>
@@ -237,6 +237,22 @@
       <wxgui-item name="CloseAllOpenMapDisplayWindows"/>
     </items>
   </toolbox>
+  <toolbox name="ImportExportLink">
+    <label>Import, export and link data</label>
+    <items>
+      <subtoolbox name="ImportRasterData"/>
+      <subtoolbox name="ImportVectorData"/>
+      <subtoolbox name="Import3DRasterData"/>
+      <subtoolbox name="ImportDatabaseTable"/>
+      <separator/>
+      <subtoolbox name="ExportRasterMap"/>
+      <subtoolbox name="ExportVectorMap"/>
+      <subtoolbox name="Export3DRasterMaps"/>
+      <subtoolbox name="ExportDatabaseTable"/>
+      <separator/>
+      <subtoolbox name="LinkExternalData"/>
+    </items>
+  </toolbox>
   <toolbox name="ImportRasterData">
     <label>Import raster data</label>
     <items>
@@ -282,6 +298,10 @@
       <separator/>
       <module-item name="r.unpack">
         <label>Unpack raster map</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.proj">
+        <label>Reproject raster map from different GRASS location</label>
       </module-item>
     </items>
   </toolbox>
@@ -330,6 +350,10 @@
       <separator/>
       <module-item name="v.unpack">
         <label>Unpack vector map</label>
+      </module-item>
+      <separator/>
+      <module-item name="v.proj">
+        <label>Reproject vector map from different GRASS location</label>
       </module-item>
     </items>
   </toolbox>
@@ -472,8 +496,8 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="ExternalFormats">
-    <label>External formats</label>
+  <toolbox name="LinkExternalData">
+    <label>Link external data</label>
     <items>
       <wxgui-item name="LinkExternalRasterData"/>
       <wxgui-item name="LinkExternalVectorData"/>
@@ -484,8 +508,8 @@
       <wxgui-item name="OutputFormatForVectorData"/>
     </items>
   </toolbox>
-  <toolbox name="ManageMapsAndVolumes">
-    <label>Manage maps and volumes</label>
+  <toolbox name="ManageMaps">
+    <label>Manage maps</label>
     <items>
       <module-item name="g.copy">
         <label>Copy</label>
@@ -643,7 +667,7 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different location</label>
+        <label>Reproject raster map from different GRASS location</label>
       </module-item>
       <module-item name="r.tileset">
         <label>Tiling</label>
@@ -1132,7 +1156,7 @@
         <label>Rectify vector map</label>
       </module-item>
       <module-item name="v.proj">
-        <label>Reproject vector map from different location</label>
+        <label>Reproject vector map from different GRASS location</label>
       </module-item>
       <separator/>
       <module-item name="v.support">
@@ -1773,6 +1797,7 @@
       <subtoolbox name="TemporalAggregation"/>
       <subtoolbox name="TemporalSampling"/>
       <subtoolbox name="TemporalReportsAndStatistics"/>
+      <subtoolbox name="TemporalGuiTools"/>
     </items>
   </toolbox>
   <toolbox name="TemporalManageDatasets">
@@ -1919,6 +1944,29 @@
       <module-item name="t.vect.observe.strds">
         <label>Observe specific locations in raster dataset</label>
       </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="TemporalGuiTools">
+    <label>GUI tools</label>
+    <items>
+      <wxgui-item name="AnimationTool"/>
+      <module-item name="g.gui.timeline">
+        <label>Plot temporal extents</label>
+      </module-item>
+    </items>
+  </toolbox>
+  <toolbox name="GuiTools">
+    <label>GUI tools</label>
+    <items>
+      <wxgui-item name="AnimationTool"/>
+      <module-item name="g.gui.dbmgr">
+        <label>Attribute table manager</label>
+      </module-item>
+      <wxgui-item name="Georectify"/>
+      <wxgui-item name="GraphicalModeler"/>
+      <wxgui-item name="InteractiveInputForSupervisedClassification"/>
+      <wxgui-item name="MapSwipe"/>
+      <wxgui-item name="CartographicComposer"/>
     </items>
   </toolbox>
 </toolboxes>

@@ -429,28 +429,28 @@ class GMFrame(wx.Frame):
         ### self._createMenuBar() # bug when menu is re-created on the fly
         self._setCopyingOfSelectedText()
         
-    def OnGCPManager(self, event):
-        """!Launch georectifier module
+    def OnGCPManager(self, event=None, cmd=None):
+        """!Launch georectifier module. See OnIClass documentation.
         """
         GCPWizard(self, self._giface)
 
-    def OnGModeler(self, event):
-        """!Launch Graphical Modeler"""
+    def OnGModeler(self, event=None, cmd=None):
+        """!Launch Graphical Modeler. See OnIClass documentation."""
         win = ModelFrame(parent = self, giface = self._giface)
         win.CentreOnScreen()
         
         win.Show()
         
-    def OnPsMap(self, event):
-        """!Launch Cartographic Composer
+    def OnPsMap(self, event=None, cmd=None):
+        """!Launch Cartographic Composer. See OnIClass documentation.
         """
         win = PsMapFrame(parent = self)
         win.CentreOnScreen()
         
         win.Show()
 
-    def OnMapSwipe(self, event):
-        """!Launch Map Swipe"""
+    def OnMapSwipe(self, event=None, cmd=None):
+        """!Launch Map Swipe. See OnIClass documentation."""
         win = SwipeMapFrame(parent=self, giface=self._giface)
 
         rasters = []
@@ -470,8 +470,8 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
-    def OnRLiSetup(self, event):
-        """!Launch r.li Setup"""
+    def OnRLiSetup(self, event=None, cmd=None):
+        """!Launch r.li Setup. See OnIClass documentation."""
         win = RLiSetupFrame(parent = self)
         win.CentreOnScreen()
         
@@ -1465,8 +1465,8 @@ class GMFrame(wx.Frame):
         
         win.Show()
 
-    def OnAnimationTool(self, event):
-        """!Launch Animation tool
+    def OnAnimationTool(self, event=None, cmd=None):
+        """!Launch Animation tool. See OnIClass documentation.
         """
         from animation.frame import AnimationFrame
 
