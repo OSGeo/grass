@@ -100,6 +100,7 @@ typedef struct fcell_memory_entry *fcell_manager;
   * \member y the y coordinate of upper left corner
   * \member rl area length in rows
   * \member cl area length in columns
+  * \member rc number of rows in the cache
   * \member mask file descriptor of mask raster file (-1 if there is no mask)
  */
 struct area_entry
@@ -108,6 +109,7 @@ struct area_entry
     int y;
     int rl;
     int cl;
+    int rc;
     int mask;
     int data_type;
     cell_manager cm;
