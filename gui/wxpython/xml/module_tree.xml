@@ -3,12 +3,15 @@
 <toolbox name="DefaultModuleTree">
   <label>Default GRASS GIS module tree</label>
   <items>
+    <subtoolbox name="ImportExportLink"/>
+    <subtoolbox name="ManageMaps"/>
     <subtoolbox name="Raster"/>
     <subtoolbox name="Vector"/>
     <subtoolbox name="Imagery"/>
     <subtoolbox name="Volumes"/>
     <subtoolbox name="Database"/>
     <subtoolbox name="Temporal"/>
+    <subtoolbox name="GuiTools"/>
     <user-toolboxes-list/>
     <addons/>
   </items>
