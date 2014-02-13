@@ -2,15 +2,15 @@
 
 ############################################################################
 #
-# MODULE:	g.manual
-# AUTHOR(S):	Markus Neteler
+# MODULE:       g.manual
+# AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
-# PURPOSE:	Display the HTML/MAN pages
-# COPYRIGHT:	(C) 2003, 2008, 2010-2012 by the GRASS Development Team
+# PURPOSE:      Display the HTML/MAN pages
+# COPYRIGHT:    (C) 2003, 2008, 2010-2012 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
 #
 #############################################################################
 
@@ -87,9 +87,9 @@ def start_man(entry):
         path = os.path.join(os.getenv('GRASS_ADDON_BASE'), 'docs', 'man', 'man1', entry + '.1')
     
     for ext in ['', '.gz', '.bz2']:
-	if os.path.exists(path + ext):
-	    os.execlp('man', 'man', path + ext)
-	    grass.fatal(_("Error starting 'man' for '%s'") % path)
+        if os.path.exists(path + ext):
+            os.execlp('man', 'man', path + ext)
+            grass.fatal(_("Error starting 'man' for '%s'") % path)
     grass.fatal(_("No manual page entry for '%s'") % entry)
 
 def main():
@@ -117,12 +117,12 @@ def main():
     
     if sys.platform == 'darwin':
         # hack for MacOSX
-	browser_name = os.getenv('GRASS_HTML_BROWSER_MACOSX', '..').split('.')[2]
+        browser_name = os.getenv('GRASS_HTML_BROWSER_MACOSX', '..').split('.')[2]
     elif sys.platform == 'cygwin':
         # hack for Cygwin
-	browser_name = grass.basename(browser, 'exe')
+        browser_name = grass.basename(browser, 'exe')
     else:
-	browser_name = grass.basename(browser)
+        browser_name = grass.basename(browser)
     
     # keep order!
     # first test for index...
