@@ -115,9 +115,9 @@ int patch_density(int fd, char **par, struct area_entry *ad, double *result)
 	if (ad->mask == 1) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
 		return 0;
-	    for (k = 0; k < ad->cl; k++) {
-		if (mask_buf[k] == 0) {
-		    Rast_set_c_null_value(&buf[k + ad->x], 1);
+	    for (j = 0; j < ad->cl; j++) {
+		if (mask_buf[j + ad->x] == 0) {
+		    Rast_set_c_null_value(&buf[j + ad->x], 1);
 		    null_count++;
 		}
 	    }
