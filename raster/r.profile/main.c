@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 {
     char *name, *outfile;
     int fd, projection;
-    FILE *fp;
+    FILE *fp, *coor_fp;
     double res;
     char *null_string;
     char ebuf[256], nbuf[256], label[512], formatbuff[256];
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct
     {
-	struct Option *opt1, *profile, *res, *output, *null_str;
+	struct Option *opt1, *profile, *res, *output, *null_str, *coord_file;
 	struct Flag *g, *c;
     }
     parm;
@@ -66,10 +66,15 @@ int main(int argc, char *argv[])
     parm.profile->required = NO;
     parm.profile->multiple = YES;
     parm.profile->key_desc = "east,north";
-    parm.profile->label = _("Profile coordinate pairs");
-    parm.profile->description =
-	_("If no coordinate pairs are specified, "
-	  "coordinates at standard input are expected.");
+    parm.profile->description = _("Profile coordinate pairs");
+
+    parm.coord_file = G_define_standard_option(G_OPT_F_INPUT);
+    parm.coord_file->key = "coordinate_file";
+    parm.coord_file->label =
+	_("Name of input file containing coordinate pairs");
+    parm.coord_file->description =
+	_("Use instead of the 'profile' option. \"-\" reads from stdin.");
+    parm.coord_file->required = NO;
 
     parm.res = G_define_option();
     parm.res->key = "res";
@@ -105,6 +110,11 @@ int main(int argc, char *argv[])
 	clr = 1;		/* color output */
 
     null_string = parm.null_str->answer;
+
+    if ((parm.profile->answer && parm.coord_file->answer) ||
+	(!parm.profile->answer && !parm.coord_file->answer))
+	G_fatal_error(_("Either use profile option or coordinate_file "
+			" option, but not both"));
 
     G_get_window(&window);
     projection = G_projection();
@@ -161,9 +171,17 @@ int main(int argc, char *argv[])
     G_message(formatbuff);
 
     /* Get Profile Start Coords */
-    if (!parm.profile->answer) {
-	/* Assume input from stdin */
-	for (n = 1; input(b1, ebuf, b2, nbuf, label); n++) {
+    if (parm.coord_file->answer) {
+	if (strcmp("-", parm.coord_file->answer) == 0)
+	    coor_fp = stdin;
+	else
+	    coor_fp = fopen(parm.coord_file->answer, "r");
+
+	if (coor_fp == NULL)
+	    G_fatal_error(_("Could not open <%s>"), parm.coord_file->answer);
+
+
+	for (n = 1; input(b1, ebuf, b2, nbuf, label, coor_fp); n++) {
 	    G_debug(4, "stdin line %d: ebuf=[%s]  nbuf=[%s]", n, ebuf, nbuf);
 	    if (!G_scan_easting(ebuf, &e2, G_projection()) ||
 		!G_scan_northing(nbuf, &n2, G_projection()))
@@ -176,9 +194,12 @@ int main(int argc, char *argv[])
 	    n1 = n2;
 	    havefirst = TRUE;
 	}
+
+	if (coor_fp != stdin)
+	    fclose(coor_fp);
     }
     else {
-	/* Coords from Command Line */
+	/* Coords given on the Command Line using the profile= option */
 	for (i = 0; parm.profile->answers[i]; i += 2) {
 	    /* Test for number coordinate pairs */
 	    k = i;

@@ -6,7 +6,8 @@
 
 #include "local_proto.h"
 
-int input(char *blank1, char *word1, char *blank2, char *word2, char *rest)
+int input(char *blank1, char *word1, char *blank2, char *word2, char *rest,
+	  FILE *infile)
 {
     char buf[1024];
     char *b, *w1, *w2;
@@ -18,7 +19,7 @@ int input(char *blank1, char *word1, char *blank2, char *word2, char *rest)
     *blank1 = *blank2 = 0;
     *word1 = *word2 = *rest = 0;
 
-    if (!fgets(buf, 1024, stdin)) {
+    if (!fgets(buf, 1024, infile)) {
 	*buf = 0;
 	return 0;
     }
