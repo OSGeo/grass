@@ -66,7 +66,10 @@ int main(int argc, char *argv[])
     parm.profile->required = NO;
     parm.profile->multiple = YES;
     parm.profile->key_desc = "east,north";
-    parm.profile->description = _("Profile coordinate pairs");
+    parm.profile->label = _("Profile coordinate pairs");
+    parm.profile->description =
+	_("If no coordinate pairs are specified, "
+	  "coordinates at standard input are expected.");
 
     parm.res = G_define_option();
     parm.res->key = "res";
