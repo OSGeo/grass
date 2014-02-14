@@ -56,8 +56,6 @@ int main(int argc, char *argv[])
 
     return calculateIndex(conf->answer, meanPixelAttribute, NULL,
 			  raster->answer, output->answer);
-
-
 }
 
 
@@ -65,9 +63,6 @@ int meanPixelAttribute(int fd, char **par, struct area_entry *ad, double *result
 {
     int ris = 0;
     double indice = 0;
-    struct Cell_head hd;
-
-    Rast_get_cellhd(ad->raster, "", &hd);
 
     switch (ad->data_type) {
     case CELL_TYPE:
@@ -96,12 +91,10 @@ int meanPixelAttribute(int fd, char **par, struct area_entry *ad, double *result
 	return RLI_ERRORE;
     }
 
-
     *result = indice;
 
     return RLI_OK;
 }
-
 
 
 int calculate(int fd, struct area_entry *ad, double *result)
@@ -109,13 +102,12 @@ int calculate(int fd, struct area_entry *ad, double *result)
     CELL *buf;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int masked = FALSE;
 
     double area = 0;
     double indice = 0;
     double somma = 0;
-
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -163,6 +155,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
     *result = indice;
     if (masked) {
+	close(mask_fd);
 	G_free(mask_buf);
     }
     return RLI_OK;
@@ -173,13 +166,12 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     DCELL *buf;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int masked = FALSE;
 
     double area = 0;
     double indice = 0;
     double somma = 0;
-
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -194,8 +186,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	}
 	masked = TRUE;
     }
-
-
 
     for (j = 0; j < ad->rl; j++) {	/*for each raster row */
 	buf = RLI_get_dcell_raster_row(fd, j + ad->y, ad);	/*read raster row */
@@ -220,7 +210,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	}
     }
 
-
     if (area == 0)
 	indice = (double)-1;
     else
@@ -228,6 +217,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
     *result = indice;
     if (masked) {
+	close(mask_fd);
 	G_free(mask_buf);
     }
     return RLI_OK;
@@ -238,13 +228,12 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     FCELL *buf;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int masked = FALSE;
 
     double area = 0;
     double indice = 0;
     double somma = 0;
-
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -259,8 +248,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	}
 	masked = TRUE;
     }
-
-
 
     for (j = 0; j < ad->rl; j++) {	/*for each raster row */
 	buf = RLI_get_fcell_raster_row(fd, j + ad->y, ad);	/*read raster row */
@@ -286,7 +273,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	}
     }
 
-
     if (area == 0)
 	indice = (double)-1;
     else
@@ -294,6 +280,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
     *result = indice;
     if (masked) {
+	close(mask_fd);
 	G_free(mask_buf);
     }
     return RLI_OK;
