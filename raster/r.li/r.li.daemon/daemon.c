@@ -365,7 +365,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 	    /* Get start x and y position of masked overlay raster with
 		respect to input raster region from window.
 		sa_n, sa_e are read from configuration file. */
-	    m.f.f_ma.x = (int)Rast_easting_to_col(sa_e, &window);
+	    m.f.f_ma.x = (int)Rast_easting_to_col(sa_w, &window);
 	    m.f.f_ma.y = (int)Rast_northing_to_row(sa_n, &window);
 
 	    /* Get row count and column count of overlay raster */

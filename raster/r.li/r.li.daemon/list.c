@@ -65,7 +65,8 @@ void removeNode(struct list *l)
 	struct node *tmp = l->head;
 
 	l->head = NULL;
-	free(tmp);
+	G_free(tmp->m);
+	G_free(tmp);
 	l->size--;
     }
     else {
@@ -73,7 +74,8 @@ void removeNode(struct list *l)
 
 	l->head = l->head->next;
 	l->head->prev = NULL;
-	free(tmp);
+	G_free(tmp->m);
+	G_free(tmp);
 	l->size--;
     }
 }
