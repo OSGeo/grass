@@ -60,10 +60,11 @@ from temporal_raster_base_algebra import *
 class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
     """The temporal raster algebra class"""
 
-    def __init__(self, pid=None, run=False, debug=True, spatial = False, nprocs = 1):
-        TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs)
+    def __init__(self, pid=None, run=False, debug=True, spatial = False, nprocs = 1, register_null = False):
+        TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs, register_null)
 
         self.m_mapcalc = pymod.Module('r.mapcalc')
+        self.m_mremove = pymod.Module('g.mremove')
 
     def parse(self, expression, basename = None, overwrite=False):
         self.lexer = TemporalRasterAlgebraLexer()
@@ -76,6 +77,23 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.basename = basename
         self.expression = expression
         self.parser.parse(expression)
+
+    def remove_empty_maps(self):
+        """! Removes the intermediate vector maps.
+        """
+        if self.empty_maps:
+            self.msgr.message(_("Removing empty raster maps"))
+            namelist = self.empty_maps.values()
+            max = 100
+            chunklist = [namelist[i:i + max] for i in range(0, len(namelist), max)]
+            for chunk in chunklist:
+                stringlist = ",".join(chunk)
+
+                if self.run:
+                    m = copy.deepcopy(self.m_mremove)
+                    m.inputs["rast"].value = stringlist
+                    m.flags["f"].value = True
+                    m.run()
 
     ######################### Temporal functions ##############################
 
