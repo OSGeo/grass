@@ -123,6 +123,7 @@ class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
         'float'   : 'FLOATEXP',
         'int'     : 'INTEXP',
         'isnull'  : 'ISNULL',
+        'isntnull': 'ISNTNULL',
         'null'    : 'NULL',
         'exist'   : 'EXIST',
     }
@@ -187,9 +188,18 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
          'T_ARITH1_OPERATOR'))
 
     def __init__(self, pid=None, run = True, debug = False, spatial = False, \
-                  nprocs = 1, null = False):
+                  nprocs = 1, register_null = False):
         TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)
         self.nprocs = nprocs
+        self.empty_maps = {}
+        self.register_null = register_null
+
+    def check_null(self, t):
+        try:
+            int(t)
+            return t
+        except ValueError:
+            return "null()"
 
     ######################### Temporal functions ##############################
 
@@ -317,6 +327,15 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 for map_i in register_list:
                     # Get meta data from grass database.
                     map_i.load()
+                    # Do not register empty maps if not required
+
+                    # In case of a null map continue, do not register null maps
+                    if map_i.metadata.get_min() is None and \
+                       map_i.metadata.get_max() is None:
+                        if not self.register_null:
+                            self.empty_maps[map_i.get_name()] = map_i.get_name()
+                            continue
+
                     if map_i.is_in_db(dbif) and self.overwrite:
                         # Update map in temporal database.
                         map_i.update_all(dbif)
@@ -332,6 +351,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 resultstds.update_from_registered_maps(dbif)
                 dbif.close()
                 t[0] = register_list
+
+                self.remove_empty_maps()
 
     def p_arith1_operation(self, t):
         """
@@ -790,6 +811,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print map.cmd_list
 
+
     def p_s_var_expr(self, t):
         # Examples:
         #   isnull(A)
@@ -808,6 +830,35 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     cmdstring = "%s(%s)" %(t[1].lower(), map_i.cmd_list)
                 else:
                     cmdstring = "%s(%s)" %(t[1].lower(), map_i.get_id())
+                # Set new command list for map.
+                map_i.cmd_list = cmdstring
+                # Append map with updated command list to result list.
+                resultlist.append(map_i)
+
+            t[0] = resultlist
+
+        if self.debug:
+            for map in resultlist:
+                print map.cmd_list
+
+    def p_s_var_expr_1(self, t):
+        # Examples:
+        #   isntnull(A)
+        """
+        s_var_expr : ISNTNULL LPAREN stds RPAREN
+                   | ISNTNULL LPAREN expr RPAREN
+        """
+        # Check input stds.
+        maplist = self.check_stds(t[3])
+
+        if self.run:
+            resultlist = []
+            for map_i in maplist:
+                # Create r.mapcalc expression string for the operation.
+                if "cmd_list" in dir(map_i):
+                    cmdstring = "!isnull(%s)" %(map_i.cmd_list)
+                else:
+                    cmdstring = "!isnull(%s)" %(map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -1015,7 +1066,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if len(t) == 7:
             numinput = t[5]
         elif len(t) == 9:
-            numinput = t[5] + t[6] + t[7]
+            numinput = self.check_null(t[5])
+
         # Iterate over condition map list.
         for map_i in ifmaplist:
             mapinput = map_i.get_id()
@@ -1304,20 +1356,21 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             try:
                 thenmaplist = self.check_stds(t[5])
             except:
-                numthen = t[5]
+                numthen = self.check_null(t[5])
             try:
                 elsemaplist = self.check_stds(t[7])
             except:
-                numelse = t[7]
+                numelse = self.check_null(t[7])
         elif len(t) == 11:
             try:
                 thenmaplist = self.check_stds(t[5])
             except:
-                numthen = t[5] + t[6] + t[7]
+                numthen = self.check_null(t[5])
             try:
                 elsemaplist = self.check_stds(t[9])
             except:
-                numelse = t[7] + t[8] + t[9]
+                numelse = self.check_null(t[7])
+
         if thenmaplist != []:
             topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist)
         elif elsemaplist != []:
@@ -1418,20 +1471,21 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             try:
                 thenmaplist = self.check_stds(t[7])
             except:
-                numthen = t[7]
+                numthen = self.check_null(t[7])
             try:
                 elsemaplist = self.check_stds(t[9])
             except:
-                numelse = t[9]
+                numelse = self.check_null(t[9])
         elif len(t) == 13:
             try:
                 thenmaplist = self.check_stds(t[7])
             except:
-                numthen = t[9] + t[10] + t[11]
+                numthen = self.check_null(t[7])
             try:
                 elsemaplist = self.check_stds(t[11])
             except:
-                numelse = t[9] + t[10] + t[11]
+                numelse = self.check_null(t[9])
+
         if thenmaplist != []:
             topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist, \
                                                     topolist = relations)
@@ -2302,15 +2356,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if len(t) == 9:
             numthen = t[5]
             numelse = t[7]
-        elif len(t) == 11 and t[6] == '(':
-            numthen = t[5] + t[6] + t[7]
-            numelse = t[9]
-        elif len(t) == 11 and t[6] == ',':
-            numthen = t[5]
-            numelse = t[7] + t[8] + t[9]
+        elif len(t) == 11:
+            numthen = self.check_null(t[5])
+            numelse = self.check_null(t[7])
         elif len(t) == 13:
-            numthen = t[5] + t[6] + t[7]
-            numelse = t[9] + t[10] + t[11]
+            numthen = self.check_null(t[5])
+            numelse = self.check_null(t[9])
+
         # Iterate over condition map list.
         for map_i in ifmaplist:
             mapinput = map_i.get_id()

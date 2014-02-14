@@ -391,7 +391,6 @@ except:
     pass
 
 import os
-import grass.script as grass
 from space_time_datasets import *
 from factory import *
 from open_stds import *
@@ -653,6 +652,15 @@ class GlobalTemporalVar(object):
 
 ###############################################################################
 
+class FatalError(Exception):
+    def __init__(self, msg):
+        self.value = msg
+
+    def __str__(self):
+        return self.value
+
+###############################################################################
+
 class TemporalAlgebraParser(object):
     """The temporal algebra class"""
 
@@ -806,18 +814,16 @@ class TemporalAlgebraParser(object):
 
         """
         if not isinstance(input, list):
-            # Get mapset input.
-            mapset = get_current_mapset()
             # Check for mapset in given stds input.
             if input.find("@") >= 0:
                 id_input = input
             else:
-                id_input = input + "@" + mapset
+                id_input = input + "@" + self.mapset
             # Create empty spacetime dataset.
             stds = dataset_factory(self.stdstype, id_input)
             # Check for occurence of space time dataset.
             if stds.is_in_db(dbif=self.dbif) == False:
-                self.msgr.fatal(_("Space time %s dataset <%s> not found") %
+                raise FatalError(_("Space time %s dataset <%s> not found") %
                     (stds.get_new_map_instance(None).get_type(), id_input))
             else:
                 # Select temporal dataset entry from database.
