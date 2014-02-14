@@ -60,9 +60,8 @@ int main(int argc, char *argv[])
     parm.output->description =
 	_("Name of file for output (use output=- for stdout)");
 
-    parm.profile = G_define_option();
+    parm.profile = G_define_standard_option(G_OPT_M_COORDS);
     parm.profile->key = "profile";
-    parm.profile->type = TYPE_STRING;
     parm.profile->required = NO;
     parm.profile->multiple = YES;
     parm.profile->key_desc = "east,north";
