@@ -11,8 +11,10 @@ set with the <b>res</b> argument.
 
 <p>The <b>profile</b> parameter can be set to comma separated geographic
 coordinates for profile line endpoints.
-Alternatively the coordinate pairs can be piped
-from stdin, one comma separated pair per line.
+Alternatively the coordinate pairs can be piped from the text file specified
+by <b>coordinate_file</b> option, or if set to "-", from <tt>stdin</tt>.
+In these cases the coordinate pairs should be given one comma separated pair
+per line.
 
 <p>The <b>res</b> parameter sets the distance between each profile point
 (resolution). The resolution must be provided in GRASS database units (i.e.
@@ -39,6 +41,7 @@ The 2 column output is compatible with most plotting programs.
 <p>The optional RGB output provides the associated GRASS colour value for
 each profile point.
 
+
 <h2>EXAMPLES</h2>
 
 <b>Example 1</b><br>
@@ -52,6 +55,7 @@ pairs.
 <p><br>
 
 
+<!-- d.where no longer there
 <b>Example 2</b><br>
 Extract a profile with coordinates provided from standard input or an external file:
 <p>First create a points file with <em><a href="d.where.html">d.where</a></em>
@@ -75,14 +79,13 @@ and northing. Labels after these values are ignored.
 <div class="code"><pre>
 d.where | r.profile elevation.dem
 </pre></div>
-
 <p><br>
+-->
 
-
-<b>Example 3</b><br>
+<b>Example 2</b><br>
 Pipe coordinates into r.profile
 <div class="code"><pre>
-r.profile elevation.dem res=1000 &lt;&lt; EOF
+r.profile elevation.dem res=1000 coordinate_file=- &lt;&lt; EOF
  591243,4926344
  592509,4922156
  594100,4920793
@@ -109,6 +112,7 @@ r.profile input=dgm12.5 profile=3570631,5763556 2>/dev/null
 
 This filters out the everything except the numbers.
 
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -120,7 +124,9 @@ This filters out the everything except the numbers.
 <a href="wxGUI.html">wxGUI profile tool</a>
 </em>
 
+
 <h2>AUTHOR</h2>
 <a href="mailto:bcovill@tekmap.ns.ca">Bob Covill</a>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

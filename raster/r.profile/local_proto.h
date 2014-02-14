@@ -14,7 +14,7 @@ int read_rast(double, double, double, int, int, RASTER_MAP_TYPE, FILE *,
 	      char *);
 
 /* input.c */
-int input(char *, char *, char *, char *, char *);
+int input(char *, char *, char *, char *, char *, FILE *);
 
 extern int clr;
 extern struct Colors colors;
