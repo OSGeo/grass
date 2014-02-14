@@ -83,27 +83,19 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 				double *result)
 {
     double indice = 0;		/* the result */
-
     struct Cell_head hd;
-
     int i = 0;
     int file_fd = -1;
     int l;			/*number of read byte */
     int ris = 0;
-
     char *file;
     char *strFile;
-
     char row[NMAX];		/* to read the file */
-
     char **bufRighe;		/* contains every valid file row */
-
     char separatore;		/* separator to split a string */
-
     long totCoppie = 0;		/* number of cells pair */
     long totRow = 0;		/* of the file */
     long tabSize = 10;		/* array length */
-
     Coppie *cc = NULL;		/* here store the pair of cell with the weight. these information are in the file */
 
 
@@ -243,8 +235,7 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 	    }
 
 	}
-	/*else
-	 *    num = 1  ---> in the line there is only 1 token 
+	/* else num = 1  ---> in the line there is only 1 token 
 	 * I ignore this line
 	 */
     }
@@ -291,7 +282,6 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	      double *result)
 {
-
     double indice = 0;
     double somma = 0;
     double area = 0;
@@ -299,14 +289,17 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     int i = 0, j;
     int mask_fd = -1;
     int masked = FALSE;
-    int *mask_corr, *mask_sup;
+    int *mask_corr = NULL;
+    /* TODO: mask_sup */
 
-    CELL *buf_corr, *buf_sup;
+    CELL *buf_corr, *buf_sup, *buf_null;
     CELL prevCell, corrCell, supCell;
 
     generic_cell c1;
     generic_cell c2;
 
+    if (ad->rl < 2)
+	G_fatal_error(_("Row cache is too small"));
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -321,34 +314,25 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    return RLI_ERRORE;
 	}
 
-	mask_sup = G_malloc(ad->cl * sizeof(int));
-	if (mask_sup == NULL) {
-	    G_fatal_error("malloc mask_sup failed");
-	    return RLI_ERRORE;
-	}
-
 	masked = TRUE;
     }
 
-
-    buf_sup = Rast_allocate_c_buf();
-    if (buf_sup == NULL) {
-	G_fatal_error("malloc buf_sup failed");
+    buf_null = Rast_allocate_c_buf();
+    if (buf_null == NULL) {
+	G_fatal_error("malloc buf_null failed");
 	return RLI_ERRORE;
     }
 
     c1.t = CELL_TYPE;
     c2.t = CELL_TYPE;
 
-    buf_corr = Rast_allocate_c_buf();
-    if (buf_corr == NULL) {
-	G_fatal_error("error malloc buf_corr");
-	return RLI_ERRORE;
-    }
+    /*the first time buf_sup is all null */
+    Rast_set_c_null_value(buf_null + ad->x, ad->cl);
+    buf_sup = buf_null;
 
-    Rast_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
     for (j = 0; j < ad->rl; j++) {	/* for each row */
-	buf_corr = RLI_get_cell_raster_row(fd, j + ad->y, ad);	/* read row of raster */
+	/* read row of raster */
+	buf_corr = RLI_get_cell_raster_row(fd, j + ad->y, ad);
 	if (j > 0) {		/* not first row */
 	    buf_sup = RLI_get_cell_raster_row(fd, j - 1 + ad->y, ad);
 	}
@@ -371,7 +355,7 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    }
 	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
 		supCell = buf_sup[i + ad->x];
-		/* calculate how many edge the cell has */
+		/* calculate how many edges the cell has */
 
 		if (((!Rast_is_null_value(&prevCell, CELL_TYPE))) &&
 		    (corrCell != prevCell)) {
@@ -397,13 +381,9 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 			return RLI_ERRORE;
 		}
 	    }
-	    prevCell = buf_corr[i + ad->x];
+	    prevCell = corrCell;
 	}
-
-	if (masked)
-	    mask_sup = mask_corr;
     }
-
 
     /* calcolo dell'indice */
     if (area == 0)
@@ -421,11 +401,12 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     *result = indice;
 
     if (masked) {
+	close(mask_fd);
 	G_free(mask_corr);
-	G_free(mask_sup);
     }
 
-    G_free(buf_sup);
+    G_free(buf_null);
+
     return RLI_OK;
 }
 
@@ -433,7 +414,6 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	       double *result)
 {
-
     double indice = 0;
     double somma = 0;
     double area = 0;
@@ -441,15 +421,17 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     int i = 0, j;
     int mask_fd = -1;
     int masked = FALSE;
-    int *mask_corr, *mask_sup;
+    int *mask_corr = NULL;
+    /* TODO: mask_sup */
 
-    DCELL *buf_corr, *buf_sup;
+    DCELL *buf_corr, *buf_sup, *buf_null;
     DCELL prevCell, corrCell, supCell;
 
     generic_cell c1;
     generic_cell c2;
 
-
+    if (ad->rl < 2)
+	G_fatal_error(_("Row cache is too small"));
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -464,31 +446,25 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    return RLI_ERRORE;
 	}
 
-	mask_sup = G_malloc(ad->cl * sizeof(int));
-	if (mask_sup == NULL) {
-	    G_fatal_error("malloc mask_corr failed");
-	    return RLI_ERRORE;
-	}
-
 	masked = TRUE;
     }
 
-
-    buf_sup = Rast_allocate_d_buf();
-    if (buf_sup == NULL) {
-	G_fatal_error("malloc buf_sup failed");
+    buf_null = Rast_allocate_d_buf();
+    if (buf_null == NULL) {
+	G_fatal_error("malloc buf_null failed");
 	return RLI_ERRORE;
     }
 
     c1.t = DCELL_TYPE;
     c2.t = DCELL_TYPE;
 
-    buf_corr = Rast_allocate_d_buf();
-
-    Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    /*the first time buf_sup is all null */
+    Rast_set_d_null_value(buf_null + ad->x, ad->cl);
+    buf_sup = buf_null;
 
     for (j = 0; j < ad->rl; j++) {	/* for each row */
-	buf_corr = RLI_get_dcell_raster_row(fd, j + ad->y, ad);	/* read row of raster */
+	/* read row of raster */
+	buf_corr = RLI_get_dcell_raster_row(fd, j + ad->y, ad);
 	if (j > 0) {		/* not first row */
 	    buf_sup = RLI_get_dcell_raster_row(fd, j - 1 + ad->y, ad);
 	}
@@ -535,13 +511,9 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 		}
 
 	    }
-	    prevCell = buf_corr[i + ad->x];
+	    prevCell = corrCell;
 	}
-
-	if (masked)
-	    mask_sup = mask_corr;
     }
-
 
     /* calcolo dell'indice */
     if (area == 0)
@@ -558,9 +530,12 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     }
     *result = indice;
     if (masked) {
+	close(mask_fd);
 	G_free(mask_corr);
-	G_free(mask_sup);
     }
+
+    G_free(buf_null);
+    
     return RLI_OK;
 }
 
@@ -569,7 +544,6 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	       double *result)
 {
-
     double indice = 0;
     double somma = 0;
     double area = 0;
@@ -577,15 +551,17 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     int i = 0, j;
     int mask_fd = -1;
     int masked = FALSE;
-    int *mask_corr, *mask_sup;
+    int *mask_corr = NULL;
+    /* TODO: mask_sup */
 
-    FCELL *buf_corr, *buf_sup;
+    FCELL *buf_corr, *buf_sup, *buf_null;
     FCELL prevCell, corrCell, supCell;
 
     generic_cell c1;
     generic_cell c2;
 
-
+    if (ad->rl < 2)
+	G_fatal_error(_("Row cache is too small"));
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -600,36 +576,27 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    return RLI_ERRORE;
 	}
 
-	mask_sup = G_malloc(ad->cl * sizeof(int));
-	if (mask_sup == NULL) {
-	    G_fatal_error("malloc mask_sup failed");
-	    return RLI_ERRORE;
-	}
-
 	masked = TRUE;
     }
 
     /* allocate and inizialize buffers */
-    buf_sup = Rast_allocate_f_buf();
-    if (buf_sup == NULL) {
+    buf_null = Rast_allocate_f_buf();
+    if (buf_null == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
-    Rast_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
-
-    buf_corr = Rast_allocate_f_buf();
-    if (buf_corr == NULL) {
-	G_fatal_error("malloc buf_corr failed");
-	return RLI_ERRORE;
-    }
+    /*the first time buf_sup is all null */
+    Rast_set_f_null_value(buf_null + ad->x, ad->cl);
+    buf_sup = buf_null;
 
     c1.t = FCELL_TYPE;
     c2.t = FCELL_TYPE;
 
-
     for (j = 0; j < ad->rl; j++) {	/* for each row */
-	buf_corr = RLI_get_fcell_raster_row(fd, j + ad->y, ad);	/* read row of raster */
-	if (j > 0) {		/* not first row */
+	/* read row of raster */
+	buf_corr = RLI_get_fcell_raster_row(fd, j + ad->y, ad);
+	if (j > 0) {
+	    /* not first row */
 	    buf_sup = RLI_get_fcell_raster_row(fd, j - 1 + ad->y, ad);
 	}
 	/*read mask if needed */
@@ -655,13 +622,12 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 		    (corrCell != prevCell)) {
 		    int r = 0;
 
-		    c1.val.dc = corrCell;
-		    c2.val.dc = prevCell;
+		    c1.val.fc = corrCell;
+		    c2.val.fc = prevCell;
 		    r = updateCoppia(cc, c1, c2, totCoppie);
 		    if (r == RLI_ERRORE)
 			return RLI_ERRORE;
 		}
-
 
 		if ((!(Rast_is_null_value(&supCell, FCELL_TYPE))) &&
 		    (corrCell != supCell)) {
@@ -675,13 +641,9 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 		}
 
 	    }
-	    prevCell = buf_corr[i + ad->x];
+	    prevCell = corrCell;
 	}
-
-	if (masked)
-	    mask_sup = mask_corr;
     }
-
 
     /* calcolo dell'indice */
     if (area == 0)
@@ -698,9 +660,12 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     }
     *result = indice;
     if (masked) {
+	close(mask_fd);
 	G_free(mask_corr);
-	G_free(mask_sup);
     }
+
+    G_free(buf_null);
+
     return RLI_OK;
 }
 
