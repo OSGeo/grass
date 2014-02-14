@@ -52,6 +52,12 @@
 #% description: Activate spatial topology.
 #%end
 
+#%flag
+#% key: n
+#% description: Register Null maps
+#%end
+
+
 import grass.script
 import grass.temporal as tgis
 import sys
@@ -61,6 +67,7 @@ def main():
     basename = options['basename']
     nprocs = options["nprocs"]
     spatial = flags["s"]
+    register_null = flags["n"]
 
     # Check for PLY istallation
     try:
@@ -72,7 +79,7 @@ def main():
                              "t.rast3d.mapcalc2 without PLY requirement."))
 
     tgis.init(True)
-    p = tgis.TemporalRaster3DAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs)
+    p = tgis.TemporalRaster3DAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs, register_null = register_null)
     p.parse(expression, basename, grass.script.overwrite())
 
 if __name__ == "__main__":
