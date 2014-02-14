@@ -138,11 +138,7 @@ void worker_process(msg * ret, msg * m)
 	    if (strcmp(m->f.f_ma.mask, ad->mask_name) != 0)
 		/* temporary mask created */
 		erease_mask = 1;
-	    ad->mask = open(ad->mask_name, O_WRONLY, 0755);
-	    if (ad->mask == -1) {
-		G_message(_("unable to open <%s> mask ... continuing without!"),
-			  m->f.f_ma.mask);
-	    }
+	    ad->mask = 1;
 	}
 	break;
     default:
@@ -159,18 +155,21 @@ void worker_process(msg * ret, msg * m)
 	case CELL_TYPE:{
 		for (i = 0; i < (ad->rc - used); i++) {
 		    cm->cache[used + i] = Rast_allocate_c_buf();
+		    cm->contents[used + i] = -1;
 		}
 	    }
 	    break;
 	case DCELL_TYPE:{
 		for (i = 0; i < ad->rc - used; i++) {
 		    dm->cache[used + i] = Rast_allocate_d_buf();
+		    dm->contents[used + i] = -1;
 		}
 	    }
 	    break;
 	case FCELL_TYPE:{
 		for (i = 0; i < ad->rc - used; i++) {
 		    fm->cache[used + i] = Rast_allocate_f_buf();
+		    fm->contents[used + i] = -1;
 		}
 	    }
 	    break;
@@ -252,6 +251,7 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
     }
 
     close(mask_fd);
+    Rast_close(old_fd);
     
     G_free(buf);
     G_free(old);
