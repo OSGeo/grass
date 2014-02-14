@@ -120,7 +120,7 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
     double e = 0;
     double somma = 0;
     double area = 0;
-    CELL *buf_corr, *buf_sup, *buf_inf;
+    CELL *buf_corr, *buf_sup, *buf_inf, *buf_null;
     CELL prevCell, corrCell, supCell, infCell, nextCell;
     AVL_table *array;
     long tot = 0;
@@ -129,7 +129,7 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
     long bordoCorr = 0;
     avl_tree albero = NULL;
     int i, j;
-    int mask_fd = -1, *mask_corr, *mask_sup, *mask_inf;
+    int mask_fd = -1, *mask_corr, *mask_sup, *mask_inf, *mask_tmp;
     int masked = FALSE;
     int ris;
     generic_cell c1;
@@ -138,7 +138,9 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
     c1.t = CELL_TYPE;
 
     /* open mask if needed */
+    mask_corr = mask_sup = mask_inf = NULL;
     if (ad->mask == 1) {
+
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
 	    G_fatal_error("Cannot open mask file <%s>", ad->mask_name);
 	    return RLI_ERRORE;  /* FIXME: can not return from a fatal error */
@@ -156,17 +158,35 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    return RLI_ERRORE;
 	}
 
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_sup failed");
+	    return RLI_ERRORE;
+	}
+
+	for (i = 0; i < ad->cl; i++) {
+	    mask_corr[i + ad->x] = 0;
+	    mask_sup[i + ad->x] = 0;
+	}
+
+	if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) <= 0) {
+	    G_fatal_error("reading mask_corr");
+	    return RLI_ERRORE;
+	}
+
 	masked = TRUE;
     }
 
-    buf_sup = Rast_allocate_c_buf();
-    if (buf_sup == NULL) {
-	G_fatal_error("malloc buf_sup failed");
+    buf_null = Rast_allocate_c_buf();
+    if (buf_null == NULL) {
+	G_fatal_error("malloc buf_null failed");
 	return RLI_ERRORE;
     }
 
     /* the first time buf_sup is all null */
-    Rast_set_c_null_value(buf_sup + ad->x, ad->cl);
+    Rast_set_c_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
+    buf_inf = buf_null;
 
     /* for each raster row */
     for (j = 0; j < ad->rl; j++) {
@@ -177,29 +197,23 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	if (j > 0)		/* not first row */
 	    buf_sup = RLI_get_cell_raster_row(fd, j - 1 + ad->y, ad);
 
-
 	if ((j + 1) < ad->rl) {	/* not last row */
 	    buf_inf = RLI_get_cell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = Rast_allocate_c_buf();
-	    if (buf_inf == NULL) {
-		G_fatal_error("malloc buf_inf failed");
-		return RLI_ERRORE;
-	    }
-	    Rast_set_c_null_value(buf_inf + ad->x, ad->cl);
+	    buf_inf = buf_null;
 	}
 
 	/*read mask if needed */
 	if (masked) {
-	    if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
-		G_fatal_error("reading mask_corr");
-		return RLI_ERRORE;
-	    }
 
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_corr;
+	    mask_corr = mask_inf;
+	    mask_inf = mask_tmp;
 
 	    if ((j + 1) < ad->rl) {	/* not last row */
-		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
+		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) <= 0) {
 		    G_fatal_error("reading mask_inf");
 		    return RLI_ERRORE;
 		}
@@ -220,7 +234,6 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    area++;
 	    corrCell = buf_corr[i + ad->x];
 
-
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
 		area--;
@@ -234,21 +247,22 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
-		supCell = buf_sup[i + ad->x];
-
+		if (masked && mask_sup[i + ad->x] == 0)
+		    Rast_set_c_null_value(&supCell, 1);
+		else
+		    supCell = buf_sup[i + ad->x];
 
 		if (masked && mask_inf[i + ad->x] == 0)
 		    Rast_set_c_null_value(&infCell, 1);
 		else
 		    infCell = buf_inf[i + ad->x];
 
-		/* calculate how many edge the cell has */
+		/* calculate how many edges the cell has */
 
 		if ((Rast_is_null_value(&prevCell, CELL_TYPE)) ||
 		    (corrCell != prevCell)) {
 		    bordoCorr++;
 		}
-
 
 		if ((Rast_is_null_value(&supCell, CELL_TYPE)) ||
 		    (corrCell != supCell)) {
@@ -306,18 +320,14 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 		bordoCorr = 0;
 	    }
 
-	    prevCell = buf_corr[i + ad->x];
+	    prevCell = corrCell;
 	}
-
-	if (masked)
-	    mask_sup = mask_corr;
     }
 
     /* calculate index */
     if (area == 0)
 	indice = -1;
     else {
-
 	if (valore != NULL) {	/* only 1 class */
 	    char *sval;
 	    int val;
@@ -342,7 +352,7 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    tot = avl_to_array(albero, zero, array);
 	    if (tot != m) {
 		G_warning
-		    ("avl_to_array unaspected value. the result could be wrong");
+		    ("avl_to_array unexpected value. the result could be wrong");
 	    }
 	    for (i = 0; i < m; i++) {
 		e = (double)array[i]->tot;
@@ -356,11 +366,15 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 
     *result = indice;
     if (masked) {
+	close(mask_fd);
 	G_free(mask_inf);
 	G_free(mask_corr);
+	G_free(mask_sup);
     }
 
-    G_free(buf_sup);
+    G_free(buf_null);
+    avl_destroy(albero);
+
     return RLI_OK;
 }
 
@@ -371,7 +385,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
     double somma = 0;
     double area = 0;
 
-    DCELL *buf_corr, *buf_sup, *buf_inf;
+    DCELL *buf_corr, *buf_sup, *buf_inf, *buf_null;
     DCELL prevCell, corrCell, supCell, infCell, nextCell;
 
     AVL_table *array;
@@ -384,7 +398,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
     avl_tree albero = NULL;
 
     int i, j;
-    int mask_fd = -1, *mask_corr, *mask_sup, *mask_inf;
+    int mask_fd = -1, *mask_corr, *mask_sup, *mask_inf, *mask_tmp;
     int masked = FALSE;
     int ris;
 
@@ -393,6 +407,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
     c1.t = DCELL_TYPE;
 
     /* open mask if needed */
+    mask_corr = mask_sup = mask_inf = NULL;
     if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
 	    G_fatal_error("Cannot open mask file");
@@ -411,17 +426,35 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	    return RLI_ERRORE;
 	}
 
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_sup failed");
+	    return RLI_ERRORE;
+	}
+
+	for (i = 0; i < ad->cl; i++) {
+	    mask_corr[i + ad->x] = 0;
+	    mask_sup[i + ad->x] = 0;
+	}
+
+	if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) <= 0) {
+	    G_fatal_error("reading mask_corr");
+	    return RLI_ERRORE;
+	}
+
 	masked = TRUE;
     }
 
-    buf_sup = Rast_allocate_d_buf();
-    if (buf_sup == NULL) {
-	G_fatal_error("malloc buf_sup failed");
+    buf_null = Rast_allocate_d_buf();
+    if (buf_null == NULL) {
+	G_fatal_error("malloc buf_null failed");
 	return RLI_ERRORE;
     }
 
     /* the first time buf_sup is all null */
-    Rast_set_d_null_value(buf_sup + ad->x, ad->cl);
+    Rast_set_d_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
+    buf_inf = buf_null;
 
     /* for each raster row */
     for (j = 0; j < ad->rl; j++) {
@@ -432,29 +465,20 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	if (j > 0)
 	    buf_sup = RLI_get_dcell_raster_row(fd, j - 1 + ad->y, ad);
 
-
 	if ((j + 1) < ad->rl) {	/* not last row */
-
 	    buf_inf = RLI_get_dcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = Rast_allocate_d_buf();
-	    if (buf_inf == NULL) {
-		G_fatal_error("malloc buf_inf failed");
-		return RLI_ERRORE;
-	    }
-
-	    Rast_set_d_null_value(buf_inf + ad->x, ad->cl);
+	    buf_inf = buf_null;
 	}
 
 	/*read mask if needed */
 	if (masked) {
 
-	    if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
-		G_fatal_error("reading mask_corr");
-		return RLI_ERRORE;
-	    }
-
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_corr;
+	    mask_corr = mask_inf;
+	    mask_inf = mask_tmp;
 
 	    if ((j + 1) < ad->rl) {	/* not last row */
 		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
@@ -479,7 +503,6 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	    area++;
 	    corrCell = buf_corr[i + ad->x];
 
-
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 		area--;
@@ -494,8 +517,10 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
-		supCell = buf_sup[i + ad->x];
-
+		if (masked && mask_sup[i + ad->x] == 0)
+		    Rast_set_d_null_value(&supCell, 1);
+		else
+		    supCell = buf_sup[i + ad->x];
 
 		if (masked && mask_inf[i + ad->x] == 0)
 		    Rast_set_d_null_value(&infCell, 1);
@@ -565,12 +590,8 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 
 	    }
 
-	    prevCell = buf_corr[i + ad->x];
+	    prevCell = corrCell;
 	}
-
-	if (masked)
-	    mask_sup = mask_corr;
-
     }
 
     /* calculate index */
@@ -599,7 +620,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	    tot = avl_to_array(albero, zero, array);
 	    if (tot != m) {
 		G_warning
-		    ("avl_to_array unaspected value. the result could be wrong");
+		    ("avl_to_array unexpected value. the result could be wrong");
 	    }
 	    for (i = 0; i < m; i++) {
 		e = (double)array[i]->tot;
@@ -612,9 +633,15 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 
     *result = indice;
     if (masked) {
+	close(mask_fd);
 	G_free(mask_inf);
 	G_free(mask_corr);
+	G_free(mask_sup);
     }
+
+    G_free(buf_null);
+    avl_destroy(albero);
+
     return RLI_OK;
 }
 
@@ -625,7 +652,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
     double somma = 0;
     double area = 0;
 
-    FCELL *buf_corr, *buf_sup, *buf_inf;
+    FCELL *buf_corr, *buf_sup, *buf_inf, *buf_null;
     FCELL prevCell, corrCell, supCell, infCell, nextCell;
 
     AVL_table *array;
@@ -638,7 +665,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
     avl_tree albero = NULL;
 
     int i, j;
-    int mask_fd = -1, *mask_corr, *mask_sup, *mask_inf;
+    int mask_fd = -1, *mask_corr, *mask_sup, *mask_inf, *mask_tmp;
     int masked = FALSE;
     int ris;
 
@@ -646,6 +673,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 
     c1.t = FCELL_TYPE;
     /* open mask if needed */
+    mask_corr = mask_sup = mask_inf = NULL;
     if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
 	    G_fatal_error("Cannot open mask file");
@@ -664,17 +692,35 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	    return RLI_ERRORE;
 	}
 
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_sup failed");
+	    return RLI_ERRORE;
+	}
+
+	for (i = 0; i < ad->cl; i++) {
+	    mask_corr[i + ad->x] = 0;
+	    mask_sup[i + ad->x] = 0;
+	}
+
+	if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) <= 0) {
+	    G_fatal_error("reading mask_corr");
+	    return RLI_ERRORE;
+	}
+
 	masked = TRUE;
     }
 
-    buf_sup = Rast_allocate_f_buf();
-    if (buf_sup == NULL) {
-	G_fatal_error("malloc buf_sup failed");
+    buf_null = Rast_allocate_f_buf();
+    if (buf_null == NULL) {
+	G_fatal_error("malloc buf_null failed");
 	return RLI_ERRORE;
     }
 
     /* the first time buf_sup is all null */
-    Rast_set_f_null_value(buf_sup + ad->x, ad->cl);
+    Rast_set_f_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
+    buf_inf = buf_null;
 
     /* for each raster row */
     for (j = 0; j < ad->rl; j++) {
@@ -689,22 +735,16 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	    buf_inf = RLI_get_fcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
-	    buf_inf = Rast_allocate_f_buf();
-	    if (mask_inf == NULL) {
-		G_fatal_error("malloc mask_inf failed");
-		return RLI_ERRORE;
-	    }
-
-	    Rast_set_f_null_value(buf_inf + ad->x, ad->cl);
+	    buf_inf = buf_null;
 	}
 
 	/*read mask if needed */
 	if (masked) {
 
-	    if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
-		G_fatal_error("reading mask_corr");
-		return RLI_ERRORE;
-	    }
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_corr;
+	    mask_corr = mask_inf;
+	    mask_inf = mask_tmp;
 
 	    if ((j + 1) < ad->rl) {	/* not last row */
 		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
@@ -728,7 +768,6 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	    area++;
 	    corrCell = buf_corr[i + ad->x];
 
-
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 		area--;
@@ -743,8 +782,10 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
-		supCell = buf_sup[i + ad->x];
-
+		if (masked && mask_sup[i + ad->x] == 0)
+		    Rast_set_f_null_value(&supCell, 1);
+		else
+		    supCell = buf_sup[i + ad->x];
 
 		if (masked && mask_inf[i + ad->x] == 0)
 		    Rast_set_f_null_value(&infCell, 1);
@@ -814,12 +855,8 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 
 	    }
 
-	    prevCell = buf_corr[i + ad->x];
+	    prevCell = corrCell;
 	}
-
-	if (masked)
-	    mask_sup = mask_corr;
-
     }
 
     /* calculate index */
@@ -843,13 +880,13 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	else {			/* all classes */
 	    array = G_malloc(m * sizeof(AVL_tableRow));
 	    if (array == NULL) {
-		G_fatal_error("malloc array failederror");
+		G_fatal_error("malloc array failed");
 		return RLI_ERRORE;
 	    }
 	    tot = avl_to_array(albero, zero, array);
 	    if (tot != m) {
 		G_warning
-		    ("avl_to_array unaspected value. the result could be wrong");
+		    ("avl_to_array unexpected value. the result could be wrong");
 	    }
 	    for (i = 0; i < m; i++) {
 		e = (double)array[i]->tot;
@@ -862,8 +899,14 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 
     *result = indice;
     if (masked) {
+	close(mask_fd);
 	G_free(mask_inf);
 	G_free(mask_corr);
+	G_free(mask_sup);
     }
+
+    G_free(buf_null);
+    avl_destroy(albero);
+
     return RLI_OK;
 }
