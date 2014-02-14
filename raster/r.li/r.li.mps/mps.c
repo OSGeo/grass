@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
 
     return calculateIndex(conf->answer, meanPatchSize, NULL, raster->answer,
 			  output->answer);
-
 }
 
 
@@ -91,7 +90,7 @@ int meanPatchSize(int fd, char **par, struct area_entry *ad, double *result)
 
     }
     if (ris != RLI_OK)
-	  return RLI_ERRORE;
+	return RLI_ERRORE;
 
     *result = indice;
 
@@ -101,18 +100,16 @@ int meanPatchSize(int fd, char **par, struct area_entry *ad, double *result)
 
 int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result)
 {
-    CELL *buf;
-    CELL *buf_sup;
+    CELL *buf, *buf_sup, *buf_null;
 
     CELL corrCell;
     CELL precCell;
     CELL supCell;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
-
 
     long npatch = 0;
     long tot = 0;
@@ -123,6 +120,7 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
     long doppi = 0;
     long *mask_patch_sup;
     long *mask_patch_corr;
+    long *ltmp;
 
     double indice = 0;
     double area = 0;		/*if all cells are null area=0 */
@@ -156,19 +154,16 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
 	return RLI_ERRORE;
     }
 
-    buf_sup = Rast_allocate_c_buf();
-    if (buf_sup == NULL) {
-	G_fatal_error("malloc buf_sup failed");
+    buf_null = Rast_allocate_c_buf();
+    if (buf_null == NULL) {
+	G_fatal_error("malloc buf_null failed");
 	return RLI_ERRORE;
     }
 
-    buf = Rast_allocate_c_buf();
-    if (buf == NULL) {
-	G_fatal_error("malloc buf failed");
-	return RLI_ERRORE;
-    }
-
-    Rast_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    /*the first time buf_sup is all null */
+    Rast_set_c_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
+    buf = buf_null;
 
     for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
@@ -176,7 +171,6 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
     }
 
     /*for each raster row */
-
     for (j = 0; j < ad->rl; j++) {
 	if (j > 0) {
 	    buf_sup = RLI_get_cell_raster_row(fd, j - 1 + ad->y, ad);
@@ -200,14 +194,8 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
 	    /*valid cell */
 	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
 		area++;
-		if (i > 0)
-		    precCell = buf[i - 1 + ad->x];
 
-		if (j == 0)
-		    Rast_set_c_null_value(&supCell, 1);
-		else
-		    supCell = buf_sup[i + ad->x];
-
+		supCell = buf_sup[i + ad->x];
 
 		if (corrCell != precCell) {
 		    if (corrCell != supCell) {
@@ -346,7 +334,6 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
 		}
 		else {		/*current cell and previous cell are equal */
 
-
 		    if ((corrCell == supCell) &&
 			(mask_patch_sup[i] != mask_patch_corr[i - 1])) {
 			int l;
@@ -368,18 +355,18 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
 		    else {
 			mask_patch_corr[i] = idCorr;
 		    }
-
 		}
 	    }
 	    else {		/*cell not to consider or cell is null */
 
 		mask_patch_corr[i] = 0;
 	    }
+	    precCell = corrCell;
 	}
+	ltmp = mask_patch_sup;
 	mask_patch_sup = mask_patch_corr;
+	mask_patch_corr = ltmp;
     }
-
-
 
     if (area != 0) {
 	if (albero == NULL) {
@@ -414,7 +401,6 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
 		}
 	    }
 	}
-
 
 	array = G_malloc(npatch * sizeof(avlID_tableRow));
 	if (array == NULL) {
@@ -454,29 +440,31 @@ int calculate(int fd, struct area_entry *ad, struct Cell_head hd, double *result
     else
 	indice = (double)(0);
 
-
     *result = indice;
 
-
-    if (masked)
+    if (masked) {
+	close(mask_fd);
 	G_free(mask_buf);
+    }
 
     G_free(mask_patch_corr);
+    G_free(mask_patch_sup);
+    G_free(buf_null);
 
-    /* G_free(buf_sup); */   /* <-- why not free it? */
+    avlID_destroy(albero);
+
     return RLI_OK;
 }
 
 
 int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *result)
 {
-    DCELL *buf;
-    DCELL *buf_sup;
+    DCELL *buf, *buf_sup, *buf_null;
     DCELL corrCell;
     DCELL precCell;
     DCELL supCell;
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
     long npatch = 0;
@@ -488,16 +476,14 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
     long doppi = 0;
     long *mask_patch_sup;
     long *mask_patch_corr;
+    long *ltmp;
     double indice = 0;
     double area = 0;		/*if all cells are null area=0 */
     double areaCorrect = 0;
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
 
     avlID_tree albero = NULL;
-
     avlID_table *array;
-
-
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -523,19 +509,12 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 	return RLI_ERRORE;
     }
 
-    buf_sup = Rast_allocate_d_buf();
-    if (buf_sup == NULL) {
-	G_fatal_error("malloc buf_sup failed");
-	return RLI_ERRORE;
-    }
+    buf_null = Rast_allocate_d_buf();
 
-    buf = Rast_allocate_d_buf();
-    if (buf == NULL) {
-	G_fatal_error("malloc buf failed");
-	return RLI_ERRORE;
-    }
-
-    Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    /*the first time buf_sup is all null */
+    Rast_set_d_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
+    buf = buf_null;
 
     for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
@@ -565,13 +544,8 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 
 	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
 		area++;
-		if (i > 0)
-		    precCell = buf[i - 1 + ad->x];
 
-		if (j == 0)
-		    Rast_set_d_null_value(&supCell, 1);
-		else
-		    supCell = buf_sup[i + ad->x];
+		supCell = buf_sup[i + ad->x];
 
 		if (corrCell != precCell) {
 		    if (corrCell != supCell) {
@@ -740,10 +714,12 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 
 		mask_patch_corr[i] = 0;
 	    }
+	    precCell = corrCell;
 	}
+	ltmp = mask_patch_sup;
 	mask_patch_sup = mask_patch_corr;
+	mask_patch_corr = ltmp;
     }
-
 
 
     if (area != 0) {
@@ -779,7 +755,6 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 		}
 	    }
 	}
-
 
 	array = G_malloc(npatch * sizeof(avlID_tableRow));
 	if (array == NULL) {
@@ -823,11 +798,16 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 
     *result = indice;
 
-
-    if (masked)
+    if (masked) {
+	close(mask_fd);
 	G_free(mask_buf);
+    }
 
     G_free(mask_patch_corr);
+    G_free(mask_patch_sup);
+    G_free(buf_null);
+
+    avlID_destroy(albero);
 
     return RLI_OK;
 }
@@ -835,18 +815,16 @@ int calculateD(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 
 int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *result)
 {
-    FCELL *buf;
-    FCELL *buf_sup;
+    FCELL *buf, *buf_sup, *buf_null;
 
     FCELL corrCell;
     FCELL precCell;
     FCELL supCell;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
-
 
     long npatch = 0;
     long tot = 0;
@@ -857,6 +835,7 @@ int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
     long doppi = 0;
     long *mask_patch_sup;
     long *mask_patch_corr;
+    long *ltmp;
 
     double indice = 0;
     double area = 0;		/*if all cells are null area=0 */
@@ -864,10 +843,7 @@ int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
 
     avlID_tree albero = NULL;
-
     avlID_table *array;
-
-
 
     /* open mask if needed */
     if (ad->mask == 1) {
@@ -893,27 +869,19 @@ int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 	return RLI_ERRORE;
     }
 
-    buf_sup = Rast_allocate_f_buf();
-    if (buf_sup == NULL) {
-	G_fatal_error("malloc buf_sup failed");
-	return RLI_ERRORE;
-    }
+    buf_null = Rast_allocate_f_buf();
 
-
-    buf = Rast_allocate_f_buf();
-    if (buf == NULL) {
-	G_fatal_error("malloc buf failed");
-	return RLI_ERRORE;
-    }
-
-    Rast_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
+    /*the first time buf_sup is all null */
+    Rast_set_f_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
+    buf = buf_null;
 
     for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
 	mask_patch_corr[i] = 0;
     }
-    /*for each raster row */
 
+    /*for each raster row */
     for (j = 0; j < ad->rl; j++) {
 	if (j > 0) {
 	    buf_sup = RLI_get_fcell_raster_row(fd, j - 1 + ad->y, ad);
@@ -928,20 +896,14 @@ int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 	Rast_set_f_null_value(&precCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/*for each cell in the row */
 
-
 	    corrCell = buf[i + ad->x];
 	    if (((masked) && (mask_buf[i + ad->x] == 0))) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
 	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
 		area++;
-		if (i > 0)
-		    precCell = buf[i - 1 + ad->x];
-		if (j == 0)
-		    Rast_set_f_null_value(&supCell, 1);
-		else
-		    supCell = buf_sup[i + ad->x];
 
+		supCell = buf_sup[i + ad->x];
 
 		if (corrCell != precCell) {
 		    if (corrCell != supCell) {
@@ -1108,11 +1070,12 @@ int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
 
 		mask_patch_corr[i] = 0;
 	    }
+	    precCell = corrCell;
 	}
+	ltmp = mask_patch_sup;
 	mask_patch_sup = mask_patch_corr;
+	mask_patch_corr = ltmp;
     }
-
-
 
     if (area != 0) {
 	if (albero == NULL) {
@@ -1187,14 +1150,18 @@ int calculateF(int fd, struct area_entry *ad, struct Cell_head hd, double *resul
     else
 	indice = (double)(0);
 
-
     *result = indice;
 
+    if (masked) {
+	close(mask_fd);
+	G_free(mask_buf);
+    }
 
-    if (masked)
-	  G_free(mask_buf);
-/* TODO: fix if? */
     G_free(mask_patch_corr);
+    G_free(mask_patch_sup);
+    G_free(buf_null);
+
+    avlID_destroy(albero);
 
     return RLI_OK;
 }
