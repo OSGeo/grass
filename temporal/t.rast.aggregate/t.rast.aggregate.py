@@ -95,7 +95,7 @@ def main():
                                               title, description, semantic_type,
                                               dbif, grass.overwrite())
 
-    rows = sp.get_registered_maps("id,start_time", where, "start_time", dbif)
+    rows = sp.get_registered_maps("id,start_time,end_time", where, "start_time", dbif)
 
     if not rows:
         dbif.close()
@@ -109,12 +109,12 @@ def main():
     else:
         first_start_time = rows[0]["start_time"]
 
-    last_start_time = rows[len(rows) - 1]["start_time"]
+    last_start_time = rows[len(rows) - 1]["end_time"]
     next_start_time = first_start_time
 
     count = 0
 
-    while next_start_time <= last_start_time:
+    while next_start_time < last_start_time:
         start = next_start_time
         if sp.is_time_absolute():
             end = tgis.increment_datetime_by_string(next_start_time, gran)
