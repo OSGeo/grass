@@ -29,6 +29,7 @@ typedef avlID_tableRow *avlID_table;
 
 /* prototype of functions */
 avlID_tree avlID_make(const long k, const long n);
+void avlID_destroy(avlID_tree root);
 avlID_node *avlID_find(const avlID_tree root, const long k);
 int avlID_add(avlID_tree * root, const long k, const long n);
 long avlID_to_array(avlID_node * root, long i, avlID_table * a);

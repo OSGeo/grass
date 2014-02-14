@@ -81,7 +81,6 @@ void avl_destroy(avl_tree root)
 	    save->right_child = it;
 	}
     }
-    
 }
 
 long howManyCell(const avl_tree root, const generic_cell k)
