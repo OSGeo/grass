@@ -4,24 +4,27 @@ This program outputs two or four column (with <b>-g</b>) data to stdout or
 an ASCII file. The default two column output consists of cumulative profile 
 length (in meters) and raster value. The optional four column output consists 
 of easting, northing, cumlative profile length (m), and raster value. Profile
-end or "turning" points can be set manually with the <b>profile</b>
+end or "turning" points can be set manually with the <b>coordinates</b>
 argument. The profile resolution, or distance between profile
 points, is obtained from the current region resolution, or can be manually
-set with the <b>res</b> argument.
+set with the <b>resolution</b> argument.
 
-<p>The <b>profile</b> parameter can be set to comma separated geographic
+<p>
+The <b>coordinates</b> parameter can be set to comma separated geographic
 coordinates for profile line endpoints.
 Alternatively the coordinate pairs can be piped from the text file specified
-by <b>coordinate_file</b> option, or if set to "-", from <tt>stdin</tt>.
+by <b>file</b> option, or if set to "-", from <tt>stdin</tt>.
 In these cases the coordinate pairs should be given one comma separated pair
 per line.
 
-<p>The <b>res</b> parameter sets the distance between each profile point
+<p>
+The <b>resolution</b> parameter sets the distance between each profile point
 (resolution). The resolution must be provided in GRASS database units (i.e.
 decimal degrees for Lat Long databases and meters for UTM). By default
 <em>r.profile</em> uses the resolution of the current GRASS region.
 
-<p>The <b>null</b> parameter can optionally be set to change the character
+<p>
+The <b>null</b> parameter can optionally be set to change the character
 string representing null values.
 
 
@@ -34,11 +37,12 @@ is compatible with <em><a href="v.in.ascii.html">v.in.ascii</a></em> and can
 be piped direcly into this program.
 
 <div class="code"><pre>
-r.profile -g input=elevation profile=... | v.in.ascii output=elevation_profile separator=space
+r.profile -g input=elevation coordinates=... | v.in.ascii output=elevation_profile separator=space
 </pre></div>
 
 The 2 column output is compatible with most plotting programs.
-<p>The optional RGB output provides the associated GRASS colour value for
+<p>
+The optional RGB output provides the associated GRASS colour value for
 each profile point.
 
 
@@ -48,7 +52,7 @@ each profile point.
 Extract a profile with coordinates provided on the command line:
 
 <div class="code"><pre>
-r.profile input=elevation output=profile_points profile=562517,7779433,562984,7779533,563875,7779800
+r.profile input=elevation output=profile_points coordinates=562517,7779433,562984,7779533,563875,7779800
 </pre></div>
 This will extract a profile along the track defined by the three coordinate
 pairs.
@@ -67,14 +71,16 @@ d.where > saved.points
 Then pipe the points file into r.profile
 
 <div class="code"><pre>
-cat saved.points | r.profile input=elev.rast output=profile.pts
+cat saved.points | r.profile input=elev.rast output=profile.pts file=-
 </pre></div>
 
-The advantage of this method is that the same profile points can be piped into
-different GRASS rasters by changing the input parameter. 
-<p>With this method the coordinates must be given as space or tab separated easting
-and northing. Labels after these values are ignored.
-<p>Another example using d.where:
+The advantage of this method is that the same profile points can be piped
+into different GRASS rasters by changing the input parameter.
+<p>
+With this method the coordinates must be given as space or tab separated
+easting and northing. Labels after these values are ignored.
+<p>
+Another example using d.where:
 
 <div class="code"><pre>
 d.where | r.profile elevation.dem
@@ -85,7 +91,7 @@ d.where | r.profile elevation.dem
 <b>Example 2</b><br>
 Pipe coordinates into r.profile
 <div class="code"><pre>
-r.profile elevation.dem res=1000 coordinate_file=- &lt;&lt; EOF
+r.profile elevation.dem res=1000 file=- &lt;&lt; EOF
  591243,4926344
  592509,4922156
  594100,4920793
@@ -107,7 +113,7 @@ the end point coordinates entered for the segmanet.
 
 <p>To extract the numbers in scripts, following parameters can be used:
 <div class="code"><pre>
-r.profile input=dgm12.5 profile=3570631,5763556 2>/dev/null
+r.profile input=dgm12.5 coordinates=3570631,5763556 2>/dev/null
 </pre></div>
 
 This filters out the everything except the numbers.
