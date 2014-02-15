@@ -85,16 +85,16 @@ d.mon start=x0
 # display as black points
 d.vect map=random3d
 # display 3D points colorized according to z height
-d.vect -z map=random3d zcolor=gyr
+d.vect map=random3d zcolor=gyr
 
 # 3D contour lines
 r.contour input=elevation.10m output=contour20m step=20
-d.vect -z map=contour20m zcolor=gyr
+d.vect map=contour20m zcolor=gyr
 
 # generate 3D triangles
 v.delaunay input=random3d output=random3d_del
 # display 3D polygons colorized according to z height
-d.vect -z map=random3d_del type=area zcolor=gyr
+d.vect map=random3d_del type=area zcolor=gyr
 </pre></div>
 
 <h2>SEE ALSO</h2>
