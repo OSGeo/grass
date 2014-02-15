@@ -52,8 +52,7 @@ int main(int argc, char **argv)
     struct Option *lsize_opt, *font_opt, *enc_opt, *xref_opt, *yref_opt;
     struct Option *attrcol_opt, *maxreg_opt, *minreg_opt;
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
-    struct Flag *id_flag, *cats_acolors_flag,
-	*zcol_flag, *sqrt_flag;
+    struct Flag *id_flag, *cats_acolors_flag, *sqrt_flag;
     char *desc;
     
     struct cat_list *Clist;
@@ -141,8 +140,7 @@ int main(int argc, char **argv)
     
     zcol_opt = G_define_standard_option(G_OPT_M_COLR);
     zcol_opt->key = "zcolor";
-    zcol_opt->description = _("Name of color table (for use with -z flag)");
-    zcol_opt->answer = "terrain";
+    zcol_opt->description = _("Colorize features according to z-coordinate");
     zcol_opt->guisection = _("Colors");
 
     /* Lines */
@@ -309,11 +307,6 @@ int main(int argc, char **argv)
     id_flag->guisection = _("Selection");
     id_flag->description = _("Use values from 'cats' option as feature id");
 
-    zcol_flag = G_define_flag();
-    zcol_flag->key = 'z';
-    zcol_flag->description = _("Colorize features according to z-coordinate (only for 3D vector maps)");
-    zcol_flag->guisection = _("Colors");
-
     sqrt_flag = G_define_flag();
     sqrt_flag->key = 'r';
     sqrt_flag->label = _("Use square root of the value of size_column");
@@ -441,7 +434,7 @@ int main(int argc, char **argv)
 				  id_flag->answer ? TRUE : FALSE, 
 				  cats_acolors_flag->answer ? TRUE : FALSE, rgbcol_opt->answer,
 				  default_width,  wcolumn_opt->answer, width_scale,
-				  zcol_flag->answer ? TRUE : FALSE, zcol_opt->answer);
+				  zcol_opt->answer);
 	    
 	    if (wcolumn_opt->answer)
 		D_line_width(default_width);

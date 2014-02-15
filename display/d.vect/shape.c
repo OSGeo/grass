@@ -24,7 +24,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 		  const char *icon, double size, const char *size_column, int sqrt_flag, const char *rot_column, /* lines only */
 		  int id_flag, int cats_colors_flag, char *rgb_column,
 		  int default_width, char *width_column, double width_scale,
-		  int z_color_flag, char *z_style)
+		  char *z_style)
 {
     int open_db, field, i, stat;
     dbCatValArray cvarr_rgb, cvarr_width, cvarr_size, cvarr_rot;
@@ -184,10 +184,10 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	db_close_database_shutdown_driver(driver);
     }
 
-    if (z_color_flag) {
+    if (z_style) {
 	if (!Vect_is_3d(Map)) {
 	    G_warning(_("Vector map is not 3D. Unable to colorize features based on z-coordinates."));
-	    z_color_flag = 0;
+	    z_style = NULL;
 	}
 	else {
 	    Vect_get_map_box(Map, &box);
@@ -201,7 +201,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 			     bcolor, fcolor, chcat,
 			     id_flag, cats_colors_flag,
 			     default_width, width_scale,
-			     z_color_flag ? &zcolors : NULL,
+			     z_style ? &zcolors : NULL,
 			     rgb_column ? &cvarr_rgb : NULL,
 			     have_colors ? &colors : NULL,
 			     &cvarr_width, nrec_width);
@@ -211,7 +211,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 			  icon, size, sqrt_flag,
 			  id_flag, cats_colors_flag,
 			  default_width, width_scale,
-			  z_color_flag ? &zcolors : NULL,
+			  z_style ? &zcolors : NULL,
 			  rgb_column ? &cvarr_rgb : NULL,
 			  have_colors ? &colors : NULL,
 			  &cvarr_width, nrec_width,

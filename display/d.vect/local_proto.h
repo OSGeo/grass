@@ -40,7 +40,7 @@ int display_shape(struct Map_info *, int, struct cat_list *, const struct Cell_h
 		  const char *, double, const char *, int, const char *, /* lines only */
 		  int, int, char *,
 		  int, char *, double,
-		  int, char *);
+		  char *);
 int get_table_color(int, int, struct Colors *, dbCatValArray *,
 		    int *, int *, int *);
 int get_cat_color(int, const struct line_cats *, const struct cat_list *,
