@@ -165,6 +165,10 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		  &n_faces);
     }
     
+    if ((colors || cvarr_rgb) && get_num_color_rules_skipped() > 0)
+        G_warning(_("%d invalid color rules for lines skipped"), 
+                  get_num_color_rules_skipped());
+
     if (n_points > 0) 
 	G_verbose_message(_("%d points plotted"), n_points);
     if (n_lines > 0) 

@@ -38,7 +38,7 @@ int display_lines(struct Map_info *, int, struct cat_list *,
 int display_shape(struct Map_info *, int, struct cat_list *, const struct Cell_head *, 
 		  const struct color_rgb *, const struct color_rgb *, int,
 		  const char *, double, const char *, int, const char *, /* lines only */
-		  int, int, int, char *,
+		  int, int, char *,
 		  int, char *, double,
 		  int, char *);
 int get_table_color(int, int, struct Colors *, dbCatValArray *,
@@ -46,6 +46,7 @@ int get_table_color(int, int, struct Colors *, dbCatValArray *,
 int get_cat_color(int, const struct line_cats *, const struct cat_list *,
 		  int *, int *, int *);
 double get_property(int, int, dbCatValArray *, double, double);
+int get_num_color_rules_skipped();
 
 /* opt.c */
 int option_to_display(const struct Option *);

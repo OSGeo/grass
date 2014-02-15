@@ -5,6 +5,8 @@
 
 #include "local_proto.h"
 
+static int ncolor_rules_skipped = 0;
+
 static void error_handler(void *p)
 {
     dbDriver *driver = (dbDriver *) p;
@@ -12,10 +14,15 @@ static void error_handler(void *p)
     db_close_database_shutdown_driver(driver);
 }
 
+int get_num_color_rules_skipped()
+{
+    return ncolor_rules_skipped;
+}
+
 int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const struct Cell_head *window, 
 		  const struct color_rgb *bcolor, const struct color_rgb *fcolor, int chcat,
 		  const char *icon, double size, const char *size_column, int sqrt_flag, const char *rot_column, /* lines only */
-		  int id_flag, int table_colors_flag, int cats_colors_flag, char *rgb_column,
+		  int id_flag, int cats_colors_flag, char *rgb_column,
 		  int default_width, char *width_column, double width_scale,
 		  int z_color_flag, char *z_style)
 {
@@ -30,7 +37,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
     stat = 0;
     nrec_rgb = nrec_width = nrec_size = nrec_rot = 0;
     
-    open_db = table_colors_flag || width_column || size_column || rot_column;
+    open_db = rgb_column || width_column || size_column || rot_column;
     if (open_db) {
 	field = Clist->field > 0 ? Clist->field : 1;
 	fi = Vect_get_field(Map, field);
@@ -52,11 +59,8 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
     have_colors = Vect_read_colors(Vect_get_name(Map), Vect_get_mapset(Map),
 				   &colors);
     
-    if (table_colors_flag) {
+    if (rgb_column) {
 	/* read RRR:GGG:BBB color strings from table */
-	if (!rgb_column || *rgb_column == '\0')
-	    G_fatal_error(_("Color definition column not specified"));
-	
 	db_CatValArray_init(&cvarr_rgb);
 	
 	nrec_rgb = db_select_CatValArray(driver, fi->table, fi->key,
@@ -64,12 +68,14 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	
 	G_debug(3, "nrec_rgb (%s) = %d", rgb_column, nrec_rgb);
 	    
-	if (cvarr_rgb.ctype != DB_C_TYPE_STRING)
+	if (cvarr_rgb.ctype != DB_C_TYPE_STRING) {
 	    G_warning(_("Color definition column ('%s') not a string. "
 			"Column must be of form 'RRR:GGG:BBB' where RGB values range 0-255. "
 			"You can use '%s' module to define color rules. "
 			"Unable to colorize features."),
 		      rgb_column, "v.colors");
+            rgb_column = NULL;
+        }
 	else {
 	    if (nrec_rgb < 0)
 		G_fatal_error(_("Unable to select data ('%s') from table"),
@@ -196,7 +202,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 			     id_flag, cats_colors_flag,
 			     default_width, width_scale,
 			     z_color_flag ? &zcolors : NULL,
-			     table_colors_flag ? &cvarr_rgb : NULL,
+			     rgb_column ? &cvarr_rgb : NULL,
 			     have_colors ? &colors : NULL,
 			     &cvarr_width, nrec_width);
     
@@ -206,7 +212,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 			  id_flag, cats_colors_flag,
 			  default_width, width_scale,
 			  z_color_flag ? &zcolors : NULL,
-			  table_colors_flag ? &cvarr_rgb : NULL,
+			  rgb_column ? &cvarr_rgb : NULL,
 			  have_colors ? &colors : NULL,
 			  &cvarr_width, nrec_width,
 			  &cvarr_size, nrec_size,
@@ -251,13 +257,13 @@ int get_table_color(int cat, int line,
 			line, cat, *red, *grn, *blu);
 	    }
 	    else {
-		G_important_message(_("Error in color definition (%s) - feature %d with category %d"),
-				    colorstring, line, cat);
+                G_debug(3, "Invalid color definition '%s' ignored", colorstring);
+                ncolor_rules_skipped++;
 		}
 	}
 	else {
-	    G_important_message(_("Error in color definition (%s) - feature %d with category %d"),
-				colorstring, line, cat);
+	    G_debug(3, "Invalid color definition '%s' ignored", colorstring);
+            ncolor_rules_skipped++;
 	}
     }
 
