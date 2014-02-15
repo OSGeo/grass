@@ -1,5 +1,7 @@
 <!-- meta page description: SQL support in GRASS GIS -->
 
+<!-- this file is lib/db/sqlp/sql.html -->
+
 GRASS can use various RDBMS
 (<a href="http://en.wikipedia.org/wiki/Relational_database_management_system">Relational
 database management system</a>) and embedded databases. SQL
@@ -49,8 +51,10 @@ d.vect map where="individual='juvenile' and area='beach'"
 <li> An error message such as &quot;<tt>dbmi: Protocol
      error</tt>&quot; either indicates an invalid column name or an
      unsupported column type (then the GRASS SQL parser needs to be
-     extended).
-<li> DBF column names are limited to 10 characters (DBF API definition)
+     extended).</li>
+<li> DBF column names are limited to 10 characters (DBF API definition).</li>
+<li> Attempts to use a reserved SQL word (depends on database backend) as 
+     column or table name will cause a "SQL syntax error".</li>
 </ul>
 
 

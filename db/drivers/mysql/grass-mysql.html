@@ -110,6 +110,12 @@ MySQL does not support user groups. Any settings specified
 by 'group' parameter of module db.connect are ignored by
 GRASS for MySQL driver.
 
+<h2>Troubleshooting: SQL syntax error</h2>
+
+Attempting to use a reserved SQL word as column or table name will result
+in a "SQL syntax" error. The list of reserved words for MySQL can be
+found in the <a href="http://dev.mysql.com/doc/refman/5.7/en/reserved-words.html#table-reserved-words-5.7.4">MySQL manual</a>.
+
 <h2>SEE ALSO</h2>
 
 <em>
