@@ -1579,7 +1579,6 @@ class VectorColorTable(ColorTable):
                    'type=point,line,boundary,area']
                 
         if self.attributeType == 'color':
-            cmdlist.append('flags=a')
             cmdlist.append('rgb_column=%s' % self.properties['tmpColumn'])
         elif self.attributeType == 'size':
             cmdlist.append('size_column=%s' % self.properties['tmpColumn'])
@@ -1607,11 +1606,8 @@ class VectorColorTable(ColorTable):
             
             if self.attributeType == 'color':
                 if useAttrColumn:
-                    cmdlist[1].update({'flags': 'a'})
                     cmdlist[1].update({'rgb_column': self.properties['storeColumn']})
                 else:
-                    if 'flags' in cmdlist[1]:
-                        cmdlist[1]['flags'] = cmdlist[1]['flags'].replace('a', '')
                     cmdlist[1].pop('rgb_column', None)
             elif self.attributeType == 'size':
                 cmdlist[1].update({'size_column': self.properties['storeColumn']})
