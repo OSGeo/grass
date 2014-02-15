@@ -61,22 +61,21 @@ int main(int argc, char *argv[])
 	_("Name of file for output (use output=- for stdout)");
 
     parm.profile = G_define_standard_option(G_OPT_M_COORDS);
-    parm.profile->key = "profile";
     parm.profile->required = NO;
     parm.profile->multiple = YES;
-    parm.profile->key_desc = "east,north";
     parm.profile->description = _("Profile coordinate pairs");
 
     parm.coord_file = G_define_standard_option(G_OPT_F_INPUT);
-    parm.coord_file->key = "coordinate_file";
+    parm.coord_file->key = "file";
+    parm.coord_file->required = NO;
     parm.coord_file->label =
 	_("Name of input file containing coordinate pairs");
     parm.coord_file->description =
-	_("Use instead of the 'profile' option. \"-\" reads from stdin.");
-    parm.coord_file->required = NO;
+	_("Use instead of the 'coordinates' option. "
+	  "\"-\" reads from stdin.");
 
     parm.res = G_define_option();
-    parm.res->key = "res";
+    parm.res->key = "resolution";
     parm.res->type = TYPE_DOUBLE;
     parm.res->required = NO;
     parm.res->description =
