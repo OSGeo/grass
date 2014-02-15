@@ -5,7 +5,7 @@
  * AUTHOR(S):    CERL, Radim Blazek, others
  *               Updated to GRASS7 by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Display the vector map in map display
- * COPYRIGHT:    (C) 2004-2009, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     struct Option *lsize_opt, *font_opt, *enc_opt, *xref_opt, *yref_opt;
     struct Option *attrcol_opt, *maxreg_opt, *minreg_opt;
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
-    struct Flag *id_flag, *table_acolors_flag, *cats_acolors_flag,
+    struct Flag *id_flag, *cats_acolors_flag,
 	*zcol_flag, *sqrt_flag;
     char *desc;
     
@@ -136,8 +136,8 @@ int main(int argc, char **argv)
     rgbcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     rgbcol_opt->key = "rgb_column";
     rgbcol_opt->guisection = _("Colors");
-    rgbcol_opt->description = _("Name of color definition column (for use with -a flag)");
-    rgbcol_opt->answer = "GRASSRGB";
+    rgbcol_opt->label = _("Colorize features according color definition column");
+    rgbcol_opt->description = _("Color definition in R:G:B form");
     
     zcol_opt = G_define_standard_option(G_OPT_M_COLR);
     zcol_opt->key = "zcolor";
@@ -296,12 +296,6 @@ int main(int argc, char **argv)
 	  "when map is displayed");
 
     /* Colors */
-    table_acolors_flag = G_define_flag();
-    table_acolors_flag->key = 'a';
-    table_acolors_flag->guisection = _("Colors");
-    table_acolors_flag->description =
-	_("Get colors from attribute table (see 'rgb_column' option)");
-
     cats_acolors_flag = G_define_flag();
     cats_acolors_flag->key = 'c';
     cats_acolors_flag->guisection = _("Colors");
@@ -364,10 +358,11 @@ int main(int argc, char **argv)
 	default_width = 0;
     width_scale = atof(wscale_opt->answer);
 
-    if (table_acolors_flag->answer && cats_acolors_flag->answer) {
-	cats_acolors_flag->answer = '\0';
-	G_warning(_("The '-c' and '-a' flags cannot be used together, "
-		    "the '-c' flag will be ignored!"));
+    if (cats_acolors_flag->answer && rgbcol_opt->answer) {
+	G_warning(_("The -%c flag and <%s> option cannot be used together, "
+		    "the -%c flag will be ignored!"), 
+                  cats_acolors_flag->key, rgbcol_opt->key, cats_acolors_flag->key);
+        cats_acolors_flag->answer = FALSE;
     }
 
     color = G_standard_color_rgb(WHITE);
@@ -442,11 +437,11 @@ int main(int argc, char **argv)
 	    stat += display_shape(&Map, type, Clist, &window,
 				  has_color ? &color : NULL, has_fcolor ? &fcolor : NULL, chcat,
 				  icon_opt->answer, size, sizecolumn_opt->answer,
-				  sqrt_flag->answer ? 1 : 0, rotcolumn_opt->answer,
-				  id_flag->answer ? 1 : 0, table_acolors_flag->answer ? 1 : 0,
-				  cats_acolors_flag->answer ? 1 : 0, rgbcol_opt->answer,
+				  sqrt_flag->answer ? TRUE : FALSE, rotcolumn_opt->answer,
+				  id_flag->answer ? TRUE : FALSE, 
+				  cats_acolors_flag->answer ? TRUE : FALSE, rgbcol_opt->answer,
 				  default_width,  wcolumn_opt->answer, width_scale,
-				  zcol_flag->answer ? 1 : 0, zcol_opt->answer);
+				  zcol_flag->answer ? TRUE : FALSE, zcol_opt->answer);
 	    
 	    if (wcolumn_opt->answer)
 		D_line_width(default_width);
