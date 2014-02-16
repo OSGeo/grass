@@ -180,6 +180,7 @@ def main():
         sp.register_map(_map, dbif)
 
     sp.update_from_registered_maps(dbif)
+    sp.update_command_string(dbif=dbif)
     dbif.close()
 
 ###############################################################################
