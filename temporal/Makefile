@@ -42,6 +42,7 @@ SUBDIRS = \
 	t.vect.db.select \
 	t.vect.export \
 	t.vect.extract \
+	t.vect.mapcalc \
 	t.vect.import \
 	t.vect.what.strds \
 	t.vect.observe.strds \
