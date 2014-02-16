@@ -109,12 +109,27 @@ def main():
     else:
         first_start_time = rows[0]["start_time"]
 
+    # We use the end time first
     last_start_time = rows[len(rows) - 1]["end_time"]
+    is_end_time = True
+
+    # In case no end time is available, then we use the start time
+    if last_start_time is None:
+        last_start_time = rows[len(rows) - 1]["start_time"]
+        is_end_time = False
+
     next_start_time = first_start_time
 
     count = 0
 
-    while next_start_time < last_start_time:
+    while True:
+        if is_end_time is True:
+            if next_start_time >= last_start_time:
+                break
+        else:
+            if next_start_time > last_start_time:
+                break
+
         start = next_start_time
         if sp.is_time_absolute():
             end = tgis.increment_datetime_by_string(next_start_time, gran)
