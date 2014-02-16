@@ -1,11 +1,14 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.richness</em> calculates the "richness diversity index" as:<br>
-<img src="rliRichness_formula.png alt="rliRichness formula"> <br>
+<em>r.li.richness</em> calculates the "richness diversity index" as:
+<br>
+<img src="rliRichness_formula.png" alt="rliRichness formula">
+<br>
 with:
 <ul>
   <li><b>m</b>: number of different patch types</li>
 </ul>
+
 
 <h2>NOTES</h2>
 
@@ -23,7 +26,9 @@ r.null setnull=-1 input=my_map
 </pre></div>
 after index calculation.
 
+
 <h2>EXAMPLES</h2>
+
 To calculate the richness diversity index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
 <em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
@@ -37,18 +42,24 @@ r.li.richness input=forests conf=movwindow7 out=forests_richness_mov7
 r.univar forests_richness_mov7
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="r.li.html">r.li</a> - package overview<br>
 <a href="r.li.setup.html">r.li.setup</a>
 </em>
 
+
 <h2>REFERENCES</h2>
+
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
+
 <h2>AUTHORS</h2>
+
 Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
 
