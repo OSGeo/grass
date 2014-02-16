@@ -368,6 +368,12 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | expr MULT stds
              | stds MULT expr
              | expr MULT expr
+             | stds MOD t_td_var
+             | expr MOD t_td_var
+             | stds DIV t_td_var
+             | expr DIV t_td_var
+             | stds MULT t_td_var
+             | expr MULT t_td_var
         """
         # Check input stds.
         maplistA = self.check_stds(t[1])
@@ -398,8 +404,12 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         # Generate an intermediate map
                         name = self.generate_map_name()
 
+                    if "map_value" in dir(map_j) and len(map_j.map_value) > 0 and map_j.map_value[0].get_type() == "timediff":
+                        mapbinput = map_j.map_value[0].get_type_value()[0]
+                    else:
                     # Set first input for overlay module.
-                    mapbinput = map_j.get_id()
+                        mapbinput = map_j.get_id()
+
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
                         cmdstring = "(%s %s %s)" %(map_new.cmd_list, t[2], mapbinput)
@@ -423,7 +433,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_arith1_operation_numeric1(self, t):
         """
@@ -501,6 +510,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | expr SUB stds
              | stds SUB expr
              | expr SUB expr
+             | stds ADD t_td_var
+             | expr ADD t_td_var
+             | expr SUB t_td_var
+             | stds SUB t_td_var
 
         """
         # Check input stds.
@@ -532,8 +545,12 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         # Generate an intermediate map
                         name = self.generate_map_name()
 
+                    if "map_value" in dir(map_j) and len(map_j.map_value) > 0 and map_j.map_value[0].get_type() == "timediff":
+                        mapbinput = map_j.map_value[0].get_type_value()[0]
+                    else:
                     # Set first input for overlay module.
-                    mapbinput = map_j.get_id()
+                        mapbinput = map_j.get_id()
+
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
                         cmdstring = "(%s %s %s)" %(map_new.cmd_list, t[2], mapbinput)
@@ -625,6 +642,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | expr T_ARITH1_OPERATOR stds
              | stds T_ARITH1_OPERATOR expr
              | expr T_ARITH1_OPERATOR expr
+             | stds T_ARITH1_OPERATOR t_td_var
+             | expr T_ARITH1_OPERATOR t_td_var
         """
         # Check input stds.
         maplistA = self.check_stds(t[1])
@@ -660,7 +679,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                 name = self.generate_map_name()
                                 map_new.set_id(name + "@" + mapset)
                             # Set second input for overlay module.
-                            mapbinput = map_j.get_id()
+
+                            if "map_value" in dir(map_j) and len(map_j.map_value) > 0 and map_j.map_value[0].get_type() == "timediff":
+                                mapbinput = map_j.map_value[0].get_type_value()[0]
+                            else:
+                            # Set first input for overlay module.
+                                mapbinput = map_j.get_id()
+
                             # Create r.mapcalc expression string for the operation.
                             if "cmd_list" in dir(map_new):
                                 cmdstring = "(%s %s %s)" %(map_new.cmd_list, function, mapbinput)
@@ -697,6 +722,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | expr T_ARITH2_OPERATOR stds
              | stds T_ARITH2_OPERATOR expr
              | expr T_ARITH2_OPERATOR expr
+             | stds T_ARITH2_OPERATOR t_td_var
+             | expr T_ARITH2_OPERATOR t_td_var
         """
         # Check input stds.
         maplistA = self.check_stds(t[1])
@@ -731,7 +758,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                 name = self.generate_map_name()
                                 map_new.set_id(name + "@" + self.mapset)
                             # Set second input for overlay module.
-                            mapbinput = map_j.get_id()
+
+                            if "map_value" in dir(map_j) and len(map_j.map_value) > 0 and map_j.map_value[0].get_type() == "timediff":
+                                mapbinput = map_j.map_value[0].get_type_value()[0]
+                            else:
+                            # Set first input for overlay module.
+                                mapbinput = map_j.get_id()
+
                             # Create r.mapcalc expression string for the operation.
                             if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
                                 cmdstring = "(%s %s %s)" %(map_new.cmd_list, function, mapbinput)
