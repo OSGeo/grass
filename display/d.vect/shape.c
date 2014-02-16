@@ -58,7 +58,12 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
     /* fisrt search for color table */
     have_colors = Vect_read_colors(Vect_get_name(Map), Vect_get_mapset(Map),
 				   &colors);
-    
+    if (have_colors && rgb_column) {
+        G_warning(_("Both color table and <%s> option detected. "
+                    "Color table will ignored."), "rgb_column");
+        have_colors = FALSE;
+    }
+
     if (rgb_column) {
 	/* read RRR:GGG:BBB color strings from table */
 	db_CatValArray_init(&cvarr_rgb);
@@ -189,6 +194,11 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	    G_warning(_("Vector map is not 3D. Unable to colorize features based on z-coordinates."));
 	    z_style = NULL;
 	}
+        else if (rgb_column) {
+            G_warning(_("Options <%s> and <%s> are mutually exclusive. "
+                        "Option <%s> will be ignored."), "zcolor", "rgb_column", "zcolor");
+	    z_style = NULL;
+        }
 	else {
 	    Vect_get_map_box(Map, &box);
 	    Rast_make_fp_colors(&zcolors, z_style, box.B, box.T);
