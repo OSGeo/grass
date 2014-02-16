@@ -50,6 +50,65 @@ class TestRegisterFunctions(unittest.TestCase):
         tgis.register_maps_in_space_time_dataset(type="rast", name="C", maps="c1",
                                                  start="2001-01-02", increment="2 day", interval=True)
 
+    def test_simple_arith_td_1(self):
+        """Simple arithmetic test with if condition"""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        tra.parse(expression='D = A + td(A)', basename="d", overwrite=True)
+
+        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D.select()
+        self.assertEqual(D.metadata.get_number_of_maps(), 4)
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 5)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+
+
+    def test_simple_arith_td_2(self):
+        """Simple arithmetic test with if condition"""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        tra.parse(expression='D = A / td(A)', basename="d", overwrite=True)
+
+        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D.select()
+        self.assertEqual(D.metadata.get_number_of_maps(), 4)
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 4)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+
+    def test_simple_arith_td_3(self):
+        """Simple arithmetic test with if condition"""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        tra.parse(expression='D = A {equal,+} td(A)', basename="d", overwrite=True)
+
+        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D.select()
+        self.assertEqual(D.metadata.get_number_of_maps(), 4)
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 5)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+
+
+    def test_simple_arith_td_4(self):
+        """Simple arithmetic test with if condition"""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        tra.parse(expression='D = A {equal,/} td(A)', basename="d", overwrite=True)
+
+        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D.select()
+        self.assertEqual(D.metadata.get_number_of_maps(), 4)
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 4)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+
+
     def test_simple_arith_if_1(self):
         """Simple arithmetic test with if condition"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
