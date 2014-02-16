@@ -443,8 +443,11 @@ class MapCalcFrame(wx.Frame):
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         expr = self.text_mcalc.GetValue().strip().replace("\n", " ")
-        self.SetStatusText("r.mapcalc '%s = %s'" % (self.newmaptxt.GetValue(),
-                                                    expr))
+        cmd = 'r.mapcalc'
+        if self.rast3d:
+            cmd = 'r3.mapcalc'
+        self.SetStatusText("{cmd} '{new} = {expr}'".format(cmd=cmd, expr=expr,
+                                                           new=self.newmaptxt.GetValue()))
         event.Skip()
         
     def _addSomething(self, what):
