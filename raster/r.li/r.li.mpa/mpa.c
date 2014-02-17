@@ -106,7 +106,6 @@ int calculate(int fd, struct area_entry *ad, double *result)
     int masked = FALSE;
 
     double area = 0;
-    double indice = 0;
     double somma = 0;
 
     /* open mask if needed */
@@ -123,43 +122,40 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	masked = TRUE;
     }
 
+    for (j = 0; j < ad->rl; j++) {
+	buf = RLI_get_cell_raster_row(fd, j + ad->y, ad);
 
-    for (j = 0; j < ad->rl; j++) {	/*for each raster row */
-	buf = RLI_get_cell_raster_row(fd, j + ad->y, ad);	/*read raster row */
-
-	if (masked) {		/*read mask row if needed */
-
+	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("mask read failed");
 		return RLI_ERRORE;
 	    }
 	}
 
-	for (i = 0; i < ad->cl; i++) {	/*for each cell in the row */
-	    area++;
+	for (i = 0; i < ad->cl; i++) {
 	    if (masked && mask_buf[i + ad->x] == 0) {
 		Rast_set_c_null_value(&buf[i + ad->x], 1);
-		area--;
 	    }
-	    if (!(Rast_is_null_value(&buf[i + ad->x], CELL_TYPE))) {	/*if it's a cell to consider */
+	    if (!(Rast_is_c_null_value(&buf[i + ad->x]))) {
+		area++;
 		somma = somma + buf[i + ad->x];
 	    }
 	}
     }
 
-
-    if (area == 0)
-	indice = (double)-1;
+    if (area > 0)
+	*result = somma / area;
     else
-	indice = somma / area;
+	Rast_set_d_null_value(result);
 
-    *result = indice;
     if (masked) {
 	close(mask_fd);
 	G_free(mask_buf);
     }
+
     return RLI_OK;
 }
+
 
 int calculateD(int fd, struct area_entry *ad, double *result)
 {
@@ -170,7 +166,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     int masked = FALSE;
 
     double area = 0;
-    double indice = 0;
     double somma = 0;
 
     /* open mask if needed */
@@ -187,39 +182,37 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	masked = TRUE;
     }
 
-    for (j = 0; j < ad->rl; j++) {	/*for each raster row */
-	buf = RLI_get_dcell_raster_row(fd, j + ad->y, ad);	/*read raster row */
+    for (j = 0; j < ad->rl; j++) {
+	buf = RLI_get_dcell_raster_row(fd, j + ad->y, ad);
 
-	if (masked) {		/*read mask row if needed */
-
+	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("mask read failed");
 		return RLI_ERRORE;
 	    }
 	}
 
-	for (i = 0; i < ad->cl; i++) {	/*for each cell in the row */
-	    area++;
-	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
-		area--;
+	for (i = 0; i < ad->cl; i++) {
+	    if (masked && mask_buf[i + ad->x] == 0) {
 		Rast_set_d_null_value(&buf[i + ad->x], 1);
 	    }
-	    if (!(Rast_is_null_value(&buf[i + ad->x], DCELL_TYPE))) {
+	    if (!(Rast_is_d_null_value(&buf[i + ad->x]))) {
+		area++;
 		somma = somma + buf[i + ad->x];
 	    }
 	}
     }
 
-    if (area == 0)
-	indice = (double)-1;
+    if (area > 0)
+	*result = somma / area;
     else
-	indice = somma / area;
+	Rast_set_d_null_value(result);
 
-    *result = indice;
     if (masked) {
 	close(mask_fd);
 	G_free(mask_buf);
     }
+
     return RLI_OK;
 }
 
@@ -232,7 +225,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     int masked = FALSE;
 
     double area = 0;
-    double indice = 0;
     double somma = 0;
 
     /* open mask if needed */
@@ -249,39 +241,36 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	masked = TRUE;
     }
 
-    for (j = 0; j < ad->rl; j++) {	/*for each raster row */
-	buf = RLI_get_fcell_raster_row(fd, j + ad->y, ad);	/*read raster row */
+    for (j = 0; j < ad->rl; j++) {
+	buf = RLI_get_fcell_raster_row(fd, j + ad->y, ad);
 
-	if (masked) {		/*read mask row if needed */
-
+	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("mask read failed");
 		return RLI_ERRORE;
 	    }
 	}
 
-	for (i = 0; i < ad->cl; i++) {	/*for each cell in the row */
-	    area++;
-
-	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
-		area--;
+	for (i = 0; i < ad->cl; i++) {
+	    if (masked && mask_buf[i + ad->x] == 0) {
 		Rast_set_f_null_value(&buf[i + ad->x], 1);
 	    }
-	    if (!(Rast_is_null_value(&buf[i + ad->x], FCELL_TYPE))) {
+	    if (!(Rast_is_f_null_value(&buf[i + ad->x]))) {
+		area++;
 		somma = somma + buf[i + ad->x];
 	    }
 	}
     }
 
-    if (area == 0)
-	indice = (double)-1;
+    if (area > 0)
+	*result = somma / area;
     else
-	indice = somma / area;
+	Rast_set_d_null_value(result);
 
-    *result = indice;
     if (masked) {
 	close(mask_fd);
 	G_free(mask_buf);
     }
+
     return RLI_OK;
 }

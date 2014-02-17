@@ -347,16 +347,16 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	Rast_set_c_null_value(&prevCell, 1);
 	Rast_set_c_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
-	    area++;
 	    corrCell = buf_corr[i + ad->x];
 	    if (masked && mask_corr[i + ad->x] == 0) {
-		area--;
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
 	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
-		supCell = buf_sup[i + ad->x];
-		/* calculate how many edges the cell has */
+		area++;
 
+		supCell = buf_sup[i + ad->x];
+
+		/* calculate how many edges the cell has */
 		if (((!Rast_is_null_value(&prevCell, CELL_TYPE))) &&
 		    (corrCell != prevCell)) {
 		    int r = 0;
@@ -478,15 +478,15 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	Rast_set_d_null_value(&prevCell, 1);
 	Rast_set_d_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
-	    area++;
 	    corrCell = buf_corr[i + ad->x];
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
-		area--;
 	    }
 	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
+		area++;
 		supCell = buf_sup[i + ad->x];
-		/* calculate how many edge the cell has */
+
+		/* calculate how many edges the cell has */
 		if (((!Rast_is_null_value(&prevCell, DCELL_TYPE))) &&
 		    (corrCell != prevCell)) {
 		    int r = 0;
@@ -609,15 +609,16 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	Rast_set_f_null_value(&prevCell, 1);
 	Rast_set_f_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
-	    area++;
 	    corrCell = buf_corr[i + ad->x];
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
-		area--;
 	    }
 	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
+		area++;
+
 		supCell = buf_sup[i + ad->x];
 
+		/* calculate how many edges the cell has */
 		if (((!Rast_is_null_value(&prevCell, FCELL_TYPE))) &&
 		    (corrCell != prevCell)) {
 		    int r = 0;

@@ -565,7 +565,7 @@ int print_Output(int out, msg m)
 	char s[100];
 	int len;
 
-	sprintf(s, "RESULT %i|%f\n", m.f.f_d.aid, m.f.f_d.res);
+	sprintf(s, "RESULT %i|%.15g\n", m.f.f_d.aid, m.f.f_d.res);
 	len = strlen(s);
 
 	if (write(out, s, len) == len)

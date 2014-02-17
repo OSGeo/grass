@@ -1,13 +1,17 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.padrange</em> (patch area distribution range) calculates
-as:<br>
+<em>r.li.padrange</em> calculates the range of patch area sizes in 
+hectares as:<br>
 <img src="rlipadrange_formula.png" alt="rlipadrange formula"> <br>
 with:<br>
 <ul>
   <li><b>a<small><small>max</small></small></b>: max patch area size</li>
   <li><b>a<small><small>min</small></small></b>: min patch area size</li>
 </ul>
+
+<p>
+This index is calculated using a 4 neighbour algorithm, diagonal cells 
+are ignored when tracing a patch.
 
 <h2>NOTES</h2>
 
@@ -16,14 +20,8 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
-<!-- TODO: verify next: -->
-If the input raster map contains only NULL values then <em>r.li.padrange</em>
-returns -1.<br>
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=-1 input=my_map
-</pre></div>
-after index calculation.
+If the sample area contains only NULL values then <em>r.li.padrange</em>
+returns NULL.<br>
 
 <h2>EXAMPLES</h2>
 To calculate range of patch area size index on map <em>my_map</em>, using
@@ -51,8 +49,8 @@ analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
-Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
-Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+Michael Shapiro - CERL (patch identification)<br>
+Markus Metz (statistics)
 
 <p>
 <i>Last changed: $Date$</i></p>

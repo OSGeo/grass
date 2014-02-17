@@ -6,8 +6,11 @@
  *                students of Computer Science University of Pisa (Italy)
  *               Commission from Faunalia Pontedera (PI) www.faunalia.it
  *               Fixes: Serena Pallecchi, Markus Neteler <neteler itc.it>
+ *               Rewrite: Markus Metz
+ *               Patch identification: Michael Shapiro - CERL
+ *
  * PURPOSE:      calculates patch density index
- * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,6 +24,19 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "../r.li.daemon/daemon.h"
+#include "../r.li.daemon/GenericCell.h"
+
+/* template is patchnum */
+
+/* cell count and type of each patch */
+struct pst {
+    long count;
+    generic_cell type;
+};
+
+int calculate(int fd, struct area_entry *ad, double *result);
+int calculateD(int fd, struct area_entry *ad, double *result);
+int calculateF(int fd, struct area_entry *ad, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -46,168 +62,716 @@ int main(int argc, char *argv[])
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-	/** add other options for index parameters here */
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     return calculateIndex(conf->answer, patch_density, NULL, raster->answer,
 			  output->answer);
-
 }
 
 
 int patch_density(int fd, char **par, struct area_entry *ad, double *result)
 {
-    CELL *buf, *sup, *cnull;
-    CELL pid, old_pid, *pid_curr, *pid_sup, *ctmp;
-    int count, i, j, k, connected, other_above;
+    int ris = RLI_OK;
+    double indice = 0;
+
+    switch (ad->data_type) {
+    case CELL_TYPE:
+	{
+	    calculate(fd, ad, &indice);
+	    break;
+	}
+    case DCELL_TYPE:
+	{
+	    calculateD(fd, ad, &indice);
+	    break;
+	}
+    case FCELL_TYPE:
+	{
+	    calculateF(fd, ad, &indice);
+	    break;
+	}
+    default:
+	{
+	    G_fatal_error("data type unknown");
+	    return RLI_ERRORE;
+	}
+    }
+
+    if (ris != RLI_OK) {
+	return RLI_ERRORE;
+    }
+
+    *result = indice;
+
+    return RLI_OK;
+}
+
+
+int calculate(int fd, struct area_entry *ad, double *result)
+{
+    CELL *buf, *buf_sup, *buf_null;
+    CELL corrCell, precCell, supCell;
+    long npatch, area; 
+    long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
+    struct pst *pst;
+    long nalloc, incr;
+    int i, j, k;
+    int connected;
+    int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
-    int mask_fd, *mask_buf, null_count;
-    double area;
-    double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
 
     Rast_get_cellhd(ad->raster, "", &hd);
 
-    cnull = Rast_allocate_c_buf();
-    Rast_set_c_null_value(cnull, Rast_window_cols());
-    sup = cnull;
+    buf_null = Rast_allocate_c_buf();
+    Rast_set_c_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
 
     /* initialize patch ids */
-    pid_curr = Rast_allocate_c_buf();
-    Rast_set_c_null_value(pid_curr, Rast_window_cols());
-    pid_sup = Rast_allocate_c_buf();
-    Rast_set_c_null_value(pid_sup, Rast_window_cols());
+    pid_corr = G_malloc(Rast_window_cols() * sizeof(long));
+    pid_sup = G_malloc(Rast_window_cols() * sizeof(long));
+
+    for (j = 0; j < Rast_window_cols(); j++) {
+	pid_corr[j] = 0;
+	pid_sup[j] = 0;
+    }
 
     /* open mask if needed */
     mask_fd = -1;
-    mask_buf = NULL;
-    null_count = 0;
+    mask_buf = mask_sup = NULL;
+    masked = FALSE;
     if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
-	    return 0;
+	    return RLI_ERRORE;
 	mask_buf = G_malloc(ad->cl * sizeof(int));
+	if (mask_buf == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	for (j = 0; j < ad->cl; j++)
+	    mask_buf[j] = 0;
+
+	masked = TRUE;
     }
 
-    /* calculate distance */
-    G_begin_distance_calculations();
-    /* EW Dist at North edge */
-    EW_DIST1 = G_distance(hd.east, hd.north, hd.west, hd.north);
-    /* EW Dist at South Edge */
-    EW_DIST2 = G_distance(hd.east, hd.south, hd.west, hd.south);
-    /* NS Dist at East edge */
-    NS_DIST1 = G_distance(hd.east, hd.north, hd.east, hd.south);
-    /* NS Dist at West edge */
-    NS_DIST2 = G_distance(hd.west, hd.north, hd.west, hd.south);
-
     /* calculate number of patches */
-    count = 0;
-    connected = 0;
-    other_above = 0;
+    npatch = 0;
+    area = 0;
     pid = 0;
+
+    /* patch size and type */
+    incr = 1024;
+    if (incr > ad->rl)
+	incr = ad->rl;
+    if (incr > ad->cl)
+	incr = ad->cl;
+    if (incr < 2)
+	incr = 2;
+    nalloc = incr;
+    pst = G_malloc(nalloc * sizeof(struct pst));
+    for (k = 0; k < nalloc; k++) {
+	pst[k].count = 0;
+    }
 
     for (i = 0; i < ad->rl; i++) {
 	buf = RLI_get_cell_raster_row(fd, i + ad->y, ad);
 	if (i > 0) {
-	    sup = RLI_get_cell_raster_row(fd, i - 1 + ad->y, ad);
+	    buf_sup = RLI_get_cell_raster_row(fd, i - 1 + ad->y, ad);
 	}
-	/* mask values */
-	if (ad->mask == 1) {
+
+	if (masked) {
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_buf;
+	    mask_buf = mask_tmp;
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
 		return 0;
-	    for (j = 0; j < ad->cl; j++) {
-		if (mask_buf[j + ad->x] == 0) {
-		    Rast_set_c_null_value(&buf[j + ad->x], 1);
-		    null_count++;
-		}
-	    }
 	}
 	
-	ctmp = pid_sup;
-	pid_sup = pid_curr;
-	pid_curr = ctmp;
-	Rast_set_c_null_value(pid_curr, Rast_window_cols());
+	ltmp = pid_sup;
+	pid_sup = pid_corr;
+	pid_corr = ltmp;
+
+	Rast_set_c_null_value(&precCell, 1);
 
 	connected = 0;
-	other_above = 1;
 	for (j = 0; j < ad->cl; j++) {
+	    pid_corr[j + ad->x] = 0;
 	    
-	    if (Rast_is_null_value(&(buf[j + ad->x]), CELL_TYPE)) {
-		connected = 0;
-		other_above = 1;
-		continue;
+	    corrCell = buf[j + ad->x];
+	    if (masked && (mask_buf[j + ad->x] == 0)) {
+		Rast_set_c_null_value(&corrCell, 1);
 	    }
 
-	    if (sup[j + ad->x] == buf[j + ad->x]) {
-		
-		if (!connected) {
-		    pid_curr[j + ad->x] = pid_sup[j + ad->x];
-		}
-		
-		if (pid_curr[j + ad->x] != pid_sup[j + ad->x]) {
+	    if (Rast_is_c_null_value(&corrCell)) {
+		connected = 0;
+		precCell = corrCell;
+		continue;
+	    }
+	    
+	    area++;
+	    
+	    supCell = buf_sup[j + ad->x];
+	    if (masked && (mask_sup[j + ad->x] == 0)) {
+		Rast_set_c_null_value(&supCell, 1);
+	    }
+
+	    if (!Rast_is_c_null_value(&precCell) && corrCell == precCell) {
+		pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+		connected = 1;
+		pst[pid_corr[j + ad->x]].count++;
+	    }
+	    else {
+		connected = 0;
+	    }
+
+	    if (!Rast_is_c_null_value(&supCell) && corrCell == supCell) {
+
+		if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+		    /* connect or merge */
+		    /* after r.clump */
 		    if (connected) {
-			count--;
-		    }
-		    if (other_above) {
-			pid_curr[j + ad->x] = pid_sup[j + ad->x];
-			for (k = j + ad->x - 1; k >= ad->x; k--) {
-			    if (buf[k] != buf[j + ad->x])
-				break;
-			    pid_curr[k] = pid_sup[j + ad->x];
+			npatch--;
+
+			if (npatch == 0) {
+			    G_fatal_error("npatch == 0 at row %d, col %d", i, j);
 			}
+		    }
+
+		    old_pid = pid_corr[j + ad->x];
+		    new_pid = pid_sup[j + ad->x];
+		    pid_corr[j + ad->x] = new_pid;
+		    if (old_pid > 0) {
+			/* merge */
+			/* update left side of the current row */
+			for (k = 0; k < j; k++) {
+			    if (pid_corr[k + ad->x] == old_pid)
+				pid_corr[k + ad->x] = new_pid;
+			}
+			/* update right side of the previous row */
+			for (k = j + 1; k < ad->cl; k++) {
+			    if (pid_sup[k + ad->x] == old_pid)
+				pid_sup[k + ad->x] = new_pid;
+			}
+			pst[new_pid].count += pst[old_pid].count;
+			pst[old_pid].count = 0;
+			
+			if (old_pid == pid)
+			    pid--;
 		    }
 		    else {
-			old_pid = pid_sup[j + ad->x];
-			pid_sup[j + ad->x] = pid_curr[j + ad->x];
-			
-			for (k = j + 1; k < ad->cl; k++) {
-			    if (pid_sup[k + ad->x] == old_pid) {
-				pid_sup[k + ad->x] = pid_curr[j + ad->x];
-			    }
-			}
+			pst[new_pid].count++;
 		    }
 		}
-
-		other_above = 0;
 		connected = 1;
 	    }
 
 	    if (!connected) {
-		count++;
+		/* start new patch */
+		npatch++;
 		pid++;
-		pid_curr[j + ad->x] = pid;
-	    }
+		pid_corr[j + ad->x] = pid;
 
-	    if (j < ad->cl - 1) {
-		if (buf[j + ad->x] == buf[j + 1 + ad->x]) {
-		    
-		    connected = 1;
-		    pid_curr[j + 1 + ad->x] = pid_curr[j + ad->x];
+		if (pid >= nalloc) {
+		    pst = (struct pst *)G_realloc(pst, (pid + incr) * sizeof(struct pst));
+
+		    for (k = nalloc; k < pid + incr; k++)
+			pst[k].count = 0;
+			
+		    nalloc = pid + incr;
 		}
-		else {
-		    other_above = 1;
-		    connected = 0;
-		}
+
+		pst[pid].count = 1;
+		pst[pid].type.t = CELL_TYPE;
+		pst[pid].type.val.c = corrCell;
 	    }
+	    precCell = corrCell;
 	}
     }
 
-    area = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
-	(((NS_DIST1 + NS_DIST2) / 2) / hd.rows) *
-	(ad->rl *ad->cl - null_count);
+    if (npatch > 0) {
+	double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
+	double area_units;
 
-    if (area != 0)
-	*result = (count / area) * 1000000;
-    else
-	Rast_set_d_null_value(result, 1);
+	/* calculate distance */
+	G_begin_distance_calculations();
+	/* EW Dist at North edge */
+	EW_DIST1 = G_distance(hd.east, hd.north, hd.west, hd.north);
+	/* EW Dist at South Edge */
+	EW_DIST2 = G_distance(hd.east, hd.south, hd.west, hd.south);
+	/* NS Dist at East edge */
+	NS_DIST1 = G_distance(hd.east, hd.north, hd.east, hd.south);
+	/* NS Dist at West edge */
+	NS_DIST2 = G_distance(hd.west, hd.north, hd.west, hd.south);
 
-    if (ad->mask == 1) {
-	G_free(mask_buf);
+	area_units = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
+	    (((NS_DIST1 + NS_DIST2) / 2) / hd.rows) * (ad->rl * ad->cl);
+
+	*result = (npatch / area_units) * 1000000;
+    }
+    else {
+	*result = 0;
     }
 
-    G_free(cnull);
-    G_free(pid_curr);
+    if (masked) {
+	close(mask_fd);
+	G_free(mask_buf);
+	G_free(mask_sup);
+    }
+    G_free(buf_null);
+    G_free(pid_corr);
     G_free(pid_sup);
+    G_free(pst);
+
+    return RLI_OK;
+}
+
+
+int calculateD(int fd, struct area_entry *ad, double *result)
+{
+    DCELL *buf, *buf_sup, *buf_null;
+    DCELL corrCell, precCell, supCell;
+    long npatch, area; 
+    long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
+    struct pst *pst;
+    long nalloc, incr;
+    int i, j, k;
+    int connected;
+    int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
+    struct Cell_head hd;
+
+    Rast_get_cellhd(ad->raster, "", &hd);
+
+    buf_null = Rast_allocate_d_buf();
+    Rast_set_d_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
+
+    /* initialize patch ids */
+    pid_corr = G_malloc(Rast_window_cols() * sizeof(long));
+    pid_sup = G_malloc(Rast_window_cols() * sizeof(long));
+
+    for (j = 0; j < Rast_window_cols(); j++) {
+	pid_corr[j] = 0;
+	pid_sup[j] = 0;
+    }
+
+    /* open mask if needed */
+    mask_fd = -1;
+    mask_buf = mask_sup = NULL;
+    masked = FALSE;
+    if (ad->mask == 1) {
+	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
+	    return RLI_ERRORE;
+	mask_buf = G_malloc(ad->cl * sizeof(int));
+	if (mask_buf == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	for (j = 0; j < ad->cl; j++)
+	    mask_buf[j] = 0;
+
+	masked = TRUE;
+    }
+
+    /* calculate number of patches */
+    npatch = 0;
+    area = 0;
+    pid = 0;
+
+    /* patch size and type */
+    incr = 1024;
+    if (incr > ad->rl)
+	incr = ad->rl;
+    if (incr > ad->cl)
+	incr = ad->cl;
+    if (incr < 2)
+	incr = 2;
+    nalloc = incr;
+    pst = G_malloc(nalloc * sizeof(struct pst));
+    for (k = 0; k < nalloc; k++) {
+	pst[k].count = 0;
+    }
+
+    for (i = 0; i < ad->rl; i++) {
+	buf = RLI_get_dcell_raster_row(fd, i + ad->y, ad);
+	if (i > 0) {
+	    buf_sup = RLI_get_dcell_raster_row(fd, i - 1 + ad->y, ad);
+	}
+
+	if (masked) {
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_buf;
+	    mask_buf = mask_tmp;
+	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
+		return 0;
+	}
+	
+	ltmp = pid_sup;
+	pid_sup = pid_corr;
+	pid_corr = ltmp;
+
+	Rast_set_d_null_value(&precCell, 1);
+
+	connected = 0;
+	for (j = 0; j < ad->cl; j++) {
+	    pid_corr[j + ad->x] = 0;
+	    
+	    corrCell = buf[j + ad->x];
+	    if (masked && (mask_buf[j + ad->x] == 0)) {
+		Rast_set_d_null_value(&corrCell, 1);
+	    }
+
+	    if (Rast_is_d_null_value(&corrCell)) {
+		connected = 0;
+		precCell = corrCell;
+		continue;
+	    }
+	    
+	    area++;
+	    
+	    supCell = buf_sup[j + ad->x];
+	    if (masked && (mask_sup[j + ad->x] == 0)) {
+		Rast_set_d_null_value(&supCell, 1);
+	    }
+
+	    if (!Rast_is_d_null_value(&precCell) && corrCell == precCell) {
+		pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+		connected = 1;
+		pst[pid_corr[j + ad->x]].count++;
+	    }
+	    else {
+		connected = 0;
+	    }
+
+	    if (!Rast_is_d_null_value(&supCell) && corrCell == supCell) {
+
+		if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+		    /* connect or merge */
+		    /* after r.clump */
+		    if (connected) {
+			npatch--;
+
+			if (npatch == 0) {
+			    G_fatal_error("npatch == 0 at row %d, col %d", i, j);
+			}
+		    }
+
+		    old_pid = pid_corr[j + ad->x];
+		    new_pid = pid_sup[j + ad->x];
+		    pid_corr[j + ad->x] = new_pid;
+		    if (old_pid > 0) {
+			/* merge */
+			/* update left side of the current row */
+			for (k = 0; k < j; k++) {
+			    if (pid_corr[k + ad->x] == old_pid)
+				pid_corr[k + ad->x] = new_pid;
+			}
+			/* update right side of the previous row */
+			for (k = j + 1; k < ad->cl; k++) {
+			    if (pid_sup[k + ad->x] == old_pid)
+				pid_sup[k + ad->x] = new_pid;
+			}
+			pst[new_pid].count += pst[old_pid].count;
+			pst[old_pid].count = 0;
+			
+			if (old_pid == pid)
+			    pid--;
+		    }
+		    else {
+			pst[new_pid].count++;
+		    }
+		}
+		connected = 1;
+	    }
+
+	    if (!connected) {
+		/* start new patch */
+		npatch++;
+		pid++;
+		pid_corr[j + ad->x] = pid;
+
+		if (pid >= nalloc) {
+		    pst = (struct pst *)G_realloc(pst, (pid + incr) * sizeof(struct pst));
+
+		    for (k = nalloc; k < pid + incr; k++)
+			pst[k].count = 0;
+			
+		    nalloc = pid + incr;
+		}
+
+		pst[pid].count = 1;
+		pst[pid].type.t = CELL_TYPE;
+		pst[pid].type.val.c = corrCell;
+	    }
+	    precCell = corrCell;
+	}
+    }
+
+    if (npatch > 0) {
+	double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
+	double area_units;
+
+	/* calculate distance */
+	G_begin_distance_calculations();
+	/* EW Dist at North edge */
+	EW_DIST1 = G_distance(hd.east, hd.north, hd.west, hd.north);
+	/* EW Dist at South Edge */
+	EW_DIST2 = G_distance(hd.east, hd.south, hd.west, hd.south);
+	/* NS Dist at East edge */
+	NS_DIST1 = G_distance(hd.east, hd.north, hd.east, hd.south);
+	/* NS Dist at West edge */
+	NS_DIST2 = G_distance(hd.west, hd.north, hd.west, hd.south);
+
+	area_units = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
+	    (((NS_DIST1 + NS_DIST2) / 2) / hd.rows) * (ad->rl * ad->cl);
+
+	*result = (npatch / area_units) * 1000000;
+    }
+    else {
+	*result = 0;
+    }
+
+    if (masked) {
+	close(mask_fd);
+	G_free(mask_buf);
+	G_free(mask_sup);
+    }
+    G_free(buf_null);
+    G_free(pid_corr);
+    G_free(pid_sup);
+    G_free(pst);
+
+    return RLI_OK;
+}
+
+
+int calculateF(int fd, struct area_entry *ad, double *result)
+{
+    FCELL *buf, *buf_sup, *buf_null;
+    FCELL corrCell, precCell, supCell;
+    long npatch, area; 
+    long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
+    struct pst *pst;
+    long nalloc, incr;
+    int i, j, k;
+    int connected;
+    int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
+    struct Cell_head hd;
+
+    Rast_get_cellhd(ad->raster, "", &hd);
+
+    buf_null = Rast_allocate_f_buf();
+    Rast_set_f_null_value(buf_null, Rast_window_cols());
+    buf_sup = buf_null;
+
+    /* initialize patch ids */
+    pid_corr = G_malloc(Rast_window_cols() * sizeof(long));
+    pid_sup = G_malloc(Rast_window_cols() * sizeof(long));
+
+    for (j = 0; j < Rast_window_cols(); j++) {
+	pid_corr[j] = 0;
+	pid_sup[j] = 0;
+    }
+
+    /* open mask if needed */
+    mask_fd = -1;
+    mask_buf = mask_sup = NULL;
+    masked = FALSE;
+    if (ad->mask == 1) {
+	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
+	    return RLI_ERRORE;
+	mask_buf = G_malloc(ad->cl * sizeof(int));
+	if (mask_buf == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	for (j = 0; j < ad->cl; j++)
+	    mask_buf[j] = 0;
+
+	masked = TRUE;
+    }
+
+    /* calculate number of patches */
+    npatch = 0;
+    area = 0;
+    pid = 0;
+
+    /* patch size and type */
+    incr = 1024;
+    if (incr > ad->rl)
+	incr = ad->rl;
+    if (incr > ad->cl)
+	incr = ad->cl;
+    if (incr < 2)
+	incr = 2;
+    nalloc = incr;
+    pst = G_malloc(nalloc * sizeof(struct pst));
+    for (k = 0; k < nalloc; k++) {
+	pst[k].count = 0;
+    }
+
+    for (i = 0; i < ad->rl; i++) {
+	buf = RLI_get_fcell_raster_row(fd, i + ad->y, ad);
+	if (i > 0) {
+	    buf_sup = RLI_get_fcell_raster_row(fd, i - 1 + ad->y, ad);
+	}
+
+	if (masked) {
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_buf;
+	    mask_buf = mask_tmp;
+	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
+		return 0;
+	}
+	
+	ltmp = pid_sup;
+	pid_sup = pid_corr;
+	pid_corr = ltmp;
+
+	Rast_set_f_null_value(&precCell, 1);
+
+	connected = 0;
+	for (j = 0; j < ad->cl; j++) {
+	    pid_corr[j + ad->x] = 0;
+	    
+	    corrCell = buf[j + ad->x];
+	    if (masked && (mask_buf[j + ad->x] == 0)) {
+		Rast_set_f_null_value(&corrCell, 1);
+	    }
+
+	    if (Rast_is_f_null_value(&corrCell)) {
+		connected = 0;
+		precCell = corrCell;
+		continue;
+	    }
+	    
+	    area++;
+	    
+	    supCell = buf_sup[j + ad->x];
+	    if (masked && (mask_sup[j + ad->x] == 0)) {
+		Rast_set_f_null_value(&supCell, 1);
+	    }
+
+	    if (!Rast_is_f_null_value(&precCell) && corrCell == precCell) {
+		pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+		connected = 1;
+		pst[pid_corr[j + ad->x]].count++;
+	    }
+	    else {
+		connected = 0;
+	    }
+
+	    if (!Rast_is_f_null_value(&supCell) && corrCell == supCell) {
+
+		if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+		    /* connect or merge */
+		    /* after r.clump */
+		    if (connected) {
+			npatch--;
+
+			if (npatch == 0) {
+			    G_fatal_error("npatch == 0 at row %d, col %d", i, j);
+			}
+		    }
+
+		    old_pid = pid_corr[j + ad->x];
+		    new_pid = pid_sup[j + ad->x];
+		    pid_corr[j + ad->x] = new_pid;
+		    if (old_pid > 0) {
+			/* merge */
+			/* update left side of the current row */
+			for (k = 0; k < j; k++) {
+			    if (pid_corr[k + ad->x] == old_pid)
+				pid_corr[k + ad->x] = new_pid;
+			}
+			/* update right side of the previous row */
+			for (k = j + 1; k < ad->cl; k++) {
+			    if (pid_sup[k + ad->x] == old_pid)
+				pid_sup[k + ad->x] = new_pid;
+			}
+			pst[new_pid].count += pst[old_pid].count;
+			pst[old_pid].count = 0;
+			
+			if (old_pid == pid)
+			    pid--;
+		    }
+		    else {
+			pst[new_pid].count++;
+		    }
+		}
+		connected = 1;
+	    }
+
+	    if (!connected) {
+		/* start new patch */
+		npatch++;
+		pid++;
+		pid_corr[j + ad->x] = pid;
+
+		if (pid >= nalloc) {
+		    pst = (struct pst *)G_realloc(pst, (pid + incr) * sizeof(struct pst));
+
+		    for (k = nalloc; k < pid + incr; k++)
+			pst[k].count = 0;
+			
+		    nalloc = pid + incr;
+		}
+
+		pst[pid].count = 1;
+		pst[pid].type.t = CELL_TYPE;
+		pst[pid].type.val.c = corrCell;
+	    }
+	    precCell = corrCell;
+	}
+    }
+
+    if (npatch > 0) {
+	double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
+	double area_units;
+
+	/* calculate distance */
+	G_begin_distance_calculations();
+	/* EW Dist at North edge */
+	EW_DIST1 = G_distance(hd.east, hd.north, hd.west, hd.north);
+	/* EW Dist at South Edge */
+	EW_DIST2 = G_distance(hd.east, hd.south, hd.west, hd.south);
+	/* NS Dist at East edge */
+	NS_DIST1 = G_distance(hd.east, hd.north, hd.east, hd.south);
+	/* NS Dist at West edge */
+	NS_DIST2 = G_distance(hd.west, hd.north, hd.west, hd.south);
+
+	area_units = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
+	    (((NS_DIST1 + NS_DIST2) / 2) / hd.rows) * (ad->rl * ad->cl);
+
+	*result = (npatch / area_units) * 1000000;
+    }
+    else {
+	*result = 0;
+    }
+
+    if (masked) {
+	close(mask_fd);
+	G_free(mask_buf);
+	G_free(mask_sup);
+    }
+    G_free(buf_null);
+    G_free(pid_corr);
+    G_free(pid_sup);
+    G_free(pst);
 
     return RLI_OK;
 }

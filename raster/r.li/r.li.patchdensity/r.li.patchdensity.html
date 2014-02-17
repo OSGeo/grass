@@ -1,11 +1,17 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.patchdensity</em> calculates the "patch density index" as:
+<em>r.li.patchdensity</em> calculates the "patch density index", 
+the number of patches per square kilometer, as:
 <div class="code"><pre>
-f(sample_area) = (Patch_Number/Area) * 1000000
+PD = (Npatch / A) * 1000000
 </pre></div>
 
-that is the number of patches per 1,000,000 area units.
+with:
+<ul>
+  <li><b>A</b>:sampling area size</li>
+  <li><b>Npatch</b>: number of patches</li>
+</ul>
+
 <p>
 This index is calculated using a 4 neighbour algorithm, diagonal cells 
 are ignored when tracing a patch.
@@ -17,16 +23,8 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
-<!-- TODO: verify next: -->
-A map of NULL values is considered to have zero patches. <br>
-If the size of the sample area is 0, <em>r.li.patchdensity</em> returns 
-NULL. This is only possible if the raster is masked.<br>
-If you want to change these NULL values to some number, run subsequently 
-on the resulting map:
-<div class="code"><pre>
-r.null null=-1 input=my_out
-</pre></div>
-after index calculation.
+A sample area of only NULL values is considered to have zero patches, 
+that is, the result is always &ge; 0.
 
 <h2>EXAMPLES</h2>
 To calculate patch density index on map <em>my_map</em>, using
@@ -64,10 +62,8 @@ analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
-
-Claudio Porta and Lucio Davide Spano, students of Computer Science 
-University of Pisa (Italy).<br>
-Commission from Faunalia Pontedera (PI) (www.faunalia.it)<br>
+Michael Shapiro - CERL (patch identification)<br>
+Markus Metz (statistics)
 
 <p>
 <i>Last changed: $Date$</i>
