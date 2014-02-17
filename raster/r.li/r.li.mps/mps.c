@@ -310,7 +310,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	area_units = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
 	    (((NS_DIST1 + NS_DIST2) / 2) / hd.rows) * area;
 
-	*result = (area_units / (npatch * 10000);
+	*result = area_units / (npatch * 10000);
     }
     else {
 	*result = 0;
@@ -533,7 +533,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	area_units = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
 	    (((NS_DIST1 + NS_DIST2) / 2) / hd.rows) * area;
 
-	*result = (area_units / npatch) * 10000;
+	*result = area_units / (npatch * 10000);
     }
     else {
 	*result = 0;
@@ -756,7 +756,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	area_units = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
 	    (((NS_DIST1 + NS_DIST2) / 2) / hd.rows) * area;
 
-	*result = (area_units / npatch) * 10000;
+	*result = area_units / (npatch * 10000);
     }
     else {
 	*result = 0;

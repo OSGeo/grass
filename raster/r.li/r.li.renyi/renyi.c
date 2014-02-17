@@ -28,9 +28,9 @@
 
 /* template is shannon */
 
-double calculate(struct area_entry *ad, int fd, char **par, double *result);
-double calculateD(struct area_entry *ad, int fd, char **par, double *result);
-double calculateF(struct area_entry *ad, int fd, char **par, double *result);
+int calculate(int fd, struct area_entry *ad, char **par, double *result);
+int calculateD(int fd, struct area_entry *ad, char **par, double *result);
+int calculateF(int fd, struct area_entry *ad, char **par, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -95,17 +95,17 @@ int renyi(int fd, char **par, struct area_entry *ad, double *result)
     switch (ad->data_type) {
     case CELL_TYPE:
 	{
-	    ris = calculate(ad, fd, par, &indice);
+	    ris = calculate(fd, ad, par, &indice);
 	    break;
 	}
     case DCELL_TYPE:
 	{
-	    ris = calculateD(ad, fd, par, &indice);
+	    ris = calculateD(fd, ad, par, &indice);
 	    break;
 	}
     case FCELL_TYPE:
 	{
-	    ris = calculateF(ad, fd, par, &indice);
+	    ris = calculateF(fd, ad, par, &indice);
 	    break;
 	}
     default:
@@ -125,7 +125,7 @@ int renyi(int fd, char **par, struct area_entry *ad, double *result)
 }
 
 
-int calculate(int fd, struct area_entry *ad, double *result)
+int calculate(int fd, struct area_entry *ad, char **par, double *result)
 {
     CELL *buf;
     CELL corrCell;
@@ -314,7 +314,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 }
 
 
-int calculateD(int fd, struct area_entry *ad, double *result)
+int calculateD(int fd, struct area_entry *ad, char **par, double *result)
 {
     DCELL *buf;
     DCELL corrCell;
@@ -503,7 +503,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 }
 
 
-int calculateF(int fd, struct area_entry *ad, double *result)
+int calculateF(int fd, struct area_entry *ad, char **par, double *result)
 {
     FCELL *buf;
     FCELL corrCell;
