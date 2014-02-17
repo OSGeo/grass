@@ -29,7 +29,7 @@ CELL clump(int in_fd, int out_fd)
 {
     register int col;
     register CELL *prev_clump, *cur_clump;
-    register CELL *index;
+    register CELL *index, *index2;
     register int n;
     CELL *prev_in, *cur_in;
     CELL *temp_cell, *temp_clump, *out_cell;
@@ -43,14 +43,14 @@ CELL clump(int in_fd, int out_fd)
     long cur_time;
     int column;
 
-
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    /* allocate reclump index */
+    /* allocate clump index */
     nalloc = INCR;
     index = (CELL *) G_malloc(nalloc * sizeof(CELL));
     index[0] = 0;
+    index2 = NULL;
 
     /* allocate CELL buffers one column larger than current window */
     len = (ncols + 1) * sizeof(CELL);
@@ -69,20 +69,25 @@ CELL clump(int in_fd, int out_fd)
     for (pass = 1; pass <= 2; pass++) {
 	/* second pass must generate a renumbering scheme */
 	if (pass == 2) {
-	    CELL cat, *renumber;
+	    CELL cat;
 
-	    renumber = (CELL *) G_malloc((label + 1) * sizeof(CELL));
 	    cat = 1;
-	    for (n = 1; n <= label; n++)
-		renumber[n] = 0;
-	    for (n = 1; n <= label; n++)
-		renumber[index[n]] = 1;
-	    for (n = 1; n <= label; n++)
-		if (renumber[n])
-		    renumber[n] = cat++;
-	    for (n = 1; n <= label; n++)
-		index[n] = renumber[index[n]];
-	    G_free(renumber);
+	    index2 = (CELL *) G_malloc((label + 1) * sizeof(CELL));
+	    index2[0] = 0;
+	    for (n = 1; n <= label; n++) {
+		OLD = n;
+		NEW = index[n];
+		if (OLD != NEW) {
+		    /* find final clump id */
+		    while (OLD != NEW) {
+			OLD = NEW;
+			NEW = index[OLD];
+		    }
+		    index[n] = NEW;
+		}
+		else
+		    index2[n] = cat++;
+	    }
 	}
 
 	/* fake a previous row which is all zero */
@@ -102,10 +107,11 @@ CELL clump(int in_fd, int out_fd)
 	    
 	    G_percent(row+1, nrows, 2);
 	    X = 0;
+	    Rast_set_c_null_value(&X, 1);
 	    for (col = 1; col <= ncols; col++) {
 		LEFT = X;
 		X = cur_in[col];
-		if (X == 0) {	/* don't clump zero data */
+		if (Rast_is_c_null_value(&X)) {	/* don't clump NULL data */
 		    cur_clump[col] = 0;
 		    continue;
 		}
@@ -170,14 +176,13 @@ CELL clump(int in_fd, int out_fd)
 		   cur_clump[n] = NEW;
 		 */
 
-		temp_cell = cur_clump++;
+		temp_clump = cur_clump;
 		n = col - 1;
-		while (n-- > 0)
-		    if (*cur_clump == OLD)
-			*cur_clump++ = NEW;
-		    else
-			cur_clump++;
-		cur_clump = temp_cell;
+		while (n-- > 0) {
+		    temp_clump++;	/* skip left edge */
+		    if (*temp_clump == OLD)
+			*temp_clump = NEW;
+		}
 
 		/* to right
 		   for (n = col+1; n <= ncols; n++)
@@ -185,15 +190,14 @@ CELL clump(int in_fd, int out_fd)
 		   prev_clump[n] = NEW;
 		 */
 
-		temp_cell = prev_clump;
-		prev_clump += col + 1;
+		temp_clump = prev_clump;
+		temp_clump += col;
 		n = ncols - col;
-		while (n-- > 0)
-		    if (*prev_clump == OLD)
-			*prev_clump++ = NEW;
-		    else
-			prev_clump++;
-		prev_clump = temp_cell;
+		while (n-- > 0) {
+		    temp_clump++;	/* skip col */
+		    if (*temp_clump == OLD)
+			*temp_clump = NEW;
+		}
 
 		/* modify the indexes
 		   if (pass == 1)
@@ -202,16 +206,8 @@ CELL clump(int in_fd, int out_fd)
 		   index[n] = NEW;
 		 */
 
-		if (pass == 1) {
-		    temp_cell = index++;
-		    n = label;
-		    while (n-- > 0)
-			if (*index == OLD)
-			    *index++ = NEW;
-			else
-			    index++;
-		    index = temp_cell;
-		}
+		if (pass == 1)
+		    index[OLD] = NEW;
 	    }
 
 	    if (pass == 2) {
@@ -221,16 +217,14 @@ CELL clump(int in_fd, int out_fd)
 
 		   Rast_put_row (out_fd, out_cell+1, CELL_TYPE);
 		 */
-		col = ncols;
-		temp_clump = cur_clump + 1;	/* skip left edge */
+		temp_clump = cur_clump;
 		temp_cell = out_cell;
 
-		while (col-- > 0)
-		    *temp_cell++ = index[*temp_clump++];
-
 		for (column = 0; column < ncols; column++) {
-		    if (out_cell[column] == 0)
-			Rast_set_null_value(&out_cell[column], 1, CELL_TYPE);
+		    temp_cell++;	/* skip left edge */
+		    *temp_cell = index2[index[*temp_clump++]];
+		    if (*temp_cell == 0)
+			Rast_set_null_value(temp_cell, 1, CELL_TYPE);
 		}
 		Rast_put_row(out_fd, out_cell, CELL_TYPE);
 	    }
