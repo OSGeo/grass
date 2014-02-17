@@ -1,6 +1,6 @@
 
 /*
- * \brief calculates dominance's diversity index
+ * \brief calculates richness diversity index
  *
  *  \AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
  *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
@@ -109,7 +109,7 @@ double calculate(struct area_entry *ad, int fd, double *result)
     CELL precCell;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
     int a = 0;			/* a=0 if all cells are null */
@@ -137,9 +137,6 @@ double calculate(struct area_entry *ad, int fd, double *result)
 	masked = TRUE;
     }
 
-    Rast_set_c_null_value(&precCell, 1);
-
-
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
@@ -149,6 +146,7 @@ double calculate(struct area_entry *ad, int fd, double *result)
 	}
 
 	buf = RLI_get_cell_raster_row(fd, j + ad->y, ad);
+	Rast_set_c_null_value(&precCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
 
@@ -158,9 +156,6 @@ double calculate(struct area_entry *ad, int fd, double *result)
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
 		a = 1;
-		if (Rast_is_null_value(&precCell, uc.t)) {
-		    precCell = corrCell;
-		}
 		if (corrCell != precCell) {
 		    if (albero == NULL) {
 			uc.val.c = precCell;
@@ -202,14 +197,13 @@ double calculate(struct area_entry *ad, int fd, double *result)
 
 		    ;
 		}
-		precCell = corrCell;
 	    }
-
+	    precCell = corrCell;
 	}
     }
 
     /*last closing */
-    if (a != 0) {
+    if (!(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.c = precCell;
 	    albero = avl_make(uc, (long)1);
@@ -268,7 +262,7 @@ double calculateD(struct area_entry *ad, int fd, double *result)
     DCELL precCell;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
     int a = 0;			/* a=0 if all cells are null */
@@ -295,8 +289,6 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 	masked = TRUE;
     }
 
-    Rast_set_d_null_value(&precCell, 1);
-
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
@@ -306,6 +298,7 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 	}
 
 	buf = RLI_get_dcell_raster_row(fd, j + ad->y, ad);
+	Rast_set_d_null_value(&precCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each dcell in the row */
 	    corrCell = buf[i + ad->x];
@@ -317,9 +310,6 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
 		a = 1;
 
-		if (Rast_is_null_value(&precCell, uc.t)) {
-		    precCell = corrCell;
-		}
 		if (corrCell != precCell) {
 		    if (albero == NULL) {
 			uc.val.dc = precCell;
@@ -361,15 +351,13 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 
 		    ;
 		}
-		precCell = corrCell;
 	    }
-
-
+	    precCell = corrCell;
 	}
     }
 
     /*last closing */
-    if (a != 0) {
+    if (!(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.dc = precCell;
 	    albero = avl_make(uc, (long)1);
@@ -430,7 +418,7 @@ double calculateF(struct area_entry *ad, int fd, double *result)
     FCELL precCell;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
     int a = 0;			/* a=0 if all cells are null */
@@ -457,9 +445,6 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 	masked = TRUE;
     }
 
-    Rast_set_f_null_value(&precCell, 1);
-
-
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
@@ -469,7 +454,7 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 	}
 
 	buf = RLI_get_fcell_raster_row(fd, j + ad->y, ad);
-
+	Rast_set_f_null_value(&precCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each fcell in the row */
 
@@ -481,9 +466,7 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
 		a = 1;
-		if (Rast_is_null_value(&precCell, uc.t)) {
-		    precCell = corrCell;
-		}
+
 		if (corrCell != precCell) {
 		    if (albero == NULL) {
 			uc.val.fc = precCell;
@@ -525,15 +508,13 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 
 		    ;
 		}
-		precCell = corrCell;
 	    }
-
-
+	    precCell = corrCell;
 	}
     }
 
     /*last closing */
-    if (a != 0) {
+    if (!(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.fc = precCell;
 	    albero = avl_make(uc, (long)1);

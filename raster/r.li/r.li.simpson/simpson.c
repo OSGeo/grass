@@ -1,31 +1,37 @@
-
-/*
- * \brief calculates Simpson's diversity index
+/****************************************************************************
  *
- *  \AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
- *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
+ * MODULE:       r.li.simpson
+ * AUTHOR(S):    Serena Pallecchi (original contributor)
+ *                student of Computer Science University of Pisa (Italy)
+ *               Commission from Faunalia Pontedera (PI) www.faunalia.it
+ *               Rewrite: Markus Metz
  *
- *   This program is free software under the GPL (>=v2)
- *   Read the COPYING file that comes with GRASS for details.
- *       
- */
-
-#include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/glocale.h>
+ * PURPOSE:      calculates Simpson's diversity index
+ * COPYRIGHT:    (C) 2007-2014 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <fcntl.h>
 #include <math.h>
 
-#include "../r.li.daemon/defs.h"
+#include <grass/gis.h>
+#include <grass/raster.h>
+#include <grass/glocale.h>
+
+#include "../r.li.daemon/daemon.h"
 #include "../r.li.daemon/avlDefs.h"
 #include "../r.li.daemon/avl.h"
-#include "../r.li.daemon/daemon.h"
 
-double calculate(struct area_entry *ad, int fd, double *result);
-double calculateD(struct area_entry *ad, int fd, double *result);
-double calculateF(struct area_entry *ad, int fd, double *result);
+/* template is shannon */
+
+int calculate(int fd, struct area_entry *ad, double *result);
+int calculateD(int fd, struct area_entry *ad, double *result);
+int calculateF(int fd, struct area_entry *ad, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -56,31 +62,27 @@ int main(int argc, char *argv[])
 
     return calculateIndex(conf->answer, simpson, NULL, raster->answer,
 			  output->answer);
-
 }
 
 int simpson(int fd, char **par, struct area_entry *ad, double *result)
 {
     int ris = RLI_OK;
     double indice = 0;
-    struct Cell_head hd;
-
-    Rast_get_cellhd(ad->raster, "", &hd);
 
     switch (ad->data_type) {
     case CELL_TYPE:
 	{
-	    ris = calculate(ad, fd, &indice);
+	    ris = calculate(fd, ad, &indice);
 	    break;
 	}
     case DCELL_TYPE:
 	{
-	    ris = calculateD(ad, fd, &indice);
+	    ris = calculateD(fd, ad, &indice);
 	    break;
 	}
     case FCELL_TYPE:
 	{
-	    ris = calculateF(ad, fd, &indice);
+	    ris = calculateF(fd, ad, &indice);
 	    break;
 	}
     default:
@@ -88,7 +90,6 @@ int simpson(int fd, char **par, struct area_entry *ad, double *result)
 	    G_fatal_error("data type unknown");
 	    return RLI_ERRORE;
 	}
-
     }
 
     if (ris != RLI_OK)
@@ -97,40 +98,33 @@ int simpson(int fd, char **par, struct area_entry *ad, double *result)
     *result = indice;
 
     return RLI_OK;
-
 }
 
 
-
-double calculate(struct area_entry *ad, int fd, double *result)
+int calculate(int fd, struct area_entry *ad, double *result)
 {
     CELL *buf;
     CELL corrCell;
     CELL precCell;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
-    int a = 0;			/* a=0 if all cells are null */
 
     long m = 0;
     long tot = 0;
     long zero = 0;
-    long totCorr = 0;
+    long totCorr = 1;
 
-    double indice = 0;
     double somma = 0;
     double p = 0;
-    double area = 0;
+    long area = 0;
     double t;
 
     avl_tree albero = NULL;
-
     AVL_table *array;
-
     generic_cell uc;
-
 
     uc.t = CELL_TYPE;
 
@@ -146,9 +140,6 @@ double calculate(struct area_entry *ad, int fd, double *result)
 	masked = TRUE;
     }
 
-    Rast_set_c_null_value(&precCell, 1);
-
-
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
@@ -158,70 +149,71 @@ double calculate(struct area_entry *ad, int fd, double *result)
 	}
 
 	buf = RLI_get_cell_raster_row(fd, j + ad->y, ad);
+	Rast_set_c_null_value(&precCell, 1);
+
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
-	    area++;
 	    corrCell = buf[i + ad->x];
 
 	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
 		Rast_set_c_null_value(&corrCell, 1);
-		area--;
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
-		a = 1;
-		if (Rast_is_null_value(&precCell, uc.t)) {
-		    precCell = corrCell;
-		}
-		if (corrCell != precCell) {
-		    if (albero == NULL) {
-			uc.val.c = precCell;
-			albero = avl_make(uc, totCorr);
-			if (albero == NULL) {
-			    G_fatal_error("avl_make error");
-			    return RLI_ERRORE;
-			}
-			else
-			    m++;
-		    }
-		    else {
-			uc.val.c = precCell;
-			ris = avl_add(&albero, uc, totCorr);
-			switch (ris) {
-			case AVL_ERR:
-			    {
-				G_fatal_error("avl_add error");
-				return RLI_ERRORE;
-			    }
-			case AVL_ADD:
-			    {
-				m++;
-				break;
-			    }
-			case AVL_PRES:
-			    {
-				break;
-			    }
-			default:
-			    {
-				G_fatal_error("avl_make unknown error");
-				return RLI_ERRORE;
-			    }
-			}
-		    }
-		    totCorr = 1;
-		}		/* endif not equal cells */
-		else {		/*equal cells */
-
-		    totCorr++;
-		}
-		precCell = corrCell;
+		area++;
 	    }
 
+	    if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		corrCell == precCell) {
+
+		totCorr++;
+	    }
+	    else if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		     corrCell != precCell) {
+		
+		/* add precCell to search tree */
+		if (albero == NULL) {
+		    uc.val.c = precCell;
+		    albero = avl_make(uc, totCorr);
+		    if (albero == NULL) {
+			G_fatal_error("avl_make error");
+			return RLI_ERRORE;
+		    }
+
+		    m++;
+		}
+		else {
+		    uc.val.c = precCell;
+		    ris = avl_add(&albero, uc, totCorr);
+		    switch (ris) {
+		    case AVL_ERR:
+			{
+			    G_fatal_error("avl_add error");
+			    return RLI_ERRORE;
+			}
+		    case AVL_ADD:
+			{
+			    m++;
+			    break;
+			}
+		    case AVL_PRES:
+			{
+			    break;
+			}
+		    default:
+			{
+			    G_fatal_error("avl_make unknown error");
+			    return RLI_ERRORE;
+			}
+		    }
+		}
+		totCorr = 1;
+	    }		/* endif not equal cells */
+	    precCell = corrCell;
 	}
     }
 
     /*last closing */
-    if (a != 0) {
+    if (area > 0 && !(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.c = precCell;
 	    albero = avl_make(uc, totCorr);
@@ -257,68 +249,65 @@ double calculate(struct area_entry *ad, int fd, double *result)
 	    }
 	}
     }
-    array = G_malloc(m * sizeof(AVL_tableRow));
-    if (array == NULL) {
-	G_fatal_error("malloc array failed");
-	return RLI_ERRORE;
-    }
-    tot = avl_to_array(albero, zero, array);
-    if (tot != m) {
-	G_warning("avl_to_array unaspected value. the result could be wrong");
-	return RLI_ERRORE;
-    }
 
-    /* claculate index summary */
-    for (i = 0; i < m; i++) {
-	t = (double)(array[i]->tot);
-	p = t / area;
-	somma = somma + (p * p);
+    if (area > 0) {
+	array = G_malloc(m * sizeof(AVL_tableRow));
+	if (array == NULL) {
+	    G_fatal_error("malloc array failed");
+	    return RLI_ERRORE;
+	}
+	tot = avl_to_array(albero, zero, array);
+	if (tot != m) {
+	    G_warning("avl_to_array unexpected value. the result could be wrong");
+	    return RLI_ERRORE;
+	}
+
+	/* calculate index summary */
+	for (i = 0; i < m; i++) {
+	    t = (double)(array[i]->tot);
+	    p = t / area;
+	    somma = somma + (p * p);
+	}
+	G_free(array);
+
+	*result = 1 - somma;
     }
+    else
+	Rast_set_d_null_value(result, 1);
 
-    if (a != 0) {
-	indice = 1 - somma;
-    }
-    else			/*if a is 0, that is all cell are null, i put index=-1 */
-	indice = (double)(-1);
-
-
-    G_free(array);
-    if (masked)
+    avl_destroy(albero);
+    if (masked) {
+	close(mask_fd);
 	G_free(mask_buf);
-
-    *result = indice;
+    }
 
     return RLI_OK;
 }
 
 
-double calculateD(struct area_entry *ad, int fd, double *result)
+int calculateD(int fd, struct area_entry *ad, double *result)
 {
     DCELL *buf;
     DCELL corrCell;
     DCELL precCell;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
-    int a = 0;			/* a=0 if all cells are null */
 
     long m = 0;
     long tot = 0;
     long zero = 0;
-    long totCorr = 0;
+    long totCorr = 1;
 
-    double indice = 0;
     double somma = 0;
     double p = 0;
-    double area = 0;
+    long area = 0;
     double t;
 
     avl_tree albero = NULL;
-
     AVL_table *array;
-
     generic_cell uc;
 
     uc.t = DCELL_TYPE;
@@ -329,13 +318,11 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 	    return RLI_ERRORE;
 	mask_buf = G_malloc(ad->cl * sizeof(int));
 	if (mask_buf == NULL) {
-	    G_fatal_error("malloc mask_buffailed");
+	    G_fatal_error("malloc mask_buf failed");
 	    return RLI_ERRORE;
 	}
 	masked = TRUE;
     }
-
-    Rast_set_d_null_value(&precCell, 1);
 
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
@@ -346,72 +333,71 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 	}
 
 	buf = RLI_get_dcell_raster_row(fd, j + ad->y, ad);
+	Rast_set_d_null_value(&precCell, 1);
 
-	for (i = 0; i < ad->cl; i++) {	/* for each dcell in the row */
-	    area++;
+	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
 
-	    if (masked && mask_buf[i + ad->x] == 0) {
+	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
 		Rast_set_d_null_value(&corrCell, 1);
-		area--;
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
-		a = 1;
-
-		if (Rast_is_null_value(&precCell, uc.t)) {
-		    precCell = corrCell;
-		}
-		if (corrCell != precCell) {
-		    if (albero == NULL) {
-			uc.val.dc = precCell;
-			albero = avl_make(uc, totCorr);
-			if (albero == NULL) {
-			    G_fatal_error("avl_make error");
-			    return RLI_ERRORE;
-			}
-			m++;
-		    }
-		    else {
-			uc.val.dc = precCell;
-			ris = avl_add(&albero, uc, totCorr);
-			switch (ris) {
-			case AVL_ERR:
-			    {
-				G_fatal_error("avl_add error");
-				return RLI_ERRORE;
-			    }
-			case AVL_ADD:
-			    {
-				m++;
-				break;
-			    }
-			case AVL_PRES:
-			    {
-				break;
-			    }
-			default:
-			    {
-				G_fatal_error("avl_make unknown error");
-				return RLI_ERRORE;
-			    }
-			}
-		    }
-		    totCorr = 1;
-		}		/* endif not equal dcells */
-		else {		/*equal dcells */
-
-		    totCorr++;
-		}
-		precCell = corrCell;
+		area++;
 	    }
 
+	    if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		corrCell == precCell) {
 
+		totCorr++;
+	    }
+	    else if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		     corrCell != precCell) {
+		
+		/* add precCell to search tree */
+		if (albero == NULL) {
+		    uc.val.dc = precCell;
+		    albero = avl_make(uc, totCorr);
+		    if (albero == NULL) {
+			G_fatal_error("avl_make error");
+			return RLI_ERRORE;
+		    }
+
+		    m++;
+		}
+		else {
+		    uc.val.dc = precCell;
+		    ris = avl_add(&albero, uc, totCorr);
+		    switch (ris) {
+		    case AVL_ERR:
+			{
+			    G_fatal_error("avl_add error");
+			    return RLI_ERRORE;
+			}
+		    case AVL_ADD:
+			{
+			    m++;
+			    break;
+			}
+		    case AVL_PRES:
+			{
+			    break;
+			}
+		    default:
+			{
+			    G_fatal_error("avl_make unknown error");
+			    return RLI_ERRORE;
+			}
+		    }
+		}
+		totCorr = 1;
+	    }		/* endif not equal cells */
+	    precCell = corrCell;
 	}
     }
 
     /*last closing */
-    if (a != 0) {
+    if (area > 0 && !(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.dc = precCell;
 	    albero = avl_make(uc, totCorr);
@@ -447,67 +433,65 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 	    }
 	}
     }
-    array = G_malloc(m * sizeof(AVL_tableRow));
-    if (array == NULL) {
-	G_fatal_error("malloc array failed");
-	return RLI_ERRORE;
-    }
-    tot = avl_to_array(albero, zero, array);
-    if (tot != m) {
-	G_warning("avl_to_array unaspected value. the result could be wrong");
-	return RLI_ERRORE;
-    }
 
-    /* claculate index summary */
-    for (i = 0; i < m; i++) {
-	t = (double)(array[i]->tot);
-	p = t / area;
-	somma = somma + (p * p);
-    }
+    if (area > 0) {
+	array = G_malloc(m * sizeof(AVL_tableRow));
+	if (array == NULL) {
+	    G_fatal_error("malloc array failed");
+	    return RLI_ERRORE;
+	}
+	tot = avl_to_array(albero, zero, array);
+	if (tot != m) {
+	    G_warning("avl_to_array unexpected value. the result could be wrong");
+	    return RLI_ERRORE;
+	}
 
-    if (a != 0) {		/*if a is 0, that is all cell are null, i put index=-1 */
-	indice = 1 - somma;
+	/* calculate index summary */
+	for (i = 0; i < m; i++) {
+	    t = (double)(array[i]->tot);
+	    p = t / area;
+	    somma = somma + (p * p);
+	}
+	G_free(array);
+
+	*result = 1 - somma;
     }
     else
-	indice = (double)(-1);
+	Rast_set_d_null_value(result, 1);
 
-    G_free(array);
-    if (masked)
+    avl_destroy(albero);
+    if (masked) {
+	close(mask_fd);
 	G_free(mask_buf);
+    }
 
-    *result = indice;
     return RLI_OK;
 }
 
 
-
-double calculateF(struct area_entry *ad, int fd, double *result)
+int calculateF(int fd, struct area_entry *ad, double *result)
 {
     FCELL *buf;
     FCELL corrCell;
     FCELL precCell;
 
     int i, j;
-    int mask_fd = -1, *mask_buf;
+    int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
-    int a = 0;			/* a=0 if all cells are null */
 
     long m = 0;
     long tot = 0;
     long zero = 0;
-    long totCorr = 0;
+    long totCorr = 1;
 
-    double indice = 0;
     double somma = 0;
     double p = 0;
-    double area = 0;
+    long area = 0;
     double t;
 
     avl_tree albero = NULL;
-
     AVL_table *array;
-
     generic_cell uc;
 
     uc.t = FCELL_TYPE;
@@ -524,9 +508,6 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 	masked = TRUE;
     }
 
-    Rast_set_f_null_value(&precCell, 1);
-
-
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
@@ -536,73 +517,71 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 	}
 
 	buf = RLI_get_fcell_raster_row(fd, j + ad->y, ad);
+	Rast_set_f_null_value(&precCell, 1);
 
-
-	for (i = 0; i < ad->cl; i++) {	/* for each fcell in the row */
-
-	    area++;
+	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
 
-	    if (masked && mask_buf[i + ad->x] == 0) {
+	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
 		Rast_set_f_null_value(&corrCell, 1);
-		area--;
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
-		a = 1;
-		if (Rast_is_null_value(&precCell, uc.t)) {
-		    precCell = corrCell;
-		}
-		if (corrCell != precCell) {
-		    if (albero == NULL) {
-			uc.val.fc = precCell;
-			albero = avl_make(uc, totCorr);
-			if (albero == NULL) {
-			    G_fatal_error("avl_make error");
-			    return RLI_ERRORE;
-			}
-			m++;
-		    }
-		    else {
-			uc.val.fc = precCell;
-			ris = avl_add(&albero, uc, totCorr);
-			switch (ris) {
-			case AVL_ERR:
-			    {
-				G_fatal_error("avl_add error");
-				return RLI_ERRORE;
-			    }
-			case AVL_ADD:
-			    {
-				m++;
-				break;
-			    }
-			case AVL_PRES:
-			    {
-				break;
-			    }
-			default:
-			    {
-				G_fatal_error("avl_make unknown error");
-				return RLI_ERRORE;
-			    }
-			}
-		    }
-		    totCorr = 1;
-		}		/* endif not equal fcells */
-		else {		/*equal fcells */
-
-		    totCorr++;
-		}
-		precCell = corrCell;
+		area++;
 	    }
 
+	    if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		corrCell == precCell) {
 
+		totCorr++;
+	    }
+	    else if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		     corrCell != precCell) {
+		
+		/* add precCell to search tree */
+		if (albero == NULL) {
+		    uc.val.fc = precCell;
+		    albero = avl_make(uc, totCorr);
+		    if (albero == NULL) {
+			G_fatal_error("avl_make error");
+			return RLI_ERRORE;
+		    }
+
+		    m++;
+		}
+		else {
+		    uc.val.fc = precCell;
+		    ris = avl_add(&albero, uc, totCorr);
+		    switch (ris) {
+		    case AVL_ERR:
+			{
+			    G_fatal_error("avl_add error");
+			    return RLI_ERRORE;
+			}
+		    case AVL_ADD:
+			{
+			    m++;
+			    break;
+			}
+		    case AVL_PRES:
+			{
+			    break;
+			}
+		    default:
+			{
+			    G_fatal_error("avl_make unknown error");
+			    return RLI_ERRORE;
+			}
+		    }
+		}
+		totCorr = 1;
+	    }		/* endif not equal cells */
+	    precCell = corrCell;
 	}
     }
 
     /*last closing */
-    if (a != 0) {
+    if (area > 0 && !(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.fc = precCell;
 	    albero = avl_make(uc, totCorr);
@@ -639,36 +618,36 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 	}
     }
 
-    array = G_malloc(m * sizeof(AVL_tableRow));
-    if (array == NULL) {
-	G_fatal_error("malloc array failed");
-	return RLI_ERRORE;
-    }
-    tot = avl_to_array(albero, zero, array);
-    if (tot != m) {
-	G_warning("avl_to_array unaspected value. the result could be wrong");
-	return RLI_ERRORE;
-    }
+    if (area > 0) {
+	array = G_malloc(m * sizeof(AVL_tableRow));
+	if (array == NULL) {
+	    G_fatal_error("malloc array failed");
+	    return RLI_ERRORE;
+	}
+	tot = avl_to_array(albero, zero, array);
+	if (tot != m) {
+	    G_warning("avl_to_array unexpected value. the result could be wrong");
+	    return RLI_ERRORE;
+	}
 
-    /* calculate index summary */
-    for (i = 0; i < m; i++) {
-	t = (double)(array[i]->tot);
-	p = t / area;
-	somma = somma + (p * p);
-    }
+	/* calculate index summary */
+	for (i = 0; i < m; i++) {
+	    t = (double)(array[i]->tot);
+	    p = t / area;
+	    somma = somma + (p * p);
+	}
+	G_free(array);
 
-    if (a != 0) {		/*if a is 0, that is all cell are null, i put index=-1 */
-	indice = 1 - somma;
+	*result = 1 - somma;
     }
     else
-	indice = (double)(-1);
+	Rast_set_d_null_value(result, 1);
 
-
-    G_free(array);
-    if (masked)
+    avl_destroy(albero);
+    if (masked) {
+	close(mask_fd);
 	G_free(mask_buf);
+    }
 
-
-    *result = indice;
     return RLI_OK;
 }

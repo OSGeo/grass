@@ -53,20 +53,17 @@ int main(int argc, char *argv[])
 
     return calculateIndex(conf->answer, shape_index, NULL, raster->answer,
 			  output->answer);
-
 }
 
 int shape_index(int fd, char **par, struct area_entry *ad, double *result)
 {
-
-
     double area;
     struct Cell_head hd;
     CELL complete_value;
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
     int mask_fd = -1, null_count = 0;
     int i = 0, k = 0;
-    int *mask_buf;
+    int *mask_buf = NULL;
 
     Rast_set_c_null_value(&complete_value, 1);
     Rast_get_cellhd(ad->raster, "", &hd);
@@ -108,5 +105,6 @@ int shape_index(int fd, char **par, struct area_entry *ad, double *result)
 	(ad->rl * ad->cl - null_count);
 
     *result = area;
+
     return 1;
 }

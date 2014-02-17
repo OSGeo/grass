@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.mps</em> (mean patch size) calculates the mean size of the patches
-in the sampling area as:<br>
+<em>r.li.mps</em> (mean patch size) calculates the mean size of the 
+patches in the sampling area as:<br>
 <img src="rlimps_formula.png" alt="rliMps formula"><br>
 
 with:
@@ -10,6 +10,12 @@ with:
   <li><b>Npatch</b>: number of patches</li>
 </ul>
 
+The unit of the mean size is hectare.
+
+<p>
+This index is calculated using a 4 neighbour algorithm, diagonal cells 
+are ignored when tracing a patch.
+
 <h2>NOTES</h2>
 
 Do not use absolute path names for the <b>output</b> map/file.
@@ -17,14 +23,8 @@ If the "moving window" method was selected in <b>r.li.setup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
-<!-- TODO: verify next: -->
-If the input raster contains NULL value cells, <em>r.li.mps</em>
-returns 0 for these cells. <br>
-If you want to change these 0 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=0 input=my_map
-</pre></div>
-after index calculation.
+If the sample area contains only NULL value cells, <em>r.li.mps</em>
+returns 0 (zero). <br>
 
 <h2>EXAMPLES</h2>
 To calculate mean path size index on map <em>my_map</em>, using
@@ -52,8 +52,8 @@ analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
-Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
-Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+Michael Shapiro - CERL (patch identification)<br>
+Markus Metz (statistics)
 
 <p>
 <i>Last changed: $Date$</i>

@@ -18,13 +18,8 @@ output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
 <!-- TODO: verify next: -->
-If the input raster map contains only NULL values then <em>r.li.dominance</em>
-returns -1.<br>
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=-1 input=my_map
-</pre></div>
-after index calculation.
+If the input raster map contains only NULL values then 
+<em>r.li.dominance</em> returns NULL.<br>
 
 <h2>EXAMPLES</h2>
 To calculate the dominance diversity index on map <em>my_map</em>, using
@@ -53,7 +48,8 @@ Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a
 
 <h2>AUTHORS</h2>
 Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
-Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)<br>
+Markus Metz
 
 <p>
 <i>Last changed: $Date$</i></p>

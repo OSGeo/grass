@@ -116,7 +116,6 @@ int edgedensity(int fd, char **valore, struct area_entry *ad, double *result)
 
 int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 {
-    double indice = 0;
     double e = 0;
     double somma = 0;
     double area = 0;
@@ -204,9 +203,8 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    buf_inf = buf_null;
 	}
 
-	/*read mask if needed */
+	/* read mask if needed */
 	if (masked) {
-
 	    mask_tmp = mask_sup;
 	    mask_sup = mask_corr;
 	    mask_corr = mask_inf;
@@ -230,16 +228,15 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	Rast_set_c_null_value(&prevCell, 1);
 	Rast_set_c_null_value(&corrCell, 1);
 
-	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
-	    area++;
+	for (i = 0; i < ad->cl; i++) {
 	    corrCell = buf_corr[i + ad->x];
 
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
-		area--;
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
+		area++;
 		if ((i + 1) == ad->cl)	/*last cell of the row */
 		    Rast_set_c_null_value(&nextCell, 1);
 		else if (masked && mask_corr[i + 1 + ad->x] == 0)
@@ -258,7 +255,6 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 		    infCell = buf_inf[i + ad->x];
 
 		/* calculate how many edges the cell has */
-
 		if ((Rast_is_null_value(&prevCell, CELL_TYPE)) ||
 		    (corrCell != prevCell)) {
 		    bordoCorr++;
@@ -274,13 +270,12 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 		    bordoCorr++;
 		}
 
-
 		if ((Rast_is_null_value(&nextCell, CELL_TYPE)) ||
 		    (corrCell != nextCell)) {
 		    bordoCorr++;
 		}
 
-		/*store the result in the tree */
+		/* store the result in the tree */
 		if (albero == NULL) {
 		    c1.val.c = corrCell;
 		    albero = avl_make(c1, bordoCorr);
@@ -316,18 +311,14 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 			}
 		    }
 		}
-
 		bordoCorr = 0;
 	    }
-
 	    prevCell = corrCell;
 	}
     }
 
     /* calculate index */
-    if (area == 0)
-	indice = -1;
-    else {
+    if (area > 0) {
 	if (valore != NULL) {	/* only 1 class */
 	    char *sval;
 	    int val;
@@ -340,10 +331,8 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    c1.val.c = cella;
 	    e = (double)howManyCell(albero, c1);
 	    somma = e;
-
 	}
 	else {			/* all classes */
-
 	    array = G_malloc(m * sizeof(AVL_tableRow));
 	    if (array == NULL) {
 		G_fatal_error("malloc array failed");
@@ -361,10 +350,11 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    G_free(array);
 	}
 
-	indice = somma * 10000 / area;
+	*result = somma * 10000 / area;
     }
+    else
+	Rast_set_d_null_value(result);
 
-    *result = indice;
     if (masked) {
 	close(mask_fd);
 	G_free(mask_inf);
@@ -380,7 +370,6 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 
 int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 {
-    double indice = 0;
     double e = 0;
     double somma = 0;
     double area = 0;
@@ -472,7 +461,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	    buf_inf = buf_null;
 	}
 
-	/*read mask if needed */
+	/* read mask if needed */
 	if (masked) {
 
 	    mask_tmp = mask_sup;
@@ -499,17 +488,14 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	Rast_set_d_null_value(&corrCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
-
-	    area++;
 	    corrCell = buf_corr[i + ad->x];
 
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
-		area--;
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
-
+		area++;
 		if ((i + 1) == ad->cl)	/*last cell of the row */
 		    Rast_set_d_null_value(&nextCell, 1);
 		else if (masked && mask_corr[i + 1 + ad->x] == 0)
@@ -549,7 +535,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 		    bordoCorr++;
 		}
 
-		/*store the result in the tree */
+		/* store the result in the tree */
 		if (albero == NULL) {
 		    c1.val.dc = corrCell;
 		    albero = avl_make(c1, bordoCorr);
@@ -585,19 +571,14 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 			}
 		    }
 		}
-
 		bordoCorr = 0;
-
 	    }
-
 	    prevCell = corrCell;
 	}
     }
 
     /* calculate index */
-    if (area == 0)
-	indice = -1;
-    else {
+    if (area > 0) {
 	if (valore != NULL) {	/* only 1 class */
 	    char *sval;
 	    double val;
@@ -628,10 +609,11 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	    }
 	    G_free(array);
 	}
-	indice = somma * 10000 / area;
+	*result = somma * 10000 / area;
     }
+    else
+	Rast_set_d_null_value(result);
 
-    *result = indice;
     if (masked) {
 	close(mask_fd);
 	G_free(mask_inf);
@@ -647,7 +629,6 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 
 int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 {
-    double indice = 0;
     double e = 0;
     double somma = 0;
     double area = 0;
@@ -731,16 +712,14 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	    buf_sup = RLI_get_fcell_raster_row(fd, j - 1 + ad->y, ad);
 
 	if ((j + 1) < ad->rl) {	/* not last row */
-
 	    buf_inf = RLI_get_fcell_raster_row(fd, 1 + j + ad->y, ad);
 	}
 	else {
 	    buf_inf = buf_null;
 	}
 
-	/*read mask if needed */
+	/* read mask if needed */
 	if (masked) {
-
 	    mask_tmp = mask_sup;
 	    mask_sup = mask_corr;
 	    mask_corr = mask_inf;
@@ -765,16 +744,14 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	Rast_set_f_null_value(&corrCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
-	    area++;
 	    corrCell = buf_corr[i + ad->x];
 
 	    if (masked && mask_corr[i + ad->x] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
-		area--;
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
-
+		area++;
 		if ((i + 1) == ad->cl)	/*last cell of the row */
 		    Rast_set_f_null_value(&nextCell, 1);
 		else if (masked && mask_corr[i + 1 + ad->x] == 0)
@@ -792,8 +769,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 		else
 		    infCell = buf_inf[i + ad->x];
 
-		/* calculate how many edge the cell has */
-
+		/* calculate how many edges the cell has */
 		if ((Rast_is_null_value(&prevCell, FCELL_TYPE)) ||
 		    (corrCell != prevCell)) {
 		    bordoCorr++;
@@ -814,9 +790,9 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 		    bordoCorr++;
 		}
 
-		/*store the result in the tree */
+		/* store the result in the tree */
 		if (albero == NULL) {
-		    c1.val.c = corrCell;
+		    c1.val.fc = corrCell;
 		    albero = avl_make(c1, bordoCorr);
 		    if (albero == NULL) {
 			G_fatal_error("avl_make error");
@@ -825,7 +801,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 		    m++;
 		}
 		else {
-		    c1.val.c = corrCell;
+		    c1.val.fc = corrCell;
 		    ris = avl_add(&albero, c1, bordoCorr);
 
 		    switch (ris) {
@@ -850,19 +826,14 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 			}
 		    }
 		}
-
 		bordoCorr = 0;
-
 	    }
-
 	    prevCell = corrCell;
 	}
     }
 
     /* calculate index */
-    if (area == 0)
-	indice = -1;
-    else {
+    if (area > 0) {
 	if (valore != NULL) {	/* only 1 class */
 	    char *sval;
 	    float val;
@@ -894,10 +865,11 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	    }
 	    G_free(array);
 	}
-	indice = somma * 10000 / area;
+	*result = somma * 10000 / area;
     }
+    else
+	Rast_set_d_null_value(result);
 
-    *result = indice;
     if (masked) {
 	close(mask_fd);
 	G_free(mask_inf);
