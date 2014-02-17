@@ -390,6 +390,7 @@ int main(int argc, char **argv)
     case RANGE:
 	for (i = 0; i < ncats; i++)
 	    result[i] = max[i] - min[i];
+	break;
     case VARIANCE1:
 	for (i = 0; i < ncats; i++) {
 	    double n = count[i];
