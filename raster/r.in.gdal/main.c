@@ -1111,8 +1111,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     }
 
     /* colors in raster attribute table? */
-    
-    if (!have_colors && (gdal_rat = GDALGetDefaultRAT(hBand)) != NULL) {
+    gdal_rat = GDALGetDefaultRAT(hBand);
+    if (!have_colors && gdal_rat != NULL) {
 	nrows = GDALRATGetRowCount(gdal_rat);
 	ncols = GDALRATGetColumnCount(gdal_rat);
 	
@@ -1261,6 +1261,68 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    Rast_make_grey_scale_colors(&colors, min, max);	/* image range */
 	    Rast_write_colors((char *)output, G_mapset(), &colors);
 	    Rast_free_colors(&colors);
+	}
+    }
+    
+    /* categories in raster attribute table? */
+    
+    if (gdal_rat != NULL) {
+	nrows = GDALRATGetRowCount(gdal_rat);
+	ncols = GDALRATGetColumnCount(gdal_rat);
+	
+	if (nrows > 0 && ncols > 0) {
+	    int minc, maxc, minmaxc, namec;
+	    GDALRATFieldUsage field_use;
+	    DCELL val1, val2;
+	    struct Categories cats;
+	    const char *label;
+
+	    minc = maxc = minmaxc = namec = -1;
+	    for (indx = 0; indx < ncols; indx++) {
+		 field_use = GDALRATGetUsageOfCol(gdal_rat, indx);
+		 
+		 if (field_use == GFU_Min)
+		    minc = indx;
+		 else if (field_use == GFU_Max)
+		    maxc = indx;
+		 else if (field_use == GFU_MinMax)
+		    minmaxc = indx;
+		 else if (field_use == GFU_Name)
+		    namec = indx;
+	    }
+
+	    if (namec >= 0 && minmaxc >= 0) {
+		Rast_init_cats("", &cats);
+
+		/* fetch labels */
+		for (indx = 0; indx < nrows; indx++) {
+		    val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minmaxc);
+		    val2 = val1;
+		    label = GDALRATGetValueAsString(gdal_rat, indx, namec);
+		    
+		    if (label)
+			Rast_set_d_cat(&val1, &val2, label, &cats);
+		}
+		Rast_write_cats(output, &cats);
+
+		Rast_free_cats(&cats);
+	    }
+	    else if (namec >= 0 && minc >= 0 && maxc >= 0) {
+		Rast_init_cats("", &cats);
+
+		/* fetch labels */
+		for (indx = 0; indx < nrows; indx++) {
+		    val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minc);
+		    val2 = GDALRATGetValueAsDouble(gdal_rat, indx, maxc);
+		    label = GDALRATGetValueAsString(gdal_rat, indx, namec);
+		    
+		    if (label)
+			Rast_set_d_cat(&val1, &val2, label, &cats);
+		}
+		Rast_write_cats(output, &cats);
+
+		Rast_free_cats(&cats);
+	    }
 	}
     }
 
