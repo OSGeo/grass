@@ -146,7 +146,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     if (area > 0)
 	*result = somma / area;
     else
-	Rast_set_d_null_value(result);
+	Rast_set_d_null_value(result, 1);
 
     if (masked) {
 	close(mask_fd);
@@ -206,7 +206,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     if (area > 0)
 	*result = somma / area;
     else
-	Rast_set_d_null_value(result);
+	Rast_set_d_null_value(result, 1);
 
     if (masked) {
 	close(mask_fd);
@@ -265,7 +265,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     if (area > 0)
 	*result = somma / area;
     else
-	Rast_set_d_null_value(result);
+	Rast_set_d_null_value(result, 1);
 
     if (masked) {
 	close(mask_fd);

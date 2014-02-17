@@ -353,7 +353,7 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	*result = somma * 10000 / area;
     }
     else
-	Rast_set_d_null_value(result);
+	Rast_set_d_null_value(result, 1);
 
     if (masked) {
 	close(mask_fd);
@@ -612,7 +612,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	*result = somma * 10000 / area;
     }
     else
-	Rast_set_d_null_value(result);
+	Rast_set_d_null_value(result, 1);
 
     if (masked) {
 	close(mask_fd);
@@ -868,7 +868,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	*result = somma * 10000 / area;
     }
     else
-	Rast_set_d_null_value(result);
+	Rast_set_d_null_value(result, 1);
 
     if (masked) {
 	close(mask_fd);
