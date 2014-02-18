@@ -28,6 +28,7 @@
 
 /* template is shannon */
 
+rli_func renyi;
 int calculate(int fd, struct area_entry *ad, char **par, double *result);
 int calculateD(int fd, struct area_entry *ad, char **par, double *result);
 int calculateF(int fd, struct area_entry *ad, char **par, double *result);
@@ -67,7 +68,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (atoi(alpha->answer) == 1) {
+    if (atof(alpha->answer) == 1) {
 	G_fatal_error
 	    ("If alpha = 1 Renyi index is not defined. (Ricotta et al., 2003, Environ. Model. Softw.)");
 	exit(RLI_ERRORE);
@@ -275,7 +276,7 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result)
 	double alpha;
 	double pi;
 	double t;
-	double sum;
+	double sum, sum2;
 
 	alpha = atof(par[0]);
 
@@ -292,13 +293,25 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result)
 
 	/* calculate renyi index */
 	sum = 0;
+	sum2 = 0;
 	for (i = 0; i < m; i++) {
 	    t = array[i]->tot;
 	    pi = t / area;
 	    sum += pow(pi, alpha);
+	    sum2 += pi;
 	}
 	G_free(array);
-	
+
+	/* correction for numerical instability */
+	if (sum2 != 1)
+	    sum += 1 - sum2;
+
+	if ((alpha < 1 && sum < 1) || (alpha > 1 && sum > 1)) {
+	    G_warning("Renyi index calculation reached numerical instability. "
+	              "This can happen with alpha close to 1. The result will be set to zero.");
+	    sum = 1;
+	}
+
 	*result = (1 / (1 - alpha)) * log(sum);
     }
     else
@@ -464,7 +477,7 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
 	double alpha;
 	double pi;
 	double t;
-	double sum;
+	double sum, sum2;
 
 	alpha = atof(par[0]);
 
@@ -481,13 +494,25 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
 
 	/* calculate renyi index */
 	sum = 0;
+	sum2 = 0;
 	for (i = 0; i < m; i++) {
 	    t = array[i]->tot;
 	    pi = t / area;
 	    sum += pow(pi, alpha);
+	    sum += pi;
 	}
 	G_free(array);
-	
+
+	/* correction for numerical instability */
+	if (sum2 != 1)
+	    sum += 1 - sum2;
+
+	if ((alpha < 1 && sum < 1) || (alpha > 1 && sum > 1)) {
+	    G_warning("Renyi index calculation reached numerical instability. "
+	              "This can happen with alpha close to 1. The result will be set to zero.");
+	    sum = 1;
+	}
+
 	*result = (1 / (1 - alpha)) * log(sum);
     }
     else
@@ -653,7 +678,7 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
 	double alpha;
 	double pi;
 	double t;
-	double sum;
+	double sum, sum2;
 
 	alpha = atof(par[0]);
 
@@ -670,13 +695,25 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
 
 	/* calculate renyi index */
 	sum = 0;
+	sum2 = 0;
 	for (i = 0; i < m; i++) {
 	    t = array[i]->tot;
 	    pi = t / area;
 	    sum += pow(pi, alpha);
+	    sum2 += pi;
 	}
 	G_free(array);
-	
+
+	/* correction for numerical instability */
+	if (sum2 != 1)
+	    sum += 1 - sum2;
+
+	if ((alpha < 1 && sum < 1) || (alpha > 1 && sum > 1)) {
+	    G_warning("Renyi index calculation reached numerical instability. "
+	              "This can happen with alpha close to 1. The result will be set to zero.");
+	    sum = 1;
+	}
+
 	*result = (1 / (1 - alpha)) * log(sum);
     }
     else

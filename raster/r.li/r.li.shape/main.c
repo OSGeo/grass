@@ -23,6 +23,8 @@
 #include <grass/glocale.h>
 #include "../r.li.daemon/daemon.h"
 
+rli_func shape_index;
+
 int main(int argc, char *argv[])
 {
     struct Option *raster, *conf, *output;

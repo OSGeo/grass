@@ -29,6 +29,7 @@
 
 /* template for dominance, renyi, pielou, simpson */
 
+rli_func shannon;
 int calculate(int fd, struct area_entry *ad, double *result);
 int calculateD(int fd, struct area_entry *ad, double *result);
 int calculateF(int fd, struct area_entry *ad, double *result);

@@ -26,6 +26,7 @@
 #define _PRES 1
 #define _ERR -1
 
+rli_func contrastWeightedEdgeDensity;
 int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	      double *result);
 int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,

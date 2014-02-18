@@ -21,6 +21,7 @@
 #include "../r.li.daemon/avl.h"
 #include "../r.li.daemon/daemon.h"
 
+rli_func edgedensity;
 int calculate(int fd, struct area_entry *ad, char **valore, double *result);
 int calculateD(int fd, struct area_entry *ad, char **valore, double *result);
 int calculateF(int fd, struct area_entry *ad, char **valore, double *result);
