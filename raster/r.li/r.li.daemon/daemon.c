@@ -195,6 +195,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
     double rel_x, rel_y, rel_rl, rel_cl;
     double sf_n, sf_s, sf_e, sf_w;
     int sf_x, sf_y, sf_rl, sf_cl;
+    int sa_x, sa_y, sa_rl, sa_cl;
     int size;
 
     if (stat(path, &s) != 0)
@@ -220,14 +221,28 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
     rel_rl = atof(strtok(NULL, "|"));
     rel_cl = atof(strtok(NULL, "\n"));
 
-    /* find raster map */
-    Rast_get_cellhd(raster, "", &cellhd);
+    /* use current region ! */
+    Rast_get_window(&cellhd);
 
     /* calculate absolute sampling frame definition */
     sf_x = (int)rint(cellhd.cols * rel_x);
     sf_y = (int)rint(cellhd.rows * rel_y);
     sf_rl = (int)rint(cellhd.rows * rel_rl);
     sf_cl = (int)rint(cellhd.cols * rel_cl);
+    
+    /* sanity check */
+    if (sf_x < 0)
+	sf_x = 0;
+    if (sf_y < 0)
+	sf_y = 0;
+    if (sf_x > cellhd.cols)
+	sf_x = cellhd.cols;
+    if (sf_y > cellhd.rows)
+	sf_y = cellhd.rows;
+    if (sf_rl > cellhd.rows - sf_y)
+	sf_rl = cellhd.rows - sf_y;
+    if (sf_cl > cellhd.cols - sf_x)
+	sf_cl = cellhd.cols - sf_x;
 
     /* calculate sample frame boundaries */
     sf_n = cellhd.north - (cellhd.ns_res * sf_y);
@@ -250,19 +265,28 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 
 	    if (rel_sa_x == -1.0 && rel_sa_y == -1.0) {
 		/* runtime disposition */
-		int sa_rl, sa_cl;
 
 		sa_rl = (int)rint(cellhd.rows * rel_sa_rl);
 		sa_cl = (int)rint(cellhd.cols * rel_sa_cl);
+
+		/* sanity check */
+		if (sa_rl > cellhd.rows - sf_y)
+		    sa_rl = cellhd.rows - sf_y;
+		if (sa_cl > cellhd.cols - sf_x)
+		    sa_cl = cellhd.cols - sf_x;
+
+		/* total sample area */
 		g->rows = sf_rl;
 		g->cols = sf_cl;
-		g->rl = sa_rl;
-		g->cl = sa_cl;
-		g->count = 1;
-		g->sf_x = sf_x;
-		g->sf_y = sf_y;
 		g->x = sf_x;
 		g->y = sf_y;
+		/* current sample area (subset of total sample area) */
+		g->rl = sa_rl;
+		g->cl = sa_cl;
+		g->sf_x = sf_x;
+		g->sf_y = sf_y;
+
+		g->count = 1;
 		g->maskname = NULL;
 
 		return disposeAreas(l, g, strtok(NULL, "\n"));
@@ -273,10 +297,30 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 		toReturn = NORMAL;
 		/*read file and create list */
 		m.type = AREA;
-		m.f.f_a.x = (int)rint(cellhd.cols * rel_sa_x);
-		m.f.f_a.y = (int)rint(cellhd.rows * rel_sa_y);
-		m.f.f_a.rl = (int)rint(cellhd.rows * rel_sa_rl);
-		m.f.f_a.cl = (int)rint(cellhd.cols * rel_sa_cl);
+		/* current sample area (subset of total sample area) */
+		sa_x = (int)rint(cellhd.cols * rel_sa_x);
+		sa_y = (int)rint(cellhd.rows * rel_sa_y);
+		sa_rl = (int)rint(cellhd.rows * rel_sa_rl);
+		sa_cl = (int)rint(cellhd.cols * rel_sa_cl);
+
+		/* sanity check */
+		if (sa_x < 0)
+		    sa_x = 0;
+		if (sa_y < 0)
+		    sa_y = 0;
+		if (sa_x > cellhd.cols)
+		    sa_x = cellhd.cols;
+		if (sa_y > cellhd.rows)
+		    sa_y = cellhd.rows;
+		if (sa_rl > cellhd.rows - sa_y)
+		    sa_rl = cellhd.rows - sa_y;
+		if (sa_cl > cellhd.cols - sa_x)
+		    sa_cl = cellhd.cols - sa_x;
+
+		m.f.f_a.x = sa_x;
+		m.f.f_a.y = sa_y;
+		m.f.f_a.rl = sa_rl;
+		m.f.f_a.cl = sa_cl;
 		m.f.f_a.aid = aid;
 		aid++;
 		insertNode(l, m);
@@ -302,17 +346,25 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 
 	    if (rel_sa_x == -1 && rel_sa_y == -1) {
 		/* runtime disposition */
-		int sa_rl, sa_cl;
 
 		sa_rl = (int)rint(cellhd.rows * rel_sa_rl);
 		sa_cl = (int)rint(cellhd.cols * rel_sa_cl);
+
+		/* sanity check */
+		if (sa_rl > cellhd.rows - sf_y)
+		    sa_rl = cellhd.rows - sf_y;
+		if (sa_cl > cellhd.cols - sf_x)
+		    sa_cl = cellhd.cols - sf_x;
+
+		/* total sample area */
 		g->rows = sf_rl;
 		g->cols = sf_cl;
+		g->x = sf_x;
+		g->y = sf_y;
+		/* current sample area (subset of total sample area) */
 		g->rl = sa_rl;
 		g->cl = sa_cl;
 		g->count = 1;
-		g->x = sf_x;
-		g->y = sf_y;
 		g->maskname = maskname;
 		return disposeAreas(l, g, strtok(NULL, "\n"));
 	    }
@@ -321,10 +373,30 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 		msg m;
 
 		m.type = MASKEDAREA;
-		m.f.f_ma.x = (int)rint(cellhd.cols * rel_sa_x);
-		m.f.f_ma.y = (int)rint(cellhd.rows * rel_sa_y);
-		m.f.f_ma.rl = (int)rint(cellhd.rows * rel_sa_rl);
-		m.f.f_ma.cl = (int)rint(cellhd.cols * rel_sa_cl);
+		/* current sample area (subset of total sample area) */
+		sa_x = (int)rint(cellhd.cols * rel_sa_x);
+		sa_y = (int)rint(cellhd.rows * rel_sa_y);
+		sa_rl = (int)rint(cellhd.rows * rel_sa_rl);
+		sa_cl = (int)rint(cellhd.cols * rel_sa_cl);
+
+		/* sanity check */
+		if (sa_x < 0)
+		    sa_x = 0;
+		if (sa_y < 0)
+		    sa_y = 0;
+		if (sa_x > cellhd.cols)
+		    sa_x = cellhd.cols;
+		if (sa_y > cellhd.rows)
+		    sa_y = cellhd.rows;
+		if (sa_rl > cellhd.rows - sa_y)
+		    sa_rl = cellhd.rows - sa_y;
+		if (sa_cl > cellhd.cols - sa_x)
+		    sa_cl = cellhd.cols - sa_x;
+
+		m.f.f_ma.x = sa_x;
+		m.f.f_ma.y = sa_y;
+		m.f.f_ma.rl = sa_rl;
+		m.f.f_ma.cl = sa_cl;
 		m.f.f_ma.aid = aid;
 		strcpy(m.f.f_ma.mask, maskname);
 		aid++;
@@ -342,12 +414,11 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 	double sa_n, sa_s, sa_w, sa_e;
 	int aid = 1;
 	char maskname[GNAME_MAX] = {'\0'};
-	struct Cell_head window;
 	msg m;
 
 	/* Get the window setting. g.region rast=<input raster> */
 	/*   ? same as cellhd above ? */
-	G_get_window(&window);
+	/* no. the current window might be different */
 
 	do {
 	    strcpy(maskname, strtok(NULL, "|"));
@@ -362,16 +433,36 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 		raster via v.to.rast. See r.li.setup/sample_area_vector.sh.
 		This is used only for reading the region (NS, EW). */
 
+	    /* current sample area (subset of total sample area) */
+
 	    /* Get start x and y position of masked overlay raster with
-		respect to input raster region from window.
-		sa_n, sa_e are read from configuration file. */
-	    m.f.f_ma.x = (int)Rast_easting_to_col(sa_w, &window);
-	    m.f.f_ma.y = (int)Rast_northing_to_row(sa_n, &window);
+		respect to current region.
+		sa_n, sa_w are read from configuration file. */
+	    sa_x = (int)rint((sa_w - cellhd.west) / cellhd.ew_res);
+	    sa_y = (int)rint((cellhd.north - sa_n) / cellhd.ns_res);
 
 	    /* Get row count and column count of overlay raster */
-	    m.f.f_ma.rl = (int)rint((sa_n - sa_s) / cellhd.ns_res);
-	    m.f.f_ma.cl = (int)rint((sa_e - sa_w) / cellhd.ew_res);
+	    sa_rl = (int)rint((sa_n - sa_s) / cellhd.ns_res);
+	    sa_cl = (int)rint((sa_e - sa_w) / cellhd.ew_res);
 
+	    /* sanity check */
+	    if (sa_x < 0)
+		sa_x = 0;
+	    if (sa_y < 0)
+		sa_y = 0;
+	    if (sa_x > cellhd.cols)
+		sa_x = cellhd.cols;
+	    if (sa_y > cellhd.rows)
+		sa_y = cellhd.rows;
+	    if (sa_rl > cellhd.rows - sa_y)
+		sa_rl = cellhd.rows - sa_y;
+	    if (sa_cl > cellhd.cols - sa_x)
+		sa_cl = cellhd.cols - sa_x;
+
+	    m.f.f_ma.x = sa_x;
+	    m.f.f_ma.y = sa_y;
+	    m.f.f_ma.rl = sa_rl;
+	    m.f.f_ma.cl = sa_cl;
 	    m.f.f_ma.aid = aid;
 	    strcpy(m.f.f_ma.mask, maskname);
 	    aid++;

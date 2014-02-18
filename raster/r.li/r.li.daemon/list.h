@@ -68,13 +68,15 @@ void removeNode(struct list *l);
   * \param dist inter-area distance
   * \param add_row cell to add in rows
   * \param add_col cell to add in columns
-  * \param x x coordinate of next area
-  * \param y y coordinate of next area
-  * \param rl area length in rows
-  * \param cl areal length in columns
+  * \param rows area length in rows
+  * \param cols area length in columns
+  * \param x column offset of next area
+  * \param y row offset of next area
+  * \param rl sample area length in rows
+  * \param cl sample area length in columns
   * \param count identifier of next area
-  * \param sf_x x coordinate of sample frame
-  * \param sf_y y coordinate of sample frame
+  * \param sf_x column offset of sample frame
+  * \param sf_y row offset of sample frame
   * \param maskname name of mask for the area
   */
 struct g_area
