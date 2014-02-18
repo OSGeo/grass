@@ -133,7 +133,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	}
 
 	for (i = 0; i < ad->cl; i++) {
-	    if (masked && mask_buf[i + ad->x] == 0) {
+	    if (masked && mask_buf[i] == 0) {
 		Rast_set_c_null_value(&buf[i + ad->x], 1);
 	    }
 	    if (!(Rast_is_c_null_value(&buf[i + ad->x]))) {
@@ -193,7 +193,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	}
 
 	for (i = 0; i < ad->cl; i++) {
-	    if (masked && mask_buf[i + ad->x] == 0) {
+	    if (masked && mask_buf[i] == 0) {
 		Rast_set_d_null_value(&buf[i + ad->x], 1);
 	    }
 	    if (!(Rast_is_d_null_value(&buf[i + ad->x]))) {
@@ -252,7 +252,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	}
 
 	for (i = 0; i < ad->cl; i++) {
-	    if (masked && mask_buf[i + ad->x] == 0) {
+	    if (masked && mask_buf[i] == 0) {
 		Rast_set_f_null_value(&buf[i + ad->x], 1);
 	    }
 	    if (!(Rast_is_f_null_value(&buf[i + ad->x]))) {

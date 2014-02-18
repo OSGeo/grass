@@ -153,7 +153,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
 
-	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
+	    if ((masked) && (mask_buf[i] == 0)) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
 
@@ -340,7 +340,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
 
-	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
+	    if ((masked) && (mask_buf[i] == 0)) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
 
@@ -527,7 +527,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
 
-	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
+	    if ((masked) && (mask_buf[i] == 0)) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
 

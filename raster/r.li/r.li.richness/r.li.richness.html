@@ -19,12 +19,7 @@ the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
 <!-- TODO: verify next: -->
 If the input raster map contains only NULL values then <em>r.li.richness</em>
-returns -1.<br>
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=-1 input=my_map
-</pre></div>
-after index calculation.
+returns 0.<br>
 
 
 <h2>EXAMPLES</h2>

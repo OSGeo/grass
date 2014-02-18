@@ -23,9 +23,9 @@
 #include "../r.li.daemon/avl.h"
 #include "../r.li.daemon/daemon.h"
 
-double calculate(struct area_entry *ad, int fd, double *result);
-double calculateD(struct area_entry *ad, int fd, double *result);
-double calculateF(struct area_entry *ad, int fd, double *result);
+double calculate(int fd, struct area_entry *ad, double *result);
+double calculateD(int fd, struct area_entry *ad, double *result);
+double calculateF(int fd, struct area_entry *ad, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -70,17 +70,17 @@ int dominance(int fd, char **par, struct area_entry *ad, double *result)
     switch (ad->data_type) {
     case CELL_TYPE:
 	{
-	    ris = calculate(ad, fd, &indice);
+	    ris = calculate(fd, ad, &indice);
 	    break;
 	}
     case DCELL_TYPE:
 	{
-	    ris = calculateD(ad, fd, &indice);
+	    ris = calculateD(fd, ad, &indice);
 	    break;
 	}
     case FCELL_TYPE:
 	{
-	    ris = calculateF(ad, fd, &indice);
+	    ris = calculateF(fd, ad, &indice);
 	    break;
 	}
     default:
@@ -102,7 +102,7 @@ int dominance(int fd, char **par, struct area_entry *ad, double *result)
 
 
 
-double calculate(struct area_entry *ad, int fd, double *result)
+double calculate(int fd, struct area_entry *ad, double *result)
 {
     CELL *buf;
     CELL corrCell;
@@ -112,16 +112,9 @@ double calculate(struct area_entry *ad, int fd, double *result)
     int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
-    int a = 0;			/* a=0 if all cells are null */
-
     long m = 0;
-
-    double indice = 0;
-
     avl_tree albero = NULL;
-
     generic_cell uc;
-
 
     uc.t = CELL_TYPE;
 
@@ -150,13 +143,15 @@ double calculate(struct area_entry *ad, int fd, double *result)
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
 
-	    if ((masked) && (mask_buf[i + ad->x] == 0)) {
+	    if ((masked) && (mask_buf[i] == 0)) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
-		a = 1;
-		if (corrCell != precCell) {
+
+		if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		     corrCell != precCell) {
+
 		    if (albero == NULL) {
 			uc.val.c = precCell;
 			albero = avl_make(uc, (long)1);
@@ -193,10 +188,6 @@ double calculate(struct area_entry *ad, int fd, double *result)
 			}
 		    }
 		}		/* endif not equal cells */
-		else {		/*equal cells */
-
-		    ;
-		}
 	    }
 	    precCell = corrCell;
 	}
@@ -240,22 +231,17 @@ double calculate(struct area_entry *ad, int fd, double *result)
 	}
     }
 
-    if (a != 0) {
-	indice = m;
-    }
-    else			/*if a is 0, that is all cell are null, i put index=-1 */
-	indice = (double)(-1);
+    *result = m;
 
+    avl_destroy(albero);
     if (masked)
 	G_free(mask_buf);
-
-    *result = indice;
 
     return RLI_OK;
 }
 
 
-double calculateD(struct area_entry *ad, int fd, double *result)
+double calculateD(int fd, struct area_entry *ad, double *result)
 {
     DCELL *buf;
     DCELL corrCell;
@@ -265,14 +251,8 @@ double calculateD(struct area_entry *ad, int fd, double *result)
     int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
-    int a = 0;			/* a=0 if all cells are null */
-
     long m = 0;
-
-    double indice = 0;
-
     avl_tree albero = NULL;
-
     generic_cell uc;
 
     uc.t = DCELL_TYPE;
@@ -303,14 +283,15 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 	for (i = 0; i < ad->cl; i++) {	/* for each dcell in the row */
 	    corrCell = buf[i + ad->x];
 
-	    if (masked && mask_buf[i + ad->x] == 0) {
+	    if (masked && mask_buf[i] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
-		a = 1;
 
-		if (corrCell != precCell) {
+		if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		     corrCell != precCell) {
+
 		    if (albero == NULL) {
 			uc.val.dc = precCell;
 			albero = avl_make(uc, (long)1);
@@ -347,10 +328,6 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 		    }
 
 		}		/* endif not equal dcells */
-		else {		/*equal dcells */
-
-		    ;
-		}
 	    }
 	    precCell = corrCell;
 	}
@@ -394,24 +371,18 @@ double calculateD(struct area_entry *ad, int fd, double *result)
 	}
     }
 
+    *result = m;
 
-    if (a != 0) {		/*if a is 0, that is all cell are null, i put index=-1 */
-	indice = m;
-    }
-    else
-	indice = (double)(-1);
-
-
+    avl_destroy(albero);
     if (masked)
 	G_free(mask_buf);
 
-    *result = indice;
     return RLI_OK;
 }
 
 
 
-double calculateF(struct area_entry *ad, int fd, double *result)
+double calculateF(int fd, struct area_entry *ad, double *result)
 {
     FCELL *buf;
     FCELL corrCell;
@@ -421,14 +392,8 @@ double calculateF(struct area_entry *ad, int fd, double *result)
     int mask_fd = -1, *mask_buf = NULL;
     int ris = 0;
     int masked = FALSE;
-    int a = 0;			/* a=0 if all cells are null */
-
     long m = 0;
-
-    double indice = 0;
-
     avl_tree albero = NULL;
-
     generic_cell uc;
 
     uc.t = FCELL_TYPE;
@@ -460,14 +425,15 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 
 	    corrCell = buf[i + ad->x];
 
-	    if (masked && mask_buf[i + ad->x] == 0) {
+	    if (masked && mask_buf[i] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
-		a = 1;
 
-		if (corrCell != precCell) {
+		if (!(Rast_is_null_value(&precCell, uc.t)) &&
+		     corrCell != precCell) {
+
 		    if (albero == NULL) {
 			uc.val.fc = precCell;
 			albero = avl_make(uc, (long)1);
@@ -551,19 +517,11 @@ double calculateF(struct area_entry *ad, int fd, double *result)
 	}
     }
 
+    *result = m;
 
-
-    if (a != 0) {		/*if a is 0, that is all cell are null, i put index=-1 */
-	indice = m;
-    }
-    else
-	indice = (double)(-1);
-
-
+    avl_destroy(albero);
     if (masked)
 	G_free(mask_buf);
 
-
-    *result = indice;
     return RLI_OK;
 }

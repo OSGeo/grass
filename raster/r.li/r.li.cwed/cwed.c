@@ -348,7 +348,7 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	Rast_set_c_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf_corr[i + ad->x];
-	    if (masked && mask_corr[i + ad->x] == 0) {
+	    if (masked && mask_corr[i] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
 	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
@@ -479,7 +479,7 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	Rast_set_d_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf_corr[i + ad->x];
-	    if (masked && mask_corr[i + ad->x] == 0) {
+	    if (masked && mask_corr[i] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
 	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
@@ -610,7 +610,7 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	Rast_set_f_null_value(&corrCell, 1);
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf_corr[i + ad->x];
-	    if (masked && mask_corr[i + ad->x] == 0) {
+	    if (masked && mask_corr[i] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
 	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
