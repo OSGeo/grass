@@ -26,6 +26,8 @@
  * This function creates a new mapset in the given location,
  * initializes default window and the current window.
  *
+ * Calls G_fatal_error() if location doesn't exist.
+ *
  * \param gisdbase_name full path of GISDBASE to create mapset in
  *                      (NULL for the current GISDBASE)
  * \param location_name name of location to create mapset in
@@ -58,7 +60,12 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
     if (G_legal_filename(mapset_name) != 1)
         return -2;
     
-    /* Make the mapset. */
+    /* Check if location exists */
+    sprintf(path, "%s/%s", gisdbase_name, location_name);
+    if (access(path, F_OK ) == -1)
+        G_fatal_error(_("Location <%s> doesn't exist"), location_name);
+    
+    /* Make the mapset */
     sprintf(path, "%s/%s/%s", gisdbase_name, location_name, mapset_name);
     if (G_mkdir(path) != 0) {
         perror("G_make_mapset");
