@@ -2615,11 +2615,12 @@ class LayerBook(wx.Notebook):
             item, value = line.split(':', 1)
             self.defaultConnect[item.strip()] = value.strip()
         
-        if len(self.defaultConnect['driver']) == 0 or \
-               len(self.defaultConnect['database']) == 0:
-            GWarning(parent = self.parent,
-                     message = _("Unknown default DB connection. "
-                                 "Please define DB connection using db.connect module."))
+        ### really needed?
+        # if len(self.defaultConnect['driver']) == 0 or \
+        #        len(self.defaultConnect['database']) == 0:
+        #     GWarning(parent = self.parent,
+        #              message = _("Unknown default DB connection. "
+        #                          "Please define DB connection using db.connect module."))
         
         self.defaultTables = self._getTables(self.defaultConnect['driver'],
                                              self.defaultConnect['database'])
