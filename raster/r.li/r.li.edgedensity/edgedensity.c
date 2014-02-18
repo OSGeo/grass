@@ -164,8 +164,8 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	}
 
 	for (i = 0; i < ad->cl; i++) {
-	    mask_corr[i + ad->x] = 0;
-	    mask_sup[i + ad->x] = 0;
+	    mask_corr[i] = 0;
+	    mask_sup[i] = 0;
 	}
 
 	if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
@@ -220,7 +220,7 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 		int z = 0;
 
 		for (z = 0; z < ad->cl; z++)
-		    mask_inf[z + ad->x] = 0;
+		    mask_inf[z] = 0;
 	    }
 	}
 
@@ -422,8 +422,8 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	}
 
 	for (i = 0; i < ad->cl; i++) {
-	    mask_corr[i + ad->x] = 0;
-	    mask_sup[i + ad->x] = 0;
+	    mask_corr[i] = 0;
+	    mask_sup[i] = 0;
 	}
 
 	if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) <= 0) {
@@ -479,7 +479,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 		int z = 0;
 
 		for (z = 0; z < ad->cl; z++)
-		    mask_inf[z + ad->x] = 0;
+		    mask_inf[z] = 0;
 	    }
 	}
 
@@ -513,7 +513,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 		else
 		    infCell = buf_inf[i + ad->x];
 
-		/* calculate how many edge the cell has */
+		/* calculate how many edges the cell has */
 
 		if ((Rast_is_null_value(&prevCell, DCELL_TYPE)) ||
 		    (corrCell != prevCell)) {
@@ -680,8 +680,8 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	}
 
 	for (i = 0; i < ad->cl; i++) {
-	    mask_corr[i + ad->x] = 0;
-	    mask_sup[i + ad->x] = 0;
+	    mask_corr[i] = 0;
+	    mask_sup[i] = 0;
 	}
 
 	if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) <= 0) {
@@ -735,7 +735,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 		int z = 0;
 
 		for (z = 0; z < ad->cl; z++)
-		    mask_inf[z + ad->x] = 0;
+		    mask_inf[z] = 0;
 	    }
 	}
 
