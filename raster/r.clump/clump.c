@@ -91,7 +91,7 @@ CELL clump(int in_fd, int out_fd)
 	}
 
 	/* fake a previous row which is all zero */
-	G_zero(prev_in, len);
+	Rast_set_c_null_value(prev_in, ncols + 1);
 	G_zero(prev_clump, len);
 
 	/* create a left edge of zero */
@@ -104,8 +104,8 @@ CELL clump(int in_fd, int out_fd)
 	G_message(_("Pass %d..."), pass);
 	for (row = 0; row < nrows; row++) {
 	    Rast_get_c_row(in_fd, cur_in + 1, row);
-	    
-	    G_percent(row+1, nrows, 2);
+
+	    G_percent(row, nrows, 4);
 	    X = 0;
 	    Rast_set_c_null_value(&X, 1);
 	    for (col = 1; col <= ncols; col++) {
@@ -221,10 +221,11 @@ CELL clump(int in_fd, int out_fd)
 		temp_cell = out_cell;
 
 		for (column = 0; column < ncols; column++) {
-		    temp_cell++;	/* skip left edge */
-		    *temp_cell = index2[index[*temp_clump++]];
+		    temp_clump++;	/* skip left edge */
+		    *temp_cell = index2[index[*temp_clump]];
 		    if (*temp_cell == 0)
 			Rast_set_null_value(temp_cell, 1, CELL_TYPE);
+		    temp_cell++;
 		}
 		Rast_put_row(out_fd, out_cell, CELL_TYPE);
 	    }
@@ -238,6 +239,7 @@ CELL clump(int in_fd, int out_fd)
 	    cur_clump = prev_clump;
 	    prev_clump = temp_clump;
 	}
+	G_percent(1, 1, 1);
 
 	print_time(&cur_time);
     }
