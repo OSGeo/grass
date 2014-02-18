@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.li.pielou</em>  calculates the "Pielou's diversity index" as: <br>
-<img src="r_li_pielou.png"><br>
+<img src="r_li_pielou.png" alt="r.li.pielou formula"> <br>
 with:
 <ul>
   <li><b>J</b>: Pielou eveness index</li>
@@ -12,10 +12,11 @@ with:
 <h2>NOTES</h2>
 
 Do not use absolute path names for the <b>output</b> map/file.
-If the "moving window" method was selected in <b>r.li.setup</b>, then the
+If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
+<!-- TODO: verify next: -->
 If the input raster contains NULL value cells, <em>r.li.pielou</em>
 returns -1 for these cells. <br>
 If you want to change these -1 values to NULL, run subsequently on the resulting map:
@@ -27,11 +28,14 @@ after index calculation.
 <h2>EXAMPLES</h2>
 To calculate Pielou's diversity index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
-<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
+<em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
 r.li.pielou input=my_map conf=my_conf output=my_out
+</pre></div>
+<p>
 
-# forest map example:
+Forest map (Spearfish sample dataset) example:
+<div class="code"><pre>
 g.region rast=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.pielou input=forests conf=movwindow7 out=forests_pielou_mov7
@@ -41,7 +45,7 @@ r.univar forests_pielou_mov7
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.li.html">r.li</a> - package overview<br>
-<a href="r.li.setup.html">r.li.setup</a>
+<a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
 <h2>REFERENCES</h2>

@@ -2,7 +2,7 @@
 
 <em>r.li.padcv</em> calculates the coefficient of variation of patch 
 area sizes in hectares as:<br>
-<img src="rlipadcv_formula1.png" alt="rlipadcv formula"> <br>
+<img src="rlipadcv_formula1.png" alt="r.li.padcv formula"> <br>
 with:<br>
 <ul>
  <li><b>SD</b>: standard deviation of patch area size
@@ -15,7 +15,7 @@ with:<br>
 <h2>NOTES</h2>
 
 Do not use absolute path names for the <b>output</b> map/file.
-If the "moving window" method was selected in <b>r.li.setup</b>, then the
+If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
@@ -24,11 +24,14 @@ The result is NULL if the sample area contains only NULL values.
 <h2>EXAMPLES</h2>
 To calculate patch area distribution coefficient of variation index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
-<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
+<em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
 r.li.padcv input=my_map conf=my_conf output=my_out
+</pre></div>
+<p>
 
-# forest map example:
+Forest map (Spearfish sample dataset) example:
+<div class="code"><pre>
 g.region rast=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.padcv input=forests conf=movwindow7 out=forests_padcv_mov7
@@ -38,7 +41,7 @@ r.univar forests_padcv_mov7
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.li.html">r.li</a> - package overview<br>
-<a href="r.li.setup.html">r.li.setup</a>
+<a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
 <h2>REFERENCES</h2>
