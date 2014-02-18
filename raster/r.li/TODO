@@ -11,7 +11,77 @@ GRASS 7
    See Luca D's prototype in  trunk/gui/wxpython/rlisetup
    and  http://grass.osgeo.org/grass70/manuals/g.gui.rlisetup.html
 
+Brute-force testing
+-------------------
+# TODO: change to 3x3 example
 
+export GRASS_OVERWRITE=1
+# still Spearfish...
+g.region rast=landcover.30m -p
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+
+echo "-------------------------"
+r.li.dominance input=forests conf=movwindow7 out=forests_dominance_mov7
+r.univar forests_dominance_mov7
+
+echo "-------------------------"
+r.li.edgedensity input=forests conf=movwindow7 out=forests_edgedens_mov7
+r.univar forests_edgedens_mov7
+
+echo "-------------------------"
+r.li.mpa input=forests conf=movwindow7 out=forests_mpa_mov7
+r.univar forests_mpa_mov7
+
+echo "-------------------------"
+r.li.mps input=forests conf=movwindow7 out=forests_mps_mov7
+r.univar forests_mps_mov7
+
+echo "-------------------------"
+r.li.padcv input=forests conf=movwindow7 out=forests_padcv_mov7
+r.univar forests_padcv_mov7
+
+echo "-------------------------"
+r.li.padrange input=forests conf=movwindow7 out=forests_padrange_mov7
+r.univar forests_padrange_mov7
+
+echo "-------------------------"
+r.li.padsd input=forests conf=movwindow7 out=forests_padsd_mov7
+r.univar forests_padsd_mov7
+
+echo "-------------------------"
+r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
+r.univar forests_p_dens7
+
+echo "-------------------------"
+r.li.patchnum input=forests conf=movwindow7 out=forests_patchnum_mov7
+r.univar forests_patchnum_mov7
+
+echo "-------------------------"
+r.li.pielou input=forests conf=movwindow7 out=forests_pielou_mov7
+r.univar forests_pielou_mov7
+
+echo "-------------------------"
+r.li.renyi input=forests conf=movwindow7 out=forests_renyi_mov7_a06 alpha=0.6
+r.univar forests_renyi_mov7_a06
+
+echo "-------------------------"
+r.li.richness input=forests conf=movwindow7 out=forests_richness_mov7
+r.univar forests_richness_mov7
+
+echo "-------------------------"
+r.li.shannon input=forests conf=movwindow7 out=forests_shannon_mov7
+r.univar forests_shannon_mov7
+
+echo "-------------------------"
+r.li.shape input=forests conf=movwindow7 out=forests_shape_mov7
+r.univar forests_shape_mov7
+
+echo "-------------------------"
+r.li.simpson input=forests conf=movwindow7 out=forests_simpson_mov7
+r.univar forests_simpson_mov7
+
+
+===============================================================
 GRASS 6
 -------
 

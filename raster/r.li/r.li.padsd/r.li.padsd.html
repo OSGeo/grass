@@ -37,7 +37,8 @@ Forest map (Spearfish sample dataset) example:
 g.region rast=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.padsd input=forests conf=movwindow7 out=forests_padsd_mov7
-r.univar forests_padsd_mov7</pre></div>
+r.univar forests_padsd_mov7
+</pre></div>
 
 <h2>SEE ALSO</h2>
 <em>
