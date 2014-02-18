@@ -49,9 +49,9 @@ static dcell_manager dm;
 static fcell_manager fm;
 static char *raster;
 static char **parameters;
-static int (*func) (int, char **, struct area_entry *, double *);
+static rli_func *func;
 
-void worker_init(char *r, int f(int, char **, struct area_entry *, double *), char **p)
+void worker_init(char *r, rli_func *f, char **p)
 {
     cm = G_malloc(sizeof(struct cell_memory_entry));
     fm = G_malloc(sizeof(struct fcell_memory_entry));

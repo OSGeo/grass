@@ -119,7 +119,16 @@ struct area_entry
     char *mask_name;
 };
 
-
+/**
+ * \brief function prototype for index calculation
+ * \param fd file descripter of opened raster map
+ * \param par optional parameters
+ * \param ad definition of the sample area
+ * \param result pointer to store the result
+ * \return RLI_ERRORE error occurs in calculating index
+ * \return RLI_OK  otherwise
+ */
+typedef int rli_func(int fd, char **par, struct area_entry *ad, double *result);
 
 
 /**
@@ -132,7 +141,7 @@ struct area_entry
  * \return 1  otherwise
  */
 
-int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *),
+int calculateIndex(char *file, rli_func *f,
 		   char **parameters, char *raster, char *output);
 
 /**
@@ -199,7 +208,7 @@ int error_Output(int out, msg m);
  * \param f the function used for index computing
  * \param result where to put the result of index computing
  */
-void worker_init(char *raster, int f(int, char **, struct area_entry *, double *),
+void worker_init(char *raster, rli_func *f,
 		 char **parameters);
 void worker_process(msg * ret, msg * m);
 void worker_end(void);
@@ -267,4 +276,3 @@ DCELL *RLI_get_dcell_raster_row(int fd, int row, struct area_entry * ad);
   */
 FCELL *RLI_get_fcell_raster_row(int fd, int row, struct area_entry * ad);
 
-#include "index.h"

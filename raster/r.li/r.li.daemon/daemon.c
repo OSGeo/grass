@@ -41,7 +41,7 @@
 #define random rand
 #endif
 
-int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *),
+int calculateIndex(char *file, rli_func *f,
 		   char **parameters, char *raster, char *output)
 {
 
