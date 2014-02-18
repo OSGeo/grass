@@ -1063,7 +1063,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         # Advanced tab
         advancedSqlPanel = wx.Panel(parent = sqlNtb, id = wx.ID_ANY)   
         sqlNtb.AddPage(page = advancedSqlPanel,
-                       text = _('Advanced'))
+                       text = _('Builder'))
 
         btnSqlBuilder = wx.Button(parent = advancedSqlPanel, id = wx.ID_ANY, label = _("SQL Builder"))
         btnSqlBuilder.Bind(wx.EVT_BUTTON, self.OnBuilder)
