@@ -64,7 +64,9 @@ void worker_init(char *r, int f(int, char **, struct area_entry *, double *), ch
 
     /* open raster map */
     fd = Rast_open_old(raster, "");
-    Rast_get_cellhd(raster, "", &hd);
+
+    /* get current window */
+    Rast_get_window(&hd);
 
     /* read data type to allocate cache */
     data_type = Rast_map_type(raster, "");
@@ -127,8 +129,8 @@ void worker_process(msg * ret, msg * m)
 	ad->raster = raster;
 
 	/* mask preprocessing */
-	ad->mask_name = mask_preprocessing(m->f.f_ma.mask,
-					   raster, ad->rl, ad->cl);
+	ad->mask_name = mask_preprocessing(m->f.f_ma.mask, raster, ad);
+
 	if (ad->mask_name == NULL) {
 	    G_message(_("unable to open <%s> mask ... continuing without!"),
 		      m->f.f_ma.mask);
@@ -145,6 +147,12 @@ void worker_process(msg * ret, msg * m)
 	G_fatal_error("Program error, worker() type=%d", m->type);
 	break;
     }
+    
+    /* sanity check on the sample area ? */
+    /* 0 <= ad->x < hd.cols */
+    /* 0 <= ad->y < hd.rows */
+    /* ad->rl + ad->y <= hd.rows */
+    /* ad->cl + ad->x <= hd.cols */
 
     /* memory menagement */
     if (ad->rc > used) {
@@ -208,45 +216,33 @@ void worker_end(void)
     Rast_close(fd);
 }
 
-char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
+char *mask_preprocessing(char *mask, char *raster, struct area_entry *ad)
 {
     const char *tmp_file;
-    struct Cell_head cell, oldcell;
     int mask_fd, old_fd, *buf, i, j;
     CELL *old;
-    double add_row, add_col;
 
-    buf = G_malloc(cl * sizeof(int));
+    buf = G_malloc(ad->cl * sizeof(int));
 
     G_debug(3, "daemon mask preproc: raster=[%s] mask=[%s]  rl=%d cl=%d",
-	    raster, mask, rl, cl);
-
-    /* open raster */
-    Rast_get_cellhd(raster, "", &cell);
-
-    /* open raster */
-    Rast_get_cellhd(mask, "", &oldcell);
-
-    add_row = 1.0 * oldcell.rows / rl;
-    add_col = 1.0 * oldcell.cols / cl;
+	    raster, mask, ad->rl, ad->cl);
 
     tmp_file = G_tempfile();
     mask_fd = open(tmp_file, O_RDWR | O_CREAT, 0755);
     old_fd = Rast_open_old(mask, "");
     old = Rast_allocate_c_buf();
 
-    for (i = 0; i < rl; i++) {
-	int riga;
+    /* write out sample area size: ad->rl rows and ad->cl columns */
 
-	riga = (int)rint(i * add_row);
-	Rast_get_c_row_nomask(old_fd, old, riga);
-	for (j = 0; j < cl; j++) {
-	    int colonna;
+    for (i = 0; i < ad->rl; i++) {
 
-	    colonna = (int)rint(j * add_col);
-	    buf[j] = old[colonna];
+	Rast_get_c_row_nomask(old_fd, old, i + ad->y);
+	for (j = 0; j < ad->cl; j++) {
+
+	    /* NULL -> 0, else 1 */
+	    buf[j] = !Rast_is_c_null_value(&old[j + ad->x]);
 	}
-	if (write(mask_fd, buf, cl * sizeof(int)) < 0)
+	if (write(mask_fd, buf, ad->cl * sizeof(int)) < 0)
 	    return NULL;
     }
 

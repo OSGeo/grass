@@ -96,10 +96,10 @@ typedef struct fcell_memory_entry *fcell_manager;
 
  /**
   * \brief fields of an area descriptor
-  * \member x the x coordinate of upper left corner
-  * \member y the y coordinate of upper left corner
-  * \member rl area length in rows
-  * \member cl area length in columns
+  * \member x column offset = start of sample area
+  * \member y row offset = start of sample area
+  * \member rl sample area length in rows
+  * \member cl sample area length in columns
   * \member rc number of rows in the cache
   * \member mask file descriptor of mask raster file (-1 if there is no mask)
  */
@@ -212,7 +212,7 @@ void worker_end(void);
   * \param cl the lenght in cols of sample area
   * \return the name of mask raster file to use
   */
-char *mask_preprocessing(char *mask, char *raster, int rl, int cl);
+char *mask_preprocessing(char *mask, char *raster, struct area_entry *ad);
 
  /**
   * \brief writes the output for a raster file
