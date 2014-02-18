@@ -22,7 +22,7 @@
 #include "../r.li.daemon/defs.h"
 #include "../r.li.daemon/daemon.h"
 
-
+rli_func meanPixelAttribute;
 int calculate(int fd, struct area_entry *ad, double *result);
 int calculateD(int fd, struct area_entry *ad, double *result);
 int calculateF(int fd, struct area_entry *ad, double *result);

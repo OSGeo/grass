@@ -29,6 +29,7 @@
 
 /* template is shannon */
 
+rli_func pielou;
 int calculate(int fd, struct area_entry *ad, double *result);
 int calculateD(int fd, struct area_entry *ad, double *result);
 int calculateF(int fd, struct area_entry *ad, double *result);

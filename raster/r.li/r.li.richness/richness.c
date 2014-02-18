@@ -23,9 +23,10 @@
 #include "../r.li.daemon/avl.h"
 #include "../r.li.daemon/daemon.h"
 
-double calculate(int fd, struct area_entry *ad, double *result);
-double calculateD(int fd, struct area_entry *ad, double *result);
-double calculateF(int fd, struct area_entry *ad, double *result);
+rli_func dominance;
+int calculate(int fd, struct area_entry *ad, double *result);
+int calculateD(int fd, struct area_entry *ad, double *result);
+int calculateF(int fd, struct area_entry *ad, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -63,9 +64,6 @@ int dominance(int fd, char **par, struct area_entry *ad, double *result)
 {
     int ris = RLI_OK;
     double indice = 0;
-    struct Cell_head hd;
-
-    Rast_get_cellhd(ad->raster, "", &hd);
 
     switch (ad->data_type) {
     case CELL_TYPE:
@@ -102,7 +100,7 @@ int dominance(int fd, char **par, struct area_entry *ad, double *result)
 
 
 
-double calculate(int fd, struct area_entry *ad, double *result)
+int calculate(int fd, struct area_entry *ad, double *result)
 {
     CELL *buf;
     CELL corrCell;
@@ -241,7 +239,7 @@ double calculate(int fd, struct area_entry *ad, double *result)
 }
 
 
-double calculateD(int fd, struct area_entry *ad, double *result)
+int calculateD(int fd, struct area_entry *ad, double *result)
 {
     DCELL *buf;
     DCELL corrCell;
@@ -382,7 +380,7 @@ double calculateD(int fd, struct area_entry *ad, double *result)
 
 
 
-double calculateF(int fd, struct area_entry *ad, double *result)
+int calculateF(int fd, struct area_entry *ad, double *result)
 {
     FCELL *buf;
     FCELL corrCell;

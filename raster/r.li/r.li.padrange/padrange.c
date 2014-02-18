@@ -36,6 +36,7 @@ struct pst {
     generic_cell type;
 };
 
+rli_func patchAreaDistributionRANGE;
 int calculate(int fd, struct area_entry *ad, double *result);
 int calculateD(int fd, struct area_entry *ad, double *result);
 int calculateF(int fd, struct area_entry *ad, double *result);
