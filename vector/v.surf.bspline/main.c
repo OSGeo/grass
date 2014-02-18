@@ -152,8 +152,8 @@ int main(int argc, char *argv[])
     type_opt->key = "method";
     type_opt->description = _("Spline interpolation algorithm");
     type_opt->type = TYPE_STRING;
-    type_opt->options = "linear,cubic";
-    type_opt->answer = "linear";
+    type_opt->options = "bilinear,bicubic";
+    type_opt->answer = "bilinear";
     type_opt->guisection = _("Settings");
     G_asprintf((char **) &(type_opt->descriptions),
 	       "bilinear;%s;bicubic;%s",
