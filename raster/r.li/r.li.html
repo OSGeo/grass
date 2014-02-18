@@ -30,7 +30,7 @@ The <em>r.li</em> suite offers a set of patch and diversity indices.
 It supports analysis of landscapes composed of a mosaic of
 patches, but, more generally, the modules work with any two-dimensional
 raster map whose cell values are integer (e.g., 1, 2) or floating point
-(e.g., 1.1, 3.2) values. The <em>r.li.setup</em> module has options for
+(e.g., 1.1, 3.2) values. The <em>g.gui.rlisetup</em> module has options for
 controlling the shape, size, number, and distribution of sampling
 areas used to collect information about the landscape structure.
 Sampling area shapes can be the entire map or a moving
@@ -50,7 +50,7 @@ results are stored as raster maps.
 The general procedure to calculate an index from a raster map is two-fold:
 
 <ol>
-<li>run <em>r.li.setup</em>: create a configuration file selecting the parts of
+<li>run <em>g.gui.rlisetup</em>: create a configuration file selecting the parts of
     raster to analyze.
 
 <li>run one or more of the <em>r.li.<b>[index]</b></em> modules (e.g.,
@@ -83,7 +83,7 @@ in the Spearfish sample dataset, using a 5x5 moving window:
 <div class="code"><pre>
   g.gui.rlisetup
 </pre></div>
-  <li> The main <em>r.li.setup</em> window is displayed, click on "New"
+  <li> The main <em>g.gui.rlisetup</em> window is displayed, click on "New"
   <li> The new configuration window is now displayed, enter the
 	configuration file name (e.g., "my_conf", do not use absolute paths)
   
@@ -96,7 +96,7 @@ in the Spearfish sample dataset, using a 5x5 moving window:
   <li> Click on "Use keyboard to enter moving window dimension"
   <li> Select "Rectangle" and enter 5 in the "height" and "width" fields
   <li> Click on "Save settings"
-  <li> Close the <em>r.li.setup</em> window
+  <li> Close the <em>g.gui.rlisetup</em> window
   </ol>
 
 <li> CALCULATE PATCHDENSITY INDEX
@@ -136,7 +136,7 @@ configuration file on a 200x200 raster map, then the sample area is
 <b>Core modules</b>:
 <ul>
   <li> <a href="r.li.daemon.html">r.li.daemon</a>: job launch daemon</li>
-  <li> <a href="r.li.setup.html">r.li.setup</a>: Configuration editor for r.li.'index'</li>
+  <li> <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>: Configuration editor for r.li.'index'</li>
 </ul>
 
 <b>Patch indices</b>:

@@ -23,7 +23,7 @@ consider in the calculation. Each row must be saved using this syntax:<br>
 <h2>NOTES</h2>
 
 Do not use absolute path names for the <b>output</b> map/file.
-If the "moving window" method was selected in <b>r.li.setup</b>, then the
+If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
@@ -40,7 +40,7 @@ after index calculation.
 <h2>EXAMPLES</h2>
 To calculate the contrast weighted edge density index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
-<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
+<em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
 r.li.cwed input=my_map conf=my_conf path=my_file output=my_out \
           path=/path/to/weights.csv
@@ -57,7 +57,7 @@ r.li.cwed input=my_map conf=my_conf path=my_file output=my_out \
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.li.html">r.li</a> - package overview<br>
-<a href="r.li.setup.html">r.li.setup</a>
+<a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
 <h2>REFERENCES</h2>

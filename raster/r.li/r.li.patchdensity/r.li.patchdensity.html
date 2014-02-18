@@ -19,7 +19,7 @@ are ignored when tracing a patch.
 <h2>NOTES</h2>
 
 Do not use absolute path names for the <b>output</b> map/file.
-If the "moving window" method was selected in <b>r.li.setup</b>, then the
+If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
 the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
@@ -29,7 +29,7 @@ that is, the result is always &ge; 0.
 <h2>EXAMPLES</h2>
 To calculate patch density index on map <em>my_map</em>, using
 <em>my_conf</em> configuration file (previously defined with
-<em>r.li.setup</em>) and saving results in <em>my_out</em>, run:
+<em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
 <div class="code"><pre>
 r.li.patchdensity input=my_map conf=my_conf output=my_out
 </pre></div>
@@ -42,8 +42,9 @@ g.region rast=landcover.30m -p
 r.category landcover.30m
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43, 1, null())"
 
-# patch density (7x7 moving window defined in r.li.setup):
+# patch density (7x7 moving window defined in g.gui.rlisetup):
 r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
+r.univar forests_p_dens7
 d.rast.leg forests_p_dens7
 
 r.to.vect forests out=forests feature=area
@@ -53,7 +54,7 @@ d.vect forests type=boundary
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.li.html">r.li</a> - package overview<br>
-<a href="r.li.setup.html">r.li.setup</a>
+<a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
 <h2>REFERENCES</h2>
