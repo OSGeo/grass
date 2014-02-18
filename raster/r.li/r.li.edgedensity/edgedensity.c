@@ -168,8 +168,8 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    mask_sup[i + ad->x] = 0;
 	}
 
-	if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) <= 0) {
-	    G_fatal_error("reading mask_corr");
+	if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
+	    G_fatal_error("reading mask_inf at first row");
 	    return RLI_ERRORE;
 	}
 
@@ -211,8 +211,8 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	    mask_inf = mask_tmp;
 
 	    if ((j + 1) < ad->rl) {	/* not last row */
-		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) <= 0) {
-		    G_fatal_error("reading mask_inf");
+		if (read(mask_fd, mask_inf, (ad->cl * sizeof(int))) < 0) {
+		    G_fatal_error("reading mask_inf at row j");
 		    return RLI_ERRORE;
 		}
 	    }
@@ -231,7 +231,7 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 	for (i = 0; i < ad->cl; i++) {
 	    corrCell = buf_corr[i + ad->x];
 
-	    if (masked && mask_corr[i + ad->x] == 0) {
+	    if (masked && mask_corr[i] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
 
@@ -239,17 +239,17 @@ int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 		area++;
 		if ((i + 1) == ad->cl)	/*last cell of the row */
 		    Rast_set_c_null_value(&nextCell, 1);
-		else if (masked && mask_corr[i + 1 + ad->x] == 0)
+		else if (masked && mask_corr[i + 1] == 0)
 		    Rast_set_c_null_value(&nextCell, 1);
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
-		if (masked && mask_sup[i + ad->x] == 0)
+		if (masked && mask_sup[i] == 0)
 		    Rast_set_c_null_value(&supCell, 1);
 		else
 		    supCell = buf_sup[i + ad->x];
 
-		if (masked && mask_inf[i + ad->x] == 0)
+		if (masked && mask_inf[i] == 0)
 		    Rast_set_c_null_value(&infCell, 1);
 		else
 		    infCell = buf_inf[i + ad->x];
@@ -490,7 +490,7 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf_corr[i + ad->x];
 
-	    if (masked && mask_corr[i + ad->x] == 0) {
+	    if (masked && mask_corr[i] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
 
@@ -498,17 +498,17 @@ int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 		area++;
 		if ((i + 1) == ad->cl)	/*last cell of the row */
 		    Rast_set_d_null_value(&nextCell, 1);
-		else if (masked && mask_corr[i + 1 + ad->x] == 0)
+		else if (masked && mask_corr[i + 1] == 0)
 		    Rast_set_d_null_value(&nextCell, 1);
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
-		if (masked && mask_sup[i + ad->x] == 0)
+		if (masked && mask_sup[i] == 0)
 		    Rast_set_d_null_value(&supCell, 1);
 		else
 		    supCell = buf_sup[i + ad->x];
 
-		if (masked && mask_inf[i + ad->x] == 0)
+		if (masked && mask_inf[i] == 0)
 		    Rast_set_d_null_value(&infCell, 1);
 		else
 		    infCell = buf_inf[i + ad->x];
@@ -746,7 +746,7 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf_corr[i + ad->x];
 
-	    if (masked && mask_corr[i + ad->x] == 0) {
+	    if (masked && mask_corr[i] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
 
@@ -754,17 +754,17 @@ int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 		area++;
 		if ((i + 1) == ad->cl)	/*last cell of the row */
 		    Rast_set_f_null_value(&nextCell, 1);
-		else if (masked && mask_corr[i + 1 + ad->x] == 0)
+		else if (masked && mask_corr[i + 1] == 0)
 		    Rast_set_f_null_value(&nextCell, 1);
 		else
 		    nextCell = buf_corr[i + 1 + ad->x];
 
-		if (masked && mask_sup[i + ad->x] == 0)
+		if (masked && mask_sup[i] == 0)
 		    Rast_set_f_null_value(&supCell, 1);
 		else
 		    supCell = buf_sup[i + ad->x];
 
-		if (masked && mask_inf[i + ad->x] == 0)
+		if (masked && mask_inf[i] == 0)
 		    Rast_set_f_null_value(&infCell, 1);
 		else
 		    infCell = buf_inf[i + ad->x];

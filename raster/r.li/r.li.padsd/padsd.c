@@ -120,7 +120,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
-    Rast_get_cellhd(ad->raster, "", &hd);
+    Rast_get_window(&hd);
 
     buf_null = Rast_allocate_c_buf();
     Rast_set_c_null_value(buf_null, Rast_window_cols());
@@ -202,7 +202,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    pid_corr[j + ad->x] = 0;
 	    
 	    corrCell = buf[j + ad->x];
-	    if (masked && (mask_buf[j + ad->x] == 0)) {
+	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
 
@@ -215,7 +215,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    area++;
 	    
 	    supCell = buf_sup[j + ad->x];
-	    if (masked && (mask_sup[j + ad->x] == 0)) {
+	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_c_null_value(&supCell, 1);
 	    }
 
@@ -361,7 +361,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
-    Rast_get_cellhd(ad->raster, "", &hd);
+    Rast_get_window(&hd);
 
     buf_null = Rast_allocate_d_buf();
     Rast_set_d_null_value(buf_null, Rast_window_cols());
@@ -443,7 +443,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	    pid_corr[j + ad->x] = 0;
 	    
 	    corrCell = buf[j + ad->x];
-	    if (masked && (mask_buf[j + ad->x] == 0)) {
+	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
 
@@ -456,7 +456,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	    area++;
 	    
 	    supCell = buf_sup[j + ad->x];
-	    if (masked && (mask_sup[j + ad->x] == 0)) {
+	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_d_null_value(&supCell, 1);
 	    }
 
@@ -602,7 +602,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
-    Rast_get_cellhd(ad->raster, "", &hd);
+    Rast_get_window(&hd);
 
     buf_null = Rast_allocate_f_buf();
     Rast_set_f_null_value(buf_null, Rast_window_cols());
@@ -684,7 +684,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	    pid_corr[j + ad->x] = 0;
 	    
 	    corrCell = buf[j + ad->x];
-	    if (masked && (mask_buf[j + ad->x] == 0)) {
+	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
 
@@ -697,7 +697,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	    area++;
 	    
 	    supCell = buf_sup[j + ad->x];
-	    if (masked && (mask_sup[j + ad->x] == 0)) {
+	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_f_null_value(&supCell, 1);
 	    }
 

@@ -66,14 +66,15 @@ int shape_index(int fd, char **par, struct area_entry *ad, double *result)
     int *mask_buf = NULL;
 
     Rast_set_c_null_value(&complete_value, 1);
-    Rast_get_cellhd(ad->raster, "", &hd);
+
+    Rast_get_window(&hd);
 
     /* open mask if needed */
     if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
 	    return 0;
 
-	mask_buf = malloc(ad->cl * sizeof(int));
+	mask_buf = G_malloc(ad->cl * sizeof(int));
 
 	for (i = 0; i < ad->rl; i++) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
@@ -85,7 +86,7 @@ int shape_index(int fd, char **par, struct area_entry *ad, double *result)
 		}
 	    }
 	}
-	/* todo? free(mask_buf); */
+	G_free(mask_buf);
     }
 
     /* calculate distance */

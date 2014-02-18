@@ -121,7 +121,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
-    Rast_get_cellhd(ad->raster, "", &hd);
+    Rast_get_window(&hd);
 
     buf_null = Rast_allocate_c_buf();
     Rast_set_c_null_value(buf_null, Rast_window_cols());
@@ -203,7 +203,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    pid_corr[j + ad->x] = 0;
 	    
 	    corrCell = buf[j + ad->x];
-	    if (masked && (mask_buf[j + ad->x] == 0)) {
+	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
 
@@ -216,7 +216,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    area++;
 	    
 	    supCell = buf_sup[j + ad->x];
-	    if (masked && (mask_sup[j + ad->x] == 0)) {
+	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_c_null_value(&supCell, 1);
 	    }
 
@@ -321,7 +321,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 		area_p = cell_size_m * pst[old_pid].count / 10000;
 		if (min > area_p)
 		    min = area_p;
-		if (max > area_p)
+		if (max < area_p)
 		    max = area_p;
 	    }
 	}
@@ -357,7 +357,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
-    Rast_get_cellhd(ad->raster, "", &hd);
+    Rast_get_window(&hd);
 
     buf_null = Rast_allocate_d_buf();
     Rast_set_d_null_value(buf_null, Rast_window_cols());
@@ -439,7 +439,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	    pid_corr[j + ad->x] = 0;
 	    
 	    corrCell = buf[j + ad->x];
-	    if (masked && (mask_buf[j + ad->x] == 0)) {
+	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
 
@@ -452,7 +452,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	    area++;
 	    
 	    supCell = buf_sup[j + ad->x];
-	    if (masked && (mask_sup[j + ad->x] == 0)) {
+	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_d_null_value(&supCell, 1);
 	    }
 
@@ -531,12 +531,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
     if (npatch > 0) {
 	double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
-	double area_units;
 	double area_p;
 	double cell_size_m;
-	double mps;
-	double psd;
-	double diff;
+	double min, max;
 
 	/* calculate distance */
 	G_begin_distance_calculations();
@@ -551,22 +548,20 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
 	cell_size_m = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
 	              (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
-	area_units = cell_size_m * area;
 
-	/* mean patch size in hectares */
-	mps = area_units / (npatch * 10000);
-
-	/* calculate patch size standard deviation */
-	psd = 0;
+	/* get min and max patch size */
+	min = 1.0 / 0.0;	/* inf */
+	max = -1.0 / 0.0;	/* -inf */
 	for (old_pid = 1; old_pid <= pid; old_pid++) {
 	    if (pst[old_pid].count > 0) {
 		area_p = cell_size_m * pst[old_pid].count / 10000;
-		diff = area_p - mps;
-		psd += diff * diff;
+		if (min > area_p)
+		    min = area_p;
+		if (max < area_p)
+		    max = area_p;
 	    }
 	}
-	psd = sqrt(psd / npatch);
-	*result = psd;
+	*result = max - min;
     }
     else
 	Rast_set_d_null_value(result, 1);
@@ -598,7 +593,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
-    Rast_get_cellhd(ad->raster, "", &hd);
+    Rast_get_window(&hd);
 
     buf_null = Rast_allocate_f_buf();
     Rast_set_f_null_value(buf_null, Rast_window_cols());
@@ -680,7 +675,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	    pid_corr[j + ad->x] = 0;
 	    
 	    corrCell = buf[j + ad->x];
-	    if (masked && (mask_buf[j + ad->x] == 0)) {
+	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
 
@@ -693,7 +688,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	    area++;
 	    
 	    supCell = buf_sup[j + ad->x];
-	    if (masked && (mask_sup[j + ad->x] == 0)) {
+	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_f_null_value(&supCell, 1);
 	    }
 
@@ -772,12 +767,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
     if (npatch > 0) {
 	double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
-	double area_units;
 	double area_p;
 	double cell_size_m;
-	double mps;
-	double psd;
-	double diff;
+	double min, max;
 
 	/* calculate distance */
 	G_begin_distance_calculations();
@@ -792,22 +784,20 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
 	cell_size_m = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
 	              (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
-	area_units = cell_size_m * area;
 
-	/* mean patch size in hectares */
-	mps = area_units / (npatch * 10000);
-
-	/* calculate patch size standard deviation */
-	psd = 0;
+	/* get min and max patch size */
+	min = 1.0 / 0.0;	/* inf */
+	max = -1.0 / 0.0;	/* -inf */
 	for (old_pid = 1; old_pid <= pid; old_pid++) {
 	    if (pst[old_pid].count > 0) {
 		area_p = cell_size_m * pst[old_pid].count / 10000;
-		diff = area_p - mps;
-		psd += diff * diff;
+		if (min > area_p)
+		    min = area_p;
+		if (max < area_p)
+		    max = area_p;
 	    }
 	}
-	psd = sqrt(psd / npatch);
-	*result = psd;
+	*result = max - min;
     }
     else
 	Rast_set_d_null_value(result, 1);
