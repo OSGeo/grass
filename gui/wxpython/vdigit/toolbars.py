@@ -822,7 +822,9 @@ class VDigitToolbar(BaseToolbar):
 
         @param mapLayer MapLayer to be edited
         """
-        if grass.vector_info(mapLayer.GetName())['level'] != 2:
+        # check if topology is available (skip for hidden - temporary
+        # maps, see iclass for details)
+        if not mapLayer.IsHidden() and grass.vector_info(mapLayer.GetName())['level'] != 2:
             dlg = wx.MessageDialog(parent = self.MapWindow,
                                    message = _("Topology for vector map <%s> is not available. "
                                                "Topology is required by digitizer.\nDo you want to "
