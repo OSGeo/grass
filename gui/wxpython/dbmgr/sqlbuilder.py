@@ -13,7 +13,7 @@ Usage:
 python sqlbuilder.py select|update vector_map
 @endcode
 
-(C) 2007-2009, 2011-2012 by the GRASS Development Team
+(C) 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -216,9 +216,18 @@ class SQLBuilder(wx.Frame):
 
         valuesizer.Add(item = buttonsizer3, proportion = 0,
                        flag = wx.TOP, border = 5)
+
+        # go to
+        gotosizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.goto = wx.TextCtrl(parent = self.valuespanel, id = wx.ID_ANY)
+        gotosizer.Add(item = wx.StaticText(parent = self.valuespanel, id = wx.ID_ANY,
+                                              label = _("Go to:")), proportion = 0,
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border = 5)
+        gotosizer.Add(item = self.goto, proportion = 1,
+                      flag = wx.EXPAND)
+        valuesizer.Add(item = gotosizer, proportion = 0,
+                       flag = wx.ALL | wx.EXPAND, border = 5)
         
-        # hsizer1.Add(wx.StaticText(self.panel,-1, "Unique values: "), border=0, proportion=1)
- 
         self.hsizer.Add(item = columnsizer, proportion = 1,
                         flag = wx.EXPAND)
         self.hsizer.Add(item = self.valuespanel, proportion = 1,
@@ -263,6 +272,7 @@ class SQLBuilder(wx.Frame):
 
         self.list_columns.Bind(wx.EVT_LISTBOX,   self.OnAddColumn)
         self.list_values.Bind(wx.EVT_LISTBOX,    self.OnAddValue)
+        self.goto.Bind(wx.EVT_TEXT,              self.OnGoTo)
 
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(self.pagesizer)
@@ -337,6 +347,23 @@ class SQLBuilder(wx.Frame):
         
         self._add(element = 'value', value = value)
 
+    def OnGoTo(self, event):
+        # clear all previous selections
+        for item in self.list_values.GetSelections():
+            self.list_values.Deselect(item)
+        
+        gotoText = event.GetString()
+        lenLimit = len(gotoText)
+        found = idx = 0
+        for item in self.list_values.GetItems():
+            if item[:lenLimit] == gotoText:
+                found = idx
+                break
+            idx += 1
+
+        if found > 0:
+            self.list_values.SetSelection(found)
+            
     def OnAddMark(self, event):
         """!Add mark"""
         mark = None
