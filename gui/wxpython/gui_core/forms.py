@@ -1893,7 +1893,7 @@ class CmdPanel(wx.Panel):
         win = self.FindWindowById(p['wxId'][0])
         if text:
             filename = win.GetValue()
-            if not filename:
+            if not filename or filename == p['default']:  # m.proj has - as default
                 filename = grass.tempfile()
                 win.SetValue(filename)
                 
