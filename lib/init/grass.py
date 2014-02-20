@@ -1239,6 +1239,9 @@ os.environ['GRASS_VERSION'] = grass_version
 gis_lock = str(os.getpid())
 os.environ['GIS_LOCK'] = gis_lock
 
+if not os.path.exists(grass_config_dir):
+    os.mkdir(grass_config_dir)
+
 # Set the global grassrc file
 batch_job = os.getenv('GRASS_BATCH_JOB')
 if batch_job:
@@ -1374,8 +1377,6 @@ try_remove(lockfile)
 
 # Save GISRC
 s = readfile(gisrc)
-if not os.path.exists(grass_config_dir):
-    os.mkdir(grass_config_dir)
 writefile(gisrcrc, s)
 
 cleanup()
