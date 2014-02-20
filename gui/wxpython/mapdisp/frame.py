@@ -552,6 +552,8 @@ class MapFrame(SingleMapFrame):
         """!Save map to image
         """
         filetype, ltype = self._prepareSaveToFile()
+        if not ltype:
+            return
         
         # get size
         dlg = ImageSizeDialog(self)
@@ -591,6 +593,8 @@ class MapFrame(SingleMapFrame):
         Command is expected to be validated by parser.        
         """
         filetype, ltype = self._prepareSaveToFile()
+        if not ltype:
+            return
         width, height = self.MapWindow.GetClientSize()
         for param in command[1:]:
             p, val = param.split('=')
@@ -640,7 +644,7 @@ class MapFrame(SingleMapFrame):
             if not img:
                 GMessage(parent = self,
                          message = _("Nothing to render (empty map). Operation canceled."))
-                return
+                return None, None
             filetype, ltype = GetImageHandlers(img)
         return filetype, ltype
 
