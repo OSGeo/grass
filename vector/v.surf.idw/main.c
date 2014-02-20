@@ -62,9 +62,10 @@ int main(int argc, char *argv[])
     double dist;
     double sum1, sum2, interp_value;
     int n;
+    double p;
     struct
     {
-	struct Option *input, *npoints, *output, *dfield, *col;
+	struct Option *input, *npoints, *power, *output, *dfield, *col;
     } parm;
     struct
     {
@@ -110,6 +111,15 @@ int main(int argc, char *argv[])
     parm.npoints->answer = "12";
     parm.npoints->guisection = _("Settings");
 
+    parm.power = G_define_option();
+    parm.power->key = "power";
+    parm.power->type = TYPE_DOUBLE;
+    parm.power->answer = "2.0";
+    parm.power->label = _("Power parameter");
+    parm.power->description = 
+    	_("Greater values assign greater influence to closer points");
+    parm.power->guisection = _("Settings");
+
     flag.noindex = G_define_flag();
     flag.noindex->key = 'n';
     flag.noindex->label = _("Don't index points by raster cell");
@@ -137,7 +147,9 @@ int main(int argc, char *argv[])
     list =
 	(struct list_Point *) G_calloc((size_t) search_points,
 				       sizeof(struct list_Point));
-    
+
+    p = atof(parm.power->answer);
+
     /* get the window, dimension arrays */
     G_get_window(&window);
 
@@ -373,8 +385,8 @@ int main(int argc, char *argv[])
 		sum2 = 0.0;
 		for (n = 0; n < nsearch; n++) {
 		    if ((dist = list[n].dist)) {
-			sum1 += list[n].z / dist;
-			sum2 += 1.0 / dist;
+			sum1 += list[n].z / pow(dist, p);
+			sum2 += 1.0 / pow(dist, p);
 		    }
 		    else {
 			/* If one site is dead on the centre of the cell, ignore

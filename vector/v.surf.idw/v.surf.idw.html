@@ -45,7 +45,16 @@ the mean of all the site values will determine the cell value (unless
 the -n flag is specified, in which case only the <em>count</em> 
 points closest to the centre of the cell will be interpolated).
 
-<p>By setting <em>npoints=1</em>, the module can be used 
+<p>
+The <em>power</em> parameter defines an exponential distance weight.
+Greater values assign greater influence to values closer to the
+point to be interpolated. The interpolation function peaks sharply over
+the given data points for 0 &lt; <em>p</em> &lt; 1 and more smoothly for
+larger values. The default value for the power parameter is 2.  
+
+
+<p>
+By setting <em>npoints=1</em>, the module can be used 
 to calculate raster Voronoi diagrams (Thiessen polygons).
 
 
