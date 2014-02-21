@@ -35,11 +35,11 @@ int main(int argc, char *argv[])
 
     struct {
 	struct Option *map, *field, *colr, *rast, *volume, *rules,
-	    *attrcol, *rgbcol, *range;
+          *attrcol, *rgbcol, *range, *use;
     } opt;
 
     int layer;
-    int overwrite, remove, is_from_stdin, stat, have_colors, convert;
+    int overwrite, remove, is_from_stdin, stat, have_colors, convert, use;
     const char *mapset, *cmapset;
     const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
     char *name;
@@ -61,9 +61,23 @@ int main(int argc, char *argv[])
 
     opt.field = G_define_standard_option(G_OPT_V_FIELD);
 
+    opt.use = G_define_option();
+    opt.use->key = "use";
+    opt.use->type = TYPE_STRING;
+    opt.use->required = YES;
+    opt.use->multiple = NO;
+    opt.use->options = "attr,cat,z";
+    opt.use->description = _("Source values");
+    G_asprintf((char **) &(opt.use->descriptions),
+	       "attr;%s;cat;%s;z;%s",
+	       _("read values from attribute table (requires <column> option)"),
+	       _("use category values"),
+	       _("use z coordinate (3D points or centroids only)"));
+    opt.use->answer = "cat";
+    
     opt.attrcol = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.attrcol->label = _("Name of column containing numeric data");
-    opt.attrcol->description = _("If not given categories are used");
+    opt.attrcol->description = _("Required for use=attr");
     opt.attrcol->guisection = _("Define");
 
     opt.range = G_define_option();
@@ -161,9 +175,33 @@ int main(int argc, char *argv[])
     attrcolumn = opt.attrcol->answer;
     rgbcolumn = opt.rgbcol->answer;
     convert = flag.c->answer;
+    use = USE_CAT;
+    if (opt.use->answer) {
+        switch (opt.use->answer[0]) {
+        case 'a':
+            use = USE_ATTR;
+            break;
+        case 'c':
+            use = USE_CAT;
+            break;
+        case 'z':
+            use = USE_Z;
+            break;
+        default:
+            break;
+        }
+    }
+    G_debug(1, "use=%d", use);
     
     if (!name)
         G_fatal_error(_("No vector map specified"));
+
+    if (use == USE_ATTR && !attrcolumn)
+        G_fatal_error(_("Option <%s> required"), opt.attrcol->key); 
+    if (use != USE_ATTR && attrcolumn) {
+        G_important_message(_("Option <%s> given, assuming <use=attr>..."), opt.attrcol->key);
+        use = USE_ATTR;
+    }
 
     if (opt.rast->answer && opt.volume->answer)
         G_fatal_error(_("Options <%s> and <%s> are mutually exclusive"),
@@ -212,7 +250,7 @@ int main(int argc, char *argv[])
     }
 
     G_suppress_warnings(TRUE);
-    have_colors = Vect_read_colors(name, mapset, &colors);
+    have_colors = Vect_read_colors(name, mapset, NULL);
 
     if (have_colors > 0 && !overwrite) {
         G_fatal_error(_("Color table exists. Exiting."));
@@ -223,7 +261,10 @@ int main(int argc, char *argv[])
     /* open map and get min/max values */
     Vect_set_open_level(1); /* no topology required */
     Vect_open_old2(&Map, name, mapset, opt.field->answer);
-
+    Vect_set_error_handler_io(&Map, NULL);
+    if (use == USE_Z && !Vect_is_3d(&Map))
+        G_fatal_error(_("Vector map <%s> is not 3D"), Vect_get_full_name(&Map));
+    
     layer = Vect_get_field_number(&Map, opt.field->answer);
     if (layer < 1)
 	G_fatal_error(_("Layer <%s> not found"), opt.field->answer);
@@ -236,6 +277,7 @@ int main(int argc, char *argv[])
 			  opt.range->key);
     }
 
+    Rast_init_colors(&colors);
     if (is_from_stdin) {
 	/*
         if (!read_color_rules(stdin, &colors, min, max, fp))
@@ -245,12 +287,17 @@ int main(int argc, char *argv[])
 	if (style && !G_find_color_rule(style))
 	    G_fatal_error(_("Color table <%s> not found"), style);
 	
-	if (!attrcolumn) {
+	if (use == USE_CAT) {
 	    scan_cats(&Map, layer, style, rules,
 		      opt.range->answer ? &range : NULL,
 		      &colors);
-	}
-	else {
+        }
+        else if (use == USE_Z) {
+	    scan_z(&Map, layer, style, rules,
+		      opt.range->answer ? &range : NULL,
+		      &colors);
+        }
+        else {
 	    scan_attr(&Map, layer, attrcolumn, style, rules,
 		      opt.range->answer ? &range : NULL,
 		      &colors);

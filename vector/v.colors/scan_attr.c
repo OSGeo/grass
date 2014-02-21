@@ -9,14 +9,12 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	      const char *style, const char *rules,
 	      const struct FPRange *range, struct Colors *colors)
 {
-    int ctype, is_fp, nrec, i, cat;
-    int red, grn, blu;
+    int ctype, is_fp, nrec;
     double fmin, fmax;
     
     struct field_info *fi;
     struct Colors vcolors;
     dbDriver *driver;
-    dbCatVal *cv;
     dbCatValArray cvarr;
 
     Rast_init_colors(colors);
@@ -91,12 +89,27 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	load_colors(&vcolors, rules, (DCELL) fmin, (DCELL) fmax, is_fp);
 
     /* color table for categories */
-    for (i = 0; i < cvarr.n_values; i++) {
-	cv = &(cvarr.value[i]);
+    color_rules_to_cats(&cvarr, is_fp, &vcolors, colors);
+
+    db_close_database(driver);
+
+    return is_fp;
+}
+
+void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
+                         struct Colors *vcolors, struct Colors *colors)
+{
+    int i, cat;
+    dbCatVal *cv;
+    int red, grn, blu;
+
+    /* color table for categories */
+    for (i = 0; i < cvarr->n_values; i++) {
+	cv = &(cvarr->value[i]);
 	cat = cv->cat;
 	if (is_fp) {
 	    if (Rast_get_d_color((const DCELL *) &(cv->val.d), &red, &grn, &blu,
-				 &vcolors) == 0) {
+				 vcolors) == 0) {
 		/* G_warning(_("No color rule defined for value %f"), cv->val.d); */
 		G_debug(3, "scan_attr(): cat=%d, val=%f -> no color rule", cat, cv->val.d);
 		continue;
@@ -104,7 +117,7 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	}
 	else {
 	    if (Rast_get_c_color((const CELL *) &(cv->val.i), &red, &grn, &blu,
-				 &vcolors) == 0) {
+				 vcolors) == 0) {
 		/* G_warning(_("No color rule defined for value %d"), cv->val.i); */
 		G_debug(3, "scan_attr(): cat=%d, val=%d -> no color rule", cat, cv->val.i);
 		continue;
@@ -115,8 +128,4 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	Rast_add_c_color_rule((const CELL*) &cat, red, grn, blu,
 			      (const CELL*) &cat, red, grn, blu, colors);
     }
-    
-    db_close_database(driver);
-
-    return is_fp;
 }
