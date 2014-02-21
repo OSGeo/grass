@@ -258,7 +258,7 @@ int draw_line(int type, int ltype, int line,
     G_debug(3, "\tdisplay feature %d, cat %d", line, cat);
     
     /* z height colors */
-    if (zcolors) {
+    if (zcolors && (ltype & GV_POINTS)) {
 	if (Rast_get_d_color(&Points->z[0], &red, &grn, &blu, zcolors) == 1)
 	    custom_rgb = TRUE;
 	else
