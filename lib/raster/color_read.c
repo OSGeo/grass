@@ -131,18 +131,24 @@ int Rast__read_colors(const char *element, const char *name,
 	fclose(fd);
 	return -1;
     }
-    G_fseek(fd, 0L, 0);
+    
+    stat = 1;
+    if (colors) {
+        G_fseek(fd, 0L, 0);
 
-    G_strip(buf);
-    if (*buf == '%') {		/* 4.0 format */
-	stat = read_new_colors(fd, colors);
-	colors->version = 0;	/* 4.0 format */
+        G_strip(buf);
+        if (*buf == '%') {		/* 4.0 format */
+            stat = read_new_colors(fd, colors);
+            colors->version = 0;	/* 4.0 format */
+        }
+        else {
+            stat = read_old_colors(fd, colors);
+            colors->version = -1;	/* pre 4.0 format */
+        }
     }
-    else {
-	stat = read_old_colors(fd, colors);
-	colors->version = -1;	/* pre 4.0 format */
-    }
+
     fclose(fd);
+
     return stat;
 }
 
