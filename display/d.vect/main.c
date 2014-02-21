@@ -140,7 +140,7 @@ int main(int argc, char **argv)
     
     zcol_opt = G_define_standard_option(G_OPT_M_COLR);
     zcol_opt->key = "zcolor";
-    zcol_opt->description = _("Colorize features according to z-coordinate");
+    zcol_opt->description = _("Colorize point or area features according to z-coordinate");
     zcol_opt->guisection = _("Colors");
 
     /* Lines */
