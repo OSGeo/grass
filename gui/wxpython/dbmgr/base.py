@@ -15,7 +15,9 @@ List of classes:
  - base::LayerListCtrl
  - base::LayerBook
 
-(C) 2007-2009, 2011-2012 by the GRASS Development Team
+@todo Implement giface class
+
+(C) 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -352,6 +354,14 @@ class VirtualAttributeList(wx.ListCtrl,
             cats.append(self.GetItemText(item))
             item = self.GetNextSelected(item)
 
+        return cats
+
+    def GetItems(self):
+        """!Return list of items (category numbers)"""
+        cats = []
+        for item in range(self.GetItemCount()):
+            cats.append(self.GetItemText(item))
+        
         return cats
 
     def GetColumnText(self, index, col):
@@ -1557,14 +1567,19 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         
         event.Skip()
 
-    def _drawSelected(self, zoom):
+    def _drawSelected(self, zoom, selectedOnly=True):
         """!Highlight selected features"""
         if not self.map or not self.mapdisplay:
             return
         
         tlist = self.FindWindowById(self.layerPage[self.selLayer]['data'])
-        cats = map(int, tlist.GetSelectedItems())
-
+        if selectedOnly:
+            fn = tlist.GetSelectedItems
+        else:
+            fn = tlist.GetItems
+        
+        cats = map(int, fn())
+        
         digitToolbar = None
         if 'vdigit' in self.mapdisplay.toolbars:
             digitToolbar = self.mapdisplay.toolbars['vdigit']
@@ -1578,12 +1593,12 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                               update = True)
         else:
             # add map layer with higlighted vector features
-            self.AddQueryMapLayer() # -> self.qlayer
+            self.AddQueryMapLayer(selectedOnly) # -> self.qlayer
 
             # set opacity based on queried layer
             if self.parent and self.mapdisplay.tree and \
                     self.dbMgrData['treeItem']:
-                maptree = self.mapdisplay.tree
+                maptree = self.mapdisplay.tree # TODO: giface
                 opacity = maptree.GetLayerInfo(self.dbMgrData['treeItem'], key = 'maplayer').GetOpacity()
                 self.qlayer.SetOpacity(opacity)
             if zoom:
@@ -1633,15 +1648,18 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         else:
             self.mapdisplay.MapWindow.UpdateMap(render = False, renderVector = True)
         
-    def AddQueryMapLayer(self):
+    def AddQueryMapLayer(self, selectedOnly = True):
         """!Redraw a map
 
         Return True if map has been redrawn, False if no map is given
         """
         tlist = self.FindWindowById(self.layerPage[self.selLayer]['data'])
-        cats = { 
-            self.selLayer : tlist.GetSelectedItems()
-            }
+        if selectedOnly:
+            fn = tlist.GetSelectedItems
+        else:
+            fn = tlist.GetItems
+
+        cats = { self.selLayer : fn() }
         
         if self.mapdisplay.Map.GetLayerIndex(self.qlayer) < 0:
             self.qlayer = None
@@ -1826,6 +1844,10 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         # update statusbar
         self.log.write(_("Number of loaded records: %d") % \
                            self.FindWindowById(self.layerPage[self.selLayer]['data']).GetItemCount())
+
+        # update map display if needed
+        if UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'auto'):
+            self._drawSelected(zoom=False, selectedOnly=False) # TODO: replace by signals
 
     def OnBuilder(self,event):
         """!SQL Builder button pressed -> show the SQLBuilder dialog"""

@@ -214,7 +214,8 @@ class Settings:
             'atm' : {
                 'highlight' : {
                     'color' : (255, 255, 0, 255),
-                    'width' : 2
+                    'width' : 2,
+                    'auto'  : True,
                     },
                 'leftDbClick' : {
                     'selection' : 1 # draw selected

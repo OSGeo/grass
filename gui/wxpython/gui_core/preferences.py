@@ -15,7 +15,7 @@ Classes:
  - preferences::MapsetAccess
  - preferences::CheckListMapset
 
-(C) 2007-2012 by the GRASS Development Team
+(C) 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1060,12 +1060,13 @@ class PreferencesDialog(PreferencesBaseDialog):
         # highlighting
         #
         highlightBox = wx.StaticBox(parent = panel, id = wx.ID_ANY,
-                                    label = " %s " % _("Highlighting"))
+                                    label = " %s " % _("Highlight selected features"))
         highlightSizer = wx.StaticBoxSizer(highlightBox, wx.VERTICAL)
 
         flexSizer = wx.FlexGridSizer (cols = 2, hgap = 5, vgap = 5)
         flexSizer.AddGrowableCol(0)
         
+        # color
         label = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Color:"))
         hlColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
                                     colour = self.settings.Get(group = 'atm', key = 'highlight', subkey = 'color'),
@@ -1076,6 +1077,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         flexSizer.Add(label, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(hlColor, proportion = 0, flag = wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
+        # width
         label = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Line width (in pixels):"))
         hlWidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (50, -1),
                               initial = self.settings.Get(group = 'atm', key = 'highlight',subkey = 'width'),
@@ -1085,6 +1087,13 @@ class PreferencesDialog(PreferencesBaseDialog):
         flexSizer.Add(label, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(hlWidth, proportion = 0, flag = wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
+        # auto
+        autoHighlight = wx.CheckBox(parent = panel, id = wx.ID_ANY, label = _("Automatically hightlight selected features in map display"))
+        autoHighlight.SetValue(self.settings.Get(group = 'atm', key = 'highlight', subkey = 'auto'))
+        self.winId['atm:highlight:auto'] = autoHighlight.GetId()
+        
+        flexSizer.Add(autoHighlight, proportion = 1)
+        
         highlightSizer.Add(item = flexSizer,
                            proportion = 0,
                            flag = wx.ALL | wx.EXPAND,
