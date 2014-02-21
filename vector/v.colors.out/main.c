@@ -59,9 +59,9 @@ int main(int argc, char **argv)
     opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.file->key = "rules";
     opt.file->label = _("Path to output rules file");
-    opt.file->description = _("\"-\" to write to stdout");
-    opt.file->answer = "-";
-    
+    opt.file->description = _("If not given write to standard output");
+    opt.file->required = NO;
+
     opt.col = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.col->label = _("Name of attribute (numeric) column to which refer color rules");
     opt.col->description = _("If not given color rules are refered to categories");
