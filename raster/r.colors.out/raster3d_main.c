@@ -54,9 +54,9 @@ int main(int argc, char **argv)
     opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.file->key = "rules";
     opt.file->label = _("Path to output rules file");
-    opt.file->description = _("\"-\" to write to stdout");
-    opt.file->answer = "-";
-    
+    opt.file->description = _("If not given write to standard output");
+    opt.file->required = NO;
+
     flag.p = G_define_flag();
     flag.p->key = 'p';
     flag.p->description = _("Output values as percentages");
