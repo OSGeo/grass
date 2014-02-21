@@ -104,6 +104,7 @@ void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
     int red, grn, blu;
 
     /* color table for categories */
+    G_message(_("Converting color rules into categories..."));
     for (i = 0; i < cvarr->n_values; i++) {
 	cv = &(cvarr->value[i]);
 	cat = cv->cat;
