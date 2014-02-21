@@ -6,7 +6,9 @@
  *               Markus Neteler <neteler itc.it>
  *               Roberto Flor <flor itc.it>, Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>
- * PURPOSE:
+ * PURPOSE:      Generates rate of spread raster map layers for wildfire modeling
+ *
+ * TODO: (re)move following documentation
  *
  * This raster module creates three raster map layers:
  *	1. Base (perpendicular) rate of spread (ROS);
@@ -210,75 +212,122 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("fire"));
-    module->label = _("Generates rate of spread raster map layers.");
+    G_add_keyword(_("spread"));
+    G_add_keyword(_("rate of spread"));
+    G_add_keyword(_("hazard"));
+    module->label = _("Generates rate of spread raster maps.");
     module->description =
-	_("Generates three, or four raster map layers showing 1) the base "
-	  "(perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, "
-	  "3) the direction of the maximum ROS, and optionally 4) the "
-	  "maximum potential spotting distance.");
+	_("Generates three, or four raster map layers showing the base "
+	  "(perpendicular) rate of spread (ROS), the maximum (forward) ROS, "
+	  "the direction of the maximum ROS, and optionally the "
+	  "maximum potential spotting distance for fire spread simulation.");
 
     parm.model = G_define_standard_option(G_OPT_R_INPUT);
     parm.model->key = "model";
-    parm.model->description = _("Name of raster map containing fuel MODELs");
+    parm.model->label = _("Raster map containing fuel models");
+    parm.model->description =
+	_("Name of an "
+	  "existing raster map layer in the user's current mapset search path containing "
+	  "the standard fuel models defined by the USDA Forest Service. Valid values "
+	  "are 1-13; other numbers are recognized as barriers by r.ros.");
 
     parm.mois_1h = G_define_standard_option(G_OPT_R_INPUT);
     parm.mois_1h->key = "moisture_1h";
     parm.mois_1h->required = NO;
-    parm.mois_1h->description =
-	_("Name of raster map containing the 1-HOUR fuel MOISTURE (%)");
+    parm.mois_1h->label =
+	_("Raster map containing the 1-hour fuel moisture (%)");
+	parm.mois_1h->description =
+	_("Name of an existing raster map layer in "
+	  "the user's current mapset search path containing the 1-hour (<.25\") "
+	  "fuel moisture (percentage content multiplied by 100).");
 
     parm.mois_10h = G_define_standard_option(G_OPT_R_INPUT);
     parm.mois_10h->key = "moisture_10h";
     parm.mois_10h->required = NO;
+    parm.mois_10h->label =
+	_("Raster map containing the 10-hour fuel moisture (%)");
     parm.mois_10h->description =
-	_("Name of raster map containing the 10-HOUR fuel MOISTURE (%)");
+	_("Name of an existing raster map layer in the "
+	  "user's current mapset search path containing the 10-hour (.25-1\") fuel "
+	  "moisture (percentage content multiplied by 100).");
 
     parm.mois_100h = G_define_standard_option(G_OPT_R_INPUT);
     parm.mois_100h->key = "moisture_100h";
     parm.mois_100h->required = NO;
+    parm.mois_100h->label =
+	_("Raster map containing the 100-hour fuel moisture (%)");
     parm.mois_100h->description =
-	_("Name of raster map containing the 100-HOUR fuel MOISTURE (%)");
+	_("Name of an existing raster map layer in the "
+	  "user's current mapset search path containing the 100-hour (1-3\") fuel moisture "
+	  "(percentage content multiplied by 100).");
 
     parm.mois_live = G_define_standard_option(G_OPT_R_INPUT);
     parm.mois_live->key = "moisture_live";
+    parm.mois_live->label =
+	_("Raster map containing live fuel moisture (%)");
     parm.mois_live->description =
-	_("Name of raster map containing LIVE fuel MOISTURE (%)");
+	_("Name of an existing raster map layer in the "
+	  "user's current mapset search path containing live (herbaceous) fuel "
+	  "moisture (percentage content multiplied by 100).");
 
     parm.vel = G_define_standard_option(G_OPT_R_INPUT);
     parm.vel->key = "velocity";
     parm.vel->required = NO;
     parm.vel->description =
-	_("Name of raster map containing midflame wind VELOCITYs (ft/min)");
+	_("Raster map containing midflame wind velocitys (ft/min)");
+    parm.vel->description =
+	_("Name of an existing raster map layer in the user's "
+	  "current mapset search path containing wind velocities at half of the average "
+	  "flame height (feet/minute).");
 
     parm.dir = G_define_standard_option(G_OPT_R_INPUT);
     parm.dir->key = "direction";
     parm.dir->required = NO;
+    parm.dir->label =
+	_("Name of raster map containing wind directions (degree)");
     parm.dir->description =
-	_("Name of raster map containing wind DIRECTIONs (degree)");
+	_("Name of an existing raster map "
+	  "layer in the user's current mapset search path containing wind direction, "
+	  "clockwise from north (degree).");
 
     parm.slope = G_define_standard_option(G_OPT_R_INPUT);
     parm.slope->key = "slope";
     parm.slope->required = NO;
+    parm.slope->label =
+	_("Name of raster map containing slope (degree)");
     parm.slope->description =
-	_("Name of raster map containing SLOPE (degree)");
+	_("Name of an existing raster map layer "
+	  "in the user's current mapset search path containing "
+	  "topographic slope (degree).");
 
     parm.aspect = G_define_standard_option(G_OPT_R_INPUT);
     parm.aspect->key = "aspect";
     parm.aspect->required = NO;
+    parm.aspect->label =
+	_("Raster map containing aspect (degree, CCW from E)");
     parm.aspect->description =
-	_("Name of raster map containing ASPECT (degree, anti-clockwise from E)");
+	_("Name of an existing "
+	  "raster map layer in the user's current mapset search path containing "
+	  "topographic aspect, counterclockwise from east (GRASS convention) "
+	  "in degrees.");
 
     parm.elev = G_define_standard_option(G_OPT_R_ELEV);
     parm.elev->required = NO;
+    parm.elev->label =
+	_("Raster map containing elevation (m, required with -s)");
     parm.elev->description =
-	_("Name of raster map containing ELEVATION (m) (required w/ -s)");
+	_("Name of an existing raster map "
+	  "layer in the user's current mapset search path containing elevation (meters). "
+	  "Option is required from spotting distance computation "
+	  "(when -s flag is enabled)");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.output->description = _("Name prefix for output raster maps (.base, .max, .maxdir)");
+    parm.output->description =
+	_("Prefix for output raster maps (.base, .max, .maxdir, .spotdist)");
 
     flag_s = G_define_flag();
     flag_s->key = 's';
-    flag_s->description = _("Also produce maximum SPOTTING distance");
+    flag_s->description = _("Also produce maximum spotting distance");
 
     /*   Parse command line */
     if (G_parser(argc, argv))
