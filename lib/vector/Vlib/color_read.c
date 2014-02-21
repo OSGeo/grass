@@ -33,7 +33,7 @@
   
   \param name vector map name
   \param mapset mapset name ("" for search path)
-  \param[out] colors pointer to Colors structure
+  \param[out] colors pointer to Colors structure (can be NULL)
   
   \return -1 on error
   \return 0 if color table missing
@@ -46,7 +46,8 @@ int Vect_read_colors(const char *name, const char *mapset,
     char buf[GPATH_MAX];
     char xname[GNAME_MAX];
     
-    Rast_init_colors(colors);
+    if (colors)
+        Rast_init_colors(colors);
     
     strcpy(xname, name);
     mapset = G_find_vector(xname, mapset);
