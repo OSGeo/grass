@@ -101,14 +101,17 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("fire"));
+    G_add_keyword(_("spread"));
+    G_add_keyword(_("hazard"));
     module->label =
-	_("Simulates elliptically anisotropic spread on a graphics window and "
-	 "generates a raster map of the cumulative time of spread, "
-	 "given raster maps containing the rates of spread (ROS), the ROS "
-	 "directions and the spread origins.");
+	_("Simulates elliptically anisotropic spread.");
     module->description =
-	_("It optionally produces raster maps to contain backlink UTM "
-	  "coordinates for tracing spread paths.");
+	_("Generates a raster map of the cumulative time of spread, "
+	  "given raster maps containing the rates of spread (ROS), "
+	  "the ROS directions and the spread origins. "
+	  "It optionally produces raster maps to contain backlink UTM "
+	  "coordinates for tracing spread paths. "
+	  "Usable for fire spread simulations.");
 
     parm.max = G_define_option();
     parm.max->key = "max";
@@ -116,8 +119,11 @@ int main(int argc, char *argv[])
     parm.max->required = YES;
     parm.max->gisprompt = "old,cell,raster";
     parm.max->guisection = _("Input maps");
-    parm.max->description =
-	_("Name of raster map containing MAX rate of spread (ROS) (cm/min)");
+    parm.max->label =
+	_("Raster map containing maximal ROS (cm/min)");
+	parm.max->description =
+	_("Name of an existing raster map layer in the user's current "
+	  "mapset search path containing the maximum ROS values (cm/minute).");
 
     parm.dir = G_define_option();
     parm.dir->key = "dir";
@@ -125,8 +131,12 @@ int main(int argc, char *argv[])
     parm.dir->required = YES;
     parm.dir->gisprompt = "old,cell,raster";
     parm.dir->guisection = _("Input maps");
+    parm.dir->label =
+	_("Raster map containing directions of maximal ROS (degree)");
     parm.dir->description =
-	_("Name of raster map containing DIRections of max ROS (degree)");
+	_("Name of an existing raster map layer in the user's "
+	  "current mapset search path containing directions of the maximum ROSes, "
+	  "clockwise from north (degree)."); /* TODO: clockwise from north? see r.ros */
 
     parm.base = G_define_option();
     parm.base->key = "base";
@@ -134,8 +144,13 @@ int main(int argc, char *argv[])
     parm.base->required = YES;
     parm.base->gisprompt = "old,cell,raster";
     parm.base->guisection = _("Input maps");
+    parm.base->label =
+	_("Raster map containing base ROS (cm/min)");
     parm.base->description =
-	_("Name of raster map containing BASE ROS (cm/min)");
+	_("Name of an existing raster map layer in the user's "
+	  "current mapset search path containing the ROS values in the directions "
+	  "perpendicular to maximum ROSes' (cm/minute). These ROSes are also the ones "
+	  "without the effect of directional factors.");
 
     parm.start = G_define_option();
     parm.start->key = "start";
@@ -144,31 +159,48 @@ int main(int argc, char *argv[])
     parm.start->gisprompt = "old,cell,raster";
     parm.start->guisection = _("Input maps");
     parm.start->description =
-	_("Name of raster map containing STARTing sources");
+	_("Raster map containing starting sources");
+    parm.start->description =
+	_("Name of an existing raster map layer in the "
+	  "user's current mapset search path containing starting locations of the "
+	  "spread phenomenon. Any positive integers in this map are recognized as "
+	  "starting sources (seeds).");
 
     parm.spotdist = G_define_option();
     parm.spotdist->key = "spot_dist";
     parm.spotdist->type = TYPE_STRING;
     parm.spotdist->gisprompt = "old,cell,raster";
     parm.spotdist->guisection = _("Input maps");
+    parm.spotdist->label =
+	_("Raster map containing maximal spotting distance (m, required with -s)");
     parm.spotdist->description =
-	_("Name of raster map containing max SPOTting DISTance (m) (required w/ -s)");
+	_("Name of an existing raster map layer in "
+	  "the user's current mapset search path containing the maximum potential "
+	  "spotting distances (meters).");
 
     parm.velocity = G_define_option();
     parm.velocity->key = "w_speed";
     parm.velocity->type = TYPE_STRING;
     parm.velocity->gisprompt = "old,cell,raster";
     parm.velocity->guisection = _("Input maps");
+    parm.velocity->label =
+	_("Raster map containing midflame wind speed (ft/min, required with -s)");
     parm.velocity->description =
-	_("Name of raster map containing midflame Wind SPEED (ft/min) (required w/ -s)");
+	_("Name of an existing raster map layer in the "
+	  "user's current mapset search path containing wind velocities at half of "
+	  "the average flame height (feet/minute).");
 
     parm.mois = G_define_option();
     parm.mois->key = "f_mois";
     parm.mois->type = TYPE_STRING;
     parm.mois->gisprompt = "old,cell,raster";
     parm.mois->guisection = _("Input maps");
+    parm.mois->label =
+	_("Raster map containing fine fuel moisture of the cell receiving a spotting firebrand (%, required with -s)");
     parm.mois->description =
-	_("Name of raster map containing fine Fuel MOISture of the cell receiving a spotting firebrand (%) (required w/ -s)");
+	_("Name of an existing raster map layer in the "
+	  "user's current mapset search path containing the 1-hour (<.25\") fuel "
+	  "moisture (percentage content multiplied by 100).");
 
     parm.least = G_define_option();
     parm.least->key = "least_size";
@@ -176,35 +208,61 @@ int main(int argc, char *argv[])
     parm.least->key_desc = "odd int";
     parm.least->options = "3,5,7,9,11,13,15";
     parm.least->description =
-	_("Basic sampling window SIZE needed to meet certain accuracy (3)");
+	_("Basic sampling window size needed to meet certain accuracy (3)"); /* TODO: what is 3 here? default? */
+    parm.least->description =
+	_("An odd integer ranging 3 - 15 indicating "
+	  "the basic sampling window size within which all cells will be considered "
+	  "to see whether they will be reached by the current spread cell. The default "
+	  "number is 3 which means a 3x3 window.");
 
     parm.comp_dens = G_define_option();
     parm.comp_dens->key = "comp_dens";
     parm.comp_dens->type = TYPE_STRING;
     parm.comp_dens->key_desc = "decimal";
+    parm.comp_dens->label =
+	_("Sampling density for additional computing (range: 0.0 - 1.0 (0.5))"); /* TODO: again, what is 0.5?, TODO: range not set */
     parm.comp_dens->description =
-	_("Sampling DENSity for additional COMPutin (range: 0.0 - 1.0 (0.5))");
+	_("A decimal number ranging 0.0 - 1.0 indicating "
+	  "additional sampling cells will be considered to see whether they will be "
+	  "reached by the current spread cell. The closer to 1.0 the decimal number "
+	  "is, the longer the program will run and the higher the simulation accuracy "
+	  "will be. The default number is 0.5.");
 
     parm.init_time = G_define_option();
     parm.init_time->key = "init_time";
     parm.init_time->type = TYPE_STRING;
-    parm.init_time->key_desc = "int (>= 0)";
+    parm.init_time->key_desc = "int (>= 0)"; /* TODO: move to ->options */
+    parm.init_time->label =
+	_("Initial time for current simulation (0) (min)");
     parm.init_time->description =
-	_("INITial TIME for current simulation (0) (min)");
+	_("A non-negative number specifying the initial "
+	  "time for the current spread simulation (minutes). This is useful when multiple "
+	  "phase simulation is conducted. The default time is 0.");
 
     parm.time_lag = G_define_option();
     parm.time_lag->key = "lag";
     parm.time_lag->type = TYPE_STRING;
-    parm.time_lag->key_desc = "int (>= 0)";
+    parm.time_lag->key_desc = "int (>= 0)"; /* TODO: move to ->options */
     parm.time_lag->description =
-	_("Simulating time duration LAG (fill the region) (min)");
+	_("Simulating time duration LAG (fill the region) (min)"); /* TODO: what does this mean? */
+    parm.time_lag->description =
+	_("A non-negative integer specifying the simulating "
+	  "duration time lag (minutes). The default is infinite, but the program will "
+	  "terminate when the current geographic region/mask has been filled. It also "
+	  "controls the computational time, the shorter the time lag, the faster the "
+	  "program will run.");
 
+    /* TODO: what's this? probably display, so remove */
     parm.backdrop = G_define_option();
     parm.backdrop->key = "backdrop";
     parm.backdrop->type = TYPE_STRING;
     parm.backdrop->gisprompt = "old,cell,raster";
-    parm.backdrop->description =
+    parm.backdrop->label =
 	_("Name of raster map as a display backdrop");
+    parm.backdrop->description =
+	_("Name of an existing raster map layer in the "
+	  "user's current mapset search path to be used as the background on which "
+	  "the \"live\" movement will be shown.");
 
     parm.out = G_define_option();
     parm.out->key = "output";
@@ -212,36 +270,51 @@ int main(int argc, char *argv[])
     parm.out->required = YES;
     parm.out->gisprompt = "new,cell,raster";
     parm.out->guisection = _("Output maps");
+    parm.out->label =
+	_("Raster map to contain output spread time (min)");
     parm.out->description =
-	_("Name of raster map to contain OUTPUT spread time (min)");
+	_("Name of the new raster map layer to contain "
+	  "the results of the cumulative spread time needed for a phenomenon to reach "
+	  "each cell from the starting sources (minutes).");
 
     parm.x_out = G_define_option();
     parm.x_out->key = "x_output";
     parm.x_out->type = TYPE_STRING;
     parm.x_out->gisprompt = "new,cell,raster";
     parm.x_out->guisection = _("Output maps");
+    parm.x_out->label =
+	_("Name of raster map to contain X back coordinates");
     parm.x_out->description =
-	_("Name of raster map to contain X_BACK coordinates");
+	_("Name of the new raster map layer to contain "
+	  "the results of backlink information in UTM easting coordinates for each "
+	  "cell.");
 
     parm.y_out = G_define_option();
     parm.y_out->key = "y_output";
     parm.y_out->type = TYPE_STRING;
     parm.y_out->gisprompt = "new,cell,raster";
     parm.y_out->guisection = _("Output maps");
+    parm.y_out->label =
+	_("Name of raster map to contain Y back coordinates");
     parm.y_out->description =
-	_("Name of raster map to contain Y_BACK coordinates");
+	_("Name of the new raster map layer to contain "
+	  "the results of backlink information in UTM northing coordinates for each "
+	  "cell.");
 
     flag.display = G_define_flag();
     flag.display->key = 'd';
 #if 0
-    flag.display->description = _("DISPLAY 'live' spread process on screen");
+    flag.display->label = _("DISPLAY 'live' spread process on screen");
+    flag.display->description =
+	_("Display the "live" simulation on screen. A graphics window "
+	  "must be opened and selected before using this option.");
 #else
-    flag.display->description = _("Live display - currently DISABLED");
+    flag.display->description = _("Live display - disabled and depreciated");
 #endif
 
     flag.spotting = G_define_flag();
     flag.spotting->key = 's';
-    flag.spotting->description = _("For wildfires: consider SPOTTING effect");
+    flag.spotting->description = _("Consider spotting effect (for wildfires)");
 
     /*   Parse command line */
     if (G_parser(argc, argv))
