@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 {
     struct Colors colr;
     struct Range range;
+    struct History hist;
     CELL min, max;
     int in_fd, out_fd;
     char title[512];
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
     struct Option *opt_in;
     struct Option *opt_out;
     struct Option *opt_title;
+    struct Flag *flag_diag;
 
     G_gisinit(argv[0]);
 
@@ -60,6 +62,11 @@ int main(int argc, char *argv[])
     opt_title->required = NO;
     opt_title->description = _("Title for output raster map");
 
+    flag_diag = G_define_flag();
+    flag_diag->key = 'd';
+    flag_diag->label = _("Clump also diagonal cells");
+    flag_diag->description = _("Clumps are also traced along diagonal neighboring cells"); 
+
     /* parse options */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -73,7 +80,10 @@ int main(int argc, char *argv[])
 
     out_fd = Rast_open_c_new(OUTPUT);
 
-    clump(in_fd, out_fd);
+    if (flag_diag->answer)
+	clumpd(in_fd, out_fd);
+    else
+	clump(in_fd, out_fd);
 
     G_debug(1, "Creating support files...");
 
@@ -86,12 +96,19 @@ int main(int argc, char *argv[])
 	strcpy(title, opt_title->answer);
     else
 	sprintf(title, "clump of <%s@%s>", name, G_mapset());
-    
     Rast_put_cell_title(OUTPUT, title);
+
+    /* colors */
     Rast_read_range(OUTPUT, G_mapset(), &range);
     Rast_get_range_min_max(&range, &min, &max);
     Rast_make_random_colors(&colr, min, max);
     Rast_write_colors(OUTPUT, G_mapset(), &colr);
+
+    /* history */
+    Rast_short_history(OUTPUT, "raster", &hist);
+    Rast_set_history(&hist, HIST_DATSRC_1, INPUT);
+    Rast_command_history(&hist);
+    Rast_write_history(OUTPUT, &hist);
 
     G_done_msg(_("%d clumps."), range.max);
 

@@ -4,6 +4,7 @@
  * MODULE:       r.clump
  *
  * AUTHOR(S):    Michael Shapiro - CERL
+ *               Markus Metz
  *
  * PURPOSE:      Recategorizes data in a raster map layer by grouping cells
  *               that form physically discrete areas into unique categories.
@@ -24,7 +25,7 @@
 
 #define INCR 1024
 
-
+/* 4 neighbor algorithm */
 CELL clump(int in_fd, int out_fd)
 {
     register int col;
@@ -190,6 +191,228 @@ CELL clump(int in_fd, int out_fd)
 		   prev_clump[n] = NEW;
 		 */
 
+		temp_clump = prev_clump;
+		temp_clump += col;
+		n = ncols - col;
+		while (n-- > 0) {
+		    temp_clump++;	/* skip col */
+		    if (*temp_clump == OLD)
+			*temp_clump = NEW;
+		}
+
+		/* modify the indexes
+		   if (pass == 1)
+		   for (n = 1; n <= label; n++)
+		   if (index[n] == OLD)
+		   index[n] = NEW;
+		 */
+
+		if (pass == 1)
+		    index[OLD] = NEW;
+	    }
+
+	    if (pass == 2) {
+		/*
+		   for (col = 1; col <= ncols; col++)
+		   out_cell[col] = index[cur_clump[col]];
+
+		   Rast_put_row (out_fd, out_cell+1, CELL_TYPE);
+		 */
+		temp_clump = cur_clump;
+		temp_cell = out_cell;
+
+		for (column = 0; column < ncols; column++) {
+		    temp_clump++;	/* skip left edge */
+		    *temp_cell = index2[index[*temp_clump]];
+		    if (*temp_cell == 0)
+			Rast_set_null_value(temp_cell, 1, CELL_TYPE);
+		    temp_cell++;
+		}
+		Rast_put_row(out_fd, out_cell, CELL_TYPE);
+	    }
+
+	    /* switch the buffers so that the current buffer becomes the previous */
+	    temp_cell = cur_in;
+	    cur_in = prev_in;
+	    prev_in = temp_cell;
+
+	    temp_clump = cur_clump;
+	    cur_clump = prev_clump;
+	    prev_clump = temp_clump;
+	}
+	G_percent(1, 1, 1);
+
+	print_time(&cur_time);
+    }
+    return 0;
+}
+
+/* 8 neighbor algorithm */
+CELL clumpd(int in_fd, int out_fd)
+{
+    register int col;
+    register CELL *prev_clump, *cur_clump;
+    register CELL *index, *index2;
+    register int n;
+    CELL *prev_in, *cur_in;
+    CELL *temp_cell, *temp_clump, *out_cell;
+    CELL X, UP, LEFT, UL, UR, NEW, OLD;
+    CELL label;
+    int nrows, ncols;
+    int row;
+    int len;
+    int pass;
+    int nalloc;
+    long cur_time;
+    int column;
+
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
+
+    /* allocate clump index */
+    nalloc = INCR;
+    index = (CELL *) G_malloc(nalloc * sizeof(CELL));
+    index[0] = 0;
+    index2 = NULL;
+
+    /* allocate CELL buffers two columns larger than current window */
+    len = (ncols + 2) * sizeof(CELL);
+    prev_in = (CELL *) G_malloc(len);
+    cur_in = (CELL *) G_malloc(len);
+    prev_clump = (CELL *) G_malloc(len);
+    cur_clump = (CELL *) G_malloc(len);
+    out_cell = (CELL *) G_malloc(len);
+
+/******************************** PASS 1 ************************************
+ * first pass thru the input simulates the clump to determine
+ * the reclumping index.
+ * second pass does the clumping for real
+ */
+    time(&cur_time);
+    for (pass = 1; pass <= 2; pass++) {
+	/* second pass must generate a renumbering scheme */
+	if (pass == 2) {
+	    CELL cat;
+
+	    cat = 1;
+	    index2 = (CELL *) G_malloc((label + 1) * sizeof(CELL));
+	    index2[0] = 0;
+	    for (n = 1; n <= label; n++) {
+		OLD = n;
+		NEW = index[n];
+		if (OLD != NEW) {
+		    /* find final clump id */
+		    while (OLD != NEW) {
+			OLD = NEW;
+			NEW = index[OLD];
+		    }
+		    index[n] = NEW;
+		}
+		else
+		    index2[n] = cat++;
+	    }
+	}
+
+	/* fake a previous row which is all zero */
+	Rast_set_c_null_value(prev_in, ncols + 2);
+	G_zero(prev_clump, len);
+
+	/* set left and right edge to NULL */
+	Rast_set_c_null_value(&cur_in[0], 1);
+	Rast_set_c_null_value(&cur_in[ncols + 1], 1);
+
+	/* create a left and right edge of zero */
+	G_zero(cur_clump, len);
+
+	/* initialize clump labels */
+	label = 0;
+
+	G_message(_("Pass %d..."), pass);
+	for (row = 0; row < nrows; row++) {
+	    Rast_get_c_row(in_fd, cur_in + 1, row);
+
+	    G_percent(row, nrows, 4);
+	    X = 0;
+	    Rast_set_c_null_value(&X, 1);
+	    for (col = 1; col <= ncols; col++) {
+		LEFT = X;
+		X = cur_in[col];
+		if (Rast_is_c_null_value(&X)) {	/* don't clump NULL data */
+		    cur_clump[col] = 0;
+		    continue;
+		}
+
+		UL = prev_in[col - 1];
+		UP = prev_in[col];
+		UR = prev_in[col + 1];
+
+		/*
+		 * if the cell value is different above and to the left
+		 * then we must start a new clump
+		 *
+		 * this new clump may eventually collide with another
+		 * clump and have to be merged
+		 */
+		if (X != LEFT && X != UP && X != UL && X != UR) {	/* start a new clump */
+		    label++;
+		    cur_clump[col] = label;
+		    if (pass == 1) {
+			if (label >= nalloc) {
+			    nalloc += INCR;
+			    index =
+				(CELL *) G_realloc(index,
+						   nalloc * sizeof(CELL));
+			}
+			index[label] = label;
+		    }
+		    continue;
+		}
+		OLD = NEW = 0;
+		if (X == LEFT) {	/* same clump as to the left */
+		    OLD = cur_clump[col - 1];
+		    cur_clump[col] = OLD;
+		}
+		/* check UL, UP, UR */
+		n = 2;
+		temp_clump = prev_clump + col + 1;
+		temp_cell = prev_in + col + 1;
+		do {
+		    if (X == *temp_cell) {
+			if (OLD == 0) {
+			    OLD = *temp_clump;
+			    cur_clump[col] = OLD;
+			}
+			else {
+			    NEW  = *temp_clump;
+			    cur_clump[col] = NEW;
+			}
+		    }
+		    if (NEW != 0)
+			break;
+		    temp_cell--;
+		    temp_clump--;
+		} while (n-- > 0);
+
+		if (NEW == 0 || OLD == NEW) {	/* ok */
+		    continue;
+		}
+
+		/* conflict! preserve the clump from above and change the left.
+		 * Must also go back to the left in the current row and to the right
+		 * in the previous row to change all the clump values as well.
+		 *
+		 */
+
+		/* left of the current row from 1 to col - 1 */
+		temp_clump = cur_clump;
+		n = col - 1;
+		while (n-- > 0) {
+		    temp_clump++;	/* skip left edge */
+		    if (*temp_clump == OLD)
+			*temp_clump = NEW;
+		}
+
+		/* right of previous row from col + 1 to ncols */
 		temp_clump = prev_clump;
 		temp_clump += col;
 		n = ncols - col;

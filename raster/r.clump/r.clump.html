@@ -1,8 +1,9 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.clump</em> finds all areas of contiguous cell category values in
-the input raster map. It assigns a unique category value to each such
-area (&quot;clump&quot;) in the resulting output raster map.
+the input raster map. NULL values in the input are ignored. It assigns 
+a unique category value to each such area (&quot;clump&quot;) in the 
+resulting output raster map.
 
 <p>
 Category distinctions in the input raster map are preserved.  This
@@ -14,18 +15,18 @@ values.
 
 <h2>NOTES</h2>
 
-<em>r.clump</em> moves a 2x2 matrix over the input raster map. The
-lower right-hand corner of the matrix is grouped with the cells above
-it, or to the left of it (diagonal cells are not considered.)
+By default, the resulting clumps are connected only by their four 
+direct neighbors (left, right, top, bottom). The <em>-d</em> flag 
+activates also diagonal clump tracing.
 
 <p>
-<em>r.clump</em> works properly with raster map that contain only
+<em>r.clump</em> works properly with raster map that contains only
 &quot;fat&quot; areas (more than a single cell in width). Linear
 elements (lines that are a single cell wide) may or may not be clumped
 together depending on the direction of the line - horizontal and
 vertical lines of cells are considered to be contiguous, but diagonal
 lines of cells are not considered to be contiguous and are broken up
-into separate clumps.
+into separate clumps unless the <em>-d</em> flag is used.
 
 <p>
 A random color table and other support files are generated for the
@@ -50,7 +51,8 @@ output raster map.
 <h2>AUTHOR</h2>
 
 Michael Shapiro, U.S. Army Construction Engineering Research
-Laboratory
+Laboratory<br>
+Markus Metz (diagonal clump tracing)
 
 <p>
 <i>Last changed: $Date$</i>
