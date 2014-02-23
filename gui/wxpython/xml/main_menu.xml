@@ -10,6 +10,7 @@
     <subtoolbox name="Imagery"/>
     <subtoolbox name="Volumes"/>
     <subtoolbox name="Database"/>
+    <subtoolbox name="Temporal"/>
     <subtoolbox name="Help"/>
   </items>
 </toolbox>
