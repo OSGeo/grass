@@ -1791,6 +1791,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         if not win:
             return
         
+        showSelected = False
         wx.BeginBusyCursor()
         if win.GetSelection() == 0:
             # simple sql statement
@@ -1799,6 +1800,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             whereVal = self.FindWindowById(self.layerPage[self.selLayer]['where']).GetValue().strip()
             try:
                 if len(whereVal) > 0:
+                    showSelected = True
                     keyColumn = listWin.LoadData(self.selLayer, where = whereCol + whereOpe + whereVal)
                 else:
                     keyColumn = listWin.LoadData(self.selLayer)
@@ -1813,6 +1815,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 cols, where = self.ValidateSelectStatement(win.GetValue())
                 if cols is None and where is None:
                     sql = win.GetValue()
+                if where:
+                    showSelected = True
             except TypeError:
                 GError(parent = self,
                        message = _("Loading attribute data failed.\n"
@@ -1847,7 +1851,12 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         # update map display if needed
         if UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'auto'):
-            self._drawSelected(zoom=False, selectedOnly=False) # TODO: replace by signals
+            # TODO: replace by signals
+            if showSelected:
+                self._drawSelected(zoom=False, selectedOnly=False) 
+            else:
+                self.mapdisplay.RemoveQueryLayer()
+                self.mapdisplay.MapWindow.UpdateMap(render=False) # TODO: replace by signals
 
     def OnBuilder(self,event):
         """!SQL Builder button pressed -> show the SQLBuilder dialog"""
