@@ -36,6 +36,8 @@ from core import globalvar
 from core.utils import _
 import wx
 
+from grass.pydispatch.signal import Signal
+
 from core.gcmd   import RunCommand, GError, GMessage
 from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo
 
@@ -549,6 +551,11 @@ class SQLBuilderUpdate(SQLBuilder):
         SQLBuilder.__init__(self, parent, title, vectmap, id = wx.ID_ANY,
                             modeChoices = modeChoices, layer = layer)
 
+        # signals
+        self.sqlApplied = Signal("SQLBuilder.sqlApplied")
+        if parent: # TODO: replace by giface
+            self.sqlApplied.connect(parent.Update)
+
     def _doLayout(self, modeChoices):
         """!Do dialog layout"""
 
@@ -628,10 +635,10 @@ class SQLBuilderUpdate(SQLBuilder):
 
         if ret != 0 and msg:
             self.statusbar.SetStatusText(_("SQL statement was not applied"), 0)
-            #GError(parent = self,
-            #       message = _("SQL statement can not be applied.\n\n%s") % msg)
         else:
             self.statusbar.SetStatusText(_("SQL statement applied"), 0)
+        
+        self.sqlApplied.emit()
 
     def OnClear(self, event):
         """!Clear button pressed"""
