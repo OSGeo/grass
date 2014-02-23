@@ -124,7 +124,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
 
         # events
         self.btnClose.Bind(wx.EVT_BUTTON,   self.OnCloseWindow)
-        self.btnReload.Bind(wx.EVT_BUTTON, self.pages['browse'].OnDataReload)
+        self.btnReload.Bind(wx.EVT_BUTTON, self.ReloadData)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -165,7 +165,12 @@ class AttributeManager(wx.Frame, DbMgrBase):
             self.Destroy()
         
         event.Skip()
-          
+
+    def ReloadData(self):
+        """Reload data"""
+        if self.pages['browse']:
+            self.pages['browse'].OnDataReload() # TODO replace by signal
+        
     def OnPageChanged(self, event):
         """!On page in ATM is changed"""
         try:
