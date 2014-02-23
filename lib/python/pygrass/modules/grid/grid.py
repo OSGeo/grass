@@ -4,6 +4,8 @@ Created on Thu Mar 28 11:06:00 2013
 
 @author: pietro
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
 import os
 import multiprocessing as mltp
 import subprocess as sub
@@ -434,7 +436,7 @@ def cmd_exe(args):
     else:
         # set the computational region
         lcmd = ['g.region', ]
-        lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.iteritems()])
+        lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.items()])
         sub.Popen(lcmd, env=env).wait()
     if groups:
         copy_groups(groups, gisrc_src, gisrc_dst)

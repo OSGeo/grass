@@ -4,6 +4,8 @@ Created on Tue Apr  2 18:57:42 2013
 
 @author: pietro
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
 from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.functions import coor2pixel
@@ -29,7 +31,7 @@ def rpatch_row(rast, rasts, bboxes):
     buff = rasts[0][0]
     rbuff = rasts[0][0]
     r_start, r_end, c_start, c_end = sei[0]
-    for row in xrange(r_start, r_end):
+    for row in range(r_start, r_end):
         for col, ras in enumerate(rasts):
             r_start, r_end, c_start, c_end = sei[col]
             buff = ras.get_row(row, buff)

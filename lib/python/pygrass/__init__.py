@@ -9,11 +9,11 @@ _libgis.G_gisinit('')
 import os as _os
 import sys as _sys
 
-import errors
-import gis
-import functions
-import raster
-import vector
-import modules
-import shell
-import messages
+from . import errors
+from . import gis
+from . import functions
+from . import raster
+from . import vector
+from . import modules
+from . import shell
+from . import messages

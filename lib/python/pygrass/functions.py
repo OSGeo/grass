@@ -160,13 +160,13 @@ def is_clean_name(name):
     """
     if name[0].isdigit():
         return False
-    for char in ' @#^?°,;%&/':
+    for char in u' @#^?°,;%&/':
         if name.find(char) != -1:
             return False
     return True
 
 
-def coor2pixel((east, north), region):
+def coor2pixel(coord, region):
     """Convert coordinates into a pixel row and col ::
 
         >>> reg = Region()
@@ -175,11 +175,12 @@ def coor2pixel((east, north), region):
         >>> coor2pixel((reg.east, reg.south), reg) == (reg.rows, reg.cols)
         True
     """
+    (east, north) = coord
     return (libraster.Rast_northing_to_row(north, region.c_region),
             libraster.Rast_easting_to_col(east, region.c_region))
 
 
-def pixel2coor((col, row), region):
+def pixel2coor(pixel, region):
     """Convert row and col of a pixel into a coordinates ::
 
         >>> reg = Region()
@@ -188,6 +189,7 @@ def pixel2coor((col, row), region):
         >>> pixel2coor((reg.cols, reg.rows), reg) == (reg.south, reg.east)
         True
     """
+    (col, row) = pixel
     return (libraster.Rast_row_to_northing(row, region.c_region),
             libraster.Rast_col_to_easting(col, region.c_region))
 

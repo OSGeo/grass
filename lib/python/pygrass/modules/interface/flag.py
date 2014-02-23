@@ -4,7 +4,9 @@ Created on Tue Apr  2 18:39:21 2013
 
 @author: pietro
 """
-import read
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
+from . import read
 
 
 class Flag(object):

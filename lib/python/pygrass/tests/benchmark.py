@@ -4,6 +4,9 @@ Created on Sat Jun 16 20:24:56 2012
 
 @author: soeren
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
+
 import optparse
 #import numpy as np
 import time
@@ -28,8 +31,8 @@ def test__RasterNumpy_value_access__if():
     test_c = pygrass.RasterNumpy(name="test_c", mtype="CELL", mode="w+", overwrite=True)
     test_c.open()
 
-    for row in xrange(test_a.rows):
-        for col in xrange(test_a.cols):
+    for row in range(test_a.rows):
+        for col in range(test_a.cols):
             test_c[row, col] = test_a[row, col] > 50
 
     test_a.close()
@@ -45,8 +48,8 @@ def test__RasterNumpy_value_access__add():
     test_c = pygrass.RasterNumpy(name="test_c", mtype="DCELL", mode="w+", overwrite=True)
     test_c.open()
 
-    for row in xrange(test_a.rows):
-        for col in xrange(test_a.cols):
+    for row in range(test_a.rows):
+        for col in range(test_a.cols):
             test_c[row, col] = test_a[row, col] + test_b[row, col]
 
     test_a.close()
@@ -60,7 +63,7 @@ def test__RasterNumpy_row_access__if():
     test_c = pygrass.RasterNumpy(name="test_c", mtype="CELL", mode="w+", overwrite=True)
     test_c.open()
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_c[row] = test_a[row] > 50
 
     test_a.close()
@@ -76,7 +79,7 @@ def test__RasterNumpy_row_access__add():
     test_c = pygrass.RasterNumpy(name="test_c", mtype="DCELL", mode="w+", overwrite=True)
     test_c.open()
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_c[row] = test_a[row] + test_b[row]
 
     test_a.close()
@@ -120,9 +123,9 @@ def test__RasterSegment_value_access__if():
 
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
-        for col in xrange(test_a.cols):
+        for col in range(test_a.cols):
             test_c.put(row, col, buff_a[col] > 50)
 
     test_a.close()
@@ -141,10 +144,10 @@ def test__RasterSegment_value_access__add():
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
     buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
         test_b.get_row(row,buff_b)
-        for col in xrange(test_a.cols):
+        for col in range(test_a.cols):
             test_c.put(row, col, buff_a[col] + buff_b[col])
 
     test_a.close()
@@ -160,7 +163,7 @@ def test__RasterSegment_row_access__if():
 
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
         test_c.put_row(row, buff_a > 50)
 
@@ -180,7 +183,7 @@ def test__RasterSegment_row_access__add():
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
     buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
         test_b.get_row(row,buff_b)
         test_c.put_row(row, buff_a + buff_b)
@@ -203,11 +206,11 @@ def test__RasterRow_value_access__add():
     buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
     buff_c = pygrass.Buffer(test_b.cols, test_b.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
         test_b.get_row(row,buff_b)
 
-        for col in xrange(test_a.cols):
+        for col in range(test_a.cols):
             buff_c[col] = buff_a[col] + buff_b[col]
 
         test_c.put_row(buff_c)
@@ -226,10 +229,10 @@ def test__RasterRow_value_access__if():
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
     buff_c = pygrass.Buffer(test_a.cols, test_a.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
 
-        for col in xrange(test_a.cols):
+        for col in range(test_a.cols):
             buff_c[col] = buff_a[col] > 50
 
         test_c.put_row(buff_c)
@@ -250,7 +253,7 @@ def test__RasterRowIO_row_access__add():
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
     buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
         test_b.get_row(row,buff_b)
         test_c.put_row(buff_a + buff_b)
@@ -268,7 +271,7 @@ def test__RasterRowIO_row_access__if():
 
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
         test_c.put_row(buff_a > 50)
 
@@ -288,7 +291,7 @@ def test__RasterRow_row_access__add():
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
     buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
         test_b.get_row(row,buff_b)
         test_c.put_row(buff_a + buff_b)
@@ -306,7 +309,7 @@ def test__RasterRow_row_access__if():
 
     buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
 
-    for row in xrange(test_a.rows):
+    for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
         test_c.put_row(buff_a > 50)
 
@@ -322,7 +325,7 @@ def test__mapcalc__if():
 def mytimer(func, runs=1):
     times = []
     t = 0.0
-    for _ in xrange(runs):
+    for _ in range(runs):
         start = time.time()
         func()
         end = time.time()
@@ -363,15 +366,15 @@ def run_benchmark(resolution_list, runs, testdict, profile):
         result['rows'] = region.rows
         result['cells'] = region.rows * region.cols
         result['results'] = copy.deepcopy(testdict)
-        for execmode, operation in result['results'].iteritems():
+        for execmode, operation in result['results'].items():
             print(execmode)
-            for oper, operdict in operation.iteritems():
+            for oper, operdict in operation.items():
                 operdict['time'], operdict['times'] = mytimer(operdict['func'],runs)
                 if profile:
                     filename = '{}_{}_{}'.format(execmode, oper, profile)
                     cProfile.runctx(operdict['func'].__name__ + '()',
                                     globals(), locals(), filename = filename)
-                print('    {0}: {1: 40.6f}s'.format(oper, operdict['time']))
+                print(('    {0}: {1: 40.6f}s'.format(oper, operdict['time'])))
                 del(operdict['func'])
 
         regions.append(result)
@@ -380,7 +383,7 @@ def run_benchmark(resolution_list, runs, testdict, profile):
     return regions
 
 def get_testlist(loc):
-    testlist = [test for test in loc.keys() if 'test' in test[:5]]
+    testlist = [test for test in list(loc.keys()) if 'test' in test[:5]]
     testlist.sort()
     return testlist
 
@@ -389,7 +392,7 @@ def get_testdict(testlist):
     for testfunc in testlist:
         #import pdb; pdb.set_trace()
         dummy, execmode, operation = testfunc.split('__')
-        if execmode in testdict.keys():
+        if execmode in list(testdict.keys()):
             testdict[execmode][operation] = collections.OrderedDict()
             testdict[execmode][operation]['func'] = loc[testfunc]
         else:
@@ -399,14 +402,14 @@ def get_testdict(testlist):
     return testdict
 
 def print_test(testdict):
-    for execmode, operation in testdict.iteritems():
-        print execmode
-        for oper, operdict in operation.iteritems():
-            print '    ', oper
-            for key, value in operdict.iteritems():
-                print '        ', key
+    for execmode, operation in testdict.items():
+        print(execmode)
+        for oper, operdict in operation.items():
+            print('    ', oper)
+            for key, value in operdict.items():
+                print('        ', key)
 
-TXT = u"""
+TXT = """
 {% for region in regions %}
 {{ '#'*60 }}
 ### Benchmark cols = {{ region.cols }} rows = {{ region.rows}} cells = {{ region.cells }}
@@ -506,7 +509,7 @@ def main(testdict):
         pickle.dump(results, output)
         output.close()
     #import pdb; pdb.set_trace()
-    print get_txt(results)
+    print(get_txt(results))
 
 
 #add options

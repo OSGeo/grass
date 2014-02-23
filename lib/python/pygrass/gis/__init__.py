@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python2.7
-from __future__ import print_function
+
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
 from os import listdir
 from os.path import join, exists, isdir
 import shutil
@@ -23,7 +25,7 @@ script.gisenv()
 import grass.lib.gis as libgis
 from grass.pygrass.functions import getenv
 from grass.pygrass.errors import GrassError
-import region
+from . import region
 
 
 #write dec to check if user have permissions or not

@@ -11,7 +11,7 @@ import grass.lib.raster as libraster
 
 from grass.pygrass.errors import GrassError
 
-from raster_type import TYPE as RTYPE
+from .raster_type import TYPE as RTYPE
 
 
 class Category(list):
@@ -65,9 +65,11 @@ class Category(list):
     >>> libraster.Rast_get_ith_c_cat(ctypes.byref(cats.cats), 0,
     ...                              min_cat, max_cat)
     """
-    def __init__(self, mtype=None, *args, **kargs):
-        self._cats = libraster.Categories()
-        libraster.Rast_init_cats("", ctypes.byref(self._cats))
+    def __init__(self, name, mapset='', mtype=None, *args, **kargs):
+        self.name = name
+        self.mapset = mapset
+        self.c_cats = libraster.Categories()
+        libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         self._mtype = mtype
         self._gtype = None if mtype is None else RTYPE[mtype]['grass type']
         super(Category, self).__init__(*args, **kargs)
@@ -85,11 +87,11 @@ class Category(list):
     mtype = property(fget=_get_mtype, fset=_set_mtype)
 
     def _get_title(self):
-        return libraster.Rast_get_cats_title(ctypes.byref(self._cats))
+        return libraster.Rast_get_cats_title(ctypes.byref(self.c_cats))
 
     def _set_title(self, newtitle):
         return libraster.Rast_set_cats_title(newtitle,
-                                             ctypes.byref(self._cats))
+                                             ctypes.byref(self.c_cats))
 
     title = property(fget=_get_title, fset=_set_title)
 
@@ -156,7 +158,7 @@ class Category(list):
         """
         min_cat = ctypes.pointer(RTYPE[self.mtype]['grass def']())
         max_cat = ctypes.pointer(RTYPE[self.mtype]['grass def']())
-        lab = libraster.Rast_get_ith_cat(ctypes.byref(self._cats),
+        lab = libraster.Rast_get_ith_cat(ctypes.byref(self.c_cats),
                                          index,
                                          ctypes.cast(min_cat, ctypes.c_void_p),
                                          ctypes.cast(max_cat, ctypes.c_void_p),
@@ -186,7 +188,7 @@ class Category(list):
         err = libraster.Rast_set_cat(ctypes.cast(min_cat, ctypes.c_void_p),
                                      ctypes.cast(max_cat, ctypes.c_void_p),
                                      label,
-                                     ctypes.byref(self._cats), self._gtype)
+                                     ctypes.byref(self.c_cats), self._gtype)
         # Manage C function Errors
         if err == 1:
             return None
@@ -196,7 +198,7 @@ class Category(list):
             raise GrassError(_("Error executing: Rast_set_cat"))
 
     def __del__(self):
-        libraster.Rast_free_cats(ctypes.byref(self._cats))
+        libraster.Rast_free_cats(ctypes.byref(self.c_cats))
 
     def get_cat(self, index):
         return self.__getitem__(index)
@@ -210,19 +212,19 @@ class Category(list):
             raise TypeError("Index outside range.")
 
     def reset(self):
-        for i in xrange(len(self) - 1, -1, -1):
+        for i in range(len(self) - 1, -1, -1):
             del(self[i])
-        libraster.Rast_init_cats("", ctypes.byref(self._cats))
+        libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
 
     def _read_cats(self):
         """Copy from the C struct to the list"""
-        for i in xrange(self._cats.ncats):
+        for i in range(self.c_cats.ncats):
             self.append(self._get_c_cat(i))
 
     def _write_cats(self):
         """Copy from the list data to the C struct"""
         # reset only the C struct
-        libraster.Rast_init_cats("", ctypes.byref(self._cats))
+        libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         # write to the c struct
         for cat in self.__iter__():
             label, min_cat, max_cat = cat
@@ -230,7 +232,7 @@ class Category(list):
                 max_cat = min_cat
             self._set_c_cat(label, min_cat, max_cat)
 
-    def read(self, rast, mapset=None, mtype=None):
+    def read(self):
         """Read categories from a raster map
 
         The category file for raster map name in mapset is read into the
@@ -242,25 +244,15 @@ class Category(list):
                            struct Categories * 	pcats
                            )
         """
-        if type(rast) == str:
-            mapname = rast
-            if mapset is None or mtype is None:
-                raise TypeError(_('Mapset and maptype must be specify'))
-        else:
-            mapname = rast.name
-            mapset = rast.mapset
-            mtype = rast.mtype
-
-        self.mtype = mtype
         self.reset()
-        err = libraster.Rast_read_cats(mapname, mapset,
-                                       ctypes.byref(self._cats))
+        err = libraster.Rast_read_cats(self.name, self.mapset,
+                                       ctypes.byref(self.c_cats))
         if err == -1:
             raise GrassError("Can not read the categories.")
         # copy from C struct to list
         self._read_cats()
 
-    def write(self, map):
+    def write(self):
         """Writes the category file for the raster map name in the current
            mapset from the cats structure.
 
@@ -268,18 +260,14 @@ class Category(list):
                              struct Categories * 	cats
                              )
         """
-        if type(map) == str:
-            mapname = map
-        else:
-            mapname = map.name
         # copy from list to C struct
         self._write_cats()
         # write to the map
-        libraster.Rast_write_cats(mapname, ctypes.byref(self._cats))
+        libraster.Rast_write_cats(self.name, ctypes.byref(self.c_cats))
 
     def copy(self, category):
         """Copy from another Category class"""
-        libraster.Rast_copy_cats(ctypes.byref(self._cats),     # to
+        libraster.Rast_copy_cats(ctypes.byref(self.c_cats),     # to
                                  ctypes.byref(category._cats))  # from
         self._read_cats()
 
@@ -342,7 +330,7 @@ class Category(list):
             f.write('\n'.join(cats))
 
     def sort(self):
-        libraster.Rast_sort_cats(ctypes.byref(self._cats))
+        libraster.Rast_sort_cats(ctypes.byref(self.c_cats))
 
     def labels(self):
-        return map(itemgetter(0), self)
+        return list(map(itemgetter(0), self))

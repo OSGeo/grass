@@ -4,12 +4,13 @@ Created on Tue Apr  2 18:49:11 2013
 
 @author: pietro
 """
-from __future__ import print_function
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
 import fnmatch
 
 
 from grass.script.core import get_commands
-from interface import Module
+from .interface import Module
 
 _CMDS = list(get_commands()[0])
 _CMDS.sort()

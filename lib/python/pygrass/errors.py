@@ -4,8 +4,8 @@ Created on Wed Aug 15 17:33:27 2012
 
 @author: pietro
 """
-
-from grass.script import warning
+from functools import wraps
+from grass.pygrass.messages import get_msgr
 
 
 class AbstractError(Exception):
@@ -37,10 +37,11 @@ class OpenError(AbstractError):
 
 
 def must_be_open(method):
+
+    @wraps(method)
     def wrapper(self, *args, **kargs):
         if self.is_open():
             return method(self, *args, **kargs)
         else:
-            warning(_("The map is close!"))
-    wrapper.__doc__ = method.__doc__
+            get_msgr().warning(_("The map is close!"))
     return wrapper

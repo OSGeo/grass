@@ -4,7 +4,7 @@ Created on Fri Jun  8 18:46:34 2012
 
 @author: pietro
 """
-from raster_type import TYPE as RTYPE
+from .raster_type import TYPE as RTYPE
 import ctypes
 import numpy as np
 

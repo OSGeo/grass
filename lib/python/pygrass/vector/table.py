@@ -7,7 +7,14 @@ Created on Wed Aug  8 15:29:21 2012
 
 
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
+
 import os
+import sys
+
+long = int if sys.version_info.major == 3 else long
+
 import ctypes
 import numpy as np
 from sqlite3 import OperationalError
@@ -24,7 +31,7 @@ from grass.pygrass.functions import table_exist
 from grass.script.db import db_table_in_vector
 from grass.script.core import warning
 
-import sql
+from . import sql
 
 
 DRIVERS = ('sqlite', 'pg')
@@ -724,12 +731,12 @@ class Link(object):
 
         ..
         """
-        print "layer:    ", self.layer
-        print "name:     ", self.name
-        print "table:    ", self.table_name
-        print "key:      ", self.key
-        print "database: ", self.database
-        print "driver:   ", self.driver
+        print("layer:    ", self.layer)
+        print("name:     ", self.name)
+        print("table:    ", self.table_name)
+        print("key:      ", self.key)
+        print("database: ", self.database)
+        print("driver:   ", self.driver)
 
 
 class DBlinks(object):
@@ -756,7 +763,7 @@ class DBlinks(object):
 
     def __iter__(self):
         return (self.by_index(i)
-                for i in xrange(self.num_dblinks()))
+                for i in range(self.num_dblinks()))
 
     def __getitem__(self, item):
         """
@@ -904,7 +911,7 @@ class Table(object):
 
     def __iter__(self):
         cur = self.execute()
-        return (cur.fetchone() for _ in xrange(self.__len__()))
+        return (cur.fetchone() for _ in range(self.__len__()))
 
     def __len__(self):
         """Return the number of rows"""
@@ -965,6 +972,7 @@ class Table(object):
                 return cur.executemany(sqlc, values)
             return cur.execute(sqlc)
         except:
+            #import ipdb; ipdb.set_trace()
             raise ValueError("The SQL is not correct:\n%r" % sqlc)
 
     def exist(self, cursor=None):
@@ -1004,6 +1012,6 @@ class Table(object):
                                                   coldef=coldef))
                 self.conn.commit()
             else:
-                print "The table: %s already exist." % self.name
+                print("The table: %s already exist." % self.name)
         cur.close()
         self.columns.update_odict()

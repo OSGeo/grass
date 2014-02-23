@@ -47,18 +47,23 @@ Created on Tue Apr  2 18:41:27 2013
 
 @endcode
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
+import sys
 
-from __future__ import print_function
-from itertools import izip_longest
+if sys.version_info.major == 2:
+    from itertools import izip_longest as zip_longest
+else:
+    from itertools import zip_longest
 from xml.etree.ElementTree import fromstring
 import time
 
 from grass.script.core import Popen, PIPE
 from grass.pygrass.errors import GrassError, ParameterError
-from parameter import Parameter
-from flag import Flag
-from typedict import TypeDict
-from read import GETFROMTAG, DOC
+from .parameter import Parameter
+from .flag import Flag
+from .typedict import TypeDict
+from .read import GETFROMTAG, DOC
 
 
 class ParallelModuleQueue(object):
@@ -362,7 +367,7 @@ class Module(object):
                         (k in self.outputs and self.outputs[k].value is None)):
                     msg = "Required parameter <%s> not set."
                     raise ParameterError(msg % key)
-            self.run()
+            return self.run()
 
 
     def get_bash(self):
@@ -373,15 +378,18 @@ class Module(object):
         name = '_'.join(self.name.split('.')[1:])
         params = ', '.join([par.get_python() for par in self.params_list
                            if par.get_python() != ''])
+        flags = ''.join([flg.get_python()
+                         for flg in self.flags.values()
+                         if not flg.special and flg.get_python() != ''])
         special = ', '.join([flg.get_python()
                              for flg in self.flags.values()
                              if flg.special and flg.get_python() != ''])
         #     pre name par flg special
-        if self.flags and special:
+        if flags and special:
             return "%s.%s(%s, flags=%r, %s)" % (prefix, name, params,
-                                                self.flags, special)
-        elif self.flags:
-            return "%s.%s(%s, flags=%r)" % (prefix, name, params, self.flags)
+                                                flags, special)
+        elif flags:
+            return "%s.%s(%s, flags=%r)" % (prefix, name, params, flags)
         elif special:
             return "%s.%s(%s, %s)" % (prefix, name, params, special)
         else:
@@ -406,7 +414,7 @@ class Module(object):
              # transform each parameter in string
              [str(param) for param in line if param is not None])
              # make a list of parameters with only 3 param per line
-             for line in izip_longest(*[iter(self.params_list)] * 3)]),)
+             for line in zip_longest(*[iter(self.params_list)] * 3)]),)
         params = '\n'.join([par.__doc__ for par in self.params_list])
         flags = self.flags.__doc__
         return '\n'.join([head, params, DOC['flag_head'], flags, DOC['foot']])
@@ -472,6 +480,7 @@ class Module(object):
             self.outputs['stdout'].value = stdout if stdout else ''
             self.outputs['stderr'].value = stderr if stderr else ''
             self.time = time.time() - start
+        return self
 
 ###############################################################################
 
