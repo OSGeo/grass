@@ -20,8 +20,7 @@
 #define __LOCAL_PROTO_H__
 
 /* clump.c */
-CELL clump(int, int);
-CELL clumpd(int, int);
+CELL clump(int, int, int);
 int print_time(long *);
 
 /* main.c */
