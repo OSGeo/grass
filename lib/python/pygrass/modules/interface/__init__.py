@@ -4,10 +4,10 @@ Created on Tue Apr  2 18:40:39 2013
 
 @author: pietro
 """
-import flag
-import parameter
-import module
-import typedict
-import read
+from . import flag
+from . import parameter
+from . import module
+from . import typedict
+from . import read
 
-from module import Module, ParallelModuleQueue
+from .module import Module, ParallelModuleQueue

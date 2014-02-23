@@ -4,6 +4,8 @@ Created on Fri May 25 12:57:10 2012
 
 @author: Pietro Zambelli
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
 import ctypes
 import grass.lib.gis as libgis
 import grass.script as grass

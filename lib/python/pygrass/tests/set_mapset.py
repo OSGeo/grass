@@ -5,6 +5,9 @@ Created on Thu Aug 23 11:07:38 2012
 @author: pietro
 
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
+
 import os
 import subprocess
 import optparse
@@ -31,8 +34,8 @@ def main():
     parser.add_option("-P", "--password", dest="passwd", default=None,
                       help="PostgreSQL password for user [default=%default]")
     parser.add_option("-D", "--database", dest="db", default='pygrassdb_doctest',
-                      help="PostgreSQL database name [default=%default]")                      
-                      
+                      help="PostgreSQL database name [default=%default]")
+
     (opts, args) = parser.parse_args()
     #
     # Create DB
@@ -41,19 +44,19 @@ def main():
     createdb = ['createdb', '--encoding=UTF-8', '--owner=%s' % opts.user,
                 '--host=localhost', '--username=%s' % opts.user, opts.db]
     if opts.passwd:
-        print opts.passwd
+        print(opts.passwd)
         createdb.append("--password=%s" % opts.passwd)
     else:
         createdb.append("--no-password")
     subprocess.Popen(createdb)
-    
+
     #
     # set postgreSQL
     #
     print("\n\nSet Postgres connection...\n")
     grasscore.run_command('db.connect', driver='pg',
                           database='host=localhost,dbname=%s' % opts.db)
-    
+
     grasscore.run_command('db.login', user=opts.user)
     print("\n\nCopy the map from PERMANENT to user1...\n")
     grasscore.run_command('g.copy',
@@ -61,8 +64,8 @@ def main():
                           overwrite=True)
     print("\n\nBuild topology...\n")
     grasscore.run_command('v.build', map='boundary_municp_pg', overwrite=True)
-    
-    
+
+
     #
     # set sqlite
     #
@@ -76,6 +79,6 @@ def main():
                           overwrite=True)
     print("\n\nBuild topology...\n")
     grasscore.run_command('v.build', map='boundary_municp_sqlite', overwrite=True)
-    
+
 if __name__ == "__main__":
     main()

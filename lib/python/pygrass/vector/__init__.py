@@ -5,7 +5,7 @@ Created on Tue Jul 17 08:51:53 2012
 @author: pietro
 """
 import grass.lib.vector as libvect
-from vector_type import VTYPE
+from .vector_type import VTYPE
 from os.path import join, exists
 
 #
@@ -14,11 +14,11 @@ from os.path import join, exists
 from grass.pygrass.errors import GrassError, must_be_open
 from grass.pygrass.gis import Location
 
-from geometry import GEOOBJ as _GEOOBJ
-from geometry import read_line, read_next_line
-from geometry import Area as _Area
-from abstract import Info
-from basic import Bbox, Cats, Ilist
+from .geometry import GEOOBJ as _GEOOBJ
+from .geometry import read_line, read_next_line
+from .geometry import Area as _Area
+from .abstract import Info
+from .basic import Bbox, Cats, Ilist
 
 
 _NUMOF = {"areas": libvect.Vect_get_num_areas,
@@ -276,7 +276,7 @@ class VectorTopo(Vector):
             #import pdb; pdb.set_trace()
             #Get the start, stop, and step from the slice
             return [self.read(indx + 1)
-                    for indx in xrange(*key.indices(len(self)))]
+                    for indx in range(*key.indices(len(self)))]
         elif isinstance(key, int):
             return self.read(key)
         else:
@@ -389,7 +389,7 @@ class VectorTopo(Vector):
         """
         if vtype in _GEOOBJ.keys():
             if _GEOOBJ[vtype] is not None:
-                ids = (indx for indx in xrange(1, self.number_of(vtype) + 1))
+                ids = (indx for indx in range(1, self.number_of(vtype) + 1))
                 if idonly:
                     return ids
                 return (_GEOOBJ[vtype](v_id=indx, c_mapinfo=self.c_mapinfo,
@@ -422,7 +422,7 @@ class VectorTopo(Vector):
         libvect.Vect_rewind(self.c_mapinfo)
 
     @must_be_open
-    def cat(self, cat_id, vtype, layer=None, generator=False):
+    def cat(self, cat_id, vtype, layer=None, generator=False, geo=None):
         """Return the geometry features with category == cat_id.
 
         Parameters
@@ -436,18 +436,22 @@ class VectorTopo(Vector):
         generator : bool, optional
             If True return a generator otherwise it return a list of features.
         """
-        if vtype not in _GEOOBJ:
+        if geo is None and vtype not in _GEOOBJ:
             keys = "', '".join(sorted(_GEOOBJ.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
-        Obj = _GEOOBJ[vtype]
+        Obj = _GEOOBJ[vtype] if geo is None else geo
         ilist = Ilist()
         libvect.Vect_cidx_find_all(self.c_mapinfo,
                                    layer if layer else self.layer,
                                    Obj.gtype, cat_id, ilist.c_ilist)
         if generator:
-            return (Obj(v_id=v_id, c_mapinfo=self.c_mapinfo) for v_id in ilist)
+            return (read_line(feature_id=v_id, c_mapinfo=self.c_mapinfo,
+                              table=self.table, writable=self.writable)
+                    for v_id in ilist)
         else:
-            return [Obj(v_id=v_id, c_mapinfo=self.c_mapinfo) for v_id in ilist]
+            return [read_line(feature_id=v_id, c_mapinfo=self.c_mapinfo,
+                              table=self.table, writable=self.writable)
+                    for v_id in ilist]
 
     @must_be_open
     def read(self, feature_id):
@@ -549,4 +553,4 @@ class VectorTopo(Vector):
         occupied by spatial index is released"""
         if release:
             libvect.Vect_set_release_support(self.c_mapinfo)
-        super(VectorTopo, self).close()
+        super(VectorTopo, self).close(build=build)

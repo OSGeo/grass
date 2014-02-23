@@ -7,12 +7,12 @@ Created on Fri Aug 17 17:24:03 2012
 import ctypes
 import datetime
 import grass.lib.vector as libvect
-from vector_type import MAPTYPE
+from .vector_type import MAPTYPE
 
 from grass.pygrass import functions
 from grass.pygrass.errors import GrassError, OpenError, must_be_open
-from table import DBlinks, Link
-from find import PointFinder, BboxFinder, PolygonFinder
+from .table import DBlinks, Link
+from .find import PointFinder, BboxFinder, PolygonFinder
 
 
 def is_open(c_mapinfo):
@@ -78,8 +78,8 @@ class Info(object):
 
     """
     def __init__(self, name, mapset='', layer=None, mode='r'):
-        self._name = None
-        self._mapset = None
+        self._name = ''
+        self._mapset = ''
         # Set map name and mapset
         self.name = name
         self.mapset = mapset
@@ -121,8 +121,6 @@ class Info(object):
         """Private method to change the Vector name"""
         if mapset:
             self._mapset = mapset
-        else:
-            self._mapset = ''
 
     mapset = property(fget=_get_mapset, fset=_set_mapset)
 

@@ -15,8 +15,8 @@ import grass.lib.vector as libvect
 
 from grass.pygrass.errors import GrassError
 
-from basic import Ilist, Bbox, Cats
-import sql
+from .basic import Ilist, Bbox, Cats
+from . import sql
 
 
 WKT = {'POINT\((.*)\)': 'point',  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
@@ -159,9 +159,12 @@ class Attrs(object):
 
         """
         #SELECT {cols} FROM {tname} WHERE {condition};
-        cur = self.table.execute(sql.SELECT_WHERE.format(cols=key,
+        try:
+            cur = self.table.execute(sql.SELECT_WHERE.format(cols=key,
                                                          tname=self.table.name,
                                                          condition=self.cond))
+        except:
+            import ipdb; ipdb.set_trace()
         results = cur.fetchone()
         if results is not None:
             return results[0] if len(results) == 1 else results
@@ -316,7 +319,7 @@ class Point(Geo):
         False
         >>> pnt
         Point(0.000000, 0.000000, 0.000000)
-        >>> print pnt
+        >>> print(pnt)
         POINT(0.000000, 0.000000, 0.000000)
 
     ..
@@ -547,7 +550,7 @@ class Line(Geo):
             return [Point(self.c_points.contents.x[indx],
                           self.c_points.contents.y[indx],
                     None if self.is2D else self.c_points.contents.z[indx])
-                    for indx in xrange(*key.indices(len(self)))]
+                    for indx in range(*key.indices(len(self)))]
         elif isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_points.contents.n_points
@@ -1017,7 +1020,7 @@ class Line(Geo):
         return Area(boundary=Line(c_points=p_bound.contents),
                     centroid=self[0],
                     isles=[Line(c_points=pp_isle[i].contents)
-                           for i in xrange(n_isles.contents.value)])
+                           for i in range(n_isles.contents.value)])
 
     def reset(self):
         """Reset line, using `Vect_reset_line` C function. ::
@@ -1053,7 +1056,7 @@ class Boundary(Line):
         super(Boundary, self).__init__(**kargs)
         self.c_left = ctypes.pointer(ctypes.c_int())
         self.c_right = ctypes.pointer(ctypes.c_int())
-        self.get_left_right()
+        #self.get_left_right()
 
     @property
     def left_id(self):
@@ -1395,7 +1398,7 @@ class Area(Geo):
         return Area(boundary=Line(c_points=p_bound.contents),
                     centroid=self.centroid,
                     isles=[Line(c_points=pp_isle[i].contents)
-                           for i in xrange(n_isles.contents.value)])
+                           for i in range(n_isles.contents.value)])
 
     def boundaries(self, ilist=False):
         """Creates list of boundaries for given area.

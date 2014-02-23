@@ -186,7 +186,7 @@ class BoxList(object):
         self.c_boxlist.contents.box[indx] = bbox
 
     def __iter__(self):
-        return (self.__getitem__(box_id) for box_id in xrange(self.__len__()))
+        return (self.__getitem__(box_id) for box_id in range(self.__len__()))
 
     def __str__(self):
         return self.__repr__()
@@ -297,7 +297,7 @@ class Ilist(object):
             #import pdb; pdb.set_trace()
             #Get the start, stop, and step from the slice
             return [self.c_ilist.contents.value[indx]
-                    for indx in xrange(*key.indices(len(self)))]
+                    for indx in range(*key.indices(len(self)))]
         elif isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_ilist.contents.n_values
@@ -316,7 +316,7 @@ class Ilist(object):
         return self.c_ilist.contents.n_values
 
     def __iter__(self):
-        return (self.c_ilist.contents.value[i] for i in xrange(self.__len__()))
+        return (self.c_ilist.contents.value[i] for i in range(self.__len__()))
 
     def __repr__(self):
         return "Ilist(%r)" % [i for i in self.__iter__()]
@@ -395,12 +395,12 @@ class Cats(object):
     @property
     def layer(self):
         field = self.c_cats.contents.field
-        return [field[i] for i in xrange(self.n_cats)]
+        return [field[i] for i in range(self.n_cats)]
 
     @property
     def cat(self):
         cat = self.c_cats.contents.cat
-        return [cat[i] for i in xrange(self.n_cats)]
+        return [cat[i] for i in range(self.n_cats)]
 
     @property
     def n_cats(self):
@@ -490,13 +490,13 @@ class CatsList(object):
     def min(self):
         """Return the minimum value"""
         min_values = self.c_cat_list.contents.min
-        return [min_values[i] for i in xrange(self.n_ranges)]
+        return [min_values[i] for i in range(self.n_ranges)]
 
     @property
     def max(self):
         """Return the maximum value"""
         max_values = self.c_cat_list.contents.max
-        return [max_values[i] for i in xrange(self.n_ranges)]
+        return [max_values[i] for i in range(self.n_ranges)]
 
     def __init__(self, c_cat_list=None):
         self.c_cat_list = c_cat_list if c_cat_list \

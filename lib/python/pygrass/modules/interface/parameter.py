@@ -4,12 +4,12 @@ Created on Tue Apr  2 18:31:47 2013
 
 @author: pietro
 """
-
-from __future__ import print_function
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
 import re
 
 
-from read import GETTYPE, element2dict, DOC
+from .read import GETTYPE, element2dict, DOC
 
 
 class Parameter(object):
@@ -116,7 +116,8 @@ class Parameter(object):
                     raise ValueError(values_error % (self.name, self.values))
             else:
                 self._value = value
-        elif self.type is str and isinstance(value, unicode):
+        # was: elif self.type is str and isinstance(value, unicode):
+        elif self.type is str and isinstance(value, str):
             if hasattr(self, 'values'):
                 if value in self.values:
                     self._value = value

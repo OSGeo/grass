@@ -4,6 +4,8 @@ Created on Tue Apr  2 19:00:15 2013
 
 @author: pietro
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
 from grass.pygrass.gis.region import Region
 from grass.pygrass.vector.basic import Bbox
 
@@ -46,9 +48,9 @@ def split_region_tiles(region=None, width=100, height=100, overlap=0):
     nrows = (reg.rows + height - 1) // height
     box_list = []
     #print reg
-    for row in xrange(nrows):
+    for row in range(nrows):
         row_list = []
-        for col in xrange(ncols):
+        for col in range(ncols):
             #print 'c', c, 'r', r
             row_list.append(get_bbox(reg, row, col, width, height, overlap))
         box_list.append(row_list)
@@ -81,9 +83,9 @@ def get_overlap_region_tiles(region=None, width=100, height=100, overlap=0):
     nrows = (reg.rows + height - 1) // height
     box_list = []
     #print reg
-    for row in xrange(nrows):
+    for row in range(nrows):
         row_list = []
-        for col in xrange(ncols):
+        for col in range(ncols):
             #print 'c', c, 'r', r
             row_list.append(get_bbox(reg, row, col, width, height, -overlap))
         box_list.append(row_list)

@@ -4,6 +4,9 @@ Created on Fri May 25 12:56:33 2012
 
 @author: pietro
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
+import os
 import ctypes
 import numpy as np
 
@@ -27,11 +30,11 @@ from grass.pygrass import functions
 #
 # import raster classes
 #
-from abstract import RasterAbstractBase, Info
-from raster_type import TYPE as RTYPE, RTYPE_STR
-from buffer import Buffer
-from segment import Segment
-from rowio import RowIO
+from .abstract import RasterAbstractBase, Info
+from .raster_type import TYPE as RTYPE, RTYPE_STR
+from .buffer import Buffer
+from .segment import Segment
+from .rowio import RowIO
 
 
 class RasterRow(RasterAbstractBase):
@@ -169,14 +172,20 @@ class RasterRow(RasterAbstractBase):
 
         # check if exist and instantiate all the private attributes
         if self.exist():
-            self.info = Info(self.name, self.mapset)
+            self.info.read()
+            self.cats.mtype = self.mtype
+            self.cats.read()
+            self.hist.read()
             if self.mode == 'r':
                 # the map exist, read mode
                 self._fd = libraster.Rast_open_old(self.name, self.mapset)
                 self._gtype = libraster.Rast_get_map_type(self._fd)
                 self.mtype = RTYPE_STR[self._gtype]
-                self.cats.read(self)
-                self.hist.read(self.name)
+#                try:
+#                    self.cats.read(self)
+#                    self.hist.read(self.name)
+#                except:
+#                    import ipdb; ipdb.set_trace()
             elif self.overwrite:
                 if self._gtype is None:
                     raise OpenError(_("Raster type not defined"))
@@ -269,7 +278,7 @@ class RasterSegment(RasterAbstractBase):
         if isinstance(key, slice):
             #Get the start, stop, and step from the slice
             return [self.put_row(ii, row)
-                    for ii in xrange(*key.indices(len(self)))]
+                    for ii in range(*key.indices(len(self)))]
         elif isinstance(key, tuple):
             x, y = key
             return self.put(x, y, row)
@@ -287,7 +296,7 @@ class RasterSegment(RasterAbstractBase):
         """Transform an existing map to segment file.
         """
         row_buffer = Buffer((self._cols), self.mtype)
-        for row in xrange(self._rows):
+        for row in range(self._rows):
             libraster.Rast_get_row(
                 self._fd, row_buffer.p, row, self._gtype)
             self.segment.put_row(row, row_buffer)
@@ -297,7 +306,7 @@ class RasterSegment(RasterAbstractBase):
         """Transform the segment file to a map.
         """
         row_buffer = Buffer((self._cols), self.mtype)
-        for row in xrange(self._rows):
+        for row in range(self._rows):
             row_buffer = self.segment.get_row(row, row_buffer)
             libraster.Rast_put_row(self._fd, row_buffer.p, self._gtype)
 
@@ -387,7 +396,10 @@ class RasterSegment(RasterAbstractBase):
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.exist():
-            self.info = Info(self.name, self.mapset)
+            self.info.read()
+            self.cats.mtype = self.mtype
+            self.cats.read()
+            self.hist.read()
             if ((self.mode == "w" or self.mode == "rw") and
                     self.overwrite is False):
                 str_err = _("Raster map <{0}> already exists. Use overwrite.")
@@ -579,51 +591,25 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         @return 0 on success
         @return non-zero code on failure
         """
-        self.null = None
+        with RasterRow(self.name, self.mapset, mode='r') as rst:
+            buff = rst[0]
+            for i in range(len(rst)):
+                self[i] = rst.get_row(i, buff)
 
-        size, kind = self._get_flags(self.dtype.itemsize, self.dtype.kind)
-        kind = 'f' if kind == 'd' else kind
-        ret = grasscore.run_command('r.out.bin', flags=kind,
-                                    input=self._name, output=self.filename,
-                                    bytes=size, null=self.null,
-                                    quiet=True)
-        return ret
 
     def _write(self):
         """
         r.in.bin input=/home/pietro/docdat/phd/thesis/gis/north_carolina/user1/.tmp/eraclito/14325.0 output=new title='' bytes=1,anull='' --verbose --overwrite north=228500.0 south=215000.0 east=645000.0 west=630000.0 rows=1350 cols=1500
 
         """
-        self.tofile(self.filename)
-        size, kind = self._get_flags(self.dtype.itemsize, self.dtype.kind)
-        #print size, kind
-        if kind == 'i':
-            kind = None
-            size = 4
-        size = None if kind == 'f' else size
-
-        # To be set in the future
-        self.title = None
-        self.null = None
-
-        #import pdb; pdb.set_trace()
-        if self.mode in ('w+', 'r+'):
-            if not self._name:
-                import os
-                self._name = "doctest_%i" % os.getpid()
-            ret = grasscore.run_command('r.in.bin', flags=kind,
-                                        input=self.filename, output=self._name,
-                                        title=self.title, bytes=size,
-                                        anull=self.null,
-                                        overwrite=self.overwrite,
-                                        verbose=True,
-                                        north=self.reg.north,
-                                        south=self.reg.south,
-                                        east=self.reg.east,
-                                        west=self.reg.west,
-                                        rows=self.reg.rows,
-                                        cols=self.reg.cols)
-            return ret
+        if not self.exist() or self.mode != 'r':
+            self.flush()
+            buff = Buffer(self[0].shape, mtype=self.mtype)
+            with RasterRow(self.name, self.mapset, mode='w',
+                           mtype=self.mtype) as rst:
+                for i in range(len(rst)):
+                    buff[:] = self[i][:]
+                    rst.put_row(buff[:])
 
     def open(self, mtype='', null=None, overwrite=None):
         """Open the map, if the map already exist: determine the map type
@@ -641,6 +627,10 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         self.null = null
         # rows and cols already set in __new__
         if self.exist():
+            self.info.read()
+            self.cats.mtype = self.mtype
+            self.cats.read()
+            self.hist.read()
             self._read()
         else:
             if mtype:
@@ -652,8 +642,7 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
 
     def close(self):
         self._write()
-        np.memmap._close(self)
-        grasscore.try_remove(self.filename)
+        os.remove(self.filename)
         self._fd = None
 
     def get_value(self, point, region=None):
@@ -676,7 +665,7 @@ def random_map_only_columns(mapname, mtype, overwrite=True, factor=100):
     row_buf = Buffer((region.cols, ), mtype,
                      buffer=(np.random.random(region.cols,) * factor).data)
     random_map.open('w', mtype, overwrite)
-    for _ in xrange(region.rows):
+    for _ in range(region.rows):
         random_map.put_row(row_buf)
     random_map.close()
     return random_map
@@ -686,7 +675,7 @@ def random_map(mapname, mtype, overwrite=True, factor=100):
     region = Region()
     random_map = RasterRow(mapname)
     random_map.open('w', mtype, overwrite)
-    for _ in xrange(region.rows):
+    for _ in range(region.rows):
         row_buf = Buffer((region.cols, ), mtype,
                          buffer=(np.random.random(region.cols,) * factor).data)
         random_map.put_row(row_buf)

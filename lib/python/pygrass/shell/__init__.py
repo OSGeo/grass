@@ -5,6 +5,6 @@ Created on Sun Jun 23 15:06:46 2013
 @author: pietro
 """
 
-import conversion
-import show
+from . import conversion
+from . import show
 

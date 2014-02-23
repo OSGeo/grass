@@ -4,6 +4,8 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function, unicode_literals)
 import ctypes
 
 #
@@ -25,9 +27,9 @@ from grass.pygrass.shell.show import raw_figure
 #
 # import raster classes
 #
-from raster_type import TYPE as RTYPE
-from category import Category
-from history import History
+from .raster_type import TYPE as RTYPE
+from .category import Category
+from .history import History
 
 
 ## Define global variables to not exceed the 80 columns
@@ -62,13 +64,18 @@ class Info(object):
         self.name = name
         self.mapset = mapset
         self.c_region = ctypes.pointer(libgis.Cell_head())
-        libraster.Rast_get_cellhd(name, mapset,
-                                  self.c_region)
-        self._get_range()
+        self.c_range = ctypes.pointer(libraster.Range())
 
     def _get_range(self):
-        self.c_range = ctypes.pointer(libraster.Range())
         libraster.Rast_read_range(self.name, self.mapset, self.c_range)
+
+    def _get_raster_region(self):
+        if self.name and self.mapset:
+            libraster.Rast_get_cellhd(self.name, self.mapset, self.c_region)
+
+    def read(self):
+        self._get_range()
+        self._get_raster_region()
 
     @property
     def north(self):
@@ -196,10 +203,9 @@ class RasterAbstractBase(object):
         # when you open the file, using Rast_window_cols()
         self._cols = None
         #self.region = Region()
-        self.cats = Category()
-        self.hist = History()
-        if self.exist():
-            self.info = Info(self.name, self.mapset)
+        self.hist = History(self.name, self.mapset)
+        self.cats = Category(self.name, self.mapset)
+        self.info = Info(self.name, self.mapset)
         self.mode = mode
         self.mtype = mtype
         self.overwrite = overwrite
@@ -288,7 +294,7 @@ class RasterAbstractBase(object):
         if isinstance(key, slice):
             #import pdb; pdb.set_trace()
             #Get the start, stop, and step from the slice
-            return (self.get_row(ii) for ii in xrange(*key.indices(len(self))))
+            return (self.get_row(ii) for ii in range(*key.indices(len(self))))
         elif isinstance(key, tuple):
             x, y = key
             return self.get(x, y)
@@ -304,7 +310,7 @@ class RasterAbstractBase(object):
 
     def __iter__(self):
         """Return a constructor of the class"""
-        return (self.__getitem__(irow) for irow in xrange(self._rows))
+        return (self.__getitem__(irow) for irow in range(self._rows))
 
     def _repr_png_(self):
         return raw_figure(functions.r_export(self))

@@ -8,8 +8,8 @@ import grass.lib.vector as libvect
 
 from grass.pygrass.errors import must_be_open
 
-from basic import Ilist, BoxList
-from geometry import read_line, Isle, Area, Point
+from .basic import Ilist, BoxList
+from .geometry import read_line, Isle, Area, Point
 
 
 class AbstractFinder(object):
@@ -27,7 +27,7 @@ class AbstractFinder(object):
 
     def is_open(self):
         """Check if the vector map is open or not"""
-        import abstract
+        from . import abstract
         return abstract.is_open(self.c_mapinfo)
 
 

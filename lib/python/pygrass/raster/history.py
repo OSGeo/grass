@@ -36,12 +36,27 @@ class History(object):
 
     ..
     """
-    def __init__(self, name=''):
+    def __init__(self, name, mapset='', mtype='',
+                 creator='', src1='', src2='', keyword='',
+                 date='', title=''):
         self.c_hist = ctypes.pointer(libraster.History())
         #                'Tue Nov  7 01:11:23 2006'
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
-        if name:
-            self.read(name)
+        self.name = name
+        self.mapset = mapset
+        self.mtype = mtype
+        self.creator = creator
+        self.src1 = src1
+        self.src2 = src2
+        self.keyword = keyword
+        self.date = date
+        self.title = title
+
+    def __repr__(self):
+        attrs = ['name', 'mapset', 'mtype', 'creator', 'src1', 'src2',
+                 'keyword', 'date', 'title']
+        return "History(%s)" % ', '.join(["%s=%r" % (attr, getattr(self, attr))
+                                          for attr in attrs])
 
     def __del__(self):
         """Rast_free_history"""
@@ -104,13 +119,15 @@ class History(object):
     def _get_date(self):
         date_str = libraster.Rast_get_history(self.c_hist,
                                               libraster.HIST_MAPID)
-        return datetime.datetime.strptime(date_str, self.date_fmt)
+        if date_str:
+            return datetime.datetime.strptime(date_str, self.date_fmt)
 
     def _set_date(self, datetimeobj):
-        date_str = datetimeobj.strftime(self.date_fmt)
-        return libraster.Rast_set_history(self.c_hist,
-                                          libraster.HIST_MAPID,
-                                          ctypes.c_char_p(date_str))
+        if datetimeobj:
+            date_str = datetimeobj.strftime(self.date_fmt)
+            return libraster.Rast_set_history(self.c_hist,
+                                              libraster.HIST_MAPID,
+                                              ctypes.c_char_p(date_str))
 
     date = property(fget=_get_date, fset=_set_date)
 
@@ -203,7 +220,7 @@ class History(object):
         libraster.Rast_history_line(self.c_hist,
                                     ctypes.c_int(line))
 
-    def read(self, name):
+    def read(self):
         """Rast_read_history. ::
 
             >>> import grass.lib.gis as libgis
@@ -221,17 +238,15 @@ class History(object):
 
         ..
         """
-        libraster.Rast_read_history(ctypes.c_char_p(name),
-                                    ctypes.c_char_p(''),
-                                    self.c_hist)
+        libraster.Rast_read_history(self.name, self.mapset, self.c_hist)
 
-    def write(self, name):
+    def write(self):
         """Rast_write_history"""
-        libraster.Rast_write_history(ctypes.c_char_p(name),
+        libraster.Rast_write_history(self.name,
                                      self.c_hist)
 
-    def short(self, name, maptype,):
+    def short(self):
         """Rast_short_history"""
-        libraster.Rast_short_history(ctypes.c_char_p(name),
-                                     ctypes.c_char_p(maptype),
+        libraster.Rast_short_history(self.name,
+                                     'raster',
                                      self.c_hist)
