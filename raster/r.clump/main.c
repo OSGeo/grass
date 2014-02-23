@@ -80,16 +80,12 @@ int main(int argc, char *argv[])
 
     out_fd = Rast_open_c_new(OUTPUT);
 
-    if (flag_diag->answer)
-	clumpd(in_fd, out_fd);
-    else
-	clump(in_fd, out_fd);
+    clump(in_fd, out_fd, flag_diag->answer);
 
     G_debug(1, "Creating support files...");
 
     Rast_close(in_fd);
     Rast_close(out_fd);
-
 
     /* build title */
     if (opt_title->answer != NULL)
