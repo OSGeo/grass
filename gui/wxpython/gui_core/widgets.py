@@ -11,6 +11,7 @@ Classes:
  - widgets::SymbolButton
  - widgets::StaticWrapText
  - widgets::BaseValidator
+ - widgets::CoordinatesValidator
  - widgets::IntegerValidator
  - widgets::FloatValidator
  - widgets::GListCtrl
@@ -21,7 +22,7 @@ Classes:
  - widgets::BarscalesComboBox
  - widgets::NArrowsComboBox
 
-(C) 2008-2013 by the GRASS Development Team
+(C) 2008-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -494,16 +495,26 @@ class BaseValidator(wx.PyValidator):
             try:
                 self.type(text)
             except ValueError:
-                textCtrl.SetBackgroundColour("grey")
-                textCtrl.SetFocus()
-                textCtrl.Refresh()
+                self._notvalid()
                 return False
         
+        self._valid()
+        return True
+
+    def _notvalid(self):
+        textCtrl = self.GetWindow()
+
+        textCtrl.SetBackgroundColour("grey")
+        textCtrl.SetFocus()
+        textCtrl.Refresh()
+
+    def _valid(self):
+        textCtrl = self.GetWindow()
+
         sysColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW)
         textCtrl.SetBackgroundColour(sysColor)
         
         textCtrl.Refresh()
-        
         return True
 
     def TransferToWindow(self):
@@ -511,6 +522,38 @@ class BaseValidator(wx.PyValidator):
     
     def TransferFromWindow(self):
         return True # Prevent wxDialog from complaining.
+
+class CoordinatesValidator(BaseValidator):
+    """!Validator for coordinates input (list of floats separated by comma)"""
+
+    def __init__(self):
+        BaseValidator.__init__(self)
+
+    def Validate(self):
+        """Validate input"""
+
+        textCtrl = self.GetWindow()
+        text = textCtrl.GetValue()
+        if text:
+            try:
+                text = text.split(',')
+                
+                for t in text:
+                    float(t)
+
+                if len(text)%2 != 0:
+                    return False
+
+            except ValueError:
+                self._notvalid()
+                return False
+        
+        self._valid()
+        return True
+
+    def Clone(self):
+        """!Clone validator"""
+        return CoordinatesValidator()
 
 class IntegerValidator(BaseValidator):
     """!Validator for floating-point input"""
