@@ -98,10 +98,14 @@ class GraphicsSet:
                     coords = item.GetCoords()
                 size = self.properties["size"]
 
-                self.properties["text"]['coords'] = [coords[0] + size, coords[1] + size, size, size]
-                self.properties["text"]['color'] = self.parentMapWin.pen.GetColour()
-                self.properties["text"]['text'] = item.GetPropertyVal("label")
-
+                label = item.GetPropertyVal("label")
+                if label is None:
+                    self.properties["text"] = None
+                else:
+                    self.properties["text"]['coords'] = [coords[0] + size, coords[1] + size, size, size]
+                    self.properties["text"]['color'] = self.parentMapWin.pen.GetColour()
+                    self.properties["text"]['text'] = label
+                    
                 self.drawFunc(pdc=pdc, drawid=item.GetId(),
                               coords=coords,
                               text=self.properties["text"],

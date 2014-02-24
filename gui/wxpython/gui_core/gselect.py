@@ -57,7 +57,7 @@ except ImportError, e:
     print >> sys.stderr, _("Unable to import pyGRASS: %s\n"
                            "Some functionality will be not accessible") % e
 
-from gui_core.widgets  import ManageSettingsWidget
+from gui_core.widgets  import ManageSettingsWidget, CoordinatesValidator
 
 from core.gcmd     import RunCommand, GError, GMessage
 from core.utils    import GetListOfLocations, GetListOfMapsets, \
@@ -66,7 +66,6 @@ from core.utils    import GetSettingsPath, GetValidLayerName, ListSortLower
 from core.utils    import GetVectorNumberOfLayers, _
 from core.settings import UserSettings
 from core.debug    import Debug
-
 from grass.pydispatch.signal import Signal
 
 class Select(wx.combo.ComboCtrl):
@@ -2126,16 +2125,18 @@ class CoordinatesSelect(wx.Panel):
         self._giface = giface
         self.multiple = multiple
         self.mapWin   = None
+        self.drawMapWin = None
+
+        super(CoordinatesSelect, self).__init__(parent=parent, id=wx.ID_ANY)
         
-        super(CoordinatesSelect, self).__init__(parent = parent, id = wx.ID_ANY)
-        
-        self.coordsField = wx.TextCtrl(parent = self, id = wx.ID_ANY, 
-                                       size = globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.coordsField = wx.TextCtrl(parent=self, id=wx.ID_ANY, 
+                                       size=globalvar.DIALOG_TEXTCTRL_SIZE,
+                                       validator=CoordinatesValidator())
         
         icon = wx.Bitmap(os.path.join(globalvar.ETCICONDIR, "grass", "pointer.png"))
-        self.buttonInsCoords = buttons.ThemedGenBitmapToggleButton(parent = self, id = wx.ID_ANY,
-                                                                   bitmap = icon,
-                                                                   size = globalvar.DIALOG_COLOR_SIZE)
+        self.buttonInsCoords = buttons.ThemedGenBitmapToggleButton(parent=self, id=wx.ID_ANY,
+                                                                   bitmap=icon,
+                                                                   size=globalvar.DIALOG_COLOR_SIZE)
         self.registered = False
         self.buttonInsCoords.Bind(wx.EVT_BUTTON, self._onClick)
         switcher = self._giface.GetMapDisplay().GetToolSwitcher()
@@ -2143,6 +2144,7 @@ class CoordinatesSelect(wx.Panel):
                                       btnId=self.buttonInsCoords.GetId(), 
                                       toggleHandler=self.buttonInsCoords.SetValue)
         self._doLayout()
+        self.coordsField.Bind(wx.EVT_TEXT, lambda event : self._draw())
         
     def _doLayout(self):
         self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -2172,6 +2174,42 @@ class CoordinatesSelect(wx.Panel):
                 self.registered = False
                 return
 
+
+    def drawCleanUp(self):
+        if self.drawMapWin:
+            self.drawMapWin.UnregisterGraphicsToDraw(self.pointsToDraw)
+
+    def _draw(self):
+        """!Draws points representing inserted coordinates in mapwindow."""
+        if self.drawMapWin != self.mapWin:
+            self.drawCleanUp()
+            if self.mapWin:
+                self.drawMapWin = self.mapWin
+                self.pointsToDraw = self.drawMapWin.RegisterGraphicsToDraw(graphicsType="point")
+
+        if self.drawMapWin:
+                items = self.pointsToDraw.GetAllItems()
+                for i in items:
+                    self.pointsToDraw.DeleteItem(i)
+                
+                coords = self._getCoords()
+                if coords is not None:
+                    for i in range(len(coords)/2):
+                        i = i * 2
+                        self.pointsToDraw.AddItem(coords=(coords[i], coords[i + 1]))
+
+                self._giface.updateMap.emit(render=False, renderVector=False)
+
+    def _getCoords(self):
+        """!Get list of coordinates.
+
+        @return None if values are not valid 
+        """
+        if self.coordsField.GetValidator().Validate():
+            return self.coordsField.GetValue().split(',')
+
+        return None
+
     def _onMapClickHandler(self, event):
         """!Gets coordinates from mapwindow"""
         if event == "unregistered":
@@ -2184,12 +2222,17 @@ class CoordinatesSelect(wx.Panel):
             prevCoords = self.coordsField.GetValue().strip()
             if prevCoords != "":
                 prevCoords += ","
-        
+
         value = prevCoords + str(e) + "," + str(n)
         self.coordsField.SetValue(value)
 
+        self._draw()
+
     def OnClose(self):
         """!Unregistrates _onMapClickHandler from mapWin"""
+        self.drawCleanUp()
+        self._giface.updateMap.emit(render=False, renderVector=False)
+ 
         switcher = self._giface.GetMapDisplay().GetToolSwitcher()
         switcher.RemoveCustomToolFromGroup(self.buttonInsCoords.GetId())
         if self.mapWin and self.registered:
