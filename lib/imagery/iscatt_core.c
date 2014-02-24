@@ -962,7 +962,7 @@ int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
 	Vect_append_point(pol, polygon[i * 2], polygon[i * 2 + 1], 0.0);
     }
 
-    Rast_set_window(rast_region);
+    //Rast_set_window(rast_region);
 
     make_perimeter(pol, &perimeter, rast_region);
     for (i = 1; i < perimeter.npoints; i += 2) {

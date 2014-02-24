@@ -176,9 +176,21 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
     for (i = 0; i < count; i++) {
 	G_debug(5, "iclass_make_perimeter(): points: x: %f y: %f",
 		points->x[i], points->y[i]);
-	tmp_points[i].y = Rast_northing_to_row(points->y[i], band_region);
-	tmp_points[i].x = Rast_easting_to_col(points->x[i], band_region);
-    }
+
+    /* This functions are no longer used because of the different behaviour 
+       of Rast_easting_to_col depending whether location is LL or not. 
+       It makes problem  in  interactive scatter plot tool, 
+       which defines its own coordinates systems for the plots and 
+       therefore it requires the function to work always in same way 
+       without hidden dependency on location type.
+
+	  tmp_points[i].y = Rast_northing_to_row(points->y[i], band_region);
+	  tmp_points[i].x = Rast_easting_to_col(points->x[i], band_region);
+   */
+
+   tmp_points[i].y = (band_region->north - points->y[i]) / band_region->ns_res;
+   tmp_points[i].x = (points->x[i] - band_region->west) / band_region->ew_res;
+    }   
 
     /* find first edge which is not horizontal */
 
