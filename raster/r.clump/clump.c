@@ -119,6 +119,8 @@ CELL clump(int in_fd, int out_fd, int diag)
 	     * clump and will have to be merged
 	     */
 
+	    OLD = NEW = 0;
+
 	    /* only one "if (diag)" for speed */
 	    if (diag) {
 		temp_cell = prev_in + col - 1;
@@ -126,21 +128,6 @@ CELL clump(int in_fd, int out_fd, int diag)
 		UP = *temp_cell++;
 		UR = *temp_cell;
 
-		/* start a new clump */
-		if (X != LEFT && X != UP && X != UL && X != UR) {
-		    label++;
-		    cur_clump[col] = label;
-		    if (label >= nalloc) {
-			nalloc += INCR;
-			index =
-			    (CELL *) G_realloc(index,
-					       nalloc * sizeof(CELL));
-		    }
-		    index[label] = label;
-		    continue;
-		}
-
-		OLD = NEW = 0;
 		/* same clump as to the left */
 		if (X == LEFT) {
 		    OLD = cur_clump[col - 1];
@@ -170,21 +157,6 @@ CELL clump(int in_fd, int out_fd, int diag)
 	    else {
 		UP = prev_in[col];
 
-		/* start a new clump */
-		if (X != LEFT && X != UP) {
-		    label++;
-		    cur_clump[col] = label;
-		    if (label >= nalloc) {
-			nalloc += INCR;
-			index =
-			    (CELL *) G_realloc(index,
-					       nalloc * sizeof(CELL));
-		    }
-		    index[label] = label;
-		    continue;
-		}
-
-		OLD = NEW = 0;
 		/* same clump as to the left */
 		if (X == LEFT) {
 		    OLD = cur_clump[col - 1];
@@ -204,6 +176,18 @@ CELL clump(int in_fd, int out_fd, int diag)
 	    }
 
 	    if (NEW == 0 || OLD == NEW) {	/* ok */
+		if (OLD == 0) {
+		    /* start a new clump */
+		    label++;
+		    cur_clump[col] = label;
+		    if (label >= nalloc) {
+			nalloc += INCR;
+			index =
+			    (CELL *) G_realloc(index,
+					       nalloc * sizeof(CELL));
+		    }
+		    index[label] = label;
+		}
 		continue;
 	    }
 
@@ -259,7 +243,7 @@ CELL clump(int in_fd, int out_fd, int diag)
 
     /* generate a renumbering scheme */
     G_message(_("Generating renumbering scheme..."));
-    G_debug(0, "%d initial labels", label);
+    G_debug(1, "%d initial labels", label);
     /* allocate final clump ID */
     renumber = (CELL *) G_malloc((label + 1) * sizeof(CELL));
     renumber[0] = 0;
