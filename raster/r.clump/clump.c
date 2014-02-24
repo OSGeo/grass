@@ -9,7 +9,7 @@
  * PURPOSE:      Recategorizes data in a raster map layer by grouping cells
  *               that form physically discrete areas into unique categories.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -32,12 +32,13 @@
 CELL clump(int in_fd, int out_fd, int diag)
 {
     register int col;
-    register CELL *prev_clump, *cur_clump;
-    register CELL *index, *renumber;
     register int n;
-    CELL *prev_in, *cur_in;
-    CELL *temp_cell, *temp_clump, *out_cell;
-    CELL X, UP, LEFT, UL, UR, NEW, OLD;
+    CELL NEW, OLD;
+    CELL *temp_cell, *temp_clump;
+    CELL *prev_in, *cur_in, *out_cell;
+    CELL *prev_clump, *cur_clump;
+    CELL X, LEFT;
+    CELL *index, *renumber;
     CELL label;
     int nrows, ncols;
     int row;
@@ -73,22 +74,16 @@ CELL clump(int in_fd, int out_fd, int diag)
 
     time(&cur_time);
 
-    /* fake a previous row which is all zero */
+    /* fake a previous row which is all NULL */
     Rast_set_c_null_value(prev_in, ncols + 2);
-    G_zero(prev_clump, len);
 
     /* set left and right edge to NULL */
     Rast_set_c_null_value(&cur_in[0], 1);
     Rast_set_c_null_value(&cur_in[ncols + 1], 1);
 
-    /* set above left and right to NULL for diag == 0 */
-    Rast_set_c_null_value(&UL, 1);
-    Rast_set_c_null_value(&UR, 1);
-
-    /* create a left and right edge of zero */
-    G_zero(cur_clump, len);
-
     /* initialize clump labels */
+    G_zero(cur_clump, len);
+    G_zero(prev_clump, len);
     label = 0;
 
     /****************************************************
@@ -119,58 +114,43 @@ CELL clump(int in_fd, int out_fd, int diag)
 	     * clump and will have to be merged
 	     */
 
+	    /* try to connect the current cell to an existing clump */
 	    OLD = NEW = 0;
+	    /* same clump as to the left */
+	    if (X == LEFT) {
+		OLD = cur_clump[col] = cur_clump[col - 1];
+	    }
 
-	    /* only one "if (diag)" for speed */
 	    if (diag) {
-		temp_cell = prev_in + col - 1;
-		UL = *temp_cell++;
-		UP = *temp_cell++;
-		UR = *temp_cell;
-
-		/* same clump as to the left */
-		if (X == LEFT) {
-		    OLD = cur_clump[col - 1];
-		    cur_clump[col] = OLD;
-		}
-		/* check UL, UP, UR */
+		/* check above right, center, left, in that order */
 		n = 2;
 		temp_clump = prev_clump + col + 1;
 		temp_cell = prev_in + col + 1;
 		do {
 		    if (X == *temp_cell) {
+			cur_clump[col] = *temp_clump;
 			if (OLD == 0) {
 			    OLD = *temp_clump;
-			    cur_clump[col] = OLD;
-			}
+			    }
 			else {
 			    NEW = *temp_clump;
-			    cur_clump[col] = NEW;
+			    break;
 			}
 		    }
-		    if (NEW != 0)
-			break;
 		    temp_cell--;
 		    temp_clump--;
 		} while (n-- > 0);
 	    }
 	    else {
-		UP = prev_in[col];
-
-		/* same clump as to the left */
-		if (X == LEFT) {
-		    OLD = cur_clump[col - 1];
-		    cur_clump[col] = OLD;
-		}
-		/* same clump as above */
-		if (X == UP) {
+		/* check above */
+		if (X == prev_in[col]) {
+		    temp_clump = prev_clump + col;
+		    cur_clump[col] = *temp_clump;
 		    if (OLD == 0) {
-			OLD = prev_clump[col];
-			cur_clump[col] = OLD;
-		    }
+			OLD = *temp_clump;
+			}
 		    else {
-			NEW = prev_clump[col];
-			cur_clump[col] = NEW;
+			NEW = *temp_clump;
 		    }
 		}
 	    }
@@ -220,8 +200,8 @@ CELL clump(int in_fd, int out_fd, int diag)
 	}
 
 	/* write initial clump IDs */
-	/* this works also with writing out cur_clump, 
-	 * but only prev_clump is complete */
+	/* this works also with writing out cur_clump, but only 
+	 * prev_clump is complete and will not change any more */
 	if (row > 0) {
 	    if (write(cfd, prev_clump + 1, csize) != csize)
 		G_fatal_error(_("Unable to write to temp file"));
@@ -248,9 +228,9 @@ CELL clump(int in_fd, int out_fd, int diag)
     renumber = (CELL *) G_malloc((label + 1) * sizeof(CELL));
     renumber[0] = 0;
     cat = 1;
-    G_percent(0, label, 4);
+    G_percent(0, label, 1);
     for (n = 1; n <= label; n++) {
-	G_percent(n, label, 4);
+	G_percent(n, label, 1);
 	OLD = n;
 	NEW = index[n];
 	if (OLD != NEW) {
@@ -272,11 +252,12 @@ CELL clump(int in_fd, int out_fd, int diag)
 
     /****************************************************
      *                      PASS 2                      *
-     *             apply renumbering scheme             *
+     * apply renumbering scheme to initial clump labels *
      ****************************************************/
 
     /* the input raster is no longer needed, 
-     * instead we use the temp file with the initial clump labels */
+     * using instead the temp file with initial clump labels */
+
     G_message(_("Pass 2..."));
     for (row = 0; row < nrows; row++) {
 
@@ -291,7 +272,7 @@ CELL clump(int in_fd, int out_fd, int diag)
 	for (col = 0; col < ncols; col++) {
 	    *temp_cell = renumber[index[*temp_clump]];
 	    if (*temp_cell == 0)
-		Rast_set_null_value(temp_cell, 1, CELL_TYPE);
+		Rast_set_c_null_value(temp_cell, 1);
 	    temp_clump++;
 	    temp_cell++;
 	}

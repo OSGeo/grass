@@ -4,11 +4,12 @@
  * MODULE:       r.clump
  *
  * AUTHOR(S):    Michael Shapiro - CERL
+ *               Markus Metz
  *
  * PURPOSE:      Recategorizes data in a raster map layer by grouping cells
- *		 that form physically discrete areas into unique categories.
+ *               that form physically discrete areas into unique categories.
  *
- * COPYRIGHT:    (C) 2006-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
