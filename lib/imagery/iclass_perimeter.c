@@ -177,7 +177,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter * perimeter,
 	G_debug(5, "iclass_make_perimeter(): points: x: %f y: %f",
 		points->x[i], points->y[i]);
 
-    /* This functions are no longer used because of the different behaviour 
+    /* This functions are no longer used because of the different behavior 
        of Rast_easting_to_col depending whether location is LL or not. 
        It makes problem  in  interactive scatter plot tool, 
        which defines its own coordinates systems for the plots and 
