@@ -11,10 +11,10 @@ entering <b>rules=-</b>.
 <p>Rules are defined in one of these formats:
 
 <div class="code"><pre>
-    old_low:old_high:new_low:new_high
-    old_low:old_high:new_val  (i.e. new_high == new_low)
-    *:old_val:new_val         (interval [inf, old_val])
-    old_val:*:new_val         (interval [old_val, inf])
+old_low:old_high:new_low:new_high
+old_low:old_high:new_val  (i.e. new_high == new_low)
+*:old_val:new_val         (interval [inf, old_val])
+old_val:*:new_val         (interval [old_val, inf])
 </pre></div>
 
 <p><em>r.recode</em> is loosely based
@@ -52,7 +52,7 @@ To simply convert a raster between formats (eg. int to float) the user
 would use the first argument. For example
 
 <div class="code"><pre>
-    10:1500:0.1:15.0
+10:1500:0.1:15.0
 </pre></div>
 
 would convert an input raster map with range between 10 and 1500 to a
@@ -65,10 +65,10 @@ others. The formatting is as described above. In following example the
 values 1, 2 and 3 are replaced by 1.1, 7.5 resp. 0.4:
 
 <div class="code"><pre>
-r.recode input=oldmap output=newmap &lt;&lt; EOF
-    1:1:1.1:1.1
-    2:2:7.5:7.5
-    3:3:0.4:0.4
+r.recode input=oldmap output=newmap rules=- &lt;&lt; EOF
+1:1:1.1:1.1
+2:2:7.5:7.5
+3:3:0.4:0.4
 EOF
 </pre></div>
 
