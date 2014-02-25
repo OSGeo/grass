@@ -51,7 +51,7 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import sys
 
-if sys.version_info.major == 2:
+if sys.version_info[0] == 2:
     from itertools import izip_longest as zip_longest
 else:
     from itertools import zip_longest

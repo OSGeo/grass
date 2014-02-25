@@ -13,7 +13,7 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
 import os
 import sys
 
-long = int if sys.version_info.major == 3 else long
+long = int if sys.version_info[0] == 3 else long
 
 import ctypes
 import numpy as np
