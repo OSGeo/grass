@@ -307,6 +307,7 @@ class Module(object):
 
         if args or kargs:
             self.__call__(*args, **kargs)
+        self.__call__.__func__.__doc__ = self.__doc__
 
     def __call__(self, *args, **kargs):
         if not args and not kargs:
