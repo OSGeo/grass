@@ -7,7 +7,7 @@ Classes:
  - profile::ProfileFrame
  - profile::ProfileToolbar
 
-(C) 2011-2012 by the GRASS Development Team
+(C) 2011-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -242,8 +242,8 @@ class ProfileFrame(BasePlotFrame):
         ret = RunCommand("r.profile",
                          parent = self,
                          input = raster,
-                         profile = coords,
-                         res = transect_res,
+                         coordinates = coords,
+                         resolution = transect_res,
                          null = "nan",
                          quiet = True,
                          read = True)
