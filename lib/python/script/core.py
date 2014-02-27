@@ -757,7 +757,53 @@ def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
     return result
 
 
-def _text_to_key_value_dict(filename, sep=":", val_sep=","):
+def _compare_projection(dic):
+    """
+        !Check if projection has some possibility of duplicate names like
+        Universal Transverse Mercator and Universe Transverse Mercator and
+        unify them
+
+        @param dic The dictionary containing information about projection
+
+        @return The dictionary with the new values if needed
+
+    """
+    # the lookup variable is a list of list, each list contains all the
+    # possible name for a projection system
+    lookup = [['Universal Transverse Mercator', 'Universe Transverse Mercator']]
+    for lo in lookup:
+        for n in range(len(dic['name'])):
+            if dic['name'][n] in lo:
+                dic['name'][n] = lo[0]
+    return dic
+
+
+def _compare_units(dic):
+    """
+        !Check if units has some possibility of duplicate names like
+        meter and metre and unify them
+
+        @param dic The dictionary containing information about units
+
+        @return The dictionary with the new values if needed
+
+    """
+    # the lookup variable is a list of list, each list contains all the
+    # possible name for a units
+    lookup = [['meter', 'metre'], ['meters', 'metres'], ['kilometer',
+              'kilometre'], ['kilometers', 'kilometres']]
+    for l in lookup:
+        for n in range(len(dic['unit'])):
+            if dic['unit'][n] in l:
+                dic['unit'][n] = l[0]
+        for n in range(len(dic['units'])):
+            if dic['units'][n] in l:
+                dic['units'][n] = l[0]
+    return dic
+
+
+def _text_to_key_value_dict(filename, sep=":", val_sep=",", checkproj=False,
+                            checkunits=False):
     """
         !Convert a key-value text file, where entries are separated
         by newlines and the key and value are separated by `sep',
@@ -767,6 +813,9 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=","):
         @param filename The name or name and path of the text file to convert
         @param sep The character that separates the keys and values, default is ":"
         @param val_sep The character that separates the values of a single key, default is ","
+        @param checkproj True if it has to check some information about projection system
+        @param checkproj True if it has to check some information about units
+        
         @return The dictionary
 
         A text file with this content:
@@ -819,11 +868,16 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=","):
             value_list.append(value_converted)
 
         kvdict[key] = value_list
+    if checkproj:
+        kvdict = _compare_projection(kvdict)
+    if checkunits:
+        kvdict = _compare_units(kvdict)
     return kvdict
 
 
 def compare_key_value_text_files(filename_a, filename_b, sep=":",
-                                 val_sep=",", precision=0.000001):
+                                 val_sep=",", precision=0.000001,
+                                 proj=False, units=False):
     """
     !Compare two key-value text files
 
@@ -845,11 +899,15 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
     @param sep character that separates the keys and values, default is ":"
     @param val_sep character that separates the values of a single key, default is ","
     @param precision precision with which the floating point values are compared
-
+    @param proj True if it has to check some information about projection system
+    @param units True if it has to check some information about units
+    
     @return True if full or almost identical, False if different
     """
-    dict_a = _text_to_key_value_dict(filename_a, sep)
-    dict_b = _text_to_key_value_dict(filename_b, sep)
+    dict_a = _text_to_key_value_dict(filename_a, sep, checkproj=proj,
+                                     checkunits=units)
+    dict_b = _text_to_key_value_dict(filename_b, sep, checkproj=proj,
+                                     checkunits=units)
 
     missing_keys = 0
 
