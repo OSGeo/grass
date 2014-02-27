@@ -16,7 +16,7 @@
 
 #define EDGE ((wsize-1)/2)	/* Number of rows/cols that make up the */
 				/* 'blank' edge around raster.          */
-#define MAX_WSIZE 69		/* Maximum dimensions of window.        */
+#define MAX_WSIZE 499		/* Maximum dimensions of window.        */
 				/* Some useful labels.                  */
 #define TRUE 1
 #define FALSE 0
