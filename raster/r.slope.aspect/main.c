@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("terrain"));
     module->label = _("Generates raster maps of slope, aspect, curvatures and "
-		      "partial derivatives from a elevation raster map.");
+		      "partial derivatives from an elevation raster map.");
     module->description = _("Aspect is calculated counterclockwise from east.");
     
     parm.elevation = G_define_standard_option(G_OPT_R_ELEV);
@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
     flag.a = G_define_flag();
     flag.a->key = 'a';
     flag.a->description =
-	_("Do not align the current region to the elevation layer");
+	_("Do not align the current region to the raster elevation map");
     flag.a->guisection = _("Settings");
 
 
