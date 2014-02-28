@@ -397,7 +397,9 @@ class Map(object):
         
         # setting some initial env. variables
         self._initGisEnv() # g.gisenv
-        self.GetWindow()
+        if not self.GetWindow():
+            sys.stderr.write(_("Trying to recover from default region..."))
+            RunCommand('g.region', flags='d')
         
         # info to report progress
         self.progressInfo = None
@@ -492,7 +494,12 @@ class Map(object):
         
         for line in windfile.readlines():
             line = line.strip()
-            key, value = line.split(":", 1)
+            try:
+                key, value = line.split(":", 1)
+            except ValueError, e:
+                sys.stderr.write(_("\nERROR: Unable to read WIND file: %s\n") % e)
+                return None
+            
             self.wind[key.strip()] = value.strip()
         
         windfile.close()
