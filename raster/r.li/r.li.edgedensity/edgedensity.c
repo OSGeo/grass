@@ -9,13 +9,13 @@
  *       
  */
 
-#include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/glocale.h>
-
 #include <stdlib.h>
 #include <fcntl.h>		/* for O_RDONLY usage */
 #include <math.h>
+
+#include <grass/gis.h>
+#include <grass/raster.h>
+#include <grass/glocale.h>
 
 #include "../r.li.daemon/avlDefs.h"
 #include "../r.li.daemon/avl.h"
@@ -72,7 +72,6 @@ int main(int argc, char *argv[])
 
     return calculateIndex(conf->answer, edgedensity, par, raster->answer,
 			  output->answer);
-
 }
 
 int edgedensity(int fd, char **valore, struct area_entry *ad, double *result)

@@ -15,13 +15,13 @@
  *
  *****************************************************************************/
 
-#include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/glocale.h>
-
 #include <stdlib.h>
 #include <fcntl.h>
 #include <math.h>
+
+#include <grass/gis.h>
+#include <grass/raster.h>
+#include <grass/glocale.h>
 
 #include "../r.li.daemon/daemon.h"
 #include "../r.li.daemon/avlDefs.h"
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 }
 
 
-int shannon(int fd, char **par, struct area_entry * ad, double *result)
+int shannon(int fd, char **par, struct area_entry *ad, double *result)
 {
     int ris = RLI_OK;
     double indice = 0;
@@ -74,17 +74,17 @@ int shannon(int fd, char **par, struct area_entry * ad, double *result)
     switch (ad->data_type) {
     case CELL_TYPE:
 	{
-	    calculate(fd, ad, &indice);
+	    ris = calculate(fd, ad, &indice);
 	    break;
 	}
     case DCELL_TYPE:
 	{
-	    calculateD(fd, ad, &indice);
+	    ris = calculateD(fd, ad, &indice);
 	    break;
 	}
     case FCELL_TYPE:
 	{
-	    calculateF(fd, ad, &indice);
+	    ris = calculateF(fd, ad, &indice);
 	    break;
 	}
     default:
@@ -140,6 +140,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	masked = TRUE;
     }
 
+    Rast_set_c_null_value(&precCell, 1);
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
@@ -149,7 +150,6 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	}
 
 	buf = RLI_get_cell_raster_row(fd, j + ad->y, ad);
-	Rast_set_c_null_value(&precCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
@@ -178,7 +178,6 @@ int calculate(int fd, struct area_entry *ad, double *result)
 			G_fatal_error("avl_make error");
 			return RLI_ERRORE;
 		    }
-
 		    m++;
 		}
 		else {
@@ -212,7 +211,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	}
     }
 
-    /*last closing */
+    /* last closing */
     if (area > 0 && !(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.c = precCell;
@@ -253,7 +252,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     if (area > 0) {
 	double t;
 	double shannon;
-	double perc, logarithm;;
+	double perc, logarithm;
 
 	array = G_malloc(m * sizeof(AVL_tableRow));
 	if (array == NULL) {
@@ -327,6 +326,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	masked = TRUE;
     }
 
+    Rast_set_d_null_value(&precCell, 1);
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
@@ -336,7 +336,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	}
 
 	buf = RLI_get_dcell_raster_row(fd, j + ad->y, ad);
-	Rast_set_d_null_value(&precCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
@@ -365,7 +364,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 			G_fatal_error("avl_make error");
 			return RLI_ERRORE;
 		    }
-
 		    m++;
 		}
 		else {
@@ -399,7 +397,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	}
     }
 
-    /*last closing */
+    /* last closing */
     if (area > 0 && !(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.dc = precCell;
@@ -440,7 +438,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     if (area > 0) {
 	double t;
 	double shannon;
-	double perc, logarithm;;
+	double perc, logarithm;
 
 	array = G_malloc(m * sizeof(AVL_tableRow));
 	if (array == NULL) {
@@ -514,6 +512,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	masked = TRUE;
     }
 
+    Rast_set_f_null_value(&precCell, 1);
     for (j = 0; j < ad->rl; j++) {	/* for each row */
 	if (masked) {
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
@@ -523,7 +522,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	}
 
 	buf = RLI_get_fcell_raster_row(fd, j + ad->y, ad);
-	Rast_set_f_null_value(&precCell, 1);
 
 	for (i = 0; i < ad->cl; i++) {	/* for each cell in the row */
 	    corrCell = buf[i + ad->x];
@@ -552,7 +550,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 			G_fatal_error("avl_make error");
 			return RLI_ERRORE;
 		    }
-
 		    m++;
 		}
 		else {
@@ -586,7 +583,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	}
     }
 
-    /*last closing */
+    /* last closing */
     if (area > 0 && !(Rast_is_null_value(&precCell, uc.t))) {
 	if (albero == NULL) {
 	    uc.val.fc = precCell;
@@ -627,7 +624,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     if (area > 0) {
 	double t;
 	double shannon;
-	double perc, logarithm;;
+	double perc, logarithm;
 
 	array = G_malloc(m * sizeof(AVL_tableRow));
 	if (array == NULL) {
