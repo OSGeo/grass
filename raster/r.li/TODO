@@ -13,7 +13,10 @@ GRASS 7
 
 Brute-force testing
 -------------------
-# TODO: change to 3x3 example
+# TODO: change to/add 3x3 example
+
+# 7x7 moving window test:
+# still Spearfish...
 
 # created as described in EXAMPLES, moving window, in gui/wxgui/rlisetup/g.gui.rlisetup.html:
 echo "SAMPLINGFRAME 0|0|1|1
@@ -21,69 +24,22 @@ SAMPLEAREA -1|-1|0.015021459227467811|0.011058451816745656
 MOVINGWINDOW" > $HOME/.grass7/r.li/movwindow7
 
 export GRASS_OVERWRITE=1
-# still Spearfish...
 g.region rast=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 
-echo "-------------------------"
-r.li.dominance input=forests conf=movwindow7 out=forests_dominance_mov7
-r.univar forests_dominance_mov7
+MEASURE="dominance edgedensity mpa mps padcv padrange padsd patchdensity patchnum pielou richness shannon shape simpson"
 
-echo "-------------------------"
-r.li.edgedensity input=forests conf=movwindow7 out=forests_edgedens_mov7
-r.univar forests_edgedens_mov7
+for mymeasure in $MEASURE ; do
+  r.li.${mymeasure} input=forests conf=movwindow7 out=forests_${mymeasure}_mov7
+  r.univar forests_${mymeasure}_mov7
+done
 
-echo "-------------------------"
-r.li.mpa input=forests conf=movwindow7 out=forests_mpa_mov7
-r.univar forests_mpa_mov7
-
-echo "-------------------------"
-r.li.mps input=forests conf=movwindow7 out=forests_mps_mov7
-r.univar forests_mps_mov7
-
-echo "-------------------------"
-r.li.padcv input=forests conf=movwindow7 out=forests_padcv_mov7
-r.univar forests_padcv_mov7
-
-echo "-------------------------"
-r.li.padrange input=forests conf=movwindow7 out=forests_padrange_mov7
-r.univar forests_padrange_mov7
-
-echo "-------------------------"
-r.li.padsd input=forests conf=movwindow7 out=forests_padsd_mov7
-r.univar forests_padsd_mov7
-
-echo "-------------------------"
-r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
-r.univar forests_p_dens7
-
-echo "-------------------------"
-r.li.patchnum input=forests conf=movwindow7 out=forests_patchnum_mov7
-r.univar forests_patchnum_mov7
-
-echo "-------------------------"
-r.li.pielou input=forests conf=movwindow7 out=forests_pielou_mov7
-r.univar forests_pielou_mov7
-
-echo "-------------------------"
+# also alpha:
 r.li.renyi input=forests conf=movwindow7 out=forests_renyi_mov7_a06 alpha=0.6
 r.univar forests_renyi_mov7_a06
 
-echo "-------------------------"
-r.li.richness input=forests conf=movwindow7 out=forests_richness_mov7
-r.univar forests_richness_mov7
+echo "End of r.li tests"
 
-echo "-------------------------"
-r.li.shannon input=forests conf=movwindow7 out=forests_shannon_mov7
-r.univar forests_shannon_mov7
-
-echo "-------------------------"
-r.li.shape input=forests conf=movwindow7 out=forests_shape_mov7
-r.univar forests_shape_mov7
-
-echo "-------------------------"
-r.li.simpson input=forests conf=movwindow7 out=forests_simpson_mov7
-r.univar forests_simpson_mov7
 
 ========================
 GRASS 7: North Carolina tests
