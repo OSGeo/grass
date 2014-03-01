@@ -269,9 +269,10 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 	return outputlist;
 
     (fatal ? G_fatal_error : G_warning)(
-	err == 1
-	? _("Line%s of ellipsoid table file <%s> is invalid")
-	: _("Lines%s of ellipsoid table file <%s> are invalid"),
+	_n(
+        ("Line%s of ellipsoid table file <%s> is invalid"),
+	("Lines%s of ellipsoid table file <%s> are invalid"),
+        err), 
 	badlines, file);
 
     return outputlist;

@@ -317,9 +317,10 @@ int G_read_ellipsoid_table(int fatal)
     }
 
     (fatal ? G_fatal_error : G_warning)(
-	(err > 1)
-	? _("Lines%s of ellipsoid table file <%s> are invalid")
-	: _("Line%s of ellipsoid table file <%s> is invalid"),
+	_n(
+	("Line%s of ellipsoid table file <%s> is invalid"),
+        ("Lines%s of ellipsoid table file <%s> are invalid"),
+        err), 
 	badlines, file);
 
     G_initialize_done(&table.initialized);
