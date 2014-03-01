@@ -70,3 +70,24 @@ char *G_gettext(const char *package, const char *msgid)
     return (char *)msgid;
 #endif
 }
+
+/**
+ * \brief Gets localized text with correct plural forms.
+ *
+ * \param[in] package
+ * \param[in] msgids A singular version of string
+ * \param[in] msgidp A plural version of string
+ * \param[in] n The number
+ * \retval char * Pointer to string
+ */
+
+char *G_ngettext(const char *package, const char *msgids, const char *msgidp, unsigned long int n)
+{
+#if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
+    G_init_locale();
+
+    return dngettext(package, msgids, msgidp, n);
+#else
+    return n == 1 ? (char *)msgids : (char *)msgidp;
+#endif
+}
