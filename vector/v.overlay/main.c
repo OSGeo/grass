@@ -11,7 +11,7 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Markus Metz
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2009, 2012-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -75,8 +75,8 @@ int main(int argc, char *argv[])
     type_opt[0] = G_define_standard_option(G_OPT_V_TYPE);
     type_opt[0]->label = _("Feature type (vector map A)");
     type_opt[0]->key = "atype";
-    type_opt[0]->options = "line,area";
-    type_opt[0]->answer = "area";
+    type_opt[0]->options = "line,area,auto";
+    type_opt[0]->answer = "auto";
 
     in_opt[1] = G_define_standard_option(G_OPT_V_INPUT);
     in_opt[1]->label = _("Name of input vector map (B)");
@@ -144,8 +144,10 @@ int main(int argc, char *argv[])
     for (input = 0; input < 2; input++) {
 	type[input] = Vect_option_to_types(type_opt[input]);
     }
+    /* not needed
     if (type[0] & GV_AREA)
 	type[0] = GV_AREA;
+    */
 
     ofield[0] = ofield[1] = ofield[2] = 0;
     i = 0;
@@ -165,16 +167,32 @@ int main(int argc, char *argv[])
     else
 	G_fatal_error(_("Unknown operator '%s'"), operator_opt->answer);
 
+    Vect_check_input_output_name(in_opt[0]->answer, out_opt->answer,
+				 G_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt[1]->answer, out_opt->answer,
+				 G_FATAL_EXIT);
+
+    for (input = 0; input < 2; input++) {
+        Vect_set_open_level(2);
+        Vect_open_old2(&(In[input]), in_opt[input]->answer, "", field_opt[input]->answer);
+	field[input] = Vect_get_field_number(&(In[input]), field_opt[input]->answer);
+    }
+    if (type[0] == 0) { /* atype=auto */
+        type[0] = Vect_read_next_line(&(In[0]), NULL, NULL);
+        if (type[0] == -1)
+            G_fatal_error(_("Unable to determine feature type for <%s>"),
+                          in_opt[0]->key);
+        if (!(type[0] & (GV_LINE | GV_AREA)))
+            G_fatal_error(_("Invalid fearure type for <%s>. Only '%s' or '%s' supported."),
+                          in_opt[0]->key, "line", "area");
+        G_debug(1, "auto -> atype=%d", type[0]);
+    }
+
     /* OP_OR, OP_XOR is not supported for lines,
        mostly because I'am not sure if they make enouhg sense */
     if (type[0] == GV_LINE && (operator == OP_OR || operator == OP_XOR))
 	G_fatal_error(_("Operator '%s' is not supported for type line"),
 		      operator_opt->answer);
-
-    Vect_check_input_output_name(in_opt[0]->answer, out_opt->answer,
-				 G_FATAL_EXIT);
-    Vect_check_input_output_name(in_opt[1]->answer, out_opt->answer,
-				 G_FATAL_EXIT);
 
     snap_thresh = atof(snap_opt->answer);
 
@@ -224,10 +242,6 @@ int main(int argc, char *argv[])
     G_set_verbose(verbose);
     for (input = 0; input < 2; input++) {
 	int ncats, index, nlines_out, newline;
-
-	Vect_set_open_level(2);
-	Vect_open_old2(&(In[input]), in_opt[input]->answer, "", field_opt[input]->answer);
-	field[input] = Vect_get_field_number(&(In[input]), field_opt[input]->answer);
 
 	G_message(_("Copying vector features from <%s>..."),
 		  Vect_get_full_name(&(In[input])));

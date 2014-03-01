@@ -1,21 +1,21 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.overlay</em> allows the user to overlay two vector maps. Features 
-in <em>ainput</em> can be lines or areas and are cut with areas in 
-<em>binput</em>. Simple clipping can be performed with the <em>and</em> 
+in <b>ainput</b> can be lines or areas and are cut with areas in 
+<b>binput</b>. Simple <i>clipping</i> can be performed with the <b>and</b> 
 oerator.
 <p>
-If areas in <em>ainput</em> are overlaid with areas in <em>binput</em>, 
-it is sometimes necessary to snap areas of <em>binput</em> to those of 
-<em>ainput</em>, otherwise areas can go missing or many sliver areas 
+If areas in <b>ainput</b> are overlaid with areas in <b>binput</b>, 
+it is sometimes necessary to snap areas of <b>binput</b> to those of 
+<b>ainput</b>, otherwise areas can go missing or many sliver areas 
 can be created. Snapping is enabled by default and can be disabled by 
-setting the <em>snap</em> option to a negative value. Recommended values 
+setting the <b>snap</b> option to a negative value. Recommended values 
 are between 0.00000001 and 0.0001. Using larger values for snapping can 
 have undesired side-effects, but may sometimes be necessary to get a 
 clean output (see example below). In general, it is recommended to start 
 with a small snapping threshold, gradually increasing the threshold until 
 the result is reasonably clean. Snapping modifies only boundaries in 
-binput, which are snapped to boundaries in ainput. Boundaries in ainput 
+binput, which are snapped to boundaries in ainput. Boundaries in <b>ainput</b> 
 are not modified.
 <!-- This is outdated 
 There are 3 links attached to features in output map, 
@@ -31,36 +31,40 @@ There are 3 links attached to features in output map,
 </ul>
 -->
 <p>
-If the first number of the <em>olayer</em> option is > 0, then the 
+If the <i>first</i> number of the <b>olayer</b> option is greater than 0, then the 
 resulting output map has a merged attribute table in the given layer 
 number. The original column names have a prefix (<em>a_</em> and 
-<em>b_</em>) corresponding to <em>ainput</em> and <em>binput</em> map.
+<em>b_</em>) corresponding to <b>ainput</b> and <b>binput</b> map.
 <p>
-If the second number of the <em>olayer</em> option is > 0, then the 
-categories of <em>ainput</em> in layer <em>alayer</em> are transferred to
+If the <i>second</i> number of the <b>olayer</b> option is greater than 0, then the 
+categories of <b>ainput</b> in layer <b>alayer</b> are transferred to
 the output layer with the second number.
 <p>
-If the third number of the <em>olayer</em> option is > 0, then the 
-categories of <em>binput</em> in layer <em>blayer</em> are transferred to
+If the <i>third</i> number of the <b>olayer</b> option is greater than 0, then the 
+categories of <b>binput</b> in layer <em>blayer</em> are transferred to
 the output layer with the third number.
 
 <h2>NOTES</h2>
-Currently only areas in <em>ainput</em> are supported for the operators 
-<em>or</em> and <em>xor</em>! See also <a href="v.select.html">v.select</a>.
+Currently only areas in <b>ainput</b> are supported for the operators 
+<em>or</em> and <em>xor</em>! See also <em><a href="v.select.html">v.select</a></em>.
 
 The operator defines what kind of operation will be done. Features are 
-written to output, if the result of an operation 'ainput operator binput' 
+written to output, if the result of an operation <b>ainput</b> operator <b>binput</b> 
 is true.
 <p>
-If the first number of the <em>olayer</em> option is > 0, then attributes 
-of the tables from ainput and binput are joined into a new table linked 
+If the <i>first</i> number of the <b>olayer</b> option is greater than 0, then attributes 
+of the tables from <b>ainput</b> and <b>binput</b> are joined into a new table linked 
 to the output map with a new cat column. 
 <p>
-If the second number of the <em>olayer</em> option is > 0, then the 
-attribute table of ainput is copied to the output map. 
+If the <i>second</i> number of the <b>olayer</b> option is greater than 0, then the 
+attribute table of <b>ainput</b> is copied to the output map. 
 <p>
-If the third number of the <em>olayer</em> option is > 0, then the 
-attribute table of binput is copied to the output map. 
+If the <i>third</i> number of the <b>olayer</b> option is greater than 0, then the 
+attribute table of <b>binput</b> is copied to the output map. 
+
+<p>
+If <b>atype</b>=auto is given than <em>v.overlay</em> determines
+feature type for <b>ainput</b> from the first found feature.
 
 <!-- This is outdated
 <p><div class="code"><pre>
@@ -75,7 +79,7 @@ connect the copied tables to the output map.-->
 
 <h2>EXAMPLES</h2>
 
-<h4>Polygons overlaid with ploygons</h4>
+<h3>Polygons overlaid with ploygons</h3>
 <div class="code"><pre>
 v.overlay ainput=lake binput=province output=lakeXprovince operator=or
 </pre></div>
@@ -131,7 +135,7 @@ As can be seen by the resulting large number of centroids on boundaries,
 the urban areas do not match exactly the Census 2000 areas. In this case 
 a clean result can be obtained by snapping with a threshold of 0.1 m.
 
-<h4>Lines overlaid with polygons</h4>
+<h3>Lines overlaid with polygons</h3>
 
 Using the North Carolina sample dataset, we clip the roads map to the area
 of city of Raleigh, preserving road attributes in layer 1:
@@ -171,4 +175,5 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh \
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Markus Metz
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
