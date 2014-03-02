@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
 			  output->answer);
 }
 
+
 int patch_number(int fd, char **par, struct area_entry *ad, double *result)
 {
     int ris = RLI_OK;
@@ -78,17 +79,17 @@ int patch_number(int fd, char **par, struct area_entry *ad, double *result)
     switch (ad->data_type) {
     case CELL_TYPE:
 	{
-	    calculate(fd, ad, &indice);
+	    ris = calculate(fd, ad, &indice);
 	    break;
 	}
     case DCELL_TYPE:
 	{
-	    calculateD(fd, ad, &indice);
+	    ris = calculateD(fd, ad, &indice);
 	    break;
 	}
     case FCELL_TYPE:
 	{
-	    calculateF(fd, ad, &indice);
+	    ris = calculateF(fd, ad, &indice);
 	    break;
 	}
     default:
@@ -128,10 +129,10 @@ int calculate(int fd, struct area_entry *ad, double *result)
     buf_sup = buf_null;
 
     /* initialize patch ids */
-    pid_corr = G_malloc(Rast_window_cols() * sizeof(long));
-    pid_sup = G_malloc(Rast_window_cols() * sizeof(long));
+    pid_corr = G_malloc(ad->cl * sizeof(long));
+    pid_sup = G_malloc(ad->cl * sizeof(long));
 
-    for (j = 0; j < Rast_window_cols(); j++) {
+    for (j = 0; j < ad->cl; j++) {
 	pid_corr[j] = 0;
 	pid_sup[j] = 0;
     }
@@ -191,7 +192,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
 		return 0;
 	}
-	
+
 	ltmp = pid_sup;
 	pid_sup = pid_corr;
 	pid_corr = ltmp;
@@ -200,7 +201,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
 	connected = 0;
 	for (j = 0; j < ad->cl; j++) {
-	    pid_corr[j + ad->x] = 0;
+	    pid_corr[j] = 0;
 	    
 	    corrCell = buf[j + ad->x];
 	    if (masked && (mask_buf[j] == 0)) {
@@ -221,9 +222,9 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    }
 
 	    if (!Rast_is_c_null_value(&precCell) && corrCell == precCell) {
-		pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+		pid_corr[j] = pid_corr[j - 1];
 		connected = 1;
-		pst[pid_corr[j + ad->x]].count++;
+		pst[pid_corr[j]].count++;
 	    }
 	    else {
 		connected = 0;
@@ -231,7 +232,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
 	    if (!Rast_is_c_null_value(&supCell) && corrCell == supCell) {
 
-		if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+		if (pid_corr[j] != pid_sup[j]) {
 		    /* connect or merge */
 		    /* after r.clump */
 		    if (connected) {
@@ -242,20 +243,20 @@ int calculate(int fd, struct area_entry *ad, double *result)
 			}
 		    }
 
-		    old_pid = pid_corr[j + ad->x];
-		    new_pid = pid_sup[j + ad->x];
-		    pid_corr[j + ad->x] = new_pid;
+		    old_pid = pid_corr[j];
+		    new_pid = pid_sup[j];
+		    pid_corr[j] = new_pid;
 		    if (old_pid > 0) {
 			/* merge */
 			/* update left side of the current row */
 			for (k = 0; k < j; k++) {
-			    if (pid_corr[k + ad->x] == old_pid)
-				pid_corr[k + ad->x] = new_pid;
+			    if (pid_corr[k] == old_pid)
+				pid_corr[k] = new_pid;
 			}
 			/* update right side of the previous row */
 			for (k = j + 1; k < ad->cl; k++) {
-			    if (pid_sup[k + ad->x] == old_pid)
-				pid_sup[k + ad->x] = new_pid;
+			    if (pid_sup[k] == old_pid)
+				pid_sup[k] = new_pid;
 			}
 			pst[new_pid].count += pst[old_pid].count;
 			pst[old_pid].count = 0;
@@ -274,7 +275,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 		/* start new patch */
 		npatch++;
 		pid++;
-		pid_corr[j + ad->x] = pid;
+		pid_corr[j] = pid;
 
 		if (pid >= nalloc) {
 		    pst = (struct pst *)G_realloc(pst, (pid + incr) * sizeof(struct pst));
@@ -329,10 +330,10 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     buf_sup = buf_null;
 
     /* initialize patch ids */
-    pid_corr = G_malloc(Rast_window_cols() * sizeof(long));
-    pid_sup = G_malloc(Rast_window_cols() * sizeof(long));
+    pid_corr = G_malloc(ad->cl * sizeof(long));
+    pid_sup = G_malloc(ad->cl * sizeof(long));
 
-    for (j = 0; j < Rast_window_cols(); j++) {
+    for (j = 0; j < ad->cl; j++) {
 	pid_corr[j] = 0;
 	pid_sup[j] = 0;
     }
@@ -401,7 +402,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
 	connected = 0;
 	for (j = 0; j < ad->cl; j++) {
-	    pid_corr[j + ad->x] = 0;
+	    pid_corr[j] = 0;
 	    
 	    corrCell = buf[j + ad->x];
 	    if (masked && (mask_buf[j] == 0)) {
@@ -422,9 +423,9 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	    }
 
 	    if (!Rast_is_d_null_value(&precCell) && corrCell == precCell) {
-		pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+		pid_corr[j] = pid_corr[j - 1];
 		connected = 1;
-		pst[pid_corr[j + ad->x]].count++;
+		pst[pid_corr[j]].count++;
 	    }
 	    else {
 		connected = 0;
@@ -432,7 +433,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
 	    if (!Rast_is_d_null_value(&supCell) && corrCell == supCell) {
 
-		if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+		if (pid_corr[j] != pid_sup[j]) {
 		    /* connect or merge */
 		    /* after r.clump */
 		    if (connected) {
@@ -443,20 +444,20 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 			}
 		    }
 
-		    old_pid = pid_corr[j + ad->x];
-		    new_pid = pid_sup[j + ad->x];
-		    pid_corr[j + ad->x] = new_pid;
+		    old_pid = pid_corr[j];
+		    new_pid = pid_sup[j];
+		    pid_corr[j] = new_pid;
 		    if (old_pid > 0) {
 			/* merge */
 			/* update left side of the current row */
 			for (k = 0; k < j; k++) {
-			    if (pid_corr[k + ad->x] == old_pid)
-				pid_corr[k + ad->x] = new_pid;
+			    if (pid_corr[k] == old_pid)
+				pid_corr[k] = new_pid;
 			}
 			/* update right side of the previous row */
 			for (k = j + 1; k < ad->cl; k++) {
-			    if (pid_sup[k + ad->x] == old_pid)
-				pid_sup[k + ad->x] = new_pid;
+			    if (pid_sup[k] == old_pid)
+				pid_sup[k] = new_pid;
 			}
 			pst[new_pid].count += pst[old_pid].count;
 			pst[old_pid].count = 0;
@@ -475,7 +476,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 		/* start new patch */
 		npatch++;
 		pid++;
-		pid_corr[j + ad->x] = pid;
+		pid_corr[j] = pid;
 
 		if (pid >= nalloc) {
 		    pst = (struct pst *)G_realloc(pst, (pid + incr) * sizeof(struct pst));
@@ -530,10 +531,10 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     buf_sup = buf_null;
 
     /* initialize patch ids */
-    pid_corr = G_malloc(Rast_window_cols() * sizeof(long));
-    pid_sup = G_malloc(Rast_window_cols() * sizeof(long));
+    pid_corr = G_malloc(ad->cl * sizeof(long));
+    pid_sup = G_malloc(ad->cl * sizeof(long));
 
-    for (j = 0; j < Rast_window_cols(); j++) {
+    for (j = 0; j < ad->cl; j++) {
 	pid_corr[j] = 0;
 	pid_sup[j] = 0;
     }
@@ -602,7 +603,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
 	connected = 0;
 	for (j = 0; j < ad->cl; j++) {
-	    pid_corr[j + ad->x] = 0;
+	    pid_corr[j] = 0;
 	    
 	    corrCell = buf[j + ad->x];
 	    if (masked && (mask_buf[j] == 0)) {
@@ -623,9 +624,9 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	    }
 
 	    if (!Rast_is_f_null_value(&precCell) && corrCell == precCell) {
-		pid_corr[j + ad->x] = pid_corr[j - 1 + ad->x];
+		pid_corr[j] = pid_corr[j - 1];
 		connected = 1;
-		pst[pid_corr[j + ad->x]].count++;
+		pst[pid_corr[j]].count++;
 	    }
 	    else {
 		connected = 0;
@@ -633,7 +634,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
 	    if (!Rast_is_f_null_value(&supCell) && corrCell == supCell) {
 
-		if (pid_corr[j + ad->x] != pid_sup[j + ad->x]) {
+		if (pid_corr[j] != pid_sup[j]) {
 		    /* connect or merge */
 		    /* after r.clump */
 		    if (connected) {
@@ -644,20 +645,20 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 			}
 		    }
 
-		    old_pid = pid_corr[j + ad->x];
-		    new_pid = pid_sup[j + ad->x];
-		    pid_corr[j + ad->x] = new_pid;
+		    old_pid = pid_corr[j];
+		    new_pid = pid_sup[j];
+		    pid_corr[j] = new_pid;
 		    if (old_pid > 0) {
 			/* merge */
 			/* update left side of the current row */
 			for (k = 0; k < j; k++) {
-			    if (pid_corr[k + ad->x] == old_pid)
-				pid_corr[k + ad->x] = new_pid;
+			    if (pid_corr[k] == old_pid)
+				pid_corr[k] = new_pid;
 			}
 			/* update right side of the previous row */
 			for (k = j + 1; k < ad->cl; k++) {
-			    if (pid_sup[k + ad->x] == old_pid)
-				pid_sup[k + ad->x] = new_pid;
+			    if (pid_sup[k] == old_pid)
+				pid_sup[k] = new_pid;
 			}
 			pst[new_pid].count += pst[old_pid].count;
 			pst[old_pid].count = 0;
@@ -676,7 +677,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 		/* start new patch */
 		npatch++;
 		pid++;
-		pid_corr[j + ad->x] = pid;
+		pid_corr[j] = pid;
 
 		if (pid >= nalloc) {
 		    pst = (struct pst *)G_realloc(pst, (pid + incr) * sizeof(struct pst));
