@@ -493,7 +493,7 @@ def set_browser():
 
 
 def grass_intro():
-    intro = r"""
+    intro = _(r"""
 WELCOME TO GRASS %s
 
    1) Have at your side all available GRASS GIS tutorials
@@ -505,7 +505,7 @@ WELCOME TO GRASS %s
 
    3) heck the GRASS GIS web pages for supporting mailing lists and more:
       http://grass.osgeo.org
-""" % grass_version
+""") % grass_version
     sys.stderr.write(intro)
 
     sys.stderr.write("\n")
@@ -753,39 +753,62 @@ def load_env():
 
 
 def set_language():
+    # This function is used to override system default language and locale
+    # Such override can be requested only from wxGUI
+    # An override if user has provided correct environmental variables as
+    # LC_MESSAGES or LANG is not necessary.
+    # Unfortunately currently a working solution for Windows is lacking
+    # thus it always on Vista and XP will print an error.
+    # See discussion for Windows not following its own documentation and
+    # not accepting ISO codes as valid locale identifiers http://bugs.python.org/issue10466
     import locale
-
-    language = os.getenv('LANG')
-    if not language:
+    
+    # Override value is stored in wxGUI preferences file.
+    # As it's the only thing required, we'll just grep it out.
+    try:
+        fd = open(os.path.join(grass_config_dir, 'wx'), 'r')
+    except:
+        # Language override has not been defined or is inaccessible
         return
-
-    language = language.split('.')[0] # Split off ignored .encoding part if present
-    orig_language = language
+    for line in fd:
+        if re.search('^language', line):
+            line = line.rstrip('%s' % os.linesep)
+            language = ''.join(line.split(';')[-1:])
+            break
+    if language == 'None':
+        # Language override is disabled (system language specified)
+        return
+    
+    warning("A language override has been requested. Trying to switch GRASS into '%s'..." % language)
+    
+    # Even if setting locale will fail, let's set LANG in a hope,
+    # that UI will use it GRASS texts will be in selected language,
+    # system messages (i.e. OK, Cancel etc.) - in system default
+    # language
+    os.environ['LANGUAGE'] = language
+    os.environ['LANG'] = language
+    
     try:
         locale.setlocale(locale.LC_ALL, language)
     except locale.Error, e:
-        if sys.platform != 'win32': # Don't try on Windows, it will probably not work
-            # sys.stderr.write("Failed to set LC_ALL to %s (%s)\n" % (language, e))
+        try:
+            # Locale lang.encoding might be missing. Let's try
+            # UTF-8 encoding before giving up as on Linux systems
+            # lang.UTF-8 locales are more common than legacy
+            # ISO-8859 ones.
+            language = locale.normalize('%s.UTF-8' % (language))
+            locale.setlocale(locale.LC_ALL, language)
+        except locale.Error, e:
+            # The last attempt...
             try:
-                # Locale lang.encoding might be missing. Let's try
-                # UTF-8 encoding before giving up as on Linux systems
-                # lang.UTF-8 locales are more common than legacy
-                # ISO-8859 ones.
-                language = locale.normalize('%s.UTF-8' % (language))
+                language = locale.normalize('%s.%s' % (language, locale.getpreferredencoding()))
                 locale.setlocale(locale.LC_ALL, language)
             except locale.Error, e:
-                # If we got so far, provided locale is not supported
+                # If we got so far, attempts to set up language and locale have failed
                 # on this system
-                sys.stderr.write("Failed to set LC_ALL to %s (%s)\n" % (language, e))
-                ### locale.getdefaultlocale() is probably related to gettext?
-                # try:
-                #     default_locale = locale.getdefaultlocale()
-                # except:
-                #     default_locale = None
-                # if default_locale and default_locale[0]:
-                #     language = default_locale[0]
-                # else:
-                language = 'C'
+                sys.stderr.write("Failed to enforce user specified language '%s' with error: '%s'\n" % (language, e))
+                sys.stderr.write("A LANGUAGE environmental variable has been set.\nPart of messages will be displayed in the requested language.\n")
+                return
 
     # Set up environment for subprocesses
     for lc in ('LC_CTYPE', 'LC_MESSAGES', 'LC_TIME', 'LC_COLLATE',
@@ -800,15 +823,7 @@ def set_language():
     if os.getenv('LC_ALL'):
         del os.environ['LC_ALL']  # Remove LC_ALL to not override LC_NUMERIC
 
-    # Even if setting locale has failed, let's set LANG in a hope,
-    # that UI will use it GRASS texts will be in selected language,
-    # system messages (i.e. OK, Cancel etc.) - in system default
-    # language
-    os.environ['LANGUAGE'] = orig_language
-    os.environ['LANG'] = orig_language
-
-    # Calling gettext.install twice seems to allow to see also
-    # localized startup messages Black magic ;)
+    # From now on enforce the new language
     gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
 
 
@@ -1257,6 +1272,12 @@ get_username()
 # Parse the command-line options
 parse_cmdline()
 
+# Set language
+# This has to be called before any _() function call!
+# Subsequent functions are using _() calls and
+# thus must be called only after Language has been set.
+set_language()
+
 # Create the temporary directory and session grassrc file
 create_tmp()
 
@@ -1319,9 +1340,6 @@ else:
             non_interactive(args[0])
     else:
         non_interactive(args[0])
-
-# Set language
-set_language()
 
 # User selects LOCATION and MAPSET if not set
 set_data()
