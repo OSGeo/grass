@@ -12,7 +12,7 @@ http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/426407
 List of classes:
  - manager::AttributeManager
 
-(C) 2007-2009, 2011-2012 by the GRASS Development Team
+(C) 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -124,7 +124,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
 
         # events
         self.btnClose.Bind(wx.EVT_BUTTON,   self.OnCloseWindow)
-        self.btnReload.Bind(wx.EVT_BUTTON, self.ReloadData)
+        self.btnReload.Bind(wx.EVT_BUTTON, self.OnReloadData)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -166,10 +166,10 @@ class AttributeManager(wx.Frame, DbMgrBase):
         
         event.Skip()
 
-    def ReloadData(self):
+    def OnReloadData(self, event):
         """Reload data"""
         if self.pages['browse']:
-            self.pages['browse'].OnDataReload() # TODO replace by signal
+            self.pages['browse'].OnDataReload(event) # TODO replace by signal
         
     def OnPageChanged(self, event):
         """!On page in ATM is changed"""
