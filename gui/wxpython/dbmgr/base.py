@@ -1850,7 +1850,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                            self.FindWindowById(self.layerPage[self.selLayer]['data']).GetItemCount())
 
         # update map display if needed
-        if UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'auto'):
+        if self.mapdisplay and \
+                UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'auto'):
             # TODO: replace by signals
             if showSelected:
                 self._drawSelected(zoom=False, selectedOnly=False) 
