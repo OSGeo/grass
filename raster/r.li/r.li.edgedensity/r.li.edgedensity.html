@@ -19,6 +19,8 @@
 the landscape involving patch type k</li>
 <li> <b>Area</b>: total landscape area</li>
 </ul>
+<p>
+The unit is meters per hectare.
 
 <h2>NOTES</h2>
 
@@ -30,13 +32,8 @@ the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <!-- TODO: verify next: -->
 If the input raster map contains only NULL values then <em>r.li.edgedensity</em>
 consider to have 0 patches.<br>
-If area is 0 <em>r.li.edgedensity</em> returns -1; this is only possible if input
+If area is 0 <em>r.li.edgedensity</em> returns NULL; this is only possible if input
 raster is masked.
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=-1 input=my_map
-</pre></div>
-after index calculation.
 
 <h2>EXAMPLES</h2>
 To calculate the edge density index on map <em>my_map</em>, using
