@@ -11,12 +11,13 @@ void parse_args(struct opts *opt)
 	_("Reverse transformation; 3D vector features to 2D");
 
     opt->table = G_define_standard_flag(G_FLG_V_TABLE);
-    opt->table->description = _("Do not copy table");
+    opt->table->description = _("Do not copy attribute table");
 
     opt->input = G_define_standard_option(G_OPT_V_INPUT);
 
     opt->field = G_define_standard_option(G_OPT_V_FIELD_ALL);
     opt->field->guisection = _("Selection");
+    opt->field->answer = "1";
 
     opt->type = G_define_standard_option(G_OPT_V_TYPE);
     opt->type->options = "point,line,boundary,centroid";
