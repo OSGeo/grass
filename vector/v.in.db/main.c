@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
     zcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     zcol_opt->key = "z";
     zcol_opt->description = _("Name of column containing z coordinate");
+    zcol_opt->guisection = _("3D output");
 
     keycol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     keycol_opt->key = "key";
@@ -91,12 +92,12 @@ int main(int argc, char *argv[])
     keycol_opt->description = _("Must refer to an integer column");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    where_opt->guisection = _("Selection");
 
     outvect = G_define_standard_option(G_OPT_V_OUTPUT);
 
     same_table_flag = G_define_flag();
     same_table_flag->key = 't';
-    same_table_flag->guisection = _("Connection");
     same_table_flag->description =
 	_("Use imported table as attribute table for new map");
 
