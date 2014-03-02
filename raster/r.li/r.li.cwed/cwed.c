@@ -1,19 +1,26 @@
-/*
- * \brief calculates contrast weighted edge density index
+
+/****************************************************************************
  *
- *   \AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
- *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
+ * MODULE:       r.li.cwed
+ * AUTHOR(S):    Serena Pallecchi student of Computer Science University of Pisa (Italy)
+ *               Commission from Faunalia Pontedera (PI) www.faunalia.it
+ *               Markus Metz
  *
- *   This program is free software under the GPL (>=v2)
- *   Read the COPYING file that comes with GRASS for details.
- *       
- */
+ * PURPOSE:      calculates contrast weighted edge density index
+ * COPYRIGHT:    (C) 2006-2014 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
+
+#include <fcntl.h>		/* for O_RDONLY usage */
 
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-
-#include <fcntl.h>		/* for O_RDONLY usage */
 
 #include "../r.li.daemon/defs.h"
 #include "../r.li.daemon/daemon.h"
@@ -84,7 +91,6 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 				double *result)
 {
     double indice = 0;		/* the result */
-    struct Cell_head hd;
     int i = 0;
     int file_fd = -1;
     int l;			/*number of read byte */
@@ -148,8 +154,6 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 	G_fatal_error("malloc cc failed");
 	return RLI_ERRORE;
     }
-
-    Rast_get_cellhd(ad->raster, "", &hd);
 
     for (i = 0; i < totRow; i++) {
 	long num = 0;
@@ -290,8 +294,7 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     int i = 0, j;
     int mask_fd = -1;
     int masked = FALSE;
-    int *mask_corr = NULL;
-    /* TODO: mask_sup */
+    int *mask_corr = NULL, *mask_sup = NULL, *mask_tmp;
 
     CELL *buf_corr, *buf_sup, *buf_null;
     CELL prevCell, corrCell, supCell;
@@ -314,6 +317,13 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    G_fatal_error("malloc mask_corr failed");
 	    return RLI_ERRORE;
 	}
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	for (j = 0; j < ad->cl; j++)
+	    mask_corr[j] = 0;
 
 	masked = TRUE;
     }
@@ -339,6 +349,9 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	}
 	/*read mask if needed */
 	if (masked) {
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_corr;
+	    mask_corr = mask_tmp;
 	    if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("reading mask_corr");
 		return RLI_ERRORE;
@@ -352,10 +365,16 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    if (masked && mask_corr[i] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
-	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
+	    else {
+		/* total sample area */
 		area++;
-
+	    }
+	    
+	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
 		supCell = buf_sup[i + ad->x];
+		if (masked && (mask_sup[i] == 0)) {
+		    Rast_set_c_null_value(&supCell, 1);
+		}
 
 		/* calculate how many edges the cell has */
 		if (((!Rast_is_null_value(&prevCell, CELL_TYPE))) &&
@@ -404,6 +423,7 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     if (masked) {
 	close(mask_fd);
 	G_free(mask_corr);
+	G_free(mask_sup);
     }
 
     G_free(buf_null);
@@ -422,8 +442,7 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     int i = 0, j;
     int mask_fd = -1;
     int masked = FALSE;
-    int *mask_corr = NULL;
-    /* TODO: mask_sup */
+    int *mask_corr = NULL, *mask_sup = NULL, *mask_tmp;
 
     DCELL *buf_corr, *buf_sup, *buf_null;
     DCELL prevCell, corrCell, supCell;
@@ -446,6 +465,13 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    G_fatal_error("malloc mask_corr failed");
 	    return RLI_ERRORE;
 	}
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	for (j = 0; j < ad->cl; j++)
+	    mask_corr[j] = 0;
 
 	masked = TRUE;
     }
@@ -471,6 +497,9 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	}
 	/*read mask if needed */
 	if (masked) {
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_corr;
+	    mask_corr = mask_tmp;
 	    if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("reading mask_corr");
 		return RLI_ERRORE;
@@ -483,9 +512,16 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    if (masked && mask_corr[i] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
-	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
+	    else {
+		/* total sample area */
 		area++;
+	    }
+
+	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
 		supCell = buf_sup[i + ad->x];
+		if (masked && (mask_sup[i] == 0)) {
+		    Rast_set_d_null_value(&supCell, 1);
+		}
 
 		/* calculate how many edges the cell has */
 		if (((!Rast_is_null_value(&prevCell, DCELL_TYPE))) &&
@@ -533,6 +569,7 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     if (masked) {
 	close(mask_fd);
 	G_free(mask_corr);
+	G_free(mask_sup);
     }
 
     G_free(buf_null);
@@ -552,8 +589,7 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     int i = 0, j;
     int mask_fd = -1;
     int masked = FALSE;
-    int *mask_corr = NULL;
-    /* TODO: mask_sup */
+    int *mask_corr = NULL, *mask_sup = NULL, *mask_tmp;
 
     FCELL *buf_corr, *buf_sup, *buf_null;
     FCELL prevCell, corrCell, supCell;
@@ -576,6 +612,13 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    G_fatal_error("malloc mask_corr failed");
 	    return RLI_ERRORE;
 	}
+	mask_sup = G_malloc(ad->cl * sizeof(int));
+	if (mask_sup == NULL) {
+	    G_fatal_error("malloc mask_buf failed");
+	    return RLI_ERRORE;
+	}
+	for (j = 0; j < ad->cl; j++)
+	    mask_corr[j] = 0;
 
 	masked = TRUE;
     }
@@ -602,6 +645,9 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	}
 	/*read mask if needed */
 	if (masked) {
+	    mask_tmp = mask_sup;
+	    mask_sup = mask_corr;
+	    mask_corr = mask_tmp;
 	    if (read(mask_fd, mask_corr, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("reading mask_corr");
 		return RLI_ERRORE;
@@ -614,10 +660,16 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    if (masked && mask_corr[i] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
-	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
+	    else {
+		/* total sample area */
 		area++;
+	    }
 
+	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
 		supCell = buf_sup[i + ad->x];
+		if (masked && (mask_sup[i] == 0)) {
+		    Rast_set_f_null_value(&supCell, 1);
+		}
 
 		/* calculate how many edges the cell has */
 		if (((!Rast_is_null_value(&prevCell, FCELL_TYPE))) &&
@@ -664,6 +716,7 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
     if (masked) {
 	close(mask_fd);
 	G_free(mask_corr);
+	G_free(mask_sup);
     }
 
     G_free(buf_null);
