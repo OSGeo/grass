@@ -5,9 +5,9 @@
 with:
 <ul>
 <li><b>i</b>: patch type</li>
-<li><b>m</b>: number of patch types</li>
-<li><b>p<small><small>i</small></small></b>: proportion of the landscape
-  occupied by patch type <i>i</i> </li>
+<li><b>m</b>: number of different patch types</li>
+<li><b>p<small><small>i</small></small></b>: proportional abundance of 
+patch type <i>i</i> </li>
 </ul>
 
 <h2>NOTES</h2>
@@ -19,12 +19,7 @@ the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
 <!-- TODO: verify next: -->
 If the input raster map contains only NULL values then <em>r.li.simpson</em>
-returns -1.<br>
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=-1 input=my_map
-</pre></div>
-after index calculation.
+returns NULL.
 
 <h2>EXAMPLES</h2>
 To calculate Simpson's diversity index on map <em>my_map</em>, using

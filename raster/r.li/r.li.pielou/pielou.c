@@ -159,6 +159,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
+		/* total patch area */
 		area++;
 	    }
 
@@ -345,6 +346,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
+		/* total patch area */
 		area++;
 	    }
 
@@ -531,6 +533,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	    }
 
 	    if (!(Rast_is_null_value(&corrCell, uc.t))) {
+		/* total patch area */
 		area++;
 	    }
 
