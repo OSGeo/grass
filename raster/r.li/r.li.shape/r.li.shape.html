@@ -1,7 +1,15 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.li.shape</em> calculates the "shape index" as:<br>
-<I> f(sample_area)= Area </I><br>
+<em>r.li.shape</em> calculates the landscape shape index as:
+<div class="code"><pre>
+LSI = 0.25 * E / sqrt(A)
+</pre></div>
+
+with:
+<ul>
+  <li><b>E</b>: sum of all edges</li>
+  <li><b>A</b>: sum of all patch areas</li>
+</ul>
 
 <h2>NOTES</h2>
 
@@ -12,13 +20,7 @@ the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
 <!-- TODO: verify next: -->
 If the input raster map contains only NULL values then <em>r.li.shape</em>
-returns -1.<br>
-<!-- does that mean the program exit code or raster values?? -->
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=-1 input=my_map
-</pre></div>
-after index calculation.
+returns NULL.
 
 <h2>EXAMPLES</h2>
 To calculate the shape index on map <em>my_map</em>, using
