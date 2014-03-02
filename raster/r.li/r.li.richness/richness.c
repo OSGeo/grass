@@ -107,6 +107,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     int ris = 0;
     int masked = FALSE;
     long m = 0;
+    long area = 0;
     avl_tree albero = NULL;
     generic_cell uc;
 
@@ -140,6 +141,10 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
 	    if ((masked) && (mask_buf[i] == 0)) {
 		Rast_set_c_null_value(&corrCell, 1);
+	    }
+	    else {
+		/* total sample area */
+		area++;
 	    }
 
 	    if (!(Rast_is_null_value(&precCell, uc.t)) &&
@@ -222,7 +227,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	}
     }
 
-    if (m)
+    if (area)
 	*result = m;
     else
 	Rast_set_d_null_value(result, 1);
@@ -248,6 +253,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     int ris = 0;
     int masked = FALSE;
     long m = 0;
+    long area = 0;
     avl_tree albero = NULL;
     generic_cell uc;
 
@@ -281,6 +287,10 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
 	    if ((masked) && (mask_buf[i] == 0)) {
 		Rast_set_d_null_value(&corrCell, 1);
+	    }
+	    else {
+		/* total sample area */
+		area++;
 	    }
 
 	    if (!(Rast_is_null_value(&precCell, uc.t)) &&
@@ -363,7 +373,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	}
     }
 
-    if (m)
+    if (area)
 	*result = m;
     else
 	Rast_set_d_null_value(result, 1);
@@ -389,6 +399,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     int ris = 0;
     int masked = FALSE;
     long m = 0;
+    long area = 0;
     avl_tree albero = NULL;
     generic_cell uc;
 
@@ -423,6 +434,10 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
 	    if ((masked) && (mask_buf[i] == 0)) {
 		Rast_set_f_null_value(&corrCell, 1);
+	    }
+	    else {
+		/* total sample area */
+		area++;
 	    }
 
 	    if (!(Rast_is_null_value(&precCell, uc.t)) &&
@@ -506,7 +521,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	}
     }
 
-    if (m)
+    if (area)
 	*result = m;
     else
 	Rast_set_d_null_value(result, 1);

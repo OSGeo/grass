@@ -6,9 +6,10 @@ with:
 <ul>
   <li><b>H</b>: Renyi entropy</li>
   <li><b>alpha</b>: order of the generalized entropy</li>
-  <li><b>i</b>: ith class</li>
-  <li><b>S</b>: number of classes</li>
-  <li><b>p<small>i</small></b>: proportion of the landscape occupied by class i</li>
+  <li><b>i</b>: patch type</li>
+  <li><b>S</b>: number of different patch types</li>
+  <li><b>p<small><small>i</small></small></b>: proportional abundance of 
+patch type <i>i</i> </li>
 </ul>
 
 <h2>NOTES</h2>
@@ -20,12 +21,7 @@ the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
 <!-- TODO: verify next: -->
 If the input raster map contains only NULL values then <em>r.li.renyi</em>
-returns -1.<br>
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=-1 input=my_map
-</pre></div>
-after index calculation.
+returns NULL.
 
 <h2>EXAMPLES</h2>
 To calculate Renyi's diversity index on map <em>my_map</em>, using

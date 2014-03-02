@@ -18,12 +18,7 @@ the <tt>$HOME/.grass7/r.li/output/</tt> folder.
 <p>
 <!-- TODO: verify next: -->
 If the input raster contains NULL value cells, <em>r.li.pielou</em>
-returns -1 for these cells. <br>
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
-r.null setnull=-1 input=my_map
-</pre></div>
-after index calculation.
+returns NULL for these cells.
 
 <h2>EXAMPLES</h2>
 To calculate Pielou's diversity index on map <em>my_map</em>, using
