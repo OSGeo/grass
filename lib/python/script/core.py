@@ -901,7 +901,7 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
     @param precision precision with which the floating point values are compared
     @param proj True if it has to check some information about projection system
     @param units True if it has to check some information about units
-    
+
     @return True if full or almost identical, False if different
     """
     dict_a = _text_to_key_value_dict(filename_a, sep, checkproj=proj,
@@ -909,34 +909,26 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
     dict_b = _text_to_key_value_dict(filename_b, sep, checkproj=proj,
                                      checkunits=units)
 
-    missing_keys = 0
+    if sorted(dict_a.keys()) != sorted(dict_b.keys()):
+        return False
 
     # We compare matching keys
     for key in dict_a.keys():
-        if key in dict_b:
-            # Floating point values must be handled separately
-            if isinstance(dict_a[key], float) and isinstance(dict_b[key], float):
-                if abs(dict_a[key] - dict_b[key]) > precision:
-                    return False
-            elif isinstance(dict_a[key], float) or isinstance(dict_b[key], float):
-                warning(_("Mixing value types. Will try to compare after "
-                          "integer conversion"))
-                return int(dict_a[key]) == int(dict_b[key])
-            elif key == "+towgs84":
-                # We compare the sum of the entries
-                if abs(sum(dict_a[key]) - sum(dict_b[key])) > precision:
-                    return False
-            else:
-                if dict_a[key] != dict_b[key]:
-                    return False
+        # Floating point values must be handled separately
+        if isinstance(dict_a[key], float) and isinstance(dict_b[key], float):
+            if abs(dict_a[key] - dict_b[key]) > precision:
+                return False
+        elif isinstance(dict_a[key], float) or isinstance(dict_b[key], float):
+            warning(_("Mixing value types. Will try to compare after "
+                      "integer conversion"))
+            return int(dict_a[key]) == int(dict_b[key])
+        elif key == "+towgs84":
+            # We compare the sum of the entries
+            if abs(sum(dict_a[key]) - sum(dict_b[key])) > precision:
+                return False
         else:
-            missing_keys += 1
-    if missing_keys == len(dict_a):
-        return False
-    if missing_keys > 0:
-        warning(_("Several keys (%(miss)i out of %(a)i) are missing "
-                  "in the target file") % {'miss': missing_keys,
-                                           'a': len(dict_a)})
+            if dict_a[key] != dict_b[key]:
+                return False
     return True
 
 def diff_files(filename_a, filename_b):
