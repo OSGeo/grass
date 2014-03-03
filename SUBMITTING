@@ -150,6 +150,11 @@ following rules:
     example:
         /* GTC A name of a projection */
         G_message(_("State Plane"));
+    
+    Any message with a noun in plural form has to pass _n() macro,
+    even if for the English language it is not required!
+        G_message(_n("One map", "%d maps", number), number);
+        
     See locale/README for details.
 
 

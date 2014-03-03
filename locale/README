@@ -1,7 +1,11 @@
 HOWTO translate GRASS messages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-$Date$
+This file contains following sections:
+1. Instructions for programmers;
+2. A translation workflow overview;
+3. A detailed explanation of translation workflow, testing;
+4. Some notes and links
 
 [ Web page: http://grass.osgeo.org/devel/i18n.php ]
 
@@ -54,6 +58,39 @@ NOTE3: Notices to translators can be added by placing
         /* GTC A comma separated keyword list. 
            Should not contain spaces! */
         keywords = _("first,second,third");
+
+NOTE4:  Any string containing a number that requires a correct plural form of
+        a noun, has to pass trough ngettext function implemented in GRASS
+        as a _n() macro.
+        _n("Message in English for singular case", "Message in English for
+        plural case", number) 
+
+Examples of messages with plural forms.
+Wrong:
+    G_message( _("%d map(s) from mapset <%s> removed"), n, ms);
+    G_message( n == 1 ? _("One file removed") : _("%d files removed"), n);
+    G_warning( _("%d %s without geometry skipped"), n, 
+        n == 1 ? "feature" : "features"); 
+    G_message( _("%d maps selected"), n);
+    G_message( n == 1 ? _("Remove map") : _("Remove maps"));
+
+Correct:
+    G_message( _n("%d map from mapset <%s> removed", 
+        "%d maps from mapset <%s> removed", n), n, ms);
+    /* Notice double use of number "n" - as an argument for 
+    both functions - _n() and G_message() */
+    G_message( _n("One file removed", "%d files removed", n) n);
+    /* Both of forms of singular case "%d file" or "One file" are correct. 
+    The choice between them is purely stylistic one. */
+    G_warning( _n("One feature without geometry skipped", 
+        "%d features without geometry skipped", n), n);
+    G_message( _n("%d map selected", "%d maps selected", n), n);
+    /* Altough in English it is not necessary to provide a separate
+    text if "n" always is >1, in other languages is a difference if "n"
+    is i.e. 2-4, or n==10 etc. */
+    G_message( _n("Remove map", "Remove maps", n));
+    /* Number it self doesn't have to be used in the output text */
+        
         
 All these messages strings will be then automatically 
 extracted into the message files.
@@ -64,6 +101,13 @@ NOTE4: Such lines
         fprintf (stdout,"\n");
   do not need a change as no translation is needed.
 
+A detailed example of adapting code for use in multiple languages
+can be found in gettext manual.
+How to prepare program source: 
+http://www.gnu.org/software/gettext/manual/gettext.html#Sources
+
+More advanced tricks like resolving ambiguties and handling of plural forms:
+http://www.gnu.org/software/gettext/manual/gettext.html#Programmers
 
 ------------------------------------------------------
 
