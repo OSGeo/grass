@@ -4,7 +4,7 @@
  *
  * Garbrecht, J. & Martz, L. W. (1997)
  * The assignment of drainage direction over flat surfaces in raster
- * digital elevation models. J. Hydrol 193, 204–213.
+ * digital elevation models. J. Hydrol 193, 204-213.
  *
  * the method is modifed for speed, only one pass is necessary to get
  * the gradient away from higher terrain

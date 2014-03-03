@@ -49,7 +49,7 @@ long calc_solar_position(double longitude, double latitude, double timezone,
        - timezone: DO NOT ADJUST FOR DAYLIGHT SAVINGS TIME.
        - timezone: negative for zones west of Greenwich
        - lat/long: east and north positive
-       - the atmospheric refraction is calculated for 1013hPa, 15°C
+       - the atmospheric refraction is calculated for 1013hPa, 15 degrees C
        - time: local time from your watch
      */
 

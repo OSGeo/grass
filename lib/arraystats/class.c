@@ -82,7 +82,7 @@ double class_stdev(double *data, int count, int nbreaks, double *classbreaks)
 		stats.stdev * scale * (i - nbreaks / 2);
 
     }
-    else {			/* number of classes is even so mean is a classbreak */
+    else {		/* number of classes is even so mean is a classbreak */
 
 	/* decide whether to use 1*stdev or 0.5*stdev as step */
 	i = 1;
@@ -133,8 +133,7 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
 
     lequi = G_malloc(*nbreaks * sizeof(double));
 
-    /*The following values come from the normal distribution and 
-     * will be used as: 
+    /* The following values come from the normal distribution and will be used as:
      * classbreak[i] = (lequi[i] * stdev) + mean;
      */
 
@@ -208,7 +207,7 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
 
     basic_stats(data, count, &stats);
 
-    /*check if any of the classbreaks would fall outside of the range min-max */
+    /* Check if any of the classbreaks would fall outside of the range min-max */
     j = 0;
     for (i = 0; i < *nbreaks; i++) {
 	if ((lequi[i] * stats.stdev + stats.mean) >= stats.min &&
@@ -218,7 +217,8 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
     }
 
     if (j < (*nbreaks)) {
-	G_warning(_("There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."),
+	G_warning(_("There are classbreaks outside the range min-max. Number of "
+		    "classes reduced to %i, but using probabilities for %i classes."),
 		  j + 1, *nbreaks + 1);
 	G_realloc(classbreaks, j * sizeof(double));
 	for (i = 0; i < j; i++)
@@ -240,13 +240,14 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
     return (1);
 }
 
-/* FixMe: there seems to a problem with array overflow, probably due to the fact that the code was ported from fortran which has 1-based arrays*/
+/* FIXME: there seems to a problem with array overflow, probably due to
+   the fact that the code was ported from fortran which has 1-based arrays*/
 double class_discont(double *data, int count, int nbreaks,
 		     double *classbreaks)
 {
     int *num, nbclass;
     double *no, *zz, *nz, *xn, *co;
-    double *x;			/* Vecteur des observations standardisées */
+    double *x;		/* Vector standardized observations */
     int i, j, k;
     double min = 0, max = 0, rangemax = 0;
     int n = 0;

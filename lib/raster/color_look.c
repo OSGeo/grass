@@ -30,7 +30,7 @@
  * <b>set</b> arrays to be at least dimension <i>n</i>.
  *
  * <b>Note:</b> The <i>red, green</i>, and <i>blue</i> intensities
- * will be in the range 0 -­ 255.
+ * will be in the range 0 - 255.
  *
  * Modified to return a color for NULL-values.
  *

@@ -454,7 +454,7 @@ int main(int argc, char **argv)
 	add_city(city, city1);
     }
     
-    /* TODO: optimize tour (some Lin–Kernighan method) */
+    /* TODO: optimize tour (some Lin-Kernighan method) */
 
     if (debug_level >= 2) {
 	/* debug print */
