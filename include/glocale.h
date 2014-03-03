@@ -11,6 +11,7 @@
 #define _n(strs,strp,num) G_ngettext(PACKAGE,(strs),(strp),num)
 #else
 #define _(str) (str)
+#define _n(strs,strp,num) ((num == 1) ? (strs) : (strp))
 #endif
 
 #endif
