@@ -1106,7 +1106,7 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 	ig++;
 
 	/* successive orders
-	   multiple scattering source function at every level within the laye */
+	   multiple scattering source function at every level within the layer */
 	for(k = 1; k <= mu; k++)
 	{
 	    for(int i = 0; i <= snt; i++)

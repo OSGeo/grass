@@ -11,7 +11,7 @@ extern DCELL f_d(DCELL);
 
 /* constant definition */
 /* #define k_sb 4.903    //[MJ/m2*h]             Stefan Bolzman constant  */
-#define cp 1.013		/* [kJ/kg*°C]    specific heat of moist air */
+#define cp 1.013		/* [kJ/kg*degC]    specific heat of moist air */
 #define epsilon 0.622		/* [-]                   ratio of molecular weigth of water to dry air */
 #define Po 101.3		/* [kPa]                 atmospheric pressure at sea level */
 #define Tko 293.16		/* [K]                   reference temperature at sea level */
@@ -35,7 +35,7 @@ DCELL calc_ETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int night, DCELL Rh,
     /* calculus: mean saturation vapoure pressure [KPa] */
     ea = 0.61078 * exp((17.27 * T) / (T + 237.3));
 
-    /* calculus: slope of vapoure pressure curve [KPa/°C] */
+    /* calculus: slope of vapoure pressure curve [KPa/degC] */
     delta = (4098 * ea) / pow((237.3 + T), 2);
 
     /* calculus: latent heat vapourisation [MJ/kg]  */
@@ -44,7 +44,7 @@ DCELL calc_ETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int night, DCELL Rh,
     /* calculus: atmospheric pressure [KPa] */
     P = Po * pow(((Tko - eta * (Z - Ao)) / Tko), (g / (eta * R)));
 
-    /* calculus: psichiometric constant [kPa/°C] */
+    /* calculus: psichiometric constant [kPa/degC] */
     gamma = ((cp * P) / (epsilon * lambda)) * 0.001;
 
     /* calculus: aerodynamic resistance [s/m] */
@@ -62,7 +62,7 @@ DCELL calc_ETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int night, DCELL Rh,
     /* calculus: surface resistance [s/m]  */
     rs = 100 / (0.5 * 24 * hc);
 
-    /*calculus: modified psichiometric constant [kPa/°C] */
+    /*calculus: modified psichiometric constant [kPa/degC] */
     gstar = gamma * (1 + (rs / ra));
 
     /*calculus: net radiation [MJ/m2*d] */
@@ -81,7 +81,7 @@ DCELL calc_ETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int night, DCELL Rh,
     /* calculus: actual vapoure pressure [kPa] */
     ed = Rh * ea / 100;
 
-    /* calculus: virtual temperature [°C] */
+    /* calculus: virtual temperature [degC] */
     Tkv = (T + 273.15) / (1 - (0.378 * ed / P));
 
     /* calculus: atmospheric density [Kg/m^3] */
@@ -107,7 +107,7 @@ DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day,
     /* calculus: mean saturation vapoure pressure [KPa] */
     ea = 0.61078 * exp((17.27 * T) / (T + 237.3));
 
-    /* calculus: slope of vapoure pressure curve [KPa/°C] */
+    /* calculus: slope of vapoure pressure curve [KPa/degC] */
     delta = (4098 * ea) / pow((237.3 + T), 2);
 
     /* calculus: latent heat vapourisation [MJ/kg]  */
@@ -116,7 +116,7 @@ DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day,
     /* calculus: atmospheric pressure [KPa] */
     P = Po * pow(((Tko - eta * (Z - Ao)) / Tko), (g / (eta * R)));
 
-    /* calculus: di psichiometric constant [kPa/°C] */
+    /* calculus: di psichiometric constant [kPa/degC] */
     gamma = ((cp * P) / (epsilon * lambda)) * 0.001;
 
     /* calculus: net radiation [MJ/m2*h] */
@@ -143,18 +143,18 @@ DCELL calc_openwaterETp(DCELL T, DCELL Z, DCELL u2, DCELL Rn, int day,
 
 
    /* calculus of saturation vapour pressure at the temperature T: es[hPa]  */
-   /* with T[°C] */
+   /* with T[degC] */
    es   =       6.1078*exp((17.27*T)/(237.3+T);
 
-   /* tangent of the saturated vapour pressure curve: D[hPa/K] with T[°C] */
+   /* tangent of the saturated vapour pressure curve: D[hPa/K] with T[degC] */
    D    =       (25029/pow((273.3+T),2))*exp((17.27*T)/(237.3+T);
 
    /* air pressure at level hM */
    P    =       1013*exp(-hM/(7991+29.33*Tv));
 
-   /* calculus of lambda [KJ/Kg] with T[°C] */
+   /* calculus of lambda [KJ/Kg] with T[degC] */
    lambda       =       2500.8 - 2.372*T;
 
-   /* calculus psichiometric constant gamma [hPa/°C] with cp=1.005[KJ/(Kg*K)] */
+   /* calculus psichiometric constant gamma [hPa/degC] with cp=1.005[KJ/(Kg*K)] */
    gamma        = ((1.005*P)/(0.622*lambda))*0.001; 
 #endif

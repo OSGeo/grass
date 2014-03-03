@@ -14,12 +14,12 @@
 #define NOMETADATAFILE  0
 #define METADATAFILE    1
 
-/*****************************************************
+/**********************************************************
  * Landsat Structures
  *
- * Lmax and Lmin in  W / (m^2 * sr * µm) -> Radiance
- * Esun in  W / (m^2 * µm)               -> Irradiance
- ****************************************************/
+ * Lmax and Lmin in  W / (m^2 * sr * micron) -> Radiance
+ * Esun in  W / (m^2 * micron)               -> Irradiance
+ *********************************************************/
 
 #define MAX_BANDS   11
 
@@ -28,7 +28,7 @@ typedef struct
     int number;			/* Band number */
     int code;			/* Band code */
 
-    double wavemax, wavemin;	/* Wavelength in µm */
+    double wavemax, wavemin;	/* Wavelength in micron */
 
     double esun;		/* Mean solar irradiance */
     double lmax, lmin;		/* Spectral radiance */

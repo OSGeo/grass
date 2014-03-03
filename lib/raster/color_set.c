@@ -19,7 +19,7 @@
  *
  * The <i>red, green</i>, and <i>blue</i> intensities for the color
  * associated with category <i>cat</i> are set in the <i>colors</i>
- * structure.  The intensities must be in the range 0 -­ 255. Values
+ * structure.  The intensities must be in the range 0 - 255. Values
  * below zero are set as zero, values above 255 are set as 255.
  *
  * <b>Warning: Use of this routine is discouraged because it defeats the new

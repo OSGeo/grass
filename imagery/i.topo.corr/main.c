@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
 	    /* Abre fichero de bandas y el de salida */
 	    strcpy(band.name, input->answers[i]);
 	    Rast_get_cellhd(band.name, "", &hd_band);
-	    Rast_set_window(&hd_band);	/* Antes de out_open y allocate para mismo tamaño */
+	    Rast_set_window(&hd_band);	/* Antes de out_open y allocate para mismo size */
 	    band.fd = Rast_open_old(band.name, "");
 	    band.type = Rast_get_map_type(band.fd);
 	    if (band.type != DCELL_TYPE) {
