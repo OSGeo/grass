@@ -153,16 +153,15 @@ def is_clean_name(name):
     >>> is_clean_name('census')
     True
     >>> is_clean_name('0census')
-    False
+    True
     >>> is_clean_name('census&')
+    False
+    >>> is_clean_name('cénsus')
     False
 
     """
-    if name[0].isdigit():
+    if libgis.G_legal_filename(name) < 0:
         return False
-    for char in u' @#^?°,;%&/':
-        if name.find(char) != -1:
-            return False
     return True
 
 
