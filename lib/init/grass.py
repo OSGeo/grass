@@ -770,6 +770,7 @@ def set_language():
     except:
         # Language override has not been defined or is inaccessible
         return
+    language = 'None' # Such string sometimes is present in wx file
     for line in fd:
         if re.search('^language', line):
             line = line.rstrip('%s' % os.linesep)
