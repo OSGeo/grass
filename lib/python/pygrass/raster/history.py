@@ -62,6 +62,9 @@ class History(object):
         """Rast_free_history"""
         pass
 
+    def __len__(self):
+        return self.length()
+
     #----------------------------------------------------------------------
     #libraster.HIST_CREATOR
     def _get_creator(self):
@@ -213,12 +216,12 @@ class History(object):
 
     def length(self):
         """Rast_history_length"""
-        libraster.Rast_history_length(self.c_hist)
+        return libraster.Rast_history_length(self.c_hist)
 
     def line(self, line):
         """Rast_history_line"""
-        libraster.Rast_history_line(self.c_hist,
-                                    ctypes.c_int(line))
+        return libraster.Rast_history_line(self.c_hist,
+                                           ctypes.c_int(line))
 
     def read(self):
         """Rast_read_history. ::
