@@ -640,10 +640,15 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         # if the map is open or not
         self._fd = 1
 
-    def close(self):
-        self._write()
-        os.remove(self.filename)
-        self._fd = None
+    def close(self, name=''):
+        if self.is_open():
+            name = name if name else self.name
+            if not name:
+                raise RuntimeError('Raster name not set neither '
+                                   'given as parameter.')
+            self._write()
+            os.remove(self.filename)
+            self._fd = None
 
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
