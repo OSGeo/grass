@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-	struct Flag *noindex, *withz;
+        struct Flag *noindex;
     } flag;
     struct cell_list
     {
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("IDW"));
     module->description =
-	_("Surface interpolation from vector point data by Inverse "
+	_("Provides surface interpolation from vector point data by Inverse "
 	  "Distance Squared Weighting.");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
@@ -97,7 +97,9 @@ int main(int argc, char *argv[])
     
     parm.col = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.col->required = NO;
-    parm.col->description = _("Name of attribute column with values to interpolate");
+    parm.col->label = _("Name of attribute column with values to interpolate");
+    parm.col->description = _("If not given and input is 2D vector map then category values are used. "
+                               "If input is 3D vector map then z-coordinates are used.");
     parm.col->guisection = _("Values");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -128,22 +130,14 @@ int main(int argc, char *argv[])
 				  " in the interpolation");
     flag.noindex->guisection = _("Settings");
 
-    flag.withz = G_define_flag();
-    flag.withz->key = 'z';
-    flag.withz->description = _("Use z coordinates for approximation (3D vector maps only)");
-    flag.withz->guisection = _("Values");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (sscanf(parm.npoints->answer, "%d", &search_points) != 1 ||
 	search_points < 1)
-	G_fatal_error(_("Illegal number of interpolation points"),
-		      parm.npoints->key, parm.npoints->answer);
+	G_fatal_error(_("Illegal number (%s) of interpolation points"),
+		      parm.npoints->answer);
     
-    if (!flag.withz->answer && !parm.col->answer)
-	G_fatal_error(_("No attribute column specified"));
-
     list =
 	(struct list_Point *) G_calloc((size_t) search_points,
 				       sizeof(struct list_Point));
@@ -175,7 +169,7 @@ int main(int argc, char *argv[])
 
     /* read the elevation points from the input sites file */
     read_sites(parm.input->answer, parm.dfield->answer,
-	       parm.col->answer, flag.noindex->answer, flag.withz->answer);
+	       parm.col->answer, flag.noindex->answer);
     
     if (npoints == 0)
 	G_fatal_error(_("No points found"));

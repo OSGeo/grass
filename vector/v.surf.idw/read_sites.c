@@ -13,10 +13,10 @@
  * mccauley
  */
 
-void read_sites(const char *name, const char *field_name, const char *col, int noindex, int with_z)
+void read_sites(const char *name, const char *field_name, const char *col, int noindex)
 {
     extern long npoints;
-    int nrec, ctype = 0, type, field;
+    int nrec, ctype = 0, type, field, with_z;
     struct Map_info Map;
     struct field_info *Fi;
     dbDriver *Driver;
@@ -27,8 +27,20 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
     Vect_set_open_level(1);	/* without topology */
     Vect_open_old2(&Map, name, "", field_name);
     field = Vect_get_field_number(&Map, field_name);
-    
-    if (!with_z) {
+    with_z = col == NULL && Vect_is_3d(&Map); /* read z-coordinates
+                                                 only when column is
+                                                 not defined */
+    if (!col) {
+        if (!with_z)
+            G_important_message(_("Input vector map <%s> is 2D - using categories to interpolate"),
+                                Vect_get_full_name(&Map));
+        else
+            G_important_message(_("Input vector map <%s> is 3D - using z-coordinates to interpolate"),
+                                Vect_get_full_name(&Map));
+
+    }
+
+    if (col) {
 	db_CatValArray_init(&cvarr);
 
 	Fi = Vect_get_field(&Map, field);
@@ -73,16 +85,21 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
 
 	    /* TODO: what to do with multiple cats */
 	    Vect_cat_get(Cats, field, &cat);
-	    if (cat < 0)
+	    if (cat < 0) /* skip features without category */
 		continue;
 
-	    if (ctype == DB_C_TYPE_INT) {
-		ret = db_CatValArray_get_value_int(&cvarr, cat, &ival);
-		dval = ival;
-	    }
-	    else {		/* DB_C_TYPE_DOUBLE */
-		ret = db_CatValArray_get_value_double(&cvarr, cat, &dval);
-	    }
+            if (col) {
+                if (ctype == DB_C_TYPE_INT) {
+                    ret = db_CatValArray_get_value_int(&cvarr, cat, &ival);
+                    dval = ival;
+                }
+                else {		/* DB_C_TYPE_DOUBLE */
+                    ret = db_CatValArray_get_value_double(&cvarr, cat, &dval);
+                }
+            }
+            else {
+                dval = cat;
+            }
 
 	    if (ret != DB_OK) {
 		G_warning(_("No record for point (cat = %d)"), cat);
@@ -95,11 +112,11 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
 	newpoint(dval, Points->x[0], Points->y[0], noindex);
     }
 
-    if (!with_z)
+    if (col)
 	db_CatValArray_free(&cvarr);
 
     Vect_set_release_support(&Map);
     Vect_close(&Map);
 
-    G_message(_("%d points loaded"), npoints);
+    G_message(_("%ld points loaded"), npoints);
 }

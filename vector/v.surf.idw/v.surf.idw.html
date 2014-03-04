@@ -1,20 +1,18 @@
 <h2>DESCRIPTION</h2>
 
-<p><em>v.surf.idw</em> fills a raster matrix with interpolated
-values generated from a set of irregularly spaced data
-points using numerical approximation (weighted averaging)
-techniques. The interpolated value of a cell is determined
-by values of nearby data points and the distance of the
-cell from those input points.  In comparison with other
-methods, numerical approximation allows representation of
-more complex surfaces (particularly those with anomalous
-features), restricts the spatial influence of any errors,
-and generates the interpolated surface from the data
-points.
+<p><em>v.surf.idw</em> fills a raster matrix with interpolated values
+generated from a set of irregularly spaced vector data points using
+numerical approximation (weighted averaging) techniques. The
+interpolated value of a cell is determined by values of nearby data
+points and the distance of the cell from those input points.  In
+comparison with other methods, numerical approximation allows
+representation of more complex surfaces (particularly those with
+anomalous features), restricts the spatial influence of any errors,
+and generates the interpolated surface from the data points.
 
-<p>This program allows the user to use a GRASS vector point map file,
-rather than a raster map layer, as input.
-
+<p>Values to interpolate are read from <b>column</b> option. If this
+option is not given than the program uses <i>categories</i> as values
+to interpolate or <i>z-coordinates</i> if the input vector map is 3D.
 
 <h2>NOTES</h2>
 
@@ -26,9 +24,9 @@ system.  The time required to execute is related to the
 resolution of the current region, after an initial delay 
 determined by the time taken to read the input vector points map.
 
-<p>To read and interpolate from the elevation co-ordinates as 3rd dimension
-of the vector geometry, use the <em>-z</em> flag. In this case no <em>column</em>
-parameter has to be specified.
+<p>
+Note that vector features without category in given <b>layer</b> are
+<i>skipped</i>.
 
 <p>If the user has a mask set, then interpolation is only done
 for those cells that fall within the mask. However, all
@@ -37,40 +35,39 @@ if they fall outside the mask. Vector points outside the current
 region are not used in the interpolation. A larger region may
 be set and a mask used to limit interpolation to a smaller area
 if it is desired to use vector points from outside the region in the
-interpolation. The <em>-n</em> flag may also be used to
+interpolation. The <b>-n</b> flag may also be used to
 achieve a similar result.
 
-<p>If more than <em>count</em> points fall into one target raster cell, 
+<p>If more than <b>npoints</b> fall into one target raster cell, 
 the mean of all the site values will determine the cell value (unless
-the -n flag is specified, in which case only the <em>count</em> 
-points closest to the centre of the cell will be interpolated).
+the <b>-n</b> flag is specified, in which case only the <b>npoints</b> 
+closest to the centre of the cell will be interpolated).
 
 <p>
-The <em>power</em> parameter defines an exponential distance weight.
+The <b>power</b> parameter defines an exponential distance weight.
 Greater values assign greater influence to values closer to the
 point to be interpolated. The interpolation function peaks sharply over
 the given data points for 0 &lt; <em>p</em> &lt; 1 and more smoothly for
 larger values. The default value for the power parameter is 2.  
 
-
 <p>
-By setting <em>npoints=1</em>, the module can be used 
-to calculate raster Voronoi diagrams (Thiessen polygons).
-
+By setting <b>npoints</b>=1, the module can be used to calculate
+raster Voronoi diagrams (Thiessen polygons).
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.vect.html">d.vect</a></em><br>
-<em><a href="g.region.html">g.region</a></em><br>
-<em><a href="r.surf.contour.html">r.surf.contour</a></em><br>
-<em><a href="r.surf.idw.html">r.surf.idw</a></em><br>
-<em><a href="r.surf.idw2.html">r.surf.idw2</a></em><br>
-<em><a href="r.surf.gauss.html">r.surf.gauss</a></em><br>
-<em><a href="r.surf.fractal.html">r.surf.fractal</a></em><br>
-<em><a href="r.surf.random.html">r.surf.random</a></em><br>
-<em><a href="v.surf.rst.html">v.surf.rst</a></em>
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.surf.contour.html">r.surf.contour</a>,
+<a href="r.surf.idw.html">r.surf.idw</a>,
+<a href="r.surf.idw2.html">r.surf.idw2</a>,
+<a href="r.surf.gauss.html">r.surf.gauss</a>,
+<a href="r.surf.fractal.html">r.surf.fractal</a>,
+<a href="r.surf.random.html">r.surf.random</a>,
+<a href="v.surf.rst.html">v.surf.rst</a>
+</em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Michael Shapiro,  
 U.S. Army Construction Engineering 
@@ -79,4 +76,5 @@ Research Laboratory
 Improved algorithm (indexes points according to cell and ignores
 points outside current region) by Paul Kelly
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
