@@ -13,16 +13,101 @@ from core.utils import _
 from grass.script import core as grass
 from rlisetup.functions import retRLiPath
 from rlisetup.wizard import RLIWizard
+import locale
+import codecs
 
+
+class ViewFrame(wx.Frame):
+    def __init__(self, parent, conf, giface=None, id=wx.ID_ANY,
+                 title=_("Modify the configuration file"),
+                 style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER, **kwargs):
+        ###VARIABLES
+        self.parent = parent
+        self.rlipath = retRLiPath()
+        self.confile = conf
+        self.pathfile = os.path.join(self.rlipath, conf)
+        wx.Frame.__init__(self, parent=parent, id=id, title=title,
+                          **kwargs)
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'),
+                             wx.BITMAP_TYPE_ICO))
+        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.confilesBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                        label=_("View and modify the " \
+                                        "configuration file '{name}'".format(name=self.confile)))
+        self.textCtrl = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
+                                    style=wx.TE_MULTILINE, size=(-1, 75))
+        self.textCtrl.Bind(wx.EVT_TEXT, self.OnFileText)
+        f = open(self.pathfile)
+        self.textCtrl.SetValue(''.join(f.readlines()))
+        f.close()
+        ###BUTTONS      #definition
+        self.btn_close = wx.Button(parent=self, id=wx.ID_CLOSE)
+        self.btn_ok = wx.Button(parent=self, id=wx.ID_OK)
+        self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
+        self.btn_ok.Bind(wx.EVT_BUTTON, self.OnOk)
+        self._layout()
+        self.enc = locale.getdefaultlocale()[1]
+
+    def _layout(self):
+        """Set the layout"""
+        panelsizer = wx.GridBagSizer(1, 1)
+        mainsizer = wx.BoxSizer(wx.VERTICAL)
+        ###CONFILES
+        confilesSizer = wx.StaticBoxSizer(self.confilesBox, wx.HORIZONTAL)
+        confilesSizer.Add(item=self.textCtrl, proportion=1, flag=wx.EXPAND)
+        ###END CONFILES
+        ###BUTTONS
+        buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+        buttonSizer.Add(item=self.btn_ok, flag=wx.ALL, border=5)
+        buttonSizer.Add(item=self.btn_close, flag=wx.ALL, border=5)
+        ###END BUTTONS
+        #add listbox to staticbox
+        panelsizer.Add(item=confilesSizer, pos=(0, 0), flag=wx.EXPAND,
+                       border=3)
+        #add panel and buttons
+        mainsizer.Add(item=self.panel, proportion=1, flag=wx.EXPAND, border=3)
+        mainsizer.Add(item=buttonSizer, proportion=0, flag=wx.EXPAND, border=3)
+        panelsizer.AddGrowableRow(0)
+        panelsizer.AddGrowableCol(0)
+        self.panel.SetAutoLayout(True)
+        self.panel.SetSizerAndFit(panelsizer)
+        self.SetSizer(mainsizer)
+        self.Layout()
+
+    def OnClose(self, event):
+        """!Close window"""
+        self.Destroy()
+
+    def OnOk(self, event):
+        """!Launches help"""
+        dlg = wx.MessageDialog(parent=self.parent,
+                                message=_("Are you sure that you want modify" \
+                                          " r.li configuration file {name}?" \
+                                          "\nYou could broke the configuration" \
+                                          " file...").format(name=self.confile),
+                                caption=_("WARNING"),
+                                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_WARNING)
+
+        if dlg.ShowModal() == wx.ID_YES:
+            f = codecs.open(self.pathfile, encoding=self.enc, mode='w',
+                            errors='replace')
+            f.write(self.text + os.linesep)
+            f.close()
+        dlg.Destroy()
+        self.Destroy()
+
+    def OnFileText(self, event):
+        """File input interactively entered"""
+        self.text = event.GetString()
 
 class RLiSetupFrame(wx.Frame):
 
-    def __init__(self, parent, giface = None, id=wx.ID_ANY, title=_("GRASS" \
+    def __init__(self, parent, giface=None, id=wx.ID_ANY, title=_("GRASS" \
                  " GIS Setup for r.li modules"),
                  style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER, **kwargs):
         ###VARIABLES
         self.parent = parent
-        self.cmd = "r.li.setup"
+#        self.cmd = "r.li.setup"
         self.rlipath = retRLiPath()
         self.listfiles = self.ListFiles()
         ###END VARIABLES
@@ -37,25 +122,29 @@ class RLiSetupFrame(wx.Frame):
                                         label=_('Available sampling area configuration files'))
         self.listfileBox = wx.ListBox(parent=self.panel,  id=wx.ID_ANY,
                     choices=self.listfiles)
-        ###BUTTONS
-        #definition
-        self.btn_close = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
-        self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
-        self.btn_remove = wx.Button(parent=self.panel, id=wx.ID_ANY,
+
+        ###BUTTONS      #definition
+        self.btn_close = wx.Button(parent=self, id=wx.ID_CLOSE)
+        self.btn_help = wx.Button(parent=self, id=wx.ID_HELP)
+        self.btn_remove = wx.Button(parent=self, id=wx.ID_ANY,
                                     label=_("Remove"))
         self.btn_remove.SetToolTipString(_('Remove a configuration file'))
-        self.btn_new = wx.Button(parent=self.panel, id=wx.ID_ANY,
+        self.btn_new = wx.Button(parent=self, id=wx.ID_ANY,
                                  label=_("Create"))
         self.btn_new.SetToolTipString(_('Create a new configuration file'))
-        self.btn_rename = wx.Button(parent=self.panel, id=wx.ID_ANY,
+        self.btn_rename = wx.Button(parent=self, id=wx.ID_ANY,
                                     label=_("Rename"))
         self.btn_rename.SetToolTipString(_('Rename a configuration file'))
+        self.btn_view = wx.Button(parent=self, id=wx.ID_ANY,
+                                    label=_("View"))
+        self.btn_view.SetToolTipString(_('View a configuration file'))
         #set action for button
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.btn_remove.Bind(wx.EVT_BUTTON, self.OnRemove)
         self.btn_new.Bind(wx.EVT_BUTTON, self.OnNew)
         self.btn_rename.Bind(wx.EVT_BUTTON, self.OnRename)
+        self.btn_view.Bind(wx.EVT_BUTTON, self.OnView)
         self._layout()
         ###END BUTTONS
 
@@ -67,7 +156,8 @@ class RLiSetupFrame(wx.Frame):
 
     def _layout(self):
         """Set the layout"""
-        sizer = wx.BoxSizer(wx.VERTICAL)
+        panelsizer = wx.GridBagSizer(1, 1)
+        mainsizer = wx.BoxSizer(wx.VERTICAL)
         ###CONFILES
         confilesSizer = wx.StaticBoxSizer(self.confilesBox, wx.HORIZONTAL)
         confilesSizer.Add(item=self.listfileBox, proportion=1,
@@ -77,19 +167,25 @@ class RLiSetupFrame(wx.Frame):
         buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
         buttonSizer.Add(item=self.btn_new, flag=wx.ALL, border=5)
         buttonSizer.Add(item=self.btn_rename, flag=wx.ALL, border=5)
+        buttonSizer.Add(item=self.btn_view, flag=wx.ALL, border=5)
         buttonSizer.Add(item=self.btn_remove, flag=wx.ALL, border=5)
         buttonSizer.Add(item=self.btn_help, flag=wx.ALL, border=5)
         buttonSizer.Add(item=self.btn_close, flag=wx.ALL, border=5)
         ###END BUTTONS
-        #add to sizer
-        sizer.Add(item=confilesSizer, proportion=0,
-                  flag=wx.ALIGN_LEFT | wx.EXPAND | wx.ALL, border=3)
-        sizer.Add(item=buttonSizer, proportion=0,
-                  flag=wx.ALIGN_RIGHT | wx.ALL, border=3)
-        #set dimension
+        #add listbox to staticbox
+        panelsizer.Add(item=confilesSizer, pos=(0, 0), flag=wx.EXPAND,
+                       border=3)
+
+        #add panel and buttons
+        mainsizer.Add(item=self.panel, proportion=1, flag=wx.EXPAND, border=3)
+        mainsizer.Add(item=buttonSizer, proportion=0, flag=wx.EXPAND, border=3)
+
+        panelsizer.AddGrowableRow(0)
+        panelsizer.AddGrowableCol(0)
+
         self.panel.SetAutoLayout(True)
-        self.panel.SetSizer(sizer)
-        sizer.Fit(self.panel)
+        self.panel.SetSizerAndFit(panelsizer)
+        self.SetSizer(mainsizer)
         self.Layout()
 
     def ListFiles(self):
@@ -101,7 +197,7 @@ class RLiSetupFrame(wx.Frame):
         for l in os.listdir(self.rlipath):
             if os.path.isfile(os.path.join(self.rlipath, l)):
                 listfiles.append(l)
-        return listfiles
+        return sorted(listfiles)
 
     def OnClose(self, event):
         """!Close window"""
@@ -109,14 +205,22 @@ class RLiSetupFrame(wx.Frame):
 
     def OnHelp(self, event):
         """!Launches help"""
-        gcmd.RunCommand('g.manual', parent = self, entry = 'wxGUI.rlisetup')
+        gcmd.RunCommand('g.manual', parent=self, entry='wxGUI.rlisetup')
 
     def OnRemove(self, event):
         """!Remove configuration file from path and update the list"""
         confile = self.listfiles[self.listfileBox.GetSelections()[0]]
-        self.listfileBox.Delete(self.listfileBox.GetSelections()[0])
-        grass.try_remove(os.path.join(self.rlipath, confile))
-        self.listfiles = self.ListFiles()
+        dlg = wx.MessageDialog(parent=self.parent,
+                                message=_("Do you want remove r.li " \
+                                          "configuration file <%s>?") % confile,
+                                caption=_("Remove new r.li configuration file?"),
+                                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+
+        if dlg.ShowModal() == wx.ID_YES:
+            self.listfileBox.Delete(self.listfileBox.GetSelections()[0])
+            grass.try_remove(os.path.join(self.rlipath, confile))
+            self.listfiles = self.ListFiles()
+        dlg.Destroy()
         return
 
     def OnNew(self, event):
@@ -145,3 +249,14 @@ class RLiSetupFrame(wx.Frame):
             self.listfiles = self.ListFiles()
             self.listfileBox.Clear()
             self.listfileBox.Set(self.listfiles)
+
+    def OnView(self, event):
+        """!Show and edit a configuration file"""
+        try:
+            confile = self.listfiles[self.listfileBox.GetSelections()[0]]
+        except:
+            gcmd.GMessage(parent=self,
+                          message=_("You have to select a configuration file"))
+            return
+        frame = ViewFrame(self, conf=confile)
+        frame.Show()
