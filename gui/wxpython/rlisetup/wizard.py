@@ -9,7 +9,7 @@ Classes:
  - RLIWizard (the main wizard)
  - FirstPage (first page of wizard, choose name of conf file, raster, vector,
               sampling region)
- - Keybord (page to insert region areas from keybord)
+ - Keyboard (page to insert region areas from keyboard)
  - SamplingAreas (define sampling area)
  - SummaryPage (show choosen options)
 
@@ -32,14 +32,14 @@ import wx.wizard as wiz
 import wx.lib.scrolledpanel as scrolled
 
 from gui_core import gselect
-from core import gcmd
 from core.utils import _
 from location_wizard.wizard import TitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
 from rlisetup.sampling_frame import RLiSetupMapPanel
 from grass.script import core as grass
 from grass.script import raster as grast
-
+from functions import SamplingType, sampleAreaVector, convertFeature, obtainAreaVector
+from core.gcmd import GError, GMessage, RunCommand
 
 #@NOTE: r.li.setup writes in the settings file with
 ## r.li.windows.tcl:
@@ -48,7 +48,7 @@ from grass.script import raster as grast
 
 class RLIWizard(object):
     """
-    Start wizard here and finish wizard here
+    !Start wizard here and finish wizard here
     """
 
     def __init__(self, parent):
@@ -57,14 +57,20 @@ class RLIWizard(object):
                                  title=_("Create new configuration file for " \
                                  "r.li modules"))
         self.rlipath = retRLiPath()
+
+        self.msAreaList = []
         #pages
         self.startpage = FirstPage(self.wizard, self)
         self.drawsampleframepage = DrawSampleFramePage(self.wizard, self)
-        self.keyboardpage = KeybordPage(self.wizard, self)
+        self.keyboardpage = KeyboardPage(self.wizard, self)
         self.samplingareapage = SamplingAreasPage(self.wizard, self)
         self.summarypage = SummaryPage(self.wizard, self)
         self.units = SampleUnitsKeyPage(self.wizard, self)
+        self.drawunits = SampleUnitsMousePage(self.wizard, self)
+        self.drawsampleunitspage = DrawSampleUnitsPage(self.wizard, self)
+        self.vectorareas = VectorAreasPage(self.wizard, self)
         self.moving = MovingWindows(self.wizard, self)
+        self.regions = DrawRegionsPage(self.wizard, self)
 
         #order of pages
         self.startpage.SetNext(self.samplingareapage)
@@ -74,10 +80,25 @@ class RLIWizard(object):
         self.drawsampleframepage.SetPrev(self.startpage)
         self.samplingareapage.SetPrev(self.startpage)
         self.samplingareapage.SetNext(self.summarypage)
+
+        self.regions.SetPrev(self.samplingareapage)
+        self.regions.SetNext(self.summarypage)
+
         self.units.SetPrev(self.samplingareapage)
         self.units.SetNext(self.summarypage)
+
+        self.drawunits.SetPrev(self.samplingareapage)
+        self.drawunits.SetNext(self.drawsampleunitspage)
+
+        self.drawsampleunitspage.SetPrev(self.drawunits)
+        self.drawsampleunitspage.SetNext(self.summarypage)
+
         self.moving.SetPrev(self.samplingareapage)
         self.moving.SetNext(self.summarypage)
+
+        self.vectorareas.SetPrev(self.samplingareapage)
+        self.vectorareas.SetNext(self.summarypage)
+
         self.summarypage.SetPrev(self.samplingareapage)
 
         #layout
@@ -87,7 +108,11 @@ class RLIWizard(object):
         self.samplingareapage.DoLayout()
         self.summarypage.DoLayout()
         self.units.DoLayout()
+        self.drawunits.DoLayout()
+        self.drawsampleunitspage.DoLayout()
+        self.regions.DoLayout()
         self.moving.DoLayout()
+        self.vectorareas.DoLayout()
 
         self.wizard.FitToPage(self.startpage)
         #run_wizard
@@ -100,20 +125,19 @@ class RLIWizard(object):
 
             if dlg.ShowModal() == wx.ID_NO:
                 self._cleanup()
-                dlg.Destroy()
             else:
                 self._write_confile()
                 self._cleanup()
-                dlg.Destroy()
+            dlg.Destroy()
         else:
             self.wizard.Destroy()
-            gcmd.GMessage(parent=self.parent,
+            GMessage(parent=self.parent,
                      message=_("r.li.setup wizard canceled. "
                                 "Configuration file not created."))
             self._cleanup()
 
     def _write_confile(self):
-        """Write the configuration file"""
+        """!Write the configuration file"""
         f = open(os.path.join(self.rlipath, self.startpage.conf_name), 'w')
         self.rasterinfo = grast.raster_info(self.startpage.rast)
         self._write_region(f)
@@ -131,7 +155,7 @@ class RLIWizard(object):
         self.SF_EWRES = self.gregion['ewres']
 
     def _write_region(self, fil):
-        """Write the region"""
+        """!Write the region"""
         if self.startpage.region == 'whole':
             fil.write("SAMPLINGFRAME 0|0|1|1\n")
             self._temp_region()
@@ -163,22 +187,21 @@ class RLIWizard(object):
             self.per_y = float(self.SF_Y) / float(self.rasterinfo['rows'])
             self.per_rl = float(self.SF_RL) / float(self.rasterinfo['rows'])
             self.per_cl = float(self.SF_CL) / float(self.rasterinfo['cols'])
-            #import pdb; pdb.set_trace()
             fil.write("SAMPLINGFRAME %r|%r|%r|%r\n" % (self.per_x, self.per_y,
                                                        self.per_rl, self.per_cl))
         elif self.startpage.region == 'draw':
             self._temp_region()
-            frame = self.drawsampleframepage.GetSampleFrame()
+            tregion = self.drawsampleframepage.tregion
             # should we call this? with align param?
-            gcmd.RunCommand('g.region', align=self.startpage.rast, 
-                            n=frame['n'], s=frame['s'],
-                            w=frame['w'], e=frame['e'])
+            RunCommand('g.region', align=self.startpage.rast,
+                            n=tregion['n'], s=tregion['s'],
+                            w=tregion['w'], e=tregion['e'])
             newreg = grass.region()
-            self.SF_N = newreg['n']  #	set env(SF_N) $n
+            self.SF_N = newreg['n']  # set env(SF_N) $n
             self.SF_S = newreg['s']  # set env(SF_S) $s
             self.SF_E = newreg['e']  # set env(SF_E) $e
-            self.SF_W = newreg['w']  # set env(SF_W) $w		
-   
+            self.SF_W = newreg['w']  # set env(SF_W) $w
+
             self.SF_Y = abs(round(self.gregion['n'] - newreg['n']) / newreg['nsres'])
 #		 set env(SF_Y) [expr abs(round(($s_n - $n) / $nres)) ] 
             self.SF_X = abs(round(self.gregion['w'] - newreg['w']) / newreg['ewres'])
@@ -199,7 +222,7 @@ class RLIWizard(object):
                                                        self.per_rl, self.per_cl))
 
     def _circle(self, radius, mask):
-        """create a circle mask"""
+        """!Create a circle mask"""
         self.CIR_RL = round((2 * float(radius)) / float(self.rasterinfo['ewres']))
         self.CIR_CL = round((2 * float(radius)) / float(self.rasterinfo['nsres']))
         if not self.CIR_RL % 2:
@@ -220,40 +243,84 @@ class RLIWizard(object):
         grass.use_temp_region()
         grass.run_command('g.region', rast=self.startpage.rast)
 
+    def getSamplingType(self):
+        """!Obtain the sampling type"""
+        devicetype = self.samplingareapage.regionbox
+        samplingtype = self.samplingareapage.samplingtype
+        shapetype = self.units.boxtype
+        if samplingtype == SamplingType.UNITS:
+            if devicetype == 'mouse':
+                if shapetype == 'circle':
+                    samtype = SamplingType.MUNITSC
+                else:
+                    samtype = SamplingType.MUNITSR
+            elif devicetype == 'keyboard':
+                if shapetype == 'circle':
+                    samtype = SamplingType.KUNITSC
+                else:
+                    samtype = SamplingType.KUNITSR
+
+        elif samplingtype == SamplingType.MVWIN:
+            if devicetype == 'mouse':
+                if shapetype == 'circle':
+                    samtype = SamplingType.MMVWINC
+                else:
+                    samtype = SamplingType.MMVWINR
+            elif devicetype == 'keyboard':
+                if shapetype == 'circle':
+                    samtype = SamplingType.KMVWINC
+                else:
+                    samtype = SamplingType.KMVWINR
+        elif samplingtype == SamplingType.WHOLE:
+            samtype = SamplingType.WHOLE
+        elif samplingtype == SamplingType.REGIONS:
+            samtype = SamplingType.REGIONS
+        elif samplingtype == SamplingType.VECT:
+            samtype = SamplingType.VECT
+        return samtype
+
     def _write_area(self, fil):
-        """Write the region"""
-        if self.samplingareapage.samplingtype == 'whole':
+        """!Write the area according the type"""
+        samtype = self.getSamplingType()
+
+        #sampling type is whole
+        if samtype == SamplingType.WHOLE:
             cl = float(self.SF_CL) / float(self.rasterinfo['cols'])
             rl = float(self.SF_RL) / float(self.rasterinfo['rows'])
             #this two variable are unused, problably to remove
-            x = float(self.SF_X) / float(self.rasterinfo['cols'])            
-            y = float(self.SF_Y) / float(self.rasterinfo['rows'])            
-            if self.startpage.region == 'whole':
-                fil.write("SAMPLEAREA %r|%r|%r|%r\n" % (self.per_x, self.per_y,
-                                                        rl, cl))
-            elif self.startpage.region == 'key':
-                fil.write("SAMPLEAREA %r|%r|%r|%r\n" % (self.per_x, self.per_y,
-                                                        rl, cl))
-        elif self.samplingareapage.samplingtype == 'moving':
-            if self.moving.boxtype == 'circle':
-                self._circle(self.moving.width, self.moving.height)
+            x = float(self.SF_X) / float(self.rasterinfo['cols'])
+            y = float(self.SF_Y) / float(self.rasterinfo['rows'])
+            fil.write("SAMPLEAREA %r|%r|%r|%r\n" % (self.per_x, self.per_y,
+                                                    rl, cl))
+
+        ##KMWINC = samplingtype=moving, regionbox=keyboard, shape=circle
+        elif samtype == SamplingType.KMVWINC:
+            self._circle(self.moving.width, self.moving.height)
+            cl = float(self.CIR_CL) / float(self.rasterinfo['cols'])
+            rl = float(self.CIR_RL) / float(self.rasterinfo['rows'])
+            fil.write("SAMPLEAREA -1|-1|%r|%r" % (rl, cl))
+            fil.write("|%s" % self.moving.height)
+            fil.write("\nMOVINGWINDOW\n")
+
+        ##KMWINR = samplingtype moving, regionbox=keyboard, shape=rectangle
+        elif samtype == SamplingType.KMVWINR:
+            cl = float(self.moving.width) / float(self.rasterinfo['cols'])
+            rl = float(self.moving.height) / float(self.rasterinfo['rows'])
+            fil.write("SAMPLEAREA -1|-1|%r|%r" % (rl, cl))
+            fil.write("\nMOVINGWINDOW\n")
+
+        ##KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
+        ##KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
+        elif samtype == SamplingType.KUNITSC or samtype == SamplingType.KUNITSR:
+
+            if samtype == SamplingType.KUNITSC:
+                self._circle(self.units.width, self.units.height)
                 cl = float(self.CIR_CL) / float(self.rasterinfo['cols'])
                 rl = float(self.CIR_RL) / float(self.rasterinfo['rows'])
             else:
                 cl = float(self.moving.width) / float(self.rasterinfo['cols'])
                 rl = float(self.moving.height) / float(self.rasterinfo['rows'])
-            fil.write("SAMPLEAREA -1|-1|%r|%r" % (rl, cl))
-            if self.moving.boxtype == 'circle':
-                fil.write("|%s" % self.moving.height)
-            fil.write("\nMOVINGWINDOW\n")
-        elif self.samplingareapage.samplingtype == 'units':
-            if self.units.boxtype == 'circle':
-                self._circle(self.units.width, self.units.height)
-                cl = float(self.CIR_CL) / float(self.rasterinfo['cols'])
-                rl = float(self.CIR_RL) / float(self.rasterinfo['rows'])
-            else:
-                cl = float(self.units.width) / float(self.rasterinfo['cols'])
-                rl = float(self.units.height) / float(self.rasterinfo['rows'])
+
             fil.write("SAMPLEAREA -1|-1|%r|%r\n" % (rl, cl))
             if self.units.distrtype == 'non_overlapping':
                 fil.write("RANDOMNONOVERLAPPING %s\n" % self.units.distr1)
@@ -267,8 +334,60 @@ class RLIWizard(object):
             elif self.units.distrtype == 'centered_oversites':
                 fil.write("")
 
+        #elif self.samplingareapage.samplingtype == SamplingType.UNITS and self.samplingareapage.regionbox=='mouse':
+
+        ##MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
+        elif self.samplingareapage.samplingtype == SamplingType.MUNITSC:
+            print "not added"
+
+        ##MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
+        elif self.samplingareapage.samplingtype == SamplingType.MUNITSR:
+            for tregion in self.msAreaList:
+                rows = float(self.rasterinfo['rows'])
+                cols = float(self.rasterinfo['cols'])
+                # get the raster region into rastregion
+                grass.use_temp_region()
+                grass.run_command('g.region', rast=self.startpage.rast)
+                rastregion = grass.region()
+                s_n = rastregion['n']
+                s_w = rastregion['w']
+                abs_y = abs(round((float(s_n) - tregion['n']) / tregion['nsres']))
+                abs_x = abs(round((float(s_w) - tregion['w']) / tregion['ewres'])) 
+                abs_rl = abs(round((tregion['n'] - tregion['s']) / tregion['nsres']))
+                abs_cl = abs(round((tregion['e'] - tregion['w']) / tregion['ewres']))
+
+                x = float(abs_x) / float(cols)
+                y = float(abs_y) / float(rows)
+                rl = float(abs_rl) / float(rows)
+                cl = float(abs_cl) / float(cols)
+                sarea = str(x) + "|" + str(y) + "|" + str(rl) + "|" + str(cl)
+                fil.write("SQUAREAREA %s\n" % sarea)
+
+        elif self.samplingareapage.samplingtype == SamplingType.REGIONS:
+            for marea in self.msAreaList:
+                gregion = marea.region
+                rows = float(self.rasterinfo['rows'])
+                cols = float(self.rasterinfo['cols'])
+                abs_y = self.SF_Y + abs(round((self.SF_N - gregion['n']) / self.SF_NSRES))
+                abs_x = self.SF_X + abs(round((self.SF_W - gregion['w']) / self.SF_EWRES))
+                abs_rl = abs(round(gregion['n'] - gregion['s']) / self.SF_NSRES)
+                abs_cl = abs(round(gregion['e'] - gregion['w']) / self.SF_EWRES)
+
+                x = float(abs_x) / float(cols)
+                y = float(abs_y) / float(rows)
+                rl = float(abs_rl) / float(rows)
+                cl = float(abs_cl) / float(cols)
+
+                maskArea = str(x) + "|" + str(y) + "|" + str(rl) + "|" + str(cl) + "|" + marea.raster
+                fil.write("SQUAREAREA %s\n" % maskArea)
+        elif self.samplingareapage.samplingtype == SamplingType.VECT:
+            for marea in self.msAreaList:
+                fil.write(marea)
+            fil.write("RASTERMAP {name}\n".format(name=self.startpage.rast))
+            fil.write("VECTORMAP {name}\n".format(name=self.startpage.vect))
+
     def _cleanup(self):
-        """Clean all the variables to save into configuration file"""
+        """!Clean all the variables to save into configuration file"""
         self.startpage.conf_name = ''
         self.startpage.rast = ''
         self.startpage.vect = ''
@@ -281,6 +400,7 @@ class RLIWizard(object):
         self.units.width = ''
         self.units.height = ''
         self.units.boxtype = ''
+        self.regions.numregions = 0
         self.moving.width = ''
         self.moving.height = ''
         self.moving.boxtype = ''
@@ -288,9 +408,8 @@ class RLIWizard(object):
 
 class FirstPage(TitledPage):
     """
-    Set name of configuration file, choose raster and optionally vector/sites
+    !Set name of configuration file, choose raster and optionally vector/sites
     """
-
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Select maps and define name"))
 
@@ -329,8 +448,6 @@ class FirstPage(TitledPage):
         self.vectselect = gselect.Select(parent=self, id=wx.ID_ANY,
                                          size=(250, -1), type='vector',
                                          multiple=False)
-        self.vectsellabel.Enable(False)
-        self.vectselect.Enable(False)
         self.sizer.Add(item=self.vectsellabel, border=5, pos=(2, 0),
                         flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.vectselect, border=5, pos=(2, 1),
@@ -345,8 +462,6 @@ class FirstPage(TitledPage):
                                       majorDimension=1,
                                       style=wx.RA_SPECIFY_ROWS)
 
-#        self.sampling_reg.EnableItem(2, False)  # disable 'draw' for now
-#        self.sampling_reg.SetItemToolTip(2, _("This option is not supported yet"))
         self.sizer.Add(item=self.sampling_reg,
                         flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
                         pos=(4, 0), span=(1, 2))
@@ -356,31 +471,27 @@ class FirstPage(TitledPage):
         self.newconftxt.Bind(wx.EVT_TEXT, self.OnNameChanged)
         self.vectselect.Bind(wx.EVT_TEXT, self.OnVector)
         self.mapselect.Bind(wx.EVT_TEXT, self.OnRast)
-        #self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
         wx.CallAfter(wx.FindWindowById(wx.ID_FORWARD).Enable, False)
-        # wx.FindWindowById(wx.ID_FORWARD).Enable(False)
-        # self.OnName(None)
 
     def OnSampling(self, event):
-        """!Change map type"""
+        """!Change region type"""
         if event.GetInt() == 0:
             self.region = 'whole'
             self.SetNext(self.parent.samplingareapage)
         elif event.GetInt() == 1:
             self.region = 'key'
             self.SetNext(self.parent.keyboardpage)
-        elif event.GetInt() == 2: # currently disabled
+        elif event.GetInt() == 2:  # currently disabled
             self.region = 'draw'
             self.SetNext(self.parent.drawsampleframepage)
 
     def OnName(self, event):
         """!Sets the name of configuration file"""
         if self.conf_name in self.parent.parent.listfiles:
-            gcmd.GMessage(parent=self,
-                          message=_("The configuration file %s "
-                                    "already exists, please change name") % self.conf_name)
+            GMessage(parent=self, message=_("The configuration file %s "
+                     "already exists, please change name") % self.conf_name)
             self.newconftxt.SetValue('')
             self.conf_name = ''
 
@@ -408,7 +519,8 @@ class FirstPage(TitledPage):
         @return True if configuration file is given and raster xor vector map,
         False otherwise
         """
-        return bool(self.conf_name and (bool(self.rast) != bool(self.vect)))
+        #R#return bool(self.conf_name and (bool(self.rast) != bool(self.vect)))
+        return bool(self.conf_name and bool(self.rast))
 
     def OnExitPage(self, event=None):
         """!Function during exiting"""
@@ -428,11 +540,11 @@ class FirstPage(TitledPage):
                 self.parent.samplingareapage.SetPrev(self.parent.drawsampleframepage)
                 return
 
-class KeybordPage(TitledPage):
-    """
-    Set name of configuration file, choose raster and optionally vector/sites
-    """
 
+class KeyboardPage(TitledPage):
+    """
+    !Choose the region setting the values of border using the keyboard
+    """
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Insert sampling frame parameter"))
 
@@ -526,6 +638,7 @@ class KeybordPage(TitledPage):
     def OnEnterPage(self, event):
         """!Sets the default values, for the entire map
         """
+        #R# check if raster exists before anything
         if self.col_len == '' and self.row_len == '':
             rastinfo = grast.raster_info(self.parent.startpage.rast)
             self.col_len = rastinfo['cols']
@@ -543,32 +656,36 @@ class KeybordPage(TitledPage):
 
 
 class DrawSampleFramePage(TitledPage):
+    """!Choose the region setting the values drawing a box"""
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Draw sampling frame"))
         self.parent = parent
-        self.mapPanel = RLiSetupMapPanel(self)
-        self.mapPanel.sampleFrameChanged.connect(self.SampleFrameChanged)
-        self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(0, 0))
-        self.sizer.AddGrowableCol(0)
-        self.sizer.AddGrowableRow(0)
-        
-        self._raster = None
-
+        self.mapPanel = None
+        self.tregion = None
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
-    def SampleFrameChanged(self):
-        region = self.GetSampleFrame()
+    def SampleFrameChanged(self, region):
+        """"!Enables the next dialog when region is set"""
         if region:
+            self.tregion = region
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
         else:
-            wx.FindWindowById(wx.ID_FORWARD).Enable(False) 
-        
-    def GetSampleFrame(self):
-        return self.mapPanel.GetRegion()
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
-        self.SampleFrameChanged()
+        """!Function during entering"""
+        if self.mapPanel is None:
+            self.mapPanel = RLiSetupMapPanel(self, samplingType='drawFrame')
+            self.mapPanel.sampleFrameChanged.connect(self.SampleFrameChanged)
+            self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(0, 0))
+            self.sizer.AddGrowableCol(0)
+            self.sizer.AddGrowableRow(0)
+            self._raster = None
+        else:
+            self.mapPanel._region = {}
+
+        self.SampleFrameChanged(region=None)
         rast = self.parent.startpage.rast
         if self._raster != rast:
             map_ = self.mapPanel.GetMap()
@@ -577,19 +694,328 @@ class DrawSampleFramePage(TitledPage):
             map_.AddLayer(ltype='raster', command=cmdlist, active=True,
                               name=rast, hidden=False, opacity=1.0,
                               render=True)
-        
+
     def OnExitPage(self, event=None):
         """!Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.parent.samplingareapage)
             self.parent.samplingareapage.SetPrev(self)
+        else:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+
+
+class SampleUnitsMousePage(TitledPage):
+    """!Choose the sampling area setting the values using the mouse"""
+    def __init__(self, wizard, parent):
+        TitledPage.__init__(self, wizard, _("Draw sampling units"))
+        self.parent = parent
+        self.numregions = ''
+        self.mapPanel = None
+        # type of shape
+        self.typeBox = wx.RadioBox(parent=self, id=wx.ID_ANY,
+                                   majorDimension=1, style=wx.RA_SPECIFY_COLS,
+                                   label=" %s " % _("Select type of shape"),
+                                   choices=[_('Rectangle'), _('Circle')])
+
+        self.sizer.Add(self.typeBox, flag=wx.ALIGN_LEFT, pos=(0, 0),
+                            span=(1, 2))
+
+        self.regionPanelSizer = wx.GridBagSizer(1, 2)
+        self.regionNumPanel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.regionNumLabel = wx.StaticText(parent=self.regionNumPanel,
+                                            id=wx.ID_ANY,
+                                            label=_('Number of sampling area to draw:'))
+        self.regionNumTxt = wx.TextCtrl(parent=self.regionNumPanel,
+                                        id=wx.ID_ANY, size=(50, -1))
+        self.regionPanelSizer.Add(self.regionNumLabel, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 0))
+        self.regionPanelSizer.Add(self.regionNumTxt, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 1))
+
+        self.regionNumPanel.SetSizer(self.regionPanelSizer)
+
+        self.sizer.Add(self.regionNumPanel, flag=wx.ALIGN_LEFT, pos=(1, 0),
+                            span=(1, 2))
+
+        self.typeBox.Bind(wx.EVT_RADIOBOX, self.OnType)
+        self.regionNumTxt.Bind(wx.EVT_TEXT, self.OnNumRegions)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+        self.sizer.AddGrowableCol(0)
+        self.OnType(None)
+        self.regionNumTxt.SetValue('')
+
+    def OnEnterPage(self, event):
+        """!Function during entering"""
+        if self.numregions:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+        else:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+
+    def OnType(self, event):
+        chosen = self.typeBox.GetSelection()
+        if chosen == 0:
+            self.drawtype = 'rectangle'
+        else:
+            self.drawtype = 'circle'
+
+    def OnNumRegions(self, event):
+        """!Set the number of region"""
+        if event.GetString():
+            self.SetNext(self.parent.drawsampleunitspage)
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+            self.numregions = event.GetString()
+        else:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+
+    def OnExitPage(self, event=None):
+        """!Function during exiting"""
+        if event.GetDirection():
+            self.SetNext(self.drawsampleunitspage)
+            self.SetPrev(self.samplingareapage)
+
+
+class DrawSampleUnitsPage(TitledPage):
+    """!Choose the sampling area drawing them"""
+    def __init__(self, wizard, parent):
+        TitledPage.__init__(self, wizard, _("Draw sampling units"))
+        self.parent = parent
+        self.regioncount = 0
+        self.mapPanel = None
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+        #self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
+
+    def SampleFrameChanged(self, region):
+        #region = self.GetSampleUnitRegion()
+        if region:
+            self.parent.msAreaList.append(region)
+        self.regioncount = self.regioncount + 1
+        numregions = int(self.parent.drawunits.numregions)
+        drawtype = self.parent.drawunits.drawtype
+        if self.regioncount > numregions:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+        else:
+            self.title.SetLabel(_('Draw Sampling ' + drawtype  + ' ' \
+                                  + str(self.regioncount) + ' of ' \
+                                  + str(numregions) ))
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+
+    def afterCircleDrawn(self):
+        if region:
+            self.parent.msAreaList.append(region)
+        self.regioncount = self.regioncount + 1
+        numregions = int(self.parent.drawunits.numregions)
+        drawtype = self.parent.drawunits.drawtype
+        if self.regioncount > numregions:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+        else:
+            self.title.SetLabel(_('Draw Sampling ' + drawtype  + ' ' \
+                                  + str(self.regioncount) + ' of ' \
+                                  + str(numregions) ))
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)        
+
+    def OnEnterPage(self, event):
+        """!Function during entering"""
+        if self.mapPanel is None:
+            gtype = self.parent.drawunits.drawtype
+            self.mapPanel = RLiSetupMapPanel(self, samplingType=self.parent.samplingareapage.samplingtype, 
+                                             graphicsType=gtype)
+            if gtype == 'circle':
+                self.mapPanel.afterCircleDrawn.connect(self.afterCircleDrawn)
+            else:
+                self.mapPanel.sampleFrameChanged.connect(self.SampleFrameChanged)
+
+            self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(1, 0))
+            self.sizer.AddGrowableCol(0)
+            self.sizer.AddGrowableRow(1)
+            self._raster = None
+
+        self.SampleFrameChanged(region=None)
+        rast = self.parent.startpage.rast
+
+        if self._raster != rast:
+            map_ = self.mapPanel.GetMap()
+            map_.DeleteAllLayers()
+            cmdlist = ['d.rast', 'map=%s' % rast]
+            map_.AddLayer(ltype='raster', command=cmdlist, active=True,
+                              name=rast, hidden=False, opacity=1.0,
+                              render=True)
+
+    def OnExitPage(self, event=None):
+        #!Function during exiting
+        print event.GetDirection()
+
+        #if event.GetDirection():
+        #    self.SetNext(self.parent.samplingareapage)
+        #    self.parent.samplingareapage.SetPrev(self)
+
+
+class DrawRegionsPage(TitledPage):
+    def __init__(self, wizard, parent):
+        TitledPage.__init__(self, wizard, _("Draw sampling region"))
+        self.parent = parent
+        self.regioncount = 0
+        self.mapPanel = None
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+        #self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
+
+    def afterRegionDrawn(self, marea):
+        if marea:
+            self.parent.msAreaList.append(marea)
+
+        self.regioncount = self.regioncount + 1
+        numregions = int(self.parent.samplingareapage.numregions)
+
+        if self.regioncount > numregions:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+        else:
+            self.title.SetLabel(_('Draw sample region ' + str(self.regioncount) + ' of ' + str(numregions) ))
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+
+    def OnEnterPage(self, event):
+        """!Function during entering"""
+        if self.mapPanel is None:
+            #print self.parent.samplingareapage.samplingtype
+            self.mapPanel = RLiSetupMapPanel(self, samplingType=self.parent.samplingareapage.samplingtype, graphicsType="line")
+            self.mapPanel.afterRegionDrawn.connect(self.afterRegionDrawn)
+
+            self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(1, 0))
+            self.sizer.AddGrowableCol(0)
+            self.sizer.AddGrowableRow(1)
+            self._raster = None
+
+        rast = self.parent.startpage.rast
+        self.afterRegionDrawn(marea=None)
+
+        if self._raster != rast:
+            map_ = self.mapPanel.GetMap()
+            map_.DeleteAllLayers()
+            cmdlist = ['d.rast', 'map=%s' % rast]
+            map_.AddLayer(ltype='raster', command=cmdlist, active=True,
+                              name=rast, hidden=False, opacity=1.0,
+                              render=True)
+
+    #def OnExitPage(self, event=None):
+        #!Function during exiting
+        #print event.GetDirection()
+        #if event.GetDirection():
+        #    self.SetNext(self.parent.samplingareapage)
+        #    self.parent.samplingareapage.SetPrev(self)
+
+
+class VectorAreasPage(TitledPage):
+    """!Choose the sampling area using the vector features"""
+    def __init__(self, wizard, parent):
+        TitledPage.__init__(self, wizard, _("Select sampling areas"))
+        self.parent = parent
+        self.areascount = 0
+        self.mapPanel = None
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
+        self.areaPanelSizer = wx.GridBagSizer(1, 3)
+        self.areaPanel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.areaText = wx.StaticText(parent=self.areaPanel, id=wx.ID_ANY,
+                                     label=_('Is this area ok?'))
+        self.areaOK = wx.Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
+        self.areaNO = wx.Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
+        self.areaOK.Bind(wx.EVT_BUTTON, self.OnYes)
+        self.areaNO.Bind(wx.EVT_BUTTON, self.OnNo)
+        self.areaPanelSizer.Add(self.areaText, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 0))
+        self.areaPanelSizer.Add(self.areaOK, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 1))
+        self.areaPanelSizer.Add(self.areaNO, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 2))
+        self.areaPanel.SetSizer(self.areaPanelSizer)
+        self.sizer.Add(self.areaPanel, flag=wx.ALIGN_CENTER, pos=(2, 0))
+
+    def afterRegionDrawn(self):
+        """!Function to update the title and the number of selected area"""
+        self.areascount = self.areascount + 1
+        if self.areascount == self.areanum:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+            return True
+        else:
+            self.title.SetLabel(_('Select sample area ' + str(self.areascount + 1) \
+                                  + ' of ' + str(self.areanum)))
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+            return False
+
+    def OnYes(self, event):
+        """!Function to create the string for the conf file if the area
+        is selected"""
+        self.parent.msAreaList.append(obtainAreaVector(self.outname))
+        if not self.afterRegionDrawn():
+            self.newCat()
+
+    def OnNo(self, event):
+        """!Function to pass to the next feature if it is not selected"""
+        if not self.afterRegionDrawn():
+            self.newCat()
+
+    def newCat(self):
+        """!Convert to raster and draw the new feature"""
+        cat = self.vect_cats[self.areascount]
+        self.outname = "{name}_{cat}".format(name=self.vect.split('@')[0],
+                                             cat=cat)
+        convertFeature(self.vect, self.outname, cat, self.rast)
+        cmdlistcat = ['d.rast', 'map=%s' % self.outname]
+        self.map_.AddLayer(ltype='raster', command=cmdlistcat, active=True,
+                      name=self.outname, hidden=False, opacity=1.0,
+                      render=True)
+        for l in self.map_.GetListOfLayers():
+            if l.name == self.outname:
+                self.mapPanel.mapWindow.ZoomToMap(layers=[l], render=True,
+                                                  ignoreNulls=True)
+            elif l.name != self.rast:
+                self.map_.DeleteLayer(l)
+        self.areaText.SetLabel("Is this area (cat={n}) ok?".format(n=cat))
+
+    def OnEnterPage(self, event):
+        """!Function during entering: draw the raster map and the first vector
+        feature"""
+        if self.mapPanel is None:
+            #print self.parent.samplingareapage.samplingtype
+            self.mapPanel = RLiSetupMapPanel(self, samplingType=self.parent.samplingareapage.samplingtype,
+                                             graphicsType="line")
+            self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(1, 0))
+            self.sizer.AddGrowableCol(0)
+            self.sizer.AddGrowableRow(1)
+            self._raster = None
+
+        self.rast = self.parent.startpage.rast
+        self.vect = self.parent.startpage.vect
+        self.vect_cats = sorted(set(grass.parse_command('v.category',
+                                                        input=self.vect,
+                                                        type='centroid',
+                                                        option='print').keys()))
+        self.areanum = len(self.vect_cats)
+        if self.areanum == 0:
+            GError(parent=self, message=_("The polygon seems to have 0 areas"))
+            self.parent.wizard.ShowPage(self.parent.samplingareapage)
+            return
+        self.title.SetLabel(_('Select sample area 1 of ' + str(self.areanum)))
+        grass.use_temp_region()
+        if self._raster != self.rast:
+            self.map_ = self.mapPanel.GetMap()
+            self.map_.DeleteAllLayers()
+            cmdlist = ['d.rast', 'map=%s' % self.rast]
+            self.map_.AddLayer(ltype='raster', command=cmdlist, active=True,
+                              name=self.rast, hidden=False, opacity=1.0,
+                              render=True)
+        self.newCat()
+
+    def OnExitPage(self, event=None):
+        """!Function during exiting"""
+        grass.del_temp_region()
+#        if event.GetDirection():
+#            self.SetNext(self.parent.samplingareapage)
+#            self.parent.samplingareapage.SetPrev(self)
 
 
 class SamplingAreasPage(TitledPage):
     """
     Set name of configuration file, choose raster and optionally vector/sites
     """
-
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Insert sampling areas"))
         self.samplingtype = 'whole'
@@ -605,9 +1031,6 @@ class SamplingAreasPage(TitledPage):
                                                  "overlayed vector map")],
                                       majorDimension=1,
                                       style=wx.RA_SPECIFY_COLS | wx.NO_BORDER)
-        self.radioBox.EnableItem(1, False)
-        self.radioBox.SetItemToolTip(1, _("This option is not supported yet"))
-
         # layout
         self.sizer.SetVGap(10)
         self.sizer.Add(item=self.radioBox, flag=wx.ALIGN_LEFT, pos=(0, 0))
@@ -625,9 +1048,57 @@ class SamplingAreasPage(TitledPage):
         # bindings
         self.radioBox.Bind(wx.EVT_RADIOBOX, self.SetVal)
         self.regionBox.Bind(wx.EVT_RADIOBOX, self.OnRegionDraw)
-        self.regionbox = 'keybord'
+        self.regionbox = 'keyboard'
 
+        self.regionPanelSizer = wx.GridBagSizer(1, 2)
+        self.regionNumPanel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.regionNumLabel = wx.StaticText(parent=self.regionNumPanel,
+                                            id=wx.ID_ANY,
+                                            label=_('Number of regions to draw:'))
+        self.regionNumTxt = wx.TextCtrl(parent=self.regionNumPanel,
+                                        id=wx.ID_ANY, size=(50, -1))
+        self.regionPanelSizer.Add(self.regionNumLabel, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 0))
+        self.regionPanelSizer.Add(self.regionNumTxt, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 1))
+
+        self.regionNumPanel.SetSizer(self.regionPanelSizer)
+        self.sizer.Add(self.regionNumPanel, flag=wx.ALIGN_CENTER, pos=(2, 0))
+
+        self.areaPanelSizer = wx.GridBagSizer(1, 3)
+        self.areaPanel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.areaText = wx.StaticText(parent=self.areaPanel, id=wx.ID_ANY,
+                                     label=_('Do you want to check vector areas?'))
+        self.areaOK = wx.Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
+        self.areaOK.SetToolTip(wx.ToolTip(_("Select if use area by area")))
+        self.areaNO = wx.Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
+        self.areaNO.SetToolTip(wx.ToolTip(_("All the features will be used")))
+        self.areaOK.Bind(wx.EVT_BUTTON, self.OnVectYes)
+        self.areaNO.Bind(wx.EVT_BUTTON, self.OnVectNo)
+        self.areaPanelSizer.Add(self.areaText, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 0))
+        self.areaPanelSizer.Add(self.areaOK, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 1))
+        self.areaPanelSizer.Add(self.areaNO, flag=wx.ALIGN_CENTER,
+                                  pos=(0, 2))
+        self.areaPanel.SetSizer(self.areaPanelSizer)
+        self.sizer.Add(self.areaPanel, flag=wx.ALIGN_CENTER, pos=(3, 0))
+
+        self.calculatingAreas = wx.StaticText(parent=self, id=wx.ID_ANY,
+                                     label=_('Analysing all vector features...'))
+        self.sizer.Add(self.calculatingAreas, flag=wx.ALIGN_CENTER, pos=(4, 0))
+        self.numregions = ''
+        self.regionNumTxt.Bind(wx.EVT_TEXT, self.OnNumRegions)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+
+    def OnNumRegions(self, event):
+        """!Obtain the number of regions"""
+        if event.GetString():
+            self.SetNext(self.parent.regions)
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+            self.numregions = event.GetString()
+        else:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
         """!Insert values into text controls for summary of location
@@ -636,63 +1107,114 @@ class SamplingAreasPage(TitledPage):
         self.SetVal(None)
         if self.parent.startpage.vect:
             self.radioBox.ShowItem(4, True)
+            self.vect_data = []
         else:
             self.radioBox.ShowItem(4, False)
         self.sizer.Layout()
-
         wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
     def SetVal(self, event):
         """!Choose method"""
         radio = self.radioBox.GetSelection()
+        wx.FindWindowById(wx.ID_FORWARD).Enable(True)
         if radio == 0:
-            self.samplingtype = 'whole'
+            self.samplingtype = SamplingType.WHOLE
             self.DrawNothing()
-        # elif event.GetInt() == 1: # disabled
-        # self.samplingtype = 'regions'
-        # self.Region()
+        elif radio == 1:
+            self.samplingtype = SamplingType.REGIONS
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         elif radio == 2:
-            self.samplingtype = 'units'
-            self.SetNext(self.parent.units)
-            self.KeyDraw()
+            self.samplingtype = SamplingType.UNITS
+            regtype = self.regionBox.GetSelection()
+            self.RegionDraw(regtype)
+
         elif radio == 3:
-            self.samplingtype = 'moving'
+            self.samplingtype = SamplingType.MVWIN
             self.SetNext(self.parent.moving)
-            self.KeyDraw()
         elif radio == 4:
-            self.samplingtype = 'vector'
-            self.DrawNothing()
+            self.samplingtype = SamplingType.VECT
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+        self.ShowExtraOptions(self.samplingtype)
 
-    def Region(self):
-        """show this only if radio2 it is selected"""
-        try:
+    def ShowExtraOptions(self, samtype):
+        """!Show some extra options for some sampling type"""
+        if samtype == SamplingType.REGIONS:
             self.sizer.Hide(self.regionBox)
-            self.sizer.Remove(self.regionBox)
-            self.sizer.Layout()
-        except:
-            pass
-        gcmd.GMessage(parent=self, message=_("Function not supported yet"))
-        return
-
-    def KeyDraw(self):
-        """Show this only if radio3 and radio4 it is selected"""
-        self.sizer.Show(self.regionBox)
+            self.sizer.Hide(self.areaPanel)
+            self.sizer.Hide(self.calculatingAreas)
+            self.sizer.Show(self.regionNumPanel)
+        elif samtype == SamplingType.UNITS or  samtype == SamplingType.MVWIN:
+            self.sizer.Hide(self.regionNumPanel)
+            self.sizer.Hide(self.areaPanel)
+            self.sizer.Hide(self.calculatingAreas)
+            self.sizer.Show(self.regionBox)
+        elif samtype == SamplingType.VECT:
+            self.sizer.Hide(self.regionBox)
+            self.sizer.Hide(self.regionNumPanel)
+            self.sizer.Hide(self.calculatingAreas)
+            self.sizer.Show(self.areaPanel)
         self.sizer.Layout()
 
     def OnRegionDraw(self, event):
-        """Function called by KeyDraw to find what method is choosed"""
-        if event.GetInt() == 0:
-            self.regionbox = 'keybord'
-            self.SetNext(self.parent.units)
+        self.RegionDraw(event.GetInt())
+        return
 
-        elif event.GetInt() == 1:
-            self.regionbox = 'drawmouse'
-            return
-            #self.SetNext(self.parent.draw)
+    def OnVectYes(self, event):
+        """!The user choose to select the vector areas, this function set the
+        next page to VectorAreasPage"""
+        self.SetNext(self.parent.vectorareas)
+        wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+        self.parent.wizard.ShowPage(self.parent.vectorareas)
+
+    def OnVectNo(self, event):
+        """!The user choose to use all the vector areas, this function analyses
+        all the vector areas and fill the msAreaList variable"""
+        self.sizer.Show(self.calculatingAreas)
+        self.sizer.Hide(self.regionNumPanel)
+        self.sizer.Hide(self.regionBox)
+        self.sizer.Hide(self.areaPanel)
+        self.SetNext(self.parent.summarypage)
+        vect_cats = sorted(set(grass.parse_command('v.category', input=self.parent.startpage.vect,
+                                                   option='print',
+                                                   type='centroid').keys()))
+        self._progressDlg = wx.ProgressDialog(title=_("Analysing vector"),
+                                              message="Analysing vector",
+                                              maximum=len(vect_cats),
+                                              parent=self,
+                                              style=wx.PD_CAN_ABORT | wx.PD_APP_MODAL |
+                                              wx.PD_AUTO_HIDE | wx.PD_SMOOTH)
+        self._progressDlgMax = len(vect_cats)
+        grass.use_temp_region()
+        self.parent.msAreaList = sampleAreaVector(self.parent.startpage.vect,
+                                                  self.parent.startpage.rast,
+                                                  vect_cats,
+                                                  self._progressDlg)
+        grass.del_temp_region()
+        if self.parent.msAreaList:
+            self.calculatingAreas.SetLabel(_("All feature are been analyzed."))
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+            self.parent.wizard.ShowPage(self.parent.summarypage)
+        else:
+            self.calculatingAreas.SetLabel(_("An error occurred"))
+        self._progressDlg.Destroy()
+        self._progressDlg = None
+
+    def RegionDraw(self, regtype):
+        """!Set the next page to units or drawunits"""
+        if regtype == 0:
+            self.regionbox = 'keyboard'
+            self.SetNext(self.parent.units)
+        elif regtype == 1:
+            self.regionbox = 'mouse'
+            self.SetNext(self.parent.drawunits)
 
     def DrawNothing(self):
-        """"""
+        """Remove all the optional choices. Used also when the wizard enter in
+           SamplingAreasPage, all the optional choices should be hide here"""
+        self.sizer.Hide(self.regionNumPanel)
         self.sizer.Hide(self.regionBox)
+        self.sizer.Hide(self.areaPanel)
+        self.sizer.Hide(self.calculatingAreas)
         self.sizer.Layout()
 
         self.SetNext(self.parent.summarypage)
@@ -788,7 +1310,14 @@ class SampleUnitsKeyPage(TitledPage):
         self.sizer.AddGrowableCol(0)
         self.sizer.AddGrowableRow(0)
         self.scrollPanel.SetSizer(self.panelSizer)
+        #self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
         self.OnType(None)
+
+    def OnExitPage(self, event=None):
+        """!Function during exiting"""
+        if event.GetDirection():
+            self.SetNext(self.parent.summarypage)
+            self.SetPrev(self.parent.samplingareapage)
 
     def OnType(self, event):
         chosen = self.typeBox.GetSelection()
@@ -919,7 +1448,6 @@ class MovingWindows(TitledPage):
 
 class SummaryPage(TitledPage):
     """!Shows summary result of choosing data"""
-
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Summary"))
         global rlisettings
@@ -1044,8 +1572,8 @@ class SummaryPage(TitledPage):
         self.regiontxt.SetLabel(self.parent.startpage.region)
         self.vecttxt.SetLabel(self.parent.startpage.vect)
         if self.parent.startpage.region == 'key':
-            #region keybord values
-            self.regionkeylabel.SetLabel(_('Region keybord values:'))
+            #region keyboard values
+            self.regionkeylabel.SetLabel(_('Region keyboard values:'))
             regKeyVals = "Column left up: %s - Row left up: %s\n" \
                          "Column length: %s - Row length: %s\n" % (
                          self.parent.keyboardpage.col_up,
@@ -1057,7 +1585,8 @@ class SummaryPage(TitledPage):
             self.regionkeylabel.SetLabel("")
             self.regionkeytxt.SetLabel("")
 
-        if self.parent.samplingareapage.samplingtype == 'units':
+        if self.parent.samplingareapage.samplingtype == SamplingType.UNITS \
+        and self.parent.samplingareapage.regionbox=='keyboard':
             self.shapelabel.SetLabel(_('Type of shape:'))
             self.shapetxt.SetLabel(self.parent.units.boxtype)
             if self.parent.units.boxtype == 'circle':
@@ -1081,6 +1610,11 @@ class SummaryPage(TitledPage):
                 self.unitsmoretxt.SetLabel(self.parent.units.distr1)
                 self.unitsmorelabel2.SetLabel(_("Number column strates:"))
                 self.unitsmoretxt2.SetLabel(self.parent.units.distr2)
+        elif self.parent.samplingareapage.samplingtype == SamplingType.UNITS \
+        and self.parent.samplingareapage.regionbox == 'mouse':
+            self.shapelabel.SetLabel(_('Type of shape:'))
+            self.shapetxt.SetLabel(self.parent.units.boxtype)
+            self.unitstxt.SetLabel('by mouse')
         elif self.parent.samplingareapage.samplingtype == 'moving':
             self.shapelabel.SetLabel(_('Type of shape:'))
             self.shapetxt.SetLabel(self.parent.moving.boxtype)

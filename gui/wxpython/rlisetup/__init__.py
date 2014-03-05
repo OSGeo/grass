@@ -3,4 +3,5 @@ all = [
     'wizard',
     'functions',
     'frame',
+    'sampling_frame'
     ]

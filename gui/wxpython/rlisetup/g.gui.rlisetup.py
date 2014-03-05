@@ -46,7 +46,7 @@ def main():
     app = wx.PySimpleApp()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
-    frame = RLiSetupFrame(parent = None, giface = StandaloneGrassInterface())
+    frame = RLiSetupFrame(parent=None, giface=StandaloneGrassInterface())
     frame.Show()
 
     app.MainLoop()
