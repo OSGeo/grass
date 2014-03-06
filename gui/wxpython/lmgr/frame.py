@@ -1748,9 +1748,12 @@ class GMFrame(wx.Frame):
                                        lcmd = cmd,
                                        lgroup = None)
 
-    def _updateCurrentMap(self):
+    def _updateCurrentMap(self, **kwargs):
         """!Updates map of the current map window."""
-        self.GetMapDisplay().GetWindow().UpdateMap()
+        if kwargs.has_key('delay'):
+            self.GetMapDisplay().GetWindow().UpdateMap(delay=kwargs['delay'])
+        else:
+            self.GetMapDisplay().GetWindow().UpdateMap()
 
     def OnMapCreated(self, name, ltype, add=None):
         """!Decides wheter the map should be added to layer tree."""

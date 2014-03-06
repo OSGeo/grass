@@ -1111,6 +1111,8 @@ class IClassConnection:
             bands = res.split('\n')
             self.scatt_mgr.SetBands(bands)
 
+
+#TODO uses it also BufferedMapWindow class -> move to core?
 class gThread(threading.Thread, wx.EvtHandler):
     """!Thread for scatter plot backend"""
     requestId = 0
@@ -1140,7 +1142,10 @@ class gThread(threading.Thread, wx.EvtHandler):
         """!Run command in queue
 
         @param args unnamed command arguments
-        @param kwds named command arguments
+        @param kwds named command arguments,
+               keyword 'callable' represents function to be run,
+               keyword 'ondone' represents function to be 
+                       called after the callable is done
 
         @return request id in queue
         """
@@ -1171,7 +1176,7 @@ class gThread(threading.Thread, wx.EvtHandler):
 
             ret = None
             exception = None
-            time.sleep(.1)
+            time.sleep(.01)
 
             if self.terminate:
                 return

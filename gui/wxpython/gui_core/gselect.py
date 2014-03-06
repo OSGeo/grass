@@ -2144,7 +2144,7 @@ class CoordinatesSelect(wx.Panel):
                                       btnId=self.buttonInsCoords.GetId(), 
                                       toggleHandler=self.buttonInsCoords.SetValue)
         self._doLayout()
-        self.coordsField.Bind(wx.EVT_TEXT, lambda event : self._draw())
+        self.coordsField.Bind(wx.EVT_TEXT, lambda event : self._draw(delay=1))
         
     def _doLayout(self):
         self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -2174,12 +2174,11 @@ class CoordinatesSelect(wx.Panel):
                 self.registered = False
                 return
 
-
     def drawCleanUp(self):
         if self.drawMapWin:
             self.drawMapWin.UnregisterGraphicsToDraw(self.pointsToDraw)
 
-    def _draw(self):
+    def _draw(self, delay):
         """!Draws points representing inserted coordinates in mapwindow."""
         if self.drawMapWin != self.mapWin:
             self.drawCleanUp()
@@ -2198,7 +2197,7 @@ class CoordinatesSelect(wx.Panel):
                         i = i * 2
                         self.pointsToDraw.AddItem(coords=(coords[i], coords[i + 1]))
 
-                self._giface.updateMap.emit(render=False, renderVector=False)
+                self._giface.updateMap.emit(render=False, renderVector=False, delay=delay)
 
     def _getCoords(self):
         """!Get list of coordinates.
@@ -2226,7 +2225,7 @@ class CoordinatesSelect(wx.Panel):
         value = prevCoords + str(e) + "," + str(n)
         self.coordsField.SetValue(value)
 
-        self._draw()
+        self._draw(delay=0)
 
     def OnClose(self):
         """!Unregistrates _onMapClickHandler from mapWin"""
