@@ -400,11 +400,8 @@ class CategoryListCtrl(wx.ListCtrl,
 
     def Update(self, **kwargs):
         self.SetItemCount(len(self.cats_mgr.GetCategories()))
-        self.RefreshItems(0, len(self.cats_mgr.GetCategories()))
-
-    def InitCoreCats(self):
-        self.SetItemCount(len(self.cats_mgr.GetCategories()))
-        self.RefreshItems(0, len(self.cats_mgr.GetCategories()))
+        if len(self.cats_mgr.GetCategories()):
+            self.RefreshItems(0, len(self.cats_mgr.GetCategories()) - 1)
 
     def SetVirtualData(self, row, column, text):
         attr = self.columns[column][1]
