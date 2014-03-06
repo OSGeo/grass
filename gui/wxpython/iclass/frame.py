@@ -794,6 +794,7 @@ class IClassMapFrame(DoubleMapFrame):
         """!Show category management dialog"""
         if self.dialogs['classManager'] is None:
             dlg = IClassCategoryManagerDialog(self)
+            dlg.CenterOnParent()
             dlg.Show()
             self.dialogs['classManager'] = dlg
         else:
