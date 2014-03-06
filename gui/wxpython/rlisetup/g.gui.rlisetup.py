@@ -29,7 +29,7 @@
 import os
 import sys
 
-import  wx
+import wx
 import grass.script as grass
 
 wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
@@ -48,6 +48,7 @@ def main():
         wx.InitAllImageHandlers()
     frame = RLiSetupFrame(parent=None, giface=StandaloneGrassInterface())
     frame.Show()
+    frame.CenterOnScreen()
 
     app.MainLoop()
 
