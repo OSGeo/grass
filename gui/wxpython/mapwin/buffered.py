@@ -689,10 +689,18 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         @param render re-render map composition
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
-        @param delay defines time threshold  in seconds for postponing rendering to merge more update requests. 
-               If another request do come within the limit, rendering is delayed again.
-               Next delay limit is chosen according to the lowest delay value of all requests 
+        @param delay defines time threshold  in seconds for postponing 
+               rendering to merge more update requests. 
+               If another request comes within the limit, rendering is delayed again.
+               Next delay limit is chosen according to the smallest delay value of all requests 
                which have come during waiting period.
+
+               Let say that first UpdateMap request come with 5 second delay limit. 
+               After 4  seconds of waiting another UpdateMap request come 
+               with delay limit of 2.5 seconds. New waiting period is set to 2.5 seconds, 
+               because limit of the second request is the smallest. If no other request comes
+               rendering will be done after 6.5 seconds from the first request.
+
                Arguments 'render' and 'renderVector' have priority for True. It means that 
                if more UpdateMap requests come within waiting period and at least one request
                has argument set for True, map will be updated with the True value of the argument.
@@ -709,7 +717,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         updTime = time.time()
         self.lastUpdateMapReq = updTime
 
-        if self.updDelay == 0.0:
+        if self.updDelay <= 0.0:
             self._runUpdateMap()
         else:
             self.timerRunId = self.renderTimingThr.GetId()
