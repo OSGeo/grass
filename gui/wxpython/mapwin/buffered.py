@@ -33,6 +33,7 @@ from grass.pydispatch.signal import Signal
 
 import grass.script as grass
 
+
 from gui_core.dialogs   import SavedRegion
 from core.gcmd          import RunCommand, GException, GError, GMessage
 from core.debug         import Debug
@@ -41,6 +42,7 @@ from mapwin.base import MapWindowBase
 from core.utils         import GetGEventAttribsForHandler, _
 import core.utils as utils
 from mapwin.graphics import GraphicsSet
+from iscatt.controllers import gThread
 
 try:
     import grass.lib.gis as gislib
@@ -89,6 +91,20 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.lineid = None
         # ID of poly line resulting from cumulative rubber band lines (e.g. measurement)
         self.plineid = None
+
+        # following class members deals with merging more updateMap request
+        # into one UpdateMap process 
+
+        # thread where timer for measuring delay limit
+        self.renderTimingThr = gThread();
+        # relevant timer id given by the thread
+        self.timerRunId = None
+        # time, of last updateMap request
+        self.lastUpdateMapReq = None
+        # defines time limit for waiting for another update request
+        self.updDelay = 0
+        # holds information about level of rendering during the delay limit
+        self.render = self.renderVector = False 
 
         # Emitted when zoom of a window is changed
         self.zoomChanged = Signal('BufferedWindow.zoomChanged')
@@ -169,7 +185,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         
         # list for registration of graphics to draw
         self.graphicsSetList = []
-        
+  
     def _definePseudoDC(self):
         """!Define PseudoDC objects to use
         """
@@ -661,25 +677,84 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
     def IsAlwaysRenderEnabled(self):
         return self.alwaysRender
 
-    def UpdateMap(self, render = True, renderVector = True):
+    def UpdateMap(self, render=True, renderVector=True, delay=0.0):
         """!Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
         
         This method should not be called directly.
 
-        @todo change direct calling of UpdateMap method to emittig grass
+        @todo change direct calling of UpdateMap method to emitting grass
         interface updateMap signal
+
+        @todo consider using strong/weak signal instead of delay limit in giface
 
         @param render re-render map composition
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
+        @param delay defines time threshold  in seconds for postponing rendering to merge more update requests. 
+               If another request do come within the limit, rendering is delayed again.
+               Next delay limit is chosen according to the lowest delay value of all requests 
+               which have come during waiting period.
+               Arguments 'render' and 'renderVector' have priority for True. It means that 
+               if more UpdateMap requests come within waiting period and at least one request
+               has argument set for True, map will be updated with the True value of the argument.
         """
-        start = time.clock()
+
+        if self.timerRunId is None or delay < self.updDelay:
+            self.updDelay = delay
+        
+        if render:
+            self.render = render
+        if renderVector:
+            self.renderVector = renderVector
+
+        updTime = time.time()
+        self.lastUpdateMapReq = updTime
+
+        if self.updDelay == 0.0:
+            self._runUpdateMap()
+        else:
+            self.timerRunId = self.renderTimingThr.GetId()
+            self.renderTimingThr.Run(callable=self._timingFunction, 
+                                     ondone=self._onUpdateMap, 
+                                     pid=self.timerRunId)
+
+    def _timingFunction(self, pid):
+        """!Timer measuring elapsed time, since last update request.
+
+        It terminates, when delay limit is exceeded. 
+
+        @param pid - id which defines whether it is newest timer, or there is another one 
+                     (representing newer Update map request).
+                     If it is not the newest, it is terminated.
+        """
+        while True:
+            updTime = time.time()
+            time.sleep(.01)
+            if updTime > self.lastUpdateMapReq + self.updDelay or pid != self.timerRunId:
+                return
+
+    def _onUpdateMap(self, event):
+        if self.timerRunId == event.pid:
+            self._runUpdateMap()
+
+    def _runUpdateMap(self):
+        """!Update map when delay limit is over."""
+        self.timerRunId = None
+        self._updateM(self.render, self.renderVector)
+        self.render = self.renderVector = False
+
+    def _updateM(self, render=True, renderVector=True):
+        """
+        @see method UpdateMap for arguments description.
+        """
         self.resize = False
+        start = time.clock()
         
         # was if self.Map.cmdfile and ...
         if self.IsAlwaysRenderEnabled() and self.img is None:
             render = True
         
+
         #
         # render background image if needed
         #
@@ -1160,7 +1235,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.Zoom(begin, end, zoomtype)
         
         # redraw map
-        self.UpdateMap()
+        self.UpdateMap(delay=0.2)
 
         self.Refresh()
         self.processMouse = True
