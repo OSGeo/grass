@@ -33,7 +33,6 @@ from grass.pydispatch.signal import Signal
 
 import grass.script as grass
 
-
 from gui_core.dialogs   import SavedRegion
 from core.gcmd          import RunCommand, GException, GError, GMessage
 from core.debug         import Debug
@@ -747,8 +746,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """
         @see method UpdateMap for arguments description.
         """
-        self.resize = False
         start = time.clock()
+        self.resize = False
         
         # was if self.Map.cmdfile and ...
         if self.IsAlwaysRenderEnabled() and self.img is None:
