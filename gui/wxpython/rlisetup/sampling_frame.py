@@ -25,7 +25,7 @@ import wx.aui
 
 #start new import
 import tempfile
-from core.gcmd        import RunCommand
+from core.gcmd import RunCommand
 import grass.script.core as grass
 from core import gcmd
 
@@ -104,8 +104,6 @@ class RLiSetupMapPanel(wx.Panel):
         self._toolSwitcher.toggleToolChanged.connect(self._onToolChanged)
         self.toolbar = RLiSetupToolbar(self, self._toolSwitcher)
 
-        self.polycoords = []
-        self.coords = []
         self.catId = 1
 
         self._mgr.AddPane(self.toolbar,
@@ -116,8 +114,6 @@ class RLiSetupMapPanel(wx.Panel):
                           BestSize((self.toolbar.GetBestSize())))
         self._mgr.Update()
 
-        if self.samplingtype != SamplingType.VECT:
-            self.toolbar.SelectDefault()
         #print self.samplingtype
         if self.samplingtype == SamplingType.REGIONS:
             self.afterRegionDrawn = Signal('RLiSetupMapPanel.afterRegionDrawn')
@@ -125,19 +121,22 @@ class RLiSetupMapPanel(wx.Panel):
         elif self.samplingtype in [SamplingType.MUNITSR, SamplingType.KUNITSR,
                                    SamplingType.KMVWINR, SamplingType.MMVWINR]:
             self.sampleFrameChanged = Signal('RLiSetupMapPanel.sampleFrameChanged')
-            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='box')
+            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='rectangle')
         elif self.samplingtype in [SamplingType.MUNITSC, SamplingType.KUNITSC,
                                    SamplingType.KMVWINC, SamplingType.MMVWINC]:
             self.afterCircleDrawn = Signal('RLiSetupMapPanel.afterCircleDrawn')
             self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='line')
         else:
             self.sampleFrameChanged = Signal('RLiSetupMapPanel.sampleFrameChanged')
-            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='box')
+            self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='rectangle')
 
         self._registeredGraphics.AddPen('rlisetup', wx.Pen(wx.GREEN, width=2,
-                                                           style=wx.SHORT_DASH))
+                                                           style=wx.SOLID))
         self._registeredGraphics.AddItem(coords=[[0, 0], [0, 0]],
                                          penName='rlisetup', hide=True)
+
+        if self.samplingtype != SamplingType.VECT:
+            self.toolbar.SelectDefault()
 
     def GetMap(self):
         return self.map_
@@ -174,9 +173,10 @@ class RLiSetupMapPanel(wx.Panel):
         self.mapWindow.pen = wx.Pen(colour=wx.RED, width=1,
                                     style=wx.SHORT_DASH)
         self.mapWindow.SetNamedCursor('cross')
-        self.mapWindow.mouseLeftDown.connect(self._mouseLeftDown)
-        self.mapWindow.mouseMoving.connect(self._mouseMoving)
+        self.mapWindow.mouseLeftUp.connect(self._lineSegmentDrawn)
         self.mapWindow.mouseDClick.connect(self._mouseDbClick)
+
+        self._registeredGraphics.GetItem(0).SetCoords([])
 
     def OnDraw(self, event):
         """!Start draw mode"""
@@ -187,37 +187,27 @@ class RLiSetupMapPanel(wx.Panel):
         self.mapWindow.SetNamedCursor('cross')
         self.mapWindow.mouseLeftUp.connect(self._rectangleDrawn)
 
-    def _mouseLeftDown(self, x, y):
-        self.polycoords.append((x, y))
-        self.coords.append((x, y))
-        if len(self.polycoords) > 1:
-            item = self._registeredGraphics.GetItem(0)
-            item.SetCoords(self.polycoords)
-            self.coords = []
-            self.coords.append((x, y))
-            item.SetPropertyVal('hide', False)
-            self._registeredGraphics.Draw(self.mapWindow.pdc)
+    def _lineSegmentDrawn(self, x, y):
+        item = self._registeredGraphics.GetItem(0)
+        coords = item.GetCoords()
+        if len(coords) == 0:
+            coords.extend([self.mapWindow.Pixel2Cell(self.mapWindow.mouse['begin'])])
+        coords.extend([[x, y]])
 
-    def _mouseMoving(self, x, y):
-        self.mapWindow.mouse['end'] = (x, y)
-        if len(self.coords) > 0:
-            mouse = self.mapWindow.mouse
-            item = self._registeredGraphics.GetItem(0)
-            item.SetCoords([self.coords[0], mouse['end']])
-            item.SetPropertyVal('hide', False)
-            self.mapWindow.ClearLines()
-            self._registeredGraphics.Draw(self.mapWindow.pdcTmp)
+        item.SetCoords(coords)
+        item.SetPropertyVal('hide', False)
+        self.mapWindow.ClearLines()
+        self._registeredGraphics.Draw(self.mapWindow.pdcTmp)
 
     def _mouseDbClick(self, x, y):
-        if len(self.polycoords) > 1:
-            item = self._registeredGraphics.GetItem(0)
-            self.polycoords.append((x, y))
-            self.polycoords.append(self.polycoords[0])
-            item.SetCoords(self.polycoords)
-            item.SetPropertyVal('hide', False)
-            self.mapWindow.ClearLines()
-            self._registeredGraphics.Draw(self.mapWindow.pdc)
-            self.createRegion()
+        item = self._registeredGraphics.GetItem(0)
+        coords = item.GetCoords()
+        coords.extend([[x, y]])
+        item.SetCoords(coords)
+        item.SetPropertyVal('hide', False)
+        self.mapWindow.ClearLines()
+        self._registeredGraphics.Draw(self.mapWindow.pdc)
+        self.createRegion()
 
     def createRegion(self):
         dlg = wx.TextEntryDialog(None, 'Name of sample region',
@@ -225,18 +215,16 @@ class RLiSetupMapPanel(wx.Panel):
         ret = dlg.ShowModal()
         if ret == wx.ID_OK:
             raster = dlg.GetValue()
-            marea = self.writeArea(self.polycoords, raster)
+            marea = self.writeArea(self._registeredGraphics.GetItem(0).GetCoords(), raster)
             self.nextRegion(next=True, area=marea)
         else:
             self.nextRegion(next=False)
         dlg.Destroy()
 
     def nextRegion(self, next=True, area=None):
-        self.coords = []
-        self.polycoords = []
-
         self.mapWindow.ClearLines()
         item = self._registeredGraphics.GetItem(0)
+        item.SetCoords([])
         item.SetPropertyVal('hide', True)
 
         layers = self.map_.GetListOfLayers()
@@ -245,7 +233,7 @@ class RLiSetupMapPanel(wx.Panel):
             self.afterRegionDrawn.emit(marea=area)
         else:
             gcmd.GMessage(parent=self.parent,
-                          message=_("Raster map not created. redraw region again."))
+                          message=_("Raster map not created. Please redraw region."))
 
     def writeArea(self, coords, rasterName):
         polyfile = tempfile.NamedTemporaryFile(delete=False)
@@ -265,6 +253,8 @@ class RLiSetupMapPanel(wx.Panel):
         pname = polyfile.name.split('/')[-1]
         tmpraster = "rast_" + pname
         tmpvector = "vect_" + pname
+        wx.BeginBusyCursor()
+        wx.Yield()
         RunCommand('r.in.poly', input=polyfile.name, output=tmpraster,
                    rows=region_settings['rows'], overwrite=True)
 
@@ -273,7 +263,7 @@ class RLiSetupMapPanel(wx.Panel):
 
         RunCommand('v.to.rast', input=tmpvector, output=rasterName,
                    value=1, use='val', overwrite=True)
-
+        wx.EndBusyCursor()
         grass.use_temp_region()
         grass.run_command('g.region', vect=tmpvector)
         region = grass.region()
@@ -385,9 +375,9 @@ class RLiSetupMapPanel(wx.Panel):
         p2 = self.mapWindow.Pixel2Cell(mouse['end'])
         item.SetCoords([p1, p2])
         region = {'n': max(p1[1], p2[1]),
-                        's': min(p1[1], p2[1]),
-                        'w': min(p1[0], p2[0]),
-                        'e': max(p1[0], p2[0])}
+                  's': min(p1[1], p2[1]),
+                  'w': min(p1[0], p2[0]),
+                  'e': max(p1[0], p2[0])}
         item.SetPropertyVal('hide', False)
         self.mapWindow.ClearLines()
         self._registeredGraphics.Draw(self.mapWindow.pdcTmp)
