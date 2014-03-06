@@ -1112,7 +1112,7 @@ class IClassConnection:
             self.scatt_mgr.SetBands(bands)
 
 
-#TODO uses it also BufferedMapWindow class -> move to core?
+#TODO it uses also BufferedMapWindow class -> move to core?
 class gThread(threading.Thread, wx.EvtHandler):
     """!Thread for scatter plot backend"""
     requestId = 0
