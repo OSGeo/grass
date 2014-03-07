@@ -209,6 +209,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_TREE_END_DRAG,         self.OnEndDrag)
         self.Bind(wx.EVT_TREE_END_LABEL_EDIT,   self.OnRenamed)
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
+        self.Bind(wx.EVT_KEY_DOWN,                self.OnKeyDown)
         self.Bind(wx.EVT_IDLE,                  self.OnIdle)
         self.Bind(wx.EVT_MOTION,                self.OnMotion)
 
@@ -362,7 +363,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.lmgr.OnDeleteLayer(None)
         
         event.Skip()
-        
+
+    def OnKeyDown(self, event):
+        """!Skip event, otherwise causing error when layertree is empty"""
+        event.Skip()
+
     def OnLayerContextMenu (self, event):
         """!Contextual menu for item/layer"""
         if not self.layer_selected:
