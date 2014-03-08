@@ -763,24 +763,34 @@ def set_language():
     # not accepting ISO codes as valid locale identifiers http://bugs.python.org/issue10466
     import locale
     
+    language = 'None' # Such string sometimes is present in wx file
+    
     # Override value is stored in wxGUI preferences file.
     # As it's the only thing required, we'll just grep it out.
     try:
         fd = open(os.path.join(grass_config_dir, 'wx'), 'r')
     except:
-        # Language override has not been defined or is inaccessible
-        return
-    language = 'None' # Such string sometimes is present in wx file
-    for line in fd:
-        if re.search('^language', line):
-            line = line.rstrip('%s' % os.linesep)
-            language = ''.join(line.split(';')[-1:])
-            break
-    if language == 'None':
+        # Even if there is no override, we still need to set locale.
+        pass
+    else:
+        for line in fd:
+            if re.search('^language', line):
+                line = line.rstrip('%s' % os.linesep)
+                language = ''.join(line.split(';')[-1:])
+                break
+        fd.close()
+    
+    if language == 'None' or language == '' or not language:
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
         # have their default locale, we'll just set default locale
         locale.setlocale(locale.LC_ALL, '')
+        if windows and os.getenv('LANG') is None:
+            language, encoding = locale.getdefaultlocale()
+            os.environ['LANG'] = language
+            gettext.install('grasslibs', os.path.join(gisbase, 'locale'), codeset=encoding)
+        else:
+            gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
         return
     
     warning("A language override has been requested. Trying to switch GRASS into '%s'..." % language)
