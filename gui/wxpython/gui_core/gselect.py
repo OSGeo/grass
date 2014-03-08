@@ -2156,10 +2156,11 @@ class CoordinatesSelect(wx.Panel):
         
     def _onClick(self, event):
         """!Button for interacitve inserting of coordinates clicked"""
-        switcher = self._giface.GetMapDisplay().GetToolSwitcher()
-        switcher.ToolChanged(self.buttonInsCoords.GetId())
+
         self.mapWin = self._giface.GetMapWindow()
         if self.buttonInsCoords.GetToggle() and self.mapWin:
+            switcher = self._giface.GetMapDisplay().GetToolSwitcher()
+            switcher.ToolChanged(self.buttonInsCoords.GetId())
             if self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
                                                      self._onMapClickHandler,
                                                      'cross') == False:
@@ -2169,8 +2170,8 @@ class CoordinatesSelect(wx.Panel):
             self._giface.GetMapDisplay().Raise()
         else:
             if self.mapWin and \
-                    self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
-                                                            self._onMapClickHandler):
+               self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
+                                                       self._onMapClickHandler):
                 self.registered = False
                 return
 
