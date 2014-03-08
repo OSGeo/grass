@@ -1224,6 +1224,9 @@ windows = sys.platform == 'win32'
 cygwin = "cygwin" in sys.platform
 macosx = "darwin" in sys.platform
 
+if 'GISBASE' in os.environ:
+    sys.exit(_("ERROR: GRASS GIS seems to be already running. Exiting."))
+
 # Set GISBASE
 os.environ['GISBASE'] = gisbase
 
