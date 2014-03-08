@@ -46,7 +46,7 @@ from grass.script import core as grass
 
 from core          import globalvar
 from core.gcmd     import RunCommand
-from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, StoreEnvVariable, _
+from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, _
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
 from gui_core.widgets import IntegerValidator, ColorTablesComboBox
@@ -177,10 +177,6 @@ class PreferencesBaseDialog(wx.Dialog):
                 lang = 'C'
             self.settings.SaveToFile()
             Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
-            if lang:
-                StoreEnvVariable(key = 'LANG', value = lang)
-            else:
-                StoreEnvVariable(key = 'LANG')
             self.settingsChanged.emit()
             self.Close()
 
@@ -426,6 +422,8 @@ class PreferencesDialog(PreferencesBaseDialog):
             elementList.SetStringSelection(loc)
         if loc == 'C':
             elementList.SetStringSelection('en')
+        if not loc:
+            elementList.SetStringSelection('system')
         self.winId['language:locale:lc_all'] = elementList.GetId()
 
         gridSizer.Add(item = elementList,
