@@ -778,6 +778,9 @@ def set_language():
             break
     if language == 'None':
         # Language override is disabled (system language specified)
+        # As by default program runs with C locale, but users expect to
+        # have their default locale, we'll just set default locale
+        locale.setlocale(locale.LC_ALL, '')
         return
     
     warning("A language override has been requested. Trying to switch GRASS into '%s'..." % language)
