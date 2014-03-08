@@ -8,7 +8,7 @@ control for display management and access to command console.
 Classes:
  - frame::GMFrame
 
-(C) 2006-2013 by the GRASS Development Team
+(C) 2006-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -82,11 +82,14 @@ class GMFrame(wx.Frame):
     GIS. Includes command console page for typing GRASS (and other)
     commands, tree widget page for managing map layers.
     """
-    def __init__(self, parent, id = wx.ID_ANY, title = _("GRASS GIS Layer Manager"),
+    def __init__(self, parent, id = wx.ID_ANY, title = None,
                  workspace = None,
                  size = globalvar.GM_WINDOW_SIZE, style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         self.parent    = parent
-        self.baseTitle = title
+        if title:
+            self.baseTitle = title
+        else:
+            self.baseTitle = _("GRASS GIS %s Layer Manager") % grass.version()['version']
         self.iconsize  = (16, 16)
 
         self.displayIndex    = 0          # index value for map displays and layer trees
@@ -1379,9 +1382,10 @@ class GMFrame(wx.Frame):
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page = self.currentPageNum, text = name)
             mapdisplay = self.GetMapDisplay()
-            mapdisplay.SetTitle(_("GRASS GIS Map Display: %(name)s  - Location: %(loc)s") % \
-                                     { 'name' : name,
-                                       'loc' : grass.gisenv()["LOCATION_NAME"] })
+            mapdisplay.SetTitle(_("GRASS GIS %(version) Map Display: %(name)s - Location: %(loc)s") % \
+                                    { 'version' : grass.version()['version'],
+                                      'name' : name,
+                                      'loc' : grass.gisenv()["LOCATION_NAME"] })
         dlg.Destroy()
         
     def OnRasterRules(self, event):
