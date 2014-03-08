@@ -14,7 +14,7 @@ Classes:
 Usage:
 python mapdisp/main.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
 
-(C) 2006-2013 by the GRASS Development Team
+(C) 2006-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -56,9 +56,6 @@ monFile = { 'cmd' : None,
             }
 monName = None
 monSize = list(globalvar.MAP_WINDOW_SIZE)
-
-
-
 
 class DMonMap(Map):
     def __init__(self, giface, cmdfile=None, mapfile=None):
@@ -448,9 +445,10 @@ if __name__ == "__main__":
     
     gmMap = MapApp(0)
     # set title
-    gmMap.mapFrm.SetTitle(_("GRASS GIS Map Display: " +
-                            monName + 
-                            " - Location: " + grass.gisenv()["LOCATION_NAME"]))
+    gmMap.mapFrm.SetTitle(_("GRASS GIS %(version)s Map Display: %(name)s - Location: %(location)s") % \
+                              { 'version' : grass.version()['version'],
+                                'name' : monName,
+                                'location' : grass.gisenv()["LOCATION_NAME"] })
     
     gmMap.MainLoop()
     

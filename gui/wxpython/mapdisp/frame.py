@@ -9,7 +9,7 @@ Can be used either from Layer Manager or as d.mon backend.
 Classes:
  - mapdisp::MapFrame
 
-(C) 2006-2013 by the GRASS Development Team
+(C) 2006-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
