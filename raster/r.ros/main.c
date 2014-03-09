@@ -826,7 +826,6 @@ int main(int argc, char *argv[])
     Rast_close(maxdir_fd);
     if (spotting) {
 	Rast_close(spotdist_fd);
-	Rast_close(spotdist_fd);
 	G_free(map_elev);
     }
 
