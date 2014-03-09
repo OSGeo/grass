@@ -1237,9 +1237,10 @@ windows = sys.platform == 'win32'
 cygwin = "cygwin" in sys.platform
 macosx = "darwin" in sys.platform
 
-if 'GISBASE' in os.environ:
-    sys.exit(_("ERROR: GRASS GIS is already running "
-               "(environmental variable GISBASE found)"))
+### commented-out: broken winGRASS 
+# if 'GISBASE' in os.environ:
+#     sys.exit(_("ERROR: GRASS GIS is already running "
+#                "(environmental variable GISBASE found)"))
 
 # Set GISBASE
 os.environ['GISBASE'] = gisbase
