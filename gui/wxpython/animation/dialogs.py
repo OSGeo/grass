@@ -1586,7 +1586,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 def test():
     import wx.lib.inspection
 
-    app = wx.PySimpleApp()
+    app = wx.App()
 
 #    testTemporalLayer()
 #    testAnimLmgr()

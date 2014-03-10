@@ -48,7 +48,7 @@ def main():
         grass.set_raise_on_error(False)
         grass.fatal(_("Vector map <%s> not found") % options['map'])
     
-    app = wx.PySimpleApp()
+    app = wx.App()
     grass.message(_("Loading attribute data for vector map <%s>...") % mapName)
     f = AttributeManager(parent = None, id = wx.ID_ANY,
                          title = "%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),

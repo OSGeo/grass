@@ -98,7 +98,7 @@ def main():
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
     
     # launch application
-    app = wx.PySimpleApp()
+    app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
     

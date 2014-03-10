@@ -81,7 +81,7 @@ def main():
             if not gfile['name']:
                 grass.fatal(_("Raster map <%s> not found") % mapName)
 
-    app = wx.PySimpleApp()
+    app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
 

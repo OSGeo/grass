@@ -18,7 +18,7 @@ from core import globalvar
 import wx
 
 def main():
-    app = wx.PySimpleApp()
+    app = wx.App()
     
     if len(sys.argv) == 1:
         msg = "Unknown reason"

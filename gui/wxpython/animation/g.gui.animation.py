@@ -122,7 +122,7 @@ def main():
         layer.cmd = ['d.vect', 'map=']
         layerList.AddLayer(layer)
 
-    app = wx.PySimpleApp()
+    app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
 

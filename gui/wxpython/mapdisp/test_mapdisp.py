@@ -290,7 +290,7 @@ def main():
     options, flags = grass.parser()
     test = options['test']
 
-    app = wx.PySimpleApp()
+    app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
 
