@@ -115,7 +115,7 @@ class LocationDialog(SimpleDialog):
                                      setItems = False, skipCurrent = True,
                                      validator = SimpleValidator(callback = self.ValidatorCallback))
         self.element1.SetFocus()
-        self.warning = _("Location or mapset is missing.")
+        self.warning = _("Location or mapset is not defined.")
         self._layout()
         self.SetMinSize(self.GetSize())
 

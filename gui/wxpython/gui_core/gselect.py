@@ -1176,6 +1176,12 @@ class MapsetSelect(wx.combo.ComboCtrl):
         wx.ComboBox to wx.combo.ComboCtrl"""
         return self.SetValue(text)
 
+    def SetSelection(self, sel=0):
+        """!For backward compatibility. MapsetSelect changed to allow
+        multiple selection, this required to change super-class from
+        wx.ComboBox to wx.combo.ComboCtrl"""
+        self.SetValue('') # TODO: implement SetSelection()
+
     def SetItems(self, items):
         """!For backward compatibility. MapsetSelect changed to allow
         multiple selection, this required to change super-class from
