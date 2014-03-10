@@ -263,8 +263,12 @@ def main():
 	if include_header:
 	    outf.write("x%sy%sz\n" % (ofs, ofs))
 	for line in p.stdout:
-	    xy, z = line.split(' ', 1)
-	    x, y = xy.split('\t')
+            try:
+                xy, z = line.split(' ', 1)
+                x, y = xy.split('\t')
+            except ValueError:
+                grass.fatal(line)
+            
 	    outf.write('%s%s%s%s%s\n' % \
                        (x.strip(), ofs, y.strip(), ofs, z.strip()))
     else:
