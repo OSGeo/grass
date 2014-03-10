@@ -29,21 +29,26 @@
 #% keywords: miscellaneous
 #% keywords: projection
 #%end
+#%option G_OPT_M_COORDS
+#% description: Input coordinates to reproject
+#% guisection: Input coordinates
+#%end
 #%option G_OPT_F_INPUT
-#% description: Name of input coordinate file ('-' to read from stdin)
-#% answer: -
-#% guisection: Files & format
+#% label: Name of input coordinate file
+#% description: '-' to read from standard input
+#% required: no
+#% guisection: Input coordinates
 #%end
 #%option G_OPT_F_OUTPUT
 #% description: Name for output coordinate file (omit to send to stdout)
 #% required : no
-#% guisection: Files & format
+#% guisection: Output
 #%end
 #%option G_OPT_F_SEP
 #% label: Field separator (format: input[,output])
 #% description: Valid field separators are also "space", "tab", or "comma"
 #% required : no
-#% guisection: Files & format
+#% guisection: Output
 #%end
 #%option
 #% key: proj_in
@@ -72,17 +77,17 @@
 #%flag
 #% key: d
 #% description: Output long/lat in decimal degrees, or other projections with many decimal places
-#% guisection: Files & format
+#% guisection: Output
 #%end
 #%flag
 #% key: e
 #% description: Include input coordinates in output file
-#% guisection: Files & format
+#% guisection: Output
 #%end
 #%flag
 #% key: c
 #% description: Include column names in output file
-#% guisection: Files & format
+#% guisection: Output
 #%end
 
 
@@ -110,6 +115,7 @@ class TrThread(threading.Thread):
         self.outf.close()
 
 def main():
+    coords = options['coordinates']
     input = options['input']
     output = options['output']
     fs = options['separator']
@@ -137,6 +143,11 @@ def main():
 
     if output and not grass.overwrite() and os.path.exists(output):
 	grass.fatal(_("Output file already exists")) 
+
+    if not coords and not input:
+        grass.fatal(_("One of <coordinates> and <input> must be given"))
+    if coords and input:
+        grass.fatal(_("Options <coordinates> and <input> are mutually exclusive"))
 
     #### parse field separator
     # FIXME: input_x,y needs to split on multiple whitespace between them
@@ -220,16 +231,24 @@ def main():
     grass.verbose("Output parameters: '%s'" % out_proj)
 
     #### set up input file
-    if input == '-':
-	infile = None
-	inf = sys.stdin
+    if coords:
+        x, y = coords.split(',')
+        tmpfile = grass.tempfile()
+        fd = open(tmpfile, "w")
+        fd.write("%s%s%s\n" % (x, ifs, y))
+        fd.close()
+        inf = file(tmpfile)
     else:
-	infile = input
-	if not os.path.exists(infile):
-	    grass.fatal(_("Unable to read input data"))
-	inf = file(infile)
-	grass.debug("input file=[%s]" % infile)
-
+        if input == '-':
+            infile = None
+            inf = sys.stdin
+        else:
+            infile = input
+            if not os.path.exists(infile):
+                grass.fatal(_("Unable to read input data"))
+            inf = file(infile)
+            grass.debug("input file=[%s]" % infile)
+    
     #### set up output file
     if not output:
 	outfile = None
