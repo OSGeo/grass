@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Create points along lines 
  *               
- * COPYRIGHT:    (C) 2002-2010, 2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -190,8 +190,9 @@ int main(int argc, char **argv)
     }
 
     if (type & (GV_POINTS | GV_LINES | GV_FACE)) {
-	int line, nlines;
+        int line, nlines, nskipped;
 
+        nskipped = 0;
 	nlines = Vect_get_num_lines(&In);
 	for (line = 1; line <= nlines; line++) {
 	    int ltype, cat;
@@ -202,8 +203,10 @@ int main(int argc, char **argv)
 	    ltype = Vect_read_line(&In, LPoints, LCats, line);
 	    if (!(ltype & type))
 		continue;
-            if (!Vect_cat_get(LCats, field, &cat) && field != -1)
+            if (!Vect_cat_get(LCats, field, &cat) && field != -1) {
+                nskipped++;
 		continue;
+            }
 
             /* Assign CAT for layer 0 objects (i.e. boundaries) */
             if (field == -1)
@@ -218,6 +221,12 @@ int main(int argc, char **argv)
 			   flag.inter->answer, dmax, driver, Fi);
 	    }
 	}
+
+        if (nskipped > 0)
+            G_warning(_("%d features without category in layer <%d> skipped. "
+                        "Note that features without category (usually boundaries) are not "
+                        "skipped when '%s=-1' is given."),
+                      nskipped, field, opt.lfield->key);
     }
 
     if (type == GV_AREA) {
