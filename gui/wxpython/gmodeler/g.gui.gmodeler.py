@@ -51,7 +51,7 @@ from core.utils import _, GuiModuleMain
 from gmodeler.frame import ModelFrame
 
 def main():
-    app = wx.PySimpleApp()
+    app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
     frame = ModelFrame(parent = None, giface = StandaloneGrassInterface())

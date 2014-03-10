@@ -736,7 +736,7 @@ class GConsoleFrame(wx.Frame):
 
 
 def testGConsole():
-    app = wx.PySimpleApp()
+    app = wx.App()
     frame = GConsoleFrame(parent = None)
     frame.Show()
     app.MainLoop()

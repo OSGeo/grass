@@ -49,7 +49,7 @@ from psmap.frame import PsMapFrame
 from psmap.instructions import Instruction
 
 def main():
-    app = wx.PySimpleApp()
+    app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
     frame = PsMapFrame(parent = None)

@@ -624,7 +624,7 @@ def testRegionDef():
     import wx.lib.inspection
     import grass.script as grass
 
-    app = wx.PySimpleApp()
+    app = wx.App()
 
     dlg = RegionDef(None, location = grass.gisenv()["LOCATION_NAME"])
     dlg.Show()

@@ -1343,7 +1343,7 @@ class MapManager:
 def test():
     import core.render as render
 
-    app = wx.PySimpleApp()
+    app = wx.App()
     wx.InitAllImageHandlers()
     
     frame = IClassMapFrame()

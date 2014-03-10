@@ -218,7 +218,7 @@ def main():
     n111 = tree.AppendNode(parent=n11, label='node111', data={'xxx': 'A'}) # pylint: disable=W0612
 
 
-    app = wx.PySimpleApp()
+    app = wx.App()
     frame = TreeFrame(model=tree)
 #    frame.tree.Select(n111)
     frame.Show()

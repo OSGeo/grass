@@ -43,7 +43,7 @@ from rlisetup.frame import RLiSetupFrame
 
 
 def main():
-    app = wx.PySimpleApp()
+    app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
     frame = RLiSetupFrame(parent=None, giface=StandaloneGrassInterface())

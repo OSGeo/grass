@@ -243,7 +243,7 @@ def PrepareQueryResults(coordinates, result):
 
 
 def test():
-    app = wx.PySimpleApp()
+    app = wx.App()
     from grass.script import vector as gvect
     from grass.script import raster as grast
     testdata1 = grast.raster_what(map = ('elevation_shade@PERMANENT','landclass96'),
