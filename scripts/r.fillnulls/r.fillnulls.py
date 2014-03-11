@@ -38,7 +38,7 @@
 #% type: string
 #% description: Interpolation method
 #% required: yes
-#% options: linear,cubic,rst
+#% options: bilinear,bicubic,rst
 #% answer: rst
 #%end
 #%option
