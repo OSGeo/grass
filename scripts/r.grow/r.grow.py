@@ -105,10 +105,11 @@ def main():
 
     #check if input file exists
     if not grass.find_file(input)['file']:
-        grass.fatal(_("<%s> does not exist.") % input)
+        grass.fatal(_("Map <%s> does not exist.") % input)
 
-    grass.run_command('r.grow.distance',  input = input, metric = metric,
-                      distance = temp_dist, value = temp_val)
+    if grass.run_command('r.grow.distance',  input = input, metric = metric,
+                      distance = temp_dist, value = temp_val) != 0:
+        grass.fatal(_("Growing failed. Removing temporary maps."))
 
     grass.mapcalc(
         "$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))",
