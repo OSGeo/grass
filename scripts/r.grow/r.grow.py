@@ -2,15 +2,15 @@
 #
 ############################################################################
 #
-# MODULE:	r.grow
-# AUTHOR(S):	Glynn Clements
-# PURPOSE:	Fast replacement for r.grow using r.grow.distance
+# MODULE:    r.grow
+# AUTHOR(S): Glynn Clements
+# PURPOSE:   Fast replacement for r.grow using r.grow.distance
 #
-# COPYRIGHT:	(C) 2008 by Glynn Clements
+# COPYRIGHT: (C) 2008 by Glynn Clements
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+#   This program is free software under the GNU General Public
+#   License (>=v2). Read the file COPYING that comes with GRASS
+#   for details.
 #
 #############################################################################
 
@@ -67,8 +67,8 @@ import grass.script as grass
 # what to do in case of user break:
 def cleanup():
     for map in [temp_dist, temp_val]:
-	if map:
-	    grass.run_command('g.remove', quiet = True, flags = 'f', rast = map)
+        if map:
+            grass.run_command('g.remove', quiet = True, flags = 'f', rast = map)
 
 def main():
     global temp_dist, temp_val
@@ -86,34 +86,34 @@ def main():
     temp_dist = "r.grow.tmp.%s.dist" % tmp
 
     if new == '':
-	temp_val = "r.grow.tmp.%s.val" % tmp
-	new = temp_val
+        temp_val = "r.grow.tmp.%s.val" % tmp
+        new = temp_val
     else:
-	temp_val = None
+        temp_val = None
 
     if old == '':
-	old = input
+        old = input
 
     if not mapunits:
-	kv = grass.region()
-	scale = math.sqrt(float(kv['nsres']) * float(kv['ewres']))
-	radius *= scale
+        kv = grass.region()
+        scale = math.sqrt(float(kv['nsres']) * float(kv['ewres']))
+        radius *= scale
 
     if metric == 'euclidean':
-	metric = 'squared'
-	radius = radius * radius
+        metric = 'squared'
+        radius = radius * radius
 
     #check if input file exists
     if not grass.find_file(input)['file']:
-	grass.fatal(_("<%s> does not exist.") % input)
+        grass.fatal(_("<%s> does not exist.") % input)
 
     grass.run_command('r.grow.distance',  input = input, metric = metric,
-		      distance = temp_dist, value = temp_val)
+                      distance = temp_dist, value = temp_val)
 
     grass.mapcalc(
-	"$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))",
-	output = output, input = input, radius = radius,
-	old = old, new = new, dist = temp_dist)
+        "$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))",
+        output = output, input = input, radius = radius,
+        old = old, new = new, dist = temp_dist)
 
     grass.run_command('r.colors', map = output, raster = input)
 
