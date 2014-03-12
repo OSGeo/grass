@@ -3,16 +3,16 @@
 ############################################################################
 #
 # MODULE:       r.mask
-# AUTHOR(S):	Michael Barton, Arizona State University
+# AUTHOR(S):    Michael Barton, Arizona State University
 #               Markus Neteler
 #               Converted to Python by Glynn Clements
 #               Markus Metz
 # PURPOSE:      Facilitates creation of raster MASK
-# COPYRIGHT:	(C) 2005-2013 by the GRASS Development Team
+# COPYRIGHT:    (C) 2005-2013 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
 #
 #############################################################################
 
@@ -155,15 +155,15 @@ def main():
                               output = 'MASK', use = 'val', val = '1',
                               type = 'area', cats = cats, where = where, env = env)
         
-	if invert:
-	    global tmp
-	    tmp = "r_mask_%d" % os.getpid()
-	    grass.run_command('g.rename', rast = ('MASK', tmp), quiet = True)
+        if invert:
+            global tmp
+            tmp = "r_mask_%d" % os.getpid()
+            grass.run_command('g.rename', rast = ('MASK', tmp), quiet = True)
             grass.message(_("Creating inverted raster MASK..."))
-	    grass.mapcalc("MASK = if(isnull($tmp), 1, null())", tmp = tmp)
-	    grass.verbose(_("Inverted raster MASK created"))
-	else:
-	    grass.verbose(_("Raster MASK created"))
+            grass.mapcalc("MASK = if(isnull($tmp), 1, null())", tmp = tmp)
+            grass.verbose(_("Inverted raster MASK created"))
+        else:
+            grass.verbose(_("Raster MASK created"))
 
         grass.message(_("All subsequent raster operations will be limited to "
                         "the MASK area. Removing or renaming raster map named "

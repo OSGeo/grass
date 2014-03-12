@@ -1,33 +1,33 @@
 #!/usr/bin/env python
 
 ##############################################################################
-# d.rast.leg	(GRASS Shell Script)
+# d.rast.leg        (GRASS Shell Script)
 #
 # displays a raster map and its legend on a graphics window. 
 #
-# Usage: 	d.rast.leg
-#	or	d.rast.leg help
-#	or	d.rast.leg rast_map [num_of_lines]
+# Usage:         d.rast.leg
+#        or      d.rast.leg help
+#        or      d.rast.leg rast_map [num_of_lines]
 #
-# Description:	d.rast.leg clears the entire screen, divides it into a main
-#		(left) and a minor (right) frames, and then display a raster 
-#		map in the main frame and the map legend in the minor frame.
-#		The user can run the program interactively or 
-#		non-interactively.
+# Description:   d.rast.leg clears the entire screen, divides it into a main
+#                (left) and a minor (right) frames, and then display a raster 
+#                map in the main frame and the map legend in the minor frame.
+#                The user can run the program interactively or 
+#                non-interactively.
 #
-# Parameters: 	rast_map 	A raster map to be displayed.
+# Parameters:    rast_map         A raster map to be displayed.
 #
-#	 	num_of_lines 	Number of lines to appear in the legend. 
-#				If this number is not given, the legend frame 
-#				will display as many lines as number of 
-#				categories in the map, otherwise, it will
-#				display the first num_of_lines minus 1  
-#				categories with the rest being truncated. 
+#                num_of_lines         Number of lines to appear in the legend. 
+#                                If this number is not given, the legend frame 
+#                                will display as many lines as number of 
+#                                categories in the map, otherwise, it will
+#                                display the first num_of_lines minus 1  
+#                                categories with the rest being truncated. 
 # 
-# Note:		The user may adjust the num_of_lines parameter or the size of 
-#		graphics window to get an appropriate result.
+# Note:          The user may adjust the num_of_lines parameter or the size of 
+#                graphics window to get an appropriate result.
 #
-# See also:	d.rast, d.legend.
+# See also:      d.rast, d.legend.
 #
 # Jianping Xu and Scott Madry, Rutgers University. October 19, 1993
 # Markus Neteler 8/2002: added simple d.legend logic
@@ -144,7 +144,7 @@ def main():
     if kv['datatype'] is 'CELL':
         leg_at = None
     else:
-        leg_at = '%f,95,5,15' %VSpacing	
+        leg_at = '%f,95,5,15' %VSpacing        
 
 # checking for histogram causes more problems than it solves
 #    histfiledir = grass.find_file(lmap, 'cell_misc')['file']

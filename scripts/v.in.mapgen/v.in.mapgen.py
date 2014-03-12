@@ -93,16 +93,16 @@ def main():
     grass.message(_("Importing data..."))
     cat = 1   
     if matlab:
-	## HB:  OLD v.in.mapgen.sh Matlab import command follows.
-	##    I have no idea what it's all about, so "new" matlab format will be
-	##    a series of x y with "nan nan" breaking lines. (as NOAA provides)
-	##  Old command:
-	#  tac $infile | $AWK 'BEGIN { FS="," ; R=0 }
-	#    $1~/\d*/   { printf("L %d\n", R) }
-	#    $1~/   .*/ { printf(" %lf %lf\n", $2, $1) ; ++R }
-	#    $1~/END/   { }' | tac > "$TMP"
+        ## HB:  OLD v.in.mapgen.sh Matlab import command follows.
+        ##    I have no idea what it's all about, so "new" matlab format will be
+        ##    a series of x y with "nan nan" breaking lines. (as NOAA provides)
+        ##  Old command:
+        #  tac $infile | $AWK 'BEGIN { FS="," ; R=0 }
+        #    $1~/\d*/   { printf("L %d\n", R) }
+        #    $1~/   .*/ { printf(" %lf %lf\n", $2, $1) ; ++R }
+        #    $1~/END/   { }' | tac > "$TMP"
 
-	## matlab format.
+        ## matlab format.
         points = []
  
         for line in inf:
@@ -174,7 +174,7 @@ VERTI:
     host = os.getenv('COMPUTERNAME') or os.uname()[1]
     
     s = t.substitute(prog = prog, name = name, date = date, year = year,
-		     user = user, host = host)
+                     user = user, host = host)
     outf.write(s)
     
     #### process points list to ascii vector file (merge in vertices)
@@ -193,7 +193,7 @@ VERTI:
         #### import to binary vector file
         grass.message(_("Importing with v.in.ascii...")) 
         if grass.run_command('v.in.ascii', flags = do3D, input = digfile,
-			     output = name, format = 'standard') != 0:
+                             output = name, format = 'standard') != 0:
             grass.fatal(_('An error occurred on creating "%s", please check') % name)
 
 if __name__ == "__main__":
