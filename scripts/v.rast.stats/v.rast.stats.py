@@ -2,18 +2,18 @@
 
 ############################################################################
 #
-# MODULE:	v.rast.stats
-# AUTHOR(S):	Markus Neteler
-#		converted to Python by Glynn Clements
-#		speed up by Markus Metz
-#           add column choose by Luca Delucchi
-# PURPOSE:	Calculates univariate statistics from a GRASS raster map
-#		only for areas covered by vector objects on a per-category base
-# COPYRIGHT:	(C) 2005-2010 by the GRASS Development Team
+# MODULE:       v.rast.stats
+# AUTHOR(S):    Markus Neteler
+#               converted to Python by Glynn Clements
+#               speed up by Markus Metz
+#               add column choose by Luca Delucchi
+# PURPOSE:      Calculates univariate statistics from a GRASS raster map
+#               only for areas covered by vector objects on a per-category base
+# COPYRIGHT:    (C) 2005-2010 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
 #
 #############################################################################
 
@@ -76,7 +76,7 @@ def cleanup():
         grass.run_command('g.rename', rast=(tmpname + "_origmask", 'MASK'),
                           quiet=True)
 #    for f in [tmp, tmpname, sqltmp]:
-#	grass.try_remove(f)
+#        grass.try_remove(f)
 
 
 def main():

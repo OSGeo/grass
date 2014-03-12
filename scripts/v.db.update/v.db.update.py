@@ -60,12 +60,12 @@ def main():
 
     # does map exist in CURRENT mapset?
     if not grass.find_file(vector, element = 'vector', mapset = mapset)['file']:
-	grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
+        grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
     try:
         f = grass.vector_db(vector)[int(layer)]
     except KeyError:
-	grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
+        grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
 
     table = f['table']
     database = f['database']
@@ -75,23 +75,23 @@ def main():
     try:
         coltype = grass.vector_columns(vector, layer)[column]['type']
     except KeyError:
-	grass.fatal(_('Column <%s> not found') % column)
+        grass.fatal(_('Column <%s> not found') % column)
 
     if qcolumn:
-	if value:
-	    grass.fatal(_('<value> and <qcolumn> are mutually exclusive'))
-	# special case: we copy from another column
-	value = qcolumn
+        if value:
+            grass.fatal(_('<value> and <qcolumn> are mutually exclusive'))
+        # special case: we copy from another column
+        value = qcolumn
     else:
-	if not value:
-	    grass.fatal(_('Either <value> or <qcolumn> must be given'))
-	# we insert a value
-	if coltype.upper() not in ["INTEGER", "DOUBLE PRECISION"]:
-	    value = "'%s'" % value
+        if not value:
+            grass.fatal(_('Either <value> or <qcolumn> must be given'))
+        # we insert a value
+        if coltype.upper() not in ["INTEGER", "DOUBLE PRECISION"]:
+            value = "'%s'" % value
 
     cmd = "UPDATE %s SET %s=%s" % (table, column, value)
     if where:
-	cmd += " WHERE " + where
+        cmd += " WHERE " + where
 
     grass.verbose("SQL: \"%s\"" % cmd)
 

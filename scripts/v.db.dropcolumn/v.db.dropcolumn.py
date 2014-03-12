@@ -51,7 +51,7 @@ def main():
     
     # does map exist in CURRENT mapset?
     if not grass.find_file(map, element = 'vector', mapset = mapset):
-	grass.fatal(_("Vector map <%s> not found in current mapset") % map)
+        grass.fatal(_("Vector map <%s> not found in current mapset") % map)
     
     f = grass.vector_layer_db(map, layer)
     
@@ -61,11 +61,11 @@ def main():
     driver = f['driver']
     
     if not table:
-	grass.fatal(_("There is no table connected to the input vector map. "
+        grass.fatal(_("There is no table connected to the input vector map. "
                       "Unable to delete any column. Exiting."))
     
     if keycol in columns:
-	grass.fatal(_("Unable to delete <%s> column as it is needed to keep table <%s> "
+        grass.fatal(_("Unable to delete <%s> column as it is needed to keep table <%s> "
                       "connected to the input vector map <%s>") % \
                         (keycol, table, map))
     

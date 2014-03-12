@@ -2,15 +2,15 @@
 #
 ############################################################################
 #
-# MODULE:	r.buffer.lowmem
-# AUTHOR(S):	Glynn Clements
-# PURPOSE:	Low-memory replacement for r.buffer using r.grow.distance
+# MODULE:    r.buffer.lowmem
+# AUTHOR(S): Glynn Clements
+# PURPOSE:   Low-memory replacement for r.buffer using r.grow.distance
 #
-# COPYRIGHT:	(C) 2008, 2010 by Glynn Clements
+# COPYRIGHT: (C) 2008, 2010 by Glynn Clements
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+#   This program is free software under the GNU General Public
+#   License (>=v2). Read the file COPYING that comes with GRASS
+#   for details.
 #
 #############################################################################
 
@@ -77,7 +77,7 @@ def main():
 
     #check if input file exists
     if not grass.find_file(input)['file']:
-	grass.fatal(_("<%s> does not exist.") % input)
+        grass.fatal(_("<%s> does not exist.") % input)
 
     scale = scales[units]
 
@@ -88,28 +88,28 @@ def main():
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if kv['+proj'] == 'longlat':
-	metric = 'geodesic'
+        metric = 'geodesic'
     else:
-	metric = 'squared'
+        metric = 'squared'
 
     grass.run_command('r.grow.distance',  input = input, metric = metric,
-		      distance = temp_dist, flags = 'm')
+                      distance = temp_dist, flags = 'm')
 
     if zero:
-	exp = "$temp_src = if($input == 0,null(),1)"
+        exp = "$temp_src = if($input == 0,null(),1)"
     else:
-	exp = "$temp_src = if(isnull($input),null(),1)"
+        exp = "$temp_src = if(isnull($input),null(),1)"
 
     grass.message(_("Extracting buffers (1/2)..."))
     grass.mapcalc(exp, temp_src = temp_src, input = input)
 
     exp = "$output = if(!isnull($input),$input,%s)"
     if metric == 'squared':
-	for n, dist2 in enumerate(distances2):
-	    exp %= "if($dist <= %f,%d,%%s)" % (dist2,n + 2)
+        for n, dist2 in enumerate(distances2):
+            exp %= "if($dist <= %f,%d,%%s)" % (dist2,n + 2)
     else:
-	for n, dist2 in enumerate(distances1):
-	    exp %= "if($dist <= %f,%d,%%s)" % (dist2,n + 2)
+        for n, dist2 in enumerate(distances1):
+            exp %= "if($dist <= %f,%d,%%s)" % (dist2,n + 2)
     exp %= "null()"
 
     grass.message(_("Extracting buffers (2/2)..."))
@@ -120,8 +120,8 @@ def main():
     p.stdin.write("1:distances calculated from these locations\n")
     d0 = "0"
     for n, d in enumerate(distances):
-	p.stdin.write("%d:%s-%s %s\n" % (n + 2, d0, d, units))
-	d0 = d
+        p.stdin.write("%d:%s-%s %s\n" % (n + 2, d0, d, units))
+        d0 = d
     p.stdin.close()
     p.wait()
 
