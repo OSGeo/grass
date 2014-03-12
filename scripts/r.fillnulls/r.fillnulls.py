@@ -127,7 +127,7 @@ def main():
 
     #check if input file exists
     if not grass.find_file(input)['file']:
-        grass.fatal(_("Map <%s> does not exist.") % input)
+        grass.fatal(_("Raster map <%s> not found") % input)
 
     # save original region
     reg_org = grass.region()

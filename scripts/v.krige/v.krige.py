@@ -332,7 +332,7 @@ def main(argv = None):
         
         #@TODO: Work on verbosity. Sometimes it's too verbose (R), sometimes not enough.
         if grass.find_file(options['input'], element = 'vector')['fullname'] is '':
-            grass.fatal(_("option: <input>: Vector map not found.")) #TODO cosmetics, insert real map name
+            grass.fatal(_("Vector map <%s> not found") % options['input'] )
         
         #@TODO: elaborate input string, if contains mapset or not.. thanks again to Bob for testing on 64bit.
         
