@@ -64,7 +64,7 @@ def main():
     nuldev = file(os.devnull, 'w')
 
     if not grass.find_file(mapname, 'vector')['file']:
-        grass.fatal(_("Vector map '%s' not found in mapset search path.") % mapname)
+        grass.fatal(_("Vector map <%s> not found") % mapname)
 
     colnames = grass.vector_columns(mapname, layer, getDict = False, stderr = nuldev)
     

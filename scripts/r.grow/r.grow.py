@@ -105,7 +105,7 @@ def main():
 
     #check if input file exists
     if not grass.find_file(input)['file']:
-        grass.fatal(_("Map <%s> does not exist.") % input)
+        grass.fatal(_("Raster map <%s> not found") % input)
 
     if grass.run_command('r.grow.distance',  input = input, metric = metric,
                       distance = temp_dist, value = temp_val) != 0:

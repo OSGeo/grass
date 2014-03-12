@@ -112,7 +112,7 @@ def main():
         if raster:
             # check if input raster exists
             if not grass.find_file(raster)['file']:
-                grass.fatal(_("<%s> does not exist.") % raster)
+                grass.fatal(_("Raster map <%s> not found") % raster)
 
             if maskcats != '*' and not remove:
                 if grass.raster_info(raster)['datatype'] != "CELL":
@@ -126,7 +126,7 @@ def main():
         elif vector:
             vector_name = grass.find_file(vector, 'vector')['fullname']
             if not vector_name:
-                grass.fatal(_("<%s> does not exist.") % vector)
+                grass.fatal(_("Vector map <%s> not found") % vector)
             
             # parser bug?
             if len(cats) == 0:
