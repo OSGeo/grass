@@ -121,6 +121,10 @@ int main(int argc, char *argv[])
     G_free(points);
     G_free(lines);
 
+    Vect_copy_head_data(&in, &out);
+    Vect_hist_copy(&in, &out);
+    Vect_hist_command(&out);
+
     Vect_build(&out);
     Vect_close(&out);
     Vect_close(&in);
