@@ -176,10 +176,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                    Map = self.Map)
         
         # title
-        self.mapdisplay.SetTitle(_("GRASS GIS %(version)s Map Display: %(id)d  - Location: %(loc)s") % \
+        self.mapdisplay.SetTitle(_("GRASS GIS %(version)s Map Display: %(id)d  - Location: %(loc)s@%(mapset)s") % \
                                      { 'version' : grass.version()['version'],
                                        'id' : self.displayIndex + 1,
-                                       'loc' : grass.gisenv()["LOCATION_NAME"] })
+                                       'loc' : grass.gisenv()["LOCATION_NAME"],
+                                       'mapset' : grass.gisenv()["MAPSET"] })
         
         # show new display
         if showMapDisplay is True:
