@@ -48,5 +48,5 @@ Comment[uk]=Геоінформаційна система
 Comment[uz]=Geografik axborot tizimi
 Categories=Education;Science;Geoscience;Geography;
 Exec=grass7
-Icon=/usr/share/icons/grass-48x48.png
+Icon=grass
 Terminal=true
