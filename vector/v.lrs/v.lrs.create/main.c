@@ -862,6 +862,11 @@ int main(int argc, char **argv)
     Vect_close(&PMap);
 
     G_message(_("Building topology for output (out_lines) map..."));
+
+    Vect_copy_head_data(&In, &Out);
+    Vect_hist_copy(&In, &Out);
+    Vect_hist_command(&Out);
+
     Vect_build(&Out);
     Vect_close(&Out);
 
