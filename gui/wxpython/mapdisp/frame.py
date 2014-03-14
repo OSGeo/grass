@@ -241,7 +241,17 @@ class MapFrame(SingleMapFrame):
 
     def GetMapWindow(self):
         return self.MapWindow
-    
+
+    def SetTitle(self, displayId = 1):
+        """!Set map display title"""
+        title = _("GRASS GIS %(version)s Map Display: %(id)s  - Location: %(loc)s@%(mapset)s") % \
+            { 'version' : grass.version()['version'],
+              'id' : str(displayId),
+              'loc' : grass.gisenv()["LOCATION_NAME"],
+              'mapset' : grass.gisenv()["MAPSET"] }
+            
+        super(MapFrame, self).SetTitle(title)
+
     def _addToolbarVDigit(self):
         """!Add vector digitizer toolbar
         """

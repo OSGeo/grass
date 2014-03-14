@@ -445,10 +445,7 @@ if __name__ == "__main__":
     
     gmMap = MapApp(0)
     # set title
-    gmMap.mapFrm.SetTitle(_("GRASS GIS %(version)s Map Display: %(name)s - Location: %(location)s") % \
-                              { 'version' : grass.version()['version'],
-                                'name' : monName,
-                                'location' : grass.gisenv()["LOCATION_NAME"] })
+    gmMap.mapFrm.SetTitle(monName)
     
     gmMap.MainLoop()
     

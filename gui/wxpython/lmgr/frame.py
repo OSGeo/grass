@@ -934,6 +934,11 @@ class GMFrame(wx.Frame):
                 GMessage(parent = self,
                          message = _("Current mapset is <%s>.") % mapset)
         
+                dispId = 1
+                for display in self.GetMapDisplay(onlyCurrent = False):
+                    display.SetTitle(dispId) # TODO: signal ?
+                    dispId += 1 
+        
     def OnChangeCWD(self, event):
         """!Change current working directory
         """
