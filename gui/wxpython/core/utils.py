@@ -310,7 +310,7 @@ def ListSortLower(list):
     list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
 
 def GetVectorNumberOfLayers(vector):
-    """!Get list of vector layers connected to database"""
+    """!Get list of all vector layers"""
     layers = list()
     if not vector:
         return layers
