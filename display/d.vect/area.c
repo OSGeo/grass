@@ -233,8 +233,10 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
     }
 
     if ((colors || cvarr_rgb) && get_num_color_rules_skipped() > 0)
-        G_warning(_("%d invalid color rules for areas skipped"), 
-                  get_num_color_rules_skipped());
+        G_warning(_n("%d invalid color rule for areas skipped", 
+                "%d invalid color rules for areas skipped", 
+                get_num_color_rules_skipped()), 
+                get_num_color_rules_skipped());
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(APoints);

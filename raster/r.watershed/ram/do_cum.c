@@ -471,7 +471,9 @@ int do_cum_mfd(void)
 	}
     }
     if (workedon)
-	G_warning(_("MFD: A * path already processed when distributing flow: %d of %d cells"),
+	G_warning(_n("MFD: A * path already processed when distributing flow: %d of %d cell", 
+        "MFD: A * path already processed when distributing flow: %d of %d cells", 
+        do_points),
 		  workedon, do_points);
 
 

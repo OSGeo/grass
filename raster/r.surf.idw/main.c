@@ -252,8 +252,9 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
     nbr_head->searchptr = &(nbr_head->Mptr);	/* see replace_neighbor */
 #endif
 
-    G_message(_("Interpolating raster map <%s> (%d rows)..."), output,
-	      nrows);
+    G_message(_n("Interpolating raster map <%s> (%d row)...", 
+        "Interpolating raster map <%s> (%d rows)...", nrows),
+        output, nrows);
 
     for (row = 0; row < nrows; row++) {	/*  loop over rows      */
 	G_percent(row+1, nrows, 2);

@@ -166,7 +166,8 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
     /* Current region is read and points recorded into observ */
     observ = P_Read_Raster_Region_Map(in_seg, &region, src_reg, &ndata, 1024);
     G_debug(5, "CrossCorrelation: %d points read in region. ", ndata);
-    G_verbose_message(_("%d points read in region"),
+    G_verbose_message(_n("%d point read in region", 
+        "%d points read in region", ndata),
 		      ndata);
 
     if (ndata > 50)

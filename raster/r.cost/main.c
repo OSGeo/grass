@@ -578,7 +578,7 @@ int main(int argc, char *argv[])
 	if (npoints < 1)
 	    G_fatal_error(_("No start points found in vector map <%s>"), Vect_get_full_name(&In));
         else
-            G_verbose_message(_("%d points found"), npoints);
+            G_verbose_message(_n("%d point found", "%d points found", npoints), npoints);
         
 	Vect_close(&In);
     }

@@ -127,7 +127,9 @@ int del_streams(int min_length)
     int other_trib, tmp_trib;
     int slength;
 
-    G_message(_("Deleting stream segments shorter than %d cells..."), min_length);
+    G_message(_n("Deleting stream segments shorter than %d cell...",
+        "Deleting stream segments shorter than %d cells...", min_length),
+        min_length);
 
     /* TODO: proceed from stream heads to outlets
      *       -> use depth first post order traversal */
@@ -188,7 +190,8 @@ int del_streams(int min_length)
 	}
     }
 
-    G_verbose_message(_("%d stream segments deleted"), n_deleted);
+    G_verbose_message(_n("%d stream segment deleted", 
+        "%d stream segments deleted", n_deleted), n_deleted);
 
     return n_deleted;
 }

@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     Rast_command_history(&hist);
     Rast_write_history(OUTPUT, &hist);
 
-    G_done_msg(_("%d clumps."), range.max);
+    G_done_msg(_n("%d clump.", "%d clumps.", range.max), range.max);
 
     exit(EXIT_SUCCESS);
 }

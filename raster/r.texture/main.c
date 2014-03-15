@@ -328,7 +328,8 @@ int main(int argc, char *argv[])
 	}
     }
     if (n_measures > 1)
-	G_message(_("Calculating %d texture measures"), n_measures);
+	G_message(_n("Calculating %d texture measure", 
+        "Calculating %d texture measures", n_measures), n_measures);
     else
 	G_message(_("Calculating %s"), menu[measure_idx[0]].desc);
     alloc_vars(size, dist);

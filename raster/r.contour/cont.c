@@ -79,7 +79,8 @@ void contour(double levels[],
 
     ncrossing = 0;
 
-    G_message(_("Writing vector contours (total levels %d)..."), nlevels);
+    G_message(_n("Writing vector contour (one level)...", 
+        "Writing vector contours (total levels %d)...", nlevels), nlevels);
 
     for (n = 0; n < nlevels; n++) {
 	level = levels[n];
@@ -209,7 +210,9 @@ void contour(double levels[],
     }				/* for levels */
 
     if (ncrossing > 0) {
-	G_warning(_("%d crossings founds"), ncrossing);
+	G_warning(_n("%d crossing found", 
+        "%d crossings found", 
+        ncrossing), ncrossing);
     }
 
     Vect_destroy_line_struct(Points);
