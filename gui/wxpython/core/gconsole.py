@@ -9,7 +9,7 @@ Classes:
  - goutput::GStderr
  - goutput::GConsole
 
-(C) 2007-2012 by the GRASS Development Team
+(C) 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -660,15 +660,13 @@ class GConsole(wx.EvtHandler):
         name = task.get_name()
         for p in task.get_options()['params']:
             prompt = p.get('prompt', '')
-            if prompt in ('raster', 'vector', '3d-raster') and \
-                    (p.get('age', 'old') == 'new' or 
-                     # TODO: do it better (?)
-                     name in ('r.colors', 'r3.colors', 'v.colors')) and \
-                    p.get('value', None):
-                lname = p.get('value')
-                if '@' not in lname:
-                    lname += '@' + grass.gisenv()['MAPSET']
-                self.mapCreated.emit(name=lname, ltype=prompt)
+            if prompt in ('raster', 'vector', '3d-raster') and p.get('value', None):
+                if p.get('age', 'old') == 'new' or \
+                        name in ('r.colors', 'r3.colors', 'v.colors', 'v.proj', 'r.proj'):
+                    lname = p.get('value')
+                    if '@' not in lname:
+                        lname += '@' + grass.gisenv()['MAPSET']
+                    self.mapCreated.emit(name=lname, ltype=prompt)
         if name == 'r.mask':
             self.updateMap.emit()
         
