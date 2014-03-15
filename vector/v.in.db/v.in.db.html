@@ -1,71 +1,116 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.in.db</em> 
-creates new vector (points) map from database table containing coordinates. 
+<em>v.in.db</em> creates a new vector point map from database table or file
+containing coordinates.
 
-<h2>EXAMPLE</h2>
+<h2>NOTES</h2>
 
-<h3>1) Creating a map from PostgreSQL table:</h3>
+If GRASS comes with <a href="grass-ogr.html">OGR</a> support
+than <em>v.in.db</em> allows to import data from different input
+files, eg. CSV or MS Excel (assuming that GDAL/OGR library is compiled
+with this support).
+
+<p>
+<em>v.in.db</em> creates key column &quot;cat&quot; automatically
+when <b>key</b> option is not given. Note that this operation is
+possible to perform only when <b>-t</b> flag is not given. Currently,
+automated creation of key column is supported only when default DB
+driver for output vector map is <a href="grass-sqlite.html">SQLite
+driver</a> otherwise <b>key</b> option must be specified by the
+user. Default DB driver is defined
+by <em><a href="db.connect.html">db.connect</a></em>.
+
+<h2>EXAMPLES</h2>
+
+<h3>Creating a map from PostgreSQL table</h3>
 
 <div class="code"><pre>
 v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
         table=pat_stazioni x=east y=north z=quota key=id output=pat_stazioni
 </pre></div>
-<p>If an ID column is not not present in the PostgreSQL table,
-a new column should be added. See <a href="grass-pg.html">PostgreSQL DB driver</a>
-page for details.
 
-<h3>2) Creating a map from PostGIS:</h3>
+<p>If an ID column is not not present in the PostgreSQL table, a new
+column should be added. See <a href="grass-pg.html">PostgreSQL DB
+driver</a> page for details.
+
+<h3>Creating a map from PostGIS</h3>
 
 To extract coordinate values from PostGIS, functions have to be used:
+
 <div class="code"><pre>
 v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
         table=station x="x(geom)" y="y(geom)" z="z(geom)" key=id out=meteostations
 </pre></div>
-<p>If an ID column is not not present in the PostgreSQL table,
-a new column should be added. See <a href="grass-pg.html">PostgreSQL DB driver</a> 
-page for details.
 
-<p>Alternatively a point vector map can be imported from PostGIS
+<p>If an ID column is not not present in the PostgreSQL table, a new
+column should be added. See <a href="grass-pg.html">PostgreSQL DB
+driver</a> page for details.
+
+<p>Alternatively a vector point map can be imported from PostGIS
 database using <em><a href="v.in.ogr.html">v.in.ogr</a></em>.
 
-<h3>3) Import of a points table (x, y, z) from DBF file to vector points map:</h3>
+<h3>Creating a map from MS Excel file</h3>
+
+A new vector point map is created from given list in MS Excel file
+file. The
+<b>database</b> option points to the file in MS Excel
+format. Option <b>table</b> is name of selected spreadsheet list.
 
 <div class="code"><pre>
-#create vector map from DBF table (here, 'idcol' contains unique row IDs, 'z' is optional):
-#the 'database' parameter is the directory where the DBF file is stored:
+v.in.db table=List1 x=long y=lat z=height output=meteodata \
+         driver=ogr datatabase=meteodata.xls
+</pre></div>
+
+Note that <b>key</b> option is omitted. In this case <em>v.in.db</em>
+tries to add key column automatically. This
+requires <a href="grass-sqlite.html">SQLite</a> to be a default DB
+driver. 
+
+<h3>Creating a map from DBF table</h3>
+
+A new 3D point vector map is created from DBF table. Column 'idcol'
+contains unique row IDs. The <b>database</b> option is the
+directory where the DBF file is stored.
+
+<div class="code"><pre>
 v.in.db driver=dbf database=/home/user/tables/ table=pointsfile x=x y=y z=z \
         key=idcol out=dtmpoints
-
-#check result:
-v.info dtmpoints
-v.info -c dtmpoints
 </pre></div>
-<p>If an ID column is missing in the DBF file, it has to be added beforehand, e.g. with OpenOffice.
-Alternatively, import the table with <em>db.in.ogr</em> into GRASS and then with <em>v.in.db</em>
-from the imported table (<em>db.in.ogr</em> optionally adds an unique ID column).
 
-<h3>4) Import of a points table (x, y, z) from SQLite file to vector points map:</h3>
+To check result:
 
 <div class="code"><pre>
-#create vector map from table in SQLITE database file (here, 'idcol' contains unique row IDs, 'z' is optional):
-#the 'database' parameter is the the SQLite database file with path:
-v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=x y=y z=z \
-        key=idcol out=dtmpoints
-
-#check result:
 v.info dtmpoints
 v.info -c dtmpoints
 </pre></div>
-<p>If an ID column is missing in the table, it has to be added beforehand with 'sqlite3' or
-<em>db.execute</em>.
 
+<p>If DB driver for output vector map is different from SQLite driver
+and an ID column is missing in the DBF file, it has to be added
+beforehand, e.g. with OpenOffice.  Alternatively, import the table
+with <em><a href="db.in.ogr.html">db.in.ogr</a></em> into GRASS and
+then with <em>v.in.db</em> from the imported table
+(<em><a href="db.in.ogr.html">db.in.ogr</a></em> optionally adds an
+unique ID column).
 
-<h3>5) Import of a points table (x, y, z) from DBF file to vector points map for selected points only:</h3>
-<p>The user can import only selected vector points from a table using the <em>where</em> parameter
-(see above for general DBF handling):<p><div class="code"><pre>
+<h3>Creating a point map from DBF table for selected records only</h3>
+
+<p>The user can import only selected vector points from a table using
+the <b>where</b> parameter (see above for general DBF handling):
+
+<div class="code"><pre>
 v.in.db driver=dbf  database=/home/user/tables/ table=pointsfile x=x y=y z=z \
         key=idcol out=dtmpoints where="x NOT NULL and z > 100"
+</pre></div>
+
+<h3>Creating a map from SQLite table</h3>
+
+A new vector point map is created from table in SQLite database
+file. Column 'idcol' contains unique row IDs. The
+<b>database</b> option is the the SQLite database file.
+
+<div class="code"><pre>
+v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=x y=y z=z \
+        key=idcol out=dtmpoints
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -75,13 +120,17 @@ v.in.db driver=dbf  database=/home/user/tables/ table=pointsfile x=x y=y z=z \
 <a href="db.in.ogr.html">db.in.ogr</a>,
 <a href="v.info.html">v.info</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>,
-<a href="v.to.db.html">v.to.db</a>,<br>
-<a href="sql.html">SQL support in GRASS GIS</a>
+<a href="v.to.db.html">v.to.db</a>
 </em>
 
+<p>
+<a href="sql.html">SQL support in GRASS GIS</a>
 
-<h2>AUTHOR</h2>
 
-Radim Blazek
+<h2>AUTHORS</h2>
 
-<p><i>Last changed: $Date$</i>
+Radim Blazek<br>
+Various updates for GRASS 7 by Martin Landa, Czech Technical University in Prague, Czech Republic
+
+<p>
+<i>Last changed: $Date$</i>
