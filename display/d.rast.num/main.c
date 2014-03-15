@@ -172,11 +172,13 @@ int main(int argc, char **argv)
     /* number of rows and cols in window */
 
     if ((nrows > 75) || (ncols > 75)) {
-	G_warning(_("Current region size: %d rows X %d cols\n"
+        /* GTC %s will be replaced by strings "X rows" and "Y cols" */
+        G_warning(_("Current region size: %s X %s\n"
 		    "Your current region setting may be too large. "
 		    "Cells displayed on your graphics window may be too "
 		    "small for cell category number to be visible."),
-		  nrows, ncols);
+		  _n("%d row", "%d rows", nrows), 
+          _n("%d col", "%d cols", ncols));
     }
     if ((nrows > 200) || (ncols > 200)) {
 	G_fatal_error(_("Aborting (region larger then 200 rows X 200 cols is not allowed)"));

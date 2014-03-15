@@ -109,7 +109,8 @@ int main(int argc, char *argv[])
 
     fd = Rast_open_c_new(parm.output->answer);
 
-    G_message(_("Interpolating raster map <%s>... %d rows... "),
+    G_message(_n("Interpolating raster map <%s>... %d row... ",
+        "Interpolating raster map <%s>... %d rows... ", window.rows),
 	      parm.output->answer, window.rows);
 
     north = window.north - window.ns_res / 2.0;

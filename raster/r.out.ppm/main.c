@@ -97,7 +97,8 @@ int main(int argc, char *argv[])
     /*G_get_set_window (&w); *//* 10/99 MN: check for current region */
     G_get_window(&w);
 
-    G_message(_("rows = %d, cols = %d"), w.rows, w.cols);
+    G_message("%s, %s", _n("row = %d", "rows = %d", w.rows), 
+        _n("col = %d", "cols = %d", w.cols));
 
     /* open raster map for reading */
     cellfile = Rast_open_old(rast->answer, "");

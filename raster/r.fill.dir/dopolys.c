@@ -81,7 +81,8 @@ int dopolys(int fd, int fm, int nl, int ns)
 	    recurse_list(flag, cells, found, i);
 	}
     }
-    G_message(_("Found %d unresolved areas"), flag);
+    G_message(_n("Found %d unresolved area", 
+        "Found %d unresolved areas", flag), flag);
 
     /* Compose a new raster map to contain the resulting assignments */
     lseek(fm, 0, SEEK_SET);
