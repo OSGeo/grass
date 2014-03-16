@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Unable to determine feature type for <%s>"),
                           in_opt[0]->key);
         if (!(type[0] & (GV_LINE | GV_AREA)))
-            G_fatal_error(_("Invalid fearure type for <%s>. Only '%s' or '%s' supported."),
+            G_fatal_error(_("Invalid feature type for <%s>. Only '%s' or '%s' supported."),
                           in_opt[0]->key, "line", "area");
         G_debug(1, "auto -> atype=%d", type[0]);
     }
