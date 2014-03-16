@@ -37684,7 +37684,7 @@ msgstr "Impossibile determinare il tipo di cella raster"
 
 #: ../vector/v.overlay/main.c:186
 #, c-format
-msgid "Invalid fearure type for <%s>. Only '%s' or '%s' supported."
+msgid "Invalid feature type for <%s>. Only '%s' or '%s' supported."
 msgstr ""
 
 #: ../vector/v.overlay/main.c:194
