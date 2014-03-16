@@ -37935,7 +37935,7 @@ msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
 #: ../vector/v.overlay/main.c:186
 #, c-format
-msgid "Invalid fearure type for <%s>. Only '%s' or '%s' supported."
+msgid "Invalid feature type for <%s>. Only '%s' or '%s' supported."
 msgstr ""
 
 #: ../vector/v.overlay/main.c:194
