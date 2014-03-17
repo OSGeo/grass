@@ -2145,10 +2145,13 @@ class CoordinatesSelect(wx.Panel):
                                                                    size=globalvar.DIALOG_COLOR_SIZE)
         self.registered = False
         self.buttonInsCoords.Bind(wx.EVT_BUTTON, self._onClick)
-        switcher = self._giface.GetMapDisplay().GetToolSwitcher()
-        switcher.AddCustomToolToGroup(group='mouseUse',
-                                      btnId=self.buttonInsCoords.GetId(), 
-                                      toggleHandler=self.buttonInsCoords.SetValue)
+
+        mapdisp = self._giface.GetMapDisplay()
+        if mapdisp:
+            switcher = mapdisp.GetToolSwitcher()
+            switcher.AddCustomToolToGroup(group='mouseUse',
+                                          btnId=self.buttonInsCoords.GetId(), 
+                                          toggleHandler=self.buttonInsCoords.SetValue)
         self._doLayout()
         self.coordsField.Bind(wx.EVT_TEXT, lambda event : self._draw(delay=1))
         
@@ -2239,8 +2242,11 @@ class CoordinatesSelect(wx.Panel):
         self.drawCleanUp()
         self._giface.updateMap.emit(render=False, renderVector=False)
  
-        switcher = self._giface.GetMapDisplay().GetToolSwitcher()
-        switcher.RemoveCustomToolFromGroup(self.buttonInsCoords.GetId())
+        mapdisp = self._giface.GetMapDisplay()
+        if mapdisp:
+            switcher = mapdisp.GetToolSwitcher()
+            switcher.RemoveCustomToolFromGroup(self.buttonInsCoords.GetId())
+        
         if self.mapWin and self.registered:
             self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,  
                                                     self._onMapClickHandler)
