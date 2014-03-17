@@ -182,9 +182,12 @@ int main(int argc, char *argv[])
         if (type[0] == -1)
             G_fatal_error(_("Unable to determine feature type for <%s>"),
                           in_opt[0]->key);
+        if (type[0] & (GV_BOUNDARY | GV_CENTROID))
+            type[0] = GV_AREA;
+               
         if (!(type[0] & (GV_LINE | GV_AREA)))
-            G_fatal_error(_("Invalid feature type for <%s>. Only '%s' or '%s' supported."),
-                          in_opt[0]->key, "line", "area");
+            G_fatal_error(_("Invalid feature type (%d) for <%s>. Only '%s' or '%s' supported."),
+                          type[0], in_opt[0]->key, "line", "area");
         G_debug(1, "auto -> atype=%d", type[0]);
     }
 
