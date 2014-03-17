@@ -905,7 +905,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                                                 'style' : st})
  
                 self.SetPyData(item, {'type' : 'layer', # is it layer or style?
-                                      'layer' : layer,  # *Layer instance from web_services.cap_interface
+                                      'layer' : layer,  # Layer instance from web_services.cap_interface
                                       'style' : def_st}) # layer can have assigned default style
 
             if parent_layer is None:
@@ -920,7 +920,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
                 AddLayerChildrenToTree(layer, item)
 
         AddLayerChildrenToTree(None, None)
-        self.ExpandAll(self.GetRootItem())
+        #self.ExpandAll(self.GetRootItem())
 
     def GetSelectedLayers(self):
         """!Get selected layers/styles in LayersList
@@ -950,10 +950,39 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
     def OnListSelChanging(self, event):
         """!Do not allow to select items, which cannot be requested from server.
         """
-        cur_item = event.GetItem ()
 
+        def _selectRequestableChildren(item, list_to_check, items_to_sel):
+
+            child_item, cookie = self.GetFirstChild(item)
+            while child_item.IsOk():
+                if  self.GetPyData(child_item)['layer'].IsRequestable() \
+                    and not self.IsSelected(child_item):
+                    items_to_sel.append(child_item)
+                elif not self.GetPyData(child_item)['layer'].IsRequestable():
+                    list_to_check.append(child_item)
+
+                child_item, cookie = self.GetNextChild(item, cookie)
+
+        cur_item = event.GetItem()
         if not self.GetPyData(cur_item)['layer'].IsRequestable():
             event.Veto()
+
+            if not self.HasFlag(wx.TR_MULTIPLE):
+                return
+
+            items_to_chck = []
+            items_to_sel = []
+            chck_item = cur_item
+
+            while True:
+                _selectRequestableChildren(chck_item, items_to_chck, items_to_sel)
+                if items_to_chck:
+                    chck_item = items_to_chck.pop() 
+                else:
+                    break
+
+            while items_to_sel:
+                self.SelectItem(items_to_sel.pop(), unselect_others=False)
 
     def GetItemCount(self):
         """!Required for listmix.ListCtrlAutoWidthMixin
@@ -1018,7 +1047,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             if self.HasFlag(wx.TR_MULTIPLE):
                 un_o = False
 
-            self.SelectItem(item, unselect_others = un_o)
+            self.SelectItem(item, unselect_others=un_o)
             l_st_list.remove(l_st)
 
         return l_st_list
