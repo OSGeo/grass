@@ -342,6 +342,8 @@ int main(int argc, char *argv[])
 	    subregion++;
 	    if (nsubregions > 1)
 		G_message(_("subregion %d of %d"), subregion, nsubregions);
+	    else /* v.outlier -e will report mean point distance: */
+		G_warning(_("No subregions found! Check values for 'soe' and 'son' parameters"));
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
