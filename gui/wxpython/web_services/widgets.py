@@ -953,6 +953,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
 
         def _selectRequestableChildren(item, list_to_check, items_to_sel):
 
+            self.Expand(item)
             child_item, cookie = self.GetFirstChild(item)
             while child_item.IsOk():
                 if  self.GetPyData(child_item)['layer'].IsRequestable() \
