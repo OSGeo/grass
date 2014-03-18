@@ -300,7 +300,7 @@ int Vect_get_node_coor(const struct Map_info *Map, int num, double *x, double *y
 
    \param Map pointer to Map_info struct
    \param line line id
-   \param n1, n2 ids of line nodes (or NULL)
+   \param n1 (start node), n2 (end node) ids of line nodes (or NULL)
 
    \return 1
  */
