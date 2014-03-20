@@ -98,14 +98,14 @@ int main(int argc, char *argv[])
     FILE *in_fp;
     int out_fd;
     char *infile, *outmap;
-    int xcol, ycol, zcol, vcol, max_col, percent;
+    int xcol, ycol, zcol, vcol, max_col, percent, skip_lines;
     int method = -1;
     int bin_n, bin_min, bin_max, bin_sum, bin_sumsq, bin_index;
     double zrange_min, zrange_max, vrange_min, vrange_max, d_tmp;
     char *fs;			/* field delim */
     off_t filesize;
     int linesize;
-    unsigned long estimated_lines;
+    unsigned long estimated_lines, line;
     int from_stdin;
     int can_seek;
 
@@ -120,7 +120,6 @@ int main(int argc, char *argv[])
     int row, col;		/* counters */
 
     int pass, npasses;
-    unsigned long line;
     char buff[BUFFSIZE];
     double x, y, z;
     char **tokens;
@@ -149,7 +148,7 @@ int main(int argc, char *argv[])
     struct Option *input_opt, *output_opt, *delim_opt, *percent_opt,
 	*type_opt;
     struct Option *method_opt, *xcol_opt, *ycol_opt, *zcol_opt, *zrange_opt,
-	*zscale_opt, *vcol_opt, *vrange_opt, *vscale_opt;
+	*zscale_opt, *vcol_opt, *vrange_opt, *vscale_opt, *skip_opt;
     struct Option *trim_opt, *pth_opt;
     struct Flag *scan_flag, *shell_style, *skipline;
 
@@ -219,6 +218,16 @@ int main(int argc, char *argv[])
 	_("If a separate value column is given, this option refers to the "
 	  "z-coordinate column to be filtered by the zrange option");
     zcol_opt->guisection = _("Input");
+
+    skip_opt = G_define_option();
+    skip_opt->key = "skip";
+    skip_opt->type = TYPE_INTEGER;
+    skip_opt->required = NO;
+    skip_opt->multiple = NO;
+    skip_opt->answer = "0";
+    skip_opt->description =
+	_("Number of header lines to skip at top of input file");
+    skip_opt->guisection = _("Input");
 
     zrange_opt = G_define_option();
     zrange_opt->key = "zrange";
@@ -329,6 +338,10 @@ int main(int argc, char *argv[])
     percent = atoi(percent_opt->answer);
     zscale = atof(zscale_opt->answer);
     vscale = atof(vscale_opt->answer);
+
+    skip_lines = atoi(skip_opt->answer);
+    if (skip_lines < 0)
+	G_fatal_error(_("Please specify reasonable number of lines to skip"));
 
     /* parse zrange and vrange */
     if (zrange_opt->answer != NULL) {
@@ -534,6 +547,12 @@ int main(int argc, char *argv[])
 	npasses = 1;
     }
 
+    /* skip past header lines */
+    for (line = 0; line < (unsigned long)skip_lines; line++) {
+	if (0 == G_getl2(buff, BUFFSIZE - 1, in_fp))
+	    break;
+    }
+
     if (scan_flag->answer) {
 	if (zrange_opt->answer || vrange_opt->answer)
 	    G_warning(_("Range filters will not be taken into account during scan"));
@@ -581,8 +600,15 @@ int main(int argc, char *argv[])
 	if (npasses > 1)
 	    G_message(_("Pass #%d (of %d) ..."), pass, npasses);
 
-	if (can_seek)
+	if (can_seek) {
 	    rewind(in_fp);
+
+	    /* skip past header lines again */
+	    for (line = 0; line < (unsigned long)skip_lines; line++) {
+		if (0 == G_getl2(buff, BUFFSIZE - 1, in_fp))
+		    break;
+	    }
+	}
 
 	/* figure out segmentation */
 	pass_north = region.north - (pass - 1) * rows * region.ns_res;
@@ -786,7 +812,6 @@ int main(int argc, char *argv[])
 	G_message(_("Writing to output raster map..."));
 	for (row = 0; row < rows; row++) {
 
-            G_percent(row, rows, 5);
 	    switch (method) {
 	    case METHOD_N:	/* n is a straight copy */
 		Rast_raster_cpy(raster_row,
@@ -1076,6 +1101,8 @@ int main(int argc, char *argv[])
 	    default:
 		G_fatal_error("?");
 	    }
+
+	    G_percent(row, rows, 5);
 
 	    /* write out line of raster data */
 	    Rast_put_row(out_fd, raster_row, rtype);
