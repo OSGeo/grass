@@ -932,12 +932,12 @@ class ExportDialog(wx.Dialog):
                                                     startDirectory=os.getcwd())
 
         dirGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
-        dirGridSizer.AddGrowableCol(1)
         dirGridSizer.Add(prefixLabel, pos=(0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         dirGridSizer.Add(self.prefixCtrl, pos=(0, 1), flag = wx.EXPAND)
         dirGridSizer.Add(formatLabel, pos=(1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         dirGridSizer.Add(self.imSeqFormatChoice, pos=(1, 1), flag = wx.EXPAND)
         dirGridSizer.Add(self.dirBrowse, pos=(2, 0), flag = wx.EXPAND, span = (1, 2))
+        dirGridSizer.AddGrowableCol(1)
         imSeqPanel.SetSizer(dirGridSizer)
         dirGridSizer.Fit(imSeqPanel)
 
@@ -1001,7 +1001,6 @@ class ExportDialog(wx.Dialog):
                                             "if not satisfied with video quality. "
                                             "Options depend on ffmpeg version."))
         aviGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
-        aviGridSizer.AddGrowableCol(1)
         aviGridSizer.Add(self.aviBrowse, pos=(0, 0), span = (1, 2), flag = wx.EXPAND)
         aviGridSizer.Add(encodingLabel, pos=(1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         aviGridSizer.Add(self.encodingText, pos=(1, 1), flag = wx.EXPAND)
@@ -1011,6 +1010,7 @@ class ExportDialog(wx.Dialog):
             aviGridSizer.Add(warningLabel, pos=(3, 0), span=(1, 2),
                              flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
+        aviGridSizer.AddGrowableCol(1)
         aviPanel.SetSizer(aviGridSizer)
         aviGridSizer.Fit(aviPanel)
 

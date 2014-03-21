@@ -229,8 +229,8 @@ def RenderText(text, font):
     dc.SetBackgroundMode(wx.TRANSPARENT)
     dc.Clear()
     dc.DrawText(text, 1, 1)
-    bmp.SetMaskColour(wx.WHITE)
     dc.SelectObject(wx.NullBitmap)
+    bmp.SetMaskColour(wx.WHITE)
 
     return bmp
 

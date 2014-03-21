@@ -249,6 +249,7 @@ class AnimationFrame(wx.Frame):
             win = SpeedDialog(self, temporalMode=self.controller.GetTemporalMode(),
                               timeGranularity=self.controller.GetTimeGranularity(),
                               initialSpeed=self.controller.timeTick)
+            win.CenterOnParent()
             self.dialogs['speed'] = win
             win.speedChanged.connect(self.ChangeSpeed)
             win.Show()

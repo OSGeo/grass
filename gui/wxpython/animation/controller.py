@@ -456,6 +456,7 @@ class AnimationController(wx.EvtHandler):
         else:
             dlg = ExportDialog(self.frame, temporal=self.temporalMode,
                                timeTick=self.timeTick)
+            dlg.CenterOnParent()
             dlg.doExport.connect(self._export)
             self._dialogs['export'] = dlg
             dlg.Show()
