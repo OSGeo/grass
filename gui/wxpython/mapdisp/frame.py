@@ -244,8 +244,14 @@ class MapFrame(SingleMapFrame):
 
     def SetTitle(self, displayId = 1):
         """!Set map display title"""
+        try:
+            grassVersion = grass.version()['version']
+        except KeyError:
+            sys.stderr.write(_("Unable to get GRASS version"))
+            grassVersion = "?"
+        
         title = _("GRASS GIS %(version)s Map Display: %(id)s  - Location: %(loc)s@%(mapset)s") % \
-            { 'version' : grass.version()['version'],
+            { 'version' : grassVersion,
               'id' : str(displayId),
               'loc' : grass.gisenv()["LOCATION_NAME"],
               'mapset' : grass.gisenv()["MAPSET"] }
