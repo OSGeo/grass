@@ -92,7 +92,7 @@ class GMFrame(wx.Frame):
             try:
                 grassVersion = grass.version()['version']
             except KeyError:
-                sys.stderr.write(_("Unable to get GRASS version"))
+                sys.stderr.write(_("Unable to get GRASS version\n"))
                 grassVersion = "?"
             self.baseTitle = _("GRASS GIS %s Layer Manager") % grassVersion
 
@@ -979,7 +979,9 @@ class GMFrame(wx.Frame):
     def OnSystemInfo(self, event):
         """!Print system information"""
         vInfo = grass.version()
-        
+        if not vInfo:
+            sys.stderr.write(_("Unable to get GRASS version\n"))
+
         # check also OSGeo4W on MS Windows
         if sys.platform == 'win32' and \
                 not os.path.exists(os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")):
@@ -1001,11 +1003,11 @@ class GMFrame(wx.Frame):
                                 "SQLite: %s\n"
                                 "Python: %s\n"
                                 "wxPython: %s\n"
-                                "%s: %s%s\n"% (_("GRASS version"), vInfo['version'],
-                                               _("GRASS SVN Revision"), vInfo['revision'],
-                                               _("Build Date"), vInfo['build_date'],
-                                               # _("GIS Library Revision"), vInfo['libgis_revision'], vInfo['libgis_date'].split(' ', 1)[0],
-                                               vInfo['gdal'], vInfo['proj4'], vInfo['geos'], vInfo['sqlite'],
+                                "%s: %s%s\n"% (_("GRASS version"), vInfo.get('version', _('unknown version')),
+                                               _("GRASS SVN Revision"), vInfo.get('revision', '?'),
+                                               _("Build Date"), vInfo.get('build_date', '?'),
+                                               # _("GIS Library Revision"), vInfo.get('libgis_revision'], vInfo.get('libgis_date'].split(' ', 1)[0],
+                                               vInfo.get('gdal', '?'), vInfo.get('proj4', '?'), vInfo.get('geos', '?'), vInfo.get('sqlite', '?'),
                                                platform.python_version(),
                                                wx.__version__,
                                                _("Platform"), platform.platform().decode('utf8', 'replace'), osgeo4w),
