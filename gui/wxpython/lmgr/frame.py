@@ -89,7 +89,13 @@ class GMFrame(wx.Frame):
         if title:
             self.baseTitle = title
         else:
-            self.baseTitle = _("GRASS GIS %s Layer Manager") % grass.version()['version']
+            try:
+                grassVersion = grass.version()['version']
+            except KeyError:
+                sys.stderr.write(_("Unable to get GRASS version"))
+                grassVersion = "?"
+            self.baseTitle = _("GRASS GIS %s Layer Manager") % grassVersion
+
         self.iconsize  = (16, 16)
 
         self.displayIndex    = 0          # index value for map displays and layer trees
