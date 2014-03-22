@@ -247,7 +247,7 @@ class MapFrame(SingleMapFrame):
         try:
             grassVersion = grass.version()['version']
         except KeyError:
-            sys.stderr.write(_("Unable to get GRASS version"))
+            sys.stderr.write(_("Unable to get GRASS version\n"))
             grassVersion = "?"
         
         title = _("GRASS GIS %(version)s Map Display: %(id)s  - Location: %(loc)s@%(mapset)s") % \

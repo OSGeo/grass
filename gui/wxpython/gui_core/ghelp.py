@@ -9,7 +9,7 @@ Classes:
  - ghelp::HelpWindow
  - ghelp::HelpPanel
 
-(C) 2008-2012 by the GRASS Development Team
+(C) 2008-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -22,6 +22,7 @@ import codecs
 import platform
 import re
 import textwrap
+import sys
 
 import wx
 from wx.html import HtmlWindow
@@ -95,6 +96,8 @@ class AboutWindow(wx.Frame):
         """!Info page"""
         # get version and web site
         vInfo = grass.version()
+        if not vInfo:
+            sys.stderr.write(_("Unable to get GRASS version\n"))
         
         infoTxt = ScrolledPanel(self.aboutNotebook)
         infoTxt.SetBackgroundColour('WHITE')
@@ -109,7 +112,7 @@ class AboutWindow(wx.Frame):
                       flag = wx.ALL | wx.ALIGN_CENTER, border = 20)
         
         info = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                             label = 'GRASS GIS ' + vInfo['version'] + '\n')
+                             label = 'GRASS GIS ' + vInfo.get('version', _('unknown version')) + '\n')
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         info.SetForegroundColour(wx.Colour(35, 142, 35))
         infoSizer.Add(item = info, proportion = 0,
@@ -137,7 +140,7 @@ class AboutWindow(wx.Frame):
                           flag = wx.ALIGN_RIGHT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = vInfo['revision']),
+                                               label = vInfo.get('revision', '?')),
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
         
@@ -148,7 +151,7 @@ class AboutWindow(wx.Frame):
                           flag = wx.ALIGN_RIGHT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = vInfo['build_date']),
+                                               label = vInfo.get('build_date', '?')),
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
         
@@ -798,5 +801,12 @@ def ShowAboutDialog(prgName, startYear):
     wx.AboutBox(info)
 
 def _grassDevTeam(start):
-    end = grass.version()['date']
+    try:
+        end = grass.version()['date']
+    except KeyError:
+        sys.stderr.write(_("Unable to get GRASS version\n"))
+        
+        from datetime import date
+        end = date.today().year
+    
     return '%(c)s %(start)s-%(end)s by the GRASS Development Team' % {'c': unichr(169), 'start': start, 'end': end}
