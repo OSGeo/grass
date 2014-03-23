@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "date=%s\n", GRASS_VERSION_DATE);
 	fprintf(stdout, "revision=%s\n", GRASS_VERSION_SVN);
 	fprintf(stdout, "build_date=%d-%02d-%02d\n", YEAR, MONTH, DAY);
+	fprintf(stdout, "build_platform=%s\n", ARCH);
     }
     else {
 	fprintf(stdout, "GRASS %s (%s)\n",
