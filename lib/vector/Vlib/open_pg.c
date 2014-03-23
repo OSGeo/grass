@@ -98,13 +98,6 @@ int V1_open_old_pg(struct Map_info *Map, int update)
     if (!pg_info->conn)
         connect_db(pg_info);
     
-    /* get DB name */
-    pg_info->db_name = G_store(PQdb(pg_info->conn));
-    if (!pg_info->db_name) {
-        G_warning(_("Unable to get database name"));
-        return -1;
-    }
-
     /* get fid and geometry column */
     sprintf(stmt, "SELECT f_geometry_column, coord_dimension, srid, type "
             "FROM geometry_columns WHERE f_table_schema = '%s' AND "
@@ -248,16 +241,9 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
     G_debug(1, "V1_open_new_pg(): conninfo='%s' table='%s'",
             pg_info->conninfo, pg_info->table_name);
 
-    /* connect database */
+    /* connect database & get DB name */
     connect_db(pg_info);
     
-    /* get DB name */
-    pg_info->db_name = G_store(PQdb(pg_info->conn));
-    if (!pg_info->db_name) {
-        G_warning(_("Unable to get database name"));
-        return -1;
-    }
-
     /* if schema not defined, use 'public' */
     if (!pg_info->schema_name)
         pg_info->schema_name = G_store("public");
@@ -462,34 +448,38 @@ int drop_table(struct Format_info_pg *pg_info)
     
     PGresult *result, *result_drop;
     
-    /* drop topology schema(s) related to the feature table */
-    sprintf(stmt, "SELECT t.name FROM topology.layer AS l JOIN "
-            "topology.topology AS t ON l.topology_id = t.id "
-            "WHERE l.table_name = '%s'", pg_info->table_name);
-    G_debug(2, "SQL: %s", stmt);
-    
-    result = PQexec(pg_info->conn, stmt);
-    if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
-        G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
-        PQclear(result);
-        return -1;
-    }
-    for (i = 0; i < PQntuples(result); i++) {
-        topo_schema = PQgetvalue(result, i, 0);
-        sprintf(stmt, "SELECT topology.DropTopology('%s')",
-                topo_schema);
+    /* check if topology schema exists */
+    sprintf(stmt, "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'topology'");
+    if (Vect__execute_get_value_pg(pg_info->conn, stmt) != 0) {
+        /* drop topology schema(s) related to the feature table */
+        sprintf(stmt, "SELECT t.name FROM topology.layer AS l JOIN "
+                "topology.topology AS t ON l.topology_id = t.id "
+                "WHERE l.table_name = '%s'", pg_info->table_name);
         G_debug(2, "SQL: %s", stmt);
         
-        result_drop = PQexec(pg_info->conn, stmt);
-        if (!result_drop || PQresultStatus(result_drop) != PGRES_TUPLES_OK)
+        result = PQexec(pg_info->conn, stmt);
+        if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
             G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
-        
-        G_verbose_message(_("PostGIS topology schema <%s> dropped"),
-                          topo_schema);
-        PQclear(result_drop);
+            PQclear(result);
+            return -1;
+        }
+        for (i = 0; i < PQntuples(result); i++) {
+            topo_schema = PQgetvalue(result, i, 0);
+            sprintf(stmt, "SELECT topology.DropTopology('%s')",
+                    topo_schema);
+            G_debug(2, "SQL: %s", stmt);
+            
+            result_drop = PQexec(pg_info->conn, stmt);
+            if (!result_drop || PQresultStatus(result_drop) != PGRES_TUPLES_OK)
+                G_warning(_("Execution failed: %s"), PQerrorMessage(pg_info->conn));
+            
+            G_verbose_message(_("PostGIS topology schema <%s> dropped"),
+                              topo_schema);
+            PQclear(result_drop);
+        }
+        PQclear(result);
     }
-    PQclear(result);
-    
+
     /* drop feature table */
     sprintf(stmt, "DROP TABLE \"%s\".\"%s\"",
             pg_info->schema_name, pg_info->table_name);
@@ -520,10 +510,16 @@ void connect_db(struct Format_info_pg *pg_info)
                       _("Connection to PostgreSQL database failed."),
                       PQerrorMessage(pg_info->conn));
 
+    /* get DB name */
+    pg_info->db_name = G_store(PQdb(pg_info->conn));
+    if (!pg_info->db_name)
+        G_warning(_("Unable to get database name"));
+    
     sprintf(stmt, "SELECT COUNT(*) FROM pg_tables WHERE tablename = 'spatial_ref_sys'");
     if (Vect__execute_get_value_pg(pg_info->conn, stmt) != 1) {
         PQfinish(pg_info->conn);
-        G_fatal_error(_("Spatial-enabled PostGIS database is required"));
+        G_fatal_error(_("<%s> is not PostGIS database. DB table 'spatial_ref_sys' not found."),
+                      pg_info->db_name ? pg_info->db_name : pg_info->conninfo);
     }
 
     if (pg_info->toposchema_name) {
@@ -531,7 +527,8 @@ void connect_db(struct Format_info_pg *pg_info)
         sprintf(stmt, "SELECT COUNT(*) FROM pg_tables WHERE schemaname = 'topology'");
         if (Vect__execute_get_value_pg(pg_info->conn, stmt) == 0) {
             PQfinish(pg_info->conn);
-            G_fatal_error(_("PostGIS Topology extension not found in the database"));
+            G_fatal_error(_("PostGIS Topology extension not found in the database <%s>"),
+                          pg_info->db_name);
         }
     }
 
