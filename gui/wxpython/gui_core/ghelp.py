@@ -111,8 +111,11 @@ class AboutWindow(wx.Frame):
         infoSizer.Add(item = logoBitmap, proportion = 0,
                       flag = wx.ALL | wx.ALIGN_CENTER, border = 20)
         
+        infoLabel = 'GRASS GIS %s' % vInfo.get('version', _('unknown version'))
+        if '64' in vInfo.get('build_platform', ''):
+            infoLabel += ' (64bit)'
         info = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                             label = 'GRASS GIS ' + vInfo.get('version', _('unknown version')) + '\n')
+                             label = infoLabel + os.linesep)
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         info.SetForegroundColour(wx.Colour(35, 142, 35))
         infoSizer.Add(item = info, proportion = 0,
