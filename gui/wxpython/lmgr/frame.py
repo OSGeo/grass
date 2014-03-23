@@ -996,6 +996,7 @@ class GMFrame(wx.Frame):
         self._gconsole.WriteLog("%s: %s\n"
                                 "%s: %s\n"
                                 "%s: %s\n"
+                                "%s: %s\n"
                                 # "%s: %s (%s)\n"
                                 "GDAL/OGR: %s\n"
                                 "PROJ.4: %s\n"
@@ -1006,6 +1007,7 @@ class GMFrame(wx.Frame):
                                 "%s: %s%s\n"% (_("GRASS version"), vInfo.get('version', _('unknown version')),
                                                _("GRASS SVN Revision"), vInfo.get('revision', '?'),
                                                _("Build Date"), vInfo.get('build_date', '?'),
+                                               _("Build Platform"), vInfo.get('build_platform', '?'),
                                                # _("GIS Library Revision"), vInfo.get('libgis_revision'], vInfo.get('libgis_date'].split(' ', 1)[0],
                                                vInfo.get('gdal', '?'), vInfo.get('proj4', '?'), vInfo.get('geos', '?'), vInfo.get('sqlite', '?'),
                                                platform.python_version(),
