@@ -276,3 +276,6 @@ class StandaloneGrassInterface():
         # TODO: implement some progress with same inface as gui one
         # (probably using g.message or similarly to Write... functions)
         raise NotImplementedError()
+
+    def UpdateCmdHistory(self, cmd):
+        raise NotImplementedError()

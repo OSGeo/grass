@@ -187,6 +187,8 @@ class LayerManagerGrassInterface(object):
     def GetProgress(self):
         return self.lmgr.goutput.GetProgressBar()
 
+    def UpdateCmdHistory(self, cmd):
+        self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
 class LayerManagerGrassInterfaceForMapDisplay(object):
     """!Provides reference only to the given layer list (according to tree),

@@ -1771,7 +1771,7 @@ class CmdPanel(wx.Panel):
         if self.parent.GetName() == "MainFrame" and self.parent.get_dcmd is None:
             from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE
             from gui_core.goutput import GConsoleWindow
-            self._gconsole = GConsole(guiparent = self.notebook)
+            self._gconsole = GConsole(guiparent = self.notebook, giface = self._giface)
             self.goutput = GConsoleWindow(parent = self.notebook, gconsole = self._gconsole, margin = False)
             self._gconsole.Bind(EVT_CMD_RUN,
                                 lambda event:

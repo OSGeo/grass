@@ -7,7 +7,7 @@ Classes:
  - prompt::GPrompt
  - prompt::GPromptSTC
 
-(C) 2009-2011 by the GRASS Development Team
+(C) 2009-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -44,7 +44,7 @@ class GPrompt(object):
 
     See subclass GPromptPopUp and GPromptSTC.
     """
-    def __init__(self, parent, menuModel, updateCmdHistory):
+    def __init__(self, parent, menuModel):
         self.parent = parent                 # GConsole
         self.panel  = self.parent.GetPanel()
 
@@ -62,8 +62,7 @@ class GPrompt(object):
         
         # command description (gtask.grassTask)
         self.cmdDesc   = None
-
-        self._updateCmdHistory = updateCmdHistory
+        
         self.cmdbuffer = self._readHistory()
         self.cmdindex  = len(self.cmdbuffer)
         
@@ -119,7 +118,7 @@ class GPrompt(object):
         self.promptRunCmd.emit(cmd=cmd)
 
         # add command to history & clean prompt
-        self.UpdateCmdHistory(cmd)
+        ### self.UpdateCmdHistory(cmd)
         self.OnCmdErase(None)
         self.ShowStatusText('')
         
@@ -134,9 +133,8 @@ class GPrompt(object):
 
 class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     """!Styled wxGUI prompt with autocomplete and calltips"""    
-    def __init__(self, parent, menuModel, updateCmdHistory = True, margin = False):
-        GPrompt.__init__(self, parent = parent, 
-                         menuModel = menuModel, updateCmdHistory = updateCmdHistory)
+    def __init__(self, parent, menuModel, margin = False):
+        GPrompt.__init__(self, parent = parent, menuModel = menuModel)
         wx.stc.StyledTextCtrl.__init__(self, self.panel, id = wx.ID_ANY)
         
         #
@@ -283,12 +281,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     def UpdateCmdHistory(self, cmd):
         """!Update command history
         
-        @param cmd command given as a list
+        @param cmd command given as a string
         """
-        if not self._updateCmdHistory:
-            return
         # add command to history    
-        self.cmdbuffer.append(' '.join(cmd))
+        self.cmdbuffer.append(cmd)
         
         # keep command history to a managable size
         if len(self.cmdbuffer) > 200:
