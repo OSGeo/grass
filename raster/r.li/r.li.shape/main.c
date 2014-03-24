@@ -6,9 +6,10 @@
  *                students of Computer Science University of Pisa (Italy)
  *               Commission from Faunalia Pontedera (PI) www.faunalia.it
  *               Fixes: Markus Neteler <neteler itc.it>
- *               
- * PURPOSE:      calculates shape index
- * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
+ *               Rewrite: Markus Metz
+ *
+ * PURPOSE:      calculates patch number index
+ * COPYRIGHT:    (C) 2007-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS

@@ -1,14 +1,19 @@
-
-/*
- * \brief calculates mean pixel attribute index
+/****************************************************************************
  *
- *  \AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
- *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
+ * MODULE:       r.li.mpa
+ * AUTHOR(S):    Serena Pallecchi (original contributor)
+ *                student of Computer Science University of Pisa (Italy)
+ *               Commission from Faunalia Pontedera (PI) www.faunalia.it
+ *               Rewrite: Markus Metz
  *
- *   This program is free software under the GPL (>=v2)
- *   Read the COPYING file that comes with GRASS for details.
+ * PURPOSE:      calculates mean pixel attribute index
+ * COPYRIGHT:    (C) 2007-2014 by the GRASS Development Team
  *
- */
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/raster.h>

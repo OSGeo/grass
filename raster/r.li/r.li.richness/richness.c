@@ -1,14 +1,18 @@
-
-/*
- * \brief calculates richness diversity index
+/****************************************************************************
  *
- *  \AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
- *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
+ * MODULE:	r.li.ritchness
  *
- *   This program is free software under the GPL (>=v2)
- *   Read the COPYING file that comes with GRASS for details.
+ * PURPOSE:	calculates richness diversity index
  *
- */
+ * AUTHOR(S):	Serena Pallecchi student of Computer Science University of Pisa (Italy)
+ *              Commission from Faunalia Pontedera (PI) www.faunalia.it
+ *              Rewrite: Markus Metz
+ *            	
+ * COPYRIGHT:
+ *		This program is free software under the GPL (>=v2)
+ *		Read the COPYING file that comes with GRASS for details.
+ *
+ ***************************************************************************/
 
 #include <stdlib.h>
 #include <fcntl.h>

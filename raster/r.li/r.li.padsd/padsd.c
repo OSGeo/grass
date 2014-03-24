@@ -191,7 +191,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
 		return 0;
 	}
-	
+
 	ltmp = pid_sup;
 	pid_sup = pid_corr;
 	pid_corr = ltmp;

@@ -3,7 +3,7 @@
  *
  * MODULE:	r.li.renyi
  *
- * PURPOSE:	brief calculates renyi's diversity index
+ * PURPOSE:	calculates renyi's diversity index
  *
  * AUTHOR(S):	Luca Delucchi, Fondazione Edmund Mach         
  *		Serena Pallecchi student of Computer Science University of Pisa (Italy)
