@@ -449,25 +449,8 @@ class GConsole(wx.EvtHandler):
             return
 
         # update history file
-        env = grass.gisenv()
-        try:
-            filePath = os.path.join(env['GISDBASE'],
-                                    env['LOCATION_NAME'],
-                                    env['MAPSET'],
-                                    '.bash_history')
-            fileHistory = codecs.open(filePath, encoding='utf-8', mode='a')
-        except IOError, e:
-            GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
-                    {'filePath': filePath, 'error': e},
-                   parent=self._guiparent)
-            fileHistory = None
-
-        if fileHistory:
-            try:
-                fileHistory.write(' '.join(command) + os.linesep)
-            finally:
-                fileHistory.close()
-
+        self.UpdateHistoryFile(' '.join(command))
+        
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
             # except ignored commands (event is emitted)
@@ -674,3 +657,31 @@ class GConsole(wx.EvtHandler):
 
     def OnProcessPendingOutputWindowEvents(self, event):
         wx.GetApp().ProcessPendingEvents()
+
+    def UpdateHistoryFile(self, command):
+        """!Update history file
+        
+        @param command the command given as a string
+        """
+        env = grass.gisenv()
+        try:
+            filePath = os.path.join(env['GISDBASE'],
+                                    env['LOCATION_NAME'],
+                                    env['MAPSET'],
+                                    '.bash_history')
+            fileHistory = codecs.open(filePath, encoding='utf-8', mode='a')
+        except IOError, e:
+            GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
+                    {'filePath': filePath, 'error': e},
+                   parent=self._guiparent)
+            return
+        
+        try:
+            fileHistory.write(command + os.linesep)
+        finally:
+            fileHistory.close()
+        
+        # update wxGUI prompt
+        if self._giface:
+            self._giface.UpdateCmdHistory(command)
+        

@@ -164,7 +164,7 @@ class ModelSearchDialog(wx.Dialog):
         # menu data for search widget and prompt
         menuModel = LayerManagerMenuData()
         
-        self.cmd_prompt = GPromptSTC(parent = self, menuModel = menuModel.GetModel(), updateCmdHistory = False)
+        self.cmd_prompt = GPromptSTC(parent = self, menuModel = menuModel.GetModel())
         self.cmd_prompt.promptRunCmd.connect(self.OnCommand)
         self.cmd_prompt.commandSelected.connect(lambda command: self.label.SetValue(command))
         self.search = SearchModuleWidget(parent = self.panel,
