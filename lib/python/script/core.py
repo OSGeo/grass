@@ -978,7 +978,7 @@ def locn_is_latlong():
     """
     s = read_command("g.region", flags='p')
     kv = parse_key_val(s, ':')
-    if kv['projection'].split(' ')[1] == '3':
+    if kv['projection'].split(' ')[0] == '3':
         return True
     else:
         return False
