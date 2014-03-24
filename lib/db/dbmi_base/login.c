@@ -3,7 +3,7 @@
   
   \brief DBMI Library (base) - login settings
   
-  (C) 1999-2009 by the GRASS Development Team
+  (C) 1999-2014 by the GRASS Development Team
   
   This program is free software under the GNU General Public
   License (>=v2). Read the file COPYING that comes with GRASS
@@ -87,7 +87,7 @@ static int read_file(LOGIN * login)
     login->n = 0;
     file = login_filename();
 
-    G_debug(3, "DB login file = <%s>", file);
+    G_debug(3, "read_file(): DB login file = <%s>", file);
 
     if (access(file, F_OK) != 0) {
 	G_debug(3, "login file does not exist");
@@ -95,8 +95,10 @@ static int read_file(LOGIN * login)
     }
 
     fd = fopen(file, "r");
-    if (fd == NULL)
+    if (fd == NULL) {
+        G_warning(_("Unable to read file '%s'"), file);
 	return -1;
+    }
 
     while (G_getl2(buf, 2000, fd)) {
 	G_chop(buf);
@@ -108,7 +110,7 @@ static int read_file(LOGIN * login)
 		ret, dr, db, usr, pwd);
 
 	if (ret < 2) {
-	    G_warning(_("Login file corrupted"));
+	    G_warning(_("Login file (%s) corrupted (line: %s)"), file, buf);
 	    continue;
 	}
 
@@ -133,11 +135,13 @@ static int write_file(LOGIN * login)
 
     file = login_filename();
 
-    G_debug(3, "DB login file = <%s>", file);
+    G_debug(3, "write_file(): DB login file = <%s>", file);
 
     fd = fopen(file, "w");
-    if (fd == NULL)
+    if (fd == NULL) {
+        G_warning(_("Unable to write file '%s'"), file);
 	return -1;
+    }
 
     /* fchmod is not available on Windows */
     /* fchmod ( fileno(fd), S_IRUSR | S_IWUSR ); */
