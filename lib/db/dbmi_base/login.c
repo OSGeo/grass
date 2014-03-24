@@ -42,8 +42,8 @@ static const char *login_filename(void)
     static char *file;
 
     if (!file) {
-	file = (char *)malloc(1000);
-	sprintf(file, "%s/%s/dblogin", G_home(), CONFIG_DIR);
+	file = (char *)db_malloc(GPATH_MAX);
+	sprintf(file, "%s/dblogin", G_config_path());
     }
     return file;
 }
