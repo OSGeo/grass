@@ -125,6 +125,7 @@ class WSDialogBase(wx.Dialog):
             self.ws_panels[ws]['panel'] =  WSPanel(parent = self.reqDataPanel,
                                                    web_service = ws)
             self.ws_panels[ws]['panel'].capParsed.connect(self.OnPanelCapParsed)
+            self.ws_panels[ws]['panel'].layerSelected.connect(self.OnLayerSelected)
 
         # buttons
         self.btn_close = wx.Button(parent = self, id = wx.ID_CLOSE)
@@ -144,6 +145,11 @@ class WSDialogBase(wx.Dialog):
         self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
         self.settsManager.settingsLoaded.connect(self.OnSettingsLoaded)
         self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
+
+    def OnLayerSelected(self, title):
+
+        if not self.layerName.GetValue().strip():
+            self.layerName.SetValue(title)
 
     def _doLayout(self):
 
@@ -331,6 +337,7 @@ class WSDialogBase(wx.Dialog):
         """!Update layer name to web service panel
         """
         lname = event.GetString()
+        lname = lname.encode('ascii', 'replace')
 
         for v in self.ws_panels.itervalues():
             v['panel'].SetOutputLayerName(lname.strip())
@@ -541,7 +548,8 @@ class AddWSDialog(WSDialogBase):
             shutil.copyfile(cap_file, cmd_cap_file)
             lcmd.append('capfile=' + cmd_cap_file)
 
-        layer = ltree.AddLayer(ltype = 'wms', lname = self.layerName.GetValue(), 
+        layer = ltree.AddLayer(ltype = 'wms',
+                               lname = self.active_ws_panel.GetOutputLayerName(), 
                                lchecked = True, lcmd = lcmd)
 
 
