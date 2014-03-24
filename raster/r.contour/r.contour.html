@@ -25,7 +25,7 @@ in the output vector map.
 raster cells eligilble to be included in a contour line written to the <b>output</b> 
 vector map. It acts like a filter, omitting spurs, single points, etc., making the output more generalized.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 In the Spearfish location, produce a vector contour map from input raster <i>elevation.dem</i> 
 with contour levels from 1000m to 2000m, 100m contour step, and a minimum of 200 input raster
@@ -33,6 +33,15 @@ points contributing to the contour line:
 
 <div class="code"><pre>
 r.contour input=elevation.dem output=elevation_dem_contours minlevel=1000 maxlevel=2000 step=100 cut=200
+</pre></div>
+
+<p>
+
+North Carolina example:
+<p>
+<div class="code"><pre>
+g.region rast=elev_lid792_1m -p
+r.contour input=elev_lid792_1m output=elev_lid792_1m_contours minlevel=100 maxlevel=150 step=10
 </pre></div>
 
 <h2>AUTHORS</h2>
