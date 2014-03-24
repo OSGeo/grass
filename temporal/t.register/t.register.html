@@ -32,7 +32,7 @@ the <em>(r|r3|v).timestamp</em> modules have no access to the temporal database.
 <p>
 
 
-<h2>INPUT FILE FOTMAT</h2>
+<h2>INPUT FILE FORMAT</h2>
 
 Specification of map names:
 <div class="code"><pre>
@@ -43,7 +43,8 @@ prec_4
 prec_5
 prec_6
 </pre></div>
-Specification of map names and the absolut start time of the time instances:
+
+Specification of map names and the absolute start time (date) of the time instances:
 <div class="code"><pre>
 prec_1|2001-01-01
 prec_2|2001-02-01
@@ -52,6 +53,16 @@ prec_4|2001-04-01
 prec_5|2001-05-01
 prec_6|2001-06-01
 </pre></div>
+
+Specification of map names and the absolute time stamp (datetime):
+<div class="code"><pre>
+terra_lst_day20020113|2002-01-13 10:30
+terra_lst_day20020114|2002-01-14 10:30
+terra_lst_day20020115|2002-01-15 10:30
+terra_lst_day20020116|2002-01-16 10:30
+terra_lst_day20020117|2002-01-17 10:30
+</pre></div>
+
 Specification of the map name and the absolute time interval with start and end time:
 <div class="code"><pre>
 prec_1|2001-01-01|2001-04-01
