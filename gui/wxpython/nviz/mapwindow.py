@@ -2590,3 +2590,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         @param textinfo text metadata (text, font, color, rotation)
         """
         return self.parent.MapWindow2D.TextBounds(textinfo, relcoords = True)
+
+    def DisactivateWin(self):
+        """!Use when the class instance is hidden in MapFrame."""
+        pass
+
+    def ActivateWin(self):
+        """!Used when the class instance is activated in MapFrame."""
+        pass

@@ -383,3 +383,11 @@ class MapWindowBase(object):
         self.zoomtype = zoomType
         self.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         self.SetNamedCursor('cross')
+
+    def DisactivateWin(self):
+        """!Use when the class instance is hidden in MapFrame."""
+        raise NotImplementedError()
+
+    def ActivateWin(self):
+        """!Used when the class instance is activated in MapFrame."""
+        raise NotImplementedError()

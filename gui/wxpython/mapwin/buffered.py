@@ -175,8 +175,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self._buffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
         
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x:None)
+
         # rerender when Map reports change
-        self.Map.layerChanged.connect(lambda: self.UpdateMap())
+        self.Map.layerChanged.connect(self.OnUpdateMap)
         
         # vars for handling mouse clicks
         self.dragid   = -1
@@ -184,7 +185,20 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         
         # list for registration of graphics to draw
         self.graphicsSetList = []
-  
+
+    def OnUpdateMap(self):
+        # before lambda func was used, however it was problem 
+        # to disconnect it from signal
+        self.UpdateMap()
+
+    def DisactivateWin(self):
+        """!Use when the class instance is hidden in MapFrame."""
+        self.Map.layerChanged.disconnect(self.OnUpdateMap)
+
+    def ActivateWin(self):
+        """!Used when the class instance is activated in MapFrame."""
+        self.Map.layerChanged.connect(self.OnUpdateMap)
+
     def _definePseudoDC(self):
         """!Define PseudoDC objects to use
         """

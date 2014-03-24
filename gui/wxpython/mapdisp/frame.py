@@ -292,7 +292,7 @@ class MapFrame(SingleMapFrame):
                           CloseButton(False).DestroyOnClose(True).
                           Layer(0))
         
-        self.MapWindow = self.MapWindowVDigit
+        self._switchMapWindow(self.MapWindowVDigit)
         
         if self._mgr.GetPane('2d').IsShown():
             self._mgr.GetPane('2d').Hide()
@@ -362,7 +362,7 @@ class MapFrame(SingleMapFrame):
                                         Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self._setUpMapWindow(self.MapWindow3D)
             self.MapWindow3D.mapQueried.connect(self.Query)
-            self.MapWindow = self.MapWindow3D
+            self._switchMapWindow(self.MapWindow3D)
             self.MapWindow.SetNamedCursor('default')
 
             # here was AddNvizTools in lmgr
@@ -382,7 +382,7 @@ class MapFrame(SingleMapFrame):
             self.MapWindow3D.overlayHidden.connect(self._hideOverlay)
             self.legend.overlayChanged.connect(self.MapWindow3D.UpdateOverlays)
         else:
-            self.MapWindow = self.MapWindow3D
+            self._switchMapWindow(self.MapWindow3D)
             os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True, windres3 = True)
             self.MapWindow3D.GetDisplay().Init()
             del os.environ['GRASS_REGION']
@@ -436,7 +436,7 @@ class MapFrame(SingleMapFrame):
         self._mgr.GetPane('2d').Show()
         self._mgr.GetPane('3d').Hide()
 
-        self.MapWindow = self.MapWindow2D
+        self._switchMapWindow(self.MapWindow2D)
         # here was RemoveNvizTools form lmgr
         self.ending3dMode.emit()
         try:
@@ -503,7 +503,7 @@ class MapFrame(SingleMapFrame):
         if name == 'vdigit':
             self._mgr.GetPane('vdigit').Hide()
             self._mgr.GetPane('2d').Show()
-            self.MapWindow = self.MapWindow2D
+            self._switchMapWindow(self.MapWindow2D)
             
         self.toolbars['map'].combo.SetValue(_("2D view"))
         self.toolbars['map'].Enable2D(True)
@@ -1334,3 +1334,10 @@ class MapFrame(SingleMapFrame):
         handler).
         """
         self.GetMapToolbar().SelectDefault()
+
+    def _switchMapWindow(self, map_win):
+        """!Notifies activated and disactivated map_wins."""
+        self.MapWindow.DisactivateWin()
+        map_win.ActivateWin()
+
+        self.MapWindow = map_win
