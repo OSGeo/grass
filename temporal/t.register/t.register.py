@@ -19,6 +19,7 @@
 #% keywords: temporal
 #% keywords: map management
 #% keywords: register
+#% overwrite: yes
 #%end
 
 #%option G_OPT_STDS_INPUT
