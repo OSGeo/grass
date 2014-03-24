@@ -1,9 +1,9 @@
 /*!
  * \file gis/home.c
  *
- * \brief GIS Library - Get user's home directory.
+ * \brief GIS Library - Get user's home or config directory.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2014 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -22,6 +22,8 @@
  * Returns a pointer to a string which is the full path name of the
  * user's home directory.
  *
+ * Calls G_fatal_error() on failure.
+ *
  * \return pointer to string
  * \return NULL on error
  */
@@ -38,7 +40,7 @@ const char *G_home(void)
 }
 
 /*!
- * \brief Get user's home directory
+ * \brief Get user's home directory (internal use only)
  *
  * Returns a pointer to a string which is the full path name of the
  * user's home directory.
@@ -78,32 +80,36 @@ const char *G__home(void)
     return home;
 }
 
-
-#ifdef TODO
-#include <stdio.h>
-#define RCDIR ".grass7"
-
 /*!
- * \brief Get user's .grass/ config path directory
+ * \brief Get user's config path directory
  *
  * Returns a pointer to a string which is the full path name of the
- * user's .grass/ config directory in their home directory.
+ * user's GRASS config directory in their home directory.
  *
  * The path is not guaranteed to exist.
-(should it be?  see possible TODO below)
+ *
+ * \todo should it be? see possible TODO below
  *
  * \return pointer to string
  * \return NULL on error
  */
-const char *G_rc_path(void)
+const char *G_config_path(void)
 {
-/* choose better name for fn? */
-/* HB: making a complete bollocks of this, but to express the idea... */
-    const char *rcpath = 0;
+    static int initialized_config;
+    static const char *config_path = 0;
+    char buf[GPATH_MAX];
+    
+    if (G_is_initialized(&initialized_config))
+        return config_path;
+    
+#ifdef __MINGW32__
+    sprintf(buf, "%s%c%s", getenv("APPDATA"), HOST_DIRSEP, CONFIG_DIR);
+#else    
+    sprintf(buf, "%s%c%s", G_home(), HOST_DIRSEP, CONFIG_DIR);
+#endif
+    config_path = G_store(buf);
 
-    sprintf(rcpath, "%s%c%s", G_home(), HOST_DIRSEP, RCDIR);
-
-#ifdef POSSIBILITY
+#if 0
     /* create it if it doesn't exist */
 #include <errno.h>
     int ret;
@@ -112,6 +118,7 @@ const char *G_rc_path(void)
 	G_fatal_error(_("Failed to create directory [%s]"), rcpath);
 #endif
 
-    return G_store(rcpath);
+    G_initialize_done(&initialized_config);
+
+    return config_path;
 }
-#endif
