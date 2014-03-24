@@ -125,6 +125,8 @@ class WSPanel(wx.Panel):
 
         self._layout()
 
+        self.layerSelected = self.list.layerSelected
+
         self.Bind(EVT_CMD_DONE, self.OnCapDownloadDone)
         self.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
 
@@ -819,6 +821,9 @@ class WSPanel(wx.Panel):
         """
         self.o_layer_name = name
 
+    def GetOutputLayerName(self):
+        return self.o_layer_name
+
     def GetCapFile(self):
         """!Get path to file where capabilities are saved
         """
@@ -851,6 +856,8 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         
         self.root = None
         self.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnListSelChanging)
+
+        self.layerSelected = Signal('LayersList.layerSelected')
 
     def LoadData(self, cap = None):
         """!Load data into list
@@ -950,6 +957,9 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
     def OnListSelChanging(self, event):
         """!Do not allow to select items, which cannot be requested from server.
         """
+        def _emitSelected(layer):
+            title = layer.GetLayerData('title')
+            self.layerSelected.emit(title = title)
 
         def _selectRequestableChildren(item, list_to_check, items_to_sel):
 
@@ -971,6 +981,8 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             if not self.HasFlag(wx.TR_MULTIPLE):
                 return
 
+            _emitSelected(self.GetPyData(cur_item)['layer'])
+
             items_to_chck = []
             items_to_sel = []
             chck_item = cur_item
@@ -984,7 +996,9 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
 
             while items_to_sel:
                 self.SelectItem(items_to_sel.pop(), unselect_others=False)
-
+        else:
+            _emitSelected(self.GetPyData(cur_item)['layer'])
+          
     def GetItemCount(self):
         """!Required for listmix.ListCtrlAutoWidthMixin
         """
