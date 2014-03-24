@@ -96,7 +96,11 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define PROJECTION_FILE "PROJ_INFO"
 #define UNIT_FILE       "PROJ_UNITS"
 
+#ifdef __MINGW32__
+#define CONFIG_DIR "GRASS7"
+#else
 #define CONFIG_DIR ".grass7"
+#endif
 
 /* define PI and friends */
 #undef M_PI

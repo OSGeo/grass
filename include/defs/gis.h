@@ -318,6 +318,7 @@ void G__call_error_handlers(void);
 /* home.c */
 const char *G_home(void);
 const char *G__home(void);
+const char *G_config_path(void);
 
 /* ilist.c */
 void G_init_ilist(struct ilist *);
