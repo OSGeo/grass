@@ -1,5 +1,5 @@
 /*!
- * \file gis/home.c
+ * \file lib/gis/home.c
  *
  * \brief GIS Library - Get user's home or config directory.
  *
