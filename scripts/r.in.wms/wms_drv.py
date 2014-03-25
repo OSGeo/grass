@@ -105,7 +105,7 @@ class WMSDrv(WMSBase):
                 
             # download data into temporary file
             try:
-                temp_tile_opened = open(temp_tile, 'w')
+                temp_tile_opened = open(temp_tile, 'wb')
                 temp_tile_opened.write(wms_data.read())
             except IOError, e:
                 # some servers are not happy with many subsequent requests for tiles done immediately,
@@ -134,7 +134,7 @@ class WMSDrv(WMSBase):
             if tile_dataset_info is None:
                 # print error xml returned from server
                 try:
-                    error_xml_opened = open(temp_tile, 'r')
+                    error_xml_opened = open(temp_tile, 'rb')
                     err_str = error_xml_opened.read()     
                 except IOError, e:
                     grass.fatal(_("Unable to read data from tempfile.\n%s") % str(e))
