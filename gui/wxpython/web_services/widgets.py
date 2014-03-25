@@ -1092,6 +1092,11 @@ class WSManageSettingsWidget(ManageSettingsWidget):
         for k, v in self.default_servers.iteritems():
             if k not in setts.iterkeys():
                 self.servers_to_add[k] = v
+            elif v != setts[k]:
+                GMessage(parent=self,
+                         message=_("There exists user defined server with same name "
+                                   "as a default server <%s>.\n"
+                                   "The user defined server was not overwritten.") % (k))
 
         if self.servers_to_add:
             self.AddSettings(self.servers_to_add)
