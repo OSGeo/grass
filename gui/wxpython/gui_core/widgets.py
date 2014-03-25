@@ -1005,26 +1005,26 @@ class ManageSettingsWidget(wx.Panel):
 
         self._layout()
 
+        self.SetSizer(self.settingsSizer)
+        self.settingsSizer.Fit(self)
+
     def _layout(self):
 
-        settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
-        settingsSizer.Add(item = wx.StaticText(parent = self,
+        self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
+        self.settingsSizer.Add(item = wx.StaticText(parent = self,
                                                id = wx.ID_ANY,
                                                label = _("Load settings:")),
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
                           border  = 5)
-        settingsSizer.Add(item = self.settingsChoice,
+        self.settingsSizer.Add(item = self.settingsChoice,
                           proportion = 1,
                           flag = wx.EXPAND)
-        settingsSizer.Add(item = self.btnSettingsSave,
+        self.settingsSizer.Add(item = self.btnSettingsSave,
                           flag = wx.LEFT | wx.RIGHT,
                           border = 5)
-        settingsSizer.Add(item = self.btnSettingsDel,
+        self.settingsSizer.Add(item = self.btnSettingsDel,
                           flag = wx.RIGHT,
                           border = 5)
-
-        self.SetSizer(settingsSizer)
-        settingsSizer.Fit(self)
 
     def OnSettingsChanged(self, event):
         """!Load named settings"""
@@ -1037,6 +1037,10 @@ class ManageSettingsWidget(wx.Panel):
         data = self._settings[name]
         self.settingsChanged.emit(data=data)
 
+    def GetSettings(self):
+        """!Load named settings"""
+        return self._settings.copy()
+       
     def OnSettingsSave(self, event):
         """!Save settings"""
         dlg = wx.TextEntryDialog(parent = self,
@@ -1088,6 +1092,14 @@ class ManageSettingsWidget(wx.Panel):
         @param settings - dict with all settigs {nameofsetting : settingdata, ....}
         """
         self._settings = settings
+        self._saveSettings()
+
+    def AddSettings(self, settings):
+        """!Add settings
+
+        @param settings - dict with all settigs {nameofsetting : settingdata, ....}
+        """
+        self._settings = dict(self._settings.items() + settings.items())
         self._saveSettings()
 
     def OnSettingsDelete(self, event):
