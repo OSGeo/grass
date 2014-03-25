@@ -35,9 +35,8 @@ from core.utils       import GetSettingsPath, CmdToTuple, CmdTupleToList, _
 from core.gconsole    import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from gui_core.gselect import Select
-from gui_core.widgets import ManageSettingsWidget
 
-from web_services.widgets import WSPanel
+from web_services.widgets import WSPanel, WSManageSettingsWidget
 
 class WSDialogBase(wx.Dialog):
     """!Base class for web service dialogs. 
@@ -82,8 +81,9 @@ class WSDialogBase(wx.Dialog):
 
         settingsFile = os.path.join(GetSettingsPath(), 'wxWS')
 
-        self.settsManager = ManageSettingsWidget(parent=self,
-                                                 settingsFile=settingsFile)
+        self.settsManager = WSManageSettingsWidget(parent=self,
+                                                 settingsFile=settingsFile,
+                                                 default_servers=self.default_servers)
 
         self.settingsBox = wx.StaticBox(parent = self, 
                                         id = wx.ID_ANY,
@@ -143,7 +143,6 @@ class WSDialogBase(wx.Dialog):
         self.layerName.Bind(wx.EVT_TEXT, self.OnOutputLayerName)
 
         self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
-        self.settsManager.settingsLoaded.connect(self.OnSettingsLoaded)
         self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
 
     def OnLayerSelected(self, title):
@@ -302,12 +301,6 @@ class WSDialogBase(wx.Dialog):
             self.adv_conn.Expand()
         else:
             self.adv_conn.Collapse(True)
-
-    def OnSettingsLoaded(self, settings):
-        """!If settings are empty set default servers
-        """
-        if not settings:
-            self.settsManager.SetSettings(self.default_servers)
 
     def OnClose(self, event):
         """!Close the dialog

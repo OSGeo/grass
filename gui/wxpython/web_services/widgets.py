@@ -42,6 +42,7 @@ from core.utils import _
 from web_services.cap_interface import WMSCapabilities, WMTSCapabilities, OnEarthCapabilities
 
 from gui_core.widgets  import GNotebook
+from gui_core.widgets import ManageSettingsWidget
 
 import grass.script as grass
 
@@ -1066,3 +1067,31 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             l_st_list.remove(l_st)
 
         return l_st_list
+
+class WSManageSettingsWidget(ManageSettingsWidget):
+    def __init__(self, parent, settingsFile, default_servers):
+
+        ManageSettingsWidget.__init__(self, parent, settingsFile)
+        self.default_servers = default_servers
+
+    def _layout(self):
+
+        self.btnAddDefaultServers = wx.Button(parent=self, id=wx.ID_ANY,
+                                             label=_("Add default servers"))
+        self.btnAddDefaultServers.Bind(wx.EVT_BUTTON, self.OnAddDefaultServers)
+        
+        ManageSettingsWidget._layout(self)
+        self.settingsSizer.Add(item=self.btnAddDefaultServers,
+                               flag=wx.RIGHT,
+                               border=5)
+
+    def OnAddDefaultServers(self, event):
+
+        setts = self.GetSettings()
+        self.servers_to_add = {}
+        for k, v in self.default_servers.iteritems():
+            if k not in setts.iterkeys():
+                self.servers_to_add[k] = v
+
+        if self.servers_to_add:
+            self.AddSettings(self.servers_to_add)
