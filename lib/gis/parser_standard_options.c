@@ -458,7 +458,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = YES;
 	Opt->answer = "point,line,boundary,centroid,area";
 	Opt->options = "point,line,boundary,centroid,area";
-	Opt->description = _("Feature type");
+	Opt->description = _("Input feature type");
 	break;
     case G_OPT_V3_TYPE:
 	Opt->key = "type";
@@ -467,7 +467,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = YES;
 	Opt->answer = "point,line,boundary,centroid,area,face,kernel";
 	Opt->options = "point,line,boundary,centroid,area,face,kernel";
-	Opt->description = _("Feature type");
+	Opt->description = _("Input feature type");
 	break;
     case G_OPT_V_FIELD:
 	Opt->key = "layer";
