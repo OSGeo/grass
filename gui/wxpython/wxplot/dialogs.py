@@ -1235,6 +1235,8 @@ class OptDialog(wx.Dialog):
         self.properties['font']['prop']['legendSize'] = self.FindWindowById(self.wxId['font']['legendSize']).GetValue()
         self.properties['legend']['enabled'] = self.FindWindowById(self.wxId['legend']['enabled']).IsChecked()
 
+        self.parent.UpdateLabels()
+
     def OnSave(self, event):
         """!Button 'Save' pressed"""
         self.OnApply(None)
