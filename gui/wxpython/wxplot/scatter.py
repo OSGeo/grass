@@ -131,8 +131,8 @@ class ScatterFrame(BasePlotFrame):
         #
         # set xlabel & ylabel based on raster maps of first pair to be plotted
         #
-        self.xlabel = _('Raster cell values')
-        self.ylabel = _('Raster cell values') 
+        self.xlabel = _('Raster <%s> cell values') % rpair[0].split('@')[0]
+        self.ylabel = _('Raster <%s> cell values') % rpair[1].split('@')[0]
         
         units = self.raster[self.rasterList[0]][0]['units']
         if units != '':
