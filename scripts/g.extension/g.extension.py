@@ -1026,9 +1026,11 @@ def main():
             options['prefix'] = os.path.join(os.environ['HOME'], '.grass%s' % version[0], 'addons')
         else:
             options['prefix'] = os.environ['GRASS_ADDON_BASE']
-    if options['svnurl'] == 'http://svn.osgeo.org/grass/grass-addons/grass7':
+    if 'svn.osgeo.org/grass/grass-addons/grass7' in options['svnurl']:
+        # use pregenerated modules XML file
         xmlurl = "http://grass.osgeo.org/addons/grass%s" % version[0]
     else:
+        # try to get modules XMl from SVN repository
         xmlurl = options['svnurl']
 
     if not xmlurl.endswith('/'):
