@@ -106,7 +106,6 @@ class BasePlotFrame(wx.Frame):
         
         self._createColorDict()
 
-
     def _createColorDict(self):
         """!Create color dictionary to return wx.Colour tuples
         for assigning colors to images in imagery groups"""
@@ -362,10 +361,11 @@ class BasePlotFrame(wx.Frame):
     def DrawPlot(self, plotlist):
         """!Draw line and point plot from list plot elements.
         """
+        xlabel, ylabel = self._getPlotLabels()
         self.plot = plot.PlotGraphics(plotlist,
                                       self.ptitle,
-                                      self.xlabel,
-                                      self.ylabel)
+                                      xlabel,
+                                      ylabel)
 
         if self.properties['x-axis']['prop']['type'] == 'custom':
             self.client.SetXSpec('min')
@@ -421,6 +421,7 @@ class BasePlotFrame(wx.Frame):
     def OnRedraw(self, event):
         """!Redraw the plot window. Unzoom to original size
         """
+        self.UpdateLabels()
         self.client.Reset()
         self.client.Redraw()
        
@@ -487,6 +488,21 @@ class BasePlotFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
 
+
+    def _getPlotLabels(self):
+        def log(txt):
+            return "log( " + txt  + " )" 
+
+        x = self.xlabel
+        if self.properties['x-axis']['prop']['log']:
+            x = log(x)
+
+        y = self.ylabel
+        if self.properties['y-axis']['prop']['log']:
+            y = log(y)
+
+        return x, y
+
     def OnPlotText(self, dlg):
         """!Custom text settings for histogram plot.
         """
@@ -494,17 +510,22 @@ class BasePlotFrame(wx.Frame):
         self.xlabel = dlg.xlabel
         self.ylabel = dlg.ylabel
 
+        if self.plot:
+            self.plot.setTitle(dlg.ptitle)
+            
+        self.OnRedraw(event = None)
+    
+    def UpdateLabels(self):
+        x, y = self._getPlotLabels()
+
         self.client.SetFont(self.properties['font']['wxfont'])
         self.client.SetFontSizeTitle(self.properties['font']['prop']['titleSize'])
         self.client.SetFontSizeAxis(self.properties['font']['prop']['axisSize'])
 
         if self.plot:
-            self.plot.setTitle(dlg.ptitle)
-            self.plot.setXLabel(dlg.xlabel)
-            self.plot.setYLabel(dlg.ylabel)
+            self.plot.setXLabel(x)
+            self.plot.setYLabel(y)
 
-        self.OnRedraw(event = None)
-    
     def PlotText(self, event):
         """!Set custom text values for profile title and axis labels.
         """
