@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.what.rast</em> retrieves raster value from a given raster map for each point
-stored in a given vector map. It can update a <b>column</b> in the linked vector
-attribute table with the retrieved raster cell value or print it. The column type
+or centroid stored in a given vector map. It can update a <b>column</b> in the linked
+vector attribute table with the retrieved raster cell value or print it. The column type
 needs to be numeric (integer, float, double, ...).
 <p>
 If the <b>-p</b> flag is used, then the attribute table is not updated
@@ -12,7 +12,10 @@ If the <b>-i</b> flag is used, then the value to be uploaded to the database
 is interpolated from the four nearest raster cells values using an inverse
 distance weighting method (IDW). This is useful for cases when the vector
 point density is much higher than the raster cell size.
-
+<p>
+Points and centroid with shared category number cannot be processed.
+To solved this, unique categories may be added with <em>v.category</em> in
+a separate layer.
 
 <h2>NOTES</h2>
 
@@ -77,6 +80,7 @@ v.univar map=pnts column=heights type=point
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="v.category.html">v.category</a>,
 <a href="v.db.addtable.html">v.db.addtable</a>,
 <a href="v.db.select.html">v.db.select</a>,
 <a href="v.drape.html">v.drape</a>,
