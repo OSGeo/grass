@@ -28,7 +28,7 @@
 
 int main(int argc, char *argv[])
 {
-    int i, j, nlines, type, field, cat;
+    int i, j, nlines, type, field, cat, vtype;
     int fd;
 
     /* struct Categories RCats; */ /* TODO */
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     char buf[2000];
     struct
     {
-	struct Option *vect, *rast, *field, *col, *where;
+	struct Option *vect, *rast, *field, *type, *col, *where;
     } opt;
     struct Flag *interp_flag, *print_flag;
     int Cache_size;
@@ -82,6 +82,10 @@ int main(int argc, char *argv[])
 	_("Name of vector points map for which to edit attributes");
 
     opt.field = G_define_standard_option(G_OPT_V_FIELD);
+
+    opt.type = G_define_standard_option(G_OPT_V_TYPE);
+    opt.type->options = "point,centroid";
+    opt.type->answer = "point";
 
     opt.rast = G_define_standard_option(G_OPT_R_MAP);
     opt.rast->key = "raster";
@@ -172,8 +176,9 @@ int main(int argc, char *argv[])
 	    G_warning(_("Raster type is float and column type is integer, some data lost!!"));
     }
 
+    vtype = Vect_option_to_types(opt.type);
     /* Read vector points to cache */
-    Cache_size = Vect_get_num_primitives(&Map, GV_POINTS);
+    Cache_size = Vect_get_num_primitives(&Map, vtype);
     /* Note: Some space may be wasted (outside region or no category) */
 
     cache = (struct order *)G_calloc(Cache_size, sizeof(struct order));
@@ -192,8 +197,9 @@ int main(int argc, char *argv[])
 	G_percent(i, nlines, 2);
 
 	/* check type */
-	if (!(type & GV_POINTS))
-	    continue;		/* Points only */
+	if (!(type & vtype))
+	    continue;		/* Points or centroids only */
+        G_debug(1, "line = %d type = %d", i, type);
 
 	/* check region */
 	if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &box)) {
