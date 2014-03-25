@@ -1,8 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.what.rast</em> reads the raster value for each point in the vector map
-and updates <b>column</b> in the vector attribute table by this value. The
-column should be type number (integer, float, double, ... ).
+<em>v.what.rast</em> retrieves raster value from a given raster map for each point
+stored in a given vector map. It can update a <b>column</b> in the linked vector
+attribute table with the retrieved raster cell value or print it. The column type
+needs to be numeric (integer, float, double, ...).
 <p>
 If the <b>-p</b> flag is used, then the attribute table is not updated
 and the results are printed to <tt>stdout</tt>.
