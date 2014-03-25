@@ -13,7 +13,7 @@ grass.parser()
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2008-2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -192,6 +192,9 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
 
         # PATHEXT is necessary to check on Windows.
         pathext = os.environ.get("PATHEXT", "").split(os.pathsep)
+        map(lambda x: x.lower(), pathext) # force lowercase
+        if '.py' not in pathext:          # we assume that PATHEXT contains always '.py'
+            pathext.insert(0, '.py')
         # See if the given file matches any of the expected path extensions.
         # This will allow us to short circuit when given "python.exe".
         # If it does match, only test that one, otherwise we have to try
