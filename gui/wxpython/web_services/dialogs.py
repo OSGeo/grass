@@ -60,7 +60,7 @@ class WSDialogBase(wx.Dialog):
                           }
 
         #TODO: should be in file
-        self.default_servers = { 'OSM-WMS-EUROPE' : ['http://129.206.228.72/cached/osm', '', ''],
+        self.default_servers = { 'OSM-WMS-EUROPE' : ['http://watzmann-geog.urz.uni-heidelberg.de/cached/osm', '', ''],
                                  'irs.gis-lab.info (OSM)' : ['http://irs.gis-lab.info', '', ''],
                                  'NASA OnEarth' : ['http://onearth.jpl.nasa.gov/wms.cgi', '', '']
                                }
