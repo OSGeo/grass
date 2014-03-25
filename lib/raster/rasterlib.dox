@@ -340,6 +340,63 @@ Rast_put_reclass(). Rast_is_reclassed_to() is used by <tt>g.rename</tt>,
 <tt>g.remove</tt> and <tt>r.reclass</tt> to prevent accidentally
 deleting the parent map of a reclassed raster map.
 
+\section Raster_split_windows Raster split windows
+
+The input window determines the number of rows and columns for
+Rast_get_row() etc, i.e. the valid range for the "row" parameter, and the
+number of elements in the "buf" array.
+
+The output window determines the number of rows and columns for
+Rast_put_row() etc, i.e. the number of times it should be called ("put"
+operations don't have a "row" parameter) and the number of elements in the
+"buf" array.
+
+For most modules, the input and output windows should be the same, but
+e.g. <tt>r.resamp.*</tt> will typically use split windows.
+
+The rationale was that the old GRASS 6 mechanism was inefficient. It would change
+the window twice for each row of output (set "read" window, read rows, set
+"write" window, write row). Each change caused the column mapping to be
+recalculated for each input map. With split windows, there are separate
+windows for input maps and output maps, eliminating the need to change
+back and forth between input and output windows. The column mapping is
+calculated when a map is opened and never changes. Attempting to change
+the input window while any input maps are open generates an error, as does
+attempting to change the output window while any output maps are open.
+
+Also, certain functions assume the existence of a single window, e.g.
+Rast_get_window(), Rast_window_{rows,cols}(). These functions still exist,
+and work so long as the windows aren't split (i.e. neither
+Rast_set_input_window() nor Rast_set_output_window() have been called, or
+the windows have since been joined by calling Rast_set_window()), but will
+generate an error if the windows are split. If the windows are split, the
+code must use e.g. Rast_get_input_window(), Rast_input_window_rows() etc
+to read the appropriate window.
+
+The "split window" design eliminates the most common reason for changing
+the window while maps are open, although there may be cases it doesn't
+cover (e.g. reading multiple input maps at different resolutions won't
+work). If we need to support that, there are a number of possible
+solutions.
+
+One is to store the current window in the fileinfo structure whenever the
+column mapping is created, check that it matches the current window
+whenever Rast_read_row() etc is called, and either re-generate it or
+generate an error if it differs. This avoids having to needlessly re-
+calculate the column mapping for all input maps on every set-window
+operation, but requires a window comparison (which probably needs some
+tolerance for comparing floating-point fields) for each get-row operation.
+
+Another is to allow each map to have a separate window, set from the
+current window when the map is opened. The main drawback is that
+Rast_window_rows() etc become meaningless. We would need to add yet
+another "level" of window splitting, so you'd have: single window,
+read/write windows, per-map windows.
+
+As usual, the main problem isn't implementation, but design and ensuring
+that existing code doesn't silently break (the current implementation
+should ensure that any breakage results in a fatal error).
+
 
 \section Raster_Category_File Raster Category File
 
