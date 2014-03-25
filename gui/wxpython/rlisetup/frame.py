@@ -100,8 +100,8 @@ class ViewFrame(wx.Frame):
         """File input interactively entered"""
         self.text = event.GetString()
 
-class RLiSetupFrame(wx.Frame):
 
+class RLiSetupFrame(wx.Frame):
     def __init__(self, parent, giface=None, id=wx.ID_ANY, title=_("GRASS" \
                  " GIS Setup for r.li modules"),
                  style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER, **kwargs):
@@ -136,8 +136,8 @@ class RLiSetupFrame(wx.Frame):
                                     label=_("Rename"))
         self.btn_rename.SetToolTipString(_('Rename a configuration file'))
         self.btn_view = wx.Button(parent=self, id=wx.ID_ANY,
-                                    label=_("View"))
-        self.btn_view.SetToolTipString(_('View a configuration file'))
+                                    label=_("View/Edit"))
+        self.btn_view.SetToolTipString(_('View and edit a configuration file'))
         #set action for button
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
@@ -147,7 +147,6 @@ class RLiSetupFrame(wx.Frame):
         self.btn_view.Bind(wx.EVT_BUTTON, self.OnView)
         self._layout()
         ###END BUTTONS
-
         ###SIZE FRAME
         self.SetMinSize(self.GetBestSize())
         ##Please check this because without this the size it is not the min
