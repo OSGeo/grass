@@ -465,22 +465,23 @@ def get_interface_description(cmd):
                   stderr = PIPE)
         cmdout, cmderr = p.communicate()
         
-        # TODO: replace ugly hack bellow
-        # expecting that cmd is without .py
+        # TODO: do it better (?)
         if not cmdout and sys.platform == 'win32':
             # we in fact expect pure module name (without extension)
             # so, lets remove extension
-            if os.path.splitext(cmd)[1] == '.py':
-                cmd = cmd[:-3]
+            if cmd.endswith('.py'):
+                cmd = os.path.splitext(cmd)[0]
+            
             if cmd == 'd.rast3d':
-                cmd += '.py'
-                os.chdir(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'scripts'))
-            else:
-                cmd = get_real_command(cmd)
-            p = Popen([sys.executable, cmd, '--interface-description'],
+                sys.path.insert(0, os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'scripts'))
+            
+            p = Popen([sys.executable, get_real_command(cmd), '--interface-description'],
                       stdout = PIPE, stderr = PIPE)
             cmdout, cmderr = p.communicate()
-        
+            
+            if cmd == 'd.rast3d':
+                del sys.path[0] # remove gui/scripts from the path
+            
         if p.returncode != 0:
             raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
                                  "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : decode(cmderr) }
