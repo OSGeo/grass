@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     }
     
     if (password->answer)
-        G_important_message(_("The password was stored in file (%s/dblogin)"), G_config_path());
+	G_important_message(_("The password was stored in file (%s%cdblogin)"), G_config_path(), HOST_DIRSEP);
     
     exit(EXIT_SUCCESS);
 }
