@@ -8,7 +8,7 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Dissolve common boundaries between areas with common cat
 #                 (frontend to v.extract -d)
-# COPYRIGHT:    (c) 2006 Hamish Bowman, and the GRASS Development Team
+# COPYRIGHT:    (c) 2006-2014 Hamish Bowman, and the GRASS Development Team
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
@@ -58,6 +58,8 @@ def main():
 	grass.fatal(_("Vector map <%s> not found") % input)
     
     if not column:
+        grass.warning(_("No '%s' option specified. Dissolving based on category values from layer <%s>.") % \
+                          ("column", layer))
 	grass.run_command('v.extract', flags = 'd', input = input,
 			  output = output, type = 'area', layer = layer)
     else:
