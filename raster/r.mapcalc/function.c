@@ -74,6 +74,7 @@ func_desc func_descs[] = {
     {"nmode", c_varop, f_nmode},
 
     {"graph", c_graph, f_graph},
+    {"graph2", c_graph, f_graph2},
 
     {"rand", c_binop, f_rand},
 
