@@ -41,7 +41,7 @@ def GetUnicodeValue(value):
     else:
         enc = 'utf-8' # assuming UTF-8
     
-    return unicode(value, enc, errors = 'replace')
+    return unicode(str(value), enc, errors = 'replace')
 
 def CreateDbInfoDesc(panel, mapDBInfo, layer):
     """!Create database connection information content"""
