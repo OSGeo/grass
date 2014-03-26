@@ -4,7 +4,7 @@
 
 <b>grass70</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>]
     [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code</b>]
-    [<b>-text</b> | <b>-gui</b>]
+    [<b>-text</b> | <b>-gtext</b> | <b>-gui</b>]
     [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION_NAME&gt;/</b>]
     	<b>&lt;MAPSET&gt;</b>]
 
@@ -28,7 +28,10 @@
 <dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code
 
 <dt><b>-text</b>
-<dd> Indicates that Text-based User Interface should be used
+<dd> Indicates that Text-based User Interface should be used (skip welcome screen)
+
+<dt><b>-gtext</b>
+<dd> Indicates that Text-based User Interface should be used (show welcome screen)
 
 <dt><b>-gui</b>
 <dd> Indicates that Graphical User Interface
@@ -105,7 +108,7 @@ environment variable called GRASS_GUI which indicates the type of user
 interface for GRASS to use. If this variable is not set
 when <em>grass70</em> is run, then it will be created and then saved
 in the <tt>$HOME/.grass7/rc</tt> file for the next time GRASS is
-run. It can be set to <tt>text</tt> or <tt>gui</tt>.
+run. It can be set to <tt>text</tt>, <tt>gtext</tt> or <tt>gui</tt>.
 
 <p>There is an order of precedence in the way <em>grass70</em>
 determines the user interface to use. The following is the hierarchy
@@ -215,6 +218,11 @@ script. The script file must have its executable bit set.
     prompted to choose the appropriate location and mapset.
 
 <dt><b>grass70 -text</b>
+<dd> Start GRASS using the text-based user interface. Appropriate
+location and mapset must be set by environmental variables (see
+examples bellow) otherwise taken from the last GRASS session.</dd>
+
+<dt><b>grass70 -gtext</b>
 <dd> Start GRASS using the text-based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
@@ -336,9 +344,7 @@ List of <a href="variables.html">GRASS environment variables</a>
 Justin Hickey<br>
 Markus Neteler<br>
 Hamish Bowman<br>
-<a href="http://geo.fsv.cvut.cz/gwiki/Landa">Martin
-Landa</a>, <a href="http://www.cvut.cz">Czech Technical University in
-Prague</a>, Czech Republic
+Martin Landa, Czech Technical University in Prague, Czech Republic
 
 <p>
 <i>Last changed: $Date$</i>
