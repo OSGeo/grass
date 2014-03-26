@@ -74,6 +74,7 @@ extern func_t f_isnull;
 extern args_t c_isnull;
 
 extern func_t f_graph;
+extern func_t f_graph2;
 extern args_t c_graph;
 
 extern func_t f_min;
