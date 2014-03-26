@@ -65,26 +65,22 @@ class Circle:
 
 
 class MaskedArea(object):
-    def __init__(self, region, raster):
+    def __init__(self, region, raster, radius):
         self.region = region
         self.raster = raster
+        self.radius = radius
 
 
 class RLiSetupMapPanel(wx.Panel):
     """!Panel with mapwindow used in r.li.setup"""
-    def __init__(self, parent, samplingType, graphicsType="rect", icon=None,
-                 map_=None):
+    def __init__(self, parent, samplingType, icon=None, map_=None):
         wx.Panel.__init__(self, parent=parent)
 
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
         giface = StandaloneGrassInterface()
         self.samplingtype = samplingType
-        self.gtype = graphicsType
         self.parent = parent
-
-        ##print self.gtype
-        ##print samplingType
 
         if map_:
             self.map_ = map_
@@ -114,16 +110,13 @@ class RLiSetupMapPanel(wx.Panel):
                           BestSize((self.toolbar.GetBestSize())))
         self._mgr.Update()
 
-        #print self.samplingtype
         if self.samplingtype == SamplingType.REGIONS:
             self.afterRegionDrawn = Signal('RLiSetupMapPanel.afterRegionDrawn')
             self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='line')
-        elif self.samplingtype in [SamplingType.MUNITSR, SamplingType.KUNITSR,
-                                   SamplingType.KMVWINR, SamplingType.MMVWINR]:
+        elif self.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
             self.sampleFrameChanged = Signal('RLiSetupMapPanel.sampleFrameChanged')
             self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='rectangle')
-        elif self.samplingtype in [SamplingType.MUNITSC, SamplingType.KUNITSC,
-                                   SamplingType.KMVWINC, SamplingType.MMVWINC]:
+        elif self.samplingtype in [SamplingType.MUNITSC, SamplingType.MMVWINC]:
             self.afterCircleDrawn = Signal('RLiSetupMapPanel.afterCircleDrawn')
             self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(graphicsType='line')
         else:
@@ -305,13 +298,13 @@ class RLiSetupMapPanel(wx.Panel):
         self.createCricle(circle)
 
     def createCricle(self, c):
-        dlg = wx.TextEntryDialog(None, 'Name of sample region',
-                                 'Create region', 'region' + str(self.catId))
+        dlg = wx.TextEntryDialog(None, 'Name of sample circle region',
+                                 'Create circle region', 'circle' + str(self.catId))
         ret = dlg.ShowModal()
         if ret == wx.ID_OK:
             raster = dlg.GetValue()
             circle = self.writeCircle(c, raster)
-            self.nextCircle(next=True, circle=c)
+            self.nextCircle(next=True, circle=circle)
         else:
             self.nextCircle(next=False)
         dlg.Destroy()
@@ -323,48 +316,19 @@ class RLiSetupMapPanel(wx.Panel):
         layers = self.map_.GetListOfLayers()
         self.mapWindow.ZoomToMap(layers=layers, ignoreNulls=False, render=True)
         if next is True:
-            self.afterCircleDrawn.emit(mcircle=circle)
+            self.afterCircleDrawn.emit(region=circle)
         else:
             gcmd.GMessage(parent=self.parent,
                           message=_("Raster map not created. redraw region again."))
 
     def writeCircle(self, circle, rasterName):
-        polyfile = tempfile.NamedTemporaryFile(delete=False)
-        polyfile.write("AREA\n")
-        for coor in coords:
-            east, north = coor
-            point = " %s %s\n" % (east, north)
-            polyfile.write(point)
-
-        catbuf = "=%d a\n" % self.catId
-        polyfile.write(catbuf)
-        self.catId = self.catId + 1
-
-        polyfile.close()
-        region_settings = grass.parse_command('g.region', flags='p',
-                                              delimiter=':')
-        pname = polyfile.name.split('/')[-1]
-        tmpraster = "rast_" + pname
-        tmpvector = "vect_" + pname
-        RunCommand('r.in.poly', input=polyfile.name, output=tmpraster,
-                   rows=region_settings['rows'], overwrite=True)
-
-        RunCommand('r.to.vect', input=tmpraster, output=tmpvector,
-                   type='area', overwrite=True)
-
-        RunCommand('v.to.rast', input=tmpvector, output=rasterName,
-                   value=1, use='val', overwrite=True)
-
+        coords = self.mapWindow.Pixel2Cell(circle.point)
+        RunCommand('r.circle', output=rasterName, max=circle.radius,
+                   coordinate=coords, flags="b")
         grass.use_temp_region()
-        grass.run_command('g.region', vect=tmpvector)
+        grass.run_command('g.region', zoom=rasterName)
         region = grass.region()
-
-        marea = MaskedArea(region, rasterName)
-
-        RunCommand('g.remove', rast=tmpraster)
-        RunCommand('g.remove', vect=tmpvector)
-
-        os.unlink(polyfile.name)
+        marea = MaskedArea(region, rasterName, circle.radius)
         return marea
 
     def _rectangleDrawn(self):
@@ -381,8 +345,7 @@ class RLiSetupMapPanel(wx.Panel):
         item.SetPropertyVal('hide', False)
         self.mapWindow.ClearLines()
         self._registeredGraphics.Draw(self.mapWindow.pdcTmp)
-
-        if self.samplingtype == SamplingType.MUNITSR:
+        if self.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
             dlg = wx.MessageDialog(self, "Is this area ok?",
                                    "select sampling unit",
                                    wx.YES_NO | wx.ICON_QUESTION)
@@ -433,22 +396,13 @@ class RLiSetupToolbar(BaseToolbar):
 
         self.InitToolbar(self._toolbarData())
 
-        """
         if self.parent.samplingtype == SamplingType.REGIONS:
             self._default = self.digitizeregion
-            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=self.digitizeregion)
-        elif self.parent.samplingtype == SamplingType.MUNITSR:
+        elif self.parent.samplingtype in [SamplingType.MUNITSR,
+                                          SamplingType.MMVWINR]:
             self._default = self.digitizeunit
-            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=self.digitizeunit)        
-        else:
-            self._default = self.draw
-            self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=self.draw)
-        """
-        if self.parent.samplingtype == SamplingType.REGIONS:
-            self._default = self.digitizeregion
-        elif self.parent.samplingtype == SamplingType.MUNITSR:
-            self._default = self.digitizeunit
-        elif self.parent.samplingtype == SamplingType.MUNITSC:
+        elif self.parent.samplingtype in [SamplingType.MUNITSC,
+                                          SamplingType.MMVWINC]:
             self._default = self.digitizeunitc
         elif self.parent.samplingtype == SamplingType.VECT:
             self._default = None
@@ -467,43 +421,35 @@ class RLiSetupToolbar(BaseToolbar):
         """!Toolbar data"""
         if self.parent.samplingtype == SamplingType.REGIONS:
             drawTool = ('digitizeregion', icons['digitizeregion'],
-                                     self.parent.OnDigitizeRegion,
-                                     wx.ITEM_CHECK)
-        elif self.parent.samplingtype == SamplingType.MUNITSR:
+                        self.parent.OnDigitizeRegion, wx.ITEM_CHECK)
+        elif self.parent.samplingtype in [SamplingType.MUNITSR,
+                                          SamplingType.MMVWINR]:
             drawTool = ('digitizeunit', icons['digitizeunit'],
-                                     self.parent.OnDraw,
-                                     wx.ITEM_CHECK)
-        elif self.parent.samplingtype == SamplingType.MUNITSC:
+                        self.parent.OnDraw, wx.ITEM_CHECK)
+        elif self.parent.samplingtype in [SamplingType.MUNITSC,
+                                          SamplingType.MMVWINC]:
             drawTool = ('digitizeunitc', icons['digitizeunitc'],
-                                     self.parent.OnDrawRadius,
-                                     wx.ITEM_CHECK)
+                        self.parent.OnDrawRadius, wx.ITEM_CHECK)
         else:
-            drawTool = ('draw', icons['draw'],
-                         self.parent.OnDraw,
-                         wx.ITEM_CHECK)
+            drawTool = ('draw', icons['draw'], self.parent.OnDraw,
+                        wx.ITEM_CHECK)
         if self.parent.samplingtype == SamplingType.VECT:
             return self._getToolbarData((
-                       ('pan', BaseIcons['pan'],
-                                      self.parent.OnPan,
-                                      wx.ITEM_CHECK),
-                       ('zoomIn', BaseIcons['zoomIn'],
-                                      self.parent.OnZoomIn,
-                                      wx.ITEM_CHECK),
-                       ('zoomOut', BaseIcons['zoomOut'],
-                                      self.parent.OnZoomOut,
-                                      wx.ITEM_CHECK),
+                       ('pan', BaseIcons['pan'], self.parent.OnPan,
+                        wx.ITEM_CHECK),
+                       ('zoomIn', BaseIcons['zoomIn'], self.parent.OnZoomIn,
+                        wx.ITEM_CHECK),
+                       ('zoomOut', BaseIcons['zoomOut'], self.parent.OnZoomOut,
+                        wx.ITEM_CHECK),
                        ('zoomExtent', BaseIcons['zoomExtent'],
-                                      self.parent.OnZoomToMap),))
+                        self.parent.OnZoomToMap),))
         else:
             return self._getToolbarData((drawTool, (None, ),
-                       ('pan', BaseIcons['pan'],
-                                      self.parent.OnPan,
-                                      wx.ITEM_CHECK),
-                       ('zoomIn', BaseIcons['zoomIn'],
-                                      self.parent.OnZoomIn,
-                                      wx.ITEM_CHECK),
-                       ('zoomOut', BaseIcons['zoomOut'],
-                                      self.parent.OnZoomOut,
-                                      wx.ITEM_CHECK),
+                       ('pan', BaseIcons['pan'], self.parent.OnPan,
+                        wx.ITEM_CHECK),
+                       ('zoomIn', BaseIcons['zoomIn'], self.parent.OnZoomIn,
+                        wx.ITEM_CHECK),
+                       ('zoomOut', BaseIcons['zoomOut'], self.parent.OnZoomOut,
+                        wx.ITEM_CHECK),
                        ('zoomExtent', BaseIcons['zoomExtent'],
-                                      self.parent.OnZoomToMap),))
+                        self.parent.OnZoomToMap),))

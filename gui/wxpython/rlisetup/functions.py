@@ -12,10 +12,10 @@ from core.gcmd import GError
 
 class SamplingType:
     """"
-    KMWINC = samplingtype=moving, regionbox=keyboard, shape=circle
-    KMWINR = samplingtype moving, regionbox=keyboard, shape=rectangle
-    MMWINC = samplingtype=moving, regionbox=mouse, shape=circle
-    MMWINR = samplingtype moving, regionbox=mouse, shape=rectangle
+    KMVWINC = samplingtype=moving, regionbox=keyboard, shape=circle
+    KMVWINR = samplingtype moving, regionbox=keyboard, shape=rectangle
+    MMVWINC = samplingtype=moving, regionbox=mouse, shape=circle
+    MMVWINR = samplingtype moving, regionbox=mouse, shape=rectangle
 
     KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
     KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
