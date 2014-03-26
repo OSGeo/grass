@@ -73,9 +73,13 @@ def main():
     shell = flags['g']
     serial = flags['s']
     bands = options['input'].split(',')
+
+    if len(bands) < 4:
+        grass.fatal(_("At least four input maps required"))
+
     output = options['output']
     # calculate the Stddev for TM bands
-    grass.message(_("Calculating Standard deviations for all bands..."))
+    grass.message(_("Calculating standard deviations for all bands..."))
     stddev = {}
 
     if serial:
@@ -134,12 +138,12 @@ def main():
     oif.sort(reverse=True)
 
     grass.verbose(_("The Optimum Index Factor analysis result " \
-                    "(Best combination comes first):"))
+                    "(best combination shown first):"))
 
     if shell:
-        fmt = "%s%s%s:%.4f\n"
+        fmt = "%s,%s,%s:%.4f\n"
     else:
-        fmt = "%s%s%s:  %.4f\n"
+        fmt = "%s, %s, %s:  %.4f\n"
 
     if not output or output == '-':
         for v, p in oif:
