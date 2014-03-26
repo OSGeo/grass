@@ -152,6 +152,18 @@ int main(int argc, char *argv[])
                         *c = '\0';
                         sprintf(database, "%s%s%s", buf, G_mapset(), c + 7);
                     }
+#ifdef __MINGW32__
+                    if (strcmp(conn.driverName, "sqlite") == 0 |
+                        strcmp(conn.driverName, "dbf") == 0) {
+                        char *p;
+                        p = database;
+                        while(*p) {
+                            if (*p == '/')
+                                *p = HOST_DIRSEP;
+                            p++;
+                        }
+                    }
+#endif
                 }
                 else {
                     database[0] = '\0';
