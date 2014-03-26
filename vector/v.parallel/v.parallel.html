@@ -3,6 +3,14 @@
 <em>v.parallel</em> creates parallel lines to the input vector lines which
 can be used as half-buffers.
 
+<h2>NOTES</h2>
+Usage of <b>-b</b> flag will overrule the <b>side</b> parameter.
+
+<h2>BUGS</h2>
+There is a problem with side-offset parallel line generation for inside corners.
+To avoid this problem, the <b>-b</b> flag might be used.
+<!-- in Vect_line_parallel(), v.segment is also affected -->
+
 <h2>SEE ALSO</h2>
 
 <em>
