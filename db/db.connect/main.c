@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
                         sprintf(database, "%s%s%s", buf, G_mapset(), c + 7);
                     }
 #ifdef __MINGW32__
-                    if (strcmp(conn.driverName, "sqlite") == 0 |
+                    if (strcmp(conn.driverName, "sqlite") == 0 ||
                         strcmp(conn.driverName, "dbf") == 0) {
                         char *p;
                         p = database;
