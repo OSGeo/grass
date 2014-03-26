@@ -933,7 +933,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 
   \param[out] Map pointer to output Map_info struct
   \param name name for new vector map (or NULL)
-  \param with_z WITH_Z for 3D vector data
+  \param with_z WITH_Z for 3D vector data otherwise WITHOUT_Z
 
   \return 1 on success
   \return -1 on error
