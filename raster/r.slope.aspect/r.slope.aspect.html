@@ -20,8 +20,17 @@ The <b>aspect</b> output raster map indicates the direction that slopes are
 facing. The aspect categories represent the number degrees of east. Category
 and color table files are also generated for the aspect raster map. The aspect
 categories represent the number degrees of east and they increase
-counterclockwise: 90deg is North, 180 is West, 270 is South 360 is East. The
-aspect value 0 is used to indicate undefined aspect in flat areas with slope=0.
+counterclockwise: 90 degrees is North, 180 is West, 270 is South 360 is East.
+
+<p>
+The aspect is not defined for slope equal to zero.
+Thus, most cells with a very small slope end up having category 0,
+45, ..., 360 in <b>aspect</b> output.
+It is possible to reduce the bias in these directions
+by filtering out the aspect in areas where the terrain is almost flat.
+A option <b>min_slp_allowed</b> can be used to specify the minimum slope
+for which aspect is computed. The aspect for all cells with
+slope&nbsp;&lt;&nbsp;<b>min_slp_allowed</b> is set to <i>null</i> (no-data).
 
 <center>
   <img src="aspect_diagram.png" border="0">
@@ -148,14 +157,6 @@ Only when using integer elevation models, the aspect is biased in 0,
 45, 90, 180, 225, 270, 315, and 360 directions; i.e., the distribution
 of aspect categories is very uneven, with peaks at 0, 45,..., 360 categories.
 When working with floating point elevation models, no such aspect bias occurs.
-
-<p>
-Because most cells with a very small slope end up having category 0,
-45, ..., 360, it is sometimes possible to reduce the bias in these directions
-by filtering out the aspect in areas where the terrain is almost flat. A new
-option <b>min_slp_allowed</b> was added to specify the minimum slope for which
-aspect is computed. The aspect for all cells with slope &lt;
-<b>min_slp_allowed</b> is set to <i>null</i> (no-data).
 
 
 <h2>REFERENCE</h2>
