@@ -978,11 +978,11 @@ def gisenv():
 
 def locn_is_latlong():
     """!Tests if location is lat/long. Value is obtained
-    by checking the "g.region -p" projection code.
+    by checking the "g.region -pu" projection code.
 
     @return True for a lat/long region, False otherwise
     """
-    s = read_command("g.region", flags='p')
+    s = read_command("g.region", flags='pu')
     kv = parse_key_val(s, ':')
     if kv['projection'].split(' ')[0] == '3':
         return True
@@ -991,7 +991,7 @@ def locn_is_latlong():
 
 
 def region(region3d=False, complete=False):
-    """!Returns the output from running "g.region -g", as a
+    """!Returns the output from running "g.region -gu", as a
     dictionary. Example:
 
     @param region3d True to get 3D region
@@ -1009,7 +1009,7 @@ def region(region3d=False, complete=False):
 
     @return dictionary of region values
     """
-    flgs = 'g'
+    flgs = 'gu'
     if region3d:
         flgs += '3'
     if complete:
@@ -1067,7 +1067,7 @@ def region_env(region3d=False, **kwargs):
     if not kwargs:  # return current region
         return grass_region
 
-    # read other values from `g.region -g`
+    # read other values from `g.region -gu`
     flgs = 'ug'
     if region3d:
         flgs += '3'

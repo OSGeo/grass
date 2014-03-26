@@ -204,7 +204,7 @@ class Region(object):
                          border='1', kdec='b')
 
     def __unicode__(self):
-        return grass.pipe_command("g.region", flags="p").communicate()[0]
+        return grass.pipe_command("g.region", flags="pu").communicate()[0]
 
     def __str__(self):
         return self.__unicode__()

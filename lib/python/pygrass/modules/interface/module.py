@@ -10,9 +10,10 @@ Created on Tue Apr  2 18:41:27 2013
 >>> import copy
 >>> region = pymod.Module("g.region")
 >>> region.flags["p"].value = True
+>>> region.flags["u"].value = True
 >>> region.flags["3"].value = True
 >>> region.get_bash()
-'g.region -p -3'
+'g.region -p -u -3'
 >>> new_region = copy.deepcopy(region)
 >>> new_region.inputs["res"].value = "10"
 >>> new_region.get_bash()
