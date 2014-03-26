@@ -1024,7 +1024,7 @@ class CmdPanel(wx.Panel):
 
                             # for multiple integers use textctrl instead of spinsctrl
                             try:
-                                minValue, maxValue = map(int, valuelist[0].split('-'))
+                                minValue, maxValue = map(int, valuelist[0].rsplit('-', 1))
                             except ValueError:
                                 minValue = -1e6
                                 maxValue = 1e6
