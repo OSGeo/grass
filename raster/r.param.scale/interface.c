@@ -38,7 +38,7 @@ void interface(int argc, char **argv)
 
     /* cell of local window if selected.    */
     struct GModule *module;	/* GRASS module description */
-    char buf[128];
+    char buf[4];
 
     G_gisinit(argv[0]);		/* GRASS function which MUST be called  */
     /* first to check for valid database    */
@@ -88,12 +88,12 @@ void interface(int argc, char **argv)
     tol2_val->required = NO;
     tol2_val->answer = "0.0001";
 
-    sprintf(buf, _("Size of processing window (odd number only, max: %i)"),
-	    MAX_WSIZE);
+    sprintf(buf, "3-%i", MAX_WSIZE);
     win_size->key = "size";
-    win_size->description = G_store(buf);
+    win_size->description = _("Size of processing window (odd number only)");
     win_size->type = TYPE_INTEGER;
     win_size->required = NO;
+    win_size->options = G_store(buf);
     win_size->answer = "3";
 
     parameter->key = "param";
