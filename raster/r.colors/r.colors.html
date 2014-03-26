@@ -6,16 +6,11 @@ The raster maps (specified on the command line
 by <b>map</b> or as <b>file</b> using an input file with one map name per line) 
 must exist in the user's current mapset search path.
 
-
 <p>The <b>rast</b> option allows user to specify a raster map <i>name</i>
 from which to copy the color map.
 
 <p>The <b>volume</b> option allows user to specify a volume (3d raster)
 map <i>name</i> from which to copy the color map.
-
-<p>All color tables are stored in <tt>$GISBASE/etc/colors/</tt>. Further
-user-defined color tables can also be stored in this directory for
-access from the <em>color</em> parameter.
 
 <p>The <b>-e</b> flag equalizes the original raster's color table. It can
 preclude the need for <em>grey.eq</em> rule, when used as
@@ -227,6 +222,16 @@ default grey
 end
 </pre></div>
 
+<h2>NOTES</h2>
+
+All color tables are stored in <tt>$GISBASE/etc/colors/</tt>. Further
+user-defined color tables can also be stored in this directory for
+access from the <em>color</em> parameter or in a user defined directory.
+See also <em>r.colors.out</em> for printing color tables easily to the
+terminal.
+<p>
+The color table assigned to a raster map is stored in
+<tt>$GISDBASE/location/mapset/colr/</tt>.
 
 <h2>EXAMPLES</h2>
 
