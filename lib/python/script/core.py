@@ -510,8 +510,11 @@ def debug(msg, debug=1):
     @param msg debugging message to be displayed
     @param debug debug level (0-5)
     """
-    run_command("g.message", flags='d', message=msg, debug=debug)
-
+    if debug_level() >= debug:
+        if sys.platform == "win32":
+            msg = msg.replace('&', '^&')
+            
+        run_command("g.message", flags='d', message=msg, debug=debug)
 
 def verbose(msg):
     """!Display a verbose message using `g.message -v`
