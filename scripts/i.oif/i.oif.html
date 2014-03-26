@@ -17,7 +17,7 @@ required for <em>d.rgb</em> or <em>r.composite</em>.
 
 <h2>NOTES</h2>
 
-Landsat TM:
+Landsat 1-7 TM:
 Colour Composites in BGR order as important Landsat TM band combinations
 (example: 234 in BGR order means: B=2, G=3, R=4):
 
@@ -55,8 +55,7 @@ limited to that number of jobs.
 North Carolina sample dataset:
 <div class="code"><pre>
 g.region rast=lsat7_2002_10 -p
-i.oif image1=lsat7_2002_10 image2=lsat7_2002_20 image3=lsat7_2002_30 \
-      image4=lsat7_2002_40 image5=lsat7_2002_50 image7=lsat7_2002_70
+i.oif input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 </pre></div>
 
 
