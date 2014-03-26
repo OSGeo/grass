@@ -817,7 +817,10 @@ class DbMgrNotebookBase(FN.FlatNotebook):
             self.dbMgrData['mapDBInfo'].GetColumns(table)
 
     def ApplyCommands(self, listOfCommands, listOfSQLStatements):
-        """!Apply changes"""
+        """!Apply changes
+
+        @todo: this part should be _completely_ redesigned
+        """
         # perform GRASS commands (e.g. v.db.addcolumn)
         wx.BeginBusyCursor()
         
@@ -867,7 +870,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
             os.close(fd)
             os.remove(sqlFilePath)
             # reset list of statements
-            listOfSQLStatements = []
+            self.listOfSQLStatements = []
             
         wx.EndBusyCursor()        
 
@@ -1430,7 +1433,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                                " is missing.") % keyColumn)
                         else:
                             continue
-
+                    
                     try:
                         if tlist.columns[columnName[i]]['ctype'] == int:
                             # values[i] is stored as text. 
@@ -1438,17 +1441,17 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                         else:
                             value = values[i]
                         values[i] = tlist.columns[columnName[i]]['ctype'] (value)
-
                     except:
                         raise ValueError(_("Value '%(value)s' needs to be entered as %(type)s.") % 
                                          {'value' : str(values[i]),
                                           'type' : tlist.columns[columnName[i]]['type']})
                     columnsString += '%s,' % columnName[i]
+                    
                     if tlist.columns[columnName[i]]['ctype'] == str:
                         valuesString += "'%s'," % values[i]
                     else:
                         valuesString += "%s," % values[i]
-
+                
             except ValueError, err:
                 GError(parent = self,
                        message = _("Unable to insert new record.\n%s") % err,
@@ -1473,8 +1476,9 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
             self.listOfSQLStatements.append('INSERT INTO %s (%s) VALUES(%s)' % \
                                                 (table,
-                                                 columnsString.strip(','),
-                                                 valuesString.strip(',')))
+                                                 columnsString.rstrip(','),
+                                                 valuesString.rstrip(',')))
+            
             self.ApplyCommands(self.listOfCommands, self.listOfSQLStatements)
 
         
