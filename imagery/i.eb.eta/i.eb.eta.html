@@ -2,21 +2,21 @@
 
 <em>i.eb.eta</em> calculates the actual evapotranspiration (ETa ; mm/d) for
 diurnal period after [1], implemented in [3].
-It takes input of Diurnal Net Radiation (see r.sun), evaporative fraction (see
-r.eb.evapfr) and surface skin temperature. 
+It takes input of Diurnal Net Radiation (see <i>r.sun</i>), evaporative fraction (see
+<i>i.eb.evapfr</i>) and surface skin temperature. 
 
 <h2>NOTES</h2>
 Full ETa processing will need those:
 <ul>
   <li>i.vi, i.albedo, r.latlong, i.emissivity
-  <li>i.evapo.potrad
+  <li>i.evapo.potrad (Addon)
   <li>i.eb.netrad, i.eb.soilheatflux, i.eb.h_sebal01
   <li>i.eb.evapfr, i.eb.eta
 </ul>
 
 (for time integration: i.evapo.time_integration)
 
-<p>For more details on the algorithms see [1][2][3].
+<p>For more details on the algorithms see [1][2][3][4].
 
 <h2>SEE ALSO</h2>
 
@@ -41,6 +41,12 @@ seasonal for irrigated rice in Zhanghe, China. Asian Journal of Geoinformatics.
 Zalidis G.C. Integrated methodology for estimating water use in Mediterranean
 agricultural areas. Remote Sensing. 2009, 1, 445-465. 
 (<a href="http://www.mdpi.com/2072-4292/1/3/445">PDF</a>)
+
+<p>[4] Chemin, Y., 2012. 
+A Distributed Benchmarking Framework for Actual ET Models, 
+in: Irmak, A. (Ed.), Evapotranspiration - Remote Sensing and Modeling. InTech.
+(<a href="http://www.intechopen.com/books/evapotranspiration-remote-sensing-and-modeling/a-distributed-benchmarking-framework-for-actual-et-models">PDF</a>)
+
 
 <h2>AUTHORS</h2>
 
