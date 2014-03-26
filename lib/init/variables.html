@@ -137,15 +137,15 @@ PERMANENT
     program to use for plotting <em>gnuplot</em> data.</dd>
   
   <dt>GRASS_GUI</dt>
-  <dd>either <tt>text</tt> or <tt>gui</tt> to define non-/graphical startup.
-    <br><br> Can also specify the name of the GUI to use,
-    e.g. <tt>wxpython</tt>
-    (<em><a href="wxGUI.html">wxGUI</a></em>). Also exists as a GRASS
-    gisenv variable (see below). If this shell variable exists at
-    GRASS startup, it will determine the GUI used. If it is not
-    defined startup will default to the last GUI used.</dd>
-  
-  
+  <dd>either <tt>text</tt> (text user interface), <tt>gtext</tt> (text
+  user interface with GUI welcome screen), or <tt>gui</tt> (graphical
+  user interface) to define non-/graphical startup. Can also specify
+  the name of the GUI to use, e.g. <tt>wxpython</tt>
+  (<em><a href="wxGUI.html">wxGUI</a></em>). Also exists as a GRASS
+  gisenv variable (see below). If this shell variable exists at GRASS
+  startup, it will determine the GUI used. If it is not defined
+  startup will default to the last GUI used.</dd>
+    
   <dt>GRASS_HTML_BROWSER</dt>
   <dd>[init.sh, wxgui]<br> defines name of HTML browser. For most
     platforms this should be an executable in your PATH, or the full
@@ -436,13 +436,7 @@ g.gisenv set=DEBUG=0
     encoding of query form (utf-8, ascii, iso8859-1, koi8-r)</dd>
   
   <dt>GUI</dt>
-  <dd>either <tt>text</tt> or <tt>gui</tt> to define non-/graphical startup.
-    <br><br> Can also specify the name of the GUI to use,
-    e.g. <tt>wxpython</tt>
-    (<em><a href="wxGUI.html">wxGUI</a></em>). Also exists as a shell
-    environment variable. If this shell variable exists at GRASS
-    startup, it will determine the GUI used. If it is not defined
-    startup will default to the last GUI used.</dd>
+  <dd>See <tt>GRASS_GUI</tt> environmental variable for details.</dd>
   
   <dt>LOCATION</dt>
   <dd>full path to location directory</dd>

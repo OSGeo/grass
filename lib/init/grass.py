@@ -126,7 +126,7 @@ def cleanup():
 
 
 def fatal(msg):
-    sys.stderr.write(msg + os.linesep)
+    sys.stderr.write("%s: " % _('ERROR') + msg + os.linesep)
     sys.exit(_("Exiting..."))
 
 
@@ -177,6 +177,8 @@ Geographic Resources Analysis Support System (GRASS GIS).
   -c                             %s
   -text                          %s
                                    %s
+  -gtext                         %s
+                                   %s
   -gui                           %s
                                    %s
   --config                       %s
@@ -202,7 +204,9 @@ Geographic Resources Analysis Support System (GRASS GIS).
        _("print this help message"),
        _("show version information and exit"),
        _("create given database, location or mapset if it doesn't exist"),
-       _("use text based interface"),
+       _("use text based interface (skip welcome screen)"),
+       _("and set as default"),
+       _("use text based interface (show welcome screen)"),
        _("and set as default"),
        _("use $DEFAULT_GUI graphical user interface"),
        _("and set as default"),
@@ -525,7 +529,7 @@ def check_gui():
     # Check if we are running X windows by checking the DISPLAY variable
     if os.getenv('DISPLAY') or windows or macosx:
         # Check if python is working properly
-        if grass_gui == 'wxpython':
+        if grass_gui in ('wxpython', 'gtext'):
             nul = open(os.devnull, 'w')
             p = Popen([os.environ['GRASS_PYTHON']], stdin=subprocess.PIPE,
                       stdout=nul, stderr=nul)
@@ -675,22 +679,22 @@ def set_data():
         if grass_gui == 'text':
             pass
         # Check for GUI
-        elif grass_gui == 'wxpython':
-            gui_startup()
+        elif grass_gui in ('gtext', 'wxpython'):
+            gui_startup(grass_gui == 'gtext')
         else:
             # Shouldn't need this but you never know
-            fatal(_("Invalid user interface specified - <%s>.\n" 
+            fatal(_("Invalid user interface specified - <%s>. " 
                     "Use the --help option to see valid interface names.") % grass_gui)
 
 
-def gui_startup():
-    if grass_gui == 'wxpython':
-        thetest = call([os.getenv('GRASS_PYTHON'),
+def gui_startup(wscreen_only = False):
+    if grass_gui in ('wxpython', 'gtext'):
+        ret = call([os.getenv('GRASS_PYTHON'),
                         gfile(wxpython_base, "gis_set.py")])
 
-    if thetest == 0:
+    if ret == 0:
         pass
-    elif thetest == 1:
+    elif ret == 1:
         # The startup script printed an error message so wait
         # for user to read it
         message(_("Error in GUI startup. If necessary, please "
@@ -701,7 +705,7 @@ def gui_startup():
 
         os.execlp(cmd_name, "-text")
         sys.exit(1)
-    elif thetest == 2:
+    elif ret == 2:
         # User wants to exit from GRASS
         message(_("Received EXIT message from GUI.\nGRASS is not started. Bye."))
         sys.exit(0)
@@ -861,9 +865,9 @@ def check_lock():
 
     if msg:
         if grass_gui == "wxpython":
-            thetest = call([os.getenv('GRASS_PYTHON'),
-                            os.path.join(wxpython_base, "gis_set_error.py"),
-                            msg])
+            call([os.getenv('GRASS_PYTHON'),
+                  os.path.join(wxpython_base, "gis_set_error.py"),
+                  msg])
         else:
             global remove_lockfile
             remove_lockfile = False
@@ -1215,6 +1219,9 @@ def parse_cmdline():
         # Check if the -text flag was given
         elif i in ["-text", "--text"]:
             grass_gui = 'text'
+        # Check if the -gtext flag was given
+        elif i in ["-gtext", "--gtext"]:
+            grass_gui = 'gtext'
         # Check if the -gui flag was given
         elif i in ["-gui", "--gui"]:
             grass_gui = default_gui
