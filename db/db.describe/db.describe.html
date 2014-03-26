@@ -9,8 +9,18 @@ If parameters for database connection are already set with
 <a href="db.connect.html">db.connect</a>, they are taken as default values and
 do not need to be spcified each time.
  
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
+<em>List column descriptions of table in SQLite database (note that this is the default setting)</em><br>
+<div class="code"><pre>
+db.describe driver=sqlite table=myarchsites \
+   database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+
+# or simply
+db.describe myarchsites
+</pre></div>
+
+<h3>DBF example</h3>
 <div class="code"><pre>
 db.describe -c table=roads database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
             driver=dbf
@@ -49,7 +59,8 @@ update:yes
 <a href="db.execute.html">db.execute</a>,
 <a href="db.login.html">db.login</a>,
 <a href="db.tables.html">db.tables</a>,
-<a href="sql.html">GRASS SQL interface</a></em>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHOR</h2>
 

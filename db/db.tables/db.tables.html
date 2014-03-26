@@ -16,19 +16,28 @@ db.tables -p
 </pre></div>
 
 <p>
-<em>List all tables of existing dbf database</em><br>
+<em>List all DBF tables</em><br>
 <div class="code"><pre>
 db.tables driver=dbf database=/home/user/grassdata/fire/PERMANENT/dbf
 </pre></div>
 
+<p>
+<em>List all tables in SQLite database (note that this is the default setting)</em><br>
+<div class="code"><pre>
+db.tables -p driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+</pre></div>
+
 <h2>SEE ALSO</h2>
-<em><a href="db.columns.html">db.columns</a>,
+<em>
+<a href="db.columns.html">db.columns</a>,
 <a href="db.droptable.html">db.droptable</a>,
 <a href="db.login.html">db.login</a>,
 <a href="db.execute.html">db.execute</a>,
-<a href="sql.html">GRASS SQL interface</a></em>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHOR</h2>
-?
+
+Unknown
 
 <p><i>Last changed: $Date$</i>

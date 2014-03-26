@@ -9,15 +9,15 @@ If parameters for database connection are already set with
 <a href="db.connect.html">db.connect</a>, they are taken as default values and
 do not need to be spcified each time.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-<em>List columns from PostgreSQL attribute table</em><br>
+<em>List columns of a PostgreSQL attribute table</em><br>
 <div class="code"><pre>
 db.columns table=markveggy driver=pg database=grass60test
 </pre></div>
 
 <p>
-<em>If database parameters are already set</em><br>
+<em>If the database parameters are already set, the columns can be listed directly</em><br>
 <div class="code"><pre>
 db.columns table=markveggy
 </pre></div>
@@ -28,15 +28,23 @@ db.columns table=markveggy
 db.columns table=network driver=dbf database=/daten/grassdata/fire/PERMANENT/dbf/
 </pre></div>
 
+<p>
+<em>List columns of table in SQLite database (note that this is the default setting)</em><br>
+<div class="code"><pre>
+db.columns driver=sqlite table=myarchsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+</pre></div>
+
 <h2>SEE ALSO</h2>
-<em><a href="db.connect.html">db.connect</a>,
+<em>
+<a href="db.connect.html">db.connect</a>,
 <a href="db.describe.html">db.describe</a>,
 <a href="db.drivers.html">db.drivers</a>,
 <a href="db.droptable.html">db.droptable</a>,
 <a href="db.execute.html">db.execute</a>,
 <a href="db.login.html">db.login</a>,
 <a href="db.tables.html">db.tables</a>,
-<a href="sql.html">GRASS SQL interface</a></em>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHOR</h2>
 
