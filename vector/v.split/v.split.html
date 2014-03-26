@@ -1,13 +1,15 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.split</em> split vector lines into shorter segments using a
-maximal distance between nodes.
+<em>v.split</em> splits vector lines into shorter segments using 
+a maximal distance between nodes. The resulting length of all segments
+is expected to be equal and not higher than the given <b>length</b> 
+parameter.
 
 <h2>EXAMPLES</h2>
 
 The examples are based on the North Carolina sample data location.
 
-<h3>Example 1: Inserting kilometric nodes to railroad map</h3>
+<h3>Example 1: Inserting nodes to railroad map</h3>
 
 <div class="code"><pre>
 # extract data for this example
@@ -16,7 +18,7 @@ v.extract railroads out=myrr cats=1
 # show line, category, direction (to find the beginning)
 d.vect myrr disp=shape,cat,dir
 
-# insert nodes at 1000m distance (max)
+# insert nodes at a distance not longer than 1000m
 v.split myrr out=mrr_split length=1000
 d.vect myrr_split disp=shape,topo
 </pre></div>
@@ -29,12 +31,12 @@ v.build.polylines myrr out=myrr_poly
 v.category myrr_pol out=myrailroads option=add
 </pre></div>
 
-<h3>Example 2: Inserting kilometric vertices to railroad map</h3>
+<h3>Example 2: Inserting vertices to railroad map</h3>
 
 Note: first run the two steps from example 1.
 
 <div class="code"><pre>
-# insert vertices at 1000m distance (max)
+# insert vertices at a distance not longer than 1000m
 v.split -n myrr out=myrr_split length=1000
 d.vect myrr_split disp=shape,topo
 </pre></div>
