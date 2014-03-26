@@ -2,6 +2,9 @@
 
 <em>r.reclass.area</em> reclasses a raster map greater or
 less than a user specified area size (in hectares).
+<p>
+If the <em>-c</em> flag is used, <em>r.reclass.area</em> will skip the creation
+of a clumped raster and assume that the input raster is already clumped.
 
 <h2>EXAMPLE</h2>
 
@@ -17,9 +20,11 @@ r.reclass.area input=zipcodes output=zipcodes_larger2000ha greater=2000
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.reclass.html">r.reclass</a></em><br>
-<em><a href="r.clump.html">r.clump</a></em><br>
-<em><a href="r.stats.html">r.stats</a></em><br>
+<em>
+<a href="r.reclass.html">r.reclass</a>,
+<a href="r.clump.html">r.clump</a>,
+<a href="r.stats.html">r.stats</a>
+</em>
 
 <h2>AUTHORS</h2>
 
