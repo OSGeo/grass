@@ -1784,7 +1784,7 @@ class CmdPanel(wx.Panel):
             self.goutput = None
             self._gconsole = None
 
-        self.manualTab = HelpPanel(parent = self.notebook, command = self.task.name)
+        self.manualTab = HelpPanel(parent = self.notebook, command = self.task.get_name())
         if not self.manualTab.GetFile():
             self.manualTab.Hide()
         else:
