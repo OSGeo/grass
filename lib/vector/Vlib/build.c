@@ -797,7 +797,7 @@ void Vect__build_downgrade(struct Map_info *Map, int build)
     - GV_BUILD_BASE - basic topology, nodes, lines, spatial index;
     - GV_BUILD_AREAS - build areas and islands, but islands are not attached to areas;
     - GV_BUILD_ATTACH_ISLES - attach islands to areas;
-    - GV_BUILD_CENTROIDS - assign centroids to areas;
+    - GV_BUILD_CENTROIDS - assign centroids to areas, build category index;
     - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
     
    If functions is called with build lower than current value of the
