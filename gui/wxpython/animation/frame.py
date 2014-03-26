@@ -43,7 +43,7 @@ from animation.utils import Orientation, ReplayMode, TemporalType
 
 
 MAX_COUNT = 4
-TMP_DIR = tempfile.mkdtemp()
+TMP_DIR = None
 
 gcore.set_raise_on_error(True)
 
@@ -61,6 +61,9 @@ class AnimationFrame(wx.Frame):
 
         # Make sure the temporal database exists
         tgis.init()
+
+        global TMP_DIR
+        TMP_DIR = tempfile.mkdtemp()
 
         self.animations = [Animation() for i in range(MAX_COUNT)]
         self.windows = []
