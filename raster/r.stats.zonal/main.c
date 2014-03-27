@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       r.statistics2
+ * MODULE:       r.stats.zonal
  *               
  * AUTHOR(S):    Glynn Clements; loosely based upon r.statistics, by
  *               Martin Schroeder, Geographisches Institut Heidelberg, Germany
