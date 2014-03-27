@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = r.statistics3
+PGM = r.stats.quantile
 
 LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)

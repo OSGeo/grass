@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       r.statistics3
+ * MODULE:       r.stats.quantile
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor),
  * PURPOSE:      Compute category or object oriented quantiles using two passes
  *
