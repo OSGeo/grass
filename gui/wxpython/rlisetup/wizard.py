@@ -303,7 +303,7 @@ class RLIWizard(object):
             self._circle(self.moving.width, self.moving.height)
             cl = float(self.CIR_CL) / float(self.rasterinfo['cols'])
             rl = float(self.CIR_RL) / float(self.rasterinfo['rows'])
-            fil.write("SAMPLEAREA -1|-1|%r|%r" % (rl, cl))
+            fil.write("MASKEDSAMPLEAREA -1|-1|%r|%r" % (rl, cl))
             fil.write("|%s" % self.moving.height)
             fil.write("\nMOVINGWINDOW\n")
         ##KMWINR = samplingtype moving, regionbox=keyboard, shape=rectangle
@@ -354,20 +354,20 @@ class RLIWizard(object):
         #elif self.samplingareapage.samplingtype == SamplingType.UNITS and self.samplingareapage.regionbox=='mouse':
 
         ##MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
-        elif self.samplingareapage.samplingtype == SamplingType.MUNITSC:
-            print "not added"
-
         ##MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
-        elif self.samplingareapage.samplingtype == SamplingType.MUNITSR:
+        elif self.samplingareapage.samplingtype in [SamplingType.MUNITSR,
+                                                    SamplingType.MUNITSC]:
+            # get the raster region into rastregion
+            grass.use_temp_region()
+            grass.run_command('g.region', rast=self.startpage.rast)
+            rastregion = grass.region()
+            s_n = rastregion['n']
+            s_w = rastregion['w']
+            rows = float(self.rasterinfo['rows'])
+            cols = float(self.rasterinfo['cols'])
             for tregion in self.msAreaList:
-                rows = float(self.rasterinfo['rows'])
-                cols = float(self.rasterinfo['cols'])
-                # get the raster region into rastregion
-                grass.use_temp_region()
-                grass.run_command('g.region', rast=self.startpage.rast)
-                rastregion = grass.region()
-                s_n = rastregion['n']
-                s_w = rastregion['w']
+                if self.samplingareapage.samplingtype == SamplingType.MUNITSC:
+                    tregion = tregion.region
                 abs_y = abs(round((float(s_n) - tregion['n']) / tregion['nsres']))
                 abs_x = abs(round((float(s_w) - tregion['w']) / tregion['ewres'])) 
                 abs_rl = abs(round((tregion['n'] - tregion['s']) / tregion['nsres']))
@@ -378,13 +378,17 @@ class RLIWizard(object):
                 rl = float(abs_rl) / float(rows)
                 cl = float(abs_cl) / float(cols)
                 sarea = str(x) + "|" + str(y) + "|" + str(rl) + "|" + str(cl)
-                fil.write("SQUAREAREA %s\n" % sarea)
+                if self.samplingareapage.samplingtype == SamplingType.MUNITSR:
+                    fil.write("SQUAREAREA %s\n" % sarea)
+                elif self.samplingareapage.samplingtype == SamplingType.MUNITSC:
+                    fil.write("MASKEDSAMPLEAREA %s" % sarea)
+                    fil.write("|%s\n" % self.msAreaList[0].raster)
 
         elif self.samplingareapage.samplingtype == SamplingType.REGIONS:
+            rows = float(self.rasterinfo['rows'])
+            cols = float(self.rasterinfo['cols'])
             for marea in self.msAreaList:
                 gregion = marea.region
-                rows = float(self.rasterinfo['rows'])
-                cols = float(self.rasterinfo['cols'])
                 abs_y = self.SF_Y + abs(round((self.SF_N - gregion['n']) / self.SF_NSRES))
                 abs_x = self.SF_X + abs(round((self.SF_W - gregion['w']) / self.SF_EWRES))
                 abs_rl = abs(round(gregion['n'] - gregion['s']) / self.SF_NSRES)
@@ -912,8 +916,8 @@ class SamplingAreasPage(TitledPage):
     def RegionDraw(self, regtype):
         """!Set the next page to units or drawunits"""
         #TODO add only to commit the last changes, remove after more testing
-        if self.radioBox.GetSelection() == 2:
-            self.regionBox.EnableItem(1, False)
+#        if self.radioBox.GetSelection() == 2:
+#            self.regionBox.EnableItem(1, False)
         if regtype == 0:
             self.regionbox = 'keyboard'
             if self.samplingtype == SamplingType.UNITS:
