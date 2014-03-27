@@ -51,11 +51,11 @@ from mapwin.buffered import BufferedMapWindow
 from core.render import Map
 from gui_core.toolbars import BaseToolbar, BaseIcons, ToolSwitcher
 from icons.icon import MetaIcon
-
+from core.gcmd import GMessage
 from grass.pydispatch.signal import Signal
 from grass.pydispatch.errors import DispatcherKeyError
 
-from functions import SamplingType
+from functions import SamplingType, checkMapExists
 
 
 class Circle:
@@ -206,13 +206,21 @@ class RLiSetupMapPanel(wx.Panel):
         dlg = wx.TextEntryDialog(None, 'Name of sample region',
                                  'Create region', 'region' + str(self.catId))
         ret = dlg.ShowModal()
-        if ret == wx.ID_OK:
-            raster = dlg.GetValue()
-            marea = self.writeArea(self._registeredGraphics.GetItem(0).GetCoords(), raster)
-            self.nextRegion(next=True, area=marea)
-        else:
-            self.nextRegion(next=False)
-        dlg.Destroy()
+        while True:
+            if ret == wx.ID_OK:
+                raster = dlg.GetValue()
+                if checkMapExists(raster):
+                    GMessage(parent=self, message=_("The raster file %s already"
+                             " exists, please change name") % raster)
+                    ret = dlg.ShowModal()
+                else:
+                    dlg.Destroy()
+                    marea = self.writeArea(self._registeredGraphics.GetItem(0).GetCoords(), raster)
+                    self.nextRegion(next=True, area=marea)
+                    break
+            else:
+                self.nextRegion(next=False)
+                break
 
     def nextRegion(self, next=True, area=None):
         self.mapWindow.ClearLines()
@@ -255,7 +263,7 @@ class RLiSetupMapPanel(wx.Panel):
                    type='area', overwrite=True)
 
         RunCommand('v.to.rast', input=tmpvector, output=rasterName,
-                   value=1, use='val', overwrite=True)
+                   value=1, use='val')
         wx.EndBusyCursor()
         grass.use_temp_region()
         grass.run_command('g.region', vect=tmpvector)
@@ -301,13 +309,21 @@ class RLiSetupMapPanel(wx.Panel):
         dlg = wx.TextEntryDialog(None, 'Name of sample circle region',
                                  'Create circle region', 'circle' + str(self.catId))
         ret = dlg.ShowModal()
-        if ret == wx.ID_OK:
-            raster = dlg.GetValue()
-            circle = self.writeCircle(c, raster)
-            self.nextCircle(next=True, circle=circle)
-        else:
-            self.nextCircle(next=False)
-        dlg.Destroy()
+        while True:        
+            if ret == wx.ID_OK:
+                raster = dlg.GetValue()
+                if checkMapExists(raster):
+                    GMessage(parent=self, message=_("The raster file %s already"
+                             " exists, please change name") % raster)
+                    ret = dlg.ShowModal()
+                else:
+                    dlg.Destroy()
+                    circle = self.writeCircle(c, raster)
+                    self.nextCircle(next=True, circle=circle)
+                    break
+            else:
+                self.nextCircle(next=False)
+                break
 
     def nextCircle(self, next=True, circle=None):
         self.mapWindow.ClearLines()

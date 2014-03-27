@@ -66,6 +66,17 @@ def retRLiPath():
         return rlipath
 
 
+def checkMapExists(name, typ='rast'):
+    """!Check if a map already exist in the working mapset"""
+    env = grass.gisenv()
+    mapset = env['MAPSET']
+    mapp = grass.find_file(name, typ, mapset)
+    if mapp.name != '':
+        return True
+    else:
+        return False
+
+
 def convertFeature(vect, outrast, cat, origrast):
     """Convert a single feature to a raster"""
     tmp_vect = "tmp_{rast}".format(rast=outrast)
