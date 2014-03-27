@@ -50,7 +50,13 @@ class Popen(subprocess.Popen):
 
         if shell == None:
             shell = (sys.platform == "win32")
-
+        if sys.platform == "win32":
+            # get full path including file extension for scripts
+            fcmd = get_real_command(args[0]) 
+            if fcmd.endswith('.py'):
+                args[0] = fcmd
+                args.insert(0, sys.executable)
+        
         subprocess.Popen.__init__(self, args, bufsize, executable,
                                   stdin, stdout, stderr,
                                   preexec_fn, close_fds, shell,
