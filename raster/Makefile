@@ -97,7 +97,7 @@ SUBDIRS = \
 	r.spreadpath \
 	r.statistics \
 	r.statistics2 \
-	r.statistics3 \
+	r.stats.quantile \
 	r.stats \
 	r.stream.channel \
 	r.stream.distance \
