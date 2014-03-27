@@ -33,10 +33,8 @@ int close_streamvect(char *stream_vect)
 
     G_message(_("Writing vector map <%s>..."), stream_vect);
 
-    if (0 > Vect_open_new(&Out, stream_vect, 0)) {
-	G_fatal_error(_("Unable to create vector map <%s>"), stream_vect);
-    }
-
+    Vect_open_new(&Out, stream_vect, 0);
+    
     nodestack = (struct sstack *)G_malloc(stack_step * sizeof(struct sstack));
 
     Points = Vect_new_line_struct();
@@ -115,7 +113,8 @@ int close_streamvect(char *stream_vect)
 
 		cseg_get(&stream, &stream_nbr, r_nbr, c_nbr);
 		if (stream_nbr <= 0)
-		    G_fatal_error("stream id %d not set, top is %d, parent is %d", stream_id, top, nodestack[top - 1].stream_id);
+                    G_fatal_error(_("Stream id %d not set, top is %d, parent is %d"),
+                                  stream_id, top, nodestack[top - 1].stream_id);
 
 		Vect_cat_set(Cats, 1, stream_id);
 		if (stream_node[stream_id].n_trib == 0)
@@ -135,7 +134,7 @@ int close_streamvect(char *stream_vect)
 		    
 		    cseg_get(&stream, &stream_nbr, r_nbr, c_nbr);
 		    if (stream_nbr <= 0)
-			G_fatal_error("stream id not set while tracing");
+			G_fatal_error(_("Stream id not set while tracing"));
 
 		    Vect_append_point(Points, west_offset + c_nbr * ew_res,
 				      north_offset - r_nbr * ns_res, 0);
@@ -154,7 +153,7 @@ int close_streamvect(char *stream_vect)
     }
     G_percent(n_outlets, n_outlets, 1);	/* finish it */
 
-    G_message(_("Write vector attribute table"));
+    G_message(_("Writing attribute data..."));
 
     /* Prepeare strings for use in db_* calls */
     db_init_string(&dbsql);
@@ -184,15 +183,15 @@ int close_streamvect(char *stream_vect)
     if (db_execute_immediate(driver, &dbsql) != DB_OK) {
 	db_close_database(driver);
 	db_shutdown_driver(driver);
-	G_fatal_error(_("Cannot create table: %s"), db_get_string(&dbsql));
+	G_fatal_error(_("Unable to create table: '%s'"), db_get_string(&dbsql));
     }
 
     if (db_create_index2(driver, Fi->table, cat_col_name) != DB_OK)
-	G_warning(_("Cannot create index"));
+	G_warning(_("Unable to create index on table <%s>"), Fi->table);
 
     if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
 			  DB_GROUP | DB_PUBLIC) != DB_OK)
-	G_fatal_error(_("Cannot grant privileges on table %s"), Fi->table);
+	G_fatal_error(_("Unable to grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
 
@@ -209,7 +208,7 @@ int close_streamvect(char *stream_vect)
 	if (db_execute_immediate(driver, &dbsql) != DB_OK) {
 	    db_close_database(driver);
 	    db_shutdown_driver(driver);
-	    G_fatal_error(_("Cannot insert new row: %s"),
+	    G_fatal_error(_("Unable to insert new row: '%s'"),
 			  db_get_string(&dbsql));
 	}
     }
@@ -244,9 +243,8 @@ int close_maps(char *stream_rast, char *stream_vect, char *dir_rast)
     stream_fd = dir_fd = -1;
     cell_buf1 = cell_buf2 = NULL;
 
-    G_message(_("Writing raster %s"),
-              (stream_rast != NULL) + (dir_rast != NULL) > 1 ? "maps" : "map");
-
+    G_message(_("Writing output raster maps..."));
+    
     /* write requested output rasters */
     if (stream_rast) {
 	stream_fd = Rast_open_new(stream_rast, CELL_TYPE);

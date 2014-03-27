@@ -69,7 +69,7 @@ static int continue_stream(CELL stream_id, int r_max, int c_max,
 
 	/* debug */
 	if (n_stream_nodes != *stream_no)
-	    G_warning(_("BUG: stream_no %d and n_stream_nodes %lld out of sync"),
+	    G_warning(_("Stream_no %d and n_stream_nodes %lld out of sync"),
 		      *stream_no, n_stream_nodes);
 
 	stream_node[*stream_no].n_alloc += 2;
@@ -665,7 +665,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
 
 	    /* debug */
 	    if (n_stream_nodes != stream_no)
-		G_warning(_("BUG: stream_no %d and n_stream_nodes %lld out of sync"),
+		G_warning(_("Stream_no %d and n_stream_nodes %lld out of sync"),
 			  stream_no, n_stream_nodes);
 	}
 

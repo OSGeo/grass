@@ -16,7 +16,7 @@ seg_open(SSEG *sseg, int nrows, int ncols, int row_in_seg, int col_in_seg,
 
     filename = G_tempfile();
     if (-1 == (fd = creat(filename, 0666))) {
-	G_warning(_("seg_open(): unable to create segment file"));
+	G_warning(_("Unable to create segment file"));
 	return -2;
     }
     if (fill)
@@ -30,29 +30,29 @@ seg_open(SSEG *sseg, int nrows, int ncols, int row_in_seg, int col_in_seg,
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
-	    G_warning(_("seg_open(): could not write segment file"));
+	    G_warning(_("Unable to write segment file"));
 	    return -1;
 	}
 	else {
-	    G_warning(_("seg_open(): illegal configuration parameter(s)"));
+	    G_warning(_("Illegal configuration parameter(s)"));
 	    return -3;
 	}
     }
     close(fd);
     if (-1 == (fd = open(filename, 2))) {
 	unlink(filename);
-	G_warning(_("seg_open(): unable to re-open segment file"));
+	G_warning(_("Unable to re-open file '%s'"), filename);
 	return -4;
     }
     if (0 > (errflag = segment_init(&(sseg->seg), fd, nsegs_in_memory))) {
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
-	    G_warning(_("seg_open(): could not read segment file"));
+	    G_warning(_("Unable to read segment file"));
 	    return -5;
 	}
 	else {
-	    G_warning(_("seg_open(): out of memory"));
+	    G_warning(_("Out of memory"));
 	    return -6;
 	}
     }
@@ -72,7 +72,7 @@ int seg_close(SSEG *sseg)
 int seg_put(SSEG *sseg, char *value, int row, int col)
 {
     if (segment_put(&(sseg->seg), value, row, col) < 0) {
-	G_warning(_("seg_put(): could not write segment file"));
+	G_warning(_("Unable to write segment file"));
 	return -1;
     }
     return 0;
@@ -90,7 +90,7 @@ int seg_put_row(SSEG *sseg, char *value, int row)
 int seg_get(SSEG *sseg, char *value, int row, int col)
 {
     if (segment_get(&(sseg->seg), value, row, col) < 0) {
-	G_warning(_("seg_get(): could not read segment file"));
+	G_warning(_("Unable to read segment file"));
 	return -1;
     }
     return 0;
@@ -99,7 +99,7 @@ int seg_get(SSEG *sseg, char *value, int row, int col)
 int seg_get_row(SSEG *sseg, char *value, int row)
 {
     if (segment_get_row(&(sseg->seg), value, row) < 0) {
-	G_warning(_("seg_get_row(): could not read segment file"));
+	G_warning(_("Unable to read segment file"));
 	return -1;
     }
     return 0;

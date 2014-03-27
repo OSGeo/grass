@@ -16,7 +16,7 @@ int cseg_open(CSEG *cseg, int srows, int scols, int nsegs_in_memory)
 
     filename = G_tempfile();
     if (-1 == (fd = creat(filename, 0666))) {
-	G_warning(_("cseg_open(): unable to create segment file"));
+	G_warning(_("Unable to create segment file"));
 	return -2;
     }
     if (0 >
@@ -26,29 +26,29 @@ int cseg_open(CSEG *cseg, int srows, int scols, int nsegs_in_memory)
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
-	    G_warning(_("cseg_open(): could not write segment file"));
+	    G_warning(_("Unable to write segment file"));
 	    return -1;
 	}
 	else {
-	    G_warning(_("cseg_open(): illegal configuration parameter(s)"));
+	    G_warning(_("Illegal configuration parameter(s)"));
 	    return -3;
 	}
     }
     close(fd);
     if (-1 == (fd = open(filename, 2))) {
 	unlink(filename);
-	G_warning(_("cseg_open(): unable to re-open segment file"));
+	G_warning(_("Unable to re-open segment file"));
 	return -4;
     }
     if (0 > (errflag = segment_init(&(cseg->seg), fd, nsegs_in_memory))) {
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
-	    G_warning(_("cseg_open(): could not read segment file"));
+	    G_warning(_("Unable to read segment file"));
 	    return -5;
 	}
 	else {
-	    G_warning(_("cseg_open(): out of memory"));
+	    G_warning(_("Out of memory"));
 	    return -6;
 	}
     }
@@ -76,7 +76,7 @@ int cseg_close(CSEG *cseg)
 int cseg_put(CSEG *cseg, CELL *value, int row, int col)
 {
     if (segment_put(&(cseg->seg), value, row, col) < 0) {
-	G_warning(_("cseg_put(): could not write segment file"));
+	G_warning(_("Unable to write segment file"));
 	return -1;
     }
     return 0;
@@ -85,7 +85,7 @@ int cseg_put(CSEG *cseg, CELL *value, int row, int col)
 int cseg_put_row(CSEG *cseg, CELL *value, int row)
 {
     if (segment_put_row(&(cseg->seg), value, row) < 0) {
-	G_warning(_("cseg_put_row(): could not write segment file"));
+	G_warning(_("Unable to write segment file"));
 	return -1;
     }
     return 0;
@@ -94,7 +94,7 @@ int cseg_put_row(CSEG *cseg, CELL *value, int row)
 int cseg_get(CSEG *cseg, CELL *value, int row, int col)
 {
     if (segment_get(&(cseg->seg), value, row, col) < 0) {
-	G_warning(_("cseg_get(): could not read segment file"));
+	G_warning(_("Unabel to read segment file"));
 	return -1;
     }
     return 0;
@@ -117,9 +117,9 @@ int cseg_read_raster(CSEG *cseg, char *map_name, char *mapset)
 	if (segment_put_row(&(cseg->seg), buffer, row) < 0) {
 	    G_free(buffer);
 	    Rast_close(map_fd);
-	    G_warning(_("cseg_read_cell(): unable to segment put row for <%s> in <%s>"),
-		    map_name, mapset);
-	    return (-1);
+	    G_warning(_("Unable to segment put row %d for raster map <%s>"),
+                      row, map_name);
+	    return -1;
 	}
     }
 

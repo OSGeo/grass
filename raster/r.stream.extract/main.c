@@ -86,15 +86,15 @@ int main(int argc, char *argv[])
     input.acc->required = NO;
     input.acc->description =
 	_("Stream extraction will use provided accumulation instead of calculating it anew");
-    input.acc->guisection = _("Input options");
+    input.acc->guisection = _("Input maps");
 
     input.depression = G_define_standard_option(G_OPT_R_INPUT);
     input.depression->key = "depression";
-    input.depression->label = _("Name of raster map with real depressions");
+    input.depression->label = _("Name of input raster map with real depressions");
     input.depression->required = NO;
     input.depression->description =
 	_("Streams will not be routed out of real depressions");
-    input.depression->guisection = _("Input options");
+    input.depression->guisection = _("Input maps");
 
     input.threshold = G_define_option();
     input.threshold->key = "threshold";
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     input.mont_exp->label =
 	_("Montgomery exponent for slope, disabled with 0");
     input.mont_exp->description =
-	_("Montgomery: accumulation is multiplied with pow(slope,mexp) and then compared with threshold.");
+	_("Montgomery: accumulation is multiplied with pow(slope,mexp) and then compared with threshold");
 
     input.min_stream_length = G_define_option();
     input.min_stream_length->key = "stream_length";
@@ -129,9 +129,9 @@ int main(int argc, char *argv[])
     input.min_stream_length->required = NO;
     input.min_stream_length->answer = "0";
     input.min_stream_length->label =
-	_("Delete stream segments shorter than stream_length cells.");
+	_("Delete stream segments shorter than stream_length cells");
     input.min_stream_length->description =
-	_("Applies only to first-order stream segments (springs/stream heads).");
+	_("Applies only to first-order stream segments (springs/stream heads)");
 
     input.memory = G_define_option();
     input.memory->key = "memory";
@@ -145,27 +145,27 @@ int main(int argc, char *argv[])
     output.stream_rast->description =
 	_("Name for output raster map with unique stream ids");
     output.stream_rast->required = NO;
-    output.stream_rast->guisection = _("Output options");
+    output.stream_rast->guisection = _("Output maps");
 
     output.stream_vect = G_define_standard_option(G_OPT_V_OUTPUT);
     output.stream_vect->key = "stream_vect";
     output.stream_vect->description =
 	_("Name for output vector map with unique stream ids");
     output.stream_vect->required = NO;
-    output.stream_vect->guisection = _("Output options");
+    output.stream_vect->guisection = _("Output maps");
 
     output.dir_rast = G_define_standard_option(G_OPT_R_OUTPUT);
     output.dir_rast->key = "direction";
     output.dir_rast->description =
 	_("Name for output raster map with flow direction");
     output.dir_rast->required = NO;
-    output.dir_rast->guisection = _("Output options");
+    output.dir_rast->guisection = _("Output maps");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     /***********************/
-    /*    check options    */
+    /*    check options   */
     /***********************/
 
     /* input maps exist ? */
@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
     if ((output.stream_rast->answer == NULL)
 	&& (output.stream_vect->answer == NULL)
 	&& (output.dir_rast->answer == NULL)) {
-	G_fatal_error(_("Sorry, you must choose at least one output map."));
+	G_fatal_error(_("At least one output raster maps must be specified"));
     }
 
     /*********************/
@@ -247,15 +247,10 @@ int main(int argc, char *argv[])
     /* open input maps */
     mapset = G_find_raster2(input.ele->answer, "");
     ele_fd = Rast_open_old(input.ele->answer, mapset);
-    if (ele_fd < 0)
-	G_fatal_error(_("Could not open input map %s"), input.ele->answer);
 
     if (input.acc->answer) {
 	mapset = G_find_raster2(input.acc->answer, "");
 	acc_fd = Rast_open_old(input.acc->answer, mapset);
-	if (acc_fd < 0)
-	    G_fatal_error(_("Could not open input map %s"),
-			  input.acc->answer);
     }
     else
 	acc_fd = -1;
@@ -263,9 +258,6 @@ int main(int argc, char *argv[])
     if (input.depression->answer) {
 	mapset = G_find_raster2(input.depression->answer, "");
 	depr_fd = Rast_open_old(input.depression->answer, mapset);
-	if (depr_fd < 0)
-	    G_fatal_error(_("Could not open input map %s"),
-			  input.depression->answer);
     }
     else
 	depr_fd = -1;
@@ -349,9 +341,9 @@ int main(int argc, char *argv[])
 
     /* load maps */
     if (load_maps(ele_fd, acc_fd) < 0)
-	G_fatal_error(_("Could not load input map(s)"));
+	G_fatal_error(_("Unable to load input raster map(s)"));
     else if (!n_points)
-	G_fatal_error(_("No non-NULL cells in input map(s)"));
+	G_fatal_error(_("No non-NULL cells in input raster map(s)"));
 
     G_debug(1, "open segments for A* points");
     /* columns per segment */
@@ -402,40 +394,40 @@ int main(int argc, char *argv[])
 
     /* initialize A* search */
     if (init_search(depr_fd) < 0)
-	G_fatal_error(_("Could not initialize search"));
+	G_fatal_error(_("Unable to initialize search"));
 
     /* sort elevation and get initial stream direction */
     if (do_astar() < 0)
-	G_fatal_error(_("Could not sort elevation map"));
+	G_fatal_error(_("Unable to sort elevation raster map values"));
     seg_close(&search_heap);
 
     if (acc_fd < 0) {
 	/* accumulate surface flow */
 	if (do_accum(d8cut) < 0)
-	    G_fatal_error(_("Could not calculate flow accumulation"));
+	    G_fatal_error(_("Unable to calculate flow accumulation"));
     }
 
     /* extract streams */
     if (extract_streams(threshold, mont_exp, acc_fd < 0) < 0)
-	G_fatal_error(_("Could not extract streams"));
+	G_fatal_error(_("Unable to extract streams"));
 
     seg_close(&astar_pts);
     seg_close(&watalt);
 
     /* thin streams */
     if (thin_streams() < 0)
-	G_fatal_error(_("Could not thin streams"));
+	G_fatal_error(_("Unable to thin streams"));
 
     /* delete short streams */
     if (min_stream_length) {
 	if (del_streams(min_stream_length) < 0)
-	    G_fatal_error(_("Could not delete short stream segments"));
+	    G_fatal_error(_("Unable to delete short stream segments"));
     }
 
     /* write output maps */
     if (close_maps(output.stream_rast->answer, output.stream_vect->answer,
 		   output.dir_rast->answer) < 0)
-	G_fatal_error(_("Could not write output maps"));
+	G_fatal_error(_("Unable to write output raster maps"));
 
     cseg_close(&stream);
     seg_close(&aspflag);

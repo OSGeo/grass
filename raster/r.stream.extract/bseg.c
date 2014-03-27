@@ -16,7 +16,7 @@ int bseg_open(BSEG *bseg, int srows, int scols, int nsegs_in_memory)
 
     filename = G_tempfile();
     if (-1 == (fd = creat(filename, 0666))) {
-	G_warning(_("bseg_open(): unable to create segment file"));
+	G_warning(_("Unable to create segment file"));
 	return -2;
     }
     if (0 > (errflag = segment_format(fd, Rast_window_rows(),
@@ -25,29 +25,29 @@ int bseg_open(BSEG *bseg, int srows, int scols, int nsegs_in_memory)
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
-	    G_warning(_("bseg_open(): could not write segment file"));
+	    G_warning(_("Unable to write segment file"));
 	    return -1;
 	}
 	else {
-	    G_warning(_("bseg_open(): illegal configuration parameter(s)"));
+	    G_warning(_("Illegal configuration parameter(s)"));
 	    return -3;
 	}
     }
     close(fd);
     if (-1 == (fd = open(filename, 2))) {
 	unlink(filename);
-	G_warning(_("bseg_open(): unable to re-open segment file"));
+	G_warning(_("Unable to re-open segment file"));
 	return -4;
     }
     if (0 > (errflag = segment_init(&(bseg->seg), fd, nsegs_in_memory))) {
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
-	    G_warning(_("bseg_open(): could not read segment file"));
+	    G_warning(_("Unable to read segment file"));
 	    return -5;
 	}
 	else {
-	    G_warning(_("bseg_open(): out of memory"));
+	    G_warning(_("Out of memory"));
 	    return -6;
 	}
     }
@@ -75,7 +75,7 @@ int bseg_close(BSEG *bseg)
 int bseg_put(BSEG *bseg, char *value, int row, int col)
 {
     if (segment_put(&(bseg->seg), value, row, col) < 0) {
-	G_warning(_("bseg_put(): could not write segment file"));
+	G_warning(_("Unable to write segment file"));
 	return -1;
     }
     return 0;
@@ -84,7 +84,7 @@ int bseg_put(BSEG *bseg, char *value, int row, int col)
 int bseg_put_row(BSEG *bseg, char *value, int row)
 {
     if (segment_put_row(&(bseg->seg), value, row) < 0) {
-	G_warning(_("bseg_put_row(): could not write segment file"));
+	G_warning(_("Unable to write segment file"));
 	return -1;
     }
     return 0;
@@ -93,7 +93,7 @@ int bseg_put_row(BSEG *bseg, char *value, int row)
 int bseg_get(BSEG *bseg, char *value, int row, int col)
 {
     if (segment_get(&(bseg->seg), value, row, col) < 0) {
-	G_warning(_("bseg_get(): could not read segment file"));
+	G_warning(_("Unable to read segment file"));
 	return -1;
     }
     return 0;

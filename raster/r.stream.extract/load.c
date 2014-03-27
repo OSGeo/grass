@@ -30,9 +30,9 @@ int load_maps(int ele_fd, int acc_fd)
     ASP_FLAG *afbuf;
 
     if (acc_fd < 0)
-	G_message(_("Loading elevation map..."));
+	G_message(_("Loading elevation raster map..."));
     else
-	G_message(_("Loading input maps..."));
+	G_message(_("Loading input raster maps..."));
 
     n_search_points = n_points = 0;
 
@@ -41,7 +41,7 @@ int load_maps(int ele_fd, int acc_fd)
     ele_buf = Rast_allocate_buf(ele_map_type);
 
     if (ele_buf == NULL) {
-	G_warning(_("Could not allocate memory"));
+	G_warning(_("Unable to allocate memory"));
 	return -1;
     }
 
@@ -50,7 +50,7 @@ int load_maps(int ele_fd, int acc_fd)
 	acc_size = Rast_cell_size(acc_map_type);
 	acc_buf = Rast_allocate_buf(acc_map_type);
 	if (acc_buf == NULL) {
-	    G_warning(_("Could not allocate memory"));
+	    G_warning(_("Unable to allocate memory"));
 	    return -1;
 	}
     }
@@ -92,7 +92,7 @@ int load_maps(int ele_fd, int acc_fd)
 		/* flow accumulation */
 		if (acc_fd >= 0) {
 		    if (!Rast_is_null_value(acc_ptr, acc_map_type))
-			G_fatal_error(_("Elevation map is NULL but accumulation map is not NULL!"));
+			G_fatal_error(_("Elevation raster map is NULL but accumulation map is not NULL"));
 		}
 		Rast_set_d_null_value(&acc_value, 1);
 	    }
@@ -117,7 +117,7 @@ int load_maps(int ele_fd, int acc_fd)
 		else {
 		    if (Rast_is_null_value(acc_ptr, acc_map_type)) {
 			/* can this be ok after weighing ? */
-			G_fatal_error(_("Accumulation map is NULL but elevation map is not NULL!"));
+			G_fatal_error(_("Accumulation raster map is NULL but elevation map is not NULL"));
 		    }
 
 		    switch (acc_map_type) {
