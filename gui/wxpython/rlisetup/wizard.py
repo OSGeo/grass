@@ -329,7 +329,6 @@ class RLIWizard(object):
         ##KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
         ##KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
         elif samtype == SamplingType.KUNITSC or samtype == SamplingType.KUNITSR:
-
             if samtype == SamplingType.KUNITSC:
                 self._circle(self.units.width, self.units.height)
                 cl = float(self.CIR_CL) / float(self.rasterinfo['cols'])
@@ -915,9 +914,6 @@ class SamplingAreasPage(TitledPage):
 
     def RegionDraw(self, regtype):
         """!Set the next page to units or drawunits"""
-        #TODO add only to commit the last changes, remove after more testing
-#        if self.radioBox.GetSelection() == 2:
-#            self.regionBox.EnableItem(1, False)
         if regtype == 0:
             self.regionbox = 'keyboard'
             if self.samplingtype == SamplingType.UNITS:
@@ -958,8 +954,11 @@ class DrawRegionsPage(TitledPage):
 
         if self.regioncount > numregions:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+            self.parent.wizard.ShowPage(self.parent.summarypage)
         else:
-            self.title.SetLabel(_('Draw sample region ' + str(self.regioncount) + ' of ' + str(numregions) ))
+            self.title.SetLabel(_('Draw sample region ' + \
+                                  str(self.regioncount) + ' of ' + \
+                                  str(numregions)))
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
@@ -1020,7 +1019,8 @@ class SampleUnitsKeyPage(TitledPage):
         self.typeBox = wx.RadioBox(parent=self.scrollPanel, id=wx.ID_ANY,
                                    majorDimension=1, style=wx.RA_SPECIFY_COLS,
                                    label=" %s " % _("Select type of shape"),
-                                   choices=[_('Rectangle'), _('Circle')])
+                                   choices=[_('Rectangle'), _('Circle'),
+                                            ('None')])
 
         self.panelSizer.Add(self.typeBox, flag=wx.ALIGN_LEFT, pos=(0, 0),
                             span=(1, 2))
@@ -1096,6 +1096,9 @@ class SampleUnitsKeyPage(TitledPage):
 
     def OnEnterPage(self, event=None):
         """!Function during entering"""
+        # This is an hack to force the user to choose Rectangle or Circle
+        self.typeBox.SetSelection(2),
+        self.typeBox.ShowItem(2, False)
         self.panelSizer.Layout()
 
     def OnExitPage(self, event=None):
@@ -1180,7 +1183,8 @@ class MovingKeyPage(TitledPage):
         # type of shape
         self.typeBox = wx.RadioBox(parent=self, id=wx.ID_ANY,
                                       label=" %s " % _("Select type of shape"),
-                                      choices=[_('Rectangle'), _('Circle')],
+                                      choices=[_('Rectangle'), _('Circle'),
+                                               ('None')],
                                       majorDimension=1,
                                       style=wx.RA_SPECIFY_COLS)
 
@@ -1213,6 +1217,9 @@ class MovingKeyPage(TitledPage):
         self.heightTxt.Bind(wx.EVT_TEXT, self.OnHeight)
 
     def OnEnterPage(self, event):
+        # This is an hack to force the user to choose Rectangle or Circle
+        self.typeBox.SetSelection(2),
+        self.typeBox.ShowItem(2, False)
         if self.parent.samplingareapage.samplingtype == SamplingType.MVWIN:
             self.title.SetLabel(_("Set moving windows"))
         self.OnType(None)
@@ -1257,8 +1264,10 @@ class UnitsMousePage(TitledPage):
         self.typeBox = wx.RadioBox(parent=self, id=wx.ID_ANY,
                                    majorDimension=1, style=wx.RA_SPECIFY_COLS,
                                    label=" %s " % _("Select type of shape"),
-                                   choices=[_('Rectangle'), _('Circle')])
-
+                                   choices=[_('Rectangle'), _('Circle'), ('')])
+        # This is an hack to force the user to choose Rectangle or Circle
+        self.typeBox.SetSelection(2),
+        self.typeBox.ShowItem(2, False)
         self.sizer.Add(self.typeBox, flag=wx.ALIGN_LEFT, pos=(0, 0),
                             span=(1, 2))
 
@@ -1303,6 +1312,8 @@ class UnitsMousePage(TitledPage):
                                                            SamplingType.MUNITSC]:
             self.title.SetLabel(_("Draw sampling region"))
             self.sizer.Show(self.regionNumPanel)
+        if self.typeBox.GetSelection() == 2:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         self.sizer.Layout()
 
     def OnType(self, event):
@@ -1312,6 +1323,7 @@ class UnitsMousePage(TitledPage):
                                                              SamplingType.MMVWINR,
                                                              SamplingType.MMVWINC]:
                 self.parent.samplingareapage.samplingtype = SamplingType.MMVWINR
+                wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             else:
                 self.parent.samplingareapage.samplingtype = SamplingType.MUNITSR
             self.drawtype = 'rectangle'
@@ -1320,6 +1332,7 @@ class UnitsMousePage(TitledPage):
                                                              SamplingType.MMVWINR,
                                                              SamplingType.MMVWINC]:
                 self.parent.samplingareapage.samplingtype = SamplingType.MMVWINC
+                wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             else:
                 self.parent.samplingareapage.samplingtype = SamplingType.MUNITSC
             self.drawtype = 'circle'
@@ -1358,11 +1371,12 @@ class DrawSampleUnitsPage(TitledPage):
         drawtype = self.parent.drawunits.drawtype
         if self.regioncount > self.numregions:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+            self.parent.wizard.ShowPage(self.parent.summarypage)
         else:
-            self.title.SetLabel(_('Draw Sampling ' + drawtype  + ' ' \
+            self.title.SetLabel(_('Draw Sampling ' + drawtype + ' ' \
                                   + str(self.regioncount) + ' of ' \
-                                  + str(self.numregions) ))
-            wx.FindWindowById(wx.ID_FORWARD).Enable(False)      
+                                  + str(self.numregions)))
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
         """!Function during entering"""
@@ -1372,11 +1386,11 @@ class DrawSampleUnitsPage(TitledPage):
                                                          SamplingType.MMVWINR]:
             self.numregions = 1
         else:
-            self.numregions = int(self.parent.drawunits.numregions)        
+            self.numregions = int(self.parent.drawunits.numregions)
         self.regioncount = 0
         if self.mapPanel:
             self.sizer.Remove(self.mapPanel)
-            
+
         gtype = self.parent.drawunits.drawtype
         self.mapPanel = RLiSetupMapPanel(self,
                                          samplingType=self.parent.samplingareapage.samplingtype, 
@@ -1660,7 +1674,7 @@ class SummaryPage(TitledPage):
             self.regionkeytxt.SetLabel("")
 
         if self.parent.samplingareapage.samplingtype == SamplingType.UNITS \
-        and self.parent.samplingareapage.regionbox=='keyboard':
+        and self.parent.samplingareapage.regionbox == 'keyboard':
             self.shapelabel.SetLabel(_('Type of shape:'))
             self.shapetxt.SetLabel(self.parent.units.boxtype)
             if self.parent.units.boxtype == 'circle':
