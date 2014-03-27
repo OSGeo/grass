@@ -6,7 +6,7 @@
  * PURPOSE:      Hydrological analysis
  *               Extracts stream networks from accumulation raster with
  *               given threshold
- * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
