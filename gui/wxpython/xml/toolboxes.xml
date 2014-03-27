@@ -751,7 +751,7 @@
       <module-item name="r.statistics2">
         <label>Statistical overlay</label>
       </module-item>
-      <module-item name="r.statistics3">
+      <module-item name="r.stats.quantile">
         <label>Quantiles overlay</label>
       </module-item>
     </items>
