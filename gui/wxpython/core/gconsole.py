@@ -524,6 +524,14 @@ class GConsole(wx.EvtHandler):
             #
             # Check if the script has an interface (avoid double-launching
             # of the script)
+
+            # check if we ignore the command (similar to grass commands part)
+            if self._ignoredCmdPattern and \
+               re.compile(self._ignoredCmdPattern).search(' '.join(command)):
+                event = gIgnoredCmdRun(cmd=command)
+                wx.PostEvent(self, event)
+                return
+
             skipInterface = True
             if os.path.splitext(command[0])[1] in ('.py', '.sh'):
                 try:

@@ -291,7 +291,8 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(guiparent = self, giface = self._giface,
                                   ignoredCmdPattern = '^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.in.gdal$|'
                                                       '^r.external$|^r.external.out$|'
-                                                      '^v.in.ogr$|^v.external$|^v.external.out$')
+                                                      '^v.in.ogr$|^v.external$|^v.external.out$|'
+                                                      '^cd$|^cd .*')
         self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
                                       menuModel=self._moduleTreeBuilder.GetModel(),
                                       gcstyle = GC_PROMPT)
@@ -621,7 +622,8 @@ class GMFrame(wx.Frame):
             self.OnLinkOgrLayers(event = None, cmd = command)
         elif command[0] == 'v.external.out':
              self.OnVectorOutputFormat(event = None)
-
+        elif command[0] == 'cd':
+             self.OnChangeCWD(event=None, cmd=command)
         else:
             raise ValueError('Layer Manager special command (%s)'
                              ' not supported.' % ' '.join(command))
@@ -945,14 +947,53 @@ class GMFrame(wx.Frame):
                     display.SetTitle(dispId) # TODO: signal ?
                     dispId += 1 
         
-    def OnChangeCWD(self, event):
+    def OnChangeCWD(self, event=None, cmd=None):
         """!Change current working directory
-        """
-        dlg = wx.DirDialog(parent = self, message = _("Choose a working directory"),
-                            defaultPath = os.getcwd(), style = wx.DD_CHANGE_DIR)
 
-        if dlg.ShowModal() == wx.ID_OK:
-            self.cwdPath = dlg.GetPath() # is saved in the workspace
+        @param event to be able to serve as a handler of wx event
+        @param command cd command as a list (must start with 'cd')
+        """
+        # local functions
+        def write_beginning(directory):
+            self._giface.WriteCmdLog('cd "' + directory + '"')
+
+        def write_changed():
+            self._giface.WriteLog(_("Working directory changed to:\n\"%s\"")
+                                  % os.getcwd())
+
+        def write_end():
+            self._giface.WriteCmdLog(' ')
+
+        # check correctness of cmd
+        if cmd and (cmd[0] != 'cd' or len(cmd) > 2):
+            raise ValueError("OnChangeCWD cmd parameter must be list with"
+                             " lenght 1 or 2 and 'cd' as a first item")
+        # use chdir or dialog
+        if cmd and len(cmd) == 2:
+            write_beginning(cmd[1])
+            if cmd[1] in ['-h', '--h', '--help']:
+                self._giface.WriteLog(_("Changes current working directory"
+                                        " for this GUI."))
+                self._giface.WriteLog(_("Usage: cd [directory]"))
+                write_end()
+                return
+            try:
+                os.chdir(cmd[1])
+                write_changed()
+            except OSError as error:
+                self._giface.WriteError(str(error))
+            write_end()
+        else:
+            # style wx.DD_CHANGE_DIR changes the directory
+            dlg = wx.DirDialog(parent=self,
+                               message=_("Choose a working directory"),
+                               defaultPath=os.getcwd(), style=wx.DD_CHANGE_DIR)
+
+            if dlg.ShowModal() == wx.ID_OK:
+                self.cwdPath = dlg.GetPath()  # is saved in the workspace
+                write_beginning(self.cwdPath)
+                write_changed()
+                write_end()
 
     def GetCwdPath(self):
         """!Get current working directory or None"""
