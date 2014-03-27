@@ -748,7 +748,7 @@
         <label>Patch raster maps</label>
       </module-item>
       <separator/>
-      <module-item name="r.statistics2">
+      <module-item name="r.stats.zonal">
         <label>Statistical overlay</label>
       </module-item>
       <module-item name="r.stats.quantile">
