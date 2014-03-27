@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-03 17:46+0100\n"
+"POT-Creation-Date: 2014-03-27 20:41+0100\n"
 "PO-Revision-Date: 2010-08-24 11:31+0530\n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: GRASS Malayalam Translation Team <rashadkm@gmail.com>\n"
@@ -1527,9 +1527,20 @@ msgid ""
 "-- Table unit tests finished successfully --"
 msgstr ""
 
-#: ../lib/db/dbmi_base/login.c:111
-msgid "Login file corrupted"
+#: ../lib/db/dbmi_base/login.c:99
+#, fuzzy, c-format
+msgid "Unable to read file '%s'"
+msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
+
+#: ../lib/db/dbmi_base/login.c:113
+#, fuzzy, c-format
+msgid "Login file (%s) corrupted (line: %s)"
 msgstr "ഗ്രാസ്സിലേക്ക് കയറുന്ന ഫയലിൽ പിശക്"
+
+#: ../lib/db/dbmi_base/login.c:142
+#, fuzzy, c-format
+msgid "Unable to write file '%s'"
+msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 
 #: ../lib/db/dbmi_base/default_name.c:136
 msgid "Programmer error"
@@ -1888,117 +1899,125 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
+#: ../lib/init/grass.py:129 ../lib/gis/parser.c:569
+msgid "ERROR"
+msgstr ""
+
 #: ../lib/init/grass.py:130
 #, fuzzy
 msgid "Exiting..."
 msgstr "ചതുരയളവ് പണിയുന്നു..."
 
-#: ../lib/init/grass.py:200
+#: ../lib/init/grass.py:202
 msgid "Usage"
 msgstr ""
 
-#: ../lib/init/grass.py:201 ../lib/gis/parser_html.c:143
+#: ../lib/init/grass.py:203 ../lib/gis/parser_html.c:143
 #: ../lib/gis/parser_rest.c:146
 msgid "Flags"
 msgstr ""
 
-#: ../lib/init/grass.py:202
+#: ../lib/init/grass.py:204
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:203
+#: ../lib/init/grass.py:205
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:204
+#: ../lib/init/grass.py:206
 msgid "create given database, location or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:205
-msgid "use text based interface"
+#: ../lib/init/grass.py:207
+msgid "use text based interface (skip welcome screen)"
 msgstr ""
 
-#: ../lib/init/grass.py:206 ../lib/init/grass.py:208
+#: ../lib/init/grass.py:208 ../lib/init/grass.py:210 ../lib/init/grass.py:212
 msgid "and set as default"
 msgstr ""
 
-#: ../lib/init/grass.py:207
+#: ../lib/init/grass.py:209
+msgid "use text based interface (show welcome screen)"
+msgstr ""
+
+#: ../lib/init/grass.py:211
 msgid "use $DEFAULT_GUI graphical user interface"
 msgstr ""
 
-#: ../lib/init/grass.py:209
+#: ../lib/init/grass.py:213
 msgid "print GRASS configuration parameters"
 msgstr ""
 
-#: ../lib/init/grass.py:210
+#: ../lib/init/grass.py:214
 msgid "options: arch,build,compiler,path,revision"
 msgstr ""
 
-#: ../lib/init/grass.py:211 ../lib/gis/parser_html.c:186
+#: ../lib/init/grass.py:215 ../lib/gis/parser_html.c:186
 #: ../lib/gis/parser_rest.c:179
 msgid "Parameters"
 msgstr ""
 
-#: ../lib/init/grass.py:212
+#: ../lib/init/grass.py:216
 msgid "initial database (path to GIS data)"
 msgstr ""
 
-#: ../lib/init/grass.py:213
+#: ../lib/init/grass.py:217
 msgid "initial location"
 msgstr ""
 
-#: ../lib/init/grass.py:214
+#: ../lib/init/grass.py:218
 msgid "initial mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:215
+#: ../lib/init/grass.py:219
 msgid "fully qualified initial mapset directory"
 msgstr ""
 
-#: ../lib/init/grass.py:216
+#: ../lib/init/grass.py:220
 msgid "Environment variables relevant for startup"
 msgstr ""
 
-#: ../lib/init/grass.py:217
+#: ../lib/init/grass.py:221
 msgid "select GUI (text, gui)"
 msgstr ""
 
-#: ../lib/init/grass.py:218
+#: ../lib/init/grass.py:222
 msgid "set html web browser for help pages"
 msgstr ""
 
-#: ../lib/init/grass.py:219
+#: ../lib/init/grass.py:223
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 
-#: ../lib/init/grass.py:220
+#: ../lib/init/grass.py:224
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr ""
 
-#: ../lib/init/grass.py:221
+#: ../lib/init/grass.py:225
 msgid "shell script to be processed as batch job"
 msgstr ""
 
-#: ../lib/init/grass.py:222
+#: ../lib/init/grass.py:226
 msgid "set python shell name to override 'python'"
 msgstr ""
 
-#: ../lib/init/grass.py:260
+#: ../lib/init/grass.py:264
 #, fuzzy, python-format
 msgid ""
 "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
 msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/init/grass.py:344
+#: ../lib/init/grass.py:348
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr ""
 
-#: ../lib/init/grass.py:488
+#: ../lib/init/grass.py:492
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:496
+#: ../lib/init/grass.py:500
 #, python-format
 msgid ""
 "\n"
@@ -2015,11 +2034,11 @@ msgid ""
 "      http://grass.osgeo.org\n"
 msgstr ""
 
-#: ../lib/init/grass.py:512
+#: ../lib/init/grass.py:516
 msgid "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:541
+#: ../lib/init/grass.py:545
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -2029,7 +2048,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:553
+#: ../lib/init/grass.py:557
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -2038,46 +2057,46 @@ msgid ""
 "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:600 ../lib/gis/make_mapset.c:66
+#: ../lib/init/grass.py:604 ../lib/gis/make_mapset.c:66
 #, fuzzy, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr "ഗ്രൂപ്പ് <%s> കാലിയാണ്‌ \n"
 
-#: ../lib/init/grass.py:605
+#: ../lib/init/grass.py:609
 #, python-format
 msgid "ERROR: <%s> is not a valid GRASS location"
 msgstr ""
 
-#: ../lib/init/grass.py:608
+#: ../lib/init/grass.py:612
 #, python-format
 msgid ""
 "Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be "
 "created by '-c' switch."
 msgstr ""
 
-#: ../lib/init/grass.py:627
+#: ../lib/init/grass.py:631
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:655
+#: ../lib/init/grass.py:659
 msgid "Missing WIND file fixed"
 msgstr ""
 
-#: ../lib/init/grass.py:667
+#: ../lib/init/grass.py:671
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:682
+#: ../lib/init/grass.py:686
 #, python-format
 msgid ""
-"Invalid user interface specified - <%s>.\n"
-"Use the --help option to see valid interface names."
+"Invalid user interface specified - <%s>. Use the --help option to see valid "
+"interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:696
+#: ../lib/init/grass.py:700
 msgid ""
 "Error in GUI startup. If necessary, please report this error to the GRASS "
 "developers.\n"
@@ -2086,19 +2105,19 @@ msgid ""
 "Hit RETURN to continue..."
 msgstr ""
 
-#: ../lib/init/grass.py:706
+#: ../lib/init/grass.py:710
 msgid ""
 "Received EXIT message from GUI.\n"
 "GRASS is not started. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:709
+#: ../lib/init/grass.py:713
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr ""
 
-#: ../lib/init/grass.py:720
+#: ../lib/init/grass.py:724
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE=%(gisbase)s\n"
@@ -2108,40 +2127,40 @@ msgid ""
 "Check the <%s(file)> file."
 msgstr ""
 
-#: ../lib/init/grass.py:834
+#: ../lib/init/grass.py:851
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:842
+#: ../lib/init/grass.py:859
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
 "found). Concurrent use not allowed."
 msgstr ""
 
-#: ../lib/init/grass.py:846
+#: ../lib/init/grass.py:863
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:863
+#: ../lib/init/grass.py:880
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "ചതുരയളവ് പണിയുന്നു..."
 
-#: ../lib/init/grass.py:908
+#: ../lib/init/grass.py:925
 #, python-format
 msgid "Unsupported shell <%(sh)s>: %(env)s"
 msgstr ""
 
-#: ../lib/init/grass.py:913
+#: ../lib/init/grass.py:930
 msgid "The SHELL variable is not set"
 msgstr ""
 
-#: ../lib/init/grass.py:924
+#: ../lib/init/grass.py:941
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -2150,87 +2169,87 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:929
+#: ../lib/init/grass.py:946
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:931
+#: ../lib/init/grass.py:948
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:936
+#: ../lib/init/grass.py:953
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:942
+#: ../lib/init/grass.py:959
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:971
+#: ../lib/init/grass.py:988
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:981
+#: ../lib/init/grass.py:998
 msgid "GRASS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:982
+#: ../lib/init/grass.py:999
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:984
+#: ../lib/init/grass.py:1001
 msgid "Help is available with the command:"
 msgstr ""
 
-#: ../lib/init/grass.py:985
+#: ../lib/init/grass.py:1002
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:988
+#: ../lib/init/grass.py:1005
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:990
+#: ../lib/init/grass.py:1007
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:992
+#: ../lib/init/grass.py:1009
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1105
+#: ../lib/init/grass.py:1122
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "ഡ്രയ്വ്വർ തുടങ്ങാൻ സാധിക്കുന്നില്ല <%s>"
 
-#: ../lib/init/grass.py:1110
+#: ../lib/init/grass.py:1127
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:1111 ../lib/init/grass.py:1116
+#: ../lib/init/grass.py:1128 ../lib/init/grass.py:1133
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:1114
+#: ../lib/init/grass.py:1131
 msgid "Done."
 msgstr ""
 
-#: ../lib/init/grass.py:1121
+#: ../lib/init/grass.py:1138
 msgid "Cleaning up temporary files..."
 msgstr ""
 
-#: ../lib/init/grass.py:1165
+#: ../lib/init/grass.py:1182
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "റാസ്റ്റെർ മാപ്പ് <%s> കണ്മാനില്ല"
 
-#: ../lib/init/grass.py:1318
+#: ../lib/init/grass.py:1343
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -2240,11 +2259,11 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1327
+#: ../lib/init/grass.py:1352
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1381
+#: ../lib/init/grass.py:1406
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
@@ -3122,11 +3141,11 @@ msgstr ""
 msgid "Top must be larger than Bottom"
 msgstr ""
 
-#: ../lib/gis/home.c:35
+#: ../lib/gis/home.c:37
 msgid "Unable to determine user's home directory"
 msgstr ""
 
-#: ../lib/gis/home.c:112
+#: ../lib/gis/home.c:118
 #, fuzzy, c-format
 msgid "Failed to create directory [%s]"
 msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
@@ -3377,8 +3396,9 @@ msgstr "റാസ്റ്റെർ മാപ്പ് തുറക്കാൻ 
 
 #: ../lib/gis/parser_standard_options.c:461
 #: ../lib/gis/parser_standard_options.c:470
-msgid "Feature type"
-msgstr ""
+#, fuzzy
+msgid "Input feature type"
+msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ പട്ടുന്നില്ല"
 
 #: ../lib/gis/parser_standard_options.c:477
 msgid "Layer number or name"
@@ -3961,10 +3981,6 @@ msgstr ""
 #: ../lib/gis/parser.c:536
 #, c-format
 msgid "Sorry <%s> is not a valid option"
-msgstr ""
-
-#: ../lib/gis/parser.c:569
-msgid "ERROR"
 msgstr ""
 
 #: ../lib/gis/parser.c:806
@@ -5271,7 +5287,7 @@ msgstr "റാസ്റ്റെർ മാപ്പ് <%s> കണ്മാന�
 msgid "Unable to parse time string: %s"
 msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 
-#: ../lib/python/temporal/gui_support.py:57 ../lib/python/script/core.py:1327
+#: ../lib/python/temporal/gui_support.py:57 ../lib/python/script/core.py:1333
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
@@ -5334,42 +5350,42 @@ msgstr ""
 msgid "Error while computation"
 msgstr ""
 
-#: ../lib/python/script/core.py:922
+#: ../lib/python/script/core.py:928
 msgid "Mixing value types. Will try to compare after integer conversion"
 msgstr ""
 
-#: ../lib/python/script/core.py:1140
+#: ../lib/python/script/core.py:1146
 #, python-format
 msgid "Element type should be \"cell\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1169 ../lib/python/script/core.py:1259
-#: ../lib/python/script/core.py:1314
+#: ../lib/python/script/core.py:1175 ../lib/python/script/core.py:1265
+#: ../lib/python/script/core.py:1320
 #, python-format
 msgid "Element type should be \"rast\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1515
+#: ../lib/python/script/core.py:1521
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "വെക്റ്റർ അടയ്ക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/python/script/core.py:1551
+#: ../lib/python/script/core.py:1557
 #, python-format
 msgid "Location <%s> already exists. Operation canceled."
 msgstr ""
 
-#: ../lib/python/script/core.py:1554
+#: ../lib/python/script/core.py:1560
 #, fuzzy, python-format
 msgid "Location <%s> already exists and will be overwritten"
 msgstr "ഈ ടേബിൾ <%s> ഡേറ്റാബേയ്സിൽ ഉണ്ട് <%s>"
 
-#: ../lib/python/script/core.py:1686
+#: ../lib/python/script/core.py:1692
 #, fuzzy, python-format
 msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
 msgstr "അസാധുവായ ടേബിൾ മാപ്പിന്റെ പേർ <%s> '.' ഉണ്ടാകാൻ പാടില്ല \n"
 
-#: ../lib/python/script/core.py:1695
+#: ../lib/python/script/core.py:1701
 #, fuzzy, python-format
 msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
 msgstr "അസാധുവായ ടേബിൾ മാപ്പിന്റെ പേർ <%s> ഈ അക്ഷരം അനുവദിക്കുന്നതല്ല <%c> \n"
@@ -5426,7 +5442,7 @@ msgstr ""
 msgid "<required>"
 msgstr ""
 
-#: ../lib/python/script/task.py:485 ../lib/python/script/task.py:489
+#: ../lib/python/script/task.py:486 ../lib/python/script/task.py:490
 #, python-format
 msgid ""
 "Unable to fetch interface description for command '%(cmd)s'.\n"
@@ -6474,35 +6490,30 @@ msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ 
 msgid "Attempt to access dead feature %d"
 msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ പട്ടുന്നില്ല"
 
-#: ../lib/vector/Vlib/open_pg.c:85 ../lib/vector/Vlib/open_pg.c:239
+#: ../lib/vector/Vlib/open_pg.c:85 ../lib/vector/Vlib/open_pg.c:232
 #: ../lib/vector/Vlib/write_pg.c:1058
 #, fuzzy
 msgid "Connection string not defined"
 msgstr "കണക്ഷൻ നിർവീര്യമായി."
 
-#: ../lib/vector/Vlib/open_pg.c:90 ../lib/vector/Vlib/open_pg.c:244
+#: ../lib/vector/Vlib/open_pg.c:90 ../lib/vector/Vlib/open_pg.c:237
 #: ../lib/vector/Vlib/write_pg.c:1063 ../lib/vector/Vlib/write_pg.c:1204
 #: ../lib/vector/Vlib/write_pg.c:1354
 msgid "PostGIS feature table not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:104 ../lib/vector/Vlib/open_pg.c:257
-#, fuzzy
-msgid "Unable to get database name"
-msgstr "ടേബിലിന്റെ പട്ടിക ഡേറ്റാബേയ്സിൽ നിന്ന് വായിക്കാൻ പട്ടുന്നില്ല <%s>"
-
-#: ../lib/vector/Vlib/open_pg.c:116 ../lib/vector/Vlib/open_pg.c:281
+#: ../lib/vector/Vlib/open_pg.c:109 ../lib/vector/Vlib/open_pg.c:267
 #, fuzzy
 msgid "No feature tables found in database."
 msgstr "ഈ ടേബിൾ <%s> ഡേറ്റാബേയ്സിൽ ഉണ്ട് <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:140
+#: ../lib/vector/Vlib/open_pg.c:133
 #, fuzzy, c-format
 msgid "Feature table <%s> not found in 'geometry_columns'"
 msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 
-#: ../lib/vector/Vlib/open_pg.c:150 ../lib/vector/Vlib/open_pg.c:207
-#: ../lib/vector/Vlib/open_pg.c:313 ../lib/vector/Vlib/open_pg.c:363
+#: ../lib/vector/Vlib/open_pg.c:143 ../lib/vector/Vlib/open_pg.c:200
+#: ../lib/vector/Vlib/open_pg.c:299 ../lib/vector/Vlib/open_pg.c:349
 #: ../lib/vector/Vlib/write_pg.c:124 ../lib/vector/Vlib/write_pg.c:158
 #: ../lib/vector/Vlib/write_pg.c:197 ../lib/vector/Vlib/write_pg.c:289
 #: ../lib/vector/Vlib/write_pg.c:349 ../lib/vector/Vlib/write_pg.c:467
@@ -6519,125 +6530,131 @@ msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 msgid "GRASS is not compiled with PostgreSQL support"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:188
+#: ../lib/vector/Vlib/open_pg.c:181
 msgid "Topology schema not found."
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:200 ../lib/vector/Vlib/open_ogr.c:145
+#: ../lib/vector/Vlib/open_pg.c:193 ../lib/vector/Vlib/open_ogr.c:145
 #, fuzzy, c-format
 msgid "Unable to open feature index file for vector map <%s>"
 msgstr "റാസ്റ്റെർ മാപ്പ് തുറക്കാൻ പറ്റുനില്ല <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:287
+#: ../lib/vector/Vlib/open_pg.c:273
 #, fuzzy, c-format
 msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
 msgstr "ഈ ടേബിൾ <%s> ഡേറ്റാബേയ്സിൽ ഉണ്ട് <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:290
+#: ../lib/vector/Vlib/open_pg.c:276
 #, fuzzy, c-format
 msgid "Unable to delete PostGIS layer <%s>"
 msgstr "ലെയർ തുറക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:296
+#: ../lib/vector/Vlib/open_pg.c:282
 #, fuzzy, c-format
 msgid "PostGIS layer <%s.%s> already exists in database '%s'"
 msgstr "ഈ ടേബിൾ <%s> ഡേറ്റാബേയ്സിൽ ഉണ്ട് <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:404
+#: ../lib/vector/Vlib/open_pg.c:390
 #, fuzzy
 msgid "No key column detected."
 msgstr "റാസ്റ്റെർ മാപ്പ് തുറക്കാൻ പറ്റുനില്ല <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:473 ../lib/vector/Vlib/open_pg.c:485
+#: ../lib/vector/Vlib/open_pg.c:462 ../lib/vector/Vlib/open_pg.c:474
 #, fuzzy, c-format
 msgid "Execution failed: %s"
 msgstr "കണക്ഷൻ നിർവീര്യമായി."
 
-#: ../lib/vector/Vlib/open_pg.c:487
+#: ../lib/vector/Vlib/open_pg.c:476
 #, c-format
 msgid "PostGIS topology schema <%s> dropped"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:520
+#: ../lib/vector/Vlib/open_pg.c:510
 #, fuzzy
 msgid "Connection to PostgreSQL database failed."
 msgstr "കണക്ഷൻ നിർവീര്യമായി."
 
-#: ../lib/vector/Vlib/open_pg.c:526
-msgid "Spatial-enabled PostGIS database is required"
+#: ../lib/vector/Vlib/open_pg.c:516
+#, fuzzy
+msgid "Unable to get database name"
+msgstr "ടേബിലിന്റെ പട്ടിക ഡേറ്റാബേയ്സിൽ നിന്ന് വായിക്കാൻ പട്ടുന്നില്ല <%s>"
+
+#: ../lib/vector/Vlib/open_pg.c:521
+#, c-format
+msgid "<%s> is not PostGIS database. DB table 'spatial_ref_sys' not found."
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:534
-#, fuzzy
-msgid "PostGIS Topology extension not found in the database"
+#: ../lib/vector/Vlib/open_pg.c:530
+#, fuzzy, c-format
+msgid "PostGIS Topology extension not found in the database <%s>"
 msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 
-#: ../lib/vector/Vlib/open_pg.c:620
+#: ../lib/vector/Vlib/open_pg.c:617
 msgid "Empty bounding box"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:721
+#: ../lib/vector/Vlib/open_pg.c:718
 #, c-format
 msgid "Inconsistency in topology: unable to read node %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:787
+#: ../lib/vector/Vlib/open_pg.c:784
 #, fuzzy, c-format
 msgid "Inconsistency in topology: node %d - unexpected feature type %d"
 msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ പട്ടുന്നില്ല"
 
-#: ../lib/vector/Vlib/open_pg.c:957
+#: ../lib/vector/Vlib/open_pg.c:954
 #, c-format
 msgid "Area %d without boundary detected"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1015
+#: ../lib/vector/Vlib/open_pg.c:1012
 #, c-format
 msgid "Isle %d without boundary detected"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1082
+#: ../lib/vector/Vlib/open_pg.c:1079
 #, fuzzy
 msgid "Unable to get map bounding box from topology"
 msgstr "ടേബിൾ നിന്ന് ഡേറ്റ എടുക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:1089
+#: ../lib/vector/Vlib/open_pg.c:1086
 #, fuzzy, c-format
 msgid ""
 "Unable to parse map bounding box:\n"
 "%s"
 msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 
-#: ../lib/vector/Vlib/open_pg.c:1113
+#: ../lib/vector/Vlib/open_pg.c:1110
 #, c-format
 msgid "Different number of nodes detected (%d, %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1141 ../lib/vector/Vlib/open_pg.c:1163
+#: ../lib/vector/Vlib/open_pg.c:1138 ../lib/vector/Vlib/open_pg.c:1160
 #, c-format
 msgid "Different number of areas detected (%d, %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1334
+#: ../lib/vector/Vlib/open_pg.c:1331
 msgid "To be implemented: isles not attached in Topo-Geo-only mode"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1439 ../lib/vector/Vlib/build_pg.c:212
+#: ../lib/vector/Vlib/open_pg.c:1436 ../lib/vector/Vlib/build_pg.c:212
 #, c-format
 msgid "Inconsistency in topology: number of nodes %d (should be %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1523
+#: ../lib/vector/Vlib/open_pg.c:1520
 #, c-format
 msgid "Inconsistency in topology: number of points %d (should be %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1568
+#: ../lib/vector/Vlib/open_pg.c:1565
 #, c-format
 msgid "Inconsistency in topology: number of lines %d (should be %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1622
+#: ../lib/vector/Vlib/open_pg.c:1619
 #, c-format
 msgid "Inconsistency in topology: number of centroids %d (should be %d)"
 msgstr ""
