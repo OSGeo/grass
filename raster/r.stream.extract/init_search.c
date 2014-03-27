@@ -21,7 +21,7 @@ int init_search(int depr_fd)
     else
 	depr_buf = NULL;
 
-    G_message(_("Initializing A* Search..."));
+    G_message(_("Initializing A* search..."));
     for (r = 0; r < nrows; r++) {
 	G_percent(r, nrows, 2);
 
