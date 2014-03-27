@@ -7,7 +7,7 @@
 #               Pythonized & upgraded for GRASS 7 by Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Tool to download and install extensions from GRASS Addons SVN into
 #               local GRASS installation
-# COPYRIGHT:    (C) 2009-2013 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2014 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -1077,7 +1077,7 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     global TMPDIR
-    TMPDIR = grass.tempdir()
+    TMPDIR = tempfile.mkdtemp()
     atexit.register(cleanup)
     version = grass.version()['version'].split('.')
     sys.exit(main())
