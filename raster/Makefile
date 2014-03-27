@@ -99,7 +99,14 @@ SUBDIRS = \
 	r.statistics2 \
 	r.statistics3 \
 	r.stats \
+	r.stream.channel \
+	r.stream.distance \
 	r.stream.extract \
+	r.stream.order \
+	r.stream.segment \
+	r.stream.slope \
+	r.stream.snap \
+	r.stream.stats \
 	r.sun \
 	r.sunhours \
 	r.sunmask \
