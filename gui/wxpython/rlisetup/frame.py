@@ -41,8 +41,8 @@ class ViewFrame(wx.Frame):
         self.textCtrl.SetValue(''.join(f.readlines()))
         f.close()
         ###BUTTONS      #definition
-        self.btn_close = wx.Button(parent=self, id=wx.ID_CLOSE)
-        self.btn_ok = wx.Button(parent=self, id=wx.ID_OK)
+        self.btn_close = wx.Button(parent=self, id=wx.ID_EXIT)
+        self.btn_ok = wx.Button(parent=self, id=wx.ID_SAVE)
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_ok.Bind(wx.EVT_BUTTON, self.OnOk)
         self._layout()
