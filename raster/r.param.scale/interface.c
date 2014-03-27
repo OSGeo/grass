@@ -38,7 +38,7 @@ void interface(int argc, char **argv)
 
     /* cell of local window if selected.    */
     struct GModule *module;	/* GRASS module description */
-    char buf[4];
+    char buf[24];
 
     G_gisinit(argv[0]);		/* GRASS function which MUST be called  */
     /* first to check for valid database    */
