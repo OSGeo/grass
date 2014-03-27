@@ -535,6 +535,7 @@ int main(int argc, char *argv[])
 	infile = G_store("stdin");	/* filename for history metadata */
     }
     else {
+	from_stdin = FALSE;
 	if ((in_fp = fopen(infile, "r")) == NULL)
 	    G_fatal_error(_("Unable to open input file <%s>"), infile);
     }
@@ -560,6 +561,7 @@ int main(int argc, char *argv[])
 	scan_bounds(in_fp, xcol, ycol, zcol, vcol, fs, shell_style->answer,
 		    skipline->answer, zscale, vscale);
 
+	/* close input file */
 	if (!from_stdin)
 	    fclose(in_fp);
 
