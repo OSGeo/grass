@@ -237,4 +237,10 @@ Contents
            cd /path/to/your/local/copy/trunk
            svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_0 .
 
+----------
+GRASS GIS 7.0 release branch creation
+
+svn copy https://svn.osgeo.org/grass/grass/trunk/ \
+    https://svn.osgeo.org/grass/grass/branches/releasebranch_7_0 \
+    -m "Creating the GRASS GIS 7.0 release branch (development started in 04/2008, r31142)"
 
