@@ -7,8 +7,8 @@
  * PURPOSE:      Calculate distance and elevation over the streams and outlets 
  *               according user's input data. The elevation and distance is calculated
  *               along watercourses
- *               It uses any stream map  and r.watershed or .stream.extreact direction map.
- *               Stram input map shall contains streams or points outlets with or
+ *               It uses any stream map  and r.watershed or .stream.extract direction map.
+ *               Stream input map shall contains streams or points outlets with or
  *               without unique categories
  *
  * COPYRIGHT:    (C) 2002,2009-2014 by the GRASS Development Team
