@@ -5,7 +5,7 @@
  * AUTHOR(S):    Jarek Jasiewicz jarekj amu.edu.pl
  *               
  * PURPOSE:      Calculate Horton's statistics according stream network and elevation map.
- *               Program calculates: Bifuarcation ratio, length ratio, area ratio, 
+ *               Program calculates: Bifurcation ratio, length ratio, area ratio, 
  *               slope ratio and drainage density.
  *               It uses r.stream.order stream map, r.watershed direction map and DEM
  *               Stream input map shall contain streams ordered according Strahler's or

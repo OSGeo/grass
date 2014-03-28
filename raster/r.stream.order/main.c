@@ -8,7 +8,7 @@
  *			It use r.stream.extract or r.watershed output files: 
  * 			stream, direction, accumulation and elevation. 
  * 			The output are set of raster maps and vector file containing
- * 			addational stream attributes.
+ * 			additional stream attributes.
  *
  * COPYRIGHT:		(C) 2009-2014 by the GRASS Development Team
  *
