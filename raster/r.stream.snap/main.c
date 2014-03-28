@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->label = _("Delineates basins for stream network.");
+    module->label = _("Snap point to modelled river network.");
     module->description = _("Input can be stream network, point vector map with outlets or outlet coordinates.");
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
