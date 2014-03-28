@@ -194,7 +194,6 @@ class ModelSearchDialog(wx.Dialog):
                      flag = wx.EXPAND)
         labelSizer = wx.StaticBoxSizer(self.labelBox, wx.VERTICAL)
         gridSizer = wx.GridBagSizer (hgap = 5, vgap = 5)
-        gridSizer.AddGrowableCol(1)
         gridSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                            label = _("Label:")),
                       flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
@@ -203,6 +202,7 @@ class ModelSearchDialog(wx.Dialog):
                                            label = _("Comment:")),
                       flag = wx.ALIGN_CENTER_VERTICAL, pos = (1, 0))
         gridSizer.Add(item = self.comment, pos = (1, 1), flag =  wx.EXPAND)
+        gridSizer.AddGrowableCol(1)
         labelSizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND)
         
         btnSizer = wx.StdDialogButtonSizer()
