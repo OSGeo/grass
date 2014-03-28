@@ -443,8 +443,8 @@ class TaskFrame(wx.Frame):
             module_desc = self.task.label + ' ' + self.task.description
         else:
             module_desc = self.task.description
-        self.description = StaticWrapText(parent = self.panel,
-                                          label = module_desc)
+        self.description = StaticWrapText(parent=self.panel,
+                                          label=module_desc, margin=10)
         topsizer.Add(item = self.description, proportion = 1, border = 5,
                      flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
         
