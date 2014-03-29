@@ -422,7 +422,7 @@ class MapCalcFrame(wx.Frame):
         """!Checks if user is typing or the event was emited by map selection.
         Prevents from changing focus.
         """
-        item = event.GetString()
+        item = self.mapselect.GetValue().strip()
         if not (abs(len(item) - len(self.lastMapName)) == 1  and \
             self.lastMapName in item or item in self.lastMapName):
             self.OnSelect(event)
@@ -435,7 +435,7 @@ class MapCalcFrame(wx.Frame):
         Checks for characters which can be in raster map name but 
         the raster map name must be then quoted.
         """
-        item = event.GetString().strip()
+        item = self.FindWindowById(event.GetId()).GetValue().strip()
         if any((char in item) for char in self.charactersToQuote):
             item = '"' + item + '"'
         self._addSomething(item)
