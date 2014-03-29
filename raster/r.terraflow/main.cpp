@@ -405,7 +405,7 @@ printMaxSortSize(long nodata_count) {
   maxneed =  2*maxneed; /* need 2*N to sort */
 
   G_message( "total elements=%ld, nodata elements=%ld",
-		(long)nrows*ncols, nodata_count);
+		(long)nrows * ncols, nodata_count);
   G_message( "largest temporary files: ");
   G_message( "\t\t FILL: %s [%ld elements, %dB each]",
 		  formatNumber(buf, fillmaxsize),
