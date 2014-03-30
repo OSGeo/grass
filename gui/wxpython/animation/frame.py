@@ -309,10 +309,13 @@ class AnimationFrame(wx.Frame):
                    entry='wxGUI.animation')
 
     def OnCloseWindow(self, event):
+        if self.controller.timer.IsRunning():
+                self.controller.timer.Stop()
         CleanUp(TMP_DIR)()
         self.Destroy()
 
     def __del__(self):
+        """!It might not be called, therefore we try to clean it all in OnCloseWindow."""
         if hasattr(self, 'controller') and hasattr(self.controller, 'timer'):
             if self.controller.timer.IsRunning():
                 self.controller.timer.Stop()
