@@ -1172,7 +1172,7 @@ msgstr "Vektorkartes nosaukums"
 #: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
 #: ../raster/r.stream.order/main.c:32
 #, fuzzy
-msgid "Name of input streams mask raster map"
+msgid "Name for input raster map with stream network"
 msgstr "Rastra kartes nosaukums"
 
 #: ../raster/r.stream.snap/main.c:64 ../raster/r.stream.snap/main.c:70
@@ -9263,7 +9263,7 @@ msgstr ""
 
 #: ../raster/r.stream.distance/main.c:60
 #, fuzzy
-msgid "Name of input streams (outlets) mask raster map"
+msgid "Name for input raster map with stream network"
 msgstr "Jaunas rastra kartes nosaukums"
 
 #: ../raster/r.stream.distance/main.c:72
