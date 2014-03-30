@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     in_stream_opt = G_define_standard_option(G_OPT_R_INPUT);
     in_stream_opt->key = "stream_rast";
     in_stream_opt->required = NO;
-    in_stream_opt->description = _("Name of input streams mask raster map");
+    in_stream_opt->description = _("Name for input raster map with stream network");
     in_stream_opt->guisection = _("Input maps");
 
     in_accum_opt = G_define_standard_option(G_OPT_R_INPUT);
