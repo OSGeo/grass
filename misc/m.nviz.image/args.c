@@ -409,16 +409,16 @@ void args_vpoint(struct GParams *params)
     params->vpoint_layer->key = "vpoint_layer";
     params->vpoint_layer->answer = "1";
 
-    /* point width */
+    /* point size */
     params->vpoint_size = G_define_option();
     params->vpoint_size->key = "vpoint_size";
     params->vpoint_size->key_desc = "value";
-    params->vpoint_size->type = TYPE_INTEGER;
+    params->vpoint_size->type = TYPE_DOUBLE;
     params->vpoint_size->required = NO;
     params->vpoint_size->multiple = YES;
     params->vpoint_size->description = _("Icon size (map units)");
     params->vpoint_size->guisection = _("Vector points");
-    params->vpoint_size->options = "1-1000";
+    params->vpoint_size->options = "0-1000";
     params->vpoint_size->answer = "100";
 
     params->vpoint_size_column = G_define_standard_option(G_OPT_DB_COLUMN);
@@ -503,7 +503,7 @@ void args_vpoint(struct GParams *params)
     params->vpoint_pos = G_define_option();
     params->vpoint_pos->key = "vpoint_position";
     params->vpoint_pos->key_desc = "x,y,z";
-    params->vpoint_pos->type = TYPE_INTEGER;
+    params->vpoint_pos->type = TYPE_DOUBLE;
     params->vpoint_pos->required = NO;
     params->vpoint_pos->multiple = YES;
     params->vpoint_pos->description = _("Vector points position");
