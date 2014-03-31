@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2008-10-16 11:25+0300\n"
 "Last-Translator: Vasilios Antoniou <antoniou_v@yahoo.gr>\n"
 "Language-Team: Greek <grass-translations@lists.osgeo.org>\n"
@@ -5606,7 +5606,7 @@ msgstr "Ο 3Δ χάρτης raster  <%s> δεν βρέθηκε"
 msgid "Unable to parse time string: %s"
 msgstr "Αδυναμία ανοίγματος αρχείου %s στο <%s>"
 
-#: ../lib/python/temporal/gui_support.py:57 ../lib/python/script/core.py:1333
+#: ../lib/python/temporal/gui_support.py:57 ../lib/python/script/core.py:1339
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
@@ -5669,43 +5669,43 @@ msgstr ""
 msgid "Error while computation"
 msgstr ""
 
-#: ../lib/python/script/core.py:928
+#: ../lib/python/script/core.py:934
 msgid "Mixing value types. Will try to compare after integer conversion"
 msgstr ""
 
-#: ../lib/python/script/core.py:1146
+#: ../lib/python/script/core.py:1152
 #, python-format
 msgid "Element type should be \"cell\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1175 ../lib/python/script/core.py:1265
-#: ../lib/python/script/core.py:1320
+#: ../lib/python/script/core.py:1181 ../lib/python/script/core.py:1271
+#: ../lib/python/script/core.py:1326
 #, python-format
 msgid "Element type should be \"rast\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1521
+#: ../lib/python/script/core.py:1527
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "Αδυναμία κλεισίματος του χάρτη input"
 
-#: ../lib/python/script/core.py:1557
+#: ../lib/python/script/core.py:1563
 #, python-format
 msgid "Location <%s> already exists. Operation canceled."
 msgstr ""
 
-#: ../lib/python/script/core.py:1560
+#: ../lib/python/script/core.py:1566
 #, fuzzy, python-format
 msgid "Location <%s> already exists and will be overwritten"
 msgstr ""
 "Ο διανυσματικός χάρτης <%s> υπάρχει ήδη και θα αντικατασταθεί (overwritten)"
 
-#: ../lib/python/script/core.py:1692
+#: ../lib/python/script/core.py:1698
 #, fuzzy, python-format
 msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
 msgstr "Μη επιτρεπτό όνομα.  δεν μπορεί να είναι  '.' ή  'NULL'\n"
 
-#: ../lib/python/script/core.py:1701
+#: ../lib/python/script/core.py:1707
 #, fuzzy, python-format
 msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
 msgstr "Μη επιτρεπτό όνομα αρχείου. Ο χαρακτήρας <%c> δεν επιτρέπεται.\n"

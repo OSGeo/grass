@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2005-08-09 22:53-0500\n"
 "Last-Translator: Huidae Cho\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -1095,8 +1095,9 @@ msgid "Unable to convert to NULL at: %d %d"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.stream.snap/main.c:47
-msgid "Delineates basins for stream network."
-msgstr ""
+#, fuzzy
+msgid "Snap point to modelled river network."
+msgstr "출력할 래스터맵"
 
 #: ../raster/r.stream.snap/main.c:48
 msgid ""
@@ -1143,8 +1144,8 @@ msgid "Name of output vector points map"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
-#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.distance/main.c:60
+#: ../raster/r.stream.channel/main.c:64 ../raster/r.stream.order/main.c:32
 #, fuzzy
 msgid "Name for input raster map with stream network"
 msgstr "출력할 래스터맵"
@@ -9045,11 +9046,6 @@ msgstr ""
 #: ../raster/r.stream.distance/main.c:56
 msgid "watercourse distance"
 msgstr ""
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "출력할 래스터맵"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy

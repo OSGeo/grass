@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2008-01-05 15:19+0700\n"
 "Last-Translator: man <mansv68@yahoo.co.th>\n"
 "Language-Team: Thai <grass-translations@lists.osgeo.org>\n"
@@ -1119,8 +1119,9 @@ msgid "Unable to convert to NULL at: %d %d"
 msgstr "%s: ไม่สามารถแปลงไปเป็น WKT"
 
 #: ../raster/r.stream.snap/main.c:47
-msgid "Delineates basins for stream network."
-msgstr ""
+#, fuzzy
+msgid "Snap point to modelled river network."
+msgstr "จุดสิ้นสุด ของแผนที่เชิงเส้น"
 
 #: ../raster/r.stream.snap/main.c:48
 msgid ""
@@ -1168,8 +1169,8 @@ msgid "Name of output vector points map"
 msgstr "ชื่อของ แผนที่เชิงเส้น จุด ที่จะนำเข้า"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
-#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.distance/main.c:60
+#: ../raster/r.stream.channel/main.c:64 ../raster/r.stream.order/main.c:32
 #, fuzzy
 msgid "Name for input raster map with stream network"
 msgstr "ชื่อของแผนที่เชิงภาพ"
@@ -9361,11 +9362,6 @@ msgstr ""
 #, fuzzy
 msgid "watercourse distance"
 msgstr "อ่าน ระยะทางผิดพลาด"
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "ชื่อของแผนที่เชิงภาพ"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy

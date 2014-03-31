@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2010-03-07 15:47+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <cs@li.org>\n"
@@ -5554,7 +5554,7 @@ msgstr "Typ prvku OGR %d není podporován"
 msgid "Unable to parse time string: %s"
 msgstr "Nelze otevřít soubor %s v <%s>"
 
-#: ../lib/python/temporal/gui_support.py:57 ../lib/python/script/core.py:1333
+#: ../lib/python/temporal/gui_support.py:57 ../lib/python/script/core.py:1339
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
@@ -5617,42 +5617,42 @@ msgstr ""
 msgid "Error while computation"
 msgstr ""
 
-#: ../lib/python/script/core.py:928
+#: ../lib/python/script/core.py:934
 msgid "Mixing value types. Will try to compare after integer conversion"
 msgstr ""
 
-#: ../lib/python/script/core.py:1146
+#: ../lib/python/script/core.py:1152
 #, python-format
 msgid "Element type should be \"cell\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1175 ../lib/python/script/core.py:1265
-#: ../lib/python/script/core.py:1320
+#: ../lib/python/script/core.py:1181 ../lib/python/script/core.py:1271
+#: ../lib/python/script/core.py:1326
 #, python-format
 msgid "Element type should be \"rast\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1521
+#: ../lib/python/script/core.py:1527
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "Nelze zavřít vstupní mapu"
 
-#: ../lib/python/script/core.py:1557
+#: ../lib/python/script/core.py:1563
 #, python-format
 msgid "Location <%s> already exists. Operation canceled."
 msgstr ""
 
-#: ../lib/python/script/core.py:1560
+#: ../lib/python/script/core.py:1566
 #, fuzzy, python-format
 msgid "Location <%s> already exists and will be overwritten"
 msgstr "Vektorová mapa <%s> již existuje a bude přepsána."
 
-#: ../lib/python/script/core.py:1692
+#: ../lib/python/script/core.py:1698
 #, fuzzy, python-format
 msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
 msgstr "Nedovolený název souboru. Soubor se nemůže jmenovat '.' nebo 'NIC'\n"
 
-#: ../lib/python/script/core.py:1701
+#: ../lib/python/script/core.py:1707
 #, fuzzy, python-format
 msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
 msgstr "Nedovolený název souboru. Znak <%c> není povolen.\n"

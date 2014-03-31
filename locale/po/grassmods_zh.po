@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2007-12-13 16:33+0100\n"
 "Last-Translator: Zhang Jun <nilarcs@gmail.com>\n"
 "Language-Team: Simplified Chinese <translations@grass.itc.it>\n"
@@ -1123,8 +1123,9 @@ msgid "Unable to convert to NULL at: %d %d"
 msgstr "无法向表中插入新记录：%s"
 
 #: ../raster/r.stream.snap/main.c:47
-msgid "Delineates basins for stream network."
-msgstr ""
+#, fuzzy
+msgid "Snap point to modelled river network."
+msgstr "终止点矢量图"
 
 #: ../raster/r.stream.snap/main.c:48
 msgid ""
@@ -1172,11 +1173,15 @@ msgid "Name of output vector points map"
 msgstr "输入的 2D 矢量地图的名称"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
-#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.distance/main.c:60
+#: ../raster/r.stream.channel/main.c:64 ../raster/r.stream.order/main.c:32
 #, fuzzy
 msgid "Name for input raster map with stream network"
-msgstr "输入栅格图的名称"
+msgstr ""
+"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+"输入栅格图的名称\n"
+"#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+"新的栅格文件的名称"
 
 #: ../raster/r.stream.snap/main.c:64 ../raster/r.stream.snap/main.c:70
 #: ../raster/r.spread/main.c:121 ../raster/r.spread/main.c:133
@@ -9405,11 +9410,6 @@ msgstr ""
 #: ../raster/r.stream.distance/main.c:56
 msgid "watercourse distance"
 msgstr ""
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "新的栅格文件的名称"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy

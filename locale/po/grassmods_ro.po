@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2013-07-17 22:14+0200\n"
 "Last-Translator: Andreea Marin <andreea.marin09 yahoo.com>\n"
 "Language-Team: GRASS Translation Team <grass-translations@lists.osgeo.org>\n"
@@ -1075,7 +1075,7 @@ msgid "Unable to convert to NULL at: %d %d"
 msgstr "Imposibil de inserat rândul: %s"
 
 #: ../raster/r.stream.snap/main.c:47
-msgid "Delineates basins for stream network."
+msgid "Snap point to modelled river network."
 msgstr ""
 
 #: ../raster/r.stream.snap/main.c:48
@@ -1124,11 +1124,15 @@ msgid "Name of output vector points map"
 msgstr "Nume pentru harta vectorială de ieșire"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
-#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.distance/main.c:60
+#: ../raster/r.stream.channel/main.c:64 ../raster/r.stream.order/main.c:32
 #, fuzzy
 msgid "Name for input raster map with stream network"
-msgstr "Numele a două 2-%d hărți raster de intrare"
+msgstr ""
+"#-#-#-#-#  grassmods_ro.po (grassmods_ro)  #-#-#-#-#\n"
+"Numele a două 2-%d hărți raster de intrare\n"
+"#-#-#-#-#  grassmods_ro.po (grassmods_ro)  #-#-#-#-#\n"
+"Nume pentru harta vectorială de intrare"
 
 #: ../raster/r.stream.snap/main.c:64 ../raster/r.stream.snap/main.c:70
 #: ../raster/r.spread/main.c:121 ../raster/r.spread/main.c:133
@@ -8833,11 +8837,6 @@ msgstr ""
 #, fuzzy
 msgid "watercourse distance"
 msgstr "raster, distanță"
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "Nume pentru harta vectorială de intrare"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy
