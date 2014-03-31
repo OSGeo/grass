@@ -1175,7 +1175,7 @@ msgstr "���"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
 #: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.order/main.c:32 ../raster/r.stream.distance/main.c:60
 #, fuzzy
 msgid "Name for input raster map with stream network"
 msgstr "入力ラスターマップ名"
@@ -9328,11 +9328,6 @@ msgstr ""
 #, fuzzy
 msgid "watercourse distance"
 msgstr "解析距離エラー"
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "入力ラスターマップ名"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy

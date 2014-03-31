@@ -1206,7 +1206,7 @@ msgstr "Nom de la couche vecteur 2D source"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
 #: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.order/main.c:32 ../raster/r.stream.distance/main.c:60
 #, fuzzy
 msgid "Name for input raster map with stream network"
 msgstr "Nom du nouveau fichier raster"
@@ -9997,11 +9997,6 @@ msgstr ""
 #, fuzzy
 msgid "watercourse distance"
 msgstr "Erreur de calcul des distances"
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "Nom du nouveau fichier raster"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy
