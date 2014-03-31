@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2010-08-27 14:37+0700\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese <grass-translations@lists.osgeo.org>\n"
@@ -1120,8 +1120,9 @@ msgid "Unable to convert to NULL at: %d %d"
 msgstr "%s: Không thể đổi thành WKT"
 
 #: ../raster/r.stream.snap/main.c:47
-msgid "Delineates basins for stream network."
-msgstr ""
+#, fuzzy
+msgid "Snap point to modelled river network."
+msgstr "Bản đồ vec-tơ chứa các điểm kết thúc"
 
 #: ../raster/r.stream.snap/main.c:48
 msgid ""
@@ -1169,11 +1170,15 @@ msgid "Name of output vector points map"
 msgstr "Tên của bản đồ vector điểm đầu vào"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
-#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.distance/main.c:60
+#: ../raster/r.stream.channel/main.c:64 ../raster/r.stream.order/main.c:32
 #, fuzzy
 msgid "Name for input raster map with stream network"
-msgstr "Tên bản đồ raster đầu vào"
+msgstr ""
+"#-#-#-#-#  grassmods_vi.po (grassmods_vi)  #-#-#-#-#\n"
+"Tên bản đồ raster đầu vào\n"
+"#-#-#-#-#  grassmods_vi.po (grassmods_vi)  #-#-#-#-#\n"
+"Tên tập tin raster mới"
 
 #: ../raster/r.stream.snap/main.c:64 ../raster/r.stream.snap/main.c:70
 #: ../raster/r.spread/main.c:121 ../raster/r.spread/main.c:133
@@ -9506,11 +9511,6 @@ msgstr ""
 #, fuzzy
 msgid "watercourse distance"
 msgstr "Lỗi phân tách các khoảng cách"
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "Tên tập tin raster mới"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy

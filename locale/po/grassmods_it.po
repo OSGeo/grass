@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2013-11-20 18:19+0100\n"
 "Last-Translator: az\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
@@ -1134,8 +1134,9 @@ msgid "Unable to convert to NULL at: %d %d"
 msgstr "%s, Impossibile convertire a WKT"
 
 #: ../raster/r.stream.snap/main.c:47
-msgid "Delineates basins for stream network."
-msgstr ""
+#, fuzzy
+msgid "Snap point to modelled river network."
+msgstr "Mappa vettoriale dei punti di arrivo"
 
 #: ../raster/r.stream.snap/main.c:48
 msgid ""
@@ -1182,12 +1183,18 @@ msgstr "Nome della mappa di input"
 msgid "Name of output vector points map"
 msgstr "Nome della mappa vettoriale dei punti di arrivo"
 
+# #-#-#-#-#  grassmods_it.po (grassmods_it)  #-#-#-#-#
+# codificato/classificato
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
-#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.distance/main.c:60
+#: ../raster/r.stream.channel/main.c:64 ../raster/r.stream.order/main.c:32
 #, fuzzy
 msgid "Name for input raster map with stream network"
-msgstr "Nome della mappa raster d'inserimento dati"
+msgstr ""
+"#-#-#-#-#  grassmods_it.po (grassmods_it)  #-#-#-#-#\n"
+"Nome della mappa raster d'inserimento dati\n"
+"#-#-#-#-#  grassmods_it.po (grassmods_it)  #-#-#-#-#\n"
+"Nome della mappa raster di input del reticolo idrografico codificato"
 
 #: ../raster/r.stream.snap/main.c:64 ../raster/r.stream.snap/main.c:70
 #: ../raster/r.spread/main.c:121 ../raster/r.spread/main.c:133
@@ -9400,12 +9407,6 @@ msgstr ""
 #, fuzzy
 msgid "watercourse distance"
 msgstr "raster, distanza"
-
-# codificato/classificato
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "Nome della mappa raster di input del reticolo idrografico codificato"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy

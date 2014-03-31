@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 20:41+0100\n"
+"POT-Creation-Date: 2014-03-31 21:29+0200\n"
 "PO-Revision-Date: 2012-01-27 14:24+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -1120,8 +1120,9 @@ msgid "Unable to convert to NULL at: %d %d"
 msgstr "Nevar izveidot ierakstu tabulā: %s"
 
 #: ../raster/r.stream.snap/main.c:47
-msgid "Delineates basins for stream network."
-msgstr ""
+#, fuzzy
+msgid "Snap point to modelled river network."
+msgstr "Neveiksme atverot ieejas dig ieejas failu"
 
 #: ../raster/r.stream.snap/main.c:48
 msgid ""
@@ -1169,11 +1170,15 @@ msgid "Name of output vector points map"
 msgstr "Vektorkartes nosaukums"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
-#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.distance/main.c:60
+#: ../raster/r.stream.channel/main.c:64 ../raster/r.stream.order/main.c:32
 #, fuzzy
 msgid "Name for input raster map with stream network"
-msgstr "Rastra kartes nosaukums"
+msgstr ""
+"#-#-#-#-#  grassmods_lv.po (grassmods_lv)  #-#-#-#-#\n"
+"Rastra kartes nosaukums\n"
+"#-#-#-#-#  grassmods_lv.po (grassmods_lv)  #-#-#-#-#\n"
+"Jaunas rastra kartes nosaukums"
 
 #: ../raster/r.stream.snap/main.c:64 ../raster/r.stream.snap/main.c:70
 #: ../raster/r.spread/main.c:121 ../raster/r.spread/main.c:133
@@ -9260,11 +9265,6 @@ msgstr ""
 #: ../raster/r.stream.distance/main.c:56
 msgid "watercourse distance"
 msgstr ""
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "Jaunas rastra kartes nosaukums"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy
