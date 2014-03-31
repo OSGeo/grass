@@ -1171,10 +1171,14 @@ msgstr "اسم الخريطة الراسترية المدخلة"
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
 #: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.order/main.c:32 ../raster/r.stream.distance/main.c:60
 #, fuzzy
 msgid "Name for input raster map with stream network"
-msgstr "اسم الخريطة الراسترية المدخلة"
+msgstr ""
+"#-#-#-#-#  grassmods_ar.po (grassmods_ar)  #-#-#-#-#\n"
+"اسم الخريطة الراسترية المدخلة\n"
+"#-#-#-#-#  grassmods_ar.po (grassmods_ar)  #-#-#-#-#\n"
+"اسم الملف الراسترى الجديد"
 
 #: ../raster/r.stream.snap/main.c:64 ../raster/r.stream.snap/main.c:70
 #: ../raster/r.spread/main.c:121 ../raster/r.spread/main.c:133
@@ -9309,11 +9313,6 @@ msgstr ""
 #: ../raster/r.stream.distance/main.c:56
 msgid "watercourse distance"
 msgstr ""
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "اسم الملف الراسترى الجديد"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy

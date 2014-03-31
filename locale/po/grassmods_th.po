@@ -1169,7 +1169,7 @@ msgstr "ชื่อของ แผนที่เชิงเส้น จุ�
 
 #: ../raster/r.stream.snap/main.c:63 ../raster/r.stream.segment/main.c:64
 #: ../raster/r.stream.stats/main.c:60 ../raster/r.stream.channel/main.c:64
-#: ../raster/r.stream.order/main.c:32
+#: ../raster/r.stream.order/main.c:32 ../raster/r.stream.distance/main.c:60
 #, fuzzy
 msgid "Name for input raster map with stream network"
 msgstr "ชื่อของแผนที่เชิงภาพ"
@@ -9361,11 +9361,6 @@ msgstr ""
 #, fuzzy
 msgid "watercourse distance"
 msgstr "อ่าน ระยะทางผิดพลาด"
-
-#: ../raster/r.stream.distance/main.c:60
-#, fuzzy
-msgid "Name for input raster map with stream network"
-msgstr "ชื่อของแผนที่เชิงภาพ"
 
 #: ../raster/r.stream.distance/main.c:72
 #, fuzzy
