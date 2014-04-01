@@ -184,7 +184,7 @@ class BufferedWindow(wx.Window):
         self.Map.Render(force=True, windres = True)
         img = self.GetImage()
         self.Draw(self.pdc, img, drawid = 99)
-        dc = wx.BufferedPaintDC(self, ibuffer)
+        dc = wx.BufferedDC(None, ibuffer)
         dc.Clear()
         # probably does nothing, removed from wxPython 2.9
         # self.PrepareDC(dc)
