@@ -1,6 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.rast.aggregate</em> temporally aggregates space time raster datasets by a specific temporal granularity.
+<em>t.rast.aggregate</em> temporally aggregates space time raster datasets
+by a specific temporal granularity.
 This module support <em>absolute</em> and <em>relative time</em>.
 The temporal granularity of absolute time can be 
 <em>seconds, minutes, hours, days, weeks, months</em> or <em>years</em>.
@@ -8,16 +9,17 @@ Mixing of granularities eg. "1 year, 3 months 5 days" is not supported.
 In case of relative time the temporal unit of the input space time raster 
 dataset is used. The granularity must be specified with an integer value. 
 <p>
-This module is sensitive to the current region and mask settings, hence spatial extent and spatial resolution. 
-In case the registered raster maps of the input space time raster dataset
-have different spatial resolutions, the default nearest neighbor resampling method is used for
-runtime spatial aggregation.
+This module is sensitive to the current region and mask settings, 
+hence spatial extent and spatial resolution. In case the registered 
+raster maps of the input space time raster dataset have different 
+spatial resolutions, the default nearest neighbor resampling method 
+is used for runtime spatial aggregation.
 
 <h2>NOTES</h2>
 
 The raster module <em>r.series</em> is used internally. Hence all aggregate
-methods of <em>r.series</em> are supported. See the <a href="r.series.html">r.series</a> manpage
-for details.
+methods of <em>r.series</em> are supported. See the
+<a href="r.series.html">r.series</a> manual page for details.
 <p>
 This module will shift the start date for each aggregation process depending on the 
 provided temporal granularity. The following shifts will performed:
@@ -31,9 +33,11 @@ provided temporal granularity. The following shifts will performed:
     <li><em>granularity minutes</em>: will start at the first second of a minute, hence 14-08-2012 01:30:30 will be shifted to 14-08-2012 01:30:00</li>
 </ul>
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-In this example we create 7 raster maps that will be registered in a single space time
+<h3>EXAMPLE 1</h3>
+
+In this example, we create 7 raster maps that will be registered in a single space time
 raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
 The names of the raster maps are stored in a text file that is used for raster map registration. 
 <p>
@@ -45,7 +49,6 @@ of all raster maps in a week. The sampling option assures that only raster maps 
 temporally during a week will be considered for computation: 
 
 <div class="code"><pre>
-
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 for map in ${MAPS} ; do
@@ -163,6 +166,29 @@ t.info type=strds input=precipitation_weekly
  | 
  +----------------------------------------------------------------------------+
 </pre></div>
+
+
+<h3>EXAMPLE 2</h3>
+
+Example for monthly aggregation:
+
+<div class="code"><pre>
+# January averages
+t.rast.series input=monthly_aggregates \
+    output=jan_average method=average \
+    where="start_time = datetime(start_time, 'start_of_year', '0 month')"
+
+# February averages
+t.rast.series input=monthly_aggregates \
+    output=feb_average method=average \
+    where="start_time = datetime(start_time, 'start_of_year', '1 month')"
+
+# March averages
+t.rast.series input=monthly_aggregates \
+    output=mar_average method=average \
+    where="start_time = datetime(start_time, 'start_of_year', '2 month')"
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
