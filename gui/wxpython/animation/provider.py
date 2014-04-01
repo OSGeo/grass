@@ -90,7 +90,7 @@ class BitmapProvider:
         @param opacities list of opacity values
         @param regions list of regions
         """
-        Debug.msg(2, "BitmapProvider.SetCmds: {} lists".format(len(cmdsForComposition)))
+        Debug.msg(2, "BitmapProvider.SetCmds: {n} lists".format(n=len(cmdsForComposition)))
         self._cmdsForComposition.extend(cmdsForComposition)
         self._opacities.extend(opacities)
         self._regions.extend(regions)
@@ -103,7 +103,7 @@ class BitmapProvider:
         @param cmds list of commands m.nviz.image (cmd as a list)
         @param region for 3D rendering
         """
-        Debug.msg(2, "BitmapProvider.SetCmds3D: {} commands".format(len(cmds)))
+        Debug.msg(2, "BitmapProvider.SetCmds3D: {c} commands".format(c=len(cmds)))
         self._cmds3D = cmds
         self._regionFor3D = region
 
@@ -157,7 +157,7 @@ class BitmapProvider:
                 continue
             count += 1
 
-        Debug.msg(3, "BitmapProvider._dryRender: {} files to be rendered".format(count))
+        Debug.msg(3, "BitmapProvider._dryRender: {c} files to be rendered".format(c=count))
 
         return count
 
@@ -177,7 +177,7 @@ class BitmapProvider:
                 continue
             count += 1
 
-        Debug.msg(2, "BitmapProvider._dryCompose: {} files to be composed".format(count))
+        Debug.msg(2, "BitmapProvider._dryCompose: {c} files to be composed".format(c=count))
 
         return count
 
@@ -190,7 +190,9 @@ class BitmapProvider:
         @param nprocs number of procs to be used for rendering
         """
         Debug.msg(2, "BitmapProvider.Load: "
-                     "force={}, bgcolor={}, nprocs={}".format(force, bgcolor, nprocs))
+                     "force={f}, bgcolor={b}, nprocs={n}".format(f=force,
+                                                                 b=bgcolor,
+                                                                 n=nprocs))
         cmds = []
         regions = []
         if self._uniqueCmds:
@@ -246,7 +248,7 @@ class BitmapProvider:
 
     def WindowSizeChanged(self, width, height):
         """!Sets size when size of related window changes."""
-        Debug.msg(5, "BitmapProvider.WindowSizeChanged: w={}, h={}".format(width, height))
+        Debug.msg(5, "BitmapProvider.WindowSizeChanged: w={w}, h={h}".format(w=width, h=height))
 
         self.imageWidth, self.imageHeight = width, height
 
@@ -260,7 +262,7 @@ class BitmapProvider:
 
         @return bitmap with legend
         """
-        Debug.msg(5, "BitmapProvider.LoadOverlay: cmd={}".format(cmd))
+        Debug.msg(5, "BitmapProvider.LoadOverlay: cmd={c}".format(c=cmd))
 
         fileHandler, filename = tempfile.mkstemp(suffix=".png")
         os.close(fileHandler)
@@ -603,14 +605,14 @@ class DictRefCounter:
             self.referenceCount[key] = 1
         else:
             self.referenceCount[key] += 1
-        Debug.msg(5, 'DictRefCounter.__setitem__: +1 for key {}'.format(key))
+        Debug.msg(5, 'DictRefCounter.__setitem__: +1 for key {k}'.format(k=key))
 
     def __contains__(self, key):
         return key in self.dictionary
 
     def __delitem__(self, key):
         self.referenceCount[key] -= 1
-        Debug.msg(5, 'DictRefCounter.__delitem__: -1 for key {}'.format(key))
+        Debug.msg(5, 'DictRefCounter.__delitem__: -1 for key {k}'.format(k=key))
 
     def keys(self):
         return self.dictionary.keys()
@@ -670,9 +672,9 @@ class CleanUp:
         if os.path.exists(self._tempDir):
             try:
                 shutil.rmtree(self._tempDir)
-                Debug.msg(5, 'CleanUp: removed directory {}'.format(self._tempDir))
+                Debug.msg(5, 'CleanUp: removed directory {t}'.format(t=self._tempDir))
             except OSError:
-                gcore.warning(_("Directory {} not removed.").format(self._tempDir))
+                gcore.warning(_("Directory {t} not removed.").format(t=self._tempDir))
 
 
 def _setEnvironment(width, height, filename, transparent, bgcolor):
@@ -684,15 +686,20 @@ def _setEnvironment(width, height, filename, transparent, bgcolor):
     @param transparent use transparency
     @param bgcolor background color as a tuple of 3 values 0 to 255
     """
-    Debug.msg(5, "_setEnvironment: width={}, height={}, "
-                 "filename={}, transparent={}, bgcolor={}".format(width, height, filename,
-                                                                  transparent, bgcolor))
+    Debug.msg(5, "_setEnvironment: width={w}, height={h}, "
+                 "filename={f}, transparent={t}, bgcolor={b}".format(w=width,
+                                                                     h=height,
+                                                                     f=filename,
+                                                                     t=transparent,
+                                                                     b=bgcolor))
 
     os.environ['GRASS_WIDTH'] = str(width)
     os.environ['GRASS_HEIGHT'] = str(height)
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     os.environ['GRASS_RENDER_IMMEDIATE'] = driver
-    os.environ['GRASS_BACKGROUNDCOLOR'] = '{:02x}{:02x}{:02x}'.format(*bgcolor)
+    os.environ['GRASS_BACKGROUNDCOLOR'] = '{r}{g}{b}'.format(r=bgcolor[0],
+                                                             g=bgcolor[1],
+                                                             b=bgcolor[2])
     os.environ['GRASS_TRUECOLOR'] = "TRUE"
     if transparent:
         os.environ['GRASS_TRANSPARENT'] = "TRUE"
@@ -710,8 +717,9 @@ def createNoDataBitmap(imageWidth, imageHeight, text="No data"):
     @param imageWidth image width
     @param imageHeight image height
     """
-    Debug.msg(4, "createNoDataBitmap: w={}, h={}, text={}".format(imageWidth,
-                                                                  imageHeight, text))
+    Debug.msg(4, "createNoDataBitmap: w={w}, h={h}, text={t}".format(w=imageWidth,
+                                                                     h=imageHeight,
+                                                                     t=text))
     bitmap = wx.EmptyBitmap(imageWidth, imageHeight)
     dc = wx.MemoryDC()
     dc.SelectObject(bitmap)
@@ -772,13 +780,13 @@ def test():
     prov = BitmapProvider(bPool, mapFilesPool, tempDir,
                           imageWidth=640, imageHeight=480)
     prov.renderingStarted.connect(
-        lambda count: sys.stdout.write("Total number of maps: {}\n".format(count)))
+        lambda count: sys.stdout.write("Total number of maps: {c}\n".format(c=count)))
     prov.renderingContinues.connect(
-        lambda current, text: sys.stdout.write("Current number: {}\n".format(current)))
+        lambda current, text: sys.stdout.write("Current number: {c}\n".format(c=current)))
     prov.compositionStarted.connect(
-        lambda count: sys.stdout.write("Composition: total number of maps: {}\n".format(count)))
+        lambda count: sys.stdout.write("Composition: total number of maps: {c}\n".format(c=count)))
     prov.compositionContinues.connect(
-        lambda current, text: sys.stdout.write("Composition: Current number: {}\n".format(current)))
+        lambda current, text: sys.stdout.write("Composition: Current number: {c}\n".format(c=current)))
     prov.mapsLoaded.connect(
         lambda: sys.stdout.write("Maps loading finished\n"))
     cmdMatrix = layerListToCmdsMatrix(layerList)

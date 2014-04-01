@@ -101,13 +101,13 @@ def main():
         layer = AnimLayer()
         layer.mapType = 'rast'
         layer.name = rast
-        layer.cmd = ['d.rast', 'map={}'.format(rast.split(',')[0])]
+        layer.cmd = ['d.rast', 'map={name}'.format(name=rast.split(',')[0])]
         layerList.AddLayer(layer)
     if vect:
         layer = AnimLayer()
         layer.mapType = 'vect'
         layer.name = vect
-        layer.cmd = ['d.vect', 'map={}'.format(rast.split(',')[0])]
+        layer.cmd = ['d.vect', 'map={name=}'.format(name=vect.split(',')[0])]
         layerList.AddLayer(layer)
     if strds:
         layer = AnimLayer()

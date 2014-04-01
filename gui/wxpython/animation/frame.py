@@ -274,7 +274,8 @@ class AnimationFrame(wx.Frame):
         self._progressDlgMax = count
 
     def _updateProgress(self, current, text):
-        text += _(" ({} out of {})").format(current, self._progressDlgMax)
+        text += _(" ({c} out of {p})").format(c=current,
+                                              p=self._progressDlgMax)
         keepGoing, skip = self._progressDlg.Update(current, text)
         if not keepGoing:
             self.provider.RequestStopRendering()
