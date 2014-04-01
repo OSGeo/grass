@@ -2,6 +2,28 @@
 
 TBD.
 
+
+<h2>EXAMPLE</h2>
+
+Example for monthly aggregation:
+
+<div class="code"><pre>
+# January averages
+t.rast.series input=monthly_aggregates \
+    output=jan_average method=average \
+    where="start_time = datetime(start_time, 'start of year', '0 month')"
+
+# February averages
+t.rast.series input=monthly_aggregates \
+    output=feb_average method=average \
+    where="start_time = datetime(start_time, 'start of year', '1 month')"
+
+# March averages
+t.rast.series input=monthly_aggregates \
+    output=mar_average method=average \
+    where="start_time = datetime(start_time, 'start of year', '2 month')"
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
