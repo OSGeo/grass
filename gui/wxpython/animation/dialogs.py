@@ -1389,12 +1389,12 @@ class AddTemporalLayerDialog(wx.Dialog):
             cmd.append('d.rast3d')
         if self._name:
             if self._mapType in ('rast', 'vect', 'rast3d'):
-                cmd.append('map={}'.format(self._name.split(',')[0]))
+                cmd.append('map={name}'.format(name=self._name.split(',')[0]))
             else:
                 try:
                     maps = getRegisteredMaps(self._name, etype=self._mapType)
                     if maps:
-                        cmd.append('map={}'.format(maps[0]))
+                        cmd.append('map={name}'.format(name=maps[0]))
                 except gcore.ScriptError, e:
                     GError(parent=self, message=str(e), showTraceback=False)
                     return None

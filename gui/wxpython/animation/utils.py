@@ -290,7 +290,7 @@ def layerListToCmdsMatrix(layerList):
                     cmd = layer.cmd[:]
                     cmds = []
                     for map_ in layer.maps:
-                        cmd[i] = 'map={}'.format(map_)
+                        cmd[i] = 'map={name}'.format(name=map_)
                         cmds.append(cmd[:])
                     cmdsForComposition.append(cmds)
         else:
