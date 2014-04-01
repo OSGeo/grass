@@ -35,8 +35,6 @@ provided temporal granularity. The following shifts will performed:
 
 <h2>EXAMPLES</h2>
 
-<h3>EXAMPLE 1</h3>
-
 In this example, we create 7 raster maps that will be registered in a single space time
 raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
 The names of the raster maps are stored in a text file that is used for raster map registration. 
@@ -165,28 +163,6 @@ t.info type=strds input=precipitation_weekly
  |     description="Aggregated precipitation dataset with weekly resolution"
  | 
  +----------------------------------------------------------------------------+
-</pre></div>
-
-
-<h3>EXAMPLE 2</h3>
-
-Example for monthly aggregation:
-
-<div class="code"><pre>
-# January averages
-t.rast.series input=monthly_aggregates \
-    output=jan_average method=average \
-    where="start_time = datetime(start_time, 'start_of_year', '0 month')"
-
-# February averages
-t.rast.series input=monthly_aggregates \
-    output=feb_average method=average \
-    where="start_time = datetime(start_time, 'start_of_year', '1 month')"
-
-# March averages
-t.rast.series input=monthly_aggregates \
-    output=mar_average method=average \
-    where="start_time = datetime(start_time, 'start_of_year', '2 month')"
 </pre></div>
 
 
