@@ -1279,8 +1279,11 @@ class PictureComboBox(wx.combo.OwnerDrawnComboBox):
         bitmap = self.GetPictureBitmap(self.GetString(item))
         if bitmap:
             dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) / 2)
+            width = bitmap.GetWidth() + 10
+        else:
+            width = 0
         dc.DrawText(self.GetString(item),
-                    r.x + bitmap.GetWidth() + 10,
+                    r.x + width,
                     (r.y + 0) + (r.height - dc.GetCharHeight()) / 2)
 
     def OnMeasureItem(self, item):
