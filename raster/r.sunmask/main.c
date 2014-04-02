@@ -189,6 +189,7 @@ int main(int argc, char *argv[])
     parm.seconds->required = NO;
     parm.seconds->description = _("Seconds (B)");
     parm.seconds->options = "0-60";
+    parm.seconds->answer = "0";
     parm.seconds->guisection = _("Time");
 
     parm.timezone = G_define_option();
