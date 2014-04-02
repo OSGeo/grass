@@ -7,8 +7,8 @@ the sun position either directly or the module calculates it from given
 location and date/time parameters using the
 <a href="http://rredc.nrel.gov/">NREL</a> sun position algorithm. So either
 "A:"-parameters to specify the exact known sun position or "B:-parameters"
-to specify date/time for sun position calculation by r.sunmask itself have
-to be used.
+to specify date/time for sun position calculation by <em>r.sunmask</em> itself
+have to be used.
 
 <p>The module performs sunset/sunrise checks and refraction correction for sun
 position calculation. Local coordinate systems are internally transformed to
@@ -17,22 +17,25 @@ in the sunset/sunrise calculations.
 
 <h2>NOTES</h2>
 
-r.sunmask and daylight savings: Rather than convert time to GMT, the solpos
-algorithm uses what is called Local Standard Time, which is generally
-defined politically as an offset from GMT.  So the key is the offset from
-GMT, which the solpos Time Zone parameter.  If the user specifies clock time
-(different for winter and summer), he/she would have to change the Time Zone
-parameter seasonally in r.sunmask (timezone parameter). See also 
+<em>r.sunmask</em> and daylight savings: Rather than converting the
+local time to GMT, the SOLPOS algorithm uses what is called Local
+Standard Time, which is generally politically defined as an offset
+from GMT.  So the key is the offset from GMT, which the solpos Time
+Zone parameter. If the user specifies clock time (different for
+winter and summer), s/he would have to change the Time Zone
+parameter seasonally in <em>r.sunmask</em> (timezone parameter). See also 
 <a href="http://en.wikipedia.org/wiki/Daylight_saving_time_by_country">Daylight saving time by region and country</a>.
 
 <p>
 Note: In latitude/longitude locations the position coordinates pair
 (east/west) has to be specified in decimal degree (not D:M:S). If
 not specified, the map center's coordinates will be used.
-Also <em>g.region -l</em> displays the map center's coordinates.
+Also <em>g.region -l</em> displays the map center's coordinates in
+latitude/longitude (or <em>g.region -c</em> in the actual coordinate
+system).
 
 <p>
-Note for module usage with <em>-g</em> flag and calculations
+Note for module usage with the <em>-g</em> flag, when performing calculations
 close to sunset/sunrise:
 
 <pre>
@@ -45,7 +48,7 @@ close to sunset/sunrise:
  No map calculation requested. Finished.
 </pre>
 
-In above calculation appears to be a mistake as
+In above calculation it appears to be a mistake as
 the program indicates that we are before sunrise while
 the <i>sun angle above horizon</i> is already positive.
 The reason is that <i>sun angle above horizon</i> is
@@ -63,20 +66,20 @@ of sun position angles and more:
 # set the region to a place near Raleigh (NC)
 g.region rast=elev_lid792_1m -p
 
-# compute the sun position
-r.sunmask -s --v elev_lid792_1m out=dummy year=2012 month=2 \
-          day=22 hour=10 minute=30 sec=0 timezone=-5
+# compute only sun position and no output map
+r.sunmask -s elev_lid792_1m year=2012 month=2 \
+          day=22 hour=10 minute=30 timezone=-5
 Using map center coordinates: 638650.000000 220375.000000
 Calculating sun position... (using solpos (V. 11 April 2001) from NREL)
 2012/02/22, daynum: 53, time: 10:30:00 (decimal time: 10.500000)
 long: -78.678856, lat: 35.736160, timezone: -5.000000
-Solar position: sun azimuth: 143.006424, sun angle above horz. (refraction corrected): 36.233883
+Solar position: sun azimuth: 143.006409, sun angle above horz. (refraction corrected): 36.233879
 Sunrise time (without refraction): 06:58:11
 Sunset time  (without refraction): 17:58:47
 
-# with -g flag
-r.sunmask -s -g --v elev_lid792_1m out=dummy year=2012 month=2 \
-          day=22 hour=10 minute=30 sec=0 timezone=-5
+# with -g flag, useful for eval() shell function
+r.sunmask -s -g elev_lid792_1m  year=2012 month=2 \
+          day=22 hour=10 minute=30 timezone=-5
 Using map center coordinates: 638650.000000 220375.000000
 Calculating sun position... (using solpos (V. 11 April 2001) from NREL)
 date=2012/02/22
@@ -86,8 +89,8 @@ decimaltime=10.500000
 longitudine=-78.678856
 latitude=35.736160
 timezone=-5.000000
-sunazimuth=143.006424
-sunangleabovehorizon=36.233883
+sunazimuth=143.006409
+sunangleabovehorizon=36.233879
 sunrise=06:58:11
 sunset=17:58:47
 </pre></div>
