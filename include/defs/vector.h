@@ -391,8 +391,12 @@ int Vect_graph_shortest_path(dglGraph_s *, int, int, struct ilist *, double *);
 /* Network (graph) */
 int Vect_net_build_graph(struct Map_info *, int, int, int, const char *,
                          const char *, const char *, int, int);
+int Vect_net_ttb_build_graph(struct Map_info *, int, int, int, int, int ,
+                            const char *, const char *, const char *, int, int);
 int Vect_net_shortest_path(struct Map_info *, int, int, struct ilist *,
                            double *);
+int Vect_net_ttb_shortest_path(struct Map_info *, int, int, int, int, int,
+                             struct ilist *, double *);
 dglGraph_s *Vect_net_get_graph(struct Map_info *);
 int Vect_net_get_line_cost(const struct Map_info *, int, int, double *);
 int Vect_net_get_node_cost(const struct Map_info *, int, double *);
@@ -401,12 +405,12 @@ int Vect_net_nearest_nodes(struct Map_info *, double, double, double, int,
                            struct line_pnts *, struct line_pnts *, double *);
 int Vect_net_shortest_path_coor(struct Map_info *, double, double, double,
                                 double, double, double, double, double,
-                                double *, struct line_pnts *, struct ilist *,
+                                double *, struct line_pnts *, struct ilist *,  struct ilist *,
                                 struct line_pnts *, struct line_pnts *,
                                 double *, double *);
-int Vect_net_shortest_path_coor2(struct Map_info *, double, double, double,
-                                double, double, double, double, double,
-                                double *, struct line_pnts *, struct ilist *, struct ilist *,
+int Vect_net_ttb_shortest_path_coor(struct Map_info *, double, double, double,
+                                double, double, double, double, double, int,
+                                double *, struct line_pnts *, struct ilist *,  struct ilist *,
                                 struct line_pnts *, struct line_pnts *,
                                 double *, double *);
 
