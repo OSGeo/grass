@@ -80,6 +80,8 @@ void png_draw_line(double x1, double y1, double x2, double y2)
     path.alloc = 5;
     path.start = -1;
 
+    /* FIXME: dx, dy used uninitialized here, lines have no vertical width */
+
     if (dy > dx) {
 	path_move(&path, x1 - k, y1);
 	path_cont(&path, x1 + k, y1);
