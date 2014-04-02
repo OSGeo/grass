@@ -210,12 +210,12 @@ class AnimationData(object):
 
     zoomRegionValue = property(fset=SetZoomRegionValue, fget=GetZoomRegionValue)
 
-    def GetRegions(self):
-        self._computeRegions(self._mapCount, self._startRegion,
+    def GetRegions(self, width, height):
+        self._computeRegions(width, height, self._mapCount, self._startRegion,
                              self._endRegion, self._zoomRegionValue)
         return self._regions
 
-    def _computeRegions(self, count, startRegion, endRegion=None, zoomValue=None):
+    def _computeRegions(self, width, height, count, startRegion, endRegion=None, zoomValue=None):
         """Computes regions based on start region and end region or zoom value
         for each of the animation frames."""
         currRegion = dict(gcore.region())  # cast to dict, otherwise deepcopy error
@@ -255,6 +255,13 @@ class AnimationData(object):
                 if regions[i]['n'] < regions[i]['s'] or \
                    regions[i]['e'] < regions[i]['w']:
                         regions[i] = regions[i - 1]
+
+        for region in regions:
+            mapwidth = abs(region['e'] - region['w'])
+            mapheight = abs(region['n'] - region['s'])
+            region['nsres'] = mapheight / height
+            region['ewres'] = mapwidth / width
+
         self._regions = regions
 
     def __repr__(self):
