@@ -67,7 +67,7 @@ void png_draw_line(double x1, double y1, double x2, double y2)
     struct path path;
     struct vertex vertices[5];
     double k = png.linewidth / 2;
-    int dx, dy;
+    double dx, dy;
 
     if (png.linewidth <= 1) {
 	draw_line(x1, y1, x2, y2);
@@ -80,7 +80,9 @@ void png_draw_line(double x1, double y1, double x2, double y2)
     path.alloc = 5;
     path.start = -1;
 
-    /* FIXME: dx, dy used uninitialized here, lines have no vertical width */
+    /* FIXME: rendering issues (#1283) */
+    dx = fabs(x2 - x1);
+    dy = fabs(y2 - y1);
 
     if (dy > dx) {
 	path_move(&path, x1 - k, y1);
