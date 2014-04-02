@@ -711,7 +711,7 @@ double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
 		Vect_net_shortest_path_coor(Net, APoints->x[0], APoints->y[0],
 					    0.0, BPoints->x[0], BPoints->y[0],
 					    0.0, netmax, netmax, &dist, NULL,
-					    NULL, NULL, NULL, NULL, NULL);
+					    NULL, NULL, NULL, NULL, NULL, NULL);
 
 	    G_debug(3, "  SP: %f %f -> %f %f", APoints->x[0], APoints->y[0],
 		    BPoints->x[0], BPoints->y[0]);
@@ -796,9 +796,9 @@ void compute_net_distance(double x, double y, struct Map_info *In,
 	G_debug(3, "  SP: %f %f -> %f %f", x, y, PointsList->box[i].E, PointsList->box[i].N);
 	/*ret = Vect_net_shortest_path_coor(Net, x, y, 0.0, Points->x[0], */
 	/*Points->y[0], 0.0, netmax, netmax, */
-	/*&dist, NULL, NULL, NULL, NULL, NULL, */
+	/*&dist, NULL, NULL, NULL, NULL, NULL, NULL, */
 	/*NULL); */
-	ret = Vect_net_shortest_path_coor2(Net,
+	ret = Vect_net_shortest_path_coor(Net,
 					   PointsList->box[i].E,
 					   PointsList->box[i].N, 0.0,
 					   x, y, 0.0, netmax, 1.0,
