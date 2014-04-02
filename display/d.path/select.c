@@ -117,7 +117,7 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
     ret =
 	Vect_net_shortest_path_coor(Map, fx, fy, 0.0, tx, ty, 0.0,
 				    5 * maxdist, 5 * maxdist, &cost, Points,
-				    NULL, NULL, NULL, &fdist, &tdist);
+				    NULL, NULL, NULL, NULL, &fdist, &tdist);
     if (ret == 0) {
 	fprintf(stdout, _("Destination unreachable\n"));
     }
