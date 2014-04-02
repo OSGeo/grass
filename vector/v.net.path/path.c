@@ -257,7 +257,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    ret =
 		Vect_net_shortest_path_coor(In, fx, fy, 0.0, tx, ty, 0.0,
 					    maxdist, maxdist, &cost, OPoints,
-					    AList, FPoints, TPoints, &fdist,
+					    AList, NULL, FPoints, TPoints, &fdist,
 					    &tdist);
 
 	    if (ret == 0) {
