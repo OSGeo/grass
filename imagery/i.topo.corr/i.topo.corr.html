@@ -3,9 +3,17 @@
 <em>i.topo.corr</em> is used to topographically correct reflectance
 from imagery files, e.g. obtained with <em>i.landsat.toar</em>, using a
 sun illumination terrain model. This illumination model represents the
-cosine of the incident angle, i.e. the  angle between the normal to the
-ground and the sun rays. It can be obtained with <em>r.sun</em>
-(parameter incidout), and then calculating its cosine with float precision.
+cosine of the incident angle <em>i</em>, i.e. the  angle between the normal to the
+ground and the sun rays.
+<p>
+Note: If needed, the sun position can be calculated for a given date with
+<em>r.sunmask</em>.
+
+
+<center>
+<img src="terrain_correction.png" alt="Figure showing terrain and solar angles"><br>
+Figure showing terrain and solar angles
+</center>
 
 <p>
 Using the <b>-i</b> flag and given an elevation basemap (metric),
@@ -14,8 +22,11 @@ Using the <b>-i</b> flag and given an elevation basemap (metric),
   <li> cos_i = cos(s) * cos(z) + sin(s) * sin(z) * cos(a - o) </li>
 </ul>
 where,
-<em>s</em> is the terrain slope angle, <em>z</em> is the solar zenith angle,
-<em>a</em> the solar azimuth angle, <em>o</em> the terrain aspect angle.
+<em>i</em> is the incident angle to be calculated,
+<em>s</em> is the terrain slope angle,
+<em>z</em> is the solar zenith angle,
+<em>a</em> the solar azimuth angle,
+<em>o</em> the terrain aspect angle.
 
 <p>
 For each band file, the corrected reflectance (ref_c) is calculate from
@@ -78,7 +89,10 @@ method:
 <p>
 
 <div class="code"><pre>
+# first pass: create illumination model
 i.topo.corr -i base=SRTM zenith=33.3631 azimuth=59.8897 out=SRTM.illumination
+
+# second pass: apply illumination model
 i.topo.corr base=SRTM.illumination input=toar.5,toar.4,toar.3 out=tcor \ 
   zenith=33.3631 method=c-factor
 </pre></div>
@@ -110,13 +124,15 @@ i.topo.corr base=SRTM.illumination input=toar.5,toar.4,toar.3 out=tcor \
 <a href="i.landsat.toar.html">i.landsat.toar</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.sun.html">r.sun</a>
+<a href="r.sunmask.html">r.sunmask</a>
 </em>
-
 
 <h2>AUTHOR</h2>
 
 E. Jorge Tizado  (ej.tizado unileon es)<br>
 Dept. Biodiversity and Environmental Management, University of Le&oacute;n, Spain
+<p>
+Figure derived from Neteler &amp; Mitasova, 2008.
 
 <p>
 <i>Last changed: $Date$</i>
