@@ -440,8 +440,11 @@ int Vect__delete(const char *map, int is_tmp)
                 if (Fi == NULL) {
                     G_warning(_("Database connection not defined for layer %d"),
                               Map.dblnk->field[i].number);
-                    Vect_close(&Map);
-                    return -1;
+                    /* 
+                       Vect_close(&Map);
+                       return -1;
+                    */
+                    continue;
                 }
                 G_debug(3, "Delete drv:db:table '%s:%s:%s'", Fi->driver,
                         Fi->database, Fi->table);
@@ -450,8 +453,11 @@ int Vect__delete(const char *map, int is_tmp)
                 if (ret == -1) {
                     G_warning(_("Unable to find table <%s> linked to vector map <%s>"),
                               Fi->table, map);
-                    Vect_close(&Map);
-                    return -1;
+                    /* 
+                       Vect_close(&Map);
+                       return -1;
+                    */
+                    continue;
                 }
 
                 if (ret == 1) {
@@ -460,8 +466,11 @@ int Vect__delete(const char *map, int is_tmp)
                     if (ret == DB_FAILED) {
                         G_warning(_("Unable to delete table <%s>"),
                                   Fi->table);
-                        Vect_close(&Map);
-                        return -1;
+                        /*
+                          Vect_close(&Map);
+                          return -1;
+                        */
+                        continue;
                     }
                 }
                 else {
