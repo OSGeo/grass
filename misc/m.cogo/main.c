@@ -329,7 +329,7 @@ int main(int argc, char **argv)
 
 	if (!parse_line(cptr, &record)) {
 	    if (verbose)
-		G_warning(_("Input parse error on line %d"), linenum);
+		G_warning(_("Input parse error on line %lu"), linenum);
 	    continue;
 	}
 
