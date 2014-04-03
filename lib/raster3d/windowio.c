@@ -71,7 +71,7 @@ static void Rast3d_getFullWindowPath(char *path, const char *windowName)
 	windowName++;
 
     if (strchr(windowName, GRASS_DIRSEP) || strchr(windowName, HOST_DIRSEP)) {
-	sprintf(path, windowName);
+	sprintf(path, "%s", windowName);
 	return;
     }
 
@@ -108,7 +108,7 @@ static void Rast3d_getFullWindowPath(char *path, const char *windowName)
    else
    G_file_name (path, RASTER3D_WINDOW_DATABASE, windowName, G_mapset ());
    } else
-   sprintf (path, windowName);
+   sprintf (path, "%s", windowName);
    p = path;
    slash = NULL;
    while (*p != 0) {
