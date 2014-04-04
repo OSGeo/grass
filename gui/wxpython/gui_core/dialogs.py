@@ -1792,6 +1792,11 @@ class ImportDialog(wx.Dialog):
         """
         pass
 
+    def OnCmdDone(self, cmd, returncode):
+        """!Do what has to be done after importing"""
+        pass
+
+
 class GdalImportDialog(ImportDialog):
     def __init__(self, parent, giface, ogr = False, link = False):
         """!Dialog for bulk import of various raster/vector data
@@ -1855,12 +1860,12 @@ class GdalImportDialog(ImportDialog):
         ext  = self.dsnInput.GetFormatExt()
         
         # determine data driver for PostGIS links
-        popOGR = False
+        self.popOGR = False
         if self.importType == 'ogr' and \
                 self.dsnInput.GetType() == 'db' and \
                 self.dsnInput.GetFormat() == 'PostgreSQL' and \
                 'GRASS_VECTOR_OGR' not in os.environ:
-            popOGR = True
+            self.popOGR = True
             os.environ['GRASS_VECTOR_OGR'] = '1'
         
         for layer, output in data:
@@ -1904,14 +1909,21 @@ class GdalImportDialog(ImportDialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self._giface.RunCmd(cmd, onDone=self.AddLayers)
-        
-        if popOGR:
+            self._giface.RunCmd(cmd, onDone=self.OnCmdDone)
+
+    def OnCmdDone(self, cmd, returncode):
+        """!Load layers and close if required"""
+        if not hasattr(self, 'AddLayers'):
+            return
+
+        self.AddLayers(cmd, returncode)
+
+        if self.popOGR:
             os.environ.pop('GRASS_VECTOR_OGR')
 
-        if self.closeOnFinish.IsChecked():
+        if returncode == 0 and self.closeOnFinish.IsChecked():
             self.Close()
-        
+
     def _getCommand(self):
         """!Get command"""
         if self.link:
@@ -2066,9 +2078,17 @@ class DxfImportDialog(ImportDialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self._giface.RunCmd(cmd, onDone=self.AddLayers)
-        
-        self.Close()
+            self._giface.RunCmd(cmd, onDone=self.OnCmdDone)
+
+    def OnCmdDone(self, cmd, returncode):
+        """!Load layers and close if required"""
+        if not hasattr(self, 'AddLayers'):
+            return
+
+        self.AddLayers(cmd, returncode)
+
+        if self.closeOnFinish.IsChecked():
+            self.Close()
 
     def OnSetDsn(self, event):
         """!Input DXF file defined, update list of layer widget"""
