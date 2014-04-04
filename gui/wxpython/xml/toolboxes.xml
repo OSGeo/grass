@@ -861,22 +861,22 @@
         <label>Watershed basin creation</label>
       </module-item>
       <module-item name="r.stream.channel">
-        <label>River channel characteristics</label>
+        <label>Stream channel characteristics</label>
       </module-item>
       <module-item name="r.stream.distance">
-        <label>River distance and elevation characteristics</label>
+        <label>Stream distance and elevation characteristics</label>
       </module-item>
       <module-item name="r.stream.extract">
         <label>Extraction of stream networks</label>
       </module-item>
       <module-item name="r.stream.order">
-        <label>River ordering and hierarchy</label>
+        <label>Stream ordering and hierarchy</label>
       </module-item>
       <module-item name="r.stream.segment">
-        <label>River segment characteristics</label>
+        <label>Stream segment characteristics</label>
       </module-item>
       <module-item name="r.stream.slope">
-        <label>River elevation change</label>
+        <label>Stream elevation change</label>
       </module-item>
       <module-item name="r.stream.snap">
         <label>Position correction of water outlet point</label>
