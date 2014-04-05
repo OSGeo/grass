@@ -22,16 +22,20 @@ when <tt>GRASS_VECTOR_OGR</tt> environmental variable is defined or
 GRASS is not compiled with PostgreSQL support.
 
 <p>
-Creation <b>options</b> refer to the given output format selected
+Creation <b>options</b> refer to the output format specified
 by <b>format</b> option. See the list of valid creation options
 at <a href="http://www.gdal.org/ogr/ogr_formats.html">OGR formats
 specification page</a>, example
 for <a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI
 Shapefile</a>
 or <a href="http://www.gdal.org/ogr/drv_pg.html">PostgreSQL/PostGIS</a>
-format (section &quot;Layer Creation Options&quot;).
+format (section &quot;Layer Creation Options&quot;). Options are
+comma-separated pairs (<tt>key=value</tt>), the options are
+case-insensitive,
+eg. <tt>options=&quot;SCHEMA=myschema,FID=cat&quot;</tt>.
 
-<p>
+<h3>PostgreSQL/PostGIS Creation Options</h3>
+
 Note that built-in <em>GRASS-PostGIS data provider</em>
 (<b>format=PostgreSQL</b>) supports different creation <b>options</b>
 compared to PostgreSQL/PostGIS driver from OGR library:
@@ -72,9 +76,7 @@ Options relevant only to topological output (<tt>TOPOLOGY=YES</tt>):
   NO</li>
 </ul>
 
-<p>
-Creation <b>options</b> are comma-separated pairs
-(<tt>key=value</tt>), the options are case-insensitive, eg. <tt>options=&quot;SCHEMA=myschema,FID=cat&quot;</tt>.
+Note that topological output requires <b>PostGIS version 2 or later</b>.
 
 <h2>EXAMPLES</h2>
 
