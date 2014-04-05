@@ -860,6 +860,7 @@
       <module-item name="r.water.outlet">
         <label>Watershed basin creation</label>
       </module-item>
+      <separator/>
       <module-item name="r.stream.channel">
         <label>Stream channel characteristics</label>
       </module-item>
