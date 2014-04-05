@@ -1,0 +1,322 @@
+\section{Windows Batch Files for R}
+
+G. Grothendieck
+
+Software and documentation is (c) 2013 GKX Associates Inc. and licensed
+under \href{http://www.gnu.org/licenses/gpl-2.0.html}{GPL 2.0}.
+
+\subsection{Introduction}
+
+This document describes a number of Windows batch, javascript and
+\texttt{.hta} files that may be used in conjunction with R. Each is self
+contained and independent of the others. Each requires no installation -
+just place it on the Windows path\footnote{To display the Windows path
+  enter \texttt{path} at the Windows \texttt{cmd} line.}.
+
+\texttt{R.bat} and \texttt{Rpathset.bat} are alternatives to each other
+intended to facilitate the use of R without having to permanently modify
+the Windows system PATH or otherwise use the Windows control panel.
+\texttt{R.bat} uses heuristics to automatically locate \texttt{R},
+\texttt{MiKTeX} and \texttt{Rtools} while \texttt{Rpathset.bat} takes a
+simpler approach of having the user manually edit the \texttt{set}
+statements in it to configure it. \texttt{R.bat} does not require
+changes when you install a new version of R but \texttt{Rpathset.bat}
+does. \texttt{R.bat help} gives a quick overview of that batch file.
+
+\texttt{movedir.bat} and \texttt{copydir.bat} are used for moving or
+copying packages from one library to another.
+
+\texttt{el.js} runs its arguments in elevated mode (i.e.~with
+Administrator privileges).
+
+\texttt{clip2r.js} copies the current clipboard into a running R
+instance. It can be used with vim or other text editor.
+
+\texttt{find-miktex.hta} displays a popup window showing where it found
+MiKTeX.
+
+\subsection{R.bat}
+
+\subsubsection{Purpose}
+
+The purpose of R.bat is to facilitiate the use of R from the Windows
+\texttt{cmd} line by eliminating the need to make any systems changes.
+There is no need to modify the Windows PATH or to set any environment
+variables for standard configurations of R. It will automatically locate
+R (and Rtools and MiKTeX if installed) and then run \texttt{R.exe},
+\texttt{Rgui.exe} or other command.
+
+It is a self contained no-install script with no dependencies so just
+place it anywhere on your Windows path.
+
+\subsubsection{Typical Usage}
+
+Typical usage to launch R gui is the following:
+
+\begin{verbatim}
+R.bat gui
+\end{verbatim}
+
+If R.exe is not on the Windows path or is after R.bat on the path then
+the above can be shortened to:
+
+\begin{verbatim}
+R gui
+\end{verbatim}
+
+Either of these commands runs \texttt{Rgui.exe} along with further
+arguments, if any. For example,
+
+\begin{verbatim}
+R.bat gui --help
+\end{verbatim}
+
+will run:
+
+\begin{verbatim}
+Rgui.exe --help
+\end{verbatim}
+
+\subsubsection{Other R Executables}
+
+Other executable files that come with R (\texttt{R.exe},
+\texttt{Rcmd.exe}, \texttt{Rscript.exe}) can be run in a similar way:
+
+\begin{verbatim}
+R.bat --help
+R.bat cmd --help
+R.bat script --help
+\end{verbatim}
+
+(\texttt{RSetReg.exe} is another executable that comes with R for
+Windows. It will be discussed later.)
+
+\subsubsection{Support Subcommands}
+
+There are also some support commands:
+
+\begin{verbatim}
+R.bat cd
+R.bat dir
+R.bat help
+R.bat show
+\end{verbatim}
+
+\texttt{R.bat cd} changes to the \texttt{R\_ROOT} directory (typically
+\texttt{C:\textbackslash{}\textbackslash{}Program Files\textbackslash{}\textbackslash{}R}).
+
+\texttt{R.bat dir} displays the contents of that directory.
+
+\texttt{R.bat show} shows the values of the \texttt{R\_} environment
+that \texttt{R.bat} uses. Here is a list with typical values. These
+values are determined by the script heuristically (or the user can set
+any before running \texttt{R.bat} or by customizing \texttt{R.bat}
+itself by setting any of them near top of the script).
+
+\begin{verbatim}
+R_ARCH=x64
+R_CMD=RShow
+R_HOME=C:\\Program Files\\R\\R-2.15.2
+R_MIKTEX_PATH=\\Program Files (x86)\\MiKTeX 2.9\\miktex\\bin
+R_PATH=C:\\Program Files\\R\\R-2.15.2\\bin\\x64
+R_REGISTRY=1
+R_ROOT=C:\\Program Files\\R
+R_TOOLS=C:\\Rtools
+R_TOOLS_PATH=C:\\Rtools\\bin;C:\\Rtools\\gcc-4.6.3\\bin;
+R_TOOLS_VERSION=3.0.0.1927
+R_VER=R-2.15.2
+\end{verbatim}
+
+\texttt{R\_PATH}, \texttt{R\_MIKTEX\_PATH} and \texttt{R\_TOOLS\_PATH}
+are the paths to the directories holding the \texttt{R}, \texttt{MiKTeX}
+and \texttt{Rtools} binaries.
+
+\texttt{R\_CMD} indicates the subcommand or if no subcommand specified
+then is derived from the name of the script. For example if the script
+were renamed \texttt{Rgui.bat} then if no subcommand were specified it
+would default to \texttt{gui}.
+
+\texttt{R\_ROOT} is the directory holding all the R installations.
+\texttt{R\_HOME} is the directory of the particular R installation.
+\texttt{R\_HOME} is made up of \texttt{R\_ROOT} and \texttt{R\_VER} so
+that \texttt{R\_VER} represents the directory that holds the particular
+R version used. \texttt{R\_ARCH} is \texttt{i386} or \texttt{x64} for 32
+bit or 64 bit R respectively. It can also be specified as \texttt{32} or
+\texttt{64} in which case it will be translated automatically.
+
+\subsubsection{Path Setting Subcommands}
+
+The command
+
+\begin{verbatim}
+R.bat path
+\end{verbatim}
+
+adds \texttt{R\_PATH}, \texttt{R\_MIKTEX\_PATH} and \texttt{R\_TOOLS} to
+the Windows path for the current \texttt{cmd} line session. No other
+\texttt{cmd} line sessions are affected and there are no permanent
+changes to the system. Once this is run one no longer needs R.bat in the
+current session as the R binaries such as \texttt{R.exe},
+\texttt{Rgui.exe} will be directly on the path. (An alternative to this
+is the \texttt{Rpathset.bat} utility which will be desribed later.)
+
+\begin{verbatim}
+R.bat tools
+\end{verbatim}
+
+is similar except only \texttt{R\_TOOLS\_PATH} and
+\texttt{R\_MIKTEX\_PATH} are added to the path. This might be useful if
+you need to use those utilities without R.
+
+\subsubsection{Selecting R Version}
+
+For R installations using the standard locations and not specifying any
+of the R\_ environment variables the registry will determine which
+version of R is used (assuming \texttt{R\_REGISTRY} is not 0). If R is
+not found in the registry the R installation in \texttt{R\_ROOT} which
+has the most recent date will be used.
+
+We can change which version of R is used like this:
+
+\begin{verbatim}
+set R_VER=R-2.14.0
+\end{verbatim}
+
+and now for the remainder of this \texttt{cmd} line session that version
+will be used. If one wants to use two different R versions at once we
+could spawn a new \texttt{cmd} line session with the new version:
+
+\begin{verbatim}
+start
+\end{verbatim}
+
+and then enter the same set command into the new window. Now any use of
+R in the original window will use the default version and in the new
+version will use the specified version.
+
+One can change the registry entry permanently to refer to a particlar
+version like this:
+
+\begin{verbatim}
+cmd /c set R_VER=R-2.14.0 ^& R.bat SetReg
+\end{verbatim}
+
+This requires Administrator privileges so a window will pop up
+requesting permission to proceed.
+
+If the registry is empty or \texttt{R\_REGISTRY=0} then the default
+version is determined by which R install directory is the most recent.
+To make a particular R install directory the most recent run the
+following in a \texttt{cmd} line session with Administrator privileges:
+
+\begin{verbatim}
+cmd /c set R_VER=R-2.14.0 ^& R.bat touch
+\end{verbatim}
+
+The \texttt{el.js} command that comes with the batch utilities is one
+way to elevate the command to run with such privileges:
+
+\begin{verbatim}
+el cmd /c set R_VER=R-2.14.0 ^& R.bat touch
+\end{verbatim}
+
+Note that \texttt{R.bat SetReg} and \texttt{R.bat touch} make permanent
+changes to the system (namely installing or uninstalling the R key and
+updating the date on a particular R directory) but the other subcommands
+do not.
+
+\subsubsection{Heuristic to Locate R}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  If \texttt{.\textbackslash{}\textbackslash{}R.exe} exists use implied
+  \texttt{R\_PATH} and skip remaining points.
+\item
+  If
+  \texttt{.\textbackslash{}\textbackslash{}\{x64,i386\}\textbackslash{}\textbackslash{}R.exe}
+  or
+  \texttt{.\textbackslash{}\textbackslash{}bin\textbackslash{}\textbackslash{}\{x64,i386\}\textbackslash{}\textbackslash{}R.exe}
+  exists use implied \texttt{R\_HOME}.
+\item
+  If \texttt{R\_HOME} defined then derive any of \texttt{R\_ROOT} and
+  \texttt{R\_VER} that are not already defined.
+\item
+  If \texttt{R\_PATH} defined then derive any of \texttt{R\_ROOT},
+  \texttt{R\_HOME}, \texttt{R\_VER} and \texttt{R\_ARCH} that are not
+  already defined.
+\item
+  If \texttt{R\_REGISTRY=1} and R found in registry derive any of
+  \texttt{R\_HOME}, \texttt{R\_ROOT} and \texttt{R\_VER} that are not
+  already defined.
+\item
+  If R\_ROOT not defined try
+  \texttt{\%ProgramFiles\%\textbackslash{}\textbackslash{}R\textbackslash{}\textbackslash{}*},
+  \texttt{\%ProgramFiles(x86)\%\textbackslash{}\textbackslash{}R\textbackslash{}\textbackslash{}*}
+  and then \texttt{\%SystemRoot\%\textbackslash{}\textbackslash{}R} else
+  error.
+\item
+  If \texttt{R\_VER} not defined use last directory in
+  \texttt{cd \%R\_ROOT\% \& dir /od}.
+\item
+  if \texttt{R\_ARCH} not defined try
+  \texttt{\%R\_ROOT\%\textbackslash{}\textbackslash{}\%}R\_VER\texttt{\%\textbackslash{}\textbackslash{}bin\textbackslash{}\textbackslash{}x64\textbackslash{}\textbackslash{}R.exe}
+  and then
+  \texttt{\%R\_ROOT\%\textbackslash{}\textbackslash{}\%}R\_VER\texttt{\%\textbackslash{}\textbackslash{}bin\textbackslash{}\textbackslash{}i386\textbackslash{}\textbackslash{}R.exe}
+\item
+  If \texttt{R\_ROOT}, \texttt{R\_VER} and \texttt{R\_ARCH} defined skip
+  remaining points.
+\item
+  If \texttt{R.exe} found on \texttt{PATH} use implied \texttt{R\_PATH}.
+\end{enumerate}
+
+\subsection{Rpathset.bat}
+
+An alternative to
+
+\begin{verbatim}
+R.bat path 
+\end{verbatim}
+
+is the \texttt{Rpathset.bat}. Unlike \texttt{R.bat},
+\texttt{Rpathset.bat} is not automatic but requires that the user modify
+the various set commands in it. Running \texttt{Rpathset.bat} then sets
+the path accordingly and from then on in the session one can access
+Rgui.exe, etc. on the path. Although \texttt{Rpathset.bat} involves
+manual editing it does have the advantage that as a consequence it is
+very simple -- not much more than a collection of Windows batch set
+commands.
+
+The set statements are documented in the source of the file itself.
+
+\subsection{movedir.bat and copydir.bat}
+
+\texttt{movedir.bat} and \texttt{copydir.bat} move or copy the packages
+from one library to another. If used to transfer packages from one
+version of R to another it is recommended that the user run
+\texttt{upgrade.packages()} in the target. For example, assuming the
+default location for the user libraries:
+
+\begin{verbatim}
+cd %userprofile%\\Documents\\win-library
+copydir 2.15\\library 3.0\\library
+R.bat gui 
+... now enter update.packages() into R...
+\end{verbatim}
+
+\subsection{el.js}
+
+\texttt{el.js} runs its arguments elevated (i.e.~with Adminstrator
+privileges).
+
+\subsection{clip2r.js}
+
+This program writes the clipboard into the running R session. It can be
+used with vim or other editor. See the source for additional
+instructions.
+
+\subsection{find-mixtex.hta}
+
+This program displays a window showing where MiKTeX was found. It uses
+the MiKTeX API. This API is not used by \texttt{R.bat} . It may be
+incorporated into \texttt{R.bat} in the future.
