@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
     /* extract areas if any or requested */
     if (type == TYPE_POLY) {
 	if (Vect_get_num_areas(&In) == 0) {
-	    G_warning(_("No areas found, skipping %"), "type=poly");
+	    G_warning(_("No areas found, skipping %s"), "type=poly");
 	}
 	else {
             int nareas;
