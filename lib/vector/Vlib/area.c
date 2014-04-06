@@ -279,19 +279,46 @@ int Vect_get_isle_area(const struct Map_info *Map, int isle)
     return (Isle->area);
 }
 
-
 /*!
-   \brief Calculate area perimeter
+   \brief Returns perimeter of area with perimeter of isles
 
-   \param Points list of points defining area boundary
+   \param Map pointer to Map_info structure
+   \param area area id
 
-   \return area perimeter
+   \return perimeter of area with perimeters of isles in meters
  */
-double Vect_area_perimeter(const struct line_pnts *Points)
-{
-    return Vect_line_length(Points);
-}
 
+double Vect_get_area_perimeter(const struct Map_info *Map, int area)
+{
+    const struct Plus_head *Plus;
+    struct P_area *Area;
+    struct line_pnts *Points;
+    double d;
+    int i;
+
+    G_debug(3, "Vect_get_area_perimeter(): area = %d", area);
+
+    Points = Vect_new_line_struct();
+    Plus = &(Map->plus);
+    Area = Plus->Area[area];
+
+    Vect_get_area_points(Map, area, Points);
+    Vect_line_prune(Points);
+    d = Vect_line_geodesic_length(Points);
+
+    /* adding island perimeters */
+    for (i = 0; i < Area->n_isles; i++) {
+	Vect_get_isle_points(Map, Area->isles[i], Points);
+	Vect_line_prune(Points);
+	d += Vect_line_geodesic_length(Points);
+    }
+
+    Vect_destroy_line_struct(Points);
+
+    G_debug(3, "    perimeter = %f", d);
+
+    return (d);
+}
 
 /*!
    \brief Check if point is in area
@@ -363,11 +390,13 @@ double Vect_get_area_area(const struct Map_info *Map, int area)
     Area = Plus->Area[area];
 
     Vect_get_area_points(Map, area, Points);
+    Vect_line_prune(Points);
     size = G_area_of_polygon(Points->x, Points->y, Points->n_points);
 
-    /* substructing island areas */
+    /* substracting island areas */
     for (i = 0; i < Area->n_isles; i++) {
 	Vect_get_isle_points(Map, Area->isles[i], Points);
+	Vect_line_prune(Points);
 	size -= G_area_of_polygon(Points->x, Points->y, Points->n_points);
     }
 
