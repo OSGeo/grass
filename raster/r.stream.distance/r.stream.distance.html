@@ -1,30 +1,43 @@
 <h2>DESCRIPTION</h2>
+
 <p>
-Module <em>r.stream.distance</em> may calculate distance using two methods: downstream
-and upstream.
+The module <em>r.stream.distance</em> can calculate: the distance to streams; 
+the distance to outlet; the relative elevation above streams; the relative 
+elevation above the outlet. The distance and the elevation are calculated 
+along watercourses.
+
 <p>
-The default is downstream method when it calculates distance to streams and
-outlets and relative elevation to streams and outlets. The distance and
-elevation is calculated along watercourses. In outlets mode it can also
-calculate parameters for subbasins.
-<p>
-In streams mode (default) it calculates that parameters downstream to streams
-which are added as stream mask. In outlets mode there are some additional
-possibilities. If subbasin is off it calculate parameters only for last point of
-last (downstream) CELL. In subbasin mode it calculates parameters for every
-subbasin separately. Subbasin mode acts similar to subbasin mask. Streams file
-prepared to create basins and subbasins with <em>r.stream.basins</em> can be used to 
-calculate distance and elevation parameters.
-<p>
-With upstream method it calculates distance to the local maximum or divide.
+The module may calculate the distance either <em>downstream</em> or 
+<em>upstream</em>. The default is set on downstream. 
+The upstream method calculates the distance to the local maximum or divide.
 Opposite to downstream method, where every cell has one and only one downstream
-cell in upstream method every cell has usually more than one upstream cell. So
-it is impossible to determine interchangeable path from any cell. The upstream
-method offers two alternative modes switched with -n flag: nearest local
-maximum/divide:  means the shortest path to local maximum and default option
-farthest maximum/divide means the longest path. In hydrological sense, nearest
-mode means the shortest path which a particle of water must run from divide to
-reach particular cell, while farthest mode means the possible longest path.
+cell, in upstream method every cell has usually more than one upstream cell. So
+it is impossible to determine interchangeable path from any cell. 
+
+<p>
+The upstream method offers two alternative modes switched with <em>-n</em> 
+flag: the <em>nearest local maximum/divide</em>: is the shortest path to 
+the local maximum (default option); and the <em>farthest maximum/divide</em>: 
+is the longest path. 
+In hydrological sense, the <em>nearest</em> option means the shortest path which a 
+particle of water must run from the divide to reach a particular pixel, 
+while the <em>farthest</em> option means the possible longest path.
+
+<p>
+In <em>outlets</em> mode, the module can optionally be used for subbasins.
+
+<p>
+In <em>streams</em> mode (default) it calculates the distance (downstream)
+to the stream network taken in input. In <em>outlets</em> mode there are 
+some additional possibilities. If the <em>subbasin</em> option is set off,
+it calculates the distance only for the outlet (downstream).
+If the <em>subbasin</em> option is set on, it calculates the distance to
+outlet for every subbasin separately. The <em>subbasin</em> option acts 
+similarly to a subbasin mask. The module <em>r.stream.basins</em> can be
+used to prepare the stream network map taken in input by <em>r.stream.distance</em>.
+In fact it can be used to individuate basins and subbasins.
+
+<p>
 
 <h2>OPTIONS</h2>
 
