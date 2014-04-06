@@ -277,11 +277,11 @@ int Vect_get_node_n_lines(const struct Map_info *, int);
 int Vect_get_node_line(const struct Map_info *, int, int);
 float Vect_get_node_line_angle(const struct Map_info *, int, int);
 
-double Vect_area_perimeter(const struct line_pnts *);
 int Vect_get_area_points(const struct Map_info *, int, struct line_pnts *);
 int Vect_get_area_centroid(const struct Map_info *, int);
 int Vect_get_area_num_isles(const struct Map_info *, int);
 int Vect_get_area_isle(const struct Map_info *, int, int);
+double Vect_get_area_perimeter(const struct Map_info *, int);
 double Vect_get_area_area(const struct Map_info *, int);
 int Vect_get_area_boundaries(const struct Map_info *, int, struct ilist *);
 
