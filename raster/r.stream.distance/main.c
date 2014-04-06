@@ -4,12 +4,12 @@
  * MODULE:       r.stream.distance
  * AUTHOR(S):    Jarek Jasiewicz jarekj amu.edu.pl
  *               
- * PURPOSE:      Calculate distance and elevation over the streams and outlets 
- *               according user's input data. The elevation and distance is calculated
- *               along watercourses
- *               It uses any stream map  and r.watershed or .stream.extract direction map.
- *               Stream input map shall contains streams or points outlets with or
- *               without unique categories
+ * PURPOSE:      Calculate distance to and elevation above streams and outlet 
+ *               according to user's input data. The elevation and distance are calculated
+ *               along watercourses.
+ *               It uses any stream map and r.watershed or r.stream.extract direction map.
+ *               Stream network input map shall contains streams or points outlets with or
+ *               without unique categories.
  *
  * COPYRIGHT:    (C) 2002,2009-2014 by the GRASS Development Team
  *
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     out_dist_opt = G_define_standard_option(G_OPT_R_OUTPUT);
     out_dist_opt->key = "distance";
     out_dist_opt->required = NO;
-    out_dist_opt->description = _("Name for output distance/accumulation raster map");
+    out_dist_opt->description = _("Name for output distance raster map");
     out_dist_opt->guisection = _("Output maps");
 
     out_diff_opt = G_define_standard_option(G_OPT_R_OUTPUT);
