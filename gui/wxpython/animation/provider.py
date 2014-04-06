@@ -697,9 +697,9 @@ def _setEnvironment(width, height, filename, transparent, bgcolor):
     os.environ['GRASS_HEIGHT'] = str(height)
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     os.environ['GRASS_RENDER_IMMEDIATE'] = driver
-    os.environ['GRASS_BACKGROUNDCOLOR'] = '{r}{g}{b}'.format(r=bgcolor[0],
-                                                             g=bgcolor[1],
-                                                             b=bgcolor[2])
+    os.environ['GRASS_BACKGROUNDCOLOR'] = '{r:02x}{g:02x}{b:02x}'.format(r=bgcolor[0],
+                                                                         g=bgcolor[1],
+                                                                         b=bgcolor[2])
     os.environ['GRASS_TRUECOLOR'] = "TRUE"
     if transparent:
         os.environ['GRASS_TRANSPARENT'] = "TRUE"
