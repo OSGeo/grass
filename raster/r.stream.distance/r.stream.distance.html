@@ -43,85 +43,93 @@ In fact it can be used to individuate basins and subbasins.
 
 <dl>
 <dt><b>-o</b></dt>
-<dd>Outlets. Downstream method only. Calculate distance and relative elevation
-to basin outlets instead of streams. It chooses only last outlets in the network
-ignoring nodes.</dd>
+<dd>Outlets. Downstream method only. Calculate distance to or elevation
+above the outlet instead of streams. It chooses only the last outlet in 
+the network ignoring nodes.</dd>
 
 <dt><b>-s</b></dt>
-<dd>Subbasins. Downstream method only. Calculate distance and elevation to
-stream nodes instead of streams. It creates distance and elevation parameters not
-for whole basins but for all elementary subbasins.</dd>
+<dd>Subbasins. Downstream method only. Calculate distance to or elevation 
+above stream nodes instead of streams. The distance and the elevation 
+difference are relative to elementary subbasins instead of the whole basin.</dd>
 
 <dt><b>-n</b></dt>
-<dd>Near. For upstream method only. Calculate distance and elevation to the
-nearest local maximum/divide. With the default option distance/elevation is
-calculated to the farthest possible maximum/divide.</dd>
+<dd>Near. For upstream method only. Calculate distance to or elevation 
+above the nearest local maximum/divide. With the default option, the 
+distance/elevation is calculated to the farthest possible maximum/divide.</dd>
 
 <dt><b>stream_rast</b></dt>
-<dd>Stream network: name of input stream map on which ordering will be performed,
-produced by <em>r.watershed</em> or <em>r.stream.extract</em>. Because streams
-network produced by <em>r.watershed</em> and <em>r.stream.extract</em> may
-slighty differ in detail it is required to use both stream and direction map
+<dd>Stream network: name of input stream network map, produced using either
+<em>r.watershed</em> or <em>r.stream.extract</em>. Since stream
+network maps produced by <em>r.watershed</em> and <em>r.stream.extract</em> may
+slightly differ in detail, it is required to use both stream and direction maps
 produced by the same module. Non-stream cell values must be set to NULL.</dd>
 
 <dt><b>direction</b></dt>
-<dd>Flow direction: name of input direction map produced by r.watershed or
-<em>r.stream.extract</em>. If <em>r.stream.extract</em> output map is used,
-it only has non-NULL values in places where streams occur. NULL (nodata) cells
-are ignored, zero and negative values are valid direction data if they vary
-from -8 to 8 (CCW from East in steps of 45 degrees). Direction map shall be of
-integer type (CELL). Region
-resolution and map resoultion must be the same. Also <em>stream_rast</em> network map
-must have the same resolution. It is checked by default. If resolutions differ,
-the module informs about it and stops. Region boundary and maps boundary may
-differ but it may lead to unexpected results.</dd>
+<dd>Flow direction: name of input input raster map with flow direction, 
+produced using either <em>r.watershed</em> or <em>r.stream.extract</em>. 
+If <em>r.stream.extract</em> output map is used, it is non-NULL only
+where streams occur and NULL elsewhere. NULL (nodata) cells are ignored, 
+zero and negative values are valid direction data only if they vary
+from -8 to 8 (CCW from East in steps of 45 degrees). Flow direction map 
+shall be of integer type (CELL). </dd>
 
 <dt><b>elevation</b></dt>
-<dd>Elevation: name of input elevation map. Map can be of type CELL, FCELL or
-DCELL. It is not restricted to resolution of region settings as stream and
-direction.</dd>
+<dd>Elevation: name of input elevation map. It can be of type CELL, FCELL or
+DCELL. </dd>
 
 <dt><b>method</b></dt>
-<dd>It is possible to calculate distance with two method: <b>downstream</b> from
-any raster cell to the nearest stream cell/ junction cell or outlet or
+<dd>It is possible to calculate the distance with two method: <b>downstream</b> from
+any raster cell to the nearest stream cell / junction cell or outlet or
 <b>upstream</b> from any cell upstream to the nearest maximum or divide.</dd>
-</dl>
 
-<h2>OUTPUTS</h2>
-<dl>
 <dt><b>difference</b></dt>
-<dd>Returns elevation difference to the targer (outlet, node, stream, divide,
-maximum) along watercoures. The map is of FCELL type.</dd>
+<dd>Name of output map of elevation difference to the targer (outlet, node, 
+stream, divide, maximum) along watercoures. The map is of FCELL type.</dd>
+
 <dt><b>distance</b></dt>
-<dd>Returns distance to the targer (outlet, node, stream, divide, maximum) along
-watercoures. The map is of FCELL type.</dd>
+<dd>Name of output map of distance to the targer (outlet, node, stream, 
+divide, maximum) along watercoures. The map is of FCELL type.</dd>
 </dl>
 
 <h2>NOTES</h2>
+    
+<!--
 <p>
 If there are more than one point or one stream network and some separate points
-or separate streams networks are in catchment area defined by others it will
-results as in subbasin mode. In stream mode subbasin options is omited. Input
-maps must be in CELL format (default output of <em>r.watershed</em>, <em>r.stream.order</em> and
-<em>r.stream.extract</em>).
-The distance are calculated in meters both for planimeters and
-Latitude-Longitude projections. The distance is calculated for flat areas not
-corrected by topography. Distance correction by topography may be done with
+or separate stream networks are in catchment area defined by others it will
+results as in subbasin mode. 
+-->
+<!--TODO: I don't understand this sentence, to be rephrased-->
+
+<p>
+In <em>stream</em> mode subbasin options is omitted. Input maps must be in 
+CELL format (default output of <em>r.watershed</em>, <em>r.stream.order</em> 
+and <em>r.stream.extract</em>).
+The distance is calculated in meters, for flat areas not corrected by 
+topography. Distance correction by topography may be done using the
 following <em>r.mapcalc</em> formula:
+
 <div class="code"><pre>
 r.mapcalc "dist_corrected = sqrt(distance^2 + elevation^2)"
 </pre></div>
+
+<p>
 The module can work only if direction map, streams map and region have the same settings.
-It is also required that streams map and direction map come from the same source.
-For lots of reason this limitation probably cannot be omitted. This means that if
-stream_rast map comes from <em>r.stream.extract</em> also direction map from <em>r.stream.extract</em>
-must be used. If stream network was generated with MFD method also MFD direction
-map must be used.
+This is checked by default. If resolutions differ, the module informs about 
+it and stops. Region boundary and maps boundary may differ but it may lead 
+to unexpected results. The elevation map is not affected by this restriction 
+and can have whatever resolution.
+
+<p>
+It is also required that <em>stream_rast</em> and <em>direction</em> maps come 
+from the same source, e.g. both from <em>r.stream.extract</em>. If the stream network 
+was generated with MFD method also MFD direction map must be used.
+
 <p>
 Probably one of the most imortant features of <em>r.stream.distance</em> is the ability to
-calculate distance not only for streams generated with r.stream.extract, but also
-to any CELL map with resolution corresponding to direction map. It can be a lake,
-swamp, depression and lake boundaries even divided into smaller fragments each
+calculate the distance not only for streams generated by <em>r.stream.extract</em>, but also
+for any integer map, as long ast the resolution corresponds to that of <em>direction</em> map. 
+It can be a lake, swamp, depression and lake boundaries even divided into smaller fragments each
 with its own category.
 
 <h2>EXAMPLE</h2>
