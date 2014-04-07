@@ -1,12 +1,12 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.distance</em> finds the nearest element in vector map (<em>to</em>) 
-for elements in vector map (<em>from</em>). Various information about 
+<em>v.distance</em> finds the nearest element in vector map (<b>to</b>) 
+for elements in vector map (<b>from</b>). Various information about 
 the vectors' relationships (distance, category, etc.) may be uploaded to 
 the attribute table attached to the first vector map, or printed to 
 'stdout'. A new vector map may be created where lines connecting 
-nearest points on features are written. <em>dmin</em> and/or 
-<em>dmax</em> can be used to limit the search radius.
+nearest points on features are written. <b>dmin</b> and/or 
+<b>dmax</b> can be used to limit the search radius.
 
 <p>
 For lines to lines, say line A to line B, <em>v.distance</em> calculates 
@@ -36,21 +36,22 @@ area is used as common point, or the first intersection point.
 For anything else than points to lines, there can be several common
 locations with zero distance, and the common location would then be the 
 result of an overlay consisting of several points, lines, or areas.
-<em>v.distance</em> selects in these cases a single point, and does not 
-create an overlay like <em>v.overlay</em>. In this implementation, any 
-shared point is as good as any other. Calculating an intersection is 
-costlier than to check if a vertex is inside a polygon. For example, if 
-a vertex of the boundary of the 'to' area is inside the 'from' area, it 
-is a common location. For speed reasons, the distance is then set to 
-zero and no further tests are done.
+<em>v.distance</em> selects in these cases a single point, and does
+not create an overlay
+like <em><a href="v.overlay.html">v.overlay</a></em>. In this
+implementation, any shared point is as good as any other. Calculating
+an intersection is costlier than to check if a vertex is inside a
+polygon. For example, if a vertex of the boundary of the 'to' area is
+inside the 'from' area, it is a common location. For speed reasons,
+the distance is then set to zero and no further tests are done.
 
 
 <h2>NOTES</h2>
 
 If a nearest feature does not have a category, the attribute column is 
-updated to <em>null</em>.
-<p>The upload <em>column</em>(s) must already exist. Create one with 
-<em>v.db.addcolumn</em>.
+updated to NULL.
+<p>The upload <b>column</b>(s) must already exist. Create one with 
+<em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>.
 
 <!-- needs Vect_line_geodesic_distance()
 <p>In lat-long locations <em>v.distance</em> gives distances 
@@ -62,10 +63,10 @@ calculated as geodesic distances on a sphere.
 
 <h3>Find nearest lines</h3>
 
-Find <em>nearest lines</em> in vector map <b>ln</b> for points from
-vector map <b>pnt</b> within the given threshold and write related
-line categories to column <b>linecat</b> in an attribute table attached
-to vector map <b>pnt</b>:
+Find <em>nearest lines</em> in vector map &quot;ln&quot; for points from
+vector map &quot;pnt&quot; within the given threshold and write related
+line categories to column &quot;linecat&quot; in an attribute table attached
+to vector map &quot;pnt&quot;:
 
 <div class="code"><pre>
 v.distance from=pnt to=ln upload=cat column=linecat
@@ -73,10 +74,10 @@ v.distance from=pnt to=ln upload=cat column=linecat
 
 <h3>Find nearest area</h3>
 
-For each point from vector map <b>pnt</b>, find the <em>nearest area</em>
-from map <b>ar</b> within the given threshold and write the related
-area categories to column <b>areacat</b> in an attribute table attached
-to vector map <b>pnt</b> (in the case that a point falls into an area,
+For each point from vector map &quot;pnt&quot;, find the <em>nearest area</em>
+from map &quot;ar&quot; within the given threshold and write the related
+area categories to column &quot;areacat&quot; in an attribute table attached
+to vector map &quot;pnt&quot; (in the case that a point falls into an area,
 the distance is zero):
 
 <div class="code"><pre>
@@ -86,7 +87,7 @@ v.distance from=pnt to=ar upload=cat column=areacat
 <h3>Create a new vector map</h3>
 
 Create a new vector map which contains <em>lines connecting nearest
-features</em> of maps <b>pnt</b> and map <b>ln</b>. The resulting
+features</em> of maps &quot;pnt&quot; and map &quot;ln&quot;. The resulting
 vector map can be used for example to connect points to a network as
 needed for network analysis:
 
@@ -114,14 +115,14 @@ v.distance from=pnt to=map_to_query upload=cat col=somecol -p
 
 <h3>Point-in-polygon</h3>
 
-The option <em>dmax=0</em> is here important because otherwise for
+The option <b>dmax=0</b> is here important because otherwise for
 points not falling into any area, the category of the nearest area is
 recorded.
 <br>
-For each point from vector map <b>pnt</b>, find the <em>area</em> from
-vector map <b>ar</b> in which the individual point falls, and
-write the related area categories to column <b>areacat</b> into
-the attribute table attached to vector map <b>pnt</b>:
+For each point from vector map &quot;pnt&quot;, find the <em>area</em> from
+vector map &quot;ar&quot; in which the individual point falls, and
+write the related area categories to column &quot;areacat&quot; into
+the attribute table attached to vector map &quot;pnt&quot;:
 
 <div class="code"><pre>
 v.distance from=pnt to=ar dmax=0 upload=cat column=areacat
@@ -164,7 +165,7 @@ v.univar vdistance_vectors column=length
 v.distance -pa from=archsites to=archsites upload=dist col=dist
 </pre></div>
 
-Note: Matrix-like output is enabled only for flag <em>-a</em> and one
+Note: Matrix-like output is enabled only for flag <b>-a</b> and one
 given upload option.
 
 <h2>SEE ALSO</h2>
@@ -183,6 +184,7 @@ Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy<br>
 Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy<br>
 Matrix-like output by Martin Landa, FBK-irst, Trento, Italy<br>
 Improved processing speed: Markus Metz<br>
-Distance from any feature to any feature Markus Metz
+Distance from any feature to any feature: Markus Metz
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
