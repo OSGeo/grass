@@ -217,47 +217,53 @@ type=boundary,centroid snap=-1
 
 <h3>PostGIS tables</h3>
 
-Area example:
+Import polygons as areas:
 
 <div class="code"><pre>
 v.in.ogr dsn="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
 output=polygons type=boundary,centroid
 </pre></div>
 
-<h3>Oracle Spatial maps</h3>
+<h3>Default connection settings as datasource (PostgreSQL only)</h3>
+
+Datasource (<b>dsn</b>) can be omitted in the case that default DB
+driver is <a href="grass-pg.html">PostgreSQL</a> (<tt>pg</tt>), see
+examples below.
+
+<p>
+For schema support, first set a default schema with 
+<em><a href="db.connect.html">db.connect</a></em>. If schema support
+is used the schema name must be specified whenever a <tt>db.*</tt>
+module is called. User and password for connection to the database can
+be specified by <em><a href="db.login.html">db.login</a></em>.
+
+<p>
+Example (with schema):
+
+<div class="code"><pre>
+db.connect driver=pg database=test schema=user1
+db.login user=user1 password=pwd1
+v.in.ogr layer=river output=river     # -> table user1.river
+db.select table=user1.river
+</pre></div>
+
+<p>
+The user can ignore schemas, if desired:
+
+<div class="code"><pre>
+db.connect driver=pg database=test
+db.login user=user1 password=pwd1
+v.in.ogr layer=river output=river     # -> table public.river
+db.select table=river
+</pre></div>
+
+<h3>Oracle Spatial</h3>
 
 Note that you have to set the environment-variables <tt>ORACLE_BASE,
 ORACLE_SID, ORACLE_HOME</tt> and <tt>TNS_ADMIN</tt> accordingly.
 
 <div class="code"><pre>
 v.in.ogr dsn=OCI:username/password@database_instance output=grasslayer layer=roads_oci
-</pre></div>
-
-<h3>Support of database schema</h3>
-
-<p>
-For schema support, first set a default schema with 
-<em><a href="db.connect.html">db.connect</a></em>. If schema support
-is used the schema name must be specified whenever a db.* module is
-called.
-
-<p>
-Example:
-
-<div class="code"><pre>
-db.connect driver=pg database=test schema=user1 group=group1
-db.login driver=pg database=test user=user1 password=pwd1
-v.in.ogr dsn=./ layer=river output=river     # -> table user1.river
-db.select table=user1.river
-</pre></div>
-
-The user can ignore schemas, if desired:
-
-<div class="code"><pre>
-db.connect driver=pg database=test
-db.login driver=pg database=test user=user1 password=pwd1
-v.in.ogr dsn=./ layer=river output=river     # -> table public.river
-db.select table=river
 </pre></div>
 
 <h2>WARNINGS</h2>
