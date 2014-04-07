@@ -9,7 +9,7 @@
  *
  * PURPOSE:      Import OGR vectors
  *
- * COPYRIGHT:    (C) 2003, 2011-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003, 2011-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -100,6 +100,7 @@ int main(int argc, char *argv[])
 
     int OFTIntegerListlength;
 
+    char *dsn;
     char *output;
     char **layer_names;		/* names of layers to be imported */
     int *layers;		/* layer indexes */
@@ -318,7 +319,46 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if (param.dsn->answer == NULL) {
+    /* dsn not specified, check default connection settings */
+    dsn = NULL;
+    if (strcmp(db_get_default_driver_name(), "pg") == 0 &&
+        param.dsn->answer == NULL) {
+        const char *dbname;
+        dbConnection conn;
+        
+        dbname = db_get_default_database_name();
+        if (!dbname)
+            G_fatal_error(_("Database not defined, please check default "
+                            " connection settings by db.connect"));
+
+        dsn = (char *) G_malloc(GPATH_MAX);
+        /* -> dbname */
+        sprintf(dsn, "PG:dbname=%s", dbname);
+        
+        /* -> user/passwd */
+        if (DB_OK == db_get_connection(&conn) &&
+            strcmp(conn.driverName, "pg") == 0 &&
+            strcmp(conn.databaseName, dbname) == 0) {
+            if (conn.user) {
+                strcat(dsn, " user=");
+                strcat(dsn, conn.user);
+            }
+            if (conn.password) {
+                strcat(dsn, " passwd=");
+                strcat(dsn, conn.password);
+            }
+            /* TODO: host/port... */
+        }
+        else {
+            G_debug(1, "unable to get connection");
+        }
+        G_debug(1, "Using dsn=%s", dsn);
+    }
+    else if (param.dsn->answer) {
+        dsn = G_store(param.dsn->answer);
+    }
+    
+    if (dsn == NULL) {
 	G_fatal_error(_("Required parameter <%s> not set"), param.dsn->key);
     }
 
@@ -358,10 +398,10 @@ int main(int argc, char *argv[])
 
     /* open OGR DSN */
     Ogr_ds = NULL;
-    if (strlen(param.dsn->answer) > 0)
-	Ogr_ds = OGROpen(param.dsn->answer, FALSE, NULL);
+    if (strlen(dsn) > 0)
+	Ogr_ds = OGROpen(dsn, FALSE, NULL);
     if (Ogr_ds == NULL)
-	G_fatal_error(_("Unable to open data source <%s>"), param.dsn->answer);
+	G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
     /* check encoding for given driver */
     if (param.encoding->answer) {
@@ -380,7 +420,7 @@ int main(int argc, char *argv[])
 
     if (flag.list->answer)
 	G_message(_("Data source <%s> (format '%s') contains %d layers:"),
-		  param.dsn->answer,
+		  dsn,
 		  OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)), navailable_layers);
     for (i = 0; i < navailable_layers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
