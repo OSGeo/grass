@@ -688,9 +688,11 @@ def install_extension_xml(url, mlist):
 
 # install extension on MS Windows
 def install_extension_win(name):
-    ### TODO: do not use hardcoded url - http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
+    ### do not use hardcoded url - http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") % options['extension'])
-    url = "http://wingrass.fsv.cvut.cz/grass70/addons/grass-7.0.0svn/"
+    url = "http://wingrass.fsv.cvut.cz/grass%s%s/addons/grass-%s%s%s/" % \
+        (version[0], version[1], version[0], version[1], version[2])
+    
     grass.debug("url=%s" % url, 1)
 
     try:
