@@ -690,7 +690,7 @@ def install_extension_xml(url, mlist):
 def install_extension_win(name):
     ### TODO: do not use hardcoded url - http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") % options['extension'])
-    url = "http://wingrass.fsv.cvut.cz/grass%s%s/addons" % (version[0], version[1])
+    url = "http://wingrass.fsv.cvut.cz/grass70/addons/grass-7.0.0svn/"
     grass.debug("url=%s" % url, 1)
 
     try:
