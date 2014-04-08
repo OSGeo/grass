@@ -4299,7 +4299,7 @@ msgstr "Modifier"
 
 #: ../raster/r.null/main.c:80 ../raster3d/r3.null/main.c:69
 msgid "The value to replace the null value by"
-msgstr "Valeur à remplacer par la valeur null"
+msgstr "Valeur pour remplacer la valeur null"
 
 #: ../raster/r.null/main.c:85
 msgid "Only do the work if the map is floating-point"
