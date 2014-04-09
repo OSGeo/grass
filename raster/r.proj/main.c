@@ -494,11 +494,12 @@ int main(int argc, char **argv)
 
     xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
     ycoord2 = outcellhd.north - (outcellhd.ns_res / 2);
-    G_important_message(_("Projecting..."));
-    G_percent(0, outcellhd.rows, 2);
 
+    G_important_message(_("Projecting..."));
     for (row = 0; row < outcellhd.rows; row++) {
 	/* obufptr = obuffer */;
+
+        G_percent(row, outcellhd.rows - 1, 2);
 
 #if 0
 	/* parallelization does not always work,
@@ -537,7 +538,6 @@ int main(int argc, char **argv)
 
 	xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
 	ycoord2 -= outcellhd.ns_res;
-	G_percent(row, outcellhd.rows - 1, 2);
     }
 
     Rast_close(fdo);
