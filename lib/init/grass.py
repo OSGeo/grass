@@ -507,7 +507,7 @@ WELCOME TO GRASS %s
       - A topographic map of your area
       - Current catalog of available computer maps
 
-   3) heck the GRASS GIS web pages for supporting mailing lists and more:
+   3) Check the GRASS GIS web pages for supporting mailing lists and more:
       http://grass.osgeo.org
 """) % grass_version
     sys.stderr.write(intro)
