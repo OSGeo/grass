@@ -60,11 +60,10 @@ struct cache *readcell(int fdi, const char *size)
 	c->fd = -1;
 	c->fname = NULL;
     }
-    G_message("%.2f percent are kept in memory", 100.0 * nblocks / (nx * ny));
+    G_verbose_message("%.2f percent are kept in memory", 100.0 * nblocks / (nx * ny));
 
-    G_important_message(_("Allocating memory and reading input map..."));
-    G_percent(0, nrows, 5);
-
+    G_important_message(_("Allocating memory and reading input raster map..."));
+    
     for (i = 0; i < c->nblocks; i++)
 	c->refs[i] = -1;
 
@@ -95,7 +94,7 @@ struct cache *readcell(int fdi, const char *size)
 			   &tmpbuf[(y * nx + x) * BDIM],
 			   BDIM * sizeof(FCELL));
     }
-
+    
     G_free(tmpbuf);
 
     if (c->fd < 0) {
