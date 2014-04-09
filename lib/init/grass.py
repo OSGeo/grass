@@ -789,7 +789,16 @@ def set_language():
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
         # have their default locale, we'll just set default locale
-        locale.setlocale(locale.LC_ALL, '')
+        try:
+            locale.setlocale(locale.LC_ALL, '')
+        except locale.Error, e:
+            # If we get here, system locale settings are terribly wrong
+            # There is no point to continue as GRASS/Python will fail
+            # in some other unpredictable way.
+            print "System locale is not usable. It indicates misconfigured environment."
+            print "Reported error message: %s" % e
+            sys.exit("Fix system locale settings and then try again.")
+        
         language, encoding = locale.getdefaultlocale()
         if not language:
             warning("Default locale settings are missing. GRASS running with C locale.")
