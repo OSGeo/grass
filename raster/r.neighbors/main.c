@@ -323,8 +323,8 @@ int main(int argc, char *argv[])
 	    : 0;
 	out->buf = Rast_allocate_d_buf();
 	out->fd = Rast_open_new(output_name,
-				menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
-    /* TODO: method=mode should propagate its type */
+				(menu[method].is_int && !out->method_fn_w) ? CELL_TYPE : DCELL_TYPE);
+	/* TODO: method=mode should propagate its type */
 
 	/* get title, initialize the category and stat info */
 	if (parm.title->answer)
