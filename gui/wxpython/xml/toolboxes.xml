@@ -861,15 +861,18 @@
         <label>Watershed basin creation</label>
       </module-item>
       <separator/>
+      <!--
       <module-item name="r.stream.channel">
         <label>Stream channel characteristics</label>
       </module-item>
       <module-item name="r.stream.distance">
         <label>Stream distance and elevation characteristics</label>
       </module-item>
+      -->
       <module-item name="r.stream.extract">
         <label>Extraction of stream networks</label>
       </module-item>
+      <!--
       <module-item name="r.stream.order">
         <label>Stream ordering and hierarchy</label>
       </module-item>
@@ -885,6 +888,7 @@
       <module-item name="r.stream.stats">
         <label>Horton's statistics</label>
       </module-item>
+      -->
       <separator/>
       <module-item name="r.sim.water">
         <label>SIMWE Overland flow modeling</label>
