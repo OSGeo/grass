@@ -226,8 +226,9 @@ output=polygons type=boundary,centroid
 
 <h3>Default connection settings as datasource (PostgreSQL only)</h3>
 
-Datasource (<b>dsn</b>) can be omitted in the case that default DB
-driver is <a href="grass-pg.html">PostgreSQL</a> (<tt>pg</tt>), see
+If datasource (<b>dsn</b>) is specified as 'PG:' and the default DB
+driver is <a href="grass-pg.html">PostgreSQL</a> (<tt>pg</tt>) than
+the connection string is determined from the default DB settings, see
 examples below.
 
 <p>
@@ -243,7 +244,8 @@ Example (with schema):
 <div class="code"><pre>
 db.connect driver=pg database=test schema=user1
 db.login user=user1 password=pwd1
-v.in.ogr layer=river output=river     # -> table user1.river
+# -> dsn=&quot;PG:dbname=test user=user1 password=pwd1&quot; layer=&quot;user1.river&quot;
+v.in.ogr dsn=PG: layer=river output=river     
 db.select table=user1.river
 </pre></div>
 
@@ -253,7 +255,8 @@ The user can ignore schemas, if desired:
 <div class="code"><pre>
 db.connect driver=pg database=test
 db.login user=user1 password=pwd1
-v.in.ogr layer=river output=river     # -> table public.river
+# -> dsn=&quot;PG:dbname=test user=user1 password=pwd1&quot;
+v.in.ogr dsn=PG: layer=river output=river 
 db.select table=river
 </pre></div>
 

@@ -319,10 +319,14 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    /* dsn not specified, check default connection settings */
+    if (param.dsn->answer == NULL) {
+	G_fatal_error(_("Required parameter <%s> not set"), param.dsn->key);
+    }
+
+    /* dsn is 'PG:', check default connection settings */
     dsn = NULL;
     if (strcmp(db_get_default_driver_name(), "pg") == 0 &&
-        param.dsn->answer == NULL) {
+        G_strcasecmp(param.dsn->answer, "PG:") == 0) {
         const char *dbname;
         dbConnection conn;
         
@@ -358,10 +362,6 @@ int main(int argc, char *argv[])
         dsn = G_store(param.dsn->answer);
     }
     
-    if (dsn == NULL) {
-	G_fatal_error(_("Required parameter <%s> not set"), param.dsn->key);
-    }
-
     min_area = atof(param.min_area->answer);
     snap = atof(param.snap->answer);
     type = Vect_option_to_types(param.type);
