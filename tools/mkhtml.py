@@ -2,12 +2,12 @@
 
 ############################################################################
 #
-# MODULE:       mkhtml.py
+# MODULE:       Builds manual pages
 # AUTHOR(S):    Markus Neteler
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007, 2009, 2011-2012 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2014 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -21,6 +21,7 @@ import os
 import string
 import re
 from datetime import datetime
+from HTMLParser import HTMLParser
 
 pgm = sys.argv[1]
 
@@ -70,6 +71,53 @@ def read_file(name):
     except IOError:
         return ""
 
+def create_toc(src_data):
+    class MyHTMLParser(HTMLParser):
+        def __init__(self):
+            self.reset()
+            self.idx = 1
+            self.tag = ''
+            self.data = []
+            
+        def handle_starttag(self, tag, attrs):
+            self.tag = tag
+
+        def handle_endtag(self, tag):
+            self.tag = ''
+        
+        def handle_data(self, data):
+            if self.tag in ('h1', 'h2', 'h3'):
+                self.data.append((self.tag, '%s_%d' % (self.tag, self.idx), data))
+                self.idx += 1
+
+    # instantiate the parser and fed it some HTML
+    parser = MyHTMLParser()
+    parser.feed(src_data)
+    
+    return parser.data
+
+def write_toc(data):
+    fd = sys.stdout
+    fd.write('<table class="toc">\n')
+    for tag, href, text in data:
+        fd.write('<tr><td>%s <a href="#%s" class="toc">%s</a></td></tr>\n' % \
+                     ('&nbsp;&nbsp;' if tag == 'h3' else '', href, text))
+    fd.write('</table>\n')
+
+def update_toc(data):
+    ret_data = []
+    pat = re.compile(r'(<(h\d)>)(.+)(</h\d>)')
+    idx = 1
+    for line in data.splitlines():
+        if pat.search(line):
+            xline = pat.split(line)
+            line = xline[1] + '<a name="%s_%d">' % (xline[2], idx) + xline[3] + '</a>' + xline[4]
+            idx += 1
+        ret_data.append(line)
+    
+    return '\n'.join(ret_data)
+
+# process header
 src_data = read_file(src_file)
 name = re.search('(<!-- meta page name:)(.*)(-->)', src_data, re.IGNORECASE)
 if name:
@@ -90,7 +138,11 @@ if not re.search('<html>', src_data, re.IGNORECASE):
             if not re.search('</body>|</html>', line, re.IGNORECASE):
                 sys.stdout.write(line)
 
-sys.stdout.write(src_data)
+# create TOC
+write_toc(create_toc(src_data))
+
+# process body
+sys.stdout.write(update_toc(src_data))
 
 # if </html> is found, suppose a complete html is provided.
 # otherwise, generate module class reference:
@@ -112,6 +164,7 @@ index_names = {
     'v' : 'vector'
     }
 
+# process footer
 index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
 if index:
     index_name_cap = index_name = index.group(2).strip()
