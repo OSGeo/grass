@@ -37,6 +37,7 @@ struct menu
     ifunc cat_names;		/* routine to make category names */
     int copycolr;		/* flag if color table can be copied */
     int half;			/* whether to add 0.5 to result (redundant) */
+    int is_int;			/* result is an integer */
     char *name;			/* method name */
     char *text;			/* menu display - full description */
 };
@@ -45,25 +46,25 @@ struct menu
 
 /* modify this table to add new methods */
 static struct menu menu[] = {
-    {c_ave, w_ave, NO_CATS, 1, 1, "average", "average value"},
-    {c_median, w_median, NO_CATS, 1, 0, "median", "median value"},
-    {c_mode, w_mode, NO_CATS, 1, 0, "mode", "most frequently occuring value"},
-    {c_min, NULL, NO_CATS, 1, 0, "minimum", "lowest value"},
-    {c_max, NULL, NO_CATS, 1, 0, "maximum", "highest value"},
-    {c_range, NULL, NO_CATS, 1, 0, "range", "range value"},
-    {c_stddev, w_stddev, NO_CATS, 0, 1, "stddev", "standard deviation"},
-    {c_sum, w_sum, NO_CATS, 1, 0, "sum", "sum of values"},
-    {c_count, w_count, NO_CATS, 0, 0, "count", "count of non-NULL values"},
-    {c_var, w_var, NO_CATS, 0, 1, "variance", "statistical variance"},
-    {c_divr, NULL, divr_cats, 0, 0, "diversity",
+    {c_ave, w_ave, NO_CATS, 1, 1, 0, "average", "average value"},
+    {c_median, w_median, NO_CATS, 1, 0, 0, "median", "median value"},
+    {c_mode, w_mode, NO_CATS, 1, 0, 0, "mode", "most frequently occuring value"},
+    {c_min, NULL, NO_CATS, 1, 0, 0, "minimum", "lowest value"},
+    {c_max, NULL, NO_CATS, 1, 0, 0, "maximum", "highest value"},
+    {c_range, NULL, NO_CATS, 1, 0, 0, "range", "range value"},
+    {c_stddev, w_stddev, NO_CATS, 0, 1, 0, "stddev", "standard deviation"},
+    {c_sum, w_sum, NO_CATS, 1, 0, 0, "sum", "sum of values"},
+    {c_count, w_count, NO_CATS, 0, 0, 1, "count", "count of non-NULL values"},
+    {c_var, w_var, NO_CATS, 0, 1, 0, "variance", "statistical variance"},
+    {c_divr, NULL, divr_cats, 0, 0, 1, "diversity",
      "number of different values"},
-    {c_intr, NULL, intr_cats, 0, 0, "interspersion",
+    {c_intr, NULL, intr_cats, 0, 0, 1, "interspersion",
      "number of values different than center value"},
-    {c_quart1, w_quart1, NO_CATS, 1, 0, "quart1", "first quartile"},
-    {c_quart3, w_quart3, NO_CATS, 1, 0, "quart3", "third quartile"},
-    {c_perc90, w_perc90, NO_CATS, 1, 0, "perc90", "ninetieth percentile"},
-    {c_quant, w_quant, NO_CATS, 1, 0, "quantile", "arbitrary quantile"},
-    {0, 0, 0, 0, 0, 0, 0}
+    {c_quart1, w_quart1, NO_CATS, 1, 0, 0, "quart1", "first quartile"},
+    {c_quart3, w_quart3, NO_CATS, 1, 0, 0, "quart3", "third quartile"},
+    {c_perc90, w_perc90, NO_CATS, 1, 0, 0, "perc90", "ninetieth percentile"},
+    {c_quant, w_quant, NO_CATS, 1, 0, 0, "quantile", "arbitrary quantile"},
+    {0, 0, 0, 0, 0, 0, 0, 0}
 };
 
 struct ncb ncb;
@@ -321,7 +322,9 @@ int main(int argc, char *argv[])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
 	out->buf = Rast_allocate_d_buf();
-	out->fd = Rast_open_new(output_name, DCELL_TYPE);
+	out->fd = Rast_open_new(output_name,
+				menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
+    /* TODO: method=mode should propagate its type */
 
 	/* get title, initialize the category and stat info */
 	if (parm.title->answer)
