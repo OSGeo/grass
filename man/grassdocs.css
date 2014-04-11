@@ -101,8 +101,12 @@ table.toc{
     font-family: arial,sans-serif;
 }
 
-ul.toc li.toc {
-   margin-left:-25px;
+li.toc {
+   margin-left: -15px;
+}
+
+ul.toc {
+   margin-bottom: 0px;
 }
 
 a.toc {
