@@ -121,18 +121,24 @@ def write_toc(data):
     fd = sys.stdout
     fd.write('<table class="toc">\n')
     ul = False
+    ul_parent = False
     for tag, href, text in data:
         if tag == 'h3':
-            if not ul:
-                fd.write('<tr><td><ul class="toc">\n')
-                ul = True
-            fd.write('<li class="toc"><a href="#%s" class="toc">%s</a></li>\n' % \
-                     (href, text))
-        else:
-            if ul:
-                fd.write('</ul></td></tr>\n')
-                ul = False
-            fd.write('<tr><td> <a href="#%s" class="toc">%s</a></td></tr>\n' % \
+            if ul_parent:
+                if not ul:
+                    fd.write('<tr><td><ul class="toc">\n')
+                    ul = True
+                    fd.write('<li class="toc"><a href="#%s" class="toc">%s</a></li>\n' % \
+                                 (href, text))
+                    continue
+
+        if tag == 'h2' and not ul_parent:
+            ul_parent = True
+            
+        if ul:
+            fd.write('</ul></td></tr>\n')
+            ul = False
+        fd.write('<tr><td> <a href="#%s" class="toc">%s</a></td></tr>\n' % \
                      (href, text))
     fd.write('</table>\n')
 
