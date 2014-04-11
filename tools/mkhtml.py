@@ -101,7 +101,7 @@ def write_toc(data):
     fd.write('<table class="toc">\n')
     for tag, href, text in data:
         fd.write('<tr><td>%s <a href="#%s" class="toc">%s</a></td></tr>\n' % \
-                     ('&nbsp;&nbsp;' if tag == 'h3' else '', href, text))
+                     ('&nbsp;' if tag == 'h3' else '', href, text))
     fd.write('</table>\n')
 
 def update_toc(data):
