@@ -50,7 +50,7 @@ class MetaModule(object):
         return self.cls('%s.%s' % (self.prefix, name.replace('_', '.')))
 
 
-# http://grass.osgeo.org/grass70/manuals/html70_user/full_index.html
+# http://grass.osgeo.org/grass70/manuals/full_index.html
 #[ d.* | db.* | g.* | i.* | m.* | ps.* | r.* | r3.* | t.* | v.* ]
 #
 #  d.*	display commands
