@@ -78,25 +78,42 @@ def create_toc(src_data):
         def __init__(self):
             self.reset()
             self.idx = 1
-            self.tag = ''
+            self.tag_curr = ''
+            self.tag_last = ''
+            self.process_text = False
             self.data = []
+            self.tags_allowed = ('h1', 'h2', 'h3')
+            self.tags_ignored = ('img')
+            self.text = ''
 
         def handle_starttag(self, tag, attrs):
-            self.tag = tag
+            if tag in self.tags_allowed:
+                self.process_text = True
+            self.tag_last = self.tag_curr
+            self.tag_curr = tag
 
         def handle_endtag(self, tag):
-            self.tag = ''
-
-        def handle_data(self, data):
-            if self.tag in ('h1', 'h2', 'h3'):
-                self.data.append((self.tag, '%s_%d' % (self.tag, self.idx),
-                                  data))
+            if tag in self.tags_allowed:
+                self.data.append((tag, '%s_%d' % (tag, self.idx),
+                                  self.text))
                 self.idx += 1
-
+                self.process_text = False
+                self.text = ''
+            
+            self.tag_curr = self.tag_last
+                
+        def handle_data(self, data):
+            if not self.process_text:
+                return
+            if self.tag_curr in self.tags_allowed or self.tag_curr in self.tags_ignored:
+                self.text += data
+            else:
+                self.text += '<%s>%s</%s>' % (self.tag_curr, data, self.tag_curr)
+    
     # instantiate the parser and fed it some HTML
     parser = MyHTMLParser()
     parser.feed(src_data)
-
+    
     return parser.data
 
 
