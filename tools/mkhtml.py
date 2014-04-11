@@ -62,6 +62,7 @@ footer_noindex = string.Template(\
 </html>
 """)
 
+
 def read_file(name):
     try:
         f = open(name, 'rb')
@@ -71,6 +72,7 @@ def read_file(name):
     except IOError:
         return ""
 
+
 def create_toc(src_data):
     class MyHTMLParser(HTMLParser):
         def __init__(self):
@@ -78,31 +80,45 @@ def create_toc(src_data):
             self.idx = 1
             self.tag = ''
             self.data = []
-            
+
         def handle_starttag(self, tag, attrs):
             self.tag = tag
 
         def handle_endtag(self, tag):
             self.tag = ''
-        
+
         def handle_data(self, data):
             if self.tag in ('h1', 'h2', 'h3'):
-                self.data.append((self.tag, '%s_%d' % (self.tag, self.idx), data))
+                self.data.append((self.tag, '%s_%d' % (self.tag, self.idx),
+                                  data))
                 self.idx += 1
 
     # instantiate the parser and fed it some HTML
     parser = MyHTMLParser()
     parser.feed(src_data)
-    
+
     return parser.data
+
 
 def write_toc(data):
     fd = sys.stdout
     fd.write('<table class="toc">\n')
+    ul = False
     for tag, href, text in data:
-        fd.write('<tr><td>%s <a href="#%s" class="toc">%s</a></td></tr>\n' % \
-                     ('&nbsp;' if tag == 'h3' else '', href, text))
+        if tag == 'h3':
+            if not ul:
+                fd.write('<tr><td><ul class="toc">\n')
+                ul = True
+            fd.write('<li class="toc"><a href="#%s" class="toc">%s</a></li>\n' % \
+                     (href, text))
+        else:
+            if ul:
+                fd.write('</ul></td></tr>\n')
+                ul = False
+            fd.write('<tr><td> <a href="#%s" class="toc">%s</a></td></tr>\n' % \
+                     (href, text))
     fd.write('</table>\n')
+
 
 def update_toc(data):
     ret_data = []
@@ -114,7 +130,7 @@ def update_toc(data):
             line = xline[1] + '<a name="%s_%d">' % (xline[2], idx) + xline[3] + '</a>' + xline[4]
             idx += 1
         ret_data.append(line)
-    
+
     return '\n'.join(ret_data)
 
 # process header
@@ -122,7 +138,8 @@ src_data = read_file(src_file)
 name = re.search('(<!-- meta page name:)(.*)(-->)', src_data, re.IGNORECASE)
 if name:
     pgm = name.group(2).strip().split('-', 1)[0].strip()
-desc = re.search('(<!-- meta page description:)(.*)(-->)', src_data, re.IGNORECASE)
+desc = re.search('(<!-- meta page description:)(.*)(-->)', src_data,
+                 re.IGNORECASE)
 if desc:
     pgm = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
@@ -132,7 +149,7 @@ else:
 if not re.search('<html>', src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
     if not re.search('<html>', tmp_data, re.IGNORECASE):
-        sys.stdout.write(header_tmpl.substitute(PGM = pgm))
+        sys.stdout.write(header_tmpl.substitute(PGM=pgm))
     if tmp_data:
         for line in tmp_data.splitlines(True):
             if not re.search('</body>|</html>', line, re.IGNORECASE):
@@ -173,13 +190,16 @@ else:
     index_name = index_names.get(mod_class, '')
     index_name_cap = index_name.title()
 
-grass_version = os.getenv("VERSION_NUMBER", "unknown") 
+grass_version = os.getenv("VERSION_NUMBER", "unknown")
 year = os.getenv("VERSION_DATE")
 if not year:
     year = str(datetime.now().year)
 
 if index_name:
-    sys.stdout.write(footer_index.substitute(INDEXNAME = index_name, INDEXNAMECAP = index_name_cap,
-                                             YEAR = year, GRASS_VERSION = grass_version))
+    sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
+                                             INDEXNAMECAP=index_name_cap,
+                                             YEAR=year,
+                                             GRASS_VERSION=grass_version))
 else:
-    sys.stdout.write(footer_noindex.substitute(YEAR = year, GRASS_VERSION = grass_version))
+    sys.stdout.write(footer_noindex.substitute(YEAR=year,
+                                               GRASS_VERSION=grass_version))

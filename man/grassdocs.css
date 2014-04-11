@@ -95,10 +95,14 @@ table.toc{
     top: 5px;
     right: 5px;
     width: 17%;
-    line-height: 110%;
+    line-height: 120%;
     font-weight: bold;
     font-size: small;
     font-family: arial,sans-serif;
+}
+
+ul.toc li.toc {
+   margin-left:-25px;
 }
 
 a.toc {
