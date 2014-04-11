@@ -50,8 +50,42 @@ class TestRegisterFunctions(unittest.TestCase):
         tgis.register_maps_in_space_time_dataset(type="rast", name="C", maps="c1",
                                                  start="2001-01-02", increment="2 day", interval=True)
 
+
+    def test_temporal_conditional_time_dimension_bug(self):
+        """Testing the conditional time dimension bug, that uses the time 
+            dimension of the conditional statement instead the time dimension 
+            of the then/else statement."""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        tra.parse(expression="D = if({contains}, B == 5,  A - 1,  A + 1)", basename="d", overwrite=True)
+
+        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D.select()
+        self.assertEqual(D.metadata.get_number_of_maps(), 4)
+        self.assertEqual(D.metadata.get_min_min(), 0) # 1 - 1
+        self.assertEqual(D.metadata.get_max_max(), 5) # 4 + 1
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+        self.assertEqual( D.check_temporal_topology(),  True)
+        self.assertEqual(D.get_granularity(),  u'1 day')
+
+    def test_simple_arith_hash_1(self):
+        """Simple arithmetic test including the hash operator"""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        tra.parse(expression='D = A + A{equal,=#}A', basename="d", overwrite=True)
+
+        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D.select()
+        self.assertEqual(D.metadata.get_number_of_maps(), 4)
+        self.assertEqual(D.metadata.get_min_min(), 2)
+        self.assertEqual(D.metadata.get_max_max(), 5)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+
+
     def test_simple_arith_td_1(self):
-        """Simple arithmetic test with if condition"""
+        """Simple arithmetic test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A + td(A)', basename="d", overwrite=True)
 
@@ -64,9 +98,8 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-
     def test_simple_arith_td_2(self):
-        """Simple arithmetic test with if condition"""
+        """Simple arithmetic test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A / td(A)', basename="d", overwrite=True)
 
@@ -80,7 +113,7 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
     def test_simple_arith_td_3(self):
-        """Simple arithmetic test with if condition"""
+        """Simple arithmetic test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A {equal,+} td(A)', basename="d", overwrite=True)
 
@@ -95,7 +128,7 @@ class TestRegisterFunctions(unittest.TestCase):
 
 
     def test_simple_arith_td_4(self):
-        """Simple arithmetic test with if condition"""
+        """Simple arithmetic test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A {equal,/} td(A)', basename="d", overwrite=True)
 
@@ -187,7 +220,7 @@ class TestRegisterFunctions(unittest.TestCase):
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-
+        
     def test_temporal_intersection_1(self):
         """Simple temporal intersection test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
