@@ -1357,10 +1357,10 @@ if os.getenv('HOSTTYPE') == 'arm':
 if not os.access(gisrc, os.F_OK):
     if grass_gui == 'text' and len(args) == 0:
         fatal(_("Unable to start GRASS. You can:\n"
-                " - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
+                " - Launch GRASS with '-gui' switch (`grass71 -gui`)\n"
                 " - Create manually GISRC file (%s)\n"
                 " - Launch GRASS with path to "
-                "the location/mapset as an argument (`grass70 /path/to/location/mapset`)") % gisrcrc)
+                "the location/mapset as an argument (`grass71 /path/to/location/mapset`)") % gisrcrc)
     grass_intro()
 else:
     clean_temp()
