@@ -120,23 +120,6 @@ xcopy %OSGEO4W_PKG_DIR%\apps\Python27\* %PACKAGE_DIR%\Python27 /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
-@echo Copy Tcl/Tk content to PACKAGE_DIR\lib
-@echo -----------------------------------------------------------------------------------------------------------------------
-@echo.
-
-mkdir %PACKAGE_DIR%\lib\tcl8.5
-mkdir %PACKAGE_DIR%\lib\tk8.5
-
-copy %OSGEO4W_PKG_DIR%\lib\tcl8.5\*.tcl %PACKAGE_DIR%\lib\tcl8.5
-copy %OSGEO4W_PKG_DIR%\lib\tcl8.5\tclIndex %PACKAGE_DIR%\lib\tcl8.5
-
-copy %OSGEO4W_PKG_DIR%\lib\tk8.5\*.tcl %PACKAGE_DIR%\lib\tk8.5
-copy %OSGEO4W_PKG_DIR%\lib\tk8.5\tclIndex %PACKAGE_DIR%\lib\tk8.5
-
-xcopy %OSGEO4W_PKG_DIR%\lib\tk8.5\ttk %PACKAGE_DIR%\lib\tk8.5\ttk /S/V/F/I
-
-@echo.
-@echo -----------------------------------------------------------------------------------------------------------------------
 @echo Copy env.bat
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
