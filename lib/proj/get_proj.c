@@ -232,7 +232,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 	    sprintf(err, " +%s", opt_in[i]);
 	    strcat(buffa, err);
 	}
-	G_warning(buffa);
+	G_warning("%s", buffa);
 	G_warning(_("The error message: %s"), pj_strerrno(pj_errno));
 	return -1;
     }

@@ -746,7 +746,7 @@ void gvl_write_char(int pos, unsigned char **data, unsigned char c)
 	}
 
 	G_debug(3,
-		"gvl_write_char(): reallocate memory for pos : %d to : %d B",
+		"gvl_write_char(): reallocate memory for pos : %d to : %lu B",
 		pos, sizeof(char) * ((pos / BUFFER_SIZE) + 1) * BUFFER_SIZE);
     }
 
