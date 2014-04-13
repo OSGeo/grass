@@ -271,8 +271,12 @@ int main(int argc, char *argv[])
     P_get_edge(P_BILINEAR, &dims, stepE, stepN);
     P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
-    G_verbose_message(_("adjusted EW splines %d"), nsplx_adj);
-    G_verbose_message(_("adjusted NS splines %d"), nsply_adj);
+    G_verbose_message(_n("adjusted EW spline %d",
+                         "adjusted EW splines %d",
+                         nsplx_adj), nsplx_adj);
+    G_verbose_message(_n("adjusted NS spline %d",
+                         "adjusted NS splines %d",
+                         nsply_adj), nsply_adj);
 
     /* calculate number of subregions */
     edgeE = dims.ew_size - dims.overlap - 2 * dims.edge_v;

@@ -63,6 +63,7 @@ int main(int argc, char **argv)
     dbDriver *rsdriver;
     dbHandle rshandle;
     dbString rsstmt;
+    char *tmpstr1;
 
     G_gisinit(argv[0]);
 
@@ -349,12 +350,30 @@ int main(int argc, char **argv)
     if (file_opt->answer)
 	fclose(in_file);
 
-    G_message(_("[%d] points read from input"), points_read);
-    G_message(_("[%d] points written to output map (%d lost)"),
-	      points_written, points_read - points_written);
-    G_message(_("[%d] lines read from input"), lines_read);
-    G_message(_("[%d] lines written to output map (%d lost)"),
-	      lines_written, lines_read - lines_written);
+    G_message(_n("[%d] point read from input",
+                 "[%d] points read from input",
+                 points_read), points_read);
+    G_asprintf(&tmpstr1, _n("%d lost", "%d lost", 
+                            points_read - points_written), 
+               points_read - points_written);
+    /* GTC %s will be replaced with a message about lost points. */
+    G_message(_n("[%d] point written to output map (%s)",
+                 "[%d] points written to output map (%s)",
+                 points_written),
+	      points_written, tmpstr1);
+    G_free(tmpstr1);
+    G_message(_n("[%d] line read from input",
+                 "[%d] lines read from input",
+                 lines_read), lines_read);
+    G_asprintf(&tmpstr1, _n("%d lost", "%d lost",
+                            lines_read - lines_written),
+               lines_read - lines_written);
+    /* GTC %s will be replaced with a message about lost lines. */
+    G_message(_n("[%d] line written to output map (%s)",
+                 "[%d] lines written to output map (%s)",
+                 lines_written),
+	      lines_written, tmpstr1);
+    G_free(tmpstr1);
 
     exit(EXIT_SUCCESS);
 }

@@ -301,7 +301,9 @@ int main(int argc, char *argv[])
     Vect_build(&Map);
     Vect_close(&Map);
 
-    G_done_msg(_("%d points written to vector map."), count);
+    G_done_msg(_n("%d point written to vector map.",
+                  "%d points written to vector map.",
+                  count), count);
 
     return (EXIT_SUCCESS);
 }
