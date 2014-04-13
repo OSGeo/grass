@@ -102,7 +102,7 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
 	}
 	else if (Cats->n_cats > 1) {
 	    G_warning(_("Feature id %d has more categories. "
-			"Using category %d."), line, field, cat);
+			"Using category %d."), line, cat);
 	}
 
 	if (zcolumn && ltype == GV_POINT && cat > -1) {

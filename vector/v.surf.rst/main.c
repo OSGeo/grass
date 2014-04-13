@@ -818,12 +818,12 @@ static FILE *create_temp_file(const char *name, char **tmpname)
     *tmpname = tmp = G_tempfile();
     fp = fopen(tmp, "w+");
     if (!fp)
-	G_fatal_error(_("Unable to open temporary file <%s>"), tmpname);
+	G_fatal_error(_("Unable to open temporary file <%s>"), *tmpname);
 
     for (i = 0; i < n_rows; i++) {
 	if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) != n_cols) {
 	    clean();
-	    G_fatal_error(_("Error writing temporary file <%s>"), tmpname);
+	    G_fatal_error(_("Error writing temporary file <%s>"), *tmpname);
 	}
     }
 

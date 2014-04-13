@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
     fclose(fp);
 
     if (do_stdout)
-	G_done_msg("");
+	G_done_msg("%s", "");
     else
 	G_done_msg(_("File <%s> created"), ofile);
 
