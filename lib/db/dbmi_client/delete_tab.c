@@ -47,7 +47,7 @@ int db_delete_table(const char *drvname, const char *dbname, const char *tblname
     db_init_string(&sql);
     db_set_string(&sql, "drop table ");
     db_append_string(&sql, tblname);
-    G_debug(3, db_get_string(&sql));
+    G_debug(3, "%s", db_get_string(&sql));
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	G_warning(_("Unable to drop table: '%s'"),

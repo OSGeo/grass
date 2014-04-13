@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
     G_asprintf(&lock_prog, "%s/etc/lock", G_gisbase());
 
     sprintf(path, "%s/.gislock", mapset_new_path);
-    G_debug(2, path);
+    G_debug(2, "%s", path);
     
     ret = G_spawn(lock_prog, lock_prog, path, gis_lock, NULL);
     G_debug(2, "lock result = %d", ret);
