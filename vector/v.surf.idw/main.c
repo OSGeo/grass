@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
     struct cell_list **search_list = NULL, **search_list_start = NULL;
     int max_radius, radius;
     int searchallpoints = 0;
+    char *tmpstr1, *tmpstr2;
 
     G_gisinit(argv[0]);
 
@@ -254,8 +255,15 @@ int main(int argc, char *argv[])
 
     fd = Rast_open_new(parm.output->answer, DCELL_TYPE);
 
-    G_important_message(_("Interpolating raster map <%s> (%d rows, %d cols)... "),
-			parm.output->answer, window.rows, window.cols);
+    /* GTC Count of window rows */
+    G_asprintf(&tmpstr1, _n("%d row", "%d rows", window.rows), window.rows);
+    /* GTC Count of window columns */
+    G_asprintf(&tmpstr2, _n("%d column", "%d columns", window.cols), window.cols);
+    /* GTC First argument is map name, second - message about number of rows, third - columns. */
+    G_important_message(_("Interpolating raster map <%s> (%s, %s)..."),
+			parm.output->answer, tmpstr1, tmpstr2);
+    G_free(tmpstr1);
+    G_free(tmpstr2);
 
     north = window.north + window.ns_res / 2.0;
     for (row = 0; row < window.rows; row++) {

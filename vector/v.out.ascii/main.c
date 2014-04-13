@@ -104,7 +104,10 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Layer <%s> not found"), field_name);
         ret = Vect_str_to_cat_list(cats, clist);
         if (ret > 0)
-            G_fatal_error(_("%d errors in <%s> option"), ret, "cats");
+            G_fatal_error(_n("%d error in <%s> option",
+                             "%d errors in <%s> option",
+                             ret),
+                          ret, "cats");
     }
 
     if (strcmp(output, "-") != 0) {
