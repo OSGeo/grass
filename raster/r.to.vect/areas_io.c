@@ -371,7 +371,7 @@ int write_area(struct area_table *a_list,	/* list of areas */
 		}
 
 		db_append_string(&sql, ")");
-		G_debug(3, db_get_string(&sql));
+		G_debug(3, "%s", db_get_string(&sql));
 
 		if (db_execute_immediate(driver, &sql) != DB_OK)
 		    G_fatal_error(_("Cannot insert new row: %s"),
