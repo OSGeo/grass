@@ -288,39 +288,62 @@ int main(int argc, char *argv[])
 
     /* check what users wants to export and what's present in the map */
     if (Vect_get_num_primitives(&In, GV_POINT) > 0 && !(otype & GV_POINTS))
-	G_warning(_("%d point(s) found, but not requested to be exported. "
-		    "Verify 'type' parameter."), Vect_get_num_primitives(&In,
-									 GV_POINT));
+	G_warning(_n("%d point found, but not requested to be exported. "
+		     "Verify 'type' parameter.",
+                     "%d points found, but not requested to be exported. "
+                     "Verify 'type' parameter.",
+                     Vect_get_num_primitives(&In, GV_POINT)),
+                  Vect_get_num_primitives(&In, GV_POINT));
 
     if (Vect_get_num_primitives(&In, GV_LINE) > 0 && !(otype & GV_LINES))
-	G_warning(_("%d line(s) found, but not requested to be exported. "
-		    "Verify 'type' parameter."), Vect_get_num_primitives(&In,
-									 GV_LINE));
+	G_warning(_n("%d line found, but not requested to be exported. "
+		     "Verify 'type' parameter.",
+                     "%d line(s) found, but not requested to be exported. "
+                     "Verify 'type' parameter.",
+                     Vect_get_num_primitives(&In, GV_LINE)),
+                  Vect_get_num_primitives(&In, GV_LINE));
 
     if (Vect_get_num_primitives(&In, GV_BOUNDARY) > 0 &&
 	!(otype & GV_BOUNDARY) && !(otype & GV_AREA))
-	G_warning(_("%d boundary(ies) found, but not requested to be exported. "
-		   "Verify 'type' parameter."), Vect_get_num_primitives(&In,
-									GV_BOUNDARY));
+	G_warning(_n("%d boundary found, but not requested to be exported. "
+		     "Verify 'type' parameter.",
+                     "%d boundaries found, but not requested to be exported. "
+                     "Verify 'type' parameter.",
+                     Vect_get_num_primitives(&In, GV_BOUNDARY)),
+                  Vect_get_num_primitives(&In, GV_BOUNDARY));
 
     if (Vect_get_num_primitives(&In, GV_CENTROID) > 0 &&
 	!(otype & GV_CENTROID) && !(otype & GV_AREA))
-	G_warning(_("%d centroid(s) found, but not requested to be exported. "
-		    "Verify 'type' parameter."), Vect_get_num_primitives(&In,
-									 GV_CENTROID));
+	G_warning(_n("%d centroid found, but not requested to be exported. "
+		     "Verify 'type' parameter.",
+                     "%d centroids found, but not requested to be exported. "
+                     "Verify 'type' parameter.",
+                     Vect_get_num_primitives(&In, GV_CENTROID)),
+                  Vect_get_num_primitives(&In, GV_CENTROID));
 
     if (Vect_get_num_areas(&In) > 0 && !(otype & GV_AREA))
-	G_warning(_("%d area(s) found, but not requested to be exported. "
-		    "Verify 'type' parameter."), Vect_get_num_areas(&In));
+	G_warning(_n("%d area found, but not requested to be exported. "
+		     "Verify 'type' parameter.",
+                     "%d areas found, but not requested to be exported. "
+                     "Verify 'type' parameter.",
+                     Vect_get_num_areas(&In)),
+                  Vect_get_num_areas(&In));
 
     if (Vect_get_num_primitives(&In, GV_FACE) > 0 && !(otype & GV_FACE))
-	G_warning(_("%d face(s) found, but not requested to be exported. "
-		    "Verify 'type' parameter."), Vect_get_num_primitives(&In,
-									 GV_FACE));
+	G_warning(_n("%d face found, but not requested to be exported. "
+		     "Verify 'type' parameter.",
+                     "%d faces found, but not requested to be exported. "
+                     "Verify 'type' parameter.",
+                     Vect_get_num_primitives(&In, GV_FACE)),
+                  Vect_get_num_primitives(&In, GV_FACE));
 
     if (Vect_get_num_volumes(&In) > 0 && !(otype & GV_VOLUME))
-	G_warning(_("%d volume(s) found, but not requested to be exported. "
-		    "Verify 'type' parameter."), Vect_get_num_volumes(&In));
+	G_warning(_n("%d volume found, but not requested to be exported. "
+		     "Verify 'type' parameter.",
+                     "%d volumes found, but not requested to be exported. "
+                     "Verify 'type' parameter.",
+                     Vect_get_num_volumes(&In)),
+                  Vect_get_num_volumes(&In));
 
     /* warn and eventually abort if there is nothing to be exported */
     num_to_export = 0;
@@ -665,7 +688,10 @@ int main(int argc, char *argv[])
     
     /* Lines (run always to count features of different type) */
     if (otype & (GV_POINTS | GV_LINES | GV_KERNEL | GV_FACE)) {
-        G_message(_("Exporting %d features..."), Vect_get_num_primitives(&In, otype));
+        G_message(_n("Exporting %d feature...",
+                     "Exporting %d features...",
+                     Vect_get_num_primitives(&In, otype)),
+                 Vect_get_num_primitives(&In, otype));
 
         n_feat += export_lines(&In, field, otype, flags.multi->answer ? TRUE : FALSE,
                                donocat, ftype == GV_BOUNDARY ? TRUE : FALSE,
@@ -677,7 +703,9 @@ int main(int argc, char *argv[])
 
     /* Areas (run always to count features of different type) */
     if (Vect_get_num_areas(&In) > 0 && (otype & GV_AREA)) {
-	G_message(_("Exporting %d areas (may take some time)..."),
+	G_message(_n("Exporting %d area (may take some time)...",
+                     "Exporting %d areas (may take some time)...",
+                     Vect_get_num_areas(&In)),
 		  Vect_get_num_areas(&In));
 
         n_feat += export_areas(&In, field, flags.multi->answer ? TRUE : FALSE, donocat, 
@@ -694,7 +722,10 @@ int main(int argc, char *argv[])
        which output format would know the difference?
      */
     if (Vect_get_num_volumes(&In) > 0 && (otype & GV_VOLUME)) {
-	G_message(_("Exporting %d volumes..."), Vect_get_num_volumes(&In));
+	G_message(_n("Exporting %d volume...",
+                     "Exporting %d volumes...",
+                     Vect_get_num_volumes(&In)),
+                  Vect_get_num_volumes(&In));
 	G_warning(_("Export of volumes not implemented yet. Skipping."));
     }
 
@@ -712,13 +743,20 @@ int main(int argc, char *argv[])
 
     /* Summary */
     if (n_nocat > 0)
-	G_important_message(_("%d features without category were written"), n_nocat);
+	G_important_message(_n("%d feature without category was written",
+                               "%d features without category were written",
+                               n_nocat), n_nocat);
     if (n_noatt > 0)
-	G_important_message(_("%d features without attributes were written"), n_noatt);
+	G_important_message(_n("%d feature without attributes was written",
+                               "%d features without attributes were written",
+                               n_noatt), n_noatt);
 
     if (n_nocatskip > 0)
-	G_warning(_("%d features without category were skipped. "
-                    "Features without category are written only when -%c flag is given."),
+	G_warning(_n("%d feature without category was skipped. "
+                     "Features without category are written only when -%c flag is given.",
+                     "%d features without category were skipped. "
+                     "Features without category are written only when -%c flag is given.",
+                     n_nocatskip),
 		  n_nocatskip, flags.cat->key);
 
     /* Enable this? May be confusing that for area type are not
@@ -731,7 +769,9 @@ int main(int argc, char *argv[])
 
     if (n_feat < 1)
         G_warning(_("Output layer is empty, no features written"));
-    G_done_msg(_("%d features (%s type) written to <%s> (%s format)."), n_feat,
+    G_done_msg(_n("%d feature (%s type) written to <%s> (%s format).",
+                  "%d features (%s type) written to <%s> (%s format).",
+                  n_feat), n_feat,
                OGRGeometryTypeToName(wkbtype),
 	       options.layer->answer, options.format->answer);
 

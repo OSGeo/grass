@@ -214,7 +214,9 @@ int main(int argc, char *argv[])
 	Clist->field = atoi(field_opt->answer);
 	ret = Vect_str_to_cat_list(id_opt->answer, Clist);
 	if (ret > 0) {
-	    G_warning(_("%d errors in id option"), ret);
+	    G_warning(_n("%d error in id option",
+                         "%d errors in id option",
+                         ret), ret);
 	}
     }
     else {
@@ -373,7 +375,9 @@ int main(int argc, char *argv[])
 		new_centr++;
 	    }
 	    if (new_centr > 0) 
-		G_message(_("%d new centroids placed in output map"), new_centr);
+		G_message(_n("%d new centroid placed in output map",
+                             "%d new centroids placed in output map",
+                             new_centr), new_centr);
 	}
 	break;
 
@@ -774,7 +778,9 @@ int main(int argc, char *argv[])
         for(i = 1; i < nfields; i++)
 	    G_important_message(_("Categories copied from layer %d to layer %d"),
 		                  fields[0], fields[i]);
-    G_done_msg(_("%d features modified."), nmodified);
+    G_done_msg(_n("%d feature modified.",
+                  "%d features modified.",
+                  nmodified), nmodified);
     Vect_close(&In);
 
     exit(EXIT_SUCCESS);

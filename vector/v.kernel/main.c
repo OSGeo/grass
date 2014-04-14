@@ -91,6 +91,7 @@ int main(int argc, char **argv)
     CELL *mask = NULL;
     DCELL *output_cell = NULL;
     double sigma, dmax, segmax, netmax, multip;
+    char *tmpstr1, *tmpstr2;
 
     double **coordinate;
     double sigmaOptimal;
@@ -295,8 +296,13 @@ int main(int argc, char **argv)
     G_get_window(&window);
 
     G_verbose_message(_("Standard deviation: %f"), sigma);
-    G_verbose_message(_("Output raster map: res: %f\trows: %d\tcols: %d"),
-                      window.ew_res, window.rows, window.cols);
+    G_asprintf(&tmpstr1, _n("%d row", "%d rows", window.rows), window.rows);
+    G_asprintf(&tmpstr2, _n("%d column", "%d columns", window.cols), window.cols);
+    /* GTC First argument is resolution, second - number of rows as a text, third - number of columns as a text. */
+    G_verbose_message(_("Output raster map: resolution: %f\t%s\t%s"),
+                      window.ew_res, tmpstr1, tmpstr2);
+    G_free(tmpstr1);
+    G_free(tmpstr2); 
     
     /* Open input vector */
     Vect_set_open_level(2);
@@ -334,7 +340,9 @@ int main(int argc, char **argv)
 	}
 
 	if (notreachable > 0)
-	    G_warning(_("%d points outside threshold"), notreachable);
+	    G_warning(_n("%d point outside threshold",
+                         "%d points outside threshold",
+                         notreachable), notreachable);
     }
     else {
 	/* check and open the name of output map */
@@ -377,7 +385,9 @@ int main(int argc, char **argv)
 	}
 
 	G_message(_("Number of input points: %d."), npoints);
-	G_message(_("%d distances read from the map."), ndists);
+	G_message(_n("%d distance read from the map.",
+                     "%d distances read from the map.",
+                     ndists), ndists);
 
 	if (ndists == 0)
 	    G_fatal_error(_("Distances between all points are beyond %e (4 * "
