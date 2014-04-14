@@ -49,6 +49,7 @@ int main(int argc, char **argv)
     unsigned char *dummy;
     int row, col;
     int i;
+    char *tmpstr1, *tmpstr2;
 
     G_gisinit(argv[0]);
 
@@ -91,8 +92,12 @@ int main(int argc, char **argv)
 
     G_get_window(&w);
 
-    G_message("%s, %s", _n("row = %d", "rows = %d", w.rows), 
-        _n("col = %d", "cols = %d", w.cols));
+    G_asprintf(&tmpstr1, _n("row = %d", "rows = %d", w.rows), w.rows);
+    /* GTC Raster columns */
+    G_asprintf(&tmpstr2, _n("column = %d", "columns = %d", w.cols), w.cols);
+    G_message("%s, %s", tmpstr1, tmpstr2);
+    G_free(tmpstr1);
+    G_free(tmpstr2); 
 
     /* open raster map for reading */
     for (i = 0; i < 3; i++) {
