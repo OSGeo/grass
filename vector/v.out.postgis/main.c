@@ -164,11 +164,15 @@ int main(int argc, char *argv[])
                       Vect_get_name(&Out));
 
     if (!flags.topo->answer) 
-        G_done_msg(_("%d features (%s type) written to <%s>."),
+        G_done_msg(_n("%d feature (%s type) written to <%s>.",
+                      "%d features (%s type) written to <%s>.",
+                      Vect_sfa_get_num_features(&Out)),
                    Vect_sfa_get_num_features(&Out), Vect_get_finfo_geometry_type(&Out),
                    Vect_get_name(&Out));
     else
-        G_done_msg(_("%d primitives written to <%s>."),
+        G_done_msg(_n("%d primitive written to <%s>.",
+                      "%d primitives written to <%s>.",
+                      Vect_get_num_lines(&Out)),
                    Vect_get_num_lines(&Out), 
                    Vect_get_name(&Out));
     

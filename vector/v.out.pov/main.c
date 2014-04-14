@@ -214,7 +214,9 @@ int main(int argc, char *argv[])
     Vect_close(&In);
 
     /* Summary */
-    G_done_msg(_("%d features written."), count);
+    G_done_msg(_n("%d feature written.",
+                  "%d features written.",
+                  count), count);
 
     exit(EXIT_SUCCESS);
 }
