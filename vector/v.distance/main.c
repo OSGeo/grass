@@ -594,6 +594,7 @@ int main(int argc, char *argv[])
 	near = NULL;
 	nlines = Vect_get_num_lines(&From);
 
+	G_percent(0, 0, 4);
 	for (fline = 1; fline <= nlines; fline++) {
 	    int tmp_tcat;
 	    double tmp_min = (min < 0 ? 0 : min);
@@ -603,7 +604,7 @@ int main(int argc, char *argv[])
 	    curr_step = 0;
 
 	    G_debug(3, "fline = %d", fline);
-	    G_percent(fline, nfrom, 2);
+	    G_percent(fline, nlines, 4);
 	    ftype = Vect_get_line_type(&From, fline);
 	    if (!(ftype & from_type))
 		continue;
