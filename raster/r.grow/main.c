@@ -24,6 +24,9 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+#ifdef MAX
+#undef MAX
+#endif
 #define MAX(a, b)	((a) > (b) ? (a) : (b))
 
 static int size;
@@ -115,6 +118,7 @@ int main(int argc, char **argv)
     DCELL *out_row;
     int nrows, row;
     int ncols, col;
+    int shrink;
 
     G_gisinit(argv[0]);
 
@@ -163,7 +167,13 @@ int main(int argc, char **argv)
     in_name = opt.in->answer;
     out_name = opt.out->answer;
 
+    shrink = 0;
+
     radius = atof(opt.rad->answer);
+    if (radius < 0) {
+	shrink = 1;
+	radius = -radius;
+    }
 
     if (opt.old->answer)
 	oldval = atoi(opt.old->answer);
@@ -227,38 +237,66 @@ int main(int argc, char **argv)
 	for (col = 0; col < ncols; col++) {
 	    DCELL *c = &in_rows[size][col];
 
-	    if (!Rast_is_d_null_value(c)) {
-		if (opt.old->answer) {
-		    if (oldval < 0)
-			Rast_set_d_null_value(&out_row[col], 1);
-		    else
-			out_row[col] = oldval;
-		}
-		else
-		    out_row[col] = *c;
-
-		continue;
-	    }
-
-	    for (i = 0; i < count; i++) {
-		int dx = neighbors[i][0];
-		int dy = neighbors[i][1];
-		int x = col + dx;
-		int y = row + dy;
-
-		if (x < 0 || x >= ncols || y < 0 || y >= nrows)
+	    if (shrink) {
+		if (Rast_is_d_null_value(c)) {
+		    Rast_set_d_null_value(&out_row[col], 1);
 		    continue;
-
-		c = &in_rows[size + dy][x];
-
-		if (!Rast_is_d_null_value(c)) {
-		    out_row[col] = opt.new->answer ? newval : *c;
-		    break;
 		}
-	    }
 
-	    if (i == count)
-		Rast_set_d_null_value(&out_row[col], 1);
+		for (i = 0; i < count; i++) {
+		    int dx = neighbors[i][0];
+		    int dy = neighbors[i][1];
+		    int x = col + dx;
+		    int y = row + dy;
+
+		    if (x < 0 || x >= ncols || y < 0 || y >= nrows)
+			continue;
+
+		    c = &in_rows[size + dy][x];
+
+		    if (Rast_is_d_null_value(c)) {
+			Rast_set_d_null_value(&out_row[col], 1);
+			break;
+		    }
+		}
+
+		if (i == count)
+		    out_row[col] = *c;
+	    }
+	    else {
+		if (!Rast_is_d_null_value(c)) {
+		    if (opt.old->answer) {
+			if (oldval < 0)
+			    Rast_set_d_null_value(&out_row[col], 1);
+			else
+			    out_row[col] = oldval;
+		    }
+		    else
+			out_row[col] = *c;
+
+		    continue;
+		}
+
+		for (i = 0; i < count; i++) {
+		    int dx = neighbors[i][0];
+		    int dy = neighbors[i][1];
+		    int x = col + dx;
+		    int y = row + dy;
+
+		    if (x < 0 || x >= ncols || y < 0 || y >= nrows)
+			continue;
+
+		    c = &in_rows[size + dy][x];
+
+		    if (!Rast_is_d_null_value(c)) {
+			out_row[col] = opt.new->answer ? newval : *c;
+			break;
+		    }
+		}
+
+		if (i == count)
+		    Rast_set_d_null_value(&out_row[col], 1);
+	    }
 	}
 
 	Rast_put_d_row(out_fd, out_row);
