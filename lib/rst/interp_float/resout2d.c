@@ -78,7 +78,7 @@ int IL_resample_output_2d(struct interp_params *params, double zmin, double zmax
     Rast_set_output_window(outhd);
     mapset = G_mapset();
 
-    cell1 = Rast_allocate_f_buf();
+    cell1 = Rast_allocate_f_output_buf();
 
     if (params->elev)
 	cf1 = Rast_open_fp_new(params->elev);
