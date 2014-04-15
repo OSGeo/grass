@@ -367,8 +367,6 @@ int main(int argc, char *argv[])
 
     if (smooth != NULL) {
 
-	fdsmooth = Rast_open_old(smooth, "");
-
 	Rast_get_cellhd(smooth, "", &smhd);
 
 	if ((winhd.ew_res != smhd.ew_res) || (winhd.ns_res != smhd.ns_res))
@@ -387,8 +385,6 @@ int main(int argc, char *argv[])
 
     if ((winhd.ew_res != inphd.ew_res) || (winhd.ns_res != inphd.ns_res))
 	G_fatal_error(_("Input map resolution differs from current region resolution!"));
-
-    fdinp = Rast_open_old(input, "");
 
     sdisk = 0;
     if (elev != NULL)
@@ -439,12 +435,16 @@ int main(int argc, char *argv[])
 	Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
     }
     else {
+	fdinp = Rast_open_old(input, "");
+
 	cellrow = Rast_allocate_f_buf();
 	for (m1 = 0; m1 < inp_rows; m1++) {
 	    Rast_get_f_row(fdinp, cellrow, m1);
 	    Rast_row_update_fp_range(cellrow, m1, &range, FCELL_TYPE);
 	}
 	Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
+
+	Rast_close(fdinp);
     }
 
     fcellmin = (float)cellmin;
@@ -484,6 +484,10 @@ int main(int argc, char *argv[])
     /* change region to initial region */
     G_message(_("Changing back to the original region ..."));
     Rast_set_window(&winhd);
+
+    fdinp = Rast_open_old(input, "");
+    if (smooth != NULL)
+	fdsmooth = Rast_open_old(smooth, "");
 
     ertot = 0.;
     cursegm = 0;
