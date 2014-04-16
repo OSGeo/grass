@@ -72,7 +72,7 @@ void interface(int argc, char **argv)
     /* a 'type' (eg int, or string), and an indication whether manditory or not */
 
     rast_out->description =
-	_("Output raster layer containing morphometric parameter");
+	_("Name for output raster map containing morphometric parameter");
 
     tol1_val->key = "s_tol";
     tol1_val->description =
