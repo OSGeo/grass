@@ -305,11 +305,11 @@ class ExtensionTreeModelBuilder:
             flags = 'g'
         else:
             flags = 'l'
-        ret = RunCommand('g.extension', read = True,
-                         svnurl = url,
-                         flags = flags, quiet = True)
-        if not ret:
-            raise GException(_("Unable to load extensions."))
+        retcode, ret, msg = RunCommand('g.extension', read = True, getErrorMsg = True,
+                                       svnurl = url,
+                                       flags = flags, quiet = True)
+        if retcode != 0:
+            raise GException(_("Unable to load extensions. %s") % msg)
         
         currentNode = None
         for line in ret.splitlines():
