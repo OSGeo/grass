@@ -281,7 +281,7 @@ class SQLBuilder(wx.Frame):
         self.pagesizer.Fit(self.panel)
         
         self.Layout()
-        self.SetSize((400, 525))
+        self.SetMinSize((400, 550))
         self.SetClientSize(self.panel.GetSize())
         self.CenterOnParent()
    
