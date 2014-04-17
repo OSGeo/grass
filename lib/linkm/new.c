@@ -9,7 +9,7 @@
 #include <grass/linkm.h>
 
 
-struct link_head *link_new(struct link_head *Head)
+VOID_T *link_new(struct link_head *Head)
 {
     VOID_T *tmp;
     char *ctmp, *p;
