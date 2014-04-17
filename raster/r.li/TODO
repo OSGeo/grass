@@ -1,98 +1,68 @@
 TODO list
 =========
 
-GRASS 7
--------
-
+GRASS 7:
  * r.li.daemon: Uses UNIX sockets, replace or figure out how
    to use them on Windows
+    --> 4/2014: still an issue?
+
  * r.li.setup: Shell scripts, Tcl/Tk, Xmonitors to be replaced
    by Python + wxPython equivalents.
    See Luca D's prototype in  trunk/gui/wxpython/rlisetup
    and  http://grass.osgeo.org/grass70/manuals/g.gui.rlisetup.html
+    --> 4/2014: still an issue?
 
-Brute-force testing
--------------------
-# TODO: change to/add 3x3 example
+# TODO: change the examples to North Carolina wherever possible:
 
-# 7x7 moving window test:
-# still Spearfish...
-
-# created as described in EXAMPLES, moving window, in gui/wxgui/rlisetup/g.gui.rlisetup.html:
-echo "SAMPLINGFRAME 0|0|1|1
-SAMPLEAREA -1|-1|0.015021459227467811|0.011058451816745656
-MOVINGWINDOW" > $HOME/.grass7/r.li/movwindow7
-
-export GRASS_OVERWRITE=1
-g.region rast=landcover.30m -p
-r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
-
-MEASURE="dominance edgedensity mpa mps padcv padrange padsd patchdensity patchnum pielou richness shannon shape simpson"
-
-for mymeasure in $MEASURE ; do
-  r.li.${mymeasure} input=forests conf=movwindow7 out=forests_${mymeasure}_mov7
-  r.univar forests_${mymeasure}_mov7
-done
-
-# also alpha:
-r.li.renyi input=forests conf=movwindow7 out=forests_renyi_mov7_a06 alpha=0.6
-r.univar forests_renyi_mov7_a06
-
-echo "End of r.li tests"
-
-
-========================
-GRASS 7: North Carolina tests
-
-echo "SAMPLINGFRAME 0|0|1|1
-SAMPLEAREA 0.0|0.0|1.0|1.0" > $HOME/.grass7/r.li/landsat_test
-
-g.region rast=lsat7_2002_40 -p
-r.li.shannon input=lsat7_2002_40 conf=landsat_test out=landsat_shannon
---> Result written to ASCII file <$HOME/.grass7/r.li/output/landsat_shannon>
-
-
-
-===============================================================
-GRASS 6
--------
-
-TODO: backport all GRASS 7 fixes
-
-A few remaining things should be done soon:
-- add relevant references
-- use English variable names in C code
-
-Please change the examples to North Carolina wherever possible:
-
-
-# Spearfish
+# Spearfish tests
 g.region rast=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 d.mon wx0
 d.rast forests
 
 # g.gui.rlisetup:
-# created as described in EXAMPLES, moving window, in r.li.setup.html:
+# created as described in EXAMPLES, moving window, in g.gui.rlisetup.html:
 echo "SAMPLINGFRAME 0|0|1|1
 SAMPLEAREA -1|-1|0.015021459227467811|0.011058451816745656
-MOVINGWINDOW" > $HOME/.r.li/history/movwindow7
+MOVINGWINDOW" > $HOME/.grass7/r.li/movwindow7
 
-r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
+r.li.patchdensity forests conf=movwindow7 output=forests_p_dens7
 d.rast.leg forests_p_dens7
 
-r.to.vect forests out=forests feature=area
+r.to.vect forests out=forests type=area
 d.vect forests type=boundary
 
+######## TODO: CHECK THIS:
 
 # MASK test
 g.copy rast=fields,MASK
-r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7mask --o
+r.li.patchdensity forests conf=movwindow7 output=forests_p_dens7mask --o
+d.erase
 d.rast.leg forests_p_dens7mask
 # -> no negative values! but MASK is respected
 
+# zero data test
+r.mapcalc "forests = 0"
+r.li.patchdensity forests conf=movwindow7 output=forests_p_dens7 --o
+d.erase
+d.rast.leg forests_p_dens7mask
+r.info -r forests_p_dens7
+min=0
+max=204.081632653061
+
+========================
+North Carolina tests
+
+# Tests with return an ASCII output file
+sh ./r.li.testing_nc_asc.sh
+
 ---------
 
-Add example which results in an ASCII output file
+echo "SAMPLINGFRAME 0|0|1|1
+SAMPLEAREA 0.0|0.0|1.0|1.0" > $HOME/.grass7/r.li/landsat_test
+
+g.region rast=lsat7_2002_40 -p
+r.li.shannon input=lsat7_2002_40 conf=landsat_test output=landsat_shannon
+--> Result written to ASCII file <$HOME/.grass7/r.li/output/landsat_shannon>
 
 
