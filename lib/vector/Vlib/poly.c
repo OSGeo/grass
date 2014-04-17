@@ -31,7 +31,7 @@ struct Slink
 static int comp_double(double *, double *);
 static int V__within(double, double, double);
 int Vect__intersect_line_with_poly();
-static void destroy_links(struct Slink *);
+static void destroy_links(struct link_head *, struct Slink *);
 static int Vect__divide_and_conquer(struct Slink *, const struct line_pnts *,
 				    struct link_head *, double *, double *,
 				    int);
@@ -185,6 +185,8 @@ int Vect_get_point_in_poly(const struct line_pnts *Points, double *X, double *Y)
     }
 
     /* guess we have to do it the hard way... */
+    G_debug(3, "Vect_get_point_in_poly(): divide and conquer");
+
     /* get min and max x values */
     x_max = x_min = Points->x[0];
     for (i = 0; i < Points->n_points; i++) {
@@ -215,7 +217,7 @@ int Vect_get_point_in_poly(const struct line_pnts *Points, double *X, double *Y)
     *Y = cent_y;		/* pick line segment (x_min, cent_y) - (x_max, cent_y) */
     ret = Vect__divide_and_conquer(Head, Points, Token, X, Y, 10);
 
-    destroy_links(Head);
+    destroy_links(Token, Head);
 
     if (ret < 0) {
 	G_warning("Vect_get_point_in_poly(): %s",
@@ -290,7 +292,7 @@ Vect__divide_and_conquer(struct Slink *Head,
     return Vect__divide_and_conquer(Head, Points, Token, X, Y, --levels);
 }
 
-static void destroy_links(struct Slink *Head)
+static void destroy_links(struct link_head *Token, struct Slink *Head)
 {
     struct Slink *p, *tmp;
 
@@ -298,7 +300,7 @@ static void destroy_links(struct Slink *Head)
 
     while (p != NULL) {
 	tmp = p->next;
-	link_dispose((struct link_head *)Head, (VOID_T *) p);
+	link_dispose(Token, (VOID_T *) p);
 	p = tmp;
     }
 }
