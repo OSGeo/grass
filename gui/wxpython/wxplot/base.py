@@ -443,12 +443,10 @@ class BasePlotFrame(wx.Frame):
     def OnMotion(self, event):
         """!Indicate when mouse is outside the plot area
         """
-        if self.client.OnLeave(event): print 'out of area'
-        #show closest point (when enbled)
         if self.client.GetEnablePointLabel() == True:
             #make up dict with info for the pointLabel
             #I've decided to mark the closest point on the closest curve
-            dlst =  self.client.GetClosetPoint( self.client._getXY(event), pointScaled =  True)
+            dlst = self.client.GetClosestPoint(self.client._getXY(event), pointScaled=True)
             if dlst != []:      #returns [] if none
                 curveNum, legend, pIndex, pointXY, scaledXY, distance = dlst
                 #make up dictionary to pass to my user function (see DrawPointLabel)
