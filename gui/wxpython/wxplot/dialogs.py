@@ -99,8 +99,7 @@ class ProfileRasterDialog(wx.Dialog):
     def OnSelection(self, event):
         """!Choose maps to profile. Convert these into a list
         """
-        self.rasterList = []
-        self.rasterList = event.GetString().split(',')
+        self.rasterList = self.FindWindowById(event.GetId()).GetValue().split(',')
 
 class ScatterRasterDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, 
@@ -207,7 +206,7 @@ class ScatterRasterDialog(wx.Dialog):
     def OnSelection(self, event):
         """!Select raster maps for scatterplot. Must select maps in pairs.
         """
-        self.rasterList = event.GetString().split(',', 1)
+        self.rasterList = self.FindWindowById(event.GetId()).GetValue().split(',', 1)
         
     def OnSetBins(self, event):
         """!Bins for histogramming FP maps (=nsteps in r.stats)

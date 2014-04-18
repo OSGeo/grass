@@ -120,7 +120,7 @@ class ProfileFrame(BasePlotFrame):
         """!Select raster map(s) to profile
         """
         dlg = ProfileRasterDialog(parent = self)
-
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             self.rasterList = dlg.rasterList
             self.raster = self.InitRasterOpts(self.rasterList, self.plottype)
