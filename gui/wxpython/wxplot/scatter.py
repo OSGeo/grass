@@ -88,7 +88,7 @@ class ScatterFrame(BasePlotFrame):
         """!Select raster map(s) to profile
         """
         dlg = ScatterRasterDialog(parent = self)
-
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             self.rasterList = dlg.GetRasterPairs()
             if not self.rasterList:
