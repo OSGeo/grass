@@ -81,78 +81,78 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Quick Introduction</h3>
       <ul>
-       <li><a href="helptext.html">How to start with GRASS</a></li>
-       <li><a href="topics.html">Index of topics</a></li>
+       <li class="box"><a href="helptext.html">How to start with GRASS</a></li>
+       <li class="box"><a href="topics.html">Index of topics</a></li>
       </ul>
      <p>
       <ul>
-       <li><a href="projectionintro.html">Intro: projections and spatial transformations</a></li>
-       <li><a href="rasterintro.html">Intro: 2D raster map processing</a></li>
-       <li><a href="raster3dintro.html">Intro: 3D raster map (voxel) processing</a></li>
-       <li><a href="imageryintro.html">Intro: image processing</a></li>
-       <li><a href="vectorintro.html">Intro: vector map processing and network analysis</a></li>
-       <li><a href="databaseintro.html">Intro: database management</a></li>
-       <li><a href="temporalintro.html">Intro: temporal data processing</a></li>
+       <li class="box"><a href="projectionintro.html">Intro: projections and spatial transformations</a></li>
+       <li class="box"><a href="rasterintro.html">Intro: 2D raster map processing</a></li>
+       <li class="box"><a href="raster3dintro.html">Intro: 3D raster map (voxel) processing</a></li>
+       <li class="box"><a href="imageryintro.html">Intro: image processing</a></li>
+       <li class="box"><a href="vectorintro.html">Intro: vector map processing and network analysis</a></li>
+       <li class="box"><a href="databaseintro.html">Intro: database management</a></li>
+       <li class="box"><a href="temporalintro.html">Intro: temporal data processing</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
-        <li><a href="wxGUI.html">wxGUI</a> wxPython-based GUI frontend</li>
-        <li><a href="wxGUI.components.html">wxGUI components</a></li>
+        <li class="box"><a href="wxGUI.html">wxGUI</a></li>
+        <li class="box"><a href="wxGUI.components.html">wxGUI components</a></li>
        </ul>
 
        <ul>
-        <li><a href="topic_gui.html">GUI commands</li>
+        <li class="box"><a href="topic_gui.html">GUI commands</li>
        </ul>
 
        <ul>
-        <li><a href="display.html">Display commands manual</a></li>
-        <li><a href="displaydrivers.html">Display drivers</a></li>
+        <li class="box"><a href="display.html">Display commands manual</a></li>
+        <li class="box"><a href="displaydrivers.html">Display drivers</a></li>
        </ul>
       </td>
     </tr>
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Raster and 3D raster processing</h3>
        <ul>
-        <li><a href="raster.html">Raster commands manual</a></li>
-        <li><a href="raster3D.html">3D raster (voxel) commands manual</a></li>
+        <li class="box"><a href="raster.html">Raster commands manual</a></li>
+        <li class="box"><a href="raster3D.html">3D raster (voxel) commands manual</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Image processing</h3>
        <ul>
-        <li><a href="imagery.html">Imagery commands manual</a></li>
+        <li class="box"><a href="imagery.html">Imagery commands manual</a></li>
       </ul></td>
     </tr>
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Vector processing</h3>
        <ul>
-        <li><a href="vector.html">Vector commands manual</a></li>
-        <li><a href="vectorascii.html">GRASS ASCII vector format specification</a></li>
+        <li class="box"><a href="vector.html">Vector commands manual</a></li>
+        <li class="box"><a href="vectorascii.html">GRASS ASCII vector format specification</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Database</h3>
        <ul>
-       <li><a href="sql.html">SQL support in GRASS GIS</a></li>
-       <li><a href="database.html">Database commands manual</a></li>
+       <li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
+       <li class="box"><a href="database.html">Database commands manual</a></li>
        </ul></td>
     </tr>
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;General</h3>
       <ul>
-      <li><a href="grass7.html">GRASS GIS startup manual page</a></li>
-      <li><a href="general.html">General commands manual</a></li>
+      <li class="box"><a href="grass7.html">GRASS GIS startup manual page</a></li>
+      <li class="box"><a href="general.html">General commands manual</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Miscellaneous&nbsp;&amp;&nbsp;Variables</h3>
        <ul>
-        <li><a href="misc.html">Miscellaneous commands manual</a></li>
-        <li><a href="variables.html">GRASS variables and environment variables</a></li>
+        <li class="box"><a href="misc.html">Miscellaneous commands manual</a></li>
+        <li class="box"><a href="variables.html">GRASS variables and environment variables</a></li>
        </ul></td>
     </tr>
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Temporal processing</h3>
        <ul>
-        <li><a href="temporal.html">Temporal commands manual</a></li>
+        <li class="box"><a href="temporal.html">Temporal commands manual</a></li>
        </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Printing</h3>
        <ul>
-        <li><a href="postscript.html">Postscript commands manual</a></li>
+        <li class="box"><a href="postscript.html">Postscript commands manual</a></li>
        </ul></td>
     </tr>
   </tbody>
