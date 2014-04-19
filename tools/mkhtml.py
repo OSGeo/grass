@@ -119,29 +119,30 @@ def create_toc(src_data):
 
 def write_toc(data):
     fd = sys.stdout
-    fd.write('<table class="toc">\n')
-    ul = False
-    ul_parent = False
+    fd.write('<div class="toc">\n')
+    fd.write('<ul class="toc">\n')
+    first = True
+    in_h3 = False
+    indent = 4
     for tag, href, text in data:
-        if tag == 'h3':
-            if ul_parent:
-                if not ul:
-                    fd.write('<tr><td><ul class="toc">\n')
-                    ul = True
-                    fd.write('<li class="toc"><a href="#%s" class="toc">%s</a></li>\n' % \
-                                 (href, text))
-                    continue
-
-        if tag == 'h2' and not ul_parent:
-            ul_parent = True
+        if tag == 'h3' and not in_h3:
+            fd.write('\n%s<ul class="toc">\n' % (' ' * indent))
+            indent += 4
+            in_h3 = True
+        elif not first:
+            fd.write('</li>\n')
             
-        if ul:
-            fd.write('</ul></td></tr>\n')
-            ul = False
-        fd.write('<tr><td> <a href="#%s" class="toc">%s</a></td></tr>\n' % \
-                     (href, text))
-    fd.write('</table>\n')
-
+        if tag == 'h2' and in_h3:
+            indent -= 4
+            fd.write('%s</ul></li>\n' % (' ' * indent))
+            in_h3 = False
+        
+        fd.write('%s<li class="toc"><a href="#%s" class="toc">%s</a>' % \
+                     (' ' * indent, href, text))
+        first = False
+    
+    fd.write('</li>\n</ul>\n')
+    fd.write('</div>\n')
 
 def update_toc(data):
     ret_data = []
