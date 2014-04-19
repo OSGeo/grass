@@ -82,7 +82,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Quick Introduction</h3>
       <ul>
        <li class="box"><a href="helptext.html">How to start with GRASS</a></li>
-       <li class="box"><a href="topics.html">Index of topics</a></li>
+       <li class="box"> Index of <a href="topics.html">topics</a> and <a href="keywords.html">keywords</a></li>
       </ul>
      <p>
       <ul>
@@ -96,8 +96,9 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
-        <li class="box"><a href="wxGUI.html">wxGUI</a></li>
+        <li class="box"><a href="wxGUI.html">wxGUI</a> Graphical User Interface</li>
         <li class="box"><a href="wxGUI.components.html">wxGUI components</a></li>
+        <li class="box"><a href="wxGUI.toolboxes.html">wxGUI toolboxes</a></li>
        </ul>
 
        <ul>
