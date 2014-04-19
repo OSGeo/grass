@@ -88,7 +88,7 @@ td {
     padding: 5px;
 }
 
-table.toc{
+div.toc{
     background-color: transparent;
     position: fixed;
     border: solid 1px rgb(25%, 60%, 25%);
@@ -103,11 +103,13 @@ table.toc{
 
 li.toc {
    margin-left: -15px;
+   padding: 3px 3px; 3px; 3px;
    color: rgb(25%, 60%, 25%);
 }
 
 ul.toc {
-   margin-bottom: 0px;
+   margin-top: 3px;
+   margin-bottom: 3px;
 }
 
 a.toc {
