@@ -125,20 +125,23 @@ def write_toc(data):
     fd.write('<div class="toc">\n')
     fd.write('<ul class="toc">\n')
     first = True
+    has_h2 = False
     in_h3 = False
     indent = 4
     for tag, href, text in data:
-        if tag == 'h3' and not in_h3:
+        if tag == 'h3' and not in_h3 and has_h2:
             fd.write('\n%s<ul class="toc">\n' % (' ' * indent))
             indent += 4
             in_h3 = True
         elif not first:
             fd.write('</li>\n')
             
-        if tag == 'h2' and in_h3:
-            indent -= 4
-            fd.write('%s</ul></li>\n' % (' ' * indent))
-            in_h3 = False
+        if tag == 'h2':
+            has_h2 = True
+            if in_h3:
+                indent -= 4
+                fd.write('%s</ul></li>\n' % (' ' * indent))
+                in_h3 = False
         
         fd.write('%s<li class="toc"><a href="#%s" class="toc">%s</a>' % \
                      (' ' * indent, href, text))
