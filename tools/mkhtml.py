@@ -118,6 +118,9 @@ def create_toc(src_data):
 
 
 def write_toc(data):
+    if not data:
+        return
+    
     fd = sys.stdout
     fd.write('<div class="toc">\n')
     fd.write('<ul class="toc">\n')
