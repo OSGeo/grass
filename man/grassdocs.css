@@ -69,11 +69,15 @@ span.code {
     padding-left: 10px;
 }
 
-.box {
+td.box {
     border:  1px solid #c9c9c9;
+    border-radius: 10px;
     margin: 0px 2px 2px 10px;
-    padding: 0px 4px 2px 6px;
-    -moz-border-radius: 6px ;
+    padding: 4px 4px 4px 4px;
+}
+
+li.box {
+    color: rgb(25%, 60%, 25%);
 }
 
 table.border {
