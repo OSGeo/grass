@@ -39,7 +39,7 @@ import wx
 from grass.pydispatch.signal import Signal
 
 from core.gcmd   import RunCommand, GError, GMessage
-from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo
+from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo, GetUnicodeValue
 
 import grass.script as grass
 
@@ -299,7 +299,7 @@ class SQLBuilder(wx.Frame):
         
         data = grass.db_select(sql = "SELECT %s FROM %s" % (column, self.tablename),
                                database = self.database,
-                               driver = self.driver)
+                               driver = self.driver, sep = '{_sep_}')
         if not data:
             return
         
@@ -312,6 +312,8 @@ class SQLBuilder(wx.Frame):
             
             if desc['type'] != 'character':
                 item = str(item)
+            else:
+                item = GetUnicodeValue(item)
             self.list_values.Append(item)
             i += 1
         
