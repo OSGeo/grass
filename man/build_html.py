@@ -102,7 +102,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
        </ul>
 
        <ul>
-        <li class="box"><a href="topic_gui.html">GUI commands</li>
+        <li class="box"><a href="topic_gui.html">GUI commands</a></li>
        </ul>
 
        <ul>
