@@ -87,12 +87,6 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
      <p>
       <ul>
        <li class="box"><a href="projectionintro.html">Intro: projections and spatial transformations</a></li>
-       <li class="box"><a href="rasterintro.html">Intro: 2D raster map processing</a></li>
-       <li class="box"><a href="raster3dintro.html">Intro: 3D raster map (voxel) processing</a></li>
-       <li class="box"><a href="imageryintro.html">Intro: image processing</a></li>
-       <li class="box"><a href="vectorintro.html">Intro: vector map processing and network analysis</a></li>
-       <li class="box"><a href="databaseintro.html">Intro: database management</a></li>
-       <li class="box"><a href="temporalintro.html">Intro: temporal data processing</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
@@ -102,7 +96,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
        </ul>
 
        <ul>
-        <li class="box"><a href="topic_gui.html">GUI commands</li>
+        <li class="box"><a href="topic_gui.html">GUI commands</a></li>
        </ul>
 
        <ul>
@@ -114,22 +108,30 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Raster and 3D raster processing</h3>
        <ul>
+        <li class="box"><a href="rasterintro.html">Intro: 2D raster map processing</a></li>
         <li class="box"><a href="raster.html">Raster commands manual</a></li>
+       </ul>
+
+       <ul>
+        <li class="box"><a href="raster3dintro.html">Intro: 3D raster map (voxel) processing</a></li>
         <li class="box"><a href="raster3D.html">3D raster (voxel) commands manual</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Image processing</h3>
        <ul>
+        <li class="box"><a href="imageryintro.html">Intro: image processing</a></li>
         <li class="box"><a href="imagery.html">Imagery commands manual</a></li>
       </ul></td>
     </tr>
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Vector processing</h3>
        <ul>
+        <li class="box"><a href="vectorintro.html">Intro: vector map processing and network analysis</a></li>
         <li class="box"><a href="vector.html">Vector commands manual</a></li>
         <li class="box"><a href="vectorascii.html">GRASS ASCII vector format specification</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Database</h3>
        <ul>
+       <li class="box"><a href="databaseintro.html">Intro: database management</a></li>
        <li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
        <li class="box"><a href="database.html">Database commands manual</a></li>
        </ul></td>
@@ -149,6 +151,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Temporal processing</h3>
        <ul>
+        <li class="box"><a href="temporalintro.html">Intro: temporal data processing</a></li>
         <li class="box"><a href="temporal.html">Temporal commands manual</a></li>
        </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Printing</h3>
