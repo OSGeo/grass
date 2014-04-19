@@ -12,7 +12,7 @@ include $(MODULE_TOPDIR)/include/Make/Multi.make
 
 default: multi thumbnails
 
-thumbnails: $(BIN)/r.mapcalc$(EXE) $(HTMLDIR)/colortables
+thumbnails: $(BIN)/r.mapcalc$(EXE) $(BIN)/r.colors$(EXE) $(HTMLDIR)/colortables
 	-$(call run_grass, $(GRASS_HOME)/tools/thumbnails.py)
 
 $(HTMLDIR)/colortables: $(HTMLDIR)
