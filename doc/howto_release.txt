@@ -57,7 +57,7 @@ Contents
 7
 0
 0RC1
-2013
+2014
       rm -f include/VERSION~
 
     - Update additionally the winGRASS version
@@ -115,7 +115,7 @@ Contents
 7
 0
 0svn
-2013
+2014
 
     rm -f include/VERSION~
     svn ci -m"back to SVN" include/VERSION
@@ -130,10 +130,10 @@ Contents
    # copy along with associated files:
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
          INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
-         SUBMITTING_PYTHON SUBMITTING_SCRIPTS neteler@$SERVER1
+         SUBMITTING_PYTHON SUBMITTING_WXGUI neteler@$SERVER1
      scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
          INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
-         SUBMITTING_PYTHON SUBMITTING_SCRIPTS neteler@$SERVER2
+         SUBMITTING_PYTHON SUBMITTING_WXGUI neteler@$SERVER2
     
 
  o update web site to new version: CMS
