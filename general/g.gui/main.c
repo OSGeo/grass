@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Start GRASS GUI from command line.
  *
- * COPYRIGHT:    (C) 2008, 2010-2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -35,14 +35,15 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("user interface"));
     G_add_keyword(_("gui"));
     module->description =
 	_("Launches a GRASS graphical user interface (GUI) session.");
 
     type = G_define_option();
-    type->key = "gui";
+    type->key = "ui";
     type->type = TYPE_STRING;
-    type->label = _("GUI type");
+    type->label = _("User interface");
     type->description = _("Default value: GRASS_GUI if defined otherwise wxpython");
     desc = NULL;
     G_asprintf(&desc,
@@ -61,13 +62,13 @@ int main(int argc, char *argv[])
 
     update = G_define_flag();
     update->key = 'u';
-    update->description = _("Update default GUI setting");
+    update->description = _("Update default user interface settings");
     update->guisection = _("Default");
 
     nolaunch = G_define_flag();
     nolaunch->key = 'n';
     nolaunch->description =
-	_("Do not launch GUI after updating the default GUI setting");
+	_("Do not launch GUI after updating the default user interface settings");
     nolaunch->guisection = _("Default");
 
     if (G_parser(argc, argv))
