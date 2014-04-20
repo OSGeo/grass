@@ -36,7 +36,8 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body bgcolor="white">
-<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+<img src="grass_logo.png" alt="GRASS logo">
+<hr class="header">
 """
 
 header_nopgm = """<h2>${PGM}</h2>
@@ -47,7 +48,7 @@ header_pgm = """<h2>NAME</h2>
 """
 
 footer_index = string.Template(\
-"""<hr>
+"""<hr class="header">
 <p><a href="index.html">Main index</a> | <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
 </body>
@@ -55,7 +56,7 @@ footer_index = string.Template(\
 """)
 
 footer_noindex = string.Template(\
-"""<hr>
+"""<hr class="header">
 <p><a href="index.html">Main index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
 </body>
@@ -116,6 +117,11 @@ def create_toc(src_data):
     
     return parser.data
 
+def escape_href(label):
+    # remove html tags
+    label = re.sub('<[^<]+?>', '', label)
+    # replace space with underscore + lower
+    return label.replace(' ', '_').lower()
 
 def write_toc(data):
     if not data:
@@ -144,7 +150,7 @@ def write_toc(data):
                 in_h3 = False
         
         fd.write('%s<li class="toc"><a href="#%s" class="toc">%s</a>' % \
-                     (' ' * indent, href, text))
+                     (' ' * indent, escape_href(text), text))
         first = False
     
     fd.write('</li>\n</ul>\n')
@@ -152,12 +158,12 @@ def write_toc(data):
 
 def update_toc(data):
     ret_data = []
-    pat = re.compile(r'(<(h\d)>)(.+)(</h\d>)')
+    pat = re.compile(r'(<(h[2|3])>)(.+)(</h[2|3]>)')
     idx = 1
     for line in data.splitlines():
         if pat.search(line):
             xline = pat.split(line)
-            line = xline[1] + '<a name="%s_%d">' % (xline[2], idx) + xline[3] + '</a>' + xline[4]
+            line = xline[1] + '<a name="%s">' % escape_href(xline[3]) + xline[3] + '</a>' + xline[4]
             idx += 1
         ret_data.append(line)
 

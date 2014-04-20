@@ -49,7 +49,8 @@ echo " <link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">
 </head>
 <body bgcolor=\"#FFFFFF\">
 
-<img src=\"grass_logo.png\" alt=\"GRASS logo\"><hr align=center size=6 noshade>
+<img src=\"grass_logo.png\" alt=\"GRASS logo\">
+<hr class=\"header\">
 
 <h2>GRASS GIS $GRASSVERSION Reference Manual</h2>
 
@@ -71,7 +72,7 @@ GPL'ed), image processing and geographic information system (GIS).</p>
 write_html_footer()
 {
 # $1: filename
-echo "<hr>" >> $1
+echo "<hr class=\"header\">" >> $1
 echo "<p><a href=\"$GISBASE/docs/html/index.html\">Help Index</a> | <a href=\"$GISBASE/docs/html/full_index.html\">Full Index</a> | <a href=\"$HTMLDIR/addon_index.html\">Addon Index</a><br>" >> $1
 echo "&copy; 2003-2008 <a href=\"http://grass.osgeo.org\">GRASS Development Team</a></p>" >> $1
 echo "</body>" >> $1   

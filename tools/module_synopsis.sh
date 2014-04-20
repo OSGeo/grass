@@ -206,7 +206,7 @@ cat << EOF > "${TMP}.html"
 <body bgcolor="white">
 
 <img src="grass_logo.png" alt="_\|/_ GRASS logo">
-<hr align=center size=6 noshade>
+<hr class="header">
 
 <!-- prettier:
 <BR><BR><BR><BR>
@@ -321,7 +321,7 @@ done
 cat << EOF >> "${TMP}.html"
 </ul>
 
-<hr>
+<hr class="header">
 <p>
 <a href="index.html">Help Index</a><br>
 &copy; 2007-2010 <a href="http://grass.osgeo.org">GRASS Development Team</a>
