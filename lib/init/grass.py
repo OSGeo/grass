@@ -1002,7 +1002,15 @@ def show_banner():
 
 def say_hello():
     sys.stderr.write(_("Welcome to GRASS %s") % grass_version)
-
+    try:
+        filerev = open(os.path.join(gisbase, 'etc', 'VERSIONNUMBER'))
+        linerev = filerev.readline().rstrip('\n')
+        filerev.close()
+        
+        revision = linerev.split(' ')[1]
+        sys.stderr.write(' (' + revision + ')')
+    except:
+        pass
 
 def show_info():
     sys.stderr.write(
