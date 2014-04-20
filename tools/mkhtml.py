@@ -120,8 +120,10 @@ def create_toc(src_data):
 def escape_href(label):
     # remove html tags
     label = re.sub('<[^<]+?>', '', label)
+    # fix &nbsp;
+    label = label.replace('&nbsp;', '')
     # replace space with underscore + lower
-    return label.replace(' ', '_').lower()
+    return label.replace(' ', '-').lower()
 
 def write_toc(data):
     if not data:
@@ -220,7 +222,11 @@ index_names = {
 # process footer
 index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
 if index:
-    index_name_cap = index_name = index.group(2).strip()
+    index_name = index.group(2).strip()
+    if '|' in index_name:
+        index_name, index_name_cap = index_name.split('|', 1)
+    else:
+        index_name_cap = index_name
 else:
     mod_class = pgm.split('.', 1)[0]
     index_name = index_names.get(mod_class, '')
