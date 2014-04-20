@@ -11,7 +11,7 @@ Classes:
  - gis_set::GListBox
  - gis_set::StartUp
 
-(C) 2006-2013 by the GRASS Development Team
+(C) 2006-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -99,7 +99,10 @@ class GRASSStartup(wx.Frame):
         versionFile.close()
         try:
             grassVersion, grassRevision = versionLine.split(' ', 1)
-            grassRevisionStr = ' (%s)' % grassRevision
+            if grassVersion.endswith('svn'):
+                grassRevisionStr = ' (%s)' % grassRevision
+            else:
+                grassRevisionStr = ''
         except ValueError:
             grassVersion = versionLine
             grassRevisionStr = ''
