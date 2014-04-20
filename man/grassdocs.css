@@ -17,6 +17,13 @@ body{
     width: 80%;
 }
 
+hr.header {
+    height: 3px;
+    color: gray;
+    background-color: gray;
+    width: 100%;
+}
+
 h1{
     background-color: transparent;
     color: rgb(25%, 60%, 25%);
@@ -80,6 +87,10 @@ li.box {
     color: rgb(25%, 60%, 25%);
 }
 
+li.box span {
+    color: black;
+}
+
 table.border {
     border-collapse:collapse;
 }
@@ -99,10 +110,8 @@ div.toc{
     top: 5px;
     right: 5px;
     width: 17%;
-    line-height: 120%;
-    font-weight: bold;
     font-size: small;
-    font-family: arial,sans-serif;
+    border-radius: 10px;
 }
 
 li.toc {
@@ -117,6 +126,5 @@ ul.toc {
 }
 
 a.toc {
-    color: rgb(25%, 60%, 25%);
     text-decoration: none;
 }
