@@ -10,6 +10,22 @@ entities = {
     'bull': "*"
     }
 
+# Remove ToC
+def fix(content):
+    if isinstance(content, tuple):
+        tag, attrs, body = content
+        if tag == 'div' and ('class', 'toc') in attrs:
+            return None
+        else:
+            return (tag, attrs, fix(body))
+    elif isinstance(content, list):
+        return [fixed
+                for item in content
+                for fixed in [fix(item)]
+                if fixed is not None]
+    else:
+        return content
+
 def main():
     # parse HTML
     infile = sys.argv[1]
@@ -30,7 +46,7 @@ def main():
     # generate groff
     sf = StringIO()
     f = Formatter(infile, sf)
-    f.pp(p.data)
+    f.pp(fix(p.data))
     s = sf.getvalue()
     sf.close()
 
