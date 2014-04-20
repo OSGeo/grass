@@ -5,8 +5,8 @@ from the command line prompt or to change default User Interface (UI)
 settings.
 
 <p>GRASS 7 comes with wxPython-based GUI
-aka <em><a href="wxGUI.html">wxGUI</a></em> (<b>gui=wxpython</b>) and
-command line text-based UI (<b>gui=text</b>).
+aka <em><a href="wxGUI.html">wxGUI</a></em> (<b>ui=wxpython</b>) and
+command line text-based UI (<b>ui=text</b>).
 
 <p>
 The old <em>gis.m</em> and <em>d.m</em> Tcl/Tk-based GUIs from GRASS 6
@@ -17,7 +17,7 @@ have been dropped in GRASS 7.
 
 If the <b>-u</b> update flag is given or the GRASS
 <tt>GUI</tt> variable is missing, then the <tt>GUI</tt> variable is
-permanently changed and the selected <b>gui</b> will be used as the default
+permanently changed and the selected <b>ui</b> will be used as the default
 UI from then on.
 
 <p>
@@ -33,7 +33,7 @@ contains persistent GRASS variables.
 
 Set the command line text-based UI to be the default UI:
 <div class="code"><pre>
-g.gui -u gui=text
+g.gui -u ui=text
 </pre></div>
 
 <h2>SEE ALSO</h2>
