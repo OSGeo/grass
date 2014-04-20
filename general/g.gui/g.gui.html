@@ -1,49 +1,53 @@
 <h2>DESCRIPTION</h2>
 
-<p>This program allows user to start a selected graphical user interface (GUI)
-from the command line prompt.
+<p>This program allows user to start Graphical User Interface (GUI)
+from the command line prompt or to change default User Interface (UI)
+settings.
 
-<p>GRASS 7 has a new GUI based on wxWidgets, written in Python:
+<p>GRASS 7 comes with wxPython-based GUI
+aka <em><a href="wxGUI.html">wxGUI</a></em> (<b>gui=wxpython</b>) and
+command line text-based UI (<b>gui=text</b>).
 
-<ul>
-<li><b>wxpython</b> - New wxPython based GUI aka
-    <a href="wxGUI.html">wxGUI</a></li>
-</ul>
-
-The old <em>gis.m</em> and <em>d.m</em> Tcl/Tk GUIs from GRASS 6 have been removed.
-<p>If the <b>-u</b> update flag is given or the <em>g.gisenv</em>
-<tt>GUI</tt> variable is missing, then the <tt>GUI</tt> variable is
-permanently changed and the selected GUI will be used as the default
-UI from then on.
+<p>
+The old <em>gis.m</em> and <em>d.m</em> Tcl/Tk-based GUIs from GRASS 6
+have been dropped in GRASS 7.
 
 
 <h2>NOTES</h2>
 
-Valid values for GUI variable are <tt>text</tt> and <tt>wxpython</tt>.
+If the <b>-u</b> update flag is given or the GRASS
+<tt>GUI</tt> variable is missing, then the <tt>GUI</tt> variable is
+permanently changed and the selected <b>gui</b> will be used as the default
+UI from then on.
 
-<em>g.gisenv</em> variables are stored in the user's home directory in
-a hidden file called "<tt>.grass7/rc</tt>". They are not shell
-environment variables and the "rc" file is not a classic UNIX run
-command file, it just contains persistent GRASS variables and is not
-executed.
-
+<p>
+GRASS variables (see <em><a href="g.gisenv.html">g.gisenv</a></em>)
+are stored in the user's home directory in a hidden file called
+<tt>$HOME/.grass7/rc</tt> on Unix-based operating systems
+and <tt>%APPDATA%\GRASS7\rc</tt> on MS Windows. Note that GRASS
+variables are not the shell environment variables and the
+&quot;rc&quot; file is not a classic UNIX run command file, it just
+contains persistent GRASS variables.
 
 <h2>EXAMPLE</h2>
 
-Set the command line to be the default UI:
+Set the command line text-based UI to be the default UI:
 <div class="code"><pre>
-g.gui text
+g.gui -u gui=text
 </pre></div>
-
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="wxGUI.html">wxPython based new generation GUI</a>,
-<a href="http://grasswiki.osgeo.org/wiki/WxPython-based_GUI_for_GRASS">wxGUI wiki-page</a><br>
-<a href="g.gisenv.html">g.gisenv</a>, <a href="variables.html">GRASS variables list</a>
+<a href="wxGUI.html">wxGUI</a>,
+<a href="http://grasswiki.osgeo.org/wiki/WxPython-based_GUI_for_GRASS">wxGUI wiki-page</a>
 </em>
 
+<p>
+<em>
+<a href="g.gisenv.html">g.gisenv</a>,
+<a href="variables.html">GRASS variables list</a>
+</em>
 
 <h2>AUTHORS</h2>
 
