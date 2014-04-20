@@ -93,9 +93,16 @@ class GRASSStartup(wx.Frame):
 
         # labels
         ### crashes when LOCATION doesn't exist
+        # get version & revision
         versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
-        grassVersion = versionFile.readline().split(' ')[0].rstrip('\n')
+        versionLine = versionFile.readline().rstrip('\n')
         versionFile.close()
+        try:
+            grassVersion, grassRevision = versionLine.split(' ', 1)
+            grassRevisionStr = ' (%s)' % grassRevision
+        except ValueError:
+            grassVersion = versionLine
+            grassRevisionStr = ''
         
         self.select_box = wx.StaticBox (parent = self.panel, id = wx.ID_ANY,
                                         label = " %s " % _("Choose project location and mapset"))
@@ -103,8 +110,8 @@ class GRASSStartup(wx.Frame):
         self.manage_box = wx.StaticBox (parent = self.panel, id = wx.ID_ANY,
                                         label = " %s " % _("Manage"))
         self.lwelcome = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                      label = _("Welcome to GRASS GIS %s\n"
-                                              "The world's leading open source GIS") % grassVersion,
+                                      label = _("Welcome to GRASS GIS %s%s\n"
+                                              "The world's leading open source GIS") % (grassVersion, grassRevisionStr),
                                       style = wx.ALIGN_CENTRE)
         self.ltitle = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                     label = _("Select an existing project location and mapset\n"
