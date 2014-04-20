@@ -152,9 +152,10 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
        <ul>
         <li class="box"><a href="temporal.html">Temporal commands manual</a></li>
        </ul></td>
-      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Printing</h3>
+      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Cartography</h3>
        <ul>
         <li class="box"><a href="postscript.html">Postscript commands manual</a></li>
+        <li class="box"><a href="g.gui.psmap.html">wxGUI Cartographic Composer</a></li>
        </ul></td>
     </tr>
   </tbody>
