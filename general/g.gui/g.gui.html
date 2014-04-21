@@ -9,14 +9,9 @@ GRASS GIS 7 comes with both a wxPython-based GUI
 aka <em><a href="wxGUI.html">wxGUI</a></em> (<b>ui=wxpython</b>) and
 command line text-based UI (<b>ui=text</b>).
 
-<p>
-The old <em>gis.m</em> and <em>d.m</em> Tcl/Tk-based GUIs known from 
-GRASS GIS 6 have been dropped in GRASS GIS 7.
-
-
 <h2>NOTES</h2>
 
-If the <b>-u</b> update flag is given or the <tt>GRASS_GUI</tt> 
+If the <b>-d</b> update flag is given or the <tt>GRASS_GUI</tt> 
 environmental <a href="variables.html">variable</a> is unset, then 
 the GRASS internal variable <tt>GUI</tt> is permanently changed and 
 the selected <b>ui</b> will be used as the default UI from then on.
@@ -27,33 +22,47 @@ are stored in the user's home directory in a hidden file called
 <tt>$HOME/.grass7/rc</tt> on Unix-based operating systems
 and <tt>%APPDATA%\GRASS7\rc</tt> on MS Windows. Note that these GRASS
 internal variables are not the shell environment variables and the
-&quot;rc&quot; file is not a classic UNIX run command file, it just
+<tt>rc</tt> file is not a classic UNIX run command file, it just
 contains persistent GRASS variables.
 
-<h2>EXAMPLE</h2>
+<p>
+The
+old <em><a href="http://grass.osgeo.org/grass64/manuals/gis.m.html">gis.m</a></em>
+and <em><a href="http://grass.osgeo.org/grass64/manuals/d.m.html">d.m</a></em>
+Tcl/Tk-based GUIs known from GRASS GIS 6 have been dropped in GRASS
+GIS 7.
+
+<h2>EXAMPLES</h2>
 
 Set default user interface setting to command line, text-based UI:
 <div class="code"><pre>
-g.gui -u ui=text
+g.gui -d ui=text
 </pre></div>
 
 <p>
-Set default user interface setting to the graphical user interface (GUI):
+Set default user interface setting to the graphical user interface
+(GUI) and <i>launch</i> the GUI:
 <div class="code"><pre>
-g.gui -u ui=wxpython
+g.gui -d ui=wxpython
 </pre></div>
+
+<p>
+Set default user interface setting to the graphical user interface
+(GUI) but <i>do not launch</i> the GUI:
+<div class="code"><pre>
+g.gui -dn ui=wxpython
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="wxGUI.html">wxGUI</a>,
-<a href="http://grasswiki.osgeo.org/wiki/WxPython-based_GUI_for_GRASS">wxGUI wiki-page</a>
+<a href="g.gisenv.html">g.gisenv</a>,
+<a href="variables.html">GRASS variables</a>
 </em>
 
 <p>
-<em>
-<a href="g.gisenv.html">g.gisenv</a>,
-<a href="variables.html">GRASS variables list</a>
-</em>
+<a href="http://grasswiki.osgeo.org/wiki/WxPython-based_GUI_for_GRASS">wxGUI wiki page</a>
 
 <h2>AUTHORS</h2>
 
