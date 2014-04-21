@@ -62,7 +62,8 @@ distance/elevation is calculated to the farthest possible maximum/divide.</dd>
 <em>r.watershed</em> or <em>r.stream.extract</em>. Since stream
 network maps produced by <em>r.watershed</em> and <em>r.stream.extract</em> may
 slightly differ in detail, it is required to use both stream and direction maps
-produced by the same module. Non-stream cell values must be set to NULL.</dd>
+produced by the same module. Non-stream cell values must be set to NULL.
+Alternatively, in <em>outlet</em> mode, it's the raster map of the outlet.</dd>
 
 <dt><b>direction</b></dt>
 <dd>Flow direction: name of input input raster map with flow direction, 
@@ -137,29 +138,30 @@ with its own category.
 <div class="code"><pre>
     
 # Set the region to match with elevation map
-g.region -ap rast = elevation
+g.region -ap rast=elevation
 
 # Calculate flow direction and stream network
-r.watershed elevation = elevation threshold = 10000 drainage = direction stream = streams
+r.watershed elevation=elevation threshold=10000 drainage=direction stream=streams
 
 # Calculate elevation above and distance to stream network using downstream method
-r.stream.distance stream_rast = streams direction = direction elevation = elevation \
-  method = downstream distance = distance_stream_downstream difference = difference_stream_downstream
+r.stream.distance stream_rast=streams direction=direction elevation=elevation \
+  method=downstream distance=distance_stream_downstream difference=difference_stream_downstream
   
 # Calculate elevation above and distance to stream network using upstream method
-r.stream.distance stream_rast = streams direction = direction elevation = elevation \
-  method = upstream distance = distance_stream_upstream difference = difference_stream_upstream
+r.stream.distance stream_rast=streams direction=direction elevation=elevation \
+  method=upstream distance=distance_stream_upstream difference=difference_stream_upstream
+  
+# Create outlet
+echo "636645,218835" | v.in.ascii -n input=- output=outlet separator=","
+
+# Convert outlet to raster
+v.to.rast input=outlet output=outlet use=cat
+
+# Calculate distance to and elevation above outlet
+r.stream.distance -o stream_rast=outlet direction=direction elevation=elevation \
+method=downstream distance=distance2outlet difference=difference2outlet
 
 </pre></div>
-
-<!--
-
-TODO : add the following examples:
-elevation above outlet 
-distance to outlet
-
--->
-
 
 <h2>SEE ALSO</h2>
 <em>
