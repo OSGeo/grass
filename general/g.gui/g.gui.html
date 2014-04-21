@@ -1,41 +1,47 @@
 <h2>DESCRIPTION</h2>
 
-<p>This program allows user to start Graphical User Interface (GUI)
-from the command line prompt or to change default User Interface (UI)
-settings.
+The <em>g.gui</em> module allows user to start the Graphical User 
+Interface (GUI) from the command line prompt or to change the 
+default User Interface (UI) settings.
 
-<p>GRASS 7 comes with wxPython-based GUI
+<p>
+GRASS GIS 7 comes with both a wxPython-based GUI
 aka <em><a href="wxGUI.html">wxGUI</a></em> (<b>ui=wxpython</b>) and
 command line text-based UI (<b>ui=text</b>).
 
 <p>
-The old <em>gis.m</em> and <em>d.m</em> Tcl/Tk-based GUIs from GRASS 6
-have been dropped in GRASS 7.
+The old <em>gis.m</em> and <em>d.m</em> Tcl/Tk-based GUIs known from 
+GRASS GIS 6 have been dropped in GRASS GIS 7.
 
 
 <h2>NOTES</h2>
 
-If the <b>-u</b> update flag is given or the GRASS
-<tt>GUI</tt> variable is missing, then the <tt>GUI</tt> variable is
-permanently changed and the selected <b>ui</b> will be used as the default
-UI from then on.
+If the <b>-u</b> update flag is given or the <tt>GRASS_GUI</tt> 
+environmental <a href="variables.html">variable</a> is unset, then 
+the GRASS internal variable <tt>GUI</tt> is permanently changed and 
+the selected <b>ui</b> will be used as the default UI from then on.
 
 <p>
-GRASS variables (see <em><a href="g.gisenv.html">g.gisenv</a></em>)
+All GRASS internal variables (see <em><a href="g.gisenv.html">g.gisenv</a></em>)
 are stored in the user's home directory in a hidden file called
 <tt>$HOME/.grass7/rc</tt> on Unix-based operating systems
-and <tt>%APPDATA%\GRASS7\rc</tt> on MS Windows. Note that GRASS
-variables are not the shell environment variables and the
+and <tt>%APPDATA%\GRASS7\rc</tt> on MS Windows. Note that these GRASS
+internal variables are not the shell environment variables and the
 &quot;rc&quot; file is not a classic UNIX run command file, it just
 contains persistent GRASS variables.
 
 <h2>EXAMPLE</h2>
 
-Set the command line text-based UI to be the default UI:
+Set default user interface setting to command line, text-based UI:
 <div class="code"><pre>
 g.gui -u ui=text
 </pre></div>
 
+<p>
+Set default user interface setting to the graphical user interface (GUI):
+<div class="code"><pre>
+g.gui -u ui=wxpython
+</pre></div>
 <h2>SEE ALSO</h2>
 
 <em>
