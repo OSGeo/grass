@@ -1,114 +1,107 @@
 <h2>DESCRIPTION</h2>
 
-The <em>r.stream.order</em> calculates Strahler's and other stream
+<p>
+The module <em>r.stream.order</em> calculates Strahler's and other stream
 hierarchy methods. It is a basic module for topological analysis of
 drainage networks.
 
 <h2>OPTIONS</h2>
+
 <dl>
 <dt><b>-z</b></dt>
 <dd>Creates zero-value background instead of NULL. For some reason
 (like map algebra calculation) zero-valued background may be
 required. This flag produces zero-filled background instead of null
 (default).</dd>
+
 <dt><b>-a</b></dt>
 <dd>Uses accumulation map instead of cumulated stream length to
-determine main branch at bifurcation. Works well only with SFD
-networks</dd>
+determine main branch at bifurcation. Works well only with stream
+network produced with SFD algorithm.</dd>
+
 <dt><b>-m</b></dt>
 <dd>Only for very large data sets. Use segment library to optimise
 memory consumption during analysis</dd>
+
 <dt><b>stream_rast</b></dt>
-<dd>Name of input stream map on which ordering will be performed
-produced by <em><a href="r.watershed.html">r.watershed</a></em> or
-<em><a href="r.stream.extract.html">r.stream.extract</a></em>. Because
-streams network produced
-by <em><a href="r.watershed.html">r.watershed</a></em> and
-<em><a href="r.stream.extract.html">r.stream.extract</a></em> may
-slightly differ in detail it is required to use both stream and
-direction map produced by the same module. Stream background shall
-have NULL value or zero value. Background values of NULL are by
-default produced by <em><a href="r.watershed.html">r.watershed</a></em> or
-<em><a href="r.stream.extract.html">r.stream.extract</a></em>. If not
-0 or NULL use <em><a href="r.mapcalc.html">r.mapcalc</a></em> to set background
-values to null.
-</dd>
+<dd>Stream network: name for input stream network map, produced using either
+<em>r.watershed</em> or <em>r.stream.extract</em>. Since stream
+network maps produced by <em>r.watershed</em> and <em>r.stream.extract</em> may
+slightly differ in detail, it is required to use both stream and direction maps
+produced by the same module. Non-stream cell values must be set to NULL.</dd>
+
 <dt><b>direction</b></dt>
-<dd>Name of input direction map produced by <em><a href="r.watershed.html">r.watershed</a></em> or
-<em><a href="r.stream.extract.html">r.stream.extract</a></em>. If
-<em><a href="r.stream.extract.html">r.stream.extract</a></em> output
-map is used, it only has non-NULL values in places where streams
-occur. NULL (nodata) cells are ignored, zero and negative values are
-valid direction data if they vary from -8 to 8 (CCW from East in steps
-of 45 degrees). Direction map shall be of type CELL values. Region
-resolution and map resolution must be the same.
-Also <b>stream_rast</b> network and <b>direction</b> maps must have
-the same resolution. It is checked by default. If resolutions differ
-the module informs about it and stops. Region boundary and maps
-boundary may be differ but it may lead to unexpected results.</dd>
+<dd>Flow direction: name of input input raster map with flow direction, 
+produced using either <em>r.watershed</em> or <em>r.stream.extract</em>. 
+If <em>r.stream.extract</em> output map is used, it is non-NULL only
+where streams occur and NULL elsewhere. NULL (nodata) cells are ignored, 
+zero and negative values are valid direction data only if they vary
+from -8 to 8 (CCW from East in steps of 45 degrees). Flow direction map 
+shall be of integer type (CELL).</dd>
+
 <dt><b>accumulation</b></dt>
-<dd>Flow accumulation (optional, not recommended): name of flow
-accumulation file produced by <em><a href="r.watershed.html">r.watershed</a></em> or
-<em><a href="r.stream.extract.html">r.stream.extract</a></em>. This
+<dd>(optional, not recommended): name for input flow
+accumulation map produced by <em><a href="r.watershed.html">r.watershed</a></em> 
+or <em><a href="r.stream.extract.html">r.stream.extract</a></em>. This
 map is an option only if Horton's or Hack's ordering is
 performed. Normally both Horton and Hack ordering is calculated on
 cumulative stream length which is calculated internally. Flow
-accumulation can be used if user want to calculate main stream as most
-accumulated stream. Flow accumulation map shall be of DCELL type, as
-is by default produced by r.watershed or converted do DCELL with
+accumulation can be used if user wants to calculate the main channel 
+as the stream with the highest value of aqccumulation.
+Flow accumulation map shall be of DCELL type, as
+is by default produced by r.watershed or converted to DCELL with
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>.</dd>
+
 <dt><b>elevation</b></dt>
-<dd>Used to calculate geometrical properties of the network stored in the
-table.</dd>
-</dl>
+<dd>Elevation: name for input elevation map. It can be of type CELL, FCELL or
+DCELL. It is used to calculate geometrical properties of the network 
+stored in the table.</dd>
 
-<h3>OUTPUTS</h3>
-
-<p>At least one output map is required:
-
-<dl>
 <dt><b>stream_vect</b></dt>
-<dd>Vector network with table where stream network topology can be
-stored. Because <em><a href="r.stream.order.html">r.stream.order</a></em>
-is prepared to work both with <em><a href="r.watershed.html">r.watershed</a></em> or
+<dd>Name for output vector map with stream network. It has a table associated, 
+where stream network topology can be stored. Because 
+<em><a href="r.stream.order.html">r.stream.order</a></em>
+is prepared to work either with <em><a href="r.watershed.html">r.watershed</a></em> or
 <em><a href="r.stream.extract.html">r.stream.extract</a></em>, it may
-be used to create correct vector
-from <em><a href="r.watershed.html">r.watershed</a></em> results.<dd>
+be used to create corrected stream vector from 
+<em><a href="r.watershed.html">r.watershed</a></em> results.<dd>
 
 <dt><b>strahler</b></dt>
-<dd>Name of Strahler's stream order output map: see notes for
-detail. </dd>
+<dd>Name for output Strahler's stream order raster map.</dd>
 
 <dt><b>shreve</b></dt>
-<dd>Name of Shreve's stream magnitude output map: see notes for detail.</dd>
+<dd>Name for output Shreve's stream magnitude raster map.</dd>
 
 <dt><b>horton</b></dt>
-<dd>Name of Horton's stream order output map (require accum file): see
-notes for detail.</dd>
+<dd>Name for output Horton's stream order raster map (requires flow 
+accumulation map).</dd>
 
 <dt><b>hack</b></dt>
-<dd>Name of Hack's main streams output map : see notes for
-detail.</dd>
+<dd>Name for Hack's main streams output raster map.</dd>
 
 <dt><b>topo</b></dt>
-<dd>Name of topological dimensions streams output map: see notes for
-detail.</dd>
+<dd>Name for topological dimension streams raster map.</dd>
 </dl>
+
 
 <h2>NOTES</h2>
 
-Module can work only if direction map, stream map and region map has
-same settings. It is also required that stream map and direction map
-come from the same source. For lots of reason this limitation probably
-cannot be omitted. This means if stream map comes from
-<em><a href="r.stream.extract.html">r.stream.extract</a></em> also
-direction map
+<p>
+The module can work only if <em>direction</em> map, <em>stream_rast</em> 
+map and the computational region have the same settings.
+It is also required that the <em>stream_rast</em> map and the 
+<em>direction</em> map come from the same source. For lots of reason this 
+limitation probably cannot be omitted. This means if <em>stream_rast</em> 
+map comes from
+<em><a href="r.stream.extract.html">r.stream.extract</a></em> also the
+<em>direction</em> map
 from <em><a href="r.stream.extract.html">r.stream.extract</a></em>
 must be used. If stream network was generated with MFD method also MFD
-direction map must be used. Nowadays f direction map comes from
+direction map must be used. Nowadays if direction map comes from
 <em><a href="r.stream.extract.html">r.stream.extract</a></em> must be
 patched by direction map
-from <em><a href="r.watershed.html">r.watershed</a></em>. (with <em><a href="r.patch.html">r.patch</a></em>).
+from <em><a href="r.watershed.html">r.watershed</a></em>. (with 
+<em><a href="r.patch.html">r.patch</a></em>).
 
 <h3>Stream ordering example</h3>
 <center>
