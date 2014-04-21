@@ -35,10 +35,11 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
-    G_add_keyword(_("user interface"));
     G_add_keyword(_("gui"));
-    module->description =
+    G_add_keyword(_("user interface"));
+    module->label =
 	_("Launches a GRASS graphical user interface (GUI) session.");
+    module->description = _("And updates default user interface settings.");
 
     type = G_define_option();
     type->key = "ui";
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
     rc_file->description = _("Name of workspace file to load on start-up (valid only for wxGUI)");
 
     update = G_define_flag();
-    update->key = 'u';
+    update->key = 'd';
     update->description = _("Update default user interface settings");
     update->guisection = _("Default");
 
