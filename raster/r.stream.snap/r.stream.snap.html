@@ -1,32 +1,36 @@
 <h2>DESCRIPTION</h2>
+
 <p>
 The module <em>r.stream.snap</em> is a supplementary module for
 <em><a href="r.stream.extract.html">r.stream.extract</a></em> and
 <em><a href="r.stream.basins.html">r.stream.basins</a></em> to correct
-position of outlets or stream initial points as they do not lie on the
-streamlines.
+the position of outlets or stream initial points as they do not lie on 
+the streamlines.
 
 <p>
-For outlets, the situation is clear. Points are snapped to nearest
-point which lies on the streamline. In situation where there can be a
-small tributary nearer than main stream accumulation threshold shall
-be high enough to force the program ignoring this tributary and snap
-to the main stream. If there is no accumulation map, the points will
-be snapped to the nearest stream line, which in particular situations
-may be wrong. Because the <em>r.stream.*</em> modules are prepared to
-work with MFD accumulation maps, both stream network and accumulation
-map are necessary to resolve the problem.
+For the outlet, the point is snapped to the nearest point which lies on 
+the streamline. 
+
+<p>
+For the stream initial points, when there is a small tributary near 
+the main stream, the accumulation threshold shall be high enough to 
+force the program ignoring this tributary and snap to the main stream. 
+If there is no accumulation map, the points will be snapped to the 
+nearest stream line, which in particular situations may be wrong. 
+Because the <em>r.stream.*</em> modules are prepared to work with MFD 
+accumulation maps, both stream network and accumulation map are 
+necessary.
 
 <p>
 While it is assumed that the accumulation map is a MFD map, if the
 stream network is not supplied, the snap point is calculated in
-different way: the threshold is used to select only these points in
+different way: the threshold is used to select only those points in the
 search radius which have accumulation value greater than the given
-threshold.  The next mean value of these points is calculated and its
+threshold. The next mean value of these points is calculated and its
 value is taken as a new threshold. This procedure guarantees that
-points are snapped to the center of stream tube. While for inits small
-thresholds are in use, it is probable that points were snapped to the
-streamtube border instead of its center.
+points are snapped to the center of the stream tube. While for inits 
+small thresholds are in use, it is probable that points were snapped to 
+the stream tube border instead of its center.
 
 <p>
 It is strongly recommended to use both stream network (even
@@ -34,26 +38,28 @@ pre-generated with small accumulation threshold) and accumulation
 raster map, than accumulation or stream raster map only.
 
 <h2>OPTIONS</h2>
+
 <dl>
 <dt><b>stream_rast</b></dt>
 <dd>Stream network created
 by <em><a href="r.stream.extract.html">r.stream.extract</a></em> or
 <em><a href="r.watershed.html">r.watershed</a></em>. If used, the
 points are snapped to the nearest streamline point whose accumulation
-is greater than threshold. If the accumulation is not used, the point
-is snapped to the nearest stream.
+is greater than the threshold. If the accumulation is not used, the 
+point is snapped to the nearest stream.
 </dd>
 
 <dt><b>accumulation</b></dt>
-<dd>Accumulation map created
-with <em><a href="r.watershed.html">r.watershed</a></em> and used to
-generate the stream network
-with <em><a href="r.stream.extract.html">r.stream.extract</a></em>. If
+<dd>Accumulation map created with 
+<em><a href="r.watershed.html">r.watershed</a></em> and used to
+generate the stream network with 
+<em><a href="r.stream.extract.html">r.stream.extract</a></em>. If
 the stream network is not used, the point is adaptively snapped to the
 point where the value is greater than mean values of accumulation
-greater than given threshold in a search radius. See description for
+greater than given threshold in a search radius. See the description for
 details.
 </dd>
+
 <dt><b>radius</b></dt>
 <dd>Search radius (in cells). If there are no streams in the search
 radius, the point is not snapped. If there are no cells with
@@ -62,21 +68,19 @@ not snapped.
 </dd>
 
 <dt><b>threshold</b></dt>
-<dd>Minimum value of accumulation which cell must have to snap
-point. This option is added to snap stream inits to the stream tubes
+<dd>Minimum value of accumulation to snap the point. This option is 
+added to the snap stream inits to the stream tubes
 and to distinguish between local tributaries and main streams.
 </dd>
 
 <dt><b>input</b></dt>
 <dd>Vector file containing outlets or inits as vector points. Only
 point's categories are used. Any table attached to it is
-ignored. Every point shall have his own unique category.
+ignored. Every point shall have its own unique category.
 </dd>
-</dl>
 
-<h3>OUTPUTS</h3>
-
-<p>Vector file containing outlets or inits after snapping. On layer 1,
+<dt><b>output</b></dt>
+<dd>Vector file containing outlets or inits after snapping. On layer 1,
 the original categories are preserved, on layer 2 there are four
 categories which mean:
 <ol>
@@ -86,6 +90,8 @@ categories which mean:
 <li>correct (points which remain on their original position, which were
 originally corrected)
 </ol>
+</dd>
+</dl>
 
 <h2>EXAMPLE</h2>
 
