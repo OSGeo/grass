@@ -19,6 +19,8 @@ no_stream(int row, int col, CELL basin_num, double stream_length,
 	for (r = row - 1, rr = 0; r <= row + 1; r++, rr++) {
 	    for (c = col - 1, cc = 0; c <= col + 1; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
+		    if (r == row && c == col)
+			continue;
 
 		    seg_get(&aspflag, (char *)&af, r, c);
 		    aspect = af.asp;
