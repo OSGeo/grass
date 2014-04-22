@@ -122,6 +122,8 @@ def escape_href(label):
     label = re.sub('<[^<]+?>', '', label)
     # fix &nbsp;
     label = label.replace('&nbsp;', '')
+    # fix "
+    label = label.replace('"', '')
     # replace space with underscore + lower
     return label.replace(' ', '-').lower()
 
