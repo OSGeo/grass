@@ -191,18 +191,18 @@ toc = \
 r"""
 <div class="toc">
 <ul class="toc">
-<li class="toc"\><a class="toc" href="full_index.html#d">Display commands (d.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#db">Database commands (db.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#g">General commands (g.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#i">Imagery commands (i.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#m">Miscellaneous commands (m.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#ps">PostScript commands (ps.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#r">Raster commands (r.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#r3">3d raster commands (r3.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#t">Temporal commands (t.*)</a></li>
-<li class="toc"\><a class="toc" href="full_index.html#v">Vector commands (v.*)</a></li>
-<li class="toc"\><a class="toc" href="wxGUI.html">wxGUI Graphical User Interface</a></li>
-<li class="toc"\><a class="toc" href="wxGUI.nviz.html">3D visualization suite</a></li>
+<li class="toc"><a class="toc" href="full_index.html#d">Display commands (d.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#db">Database commands (db.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#g">General commands (g.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#i">Imagery commands (i.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#m">Miscellaneous commands (m.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#ps">PostScript commands (ps.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#r">Raster commands (r.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#r3">3d raster commands (r3.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#t">Temporal commands (t.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#v">Vector commands (v.*)</a></li>
+<li class="toc"><a class="toc" href="wxGUI.html">wxGUI Graphical User Interface</a></li>
+<li class="toc"><a class="toc" href="wxGUI.nviz.html">3D visualization suite</a></li>
 </ul>
 </div>
 """
