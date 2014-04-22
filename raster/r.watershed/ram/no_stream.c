@@ -15,6 +15,8 @@ int no_stream(int row, int col, CELL basin_num,
 	for (r = row - 1, rr = 0; r <= row + 1; r++, rr++) {
 	    for (c = col - 1, cc = 0; c <= col + 1; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
+		    if (r == row && c == col)
+			continue;
 		    aspect = asp[SEG_INDEX(asp_seg, r, c)];
 		    if (aspect == drain[rr][cc]) {
 			dvalue = wat[SEG_INDEX(wat_seg, r, c)];
