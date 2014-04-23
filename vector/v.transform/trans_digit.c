@@ -98,7 +98,7 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
 		    case DB_C_TYPE_STRING:
 			break;
 		    case -1:
-			G_fatal_error(_("Missing column <%s> in table <%s>"),
+			G_fatal_error(_("Column <%s> not found in table <%s>"),
 				      columns[j], fi->table);
 		    default:
 			G_fatal_error(_("Unsupported column type of <%s>"),
