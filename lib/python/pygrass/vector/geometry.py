@@ -15,8 +15,8 @@ import grass.lib.vector as libvect
 
 from grass.pygrass.errors import GrassError
 
-from .basic import Ilist, Bbox, Cats
-from . import sql
+from grass.pygrass.vector.basic import Ilist, Bbox, Cats
+from grass.pygrass.vector import sql
 
 
 WKT = {'POINT\((.*)\)': 'point',  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
@@ -211,7 +211,7 @@ in another mapset"
            >>> schools.open('r')
            >>> school = schools[1]
            >>> attrs = Attrs(school.cat, schools.table)
-           >>> attrs.values()                             # doctest: +ELLIPSIS
+           >>> attrs.values()       # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            (1,
            ...
            None)
@@ -230,10 +230,10 @@ in another mapset"
            >>> schools.open('r')
            >>> school = schools[1]
            >>> attrs = Attrs(school.cat, schools.table)
-           >>> attrs.keys()                             # doctest: +ELLIPSIS
-           (u'cat',
+           >>> attrs.keys()         # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+           [u'cat',
            ...
-           u'NOTES')
+           u'NOTES']
         """
         return self.table.columns.names()
 
@@ -320,7 +320,7 @@ class Point(Geo):
         >>> pnt
         Point(0.000000, 0.000000, 0.000000)
         >>> print(pnt)
-        POINT(0.000000, 0.000000, 0.000000)
+        POINT(0.000000 0.000000 0.000000)
 
     ..
     """

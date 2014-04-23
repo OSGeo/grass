@@ -10,7 +10,7 @@ import grass.lib.rowio as librowio
 import grass.lib.raster as librast
 
 from grass.pygrass.errors import GrassError
-from .raster_type import TYPE as RTYPE
+from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
 CMPFUNC = ctypes.CFUNCTYPE(ctypes.c_int,

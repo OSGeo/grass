@@ -6,7 +6,7 @@ Created on Tue Apr  2 18:39:21 2013
 """
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
-from . import read
+from grass.pygrass.modules.interface import read
 
 
 class Flag(object):

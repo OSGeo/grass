@@ -19,8 +19,9 @@ class Region(object):
         """::
 
             >>> default = Region(default=True)
-            >>> current = Region()
             >>> current_good = Region()
+            >>> current = Region()
+            >>> current.align('elevation')
             >>> default == current
             True
             >>> current.cols
