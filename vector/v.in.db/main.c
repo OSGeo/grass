@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
         coltype = db_column_Ctype(driver, table_opt->answer, keycol_opt->answer);
 
         if (coltype == -1)
-            G_fatal_error(_("Missing column <%s> in table <%s>"),
+            G_fatal_error(_("Column <%s> not found in table <%s>"),
                           keycol_opt->answer, table_opt->answer);
         if (coltype != DB_C_TYPE_INT)
             G_fatal_error(_("Data type of key column must be integer"));
