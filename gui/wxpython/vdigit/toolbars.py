@@ -365,9 +365,9 @@ class VDigitToolbar(BaseToolbar):
         menuItems = []
         if not self.tools or 'addArea' in self.tools:
             menuItems.append((self.icons["addArea"], self.OnAddArea))
-        if not self.tools or 'addBoundary' in self.tools:
+        if not self.fType and not self.tools or 'addBoundary' in self.tools:
             menuItems.append((self.icons["addBoundary"], self.OnAddBoundary))
-        if not self.tools or 'addCentroid' in self.tools:
+        if not self.fType and not self.tools or 'addCentroid' in self.tools:
             menuItems.append((self.icons["addCentroid"],  self.OnAddCentroid))
         
         self._onMenu(menuItems)
@@ -865,27 +865,25 @@ class VDigitToolbar(BaseToolbar):
             return False
         
         # check feature type (only for OGR layers)
-        fType = self.digit.GetFeatureType()
+        self.fType = self.digit.GetFeatureType()
         self.EnableAll()
         self.EnableUndo(False)
         self.EnableRedo(False)
         
-        if fType == 'point':
-            for tool in (self.addLine, self.addBoundary, self.addCentroid,
-                         self.addArea, self.moveVertex, self.addVertex,
+        if self.fType == 'point':
+            for tool in (self.addLine, self.addArea, self.moveVertex, self.addVertex,
                          self.removeVertex, self.editLine):
                 self.EnableTool(tool, False)
-        elif fType == 'linestring':
-            for tool in (self.addPoint, self.addBoundary, self.addCentroid,
-                         self.addArea):
+        elif self.fType == 'linestring':
+            for tool in (self.addPoint, self.addArea):
                 self.EnableTool(tool, False)
-        elif fType == 'polygon':
-            for tool in (self.addPoint, self.addLine, self.addBoundary, self.addCentroid):
+        elif self.fType == 'polygon':
+            for tool in (self.addPoint, self.addLine):
                 self.EnableTool(tool, False)
-        elif fType:
+        elif self.fType:
             GError(parent = self,
                    message = _("Unsupported feature type '%(type)s'. Unable to edit "
-                               "OGR layer <%(layer)s>.") % { 'type' : fType,
+                               "OGR layer <%(layer)s>.") % { 'type' : self.fType,
                                                              'layer' : mapLayer.GetName() })
             self.digit.CloseMap()
             self.mapLayer = None
