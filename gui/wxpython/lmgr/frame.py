@@ -2047,8 +2047,8 @@ class GMFrame(wx.Frame):
         if UserSettings.Get(group = 'manager', key = 'askOnRemoveLayer', subkey = 'enabled'):
             layerName = ''
             for item in self.GetLayerTree().GetSelections():
-                name = str(self.GetLayerTree().GetItemText(item))
-                idx = name.find('(opacity')
+                name = self.GetLayerTree().GetItemText(item)
+                idx = name.find('(' + _('opacity:'))
                 if idx > -1:
                     layerName += '<' + name[:idx].strip(' ') + '>,\n'
                 else:
