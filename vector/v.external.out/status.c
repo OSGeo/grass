@@ -61,11 +61,16 @@ int print_status_file(const char *file, int shell)
 	    G_fatal_error(_("OGR format not defined"));
     }
     else { /* PG */
+        char dsn_name[GNAME_MAX];
+        
 	/* conninfo (required) */
 	p = G_find_key_value("conninfo", key_val);
 	if (!p)
 	    G_fatal_error(_("PG connection info (conninfo) not defined"));
-        
+
+        /* print also dsn for compatibility */
+        sprintf(dsn_name, "PG:%s", p);
+        G_set_key_value("dsn", dsn_name, key_val);
         /* force format */
         print_key_value("format", "PostgreSQL", shell);
     }
