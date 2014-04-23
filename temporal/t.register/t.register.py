@@ -124,5 +124,8 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
- 
-    tgis.profile_function(main)
+
+    try:
+        tgis.profile_function(main)
+    except StandardError, e:
+        grass.fatal(e)
