@@ -55,8 +55,8 @@ int db__driver_create_index(dbIndex * index)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	db_d_append_error("%s\n%s\%s",
-			  _("Unable to create index:\n"),
+	db_d_append_error("%s: %s\n%s",
+			  _("Unable to create index"),
 			  db_get_string(&sql),
 			  PQerrorMessage(pg_conn));
 	db_d_report_error();
