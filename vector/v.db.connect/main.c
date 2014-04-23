@@ -285,7 +285,7 @@ int main(int argc, char **argv)
 			db_get_column(driver, dbtable->answer, dbkey->answer,
 				      &column);
 			if (!column)
-			    G_fatal_error(_("Missing column <%s> in table <%s>"),
+			    G_fatal_error(_("Column <%s> not found in table <%s>"),
 					  dbkey->answer, dbtable->answer);
 
 			if (db_column_Ctype
