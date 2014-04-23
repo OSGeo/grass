@@ -6,7 +6,7 @@ Created on Wed Jul 18 10:49:26 2012
 """
 
 import grass.lib.vector as libvect
-from . import geometry as geo
+from grass.pygrass.vector import geometry as geo
 
 MAPTYPE = {libvect.GV_FORMAT_NATIVE:     "native",
            libvect.GV_FORMAT_OGR:        "OGR",

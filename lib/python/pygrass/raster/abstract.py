@@ -27,9 +27,9 @@ from grass.pygrass.shell.show import raw_figure
 #
 # import raster classes
 #
-from .raster_type import TYPE as RTYPE
-from .category import Category
-from .history import History
+from grass.pygrass.raster.raster_type import TYPE as RTYPE
+from grass.pygrass.raster.category import Category
+from grass.pygrass.raster.history import History
 
 
 ## Define global variables to not exceed the 80 columns
@@ -182,7 +182,7 @@ class RasterAbstractBase(object):
 
             >>> ele = RasterAbstractBase('elevation')
             >>> ele.name
-            'elevation'
+            u'elevation'
             >>> ele.exist()
             True
             >>> ele.mapset
@@ -368,7 +368,7 @@ class RasterAbstractBase(object):
 
             >>> ele = RasterAbstractBase('elevation')
             >>> ele.name_mapset()
-            'elevation@PERMANENT'
+            u'elevation@PERMANENT'
 
         """
         if name is None:

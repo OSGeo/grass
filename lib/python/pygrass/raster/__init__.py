@@ -30,11 +30,11 @@ from grass.pygrass import functions
 #
 # import raster classes
 #
-from .abstract import RasterAbstractBase, Info
-from .raster_type import TYPE as RTYPE, RTYPE_STR
-from .buffer import Buffer
-from .segment import Segment
-from .rowio import RowIO
+from grass.pygrass.raster.abstract import RasterAbstractBase
+from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
+from grass.pygrass.raster.buffer import Buffer
+from grass.pygrass.raster.segment import Segment
+from grass.pygrass.raster.rowio import RowIO
 
 
 class RasterRow(RasterAbstractBase):
@@ -62,53 +62,42 @@ class RasterRow(RasterAbstractBase):
         True
         >>> elev.is_open()
         False
-        >>> elev.cols
+        >>> elev.info.cols
         >>> elev.open()
         >>> elev.is_open()
         True
-        >>> type(elev.cols)
+        >>> type(elev.info.cols)
         <type 'int'>
         >>> elev.has_cats()
         False
         >>> elev.mode
-        'r'
+        u'r'
         >>> elev.mtype
         'FCELL'
         >>> elev.num_cats()
         0
-        >>> elev.range
-        (55.578792572021484, 156.32986450195312)
+        >>> elev.info.range
+        (56, 156)
 
     Each Raster map have an attribute call ``cats`` that allow user
     to interact with the raster categories. ::
 
-        >>> land = RasterRow('landcover_1m')
+        >>> land = RasterRow('geology')
         >>> land.open()
-        >>> land.cats
-        []
-        >>> land.read_cats()
-        >>> land.cats
-        [('pond', 1, None),
-         ('forest', 2, None),
-         ('developed', 3, None),
-         ('bare', 4, None),
-         ('paved road', 5, None),
-         ('dirt road', 6, None),
-         ('vineyard', 7, None),
-         ('agriculture', 8, None),
-         ('wetland', 9, None),
-         ('bare ground path', 10, None),
-         ('grass', 11, None)]
+        >>> land.cats               # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        [('Zml', 1.0, None),
+         ...
+         ('Tpyw', 1832.0, None)]
 
     Open a raster map using the *with statement*: ::
 
-        >>> with RasterRow('elevation') as elev:
+        >>> with RasterRow('elevation') as elev:   
         ...     for row in elev[:3]:
-        ...         print row[:4]
+        ...         row[:4]
         ...
-        [ 141.99613953  141.27848816  141.37904358  142.29821777]
-        [ 142.90461731  142.39450073  142.68611145  143.59086609]
-        [ 143.81854248  143.54707336  143.83972168  144.59527588]
+        Buffer([ 141.99613953,  141.27848816,  141.37904358,  142.29821777], dtype=float32)
+        Buffer([ 142.90461731,  142.39450073,  142.68611145,  143.59086609], dtype=float32)
+        Buffer([ 143.81854248,  143.54707336,  143.83972168,  144.59527588], dtype=float32)
         >>> elev.is_open()
         False
 
@@ -484,20 +473,18 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
     >>> elev.open()
     >>> elev[:5, :3]
     RasterNumpy([[ 141.99613953,  141.27848816,  141.37904358],
-       [ 142.90461731,  142.39450073,  142.68611145],
-       [ 143.81854248,  143.54707336,  143.83972168],
-       [ 144.56524658,  144.58493042,  144.86477661],
-       [ 144.99488831,  145.22894287,  145.57142639]], dtype=float32)
+           [ 142.90461731,  142.39450073,  142.68611145],
+           [ 143.81854248,  143.54707336,  143.83972168],
+           [ 144.56524658,  144.58493042,  144.86477661],
+           [ 144.99488831,  145.22894287,  145.57142639]], dtype=float32)
     >>> el = elev < 144
     >>> el[:5, :3]
-    RasterNumpy([[ True,  True,  True],
-       [ True,  True,  True],
-       [ True,  True,  True],
-       [False, False, False],
-       [False, False, False]], dtype=bool)
+    RasterNumpy([[1, 1, 1],
+           [1, 1, 1],
+           [1, 1, 1],
+           [0, 0, 0],
+           [0, 0, 0]], dtype=int32)
     >>> el._write()
-    0
-
     """
     def __new__(cls, name, mapset="", mtype='CELL', mode='r+',
                 overwrite=False):
@@ -581,7 +568,7 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
             if kind in FLAGS[size]:
                 return size, FLAGS[size][kind]
             else:
-                raise ValueError(_('Invalid type {0}'.forma(kind)))
+                raise ValueError(_('Invalid type {0}'.format(kind)))
         else:
             raise ValueError(_('Invalid size {0}'.format(size)))
 
@@ -595,7 +582,6 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
             buff = rst[0]
             for i in range(len(rst)):
                 self[i] = rst.get_row(i, buff)
-
 
     def _write(self):
         """

@@ -11,7 +11,7 @@ import grass.lib.raster as libraster
 
 from grass.pygrass.errors import GrassError
 
-from .raster_type import TYPE as RTYPE
+from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
 class Category(list):
@@ -54,7 +54,7 @@ class Category(list):
     >>> import grass.lib.raster as libraster
     >>> import ctypes
     >>> import grass.pygrass as pygrass
-    >>> land = pygrass.raster.RasterRow('landcover_1m')
+    >>> land = pygrass.raster.RasterRow('geology')
     >>> cats = pygrass.raster.Category()
     >>> cats.read(land) # or with cats.read(land.name, land.mapset, land.mtype)
     >>> cats.labels()

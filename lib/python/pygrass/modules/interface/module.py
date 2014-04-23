@@ -13,38 +13,38 @@ Created on Tue Apr  2 18:41:27 2013
 >>> region.flags["u"].value = True
 >>> region.flags["3"].value = True
 >>> region.get_bash()
-'g.region -p -u -3'
+u'g.region -p -3 -u'
 >>> new_region = copy.deepcopy(region)
 >>> new_region.inputs["res"].value = "10"
 >>> new_region.get_bash()
-'g.region res=10 -p -3'
+u'g.region res=10 -p -3 -u'
 
 >>> neighbors = pymod.Module("r.neighbors")
 >>> neighbors.inputs["input"].value = "mapA"
 >>> neighbors.outputs["output"].value = "mapB"
 >>> neighbors.inputs["size"].value = 5
 >>> neighbors.get_bash()
-'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
+u'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
 
 >>> new_neighbors1 = copy.deepcopy(neighbors)
 >>> new_neighbors1.inputs["input"].value = "mapD"
 >>> new_neighbors1.inputs["size"].value = 3
 >>> new_neighbors1.get_bash()
-'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
 >>> new_neighbors2 = copy.deepcopy(neighbors)
 >>> new_neighbors2(input="mapD", size=3, run_=False)
 >>> new_neighbors2.get_bash()
-'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
 >>> neighbors = pymod.Module("r.neighbors")
 >>> neighbors.get_bash()
-'r.neighbors method=average size=3 quantile=0.5'
+u'r.neighbors method=average size=3 quantile=0.5'
 
 >>> new_neighbors3 = copy.deepcopy(neighbors)
 >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
 >>> new_neighbors3.get_bash()
-'r.neighbors input=mapA method=average size=3 quantile=0.5 output=mapB'
+u'r.neighbors input=mapA method=average size=3 quantile=0.5 output=mapB'
 
 @endcode
 """
@@ -61,10 +61,10 @@ import time
 
 from grass.script.core import Popen, PIPE
 from grass.pygrass.errors import GrassError, ParameterError
-from .parameter import Parameter
-from .flag import Flag
-from .typedict import TypeDict
-from .read import GETFROMTAG, DOC
+from grass.pygrass.modules.interface.parameter import Parameter
+from grass.pygrass.modules.interface.flag import Flag
+from grass.pygrass.modules.interface.typedict import TypeDict
+from grass.pygrass.modules.interface.read import GETFROMTAG, DOC
 
 
 class ParallelModuleQueue(object):
@@ -242,7 +242,12 @@ class Module(object):
     and keyword arguments to the grass module.
     """
     def __init__(self, cmd, *args, **kargs):
-        self.name = cmd
+        if isinstance(cmd, unicode):
+            self.name = str(cmd)
+        elif isinstance(cmd, str):
+            self.name = cmd
+        else:
+            raise GrassError("Problem initializing the module {s}".format(s=cmd))
         try:
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
