@@ -82,6 +82,13 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
         elif type == "str3ds":
             stats = core.parse_command("r3.univar", map=id, flags=flag)
 
+        if not stats:
+            if type == "strds":
+                core.warning(_("Unable to get statistics for raster map <%s>") % id)
+            elif type == "str3ds":
+                core.warning(_("Unable to get statistics for 3d raster map <%s>") % id)
+            continue
+        
         string += str(id) + fs + str(start) + fs + str(end)
         string += fs + str(stats["mean"]) + fs + str(stats["min"])
         string += fs + str(stats["max"]) + fs + str(stats["mean_of_abs"])
@@ -178,40 +185,44 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
                                    type=type, flags=flags)
 
         string = ""
-        if stats:
-            string += str(id) + fs + str(start) + fs + str(end)
-            string += fs + str(stats["n"]) + fs + str(stats[
-                "nmissing"]) + fs + str(stats["nnull"])
-            if "min" in stats:
-                string += fs + str(stats["min"]) + fs + str(
-                    stats["max"]) + fs + str(stats["range"])
+
+        if not stats:
+            core.warning(_("Unable to get statistics for vector map <%s>") % id)
+            continue
+        
+        string += str(id) + fs + str(start) + fs + str(end)
+        string += fs + str(stats["n"]) + fs + str(stats[
+            "nmissing"]) + fs + str(stats["nnull"])
+        if "min" in stats:
+            string += fs + str(stats["min"]) + fs + str(
+                stats["max"]) + fs + str(stats["range"])
+        else:
+            string += fs + fs + fs
+
+        if type == "point" or type == "centroid":
+            if "mean" in stats:
+                string += fs + str(stats["mean"]) + fs + \
+                str(stats["mean_abs"]) + fs + \
+                str(stats["population_stddev"]) + fs + \
+                str(stats["population_variance"])
+
+                string += fs + str(stats["population_coeff_variation"]) + \
+                fs + str(stats["sample_stddev"]) + fs + \
+                str(stats["sample_variance"])
+
+                string += fs + str(stats["kurtosis"]) + fs + \
+                str(stats["skewness"])
             else:
-                string += fs + fs + fs
-
-            if type == "point" or type == "centroid":
-                if "mean" in stats:
-                    string += fs + str(stats["mean"]) + fs + \
-                    str(stats["mean_abs"]) + fs + \
-                    str(stats["population_stddev"]) + fs + \
-                    str(stats["population_variance"])
-
-                    string += fs + str(stats["population_coeff_variation"]) + \
-                    fs + str(stats["sample_stddev"]) + fs + \
-                    str(stats["sample_variance"])
-
-                    string += fs + str(stats["kurtosis"]) + fs + \
-                    str(stats["skewness"])
+                string += fs + fs + fs + fs + fs + fs + fs + fs + fs
+            if extended == True:
+                if "first_quartile" in stats:
+                    string += fs + str(stats["first_quartile"]) + fs + \
+                    str(stats["median"]) + fs + \
+                    str(stats["third_quartile"]) + fs + \
+                    str(stats["percentile_90"])
                 else:
-                    string += fs + fs + fs + fs + fs + fs + fs + fs + fs
-                if extended == True:
-                    if "first_quartile" in stats:
-                        string += fs + str(stats["first_quartile"]) + fs + \
-                        str(stats["median"]) + fs + \
-                        str(stats["third_quartile"]) + fs + \
-                        str(stats["percentile_90"])
-                    else:
-                        string += fs + fs + fs + fs
+                    string += fs + fs + fs + fs
 
-            print string
+        print string
 
     dbif.close()
