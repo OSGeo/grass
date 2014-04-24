@@ -4,105 +4,67 @@
 format from a required input <b>elevation</b> map and optional input
 <b>accumulation</b> map.
 
-<h2>OPTIONS</h2>
+<h2>NOTES</h2>
 
-<dl>
-<dt><b>elevation</b> 
-<dd>Input map, required: Elevation on which the entire analysis is based.
-NULL (nodata) cells are ignored, zero and negative values are valid
-elevation data. Gaps in the elevation map that are located within the
-area of interest must be filled beforehand, e.g. with
+<p>
+NULL (nodata) cells in the input <b>elevation</b> map are ignored,
+zero and negative values are valid elevation data. Gaps in the
+elevation map that are located within the area of interest must be
+filled beforehand, e.g. with
 <em><a href="r.fillnulls.html">r.fillnulls</a></em>, to avoid distortions.
+
 <p>
-<dt><b>accumulation</b>
-<dd>Input map, optional: Accumulation values of the provided
-<b>accumulation</b> map are used and not calculated from the input
-<b>elevation</b> map. If <b>accumulation</b> is given,
-<b>elevation</b> must be exactly the same map used to calculate
-<b>accumulation</b>. If <b>accumulation</b> was calculated with
-<em><a href="r.terraflow.html">r.terraflow</a></em>, the filled elevation output
-of r.terraflow must be used. Further on, the current region should be 
-aligned to the <b>accumulation</b> map. Flow direction is
-first calculated from <b>elevation</b> and then adjusted to
-<b>accumulation</b>. It is not necessary to provide <b>accumulation</b>
-as the number of cells, it can also be the optionally adjusted or
-weighed total contributing area in square meters or any other unit. 
-When an original flow accumulation map is adjusted or weighed, the 
-adjustment or weighing should not convert valid accumulation values to 
-NULL (nodata) values.
+All non-NULL and non-zero cells of <b>depression</b> map will be
+regarded as real depressions. Streams will not be routed out of
+depressions. If an area is marked as depression but the elevation
+model has no depression at this location, streams will not stop
+there. If a flow accumulation map and a map with real depressions are
+provided, the flow accumulation map must match the depression map such
+that flow is not distributed out of the indicated depressions. It is
+recommended to use internally computed flow accumulation if a
+depression map is provided.
+
 <p>
-<dt><b>depression</b> 
-<dd>Input map, optional: All non-NULL and non-zero cells will be regarded
-as real depressions. Streams will not be routed out of depressions. If an
-area is marked as depression but the elevation model has no depression
-at this location, streams will not stop there. If a flow accumulation map
-and a map with real depressions are provided, the flow accumulation map
-must match the depression map such that flow is not distributed out of 
-the indicated depressions. It is recommended to use internally computed
-flow accumulation if a depression map is provided.
-<p>
-<dt><b>threshold</b>
-<dd>Required: <b>threshold</b> for stream initiation by overland flow:
-the minumum (optionally modifed) flow accumulation value that will initiate
-a new stream. If Montgomery's method for channel initiation is used, the
-cell value of the accumulation input map is multiplied by
-(tan(local slope))<sup>mexp</sup> and then compared to <b>threshold</b>.
-<p>
-<dt><b>d8cut</b>
-<dd>Minimum amount of overland flow (accumulation) when SFD (D8) will be
-used instead of MFD (FD8) to calculate flow accumulation. Only applies
-if no accumulation map is provided. Setting to 0 disables MFD completely.
-<p>
-<dt><b>mexp</b>
-<dd>Use the method of Montgomery and Foufoula-Georgiou (1993) to
-initiate a stream with exponent <b>mexp</b>. The cell value of the
-accumulation input map is multiplied by (tan(local slope))<sup>mexp</sup>
-and then compared to <b>threshold</b>. If threshold is reached or
-exceeded, a new stream is initiated. The default value 0 disables
-Montgomery. Montgomery and Foufoula-Georgiou (1993) generally recommend
-to use 2.0 as exponent. <b>mexp</b> values closer to 0 will produce
-streams more similar to streams extracted with Montgomery disabled.
+Option <b>threshold</b> defines the minumum (optionally modifed) flow
+accumulation value that will initiate a new stream. If Montgomery's
+method for channel initiation is used, the cell value of the
+accumulation input map is multiplied by <tt>(tan(local
+slope))<sup>mexp</sup></tt> and then compared
+to <b>threshold</b>. If <b>mexp</b> is given than the method of
+Montgomery and Foufoula-Georgiou (1993) to initiate a stream with this
+value. The cell value of the accumulation input map is multiplied
+by <tt>(tan(local slope))<sup>mexp</sup></tt> and then compared
+to <b>threshold</b>. If threshold is reached or exceeded, a new stream
+is initiated. The default value 0 disables Montgomery. Montgomery and
+Foufoula-Georgiou (1993) generally recommend to use 2.0 as
+exponent. <b>mexp</b> values closer to 0 will produce streams more
+similar to streams extracted with Montgomery disabled.
 Larger <b>mexp</b> values decrease the number of streams in flat areas
 and increase the number of streams in steep areas. If <b>weight</b> is
 given, the weight is applied first.
-<p>
-<dt><b>stream_length</b>
-<dd>Minimum stream length in number of cells for first-order (head/spring)
-stream segments. All first-order stream segments shorter than
-<b>stream_length</b> will be deleted.
 
 <p>
-<dt><b>stream_rast</b>
-<dd>Output raster map with extracted streams. Cell values encode a 
-unique ID for each stream segment.
+Option <b>d8cut</b> defines minimum amount of overland flow
+(accumulation) when SFD (D8) will be used instead of MFD (FD8) to
+calculate flow accumulation. Only applies if no accumulation map is
+provided. Setting to 0 disables MFD completely.
+
 <p>
-<dt><b>stream_vect</b>
-<dd>Output vector map with extracted stream segments and points. Points
-are written at the start location of each stream segment and at the
-outlet of a stream network. In layer 1, categories are unique IDs,
-identical to the cell value of the raster output. The attribute table
-for layer 1 holds information about the type of stream segment: start
-segment, or intermediate segment with tributaries. Columns are cat int,
-stream_type varchar(), type_code int. The encoding for type_code is 0 =
-start, 1 = intermediate. In layer 2, categories are identical to
-type_code in layer 1 with additional category 2 = outlet for outlet
-points. Points with category 1 = intermediate in layer 2 are at the
-location of confluences.
+Option <b>stream_length</b> defines minimum stream length in number of
+cells for first-order (head/spring) stream segments. All first-order
+stream segments shorter than <b>stream_length</b> will be deleted.
+
 <p>
-<dt><b>direction</b>
-<dd>Output raster map with flow direction for all non-NULL cells in
-input elevation. Flow direction is of D8 type with a range of 1 to 8.
-Multiplying values with 45 gives degrees CCW from East. Flow direction
-was adjusted during thinning, taking shortcuts and skipping cells that
-were eliminated by the thinning procedure.
-</dl>
+Output <b>direction</b> raster map contains flow direction for all
+non-NULL cells in input elevation. Flow direction is of D8 type with a
+range of 1 to 8.  Multiplying values with 45 gives degrees CCW from
+East. Flow direction was adjusted during thinning, taking shortcuts
+and skipping cells that were eliminated by the thinning procedure.
 
-<h2>NOTES</h2>
+<h3>Stream extraction</h3>
 
-<h4>Stream extraction</h4>
-
-If no accumulation input map is provided, flow accumulation is
-determined with a hydrological anaylsis similar to
+If no <b>accumulation</b> input map is provided, flow accumulation is
+determined with a hydrological analysis similar to
 <em><a href="r.watershed.html">r.watershed</a></em>. The algorithm is
 MFD (FD8) after Holmgren 1994, as for
 <em><a href="r.watershed.html">r.watershed</a></em>. The <b>threshold</b>
@@ -112,7 +74,26 @@ started and traced downstream to its outlet point. As for
 <em><a href="r.watershed.html">r.watershed</a></em>, flow accumulation is
 calculated as the number of cells draining through a cell.
 
-<h4>Weighed flow accumulation</h4>
+<p>
+If <b>accumulation</b> is given than the accumulation values of the
+provided <b>accumulation</b> map are used and not calculated from the
+input <b>elevation</b> map. In this case the <b>elevation</b> map must
+be exactly the same map used to calculate
+<b>accumulation</b>. If <b>accumulation</b> was calculated with
+<em><a href="r.terraflow.html">r.terraflow</a></em>, the filled
+elevation output
+of <em><a href="r.terraflow.html">r.terraflow</a></em> must be
+used. Further on, the current region should be aligned to
+the <b>accumulation</b> map. Flow direction is first calculated
+from <b>elevation</b> and then adjusted to
+<b>accumulation</b>. It is not necessary to provide <b>accumulation</b>
+as the number of cells, it can also be the optionally adjusted or
+weighed total contributing area in square meters or any other unit. 
+When an original flow accumulation map is adjusted or weighed, the 
+adjustment or weighing should not convert valid accumulation values to 
+NULL (nodata) values.
+
+<h3>Weighed flow accumulation</h3>
 
 Flow accumulation can be calculated first, e.g. with
 <em><a href="r.watershed.html">r.watershed</a></em>, and then modified before
@@ -135,7 +116,7 @@ indicate concave features, i.e. valleys. The size of the processing
 window determines whether narrow or broad valleys will be identified
 (See example below).
 
-<h4>Defining a region of interest</h4>
+<h3>Defining a region of interest</h3>
 
 The stream extraction procedure can be restricted to a certain region of 
 interest, e.g. a subbasin, by setting the computational region with 
@@ -144,15 +125,31 @@ be a complete catchment area, complete in the sense that the complete
 area upstream of an outlet point is included and buffered with at least 
 one cell.
 
-<h4>Stream output</h4>
+<h3>Stream output</h3>
 
-The <b>stream_rast</b> output raster and vector contains stream
-segments with unique IDs. Note that these IDs are different from the
-IDs assigned
+The output raster and vector contains stream segments with unique
+IDs. Note that these IDs are different from the IDs assigned
 by <em><a href="r.watershed.html">r.watershed</a></em>. The vector
 output also contains points at the location of the start of a stream
 segment, at confluences and at stream network outlet locations.
+
 <p>
+Output <b>stream_rast</b> raster map stores extracted streams. Cell
+values encode a unique ID for each stream segment.
+
+<p>
+Output <b>stream_vect</b> vector map stores extracted stream segments
+and points. Points are written at the start location of each stream
+segment and at the outlet of a stream network. In layer 1, categories
+are unique IDs, identical to the cell value of the raster output. The
+attribute table for layer 1 holds information about the type of stream
+segment: start segment, or intermediate segment with
+tributaries. Columns are <tt>cat int, stream_type varchar(), type_code
+int</tt>. The encoding for type_code is 0 = start, 1 =
+intermediate. In layer 2, categories are identical to type_code in
+layer 1 with additional category 2 = outlet for outlet points. Points
+with category 1 = intermediate in layer 2 are at the location of
+confluences.
 
 <h2>EXAMPLE</h2>
 
@@ -183,17 +180,16 @@ r.mapcalc "weight = if(tangential_curv_5 < 0, -100 * tangential_curv_5, \
 		    if(tangential_curv_11 < 0, -100 * tangential_curv_11, 0.000001)))"
 
 # weigh accumulation map
-r.mapcalc "elev_ned_30m.acc.weighed = elev_ned_30m.acc * weight"
+r.mapcalc expr="elev_ned_30m.acc.weighed = elev_ned_30m.acc * weight"
 
 # copy color table from original accumulation map
 r.colors map=elev_ned_30m.acc.weighed raster=elev_ned_30m.acc
-</pre>
+</pre></div>
 
 Display both the original and the weighed accumulation map.
-<br>
 Compare them and proceed if the weighed accumulation map makes sense.
 
-<pre>
+<div class="code"><pre>
 # extract streams
 r.stream.extract elevation=elev_ned_30m@PERMANENT \
                  accumulation=elev_ned_30m.acc.weighed \
