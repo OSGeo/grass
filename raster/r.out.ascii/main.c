@@ -64,12 +64,7 @@ int main(int argc, char *argv[])
 
     /* Define the different options */
 
-    parm.map = G_define_option();
-    parm.map->key = "input";
-    parm.map->type = TYPE_STRING;
-    parm.map->required = YES;
-    parm.map->gisprompt = "old,cell,raster";
-    parm.map->description = _("Name of an existing raster map");
+    parm.map = G_define_standard_option(G_OPT_R_INPUT);
 
     parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.output->required = NO;
