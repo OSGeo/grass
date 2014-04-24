@@ -57,11 +57,7 @@ int main(int argc, char *argv[])
 
     /* Define the different options */
 
-    parm.input = G_define_option();
-    parm.input->key = "input";
-    parm.input->type = TYPE_STRING;
-    parm.input->required = YES;
-    parm.input->gisprompt = "old,cell,raster";
+    parm.input = G_define_standard_option(G_OPT_R_INPUT);
     parm.input->description = _("The name of the raster map to be rescaled");
 
     parm.from = G_define_option();
@@ -72,11 +68,7 @@ int main(int argc, char *argv[])
     parm.from->description =
 	_("The input data range to be rescaled (default: full range of input map)");
 
-    parm.output = G_define_option();
-    parm.output->key = "output";
-    parm.output->type = TYPE_STRING;
-    parm.output->required = YES;
-    parm.output->gisprompt = "new,cell,raster";
+    parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->description = _("The resulting raster map name");
 
     parm.to = G_define_option();
