@@ -5,103 +5,97 @@ The module <em>r.stream.order</em> calculates Strahler's and other stream
 hierarchy methods. It is a basic module for topological analysis of
 drainage networks.
 
-<h2>OPTIONS</h2>
-
-<dl>
-<dt><b>-z</b></dt>
-<dd>Creates zero-value background instead of NULL. For some reason
-(like map algebra calculation) zero-valued background may be
-required. This flag produces zero-filled background instead of null
-(default).</dd>
-
-<dt><b>-a</b></dt>
-<dd>Uses accumulation map instead of cumulated stream length to
-determine main branch at bifurcation. Works well only with stream
-network produced with SFD algorithm.</dd>
-
-<dt><b>-m</b></dt>
-<dd>Only for very large data sets. Use segment library to optimise
-memory consumption during analysis</dd>
-
-<dt><b>stream_rast</b></dt>
-<dd>Stream network: name for input stream network map, produced using either
-<em>r.watershed</em> or <em>r.stream.extract</em>. Since stream
-network maps produced by <em>r.watershed</em> and <em>r.stream.extract</em> may
-slightly differ in detail, it is required to use both stream and direction maps
-produced by the same module. Non-stream cell values must be set to NULL.</dd>
-
-<dt><b>direction</b></dt>
-<dd>Flow direction: name of input input raster map with flow direction, 
-produced using either <em>r.watershed</em> or <em>r.stream.extract</em>. 
-If <em>r.stream.extract</em> output map is used, it is non-NULL only
-where streams occur and NULL elsewhere. NULL (nodata) cells are ignored, 
-zero and negative values are valid direction data only if they vary
-from -8 to 8 (CCW from East in steps of 45 degrees). Flow direction map 
-shall be of integer type (CELL).</dd>
-
-<dt><b>accumulation</b></dt>
-<dd>(optional, not recommended): name for input flow
-accumulation map produced by <em><a href="r.watershed.html">r.watershed</a></em> 
-or <em><a href="r.stream.extract.html">r.stream.extract</a></em>. This
-map is an option only if Horton's or Hack's ordering is
-performed. Normally both Horton and Hack ordering is calculated on
-cumulative stream length which is calculated internally. Flow
-accumulation can be used if user wants to calculate the main channel 
-as the stream with the highest value of aqccumulation.
-Flow accumulation map shall be of DCELL type, as
-is by default produced by r.watershed or converted to DCELL with
-<em><a href="r.mapcalc.html">r.mapcalc</a></em>.</dd>
-
-<dt><b>elevation</b></dt>
-<dd>Elevation: name for input elevation map. It can be of type CELL, FCELL or
-DCELL. It is used to calculate geometrical properties of the network 
-stored in the table.</dd>
-
-<dt><b>stream_vect</b></dt>
-<dd>Name for output vector map with stream network. It has a table associated, 
-where stream network topology can be stored. Because 
-<em><a href="r.stream.order.html">r.stream.order</a></em>
-is prepared to work either with <em><a href="r.watershed.html">r.watershed</a></em> or
-<em><a href="r.stream.extract.html">r.stream.extract</a></em>, it may
-be used to create corrected stream vector from 
-<em><a href="r.watershed.html">r.watershed</a></em> results.<dd>
-
-<dt><b>strahler</b></dt>
-<dd>Name for output Strahler's stream order raster map.</dd>
-
-<dt><b>shreve</b></dt>
-<dd>Name for output Shreve's stream magnitude raster map.</dd>
-
-<dt><b>horton</b></dt>
-<dd>Name for output Horton's stream order raster map (requires flow 
-accumulation map).</dd>
-
-<dt><b>hack</b></dt>
-<dd>Name for Hack's main streams output raster map.</dd>
-
-<dt><b>topo</b></dt>
-<dd>Name for topological dimension streams raster map.</dd>
-</dl>
-
-
 <h2>NOTES</h2>
 
-<p>
-The module can work only if <em>direction</em> map, <em>stream_rast</em> 
+The module can work only if <b>direction</b> map, <b>stream_rast</b> 
 map and the computational region have the same settings.
-It is also required that the <em>stream_rast</em> map and the 
-<em>direction</em> map come from the same source. For lots of reason this 
-limitation probably cannot be omitted. This means if <em>stream_rast</em> 
+It is also required that the <b>stream_rast</b> map and the 
+<b>direction</b> map come from the same source. For lots of reason this 
+limitation probably cannot be omitted. This means if <b>stream_rast</b> 
 map comes from
 <em><a href="r.stream.extract.html">r.stream.extract</a></em> also the
-<em>direction</em> map
+<b>direction</b> map
 from <em><a href="r.stream.extract.html">r.stream.extract</a></em>
 must be used. If stream network was generated with MFD method also MFD
 direction map must be used. Nowadays if direction map comes from
 <em><a href="r.stream.extract.html">r.stream.extract</a></em> must be
 patched by direction map
-from <em><a href="r.watershed.html">r.watershed</a></em>. (with 
+from <em><a href="r.watershed.html">r.watershed</a></em> (with 
 <em><a href="r.patch.html">r.patch</a></em>).
+
+<p>
+Input stream network map (<b>stream_rast</b>) may be produced using
+either
+<em><a href="r.watershed.html">r.watershed</a></em>
+or <em><a href="r.stream.extract.html">r.stream.extract</a></em>. Since
+stream network maps produced
+by <em><a href="r.watershed.html">r.watershed</a></em>
+and <em><a href="r.stream.extract.html">r.stream.extract</a></em> may
+slightly differ in detail, it is required to use both stream and
+direction maps produced by the same module. Non-stream cell values
+must be set to NULL.
+
+<p>
+Input <b>direction</b> raster map with flow direction may be produced
+using either <em><a href="r.watershed.html">r.watershed</a></em>
+or <em><a href="r.stream.extract.html">r.stream.extract</a></em>.
+If <em><a href="r.stream.extract.html">r.stream.extract</a></em>
+output map is used, it is non-NULL only where streams occur and NULL
+elsewhere. NULL (nodata) cells are ignored, zero and negative values
+are valid direction data only if they vary from -8 to 8 (CCW from East
+in steps of 45 degrees). Flow direction map shall be of integer type
+(CELL).
+
+<p>
+Optional input flow <b>accumulation</b> map may be produced
+by <em><a href="r.watershed.html">r.watershed</a></em>
+or <em><a href="r.stream.extract.html">r.stream.extract</a></em>. This
+map is an option only if Horton's or Hack's ordering is
+performed. Normally both Horton and Hack ordering is calculated on
+cumulative stream length which is calculated internally. Flow
+accumulation can be used if user wants to calculate the main channel
+as the stream with the highest value of aqccumulation.  Flow
+accumulation map shall be of DCELL type, as is by default produced by
+<em><a href="r.watershed.html">r.watershed</a></em> or converted to
+DCELL with <em><a href="r.mapcalc.html">r.mapcalc</a></em>.
+
+<p>
+If <b>-z</b> is specified than <em>r.stream.order</em> creates
+zero-value background instead of NULL (no-data). For some reason (like
+map algebra calculation) zero-valued background may be required.
+
+<p>
+If <b>-a</b> is specified than <em>r.stream.order</em> uses
+accumulation raster map instead of cumulated stream length to
+determine main branch at bifurcation. Works well only with stream
+network produced with SFD algorithm.
+
+<p>
+Flag <b>-m</b> force to use segment library to optimise memory
+consumption during analysis. Recommended only for very large data
+sets.
+
+<p>
+Input <b>elevation</b> map can be of type CELL, FCELL or DCELL. It is
+used to calculate geometrical properties of the network stored in the
+table.
+
+<p>
+Output <b>stream_vect</b> vector map stores stream network. It has a
+table associated, where stream network topology can be stored. Because
+<em>r.stream.order</em> is prepared to work either
+with <em><a href="r.watershed.html">r.watershed</a></em> or
+<em><a href="r.stream.extract.html">r.stream.extract</a></em>, it may
+be used to create corrected stream vector from 
+<em><a href="r.watershed.html">r.watershed</a></em> results.
+
+<p>
+<em>r.stream.order</em> may produce various output raster
+maps <b>strahler</b> (Strahler's stream order raster
+map), <b>shreve</b> (Shreve's stream magnitude raster
+map), <b>horton</b> (Horton's stream order raster map - requires flow
+accumulation map), <b>hack</b> (Hack's main streams output raster
+map), and <b>topo</b> (topological dimension streams raster map).
 
 <h3>Stream ordering example</h3>
 <center>
@@ -201,7 +195,7 @@ in attribute table. To achieve Consisted Associated Integers
 multiplied by 2:
 
 <div class="code"><pre>
-r.mapcalc "scheidegger = shreve * 2.0"
+r.mapcalc expr="scheidegger = shreve * 2.0"
 </pre></div>
 
 <h4>Drwal's stream hierarchy (old style)</h4>
@@ -220,7 +214,7 @@ result of Shreve's magnitude is to be recalculated according
 formula: <tt>floor(log(shreve,2))+1</tt>
 
 <div class="code"><pre>
-r.mapcalc "drwal = int(log(shreve,2.0)) + 1.0"
+r.mapcalc expr="drwal = int(log(shreve,2.0)) + 1.0"
 </pre></div>
 
 <h4>Advantages and disadvantages of Drwal's hierarhy</h4> 
@@ -271,32 +265,32 @@ stream from catchment outlet.
 <h4>Stream network topology table description connected with vector file</h4>
 
 <ul>
-	<li><b>cat</b> integer: category;
-	<li><b>stream</b>integer: stream number, usually equal to cat;
-	<li><b>next_stream</b> integer: stream to which contribute current
+	<li><tt>cat</tt> integer: category;
+	<li><tt>stream</tt>integer: stream number, usually equal to cat;
+	<li><tt>next_stream</tt> integer: stream to which contribute current
 stream (downstream);
-	<li><b>prev_streams</b>; two or more contributing streams (upstream);
-	<li><b>strahler</b> integer: Strahler's stream order:
-	<li><b>horton</b> integer: Hortons's stream order:
-	<li><b>shreve</b> integer: Shreve's stream magnitude;
-	<li><b>scheidegger</b> integer: Scheidegger's Consisted Associated
+	<li><tt>prev_streams</tt>; two or more contributing streams (upstream);
+	<li><tt>strahler</tt> integer: Strahler's stream order:
+	<li><tt>horton</tt> integer: Hortons's stream order:
+	<li><tt>shreve</tt> integer: Shreve's stream magnitude;
+	<li><tt>scheidegger</tt> integer: Scheidegger's Consisted Associated
 Integers;
-	<li><b>drwal</b> integer: Drwal's stream hierarchy;
-	<li><b>hack</b> integer: Hack's main streams or Gravelius order;
-	<li><b>topo</b> integer: Topological dimension streams order;
-	<li><b>length</b> double precision: stream length;
-	<li><b>cum_length</b> double precision: length of stream from source;
-	<li><b>out_dist</b> double precision: distance of current stream init
+	<li><tt>drwal</tt> integer: Drwal's stream hierarchy;
+	<li><tt>hack</tt> integer: Hack's main streams or Gravelius order;
+	<li><tt>topo</tt> integer: Topological dimension streams order;
+	<li><tt>length</tt> double precision: stream length;
+	<li><tt>cum_length</tt> double precision: length of stream from source;
+	<li><tt>out_dist</tt> double precision: distance of current stream init
 from outlet;
-	<li><b>stright</b> double precision: length of stream as stright line;
-	<li><b>sinusiod</b> double precision: fractal dimension: stream
+	<li><tt>stright</tt> double precision: length of stream as stright line;
+	<li><tt>sinusiod</tt> double precision: fractal dimension: stream
 length/stright stream length;
-	<li><b>elev_init</b> double precision: elevation of  stream init;
-	<li><b>elev_outlet</b> double precision: elevation of  stream outlet;
-	<li><b>drop</b> double precision: difference between stream init and
+	<li><tt>elev_init</tt> double precision: elevation of  stream init;
+	<li><tt>elev_outlet</tt> double precision: elevation of  stream outlet;
+	<li><tt>drop</tt> double precision: difference ttetween stream init and
 outlet + drop outlet;
-	<li><b>out_drop</b> double precision: drop at the outlet of the stream;
-	<li><b>gradient</b> double precision: drop/length;
+	<li><tt>out_drop</tt> double precision: drop at the outlet of the stream;
+	<li><tt>gradient</tt> double precision: drop/length;
 </ul>
 
 <h2>EXAMPLE</h2>
@@ -317,25 +311,25 @@ r.stream.order stream_rast=streams direction=direction elevation=elevation \
 <h2>REFERENCES</h2>
 <ul>
 <li>Drwal, J., (1982), <i>Wyksztalecenie i organizacja sieci hydrograficznej jako
-podstawa oceny struktury odplywu na terenach m;odoglacjalnych</i>, <b>Rozprawy i
-monografie</b>, Gdansk 1982, 130 pp (in Polish)
+podstawa oceny struktury odplywu na terenach m;odoglacjalnych</i>, Rozprawy i
+monografie, Gdansk 1982, 130 pp (in Polish)
 <li>Hack, J., (1957), <i>Studies of longitudinal stream profiles in Virginia and
 Maryland</i>, 
-<b>U.S. Geological Survey Professional Paper</b>, 294-B
+U.S. Geological Survey Professional Paper, 294-B
 <li>Horton, R. E. (1945), <i>Erosional development of streams and their drainage
-basins: hydro-physical approach to quantitative morphology</i>,<b>Geological
-Society of America Bulletin</b> 56 (3): 275-370<br>
+basins: hydro-physical approach to quantitative morphology</i>, Geological
+Society of America Bulletin 56 (3): 275-370<br>
 Scheidegger A. E., (1966), <i>Statistical Description of River Networks</i>.
-<b>Water Resour. Res.</b>, 2(4): 785-790
-<li>Shreve, R.,  (1966),<i>Statistical Law of Stream Numbers</i>, <b>J. Geol.</b>,
+Water Resour. Res., 2(4): 785-790
+<li>Shreve, R.,  (1966),<i>Statistical Law of Stream Numbers</i>, J. Geol.,
 74, 17-37.
 <li>Strahler, A. N. (1952), <i>Hypsometric (area-altitude) analysis of erosional
-topology</i>,<b>Geological Society of America Bulletin</b> 63 (11): 1117-1142
+topology</i>,Geological Society of America Bulletin 63 (11): 1117-1142
 <li>Strahler, A. N. (1957), <i>Quantitative analysis of watershed
-geomorphology</i>,<b>Transactions of the American Geophysical Union</b> 8 (6):
+geomorphology</i>, Transactions of the American Geophysical Union 8 (6):
 913-920.
-<li>Woldenberg, M. J., (1967), <i>Geography and properties of surfaces,</i>
-<b>Harvard Papers in Theoretical Geography</b>, 1: 95-189.
+<li>Woldenberg, M. J., (1967), <i>Geography and properties of surfaces</i>,
+Harvard Papers in Theoretical Geography, 1: 95-189.
 </ul>
 
 <h2>SEE ALSO</h2>
