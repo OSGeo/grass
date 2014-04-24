@@ -433,11 +433,13 @@ int main(int argc, char *argv[])
     paspin->key = "aspect";
     paspin->required = NO;
     paspin->description = _("Name of input aspect raster map");
+    paspin->guisection = _("Input maps");
 
     pbarin = G_define_standard_option(G_OPT_R_INPUT);
     pbarin->key = "barrier";
     pbarin->required = NO;
     pbarin->description = _("Name of input barrier raster map");
+    pbarin->guisection = _("Input maps");
 
     pskip = G_define_option();
     pskip->key = "skip";
@@ -454,17 +456,20 @@ int main(int argc, char *argv[])
     pflout = G_define_standard_option(G_OPT_V_OUTPUT);
     pflout->key = "flowline";
     pflout->required = NO;
-    pflout->description = _("Name for output flowline vector map");
+    pflout->description = _("Name for output flow line vector map");
+    pflout->guisection = _("Output maps");
 
     plgout = G_define_standard_option(G_OPT_R_OUTPUT);
     plgout->key = "flowlength";
     plgout->required = NO;
-    plgout->description = _("Name for output flowpath length raster map");
+    plgout->description = _("Name for output flow path length raster map");
+    plgout->guisection = _("Output maps");
 
     pdsout = G_define_standard_option(G_OPT_R_OUTPUT);
     pdsout->key = "flowaccumulation";
     pdsout->required = NO;
-    pdsout->description = _("Name for output flowaccumulation raster map");
+    pdsout->description = _("Name for output flow accumulation raster map");
+    pdsout->guisection = _("Output maps");
 
     fup = G_define_flag();
     fup->key = 'u';
