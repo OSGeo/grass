@@ -402,8 +402,9 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
     if showType:
         cmd[1]['type'] = dlg.GetFeatureType()
         
+    curMapset = grass.gisenv()['MAPSET']
     if isNative:
-        listOfVectors = grass.list_grouped('vect')[grass.gisenv()['MAPSET']]
+        listOfVectors = grass.list_grouped('vect')[curMapset]
     else:
         listOfVectors = RunCommand('v.external',
                                    quiet = True,
@@ -438,7 +439,8 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
         dlg.Destroy()
         return None
     
-    if not isNative:
+    if not isNative and \
+            not grass.find_file(outmap, element = 'vector', mapset = curMapset)['fullname']:
         # create link for OGR layers
         RunCommand('v.external',
                    overwrite = overwrite,
