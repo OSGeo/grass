@@ -735,7 +735,7 @@ class TaskFrame(wx.Frame):
         # TODO: better protect whitespace with quotes
         for i in range(1, len(cmdlist)):
             if ' ' in cmdlist[i]:
-                optname, val =  cmdlist[i].split("=")
+                optname, val =  cmdlist[i].split("=", 1)
                 cmdlist[i] = '%s="%s"' % (optname, val)
         cmdstring = ' '.join(cmdlist)
         cmddata.SetText(cmdstring)
