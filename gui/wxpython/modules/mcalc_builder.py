@@ -254,7 +254,8 @@ class MapCalcFrame(wx.Frame):
         self.btn_save.Bind(wx.EVT_BUTTON, self.OnSaveExpression)
         self.btn_load.Bind(wx.EVT_BUTTON, self.OnLoadExpression)
         
-        self.mapselect.Bind(wx.EVT_TEXT, self.OnSelectTextEvt)
+        # self.mapselect.Bind(wx.EVT_TEXT, self.OnSelectTextEvt)
+        self.mapselect.Bind(wx.EVT_TEXT, self.OnSelect)
         self.function.Bind(wx.EVT_COMBOBOX, self._return_funct)
         self.function.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
         self.newmaptxt.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
@@ -267,7 +268,11 @@ class MapCalcFrame(wx.Frame):
     def _return_funct(self,event):
         i = event.GetString()
         self._addSomething(self.funct_dict[i])
-    
+        
+        # reset
+        win = self.FindWindowById(event.GetId())
+        win.SetValue('')
+        
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -418,15 +423,17 @@ class MapCalcFrame(wx.Frame):
         elif event.GetId() == self.btn['parenr'].GetId(): mark = ")"
         self._addSomething(mark)
         
-    def OnSelectTextEvt(self, event):
-        """!Checks if user is typing or the event was emited by map selection.
-        Prevents from changing focus.
-        """
-        item = self.mapselect.GetValue().strip()
-        if not (abs(len(item) - len(self.lastMapName)) == 1  and \
-            self.lastMapName in item or item in self.lastMapName):
-            self.OnSelect(event)
-        self.lastMapName = item
+    ### unused
+    # def OnSelectTextEvt(self, event):
+    #     """!Checks if user is typing or the event was emited by map selection.
+    #     Prevents from changing focus.
+    #     """
+    #     item = self.mapselect.GetValue().strip()
+    #     if not (abs(len(item) - len(self.lastMapName)) == 1 and \
+    #         self.lastMapName in item or item in self.lastMapName):
+    #         self.OnSelect(event)
+        
+    #     self.lastMapName = item
 
     def OnSelect(self, event):
         """!Gets raster map or function selection and send it to
@@ -435,11 +442,14 @@ class MapCalcFrame(wx.Frame):
         Checks for characters which can be in raster map name but 
         the raster map name must be then quoted.
         """
-        item = self.FindWindowById(event.GetId()).GetValue().strip()
+        win = self.FindWindowById(event.GetId())
+        item = event.GetString().strip()
         if any((char in item) for char in self.charactersToQuote):
             item = '"' + item + '"'
         self._addSomething(item)
-
+        
+        win.ChangeValue('') # reset
+        
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         expr = self.text_mcalc.GetValue().strip().replace("\n", " ")
