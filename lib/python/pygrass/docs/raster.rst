@@ -392,7 +392,7 @@ Category
 .. autoclass:: pygrass.raster.category.Category
     :members:
 
-.. _Raster library: http://grass.osgeo.org/programming7/rasterlib.html/
+.. _Raster library: http://grass.osgeo.org/programming7/rasterlib.html
 .. _RowIO library: http://grass.osgeo.org/programming7/rowiolib.html
 .. _Segmentation library: http://grass.osgeo.org/programming7/segmentlib.html
 .. _numpy.memmap: http://docs.scipy.org/doc/numpy/reference/generated/numpy.memmap.html
