@@ -3,16 +3,16 @@
 Raster
 ======
 
-PyGrass use 4 different Raster classes, that respect the 4 different approaches
-of C grass API.
+PyGRASS uses 4 different Raster classes, that respect the 4 different approaches
+of GRASS-C API.
 The read access is row wise for :ref:`RasterRow-label` and
 :ref:`RasterRowIO-label` and additionally
-cached in the RowIO class. Booth classes write sequentially.
+cached in the RowIO class. Both classes write sequentially.
 RowIO is row cached, :ref:`RasterSegment-label` and :ref:`RasterNumpy-label`
 are tile cached for reading and writing therefore a randomly access is possible.
 Hence RasterRow and RasterRowIO should be used in case for fast (cached)
 row read access and RasterRow for fast sequential writing.
-Segment and Numpy should be used for random access, but numpy only for files
+Segment and Numpy should be used for random access, but Numpy only for files
 not larger than 2GB.
 
 
@@ -110,7 +110,7 @@ See all the categories with: ::
      ('bare ground path', 10, None),
      ('grass', 11, None)]
 
-Access to single category, using Rast_get_ith_cat(), with: ::
+Access a single category, using Rast_get_ith_cat(), with: ::
 
     >>> land.cats[0]
     ('pond', 1, None)

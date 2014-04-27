@@ -4,13 +4,14 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \section pygrassIntro Introduction
 
-PyGRASS improves integration between GRASS and Python (see also \ref
-pythonlib), make the use of Python under GRASS more consistent with
-the language itself and make the GRASS scripting and programming
-activity easier and more natural to the final users.
+PyGRASS improves the integration between GRASS GIS and Python (see 
+also \ref pythonlib), making the use of Python under GRASS more 
+consistent with the language itself. Furthermore, it simplifies 
+GRASS scripting and programming and more natural for the user.
 
 \section pygrassPackages PyGRASS packages 
 
+The following PyGRASS packages are provided:
  - \subpage pygrassGis
  - \subpage pygrassRaster
  - \subpage pygrassVector
@@ -18,19 +19,21 @@ activity easier and more natural to the final users.
  - \subpage pygrassFunctions
  - \subpage pygrassMessages
  - \subpage pygrassErrors
+ 
+ Below these packages are illustrated in greater detail.
 
 \subsection pygrassGis GIS Package
 
  - python::pygrass::gis
 
-Basic elements of GRASS data-base:
+Basic elements of the GRASS data-base:
 
   - python::pygrass::gis::Gisdbase
   - python::pygrass::gis::Location
   - python::pygrass::gis::Mapset
   - python::pygrass::gis::VisibleMapset
 
-Computation region:
+Computational region:
 
   - python::pygrass::gis::region::Region
 
@@ -40,6 +43,16 @@ Mapset handling:
   - python::pygrass::gis::make_mapset
 
 \subsection pygrassRaster Raster Package
+
+PyGRASS uses 4 different Raster classes, that respect the 4 
+different approaches of GRASS-C API. The read access is row wise for 
+RastRow and RasterRowIO and additionally cached in the RowIO class. 
+Both classes write sequentially. RowIO is row cached, RastSegment 
+and RasterNumpy are tile cached for reading and writing therefore a 
+randomly access is possible. Hence RasterRow and RasterRowIO should 
+be used in case for fast (cached) row read access and RasterRow for 
+fast sequential writing. Segment and Numpy should be used for random 
+access, but Numpy only for files not larger than 2GB.
 
  - python::pygrass::raster
 
@@ -101,7 +114,11 @@ Geometry and topology elements handling:
   - python::pygrass::vector::geometry::Isles
   - python::pygrass::vector::geometry::Area
 
-\subsection pygrassModule Interface to GRASS modules
+Vector attribute handling:
+
+ - python::pygrass::vector::attributes
+
+\subsection pygrassModule Interface to GRASS GIS modules
 
  - python::pygrass::modules
 
