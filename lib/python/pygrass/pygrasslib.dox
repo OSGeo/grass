@@ -1,0 +1,146 @@
+/*! \page pygrasslib PyGRASS Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\section pygrassIntro Introduction
+
+PyGRASS improves integration between GRASS and Python (see also \ref
+pythonlib), make the use of Python under GRASS more consistent with
+the language itself and make the GRASS scripting and programming
+activity easier and more natural to the final users.
+
+\section pygrassPackages PyGRASS packages 
+
+ - \subpage pygrassGis
+ - \subpage pygrassRaster
+ - \subpage pygrassVector
+ - \subpage pygrassModule
+ - \subpage pygrassFunctions
+ - \subpage pygrassMessages
+ - \subpage pygrassErrors
+
+\subsection pygrassGis GIS Package
+
+ - python::pygrass::gis
+
+Basic elements of GRASS data-base:
+
+  - python::pygrass::gis::Gisdbase
+  - python::pygrass::gis::Location
+  - python::pygrass::gis::Mapset
+  - python::pygrass::gis::VisibleMapset
+
+Computation region:
+
+  - python::pygrass::gis::region::Region
+
+Mapset handling:
+     
+  - python::pygrass::gis::set_current_mapset
+  - python::pygrass::gis::make_mapset
+
+\subsection pygrassRaster Raster Package
+
+ - python::pygrass::raster
+
+Reading/writing raster maps:
+
+  - python::pygrass::raster::RasterRow
+  - python::pygrass::raster::RasterRowIO
+  - python::pygrass::raster::RasterSegment
+  - python::pygrass::raster::RasterNumpy
+
+Random raster data:
+     
+  - python::pygrass::raster::random_map_only_columns
+  - python::pygrass::raster::random_map
+
+Raster categories:
+
+  - python::pygrass::raster::category::Category
+
+Raster metadata:
+
+  - python::pygrass::raster::history::History
+
+\subsection pygrassVector Vector Package
+
+ - python::pygrass::vector
+
+List of high-level classes:
+
+  - python::pygrass::vector::Vector
+  - python::pygrass::vector::VectorTopo
+
+Basic data structures and functions:
+
+ - python::pygrass::vector::basic
+  - python::pygrass::vector::basic::Bbox
+  - python::pygrass::vector::basic::BoxList
+  - python::pygrass::vector::basic::Cats
+  - python::pygrass::vector::basic::CatsList
+
+Search for features:
+
+ - python::pygrass::vector::find
+  - python::pygrass::vector::find::PointFinder
+  - python::pygrass::vector::find::BboxFinder
+  - python::pygrass::vector::find::PolygonFinder
+
+Geometry and topology elements handling:
+
+ - python::pygrass::vector::geometry
+  - python::pygrass::vector::geometry::Attrs
+  - python::pygrass::vector::geometry::Geo
+  - python::pygrass::vector::geometry::Point
+  - python::pygrass::vector::geometry::Line
+  - python::pygrass::vector::geometry::Node
+  - python::pygrass::vector::geometry::Boundary
+  - python::pygrass::vector::geometry::Centroid
+  - python::pygrass::vector::geometry::Isle
+  - python::pygrass::vector::geometry::Isles
+  - python::pygrass::vector::geometry::Area
+
+\subsection pygrassModule Interface to GRASS modules
+
+ - python::pygrass::modules
+
+List of high-level classes:
+
+ - python::pygrass::modules::interface::module::Module
+ - python::pygrass::modules::interface::module::ParallelModuleQueue 
+
+List of namespaces:
+
+ - python::pygrass::modules::grid
+ - python::pygrass::modules::interface
+ - python::pygrass::modules::shortcuts
+
+\subsection pygrassFunctions Functions Package
+
+List of pyGRASS functions:
+
+ - python::pygrass::functions
+
+\subsection pygrassMessages Messages Package
+
+Messages handling in PyGRASS:
+
+ - python::pygrass::messages::FatalError
+ - python::pygrass::messages::Messenger
+
+\subsection pygrassErrors Errors Package
+
+Defined errors classes:
+
+ - python::pygrass::errors::ParameterError
+ - python::pygrass::errors::FlagError
+ - python::pygrass::errors::DBError
+ - python::pygrass::errors::GrassError
+ - python::pygrass::errors::OpenError
+
+\section pygrassAuthors Authors
+
+Pietro Zambelli (Google Summer of Code 2012)
+
+*/
