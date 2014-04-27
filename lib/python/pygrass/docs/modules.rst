@@ -61,7 +61,7 @@ Create the module object input step by step and run later: ::
 
 
 
-It is possible to access to the module info, with:
+It is possible to access the module info with:
 
     >>> slope_aspect.name
     'r.slope.aspect'
