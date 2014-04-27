@@ -1,7 +1,7 @@
 Attributes
 ===========
 
-It is possible to access to the vector attributes with: ::
+It is possible to access the vector attributes with: ::
 
     >>> from pygrass.vector import Vector
     >>> municip = Vector('boundary_municp_sqlite')
