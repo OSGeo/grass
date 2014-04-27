@@ -1,0 +1,253 @@
+/*! \page pythonlib GRASS Python Scripting Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\section pythonIntro Introduction
+
+The GRASS Python Scripting Library (<tt>grass.script</tt>) provides
+support for GRASS scripts written in Python programming language. The
+<a href="http://svn.osgeo.org/grass/grass/trunk/scripts">scripts/</a>
+directory of GRASS contains a series of examples actually provided to
+the end users.
+
+- \subpage pythonUsage
+- \subpage pythonModules
+ - \subpage pythonCore
+ - \subpage pythonDb
+ - \subpage pythonRaster
+ - \subpage pythonVector
+ - \subpage pythonSetup
+ - \subpage pythonArray
+
+\section pythonUsage Usage
+
+The statement
+
+\code
+import grass.script as grass
+\endcode
+
+imports \ref pythonCore, \ref pythonDb, \ref pythonRaster and \ref pythonVector modules.
+
+To import only selected module
+
+\code
+from grass.script import core as grass
+\endcode
+
+Sample script (see the GRASS Wiki at 
+<a href="http://grass.osgeo.org/wiki/GRASS_and_Python">http://grass.osgeo.org/wiki/GRASS_and_Python</a> for more examples)
+
+\code
+#!/usr/bin/env python
+
+#%module
+#% description: Checks if vector map is 3D
+#% keywords: vector
+#%end
+#%option G_OPT_V_MAP
+#%end
+
+import sys
+import grass.script as grass
+
+def main():
+    info = grass.vector_info_topo(map = options['map'])
+    if info['map3d']:
+        print 'Vector map is 3D'
+    else:
+        print 'Vector map is 2D'
+
+    return 0
+
+if __name__ == "__main__":
+    options, flags = grass.parser()
+    sys.exit(main())
+\endcode
+
+\section pythonModules List of functions
+
+\subsection pythonCore Core
+
+<b>GRASS-oriented interface to subprocess module</b>
+
+ - python::script::core::exec_command()
+
+ - python::script::core::feed_command()
+
+ - python::script::core::make_command()
+
+ - python::script::core::parse_command()
+
+ - python::script::core::pipe_command()
+
+ - python::script::core::read_command()
+
+ - python::script::core::run_command()
+
+ - python::script::core::start_command()
+
+ - python::script::core::write_command()
+
+<b>Interface to \gmod{g.message}</b>
+
+These all run \gmod{g.message}, differing only in which flag (if any) is
+used. fatal() is error(), but also calls sys.exit(1).
+
+ - python::script::core::debug()
+
+ - python::script::core::error()
+
+ - python::script::core::fatal()
+
+ - python::script::core::info()
+
+ - python::script::core::message()
+
+ - python::script::core::verbose()
+
+ - python::script::core::warning()
+
+<b>Interface to \gmod{g.parser}</b>
+
+Interface to \gmod{g.parser}, intended to be run from the top-level, e.g.
+
+\code
+	if __name__ == "__main__":
+	    options, flags = grass.parser()
+	    main()
+\endcode
+
+ - python::script::core::parser()
+
+<b>Interface to \gmod{g.tempfile}</b>
+
+Returns the name of a temporary file, created with \gmod{g.tempfile}.
+
+ - python::script::core::tempfile()
+
+<b>Key-value parsers</b>
+
+ - python::script::core::parse_key_val()
+
+<b>Interface to \gmod{g.gisenv}</b>
+
+ - python::script::core::gisenv()
+
+<b>Interface to \gmod{g.region}</b>
+
+ - python::script::core::del_temp_region()
+
+ - python::script::core::region()
+
+ - python::script::core::region_env()
+
+ - python::script::core::use_temp_region()
+
+<b>Interface to \gmod{g.findfile}</b>
+
+ - python::script::core::find_file()
+
+<b>Interface to \gmod{g.list}</b>
+
+ - python::script::core::list_grouped()
+
+ - python::script::core::list_pairs()
+
+ - python::script::core::list_strings()
+
+ - python::script::core::mlist_grouped()
+
+<b>Interface to \gmod{g.mapsets}</b>
+
+ - python::script::core::mapsets()
+
+<b>Interface to \gmod{g.version}</b>
+
+ - python::script::core::version()
+
+<b>Color parsing</b>
+
+ - python::script::core::parse_color()
+
+<b>Check GRASS environment variables</b>
+
+ - python::script::core::overwrite()
+
+ - python::script::core::verbosity()
+
+<b>Create new GRASS location</b>
+
+ - python::script::core::create_location()
+
+<b>Various utilities, not specific to GRASS</b>
+ 
+ - python::script::core::basename()
+
+ - python::script::core::find_program()
+
+ - python::script::core::try_remove()
+
+ - python::script::core::try_rmdir()
+
+ - python::script::core::float_or_dms()
+
+\subsection pythonDb Database
+
+Interface for <tt>db.*</tt> modules.
+
+ - python::script::db::db_connection()
+
+ - python::script::db::db_describe()
+
+ - python::script::db::db_select()
+
+\subsection pythonRaster Raster
+
+Interface for <tt>r.*</tt> modules.
+
+ - python::script::raster::raster_history()
+
+ - python::script::raster::raster_info()
+
+ - python::script::raster::mapcalc()
+
+\subsection pythonVector Vector
+
+Interface for <tt>v.*</tt> modules.
+
+ - python::script::vector::vector_columns()
+
+ - python::script::vector::vector_db()
+
+ - python::script::vector::vector_db_select()
+
+ - python::script::vector::vector_history()
+
+ - python::script::vector::vector_info_topo()
+
+ - python::script::vector::vector_layer_db()
+
+\subsection pythonSetup Setup
+
+\code
+from grass.script import setup as gsetup
+\endcode
+
+ - python::script::setup::init()
+
+\subsection pythonArray Array
+
+\code
+from grass.script import array as garray
+\endcode
+
+ - python::script::array::array
+
+\section pythonAuthors Authors
+
+ Glynn Clements
+
+ Martin Landa <landa.martin gmail.com>
+
+*/
