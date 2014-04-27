@@ -3,7 +3,6 @@ MODULE_TOPDIR = ../..
 #include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 PYDIR = $(ETC)/python/grass
 
@@ -21,6 +20,3 @@ $(PYDIR):
 
 $(PYDIR)/__init__.py: __init__.py | $(PYDIR)
 	$(INSTALL_DATA) $< $@
-
-# doxygen
-DOXNAME = python
