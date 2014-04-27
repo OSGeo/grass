@@ -28,3 +28,6 @@ setup.py: setup.py.sed
 	sed \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	$< > $@
+
+# doxygen
+DOXNAME = python

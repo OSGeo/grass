@@ -37,4 +37,4 @@ $(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
 #doxygen:
-DOXNAME = pythonpygrass
+DOXNAME = pygrass
