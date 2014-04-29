@@ -411,7 +411,6 @@ static int close_new(int fd, int ok)
 			      fcb->mapset);
 	    remove(path);
 	    CELL_DIR = "cell";
-	    close(fcb->data_fd);
 	}
     }				/* ok */
     /* NOW CLOSE THE FILE DESCRIPTOR */
