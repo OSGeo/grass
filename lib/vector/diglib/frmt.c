@@ -31,7 +31,7 @@
 */
 int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
 {
-    char buff[20001], buf1[1024];
+    char buff[2001], buf1[2001];
     char *ptr;
     int frmt = -1;
 
