@@ -49,7 +49,7 @@ gcore.set_raise_on_error(True)
 
 
 class AnimationFrame(wx.Frame):
-    def __init__(self, parent, giface, title=_("Animation tool"),
+    def __init__(self, parent, giface, title=_("GRASS GIS Animation tool"),
                  rasters=None, timeseries=None):
         wx.Frame.__init__(self, parent, title=title,
                           style=wx.DEFAULT_FRAME_STYLE, size=(800, 600))
