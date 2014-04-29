@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: List space time datasets and maps registered in the temporal database.
+#% description: Lists space time datasets and maps registered in the temporal database.
 #% keywords: temporal
 #% keywords: map management
 #% keywords: list
