@@ -21,7 +21,6 @@ SUBDIRS = \
 	t.rast.univar \
 	t.rast.list \
 	t.rast.mapcalc \
-	t.rast.mapcalc2 \
 	t.rast.neighbors \
 	t.rast.series \
 	t.rast.export \
@@ -32,21 +31,22 @@ SUBDIRS = \
 	t.rast3d.list \
 	t.rast3d.extract \
 	t.rast3d.mapcalc \
-	t.rast3d.mapcalc2 \
 	t.rast3d.univar \
 	t.rename \
-	t.select \
 	t.snap \
 	t.shift \
 	t.vect.list \
 	t.vect.db.select \
 	t.vect.export \
 	t.vect.extract \
-	t.vect.mapcalc \
 	t.vect.import \
 	t.vect.what.strds \
 	t.vect.observe.strds \
 	t.vect.univar
+#	t.rast.mapcalc2
+#	t.rast3d.mapcalc2 
+#	t.select 
+#	t.vect.mapcalc 
 
 PGM = temporalintro
 
