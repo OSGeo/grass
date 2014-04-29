@@ -30,7 +30,7 @@ void Vect__init_head(struct Map_info *Map)
 {
     char buf[64];
 
-    G_zero(&(Map->head), sizeof(struct dig_head *));
+    G_zero(&(Map->head), sizeof(struct dig_head));
 
     /* organization */
     Vect_set_organization(Map, "");
