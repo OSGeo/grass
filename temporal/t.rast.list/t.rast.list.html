@@ -9,21 +9,25 @@ Example for checking which maps were used in a time series operation
 
 <div class="code"><pre>
 t.rast.list input=precipitation_1950_2013_monthly_mm \
-  where="start_time = datetime(start_time, 'start of year', '0 month')"
-
-precipitation_monthly_mm_0 soeren 1950-01-01 00:00:00 1950-02-01 00:00:00
-precipitation_monthly_mm_12 soeren 1951-01-01 00:00:00 1951-02-01 00:00:00
-...
-precipitation_monthly_mm_732 soeren 2011-01-01 00:00:00 2011-02-01 00:00:00
-precipitation_monthly_mm_744 soeren 2012-01-01 00:00:00 2012-02-01 00:00:00
-precipitation_monthly_mm_756 soeren 2013-01-01 00:00:00 2013-02-01 00:00:00
+       where="start_time = datetime(start_time, 'start of year', '0 month')"
+ precipitation_monthly_mm_0 soeren 1950-01-01 00:00:00 1950-02-01 00:00:00
+ precipitation_monthly_mm_12 soeren 1951-01-01 00:00:00 1951-02-01 00:00:00
+ ...
+ precipitation_monthly_mm_732 soeren 2011-01-01 00:00:00 2011-02-01 00:00:00
+ precipitation_monthly_mm_744 soeren 2012-01-01 00:00:00 2012-02-01 00:00:00
+ precipitation_monthly_mm_756 soeren 2013-01-01 00:00:00 2013-02-01 00:00:00
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="g.list.html">g.list</a>,
+<a href="g.mlist.html">g.mlist</a>,
 <a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
+<a href="t.info.html">t.info</a>,
+<a href="t.list.html">t.list</a>,
+<a href="t.rast3d.list.html">t.rast3d.list</a>,
+<a href="t.vect.list.html">t.vect.list</a>
 </em>
 
 <h2>AUTHOR</h2>
