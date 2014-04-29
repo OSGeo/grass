@@ -8,7 +8,7 @@ Classes:
  - frame::TimelineFrame
  - frame::LookUp
 
-(C) 2012-13 by the GRASS Development Team
+(C) 2012-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -70,7 +70,7 @@ def check_version(*version):
 class TimelineFrame(wx.Frame):
     """!The main frame of the application"""
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=_("Timeline Tool"))
+        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=_("GRASS GIS Timeline Tool"))
 
         tgis.init(True)
         self.datasets = []
