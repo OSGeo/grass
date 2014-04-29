@@ -27,10 +27,9 @@ t.register type=rast maps=map2 start=2012-08-21 end=2012-08-22
 t.register type=rast maps=map3 start=2012-08-22 end=2012-08-23
 
 t.list rast
-
-map1@soeren
-map2@soeren
-map3@soeren
+ map1@soeren
+ map2@soeren
+ map3@soeren
 
 t.create type=strds temporaltype=absolute \
          output=precipitation_daily \
@@ -40,16 +39,20 @@ t.create type=strds temporaltype=absolute \
 t.register type=rast input=precipitation_daily maps=map1,map2,map3
 
 t.list strds
-
-precipitation_daily@soeren
+ precipitation_daily@soeren
 
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="g.list.html">g.list</a>,
+<a href="g.mlist.html">g.mlist</a>,
 <a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
+<a href="t.info.html">t.info</a>,
+<a href="t.rast.list.html">t.rast.list</a>,
+<a href="t.rast3d.list.html">t.rast3d.list</a>,
+<a href="t.vect.list.html">t.vect.list</a>
 </em>
 
 <h2>AUTHOR</h2>
