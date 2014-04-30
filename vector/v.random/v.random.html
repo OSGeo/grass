@@ -6,15 +6,30 @@ current region using the selected random number generator.
 <p><em>v.random</em> can generate also 3D vector points or
 write random value to attribute table. Point height range or
 attribute value range is controlled by specifying zmin and zmax values.
-Both z values are included in range (<em>zmin >= z <= zmax</em>).
+Both z values are included in range (<em>zmin <= z <= zmax</em>).
 Generated random attribute value type can be controlled by column
 data type. Use <b>INTEGER</b> column type for integers and 
 <b>DOUBLE PRECISION</b> for floating point numbers. Integer values are
 calculated by rounding random floating point number.
 
-<p>To produce repeatable results a random seed can be set using the option <em>seed</em>>.
-    
+<p>To produce repeatable results a random seed can be set using the
+option <em>seed</em>.
+
+<h3>Restriction to vector areas</h3>
+<p>
+If an <em>input</em> vector map with areas is specified, the location of 
+random points is restricted to the selected areas. By default, the 
+requested number of points are distributed across all areas.
+
+<p>
+If the <em>-a</em> flag is given, the requested number of points is 
+generated for each individual area. For example, if 20 points should be 
+generated and the input map has 100 individual areas, 2000 points will 
+be generated in total.
+
 <h2>EXAMPLES</h2>
+All examples use the North Carolina sample dataset.
+<p>
 Generate 20 random points with binary attribute (only 0 or 1):
 <div class="code"><pre>
 v.random output=binary_random n=20 zmin=0 zmax=1 column='binary INTEGER'
@@ -27,17 +42,34 @@ v.random seed=501 output=height_random n=20 zmin=0 zmax=1 column=height
 
 Get 20 random samples from raster map:
 <div class="code"><pre>
+g.region -p rast=elevation
 v.random output=random_samples n=20
 v.db.addtable map=random_samples layer=1 columns='cat INTEGER, sample DOUBLE PRECISION'
-v.what.rast vector=random_samples raster=elevation.10m@PERMANENT layer=1 column=sample 
+v.what.rast vector=random_samples raster=elevation@PERMANENT layer=1 column=sample 
 </pre></div>
 
 Generate 20 random points and sample attribute data from geology (vector) map:
 <div class="code"><pre>
+g.region -p vect=geology
 v.random output=random_samples n=20
 v.db.addtable map=random_samples layer=1 columns='cat integer, geology varchar(100)'
 v.what.vect vector=random_samples layer=1 column=geology qvector=geology@PERMANENT qlayer=1 qcolumn=label 
 </pre></div>
+
+Generate 20 random points in forested areas
+<div class="code"><pre>
+g.region -p rast=landclass96
+r.to.vect -v input=landclass96 output=landclass96 type=area
+v.random input=landclass96 output=random_samples n=20 where="label = 'forest'"
+</pre></div>
+
+Generate 20 random points in each forest patch
+<div class="code"><pre>
+g.region -p rast=landclass96
+r.to.vect -v input=landclass96 output=landclass96 type=area
+v.random input=landclass96 output=random_samples n=20 where="label = 'forest'" -a
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
