@@ -56,27 +56,33 @@ Somewhat similar program functions to those performed by
 
 <h2>EXAMPLES</h2>
 
-Creating a raster mask, for showing only elevations of lakes:
+The examples are based on the North Carolina sample dataset.
+<p>
+Create a raster mask, for contraining the calculation of
+univariate statistics of the elevation values for "lakes":
 <div class="code"><pre>
-r.mask input=lakes
-# statistics only for elevation pixels in the lakes:
+# set computation region to lakes raster map
+g.region rast=lakes -p
+# use lakes as MASK
+r.mask raster=lakes
+# get statistics for elevation pixels of lakes:
 r.univar elevation
 </pre></div>
 
-Removing a raster mask with the -r flag:
+Remove the raster mask ("MASK" map) with the -r flag:
 <div class="code"><pre>
 r.mask -r
 </pre></div>
 
-Creating a mask from categories 3 through 6 in the North Carolina
+Creating a mask from selected categories in the North Carolina
 'geology_30m' raster map:
 <div class="code"><pre>
 g.region rast=geology_30m -p
 r.category geology_30m
 d.mon wx0
 d.rast geology_30m
-r.mask input=geology_30m maskcats="217 thru 720"
-d.erase
+r.mask raster=geology_30m maskcats="217 thru 720"
+d.mon wx0
 d.rast geology_30m
 </pre></div>
 
