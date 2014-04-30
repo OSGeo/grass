@@ -426,7 +426,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.AppendItem(item)
                 self.Bind(wx.EVT_MENU, self.OnPopupProperties, id = self.popupID['properties'])
             
-                if ltype in ('raster', 'vector', '3d-raster') and self.lmgr.IsPaneShown('toolbarNviz'):
+                if ltype in ('raster', 'vector', '3d-raster') and self.mapdisplay.IsPaneShown('3d'):
                     self.popupMenu.Append(self.popupID['nviz'], _("3D view properties"))
                     self.Bind (wx.EVT_MENU, self.OnNvizProperties, id = self.popupID['nviz'])
 
@@ -1315,7 +1315,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.Map.ChangeLayerActive(mapLayer, checked)
         
         # nviz
-        if self.lmgr.IsPaneShown('toolbarNviz') and \
+        if self.mapdisplay.IsPaneShown('3d') and \
                 self.GetPyData(item) is not None:
             # nviz - load/unload data layer
             mapLayer = self.GetLayerInfo(item, key = 'maplayer')
@@ -1428,7 +1428,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                     render = render)
         
         # update nviz tools
-        if self.lmgr.IsPaneShown('toolbarNviz'):
+        if self.mapdisplay.IsPaneShown('3d'):
             if self.layer_selected.IsChecked():
                 # update Nviz tool window
                 type = self.GetLayerInfo(self.layer_selected, key = 'maplayer').type
@@ -1447,7 +1447,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.StopDragging()
         dropTarget = event.GetItem()
         self.flag = self.HitTest(event.GetPoint())[1]
-        if self.lmgr.IsPaneShown('toolbarNviz'):
+        if self.mapdisplay.IsPaneShown('3d'):
             self.mapdisplay.MapWindow.UnloadDataLayers(True)
         if self.IsValidDropTarget(dropTarget):
             self.UnselectAll()
@@ -1634,7 +1634,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                # the layer tree
         
         # update nviz session        
-        if self.lmgr.IsPaneShown('toolbarNviz') and dcmd:
+        if self.mapdisplay.IsPaneShown('3d') and dcmd:
             mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
             mapWin = self.mapdisplay.MapWindow
             if len(mapLayer.GetCmd()) > 0:
