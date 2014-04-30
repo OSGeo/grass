@@ -140,12 +140,12 @@ Contents
     - News section
     - http://grass.osgeo.org/download/software/
     - http://grass.osgeo.org/download/software/sources/
-    - http://grass.osgeo.org/grass64/ <- to be moved to CMS
+    - http://grass.osgeo.org/grass71/ <- to be moved to CMS
     - http://grass.osgeo.org/home/history/releases/
     - http://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
 
      write announcement
-      - store in trac: http://trac.osgeo.org/grass/wiki/Release/6.XX.YY-News
+      - store in trac: http://trac.osgeo.org/grass/wiki/Release/7.XX.YY-News
       - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page?
 
  o upload user HTML manual in case of *final release* from compiled English
