@@ -8,8 +8,8 @@ segments are generated).
 
 <h2>NOTES</h2>
 
-Internal buffers for areas can be generated with negative distiance 
-values (GRASS must be compiled with GEOS).
+Internal buffers for areas can be generated with negative distance 
+values ("inward buffer" or "negative buffer").
 <p>
 Categories and attributes can be transferred with the <b>t</b> flag. 
 The resulting buffer areas can have multiple categories, and multiple 
@@ -18,11 +18,15 @@ feature with category X can thus be retrieved by selecting all buffer
 areas with category X (see example below).
 
 <p>
-Buffers for lines and areas are generated using algorithm from GEOS
-library. If GRASS is not compiled with GEOS support or environmental
+Buffers for lines and areas are generated using the algorithms from
+the GEOS library.
+
+<!-- built-in buffer algorithm no longer desired, we use GEOS:
+If GRASS is not compiled with GEOS support or environmental
 variable <tt>GRASS_VECTOR_BUFFER</tt> is defined, then GRASS generates
 buffers using built-in buffering algorithm (which is still buggy for
 some input data).
+-->
 
 <h2>EXAMPLES</h2>
 
