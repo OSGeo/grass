@@ -9,5 +9,6 @@ EXTRA_CFLAGS = $(VECT_CFLAGS) $(GEOSCFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
+ifneq ($(strip $(USE_GEOS)),)
 default: cmd
-
+endif
