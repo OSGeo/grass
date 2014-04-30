@@ -269,8 +269,7 @@ PERMANENT
     via <em><a href="g.list.html">g.list</a></em>. They are used
     internally by the GRASS modules and deleted automatically when the
     map is closed or GRASS session quited. Note that this variable is
-    dedicated for internal use only.
-  </dd>
+    dedicated for internal use only.</dd>
   
   <dt>GRASS_WXBUNDLED</dt>
   <dd>[wxGUI]<br>
@@ -307,6 +306,15 @@ PERMANENT
     If OpenMP support is enabled this limits the number of threads.
     The default is set to the number of CPUs on the system.
     Setting to '1' effectively disables parallel processing.</dd>
+    
+  <dt>TMPDIR, TEMP, TMP</dt>
+  <dd>[Various GRASS GIS commands and wxGUI]<br>
+  <!-- what about Windows %TEMP% and http://trac.osgeo.org/grass/ticket/560#comment:21 ? -->
+	The default wxGUI temporary directory is chosen from a 
+	platform-dependent list, but the user can control the selection of
+	this directory by setting one of the TMPDIR, TEMP or TMP
+	environment variables Hence the wxGUI uses $TMPDIR if it is set,
+	then $TEMP, otherwise /tmp.</dd>
 </dl>
 
 <a name="rendering"></a>
