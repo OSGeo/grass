@@ -9,7 +9,7 @@
  *
  * PURPOSE:      Import OGR vectors
  *
- * COPYRIGHT:    (C) 2003, 2011-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     struct _param {
 	struct Option *dsn, *out, *layer, *spat, *where,
 	    *min_area;
-	struct Option *snap, *type, *outloc, *cnames, *encoding;
+        struct Option *snap, *type, *outloc, *cnames, *encoding, *key;
     } param;
     struct _flag {
 	struct Flag *list, *no_clean, *force2d, *notab,
@@ -84,6 +84,8 @@ int main(int argc, char *argv[])
     dbDriver *driver = NULL;
     dbString sql, strval;
     int with_z, input3d;
+    const char *key_column;
+    int key_idx = -2; /* -1 for fid column */
 
     /* OGR */
     OGRDataSourceH Ogr_ds;
@@ -121,6 +123,7 @@ int main(int argc, char *argv[])
     OFTIntegerListlength = 40;	/* hack due to limitation in OGR */
     area_size = 0.0;
     use_tmp_vect = FALSE;
+    key_column = GV_KEY_COLUMN;
 
     G_gisinit(argv[0]);
 
@@ -228,6 +231,17 @@ int main(int argc, char *argv[])
     param.encoding->description = 
         _("Overrides encoding interpretation, useful when importing ESRI Shapefile");
     param.encoding->guisection = _("Attributes");
+
+    param.key = G_define_option();
+    param.key->key = "key";
+    param.key->type = TYPE_STRING;
+    param.key->required = NO;
+    param.key->label =
+        _("Name of column used for categories");
+    param.key->description = 
+        _("If not given, categories are generated as unique values and stored in 'cat' column");
+    param.key->guisection = _("Attributes");
+    param.key->guisection = _("Attributes");
 
     flag.formats = G_define_flag();
     flag.formats->key = 'f';
@@ -872,10 +886,31 @@ int main(int argc, char *argv[])
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
+        if (param.key->answer) {
+            const char *fid_column;
+            fid_column = OGR_L_GetFIDColumn(Ogr_layer);
+            if (fid_column) {
+                key_column = G_store(fid_column);
+                key_idx = -1;
+            }
+            if (!fid_column || strcmp(fid_column, param.key->answer) != 0) {
+                key_idx = OGR_FD_GetFieldIndex(Ogr_featuredefn, param.key->answer);
+                if (key_idx == -1)
+                    G_fatal_error(_("Key column '%s' not found"), param.key->answer);
+            }
+
+            if (key_idx > -1) {
+                /* check if the field is integer */
+                Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, key_idx);
+                Ogr_ftype = OGR_Fld_GetType(Ogr_field);
+                if (Ogr_ftype != OFTInteger)
+                    G_fatal_error(_("Key column '%s' is not integer"), param.key->answer);
+                key_column = G_store(OGR_Fld_GetNameRef(Ogr_field));
+            }
+        }
+
 	/* Add DB link */
 	if (!flag.notab->answer) {
-	    char *cat_col_name = GV_KEY_COLUMN;
-
 	    if (nlayers == 1) {	/* one layer only */
 		Fi = Vect_default_field_info(&Map, layer + 1, NULL,
 					     GV_1TABLE);
@@ -886,20 +921,23 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (ncnames > 0) {
-		cat_col_name = param.cnames->answers[0];
+		key_column = param.cnames->answers[0];
 	    }
 	    Vect_map_add_dblink(&Map, layer + 1, layer_names[layer], Fi->table,
-				cat_col_name, Fi->database, Fi->driver);
+				key_column, Fi->database, Fi->driver);
 
 	    ncols = OGR_FD_GetFieldCount(Ogr_featuredefn);
 	    G_debug(2, "%d columns", ncols);
 
 	    /* Create table */
 	    sprintf(buf, "create table %s (%s integer", Fi->table,
-		    cat_col_name);
+		    key_column);
 	    db_set_string(&sql, buf);
 	    for (i = 0; i < ncols; i++) {
 
+                if (key_idx > -1 && key_idx == i)
+                    continue; /* skip defined key (FID column) */
+                
 		Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		Ogr_ftype = OGR_Fld_GetType(Ogr_field);
 
@@ -1019,10 +1057,6 @@ int main(int argc, char *argv[])
 			      db_get_string(&sql));
 	    }
 
-	    if (db_create_index2(driver, Fi->table, cat_col_name) != DB_OK)
-		G_warning(_("Unable to create index for table <%s>, key <%s>"),
-			  Fi->table, cat_col_name);
-
 	    if (db_grant_on_table
 		(driver, Fi->table, DB_PRIV_SELECT,
 		 DB_GROUP | DB_PUBLIC) != DB_OK)
@@ -1042,6 +1076,7 @@ int main(int argc, char *argv[])
 
 	G_important_message(_("Importing %d features (OGR layer <%s>)..."),
 			    n_features, layer_names[layer]);
+
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 	    G_percent(feature_count++, n_features, 1);	/* show something happens */
 	    /* Geometry */
@@ -1050,6 +1085,11 @@ int main(int argc, char *argv[])
 		nogeom++;
 	    }
 	    else {
+                if (key_idx > -1)
+                    cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx);
+                else if (key_idx == -1)
+                    cat = OGR_F_GetFID(Ogr_feature);
+                
 		geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
 		     flag.no_clean->answer);
 	    }
@@ -1059,6 +1099,10 @@ int main(int argc, char *argv[])
 		sprintf(buf, "insert into %s values ( %d", Fi->table, cat);
 		db_set_string(&sql, buf);
 		for (i = 0; i < ncols; i++) {
+
+                    if (key_idx > -1 && key_idx == i)
+                        continue; /* skip defined key (FID column) */
+
 		    Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		    Ogr_ftype = OGR_Fld_GetType(Ogr_field);
 		    if (OGR_F_IsFieldSet(Ogr_feature, i)) {
@@ -1456,6 +1500,12 @@ int main(int argc, char *argv[])
 
     delete_table = Vect_maptype(&Map) != GV_FORMAT_NATIVE;
     Vect_close(&Map);
+
+    /* create index - may fail on non-unique categories */
+    if (db_create_index2(driver, Fi->table, key_column) != DB_OK)
+        G_warning(_("Unable to create index for table <%s>, key <%s>"),
+                  Fi->table, key_column);
+    
     if (delete_table) {
         sprintf(buf, "drop table %s", Fi->table);
         db_set_string(&sql, buf);
