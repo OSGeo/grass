@@ -111,46 +111,51 @@ def main():
             time = "relative time"
 
         stds_list = tgis.get_dataset_list(type,  ttype,  columns,  where,  order)
-    
+
+        # Use the correct order of the mapsets, hence first the current mapset, then
+        # alphabetic ordering
+        mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
+
         # Print for each mapset separately
-        for key in stds_list.keys():
-            rows = stds_list[key]
+        for key in mapsets:
+            if key in stds_list.keys():
+                rows = stds_list[key]
 
-            if rows:
-                if issubclass(sp.__class__,  tgis.AbstractMapDataset):
-                    sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%\
-                                             (sp.get_type(),  time,  key))
-                else:
-                    sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%\
-                                             (sp.get_new_map_instance(None).get_type(),  time,  key))
+                if rows:
+                    if issubclass(sp.__class__,  tgis.AbstractMapDataset):
+                        sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%\
+                                                 (sp.get_type(),  time,  key))
+                    else:
+                        sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%\
+                                                 (sp.get_new_map_instance(None).get_type(),  time,  key))
 
-                if separator is None or separator == "":
-                    separator = "\t"
-        
-                # Print the column names if requested
-                if colhead == True and first == True:
-                    output = ""
-                    count = 0
-                    for key in rows[0].keys():
-                        if count > 0:
-                            output += separator + str(key)
-                        else:
-                            output += str(key)
-                        count += 1
-                    print output
-                    first = False
-        
-                for row in rows:
-                    output = ""
-                    count = 0
-                    for col in row:
-                        if count > 0:
-                            output += separator + str(col)
-                        else:
-                            output += str(col)
-                        count += 1
-        
-                    print output
+                    if separator is None or separator == "":
+                        separator = "\t"
+            
+                    # Print the column names if requested
+                    if colhead == True and first == True:
+                        output = ""
+                        count = 0
+                        for key in rows[0].keys():
+                            if count > 0:
+                                output += separator + str(key)
+                            else:
+                                output += str(key)
+                            count += 1
+                        print output
+                        first = False
+            
+                    for row in rows:
+                        output = ""
+                        count = 0
+                        for col in row:
+                            if count > 0:
+                                output += separator + str(col)
+                            else:
+                                output += str(col)
+                            count += 1
+            
+                        print output
 
 if __name__ == "__main__":
     options, flags = grass.parser()
