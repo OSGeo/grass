@@ -38,12 +38,40 @@ class RPCDefs(object):
     READ_MAP_INFO=5
     MAP_EXISTS=6
     READ_MAP_INFO=7
+    AVAILABLE_MAPSETS = 8
 
     TYPE_RASTER=0
     TYPE_RASTER3D=1
     TYPE_VECTOR=2
 
 ###############################################################################
+def available_mapsets(lock, conn, data):
+    """!Return all available mapsets the user can access as a list of strings
+    
+       @param lock A multiprocessing.Lock instance
+       @param conn A multiprocessing.Pipe instance used to send True or False
+       @param data The list of data entries [function_id]
+       
+       @return Names of available mapsets as list of strings
+    """
+    
+    mapsets = libgis.G_available_mapsets()
+
+    count = 0
+    mapset_list = []
+    while mapsets[count]:
+        char_list = ""
+        mapset = mapsets[count]
+        if libgis.G__mapset_permissions(mapset) > 0:
+            count += 1
+            c = 0
+            while mapset[c] != "\x00":
+                char_list += mapset[c]
+                c += 1
+                
+        mapset_list.append(char_list)   
+        
+    conn.send(mapset_list) 
 
 def _has_timestamp(lock, conn, data):
     """!Check if the file based GRASS timestamp is present and send
@@ -586,7 +614,7 @@ def c_library_server(lock, conn):
        @param conn A multiprocessing.Pipe
     """
     # Crerate the function array
-    functions = [0]*8
+    functions = [0]*9
     functions[RPCDefs.STOP] = _stop
     functions[RPCDefs.HAS_TIMESTAMP] = _has_timestamp
     functions[RPCDefs.WRITE_TIMESTAMP] = _write_timestamp
@@ -594,6 +622,7 @@ def c_library_server(lock, conn):
     functions[RPCDefs.REMOVE_TIMESTAMP] = _remove_timestamp
     functions[RPCDefs.READ_MAP_INFO] = _read_map_info
     functions[RPCDefs.MAP_EXISTS] = _map_exists
+    functions[RPCDefs.AVAILABLE_MAPSETS] = available_mapsets
 
     libgis.G_gisinit("c_library_server")
     libgis.G_debug(1, "Start C-interface server")
@@ -643,7 +672,12 @@ class CLibrariesInterface(object):
        >>> grass.run_command("v.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
        0
 
-
+       # Check mapsets
+       >>> ciface = tgis.CLibrariesInterface()
+       >>> mapsets = ciface.available_mapsets()
+       >>> print mapsets[0]
+       PERMANENT
+       
        # Raster map
        >>> ciface = tgis.CLibrariesInterface()
        >>> check = ciface.raster_map_exists("test", tgis.get_current_mapset())
@@ -1029,6 +1063,19 @@ class CLibrariesInterface(object):
         self._check_restart_server()
         self.client_conn.send([RPCDefs.WRITE_TIMESTAMP, RPCDefs.TYPE_VECTOR,
                                name, mapset, layer, timestring])
+        return self.client_conn.recv()
+
+    def available_mapsets(self):
+        """!Return all available mapsets the user can access as a list of strings
+        
+           @param lock A multiprocessing.Lock instance
+           @param conn A multiprocessing.Pipe instance used to send True or False
+           @param data Can be None
+           
+           @return Names of available mapsets as list of strings
+        """
+        self._check_restart_server()
+        self.client_conn.send([RPCDefs.AVAILABLE_MAPSETS, ])
         return self.client_conn.recv()
 
     def stop(self):
