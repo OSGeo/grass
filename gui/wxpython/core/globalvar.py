@@ -21,9 +21,10 @@ if not os.getenv("GISBASE"):
 # path to python scripts
 ETCDIR   = os.path.join(os.getenv("GISBASE"), "etc")
 GUIDIR   = os.path.join(os.getenv("GISBASE"), "gui")
-WXGUIDIR = os.path.join(os.getenv("GISBASE"), "gui", "wxpython")
+WXGUIDIR = os.path.join(GUIDIR, "wxpython")
 ICONDIR  = os.path.join(GUIDIR, "icons")
-IMGDIR  = os.path.join(GUIDIR, "images")
+IMGDIR   = os.path.join(GUIDIR, "images")
+SYMBDIR  = os.path.join(IMGDIR, "symbols")
 
 from core.debug import Debug
 

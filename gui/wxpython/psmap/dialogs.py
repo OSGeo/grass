@@ -1960,7 +1960,7 @@ class VPropertiesDialog(PsmapDialog):
             
         self.symbolName = wx.StaticText(panel, id = wx.ID_ANY)
         self.symbolName.SetLabel(self.vPropertiesDict['symbol'])
-        bitmap = wx.Bitmap(os.path.join(globalvar.ETCSYMBOLDIR,
+        bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR,
                                         self.vPropertiesDict['symbol']) + '.png')
         self.symbolButton = wx.BitmapButton(panel, id = wx.ID_ANY, bitmap = bitmap)
             
@@ -2258,7 +2258,7 @@ class VPropertiesDialog(PsmapDialog):
         self.epsFileCtrl.Enable(not useSymbol)
             
     def OnSymbolSelection(self, event):
-        dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
+        dlg = SymbolDialog(self, symbolPath = globalvar.SYMBDIR,
                            currentSymbol = self.symbolName.GetLabel())
         if dlg.ShowModal() == wx.ID_OK:
             img = dlg.GetSelectedSymbolPath()
@@ -4573,7 +4573,7 @@ class PointDialog(PsmapDialog):
                                           label = self.pointDict['symbol'])
         gridSizer.Add(item = self.symbolLabel, pos = (0, 1),
                       flag = wx.ALIGN_CENTER_VERTICAL )
-        bitmap = wx.Bitmap(os.path.join(globalvar.ETCSYMBOLDIR,
+        bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR,
                                         self.pointDict['symbol']) + '.png')
         self.symbolButton = wx.BitmapButton(panel, id = wx.ID_ANY, bitmap = bitmap)
         self.symbolButton.Bind(wx.EVT_BUTTON, self.OnSymbolSelection)
@@ -4715,7 +4715,7 @@ class PointDialog(PsmapDialog):
                 widget.GetWindow().Disable()
                 
     def OnSymbolSelection(self, event):
-        dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
+        dlg = SymbolDialog(self, symbolPath = globalvar.SYMBDIR,
                            currentSymbol = self.symbolLabel.GetLabel())
         if dlg.ShowModal() == wx.ID_OK:
             img = dlg.GetSelectedSymbolPath()
