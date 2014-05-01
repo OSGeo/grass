@@ -76,7 +76,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.SetTitle(title)
         
         # icon
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_sql.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass_sql.ico'), wx.BITMAP_TYPE_ICO))
 
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
              

@@ -30,11 +30,6 @@ from core import globalvar
 import wx
 import wx.aui
 
-if os.path.join(globalvar.ETCWXDIR, "icons") not in sys.path:
-    sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
-if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
-    sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
-
 from core               import globalvar
 from core.render        import Map
 from vdigit.toolbars    import VDigitToolbar

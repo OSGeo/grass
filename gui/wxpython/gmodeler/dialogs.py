@@ -151,7 +151,7 @@ class ModelSearchDialog(wx.Dialog):
         
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title, **kwargs)
         self.SetName("ModelerDialog")
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self._command = None
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
@@ -301,7 +301,7 @@ class ModelRelationDialog(wx.Dialog):
         
         self.valid = True
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         

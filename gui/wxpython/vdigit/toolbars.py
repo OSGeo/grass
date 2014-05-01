@@ -42,7 +42,8 @@ class VDigitToolbar(BaseToolbar):
         BaseToolbar.__init__(self, parent, toolSwitcher)
         self.digit         = None
         self._giface       = giface
-        
+        self.fType         = None     # feature type for simple features editing
+
         self.editingStarted = Signal("VDigitToolbar.editingStarted")
         self.editingStopped = Signal("VDigitToolbar.editingStopped")
         self.editingBgMap = Signal("VDigitToolbar.editingBgMap")

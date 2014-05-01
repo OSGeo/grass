@@ -1809,7 +1809,7 @@ class LocationWizard(wx.Object):
         #
         # define wizard image
         #
-        imagePath = os.path.join(globalvar.ETCIMGDIR, "loc_wizard_qgis.png")
+        imagePath = os.path.join(globalvar.IMGDIR, "loc_wizard_qgis.png")
         wizbmp = wx.Image(imagePath, wx.BITMAP_TYPE_PNG)
         wizbmp = wizbmp.ConvertToBitmap()
         

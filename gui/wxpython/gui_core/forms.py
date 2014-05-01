@@ -58,18 +58,11 @@ import codecs
 
 from threading import Thread
 
-gisbase = os.getenv("GISBASE")
-if gisbase is None:
-    print >>sys.stderr, "We don't seem to be properly installed, or we are being run outside GRASS. Expect glitches."
+if not os.getenv("GISBASE"):
+    sys.write("We don't seem to be properly installed, or we are being run "
+              "outside GRASS. Expect glitches.\n")
     gisbase = os.path.join(os.path.dirname(sys.argv[0]), os.path.pardir)
-    wxbase = gisbase
-else:
-    wxbase = os.path.join(gisbase, 'etc', 'gui', 'wxpython')
 
-if wxbase not in sys.path:
-    sys.path.append(wxbase)
-
-from core import globalvar
 import wx
 try:
     import wx.lib.agw.flatnotebook as FN
@@ -89,6 +82,7 @@ from grass.pydispatch.signal import Signal
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from core import globalvar
 from gui_core.widgets import StaticWrapText, ScrolledPanel, ColorTablesComboBox, \
                              BarscalesComboBox, NArrowsComboBox
 from gui_core.ghelp   import HelpPanel
@@ -417,7 +411,7 @@ class TaskFrame(wx.Frame):
         self.CreateStatusBar()
         
         # icon
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_dialog.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass_dialog.ico'), wx.BITMAP_TYPE_ICO))
         
         guisizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -432,7 +426,7 @@ class TaskFrame(wx.Frame):
         
         # GRASS logo
         self.logo = wx.StaticBitmap(parent = self.panel,
-                                    bitmap = wx.Bitmap(name = os.path.join(globalvar.ETCIMGDIR,
+                                    bitmap = wx.Bitmap(name = os.path.join(globalvar.IMGDIR,
                                                                            'grass_form.png'),
                                                      type = wx.BITMAP_TYPE_PNG))
         topsizer.Add(item = self.logo, proportion = 0, border = 3,
@@ -1269,7 +1263,7 @@ class CmdPanel(wx.Panel):
                             showButton = False
                         if showButton:
                             iconTheme = UserSettings.Get(group='appearance', key='iconTheme', subkey='type')
-                            bitmap = wx.Bitmap(os.path.join(globalvar.ETCICONDIR, iconTheme, 'map-info.png'))
+                            bitmap = wx.Bitmap(os.path.join(globalvar.ICONDIR, iconTheme, 'map-info.png'))
                             bb = wx.BitmapButton(parent=which_panel, bitmap=bitmap)
                             bb.Bind(wx.EVT_BUTTON, self.OnTimelineTool)
                             bb.SetToolTipString(_("Show graphical representation of temporal extent of dataset(s) ."))
@@ -2237,7 +2231,7 @@ class CmdPanel(wx.Panel):
         
     def AddBitmapToImageList(self, section, imageList):
         iconTheme = UserSettings.Get(group = 'appearance', key = 'iconTheme', subkey = 'type')
-        iconSectionDict = {'manual': os.path.join(globalvar.ETCICONDIR, iconTheme, 'help.png')}
+        iconSectionDict = {'manual': os.path.join(globalvar.ICONDIR, iconTheme, 'help.png')}
         if section in iconSectionDict.keys():
             image = wx.Image(iconSectionDict[section]).Scale(16, 16, wx.IMAGE_QUALITY_HIGH)
             idx = imageList.Add(wx.BitmapFromImage(image))

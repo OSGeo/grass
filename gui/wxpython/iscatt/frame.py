@@ -146,7 +146,7 @@ class IScattDialog(wx.Dialog):
     def __init__(self, parent, giface, title=_("GRASS GIS Interactive Scatter Plot Tool"),
                  id=wx.ID_ANY, style=wx.DEFAULT_FRAME_STYLE, **kwargs):
         wx.Dialog.__init__(self, parent, id, style=style, title = title, **kwargs)
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         self.iscatt_panel = MapDispIScattPanel(self, giface)
 

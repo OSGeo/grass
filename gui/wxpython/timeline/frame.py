@@ -16,12 +16,12 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 import os
-import sys
-import wx
 import signal
 from math import ceil
 from itertools import cycle
 import numpy as np
+
+import wx
 
 try:
     import matplotlib
@@ -36,9 +36,6 @@ try:
     from matplotlib import cbook
 except ImportError:
     raise ImportError(_('The Timeline Tool needs "Matplotlib" package to be installed.'))
-
-if __name__ == '__main__':
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 import grass.script as grass
 from core.utils import _

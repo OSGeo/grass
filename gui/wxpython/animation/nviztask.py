@@ -15,14 +15,10 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
     import elementtree.ElementTree as etree  # Python <= 2.4
-
-if __name__ == '__main__':
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException

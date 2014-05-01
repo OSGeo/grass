@@ -18,7 +18,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
+
 import wx
 import wx.aui
 
@@ -35,14 +35,6 @@ try:
     from grass.lib.raster import *
 except ImportError:
     pass
-
-#end new import
-
-# adding a path to wxGUI modules
-if __name__ == '__main__':
-    WXGUIBASE = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if WXGUIBASE not in sys.path:
-        sys.path.append(WXGUIBASE)
 
 from core.utils import _
 from core.giface import StandaloneGrassInterface

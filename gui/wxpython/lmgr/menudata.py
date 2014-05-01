@@ -19,7 +19,7 @@ import os
 
 from core.menutree  import MenuTreeModelBuilder
 from core.toolboxes import getMenudataFile
-from core.globalvar import ETCWXDIR
+from core.globalvar import WXGUIDIR
 from core.gcmd import GError
 from core.utils import _
 
@@ -31,7 +31,7 @@ class LayerManagerMenuData(MenuTreeModelBuilder):
         else:
             expandAddons = True
 
-        fallback = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
+        fallback = os.path.join(WXGUIDIR, 'xml', 'menudata.xml')
         if not filename:
             filename = getMenudataFile(userRootFile='main_menu.xml',
                                        newFile='menudata.xml',
@@ -41,7 +41,7 @@ class LayerManagerMenuData(MenuTreeModelBuilder):
         except (ValueError, AttributeError, TypeError):
             GError(_("Unable to parse user toolboxes XML files. "
                      "Default main menu will be loaded."))
-            fallback = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
+            fallback = os.path.join(WXGUIDIR, 'xml', 'menudata.xml')
             MenuTreeModelBuilder.__init__(self, fallback)
 
 
@@ -52,7 +52,7 @@ class LayerManagerModuleTree(MenuTreeModelBuilder):
         else:
             expandAddons = True
 
-        fallback = os.path.join(ETCWXDIR, 'xml', 'module_tree_menudata.xml')
+        fallback = os.path.join(WXGUIDIR, 'xml', 'module_tree_menudata.xml')
         if not filename:
             filename = getMenudataFile(userRootFile='module_tree.xml',
                                        newFile='module_tree_menudata.xml',

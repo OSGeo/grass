@@ -33,16 +33,9 @@ Module to run GCP management tool as stadalone application.
 """
 
 import os
-import sys
 import  wx
 
 import grass.script as grass
-
-# adding a path to wxGUI modules
-if __name__ == '__main__':
-    WXGUIBASE = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if WXGUIBASE not in sys.path:
-        sys.path.append(WXGUIBASE)
 
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion

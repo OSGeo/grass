@@ -50,7 +50,7 @@ class AboutWindow(wx.Frame):
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
         # icon
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         # notebook
         self.aboutNotebook = FormNotebook(self.panel, style = wx.BK_LEFT)
@@ -794,7 +794,7 @@ def ShowAboutDialog(prgName, startYear):
     """
     info = wx.AboutDialogInfo()
     
-    info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+    info.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
     info.SetName(prgName)
     info.SetWebSite('http://grass.osgeo.org')
     info.SetDescription(_grassDevTeam(startYear) + '\n\n' +

@@ -30,8 +30,6 @@ except ImportError:
 from grass.script import core as grass
 from grass.script import task as gtask
 
-if __name__ == "__main__":
-    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
 from lmgr.menudata  import LayerManagerMenuData
 from core.globalvar import grassCmd
 

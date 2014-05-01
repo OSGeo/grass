@@ -83,7 +83,7 @@ class ModelFrame(wx.Frame):
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
         self.SetName("Modeler")
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self.menubar = Menu(parent = self, model = ModelerMenuData().GetModel(separators=True))        
         self.SetMenuBar(self.menubar)

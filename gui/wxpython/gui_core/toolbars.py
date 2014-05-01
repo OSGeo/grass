@@ -26,7 +26,7 @@ from core.debug import Debug
 from core.utils import _
 from icons.icon import MetaIcon
 from collections import defaultdict
-from core.globalvar import ETCIMGDIR
+from core.globalvar import IMGDIR
 
 from grass.pydispatch.signal import Signal
 
@@ -257,7 +257,7 @@ class BaseToolbar(wx.ToolBar):
 
         Button must be custom (not toolbar tool) to set smaller width.
         """
-        arrowPath = os.path.join(ETCIMGDIR, 'small_down_arrow.png')
+        arrowPath = os.path.join(IMGDIR, 'small_down_arrow.png')
         if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
             bitmap = wx.Bitmap(name = arrowPath)
         else:

@@ -30,13 +30,7 @@ if sys.version_info[0:2] > (2, 6):
 else:
     has_xpath = False
 
-
-if __name__ == '__main__':
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
-
-from core.globalvar import ETCWXDIR
+from core.globalvar import WXGUIDIR
 from core.utils import GetSettingsPath, _
 from core.gcmd import GError, RunCommand
 
@@ -47,10 +41,10 @@ from core.debug import Debug
 
 
 # this could be placed to functions
-mainMenuFile = os.path.join(ETCWXDIR, 'xml', 'main_menu.xml')
-toolboxesFile = os.path.join(ETCWXDIR, 'xml', 'toolboxes.xml')
-wxguiItemsFile = os.path.join(ETCWXDIR, 'xml', 'wxgui_items.xml')
-moduleItemsFile = os.path.join(ETCWXDIR, 'xml', 'module_items.xml')
+mainMenuFile    = os.path.join(WXGUIDIR, 'xml', 'main_menu.xml')
+toolboxesFile   = os.path.join(WXGUIDIR, 'xml', 'toolboxes.xml')
+wxguiItemsFile  = os.path.join(WXGUIDIR, 'xml', 'wxgui_items.xml')
+moduleItemsFile = os.path.join(WXGUIDIR, 'xml', 'module_items.xml')
 
 userToolboxesFile = os.path.join(GetSettingsPath(), 'toolboxes', 'toolboxes.xml')
 userMainMenuFile = os.path.join(GetSettingsPath(), 'toolboxes', 'main_menu.xml')
@@ -79,12 +73,11 @@ def getMenudataFile(userRootFile, newFile, fallback):
     """
     Debug.msg(1, "toolboxes.getMenudataFile: {userRootFile}, {newFile}, {fallback}".format(**locals()))
 
-    distributionRootFile = os.path.join(ETCWXDIR, 'xml', userRootFile)
+    distributionRootFile = os.path.join(WXGUIDIR, 'xml', userRootFile)
     userRootFile = os.path.join(GetSettingsPath(), 'toolboxes', userRootFile)
     if not os.path.exists(userRootFile):
         userRootFile = None
 
-    ##fallback = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
     # always create toolboxes directory if does not exist yet
     tbDir = _setupToolboxes()
 
@@ -685,11 +678,11 @@ def module_test():
     """Tests the module using test files included in the current directory and
     in files from distribution.
     """
-    toolboxesFile = os.path.join(ETCWXDIR, 'xml', 'toolboxes.xml')
+    toolboxesFile   = os.path.join(WXGUIDIR, 'xml', 'toolboxes.xml')
     userToolboxesFile = 'test.toolboxes_user_toolboxes.xml'
     menuFile = 'test.toolboxes_menu.xml'
-    wxguiItemsFile = os.path.join(ETCWXDIR, 'xml', 'wxgui_items.xml')
-    moduleItemsFile = os.path.join(ETCWXDIR, 'xml', 'module_items.xml')
+    wxguiItemsFile  = os.path.join(WXGUIDIR, 'xml', 'wxgui_items.xml')
+    moduleItemsFile = os.path.join(WXGUIDIR, 'xml', 'module_items.xml')
 
     toolboxes = etree.parse(toolboxesFile)
     userToolboxes = etree.parse(userToolboxesFile)
@@ -743,9 +736,9 @@ def main():
     """
     # TODO: fix parameter handling
     if len(sys.argv) > 1:
-        mainFile = os.path.join(ETCWXDIR, 'xml', 'module_tree.xml')
+        mainFile = os.path.join(WXGUIDIR, 'xml', 'module_tree.xml')
     else:
-        mainFile = os.path.join(ETCWXDIR, 'xml', 'main_menu.xml')
+        mainFile = os.path.join(WXGUIDIR, 'xml', 'main_menu.xml')
     tree = createTree(distributionRootFile=mainFile, userRootFile=None,
                       userDefined=False)
     root = tree.getroot()
