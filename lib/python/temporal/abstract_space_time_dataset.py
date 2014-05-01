@@ -14,6 +14,7 @@ for details.
 @author Soeren Gebbert
 """
 import sys
+import uuid
 from abstract_dataset import *
 from temporal_granularity import *
 from spatio_temporal_relationships import *
@@ -44,17 +45,18 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """!Create the name of the map register table of this space time
             dataset
 
-            The name, mapset and the map type are used to create the table name
+            A uuid and the map type are used to create the table name
 
             ATTENTION: It must be assured that the base object has selected its
             content from the database.
 
             @return The name of the map register table
         """
-
-        return self.base.get_name() + "_" + \
-                self.base.get_mapset() + "_" + \
-                self.get_new_map_instance(None).get_type() + "_register"
+        
+        uuid_rand = str(uuid.uuid4()).replace("-",  "")
+        
+        table_name = self.get_new_map_instance(None).get_type() + "_map_register_" + uuid_rand
+        return table_name
 
     @abstractmethod
     def get_new_map_instance(self, ident=None):
@@ -343,12 +345,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             sql = open(os.path.join(sql_path,
                                     "stds_map_register_table_template.sql"),
                                     'r').read()
-            map_type = self.get_new_map_instance(None).get_type()
-            stds_name = self.get_name() + "_" + self.get_mapset()
 
             # Create a raster, raster3d or vector tables
-            sql = sql.replace("GRASS_MAP", map_type)
-            sql = sql.replace("SPACETIME_NAME", stds_name)
+            sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
             statement += sql
 
             if dbif.dbmi.__name__ == "sqlite3":
@@ -2123,7 +2122,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             sql = "INSERT INTO " + stds_register_table + \
                 " (id) " + "VALUES (%s);\n"
 
-
         statement += dbif.mogrify_sql_statement((sql, (map_id,)))
 
         # Now execute the insert transaction
@@ -2230,7 +2228,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.msgr.verbose(_("Update metadata, spatial and temporal extent from "
                        "all registered maps of <%s>") % (self.get_id()))
 
-        # Nothing to do if the register is not present
+        # Nothing to do if the map register is not present
         if not self.get_map_register():
             return
 
@@ -2244,6 +2242,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         stds_name = self.base.get_name()
         stds_mapset = self.base.get_mapset()
         sql_path = get_sql_template_path()
+        stds_register_table = self.get_map_register()
 
         #We create a transaction
         sql_script = ""
@@ -2255,7 +2254,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                    'r').read()
         sql = sql.replace(
             "GRASS_MAP", self.get_new_map_instance(None).get_type())
-        sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset)
+        sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
         sql = sql.replace("STDS", self.get_type())
 
@@ -2265,11 +2264,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Update type specific metadata
         sql = open(os.path.join(sql_path, "update_" +
             self.get_type() + "_metadata_template.sql"), 'r').read()
-        sql = sql.replace(
-            "GRASS_MAP", self.get_new_map_instance(None).get_type())
-        sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset)
+        sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
-        sql = sql.replace("STDS", self.get_type())
 
         sql_script += sql
         sql_script += "\n"
@@ -2293,19 +2289,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if self.is_time_absolute():
                 sql = """SELECT max(start_time) FROM GRASS_MAP_absolute_time
                          WHERE GRASS_MAP_absolute_time.id IN
-                        (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register);"""
+                        (SELECT id FROM SPACETIME_REGISTER_TABLE);"""
                 sql = sql.replace("GRASS_MAP", self.get_new_map_instance(
                     None).get_type())
-                sql = sql.replace("SPACETIME_NAME",
-                    stds_name + "_" + stds_mapset)
+                sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
             else:
                 sql = """SELECT max(start_time) FROM GRASS_MAP_relative_time
                          WHERE GRASS_MAP_relative_time.id IN
-                        (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register);"""
+                        (SELECT id FROM SPACETIME_REGISTER_TABLE);"""
                 sql = sql.replace("GRASS_MAP", self.get_new_map_instance(
                     None).get_type())
-                sql = sql.replace("SPACETIME_NAME",
-                    stds_name + "_" + stds_mapset)
+                sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
 
             dbif.cursor.execute(sql)
             row = dbif.cursor.fetchone()
@@ -2337,24 +2331,22 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = """UPDATE STDS_absolute_time SET end_time =
                (SELECT max(start_time) FROM GRASS_MAP_absolute_time WHERE
                GRASS_MAP_absolute_time.id IN
-                        (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
+                        (SELECT id FROM SPACETIME_REGISTER_TABLE)
                ) WHERE id = 'SPACETIME_ID';"""
                 sql = sql.replace("GRASS_MAP", self.get_new_map_instance(
                     None).get_type())
-                sql = sql.replace("SPACETIME_NAME",
-                    stds_name + "_" + stds_mapset)
+                sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
                 sql = sql.replace("SPACETIME_ID", self.base.get_id())
                 sql = sql.replace("STDS", self.get_type())
             elif self.is_time_relative():
                 sql = """UPDATE STDS_relative_time SET end_time =
                (SELECT max(start_time) FROM GRASS_MAP_relative_time WHERE
                GRASS_MAP_relative_time.id IN
-                        (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
+                        (SELECT id FROM SPACETIME_REGISTER_TABLE)
                ) WHERE id = 'SPACETIME_ID';"""
                 sql = sql.replace("GRASS_MAP", self.get_new_map_instance(
                     None).get_type())
-                sql = sql.replace("SPACETIME_NAME",
-                    stds_name + "_" + stds_mapset)
+                sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
                 sql = sql.replace("SPACETIME_ID", self.base.get_id())
                 sql = sql.replace("STDS", self.get_type())
 
