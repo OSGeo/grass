@@ -17,7 +17,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2013 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -381,13 +381,16 @@ def set_paths():
         os.environ['GRASS_ADDON_BASE'] = addon_base
     path_prepend(os.path.join(addon_base, 'scripts'), 'PATH')
     path_prepend(os.path.join(addon_base, 'bin'), 'PATH')
-
+    
     # standard installation
     path_prepend(gfile('scripts'), 'PATH')
     path_prepend(gfile('bin'), 'PATH')
 
     # Set PYTHONPATH to find GRASS Python modules
-    path_prepend(gfile('etc', 'python'), 'PYTHONPATH')
+    if os.path.exists(gfile('gui', 'wxpython')):
+        path_prepend(gfile('gui', 'wxpython'), 'PYTHONPATH')
+    if os.path.exists(gfile('etc', 'python')):
+        path_prepend(gfile('etc', 'python'), 'PYTHONPATH')
 
     # set path for the GRASS man pages
     grass_man_path = os.path.join(gisbase, 'docs', 'man')
@@ -539,7 +542,7 @@ def check_gui():
             p.wait()
             if p.returncode == 0:
                 # Set the wxpython base directory
-                wxpython_base = gfile("etc", "gui", "wxpython")
+                wxpython_base = gfile("gui", "wxpython")
             else:
                 # Python was not found - switch to text interface mode
                 warning(_("The python command does not work as expected!\n"
@@ -689,8 +692,7 @@ def set_data():
 
 def gui_startup(wscreen_only = False):
     if grass_gui in ('wxpython', 'gtext'):
-        ret = call([os.getenv('GRASS_PYTHON'),
-                        gfile(wxpython_base, "gis_set.py")])
+        ret = call([os.getenv('GRASS_PYTHON'), gfile(wxpython_base, "gis_set.py")])
 
     if ret == 0:
         pass
@@ -881,9 +883,7 @@ def check_lock():
 
     if msg:
         if grass_gui == "wxpython":
-            call([os.getenv('GRASS_PYTHON'),
-                  os.path.join(wxpython_base, "gis_set_error.py"),
-                  msg])
+            call([os.getenv('GRASS_PYTHON'), gfile(wxpython_base, "gis_set_error.py"), msg])
         else:
             global remove_lockfile
             remove_lockfile = False
