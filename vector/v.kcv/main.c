@@ -3,13 +3,13 @@
  *
  * MODULE:     v.kcv
  *
- * AUTHOR(S):  James Darrell McCauley darrell@mccauley-usa.com
+ * AUTHOR(S):  James Darrell McCauley darrell@mccauley-usa.com (1993-1994)
  *             OGR support by Martin Landa <landa.martin gmail.com> (2009)
- *             Spped-up by Jan Vandrol and Jan Ruzicka (2013)
+ *             Speed-up by Jan Vandrol and Jan Ruzicka (2013)
  *
  * PURPOSE:    Randomly partition points into test/train sets.
  *
- * COPYRIGHT:  (C) 2001-2009 by James Darrell McCauley, and the GRASS Development Team
+ * COPYRIGHT:  (C) 2001-2014 by James Darrell McCauley, and the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2).  Read the file COPYING that
