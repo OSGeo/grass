@@ -429,8 +429,7 @@ class AboutWindow(wx.Frame):
                                                             label = email))
                     translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
                                                             label = lang))                                                            
-                    flag = os.path.join(os.getenv("GISBASE"), "etc", "gui", 
-                            "icons", "flags", "%s.png" % lang.lower())
+                    flag = os.path.join(globalvar.ICONDIR, "flags", "%s.png" % lang.lower())
                     if os.path.exists(flag):
                         flagBitmap = wx.StaticBitmap(parent = translatorswin, id = wx.ID_ANY,
                                      bitmap = wx.Bitmap(name = flag,
