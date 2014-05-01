@@ -1032,7 +1032,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId['vectorLayer:point:symbol'] = symbolLabel.GetId()
         gridSizer.Add(item = symbolLabel, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, pos = (row, col + 1))
 
-        bitmap = wx.Bitmap(os.path.join(globalvar.ETCSYMBOLDIR, symbolPath) + '.png')
+        bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR, symbolPath) + '.png')
         bb = wx.BitmapButton(parent = panel, id = wx.ID_ANY, bitmap = bitmap, name = "symbolButton")
         bb.Bind(wx.EVT_BUTTON, self.OnSetSymbol)
         gridSizer.Add(item = bb, pos = (row, col + 2))
@@ -1496,7 +1496,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         winId = self.winId['vectorLayer:point:symbol']
         label = self.FindWindowById(winId)
         bb = self.FindWindowByName('symbolButton')
-        dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
+        dlg = SymbolDialog(self, symbolPath = globalvar.SYMBDIR,
                            currentSymbol = label.GetLabel())
         if dlg.ShowModal() == wx.ID_OK:
             img = dlg.GetSelectedSymbolPath()

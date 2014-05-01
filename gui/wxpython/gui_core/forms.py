@@ -1049,7 +1049,7 @@ class CmdPanel(wx.Panel):
                         value = self._getValue(p)
                         
                         if p['name'] == 'icon': # symbols
-                            bitmap = wx.Bitmap(os.path.join(globalvar.ETCSYMBOLDIR, value) + '.png')
+                            bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR, value) + '.png')
                             bb = wx.BitmapButton(parent = which_panel, id = wx.ID_ANY,
                                                  bitmap = bitmap)
                             iconLabel = wx.StaticText(parent = which_panel, id = wx.ID_ANY)
@@ -2142,7 +2142,7 @@ class CmdPanel(wx.Panel):
         for p in self.task.params:
             if 'wxId' in p and myId in p['wxId']:
                 from gui_core.dialogs import SymbolDialog
-                dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
+                dlg = SymbolDialog(self, symbolPath = globalvar.SYMBDIR,
                                    currentSymbol = p['value'])
                 if dlg.ShowModal() == wx.ID_OK:
                     img = dlg.GetSelectedSymbolPath()
