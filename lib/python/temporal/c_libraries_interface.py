@@ -69,8 +69,17 @@ def available_mapsets(lock, conn, data):
                 char_list += mapset[c]
                 c += 1
                 
-        mapset_list.append(char_list)   
+        mapset_list.append(char_list) 
         
+    # We need to sort the mapset list, but the first one should be 
+    # the current mapset
+    current_mapset = libgis.G_mapset()
+    mapset_list.remove(current_mapset)
+    mapset_list.sort()
+    mapset_list.reverse()
+    mapset_list.append(current_mapset)
+    mapset_list.reverse()
+
     conn.send(mapset_list) 
 
 def _has_timestamp(lock, conn, data):
