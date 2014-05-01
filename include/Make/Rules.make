@@ -27,8 +27,10 @@ else
 mkpath = $(1):$(2)
 endif
 
-GRASS_PYTHONPATH := $(call mkpath,$(GISBASE)/etc/python,$$PYTHONPATH)
-GRASS_PYTHONPATH := $(call mkpath,$(ARCH_DISTDIR)/etc/python,$(GRASS_PYTHONPATH))
+GRASS_PYTHONPATH := $(call mkpath,$(GISBASE)/gui/wxpython,$$PYTHONPATH)
+GRASS_PYTHONPATH := $(call mkpath,$(GISBASE)/etc/python,$(GRASS_PYTHONPATH))
+### really needed ???
+### GRASS_PYTHONPATH := $(call mkpath,$(ARCH_DISTDIR)/etc/python,$(GRASS_PYTHONPATH))
 
 run_grass = \
 	GISRC=$(RUN_GISRC) \
