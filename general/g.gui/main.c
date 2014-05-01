@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
     G_message(_("Launching <%s> GUI in the background, please wait..."), type->answer);
 
     if (strcmp(type->answer, "wxpython") == 0) {
-	sprintf(progname, "%s/etc/gui/wxpython/wxgui.py", G_gisbase());
+	sprintf(progname, "%s/gui/wxpython/wxgui.py", G_gisbase());
 	if (rc_file->answer) {
 	    G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
 		    "--workspace", rc_file->answer, SF_BACKGROUND, NULL);
