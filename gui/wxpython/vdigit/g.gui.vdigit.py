@@ -35,16 +35,10 @@
 #%end
 
 import os
-import sys
 
 import grass.script as grass
 
 import wx
-
-if __name__ == '__main__':
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
 
 from core.globalvar import CheckWxVersion
 from core.utils import _, GuiModuleMain

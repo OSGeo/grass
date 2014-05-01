@@ -51,15 +51,11 @@
 #%end
 
 import os
-import sys
 
 import wx
 
 import grass.script as grass
 import grass.temporal as tgis
-
-if __name__ == '__main__':
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core.globalvar import CheckWxVersion
 from core.utils import _, GuiModuleMain

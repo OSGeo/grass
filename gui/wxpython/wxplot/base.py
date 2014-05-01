@@ -24,7 +24,7 @@ try:
 except ImportError, e:
     print >> sys.stderr, e
 
-from core.globalvar    import ETCICONDIR
+from core.globalvar    import ICONDIR
 from core.settings     import UserSettings
 from wxplot.dialogs    import TextDialog, OptDialog
 from core.render       import Map
@@ -73,7 +73,7 @@ class BasePlotFrame(wx.Frame):
         #
         # Icon
         #
-        self.SetIcon(wx.Icon(os.path.join(ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
                 
         #
         # Add statusbar

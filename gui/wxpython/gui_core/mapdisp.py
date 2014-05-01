@@ -83,7 +83,7 @@ class MapFrameBase(wx.Frame):
         self.SetClientSize(self.GetSize())
         self.iconsize = (16, 16)
 
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
         
         # toolbars
         self.toolbars = {}

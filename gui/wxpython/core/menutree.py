@@ -43,11 +43,6 @@ except ImportError:
 
 import wx
 
-if __name__ == '__main__':
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
-
 from core.treemodel import TreeModel, ModuleNode
 from core.settings import UserSettings
 from core.toolboxes import expandAddons as expAddons
@@ -230,21 +225,17 @@ if __name__ == "__main__":
         elif arg in ('manager', 'module_tree', 'modeler', 'psmap'):
             menu = arg
 
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
-
     # FIXME: cross-dependencies
     if menu == 'manager':
         from lmgr.menudata     import LayerManagerMenuData
-        from core.globalvar    import ETCWXDIR
-        filename = os.path.join(ETCWXDIR, 'xml', 'menudata.xml')
+        from core.globalvar    import WXGUIDIR
+        filename = os.path.join(WXGUIDIR, 'xml', 'menudata.xml')
         menudata = LayerManagerMenuData(filename)
     # FIXME: since module descriptions are used again we have now the third copy of the same string (one is in modules)
     elif menu == 'module_tree':
         from lmgr.menudata import LayerManagerModuleTree
-        from core.globalvar import ETCWXDIR
-        filename = os.path.join(ETCWXDIR, 'xml', 'module_tree_menudata.xml')
+        from core.globalvar import WXGUIDIR
+        filename = os.path.join(WXGUIDIR, 'xml', 'module_tree_menudata.xml')
         menudata = LayerManagerModuleTree(filename)
     elif menu == 'modeler':
         from gmodeler.menudata import ModelerMenuData

@@ -23,17 +23,13 @@ import time
 import thread
 from core.utils import _
 
-### dependencies to be checked once, as they are quite time-consuming. cfr. grass.parser.
-# GRASS binding
+### dependencies to be checked once, as they are quite
+### time-consuming. cfr. grass.parser.
+
 try:
     import grass.script as grass
 except ImportError:
     sys.exit(_("No GRASS-python library found."))
-### wxGUI imports
-
-GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
-if GUIModulesPath not in sys.path:
-    sys.path.append(GUIModulesPath)
 
 from core import globalvar
 from gui_core import gselect
@@ -278,7 +274,7 @@ class KrigingModule(wx.Frame):
         wx.Frame.__init__(self, parent, *args, **kwargs)
         # setting properties and all widgettery
         self.SetTitle(_("Kriging Module"))
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_dialog.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass_dialog.ico'), wx.BITMAP_TYPE_ICO))
         self.log = Log(self) 
         self.CreateStatusBar()
         self.log.message(_("Ready."))

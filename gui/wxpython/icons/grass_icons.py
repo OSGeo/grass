@@ -9,7 +9,7 @@ import os
 
 from core import globalvar
 
-iconPath = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass")
+iconPath = os.path.join(globalvar.ICONDIR, "grass")
 
 iconSet = dict()
 

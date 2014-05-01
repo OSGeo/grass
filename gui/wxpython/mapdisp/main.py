@@ -29,11 +29,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-if __name__ == "__main__":
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
-
 from core          import globalvar
 import wx
 

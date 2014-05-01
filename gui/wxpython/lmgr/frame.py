@@ -110,7 +110,7 @@ class GMFrame(wx.Frame):
         self._setTitle()
         self.SetName("LayerManager")
         
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self._giface = LayerManagerGrassInterface(self)
         
@@ -1166,9 +1166,6 @@ class GMFrame(wx.Frame):
         @return True on success
         @return False on error
         """
-        # dtd
-        # dtdFilename = os.path.join(globalvar.ETCWXDIR, "xml", "grass-gxw.dtd")
-        
         # parse workspace file
         try:
             gxwXml = ProcessWorkspaceFile(etree.parse(filename))

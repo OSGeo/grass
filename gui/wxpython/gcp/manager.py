@@ -65,7 +65,7 @@ tgt_map = { 'raster' : '',
 maptype = 'raster'
 
 def getSmallUpArrowImage():
-    stream = open(os.path.join(globalvar.ETCIMGDIR, 'small_up_arrow.png'), 'rb')
+    stream = open(os.path.join(globalvar.IMGDIR, 'small_up_arrow.png'), 'rb')
     try:
         img = wx.ImageFromStream(stream)
     finally:
@@ -73,7 +73,7 @@ def getSmallUpArrowImage():
     return img
 
 def getSmallDnArrowImage():
-    stream = open(os.path.join(globalvar.ETCIMGDIR, 'small_down_arrow.png'), 'rb')
+    stream = open(os.path.join(globalvar.IMGDIR, 'small_down_arrow.png'), 'rb')
     try:
         img = wx.ImageFromStream(stream)
     finally:

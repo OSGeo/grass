@@ -18,15 +18,9 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>   
 """
 import os
-import sys
 
 import wx
 import wx.lib.scrolledpanel as scrolled
-
-if __name__ == '__main__':
-    wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if wxbase not in sys.path:
-        sys.path.append(wxbase)
 
 from core                 import globalvar
 from core.gcmd            import RunCommand
@@ -43,7 +37,7 @@ class RegionDef(BaseClass, wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, size = size)
         panel = wx.Panel(self, id = wx.ID_ANY)
         
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self.parent = parent
         self.location = location
@@ -93,7 +87,7 @@ class RegionDef(BaseClass, wx.Dialog):
         #
         # image
         #
-        self.img = wx.Image(os.path.join(globalvar.ETCIMGDIR, "qgis_world.png"),
+        self.img = wx.Image(os.path.join(globalvar.IMGDIR, "qgis_world.png"),
                             wx.BITMAP_TYPE_PNG).ConvertToBitmap()
         
         #

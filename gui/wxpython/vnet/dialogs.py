@@ -69,7 +69,7 @@ class VNETDialog(wx.Dialog):
         """!Dialog for vector network analysis"""
 
         wx.Dialog.__init__(self, parent, id, style=style, title = title, **kwargs)
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         self.parent  = parent
         self.mapWin = giface.GetMapWindow()
@@ -341,7 +341,7 @@ class VNETDialog(wx.Dialog):
                 self.inputData[dataSel[0]] = dataSel[2](parent = selPanels[dataSel[0]],
                                                         size = (-1, -1), 
                                                         type = 'vector')
-                icon = wx.Image(os.path.join(globalvar.ETCICONDIR, "grass", "layer-vector-add.png"))
+                icon = wx.Image(os.path.join(globalvar.ICONDIR, "grass", "layer-vector-add.png"))
                 icon.Rescale(18, 18)
                 icon = wx.BitmapFromImage(icon) 
                 self.addToTreeBtn = wx.BitmapButton(parent = selPanels[dataSel[0]], 

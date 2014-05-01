@@ -26,6 +26,6 @@ class PsMapMenuData(MenuTreeModelBuilder):
         @param path path to XML to be read (None for menudata_psmap.xml)
         """
         if not path:
-            path = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata_psmap.xml')
+            path = os.path.join(globalvar.WXGUIDIR, 'xml', 'menudata_psmap.xml')
         
         MenuTreeModelBuilder.__init__(self, path)
