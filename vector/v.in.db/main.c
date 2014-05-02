@@ -147,7 +147,9 @@ int main(int argc, char *argv[])
 	}
     }
 
-    Vect_open_new(&Map, outvect->answer, with_z);
+    if (Vect_open_new(&Map, outvect->answer, with_z) == -1)
+	exit(EXIT_FAILURE);
+
     Vect_set_error_handler_io(NULL, &Map);
     
     Vect_hist_command(&Map);
