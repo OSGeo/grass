@@ -109,6 +109,8 @@ int main(int argc, char *argv[])
     if (count <= 1.1)
 	G_fatal_error(_("No non-null values"));
 
+    fprintf(stdout, "N = %.0f\n", count);
+
     ii = jj = 1.0;
     for (i = 0; i < nfiles; i++) {
 	if (correlation)
