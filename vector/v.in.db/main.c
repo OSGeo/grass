@@ -137,7 +137,8 @@ int main(int argc, char *argv[])
 	    outvect->answer, db_get_default_driver_name(),
 	    db_get_default_database_name());
 
-    if (db_table_exists(db_get_default_driver_name(),
+    if (!same_table_flag->answer &&
+	db_table_exists(db_get_default_driver_name(),
 			db_get_default_database_name(), outvect->answer) == 1)
 	G_fatal_error(_("Output vector map, table <%s> (driver: <%s>, database: <%s>) "
 		       "already exists"), outvect->answer,
