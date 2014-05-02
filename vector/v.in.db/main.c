@@ -116,6 +116,36 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
     db_init_string(&sql);
 
+    if (G_get_overwrite()) {
+	/* We don't want to delete the input table when overwriting the output
+	 * vector. */
+	char name[GNAME_MAX], mapset[GMAPSET_MAX];
+
+	if (G_name_is_fully_qualified(outvect->answer, name, mapset)) {
+	} else {
+	    strcpy(name, outvect->answer);
+	    strcpy(mapset, G_mapset());
+	}
+
+	Vect_set_open_level(1); /* no topo needed */
+	if (G_find_vector2(name, mapset) && Vect_open_old(&Map, name, mapset)) {
+	    int num_dblinks;
+
+	    num_dblinks = Vect_get_num_dblinks(&Map);
+	    for (i = 0; i < num_dblinks; i++) {
+		if ((fi = Vect_get_dblink(&Map, i)) != NULL &&
+		    strcmp(fi->driver, driver_opt->answer) == 0 &&
+		    strcmp(fi->database, database_opt->answer) == 0 &&
+		    strcmp(fi->table, table_opt->answer) == 0)
+		    G_fatal_error(_("Vector <%s> cannot be overwritten "
+				    "because input table <%s> is linked to "
+				    "the output vector."),
+				    outvect->answer, table_opt->answer);
+	    }
+	    Vect_close(&Map);
+	}
+    }
+
     Vect_open_new(&Map, outvect->answer, with_z);
     Vect_set_error_handler_io(NULL, &Map);
     
