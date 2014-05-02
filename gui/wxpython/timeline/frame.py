@@ -393,7 +393,8 @@ class TimelineFrame(wx.Frame):
                      for etype, maps in etypesDict.iteritems()]
                     for mapset, etypesDict in tDict.iteritems()]
         # flatten this list
-        allDatasets = reduce(lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets))
+        if allDatasets:
+            allDatasets = reduce(lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets))
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
