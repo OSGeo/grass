@@ -121,14 +121,15 @@ int main(int argc, char *argv[])
 	 * vector. */
 	char name[GNAME_MAX], mapset[GMAPSET_MAX];
 
-	if (G_name_is_fully_qualified(outvect->answer, name, mapset)) {
-	} else {
+	if (!G_name_is_fully_qualified(outvect->answer, name, mapset)) {
 	    strcpy(name, outvect->answer);
 	    strcpy(mapset, G_mapset());
 	}
 
 	Vect_set_open_level(1); /* no topo needed */
-	if (G_find_vector2(name, mapset) && Vect_open_old(&Map, name, mapset)) {
+
+	if (strcmp(mapset, G_mapset()) == 0 && G_find_vector2(name, mapset) &&
+	    Vect_open_old(&Map, name, mapset)) {
 	    int num_dblinks;
 
 	    num_dblinks = Vect_get_num_dblinks(&Map);
