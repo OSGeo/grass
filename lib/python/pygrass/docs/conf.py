@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# PyGrass documentation build configuration file, created by
+# PyGRASS documentation build configuration file, created by
 # sphinx-quickstart2 on Sat Jun 16 18:53:32 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -42,7 +42,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'PyGrass'
+project = u'PyGRASS'
 copyright = u'2012-2014, Pietro Zambelli'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -192,7 +192,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'PyGrass.tex', u'PyGrass Documentation',
+  ('index', 'PyGrass.tex', u'PyGRASS Documentation',
    u'Pietro Zambelli', 'manual'),
 ]
 
@@ -222,7 +222,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'pygrass', u'PyGrass Documentation',
+    ('index', 'pygrass', u'PyGRASS Documentation',
      [u'Pietro Zambelli'], 1)
 ]
 
@@ -236,8 +236,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'PyGrass', u'PyGrass Documentation',
-   u'Pietro Zambelli', 'PyGrass', 'One line description of project.',
+  ('index', 'PyGRASS', u'PyGRASS Documentation',
+   u'Pietro Zambelli', 'PyGRASS', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -254,7 +254,7 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'PyGrass'
+epub_title = u'PyGRASS'
 epub_author = u'Pietro Zambelli'
 epub_publisher = u'Pietro Zambelli'
 epub_copyright = u'2012, Pietro Zambelli'
