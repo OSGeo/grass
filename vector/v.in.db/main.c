@@ -148,7 +148,8 @@ int main(int argc, char *argv[])
     }
 
     if (Vect_open_new(&Map, outvect->answer, with_z) == -1)
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Unable to create new vector map <%s>"),
+			outvect->answer);
 
     Vect_set_error_handler_io(NULL, &Map);
     
