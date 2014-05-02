@@ -160,4 +160,14 @@ Defined errors classes:
 
 Pietro Zambelli (Google Summer of Code 2012)
 
+\section References References
+
+
+*  Zambelli, P., Gebbert, S., Ciolli, M., 2013: *PyGRASS: An Object Oriented Python Application Programming Interface (API) for Geographic Resources Analysis Support System (GRASS) Geographic Information System (GIS)* 
+* . ISPRS International Journal of Geo-Information 2, 201–219. (
+*  `DOI <http://dx.doi.org/10.3390/ijgi2010201>`
+* |
+*  `PDF <http://www.mdpi.com/2220-9964/2/1/201/pdf>`
+* )
+
 */
