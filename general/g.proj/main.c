@@ -7,7 +7,7 @@
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
  *               new projection information files.
- * COPYRIGHT:    (C) 2003-2007, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("create location"));
 #ifdef HAVE_OGR
     module->label =
-	_("Prints and manipulates GRASS projection information files "
+	_("Prints or modifies GRASS projection information files "
 	  "(in various co-ordinate system descriptions).");
     module->description =
 	_("Can also be used to create new GRASS locations.");
@@ -190,8 +190,7 @@ int main(int argc, char *argv[])
     create = G_define_flag();
     create->key = 'c';
     create->guisection = _("Modify");
-    create->description = _("Create new projection files (modifies current "
-			    "location)");
+    create->description = _("Modify current location projection files");
 
     location = G_define_option();
     location->key = "location";
