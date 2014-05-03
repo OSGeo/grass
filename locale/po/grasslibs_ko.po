@@ -22,18 +22,16 @@ msgid "Vector doesn't contain points"
 msgstr ""
 
 #: ../lib/python/pygrass/raster/category.py:83
-#, fuzzy
 msgid "Raser type: {0} not supported"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "라스터 타입: {0}를 지원하지 않습니다"
 
 #: ../lib/python/pygrass/raster/category.py:168
 msgid "Error executing: Rast_get_ith_cat"
 msgstr ""
 
 #: ../lib/python/pygrass/raster/category.py:196
-#, fuzzy
 msgid "Null value detected"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "널값을 찾았습니다"
 
 #: ../lib/python/pygrass/raster/category.py:198
 #, fuzzy
@@ -1777,11 +1775,11 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #: ../lib/gpde/N_arrays_io.c:273
 #, c-format
 msgid "3D raster map <%s> not found"
-msgstr "3차원 라스터맵 <%s>를 찾을 수 없습니다."
+msgstr "3차원 라스터맵 <%s>를 찾을 수 없습니다"
 
 #: ../lib/ogsf/gsd_label.c:58
 msgid "Max. number of labels reached!"
-msgstr "최대 레이블 개수에 도달했습니다."
+msgstr "최대 레이블 개수에 도달했습니다!"
 
 #: ../lib/ogsf/GK2.c:272 ../lib/ogsf/GK2.c:285
 msgid "Check no. of frames requested and keyframes marked"
@@ -1789,11 +1787,11 @@ msgstr ""
 
 #: ../lib/ogsf/trans.c:180
 msgid "Out of matrix stack space"
-msgstr "행렬 스택공간이 부족합니다."
+msgstr "행렬 스택공간이 부족합니다"
 
 #: ../lib/ogsf/trans.c:200
 msgid "Tried to pop an empty stack"
-msgstr "빈 스택에서 끄집어 내려고 했습니다."
+msgstr "빈 스택에서 끄집어 내려고 했습니다"
 
 #: ../lib/ogsf/gsds.c:109
 msgid "Maximum number of datasets exceeded"
@@ -1869,12 +1867,12 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:235
 #, c-format
 msgid "Vector map <%s> not found"
-msgstr "벡터맵 <%s>를 찾을 수 없습니다."
+msgstr "벡터맵 <%s>를 찾을 수 없습니다"
 
 #: ../lib/ogsf/Gv3.c:262
 #, c-format
 msgid "No features from vector map <%s> fall within current region"
-msgstr "벡터맵 <%s>의 어떤 피쳐도 현재 영역 안에 있지 않습니다."
+msgstr "벡터맵 <%s>의 어떤 피쳐도 현재 영역 안에 있지 않습니다"
 
 #: ../lib/ogsf/Gv3.c:267
 #, c-format
@@ -1891,7 +1889,7 @@ msgstr "백터맵 <%s>를 읽었습니다. (%d 피쳐)"
 #: ../lib/vector/Vlib/copy.c:595 ../lib/vector/Vlib/copy.c:733
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr "레이어 %d를 위한 데이타베이스 접속이 정의되지 않았습니다."
+msgstr "레이어 %d를 위한 데이타베이스 접속이 정의되지 않았습니다"
 
 #: ../lib/ogsf/Gv3.c:343 ../lib/ogsf/Gp3.c:206
 #: ../lib/rst/interp_float/vinput2d.c:88 ../lib/vector/neta/utils.c:119
@@ -1911,7 +1909,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/ogsf/Gv3.c:346
 #, fuzzy, c-format
 msgid "Loading thematic vector layer <%s>..."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "주제 벡터레이어 <%s>를 읽는 중입니다..."
 
 #: ../lib/ogsf/Gv3.c:370 ../lib/ogsf/Gp3.c:233
 #, fuzzy, c-format
@@ -1946,12 +1944,12 @@ msgstr "벡터맵 <%s>의 어떤 점도 현재 영역 안에 있지 않습니다
 #: ../lib/ogsf/Gp3.c:151
 #, c-format
 msgid "Vector map <%s> loaded (%d points)"
-msgstr "벡터맵 <%s>를 읽었습니다 (%d 포인트)"
+msgstr "벡터맵 <%s>를 읽었습니다 (%d 점)"
 
 #: ../lib/ogsf/Gp3.c:209
 #, fuzzy, c-format
 msgid "Loading thematic points layer <%s>..."
-msgstr "주제 포인트 레이어 <%s>를 읽는 중입니다..."
+msgstr "주제 점레이어 <%s>를 읽는 중입니다..."
 
 #: ../lib/ogsf/Gp3.c:286
 #, c-format
@@ -1959,14 +1957,14 @@ msgid ""
 "%d points without category. Unable to determine color rules for features "
 "without category."
 msgstr ""
-"%d 포인트들이 카테고리를 가지고 있지 않습니다. 카테고리 없는 포인트는 "
-"색상규칙을 정할 수 없습니다."
+"%d 점들이 카테고리를 가지고 있지 않습니다. 카테고리 없는 점은 색상규칙을 "
+"정할 수 없습니다."
 
 #: ../lib/ogsf/Gs3.c:132 ../lib/ogsf/Gs3.c:196 ../lib/ogsf/Gs3.c:348
 #: ../lib/ogsf/Gs3.c:454 ../lib/ogsf/Gs3.c:540
 #, fuzzy, c-format
 msgid "Loading raster map <%s>..."
-msgstr "라스터 맵 <%s>를 읽는 중입니다..."
+msgstr "라스터맵 <%s>를 읽는 중입니다..."
 
 #: ../lib/ogsf/Gs3.c:596
 #, c-format
@@ -1976,7 +1974,7 @@ msgstr ""
 #: ../lib/ogsf/Gs3.c:658 ../lib/ogsf/Gs3.c:730
 #, fuzzy, c-format
 msgid "Translating colors from raster map <%s>..."
-msgstr "라스터 맵 <%s>로부터 색상을 변환 중입니다..."
+msgstr "라스터맵 <%s>로부터 색상을 변환 중입니다..."
 
 #: ../lib/ogsf/Gs3.c:967
 msgid "View not saved by this program,there may be some inconsistancies"
@@ -4683,17 +4681,16 @@ msgid "Format error: file ('%s') line (%d) - %s"
 msgstr ""
 
 #: ../lib/manage/do_remove.c:42
-#, fuzzy, c-format
+#, c-format
 msgid "Removing %s <%s>"
 msgstr "%s <%s>를 지우는 중입니다"
 
 #: ../lib/manage/do_remove.c:65
-#, fuzzy
 msgid "Unable to delete vector map"
 msgstr "벡터맵을 지울 수 없습니다"
 
 #: ../lib/manage/do_remove.c:85
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to remove %s element"
 msgstr "%s 요소를 지울 수 없습니다"
 
@@ -4703,14 +4700,14 @@ msgid "%s removed"
 msgstr "%s를 지웠습니다"
 
 #: ../lib/manage/do_remove.c:105
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to remove %s"
 msgstr "%s를 지울 수 없습니다"
 
 #: ../lib/manage/do_remove.c:121
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> nothing removed"
-msgstr "<%s> 어떤 이름도 바꾸지 않았습니다"
+msgstr "<%s> 아무 것도 지우지 않았습니다"
 
 #: ../lib/manage/do_list.c:30
 #, c-format
@@ -8770,7 +8767,7 @@ msgstr "Nviz_new_map_obj(): 지원하지 않는 자료형입니다."
 #: ../lib/sites/sites.c:106
 #, c-format
 msgid "Attributes for category %d not found"
-msgstr "카테고리 %d를 위한 속성을 찾을 수 없습니다."
+msgstr "카테고리 %d를 위한 속성을 찾을 수 없습니다"
 
 #: ../lib/sites/sites.c:151
 msgid "Category must be integer"
@@ -8778,7 +8775,7 @@ msgstr "카테고리는 정수여야 합니다."
 
 #: ../lib/sites/sites.c:226
 msgid "Memory error in writing timestamp"
-msgstr "타임스탬프를 쓰는 중 메모리오류가 났습니다."
+msgstr "타임스탬프를 쓰는 중 메모리오류가 났습니다"
 
 #: ../lib/sites/sites.c:228
 msgid "Illegal TimeStamp string"
