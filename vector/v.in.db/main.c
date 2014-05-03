@@ -138,9 +138,9 @@ int main(int argc, char *argv[])
 		    strcmp(fi->driver, driver_opt->answer) == 0 &&
 		    strcmp(fi->database, database_opt->answer) == 0 &&
 		    strcmp(fi->table, table_opt->answer) == 0)
-		    G_fatal_error(_("Vector <%s> cannot be overwritten "
+		    G_fatal_error(_("Vector map <%s> cannot be overwritten "
 				    "because input table <%s> is linked to "
-				    "the output vector."),
+				    "this map."),
 				    outvect->answer, table_opt->answer);
 	    }
 	    Vect_close(&Map);
