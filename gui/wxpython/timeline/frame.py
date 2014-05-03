@@ -344,6 +344,8 @@ class TimelineFrame(wx.Frame):
         datasets = datasets.split(',')
         try:
             datasets = self._checkDatasets(datasets)
+            if not datasets:
+                return
         except GException:
             GError(parent=self, message=_("Invalid input data"))
             return
@@ -395,6 +397,8 @@ class TimelineFrame(wx.Frame):
         # flatten this list
         if allDatasets:
             allDatasets = reduce(lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets))
+            mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
+            allDatasets = [i for i in sorted(allDatasets, key=lambda l: mapsets.index(l[1]))]
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
@@ -420,6 +424,8 @@ class TimelineFrame(wx.Frame):
                 if dlg.ShowModal() == wx.ID_OK:
                     index = dlg.GetSelection()
                     validated.append(allDatasets[indices[index]])
+                else:
+                    continue
             else:
                 validated.append(allDatasets[indices[0]])
 
@@ -436,6 +442,8 @@ class TimelineFrame(wx.Frame):
             return
         try:
             datasets = self._checkDatasets(datasets)
+            if not datasets:
+                return
         except GException:
             GError(parent=self, message=_("Invalid input data"))
             return
