@@ -137,7 +137,8 @@ int main(int argc, char **argv)
 	geo = 0;
 
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map->answer, "");
+    if (Vect_open_old(&Map, map->answer, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
 
     afield = Vect_get_field_number(&Map, afield_opt->answer);
     nfield = Vect_get_field_number(&Map, nfield_opt->answer);
@@ -238,7 +239,9 @@ int main(int argc, char **argv)
     G_percent(1, 1, 1);
 
     /* Write arcs to new map */
-    Vect_open_new(&Out, output->answer, Vect_is_3d(&Map));
+    if (Vect_open_new(&Out, output->answer, Vect_is_3d(&Map)) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
+
     Vect_hist_command(&Out);
 
     nlines = Vect_get_num_lines(&Map);

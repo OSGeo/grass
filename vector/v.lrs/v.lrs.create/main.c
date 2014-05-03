@@ -250,21 +250,29 @@ int main(int argc, char **argv)
     if (mapset == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), in_lines_opt->answer);
 
-    Vect_open_old(&In, in_lines_opt->answer, mapset);
+    if (Vect_open_old(&In, in_lines_opt->answer, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"),
+			in_lines_opt->answer);
 
     /* Open input ipoints */
     mapset = G_find_vector2(points_opt->answer, NULL);
     if (mapset == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), points_opt->answer);
 
-    Vect_open_old(&PMap, points_opt->answer, mapset);
+    if (Vect_open_old(&PMap, points_opt->answer, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), points_opt->answer);
 
     /* Open output lines */
-    Vect_open_new(&Out, out_lines_opt->answer, Vect_is_3d(&In));
+    if (Vect_open_new(&Out, out_lines_opt->answer, Vect_is_3d(&In)) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"),
+			out_lines_opt->answer);
 
     /* Open output error map */
-    if (err_opt->answer)
-	Vect_open_new(&EMap, err_opt->answer, Vect_is_3d(&In));
+    if (err_opt->answer) {
+	if (Vect_open_new(&EMap, err_opt->answer, Vect_is_3d(&In)) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+			    err_opt->answer);
+    }
 
     /* Because the line feature identified by one id (lidcol) may be split
      *  to more line parts, and milepost may be in threshold for more such parts,

@@ -142,7 +142,8 @@ int main(int argc, char *argv[])
     
     /* create new vector map */
     putenv("GRASS_VECTOR_EXTERNAL_IGNORE=1");
-    Vect_open_new(&Map, output, WITHOUT_Z); /* dimension is set later from data source */
+    if (Vect_open_new(&Map, output, WITHOUT_Z) < 0) /* dimension is set later from data source */
+	G_fatal_error(_("Unable to create vector map <%s>"), output);
     Vect_set_error_handler_io(NULL, &Map);
     
     Vect_hist_command(&Map);
@@ -186,7 +187,8 @@ int main(int argc, char *argv[])
     
     if (!flags.topo->answer) {
         Vect_set_open_level(1);
-        Vect_open_old(&Map, output, G_mapset());
+        if (Vect_open_old(&Map, output, G_mapset()) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), output);
         Vect_build(&Map);
         Vect_close(&Map);
     }

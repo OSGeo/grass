@@ -158,7 +158,8 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Vector map <%s> not found"), parm.invect->answer);
 
     Vect_set_open_level(2);
-    Vect_open_old(&Map, parm.invect->answer, vmapset);
+    if (Vect_open_old(&Map, parm.invect->answer, vmapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), parm.invect->answer);
 
     if ((rmapset = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.inrast->answer);

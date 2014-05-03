@@ -96,7 +96,8 @@ int main(int argc, char **argv)
 
     /* Open input */
     Vect_set_open_level(2);
-    Vect_open_old2(&Map, parm.input->answer, "", parm.field->answer);
+    if (Vect_open_old2(&Map, parm.input->answer, "", parm.field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), parm.input->answer);
 
     /* Get the quadrats */
     G_message(_("Finding quadrats..."));
@@ -121,7 +122,10 @@ int main(int argc, char **argv)
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
 
-	Vect_open_new(&Out, parm.output->answer, 0);
+	if (Vect_open_new(&Out, parm.output->answer, 0) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+			    parm.output->answer);
+
 	Vect_hist_command(&Out);
 
 	for (i = 0; i < nquads; i++) {

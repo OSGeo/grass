@@ -119,7 +119,8 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
     Rast_init_colors(&colors);
 
     /* open vector map and database driver */
-    Vect_open_old(&Map, vector_map, "");
+    if (Vect_open_old(&Map, vector_map, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), vector_map);
 
     db_CatValArray_init(&cvarr);
     if ((Fi = Vect_get_field(&Map, field)) == NULL)
@@ -277,7 +278,8 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 
 	    /* open vector map and database driver */
 	    Vect_set_open_level(1);
-	    Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, ""));
+	    if (Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, "")) < 0)
+		G_fatal_error(_("Unable to open vector map <%s>"), vector_map);
 
 	    db_CatValArray_init(&cvarr);
 	    if (!(Fi = Vect_get_field(&Map, field)))
@@ -428,7 +430,9 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 
 		/* open vector map and database driver */
 		Vect_set_open_level(1);
-		Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, ""));
+		if (Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, "")) < 0)
+		    G_fatal_error(_("Unable to open vector map <%s>"),
+				    vector_map);
 
 		db_CatValArray_init(&cvarr);
 		if (!(Fi = Vect_get_field(&Map, field)))

@@ -184,12 +184,17 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
 
     Vect_set_open_level(2); /* topology required for input */
+
     /* opening input vector map */
-    Vect_open_old2(&In, opt.input->answer, "", opt.field->answer);
+    if (Vect_open_old2(&In, opt.input->answer, "", opt.field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), opt.input->answer);
+
     Vect_set_error_handler_io(&In, &Out);
 
     /* creating output vector map */
-    Vect_open_new(&Out, opt.output->answer, WITH_Z);
+    if (Vect_open_new(&Out, opt.output->answer, WITH_Z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"),
+			opt.output->answer);
 
     field = Vect_get_field_number(&In, opt.field->answer);
 

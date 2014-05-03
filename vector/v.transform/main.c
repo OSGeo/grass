@@ -174,7 +174,8 @@ int main(int argc, char *argv[])
     Vect_check_input_output_name(vold->answer, vnew->answer, G_FATAL_EXIT);
 
     /* open input vector */
-    Vect_open_old2(&Old, vold->answer, "", field_opt->answer);
+    if (Vect_open_old2(&Old, vold->answer, "", field_opt->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), vold->answer);
 
     field = Vect_get_field_number(&Old, field_opt->answer);
     if (field < 1 && columns->answer) {
@@ -241,7 +242,8 @@ int main(int argc, char *argv[])
 	out3d = WITH_Z;
 
     /* open output vector */
-    Vect_open_new(&New, vnew->answer, out3d);
+    if (Vect_open_new(&New, vnew->answer, out3d) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), vnew->answer);
 
     /* copy and set header */
     Vect_copy_head_data(&Old, &New);

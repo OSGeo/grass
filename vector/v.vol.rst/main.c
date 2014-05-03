@@ -559,7 +559,8 @@ int main(int argc, char *argv[])
     }
 
     Vect_set_open_level(1);
-    Vect_open_old(&In, input, "");
+    if (Vect_open_old(&In, input, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), input);
 
     if (!Vect_is_3d(&In))
 	G_warning(_("Vector is not 3D"));
@@ -577,10 +578,13 @@ int main(int argc, char *argv[])
 	Cats = Vect_new_cats_struct();
 	db_init_string(&sql);
 
-	if (devi != NULL)
-	    Vect_open_new(&Map, devi, 1);
-	else
-	    Vect_open_new(&Map, cvdev, 1);
+	if (devi != NULL) {
+	    if (Vect_open_new(&Map, devi, 1) < 0)
+		G_fatal_error(_("Unable to create vector map <%s>"), devi);
+	} else {
+	    if (Vect_open_new(&Map, cvdev, 1) < 0)
+		G_fatal_error(_("Unable to create vector map <%s>"), cvdev);
+	}
 	Vect_hist_command(&Map);
 	f = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
 	Vect_map_add_dblink(&Map, 1, NULL, f->table, GV_KEY_COLUMN, f->database,

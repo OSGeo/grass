@@ -155,7 +155,8 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 
     /* Open input */
     Vect_set_open_level(1);
-    Vect_open_old_head(&In, in, mapset);
+    if (Vect_open_old_head(&In, in, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), in);
 
     if (In.format != GV_FORMAT_NATIVE) {        /* Done */
         Vect_close(&In);
@@ -164,7 +165,8 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 
     /* Open output */
     Vect_set_open_level(1);
-    Vect_open_update_head(&Out, out, G_mapset());
+    if (Vect_open_update_head(&Out, out, G_mapset()) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), out);
 
     /* Copy tables */
     n = Vect_get_num_dblinks(&In);
@@ -276,7 +278,8 @@ int Vect_rename(const char *in, const char *out)
 
     /* Rename all tables if the format is native */
     Vect_set_open_level(1);
-    Vect_open_update_head(&Map, out, G_mapset());
+    if (Vect_open_update_head(&Map, out, G_mapset()) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), out);
 
     if (Map.format != GV_FORMAT_NATIVE) {       /* Done */
         Vect_close(&Map);

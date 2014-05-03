@@ -838,8 +838,11 @@ int Vect_build_partial(struct Map_info *Map, int build)
         /* don't write support files for OGR direct and PostGIS Topology */
 	Map->support_updated = TRUE;
 
-    if (!Map->plus.Spidx_built)
-	Vect_open_sidx(Map, 2);
+    if (!Map->plus.Spidx_built) {
+	if (Vect_open_sidx(Map, 2) < 0)
+	    G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
+			    Vect_get_full_name(Map));
+    }
 
     plus = &(Map->plus);
     if (build > GV_BUILD_NONE && !Map->temporary) {

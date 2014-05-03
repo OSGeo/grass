@@ -235,7 +235,9 @@ int main(int argc, char *argv[])
 	    }
 	    Vect_close(&Map);
 
-	    Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer);
+	    if (Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer) < 0)
+		G_fatal_error(_("Unable to open vector map <%s>"),
+				params.map->answer);
 	}
     }
 

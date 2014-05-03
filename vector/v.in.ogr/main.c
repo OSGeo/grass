@@ -856,7 +856,10 @@ int main(int argc, char *argv[])
     /* open output vector */
     /* strip any @mapset from vector output name */
     G_find_vector(output, G_mapset());
-    Vect_open_new(&Map, output, with_z);
+
+    if (Vect_open_new(&Map, output, with_z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), output);
+
     Out = &Map;
 
     if (!flag.no_clean->answer) {
@@ -865,7 +868,9 @@ int main(int argc, char *argv[])
 	     * at the end copy alive lines to output vector
 	     * in case of polygons this reduces the coor file size by a factor of 2 to 5
 	     * only needed when cleaning polygons */
-	    Vect_open_tmp_new(&Tmp, NULL, with_z);
+	    if (Vect_open_tmp_new(&Tmp, NULL, with_z) < 0)
+		G_fatal_error(_("Unable to create temporary vector map"));
+
 	    G_verbose_message(_("Using temporary vector <%s>"), Vect_get_name(&Tmp));
 	    Out = &Tmp;
 	}

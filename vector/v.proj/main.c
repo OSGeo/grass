@@ -220,7 +220,8 @@ int main(int argc, char *argv[])
 	Vect_set_open_level(1);
 	G_debug(1, "Open old: location: %s mapset : %s", G_location_path(),
 		G_mapset());
-	Vect_open_old(&Map, map_name, mapset);
+	if (Vect_open_old(&Map, map_name, mapset) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), map_name);
     }
     else if (stat < 0)
     {				/* allow 0 (i.e. denied permission) */
@@ -360,7 +361,10 @@ int main(int argc, char *argv[])
 
     G_debug(1, "Open new: location: %s mapset : %s", G_location_path(),
 	    G_mapset());
-    Vect_open_new(&Out_Map, omap_name, Vect_is_3d(&Map));
+
+    if (Vect_open_new(&Out_Map, omap_name, Vect_is_3d(&Map)) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), omap_name);
+
     Vect_set_error_handler_io(NULL, &Out_Map); /* register standard i/o error handler */
     
     Vect_copy_head_data(&Map, &Out_Map);

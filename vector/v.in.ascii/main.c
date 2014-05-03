@@ -227,7 +227,9 @@ int main(int argc, char *argv[])
 	zcoor = 1;
     }
 
-    Vect_open_new(&Map, new->answer, zcoor);
+    if (Vect_open_new(&Map, new->answer, zcoor) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), new->answer);
+
     Vect_set_error_handler_io(NULL, &Map);
     Vect_hist_command(&Map);
 

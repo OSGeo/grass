@@ -138,9 +138,10 @@ int main(int argc, char **argv)
     db_init_string(&value_string);
 
     /* open input vector */
-    if (!r_flag->answer)
-	Vect_open_old_head2(&Map, map_opt->answer, "", field_opt->answer);
-    else {
+    if (!r_flag->answer) {
+	if (Vect_open_old_head2(&Map, map_opt->answer, "", field_opt->answer) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
+    } else {
 	if (2 > Vect_open_old2(&Map, map_opt->answer, "", field_opt->answer)) {
 	    Vect_close(&Map);
 	    G_fatal_error(_("Unable to open vector map <%s> at topology level. "

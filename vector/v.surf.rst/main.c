@@ -565,10 +565,13 @@ int main(int argc, char *argv[])
 	Cats2 = Vect_new_cats_struct();
 	db_init_string(&sql2);
 
-	if (devi != NULL)
-	    Vect_open_new(&Map2, devi, 1);
-	else
-	    Vect_open_new(&Map2, cvdev, 1);
+	if (devi != NULL) {
+	    if (Vect_open_new(&Map2, devi, 1) < 0)
+		G_fatal_error(_("Unable to create vector map <%s>"), devi);
+	} else {
+	    if (Vect_open_new(&Map2, cvdev, 1) < 0)
+		G_fatal_error(_("Unable to create vector map <%s>"), cvdev);
+	}
 	Vect_hist_command(&Map2);
 	ff = Vect_default_field_info(&Map2, 1, NULL, GV_1TABLE);
 	Vect_map_add_dblink(&Map2, 1, NULL, ff->table, GV_KEY_COLUMN, ff->database,

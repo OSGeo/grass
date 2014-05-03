@@ -124,9 +124,10 @@ int main(int argc, char *argv[])
 
     /* Open vector */
     Vect_set_open_level(2);
-    Vect_open_old2(&Map, opt.vect->answer,
+    if (Vect_open_old2(&Map, opt.vect->answer,
 		   print_flag->answer ? "" : G_mapset(),
-		   opt.field->answer);
+		   opt.field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), opt.vect->answer);
 
     field = Vect_get_field_number(&Map, opt.field->answer);
 

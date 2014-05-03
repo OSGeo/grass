@@ -25,7 +25,9 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
     struct line_cats *Cats;
 
     Vect_set_open_level(1);	/* without topology */
-    Vect_open_old2(&Map, name, "", field_name);
+    if (Vect_open_old2(&Map, name, "", field_name) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), name);
+
     field = Vect_get_field_number(&Map, field_name);
     with_z = col == NULL && Vect_is_3d(&Map); /* read z-coordinates
                                                  only when column is

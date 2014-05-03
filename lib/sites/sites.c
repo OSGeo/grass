@@ -258,7 +258,9 @@ struct Map_info *G_sites_open_old(const char *name, const char *mapset)
     Map = (struct Map_info *)G_malloc(sizeof(struct Map_info));
 
     Vect_set_open_level(1);
-    Vect_open_old(Map, name, mapset);
+
+    if (Vect_open_old(Map, name, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), name);
 
     G_debug(1, "Vector map opened");
 
@@ -388,7 +390,8 @@ struct Map_info *G_sites_open_new(const char *name)
 
     Map = (struct Map_info *)G_malloc(sizeof(struct Map_info));
 
-    Vect_open_new(Map, name, 0);
+    if (Vect_open_new(Map, name, 0) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), name);
 
     G_debug(1, "New vector map opened");
 
