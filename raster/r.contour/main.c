@@ -149,7 +149,9 @@ int main(int argc, char *argv[])
     /* get window info */
     G_get_window(&Wind);
 
-    Vect_open_new(&Map, vect->answer, 1);
+    if (Vect_open_new(&Map, vect->answer, 1) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), vect->answer);
+
     Vect_hist_command(&Map);
 
     db_init_string(&sql);

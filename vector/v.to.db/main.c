@@ -45,7 +45,8 @@ int main(int argc, char *argv[])
 
     /* open map */
     Vect_set_open_level(2);
-    Vect_open_old(&Map, options.name, "");
+    if (Vect_open_old(&Map, options.name, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), options.name);
 
     Fi = Vect_get_field(&Map, options.field);
 

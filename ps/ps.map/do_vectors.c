@@ -34,9 +34,8 @@ int do_vectors(int after_masking)
 		  vector.layer[n].name, vector.layer[n].mapset);
 
 	Vect_set_open_level(2);
-	if (2 >
-	    Vect_open_old(&Map, vector.layer[n].name,
-			  vector.layer[n].mapset)) {
+	if (2 > Vect_open_old(&Map, vector.layer[n].name,
+				vector.layer[n].mapset)) {
 	    char name[100];
 
 	    sprintf(name, "%s in %s", vector.layer[n].name,
@@ -138,9 +137,8 @@ int do_vpoints(int after_masking)
 		  vector.layer[n].name, vector.layer[n].mapset);
 
 	Vect_set_open_level(2);
-	if (2 >
-	    Vect_open_old(&Map, vector.layer[n].name,
-			  vector.layer[n].mapset)) {
+	if (2 > Vect_open_old(&Map, vector.layer[n].name,
+				vector.layer[n].mapset)) {
 	    char name[100];
 
 	    sprintf(name, "%s in %s", vector.layer[n].name,

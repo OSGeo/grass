@@ -15,7 +15,8 @@ int read_points(char *in_point, SEGMENT * streams, SEGMENT * accum)
     sites = Vect_new_line_struct();
     cats = Vect_new_cats_struct();
 
-    Vect_open_old(&Map, in_point, "");
+    if (Vect_open_old(&Map, in_point, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), in_point);
     
     G_get_window(&window);
     Vect_region_box(&window, &box);
@@ -82,7 +83,9 @@ int write_points(char *out_vector, int number_of_points)
     G_get_window(&window);
     Segments = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    Vect_open_new(&Out, out_vector, 0);
+    
+    if (Vect_open_new(&Out, out_vector, 0) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_vector);
 
     Vect_reset_line(Segments);
     Vect_reset_cats(Cats);

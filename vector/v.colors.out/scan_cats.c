@@ -16,7 +16,9 @@ void scan_cats(const char *name, const char *layer,
     *cmin = *cmax = -1;
 
     Vect_set_open_level(1); /* no topology required */
-    Vect_open_old2(&Map, name, "", layer);
+    if (Vect_open_old2(&Map, name, "", layer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), name);
+
     ilayer = Vect_get_field_number(&Map, layer);
     if (ilayer < 1)
 	G_fatal_error(_("Layer <%s> not found"), layer);

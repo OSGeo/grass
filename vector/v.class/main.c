@@ -98,7 +98,8 @@ int main(int argc, char *argv[])
     
     /* open input vector */
     Vect_set_open_level(2);
-    Vect_open_old2(&Map, map_opt->answer, "", field_opt->answer);
+    if (Vect_open_old2(&Map, map_opt->answer, "", field_opt->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
 
     ofield = Vect_get_field_number(&Map, field_opt->answer);
 

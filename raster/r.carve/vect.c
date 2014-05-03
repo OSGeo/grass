@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "enforce.h"
 
 
@@ -27,7 +28,9 @@
  */
 int open_new_vect(struct Map_info *map, char *vect)
 {
-    Vect_open_new(map, vect, 1);
+    if (Vect_open_new(map, vect, 1) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), vect);
+
     Vect_set_map_name(map, vect);
     Vect_set_comment(map, G_recreate_command());
     Vect_hist_command(map);

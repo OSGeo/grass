@@ -71,7 +71,9 @@ int main(int argc, char **argv)
     mid_long = (window.west + window.east) / 2;
 
     /* Open output segments */
-    Vect_open_new(&Out, out_opt->answer, 0);
+    if (Vect_open_new(&Out, out_opt->answer, 0) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
+
     Vect_hist_command(&Out);
 
     /* Rectangle */

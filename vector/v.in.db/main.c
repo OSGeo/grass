@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 	Vect_set_open_level(1); /* no topo needed */
 
 	if (strcmp(mapset, G_mapset()) == 0 && G_find_vector2(name, mapset) &&
-	    Vect_open_old(&Map, name, mapset)) {
+	    Vect_open_old(&Map, name, mapset) >= 0) {
 	    int num_dblinks;
 
 	    num_dblinks = Vect_get_num_dblinks(&Map);
@@ -147,8 +147,8 @@ int main(int argc, char *argv[])
 	}
     }
 
-    if (Vect_open_new(&Map, outvect->answer, with_z) == -1)
-	G_fatal_error(_("Unable to create new vector map <%s>"),
+    if (Vect_open_new(&Map, outvect->answer, with_z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"),
 			outvect->answer);
 
     Vect_set_error_handler_io(NULL, &Map);

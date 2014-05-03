@@ -35,7 +35,9 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 
     G_verbose_message(_("Loading data..."));
     Vect_set_open_level(2);
-    Vect_open_old2(&Map, vector_map, "", field_name);
+    if (Vect_open_old2(&Map, vector_map, "", field_name) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), vector_map);
+
     field = Vect_get_field_number(&Map, field_name);
 
     if (field > 0)

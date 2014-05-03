@@ -184,7 +184,8 @@ int main(int argc, char **argv)
 	geo = 0;
 
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map->answer, "");
+    if (Vect_open_old(&Map, map->answer, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
 
     D_setup(0);
 

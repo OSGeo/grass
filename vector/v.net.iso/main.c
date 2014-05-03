@@ -177,7 +177,9 @@ int main(int argc, char **argv)
 	geo = 0;
 
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map->answer, "");
+
+    if (Vect_open_old(&Map, map->answer, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
 
     /* Build graph */
     Vect_net_build_graph(&Map, type, afield, nfield, afcol->answer,
@@ -274,7 +276,9 @@ int main(int argc, char **argv)
     }
 
     /* Write arcs to new map */
-    Vect_open_new(&Out, output->answer, Vect_is_3d(&Map));
+    if (Vect_open_new(&Out, output->answer, Vect_is_3d(&Map)) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
+
     Vect_hist_command(&Out);
 
     G_message("Generating isolines...");

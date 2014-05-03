@@ -19,7 +19,8 @@ struct Colors *make_colors(const char *name, const char *layer,
     dbCatVal *cv;
     
     Vect_set_open_level(1); /* no topology required */
-    Vect_open_old2(&Map, name, "", layer);
+    if (Vect_open_old2(&Map, name, "", layer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), name);
 
     field = Vect_get_field_number(&Map, layer);
     if (field < 1)

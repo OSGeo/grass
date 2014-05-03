@@ -196,7 +196,8 @@ int main(int argc, char *argv[])
 
 
     /* open output vector */
-    Vect_open_new(&Map, out_opt->answer, z_flag->answer);
+    if (Vect_open_new(&Map, out_opt->answer, z_flag->answer) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
 
     Vect_hist_command(&Map);
 

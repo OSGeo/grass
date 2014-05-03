@@ -24,7 +24,9 @@ int create_sector_vector(char *out_vector, int number_of_streams, int radians)
 
     Segments = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    Vect_open_new(&Out, out_vector, 0);
+    
+    if (Vect_open_new(&Out, out_vector, 0) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_vector);
 
     Vect_reset_line(Segments);
     Vect_reset_cats(Cats);
@@ -183,7 +185,9 @@ int create_segment_vector(char *out_vector, int number_of_streams,
 
     Segments = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    Vect_open_new(&Out, out_vector, 0);
+    
+    if (Vect_open_new(&Out, out_vector, 0) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_vector);
 
     Vect_reset_line(Segments);
     Vect_reset_cats(Cats);

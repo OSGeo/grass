@@ -288,7 +288,8 @@ int main(int argc, char *argv[])
 
     /* Open 'from' vector */
     Vect_set_open_level(2);
-    Vect_open_old2(&From, opt.from->answer, G_mapset(), opt.from_field->answer);
+    if (Vect_open_old2(&From, opt.from->answer, G_mapset(), opt.from_field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), opt.from->answer);
 
     from_field = Vect_get_field_number(&From, opt.from_field->answer);
 
@@ -306,7 +307,8 @@ int main(int argc, char *argv[])
     
     /* Open 'to' vector */
     Vect_set_open_level(2);
-    Vect_open_old2(&To, opt.to->answer, "", opt.to_field->answer);
+    if (Vect_open_old2(&To, opt.to->answer, "", opt.to_field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), opt.to->answer);
 
     ntolines = Vect_get_num_primitives(&To, to_type);
     ntoareas = 0;
@@ -326,7 +328,10 @@ int main(int argc, char *argv[])
 
     /* Open output vector */
     if (opt.out->answer) {
-	Vect_open_new(&Out, opt.out->answer, WITHOUT_Z);
+	if (Vect_open_new(&Out, opt.out->answer, WITHOUT_Z) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+			    opt.out->answer);
+
 	Vect_hist_command(&Out);
 	Outp = &Out;
     }

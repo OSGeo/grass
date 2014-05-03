@@ -1033,7 +1033,8 @@ static int calc_unit_loc(double radius, int top, int bot, int left, int right,
 	    exit(0);
 	}
 
-	Vect_open_old(&Map, sites_file_name, sites_mapset);
+	if (Vect_open_old(&Map, sites_file_name, sites_mapset) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), sites_file_name);
 	/*    fprintf(stderr, "\n    Can't open vector points file %s\n", sites_file_name); */
 
 	*sites = 0;

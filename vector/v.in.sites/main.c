@@ -119,7 +119,9 @@ int main(int argc, char *argv[])
     else
 	withz = 0;
 
-    Vect_open_new(&Map, outvect->answer, withz);
+    if (Vect_open_new(&Map, outvect->answer, withz) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), outvect->answer);
+
     Vect_hist_command(&Map);
 
     fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
