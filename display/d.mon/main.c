@@ -4,7 +4,7 @@
  * MODULE:       d.mon
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Controls graphics monitors for CLI
- * COPYRIGHT:    (C) 2011-2012 by Martin Landa, and the GRASS Development Team
+ * COPYRIGHT:    (C) 2011-2014 by Martin Landa, and the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
