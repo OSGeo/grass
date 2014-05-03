@@ -1254,7 +1254,7 @@ class MapFrame(SingleMapFrame):
                                (_('Zoom to saved region'), self.OnZoomToSaved),
                                (None, None),
                                (_('Set computational region extent from display'), self.OnSetDisplayToWind),
-                               (_('Set computational region extent iteractively'), self.OnSetExtentToWind),
+                               (_('Set computational region extent interactively'), self.OnSetExtentToWind),
                                (_('Set computational region from named region'),   self.OnSetWindToRegion),
                                (None, None),
                                (_('Save display geometry to named region'), self.OnSaveDisplayRegion),
