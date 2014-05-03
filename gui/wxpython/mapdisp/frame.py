@@ -1231,6 +1231,10 @@ class MapFrame(SingleMapFrame):
         """
         self.MapWindow.SetRegion(zoomOnly=False)
  
+    def OnSetExtentToWind(self, event):
+        """!Set compulational region extent interactively"""
+        self.MapWindow.SetModeDrawRegion()
+
     def OnSaveDisplayRegion(self, event):
         """!Save display extents to named region file.
         """
@@ -1249,8 +1253,9 @@ class MapFrame(SingleMapFrame):
         for label, handler in ((_('Zoom to default region'), self.OnZoomToDefault),
                                (_('Zoom to saved region'), self.OnZoomToSaved),
                                (None, None),
-                               (_('Set computational region from display extent'), self.OnSetDisplayToWind),
-                               (_('Set computational region from named region'), self.OnSetWindToRegion),
+                               (_('Set computational region extent from display'), self.OnSetDisplayToWind),
+                               (_('Set computational region extent iteractively'), self.OnSetExtentToWind),
+                               (_('Set computational region from named region'),   self.OnSetWindToRegion),
                                (None, None),
                                (_('Save display geometry to named region'), self.OnSaveDisplayRegion),
                                (_('Save computational region to named region'), self.OnSaveWindRegion)):

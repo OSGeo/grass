@@ -378,9 +378,15 @@ class MapWindowBase(object):
         self._setModeZoom(zoomType=-1)
 
     def _setModeZoom(self, zoomType):
+        self.zoomtype = zoomType
         self.mouse['use'] = "zoom"
         self.mouse['box'] = "box"
-        self.zoomtype = zoomType
+        self.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
+        self.SetNamedCursor('cross')
+
+    def SetModeDrawRegion(self):
+        self.mouse['use'] = 'drawRegion'
+        self.mouse['box'] = "box"
         self.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         self.SetNamedCursor('cross')
 
