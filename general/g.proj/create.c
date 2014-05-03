@@ -34,7 +34,7 @@ void modify_projinfo()
     
     if (strcmp(mapset, "PERMANENT") != 0)
 	G_fatal_error(_("You must select the PERMANENT mapset before updating the "
-			"current location's projection (current mapset is <%s>)."),
+			"current location's projection (current mapset is <%s>)"),
 		      mapset);
     
     /* Read projection information from current location first */
