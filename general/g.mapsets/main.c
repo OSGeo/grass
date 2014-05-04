@@ -158,8 +158,8 @@ int main(int argc, char *argv[])
     if (opt.dialog->answer) {
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        sprintf(path_buf, "%s/gui/scripts/g.mapsets_picker.py", G_gisbase());
-        G_spawn(getenv("GRASS_PYTHON"), "g.mapsets_picker.py", path_buf, NULL);
+        sprintf(path_buf, "%s/gui/wxpython/modules/mapsets_picker.py", G_gisbase());
+        G_spawn(getenv("GRASS_PYTHON"), "mapsets_picker.py", path_buf, NULL);
         exit(EXIT_SUCCESS);
     }
 
