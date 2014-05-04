@@ -7,18 +7,18 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 DSTDIR = $(GUIDIR)/scripts
 
 ifdef MINGW
-PYFILES := $(patsubst %.py, $(GUIDIR)/%.py, $(filter %.py, $(PY_SOURCES)))
+PYFILES := $(patsubst %.py, $(DSTDIR)/%.py, $(filter %.py, $(PY_SOURCES)))
 else
-PYFILES := $(patsubst %.py, $(GUIDIR)/%, $(filter %.py, $(PY_SOURCES)))
+PYFILES := $(patsubst %.py, $(DSTDIR)/%, $(filter %.py, $(PY_SOURCES)))
 endif
 
 default: $(PYFILES)
 
-$(GUIDIR)/%: %.py | $(GUIDIR)
+$(DSTDIR)/%: %.py | $(DSTDIR)
 	$(INSTALL) $< $@
 
-$(GUIDIR)/%.py: %.py | $(GUIDIR)
+$(DSTDIR)/%.py: %.py | $(DSTDIR)
 	$(INSTALL) $< $@
 
-$(GUIDIR):
+$(DSTDIR):
 	-test -d $@ | $(MKDIR) $@
