@@ -208,3 +208,6 @@ else:
 
 """@Check version of wxPython, use agwStyle for 2.8.11+"""
 hasAgw = CheckWxVersion()
+
+"""@Add GUIDIR/scripts into path"""
+os.environ['PATH'] = os.path.join(GUIDIR, 'scripts') + os.pathsep + os.environ['PATH']
