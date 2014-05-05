@@ -455,7 +455,7 @@ def convert_xml_to_utf8(xml_text):
 def get_interface_description(cmd):
     """!Returns the XML description for the GRASS cmd (force text encoding to "utf-8").
 
-    The DTD must be located in $GISBASE/etc/grass-interface.dtd,
+    The DTD must be located in $GISBASE/gui/xml/grass-interface.dtd,
     otherwise the parser will not succeed.
 
     @param cmd command (name of GRASS module)
@@ -490,11 +490,7 @@ def get_interface_description(cmd):
         raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
                              "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : e }
     
-    # if cmderr and cmderr[:7] != 'WARNING':
-    # raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
-    # "\n\nDetails: %(det)s") % { 'cmd': cmd, 'det' : decode(cmderr) }
-    
-    desc = cmdout.replace('grass-interface.dtd', os.path.join(os.getenv('GISBASE'), 'etc', 'grass-interface.dtd'))
+    desc = cmdout.replace('grass-interface.dtd', os.path.join(os.getenv('GISBASE'), 'gui', 'xml', 'grass-interface.dtd'))
     return convert_xml_to_utf8(desc)
 
 def parse_interface(name, parser = processTask, blackList = None):
