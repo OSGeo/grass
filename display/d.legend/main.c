@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     struct Option *opt_input, *opt_color, *opt_lines, *opt_thin,
 		  *opt_labelnum, *opt_at, *opt_use, *opt_range,
 		  *opt_font, *opt_path, *opt_charset, *opt_fontsize;
-    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *size;
+    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit;
     struct Range range;
     struct FPRange fprange;
     CELL min_ind, max_ind, null_cell;
@@ -206,11 +206,6 @@ int main(int argc, char **argv)
     flipit->key = 'f';
     flipit->description = _("Flip legend");
     flipit->guisection = _("Advanced");
-
-    size = G_define_flag();
-    size->key = 's';
-    size->description = _("Font size is height in pixels");
-    size->guisection = _("Font settings");
 
     /* Check command line */
     if (G_parser(argc, argv))
