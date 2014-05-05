@@ -8,7 +8,7 @@ PURPOSE:   Performs ordinary or block kriging
 
 DEPENDS:   R 2.x, packages gstat, maptools and spgrass6, optional: automap
 
-COPYRIGHT: (C) 2009, 2012 by the GRASS Development Team
+COPYRIGHT: (C) 2009-2014 the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -95,18 +95,9 @@ from tempfile import gettempdir
 import time
 import thread
 
-if __name__ == "__main__":
-    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-
 if not os.environ.has_key("GISBASE"):
     print "You must be in GRASS GIS to run this program."
     sys.exit(1)
-
-GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
-sys.path.append(GUIModulesPath)
-
-GUIPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "scripts")
-sys.path.append(GUIPath)
 
 ### i18N
 import gettext
@@ -314,7 +305,7 @@ def main(argv = None):
         if not os.getenv("GRASS_WXBUNDLED"):
             from core import globalvar
             globalvar.CheckForWx()
-        import vkrige as GUI
+        from modules import vkrige as GUI
         
         import wx
         
