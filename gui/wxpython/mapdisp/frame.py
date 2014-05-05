@@ -1072,15 +1072,15 @@ class MapFrame(SingleMapFrame):
                     for i, legendParam in enumerate(self.legend.cmd[1:]):
                         idx = i + 1
                         param, val = legendParam.split('=')
-                        if param == 'map':
-                            self.legend.cmd[idx] = 'map={rast}'.format(rast=layer.maplayer.name)
+                        if param == 'rast':
+                            self.legend.cmd[idx] = 'rast={rast}'.format(rast=layer.maplayer.name)
                             isMap = True
                         elif param in ('use', 'range'):
                             # clear range or use to avoid problems
                             del self.legend.cmd[idx]
 
                     if not isMap:  # for the first time
-                        self.legend.cmd.append('map=%s' % layer.maplayer.name)
+                        self.legend.cmd.append('rast=%s' % layer.maplayer.name)
                     break
 
         if not showDialog and self.legend.CmdIsValid():
