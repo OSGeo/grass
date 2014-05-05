@@ -1,4 +1,5 @@
 #include "local_proto.h"
+
 double get_distance(int r, int c, int d)
 {
     double northing, easting, next_northing, next_easting;
@@ -10,6 +11,7 @@ double get_distance(int r, int c, int d)
     easting = window.west + (c + .5) * window.ew_res;
     next_northing = window.north - (next_r + .5) * window.ns_res;
     next_easting = window.west + (next_c + .5) * window.ew_res;
+
     return G_distance(easting, northing, next_easting, next_northing);
 }
 
@@ -47,7 +49,7 @@ int ram_trib_nums(int r, int c, CELL ** streams, CELL ** dirs)
 	}
 
     if (trib_num > 5)
-	G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match."));
+	G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match"));
     if (trib_num > 3)
 	G_warning(_("Stream network may be too dense"));
 
@@ -96,7 +98,7 @@ int seg_trib_nums(int r, int c, SEGMENT *streams, SEGMENT *dirs)
 	}
 
     if (trib_num > 5)
-	G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match."));
+	G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match"));
     if (trib_num > 3)
 	G_warning(_("Stream network may be too dense"));
 
@@ -172,7 +174,7 @@ int ram_build_streamlines(CELL **streams, CELL **dirs, FCELL **elevation,
 	    if (streams[r][c])
 		if (ram_trib_nums(r, c, streams, dirs) != 1) {	/* adding inits */
 		    if (stream_num > number_of_streams)
-			G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match."));
+			G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match"));
 
 		    SA[stream_num].stream = stream_num;
 		    SA[stream_num].init = INDEX(r, c);
@@ -251,12 +253,13 @@ int ram_build_streamlines(CELL **streams, CELL **dirs, FCELL **elevation,
 	    SA[i].distance[cell_num] = get_distance(r, c, next_d);
 	    cell_num++;
 	    if (cell_num > SA[i].number_of_cells)
-		G_fatal_error(_("To much points in stream line"));
+		G_fatal_error(_("To many points in stream line"));
 	} while (streams[r][c] == SA[i].order);
 
 	if (SA[i].elevation[0] == -99999)
 	    SA[i].elevation[0] = 2 * SA[i].elevation[1] - SA[i].elevation[2];
     }
+
     return 0;
 }
 
@@ -288,7 +291,7 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 	    if (streams_cell)
 		if (seg_trib_nums(r, c, streams, dirs) != 1) {	/* adding inits */
 		    if (stream_num > number_of_streams)
-			G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match."));
+			G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match"));
 
 		    SA[stream_num].stream = stream_num;
 		    SA[stream_num].init = INDEX(r, c);
@@ -306,7 +309,6 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 	SA[i].number_of_cells = 0;
 
 	do {
-
 	    SA[i].number_of_cells++;
 	    segment_get(dirs, &dirs_cell, r, c);
 
@@ -388,6 +390,7 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 	if (SA[i].elevation[0] == -99999)
 	    SA[i].elevation[0] = 2 * SA[i].elevation[1] - SA[i].elevation[2];
     }
+
     return 0;
 }
 
