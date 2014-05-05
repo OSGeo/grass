@@ -28,11 +28,6 @@ import platform
 import codecs
 import getpass
 
-if __name__ == "__main__":
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
-
 from core import globalvar
 from core.utils import _
 import wx
@@ -82,9 +77,9 @@ class GRASSStartup(wx.Frame):
         # image
         try:
             if os.getenv('ISISROOT'):
-                name = os.path.join(globalvar.ETCDIR, "gui", "images", "startup_banner_isis.png")
+                name = os.path.join(globalvar.GUIDIR, "images", "startup_banner_isis.png")
             else:
-                name = os.path.join(globalvar.ETCDIR, "gui", "images", "startup_banner.png")
+                name = os.path.join(globalvar.GUIDIR, "images", "startup_banner.png")
             self.hbitmap = wx.StaticBitmap(self.panel, wx.ID_ANY,
                                            wx.Bitmap(name = name,
                                                      type = wx.BITMAP_TYPE_PNG))
@@ -210,7 +205,7 @@ class GRASSStartup(wx.Frame):
     def _set_properties(self):
         """!Set frame properties"""
         self.SetTitle(_("Welcome to GRASS GIS"))
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, "grass.ico"),
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"),
                              wx.BITMAP_TYPE_ICO))
 
         self.lwelcome.SetForegroundColour(wx.Colour(35, 142, 35))

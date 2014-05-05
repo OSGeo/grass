@@ -50,7 +50,7 @@ class AboutWindow(wx.Frame):
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
         # icon
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         # notebook
         self.aboutNotebook = FormNotebook(self.panel, style = wx.BK_LEFT)
@@ -104,7 +104,7 @@ class AboutWindow(wx.Frame):
         infoTxt.SetupScrolling()
         infoSizer = wx.BoxSizer(wx.VERTICAL)
         infoGridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        logo = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass-64x64.png")
+        logo = os.path.join(globalvar.ICONDIR, "grass-64x64.png")
         logoBitmap = wx.StaticBitmap(parent = infoTxt, id = wx.ID_ANY,
                                      bitmap = wx.Bitmap(name = logo,
                                                         type = wx.BITMAP_TYPE_PNG))
@@ -429,8 +429,7 @@ class AboutWindow(wx.Frame):
                                                             label = email))
                     translatorsBox.Add(item = wx.StaticText(parent = translatorswin, id = wx.ID_ANY,
                                                             label = lang))                                                            
-                    flag = os.path.join(os.getenv("GISBASE"), "etc", "gui", 
-                            "icons", "flags", "%s.png" % lang.lower())
+                    flag = os.path.join(globalvar.ICONDIR, "flags", "%s.png" % lang.lower())
                     if os.path.exists(flag):
                         flagBitmap = wx.StaticBitmap(parent = translatorswin, id = wx.ID_ANY,
                                      bitmap = wx.Bitmap(name = flag,
@@ -794,7 +793,7 @@ def ShowAboutDialog(prgName, startYear):
     """
     info = wx.AboutDialogInfo()
     
-    info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+    info.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
     info.SetName(prgName)
     info.SetWebSite('http://grass.osgeo.org')
     info.SetDescription(_grassDevTeam(startYear) + '\n\n' +

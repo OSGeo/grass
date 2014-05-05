@@ -35,12 +35,8 @@
 
 
 import os
-import sys
-import  wx
 
-gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-if gui_wx_path not in sys.path:
-    sys.path.append(gui_wx_path)
+import  wx
 
 import grass.script as grass
 from core.utils import _, GuiModuleMain

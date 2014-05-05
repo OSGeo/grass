@@ -28,7 +28,7 @@ class ViewFrame(wx.Frame):
         self.pathfile = os.path.join(self.rlipath, conf)
         wx.Frame.__init__(self, parent=parent, id=id, title=title,
                           **kwargs)
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'),
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'),
                              wx.BITMAP_TYPE_ICO))
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.confilesBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
@@ -114,7 +114,7 @@ class RLiSetupFrame(wx.Frame):
         #init of frame
         wx.Frame.__init__(self, parent=parent, id=id, title=title,
                           **kwargs)
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'),
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'),
                              wx.BITMAP_TYPE_ICO))
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
         #box for select configuration file

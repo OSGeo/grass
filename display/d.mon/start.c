@@ -39,7 +39,7 @@ void start_wx(const char *name, const char *tempfile,
     
     G_debug(3, "       mapfile = %s", map_value);
 
-    sprintf(progname, "%s/etc/gui/wxpython/mapdisp/main.py", G_gisbase());
+    sprintf(progname, "%s/gui/wxpython/mapdisp/main.py", G_gisbase());
     if (width > 0)
         sprintf(str_width, "%d", width);
     else

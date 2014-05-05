@@ -2,7 +2,12 @@ MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-default: $(ETC)/grass-interface.dtd 
+DSTDIR = $(GUIDIR)/xml
 
-$/$(ETC)/grass-interface.dtd : grass-interface.dtd 
-	$(INSTALL_DATA) grass-interface.dtd $(ETC)/grass-interface.dtd 
+default: $(DSTDIR)/grass-interface.dtd 
+
+$(DSTDIR)/grass-interface.dtd : grass-interface.dtd | $(DSTDIR)
+	$(INSTALL_DATA) $< $@
+
+$(DSTDIR):
+	-test -d $@ | $(MKDIR) $@
