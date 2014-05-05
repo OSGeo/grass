@@ -56,4 +56,3 @@ int seg_read_map(SEG *, char *, int, RASTER_MAP_TYPE);
 int seg_reset_map (SEG *, int);
 int seg_write_map(SEG *, char *, RASTER_MAP_TYPE, int, double);
 int seg_release_map(SEG *);
-
