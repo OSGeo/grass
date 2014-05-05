@@ -1380,7 +1380,30 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             self.dragid = None
 
             self.mouseLeftUpPointer.emit(x=coordinates[0], y=coordinates[1])
-
+        
+        elif self.mouse['use'] == 'drawRegion':
+            coordinatesBegin = self.Pixel2Cell(self.mouse['begin'])
+            
+            if coordinatesBegin[0] < coordinates[0]:
+                west = coordinatesBegin[0]
+                east = coordinates[0]
+            else:
+                west = coordinates[0]
+                east = coordinatesBegin[0]
+            if coordinatesBegin[1] < coordinates[1]:
+                south = coordinatesBegin[1]
+                north = coordinates[1]
+            else:
+                south = coordinates[1]
+                north = coordinatesBegin[1]
+                
+            RunCommand('g.region',
+                       parent = self,
+                       n = north, s = south, e = east, w = west)
+            
+            # redraw map
+            self.UpdateMap(render = False)
+        
        # TODO: decide which coordinates to send (e, n, mouse['begin'], mouse['end'])
         self.mouseLeftUp.emit(x=coordinates[0], y=coordinates[1])
 
@@ -1820,6 +1843,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         
         if tmpreg:
             os.environ["GRASS_REGION"] = tmpreg
+        
+        self.UpdateMap(render = False)
         
     def SetRegion(self, zoomOnly=True):
         """!Set display extents/compulational region from named region
