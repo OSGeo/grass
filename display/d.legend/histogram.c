@@ -12,7 +12,8 @@
 #include "local_proto.h"
 
 void draw_histogram(const char *map_name, int x0, int y0, int width,
-		    int height, int color, int flip, int horiz)
+		    int height, int color, int flip, int horiz,
+		    int map_type)
 {
     int i, nsteps;
     long cell_count;
@@ -30,7 +31,7 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
     }
 
     /* get the distribution statistics */
-    get_stats(map_name, &dist_stats, nsteps);
+    get_stats(map_name, &dist_stats, nsteps, map_type);
 
     width_mult = max_width / dist_stats.maxstat;
 
@@ -38,6 +39,7 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
     D_begin();
 
     ptr = dist_stats.ptr;
+
     for (i = dist_stats.mincat; i <= dist_stats.maxcat; i++) {
 	if (!ptr)
 	    break;
@@ -84,7 +86,6 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
 
 	    D_cont_rel(-dx, 0);
 	}
-
     }
 
     D_close();

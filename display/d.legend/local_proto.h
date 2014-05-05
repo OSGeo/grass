@@ -1,3 +1,10 @@
+#define MAP_TYPE_RASTER2D 1
+#define MAP_TYPE_RASTER3D 2
+/* possibles for the future:
+#define MAP_TYPE_VECTOR 3
+#define MAP_TYPE_RULES 4
+*/
+
 struct stat_node
 {
     long int cat;               /* cell-file category value */
@@ -20,8 +27,8 @@ struct stat_list
 
 
 /* histogram.c */
-void draw_histogram(const char *, int, int, int, int, int, int, int);
+void draw_histogram(const char *, int, int, int, int, int, int, int, int);
 
 /* get_stats.c */
-void get_stats(const char *, struct stat_list *, int);
-void run_stats(const char *, int, const char *);
+void get_stats(const char *, struct stat_list *, int, int);
+void run_stats(const char *, int, const char *, int);

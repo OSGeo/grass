@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -8,15 +6,20 @@
 #include "local_proto.h"
 
 
-void run_stats(const char *mapname, int nsteps, const char *tempfile)
+void run_stats(const char *mapname, int nsteps, const char *tempfile,
+	       int map_type)
 {
     char buf[32];
     const char *argv[12];
     int argc = 0;
 
-    argv[argc++] = "r.stats";
+    if (map_type == MAP_TYPE_RASTER2D) {
+	argv[argc++] = "r.stats";
+	argv[argc++] = "-r";
+    }
+    else
+	argv[argc++] = "r3.stats";
 
-    argv[argc++] = "-r";
     argv[argc++] = "-c";
     argv[argc++] = mapname;
 
@@ -35,7 +38,8 @@ void run_stats(const char *mapname, int nsteps, const char *tempfile)
 }
 
 /* linked list of stats */
-void get_stats(const char *mapname, struct stat_list *dist_stats, int nsteps)
+void get_stats(const char *mapname, struct stat_list *dist_stats, int nsteps,
+	       int map_type)
 {
     char buf[1024];		/* input buffer for reading stats */
     int done = FALSE;
@@ -59,7 +63,7 @@ void get_stats(const char *mapname, struct stat_list *dist_stats, int nsteps)
 	    G_fatal_error("Can't read frange file");
     }
 */
-    run_stats(mapname, nsteps, tempfile);
+    run_stats(mapname, nsteps, tempfile, map_type);
 
     /* open temp file and read the stats into a linked list */
     fd = fopen(tempfile, "r");
