@@ -22,7 +22,7 @@
 
 typedef struct {
 	void **map; /* matrix of data */
-	double min, max; /* data range : may requre casting */
+	double min, max; /* data range : may require casting */
 	int nrows, ncols;
 	char *map_name; /* map name, unused */
 	RASTER_MAP_TYPE data_type; /* type of data */

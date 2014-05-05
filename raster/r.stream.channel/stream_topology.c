@@ -49,9 +49,9 @@ int ram_trib_nums(int r, int c, CELL ** streams, CELL ** dirs)
 	}
 
     if (trib_num > 5)
-	G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match..."));
+	G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match"));
     if (trib_num > 3)
-	G_warning(_("Stream network may be too dense..."));
+	G_warning(_("Stream network may be too dense"));
 
     return trib_num;
 }				/* end trib_num */
@@ -87,7 +87,7 @@ int ram_build_streamlines(CELL **streams, CELL **dirs, FCELL **elevation,
 
     stream_attributes =
 	(STREAM *) G_malloc(number_of_streams * sizeof(STREAM));
-    G_message("Finding inits...");
+    G_message(_("Finding inits..."));
     SA = stream_attributes;
 
     for (r = 0; r < nrows; ++r)
@@ -95,7 +95,7 @@ int ram_build_streamlines(CELL **streams, CELL **dirs, FCELL **elevation,
 	    if (streams[r][c])
 		if (ram_trib_nums(r, c, streams, dirs) != 1) {	/* adding inits */
 		    if (stream_num > number_of_streams)
-			G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match..."));
+			G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match"));
 
 		    SA[stream_num].stream_num = stream_num;
 		    SA[stream_num].init_r = r;
@@ -170,7 +170,7 @@ int ram_build_streamlines(CELL **streams, CELL **dirs, FCELL **elevation,
 	    SA[i].distance[cell_num] = get_distance(r, c, next_d);
 	    cell_num++;
 	    if (cell_num > SA[i].number_of_cells)
-		G_fatal_error(_("To much points in stream line..."));
+		G_fatal_error(_("To many points in stream line"));
 	} while (streams[r][c] == SA[i].order);
 
 	if (SA[i].elevation[0] == -99999)
@@ -180,26 +180,6 @@ int ram_build_streamlines(CELL **streams, CELL **dirs, FCELL **elevation,
     return 0;
 }
 
-int ram_find_contributing_cell(int r, int c, CELL **dirs, FCELL **elevation)
-{
-    int i, j = 0;
-    int next_r, next_c;
-    float elev_min = 9999;
-
-    for (i = 1; i < 9; ++i) {
-	if (NOT_IN_REGION(i))
-	    continue;
-	next_r = NR(i);
-	next_c = NC(i);
-	if (dirs[next_r][next_c] == DIAG(i) &&
-	    elevation[next_r][next_c] < elev_min) {
-	    elev_min = elevation[next_r][next_c];
-	    j = i;
-	}
-    }
-
-    return j;
-}
 
 int seg_trib_nums(int r, int c, SEGMENT * streams, SEGMENT * dirs)
 {				/* calculate number of tributaries */
@@ -282,13 +262,15 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
     G_message("Finding inits...");
     SA = stream_attributes;
 
+    /* finding inits */
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {
 	    segment_get(streams, &streams_cell, r, c);
+
 	    if (streams_cell)
 		if (seg_trib_nums(r, c, streams, dirs) != 1) {	/* adding inits */
 		    if (stream_num > number_of_streams)
-			G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match..."));
+			G_fatal_error(_("Error finding inits. Stream and direction maps probably do not match"));
 
 		    SA[stream_num].stream_num = stream_num;
 		    SA[stream_num].init_r = r;
@@ -296,6 +278,7 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 		}
 	}
 
+    /* building streamline */
     for (i = 1; i < stream_num; ++i) {
 
 	r = SA[i].init_r;
@@ -303,10 +286,11 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 	segment_get(streams, &(SA[i].order), r, c);
 	//segment_get(streams,&streams_cell,r,c);
 	SA[i].number_of_cells = 0;
-	do {
 
+	do {
 	    SA[i].number_of_cells++;
 	    segment_get(dirs, &dirs_cell, r, c);
+
 	    d = abs(dirs_cell);
 	    if (NOT_IN_REGION(d) || d == 0)
 		break;
@@ -358,6 +342,7 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 	do {
 	    segment_get(dirs, &dirs_cell, r, c);
 	    d = abs(dirs_cell);
+
 	    if (NOT_IN_REGION(d) || d == 0) {
 		SA[i].points[cell_num] = -1;
 		SA[i].distance[cell_num] = SA[i].distance[cell_num - 1];
@@ -384,6 +369,27 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
     }
 
     return 0;
+}
+
+int ram_find_contributing_cell(int r, int c, CELL **dirs, FCELL **elevation)
+{
+    int i, j = 0;
+    int next_r, next_c;
+    float elev_min = 9999;
+
+    for (i = 1; i < 9; ++i) {
+	if (NOT_IN_REGION(i))
+	    continue;
+	next_r = NR(i);
+	next_c = NC(i);
+	if (dirs[next_r][next_c] == DIAG(i) &&
+	    elevation[next_r][next_c] < elev_min) {
+	    elev_min = elevation[next_r][next_c];
+	    j = i;
+	}
+    }
+
+    return j;
 }
 
 int seg_find_contributing_cell(int r, int c, SEGMENT *dirs,
