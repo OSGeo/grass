@@ -291,12 +291,12 @@ int main(int argc, char **argv)
     Rast_set_c_null_value(&null_cell, 1);
 
     if (D_open_driver() != 0)
-      	G_fatal_error(_("No graphics device selected. "
+	G_fatal_error(_("No graphics device selected. "
 			"Use d.mon to select graphics device."));
-    
+
     white = D_translate_color(DEFAULT_FG_COLOR);
     black = D_translate_color(DEFAULT_BG_COLOR);
-    
+
     if (opt_font->answer)
 	D_font(opt_font->answer);
     else if (opt_path->answer)
@@ -657,6 +657,7 @@ int main(int argc, char **argv)
 								     1);
 
 		cstr = Rast_get_c_cat(&tcell, &cats);
+
 		if (!cstr[0])	/* no cats found, disable str output */
 		    hide_catstr = 1;
 		else
@@ -685,7 +686,7 @@ int main(int argc, char **argv)
 		}
 	    }
 
-	    /* this probably shouldn't happen mid-loop as text sizes 
+	    /* this probably shouldn't happen mid-loop as text sizes
 	       might not end up being uniform, but it's a start */
 	    if (strlen(buff) > MaxLabelLen)
 		MaxLabelLen = strlen(buff);
@@ -725,21 +726,21 @@ int main(int argc, char **argv)
 		    D_pos_abs(x1 + 4, y0 + ppl * k + txsiz / 2);
 	    }
 	    else {
-		/* text width is 0.81 of text height? so even though we set width 
+		/* text width is 0.81 of text height? so even though we set width
 		   to txsiz with D_text_size(), we still have to reduce.. hmmm */
 		if (!k)		/* first  */
 		    D_pos_abs(x0 - (strlen(buff) * txsiz * .81 / 2),
-			       y1 + 4 + txsiz);
+			      y1 + 4 + txsiz);
 		else if (k == steps - 1)	/* last */
 		    D_pos_abs(x1 - (strlen(buff) * txsiz * .81 / 2),
-			       y1 + 4 + txsiz);
+			      y1 + 4 + txsiz);
 		else
 		    D_pos_abs(x0 + ppl * k -
-			       (strlen(buff) * txsiz * .81 / 2),
-			       y1 + 4 + txsiz);
+			      (strlen(buff) * txsiz * .81 / 2),
+			      y1 + 4 + txsiz);
 	    }
 
-	    if(color)
+	    if (color)
 		D_text(buff);
 
 	}			/*for */
@@ -926,11 +927,11 @@ int main(int argc, char **argv)
 	    }
 	    else {		/* is fp */
 		if (!flip) {
-		    if(use_catlist)
+		    if (use_catlist)
 			/* pass through format exactly as given by the user in
 			   the use= command line parameter (helps with log scale) */
 			sprintf(buff, "%s", opt_use->answers[i]);
-		    else 
+		    else
 			/* automatically generated/tuned decimal precision format */
 			sprintf(buff, DispFormat, catlist[i]);
 		}
@@ -944,7 +945,7 @@ int main(int argc, char **argv)
 
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
 
-	    if(color)
+	    if (color)
 		D_text(buff);
 	}
 
@@ -971,13 +972,13 @@ int main(int argc, char **argv)
 	    }
 	    D_use_color(white);
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row));
-	    if(color)
+	    if (color)
 		D_text(buff);
 	}
     }
 
     D_save_command(G_recreate_command());
     D_close_driver();
-    
+
     exit(EXIT_SUCCESS);
 }
