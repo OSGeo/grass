@@ -1,11 +1,10 @@
-/* d.legend a.k.a d.leg.thin
- *
+/*
  * MODULE:      d.legend
  *
  *              Based on the old d.leg.thin, which replaced an even older
  *              module called "d.legend".
  *
- * PURPOSE:     Draw a graphical legend for a raster on the display mon
+ * PURPOSE:     Draw a graphical legend for a raster on the display monitor
  *
  * AUTHORS:
  *      Original version:
@@ -17,7 +16,7 @@
  *      Late 2002: Rewrite of much of the code:
  *         Hamish Bowman, Otago University, New Zealand
  *
- * COPYRIGHT:   (c) 2006 The GRASS Development Team
+ * COPYRIGHT:   (c) 2006-2014 by The GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -58,7 +57,9 @@ int main(int argc, char **argv)
     struct Categories cats;
     struct Colors colors;
     struct GModule *module;
-    struct Option *opt_input, *opt_color, *opt_lines, *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range, *opt_font, *opt_path, *opt_charset, *opt_fontscale;
+    struct Option *opt_input, *opt_color, *opt_lines, *opt_thin,
+		  *opt_labelnum, *opt_at, *opt_use, *opt_range,
+		  *opt_font, *opt_path, *opt_charset, *opt_fontsize;
     struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *size;
     struct Range range;
     struct FPRange fprange;
@@ -75,7 +76,7 @@ int main(int argc, char **argv)
     double UserRangeMin, UserRangeMax, UserRangeTemp;
     double *catlist, maxCat;
     int catlistCount, use_catlist;
-    double fontscale;
+    double fontsize;
 
 
     /* Initialize the GIS calls */
@@ -157,15 +158,14 @@ int main(int argc, char **argv)
     opt_font->description = _("Font name");
     opt_font->guisection = _("Font settings");
 
-    /* HB: this option should become redundant as soon as the bug in trunk's D_text_size() is fixed. */
-    opt_fontscale = G_define_option();
-    opt_fontscale->key = "fontscale";
-    opt_fontscale->type = TYPE_DOUBLE;
-    opt_fontscale->required = NO;
-    opt_fontscale->answer = "5";
-    opt_fontscale->options = "0-100";
-    opt_fontscale->description = _("Font scaling factor for floating point legends");
-    opt_fontscale->guisection = _("Font settings");
+    opt_fontsize = G_define_option();
+    opt_fontsize->key = "fontsize";
+    opt_fontsize->type = TYPE_DOUBLE;
+    opt_fontsize->required = NO;
+    opt_fontsize->options = "1-360";
+    opt_fontsize->label = _("Font size");
+    opt_fontsize->description = _("Default: Auto-scaled");
+    opt_fontsize->guisection = _("Font settings");
 
     opt_path = G_define_standard_option(G_OPT_F_INPUT);
     opt_path->key = "path";
@@ -225,9 +225,10 @@ int main(int argc, char **argv)
     do_smooth = smooth->answer;
     flip = flipit->answer;
 
-    /* Create the fontscale factor for floating point legends */
-    fontscale = atof(opt_fontscale->answer);
-    fontscale = 1.0 / (100.0/fontscale);
+    if (opt_fontsize->answer != NULL)
+	fontsize = atof(opt_fontsize->answer);
+    else
+	fontsize = 12; /* dummy placeholder, should never be called */
 
     color = D_parse_color(opt_color->answer, TRUE);
 
@@ -506,7 +507,7 @@ int main(int argc, char **argv)
 		    y0 = ((b - t) - (dots_per_line * lines)) / 2;
 	}
 
-	/*      D_text_size((int)(dots_per_line*4/5), (int)(dots_per_line*4/5)) ;    redundant */
+	/*      D_text_size(dots_per_line*4/5., dots_per_line*4/5.);    redundant */
 	/* if(Rast_is_c_null_value(&min_ind) && Rast_is_c_null_value(&max_ind))
 	   {
 	   min_ind = 1;
@@ -581,7 +582,7 @@ int main(int argc, char **argv)
 
     if (do_smooth) {
 	int wleg, lleg, dx, dy;
-	int txsiz;
+	double txsiz;
 	int ppl;
 	int tcell;
 	float ScaleFactor = 1.0;
@@ -682,18 +683,21 @@ int main(int argc, char **argv)
 
 	    /* Draw text */
 	    if (!horiz)
-		txsiz = (int)((y1 - y0) * fontscale);
+		txsiz = (y1 - y0) / 20;
 	    else
-		txsiz = (int)((x1 - x0) * fontscale);
+		txsiz = (x1 - x0) / 20;
 
 	    /* scale text to fit in window if position not manually set */
 	    /* usually not needed, except when frame is really narrow   */
 	    if (opt_at->answer == NULL) {	/* ie default scaling */
 		ScaleFactor = ((r - x1) / ((MaxLabelLen + 1) * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
 		if (ScaleFactor < 1.0) {
-		    txsiz = (int)(txsiz * ScaleFactor);
+		    txsiz = txsiz * ScaleFactor;
 		}
 	    }
+
+	    if (opt_fontsize->answer != NULL)
+		txsiz = fontsize;
 
 	    if (txsiz < 0)
 		txsiz = 0;	/* keep it sane */
@@ -759,7 +763,8 @@ int main(int argc, char **argv)
     }
     else {			/* non FP, no smoothing */
 
-	int txsiz, true_l, true_r;
+	int true_l, true_r;
+	double txsiz;
 	float ScaleFactor = 1.0;
 
 	/* set legend box bounds */
@@ -780,19 +785,22 @@ int main(int argc, char **argv)
 
 	/* adjust text size */
 	/*      txsiz = (int)((y1-y0)/(1.5*(lines+5))); */
-	txsiz = (int)((y1 - y0) / (2.0 * lines));
+	txsiz = (y1 - y0) / (2.0 * lines);
 
 	/* scale text to fit in window if position not manually set */
 	if (opt_at->answer == NULL) {	/* ie defualt scaling */
 	    ScaleFactor = ((true_r - true_l) / ((MaxLabelLen + 3) * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
 	    if (ScaleFactor < 1.0) {
-		txsiz = (int)floor(txsiz * ScaleFactor);
+		txsiz = txsiz * ScaleFactor;
 		dots_per_line = (int)floor(dots_per_line * ScaleFactor);
 	    }
 	}
 
 	if (dots_per_line < txsiz)
 	    txsiz = dots_per_line;
+
+	if (opt_fontsize->answer != NULL)
+	    txsiz = fontsize;
 
 	D_text_size(txsiz, txsiz);
 
@@ -928,7 +936,7 @@ int main(int argc, char **argv)
 
 	if (do_cats != cats_num) {
 	    cur_dot_row += dots_per_line;
-	    /*          sprintf(buff, "%d of %d categories\n", (j-1), cats_num) ;   */
+	    /* sprintf(buff, "%d of %d categories\n", (j-1), cats_num); */
 
 	    sprintf(buff, "%d of %d categories\n", k, cats_num);
 
@@ -936,7 +944,11 @@ int main(int argc, char **argv)
 	    MaxLabelLen = strlen(buff) + 4;
 	    ScaleFactor = ((true_r - true_l) / (MaxLabelLen * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
 	    if (ScaleFactor < 1.0) {
-		txsiz = (int)floor(txsiz * ScaleFactor);
+		txsiz = txsiz * ScaleFactor;
+
+		if (opt_fontsize->answer != NULL)
+		    txsiz = fontsize;
+
 		D_text_size(txsiz, txsiz);
 	    }
 	    D_use_color(white);
