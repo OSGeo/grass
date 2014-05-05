@@ -117,6 +117,28 @@ def getRegisteredMaps(timeseries, etype):
     return timeseriesMaps
 
 
+def getNameAndLayer(name):
+    """!Checks whether map name contains layer
+    and returns map name with mapset (when there was mapset)
+    and layer (can be None).
+
+    >>> getNameAndLayer('name:2@mapset')
+    ('name@mapset', '2')
+    >>> getNameAndLayer('name@mapset')
+    ('name@mapset', None)
+    >>> getNameAndLayer('name:2')
+    ('name', '2')
+    """
+    mapset = layer = None
+    if '@' in name:
+        name, mapset = name.split('@')
+    if ':' in name:
+        name, layer = name.split(':')
+    if mapset:
+        name = name + '@' + mapset
+    return name, layer
+
+
 def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
     """!Checks whether time series (map series and stds) are compatible,
         which means they have equal number of maps ad times (in case of stds).
@@ -290,7 +312,15 @@ def layerListToCmdsMatrix(layerList):
                     cmd = layer.cmd[:]
                     cmds = []
                     for map_ in layer.maps:
-                        cmd[i] = 'map={name}'.format(name=map_)
+                        # check if dataset uses layers instead of maps
+                        mapName, mapLayer = getNameAndLayer(map_)
+                        cmd[i] = 'map={name}'.format(name=mapName)
+                        if mapLayer:
+                            try:
+                                idx = cmd.index('layer')
+                                cmd[idx] = 'layer={layer}'.format(layer=mapLayer)
+                            except ValueError:
+                                cmd.append('layer={layer}'.format(layer=mapLayer))
                         cmds.append(cmd[:])
                     cmdsForComposition.append(cmds)
         else:
