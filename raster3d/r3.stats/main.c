@@ -627,7 +627,7 @@ int main(int argc, char *argv[])
 	eqvals = NULL;
 	n = 0;
 	for (z = 0; z < depths; z++) {
-	    G_percent(z, depths - 1, 10);
+	    G_percent(z, depths - 1, 2);
 	    for (y = 0; y < rows; y++) {
 		for (x = 0; x < cols; x++) {
 		    if (map_type == FCELL_TYPE) {
@@ -686,7 +686,7 @@ int main(int argc, char *argv[])
 
 	n = 0;
 	for (z = 0; z < depths; z++) {
-	    G_percent(z, depths - 1, 10);
+	    G_percent(z, depths - 1, 2);
 	    for (y = 0; y < rows; y++) {
 		for (x = 0; x < cols; x++) {
 		    if (map_type == FCELL_TYPE) {
