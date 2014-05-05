@@ -71,7 +71,6 @@ int main(int argc, char *argv[])
 	struct Flag *c;		/* cell counts */
 	struct Flag *p;		/* percents */
 	struct Flag *l;		/* with labels */
-	struct Flag *q;		/* quiet */
 	struct Flag *n;		/* Suppress reporting of any NULLs */
 	struct Flag *N;		/* Suppress reporting of NULLs when 
 				   all values are NULL */
