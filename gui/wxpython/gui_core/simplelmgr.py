@@ -16,13 +16,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova (kratochanna gmail.com)
 """
 import os
-import sys
 
-# adding a path to wxGUI modules
-if __name__ == '__main__':
-    WXGUIBASE = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if WXGUIBASE not in sys.path:
-        sys.path.append(WXGUIBASE)
 import wx
 import wx.aui
 

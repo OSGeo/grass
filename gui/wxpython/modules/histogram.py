@@ -270,7 +270,7 @@ class HistogramFrame(wx.Frame):
                  size = wx.Size(500, 350),
                  style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         wx.Frame.__init__(self, parent, id, title, size = size, style = style, **kwargs)
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         self._giface = giface
         self.Map   = Map()         # instance of render.Map to be associated with display

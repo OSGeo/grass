@@ -46,16 +46,10 @@
 
 
 import os
-import sys
 
 import  wx
 
 import grass.script as grass
-
-if __name__ == '__main__':
-    wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if wxbase not in sys.path:
-        sys.path.append(wxbase)
 
 from core.settings import UserSettings
 from core.globalvar import CheckWxVersion

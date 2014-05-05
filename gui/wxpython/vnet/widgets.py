@@ -410,7 +410,7 @@ class PointsList(wx.ListCtrl,
 
     def getSmallUpArrowImage(self):
         """!Get arrow up symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.ETCIMGDIR, 'small_up_arrow.png'), 'rb')
+        stream = open(os.path.join(globalvar.IMGDIR, 'small_up_arrow.png'), 'rb')
         try:
             img = wx.ImageFromStream(stream)
         finally:
@@ -419,7 +419,7 @@ class PointsList(wx.ListCtrl,
 
     def getSmallDnArrowImage(self):
         """!Get arrow down symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.ETCIMGDIR, 'small_down_arrow.png'), 'rb')
+        stream = open(os.path.join(globalvar.IMGDIR, 'small_down_arrow.png'), 'rb')
         try:
             img = wx.ImageFromStream(stream)
         finally:

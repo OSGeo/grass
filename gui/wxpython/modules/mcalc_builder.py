@@ -17,16 +17,10 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import re
 
 import wx
 import grass.script as grass
-
-if __name__ == "__main__":
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
@@ -61,7 +55,7 @@ class MapCalcFrame(wx.Frame):
             title = _('GRASS GIS 3D Raster Map Calculator')
             
         wx.Frame.__init__(self, parent, id = id, title = title, **kwargs)
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         self.CreateStatusBar()

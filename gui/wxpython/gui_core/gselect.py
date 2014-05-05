@@ -2147,7 +2147,7 @@ class CoordinatesSelect(wx.Panel):
                                        size=globalvar.DIALOG_TEXTCTRL_SIZE,
                                        validator=CoordinatesValidator())
         
-        icon = wx.Bitmap(os.path.join(globalvar.ETCICONDIR, "grass", "pointer.png"))
+        icon = wx.Bitmap(os.path.join(globalvar.ICONDIR, "grass", "pointer.png"))
         self.buttonInsCoords = buttons.ThemedGenBitmapToggleButton(parent=self, id=wx.ID_ANY,
                                                                    bitmap=icon,
                                                                    size=globalvar.DIALOG_COLOR_SIZE)

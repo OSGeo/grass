@@ -21,21 +21,12 @@ import shlex
 import re
 import inspect
 
-if __name__ == '__main__':
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
-
-from core.globalvar import ETCDIR
-if os.path.join(ETCDIR, "python") not in sys.path:
-    sys.path.append(os.path.join(ETCDIR, "python"))
-
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from core import globalvar
 from core.gcmd  import RunCommand
 from core.debug import Debug
-# from core.settings import UserSettings
 
 try:
     # intended to be used also outside this module
@@ -845,7 +836,7 @@ def GetSettingsPath():
     """!Get full path to the settings directory
     """
     try:
-        verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
+        verFd = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
         version = int(verFd.readlines()[0].split(' ')[0].split('.')[0])
     except (IOError, ValueError, TypeError, IndexError), e:
         sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)

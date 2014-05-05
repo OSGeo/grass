@@ -20,16 +20,12 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 import os
-import sys
 import wx
 import copy
 import datetime
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as SP
 import wx.lib.colourselect as csel
-
-if __name__ == '__main__':
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core.gcmd import GMessage, GError, GException
 from core import globalvar
@@ -1274,7 +1270,7 @@ class AddTemporalLayerDialog(wx.Dialog):
 
         self.tselect = Select(parent=self, type='strds')
         iconTheme = UserSettings.Get(group='appearance', key='iconTheme', subkey='type')
-        bitmapPath = os.path.join(globalvar.ETCICONDIR, iconTheme, 'layer-open.png')
+        bitmapPath = os.path.join(globalvar.ICONDIR, iconTheme, 'layer-open.png')
         if os.path.isfile(bitmapPath) and os.path.getsize(bitmapPath):
             bitmap = wx.Bitmap(name=bitmapPath)
         else:

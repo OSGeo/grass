@@ -15,15 +15,9 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 
 import wx
 import wx.lib.scrolledpanel as scrolled
-
-if __name__ == '__main__':
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
 
 from core.gcmd        import RunCommand, GError
 from core             import globalvar
@@ -55,7 +49,7 @@ class VectorCleaningFrame(wx.Frame):
         self.CreateStatusBar()
 
         # icon
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 

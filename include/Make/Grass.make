@@ -51,10 +51,11 @@ RUN_GISRC       = $(GISBASE)/demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_
 # or files used by GRASS programs
 
 BIN             = $(ARCH_DISTDIR)/bin
-ETC             = $(ARCH_DISTDIR)/etc
 DRIVERDIR       = $(ARCH_DISTDIR)/driver
 DBDRIVERDIR     = $(ARCH_DISTDIR)/driver/db
 DOCSDIR         = $(ARCH_DISTDIR)/docs
+ETC             = $(ARCH_DISTDIR)/etc
+GUIDIR          = $(ARCH_DISTDIR)/gui
 HTMLDIR         = $(ARCH_DISTDIR)/docs/html
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs

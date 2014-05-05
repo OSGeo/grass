@@ -20,12 +20,7 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail com>
 """
 
-import sys
 import os
-
-wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-if wxbase not in sys.path:
-    sys.path.append(wxbase)
 
 import wx
 import wx.wizard as wiz

@@ -15,7 +15,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
+
 import wx
 from wx.lib.mixins.treemixin import VirtualTree, ExpansionState
 try:
@@ -23,11 +23,6 @@ try:
 except ImportError:
     import wx.lib.customtreectrl as CT
 import wx.gizmos as gizmos
-
-if __name__ == '__main__':
-    gui_wx_path = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
-    if gui_wx_path not in sys.path:
-        sys.path.append(gui_wx_path)
 
 from core.globalvar import hasAgw
 from core.treemodel import TreeModel, DictNode

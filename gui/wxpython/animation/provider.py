@@ -25,8 +25,6 @@ import sys
 import wx
 import tempfile
 from multiprocessing import Process, Queue
-if __name__ == '__main__':
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
 
 from core.gcmd import RunCommand, GException
 from core.settings import UserSettings
