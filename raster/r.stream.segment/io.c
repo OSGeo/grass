@@ -365,7 +365,7 @@ int seg_read_map(SEG * seg, char *input_map_name, int check_res,
 	    this_window.ns_res != cellhd.ns_res)
           G_fatal_error(_("Region resolution and raster map <%s> resolution differs. "
                           "Run 'g.region rast=%s' to set proper region resolution."),
-			  input_map_name, input_map_name);
+                        input_map_name, input_map_name);
 
     if (check_data_type != seg->data_type)
 	G_debug(1,
@@ -441,7 +441,7 @@ int seg_read_map(SEG * seg, char *input_map_name, int check_res,
 	    G_free(input_buffer);
 	    G_free(target_buffer);
 	    Rast_close(input_fd);
-	    G_fatal_error(_("seg_read: Cannot segment put row %d for map %s"),
+	    G_fatal_error(_("Unable to segment put row %d for raster map <%s>"),
 			  r, input_map_name);
 	}
     }				/* end for row */
@@ -528,8 +528,7 @@ int seg_write_map(SEG * seg, char *output_map_name,
 			Rast_set_d_null_value(row + c * (seg->data_size), 1);
 		break;
 	    default:
-		G_warning(_("Unable to convert to NULL at: %d %d"), r,
-			  c);
+		G_warning(_("Unable to convert to NULL at: %d %d"), r, c);
 	    }
 	}
 	Rast_put_row(output_fd, output_buffer, output_data_type);

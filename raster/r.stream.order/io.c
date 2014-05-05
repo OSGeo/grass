@@ -47,10 +47,10 @@ int ram_read_map(MAP * map, char *input_map_name, int check_res,
 		 RASTER_MAP_TYPE check_data_type)
 {
     /*
-     * Funciton read external map and put it in MAP structure (created with create_map)
-     * map: map to be read can be of any data type, read map is converted to target map if neccesary.
+     * Function read external map and put it in MAP structure (created with create_map)
+     * map: map to be read can be of any data type, read map is converted to target map if necessary.
      * input_map_name: name of the map to be read;
-     * map pointer to map stucture (created with create_map);
+     * map pointer to map structure (created with create_map);
      * check_res: [1]: check res correspondence between region and map [0 no check];
      * check_data_type [CELL, FCELL, DCELL] check if reading map is of particular type, [-1] no check;
      */
@@ -79,7 +79,7 @@ int ram_read_map(MAP * map, char *input_map_name, int check_res,
           G_fatal_error(_("Region resolution and raster map <%s> resolution differs. "
                           "Run 'g.region rast=%s' to set proper region resolution."),
                         input_map_name, input_map_name);
-    
+
     /* checking if input map is of required type */
     if (check_data_type != map->data_type)
 	G_debug(1,
@@ -218,7 +218,7 @@ int ram_write_map(MAP * map, char *output_map_name,
 			Rast_set_d_null_value(row + c * (map->data_size), 1);
 		break;
 	    default:
-		G_debug(1, "Unable to convert to NULL at: %d %d", r, c);
+		G_debug(1, "ram_null:Cannot convert to null at: %d %d", r, c);
 	    }
 	}
 
@@ -294,7 +294,7 @@ int seg_create_map(SEG * seg, int srows, int scols, int number_of_segs,
 	seg->data_size = sizeof(DCELL);
 	break;
     default:
-	G_fatal_error(_("Uunrecognisable data type"));
+	G_fatal_error(_("Unrecognisable data type"));
     }
 
     filename = G_tempfile();
@@ -311,7 +311,7 @@ int seg_create_map(SEG * seg, int srows, int scols, int number_of_segs,
     close(fd);
     if (0 > (fd = open(filename, 2))) {
 	unlink(filename);
-	G_fatal_error(_("Unable re-open file '%s'"), filename);
+	G_fatal_error(_("Unable to re-open file '%s'"), filename);
     }
 
     if (0 > (fd = segment_init(&(seg->seg), fd, number_of_segs))) {
@@ -329,10 +329,10 @@ int seg_read_map(SEG * seg, char *input_map_name, int check_res,
 {
 
     /*
-     * Funciton read external map and put it in SEG structure (created with seg_create_map)
-     * map to be read can be of any data type, read map is converted if neccesary.
+     * Function read external map and put it in SEG structure (created with seg_create_map)
+     * map to be read can be of any data type, read map is converted if necessary.
      * input_map_name: name of the map to be read;
-     * seg: pointer to map stucture (created with create_map);
+     * seg: pointer to map structure (created with create_map);
      * check_res: [1]: check res correspondence between region and map [0 no check];
      * check_data_type [CELL, FCELL, DCELL] check if reading map is of particular type, [-1] no check;
      */
@@ -359,14 +359,14 @@ int seg_read_map(SEG * seg, char *input_map_name, int check_res,
     G_get_window(&this_window);
     Rast_get_cellhd(input_map_name, mapset, &cellhd);
 
-    /* check resolution equal anyinteger check;  equal 0 no check */
+    /* check resolution equal any integer check;  equal 0 no check */
     if (check_res)
 	if (this_window.ew_res != cellhd.ew_res ||
 	    this_window.ns_res != cellhd.ns_res)
-            G_fatal_error(_("Region resolution and raster map <%s> resolution differs. "
-                            "Run 'g.region rast=%s' to set proper region resolution."),
-                          input_map_name, input_map_name);
-    
+          G_fatal_error(_("Region resolution and raster map <%s> resolution differs. "
+                          "Run 'g.region rast=%s' to set proper region resolution."),
+                        input_map_name, input_map_name);
+
     if (check_data_type != seg->data_type)
 	G_debug(1,
 		"ram_open:required map type and internal map type differs: conversion forced!");
@@ -528,8 +528,7 @@ int seg_write_map(SEG * seg, char *output_map_name,
 			Rast_set_d_null_value(row + c * (seg->data_size), 1);
 		break;
 	    default:
-		G_warning(_("Unable to convert to NULL at: %d %d"), r,
-			  c);
+		G_warning(_("Unable to convert to NULL at: %d %d"), r, c);
 	    }
 	}
 	Rast_put_row(output_fd, output_buffer, output_data_type);
