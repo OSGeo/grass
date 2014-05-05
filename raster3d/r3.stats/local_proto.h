@@ -40,7 +40,7 @@ int check_equal_value(equal_val_array * array, double val);
 stat_table *create_stat_table(int nsteps, equal_val_array *values,
  			      double min, double max);
 void free_stat_table(stat_table *stats);
-void print_stat_table(stat_table *stats);
+void print_stat_table(stat_table *stats, int);
 void update_stat_table(stat_table *stats, RASTER3D_Region *region);
 void heapsort_eqvals(equal_val_array *data, int n);
 void downheap_eqvals(equal_val_array *data, int n, int k);
