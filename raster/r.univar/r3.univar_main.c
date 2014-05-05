@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
 
     for (z = 0; z < depths; z++) {	/* From the bottom to the top */
 	if (!(param.shell_style->answer))
-	    G_percent(z, depths - 1, 10);
+	    G_percent(z, depths - 1, 2);
 	for (y = 0; y < rows; y++) {
 	    for (x = 0; x < cols; x++) {
 		zone = 0;
