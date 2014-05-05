@@ -12,6 +12,7 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
 		    char **fid_column, char **geom_column)
 {
     int   i;
+    const char *epsg;
     char *filename, *conninfo;
     char buf[GPATH_MAX];
     FILE *fp;
@@ -52,6 +53,9 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
     if (topo)
         G_set_key_value("topology", "yes", key_val);
 
+    /* is EPSG defined */
+    epsg = G_database_epsg_code();
+    
     /* extra options */
     if (options) {
 	char **tokens;
@@ -63,8 +67,13 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
 		continue;
 	    }
 	    G_debug(1, "option: %s=%s", tokens[0], tokens[1]);
-            /* force upper case */
+            /* force lower case */
             G_str_to_lower(tokens[0]);
+
+            if (strcmp(tokens[0], "srid") && epsg)
+                G_warning(_("EPSG code (%s) defined for current location will be ignored"),
+                          epsg);
+            
 	    G_set_key_value(tokens[0], tokens[1], key_val);
 	    
 	    if (strcmp(tokens[0], "fid") == 0)
@@ -76,6 +85,10 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
 	}
     }
     
+    /* check EPSG code if defined as an option */
+    if (epsg && !G_find_key_value("srid", key_val))
+        G_set_key_value("srid", epsg, key_val);
+        
     if (olink) {
         /* create a link for output feature table */
         G_set_key_value("link", "yes", key_val);
