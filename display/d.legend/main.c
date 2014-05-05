@@ -40,22 +40,18 @@ int main(int argc, char **argv)
     char buff[512];
     char *map_name;
     int maptype;
-    int black;
+    int black, white, color;
     int cats_num;
-    int color;
     int cur_dot_row;
     int do_cats;
     int dots_per_line;
-    int thin;
     int i, j, k;
-    int lines, steps;
+    int thin, lines, steps;
     int fp;
     double t, b, l, r;
     int hide_catnum, hide_catstr, hide_nodata, do_smooth;
     char *cstr;
-    int white;
-    double x_box[5];
-    double y_box[5];
+    double x_box[5], y_box[5];
     struct Categories cats;
     struct Colors colors;
     struct GModule *module;
@@ -79,6 +75,7 @@ int main(int argc, char **argv)
     double *catlist, maxCat;
     int catlistCount, use_catlist;
     double fontsize;
+    char *units;
 
 
     /* Initialize the GIS calls */
@@ -88,7 +85,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
     module->description =
-	_("Displays a legend for a raster map in the active frame "
+	_("Displays a legend for a raster map (2 or 3D) in the active frame "
 	  "of the graphics monitor.");
 
     opt_rast2d = G_define_standard_option(G_OPT_R_MAP);
@@ -776,7 +773,7 @@ int main(int argc, char **argv)
 	    if (color)
 		D_text(buff);
 
-	}			/*for */
+	}	/* for */
 
 	lleg = y1 - y0;
 	wleg = x1 - x0;
@@ -804,6 +801,31 @@ int main(int argc, char **argv)
 	D_stroke();
 
 
+	/* print units label, if present */
+	if (maptype == MAP_TYPE_RASTER2D)
+	    units = Rast_read_units(map_name, "");
+	else
+	    units = "";
+/* FIXME: does the raster3d really need to be opened to read the units?
+	    units = Rast3d_get_unit(map_fid); */
+
+	if (!units)
+	    units = "";
+
+	if(strlen(units)) {
+	    D_use_color(color);
+	    /* D_text_size() should be already set */
+	    if (horiz)
+		D_pos_abs((x0 + x1)/2. - (strlen(units) * txsiz * 0.81)/2,
+			  y1 + (txsiz * 3));
+	    else
+		D_pos_abs(x1 - 4, y0 - (txsiz * 1.75));
+
+	    D_text(units);
+	}
+
+
+	/* display sidebar histogram, if requested */
 	if (histo->answer) {
 	    if (opt_range->answer != NULL)
 		G_warning(_("Histogram constrained by range not yet implemented"));
@@ -813,7 +835,7 @@ int main(int argc, char **argv)
 	}
 
     }
-    else {			/* non FP, no smoothing */
+    else {	/* non FP, no smoothing */
 
 	int true_l, true_r;
 	double txsiz;
