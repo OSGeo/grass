@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-<em>d.legend</em> displays a legend for a user-specified
-raster map layer in the active frame on the graphics monitor.  
+<em>d.legend</em> displays a legend for a user-specified raster map or
+3D raster map layer in the active frame on the graphics monitor.  
 <p>
 The legend's default size is based on the dimensions of the
 active frame, specifically its height.  <em>d.legend</em> will only
@@ -65,10 +65,11 @@ The text produced from floating-point raster maps will automatically create
 output with a meaningful number of significant digits. For very small values,
 numbers will be expressed in scientific notation, e.g.&nbsp;"1.7e-9".
 <p>
-Note that old scripts which relied on setting <b>lines</b> greater than the
-number of categories to scale the legend may no longer produce the desired
-output, although the auto-scaling should still produce something that looks 
-good in this case.
+When the <b>-d</b> flag is used to display a histogram distribution along
+side the smoothed gradient legend, note that the statistics are calculated
+on the <i>current computational region</i> settings set by <em>g.region</em>.
+The default <b>range</b> however covers the entire natural bounds of the input map.
+If the histogram appears empty, check your region settings.
 
 
 <h2>SEE ALSO</h2>
@@ -76,14 +77,15 @@ good in this case.
 <em>
 <a href="d.barscale.html">d.barscale</a>,
 <a href="d.colortable.html">d.colortable</a>,
-<a href="d.erase.html">d.erase</a>,
 <a href="d.font.html">d.font</a>,
 <a href="d.grid.html">d.grid</a>,
 <a href="d.rast.html">d.rast</a>,
 <a href="d.rast.leg.html">d.rast.leg</a>,
 <a href="d.text.html">d.text</a>,
 <a href="d.vect.thematic.html">d.vect.thematic</a>,
-<a href="r.reclass.html">r.reclass</a>
+<a href="r.reclass.html">r.reclass</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="r3.stats.html">r3.stats</a>
 </em>
 
 

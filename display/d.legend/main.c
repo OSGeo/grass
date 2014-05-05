@@ -29,6 +29,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/raster3d.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -38,6 +39,7 @@ int main(int argc, char **argv)
 {
     char buff[512];
     char *map_name;
+    int maptype;
     int black;
     int cats_num;
     int color;
@@ -57,13 +59,13 @@ int main(int argc, char **argv)
     struct Categories cats;
     struct Colors colors;
     struct GModule *module;
-    struct Option *opt_input, *opt_color, *opt_lines, *opt_thin,
-		  *opt_labelnum, *opt_at, *opt_use, *opt_range,
+    struct Option *opt_rast2d, *opt_rast3d, *opt_color, *opt_lines,
+		  *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range,
 		  *opt_font, *opt_path, *opt_charset, *opt_fontsize;
     struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo;
     struct Range range;
     struct FPRange fprange;
-    CELL min_ind, max_ind, null_cell;
+    CELL min_ind, max_ind;
     DCELL dmin, dmax, val;
     CELL min_colr, max_colr;
     DCELL min_dcolr, max_dcolr;
@@ -89,12 +91,15 @@ int main(int argc, char **argv)
 	_("Displays a legend for a raster map in the active frame "
 	  "of the graphics monitor.");
 
-    opt_input = G_define_standard_option(G_OPT_R_MAP);
-    opt_input->description = _("Name of raster map");
+    opt_rast2d = G_define_standard_option(G_OPT_R_MAP);
+    opt_rast2d->key = "rast";
+    opt_rast2d->required = NO;
+    opt_rast2d->guisection = _("Input");
 
-    opt_color = G_define_standard_option(G_OPT_C_FG);
-    opt_color->label = _("Text color");
-    opt_color->guisection = _("Font settings");
+    opt_rast3d = G_define_standard_option(G_OPT_R3_MAP);
+    opt_rast3d->key = "rast3d";
+    opt_rast3d->required = NO;
+    opt_rast3d->guisection = _("Input");
 
     opt_lines = G_define_option();
     opt_lines->key = "lines";
@@ -153,6 +158,10 @@ int main(int argc, char **argv)
     opt_range->description =
 	_("Use a subset of the map range for the legend (min,max)");
     opt_range->guisection = _("Subset");
+
+    opt_color = G_define_standard_option(G_OPT_C_FG);
+    opt_color->label = _("Text color");
+    opt_color->guisection = _("Font settings");
 
     opt_font = G_define_option();
     opt_font->key = "font";
@@ -213,15 +222,26 @@ int main(int argc, char **argv)
     histo = G_define_flag();
     histo->key = 'd';
     histo->description = _("Add histogram to smoothed legend");
-    histo->guisection = _("Advanced");
+    histo->guisection = _("Gradient");
 
 
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    /* FIXME: add GUI launching logic to G_parser() call */
+    if ((opt_rast2d->answer && opt_rast3d->answer) ||
+        !(opt_rast2d->answer || opt_rast3d->answer))
+	G_fatal_error(_("Please specify a single map name. To launch GUI use d.legend --ui."));
 
-    map_name = opt_input->answer;
+    if (opt_rast2d->answer) {
+	map_name = opt_rast2d->answer;
+	maptype = MAP_TYPE_RASTER2D;
+    }
+    else {
+	map_name = opt_rast3d->answer;
+	maptype = MAP_TYPE_RASTER3D;
+    }
 
     hide_catstr = hidestr->answer;	/* note hide_catstr gets changed and re-read below */
     hide_catnum = hidenum->answer;
@@ -274,21 +294,28 @@ int main(int argc, char **argv)
 	}
     }
 
+    if (maptype == MAP_TYPE_RASTER2D) {
+	if (Rast_read_colors(map_name, "", &colors) == -1)
+	    G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    if (Rast_read_colors(map_name, "", &colors) == -1)
-	G_fatal_error(_("Color file for <%s> not available"), map_name);
+	fp = Rast_map_is_fp(map_name, "");
+ 
+	Rast_read_cats(map_name, "", &cats);
+    }
+    else {
+	if (Rast3d_read_colors(map_name, "", &colors) == -1)
+	    G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    fp = Rast_map_is_fp(map_name, "");
+	fp = TRUE;  /* currently raster 3D is always floating point */
+
+	Rast3d_read_cats(map_name, "", &cats);
+    }
+
     if (fp && !use_catlist) {
 	do_smooth = TRUE;
 	/* fprintf(stderr, "FP map found - switching gradient legend on\n"); */
 	flip = !flip;
     }
-
-    if (Rast_read_cats(map_name, "", &cats) == -1)
-	G_warning(_("Category file for <%s> not available"), map_name);
-
-    Rast_set_c_null_value(&null_cell, 1);
 
     if (D_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected. "
@@ -334,7 +361,7 @@ int main(int argc, char **argv)
 
     x0 = l + (int)((r - l) * X0 / 100.);
     x1 = l + (int)((r - l) * X1 / 100.);
-    y0 = t + (int)((b - t) * (100. - Y0) / 100.);	/* make lower left the origin */
+    y0 = t + (int)((b - t) * (100. - Y0) / 100.);  /* make lower left the origin */
     y1 = t + (int)((b - t) * (100. - Y1) / 100.);
 
     if (y0 > y1) {		/* allow for variety in order of corner */
@@ -532,13 +559,19 @@ int main(int argc, char **argv)
 		sprintf(DispFormat, "%%2d");
 	}
     }
-    else {			/* is fp */
-	if (Rast_read_fp_range(map_name, "", &fprange) == -1)
-	    G_fatal_error(_("Range information for <%s> not available"),
-			  map_name);
+    else {	/* is fp */
+	if (maptype == MAP_TYPE_RASTER2D) {
+	    if (Rast_read_fp_range(map_name, "", &fprange) == -1)
+		G_fatal_error(_("Range information for <%s> not available"),
+				map_name);
+	}
+	else {
+	    if (Rast3d_read_range(map_name, "", &fprange) == -1)
+		G_fatal_error(_("Range information for <%s> not available"),
+				map_name);
+	}
 
 	Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
-
 	Rast_get_d_color_range(&min_dcolr, &max_dcolr, &colors);
 
 	if (UserRange) {
@@ -776,7 +809,7 @@ int main(int argc, char **argv)
 		G_warning(_("Histogram constrained by range not yet implemented"));
 	    else
 		draw_histogram(map_name, x0, y0, wleg, lleg, color, flip,
-			       horiz);
+			       horiz, maptype);
 	}
 
     }
