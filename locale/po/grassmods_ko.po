@@ -23998,11 +23998,11 @@ msgid "Failed to update key column <%s>"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.in.db/main.c:339
-#, fuzzy, c-format
+#, c-format
 msgid "%d point written to vector map."
 msgid_plural "%d points written to vector map."
-msgstr[0] "출력할 래스터맵"
-msgstr[1] "출력할 래스터맵"
+msgstr[0] "점 %d개를 벡터맵에 저장했습니다. "
+msgstr[1] "점 %d개를 벡터맵에 저장했습니다. "
 
 #: ../vector/v.in.lidar/main.c:157
 #, fuzzy
