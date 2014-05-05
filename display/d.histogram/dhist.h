@@ -40,8 +40,9 @@ int draw_slice_filled(struct Colors *, DCELL, int, double, double, double,
 		      double, double);
 int draw_slice(struct Colors *, int, DCELL, DCELL, int, double, double,
 	       double, double, double);
+
 /* get_stats.c */
-int get_stats(const char *, struct stat_list *, int);
+int get_stats(const char *, struct stat_list *);
 
 /* pie.c */
 int pie(struct stat_list *, struct Colors *);
