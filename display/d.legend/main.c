@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     struct Option *opt_input, *opt_color, *opt_lines, *opt_thin,
 		  *opt_labelnum, *opt_at, *opt_use, *opt_range,
 		  *opt_font, *opt_path, *opt_charset, *opt_fontsize;
-    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit;
+    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo;
     struct Range range;
     struct FPRange fprange;
     CELL min_ind, max_ind, null_cell;
@@ -111,7 +111,8 @@ int main(int argc, char **argv)
     opt_thin->required = NO;
     opt_thin->answer = "1";
     opt_thin->options = "1-1000";
-    opt_thin->description = _("Thinning factor (thin=10 gives cats 0,10,20...)");
+    opt_thin->description =
+	_("Thinning factor (thin=10 gives cats 0,10,20...)");
     opt_thin->guisection = _("Advanced");
 
     opt_labelnum = G_define_option();
@@ -119,23 +120,25 @@ int main(int argc, char **argv)
     opt_labelnum->type = TYPE_INTEGER;
     opt_labelnum->answer = "5";
     opt_labelnum->options = "2-100";
-    opt_labelnum->description = _("Number of text labels for smooth gradient legend");
+    opt_labelnum->description =
+	_("Number of text labels for smooth gradient legend");
     opt_labelnum->guisection = _("Gradient");
 
     opt_at = G_define_option();
     opt_at->key = "at";
     opt_at->key_desc = "bottom,top,left,right";
-    opt_at->type = TYPE_DOUBLE;	/* needs to be TYPE_DOUBLE to get past options check */
+    opt_at->type = TYPE_DOUBLE;  /* needs to be TYPE_DOUBLE to get past options check */
     opt_at->required = NO;
     opt_at->options = "0-100";
     opt_at->label =
-	_("Size and placement as percentage of screen coordinates (0,0 is lower left)");
+	_("Size and placement as percentage of screen coordinates "
+	  "(0,0 is lower left)");
     opt_at->description = opt_at->key_desc;
     opt_at->answer = NULL;
 
     opt_use = G_define_option();
     opt_use->key = "use";
-    opt_use->type = TYPE_DOUBLE;	/* string as it is fed through the parser? */
+    opt_use->type = TYPE_DOUBLE;  /* string as it is fed through the parser? */
     opt_use->required = NO;
     opt_use->description =
 	_("List of discrete category numbers/values for legend");
@@ -145,7 +148,7 @@ int main(int argc, char **argv)
     opt_range = G_define_option();
     opt_range->key = "range";
     opt_range->key_desc = "min,max";
-    opt_range->type = TYPE_DOUBLE;	/* should it be type_double or _string ?? */
+    opt_range->type = TYPE_DOUBLE;  /* should it be type_double or _string ?? */
     opt_range->required = NO;
     opt_range->description =
 	_("Use a subset of the map range for the legend (min,max)");
@@ -207,6 +210,12 @@ int main(int argc, char **argv)
     flipit->description = _("Flip legend");
     flipit->guisection = _("Advanced");
 
+    histo = G_define_flag();
+    histo->key = 'd';
+    histo->description = _("Add histogram to smoothed legend");
+    histo->guisection = _("Advanced");
+
+
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -219,11 +228,6 @@ int main(int argc, char **argv)
     hide_nodata = hidenodata->answer;
     do_smooth = smooth->answer;
     flip = flipit->answer;
-
-    if (opt_fontsize->answer != NULL)
-	fontsize = atof(opt_fontsize->answer);
-    else
-	fontsize = 12; /* dummy placeholder, should never be called */
 
     color = D_parse_color(opt_color->answer, TRUE);
 
@@ -298,6 +302,11 @@ int main(int argc, char **argv)
     else if (opt_path->answer)
 	D_font(opt_path->answer);
 
+    if (opt_fontsize->answer != NULL)
+	fontsize = atof(opt_fontsize->answer);
+    else
+	fontsize = 12; /* dummy placeholder, should never be called */
+
     if (opt_charset->answer)
 	D_encoding(opt_charset->answer);
 
@@ -316,6 +325,11 @@ int main(int argc, char **argv)
 	Y0 = 88;
 	X0 = 3;
 	X1 = 7;
+
+	if (histo->answer) {
+	    X0 += 5;
+	    X1 += 5;
+	}
     }
 
     x0 = l + (int)((r - l) * X0 / 100.);
@@ -754,6 +768,15 @@ int main(int argc, char **argv)
 	D_close();
 	D_end();
 	D_stroke();
+
+
+	if (histo->answer) {
+	    if (opt_range->answer != NULL)
+		G_warning(_("Histogram constrained by range not yet implemented"));
+	    else
+		draw_histogram(map_name, x0, y0, wleg, lleg, color, flip,
+			       horiz);
+	}
 
     }
     else {			/* non FP, no smoothing */
