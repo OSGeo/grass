@@ -37,7 +37,7 @@ from core.utils import _
 from gui_core.gselect import Select
 from gui_core.widgets import FloatValidator
 
-from animation.utils import TemporalMode, getRegisteredMaps
+from animation.utils import TemporalMode, getRegisteredMaps, getNameAndLayer
 from animation.data import AnimationData, AnimLayer
 from animation.toolbars import AnimSimpleLmgrToolbar, SIMPLE_LMGR_STDS
 from gui_core.simplelmgr import SimpleLayerManager, \
@@ -1390,7 +1390,8 @@ class AddTemporalLayerDialog(wx.Dialog):
                 try:
                     maps = getRegisteredMaps(self._name, etype=self._mapType)
                     if maps:
-                        cmd.append('map={name}'.format(name=maps[0]))
+                        mapName, mapLayer = getNameAndLayer(maps[0])
+                        cmd.append('map={name}'.format(name=mapName))
                 except gcore.ScriptError, e:
                     GError(parent=self, message=str(e), showTraceback=False)
                     return None
