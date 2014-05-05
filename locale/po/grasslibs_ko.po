@@ -1943,7 +1943,7 @@ msgstr "벡터맵 <%s>의 어떤 점도 현재 영역 안에 있지 않습니다
 #: ../lib/ogsf/Gp3.c:151
 #, c-format
 msgid "Vector map <%s> loaded (%d points)"
-msgstr "벡터맵 <%s>를 읽었습니다 (%d 점)"
+msgstr "벡터맵 <%s>를 읽었습니다 (점 %d개)"
 
 #: ../lib/ogsf/Gp3.c:209
 #, fuzzy, c-format
@@ -3821,7 +3821,7 @@ msgstr ""
 #: ../lib/gis/done_msg.c:38
 #, c-format
 msgid "%s complete. %s"
-msgstr ""
+msgstr "%s를 완료했습니다. %s"
 
 #: ../lib/gis/open.c:62
 #, c-format
@@ -6767,120 +6767,116 @@ msgid "Topology was built"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:878
-#, fuzzy, c-format
+#, c-format
 msgid "Number of nodes: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "노드 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:879
-#, fuzzy, c-format
+#, c-format
 msgid "Number of primitives: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "기본자료 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:880
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "점 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:881
-#, fuzzy, c-format
+#, c-format
 msgid "Number of lines: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "선 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:882
-#, fuzzy, c-format
+#, c-format
 msgid "Number of boundaries: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "경계 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:883
-#, fuzzy, c-format
+#, c-format
 msgid "Number of centroids: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "중심점 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:886
-#, fuzzy, c-format
+#, c-format
 msgid "Number of faces: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "페이스 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:889
-#, fuzzy, c-format
+#, c-format
 msgid "Number of kernels: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "커널 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:935
-#, fuzzy, c-format
+#, c-format
 msgid "Number of areas: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "면 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:936
-#, fuzzy, c-format
+#, c-format
 msgid "Number of isles: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "섬 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:941
-#, fuzzy, c-format
+#, c-format
 msgid "Number of areas without centroid: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "중심점 없는 면 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:946
-#, fuzzy, c-format
+#, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "중심점의 개수가 면의 개수보다 많습니다: %d > %d"
 
 #: ../lib/vector/Vlib/build.c:950
-#, fuzzy, c-format
+#, c-format
 msgid "Number of incorrect boundaries: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "잘못된 경계 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:954
-#, fuzzy, c-format
+#, c-format
 msgid "Number of centroids outside area: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "면 바깥의 중심점 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:958
-#, fuzzy, c-format
+#, c-format
 msgid "Number of duplicate centroids: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "중복된 중심점 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:962
-#, fuzzy
 msgid "Number of areas: -"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "면 개수: -"
 
 #: ../lib/vector/Vlib/build.c:963
-#, fuzzy
 msgid "Number of isles: -"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "섬 개수: -"
 
 #: ../lib/vector/Vlib/build.c:992
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create topo file for vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "벡터맵 <%s>를 위한 위상파일을 생성할 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:1000
-#, fuzzy
 msgid "Error writing out topo file"
-msgstr "임시파일을 열 수 없습니다"
+msgstr "위상파일을 저장하지 못 했습니다"
 
 #: ../lib/vector/Vlib/build.c:1189
-#, fuzzy
 msgid ""
 "Unable to build spatial index from topology, vector map is not opened at "
 "topology level 2"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "벡터맵이 위상레벨 2에서 열리지 않았기 때문에 위상정보로부터 공간색인을 만들지 못 했습니다."
 
 #: ../lib/vector/Vlib/build.c:1212
 #, c-format
 msgid "%s is no longer supported"
-msgstr ""
+msgstr "%s를 더 이상 지원하지 않습니다"
 
 #: ../lib/vector/Vlib/build.c:1235
 msgid "Spatial index not available, can not be saved"
-msgstr ""
+msgstr "공간색인이 없어서 저장할 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:1248
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
-msgstr "임시파일을 열 수 없습니다"
+msgstr "벡터맵 <%s>를 위한 공간색인파일을 생성할 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:1257
 #, fuzzy
