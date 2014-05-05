@@ -66,7 +66,6 @@ int main(int argc, char **argv)
     char title[GNAME_MAX];
     double tt, tb, tl, tr;
     double t, b, l, r;
-    int quiet;
     struct GModule *module;
     struct Option *opt1;
     struct Option *opt2, *bg_opt;
@@ -129,10 +128,6 @@ int main(int argc, char **argv)
     flag1->key = 'n';
     flag1->description = _("Display information for null cells");
 
-    flag2 = G_define_flag();
-    flag2->key = 'q';
-    flag2->description = _("Gather the histogram quietly");
-
     flag3 = G_define_flag();
     flag3->key = 'C';
     flag3->description =
@@ -168,7 +163,6 @@ int main(int argc, char **argv)
 	G_warning(_("When -C flag is set, the nsteps argument is ignored"));
 
     nodata = flag1->answer;
-    quiet = flag2->answer ? YES : NO;
 
     if (Rast_read_colors(map_name, "", &pcolors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
@@ -182,7 +176,7 @@ int main(int argc, char **argv)
 
     /* get the distribution statistics */
 
-    get_stats(map_name, &dist_stats, quiet);
+    get_stats(map_name, &dist_stats);
 
     /* set up the graphics driver and initialize its color-table */
 
