@@ -1072,7 +1072,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             checked = True
         
         self.forceCheck = True
-        wx.CallAfter(self.CheckItem, layer, checked)
         
         # add text and icons for each layer ltype
         if ltype == 'command':
@@ -1116,6 +1115,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                     'nviz'     : lnviz,
                                     'propwin'  : None}, 
                                    None))
+            # must be after SetPyData because it calls OnLayerChecked
+            # which calls GetVisibleLayers which requires already set PyData
+            self.CheckItem(layer, checked=checked)
             
             # find previous map layer instance 
             prevItem = self.GetFirstChild(self.root)[0]
