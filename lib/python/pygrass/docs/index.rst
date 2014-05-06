@@ -23,11 +23,11 @@ Contents:
    :maxdepth: 2
 
    intro
+   gis
    raster
    vector
    attributes
    modules
-
 
 
 Indices and tables
