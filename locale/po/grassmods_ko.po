@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-03 16:44-0400\n"
+"POT-Creation-Date: 2014-05-06 07:42-0400\n"
 "PO-Revision-Date: 2005-08-09 22:53-0500\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -726,7 +726,7 @@ msgstr "출력할 래스터맵"
 
 #: ../general/g.proj/main.c:68
 msgid ""
-"Prints and manipulates GRASS projection information files (in various co-"
+"Prints or modifies GRASS projection information files (in various co-"
 "ordinate system descriptions)."
 msgstr ""
 
@@ -832,39 +832,38 @@ msgid "Modify"
 msgstr ""
 
 #: ../general/g.proj/main.c:193
-#, fuzzy
-msgid "Create new projection files (modifies current location)"
-msgstr "출력할 래스터맵"
+msgid "Modify current location projection files"
+msgstr ""
 
-#: ../general/g.proj/main.c:201 ../general/g.mapset/main.c:83
+#: ../general/g.proj/main.c:200 ../general/g.mapset/main.c:83
 #: ../locale/scriptstrings/r.mask_to_translate.c:18
 msgid "Create"
 msgstr ""
 
-#: ../general/g.proj/main.c:202
+#: ../general/g.proj/main.c:201
 msgid "Name of new location to create"
 msgstr ""
 
-#: ../general/g.proj/main.c:218
+#: ../general/g.proj/main.c:217
 #, c-format
 msgid "Only one of '%s', '%s', '%s' or '%s' options may be specified"
 msgstr ""
 
-#: ../general/g.proj/main.c:261
+#: ../general/g.proj/main.c:260
 msgid "Projection files missing"
 msgstr ""
 
-#: ../general/g.proj/main.c:281
+#: ../general/g.proj/main.c:280
 #, c-format
 msgid "Only one of -%c, -%c, -%c, -%c, -%c or -%c flags may be specified"
 msgstr ""
 
-#: ../general/g.proj/main.c:308
+#: ../general/g.proj/main.c:307
 #, c-format
 msgid "No output format specified, define one of flags -%c, -%c, -%c, or -%c"
 msgstr ""
 
-#: ../general/g.proj/main.c:312
+#: ../general/g.proj/main.c:311
 #, c-format
 msgid "No output format specified, define one of flags -%c, -%c, or -%c"
 msgstr ""
@@ -902,7 +901,7 @@ msgstr ""
 #, c-format
 msgid ""
 "You must select the PERMANENT mapset before updating the current location's "
-"projection (current mapset is <%s>)."
+"projection (current mapset is <%s>)"
 msgstr ""
 
 #: ../general/g.proj/create.c:62
@@ -1212,7 +1211,7 @@ msgid "Raster map <%s> not found"
 msgstr ""
 
 #: ../general/g.region/main.c:485 ../raster3d/r3.mask/main.c:57
-#: ../raster3d/r3.stats/main.c:612 ../raster3d/r3.null/main.c:102
+#: ../raster3d/r3.stats/main.c:95 ../raster3d/r3.null/main.c:102
 #: ../raster3d/r3.neighbors/main.c:225 ../raster3d/r3.retile/main.c:113
 #: ../raster3d/r3.out.v5d/main.c:306 ../raster3d/r3.out.vtk/main.c:142
 #: ../raster3d/r3.support/main.c:134 ../raster3d/r3.out.netcdf/main.c:599
@@ -1581,7 +1580,7 @@ msgstr "출력할 래스터맵"
 #: ../display/d.colortable/main.c:60 ../display/d.mon/main.c:38
 #: ../display/d.rgb/main.c:53 ../display/d.linegraph/main.c:119
 #: ../display/d.what.rast/main.c:49 ../display/d.text/main.c:138
-#: ../display/d.histogram/main.c:84 ../display/d.title/main.c:49
+#: ../display/d.histogram/main.c:83 ../display/d.title/main.c:49
 #: ../display/d.vect/main.c:70 ../display/d.barscale/main.c:54
 #: ../display/d.rast.num/main.c:76 ../display/d.profile/main.c:191
 #: ../display/d.where/main.c:43 ../display/d.rast/main.c:53
@@ -3707,8 +3706,7 @@ msgid "Unable to read data type of raster map <%s>"
 msgstr "출력할 래스터맵"
 
 #: ../imagery/i.landsat.toar/main.c:532 ../raster/r.flow/main.c:316
-#: ../raster/r.topidx/new/topidx.c:41 ../raster/r.topidx/topidx.c:41
-#: ../raster/r.topidx/old/topidx.c:41
+#: ../raster/r.topidx/topidx.c:41
 #, fuzzy
 msgid "Calculating..."
 msgstr "출력할 래스터맵"
@@ -6187,14 +6185,14 @@ msgstr ""
 msgid "Transform completed.\n"
 msgstr ""
 
-#: ../imagery/i.cca/main.c:85 ../raster3d/r3.stats/main.c:569
+#: ../imagery/i.cca/main.c:85 ../raster3d/r3.stats/main.c:49
 #: ../raster3d/r3.neighbors/main.c:211 ../raster/r.statistics/main.c:56
 #: ../raster/r.surf.area/main.c:78 ../raster/r.neighbors/main.c:142
 #: ../raster/r.cross/main.c:70 ../raster/r.quantile/main.c:257
 #: ../raster/r.univar/r.univar_main.c:101
 #: ../raster/r.univar/r3.univar_main.c:99 ../raster/r.kappa/main.c:69
 #: ../raster/r.clump/main.c:50 ../raster/r.coin/main.c:67
-#: ../raster/r.stats/main.c:106 ../raster/r.quant/main.c:49
+#: ../raster/r.stats/main.c:105 ../raster/r.quant/main.c:49
 #: ../raster/r.regression.multi/main.c:129
 #: ../raster/r.regression.line/main.c:47 ../raster/r.mode/main.c:56
 #: ../raster/r.stats.zonal/main.c:102 ../raster/r.support.stats/main.c:39
@@ -6205,7 +6203,7 @@ msgstr ""
 #: ../vector/v.random/main.c:114 ../vector/v.normal/main.c:75
 #: ../vector/v.outlier/main.c:70 ../vector/v.perturb/main.c:63
 #: ../vector/v.kcv/main.c:63 ../vector/v.qcount/main.c:61
-#: ../display/d.histogram/main.c:86
+#: ../display/d.histogram/main.c:85
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:3
 #: ../locale/scriptstrings/v.report_to_translate.c:4
 #: ../locale/scriptstrings/i.oif_to_translate.c:4
@@ -6924,7 +6922,7 @@ msgid "Out of memory!"
 msgstr ""
 
 #: ../raster3d/r3.info/r3.info.main.c:75 ../raster3d/r3.mask/main.c:132
-#: ../raster3d/r3.stats/main.c:568 ../raster3d/r3.null/main.c:185
+#: ../raster3d/r3.stats/main.c:48 ../raster3d/r3.null/main.c:185
 #: ../raster3d/r3.neighbors/main.c:208 ../raster3d/r3.in.ascii/main.c:316
 #: ../raster3d/r3.retile/main.c:96 ../raster3d/r3.out.v5d/main.c:283
 #: ../raster3d/r3.gwflow/main.c:159 ../raster3d/r3.out.vtk/main.c:376
@@ -7001,7 +6999,7 @@ msgid "3D Raster map <%s> not found"
 msgstr "출력할 래스터맵"
 
 #: ../raster3d/r3.info/r3.info.main.c:110 ../raster3d/r3.mask/main.c:63
-#: ../raster3d/r3.stats/main.c:619 ../raster3d/r3.null/main.c:109
+#: ../raster3d/r3.stats/main.c:102 ../raster3d/r3.null/main.c:109
 #: ../raster3d/r3.neighbors/main.c:262 ../raster3d/r3.neighbors/main.c:271
 #: ../raster3d/r3.retile/main.c:127 ../raster3d/r3.out.v5d/main.c:311
 #: ../raster3d/r3.out.vtk/main.c:207 ../raster3d/r3.out.vtk/main.c:292
@@ -7111,25 +7109,30 @@ msgstr ""
 msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
 
-#: ../raster3d/r3.stats/main.c:570
+#: ../raster3d/r3.stats/main.c:50
 #, fuzzy
 msgid "Generates volume statistics for 3D raster maps."
 msgstr "출력할 래스터맵"
 
-#: ../raster3d/r3.stats/main.c:581
+#: ../raster3d/r3.stats/main.c:61
 #, fuzzy
 msgid "Number of subranges to collect stats from"
 msgstr "출력할 래스터맵"
 
-#: ../raster3d/r3.stats/main.c:587
+#: ../raster3d/r3.stats/main.c:66
 msgid "Calculate statistics based on equal value groups"
 msgstr ""
 
-#: ../raster3d/r3.stats/main.c:607
+#: ../raster3d/r3.stats/main.c:70
+#, fuzzy
+msgid "Only print cell counts"
+msgstr "출력할 래스터맵"
+
+#: ../raster3d/r3.stats/main.c:90
 msgid "The number of subranges has to be equal or greater than 1"
 msgstr ""
 
-#: ../raster3d/r3.stats/main.c:666
+#: ../raster3d/r3.stats/main.c:149
 msgid "Sort non-null values"
 msgstr ""
 
@@ -7525,8 +7528,7 @@ msgstr ""
 #: ../raster/simwe/r.sim.sediment/main.c:112
 #: ../raster/r.watershed/front/main.c:73 ../raster/r.basins.fill/main.c:55
 #: ../raster/r.stream.channel/main.c:57 ../raster/r.gwflow/main.c:210
-#: ../raster/r.uslek/main.c:54 ../raster/r.topidx/new/main.c:40
-#: ../raster/r.topidx/main.c:40 ../raster/r.topidx/old/main.c:40
+#: ../raster/r.uslek/main.c:54 ../raster/r.topidx/main.c:40
 #: ../raster/r.stream.segment/main.c:58 ../raster/r.stream.order/main.c:76
 #: ../raster/r.water.outlet/main.c:68 ../raster/r.stream.stats/main.c:54
 msgid "hydrology"
@@ -8168,7 +8170,7 @@ msgstr ""
 #: ../raster/r.out.mat/main.c:62 ../raster/r.coin/main.c:66
 #: ../raster/r.resamp.bspline/main.c:80 ../raster/simwe/r.sim.water/main.c:110
 #: ../raster/simwe/r.sim.sediment/main.c:111 ../raster/r.out.ppm/main.c:54
-#: ../raster/r.out.ascii/main.c:59 ../raster/r.stats/main.c:105
+#: ../raster/r.out.ascii/main.c:59 ../raster/r.stats/main.c:104
 #: ../raster/r.surf.fractal/main.c:38 ../raster/r.proj/main.c:144
 #: ../raster/r.quant/main.c:47 ../raster/r.in.gdal/main.c:81
 #: ../raster/r.null/main.c:59 ../raster/r.out.ppm3/main.c:57
@@ -8206,8 +8208,7 @@ msgstr ""
 #: ../raster/r.surf.random/main.c:36 ../raster/r.category/main.c:52
 #: ../raster/r.uslek/main.c:53 ../raster/r.describe/main.c:54
 #: ../raster/r.what/main.c:98 ../raster/r.composite/main.c:72
-#: ../raster/r.topidx/new/main.c:39 ../raster/r.topidx/main.c:39
-#: ../raster/r.topidx/old/main.c:39 ../raster/r.out.vtk/main.c:59
+#: ../raster/r.topidx/main.c:39 ../raster/r.out.vtk/main.c:59
 #: ../raster/r.texture/main.c:101 ../raster/r.random.surface/main.c:57
 #: ../raster/r.out.gridatb/main.c:67 ../raster/r.le/r.le.trace/main.c:55
 #: ../raster/r.le/r.le.patch/main.c:48 ../raster/r.le/r.le.setup/main.c:57
@@ -9468,11 +9469,11 @@ msgstr ""
 
 #: ../raster/r.his/main.c:140 ../raster/r.his/main.c:156
 #: ../raster/r.his/main.c:174 ../raster/r.out.ppm3/main.c:115
-#: ../display/d.legend/main.c:279 ../display/d.his/main.c:141
-#: ../display/d.his/main.c:158 ../display/d.his/main.c:176
-#: ../display/d.colortable/main.c:137 ../display/d.rgb/main.c:101
-#: ../display/d.histogram/main.c:174 ../display/d.rast.num/main.c:224
-#: ../display/d.rast/display.c:23
+#: ../display/d.legend/main.c:296 ../display/d.legend/main.c:304
+#: ../display/d.his/main.c:141 ../display/d.his/main.c:158
+#: ../display/d.his/main.c:176 ../display/d.colortable/main.c:137
+#: ../display/d.rgb/main.c:101 ../display/d.histogram/main.c:168
+#: ../display/d.rast.num/main.c:224 ../display/d.rast/display.c:23
 #, c-format
 msgid "Color file for <%s> not available"
 msgstr ""
@@ -11011,7 +11012,7 @@ msgid "No raster map name found in input file"
 msgstr "출력할 래스터맵"
 
 #: ../raster/r.series/main.c:268 ../raster/r.series.accumulate/main.c:267
-#: ../raster/r.stats/main.c:289
+#: ../raster/r.stats/main.c:288
 #, fuzzy
 msgid "Raster map not found"
 msgstr "출력할 래스터맵"
@@ -12417,6 +12418,7 @@ msgstr ""
 #: ../raster/simwe/r.sim.sediment/main.c:161 ../raster/r.external/main.c:64
 #: ../raster/r.external/main.c:72 ../raster/r.external/main.c:81
 #: ../vector/v.edit/args.c:90 ../vector/v.edit/args.c:209
+#: ../display/d.legend/main.c:94 ../display/d.legend/main.c:99
 #: ../locale/scriptstrings/t.remove_to_translate.c:5
 #: ../locale/scriptstrings/t.remove_to_translate.c:8
 #: ../locale/scriptstrings/t.remove_to_translate.c:10
@@ -12803,7 +12805,7 @@ msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
 #: ../raster/r.univar/r.univar_main.c:41
-#: ../raster/r.univar/r3.univar_main.c:42 ../raster/r.stats/main.c:118
+#: ../raster/r.univar/r3.univar_main.c:42 ../raster/r.stats/main.c:117
 #: ../raster/r.what/main.c:129 ../vector/v.db.select/main.c:88
 #: ../locale/scriptstrings/i.oif_to_translate.c:5
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:6
@@ -12834,8 +12836,8 @@ msgstr ""
 
 #: ../raster/r.univar/r.univar_main.c:56 ../raster/r.univar/r.univar_main.c:62
 #: ../raster/r.univar/r.univar_main.c:72 ../raster/r.kappa/main.c:104
-#: ../raster/r.kappa/main.c:109 ../raster/r.stats/main.c:122
-#: ../raster/r.stats/main.c:131 ../raster/r.stats/main.c:155
+#: ../raster/r.kappa/main.c:109 ../raster/r.stats/main.c:121
+#: ../raster/r.stats/main.c:130 ../raster/r.stats/main.c:154
 #: ../raster/r.report/parse.c:76 ../raster/r.report/parse.c:85
 #: ../raster/r.report/parse.c:94 ../raster/r.report/parse.c:118
 #: ../raster/r.report/parse.c:123 ../raster/r.report/parse.c:128
@@ -12884,7 +12886,7 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.univar/r.univar_main.c:116
-#: ../raster/r.univar/r3.univar_main.c:124 ../raster/r.stats/main.c:231
+#: ../raster/r.univar/r3.univar_main.c:124 ../raster/r.stats/main.c:230
 #: ../raster/r.regression.multi/main.c:168
 #: ../raster/r.regression.line/main.c:76 ../raster/r.what/main.c:174
 #: ../vector/v.db.select/main.c:114 ../db/db.select/main.c:141
@@ -13516,8 +13518,7 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.solute.transport/main.c:244 ../raster/r.gwflow/main.c:222
-#: ../raster/r.topidx/new/main.c:55 ../raster/r.topidx/main.c:55
-#: ../raster/r.topidx/old/main.c:55
+#: ../raster/r.topidx/main.c:55
 #, c-format
 msgid "Lat/Long location is not supported by %s. Please reproject map first."
 msgstr ""
@@ -14902,153 +14903,153 @@ msgstr "출력할 래스터맵"
 msgid "Read failed at row %d"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:108
+#: ../raster/r.stats/main.c:107
 #, fuzzy
 msgid "Generates area statistics for raster map."
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:113 ../raster/r.report/parse.c:40
+#: ../raster/r.stats/main.c:112 ../raster/r.report/parse.c:40
 #, fuzzy
 msgid "Name of raster map(s) to report on"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:130 ../raster/r.describe/main.c:68
+#: ../raster/r.stats/main.c:129 ../raster/r.describe/main.c:68
 #: ../raster/r.report/parse.c:75
 msgid "String representing no data cell value"
 msgstr ""
 
-#: ../raster/r.stats/main.c:140 ../raster/r.report/parse.c:103
+#: ../raster/r.stats/main.c:139 ../raster/r.report/parse.c:103
 #, fuzzy
 msgid "Number of floating-point subranges to collect stats from"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:141 ../raster/r.stats/main.c:196
-#: ../raster/r.stats/main.c:201 ../raster/r.stats/main.c:216
-#: ../raster/r.stats/main.c:221 ../raster/r.report/parse.c:104
+#: ../raster/r.stats/main.c:140 ../raster/r.stats/main.c:195
+#: ../raster/r.stats/main.c:200 ../raster/r.stats/main.c:215
+#: ../raster/r.stats/main.c:220 ../raster/r.report/parse.c:104
 #: ../raster/r.report/parse.c:148 ../raster/r.report/parse.c:154
 #, fuzzy
 msgid "Floating point"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:148 ../raster/r.report/parse.c:111
+#: ../raster/r.stats/main.c:147 ../raster/r.report/parse.c:111
 msgid "Sort output statistics by cell counts"
 msgstr ""
 
-#: ../raster/r.stats/main.c:149 ../raster/r.report/parse.c:112
+#: ../raster/r.stats/main.c:148 ../raster/r.report/parse.c:112
 #, fuzzy
 msgid "Default: sorted by categories or intervals"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:153 ../raster/r.report/parse.c:116
+#: ../raster/r.stats/main.c:152 ../raster/r.report/parse.c:116
 msgid "Sort by cell counts in ascending order"
 msgstr ""
 
-#: ../raster/r.stats/main.c:154 ../raster/r.report/parse.c:117
+#: ../raster/r.stats/main.c:153 ../raster/r.report/parse.c:117
 msgid "Sort by cell counts in descending order"
 msgstr ""
 
-#: ../raster/r.stats/main.c:161
+#: ../raster/r.stats/main.c:160
 msgid "Print area totals in square meters"
 msgstr ""
 
-#: ../raster/r.stats/main.c:162 ../raster/r.stats/main.c:167
-#: ../raster/r.stats/main.c:173 ../raster/r.report/parse.c:60
+#: ../raster/r.stats/main.c:161 ../raster/r.stats/main.c:166
+#: ../raster/r.stats/main.c:172 ../raster/r.report/parse.c:60
 #, fuzzy
 msgid "Statistics"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:166
+#: ../raster/r.stats/main.c:165
 msgid "Print cell counts (sortable)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:172
+#: ../raster/r.stats/main.c:171
 msgid "Print approximate (total percent may not be 100%) percents"
 msgstr ""
 
-#: ../raster/r.stats/main.c:177
+#: ../raster/r.stats/main.c:176
 msgid "Print category labels"
 msgstr ""
 
-#: ../raster/r.stats/main.c:181
+#: ../raster/r.stats/main.c:180
 msgid "One cell (range) per line"
 msgstr ""
 
-#: ../raster/r.stats/main.c:185
+#: ../raster/r.stats/main.c:184
 msgid "Print grid coordinates (east and north)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:186 ../raster/r.stats/main.c:191
+#: ../raster/r.stats/main.c:185 ../raster/r.stats/main.c:190
 #, fuzzy
 msgid "Coordinates"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:190
+#: ../raster/r.stats/main.c:189
 msgid "Print x and y (column and row)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:195
+#: ../raster/r.stats/main.c:194
 msgid "Print averaged values instead of intervals (floating-point maps only)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:200
+#: ../raster/r.stats/main.c:199
 msgid "Print raw indexes of floating-point ranges (floating-point maps only)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:205 ../raster/r.report/parse.c:137
+#: ../raster/r.stats/main.c:204 ../raster/r.report/parse.c:137
 #, fuzzy
 msgid "Do not report no data value"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:206 ../raster/r.stats/main.c:211
+#: ../raster/r.stats/main.c:205 ../raster/r.stats/main.c:210
 #: ../raster/r.report/parse.c:138 ../raster/r.report/parse.c:143
 #, fuzzy
 msgid "No data"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:210 ../raster/r.report/parse.c:142
+#: ../raster/r.stats/main.c:209 ../raster/r.report/parse.c:142
 msgid "Do not report cells where all maps have no data"
 msgstr ""
 
-#: ../raster/r.stats/main.c:215 ../raster/r.report/parse.c:147
+#: ../raster/r.stats/main.c:214 ../raster/r.report/parse.c:147
 msgid "Report for cats floating-point ranges (floating-point maps only)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:220 ../raster/r.report/parse.c:153
+#: ../raster/r.stats/main.c:219 ../raster/r.report/parse.c:153
 msgid "Read floating-point map as integer (use map's quant rules)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:237
+#: ../raster/r.stats/main.c:236
 #, c-format
 msgid "'%s' must be greater than zero; using %s=255"
 msgstr ""
 
-#: ../raster/r.stats/main.c:307
+#: ../raster/r.stats/main.c:306
 #, c-format
 msgid ""
 "Raster map <%s> is reading as integer map! Flag '-%c' and/or '%s' option "
 "will be ignored."
 msgstr ""
 
-#: ../raster/r.stats/main.c:323
+#: ../raster/r.stats/main.c:322
 #, c-format
 msgid ""
 "Cats for raster map <%s> are either missing or have no explicit labels. "
 "Using %s=%d."
 msgstr ""
 
-#: ../raster/r.stats/main.c:329
+#: ../raster/r.stats/main.c:328
 #, c-format
 msgid ""
 "Flag '-%c' was given, using cats fp ranges of raster map <%s>, ignoring '%s' "
 "option"
 msgstr ""
 
-#: ../raster/r.stats/main.c:335 ../raster/r.contour/main.c:146
+#: ../raster/r.stats/main.c:334 ../raster/r.contour/main.c:146
 #, fuzzy, c-format
 msgid "Unable to read fp range of raster map <%s>"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.stats/main.c:362 ../raster/r.recode/read_rules.c:35
+#: ../raster/r.stats/main.c:361 ../raster/r.recode/read_rules.c:35
 #, fuzzy, c-format
 msgid "Unable to read range for map <%s>"
 msgstr "출력할 래스터맵"
@@ -19976,9 +19977,9 @@ msgid "Size of point cache"
 msgstr ""
 
 #: ../raster/r.what/main.c:141 ../raster/r.what/main.c:166
-#: ../display/d.legend/main.c:105 ../display/d.legend/main.c:114
-#: ../display/d.legend/main.c:188 ../display/d.legend/main.c:193
-#: ../display/d.legend/main.c:198 ../display/d.legend/main.c:208
+#: ../display/d.legend/main.c:108 ../display/d.legend/main.c:118
+#: ../display/d.legend/main.c:197 ../display/d.legend/main.c:202
+#: ../display/d.legend/main.c:207 ../display/d.legend/main.c:217
 msgid "Advanced"
 msgstr ""
 
@@ -20070,25 +20071,21 @@ msgstr "출력할 래스터맵"
 msgid "Creating color table for output raster map..."
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.topidx/new/topidx.c:277 ../raster/r.topidx/topidx.c:277
-#: ../raster/r.topidx/old/topidx.c:277
+#: ../raster/r.topidx/topidx.c:277
 #, fuzzy, c-format
 msgid "Number of sinks or boundaries: %d"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.topidx/new/main.c:42 ../raster/r.topidx/main.c:42
-#: ../raster/r.topidx/old/main.c:42
+#: ../raster/r.topidx/main.c:42
 #, fuzzy
 msgid "Creates topographic index map from elevation raster map."
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.topidx/new/main.c:48 ../raster/r.topidx/main.c:48
-#: ../raster/r.topidx/old/main.c:48
+#: ../raster/r.topidx/main.c:48
 #, fuzzy
 msgid "Name for output topographic index map"
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.topidx/new/file_io.c:35 ../raster/r.topidx/old/file_io.c:35
 #: ../raster/r.topidx/file_io.c:35
 #, c-format
 msgid ""
@@ -20097,13 +20094,11 @@ msgid ""
 "coarser than, the input map's resolution."
 msgstr ""
 
-#: ../raster/r.topidx/new/file_io.c:42 ../raster/r.topidx/old/file_io.c:42
 #: ../raster/r.topidx/file_io.c:42
 #, fuzzy
 msgid "Reading elevation map..."
 msgstr "출력할 래스터맵"
 
-#: ../raster/r.topidx/new/file_io.c:87 ../raster/r.topidx/old/file_io.c:87
 #: ../raster/r.topidx/file_io.c:87
 #, fuzzy
 msgid "Writing topographic index map..."
@@ -23932,7 +23927,7 @@ msgstr "출력할 래스터맵"
 msgid ""
 "Vector map <%s> cannot be overwritten because input table <%s> is linked to "
 "this map."
-msgstr ""
+msgstr "입력테이블 <%2$s>이 벡터맵 <%1$s>와 연결되어 있어서 벡터맵을 덮어 쓸 수 없습니다."
 
 #: ../vector/v.in.db/main.c:177
 #, c-format
@@ -28254,7 +28249,7 @@ msgstr ""
 msgid "Reference position"
 msgstr ""
 
-#: ../vector/v.label/main.c:122 ../display/d.legend/main.c:157
+#: ../vector/v.label/main.c:122 ../display/d.legend/main.c:167
 #: ../display/d.text/main.c:218 ../display/d.vect/main.c:256
 msgid "Font name"
 msgstr ""
@@ -28280,7 +28275,7 @@ msgid "Label size (in points)"
 msgstr ""
 
 #: ../vector/v.label/main.c:151 ../vector/v.lrs/v.lrs.label/main.c:194
-#: ../vector/v.label.sa/main.c:98 ../display/d.legend/main.c:95
+#: ../vector/v.label.sa/main.c:98 ../display/d.legend/main.c:160
 #: ../display/d.grid/main.c:102 ../display/d.rhumbline/main.c:68
 msgid "Text color"
 msgstr ""
@@ -34181,14 +34176,14 @@ msgstr ""
 
 #: ../display/d.labels/main.c:117 ../display/d.vect.chart/main.c:254
 #: ../display/d.font/main.c:85 ../display/d.thematic.area/main.c:371
-#: ../display/d.fontlist/main.c:54 ../display/d.legend/main.c:294
+#: ../display/d.fontlist/main.c:54 ../display/d.legend/main.c:318
 #: ../display/d.northarrow/main.c:130 ../display/d.erase/main.c:45
 #: ../display/d.info/main.c:70 ../display/d.rast.arrow/main.c:224
 #: ../display/d.his/main.c:119 ../display/d.grid/main.c:253
 #: ../display/d.rhumbline/main.c:96 ../display/d.colortable/main.c:141
 #: ../display/d.mon/main.c:200 ../display/d.rgb/main.c:82
 #: ../display/d.linegraph/main.c:268 ../display/d.text/main.c:286
-#: ../display/d.histogram/main.c:190 ../display/d.vect/main.c:323
+#: ../display/d.histogram/main.c:184 ../display/d.vect/main.c:323
 #: ../display/d.barscale/main.c:221 ../display/d.rast.num/main.c:195
 #: ../display/d.profile/main.c:263 ../display/d.where/main.c:170
 #: ../display/d.rast/main.c:97 ../display/d.graph/main.c:98
@@ -34626,160 +34621,166 @@ msgid "List fonts (default; provided for compatibility with d.font)"
 msgstr ""
 
 #: ../display/d.legend/main.c:88
-msgid ""
-"Displays a legend for a raster map in the active frame of the graphics "
-"monitor."
-msgstr ""
-
-#: ../display/d.legend/main.c:92 ../display/d.zoom/main.c:76
-msgid "Name of raster map"
-msgstr ""
-
-#: ../display/d.legend/main.c:96 ../display/d.legend/main.c:158
-#: ../display/d.legend/main.c:168 ../display/d.legend/main.c:175
-#: ../display/d.legend/main.c:183 ../display/d.legend/main.c:213
 #, fuzzy
-msgid "Font settings"
+msgid ""
+"Displays a legend for a raster map (2 or 3D) in the active frame of the "
+"graphics monitor."
 msgstr "출력할 래스터맵"
 
-#: ../display/d.legend/main.c:104
+#: ../display/d.legend/main.c:107
 msgid "Number of text lines (useful for truncating long legends)"
 msgstr ""
 
-#: ../display/d.legend/main.c:113
+#: ../display/d.legend/main.c:117
 msgid "Thinning factor (thin=10 gives cats 0,10,20...)"
 msgstr ""
 
-#: ../display/d.legend/main.c:121
+#: ../display/d.legend/main.c:126
 msgid "Number of text labels for smooth gradient legend"
 msgstr ""
 
-#: ../display/d.legend/main.c:122 ../display/d.legend/main.c:203
+#: ../display/d.legend/main.c:127 ../display/d.legend/main.c:212
+#: ../display/d.legend/main.c:222
 #, fuzzy
 msgid "Gradient"
 msgstr "출력할 래스터맵"
 
-#: ../display/d.legend/main.c:131
+#: ../display/d.legend/main.c:136
 msgid ""
 "Size and placement as percentage of screen coordinates (0,0 is lower left)"
 msgstr ""
 
-#: ../display/d.legend/main.c:140
+#: ../display/d.legend/main.c:146
 msgid "List of discrete category numbers/values for legend"
 msgstr ""
 
-#: ../display/d.legend/main.c:142 ../display/d.legend/main.c:151
+#: ../display/d.legend/main.c:148 ../display/d.legend/main.c:157
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:10
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:11
 msgid "Subset"
 msgstr ""
 
-#: ../display/d.legend/main.c:150
+#: ../display/d.legend/main.c:156
 msgid "Use a subset of the map range for the legend (min,max)"
 msgstr ""
 
-#: ../display/d.legend/main.c:167
-msgid "Font scaling factor for floating point legends"
+#: ../display/d.legend/main.c:161 ../display/d.legend/main.c:168
+#: ../display/d.legend/main.c:177 ../display/d.legend/main.c:184
+#: ../display/d.legend/main.c:192
+#, fuzzy
+msgid "Font settings"
+msgstr "출력할 래스터맵"
+
+#: ../display/d.legend/main.c:175 ../display/d.northarrow/main.c:86
+#: ../display/d.barscale/main.c:132
+msgid "Font size"
 msgstr ""
 
-#: ../display/d.legend/main.c:173 ../display/d.text/main.c:223
+#: ../display/d.legend/main.c:176
+msgid "Default: Auto-scaled"
+msgstr ""
+
+#: ../display/d.legend/main.c:182 ../display/d.text/main.c:223
 msgid "Path to font file"
 msgstr ""
 
-#: ../display/d.legend/main.c:182 ../display/d.text/main.c:231
+#: ../display/d.legend/main.c:191 ../display/d.text/main.c:231
 msgid "Text encoding (only applicable to TrueType fonts)"
 msgstr ""
 
-#: ../display/d.legend/main.c:187
+#: ../display/d.legend/main.c:196
 msgid "Do not show category labels"
 msgstr ""
 
-#: ../display/d.legend/main.c:192
+#: ../display/d.legend/main.c:201
 msgid "Do not show category numbers"
 msgstr ""
 
-#: ../display/d.legend/main.c:197
+#: ../display/d.legend/main.c:206
 msgid "Skip categories with no label"
 msgstr ""
 
-#: ../display/d.legend/main.c:202
+#: ../display/d.legend/main.c:211
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:7
 msgid "Draw smooth gradient"
 msgstr ""
 
-#: ../display/d.legend/main.c:207
+#: ../display/d.legend/main.c:216
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:4
 msgid "Flip legend"
 msgstr ""
 
-#: ../display/d.legend/main.c:212 ../display/d.text/main.c:255
-msgid "Font size is height in pixels"
+#: ../display/d.legend/main.c:221
+msgid "Add histogram to smoothed legend"
 msgstr ""
 
-#: ../display/d.legend/main.c:289 ../display/d.histogram/main.c:177
-#: ../ps/ps.map/ps_clrtbl.c:39
-#, c-format
-msgid "Category file for <%s> not available"
+#: ../display/d.legend/main.c:232
+msgid "Please specify a single map name. To launch GUI use d.legend --ui."
 msgstr ""
 
-#: ../display/d.legend/main.c:348
+#: ../display/d.legend/main.c:382
 msgid "Legend box lies outside of frame. Text may not display properly."
 msgstr ""
 
-#: ../display/d.legend/main.c:352
+#: ../display/d.legend/main.c:386
 msgid "Drawing horizontal legend as box width exceeds height"
 msgstr ""
 
-#: ../display/d.legend/main.c:363
+#: ../display/d.legend/main.c:397
 #, c-format
 msgid "Range information for <%s> not available (run r.support)"
 msgstr ""
 
-#: ../display/d.legend/main.c:368
+#: ../display/d.legend/main.c:402
 #, fuzzy
 msgid "Input map contains no data"
 msgstr "출력할 래스터맵"
 
-#: ../display/d.legend/main.c:381
+#: ../display/d.legend/main.c:415
 msgid "Requested range exceeds lower limit of actual data"
 msgstr ""
 
-#: ../display/d.legend/main.c:387
+#: ../display/d.legend/main.c:421
 msgid "Requested range exceeds upper limit of actual data"
 msgstr ""
 
-#: ../display/d.legend/main.c:446
+#: ../display/d.legend/main.c:480
 #, c-format
 msgid "use=%s out of range [%d,%d] (extend with range= ?)"
 msgstr ""
 
-#: ../display/d.legend/main.c:487
+#: ../display/d.legend/main.c:521
 msgid "Nothing to draw! (no categories with labels? out of range?)"
 msgstr ""
 
-#: ../display/d.legend/main.c:497
+#: ../display/d.legend/main.c:531
 msgid "Forcing a smooth legend: too many categories for current window height"
 msgstr ""
 
-#: ../display/d.legend/main.c:527 ../display/d.histogram/main.c:180
+#: ../display/d.legend/main.c:562 ../display/d.legend/main.c:567
+#: ../display/d.histogram/main.c:174
 #, c-format
 msgid "Range information for <%s> not available"
 msgstr ""
 
-#: ../display/d.legend/main.c:541
+#: ../display/d.legend/main.c:581
 msgid "Color range exceeds lower limit of actual data"
 msgstr ""
 
-#: ../display/d.legend/main.c:545
+#: ../display/d.legend/main.c:585
 msgid "Color range exceeds upper limit of actual data"
 msgstr ""
 
-#: ../display/d.legend/main.c:552
+#: ../display/d.legend/main.c:592
 #, c-format
 msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
 msgstr ""
 
-#: ../display/d.legend/main.c:926
+#: ../display/d.legend/main.c:831
+msgid "Histogram constrained by range not yet implemented"
+msgstr ""
+
+#: ../display/d.legend/main.c:1008
 msgid "Nothing to draw! (no categories with labels?)"
 msgstr ""
 
@@ -34887,10 +34888,6 @@ msgstr ""
 
 #: ../display/d.northarrow/main.c:78 ../display/d.vect/main.c:152
 msgid "Line width"
-msgstr ""
-
-#: ../display/d.northarrow/main.c:86 ../display/d.barscale/main.c:132
-msgid "Font size"
 msgstr ""
 
 #: ../display/d.northarrow/main.c:87 ../display/d.northarrow/main.c:92
@@ -35610,6 +35607,10 @@ msgstr ""
 msgid "Use radians instead of degrees for rotation"
 msgstr ""
 
+#: ../display/d.text/main.c:255
+msgid "Font size is height in pixels"
+msgstr ""
+
 #: ../display/d.text/main.c:266
 msgid "Please choose only one placement method"
 msgstr ""
@@ -35630,57 +35631,58 @@ msgstr ""
 msgid "[%s]: No such color. Use '%s'"
 msgstr ""
 
-#: ../display/d.histogram/main.c:85
+#: ../display/d.histogram/main.c:84
 #, fuzzy
 msgid "histogram"
 msgstr "출력할 래스터맵"
 
-#: ../display/d.histogram/main.c:88
+#: ../display/d.histogram/main.c:87
 msgid ""
 "Displays a histogram in the form of a pie or bar chart for a user-specified "
 "raster map."
 msgstr ""
 
-#: ../display/d.histogram/main.c:92
+#: ../display/d.histogram/main.c:91
 #, fuzzy
 msgid "Raster map for which histogram will be displayed"
 msgstr "출력할 래스터맵"
 
-#: ../display/d.histogram/main.c:96
+#: ../display/d.histogram/main.c:95
 msgid "Indicate if a pie or bar chart is desired"
 msgstr ""
 
-#: ../display/d.histogram/main.c:105
+#: ../display/d.histogram/main.c:104
 msgid "Color for text and axes"
 msgstr ""
 
-#: ../display/d.histogram/main.c:113
+#: ../display/d.histogram/main.c:112
 msgid "Indicate if cell counts or map areas should be displayed"
 msgstr ""
 
-#: ../display/d.histogram/main.c:123
+#: ../display/d.histogram/main.c:122
 msgid "Number of steps to divide the data range into (fp maps only)"
 msgstr ""
 
-#: ../display/d.histogram/main.c:130
+#: ../display/d.histogram/main.c:129
 msgid "Display information for null cells"
 msgstr ""
 
 #: ../display/d.histogram/main.c:134
-msgid "Gather the histogram quietly"
-msgstr ""
-
-#: ../display/d.histogram/main.c:139
 msgid "Report for ranges defined in cats file (fp maps only)"
 msgstr ""
 
-#: ../display/d.histogram/main.c:163
+#: ../display/d.histogram/main.c:158
 #, c-format
 msgid "Invalid number of steps: %s"
 msgstr ""
 
-#: ../display/d.histogram/main.c:168
+#: ../display/d.histogram/main.c:163
 msgid "When -C flag is set, the nsteps argument is ignored"
+msgstr ""
+
+#: ../display/d.histogram/main.c:171 ../ps/ps.map/ps_clrtbl.c:39
+#, c-format
+msgid "Category file for <%s> not available"
 msgstr ""
 
 #: ../display/d.title/main.c:52
@@ -36364,6 +36366,10 @@ msgstr ""
 msgid ""
 "Allows the user to change the current geographic region settings "
 "interactively, with a mouse."
+msgstr ""
+
+#: ../display/d.zoom/main.c:76
+msgid "Name of raster map"
 msgstr ""
 
 #: ../display/d.zoom/main.c:92
@@ -41162,6 +41168,10 @@ msgstr ""
 #: ../temporal/t.connect/main.c:121
 msgid "Default TGIS database is not set"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Create new projection files (modifies current location)"
+#~ msgstr "출력할 래스터맵"
 
 #, fuzzy
 #~ msgid "Name for output distance/accumulation raster map"

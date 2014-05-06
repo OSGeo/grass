@@ -3,11 +3,12 @@
 # Copyright (C) 2005, 2014 GRASS Development Team
 # Huidae Cho <grass4u@gmail.com>, 2005, 2014.
 #
+#: ../gui/wxpython/gis_set.py:122
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-03 16:44-0400\n"
+"POT-Creation-Date: 2014-05-06 07:42-0400\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -69,46 +70,46 @@ msgstr ""
 msgid "Add space-time dataset or series of map layers for animation"
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:69 ../gui/wxpython/animation/utils.py:75
+#: ../gui/wxpython/animation/utils.py:69 ../gui/wxpython/animation/utils.py:77
 #: ../gui/wxpython/animation/temporal_manager.py:225
-#: ../gui/wxpython/timeline/frame.py:399
+#: ../gui/wxpython/timeline/frame.py:404
 #, python-format
 msgid "Space time dataset <%s> not found."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:93
-#: ../gui/wxpython/animation/utils.py:101
+#: ../gui/wxpython/animation/utils.py:95
+#: ../gui/wxpython/animation/utils.py:103
 #: ../gui/wxpython/mapswipe/frame.py:392
 #: ../gui/wxpython/lmgr/layertree.py:1612 ../gui/wxpython/gis_set.py:539
 #, python-format
 msgid "Map <%s> not found."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:156
+#: ../gui/wxpython/animation/utils.py:158
 msgid "The number of maps in space-time datasets has to be the same."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:160
+#: ../gui/wxpython/animation/utils.py:162
 msgid ""
 "The temporal type (absolute/relative) of space-time datasets has to be the "
 "same."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:164
+#: ../gui/wxpython/animation/utils.py:166
 msgid ""
 "The map type (point/interval) of space-time datasets has to be the same."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:168
+#: ../gui/wxpython/animation/utils.py:170
 msgid ""
 "The temporal extents of maps in space-time datasets have to be the same."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:176
+#: ../gui/wxpython/animation/utils.py:178
 msgid "The number of maps to animate has to be the same for each map series."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:180
+#: ../gui/wxpython/animation/utils.py:182
 msgid ""
 "The number of maps to animate has to be the same as the number of maps in "
 "temporal dataset."
@@ -535,7 +536,7 @@ msgid "Sample text"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:845
-#: ../gui/wxpython/mapwin/decorations.py:361
+#: ../gui/wxpython/mapwin/decorations.py:366
 #: ../gui/wxpython/gui_core/preferences.py:394
 #: ../gui/wxpython/gui_core/preferences.py:589
 msgid "Set font"
@@ -1917,7 +1918,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/workspace.py:1329 ../gui/wxpython/core/gcmd.py:140
 #: ../gui/wxpython/wxplot/dialogs.py:802
-#: ../gui/wxpython/mapwin/buffered.py:1888
+#: ../gui/wxpython/mapwin/buffered.py:1913
 msgid "Warning"
 msgstr ""
 
@@ -3425,18 +3426,16 @@ msgstr ""
 msgid "Select output vector map:"
 msgstr ""
 
-#: ../gui/wxpython/modules/vclean.py:137
+#: ../gui/wxpython/modules/vclean.py:137 ../gui/wxpython/modules/vkrige.py:137
 #: ../gui/wxpython/modules/mcalc_builder.py:231
-#: ../gui/wxpython/scripts/vkrige.py:137
 #: ../gui/wxpython/gmodeler/preferences.py:529
 #: ../gui/wxpython/gui_core/dialogs.py:1652
 #: ../gui/wxpython/gui_core/preferences.py:816
 msgid "Allow output files to overwrite existing files"
 msgstr ""
 
-#: ../gui/wxpython/modules/vclean.py:158
+#: ../gui/wxpython/modules/vclean.py:158 ../gui/wxpython/modules/vkrige.py:151
 #: ../gui/wxpython/modules/mcalc_builder.py:135
-#: ../gui/wxpython/scripts/vkrige.py:151
 #: ../gui/wxpython/gmodeler/frame.py:1665
 #: ../gui/wxpython/gmodeler/model.py:2535 ../gui/wxpython/gui_core/menu.py:156
 #: ../gui/wxpython/gui_core/forms.py:502
@@ -3550,6 +3549,85 @@ msgstr ""
 msgid "Vector cleaning command copied to clipboard"
 msgstr ""
 
+#: ../gui/wxpython/modules/vkrige.py:32
+msgid "No GRASS-python library found."
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:62
+msgid "Input Data"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:68
+msgid "Point dataset:"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:80
+msgid "Numeric column:"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:91
+msgid "Kriging"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:102 ../gui/wxpython/gmodeler/frame.py:129
+#: ../gui/wxpython/gui_core/forms.py:1777
+msgid "Command output"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:113
+#: ../gui/wxpython/modules/mcalc_builder.py:124
+#: ../gui/wxpython/vnet/dialogs.py:302
+msgid "Output"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:116
+msgid "Name for the output raster map:"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:124
+msgid "Export variance map as well: "
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:276
+msgid "Kriging Module"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:280
+msgid "Ready."
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:304
+msgid "Variogram fitting"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:314
+msgid "Plot/refresh variogram"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:325
+msgid ":"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:350
+msgid "Kriging techniques"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:364
+msgid "Block size:"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:397
+msgid "Auto-fit variogram"
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:421
+msgid "Model: "
+msgstr ""
+
+#: ../gui/wxpython/modules/vkrige.py:510
+msgid "Work in progress! No functionality provided."
+msgstr ""
+
 #: ../gui/wxpython/modules/mcalc_builder.py:52
 msgid "GRASS GIS Raster Map Calculator"
 msgstr ""
@@ -3564,11 +3642,6 @@ msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:122
 msgid "Operators"
-msgstr ""
-
-#: ../gui/wxpython/modules/mcalc_builder.py:124
-#: ../gui/wxpython/scripts/vkrige.py:113 ../gui/wxpython/vnet/dialogs.py:302
-msgid "Output"
 msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:126
@@ -4183,27 +4256,31 @@ msgstr ""
 msgid "No raster or vector map layer selected for querying."
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1249 ../gui/wxpython/gcp/mapdisplay.py:463
+#: ../gui/wxpython/mapdisp/frame.py:1253 ../gui/wxpython/gcp/mapdisplay.py:463
 msgid "Zoom to default region"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1250 ../gui/wxpython/gcp/mapdisplay.py:467
+#: ../gui/wxpython/mapdisp/frame.py:1254 ../gui/wxpython/gcp/mapdisplay.py:467
 msgid "Zoom to saved region"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1252
-msgid "Set computational region from display extent"
+#: ../gui/wxpython/mapdisp/frame.py:1256
+msgid "Set computational region extent from display"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1253
+#: ../gui/wxpython/mapdisp/frame.py:1257
+msgid "Set computational region extent interactively"
+msgstr ""
+
+#: ../gui/wxpython/mapdisp/frame.py:1258
 msgid "Set computational region from named region"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1255 ../gui/wxpython/gcp/mapdisplay.py:475
+#: ../gui/wxpython/mapdisp/frame.py:1260 ../gui/wxpython/gcp/mapdisplay.py:475
 msgid "Save display geometry to named region"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1256
+#: ../gui/wxpython/mapdisp/frame.py:1261
 msgid "Save computational region to named region"
 msgstr ""
 
@@ -4871,21 +4948,21 @@ msgid ""
 "for better control of legend and other decorations."
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:321
+#: ../gui/wxpython/mapwin/decorations.py:326
 msgid "Show text object"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:331
+#: ../gui/wxpython/mapwin/decorations.py:336
 #: ../gui/wxpython/psmap/dialogs.py:3713
 msgid "Enter text:"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:348
+#: ../gui/wxpython/mapwin/decorations.py:353
 #: ../gui/wxpython/nviz/tools.py:1008
 msgid "Rotation:"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:372
+#: ../gui/wxpython/mapwin/decorations.py:377
 msgid ""
 "Drag text with mouse in pointer mode to position.\n"
 "Double-click to change options"
@@ -4984,28 +5061,28 @@ msgstr ""
 msgid "Unable to draw registered graphics. The graphics was unregistered."
 msgstr ""
 
-#: ../gui/wxpython/mapwin/buffered.py:1831
+#: ../gui/wxpython/mapwin/buffered.py:1856
 msgid "Zoom to saved region extents"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/buffered.py:1833
+#: ../gui/wxpython/mapwin/buffered.py:1858
 msgid "Set compulational region from named region"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/buffered.py:1845
+#: ../gui/wxpython/mapwin/buffered.py:1870
 #, python-format
 msgid "Region <%s> not found. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/mapwin/buffered.py:1874
+#: ../gui/wxpython/mapwin/buffered.py:1899
 msgid "Save display extents to region file"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/buffered.py:1876
+#: ../gui/wxpython/mapwin/buffered.py:1901
 msgid "Save computational region to region file"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/buffered.py:1886
+#: ../gui/wxpython/mapwin/buffered.py:1911
 #, python-format
 msgid "Region file <%s> already exists. Do you want to overwrite it?"
 msgstr ""
@@ -5451,79 +5528,6 @@ msgstr ""
 #: ../gui/wxpython/gcp/statusbar.py:122
 #, python-format
 msgid "Forward: %(forw)s, Backward: %(back)s"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:32
-msgid "No GRASS-python library found."
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:62
-msgid "Input Data"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:68
-msgid "Point dataset:"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:80
-msgid "Numeric column:"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:91
-msgid "Kriging"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:102 ../gui/wxpython/gmodeler/frame.py:129
-#: ../gui/wxpython/gui_core/forms.py:1777
-msgid "Command output"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:116
-msgid "Name for the output raster map:"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:124
-msgid "Export variance map as well: "
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:276
-msgid "Kriging Module"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:280
-msgid "Ready."
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:304
-msgid "Variogram fitting"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:314
-msgid "Plot/refresh variogram"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:325
-msgid ":"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:350
-msgid "Kriging techniques"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:364
-msgid "Block size:"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:397
-msgid "Auto-fit variogram"
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:421
-msgid "Model: "
-msgstr ""
-
-#: ../gui/wxpython/scripts/vkrige.py:510
-msgid "Work in progress! No functionality provided."
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:62
@@ -6250,59 +6254,59 @@ msgstr ""
 msgid "Time [%s]"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:348 ../gui/wxpython/timeline/frame.py:439
+#: ../gui/wxpython/timeline/frame.py:350 ../gui/wxpython/timeline/frame.py:448
 msgid "Invalid input data"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:412
+#: ../gui/wxpython/timeline/frame.py:417
 #, python-format
 msgid "Please specify the space time dataset <%s>."
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:413
+#: ../gui/wxpython/timeline/frame.py:418
 msgid "Ambiguous dataset name"
-msgstr ""
-
-#: ../gui/wxpython/timeline/frame.py:491
-#, python-format
-msgid "Space time raster dataset: %s"
-msgstr ""
-
-#: ../gui/wxpython/timeline/frame.py:493
-#, python-format
-msgid "Space time vector dataset: %s"
-msgstr ""
-
-#: ../gui/wxpython/timeline/frame.py:495
-#, python-format
-msgid "Space time 3D raster dataset: %s"
-msgstr ""
-
-#: ../gui/wxpython/timeline/frame.py:497
-#, python-format
-msgid "Mapset: %s"
-msgstr ""
-
-#: ../gui/wxpython/timeline/frame.py:498
-#, python-format
-msgid "Map name: %s"
-msgstr ""
-
-#: ../gui/wxpython/timeline/frame.py:499
-#, python-format
-msgid "Start time: %s"
 msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:500
 #, python-format
+msgid "Space time raster dataset: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:502
+#, python-format
+msgid "Space time vector dataset: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:504
+#, python-format
+msgid "Space time 3D raster dataset: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:506
+#, python-format
+msgid "Mapset: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:507
+#, python-format
+msgid "Map name: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:508
+#, python-format
+msgid "Start time: %s"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:509
+#, python-format
 msgid "End time: %s"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:503
+#: ../gui/wxpython/timeline/frame.py:512
 msgid "WARNING: invalid topology"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:505
+#: ../gui/wxpython/timeline/frame.py:514
 msgid ""
 "\n"
 "Press Del to dismiss."

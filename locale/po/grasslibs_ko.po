@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-03 16:44-0400\n"
+"POT-Creation-Date: 2014-05-06 07:42-0400\n"
 "PO-Revision-Date: 2013-10-30 22:07-0500\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -1733,7 +1733,7 @@ msgstr "읽을 수 없습니다."
 
 #: ../lib/ogsf/GS2.c:1854
 msgid "Error finding range"
-msgstr "범위를 찾지 못했습니다."
+msgstr "범위를 찾지 못 했습니다."
 
 #: ../lib/ogsf/gs_bm.c:124
 msgid "Bitmap mismatch"
@@ -1956,8 +1956,8 @@ msgid ""
 "%d points without category. Unable to determine color rules for features "
 "without category."
 msgstr ""
-"%d 점들이 카테고리를 가지고 있지 않습니다. 카테고리 없는 점은 색상규칙을 "
-"정할 수 없습니다."
+"%d 점들이 카테고리를 가지고 있지 않습니다. 카테고리 없는 점은 색상규칙을 정"
+"할 수 없습니다."
 
 #: ../lib/ogsf/Gs3.c:132 ../lib/ogsf/Gs3.c:196 ../lib/ogsf/Gs3.c:348
 #: ../lib/ogsf/Gs3.c:454 ../lib/ogsf/Gs3.c:540
@@ -2883,34 +2883,33 @@ msgstr ""
 #: ../lib/gis/spawn.c:624 ../lib/gis/spawn.c:633
 #, c-format
 msgid "G_spawn: unable to duplicate descriptor %d to %d"
-msgstr ""
+msgstr "G_spwan: 디스크립터 %d를 %d로 복재하지 못 했습니다"
 
 #: ../lib/gis/spawn.c:666
 msgid "Unable to create a new process"
-msgstr ""
+msgstr "새 프로세스를 생성하지 못 했습니다"
 
 #: ../lib/gis/spawn.c:681
 #, c-format
 msgid "Unable to change directory to %s"
-msgstr ""
+msgstr "%s로 디렉토리를 변경하지 못 했습니다"
 
 #: ../lib/gis/error.c:344
 msgid "WARNING: "
-msgstr ""
+msgstr "경고: "
 
 #: ../lib/gis/error.c:345
 msgid "ERROR: "
-msgstr ""
+msgstr "오류: "
 
 #: ../lib/gis/home.c:37
-#, fuzzy
 msgid "Unable to determine user's home directory"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "사용자의 홈디렉토리를 결정할 수 없습니다"
 
 #: ../lib/gis/home.c:118
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory [%s]"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "[%s] 디렉토리를 생성하지 못 했습니다"
 
 #: ../lib/gis/adj_cellhd.c:42 ../lib/gis/adj_cellhd.c:191
 msgid "Illegal n-s resolution value"
@@ -3033,7 +3032,7 @@ msgstr ""
 
 #: ../lib/gis/parser.c:569 ../lib/init/grass.py:129
 msgid "ERROR"
-msgstr ""
+msgstr "오류"
 
 #: ../lib/gis/parser.c:806
 msgid "Unable to determine program name"
@@ -3102,7 +3101,7 @@ msgstr ""
 #: ../lib/gis/parser.c:1365
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
-msgstr ""
+msgstr "오류: 옵션 <%s>: <%s>이 존재합니다.\n"
 
 #: ../lib/gis/parser.c:1449
 msgid "No separator given"
@@ -3147,7 +3146,7 @@ msgstr ""
 
 #: ../lib/gis/parser_help.c:127
 msgid "ERROR: Option key not defined"
-msgstr ""
+msgstr "오류: 옵션키가 정의되지 않았습니다"
 
 #: ../lib/gis/parser_help.c:174
 msgid "Flags:"
@@ -4244,7 +4243,7 @@ msgstr ""
 #: ../lib/init/grass.py:612
 #, python-format
 msgid "ERROR: <%s> is not a valid GRASS location"
-msgstr ""
+msgstr "오류: <%s>은 유효한 GRASS 로케이션이 아닙니다"
 
 #: ../lib/init/grass.py:615
 #, python-format
@@ -4969,74 +4968,74 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 msgid "Unable to locate symbol <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:140
+#: ../lib/raster/gdal.c:141
 #, fuzzy
 msgid "Unable to load GDAL library"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:370
+#: ../lib/raster/gdal.c:371
 #, fuzzy
 msgid "Unable to open GDAL file"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:474 ../lib/raster/open.c:569
+#: ../lib/raster/gdal.c:475 ../lib/raster/open.c:569
 #, fuzzy, c-format
 msgid "Invalid map type <%d>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:480
+#: ../lib/raster/gdal.c:481
 #, fuzzy, c-format
 msgid "Unable to get <%s> driver"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:489
+#: ../lib/raster/gdal.c:490
 #, fuzzy, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:497
+#: ../lib/raster/gdal.c:498
 #, c-format
 msgid ""
 "Driver <%s> does not support direct writing. Using MEM driver for "
 "intermediate dataset."
 msgstr ""
 
-#: ../lib/raster/gdal.c:503
+#: ../lib/raster/gdal.c:504
 #, fuzzy
 msgid "Unable to get in-memory raster driver"
 msgstr "자동 MASK파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:510
+#: ../lib/raster/gdal.c:511
 #, fuzzy, c-format
 msgid "Unable to create <%s> dataset using memory driver"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:514
+#: ../lib/raster/gdal.c:515
 #, c-format
 msgid "Driver <%s> does not support creating rasters"
 msgstr ""
 
-#: ../lib/raster/gdal.c:530
+#: ../lib/raster/gdal.c:531
 #, fuzzy
 msgid "Unable to set geo transform"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:534
+#: ../lib/raster/gdal.c:535
 #, fuzzy
 msgid "Unable to set projection"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:538
+#: ../lib/raster/gdal.c:539
 #, fuzzy, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:554
+#: ../lib/raster/gdal.c:555
 #, fuzzy, c-format
 msgid "Error writing cell_misc/%s/gdal file"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/raster/gdal.c:602
+#: ../lib/raster/gdal.c:603
 #, fuzzy, c-format
 msgid "Unable to create output file <%s> using driver <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -6862,7 +6861,9 @@ msgstr "위상파일을 저장하지 못 했습니다"
 msgid ""
 "Unable to build spatial index from topology, vector map is not opened at "
 "topology level 2"
-msgstr "벡터맵이 위상레벨 2에서 열리지 않았기 때문에 위상정보로부터 공간색인을 만들지 못 했습니다."
+msgstr ""
+"벡터맵이 위상레벨 2에서 열리지 않았기 때문에 위상정보로부터 공간색인을 만들"
+"지 못 했습니다."
 
 #: ../lib/vector/Vlib/build.c:1212
 #, c-format
@@ -6879,73 +6880,72 @@ msgid "Unable to create spatial index file for vector map <%s>"
 msgstr "벡터맵 <%s>를 위한 공간색인파일을 생성할 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:1257
-#, fuzzy
 msgid "Error writing out spatial index file"
-msgstr "임시파일을 열 수 없습니다"
+msgstr "공간색인파일을 쓰는데 오류가 발생했습니다"
 
 #: ../lib/vector/Vlib/read_sfa.c:90
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to construct centroid for area %d. Skipped."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "면 %d를 위한 중심점을 생성하지 못 해서 넘어갑니다."
 
 #: ../lib/vector/Vlib/read_sfa.c:95
 #, c-format
 msgid "Centroid %d: invalid area %d"
-msgstr ""
+msgstr "중심점 %d: 잘못된 면 %d"
 
 #: ../lib/vector/Vlib/read_sfa.c:117 ../lib/vector/Vlib/read_pg.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected feature type (%d) - should be (%d)"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "기대하지 않았던 피쳐타입 (%d) - (%d)라야 합니다"
 
 #: ../lib/vector/Vlib/read_sfa.c:124 ../lib/vector/Vlib/write_sfa.c:127
 #: ../lib/vector/Vlib/write_sfa.c:170 ../lib/vector/Vlib/write_sfa.c:266
 msgid "GRASS is not compiled with OGR/PostgreSQL support"
-msgstr ""
+msgstr "GRASS가 OGR/PostgreSQL의 지원없이 컴파일되었습니다"
 
 #: ../lib/vector/Vlib/dangles.c:148
 msgid "Changed"
-msgstr ""
+msgstr "바뀌었습니다"
 
 #: ../lib/vector/Vlib/dangles.c:151
 msgid "Removed"
-msgstr ""
+msgstr "지워졌습니다"
 
 #: ../lib/vector/Vlib/dangles.c:154
 msgid "Selected"
-msgstr ""
+msgstr "선택했습니다"
 
 #: ../lib/vector/Vlib/dangles.c:262
-#, fuzzy, c-format
+#, c-format
 msgid "%s lines: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "%s 선: %d"
 
 #: ../lib/vector/Vlib/dangles.c:263
 #, c-format
 msgid "%s dangles: %d"
-msgstr ""
+msgstr "%s 댕글: %d"
 
 #: ../lib/vector/Vlib/build_sfa.c:279 ../lib/vector/Vlib/build_sfa.c:546
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to calculate centroid for area %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "면 %d를 위한 중심점을 계산할 수 없습니다"
 
 #: ../lib/vector/Vlib/build_sfa.c:305
 #, c-format
 msgid "Feature type %d not supported"
-msgstr ""
+msgstr "피쳐타입 %d를 지원하지 않습니다"
 
 #: ../lib/vector/Vlib/build_sfa.c:354 ../lib/vector/Vlib/build_sfa.c:364
 #: ../lib/vector/Vlib/read_pg.c:378
-#, fuzzy, c-format
+#, c-format
 msgid "Feature %d without geometry skipped"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "지오메트리가 없는 피쳐 %d를 넘어갑니다"
 
 #: ../lib/vector/Vlib/build_sfa.c:603 ../lib/vector/Vlib/read_ogr.c:344
 #: ../lib/vector/Vlib/read_ogr.c:578
 #, c-format
 msgid "OGR feature type %d not supported"
-msgstr ""
+msgstr "OGR 피쳐타입 %d를 지원하지 않습니다"
 
 #: ../lib/vector/Vlib/build_sfa.c:665
 #, fuzzy, c-format
