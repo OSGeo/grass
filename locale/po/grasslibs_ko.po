@@ -1908,7 +1908,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/ogsf/Gv3.c:346
 #, fuzzy, c-format
 msgid "Loading thematic vector layer <%s>..."
-msgstr "주제 벡터레이어 <%s>를 읽는 중입니다..."
+msgstr "주제 벡터레이어 <%s>를 읽고 있습니다..."
 
 #: ../lib/ogsf/Gv3.c:370 ../lib/ogsf/Gp3.c:233
 #, fuzzy, c-format
@@ -1948,7 +1948,7 @@ msgstr "벡터맵 <%s>를 읽었습니다 (점 %d개)"
 #: ../lib/ogsf/Gp3.c:209
 #, fuzzy, c-format
 msgid "Loading thematic points layer <%s>..."
-msgstr "주제 점레이어 <%s>를 읽는 중입니다..."
+msgstr "주제 점레이어 <%s>를 읽고 있습니다..."
 
 #: ../lib/ogsf/Gp3.c:286
 #, c-format
@@ -1963,7 +1963,7 @@ msgstr ""
 #: ../lib/ogsf/Gs3.c:454 ../lib/ogsf/Gs3.c:540
 #, fuzzy, c-format
 msgid "Loading raster map <%s>..."
-msgstr "라스터맵 <%s>를 읽는 중입니다..."
+msgstr "라스터맵 <%s>를 읽고 있습니다..."
 
 #: ../lib/ogsf/Gs3.c:596
 #, c-format
@@ -1973,7 +1973,7 @@ msgstr ""
 #: ../lib/ogsf/Gs3.c:658 ../lib/ogsf/Gs3.c:730
 #, fuzzy, c-format
 msgid "Translating colors from raster map <%s>..."
-msgstr "라스터맵 <%s>로부터 색상을 변환 중입니다..."
+msgstr "라스터맵 <%s>로부터 색상을 변환하고 있습니다..."
 
 #: ../lib/ogsf/Gs3.c:967
 msgid "View not saved by this program,there may be some inconsistancies"
@@ -4681,7 +4681,7 @@ msgstr ""
 #: ../lib/manage/do_remove.c:42
 #, c-format
 msgid "Removing %s <%s>"
-msgstr "%s <%s>를 지우는 중입니다"
+msgstr "%s <%s>를 지우고 있습니다"
 
 #: ../lib/manage/do_remove.c:65
 msgid "Unable to delete vector map"
@@ -6438,7 +6438,7 @@ msgstr ""
 #: ../lib/vector/Vlib/build_nat.c:74 ../lib/vector/Vlib/build_sfa.c:339
 #: ../lib/vector/Vlib/build_sfa.c:629
 msgid "Registering primitives..."
-msgstr ""
+msgstr "기본자료를 등록하고 있습니다..."
 
 #: ../lib/vector/Vlib/build_nat.c:84
 #, fuzzy
@@ -6450,42 +6450,42 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1개의 기본자료를 등록했습니다"
+msgstr[1] "%d개의 기본자료를 등록했습니다"
 
 #: ../lib/vector/Vlib/build_nat.c:118 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:662
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1개의 꼭지점을 등록했습니다"
+msgstr[1] "%d개의 꼭지점을 등록했습니다"
 
 #: ../lib/vector/Vlib/build_nat.c:129
 msgid "Building areas..."
-msgstr ""
+msgstr "면을 생성하고 있습니다..."
 
 #: ../lib/vector/Vlib/build_nat.c:152
 #, c-format
 msgid "One area built"
 msgid_plural "%d areas built"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1개의 면을 생성했습니다"
+msgstr[1] "%d개의 면을 생성했습니다"
 
 #: ../lib/vector/Vlib/build_nat.c:153
 #, c-format
 msgid "One isle built"
 msgid_plural "%d isles built"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1개의 섬을 생성했습니다"
+msgstr[1] "%d개의 섬을 생성했습니다"
 
 #: ../lib/vector/Vlib/build_nat.c:162
 msgid "Attaching islands..."
-msgstr ""
+msgstr "섬을 부착하고 있습니다..."
 
 #: ../lib/vector/Vlib/build_nat.c:178
 msgid "Attaching centroids..."
-msgstr ""
+msgstr "중심점을 부착하고 있습니다..."
 
 #: ../lib/vector/Vlib/write_pg.c:236 ../lib/vector/Vlib/write_pg.c:376
 #: ../lib/vector/Vlib/write_pg.c:391 ../lib/vector/Vlib/read_sfa.c:50
@@ -6757,9 +6757,9 @@ msgid "Unable to open spatial index file for vector map <%s>"
 msgstr "임시파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:849
-#, fuzzy, c-format
+#, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr "임시파일을 열 수 없습니다"
+msgstr "벡터맵 <%s>를 위한 위상을 생성하고 있습니다..."
 
 #: ../lib/vector/Vlib/build.c:867
 msgid "Topology was built"
