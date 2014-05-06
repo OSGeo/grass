@@ -23958,9 +23958,8 @@ msgid "Unable to open select cursor: '%s'"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.in.db/main.c:235 ../vector/v.voronoi/main.c:321
-#, fuzzy
 msgid "Writing features..."
-msgstr "출력할 래스터맵"
+msgstr "피쳐를 쓰고 있습니다..."
 
 #: ../vector/v.in.db/main.c:243
 msgid "Key column must be integer"
@@ -25050,7 +25049,7 @@ msgstr ""
 
 #: ../vector/v.in.dxf/main.c:165
 msgid "Building topology failed"
-msgstr ""
+msgstr "위상을 생성하는데 실패했습니다"
 
 #: ../vector/v.in.dxf/main.c:171
 msgid "Failed to import DXF file!"
@@ -29013,9 +29012,8 @@ msgid "Rebuilding topology for output vector map..."
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.clean/main.c:490
-#, fuzzy
 msgid "Building topology for error vector map..."
-msgstr "출력할 래스터맵"
+msgstr "오류벡터맵을 위한 위상을 생성하고 있습니다..."
 
 #: ../vector/v.clean/split.c:85
 #, c-format
@@ -29370,14 +29368,12 @@ msgid "Unable to insert reference records: %s"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.lrs/v.lrs.create/main.c:872
-#, fuzzy
 msgid "Building topology for output (out_lines) map..."
-msgstr "출력할 래스터맵"
+msgstr "출력맵(out_lines)을 위한 위상을 생성하고 있습니다..."
 
 #: ../vector/v.lrs/v.lrs.create/main.c:883
-#, fuzzy
 msgid "Building topology for error (err) map..."
-msgstr "출력할 래스터맵"
+msgstr "오류맵(err)을 위한 위상을 생성하고 있습니다..."
 
 #: ../vector/v.lrs/v.lrs.label/main.c:105
 msgid "Creates stationing from input lines, and linear reference system."
@@ -29964,9 +29960,9 @@ msgid "Copying features failed"
 msgstr "출력할 래스터맵"
 
 #: ../vector/v.out.postgis/main.c:159
-#, fuzzy, c-format
+#, c-format
 msgid "Building %s topology failed"
-msgstr "출력할 래스터맵"
+msgstr "%s 위상을 생성하는데 실패했습니다"
 
 #: ../vector/v.out.postgis/main.c:163
 #, c-format
@@ -30584,9 +30580,9 @@ msgid "Error reading vector map <%s> - some data may not be correct"
 msgstr ""
 
 #: ../vector/v.patch/main.c:389
-#, fuzzy, c-format
+#, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr "출력할 래스터맵"
+msgstr "벡터맵 <%s>를 위한 위상을 생성하고 있습니다..."
 
 #: ../vector/v.patch/main.c:395
 msgid "Intersections at borders will have to be snapped"
