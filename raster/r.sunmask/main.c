@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("solar"));
     G_add_keyword(_("sun position"));
+    G_add_keyword(_("shadow"));
     module->label = _("Calculates cast shadow areas from sun position and elevation raster map.");
     module->description = _("Either exact sun position (A) is specified, or date/time to calculate "
 			    "the sun position (B) by r.sunmask itself.");
