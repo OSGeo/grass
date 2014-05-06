@@ -18,170 +18,160 @@ msgstr ""
 
 #: ../lib/python/pygrass/functions.py:240
 msgid "Vector doesn't contain points"
-msgstr ""
+msgstr "벡터가 점을 포함하고 있지 않습니다"
 
 #: ../lib/python/pygrass/raster/category.py:83
 msgid "Raser type: {0} not supported"
-msgstr "라스터 타입: {0}를 지원하지 않습니다"
+msgstr "라스터 타입 {0}를 지원하지 않습니다"
 
 #: ../lib/python/pygrass/raster/category.py:168
 msgid "Error executing: Rast_get_ith_cat"
-msgstr ""
+msgstr "Rast_get_ith_cat을 실행하는데 오류가 발생했습니다"
 
 #: ../lib/python/pygrass/raster/category.py:196
 msgid "Null value detected"
 msgstr "널값을 찾았습니다"
 
 #: ../lib/python/pygrass/raster/category.py:198
-#, fuzzy
 msgid "Error executing: Rast_set_cat"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Rast_set_cat을 실행하는데 오류가 발생했습니다"
 
 #: ../lib/python/pygrass/raster/abstract.py:240
 msgid "Mode type: {0} not supported ('r', 'w')"
-msgstr ""
+msgstr "모드타입 {0}를 지원하지 않습니다 ('r', 'w')"
 
 #: ../lib/python/pygrass/raster/abstract.py:251
 msgid "Overwrite type: {0} not supported (True/False)"
-msgstr ""
+msgstr "덮어쓰기타입 {0}를 지원하지 않습니다 (True/False)"
 
 #: ../lib/python/pygrass/raster/abstract.py:264
 #: ../lib/python/pygrass/vector/abstract.py:108
 msgid "Map name {0} not valid"
-msgstr ""
+msgstr "잘못된 맵이름 {0}"
 
 #: ../lib/python/pygrass/raster/__init__.py:180
-#, fuzzy
 msgid "Raster type not defined"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "라스터타입을 정의하지 않았습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:183
-#, fuzzy
 msgid "Raster map <{0}> already exists"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+msgstr "라스터맵 <{0}>이 이미 존재합니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:189
 msgid "The map does not exist, I can't open in 'r' mode"
-msgstr ""
+msgstr "맵이 존재하지 않기 때문에 'r' 모드로 열 수 없습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:259
 msgid "Mode type: {0} not supported ('r', 'w','rw')"
-msgstr ""
+msgstr "모드타입 {0}를 지원하지 않습니다 ('r', 'w', 'rw')"
 
 #: ../lib/python/pygrass/raster/__init__.py:278
 #, python-format
 msgid "Index out of range: %r."
-msgstr ""
+msgstr "범위를 벗어난 색인: %r."
 
 #: ../lib/python/pygrass/raster/__init__.py:394
-#, fuzzy
 msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "라스터맵 <{0}>이 이미 존재합니다. 덮어쓰기를 사용하세요."
 
 #: ../lib/python/pygrass/raster/__init__.py:425
-#, fuzzy
 msgid "Raster map <{0}> does not exists"
-msgstr "임시파일을 열 수 없습니다"
+msgstr "라스터맵 <{0}>이 존재하지 않습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:537
 msgid "Mode type: {0} not supported."
-msgstr ""
+msgstr "모드타입 {0}를 지원하지 않습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:571
-#, fuzzy
 msgid "Invalid type {0}"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "잘못된 타입 {0}"
 
 #: ../lib/python/pygrass/raster/__init__.py:573
-#, fuzzy
 msgid "Invalid size {0}"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "잘못된 크기 {0}"
 
 #: ../lib/python/pygrass/vector/table.py:926
 #, python-format
 msgid "Deleting table <%s> which is attached to following map(s):"
-msgstr ""
+msgstr "다음 맵에 연결된 테이블 <%s>를 지우고 있습니다:"
 
 #: ../lib/python/pygrass/vector/table.py:930
 msgid "You must use the force flag to actually remove it. Exiting."
-msgstr ""
+msgstr "실제로 지우기 위해서는 강제플래그를 사용해야 합니다. 빠져나갑니다."
 
 #: ../lib/python/pygrass/errors.py:46
 msgid "The map is close!"
-msgstr ""
+msgstr "맵이 닫혔습니다!"
 
 #: ../lib/python/script/raster3d.py:89
 msgid "An error occurred while running r3.mapcalc"
-msgstr ""
+msgstr "r3.mapcalc를 실행하는 도중 오류가 발생했습니다"
 
 #: ../lib/python/script/db.py:48 ../lib/vector/Vlib/ascii.c:431
 #: ../lib/db/dbmi_client/column.c:136
-#, fuzzy, c-format, python-format
+#, c-format, python-format
 msgid "Unable to describe table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "테이블 <%s>를 설명할 수 없습니다"
 
 #: ../lib/python/script/db.py:142
 #, python-format
 msgid ""
 "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
-msgstr ""
+msgstr "개발자 오류: '%(sql)s', '%(filename)s', 또는 '%(table)s'를 반드시 제공해야 합니다"
 
 #: ../lib/python/script/db.py:154
-#, fuzzy
 msgid "Fetching data failed"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "자료를 가져오는데 실패했습니다"
 
 #: ../lib/python/script/raster.py:47
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
 "current mapset."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "<%(map)s>를 위한 히스토리를 쓰지 못 했습니다. 라스터맵 <%(map)s>를 현재 맵셋에서 찾지 못 했습니다."
 
 #: ../lib/python/script/raster.py:105
 msgid "An error occurred while running r.mapcalc"
-msgstr ""
+msgstr "r.mapcalc를 실행하는 도중 오류가 발생했습니다"
 
 #: ../lib/python/script/raster.py:162
-#, fuzzy
 msgid "No data"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "자료가 없습니다"
 
 #: ../lib/python/script/raster.py:170
 msgid "value"
-msgstr ""
+msgstr "값"
 
 #: ../lib/python/script/raster.py:170
 msgid "label"
-msgstr ""
+msgstr "레이블"
 
 #: ../lib/python/script/raster.py:170
 msgid "color"
-msgstr ""
+msgstr "색상"
 
 #: ../lib/python/script/task.py:52
-#, fuzzy
 msgid "unknown"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은"
 
 #: ../lib/python/script/task.py:166
 #, python-format
 msgid "Parameter element '%(element)s' not found: '%(value)s'"
-msgstr ""
+msgstr "매개변수요소 '%(element)s'를 찾지 못 했습니다: '%(value)s'"
 
 #: ../lib/python/script/task.py:181
 #, python-format
 msgid "Flag not found: %s"
-msgstr ""
+msgstr "플래그를 찾지 못 했습니다: %s"
 
 #: ../lib/python/script/task.py:200
 #, python-format
 msgid "Parameter '%(name)s' (%(desc)s) is missing."
-msgstr ""
+msgstr "매개변수 '%(name)s' (%(desc)s)가 빠졌습니다."
 
 #: ../lib/python/script/task.py:231
 msgid "<required>"
-msgstr ""
+msgstr "<필수>"
 
 #: ../lib/python/script/task.py:486 ../lib/python/script/task.py:490
 #, python-format
@@ -203,7 +193,7 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
 #: ../lib/python/script/vector.py:256
 msgid "vector_db_select() failed"
-msgstr ""
+msgstr "vector_db_select()가 실패했습니다"
 
 #: ../lib/python/script/core.py:934
 msgid "Mixing value types. Will try to compare after integer conversion"
@@ -6481,11 +6471,11 @@ msgstr[1] "%d개의 섬을 생성했습니다"
 
 #: ../lib/vector/Vlib/build_nat.c:162
 msgid "Attaching islands..."
-msgstr "섬을 부착하고 있습니다..."
+msgstr "섬을 연결하고 있습니다..."
 
 #: ../lib/vector/Vlib/build_nat.c:178
 msgid "Attaching centroids..."
-msgstr "중심점을 부착하고 있습니다..."
+msgstr "중심점을 연결하고 있습니다..."
 
 #: ../lib/vector/Vlib/write_pg.c:236 ../lib/vector/Vlib/write_pg.c:376
 #: ../lib/vector/Vlib/write_pg.c:391 ../lib/vector/Vlib/read_sfa.c:50
