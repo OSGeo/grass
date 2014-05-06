@@ -56,7 +56,7 @@ def _check(value, path, type):
     elif value is '':
         return getenv(type)
     else:
-        raise GrassError("%s <%s> not found." % (type.title(),
+        raise GrassError("%s <%s> not found" % (type.title(),
                                                  join(path, value)))
 
 
@@ -71,9 +71,9 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
 def make_mapset(mapset, location=None, gisdbase=None):
     res = libgis.G_make_mapset(gisdbase, location, mapset)
     if res == -1:
-        raise GrassError("I cannot create a new mapset.")
+        raise GrassError("Cannot create new mapset")
     elif res == -2:
-        raise GrassError("Illegal name.")
+        raise GrassError("Illegal name")
 
 
 class Gisdbase(object):
@@ -125,7 +125,7 @@ class Gisdbase(object):
 
     def new_location(self):
         if libgis.G__make_location() != 0:
-            raise GrassError("I cannot create a new mapset.")
+            raise GrassError("Cannot create new location")
 
     def locations(self):
         """Return a list of locations that are available in the gisdbase: ::
