@@ -27,7 +27,7 @@ struct stat_list
 
 
 /* histogram.c */
-void draw_histogram(const char *, int, int, int, int, int, int, int, int);
+void draw_histogram(const char *, int, int, int, int, int, int, int, int, int);
 
 /* get_stats.c */
 void get_stats(const char *, struct stat_list *, int, int);
