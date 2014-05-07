@@ -987,7 +987,7 @@ def clear_screen():
     # TODO: uncomment when PDCurses works.
     #   cls
     else:
-        if not os.getenv('GRASS_BATCH_JOB') and not grass_debug:
+        if not os.getenv('GRASS_BATCH_JOB') and not grass_debug and not exit_grass:
             call(["tput", "clear"])
 
 
@@ -1380,7 +1380,10 @@ if not os.access(gisrc, os.F_OK):
 else:
     clean_temp()
 
-message(_("Starting GRASS GIS..."))
+if create_new:
+    message(_("Creating new GRASS GIS location/mapset..."))
+else:
+    message(_("Starting GRASS GIS..."))
 
 # Check that the GUI works
 check_gui()
