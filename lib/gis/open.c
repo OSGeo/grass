@@ -13,6 +13,7 @@
  */
 
 #include <grass/config.h>
+#include <errno.h>
 #include <string.h>
 
 #include <unistd.h>
@@ -49,6 +50,7 @@
 static int G__open(const char *element,
 		   const char *name, const char *mapset, int mode)
 {
+    int fd;
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
@@ -66,15 +68,18 @@ static int G__open(const char *element,
 	    name = xname;
 	    mapset = xmapset;
 	}
-	else if (!mapset || !*mapset)
-	    mapset = G_find_file2(element, name, mapset);
+
+	mapset = G_find_file2(element, name, mapset);
 
 	if (!mapset)
 	    return -1;
 
 	G_file_name(path, element, name, mapset);
 
-	return open(path, 0);
+	if ((fd = open(path, 0)) < 0)
+	    G_warning(_("G__open(read): Unable to open '%s': %s"),
+	              path, strerror(errno));
+	return fd;
     }
     /* WRITE */
     if (mode == 1 || mode == 2) {
@@ -98,7 +103,10 @@ static int G__open(const char *element,
 	    close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
 	}
 
-	return open(path, mode);
+	if ((fd = open(path, mode)) < 0)
+	    G_warning(_("G__open(write): Unable to open '%s': %s"),
+	              path, strerror(errno));
+	return fd;
     }
     return -1;
 }

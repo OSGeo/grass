@@ -20,6 +20,7 @@
  *****************************************************************************/
 
 #include <grass/config.h>
+#include <errno.h>
 #include <string.h>
 
 #include <unistd.h>
@@ -32,6 +33,7 @@ static int G__open_misc(const char *dir,
 			const char *element,
 			const char *name, const char *mapset, int mode)
 {
+    int fd;
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
@@ -49,15 +51,18 @@ static int G__open_misc(const char *dir,
 	    name = xname;
 	    mapset = xmapset;
 	}
-	else if (!*mapset)
-    	    mapset = G_find_file2_misc(dir, element, name, mapset);
+
+	mapset = G_find_file2_misc(dir, element, name, mapset);
 
 	if (!mapset)
 	    return -1;
 
 	G_file_name_misc(path, dir, element, name, mapset);
 
-	return open(path, 0);
+	if ((fd = open(path, 0)) < 0)
+	    G_warning("G__open_misc(read): Unable to open '%s': %s",
+	              path, strerror(errno));
+	return fd;
     }
     /* WRITE */
     if (mode == 1 || mode == 2) {
@@ -80,7 +85,10 @@ static int G__open_misc(const char *dir,
 	    close(creat(path, 0666));
 	}
 
-	return open(path, mode);
+	if ((fd = open(path, mode)) < 0)
+	    G_warning("G__open_misc(write): Unable to open '%s': %s",
+	              path, strerror(errno));
+	return fd;
     }
     return -1;
 }
