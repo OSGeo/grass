@@ -16338,9 +16338,8 @@ msgstr "출력할 래스터맵"
 #: ../raster/r.contour/main.c:198 ../vector/v.voronoi/main.c:383
 #: ../vector/v.generalize/misc.c:124 ../vector/v.select/copy_tabs.c:17
 #: ../vector/v.extract/copy_tab.c:53
-#, fuzzy
 msgid "Writing attributes..."
-msgstr "출력할 래스터맵"
+msgstr "특성을 쓰고 있습니다..."
 
 #: ../raster/r.contour/main.c:210 ../vector/v.to.points/write.c:52
 #: ../vector/v.overlay/line_area.c:410 ../vector/v.overlay/area_area.c:345
@@ -30772,9 +30771,8 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.extract/main.c:355
-#, fuzzy
 msgid "Extracting features..."
-msgstr "출력할 래스터맵"
+msgstr "피쳐를 추출하고 있습니다..."
 
 #: ../vector/v.extract/main.c:379
 msgid "Removing duplicate centroids..."
