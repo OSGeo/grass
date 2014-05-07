@@ -79,8 +79,12 @@ int PS_fcolortable(void)
     /* if height and width are not given, calculate defaults */
     if (ct.width <= 0)
 	ct.width = 2 * ct.fontsize / 72.0;
-    if (ct.height <= 0)
-	ct.height = 10 * ct.fontsize / 72.0;
+    if (ct.height <= 0) {
+	if (ct.width < 1.5)
+	    ct.height = 10 * ct.fontsize / 72.0;
+	else /* very wide and height not set triggers a horizontal legend */
+	    ct.height = 1.5 * ct.fontsize / 72.0;
+    }
 
     dy = 1.5 * ct.fontsize;
 
