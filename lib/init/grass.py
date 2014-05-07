@@ -68,7 +68,7 @@ remove_lockfile = True
 location = None
 create_new = None
 grass_gui = None
-
+exit_grass = None
 
 def warning(text):
     sys.stderr.write(_("WARNING") + ': ' + text + os.linesep)
@@ -168,13 +168,14 @@ Geographic Resources Analysis Support System (GRASS GIS).
 
 %s:
   $CMD_NAME [-h | -help | --help] [-v | --version] [-c | -c geofile | -c EPSG:code]
-          [-text | -gui] [--config param]
+          [-e] [-text | -gui] [--config param]
           [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 
 %s:
   -h or -help or --help          %s
   -v or --version                %s
   -c                             %s
+  -e                             %s
   -text                          %s
                                    %s
   -gtext                         %s
@@ -204,6 +205,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
        _("print this help message"),
        _("show version information and exit"),
        _("create given database, location or mapset if it doesn't exist"),
+       _("exit after creation of location or mapset. Only with -c flag"),
        _("use text based interface (skip welcome screen)"),
        _("and set as default"),
        _("use text based interface (show welcome screen)"),
@@ -1230,7 +1232,7 @@ def get_username():
 
 
 def parse_cmdline():
-    global args, grass_gui, create_new
+    global args, grass_gui, create_new, exit_grass
     args = []
     for i in sys.argv[1:]:
         # Check if the user asked for the version
@@ -1256,6 +1258,8 @@ def parse_cmdline():
         # Check if the user wants to create a new mapset
         elif i == "-c":
             create_new = True
+        elif i == "-e":
+            exit_grass = True
         elif i == "--config":
             print_params()
             sys.exit()
@@ -1323,6 +1327,8 @@ get_username()
 # Parse the command-line options
 parse_cmdline()
 
+if exit_grass and not create_new:
+    fatal(_("Flag -e required also flag -c"))
 # Set language
 # This has to be called before any _() function call!
 # Subsequent functions are using _() calls and
@@ -1411,7 +1417,7 @@ if not os.access(os.path.join(location, "VAR"), os.F_OK):
 
 check_batch_job()
 
-if not batch_job:       
+if not batch_job and not exit_grass:       
     start_gui()
 
 clear_screen()
@@ -1420,6 +1426,10 @@ clear_screen()
 if batch_job:
     grass_gui = 'text'
     clear_screen()
+    clean_temp()
+    try_remove(lockfile)
+    sys.exit(0)
+elif exit_grass:
     clean_temp()
     try_remove(lockfile)
     sys.exit(0)
