@@ -22,11 +22,11 @@ msgstr "벡터가 점을 포함하고 있지 않습니다"
 
 #: ../lib/python/pygrass/raster/category.py:83
 msgid "Raser type: {0} not supported"
-msgstr "라스터 타입 {0}를 지원하지 않습니다"
+msgstr "라스터타입: {0}를 지원하지 않습니다"
 
 #: ../lib/python/pygrass/raster/category.py:168
 msgid "Error executing: Rast_get_ith_cat"
-msgstr "Rast_get_ith_cat을 실행하는데 오류가 발생했습니다"
+msgstr "실행오류: Rast_get_ith_cat"
 
 #: ../lib/python/pygrass/raster/category.py:196
 msgid "Null value detected"
@@ -34,15 +34,15 @@ msgstr "널값을 찾았습니다"
 
 #: ../lib/python/pygrass/raster/category.py:198
 msgid "Error executing: Rast_set_cat"
-msgstr "Rast_set_cat을 실행하는데 오류가 발생했습니다"
+msgstr "실행오류: Rast_set_cat"
 
 #: ../lib/python/pygrass/raster/abstract.py:240
 msgid "Mode type: {0} not supported ('r', 'w')"
-msgstr "모드타입 {0}를 지원하지 않습니다 ('r', 'w')"
+msgstr "모드타입: {0}를 지원하지 않습니다 ('r', 'w')"
 
 #: ../lib/python/pygrass/raster/abstract.py:251
 msgid "Overwrite type: {0} not supported (True/False)"
-msgstr "덮어쓰기타입 {0}를 지원하지 않습니다 (True/False)"
+msgstr "덮어쓰기타입: {0}를 지원하지 않습니다 (True/False)"
 
 #: ../lib/python/pygrass/raster/abstract.py:264
 #: ../lib/python/pygrass/vector/abstract.py:108
@@ -63,7 +63,7 @@ msgstr "맵이 존재하지 않기 때문에 'r' 모드로 열 수 없습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:259
 msgid "Mode type: {0} not supported ('r', 'w','rw')"
-msgstr "모드타입 {0}를 지원하지 않습니다 ('r', 'w', 'rw')"
+msgstr "모드타입: {0}를 지원하지 않습니다 ('r', 'w', 'rw')"
 
 #: ../lib/python/pygrass/raster/__init__.py:278
 #, python-format
@@ -80,7 +80,7 @@ msgstr "라스터맵 <{0}>이 존재하지 않습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:537
 msgid "Mode type: {0} not supported."
-msgstr "모드타입 {0}를 지원하지 않습니다"
+msgstr "모드타입: {0}를 지원하지 않습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:571
 msgid "Invalid type {0}"
@@ -419,7 +419,7 @@ msgstr ""
 
 #: ../lib/python/temporal/mapcalc.py:274
 msgid "Error while mapcalc computation"
-msgstr ""
+msgstr "mapcalc 계산중 오류"
 
 #: ../lib/python/temporal/mapcalc.py:280
 #, fuzzy
@@ -2775,7 +2775,7 @@ msgstr "데이텀 테이블파일 %s을 열 수 없습니다."
 #: ../lib/gis/datum.c:182
 #, c-format
 msgid "error in datum table file, line %d"
-msgstr "데이텀 테이블파일의 %d번째 줄에 오류가 있습니다."
+msgstr "데이텀 테이블파일의 %d번째 줄에 오류"
 
 #: ../lib/gis/parser_wps.c:490
 msgid "Multiple outputs are not supported by WPS 1.0.0"
@@ -4525,9 +4525,9 @@ msgid "Unable to open datum table file <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
 #: ../lib/proj/datum.c:283 ../lib/proj/datum.c:364
-#, fuzzy, c-format
+#, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr "Datum 테이블파일의 %d번째 줄에 오류가 있습니다"
+msgstr "데이텀 테이블파일 <%s>의 %d번째 줄에 오류"
 
 #: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
@@ -6871,7 +6871,7 @@ msgstr "벡터맵 <%s>를 위한 공간색인파일을 생성할 수 없습니�
 
 #: ../lib/vector/Vlib/build.c:1257
 msgid "Error writing out spatial index file"
-msgstr "공간색인파일을 쓰는데 오류가 발생했습니다"
+msgstr "공간색인파일을 쓰는 중 오류"
 
 #: ../lib/vector/Vlib/read_sfa.c:90
 #, c-format
@@ -8760,7 +8760,7 @@ msgstr "카테고리는 정수여야 합니다."
 
 #: ../lib/sites/sites.c:226
 msgid "Memory error in writing timestamp"
-msgstr "타임스탬프를 쓰는 중 메모리오류가 났습니다"
+msgstr "타임스탬프를 쓰는 중 메모리오류"
 
 #: ../lib/sites/sites.c:228
 msgid "Illegal TimeStamp string"
