@@ -122,7 +122,7 @@ int get_stp_num(void)
 	if (icode != 0)
 	    break;
 	else {			/* no match */
-	    G_warning(_("No match of fips state %d county %d"), SFIPS, CFIPS);
+	    G_warning(_("No match of FIPS state %d county %d"), SFIPS, CFIPS);
 	    fclose(fipsfile);
 	}
     }
