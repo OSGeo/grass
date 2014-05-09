@@ -435,7 +435,7 @@ N_gwflow_3d_calc_water_budget(N_gwflow_data3d * data, N_geom_data * geom, N_arra
     if(fabs(sum) < 0.0000000001)
         G_message(_("The total sum of the water budget: %g\n"), sum);
     else
-        G_warning(_("The total sum of the water budget is significant larger then 0: %g\n"), sum);
+        G_warning(_("The total sum of the water budget is significantly larger then 0: %g\n"), sum);
 
     return;
 }
@@ -714,7 +714,7 @@ N_gwflow_2d_calc_water_budget(N_gwflow_data2d * data, N_geom_data * geom, N_arra
     if(fabs(sum) < 0.0000000001)
         G_message(_("The total sum of the water budget: %g\n"), sum);
     else
-        G_warning(_("The total sum of the water budget is significant larger then 0: %g\n"), sum);
+        G_warning(_("The total sum of the water budget is significantly larger then 0: %g\n"), sum);
 
     return;
 }
