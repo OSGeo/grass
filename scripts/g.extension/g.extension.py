@@ -618,7 +618,7 @@ def install_extension_xml(url, mlist):
                 'files' : fList,
                 }
 
-    except HTTPError:
+    except:
         grass.error(_("Unable to read metadata file from the remote server"))
 
     if not data:
