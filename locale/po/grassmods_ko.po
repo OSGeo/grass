@@ -33,48 +33,44 @@ msgstr ""
 #: ../locale/scriptstrings/g.extension.all_to_translate.c:3
 #: ../locale/scriptstrings/g.manual_to_translate.c:2
 msgid "general"
-msgstr ""
+msgstr "일반"
 
 #: ../general/g.mapsets/main.c:64 ../general/g.region/main.c:64
 #: ../general/g.mapset/main.c:50 ../general/g.gisenv/main.c:44
 #: ../display/d.font/main.c:46 ../display/d.fontlist/main.c:39
 #: ../display/d.colorlist/main.c:36
-#, fuzzy
 msgid "settings"
-msgstr "출력할 라스터맵"
+msgstr "설정"
 
 #: ../general/g.mapsets/main.c:65
 msgid "search path"
-msgstr ""
+msgstr "검색경로"
 
 #: ../general/g.mapsets/main.c:66
 msgid "Modifies/prints the user's current mapset search path."
-msgstr ""
+msgstr "사용자의 맵셋검색경로를 변경하거나 출력합니다."
 
 #: ../general/g.mapsets/main.c:67
 msgid ""
 "Affects the user's access to data existing under the other mapsets in the "
 "current location."
-msgstr ""
+msgstr "현재로케이션 안에 있는 다른 맵셋에 존재하는 자료에 대한 사용자의 접근에 영향을 미칩니다."
 
 #: ../general/g.mapsets/main.c:73
-#, fuzzy
 msgid "Name(s) of existing mapset(s) to add/remove or set"
-msgstr "출력할 라스터맵"
+msgstr "추가/삭제 또는 설정하고 싶은 존재하는 맵셋의 이름들"
 
 #: ../general/g.mapsets/main.c:74 ../general/g.mapsets/main.c:83
 msgid "Search path"
-msgstr ""
+msgstr "검색경로"
 
 #: ../general/g.mapsets/main.c:82
-#, fuzzy
 msgid "Operation to perform"
-msgstr "출력할 라스터맵"
+msgstr "수행할 작업"
 
 #: ../general/g.mapsets/main.c:87
-#, fuzzy
 msgid "Field separator for printing (-l and -p flags)"
-msgstr "출력할 라스터맵"
+msgstr "출력을 위한 필드구분자(-l과 -p 플래그)"
 
 #: ../general/g.mapsets/main.c:89 ../general/g.mapsets/main.c:94
 #: ../general/g.mapsets/main.c:100 ../general/g.proj/main.c:79
@@ -123,92 +119,90 @@ msgstr "출력할 라스터맵"
 #: ../db/db.connect/main.c:53 ../db/db.connect/main.c:58
 #: ../temporal/t.connect/main.c:43
 msgid "Print"
-msgstr ""
+msgstr "출력"
 
 #: ../general/g.mapsets/main.c:93
 msgid "List all available mapsets in alphabetical order"
-msgstr ""
+msgstr "모든 맵셋을 알파벳순으로 나열합니다"
 
 #: ../general/g.mapsets/main.c:99
 msgid "Print mapsets in current search path"
-msgstr ""
+msgstr "검색경로에 있는 맵셋을 출력합니다"
 
 #: ../general/g.mapsets/main.c:105
 msgid "Launch mapset selection GUI dialog"
-msgstr ""
+msgstr "맵셋선택 GUI창을 시작합니다"
 
 #: ../general/g.mapsets/main.c:128
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown operation '%s'"
-msgstr "출력할 라스터맵"
+msgstr "알려지지 않은 작업 '%s'"
 
 #: ../general/g.mapsets/main.c:138 ../general/g.mapsets/main.c:140
 #: ../general/g.mapsets/main.c:150 ../display/d.mon/main.c:138
 #, c-format
 msgid "Flag -%c ignored"
-msgstr ""
+msgstr "-%c 플래그를 무시합니다"
 
 #: ../general/g.mapsets/main.c:142 ../general/g.mapsets/main.c:152
 #: ../general/g.mapsets/main.c:160 ../display/d.mon/main.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Option <%s> ignored"
-msgstr "출력할 라스터맵"
+msgstr "<%s> 옵션을 무시합니다"
 
 #: ../general/g.mapsets/main.c:176 ../general/g.mapsets/main.c:210
-#, fuzzy, c-format
+#, c-format
 msgid "Mapset <%s> not found"
-msgstr "출력할 라스터맵"
+msgstr "맵셋 <%s>를 찾지 못 했습니다"
 
 #: ../general/g.mapsets/main.c:183 ../general/g.mapsets/main.c:242
 #, c-format
 msgid "Current mapset (<%s>) must always included in the search path"
-msgstr ""
+msgstr "현재맵셋(<%s>)이 반드시 검색경로에 포함되어야 합니다"
 
 #: ../general/g.mapsets/main.c:205
-#, fuzzy, c-format
+#, c-format
 msgid "Mapset <%s> already in the path"
-msgstr "출력할 라스터맵"
+msgstr "맵셋 <%s>이 경로에 이미 존재합니다"
 
 #: ../general/g.mapsets/main.c:212
 #, c-format
 msgid "Mapset <%s> added to search path"
-msgstr ""
+msgstr "맵셋 <%s>를 검색경로에 추가했습니다"
 
 #: ../general/g.mapsets/main.c:245
 #, c-format
 msgid "Mapset <%s> removed from search path"
-msgstr ""
+msgstr "맵셋 <%s>를 검색경로에서 제거했습니다"
 
 #: ../general/g.mapsets/main.c:257
 msgid "Search path not modified"
-msgstr ""
+msgstr "검색경로가 변경되지 않았습니다"
 
 #: ../general/g.mapsets/main.c:275
-#, fuzzy
 msgid "Unable to open SEARCH_PATH for write"
-msgstr "출력할 라스터맵"
+msgstr "SEARCH_PATH를 쓰기를 위해서 열지 못 했습니다"
 
 #: ../general/g.mapsets/list.c:10
 msgid "Available mapsets:"
-msgstr ""
+msgstr "유효한 맵셋들:"
 
 #: ../general/g.mapsets/list.c:35
 msgid "Accessible mapsets:"
-msgstr ""
+msgstr "접근 가능한 맵셋들:"
 
 #: ../general/g.setproj/get_stp.c:43
-msgid "This should not happen see your system admin"
-msgstr ""
+msgid "This should not happen. See your system admin."
+msgstr "이 상황은 일어나면 안 됩니다. 시스템관리자에게 얘기하세요."
 
 #: ../general/g.setproj/get_stp.c:99
-#, fuzzy
 msgid "Unable to open FIPS code file"
-msgstr "출력할 라스터맵"
+msgstr "FIPS 코드파일을 열 수 없습니다"
 
 #: ../general/g.setproj/get_stp.c:125
 #, c-format
-msgid "No match of fips state %d county %d"
-msgstr ""
+msgid "No match of FIPS state %d county %d"
+msgstr "FIPS 주 %d 카운티 %d를 찾을 수 없습니다"
 
 #: ../general/g.setproj/get_stp.c:162 ../general/g.setproj/get_stp.c:165
 #: ../general/g.setproj/get_stp.c:282 ../general/g.setproj/get_stp.c:286
@@ -216,193 +210,192 @@ msgstr ""
 #: ../raster/r.in.ascii/main.c:158 ../raster/r.resamp.rst/main.c:558
 #: ../vector/v.in.ascii/main.c:255 ../vector/v.surf.rst/main.c:824
 #: ../display/d.title/main.c:117
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open temporary file <%s>"
-msgstr "출력할 라스터맵"
+msgstr "임시파일 <%s>를 열 수 없습니다"
 
 #: ../general/g.setproj/get_stp.c:179
-#, fuzzy
 msgid "Reading sf key_value temp file"
-msgstr "출력할 라스터맵"
+msgstr "sf key_value 임시파일을 읽습니다"
 
 #: ../general/g.setproj/get_stp.c:212
 msgid "Invalid State FIPS code"
-msgstr ""
+msgstr "잘못된 주 FIPS 코드"
 
 #: ../general/g.setproj/get_stp.c:302
-#, fuzzy
 msgid "Reading cf key_value temp file"
-msgstr "출력할 라스터맵"
+msgstr "cf key_value 임시파일을 읽습니다"
 
 #: ../general/g.setproj/get_stp.c:336
 msgid "Invalid County FIPS code"
-msgstr ""
+msgstr "잘못된 카운티 FIPS 코드"
 
 #: ../general/g.setproj/proj.c:168
 #, c-format
 msgid "Unrecognized 'ask' value in parms.table: %s"
-msgstr ""
+msgstr "parms.table에 잘못된 'ask' 값: %s"
 
 #: ../general/g.setproj/proj.c:178
 #, c-format
 msgid "Unrecognized default value in parms.table: %s"
-msgstr ""
+msgstr "parms.table에 잘못된 기본값: %s"
 
 #: ../general/g.setproj/main.c:79 ../general/g.proj/main.c:64
 #: ../raster/r.proj/main.c:145 ../raster/r.latlong/main.c:59
 #: ../vector/v.proj/main.c:67 ../locale/scriptstrings/m.proj_to_translate.c:3
-#, fuzzy
 msgid "projection"
-msgstr "출력할 라스터맵"
+msgstr "투영"
 
 #: ../general/g.setproj/main.c:81
 msgid "Interactively reset the location's projection settings."
-msgstr ""
+msgstr "로케이션의 투영설정을 대화식으로 재설정합니다."
 
 #: ../general/g.setproj/main.c:88
 msgid "You must be in the PERMANENT mapset to run g.setproj"
-msgstr ""
+msgstr "g.setproj를 실행하기 위해서는 PERMANENT 맵셋 안에 있어야 합니다"
 
 #: ../general/g.setproj/main.c:101
 msgid "PERMANENT: permission denied"
-msgstr ""
+msgstr "PERMANENT: 허가되지 않았습니다"
 
 #: ../general/g.setproj/main.c:105
 msgid "Current region cannot be set"
-msgstr ""
+msgstr "현재지역을 설정할 수 없습니다"
 
 #: ../general/g.setproj/main.c:108
 msgid "Retrieving and setting region failed"
-msgstr ""
+msgstr "지역을 읽고 설정하는데 실패했습니다"
 
 #: ../general/g.setproj/main.c:135
 msgid "Would you still like to change some of the parameters?"
-msgstr ""
+msgstr "아직도 일부 매개변수를 바꾸기 원합니까?"
 
 #: ../general/g.setproj/main.c:137
 msgid "The projection information will not be updated"
-msgstr ""
+msgstr "투영정보가 갱신되지 않을 겁니다"
 
 #: ../general/g.setproj/main.c:148
 #, c-format
 msgid ""
 "Zone in default geographic region definition: %d\n"
 " is different from zone in PROJ_INFO file: %d"
-msgstr ""
+msgstr "기본 지리지역정의 내의 구역 %d\n"
+" 이 PROJ_INFO 파일 내의 구역 %d와 다릅니다"
 
 #: ../general/g.setproj/main.c:158
 msgid "XY-location cannot be projected"
-msgstr ""
+msgstr "XY-로케이션은 투영할 수 없습니다"
 
 #: ../general/g.setproj/main.c:192
 msgid "Unknown projection"
-msgstr ""
+msgstr "알려지지 않은 투영"
 
 #: ../general/g.setproj/main.c:198
 #, c-format
 msgid "Projection %s is not specified in the file 'proj-parms.table'"
-msgstr ""
+msgstr "투영 %s이 'proj-parms.table' 파일 안에 정의되지 않았습니다"
 
 #: ../general/g.setproj/main.c:205
 msgid "Do you wish to specify a geodetic datum for this location?"
-msgstr ""
+msgstr "이 로케이션을 위한 측지계를 지정하길 원합니까?"
 
 #: ../general/g.setproj/main.c:214
 #, c-format
 msgid "The current datum is %s (%s)"
-msgstr ""
+msgstr "현재 측지계는 %s(%s)입니다"
 
 #: ../general/g.setproj/main.c:217
 msgid "Do you wish to change the datum (or datum transformation parameters)?"
-msgstr ""
+msgstr "측지계(또는 측지계 변환매개변수)를 바꾸길 원합니까?"
 
 #: ../general/g.setproj/main.c:225
 msgid "The datum information has not been changed"
-msgstr ""
+msgstr "측지계정보를 바꾸지 않았습니다"
 
 #: ../general/g.setproj/main.c:288
 #, c-format
 msgid "The current ellipsoid is %s"
-msgstr ""
+msgstr "현재 타원체는 %s입니다"
 
 #: ../general/g.setproj/main.c:290
 msgid "Do you want to change ellipsoid parameter?"
-msgstr ""
+msgstr "타원체 매개변수를 바꾸길 원합니까?"
 
 #: ../general/g.setproj/main.c:294
 msgid "The ellipse information has not been changed"
-msgstr ""
+msgstr "타원정보를 바꾸지 않았습니다"
 
 #: ../general/g.setproj/main.c:311
 #, c-format
 msgid "The radius is currently %f"
-msgstr ""
+msgstr "반경은 현재 %f입니다"
 
 #: ../general/g.setproj/main.c:312
 msgid "Do you want to change the radius?"
-msgstr ""
+msgstr "반경을 바꾸길 원합니까?"
 
 #: ../general/g.setproj/main.c:314 ../general/g.setproj/main.c:320
 msgid "Enter radius for the sphere in meters"
-msgstr ""
+msgstr "구체의 반경을 미터로 입력하세요"
 
 #: ../general/g.setproj/main.c:336
 msgid "Invalid input ellipsoid"
-msgstr ""
+msgstr "잘못된 입력 타원체"
 
 #: ../general/g.setproj/main.c:447
 #, c-format
 msgid "The UTM zone is now set to %d"
-msgstr ""
+msgstr "UTM 구역이 현재 %d로 설정되었습니다"
 
 #: ../general/g.setproj/main.c:450
 msgid "Do you want to change the UTM zone?"
-msgstr ""
+msgstr "UTM 구역을 바꾸길 원합니까?"
 
 #: ../general/g.setproj/main.c:451
 msgid "UTM zone information has not been updated"
-msgstr ""
+msgstr "UTM 구역정보를 갱신하지 않았습니다"
 
 #: ../general/g.setproj/main.c:456
 msgid ""
 "But if you change zone, all the existing data will be interpreted by "
 "projection software. GRASS will not automatically re-project or even change "
 "the headers for existing maps."
-msgstr ""
+msgstr "하지만 만약 구역을 바꾼다면 투영소프트웨어가 모든 기존의 자료를 "
+"해석할 것입니다. GRASS는 기존의 맵을 자동으로 재투영하거나 헤더를 바꾸지 "
+"않을 것입니다."
 
 #: ../general/g.setproj/main.c:461
 msgid "Would you still like to change the UTM zone?"
-msgstr ""
+msgstr "아직도 UTM 구역을 바꾸길 원합니까?"
 
 #: ../general/g.setproj/main.c:497
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing PROJ_INFO file <%s>"
-msgstr "출력할 라스터맵"
+msgstr "PROJ_INFO 파일 <%s>를 쓰는데 오류"
 
 #: ../general/g.setproj/main.c:571
 #, c-format
 msgid "Enter plural form of units [meters]: "
-msgstr ""
+msgstr "단위의 복수형을 입력하세요 [meters]: "
 
 #: ../general/g.setproj/main.c:603
 #, c-format
 msgid "Enter singular for unit: "
-msgstr ""
+msgstr "단위의 단수형을 입력하세요: "
 
 #: ../general/g.setproj/main.c:611
 #, c-format
 msgid "Enter conversion factor from %s to meters: "
-msgstr ""
+msgstr "%s를 미터로 바꾸는 변환계수를 입력하세요: "
 
 #: ../general/g.setproj/main.c:636
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing into UNITS output file <%s>"
-msgstr "출력할 라스터맵"
+msgstr "UNITS 출력파일 <%s>로 쓰는데 오류"
 
 #: ../general/g.setproj/main.c:643
-#, fuzzy
 msgid "Unable to write to DEFAULT_WIND region file"
-msgstr "출력할 라스터맵"
+msgstr "DEFAULT_WIND 지역파일을 쓰지 못 했습니다"
 
 #: ../general/g.setproj/main.c:645
 #, c-format
@@ -411,14 +404,17 @@ msgid ""
 "Projection information has been recorded for this location\n"
 "\n"
 msgstr ""
+"\n"
+"이 로케이션을 위한 투영정보를 기록했습니다\n"
+"\n"
 
 #: ../general/g.setproj/main.c:647
 msgid "The geographic region information in WIND is now obsolete"
-msgstr ""
+msgstr "WIND 안에 있는 지리지역정보는 이제 쓸모가 없습니다"
 
 #: ../general/g.setproj/main.c:648
 msgid "Run g.region -d to update it"
-msgstr ""
+msgstr "이것을 갱신하기 위해서는 g.region -d를 실행하세요"
 
 #: ../general/g.rename/main.c:44 ../general/g.findetc/main.c:29
 #: ../general/g.access/main.c:38 ../general/g.dirseps/main.c:35
@@ -436,9 +432,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.unregister_to_translate.c:3
 #: ../locale/scriptstrings/t.list_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:3
-#, fuzzy
 msgid "map management"
-msgstr "출력할 라스터맵"
+msgstr "맵관리"
 
 #: ../general/g.rename/main.c:45
 #: ../locale/scriptstrings/t.rename_to_translate.c:4
@@ -1897,11 +1892,11 @@ msgstr ""
 
 #: ../general/g.mlist/main.c:128 ../general/g.list/main.c:59
 msgid "Verbose listing (also list map titles)"
-msgstr ""
+msgstr "상세목록(맵제목도 나열합니다)"
 
 #: ../general/g.mlist/main.c:135
 msgid "-r and -e are mutually exclusive"
-msgstr ""
+msgstr "-r과 -e를 같이 지정할 수 없습니다"
 
 #: ../general/g.mlist/main.c:258
 #, c-format
@@ -1912,17 +1907,16 @@ msgstr "맵셋 <%2$s> 안에 유효한 %1$s:"
 msgid ""
 "Copies available data files in the current mapset search path to the user's "
 "current mapset."
-msgstr ""
+msgstr "맵셋검색경로에 있는 자료파일을 사용자의 현재맵셋으로 복사합니다."
 
 #: ../general/g.copy/main.c:51
-#, fuzzy
 msgid "copied"
-msgstr "출력할 라스터맵"
+msgstr "복사했습니다"
 
 #: ../general/g.copy/main.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> not found"
-msgstr "출력할 라스터맵"
+msgstr "<%s>를 찾지 못 했습니다"
 
 #: ../general/g.copy/main.c:71
 #, c-format
