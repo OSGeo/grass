@@ -267,6 +267,10 @@ int PS_fcolortable(void)
 
     fprintf(PS.fp, "%.8f W\n", lwidth);
 
+    margin = 0.2 * ct.fontsize;
+    if (margin < 2)
+	margin = 2;
+
     while (val <= dmax) {
 	fprintf(PS.fp, "NP\n");
 
@@ -295,9 +299,9 @@ int PS_fcolortable(void)
 	    max_label_length = strlen(buf);
 
 	if (horiz)
-	    fprintf(PS.fp, "(%s) %f %f MS\n", buf,
-		    x + 0.2 * ct.fontsize - (strlen(buf) * 0.37 * ct.fontsize),
-		    y2 - 1.15 * ct.fontsize);
+	    fprintf(PS.fp,
+		    "%f %f M (%s) dup stringwidth pop 2 div neg 0 rmoveto show\n",
+		    x, y2 - margin/2 - ct.fontsize, buf);
 	else
 	    fprintf(PS.fp, "(%s) %f %f MS\n", buf, x2 + 0.2 * ct.fontsize,
 		    y - 0.35 * ct.fontsize);
@@ -312,9 +316,6 @@ int PS_fcolortable(void)
         units = "";
 
     if(strlen(units)) {
-	margin = 0.2 * ct.fontsize;
-	if (margin < 2)
-	    margin = 2;
 	fprintf(PS.fp, "/mg %.1f def\n", margin);
 
 	/* Hint from Glynn:
@@ -367,7 +368,7 @@ int PS_fcolortable(void)
 	    /* below the tick numbers */
 	    if (horiz) {
 		xu = l + width/2.;
-		yu = y2 - 1.85 * ct.fontsize;
+		yu = y2 - margin - ct.fontsize;
 		label_xref = CENTER;
 	    }
 	    else {
