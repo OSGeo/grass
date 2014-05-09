@@ -184,12 +184,12 @@ msgstr ""
 #: ../lib/python/script/vector.py:88
 #, python-format
 msgid "Database connection not defined for layer %s"
-msgstr ""
+msgstr "레이어 %s를 위한 데이타베이스 연결이 정의되지 않았습니다"
 
 #: ../lib/python/script/vector.py:238
-#, fuzzy, python-format
+#, python-format
 msgid "Missing layer %(layer)d in vector map <%(map)s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "레이어 %(layer)d이 벡터맵 <%(map)s> 안에 없습니다"
 
 #: ../lib/python/script/vector.py:256
 msgid "vector_db_select() failed"
@@ -197,53 +197,52 @@ msgstr "vector_db_select()가 실패했습니다"
 
 #: ../lib/python/script/core.py:934
 msgid "Mixing value types. Will try to compare after integer conversion"
-msgstr ""
+msgstr "값타입을 혼용했습니다. 정수로 변환한 후 비교를 시도할 것입니다"
 
 #: ../lib/python/script/core.py:1152
 #, python-format
 msgid "Element type should be \"cell\" and not \"%s\""
-msgstr ""
+msgstr "요소타입이 \"%s\"이 아니라 \"cell\"이라야 합니다"
 
 #: ../lib/python/script/core.py:1181 ../lib/python/script/core.py:1271
 #: ../lib/python/script/core.py:1326
 #, python-format
 msgid "Element type should be \"rast\" and not \"%s\""
-msgstr ""
+msgstr "요소타입이 \"%s\"이 아니라 \"rast\"라야 합니다"
 
 #: ../lib/python/script/core.py:1339 ../lib/python/temporal/gui_support.py:57
 #, python-format
 msgid "Invalid element '%s'"
-msgstr ""
+msgstr "잘못된 요수 '%s'"
 
 #: ../lib/python/script/core.py:1527
-#, fuzzy
 msgid "Unable to list mapsets"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "맵셋을 나열하지 못 했습니다"
 
 #: ../lib/python/script/core.py:1563
 #, python-format
 msgid "Location <%s> already exists. Operation canceled."
-msgstr ""
+msgstr "로케이션 <%s>이 이미 존재합니다. 작업을 취소합니다."
 
 #: ../lib/python/script/core.py:1566
-#, fuzzy, python-format
+#, python-format
 msgid "Location <%s> already exists and will be overwritten"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "로케이션 <%s>이 이미 존재하지만 덮어씁니다"
 
 #: ../lib/python/script/core.py:1698
 #, python-format
 msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
-msgstr ""
+msgstr "잘못된 파일이름 <%s>. 'NULL'이나 '.'으로 시작할 수 없습니다."
 
 #: ../lib/python/script/core.py:1707
 #, python-format
 msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
-msgstr ""
+msgstr "잘못된 파일이름 <%(s)s>. <%(il)s>는 허용되지 않습니다.\n"
 
 #: ../lib/python/temporal/temporal_algebra.py:826
-#, fuzzy, python-format
+#, python-format
 msgid "Space time %s dataset <%s> not found"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+msgstr "시공간 %s 데이타셋 <%s>를 찾을 수 없습니다"
 
 #: ../lib/python/temporal/temporal_algebra.py:844
 #: ../lib/python/temporal/temporal_algebra.py:848
@@ -252,12 +251,14 @@ msgid ""
 "Wrong temporal type of space time dataset <"
 "%s>                                       <%s> time is required"
 msgstr ""
+"시공간 데이타셋 <%s>의 틀린 시간타입"
+"                                       <%s> 시간이 필요합니다"
 
 #: ../lib/python/temporal/univar_statistics.py:54
 #: ../lib/python/temporal/univar_statistics.py:149
-#, fuzzy, python-format
+#, python-format
 msgid "Space time %(sp)s dataset <%(i)s> is empty"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+msgstr "시공간 %(sp)s 데이타셋 <%(i)s>이 비어있습니다"
 
 #: ../lib/python/temporal/univar_statistics.py:87
 #, fuzzy, python-format
@@ -1810,7 +1811,7 @@ msgstr ""
 #: ../lib/rst/interp_float/resout2d.c:426
 #, c-format
 msgid "Raster map <%s> not found"
-msgstr ""
+msgstr "라스터맵 <%s>를 찾지 못 했습니다"
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, fuzzy, c-format
@@ -4591,9 +4592,9 @@ msgid "Output Unit Factor"
 msgstr ""
 
 #: ../lib/manage/do_rename.c:42
-#, fuzzy, c-format
+#, c-format
 msgid "Rename %s <%s> to <%s>"
-msgstr "<%s>를 <%s>으로 이름을 바꿉니다"
+msgstr "%s <%s>를 <%s>으로 이름을 바꿉니다"
 
 #: ../lib/manage/do_rename.c:62
 #, fuzzy, c-format
@@ -4644,12 +4645,12 @@ msgid "Group"
 msgstr "그룹"
 
 #: ../lib/manage/do_copy.c:43
-#, fuzzy, c-format
+#, c-format
 msgid "Copy %s <%s> to current mapset as <%s>"
-msgstr "<%s>를 현재 맵셋의 <%s>으로 복사합니다"
+msgstr "%s <%s>를 현재 맵셋의 <%s>으로 복사합니다"
 
 #: ../lib/manage/do_copy.c:52
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
 msgstr "<%s>를 현재 맵셋의 <%s>으로 복사 할 수 없습니다"
 
@@ -4659,14 +4660,14 @@ msgid "%s copied"
 msgstr "%s를 복사했습니다"
 
 #: ../lib/manage/read_list.c:73
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open data base element list '%s'"
 msgstr "데이타의 기본요소목록 '%s'를 열 수 없습니다"
 
 #: ../lib/manage/read_list.c:134
 #, c-format
 msgid "Format error: file ('%s') line (%d) - %s"
-msgstr ""
+msgstr "포맷오류: 파일('%s') 줄(%d) - %s"
 
 #: ../lib/manage/do_remove.c:42
 #, c-format
@@ -4700,68 +4701,68 @@ msgstr "<%s> 아무 것도 지우지 않았습니다"
 #: ../lib/manage/do_list.c:30
 #, c-format
 msgid "%s: invalid index %d"
-msgstr ""
+msgstr "%s: 잘못된 색인 %d"
 
 #: ../lib/gpde/N_gwflow.c:436 ../lib/gpde/N_gwflow.c:715
 #, c-format
 msgid "The total sum of the water budget: %g\n"
-msgstr ""
+msgstr "수수지의 총합: %g\n"
 
 #: ../lib/gpde/N_gwflow.c:438 ../lib/gpde/N_gwflow.c:717
 #, c-format
-msgid "The total sum of the water budget is significant larger then 0: %g\n"
-msgstr ""
+msgid "The total sum of the water budget is significantly larger then 0: %g\n"
+msgstr "수수지의 총합이 0보다 훨씬 큽니다: %g\n"
 
 #: ../lib/gpde/N_arrays_io.c:93
 #, c-format
 msgid "Reading raster map <%s> into memory"
-msgstr ""
+msgstr "라스터맵 <%s>를 메모리로 읽어들입니다"
 
 #: ../lib/gpde/N_arrays_io.c:183
 msgid "N_array_2d * array is empty"
-msgstr ""
+msgstr "N_array_2d * 행렬이 비어있습니다"
 
 #: ../lib/gpde/N_arrays_io.c:202
 #, c-format
 msgid "Write 2d array to raster map <%s>"
-msgstr ""
+msgstr "2차원 행렬을 라스터맵 <%s>로 씁니다"
 
 #: ../lib/gpde/N_arrays_io.c:309
 #, c-format
 msgid "Read g3d map <%s> into the memory"
-msgstr ""
+msgstr "g3d 맵 <%s>를 메모리로 읽어들입니다"
 
 #: ../lib/gpde/N_arrays_io.c:364 ../lib/gpde/N_arrays_io.c:464
 msgid "Error closing g3d file"
-msgstr ""
+msgstr "g3d 파일을 닫는 중 오류"
 
 #: ../lib/gpde/N_arrays_io.c:420
 #, c-format
 msgid "Error opening g3d map <%s>"
-msgstr ""
+msgstr "g3d 맵 <%s>를 여는 중 오류"
 
 #: ../lib/gpde/N_arrays_io.c:422
 #, c-format
 msgid "Write 3d array to g3d map <%s>"
-msgstr ""
+msgstr "3차원 행렬을 g3d 맵 <%s>로 씁니다"
 
 #: ../lib/gpde/test/test_main.c:88
 msgid "Performs unit and integration tests for gpde library"
-msgstr ""
+msgstr "gpde 라이브러리를 위한 단위 및 통합 테스트를 수행합니다"
 
 #: ../lib/gpde/N_parse_options.c:106
 msgid "The calculation time in seconds"
-msgstr ""
+msgstr "계산시간(초)"
 
 #: ../lib/raster/quant_rw.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read fp range for raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "라스터맵 <%s>의 실수범위를 읽지 못 했습니다"
 
 #: ../lib/raster/quant_rw.c:92
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> is empty"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+msgstr "라스터맵 <%s>이 비어있습니다"
 
 #: ../lib/raster/quant_rw.c:157
 #, fuzzy, c-format

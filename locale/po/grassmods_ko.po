@@ -463,7 +463,7 @@ msgstr "출력할 라스터맵"
 #: ../general/g.rename/main.c:74
 #, c-format
 msgid "<%s> already exists in mapset <%s>"
-msgstr ""
+msgstr "<%s>이 맵셉 <%s> 안에 이미 존재합니다."
 
 #: ../general/g.rename/main.c:79 ../general/g.copy/main.c:80
 #: ../imagery/i.ortho.photo/i.ortho.camera/main.c:114
@@ -1208,7 +1208,7 @@ msgstr ""
 #: ../display/d.what.rast/main.c:119 ../doc/raster/r.example/main.c:105
 #, c-format
 msgid "Raster map <%s> not found"
-msgstr ""
+msgstr "라스터맵 <%s>를 찾지 못 했습니다"
 
 #: ../general/g.region/main.c:485 ../raster3d/r3.mask/main.c:57
 #: ../raster3d/r3.stats/main.c:95 ../raster3d/r3.null/main.c:102
@@ -1904,9 +1904,9 @@ msgid "-r and -e are mutually exclusive"
 msgstr ""
 
 #: ../general/g.mlist/main.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "%s available in mapset <%s>:"
-msgstr "출력할 라스터맵"
+msgstr "맵셋 <%2$s> 안에 유효한 %1$s:"
 
 #: ../general/g.copy/main.c:44
 msgid ""
@@ -6336,9 +6336,9 @@ msgid "Adding raster maps to subgroup <%s>..."
 msgstr "출력할 라스터맵"
 
 #: ../imagery/i.group/main.c:219 ../imagery/i.group/main.c:261
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> not found. Skipped."
-msgstr "출력할 라스터맵"
+msgstr "라스터맵 <%s>를 찾지 못 했습니다. 넘어갑니다."
 
 #: ../imagery/i.group/main.c:224
 #, fuzzy, c-format
@@ -10448,9 +10448,9 @@ msgstr ""
 
 #: ../raster/r.cross/main.c:169 ../raster/r.resample/main.c:125
 #: ../raster/r.basins.fill/main.c:146 ../raster/r.in.png/main.c:485
-#, fuzzy, c-format
+#, c-format
 msgid "Creating support files for <%s>..."
-msgstr "출력할 라스터맵"
+msgstr "<%s>를 위한 지원파일을 생성합니다..."
 
 #: ../raster/r.cross/main.c:179
 #, c-format
@@ -18796,9 +18796,9 @@ msgid "Error writing cell_misc/%s/f_format file"
 msgstr "출력할 라스터맵"
 
 #: ../raster/r.external/link.c:224
-#, fuzzy, c-format
+#, c-format
 msgid "Creating support files for %s"
-msgstr "출력할 라스터맵"
+msgstr "%s를 위한 지원파일을 생성합니다"
 
 #: ../raster/r.external/link.c:236
 #, fuzzy, c-format
@@ -21817,9 +21817,9 @@ msgid "The minimum number of input raster maps is two"
 msgstr ""
 
 #: ../raster/r.patch/main.c:144
-#, fuzzy, c-format
+#, c-format
 msgid "Creating support files for raster map <%s>"
-msgstr "출력할 라스터맵"
+msgstr "라스터맵 <%s>를 위한 지원파일을 생성합니다"
 
 #: ../raster/r.report/parse.c:47
 #, fuzzy
@@ -25212,9 +25212,8 @@ msgid "Problem processing lines from vector map <%s>, continuing..."
 msgstr ""
 
 #: ../vector/v.to.rast/vect2rast.c:201
-#, fuzzy
 msgid "Creating support files for raster map..."
-msgstr "출력할 라스터맵"
+msgstr "라스터맵을 위한 지원파일을 생성합니다..."
 
 #: ../vector/v.to.rast/vect2rast.c:208
 msgid "Color can be updated from database only if use=attr"
