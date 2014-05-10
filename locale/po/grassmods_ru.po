@@ -16031,8 +16031,8 @@ msgstr "Невозможно открыть файл кода FIPS"
 
 #: ../general/g.setproj/get_stp.c:125
 #, c-format
-msgid "No match of fips state %d county %d"
-msgstr "Нет соответствия fips штата %d района %d"
+msgid "No match of FIPS state %d county %d"
+msgstr "Нет соответствия FIPS штата %d района %d"
 
 #: ../general/g.setproj/get_stp.c:179
 msgid "Reading sf key_value temp file"

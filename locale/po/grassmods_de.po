@@ -16140,8 +16140,8 @@ msgstr "Kann die FIPS Code Datei nicht öffnen."
 
 #: ../general/g.setproj/get_stp.c:125
 #, c-format
-msgid "No match of fips state %d county %d"
-msgstr "Keine Übereinstimmung mit fips state %d county %d"
+msgid "No match of FIPS state %d county %d"
+msgstr "Keine Übereinstimmung mit FIPS state %d county %d"
 
 #: ../general/g.setproj/get_stp.c:179
 msgid "Reading sf key_value temp file"
