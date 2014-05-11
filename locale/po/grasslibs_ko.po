@@ -5324,9 +5324,9 @@ msgid "Error writing uncompressed FP data for row %d of <%s>"
 msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/put_row.c:130
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing compressed FP data for row %d of <%s>"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "<%2$s>의 열 %1$d를 위한 압축된 실수자료를 쓰는데 오류"
 
 #: ../lib/raster/put_row.c:389 ../lib/raster/put_row.c:395
 #, fuzzy, c-format
