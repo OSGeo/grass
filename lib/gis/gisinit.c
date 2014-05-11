@@ -82,7 +82,7 @@ void G__no_gisinit(const char *version)
 	return;
 
     if (strcmp(version, GIS_H_VERSION) != 0)
-	G_fatal_error(_("Module built against version %s "
+	G_fatal_error(_("Module built against version %s but "
 			"trying to use version %s."
 			"You need to rebuild GRASS GIS or untangle multiple installations."),
                         version, GIS_H_VERSION);
