@@ -340,16 +340,16 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
 def _run_mapcalc2d(expr):
     """Helper function to run r.mapcalc in parallel"""
-    return core.run_command("r.mapcalc", expression=expr,
-                            overwrite=core.overwrite(), quiet=True)
+    exit(core.run_command("r.mapcalc", expression=expr,
+                            overwrite=core.overwrite(), quiet=True))
 
 ###############################################################################
 
 
 def _run_mapcalc3d(expr):
     """Helper function to run r3.mapcalc in parallel"""
-    return core.run_command("r3.mapcalc", expression=expr,
-                            overwrite=core.overwrite(), quiet=True)
+    exit(core.run_command("r3.mapcalc", expression=expr,
+                            overwrite=core.overwrite(), quiet=True))
 
 ###############################################################################
 

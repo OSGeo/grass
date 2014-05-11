@@ -102,7 +102,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 
 def aggregate_raster_maps(inputs, base, start, end, count, method,
-                          register_null, dbif):
+                          register_null, dbif,  offset=0):
     """!Aggregate a list of raster input maps with r.series
 
        @param inputs The names of the raster maps to be aggregated
@@ -117,12 +117,13 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
        @param register_null If true null maps will be registered in the space
                             time raster dataset, if false not
        @param dbif The temporal database interface to use
+       @param offset Offset to be added to the map counter to create the map ids
     """
 
     msgr = get_tgis_message_interface()
 
     msgr.verbose(_("Aggregate %s raster maps") % (len(inputs)))
-    output = "%s_%i" % (base, count)
+    output = "%s_%i" % (base, int(offset) + count)
 
     mapset = get_current_mapset()
     map_id = output + "@" + mapset
@@ -151,10 +152,16 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
         file.write(string)
 
     file.close()
+    
     # Run r.series
-    ret = core.run_command("r.series", flags="z", file=filename,
-                           output=output, overwrite=core.overwrite(),
-                           method=method)
+    if len(inputs) > 1000 :
+        ret = core.run_command("r.series", flags="z", file=filename,
+                               output=output, overwrite=core.overwrite(),
+                               method=method)
+    else:
+        ret = core.run_command("r.series", file=filename,
+                               output=output, overwrite=core.overwrite(),
+                               method=method)
 
     if ret != 0:
         dbif.close()

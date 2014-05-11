@@ -286,8 +286,17 @@ class RasterDataset(AbstractMapDataset):
                                              self.get_mapset())
 
     def load(self):
-        """!Load all info from an existing raster map into the internal s
-           tructure"""
+        """!Load all info from an existing raster map into the internal structure
+            
+            This method checks first if the map exists, in case it exists
+            the metadata of the map is put into this object and True is returned.
+            
+            @return True is the map exists and the metadata was filled successfully
+                          and getting the data was successfull, False otherwise
+        """
+
+        if self.map_exists() is not True:
+            return False
 
         # Fill base information
         self.base.set_creator(str(getpass.getuser()))
@@ -295,27 +304,32 @@ class RasterDataset(AbstractMapDataset):
         kvp = self.ciface.read_raster_info(self.get_name(),
                                            self.get_mapset())
 
-        # Fill spatial extent
-        self.set_spatial_extent_from_values(north=kvp["north"],
-                                            south=kvp["south"],
-                                            east=kvp["east"],
-                                            west=kvp["west"])
+        if kvp:
+            # Fill spatial extent
+            self.set_spatial_extent_from_values(north=kvp["north"],
+                                                south=kvp["south"],
+                                                east=kvp["east"],
+                                                west=kvp["west"])
 
-        # Fill metadata
-        self.metadata.set_nsres(kvp["nsres"])
-        self.metadata.set_ewres(kvp["ewres"])
-        self.metadata.set_datatype(kvp["datatype"])
-        self.metadata.set_min(kvp["min"])
-        self.metadata.set_max(kvp["max"])
+            # Fill metadata
+            self.metadata.set_nsres(kvp["nsres"])
+            self.metadata.set_ewres(kvp["ewres"])
+            self.metadata.set_datatype(kvp["datatype"])
+            self.metadata.set_min(kvp["min"])
+            self.metadata.set_max(kvp["max"])
 
-        rows = int(kvp["rows"])
-        cols = int(kvp["cols"])
+            rows = int(kvp["rows"])
+            cols = int(kvp["cols"])
 
-        ncells = cols * rows
+            ncells = cols * rows
 
-        self.metadata.set_cols(cols)
-        self.metadata.set_rows(rows)
-        self.metadata.set_number_of_cells(ncells)
+            self.metadata.set_cols(cols)
+            self.metadata.set_rows(rows)
+            self.metadata.set_number_of_cells(ncells)
+            
+            return True
+
+        return False
 
 ###############################################################################
 
@@ -598,7 +612,17 @@ class Raster3DDataset(AbstractMapDataset):
                                                self.get_mapset())
 
     def load(self):
-        """!Load all info from an existing raster3d map into the internal structure"""
+        """!Load all info from an existing 3d raster map into the internal structure
+            
+            This method checks first if the map exists, in case it exists
+            the metadata of the map is put into this object and True is returned.
+            
+            @return True is the map exists and the metadata was filled successfully
+                          and getting the data was successfull, False otherwise
+        """
+
+        if self.map_exists() is not True:
+            return False
 
         # Fill base information
         self.base.set_creator(str(getpass.getuser()))
@@ -607,28 +631,33 @@ class Raster3DDataset(AbstractMapDataset):
         kvp = self.ciface.read_raster3d_info(self.get_name(),
                                            self.get_mapset())
 
-        self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],
-                                east=kvp["east"], west=kvp["west"],
-                                top=kvp["top"], bottom=kvp["bottom"])
+        if kvp:
+            self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],
+                                    east=kvp["east"], west=kvp["west"],
+                                    top=kvp["top"], bottom=kvp["bottom"])
 
-        # Fill metadata
-        self.metadata.set_nsres(kvp["nsres"])
-        self.metadata.set_ewres(kvp["ewres"])
-        self.metadata.set_tbres(kvp["tbres"])
-        self.metadata.set_datatype(kvp["datatype"])
-        self.metadata.set_min(kvp["min"])
-        self.metadata.set_max(kvp["max"])
+            # Fill metadata
+            self.metadata.set_nsres(kvp["nsres"])
+            self.metadata.set_ewres(kvp["ewres"])
+            self.metadata.set_tbres(kvp["tbres"])
+            self.metadata.set_datatype(kvp["datatype"])
+            self.metadata.set_min(kvp["min"])
+            self.metadata.set_max(kvp["max"])
 
-        rows = int(kvp["rows"])
-        cols = int(kvp["cols"])
-        depths = int(kvp["depths"])
+            rows = int(kvp["rows"])
+            cols = int(kvp["cols"])
+            depths = int(kvp["depths"])
 
-        ncells = cols * rows * depths
+            ncells = cols * rows * depths
 
-        self.metadata.set_cols(cols)
-        self.metadata.set_rows(rows)
-        self.metadata.set_depths(depths)
-        self.metadata.set_number_of_cells(ncells)
+            self.metadata.set_cols(cols)
+            self.metadata.set_rows(rows)
+            self.metadata.set_depths(depths)
+            self.metadata.set_number_of_cells(ncells)
+            
+            return True
+
+        return False
 
 ###############################################################################
 
@@ -869,8 +898,19 @@ class VectorDataset(AbstractMapDataset):
 
 
     def load(self):
-        """!Load all info from an existing vector map into the internal
-        structure"""
+
+        """!Load all info from an existing vector map into the internal structure
+            
+            This method checks first if the map exists, in case it exists
+            the metadata of the map is put into this object and True is returned.
+            
+            @return True is the map exists and the metadata was filled successfully
+                          and getting the data was successfull, False otherwise
+        """
+
+        if self.map_exists() is not True:
+            return False
+
 
         # Fill base information
         self.base.set_creator(str(getpass.getuser()))
@@ -880,25 +920,30 @@ class VectorDataset(AbstractMapDataset):
         kvp = self.ciface.read_vector_info(self.get_name(),
                                            self.get_mapset())
 
-        # Fill spatial extent
-        self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],
-                                east=kvp["east"], west=kvp["west"],
-                                top=kvp["top"], bottom=kvp["bottom"])
+        if kvp:
+            # Fill spatial extent
+            self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],
+                                    east=kvp["east"], west=kvp["west"],
+                                    top=kvp["top"], bottom=kvp["bottom"])
 
-        # Fill metadata
-        self.metadata.set_3d_info(kvp["map3d"])
-        self.metadata.set_number_of_points(kvp["points"])
-        self.metadata.set_number_of_lines(kvp["lines"])
-        self.metadata.set_number_of_boundaries(kvp["boundaries"])
-        self.metadata.set_number_of_centroids(kvp["centroids"])
-        self.metadata.set_number_of_faces(kvp["faces"])
-        self.metadata.set_number_of_kernels(kvp["kernels"])
-        self.metadata.set_number_of_primitives(kvp["primitives"])
-        self.metadata.set_number_of_nodes(kvp["nodes"])
-        self.metadata.set_number_of_areas(kvp["areas"])
-        self.metadata.set_number_of_islands(kvp["islands"])
-        self.metadata.set_number_of_holes(kvp["holes"])
-        self.metadata.set_number_of_volumes(kvp["volumes"])
+            # Fill metadata
+            self.metadata.set_3d_info(kvp["map3d"])
+            self.metadata.set_number_of_points(kvp["points"])
+            self.metadata.set_number_of_lines(kvp["lines"])
+            self.metadata.set_number_of_boundaries(kvp["boundaries"])
+            self.metadata.set_number_of_centroids(kvp["centroids"])
+            self.metadata.set_number_of_faces(kvp["faces"])
+            self.metadata.set_number_of_kernels(kvp["kernels"])
+            self.metadata.set_number_of_primitives(kvp["primitives"])
+            self.metadata.set_number_of_nodes(kvp["nodes"])
+            self.metadata.set_number_of_areas(kvp["areas"])
+            self.metadata.set_number_of_islands(kvp["islands"])
+            self.metadata.set_number_of_holes(kvp["holes"])
+            self.metadata.set_number_of_volumes(kvp["volumes"])
+            
+            return True
+
+        return False
 
 ###############################################################################
 

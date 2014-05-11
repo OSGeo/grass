@@ -152,7 +152,6 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     for proc in proc_list:
                         proc.join()
                         exitcodes += proc.exitcode
-
                     if exitcodes != 0:
                         dbif.close()
                         msgr.fatal(_("Error while computation"))
@@ -248,18 +247,18 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
 def run_mapcalc2d(expr):
     """Helper function to run r.mapcalc in parallel"""
-    return core.run_command("r.mapcalc", expression=expr,
-                            overwrite=core.overwrite(), quiet=True)
+    exit(core.run_command("r.mapcalc", expression=expr,
+                            overwrite=core.overwrite(), quiet=True))
 
 
 def run_mapcalc3d(expr):
     """Helper function to run r3.mapcalc in parallel"""
-    return core.run_command("r3.mapcalc", expression=expr,
-                            overwrite=core.overwrite(), quiet=True)
+    exit(core.run_command("r3.mapcalc", expression=expr,
+                            overwrite=core.overwrite(), quiet=True))
 
 
 def run_vector_extraction(input, output, layer, type, where):
     """Helper function to run r.mapcalc in parallel"""
-    return core.run_command("v.extract", input=input, output=output,
+    exit(core.run_command("v.extract", input=input, output=output,
                             layer=layer, type=type, where=where,
-                            overwrite=core.overwrite(), quiet=True)
+                            overwrite=core.overwrite(), quiet=True))
