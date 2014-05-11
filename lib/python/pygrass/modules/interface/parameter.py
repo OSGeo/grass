@@ -38,7 +38,7 @@ class Parameter(object):
         if 'values' in diz:
             try:
                 # Check for integer ranges: "3-30"
-                isrange = re.match("(?P<min>\d+)-(?P<max>\d+)",
+                isrange = re.match("(?P<min>-*\d+)-(?P<max>\d+)",
                                    diz['values'][0])
                 if isrange:
                     range_min, range_max = isrange.groups()
@@ -46,7 +46,7 @@ class Parameter(object):
                     self.isrange = diz['values'][0]
                 # Check for float ranges: "0.0-1.0"
                 if not isrange:
-                    isrange = re.match("(?P<min>\d+.\d+)-(?P<max>\d+.\d+)",
+                    isrange = re.match("(?P<min>-*\d+.\d+)-(?P<max>\d+.\d+)",
                                        diz['values'][0])
                     if isrange:
                         # We are not able to create range values from
