@@ -55,6 +55,15 @@
 #% answer: average
 #%end
 
+#%option
+#% key: offset
+#% type: integer
+#% description: Offset that is used to create the output map ids, output map id is generated as: basename_ (count + offset)
+#% required: no
+#% multiple: no
+#% answer: 0
+#%end
+
 #%option G_OPT_T_SAMPLE
 #%end
 
@@ -80,6 +89,7 @@ def main():
     method = options["method"]
     type = options["type"]
     sampling = options["sampling"]
+    offset = options["offset"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -125,7 +135,7 @@ def main():
         if input_map_names:
             new_map = tgis.aggregate_raster_maps(input_map_names, base,
                                                  start, end, count, method,
-                                                 register_null, dbif)
+                                                 register_null, dbif,  offset)
 
             if new_map:
                 # Set the time stamp and write it to the raster map

@@ -26,8 +26,12 @@ t.rast.extract --o --v -n input=precip_abs1 output=precip_abs3 where="start_time
            expression=" if(precip_abs1 > 400, precip_abs1, null())" base=new_prec nprocs=4
 t.info type=strds input=precip_abs3
 
-t.rast.extract --o --v input=precip_abs1 output=precip_abs4 where="start_time > '2001-06-01'" 
+# Let the test fail
+g.remove rast=prec_1
+
+t.rast.extract --o --v input=precip_abs1 output=precip_abs4 \
+          where="start_time > '2001-01-01'" expr="precip_abs1/1.0"\
+          base=new_test
 t.info type=strds input=precip_abs4
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-t.remove type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4
+t.remove -rf type=strds input=precip_abs1,precip_abs2,precip_abs3
