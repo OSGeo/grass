@@ -109,7 +109,7 @@ int start_mon(const char *name, const char *output, int select,
     G_setenv(env_name, cmd_value);
     close(creat(cmd_value, 0666));
 
-    G_verbose_message(_("Staring monitor <%s> with env file '%s'"), name, env_value);
+    G_verbose_message(_("Starting monitor <%s> with env file '%s'"), name, env_value);
     if (G_verbose() > G_verbose_std()) {
         FILE *fd;
         
