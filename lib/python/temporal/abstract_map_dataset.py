@@ -214,7 +214,7 @@ class AbstractMapDataset(AbstractDataset):
             self.print_topology_info()
         self.spatial_extent.print_info()
         self.metadata.print_info()
-        datasets = self.get_registered_datasets()
+        datasets = self.get_registered_stds()
         count = 0
         string = ""
         if datasets is not None:
@@ -236,7 +236,7 @@ class AbstractMapDataset(AbstractDataset):
         self.temporal_extent.print_shell_info()
         self.spatial_extent.print_shell_info()
         self.metadata.print_shell_info()
-        datasets = self.get_registered_datasets()
+        datasets = self.get_registered_stds()
         count = 0
         string = ""
         if datasets is not None:
@@ -875,7 +875,7 @@ class AbstractMapDataset(AbstractDataset):
         dbif, connected = init_dbif(dbif)
 
         # Get all datasets in which this map is registered
-        datasets = self.get_registered_datasets(dbif)
+        datasets = self.get_registered_stds(dbif)
 
         # For each stds in which the map is registered
         if datasets is not None:
@@ -899,7 +899,7 @@ class AbstractMapDataset(AbstractDataset):
 
         return statement
 
-    def get_registered_datasets(self, dbif=None):
+    def get_registered_stds(self, dbif=None):
         """!Return all space time dataset ids in which this map is registered
            as as a list of strings, or None if this map is not
            registered in any space time dataset.
@@ -923,7 +923,7 @@ class AbstractMapDataset(AbstractDataset):
 
         return datasets
 
-    def add_dataset_to_register(self, stds_id, dbif=None, execute=True):
+    def add_stds_to_register(self, stds_id, dbif=None, execute=True):
         """!Add a new space time dataset to the register
 
            @param stds_id The id of the space time dataset to be registered
@@ -937,7 +937,7 @@ class AbstractMapDataset(AbstractDataset):
         """
         dbif, connected = init_dbif(dbif=dbif)
 
-        datasets = self.get_registered_datasets(dbif=dbif)
+        datasets = self.get_registered_stds(dbif=dbif)
 
         if stds_id is None or stds_id == "":
             return ""
@@ -969,7 +969,7 @@ class AbstractMapDataset(AbstractDataset):
         return statement
 
 
-    def remove_dataset_from_register(self, stds_id, dbif=None, execute=True):
+    def remove_stds_from_register(self, stds_id, dbif=None, execute=True):
         """!Remove a space time dataset from the register
 
            @param stds_id The id of the space time dataset to removed from the registered
@@ -983,7 +983,7 @@ class AbstractMapDataset(AbstractDataset):
         """
         dbif, connected = init_dbif(dbif)
 
-        datasets = self.get_registered_datasets(dbif=dbif)
+        datasets = self.get_registered_stds(dbif=dbif)
 
         # Check if no datasets are present
         if datasets is None:

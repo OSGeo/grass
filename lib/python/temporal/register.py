@@ -243,7 +243,7 @@ def register_maps_in_space_time_dataset(
             map.select(dbif)
 
             # Save the datasets that must be updated
-            datasets = map.get_registered_datasets(dbif)
+            datasets = map.get_registered_stds(dbif)
             if datasets is not None:
                 for dataset in datasets:
                     if dataset != "":
