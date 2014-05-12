@@ -436,7 +436,7 @@ if __name__ == "__main__":
     grass.verbose(_("Starting map display <%s>...") % (monName))
 
     RunCommand('g.gisenv',
-               set = 'MONITOR_%s_PID=%d' % (monName, os.getpid()))
+               set = 'MONITOR_%s_PID=%d' % (monName.upper(), os.getpid()))
     
     gmMap = MapApp(0)
     # set title
@@ -448,7 +448,7 @@ if __name__ == "__main__":
 
     # clean up GRASS env variables
     env = grass.gisenv()
-    env_name = 'MONITOR_%s' % monName
+    env_name = 'MONITOR_%s' % monName.upper()
     for key in env.keys():
         if key.find(env_name) == 0:
             RunCommand('g.gisenv',

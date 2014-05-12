@@ -26,11 +26,14 @@ int stop_mon(const char *name)
 
 int stop(const char *name)
 {
+    char *u_name;
     char *env_name;
     const char *env_file;
-    
+
+    u_name = G_store_upper(name);
+
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", name);
+    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", u_name);
     
     env_file = G__getenv(env_name);
     if (!env_file)
@@ -43,11 +46,14 @@ int stop(const char *name)
 
 int stop_wx(const char *name)
 {
+    char *u_name;
     char *env_name;
     const char *pid;
-    
+
+    u_name = G_store_upper(name);
+
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_PID", name);
+    G_asprintf(&env_name, "MONITOR_%s_PID", u_name);
     
     pid = G__getenv(env_name);
     if (!pid) {
@@ -71,11 +77,13 @@ int stop_wx(const char *name)
 void clean_env(const char *name)
 {
     int i;
+    char *u_name;
     const char *env_prefix = "MONITOR_";
     const char *env;
     int env_prefix_len;
     char **tokens;
-    
+
+    u_name = G_store_upper(name);
     env_prefix_len = strlen(env_prefix);
     
     tokens = NULL;
@@ -85,7 +93,7 @@ void clean_env(const char *name)
 	
 	tokens = G_tokenize(env, "_");
 	if (G_number_of_tokens(tokens) != 3 ||
-	    strcmp(tokens[1], name) != 0)
+	    strcmp(tokens[1], u_name) != 0)
 	    continue;
 	G_unsetenv(env);
 	i--; /* env has been removed for the list */
