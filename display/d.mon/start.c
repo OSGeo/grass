@@ -58,16 +58,21 @@ int start_mon(const char *name, const char *output, int select,
 	      int width, int height, const char *bgcolor,
 	      int truecolor)
 {
-    const char *curr_mon;
     char *u_name;
     char *env_name, *env_value, *cmd_value;
     char *tempfile, buf[1024];
     int env_fd;
-    
-    curr_mon = G__getenv("MONITOR");
-    if (curr_mon && strcmp(curr_mon, name) == 0 && check_mon(curr_mon))
-	G_fatal_error(_("Monitor <%s> already running"), name);
-    
+
+    if (check_mon(name)) {
+        const char *curr_mon;
+
+        curr_mon = G__getenv("MONITOR");
+	if (select && (!curr_mon || strcmp(curr_mon, name) != 0))
+	    G_setenv("MONITOR", name);
+
+        G_fatal_error(_("Monitor <%s> already running"), name);
+    }
+
     tempfile = G_tempfile();
 
     u_name = G_store_upper(name);
