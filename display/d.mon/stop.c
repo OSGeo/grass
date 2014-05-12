@@ -26,14 +26,11 @@ int stop_mon(const char *name)
 
 int stop(const char *name)
 {
-    char *u_name;
     char *env_name;
     const char *env_file;
 
-    u_name = G_store_upper(name);
-
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", u_name);
+    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", G_store_upper(name));
     
     env_file = G__getenv(env_name);
     if (!env_file)
@@ -46,14 +43,11 @@ int stop(const char *name)
 
 int stop_wx(const char *name)
 {
-    char *u_name;
     char *env_name;
     const char *pid;
 
-    u_name = G_store_upper(name);
-
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_PID", u_name);
+    G_asprintf(&env_name, "MONITOR_%s_PID", G_store_upper(name));
     
     pid = G__getenv(env_name);
     if (!pid) {

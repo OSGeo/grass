@@ -13,16 +13,13 @@ static void start_wx(const char *, const char *, const char *,
 /* start file-based monitor */
 void start(const char *name, const char *output)
 {
-    char *u_name;
     char *env_name;
 
     if (!output)
 	return;
 
-    u_name = G_store_upper(name);
-
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", u_name);
+    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", G_store_upper(name));
     G_setenv(env_name, output);
 }
 
@@ -31,14 +28,11 @@ void start_wx(const char *name, const char *tempfile,
 	      const char *env_value, const char *cmd_value,
 	      int width, int height)
 {
-    char *u_name;
     char progname[GPATH_MAX];
     char *env_name, *map_value, str_width[1024], str_height[1024];
 
-    u_name = G_store_upper(name);
-
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", u_name);
+    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", G_store_upper(name));
     G_asprintf(&map_value, "%s.ppm", tempfile);
     G_setenv(env_name, map_value);
     /* close(creat(map_value, 0666)); */
