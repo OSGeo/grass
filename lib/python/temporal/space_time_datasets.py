@@ -51,6 +51,7 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap.get_temporal_extent_as_tuple()
         (datetime.datetime(1999, 1, 15, 0, 0), None)
         >>> rmap.load()
+        True
         >>> rmap.spatial_extent.print_info()
          +-------------------- Spatial extent ----------------------------------------+
          | North:...................... 80.0
@@ -366,6 +367,7 @@ class Raster3DDataset(AbstractMapDataset):
         >>> r3map.get_temporal_extent_as_tuple()
         (datetime.datetime(1999, 1, 15, 0, 0), None)
         >>> r3map.load()
+        True
         >>> r3map.spatial_extent.print_info()
          +-------------------- Spatial extent ----------------------------------------+
          | North:...................... 80.0
@@ -694,6 +696,7 @@ class VectorDataset(AbstractMapDataset):
         >>> vmap.get_temporal_extent_as_tuple()
         (datetime.datetime(1999, 1, 15, 0, 0), None)
         >>> vmap.load()
+        True
         >>> vmap.absolute_time.print_info()
          +-------------------- Absolute time -----------------------------------------+
          | Start time:................. 1999-01-15 00:00:00
