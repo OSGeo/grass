@@ -222,12 +222,12 @@ msgstr "맵셋을 나열하지 못 했습니다"
 #: ../lib/python/script/core.py:1563
 #, python-format
 msgid "Location <%s> already exists. Operation canceled."
-msgstr "로케이션 <%s>이 이미 존재합니다. 작업을 취소합니다."
+msgstr "로케이션 <%s>가 이미 존재합니다. 작업을 취소합니다."
 
 #: ../lib/python/script/core.py:1566
 #, python-format
 msgid "Location <%s> already exists and will be overwritten"
-msgstr "로케이션 <%s>이 이미 존재하지만 덮어씁니다"
+msgstr "로케이션 <%s>가 이미 존재하지만 덮어씁니다"
 
 #: ../lib/python/script/core.py:1698
 #, python-format
@@ -258,7 +258,7 @@ msgstr ""
 #: ../lib/python/temporal/univar_statistics.py:149
 #, python-format
 msgid "Space time %(sp)s dataset <%(i)s> is empty"
-msgstr "시공간 %(sp)s 데이타셋 <%(i)s>이 비어있습니다"
+msgstr "시공간 %(sp)s 데이타셋 <%(i)s>가 비어있습니다"
 
 #: ../lib/python/temporal/univar_statistics.py:87
 #, fuzzy, python-format
@@ -1710,7 +1710,7 @@ msgstr "자료가 없습니다."
 #: ../lib/ogsf/GS2.c:1655
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr "라스터맵 <%s>이 현재 영역 바깥입니다. 읽을 수 없습니다."
+msgstr "라스터맵 <%s>가 현재 영역 바깥입니다. 읽을 수 없습니다."
 
 #: ../lib/ogsf/GS2.c:1733 ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747
 #: ../lib/ogsf/GS2.c:1756 ../lib/ogsf/GS2.c:1764 ../lib/ogsf/GS2.c:1774
@@ -3092,7 +3092,7 @@ msgstr ""
 #: ../lib/gis/parser.c:1365
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
-msgstr "오류: 옵션 <%s>: <%s>이 존재합니다.\n"
+msgstr "오류: 옵션 <%s>: <%s>가 존재합니다.\n"
 
 #: ../lib/gis/parser.c:1449
 msgid "No separator given"
@@ -4762,7 +4762,7 @@ msgstr "라스터맵 <%s>의 실수범위를 읽지 못 했습니다"
 #: ../lib/raster/quant_rw.c:92
 #, c-format
 msgid "Raster map <%s> is empty"
-msgstr "라스터맵 <%s>이 비어있습니다"
+msgstr "라스터맵 <%s>가 비어있습니다"
 
 #: ../lib/raster/quant_rw.c:157
 #, fuzzy, c-format
@@ -5993,7 +5993,7 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/open.c:812
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr ""
+msgstr "벡터맵 <%s>가 이미 존재하지만 덮어씁니다"
 
 #: ../lib/vector/Vlib/map.c:126 ../lib/vector/Vlib/open.c:806
 #: ../lib/vector/Vlib/open.c:817
