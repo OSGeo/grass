@@ -163,7 +163,7 @@ msgstr "현재맵셋(<%s>)이 반드시 검색경로에 포함되어야 합니�
 #: ../general/g.mapsets/main.c:205
 #, c-format
 msgid "Mapset <%s> already in the path"
-msgstr "맵셋 <%s>이 경로에 이미 존재합니다"
+msgstr "맵셋 <%s>가 경로에 이미 존재합니다"
 
 #: ../general/g.mapsets/main.c:212
 #, c-format
@@ -458,7 +458,7 @@ msgstr "출력할 라스터맵"
 #: ../general/g.rename/main.c:74
 #, c-format
 msgid "<%s> already exists in mapset <%s>"
-msgstr "<%s>이 맵셉 <%s> 안에 이미 존재합니다."
+msgstr "<%s>가 맵셉 <%s> 안에 이미 존재합니다."
 
 #: ../general/g.rename/main.c:79 ../general/g.copy/main.c:80
 #: ../imagery/i.ortho.photo/i.ortho.camera/main.c:114
@@ -3709,12 +3709,12 @@ msgstr "출력할 라스터맵"
 #: ../vector/v.kernel/main.c:233
 #, c-format
 msgid "Raster map <%s> already exists and will be overwritten"
-msgstr "라스터맵 <%s>이 이미 존재하지만 덮어 씁니다"
+msgstr "라스터맵 <%s>가 이미 존재하지만 덮어 씁니다"
 
 #: ../imagery/i.landsat.toar/main.c:550
 #, c-format
 msgid "Raster map <%s> exists. Skipping."
-msgstr "라스터맵 <%s>이 존재합니다. 넘어갑니다."
+msgstr "라스터맵 <%s>가 존재합니다. 넘어갑니다."
 
 #: ../imagery/i.landsat.toar/main.c:564
 #: ../imagery/i.landsat.acca/algorithm.c:234
@@ -15522,7 +15522,7 @@ msgstr ""
 #: ../raster/r.in.gdal/main.c:244 ../vector/v.kernel/main.c:236
 #, c-format
 msgid "Raster map <%s> already exists"
-msgstr "라스터맵 <%s>이 이미 존재합니다"
+msgstr "라스터맵 <%s>가 이미 존재합니다"
 
 #: ../raster/r.in.gdal/main.c:262
 #, c-format
@@ -23919,7 +23919,7 @@ msgstr "출력할 라스터맵"
 msgid ""
 "Vector map <%s> cannot be overwritten because input table <%s> is linked to "
 "this map."
-msgstr "입력테이블 <%2$s>이 벡터맵 <%1$s>와 연결되어 있어서 벡터맵을 덮어 쓸 수 없습니다."
+msgstr "입력테이블 <%2$s>가 벡터맵 <%1$s>와 연결되어 있어서 벡터맵을 덮어 쓸 수 없습니다."
 
 #: ../vector/v.in.db/main.c:177
 #, c-format
