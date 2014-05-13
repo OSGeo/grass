@@ -286,7 +286,7 @@ class RulesPanel:
                 if self.attributeType == 'color':
                     try:
                         r, g, b = map(int, self.ruleslines[item][self.attributeType].split(':'))
-                    except ValueError, e:
+                    except ValueError as e:
                         message =  _("Bad color format. Use color format '0:0:0'")
                     self.mainPanel.FindWindowById(item + 2000).SetValue((r, g, b))
                 else:

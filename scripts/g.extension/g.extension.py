@@ -935,7 +935,7 @@ def check_style_files(fil):
 
     try:
         shutil.copyfile(dist_file, addons_file)
-    except OSError, e:
+    except OSError as e:
         grass.fatal(_("Unable to create '%s': %s") % (addons_file, e))
 
 def create_dir(path):
@@ -944,7 +944,7 @@ def create_dir(path):
 
     try:
         os.makedirs(path)
-    except OSError, e:
+    except OSError as e:
         grass.fatal(_("Unable to create '%s': %s") % (path, e))
 
     grass.debug("'%s' created" % path)
@@ -970,7 +970,7 @@ def update_manual_page(module):
     try:
         f = open(htmlfile)
         shtml = f.read()
-    except IOError, e:
+    except IOError as e:
         grass.fatal(_("Unable to read manual page: %s") % e)
     else:
         f.close()
@@ -1000,7 +1000,7 @@ def update_manual_page(module):
     try:
         f = open(htmlfile, 'w')
         f.write(ohtml)
-    except IOError, e:
+    except IOError as e:
         grass.fatal(_("Unable for write manual page: %s") % e)
     else:
         f.close()

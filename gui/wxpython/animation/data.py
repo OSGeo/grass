@@ -284,7 +284,7 @@ class AnimLayer(Layer):
                 try:
                     name = validateTimeseriesName(name, self._mapType)
                     self._maps = getRegisteredMaps(name, self._mapType)
-                except (GException, gcore.ScriptError), e:
+                except (GException, gcore.ScriptError) as e:
                     raise ValueError(str(e))
             else:
                 self._maps = validateMapNames(name.split(','), self._mapType)

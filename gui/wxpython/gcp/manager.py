@@ -1238,7 +1238,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 coord3 = self.list.GetItem(index, 4).GetText()
                 f.write(coord0 + ' ' + coord1 + '     ' + coord2 + ' ' + coord3 + '     ' + check + '\n')
 
-        except IOError, err:
+        except IOError as err:
             GError(parent = self,
                    message="%s <%s>. %s%s" % (_("Writing POINTS file failed"),
                                               self.file['points'], os.linesep, err))
@@ -1295,7 +1295,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                     self.list.CheckItem(index, check)
                 GCPcnt += 1
 
-        except IOError, err:
+        except IOError as err:
             GError(parent = self,
                    message = "%s <%s>. %s%s" % (_("Reading POINTS file failed"),
                                                 self.file['points'], os.linesep, err))

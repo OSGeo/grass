@@ -727,7 +727,7 @@ class EditDialog(wx.Dialog):
             return
         try:
             temporalMode, tempManager = self.eval(self.animationData)
-        except GException, e:
+        except GException as e:
             GError(parent=self, message=e.value, showTraceback=False)
             return
         self.result = (self.animationData, temporalMode, tempManager)
@@ -1392,7 +1392,7 @@ class AddTemporalLayerDialog(wx.Dialog):
                     if maps:
                         mapName, mapLayer = getNameAndLayer(maps[0])
                         cmd.append('map={name}'.format(name=mapName))
-                except gcore.ScriptError, e:
+                except gcore.ScriptError as e:
                     GError(parent=self, message=str(e), showTraceback=False)
                     return None
         return cmd
@@ -1444,7 +1444,7 @@ class AddTemporalLayerDialog(wx.Dialog):
                 self.layer.name = self._name
                 self.layer.cmd = self._cmd
                 event.Skip()
-            except (GException, gcore.ScriptError), e:
+            except (GException, gcore.ScriptError) as e:
                 GError(parent=self, message=str(e))
 
     def GetLayer(self):

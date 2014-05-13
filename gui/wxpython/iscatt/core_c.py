@@ -19,7 +19,7 @@ from ctypes import *
 try:
     from grass.lib.imagery import *
     from grass.lib.gis import Cell_head, G_get_window
-except ImportError, e:
+except ImportError as e:
     sys.stderr.write(_("Loading ctypes libs failed"))
 
 from core.gcmd import GException

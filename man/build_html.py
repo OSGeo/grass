@@ -305,7 +305,7 @@ def write_file(name, contents):
 def try_mkdir(path):
     try:
         os.mkdir(path)
-    except OSError, e:
+    except OSError as e:
         pass
 
 def replace_file(name):
@@ -315,7 +315,7 @@ def replace_file(name):
     else:
         try:
             os.remove(name)
-        except OSError, e:
+        except OSError as e:
             pass
         os.rename(temp, name)
 

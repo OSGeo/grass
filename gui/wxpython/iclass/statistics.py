@@ -25,7 +25,7 @@ from core.utils import _
 
 try:
     from grass.lib.imagery import *
-except ImportError, e:
+except ImportError as e:
     sys.stderr.write(_("Loading imagery lib failed"))
 
 from grass.pydispatch.signal import Signal

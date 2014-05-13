@@ -179,7 +179,7 @@ class DMonMap(Map):
 
             self.SetLayers(reorderedLayers)
 
-        except IOError, e:
+        except IOError as e:
             grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
                               { 'cmd' : self.cmdfile, 'det' : e })
             return
@@ -385,7 +385,7 @@ class MapApp(wx.App):
                 self.cmdTimeStamp = currentCmdFileTime
                 self.mapFrm.GetMap().GetLayersFromCmdFile()
                 self.timer.Start(mtime)
-        except OSError, e:
+        except OSError as e:
             grass.warning("%s" % e)
             self.timer.Stop()
 

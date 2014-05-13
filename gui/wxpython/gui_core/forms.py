@@ -698,7 +698,7 @@ class TaskFrame(wx.Frame):
                     cmd[0] = self.task.path # full path
                 
                 ret = self._gconsole.RunCmd(cmd, onDone = self.OnDone)
-            except AttributeError, e:
+            except AttributeError as e:
                 print >> sys.stderr, "%s: Probably not running in wxgui.py session?" % (e)
                 print >> sys.stderr, "parent window is: %s" % (str(self.parent))
         else:
@@ -1830,7 +1830,7 @@ class CmdPanel(wx.Panel):
         data = ''
         try:
             f = open(path, "r")
-        except IOError, e:
+        except IOError as e:
             gcmd.GError(parent = self, showTraceback = False,
                         message = _("Unable to load file.\n\nReason: %s") % e)
             return
@@ -2205,7 +2205,7 @@ class CmdPanel(wx.Panel):
         try:
             cmd = self.task.get_cmd(ignoreErrors = ignoreErrors,
                                    ignoreRequired = ignoreRequired)
-        except ValueError, err:
+        except ValueError as err:
             dlg = wx.MessageDialog(parent = self,
                                    message = unicode(err),
                                    caption = _("Error in %s") % self.task.name,
@@ -2291,7 +2291,7 @@ class GUI:
             global _blackList
             self.grass_task = gtask.parse_interface(gcmd.GetRealCmd(cmd[0]),
                                                     blackList = _blackList)
-        except (grass.ScriptError, ValueError), e:
+        except (grass.ScriptError, ValueError) as e:
             raise gcmd.GException(e.value)
         
         # if layer parameters previously set, re-insert them into dialog

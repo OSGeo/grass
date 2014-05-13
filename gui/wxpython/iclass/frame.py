@@ -34,7 +34,7 @@ try:
     from grass.lib.vector import *
     haveIClass = True
     errMsg = ''
-except ImportError, e:
+except ImportError as e:
     haveIClass = False
     errMsg = _("Loading imagery lib failed.\n%s") % e
 

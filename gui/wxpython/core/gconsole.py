@@ -466,7 +466,7 @@ class GConsole(wx.EvtHandler):
                 # other GRASS commands (r|v|g|...)
                 try:
                     task = GUI(show=None).ParseCommand(command)
-                except GException, e:
+                except GException as e:
                     GError(parent=self._guiparent,
                            message=unicode(e),
                            showTraceback=False)
@@ -494,7 +494,7 @@ class GConsole(wx.EvtHandler):
                     # no arguments given
                     try:
                         GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
-                    except GException, e:
+                    except GException as e:
                         print >> sys.stderr, e
                     return
 
@@ -643,7 +643,7 @@ class GConsole(wx.EvtHandler):
         # find which maps were created
         try:
             task = GUI(show=None).ParseCommand(event.cmd)
-        except GException, e:
+        except GException as e:
             print >> sys.stderr, e
             task = None
             return
@@ -678,7 +678,7 @@ class GConsole(wx.EvtHandler):
                                     env['MAPSET'],
                                     '.bash_history')
             fileHistory = codecs.open(filePath, encoding='utf-8', mode='a')
-        except IOError, e:
+        except IOError as e:
             GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
                     {'filePath': filePath, 'error': e},
                    parent=self._guiparent)

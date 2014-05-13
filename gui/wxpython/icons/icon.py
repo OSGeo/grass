@@ -47,7 +47,7 @@ try:
             iconSet[key] = img
         
         iconSet[key] = os.path.join(iconPath, iconSet[key])
-except StandardError, e:
+except StandardError as e:
     sys.exit(_("Unable to load icon theme. Reason: %s. Quiting wxGUI...") % e)
     
 class MetaIcon:

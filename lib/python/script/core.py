@@ -1602,7 +1602,7 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
         else:
             fd.write(os.linesep)
         fd.close()
-    except OSError, e:
+    except OSError as e:
         raise ScriptError(repr(e))
 
 
@@ -1650,7 +1650,7 @@ def _create_location_xy(database, location):
                     os.path.join(location, "PERMANENT", "WIND"))
 
         os.chdir(cur_dir)
-    except OSError, e:
+    except OSError as e:
         raise ScriptError(repr(e))
 
 # interface to g.version

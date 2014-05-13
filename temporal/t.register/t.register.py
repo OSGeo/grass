@@ -127,5 +127,5 @@ if __name__ == "__main__":
 
     try:
         tgis.profile_function(main)
-    except StandardError, e:
+    except StandardError as e:
         grass.fatal(e)

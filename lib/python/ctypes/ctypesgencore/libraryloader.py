@@ -67,7 +67,7 @@ class LibraryLoader(object):
                 return ctypes.CDLL(path, ctypes.RTLD_GLOBAL)
             else:
                 return ctypes.cdll.LoadLibrary(path)
-        except OSError,e:
+        except OSError as e:
             raise ImportError,e
     
     def getpaths(self,libname):

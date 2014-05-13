@@ -650,7 +650,7 @@ def non_interactive(arg, geofile=None):
                             # create location using georeferenced file
                             grass.create_location(gisdbase, location_name,
                                                   filename=geofile)
-                    except grass.ScriptError, e:
+                    except grass.ScriptError as e:
                         fatal(e.value.strip('"').strip("'").replace('\\n',
                                                                    os.linesep))
                 else:
@@ -795,7 +795,7 @@ def set_language():
         # have their default locale, we'll just set default locale
         try:
             locale.setlocale(locale.LC_ALL, '')
-        except locale.Error, e:
+        except locale.Error as e:
             # If we get here, system locale settings are terribly wrong
             # There is no point to continue as GRASS/Python will fail
             # in some other unpredictable way.
@@ -813,7 +813,7 @@ def set_language():
         
         try:
             locale.setlocale(locale.LC_ALL, language)
-        except locale.Error, e:
+        except locale.Error as e:
             try:
                 # Locale lang.encoding might be missing. Let's try
                 # UTF-8 encoding before giving up as on Linux systems
@@ -822,13 +822,13 @@ def set_language():
                 encoding = 'UTF-8'
                 normalized = locale.normalize('%s.%s' % (language, encoding))
                 locale.setlocale(locale.LC_ALL, normalized)
-            except locale.Error, e:
+            except locale.Error as e:
                 # The last attempt...
                 try:
                     encoding = locale.getpreferredencoding()
                     normalized = locale.normalize('%s.%s' % (language, encoding))
                     locale.setlocale(locale.LC_ALL, normalized)
-                except locale.Error, e:
+                except locale.Error as e:
                     # If we got so far, attempts to set up language and locale have failed
                     # on this system
                     sys.stderr.write("Failed to enforce user specified language '%s' with error: '%s'\n" % (language, e))

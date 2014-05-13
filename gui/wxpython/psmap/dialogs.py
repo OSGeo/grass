@@ -4315,7 +4315,7 @@ class ImageDialog(PsmapDialog):
                     import types
                     pImg.load = types.MethodType(loadPSForWindows, pImg)
                 img = PilImageToWxImage(pImg)
-            except IOError, e:
+            except IOError as e:
                 GError(message = _("Unable to read file %s") % file)
                 self.ClearPreview()
                 return

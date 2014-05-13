@@ -246,7 +246,7 @@ class MeasureDistanceController(AnalysisControllerBase):
                 import grass.lib.gis as gislib
                 gislib.G_begin_distance_calculations()
                 self._useCtypes = True
-            except ImportError, e:
+            except ImportError as e:
                 self._giface.WriteWarning(_('Geodesic distance calculation '
                                             'is not available.\n'
                                             'Reason: %s' % e))
