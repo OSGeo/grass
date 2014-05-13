@@ -25423,15 +25423,13 @@ msgstr "출력할 라스터맵"
 
 #: ../vector/v.voronoi/clean_topo.c:87 ../vector/v.in.ogr/main.c:1274
 #: ../vector/v.buffer/main.c:743
-#, fuzzy
 msgid "Removing dangles..."
-msgstr "출력할 라스터맵"
+msgstr "댕글을 지우는 중..."
 
 #: ../vector/v.voronoi/clean_topo.c:89 ../vector/v.in.ogr/main.c:1289
 #: ../vector/v.buffer/main.c:746
-#, fuzzy
 msgid "Removing bridges..."
-msgstr "출력할 라스터맵"
+msgstr "다리를 지우는 중..."
 
 #: ../vector/v.voronoi/clean_topo.c:115
 #, fuzzy
@@ -25625,7 +25623,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:820
 #, c-format
 msgid "Check if OGR layer <%s> contains polygons..."
-msgstr ""
+msgstr "OGR 레이어 <%s>가 폴리곤을 포함하고 있는지 확인하는 중..."
 
 #: ../vector/v.in.ogr/main.c:844
 #, c-format
@@ -25681,9 +25679,9 @@ msgid "Column type not supported (%s)"
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:1082
-#, fuzzy, c-format
+#, c-format
 msgid "Importing %d features (OGR layer <%s>)..."
-msgstr "출력할 라스터맵"
+msgstr "피쳐 %d개를 읽어오는 중 (OGR 레이어 <%s>)..."
 
 #: ../vector/v.in.ogr/main.c:1190
 #, fuzzy, c-format
@@ -25691,41 +25689,35 @@ msgid "%d %s without geometry skipped"
 msgstr "출력할 라스터맵"
 
 #: ../vector/v.in.ogr/main.c:1217
-#, fuzzy
 msgid "Cleaning polygons"
-msgstr "출력할 라스터맵"
+msgstr "폴리곤을 정리하는 중"
 
 #: ../vector/v.in.ogr/main.c:1221
-#, fuzzy, c-format
+#, c-format
 msgid "Snapping boundaries (threshold = %.3e)..."
 msgstr "출력할 라스터맵"
 
 #: ../vector/v.in.ogr/main.c:1235 ../vector/v.buffer/main.c:722
-#, fuzzy
 msgid "Breaking polygons..."
-msgstr "출력할 라스터맵"
+msgstr "폴리곤을 분해하는 중..."
 
 #: ../vector/v.in.ogr/main.c:1240 ../vector/v.in.ogr/main.c:1254
 #: ../vector/v.overlay/area_area.c:113 ../vector/v.buffer/main.c:725
 #: ../vector/v.buffer/main.c:732 ../vector/v.delaunay/main.c:144
-#, fuzzy
 msgid "Removing duplicates..."
-msgstr "출력할 라스터맵"
+msgstr "중복을 지우는 중..."
 
 #: ../vector/v.in.ogr/main.c:1250 ../vector/v.buffer/main.c:729
-#, fuzzy
 msgid "Breaking boundaries..."
-msgstr "출력할 라스터맵"
+msgstr "경계를 분해하는 중"
 
 #: ../vector/v.in.ogr/main.c:1258 ../vector/v.overlay/area_area.c:116
-#, fuzzy
 msgid "Cleaning boundaries at nodes..."
-msgstr "출력할 라스터맵"
+msgstr "노드에 있는 경계를 정리하는 중..."
 
 #: ../vector/v.in.ogr/main.c:1265
-#, fuzzy
 msgid "Merging boundaries..."
-msgstr "출력할 라스터맵"
+msgstr "경계를 합치는 중..."
 
 #: ../vector/v.in.ogr/main.c:1270
 #, fuzzy
@@ -25744,14 +25736,13 @@ msgid "Unable to calculate area centroid"
 msgstr "출력할 라스터맵"
 
 #: ../vector/v.in.ogr/main.c:1327
-#, fuzzy, c-format
+#, c-format
 msgid "Finding centroids for OGR layer <%s>..."
-msgstr "출력할 라스터맵"
+msgstr "OGR 레이어 <%s>를 위한 중앙점을 찾는 중..."
 
 #: ../vector/v.in.ogr/main.c:1351 ../vector/v.overlay/area_area.c:218
-#, fuzzy
 msgid "Writing centroids..."
-msgstr "출력할 라스터맵"
+msgstr "중앙점을 쓰는 중..."
 
 #: ../vector/v.in.ogr/main.c:1394
 #, c-format
@@ -25764,7 +25755,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1404
 #, c-format
 msgid "%d input polygons\n"
-msgstr ""
+msgstr "%d개의 입력 폴리곤\n"
 
 #: ../vector/v.in.ogr/main.c:1405
 #, c-format
@@ -25774,7 +25765,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1408
 #, c-format
 msgid "Total area: %G (%d areas)\n"
-msgstr ""
+msgstr "총면적: %G (%d개의 면)\n"
 
 #: ../vector/v.in.ogr/main.c:1409
 #, c-format

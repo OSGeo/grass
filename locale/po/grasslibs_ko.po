@@ -7269,11 +7269,11 @@ msgstr ""
 
 #: ../lib/vector/Vlib/break_polygons.c:435
 msgid "Breaking polygons (pass 1: select break points)..."
-msgstr ""
+msgstr "폴리곤을 분해하는 중 (1차: 분해점 선택)..."
 
 #: ../lib/vector/Vlib/break_polygons.c:552
 msgid "Breaking polygons (pass 2: break at selected points)..."
-msgstr ""
+msgstr "폴리곤을 분해하는 중 (2차: 선택된 점에서 분해)..."
 
 #: ../lib/vector/Vlib/break_polygons.c:592
 msgid "Point not in search tree!"
@@ -8093,7 +8093,7 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/copy.c:229 ../lib/vector/Vlib/copy.c:234
 msgid "Copying features..."
-msgstr ""
+msgstr "피쳐를 복사하는 중..."
 
 #: ../lib/vector/Vlib/copy.c:231
 #, c-format
