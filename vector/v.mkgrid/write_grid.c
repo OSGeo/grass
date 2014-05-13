@@ -29,7 +29,6 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
     width = grid_info->width;
     length = grid_info->length;
     angle = grid_info->angle;
-    fprintf(stderr, "v(%d, %d), d(%d, %d), %f %f %f %f %f\n", num_v_rows, num_v_cols, rows, cols, width, length, angle, grid_info->origin_x, grid_info->origin_y);
 
     /*
      * For latlon, must draw in shorter sections
