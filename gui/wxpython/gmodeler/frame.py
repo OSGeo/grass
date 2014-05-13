@@ -861,7 +861,7 @@ class ModelFrame(wx.Frame):
         """
         try:
             self.model.LoadModel(filename)
-        except GException, e:
+        except GException as e:
             GError(parent = self,
                    message = _("Reading model file <%s> failed.\n"
                                "Invalid file, unable to parse XML document.\n\n%s") % \
@@ -1706,7 +1706,7 @@ class PythonPanel(wx.Panel):
         try:
             fd = open(self.filename, "w")
             fd.write(self.body.GetText())
-        except IOError, e:
+        except IOError as e:
             GError(_("Unable to launch Python script. %s") % e,
                    parent = self)
             return

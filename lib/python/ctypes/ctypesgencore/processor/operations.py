@@ -189,7 +189,7 @@ def find_source_libraries(data,opts):
     for library_name in opts.libraries:
         try:
             library=ctypesgencore.libraryloader.load_library(library_name)
-        except ImportError,e:
+        except ImportError as e:
             warning_message("Could not load library \"%s\". Okay, I'll " \
                 "try to load it at runtime instead. " % (library_name),
                 cls = 'missing-library')

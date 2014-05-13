@@ -66,7 +66,7 @@ class grassTask:
             try:
                 processTask(tree = etree.fromstring(get_interface_description(path)),
                             task = self)
-            except ScriptError, e:
+            except ScriptError as e:
                 self.errorMsg = e.value
             
             self.define_first()
@@ -486,7 +486,7 @@ def get_interface_description(cmd):
             raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
                                  "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : decode(cmderr) }
     
-    except OSError, e:
+    except OSError as e:
         raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
                              "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : e }
     

@@ -294,7 +294,7 @@ class Model(object):
         # parse workspace file
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
-        except StandardError, e:
+        except StandardError as e:
             raise GException(e)
         
         if self.canvas:

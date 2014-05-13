@@ -406,7 +406,7 @@ class GRASSStartup(wx.Frame):
                 for line in rc.readlines():
                     try:
                         key, val = line.split(":", 1)
-                    except ValueError, e:
+                    except ValueError as e:
                         sys.stderr.write(_('Invalid line in GISRC file (%s):%s\n' % \
                                                (e, line)))
                     grassrc[key.strip()] = DecodeString(val.strip())
@@ -593,7 +593,7 @@ class GRASSStartup(wx.Frame):
                               os.path.join(self.gisdbase, location, newmapset))
                     self.OnSelectLocation(None)
                     self.lbmapsets.SetSelection(self.listOfMapsets.index(newmapset))
-                except StandardError, e:
+                except StandardError as e:
                     wx.MessageBox(parent = self,
                                   caption = _('Error'),
                                   message = _('Unable to rename mapset.\n\n%s') % e,
@@ -630,7 +630,7 @@ class GRASSStartup(wx.Frame):
                     self.UpdateLocations(self.gisdbase)
                     self.lblocations.SetSelection(self.listOfLocations.index(newlocation))
                     self.UpdateMapsets(newlocation)
-                except StandardError, e:
+                except StandardError as e:
                     wx.MessageBox(parent = self,
                                   caption = _('Error'),
                                   message = _('Unable to rename location.\n\n%s') % e,
@@ -887,7 +887,7 @@ class GRASSStartup(wx.Frame):
             self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
             self.bstart.SetFocus()
             return True
-        except StandardError, e:
+        except StandardError as e:
             GError(parent = self,
                    message = _("Unable to create new mapset: %s") % e,
                    showTraceback = False)
@@ -930,7 +930,7 @@ class GRASSStartup(wx.Frame):
                 if ret == wx.ID_YES:
                     try:
                         os.remove(lockfile)
-                    except IOError, e:
+                    except IOError as e:
                         GError(_("Unable to remove '%(lock)s'.\n\n"
                                  "Details: %(reason)s") % { 'lock' : lockfile, 'reason' : e})
                 else:

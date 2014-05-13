@@ -455,7 +455,7 @@ def _form_master_re(relist,reflags,ldict):
                     lexindexfunc[i] = (None, f[2:])
          
         return [(lexre,lexindexfunc)],[regex]
-    except Exception,e:
+    except Exception as e:
         m = int(len(relist)/2)
         if m == 0: m = 1
         llist, lre = _form_master_re(relist[:m],reflags,ldict)
@@ -702,7 +702,7 @@ def lex(module=None,object=None,debug=0,optimize=0,lextab="lextab",reflags=0,now
                              print "%s:%d: Regular expression for rule '%s' matches empty string." % (file,line,f.__name__)
                              error = 1
                              continue
-                    except re.error,e:
+                    except re.error as e:
                         print "%s:%d: Invalid regular expression for rule '%s'. %s" % (file,line,f.__name__,e)
                         if '#' in f.__doc__:
                              print "%s:%d. Make sure '#' in rule '%s' is escaped with '\\#'." % (file,line, f.__name__)                 
@@ -743,7 +743,7 @@ def lex(module=None,object=None,debug=0,optimize=0,lextab="lextab",reflags=0,now
                          print "lex: Regular expression for rule '%s' matches empty string." % name
                          error = 1
                          continue
-                except re.error,e:
+                except re.error as e:
                     print "lex: Invalid regular expression for rule '%s'. %s" % (name,e)
                     if '#' in r:
                          print "lex: Make sure '#' in rule '%s' is escaped with '\\#'." % name

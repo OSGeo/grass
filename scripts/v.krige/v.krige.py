@@ -349,7 +349,7 @@ def main(argv = None):
         if options['model'] is '':
             try:
                 robjects.r.require("automap")
-            except ImportError, e:
+            except ImportError as e:
                 grass.fatal(_("R package automap is missing, no variogram autofit available."))
         else:
             if options['sill'] is '' or options['nugget'] is '' or options['range'] is '':

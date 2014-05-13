@@ -432,7 +432,7 @@ class RegionDef(BaseClass, wx.Dialog):
 
             self.__UpdateInfo()
 
-        except ValueError, e:
+        except ValueError as e:
             if len(event.GetString()) > 0 and event.GetString() != '-':
                 dlg = wx.MessageBox(parent = self,
                                     message = _("Invalid value: %s") % e,

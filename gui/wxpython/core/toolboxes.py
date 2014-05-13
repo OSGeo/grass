@@ -162,7 +162,7 @@ def _createPath(path):
     if not os.path.exists(path):
         try:
             os.mkdir(path)
-        except OSError, e:
+        except OSError as e:
             # we cannot use GError or similar because the gui doesn''t start at all
             gcore.warning('%(reason)s\n%(detail)s' % 
                     ({'reason':_('Unable to create toolboxes directory.'),

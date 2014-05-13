@@ -650,7 +650,7 @@ def non_interactive(arg, geofile=None):
                             # create location using georeferenced file
                             grass.create_location(gisdbase, location_name,
                                                   filename=geofile)
-                    except grass.ScriptError, e:
+                    except grass.ScriptError as e:
                         fatal(e.value.strip('"').strip("'").replace('\\n',
                                                                    os.linesep))
                 else:
@@ -812,7 +812,7 @@ def set_language():
     
     try:
         locale.setlocale(locale.LC_ALL, language)
-    except locale.Error, e:
+    except locale.Error as e:
         try:
             # Locale lang.encoding might be missing. Let's try
             # UTF-8 encoding before giving up as on Linux systems
@@ -820,12 +820,12 @@ def set_language():
             # ISO-8859 ones.
             language = locale.normalize('%s.UTF-8' % (language))
             locale.setlocale(locale.LC_ALL, language)
-        except locale.Error, e:
+        except locale.Error as e:
             # The last attempt...
             try:
                 language = locale.normalize('%s.%s' % (language, locale.getpreferredencoding()))
                 locale.setlocale(locale.LC_ALL, language)
-            except locale.Error, e:
+            except locale.Error as e:
                 # If we got so far, attempts to set up language and locale have failed
                 # on this system
                 sys.stderr.write("Failed to enforce user specified language '%s' with error: '%s'\n" % (language, e))

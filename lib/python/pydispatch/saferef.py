@@ -115,7 +115,7 @@ class BoundMethodWeakref(object):
 				try:
 					if hasattr(function, '__call__' ):
 						function( self )
-				except Exception, e:
+				except Exception as e:
 					try:
 						traceback.print_exc()
 					except AttributeError:

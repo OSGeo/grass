@@ -313,7 +313,7 @@ class SimpleLayerManager(wx.Panel):
 
                     layer.name = mapName
                     signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
-                except ValueError, e:
+                except ValueError as e:
                     self._layerList.RemoveLayer(layer)
                     GError(parent=self,
                            message=str(e),

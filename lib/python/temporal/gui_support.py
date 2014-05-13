@@ -46,7 +46,7 @@ def tlist_grouped(type, group_type = False, dbif=None):
     for type in types:
         try:
             tlist_result = tlist(type=type, dbif=dbif)
-        except core.ScriptError, e:
+        except core.ScriptError as e:
             warning(e)
             continue
 

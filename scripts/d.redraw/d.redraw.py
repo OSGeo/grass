@@ -51,7 +51,7 @@ def main():
         
         for cmd in cmdList:
             grass.call(split(cmd))
-    except IOError, e:
+    except IOError as e:
         grass.fatal(_("Unable to open file '%s' for reading. Details: %s") % \
                         (monCmd, e))
     
@@ -61,7 +61,7 @@ def main():
     try:
         fd = open(monCmd, "w")
         fd.writelines(cmdList)
-    except IOError, e:
+    except IOError as e:
         grass.fatal(_("Unable to open file '%s' for writing. Details: %s") % \
                         (monCmd, e))
     

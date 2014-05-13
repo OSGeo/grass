@@ -451,7 +451,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                             if command.find(self.toComplete['cmd']) == 0:
                                 dotNumber = list(self.toComplete['cmd']).count('.') 
                                 self.autoCompList.append(command.split('.',dotNumber)[-1])
-                        except UnicodeDecodeError, e: # TODO: fix it
+                        except UnicodeDecodeError as e: # TODO: fix it
                             sys.stderr.write(DecodeString(command) + ": " + unicode(e))
                             
             except (KeyError, TypeError):
