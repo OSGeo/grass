@@ -194,16 +194,8 @@ class DMonMap(Map):
 
         For input params and returned data see overridden method in Map class.
         """
-        currMon = grass.gisenv()['MONITOR']
-
-        RunCommand('g.gisenv',
-                   unset = 'MONITOR') # GRASS_RENDER_IMMEDIATE doesn't like monitors
-
         ret = Map.Render(self, *args, **kwargs)
 
-        RunCommand('g.gisenv',
-                    set = 'MONITOR=%s' % currMon)
-        
         return ret
     
     def AddLayer(self, *args, **kwargs):
@@ -211,11 +203,6 @@ class DMonMap(Map):
 
         For input params and returned data see overridden method in Map class.
         """
-        currMon = grass.gisenv()['MONITOR']
-
-        RunCommand('g.gisenv',
-                   unset = 'MONITOR') # GRASS_RENDER_IMMEDIATE doesn't like monitors
-
         driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
     
         if driver == 'png':
@@ -226,9 +213,6 @@ class DMonMap(Map):
         layer = Map.AddLayer(self, *args, **kwargs)
 
         del os.environ["GRASS_RENDER_IMMEDIATE"]
-
-        RunCommand('g.gisenv',
-                   set='MONITOR=%s' % currMon)
 
         return layer
 
