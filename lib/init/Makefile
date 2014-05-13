@@ -25,7 +25,6 @@ FILES = \
 	$(ETC)/echo$(EXE) \
 	$(ETC)/license \
 	$(ETC)/VERSIONNUMBER \
-	$(ETC)/prompt.py \
 	$(HTMLDIR)/help_loc_struct.png \
 	$(HTMLDIR)/circle_1.png \
 	$(HTMLDIR)/circle_2.png \
