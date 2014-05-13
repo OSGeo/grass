@@ -191,7 +191,7 @@ class InstallExtensionWindow(wx.Frame):
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
         try:
             self.modelBuilder.Load(url = self.repo.GetValue().strip())
-        except GException, e:
+        except GException as e:
             GError(unicode(e), parent = self, showTraceback = False)
         
         self.tree.RefreshItems()

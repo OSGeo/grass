@@ -2778,7 +2778,7 @@ class NvizToolWindow(FN.FlatNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType = 'raster')['surface']
-        except TypeError, e:
+        except TypeError as e:
             self.EnablePage('surface', False)
             return
 

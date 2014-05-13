@@ -1169,7 +1169,7 @@ class GMFrame(wx.Frame):
         # parse workspace file
         try:
             gxwXml = ProcessWorkspaceFile(etree.parse(filename))
-        except Exception, e:
+        except Exception as e:
             GError(parent = self,
                    message = _("Reading workspace file <%s> failed.\n"
                                "Invalid file, unable to parse XML document.") % filename)
@@ -1380,7 +1380,7 @@ class GMFrame(wx.Frame):
         tmpfile = tempfile.TemporaryFile(mode = 'w+b')
         try:
             WriteWorkspaceFile(lmgr = self, file = tmpfile)
-        except StandardError, e:
+        except StandardError as e:
             GError(parent = self,
                    message = _("Writing current settings to workspace file "
                                "failed."))

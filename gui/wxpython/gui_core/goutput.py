@@ -383,7 +383,7 @@ class GConsoleWindow(wx.SplitterWindow):
             try:
                 output = open(path, "w")
                 output.write(text)
-            except IOError, e:
+            except IOError as e:
                 GError(_("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {'path': path, 'error': e})
             finally:
                 output.close()
@@ -436,7 +436,7 @@ class GConsoleWindow(wx.SplitterWindow):
             output.write('\n'.join(cmds))
             if len(cmds) > 0:
                 output.write('\n')
-        except IOError, e:
+        except IOError as e:
             GError(_("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s") % 
                     {'filePath': self.cmdFileProtocol, 'error': e})
         finally:

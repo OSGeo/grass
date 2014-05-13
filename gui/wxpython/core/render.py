@@ -488,7 +488,7 @@ class Map(object):
                                  "WIND")
         try:
             windfile = open (filename, "r")
-        except IOError, e:
+        except IOError as e:
             sys.exit(_("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n") % \
                          { 'file' : filename, 'ret' : e})
         
@@ -496,7 +496,7 @@ class Map(object):
             line = line.strip()
             try:
                 key, value = line.split(":", 1)
-            except ValueError, e:
+            except ValueError as e:
                 sys.stderr.write(_("\nERROR: Unable to read WIND file: %s\n") % e)
                 return None
             

@@ -615,7 +615,7 @@ class Production:
         # Precompute list of productions immediately following
         try:
             p.lrafter = Prodnames[p.prod[n+1]]
-        except (IndexError,KeyError),e:
+        except (IndexError,KeyError) as e:
             p.lrafter = []
         try:
             p.lrbefore = p.prod[n-1]
@@ -1785,7 +1785,7 @@ def lr_parse_table(method):
                                 action[st,a] = j
                                 actionp[st,a] = p
                                 
-            except StandardError,e:
+            except StandardError as e:
                 raise YaccError, "Hosed in lr_parse_table", e
 
         # Print the actions associated with each terminal
@@ -1948,7 +1948,7 @@ del _lr_goto_items
         
         f.close()
 
-    except IOError,e:
+    except IOError as e:
         print "Unable to create '%s'" % filename
         print e
         return
@@ -2194,7 +2194,7 @@ def yacc(method=default_lr, debug=yaccdebug, module=None, tabmodule=tab_module, 
                     f.write("\n\n")
                     f.write(_vf.getvalue())
                     f.close()
-                except IOError,e:
+                except IOError as e:
                     print "yacc: can't create '%s'" % debugfile,e
         
     # Made it here.   Create a parser object and set up its internal state.

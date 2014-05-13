@@ -21,7 +21,7 @@ import sys
 import wx
 try:
     import wx.lib.plot as plot
-except ImportError, e:
+except ImportError as e:
     print >> sys.stderr, e
 
 from core.globalvar    import ICONDIR

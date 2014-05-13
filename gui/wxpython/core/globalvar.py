@@ -58,7 +58,7 @@ def CheckForWx():
     try:
         try:
             import wxversion
-        except ImportError, e:
+        except ImportError as e:
             raise ImportError(e)
         # wxversion.select(str(minVersion[0]) + '.' + str(minVersion[1]))
         wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
@@ -68,14 +68,14 @@ def CheckForWx():
         if map(int, version.split('.')) < minVersion:
             raise ValueError('Your wxPython version is %s.%s.%s.%s' % tuple(version.split('.')))
 
-    except ImportError, e:
+    except ImportError as e:
         print >> sys.stderr, 'ERROR: wxGUI requires wxPython. %s' % str(e)
         sys.exit(1)
-    except (ValueError, wxversion.VersionError), e:
+    except (ValueError, wxversion.VersionError) as e:
         print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(minVersion) + \
             '%s.' % (str(e))
         sys.exit(1)
-    except locale.Error, e:
+    except locale.Error as e:
         print >> sys.stderr, "Unable to set locale:", e
         os.environ['LC_ALL'] = ''
 

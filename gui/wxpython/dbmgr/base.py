@@ -87,7 +87,7 @@ class VirtualAttributeList(wx.ListCtrl,
         
         try:
             keyColumn = self.LoadData(layer)
-        except GException, e:
+        except GException as e:
             GError(parent = self,
                    message = e.value)
             return
@@ -308,7 +308,7 @@ class VirtualAttributeList(wx.ListCtrl,
             if not cat and keyId > -1 and keyId == j:
                 try:
                     cat = self.columns[columns[j]]['ctype'] (value)
-                except ValueError, e:
+                except ValueError as e:
                     cat = -1
                     GError(parent = self,
                            message = _("Error loading attribute data. "
@@ -1344,7 +1344,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                             updateList.append("%s=%s" % (columnName[i], values[i]))
                     else: # -> NULL
                         updateList.append("%s=NULL" % (columnName[i]))
-            except ValueError, err:
+            except ValueError as err:
                 GError(parent = self,
                        message = _("Unable to update existing record.\n%s") % err,
                        showTraceback = False)
@@ -1447,7 +1447,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     else:
                         valuesString += "%s," % values[i]
                 
-            except ValueError, err:
+            except ValueError as err:
                 GError(parent = self,
                        message = _("Unable to insert new record.\n%s") % err,
                        showTraceback = False)
@@ -1803,7 +1803,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     keyColumn = listWin.LoadData(self.selLayer, where = whereCol + whereOpe + whereVal)
                 else:
                     keyColumn = listWin.LoadData(self.selLayer)
-            except GException, e:
+            except GException as e:
                 GError(parent = self,
                        message = _("Loading attribute data failed.\n\n%s") % e.value)
                 self.FindWindowById(self.layerPage[self.selLayer]['where']).SetValue('')
@@ -1828,7 +1828,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 try:
                     keyColumn = listWin.LoadData(self.selLayer, columns = cols,
                                                  where = where, sql = sql)
-                except GException, e:
+                except GException as e:
                     GError(parent = self,
                            message = _("Loading attribute data failed.\n\n%s") % e.value)
                     win.SetValue("SELECT * FROM %s" % self.dbMgrData['mapDBInfo'].layers[self.selLayer]['table'])

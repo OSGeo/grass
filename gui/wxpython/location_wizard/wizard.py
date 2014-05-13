@@ -533,7 +533,7 @@ class ItemList(wx.ListCtrl,
             
             self.SendSizeEvent()
             
-        except StandardError, e:
+        except StandardError as e:
             wx.MessageBox(parent = self,
                           message = _("Unable to read list: %s") % e,
                           caption = _("Error"), style = wx.OK | wx.ICON_ERROR)
@@ -2136,7 +2136,7 @@ class LocationWizard(wx.Object):
                                       wkt = self.wktpage.wktfile,
                                       desc = self.startpage.locTitle)
         
-        except grass.ScriptError, e:
+        except grass.ScriptError as e:
             return e.value
         
         return None

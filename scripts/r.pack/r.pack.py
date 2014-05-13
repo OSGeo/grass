@@ -111,7 +111,7 @@ def main():
     tar.close()
     try:
         shutil.move(outfile_base, outfile)
-    except shutil.Error, e:
+    except shutil.Error as e:
         grass.fatal(e)
         
     os.chdir(olddir)

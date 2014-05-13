@@ -1348,7 +1348,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     if vInfo['map3d'] and (vInfo['kernels'] + vInfo['faces']) > 0:
                         self.LoadVector(item, points=None)
                     
-            except GException, e:
+            except GException as e:
                 GError(parent = self,
                        message = e.value)
         
@@ -1390,7 +1390,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     if (vInfo['lines'] + vInfo['boundaries']) > 0 or vInfo['map3d']:
                         self.UnloadVector(layer, points = False)
                         
-            except GException, e:
+            except GException as e:
                 GError(parent = self,
                        message = e.value)
         

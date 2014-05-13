@@ -558,7 +558,7 @@ def ReadEpsgCodes(path):
                 code, params = line.split(" ", 1)
                 try:
                     code = int(code.replace('<', '').replace('>', ''))
-                except ValueError, e:
+                except ValueError as e:
                     return e
             
             if code is not None:
@@ -566,7 +566,7 @@ def ReadEpsgCodes(path):
                 code = None
         
         f.close()
-    except StandardError, e:
+    except StandardError as e:
         return e
     
     return epsgCodeDict
@@ -622,7 +622,7 @@ def GetListOfLocations(dbase):
                     listOfLocations.append(os.path.basename(location))
             except:
                 pass
-    except UnicodeEncodeError, e:
+    except UnicodeEncodeError as e:
         raise e
     
     ListSortLower(listOfLocations)
@@ -838,7 +838,7 @@ def GetSettingsPath():
     try:
         verFd = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
         version = int(verFd.readlines()[0].split(' ')[0].split('.')[0])
-    except (IOError, ValueError, TypeError, IndexError), e:
+    except (IOError, ValueError, TypeError, IndexError) as e:
         sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
     
     verFd.close()
@@ -873,14 +873,14 @@ def StoreEnvVariable(key, value = None, envFile = None):
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
-        except IOError, e:
+        except IOError as e:
             sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
         for line in fd.readlines():
             line = line.rstrip(os.linesep)
             try:
                 k, v = map(lambda x: x.strip(), line.split(' ', 1)[1].split('=', 1))
-            except StandardError, e:
+            except StandardError as e:
                 sys.stderr.write(_("%s: line skipped - unable to parse '%s'\n"
                                    "Reason: %s\n") % (envFile, line, e))
                 lineSkipped.append(line)
@@ -901,7 +901,7 @@ def StoreEnvVariable(key, value = None, envFile = None):
     # write update env file
     try:
         fd = open(envFile, 'w')
-    except IOError, e:
+    except IOError as e:
         sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
         return
     if windows:

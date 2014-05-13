@@ -242,7 +242,7 @@ class AnimationController(wx.EvtHandler):
             return
         try:
             temporalMode, tempManager = self.EvaluateInput(self.animationData + [animData])
-        except GException, e:
+        except GException as e:
             GError(parent=self.frame, message=e.value, showTraceback=False)
             return
         # if ok, set temporal mode
@@ -273,7 +273,7 @@ class AnimationController(wx.EvtHandler):
             return
         try:
             temporalMode, tempManager = self.EvaluateInput(animationData)
-        except GException, e:
+        except GException as e:
             GError(parent=self.frame, message=e.value, showTraceback=False)
             return
         self.animationData = animationData
@@ -564,7 +564,7 @@ class AnimationController(wx.EvtHandler):
                          duration=self.timeTick / float(1000),
                          encoding=exportInfo['encoding'],
                          inputOptions=exportInfo['options'])
-        except Exception, e:
+        except Exception as e:
             del busy
             GError(parent=self.frame, message=str(e))
             return

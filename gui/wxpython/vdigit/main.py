@@ -18,7 +18,7 @@ try:
     from vdigit.wxdigit import IVDigit, GV_LINES, CFUNCTYPE
     haveVDigit = True
     errorMsg   = ''
-except (ImportError, NameError), err:
+except (ImportError, NameError) as err:
     haveVDigit = False
     errorMsg   = err
     GV_LINES   = -1

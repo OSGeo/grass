@@ -26,7 +26,7 @@ try:
     from nviz import workspace
     import wxnviz
     haveNviz = True
-except (ImportError, NameError), err:
+except (ImportError, NameError) as err:
     haveNviz = False
     errorMsg = err
 

@@ -46,7 +46,7 @@ from dialogs import ExampleMapDialog
 #     from grass.lib.raster import *
 #     haveExample = True
 #     errMsg = ''
-# except ImportError, e:
+# except ImportError as e:
 #     haveExample = False
 #     errMsg = _("Loading raster lib failed.\n%s") % e
 

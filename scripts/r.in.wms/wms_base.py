@@ -219,7 +219,7 @@ class WMSBase:
 
         try:
             cap = self._fetchDataFromServer(cap_url, options['username'], options['password'])
-        except (IOError, HTTPException), e:
+        except (IOError, HTTPException) as e:
             if urllib2.HTTPError == type(e) and e.code == 401:
                 grass.fatal(_("Authorization failed to <%s> when fetching capabilities") % options['url'])
             else:
@@ -380,7 +380,7 @@ class WMSBase:
                                       '-r', gdal_method,
                                       self.temp_map, self.temp_warpmap], stdout = nuldev)
                 ps.wait()
-            except OSError, e:
+            except OSError as e:
                 grass.fatal('%s \nThis can be caused by missing %s utility. ' % (e, 'gdalwarp'))
             
             if nuldev:

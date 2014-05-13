@@ -468,7 +468,7 @@ class Instruction:
         try:
             RunCommand(cmd[0], **cmd[1])
             
-        except grass.ScriptError, e:
+        except grass.ScriptError as e:
             GError(_("Region cannot be set\n%s") % e)
             return False
         
@@ -809,7 +809,7 @@ class Text(InstructionObject):
         instr += "    end"
         try:
             instr = instr.encode('latin1')
-        except UnicodeEncodeError, err:
+        except UnicodeEncodeError as err:
             try:
                 pos = str(err).split('position')[1].split(':')[0].strip()
             except IndexError:
@@ -1542,7 +1542,7 @@ class Raster(InstructionObject):
             return False
         try:
             info = grass.find_file(map, element = 'cell')
-        except grass.ScriptError, e:
+        except grass.ScriptError as e:
             GError(message = e.value)
             return False
         instr['raster'] = info['fullname']
@@ -1580,7 +1580,7 @@ class Vector(InstructionObject):
                 vmap = line.split()[1]
                 try:
                     info = grass.find_file(vmap, element = 'vector')
-                except grass.ScriptError, e:
+                except grass.ScriptError as e:
                     GError(message = e.value)
                     return False
                 vmap = info['fullname']
@@ -1691,7 +1691,7 @@ class VProperties(InstructionObject):
         vInstruction += "    end"
         try:
             vInstruction = vInstruction.encode('Latin_1')
-        except UnicodeEncodeError, err:
+        except UnicodeEncodeError as err:
             try:
                 pos = str(err).split('position')[1].split(':')[0].strip()
             except IndexError:
@@ -1713,7 +1713,7 @@ class VProperties(InstructionObject):
         instr = {}
         try:
             info = grass.find_file(name = text[0].split()[1], element = 'vector')
-        except grass.ScriptError, e:
+        except grass.ScriptError as e:
             GError(message = e.value)
             return False
         instr['name'] = info['fullname']
