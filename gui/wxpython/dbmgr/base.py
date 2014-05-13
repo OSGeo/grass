@@ -2273,7 +2273,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             else:
                 deleteColumns = "column '%s'" % tlist.GetItemText(item)
             deleteDialog = wx.MessageBox(parent = self,
-                                         message = _("Selected column %s will PERMANENTLY removed "
+                                         message = _("Selected %s will PERMANENTLY removed "
                                                    "from table. Do you want to drop the column?") % \
                                              (deleteColumns),
                                          caption = _("Drop column(s)"),
