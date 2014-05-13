@@ -105,7 +105,11 @@ int D_open_driver(void)
     G_debug(1, "D_open_driver():");
     p = getenv("GRASS_RENDER_IMMEDIATE");
     m = G__getenv("MONITOR");
-    if (m) {
+    
+    if (m && G_strncasecmp(m, "wx", 2) == 0) {
+	/* wx monitors always use GRASS_RENDER_IMMEDIATE. */
+	p = NULL; /* use default display driver */
+    } else if (m) {
 	char *env;
 	const char *v;
 	char *u_m;
@@ -119,13 +123,10 @@ int D_open_driver(void)
 	env = NULL;
 	G_asprintf(&env, "MONITOR_%s_MAPFILE", u_m);
 	v = G__getenv(env);
-	if (G_strncasecmp(m, "wx", 2) == 0) 
-	    p = NULL; /* use default display driver */
-	else
-	    p = m;
-	
+	p = m;
+
 	if (v) {
-	    if (p && G_strcasecmp(p, "ps") == 0)
+	    if (G_strcasecmp(p, "ps") == 0)
 		G_putenv("GRASS_PSFILE", v);
 	    else
 		G_putenv("GRASS_PNGFILE", v);
@@ -201,9 +202,12 @@ int D_save_command(const char *cmd)
     G_debug(1, "D_save_command(): %s", cmd);
 
     mon_name = G__getenv("MONITOR");
-    if (!mon_name)
+    if (!mon_name || /* if no monitor selected */
+	/* or wx monitor selected and display commands called by the monitor */
+	(G_strncasecmp(mon_name, "wx", 2) == 0 &&
+	 getenv("GRASS_RENDER_IMMEDIATE")))
 	return 0;
-    
+
     /* GRASS variable names should be upper case. */
     u_mon_name = G_store_upper(mon_name);
 
