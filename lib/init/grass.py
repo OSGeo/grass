@@ -1116,14 +1116,16 @@ def bash_startup():
     f.write("""grass_prompt() {
 	LOCATION="`g.gisenv GISDBASE`/`g.gisenv LOCATION_NAME`/`g.gisenv MAPSET`"
 	if test -d "$LOCATION/grid3/G3D_MASK" && test -f "$LOCATION/cell/MASK" ; then
-		echo [Raster and Volume MASKs present]
+		echo [%s]
 	elif test -f "$LOCATION/cell/MASK" ; then
-		echo [Raster MASK present]
+		echo [%s]
 	elif test -d "$LOCATION/grid3/G3D_MASK" ; then
-		echo [Volume MASK present]
+		echo [%s]
 	fi
 }
-PROMPT_COMMAND=grass_prompt\n""")
+PROMPT_COMMAND=grass_prompt\n""" % (_("2d and 3d Raster MASKs present"),
+                                    _("Raster MASK present"),
+                                    _("3d raster MASK present")))
 
     # read environmental variables
     path = os.path.join(userhome, ".grass.bashrc") # left for backward compatibility
