@@ -323,7 +323,7 @@ class PsMapFrame(wx.Frame):
                                                                                         'code': ret})
                 else:
                     self.SetStatusText(_('PDF generated'), 0)
-            except OSError, e:
+            except OSError as e:
                 GError(parent = self,
                        message = _("Program ps2pdf is not available. Please install it to create PDF.\n\n %s") % e)
 
@@ -346,7 +346,7 @@ class PsMapFrame(wx.Frame):
                     import types
                     im.load = types.MethodType(loadPSForWindows, im)
                 im.save(self.imgName, format = 'PNG')
-            except IOError, e:
+            except IOError as e:
                 del busy
                 dlg = HyperlinkDialog(self, title=_("Preview not available"),
                                       message=_("Preview is not available probably due to missing Ghostscript."),

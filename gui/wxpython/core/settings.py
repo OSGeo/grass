@@ -44,7 +44,7 @@ class Settings:
         self.userSettings = copy.deepcopy(self.defaultSettings)
         try:
             self.ReadSettingsFile()
-        except GException, e:
+        except GException as e:
             print >> sys.stderr, e.value
         
         # define internal settings
@@ -971,7 +971,7 @@ class Settings:
                     value = self._parseValue(value, read = True)
                     self.Append(settings, group, key, subkey, value)
                     idx += 2
-        except ValueError, e:
+        except ValueError as e:
             print >> sys.stderr, _("Error: Reading settings from file <%(file)s> failed.\n"
                                    "\t\tDetails: %(detail)s\n"
                                    "\t\tLine: '%(line)s'\n") % { 'file' : filename,
@@ -1024,9 +1024,9 @@ class Settings:
                                     type(settings[group][key][subkeys[idx + 1]]) != types.DictType:
                                 file.write('%s' % self.sep)
                     file.write(os.linesep)
-        except IOError, e:
+        except IOError as e:
             raise GException(e)
-        except StandardError, e:
+        except StandardError as e:
             raise GException(_('Writing settings to file <%(file)s> failed.'
                                '\n\nDetails: %(detail)s') % { 'file' : self.filePath,
                                                               'detail' : e })

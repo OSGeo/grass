@@ -354,7 +354,7 @@ def test():
     try:
         warn = temp.EvaluateInputData()
         print warn
-    except GException, e:
+    except GException as e:
         print e
         return
 

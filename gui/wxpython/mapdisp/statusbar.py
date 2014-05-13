@@ -701,7 +701,7 @@ class SbGoTo(SbItem):
                 self.SetValue("%.*f; %.*f" % \
                                (precision, region['center_easting'],
                                 precision, region['center_northing']))
-        except SbException, e:
+        except SbException as e:
             # FIXME: this may be useless since statusbar update checks user defined projection and this exception raises when user def proj does not exists
             self.statusbar.SetStatusText(str(e), 0)
 
@@ -750,7 +750,7 @@ class SbGoTo(SbItem):
         try:
             self.SetCenter()
             self.Show()
-        except SbException, e:
+        except SbException as e:
             self.statusbar.SetStatusText(str(e), 0)
                         
         # disable long help
@@ -890,10 +890,10 @@ class SbCoordinates(SbTextItem):
             else:
                 value = self._basicValue
             self.SetValue(value)
-        except SbException, e:
+        except SbException as e:
             self.SetValue(e.message)
         # TODO: remove these excepts, they just hide errors, solve problems differently
-        except TypeError, e:
+        except TypeError as e:
             self.SetValue("")
         except AttributeError:
             self.SetValue("") # during initialization MapFrame has no MapWindow
@@ -959,7 +959,7 @@ class SbRegionExtent(SbTextItem):
         try:
             regionReprojected = self.ReprojectRegionFromMap(region, projection, precision, format)
             self.SetValue(regionReprojected)
-        except SbException, e:
+        except SbException as e:
             self.SetValue(e.message)
         SbTextItem.Show(self)
     

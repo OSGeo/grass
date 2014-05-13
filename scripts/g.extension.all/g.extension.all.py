@@ -58,7 +58,7 @@ def get_extensions():
     fo = open(fXML, 'r')
     try:
         tree = etree.fromstring(fo.read())
-    except StandardError, e:
+    except StandardError as e:
         grass.error(_("Unable to parse metadata file: %s") % e)
         fo.close()
         return []

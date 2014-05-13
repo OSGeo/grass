@@ -20,7 +20,7 @@ import sys
 import wx
 try:
     import wx.lib.plot as plot
-except ImportError, e:
+except ImportError as e:
     print >> sys.stderr, e
 
 import grass.script as grass
@@ -182,7 +182,7 @@ class HistogramPlotFrame(BasePlotFrame):
                 datalist.append((cellval,histval))
 
             return datalist
-        except GException, e:
+        except GException as e:
             GError(parent = self,
                    message = e.value)
             return None

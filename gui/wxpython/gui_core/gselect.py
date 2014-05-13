@@ -53,7 +53,7 @@ import grass.script as grass
 from   grass.script import task as gtask
 try:
     from grass.pygrass import messages
-except ImportError, e:
+except ImportError as e:
     print >> sys.stderr, _("Unable to import pyGRASS: %s\n"
                            "Some functionality will be not accessible") % e
 
@@ -511,7 +511,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                     elem_list = filesdict[mapset]
                     self._addItems(elist = elem_list, elements = elements,
                                    mapset = mapset, exclude = exclude, node = node)
-            except StandardError, e:
+            except StandardError as e:
                 sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
             
@@ -690,7 +690,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 import grass.temporal as tgis
                 try:
                     tgis.init(True)
-                except messages.FatalError, e:
+                except messages.FatalError as e:
                     sys.stderr.write("Temporal GIS error:\n%s" % e)
                     self.tgis_error = True
         if 'mapsets' in kargs:

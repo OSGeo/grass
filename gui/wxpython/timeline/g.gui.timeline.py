@@ -45,7 +45,7 @@ from core.utils import _, GuiModuleMain
 def main():
     try:
         from timeline.frame import TimelineFrame
-    except ImportError, e:
+    except ImportError as e:
         grass.fatal(e.message)
 
     datasets = options['inputs'].strip().split(',')

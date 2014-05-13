@@ -22,7 +22,7 @@ import math
 import wx
 try:
     import wx.lib.plot as plot
-except ImportError, e:
+except ImportError as e:
     print >> sys.stderr, e
 
 import grass.script as grass
@@ -356,7 +356,7 @@ class ProfileFrame(BasePlotFrame):
                 
                 try:
                     fd = open(pfile[-1], "w")
-                except IOError, e:
+                except IOError as e:
                     GError(parent = self,
                            message = _("Unable to open file <%s> for writing.\n"
                                        "Reason: %s") % (pfile[-1], e))

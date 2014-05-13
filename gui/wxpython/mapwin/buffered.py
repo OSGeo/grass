@@ -495,7 +495,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                 try:
                     gcdc = wx.GCDC(dc)
                     self.pdcVector.DrawToDCClipped(gcdc, rgn)
-                except NotImplementedError, e:
+                except NotImplementedError as e:
                     print >> sys.stderr, e
                     self.pdcVector.DrawToDCClipped(dc, rgn)
             
@@ -510,7 +510,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                     try:
                         gcdc = wx.GCDC(dc)
                         self.pdcVector.DrawToDC(gcdc)
-                    except NotImplementedError, e:
+                    except NotImplementedError as e:
                         print >> sys.stderr, e
                         self.pdcVector.DrawToDC(dc)
                 
@@ -525,7 +525,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         try:
             gcdc = wx.GCDC(dc)
             self.pdcDec.DrawToDC(gcdc)
-        except NotImplementedError, e:
+        except NotImplementedError as e:
             print >> sys.stderr, e
             self.pdcDec.DrawToDC(dc)
         
@@ -800,7 +800,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             else:
                 self.mapfile = self.Map.Render(force = False)
             
-        except GException, e:
+        except GException as e:
             GError(message = e.value)
             self.mapfile = None
         
