@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
     char buf[GNAME_MAX];
     int nrows, row;
     int ncols, col;
+    int overwrite=0;
 
     double zmult, scale, altitude, azimuth;
     double north, east, south, west, ns_med;
@@ -165,6 +166,9 @@ int main(int argc, char *argv[])
     degrees_to_radians = M_PI / 180.0;
     radians_to_degrees = 180. / M_PI;
 
+    /* Check due to default output map = input.shade map */
+    overwrite = G_check_overwrite(argc, argv);
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -183,6 +187,13 @@ int main(int argc, char *argv[])
     }
 
     G_check_input_output_name(elev_name, sr_name, G_FATAL_EXIT);
+    if (G_find_raster2(sr_name, G_mapset())) {
+        if (overwrite)
+            G_warning(_("Raster map <%s> already exists and will be overwritten"),
+			 sr_name);
+	    else
+            G_fatal_error(_("Raster map <%s> already exists"), sr_name);
+    }
 
     if (sscanf(parm.altitude->answer, "%lf", &altitude) != 1 || altitude < 0.0) {
 	G_fatal_error(_("%s=%s - must be a non-negative number"),
