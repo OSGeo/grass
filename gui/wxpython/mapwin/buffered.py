@@ -1399,6 +1399,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                 
             RunCommand('g.region',
                        parent = self,
+                       flags = 'a',
                        n = north, s = south, e = east, w = west)
             
             # redraw map
