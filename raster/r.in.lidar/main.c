@@ -26,6 +26,7 @@
 #include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
+#include <liblas/capi/liblas.h>
 #include "local_proto.h"
 
 struct node
@@ -39,6 +40,10 @@ int num_nodes = 0;
 int max_nodes = 0;
 struct node *nodes;
 
+#define LAS_ALL 0
+#define LAS_FIRST 1
+#define LAS_LAST 2
+#define LAS_MID 3
 
 int new_node(void)
 {
@@ -138,7 +143,7 @@ int main(int argc, char *argv[])
     int r_low, r_up;
 
     struct GModule *module;
-    struct Option *input_opt, *output_opt, *percent_opt, *type_opt;
+    struct Option *input_opt, *output_opt, *percent_opt, *type_opt, *filter_opt;
     struct Option *method_opt, *zrange_opt, *zscale_opt;
     struct Option *trim_opt, *pth_opt, *res_opt;
     struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag;
@@ -148,12 +153,14 @@ int main(int argc, char *argv[])
     LASHeaderH LAS_header;
     LASSRSH LAS_srs;
     LASPointH LAS_point;
+    int return_filter;
 
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     struct Key_Value *proj_info, *proj_units;
     const char *projstr;
     struct Cell_head cellhd, loc_wind;
 
+    unsigned int n_filtered;
 
     G_gisinit(argv[0]);
 
@@ -236,6 +243,14 @@ int main(int argc, char *argv[])
     res_opt->description =
 	_("Output raster resolution");
 
+    filter_opt = G_define_option();
+    filter_opt->key = "filter";
+    filter_opt->type = TYPE_STRING;
+    filter_opt->required = NO;
+    filter_opt->label = _("Only import points of selected return type");
+    filter_opt->description = _("If not specified, all points are imported");
+    filter_opt->options = "first,last,mid";
+
     print_flag = G_define_flag();
     print_flag->key = 'p';
     print_flag->description =
@@ -304,6 +319,18 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
+    return_filter = LAS_ALL;
+    if (filter_opt->answer) {
+	if (strcmp(filter_opt->answer, "first") == 0)
+	    return_filter = LAS_FIRST;
+	else if (strcmp(filter_opt->answer, "last") == 0)
+	    return_filter = LAS_LAST;
+	else if (strcmp(filter_opt->answer, "mid") == 0)
+	    return_filter = LAS_MID;
+	else
+	    G_fatal_error(_("Unknown filter option <%s>"), filter_opt->answer);
+    }
+
     /* Fetch input map projection in GRASS form. */
     proj_info = NULL;
     proj_units = NULL;
@@ -321,7 +348,7 @@ int main(int argc, char *argv[])
 	
 	/* Does the projection of the current location match the dataset? */
 	/* G_get_window seems to be unreliable if the location has been changed */
-	G_get_set_window(&loc_wind);
+	G_get_set_window(&loc_wind); /* TODO: v.in.lidar uses G_get_default_window() */
 	/* fetch LOCATION PROJ info */
 	if (loc_wind.proj != PROJECTION_XY) {
 	    loc_proj_info = G_get_projinfo();
@@ -735,6 +762,34 @@ int main(int argc, char *argv[])
 	    x = LASPoint_GetX(LAS_point);
 	    y = LASPoint_GetY(LAS_point);
 	    z = LASPoint_GetZ(LAS_point);
+
+	if (return_filter != LAS_ALL) {
+	    int return_no = LASPoint_GetReturnNumber(LAS_point);
+	    int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
+	    int skipme = 1;
+
+	    if (n_returns > 1) {
+
+		switch (return_filter) {
+		case LAS_FIRST:
+		    if (return_no == 1)
+			skipme = 0;
+		    break;
+		case LAS_LAST:
+		    if (return_no == n_returns)
+			skipme = 0;
+		    break;
+		case LAS_MID:
+		    if (return_no > 1 && return_no < n_returns)
+			skipme = 0;
+		    break;
+		}
+	    }
+	    if (skipme) {
+		n_filtered++;
+		continue;
+	    }
+	}
 
 	    if (y <= pass_south || y > pass_north) {
 		continue;
