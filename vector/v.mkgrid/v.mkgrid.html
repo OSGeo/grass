@@ -14,17 +14,42 @@ because USGS quads are not exact rectangles.
 
 <h2>EXAMPLES</h2>
 
-Make a 4x3 grid, cells 20km a side, with lower left corner at 2716500,6447000:
+1) Create a grid in a latitude-longitude location (WGS84):
+
+<div class="code"><pre>
+# use g.region to easily calculate rows and column for 'grid':
+g.region n=90 s=-90 w=-180 e=180 res=10 -p
+projection: 3 (Latitude-Longitude)
+zone:       0
+datum:      wgs84
+ellipsoid:  wgs84
+north:      90N
+south:      90S
+west:       180W
+east:       180E
+nsres:      10
+ewres:      10
+rows:       18
+cols:       36
+cells:      648
+
+# create 10 degree size grid:
+v.mkgrid map=grid_10deg grid=18,36
+</pre></div>
+
+<p>
+2) Make a 4x3 grid, cells 20km a side, with lower left corner at 2716500,6447000:
 <div class="code"><pre>
 v.mkgrid map=coro_grid grid=4,3 position=coor coor=2716500,6447000 box=20000,20000
 </pre></div>
-<br>
 
-<p>Make a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
+<p>
+3) Make a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
 at 167deg 52min east, 47deg 6min south. For use with e.g. QGIS you can then
 pull this grid into a projected location with <em>v.proj</em> before
 exporting as a Shapefile with <em>v.out.ogr</em> (within GRASS you could
-just use <em>d.grid -w</em> from the projected location for the same effect).
+just use <em>d.grid -w</em> from the projected location for the same effect):
+
 <div class="code"><pre>
 v.mkgrid map=p2min_grid grid=10,12 position=coor coor=167:52E,47:06S box=0:02,0:02
 </pre></div>
@@ -32,11 +57,12 @@ v.mkgrid map=p2min_grid grid=10,12 position=coor coor=167:52E,47:06S box=0:02,0:
 
 <h2>SEE ALSO</h2>
 
+<em>
 <a href="v.patch.html">v.patch</a>,
 <a href="d.grid.html">d.grid</a>
+</em>
 
-
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Michael Higgins,
 U.S.Army Construction Engineering 
