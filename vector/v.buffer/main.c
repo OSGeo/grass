@@ -10,7 +10,7 @@
  *               
  * PURPOSE:      Vector buffer
  *               
- * COPYRIGHT:    (C) 2001-2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -317,6 +317,10 @@ int main(int argc, char *argv[])
     G_debug(1, "use_geos = %d", use_geos);
     
     type = Vect_option_to_types(type_opt);
+
+    /* TODO: no geodesic support yet in GEOS */
+    if (G_projection() == PROJECTION_LL)
+        G_important_message(_("Note: In latitude-longitude coordinate system distances are in degree units"));
 
     if ((dista_opt->answer && bufcol_opt->answer) ||
 	(!(dista_opt->answer || bufcol_opt->answer)))
