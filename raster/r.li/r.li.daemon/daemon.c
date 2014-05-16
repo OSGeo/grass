@@ -70,7 +70,11 @@ int calculateIndex(char *file, rli_func *f,
        ######################################################### */
 
     /* strip off leading path if present */
+    char rlipath[GPATH_MAX];
     char testpath[GPATH_MAX];
+
+	/* conf files go into ~/.grass7/r.li/ */
+    sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP);
 
     sprintf(testpath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP);
     if (strncmp(file, testpath, strlen(testpath)) == 0)
@@ -78,7 +82,7 @@ int calculateIndex(char *file, rli_func *f,
 
     /* TODO: check if this path is portable */
     /* TODO: use G_rc_path() */
-    sprintf(pathSetup, "%s%c%s%c%s", G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP, file);
+    sprintf(pathSetup, "%s%s", rlipath, file);
     G_debug(1, "r.li.daemon pathSetup: [%s]", pathSetup);
     parsed = parseSetup(pathSetup, l, g, raster);
 
@@ -107,18 +111,17 @@ int calculateIndex(char *file, rli_func *f,
 	    G_fatal_error(_("Cannot create %s directory"), out);
 
 	/* check if ~/.grass7/r.li/ exists */
-	sprintf(out, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP);
+	sprintf(out, "%s", rlipath);
 	doneDir = G_mkdir(out);
 	if (doneDir == -1 && errno != EEXIST)
 	    G_fatal_error(_("Cannot create %s directory"), out);
 
 	/* check if ~/.grass7/r.li/output exists */
-	sprintf(out, "%s%c%s%c%s", G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP, "output");
+	sprintf(out, "%s%s", rlipath, "output");
 	doneDir = G_mkdir(out);
 	if (doneDir == -1 && errno != EEXIST)
 	    G_fatal_error(_("Cannot create %s directory"), out);
-	sprintf(out, "%s%c%s%c%s%c%s",
-                G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP, "output", HOST_DIRSEP, output);
+	sprintf(out, "%s%s%c%s", rlipath, "output", HOST_DIRSEP, output);
 	res = open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     }
     i = 0;
