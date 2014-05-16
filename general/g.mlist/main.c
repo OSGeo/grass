@@ -258,7 +258,10 @@ static void make_list(
 	G_message(_("%s available in mapset <%s>:"),
 		  elem->text, mapset);
     }
-    
+
+    /* Suppress "... found in more mapsets" warnings from G_find_file2. */
+    G_suppress_warnings(1);
+
     for (i = 0; i < count; i++) {
 	char *name = list[i];
 	int need_mapset = 0;
@@ -284,6 +287,7 @@ static void make_list(
 	any++;
     }
 
+    G_suppress_warnings(0);
     fflush(stdout);
     
     G_free(list);
