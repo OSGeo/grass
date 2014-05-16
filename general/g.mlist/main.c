@@ -29,7 +29,7 @@ static int any = 0;
 
 static void make_list(const struct list *,
 		      const char *, const char *,
-		      int, int, int);
+		      int, int, int, int);
 
 int main(int argc, char *argv[])
 {
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
 	else
 	    make_list(M_get_list(n), mapset, separator,
 		      flag.pretty->answer, flag.type->answer,
-		      flag.mapset->answer);
+		      flag.mapset->answer, mapset && *mapset);
     }
 
     if (!flag.pretty->answer && any)
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
 static void make_list(
     const struct list *elem,
     const char *mapset, const char *separator,
-    int pretty, int add_type, int add_mapset)
+    int pretty, int add_type, int add_mapset, int single_mapset)
 {
     char path[GPATH_MAX];
     const char *element = elem->element[0];
@@ -236,7 +236,7 @@ static void make_list(
 	int n;
 	for (n = 0; mapset = G__mapset_name(n), mapset; n++)
 	    make_list(elem, mapset, separator,
-		      pretty, add_type, add_mapset);
+		      pretty, add_type, add_mapset, n == 0);
 	return;
     }
 
@@ -274,7 +274,7 @@ static void make_list(
 
 	fprintf(stdout, "%s", name);
 
-	if (!add_mapset) {
+	if (!add_mapset && !single_mapset) {
 	    const char *mapset2 = G_find_file2(element, name, "");
             if (mapset2)
                 need_mapset = strcmp(mapset, mapset2) != 0;
