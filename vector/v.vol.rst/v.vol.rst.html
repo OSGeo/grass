@@ -148,9 +148,10 @@ very long time, so it might be worth to use just a sample data
 representing the whole dataset.
 
 <p><i>Example 
- (based on <a href="http://www.grassbook.org/data_menu2nd.phtml">Slovakia3d dataset</a>):</i>
+ (based on <a href="http://www.grassbook.org/data_menu2nd.php">Slovakia3d dataset</a>):</i>
 <p><div class="code"><pre>
 v.info -c precip3d
+g.region n=5530000 s=5275000 w=4186000 e=4631000 res=500 -p
 v.vol.rst -c input=precip3d wcolumn=precip zmult=50 segmax=700 cvdev=cvdevmap tension=10
 v.db.select cvdevmap
 v.univar cvdevmap col=flt1 type=point
@@ -274,33 +275,38 @@ Data, Journal of Computational Physics, 23, p.93-123.
 Springer-Verlag, New York, pp. 6-94.
 
 <h2>SEE ALSO</h2>
+
+<em>
 <a href="g.region.html">g.region</a>,
 <a href="v.in.ascii.html">v.in.ascii</a>,
 <a href="r3.mask.html">r3.mask</a>,
 <a href="v.in.db.html">v.in.db</a>,
 <a href="v.surf.rst.html">v.surf.rst</a>,
 <a href="v.univar.html">v.univar</a>
+</em>
 
 <h2>AUTHOR</h2>
-<p>Original version of program (in FORTRAN) and GRASS enhancements: <br>
+
+Original version of program (in FORTRAN) and GRASS enhancements: <br>
 Lubos Mitas, NCSA, University of Illinois at Urbana-Champaign,
 Illinois, USA, since 2000 at Department of Physics, 
 North Carolina State University, Raleigh, USA
-<a href="mailto:lubos_mitas@ncsu.edu">lubos_mitas@ncsu.edu</a><br>
+<a href="mailto:lubos_mitas@ncsu.edu">lubos_mitas@ncsu.edu</a>
+<br>
 Helena Mitasova, Department of Marine, Earth and Atmospheric Sciences,
-North Carolina State University, Raleigh, USA, <a
- href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a>
-<p>Modified program (translated to C, adapted for GRASS, new
+North Carolina State University, Raleigh, USA,
+<a href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a>
+<p>
+Modified program (translated to C, adapted for GRASS, new
 segmentation procedure): <br>
 Irina Kosinovsky, US Army CERL, Champaign, Illinois, USA <br>
 Dave Gerdes, US Army CERL, Champaign, Illinois, USA 
-<p>Modifications for g3d library, geometric parameters,
+<p>
+Modifications for g3d library, geometric parameters,
 cross-validation, deviations: <br>
 Jaro Hofierka, Department of Geography and Regional Development,
-University of Presov, Presov, Slovakia, <a
- href="MAILTO:hofierka@fhpv.unipo.sk">hofierka@fhpv.unipo.sk</a>, <a
- href="http://www.geomodel.sk">http://www.geomodel.sk</a> <br>
-&nbsp; 
-
+University of Presov, Presov, Slovakia,
+<a href="mailto:hofierka@fhpv.unipo.sk">hofierka@fhpv.unipo.sk</a>,
+<a href="http://www.geomodel.sk">http://www.geomodel.sk</a>
 
 <p><i>Last changed: $Date$</i> 
