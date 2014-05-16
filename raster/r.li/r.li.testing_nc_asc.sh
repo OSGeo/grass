@@ -4,9 +4,10 @@
 # North Carolina tests
 
 G_RLI=$HOME/.grass7/r.li
+mkdir -p $G_RLI
 
 echo "SAMPLINGFRAME 0|0|1|1
-SAMPLEAREA 0.0|0.0|1.0|1.0" > $G7RLI/landcover_whole_whole # GRASS7
+SAMPLEAREA 0.0|0.0|1.0|1.0" > $G_RLI/landcover_whole_whole # GRASS7
 
 # North Carolina location:
 export GRASS_OVERWRITE=1
