@@ -1,7 +1,7 @@
 /*
  ****************************************************************************
  *
- * MODULE:       s.vol.rst: program for 3D(volume) interpolation and geometry
+ * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
  *               with tension
  *
@@ -11,9 +11,9 @@
  *               GRASS 4.2, GRASS 5.0 version and modifications:
  *               H. Mitasova,  I. Kosinovsky, D. Gerdes, J. Hofierka
  *
- * PURPOSE:      s.vol.rst interpolates the values to 3-dimensional grid from
+ * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               sites file named input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev. 
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -35,7 +35,6 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
-#include <grass/site.h>
 #include "oct.h"
 #include "surf.h"
 #include "dataoct.h"
