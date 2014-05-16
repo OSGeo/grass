@@ -1,7 +1,7 @@
 /*
  ****************************************************************************
  *
- * MODULE:       s.vol.rst: program for 3D(volume) interpolation and geometry
+ * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
  *               with tension
  *
@@ -11,9 +11,9 @@
  *               GRASS 4.2, GRASS 5.0 version and modifications:
  *               H. Mitasova,  I. Kosinovsky, D. Gerdes, J. Hofierka
  *
- * PURPOSE:      s.vol.rst interpolates the values to 3-dimensional grid from
+ * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               sites file named input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev. 
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -21,8 +21,8 @@
  *               I. Kosinovsky, D. Gerdes, J. Hofierka
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 #include <stdio.h>
@@ -36,7 +36,6 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
-#include <grass/site.h>
 #include "oct.h"
 #include "surf.h"
 #include "dataoct.h"
@@ -663,10 +662,7 @@ int POINT(int n_points, struct quadruple *points, struct point_3d skip_point)
     double errmax, h, xx, yy, r2, hz, zz, ww, err, xmm, ymm,
 	zmm, wmm, r, etar;
     int n1, mm, m, mmax, inside;
-    Site *site;
 
-    if ((site = G_site_new_struct(-1, 3, 0, 1)) == NULL)
-	G_fatal_error("Memory error for site struct");
     errmax = .0;
     n1 = n_points + 1;
     if (!cv) {
