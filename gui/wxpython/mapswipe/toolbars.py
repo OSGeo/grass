@@ -23,11 +23,14 @@ from icons.icon import MetaIcon
 from core.utils import _
 
 
-swipeIcons = {
-        'tools': MetaIcon(img = 'tools', label = _("Tools")),
-        'quit' : BaseIcons['quit'].SetLabel(_("Quit Map Swipe")),
-        'addRast' : BaseIcons['addRast'].SetLabel(_("Select raster maps")),
-        }
+swipeIcons = {'tools': MetaIcon(img='tools', label=_("Tools")),
+              'quit': BaseIcons['quit'].SetLabel(_("Quit Map Swipe")),
+              'addRast': BaseIcons['addRast'].SetLabel(_("Select raster maps")),
+              'query': MetaIcon(img='info',
+                                label=_('Query raster/vector map(s)'),
+                                desc=_('Query selected raster/vector map(s)')),
+              }
+
 
 class SwipeMapToolbar(BaseToolbar):
     """!Map toolbar (to control map zoom and rendering)
@@ -36,18 +39,18 @@ class SwipeMapToolbar(BaseToolbar):
         """!Map toolbar constructor
         """
         BaseToolbar.__init__(self, parent, toolSwitcher)
-        
+
         self.InitToolbar(self._toolbarData())
         self._default = self.pan
 
         # realize the toolbar
         self.Realize()
-        
-        for tool in (self.pointer, self.pan, self.zoomIn, self.zoomOut):
+
+        for tool in (self.pointer, self.query, self.pan, self.zoomIn, self.zoomOut):
             self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
-        
+
         self.EnableTool(self.zoomBack, False)
-        
+
     def _toolbarData(self):
         """!Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
@@ -59,13 +62,16 @@ class SwipeMapToolbar(BaseToolbar):
                                       self.parent.OnRender),
                                      ("erase", icons["erase"],
                                       self.parent.OnErase),
-                                     (None, ), # creates separator
+                                     (None, ),  # creates separator
                                      ("pointer", icons["pointer"],
                                       self.parent.OnPointer,
                                       wx.ITEM_CHECK),
+                                     ("query", swipeIcons["query"],
+                                      self.parent.OnQuery,
+                                      wx.ITEM_CHECK),
                                      ("pan", icons["pan"],
                                       self.parent.OnPan,
-                                      wx.ITEM_CHECK), # toggle tool
+                                      wx.ITEM_CHECK),  # toggle tool
                                      ("zoomIn", icons["zoomIn"],
                                       self.parent.OnZoomIn,
                                       wx.ITEM_CHECK),
@@ -80,13 +86,14 @@ class SwipeMapToolbar(BaseToolbar):
                                      (None, ),
                                      ('saveFile', icons['saveFile'],
                                       self.parent.SaveToFile),
-                                    ))
-                                    
+                                     ))
+
     def SetActiveMap(self, index):
         """!Set currently selected map.
         Unused, needed because of DoubleMapFrame API.
         """
         pass
+
 
 class SwipeMainToolbar(BaseToolbar):
     """!Toolbar with tools related to application functionality
@@ -95,18 +102,18 @@ class SwipeMainToolbar(BaseToolbar):
         """!Toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
-        
+
         self.InitToolbar(self._toolbarData())
 
         # add tool to toggle active map window
         self.toggleModeId = wx.NewId()
-        self.toggleMode = wx.Choice(parent = self, id = self.toggleModeId)
+        self.toggleMode = wx.Choice(parent=self, id=self.toggleModeId)
         for label, cdata in zip([_('Swipe mode'), _('Mirror mode')], ['swipe', 'mirror']):
             self.toggleMode.Append(label, cdata)
         self.toggleMode.SetSelection(0)
         self.toggleMode.SetSize(self.toggleMode.GetBestSize())
         self.toggleMode.Bind(wx.EVT_CHOICE,
-                             lambda event: 
+                             lambda event:
                              self.parent.SetViewMode(self.toggleMode.GetClientData(event.GetSelection())))
         self.InsertControl(3, self.toggleMode)
 
@@ -114,7 +121,7 @@ class SwipeMainToolbar(BaseToolbar):
         self.SetToolShortHelp(self.toggleModeId, help)
         # realize the toolbar
         self.Realize()
-        
+
     def _toolbarData(self):
         """!Toolbar data"""
         return self._getToolbarData((("addRaster", swipeIcons['addRast'],
@@ -122,7 +129,7 @@ class SwipeMainToolbar(BaseToolbar):
                                      (None, ),
                                      ("tools", swipeIcons['tools'],
                                       self.OnToolMenu)
-                                    ))
+                                     ))
 
     def SetMode(self, mode):
         for i in range(self.toggleMode.GetCount()):
@@ -132,19 +139,19 @@ class SwipeMainToolbar(BaseToolbar):
     def OnToolMenu(self, event):
         """!Menu for additional tools"""
         toolMenu = wx.Menu()
-        
+
         for label, itype, handler, desc in (
             (_("Switch orientation"),
              wx.ITEM_NORMAL, self.parent.OnSwitchOrientation, "switchOrientation"),
             (_("Switch maps"),
              wx.ITEM_NORMAL, self.parent.OnSwitchWindows, "switchMaps")):
             # Add items to the menu
-            item = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                               text = label,
-                               kind = itype)
+            item = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                               text=label,
+                               kind=itype)
             toolMenu.AppendItem(item)
             self.parent.GetWindow().Bind(wx.EVT_MENU, handler, item)
-        
+
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.parent.GetWindow().PopupMenu(toolMenu)
@@ -158,11 +165,11 @@ class SwipeMiscToolbar(BaseToolbar):
         """!Toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
-        
+
         self.InitToolbar(self._toolbarData())
         # realize the toolbar
         self.Realize()
-        
+
     def _toolbarData(self):
         """!Toolbar data"""
         return self._getToolbarData((("settings", BaseIcons['settings'],
