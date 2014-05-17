@@ -1001,7 +1001,8 @@ command2ltype = {'d.rast'         : 'raster',
                  'd.histogram'    : 'histogram',
                  'd.colortable'   : 'colortable',
                  'd.graph'        : 'graph',
-                 'd.out.file'     : 'export'
+                 'd.out.file'     : 'export',
+                 'd.text'         : 'text'
                  }
 ltype2command = {}
 for (cmd, ltype) in command2ltype.items():
