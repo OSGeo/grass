@@ -1396,12 +1396,13 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             else:
                 south = coordinates[1]
                 north = coordinatesBegin[1]
-                
+
+            region = self.Map.GetRegion()
             RunCommand('g.region',
-                       parent = self,
-                       flags = 'a',
-                       n = north, s = south, e = east, w = west)
-            
+                       parent=self,
+                       flags='a', nsres=region['nsres'], ewres=region['ewres'],
+                       n=north, s=south, e=east, w=west)
+
             # redraw map
             self.UpdateMap(render = False)
         
