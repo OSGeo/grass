@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     opt_swapsize->key = "memory";
     opt_swapsize->type = TYPE_INTEGER;
     opt_swapsize->answer = "300";
-    opt_swapsize->description = _("Max memory used in memory swap mode (MB)");
+    opt_swapsize->description = _("Maximum memory used in memory swap mode (MB)");
     opt_swapsize->guisection = _("Memory settings");
 
     flag_downstream = G_define_flag();
