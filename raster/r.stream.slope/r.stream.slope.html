@@ -7,8 +7,8 @@ and local downstream minimum and maximum curvature.
 
 <dl>
 <dt><em>direction</em></dt>
-<dd>Flow direction: name of input direction map produced by r.watershed or
-r.stream.extract. If r.stream.extract output map is used, it only has non-NULL
+<dd>Flow direction: name of input direction map produced by <em>r.watershed</em> or
+<em>r.stream.extract</em>. If r.stream.extract output map is used, it only has non-NULL
 values in places where streams occur. NULL (nodata) cells are ignored, zero and
 negative values are valid direction data if they vary from -8 to 8 (CCW from
 East in steps of 45 degrees). Direction map shall be of type CELL values. Region
@@ -56,19 +56,15 @@ r.stream.slope dir=dirs elevation=elevation difference=downstream_elev_differenc
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.watershed.html">r.watershed</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>
-</em>
-
-<p>
-<em>
+<a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.stream.channel.html">r.stream.channel</a>,
 <a href="r.stream.distance.html">r.stream.distance</a>,
 <a href="r.stream.extract.html">r.stream.extract</a>,
 <a href="r.stream.order.html">r.stream.order</a>,
 <a href="r.stream.segment.html">r.stream.segment</a>,
 <a href="r.stream.snap.html">r.stream.snap</a>,
-<a href="r.stream.stats.html">r.stream.stats</a>
+<a href="r.stream.stats.html">r.stream.stats</a>,
+<a href="r.watershed.html">r.watershed</a>
 </em>
 
 <p>

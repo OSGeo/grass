@@ -11,18 +11,18 @@ consumption during analysis</dd>
 
 <dt><b>stream_rast</b></dt>
 <dd>Stream network: name of input stream map. Streams shall be ordered according
-one of the r.stream.order ordering system as well as unordered (with original
-stream identifiers)  Because streams network produced by r.watershed and
-r.stream.extract may slightly differ in detail, it is required to use both stream
+one of the <em>r.stream.order</em> ordering system as well as unordered (with original
+stream identifiers)  Because streams network produced by <em>r.watershed</em> and
+<em>r.stream.extract</em> may slightly differ in detail, it is required to use both stream
 and direction map produced by the same module. Stream background shall have NULL
 value or zero value. Background values of NULL are by default produced by
-r.watershed and r.stream.extract. If not 0 or NULL use <a
+<em>r.watershed</em> and <em>r.stream.extract</em>. If not 0 or NULL use <a
 href="r.mapcalc.html">r.mapcalc</a> to set background values to null.  
 </dd>
 
 <dt><b>direction</b></dt>
-<dd>Flow direction: name of input direction map produced by r.watershed or
-r.stream.extract. If r.stream.extract output map is used, it only has non-NULL
+<dd>Flow direction: name of input direction map produced by <em>r.watershed</em> or
+<em>r.stream.extract</em>. If r.stream.extract output map is used, it only has non-NULL
 values in places where streams occur. NULL (nodata) cells are ignored, zero and
 negative values are valid direction data if they vary from -8 to 8 (CCW from
 East in steps of 45 degrees). Direction map shall be of type CELL values. Region
@@ -62,7 +62,7 @@ resulting from ordering.</dl>
 <p>The module produces two vector maps: one representing original segments
 (where a segment is a streamline where its order remains unchanged) and the second
 divided into near straight line sectors resulting form segmentation process.
-Most of the segment and sectors attributes are the same as in r.stream.order vector
+Most of the segment and sectors attributes are the same as in <em>r.stream.order</em> vector
 output.</p>
 
 <dl>
@@ -169,8 +169,8 @@ streams is not fully compatible with Horton's original criterion.
 The module can work only if direction map, stream_rast map and region have the same
 settings. It is also required that stream_rast map and direction map come from the
 same source. For lots of reason this limitation probably cannot be omitted.  
-This means that if stream_rast map comes from r.stream.extract, also direction map from
-r.stream.extract must be used. If stream_rast network was generated with MFD method,
+This means that if stream_rast map comes from <em>r.stream.extract</em>, also direction map from
+<em>r.stream.extract</em> must be used. If stream_rast network was generated with MFD method,
 also MFD direction map must be used.
 
 <h2>EXAMPLE</h2>
@@ -198,19 +198,16 @@ Processing 59(6), 484-494.
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.watershed.html">r.watershed</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>
-</em>
 
-<p>
-<em>
+<a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.stream.channel.html">r.stream.channel</a>,
 <a href="r.stream.distance.html">r.stream.distance</a>,
 <a href="r.stream.extract.html">r.stream.extract</a>,
 <a href="r.stream.order.html">r.stream.order</a>,
 <a href="r.stream.slope.html">r.stream.slope</a>,
 <a href="r.stream.snap.html">r.stream.snap</a>,
-<a href="r.stream.stats.html">r.stream.stats</a>
+<a href="r.stream.stats.html">r.stream.stats</a>,
+<a href="r.watershed.html">r.watershed</a>
 </em>
 
 <p>
