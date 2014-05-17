@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
     inrast = in_opt->answer;
     outrast = out_opt->answer;
 
-    if (!strcmp(method_opt->answer, "linear"))
+    if (!strcmp(method_opt->answer, "bilinear"))
 	interp_method = P_BILINEAR;
     else
 	interp_method = P_BICUBIC;
