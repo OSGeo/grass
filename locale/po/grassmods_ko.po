@@ -131,7 +131,7 @@ msgstr "검색경로에 있는 맵셋을 출력합니다"
 
 #: ../general/g.mapsets/main.c:105
 msgid "Launch mapset selection GUI dialog"
-msgstr "맵셋선택 GUI창을 시작합니다"
+msgstr "맵셋선택 GUI 대화창을 시작합니다"
 
 #: ../general/g.mapsets/main.c:128
 #, c-format
@@ -437,28 +437,26 @@ msgstr "맵관리"
 
 #: ../general/g.rename/main.c:45
 #: ../locale/scriptstrings/t.rename_to_translate.c:4
-#, fuzzy
 msgid "rename"
-msgstr "출력할 라스터맵"
+msgstr "이름변경"
 
 #: ../general/g.rename/main.c:47
 msgid "Renames data base element files in the user's current mapset."
-msgstr ""
+msgstr "사용자의 현재맵셋 안에 있는 데이타베이스 요소파일들의 이름을 변경합니다."
 
 #: ../general/g.rename/main.c:53
-#, fuzzy
 msgid "renamed"
-msgstr "출력할 라스터맵"
+msgstr "이름이 변경되었습니다"
 
 #: ../general/g.rename/main.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "%s <%s> not found"
-msgstr "출력할 라스터맵"
+msgstr "%s <%s>를 찾지 못 했습니다"
 
 #: ../general/g.rename/main.c:74
 #, c-format
 msgid "<%s> already exists in mapset <%s>"
-msgstr "<%s>가 맵셉 <%s> 안에 이미 존재합니다."
+msgstr "<%s>가 맵셋 <%s> 안에 이미 존재합니다."
 
 #: ../general/g.rename/main.c:79 ../general/g.copy/main.c:80
 #: ../imagery/i.ortho.photo/i.ortho.camera/main.c:114
@@ -467,12 +465,12 @@ msgstr "<%s>가 맵셉 <%s> 안에 이미 존재합니다."
 #: ../raster/r.watershed/shed/com_line.c:266
 #, c-format
 msgid "<%s> is an illegal file name"
-msgstr ""
+msgstr "<%s>는 잘못된 파일이름입니다"
 
 #: ../general/g.rename/main.c:84
 #, c-format
 msgid "%s=%s,%s: files could be the same, no rename possible"
-msgstr ""
+msgstr "%s=%s,%s: 같은 파일일 수 있으므로 이름변경이 불가능합니다"
 
 #: ../general/g.rename/main.c:94
 #, fuzzy
@@ -1365,64 +1363,63 @@ msgstr ""
 
 #: ../general/g.gui/main.c:39
 msgid "user interface"
-msgstr ""
+msgstr "사용자 인터페이스"
 
 #: ../general/g.gui/main.c:41
 msgid "Launches a GRASS graphical user interface (GUI) session."
-msgstr ""
+msgstr "GRASS 그래픽 사용자 인터페이스(GUI) 세션을 시작합니다."
 
 #: ../general/g.gui/main.c:42
 msgid "And updates default user interface settings."
-msgstr ""
+msgstr "그리고 기본 사용자 인터페이스 설정을 갱신합니다."
 
 #: ../general/g.gui/main.c:47
 msgid "User interface"
-msgstr ""
+msgstr "사용자 인터페이스"
 
 #: ../general/g.gui/main.c:48
 msgid "Default value: GRASS_GUI if defined otherwise wxpython"
-msgstr ""
+msgstr "기본값: 정의되었을 경우 GRASS_GUI 아니면 wxpython"
 
 #: ../general/g.gui/main.c:52
 msgid "wxPython based GUI (wxGUI)"
-msgstr ""
+msgstr "wxPython 기반 GUI(wxGUI)"
 
 #: ../general/g.gui/main.c:53
-#, fuzzy
 msgid "command line interface only"
-msgstr "출력할 라스터맵"
+msgstr "명령줄 인터페이스에만 적용"
 
 #: ../general/g.gui/main.c:56 ../general/g.message/main.c:43
 #: ../general/g.message/main.c:48 ../general/g.message/main.c:53
 #: ../general/g.message/main.c:58
 msgid "Type"
-msgstr ""
+msgstr "타입"
 
 #: ../general/g.gui/main.c:62
 msgid "Name of workspace file to load on start-up (valid only for wxGUI)"
-msgstr ""
+msgstr "시작할 때 읽어 들일 작업공간 파일의 이름"
 
 #: ../general/g.gui/main.c:66
 msgid "Update default user interface settings"
-msgstr ""
+msgstr "기본 사용자설정을 갱신합니다"
 
 #: ../general/g.gui/main.c:67 ../general/g.gui/main.c:73
 msgid "Default"
-msgstr ""
+msgstr "기본값"
 
 #: ../general/g.gui/main.c:72
 msgid "Do not launch GUI after updating the default user interface settings"
-msgstr ""
+msgstr "기본 사용자설정을 갱신한 뒤에는 GUI를 시작하지 마세요"
 
 #: ../general/g.gui/main.c:100
 #, c-format
 msgid "<%s> is now the default GUI"
-msgstr ""
+msgstr "<%s>가 이제 기본 GUI입니다"
 
 #: ../general/g.gui/main.c:114
 #, c-format
 msgid "Launching <%s> GUI in the background, please wait..."
-msgstr ""
+msgstr "<%s> GUI를 배경프로세스에서 시작합니다. 기다려주세요..."
 
 #: ../general/manage/lister/vector.c:24 ../misc/m.nviz.image/vector.c:282
 #: ../raster/r.region/main.c:207 ../raster/r.carve/main.c:162
@@ -15171,7 +15168,7 @@ msgstr ""
 #: ../vector/v.external/main.c:139
 #, c-format
 msgid "option <%s>: <%s> exists."
-msgstr ""
+msgstr "옵션 <%s>: <%s>가 존재합니다."
 
 #: ../raster/r.proj/main.c:257 ../vector/v.proj/main.c:158
 msgid "Input and output locations can not be the same"
@@ -24666,9 +24663,8 @@ msgid "Error in pj_do_transform"
 msgstr ""
 
 #: ../vector/v.proj/main.c:390
-#, fuzzy
 msgid "Reprojecting primitives ..."
-msgstr "출력할 라스터맵"
+msgstr "원형자료를 재투영하는 중..."
 
 #: ../vector/v.proj/main.c:405
 #, fuzzy, c-format
@@ -25623,7 +25619,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:820
 #, c-format
 msgid "Check if OGR layer <%s> contains polygons..."
-msgstr "OGR 레이어 <%s>가 폴리곤을 포함하고 있는지 확인하는 중..."
+msgstr "OGR 레이어 <%s>가 다각형을 포함하고 있는지 확인하는 중..."
 
 #: ../vector/v.in.ogr/main.c:844
 #, c-format
@@ -25690,7 +25686,7 @@ msgstr "출력할 라스터맵"
 
 #: ../vector/v.in.ogr/main.c:1217
 msgid "Cleaning polygons"
-msgstr "폴리곤을 정리하는 중"
+msgstr "다각형을 정리하는 중"
 
 #: ../vector/v.in.ogr/main.c:1221
 #, c-format
@@ -25699,7 +25695,7 @@ msgstr "출력할 라스터맵"
 
 #: ../vector/v.in.ogr/main.c:1235 ../vector/v.buffer/main.c:722
 msgid "Breaking polygons..."
-msgstr "폴리곤을 분해하는 중..."
+msgstr "다각형을 분해하는 중..."
 
 #: ../vector/v.in.ogr/main.c:1240 ../vector/v.in.ogr/main.c:1254
 #: ../vector/v.overlay/area_area.c:113 ../vector/v.buffer/main.c:725
@@ -25713,7 +25709,7 @@ msgstr "경계를 분해하는 중"
 
 #: ../vector/v.in.ogr/main.c:1258 ../vector/v.overlay/area_area.c:116
 msgid "Cleaning boundaries at nodes..."
-msgstr "노드에 있는 경계를 정리하는 중..."
+msgstr "정점에 있는 경계를 정리하는 중..."
 
 #: ../vector/v.in.ogr/main.c:1265
 msgid "Merging boundaries..."
@@ -25755,12 +25751,12 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1404
 #, c-format
 msgid "%d input polygons\n"
-msgstr "%d개의 입력 폴리곤\n"
+msgstr "%d개의 입력 다각형\n"
 
 #: ../vector/v.in.ogr/main.c:1405
 #, c-format
 msgid "%d input polygons"
-msgstr ""
+msgstr "%d개의 입력 다각형"
 
 #: ../vector/v.in.ogr/main.c:1408
 #, c-format

@@ -6429,7 +6429,7 @@ msgstr ""
 #: ../lib/vector/Vlib/build_nat.c:74 ../lib/vector/Vlib/build_sfa.c:339
 #: ../lib/vector/Vlib/build_sfa.c:629
 msgid "Registering primitives..."
-msgstr "기본자료를 등록하고 있습니다..."
+msgstr "원형자료를 등록하고 있습니다..."
 
 #: ../lib/vector/Vlib/build_nat.c:84
 #, fuzzy
@@ -6441,8 +6441,8 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
-msgstr[0] "1개의 기본자료를 등록했습니다"
-msgstr[1] "%d개의 기본자료를 등록했습니다"
+msgstr[0] "1개의 원형자료를 등록했습니다"
+msgstr[1] "%d개의 원형자료를 등록했습니다"
 
 #: ../lib/vector/Vlib/build_nat.c:118 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:662
@@ -6759,12 +6759,12 @@ msgstr ""
 #: ../lib/vector/Vlib/build.c:878
 #, c-format
 msgid "Number of nodes: %d"
-msgstr "노드 개수: %d"
+msgstr "정점 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:879
 #, c-format
 msgid "Number of primitives: %d"
-msgstr "기본자료 개수: %d"
+msgstr "원형자료 개수: %d"
 
 #: ../lib/vector/Vlib/build.c:880
 #, c-format
@@ -6853,7 +6853,7 @@ msgid ""
 "Unable to build spatial index from topology, vector map is not opened at "
 "topology level 2"
 msgstr ""
-"벡터맵이 위상레벨 2에서 열리지 않았기 때문에 위상정보로부터 공간색인을 만들"
+"벡터맵이 위상수준 2에서 열리지 않았기 때문에 위상으로부터 공간색인을 만들"
 "지 못 했습니다."
 
 #: ../lib/vector/Vlib/build.c:1212
@@ -6930,7 +6930,7 @@ msgstr "피쳐타입 %d를 지원하지 않습니다"
 #: ../lib/vector/Vlib/read_pg.c:378
 #, c-format
 msgid "Feature %d without geometry skipped"
-msgstr "지오메트리가 없는 피쳐 %d를 넘어갑니다"
+msgstr "지형이 없는 피쳐 %d를 넘어갑니다"
 
 #: ../lib/vector/Vlib/build_sfa.c:603 ../lib/vector/Vlib/read_ogr.c:344
 #: ../lib/vector/Vlib/read_ogr.c:578
@@ -7269,11 +7269,11 @@ msgstr ""
 
 #: ../lib/vector/Vlib/break_polygons.c:435
 msgid "Breaking polygons (pass 1: select break points)..."
-msgstr "폴리곤을 분해하는 중 (1차: 분해점 선택)..."
+msgstr "다각형을 분해하는 중 (1차: 분해점 선택)..."
 
 #: ../lib/vector/Vlib/break_polygons.c:552
 msgid "Breaking polygons (pass 2: break at selected points)..."
-msgstr "폴리곤을 분해하는 중 (2차: 선택된 점에서 분해)..."
+msgstr "다각형을 분해하는 중 (2차: 선택된 점에서 분해)..."
 
 #: ../lib/vector/Vlib/break_polygons.c:592
 msgid "Point not in search tree!"
