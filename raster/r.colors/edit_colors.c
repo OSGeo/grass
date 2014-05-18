@@ -162,15 +162,15 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     file = opt.file->answer;
 
     if (opt.maps->answer && opt.file->answer)
-        G_fatal_error(_("Options <%s> and <%s> options are mutually exclusive"),
+        G_fatal_error(_("Options <%s> and <%s> are mutually exclusive"),
 		      opt.maps->key, opt.file->key);
 
     if (!opt.maps->answer && !opt.file->answer)
-        G_fatal_error(_("Options <%s> or <%s> must be specified"),
+        G_fatal_error(_("Option <%s> or <%s> must be specified"),
 		      opt.maps->key, opt.file->key);
 
     if (opt.rast->answer && opt.volume->answer)
-        G_fatal_error(_("Options <%s> and <%s> options are mutually exclusive"),
+        G_fatal_error(_("Options <%s> and <%s> are mutually exclusive"),
 		      opt.rast->key, opt.volume->key);
 
     if (opt.rast->answer)
@@ -184,12 +184,12 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 			opt.rast->key, opt.rules->key);
     
     if (!!style + !!cmap + !!rules > 1)
-        G_fatal_error(_("Options <%s>, <%s>, and <%s> options are mutually "
+        G_fatal_error(_("Options <%s>, <%s>, and <%s> are mutually "
 			"exclusive"), opt.colr->key, opt.rules->key,
 		      opt.rast->key);
     
     if (flag.g->answer && flag.a->answer)
-        G_fatal_error(_("Flags -%c and -%c flags are mutually exclusive"),
+        G_fatal_error(_("Flags -%c and -%c are mutually exclusive"),
 		      flag.g->key, flag.a->key);
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;
