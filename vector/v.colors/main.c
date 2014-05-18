@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
 		      opt.rast->key);
 
     if (flag.g->answer && flag.a->answer)
-        G_fatal_error(_("Flags -%c and -%c flags are mutually exclusive"),
+        G_fatal_error(_("Flags -%c and -%c are mutually exclusive"),
 		      flag.g->key, flag.a->key);
 
     if (flag.c->answer && !rgbcolumn) 
