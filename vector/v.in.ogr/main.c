@@ -241,7 +241,6 @@ int main(int argc, char *argv[])
     param.key->description = 
         _("If not given, categories are generated as unique values and stored in 'cat' column");
     param.key->guisection = _("Attributes");
-    param.key->guisection = _("Attributes");
 
     flag.formats = G_define_flag();
     flag.formats->key = 'f';
