@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 
     in_dir_opt = G_define_standard_option(G_OPT_R_INPUT);
     in_dir_opt->key = "direction";
-    in_dir_opt->description = _("Name for input raster map with flow direction");
+    in_dir_opt->description = _("Name of input raster map with flow direction");
 
     in_elev_opt = G_define_standard_option(G_OPT_R_INPUT);
 
