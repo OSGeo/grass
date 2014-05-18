@@ -30,6 +30,7 @@ from core.debug         import Debug
 from core.gcmd          import GError, GMessage
 from core.utils import _
 from core.layerlist import LayerListToRendererConverter
+from gui_core.query import QueryDialog, PrepareQueryResults
 
 from mapswipe.toolbars  import SwipeMapToolbar, SwipeMainToolbar, SwipeMiscToolbar
 from mapswipe.mapwindow import SwipeBufferedWindow
@@ -71,6 +72,10 @@ class SwipeMapFrame(DoubleMapFrame):
         self.secondMapWindow = SwipeBufferedWindow(parent = self.splitter, giface = self._giface,
                                                    properties=self.mapWindowProperties,
                                                    Map = self.secondMap)
+        # bind query signal
+        self.firstMapWindow.mapQueried.connect(self.Query)
+        self.secondMapWindow.mapQueried.connect(self.Query)
+
         self.MapWindow = self.firstMapWindow # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
         self.SetBindRegions(True)
@@ -100,6 +105,7 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self._inputDialog = None
         self._preferencesDialog = None
+        self._queryDialog = None
 
         # default action in map toolbar
         self.GetMapToolbar().SelectDefault()
@@ -601,6 +607,75 @@ class SwipeMapFrame(DoubleMapFrame):
         else:
             self.GetFirstWindow().SetRasterNameText('', 101)
             self.GetSecondWindow().SetRasterNameText('', 102)
+
+    def Query(self, x, y):
+        """!Query active layers from both mapwindows.
+
+        @param x,y coordinates
+        """
+        rasters = ([layer.GetName() for layer in
+                    self.GetFirstMap().GetListOfLayers(ltype='raster', active=True)],
+                   [layer.GetName() for layer in
+                    self.GetSecondMap().GetListOfLayers(ltype='raster', active=True)])
+        vectors = ([layer.GetName() for layer in
+                    self.GetFirstMap().GetListOfLayers(ltype='vector', active=True)],
+                   [layer.GetName() for layer in
+                    self.GetSecondMap().GetListOfLayers(ltype='vector', active=True)])
+
+        if not (rasters[0] + rasters[1] + vectors[0] + vectors[1]):
+            GMessage(parent=self,
+                     message=_('No raster or vector map layer selected for querying.'))
+            return
+
+        # set query snap distance for v.what at map unit equivalent of 10 pixels
+        qdist = 10.0 * ((self.GetFirstMap().region['e'] -
+                         self.GetFirstMap().region['w']) / self.GetFirstMap().width)
+
+        east, north = self.GetFirstWindow().Pixel2Cell((x, y))
+
+        # use display region settings instead of computation region settings
+        self.tmpreg = os.getenv("GRASS_REGION")
+        os.environ["GRASS_REGION"] = self.GetFirstMap().SetRegion(windres=False)
+
+        result = []
+        if rasters[0]:
+            result.extend(grass.raster_what(map=rasters[0], coord=(east, north)))
+        if vectors[0]:
+            result.extend(grass.vector_what(map=vectors[0], coord=(east, north), distance=qdist))
+        if rasters[1]:
+            result.extend(grass.raster_what(map=rasters[1], coord=(east, north)))
+        if vectors[1]:
+            result.extend(grass.vector_what(map=vectors[1], coord=(east, north), distance=qdist))
+
+        self._QueryMapDone()
+
+        result = PrepareQueryResults(coordinates=(east, north), result=result)
+        if self._queryDialog:
+            self._queryDialog.Raise()
+            self._queryDialog.SetData(result)
+        else:
+            self._queryDialog = QueryDialog(parent=self, data=result)
+            self._queryDialog.Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
+            self._queryDialog.redirectOutput.connect(lambda output: self._giface.WriteLog(output))
+            self._queryDialog.Show()
+
+    def _oncloseQueryDialog(self, event):
+        self._queryDialog = None
+        event.Skip()
+
+    def _QueryMapDone(self):
+        """!Restore settings after querying (restore GRASS_REGION)
+        """
+        if hasattr(self, "tmpreg"):
+            if self.tmpreg:
+                os.environ["GRASS_REGION"] = self.tmpreg
+            elif 'GRASS_REGION' in os.environ:
+                del os.environ["GRASS_REGION"]
+        elif 'GRASS_REGION' in os.environ:
+            del os.environ["GRASS_REGION"]
+
+        if hasattr(self, "tmpreg"):
+            del self.tmpreg
 
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""

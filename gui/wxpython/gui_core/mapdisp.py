@@ -587,6 +587,11 @@ class DoubleMapFrame(MapFrameBase):
         self.GetFirstWindow().SetModePointer()
         self.GetSecondWindow().SetModePointer()
 
+    def OnQuery(self, event):
+        """!Set query mode"""
+        self.GetFirstWindow().SetModeQuery()
+        self.GetSecondWindow().SetModeQuery()
+
     def OnRender(self, event):
         """!Re-render map composition (each map layer)
         """
