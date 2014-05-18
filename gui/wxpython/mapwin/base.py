@@ -390,6 +390,13 @@ class MapWindowBase(object):
         self.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         self.SetNamedCursor('cross')
 
+    def SetModeQuery(self):
+        """!Query mode on"""
+        self.mouse['use'] = "query"
+        self.mouse['box'] = "point"
+        self.zoomtype = 0
+        self.SetNamedCursor('cross')
+
     def DisactivateWin(self):
         """!Use when the class instance is hidden in MapFrame."""
         raise NotImplementedError()
