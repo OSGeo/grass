@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
 
     IO input[] = {
-        {"stream_rast", YES, _("Name for input raster map with stream network")},
+        {"stream_rast", YES, _("Name of input raster map with stream network")},
 	{"direction", YES, _("Name of input flow direction raster map")},
 	{"elevation", NO, _("Name of input elevation raster map")},
 	{"accumulation", NO, _("Name of input accumulation raster map")}

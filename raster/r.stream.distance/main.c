@@ -57,12 +57,12 @@ int main(int argc, char *argv[])
 
     in_stm_opt = G_define_standard_option(G_OPT_R_INPUT);
     in_stm_opt->key = "stream_rast";
-    in_stm_opt->description = _("Name for input raster map with stream network "
+    in_stm_opt->description = _("Name of input raster map with stream network "
                                 "(in outlet mode is the name for outlet raster map)");
 
     in_dir_opt = G_define_standard_option(G_OPT_R_INPUT);
     in_dir_opt->key = "direction";
-    in_dir_opt->description = _("Name for input raster map with flow direction");
+    in_dir_opt->description = _("Name of input raster map with flow direction");
 
     in_elev_opt = G_define_standard_option(G_OPT_R_ELEV);
     in_elev_opt->required = NO;
