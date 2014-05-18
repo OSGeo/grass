@@ -76,6 +76,10 @@ class SwipeMapFrame(DoubleMapFrame):
         self.firstMapWindow.mapQueried.connect(self.Query)
         self.secondMapWindow.mapQueried.connect(self.Query)
 
+        # bind tracking cursosr to mirror it
+        self.firstMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
+        self.secondMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
+
         self.MapWindow = self.firstMapWindow # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
         self.SetBindRegions(True)
@@ -114,7 +118,7 @@ class SwipeMapFrame(DoubleMapFrame):
 
         wx.CallAfter(self.CallAfterInit)
 
-    def TrackCursor(self, event, showInFirst):
+    def TrackCursor(self, event):
         """!Track cursor in one window and show cross in the other.
 
         Only for mirror mode.
@@ -123,7 +127,7 @@ class SwipeMapFrame(DoubleMapFrame):
             event.Skip()
             return
         coords = event.GetPosition()
-        if showInFirst:
+        if event.GetId() == self.secondMapWindow.GetId():
             self.firstMapWindow.DrawMouseCursor(coords=coords)
         else:
             self.secondMapWindow.DrawMouseCursor(coords=coords)
@@ -134,8 +138,6 @@ class SwipeMapFrame(DoubleMapFrame):
         """!Switch tracking direction"""
         super(SwipeMapFrame, self).ActivateFirstMap(event)
 
-        self.firstMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt, showInFirst = False))
-        self.secondMapWindow.Unbind(wx.EVT_MOTION)
         self.firstMapWindow.ClearLines()
         self.firstMapWindow.Refresh()
 
@@ -143,8 +145,6 @@ class SwipeMapFrame(DoubleMapFrame):
         """!Switch tracking direction"""
         super(SwipeMapFrame, self).ActivateSecondMap(event)
 
-        self.secondMapWindow.Bind(wx.EVT_MOTION,  lambda evt: self.TrackCursor(evt, showInFirst = True))
-        self.firstMapWindow.Unbind(wx.EVT_MOTION)
         self.secondMapWindow.ClearLines()
         self.secondMapWindow.Refresh()
 
