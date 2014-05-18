@@ -99,7 +99,7 @@ int parser(int argc, char *argv[], struct GParams *params,
 	_("Difference in x,y,z direction for moving feature or vertex");
 
     params->maxdist = G_define_option();
-    params->maxdist->key = "thresh";
+    params->maxdist->key = "threshold";
     params->maxdist->type = TYPE_DOUBLE;
     params->maxdist->required = NO;
     params->maxdist->multiple = YES;
