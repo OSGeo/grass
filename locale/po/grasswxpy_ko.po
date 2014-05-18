@@ -13462,11 +13462,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/query.py:60
 msgid "Copy all to clipboard"
-msgstr ""
+msgstr "모두 클립보드로 복사"
 
 #: ../gui/wxpython/gui_core/query.py:63
 msgid "Redirect to console"
-msgstr ""
+msgstr "콘솔로 보내기"
 
 #: ../gui/wxpython/gui_core/query.py:111 ../gui/wxpython/gui_core/query.py:112
 #, python-format
@@ -13496,7 +13496,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/query.py:222
 msgid "east, north"
-msgstr ""
+msgstr "동, 북"
 
 #: ../gui/wxpython/gui_core/query.py:233
 msgid "Nothing found"
