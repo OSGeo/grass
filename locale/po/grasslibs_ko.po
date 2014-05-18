@@ -22,7 +22,7 @@ msgstr "벡터가 점을 포함하고 있지 않습니다"
 
 #: ../lib/python/pygrass/raster/category.py:83
 msgid "Raser type: {0} not supported"
-msgstr "라스터타입: {0}를 지원하지 않습니다"
+msgstr "격자형: {0}를 지원하지 않습니다"
 
 #: ../lib/python/pygrass/raster/category.py:168
 msgid "Error executing: Rast_get_ith_cat"
@@ -38,32 +38,32 @@ msgstr "실행오류: Rast_set_cat"
 
 #: ../lib/python/pygrass/raster/abstract.py:240
 msgid "Mode type: {0} not supported ('r', 'w')"
-msgstr "모드타입: {0}를 지원하지 않습니다 ('r', 'w')"
+msgstr "모드형: {0}를 지원하지 않습니다 ('r', 'w')"
 
 #: ../lib/python/pygrass/raster/abstract.py:251
 msgid "Overwrite type: {0} not supported (True/False)"
-msgstr "덮어쓰기타입: {0}를 지원하지 않습니다 (True/False)"
+msgstr "덮어쓰기형: {0}를 지원하지 않습니다 (True/False)"
 
 #: ../lib/python/pygrass/raster/abstract.py:264
 #: ../lib/python/pygrass/vector/abstract.py:108
 msgid "Map name {0} not valid"
-msgstr "잘못된 맵이름 {0}"
+msgstr "잘못된 지도이름 {0}"
 
 #: ../lib/python/pygrass/raster/__init__.py:180
 msgid "Raster type not defined"
-msgstr "라스터타입을 정의하지 않았습니다"
+msgstr "격자형을 정의하지 않았습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:183
 msgid "Raster map <{0}> already exists"
-msgstr "라스터맵 <{0}>이 이미 존재합니다"
+msgstr "격자지도 <{0}>이 이미 존재합니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:189
 msgid "The map does not exist, I can't open in 'r' mode"
-msgstr "맵이 존재하지 않기 때문에 'r' 모드로 열 수 없습니다"
+msgstr "지도가 존재하지 않기 때문에 'r' 모드로 열 수 없습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:259
 msgid "Mode type: {0} not supported ('r', 'w','rw')"
-msgstr "모드타입: {0}를 지원하지 않습니다 ('r', 'w', 'rw')"
+msgstr "모드형: {0}를 지원하지 않습니다 ('r', 'w', 'rw')"
 
 #: ../lib/python/pygrass/raster/__init__.py:278
 #, python-format
@@ -72,19 +72,19 @@ msgstr "범위를 벗어난 색인: %r."
 
 #: ../lib/python/pygrass/raster/__init__.py:394
 msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "라스터맵 <{0}>이 이미 존재합니다. 덮어쓰기를 사용하세요."
+msgstr "격자지도 <{0}>이 이미 존재합니다. 덮어쓰기를 사용하세요."
 
 #: ../lib/python/pygrass/raster/__init__.py:425
 msgid "Raster map <{0}> does not exists"
-msgstr "라스터맵 <{0}>이 존재하지 않습니다"
+msgstr "격자지도 <{0}>이 존재하지 않습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:537
 msgid "Mode type: {0} not supported."
-msgstr "모드타입: {0}를 지원하지 않습니다"
+msgstr "모드형: {0}를 지원하지 않습니다"
 
 #: ../lib/python/pygrass/raster/__init__.py:571
 msgid "Invalid type {0}"
-msgstr "잘못된 타입 {0}"
+msgstr "잘못된 형 {0}"
 
 #: ../lib/python/pygrass/raster/__init__.py:573
 msgid "Invalid size {0}"
@@ -93,7 +93,7 @@ msgstr "잘못된 크기 {0}"
 #: ../lib/python/pygrass/vector/table.py:926
 #, python-format
 msgid "Deleting table <%s> which is attached to following map(s):"
-msgstr "다음 맵에 연결된 테이블 <%s>를 지우고 있습니다:"
+msgstr "다음 지도에 연결된 표 <%s>를 지우고 있습니다:"
 
 #: ../lib/python/pygrass/vector/table.py:930
 msgid "You must use the force flag to actually remove it. Exiting."
@@ -101,7 +101,7 @@ msgstr "실제로 지우기 위해서는 강제플래그를 사용해야 합니�
 
 #: ../lib/python/pygrass/errors.py:46
 msgid "The map is close!"
-msgstr "맵이 닫혔습니다!"
+msgstr "지도가 닫혔습니다!"
 
 #: ../lib/python/script/raster3d.py:89
 msgid "An error occurred while running r3.mapcalc"
@@ -111,7 +111,7 @@ msgstr "r3.mapcalc를 실행하는 도중 오류가 발생했습니다"
 #: ../lib/db/dbmi_client/column.c:136
 #, c-format, python-format
 msgid "Unable to describe table <%s>"
-msgstr "테이블 <%s>를 설명할 수 없습니다"
+msgstr "표 <%s>를 설명할 수 없습니다"
 
 #: ../lib/python/script/db.py:142
 #, python-format
@@ -128,7 +128,7 @@ msgstr "자료를 가져오는데 실패했습니다"
 msgid ""
 "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
 "current mapset."
-msgstr "<%(map)s>를 위한 히스토리를 쓰지 못 했습니다. 라스터맵 <%(map)s>를 현재 맵셋에서 찾지 못 했습니다."
+msgstr "<%(map)s>를 위한 히스토리를 쓰지 못 했습니다. 격자지도 <%(map)s>를 현재 지도세트에서 찾지 못 했습니다."
 
 #: ../lib/python/script/raster.py:105
 msgid "An error occurred while running r.mapcalc"
@@ -184,12 +184,12 @@ msgstr ""
 #: ../lib/python/script/vector.py:88
 #, python-format
 msgid "Database connection not defined for layer %s"
-msgstr "레이어 %s를 위한 데이타베이스 연결이 정의되지 않았습니다"
+msgstr "레이어 %s를 위한 자료베이스 연결이 정의되지 않았습니다"
 
 #: ../lib/python/script/vector.py:238
 #, python-format
 msgid "Missing layer %(layer)d in vector map <%(map)s>"
-msgstr "레이어 %(layer)d이 벡터맵 <%(map)s> 안에 없습니다"
+msgstr "레이어 %(layer)d이 벡터지도 <%(map)s> 안에 없습니다"
 
 #: ../lib/python/script/vector.py:256
 msgid "vector_db_select() failed"
@@ -197,18 +197,18 @@ msgstr "vector_db_select()가 실패했습니다"
 
 #: ../lib/python/script/core.py:934
 msgid "Mixing value types. Will try to compare after integer conversion"
-msgstr "값타입을 혼용했습니다. 정수로 변환한 후 비교를 시도할 것입니다"
+msgstr "값형을 혼용했습니다. 정수로 변환한 후 비교를 시도할 것입니다"
 
 #: ../lib/python/script/core.py:1152
 #, python-format
 msgid "Element type should be \"cell\" and not \"%s\""
-msgstr "요소타입이 \"%s\"이 아니라 \"cell\"이라야 합니다"
+msgstr "요소형이 \"%s\"이 아니라 \"cell\"이라야 합니다"
 
 #: ../lib/python/script/core.py:1181 ../lib/python/script/core.py:1271
 #: ../lib/python/script/core.py:1326
 #, python-format
 msgid "Element type should be \"rast\" and not \"%s\""
-msgstr "요소타입이 \"%s\"이 아니라 \"rast\"라야 합니다"
+msgstr "요소형이 \"%s\"이 아니라 \"rast\"라야 합니다"
 
 #: ../lib/python/script/core.py:1339 ../lib/python/temporal/gui_support.py:57
 #, python-format
@@ -217,7 +217,7 @@ msgstr "잘못된 요수 '%s'"
 
 #: ../lib/python/script/core.py:1527
 msgid "Unable to list mapsets"
-msgstr "맵셋을 나열하지 못 했습니다"
+msgstr "지도세트을 나열하지 못 했습니다"
 
 #: ../lib/python/script/core.py:1563
 #, python-format
@@ -242,7 +242,7 @@ msgstr "잘못된 파일이름 <%(s)s>. <%(il)s>는 허용되지 않습니다.\n
 #: ../lib/python/temporal/temporal_algebra.py:826
 #, python-format
 msgid "Space time %s dataset <%s> not found"
-msgstr "시공간 %s 데이타셋 <%s>를 찾을 수 없습니다"
+msgstr "시공간 %s 자료세트 <%s>를 찾지 못 했습니다"
 
 #: ../lib/python/temporal/temporal_algebra.py:844
 #: ../lib/python/temporal/temporal_algebra.py:848
@@ -251,24 +251,24 @@ msgid ""
 "Wrong temporal type of space time dataset <"
 "%s>                                       <%s> time is required"
 msgstr ""
-"시공간 데이타셋 <%s>의 틀린 시간타입"
+"시공간 자료세트 <%s>의 틀린 시간형"
 "                                       <%s> 시간이 필요합니다"
 
 #: ../lib/python/temporal/univar_statistics.py:54
 #: ../lib/python/temporal/univar_statistics.py:149
 #, python-format
 msgid "Space time %(sp)s dataset <%(i)s> is empty"
-msgstr "시공간 %(sp)s 데이타셋 <%(i)s>가 비어있습니다"
+msgstr "시공간 %(sp)s 자료세트 <%(i)s>가 비어있습니다"
 
 #: ../lib/python/temporal/univar_statistics.py:87
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to get statistics for raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "격자지도 <%s>를 위한 통계를 구할 수 없습니다"
 
 #: ../lib/python/temporal/univar_statistics.py:89
 #, fuzzy, python-format
 msgid "Unable to get statistics for 3d raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/univar_statistics.py:139
 #, fuzzy, python-format
@@ -278,15 +278,15 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/python/temporal/univar_statistics.py:190
 #, fuzzy, python-format
 msgid "Unable to get statistics for vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/list_stds.py:178
 msgid "Empty map list."
-msgstr ""
+msgstr "빈 지도목록"
 
 #: ../lib/python/temporal/list_stds.py:189
 msgid "Empty entry in map list, this should not happen."
-msgstr ""
+msgstr "지도목록에 빈 항목이 있을 수는 없습니다."
 
 #: ../lib/python/temporal/spatial_extent.py:125
 msgid ""
@@ -325,7 +325,7 @@ msgstr ""
 #: ../lib/python/temporal/temporal_raster_algebra.py:85
 #, fuzzy
 msgid "Removing empty raster maps"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/datetime_math.py:254
 #: ../lib/python/temporal/datetime_math.py:271
@@ -347,22 +347,22 @@ msgstr ""
 #: ../lib/python/temporal/datetime_math.py:737
 #, fuzzy
 msgid "Dates Before Christ are not supported"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/datetime_math.py:741
 #, fuzzy
 msgid "Time zones are not supported"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/datetime_math.py:751
 #, fuzzy, python-format
 msgid "Unable to parse time string: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/base.py:378
 #, fuzzy, python-format
 msgid "Object <%s> not found in the temporal database"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/base.py:459 ../lib/python/temporal/base.py:509
 msgid "Missing identifer"
@@ -376,7 +376,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/python/temporal/temporal_raster_base_algebra.py:316
 #, fuzzy, python-format
 msgid "Error computing map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/mapcalc.py:105
 msgid "Start spatio-temporal sampling"
@@ -411,7 +411,7 @@ msgstr ""
 #, fuzzy, python-format
 msgid ""
 "Map <%s> is already in temporal database, use overwrite flag to overwrite"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/mapcalc.py:255
 #, python-format
@@ -425,7 +425,7 @@ msgstr "mapcalc 계산중 오류"
 #: ../lib/python/temporal/mapcalc.py:280
 #, fuzzy
 msgid "Start map registration in temporal database"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/mapcalc.py:430 ../lib/python/temporal/mapcalc.py:436
 #: ../lib/python/temporal/mapcalc.py:442 ../lib/python/temporal/mapcalc.py:448
@@ -459,13 +459,13 @@ msgstr "임시파일을 열 수 없습니다"
 msgid ""
 "Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
 "%s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/open_stds.py:60
 #: ../lib/python/temporal/open_stds.py:115
 #, fuzzy, python-format
 msgid "Unkown type: %s"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/python/temporal/open_stds.py:66
 #, fuzzy, python-format
@@ -482,7 +482,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 msgid ""
 "Space time %(sp)s dataset <%(name)s> is already in the database. Use the "
 "overwrite flag."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/open_stds.py:155
 #, fuzzy, python-format
@@ -497,14 +497,14 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/python/temporal/aggregation.py:124
 #, fuzzy, python-format
 msgid "Aggregate %s raster maps"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/aggregation.py:138
 #, fuzzy, python-format
 msgid ""
 "Raster map <%s> is already in temporal database, use overwrite flag to "
 "overwrite"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/aggregation.py:142
 #, python-format
@@ -519,7 +519,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:289
 #, fuzzy, python-format
 msgid "Unknown temporal type \"%s\""
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:282
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1054
@@ -530,12 +530,12 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:310
 #, fuzzy, python-format
 msgid "Unsupported temporal unit: %s"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:359
 #, fuzzy, python-format
 msgid "Created register table <%s> for space time %s  dataset <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:678
 #: ../lib/python/temporal/abstract_space_time_dataset.py:924
@@ -550,7 +550,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1464
 #, fuzzy, python-format
 msgid "Unable to get map ids from register table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1574
 #, python-format
@@ -580,7 +580,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1911
 #, fuzzy, python-format
 msgid "Delete space time %s  dataset <%s> from temporal database"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1917
 #: ../lib/python/temporal/abstract_map_dataset.py:805
@@ -593,12 +593,12 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1928
 #, fuzzy, python-format
 msgid "Drop map register table: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1983
 #, fuzzy
 msgid "Error in register table request"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2011
 #, fuzzy, python-format
@@ -628,7 +628,7 @@ msgstr ""
 msgid ""
 "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer "
 "%(l)s are different"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2065
 #, fuzzy, python-format
@@ -709,12 +709,12 @@ msgstr ""
 #: ../lib/python/temporal/space_time_datasets.py:223
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/space_time_datasets.py:247
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/space_time_datasets.py:252
 #, fuzzy, python-format
@@ -730,17 +730,17 @@ msgstr ""
 #: ../lib/python/temporal/space_time_datasets.py:586
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/space_time_datasets.py:538
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/space_time_datasets.py:562
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/space_time_datasets.py:567
 #, fuzzy, python-format
@@ -750,12 +750,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/python/temporal/space_time_datasets.py:812
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/space_time_datasets.py:835
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/space_time_datasets.py:840
 #, fuzzy, python-format
@@ -765,12 +765,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/python/temporal/space_time_datasets.py:856
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/factory.py:51
 #, fuzzy, python-format
 msgid "Unknown dataset type: %s"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/python/temporal/register.py:77
 #, python-format
@@ -806,7 +806,7 @@ msgstr ""
 #: ../lib/python/temporal/register.py:177
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The map does not exists."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:196
 #, fuzzy, python-format
@@ -837,31 +837,31 @@ msgstr ""
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s> with layer %(l)s. Overwrite flag is not set."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:231
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s>. Overwrite flag is not set."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:255
 #, fuzzy, python-format
 msgid ""
 "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are "
 "different."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:261
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The temporal types are different."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:307
 #, fuzzy
 msgid "Register maps in the temporal database"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:314
 #, fuzzy
@@ -888,53 +888,53 @@ msgstr ""
 msgid ""
 "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
 "%(end)s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:404
 #, fuzzy, python-format
 msgid "Set absolute valid time for map <%s> to %s - %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:421
 #, fuzzy, python-format
 msgid ""
 "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/register.py:426
 #, fuzzy, python-format
 msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_export.py:96
 #, fuzzy, python-format
 msgid "Unable to export raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_export.py:106
 #, fuzzy, python-format
 msgid "Unable to export color rules for raster map <%s> r.out.gdal"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_export.py:128
 #, fuzzy, python-format
 msgid "Unable to export raster map <%s> with r.pack"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_export.py:154
 #, fuzzy, python-format
 msgid "Unable to export vector map <%s> as GML with v.out.ogr"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_export.py:185
 #, fuzzy, python-format
 msgid "Unable to export vector map <%s> with v.pack"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_export.py:210
 #, fuzzy, python-format
 msgid "Unable to export raster map <%s> with r3.pack"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:339
 #, fuzzy, python-format
@@ -977,12 +977,12 @@ msgstr "동쪽경계는 서쪽경계보다 값이 커야합니다"
 msgid ""
 "Unsupported relative time unit type for %(type)s map <%(id)s> with layer "
 "%(l)s: %(u)s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:448
 #, fuzzy, python-format
 msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:457
 #, fuzzy, python-format
@@ -1012,7 +1012,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_map_dataset.py:821
 #, fuzzy, python-format
 msgid "Delete %s dataset <%s> from temporal database"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:870
 #, python-format
@@ -1031,19 +1031,19 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/ogsf/gvl_file.c:436 ../lib/gpde/N_arrays_io.c:281
 #, fuzzy, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/c_libraries_interface.py:410
 #, fuzzy, python-format
 msgid "Unable to load range of 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/c_libraries_interface.py:425
 #: ../lib/ogsf/gvl_file.c:470 ../lib/raster3d/close.c:120
 #: ../lib/raster3d/close.c:130 ../lib/raster3d/close.c:159
 #, fuzzy, c-format, python-format
 msgid "Unable to close 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/c_libraries_interface.py:464 ../lib/ogsf/Gv3.c:66
 #: ../lib/ogsf/Gv3.c:331 ../lib/ogsf/Gp3.c:62 ../lib/ogsf/Gp3.c:194
@@ -1052,37 +1052,37 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/open.c:425 ../lib/sites/sites.c:263
 #, fuzzy, c-format, python-format
 msgid "Unable to open vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/sampling.py:92 ../lib/python/temporal/sampling.py:96
 #, fuzzy, python-format
 msgid "Dataset <%s> not found in temporal database"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:84
 #, fuzzy, python-format
 msgid "Unable to import/link raster map <%s> from file %s."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:94
 #, fuzzy, python-format
 msgid "Unable to set the color rules for raster map <%s>."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:118
 #, fuzzy, python-format
 msgid "Unable to unpack raster map <%s> from file %s."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:142
 #, fuzzy, python-format
 msgid "Unable to import vector map <%s> from file %s."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:166
 #, fuzzy, python-format
 msgid "Unable to unpack vector map <%s> from file %s."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:204
 #, python-format
@@ -1097,17 +1097,17 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/python/temporal/stds_import.py:215
 #, fuzzy, python-format
 msgid "Unable to find init file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:217
 #, fuzzy, python-format
 msgid "Unable to find list file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:219
 #, fuzzy, python-format
 msgid "Unable to find projection file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:244
 msgid "Projection information does not match. Proceeding..."
@@ -1126,7 +1126,7 @@ msgstr ""
 #: ../lib/python/temporal/stds_import.py:266
 #, fuzzy, python-format
 msgid "Unable to create location %(l)s. Reason: %(e)s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:273
 #, fuzzy, python-format
@@ -1136,7 +1136,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/python/temporal/stds_import.py:277
 #, fuzzy, python-format
 msgid "Unable to create default temporal database in new location %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:342
 #, python-format
@@ -1154,34 +1154,34 @@ msgstr ""
 #: ../lib/python/temporal/stds_import.py:366
 #, fuzzy, python-format
 msgid "Unable to find geotiff raster file <%s> in archive."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:372
 #, fuzzy, python-format
 msgid "Unable to find AAIGrid raster file <%s> in archive."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:378
 #, fuzzy, python-format
 msgid "Unable to find GML vector file <%s> in archive."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:387
 #, fuzzy, python-format
 msgid "Unable to find GRASS package file <%s> in archive."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:390
 #, fuzzy
 msgid "Unsupported input format"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/python/temporal/stds_import.py:396
 #, fuzzy, python-format
 msgid ""
 "Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
 "overwrite flag."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/stds_import.py:416
 #, fuzzy, python-format
@@ -1239,7 +1239,7 @@ msgstr ""
 msgid ""
 "Unable to receiving temporal database metadata.\n"
 "Current temporal database info:%(info)s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/core.py:586
 #, python-format
@@ -1268,12 +1268,12 @@ msgstr "임시파일을 열 수 없습니다"
 msgid ""
 "Unable to execute transaction:\n"
 " %(sql)s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/temporal_raster3d_algebra.py:44
 #, fuzzy
 msgid "Removing empty 3D raster maps"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gmath/solvers_direct.c:45
 msgid "Starting direct gauss elimination solver"
@@ -1710,13 +1710,13 @@ msgstr "자료가 없습니다."
 #: ../lib/ogsf/GS2.c:1655
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr "라스터맵 <%s>가 현재 영역 바깥입니다. 읽을 수 없습니다."
+msgstr "격자지도 <%s>가 현재 영역 바깥입니다. 읽을 수 없습니다."
 
 #: ../lib/ogsf/GS2.c:1733 ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747
 #: ../lib/ogsf/GS2.c:1756 ../lib/ogsf/GS2.c:1764 ../lib/ogsf/GS2.c:1774
 #: ../lib/ogsf/GS2.c:1822
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
-msgstr "GS_load_att_map(): 메모리가 모자랍니다. 맵을 읽을 수 없습니다."
+msgstr "GS_load_att_map(): 메모리가 모자랍니다. 지도를 읽을 수 없습니다."
 
 #: ../lib/ogsf/GS2.c:1850
 msgid "Loading failed"
@@ -1728,13 +1728,13 @@ msgstr "범위를 찾지 못 했습니다."
 
 #: ../lib/ogsf/gs_bm.c:124
 msgid "Bitmap mismatch"
-msgstr "비트맵이 일치하지 않습니다."
+msgstr "비트지도가 일치하지 않습니다."
 
 #: ../lib/ogsf/gsd_img_ppm.c:52 ../lib/ogsf/gsd_img_ppm.c:95
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/GK2.c:216
 #, fuzzy, c-format
 msgid "Unable to open file <%s> for writing"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_prim.c:146
 #, c-format
@@ -1753,19 +1753,19 @@ msgstr ""
 #: ../lib/ogsf/gsdrape.c:207
 #, fuzzy
 msgid "Unable to process vector map - out of memory"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/GVL2.c:267
 #, fuzzy, c-format
 msgid "Loading 3d raster map <%s>..."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/Gvl3.c:40 ../lib/ogsf/gvl_file.c:427
 #: ../lib/manage/do_rename.c:76 ../lib/manage/do_remove.c:78
 #: ../lib/gpde/N_arrays_io.c:273
 #, c-format
 msgid "3D raster map <%s> not found"
-msgstr "3차원 라스터맵 <%s>를 찾을 수 없습니다"
+msgstr "3차원 격자지도 <%s>를 찾을 수 없습니다"
 
 #: ../lib/ogsf/gsd_label.c:58
 msgid "Max. number of labels reached!"
@@ -1811,27 +1811,27 @@ msgstr ""
 #: ../lib/rst/interp_float/resout2d.c:426
 #, c-format
 msgid "Raster map <%s> not found"
-msgstr "라스터맵 <%s>를 찾지 못 했습니다"
+msgstr "격자지도 <%s>를 찾지 못 했습니다"
 
 #: ../lib/ogsf/gsd_legend.c:246
 #, fuzzy, c-format
 msgid "Unable to read color file of raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_legend.c:252
 #, fuzzy, c-format
 msgid "Unable to read category file of raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_legend.c:269
 #, fuzzy, c-format
 msgid "Unable to read fp range of raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_legend.c:281
 #, fuzzy, c-format
 msgid "Unable to read range of raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_legend.c:295
 msgid "Range request error for legend"
@@ -1857,17 +1857,17 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:235
 #, c-format
 msgid "Vector map <%s> not found"
-msgstr "벡터맵 <%s>를 찾을 수 없습니다"
+msgstr "벡터지도 <%s>를 찾을 수 없습니다"
 
 #: ../lib/ogsf/Gv3.c:262
 #, c-format
 msgid "No features from vector map <%s> fall within current region"
-msgstr "벡터맵 <%s>의 어떤 피쳐도 현재 영역 안에 있지 않습니다"
+msgstr "벡터지도 <%s>의 어떤 피쳐도 현재 영역 안에 있지 않습니다"
 
 #: ../lib/ogsf/Gv3.c:267
 #, c-format
 msgid "Vector map <%s> loaded (%d features)"
-msgstr "백터맵 <%s>를 읽었습니다. (%d 피쳐)"
+msgstr "백터지도 <%s>를 읽었습니다. (%d 피쳐)"
 
 #: ../lib/ogsf/Gv3.c:337 ../lib/ogsf/Gp3.c:200
 #: ../lib/rst/interp_float/vinput2d.c:79 ../lib/vector/Vlib/map.c:179
@@ -1879,7 +1879,7 @@ msgstr "백터맵 <%s>를 읽었습니다. (%d 피쳐)"
 #: ../lib/vector/Vlib/copy.c:595 ../lib/vector/Vlib/copy.c:733
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr "레이어 %d를 위한 데이타베이스 접속이 정의되지 않았습니다"
+msgstr "레이어 %d를 위한 자료베이스 접속이 정의되지 않았습니다"
 
 #: ../lib/ogsf/Gv3.c:343 ../lib/ogsf/Gp3.c:206
 #: ../lib/rst/interp_float/vinput2d.c:88 ../lib/vector/neta/utils.c:119
@@ -1904,7 +1904,7 @@ msgstr "주제 벡터레이어 <%s>를 읽고 있습니다..."
 #: ../lib/ogsf/Gv3.c:370 ../lib/ogsf/Gp3.c:233
 #, fuzzy, c-format
 msgid "No color rule defined for category %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/Gv3.c:385 ../lib/ogsf/Gp3.c:247
 #, fuzzy, c-format
@@ -1924,17 +1924,17 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:245
 #, fuzzy, c-format
 msgid "Unable to read vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/Gp3.c:146
 #, c-format
 msgid "No points from vector map <%s> fall within current region"
-msgstr "벡터맵 <%s>의 어떤 점도 현재 영역 안에 있지 않습니다"
+msgstr "벡터지도 <%s>의 어떤 점도 현재 영역 안에 있지 않습니다"
 
 #: ../lib/ogsf/Gp3.c:151
 #, c-format
 msgid "Vector map <%s> loaded (%d points)"
-msgstr "벡터맵 <%s>를 읽었습니다 (점 %d개)"
+msgstr "벡터지도 <%s>를 읽었습니다 (점 %d개)"
 
 #: ../lib/ogsf/Gp3.c:209
 #, fuzzy, c-format
@@ -1954,7 +1954,7 @@ msgstr ""
 #: ../lib/ogsf/Gs3.c:454 ../lib/ogsf/Gs3.c:540
 #, fuzzy, c-format
 msgid "Loading raster map <%s>..."
-msgstr "라스터맵 <%s>를 읽고 있습니다..."
+msgstr "격자지도 <%s>를 읽고 있습니다..."
 
 #: ../lib/ogsf/Gs3.c:596
 #, c-format
@@ -1964,7 +1964,7 @@ msgstr ""
 #: ../lib/ogsf/Gs3.c:658 ../lib/ogsf/Gs3.c:730
 #, fuzzy, c-format
 msgid "Translating colors from raster map <%s>..."
-msgstr "라스터맵 <%s>로부터 색상을 변환하고 있습니다..."
+msgstr "격자지도 <%s>로부터 색상을 변환하고 있습니다..."
 
 #: ../lib/ogsf/Gs3.c:967
 msgid "View not saved by this program,there may be some inconsistancies"
@@ -1989,7 +1989,7 @@ msgstr "보간을 위해서는 최소 2개의 키프레임이 필요합니다."
 #: ../lib/ogsf/gsd_img_mpeg.c:72
 #, fuzzy
 msgid "Unable to allocate stream"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:175
 msgid "Video codec not found"
@@ -1998,17 +1998,17 @@ msgstr ""
 #: ../lib/ogsf/gsd_img_mpeg.c:185
 #, fuzzy
 msgid "Unable to open codec"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:204
 #, fuzzy
 msgid "Unable to allocate picture"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:215
 #, fuzzy
 msgid "Unable to allocate temporary picture"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:282
 #, fuzzy
@@ -2051,12 +2051,12 @@ msgstr ""
 #: ../lib/ogsf/gsd_img_mpeg.c:379
 #, fuzzy
 msgid "Invalid output format parameters"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:401
 #, fuzzy, c-format
 msgid "Unable to open <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:414
 msgid "OGSF library has not been built with MPEG output support"
@@ -2069,7 +2069,7 @@ msgstr ""
 #: ../lib/ogsf/gvl_file.c:442
 #, fuzzy, c-format
 msgid "Unable to read range of 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/arraystats/class.c:21
 msgid "Discont algorithm currently not available because of bugs"
@@ -2095,7 +2095,7 @@ msgstr ""
 #: ../lib/cairodriver/read_bmp.c:88 ../lib/cairodriver/read_ppm.c:28
 #, fuzzy, c-format
 msgid "Cairo: unable to open input file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/read_bmp.c:92 ../lib/cairodriver/read_ppm.c:32
 #, c-format
@@ -2110,7 +2110,7 @@ msgstr ""
 #: ../lib/cairodriver/Raster.c:72
 #, fuzzy
 msgid "Failed to create surface"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/read_ppm.c:38
 #, c-format
@@ -2120,7 +2120,7 @@ msgstr ""
 #: ../lib/cairodriver/read_ppm.c:46
 #, fuzzy, c-format
 msgid "Cairo: unable to open input mask file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/read_ppm.c:50
 #, c-format
@@ -2136,22 +2136,22 @@ msgstr ""
 #: ../lib/cairodriver/write_xid.c:14
 #, fuzzy, c-format
 msgid "Unable to open output file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/write_xid.c:19
 #, fuzzy, c-format
 msgid "Unable to write output file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/write_ppm.c:27 ../lib/cairodriver/write_bmp.c:72
 #, fuzzy, c-format
 msgid "Cairo: unable to open output file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/write_ppm.c:34
 #, fuzzy, c-format
 msgid "Cairo: unable to open mask file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/Draw_bitmap.c:47
 msgid "Cairo_Bitmap: Failed to create source"
@@ -2160,12 +2160,12 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:67
 #, fuzzy
 msgid "Unable to open display"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/Graph.c:82
 #, fuzzy
 msgid "Unable to obtain visual"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/Graph.c:156
 #, c-format
@@ -2175,7 +2175,7 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:184
 #, fuzzy, c-format
 msgid "cairo: collecting to file '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/Graph.c:186
 #, c-format
@@ -2185,32 +2185,32 @@ msgstr ""
 #: ../lib/cairodriver/Graph.c:353
 #, fuzzy
 msgid "Unknown Cairo surface type"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/cairodriver/Graph.c:358
 #, fuzzy
 msgid "Failed to initialize Cairo surface"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/read_xid.c:14
 #, fuzzy, c-format
 msgid "Unable to open input file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/read_xid.c:17
 #, fuzzy, c-format
 msgid "Unable to read input file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/read_xid.c:20
 #, fuzzy, c-format
 msgid "Unable to parse input file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/Text.c:46
 #, fuzzy, c-format
 msgid "Unable to convert from <%s> to UTF-8"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/cairodriver/Text.c:56
 msgid "Some characters could not be converted to UTF-8"
@@ -2222,12 +2222,12 @@ msgstr ""
 #: ../lib/lidar/raster.c:175
 #, fuzzy, c-format
 msgid "Unable to access table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/lidar/zones.c:473 ../lib/lidar/zones.c:510
 #, fuzzy, c-format
 msgid "<%s> created in database."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/lidar/zones.c:477 ../lib/lidar/zones.c:514
 #, c-format
@@ -2237,12 +2237,12 @@ msgstr ""
 #: ../lib/imagery/target.c:38
 #, fuzzy, c-format
 msgid "Unable to read target file for group [%s]"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:81
 #, fuzzy, c-format
 msgid "Unable to write header into category raster condition file <%s>."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:98
 #, fuzzy, c-format
@@ -2252,12 +2252,12 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/imagery/iscatt_core.c:255
 #, fuzzy, c-format
 msgid "Unable to open category raster condtions file <%s>."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:263
 #, fuzzy, c-format
 msgid "Unable to find patch raster <%s>."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:280
 #, c-format
@@ -2277,7 +2277,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/imagery/iscatt_core.c:526
 #, fuzzy
 msgid "Unable to read from category raster condtition file."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:533
 msgid "Invalid size of category raster conditions file."
@@ -2292,12 +2292,12 @@ msgstr ""
 #: ../lib/imagery/iscatt_core.c:745
 #, fuzzy, c-format
 msgid "Unbale to read find raster <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:755
 #, fuzzy, c-format
 msgid "Unbale to open raster <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:761
 #, fuzzy, c-format
@@ -2307,12 +2307,12 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/imagery/iscatt_core.c:775
 #, fuzzy, c-format
 msgid "Unable to read range of raster <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:803
 #, fuzzy, c-format
 msgid "Unable to open category raster condtition file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iscatt_core.c:817
 msgid "Corrupted category raster conditions file (fseek failed)"
@@ -2372,17 +2372,17 @@ msgstr ""
 #: ../lib/imagery/points.c:124
 #, fuzzy, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/points.c:132
 #, fuzzy, c-format
 msgid "Bad format in control point file for group [%s in %s]"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/points.c:159
 #, fuzzy, c-format
 msgid "Unable to create control point file for group [%s in %s]"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/list_subgp.c:72
 #, c-format
@@ -2412,7 +2412,7 @@ msgstr ""
 #: ../lib/imagery/iclass_signatures.c:120
 #, fuzzy, c-format
 msgid "Unable to open output signature file '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/sigsetfile.c:41
 #, c-format
@@ -2424,7 +2424,7 @@ msgstr ""
 #: ../lib/imagery/sigsetfile.c:57
 #, fuzzy, c-format
 msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/list_gp.c:34
 #, c-format
@@ -2444,7 +2444,7 @@ msgstr ""
 #: ../lib/imagery/fopen.c:36 ../lib/imagery/fopen.c:57
 #, fuzzy, c-format
 msgid "Unable to open file [%s] of group [%s in %s]"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/fopen.c:49
 #, c-format
@@ -2469,7 +2469,7 @@ msgstr ""
 #: ../lib/imagery/iclass.c:83
 #, fuzzy, c-format
 msgid "No areas in category %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/imagery/iclass.c:127
 #, fuzzy, c-format
@@ -2494,38 +2494,38 @@ msgstr ""
 #: ../lib/raster3d/close.c:47
 #, fuzzy, c-format
 msgid "Unable to write history for 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster3d/close.c:62
 #, fuzzy, c-format
 msgid "Unable to move temp raster map <%s> to 3d data file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster3d/close.c:79
 #, fuzzy
 msgid "Unable to flush all tiles"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster3d/close.c:84
 #, fuzzy
 msgid "Unable to flush index"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster3d/close.c:94
 #, fuzzy
 msgid "Unable to position file"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster3d/close.c:99 ../lib/raster3d/close.c:105
 #: ../lib/raster3d/close.c:191 ../lib/raster3d/header.c:217
 #, fuzzy, c-format
 msgid "Unable to write header for 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster3d/close.c:110 ../lib/raster3d/close.c:153
 #, fuzzy, c-format
 msgid "Unable to create 3D raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster3d/close.c:169
 msgid "Error in cache"
@@ -2561,7 +2561,7 @@ msgstr ""
 #: ../lib/raster3d/range.c:73
 #, fuzzy, c-format
 msgid "Unable to open range file for [%s in %s]"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster3d/range.c:88
 #, fuzzy, c-format
@@ -2697,12 +2697,12 @@ msgstr ""
 #: ../lib/gis/mapset_msc.c:61
 #, fuzzy, c-format
 msgid "Unable to make mapset element %s (%s): %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/mapset_msc.c:65
 #, fuzzy, c-format
 msgid "Unable to access mapset element %s (%s): %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/alloc.c:44 ../lib/gis/alloc.c:86 ../lib/gis/alloc.c:132
 #, c-format
@@ -2766,17 +2766,17 @@ msgstr ""
 #: ../lib/gis/ls.c:103
 #, fuzzy, c-format
 msgid "Unable to open directory %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/datum.c:160
 #, c-format
 msgid "unable to open datum table file: %s"
-msgstr "데이텀 테이블파일 %s을 열 수 없습니다."
+msgstr "데이텀 표파일 %s을 열 수 없습니다."
 
 #: ../lib/gis/datum.c:182
 #, c-format
 msgid "error in datum table file, line %d"
-msgstr "데이텀 테이블파일의 %d번째 줄에 오류"
+msgstr "데이텀 표파일의 %d번째 줄에 오류"
 
 #: ../lib/gis/parser_wps.c:490
 msgid "Multiple outputs are not supported by WPS 1.0.0"
@@ -2785,7 +2785,7 @@ msgstr ""
 #: ../lib/gis/seek.c:52 ../lib/gis/seek.c:58
 #, fuzzy
 msgid "Unable to seek"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/seek.c:56
 msgid "Seek offset out of range"
@@ -3066,7 +3066,7 @@ msgstr ""
 #: ../lib/gis/parser.c:1037
 #, fuzzy, c-format
 msgid "Missing value for parameter <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser.c:1043
 #, c-format
@@ -3101,7 +3101,7 @@ msgstr ""
 #: ../lib/gis/paths.c:201
 #, fuzzy, c-format
 msgid "Unable to open file <%s> for reading"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/paths.c:217
 #, fuzzy, c-format
@@ -3121,7 +3121,7 @@ msgstr ""
 #: ../lib/gis/color_rules.c:88
 #, fuzzy
 msgid "no description"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_help.c:79
 msgid "Description:"
@@ -3160,7 +3160,7 @@ msgstr ""
 #: ../lib/gis/key_value3.c:33
 #, fuzzy, c-format
 msgid "Unable to open output file <%s>: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/key_value3.c:36
 #, fuzzy, c-format
@@ -3170,12 +3170,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/gis/key_value3.c:39
 #, fuzzy, c-format
 msgid "Error closing output file <%s>: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/key_value3.c:60
 #, fuzzy, c-format
 msgid "Unable to open input file <%s>: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/key_value3.c:64
 #, fuzzy, c-format
@@ -3185,7 +3185,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/gis/key_value3.c:67
 #, fuzzy, c-format
 msgid "Error closing input file <%s>: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:140
 msgid "SQL select statement"
@@ -3206,7 +3206,7 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:158
 #, fuzzy
 msgid "Name of attribute table"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:167
 #, fuzzy
@@ -3216,7 +3216,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/gis/parser_standard_options.c:176
 #, fuzzy
 msgid "Name of database"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:185
 msgid "Database schema"
@@ -3238,7 +3238,7 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:213
 #, fuzzy
 msgid "Name of key column"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:214
 msgid "Must refer to an integer column"
@@ -3267,12 +3267,12 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:269
 #, fuzzy
 msgid "Name of raster map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:278
 #, fuzzy
 msgid "Name of raster map(s)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:286
 msgid "Name of base raster map"
@@ -3285,12 +3285,12 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:302
 #, fuzzy
 msgid "Name of input elevation raster map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:311
 #, fuzzy
 msgid "Name of input elevation raster map(s)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:317
 msgid "Sampling interpolation method"
@@ -3311,32 +3311,32 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:333
 #, fuzzy
 msgid "Name of input 3D raster map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:342
 #, fuzzy
 msgid "Name of input 3D raster map(s)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:350
 #, fuzzy
 msgid "Name for output 3D raster map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:358
 #, fuzzy
 msgid "Name of 3D raster map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:367
 #, fuzzy
 msgid "Name of 3D raster map(s)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:376
 #, fuzzy
 msgid "Data type used in the output raster3d map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:385
 msgid ""
@@ -3378,18 +3378,18 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:442
 #, fuzzy
 msgid "Name of vector map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:452
 #, fuzzy
 msgid "Name of vector map(s)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:461
 #: ../lib/gis/parser_standard_options.c:470
 #, fuzzy
 msgid "Input feature type"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/gis/parser_standard_options.c:477
 msgid "Layer number or name"
@@ -3496,12 +3496,12 @@ msgstr "잘못된 좌표"
 #: ../lib/gis/parser_standard_options.c:632
 #, fuzzy
 msgid "Name of color table"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:643
 #, fuzzy
 msgid "Name of saved region"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:653
 #, fuzzy
@@ -3520,22 +3520,22 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:678
 #, fuzzy
 msgid "Name of the input space time raster dataset"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:687
 #, fuzzy
 msgid "Name of the input space time raster datasets"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:695
 #, fuzzy
 msgid "Name of the output space time raster dataset"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:703
 #, fuzzy
 msgid "Name of the input space time vector dataset"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:712
 msgid "Name of the input space time vector datasets"
@@ -3548,17 +3548,17 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:728
 #, fuzzy
 msgid "Name of the input space time raster3d dataset"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:737
 #, fuzzy
 msgid "Name of the input space time raster3d datasets"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:745
 #, fuzzy
 msgid "Name of the output space time raster3d dataset"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:754
 #, fuzzy
@@ -3578,7 +3578,7 @@ msgstr "자동 MASK파일을 열 수 없습니다"
 #: ../lib/gis/parser_standard_options.c:780
 #, fuzzy
 msgid "Type of the input map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:789
 #, fuzzy
@@ -3616,7 +3616,7 @@ msgstr ""
 #: ../lib/gis/find_file.c:87
 #, fuzzy, c-format
 msgid "Using <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/gisinit.c:51 ../lib/gis/gisinit.c:83
 msgid ""
@@ -3646,7 +3646,7 @@ msgstr ""
 #: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:220
 #, fuzzy, c-format
 msgid "Unable to open ellipsoid table file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/get_ellipse.c:344 ../lib/gis/get_ellipse.c:367
 #, c-format
@@ -3859,12 +3859,12 @@ msgstr "'%s' 디버그파일을 열 수 없습니다."
 #: ../lib/gis/timestamp.c:292
 #, fuzzy, c-format
 msgid "Unable to create timestamp file for %s map <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/timestamp.c:301
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for %s map <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/timestamp.c:331
 #, fuzzy, c-format
@@ -3889,12 +3889,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/gis/timestamp.c:524
 #, fuzzy, c-format
 msgid "Unable to create timestamp file for vector map <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/timestamp.c:533
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for vector map <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/distance.c:154
 #, c-format
@@ -4179,7 +4179,7 @@ msgstr ""
 #, fuzzy, python-format
 msgid ""
 "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/init/grass.py:348
 #, python-format
@@ -4393,7 +4393,7 @@ msgstr ""
 #: ../lib/init/grass.py:1147
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/init/grass.py:1152
 #, python-format
@@ -4448,7 +4448,7 @@ msgstr ""
 #: ../lib/init/lock.c:60
 #, fuzzy, c-format
 msgid "Unable to write lockfile %s (%s)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/init/prompt.py:20
 msgid "[Raster and Volume MASKs present]"
@@ -4523,12 +4523,12 @@ msgstr ""
 #: ../lib/proj/datum.c:270 ../lib/proj/datum.c:350
 #, fuzzy, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/proj/datum.c:283 ../lib/proj/datum.c:364
 #, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr "데이텀 테이블파일 <%s>의 %d번째 줄에 오류"
+msgstr "데이텀 표파일 <%s>의 %d번째 줄에 오류"
 
 #: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
@@ -4573,7 +4573,7 @@ msgstr ""
 #: ../lib/proj/get_proj.c:325
 #, fuzzy, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
@@ -4599,7 +4599,7 @@ msgstr "%s <%s>를 <%s>으로 이름을 바꿉니다"
 #: ../lib/manage/do_rename.c:62
 #, fuzzy, c-format
 msgid "Unable to rename vector map <%s> to <%s>"
-msgstr "벡터맵 <%s>의 이름을 <%s>으로 바꾸지 못 했습니다"
+msgstr "벡터지도 <%s>의 이름을 <%s>으로 바꾸지 못 했습니다"
 
 #: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
 #, fuzzy, c-format
@@ -4630,7 +4630,7 @@ msgstr ""
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
-msgstr "라스터"
+msgstr "격자"
 
 #: ../lib/manage/option.c:55
 msgid "Vector"
@@ -4647,12 +4647,12 @@ msgstr "그룹"
 #: ../lib/manage/do_copy.c:43
 #, c-format
 msgid "Copy %s <%s> to current mapset as <%s>"
-msgstr "%s <%s>를 현재 맵셋의 <%s>으로 복사합니다"
+msgstr "%s <%s>를 현재 지도세트의 <%s>으로 복사합니다"
 
 #: ../lib/manage/do_copy.c:52
 #, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
-msgstr "<%s>를 현재 맵셋의 <%s>으로 복사 할 수 없습니다"
+msgstr "<%s>를 현재 지도세트의 <%s>으로 복사 할 수 없습니다"
 
 #: ../lib/manage/do_copy.c:72
 #, c-format
@@ -4662,7 +4662,7 @@ msgstr "%s를 복사했습니다"
 #: ../lib/manage/read_list.c:73
 #, c-format
 msgid "Unable to open data base element list '%s'"
-msgstr "데이타의 기본요소목록 '%s'를 열 수 없습니다"
+msgstr "자료의 기본요소목록 '%s'를 열 수 없습니다"
 
 #: ../lib/manage/read_list.c:134
 #, c-format
@@ -4676,7 +4676,7 @@ msgstr "%s <%s>를 지우고 있습니다"
 
 #: ../lib/manage/do_remove.c:65
 msgid "Unable to delete vector map"
-msgstr "벡터맵을 지울 수 없습니다"
+msgstr "벡터지도를 지울 수 없습니다"
 
 #: ../lib/manage/do_remove.c:85
 #, c-format
@@ -4716,7 +4716,7 @@ msgstr "수수지의 총합이 0보다 훨씬 큽니다: %g\n"
 #: ../lib/gpde/N_arrays_io.c:93
 #, c-format
 msgid "Reading raster map <%s> into memory"
-msgstr "라스터맵 <%s>를 메모리로 읽어들입니다"
+msgstr "격자지도 <%s>를 메모리로 읽어들입니다"
 
 #: ../lib/gpde/N_arrays_io.c:183
 msgid "N_array_2d * array is empty"
@@ -4725,12 +4725,12 @@ msgstr "N_array_2d * 행렬이 비어있습니다"
 #: ../lib/gpde/N_arrays_io.c:202
 #, c-format
 msgid "Write 2d array to raster map <%s>"
-msgstr "2차원 행렬을 라스터맵 <%s>로 씁니다"
+msgstr "2차원 행렬을 격자지도 <%s>로 씁니다"
 
 #: ../lib/gpde/N_arrays_io.c:309
 #, c-format
 msgid "Read g3d map <%s> into the memory"
-msgstr "g3d 맵 <%s>를 메모리로 읽어들입니다"
+msgstr "g3d 지도 <%s>를 메모리로 읽어들입니다"
 
 #: ../lib/gpde/N_arrays_io.c:364 ../lib/gpde/N_arrays_io.c:464
 msgid "Error closing g3d file"
@@ -4739,12 +4739,12 @@ msgstr "g3d 파일을 닫는 중 오류"
 #: ../lib/gpde/N_arrays_io.c:420
 #, c-format
 msgid "Error opening g3d map <%s>"
-msgstr "g3d 맵 <%s>를 여는 중 오류"
+msgstr "g3d 지도 <%s>를 여는 중 오류"
 
 #: ../lib/gpde/N_arrays_io.c:422
 #, c-format
 msgid "Write 3d array to g3d map <%s>"
-msgstr "3차원 행렬을 g3d 맵 <%s>로 씁니다"
+msgstr "3차원 행렬을 g3d 지도 <%s>로 씁니다"
 
 #: ../lib/gpde/test/test_main.c:88
 msgid "Performs unit and integration tests for gpde library"
@@ -4757,37 +4757,37 @@ msgstr "계산시간(초)"
 #: ../lib/raster/quant_rw.c:88
 #, c-format
 msgid "Unable to read fp range for raster map <%s>"
-msgstr "라스터맵 <%s>의 실수범위를 읽지 못 했습니다"
+msgstr "격자지도 <%s>의 실수범위를 읽지 못 했습니다"
 
 #: ../lib/raster/quant_rw.c:92
 #, c-format
 msgid "Raster map <%s> is empty"
-msgstr "라스터맵 <%s>가 비어있습니다"
+msgstr "격자지도 <%s>가 비어있습니다"
 
 #: ../lib/raster/quant_rw.c:157
 #, fuzzy, c-format
 msgid "Unable to write quant rules: raster map <%s> is integer"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/quant_rw.c:166
 #, fuzzy, c-format
 msgid "Unable to write quant rules for raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/close.c:74 ../lib/raster/close.c:107
 #, fuzzy, c-format
 msgid "Invalid descriptor: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/close.c:373
 #, fuzzy, c-format
 msgid "Unable to rename null file '%s' to '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/close.c:439
 #, fuzzy, c-format
 msgid "Unable to rename cell file '%s' to '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/close.c:475
 msgid "unable to write f_format file for CELL maps"
@@ -4809,17 +4809,17 @@ msgstr ""
 #: ../lib/raster/quant_io.c:43
 #, fuzzy, c-format
 msgid "Floating data range for raster map <%s> is empty"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/quant_io.c:52
 #, fuzzy, c-format
 msgid "Integer data range for raster map <%s> is empty"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/quant_io.c:105
 #, fuzzy, c-format
 msgid "Attempt to open quantization table for CELL raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/quant_io.c:135
 #, fuzzy, c-format
@@ -4854,7 +4854,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/raster/reclass.c:168
 #, fuzzy, c-format
 msgid "Too many reclass categories for <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/reclass.c:171
 #, fuzzy, c-format
@@ -4872,12 +4872,12 @@ msgstr ""
 #: ../lib/raster/reclass.c:284
 #, fuzzy, c-format
 msgid "Unable to create header file for <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/reclass.c:332
 #, fuzzy, c-format
 msgid "Unable to create dependency file in <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/put_cellhd.c:34
 #, fuzzy, c-format
@@ -4887,14 +4887,14 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/raster/interp.c:211
 #, fuzzy, c-format
 msgid "Unknown interpolation method: %s"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
 msgid ""
 "Unable to read header file for raster map <%s@%s>.It is a reclass of raster "
 "map <%s@%s> %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/get_cellhd.c:70
 msgid "which is missing."
@@ -4932,22 +4932,22 @@ msgstr ""
 #: ../lib/raster/cats.c:109
 #, fuzzy, c-format
 msgid "Category support for <%s@%s> missing"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/cats.c:112
 #, fuzzy, c-format
 msgid "Category support for <%s@%s> invalid"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/cats.c:145
 #, fuzzy, c-format
 msgid "Category support for vector map <%s@%s> missing"
-msgstr "벡터맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "벡터지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/cats.c:149
 #, fuzzy, c-format
 msgid "Category support for vector map <%s@%s> invalid"
-msgstr "벡터맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "벡터지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/cats.c:968
 #, fuzzy, c-format
@@ -4957,7 +4957,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/raster/gdal.c:88
 #, fuzzy, c-format
 msgid "Unable to locate symbol <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/gdal.c:141
 #, fuzzy
@@ -4967,22 +4967,22 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/raster/gdal.c:371
 #, fuzzy
 msgid "Unable to open GDAL file"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/gdal.c:475 ../lib/raster/open.c:569
 #, fuzzy, c-format
 msgid "Invalid map type <%d>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/gdal.c:481
 #, fuzzy, c-format
 msgid "Unable to get <%s> driver"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/gdal.c:490
 #, fuzzy, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/gdal.c:498
 #, c-format
@@ -5009,12 +5009,12 @@ msgstr ""
 #: ../lib/raster/gdal.c:531
 #, fuzzy
 msgid "Unable to set geo transform"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/gdal.c:535
 #, fuzzy
 msgid "Unable to set projection"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/gdal.c:539
 #, fuzzy, c-format
@@ -5029,7 +5029,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/raster/gdal.c:603
 #, fuzzy, c-format
 msgid "Unable to create output file <%s> using driver <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/alloc_cell.c:151
 #, c-format
@@ -5054,17 +5054,17 @@ msgstr ""
 #: ../lib/raster/raster_metadata.c:109
 #, fuzzy, c-format
 msgid "Unable to read <%s> for raster map <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/raster_metadata.c:119 ../lib/raster/raster_metadata.c:148
 #, fuzzy, c-format
 msgid "Error closing <%s> metadata file for raster map <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/raster_metadata.c:142
 #, fuzzy, c-format
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/auto_mask.c:69
 msgid "Unable to open automatic MASK file"
@@ -5103,7 +5103,7 @@ msgstr ""
 #: ../lib/raster/color_rules.c:328
 #, fuzzy, c-format
 msgid "Unable to load color rules <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/format.c:154
 #, c-format
@@ -5148,7 +5148,7 @@ msgstr ""
 #: ../lib/raster/color_read.c:112
 #, fuzzy, c-format
 msgid "Color support for <%s@%s> %s"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 색상지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 색상지원: %s"
 
 #: ../lib/raster/window.c:18
 msgid ""
@@ -5176,7 +5176,7 @@ msgstr ""
 #: ../lib/raster/color_write.c:96 ../lib/vector/Vlib/color_write.c:91
 #, fuzzy, c-format
 msgid "Unable to create <%s> file for map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/range.c:102 ../lib/raster/range.c:110
 #, fuzzy, c-format
@@ -5186,7 +5186,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/raster/range.c:169
 #, fuzzy, c-format
 msgid "Unable to read quant rules for raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/range.c:206 ../lib/raster/range.c:226
 #, fuzzy, c-format
@@ -5214,7 +5214,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/raster/open.c:206
 #, fuzzy, c-format
 msgid "Error reading map type for raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/open.c:214
 #, c-format
@@ -5252,12 +5252,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/raster/open.c:301
 #, fuzzy, c-format
 msgid "Error reading format for <%s@%s>"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/open.c:498
 #, fuzzy
 msgid "Unable to create GDAL link"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/open.c:574
 #, c-format
@@ -5291,7 +5291,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/raster/open.c:839
 #, fuzzy, c-format
 msgid "Unable to find '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/open.c:850
 #, c-format
@@ -5321,7 +5321,7 @@ msgstr ""
 #: ../lib/raster/put_row.c:120
 #, fuzzy, c-format
 msgid "Error writing uncompressed FP data for row %d of <%s>"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/put_row.c:130
 #, c-format
@@ -5331,12 +5331,12 @@ msgstr "<%2$s>의 열 %1$d를 위한 압축된 실수자료를 쓰는데 오류"
 #: ../lib/raster/put_row.c:389 ../lib/raster/put_row.c:395
 #, fuzzy, c-format
 msgid "Error writing compressed data for row %d of <%s>"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/put_row.c:405
 #, fuzzy, c-format
 msgid "Error writing uncompressed data for row %d of <%s>"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/put_row.c:464
 #, fuzzy, c-format
@@ -5355,17 +5355,17 @@ msgstr ""
 #: ../lib/raster/put_row.c:522
 #, fuzzy, c-format
 msgid "Unable to find a temporary null file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/put_row.c:527
 #, fuzzy, c-format
 msgid "Unable to open null file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/put_row.c:554 ../lib/raster/put_row.c:557
 #, fuzzy, c-format
 msgid "Error writing null row %d"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/put_row.c:682
 #, c-format
@@ -5394,17 +5394,17 @@ msgstr ""
 #: ../lib/raster/get_row.c:173 ../lib/raster/get_row.c:176
 #, fuzzy
 msgid "Error reading raster data"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/get_row.c:211
 #, fuzzy
 msgid "Error reading raster data via GDAL"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/raster/get_row.c:822 ../lib/raster/get_row.c:825
 #, fuzzy, c-format
 msgid "Error reading null row %d"
-msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #: ../lib/raster/null_val.c:64
 msgid "EmbedGivenNulls: wrong data type"
@@ -5471,7 +5471,7 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:73
 #, fuzzy, c-format
 msgid "Vector map <%s> is not 3D"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/rst/interp_float/vinput2d.c:76
 msgid "Loading data from attribute table ..."
@@ -5492,7 +5492,7 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:121
 #, fuzzy
 msgid "Reading features from vector map ..."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/rst/interp_float/vinput2d.c:153
 #, c-format
@@ -5545,17 +5545,17 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:276
 #, fuzzy, c-format
 msgid "Number of points from vector map %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, fuzzy, c-format
 msgid "Number of points outside of 2D/3D region %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/rst/interp_float/vinput2d.c:279
 #, fuzzy, c-format
 msgid "Number of points being used %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/rst/interp_float/vinput2d.c:312
 msgid "Some points outside of region (ignored)"
@@ -5564,12 +5564,12 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:318
 #, fuzzy
 msgid "Unable to allocate memory"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/rst/interp_float/vinput2d.c:326
 #, fuzzy, c-format
 msgid "Unable to insert %f,%f,%f a = %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/rst/interp_float/write2d.c:40 ../lib/rst/interp_float/write2d.c:51
 #: ../lib/rst/interp_float/write2d.c:66 ../lib/rst/interp_float/write2d.c:75
@@ -5605,7 +5605,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/vedit/delete.c:72
 #, fuzzy, c-format
 msgid "No area found for centroid %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/vedit/delete.c:76
 #, c-format
@@ -5615,12 +5615,12 @@ msgstr ""
 #: ../lib/vector/vedit/delete.c:105
 #, fuzzy, c-format
 msgid "Area %d without centroid"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/vedit/delete.c:121
 #, fuzzy, c-format
 msgid "Area %d has no boundaries"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/file.c:159
 msgid "Writing to file loaded to memory not supported"
@@ -5629,7 +5629,7 @@ msgstr ""
 #: ../lib/vector/diglib/file.c:197
 #, fuzzy
 msgid "Unable to load file to memory, file not open"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/file.c:212
 msgid "Vector memory mode not supported, using 'AUTO'"
@@ -5706,7 +5706,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/diglib/test.c:58
 #, fuzzy
 msgid "Unable to open test.tmp file"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format
@@ -5832,17 +5832,17 @@ msgstr ""
 #: ../lib/vector/diglib/port_init.c:158
 #, fuzzy, c-format
 msgid "Unable to find '%x' in %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/frmt.c:45 ../lib/vector/diglib/frmt.c:70
 #, fuzzy, c-format
 msgid "Vector format not recognized: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/frmt.c:79 ../lib/vector/diglib/frmt.c:88
 #, fuzzy, c-format
 msgid "Vector format '%s' not supported"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/frmt.c:97
 #, c-format
@@ -5852,12 +5852,12 @@ msgstr ""
 #: ../lib/vector/diglib/spindex.c:450
 #, fuzzy, c-format
 msgid "Unable to delete node %d from spatial index"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/spindex.c:493
 #, fuzzy, c-format
 msgid "Unable to delete line %d from spatial index"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/spindex.c:529
 #, fuzzy
@@ -5867,12 +5867,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/diglib/spindex.c:546
 #, fuzzy, c-format
 msgid "Unable to delete area %d from spatial index"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/spindex.c:595
 #, fuzzy, c-format
 msgid "Unable to delete isle %d from spatial index"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/diglib/plus_struct.c:523
 #, c-format
@@ -5907,7 +5907,7 @@ msgstr ""
 #: ../lib/vector/neta/utils.c:195
 #, fuzzy, c-format
 msgid "Point %d is not connected!"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/neta/utils.c:230
 #, c-format
@@ -5926,7 +5926,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/neta/utils.c:249
 #, fuzzy
 msgid "Problem loading category values"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/neta/spanningtree.c:104
 msgid "Computing minimum spanning tree..."
@@ -5936,7 +5936,7 @@ msgstr ""
 #: ../lib/vector/neta/timetables.c:244 ../lib/vector/neta/timetables.c:286
 #, fuzzy, c-format
 msgid "Unable to open select cursor: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/neta/flow.c:310 ../lib/vector/Vlib/graph.c:105
 #: ../lib/vector/Vlib/net_build.c:661 ../lib/vector/Vlib/net_build.c:1064
@@ -5987,30 +5987,30 @@ msgstr ""
 #: ../lib/vector/Vlib/map.c:110
 #, fuzzy, c-format
 msgid "Unable to find vector map <%s> in <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:122 ../lib/vector/Vlib/map.c:257
 #: ../lib/vector/Vlib/open.c:812
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr "벡터맵 <%s>가 이미 존재하지만 덮어씁니다"
+msgstr "벡터지도 <%s>가 이미 존재하지만 덮어씁니다"
 
 #: ../lib/vector/Vlib/map.c:126 ../lib/vector/Vlib/open.c:806
 #: ../lib/vector/Vlib/open.c:817
 #, fuzzy, c-format
 msgid "Unable to delete vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:146 ../lib/vector/Vlib/map.c:275
 #, fuzzy, c-format
 msgid "Unable to copy vector map <%s> to <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:197 ../lib/vector/Vlib/map.c:325
 #: ../lib/vector/Vlib/copy.c:620 ../lib/vector/Vlib/copy.c:767
 #, fuzzy, c-format
 msgid "Unable to copy table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:213 ../lib/vector/Vlib/map.c:354
 #: ../lib/vector/Vlib/copy.c:633
@@ -6021,7 +6021,7 @@ msgstr ""
 #: ../lib/vector/Vlib/map.c:339 ../lib/vector/Vlib/map.c:470
 #, fuzzy, c-format
 msgid "Unable to delete table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:410
 #, c-format
@@ -6031,7 +6031,7 @@ msgstr ""
 #: ../lib/vector/Vlib/map.c:415
 #, fuzzy, c-format
 msgid "Invalid vector map name <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:425
 #, fuzzy, c-format
@@ -6051,22 +6051,22 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/map.c:494
 #, fuzzy, c-format
 msgid "Unable to open directory '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:508
 #, fuzzy, c-format
 msgid "Unable to delete file '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:522
 #, fuzzy, c-format
 msgid "Unable to rename directory '%s' to '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/map.c:531
 #, fuzzy, c-format
 msgid "Unable to remove directory '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/area.c:50
 #, fuzzy
@@ -6120,31 +6120,31 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:134
 #, fuzzy, c-format
 msgid "Invalid offset (%d)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:140 ../lib/vector/Vlib/write_pg.c:342
 #, fuzzy
 msgid "Unable to delete feature"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:192 ../lib/vector/Vlib/write_pg.c:2888
 #: ../lib/vector/Vlib/ascii.c:404 ../lib/db/dbmi_client/copy_tab.c:107
 #: ../lib/db/dbmi_client/copy_tab.c:127 ../lib/db/dbmi_client/db.c:41
 #, fuzzy, c-format
 msgid "Unable to start driver <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:210 ../lib/db/dbmi_client/copy_tab.c:218
 #: ../lib/db/dbmi_client/copy_tab.c:295 ../lib/db/dbmi_client/table.c:110
 #: ../lib/sites/sites.c:290
 #, fuzzy, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:239
 #, fuzzy, c-format
 msgid "Creating field <%s> failed"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:304 ../lib/vector/Vlib/write_pg.c:1089
 #, c-format
@@ -6154,7 +6154,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:326
 #, fuzzy, c-format
 msgid "Unable to create OGR layer <%s> in '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:338 ../lib/vector/Vlib/write_pg.c:1102
 #, c-format
@@ -6196,7 +6196,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:452
 #, fuzzy, c-format
 msgid "Unsupported feature type (%d)"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:471
 msgid "Boundary is not closed. Feature skipped."
@@ -6215,13 +6215,13 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:579 ../lib/vector/Vlib/write_pg.c:1993
 #, fuzzy, c-format
 msgid "Unable to select attributes for category %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:585 ../lib/vector/Vlib/write_pg.c:1997
 #: ../lib/db/dbmi_client/copy_tab.c:314
 #, fuzzy, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:591 ../lib/vector/Vlib/write_pg.c:2002
 #, c-format
@@ -6231,12 +6231,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_ogr.c:624
 #, fuzzy, c-format
 msgid "Unable to create field <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_ogr.c:653 ../lib/vector/Vlib/write_pg.c:2062
 #, fuzzy, c-format
 msgid "Unsupported column type %d"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/dgraph.c:432
 msgid ""
@@ -6254,22 +6254,22 @@ msgstr ""
 #: ../lib/vector/Vlib/close.c:91 ../lib/sites/sites.c:394
 #, fuzzy, c-format
 msgid "Unable to create vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/close.c:108
 #, fuzzy
 msgid "Copying features failed"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/close.c:141
 #, fuzzy, c-format
 msgid "Unable to open %s file"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/close.c:226
 #, fuzzy, c-format
 msgid "Unable to close vector <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/close.c:257
 #, c-format
@@ -6279,7 +6279,7 @@ msgstr ""
 #: ../lib/vector/Vlib/close.c:289
 #, fuzzy, c-format
 msgid "Link to vector map <%s> created"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/field.c:91
 msgid "Layer number must be 1 or greater"
@@ -6349,17 +6349,17 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/field.c:675 ../lib/vector/Vlib/open_ogr.c:77
 #, fuzzy, c-format
 msgid "Unable to open OGR data source '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/field.c:692
 #, fuzzy, c-format
 msgid "Unable to open OGR layer <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/field.c:719
 #, fuzzy
 msgid "Unable to open OGR DBMI driver"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/field.c:758
 msgid ""
@@ -6380,7 +6380,7 @@ msgstr ""
 #: ../lib/vector/Vlib/field.c:877
 #, fuzzy
 msgid "Unknown vector map format"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/field.c:911
 #, fuzzy, c-format
@@ -6434,7 +6434,7 @@ msgstr "원형자료를 등록하고 있습니다..."
 #: ../lib/vector/Vlib/build_nat.c:84
 #, fuzzy
 msgid "Unable to read vector map"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build_nat.c:117 ../lib/vector/Vlib/build_sfa.c:385
 #: ../lib/vector/Vlib/build_sfa.c:661
@@ -6502,7 +6502,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/write_pg.c:280
 #, fuzzy, c-format
 msgid "Unable to rewrite feature %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:316 ../lib/vector/Vlib/write_pg.c:1200
 #: ../lib/vector/Vlib/write_pg.c:1350 ../lib/vector/Vlib/simple_features.c:324
@@ -6512,12 +6512,12 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:321
 #, fuzzy, c-format
 msgid "Invalid offset (%ld)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:443
 #, fuzzy, c-format
 msgid "Unable to delete feature (%s) %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:545 ../lib/vector/Vlib/write_pg.c:1284
 #: ../lib/vector/Vlib/write_sfa.c:342
@@ -6528,12 +6528,12 @@ msgstr ""
 #: ../lib/vector/Vlib/build_pg.c:411 ../lib/vector/Vlib/open.c:1354
 #, fuzzy
 msgid "Unable to open PG file"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:654
 #, fuzzy, c-format
 msgid "Unable to desribe table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:725 ../lib/vector/Vlib/write_pg.c:1162
 #: ../lib/vector/Vlib/write_pg.c:1268 ../lib/vector/Vlib/write_pg.c:1779
@@ -6543,7 +6543,7 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/copy.c:100
 #, fuzzy, c-format
 msgid "Unsupported feature type %d"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/write_pg.c:761
 #, fuzzy, c-format
@@ -6575,27 +6575,27 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:237
 #, fuzzy
 msgid "PostGIS feature table not defined"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:1113
 #, fuzzy
 msgid "Unable to create new PostGIS feature table"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:1127
 #, fuzzy
 msgid "Unable to create new PostGIS topology schema"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:1240
 #, fuzzy, c-format
 msgid "Point skipped (output feature type: %s)"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/write_pg.c:1247
 #, fuzzy, c-format
 msgid "Line skipped (output feature type: %s)"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/write_pg.c:1254
 #, c-format
@@ -6605,17 +6605,17 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:1262
 #, fuzzy, c-format
 msgid "Face skipped (output feature type: %s)"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/write_pg.c:1344
 #, fuzzy, c-format
 msgid "Invalid feature type (%d) for nodes"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:1358
 #, fuzzy
 msgid "PostGIS topology schema not defined"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:1863
 msgid "Trying to insert 3D data into feature table which store 2D data only"
@@ -6628,7 +6628,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:1893
 #, fuzzy
 msgid "Unable to insert topological element into PostGIS Topology schema"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:2028
 #, c-format
@@ -6642,22 +6642,22 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:2161
 #, fuzzy, c-format
 msgid "Invalid feature %d (max: %d)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:2175
 #, fuzzy, c-format
 msgid "Invalid feature type (%d) for node"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:2179
 #, fuzzy, c-format
 msgid "Invalid node %d (%d)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:2257
 #, fuzzy, c-format
 msgid "Unable to determine next left/right edge for edge %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:2262
 #, fuzzy
@@ -6676,12 +6676,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/write_pg.c:2598
 #, fuzzy
 msgid "Unable to determine next left/right edge"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:2684
 #, fuzzy
 msgid "Unable to create new face"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:2823 ../lib/vector/Vlib/write_pg.c:2835
 #, fuzzy, c-format
@@ -6719,27 +6719,27 @@ msgstr ""
 #: ../lib/vector/Vlib/build.c:619
 #, fuzzy, c-format
 msgid "Number of lines of length zero: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:621
 #, fuzzy, c-format
 msgid "Number of boundaries of length zero: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:630
 #, fuzzy, c-format
 msgid "Number of boundary intersections: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:654
 #, fuzzy
 msgid "Skipping further checks because of incorrect boundaries"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:704
 #, fuzzy, c-format
 msgid "Number of redundant holes: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:843 ../lib/vector/Vlib/open.c:354
 #: ../lib/vector/Vlib/open.c:863
@@ -6750,7 +6750,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/build.c:849
 #, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr "벡터맵 <%s>를 위한 위상을 생성하고 있습니다..."
+msgstr "벡터지도 <%s>를 위한 위상을 생성하고 있습니다..."
 
 #: ../lib/vector/Vlib/build.c:867
 msgid "Topology was built"
@@ -6842,7 +6842,7 @@ msgstr "섬 개수: -"
 #: ../lib/vector/Vlib/build.c:992
 #, c-format
 msgid "Unable to create topo file for vector map <%s>"
-msgstr "벡터맵 <%s>를 위한 위상파일을 생성할 수 없습니다"
+msgstr "벡터지도 <%s>를 위한 위상파일을 생성할 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:1000
 msgid "Error writing out topo file"
@@ -6853,7 +6853,7 @@ msgid ""
 "Unable to build spatial index from topology, vector map is not opened at "
 "topology level 2"
 msgstr ""
-"벡터맵이 위상수준 2에서 열리지 않았기 때문에 위상으로부터 공간색인을 만들"
+"벡터지도가 위상수준 2에서 열리지 않았기 때문에 위상으로부터 공간색인을 만들"
 "지 못 했습니다."
 
 #: ../lib/vector/Vlib/build.c:1212
@@ -6868,7 +6868,7 @@ msgstr "공간색인이 없어서 저장할 수 없습니다"
 #: ../lib/vector/Vlib/build.c:1248
 #, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
-msgstr "벡터맵 <%s>를 위한 공간색인파일을 생성할 수 없습니다"
+msgstr "벡터지도 <%s>를 위한 공간색인파일을 생성할 수 없습니다"
 
 #: ../lib/vector/Vlib/build.c:1257
 msgid "Error writing out spatial index file"
@@ -6887,7 +6887,7 @@ msgstr "중심점 %d: 잘못된 면 %d"
 #: ../lib/vector/Vlib/read_sfa.c:117 ../lib/vector/Vlib/read_pg.c:192
 #, c-format
 msgid "Unexpected feature type (%d) - should be (%d)"
-msgstr "기대하지 않았던 피쳐타입 (%d) - (%d)라야 합니다"
+msgstr "기대하지 않았던 피쳐형 (%d) - (%d)라야 합니다"
 
 #: ../lib/vector/Vlib/read_sfa.c:124 ../lib/vector/Vlib/write_sfa.c:127
 #: ../lib/vector/Vlib/write_sfa.c:170 ../lib/vector/Vlib/write_sfa.c:266
@@ -6924,7 +6924,7 @@ msgstr "면 %d를 위한 중심점을 계산할 수 없습니다"
 #: ../lib/vector/Vlib/build_sfa.c:305
 #, c-format
 msgid "Feature type %d not supported"
-msgstr "피쳐타입 %d를 지원하지 않습니다"
+msgstr "피쳐형 %d를 지원하지 않습니다"
 
 #: ../lib/vector/Vlib/build_sfa.c:354 ../lib/vector/Vlib/build_sfa.c:364
 #: ../lib/vector/Vlib/read_pg.c:378
@@ -6936,14 +6936,14 @@ msgstr "지형이 없는 피쳐 %d를 넘어갑니다"
 #: ../lib/vector/Vlib/read_ogr.c:578
 #, c-format
 msgid "OGR feature type %d not supported"
-msgstr "OGR 피쳐타입 %d를 지원하지 않습니다"
+msgstr "OGR 피쳐형 %d를 지원하지 않습니다"
 
 #: ../lib/vector/Vlib/build_sfa.c:665
 #, fuzzy, c-format
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
-msgstr[0] "Datum %s 테이블파일을 열 수 없습니다"
-msgstr[1] "Datum %s 테이블파일을 열 수 없습니다"
+msgstr[0] "Datum %s 표파일을 열 수 없습니다"
+msgstr[1] "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build_sfa.c:722
 #, c-format
@@ -6988,7 +6988,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/ascii.c:160
 #, fuzzy, c-format
 msgid "Unparsable longitude value: [%s]"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/ascii.c:165
 #, c-format
@@ -7007,7 +7007,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/ascii.c:225
 #, fuzzy
 msgid "Unable to copy points"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/ascii.c:238
 #, c-format
@@ -7034,12 +7034,12 @@ msgstr ""
 #: ../lib/vector/Vlib/ascii.c:610
 #, fuzzy, c-format
 msgid "Unknown feature type %d"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/ascii.c:645
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/ascii.c:675
 #, c-format
@@ -7054,7 +7054,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/ascii.c:698
 #, fuzzy
 msgid "Unable to fetch data from table"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/ascii.c:730 ../lib/vector/Vlib/net_build.c:216
 #: ../lib/vector/Vlib/net_build.c:501 ../lib/vector/Vlib/net_build.c:519
@@ -7072,7 +7072,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/ascii.c:813
 #, fuzzy
 msgid "Unknown format"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/ascii.c:823
 msgid "Topology not available, unable to process areas"
@@ -7122,7 +7122,7 @@ msgstr ""
 #: ../lib/vector/Vlib/array.c:292
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, where %s)"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/cindex.c:32
 msgid "Category index is not up to date"
@@ -7178,12 +7178,12 @@ msgstr ""
 #: ../lib/vector/Vlib/cats.c:593
 #, fuzzy, c-format
 msgid "Loading categories from table <%s>..."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/cats.c:603 ../lib/db/dbmi_client/select.c:317
 #, fuzzy, c-format
 msgid "Unable select records from table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/cats.c:605
 #, fuzzy, c-format
@@ -7310,12 +7310,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/build_pg.c:282
 #, fuzzy
 msgid "Updating faces..."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build_pg.c:314
 #, fuzzy
 msgid "Updating edges..."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build_pg.c:323
 msgid "Inconsistency in topology detected. Dead line found."
@@ -7328,12 +7328,12 @@ msgstr ""
 #: ../lib/vector/Vlib/build_pg.c:462
 #, fuzzy, c-format
 msgid "Unsupported topo geometry type %d"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/build_pg.c:491
 #, fuzzy, c-format
 msgid "Unable to create <%s.%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/build_pg.c:642
 #, fuzzy
@@ -7348,7 +7348,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/build_pg.c:716
 #, fuzzy, c-format
 msgid "Inconsistency in topology: number of boundaries %d (should be %d)"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/build_pg.c:739
 #, fuzzy
@@ -7373,7 +7373,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_sfa.c:113
 #, fuzzy
 msgid "Unable to calculate centroid for area"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_sfa.c:212
 #, fuzzy
@@ -7383,12 +7383,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/write_sfa.c:304
 #, fuzzy, c-format
 msgid "Unsupported vector map format (%d)"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/read_ogr.c:215 ../lib/vector/Vlib/read_ogr.c:224
 #, fuzzy, c-format
 msgid "Unable to get feature geometry, fid %ld"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/read_ogr.c:382 ../lib/vector/Vlib/read_pg.c:482
 msgid "Feature without geometry. Skipped."
@@ -7406,12 +7406,12 @@ msgstr ""
 #: ../lib/vector/Vlib/level_two.c:23
 #, fuzzy, c-format
 msgid "Vector map <%s> is not open at topological level"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/level_two.c:284
 #, fuzzy, c-format
 msgid "Invalid node id: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/level_two.c:316
 #, fuzzy, c-format
@@ -7426,7 +7426,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/level_two.c:362
 #, fuzzy, c-format
 msgid "Line %d is not a boundary"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/level_two.c:445
 #, fuzzy, c-format
@@ -7450,12 +7450,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/open_ogr.c:191
 #, fuzzy, c-format
 msgid "Unable to get OGR driver <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_ogr.c:199
 #, fuzzy, c-format
 msgid "Unable to create OGR data source '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_ogr.c:211
 #, c-format
@@ -7465,12 +7465,12 @@ msgstr ""
 #: ../lib/vector/Vlib/open_ogr.c:215
 #, fuzzy, c-format
 msgid "Unable to delete OGR layer <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_ogr.c:221
 #, fuzzy, c-format
 msgid "OGR layer <%s> already exists in datasource '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_ogr.c:279
 #, c-format
@@ -7505,32 +7505,32 @@ msgstr ""
 #: ../lib/vector/Vlib/write.c:187 ../lib/vector/Vlib/write.c:339
 #, fuzzy, c-format
 msgid "Vector map <%s> is not opened"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write.c:200
 #, fuzzy, c-format
 msgid "Unable to write feature in vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write.c:250
 #, fuzzy, c-format
 msgid "Unable to rewrite feature %d in vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write.c:289
 #, fuzzy, c-format
 msgid "Unable to delete feature %d from vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write.c:330
 #, fuzzy, c-format
 msgid "Unable to restore feature %d in vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write.c:344
 #, fuzzy, c-format
 msgid "Vector map <%s> is not opened on topology level"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write.c:350
 #, fuzzy, c-format
@@ -7565,7 +7565,7 @@ msgstr ""
 #: ../lib/vector/Vlib/simple_features.c:225
 #, fuzzy, c-format
 msgid "Unknown Simple Features type (%d)"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/simple_features.c:332
 #, fuzzy
@@ -7575,18 +7575,18 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/simple_features.c:341
 #, fuzzy, c-format
 msgid "Unable to report simple features for vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/read.c:93 ../lib/vector/Vlib/read.c:129
 #: ../lib/vector/Vlib/read.c:168
 #, fuzzy
 msgid "Vector map is not open for reading"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/read.c:136 ../lib/vector/Vlib/read.c:180
 #, fuzzy, c-format
 msgid "Unable to read feature %d from vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/remove_areas.c:109 ../lib/vector/Vlib/remove_areas.c:274
 msgid "Area is composed of dead boundary"
@@ -7600,12 +7600,12 @@ msgstr ""
 #: ../lib/vector/Vlib/remove_areas.c:401
 #, fuzzy
 msgid "Could not delete line from coor"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/remove_areas.c:458 ../lib/vector/Vlib/remove_areas.c:492
 #, fuzzy
 msgid "Failed to build new area"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/remove_areas.c:463 ../lib/vector/Vlib/remove_areas.c:496
 msgid "Dissolve with neighbour area: corrupt topology"
@@ -7618,7 +7618,7 @@ msgstr ""
 #: ../lib/vector/Vlib/remove_areas.c:541 ../lib/vector/Vlib/remove_areas.c:568
 #, fuzzy
 msgid "Failed to build new isle"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/remove_areas.c:546 ../lib/vector/Vlib/remove_areas.c:573
 msgid "Dissolve with outer isle: corrupt topology"
@@ -7649,12 +7649,12 @@ msgstr ""
 #: ../lib/vector/Vlib/snap.c:519
 #, fuzzy, c-format
 msgid "New vertices: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/snap.c:546
 #, fuzzy
 msgid "Reading features..."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/net_build.c:101 ../lib/vector/Vlib/net_build.c:727
 msgid "Building graph..."
@@ -7663,7 +7663,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:143 ../lib/vector/Vlib/net_build.c:772
 #, fuzzy
 msgid "Unable to build network graph"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/net_build.c:149 ../lib/vector/Vlib/net_build.c:778
 msgid "Forward costs column not specified"
@@ -7800,7 +7800,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/close_pg.c:66 ../lib/vector/Vlib/read_pg.c:1403
 #, fuzzy, c-format
 msgid "Unable to close cursor %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/close_pg.c:137 ../lib/vector/Vlib/close_ogr.c:104
 #, fuzzy, c-format
@@ -7842,7 +7842,7 @@ msgstr "임시파일을 열 수 없습니다"
 msgid ""
 "Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
 "by v.build."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:437
 #, fuzzy, c-format
@@ -7852,7 +7852,7 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/open.c:445
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> on level %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:499
 #, fuzzy, c-format
@@ -7867,7 +7867,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/open.c:780
 #, fuzzy, c-format
 msgid "Unable to create vector map <%s>. Name is not SQL compliant."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:838
 #, fuzzy, c-format
@@ -7895,7 +7895,7 @@ msgstr "잘못된 좌표"
 #: ../lib/vector/Vlib/open.c:979
 #, fuzzy, c-format
 msgid "Unable to stat file <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:1043
 #, c-format
@@ -7918,7 +7918,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:1316
 #, fuzzy
 msgid "Unable to open OGR file"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:1342
 msgid "OGR output also detected, using OGR"
@@ -7927,22 +7927,22 @@ msgstr ""
 #: ../lib/vector/Vlib/bridges.c:213
 #, fuzzy, c-format
 msgid "Removed lines: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/bridges.c:214
 #, fuzzy, c-format
 msgid "Removed bridges: %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/select.c:116
 #, fuzzy, c-format
 msgid "Unable to delete item %d from spatial index"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/read_pg.c:272 ../lib/vector/Vlib/read_pg.c:471
 #, fuzzy, c-format
 msgid "Feature %ld without geometry skipped"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/read_pg.c:365
 #, c-format
@@ -7953,7 +7953,7 @@ msgstr ""
 #: ../lib/vector/Vlib/read_pg.c:368
 #, fuzzy, c-format
 msgid "Feature %d: unexpected type (%d) - should be %d"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/read_pg.c:575
 msgid "No geometry or topo geometry column defined"
@@ -8004,19 +8004,19 @@ msgstr ""
 msgid ""
 "Execution failed: %s\n"
 "Reason: %s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/read_pg.c:1668
 #, fuzzy, c-format
 msgid ""
 "Unable to read features. Reason:\n"
 "%s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/buffer2.c:361
 #, fuzzy
 msgid "Line is not looped"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/buffer2.c:443
 #, c-format
@@ -8044,7 +8044,7 @@ msgstr ""
 #: ../lib/vector/Vlib/buffer2.c:896 ../lib/vector/Vlib/buffer2.c:943
 #, fuzzy
 msgid "Line was not closed"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/buffer2.c:909 ../lib/vector/Vlib/buffer2.c:960
 msgid "Vect_get_point_in_poly() failed"
@@ -8079,17 +8079,17 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:81
 #, fuzzy, c-format
 msgid "Unable to copy features. Input vector map <%s> is not open"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/copy.c:104
 #, fuzzy, c-format
 msgid "Unable to create PostGIS layer <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/copy.c:133
 #, fuzzy, c-format
 msgid "Vector map <%s> not open on topological level. Areas will be skipped!"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/copy.c:229 ../lib/vector/Vlib/copy.c:234
 msgid "Copying features..."
@@ -8107,7 +8107,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:340
 #, fuzzy, c-format
 msgid "%d features without category or from different layer skipped"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/copy.c:372
 msgid "Exporting nodes..."
@@ -8116,7 +8116,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:400
 #, fuzzy, c-format
 msgid "Writing node %d failed"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/copy.c:478
 msgid "Exporting areas..."
@@ -8130,7 +8130,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:534 ../lib/vector/Vlib/copy.c:542
 #, fuzzy, c-format
 msgid "Writing area %d failed"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/copy.c:550
 #, c-format
@@ -8171,7 +8171,7 @@ msgstr ""
 #: ../lib/vector/Vlib/box.c:228
 #, fuzzy, c-format
 msgid "Unable to determine bbox for feature %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/box.c:277 ../lib/vector/Vlib/box.c:323
 #, fuzzy, c-format
@@ -8186,12 +8186,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/box.c:335
 #, fuzzy, c-format
 msgid "Unable to determine bbox for isle %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/geos.c:52
 #, fuzzy
 msgid "vector map is not opened"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/geos.c:55
 #, c-format
@@ -8232,12 +8232,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/geos.c:470
 #, fuzzy, c-format
 msgid "Unable to read feature id %d"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:109 ../lib/vector/Vlib/open_pg.c:267
 #, fuzzy
 msgid "No feature tables found in database."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:133
 #, fuzzy, c-format
@@ -8251,22 +8251,22 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:273
 #, fuzzy, c-format
 msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:276
 #, fuzzy, c-format
 msgid "Unable to delete PostGIS layer <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:282
 #, fuzzy, c-format
 msgid "PostGIS layer <%s.%s> already exists in database '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:390
 #, fuzzy
 msgid "No key column detected."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:462 ../lib/vector/Vlib/open_pg.c:474
 #, c-format
@@ -8295,7 +8295,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:530
 #, fuzzy, c-format
 msgid "PostGIS Topology extension not found in the database <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:617
 msgid "Empty bounding box"
@@ -8309,12 +8309,12 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:784
 #, fuzzy, c-format
 msgid "Inconsistency in topology: node %d - unexpected feature type %d"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/vector/Vlib/open_pg.c:954
 #, fuzzy, c-format
 msgid "Area %d without boundary detected"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:1012
 #, c-format
@@ -8324,14 +8324,14 @@ msgstr ""
 #: ../lib/vector/Vlib/open_pg.c:1079
 #, fuzzy
 msgid "Unable to get map bounding box from topology"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:1086
 #, fuzzy, c-format
 msgid ""
 "Unable to parse map bounding box:\n"
 "%s"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open_pg.c:1110
 #, c-format
@@ -8365,7 +8365,7 @@ msgstr ""
 #: ../lib/display/icon.c:80
 #, fuzzy, c-format
 msgid "Unsupported icon %d"
-msgstr "알려지지 않은 벡터타입입니다"
+msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/display/tran_colr.c:107 ../lib/display/tran_colr.c:109
 #, c-format
@@ -8380,17 +8380,17 @@ msgstr ""
 #: ../lib/display/r_raster.c:148
 #, fuzzy, c-format
 msgid "Unknown display driver <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/display/r_raster.c:149
 #, fuzzy, c-format
 msgid "Using display driver <%s>..."
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/display/r_raster.c:215
 #, fuzzy, c-format
 msgid "Unable to open file '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/symbol/read.c:211
 #, c-format
@@ -8448,7 +8448,7 @@ msgstr ""
 #: ../lib/segment/open.c:86
 #, fuzzy
 msgid "Unable to re-open segment file"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/segment/open.c:93
 msgid "Could not read segment file"
@@ -8599,7 +8599,7 @@ msgstr ""
 #: ../lib/db/dbmi_base/login.c:99
 #, fuzzy, c-format
 msgid "Unable to read file '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_base/login.c:113
 #, c-format
@@ -8609,7 +8609,7 @@ msgstr ""
 #: ../lib/db/dbmi_base/login.c:142
 #, fuzzy, c-format
 msgid "Unable to write file '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:91
 #, c-format
@@ -8619,17 +8619,17 @@ msgstr ""
 #: ../lib/db/dbmi_client/copy_tab.c:151
 #, fuzzy, c-format
 msgid "Unable to get list tables in database <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:167
 #, fuzzy, c-format
 msgid "Table <%s> already exists in database and will be overwritten"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:172
 #, fuzzy, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:250
 #, fuzzy, c-format
@@ -8639,7 +8639,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/db/dbmi_client/copy_tab.c:270
 #, fuzzy, c-format
 msgid "Unable to create table <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:370
 #, c-format
@@ -8654,7 +8654,7 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/db/dbmi_client/delete_tab.c:53
 #, fuzzy, c-format
 msgid "Unable to drop table: '%s'"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
 #: ../lib/db/dbmi_client/select.c:288
@@ -8689,12 +8689,12 @@ msgstr "html: 그림크기 %dx%d"
 #: ../lib/htmldriver/Graph_Set.c:119
 #, c-format
 msgid "html: type '%s'"
-msgstr "html: 타입 '%s'"
+msgstr "html: 형 '%s'"
 
 #: ../lib/nviz/lights.c:171
 #, fuzzy
 msgid "Unable to define new light"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/nviz/nviz.c:128
 #, c-format
@@ -8704,7 +8704,7 @@ msgstr "잘못된 색상(%s)입니다. \"white\"를 기본값으로 사용합니
 #: ../lib/nviz/position.c:56
 #, fuzzy
 msgid "Unable to set focus"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/nviz/render.c:106
 msgid "Bad server connection"
@@ -8713,12 +8713,12 @@ msgstr "서버접속 오류입니다."
 #: ../lib/nviz/render.c:112
 #, fuzzy
 msgid "Unable to get visual info"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/nviz/render.c:119
 #, fuzzy
 msgid "Unable to create rendering context"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/nviz/map_obj.c:59
 msgid "Maximum surfaces loaded!"
@@ -8726,12 +8726,12 @@ msgstr "최대 표면 개수를 초과했습니다!"
 
 #: ../lib/nviz/map_obj.c:88
 msgid "Maximum vector line maps loaded!"
-msgstr "최대 선벡터맵 개수를 초과했습니다!"
+msgstr "최대 선벡터지도 개수를 초과했습니다!"
 
 #: ../lib/nviz/map_obj.c:97 ../lib/nviz/map_obj.c:128
 #, fuzzy, c-format
 msgid "Error loading vector map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/nviz/map_obj.c:116
 msgid "Maximum vector point maps loaded!"
@@ -8744,7 +8744,7 @@ msgstr "최대 부피를 초과했습니다!"
 #: ../lib/nviz/map_obj.c:152
 #, fuzzy, c-format
 msgid "Error loading 3d raster map <%s>"
-msgstr "Datum %s 테이블파일을 열 수 없습니다"
+msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/nviz/map_obj.c:160
 msgid "Nviz_new_map_obj(): unsupported data type"
@@ -8795,11 +8795,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to select space time dataset register table <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to create timestamp file for raster3d map <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Invalid datetime in timestamp for raster3d map <%s>"
@@ -8807,7 +8807,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to remove timestamp for raster3d map <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Raster3d map <%s> not found"
@@ -8815,27 +8815,27 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Inconsistency in topology: line %d - unexpected feature type"
-#~ msgstr "알려지지 않은 벡터타입입니다"
+#~ msgstr "알려지지 않은 벡터형입니다"
 
 #, fuzzy
 #~ msgid ""
 #~ "Unable to read PostGIS features\n"
 #~ "%s"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "%d %s without geometry skipped"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Registering maps in the temporal database"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid ""
 #~ "Space time %(t)s dataset <%(i)s> is already in database, use overwrite "
 #~ "flag to overwrite"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Space time %(type)s dataset <%(id)s> not found"
@@ -8845,7 +8845,7 @@ msgstr ""
 #~ msgid ""
 #~ "Space time %(type)s dataset <%(id)s> is already in database, use "
 #~ "overwrite flag to overwrite"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unregister %(type)s map <%(map)s> from space time datasets"
@@ -8861,15 +8861,15 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Created register table <%s> for %s map <%s> with layer %s"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unregister %s map <%s> with layer %s"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unregister %s map <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable open spatial index file for write <%s>"
@@ -8881,7 +8881,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to get features"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to read line %d"
@@ -8889,38 +8889,38 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to get feature type"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to rewrite feature, vector map is not opened"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid ""
 #~ "Unable to delete feature %d, vector map <%s> is not opened on topology "
 #~ "level"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid ""
 #~ "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid ""
 #~ "Unable to restore feature %d, vector map <%s> is not opened on topology "
 #~ "level"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid ""
 #~ "Unable to restore feature %d, vector map <%s> is not opened in 'write' "
 #~ "mode"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to open cidx file <%s> for write"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Topology not available. Unable to insert new edge."
@@ -8928,7 +8928,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "input vector map is not open"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid ""
@@ -8941,23 +8941,23 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to attach centroids"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unexpected feature type (%s) - should be (%d)"
-#~ msgstr "알려지지 않은 벡터타입입니다"
+#~ msgstr "알려지지 않은 벡터형입니다"
 
 #, fuzzy
 #~ msgid "Unable to read centroid %d: %s"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to export node %d. Exiting."
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to look up account id"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to allocate memory for account name"
@@ -8969,11 +8969,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to remove space time dataset register table <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to drop table <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid ""
@@ -8983,7 +8983,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to find map <%s> with layer %s in temporal database"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to open fidx file for vector map <%s@%s>"
@@ -8999,15 +8999,15 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to delete feature id %d from vector map <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to open null device"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "The support for OGR vector maps wasn't compiled in"
-#~ msgstr "벡터맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+#~ msgstr "벡터지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #, fuzzy
 #~ msgid "End time must be later than start time"
@@ -9015,7 +9015,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unknown"
-#~ msgstr "알려지지 않은 벡터타입입니다"
+#~ msgstr "알려지지 않은 벡터형입니다"
 
 #, fuzzy
 #~ msgid "Raster map <%s> - unable to write row %d"
@@ -9023,23 +9023,23 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Failed writing raster map"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to query drawable"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to open driver <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Reading nodes from vector map ..."
@@ -9051,19 +9051,19 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to open raster map <%s@%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to find <%s@%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to open '%s'"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid " It is a reclass of raster map <%s@%s> "
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to realloc buffer"
@@ -9079,11 +9079,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to spawn the 'wish' program"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Cannot describe table <%s>"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Cannot read topo for line [%d]"
@@ -9174,7 +9174,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #~ msgid ""
 #~ "\n"
@@ -9185,46 +9185,46 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to open temporary file"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #~ msgid "Hit RETURN to cancel request\n"
 #~ msgstr "취소를 원하시면 RETURN을 누르세요\n"
 
 #, fuzzy
 #~ msgid "Problem reading raster map"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "unable to find a temporary null file %s"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #~ msgid "category support for [%s] in mapset [%s] %s"
-#~ msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+#~ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #~ msgid "category support for vector map [%s] in mapset [%s] %s"
-#~ msgstr "벡터맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+#~ msgstr "벡터지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #~ msgid "Cannot open temp file"
 #~ msgstr "임시파일을 열 수 없습니다"
 
 #~ msgid "color support for [%s] in mapset [%s] %s"
-#~ msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 색상지원: %s"
+#~ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 색상지원: %s"
 
 #, fuzzy
 #~ msgid "Error reading compressed map <%s@%s>, row %d"
-#~ msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+#~ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #, fuzzy
 #~ msgid "Error reading map <%s@%s>, row %d"
-#~ msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
+#~ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 
 #, fuzzy
 #~ msgid "Unable to find '%s' in '%s'"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to read header file for raster map <%s@%s>."
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to add database link, map is not opened in WRITE mode"
@@ -9232,7 +9232,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to delete layer/category %d/%d line %d"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Attempt to delete dead line"
@@ -9245,12 +9245,12 @@ msgstr ""
 #, fuzzy
 #~ msgid ""
 #~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid ""
 #~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to allocate memory for a null buffer"
@@ -9258,15 +9258,15 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to open file %s"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to delete prior null-cells file"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to close the null-cells file"
@@ -9274,11 +9274,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to delete the temporary null-cells file"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to delete the empty temporary null-cells file"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to delete the prior null-cells file"
@@ -9290,11 +9290,11 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to delete prior 'fcell' file"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to close file"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to delete the prior 'cell' file"
@@ -9302,7 +9302,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to delete the temporary 'cell' file"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to write quant file!"
@@ -9310,7 +9310,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable to delete the %s file"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+#~ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to write f_format file for CELL maps"
