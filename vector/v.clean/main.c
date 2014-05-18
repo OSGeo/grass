@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     opt.tool->descriptions = desc;
     
     opt.thresh = G_define_option();
-    opt.thresh->key = "thresh";
+    opt.thresh->key = "threshold";
     opt.thresh->type = TYPE_DOUBLE;
     opt.thresh->required = NO;
     opt.thresh->multiple = YES;
