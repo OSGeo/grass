@@ -63,7 +63,7 @@ void define_options(struct opt *opt)
     opt->nfield_opt->guisection = _("Nodes");
 
     opt->thresh_opt = G_define_option();
-    opt->thresh_opt->key = "thresh";
+    opt->thresh_opt->key = "threshold";
     opt->thresh_opt->type = TYPE_DOUBLE;
     opt->thresh_opt->required = NO;
     opt->thresh_opt->multiple = NO;
