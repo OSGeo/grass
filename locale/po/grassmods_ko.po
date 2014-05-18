@@ -18311,9 +18311,9 @@ msgid "Unable to read color table for 3D raster map <%s>"
 msgstr "출력할 격자지도"
 
 #: ../raster/r.colors/edit_colors.c:466
-#, c-format
+#, fuzzy, c-format
 msgid "Color table for %s map <%s> set to '%s'"
-msgstr "%s지도 <%s>를 위한 색상표가 '%s'로 설정되었습니다"
+msgstr "출력할 격자지도"
 
 #: ../raster/r.colors/rules.c:40
 #, c-format
@@ -29538,8 +29538,8 @@ msgstr[1] "출력할 격자지도"
 #, c-format
 msgid "%d lost"
 msgid_plural "%d lost"
-msgstr[0] "%d개를 잃어 버렸습니다"
-msgstr[1] "%d개를 잃어 버렸습니다"
+msgstr[0] ""
+msgstr[1] ""
 
 #. GTC %s will be replaced with a message about lost points.
 #: ../vector/v.lrs/v.lrs.segment/main.c:362
@@ -32250,34 +32250,34 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.segment/main.c:257
-#, c-format
+#, fuzzy, c-format
 msgid "%d point read from input"
 msgid_plural "%d points read from input"
-msgstr[0] "입력으로부터 %d개의 점을 읽었습니다"
-msgstr[1] "입력으로부터 %d개의 점을 읽었습니다"
+msgstr[0] "출력할 격자지도"
+msgstr[1] "출력할 격자지도"
 
 #. GTC %s is replaced with message indicating number of lost points.
 #: ../vector/v.segment/main.c:263
-#, c-format
+#, fuzzy, c-format
 msgid "%d point written to output map (%s)"
 msgid_plural "%d points written to output map (%s)"
-msgstr[0] "%d개의 점을 출력지도로 썼습니다 (%s)"
-msgstr[1] "%d개의 점을 출력지도로 썼습니다 (%s)"
+msgstr[0] "출력할 격자지도"
+msgstr[1] "출력할 격자지도"
 
 #: ../vector/v.segment/main.c:268
-#, c-format
+#, fuzzy, c-format
 msgid "%d line read from input"
 msgid_plural "%d lines read from input"
-msgstr[0] "입력으로부터 %d개의 선을 읽었습니다"
-msgstr[1] "입력으로부터 %d개의 선을 읽었습니다"
+msgstr[0] "출력할 격자지도"
+msgstr[1] "출력할 격자지도"
 
 #. GTC %s is replaced with message indicating number of lost lines.
 #: ../vector/v.segment/main.c:274
-#, c-format
+#, fuzzy, c-format
 msgid "%d line written to output map (%s)"
 msgid_plural "%d lines written to output map (%s)"
-msgstr[0] "%d개의 선을 출력지도로 썼습니다 (%s)"
-msgstr[1] "%d개의 선을 출력지도로 썼습니다 (%s)"
+msgstr[0] "출력할 격자지도"
+msgstr[1] "출력할 격자지도"
 
 #: ../vector/v.to.3d/trans3.c:45 ../vector/v.to.3d/trans2.c:43
 #, c-format

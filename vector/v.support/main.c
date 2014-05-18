@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     zone->description = _("Vector map projection zone");
 
     thresh = G_define_option();
-    thresh->key = "threshold";
+    thresh->key = "thresh";
     thresh->type = TYPE_DOUBLE;
     thresh->required = NO;
     thresh->description =
