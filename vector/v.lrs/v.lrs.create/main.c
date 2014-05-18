@@ -224,7 +224,7 @@ int main(int argc, char **argv)
     table_opt->description = _("New table is created by this module");
 
     thresh_opt = G_define_option();
-    thresh_opt->key = "thresh";
+    thresh_opt->key = "threshold";
     thresh_opt->type = TYPE_DOUBLE;
     thresh_opt->required = NO;
     thresh_opt->answer = "1";
