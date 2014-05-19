@@ -172,6 +172,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
 
+    db_begin_transaction(Driver);
     sprintf(buf,
 	    "create table %s ( cat integer, pnt_val double precision, rast_val double precision, "
 	    "diff double precision)", Fi->table);
@@ -256,6 +257,7 @@ int main(int argc, char **argv)
 	Vect_write_line(&Out, GV_POINT, Points, Cats);
     }
 
+    db_commit_transaction(Driver);
     db_close_database_shutdown_driver(Driver);
 
     Rast_close(fdrast);
