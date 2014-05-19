@@ -209,7 +209,6 @@ int main(int argc, char *argv[])
     parm.quantile->multiple = YES;
     parm.quantile->description = _("Quantile to calculate for method=quantile");
     parm.quantile->options = "0.0-1.0";
-    parm.quantile->answer = "0.5";
 
     flag.align = G_define_flag();
     flag.align->key = 'a';
