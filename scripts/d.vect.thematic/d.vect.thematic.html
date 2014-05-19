@@ -52,20 +52,23 @@ d.vect.thematic -l recent_earthquakes column=magnitude type=point \
                 themetype=graduated_points maxsize=15
 </pre></div>
 
-<p>Spearfish: differences between 'elevation.10m' and 'elevation.dem':
+<p>North Carolina: differences between 'elevation' (10m) and 'elev_state_500m':
 
 <div class="code"><pre>
 # random sampling of elevation points:
-g.region rast=elevation.10m -p
+g.region rast=elevation -p
 v.random random n=200
 v.db.addtable random col="el10 double precision"
 # transfer elevations to attribute table of random points map:
-v.what.rast random rast=elevation.10m col=el10
+v.what.rast random rast=elevation col=el10
 v.db.select random
 
 # comparative sampling of second map, incl. differences:
-v.sample in=random col=el10 rast=elevation.dem out=elev_sample
+v.sample in=random col=el10 rast=elev_state_500m out=elev_sample
 v.db.select elev_sample
+
+# univariate statistics:
+v.univar -e elev_sample col=diff type=point
 
 # thematic map:
 d.mon wx0
