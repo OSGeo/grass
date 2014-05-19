@@ -118,7 +118,7 @@ def main():
     make_frame(f, 90, 100, 70, 100)
     # use map name without mapset suffix
     mapname = map.split('@')[0]
-    grass.run_command('d.text', color='black', size=5, at='5,50', align='cl', text=mapname)
+    grass.run_command('d.text', color='black', size=5, at='5,97', align='cl', text=mapname)
 
     #draw legend
     
@@ -144,7 +144,7 @@ def main():
     if kv['datatype'] is 'CELL':
         leg_at = None
     else:
-        leg_at = '%f,95,5,15' %VSpacing        
+        leg_at = '%f,95,5,10' %VSpacing        
 
 # checking for histogram causes more problems than it solves
 #    histfiledir = grass.find_file(lmap, 'cell_misc')['file']
