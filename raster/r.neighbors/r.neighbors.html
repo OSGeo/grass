@@ -11,7 +11,6 @@ value equal to the average of the values
 appearing in its 3 x 3 cell "neighborhood" in the input
 layer.
 
-
 <p>
 The program will be run non-interactively if the user
 specifies program arguments (see OPTIONS) on the command
@@ -307,6 +306,60 @@ for <em>average</em> neighborhood function output,
 whether or not the color file makes sense for the output
 will be dependent on the input data values.)
 
+<h3>Propagation of output precision</h3>
+
+The following logic has been implemented: For any aggregate, there are
+two factors affecting the output type:
+
+<ol>
+<li> Whether the input map is integer or floating-point.</li> 
+<li> Whether the weighted or unweighted version of the aggregate is used.</li> 
+</ol>
+
+These combine to create four possibilities:
+<p>
+<table border="1">
+ <tr><th>input type</th><th>integer</th><th>integer</th><th>float</th><th>float</th></tr>
+ <tr><td>weighted</td><td>no</td><td>yes</td><td>no</td><td>yes</td></tr>
+ <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>average</td><td>float</td><td>float</td><td>float</td><td>float</td></tr>
+ <tr><td>median</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+ <tr><td>mode</td><td>integer</td><td>integer</td><td>[2]</td><td>[2]</td></tr>
+ <tr><td>minimum</td><td>integer</td><td>integer</td><td>float</td><td>float</td></tr>
+ <tr><td>maximum</td><td>integer</td><td>integer</td><td>float</td><td>float</td></tr>
+ <tr><td>range</td><td>integer</td><td>integer</td><td>float</td><td>float</td></tr>
+ <tr><td>stddev</td><td>float</td><td>float</td><td>float</td><td>float</td></tr>
+ <tr><td>sum</td><td>integer</td><td>float</td><td>float</td><td>float</td></tr>
+ <tr><td>count</td><td>integer</td><td>float</td><td>integer</td><td>float</td></tr>
+ <tr><td>variance</td><td>float</td><td>float</td><td>float</td><td>float</td></tr>
+ <tr><td>diversity</td><td>integer</td><td>integer</td><td>integer</td><td>integer</td></tr>
+ <tr><td>interspersion</td><td>integer</td><td>integer</td><td>integer</td><td>integer</td></tr>
+ <tr><td>quart1</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+ <tr><td>quart3</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+ <tr><td>perc90</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+ <tr><td>quantile</td><td>[1]</td><td>[1]</td><td>float</td><td>float</td></tr>
+</table>
+<p>
+[1] For integer input, quantiles may produce float results from
+interpolating between adjacent values.
+<br>
+[2] Calculating the mode of floating-point data is essentially
+meaningless.
+<p>
+	
+With the current aggregates, there are 5 cases:
+
+<ol> 
+<li> Output is always float: average, variance, stddev, quantiles (with
+interpolation).</li> 
+<li> Output is always integer: diversity, interspersion.</li> 
+<li> Output is integer if unweighted, float if weighted: count.</li> 
+<li> Output matches input: minimum, maximum, range, mode (subject to
+note 2 above), quantiles (without interpolation).</li> 
+<li> Output is integer for integer input and unweighted aggregate,
+otherwise float: sum.</li> 
+</ol> 
+
 <!-- TODO
 <h2>EXAMPLES</h2>
 
@@ -326,9 +379,11 @@ r.neighbors
 <em><a href="r.support.html">r.support</a></em>
 
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Michael Shapiro,
+Original version: Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory 
+<br>
+Updates for GRASS GIS 7 by Glynn Clements and others
 
 <p><i>Last changed: $Date$</i>  
