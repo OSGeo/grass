@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     out_sector_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     out_sector_opt->key = "sectors";
     out_sector_opt->description =
-	_("Name for output vector map to write segment attributes");
+	_("Name for output vector map to write sector attributes");
 
     opt_length = G_define_option();
     opt_length->key = "length";
