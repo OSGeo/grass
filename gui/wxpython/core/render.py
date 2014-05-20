@@ -86,10 +86,11 @@ class Layer(object):
         self.renderMgr = None
 
         self.Map = Map
-        self.type      = None
+        self.type = None
         self.SetType(ltype)
-        self.name  = name
-        
+        self.name = name
+        self.environ = os.environ.copy()
+
         if self.type == 'command':
             self.cmd = list()
             for c in cmd:
@@ -136,7 +137,7 @@ class Layer(object):
                                  {'type' : self.type, 'name' : self.name})
         
         if self.mapfile:
-            os.environ["GRASS_PNGFILE"] = self.mapfile
+            self.environ["GRASS_PNGFILE"] = self.mapfile
         
         # execute command
         try:
@@ -147,9 +148,9 @@ class Layer(object):
                     if ret != 0:
                         break
                     if not read:
-                        os.environ["GRASS_PNG_READ"] = "TRUE"
+                        self.environ["GRASS_PNG_READ"] = "TRUE"
                 
-                os.environ["GRASS_PNG_READ"] = "FALSE"
+                self.environ["GRASS_PNG_READ"] = "FALSE"
             else:
                 ret, msg = self._runCommand(self.cmd)
             if ret != 0:
@@ -165,11 +166,7 @@ class Layer(object):
                     continue
                 grass.try_remove(f)
                 f = None
-        
-        # stop monitor
-        if self.mapfile and "GRASS_PNGFILE" in os.environ:
-            del os.environ["GRASS_PNGFILE"]
-        
+
         self.forceRender = False
         
         return self.mapfile
@@ -180,11 +177,12 @@ class Layer(object):
         if self.type == 'wms':
             ret = 0
             msg = ''
-            self.renderMgr.Render(cmd)
+            self.renderMgr.Render(cmd, env=self.environ)
         else:
             ret, msg = RunCommand(cmd[0],
                                   getErrorMsg = True,
                                   quiet = True,
+                                  env=self.environ,
                                   **cmd[1])
         
         return ret, msg
@@ -301,6 +299,10 @@ class Layer(object):
         # for re-rendering
         self.forceRender = True
 
+    def SetEnvironment(self, environ):
+        """!Sets environment for rendering."""
+        self.environ = environ
+
     def IsDownloading(self):
         """!Is data downloading from web server e. g. wms"""
         if self.renderMgr is None:
@@ -385,10 +387,7 @@ class Map(object):
         
         self.overlays  = list()  # stack of available overlays
         self.ovlookup  = dict()  # lookup dictionary for overlay items and overlays
-        
-        # environment settings
-        self.env   = dict()
-        
+
         # path to external gisrc
         self.gisrc = gisrc
         
@@ -396,7 +395,6 @@ class Map(object):
         self.mapfile = grass.tempfile(create = False) + '.ppm'
         
         # setting some initial env. variables
-        self._initGisEnv() # g.gisenv
         if not self.GetWindow():
             sys.stderr.write(_("Trying to recover from default region..."))
             RunCommand('g.region', flags='d')
@@ -405,15 +403,11 @@ class Map(object):
         self.progressInfo = None
 
         # GRASS environment variable (for rendering)
-        self.env = {"GRASS_BACKGROUNDCOLOR" : "000000",
-               "GRASS_PNG_COMPRESSION" : "0",
-               "GRASS_TRUECOLOR"       : "TRUE",
-               "GRASS_TRANSPARENT"     : "TRUE",
-               "GRASS_PNG_READ"        : "FALSE",
-               }
-
-        for k, v in self.env.iteritems():
-            os.environ[k] = v
+        self.default_env = {"GRASS_BACKGROUNDCOLOR" : "000000",
+                            "GRASS_PNG_COMPRESSION" : "0",
+                            "GRASS_TRUECOLOR"       : "TRUE",
+                            "GRASS_TRANSPARENT"     : "TRUE"
+                            }
 
         # projection info
         self.projinfo = self._projInfo()
@@ -424,30 +418,6 @@ class Map(object):
         self.layerChanged = Signal('Map.layerChanged')
         self.updateProgress = Signal('Map.updateProgress')
 
-    def _runCommand(self, cmd, **kwargs):
-        """!Run command in environment defined by self.gisrc if
-        defined"""
-        # use external gisrc if defined
-        gisrc_orig = os.getenv("GISRC")
-        if self.gisrc:
-            os.environ["GISRC"] = self.gisrc
-        
-        ret = cmd(**kwargs)
-        
-        # back to original gisrc
-        if self.gisrc:
-            os.environ["GISRC"] = gisrc_orig
-        
-        return ret
-    
-    def _initGisEnv(self):
-        """!Stores GRASS variables (g.gisenv) to self.env variable
-        """
-        if not os.getenv("GISBASE"):
-            sys.exit(_("GISBASE not set. You must be in GRASS GIS to run this program."))
-        
-        self.env = self._runCommand(grass.gisenv)
-            
     def GetProjInfo(self):
         """!Get projection info"""
         return self.projinfo
@@ -459,10 +429,11 @@ class Map(object):
         if not grass.find_program('g.proj', '--help'):
             sys.exit(_("GRASS module '%s' not found. Unable to start map "
                        "display window.") % 'g.proj')
-        
-        ret = self._runCommand(RunCommand, prog = 'g.proj',
-                               read = True, flags = 'p')
-        
+        env = os.environ.copy()
+        if self.gisrc:
+            env['GISRC'] = self.gisrc
+        ret = RunCommand(prog='g.proj', read=True, flags='p', env=env)
+
         if not ret:
             return projinfo
         
@@ -482,9 +453,10 @@ class Map(object):
     def GetWindow(self):
         """!Read WIND file and set up self.wind dictionary"""
         # FIXME: duplicated region WIND == g.region (at least some values)
-        filename = os.path.join (self.env['GISDBASE'],
-                                 self.env['LOCATION_NAME'],
-                                 self.env['MAPSET'],
+        env = grass.gisenv()
+        filename = os.path.join (env['GISDBASE'],
+                                 env['LOCATION_NAME'],
+                                 env['MAPSET'],
                                  "WIND")
         try:
             windfile = open (filename, "r")
@@ -626,15 +598,10 @@ class Map(object):
         @see GetCurrentRegion()
         """
         region = {}
-        
-        tmpreg = os.getenv("GRASS_REGION")
-        if tmpreg:
-            del os.environ["GRASS_REGION"]
-        
-        # use external gisrc if defined
-        gisrc_orig = os.getenv("GISRC")
+
+        env = os.environ.copy()
         if self.gisrc:
-            os.environ["GISRC"] = self.gisrc
+            env['GISRC'] = self.gisrc
         
         # do not update & shell style output
         cmd = {}
@@ -673,6 +640,7 @@ class Map(object):
         ret, reg, msg = RunCommand('g.region',
                                    read = True,
                                    getErrorMsg = True,
+                                   env=env,
                                    **cmd)
         
         if ret != 0:
@@ -698,15 +666,7 @@ class Map(object):
                 region[key] = float(val)
             except ValueError:
                 region[key] = val
-        
-        # back to original gisrc
-        if self.gisrc:
-            os.environ["GISRC"] = gisrc_orig
-        
-        # restore region
-        if tmpreg:
-            os.environ["GRASS_REGION"] = tmpreg
-        
+
         Debug.msg (3, "Map.GetRegion(): %s" % region)
         
         if update:
@@ -884,7 +844,7 @@ class Map(object):
         
         return selected
 
-    def _renderLayers(self, force = False, overlaysOnly = False):
+    def _renderLayers(self, env, force = False, overlaysOnly = False):
         """!Render all map layers into files
 
         @param force True to force rendering
@@ -913,6 +873,7 @@ class Map(object):
             
             # render
             if force or layer.forceRender:
+                layer.SetEnvironment(env)
                 if not layer.Render():
                     continue
 
@@ -935,13 +896,13 @@ class Map(object):
 
         return maps, masks, opacities
         
-    def GetMapsMasksAndOpacities(self, force, windres):
+    def GetMapsMasksAndOpacities(self, force, windres, env):
         """!
         Used by Render function.
         
         @return maps, masks, opacities
         """
-        return self._renderLayers(force)
+        return self._renderLayers(force=force, env=env)
     
     def Render(self, force = False, windres = False):
         """!Creates final image composite
@@ -955,22 +916,21 @@ class Map(object):
         @return name of file with rendered image or None
         """
         wx.BeginBusyCursor()
+        env = os.environ.copy()
+        env.update(self.default_env)
         # use external gisrc if defined
-        gisrc_orig = os.getenv("GISRC")
         if self.gisrc:
-            os.environ["GISRC"] = self.gisrc
-        
-        tmp_region = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.SetRegion(windres)
-        os.environ["GRASS_WIDTH"]  = str(self.width)
-        os.environ["GRASS_HEIGHT"] = str(self.height)
+            env['GISRC'] = self.gisrc
+        env['GRASS_REGION'] = self.SetRegion(windres)
+        env['GRASS_WIDTH'] = str(self.width)
+        env['GRASS_HEIGHT'] = str(self.height)
         driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
         if driver == 'png':
-            os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
+            env['GRASS_RENDER_IMMEDIATE'] = 'png'
         else:
-            os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
+            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
         
-        maps, masks, opacities = self.GetMapsMasksAndOpacities(force, windres)
+        maps, masks, opacities = self.GetMapsMasksAndOpacities(force, windres, env)
         
         # ugly hack for MSYS
         if sys.platform != 'win32':
@@ -1000,7 +960,8 @@ class Map(object):
                                   bgcolor = bgcolor,
                                   width = self.width,
                                   height = self.height,
-                                  output = self.mapfile)
+                                  output = self.mapfile,
+                                  env=env)
             
             if ret != 0:
                 print >> sys.stderr, _("ERROR: Rendering failed. Details: %s") % msg
@@ -1008,17 +969,7 @@ class Map(object):
                 return None
         
         Debug.msg (3, "Map.Render() force=%s file=%s" % (force, self.mapfile))
-        
-        # back to original region
-        if tmp_region:
-            os.environ["GRASS_REGION"] = tmp_region
-        else:
-            del os.environ["GRASS_REGION"]
-        
-        # back to original gisrc
-        if self.gisrc:
-            os.environ["GISRC"] = gisrc_orig
-        
+
         wx.EndBusyCursor()
         if not maps:
             return None
