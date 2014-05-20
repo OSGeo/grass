@@ -226,7 +226,9 @@ class GConsoleWindow(wx.SplitterWindow):
         self.outputSizer.SetSizeHints(self)
         self.panelOutput.SetSizer(self.outputSizer)
         # eliminate gtk_widget_size_allocate() warnings
-        self.outputSizer.SetVirtualSizeHints(self.panelOutput)
+        # avoid to use a deprecated method in wxPython >= 2.9
+        getattr(self.outputSizer, 'FitInside',
+                self.outputSizer.SetVirtualSizeHints)(self.panelOutput)
         
         if self._gcstyle & GC_PROMPT:
             promptSizer.Fit(self)
