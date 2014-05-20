@@ -651,7 +651,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
         /* describe table */
         db_set_string(&dbtable_name, Fi->table);
         if (db_describe_table(driver, &dbtable_name, &table) != DB_OK) {
-            G_warning(_("Unable to desribe table <%s>"),
+            G_warning(_("Unable to describe table <%s>"),
                       Fi->table);
             db_close_database_shutdown_driver(driver);
             pg_info->dbdriver = NULL;
