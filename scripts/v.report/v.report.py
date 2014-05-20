@@ -68,8 +68,8 @@ def main():
         grass.fatal(_("Vector map <%s> not found") % mapname)
 
     colnames = grass.vector_columns(mapname, layer, getDict = False, stderr = nuldev)
-#    if not colnames:
-#        colnames = ['cat']
+    if not colnames:
+        colnames = ['cat']
 
     if option == 'coor':
         columns = ['dummy1','dummy2','dummy3']
