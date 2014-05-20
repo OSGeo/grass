@@ -5,10 +5,11 @@
  * 
  * AUTHOR(S):    Radim Blazek
  *               OGR support by Martin Landa <landa.martin gmail.com>
+ *               -f flag by Huidae Cho <grass4u gmail.com>
  *               
  * PURPOSE:      Print vector attributes
  *               
- * COPYRIGHT:    (C) 2005-2009, 2011-2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2009, 2011-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -32,7 +33,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *map_opt, *field_opt, *fs_opt, *vs_opt, *nv_opt, *col_opt,
 	*where_opt, *file_opt;
-    struct Flag *c_flag, *v_flag, *r_flag;
+    struct Flag *c_flag, *v_flag, *r_flag, *f_flag;
     dbDriver *driver;
     dbString sql, value_string;
     dbCursor cursor;
@@ -46,7 +47,7 @@ int main(int argc, char **argv)
     struct ilist *list_lines;
     char *fs, *vs;
     struct bound_box *min_box, *line_box;
-    int i, line, area, init_box, cat;
+    int i, line, area, init_box, cat, field_number;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -103,6 +104,11 @@ int main(int argc, char **argv)
     v_flag->description = _("Vertical output (instead of horizontal)");
     v_flag->guisection = _("Format");
 
+    f_flag = G_define_flag();
+    f_flag->key = 'f';
+    f_flag->description = _("Exclude attributes not linked to features");
+    f_flag->guisection = _("Selection");
+
     G_gisinit(argv[0]);
 
     if (G_parser(argc, argv))
@@ -115,17 +121,18 @@ int main(int argc, char **argv)
 	} 
     } 
     
+    min_box = line_box = NULL;
+    list_lines = NULL;
+
     if (r_flag->answer) {
 	min_box = (struct bound_box *) G_malloc(sizeof(struct bound_box));
 	G_zero((void *)min_box, sizeof(struct bound_box));
 
 	line_box = (struct bound_box *) G_malloc(sizeof(struct bound_box));
+    }
+
+    if (r_flag->answer || f_flag->answer)
 	list_lines = Vect_new_list();
-    }
-    else {
-      min_box = line_box = NULL;
-      list_lines = NULL;
-    }
 
     /* the field separator */
     fs = G_option_to_separator(fs_opt);
@@ -138,15 +145,20 @@ int main(int argc, char **argv)
     db_init_string(&value_string);
 
     /* open input vector */
-    if (!r_flag->answer)
-	Vect_open_old_head2(&Map, map_opt->answer, "", field_opt->answer);
-    else {
+    if (r_flag->answer || f_flag->answer) {
 	if (2 > Vect_open_old2(&Map, map_opt->answer, "", field_opt->answer)) {
 	    Vect_close(&Map);
 	    G_fatal_error(_("Unable to open vector map <%s> at topology level. "
 			   "Flag '%c' requires topology level."),
 			  map_opt->answer, r_flag->key);
 	}
+	field_number = Vect_get_field_number(&Map, field_opt->answer);
+    } else {
+	if (Vect_open_old_head2(&Map, map_opt->answer, "", field_opt->answer) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
+	/* field_number won't be used, but is initialized to suppress compiler
+	 * warnings. */
+	field_number = -1;
     }
 
     if ((Fi = Vect_get_field2(&Map, field_opt->answer)) == NULL)
@@ -218,6 +230,14 @@ int main(int argc, char **argv)
 	    if (r_flag->answer)
 		continue;
 
+	    if (f_flag->answer) {
+		Vect_cidx_find_all(&Map, field_number, -1, cat, list_lines);
+		/* if no features are found for this category, don't print
+		 * anything. */
+		if (list_lines->n_values == 0)
+		    break;
+	    }
+
 	    db_convert_column_value_to_string(column, &value_string);
 
 	    if (!c_flag->answer && v_flag->answer)
@@ -235,9 +255,12 @@ int main(int argc, char **argv)
 		fprintf(stdout, "\n");
 	}
 
+	if (f_flag->answer && col < ncols)
+	    continue;
+
 	if (r_flag->answer) {
 	    /* get minimal region extent */
-	    Vect_cidx_find_all(&Map, Vect_get_field_number(&Map, field_opt->answer), -1, cat, list_lines);
+	    Vect_cidx_find_all(&Map, field_number, -1, cat, list_lines);
 	    for (i = 0; i < list_lines->n_values; i++) {
 		line = list_lines->value[i];
 		if (Vect_get_line_type(&Map, line) == GV_CENTROID) {
