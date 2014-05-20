@@ -4,6 +4,7 @@
 #
 # MODULE:       v.report
 # AUTHOR(S):    Markus Neteler, converted to Python by Glynn Clements
+#               Bug fixed by Huidae Cho <grass4u gmail.com>
 # PURPOSE:      Reports geometry statistics for vector maps
 # COPYRIGHT:    (C) 2005, 2007-2009 by MN and the GRASS Development Team
 #
@@ -67,7 +68,6 @@ def main():
         grass.fatal(_("Vector map <%s> not found") % mapname)
 
     colnames = grass.vector_columns(mapname, layer, getDict = False, stderr = nuldev)
-    
     if not colnames:
         colnames = ['cat']
 
@@ -124,7 +124,11 @@ def main():
         records2.sort()
 
         #make pre-table
-        records3 = [r1 + r2[1:] for r1, r2 in zip(records1, records2)]
+	# len(records1) may not be the same as len(records2) because
+	# v.db.select can return attributes that are not linked to features.
+        records3 = []
+        for r2 in records2:
+            records3.append(filter(lambda r1: r1[0] == r2[0], records1)[0] + r2[1:])
     else:
         records1 = []
         p = grass.pipe_command('v.category', inp = mapname, layer = layer, option = 'print')
