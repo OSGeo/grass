@@ -260,6 +260,15 @@ struct Option *G_define_standard_option(int opt)
 	Opt->gisprompt = "new,cell,raster";
 	Opt->description = _("Name for output raster map");
 	break;
+    case G_OPT_R_OUTPUTS:
+	Opt->key = "output";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->multiple = YES;
+	Opt->gisprompt = "new,cell,raster";
+	Opt->description = _("Name for output raster map(s)");
+	break;
     case G_OPT_R_MAP:
 	Opt->key = "map";
 	Opt->type = TYPE_STRING;
