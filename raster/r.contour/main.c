@@ -131,9 +131,7 @@ int main(int argc, char *argv[])
     cut->description =
 	_("Minimum number of points for a contour line (0 -> no limit)");
 
-    notable = G_define_flag();
-    notable->key = 't';
-    notable->description = _("Do not create attribute table");
+    notable = G_define_standard_flag(G_FLG_V_TABLE);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
