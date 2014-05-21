@@ -465,8 +465,8 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Map);
 
     /* build topology only if requested or if tool!=select */
-    if (!(action_mode == MODE_SELECT || params.topo->answer == 1 ||
-	 !MODE_NONE)) {
+    if (action_mode != MODE_SELECT && action_mode != MODE_NONE &&
+		    params.topo->answer != 1) {
 	Vect_build_partial(&Map, GV_BUILD_NONE);
 	Vect_build(&Map);
     }
