@@ -162,12 +162,14 @@ def main():
 #        lflags += 'n'
 
     make_frame(f, 0, 90, 70, 100)
-    grass.run_command('d.legend', flags = lflags, map = lmap, lines = nlines, at = leg_at)
+    grass.run_command('d.legend', flags = lflags, rast = lmap, lines = nlines, at = leg_at)
 
     #draw map
     make_frame(f, 0, 100, 0, 70)
     grass.run_command('d.rast', map = map)
 
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
+
