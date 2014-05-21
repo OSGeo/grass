@@ -211,7 +211,7 @@ class LegendController(OverlayController):
         self._id = 0
         self._name = 'legend'
         # TODO: synchronize with d.legend?
-        self._defaultAt = 'at=5,50,2,5'
+        self._defaultAt = 'at=5,50,7,10'
         self._cmd = ['d.legend', self._defaultAt]
 
     def GetPlacement(self, screensize):
