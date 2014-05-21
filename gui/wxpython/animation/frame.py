@@ -60,17 +60,15 @@ class AnimationFrame(wx.Frame):
         # Make sure the temporal database exists
         tgis.init()
 
+        # create temporal directory and ensure it's deleted after programs ends (stored in MAPSET/.tmp/)
         global TMP_DIR
-        TMP_DIR = tempfile.mkdtemp()
+        TMP_DIR = gcore.tempdir()
 
         self.animations = [Animation() for i in range(MAX_COUNT)]
         self.windows = []
         self.animationPanel = AnimationsPanel(self, self.windows, initialCount=MAX_COUNT)
         bitmapPool = BitmapPool()
         mapFilesPool = MapFilesPool()
-        # create temporal directory and ensure it's deleted after programs ends
-#        tempDir = tempfile.mkdtemp()
-#        self.cleanUp = CleanUp(tempDir)
 
         self._progressDlg = None
         self._progressDlgMax = None
