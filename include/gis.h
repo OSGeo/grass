@@ -211,6 +211,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_R_INPUT,		/*!< old input raster map */
     G_OPT_R_INPUTS,		/*!< old input raster maps */
     G_OPT_R_OUTPUT,		/*!< new output raster map */
+    G_OPT_R_OUTPUTS,		/*!< new output raster maps */
     G_OPT_R_MAP,		/*!< old input raster map */
     G_OPT_R_MAPS,		/*!< old input rasters map */
     G_OPT_R_BASE,		/*!< old input base raster map */
