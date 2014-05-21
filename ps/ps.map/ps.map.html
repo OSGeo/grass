@@ -239,19 +239,20 @@ For a categorical (CELL) map the color table will create a legend displaying
 the colors for each of a raster map's category values along with its
 associated category label. For a floating point (FCELL or DCELL) map a
 continuous gradient legend will be created.
-<p>If <b>raster</b> is omitted, the colortable defaults to the previously
+<p>
+If <b>raster</b> is omitted, the colortable defaults to the previously
 registered raster layer.
-
+<p>
 The default location for the colortable is immediately below any other
 map legend information, starting at the left margin.
 The default text color is black.
-
-Omitting the <b>colortable</b> instruction would result in
-no color table.
-<p>If the colortable is turned off with a &quot;<tt>colortable&nbsp;N</tt>&quot;
-instruction the <b>end</b> command should not be given as the  
+<p>
+Omitting the <b>colortable</b> instruction would result in no color table.
+If the colortable is turned off with a &quot;<tt>colortable&nbsp;N</tt>&quot;
+instruction the <b>end</b> command should not be given as the
 main command will be treated as a single line instruction.
-<p>See also the <a href="#vlegend">vlegend</a> command for creating vector map
+<p>
+See also the <a href="#vlegend">vlegend</a> command for creating vector map
 legends.
 
 
@@ -266,7 +267,8 @@ raster map layers which have many categories, such as elevation.
 This could result in the printing of an extremely long color table!
 In this situation it is useful to use the <b>discrete N</b> instruction
 to force a continuous color gradient legend.
-<p>Be aware that the color table only includes categories which
+<p>
+Be aware that the color table only includes categories which
 have a label. You can use the <em>r.category</em> module to add labels.
 
 
@@ -283,6 +285,8 @@ then this label will be displayed.
 
 For floating point legends <b>width</b> is width of color
 band only. <b>height</b> is used only for floating point legend.
+A horizontal gradient legend can be achieved by setting the legend
+width greater than its height.
 
 Adding the <b>tickbar Y</b> instruction will change the tick mark style
 so that ticks are drawn across the color table instead of protruding out 
