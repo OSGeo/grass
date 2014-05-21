@@ -29,6 +29,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/raster3d.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -38,32 +39,29 @@ int main(int argc, char **argv)
 {
     char buff[512];
     char *map_name;
-    int black;
+    int maptype;
+    int black, white, color;
     int cats_num;
-    int color;
     int cur_dot_row;
     int do_cats;
     int dots_per_line;
-    int thin;
     int i, j, k;
-    int lines, steps;
+    int thin, lines, steps;
     int fp;
     double t, b, l, r;
     int hide_catnum, hide_catstr, hide_nodata, do_smooth;
     char *cstr;
-    int white;
-    double x_box[5];
-    double y_box[5];
+    double x_box[5], y_box[5];
     struct Categories cats;
     struct Colors colors;
     struct GModule *module;
-    struct Option *opt_input, *opt_color, *opt_lines, *opt_thin,
-		  *opt_labelnum, *opt_at, *opt_use, *opt_range,
+    struct Option *opt_rast2d, *opt_rast3d, *opt_color, *opt_lines,
+		  *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range,
 		  *opt_font, *opt_path, *opt_charset, *opt_fontsize;
-    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *size;
+    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo;
     struct Range range;
     struct FPRange fprange;
-    CELL min_ind, max_ind, null_cell;
+    CELL min_ind, max_ind;
     DCELL dmin, dmax, val;
     CELL min_colr, max_colr;
     DCELL min_dcolr, max_dcolr;
@@ -77,6 +75,7 @@ int main(int argc, char **argv)
     double *catlist, maxCat;
     int catlistCount, use_catlist;
     double fontsize;
+    char *units;
 
 
     /* Initialize the GIS calls */
@@ -86,15 +85,18 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
     module->description =
-	_("Displays a legend for a raster map in the active frame "
+	_("Displays a legend for a raster map (2 or 3D) in the active frame "
 	  "of the graphics monitor.");
 
-    opt_input = G_define_standard_option(G_OPT_R_MAP);
-    opt_input->description = _("Name of raster map");
+    opt_rast2d = G_define_standard_option(G_OPT_R_MAP);
+    opt_rast2d->key = "rast";
+    opt_rast2d->required = NO;
+    opt_rast2d->guisection = _("Input");
 
-    opt_color = G_define_standard_option(G_OPT_C_FG);
-    opt_color->label = _("Text color");
-    opt_color->guisection = _("Font settings");
+    opt_rast3d = G_define_standard_option(G_OPT_R3_MAP);
+    opt_rast3d->key = "rast3d";
+    opt_rast3d->required = NO;
+    opt_rast3d->guisection = _("Input");
 
     opt_lines = G_define_option();
     opt_lines->key = "lines";
@@ -111,7 +113,8 @@ int main(int argc, char **argv)
     opt_thin->required = NO;
     opt_thin->answer = "1";
     opt_thin->options = "1-1000";
-    opt_thin->description = _("Thinning factor (thin=10 gives cats 0,10,20...)");
+    opt_thin->description =
+	_("Thinning factor (thin=10 gives cats 0,10,20...)");
     opt_thin->guisection = _("Advanced");
 
     opt_labelnum = G_define_option();
@@ -119,23 +122,25 @@ int main(int argc, char **argv)
     opt_labelnum->type = TYPE_INTEGER;
     opt_labelnum->answer = "5";
     opt_labelnum->options = "2-100";
-    opt_labelnum->description = _("Number of text labels for smooth gradient legend");
+    opt_labelnum->description =
+	_("Number of text labels for smooth gradient legend");
     opt_labelnum->guisection = _("Gradient");
 
     opt_at = G_define_option();
     opt_at->key = "at";
     opt_at->key_desc = "bottom,top,left,right";
-    opt_at->type = TYPE_DOUBLE;	/* needs to be TYPE_DOUBLE to get past options check */
+    opt_at->type = TYPE_DOUBLE;  /* needs to be TYPE_DOUBLE to get past options check */
     opt_at->required = NO;
     opt_at->options = "0-100";
     opt_at->label =
-	_("Size and placement as percentage of screen coordinates (0,0 is lower left)");
+	_("Size and placement as percentage of screen coordinates "
+	  "(0,0 is lower left)");
     opt_at->description = opt_at->key_desc;
     opt_at->answer = NULL;
 
     opt_use = G_define_option();
     opt_use->key = "use";
-    opt_use->type = TYPE_DOUBLE;	/* string as it is fed through the parser? */
+    opt_use->type = TYPE_DOUBLE;  /* string as it is fed through the parser? */
     opt_use->required = NO;
     opt_use->description =
 	_("List of discrete category numbers/values for legend");
@@ -145,11 +150,15 @@ int main(int argc, char **argv)
     opt_range = G_define_option();
     opt_range->key = "range";
     opt_range->key_desc = "min,max";
-    opt_range->type = TYPE_DOUBLE;	/* should it be type_double or _string ?? */
+    opt_range->type = TYPE_DOUBLE;  /* should it be type_double or _string ?? */
     opt_range->required = NO;
     opt_range->description =
 	_("Use a subset of the map range for the legend (min,max)");
     opt_range->guisection = _("Subset");
+
+    opt_color = G_define_standard_option(G_OPT_C_FG);
+    opt_color->label = _("Text color");
+    opt_color->guisection = _("Font settings");
 
     opt_font = G_define_option();
     opt_font->key = "font";
@@ -207,28 +216,35 @@ int main(int argc, char **argv)
     flipit->description = _("Flip legend");
     flipit->guisection = _("Advanced");
 
-    size = G_define_flag();
-    size->key = 's';
-    size->description = _("Font size is height in pixels");
-    size->guisection = _("Font settings");
+    histo = G_define_flag();
+    histo->key = 'd';
+    histo->description = _("Add histogram to smoothed legend");
+    histo->guisection = _("Gradient");
+
 
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    /* FIXME: add GUI launching logic to G_parser() call */
+    if ((opt_rast2d->answer && opt_rast3d->answer) ||
+        !(opt_rast2d->answer || opt_rast3d->answer))
+	G_fatal_error(_("Please specify a single map name. To launch GUI use d.legend --ui."));
 
-    map_name = opt_input->answer;
+    if (opt_rast2d->answer) {
+	map_name = opt_rast2d->answer;
+	maptype = MAP_TYPE_RASTER2D;
+    }
+    else {
+	map_name = opt_rast3d->answer;
+	maptype = MAP_TYPE_RASTER3D;
+    }
 
     hide_catstr = hidestr->answer;	/* note hide_catstr gets changed and re-read below */
     hide_catnum = hidenum->answer;
     hide_nodata = hidenodata->answer;
     do_smooth = smooth->answer;
     flip = flipit->answer;
-
-    if (opt_fontsize->answer != NULL)
-	fontsize = atof(opt_fontsize->answer);
-    else
-	fontsize = 12; /* dummy placeholder, should never be called */
 
     color = D_parse_color(opt_color->answer, TRUE);
 
@@ -275,33 +291,45 @@ int main(int argc, char **argv)
 	}
     }
 
+    if (maptype == MAP_TYPE_RASTER2D) {
+	if (Rast_read_colors(map_name, "", &colors) == -1)
+	    G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    if (Rast_read_colors(map_name, "", &colors) == -1)
-	G_fatal_error(_("Color file for <%s> not available"), map_name);
+	fp = Rast_map_is_fp(map_name, "");
+ 
+	Rast_read_cats(map_name, "", &cats);
+    }
+    else {
+	if (Rast3d_read_colors(map_name, "", &colors) == -1)
+	    G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    fp = Rast_map_is_fp(map_name, "");
+	fp = TRUE;  /* currently raster 3D is always floating point */
+
+	Rast3d_read_cats(map_name, "", &cats);
+    }
+
     if (fp && !use_catlist) {
 	do_smooth = TRUE;
 	/* fprintf(stderr, "FP map found - switching gradient legend on\n"); */
 	flip = !flip;
     }
 
-    if (Rast_read_cats(map_name, "", &cats) == -1)
-	G_warning(_("Category file for <%s> not available"), map_name);
-
-    Rast_set_c_null_value(&null_cell, 1);
-
     if (D_open_driver() != 0)
-      	G_fatal_error(_("No graphics device selected. "
+	G_fatal_error(_("No graphics device selected. "
 			"Use d.mon to select graphics device."));
-    
+
     white = D_translate_color(DEFAULT_FG_COLOR);
     black = D_translate_color(DEFAULT_BG_COLOR);
-    
+
     if (opt_font->answer)
 	D_font(opt_font->answer);
     else if (opt_path->answer)
 	D_font(opt_path->answer);
+
+    if (opt_fontsize->answer != NULL)
+	fontsize = atof(opt_fontsize->answer);
+    else
+	fontsize = 12; /* dummy placeholder, should never be called */
 
     if (opt_charset->answer)
 	D_encoding(opt_charset->answer);
@@ -321,11 +349,16 @@ int main(int argc, char **argv)
 	Y0 = 88;
 	X0 = 3;
 	X1 = 7;
+
+	if (histo->answer) {
+	    X0 += 5;
+	    X1 += 5;
+	}
     }
 
     x0 = l + (int)((r - l) * X0 / 100.);
     x1 = l + (int)((r - l) * X1 / 100.);
-    y0 = t + (int)((b - t) * (100. - Y0) / 100.);	/* make lower left the origin */
+    y0 = t + (int)((b - t) * (100. - Y0) / 100.);  /* make lower left the origin */
     y1 = t + (int)((b - t) * (100. - Y1) / 100.);
 
     if (y0 > y1) {		/* allow for variety in order of corner */
@@ -523,13 +556,19 @@ int main(int argc, char **argv)
 		sprintf(DispFormat, "%%2d");
 	}
     }
-    else {			/* is fp */
-	if (Rast_read_fp_range(map_name, "", &fprange) == -1)
-	    G_fatal_error(_("Range information for <%s> not available"),
-			  map_name);
+    else {	/* is fp */
+	if (maptype == MAP_TYPE_RASTER2D) {
+	    if (Rast_read_fp_range(map_name, "", &fprange) == -1)
+		G_fatal_error(_("Range information for <%s> not available"),
+				map_name);
+	}
+	else {
+	    if (Rast3d_read_range(map_name, "", &fprange) == -1)
+		G_fatal_error(_("Range information for <%s> not available"),
+				map_name);
+	}
 
 	Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
-
 	Rast_get_d_color_range(&min_dcolr, &max_dcolr, &colors);
 
 	if (UserRange) {
@@ -648,6 +687,7 @@ int main(int argc, char **argv)
 								     1);
 
 		cstr = Rast_get_c_cat(&tcell, &cats);
+
 		if (!cstr[0])	/* no cats found, disable str output */
 		    hide_catstr = 1;
 		else
@@ -676,7 +716,7 @@ int main(int argc, char **argv)
 		}
 	    }
 
-	    /* this probably shouldn't happen mid-loop as text sizes 
+	    /* this probably shouldn't happen mid-loop as text sizes
 	       might not end up being uniform, but it's a start */
 	    if (strlen(buff) > MaxLabelLen)
 		MaxLabelLen = strlen(buff);
@@ -716,24 +756,24 @@ int main(int argc, char **argv)
 		    D_pos_abs(x1 + 4, y0 + ppl * k + txsiz / 2);
 	    }
 	    else {
-		/* text width is 0.81 of text height? so even though we set width 
+		/* text width is 0.81 of text height? so even though we set width
 		   to txsiz with D_text_size(), we still have to reduce.. hmmm */
 		if (!k)		/* first  */
 		    D_pos_abs(x0 - (strlen(buff) * txsiz * .81 / 2),
-			       y1 + 4 + txsiz);
+			      y1 + 4 + txsiz);
 		else if (k == steps - 1)	/* last */
 		    D_pos_abs(x1 - (strlen(buff) * txsiz * .81 / 2),
-			       y1 + 4 + txsiz);
+			      y1 + 4 + txsiz);
 		else
 		    D_pos_abs(x0 + ppl * k -
-			       (strlen(buff) * txsiz * .81 / 2),
-			       y1 + 4 + txsiz);
+			      (strlen(buff) * txsiz * .81 / 2),
+			      y1 + 4 + txsiz);
 	    }
 
-	    if(color)
+	    if (color)
 		D_text(buff);
 
-	}			/*for */
+	}	/* for */
 
 	lleg = y1 - y0;
 	wleg = x1 - x0;
@@ -760,8 +800,42 @@ int main(int argc, char **argv)
 	D_end();
 	D_stroke();
 
+
+	/* print units label, if present */
+	if (maptype == MAP_TYPE_RASTER2D)
+	    units = Rast_read_units(map_name, "");
+	else
+	    units = "";
+/* FIXME: does the raster3d really need to be opened to read the units?
+	    units = Rast3d_get_unit(map_fid); */
+
+	if (!units)
+	    units = "";
+
+	if(strlen(units)) {
+	    D_use_color(color);
+	    /* D_text_size() should be already set */
+	    if (horiz)
+		D_pos_abs((x0 + x1)/2. - (strlen(units) * txsiz * 0.81)/2,
+			  y1 + (txsiz * 3));
+	    else
+		D_pos_abs(x1 - 4, y0 - (txsiz * 1.75));
+
+	    D_text(units);
+	}
+
+
+	/* display sidebar histogram, if requested */
+	if (histo->answer) {
+	    if (opt_range->answer != NULL)
+		G_warning(_("Histogram constrained by range not yet implemented"));
+	    else
+		draw_histogram(map_name, x0, y0, wleg, lleg, color, flip,
+			       horiz, maptype);
+	}
+
     }
-    else {			/* non FP, no smoothing */
+    else {	/* non FP, no smoothing */
 
 	int true_l, true_r;
 	double txsiz;
@@ -908,11 +982,11 @@ int main(int argc, char **argv)
 	    }
 	    else {		/* is fp */
 		if (!flip) {
-		    if(use_catlist)
+		    if (use_catlist)
 			/* pass through format exactly as given by the user in
 			   the use= command line parameter (helps with log scale) */
 			sprintf(buff, "%s", opt_use->answers[i]);
-		    else 
+		    else
 			/* automatically generated/tuned decimal precision format */
 			sprintf(buff, DispFormat, catlist[i]);
 		}
@@ -926,7 +1000,7 @@ int main(int argc, char **argv)
 
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
 
-	    if(color)
+	    if (color)
 		D_text(buff);
 	}
 
@@ -953,13 +1027,13 @@ int main(int argc, char **argv)
 	    }
 	    D_use_color(white);
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row));
-	    if(color)
+	    if (color)
 		D_text(buff);
 	}
     }
 
     D_save_command(G_recreate_command());
     D_close_driver();
-    
+
     exit(EXIT_SUCCESS);
 }
