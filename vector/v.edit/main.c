@@ -235,7 +235,9 @@ int main(int argc, char *argv[])
 	    }
 	    Vect_close(&Map);
 
-	    Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer);
+	    if (Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer) < 0)
+		G_fatal_error(_("Unable to open vector map <%s>"),
+				params.map->answer);
 	}
     }
 
@@ -463,8 +465,8 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Map);
 
     /* build topology only if requested or if tool!=select */
-    if (!(action_mode == MODE_SELECT || params.topo->answer == 1 ||
-	 !MODE_NONE)) {
+    if (action_mode != MODE_SELECT && action_mode != MODE_NONE &&
+		    params.topo->answer != 1) {
 	Vect_build_partial(&Map, GV_BUILD_NONE);
 	Vect_build(&Map);
     }
