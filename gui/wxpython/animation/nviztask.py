@@ -24,6 +24,7 @@ from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
 from core.utils import GetLayerNameFromCmd, CmdToTuple, _
 from grass.script import task as gtask
+from core.settings import UserSettings
 
 
 class NvizTask:
@@ -77,6 +78,9 @@ class NvizTask:
                 self._processSurface(layer['nviz']['surface'], mapName=layerName)
             if 'volume' in layer['nviz']:
                 self._processVolume(layer['nviz']['volume'], mapName=layerName)
+            if 'vector' in layer['nviz']:
+                if 'points' in layer['nviz']['vector']:
+                    self._processPoints(layer['nviz']['vector']['points'], mapName=layerName)
 
     def _processSurface(self, surface, mapName):
         self._setMultiTaskParam('elevation_map', mapName)
@@ -123,6 +127,25 @@ class NvizTask:
             pos.append(str(surface['position'][coor]))
         value = ','.join(pos)
         self._setMultiTaskParam('surface_position', value)
+
+    def _processPoints(self, points, mapName):
+        for attrib in ('color', 'size', 'width'):
+            if attrib in points:
+                val = points[attrib]['value']
+                self._setMultiTaskParam('vpoint_' + attrib, str(val))
+        if 'height' in points:
+            height = points['height']['value']
+            self._setMultiTaskParam('vpoint_position', '0,0,{h}'.format(h=height))
+        if 'marker' in points:
+            marker = list(UserSettings.Get(group='nviz', key='vector',
+                                           subkey=['points', 'marker'],
+                                           internal=True))[points['marker']['value']]
+            self._setMultiTaskParam('vpoint_marker', marker)
+        if 'mode' in points:
+            if points['mode']['type'] == '3d':
+                self._setMultiTaskParam('vpoint_mode', '3D')
+            else:
+                self._setMultiTaskParam('vpoint_mode', 'surface')
 
     def _processVolume(self, volume, mapName):
         self._setMultiTaskParam('volume', mapName)
