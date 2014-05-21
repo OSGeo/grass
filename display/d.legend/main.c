@@ -467,7 +467,7 @@ int main(int argc, char **argv)
 	    if (!hide_catnum)
 		if (i > maxCat)
 		    maxCat = (double)i;
-	    k++;		/* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
+	    k++;	/* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
 	}
 	lines = k;
 
@@ -526,10 +526,10 @@ int main(int argc, char **argv)
 
 	/* switch to a smooth legend for CELL maps with too many cats */
 	/*  an alternate solution is to set   dots_per_line=1         */
-	if ((dots_per_line == 0) && (do_smooth == 0)) {
+	if ((dots_per_line == 0) && (do_smooth == FALSE)) {
 	    if (!use_catlist) {
 		G_message(_("Forcing a smooth legend: too many categories for current window height"));
-		do_smooth = 1;
+		do_smooth = TRUE;
 	    }
 	}
 
@@ -540,7 +540,7 @@ int main(int argc, char **argv)
 		    y0 = ((b - t) - (dots_per_line * lines)) / 2;
 	}
 
-	/*      D_text_size(dots_per_line*4/5., dots_per_line*4/5.);    redundant */
+	/* D_text_size(dots_per_line*4/5., dots_per_line*4/5.);    redundant */
 	/* if(Rast_is_c_null_value(&min_ind) && Rast_is_c_null_value(&max_ind))
 	   {
 	   min_ind = 1;
@@ -616,8 +616,9 @@ int main(int argc, char **argv)
 	cats_num = catlistCount;
 	do_cats = catlistCount;
 	lines = catlistCount;
-	do_smooth = 0;
+	do_smooth = FALSE;
     }
+
 
     if (do_smooth) {
 	int wleg, lleg, dx, dy;
@@ -813,14 +814,25 @@ int main(int argc, char **argv)
 	    units = "";
 
 	if(strlen(units)) {
+	    double x_pos, y_pos;
+	    int default_pos = TRUE;
+
 	    D_use_color(color);
 	    /* D_text_size() should be already set */
-	    if (horiz)
-		D_pos_abs((x0 + x1)/2. - (strlen(units) * txsiz * 0.81)/2,
-			  y1 + (txsiz * 3));
-	    else
-		D_pos_abs(x1 - 4, y0 - (txsiz * 1.75));
 
+	    if (horiz) {
+		x_pos = (x0 + x1)/2. - (strlen(units) * txsiz * 0.81)/2;
+		y_pos = y1 + (txsiz * 3);
+	    }
+	    else {
+		x_pos = x1 - 4;
+		if (default_pos)
+		    y_pos = y0 - (txsiz * 1.75);
+		else
+		    y_pos = y1 + (txsiz * 2.75);
+	    }
+
+	    D_pos_abs(x_pos, y_pos);
 	    D_text(units);
 	}
 
@@ -831,7 +843,7 @@ int main(int argc, char **argv)
 		G_warning(_("Histogram constrained by range not yet implemented"));
 	    else
 		draw_histogram(map_name, x0, y0, wleg, lleg, color, flip,
-			       horiz, maptype);
+			       horiz, maptype, fp);
 	}
 
     }
@@ -843,7 +855,7 @@ int main(int argc, char **argv)
 
 	/* set legend box bounds */
 	true_l = l;
-	true_r = r;		/* preserve window width */
+	true_r = r;	/* preserve window width */
 	l = x0;
 	t = y0;
 	r = x1;
@@ -858,7 +870,7 @@ int main(int argc, char **argv)
 	    dots_per_line = (b - t) / (lines + 2);	/* + another line for 'x of y categories' text */
 
 	/* adjust text size */
-	/*      txsiz = (int)((y1-y0)/(1.5*(lines+5))); */
+	/*  txsiz = (int)((y1-y0)/(1.5*(lines+5))); */
 	txsiz = (y1 - y0) / (2.0 * lines);
 
 	/* scale text to fit in window if position not manually set */
