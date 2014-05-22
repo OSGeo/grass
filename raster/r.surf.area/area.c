@@ -120,5 +120,5 @@ double conv_value(double value, int units)
     if (units == U_UNDEFINED)
 	return value;
 
-    return value * G_units_to_meters_factor_sq(units);
+    return value * G_meters_to_units_factor_sq(units);
 }
