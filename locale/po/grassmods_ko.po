@@ -1590,7 +1590,7 @@ msgstr "출력할 격자지도"
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:2
 #: ../visualization/ximgview/main.c:290
 msgid "display"
-msgstr ""
+msgstr "화면"
 
 #: ../general/g.ppmtopng/main.c:119
 msgid "Converts between PPM/PGM and PNG image formats."
@@ -1598,9 +1598,8 @@ msgstr ""
 
 #: ../general/g.version/main.c:61 ../general/g.message/main.c:34
 #: ../general/g.tempfile/main.c:39
-#, fuzzy
 msgid "support"
-msgstr "출력할 격자지도"
+msgstr "지원"
 
 #: ../general/g.version/main.c:62
 #, fuzzy
@@ -7178,7 +7177,7 @@ msgstr ""
 
 #: ../raster3d/r3.neighbors/main.c:209
 msgid "neighbor"
-msgstr ""
+msgstr "이웃"
 
 #: ../raster3d/r3.neighbors/main.c:210 ../raster/r.neighbors/main.c:143
 #: ../raster/r.series/main.c:134 ../vector/v.neighbors/main.c:53
@@ -7187,12 +7186,12 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:3
 msgid "aggregation"
-msgstr ""
+msgstr "합산"
 
 #: ../raster3d/r3.neighbors/main.c:212 ../raster/r.neighbors/main.c:144
 #: ../raster/r.mfilter/main.c:59
 msgid "filter"
-msgstr ""
+msgstr "여과"
 
 #: ../raster3d/r3.neighbors/main.c:214
 msgid ""
@@ -7273,7 +7272,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:3
 #: ../locale/scriptstrings/v.in.sites.all_to_translate.c:3
 msgid "import"
-msgstr ""
+msgstr "들여오기"
 
 #: ../raster3d/r3.in.ascii/main.c:319 ../raster3d/r3.to.rast/main.c:207
 #: ../raster3d/r3.out.ascii/main.c:308 ../raster/r.in.xyz/main.c:161
@@ -7285,7 +7284,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.to.rast3_to_translate.c:3
 #: ../locale/scriptstrings/v.convert.all_to_translate.c:4
 msgid "conversion"
-msgstr ""
+msgstr "변환"
 
 #: ../raster3d/r3.in.ascii/main.c:322
 #, fuzzy
@@ -7398,7 +7397,7 @@ msgstr "출력할 격자지도"
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:3
 #: ../locale/scriptstrings/d.out.file_to_translate.c:3
 msgid "export"
-msgstr ""
+msgstr "내보내기"
 
 #: ../raster3d/r3.out.v5d/main.c:287
 msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
@@ -7497,7 +7496,7 @@ msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:160 ../raster/r.gwflow/main.c:209
 msgid "groundwater flow"
-msgstr ""
+msgstr "지하수흐름"
 
 #: ../raster3d/r3.gwflow/main.c:162 ../raster/r.flow/main.c:423
 #: ../raster/r.usler/main.c:53 ../raster/r.stream.distance/main.c:54
@@ -7513,7 +7512,7 @@ msgstr ""
 #: ../raster/r.stream.segment/main.c:58 ../raster/r.stream.order/main.c:76
 #: ../raster/r.water.outlet/main.c:68 ../raster/r.stream.stats/main.c:54
 msgid "hydrology"
-msgstr ""
+msgstr "수문학"
 
 #: ../raster3d/r3.gwflow/main.c:163
 msgid ""
@@ -8366,7 +8365,7 @@ msgstr ""
 #: ../locale/scriptstrings/wxpyimgview_to_translate.c:3
 #: ../visualization/ximgview/main.c:291
 msgid "graphics"
-msgstr ""
+msgstr "그래픽스"
 
 #: ../misc/m.nviz.script/main.c:73 ../misc/m.nviz.image/main.c:53
 #: ../raster/r.contour/main.c:89 ../raster/r.random/main.c:53
@@ -8455,13 +8454,12 @@ msgstr ""
 #: ../locale/scriptstrings/v.centroids_to_translate.c:2
 #: ../visualization/ximgview/main.c:293 ../doc/vector/v.example/main.c:50
 msgid "vector"
-msgstr ""
+msgstr "벡터"
 
 #: ../misc/m.nviz.script/main.c:74 ../misc/m.nviz.image/main.c:50
 #: ../visualization/ximgview/main.c:294
-#, fuzzy
 msgid "visualization"
-msgstr "출력할 격자지도"
+msgstr "시각화"
 
 #: ../misc/m.nviz.script/main.c:75
 msgid "Creates fly-through script to run in NVIZ."
@@ -10259,9 +10257,8 @@ msgstr "출력할 격자지도"
 #: ../raster/r.mfilter/main.c:57 ../vector/v.neighbors/main.c:50
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:3
-#, fuzzy
 msgid "algebra"
-msgstr "출력할 격자지도"
+msgstr "대수"
 
 #: ../raster/r.neighbors/main.c:146
 msgid ""
@@ -10937,9 +10934,8 @@ msgstr ""
 #: ../raster/r.series/main.c:135 ../raster/r.series.accumulate/main.c:81
 #: ../raster/r.series.interp/main.c:65
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:3
-#, fuzzy
 msgid "series"
-msgstr "출력할 격자지도"
+msgstr "계열"
 
 #: ../raster/r.series/main.c:137
 msgid ""
@@ -25670,7 +25666,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1082
 #, c-format
 msgid "Importing %d features (OGR layer <%s>)..."
-msgstr "피쳐 %d개를 읽어오는 중 (OGR 레이어 <%s>)..."
+msgstr "피쳐 %d개를 들여오는 중 (OGR 레이어 <%s>)..."
 
 #: ../vector/v.in.ogr/main.c:1190
 #, fuzzy, c-format
@@ -34160,7 +34156,7 @@ msgstr ""
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:3
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:3
 msgid "cartography"
-msgstr ""
+msgstr "지도제작"
 
 #: ../display/d.vect.chart/main.c:65
 #, fuzzy
@@ -37797,11 +37793,11 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.manual_to_translate.c:3
 msgid "manual"
-msgstr ""
+msgstr "사용설명서"
 
 #: ../locale/scriptstrings/g.manual_to_translate.c:4
 msgid "help"
-msgstr ""
+msgstr "도움말"
 
 #: ../locale/scriptstrings/g.manual_to_translate.c:5
 msgid "Display index"
