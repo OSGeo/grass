@@ -19,7 +19,7 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Units conversion to meters
+  \brief Units conversion from meters to units
 
   Units codes (gis.h):
    - U_METERS
@@ -27,14 +27,13 @@
    - U_MILES
    - U_FEET
 
-  Returns a factor which converts the grid unit to meters (by
-  multiplication).
+  Returns a factor which converts meters to units (by multiplication).
  
   \param units units code
 
   \return factor
 */
-double G_units_to_meters_factor(int units)
+double G_meters_to_units_factor(int units)
 {
     switch (units) {
     case U_METERS:
@@ -62,7 +61,7 @@ double G_units_to_meters_factor(int units)
 }
 
 /*!
-  \brief Units conversion to square meters
+  \brief Units conversion from square meters to square units
 
   Units codes (gis.h):
    - U_METERS
@@ -72,14 +71,14 @@ double G_units_to_meters_factor(int units)
    - U_MILES
    - U_FEET
 
-  Returns a factor which converts the grid unit to square meters (by
+  Returns a factor which converts square meters to square units (by
   multiplication).
  
   \param units units code
 
   \return factor
 */
-double G_units_to_meters_factor_sq(int units)
+double G_meters_to_units_factor_sq(int units)
 {
     switch (units) {
     case U_METERS:

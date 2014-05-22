@@ -7,8 +7,8 @@ int conv_units()
     double f, sq_f;
 
     rad  = 0;
-    f    = G_units_to_meters_factor(options.units);
-    sq_f = G_units_to_meters_factor_sq(options.units);
+    f    = G_meters_to_units_factor(options.units);
+    sq_f = G_meters_to_units_factor_sq(options.units);
 
     if (options.units == U_RADIANS)
 	rad = 1;

@@ -82,8 +82,8 @@ int main(int argc, char **argv)
 	units_name    = G_get_units_name(G_units(units->answer), 1, 0);
 	sq_units_name = G_get_units_name(G_units(units->answer), 1, 1);
     }
-    f    = G_units_to_meters_factor(G_units(units->answer));
-    sq_f = G_units_to_meters_factor_sq(G_units(units->answer));
+    f    = G_meters_to_units_factor(G_units(units->answer));
+    sq_f = G_meters_to_units_factor_sq(G_units(units->answer));
     
     G_debug(1, "using '%s (%f) %s (%f)'",
 	    units_name, f, sq_units_name, sq_f);
