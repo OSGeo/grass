@@ -3,13 +3,12 @@
  *
  * MODULE:       r.topidx
  *
- * AUTHOR(S):    Keith Beven <k.beven lancaster.ac.uk>,
- *               Huidae Cho <grass4u gmail.com>, Hydro Laboratory,
+ * AUTHOR(S):    Huidae Cho <grass4u gmail.com>, Hydro Laboratory,
  *               Kyungpook National University
+ *               Based on GRIDATB.FOR by Keith Beven <k.beven lancaster.ac.uk>
  *
  * PURPOSE:      Creates a topographic index raster map from an elevation
  *               raster map.
- *               Based on GRIDATB.FOR.
  *
  * COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
  *
