@@ -36,8 +36,10 @@ db.in.ogr dsn=/path/to/sqlite.db db_table=census_raleigh output=census_raleigh
 </pre></div>
 
 <h3>Import of a PostgreSQL table</h3>
-
 <div class="code"><pre>
+# HINT: if the database contains spatial tables, but you want to import a non-spatial 
+table, set the environmental variable PG_LIST_ALL_TABLES to YES before importing
+
 db.in.ogr dsn="PG:host=localhost dbname=ecad user=neteler" \
           db_table=ecad_verona_tmean output=ecad_verona_tmean
 db.select ecad_verona_tmean
