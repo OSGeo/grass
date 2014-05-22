@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     params.input->key = "input";
 
     params.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    params.output->description = _("Name for output topographic index map");
+    params.output->description = _("Name for output topographic index raster map");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
