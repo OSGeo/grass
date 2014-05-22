@@ -578,7 +578,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->gisprompt = "old,color_none,color";
 	Opt->label = _("Background color");
 	Opt->description =
-	    _("Either a standard GRASS color, R:G:B triplet, or \"none\"");
+	    _("Either a standard color name, R:G:B triplet, or \"none\"");
 	break;
 
 	/* misc */
@@ -589,7 +589,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->key_desc = "name";
         Opt->required = YES;
         Opt->gisprompt = "old,dir,dir";
-        Opt->description = _("Name to input directory");
+        Opt->description = _("Name of input directory");
         break;
 
     case G_OPT_M_UNITS:
