@@ -585,7 +585,7 @@ int main(int argc, char *argv[])
 	if (linesize < 6)	/* min possible: "0,0,0\n" */
 	    linesize = 6;
 	estimated_lines = filesize / linesize;
-	G_debug(2, "estimated number of lines in file: %ld", estimated_lines);
+	G_debug(2, "estimated number of lines in file: %lu", estimated_lines);
     }
     else
 	estimated_lines = -1;
