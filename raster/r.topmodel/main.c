@@ -4,8 +4,8 @@
  * TMOD9502.FOR Author: Keith Beven <k.beven@lancaster.ac.uk>
  *                      http://www.es.lancs.ac.uk/hfdg/topmodel.html
  *
- *      Copyright (C) 2000, 2010, 2013 by the GRASS Development Team
- *      Author: Huidae Cho <grass4u@gmail.com>
+ *      Copyright (C) 2000, 2010, 2013-2014 by the GRASS Development Team
+ *      Author: Huidae Cho <grass4u gmail.com>
  *              Hydro Laboratory, Kyungpook National University
  *              South Korea
  *

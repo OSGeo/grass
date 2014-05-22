@@ -7,10 +7,11 @@
  *               Huidae Cho <grass4u gmail.com>, Hydro Laboratory,
  *               Kyungpook National University
  *
- * PURPOSE:      Creates topographic index raster map from elevation map.
+ * PURPOSE:      Creates a topographic index raster map from an elevation
+ *               raster map.
  *               Based on GRIDATB.FOR.
  *
- * COPYRIGHT:    (C) 2000-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -39,7 +40,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     module->description =
-	_("Creates topographic index raster map from elevation raster map.");
+	_("Creates a topographic index raster map from an elevation raster map.");
 
     params.input = G_define_standard_option(G_OPT_R_ELEV);
     params.input->key = "input";
