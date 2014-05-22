@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     params.topidx = G_define_standard_option(G_OPT_R_INPUT);
     params.topidx->key = "topidx";
     params.topidx->label =
-	_("Name of input topographic index ln(a/tanB) raster map");
+	_("Name of input topographic index raster map");
     params.topidx->description =
 	_("Must be clipped to the catchment boundary. Used for generating outtopidxstats.");
     params.topidx->required = NO;
