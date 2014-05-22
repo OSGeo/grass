@@ -143,12 +143,6 @@ int G_begin_polygon_area_calculations(void)
  * <i>n</i> pairs of <i>x,y</i> coordinate vertices. It is used both for 
  * planimetric and latitude-longitude projections.
  * 
- * Returns the area in coordinate units of the polygon described by
- * the <i>n</i> pairs of <i>x,y</i> coordinate vertices for
- * planimetric grids.  If the units for <i>x,y</i> are meters, then
- * the area is in square meters.  If the units are feet, then the area
- * is in square feet, and so on.
- *
  * You should call G_begin_polygon_area_calculations() function before
  * calling this function.
  *
@@ -160,7 +154,7 @@ int G_begin_polygon_area_calculations(void)
  * \param y array of y coordinates
  * \param n number of x,y coordinate pairs
  *
- * \return area in coordinate units of the polygon
+ * \return area in square meters of the polygon
  */
 double G_area_of_polygon(const double *x, const double *y, int n)
 {
