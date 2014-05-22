@@ -666,8 +666,8 @@ void G_free_tokens(char **);
 void G_trim_decimal(char *);
 
 /* units.c */
-double G_units_to_meters_factor(int);
-double G_units_to_meters_factor_sq(int);
+double G_meters_to_units_factor(int);
+double G_meters_to_units_factor_sq(int);
 const char *G_get_units_name(int, int, int);
 int G_units(const char *);
 int G_is_units_type_spatial(int);
