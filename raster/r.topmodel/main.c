@@ -1,18 +1,21 @@
-/*
- * r.topmodel: simulates TOPMODEL based on TMOD9502.FOR.
+
+/****************************************************************************
  *
- * TMOD9502.FOR Author: Keith Beven <k.beven@lancaster.ac.uk>
- *                      http://www.es.lancs.ac.uk/hfdg/topmodel.html
+ * MODULE:       r.topmodel
  *
- *      Copyright (C) 2000, 2010, 2013-2014 by the GRASS Development Team
- *      Author: Huidae Cho <grass4u gmail.com>
- *              Hydro Laboratory, Kyungpook National University
- *              South Korea
+ * AUTHOR(S):    Huidae Cho <grass4u gmail.com>, Hydro Laboratory,
+ *               Kyungpook National University
+ *               Based on TMOD9502.FOR by Keith Beven <k.beven lancaster.ac.uk>
  *
- *      This program is free software under the GPL (>=v2)
- *      Read the file COPYING coming with GRASS for details.
+ * PURPOSE:      Simulates TOPMODEL.
  *
- */
+ * COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #define _MAIN_C_
 #include <stdio.h>
