@@ -131,8 +131,10 @@ int main(int argc, char *argv[])
 	    top = bottom;
 	    G_percent(row, w.rows, 10);
 	}
+
 	/* Get last null row area */
-	add_null_area(top, &w, &nullarea);
+	if (w.rows > 1)
+	    add_null_area(top, &w, &nullarea);
     }
 
 
@@ -161,7 +163,9 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "%s %f\n", _("Current region plan area:"),
 		conv_value(reg_area, units));
 	fprintf(stdout, "%s %f\n", _("Estimated region Surface Area:"),
-		conv_value(reg_area * estavg / flat_area, units));
+		flat_area > 0 ?
+			conv_value(reg_area * estavg / flat_area, units) :
+			0);
     }
 
     exit(EXIT_SUCCESS);
