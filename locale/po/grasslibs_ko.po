@@ -227,7 +227,7 @@ msgstr "로케이션 <%s>가 이미 존재합니다. 작업을 취소합니다."
 #: ../lib/python/script/core.py:1566
 #, python-format
 msgid "Location <%s> already exists and will be overwritten"
-msgstr "로케이션 <%s>가 이미 존재하지만 덮어씁니다"
+msgstr "로케이션 <%s>가 이미 존재하고 덮어 쓰여질 것입니다"
 
 #: ../lib/python/script/core.py:1698
 #, python-format
@@ -266,19 +266,19 @@ msgid "Unable to get statistics for raster map <%s>"
 msgstr "격자지도 <%s>를 위한 통계를 구할 수 없습니다"
 
 #: ../lib/python/temporal/univar_statistics.py:89
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to get statistics for 3d raster map <%s>"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "3차원 격자지도 <%s>를 위한 통계를 구할 수 없습니다"
 
 #: ../lib/python/temporal/univar_statistics.py:139
-#, fuzzy, python-format
+#, python-format
 msgid "Space time %(sp)s dataset <%(i)s> not found"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+msgstr "시공간 %(sp)s 자료세트 <%(i)s>를 찾지 못 했습니다"
 
 #: ../lib/python/temporal/univar_statistics.py:190
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to get statistics for vector map <%s>"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "벡터지도 <%s>를 위한 통계를 구할 수 없습니다"
 
 #: ../lib/python/temporal/list_stds.py:178
 msgid "Empty map list."
@@ -323,72 +323,68 @@ msgid "Area computation is not supported for LL projections"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_raster_algebra.py:85
-#, fuzzy
 msgid "Removing empty raster maps"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "빈 격자지도를 지우는 중입니다"
 
 #: ../lib/python/temporal/datetime_math.py:254
 #: ../lib/python/temporal/datetime_math.py:271
 #, python-format
 msgid "Wrong increment format: %s"
-msgstr ""
+msgstr "틀린 증가 형식: %s"
 
 #: ../lib/python/temporal/datetime_math.py:447
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1546
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1579
 #, python-format
 msgid "Wrong granularity format: %s"
-msgstr ""
+msgstr "틀린 입상도 형식: %s"
 
 #: ../lib/python/temporal/datetime_math.py:725
 msgid "Time string seems to specify relative time"
-msgstr ""
+msgstr "시간문자열이 상대적인 시간을 지정하는 것 같습니다"
 
 #: ../lib/python/temporal/datetime_math.py:737
-#, fuzzy
 msgid "Dates Before Christ are not supported"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "기원전 날짜는 지원하지 않습니다"
 
 #: ../lib/python/temporal/datetime_math.py:741
-#, fuzzy
 msgid "Time zones are not supported"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "시간대는 지원하지 않습니다"
 
 #: ../lib/python/temporal/datetime_math.py:751
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to parse time string: %s"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "시간문자열을 구문분석할 수 없습니다: %s"
 
 #: ../lib/python/temporal/base.py:378
-#, fuzzy, python-format
+#, python-format
 msgid "Object <%s> not found in the temporal database"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "객체 <%s>를 시간 데이타베이스 안에서 찾지 못 했습니다"
 
 #: ../lib/python/temporal/base.py:459 ../lib/python/temporal/base.py:509
 msgid "Missing identifer"
-msgstr ""
+msgstr "식별자가 없습니다"
 
 #: ../lib/python/temporal/base.py:615
-#, fuzzy
 msgid "Wrong identifier, the mapset is missing"
-msgstr "임시파일을 열 수 없습니다"
+msgstr "틀린 식별자. 지도세트가 없습니다"
 
 #: ../lib/python/temporal/temporal_raster_base_algebra.py:316
-#, fuzzy, python-format
+#, python-format
 msgid "Error computing map <%s>"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "<%s> 지도를 계산하는데 오류"
 
 #: ../lib/python/temporal/mapcalc.py:105
 msgid "Start spatio-temporal sampling"
-msgstr ""
+msgstr "시공간 표본추출을 시작합니다"
 
 #: ../lib/python/temporal/mapcalc.py:107
 msgid "Start temporal sampling"
-msgstr ""
+msgstr "시간 표본추출을 시작합니다"
 
 #: ../lib/python/temporal/mapcalc.py:124
 msgid "No samples found for map calculation"
-msgstr ""
+msgstr "지도 계산을 위한 표본을 찾지 못 했습니다"
 
 #: ../lib/python/temporal/mapcalc.py:151
 msgid ""
@@ -399,33 +395,32 @@ msgstr ""
 
 #: ../lib/python/temporal/mapcalc.py:169
 msgid "No maps in input dataset"
-msgstr ""
+msgstr "입력 자료세트 안에 지도가 없습니다"
 
 #: ../lib/python/temporal/mapcalc.py:185
 msgid "Start mapcalc computation"
-msgstr ""
+msgstr "Mapcalc 계산을 시작합니다"
 
 #: ../lib/python/temporal/mapcalc.py:235
 #: ../lib/python/temporal/open_stds.py:205
 #: ../lib/python/temporal/extract.py:112
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Map <%s> is already in temporal database, use overwrite flag to overwrite"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "지도 <%s>가 시간 데이타베이스 안에 이미 존재합니다. 덮어쓰려면 덮어쓰기 플래그를 사용하세요"
 
 #: ../lib/python/temporal/mapcalc.py:255
 #, python-format
 msgid "Apply mapcalc expression: \"%s\""
-msgstr ""
+msgstr "Mapcalc 표현을 적용합니다: \"%s\""
 
 #: ../lib/python/temporal/mapcalc.py:274
 msgid "Error while mapcalc computation"
-msgstr "mapcalc 계산중 오류"
+msgstr "Mapcalc 계산중 오류"
 
 #: ../lib/python/temporal/mapcalc.py:280
-#, fuzzy
 msgid "Start map registration in temporal database"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "시간 데이타베이스 안에 지도 등록을 시작합니다"
 
 #: ../lib/python/temporal/mapcalc.py:430 ../lib/python/temporal/mapcalc.py:436
 #: ../lib/python/temporal/mapcalc.py:442 ../lib/python/temporal/mapcalc.py:448
@@ -437,8 +432,8 @@ msgstr "Datum %s 표파일을 열 수 없습니다"
 #: ../lib/python/temporal/mapcalc.py:558 ../lib/python/temporal/mapcalc.py:567
 #: ../lib/python/temporal/mapcalc.py:576 ../lib/python/temporal/mapcalc.py:585
 #, python-format
-msgid "The temporal operators <%s> supports only absolutetime."
-msgstr ""
+msgid "The temporal operators <%s> supports only absolute time."
+msgstr "시간 연산자 <%s>는 절대시간만 지원합니다"
 
 #: ../lib/python/temporal/temporal_vector_algebra.py:641
 #, python-format
@@ -446,26 +441,31 @@ msgid ""
 "Error vector maps with basename %s exist. Use --o flag to overwrite existing "
 "file"
 msgstr ""
+"기본이름 %s를 가진 오류벡터지도가 존재합니다. 존재하는 파일을 덮어쓰려면 --o 플래그를 사용하세요"
 
 #: ../lib/python/temporal/temporal_vector_algebra.py:673
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Error starting %s : \n"
 "%s"
-msgstr "임시파일을 열 수 없습니다"
+msgstr ""
+"%s를 시작하는데 오류 : \n"
+"%s"
 
 #: ../lib/python/temporal/temporal_vector_algebra.py:721
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
 "%s"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr ""
+"시간 데이타베이스 안에 오류벡터지도 %s가 존재합니다. 덮어쓰기 플래그를 사용하세요.  : \n"
+"%s"
 
 #: ../lib/python/temporal/open_stds.py:60
 #: ../lib/python/temporal/open_stds.py:115
-#, fuzzy, python-format
+#, python-format
 msgid "Unkown type: %s"
-msgstr "알려지지 않은 벡터형입니다"
+msgstr "알려지지 않은 형: %s"
 
 #: ../lib/python/temporal/open_stds.py:66
 #, fuzzy, python-format
@@ -3282,9 +3282,8 @@ msgid "Name of cover raster map"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:302
-#, fuzzy
 msgid "Name of input elevation raster map"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "입력 고도 격자지도의 이름"
 
 #: ../lib/gis/parser_standard_options.c:311
 #, fuzzy
@@ -3423,79 +3422,75 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:508
 #: ../lib/gis/parser_standard_options.c:522
 msgid "Example: 1,3,7-9,13"
-msgstr ""
+msgstr "예제: 1,3,7-9,13"
 
 #: ../lib/gis/parser_standard_options.c:514
 msgid "Feature id"
-msgstr ""
+msgstr "피쳐 id"
 
 #: ../lib/gis/parser_standard_options.c:521
 msgid "Feature ids"
-msgstr ""
+msgstr "피쳐 id"
 
 #: ../lib/gis/parser_standard_options.c:532
-#, fuzzy
 msgid "Name of input file"
-msgstr "자동 MASK파일을 열 수 없습니다"
+msgstr "입력 파일이름"
 
 #: ../lib/gis/parser_standard_options.c:540
 msgid "Name for output file"
-msgstr ""
+msgstr "출력 파일이름"
 
 #: ../lib/gis/parser_standard_options.c:548
 msgid "Field separator"
-msgstr ""
+msgstr "필드구분자"
 
 #: ../lib/gis/parser_standard_options.c:549
 msgid "Special characters: newline, space, comma, tab"
-msgstr ""
+msgstr "특수문자: newline, space, comma, tab"
 
 #: ../lib/gis/parser_standard_options.c:560
 msgid "Color"
-msgstr ""
+msgstr "색상"
 
 #: ../lib/gis/parser_standard_options.c:561
 msgid "Either a standard color name or R:G:B triplet"
-msgstr ""
+msgstr "표준 색상이름이나 R:G:B 쌍"
 
 #: ../lib/gis/parser_standard_options.c:570
 msgid "Background color"
-msgstr ""
+msgstr "배경색상"
 
 #: ../lib/gis/parser_standard_options.c:572
-msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
-msgstr ""
+msgid "Either a standard color name, R:G:B triplet, or \"none\""
+msgstr "표준 색상이름이나 R:G:B 쌍, 또는 \"none\""
 
 #: ../lib/gis/parser_standard_options.c:583
-#, fuzzy
-msgid "Name to input directory"
-msgstr "자동 MASK파일을 열 수 없습니다"
+msgid "Name of input directory"
+msgstr "입력 디렉토리이름"
 
 #: ../lib/gis/parser_standard_options.c:593
 msgid "Units"
-msgstr ""
+msgstr "단위"
 
 #: ../lib/gis/parser_standard_options.c:602
 msgid "Data type(s)"
-msgstr ""
+msgstr "자료형"
 
 #: ../lib/gis/parser_standard_options.c:612
 msgid "Name of mapset (default: current search path)"
-msgstr ""
+msgstr "지도세트이름 (기본값: 현재 검색경로)"
 
 #: ../lib/gis/parser_standard_options.c:613
 msgid "'.' for current mapset"
-msgstr ""
+msgstr "현재 지도세트는 '.'"
 
 #: ../lib/gis/parser_standard_options.c:623
-#, fuzzy
 msgid "Coordinates"
-msgstr "잘못된 좌표"
+msgstr "좌표"
 
 #: ../lib/gis/parser_standard_options.c:632
-#, fuzzy
 msgid "Name of color table"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "색상표이름"
 
 #: ../lib/gis/parser_standard_options.c:643
 #, fuzzy
@@ -3685,15 +3680,15 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:341 ../lib/gis/rd_cellhd.c:349
 #: ../lib/gis/rd_cellhd.c:353
 msgid "Syntax error in cell header"
-msgstr ""
+msgstr "셀헤더에 문법오류"
 
 #: ../lib/gis/rd_cellhd.c:147
 msgid "Duplicate projection field"
-msgstr ""
+msgstr "중복된 투영필드"
 
 #: ../lib/gis/rd_cellhd.c:157
 msgid "Duplicate zone field"
-msgstr ""
+msgstr "중복된 구역필드"
 
 #: ../lib/gis/rd_cellhd.c:167 ../lib/gis/rd_cellhd.c:169
 #: ../lib/gis/rd_cellhd.c:358 ../lib/gis/rd_cellhd.c:360
@@ -3703,109 +3698,104 @@ msgstr ""
 #: ../lib/gis/rd_cellhd.c:383 ../lib/gis/rd_cellhd.c:385
 #, c-format
 msgid "Field <%s> missing"
-msgstr ""
+msgstr "필드 <%s>가 없습니다"
 
 #: ../lib/gis/rd_cellhd.c:191
 msgid "Duplicate north field"
-msgstr ""
+msgstr "중복된 북쪽 경계필드"
 
 #: ../lib/gis/rd_cellhd.c:199
 msgid "Duplicate south field"
-msgstr ""
+msgstr "중복된 남쪽 경계필드"
 
 #: ../lib/gis/rd_cellhd.c:207
 msgid "Duplicate east field"
-msgstr ""
+msgstr "중복된 동쪽 경계필드"
 
 #: ../lib/gis/rd_cellhd.c:215
 msgid "Duplicate west field"
-msgstr ""
+msgstr "중복된 서쪽 경계필드"
 
 #: ../lib/gis/rd_cellhd.c:223
 msgid "Duplicate top field"
-msgstr ""
+msgstr "중복된 천장 경계필드"
 
 #: ../lib/gis/rd_cellhd.c:231
 msgid "Duplicate bottom field"
-msgstr ""
+msgstr "중복된 바닥 경계필드"
 
 #: ../lib/gis/rd_cellhd.c:239
-#, fuzzy
 msgid "Duplicate e-w resolution field"
-msgstr "잘못된 e-w 해상도"
+msgstr "중복된 동-서 해상도필드"
 
 #: ../lib/gis/rd_cellhd.c:249
-#, fuzzy
 msgid "Duplicate 3D e-w resolution field"
-msgstr "잘못된 e-w 해상도"
+msgstr "중복된 3차원 동-서 해상도필드"
 
 #: ../lib/gis/rd_cellhd.c:259
-#, fuzzy
 msgid "Duplicate n-s resolution field"
-msgstr "잘못된 n-s 해상도"
+msgstr "중복된 북-남 해상도필드"
 
 #: ../lib/gis/rd_cellhd.c:269
-#, fuzzy
 msgid "Duplicate 3D n-s resolution field"
-msgstr "잘못된 n-s 해상도"
+msgstr "중복된 3차원 북-남 해상도필드"
 
 #: ../lib/gis/rd_cellhd.c:279
-#, fuzzy
 msgid "Duplicate t-b resolution field"
-msgstr "잘못된 t-b3 해상도"
+msgstr "중복된 천장-바닥 해상도필드"
 
 #: ../lib/gis/rd_cellhd.c:289
 msgid "Duplicate rows field"
-msgstr ""
+msgstr "중복된 행필드"
 
 #: ../lib/gis/rd_cellhd.c:299
 msgid "Duplicate 3D rows field"
-msgstr ""
+msgstr "중복된 3차원 행필드"
 
 #: ../lib/gis/rd_cellhd.c:309
 msgid "Duplicate cols field"
-msgstr ""
+msgstr "중복된 열필드"
 
 #: ../lib/gis/rd_cellhd.c:319
 msgid "Duplicate 3D cols field"
-msgstr ""
+msgstr "중복된 3차원 열필드"
 
 #: ../lib/gis/rd_cellhd.c:329
 msgid "Duplicate depths field"
-msgstr ""
+msgstr "중복된 깊이필드"
 
 #: ../lib/gis/rd_cellhd.c:339
 msgid "Duplicate format field"
-msgstr ""
+msgstr "중복된 형식필드"
 
 #: ../lib/gis/rd_cellhd.c:347
 msgid "Duplicate compressed field"
-msgstr ""
+msgstr "중복된 압축필드"
 
 #: ../lib/gis/proj3.c:58 ../lib/gis/units.c:198
 msgid "units"
-msgstr ""
+msgstr "단위"
 
 #: ../lib/gis/proj3.c:58 ../lib/gis/units.c:198
 msgid "unit"
-msgstr ""
+msgstr "단위"
 
 #: ../lib/gis/proj3.c:107 ../lib/vector/Vlib/header.c:557
 msgid "Unknown projection"
-msgstr ""
+msgstr "알려지지 않은 투영"
 
 #: ../lib/gis/worker.c:72
 msgid "Task already has a worker"
-msgstr ""
+msgstr "작업은 이미 일꾼이 있습니다"
 
 #: ../lib/gis/mapset.c:38
 msgid "MAPSET is not set"
-msgstr ""
+msgstr "MAPSET이 설정되지 않았습니다"
 
 #: ../lib/gis/mapset.c:80
 #, c-format
 msgid "MAPSET <%s> not available"
-msgstr ""
+msgstr "MAPSET <%s>가 유효하지 않습니다"
 
 #: ../lib/gis/done_msg.c:38
 #, c-format
@@ -3815,7 +3805,7 @@ msgstr "%s를 완료했습니다. %s"
 #: ../lib/gis/open.c:62
 #, c-format
 msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr ""
+msgstr "G__open(read): mapset <%s>와 xmapset <%s>가 일치하지 않습니다"
 
 #: ../lib/gis/open.c:84
 #, c-format
@@ -3825,30 +3815,30 @@ msgstr ""
 #: ../lib/gis/list.c:83
 #, c-format
 msgid "no %s files available in current mapset\n"
-msgstr ""
+msgstr "현재 지도세트 안에 유효한 %s 파일이 없습니다\n"
 
 #: ../lib/gis/list.c:86
 #, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr ""
+msgstr "지도세트 <%s> 안에 유효한 %s 파일이 없습니다\n"
 
 #: ../lib/gis/list.c:132
 #, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr ""
+msgstr "지도세트 <%s> 안에 유효한 %s 파일들:\n"
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
-msgstr ""
+msgstr "G_list: 알려지지 않은 요소형"
 
 #: ../lib/gis/make_mapset.c:66 ../lib/init/grass.py:607
-#, fuzzy, c-format, python-format
+#, c-format, python-format
 msgid "Location <%s> doesn't exist"
-msgstr "임시파일을 열 수 없습니다"
+msgstr "로케이션 <%s>가 존재하지 않습니다"
 
 #: ../lib/gis/myname.c:46
 msgid "This location has no description."
-msgstr ""
+msgstr "이 로케이션은 설명이 없습니다."
 
 #: ../lib/gis/debug.c:80
 #, c-format
@@ -3902,155 +3892,155 @@ msgstr ""
 
 #: ../lib/gis/units.c:196
 msgid "square units"
-msgstr ""
+msgstr "제곱단위"
 
 #: ../lib/gis/units.c:196
 msgid "square unit"
-msgstr ""
+msgstr "제곱단위"
 
 #: ../lib/gis/units.c:203
 msgid "square meters"
-msgstr ""
+msgstr "제곱미터"
 
 #: ../lib/gis/units.c:203
 msgid "square meter"
-msgstr ""
+msgstr "제곱미터"
 
 #: ../lib/gis/units.c:205
 msgid "meters"
-msgstr ""
+msgstr "미터"
 
 #: ../lib/gis/units.c:205
 msgid "meter"
-msgstr ""
+msgstr "미터"
 
 #: ../lib/gis/units.c:210
 msgid "square kilometers"
-msgstr ""
+msgstr "제곱킬로미터"
 
 #: ../lib/gis/units.c:210
 msgid "square kilometer"
-msgstr ""
+msgstr "제곱킬로미터"
 
 #: ../lib/gis/units.c:212
 msgid "kilometers"
-msgstr ""
+msgstr "킬로미터"
 
 #: ../lib/gis/units.c:212
 msgid "kilometer"
-msgstr ""
+msgstr "킬로미터"
 
 #: ../lib/gis/units.c:217
 msgid "acres"
-msgstr ""
+msgstr "에이커"
 
 #: ../lib/gis/units.c:217
 msgid "acre"
-msgstr ""
+msgstr "에이커"
 
 #: ../lib/gis/units.c:225
 msgid "hectares"
-msgstr ""
+msgstr "헥타르"
 
 #: ../lib/gis/units.c:225
 msgid "hectare"
-msgstr ""
+msgstr "헥타르"
 
 #: ../lib/gis/units.c:233
 msgid "square miles"
-msgstr ""
+msgstr "제곱마일"
 
 #: ../lib/gis/units.c:233
 msgid "square mile"
-msgstr ""
+msgstr "제곱마일"
 
 #: ../lib/gis/units.c:235
 msgid "miles"
-msgstr ""
+msgstr "마일"
 
 #: ../lib/gis/units.c:235
 msgid "mile"
-msgstr ""
+msgstr "마일"
 
 #: ../lib/gis/units.c:240
 msgid "square feet"
-msgstr ""
+msgstr "제곱피트"
 
 #: ../lib/gis/units.c:240
 msgid "square foot"
-msgstr ""
+msgstr "제곱피트"
 
 #: ../lib/gis/units.c:242
 msgid "feet"
-msgstr ""
+msgstr "피트"
 
 #: ../lib/gis/units.c:242
 msgid "foot"
-msgstr ""
+msgstr "피트"
 
 #: ../lib/gis/units.c:247
 msgid "square degrees"
-msgstr ""
+msgstr "제곱도"
 
 #: ../lib/gis/units.c:247
 msgid "square degree"
-msgstr ""
+msgstr "제곱도"
 
 #: ../lib/gis/units.c:249
 msgid "degrees"
-msgstr ""
+msgstr "도"
 
 #: ../lib/gis/units.c:249
 msgid "degree"
-msgstr ""
+msgstr "도"
 
 #: ../lib/gis/units.c:253
 msgid "years"
-msgstr ""
+msgstr "년"
 
 #: ../lib/gis/units.c:253
 msgid "year"
-msgstr ""
+msgstr "년"
 
 #: ../lib/gis/units.c:257
 msgid "months"
-msgstr ""
+msgstr "개월"
 
 #: ../lib/gis/units.c:257
 msgid "month"
-msgstr ""
+msgstr "개월"
 
 #: ../lib/gis/units.c:261
 msgid "days"
-msgstr ""
+msgstr "일"
 
 #: ../lib/gis/units.c:261
 msgid "day"
-msgstr ""
+msgstr "일"
 
 #: ../lib/gis/units.c:265
 msgid "hours"
-msgstr ""
+msgstr "시간"
 
 #: ../lib/gis/units.c:265
 msgid "hour"
-msgstr ""
+msgstr "시간"
 
 #: ../lib/gis/units.c:269
 msgid "minutes"
-msgstr ""
+msgstr "분"
 
 #: ../lib/gis/units.c:269
 msgid "minute"
-msgstr ""
+msgstr "분"
 
 #: ../lib/gis/units.c:273
 msgid "seconds"
-msgstr ""
+msgstr "초"
 
 #: ../lib/gis/units.c:273
 msgid "second"
-msgstr ""
+msgstr "초"
 
 #: ../lib/gis/legal_name.c:39
 #, c-format
@@ -4549,12 +4539,12 @@ msgstr ""
 
 #: ../lib/proj/ellipse.c:120
 msgid "No ellipsoid info given in file"
-msgstr ""
+msgstr "파일 안에 타원체 정보가 없습니다"
 
 #: ../lib/proj/get_proj.c:148
 #, c-format
 msgid "Invalid zone %s specified"
-msgstr ""
+msgstr "잘못된 구역 %s를 지정했습니다"
 
 #: ../lib/proj/get_proj.c:228
 msgid "Unable to initialise PROJ.4 with the following parameter list:"
@@ -4563,7 +4553,7 @@ msgstr ""
 #: ../lib/proj/get_proj.c:236
 #, c-format
 msgid "The error message: %s"
-msgstr ""
+msgstr "오류: %s"
 
 #: ../lib/proj/get_proj.c:294
 msgid "Option input overflowed option table"
@@ -5992,7 +5982,7 @@ msgstr "Datum %s 표파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/open.c:812
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr "벡터지도 <%s>가 이미 존재하지만 덮어씁니다"
+msgstr "벡터지도 <%s>가 이미 존재하고 덮어 쓰여질 것입니다"
 
 #: ../lib/vector/Vlib/map.c:126 ../lib/vector/Vlib/open.c:806
 #: ../lib/vector/Vlib/open.c:817
@@ -7459,7 +7449,7 @@ msgstr "Datum %s 표파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/open_ogr.c:211
 #, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
-msgstr ""
+msgstr "OGR 레이어 <%s>가 이미 존재하고 덮어 쓰여질 것입니다"
 
 #: ../lib/vector/Vlib/open_ogr.c:215
 #, fuzzy, c-format
@@ -8248,9 +8238,9 @@ msgid "Topology schema not found."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:273
-#, fuzzy, c-format
+#, c-format
 msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "PostGIS 레이어 <%s.%s>가 이미 존재하고 덮어 쓰여질 것입니다"
 
 #: ../lib/vector/Vlib/open_pg.c:276
 #, fuzzy, c-format
@@ -8621,29 +8611,29 @@ msgid "Unable to get list tables in database <%s>"
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:167
-#, fuzzy, c-format
+#, c-format
 msgid "Table <%s> already exists in database and will be overwritten"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "표 <%s>가 데이타베이스 안에 이미 존재하고 덮어 쓰여질 것입니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "표 <%s>가 데이타베이스 <%s> 안에 이미 존재합니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:250
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> is not integer"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+msgstr "열 <%s>가 정수가 아닙니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:270
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create table <%s>"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "표 <%s>를 만들 수 없습니다"
 
 #: ../lib/db/dbmi_client/copy_tab.c:370
 #, c-format
 msgid "Unknown column type (column <%s>)"
-msgstr ""
+msgstr "알려지지 않은 열형 (열 <%s>)"
 
 #: ../lib/db/dbmi_client/table.c:46 ../lib/db/dbmi_client/delete_tab.c:40
 #, fuzzy, c-format
@@ -8651,28 +8641,27 @@ msgid "Unable open database <%s> by driver <%s>"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
 #: ../lib/db/dbmi_client/delete_tab.c:53
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drop table: '%s'"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "표를 지울 수 없습니다: '%s'"
 
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
 #: ../lib/db/dbmi_client/select.c:288
 msgid "Missing column name"
-msgstr ""
+msgstr "열이름이 없습니다"
 
 #: ../lib/db/dbmi_client/select.c:216 ../lib/db/dbmi_client/select.c:283
 msgid "Missing key column name"
-msgstr ""
+msgstr "키 열이름이 없습니다"
 
 #: ../lib/db/dbmi_client/select.c:333
-#, fuzzy
 msgid "Key column type is not integer"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+msgstr "키 열형이 정수가 아닙니다"
 
 #: ../lib/db/dbmi_driver/d_error.c:35
 #, c-format
 msgid "DBMI-%s driver error:"
-msgstr ""
+msgstr "DBMI-%s 드라이버 오류:"
 
 #: ../lib/htmldriver/Graph_Set.c:97
 #, c-format
@@ -8691,9 +8680,8 @@ msgid "html: type '%s'"
 msgstr "html: 형 '%s'"
 
 #: ../lib/nviz/lights.c:171
-#, fuzzy
 msgid "Unable to define new light"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "새 조명을 정의할 수 없습니다"
 
 #: ../lib/nviz/nviz.c:128
 #, c-format
@@ -8701,18 +8689,16 @@ msgid "Invalid color (%s), using \"white\" as default"
 msgstr "잘못된 색상(%s)입니다. \"white\"를 기본값으로 사용합니다."
 
 #: ../lib/nviz/position.c:56
-#, fuzzy
 msgid "Unable to set focus"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "포커스를 설정할 수 없습니다"
 
 #: ../lib/nviz/render.c:106
 msgid "Bad server connection"
-msgstr "서버접속 오류입니다."
+msgstr "나쁜 서버연결"
 
 #: ../lib/nviz/render.c:112
-#, fuzzy
 msgid "Unable to get visual info"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "시각정보를 얻을 수 없습니다"
 
 #: ../lib/nviz/render.c:119
 #, fuzzy
@@ -8721,29 +8707,29 @@ msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/nviz/map_obj.c:59
 msgid "Maximum surfaces loaded!"
-msgstr "최대 표면 개수를 초과했습니다!"
+msgstr "표면을 최대 개수만큼 읽었습니다!"
 
 #: ../lib/nviz/map_obj.c:88
 msgid "Maximum vector line maps loaded!"
-msgstr "최대 선벡터지도 개수를 초과했습니다!"
+msgstr "선벡터지도를 최대 개수만큼 읽었습니다!"
 
 #: ../lib/nviz/map_obj.c:97 ../lib/nviz/map_obj.c:128
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading vector map <%s>"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "벡터지도 <%s> 읽기 오류"
 
 #: ../lib/nviz/map_obj.c:116
 msgid "Maximum vector point maps loaded!"
-msgstr "최대 점벡터지도 개수를 초과했습니다!"
+msgstr "점벡터지도를 최대 개수만큼 읽었습니다!"
 
 #: ../lib/nviz/map_obj.c:143
 msgid "Maximum volumes loaded!"
-msgstr "최대 부피를 초과했습니다!"
+msgstr "부피를 최대 개수만큼 읽었습니다!"
 
 #: ../lib/nviz/map_obj.c:152
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading 3d raster map <%s>"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "3차원 격자지도 <%s> 읽기 오류"
 
 #: ../lib/nviz/map_obj.c:160
 msgid "Nviz_new_map_obj(): unsupported data type"
@@ -8775,9 +8761,8 @@ msgstr ""
 "듈을 GRASS 6 벡터 라이브러리로 업데이트해야 합니다.)"
 
 #: ../lib/sites/sites.c:306
-#, fuzzy
 msgid "Cannot fetch row"
-msgstr "임시파일을 열 수 없습니다"
+msgstr "열을 가져올 수 없습니다"
 
 #: ../lib/sites/sites.c:443
 msgid "G_oldsite_new_struct: invalid # dims or fields"
@@ -8790,7 +8775,7 @@ msgstr "G_fopen_sites_old() 다음 즉시 G_oldsite_describe()를 호출해야 �
 
 #: ../lib/temporal/lib/default_name.c:69
 msgid "Programmer error - only SQLite driver is currently supported"
-msgstr ""
+msgstr "개발자 오류 - 현재 SQLite 드라이버만 지원합니다"
 
 #, fuzzy
 #~ msgid "Unable to select space time dataset register table <%s>"
