@@ -77,9 +77,9 @@ latexpdf:
 	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex/"
 
 man:
-	$(call run_grass,$(SPHINXBUILD) -b man $(ALLSPHINXOPTS) $(BUILDDIR)/man)
+	$(call run_grass,$(SPHINXBUILD) -b man $(ALLSPHINXOPTS) $(MANDIR))
 	@echo
-	@echo "Build finished. The manual pages are in $(BUILDDIR)/man/"
+	@echo "Build finished. The manual pages are in $(MANDIR)/"
 
 doctest:
 	$(call run_grass,$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest)
