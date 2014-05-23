@@ -42,6 +42,7 @@ help:
 
 clean:
 	-rm -rf $(BUILDDIR)/*
+	-rm -f _templates/layout.html
 
 html:
 	$(call run_grass,$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
