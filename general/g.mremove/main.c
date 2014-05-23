@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("remove"));
     module->description =
 	_("Removes data base element files from "
-	  "the user's current mapset using regular expressions.");
+	  "the user's current mapset using the search pattern.");
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
