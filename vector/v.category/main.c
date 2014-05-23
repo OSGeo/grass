@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 	       "report;%s;"
 	       "print;%s;"
 	       "layers;%s",
-	       _("add a new category"),
+	       _("add a category to features without category in the given layer"),
 	       _("delete category (cat=-1 to delete all categories of given layer)"),
 	       _("change layer number (e.g. layer=3,1 changes layer 3 to layer 1)"),
 	       _("add the value specified by cat option to the current category value"),
