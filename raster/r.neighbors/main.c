@@ -37,33 +37,41 @@ struct menu
     ifunc cat_names;		/* routine to make category names */
     int copycolr;		/* flag if color table can be copied */
     int half;			/* whether to add 0.5 to result (redundant) */
-    int is_int;			/* result is an integer */
+    int otype;			/* output type */
     char *name;			/* method name */
     char *text;			/* menu display - full description */
+};
+
+enum out_type {
+    T_FLOAT	= 1,
+    T_INT	= 2,
+    T_COUNT	= 3,
+    T_COPY	= 4,
+    T_SUM	= 5
 };
 
 #define NO_CATS 0
 
 /* modify this table to add new methods */
 static struct menu menu[] = {
-    {c_ave, w_ave, NO_CATS, 1, 1, 0, "average", "average value"},
-    {c_median, w_median, NO_CATS, 1, 0, 0, "median", "median value"},
-    {c_mode, w_mode, NO_CATS, 1, 0, 0, "mode", "most frequently occuring value"},
-    {c_min, NULL, NO_CATS, 1, 0, 0, "minimum", "lowest value"},
-    {c_max, NULL, NO_CATS, 1, 0, 0, "maximum", "highest value"},
-    {c_range, NULL, NO_CATS, 1, 0, 0, "range", "range value"},
-    {c_stddev, w_stddev, NO_CATS, 0, 1, 0, "stddev", "standard deviation"},
-    {c_sum, w_sum, NO_CATS, 1, 0, 0, "sum", "sum of values"},
-    {c_count, w_count, NO_CATS, 0, 0, 1, "count", "count of non-NULL values"},
-    {c_var, w_var, NO_CATS, 0, 1, 0, "variance", "statistical variance"},
-    {c_divr, NULL, divr_cats, 0, 0, 1, "diversity",
+    {c_ave, w_ave, NO_CATS, 1, 1, T_FLOAT, "average", "average value"},
+    {c_median, w_median, NO_CATS, 1, 0, T_FLOAT, "median", "median value"},
+    {c_mode, w_mode, NO_CATS, 1, 0, T_COPY, "mode", "most frequently occuring value"},
+    {c_min, NULL, NO_CATS, 1, 0, T_COPY, "minimum", "lowest value"},
+    {c_max, NULL, NO_CATS, 1, 0, T_COPY, "maximum", "highest value"},
+    {c_range, NULL, NO_CATS, 1, 0, T_COPY, "range", "range value"},
+    {c_stddev, w_stddev, NO_CATS, 0, 1, T_FLOAT, "stddev", "standard deviation"},
+    {c_sum, w_sum, NO_CATS, 1, 0, T_SUM, "sum", "sum of values"},
+    {c_count, w_count, NO_CATS, 0, 0, T_COUNT, "count", "count of non-NULL values"},
+    {c_var, w_var, NO_CATS, 0, 1, T_FLOAT, "variance", "statistical variance"},
+    {c_divr, NULL, divr_cats, 0, 0, T_INT, "diversity",
      "number of different values"},
-    {c_intr, NULL, intr_cats, 0, 0, 1, "interspersion",
+    {c_intr, NULL, intr_cats, 0, 0, T_INT, "interspersion",
      "number of values different than center value"},
-    {c_quart1, w_quart1, NO_CATS, 1, 0, 0, "quart1", "first quartile"},
-    {c_quart3, w_quart3, NO_CATS, 1, 0, 0, "quart3", "third quartile"},
-    {c_perc90, w_perc90, NO_CATS, 1, 0, 0, "perc90", "ninetieth percentile"},
-    {c_quant, w_quant, NO_CATS, 1, 0, 0, "quantile", "arbitrary quantile"},
+    {c_quart1, w_quart1, NO_CATS, 1, 0, T_FLOAT, "quart1", "first quartile"},
+    {c_quart3, w_quart3, NO_CATS, 1, 0, T_FLOAT, "quart3", "third quartile"},
+    {c_perc90, w_perc90, NO_CATS, 1, 0, T_FLOAT, "perc90", "ninetieth percentile"},
+    {c_quant, w_quant, NO_CATS, 1, 0, T_FLOAT, "quantile", "arbitrary quantile"},
     {0, 0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -94,6 +102,25 @@ static int find_method(const char *method_name)
     G_fatal_error(_("Unknown method <%s>"), method_name);
 
     return -1;
+}
+
+static RASTER_MAP_TYPE output_type(RASTER_MAP_TYPE input_type, int weighted, int mode)
+{
+    switch (mode) {
+    case T_FLOAT:
+	return DCELL_TYPE;
+    case T_INT:
+	return CELL_TYPE;
+    case T_COUNT:
+	return weighted ? DCELL_TYPE : CELL_TYPE;
+    case T_COPY:
+	return input_type;
+    case T_SUM:
+	return weighted ? DCELL_TYPE : input_type;
+    default:
+	G_fatal_error(_("Invalid out_type enumeration: %d"), mode);
+	return -1;
+    }
 }
 
 int main(int argc, char *argv[])
@@ -209,7 +236,6 @@ int main(int argc, char *argv[])
     parm.quantile->multiple = YES;
     parm.quantile->description = _("Quantile to calculate for method=quantile");
     parm.quantile->options = "0.0-1.0";
-    parm.quantile->answer = "0.5";
 
     flag.align = G_define_flag();
     flag.align->key = 'a';
@@ -285,6 +311,7 @@ int main(int argc, char *argv[])
 	const char *output_name = parm.output->answers[i];
 	const char *method_name = parm.method->answers[i];
 	int method = find_method(method_name);
+	RASTER_MAP_TYPE otype = output_type(map_type, weights, menu[method].otype);
 
 	out->name = output_name;
 	if (weights) {
@@ -322,8 +349,7 @@ int main(int argc, char *argv[])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
 	out->buf = Rast_allocate_d_buf();
-	out->fd = Rast_open_new(output_name,
-				(menu[method].is_int && !out->method_fn_w) ? CELL_TYPE : DCELL_TYPE);
+	out->fd = Rast_open_new(output_name, otype);
 	/* TODO: method=mode should propagate its type */
 
 	/* get title, initialize the category and stat info */
