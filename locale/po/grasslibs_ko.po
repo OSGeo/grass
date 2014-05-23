@@ -4615,7 +4615,7 @@ msgstr "<%s> 어떤 이름도 바꾸지 않았습니다"
 #: ../lib/manage/option.c:47
 #, c-format
 msgid "%s to be %s"
-msgstr ""
+msgstr "%2$s할 %1$s"
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
@@ -4746,7 +4746,7 @@ msgstr "계산시간(초)"
 #: ../lib/raster/quant_rw.c:88
 #, c-format
 msgid "Unable to read fp range for raster map <%s>"
-msgstr "격자지도 <%s>의 실수범위를 읽지 못 했습니다"
+msgstr "격자지도 <%s>의 부동소수점 범위를 읽지 못 했습니다"
 
 #: ../lib/raster/quant_rw.c:92
 #, c-format
@@ -5315,7 +5315,7 @@ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
 #: ../lib/raster/put_row.c:130
 #, c-format
 msgid "Error writing compressed FP data for row %d of <%s>"
-msgstr "<%2$s>의 열 %1$d를 위한 압축된 실수자료를 쓰는데 오류"
+msgstr "<%2$s>의 열 %1$d를 위한 압축된 부동소수점 자료를 쓰는데 오류"
 
 #: ../lib/raster/put_row.c:389 ../lib/raster/put_row.c:395
 #, fuzzy, c-format
