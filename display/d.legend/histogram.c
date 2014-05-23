@@ -16,7 +16,7 @@ void draw_histogram(const char *map_name, int x0, int y0, int width,
 		    int map_type, int is_fp)
 {
     int i, nsteps;
-    long cell_count;
+    long cell_count = 0;
     double max_width, width_mult, dx;
     double dy, y0_adjust;	/* only needed for CELL maps */
     struct stat_list dist_stats;
