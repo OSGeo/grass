@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
 
     for (n = 0; n < nlist; n++) {
-	parm[n] = M_define_option(n, "removed", YES);
+	parm[n] = M_define_option(n, _("removed"), YES);
     }
 
     if (G_parser(argc, argv))
