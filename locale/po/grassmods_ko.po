@@ -1344,22 +1344,20 @@ msgstr ""
 
 #: ../general/g.remove/main.c:103 ../general/g.mremove/main.c:63
 #: ../locale/scriptstrings/t.remove_to_translate.c:4
-#, fuzzy
 msgid "remove"
-msgstr "출력할 격자지도"
+msgstr "삭제"
 
 #: ../general/g.remove/main.c:105
 msgid "Removes data base element files from the user's current mapset."
-msgstr ""
+msgstr "사용자의 현재 지도세트로부터 데이타베이스 요소파일을 지웁니다."
 
 #: ../general/g.remove/main.c:110
-#, fuzzy
 msgid "Force removal for base raster maps"
-msgstr "출력할 격자지도"
+msgstr "기반 격자지도를 강제로 지웁니다"
 
 #: ../general/g.gui/main.c:38
 msgid "gui"
-msgstr ""
+msgstr "GUI"
 
 #: ../general/g.gui/main.c:39
 msgid "user interface"
@@ -1839,17 +1837,19 @@ msgstr "출력할 격자지도"
 #: ../locale/scriptstrings/t.list_to_translate.c:4
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:5
 msgid "list"
-msgstr ""
+msgstr "목록"
 
 #: ../general/g.mlist/main.c:66
 msgid ""
 "Lists available GRASS data base files of the user-specified data type "
 "optionally using the search pattern."
 msgstr ""
+"선택적인 검색패턴을 이용해서 사용자가 지정한 자료형의 유효한 GRASS "
+"데이타베이스 파일을 나열합니다."
 
 #: ../general/g.mlist/main.c:81
 msgid "Map name search pattern (default: all)"
-msgstr ""
+msgstr "지도이름 검색패턴 (기본값: 모두)"
 
 #: ../general/g.mlist/main.c:82 ../general/g.mlist/main.c:90
 #: ../general/g.mlist/main.c:103 ../general/g.mlist/main.c:109
@@ -1858,37 +1858,35 @@ msgstr ""
 
 #: ../general/g.mlist/main.c:89
 msgid "Map name exclusion pattern (default: none)"
-msgstr ""
+msgstr "지도이름 제외패턴 (기본값: 없음)"
 
 #: ../general/g.mlist/main.c:94
-#, fuzzy
 msgid "Name of mapset to list (default: current search path)"
-msgstr "출력할 격자지도"
+msgstr "나열할 지도세트의 이름 (기본값: 현재 검색경로)"
 
 #: ../general/g.mlist/main.c:102 ../general/g.mremove/main.c:70
 msgid "Use basic regular expressions instead of wildcards"
-msgstr ""
+msgstr "와일드카드 대신 기본 정규표현식을 사용합니다"
 
 #: ../general/g.mlist/main.c:108 ../general/g.mremove/main.c:75
 msgid "Use extended regular expressions instead of wildcards"
-msgstr ""
+msgstr "와일드카드 대신 확장 정규표현식을 사용합니다"
 
 #: ../general/g.mlist/main.c:113
-#, fuzzy
 msgid "Print data types"
-msgstr "출력할 격자지도"
+msgstr "자료형을 출력합니다"
 
 #: ../general/g.mlist/main.c:118
 msgid "Print fully-qualified map names (including mapsets)"
-msgstr ""
+msgstr "지도세트를 포함한 완전한 지도이름을 출력합니다"
 
 #: ../general/g.mlist/main.c:123
 msgid "Pretty printing in human readable format"
-msgstr ""
+msgstr "사람이 읽기 쉬운 양식으로 출력합니다"
 
 #: ../general/g.mlist/main.c:128 ../general/g.list/main.c:59
 msgid "Verbose listing (also list map titles)"
-msgstr "상세목록(지도제목도 나열합니다)"
+msgstr "지도제목을 포함한 상세목록을 나열합니다"
 
 #: ../general/g.mlist/main.c:135
 msgid "-r and -e are mutually exclusive"
@@ -2163,7 +2161,7 @@ msgstr ""
 
 #: ../general/g.list/main.c:48
 msgid "Lists available GRASS data base files of the user-specified data type."
-msgstr ""
+msgstr "사용자가 지정한 자료형의 유효한 GRASS 데이타베이스 파일을 나열합니다."
 
 #: ../general/g.pnmcomp/main.c:54 ../general/g.pnmcat/main.c:30
 msgid "Error reading PPM file"
@@ -2248,20 +2246,21 @@ msgstr ""
 
 #: ../general/g.mremove/main.c:65
 msgid ""
-"Removes data base element files from the user's current mapset using regular "
-"expressions."
+"Removes data base element files from the user's current mapset using the "
+"search pattern."
 msgstr ""
+"검색패턴을 이용해서 사용자의 현재 지도세트로부터 데이타베이스 요소파일을 "
+"지웁니다."
 
 #: ../general/g.mremove/main.c:80
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:4
 #: ../locale/scriptstrings/db.droptable_to_translate.c:4
 msgid "Force removal (required for actual deletion of files)"
-msgstr ""
+msgstr "실제로 파일을 지웁니다"
 
 #: ../general/g.mremove/main.c:84
-#, fuzzy
 msgid "Remove base raster maps"
-msgstr "출력할 격자지도"
+msgstr "기반 격자지도를 지웁니다"
 
 #: ../general/g.mremove/main.c:85
 #: ../locale/scriptstrings/r.mask_to_translate.c:5
@@ -2270,9 +2269,9 @@ msgid "Raster"
 msgstr ""
 
 #: ../general/g.mremove/main.c:92
-#, fuzzy
+#: ../general/g.remove/main.c:115
 msgid "removed"
-msgstr "출력할 격자지도"
+msgstr "삭제"
 
 #: ../general/g.mremove/main.c:99
 #, c-format
@@ -6194,9 +6193,8 @@ msgstr ""
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:3
 #: ../locale/scriptstrings/d.correlate_to_translate.c:3
 #: ../locale/scriptstrings/db.univar_to_translate.c:3
-#, fuzzy
 msgid "statistics"
-msgstr "출력할 격자지도"
+msgstr "통계"
 
 #: ../imagery/i.cca/main.c:88
 msgid "Canonical components analysis (CCA) program for image processing."
@@ -10856,14 +10854,12 @@ msgid "Name for output vector points map to contain clump centroids"
 msgstr "출력할 격자지도"
 
 #: ../raster/r.volume/main.c:103 ../raster/r.report/parse.c:65
-#, fuzzy
 msgid "Name for output file to hold the report"
-msgstr "출력할 격자지도"
+msgstr "보고서를 보관할 출력파일의 이름"
 
 #: ../raster/r.volume/main.c:105
-#, fuzzy
 msgid "If no output file given report is printed to standard output"
-msgstr "출력할 격자지도"
+msgstr "출력파일을 지정하지 않으면 표준출력으로 출력합니다"
 
 #: ../raster/r.volume/main.c:109
 msgid "Generate unformatted report (items separated by colon)"
@@ -14884,19 +14880,17 @@ msgid "Generates area statistics for raster map."
 msgstr "출력할 격자지도"
 
 #: ../raster/r.stats/main.c:112 ../raster/r.report/parse.c:40
-#, fuzzy
 msgid "Name of raster map(s) to report on"
-msgstr "출력할 격자지도"
+msgstr "보고에 쓰일 격자지도의 이름"
 
 #: ../raster/r.stats/main.c:129 ../raster/r.describe/main.c:68
 #: ../raster/r.report/parse.c:75
 msgid "String representing no data cell value"
-msgstr ""
+msgstr "자료 없는 셀값을 표현할 문자열"
 
 #: ../raster/r.stats/main.c:139 ../raster/r.report/parse.c:103
-#, fuzzy
 msgid "Number of floating-point subranges to collect stats from"
-msgstr "출력할 격자지도"
+msgstr "통계를 계산할 부동소수점 범위의 개수"
 
 #: ../raster/r.stats/main.c:140 ../raster/r.stats/main.c:195
 #: ../raster/r.stats/main.c:200 ../raster/r.stats/main.c:215
@@ -14908,20 +14902,19 @@ msgstr "출력할 격자지도"
 
 #: ../raster/r.stats/main.c:147 ../raster/r.report/parse.c:111
 msgid "Sort output statistics by cell counts"
-msgstr ""
+msgstr "통계출력을 셀의 개수로 정렬"
 
 #: ../raster/r.stats/main.c:148 ../raster/r.report/parse.c:112
-#, fuzzy
 msgid "Default: sorted by categories or intervals"
-msgstr "출력할 격자지도"
+msgstr "기본값: 범주 또는 간격으로 정렬"
 
 #: ../raster/r.stats/main.c:152 ../raster/r.report/parse.c:116
 msgid "Sort by cell counts in ascending order"
-msgstr ""
+msgstr "셀의 개수로 오름차순 정렬"
 
 #: ../raster/r.stats/main.c:153 ../raster/r.report/parse.c:117
 msgid "Sort by cell counts in descending order"
-msgstr ""
+msgstr "셀의 개수로 내림차순 정렬"
 
 #: ../raster/r.stats/main.c:160
 msgid "Print area totals in square meters"
@@ -14971,27 +14964,25 @@ msgid "Print raw indexes of floating-point ranges (floating-point maps only)"
 msgstr ""
 
 #: ../raster/r.stats/main.c:204 ../raster/r.report/parse.c:137
-#, fuzzy
 msgid "Do not report no data value"
-msgstr "출력할 격자지도"
+msgstr "값이 없는 자료는 보고하지 않습니다"
 
 #: ../raster/r.stats/main.c:205 ../raster/r.stats/main.c:210
 #: ../raster/r.report/parse.c:138 ../raster/r.report/parse.c:143
-#, fuzzy
 msgid "No data"
-msgstr "출력할 격자지도"
+msgstr "값이 없는 자료"
 
 #: ../raster/r.stats/main.c:209 ../raster/r.report/parse.c:142
 msgid "Do not report cells where all maps have no data"
-msgstr ""
+msgstr "모든 지도에 값이 없는 곳의 셀은 보고하지 않습니다"
 
 #: ../raster/r.stats/main.c:214 ../raster/r.report/parse.c:147
 msgid "Report for cats floating-point ranges (floating-point maps only)"
-msgstr ""
+msgstr "범주 부동소수점 범위를 위한 보고서 (부동소수점 지도만 해당)"
 
 #: ../raster/r.stats/main.c:219 ../raster/r.report/parse.c:153
 msgid "Read floating-point map as integer (use map's quant rules)"
-msgstr ""
+msgstr "부동소수점 지도를 지도의 퀀트법칙을 이용해서 정수로 읽습니다"
 
 #: ../raster/r.stats/main.c:236
 #, c-format
@@ -21799,65 +21790,62 @@ msgid "Creating support files for raster map <%s>"
 msgstr "격자지도 <%s>를 위한 지원파일을 생성합니다"
 
 #: ../raster/r.report/parse.c:47
-#, fuzzy
 msgid "Units to report"
-msgstr "출력할 격자지도"
+msgstr "보고할 단위"
 
 #: ../raster/r.report/parse.c:51
 msgid "area in square miles"
-msgstr ""
+msgstr "제곱마일 면적"
 
 #: ../raster/r.report/parse.c:52
 msgid "area in square meters"
-msgstr ""
+msgstr "제곱미터 면적"
 
 #: ../raster/r.report/parse.c:53
 msgid "area in square kilometers"
-msgstr ""
+msgstr "제곱킬로미터 면적"
 
 #: ../raster/r.report/parse.c:54
-#, fuzzy
 msgid "area in acres"
-msgstr "출력할 격자지도"
+msgstr "에이커 면적"
 
 #: ../raster/r.report/parse.c:55
 msgid "area in hectares"
-msgstr ""
+msgstr "헥타르 면적"
 
 #: ../raster/r.report/parse.c:56
-#, fuzzy
 msgid "number of cells"
-msgstr "출력할 격자지도"
+msgstr "셀 개수"
 
 #: ../raster/r.report/parse.c:57
 msgid "percent cover"
-msgstr ""
+msgstr "퍼센트"
 
 #: ../raster/r.report/parse.c:67
 msgid "If no output given report is printed to standard output"
-msgstr ""
+msgstr "출력을 지정하지 않으면 표준출력으로 출력합니다"
 
 #: ../raster/r.report/parse.c:82
 #, c-format
 msgid "Page length (default: %d lines)"
-msgstr ""
+msgstr "쪽길이 (기본값: %d줄)"
 
 #: ../raster/r.report/parse.c:91
 #, c-format
 msgid "Page width (default: %d characters)"
-msgstr ""
+msgstr "쪽넓이 (기본값: %d글자)"
 
 #: ../raster/r.report/parse.c:122
 msgid "Suppress page headers"
-msgstr ""
+msgstr "쪽헤더를 출력하지 않습니다"
 
 #: ../raster/r.report/parse.c:127
 msgid "Use formfeeds between pages"
-msgstr ""
+msgstr "쪽 사이에 폼피드를 사용합니다"
 
 #: ../raster/r.report/parse.c:132
 msgid "Scientific format"
-msgstr ""
+msgstr "과학적 양식"
 
 #: ../raster/r.report/parse.c:196
 msgid "nsteps has to be > 0; using nsteps=255"
@@ -21891,9 +21879,8 @@ msgid "Unable to open result file <%s>"
 msgstr "출력할 격자지도"
 
 #: ../raster/r.report/main.c:69
-#, fuzzy
 msgid "Reports statistics for raster maps."
-msgstr "출력할 격자지도"
+msgstr "격자지도의 통계를 보고합니다"
 
 #: ../raster/r.latlong/main.c:57
 msgid "latitude"
