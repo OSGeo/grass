@@ -11693,9 +11693,8 @@ msgid "Generate output for this topographic index class."
 msgstr "출력할 격자지도"
 
 #: ../raster/r.topmodel/main.c:88
-#, fuzzy
-msgid "Name of input topographic index ln(a/tanB) raster map"
-msgstr "출력할 격자지도"
+msgid "Name of input topographic index raster map"
+msgstr "입력 위상색인 격자지도의 이름"
 
 #: ../raster/r.topmodel/main.c:90
 msgid ""
@@ -20055,14 +20054,12 @@ msgid "Number of sinks or boundaries: %d"
 msgstr "출력할 격자지도"
 
 #: ../raster/r.topidx/main.c:42
-#, fuzzy
-msgid "Creates topographic index map from elevation raster map."
-msgstr "출력할 격자지도"
+msgid "Creates a topographic index raster map from an elevation raster map."
+msgstr "고도 격자지도로부터 위상색인 격자지도를 생성합니다."
 
 #: ../raster/r.topidx/main.c:48
-#, fuzzy
-msgid "Name for output topographic index map"
-msgstr "출력할 격자지도"
+msgid "Name for output topographic index raster map"
+msgstr "출력 위상색인 격자지도의 이름"
 
 #: ../raster/r.topidx/file_io.c:35
 #, c-format
@@ -22212,14 +22209,12 @@ msgid "Calculating Hack's main streams and topological dimension..."
 msgstr "출력할 격자지도"
 
 #: ../raster/r.stream.order/main.c:33 ../raster/r.stream.stats/main.c:64
-#, fuzzy
 msgid "Name of input flow direction raster map"
-msgstr "출력할 격자지도"
+msgstr "입력 흐름방향 격자지도의 이름"
 
 #: ../raster/r.stream.order/main.c:34
-#, fuzzy
 msgid "Name of input elevation raster map"
-msgstr "출력할 격자지도"
+msgstr "입력 고도 격자지도의 이름"
 
 #: ../raster/r.stream.order/main.c:45
 #, fuzzy
