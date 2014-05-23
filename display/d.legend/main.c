@@ -16,7 +16,7 @@
  *      Late 2002: Rewrite of much of the code:
  *         Hamish Bowman, Otago University, New Zealand
  *
- * COPYRIGHT:   (c) 2006-2014 by The GRASS Development Team
+ * COPYRIGHT:   (c) 2002-2014 by The GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		  *opt_font, *opt_path, *opt_charset, *opt_fontsize;
     struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo;
     struct Range range;
-    struct FPRange fprange;
+    struct FPRange fprange, render_range;
     CELL min_ind, max_ind;
     DCELL dmin, dmax, val;
     CELL min_colr, max_colr;
@@ -839,11 +839,14 @@ int main(int argc, char **argv)
 
 	/* display sidebar histogram, if requested */
 	if (histo->answer) {
-	    if (opt_range->answer != NULL)
-		G_warning(_("Histogram constrained by range not yet implemented"));
-	    else
-		draw_histogram(map_name, x0, y0, wleg, lleg, color, flip,
-			       horiz, maptype, fp);
+
+	    render_range.min = (DCELL)(fp ? dmin : min_ind);
+	    render_range.max = (DCELL)(fp ? dmax : max_ind);
+	    /* reuse flag to indicate if user-specified or default ranging */
+	    render_range.first_time = opt_range->answer ? TRUE : FALSE;
+
+	    draw_histogram(map_name, x0, y0, wleg, lleg, color, flip, horiz,
+			   maptype, fp, render_range);
 	}
 
     }
@@ -852,6 +855,10 @@ int main(int argc, char **argv)
 	int true_l, true_r;
 	double txsiz;
 	float ScaleFactor = 1.0;
+
+	if (histo->answer)
+	    G_warning(_("Histogram plotting not implemented for categorical legends. "
+			"Use the '-s' flag"));
 
 	/* set legend box bounds */
 	true_l = l;
@@ -906,15 +913,15 @@ int main(int argc, char **argv)
 
 	/* Draw away */
 
-	/*              if(ScaleFactor < 1.0)   */
-	/*                  cur_dot_row = ((b-t) - (dots_per_line*lines))/2; *//* this will center the legend */
-	/*              else    */
+	/* if(ScaleFactor < 1.0)   */
+	/*    cur_dot_row = ((b-t) - (dots_per_line*lines))/2; *//* this will center the legend */
+	/* else    */
 	cur_dot_row = t + dots_per_line / 2;
 
 	/*  j = (do_cats == cats_num ? 1 : 2 ); */
 
 	for (i = 0, k = 0; i < catlistCount; i++)
-	    /*              for(i=min_ind, j=1, k=0; j<=do_cats && i<=max_ind; j++, i+=thin)        */
+	    /* for(i=min_ind, j=1, k=0; j<=do_cats && i<=max_ind; j++, i+=thin) */
 	{
 	    if (!flip)
 		cstr = Rast_get_d_cat(&catlist[i], &cats);
@@ -930,7 +937,7 @@ int main(int argc, char **argv)
 	    else
 		hide_catstr = hidestr->answer;
 
-	    k++;		/* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
+	    k++;  /* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
 
 	    /* White box */
 	    cur_dot_row += dots_per_line;

@@ -1,3 +1,5 @@
+#include <grass/raster.h>
+
 #define MAP_TYPE_RASTER2D 1
 #define MAP_TYPE_RASTER3D 2
 /* possibles for the future:
@@ -27,7 +29,8 @@ struct stat_list
 
 
 /* histogram.c */
-void draw_histogram(const char *, int, int, int, int, int, int, int, int, int);
+void draw_histogram(const char *, int, int, int, int, int, int, int, int,
+		    int, struct FPRange);
 
 /* get_stats.c */
 void get_stats(const char *, struct stat_list *, int, int);
