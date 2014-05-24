@@ -221,7 +221,7 @@ int db_set_login(const char *driver, const char *database, const char *user,
   is not found, user/password are set to NULL
   
   \param driver driver name
-  \param database database name
+  \param database database name (can be NULL)
   \param[out] user name
   \param[out] password string
   
@@ -246,7 +246,7 @@ int db_get_login(const char *driver, const char *database, const char **user,
 
     for (i = 0; i < login.n; i++) {
 	if (strcmp(login.data[i].driver, driver) == 0 &&
-	    strcmp(login.data[i].database, database) == 0) {
+	    (!database || strcmp(login.data[i].database, database) == 0)) {
 	    if (login.data[i].user && strlen(login.data[i].user) > 0)
 		*user = G_store(login.data[i].user);
 	    else
