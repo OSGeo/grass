@@ -49,7 +49,8 @@ int main(int argc, char **argv)
 
     if (db_list_databases(driver, &locations,
                           nlocs, &handles, &count) != DB_OK)
-        G_fatal_error(_("Unable to list databases"));
+        G_fatal_error(_("Unable to list databases. "
+                        "Try to define correct connection settings by db.login."));
     
     db_shutdown_driver(driver);
 
