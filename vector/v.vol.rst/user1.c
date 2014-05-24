@@ -547,7 +547,7 @@ int OUTGR()
 			bmask = BM_get(bitmask, x, nsizr - y - 1);
 		    else
 			bmask = 1;
-		    value = data[cnt];
+		    value = data[cnt] * 180 / M_PI;
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf3, x, y, iarc, value) == 0) {
@@ -597,7 +597,7 @@ int OUTGR()
 			bmask = BM_get(bitmask, x, nsizr - y - 1);
 		    else
 			bmask = 1;
-		    value = data[cnt];
+		    value = data[cnt] * 180 / M_PI;
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf4, x, y, iarc, value) == 0) {
