@@ -1380,10 +1380,10 @@ class GCP(MapFrame, ColumnSorterMixin):
             if msg:
                 GWarning(parent = self,
                          message=_('Insufficient points defined and active (checked) '
-                                   'for selected rectification method.\n'
+                                   'for selected rectification method (order: %d).\n'
                                    '3+ points needed for 1st order,\n'
                                    '6+ points for 2nd order, and\n'
-                                   '10+ points for 3rd order.'))
+                                   '10+ points for 3rd order.') % self.gr_order)
                 return False
         else:
             return True
