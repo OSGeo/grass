@@ -1860,7 +1860,7 @@ class GdalSelect(wx.Panel):
         self.dbWidgets['featType'].Enable(enableFeatType)
         if showChoice:
             # try to get list of PG databases
-            dbNames = RunCommand('db.databases', quiet=True, read=True,
+            dbNames = RunCommand('db.databases', parent=self, quiet=True, read=True,
                                  driver='pg').splitlines()
             if dbNames is not None:
                 self.dbWidgets['choice'].SetItems(sorted(dbNames))
