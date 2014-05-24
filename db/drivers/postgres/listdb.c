@@ -44,8 +44,9 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
         return DB_FAILED;
     }
     
-    G_debug(3, "host = %s, port = %s, options = %s, tty = %s",
-	    pgconn.host, pgconn.port, pgconn.options, pgconn.tty);
+    G_debug(1, "db = %s, user = %s, pass = %s, host = %s, port = %s, options = %s, tty = %s",
+	    pgconn.dbname, pgconn.user, pgconn.password, pgconn.host,
+            pgconn.port, pgconn.options, pgconn.tty);
 
     pg_conn =
 	PQsetdb(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
