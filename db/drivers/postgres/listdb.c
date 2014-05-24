@@ -19,6 +19,7 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
 			      dbHandle ** dblist, int *dbcount)
 {
     int i;
+    const char *user, *passwd;
     PGCONN pgconn;
     PGresult *res;
     int rec_num = 0;
@@ -27,11 +28,8 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
     *dblist = NULL;
     *dbcount = 0;
 
-    /* TODO: the solution below is not good as user usually does not have permissions for "template1" */
-    /*    db_d_append_error(_("db_driver_list_databases() is not implemented"));
-          db_d_report_error();
-          return DB_FAILED;
-    */
+    /* TODO: the solution below is not good as user usually does not
+     * have permissions for "template1" */
 
     if (npaths < 1) {
         db_d_append_error(_("No path given"));
@@ -48,9 +46,18 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
 	    pgconn.dbname, pgconn.user, pgconn.password, pgconn.host,
             pgconn.port, pgconn.options, pgconn.tty);
 
-    pg_conn =
-	PQsetdb(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
-		"template1");
+    db_get_login("pg", NULL, &user, &passwd);
+    G_debug(1, "user = %s, passwd = %s", user, passwd ? "xxx" : "");
+
+    if (user || passwd) {
+        pg_conn = PQsetdbLogin(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
+                               "template1", user, passwd);
+    }
+    else {
+        pg_conn =
+            PQsetdb(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
+                    "template1");
+    }
 
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
 	db_d_append_error("%s\n%s",
