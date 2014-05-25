@@ -2503,7 +2503,7 @@ msgstr ""
 
 #: ../display/d.zoom/main.c:84 ../vector/v.build/main.c:44
 msgid "Name of vector map"
-msgstr ""
+msgstr "벡터지도 이름"
 
 #: ../display/d.zoom/main.c:92
 msgid "Magnification: >1.0 zooms in, <1.0 zooms out"
@@ -8065,7 +8065,7 @@ msgstr ""
 #: ../vector/v.info/main.c:39 ../vector/v.build.polylines/main.c:113
 #: ../vector/v.build/main.c:37
 msgid "topology"
-msgstr ""
+msgstr "위상"
 
 #: ../locale/scriptstrings/t.topology_to_translate.c:4
 #: ../locale/scriptstrings/t.shift_to_translate.c:6
@@ -8922,9 +8922,8 @@ msgstr "출력할 격자지도"
 #: ../raster/r.info/main.c:70 ../raster3d/r3.info/r3.info.main.c:76
 #: ../raster3d/r3.support/main.c:50 ../vector/v.support/main.c:40
 #: ../vector/v.info/main.c:38 ../vector/v.timestamp/main.c:36
-#, fuzzy
 msgid "metadata"
-msgstr "출력할 격자지도"
+msgstr "메타자료"
 
 #: ../locale/scriptstrings/t.info_to_translate.c:4
 #, fuzzy
@@ -28720,18 +28719,16 @@ msgstr ""
 
 #: ../raster/r.info/main.c:71 ../raster3d/r3.info/r3.info.main.c:77
 #: ../vector/v.info/main.c:40
-#, fuzzy
 msgid "extent"
-msgstr "출력할 격자지도"
+msgstr "범위"
 
 #: ../raster/r.info/main.c:72 ../vector/v.info/main.c:41
 msgid "history"
-msgstr ""
+msgstr "이력"
 
 #: ../raster/r.info/main.c:74
-#, fuzzy
 msgid "Outputs basic information about a raster map."
-msgstr "출력할 격자지도"
+msgstr "격자지도에 대한 기본적인 정보를 출력합니다."
 
 #: ../raster/r.info/main.c:80
 #, fuzzy
@@ -32869,31 +32866,29 @@ msgid "Processing areas..."
 msgstr "출력할 격자지도"
 
 #: ../vector/v.out.pov/main.c:218
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature written."
 msgid_plural "%d features written."
-msgstr[0] "출력할 격자지도"
-msgstr[1] "출력할 격자지도"
+msgstr[0] "%d개의 피쳐를 썼습니다."
+msgstr[1] "%d개의 피쳐를 썼습니다."
 
 #: ../vector/v.info/main.c:42
-#, fuzzy
 msgid "attribute columns"
-msgstr "출력할 격자지도"
+msgstr "특성 열"
 
 #: ../vector/v.info/main.c:45
-#, fuzzy
 msgid "Outputs basic information about a vector map."
-msgstr "출력할 격자지도"
+msgstr "벡터지도에 대한 기본적인 정보를 출력합니다."
 
 #: ../vector/v.info/print.c:130
 #, c-format
 msgid "Database connection for map <%s> is not defined in DB file"
-msgstr ""
+msgstr "지도 <%s>를 위한 데이타베이스 연결이 DB 파일 안에 정의되지 않았습니다"
 
 #: ../vector/v.info/print.c:134
 #, c-format
 msgid "Displaying column types/names for database connection of layer <%s>:"
-msgstr ""
+msgstr "레이어 <%s>의 데이타베이스 연결을 위한 열 형과 이름을 출력합니다:"
 
 #: ../vector/v.info/print.c:138 ../vector/v.colors.out/make_colors.c:31
 #: ../vector/v.to.rast/vect2rast.c:55 ../vector/v.db.select/main.c:165
@@ -32903,7 +32898,7 @@ msgstr ""
 #: ../vector/v.extract/main.c:252
 #, c-format
 msgid "Database connection not defined for layer <%s>"
-msgstr ""
+msgstr "레이어 <%s>를 위한 데이타베이스 연결이 정의되지 않았습니다"
 
 #: ../vector/v.info/print.c:305
 msgid "Name:"
@@ -32930,9 +32925,8 @@ msgid "Map scale:"
 msgstr ""
 
 #: ../vector/v.info/print.c:326
-#, fuzzy
 msgid "Name of creator:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:329
 msgid "Organization:"
@@ -32964,14 +32958,12 @@ msgid "OGR datasource:"
 msgstr ""
 
 #: ../vector/v.info/print.c:362 ../vector/v.info/print.c:391
-#, fuzzy
 msgid "Feature type:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:380
-#, fuzzy
 msgid "DB table:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:383
 msgid "DB name:"
@@ -32982,9 +32974,8 @@ msgid "Geometry column:"
 msgstr ""
 
 #: ../vector/v.info/print.c:401 ../vector/v.info/print.c:410
-#, fuzzy
 msgid "Topology:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:402
 msgid "schema:"
@@ -32995,63 +32986,52 @@ msgid "Topology column:"
 msgstr ""
 
 #: ../vector/v.info/print.c:424
-#, fuzzy
 msgid "Type of map"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:424
 msgid "level"
 msgstr ""
 
 #: ../vector/v.info/print.c:431
-#, fuzzy
 msgid "Number of points:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:433
-#, fuzzy
 msgid "Number of centroids:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:438
-#, fuzzy
 msgid "Number of lines:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:440
-#, fuzzy
 msgid "Number of boundaries:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:445
-#, fuzzy
 msgid "Number of areas:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:447
-#, fuzzy
 msgid "Number of islands:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:453
-#, fuzzy
 msgid "Number of faces:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:455
-#, fuzzy
 msgid "Number of kernels:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:460
-#, fuzzy
 msgid "Number of volumes:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:462
-#, fuzzy
 msgid "Number of holes:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:469
 msgid "Map is 3D:"
@@ -33066,23 +33046,20 @@ msgid "No"
 msgstr ""
 
 #: ../vector/v.info/print.c:473
-#, fuzzy
 msgid "Number of dblinks:"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:486
 msgid "invalid"
 msgstr ""
 
 #: ../vector/v.info/print.c:488
-#, fuzzy
 msgid "unspecified"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:493 ../vector/v.info/print.c:498
-#, fuzzy
 msgid "Projection"
-msgstr "출력할 격자지도"
+msgstr ""
 
 #: ../vector/v.info/print.c:494
 msgid "zone"
@@ -33098,28 +33075,26 @@ msgstr ""
 
 #: ../vector/v.info/parse.c:24
 msgid "Print history instead of info and exit"
-msgstr ""
+msgstr "정보 대신에 이력을 출력하고 멈춥니다"
 
 #: ../vector/v.info/parse.c:30
 msgid ""
 "Print types/names of table columns for specified layer instead of info and "
 "exit"
 msgstr ""
+"정보 대신 지정한 레이어를 위한 표의 열 형과 이름을 출력하고 멈춥니다"
 
 #: ../vector/v.info/parse.c:35
-#, fuzzy
 msgid "Print region info in shell script style"
-msgstr "출력할 격자지도"
+msgstr "지역정보를 셸스크립트 형식으로 출력합니다"
 
 #: ../vector/v.info/parse.c:40
-#, fuzzy
 msgid "Print extended metadata info in shell script style"
-msgstr "출력할 격자지도"
+msgstr "확장 메타자료를 셸스크립트 형식으로 출력합니다"
 
 #: ../vector/v.info/parse.c:45
-#, fuzzy
 msgid "Print topology info in shell script style"
-msgstr "출력할 격자지도"
+msgstr "위상정보를 셸스크립트 형식으로 출력합니다"
 
 #: ../vector/v.colors.out/scan_cats.c:24
 #: ../vector/v.colors.out/make_colors.c:27 ../vector/v.colors/main.c:272
