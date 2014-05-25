@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
     if (flag.formats->answer) {
 	int iDriver;
 
-	G_message(_("Available OGR Drivers:"));
+	G_message(_("Supported formats:"));
 
 	for (iDriver = 0; iDriver < OGRGetDriverCount(); iDriver++) {
 	    OGRSFDriverH poDriver = OGRGetDriver(iDriver);
