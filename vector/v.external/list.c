@@ -91,7 +91,7 @@ void list_formats(void)
     int i, count;
     char **list;
     
-    G_message(_("List of supported formats:"));
+    G_message(_("Supported formats:"));
 
     list = format_list(&count, NULL);
     
