@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     if (flag_f->answer) {
 	int iDr;
 
-	G_message(_("Available GDAL Drivers:"));
+	G_message(_("Supported formats:"));
 	for (iDr = 0; iDr < GDALGetDriverCount(); iDr++) {
 	    GDALDriverH hDriver = GDALGetDriver(iDr);
 	    const char *pszRWFlag;
