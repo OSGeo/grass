@@ -73,7 +73,7 @@ static char *format_list(void)
 #ifdef GDAL_DCAP_RASTER
             /* Starting with GDAL 2.0, vector drivers can also be returned */
             /* Only keep raster drivers */
-            if (!GDALGetMetadataItem(hDriver, GDAL_DCAP_RASTER, NULL))
+            if (!GDALGetMetadataItem(driver, GDAL_DCAP_RASTER, NULL))
                 continue;
 #endif
 
@@ -90,6 +90,13 @@ static char *format_list(void)
     for (i = 0; i < GDALGetDriverCount(); i++) {
 	GDALDriverH driver = GDALGetDriver(i);
 	const char *name;
+
+#ifdef GDAL_DCAP_RASTER
+            /* Starting with GDAL 2.0, vector drivers can also be returned */
+            /* Only keep raster drivers */
+            if (!GDALGetMetadataItem(driver, GDAL_DCAP_RASTER, NULL))
+                continue;
+#endif
 
 	if (!GDALGetMetadataItem(driver, GDAL_DCAP_CREATE, NULL) &&
 	    !GDALGetMetadataItem(driver, GDAL_DCAP_CREATECOPY, NULL))
