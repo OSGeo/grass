@@ -29,12 +29,16 @@
 import sys
 import os
 from grass.script import core as grass
+from grass.script import db as grassdb
 
 def main():
     test_file = options['test']
 
     expected = grass.tempfile()
     result = grass.tempfile()
+
+    dbconn = grassdb.db_connection()
+    grass.message(_("Using DB driver: %s") % dbconn['driver'])
 
     infile = os.path.join(os.environ['GISBASE'], 'etc', 'db.test', test_file)
     inf = file(infile)
