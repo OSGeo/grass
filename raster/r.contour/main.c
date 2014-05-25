@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
     struct Option *max;
     struct Option *step;
     struct Option *cut;
+    struct Flag *notable;
 
     int i;
 
@@ -130,6 +131,8 @@ int main(int argc, char *argv[])
     cut->description =
 	_("Minimum number of points for a contour line (0 -> no limit)");
 
+    notable = G_define_standard_flag(G_FLG_V_TABLE);
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -152,40 +155,42 @@ int main(int argc, char *argv[])
     Vect_open_new(&Map, vect->answer, 1);
     Vect_hist_command(&Map);
 
-    db_init_string(&sql);
-
-    /* Open database, create table */
-    Fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
-    Vect_map_add_dblink(&Map, Fi->number, Fi->name, Fi->table, Fi->key,
-			Fi->database, Fi->driver);
-
-    Driver =
-	db_start_driver_open_database(Fi->driver,
-				      Vect_subst_var(Fi->database, &Map));
-    if (Driver == NULL)
-	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-		      Fi->database, Fi->driver);
-
-    sprintf(buf, "create table %s ( cat integer, level double precision )",
-	    Fi->table);
-
-    db_set_string(&sql, buf);
-
-    G_debug(1, "SQL: %s", db_get_string(&sql));
-
-    if (db_execute_immediate(Driver, &sql) != DB_OK) {
-	G_fatal_error(_("Unable to create table: '%s'"),
-		      db_get_string(&sql));
+    if (!notable->answer) {
+        db_init_string(&sql);
+    
+        /* Open database, create table */
+        Fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
+        Vect_map_add_dblink(&Map, Fi->number, Fi->name, Fi->table, Fi->key,
+                            Fi->database, Fi->driver);
+    
+        Driver =
+            db_start_driver_open_database(Fi->driver,
+                                          Vect_subst_var(Fi->database, &Map));
+        if (Driver == NULL)
+            G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                          Fi->database, Fi->driver);
+    
+        sprintf(buf, "create table %s ( cat integer, level double precision )",
+                Fi->table);
+    
+        db_set_string(&sql, buf);
+    
+        G_debug(1, "SQL: %s", db_get_string(&sql));
+    
+        if (db_execute_immediate(Driver, &sql) != DB_OK) {
+            G_fatal_error(_("Unable to create table: '%s'"),
+                          db_get_string(&sql));
+        }
+    
+        if (db_create_index2(Driver, Fi->table, Fi->key) != DB_OK)
+            G_warning(_("Unable to create index for table <%s>, key <%s>"),
+                      Fi->table, Fi->key);
+    
+        if (db_grant_on_table
+            (Driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+            G_fatal_error(_("Unable to grant privileges on table <%s>"),
+                          Fi->table);
     }
-
-    if (db_create_index2(Driver, Fi->table, Fi->key) != DB_OK)
-	G_warning(_("Unable to create index for table <%s>, key <%s>"),
-		  Fi->table, Fi->key);
-
-    if (db_grant_on_table
-	(Driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-	G_fatal_error(_("Unable to grant privileges on table <%s>"),
-		      Fi->table);
 
     z_array = get_z_array(fd, Wind.rows, Wind.cols);
     lev = getlevels(levels, max, min, step, &range, &nlevels);
@@ -196,22 +201,23 @@ int main(int argc, char *argv[])
     G_message(_("Writing attributes..."));
     /* Write levels */
 
-    db_begin_transaction(Driver);
-    for (i = 0; i < nlevels; i++) {
-	sprintf(buf, "insert into %s values ( %d, %e )", Fi->table, i + 1,
-		lev[i]);
-	db_set_string(&sql, buf);
-
-	G_debug(3, "SQL: %s", db_get_string(&sql));
-
-	if (db_execute_immediate(Driver, &sql) != DB_OK) {
-	    G_fatal_error(_("Unable to insert new record: '%s'"), db_get_string(&sql));
-	}
+    if (!notable->answer) {
+        db_begin_transaction(Driver);
+        for (i = 0; i < nlevels; i++) {
+            sprintf(buf, "insert into %s values ( %d, %e )", Fi->table, i + 1,
+                    lev[i]);
+            db_set_string(&sql, buf);
+            
+            G_debug(3, "SQL: %s", db_get_string(&sql));
+            
+            if (db_execute_immediate(Driver, &sql) != DB_OK) {
+                G_fatal_error(_("Unable to insert new record: '%s'"), db_get_string(&sql));
+            }
+        }
+        db_commit_transaction(Driver);
+        
+        db_close_database_shutdown_driver(Driver);
     }
-    db_commit_transaction(Driver);
-
-    db_close_database_shutdown_driver(Driver);
-
     Vect_build(&Map);
     Vect_close(&Map);
 
