@@ -722,9 +722,8 @@ msgid "Name for output raster map(s)"
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/gis/parser_standard_options.c:278
-#, fuzzy
 msgid "Name of raster map"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "격자지도 이름"
 
 #: ../lib/gis/parser_standard_options.c:287
 #, fuzzy
@@ -817,7 +816,7 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:425
 #: ../lib/gis/parser_standard_options.c:452
 msgid "Or data source for direct OGR access"
-msgstr ""
+msgstr "또는 OGR 직접접근을 위한 자료원천"
 
 #: ../lib/gis/parser_standard_options.c:434
 msgid "Name of input vector map(s)"
@@ -825,16 +824,15 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:435
 msgid "Or data source(s) for direct OGR access"
-msgstr ""
+msgstr "또는 OGR 직접접근을 위한 자료원천"
 
 #: ../lib/gis/parser_standard_options.c:443
 msgid "Name for output vector map"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:451
-#, fuzzy
 msgid "Name of vector map"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "벡터지도 이름"
 
 #: ../lib/gis/parser_standard_options.c:461
 #, fuzzy
@@ -849,7 +847,7 @@ msgstr "알려지지 않은 벡터형입니다"
 
 #: ../lib/gis/parser_standard_options.c:486
 msgid "Layer number or name"
-msgstr ""
+msgstr "레이어 번호 또는 이름"
 
 #: ../lib/gis/parser_standard_options.c:488
 msgid ""
@@ -857,6 +855,8 @@ msgid ""
 "determines which layer to use. When used with direct OGR access this is the "
 "layer name."
 msgstr ""
+"벡터피쳐는 다른 레이어 안에 범주값을 가질 수 있습니다. 이 번호는 어떤 "
+"레이어를 쓸지 결정합니다. OGR 직접접근과 함께 쓰일 경우 레이어 이름이 됩니다."
 
 #: ../lib/gis/parser_standard_options.c:498
 msgid "Layer number or name ('-1' for all layers)"
