@@ -368,21 +368,28 @@ int read_line_input(char *buf, char *stype, int *id, int *lcat,
 /* Find line by cat, returns 0 if not found */
 int find_line(struct Map_info *Map, int lfield, int lcat)
 {
-    int i, nlines, type, cat;
+    int i, nlines, type;
     struct line_cats *Cats;
+    struct ilist *cats;
 
     G_debug(2, "find_line(): llayer = %d lcat = %d", lfield, lcat);
     Cats = Vect_new_cats_struct();
+    cats = Vect_new_list();
 
     nlines = Vect_get_num_lines(Map);
     for (i = 1; i <= nlines; i++) {
 	type = Vect_read_line(Map, NULL, Cats, i);
 	if (!(type & GV_LINE))
 	    continue;
-	Vect_cat_get(Cats, lfield, &cat);
-	if (cat == lcat)
+
+	Vect_field_cat_get(Cats, lfield, cats);
+	if (Vect_val_in_list(cats, lcat)) {
+            Vect_destroy_list(cats);
 	    return i;
+	}
     }
+
+    Vect_destroy_list(cats);
 
     return 0;
 }
