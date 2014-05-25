@@ -221,6 +221,13 @@ int main(int argc, char *argv[])
 	    GDALDriverH hDriver = GDALGetDriver(iDr);
 	    const char *pszRWFlag;
 
+#ifdef GDAL_DCAP_RASTER
+            /* Starting with GDAL 2.0, vector drivers can also be returned */
+            /* Only keep raster drivers */
+            if (!GDALGetMetadataItem(hDriver, GDAL_DCAP_RASTER, NULL))
+                continue;
+#endif
+
 	    if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATE, NULL))
 		pszRWFlag = "rw+";
 	    else if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATECOPY, NULL))
