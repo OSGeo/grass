@@ -66,7 +66,7 @@ void supported_formats(const char **formats)
 	else if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATECOPY, NULL))
 	    pszRWFlag = "rw";
 	else
-	    pszRWFlag = "ro";
+          continue;
 
 	if (*formats)
 	    fprintf(stdout, "  %s (%s): %s\n",
