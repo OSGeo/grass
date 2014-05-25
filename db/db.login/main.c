@@ -30,6 +30,7 @@
 int main(int argc, char *argv[])
 {
     struct Option *driver, *database, *user, *password;
+    struct Flag *print;
     struct GModule *module;
     
     /* Initialize the GIS calls */
@@ -65,8 +66,19 @@ int main(int argc, char *argv[])
     password->description = _("Password to set for DB connection");
     password->guisection = _("Settings");
 
+    print = G_define_flag();
+    print->key = 'p';
+    print->description = _("Print connection settings and exit");
+    print->guisection = _("Print");
+    
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (print->answer) {
+        /* print all settings to standard output and exit */
+        db_get_login_dump(stdout);
+        exit(EXIT_SUCCESS);
+    }
 
     if (db_set_login(driver->answer, database->answer, user->answer,
                      password->answer) == DB_FAILED) {
