@@ -154,6 +154,8 @@ class Location(object):
         True
         >>> location.name == gisenv()['LOCATION_NAME']
         True
+
+    ..
     """
     def __init__(self, location='', gisdbase=''):
         self.gisdbase = gisdbase
@@ -324,6 +326,12 @@ class Mapset(object):
 
 
 class VisibleMapset(object):
+    """VisibleMapset object::
+
+        >>> mapset = VisibleMapset('user1')
+        >>> mapset
+        ['user1', 'PERMANENT']
+    """
     def __init__(self, mapset, location='', gisdbase=''):
         self.mapset = mapset
         self.location = Location(location, gisdbase)
@@ -338,6 +346,7 @@ class VisibleMapset(object):
             yield mapset
 
     def read(self):
+        """Return the mapsets in the search path"""
         with open(self.spath, "a+") as f:
             lines = f.readlines()
             #lines.remove('')
@@ -347,12 +356,14 @@ class VisibleMapset(object):
         self.write(lns)
         return lns
 
-    def write(self, mapsets):
+    def _write(self, mapsets):
+        """Write to SEARCH_PATH file the changes in the search path"""
         with open(self.spath, "w+") as f:
             ms = self.location.mapsets()
             f.write('%s' % '\n'.join([m for m in mapsets if m in ms]))
 
     def add(self, mapset):
+        """Add a mapset to the search path"""
         if mapset not in self.read() and mapset in self.location:
             with open(self.spath, "a+") as f:
                 f.write('\n%s' % mapset)
@@ -360,12 +371,19 @@ class VisibleMapset(object):
             raise TypeError('Mapset not found')
 
     def remove(self, mapset):
+        """Remove mapset to the search path"""
         mapsets = self.read()
         mapsets.remove(mapset)
-        self.write(mapsets)
+        self._write(mapsets)
 
     def extend(self, mapsets):
+        """Add more mapsets to the search path"""
         ms = self.location.mapsets()
         final = self.read()
         final.extend([m for m in mapsets if m in ms and m not in final])
-        self.write(final)
+        self._write(final)
+
+    def reset(self):
+        """Reset to the original search path"""
+        final = [self.mapset, 'PERMANENT']
+        self._write(final)
