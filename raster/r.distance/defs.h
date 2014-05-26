@@ -51,6 +51,7 @@ struct Parms
     int labels;			/* boolean: report includes cat labels */
     char *fs;			/* report field separator     */
     int overlap;		/* checking for overlapping, than distance is 0 */
+    int null;			/* report null objects as * */
 };
 
 /* distance.c */
@@ -61,7 +62,7 @@ int null_distance(const char *, const char *, int *, int *);
 
 /* edges.c */
 void print_edge_info(struct Map *);
-void find_edge_cells(struct Map *);
+void find_edge_cells(struct Map *, int);
 void add_edge_cell(struct Map *, CELL, int, int);
 void init_edge_list(struct Map *);
 void sort_edge_list(struct Map *);

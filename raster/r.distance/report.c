@@ -43,17 +43,32 @@ void report(struct Parms *parms)
     G_message(_("Processing..."));
 
     for (i1 = 0; i1 < map1->edges.ncats; i1++) {
+	int isnull1;
+
 	list1 = &map1->edges.catlist[i1];
+	isnull1 = parms->null ? Rast_is_c_null_value(&(list1->cat)) : 0;
+
 	for (i2 = 0; i2 < map2->edges.ncats; i2++) {
+	    int isnull2;
+
 	    list2 = &map2->edges.catlist[i2];
+	    isnull2 = parms->null ? Rast_is_c_null_value(&(list2->cat)) : 0;
+
 	    find_minimum_distance(list1, list2,
 				  &east1, &north1, &east2, &north2, &distance,
 				  &region, parms->overlap, map1->name,
 				  map2->name);
 
 	    /* print cat numbers */
-	    fprintf(stdout, "%ld%s%ld", (long)list1->cat, fs,
-		    (long)list2->cat);
+	    if (isnull1 && isnull2)
+	        fprintf(stdout, "*%s*", fs);
+	    else if (isnull1)
+	        fprintf(stdout, "*%s%ld", fs, (long)list2->cat);
+	    else if (isnull2)
+	        fprintf(stdout, "%ld%s*", (long)list1->cat, fs);
+	    else
+	        fprintf(stdout, "%ld%s%ld", (long)list1->cat, fs,
+		        (long)list2->cat);
 
 	    /* print distance */
 	    sprintf(temp, "%.10f", distance);
