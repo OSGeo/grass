@@ -25,7 +25,7 @@
 void parse(int argc, char *argv[], struct Parms *parms)
 {
     struct Option *maps, *fs;
-    struct Flag *labels, *overlap;
+    struct Flag *labels, *overlap, *null;
     const char *name, *mapset;
 
     maps = G_define_standard_option(G_OPT_R_MAPS);
@@ -44,6 +44,10 @@ void parse(int argc, char *argv[], struct Parms *parms)
     overlap->description =
 	_("Report zero distance if rasters are overlapping");
 
+    null = G_define_flag();
+    null->key = 'n';
+    null->description = _("Report null objects as *");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -51,6 +55,8 @@ void parse(int argc, char *argv[], struct Parms *parms)
     mapset = parms->map1.mapset = G_find_raster2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
+    if (Rast_map_type(name, mapset) != CELL_TYPE)
+	G_fatal_error(_("Raster map <%s> is not CELL"), name);
 
     parms->map1.fullname = G_fully_qualified_name(name, mapset);
 
@@ -58,10 +64,13 @@ void parse(int argc, char *argv[], struct Parms *parms)
     mapset = parms->map2.mapset = G_find_raster2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
+    if (Rast_map_type(name, mapset) != CELL_TYPE)
+	G_fatal_error(_("Raster map <%s> is not CELL"), name);
 
     parms->map2.fullname = G_fully_qualified_name(name, mapset);
 
     parms->labels = labels->answer ? 1 : 0;
     parms->fs = fs->answer;
     parms->overlap = overlap->answer ? 1 : 0;
+    parms->null = null->answer ? 1 : 0;
 }

@@ -46,8 +46,8 @@ int main(int argc, char *argv[])
 	read_labels(&parms.map2);
     }
 
-    find_edge_cells(&parms.map1);
-    find_edge_cells(&parms.map2);
+    find_edge_cells(&parms.map1, parms.null);
+    find_edge_cells(&parms.map2, parms.null);
 
     report(&parms);
 
