@@ -117,6 +117,9 @@ int G_set_verbose(int level)
 {
     if (level == -1 || (level >= MINLEVEL && level <= MAXLEVEL)) {
         st->verbose = level;
+        if (!G_is_initialized(&(st->initialized)))
+            G_initialize_done(&(st->initialized));
+        
         return 1;
     }
 
