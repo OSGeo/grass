@@ -475,7 +475,8 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < n_predictors; i++) {
 
-	fprintf(stdout, "\nb%d=%f\n", i + 1, B[0][i + 1]);
+	fprintf(stdout, "\npredictor%d=%s\n", i + 1, input_mapx->answers[i]);
+	fprintf(stdout, "b%d=%f\n", i + 1, B[0][i + 1]);
 	if (n_predictors > 1) {
 	    double Rsqi, SEi, sumsqX_corr;
 
