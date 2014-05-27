@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
 
     if ((mapset = opt.mapset->answer) == NULL)
 	mapset = "";
-    else if (G_strcasecmp(mapset, ".") == 0)
+    else if (strcmp(mapset, ".") == 0)
 	mapset = G_mapset();
 
     for (i = 0; opt.type->answers[i]; i++) {
