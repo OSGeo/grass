@@ -2574,7 +2574,7 @@ msgstr ""
 #: ../vector/v.drape/main.c:57 ../vector/v.overlay/main.c:63
 #: ../vector/v.build/main.c:38 ../vector/v.select/main.c:48
 msgid "geometry"
-msgstr ""
+msgstr "지형"
 
 #: ../display/d.measure/main.c:49
 msgid ""
@@ -3788,9 +3788,8 @@ msgstr "출력할 격자지도"
 #: ../db/db.select/main.c:207 ../db/db.execute/main.c:139
 #: ../general/g.proj/main.c:140 ../general/g.proj/main.c:149
 #: ../raster/r.in.ascii/main.c:79 ../vector/v.segment/main.c:76
-#, fuzzy
 msgid "'-' for standard input"
-msgstr "출력할 격자지도"
+msgstr "표준입력을 위해서는 '-'"
 
 #: ../db/db.select/main.c:211
 #, fuzzy
@@ -8143,7 +8142,7 @@ msgstr "내보내기"
 #: ../locale/scriptstrings/d.out.file_to_translate.c:4
 #: ../raster/r.topmodel/main.c:71 ../raster/r.out.mpeg/main.c:122
 msgid "Name for output file"
-msgstr ""
+msgstr "출력파일 이름"
 
 #: ../locale/scriptstrings/d.out.file_to_translate.c:6
 #, fuzzy
@@ -10279,9 +10278,8 @@ msgid "Name of input pack file"
 msgstr "출력할 격자지도"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:4
-#, fuzzy
 msgid "Name for output vector map"
-msgstr "출력할 격자지도"
+msgstr "출력 벡터지도 이름"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:5
 #, fuzzy
@@ -16881,16 +16879,15 @@ msgstr ""
 
 #: ../raster/r.to.vect/points.c:36
 msgid "Extracting points..."
-msgstr ""
+msgstr "점을 추출하는 중..."
 
 #: ../raster/r.to.vect/areas.c:120
-#, fuzzy
 msgid "Extracting areas..."
-msgstr "출력할 격자지도"
+msgstr "면을 추출하는 중..."
 
 #: ../raster/r.to.vect/lines.c:70
 msgid "Extracting lines..."
-msgstr ""
+msgstr "선을 추출하는 중..."
 
 #: ../raster/r.to.vect/lines.c:499
 msgid ""
@@ -17051,9 +17048,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.to.vect/areas_io.c:305
-#, fuzzy
 msgid "Writing areas..."
-msgstr "출력할 격자지도"
+msgstr "면을 쓰는 중..."
 
 #: ../raster/r.proj/bordwalk.c:216
 msgid "Input raster map is outside current region"
@@ -23121,14 +23117,12 @@ msgid "basins creation"
 msgstr "출력할 격자지도"
 
 #: ../raster/r.stream.snap/main.c:55
-#, fuzzy
 msgid "Name of input vector points map"
-msgstr "출력할 격자지도"
+msgstr "입력 벡터점 지도의 이름"
 
 #: ../raster/r.stream.snap/main.c:58
-#, fuzzy
 msgid "Name for output vector points map"
-msgstr "출력할 격자지도"
+msgstr "출력 점벡터 지도의 이름"
 
 #: ../raster/r.stream.snap/main.c:69 ../raster/r.stream.order/main.c:35
 #: ../raster/r.stream.extract/main.c:85
@@ -24646,7 +24640,7 @@ msgstr "범주 부동소수점 범위를 위한 보고서 (부동소수점 지�
 
 #: ../raster/r.report/parse.c:153 ../raster/r.stats/main.c:219
 msgid "Read floating-point map as integer (use map's quant rules)"
-msgstr "부동소수점 지도를 지도의 퀀트법칙을 이용해서 정수로 읽습니다"
+msgstr "부동소수점 지도를 지도의 퀀트 규칙을 이용해서 정수로 읽습니다"
 
 #: ../raster/r.report/parse.c:196
 msgid "nsteps has to be > 0; using nsteps=255"
@@ -30520,7 +30514,7 @@ msgstr ""
 
 #: ../vector/v.clean/main.c:244
 msgid "Snap vertices"
-msgstr ""
+msgstr "정점 끌어붙이기"
 
 #: ../vector/v.clean/main.c:247
 msgid "Remove duplicate area centroids"
@@ -31364,9 +31358,8 @@ msgid "Removing bridges..."
 msgstr "다리를 지우는 중..."
 
 #: ../vector/v.buffer/main.c:753 ../vector/v.overlay/area_area.c:158
-#, fuzzy
 msgid "Attaching islands..."
-msgstr "출력할 격자지도"
+msgstr "섬을 붙이는 중..."
 
 #: ../vector/v.buffer/main.c:760
 #, fuzzy
@@ -33107,9 +33100,8 @@ msgstr "출력할 격자지도"
 #: ../vector/v.colors/scan_cats.c:19 ../vector/v.colors/scan_z.c:31
 #: ../vector/v.to.db/query.c:23 ../vector/v.to.db/lines.c:75
 #: ../vector/v.voronoi/main.c:207
-#, fuzzy
 msgid "Reading features..."
-msgstr "출력할 격자지도"
+msgstr "피쳐를 읽는 중..."
 
 #: ../vector/v.colors.out/main.c:53
 #, fuzzy
@@ -34573,9 +34565,8 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.delaunay/main.c:87 ../vector/v.voronoi/main.c:125
-#, fuzzy
 msgid "triangulation"
-msgstr "출력할 격자지도"
+msgstr "삼각분할"
 
 #: ../vector/v.delaunay/main.c:88
 msgid ""
@@ -34610,9 +34601,8 @@ msgid "Unable to calculate area centroid z coordinate"
 msgstr "출력할 격자지도"
 
 #: ../vector/v.delaunay/in_out.c:93 ../vector/v.voronoi/main.c:229
-#, fuzzy
 msgid "Writing edges..."
-msgstr "출력할 격자지도"
+msgstr "가장자리를 쓰는 중..."
 
 #: ../vector/v.delaunay/in_out.c:214
 #, fuzzy
@@ -34892,9 +34882,8 @@ msgid "Name for output ASCII file or ASCII vector name if '-o' is defined"
 msgstr "출력할 격자지도"
 
 #: ../vector/v.out.ascii/args.c:33
-#, fuzzy
 msgid "If not given or '-' then standard output"
-msgstr "출력할 격자지도"
+msgstr "지정하지 않거나 '-'이면 표준출력"
 
 #: ../vector/v.out.ascii/args.c:38
 msgid "Name of attribute column(s) to be exported (point mode)"
@@ -35933,9 +35922,8 @@ msgstr "출력할 격자지도"
 
 #: ../vector/v.sample/main.c:82 ../vector/v.voronoi/main.c:130
 #: ../vector/v.surf.bspline/main.c:110
-#, fuzzy
 msgid "Name of input vector point map"
-msgstr "출력할 격자지도"
+msgstr "입력 벡터점 지도의 이름"
 
 #: ../vector/v.sample/main.c:89
 #, fuzzy
@@ -37319,12 +37307,11 @@ msgstr[1] ""
 
 #: ../vector/v.voronoi/clean_topo.c:20
 msgid "Searching for topology errors..."
-msgstr ""
+msgstr "위상오류를 찾는 중..."
 
 #: ../vector/v.voronoi/clean_topo.c:78
-#, fuzzy
 msgid "Cleaning output topology"
-msgstr "출력할 격자지도"
+msgstr "출력 위상을 정리하는 중"
 
 #: ../vector/v.voronoi/clean_topo.c:115
 #, fuzzy
@@ -37336,39 +37323,42 @@ msgid ""
 "Creates a Voronoi diagram in current region from an input vector map "
 "containing points or centroids."
 msgstr ""
+"현재지역 안에 점이나 중심점을 포함한 입력 벡터지도로부터 보로노이 "
+"다이어그램을 생성합니다."
 
 #: ../vector/v.voronoi/main.c:140
-#, fuzzy
 msgid "Factor for output smoothness"
-msgstr "출력할 격자지도"
+msgstr "출력 평활도 계수"
 
 #: ../vector/v.voronoi/main.c:141
 msgid ""
 "Applies to input areas only. Smaller values produce smoother output but can "
 "cause numerical instability."
 msgstr ""
+"입력 면에만 적용됩니다. 값이 작을 수록 평평한 출력을 생성하지만 수치계산이 "
+"불안정해질 수 있습니다."
 
 #: ../vector/v.voronoi/main.c:148
 msgid "Maximum dangle length of skeletons"
-msgstr ""
+msgstr "스켈리턴의 최대 댕글길이"
 
 #: ../vector/v.voronoi/main.c:149
 msgid ""
 "Applies only to skeleton extraction. Default = -1 will extract the center "
 "line."
-msgstr ""
+msgstr "스켈리턴 추출에만 적용됩니다. 기본값 -1은 중심선을 추출합니다."
 
 #: ../vector/v.voronoi/main.c:155
 msgid "Create Voronoi diagram for input areas"
-msgstr ""
+msgstr "입력면을 위한 보로노이 다이어그램을 생성합니다"
 
 #: ../vector/v.voronoi/main.c:160
 msgid "Extract skeletons for input areas"
-msgstr ""
+msgstr "입력면을 위한 스켈리턴을 추출합니다"
 
 #: ../vector/v.voronoi/main.c:165
 msgid "Output tessellation as a graph (lines), not areas"
-msgstr ""
+msgstr "테셀레이션을 면이 아니라 선그래프로 출력합니다"
 
 #: ../vector/v.voronoi/main.c:181
 #, fuzzy, c-format
@@ -37376,11 +37366,11 @@ msgid "Option '%s' is too small, set to %g"
 msgstr "출력할 격자지도"
 
 #: ../vector/v.voronoi/main.c:225
-#, fuzzy, c-format
+#, c-format
 msgid "Voronoi triangulation for %d point..."
 msgid_plural "Voronoi triangulation for %d points..."
-msgstr[0] "출력할 격자지도"
-msgstr[1] "출력할 격자지도"
+msgstr[0] "%d개의 점을 위해 보로노이 삼각분할 중..."
+msgstr[1] "%d개의 점을 위해 보로노이 삼각분할 중..."
 
 #: ../vector/v.voronoi/main.c:238
 msgid "Thin skeletons ..."
@@ -37983,16 +37973,16 @@ msgid "Threshold value for coordinates is %.2f"
 msgstr ""
 
 #: ../vector/v.edit/select.c:160
-#, fuzzy, c-format
+#, c-format
 msgid "Threshold value for querying is %.2f"
-msgstr "출력할 격자지도"
+msgstr "질의를 위한 임계값은 %.2f입니다"
 
 #: ../vector/v.edit/select.c:176
-#, fuzzy, c-format
+#, c-format
 msgid "%d of %d feature selected from vector map <%s>"
 msgid_plural "%d of %d features selected from vector map <%s>"
-msgstr[0] "출력할 격자지도"
-msgstr[1] "출력할 격자지도"
+msgstr[0] "벡터지도 <%3$s>에서 %2$d 중 %1$d개의 피쳐를 선택했습니다"
+msgstr[1] "벡터지도 <%3$s>에서 %2$d 중 %1$d개의 피쳐를 선택했습니다"
 
 #: ../vector/v.edit/select.c:496
 msgid "Layer must be > 0 for 'where'"
@@ -38255,13 +38245,12 @@ msgid "Threshold for snapping must be > 0. No snapping applied."
 msgstr ""
 
 #: ../vector/v.edit/main.c:211
-#, fuzzy
 msgid "Selecting features..."
-msgstr "출력할 격자지도"
+msgstr "피쳐를 선택하는 중..."
 
 #: ../vector/v.edit/main.c:223
 msgid "No features selected, nothing to edit"
-msgstr ""
+msgstr "어떤 피쳐도 선택하지 않았으므로 수정할 것이 없습니다"
 
 #: ../vector/v.edit/main.c:231
 #, c-format
@@ -38292,11 +38281,11 @@ msgstr[0] "출력할 격자지도"
 msgstr[1] "출력할 격자지도"
 
 #: ../vector/v.edit/main.c:302
-#, fuzzy, c-format
+#, c-format
 msgid "%d feature deleted"
 msgid_plural "%d features deleted"
-msgstr[0] "출력할 격자지도"
-msgstr[1] "출력할 격자지도"
+msgstr[0] "%d개의 피쳐를 지웠습니다"
+msgstr[1] "%d개의 피쳐를 지웠습니다"
 
 #: ../vector/v.edit/main.c:313
 #, fuzzy, c-format
@@ -39113,17 +39102,15 @@ msgstr "출력할 격자지도"
 
 #: ../vector/v.segment/main.c:63
 msgid "Creates points/segments from input vector lines and positions."
-msgstr ""
+msgstr "입력 벡터선과 위치를 이용해서 점 또는 선조각을 생성합니다."
 
 #: ../vector/v.segment/main.c:66
-#, fuzzy
 msgid "Name of input vector lines map"
-msgstr "출력할 격자지도"
+msgstr "입력 벡터선 지도의 이름"
 
 #: ../vector/v.segment/main.c:75
-#, fuzzy
 msgid "Name of file containing segment rules"
-msgstr "출력할 격자지도"
+msgstr "단편화 규칙을 설명하는 파일의 이름"
 
 #: ../vector/v.segment/main.c:142 ../vector/v.segment/main.c:186
 #, fuzzy, c-format
@@ -39273,9 +39260,9 @@ msgid "Computes minimum spanning tree for the network."
 msgstr ""
 
 #: ../vector/v.overlay/area_area.c:51
-#, fuzzy, c-format
+#, c-format
 msgid "Snapping boundaries with %g ..."
-msgstr "출력할 격자지도"
+msgstr "%g 임계치로 경계를 끌어붙이는 중..."
 
 #: ../vector/v.overlay/area_area.c:99
 #, fuzzy, c-format
@@ -39285,19 +39272,17 @@ msgstr[0] "출력할 격자지도"
 msgstr[1] "출력할 격자지도"
 
 #: ../vector/v.overlay/area_area.c:109 ../vector/v.overlay/line_area.c:255
-#, fuzzy
 msgid "Breaking lines..."
-msgstr "출력할 격자지도"
+msgstr "선을 분해하는 중..."
 
 #: ../vector/v.overlay/area_area.c:154
-#, fuzzy
 msgid "Merging lines..."
-msgstr "출력할 격자지도"
+msgstr "선을 합치는 중..."
 
 #: ../vector/v.overlay/area_area.c:181
-#, fuzzy, c-format
+#, c-format
 msgid "Querying vector map <%s>..."
-msgstr "출력할 격자지도"
+msgstr "벡터지도 <%s>를 검색하는 중..."
 
 #: ../vector/v.overlay/area_area.c:208 ../vector/v.overlay/area_area.c:290
 #: ../vector/v.overlay/area_area.c:318 ../vector/v.overlay/line_area.c:354
@@ -39408,9 +39393,9 @@ msgid "Operator '%s' is not supported for type line"
 msgstr ""
 
 #: ../vector/v.overlay/main.c:254
-#, fuzzy, c-format
+#, c-format
 msgid "Copying vector features from <%s>..."
-msgstr "출력할 격자지도"
+msgstr "<%s>로부터 벡터피쳐를 복사하는 중..."
 
 #: ../vector/v.overlay/main.c:335
 #, c-format

@@ -828,7 +828,7 @@ msgstr "또는 OGR 직접접근을 위한 자료원천"
 
 #: ../lib/gis/parser_standard_options.c:443
 msgid "Name for output vector map"
-msgstr ""
+msgstr "출력 벡터지도 이름"
 
 #: ../lib/gis/parser_standard_options.c:451
 msgid "Name of vector map"
@@ -860,7 +860,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:498
 msgid "Layer number or name ('-1' for all layers)"
-msgstr ""
+msgstr "레이어 번호 또는 이름 ('-1'은 모든 레이어)"
 
 #: ../lib/gis/parser_standard_options.c:500
 msgid ""
@@ -868,6 +868,8 @@ msgid ""
 "number determines which table to use. When used with direct OGR access this "
 "is the layer name."
 msgstr ""
+"하나의 벡터지도가 여러개의 데이타베이스 표에 연결될 수 있습니다. 이 번호는 "
+"어떤 표를 쓸지 결정합니다. OGR 직접접근과 함께 쓰일 경우 레이어 이름이 됩니다."
 
 #: ../lib/gis/parser_standard_options.c:509
 msgid "Category value"
@@ -892,11 +894,11 @@ msgstr "피쳐 id"
 
 #: ../lib/gis/parser_standard_options.c:541
 msgid "Name of input file"
-msgstr "입력 파일이름"
+msgstr "입력파일 이름"
 
 #: ../lib/gis/parser_standard_options.c:549
 msgid "Name for output file"
-msgstr "출력 파일이름"
+msgstr "출력파일 이름"
 
 #: ../lib/gis/parser_standard_options.c:557
 msgid "Field separator"
@@ -1052,9 +1054,8 @@ msgid "The method to be used for sampling the input dataset"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:850
-#, fuzzy
 msgid "Do not create attribute table"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+msgstr "특성표를 생성하지 않습니다"
 
 #: ../lib/gis/parser_standard_options.c:854
 msgid "Do not build topology"
@@ -5844,11 +5845,11 @@ msgstr ""
 
 #: ../lib/init/grass.py:1127
 msgid "Raster MASK present"
-msgstr ""
+msgstr "MASK 격자 적용"
 
 #: ../lib/init/grass.py:1128
 msgid "3d raster MASK present"
-msgstr ""
+msgstr "3차원 MASK 격자 적용"
 
 #: ../lib/init/grass.py:1160
 #, fuzzy, python-format
@@ -6863,12 +6864,12 @@ msgstr "선택했습니다"
 #: ../lib/vector/Vlib/dangles.c:262
 #, c-format
 msgid "%s lines: %d"
-msgstr "%s 선: %d"
+msgstr "%2$d개의 선을 %1$s"
 
 #: ../lib/vector/Vlib/dangles.c:263
 #, c-format
 msgid "%s dangles: %d"
-msgstr "%s 댕글: %d"
+msgstr "%2$d개의 댕글을 %1$s"
 
 #: ../lib/vector/Vlib/open_nat.c:57
 #, fuzzy, c-format
@@ -7781,20 +7782,20 @@ msgstr ""
 
 #: ../lib/vector/Vlib/snap.c:213
 msgid "Snap vertices Pass 1: select points"
-msgstr ""
+msgstr "정점 끌어붙이기 1단계: 점을 선택합니다"
 
 #: ../lib/vector/Vlib/snap.c:267
 msgid "Snap vertices Pass 2: assign anchor vertices"
-msgstr ""
+msgstr "정점 끌어붙이기 2단계: 닻정점을 할당합니다"
 
 #: ../lib/vector/Vlib/snap.c:336
 msgid "Snap vertices Pass 3: snap to assigned points"
-msgstr ""
+msgstr "정점 끌어붙이기 3단계: 할당된 점으로 끌어붙입니다"
 
 #: ../lib/vector/Vlib/snap.c:518
 #, c-format
 msgid "Snapped vertices: %d"
-msgstr ""
+msgstr "끌어붙여진 정점: %d"
 
 #: ../lib/vector/Vlib/snap.c:519
 #, fuzzy, c-format
@@ -7802,9 +7803,8 @@ msgid "New vertices: %d"
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/snap.c:546
-#, fuzzy
 msgid "Reading features..."
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "피쳐를 읽는 중..."
 
 #: ../lib/vector/Vlib/box.c:228
 #, fuzzy, c-format
