@@ -170,11 +170,7 @@ int main(int argc, char *argv[])
     }
 
     separator = G_option_to_separator(opt.separator);
-
-    if (!opt.output->answer || strcmp(opt.output->answer, "-") == 0)
-	fp = stdout;
-    else if ((fp = fopen(opt.output->answer, "w")) == NULL)
-	G_fatal_error(_("Failed to create file [%s]"), opt.output->answer);
+    fp = G_open_option_file(opt.output);
 
     if ((mapset = opt.mapset->answer) == NULL)
 	mapset = "";
@@ -223,8 +219,7 @@ int main(int argc, char *argv[])
     if (any)
 	fprintf(fp, "\n");
 
-    if (fp != stdout)
-	fclose(fp);
+    G_close_option_file(fp);
 
     if (filter)
 	G_free_ls_filter(filter);
