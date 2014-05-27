@@ -3,7 +3,6 @@
 <p><em>r.resamp.stats</em> fills a grid cell (raster) matrix with
 aggregated values generated from a set of input layer data points.
 
-
 <p>Without the <em>-w</em> switch, the aggregate is computed over all of
 the input cells whose centers lie within the output cell.
 
@@ -11,7 +10,6 @@ the input cells whose centers lie within the output cell.
 input cells which intersect the output cell, weighted according to the
 proportion of the source cell which lies inside the output cell. This
 is slower, but produces a more accurate result.
-
 
 
 <h2>NOTES</h2>
@@ -34,16 +32,19 @@ North Carolina sample dataset):
 <div class="code"><pre>
 g.region rast=el_D782_6m -p
 g.region res=20 -ap
-r.resamp.stats input=el_D782_6m output=el_D782_20m
+# from 6m to 20m: weighted resampling -w
+r.resamp.stats -w input=el_D782_6m output=el_D782_20m
 </pre></div>
 
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.region.html">g.region</a></em>,
-<em><a href="r.resample.html">r.resample</a></em>,
-<em><a href="r.resamp.rst.html">r.resamp.rst</a></em>
-<em><a href="r.resamp.interp.html">r.resamp.interp</a></em>
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.resample.html">r.resample</a>,
+<a href="r.resamp.rst.html">r.resamp.rst</a>
+<a href="r.resamp.interp.html">r.resamp.interp</a>
+</em>
 
 <h2>AUTHOR</h2>
 
