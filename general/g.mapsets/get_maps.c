@@ -11,7 +11,7 @@ char** get_available_mapsets(int *nmapsets)
     char **ms, **mapset_name;
     int i, n;
 
-    ms = G_available_mapsets();
+    ms = G_get_available_mapsets();
     for (n = 0; ms[n]; n++);
 
     mapset_name = (char **)G_malloc(n * sizeof(char *));

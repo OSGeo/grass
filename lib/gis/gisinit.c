@@ -134,7 +134,7 @@ void G_init_all(void)
     G_init_debug();
     G_verbose();
     G_init_tempfile();
-    G_get_list_of_mapsets();
+    G__get_list_of_mapsets();
     G__home();
     G__machine_name();
     G_whoami();

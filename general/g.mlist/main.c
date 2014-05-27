@@ -258,7 +258,7 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
 
     if (!mapset || !*mapset) {
 	int n;
-	for (n = 0; mapset = G__mapset_name(n), mapset; n++)
+	for (n = 0; mapset = G_get_mapset_name(n), mapset; n++)
 	    make_list(fp, elem, mapset, separator, add_type, add_mapset,
 		      n == 0);
 	return;

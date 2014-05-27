@@ -612,7 +612,7 @@ int main(int argc, char *argv[])
 		char target_mapset[GMAPSET_MAX];
 		
 		/* does the target location exist? */
-		G__create_alt_env();
+		G_create_alt_env();
 		G__setenv("LOCATION_NAME", parm.target->answer);
 		sprintf(target_mapset, "PERMANENT");	/* must exist */
 
@@ -620,7 +620,7 @@ int main(int argc, char *argv[])
 		    /* create target location later */
 		    create_target = 1;
 		}
-		G__switch_env();
+		G_switch_env();
 	    }
 
 	    if (parm.target->answer && !create_target) {
@@ -693,14 +693,14 @@ int main(int argc, char *argv[])
 		    
 		    G_adjust_Cell_head(&gcpcellhd, 1, 1);
 
-		    G__create_alt_env();
+		    G_create_alt_env();
 		    if (0 != G_make_location(parm.target->answer, &gcpcellhd,
 					     proj_info, proj_units)) {
 			G_fatal_error(_("Unable to create new location <%s>"),
 				      parm.target->answer);
 		    }
 		    /* switch back to import location */
-		    G__switch_env();
+		    G_switch_env();
 
 		    G_message(_("Location <%s> created"), parm.target->answer);
 		    /* set the group's target */
@@ -785,7 +785,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
     /* -------------------------------------------------------------------- */
 
     /* Change to user defined target location for GCPs transformation */
-    G__create_alt_env();
+    G_create_alt_env();
     G__setenv("LOCATION_NAME", (char *)pszDstLoc);
     sprintf(target_mapset, "PERMANENT");	/* to find PROJ_INFO */
 
@@ -810,7 +810,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
     }				/* permission check */
 
     /* And switch back to original location */
-    G__switch_env();
+    G_switch_env();
 }
 
 

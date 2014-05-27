@@ -209,12 +209,12 @@ void G__setenv2(const char *, const char *, int);
 void G_unsetenv(const char *);
 void G_unsetenv2(const char *, int);
 void G__write_env(void);
-const char *G__env_name(int);
+const char *G_get_env_name(int);
 void G__read_env(void);
 void G_set_gisrc_mode(int);
 int G_get_gisrc_mode(void);
-void G__create_alt_env(void);
-void G__switch_env(void);
+void G_create_alt_env(void);
+void G_switch_env(void);
 
 /* error.c */
 int G_info_format(void);
@@ -430,12 +430,12 @@ int G__mapset_permissions(const char *);
 int G__mapset_permissions2(const char *, const char *, const char *);
 
 /* mapset_nme.c */
-const char *G__mapset_name(int);
-void G_get_list_of_mapsets(void);
-void G__create_alt_search_path(void);
-void G__switch_search_path(void);
-void G_reset_mapsets(void);
-char **G_available_mapsets(void);
+const char *G_get_mapset_name(int);
+void G__get_list_of_mapsets(void);
+void G_create_alt_search_path(void);
+void G_switch_search_path(void);
+void G__reset_mapsets(void);
+char **G_get_available_mapsets(void);
 void G_add_mapset_to_search_path(const char *);
 int G_is_mapset_in_search_path(const char *);
 
