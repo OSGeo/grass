@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     void *filter = NULL, *exclude = NULL;
     FILE *fp;
     const char *mapset;
-    char separator[2];
+    char *separator;
 
     G_gisinit(argv[0]);
 
@@ -169,17 +169,7 @@ int main(int argc, char *argv[])
 	    exclude = G_ls_glob_filter(opt.exclude->answer, 1);
     }
 
-    if (strcmp(opt.separator->answer, "newline") == 0)
-	separator[0] = '\n';
-    else if (strcmp(opt.separator->answer, "comma") == 0)
-	separator[0] = ',';
-    else if (strcmp(opt.separator->answer, "space") == 0)
-	separator[0] = ' ';
-    else if (strcmp(opt.separator->answer, "tab") == 0)
-	separator[0] = '\t';
-    else
-	separator[0] = opt.separator->answer[0];
-    separator[1] = 0;
+    separator = G_option_to_separator(opt.separator);
 
     if (!opt.output->answer || strcmp(opt.output->answer, "-") == 0)
 	fp = stdout;
