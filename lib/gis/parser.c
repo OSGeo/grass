@@ -1512,12 +1512,14 @@ FILE *G_open_option_file(const struct Option *option)
 	if (stdinout)
 	    fp = stdin;
 	else if ((fp = fopen(option->answer, "r")) == NULL)
-	    G_fatal_error(_("Unable to read file [%s]"), option->answer);
+	    G_fatal_error(_("Unable to read %s file <%s>"),
+			    option->key, option->answer);
     } else if (strcmp(option->gisprompt, "new,file,file") == 0) {
 	if (stdinout)
 	    fp = stdout;
 	else if ((fp = fopen(option->answer, "w")) == NULL)
-	    G_fatal_error(_("Unable to create file [%s]"), option->answer);
+	    G_fatal_error(_("Unable to create %s file <%s>"),
+			    option->key, option->answer);
     } else
         G_fatal_error(_("Not a file option"));
 
