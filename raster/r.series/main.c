@@ -205,10 +205,14 @@ int main(int argc, char *argv[])
     if (parm.file->answer) {
 	FILE *in;
 	int max_inputs;
-    
-	in = fopen(parm.file->answer, "r");
-	if (!in)
-	    G_fatal_error(_("Unable to open input file <%s>"), parm.file->answer);
+
+	if (strcmp(parm.file->answer, "-") == 0)
+	    in = stdin;
+	else {
+	    in = fopen(parm.file->answer, "r");
+	    if (!in)
+		G_fatal_error(_("Unable to open input file <%s>"), parm.file->answer);
+	}
     
 	num_inputs = 0;
 	max_inputs = 0;
