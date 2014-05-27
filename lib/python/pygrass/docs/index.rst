@@ -22,6 +22,7 @@ Contents:
    vector
    attributes
    modules
+   messages
 
 
 References

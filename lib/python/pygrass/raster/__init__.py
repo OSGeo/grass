@@ -56,7 +56,6 @@ class RasterRow(RasterAbstractBase):
     Examples
     --------
 
-    ::
         >>> elev = RasterRow('elevation')
         >>> elev.exist()
         True
@@ -91,7 +90,7 @@ class RasterRow(RasterAbstractBase):
 
     Open a raster map using the *with statement*: ::
 
-        >>> with RasterRow('elevation') as elev:   
+        >>> with RasterRow('elevation') as elev:
         ...     for row in elev[:3]:
         ...         row[:4]
         ...
@@ -111,6 +110,11 @@ class RasterRow(RasterAbstractBase):
         """Private method that return the row using the read mode
         call the `Rast_get_row` C function.
 
+        :param row: the number of row to obtain
+        :type row: int
+        :param row_buffer: specify the Buffer object that will be instantiate
+        :type row_buffer: bool
+
         >>> elev = RasterRow('elevation')
         >>> elev.open()
         >>> elev[0]                 # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
@@ -129,22 +133,24 @@ class RasterRow(RasterAbstractBase):
     @must_be_open
     def put_row(self, row):
         """Private method to write the row sequentially.
+
+        :param row: a Row object to insert into raster
+        :type row: Buffer object
         """
         libraster.Rast_put_row(self._fd, row.p, self._gtype)
 
     def open(self, mode=None, mtype=None, overwrite=None):
         """Open the raster if exist or created a new one.
 
-        Parameters
-        ------------
-
-        mode: string
-            Specify if the map will be open with read or write mode ('r', 'w')
-        type: string
-            If a new map is open, specify the type of the map(`CELL`, `FCELL`,
-            `DCELL`)
-        overwrite: Boolean
-            Use this flag to set the overwrite mode of existing raster maps
+        :param mode: Specify if the map will be open with read or write mode
+                     ('r', 'w')
+        :type mode: str
+        :param type: If a new map is open, specify the type of the map(`CELL`,
+                     `FCELL`, `DCELL`)
+        :type type: str
+        :param overwrite: Use this flag to set the overwrite mode of existing
+                          raster maps
+        :type overwrite: bool
 
 
         if the map already exist, automatically check the type and set:
@@ -203,11 +209,24 @@ class RasterRowIO(RasterRow):
         super(RasterRowIO, self).__init__(name, *args, **kargs)
 
     def open(self, mode=None, mtype=None, overwrite=False):
+        """Open the raster if exist or created a new one.
+
+        :param mode: specify if the map will be open with read or write mode
+                     ('r', 'w')
+        :type mode: str
+        :param type: if a new map is open, specify the type of the map(`CELL`,
+                     `FCELL`, `DCELL`)
+        :type type: str
+        :param overwrite: use this flag to set the overwrite mode of existing
+                          raster maps
+        :type overwrite: bool
+        """
         super(RasterRowIO, self).open(mode, mtype, overwrite)
         self.rowio.open(self._fd, self._rows, self._cols, self.mtype)
 
     @must_be_open
     def close(self):
+        """Function to close the raster"""
         self.rowio.release()
         libraster.Rast_close(self._fd)
         # update rows and cols attributes
@@ -222,6 +241,10 @@ class RasterRowIO(RasterRow):
             * the read mode and
             * `rowcache` method
 
+        :param row: the number of row to obtain
+        :type row: int
+        :param row_buffer: Specify the Buffer object that will be instantiate
+        :type row_buffer: Buffer object
         """
         if row_buffer is None:
             row_buffer = Buffer((self._cols,), self.mtype)
@@ -260,7 +283,8 @@ class RasterSegment(RasterAbstractBase):
             raise ValueError(str_err.format(mode))
         self._mode = mode
 
-    mode = property(fget=_get_mode, fset=_set_mode)
+    mode = property(fget=_get_mode, fset=_set_mode,
+                    doc="Set or obtain the opening mode of raster")
 
     def __setitem__(self, key, row):
         """Return the row of Raster object, slice allowed."""
@@ -303,13 +327,10 @@ class RasterSegment(RasterAbstractBase):
     def get_row(self, row, row_buffer=None):
         """Return the row using the `segment.get_row` method
 
-        Parameters
-        ------------
-
-        row: integer
-            Specify the row number;
-        row_buffer: Buffer object, optional
-            Specify the Buffer object that will be instantiate.
+        :param row: specify the row number
+        :type row: int
+        :param row_buffer: specify the Buffer object that will be instantiate
+        :type row_buffer: Buffer object
         """
         if row_buffer is None:
             row_buffer = Buffer((self._cols), self.mtype)
@@ -319,13 +340,8 @@ class RasterSegment(RasterAbstractBase):
     def put_row(self, row, row_buffer):
         """Write the row using the `segment.put_row` method
 
-        Parameters
-        ------------
-
-        row: integer
-            Specify the row number;
-        row_buffer: Buffer object
-            Specify the Buffer object that will be write to the map.
+        :param row: a Row object to insert into raster
+        :type row: Buffer object
         """
         self.segment.put_row(row, row_buffer)
 
@@ -333,13 +349,10 @@ class RasterSegment(RasterAbstractBase):
     def get(self, row, col):
         """Return the map value using the `segment.get` method
 
-        Parameters
-        ------------
-
-        row: integer
-            Specify the row number;
-        col: integer
-            Specify the column number.
+        :param row: Specify the row number
+        :type row: int
+        :param col: Specify the column number
+        :type col: int
         """
         return self.segment.get(row, col)
 
@@ -347,15 +360,12 @@ class RasterSegment(RasterAbstractBase):
     def put(self, row, col, val):
         """Write the value to the map using the `segment.put` method
 
-        Parameters
-        ------------
-
-        row: integer
-            Specify the row number;
-        col: integer
-            Specify the column number.
-        val: value
-            Specify the value that will be write to the map cell.
+        :param row: Specify the row number
+        :type row: int
+        :param col: Specify the column number
+        :type col: int
+        :param val: Specify the value that will be write to the map cell
+        :type val: value
         """
         self.segment.val.value = val
         self.segment.put(row, col)
@@ -365,16 +375,15 @@ class RasterSegment(RasterAbstractBase):
         and copy the map to the segment files;
         else, open a new segment map.
 
-        Parameters
-        ------------
-
-        mode: string, optional
-            Specify if the map will be open with read, write or read/write
-            mode ('r', 'w', 'rw')
-        mtype: string, optional
-            Specify the map type, valid only for new maps: CELL, FCELL, DCELL;
-        overwrite: Boolean, optional
-            Use this flag to set the overwrite mode of existing raster maps
+        :param mode: specify if the map will be open with read, write or
+                     read/write mode ('r', 'w', 'rw')
+        :type mode: str
+        :param mtype: specify the map type, valid only for new maps: CELL,
+                      FCELL, DCELL
+        :type mtype: str
+        :param overwrite: use this flag to set the overwrite mode of existing
+                          raster maps
+        :type overwrite: bool
         """
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
@@ -433,11 +442,8 @@ class RasterSegment(RasterAbstractBase):
     def close(self, rm_temp_files=True):
         """Close the map, copy the segment files to the map.
 
-        Parameters
-        ------------
-
-        rm_temp_files: bool
-            If True all the segments file will be removed.
+        :param rm_temp_files: if True all the segments file will be removed
+        :type rm_temp_files: bool
         """
         if self.mode == "w" or self.mode == "rw":
             self.segment.flush()
@@ -537,7 +543,8 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
             raise ValueError(_("Mode type: {0} not supported.").format(mode))
         self._mode = mode
 
-    mode = property(fget=_get_mode, fset=_set_mode)
+    mode = property(fget=_get_mode, fset=_set_mode,
+                    doc="Set or obtain the opening mode of raster")
 
     def __array_wrap__(self, out_arr, context=None):
         """See:
@@ -584,10 +591,9 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
                 self[i] = rst.get_row(i, buff)
 
     def _write(self):
+        """Write the numpy array into map
         """
-        r.in.bin input=/home/pietro/docdat/phd/thesis/gis/north_carolina/user1/.tmp/eraclito/14325.0 output=new title='' bytes=1,anull='' --verbose --overwrite north=228500.0 south=215000.0 east=645000.0 west=630000.0 rows=1350 cols=1500
-
-        """
+        #r.in.bin input=/home/pietro/docdat/phd/thesis/gis/north_carolina/user1/.tmp/eraclito/14325.0 output=new title='' bytes=1,anull='' --verbose --overwrite north=228500.0 south=215000.0 east=645000.0 west=630000.0 rows=1350 cols=1500
         if not self.exist() or self.mode != 'r':
             self.flush()
             buff = Buffer(self[0].shape, mtype=self.mtype)
@@ -602,11 +608,14 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         and copy the map to the segment files;
         else, open a new segment map.
 
-        Parameters
-        ------------
-
-        mtype: string, optional
-            Specify the map type, valid only for new maps: CELL, FCELL, DCELL;
+        :param mtype: specify the map type, valid only for new maps: CELL,
+                      FCELL, DCELL;
+        :type mtype: str
+        :param null:
+        :type null:
+        :param overwrite: use this flag to set the overwrite mode of existing
+                          raster maps
+        :type overwrite: bool
         """
         if overwrite is not None:
             self.overwrite = overwrite
@@ -627,6 +636,11 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         self._fd = 1
 
     def close(self, name=''):
+        """Function to close the map
+
+        :param name: the name of raster
+        :type name: str        
+        """
         if self.is_open():
             name = name if name else self.name
             if not name:
@@ -639,10 +653,10 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        Parameters
-        ------------
-
-        point = pair of coordinates in tuple object
+        :param point: pair of coordinates in tuple object
+        :type point: tuple
+        :param region: the region to crop the request
+        :type region: Region object
         """
         if not region:
             region = Region()

@@ -80,11 +80,12 @@ class Category(list):
     def _set_mtype(self, mtype):
         if mtype.upper() not in ('CELL', 'FCELL', 'DCELL'):
             #fatal(_("Raser type: {0} not supported".format(mtype) ) )
-            raise ValueError(_("Raser type: {0} not supported".format(mtype)))
+            raise ValueError(_("Raster type: {0} not supported".format(mtype)))
         self._mtype = mtype
         self._gtype = RTYPE[self.mtype]['grass type']
 
-    mtype = property(fget=_get_mtype, fset=_set_mtype)
+    mtype = property(fget=_get_mtype, fset=_set_mtype,
+                     doc="Set or obtain raster data type")
 
     def _get_title(self):
         return libraster.Rast_get_cats_title(ctypes.byref(self.c_cats))
@@ -93,7 +94,8 @@ class Category(list):
         return libraster.Rast_set_cats_title(newtitle,
                                              ctypes.byref(self.c_cats))
 
-    title = property(fget=_get_title, fset=_set_title)
+    title = property(fget=_get_title, fset=_set_title,
+                     doc="Set or obtain raster title")
 
     def __str__(self):
         return self.__repr__()
@@ -266,7 +268,11 @@ class Category(list):
         libraster.Rast_write_cats(self.name, ctypes.byref(self.c_cats))
 
     def copy(self, category):
-        """Copy from another Category class"""
+        """Copy from another Category class
+
+        :param category: Category class to be copied
+        :type category: Category object
+        """
         libraster.Rast_copy_cats(ctypes.byref(self.c_cats),     # to
                                  ctypes.byref(category._cats))  # from
         self._read_cats()
@@ -293,7 +299,12 @@ class Category(list):
             0.5:1.0:road
             1.0:1.5:urban
 
-        .."""
+        :param filename: the name of file with categories rules
+        :type filename: str
+        :param sep: the separator used to divide values and category
+        :type sep: str
+        ..
+        """
         self.reset()
         with open(filename, 'r') as f:
             for row in f.readlines():
@@ -320,7 +331,12 @@ class Category(list):
             0.5:1.0:road
             1.0:1.5:urban
 
-        .."""
+        :param filename: the name of file with categories rules
+        :type filename: str
+        :param sep: the separator used to divide values and category
+        :type sep: str
+        ..
+        """
         with open(filename, 'w') as f:
             cats = []
             for cat in self.__iter__():
