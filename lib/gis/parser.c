@@ -1506,6 +1506,8 @@ FILE *G_open_option_file(const struct Option *option)
 
     if (option->gisprompt == NULL)
         G_fatal_error(_("Not a file option"));
+    else if (option->multiple)
+	G_fatal_error(_("Multiple files not supported"));
     else if (strcmp(option->gisprompt, "old,file,file") == 0) {
 	if (stdinout)
 	    fp = stdin;
