@@ -1,3 +1,4 @@
+.. _GRASSdatabase-label:
 
 GRASS database management
 ===============================
@@ -16,6 +17,8 @@ of GRASS database: Gisdbase, Location and Mapset
 
 .. autoclass:: pygrass.gis.VisibleMapset
     :members:
+
+.. _Region-label:
 
 Region management
 ======================

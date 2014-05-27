@@ -76,7 +76,8 @@ class History(object):
                                           libraster.HIST_CREATOR,
                                           ctypes.c_char_p(creator))
 
-    creator = property(fget=_get_creator, fset=_set_creator)
+    creator = property(fget=_get_creator, fset=_set_creator,
+                       doc="Set or obtain the creator of map")
 
     #----------------------------------------------------------------------
     #libraster.HIST_DATSRC_1
@@ -89,7 +90,8 @@ class History(object):
                                           libraster.HIST_DATSRC_1,
                                           ctypes.c_char_p(src1))
 
-    src1 = property(fget=_get_src1, fset=_set_src1)
+    src1 = property(fget=_get_src1, fset=_set_src1,
+                    doc="Set or obtain the first source of map")
 
     #----------------------------------------------------------------------
     #libraster.HIST_DATSRC_2
@@ -102,7 +104,8 @@ class History(object):
                                           libraster.HIST_DATSRC_2,
                                           ctypes.c_char_p(src2))
 
-    src2 = property(fget=_get_src2, fset=_set_src2)
+    src2 = property(fget=_get_src2, fset=_set_src2,
+                    doc="Set or obtain the second source of map")
 
     #----------------------------------------------------------------------
     #libraster.HIST_KEYWORD
@@ -115,7 +118,8 @@ class History(object):
                                           libraster.HIST_KEYWRD,
                                           ctypes.c_char_p(keyword))
 
-    keyword = property(fget=_get_keyword, fset=_set_keyword)
+    keyword = property(fget=_get_keyword, fset=_set_keyword,
+                       doc="Set or obtain the keywords of map")
 
     #----------------------------------------------------------------------
     #libraster.HIST_MAPID
@@ -132,7 +136,8 @@ class History(object):
                                               libraster.HIST_MAPID,
                                               ctypes.c_char_p(date_str))
 
-    date = property(fget=_get_date, fset=_set_date)
+    date = property(fget=_get_date, fset=_set_date,
+                    doc="Set or obtain the date of map")
 
     #----------------------------------------------------------------------
     #libraster.HIST_MAPSET
@@ -145,7 +150,8 @@ class History(object):
                                           libraster.HIST_MAPSET,
                                           ctypes.c_char_p(mapset))
 
-    mapset = property(fget=_get_mapset, fset=_set_mapset)
+    mapset = property(fget=_get_mapset, fset=_set_mapset,
+                      doc="Set or obtain the mapset of map")
 
     #----------------------------------------------------------------------
     #libraster.HIST_MAPTYPE
@@ -158,7 +164,8 @@ class History(object):
                                           libraster.HIST_MAPTYPE,
                                           ctypes.c_char_p(maptype))
 
-    maptype = property(fget=_get_maptype, fset=_set_maptype)
+    maptype = property(fget=_get_maptype, fset=_set_maptype,
+                       doc="Set or obtain the type of map")
 
     #----------------------------------------------------------------------
     #libraster.HIST_NUM_FIELDS
@@ -186,7 +193,8 @@ class History(object):
                                           libraster.HIST_TITLE,
                                           ctypes.c_char_p(title))
 
-    title = property(fget=_get_title, fset=_set_title)
+    title = property(fget=_get_title, fset=_set_title,
+                     doc="Set or obtain the title of map")
 
     def append(self, obj):
         """Rast_append_history"""
