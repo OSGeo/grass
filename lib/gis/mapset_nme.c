@@ -30,7 +30,7 @@ static struct state *st = &state;
 static void new_mapset(const char *);
 
 /*!
-   \brief Get name of the n'th mapset from the mapset_name[] list.
+   \brief Get name of the n'th mapset from the current mapset search path.
 
    The first call will initialize the list.
 
