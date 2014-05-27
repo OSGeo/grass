@@ -138,10 +138,10 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (opt.output->answer && flag.pretty->answer)
-	G_fatal_error(_("output and -p are mutually exclusive"));
+	G_fatal_error(_("output= and -p are mutually exclusive"));
 
     if (opt.output->answer && flag.full->answer)
-	G_fatal_error(_("output and -f are mutually exclusive"));
+	G_fatal_error(_("output= and -f are mutually exclusive"));
 
     if (flag.type->answer && flag.pretty->answer)
 	G_fatal_error(_("-t and -p are mutually exclusive"));
