@@ -1457,12 +1457,79 @@ char* G_option_to_separator(const struct Option *option)
         sep = G_store("\n");
     else if (strcmp(option->answer, "comma") == 0)
         sep = G_store(",");
-    else {
+    else
         sep = G_store(option->answer);
-    }
     
     G_debug(1, "G_option_to_separator(): key = %s -> sep = '%s'",
 	    option->key, sep);
     
     return sep;
+}
+
+/*!
+  \brief Get an input/output file pointer from the option. If the file name is
+  omitted or '-', it returns either stdin or stdout based on the gisprompt.
+
+  Calls G_fatal_error() on error. File pointer can be later closed by
+  G_close_option_file().
+  
+  \code
+  FILE *fp_input;
+  FILE *fp_output;
+  struct Option *opt_input;
+  struct Option *opt_output;
+  
+  opt_input = G_define_standard_option(G_OPT_F_INPUT);
+  opt_output = G_define_standard_option(G_OPT_F_OUTPUT);
+
+  if (G_parser(argc, argv))
+      exit(EXIT_FAILURE);
+      
+  fp_input = G_open_option_file(opt_input);
+  fp_output = G_open_option_file(opt_output);
+  ...
+  G_close_option_file(fp_input);
+  G_close_option_file(fp_output);
+  \endcode
+
+  \param option pointer to a file option
+  
+  \return file pointer
+*/
+FILE *G_open_option_file(const struct Option *option)
+{
+    int stdinout;
+    FILE *fp;
+
+    stdinout = !option->answer || !*(option->answer) ||
+	    strcmp(option->answer, "-") == 0;
+
+    if (option->gisprompt == NULL)
+        G_fatal_error(_("Not a file option"));
+    else if (strcmp(option->gisprompt, "old,file,file") == 0) {
+	if (stdinout)
+	    fp = stdin;
+	else if ((fp = fopen(option->answer, "r")) == NULL)
+	    G_fatal_error(_("Unable to read file [%s]"), option->answer);
+    } else if (strcmp(option->gisprompt, "new,file,file") == 0) {
+	if (stdinout)
+	    fp = stdout;
+	else if ((fp = fopen(option->answer, "w")) == NULL)
+	    G_fatal_error(_("Unable to create file [%s]"), option->answer);
+    } else
+        G_fatal_error(_("Not a file option"));
+
+    return fp;
+}
+
+/*!
+  \brief Close an input/output file returned by G_open_option_file(). If the
+  file pointer is stdin, stdout, or stderr, nothing happens.
+
+  \param file pointer
+*/
+void G_close_option_file(FILE *fp)
+{
+    if (fp != stdin && fp != stdout && fp != stderr)
+	fclose(fp);
 }
