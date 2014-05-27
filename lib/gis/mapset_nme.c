@@ -94,8 +94,6 @@ static void new_mapset(const char *name)
 
 /*!
    \brief Define alternative mapset search path
-
-   \return 0
  */
 void G__create_alt_search_path(void)
 {
@@ -107,8 +105,6 @@ void G__create_alt_search_path(void)
 
 /*!
    \brief Switch mapset search path
-
-   \return 0
  */
 void G__switch_search_path(void)
 {
@@ -127,8 +123,6 @@ void G__switch_search_path(void)
 
 /*!
    \brief Reset number of mapsets
-
-   \return 0
  */
 void G_reset_mapsets(void)
 {
