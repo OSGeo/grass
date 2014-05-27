@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 	G__setenv("LOCATION_NAME", location_new);
 	G__setenv("GISDBASE", gisdbase_new);
 
-	ms = G_available_mapsets();
+	ms = G_get_available_mapsets();
 
 	for (nmapsets = 0; ms[nmapsets]; nmapsets++) {
 	    if (G__mapset_permissions(ms[nmapsets]) > 0) {

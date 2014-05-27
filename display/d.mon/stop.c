@@ -81,7 +81,7 @@ void clean_env(const char *name)
     env_prefix_len = strlen(env_prefix);
     
     tokens = NULL;
-    for (i = 0; (env = G__env_name(i)); i++) {
+    for (i = 0; (env = G_get_env_name(i)); i++) {
 	if (strncmp(env_prefix, env, env_prefix_len) != 0)
 	    continue;
 	

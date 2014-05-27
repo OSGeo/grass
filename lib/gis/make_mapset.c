@@ -71,7 +71,7 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
         perror("G_make_mapset");
 	return -1;
     }
-    G__create_alt_env();
+    G_create_alt_env();
 
     /* Get PERMANENT default window */
     G__setenv("GISDBASE", gisdbase_name);
@@ -86,7 +86,7 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
     G__put_window(&default_window, "", "WIND");
 
     /* And switch back to original environment */
-    G__switch_env();
+    G_switch_env();
 
     return 0;
 }

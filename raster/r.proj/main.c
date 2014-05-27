@@ -275,7 +275,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to get projection key values of output raster map"));
 
     /* Change the location           */
-    G__create_alt_env();
+    G_create_alt_env();
     G__setenv("GISDBASE", indbase->answer ? indbase->answer : G_gisdbase());
     G__setenv("LOCATION_NAME", inlocation->answer);
 
@@ -413,7 +413,7 @@ int main(int argc, char **argv)
 
     /* And switch back to original location */
 
-    G__switch_env();
+    G_switch_env();
 
     /* Adjust borders of output map */
 
@@ -470,14 +470,14 @@ int main(int argc, char **argv)
     G_message(" ");
 
     /* open and read the relevant parts of the input map and close it */
-    G__switch_env();
+    G_switch_env();
     Rast_set_input_window(&incellhd);
     fdi = Rast_open_old(inmap->answer, setname);
     cell_type = Rast_get_map_type(fdi);
     ibuffer = readcell(fdi, memory->answer);
     Rast_close(fdi);
 
-    G__switch_env();
+    G_switch_env();
     Rast_set_output_window(&outcellhd);
 
     if (strcmp(interpol->answer, "nearest") == 0) {

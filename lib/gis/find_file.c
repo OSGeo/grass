@@ -67,7 +67,7 @@ static const char *find_file(int misc, const char *dir,
 	int cnt = 0;
 	const char *pselmapset = NULL;
 
-	for (n = 0; (pmapset = G__mapset_name(n)); n++) {
+	for (n = 0; (pmapset = G_get_mapset_name(n)); n++) {
 	    if (misc)
 		G_file_name_misc(path, dir, element, pname, pmapset);
 	    else

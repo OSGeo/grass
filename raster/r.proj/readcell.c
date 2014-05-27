@@ -49,9 +49,9 @@ struct cache *readcell(int fdi, const char *size)
 
     if (nblocks < nx * ny) {
 	/* Temporary file must be created in output location */
-	G__switch_env();
+	G_switch_env();
 	c->fname = G_tempfile();
-	G__switch_env();
+	G_switch_env();
 	c->fd = open(c->fname, O_RDWR | O_CREAT | O_EXCL, 0600);
 	if (c->fd < 0)
 	    G_fatal_error(_("Unable to open temporary file"));
