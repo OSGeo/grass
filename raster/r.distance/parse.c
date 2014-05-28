@@ -25,7 +25,7 @@
 void parse(int argc, char *argv[], struct Parms *parms)
 {
     struct Option *maps, *fs;
-    struct Flag *labels, *overlap, *null;
+    struct Flag *labels, *overlap, *null, *sort, *revsort;
     const char *name, *mapset;
 
     maps = G_define_standard_option(G_OPT_R_MAPS);
@@ -48,8 +48,20 @@ void parse(int argc, char *argv[], struct Parms *parms)
     null->key = 'n';
     null->description = _("Report null objects as *");
 
+    sort = G_define_flag();
+    sort->key = 's';
+    sort->description = _("Sort by distance in ascending order");
+
+    revsort = G_define_flag();
+    revsort->key = 'r';
+    revsort->description = _("Sort by distance in descending order");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (sort->answer && revsort->answer)
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+		      sort->key, revsort->key);
 
     name = parms->map1.name = maps->answers[0];
     mapset = parms->map1.mapset = G_find_raster2(name, "");
@@ -73,4 +85,5 @@ void parse(int argc, char *argv[], struct Parms *parms)
     parms->fs = fs->answer;
     parms->overlap = overlap->answer ? 1 : 0;
     parms->null = null->answer ? 1 : 0;
+    parms->sort = sort->answer ? 1 : (revsort->answer ? 2 : 0);
 }
