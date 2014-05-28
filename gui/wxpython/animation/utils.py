@@ -109,7 +109,7 @@ def getRegisteredMaps(timeseries, etype):
     Can throw ScriptError if the dataset doesn't exist.
     """
     timeseriesMaps = []
-    sp = tgis.open_old_space_time_dataset(timeseries, etype)
+    sp = tgis.open_old_stds(timeseries, etype)
 
     rows = sp.get_registered_maps(columns="id", where=None, order="start_time")
     timeseriesMaps = []
@@ -154,7 +154,7 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
 
     if timeseriesList:
         for stds, etype in timeseriesList:
-            sp = tgis.open_old_space_time_dataset(stds, etype)
+            sp = tgis.open_old_stds(stds, etype)
             mapType = sp.get_map_time()  # interval, ...
             tempType = sp.get_initial_values()[0]  # absolute
             timeseriesInfo['mapType'].add(mapType)
