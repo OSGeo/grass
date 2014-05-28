@@ -85,7 +85,7 @@ void parse(int argc, char *argv[], struct Parms *parms)
     parms->map2.fullname = G_fully_qualified_name(name, mapset);
 
     parms->labels = labels->answer ? 1 : 0;
-    parms->fs = fs->answer;
+    parms->fs = G_option_to_separator(fs);
     parms->overlap = overlap->answer ? 1 : 0;
     parms->null = null->answer ? 1 : 0;
     if (sort->answer)
