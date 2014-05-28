@@ -325,7 +325,7 @@ int Vect_sfa_get_num_features(const struct Map_info *Map)
             return -1;
         }
 
-        sprintf(stmt, "SELECT count(*) FROM \"%s\".%s", pg_info->schema_name,
+        sprintf(stmt, "SELECT count(*) FROM \"%s\".\"%s\"", pg_info->schema_name,
                 pg_info->table_name);
         nfeat = Vect__execute_get_value_pg(pg_info->conn, stmt);
         if (nfeat < 0) {
