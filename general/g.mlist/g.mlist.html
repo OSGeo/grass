@@ -116,12 +116,14 @@ List &quot;tmp&quot; if &quot;tmp&quot; raster map exists:
 g.mlist -r pattern='^tmp$'
 </pre></div>
 
-List &quot;tmp0&quot; ...&quot;tmp9&quot; if corresponding vector map exists (each map name linewise):
+List &quot;tmp0&quot; ...&quot;tmp9&quot; if corresponding vector map exists
+(each map name linewise):
 <div class="code"><pre>
 g.mlist -r type=vect pattern='^tmp[0-9]$'
 </pre></div>
 
-List &quot;tmp0&quot;...&quot;tmp9&quot; if corresponding vector map exists (each map name comma separated):
+List &quot;tmp0&quot;...&quot;tmp9&quot; if corresponding vector map exists
+(each map name comma separated):
 <div class="code"><pre>
 g.mlist -r type=vect separator=comma pattern='^tmp[0-9]$'
 </pre></div>
