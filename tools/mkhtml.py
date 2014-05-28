@@ -36,7 +36,7 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body bgcolor="white">
-<img src="grass_logo.png" alt="GRASS logo">
+<a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
 """
 
