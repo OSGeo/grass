@@ -171,8 +171,8 @@ static int write_file(LOGIN * login)
   \param user user name
   \param password password string
   
-  \return DB_OK
-  \return DB_FAILED
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
 int db_set_login(const char *driver, const char *database, const char *user,
 		 const char *password)
@@ -225,8 +225,8 @@ int db_set_login(const char *driver, const char *database, const char *user,
   \param[out] user name
   \param[out] password string
   
-  \return DB_OK
-  \return DB_FAILED
+  \return DB_OK on success
+  \return DB_FAILED on failure
 */
 int db_get_login(const char *driver, const char *database, const char **user,
 		 const char **password)
@@ -261,5 +261,35 @@ int db_get_login(const char *driver, const char *database, const char **user,
 	}
     }
 
+    return DB_OK;
+}
+
+/*!  
+  \brief Print all connection settings to file
+  
+  \param fd file where to print settings
+  
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_get_login_dump(FILE *fd)
+{
+    int i;
+    LOGIN login;
+    
+    G_debug(3, "db_get_login_dump()");
+    
+    init_login(&login);
+    if (read_file(&login) == -1)
+	return DB_FAILED;
+    
+    for (i = 0; i < login.n; i++) {
+        fprintf(fd, "%s|%s|%s|%s\n",
+                login.data[i].driver,
+                login.data[i].database,
+                login.data[i].user,
+                login.data[i].password);
+    }
+    
     return DB_OK;
 }
