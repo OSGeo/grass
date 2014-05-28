@@ -54,7 +54,7 @@ FILES = AUTHORS COPYING CHANGES REQUIREMENTS.html GPL.TXT contributors.csv contr
 FILES_DST = $(patsubst %,$(ARCH_DISTDIR)/%,$(FILES))
 
 default:
-	@echo "GRASS GIS $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR).$(GRASS_VERSION_RELEASE) $(GRASS_VERSION_SVN) compilation log" \
+	@echo "GRASS GIS $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR).$(GRASS_VERSION_RELEASE) r$(GRASS_VERSION_SVN) compilation log" \
 		> $(ERRORLOG)
 	@echo "--------------------------------------------------" >> $(ERRORLOG)
 	@echo "Started compilation: `date`"                        >> $(ERRORLOG)
