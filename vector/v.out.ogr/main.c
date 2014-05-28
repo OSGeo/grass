@@ -486,7 +486,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < OGR_DS_GetLayerCount(Ogr_ds); i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-	if (strcmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
+	if (G_strcasecmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
 	    continue;
 	
 	found = TRUE;
