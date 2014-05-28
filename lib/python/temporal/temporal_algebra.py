@@ -1771,7 +1771,7 @@ class TemporalAlgebraParser(object):
 
         """
         if self.run:
-            resultstds = open_new_space_time_dataset(t[1], self.stdstype, \
+            resultstds = open_new_stds(t[1], self.stdstype, \
                                                         self.temporaltype, "", "", \
                                                         'mean', dbif=self.dbif, \
                                                         overwrite = self.overwrite)

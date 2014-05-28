@@ -58,9 +58,9 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = open_old_space_time_dataset(input, type, dbif)
+    sp = open_old_stds(input, type, dbif)
     # Check the new stds
-    new_sp = check_new_space_time_dataset(output, type, dbif,
+    new_sp = check_new_stds(output, type, dbif,
                                           core.overwrite())
     if type == "vector":
         rows = sp.get_registered_maps(
@@ -165,7 +165,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
         msgr.percent(0, num_rows, 1)
 
         temporal_type, semantic_type, title, description = sp.get_initial_values()
-        new_sp = open_new_space_time_dataset(output, type,
+        new_sp = open_new_stds(output, type,
                                              sp.get_temporal_type(),
                                              title, description,
                                              semantic_type, dbif,

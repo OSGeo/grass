@@ -99,9 +99,9 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = tgis.open_old_space_time_dataset(input, "strds", dbif)
+    sp = tgis.open_old_stds(input, "strds", dbif)
     temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp = tgis.open_new_space_time_dataset(output, "strds", temporal_type,
+    new_sp = tgis.open_new_stds(output, "strds", temporal_type,
                                               title, description, semantic_type,
                                               dbif, grass.overwrite())
 

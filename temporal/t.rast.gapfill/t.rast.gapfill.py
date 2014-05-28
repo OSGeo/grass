@@ -74,7 +74,7 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = tgis.open_old_space_time_dataset(input, "strds")
+    sp = tgis.open_old_stds(input, "strds")
 
     maps = sp.get_registered_maps_as_objects_with_gaps(where, dbif)
 

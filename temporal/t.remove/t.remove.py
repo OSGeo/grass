@@ -111,7 +111,7 @@ def main():
 
     for name in dataset_list:
         name = name.strip()
-        sp = tgis.open_old_space_time_dataset(name, type, dbif)
+        sp = tgis.open_old_stds(name, type, dbif)
 
         if recursive and force:
             grass.message(_("Removing registered maps"))

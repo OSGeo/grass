@@ -32,7 +32,7 @@ class TestRegisterFunctions(unittest.TestCase):
         ret += grass.script.run_command("r3.mapcalc", overwrite=True, quiet=True, expression="a4 = 4")
 
 
-        tgis.open_new_space_time_dataset(name="A", type="str3ds", temporaltype="absolute",
+        tgis.open_new_stds(name="A", type="str3ds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field", overwrite=True)
 
         tgis.register_maps_in_space_time_dataset(type="rast3d", name="A", maps="a1,a2,a3,a4",
@@ -44,7 +44,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra.parse(expression='D = A[-1] + A[1]',
                   basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="str3ds")
+        D = tgis.open_old_stds("D", type="str3ds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
@@ -59,7 +59,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra.parse(expression='D = A[0,0,0,-1] + A[0,0,0,1]',
                   basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="str3ds")
+        D = tgis.open_old_stds("D", type="str3ds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
