@@ -91,7 +91,7 @@ def main():
 
     os.chdir(expdir)
 
-    sp = tgis.open_old_space_time_dataset(input, "strds")
+    sp = tgis.open_old_stds(input, "strds")
 
     if use_granularity:
         # Attention: A list of lists of maps will be returned

@@ -97,8 +97,8 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = tgis.open_old_space_time_dataset(input, "strds", dbif)
-    sampler_sp = tgis.open_old_space_time_dataset(sampler, type, dbif)
+    sp = tgis.open_old_stds(input, "strds", dbif)
+    sampler_sp = tgis.open_old_stds(sampler, type, dbif)
 
     if sampler_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()
@@ -112,7 +112,7 @@ def main():
                       "must have time intervals"))
 
     temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp = tgis.open_new_space_time_dataset(output, "strds", temporal_type,
+    new_sp = tgis.open_new_stds(output, "strds", temporal_type,
                                               title, description, semantic_type,
                                               dbif, grass.overwrite())
 

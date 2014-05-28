@@ -47,7 +47,7 @@ def get_dataset_list(type,  temporal_type,  columns=None,  where=None,  order=No
         >>> import grass.temporal as tgis
         >>> tgis.init()
         >>> name = "list_stds_test"
-        >>> sp = tgis.open_new_space_time_dataset(name=name, type="strds", 
+        >>> sp = tgis.open_new_stds(name=name, type="strds", 
         ... temporaltype="absolute", title="title", descr="descr", semantic="mean", dbif=None, overwrite=True)
         >>> mapset = tgis.get_current_mapset()
         >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name")
@@ -135,7 +135,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
     dbif, connected = init_dbif(None)
     msgr = get_tgis_message_interface()
 
-    sp = open_old_space_time_dataset(input, type, dbif)
+    sp = open_old_stds(input, type, dbif)
 
     if separator is None or separator == "":
         separator = "\t"

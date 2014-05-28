@@ -52,7 +52,7 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    stds = tgis.open_old_space_time_dataset(name, type, dbif)
+    stds = tgis.open_old_stds(name, type, dbif)
     stds.snap(dbif=dbif)
 
     stds.update_command_string(dbif=dbif)

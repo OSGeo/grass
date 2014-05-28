@@ -75,7 +75,7 @@ def main():
 
     tgis.init()
     
-    tgis.open_new_space_time_dataset(name, type, temporaltype, title, descr, 
+    tgis.open_new_stds(name, type, temporaltype, title, descr, 
                                      semantic, None, grass.overwrite())
 
 if __name__ == "__main__":

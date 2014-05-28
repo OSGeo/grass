@@ -84,8 +84,8 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = tgis.open_old_space_time_dataset(input, "stvds", dbif)
-    strds_sp = tgis.open_old_space_time_dataset(strds, "strds", dbif)
+    sp = tgis.open_old_stds(input, "stvds", dbif)
+    strds_sp = tgis.open_old_stds(strds, "strds", dbif)
 
     if strds_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()

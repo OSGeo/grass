@@ -704,7 +704,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     # Open connection to temporal database.
                     dbif, connected = init_dbif(dbif=self.dbif)
                     # Create result space time dataset.
-                    resultstds = open_new_space_time_dataset(t[1], self.stdstype, \
+                    resultstds = open_new_stds(t[1], self.stdstype, \
                                                                 'absolute', t[1], t[1], \
                                                                 "temporal vector algebra", dbif=dbif,
                                                                 overwrite = self.overwrite)

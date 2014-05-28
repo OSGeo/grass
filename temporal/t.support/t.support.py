@@ -86,7 +86,7 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    stds = tgis.open_old_space_time_dataset(name, type, dbif)
+    stds = tgis.open_old_stds(name, type, dbif)
 
     update = False
     if title:

@@ -84,7 +84,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
     input_name_list = inputs.split(",")
 
-    first_input = open_old_space_time_dataset(input_name_list[0], type, dbif)
+    first_input = open_old_stds(input_name_list[0], type, dbif)
 
     # All additional inputs in reverse sorted order to avoid
     # wrong name substitution
@@ -94,10 +94,10 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
     input_list = []
 
     for input in input_name_list:
-        sp = open_old_space_time_dataset(input, type, dbif)
+        sp = open_old_stds(input, type, dbif)
         input_list.append(copy.copy(sp))
 
-    new_sp = check_new_space_time_dataset(output, type, dbif,
+    new_sp = check_new_stds(output, type, dbif,
                                          core.overwrite())
 
     # Sample all inputs by the first input and create a sample matrix
@@ -281,7 +281,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
         temporal_type, semantic_type, title, description = first_input.get_initial_values()
 
-        new_sp = open_new_space_time_dataset(output, type,
+        new_sp = open_new_stds(output, type,
                                          temporal_type, title, description,
                                          semantic_type, dbif,
                                          core.overwrite())

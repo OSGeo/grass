@@ -101,11 +101,11 @@ def main():
 
     mapset = grass.gisenv()["MAPSET"]
 
-    out_sp = tgis.check_new_space_time_dataset(output, "stvds", dbif, overwrite)
+    out_sp = tgis.check_new_stds(output, "stvds", dbif, overwrite)
 
     samples = []
 
-    first_strds = tgis.open_old_space_time_dataset(strds_names[0], "strds", dbif)
+    first_strds = tgis.open_old_stds(strds_names[0], "strds", dbif)
 
     # Single space time raster dataset
     if len(strds_names) == 1:
@@ -127,7 +127,7 @@ def main():
     else:
         # Multiple space time raster datasets
         for name in strds_names[1:]:
-            dataset = tgis.open_old_space_time_dataset(name, "strds", dbif)
+            dataset = tgis.open_old_stds(name, "strds", dbif)
             if dataset.get_temporal_type() != first_strds.get_temporal_type():
                 grass.fatal(_("Temporal type of space time raster datasets must be equal\n"
                               "<%(a)s> of type %(type_a)s do not match <%(b)s> of type %(type_b)s"%\
@@ -203,7 +203,7 @@ def main():
                    " with vector map <%s>") % (strds, input)
 
     # Create the output space time vector dataset
-    out_sp = tgis.open_new_space_time_dataset(output, "stvds",
+    out_sp = tgis.open_new_stds(output, "stvds",
                                               first_strds.get_temporal_type(),
                                               title, description,
                                               first_strds.get_semantic_type(),

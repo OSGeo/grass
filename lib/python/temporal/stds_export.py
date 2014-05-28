@@ -261,7 +261,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     else:
         columns = "name,start_time,end_time"
 
-    sp = open_old_space_time_dataset(input, type_)
+    sp = open_old_stds(input, type_)
     rows = sp.get_registered_maps(columns, where, "start_time", None)
 
     if compression == "gzip":

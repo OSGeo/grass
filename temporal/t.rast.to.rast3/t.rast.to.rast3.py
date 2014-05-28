@@ -46,7 +46,7 @@ def main():
 
     mapset = grass.gisenv()["MAPSET"]
 
-    sp = tgis.open_old_space_time_dataset(input, "strds")
+    sp = tgis.open_old_stds(input, "strds")
 
     grass.use_temp_region()
 

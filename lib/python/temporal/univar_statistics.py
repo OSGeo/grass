@@ -44,7 +44,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = open_old_space_time_dataset(input, type, dbif)
+    sp = open_old_stds(input, type, dbif)
 
     rows = sp.get_registered_maps(
         "id,start_time,end_time", where, "start_time", dbif)

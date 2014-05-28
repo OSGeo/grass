@@ -35,11 +35,11 @@ class TestRegisterFunctions(unittest.TestCase):
         ret += grass.script.run_command("r.mapcalc", overwrite=True, quiet=True, expression="c1 = 7")
 
 
-        tgis.open_new_space_time_dataset(name="A", type="strds", temporaltype="absolute",
+        tgis.open_new_stds(name="A", type="strds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field", overwrite=True)
-        tgis.open_new_space_time_dataset(name="B", type="strds", temporaltype="absolute",
+        tgis.open_new_stds(name="B", type="strds", temporaltype="absolute",
                                          title="B", descr="B", semantic="field", overwrite=True)
-        tgis.open_new_space_time_dataset(name="C", type="strds", temporaltype="absolute",
+        tgis.open_new_stds(name="C", type="strds", temporaltype="absolute",
                                          title="B", descr="C", semantic="field", overwrite=True)
 
         tgis.register_maps_in_space_time_dataset(type="rast", name="A", maps="a1,a2,a3,a4",
@@ -58,7 +58,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = if({contains}, B == 5,  A - 1,  A + 1)", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 0) # 1 - 1
@@ -74,7 +74,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A + A{equal,=#}A', basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 2)
@@ -89,7 +89,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A + td(A)', basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 2)
@@ -103,7 +103,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A / td(A)', basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 1)
@@ -117,7 +117,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A {equal,+} td(A)', basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 2)
@@ -132,7 +132,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = A {equal,/} td(A)', basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 1)
@@ -147,7 +147,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = if({equal}, start_date() >= "2001-01-02", A + A)', basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 3)
         self.assertEqual(D.metadata.get_min_min(), 4)
@@ -161,7 +161,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression='D = if({equal}, A#A == 1, A - A)', basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 0)
@@ -176,7 +176,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra.parse(expression='D = if(start_date() < "2001-01-03" && A#A == 1, A{starts,=+}C, A{finishes,=+}C)', \
                   basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 9)  # 2 + 7 a2 + c1
@@ -190,7 +190,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = A {equal,*} A {equal,+} A", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 2)  # 1*1 + 1
@@ -203,7 +203,7 @@ class TestRegisterFunctions(unittest.TestCase):
         """Simple arithmetic test that creates an empty strds"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = A {during,*} A {during,+} A", basename="d", overwrite=True)
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 0)
 
@@ -212,7 +212,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = A / A + A*A/A", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 2) # 1/1 + 1*1/1
@@ -225,7 +225,7 @@ class TestRegisterFunctions(unittest.TestCase):
         """Simple temporal intersection test"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = A {equal,&+} B", basename="d", overwrite=True)
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 0)
 
@@ -234,7 +234,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = A {during,&+} B", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 6) # 1 + 5
@@ -248,7 +248,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = A {starts,&+} B", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 6) # 1 + 5
@@ -262,7 +262,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = A {finishes,&+} B", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 7)  # 2 + 5
@@ -276,7 +276,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = A {starts|finishes,&+} B", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 6)  # 1 + 5
@@ -290,7 +290,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = B {overlaps,|+} C", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
         self.assertEqual(D.metadata.get_min_min(), 12) # 5 + 7
@@ -304,7 +304,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
         tra.parse(expression="D = B {overlapped,|+} C", basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 1)
         self.assertEqual(D.metadata.get_min_min(), 13) # 6 + 7
@@ -319,7 +319,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra.parse(expression='D = A {during,=+} buff_t(C, "1 day") ',
                   basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 8)  # 1 + 7  a1 + c1
@@ -334,7 +334,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra.parse(expression='D = A[-1] + A[1]',
                   basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
@@ -349,7 +349,7 @@ class TestRegisterFunctions(unittest.TestCase):
         tra.parse(expression='D = A[0,0,-1] + A[0,0,1]',
                   basename="d", overwrite=True)
 
-        D = tgis.open_old_space_time_dataset("D", type="strds")
+        D = tgis.open_old_stds("D", type="strds")
         D.select()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3

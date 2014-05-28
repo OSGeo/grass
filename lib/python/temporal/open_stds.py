@@ -26,7 +26,7 @@ from factory import *
 
 ###############################################################################
 
-def open_old_space_time_dataset(name, type, dbif=None):
+def open_old_stds(name, type, dbif=None):
     """!This function opens an existing space time dataset and return the
        created and intialized object of the specified type.
 
@@ -76,7 +76,7 @@ def open_old_space_time_dataset(name, type, dbif=None):
 
 ###############################################################################
 
-def check_new_space_time_dataset(name, type, dbif=None, overwrite=False):
+def check_new_stds(name, type, dbif=None, overwrite=False):
     """!Check if a new space time dataset of a specific type can be created
 
        @param name The name of the new space time dataset
@@ -129,7 +129,7 @@ def check_new_space_time_dataset(name, type, dbif=None, overwrite=False):
 
 ###############################################################################
 
-def open_new_space_time_dataset(name, type, temporaltype, title, descr, semantic,
+def open_new_stds(name, type, temporaltype, title, descr, semantic,
                               dbif=None, overwrite=False):
     """!Create a new space time dataset of a specific type
 
@@ -149,7 +149,7 @@ def open_new_space_time_dataset(name, type, temporaltype, title, descr, semantic
     """
     dbif, connected = init_dbif(dbif)
     msgr = get_tgis_message_interface()
-    sp =  check_new_space_time_dataset(name, type, dbif, overwrite)
+    sp =  check_new_stds(name, type, dbif, overwrite)
 
     if sp.is_in_db(dbif):
         msgr.warning(_("Overwrite space time %(sp)s dataset <%(name)s> and "

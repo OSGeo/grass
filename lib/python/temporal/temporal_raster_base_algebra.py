@@ -320,7 +320,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Open connection to temporal database.
                 dbif, connect = init_dbif(self.dbif)
                 # Create result space time dataset.
-                resultstds = open_new_space_time_dataset(t[1], self.stdstype, \
+                resultstds = open_new_stds(t[1], self.stdstype, \
                                                          'absolute', t[1], t[1], \
                                                          'mean', self.dbif, \
                                                          overwrite = self.overwrite)

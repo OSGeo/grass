@@ -37,9 +37,9 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(ret, 0)
         
         
-        self.strds_abs = tgis.open_new_space_time_dataset(name="register_test_abs", type="strds", temporaltype="absolute", 
+        self.strds_abs = tgis.open_new_stds(name="register_test_abs", type="strds", temporaltype="absolute", 
                                             title="Test strds", descr="Test strds", semantic="field")
-        self.strds_rel = tgis.open_new_space_time_dataset(name="register_test_rel", type="strds", temporaltype="relative", 
+        self.strds_rel = tgis.open_new_stds(name="register_test_rel", type="strds", temporaltype="relative", 
                                             title="Test strds", descr="Test strds", semantic="field")
 
     def test_absolute_time_strds_1(self):
