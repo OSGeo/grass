@@ -674,8 +674,8 @@ int create_table(struct Format_info_pg *pg_info)
             G_debug(3, "\tcolumn = %d name = %s type = %d length = %d",
                     col, colname, sqltype, length);
 
-            if (strcmp(pg_info->fid_column, colname) == 0 ||
-                strcmp(GV_KEY_COLUMN, colname) == 0) {
+            if (G_strcasecmp(pg_info->fid_column, colname) == 0 ||
+                G_strcasecmp(GV_KEY_COLUMN, colname) == 0) {
                 /* skip fid column if exists */
                 G_debug(3, "\t%s skipped", colname);
                 continue;
