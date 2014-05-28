@@ -11,7 +11,7 @@
    \todo function to delete corresponding entry in fidx
    \todo PostGIS version of V2__add_area_cats_to_cidx_nat
 
-   (C) 2012-2013 by Martin Landa, and the GRASS Development Team
+   (C) 2012-2014 by Martin Landa, and the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -38,7 +38,7 @@
 */
 #define USE_TOPO_STMT 0
 
-static int create_table(struct Format_info_pg *, const struct field_info *);
+static int create_table(struct Format_info_pg *);
 static int check_schema(const struct Format_info_pg *);
 static int create_topo_schema(struct Format_info_pg *, int);
 static int create_pg_layer(struct Map_info *, int);
@@ -58,9 +58,8 @@ static unsigned char *polygon_to_wkb(int, const struct line_pnts **, int,
 static char *line_to_wkb(struct Format_info_pg *, const struct line_pnts **,
                          int, int, int);
 static int write_feature(struct Map_info *, int, int,
-                         const struct line_pnts **, int, int, const struct field_info *);
-static char *build_insert_stmt(const struct Format_info_pg *, const char *, int, 
-                               int, const struct field_info *);
+                         const struct line_pnts **, int, int);
+static char *build_insert_stmt(const struct Format_info_pg *, const char *, int, int);
 static int insert_topo_element(struct Map_info *, int, int, const char *);
 static int update_next_edge(struct Map_info*, int, int);
 static int delete_face(const struct Map_info *, int);
@@ -70,7 +69,7 @@ static int add_line_to_topo_pg(struct Map_info *, off_t, int, const struct line_
 static int delete_line_from_topo_pg(struct Map_info *, int, int, const struct line_pnts *);
 static int set_constraint_to_deferrable(struct Format_info_pg *, const char *, const char *,
                                         const char *, const char *, const char *);
-static dbDriver *open_db(struct Format_info_pg *, const struct field_info *);
+static dbDriver *open_db(struct Format_info_pg *);
 #endif
 
 static struct line_pnts *Points;
@@ -574,16 +573,17 @@ int V2__update_area_pg(struct Map_info *Map,
   \brief Create new feature table
 
   \param pg_info pointer to Format_info_pg
-  \param Fi pointer to field_info
 
   \return -1 on error
   \return 0 on success
 */
-int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
+int create_table(struct Format_info_pg *pg_info)
 {
     int spatial_index, primary_key;
     char stmt[DB_SQL_MAX];
     char *geom_type, *def_file;
+    
+    struct field_info *Fi;
     
     PGresult *result;
 
@@ -630,6 +630,8 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
             pg_info->schema_name, pg_info->table_name, pg_info->fid_column,
             primary_key ? " PRIMARY KEY" : "", GV_KEY_COLUMN);
     
+    Fi = pg_info->fi;
+    
     if (Fi) {
         /* append attributes */
         int col, ncols, sqltype, length;
@@ -644,7 +646,7 @@ int create_table(struct Format_info_pg *pg_info, const struct field_info *Fi)
 
         db_init_string(&dbtable_name);
 
-        driver = open_db(pg_info, Fi);
+        driver = open_db(pg_info);
         if (driver == NULL)
             return -1;
 
@@ -794,6 +796,11 @@ int check_schema(const struct Format_info_pg *pg_info)
     char stmt[DB_SQL_MAX];
 
     PGresult *result;
+
+    if (!pg_info->conn || !pg_info->table_name) {
+        G_warning(_("No connection defined"));
+        return -1;
+    }
 
     /* add geometry column */
     sprintf(stmt, "SELECT nspname FROM pg_namespace");
@@ -1049,9 +1056,6 @@ int create_pg_layer(struct Map_info *Map, int type)
     int ndblinks;
 
     struct Format_info_pg *pg_info;
-    struct field_info *Fi;
-
-    Fi = NULL;
 
     pg_info = &(Map->fInfo.pg);
     if (!pg_info->conninfo) {
@@ -1096,11 +1100,12 @@ int create_pg_layer(struct Map_info *Map, int type)
     /* create new PostGIS table */
     ndblinks = Vect_get_num_dblinks(Map);
     if (ndblinks > 0) {
-        Fi = Vect_get_dblink(Map, 0);
-        if (Fi) {
+        pg_info->fi = Vect_get_dblink(Map, 0); /* TODO: support more layers */
+        if (pg_info->fi) {
             if (ndblinks > 1)
                 G_warning(_("More layers defined, using driver <%s> and "
-                            "database <%s>"), Fi->driver, Fi->database);
+                            "database <%s>"),
+                          pg_info->fi->driver, pg_info->fi->database);
         }
         else {
             G_warning(_("Database connection not defined. "
@@ -1109,7 +1114,7 @@ int create_pg_layer(struct Map_info *Map, int type)
     }
 
     /* create new feature table */
-    if (create_table(pg_info, Fi) == -1) {
+    if (create_table(pg_info) == -1) {
         G_warning(_("Unable to create new PostGIS feature table"));
         return -1;
     }
@@ -1129,9 +1134,6 @@ int create_pg_layer(struct Map_info *Map, int type)
         }
     }
     
-    if (Fi)
-        G_free(Fi);
-
     return 0;
 }
 
@@ -1185,7 +1187,6 @@ off_t write_line_sf(struct Map_info *Map, int type,
 
     SF_FeatureType sf_type;
 
-    struct field_info *Fi;
     struct Format_info_pg *pg_info;
     struct Format_info_offset *offset_info;
 
@@ -1212,16 +1213,9 @@ off_t write_line_sf(struct Map_info *Map, int type,
     }
     
     /* get category & check for attributes */
-    Fi = NULL; 
     cat = -1;
     if (cats->n_cats > 0) {
-        int field;
-        
-        field = cats->field[0]; /* we assume only one layer defined */
-        if (Vect_get_num_dblinks(Map) > 0) {
-            /* check for attributes */
-            Fi = Vect_get_field(Map, field);
-        }
+        int field = pg_info->fi->number;
         
         if (!Vect_cat_get(cats, field, &cat))
             G_warning(_("No category defined for layer %d"), field);
@@ -1288,7 +1282,7 @@ off_t write_line_sf(struct Map_info *Map, int type,
     }
 
     /* write feature's geometry and fid */
-    if (-1 == write_feature(Map, -1, type, points, nparts, cat, Fi)) {
+    if (-1 == write_feature(Map, -1, type, points, nparts, cat)) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
@@ -1332,9 +1326,9 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
 {
     int line, cat, line_id;
 
-    struct field_info *Fi;
     struct Format_info_pg *pg_info;
     struct Plus_head *plus;
+    struct field_info *Fi;
     
     pg_info = &(Map->fInfo.pg);
     plus = &(Map->plus);
@@ -1371,22 +1365,19 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
     G_debug(3, "write_line_pg(): type = %d n_points = %d",
             type, points->n_points);
 
-    Fi = NULL; /* no attributes to be written */
+    Fi = pg_info->fi;
+    
     cat = -1;
     if (cats && cats->n_cats > 0) {
-        if (Vect_get_num_dblinks(Map) > 0) {
-            /* check for attributes */
-            Fi = Vect_get_dblink(Map, 0);
-            if (Fi) {
-                if (!pg_info->dbdriver)
-                    open_db(pg_info, Fi);
-                if (!Vect_cat_get(cats, Fi->number, &cat))
-                    G_warning(_("No category defined for layer %d"), Fi->number);
-                if (cats->n_cats > 1) {
-                    G_warning(_("Feature has more categories, using "
-                                "category %d (from layer %d)"),
-                              cat, cats->field[0]);
-                }
+        if (Fi) {
+            if (!pg_info->dbdriver)
+                open_db(pg_info);
+            if (!Vect_cat_get(cats, Fi->number, &cat))
+                G_warning(_("No category defined for layer %d"), Fi->number);
+            if (cats->n_cats > 1) {
+                G_warning(_("Feature has more categories, using "
+                            "category %d (from layer %d)"),
+                          cat, cats->field[0]);
             }
         }
         /* assume layer=1 */
@@ -1420,7 +1411,7 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
        - feature table for simple features
        - feature table and topo schema for topological access
     */
-    line_id = write_feature(Map, line, type, &points, 1, cat, Fi);
+    line_id = write_feature(Map, line, type, &points, 1, cat);
     if (line_id < 0) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
@@ -1841,15 +1832,13 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
    \param points pointer to line_pnts struct
    \param nparts number of parts (rings for polygon)
    \param cat category number (-1 for no category)
-   \param Fi pointer to field_info (attributes to copy, NULL for no attributes)
 
    \return topo_id for PostGIS Topology 
    \return 0 for simple features access
    \return -1 on error
  */
 int write_feature(struct Map_info *Map, int line, int type,
-                  const struct line_pnts **points, int nparts,
-                  int cat, const struct field_info *Fi)
+                  const struct line_pnts **points, int nparts, int cat)
 {
     int with_z, topo_id;
     char *stmt, *geom_data;
@@ -1900,7 +1889,7 @@ int write_feature(struct Map_info *Map, int line, int type,
     /* build INSERT statement
        simple feature geometry + attributes
     */
-    stmt = build_insert_stmt(pg_info, geom_data, topo_id, cat, Fi);
+    stmt = build_insert_stmt(pg_info, geom_data, topo_id, cat);
 
     /* stmt can NULL when writing PostGIS topology with no attributes
      * attached */
@@ -1934,13 +1923,14 @@ int write_feature(struct Map_info *Map, int line, int type,
    \return allocated string with INSERT statement
  */
 char *build_insert_stmt(const struct Format_info_pg *pg_info,
-                        const char *geom_data, int topo_id,
-                        int cat, const struct field_info *Fi)
+                        const char *geom_data, int topo_id, int cat)
 {
     int topogeom_type;
     
     char *stmt, buf[DB_SQL_MAX];
 
+    struct field_info *Fi;
+    
     topogeom_type = -1;
     if (pg_info->toposchema_name) {
         switch (pg_info->feature_type) {
@@ -1959,6 +1949,8 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
         }
     }
 
+    Fi = pg_info->fi;
+    
     stmt = NULL;
     if (Fi && cat > -1) {
         /* write attributes (simple features and topology elements) */
@@ -2775,8 +2767,7 @@ int add_line_to_topo_pg(struct Map_info *Map, off_t offset, int type,
             Vect_reset_line(Points);
             Vect_append_point(Points, x, y, z);
             
-            write_feature(Map, node, GV_POINT, (const struct line_pnts **) &Points, 1,
-                          -1, NULL);
+            write_feature(Map, node, GV_POINT, (const struct line_pnts **) &Points, 1, -1);
         }
     }
 
@@ -2872,16 +2863,19 @@ int set_constraint_to_deferrable(struct Format_info_pg *pg_info,
   \brief Open database connection with attribute table
 
   \param pg_info pointer to Format_info_pg struct
-  \param Fi pointer to field_info struct 
 
   \return pointer to dbDriver on succes
   \return NULL on failure
 */
-dbDriver *open_db(struct Format_info_pg *pg_info, const struct field_info *Fi) {
+dbDriver *open_db(struct Format_info_pg *pg_info) {
     dbDriver *driver;
     dbHandle handle;
     
+    struct field_info *Fi;
+    
     db_init_handle(&handle);
+    
+    Fi = pg_info->fi;
     
     pg_info->dbdriver = driver = db_start_driver(Fi->driver);
     if (!driver) {
