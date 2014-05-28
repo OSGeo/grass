@@ -137,34 +137,34 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (opt.output->answer && flag.pretty->answer)
-	G_fatal_error(_("output= and -p are mutually exclusive"));
+    if ((flag.pretty->answer || flag.full->answer) && opt.output->answer)
+        G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
+		      flag.pretty->key, flag.full->key, opt.output->key);
 
-    if (opt.output->answer && flag.full->answer)
-	G_fatal_error(_("output= and -f are mutually exclusive"));
+    if ((flag.pretty->answer || flag.full->answer) && flag.type->answer)
+	G_fatal_error(_("-%c/-%c and -%c are mutually exclusive"),
+		      flag.pretty->answer, flag.full->key, flag.type->answer);
 
-    if (flag.type->answer && flag.pretty->answer)
-	G_fatal_error(_("-t and -p are mutually exclusive"));
-
-    if (flag.type->answer && flag.full->answer)
-	G_fatal_error(_("-t and -f are mutually exclusive"));
-
-    if (flag.full->answer && flag.pretty->answer)
-	G_fatal_error(_("-f and -p are mutually exclusive"));
+    if (flag.pretty->answer && flag.full->answer)
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+		      flag.pretty->answer, flag.full->answer);
 
     if (flag.regex->answer && flag.extended->answer)
-	G_fatal_error(_("-r and -e are mutually exclusive"));
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+		      flag.regex->answer, flag.extended->answer);
 
     if (opt.pattern->answer) {
 	if (flag.regex->answer || flag.extended->answer)
-	    filter = G_ls_regex_filter(opt.pattern->answer, 0, (int) flag.extended->answer);
+	    filter = G_ls_regex_filter(opt.pattern->answer, 0,
+			    	       (int)flag.extended->answer);
 	else
 	    filter = G_ls_glob_filter(opt.pattern->answer, 0);
     }
 
     if (opt.exclude->answer) {
 	if (flag.regex->answer || flag.extended->answer)
-	    exclude = G_ls_regex_filter(opt.exclude->answer, 1, (int) flag.extended->answer);
+	    exclude = G_ls_regex_filter(opt.exclude->answer, 1,
+			    		(int)flag.extended->answer);
 	else
 	    exclude = G_ls_glob_filter(opt.exclude->answer, 1);
     }
@@ -178,8 +178,9 @@ int main(int argc, char *argv[])
 	mapset = G_mapset();   /* current mapset */
     else if (strcmp(mapset, "..") == 0) {
         if (flag.pretty->answer || flag.full->answer)
-            G_fatal_error(_("-%c/-%c and %s=.. are mutually exclusive"),
-                          flag.pretty->key, flag.full->key, opt.mapset->key);
+            G_fatal_error(_("-%c/-%c and %s=%s are mutually exclusive"),
+                          flag.pretty->key, flag.full->key, opt.mapset->key,
+			  mapset);
         mapset = NULL;         /* all mapsets */
     }
 
