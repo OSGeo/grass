@@ -111,18 +111,20 @@ class Info(object):
             self.rename(newname)
         self._name = newname
 
-    name = property(fget=_get_name, fset=_set_name)
+    name = property(fget=_get_name, fset=_set_name,
+                    doc="Set or obtain the Vector name")
 
     def _get_mapset(self):
-        """Private method to obtain the Vector name"""
+        """Private method to obtain the Vector mapset"""
         return self._mapset
 
     def _set_mapset(self, mapset):
-        """Private method to change the Vector name"""
+        """Private method to change the Vector mapset"""
         if mapset:
             self._mapset = mapset
 
-    mapset = property(fget=_get_mapset, fset=_set_mapset)
+    mapset = property(fget=_get_mapset, fset=_set_mapset,
+                      doc="Set or obtain the Vector mapset")
 
     def _get_organization(self):
         """Private method to obtain the Vector organization"""
@@ -132,7 +134,8 @@ class Info(object):
         """Private method to change the Vector organization"""
         libvect.Vect_get_organization(self.c_mapinfo, ctypes.c_char_p(org))
 
-    organization = property(fget=_get_organization, fset=_set_organization)
+    organization = property(fget=_get_organization, fset=_set_organization,
+                            doc="Set or obtain the Vector organization")
 
     def _get_date(self):
         """Private method to obtain the Vector date"""
@@ -142,7 +145,8 @@ class Info(object):
         """Private method to change the Vector date"""
         return libvect.Vect_set_date(self.c_mapinfo, ctypes.c_char_p(date))
 
-    date = property(fget=_get_date, fset=_set_date)
+    date = property(fget=_get_date, fset=_set_date,
+                    doc="Set or obtain the Vector date")
 
     def _get_person(self):
         """Private method to obtain the Vector person"""
@@ -152,7 +156,8 @@ class Info(object):
         """Private method to change the Vector person"""
         libvect.Vect_set_person(self.c_mapinfo, ctypes.c_char_p(person))
 
-    person = property(fget=_get_person, fset=_set_person)
+    person = property(fget=_get_person, fset=_set_person,
+                      doc="Set or obtain the Vector author")
 
     def _get_title(self):
         """Private method to obtain the Vector title"""
@@ -162,7 +167,8 @@ class Info(object):
         """Private method to change the Vector title"""
         libvect.Vect_set_map_name(self.c_mapinfo, ctypes.c_char_p(title))
 
-    title = property(fget=_get_title, fset=_set_title)
+    title = property(fget=_get_title, fset=_set_title,
+                     doc="Set or obtain the Vector title")
 
     def _get_map_date(self):
         """Private method to obtain the Vector map date"""
@@ -174,7 +180,8 @@ class Info(object):
         date_str = datetimeobj.strftime(self.date_fmt)
         libvect.Vect_set_map_date(self.c_mapinfo, ctypes.c_char_p(date_str))
 
-    map_date = property(fget=_get_map_date, fset=_set_map_date)
+    map_date = property(fget=_get_map_date, fset=_set_map_date,
+                        doc="Set or obtain the Vector map date")
 
     def _get_scale(self):
         """Private method to obtain the Vector scale"""
@@ -184,7 +191,8 @@ class Info(object):
         """Private method to set the Vector scale"""
         return libvect.Vect_set_scale(self.c_mapinfo, ctypes.c_int(scale))
 
-    scale = property(fget=_get_scale, fset=_set_scale)
+    scale = property(fget=_get_scale, fset=_set_scale,
+                     doc="Set or obtain the Vector scale")
 
     def _get_comment(self):
         """Private method to obtain the Vector comment"""
@@ -194,7 +202,8 @@ class Info(object):
         """Private method to set the Vector comment"""
         return libvect.Vect_set_comment(self.c_mapinfo, ctypes.c_char_p(comm))
 
-    comment = property(fget=_get_comment, fset=_set_comment)
+    comment = property(fget=_get_comment, fset=_set_comment,
+                       doc="Set or obtain the Vector comment")
 
     def _get_zone(self):
         """Private method to obtain the Vector projection zone"""
@@ -204,7 +213,8 @@ class Info(object):
         """Private method to set the Vector projection zone"""
         return libvect.Vect_set_zone(self.c_mapinfo, ctypes.c_int(zone))
 
-    zone = property(fget=_get_zone, fset=_set_zone)
+    zone = property(fget=_get_zone, fset=_set_zone,
+                    doc="Set or obtain the Vector projection zone")
 
     def _get_proj(self):
         """Private method to obtain the Vector projection code"""
@@ -214,7 +224,8 @@ class Info(object):
         """Private method to set the Vector projection code"""
         libvect.Vect_set_proj(self.c_mapinfo, ctypes.c_int(proj))
 
-    proj = property(fget=_get_proj, fset=_set_proj)
+    proj = property(fget=_get_proj, fset=_set_proj,
+                    doc="Set or obtain the Vector projection code")
 
     def _get_thresh(self):
         """Private method to obtain the Vector threshold"""
@@ -224,7 +235,8 @@ class Info(object):
         """Private method to set the Vector threshold"""
         return libvect.Vect_set_thresh(self.c_mapinfo, ctypes.c_double(thresh))
 
-    thresh = property(fget=_get_thresh, fset=_set_thresh)
+    thresh = property(fget=_get_thresh, fset=_set_thresh,
+                      doc="Set or obtain the Vector threshold")
 
     @property
     @must_be_open
@@ -248,7 +260,11 @@ class Info(object):
         libvect.Vect_write_header(self.c_mapinfo)
 
     def rename(self, newname):
-        """Method to rename the Vector map"""
+        """Method to rename the Vector map
+
+        :param newname: the new name for the Vector map
+        :type newname: str
+        """
         if self.exist():
             if not self.is_open():
                 functions.rename(self.name, newname, 'vect')
@@ -282,34 +298,34 @@ class Info(object):
              link_driver='sqlite'):
         """Open a Vector map.
 
-         Parameters
-        ----------
-        mode : string
-            Open a vector map in ``r`` in reading, ``w`` in writing and
-            in ``rw`` read and write mode
-        layer: int, optional
-            Specify the layer that you want to use
+         
+        :param mode: open a vector map in ``r`` in reading, ``w`` in writing
+                     and in ``rw`` read and write mode
+        :type mode: str
+        :param layer: specify the layer that you want to use
+        :type layer: int
+        :param overwrite: valid only for ``w`` mode
+        :type overwrite: bool
+        :param tab_name: define the name of the table that will be generate
+        :type tab_name: str
+        :param tab_cols: define the name and type of the columns of the
+                         attribute table of the vecto map
+        :type tab_cols: list of pairs
+        :param link_name: define the name of the link connecttion with the
+                          database
+        :type link_name: str
+        :param link_key: define the nema of the column that will be use as
+                         vector category
+        :type link_key: str
+        :param link_db: define the database connection parameters
+        :type link_db: str
+        :param link_driver: define witch database driver will be used
+        :param link_driver: str
 
-        Some parameters are valid only if we open use the writing mode (``w``)
-
-        overwrite: bool, optional
-            valid only for ``w`` mode
-        tab_name: string, optional
-            Define the name of the table that will be generate
-        tab_cols: list of pairs, optional
-            Define the name and type of the columns of the attribute table
-            of the vecto map
-        link_name: string, optional
-            Define the name of the link connecttion with the database
-        link_key: string, optional
-            Define the nema of the column that will be use as vector category
-        link_db: string, optional
-            Define the database connection parameters
-        link_driver: string, optional
-            Define witch database driver will be used
+        Some of the parameters are valid only with mode ``w`` or ``rw``
 
         See more examples in the documentation of the ``read`` and ``write``
-        methods.
+        methods
         """
         self.mode = mode if mode else self.mode
         # check if map exists or not
@@ -377,7 +393,11 @@ class Info(object):
                                                  self.writable), }
 
     def close(self, build=False):
-        """Method to close the Vector"""
+        """Method to close the Vector
+
+        :param build: True if the vector map should be build before close it
+        :type build: bool
+        """
         if hasattr(self, 'table') and self.table is not None:
             self.table.conn.close()
         if self.is_open():

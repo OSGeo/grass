@@ -1,6 +1,6 @@
 
-Vector
-========
+Introduction on Vector
+=========================
 
 Instantiation and basic interaction. ::
 
@@ -114,16 +114,17 @@ Now, find an area with an island inside... ::
     Bbox(199947.296494, 199280.969494, 754920.623987, 754351.812986)
 
 
-VectorTopo
-----------
-
-.. autoclass:: pygrass.vector.VectorTopo
-    :members:
 
 Vector
 ----------
 
 .. autoclass:: pygrass.vector.Vector
+    :members:
+
+VectorTopo
+----------
+
+.. autoclass:: pygrass.vector.VectorTopo
     :members:
 
 
@@ -165,7 +166,7 @@ Isles
 Area
 --------
 
-.. autoclass:: pygrass.vector.geometry.Boundary
+.. autoclass:: pygrass.vector.geometry.Area
     :members:
 
 Utils
