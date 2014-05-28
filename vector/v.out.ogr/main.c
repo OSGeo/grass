@@ -27,6 +27,8 @@
 
 #include "local_proto.h"
 
+#include "ogr_srs_api.h"
+
 int main(int argc, char *argv[])
 {
     int i, otype, ftype, donocat;
@@ -40,7 +42,6 @@ int main(int argc, char *argv[])
 
     char buf[SQL_BUFFER_SIZE];
     char key1[SQL_BUFFER_SIZE], key2[SQL_BUFFER_SIZE];
-    struct Key_Value *projinfo, *projunits;
     struct Cell_head cellhd;
     char **tokens;
 
@@ -251,12 +252,25 @@ int main(int argc, char *argv[])
 
     /* fetch PROJ info */
     G_get_default_window(&cellhd);
-    if (cellhd.proj == PROJECTION_XY)
-	Ogr_projection = NULL;
-    else {
-	projinfo = G_get_projinfo();
-	projunits = G_get_projunits();
-	Ogr_projection = GPJ_grass_to_osr(projinfo, projunits);
+    Ogr_projection = NULL;
+    if (cellhd.proj != PROJECTION_XY) {
+        const char *epsg;
+
+        Ogr_projection = NULL;
+        /* try EPSG code first */
+        epsg = G_database_epsg_code();
+        if (!epsg) {
+            struct Key_Value *projinfo, *projunits;
+            
+            projinfo = G_get_projinfo();
+            projunits = G_get_projunits();
+            Ogr_projection = GPJ_grass_to_osr(projinfo, projunits);
+        }
+        else {
+            Ogr_projection = OSRNewSpatialReference(NULL);
+            if (OSRImportFromEPSG(Ogr_projection, atoi(epsg)) != OGRERR_NONE)
+                G_fatal_error(_("Unknown EPSG code %s"), epsg);
+        }
 	if (flags.esristyle->answer &&
 	    (strcmp(options.format->answer, "ESRI_Shapefile") == 0))
 	    OSRMorphToESRI(Ogr_projection);
