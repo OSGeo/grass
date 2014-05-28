@@ -1512,7 +1512,7 @@ FILE *G_open_option_file(const struct Option *option)
 	if (stdinout)
 	    fp = stdin;
 	else if ((fp = fopen(option->answer, "r")) == NULL)
-	    G_fatal_error(_("Unable to read %s file <%s>"),
+	    G_fatal_error(_("Unable to open %s file <%s>"),
 			    option->key, option->answer);
     } else if (strcmp(option->gisprompt, "new,file,file") == 0) {
 	if (stdinout)
