@@ -1503,7 +1503,8 @@ int main(int argc, char *argv[])
     }
 
     delete_table = Vect_maptype(&Map) != GV_FORMAT_NATIVE;
-    Vect_close(&Map);
+    if (0 != Vect_close(&Map))
+        G_fatal_error(_("Import failed"));
 
     /* create index - may fail on non-unique categories */
     if (db_create_index2(driver, Fi->table, key_column) != DB_OK)
