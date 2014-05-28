@@ -51,7 +51,7 @@ void G__usage_html(void)
     fprintf(stdout, "</head>\n");
     fprintf(stdout, "<body bgcolor=\"white\">\n\n");
     fprintf(stdout,
-	    "<img src=\"grass_logo.png\" alt=\"GRASS logo\">\n");
+	    "<a href=\"index.html\"><img src=\"grass_logo.png\" alt=\"GRASS logo\"></a>\n");
     fprintf(stdout, "<hr class=\"header\">\n\n");
     fprintf(stdout, "<h2>%s</h2>\n", _("NAME"));
     fprintf(stdout, "<em><b>%s</b></em> ", st->pgm_name);
