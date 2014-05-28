@@ -3,11 +3,14 @@
 # We need to set a specific region in the
 # @preprocess step of this test. 
 # The region setting should work for UTM and LL test locations
+
+export GRASS_OVERWRITE=1
+
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
-r.mapcalc --o expr="prec_1 = 100"
-r.mapcalc --o expr="prec_2 = 300"
-r.mapcalc --o expr="prec_3 = 500"
+r.mapcalc  expr="prec_1 = 100"
+r.mapcalc  expr="prec_2 = 300"
+r.mapcalc  expr="prec_3 = 500"
 
 n1=`g.tempfile pid=1 -d` 
 
@@ -17,7 +20,7 @@ prec_2|2001-03-01|2001-04-01
 prec_3|2001-05-01|2001-06-01
 EOF
 
-t.create --v --o type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
+t.create --v  type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
 t.register --v type=rast input=precip_abs file="${n1}"
 
 # @test

@@ -1,5 +1,7 @@
 #!/usr/bin/sh
 
+export GRASS_OVERWRITE=1
+
 # Test for temporal algebra in LatLon location.
 n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`

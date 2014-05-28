@@ -27,7 +27,7 @@ from base import *
 
 ###############################################################################
 
-class AbstractTemporalExtent(SQLDatabaseInterface):
+class TemporalExtent(SQLDatabaseInterface):
     """!This is the abstract time base class for relative and absolute time objects
 
         It abstract class implements the interface to absolute and relative time.
@@ -42,7 +42,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         @code
 
         >>> init()
-        >>> A = AbstractTemporalExtent(table="raster_absolute_time",
+        >>> A = TemporalExtent(table="raster_absolute_time",
         ... ident="soil@PERMANENT", start_time=datetime(2001, 01, 01),
         ... end_time=datetime(2005,01,01) )
         >>> A.id
@@ -58,7 +58,7 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
         start_time=2001-01-01 00:00:00
         end_time=2005-01-01 00:00:00
         >>> # relative time
-        >>> A = AbstractTemporalExtent(table="raster_absolute_time",
+        >>> A = TemporalExtent(table="raster_absolute_time",
         ... ident="soil@PERMANENT", start_time=0, end_time=1 )
         >>> A.id
         'soil@PERMANENT'
@@ -95,14 +95,14 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> A = TemporalExtent(start_time=5, end_time=6 )
            >>> inter = A.intersect(A)
            >>> inter.print_info()
             | Start time:................. 5
             | End time:................... 6
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> A = TemporalExtent(start_time=5, end_time=6 )
+           >>> B = TemporalExtent(start_time=5, end_time=7 )
            >>> inter = A.intersect(B)
            >>> inter.print_info()
             | Start time:................. 5
@@ -112,8 +112,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 5
             | End time:................... 6
 
-           >>> A = AbstractTemporalExtent(start_time=3, end_time=6 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> A = TemporalExtent(start_time=3, end_time=6 )
+           >>> B = TemporalExtent(start_time=5, end_time=7 )
            >>> inter = A.intersect(B)
            >>> inter.print_info()
             | Start time:................. 5
@@ -123,8 +123,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 5
             | End time:................... 6
 
-           >>> A = AbstractTemporalExtent(start_time=3, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> A = TemporalExtent(start_time=3, end_time=8 )
+           >>> B = TemporalExtent(start_time=5, end_time=6 )
            >>> inter = A.intersect(B)
            >>> inter.print_info()
             | Start time:................. 5
@@ -134,8 +134,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 5
             | End time:................... 6
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> A = TemporalExtent(start_time=5, end_time=8 )
+           >>> B = TemporalExtent(start_time=3, end_time=6 )
            >>> inter = A.intersect(B)
            >>> inter.print_info()
             | Start time:................. 5
@@ -145,8 +145,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 5
             | End time:................... 6
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=None )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> A = TemporalExtent(start_time=5, end_time=None )
+           >>> B = TemporalExtent(start_time=3, end_time=6 )
            >>> inter = A.intersect(B)
            >>> inter.print_info()
             | Start time:................. 5
@@ -156,14 +156,14 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 5
             | End time:................... None
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=4 )
+           >>> A = TemporalExtent(start_time=5, end_time=8 )
+           >>> B = TemporalExtent(start_time=3, end_time=4 )
            >>> inter = A.intersect(B)
            >>> print inter
            None
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=None )
+           >>> A = TemporalExtent(start_time=5, end_time=8 )
+           >>> B = TemporalExtent(start_time=3, end_time=None )
            >>> inter = A.intersect(B)
            >>> print inter
            None
@@ -176,10 +176,10 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             return None
 
         if self.D["end_time"] is None:
-            return AbstractTemporalExtent(start_time=self.D["start_time"])
+            return TemporalExtent(start_time=self.D["start_time"])
 
         if extent.D["end_time"] is None:
-            return AbstractTemporalExtent(start_time=extent.D["start_time"])
+            return TemporalExtent(start_time=extent.D["start_time"])
 
         start = None
         end = None
@@ -199,8 +199,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
                                           unit=self.get_unit())
         elif issubclass(type(self), AbsoluteTemporalExtent):
             return AbsoluteTemporalExtent(start_time=start, end_time=end)
-        elif issubclass(type(self), AbstractTemporalExtent):
-            return AbstractTemporalExtent(start_time=start, end_time=end)
+        elif issubclass(type(self), TemporalExtent):
+            return TemporalExtent(start_time=start, end_time=end)
 
     def disjoint_union(self, extent):
         """!Creates a disjoint union with this temporal extent and the provided one.
@@ -213,14 +213,14 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> A = TemporalExtent(start_time=5, end_time=6 )
            >>> inter = A.intersect(A)
            >>> inter.print_info()
             | Start time:................. 5
             | End time:................... 6
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> A = TemporalExtent(start_time=5, end_time=6 )
+           >>> B = TemporalExtent(start_time=5, end_time=7 )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 5
@@ -230,8 +230,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 5
             | End time:................... 7
 
-           >>> A = AbstractTemporalExtent(start_time=3, end_time=6 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> A = TemporalExtent(start_time=3, end_time=6 )
+           >>> B = TemporalExtent(start_time=5, end_time=7 )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 3
@@ -241,8 +241,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 3
             | End time:................... 7
 
-           >>> A = AbstractTemporalExtent(start_time=3, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> A = TemporalExtent(start_time=3, end_time=8 )
+           >>> B = TemporalExtent(start_time=5, end_time=6 )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 3
@@ -252,8 +252,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 3
             | End time:................... 8
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> A = TemporalExtent(start_time=5, end_time=8 )
+           >>> B = TemporalExtent(start_time=3, end_time=6 )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 3
@@ -263,8 +263,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 3
             | End time:................... 8
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=None )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=6 )
+           >>> A = TemporalExtent(start_time=5, end_time=None )
+           >>> B = TemporalExtent(start_time=3, end_time=6 )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 3
@@ -274,8 +274,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
             | Start time:................. 3
             | End time:................... 6
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=4 )
+           >>> A = TemporalExtent(start_time=5, end_time=8 )
+           >>> B = TemporalExtent(start_time=3, end_time=4 )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 3
@@ -284,8 +284,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            >>> inter.print_info()
             | Start time:................. 3
             | End time:................... 8
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=None )
+           >>> A = TemporalExtent(start_time=5, end_time=8 )
+           >>> B = TemporalExtent(start_time=3, end_time=None )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 3
@@ -294,8 +294,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            >>> inter.print_info()
             | Start time:................. 3
             | End time:................... 8
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=None )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=8 )
+           >>> A = TemporalExtent(start_time=5, end_time=None )
+           >>> B = TemporalExtent(start_time=3, end_time=8 )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 3
@@ -304,8 +304,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
            >>> inter.print_info()
             | Start time:................. 3
             | End time:................... 8
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=None )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=None )
+           >>> A = TemporalExtent(start_time=5, end_time=None )
+           >>> B = TemporalExtent(start_time=3, end_time=None )
            >>> inter = A.disjoint_union(B)
            >>> inter.print_info()
             | Start time:................. 3
@@ -384,8 +384,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
                                           unit=self.get_unit())
         elif issubclass(type(self), AbsoluteTemporalExtent):
             return AbsoluteTemporalExtent(start_time=start, end_time=end)
-        elif issubclass(type(self), AbstractTemporalExtent):
-            return AbstractTemporalExtent(start_time=start, end_time=end)
+        elif issubclass(type(self), TemporalExtent):
+            return TemporalExtent(start_time=start, end_time=end)
 
     def union(self, extent):
         """!Creates a union with this temporal extent and the provided one.
@@ -397,14 +397,14 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=4 )
+           >>> A = TemporalExtent(start_time=5, end_time=8 )
+           >>> B = TemporalExtent(start_time=3, end_time=4 )
            >>> inter = A.intersect(B)
            >>> print inter
            None
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=None )
+           >>> A = TemporalExtent(start_time=5, end_time=8 )
+           >>> B = TemporalExtent(start_time=3, end_time=None )
            >>> inter = A.intersect(B)
            >>> print inter
            None
@@ -433,8 +433,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> A = TemporalExtent(start_time=5, end_time=6 )
+           >>> B = TemporalExtent(start_time=5, end_time=7 )
            >>> A.starts(B)
            True
            >>> B.starts(A)
@@ -465,8 +465,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> A = TemporalExtent(start_time=5, end_time=7 )
+           >>> B = TemporalExtent(start_time=5, end_time=6 )
            >>> A.started(B)
            True
            >>> B.started(A)
@@ -497,8 +497,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=6, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> A = TemporalExtent(start_time=6, end_time=7 )
+           >>> B = TemporalExtent(start_time=5, end_time=7 )
            >>> A.finishes(B)
            True
            >>> B.finishes(A)
@@ -529,8 +529,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=6, end_time=7 )
+           >>> A = TemporalExtent(start_time=5, end_time=7 )
+           >>> B = TemporalExtent(start_time=6, end_time=7 )
            >>> A.finished(B)
            True
            >>> B.finished(A)
@@ -561,8 +561,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=8, end_time=9 )
-           >>> B = AbstractTemporalExtent(start_time=6, end_time=7 )
+           >>> A = TemporalExtent(start_time=8, end_time=9 )
+           >>> B = TemporalExtent(start_time=6, end_time=7 )
            >>> A.after(B)
            True
            >>> B.after(A)
@@ -595,8 +595,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=6, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=8, end_time=9 )
+           >>> A = TemporalExtent(start_time=6, end_time=7 )
+           >>> B = TemporalExtent(start_time=8, end_time=9 )
            >>> A.before(B)
            True
            >>> B.before(A)
@@ -632,14 +632,14 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=7, end_time=9 )
+           >>> A = TemporalExtent(start_time=5, end_time=7 )
+           >>> B = TemporalExtent(start_time=7, end_time=9 )
            >>> A.adjacent(B)
            True
            >>> B.adjacent(A)
            True
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=5 )
+           >>> A = TemporalExtent(start_time=5, end_time=7 )
+           >>> B = TemporalExtent(start_time=3, end_time=5 )
            >>> A.adjacent(B)
            True
            >>> B.adjacent(A)
@@ -671,8 +671,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=3, end_time=5 )
+           >>> A = TemporalExtent(start_time=5, end_time=7 )
+           >>> B = TemporalExtent(start_time=3, end_time=5 )
            >>> A.follows(B)
            True
            >>> B.follows(A)
@@ -703,8 +703,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=7, end_time=9 )
+           >>> A = TemporalExtent(start_time=5, end_time=7 )
+           >>> B = TemporalExtent(start_time=7, end_time=9 )
            >>> A.precedes(B)
            True
            >>> B.precedes(A)
@@ -734,8 +734,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=4, end_time=9 )
+           >>> A = TemporalExtent(start_time=5, end_time=7 )
+           >>> B = TemporalExtent(start_time=4, end_time=9 )
            >>> A.during(B)
            True
            >>> B.during(A)
@@ -776,8 +776,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=4, end_time=9 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=8 )
+           >>> A = TemporalExtent(start_time=4, end_time=9 )
+           >>> B = TemporalExtent(start_time=5, end_time=8 )
            >>> A.contains(B)
            True
            >>> B.contains(A)
@@ -818,8 +818,8 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> A = TemporalExtent(start_time=5, end_time=6 )
+           >>> B = TemporalExtent(start_time=5, end_time=6 )
            >>> A.equal(B)
            True
            >>> B.equal(A)
@@ -856,15 +856,15 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=7 )
-           >>> B = AbstractTemporalExtent(start_time=6, end_time=8 )
+           >>> A = TemporalExtent(start_time=5, end_time=7 )
+           >>> B = TemporalExtent(start_time=6, end_time=8 )
            >>> A.overlaps(B)
            True
            >>> B.overlaps(A)
            False
 
-           >>> A = AbstractTemporalExtent(start_time=5, end_time=6 )
-           >>> B = AbstractTemporalExtent(start_time=6, end_time=8 )
+           >>> A = TemporalExtent(start_time=5, end_time=6 )
+           >>> B = TemporalExtent(start_time=6, end_time=8 )
            >>> A.overlaps(B)
            False
            >>> B.overlaps(A)
@@ -897,15 +897,15 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 
            @code
 
-           >>> A = AbstractTemporalExtent(start_time=6, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=7 )
+           >>> A = TemporalExtent(start_time=6, end_time=8 )
+           >>> B = TemporalExtent(start_time=5, end_time=7 )
            >>> A.overlapped(B)
            True
            >>> B.overlapped(A)
            False
 
-           >>> A = AbstractTemporalExtent(start_time=6, end_time=8 )
-           >>> B = AbstractTemporalExtent(start_time=5, end_time=6 )
+           >>> A = TemporalExtent(start_time=6, end_time=8 )
+           >>> B = TemporalExtent(start_time=5, end_time=6 )
            >>> A.overlapped(B)
            False
            >>> B.overlapped(A)
@@ -1046,25 +1046,25 @@ class AbstractTemporalExtent(SQLDatabaseInterface):
 ###############################################################################
 
 
-class AbsoluteTemporalExtent(AbstractTemporalExtent):
+class AbsoluteTemporalExtent(TemporalExtent):
     """!This is the absolute time class for all maps and spacetime datasets
 
         start_time and end_time must be of type datetime
     """
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
 
-        AbstractTemporalExtent.__init__(
+        TemporalExtent.__init__(
             self, table, ident, start_time, end_time)
 
     def print_info(self):
         """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Absolute time -----------------------------------------+"
-        AbstractTemporalExtent.print_info(self)
+        TemporalExtent.print_info(self)
 
     def print_shell_info(self):
         """!Print information about this class in shell style"""
-        AbstractTemporalExtent.print_shell_info(self)
+        TemporalExtent.print_shell_info(self)
 
 ###############################################################################
 
@@ -1212,7 +1212,7 @@ class STVDSAbsoluteTime(STDSAbsoluteTime):
 
 ###############################################################################
 
-class RelativeTemporalExtent(AbstractTemporalExtent):
+class RelativeTemporalExtent(TemporalExtent):
     """!This is the relative time class for all maps and space time datasets
 
         start_time and end_time must be of type integer
@@ -1247,7 +1247,7 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
     def __init__(self, table=None, ident=None, start_time=None, end_time=None,
                  unit=None):
 
-        AbstractTemporalExtent.__init__(
+        TemporalExtent.__init__(
             self, table, ident, start_time, end_time)
         self.set_unit(unit)
 
@@ -1287,7 +1287,7 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
         if self.D["unit"] != map.D["unit"]:
             return None
 
-        return AbstractTemporalExtent.temporal_relation(self, map)
+        return TemporalExtent.temporal_relation(self, map)
 
     # Properties
     unit = property(fget=get_unit, fset=set_unit)
@@ -1296,12 +1296,12 @@ class RelativeTemporalExtent(AbstractTemporalExtent):
         """!Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Relative time -----------------------------------------+"
-        AbstractTemporalExtent.print_info(self)
+        TemporalExtent.print_info(self)
         print " | Relative time unit:......... " + str(self.get_unit())
 
     def print_shell_info(self):
         """!Print information about this class in shell style"""
-        AbstractTemporalExtent.print_shell_info(self)
+        TemporalExtent.print_shell_info(self)
         print "unit=" + str(self.get_unit())
 
 ###############################################################################

@@ -131,7 +131,7 @@ def main():
             else:
                 # We need to update all datasets after the removement of maps
                 map.metadata.select(dbif)
-                datasets = map.get_registered_datasets(dbif)
+                datasets = map.get_registered_stds(dbif)
                 # Store all unique dataset ids in a dictionary
                 if datasets:
                     for dataset in datasets:
