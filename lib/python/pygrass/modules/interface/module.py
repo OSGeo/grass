@@ -373,7 +373,7 @@ class Module(object):
                 if ((k in self.inputs and self.inputs[k].value is None) or
                         (k in self.outputs and self.outputs[k].value is None)):
                     msg = "Required parameter <%s> not set."
-                    raise ParameterError(msg % key)
+                    raise ParameterError(msg % k)
             return self.run()
 
 
