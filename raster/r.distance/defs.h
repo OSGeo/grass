@@ -52,6 +52,9 @@ struct Parms
     char *fs;			/* report field separator     */
     int overlap;		/* checking for overlapping, than distance is 0 */
     int null;			/* report null objects as * */
+    int sort;			/* 0: sort by cat1,cat2 (default)
+				   1: sort by distance in ascending order
+				   2: sort by distance in descending order */
 };
 
 /* distance.c */
