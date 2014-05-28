@@ -28,6 +28,83 @@ from open_stds import *
 
 ###############################################################################
 
+def get_dataset_list(type,  temporal_type,  columns=None,  where=None,  order=None):
+    """! Return a list of time stamped maps or space time datasets of a specific temporal type
+         that are registred in the temporal database
+    
+         This method returns a dictionary, the keys are the available mapsets, 
+         the values are the rows from the SQL database query.
+
+        @param type The type of the datasets (strds, str3ds, stvds, rast, rast3d, vect)
+        @param temporal_type The temporal type of the datasets (absolute, relative)
+        @param columns A comma separated list of columns that will be selected
+        @param where A where statement for selected listing without "WHERE"
+        @param order A comma separated list of columns to order the
+                               datasets by category
+                      
+        @return A dictionary with the rows of the SQL query for each available mapset
+        
+        >>> import grass.temporal as tgis
+        >>> tgis.init()
+        >>> name = "list_stds_test"
+        >>> sp = tgis.open_new_space_time_dataset(name=name, type="strds", 
+        ... temporaltype="absolute", title="title", descr="descr", semantic="mean", dbif=None, overwrite=True)
+        >>> mapset = tgis.get_current_mapset()
+        >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name")
+        >>> rows =  stds_list[mapset]
+        >>> for row in rows:
+        ...     if row["name"] == name:
+        ...         print True
+        True
+        >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
+        >>> rows =  stds_list[mapset]
+        >>> for row in rows:
+        ...     if row["name"] == name and row["mapset"] == mapset:
+        ...         print True
+        True
+        >>> check = sp.delete()
+    """
+    id = None
+    sp = dataset_factory(type, id)
+
+    dbif = SQLDatabaseInterfaceConnection()
+    dbif.connect()
+    
+    mapsets = get_tgis_c_library_interface().available_mapsets()
+    
+    result = {}
+    
+    for mapset in mapsets:
+        
+        if temporal_type == "absolute":
+            table = sp.get_type() + "_view_abs_time"
+        else:
+            table = sp.get_type() + "_view_rel_time"
+
+        if columns and columns.find("all") == -1:
+            sql = "SELECT " + str(columns) + " FROM " + table
+        else:
+            sql = "SELECT * FROM " + table
+
+        if where:
+            sql += " WHERE " + where
+            sql += " AND mapset = '%s'"%(mapset)
+        else:
+            sql += " WHERE mapset = '%s'"%(mapset)
+
+        if order:
+            sql += " ORDER BY " + order
+
+        dbif.cursor.execute(sql)
+        rows = dbif.cursor.fetchall()
+        
+        if rows:
+            result[mapset] = rows
+        
+    return result
+        
+###############################################################################
+
 def list_maps_of_stds(type, input, columns, order, where, separator, method, header, gran=None):
     """! List the maps of a space time dataset using diffetent methods
 
@@ -35,7 +112,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
         @param input Name of a space time raster dataset
         @param columns A comma separated list of columns to be printed to stdout
         @param order A comma separated list of columns to order the
-                      space time dataset by category
+                      maps by category
         @param where A where statement for selected listing without "WHERE"
                       e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
         @param separator The field separator character between the columns
@@ -185,3 +262,9 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                     print output
     if connected:
         dbif.close()
+
+###############################################################################
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

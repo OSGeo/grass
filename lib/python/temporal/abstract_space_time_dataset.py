@@ -1810,7 +1810,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                                          dbif=dbif)
 
             # Save the datasets that must be updated
-            datasets = map.get_registered_datasets(dbif)
+            datasets = map.get_registered_stds(dbif)
             if datasets:
                 for dataset in datasets:
                     datatsets_to_modify[dataset] = dataset
@@ -1882,8 +1882,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # We need to rename the space time dataset in the maps register table
         if maps:
             for map in maps:
-                map.remove_dataset_from_register(stds_id=old_ident, dbif=dbif)
-                map.add_dataset_to_register(stds_id=ident, dbif=dbif)
+                map.remove_stds_from_register(stds_id=old_ident, dbif=dbif)
+                map.add_stds_to_register(stds_id=ident, dbif=dbif)
 
         # Execute the accumulated statements
         dbif.execute_transaction(statement)
@@ -2111,7 +2111,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             return False
 
         # Register the stds in the map stds register table column
-        statement += map.add_dataset_to_register(stds_id=self.base.get_id(),
+        statement += map.add_stds_to_register(stds_id=self.base.get_id(),
                                                  dbif=dbif, execute=False)
 
         # Now put the raster name in the stds map register table
@@ -2179,7 +2179,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Remove the space time dataset from the dataset register
         # We need to execute the statement here, otherwise the space time dataset will not be
         # removed correctly
-        map.remove_dataset_from_register(self.base.get_id(),
+        map.remove_stds_from_register(self.base.get_id(),
                                                       dbif=dbif, execute=True)
 
         # Remove the map from the space time dataset register

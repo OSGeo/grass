@@ -301,7 +301,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
                         m = copy.deepcopy(self.m_mapcalc)
                         m_expression = newident + "=" + map_i.cmd_list
-                        m.inputs["expression"].value = m_expression
+                        m.inputs["expression"].value = str(m_expression)
                         m.flags["overwrite"].value = self.overwrite
                         process_queue.put(m)
                     else:

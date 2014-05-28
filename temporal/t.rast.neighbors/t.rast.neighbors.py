@@ -135,7 +135,7 @@ def main():
         new_maps.append(new_map)
 
         mod = copy.deepcopy(neighbor_module)
-        mod(input=map.get_id(), output=new_map.get_id())
+        mod(input=str(map.get_id()), output=str(new_map.get_id()))
         print(mod.get_bash())
         process_queue.put(mod)
 
