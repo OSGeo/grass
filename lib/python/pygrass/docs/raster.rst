@@ -1,7 +1,7 @@
 .. _raster-label:
 
-Raster
-======
+Introduction on Raster
+===========================
 
 PyGRASS uses 4 different Raster classes, that respect the 4 different approaches
 of GRASS-C API.

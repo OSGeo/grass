@@ -143,7 +143,8 @@ class Attrs(object):
             # update condition
             self.cond = "%s=%d" % (self.table.key, value)
 
-    cat = property(fget=_get_cat, fset=_set_cat)
+    cat = property(fget=_get_cat, fset=_set_cat,
+                   doc="Set and obtain cat value")
 
     def __getitem__(self, key):
         """Return the value stored in the attribute table. ::
@@ -342,7 +343,8 @@ class Point(Geo):
     def _set_x(self, value):
         self.c_points.contents.x[0] = value
 
-    x = property(fget=_get_x, fset=_set_x)
+    x = property(fget=_get_x, fset=_set_x,
+                 doc="Set and obtain x coordinate")
 
     def _get_y(self):
         return self.c_points.contents.y[0]
@@ -350,7 +352,8 @@ class Point(Geo):
     def _set_y(self, value):
         self.c_points.contents.y[0] = value
 
-    y = property(fget=_get_y, fset=_set_y)
+    y = property(fget=_get_y, fset=_set_y,
+                 doc="Set and obtain y coordinate")
 
     def _get_z(self):
         if self.is2D:
@@ -365,7 +368,8 @@ class Point(Geo):
             self.c_points.contents.z[0] = value
             self.is2D = False
 
-    z = property(fget=_get_z, fset=_set_z)
+    z = property(fget=_get_z, fset=_set_z,
+                 doc="Set and obtain z coordinate")
 
     def __str__(self):
         return self.get_wkt()
@@ -429,7 +433,10 @@ class Point(Geo):
     def distance(self, pnt):
         """Calculate distance of 2 points, using the Vect_points_distance
         C function, If one of the point have z == None, return the 2D distance.
-        ::
+
+        :param pnt: the point for calculate the distance
+        :type pnt: a Point object or a tuple with the coordinates
+
 
             >>> pnt0 = Point(0, 0, 0)
             >>> pnt1 = Point(1, 0)
@@ -441,8 +448,6 @@ class Point(Geo):
             >>> pnt0.distance(pnt1)
             1.4142135623730951
 
-        The distance method require a :class:Point or a tuple with
-        the coordinates.
         """
         if self.is2D or pnt.is2D:
             return libvect.Vect_points_distance(self.x, self.y, 0,
@@ -456,31 +461,21 @@ class Point(Geo):
         """Return the buffer area around the point, using the
         ``Vect_point_buffer2`` C function.
 
-        Parameters
-        ----------
-        dist : numeric
-            The distance around the line.
-        dist_x: numeric, optional
-            The distance along x
-        dist_y: numeric, optional
-            The distance along y
-        angle: numeric, optional
-            The angle between 0x and major axis
-        round_: bool, optional
-            To make corners round
-        tol: float, optional
-            Fix the maximum distance between theoretical arc
-            and output segments
+        :param dist: the distance around the point
+        :type dist: num
+        :param dist_x: the distance along x
+        :type dist_x: num
+        :param dist_y: the distance along y
+        :type dist_y: num
+        :param angle: the angle between 0x and major axis
+        :type angle: num
+        :param round_: to make corners round
+        :type round_: bool
+        :param tol: fix the maximum distance between theoretical arc and
+                    output segments
+        :type tol: float
+        :returns: the buffer as Area object
 
-        Returns
-        -------
-        buffer : Area
-            The buffer area around the line.
-
-        Example
-        ---------
-
-        ::
             >>> pnt = Point(0, 0)
             >>> area = pnt.buffer(10)
             >>> area.boundary                              #doctest: +ELLIPSIS
@@ -623,7 +618,10 @@ class Line(Geo):
 
     def append(self, pnt):
         """Appends one point to the end of a line, using the
-        ``Vect_append_point`` C function. ::
+        ``Vect_append_point`` C function.
+        
+        :param pnt: the point to add to line
+        :type pnt: a Point object or a tuple with the coordinates
 
             >>> line = Line()
             >>> line.append((10, 100))
@@ -656,11 +654,13 @@ class Line(Geo):
     def extend(self, line, forward=True):
         """Appends points to the end of a line.
 
-        It is possible to extend a line, give a list of points, or directly
-        with a line_pnts struct.
-
-        If forward is True the line is extend forward otherwise is extend
-        backward. The method use the `Vect_append_points` C function. ::
+        :param line: it is possible to extend a line, give a list of points,
+                     or directly with a line_pnts struct.
+        :type line: Line object ot list of points
+        :param forward: if forward is True the line is extend forward otherwise
+                        is extend backward. The method use the
+                        `Vect_append_points` C function.
+        :type forward: bool
 
             >>> line = Line([(0, 0), (1, 1)])
             >>> line.extend( Line([(2, 2), (3, 3)]) )
@@ -670,8 +670,6 @@ class Line(Geo):
                   Point(2.000000, 2.000000),
                   Point(3.000000, 3.000000)])
 
-        Like python list, it is possible to extend a line, with another line
-        or with a list of points.
         """
         # set direction
         if forward:
@@ -694,7 +692,12 @@ class Line(Geo):
     def insert(self, indx, pnt):
         """Insert new point at index position and move all old points at
         that position and above up, using ``Vect_line_insert_point``
-        C function. ::
+        C function.
+
+        :param indx: the index where add new point
+        :type indx: int
+        :param pnt: the point to add
+        :type pnt: a Point object
 
             >>> line = Line([(0, 0), (1, 1)])
             >>> line.insert(0, Point(1.000000, -1.000000) )
@@ -703,7 +706,6 @@ class Line(Geo):
                   Point(0.000000, 0.000000),
                   Point(1.000000, 1.000000)])
 
-        ..
         """
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
@@ -737,7 +739,12 @@ class Line(Geo):
         return libvect.Vect_line_geodesic_length(self.c_points)
 
     def distance(self, pnt):
-        """Return a tuple with:
+        """Calculate the distance between line and a point. 
+        
+        :param pnt: the point to calculate distance
+        :type pnt: a Point object or a tuple with the coordinates
+        
+        Return a tuple with:
 
             * the closest point on the line,
             * the distance between these two points,
@@ -746,15 +753,10 @@ class Line(Geo):
 
         The distance is compute using the ``Vect_line_distance`` C function.
 
-        Example
-        ---------
-
-        ::
             >>> line = Line([(0, 0), (0, 2)])
             >>> line.distance(Point(1, 1))
             (Point(0.000000, 1.000000), 1.0, 1.0, 1.0)
 
-        ..
         """
         # instantite outputs
         cx = ctypes.c_double(0)
@@ -789,7 +791,10 @@ class Line(Geo):
         pass
 
     def pop(self, indx):
-        """Return the point in the index position and remove from the Line. ::
+        """Return the point in the index position and remove from the Line.
+
+           :param indx: the index where add new point
+           :type indx: int
 
             >>> line = Line([(0, 0), (1, 1), (2, 2)])
             >>> midle_pnt = line.pop(1)
@@ -798,7 +803,6 @@ class Line(Geo):
             >>> line
             Line([Point(0.000000, 0.000000), Point(2.000000, 2.000000)])
 
-        ..
         """
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
@@ -809,14 +813,15 @@ class Line(Geo):
         return pnt
 
     def delete(self, indx):
-        """Remove the point in the index position. ::
+        """Remove the point in the index position.
+           :param indx: the index where add new point
+           :type indx: int
 
             >>> line = Line([(0, 0), (1, 1), (2, 2)])
             >>> line.delete(-1)
             >>> line
             Line([Point(0.000000, 0.000000), Point(1.000000, 1.000000)])
 
-        ..
         """
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
@@ -841,7 +846,10 @@ class Line(Geo):
 
     def prune_thresh(self, threshold):
         """Remove points in threshold, using the ``Vect_line_prune_thresh``
-        C funtion. ::
+        C funtion.
+        
+        :param threshold: the threshold value where prune points
+        :type threshold: num
 
             >>> line = Line([(0, 0), (1.0, 1.0), (1.2, 0.9), (2, 2)])
             >>> line.prune_thresh(0.5)
@@ -858,7 +866,10 @@ class Line(Geo):
 
     def remove(self, pnt):
         """Delete point at given index and move all points above down, using
-        `Vect_line_delete_point` C function. ::
+        `Vect_line_delete_point` C function.
+        
+        :param pnt: the point to remove
+        :type pnt: a Point object or a tuple with the coordinates
 
             >>> line = Line([(0, 0), (1, 1), (2, 2)])
             >>> line.remove((2, 2))
@@ -889,7 +900,9 @@ class Line(Geo):
         libvect.Vect_line_reverse(self.c_points)
 
     def segment(self, start, end):
-        """Create line segment. using the ``Vect_line_segment`` C function."""
+        # TODO improve documentation
+        """Create line segment. using the ``Vect_line_segment`` C function.
+        """
         line = Line()
         libvect.Vect_line_segment(self.c_points, start, end, line.c_points)
         return line
@@ -933,7 +946,10 @@ class Line(Geo):
                for pnt in self.__iter__()])
 
     def from_wkt(self, wkt):
-        """Read a WKT string. ::
+        """Create a line reading a WKT string.
+
+        :param wkt: the WKT string containing the LINESTRING
+        :type wkt: str
 
             >>> line = Line()
             >>> line.from_wkt("LINESTRING(0 0,1 1,1 2)")
@@ -966,33 +982,21 @@ class Line(Geo):
         """Return the buffer area around the line, using the
         ``Vect_line_buffer2`` C function.
 
-        Parameters
-        ----------
-        dist : numeric
-            The distance around the line.
-        dist_x: numeric, optional
-            The distance along x
-        dist_y: numeric, optional
-            The distance along y
-        angle: numeric, optional
-            The angle between 0x and major axis
-        round_: bool, optional
-            To make corners round
-        caps: bool, optional
-            To add caps at line ends
-        tol: float, optional
-            Fix the maximum distance between theoretical arc
-            and output segments
+        :param dist: the distance around the line
+        :type dist: num
+        :param dist_x: the distance along x
+        :type dist_x: num
+        :param dist_y: the distance along y
+        :type dist_y: num
+        :param angle: the angle between 0x and major axis
+        :type angle: num
+        :param round_: to make corners round
+        :type round_: bool
+        :param tol: fix the maximum distance between theoretical arc and
+                    output segments
+        :type tol: float
+        :returns: the buffer as Area object
 
-        Returns
-        -------
-        buffer : Area
-            The buffer area around the line.
-
-        Example
-        ---------
-
-        ::
             >>> line = Line([(0, 0), (0, 2)])
             >>> area = line.buffer(10)
             >>> area.boundary                              #doctest: +ELLIPSIS
@@ -1080,9 +1084,19 @@ class Boundary(Line):
                 return cntr
 
     def get_left_centroid(self, idonly=False):
+        """Return left value
+
+        :param idonly: True to return only the cat of feature
+        :type idonly: bool        
+        """
         return self._get_centroid(self.left_id, idonly)
 
     def get_right_centroid(self, idonly=False):
+        """Return right value
+
+        :param idonly: True to return only the cat of feature
+        :type idonly: bool
+        """
         return self._get_centroid(self.left_id, idonly)
 
     def get_left_right(self):
@@ -1094,13 +1108,13 @@ class Boundary(Line):
 
     def area(self):
         """Return the area of the polygon.
-        ::
+
             >>> bound = Boundary(points=[(0, 0), (0, 2), (2, 2), (2, 0),
             ...                          (0, 0)])
             >>> bound.area()
             4.0
 
-        .."""
+        """
         libgis.G_begin_polygon_area_calculations()
         return libgis.G_area_of_polygon(self.c_points.contents.x,
                                         self.c_points.contents.y,
@@ -1170,12 +1184,14 @@ class Isle(Geo):
         return "Isle(%d)" % (self.id)
 
     def boundaries(self):
+        """Return a list of boundaries"""
         ilist = Ilist()
         libvect.Vect_get_isle_boundaries(self.c_mapinfo, self.id,
                                          ilist.c_ilist)
         return ilist
 
     def bbox(self, bbox=None):
+        """Return bounding box of Isle"""
         bbox = bbox if bbox else Bbox()
         libvect.Vect_get_isle_box(self.c_mapinfo, self.id, bbox.c_bbox)
         return bbox
@@ -1200,7 +1216,11 @@ class Isle(Geo):
         return bool(libvect.Vect_isle_alive(self.c_mapinfo, self.id))
 
     def contain_pnt(self, pnt):
-        """Check if point is in area."""
+        """Check if point is in area.
+
+        :param pnt: the point to remove
+        :type pnt: a Point object or a tuple with the coordinates
+        """
         bbox = self.bbox()
         return bool(libvect.Vect_point_in_island(pnt.x, pnt.y,
                                                  self.c_mapinfo, self.id,
@@ -1245,15 +1265,22 @@ class Isles(object):
         return self._isles[key]
 
     def get_isles_id(self):
+        """Return the id of isles"""
         return [libvect.Vect_get_area_isle(self.c_mapinfo, self.area_id, i)
                 for i in range(self.__len__())]
 
     def get_isles(self):
+        """Return isles"""
         return [Isle(v_id=isle_id, c_mapinfo=self.c_mapinfo)
                 for isle_id in self._isles_id]
 
     def select_by_bbox(self, bbox):
-        """Vect_select_isles_by_box"""
+        """Vect_select_isles_by_box
+
+        .. warning::
+
+            Not implemented yet.
+        """
         pass
 
 
@@ -1309,12 +1336,21 @@ class Area(Geo):
         self.get_isles()
 
     def get_points(self, line=None):
-        """Return a Line object with the outer ring"""
+        """Return a Line object with the outer ring
+
+        :param line: a Line object to fill with info from points of area
+        :type line: a Line object
+        """
         line = Line() if line is None else line
         libvect.Vect_get_area_points(self.c_mapinfo, self.id, line.c_points)
         return line
 
     def get_centroid(self, centroid=None):
+        """Return the centroid
+
+        :param centroid: a Centroid object to fill with info from centroid of area
+        :type centroid: a Centroid object
+        """
         centroid_id = libvect.Vect_get_area_centroid(self.c_mapinfo, self.id)
         if centroid:
             centroid.id = centroid_id
@@ -1346,8 +1382,10 @@ class Area(Geo):
         return bool(libvect.Vect_area_alive(self.c_mapinfo, self.id))
 
     def bbox(self, bbox=None):
-        """
-        Vect_get_area_box
+        """Return the Bbox of area
+
+        :param bbox: a Bbox object to fill with info from bounding box of area
+        :type bbox: a Bbox object
         """
         bbox = bbox if bbox else Bbox()
         libvect.Vect_get_area_box(self.c_mapinfo, self.id, bbox.c_bbox)
@@ -1358,28 +1396,20 @@ class Area(Geo):
         """Return the buffer area around the area, using the
         ``Vect_area_buffer2`` C function.
 
-        Parameters
-        ----------
-        dist : numeric
-            The distance around the line.
-        dist_x: numeric, optional
-            The distance along x
-        dist_y: numeric, optional
-            The distance along y
-        angle: numeric, optional
-            The angle between 0x and major axis
-        round_: bool, optional
-            To make corners round
-        caps: bool, optional
-            To add caps at line ends
-        tol: float, optional
-            Fix the maximum distance between theoretical arc
-            and output segments
-
-        Returns
-        -------
-        buffer : Area
-            The buffer area around the line.
+        :param dist: the distance around the area
+        :type dist: num
+        :param dist_x: the distance along x
+        :type dist_x: num
+        :param dist_y: the distance along y
+        :type dist_y: num
+        :param angle: the angle between 0x and major axis
+        :type angle: num
+        :param round_: to make corners round
+        :type round_: bool
+        :param tol: fix the maximum distance between theoretical arc and
+                    output segments
+        :type tol: float
+        :returns: the buffer as Area object
 
         """
         if dist is not None:
@@ -1415,8 +1445,9 @@ class Area(Geo):
 
     def cats(self, cats=None):
         """Get area categories.
-        int Vect_get_area_cats (const struct Map_info *Map,
-                                int area, struct line_cats *Cats)
+
+        :param cats: a Cats object to fill with info with area categories
+        :type cats: a Cats object
         """
         cats = cats if cats else Cats()
         libvect.Vect_get_area_cats(self.c_mapinfo, self.id, cats.c_cats)
@@ -1431,9 +1462,11 @@ class Area(Geo):
 
     def contain_pnt(self, pnt, bbox=None):
         """Check if point is in area.
-        int Vect_point_in_area(double x, double y,
-                               const struct Map_info *Map,
-                               int area, struct bound_box box)
+
+        :param pnt: the point to analyze 
+        :type pnt: a Point object or a tuple with the coordinates
+        :param bbox: the bounding box where run the analysis
+        :type bbox: a Bbox object
         """
         bbox = bbox if bbox else self.bbox()
         return bool(libvect.Vect_point_in_area(pnt.x, pnt.y,

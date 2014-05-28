@@ -40,7 +40,7 @@ _NUMOF = {"areas": libvect.Vect_get_num_areas,
 #=============================================
 
 class Vector(Info):
-    """ ::
+    """Vector class is the grass vector format without topology
 
         >>> from grass.pygrass.vector import Vector
         >>> cens = Vector('census')
@@ -55,7 +55,6 @@ class Vector(Info):
         >>> cens.overwrite
         False
 
-    ..
     """
     def __init__(self, name, mapset='', *args, **kwargs):
         # Set map name and mapset
@@ -103,6 +102,7 @@ class Vector(Info):
 
     @must_be_open
     def rewind(self):
+        """Rewind vector map to cause reads to start at beginning."""
         if libvect.Vect_rewind(self.c_mapinfo) == -1:
             raise GrassError("Vect_rewind raise an error.")
 
@@ -110,21 +110,17 @@ class Vector(Info):
     def write(self, geo_obj, attrs=None, set_cats=True):
         """Write geometry features and attributes.
 
-        Parameters
-        ----------
-
-        geo_obj : geometry GRASS object
-            A geometry grass object define in grass.pygrass.vector.geometry.
-        attrs: list, optional
-            A list with the values that will be insert in the attribute table.
-        set_cats, bool, optional
-            If True, the category of the geometry feature is set using the
-            default layer of the vector map and a progressive category value
-            (default), otherwise the c_cats attribute of the geometry object
-            will be used.
-
-        Examples
-        --------
+        :param geo_obj: a geometry grass object define in
+                        grass.pygrass.vector.geometry
+        :type geo_obj: geometry GRASS object        
+        :param attrs: a list with the values that will be insert in the
+                      attribute table.
+        :type attrs: list
+        :param set_cats: if True, the category of the geometry feature is set
+                         using the default layer of the vector map and a
+                         progressive category value (default), otherwise the
+                         c_cats attribute of the geometry object will be used.
+        :type set_cats: bool
 
         Open a new vector map ::
 
@@ -175,7 +171,6 @@ class Vector(Info):
             >>> new.close()
             >>> new.remove()
 
-        ..
         """
         self.n_lines += 1
         if self.table is not None and attrs:
@@ -208,8 +203,6 @@ class Vector(Info):
         """Return if vector has color table associated in file system;
         Color table stored in the vector's attribute table well be not checked
 
-        Examples
-        --------
         >>> cens = Vector('census')
         >>> cens.open()
         >>> cens.has_color_table()
@@ -252,6 +245,7 @@ class VectorTopo(Vector):
         >>> schools.is_open()
         False
 
+    ..
     """
     def __init__(self, name, mapset='', *args, **kwargs):
         super(VectorTopo, self).__init__(name, mapset, *args, **kwargs)
@@ -284,16 +278,20 @@ class VectorTopo(Vector):
 
     @must_be_open
     def num_primitive_of(self, primitive):
-        """Primitive are:
+        """Return the number of primitive
 
-            * "boundary",
-            * "centroid",
-            * "face",
-            * "kernel",
-            * "line",
-            * "point"
-            * "area"
-            * "volume"
+        :param primitive: the name of primitive to query; the supported values are:
+
+                            * *boundary*,
+                            * *centroid*,
+                            * *face*,
+                            * *kernel*,
+                            * *line*,
+                            * *point*
+                            * *area*
+                            * *volume*
+
+        :type primitive: str
 
         ::
 
@@ -316,10 +314,13 @@ class VectorTopo(Vector):
 
     @must_be_open
     def number_of(self, vtype):
-        """
-        vtype in ["areas", "dblinks", "faces", "holes", "islands", "kernels",
-                  "line_points", "lines", "nodes", "update_lines",
-                  "update_nodes", "volumes"]
+        """Return the number of the choosen element type
+
+        :param vtype: the name of type to query; the supported values are:
+                      *areas*, *dblinks*, *faces*, *holes*, *islands*,
+                      *kernels*, *line_points*, *lines*, *nodes*,
+                      *update_lines*, *update_nodes*, *volumes*
+        :type vtype: str
 
             >>> cens = VectorTopo('boundary_municp_sqlite')
             >>> cens.open()
@@ -365,7 +366,15 @@ class VectorTopo(Vector):
     def viter(self, vtype, idonly=False):
         """Return an iterator of vector features
 
-        ::
+        :param vtype: the name of type to query; the supported values are:
+                      *areas*, *dblinks*, *faces*, *holes*, *islands*,
+                      *kernels*, *line_points*, *lines*, *nodes*,
+                      *update_lines*, *update_nodes*, *volumes*
+        :type vtype: str
+        :param idonly: variable to return only the id of features instead of
+                       full features
+        :type idonly: bool
+
             >>> cens = VectorTopo('census')
             >>> cens.open()
             >>> big = [area for area in cens.viter('areas')
@@ -385,7 +394,6 @@ class VectorTopo(Vector):
             Area(2552) 298356117.948
             >>> cens.close()
 
-        ..
         """
         if vtype in _GEOOBJ.keys():
             if _GEOOBJ[vtype] is not None:
@@ -425,16 +433,15 @@ class VectorTopo(Vector):
     def cat(self, cat_id, vtype, layer=None, generator=False, geo=None):
         """Return the geometry features with category == cat_id.
 
-        Parameters
-        ----------
-        cat_id : integer
-            Integer with the category number.
-        vtype : string
-            String of the type of geometry feature that we are looking for.
-        layer : integer, optional
-            Integer of the layer that will be used.
-        generator : bool, optional
-            If True return a generator otherwise it return a list of features.
+        :param cat_id: the category number
+        :type cat_id: int
+        :param vtype: the type of geometry feature that we are looking for
+        :type vtype: str
+        :param layer: the layer number that will be used
+        :type layer: int
+        :param generator: if True return a generator otherwise it return a
+                          list of features
+        :type generator: bool
         """
         if geo is None and vtype not in _GEOOBJ:
             keys = "', '".join(sorted(_GEOOBJ.keys()))
@@ -455,7 +462,11 @@ class VectorTopo(Vector):
 
     @must_be_open
     def read(self, feature_id):
-        """Return a geometry object given the feature id. ::
+        """Return a geometry object given the feature id.
+
+            :param feature_id: the id of feature to obtain
+            :type feature_id: int
+
 
             >>> mun = VectorTopo('boundary_municp_sqlite')
             >>> mun.open()
@@ -480,7 +491,6 @@ class VectorTopo(Vector):
             IndexError: Index out of range
             >>> mun.close()
 
-        ..
         """
         return read_line(feature_id, self.c_mapinfo, self.table, self.writable)
 
@@ -504,7 +514,9 @@ class VectorTopo(Vector):
             attr = [line, ]
             attr.extend(attrs)
             self.table.update(key=line, values=attr)
-
+        elif self.table is None and attrs:
+            print "Table for vector {name} does not exist, attributes not" \
+                  " loaded".format(name=self.name) 
         libvect.Vect_cat_set(geo_obj.c_cats, self.layer, line)
         result = libvect.Vect_rewrite_line(self.c_mapinfo,
                                            line, geo_obj.gtype,
@@ -518,6 +530,11 @@ class VectorTopo(Vector):
 
     @must_be_open
     def delete(self, feature_id):
+        """Remove a feature by its id
+
+        :param feature_id: the id of the feature
+        :type feature_id: int
+        """
         if libvect.Vect_rewrite_line(self.c_mapinfo, feature_id) == -1:
             raise GrassError("C funtion: Vect_rewrite_line.")
 
@@ -541,8 +558,9 @@ class VectorTopo(Vector):
 
     @must_be_open
     def select_by_bbox(self, bbox):
-        """Return the BBox of the vecor map
+        """Return the BBox of the vector map
         """
+        # TODO replace with bbox if bbox else Bbox() ??
         bbox = Bbox()
         if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
             raise GrassError("I can not find the Bbox.")
