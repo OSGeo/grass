@@ -642,6 +642,7 @@ struct Format_info_pg
       V1_close_pg().
     */
     dbDriver *dbdriver;
+    struct field_info *fi;
 
     /*!
       \brief Start/Finish transaction
