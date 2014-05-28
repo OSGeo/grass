@@ -5,8 +5,8 @@ wildcards or POSIX Extended Regular Expressions. It is is an extended
 version of <em><a href="g.list.html">g.list</a></em>.
 
 <p>
-See also the <em>g.list</em> help page for discussion of some module
-options.
+See also the <em><a href="g.list.html">g.list</a></em> help page for
+discussion of some module options.
 
 <h2>NOTES</h2>
 
@@ -26,7 +26,52 @@ List all raster and vector maps:
 g.mlist type=rast,vect
 </pre></div>
 
-<h3>Wildcards:</h3>
+<h3>Mapset search path</h3>
+
+If <b>mapset</b> is not specified than <em>g.mlist</em> searches for
+data files in the mapsets which are included in the search path
+(defined by <em><a href="g.mapsets.html">g.mapsets</a></em>),
+see <tt>g.mapsets -p</tt>.
+
+<div class="code"><pre>
+g.mlist rast
+
+raster map(s) available in mapset &lt;user1&gt;:
+dmt
+...
+raster map(s) available in mapset &lt;PERMANENT&gt;:
+aspect
+...
+</pre></div>
+
+By option <b>mapset</b>=. (one dot) can be listed only data files from
+the current mapset:
+
+<div class="code"><pre>
+g.mlist rast mapset=.
+raster map(s) available in mapset &lt;user1&gt;:
+dmt
+</pre></div>
+
+Similarly <b>mapset</b>=.. (two dots) prints data files from all
+available mapsets also including those which are not listed in the
+current search path (see <tt>g.mapsets -l</tt>).
+
+<div class="code"><pre>
+g.mlist rast mapset=..
+
+raster map(s) available in mapset &lt;landsat&gt;:
+lsat5_1987_10
+...
+raster map(s) available in mapset &lt;user1&gt;:
+dmt
+...
+raster map(s) available in mapset &lt;PERMANENT&gt;:
+aspect
+...
+</pre></div>
+
+<h3>Wildcards</h3>
 
 List all vector maps starting with letter "r":
 <div class="code"><pre>
@@ -38,7 +83,7 @@ List certain raster maps with one variable character/number:
 g.mlist type=rast pattern="N45E00?.meters"
 </pre></div>
 
-Use of <em>exclude</em> parameter:
+Use of <b>exclude</b> parameter:
 <div class="code"><pre>
 # without exclude:
   g.mlist rast pat="r*" mapset=PERMANENT
@@ -59,30 +104,29 @@ Use of <em>exclude</em> parameter:
   rushmore
 </pre></div>
 
-<h3>Regular expressions:</h3>
+<h3>Regular expressions</h3>
 
-List all soil maps starting with "soils" in their name:
+List all soil maps starting with &quot;soils&quot; in their name:
 <div class="code"><pre>
 g.mlist -r type=rast pattern='^soils'
 </pre></div>
 
-List "tmp" if "tmp" raster map exists:
+List &quot;tmp&quot; if &quot;tmp&quot; raster map exists:
 <div class="code"><pre>
 g.mlist -r pattern='^tmp$'
 </pre></div>
 
-List "tmp0" ..."tmp9" if corresponding vector map exists (each map name linewise):
+List &quot;tmp0&quot; ...&quot;tmp9&quot; if corresponding vector map exists (each map name linewise):
 <div class="code"><pre>
 g.mlist -r type=vect pattern='^tmp[0-9]$'
 </pre></div>
 
-List "tmp0" ..."tmp9" if corresponding vector map exists (each map name comma separated):
+List &quot;tmp0&quot;...&quot;tmp9&quot; if corresponding vector map exists (each map name comma separated):
 <div class="code"><pre>
 g.mlist -r type=vect separator=comma pattern='^tmp[0-9]$'
 </pre></div>
 
-
-<h3>Extended regular expressions:</h3>
+<h3>Extended regular expressions</h3>
 
 List all precipitation maps for the years 1997-2012, comma separated:
 <div class="code"><pre>
