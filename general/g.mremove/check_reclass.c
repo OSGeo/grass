@@ -1,7 +1,5 @@
 #include <string.h>
-
 #include <grass/gis.h>
-#include <grass/manage.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
