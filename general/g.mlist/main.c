@@ -157,8 +157,19 @@ int main(int argc, char *argv[])
 	if (flag.regex->answer || flag.extended->answer)
 	    filter = G_ls_regex_filter(opt.pattern->answer, 0,
 			    	       (int)flag.extended->answer);
-	else
-	    filter = G_ls_glob_filter(opt.pattern->answer, 0);
+	else {
+	    /* handle individual map names */
+	    if (strchr(opt.pattern->answer, ',')) {
+		char *pattern;
+
+		pattern = (char *)G_malloc(strlen(opt.pattern->answer) + 3);
+		sprintf(pattern, "{%s}", opt.pattern->answer);
+
+		filter = G_ls_glob_filter(pattern, 0);
+	    }
+	    else
+		filter = G_ls_glob_filter(opt.pattern->answer, 0);
+	}
 	if (!filter)
 	    G_fatal_error(_("Unable to compile pattern <%s>"),
 			  opt.pattern->answer);
@@ -170,8 +181,19 @@ int main(int argc, char *argv[])
 	if (flag.regex->answer || flag.extended->answer)
 	    exclude = G_ls_regex_filter(opt.exclude->answer, 1,
 			    		(int)flag.extended->answer);
-	else
-	    exclude = G_ls_glob_filter(opt.exclude->answer, 1);
+	else {
+	    /* handle individual map names */
+	    if (strchr(opt.exclude->answer, ',')) {
+		char *pattern;
+
+		pattern = (char *)G_malloc(strlen(opt.exclude->answer) + 3);
+		sprintf(pattern, "{%s}", opt.exclude->answer);
+
+		exclude = G_ls_glob_filter(pattern, 1);
+	    }
+	    else
+		exclude = G_ls_glob_filter(opt.exclude->answer, 1);
+	}
 	if (!exclude)
 	    G_fatal_error(_("Unable to compile pattern <%s>"),
 			  opt.exclude->answer);
