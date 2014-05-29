@@ -24,9 +24,10 @@ while writing out the results directly in GeoTIFF:
 r.external terra_lst1km20030314.LST_Day.tif out=modis_celsius
 
 # define output directory for files resulting from GRASS calculation:
-r.external.out $HOME/gisoutput/
+r.external.out directory=$HOME/gisoutput/ format="GTiff"
 
-# do something (here: extract pixels &gt; 20°C), write output directly as GeoTIFF:
+# perform GRASS calculation (here: extract pixels &gt; 20 deg C)
+# write output directly as GeoTIFF:
 r.mapcalc "warm.tif = if(modis_celsius &gt; 20, modis_celsius, null() )"
 
 # cease GDAL output connection and turn back to write GRASS raster files:
@@ -37,6 +38,7 @@ qgis $HOME/gisoutput/warm.tif
 </pre></div>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="r.in.gdal.html">r.in.gdal</a>,
 <a href="r.out.gdal.html">r.out.gdal</a>,
