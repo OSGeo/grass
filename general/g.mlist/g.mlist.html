@@ -78,6 +78,16 @@ List all vector maps starting with letter "r":
 g.mlist type=vect pattern="r*"
 </pre></div>
 
+List all vector maps starting with letter "r" or "a":
+<div class="code"><pre>
+g.mlist type=vect pattern="[ra]*"
+</pre></div>
+
+List all raster maps starting with "soil_" or "landuse_":
+<div class="code"><pre>
+g.mlist type=rast pattern="{soil,landuse}_*"
+</pre></div>
+
 List certain raster maps with one variable character/number:
 <div class="code"><pre>
 g.mlist type=rast pattern="N45E00?.meters"
