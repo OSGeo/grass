@@ -21,7 +21,9 @@ Contents:
    raster
    vector
    attributes
+   vector_database
    modules
+   gridmodules
    messages
 
 

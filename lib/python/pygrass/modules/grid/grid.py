@@ -25,36 +25,21 @@ from grass.pygrass.modules.grid.patch import rpatch_map
 def select(parms, ptype):
     """Select only a  certain type of parameters.
 
-    Parameters
-    ----------
+    :param parms: a DictType parameter with inputs or outputs of a Module class
+    :type parms: DictType parameters
+    :param ptype: String define the type of parameter that we want to select,
+                  valid ptype are: 'raster', 'vector', 'group'
+    :type ptype: str
+    :returns: An iterator with the value of the parameter.
 
-    params : DictType parameters
-        A DictType parameter with inputs or outputs of a Module class.
-    ptype : string
-        String define the type of parameter that we want to select,
-        valid ptype are: 'raster', 'vector', 'group'
-
-
-    Returns
-    -------
-
-    An iterator with the value of the parameter.
-
-
-    Examples
-    --------
-
-    ::
-
-        >>> slp = Module('r.slope.aspect',
-        ...              elevation='ele', slope='slp', aspect='asp',
-        ...              run_=False)
-        >>> for rast in select(slp.outputs, 'raster'):
-        ...     print rast
-        ...
-        slp
-        asp
-
+    >>> slp = Module('r.slope.aspect',
+    ...              elevation='ele', slope='slp', aspect='asp',
+    ...              run_=False)
+    >>> for rast in select(slp.outputs, 'raster'):
+    ...     print rast
+    ...
+    slp
+    asp
     """
     for k in parms:
         par = parms[k]
@@ -68,7 +53,13 @@ def select(parms, ptype):
 
 def copy_special_mapset_files(path_src, path_dst):
     """Copy all the special GRASS files that are contained in
-    a mapset to another mapset."""
+    a mapset to another mapset
+
+    :param path_src: the path to the original mapset
+    :type path_src: str
+    :param path_dst: the path to the new mapset
+    :type path_dst: str
+    """
     for fil in (fi for fi in os.listdir(path_src) if fi.isupper()):
         sht.copy(os.path.join(path_src, fil), path_dst)
 
@@ -76,42 +67,29 @@ def copy_special_mapset_files(path_src, path_dst):
 def copy_mapset(mapset, path):
     """Copy mapset to another place without copying raster and vector data.
 
-    Parameters
-    ----------
-
-    mapset : mapset_like
-        A Mapset instance.
-    path : string
-        Path where the new mapset must be copied.
+    :param mapset: a Mapset instance to copy
+    :type mapset: Mapset object
+    :param path: path where the new mapset must be copied
+    :type path: str
+    :returns: the instance of the new Mapset.
 
 
-    Returns
-    -------
-
-    The instance of the new Mapset.
-
-
-    Examples
-    --------
-
-    ::
-
-        >>> mset = Mapset()
-        >>> mset.name
-        'user1'
-        >>> import tempfile as tmp
-        >>> import os
-        >>> path = os.path.join(tmp.gettempdir(), 'my_loc', 'my_mset')
-        >>> copy_mapset(mset, path)
-        Mapset('user1')
-        >>> sorted(os.listdir(path))
-        [u'PERMANENT', u'user1']
-        >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
-        [u'DEFAULT_WIND', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
-        >>> sorted(os.listdir(os.path.join(path, 'user1')))
-        [u'CURGROUP', u'SEARCH_PATH', u'VAR', u'WIND']
-        >>> import shutil
-        >>> shutil.rmtree(path)
+    >>> mset = Mapset()
+    >>> mset.name
+    'user1'
+    >>> import tempfile as tmp
+    >>> import os
+    >>> path = os.path.join(tmp.gettempdir(), 'my_loc', 'my_mset')
+    >>> copy_mapset(mset, path)
+    Mapset('user1')
+    >>> sorted(os.listdir(path))
+    [u'PERMANENT', u'user1']
+    >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
+    [u'DEFAULT_WIND', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
+    >>> sorted(os.listdir(os.path.join(path, 'user1')))
+    [u'CURGROUP', u'SEARCH_PATH', u'VAR', u'WIND']
+    >>> import shutil
+    >>> shutil.rmtree(path)
 
     """
     per_old = os.path.join(mapset.gisdbase, mapset.location, 'PERMANENT')
@@ -132,14 +110,13 @@ def read_gisrc(gisrc):
     """Read a GISRC file and return a tuple with the mapset, location
     and gisdbase.
 
-    Examples
-    --------
+    :param gisrc: the path to GISRC file
+    :type gisrc: str
+    :returns: a tuple with the mapset, location and gisdbase
 
-    ::
-
-        >>> import os
-        >>> read_gisrc(os.environ['GISRC'])  # doctest: +ELLIPSIS
-        (u'user1', ...)
+    >>> import os
+    >>> read_gisrc(os.environ['GISRC'])  # doctest: +ELLIPSIS
+    (u'user1', ...)
     """
     with open(gisrc, 'r') as gfile:
         gis = dict([(k.strip(), v.strip())
@@ -150,18 +127,11 @@ def read_gisrc(gisrc):
 def get_mapset(gisrc_src, gisrc_dst):
     """Get mapset from a GISRC source to a GISRC destination.
 
-    Parameters
-    ----------
-
-    gisrc_src : path to the GISRC source
-
-    gisrc_dst : path to the GISRC destination
-
-
-    Returns
-    -------
-
-    A tuple with Mapset(src), Mapset(dst)
+    :param gisrc_src: path to the GISRC source
+    :type gisrc_src: str
+    :param gisrc_dst: path to the GISRC destination
+    :type gisrc_dst: str
+    :returns: a tuple with Mapset(src), Mapset(dst)
 
     """
     msrc, lsrc, gsrc = read_gisrc(gisrc_src)
@@ -180,27 +150,20 @@ def get_mapset(gisrc_src, gisrc_dst):
 
 
 def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
-    """Copy group from one mapset to another, crop the raster to the region.
+    """Copy group from one mapset to another, crop the raster to the region
 
-    Parameters
-    ----------
-
-    groups : list of strings
-        A list of strings with the group that must be copied
-        from a master to another.
-    gisrc_src : path to the GISRC source
-        Path of the GISRC file from where we want to copy the groups.
-    gisrc_dst : path to the GISRC destination
-        Path of the GISRC file where the groups will be created.
-    region : region_like or dictionary
-        A region like object or a dictionary with the region parameters that
-        will be used to crop the rasters of the groups.
-
-
-    Returns
-    -------
-
-    None.
+    :param groups: a list of strings with the group that must be copied
+                   from a master to another.
+    :type groups: list of strings
+    :param gisrc_src: path of the GISRC file from where we want to copy the groups
+    :type gisrc_src: str
+    :param gisrc_dst: path of the GISRC file where the groups will be created
+    :type gisrc_dst: str
+    :param region: a region like object or a dictionary with the region
+                   parameters that will be used to crop the rasters of the
+                   groups
+    :type region: Region object or dictionary
+    :returns: None
 
     """
     env = os.environ.copy()
@@ -233,24 +196,17 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
 def set_region(region, gisrc_src, gisrc_dst, env):
     """Set a region into two different mapsets.
 
-    Parameters
-    ----------
-
-    region : region_like or dictionary
-        A region like object or a dictionary with the region parameters that
-        will be used to crop the rasters.
-    gisrc_src : path to the GISRC source
-        Path of the GISRC file from where we want to copy the rasters.
-    gisrc_dst : path to the GISRC destination
-        Path of the GISRC file where the rasters will be created.
-    region : dictionary
-        A dictionary with the variable environment to use.
-
-
-    Returns
-    -------
-
-    None.
+    :param region: a region like object or a dictionary with the region
+                   parameters that will be used to crop the rasters of the
+                   groups
+    :type region: Region object or dictionary
+    :param gisrc_src: path of the GISRC file from where we want to copy the groups
+    :type gisrc_src: str
+    :param gisrc_dst: path of the GISRC file where the groups will be created
+    :type gisrc_dst: str
+    :param env:
+    :type env:
+    :returns: None
     """
     reg_str = "g.region n=%(north)r s=%(south)r " \
               "e=%(east)r w=%(west)r " \
@@ -265,25 +221,18 @@ def set_region(region, gisrc_src, gisrc_dst, env):
 def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
     """Copy rasters from one mapset to another, crop the raster to the region.
 
-    Parameters
-    ----------
-
-    rasters : list of strings
-        A list of strings with the raster map that must be copied
-        from a master to another.
-    gisrc_src : path to the GISRC source
-        Path of the GISRC file from where we want to copy the rasters.
-    gisrc_dst : path to the GISRC destination
-        Path of the GISRC file where the rasters will be created.
-    region : region_like or dictionary
-        A region like object or a dictionary with the region parameters that
-        will be used to crop the rasters.
-
-
-    Returns
-    -------
-
-    None.
+    :param rasters: a list of strings with the raster map that must be copied
+                    from a master to another.
+    :type rasters: list
+    :param gisrc_src: path of the GISRC file from where we want to copy the groups
+    :type gisrc_src: str
+    :param gisrc_dst: path of the GISRC file where the groups will be created
+    :type gisrc_dst: str
+    :param region: a region like object or a dictionary with the region
+                   parameters that will be used to crop the rasters of the
+                   groups
+    :type region: Region object or dictionary
+    :returns: None
     """
     env = os.environ.copy()
     if region:
@@ -316,21 +265,14 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
 def copy_vectors(vectors, gisrc_src, gisrc_dst):
     """Copy vectors from one mapset to another, crop the raster to the region.
 
-    Parameters
-    ----------
-
-    vectors : list of strings
-        A list of strings with the raster map that must be copied
-        from a master to another.
-    gisrc_src : path to the GISRC source
-        Path of the GISRC file from where we want to copy the vectors.
-    gisrc_dst : path to the GISRC destination
-        Path of the GISRC file where the vectors will be created.
-
-    Returns
-    -------
-
-    None.
+    :param vectors: a list of strings with the vector map that must be copied
+                    from a master to another.
+    :type vectors: list
+    :param gisrc_src: path of the GISRC file from where we want to copy the groups
+    :type gisrc_src: str
+    :param gisrc_dst: path of the GISRC file where the groups will be created
+    :type gisrc_dst: str
+    :returns: None
     """
     env = os.environ.copy()
     path_dst = os.path.join(*read_gisrc(gisrc_dst))
@@ -359,23 +301,14 @@ def get_cmd(cmdd):
     pickle a Module class and cnvert into a string that can be used with
     `Popen(get_cmd(cmdd), shell=True)`.
 
-    Parameters
-    ----------
+    :param cmdd: a module dictionary with all the parameters
+    :type cmdd: dict
 
-    cmdd : dict
-        A module dictionary with all the parameters.
-
-    Examples
-    --------
-
-    ::
-
-        >>> slp = Module('r.slope.aspect',
-        ...              elevation='ele', slope='slp', aspect='asp',
-        ...              overwrite=True, run_=False)
-        >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
-        ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
-
+    >>> slp = Module('r.slope.aspect',
+    ...              elevation='ele', slope='slp', aspect='asp',
+    ...              overwrite=True, run_=False)
+    >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
+    ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
     """
     cmd = [cmdd['name'], ]
     cmd.extend(("%s=%s" % (k, v) for k, v in cmdd['inputs']
@@ -396,30 +329,23 @@ def get_cmd(cmdd):
 def cmd_exe(args):
     """Create a mapset, and execute a cmd inside.
 
-    Parameters
-    ----------
+    :param args: is a tuple that contains several information see below
+    :type args: tuple
+    :returns: None
 
-    `args` is a tuple that contains:
+    The puple has to contain:
 
-     bbox : dict
-        A dict with the region parameters (n, s, e, w, etc.)
-        that we want to set before to apply the command.
-    mapnames : dict
-        A dictionary to substitute the input if the domain has
-        been splitted in several tiles.
-    gisrc_src : path to the GISRC source
-        Path of the GISRC file from where we want to copy the groups.
-    gisrc_dst : path to the GISRC destination
-        Path of the GISRC file where the groups will be created.
-    cmd : dictionary
-        A dictionary with all the parameter of a GRASS module.
-    groups: list
-        A list of strings with the groups that we want to copy in the mapset.
+    - bbox (dict): a dict with the region parameters (n, s, e, w, etc.)
+      that we want to set before to apply the command.
+    - mapnames (dict): a dictionary to substitute the input if the domain has
+      been splitted in several tiles.
+    - gisrc_src (str): path of the GISRC file from where we want to copy the
+      groups.
+    - gisrc_dst (str): path of the GISRC file where the groups will be created.
+    - cmd (dict): a dictionary with all the parameter of a GRASS module.
+    - groups (list): a list of strings with the groups that we want to copy in
+      the mapset.
 
-    Returns
-    -------
-
-    None.
     """
     bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups = args
     src, dst = get_mapset(gisrc_src, gisrc_dst)
@@ -447,39 +373,32 @@ def cmd_exe(args):
 
 
 class GridModule(object):
+    # TODO maybe also i.* could be supported easily
     """Run GRASS raster commands in a multiproccessing mode.
 
-    Parameters
-    -----------
+    :param cmd: raster GRASS command, only command staring with r.* are valid.
+    :type cmd: str
+    :param width: width of the tile, in pixel
+    :type width: int
+    :param height: height of the tile, in pixel.
+    :type height: int
+    :param overlap: overlap between tiles, in pixel.
+    :type overlap: int
+    :param processes: number of threads, default value is equal to the number
+                      of processor available.
+    :param split: if True use r.tile to split all the inputs.
+    :type split: bool
+    :param run_: if False only instantiate the object
+    :type run_: bool
+    :param args: give all the parameters to the command
+    :param kargs: give all the parameters to the command 
 
-    cmd: raster GRASS command
-        Only command staring with r.* are valid.
-    width: integer
-        Width of the tile, in pixel.
-    height: integer
-        Height of the tile, in pixel.
-    overlap: integer
-        Overlap between tiles, in pixel.
-    processes: number of threads
-        Default value is equal to the number of processor available.
-    split: boolean
-        If True use r.tile to split all the inputs.
-    run_: boolean
-        If False only instantiate the object.
-    args and kargs: cmd parameters
-        Give all the parameters to the command.
-
-    Examples
-    --------
-
-    ::
-
-        >>> grd = GridModule('r.slope.aspect',
-        ...                  width=500, height=500, overlap=2,
-        ...                  processes=None, split=False,
-        ...                  elevation='elevation',
-        ...                  slope='slope', aspect='aspect', overwrite=True)
-        >>> grd.run()
+    >>> grd = GridModule('r.slope.aspect',
+    ...                  width=500, height=500, overlap=2,
+    ...                  processes=None, split=False,
+    ...                  elevation='elevation',
+    ...                  slope='slope', aspect='aspect', overwrite=True)
+    >>> grd.run()
     """
     def __init__(self, cmd, width=None, height=None, overlap=0, processes=None,
                  split=False, debug=False, region=None, move=None, log=False,
@@ -531,7 +450,11 @@ class GridModule(object):
             os.remove(self.gisrc_dst)
 
     def clean_location(self, location=None):
-        """Remove all created mapsets."""
+        """Remove all created mapsets.
+
+        :param location: a Location instance where we are running the analysis
+        :type location: Location object
+        """
         if location is None:
             if self.n_mset:
                 self.n_mset.current()
@@ -599,7 +522,14 @@ class GridModule(object):
                     inm.value = inm.value + '@%s' % mset
 
     def run(self, patch=True, clean=True):
-        """Run the GRASS command."""
+        """Run the GRASS command
+
+        :param patch: set False if you does not want to patch the results
+        :type patch: bool
+        :param clean: set False if you does not want to remove all the stuff
+                      created by GridModule
+        :type clean: bool
+        """
         self.module.flags.overwrite = True
         self.define_mapset_inputs()
         if self.debug:
