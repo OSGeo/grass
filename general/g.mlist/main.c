@@ -243,13 +243,13 @@ int main(int argc, char *argv[])
 
 	    G_debug(3, "lister CMD: %s", lister);
 
-	    if (access(lister, 1) == 0) {	/* execute permission? */
+	    if (access(lister, X_OK) == 0)	/* execute permission? */
 		G_spawn(lister, lister, mapset, NULL);
-		continue;
-	    }
+	    else
+		M_do_list(n, mapset);
 	}
 	else if (flag.pretty->answer)
-	    G_list_element(elem->element[0], elem->alias, mapset, NULL);
+	    M_do_list(n, mapset);
 	else
 	    make_list(fp, elem, mapset, separator, flag.type->answer,
 		      flag.mapset->answer, mapset && *mapset);
