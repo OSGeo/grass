@@ -16,13 +16,13 @@ void parse_args(int argc, char **argv,
 				  "\t\tESRI Shapefile: directory containing a shapefile\n"
 				  "\t\tMapInfo File: directory containing a mapinfo file\n"
 				  "\t\tPostGIS database: connection string, eg. 'PG:dbname=db user=grass'");
-    options->dsn->required = YES;
-
+    options->dsn->required = NO;
+    options->dsn->guisection = _("Settings");
 
     options->format = G_define_option();
     options->format->key = "format";
     options->format->description = _("Format for output vector data");
-    options->format->required = YES;
+    options->format->required = NO;
     options->format->type = TYPE_STRING;
     options->format->options = format_options();
 #ifdef HAVE_OGR
@@ -32,7 +32,8 @@ void parse_args(int argc, char **argv,
     options->format->answer = "PostgreSQL";
 #endif /* HAVE_POSTGRES */
 #endif /* HAVE_OGR */
-    
+    options->format->guisection = _("Settings");
+
     options->opts = G_define_option();
     options->opts->key = "options";
     options->opts->label = _("Creation options");
@@ -43,6 +44,16 @@ void parse_args(int argc, char **argv,
     options->opts->required = NO;
     options->opts->multiple = YES;
     options->opts->type = TYPE_STRING;
+    options->opts->guisection = _("Settings");
+
+    options->input = G_define_standard_option(G_OPT_F_INPUT);
+    options->input->required = NO;
+    options->input->description = _("Name of input file to read settings from");
+    options->input->guisection = _("Settings");
+
+    options->output = G_define_standard_option(G_OPT_F_OUTPUT);
+    options->output->required = NO;
+    options->output->description = _("Name for output file where to save current settings");
 
     flags->f = G_define_flag();
     flags->f->key = 'f';
@@ -70,4 +81,21 @@ void parse_args(int argc, char **argv,
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    /* check options */
+    if (options->dsn->answer && options->format->answer &&
+        options->input->answer)
+        G_fatal_error(_("Options <%s/%s> and <%s> are mutually exclusive"),
+                      options->dsn->key, options->format->key,
+                      options->input->key);
+    if (flags->f->answer || flags->p->answer || flags->r->answer || flags->g->answer ||
+        options->output->answer)
+        return;
+
+    if (!options->dsn->answer && !options->input->answer)
+        G_fatal_error(_("One of options <%s> or <%s> must be specified"),
+                      options->dsn->key, options->input->key);
+    if (options->dsn->answer && !options->format->answer)
+        G_fatal_error(_("Option <%s> must be specified"),
+                      options->format->key);
 }
