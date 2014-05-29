@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-SQL
-===
-
 It is a collection of strings to avoid to repeat the code.
 
     >>> SELECT.format(cols=', '.join(['cat', 'area']), tname='table')

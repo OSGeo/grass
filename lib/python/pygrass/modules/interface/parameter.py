@@ -12,8 +12,12 @@ import re
 from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
 
 
+# TODO add documentation
 class Parameter(object):
-
+    """The Parameter object store all information about a parameter of module.
+    
+    It is possible to set parameter of command using this object.
+    """
     def __init__(self, xparameter=None, diz=None):
         self._value = None
         diz = element2dict(xparameter) if xparameter is not None else diz
@@ -138,9 +142,11 @@ class Parameter(object):
 
     # here the property function is used to transform value in an attribute
     # in this case we define which function must be use to get/set the value
-    value = property(fget=_get_value, fset=_set_value)
+    value = property(fget=_get_value, fset=_set_value,
+                     doc="Set or obtain value")
 
     def get_bash(self):
+        """Prova"""
         if isinstance(self._value, list) or isinstance(self._value, tuple):
             value = ','.join([str(v) for v in self._value])
         else:
@@ -148,6 +154,7 @@ class Parameter(object):
         return """%s=%s""" % (self.name, value)
 
     def get_python(self):
+        """Prova"""
         if not self.value:
             return ''
         return """%s=%r""" % (self.name, self._value)

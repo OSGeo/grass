@@ -1,5 +1,5 @@
-Modules
-=======
+Introduction on Modules
+=========================
 
 Grass modules are represented as objects. These objects are generated based
 on the XML module description that is used for GUI generation already. ::
