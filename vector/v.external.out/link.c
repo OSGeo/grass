@@ -4,6 +4,8 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 static int parse_option_pg(const char *, char **, char **);
 
 void make_link(const char *dsn_opt,
@@ -25,44 +27,16 @@ void make_link(const char *dsn_opt,
                     "format (\"%s\" given)"), format);
     
     /* use OGR ? */
-    if (strcmp(format, "PostgreSQL") == 0) {
-#if defined HAVE_OGR && defined HAVE_POSTGRES
-      if (getenv("GRASS_VECTOR_OGR")) {
-	  use_ogr  = TRUE;
-	  filename = "OGR";
-	  G_remove("", "PG");
-      }
-      else {
-	  use_ogr  = FALSE;
-	  filename = "PG";
-	  G_remove("", "OGR");
-	  
-      }
-#else
-#ifdef HAVE_POSTGRES
-      if (getenv("GRASS_VECTOR_OGR"))
-	  G_warning(_("Environment variable GRASS_VECTOR_OGR defined, "
-		      "but GRASS is compiled with OGR support. "
-		      "Using GRASS-PostGIS data driver instead."));
-      use_ogr  = FALSE;
-      filename = "PG";
-      G_remove("", "OGR");
-#else /* -> force using OGR */
-      G_warning(_("GRASS is not compiled with PostgreSQL support. "
-		  "Using OGR-PostgreSQL driver instead of native "
-		  "GRASS-PostGIS data driver."));
-      use_ogr  = TRUE;
-      filename = "OGR";
-      G_remove("", "PG");
-#endif /* HAVE_POSTRES */
-#endif /* HAVE_OGR && HAVE_POSTGRES */
-    } /* format=PostgreSQL */
-    else {
-	use_ogr  = TRUE;
-	filename = "OGR";
-	G_remove("", "PG");
+    use_ogr = is_ogr(format);
+    if (use_ogr) {
+        filename = "OGR";
+        G_remove("", "PG");
     }
-
+    else {
+        filename = "PG";
+        G_remove("", "OGR");
+    }
+    
     /* be friendly, ignored 'PG:' prefix for GRASS-PostGIS data driver */
     if (!use_ogr && strcmp(format, "PostgreSQL") == 0 &&
 	G_strncasecmp(dsn_opt, "PG:", 3) == 0) {
@@ -99,21 +73,22 @@ void make_link(const char *dsn_opt,
 	    G_set_key_value("conninfo", dsn, key_val);
     }
     
-    /* OGR only */
-    if (use_ogr) {
+    if (use_ogr) { /* OGR */
         if (format)
             G_set_key_value("format", format, key_val);
         if (option_str)
             G_set_key_value("options", option_str, key_val);
     }
-   
+    else {        /* PG */
+        G_set_key_value("format", "PostgreSQL", key_val);
+    }
     /* save file - OGR or PG */
     fp = G_fopen_new("", filename);
     if (!fp)
-	G_fatal_error(_("Unable to create <%s> file"), filename);
+	G_fatal_error(_("Unable to create settings file"));
 
     if (G_fwrite_key_value(fp, key_val) < 0)
-	G_fatal_error(_("Error writing <%s> file"), filename);
+	G_fatal_error(_("Error writing settings file"));
 
     fclose(fp);
 
@@ -146,3 +121,4 @@ int parse_option_pg(const char *option, char **key, char **value)
 
     return 0;
 }
+
