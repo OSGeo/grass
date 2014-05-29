@@ -125,15 +125,16 @@ class Bbox(object):
         return ['north', 'south', 'west', 'east', 'top', 'bottom']
 
     def contains(self, point):
-        """Return True if the object is contained by the BoundingBox.
+        """Return True if the object is contained by the BoundingBox
 
-        :param point:the point to analyze 
+        :param point: the point to analyze
         :type point: a Point object or a tuple with the coordinates
-            >>> from grass.pygrass.vector.geometry import Point
-            >>> poi = Point(5,5)
-            >>> bbox = Bbox(north=10, south=0, west=0, east=10)
-            >>> bbox.contains(poi)
-            True
+
+        >>> from grass.pygrass.vector.geometry import Point
+        >>> poi = Point(5,5)
+        >>> bbox = Bbox(north=10, south=0, west=0, east=10)
+        >>> bbox.contains(poi)
+        True
 
         """
         return bool(libvect.Vect_point_in_box(point.x, point.y,
@@ -149,6 +150,7 @@ class Bbox(object):
         :param tb: if tb parameter is False return only: north, south, east,
                    west and not top and bottom
         :type tb: bool
+
         """
         if tb:
             return (self.north, self.south, self.east, self.west,
@@ -201,22 +203,22 @@ class BoxList(object):
 
     def append(self, box):
         """Append a Bbox object to a Boxlist object, using the
-        ``Vect_boxlist_append`` C fuction. 
-        
+        ``Vect_boxlist_append`` C fuction.
+
         :param bbox: the bounding box to add to the list
         :param bbox: a Bbox object
-        
-            >>> box0 = Bbox()
-            >>> box1 = Bbox(1,2,3,4)
-            >>> box2 = Bbox(5,6,7,8)
-            >>> boxlist = BoxList([box0, box1])
-            >>> boxlist
-            Boxlist([Bbox(0.0, 0.0, 0.0, 0.0), Bbox(1.0, 2.0, 3.0, 4.0)])
-            >>> len(boxlist)
-            2
-            >>> boxlist.append(box2)
-            >>> len(boxlist)
-            3
+
+        >>> box0 = Bbox()
+        >>> box1 = Bbox(1,2,3,4)
+        >>> box2 = Bbox(5,6,7,8)
+        >>> boxlist = BoxList([box0, box1])
+        >>> boxlist
+        Boxlist([Bbox(0.0, 0.0, 0.0, 0.0), Bbox(1.0, 2.0, 3.0, 4.0)])
+        >>> len(boxlist)
+        2
+        >>> boxlist.append(box2)
+        >>> len(boxlist)
+        3
 
         """
         indx = self.__len__()
@@ -261,12 +263,13 @@ class BoxList(object):
 
         :param indx: the index value of the Bbox to remove
         :param indx: int
-            >>> boxlist = BoxList([Bbox(),
-            ...                    Bbox(1, 0, 0, 1),
-            ...                    Bbox(1, -1, -1, 1)])
-            >>> boxlist.remove(0)
-            >>> boxlist
-            Boxlist([Bbox(1.0, 0.0, 0.0, 1.0), Bbox(1.0, -1.0, -1.0, 1.0)])
+
+        >>> boxlist = BoxList([Bbox(),
+        ...                    Bbox(1, 0, 0, 1),
+        ...                    Bbox(1, -1, -1, 1)])
+        >>> boxlist.remove(0)
+        >>> boxlist
+        Boxlist([Bbox(1.0, 0.0, 0.0, 1.0), Bbox(1.0, -1.0, -1.0, 1.0)])
 
         """
         if hasattr(indx, 'c_boxlist'):
@@ -279,18 +282,17 @@ class BoxList(object):
 
     def reset(self):
         """Reset the c_boxlist C struct, using the ``Vect_reset_boxlist`` C
-        function. ::
+        function.
 
-            >>> boxlist = BoxList([Bbox(),
-            ...                    Bbox(1, 0, 0, 1),
-            ...                    Bbox(1, -1, -1, 1)])
-            >>> len(boxlist)
-            3
-            >>> boxlist.reset()
-            >>> len(boxlist)
-            0
+        >>> boxlist = BoxList([Bbox(),
+        ...                    Bbox(1, 0, 0, 1),
+        ...                    Bbox(1, -1, -1, 1)])
+        >>> len(boxlist)
+        3
+        >>> boxlist.reset()
+        >>> len(boxlist)
+        0
 
-        ..
         """
         libvect.Vect_reset_boxlist(self.c_boxlist)
 

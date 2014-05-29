@@ -19,11 +19,13 @@ Contents:
 
    gis
    raster
+   raster_elements
    vector
-   attributes
-   vector_database
+   vector_attributes
+   vector_features
+   vector_utils
    modules
-   gridmodules
+   modules_grid
    messages
 
 

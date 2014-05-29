@@ -476,14 +476,14 @@ class Point(Geo):
         :type tol: float
         :returns: the buffer as Area object
 
-            >>> pnt = Point(0, 0)
-            >>> area = pnt.buffer(10)
-            >>> area.boundary                              #doctest: +ELLIPSIS
-            Line([Point(10.000000, 0.000000),...Point(10.000000, 0.000000)])
-            >>> area.centroid
-            Point(0.000000, 0.000000)
-            >>> area.isles
-            []
+        >>> pnt = Point(0, 0)
+        >>> area = pnt.buffer(10)
+        >>> area.boundary                              #doctest: +ELLIPSIS
+        Line([Point(10.000000, 0.000000),...Point(10.000000, 0.000000)])
+        >>> area.centroid
+        Point(0.000000, 0.000000)
+        >>> area.isles
+        []
 
         """
         if dist is not None:
@@ -997,14 +997,14 @@ class Line(Geo):
         :type tol: float
         :returns: the buffer as Area object
 
-            >>> line = Line([(0, 0), (0, 2)])
-            >>> area = line.buffer(10)
-            >>> area.boundary                              #doctest: +ELLIPSIS
-            Line([Point(-10.000000, 0.000000),...Point(-10.000000, 0.000000)])
-            >>> area.centroid
-            Point(0.000000, 0.000000)
-            >>> area.isles
-            []
+        >>> line = Line([(0, 0), (0, 2)])
+        >>> area = line.buffer(10)
+        >>> area.boundary                              #doctest: +ELLIPSIS
+        Line([Point(-10.000000, 0.000000),...Point(-10.000000, 0.000000)])
+        >>> area.centroid
+        Point(0.000000, 0.000000)
+        >>> area.isles
+        []
 
         ..
         """
