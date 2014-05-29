@@ -130,7 +130,13 @@ r.series file=input.txt out=result_sum meth=sum
 Example for counting the number of days above a certain temperature using 
 daily average maps ('???' as DOY wildcard):
 <div class="code"><pre>
-r.series input=`g.mlist rast pat="temp_2003_???_avg" sep=,` \
+# Approach for shell based systems
+r.series input=`g.mlist rast pattern="temp_2003_???_avg" sep=,` \
+         output=temp_2003_days_over_25deg range=25.0,100.0 method=count
+
+# Approach in two steps (e.g., for Windows systems)
+g.mlist rast pattern="temp_2003_???_avg" output=mapnames.txt
+r.series file=mapnames.txt \
          output=temp_2003_days_over_25deg range=25.0,100.0 method=count
 </pre></div>
 
