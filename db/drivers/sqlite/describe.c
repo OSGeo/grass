@@ -186,7 +186,7 @@ int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
 
 	get_column_info(statement, i, &litetype, &sqltype, &fsize);
 
-	G_debug(2, "col: %s, nkcols %d, litetype : %d, sqltype %d",
+	G_debug(3, "col: %s, nkcols %d, litetype : %d, sqltype %d",
 		fname, nkcols, litetype, sqltype);
 
 	if (sqltype == DB_SQL_TYPE_UNKNOWN) {
