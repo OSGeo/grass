@@ -31,7 +31,6 @@
 #% required: no
 #%end
 #%option G_OPT_F_SEP
-#% answer: space
 #%end
 
 import sys
@@ -41,18 +40,12 @@ from grass.script import core as grass
 def main():
     # if no output filename, output to stdout
     output = options['output']
-    sep = options['separator']
 
     parameters = dict(flags="1gn",
-                      input=options['input'])
+                      input=options['input'],
+                      separator=options['separator'])
     if output:
         parameters.update(output=output)
-    # windows don't like pipe so we don't include it in the command explicitly
-    if sep == '|':
-        grass.warning(_("Separator '|' is not allowed. Using a space."))
-        # but why?
-    else:
-        parameters.update(separator=sep)
 
     ret = grass.run_command("r.stats", **parameters)
     sys.exit(ret)
