@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	struct Flag *full;
     } flag;
     int i, n, all, num_types, nlist;
-    void *filter = NULL, *exclude = NULL;
+    void *filter, *exclude;
     FILE *fp;
     const char *mapset;
     char *separator;
@@ -159,7 +159,12 @@ int main(int argc, char *argv[])
 			    	       (int)flag.extended->answer);
 	else
 	    filter = G_ls_glob_filter(opt.pattern->answer, 0);
+	if (!filter)
+	    G_fatal_error(_("Unable to compile pattern <%s>"),
+			  opt.pattern->answer);
     }
+    else
+	filter = NULL;
 
     if (opt.exclude->answer) {
 	if (flag.regex->answer || flag.extended->answer)
@@ -167,7 +172,12 @@ int main(int argc, char *argv[])
 			    		(int)flag.extended->answer);
 	else
 	    exclude = G_ls_glob_filter(opt.exclude->answer, 1);
+	if (!exclude)
+	    G_fatal_error(_("Unable to compile pattern <%s>"),
+			  opt.exclude->answer);
     }
+    else
+	exclude = NULL;
 
     separator = G_option_to_separator(opt.separator);
     fp = G_open_option_file(opt.output);
