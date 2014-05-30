@@ -245,7 +245,7 @@ Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
 		break;
 	}
     }
-    G_verbose_message("Modifications: %d", nmodif);
+    G_verbose_message(_("Modifications: %d"), nmodif);
 
     return (nmodif);
 }
