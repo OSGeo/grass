@@ -33,10 +33,12 @@ from core.layerlist import LayerList
 SIMPLE_LMGR_RASTER = 1
 SIMPLE_LMGR_VECTOR = 2
 SIMPLE_LMGR_RASTER3D = 4
-SIMPLE_LMGR_TB_TOP = 8
-SIMPLE_LMGR_TB_BOTTOM = 16
-SIMPLE_LMGR_TB_LEFT = 32
-SIMPLE_LMGR_TB_RIGHT = 64
+SIMPLE_LMGR_RGB = 8
+
+SIMPLE_LMGR_TB_TOP = 16
+SIMPLE_LMGR_TB_BOTTOM = 32
+SIMPLE_LMGR_TB_LEFT = 64
+SIMPLE_LMGR_TB_RIGHT = 128
 
 
 class SimpleLayerManager(wx.Panel):
@@ -193,6 +195,15 @@ class SimpleLayerManager(wx.Panel):
                                                    completed=(self.GetOptData, layer, ''))
         event.Skip()
 
+    def OnAddRGB(self, event):
+        """!Opens d.rgb dialog and adds layer.
+        Dummy layer is added first."""
+        cmd = ['d.rgb']
+        layer = self.AddRGB(name='', cmd=cmd, hidden=True, dialog=None)
+        GUI(parent=self, giface=None, modal=self._modal).ParseCommand(cmd=cmd,
+                                                    completed=(self.GetOptData, layer, ''))
+        event.Skip()
+
     def OnRemove(self, event):
         """!Removes selected layers from list."""
         layers = self._layerList.GetSelectedLayers(activeOnly=False)
@@ -343,6 +354,13 @@ class SimpleLayerManager(wx.Panel):
                                             cmd=cmd, hidden=hidden)
         return layer
 
+    def AddRGB(self, name, cmd, hidden, dialog):
+        """!Ads new vector layer."""
+        layer = self._layerList.AddNewLayer(name=name, mapType='rgb',
+                                            active=True,
+                                            cmd=cmd, hidden=hidden)
+        return layer
+
     def GetLayerInfo(self, layer, key):
         """!Just for compatibility, should be removed in the future"""
         value = getattr(layer, key)
@@ -396,6 +414,9 @@ class SimpleLmgrToolbar(BaseToolbar):
         if self._style & SIMPLE_LMGR_RASTER3D:
             data.insert(0, ('addRaster3d', icons['addRast3d'],
                             self.parent.OnAddRast3d))
+        if self._style & SIMPLE_LMGR_RGB:
+            data.insert(0, ('addRGB', icons['addRGB'],
+                            self.parent.OnAddRGB))
         if self._style & SIMPLE_LMGR_VECTOR:
             data.insert(0, ('addVector', BaseIcons['addVect'],
                             self.parent.OnAddVector))
@@ -425,6 +446,7 @@ icons = {
     'addRast3d': MetaIcon(img='layer-raster3d-add',
                           label=_("Add 3D raster map layer"),
                           desc=_("Add 3D raster map layer")),
+    'addRGB': MetaIcon(img='layer-rgb-add', label=_('Add RGB map layer'))
     }
 
 

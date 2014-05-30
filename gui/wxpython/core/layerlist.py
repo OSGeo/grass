@@ -189,10 +189,11 @@ class Layer(object):
         self._hidden = False
         self._initialized = False
 
-        self._mapTypes = ['rast', 'vect', 'rast3d']
+        self._mapTypes = ['rast', 'vect', 'rast3d', 'rgb']
         self._internalTypes = {'rast': 'cell',
                                'vect': 'vector',
-                               'rast3d': 'grid3'}
+                               'rast3d': 'grid3',
+                               'rgb': 'rgb'}
 
     def GetName(self):
         return self._name
@@ -206,7 +207,7 @@ class Layer(object):
         """
         if not self.hidden:
             fullName = name.split('@')
-            if len(fullName) == 1:
+            if len(fullName) == 1 and self._mapType != 'rgb':  # skip checking rgb maps for now
                 if self._mapType is None:
                     raise ValueError("To set layer name, the type of layer must be specified.")
 
@@ -361,6 +362,8 @@ class LayerListToRendererConverter:
             mapType = 'vector'
         elif layer.mapType == 'rast3d':
             mapType = '3d-raster'
+        elif layer.mapType == 'rgb':
+            mapType = 'rgb'
         self._renderer.AddLayer(ltype=mapType, command=layer.cmd,
                                 name=layer.name, active=layer.active,
                                 hidden=False, opacity=layer.opacity,
