@@ -24,14 +24,14 @@ int get_target(void)
 	sprintf(buf, "Target location [%s] not found\n", location);
 	goto error;
     }
-    G__create_alt_env();
+    G_create_alt_env();
     G__setenv("LOCATION_NAME", location);
     stat = G__mapset_permissions(mapset);
     if (stat > 0) {
 	G__setenv("MAPSET", mapset);
-	G__create_alt_search_path();
-	G__switch_env();
-	G__switch_search_path();
+	G_create_alt_search_path();
+	G_switch_env();
+	G_switch_search_path();
 	which_env = 0;
 	return 1;
     }
@@ -46,8 +46,8 @@ int get_target(void)
 int select_current_env(void)
 {
     if (which_env != 0) {
-	G__switch_env();
-	G__switch_search_path();
+	G_switch_env();
+	G_switch_search_path();
 	which_env = 0;
     }
 
@@ -57,8 +57,8 @@ int select_current_env(void)
 int select_target_env(void)
 {
     if (which_env != 1) {
-	G__switch_env();
-	G__switch_search_path();
+	G_switch_env();
+	G_switch_search_path();
 	which_env = 1;
     }
 

@@ -18,7 +18,7 @@ void list_mon(char ***list, int *n)
     *list = NULL;
     *n    = 0;
     tokens = NULL;
-    for (i = 0; (name = G__env_name(i)); i++) {
+    for (i = 0; (name = G_get_env_name(i)); i++) {
 	if (strncmp(env_prefix, name, env_prefix_len) == 0) {
 	    tokens = G_tokenize(name, "_");
 	    if (G_number_of_tokens(tokens) != 3 ||

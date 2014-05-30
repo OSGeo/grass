@@ -358,9 +358,9 @@ int main(int argc, char *argv[])
 
 	/*  TODO: */
 	G_warning("Import into new location not yet implemented");
-	/* at this point the module should be using G__create_alt_env()
+	/* at this point the module should be using G_create_alt_env()
 	    to change context to the newly created location; once done
-	    it should switch back with G__switch_env(). See r.in.gdal */
+	    it should switch back with G_switch_env(). See r.in.gdal */
     }
     else {
 	int err = 0;

@@ -33,10 +33,10 @@ void list_accessible_mapsets(const char* fs)
     const char *name;
     
     G_message(_("Accessible mapsets:"));
-    for (n = 0; (name = G__mapset_name(n)); n++) {
+    for (n = 0; (name = G_get_mapset_name(n)); n++) {
         /* match each mapset to its numeric equivalent */
         fprintf(stdout, "%s", name);
-        if (G__mapset_name(n+1)) {
+        if (G_get_mapset_name(n+1)) {
             if (strcmp(fs, "newline") == 0)
                 fprintf(stdout, "\n");
             else if (strcmp(fs, "space") == 0)

@@ -386,7 +386,7 @@ static void mlist(const char *element, const char *wildarg, const char *outfile)
     int n;
     const char *mapset;
 
-    for (n = 0; (mapset = G__mapset_name(n)); n++) {
+    for (n = 0; (mapset = G_get_mapset_name(n)); n++) {
 	char type_arg[GNAME_MAX];
 	char pattern_arg[GNAME_MAX];
 	char mapset_arg[GMAPSET_MAX];

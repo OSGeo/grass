@@ -1,9 +1,9 @@
 /*!
-   \file mapset_nme.c
+   \file lib/gis/mapset_nme.c
 
    \brief GIS library - Mapset name, search path routines.
 
-   (C) 1999-2008 The GRASS development team
+   (C) 1999-2014 The GRASS development team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -39,9 +39,9 @@ static void new_mapset(const char *);
    \return mapset name
    \return NULL if mapset not found
  */
-const char *G__mapset_name(int n)
+const char *G_get_mapset_name(int n)
 {
-    G_get_list_of_mapsets();
+    G__get_list_of_mapsets();
 
     if (n < 0 || n >= st->path.count)
 	return NULL;
@@ -49,7 +49,10 @@ const char *G__mapset_name(int n)
     return st->path.names[n];
 }
 
-void G_get_list_of_mapsets(void)
+/*!
+  \brief Fill list of mapsets from search path (internal use only)
+*/
+void G__get_list_of_mapsets(void)
 {
     FILE *fp;
     const char *cur;
@@ -82,7 +85,7 @@ void G_get_list_of_mapsets(void)
     }
 }
 
-static void new_mapset(const char *name)
+void new_mapset(const char *name)
 {
     if (st->path.count >= st->path.size) {
 	st->path.size += 10;
@@ -97,7 +100,7 @@ static void new_mapset(const char *name)
 
    \return 0
  */
-void G__create_alt_search_path(void)
+void G_create_alt_search_path(void)
 {
     st->path2.count = st->path.count;
     st->path2.names = st->path.names;
@@ -110,7 +113,7 @@ void G__create_alt_search_path(void)
 
    \return 0
  */
-void G__switch_search_path(void)
+void G_switch_search_path(void)
 {
     int count;
     char **names;
@@ -138,11 +141,11 @@ void G_reset_mapsets(void)
 /*!
    \brief Get list of available mapsets for current location
 
-   List is updated by each call to this function
+   List is updated by each call to this function.
 
-   \return pointer to zero terminated array of available mapsets.
+   \return pointer to zero terminated array of available mapsets
  */
-char **G_available_mapsets(void)
+char **G_get_available_mapsets(void)
 {
     char **mapsets = NULL;
     int alloc = 50;
@@ -186,12 +189,12 @@ char **G_available_mapsets(void)
 }
 
 /*!
-   \brief Add mapset to the list of mapsets in search path.
+   \brief Add mapset to the list of mapsets in search path
 
    Mapset is add in memory only, not to the SEARCH_PATH file!
    List is check first if already exists.
 
-   \param mapset mapset name
+   \param mapset mapset name to be added to the search path
  */
 void G_add_mapset_to_search_path(const char *mapset)
 {
