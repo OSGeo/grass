@@ -553,9 +553,9 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "character";
 	Opt->required = NO;
-	Opt->answer = "|";
+	Opt->answer = "pipe";
 	Opt->label = _("Field separator");
-	Opt->description = _("Special characters: newline, space, comma, tab");
+	Opt->description = _("Special characters: pipe, comma, space, tab, newline");
 	break;
 
 	/* colors */

@@ -1448,15 +1448,17 @@ char* G_option_to_separator(const struct Option *option)
     if (option->answer == NULL)
         G_fatal_error(_("No separator given"));
 
-    if (strcmp(option->answer, "space") == 0)
+    if (strcmp(option->answer, "pipe") == 0)
+        sep = G_store("|");
+    else if (strcmp(option->answer, "comma") == 0)
+        sep = G_store(",");
+    else if (strcmp(option->answer, "space") == 0)
 	sep = G_store(" ");
     else if (strcmp(option->answer, "tab") == 0 ||
              strcmp(option->answer, "\\t") == 0)
         sep = G_store("\t");
     else if (strcmp(option->answer, "newline") == 0)
         sep = G_store("\n");
-    else if (strcmp(option->answer, "comma") == 0)
-        sep = G_store(",");
     else
         sep = G_store(option->answer);
     
