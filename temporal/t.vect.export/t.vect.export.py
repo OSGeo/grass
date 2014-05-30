@@ -47,7 +47,8 @@
 #%option
 #% key: format
 #% type: string
-#% description: The export format of a single raster map. Supported are GML via v.out.ogr and the GRASS package format of v.pack.
+#% label: The export format of a single raster map
+#% description: Supported are GML via v.out.ogr and the GRASS package format of v.pack
 #% required: no
 #% multiple: no
 #% options: GML,pack

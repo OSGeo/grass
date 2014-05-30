@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Sample the input space time dataset(s) with a sample space time dataset and print the result to stdout
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -44,23 +44,20 @@
 #% answer: during,overlap,contain,equal
 #%end
 
-#%option
-#% key: separator
-#% type: string
-#% description: Separator character between the output columns, default is tabular " | ". Do not use "," as this char is reserved to list several map ids in a sample granule
-#% required: no
+#%option G_OPT_F_SEP
+#% description: Field separator between output columns, default is tabular " | "
+#% label: Do not use "," as this char is reserved to list several map ids in a sample granule
 #%end
 
 #%flag
-#% key: c
-#% description: Print column names
+#% key: h
+#% description: Print the column names as first row
 #%end
 
 #%flag
 #% key: s
 #% description: Check spatial overlap to perform spatio-temporal sampling
 #%end
-
 
 import grass.script as grass
 import grass.temporal as tgis
@@ -77,7 +74,7 @@ def main():
     intype = options["intype"]
     separator = options["separator"]
     method = options["method"]
-    header = flags["c"]
+    header = flags["h"]
     spatial = flags["s"]
 
     # Make sure the temporal database exists
