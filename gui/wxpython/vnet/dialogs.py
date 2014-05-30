@@ -746,6 +746,8 @@ class VNETDialog(wx.Dialog):
     def OnCloseDialog(self, event):
         """!Cancel dialog"""
         self.vnet_mgr.CleanUp()
+        toolSwitcher = self.giface.GetMapDisplay().GetToolSwitcher()
+        toolSwitcher.RemoveToolbarFromGroup('mouseUse', self.toolbars['pointsList'])
         self.parent.dialogs['vnet'] = None
         self.Destroy()
 
