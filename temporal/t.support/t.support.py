@@ -56,7 +56,8 @@
 
 #%flag
 #% key: m
-#% description: Update the metadata information and spatial extent of registered maps from the grass spatial database. Check for removed maps and delete them from the temporal database and all effected space time datasets.
+#% label: Update the metadata information and spatial extent of registered maps from the GRASS spatial database
+#% description: Check for removed maps and delete them from the temporal database and all effected space time datasets
 #%end
 
 #%flag

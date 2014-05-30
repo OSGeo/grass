@@ -10,32 +10,31 @@
 #               datasets.
 # COPYRIGHT:    (C) 2014 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#		This program is free software under the GNU General Public
+#		License (version 2). Read the file COPYING that comes with GRASS
+#		for details.
 #
 #############################################################################
 
 #%module
-#% description: Apply temporal and spatial oeprations on space time 3D raster datasets using temporal raster algebra.
+#% description: Apply temporal and spatial operations on space time 3D raster datasets using temporal raster algebra.
 #% keywords: temporal
-#% keywords: mapalgebra
+#% keywords: algebra
 #%end
 
 #%option
 #% key: expression
 #% type: string
-#% description: The mapcalc expression for temporal and spatial analysis of space time 3D raster datasets.
-#% key_desc: expression
+#% description: r3.mapcalc expression for temporal and spatial analysis of space time 3D raster datasets
 #% required : yes
 #%end
 
 #%option
 #% key: basename
 #% type: string
-#% description: The basename of raster maps that are stored within the result space time 3D raster dataset.
-#% key_desc: basename
-#% required : yes
+#% label: Basename of the new generated output maps
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+#% required: yes
 #%end
 
 #%option
@@ -49,7 +48,7 @@
 
 #%flag
 #% key: s
-#% description: Activate spatial topology.
+#% description: Activate spatial topology
 #%end
 
 #%flag

@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Register raster, vector and raster3d maps in a space time datasets
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -40,14 +40,16 @@
 #%option G_OPT_F_INPUT
 #% key: file
 #% required: no
-#% description: Input file with map names, one per line. Additionally the start time and the end time can be specified per line
+#% label: Input file with map names, one per line
+#% description: Additionally the start time and the end time can be specified per line
 #% guisection: Input
 #%end
 
 #%option
 #% key: start
 #% type: string
-#% description: Valid start date and time of the first map. Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
+#% label: Valid start date and time of the first map
+#% description: Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
 #% required: no
 #% multiple: no
 #% guisection: Time & Date
@@ -56,7 +58,8 @@
 #%option
 #% key: end
 #% type: string
-#% description: Valid end date and time of all map. Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
+#% label: Valid end date and time of all map
+#% description: Format absolute time: "yyyy-mm-dd HH:MM:SS +HHMM", relative time is of type integer).
 #% required: no
 #% multiple: no
 #% guisection: Time & Date
@@ -65,6 +68,7 @@
 #%option
 #% key: unit
 #% type: string
+#% label: Time stamp unit
 #% description: Unit must be set in case of relative time stamps
 #% required: no
 #% multiple: no
@@ -75,6 +79,7 @@
 #%option
 #% key: increment
 #% type: string
+#% label: Time increment
 #% description: Time increment between maps for valid time interval creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative is integer: 5)
 #% required: no
 #% multiple: no
@@ -105,7 +110,7 @@ def main():
     maps = options["maps"]
     type = options["type"]
     file = options["file"]
-    fs = options["separator"]
+    separator = options["separator"]
     start = options["start"]
     end = options["end"]
     unit = options["unit"]
@@ -117,7 +122,7 @@ def main():
     # Register maps
     tgis.register_maps_in_space_time_dataset(
         type=type, name=name, maps=maps, file=file, start=start, end=end,
-        unit=unit, increment=increment, dbif=None, interval=interval, fs=fs)
+        unit=unit, increment=increment, dbif=None, interval=interval, fs=separator)
 
 
 ###############################################################################

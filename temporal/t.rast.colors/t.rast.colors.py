@@ -61,7 +61,7 @@
 
 #%flag
 #% key: w
-#% description: Only write new color table if one doesn't already exist
+#% description: Only write new color table if it does not already exist
 #%end
 
 #%flag

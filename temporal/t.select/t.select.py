@@ -36,7 +36,7 @@
 
 #%flag
 #% key: s
-#% description: Activate spatial topology.
+#% description: Activate spatial topology
 #%end
 
 

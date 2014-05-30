@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	List registered maps of a space time raster3d dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -39,6 +39,7 @@
 #% key: columns
 #% type: string
 #% description: Columns to be printed to stdout
+#% guisection: Selection
 #% required: no
 #% multiple: yes
 #% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
@@ -46,6 +47,7 @@
 #%end
 
 #%option G_OPT_T_WHERE
+#% guisection: Selection
 #%end
 
 #%option
@@ -58,16 +60,15 @@
 #% answer: cols
 #%end
 
-#%option
-#% key: separator
-#% type: string
-#% description: Separator character between the output columns, default is tabular "\t"
-#% required: no
+#%option G_OPT_F_SEP
+#% description: Field separator character between the output columns
+#% guisection: Formatting
 #%end
 
 #%flag
 #% key: h
-#% description: Print column names
+#% description: Print the column names as first row
+#% guisection: Formatting
 #%end
 
 import grass.script as grass
