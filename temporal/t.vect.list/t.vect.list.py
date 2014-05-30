@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	List registered maps of a space time vector dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -18,6 +18,7 @@
 #% description: Lists registered maps of a space time vector dataset.
 #% keywords: temporal
 #% keywords: map management
+#% keywords: vector
 #% keywords: list
 #%end
 
@@ -27,7 +28,8 @@
 #%option
 #% key: order
 #% type: string
-#% description: Order the space time dataset by category
+#% description: Sort the space time dataset by category
+#% guisection: Formatting
 #% required: no
 #% multiple: yes
 #% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
@@ -37,7 +39,8 @@
 #%option
 #% key: columns
 #% type: string
-#% description: Select columns to be printed to stdout
+#% description: Columns to be printed to stdout
+#% guisection: Selection
 #% required: no
 #% multiple: yes
 #% options: id,name,layer,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,points,lines,boundaries,centroids,faces,kernels,primitives,nodes,areas,islands,holes,volumes
@@ -45,6 +48,7 @@
 #%end
 
 #%option G_OPT_T_WHERE
+#% guisection: Selection
 #%end
 
 #%option
@@ -57,16 +61,15 @@
 #% answer: cols
 #%end
 
-#%option
-#% key: separator
-#% type: string
-#% description: Separator character between the columns, default is tabular "\t"
-#% required: no
+#%option G_OPT_F_SEP
+#% description: Field separator character between the output columns
+#% guisection: Formatting
 #%end
 
 #%flag
 #% key: h
-#% description: Print column names
+#% description: Print the column names as first row
+#% guisection: Formatting
 #%end
 
 import grass.script as grass

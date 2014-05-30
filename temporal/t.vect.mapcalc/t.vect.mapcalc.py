@@ -25,7 +25,7 @@
 #%option
 #% key: expression
 #% type: string
-#% description: The mapcalc expression for temporal and spatial analysis of space time vector datasets.
+#% description: Spatio-temporal mapcalc expression
 #% key_desc: expression
 #% required : yes
 #%end
@@ -33,14 +33,15 @@
 #%option
 #% key: basename
 #% type: string
-#% description: The basename of vector maps that are stored within the result space time vector dataset.
+#% label: Basename of the new generated output maps
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 #% key_desc: basename
 #% required : yes
 #%end
 
 #%flag
 #% key: s
-#% description: Activate spatial topology.
+#% description: Activate spatial topology
 #%end
 
 import grass.script

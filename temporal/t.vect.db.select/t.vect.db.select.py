@@ -6,7 +6,7 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Prints attributes of vector maps registered in a space time vector dataset.
-# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (version 2). Read the file COPYING that comes with GRASS
@@ -30,7 +30,7 @@
 #%end
 
 #%option G_OPT_F_SEP
-#% description: Separator character between the output columns
+#% description: Field separator character between the output columns
 #%end
 
 #%option G_OPT_V_FIELD
@@ -57,7 +57,7 @@ def main():
     columns = options["columns"]
     tempwhere = options["t_where"]
     layer = options["layer"]
-    fs = options["separator"]
+    separator = options["separator"]
 
     if where == "" or where == " " or where == "\n":
         where = None
@@ -84,7 +84,7 @@ def main():
 
             select = grass.read_command("v.db.select", map=vector_name,
                                         layer=layer, columns=columns,
-                                        separator="%s" % (fs), where=where)
+                                        separator="%s" % (separator), where=where)
 
             if not select:
                 grass.fatal(_("Unable to run v.db.select for vector map <%s> "
@@ -97,17 +97,17 @@ def main():
                     # print the column names in case they change
                     if count == 0:
                         col_names_new = "start_time%send_time%s%s" % (
-                            fs, fs, entry)
+                            separator, separator, entry)
                         if col_names != col_names_new:
                             col_names = col_names_new
                             print col_names
                     else:
                         if row["end_time"]:
-                            print "%s%s%s%s%s" % (row["start_time"], fs,
-                                                  row["end_time"], fs, entry)
+                            print "%s%s%s%s%s" % (row["start_time"], separator,
+                                                  row["end_time"], separator, entry)
                         else:
                             print "%s%s%s%s" % (row["start_time"],
-                                                fs, fs, entry)
+                                                separator, separator, entry)
                     count += 1
 
 if __name__ == "__main__":

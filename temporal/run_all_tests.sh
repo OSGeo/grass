@@ -10,6 +10,8 @@ fi
 LOG_FILE="/tmp/run.log"
 echo "Logfile\n\n" > $LOG_FILE
 
+export GRASS_MESSAGE_FORMAT=plain
+
 # For each directory
 for mydir in `ls -d t*` ; do
     if [ -d "${mydir}" ] ; then

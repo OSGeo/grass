@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	List space time datasets and maps registered in the temporal database
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -45,7 +45,7 @@
 #% guisection: Formatting
 #% required: no
 #% multiple: yes
-#% options: id, name, creator, mapset, number_of_maps, creation_time, start_time, end_time, interval, north, south, west, east, granularity
+#% options: id,name,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
 #% answer: id
 #%end
 
@@ -57,7 +57,7 @@
 #% guisection: Selection
 #% required: no
 #% multiple: yes
-#% options: id, name, creator, mapset, number_of_maps, creation_time, start_time, end_time, north, south, west, east, granularity, all
+#% options: id,name,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
 #% answer: id
 #%end
 
@@ -65,16 +65,13 @@
 #% guisection: Selection
 #%end
 
-#%option
-#% key: separator
-#% type: string
-#% description: Separator character between the columns, default is tabular "\t"
+#%option G_OPT_F_SEP
+#% description: Field separator character between the output columns
 #% guisection: Formatting
-#% required: no
 #%end
 
 #%flag
-#% key: c
+#% key: h
 #% description: Print the column names as first row
 #% guisection: Formatting
 #%end
@@ -85,6 +82,7 @@ import sys
 
 ############################################################################
 
+
 def main():
 
     # Get the options
@@ -94,7 +92,7 @@ def main():
     order = options["order"]
     where = options["where"]
     separator = options["separator"]
-    colhead = flags['c']
+    colhead = flags['h']
 
     # Make sure the temporal database exists
     tgis.init()
@@ -129,9 +127,6 @@ def main():
                         sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%\
                                                  (sp.get_new_map_instance(None).get_type(),  time,  key))
 
-                    if separator is None or separator == "":
-                        separator = "\t"
-            
                     # Print the column names if requested
                     if colhead == True and first == True:
                         output = ""
