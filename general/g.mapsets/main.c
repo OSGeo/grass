@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
         }
 
         /* read existing mapsets from SEARCH_PATH */
-        for (n = 0; (oldname = G__mapset_name(n)); n++)
+        for (n = 0; (oldname = G_get_mapset_name(n)); n++)
             append_mapset(&path, oldname);
 
         /* fetch and add new mapsets from param list */
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
         }
         
         /* read existing mapsets from SEARCH_PATH */
-        for (n = 0; (oldname = G__mapset_name(n)); n++) {
+        for (n = 0; (oldname = G_get_mapset_name(n)); n++) {
             found = FALSE;
             
             for (ptr = opt.mapset->answers; *ptr && !found; ptr++)

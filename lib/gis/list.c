@@ -73,7 +73,7 @@ void G_list_element(const char *element,
      * otherwise just list the specified mapset
      */
     if (mapset == 0 || *mapset == 0)
-	for (n = 0; (mapset = G__mapset_name(n)); n++)
+	for (n = 0; (mapset = G_get_mapset_name(n)); n++)
 	    count += list_element(more, element, desc, mapset, lister);
     else
 	count += list_element(more, element, desc, mapset, lister);

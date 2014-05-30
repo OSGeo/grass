@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 	else
 	    quote = !isatty(fileno(stdout));
 	
-	for (n = 0; (name = G__env_name(n)); n++) {
+	for (n = 0; (name = G_get_env_name(n)); n++) {
 	    value = (char *)G__getenv(name);
 	    if (value) {
 		if (!quote)

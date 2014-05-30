@@ -111,7 +111,7 @@ static int find(FILE * fd, char *element)
     fwrite(&len1, sizeof(len1), 1L, fd);
     fwrite(&len2, sizeof(len2), 1L, fd);
 
-    for (n = 0; ((mapset = G__mapset_name(n)) != NULL); n++) {
+    for (n = 0; ((mapset = G_get_mapset_name(n)) != NULL); n++) {
 	int len;
 	char dir[1024];
 	struct dirent *dp;

@@ -3,7 +3,7 @@
 
   \brief GIS library - environment routines
   
-  (C) 2001-2009, 2011 by the GRASS Development Team
+  (C) 2001-2014 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -458,7 +458,7 @@ void G__write_env(void)
 
   \code
    for (n = 0; ; n++)
-      if ((name = G__env_name(n)) == NULL)
+      if ((name = G_get_env_name(n)) == NULL)
         break;
   \endcode
 
@@ -467,7 +467,7 @@ void G__write_env(void)
   \return pointer to variable name
   \return NULL not found
 */
-const char *G__env_name(int n)
+const char *G_get_env_name(int n)
 {
     int i;
 
@@ -490,7 +490,7 @@ void G__read_env(void)
 /*!
   \brief Set up alternative environment variables
 */
-void G__create_alt_env(void)
+void G_create_alt_env(void)
 {
     int i;
 
@@ -511,7 +511,7 @@ void G__create_alt_env(void)
 /*!
   \brief Switch environments
 */
-void G__switch_env(void)
+void G_switch_env(void)
 {
     struct env tmp;
 
