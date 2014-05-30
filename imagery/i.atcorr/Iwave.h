@@ -122,6 +122,30 @@ c        97  B0 band of VGT2 (SPOT5)  ( 0.400-0.550 )                  c
 c        98  B2       "               ( 0.580-0.780 )                  c
 c        99  B3       "               ( 0.700-1.000 )                  c
 c        100 MIR      "               ( 1.450-1.800 )                  c
+c        101 Pan band of Worldview 2  ( 0.450-0.800 )                  c
+c        102 Coastal  "               ( 0.396-0.458 )                  c
+c        103 Blue     "               ( 0.442-0.515 )                  c
+c        104 Green    "               ( 0.506-0.586 )                  c
+c        105 Yellow   "               ( 0.584-0.632 )                  c
+c        106 Red      "               ( 0.624-0.694 )                  c
+c        107 RedEdge  "               ( 0.699-0.749 )                  c
+c        108 NIR1     "               ( 0.765-0.901 )                  c
+c        109 NIR2     "               ( 0.856-1.043 )                  c
+c        110 Pan band of QuickBird 2  ( 0.405-1.053 )                  c
+c        111 Blue     "               ( 0.430-0.545 )                  c
+c        112 Green    "               ( 0.466-0.620 )                  c
+c        113 Red      "               ( 0.590-0.710 )                  c
+c        114 NIR      "               ( 0.715-0.918 )                  c
+c        115 Coastal Aerosol of LS8   ( 0.427-0.459 )                  c
+c        116 Blue	  "               ( 0.436-0.527 )                  c 
+c        117 Green    "               ( 0.512-0.610 )                  c 
+c        118 Red      "               ( 0.625-0.691 )                  c 
+c        119 Pan      "               ( 0.488-0.692 )                  c 
+c        120 NIR      "               ( 0.829-0.900 )                  c 
+c        121 Cirrus   "               ( 1.340-1.409 )                  c  
+c        122 SWIR1    "               ( 1.515-1.697 )                  c 
+c        123 SWIR2    "               ( 2.037-2.037 )                  c 
+c                                                                      c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
 
@@ -163,7 +187,9 @@ private:
 	void rapideye(int iwa);
 	void vgt1_spot4(int iwa);
 	void vgt2_spot5(int iwa);
-
+	void worldview2(int iwa);
+	void quickbird2(int iwa);
+	void landsat_8(int iwa);
 
 public:
 	/* To compute the equivalent wavelength needed for the calculation of the
