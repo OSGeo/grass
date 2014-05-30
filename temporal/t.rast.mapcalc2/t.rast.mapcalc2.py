@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:       t.rast.mapcal2c
+# MODULE:       t.rast.mapcalc2
 # AUTHOR(S):    Thomas Leppelt, Soeren Gebbert
 #
 # PURPOSE:      Provide temporal raster algebra to perform spatial an temporal operations
@@ -10,32 +10,31 @@
 #               datasets.
 # COPYRIGHT:    (C) 2014 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+#		This program is free software under the GNU General Public
+#		License (version 2). Read the file COPYING that comes with GRASS
+#		for details.
 #
 #############################################################################
 
 #%module
-#% description: Apply temporal and spatial oeprations on space time raster datasets using temporal raster algebra.
+#% description: Apply temporal and spatial operations on space time raster datasets using temporal raster algebra.
 #% keywords: temporal
-#% keywords: mapalgebra
+#% keywords: algebra
 #%end
 
 #%option
 #% key: expression
 #% type: string
-#% description: The mapcalc expression for temporal and spatial analysis of space time raster datasets.
-#% key_desc: expression
+#% description: r.mapcalc expression for temporal and spatial analysis of space time raster datasets
 #% required : yes
 #%end
 
 #%option
 #% key: basename
 #% type: string
-#% description: The basename of raster maps that are stored within the result space time raster dataset.
-#% key_desc: basename
-#% required : yes
+#% label: Basename of the new generated output maps
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+#% required: yes
 #%end
 
 #%option
@@ -49,7 +48,7 @@
 
 #%flag
 #% key: s
-#% description: Activate spatial topology.
+#% description: Activate spatial topology
 #%end
 
 #%flag
