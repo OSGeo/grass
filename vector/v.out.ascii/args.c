@@ -107,18 +107,10 @@ void parse_args(int argc, char **argv,
 	*format = GV_ASCII_FORMAT_WKT;
     if (sscanf(dp_opt->answer, "%d", dp) != 1)
 	G_fatal_error(_("Failed to interpret 'dp' parameter as an integer"));
+
     /* the field separator */
-    if (strcmp(delim_opt->answer, "\\t") == 0)
-	*delim = G_store("\t");
-    else if (strcmp(delim_opt->answer, "tab") == 0)
-	*delim = G_store("\t");
-    else if (strcmp(delim_opt->answer, "space") == 0)
-	*delim = G_store(" ");
-    else if (strcmp(delim_opt->answer, "comma") == 0)
-	*delim = G_store(",");
-    else
-	*delim = G_store(delim_opt->answer);
-    
+    *delim = G_option_to_separator(delim_opt);
+
     *field = G_store(field_opt->answer);
     *type = Vect_option_to_types(type_opt);
     if (*type & GV_AREA) {

@@ -44,6 +44,7 @@ int main(int argc, char **argv)
     int field, ret, num_dblinks, i, ncols, col;
     char *fieldname;
     struct Map_info Map;
+    char *sep;
 
     /* set up the options and flags for the command line parser */
 
@@ -142,6 +143,8 @@ int main(int argc, char **argv)
     }
     G_debug(1, "layer number %d, layer name %s", field, fieldname);
 
+    sep = G_option_to_separator(sep_opt);
+
     if (print->answer && shell_print->answer)
 	G_fatal_error(_("Please choose only one print style"));
 
@@ -177,9 +180,6 @@ int main(int argc, char **argv)
 			G_fatal_error(_("Database connection not defined"));
 
 		    if (shell_print->answer) {
-			const char *sep = sep_opt->answer;
-			if (!sep)
-			    sep = "|";
 			if (fi->name)
 			    fprintf(stdout, "%d/%s%s%s%s%s%s%s%s%s\n",
 				    fi->number, fi->name, sep,
