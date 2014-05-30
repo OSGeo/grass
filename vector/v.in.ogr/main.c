@@ -103,6 +103,8 @@ int main(int argc, char *argv[])
     int OFTIntegerListlength;
 
     char *dsn;
+    const char *driver_name;
+    char *datetime_type;
     char *output;
     char **layer_names;		/* names of layers to be imported */
     int *layers;		/* layer indexes */
@@ -336,9 +338,18 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Required parameter <%s> not set"), param.dsn->key);
     }
 
+    driver_name = db_get_default_driver_name();
+
+    if (strcmp(driver_name, "pg") == 0)
+	datetime_type = G_store("timestamp with time zone");
+    else if (strcmp(driver_name, "dbf") == 0)
+	datetime_type = G_store("varchar(22)");
+    else
+	datetime_type = G_store("datetime");
+
     /* dsn is 'PG:', check default connection settings */
     dsn = NULL;
-    if (strcmp(db_get_default_driver_name(), "pg") == 0 &&
+    if (strcmp(driver_name, "pg") == 0 &&
         G_strcasecmp(param.dsn->answer, "PG:") == 0) {
         const char *dbname;
         dbConnection conn;
@@ -1010,7 +1021,7 @@ int main(int argc, char *argv[])
 		    sprintf(buf, ", %s time", Ogr_fieldname);
 		}
 		else if (Ogr_ftype == OFTDateTime) {
-		    sprintf(buf, ", %s datetime", Ogr_fieldname);
+		    sprintf(buf, ", %s %s", Ogr_fieldname, datetime_type);
 #endif
 		}
 		else if (Ogr_ftype == OFTString) {
