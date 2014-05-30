@@ -196,7 +196,7 @@ void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err
 	    G_debug(3, "nlines =  %d\n", nlines);
 	}
     }
-    G_verbose_message("Removed duplicates: %d", ndupl);
+    G_verbose_message(_("Removed duplicates: %d"), ndupl);
 }
 
 /*!
