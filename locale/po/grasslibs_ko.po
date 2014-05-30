@@ -6603,12 +6603,12 @@ msgstr "임시파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/merge_lines.c:240
 #, c-format
 msgid "%d boundaries merged"
-msgstr ""
+msgstr "%d개의 경계를 병합했습니다"
 
 #: ../lib/vector/Vlib/merge_lines.c:241
 #, c-format
 msgid "%d new boundaries"
-msgstr ""
+msgstr "%d개의 새경계"
 
 #: ../lib/vector/Vlib/level.c:34
 msgid "Map structure was never initialized"
@@ -7513,7 +7513,7 @@ msgstr "벡터지도 <%s>를 위한 위상을 생성하고 있습니다..."
 
 #: ../lib/vector/Vlib/build.c:867
 msgid "Topology was built"
-msgstr ""
+msgstr "위상을 생성했습니다"
 
 #: ../lib/vector/Vlib/build.c:878
 #, c-format
@@ -8123,14 +8123,14 @@ msgid ""
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/bridges.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "Removed lines: %d"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "지워진 선: %d"
 
 #: ../lib/vector/Vlib/bridges.c:214
-#, fuzzy, c-format
+#, c-format
 msgid "Removed bridges: %d"
-msgstr "Datum %s 표파일을 열 수 없습니다"
+msgstr "지워진 다리: %d"
 
 #: ../lib/vector/Vlib/ascii.c:84
 #, fuzzy, c-format
@@ -8484,20 +8484,19 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 #: ../lib/vector/Vlib/open.c:879
 #, c-format
 msgid "Using OGR/%s format"
-msgstr ""
+msgstr "OGR/%s 포맷을 씀"
 
 #: ../lib/vector/Vlib/open.c:883
 msgid "Using PostGIS Topology format"
-msgstr ""
+msgstr "PostGIS 위상포맷을 씀"
 
 #: ../lib/vector/Vlib/open.c:885
 msgid "Using PostGIS format"
-msgstr ""
+msgstr "PostGIS 포맷을 씀"
 
 #: ../lib/vector/Vlib/open.c:888
-#, fuzzy
 msgid "Using native format"
-msgstr "잘못된 좌표"
+msgstr "자체포맷을 씀"
 
 #: ../lib/vector/Vlib/open.c:979
 #, fuzzy, c-format
