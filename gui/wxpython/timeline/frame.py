@@ -35,7 +35,7 @@ try:
     import matplotlib.dates as mdates
     from matplotlib import cbook
 except ImportError:
-    raise ImportError(_('The Timeline Tool needs "Matplotlib" package to be installed.'))
+    raise ImportError(_('The Timeline Tool needs the "matplotlib" (python-matplotlib) package to be installed.'))
 
 import grass.script as grass
 from core.utils import _
