@@ -24619,7 +24619,7 @@ msgstr "쪽 사이에 폼피드를 사용합니다"
 
 #: ../raster/r.report/parse.c:132
 msgid "Scientific format"
-msgstr "과학적 양식"
+msgstr "과학적 기수법"
 
 #: ../raster/r.report/parse.c:137 ../raster/r.stats/main.c:204
 msgid "Do not report no data value"
@@ -33784,9 +33784,8 @@ msgstr "출력할 격자지도"
 
 #: ../vector/v.category/main.c:364 ../vector/v.delaunay/main.c:172
 #: ../vector/v.in.ogr/main.c:1310
-#, fuzzy
 msgid "Unable to calculate area centroid"
-msgstr "출력할 격자지도"
+msgstr "면의 중심점을 계산하지 못 했습니다"
 
 #: ../vector/v.category/main.c:378
 #, fuzzy, c-format
