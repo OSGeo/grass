@@ -1050,7 +1050,7 @@ int main(int argc, char *argv[])
 					      Vect_subst_var(Fi->database,
 							     &Map));
 	    if (driver == NULL) {
-		G_fatal_error(_("Unable open database <%s> by driver <%s>"),
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      Vect_subst_var(Fi->database, &Map), Fi->driver);
 	    }
 
