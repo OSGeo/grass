@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
     char *dsn;
     const char *driver_name;
-    char *datetime_type;
+    const char *datetime_type;
     char *output;
     char **layer_names;		/* names of layers to be imported */
     int *layers;		/* layer indexes */
@@ -341,11 +341,11 @@ int main(int argc, char *argv[])
     driver_name = db_get_default_driver_name();
 
     if (strcmp(driver_name, "pg") == 0)
-	datetime_type = G_store("timestamp with time zone");
+	datetime_type = "timestamp with time zone";
     else if (strcmp(driver_name, "dbf") == 0)
-	datetime_type = G_store("varchar(22)");
+	datetime_type = "varchar(22)";
     else
-	datetime_type = G_store("datetime");
+	datetime_type = "datetime";
 
     /* dsn is 'PG:', check default connection settings */
     dsn = NULL;
