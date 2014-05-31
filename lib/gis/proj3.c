@@ -1,9 +1,9 @@
 /*!
-  \file gis/proj3.c
+  \file lib/gis/proj3.c
 
   \brief GIS Library - Projection support (database)
   
-  (C) 2001-2010 by the GRASS Development Team
+  (C) 2001-2014 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -17,11 +17,12 @@
 
 static const char *lookup_proj(const char *);
 static const char *lookup_units(const char *);
+static const char *lookup_epsg();
 static int equal(const char *, const char *);
 static int lower(char);
 
 static int initialized;
-static struct Key_Value *proj_info, *proj_units;
+static struct Key_Value *proj_info, *proj_units, *proj_epsg;
 
 static void init(void)
 {
@@ -30,12 +31,13 @@ static void init(void)
 
     proj_info = G_get_projinfo();
     proj_units = G_get_projunits();
+    proj_epsg = G_get_projepsg();
 
     G_initialize_done(&initialized);
 }
 
 /*!
-  \brief Get database units (localized) name
+  \brief Get units (localized) name for the current location
   
   Returns a string describing the database grid units. It returns a
   plural form (eg. 'feet') if <i>plural</i> is non-zero. Otherwise it
@@ -81,7 +83,7 @@ const char *G_database_unit_name(int plural)
 }
 
 /*!
-  \brief Query cartographic projection
+  \brief Query cartographic projection for the current location
   
   Returns a pointer to a string which is a printable name for
   projection code <i>proj</i> (as returned by G_projection). Returns
@@ -153,7 +155,7 @@ double G_database_units_to_meters_factor(void)
 }
 
 /*!
-  \brief Get datum name for database
+  \brief Get datum name for the current location
   
   Returns a pointer to the name of the map datum of the current
   database. If there is no map datum explicitely associated with the
@@ -183,7 +185,7 @@ const char *G_database_datum_name(void)
 }
 
 /*!
-  \brief Get ellipsoid name of current database
+  \brief Get ellipsoid name for the current location
   
   \return pointer to valid name if ok
   \return NULL on error
@@ -206,19 +208,36 @@ const char *G_database_ellipse_name(void)
     return name;
 }
 
-static const char *lookup_proj(const char *key)
+/*!
+  \brief Get EPGS code for the current location
+  
+  \return pointer to valid EPSG code on success
+  \return NULL on error
+*/
+const char *G_database_epsg_code(void)
+{
+    return lookup_epsg();
+}
+
+const char *lookup_proj(const char *key)
 {
     init();
     return G_find_key_value(key, proj_info);
 }
 
-static const char *lookup_units(const char *key)
+const char *lookup_units(const char *key)
 {
     init();
     return G_find_key_value(key, proj_units);
 }
 
-static int equal(const char *a, const char *b)
+const char *lookup_epsg()
+{
+    init();
+    return G_find_key_value("epsg", proj_epsg);
+}
+
+int equal(const char *a, const char *b)
 {
     if (a == NULL || b == NULL)
 	return a == b;
@@ -230,7 +249,7 @@ static int equal(const char *a, const char *b)
     return 1;
 }
 
-static int lower(char c)
+int lower(char c)
 {
     if (c >= 'A' && c <= 'Z')
 	c += 'a' - 'A';
