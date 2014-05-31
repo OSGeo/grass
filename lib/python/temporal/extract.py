@@ -146,7 +146,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
                 # Join processes if the maximum number of processes are
                 # reached or the end of the loop is reached
-                if proc_count == nprocs or proc_count == num_rows:
+                if proc_count == nprocs or count == num_rows:
                     proc_count = 0
                     exitcodes = 0
                     for proc in proc_list:
