@@ -676,6 +676,13 @@ def parser():
 
 
 def separator(sep):
+    """!Returns separator from G_OPT_F_SEP appropriately converted
+    to character.
+
+    @param separator character or separator keyword
+
+    @return separator character
+    """
     if sep == "pipe":
         return "|"
     elif sep == "comma":
