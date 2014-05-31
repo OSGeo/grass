@@ -171,17 +171,18 @@ class Popen(subprocess.Popen):
 
             # The Windows shell (cmd.exe) requires some special characters to
             # be escaped by preceding them with 3 carets (^^^). cmd.exe /?
-            # mentions <space> and &()[]{}^=;!'+,`~. The vertical bar (|)
-            # should also be included. A quick test revealed that only ^|& need
-            # to be escaped.
+            # mentions <space> and &()[]{}^=;!'+,`~. A quick test revealed that
+            # only ^|&<> need to be escaped. A single quote can be escaped by
+            # enclosing it with double quotes and vice versa.
             for i in range(2, len(args)):
                 # "^" must be the first character in the list to avoid double
                 # escaping.
-                for c in ("^", "|", "&"):
+                for c in ("^", "|", "&", "<", ">"):
                     if c in args[i]:
                         if "=" in args[i]:
-                            k, v = args[i].split("=")
-                            k = k + "="
+                            a = args[i].split("=")
+                            k = a[0] + "="
+                            v = "=".join(a[1:len(a)])
                         else:
                             k = ""
                             v = args[i]
