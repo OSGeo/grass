@@ -674,6 +674,28 @@ def parser():
 
     return _parse_opts(lines[1:])
 
+
+def separator(sep):
+    """!Returns separator from G_OPT_F_SEP appropriately converted
+    to character.
+
+    @param separator character or separator keyword
+
+    @return separator character
+    """
+    if sep == "pipe":
+        return "|"
+    elif sep == "comma":
+        return ","
+    elif sep == "space":
+        return " "
+    elif sep == "tab" or sep == "\\t":
+        return "\t"
+    elif sep == "newline" or sep == "\\n":
+        return "\n"
+    return sep
+    
+
 # interface to g.tempfile
 
 
