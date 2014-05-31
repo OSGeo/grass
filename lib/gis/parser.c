@@ -1457,7 +1457,8 @@ char* G_option_to_separator(const struct Option *option)
     else if (strcmp(option->answer, "tab") == 0 ||
              strcmp(option->answer, "\\t") == 0)
         sep = G_store("\t");
-    else if (strcmp(option->answer, "newline") == 0)
+    else if (strcmp(option->answer, "newline") == 0 ||
+	     strcmp(option->answer, "\\n") == 0)
         sep = G_store("\n");
     else
         sep = G_store(option->answer);
