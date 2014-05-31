@@ -120,15 +120,7 @@ int main(int argc, char *argv[])
     G_get_window(&region);
     
     /* table field separator */
-    zone_info.sep = param.separator->answer;
-    if (strcmp(zone_info.sep, "\\t") == 0)
-	zone_info.sep = "\t";
-    if (strcmp(zone_info.sep, "tab") == 0)
-	zone_info.sep = "\t";
-    if (strcmp(zone_info.sep, "space") == 0)
-	zone_info.sep = " ";
-    if (strcmp(zone_info.sep, "comma") == 0)
-	zone_info.sep = ",";
+    zone_info.sep = G_option_to_separator(param.separator);
 
     zone_info.min = 0.0 / 0.0;	/* set to nan as default */
     zone_info.max = 0.0 / 0.0;	/* set to nan as default */
