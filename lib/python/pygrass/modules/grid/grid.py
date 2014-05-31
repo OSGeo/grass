@@ -374,7 +374,7 @@ def cmd_exe(args):
 
 class GridModule(object):
     # TODO maybe also i.* could be supported easily
-    """Run GRASS raster commands in a multiproccessing mode.
+    """Run GRASS raster commands in a multiprocessing mode.
 
     :param cmd: raster GRASS command, only command staring with r.* are valid.
     :type cmd: str

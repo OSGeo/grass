@@ -1,8 +1,8 @@
-Messages
-==========
+PyGRASS message interface
+=========================
 
 The PyGRASS message interface is a fast and exit-safe
-interface to GRASS C-library message functions.
+interface to the `GRASS C-library message functions <http://grass.osgeo.org/programming7/gis_2error_8c.html>`_.
 
 .. autoclass:: pygrass.messages.Messenger
     :members:

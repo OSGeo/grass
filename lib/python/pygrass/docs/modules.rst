@@ -1,8 +1,9 @@
-Introduction on Modules
-=========================
+Interface to GRASS GIS modules
+==============================
 
-Grass modules are represented as objects. These objects are generated based
-on the XML module description that is used for GUI generation already. ::
+In "modules", GRASS GIS modules are represented as objects. These objects
+are generated based on the XML module description that is used also for
+the generation of the graphical user interface (GUI). ::
 
     >>> from pygrass.modules import Module
     >>> slope_aspect = Module("r.slope.aspect", elevation='elevation',
@@ -10,7 +11,9 @@ on the XML module description that is used for GUI generation already. ::
     ...                        format='percent', overwrite=True)
 
 
-It is possible to create a run-able module object and run later:
+It is possible to create a run-able module object and run it later (this
+is also needed for registering GRASS GIS commands with more than one dot
+in their name, e.g. r.slope.aspect):
 
     >>> slope_aspect = Module("r.slope.aspect", elevation='elevation',
     ...                        slope='slp',  aspect='asp',
@@ -61,7 +64,8 @@ Create the module object input step by step and run later: ::
 
 
 
-It is possible to access the module info with:
+It is possible to access the module descriptions (name, one line description,
+keywords, label) with:
 
     >>> slope_aspect.name
     'r.slope.aspect'
@@ -130,13 +134,13 @@ and get the module documentation with: ::
 
 
 
-For each inputs and outputs parameters it is possible to get info, to see all
-the module inputs, just type: ::
+For each input and output parameter it is possible to obtain specific
+information. To see all module inputs, just type: ::
 
     >>> slope_aspect.inputs #doctest: +NORMALIZE_WHITESPACE
     TypeDict([('elevation', Parameter <elevation> (required:yes, type:raster, multiple:no)), ('format', Parameter <format> (required:no, type:string, multiple:no)), ('prec', Parameter <prec> (required:no, type:string, multiple:no)), ('zfactor', Parameter <zfactor> (required:no, type:float, multiple:no)), ('min_slp_allowed', Parameter <min_slp_allowed> (required:no, type:float, multiple:no))])
 
-To get info for each parameter: ::
+To get information for each parameter: ::
 
     >>> slope_aspect.inputs["elevation"].description
     'Name of input elevation raster map'
@@ -156,13 +160,13 @@ Or get a small documentation for each parameter with:
         Name of input elevation raster map
 
 
-User or developer can check which parameter are set, with: ::
+User or developer can check which parameters have been set, with: ::
 
     if slope_aspect.outputs['aspect'].value == None:
         print "Aspect is not computed"
 
 
-After we set the parameter and run the module, the execution of the module
+After we set the parameters and run the module, the execution of the module
 instantiate a popen attribute to the class. The `Popen`_ class allow user
 to kill/wait/ the process. ::
 

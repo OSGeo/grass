@@ -1,6 +1,10 @@
+.. _vector-label:
 
-Introduction on Vector
-=========================
+Introduction to Vector classes
+==============================
+
+Details about the architecture can be found in the `GRASS GIS 7 Programmer's Manual: GRASS Vector Library <http://grass.osgeo.org/programming7/vectorlib.html>`_
+
 
 Instantiation and basic interaction. ::
 

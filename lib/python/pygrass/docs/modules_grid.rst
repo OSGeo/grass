@@ -1,9 +1,10 @@
-GridModule
-============
+GridModule for raster multiprocessing
+=====================================
 
-GridModule class permit to work with raster data and all the processors
-of your computer. It divides the input data into the number of choosen rows and
-columns and after it patches the results together to obtain only one output map.
+The GridModule class permits to work with raster data and all the 
+processor cores of your computer. It divides the input data into the 
+number of choosen rows and columns and after it patches the results 
+together to obtain only one output map.
 
 .. automodule:: pygrass.modules.grid.grid
     :members:

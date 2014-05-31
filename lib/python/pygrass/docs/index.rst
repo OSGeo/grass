@@ -17,6 +17,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   intro
    gis
    raster
    raster_elements
