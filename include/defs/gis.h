@@ -287,6 +287,7 @@ int G_read_ellipsoid_table(int);
 /* get_projinfo.c */
 struct Key_Value *G_get_projunits(void);
 struct Key_Value *G_get_projinfo(void);
+struct Key_Value *G_get_projepsg(void);
 
 /* get_window.c */
 void G_get_window(struct Cell_head *);
@@ -552,6 +553,7 @@ const char *G_database_projection_name(void);
 const char *G_database_datum_name(void);
 const char *G_database_ellipse_name(void);
 double G_database_units_to_meters_factor(void);
+const char *G_database_epsg_code(void);
 
 /* put_window.c */
 int G_put_window(const struct Cell_head *);
