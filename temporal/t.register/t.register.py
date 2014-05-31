@@ -110,7 +110,7 @@ def main():
     maps = options["maps"]
     type = options["type"]
     file = options["file"]
-    separator = options["separator"]
+    separator = grass.separator(options["separator"])
     start = options["start"]
     end = options["end"]
     unit = options["unit"]

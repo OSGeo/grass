@@ -72,7 +72,7 @@ def main():
     sampler = options["sample"]
     samtype = options["samtype"]
     intype = options["intype"]
-    separator = options["separator"]
+    separator = grass.separator(options["separator"])
     method = options["method"]
     header = flags["h"]
     spatial = flags["s"]

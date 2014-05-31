@@ -84,7 +84,7 @@ def main():
     columns = options["columns"]
     order = options["order"]
     where = options["where"]
-    separator = options["separator"]
+    separator = grass.separator(options["separator"])
     method = options["method"]
     header = flags["h"]
 
