@@ -1135,6 +1135,7 @@ class CmdPanel(wx.Panel):
                 if p.get('prompt','') not in ('color',
                                               'subgroup',
                                               'sigfile',
+                                              'separator',
                                               'dbdriver',
                                               'dbname',
                                               'dbtable',
@@ -1298,6 +1299,17 @@ class CmdPanel(wx.Panel):
                     p['wxId'] = [ selection.GetId() ]
                     selection.Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(item = selection, proportion = 0,
+                                    flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                    border = 5)
+
+                # separator
+                elif prompt == 'separator':
+                    win = gselect.SeparatorSelect(parent = which_panel)
+                    value = self._getValue(p)
+                    win.SetValue(value)
+                    p['wxId'] = [ win.GetId() ]
+                    win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    which_sizer.Add(item = win, proportion = 0,
                                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                     border = 5)
                 
@@ -1595,7 +1607,7 @@ class CmdPanel(wx.Panel):
                     cb.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnSetValue)
                     if p.get('guidependency', ''):
                         cb.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
-                
+
             if self.parent.GetName() == 'MainFrame' and (self._giface and hasattr(self._giface, "_model")):
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
                                      label = _("Parameterized in model"))
