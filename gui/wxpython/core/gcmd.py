@@ -168,7 +168,33 @@ class Popen(subprocess.Popen):
     def __init__(self, args, **kwargs):
         if subprocess.mswindows:
             args = map(EncodeString, args)
-        
+
+            # The Windows shell (cmd.exe) requires some special characters to
+            # be escaped by preceding them with 3 carets (^^^). cmd.exe /?
+            # mentions <space> and &()[]{}^=;!'+,`~. The vertical bar (|)
+            # should also be included. A quick test revealed that only ^|& need
+            # to be escaped.
+            for i in range(2, len(args)):
+                for c in ("^", "|", "&"):
+                    if c in args[i]:
+                        if "=" in args[i]:
+                            k, v = args[i].split("=")
+                            k = k + "="
+                        else:
+                            k = ""
+                            v = args[i]
+
+                        # If there are spaces, the argument was already
+                        # esscaped with double quotes, so don't escape it
+                        # again.
+                        if c in v and not " " in v:
+                            # Here, we escape each ^ in ^^^ with ^^ and a
+                            # <special character> with ^ + <special character>,
+                            # so we need 7 carets.
+
+                            v = v.replace(c, "^^^^^^^" + c)
+                            args[i] = k + v
+
         subprocess.Popen.__init__(self, args, **kwargs)
         
     def recv(self, maxsize = None):
