@@ -57,7 +57,7 @@ def main():
     where = options["where"]
     extended = flags["e"]
     header = flags["h"]
-    separator = options["separator"]
+    separator = grass.separator(options["separator"])
 
     # Make sure the temporal database exists
     tgis.init()

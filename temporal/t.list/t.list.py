@@ -91,7 +91,7 @@ def main():
     columns = options["columns"]
     order = options["order"]
     where = options["where"]
-    separator = options["separator"]
+    separator = grass.separator(options["separator"])
     colhead = flags['h']
 
     # Make sure the temporal database exists
