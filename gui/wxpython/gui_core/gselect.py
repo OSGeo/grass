@@ -25,6 +25,7 @@ Classes:
  - gselect::OgrTypeSelect
  - gselect::CoordinatesSelect
  - gselect::SignatureSelect
+ - gselect::SeparatorSelect
 
 (C) 2007-2014 by the GRASS Development Team 
 
@@ -2301,3 +2302,12 @@ class SignatureSelect(wx.ComboBox):
         except OSError:
             self.SetItems([])
         self.SetValue('')
+
+class SeparatorSelect(wx.ComboBox):
+    """!Widget for selecting seperator"""
+    def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
+                 **kwargs):
+        super(SeparatorSelect, self).__init__(parent, id, size = size, 
+                                              **kwargs)
+        self.SetName("SeparatorSelect")
+        self.SetItems(['pipe', 'comma', 'space', 'tab', 'newline'])
