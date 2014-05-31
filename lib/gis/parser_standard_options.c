@@ -553,6 +553,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "character";
 	Opt->required = NO;
+        Opt->gisprompt = "old,separator,separator";
 	Opt->answer = "pipe";
 	Opt->label = _("Field separator");
 	Opt->description = _("Special characters: pipe, comma, space, tab, newline");
