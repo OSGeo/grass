@@ -503,11 +503,51 @@ void connect_db(struct Format_info_pg *pg_info)
 {
     char stmt[DB_SQL_MAX];
 
+    /* check if connection string already contains user/passwd */
+    if (!strstr(pg_info->conninfo, "user")) {
+        char dbname[GNAME_MAX];
+        char *p;
+        const char *user, *passwd;
+        
+        dbname[0] = '\0';
+        p = strstr(pg_info->conninfo, "dbname");
+        if (p) {
+            int i;
+            p += strlen("dbname") + 1; /* dbname= */
+            
+            for (i = 0; *p && *p != ' '; i++, p++)
+                dbname[i] = *p;
+        }
+        
+        /* try connection settings for given database first, then try
+         * any settings defined for pg driver */
+        db_get_login("pg", dbname, &user, &passwd);
+        if (strlen(dbname) > 0 && !user && !passwd)
+            db_get_login("pg", NULL, &user, &passwd);
+        
+        if (user || passwd) {
+            char  conninfo[DB_SQL_MAX];
+
+            sprintf(conninfo, "%s", pg_info->conninfo);
+            if (user) {
+                strcat(conninfo, " user=");
+                strcat(conninfo, user);
+            }
+            if (passwd) {
+                strcat(conninfo, " password=");
+                strcat(conninfo, passwd);
+            }
+            G_free(pg_info->conninfo);
+            pg_info->conninfo = G_store(conninfo);
+        }
+    }
+    
     pg_info->conn = PQconnectdb(pg_info->conninfo);
-    G_debug(2, "   PQconnectdb(): %s", pg_info->conninfo);
+    G_debug(1, "   PQconnectdb(): %s", pg_info->conninfo);
     if (PQstatus(pg_info->conn) == CONNECTION_BAD)
         G_fatal_error("%s\n%s",
-                      _("Connection to PostgreSQL database failed."),
+                      _("Connection to PostgreSQL database failed. "
+                        "Try to set up username/password by db.login."),
                       PQerrorMessage(pg_info->conn));
 
     /* get DB name */
