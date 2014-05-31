@@ -175,6 +175,8 @@ class Popen(subprocess.Popen):
             # should also be included. A quick test revealed that only ^|& need
             # to be escaped.
             for i in range(2, len(args)):
+                # "^" must be the first character in the list to avoid double
+                # escaping.
                 for c in ("^", "|", "&"):
                     if c in args[i]:
                         if "=" in args[i]:
