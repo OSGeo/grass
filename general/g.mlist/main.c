@@ -143,15 +143,15 @@ int main(int argc, char *argv[])
 
     if ((flag.pretty->answer || flag.full->answer) && flag.type->answer)
 	G_fatal_error(_("-%c/-%c and -%c are mutually exclusive"),
-		      flag.pretty->answer, flag.full->key, flag.type->answer);
+		      flag.pretty->key, flag.full->key, flag.type->key);
 
     if (flag.pretty->answer && flag.full->answer)
 	G_fatal_error(_("-%c and -%c are mutually exclusive"),
-		      flag.pretty->answer, flag.full->answer);
+		      flag.pretty->key, flag.full->key);
 
     if (flag.regex->answer && flag.extended->answer)
 	G_fatal_error(_("-%c and -%c are mutually exclusive"),
-		      flag.regex->answer, flag.extended->answer);
+		      flag.regex->key, flag.extended->key);
 
     if (opt.pattern->answer) {
 	if (flag.regex->answer || flag.extended->answer)
