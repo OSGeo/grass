@@ -4,16 +4,14 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static char *get_option_pg(char **, const char *);
-static void check_option_on_off(const char *, char **);
+static int parse_option_pg(const char *, char **, char **);
 
 void make_link(const char *dsn_opt,
 	       const char *format,
 	       char *option_str, char **options)
 {
     int use_ogr;
-    char *filename, *pg_schema, *pg_fid, *pg_geom_name, *dsn;
-    char *pg_spatial_index, *pg_primary_key, *pg_topo, *pg_sf;
+    char *filename, *dsn;
     FILE *fp;
     
     struct Key_Value *key_val;
@@ -81,30 +79,19 @@ void make_link(const char *dsn_opt,
     }
         
     /* parse options for PG data format */
-    pg_schema = pg_fid = pg_geom_name = NULL;
-    pg_spatial_index = pg_primary_key = pg_topo = NULL;
     if (options && *options && !use_ogr) {
-	pg_schema    = get_option_pg(options, "schema");
-	pg_fid       = get_option_pg(options, "fid");
-	pg_geom_name = get_option_pg(options, "geometry_name");
-	pg_spatial_index = get_option_pg(options, "spatial_index");
-	if (pg_spatial_index) {
-	    check_option_on_off("spatial_index", &pg_spatial_index);
-	}
-	pg_primary_key = get_option_pg(options, "primary_key");
-	if (pg_primary_key) {
-	    check_option_on_off("primary_key", &pg_primary_key);
-	}
-        pg_topo = get_option_pg(options, "topology");
-        if (pg_topo) {
-	    check_option_on_off("topology", &pg_topo);
-	}
-        pg_sf = get_option_pg(options, "simple_feature");
-        if (pg_sf) {
-	    check_option_on_off("simple_feature", &pg_topo);
-	}
+        int i;
+        char *key, *value;
+        
+        i = 0;
+        while (options[i]) {
+            if (parse_option_pg(options[i++], &key, &value) != 0)
+                continue;
+            G_set_key_value(key, value, key_val);
+        }
     }
-    /* add key/value items */
+
+    /* datasource section */
     if (dsn) {
 	if (use_ogr)
 	    G_set_key_value("dsn", dsn, key_val);
@@ -112,29 +99,14 @@ void make_link(const char *dsn_opt,
 	    G_set_key_value("conninfo", dsn, key_val);
     }
     
-    if (format && use_ogr)
-	G_set_key_value("format", format, key_val);
-    
-    if (use_ogr && option_str)
-	G_set_key_value("options", option_str, key_val);
-    
-    if (!use_ogr) {
-	if (pg_schema)
-	    G_set_key_value("schema", pg_schema, key_val);
-	if (pg_fid)
-	    G_set_key_value("fid", pg_fid, key_val);
-	if (pg_geom_name)
-	    G_set_key_value("geometry_name", pg_geom_name, key_val);
-	if (pg_spatial_index)
-	    G_set_key_value("spatial_index", pg_spatial_index, key_val);
-	if (pg_primary_key)
-	    G_set_key_value("primary_key", pg_primary_key, key_val);
-	if (pg_topo)
-	    G_set_key_value("topology", pg_topo, key_val);
-	if (pg_sf)
-	    G_set_key_value("simple_feature", pg_topo, key_val);
+    /* OGR only */
+    if (use_ogr) {
+        if (format)
+            G_set_key_value("format", format, key_val);
+        if (option_str)
+            G_set_key_value("options", option_str, key_val);
     }
-    
+   
     /* save file - OGR or PG */
     fp = G_fopen_new("", filename);
     if (!fp)
@@ -154,40 +126,23 @@ void make_link(const char *dsn_opt,
     G_free_key_value(key_val);
 }
 
-char *get_option_pg(char **options, const char *key)
+int parse_option_pg(const char *option, char **key, char **value)
 {
-    int   i, opt_len, key_len;
-    char *opt, *value;
+    char **tokens;
     
-    key_len = strlen(key);
-    /* parse options for PG data provider*/
-    opt = value = NULL;
-    for (i = 0; options[i] && !opt; i++) {
-	if (G_strncasecmp(key, options[i], key_len) == 0)
-	    opt = options[i];
+    tokens = G_tokenize(option, "=");
+    if (G_number_of_tokens(tokens) != 2) {
+        G_warning(_("Unable to parse option '%s'"), option);
+        return 1;
     }
-	
-    if (!opt)
-	return NULL;
     
-    opt_len = strlen(opt);
-    value = G_malloc(opt_len - key_len);
-    key_len++;
-    for (i = key_len; i < opt_len; i++) {
-	value[i - key_len] = opt[i];
-    }
-    value[opt_len - key_len] = '\0';
+    *key = G_store(tokens[0]);
+    G_str_to_lower(*key);
+    
+    *value = G_store(tokens[1]);
+    G_str_to_lower(*value);
 
-    return value;
-}
+    G_free_tokens(tokens);
 
-void check_option_on_off(const char *key, char **value)
-{
-    if(G_strcasecmp(*value, "yes") != 0 &&
-       G_strcasecmp(*value, "no") != 0) {
-	G_warning(_("Invalid option '%s=%s' ignored (allowed values: '%s', '%s')"),
-		  key, *value, "YES", "NO");
-	G_free(*value);
-	*value = NULL;
-    }
+    return 0;
 }
