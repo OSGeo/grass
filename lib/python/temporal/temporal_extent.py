@@ -347,7 +347,7 @@ class TemporalExtent(SQLDatabaseInterface):
             | Start time:................. 2001-01-10 00:00:00
             | End time:................... 2008-01-01 00:00:00
 
-           @endcoe
+           @endcode
         """
 
         start = None
