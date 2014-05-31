@@ -46,7 +46,6 @@
 #%end
 #%option G_OPT_F_SEP
 #% label: Field separator (format: input[,output])
-#% description: Valid field separators are also "space", "tab", or "comma"
 #% required : no
 #% guisection: Input coordinates
 #%end
@@ -159,34 +158,8 @@ def main():
 	except ValueError:
 	    ifs = ofs = fs
 
-    ifs = ifs.lower()
-    ofs = ofs.lower()
-    
-    if ifs in ('space', 'tab'):
-	ifs = ' '
-    elif ifs == 'comma':
-        ifs = ','
-    else:
-        if len(ifs) > 1:
-            grass.warning(_("Invalid field separator, using '%s'") % ifs[0])
-        try:
-            ifs = ifs[0]
-        except IndexError:
-            grass.fatal(_("Invalid field separator '%s'") % ifs)
-   
-    if ofs.lower() == 'space':
-        ofs = ' '
-    elif ofs.lower() == 'tab':
-        ofs = '\t'
-    elif ofs.lower() == 'comma':
-        ofs = ','
-    else:
-        if len(ofs) > 1:
-            grass.warning(_("Invalid field separator, using '%s'") % ofs[0])
-        try:
-            ofs = ofs[0]
-        except IndexError:
-            grass.fatal(_("Invalid field separator '%s'") % ifs)
+    ifs = grass.separator(ifs)
+    ofs = grass.separator(ofs)
 
     #### set up projection params
     s = grass.read_command("g.proj", flags='j')
