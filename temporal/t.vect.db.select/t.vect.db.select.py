@@ -57,7 +57,7 @@ def main():
     columns = options["columns"]
     tempwhere = options["t_where"]
     layer = options["layer"]
-    separator = options["separator"]
+    separator = grass.separator(options["separator"])
 
     if where == "" or where == " " or where == "\n":
         where = None
