@@ -5,7 +5,6 @@
 # Huidae Cho <grass4u@gmail.com>, 2005, 2014.
 #
 #: ../gui/wxpython/gis_set.py:122
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
