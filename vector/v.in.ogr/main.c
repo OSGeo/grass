@@ -1468,9 +1468,9 @@ int main(int argc, char *argv[])
 	    else
 		xmax = abs(box.W);
 	    if (abs(box.N) > abs(box.S))
-		xmax = abs(box.N);
+		ymax = abs(box.N);
 	    else
-		xmax = abs(box.S);
+		ymax = abs(box.S);
 
 	    if (xmax < ymax)
 		xmax = ymax;
