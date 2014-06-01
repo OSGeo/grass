@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
     driver_name = db_get_default_driver_name();
 
     if (strcmp(driver_name, "pg") == 0)
-	datetime_type = "timestamp with time zone";
+	datetime_type = "timestamp";
     else if (strcmp(driver_name, "dbf") == 0)
 	datetime_type = "varchar(22)";
     else
