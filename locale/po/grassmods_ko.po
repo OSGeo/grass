@@ -38669,7 +38669,7 @@ msgid "Cleaning polygons"
 msgstr "다각형을 정리하는 중"
 
 #: ../vector/v.in.ogr/main.c:1220
-#, c-format
+#, fuzzy, c-format
 msgid "Snapping boundaries (threshold = %.3e)..."
 msgstr "출력할 격자지도"
 
