@@ -1501,6 +1501,7 @@ int main(int argc, char *argv[])
 
 	    G_important_message("%s", separator);
 	    G_warning(_("Errors were encountered during the import"));
+	    G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
 
 	    if (snap < min_snap) {
 		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
@@ -1509,7 +1510,9 @@ int main(int argc, char *argv[])
 		min_snap = snap * 10;
 		G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
 	    }
-	    /* else assume manual cleaning is required */
+	    else
+		/* assume manual cleaning is required */
+		G_important_message(_("Manual cleaning may be needed."));
 	}
     }
 
