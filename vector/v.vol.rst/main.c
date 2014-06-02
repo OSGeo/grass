@@ -555,7 +555,7 @@ int main(int argc, char *argv[])
      */
     if (TESTOUT) {
 	if ((fd4 = fopen("testout", "w+")) == NULL)
-	    G_fatal_error("Unable To open testout");
+	    G_fatal_error("Unable to open testout");
     }
 
     Vect_set_open_level(1);
@@ -632,7 +632,8 @@ int main(int argc, char *argv[])
 		     (zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_cell)))
 		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
-	}
+	} else
+	  G_warning("Unable to create cellout raster map without cellinp");
 	ertot = 0.;
         
 	out_cond1 = (outz != NULL) || (gradient != NULL) || (aspect1 != NULL)
@@ -817,6 +818,8 @@ int main(int argc, char *argv[])
 
 		    Rast_command_history(&hist);
 		    Rast_write_history(cellout, &hist);
+		    G_message(_("Raster map <%s> created"), cellout);
+
 		    fclose(Tmp_fd_cell);
 		    unlink(Tmp_file_cell);
 		}
@@ -855,6 +858,7 @@ int main(int argc, char *argv[])
 		db_close_database_shutdown_driver(driver);
 		Vect_build(&Map);
 		Vect_close(&Map);
+		G_message(_("Vector map <%s> created"), cvdev);
 	    }
 
 	    fprintf(stderr, "\n");
