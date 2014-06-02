@@ -1340,12 +1340,12 @@ msgstr "현재 지도세트 안에 유효한 %s 파일이 없습니다\n"
 #: ../lib/gis/list.c:86
 #, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr "지도세트 <%s> 안에 유효한 %s 파일이 없습니다\n"
+msgstr "지도세트 <%2$s> 안에 유효한 %1$s 파일이 없습니다\n"
 
 #: ../lib/gis/list.c:132
 #, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr "지도세트 <%s> 안에 유효한 %s 파일들:\n"
+msgstr "지도세트 <%2$s> 안에 유효한 %1$s 파일들:\n"
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
