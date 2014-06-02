@@ -491,8 +491,8 @@ int main(int argc, char *argv[])
 	(cellinp != NULL || outz != NULL || cellout != NULL ||
 	 gradient != NULL || aspect1 != NULL || aspect2 != NULL ||
 	 ncurv != NULL || gcurv != NULL || mcurv != NULL || devi != NULL))
-	G_fatal_error("Crossvalidation cannot be computed simultanuously "
-                      "with output grids or devi file");
+	G_fatal_error(_("Crossvalidation cannot be computed simultanuously "
+                      "with output grids or devi file"));
 
     z_orig_in = z_orig;
     tb_res_in = tb_res;
@@ -507,46 +507,46 @@ int main(int argc, char *argv[])
     /***************        KMAX2 = GRADPARAM1*npmax;***************/
     az = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!az)
-	G_fatal_error("Not enough memory for az");
+	G_fatal_error(_("Not enough memory for az"));
     adx = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adx)
-	G_fatal_error("Not enough memory for adx");
+	G_fatal_error(_("Not enough memory for adx"));
     ady = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!ady)
-	G_fatal_error("Not enough memory for ady");
+	G_fatal_error(_("Not enough memory for ady"));
     adxx = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adxx)
-	G_fatal_error("Not enough memory for adxx");
+	G_fatal_error(_("Not enough memory for adxx"));
     adyy = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adyy)
-	G_fatal_error("Not enough memory for adyy");
+	G_fatal_error(_("Not enough memory for adyy"));
     adxy = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adxy)
-	G_fatal_error("Not enough memory for adxy");
+	G_fatal_error(_("Not enough memory for adxy"));
     adz = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adz)
-	G_fatal_error("Not enough memory for adz");
+	G_fatal_error(_("Not enough memory for adz"));
     adxz = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adxz)
-	G_fatal_error("Not enough memory for adxz");
+	G_fatal_error(_("Not enough memory for adxz"));
     adyz = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adyz)
-	G_fatal_error("Not enough memory for adyz");
+	G_fatal_error(_("Not enough memory for adyz"));
     adzz = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adzz)
-	G_fatal_error("Not enough memory for adzz");
+	G_fatal_error(_("Not enough memory for adzz"));
 
 
     if ((data =
 	 data_new(x_orig, y_orig, z_orig, n_rows, n_cols, n_levs, 0)) == NULL)
-	G_fatal_error("Unable to create octdata");
+	G_fatal_error(_("Unable to create octdata"));
     if ((functions =
 	 OT_functions_new(oct_compare, oct_divide_data, oct_add_data,
 			  oct_intersect, oct_division_check,
 			  oct_get_points)) == NULL)
-	G_fatal_error("Unable to create octfunc");
+	G_fatal_error(_("Unable to create octfunc"));
     if ((tree = OT_tree_new(data, NULL, NULL, functions, 0)) == NULL)
-	G_fatal_error("Unable to create octtree");
+	G_fatal_error(_("Unable to create octtree"));
 
     root = tree;
 
@@ -555,7 +555,7 @@ int main(int argc, char *argv[])
      */
     if (TESTOUT) {
 	if ((fd4 = fopen("testout", "w+")) == NULL)
-	    G_fatal_error("Unable to open testout");
+	    G_fatal_error(_("Unable to open testout"));
     }
 
     Vect_set_open_level(1);
@@ -621,12 +621,12 @@ int main(int argc, char *argv[])
 	    fdcout = Rast_open_fp_new(cellout);
 	    zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * n_cols);
 	    if (!zero_array_cell)
-		clean_fatal_error("Not enough memory for zero_array_cell\n");
+		clean_fatal_error(_("Not enough memory for zero_array_cell"));
 	    for (i = 0; i < n_cols; i++)
 		zero_array_cell[i] = 0;
 	    Tmp_file_cell = G_tempfile();
 	    if (NULL == (Tmp_fd_cell = fopen(Tmp_file_cell, "w+"))) {
-		sprintf(msg, "Can't open temp file [%s] ", Tmp_file_cell);
+		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_cell);
 		clean_fatal_error(msg);
 	    }
 	    /* filling temp file with zeroes */
@@ -637,7 +637,7 @@ int main(int argc, char *argv[])
 		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
 	    }
 	} else
-	  G_warning("Unable to create cellout raster map without cellinp");
+	  G_warning(_("Unable to create cellout raster map without cellinp"));
 	ertot = 0.;
         
 	out_cond1 = (outz != NULL) || (gradient != NULL) || (aspect1 != NULL)
