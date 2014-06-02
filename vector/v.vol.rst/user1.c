@@ -211,7 +211,8 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 	}
 	else {
 	    if (!(point = point_new(x, y, z, w, sm))) {
-		clean_fatal_error(_("Cannot allocate memory for point"));
+		clean();
+		G_fatal_error(_("Cannot allocate memory for point"));
 	    }
 
 	    a = OT_insert_oct(point, root);
@@ -274,8 +275,10 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     totsegm = translate_oct(root, ((struct octdata *)(root->data))->x_orig,
 			    ((struct octdata *)(root->data))->y_orig,
 			    ((struct octdata *)(root->data))->z_orig, nz);
-    if (!totsegm)
-	clean_fatal_error(_("Zero segments!"));
+    if (!totsegm) {
+	clean();
+	G_fatal_error(_("Zero segments!"));
+    }
 
     ((struct octdata *)(root->data))->x_orig = 0;
     ((struct octdata *)(root->data))->y_orig = 0;
@@ -361,8 +364,8 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     if (maskmap != NULL) {
 	mapsetm = G_find_raster2(maskmap, "");
 	if (!mapsetm) {
-	    sprintf(buf, _("Mask raster map [%s] not found"), maskmap);
-	    clean_fatal_error(buf);
+	    clean();
+	    G_fatal_error(_("Mask raster map [%s] not found"), maskmap);
 	}
 	bitmask = BM_create(nsizc, nsizr);
 	cellmask = Rast_allocate_c_buf();
@@ -377,7 +380,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 		    BM_set(bitmask, j, irev, 1);
 	    }
 	}
-	G_message("Bitmap mask created");
+	G_message(_("Bitmap mask created"));
     }
 
     return 1;
@@ -394,7 +397,6 @@ int OUTGR()
     FCELL *cell;
     float *data;
     int i, iarc, cnt;
-    char buff[1024];
     int bmask = 1;
     int x, y;
     float value;
@@ -417,7 +419,8 @@ int OUTGR()
     current_region.top = nsizl * tb_res_in + z_orig_in;
 
     if (!(data = (float *)G_malloc(sizeof(float) * nsizr * nsizc * nsizl))) {
-	clean_fatal_error(_("Out of memory"));
+	clean();
+	G_fatal_error(_("Out of memory"));
     }
 
   /*** Write elevation results ***/
@@ -425,8 +428,8 @@ int OUTGR()
 
 	cf1 = Rast3d_open_new_opt_tile_size(outz, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf1 == NULL) {
-	    sprintf(buff, _("Unable to open %s for writing"), outz);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Unable to open %s for writing"), outz);
 	}
 
 	/* seek to the beginning */
@@ -435,8 +438,10 @@ int OUTGR()
 	/* Read data in from temp file */
 	read_val =
 	    fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_z);
-	if (read_val < 0)
-	    clean_fatal_error(_("Unable to read data from temp file"));
+	if (read_val < 0) {
+	    clean();
+	    G_fatal_error(_("Unable to read data from temp file"));
+	}
 
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
@@ -451,10 +456,10 @@ int OUTGR()
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf1, x, y, iarc, value) == 0) {
-			sprintf(buff,
+			clean();
+			G_fatal_error(
 				_("Error writing cell (%d,%d,%d) with value %f"),
 				x, y, iarc, value);
-			clean_fatal_error(buff);
 		    }
 
 		    cnt++;
@@ -465,8 +470,8 @@ int OUTGR()
 
 	/* Close the file */
 	if (Rast3d_close(cf1) == 0) {
-	    sprintf(buff, _("Error closing output file %s"), outz);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Error closing output file %s"), outz);
 	} else
             G_message(_("3D raster map <%s> created"), outz);
     }
@@ -476,8 +481,8 @@ int OUTGR()
 
 	cf2 = Rast3d_open_new_opt_tile_size(gradient, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf2 == NULL) {
-	    sprintf(buff, _("Unable to open %s for writing"), gradient);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Unable to open %s for writing"), gradient);
 	}
 
 	/* seek to the beginning */
@@ -486,8 +491,10 @@ int OUTGR()
 	/* Read data in from temp file */
 	read_val =
 	    fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dx);
-	if (read_val < 0)
-	    clean_fatal_error(_("Unable to read data from temp file"));
+	if (read_val < 0) {
+	    clean();
+	    G_fatal_error(_("Unable to read data from temp file"));
+	}
 
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
@@ -502,10 +509,10 @@ int OUTGR()
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf2, x, y, iarc, value) == 0) {
-			sprintf(buff,
+			clean();
+			G_fatal_error(
 				_("Error writing cell (%d,%d,%d) with value %f"),
 				x, y, iarc, value);
-			clean_fatal_error(buff);
 		    }
 
 		    cnt++;
@@ -516,8 +523,8 @@ int OUTGR()
 
 	/* Close the file */
 	if (Rast3d_close(cf2) == 0) {
-	    sprintf(buff, _("Error closing output file %s"), gradient);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Error closing output file %s"), gradient);
 	} else
             G_message(_("3D raster map <%s> created"), gradient);
     }
@@ -527,8 +534,8 @@ int OUTGR()
 
 	cf3 = Rast3d_open_new_opt_tile_size(aspect1, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf3 == NULL) {
-	    sprintf(buff, _("Unable to open %s for writing"), aspect1);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Unable to open %s for writing"), aspect1);
 	}
 
 	/* seek to the beginning */
@@ -537,8 +544,10 @@ int OUTGR()
 	/* Read data in from temp file */
 	read_val =
 	    fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dy);
-	if (read_val < 0)
-	    clean_fatal_error(_("Unable to read data from temp file"));
+	if (read_val < 0) {
+	    clean();
+	    G_fatal_error(_("Unable to read data from temp file"));
+	}
 
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
@@ -553,10 +562,10 @@ int OUTGR()
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf3, x, y, iarc, value) == 0) {
-			sprintf(buff,
+			clean();
+			G_fatal_error(
 				_("Error writing cell (%d,%d,%d) with value %f"),
 				x, y, iarc, value);
-			clean_fatal_error(buff);
 		    }
 
 		    cnt++;
@@ -567,8 +576,8 @@ int OUTGR()
 
 	/* Close the file */
 	if (Rast3d_close(cf3) == 0) {
-	    sprintf(buff, _("Error closing output file %s"), aspect1);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Error closing output file %s"), aspect1);
 	} else
             G_message(_("3D raster map <%s> created"), aspect1);
     }
@@ -578,8 +587,8 @@ int OUTGR()
 
 	cf4 = Rast3d_open_new_opt_tile_size(aspect2, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf4 == NULL) {
-	    sprintf(buff, _("Unable to open %s for writing"), aspect2);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Unable to open %s for writing"), aspect2);
 	}
 
 	/* seek to the beginning */
@@ -588,8 +597,10 @@ int OUTGR()
 	/* Read data in from temp file */
 	read_val =
 	    fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_dz);
-	if (read_val < 0)
-	    clean_fatal_error(_("Unable to read data from temp file"));
+	if (read_val < 0) {
+	    clean();
+	    G_fatal_error(_("Unable to read data from temp file"));
+	}
 
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
@@ -604,10 +615,10 @@ int OUTGR()
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf4, x, y, iarc, value) == 0) {
-			sprintf(buff,
+			clean();
+			G_fatal_error(
 				_("Error writing cell (%d,%d,%d) with value %f"),
 				x, y, iarc, value);
-			clean_fatal_error(buff);
 		    }
 
 		    cnt++;
@@ -618,8 +629,8 @@ int OUTGR()
 
 	/* Close the file */
 	if (Rast3d_close(cf4) == 0) {
-	    sprintf(buff, _("Error closing output file %s"), aspect2);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Error closing output file %s"), aspect2);
 	} else
             G_message(_("3D raster map <%s> created"), aspect2);
     }
@@ -629,8 +640,8 @@ int OUTGR()
 
 	cf5 = Rast3d_open_new_opt_tile_size(ncurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf5 == NULL) {
-	    sprintf(buff, _("Unable to open %s for writing"), ncurv);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Unable to open %s for writing"), ncurv);
 	}
 
 	/* seek to the beginning */
@@ -639,8 +650,10 @@ int OUTGR()
 	/* Read data in from temp file */
 	read_val =
 	    fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_xx);
-	if (read_val < 0)
-	    clean_fatal_error(_("Unable to read data from temp file"));
+	if (read_val < 0) {
+	    clean();
+	    G_fatal_error(_("Unable to read data from temp file"));
+	}
 
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
@@ -655,10 +668,10 @@ int OUTGR()
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf5, x, y, iarc, value) == 0) {
-			sprintf(buff,
+			clean();
+			G_fatal_error(
 				_("Error writing cell (%d,%d,%d) with value %f"),
 				x, y, iarc, value);
-			clean_fatal_error(buff);
 		    }
 
 		    cnt++;
@@ -669,8 +682,8 @@ int OUTGR()
 
 	/* Close the file */
 	if (Rast3d_close(cf5) == 0) {
-	    sprintf(buff, _("Error closing output file %s"), ncurv);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Error closing output file %s"), ncurv);
 	} else
             G_message(_("3D raster map <%s> created"), ncurv);
     }
@@ -680,8 +693,8 @@ int OUTGR()
 
 	cf6 = Rast3d_open_new_opt_tile_size(gcurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf6 == NULL) {
-	    sprintf(buff, _("Unable to open %s for writing"), gcurv);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Unable to open %s for writing"), gcurv);
 	}
 
 	/* seek to the beginning */
@@ -690,8 +703,10 @@ int OUTGR()
 	/* Read data in from temp file */
 	read_val =
 	    fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_yy);
-	if (read_val < 0)
-	    clean_fatal_error(_("Unable to read data from temp file"));
+	if (read_val < 0) {
+	    clean();
+	    G_fatal_error(_("Unable to read data from temp file"));
+	}
 
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
@@ -706,10 +721,10 @@ int OUTGR()
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf6, x, y, iarc, value) == 0) {
-			sprintf(buff,
+			clean();
+			G_fatal_error(
 				_("Error writing cell (%d,%d,%d) with value %f"),
 				x, y, iarc, value);
-			clean_fatal_error(buff);
 		    }
 
 		    cnt++;
@@ -720,8 +735,8 @@ int OUTGR()
 
 	/* Close the file */
 	if (Rast3d_close(cf6) == 0) {
-	    sprintf(buff, _("Error closing output file %s"), gcurv);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Error closing output file %s"), gcurv);
 	} else
             G_message(_("3D raster map <%s> created"), gcurv);
     }
@@ -731,8 +746,8 @@ int OUTGR()
 
 	cf7 = Rast3d_open_new_opt_tile_size(mcurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf7 == NULL) {
-	    sprintf(buff, _("Unable to open %s for writing"), mcurv);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Unable to open %s for writing"), mcurv);
 	}
 
 	/* seek to the beginning */
@@ -741,8 +756,10 @@ int OUTGR()
 	/* Read data in from temp file */
 	read_val =
 	    fread(data, sizeof(float), nsizr * nsizc * nsizl, Tmp_fd_xy);
-	if (read_val < 0)
-	    clean_fatal_error(_("Unable to read data from temp file"));
+	if (read_val < 0) {
+	    clean();
+	    G_fatal_error(_("Unable to read data from temp file"));
+	}
 
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
@@ -757,10 +774,10 @@ int OUTGR()
 		    if (!bmask)
 			Rast3d_set_null_value(&value, 1, FCELL_TYPE);
 		    if (Rast3d_put_float(cf7, x, y, iarc, value) == 0) {
-			sprintf(buff,
+			clean();
+			G_fatal_error(
 				_("Error writing cell (%d,%d,%d) with value %f"),
 				x, y, iarc, value);
-			clean_fatal_error(buff);
 		    }
 
 		    cnt++;
@@ -771,8 +788,8 @@ int OUTGR()
 
 	/* Close the file */
 	if (Rast3d_close(cf7) == 0) {
-	    sprintf(buff, _("Error closing output file %s"), mcurv);
-	    clean_fatal_error(buff);
+	    clean();
+	    G_fatal_error(_("Error closing output file %s"), mcurv);
 	} else
             G_message(_("3D raster map <%s> created"), mcurv);
     }

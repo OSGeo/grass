@@ -480,49 +480,49 @@ int main(int argc, char *argv[])
 
     az = G_alloc_vector(n_cols + 1);
     if (!az) {
-	G_fatal_error(_("Not enough memory for az"));
+	G_fatal_error(_("Not enough memory for %s"), "az");
     }
     if (cond1) {
 	adx = G_alloc_vector(n_cols + 1);
 	if (!adx) {
-	    G_fatal_error(_("Not enough memory for adx"));
+	    G_fatal_error(_("Not enough memory for %s"), "adx");
 	}
 	ady = G_alloc_vector(n_cols + 1);
 	if (!ady) {
-	    G_fatal_error(_("Not enough memory for ady"));
+	    G_fatal_error(_("Not enough memory for %s"), "ady");
 	}
 	if (cond2) {
 	    adxx = G_alloc_vector(n_cols + 1);
 	    if (!adxx) {
-		G_fatal_error(_("Not enough memory for adxx"));
+		G_fatal_error(_("Not enough memory for %s"), "adxx");
 	    }
 	    adyy = G_alloc_vector(n_cols + 1);
 	    if (!adyy) {
-		G_fatal_error(_("Not enough memory for adyy"));
+		G_fatal_error(_("Not enough memory for %s"), "adyy");
 	    }
 	    adxy = G_alloc_vector(n_cols + 1);
 	    if (!adxy) {
-		G_fatal_error(_("Not enough memory for adxy"));
+		G_fatal_error(_("Not enough memory for %s"), "adxy");
 	    }
 	}
     }
     if ((data =
 	 quad_data_new(x_orig, y_orig, xm, ym, n_rows, n_cols, 0,
 		       KMAX)) == NULL)
-	G_fatal_error(_("Cannot create quaddata"));
+	G_fatal_error(_("Unable to create %s"), "quaddata");
     if ((functions =
 	 MT_functions_new(quad_compare, quad_divide_data, quad_add_data,
 			  quad_intersect, quad_division_check,
 			  quad_get_points)) == NULL)
 
-	G_fatal_error(_("Cannot create quadfunc"));
+	G_fatal_error(_("Unable to create %s"), "quadfunc");
 
     if ((tree = MT_tree_new(data, NULL, NULL, 0)) == NULL)
-	G_fatal_error(_("Cannot create tree"));
+	G_fatal_error(_("Unable to create %s"), "tree");
     root = tree;
 
     if ((info = MT_tree_info_new(root, functions, dmin, KMAX)) == NULL)
-	G_fatal_error(_("Cannot create tree info"));
+	G_fatal_error(_("Unable to create %s"), "tree info");
 
     open_check = Vect_open_old2(&Map, input, "", parm.field->answer);
     if (open_check < 1)
@@ -593,7 +593,7 @@ int main(int argc, char *argv[])
 	if (db_execute_immediate(driver2, &sql2) != DB_OK) {
 	    db_close_database(driver2);
 	    db_shutdown_driver(driver2);
-	    G_fatal_error(_("Unable to create table: '%s'"),
+	    G_fatal_error(_("Unable to create table '%s'"),
 			  db_get_string(&sql2));
 	}
 	count = 1;
