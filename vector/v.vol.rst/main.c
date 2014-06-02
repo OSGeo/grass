@@ -69,8 +69,6 @@ int n_rows_in;			/* fix by JH 04/24/02 */
 int cv;
 int sig1;
 
-char msg[80];
-
 struct Map_info Map;
 dbString sql;
 dbDriver *driver;
@@ -507,46 +505,46 @@ int main(int argc, char *argv[])
     /***************        KMAX2 = GRADPARAM1*npmax;***************/
     az = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!az)
-	G_fatal_error(_("Not enough memory for az"));
+	G_fatal_error(_("Not enough memory for %s"), "az");
     adx = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adx)
-	G_fatal_error(_("Not enough memory for adx"));
+	G_fatal_error(_("Not enough memory for %s"), "adx");
     ady = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!ady)
-	G_fatal_error(_("Not enough memory for ady"));
+	G_fatal_error(_("Not enough memory for %s"), "ady");
     adxx = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adxx)
-	G_fatal_error(_("Not enough memory for adxx"));
+	G_fatal_error(_("Not enough memory for %s"), "adxx");
     adyy = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adyy)
-	G_fatal_error(_("Not enough memory for adyy"));
+	G_fatal_error(_("Not enough memory for %s"), "adyy");
     adxy = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adxy)
-	G_fatal_error(_("Not enough memory for adxy"));
+	G_fatal_error(_("Not enough memory for %s"), "adxy");
     adz = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adz)
-	G_fatal_error(_("Not enough memory for adz"));
+	G_fatal_error(_("Not enough memory for %s"), "adz");
     adxz = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adxz)
-	G_fatal_error(_("Not enough memory for adxz"));
+	G_fatal_error(_("Not enough memory for %s"), "adxz");
     adyz = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adyz)
-	G_fatal_error(_("Not enough memory for adyz"));
+	G_fatal_error(_("Not enough memory for %s"), "adyz");
     adzz = (double *)G_malloc(sizeof(double) * (n_cols + 1));
     if (!adzz)
-	G_fatal_error(_("Not enough memory for adzz"));
+	G_fatal_error(_("Not enough memory for %s"), "adzz");
 
 
     if ((data =
 	 data_new(x_orig, y_orig, z_orig, n_rows, n_cols, n_levs, 0)) == NULL)
-	G_fatal_error(_("Unable to create octdata"));
+	G_fatal_error(_("Unable to create %s"), "octdata");
     if ((functions =
 	 OT_functions_new(oct_compare, oct_divide_data, oct_add_data,
 			  oct_intersect, oct_division_check,
 			  oct_get_points)) == NULL)
-	G_fatal_error(_("Unable to create octfunc"));
+	G_fatal_error(_("Unable to create %s"), "octfunc");
     if ((tree = OT_tree_new(data, NULL, NULL, functions, 0)) == NULL)
-	G_fatal_error(_("Unable to create octtree"));
+	G_fatal_error(_("Unable to create %s"), "octtree");
 
     root = tree;
 
@@ -555,7 +553,7 @@ int main(int argc, char *argv[])
      */
     if (TESTOUT) {
 	if ((fd4 = fopen("testout", "w+")) == NULL)
-	    G_fatal_error(_("Unable to open testout"));
+	    G_fatal_error(_("Unable to open %s"), "testout");
     }
 
     Vect_set_open_level(1);
@@ -606,7 +604,7 @@ int main(int argc, char *argv[])
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
 	    db_close_database(driver);
 	    db_shutdown_driver(driver);
-	    G_fatal_error(_("Unable To create table: %s"), db_get_string(&sql));
+	    G_fatal_error(_("Unable to create table '%s'"), db_get_string(&sql));
 	}
 	count = 1;
     }
@@ -620,21 +618,25 @@ int main(int argc, char *argv[])
 	    fdcell = Rast_open_old(cellinp, mapset);
 	    fdcout = Rast_open_fp_new(cellout);
 	    zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * n_cols);
-	    if (!zero_array_cell)
-		clean_fatal_error(_("Not enough memory for zero_array_cell"));
+	    if (!zero_array_cell) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "zero_array_cell");
+	    }
 	    for (i = 0; i < n_cols; i++)
 		zero_array_cell[i] = 0;
 	    Tmp_file_cell = G_tempfile();
 	    if (NULL == (Tmp_fd_cell = fopen(Tmp_file_cell, "w+"))) {
-		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_cell);
-		clean_fatal_error(msg);
+		clean();
+		G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_cell);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_rows; i++) {
 		if (!
 		    (fwrite
-		     (zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_cell)))
-		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
+		     (zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_cell))) {
+		    clean();
+		    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+		}
 	    }
 	} else
 	  G_warning(_("Unable to create cellout raster map without cellinp"));
@@ -647,127 +649,155 @@ int main(int argc, char *argv[])
 	if (outz != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array1 = (float *)G_malloc(sizeof(float) * n_cols);
-	    if (!zero_array1)
-		clean_fatal_error(_("Not enough memory"));
+	    if (!zero_array1) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "zero_array1");
+	    }
 	    for (i = 0; i < n_cols; i++)
 		zero_array1[i] = 0.;
 	    Tmp_file_z = G_tempfile();
 	    if (NULL == (Tmp_fd_z = fopen(Tmp_file_z, "w+"))) {
-		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_z);
-		clean_fatal_error(msg);
+		clean();
+		G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_z);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
-		if (!(fwrite(zero_array1, sizeof(float), n_cols, Tmp_fd_z)))
-		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
+		if (!(fwrite(zero_array1, sizeof(float), n_cols, Tmp_fd_z))) {
+		    clean();
+		    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+		}
 	    }
 	}
 	if (gradient != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array2 = (float *)G_malloc(sizeof(float) * n_cols);
-	    if (!zero_array2)
-		clean_fatal_error(_("Not enough memory"));
+	    if (!zero_array2) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "zero_array2");
+	    }
 	    for (i = 0; i < n_cols; i++)
 		zero_array2[i] = 0.;
 	    Tmp_file_dx = G_tempfile();
 	    if (NULL == (Tmp_fd_dx = fopen(Tmp_file_dx, "w+"))) {
-		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_dx);
-		clean_fatal_error(msg);
+		clean();
+		G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_dx);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
-		if (!(fwrite(zero_array2, sizeof(float), n_cols, Tmp_fd_dx)))
-		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
+		if (!(fwrite(zero_array2, sizeof(float), n_cols, Tmp_fd_dx))) {
+		    clean();
+		    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+		}
 	    }
 	}
 	if (aspect1 != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array3 = (float *)G_malloc(sizeof(float) * n_cols);
-	    if (!zero_array3)
-		clean_fatal_error(_("Not enough memory"));
+	    if (!zero_array3) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "zero_array3");
+	    }
 	    for (i = 0; i < n_cols; i++)
 		zero_array3[i] = 0.;
 	    Tmp_file_dy = G_tempfile();
 	    if (NULL == (Tmp_fd_dy = fopen(Tmp_file_dy, "w+"))) {
-		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_dy);
-		clean_fatal_error(msg);
+		clean();
+		G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_dy);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
-		if (!(fwrite(zero_array3, sizeof(float), n_cols, Tmp_fd_dy)))
-		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
+		if (!(fwrite(zero_array3, sizeof(float), n_cols, Tmp_fd_dy))) {
+		    clean();
+		    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+		}
 	    }
 	}
 	if (aspect2 != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array4 = (float *)G_malloc(sizeof(float) * n_cols);
-	    if (!zero_array4)
-		clean_fatal_error(_("Not enough memory"));
+	    if (!zero_array4) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "zero_array4");
+	    }
 	    for (i = 0; i < n_cols; i++)
 		zero_array4[i] = 0.;
 	    Tmp_file_dz = G_tempfile();
 	    if (NULL == (Tmp_fd_dz = fopen(Tmp_file_dz, "w+"))) {
-		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_dz);
-		clean_fatal_error(msg);
+		clean();
+		G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_dz);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
-		if (!(fwrite(zero_array4, sizeof(float), n_cols, Tmp_fd_dz)))
-		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
+		if (!(fwrite(zero_array4, sizeof(float), n_cols, Tmp_fd_dz))) {
+		    clean();
+		    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+		}
 	    }
 	}
 	if (ncurv != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array5 = (float *)G_malloc(sizeof(float) * n_cols);
-	    if (!zero_array5)
-		clean_fatal_error(_("Not enough memory"));
+	    if (!zero_array5) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "zero_array5");
+	    }
 	    for (i = 0; i < n_cols; i++)
 		zero_array5[i] = 0.;
 	    Tmp_file_xx = G_tempfile();
 	    if (NULL == (Tmp_fd_xx = fopen(Tmp_file_xx, "w+"))) {
-		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_xx);
-		clean_fatal_error(msg);
+		clean();
+		G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_xx);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
-		if (!(fwrite(zero_array5, sizeof(float), n_cols, Tmp_fd_xx)))
-		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
+		if (!(fwrite(zero_array5, sizeof(float), n_cols, Tmp_fd_xx))) {
+		    clean();
+		    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+		}
 	    }
 	}
 	if (gcurv != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array6 = (float *)G_malloc(sizeof(float) * n_cols);
-	    if (!zero_array6)
-		clean_fatal_error(_("Not enough memory"));
+	    if (!zero_array6) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "zero_array6");
+	    }
 	    for (i = 0; i < n_cols; i++)
 		zero_array6[i] = 0.;
 	    Tmp_file_yy = G_tempfile();
 	    if (NULL == (Tmp_fd_yy = fopen(Tmp_file_yy, "w+"))) {
-		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_yy);
-		clean_fatal_error(msg);
+		clean();
+		G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_yy);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
-		if (!(fwrite(zero_array6, sizeof(float), n_cols, Tmp_fd_yy)))
-		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
+		if (!(fwrite(zero_array6, sizeof(float), n_cols, Tmp_fd_yy))) {
+		    clean();
+		    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+		}
 	    }
 	}
 	if (mcurv != NULL) {
 	    /* allocating temp array for writing to corresponding temp file */
 	    zero_array7 = (float *)G_malloc(sizeof(float) * n_cols);
-	    if (!zero_array7)
-		clean_fatal_error(_("Not enough memory"));
+	    if (!zero_array7) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "zero_array7");
+	    }
 	    for (i = 0; i < n_cols; i++)
 		zero_array7[i] = 0.;
 	    Tmp_file_xy = G_tempfile();
 	    if (NULL == (Tmp_fd_xy = fopen(Tmp_file_xy, "w+"))) {
-		sprintf(msg, _("Unable to open temp file '%s'"), Tmp_file_xy);
-		clean_fatal_error(msg);
+		clean();
+		G_fatal_error(_("Unable to open temp file '%s'"), Tmp_file_xy);
 	    }
 	    /* filling temp file with zeroes */
 	    for (i = 0; i < n_levs * n_rows; i++) {
-		if (!(fwrite(zero_array7, sizeof(float), n_cols, Tmp_fd_xy)))
-		    clean_fatal_error(_("Not enough disk space - cannot write temp files"));
+		if (!(fwrite(zero_array7, sizeof(float), n_cols, Tmp_fd_xy))) {
+		    clean();
+		    G_fatal_error(_("Not enough disk space - cannot write temp files"));
+		}
 	    }
 	}
 	cursegm = 0;
@@ -787,7 +817,7 @@ int main(int argc, char *argv[])
 	    if (mcurv != NULL)
 		G_free(zero_array7);
 
-	    G_message("Finished interpolating");
+	    G_message(_("Finished interpolating"));
 	    if (fd4 != NULL)
 		fprintf(fd4, "max. error found = %f \n", ertot);
 	    G_free(root);
@@ -876,11 +906,15 @@ int main(int argc, char *argv[])
 		    NPOINT);
 
 	}
-	else
-	    clean_fatal_error(_("Interpolation failed"));
+	else {
+	    clean();
+	    G_fatal_error(_("Interpolation failed"));
+	}
     }
-    else
-	clean_fatal_error(_("Input failed"));
+    else {
+	clean();
+	G_fatal_error(_("Input failed"));
+    }
     if (fd4 != NULL)
 	fclose(fd4);
 

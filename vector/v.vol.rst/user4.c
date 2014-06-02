@@ -44,7 +44,7 @@
 
  */
 
-void clean_fatal_error(char *str)
+void clean()
 {
     if (Tmp_fd_z) {
 	fclose(Tmp_fd_z);
@@ -74,7 +74,6 @@ void clean_fatal_error(char *str)
 	fclose(Tmp_fd_xy);
 	unlink(Tmp_file_xy);
     }
-    G_fatal_error(str);
 }
 
 
