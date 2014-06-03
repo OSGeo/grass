@@ -40,6 +40,8 @@ import string
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
+from wx.lib.stattext import GenStaticText
+from wx.lib.wordwrap import wordwrap
 import wx.combo
 try:
     import wx.lib.agw.flatnotebook   as FN
@@ -443,36 +445,45 @@ class SymbolButton(BitmapTextButton):
         dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
         dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
 
-class StaticWrapText(wx.StaticText):
-    """!A Static Text field that wraps its text to fit its width,
-    enlarging its height if necessary.
-    """
-    def __init__(self, parent, id = wx.ID_ANY, label = '', *args, **kwds):
-        self.parent        = parent
-        self.originalLabel = label
-        
-        wx.StaticText.__init__(self, parent, id, label = '', *args, **kwds)
-        
-        self.SetLabel(label)
-        self.Bind(wx.EVT_SIZE, self.OnResize)
-    
-    def SetLabel(self, label):
-        self.originalLabel = label
-        self.wrappedSize = None
-        self.OnResize(None)
 
-    def OnResize(self, event):
-        if not getattr(self, "resizing", False):
-            self.resizing = True
-            newSize = wx.Size(self.parent.GetSize().width - 50,
-                              self.GetSize().height)
-            if self.wrappedSize != newSize:
-                wx.StaticText.SetLabel(self, self.originalLabel)
-                self.Wrap(newSize.width)
-                self.wrappedSize = newSize
-                
-                self.SetSize(self.wrappedSize)
-            del self.resizing
+class StaticWrapText(GenStaticText):
+    """!A Static Text widget that wraps its text to fit parents width,
+    enlarging its height if necessary."""
+
+    def __init__(self, parent, id=wx.ID_ANY, label='', margin=0, *args, **kwds):
+        self._margin = margin
+        self._initialLabel = label
+        self.init = False
+        GenStaticText.__init__(self, parent, id, label, *args, **kwds)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+
+    def DoGetBestSize(self):
+        """!Overriden method which reports widget's best size."""
+        if not self.init:
+            self._updateLabel()
+            self.init = True
+        parent = self.GetParent()
+        newExtent = wx.ClientDC(parent).GetMultiLineTextExtent(self.GetLabel())
+        # when starting, width is very small and height is big which creates very high windows
+        if newExtent[0] < newExtent[1]:
+            return (0, 0)
+        return newExtent[:2]
+
+    def OnSize(self, event):
+        self._updateLabel()
+        event.Skip()
+
+    def _updateLabel(self):
+        """!Calculates size of wrapped label"""
+        parent = self.GetParent()
+        newLabel = wordwrap(text=self._initialLabel, width=parent.GetSize()[0],
+                            dc=wx.ClientDC(parent), breakLongWords=True, margin=self._margin)
+        GenStaticText.SetLabel(self, newLabel)
+
+    def SetLabel(self, label):
+        self._initialLabel = label
+        self._updateLabel()
+
 
 class BaseValidator(wx.PyValidator):
     def __init__(self):
