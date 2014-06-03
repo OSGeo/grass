@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Merge several space time datasets into a single one
+#% description: Merges several space time datasets into a single space time dataset.
 #% keywords: temporal
 #% keywords: merge
 #%end

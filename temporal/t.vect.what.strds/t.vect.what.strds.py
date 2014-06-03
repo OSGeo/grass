@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Store raster map values at spatial and temporal positions of vector points as vector attributes.
+#% description: Stores raster map values at spatial and temporal positions of vector points as vector attributes.
 #% keywords: temporal
 #% keywords: sampling
 #%end
