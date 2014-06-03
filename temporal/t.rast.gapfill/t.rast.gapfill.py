@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Replace gaps in a space time raster dataset with interpolated raster maps.
+#% description: Replaces gaps in a space time raster dataset with interpolated raster maps.
 #% keywords: temporal
 #% keywords: interpolation
 #%end

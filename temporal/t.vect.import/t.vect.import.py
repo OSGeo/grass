@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Import a space time vector dataset archive file
+#% description: Imports a space time vector dataset from a GRASS GIS specific archive file.
 #% keywords: temporal
 #% keywords: import
 #%end

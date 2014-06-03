@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Export a space time vector dataset.as GRASS specific archive file
+#% description: Exports a space time vector dataset as GRASS GIS specific archive file.
 #% keywords: temporal
 #% keywords: export
 #%end
