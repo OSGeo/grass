@@ -463,11 +463,11 @@ class StaticWrapText(GenStaticText):
             self._updateLabel()
             self.init = True
         parent = self.GetParent()
-        newExtent = wx.ClientDC(parent).GetTextExtent(self.GetLabel())
+        newExtent = wx.ClientDC(parent).GetMultiLineTextExtent(self.GetLabel())
         # when starting, width is very small and height is big which creates very high windows
         if newExtent[0] < newExtent[1]:
             return (0, 0)
-        return newExtent
+        return newExtent[:2]
 
     def OnSize(self, event):
         self._updateLabel()
