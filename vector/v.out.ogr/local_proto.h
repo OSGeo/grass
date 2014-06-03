@@ -44,13 +44,6 @@ int export_lines(struct Map_info *, int, int, int, int, int,
                  const char **, int, int,
                  int *, int *);
 
-/* export_lines_3d.c */
-int export_lines_3d(struct Map_info *, int, int, int, 
-                    OGRFeatureDefnH, OGRLayerH,
-                    struct field_info *, dbDriver *, int, int *, 
-                    const char **, int, int,
-                    int *, int *);
-
 /* export_areas.c */
 int export_areas(struct Map_info *, int, int, int, 
                  OGRFeatureDefnH, OGRLayerH,
