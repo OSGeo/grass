@@ -115,6 +115,7 @@ int export_lines_single(struct Map_info *In, int field, int otype, int donocat, 
             if (j == -1) {
                 if (cat >= 0)
                     continue;	/* cat(s) exists */
+		(*n_nocat)++;
             }
             else {
                 if (Cats->field[j] == field)
@@ -147,11 +148,11 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat, i
                        int *n_noatt, int *n_nocat)
 {
     int i, n_exported;
-    int cat, lcat, ncats_field, line, type, findex, ipart;
+    int cat, ncats_field, line, type, findex, ipart;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
-    struct ilist *cat_list, *line_list;
+    struct ilist *cat_list, *line_list, *lcats;
 
     OGRGeometryH Ogr_geometry;
     OGRFeatureH Ogr_feature;
@@ -161,6 +162,7 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat, i
     Cats = Vect_new_cats_struct();
     cat_list = Vect_new_list();
     line_list = Vect_new_list();
+    lcats = Vect_new_list();
 
     n_exported = 0;
 
@@ -199,12 +201,12 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat, i
             type = Vect_read_line(In, Points, Cats, line);
             
             /* check for category consistency */
-            Vect_cat_get(Cats, field, &lcat);
-            if (lcat > 0 && lcat != cat)
+            Vect_field_cat_get(Cats, field, lcats);
+	    if (!Vect_val_in_list(lcats, cat))
                 G_fatal_error(_("Unable to create multi-feature. "
-                                "Invalid category %d (should be %d)"),
-                              lcat, cat);
-            
+                                "Category %d not found in line %d, field %d"),
+                              cat, line, field);
+
             /* add part */
             add_part(Ogr_geometry, wkbtype_part,
                      type == GV_LINE && force_poly, Points);
@@ -253,6 +255,8 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat, i
         /* add part */
         add_part(Ogr_geometry, wkbtype_part,
                  type == GV_LINE && force_poly, Points);
+
+        (*n_nocat)++;
     }
 
     if (!OGR_G_IsEmpty(Ogr_geometry)) {
@@ -279,6 +283,7 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat, i
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_list(cat_list);
     Vect_destroy_list(line_list);
+    Vect_destroy_list(lcats);
     
     return n_exported;
 }
