@@ -138,10 +138,7 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *driver, int ncol,
 	    OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum, cat);
 	}
     }
-    else {
-	/* G_warning ("Line without cat of layer %d", field); */
-	nocat++;
-    }
+    /* else G_warning ("Line without cat of layer %d", field); */
 
     /*
     db_free_string(&dbstring);

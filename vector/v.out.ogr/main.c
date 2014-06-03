@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
     dbString dbstring;
     dbColumn *Column;
 
-    int n_feat;                        /* number of written features */
-    int n_nocat, n_noatt, n_nocatskip; /* number of features without cats/atts written/skip */
+    int n_feat;           /* number of written features */
+    int n_nocat, n_noatt; /* number of features without cats/atts written/skip */
 
     /* OGR */
     int drn;
@@ -698,7 +698,7 @@ int main(int argc, char *argv[])
     
     Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
-    n_feat = n_nocat = n_noatt = n_nocatskip = 0;
+    n_feat = n_nocat = n_noatt = 0;
 
     if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
 	OGR_L_StartTransaction(Ogr_layer);
@@ -715,7 +715,7 @@ int main(int argc, char *argv[])
                                Ogr_featuredefn, Ogr_layer,
                                Fi, Driver, ncol, colctype, 
                                colname, doatt, flags.nocat->answer ? TRUE : FALSE,
-                               &n_noatt, &n_nocatskip);
+                               &n_noatt, &n_nocat);
     }
 
     /* Areas (run always to count features of different type) */
@@ -729,7 +729,7 @@ int main(int argc, char *argv[])
                                Ogr_featuredefn, Ogr_layer,
                                Fi, Driver, ncol, colctype, 
                                colname, doatt, flags.nocat->answer ? TRUE : FALSE,
-                               &n_noatt, &n_nocatskip);
+                               &n_noatt, &n_nocat);
     }
 
     /*
@@ -759,22 +759,23 @@ int main(int argc, char *argv[])
     }
 
     /* Summary */
-    if (n_nocat > 0)
-	G_important_message(_n("%d feature without category was written",
-                               "%d features without category were written",
-                               n_nocat), n_nocat);
     if (n_noatt > 0)
 	G_important_message(_n("%d feature without attributes was written",
                                "%d features without attributes were written",
                                n_noatt), n_noatt);
 
-    if (n_nocatskip > 0)
-	G_warning(_n("%d feature without category was skipped. "
-                     "Features without category are written only when -%c flag is given.",
-                     "%d features without category were skipped. "
-                     "Features without category are written only when -%c flag is given.",
-                     n_nocatskip),
-		  n_nocatskip, flags.cat->key);
+    if (n_nocat > 0) {
+	if (donocat)
+	    G_important_message(_n("%d feature without category was written",
+				   "%d features without category were written",
+				   n_nocat), n_nocat);
+	else
+	    G_warning(_n("%d feature without category was skipped. "
+                         "Features without category are written only when -%c flag is given.",
+                         "%d features without category were skipped. "
+                         "Features without category are written only when -%c flag is given.",
+                         n_nocat), n_nocat, flags.cat->key);
+    }
 
     /* Enable this? May be confusing that for area type are not
      * reported all boundaries/centroids. OTOH why should be
