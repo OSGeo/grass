@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Compute cyclic accumulations of a space time raster dataset
+#% description: Computes cyclic accumulations of a space time raster dataset.
 #% keywords: temporal
 #% keywords: accumulation
 #%end

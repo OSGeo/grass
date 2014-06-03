@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Temporally snap the maps of a space time dataset.
+#% description: Snaps temporally the maps of a space time dataset.
 #% keywords: temporal
 #% keywords: snap
 #%end
