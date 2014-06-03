@@ -41,27 +41,7 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 class Popen(subprocess.Popen):
-
-    def __init__(self, args, bufsize=0, executable=None,
-                 stdin=None, stdout=None, stderr=None,
-                 preexec_fn=None, close_fds=False, shell=None,
-                 cwd=None, env=None, universal_newlines=False,
-                 startupinfo=None, creationflags=0):
-
-        if shell == None:
-            shell = (sys.platform == "win32")
-        if sys.platform == "win32":
-            # get full path including file extension for scripts
-            fcmd = get_real_command(args[0]) 
-            if fcmd.endswith('.py'):
-                args[0] = fcmd
-                args.insert(0, sys.executable)
-        
-        subprocess.Popen.__init__(self, args, bufsize, executable,
-                                  stdin, stdout, stderr,
-                                  preexec_fn, close_fds, shell,
-                                  cwd, env, universal_newlines,
-                                  startupinfo, creationflags)
+    pass
 
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
