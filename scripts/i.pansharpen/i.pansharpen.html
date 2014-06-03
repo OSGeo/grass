@@ -78,12 +78,13 @@ The three pan-sharpened output channels may be combined with <em>d.rgb</em> or
 While the resulting color image will be at the higher resolution in all cases, 
 the 3 pan sharpening algorithms differ in terms of spectral response.  
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 Pan sharpening of a Landsat image from Boulder, Colorado, USA:
 
 <div class="code"><pre>
 # R, G, B composite at 30m 
+g.region rast=p034r032_7dt20010924_z13_10 -p
 d.rgb b=p034r032_7dt20010924_z13_10 g=lp034r032_7dt20010924_z13_20 
     r=p034r032_7dt20010924_z13_30
 
@@ -93,6 +94,7 @@ i.pansharpen ms3=p034r032_7dt20010924_z13_30 ms2=p034r032_7dt20010924_z13_20
     output_prefix=ihs321 sharpen=ihs
 
 # display at 15m
+g.region rast=ihs321_blue -p
 d.rgb b=ihs321_blue g=ihs321_green r=ihs321_red
 </pre></div>
 
@@ -137,6 +139,32 @@ d.rgb b=ihs321_blue g=ihs321_green r=ihs321_red
 </center>
 <br>
 
+
+Example: LANDSAT ETM+ (Landsat 7), North Carolina sample dataset:
+
+<div class="code"><pre>
+# original at 28m
+g.region rast=lsat7_2002_10 -p
+
+d.mon wx0
+d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
+
+# i.pansharpen with IHS algorithm
+i.pansharpen ms3=lsat7_2002_30@PERMANENT \
+  ms2=lsat7_2002_20 ms1=lsat7_2002_10 \
+  pan=lsat7_2002_80 sharpen=ihs \
+  output_prefix=lsat7_2002_ihs
+
+# display at 14.25m
+g.region rast=lsat7_2002_ihs_red -p
+d.rgb r=lsat7_2002_ihs_red g=lsat7_2002_ihs_green b=lsat7_2002_ihs_blue
+
+# compare before/after (RGB support in "Advanced"):
+g.gui.mapswipe
+
+# optionally color balancing:
+i.landsat.rgb r=lsat7_2002_ihs_red g=lsat7_2002_ihs_green b=lsat7_2002_ihs_blue
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
