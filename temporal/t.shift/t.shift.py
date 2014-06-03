@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Temporally shift the maps of a space time dataset.
+#% description: Shifts temporally the maps of a space time dataset.
 #% keywords: temporal
 #% keywords: shift
 #%end
