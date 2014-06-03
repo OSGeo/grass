@@ -437,7 +437,7 @@ int Vect_get_centroid_area(const struct Map_info *Map, int centroid)
 
     check_level(Map);
     
-    if (Map->plus.Line[centroid]->type != GV_CENTROID)
+    if (centroid == 0 || Map->plus.Line[centroid]->type != GV_CENTROID)
 	return 0;
     
     topo = (struct P_topo_c *)Map->plus.Line[centroid]->topo;
