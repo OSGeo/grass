@@ -64,7 +64,7 @@
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
  *
- * (C) 2001-2009, 2011 by the GRASS Development Team
+ * (C) 2001-2009, 2011-2014 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -113,8 +113,12 @@ static void split_opts(void);
 static void check_multiple_opts(void);
 static int check_overwrite(void);
 static void define_keywords(void);
-static void split_gisprompt(const char *gisprompt, char *age, char *element, char *desc);
+static void split_gisprompt(const char *, char *, char *, char *);
 static void module_gui_wx(void);
+static void add_exclusive(const char *, int, const char *);
+static struct Exclusive *find_exclusive(char *);
+static int has_exclusive_key(struct Exclusive *, char *);
+static void check_exclusive(int);
 static void append_error(const char *);
 
 /*!
@@ -319,6 +323,11 @@ int G_parser(int argc, char **argv)
     G_basename(tmp_name, "exe");
     st->pgm_name = tmp_name;
 
+    st->allocated_exclusive = 10;
+    st->n_exclusive = 0;
+    st->exclusive = G_malloc(st->allocated_exclusive *
+		    	     sizeof(struct Exclusive));
+
     /* Stash default answers */
 
     opt = &st->first_option;
@@ -516,7 +525,6 @@ int G_parser(int argc, char **argv)
 	    else if (*ptr == '-') {
 		while (*(++ptr))
 		    set_flag(*ptr);
-
 	    }
 	    /* If we see standard option format (option=val) */
 	    else if (is_option(ptr)) {
@@ -529,6 +537,8 @@ int G_parser(int argc, char **argv)
 		st->first_option.answer = G_store(ptr);
 		st->first_option.count++;
 		need_first_opt = 0;
+		add_exclusive(st->first_option.key, 0,
+			      st->first_option.exclusive);
 	    }
 
 	    /* If we see the non valid argument (no "=", just argument) */
@@ -538,6 +548,8 @@ int G_parser(int argc, char **argv)
 	    }
 
 	}
+
+	check_exclusive(0);
     }
     
     /* Split options where multiple answers are OK */
@@ -810,6 +822,144 @@ static void module_gui_wx(void)
     G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script, G_recreate_command(), NULL);
 }
 
+static void add_exclusive(const char *option_key, int flag_key,
+			  const char *names)
+{
+    char *keyname, *ptr1;
+
+    if (!names || !*names)
+	return;
+
+    if (option_key)
+	G_asprintf(&keyname, "%s=", option_key);
+    else
+	G_asprintf(&keyname, "-%c", flag_key);
+
+    for (ptr1 = (char *)names;;) {
+	int len;
+	char *ptr2;
+
+	for (len = 0, ptr2 = ptr1; *ptr2 != '\0' && *ptr2 != ',';
+	     ptr2++, len++) ;
+
+	if (len > 0) {	/* skip ,, */
+	    char *name;
+	    struct Exclusive *exclusive;
+
+	    name = G_malloc(len + 1);
+	    memcpy(name, ptr1, len);
+	    name[len] = 0;
+
+	    if (!(exclusive = find_exclusive(name))) {
+		exclusive = &st->exclusive[st->n_exclusive++];
+		exclusive->name = name;
+		exclusive->allocated_keys = 10;
+		exclusive->n_keys = 0;
+		exclusive->keys = G_malloc(exclusive->allocated_keys *
+					   sizeof(char *));
+
+		if (st->n_exclusive >= st->allocated_exclusive) {
+		    st->allocated_exclusive += 10;
+		    st->exclusive = G_realloc(st->exclusive,
+				    	      st->allocated_exclusive *
+					      sizeof(struct Exclusive));
+		    exclusive = find_exclusive(name);
+		}
+	    }
+
+	    if (!has_exclusive_key(exclusive, keyname)) {
+		exclusive->keys[exclusive->n_keys++] = keyname;
+
+		if (exclusive->n_keys >= exclusive->allocated_keys) {
+		    exclusive->allocated_keys += 10;
+		    exclusive->keys = G_realloc(exclusive->keys,
+				    		exclusive->allocated_keys *
+						sizeof(char *));
+		}
+	    }
+	}
+
+	if (*ptr2 == '\0')
+	    break;
+
+	ptr1 = ptr2 + 1;
+
+	if (*ptr1 == '\0')
+	    break;
+    }
+}
+
+static struct Exclusive *find_exclusive(char *name)
+{
+    int i;
+
+    for (i = 0; i < st->n_exclusive; i++) {
+	if (strcmp(st->exclusive[i].name, name) == 0)
+	    return &st->exclusive[i];
+    }
+
+    return NULL;
+}
+
+static int has_exclusive_key(struct Exclusive *exclusive, char *key)
+{
+    int i;
+
+    for (i = 0; i < exclusive->n_keys; i++) {
+	if (strcmp(exclusive->keys[i], key) == 0)
+	    return 1;
+    }
+
+    return 0;
+}
+
+static void check_exclusive(int print_group)
+{
+    int i;
+
+    for (i = 0; i < st->n_exclusive; i++) {
+	struct Exclusive *exclusive;
+
+	exclusive = &st->exclusive[i];
+
+	G_debug(1, "check_exclusive(): Exclusive option/flag group: %s",
+			exclusive->name);
+
+	if (exclusive->n_keys >= 1)
+	    G_debug(1, "check_exclusive():\t%s", exclusive->keys[0]);
+
+	if (exclusive->n_keys > 1) {
+	    int len, j;
+	    char *err;
+
+	    len = strlen(exclusive->name);
+	    for (j = 0; j < exclusive->n_keys; j++) {
+		len += strlen(exclusive->keys[j]) + 2; /* 2 for comma space */
+		if (j > 0)
+		    G_debug(1, "check_exclusive():\t%s", exclusive->keys[j]);
+	    }
+
+	    err = G_malloc(len + 100);
+	    if (print_group)
+		sprintf(err, _("Options/flags in group '%s' are "
+			       "mutually exclusive: "), exclusive->name);
+	    else
+		sprintf(err, _("The following options/flags are "
+			       "mutually exclusive: "));
+
+	    len = strlen(err);
+	    for (j = 0; j < exclusive->n_keys - 2; j++) {
+		sprintf(err + len, "%s, ", exclusive->keys[j]);
+		len = strlen(err);
+	    }
+	    sprintf(err + len, _("%s and %s"), exclusive->keys[j],
+		    exclusive->keys[j + 1]);
+
+	    append_error(err);
+	}
+    }
+}
+
 static void set_flag(int f)
 {
     struct Flag *flag;
@@ -831,6 +981,7 @@ static void set_flag(int f)
 	    flag->answer = 1;
 	    if (flag->suppress_required)
 		st->suppress_required = 1;
+	    add_exclusive(NULL, f, flag->exclusive);
 	    return;
 	}
 	flag = flag->next_flag;
@@ -961,6 +1112,8 @@ static void set_option(const char *string)
     }
     else
 	opt->answer = G_store(string);
+
+    add_exclusive(opt->key, 0, opt->exclusive);
 }
 
 static void check_opts(void)

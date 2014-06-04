@@ -11,6 +11,13 @@ struct Item
     struct Item *next_item;
 };
 
+struct Exclusive {
+    int allocated_keys;
+    int n_keys;
+    char *name;
+    char **keys;
+};
+
 struct state {
     int no_interactive;
     int n_opts;
@@ -32,6 +39,10 @@ struct state {
 
     struct Option first_option;
     struct Option *current_option;
+
+    int allocated_exclusive;
+    int n_exclusive;
+    struct Exclusive *exclusive;
 
     struct Item first_item;
     struct Item *current_item;
