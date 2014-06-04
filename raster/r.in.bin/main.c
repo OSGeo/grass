@@ -363,7 +363,8 @@ int main(int argc, char *argv[])
 
     if (flag.swap->answer) {
 	if (strcmp(parm.order->answer, "native") != 0)
-	    G_fatal_error(_("order= and -b are mutually exclusive"));
+	    G_fatal_error(_("-%c and %s= are mutually exclusive"),
+			    flag.swap->key, parm.order->key);
 	order = G_is_little_endian() ? 0 : 1;
     }
 
@@ -378,11 +379,13 @@ int main(int argc, char *argv[])
 	bytes = atoi(parm.bytes->answer);
 
     if (flag.float_in->answer && flag.double_in->answer)
-	G_fatal_error(_("-f and -d are mutually exclusive"));
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+			flag.float_in->key, flag.double_in->key);
 
     if (flag.float_in->answer) {
 	if (bytes && bytes < 4)
-	    G_fatal_error(_("-f incompatible with bytes=%d; must be 4 or 8"), bytes);
+	    G_fatal_error(_("-%c incompatible with %s=%d; must be 4 or 8"),
+			    flag.float_in->key, parm.bytes->key, bytes);
 	if (!bytes)
 	    bytes = 4;
 	is_fp = 1;
@@ -390,22 +393,24 @@ int main(int argc, char *argv[])
 
     if (flag.double_in->answer) {
 	if (bytes && bytes != 8)
-	    G_fatal_error(_("-d incompatible with bytes=%d; must be 8"), bytes);
+	    G_fatal_error(_("-%c incompatible with %s=%d; must be 8"),
+			    flag.double_in->key, parm.bytes->key, bytes);
 	if (!bytes)
 	    bytes = 8;
 	is_fp = 1;
     }
 
     if (!is_fp && !bytes)
-	G_fatal_error(_("bytes= required for integer data"));
+	G_fatal_error(_("%s= required for integer data"), parm.bytes->key);
 
 #ifndef HAVE_LONG_LONG_INT
     if (!is_fp && bytes > 4)
-	G_fatal_error(_("Integer input doesn't support size=8 in this build"));
+	G_fatal_error(_("Integer input doesn't support %s=8 in this build"),
+			parm.bytes->key);
 #endif
 
     if (bytes != 1 && bytes != 2 && bytes != 4 && bytes != 8)
-	G_fatal_error(_("bytes= must be 1, 2, 4 or 8"));
+	G_fatal_error(_("%s= must be 1, 2, 4 or 8"), parm.bytes->key);
 
     if (parm.null->answer)
 	null_val = atof(parm.null->answer);
@@ -418,12 +423,15 @@ int main(int argc, char *argv[])
 	int num_bounds;
 
 	if (!parm.rows->answer || !parm.cols->answer)
-	    G_fatal_error(_("Either -h or rows= and cols= must be given"));
+	    G_fatal_error(_("Either -%c or %s= and %s= must be given"),
+			    flag.gmt_hd->key, parm.rows->key, parm.cols->key);
 
 	num_bounds = !!parm.north->answer + !!parm.south->answer +
 	    !!parm.east->answer + !!parm.west->answer;
 	if (num_bounds != 0 && num_bounds != 4)
-	    G_fatal_error(_("Either all or none of north=, south=, east= and west= must be given"));
+	    G_fatal_error(_("Either all or none of %s=, %s=, %s= and %s= must be given"),
+			    parm.north->key, parm.south->key,
+			    parm.east->key, parm.west->key);
 
 	cellhd.rows = atoi(parm.rows->answer);
 	cellhd.cols = atoi(parm.cols->answer);
@@ -463,8 +471,8 @@ int main(int argc, char *argv[])
 	G_warning(
 	    _("East-West (ewres: %f) and North-South (nwres: %f) "
 	      "resolution differ significantly. "
-	      "Did you assign east= and west= correctly?"),
-	    cellhd.ew_res, cellhd.ns_res);
+	      "Did you assign %s= and %s= correctly?"),
+	    cellhd.ew_res, cellhd.ns_res, parm.east->key, parm.west->key);
 
     grass_nrows = nrows = cellhd.rows;
     grass_ncols = ncols = cellhd.cols;

@@ -195,10 +195,12 @@ int main(int argc, char *argv[])
     }
     
     if (parm.input->answer && parm.file->answer)
-        G_fatal_error(_("input= and file= are mutually exclusive"));
+        G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.input->key, parm.file->key);
  
     if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error(_("Please specify input= or file="));
+        G_fatal_error(_("Please specify %s= or %s="),
+			parm.input->key, parm.file->key);
 
 
     /* process the input maps from the file */

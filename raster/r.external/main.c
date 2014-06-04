@@ -140,11 +140,11 @@ int main(int argc, char *argv[])
 	title = NULL;
 
     if (!input && !source)
-	G_fatal_error(_("One of options <%s> or <%s> must be given"),
+	G_fatal_error(_("%s= or %s= must be given"),
 		      parm.input->key, parm.source->key);
 
     if (input && source)
-	G_fatal_error(_("Option <%s> and <%s> are mutually exclusive"),
+	G_fatal_error(_("%s= and %s= are mutually exclusive"),
 		      parm.input->key, parm.source->key);
     
     if (input && !G_is_absolute_path(input)) {

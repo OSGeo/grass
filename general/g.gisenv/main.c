@@ -94,7 +94,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (flag_s->answer && flag_n->answer)
-	G_fatal_error(_("Flags -%c and -%c are mutually exclusive"), flag_s->key, flag_n->key);
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+			flag_s->key, flag_n->key);
 
     nopts = 0;
     if (get_opt->answer)
@@ -128,7 +129,7 @@ int main(int argc, char *argv[])
     }
     
     if (nopts != 1)
-	G_fatal_error(_("Options <%s>, <%s>, and <%s> are mutually exclusive"),
+	G_fatal_error(_("%s=, %s= and %s= are mutually exclusive"),
 		      get_opt->key, set_opt->key, unset_opt->key);
     
     store = G_VAR_GISRC;
