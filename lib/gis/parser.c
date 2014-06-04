@@ -949,8 +949,8 @@ static void check_exclusive(int print_group)
 		}
 
 		err = G_malloc(len + 100);
-		sprintf(err, _("Options/flags in group '%s' are "
-			       "mutually exclusive: "), exclusive->name);
+		sprintf(err, _("Mutually exclusive options/flags "
+			       "in group '%s': "), exclusive->name);
 		
 		len = strlen(err);
 		for (j = 0; j < exclusive->n_keys - 2; j++) {
@@ -981,7 +981,7 @@ static void check_exclusive(int print_group)
 
     if (!print_group && n) {
 	err = G_malloc(len + 100);
-	sprintf(err, _("The following options/flags are mutually exclusive: "));
+	sprintf(err, _("Mutually exclusive options/flags: "));
 
 	len = strlen(err);
 	for (i = 0; i < n - 2; i++) {
