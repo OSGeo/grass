@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
     opt.null->type = TYPE_STRING;
     opt.null->required = NO;
     opt.null->answer = "*";
-    opt.null->description = _("Char string to represent no data cell");
+    opt.null->description = _("String to represent no data cell");
     opt.null->guisection = _("Print");
     
     opt.output = G_define_standard_option(G_OPT_F_OUTPUT);
