@@ -81,6 +81,8 @@ class DMonMap(Map):
         self.mapfile = monFile['map'] + '.ppm'
         # signal sent when d.out.file appears in cmd file, attribute is cmd
         self.saveToFile = Signal('DMonMap.saveToFile')
+        # signal sent when d.what.rast/vect appears in cmd file, attribute is cmd
+        self.query = Signal('DMonMap.query')
 
     def GetLayersFromCmdFile(self):
         """!Get list of map layers from cmdfile
@@ -95,13 +97,25 @@ class DMonMap(Map):
             lines = fd.readlines()
             fd.close()
             # detect d.out.file, delete the line from the cmd file and export graphics
-            if len(lines) > 0 and lines[-1].startswith('d.out.file'):
-                dOutFileCmd = lines[-1].strip()
-                fd = open(self.cmdfile, 'w')
-                fd.writelines(lines[:-1])
-                fd.close()
-                self.saveToFile.emit(cmd=utils.split(dOutFileCmd))
-                return
+            if len(lines) > 0:
+                if lines[-1].startswith('d.out.file'):
+                    dOutFileCmd = lines[-1].strip()
+                    fd = open(self.cmdfile, 'w')
+                    fd.writelines(lines[:-1])
+                    fd.close()
+                    self.saveToFile.emit(cmd=utils.split(dOutFileCmd))
+                    return
+                if lines[-1].startswith('d.what'):
+                    dWhatCmd = lines[-1].strip()
+                    fd = open(self.cmdfile, 'w')
+                    fd.writelines(lines[:-1])
+                    fd.close()
+                    if '=' in utils.split(dWhatCmd)[1]:
+                        maps = utils.split(dWhatCmd)[1].split('=')[1].split(',')
+                    else:
+                        maps = utils.split(dWhatCmd)[1].split(',')
+                    self.query.emit(ltype=utils.split(dWhatCmd)[0].split('.')[-1], maps=maps)
+                    return
 
             existingLayers = self.GetListOfLayers()
 
@@ -345,6 +359,7 @@ class MapApp(wx.App):
         # self.SetTopWindow(Map)
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
         self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
+        self.Map.query.connect(lambda ltype, maps: self.mapFrm.SetQueryLayersAndActivate(ltype=ltype, maps=maps))
         self.mapFrm.Show()
         
         if __name__ == "__main__":
