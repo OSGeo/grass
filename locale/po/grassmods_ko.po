@@ -11335,9 +11335,9 @@ msgid ""
 msgstr ""
 
 #: ../display/d.vect/shape.c:198
-#, fuzzy, c-format
+#, c-format
 msgid "%s= and %s= are mutually exclusive. %s= will be ignored."
-msgstr "%s=와 %s=를 같이 지정할 수 없습니다"
+msgstr "%s=와 %s=를 같이 지정할 수 없습니다. %s=를 무시합니다."
 
 #: ../display/d.vect/shape.c:341
 #, fuzzy, c-format
@@ -16578,9 +16578,9 @@ msgid "Print current status in shell script style"
 msgstr "출력할 격자지도"
 
 #: ../vector/v.external.out/args.c:88 ../raster/r.resamp.filter/main.c:432
-#, fuzzy, c-format
+#, c-format
 msgid "%s= and %s=/%s= are mutually exclusive"
-msgstr "-%c/-%c와 %s=%s를 같이 지정할 수 없습니다"
+msgstr "%s=와 %s=/%s=를 같이 지정할 수 없습니다"
 
 #: ../vector/v.external.out/args.c:96 ../raster/r.colors/edit_colors.c:169
 #, fuzzy, c-format
@@ -24429,9 +24429,9 @@ msgstr "출력할 격자지도"
 
 #: ../vector/v.colors/main.c:222 ../general/g.gisenv/main.c:132
 #: ../raster/r.colors/edit_colors.c:187
-#, fuzzy, c-format
+#, c-format
 msgid "%s=, %s= and %s= are mutually exclusive"
-msgstr "%s=와 %s=를 같이 지정할 수 없습니다"
+msgstr "%s=, %s=와 %s=를 같이 지정할 수 없습니다"
 
 #: ../vector/v.colors/main.c:226 ../general/g.mremove/main.c:99
 #: ../general/g.mremove/bak/main.c:120 ../general/g.mremove/new/main.c:116
@@ -30324,9 +30324,9 @@ msgstr "출력할 격자지도"
 
 #: ../raster/r.stats.quantile/main.c:446 ../raster/r.neighbors/main.c:260
 #: ../raster/r.in.bin/main.c:366 ../raster/r.out.bin/main.c:367
-#, fuzzy, c-format
+#, c-format
 msgid "-%c and %s= are mutually exclusive"
-msgstr "-%c/-%c와 %s=를 같이 지정할 수 없습니다"
+msgstr "-%c와 %s=를 같이 지정할 수 없습니다"
 
 #: ../raster/r.stats.quantile/main.c:471
 #, c-format
@@ -33604,9 +33604,9 @@ msgid "Round floating point data"
 msgstr ""
 
 #: ../raster/r.quant/main.c:111
-#, fuzzy, c-format
+#, c-format
 msgid "-%c, -%c, %s=, %s= and %s= are mutually exclusive"
-msgstr "-%c/-%c와 %s=를 같이 지정할 수 없습니다"
+msgstr "-%c, -%c, %s=, %s=와 %s=를 같이 지정할 수 없습니다"
 
 #: ../raster/r.quant/main.c:120
 #, c-format
