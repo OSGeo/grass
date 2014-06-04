@@ -429,13 +429,16 @@ int main(int argc, char *argv[])
 
     if (parm.radius->answer) {
 	if (parm.x_radius->answer || parm.y_radius->answer)
-	    G_fatal_error(_("radius= and x_radius=/y_radius= are mutually exclusive"));
+	    G_fatal_error(_("%s= and %s=/%s= are mutually exclusive"),
+			    parm.radius->key, parm.x_radius->key, parm.y_radius->key);
     }
     else {
 	if (!parm.x_radius->answer && !parm.y_radius->answer)
-	    G_fatal_error(_("Either radius= or x_radius=/y_radius= required"));
+	    G_fatal_error(_("Either %s= or %s=/%s= required"),
+			    parm.radius->key, parm.x_radius->key, parm.y_radius->key);
 	if (!parm.x_radius->answer || !parm.y_radius->answer)
-	    G_fatal_error(_("Both x_radius= and y_radius= required"));
+	    G_fatal_error(_("Both %s= and %s= required"),
+			    parm.x_radius->key, parm.y_radius->key);
     }
 
     nulls = flag.nulls->answer;

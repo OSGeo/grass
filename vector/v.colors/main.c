@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
     }
 
     if (opt.rast->answer && opt.volume->answer)
-        G_fatal_error(_("Options <%s> and <%s> are mutually exclusive"),
+        G_fatal_error(_("%s= and %s= are mutually exclusive"),
 		      opt.rast->key, opt.volume->key);
 
     cmap = NULL;
@@ -214,21 +214,20 @@ int main(int argc, char *argv[])
         cmap = opt.volume->answer;
     
     if (!cmap && !style && !rules && !remove && !convert)
-        G_fatal_error(_("One of -%c, -%c or options <%s>, <%s> or <%s> "
+        G_fatal_error(_("One of -%c, -%c or %s=, %s= or %s= "
 			"must be specified"), flag.r->key, flag.c->key, 
 		      opt.colr->key, opt.rast->key, opt.rules->key);
     
     if (!!style + !!cmap + !!rules > 1)
-        G_fatal_error(_("Options <%s>, <%s>, and <%s> are mutually "
-			"exclusive"), opt.colr->key, opt.rules->key,
-		      opt.rast->key);
+        G_fatal_error(_("%s=, %s= and %s= are mutually exclusive"),
+			opt.colr->key, opt.rules->key, opt.rast->key);
 
     if (flag.g->answer && flag.a->answer)
-        G_fatal_error(_("Flags -%c and -%c are mutually exclusive"),
+        G_fatal_error(_("-%c and -%c are mutually exclusive"),
 		      flag.g->key, flag.a->key);
 
     if (flag.c->answer && !rgbcolumn) 
-	G_fatal_error(_("Option <%s> required for flag -%c"),
+	G_fatal_error(_("%s= required for -%c"),
 		      opt.rgbcol->key, flag.c->key);
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;

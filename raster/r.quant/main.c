@@ -108,7 +108,8 @@ int main(int argc, char *argv[])
     if (rules->answer)
 	i++;
     if (i > 1)
-	G_fatal_error(_("-t, -r, rules=, basemap= and fprange= are mutually exclusive"));
+	G_fatal_error(_("-%c, -%c, %s=, %s= and %s= are mutually exclusive"),
+			trunc->key, rnd->key, rules->key, basemap->key, fprange->key);
 
     i = 0;
     if (fprange->answer)
@@ -116,7 +117,8 @@ int main(int argc, char *argv[])
     if (range->answer)
 	i++;
     if (i == 1)
-	G_fatal_error(_("fprange= and range= must be used together"));
+	G_fatal_error(_("%s= and %s= must be used together"),
+			fprange->key, range->key);
 
     for (noi = 0; input->answers[noi]; noi++)
 	;
@@ -158,9 +160,11 @@ int main(int argc, char *argv[])
     else if (fprange->answer)
     {
 	if (sscanf(fprange->answer, "%lf,%lf", &new_dmin, &new_dmax) != 2)
-	    G_fatal_error(_("invalid value for fprange= <%s>"), fprange->answer);
+	    G_fatal_error(_("invalid value for %s= <%s>"),
+			    fprange->key, fprange->answer);
 	if (sscanf(range->answer, "%d,%d", &new_min, &new_max) != 2)
-	    G_fatal_error(_("invalid value for range= <%s>"), range->answer);
+	    G_fatal_error(_("invalid value for %s= <%s>"),
+			    range->key, range->answer);
 	G_message(_("Setting quant rules for input map(s) to (%f,%f) -> (%d,%d)"),
 		  new_dmin, new_dmax, new_min, new_max);
 	Rast_quant_add_rule(&quant_struct, new_dmin, new_dmax, new_min, new_max);

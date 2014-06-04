@@ -74,20 +74,16 @@ def register_maps_in_space_time_dataset(
         increment = str(increment)
 
     if maps and file:
-        msgr.fatal(_("%(m)s= and %(f)s= are mutually exclusive") % {'m': "maps",
-                                                                    'f': "file"})
+        msgr.fatal(_("%s= and %s= are mutually exclusive") % ("maps", "file"))
 
     if end and increment:
-        msgr.fatal(_("%(e)s= and %(i)s= are mutually exclusive") % {'e': "end",
-                   'i': "increment"})
+        msgr.fatal(_("%s= and %s= are mutually exclusive") % ("end", "increment"))
 
     if end and not start:
-        msgr.fatal(_("Please specify %(st)s= and %(e)s=") % {'st': "start_time",
-                                                             'e': "end_time"})
+        msgr.fatal(_("Please specify %s= and %s=") % ("start_time", "end_time"))
 
     if not maps and not file:
-        msgr.fatal(_("Please specify %(m)s= or %(f)s=") % {'m': "maps",
-                                                           'f': "file"})
+        msgr.fatal(_("Please specify %s= or %s=") % ("maps", "file"))
     # We may need the mapset
     mapset = get_current_mapset()
     dbif, connected = init_dbif(None)
