@@ -1361,7 +1361,7 @@ msgstr ""
 #: ../gui/wxpython/animation/g.gui.animation.py:87
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
-msgstr ""
+msgstr "%s=, %s=, %s=와 %s=를 같이 지정할 수 없습니다."
 
 #: ../gui/wxpython/animation/temporal_manager.py:103
 msgid ""
