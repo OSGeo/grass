@@ -7,9 +7,10 @@
  *               Cedric Shock <cedricgrass shockfamily.net>, 
  *               Hamish Bowman <hamish_b yahoo.com>, 
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>, 
- *               Radim Blazek <radim.blazek gmail.com>
+ *               Radim Blazek <radim.blazek gmail.com>,
+ *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2001-2007, 2010-2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2007, 2010-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
