@@ -117,7 +117,7 @@ static void split_gisprompt(const char *, char *, char *, char *);
 static void module_gui_wx(void);
 static void add_exclusive(const char *, int, const char *);
 static struct Exclusive *find_exclusive(char *);
-static int has_exclusive_key(struct Exclusive *, char *);
+static int has_exclusive_key(int, char **, char *);
 static void check_exclusive(int);
 static void append_error(const char *);
 
@@ -867,7 +867,8 @@ static void add_exclusive(const char *option_key, int flag_key,
 		}
 	    }
 
-	    if (!has_exclusive_key(exclusive, keyname)) {
+	    if (!has_exclusive_key(exclusive->n_keys, exclusive->keys,
+				   keyname)) {
 		exclusive->keys[exclusive->n_keys++] = keyname;
 
 		if (exclusive->n_keys >= exclusive->allocated_keys) {
@@ -901,12 +902,12 @@ static struct Exclusive *find_exclusive(char *name)
     return NULL;
 }
 
-static int has_exclusive_key(struct Exclusive *exclusive, char *key)
+static int has_exclusive_key(int n_keys, char **keys, char *key)
 {
     int i;
 
-    for (i = 0; i < exclusive->n_keys; i++) {
-	if (strcmp(exclusive->keys[i], key) == 0)
+    for (i = 0; i < n_keys; i++) {
+	if (strcmp(keys[i], key) == 0)
 	    return 1;
     }
 
@@ -915,7 +916,13 @@ static int has_exclusive_key(struct Exclusive *exclusive, char *key)
 
 static void check_exclusive(int print_group)
 {
-    int i;
+    int i, n, allocated, len;
+    char **keys, *err;
+
+    n = 0;
+    allocated = 0;
+    len = 0;
+    keys = NULL;
 
     for (i = 0; i < st->n_exclusive; i++) {
 	struct Exclusive *exclusive;
@@ -929,34 +936,62 @@ static void check_exclusive(int print_group)
 	    G_debug(1, "check_exclusive():\t%s", exclusive->keys[0]);
 
 	if (exclusive->n_keys > 1) {
-	    int len, j;
-	    char *err;
+	    int j;
 
-	    len = strlen(exclusive->name);
-	    for (j = 0; j < exclusive->n_keys; j++) {
-		len += strlen(exclusive->keys[j]) + 2; /* 2 for comma space */
-		if (j > 0)
-		    G_debug(1, "check_exclusive():\t%s", exclusive->keys[j]);
-	    }
+	    if (print_group) {
+		len = strlen(exclusive->name);
+		for (j = 0; j < exclusive->n_keys; j++) {
+		    len += strlen(exclusive->keys[j]) + 2; /* 2 for comma adn
+							      space */
+		    if (j > 0)
+			G_debug(1, "check_exclusive():\t%s",
+				exclusive->keys[j]);
+		}
 
-	    err = G_malloc(len + 100);
-	    if (print_group)
+		err = G_malloc(len + 100);
 		sprintf(err, _("Options/flags in group '%s' are "
 			       "mutually exclusive: "), exclusive->name);
-	    else
-		sprintf(err, _("The following options/flags are "
-			       "mutually exclusive: "));
-
-	    len = strlen(err);
-	    for (j = 0; j < exclusive->n_keys - 2; j++) {
-		sprintf(err + len, "%s, ", exclusive->keys[j]);
+		
 		len = strlen(err);
-	    }
-	    sprintf(err + len, _("%s and %s"), exclusive->keys[j],
-		    exclusive->keys[j + 1]);
+		for (j = 0; j < exclusive->n_keys - 2; j++) {
+		    sprintf(err + len, "%s, ", exclusive->keys[j]);
+		    len = strlen(err);
+		}
+		
+		sprintf(err + len, _("%s and %s"), exclusive->keys[j],
+			exclusive->keys[j + 1]);
 
-	    append_error(err);
+		append_error(err);
+	    }
+	    else {
+		for (j = 0; j < exclusive->n_keys; j++) {
+		    if (!has_exclusive_key(n, keys, exclusive->keys[j])) {
+			if (n >= allocated) {
+			    allocated += 10;
+			    keys = G_realloc(keys, allocated * sizeof(char *));
+			}
+			keys[n] = exclusive->keys[j];
+			len += strlen(keys[n++]) + 2; /* 2 for comma and space
+						       */
+		    }
+		}
+	    }
 	}
+    }
+
+    if (!print_group && n) {
+	err = G_malloc(len + 100);
+	sprintf(err, _("The following options/flags are mutually exclusive: "));
+
+	len = strlen(err);
+	for (i = 0; i < n - 2; i++) {
+	    sprintf(err + len, "%s, ", keys[i]);
+	    len = strlen(err);
+	}
+	
+	sprintf(err + len, _("%s and %s"), keys[i], keys[i + 1]);
+
+	append_error(err);
     }
 }
 
