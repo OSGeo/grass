@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-04 11:35-0400\n"
+"POT-Creation-Date: 2014-06-04 13:14-0400\n"
 "PO-Revision-Date: 2013-10-30 22:07-0500\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -6633,136 +6633,131 @@ msgstr "Datum %s 표파일을 열 수 없습니다"
 msgid "Unable to export raster map <%s> with r3.pack"
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:77
+#: ../lib/python/temporal/register.py:77 ../lib/python/temporal/register.py:80
 #, python-format
-msgid "%(m)s= and %(f)s= are mutually exclusive"
+msgid "%s= and %s= are mutually exclusive"
+msgstr "%s=와 %s=를 같이 지정할 수 없습니다"
+
+#: ../lib/python/temporal/register.py:83
+#, python-format
+msgid "Please specify %s= and %s="
 msgstr ""
 
-#: ../lib/python/temporal/register.py:81
+#: ../lib/python/temporal/register.py:86
 #, python-format
-msgid "%(e)s= and %(i)s= are mutually exclusive"
+msgid "Please specify %s= or %s="
 msgstr ""
 
-#: ../lib/python/temporal/register.py:85
-#, python-format
-msgid "Please specify %(st)s= and %(e)s="
-msgstr ""
-
-#: ../lib/python/temporal/register.py:89
-#, python-format
-msgid "Please specify %(m)s= or %(f)s="
-msgstr ""
-
-#: ../lib/python/temporal/register.py:101
+#: ../lib/python/temporal/register.py:97
 #, python-format
 msgid ""
 "Space time %(sp)s dataset <%(name)s> with relative time found, but no "
 "relative unit set for %(sp)s maps"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:167
+#: ../lib/python/temporal/register.py:163
 msgid "Gathering map informations"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:177
+#: ../lib/python/temporal/register.py:173
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The map does not exists."
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:196
+#: ../lib/python/temporal/register.py:192
 #, fuzzy, python-format
 msgid ""
 "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has "
 "timestamp and the start time is not set."
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:202
+#: ../lib/python/temporal/register.py:198
 #, fuzzy, python-format
 msgid ""
 "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the "
 "start time is not set."
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:210
+#: ../lib/python/temporal/register.py:206
 #, python-format
 msgid "%(u)s= can only be set for relative time"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:212
+#: ../lib/python/temporal/register.py:208
 #, python-format
 msgid "%(u)s= must be set in case of relative time stamps"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:224
+#: ../lib/python/temporal/register.py:220
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:231
+#: ../lib/python/temporal/register.py:227
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s>. Overwrite flag is not set."
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:255
+#: ../lib/python/temporal/register.py:251
 #, fuzzy, python-format
 msgid ""
 "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are "
 "different."
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:261
+#: ../lib/python/temporal/register.py:257
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The temporal types are different."
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:307
+#: ../lib/python/temporal/register.py:303
 #, fuzzy
 msgid "Register maps in the temporal database"
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:314
+#: ../lib/python/temporal/register.py:310
 #, fuzzy
 msgid "Register maps in the space time raster dataset"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:323
+#: ../lib/python/temporal/register.py:319
 msgid "Update space time raster dataset"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:375
-#: ../lib/python/temporal/register.py:383
+#: ../lib/python/temporal/register.py:371
+#: ../lib/python/temporal/register.py:379
 #, python-format
 msgid "Unable to convert string \"%s\"into a datetime object"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:391
-#: ../lib/python/temporal/register.py:396
+#: ../lib/python/temporal/register.py:387
+#: ../lib/python/temporal/register.py:392
 msgid "Error in increment computation"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:399
+#: ../lib/python/temporal/register.py:395
 #, fuzzy, python-format
 msgid ""
 "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
 "%(end)s"
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:404
+#: ../lib/python/temporal/register.py:400
 #, fuzzy, python-format
 msgid "Set absolute valid time for map <%s> to %s - %s"
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:421
+#: ../lib/python/temporal/register.py:417
 #, fuzzy, python-format
 msgid ""
 "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
 msgstr "Datum %s 표파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:426
+#: ../lib/python/temporal/register.py:422
 #, fuzzy, python-format
 msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
 msgstr "Datum %s 표파일을 열 수 없습니다"
@@ -8847,526 +8842,3 @@ msgstr ""
 #: ../lib/proj/ellipse.c:120
 msgid "No ellipsoid info given in file"
 msgstr "파일 안에 타원체 정보가 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to desribe table <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to select space time dataset register table <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to create timestamp file for raster3d map <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Invalid datetime in timestamp for raster3d map <%s>"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to remove timestamp for raster3d map <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Raster3d map <%s> not found"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Inconsistency in topology: line %d - unexpected feature type"
-#~ msgstr "알려지지 않은 벡터형입니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to read PostGIS features\n"
-#~ "%s"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "%d %s without geometry skipped"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Registering maps in the temporal database"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Space time %(t)s dataset <%(i)s> is already in database, use overwrite "
-#~ "flag to overwrite"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Space time %(type)s dataset <%(id)s> not found"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Space time %(type)s dataset <%(id)s> is already in database, use "
-#~ "overwrite flag to overwrite"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unregister %(type)s map <%(map)s> from space time datasets"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Register %s map <%s> with layer %s in space time %s dataset <%s>"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Register %s map <%s> in space time %s dataset <%s>"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Created register table <%s> for %s map <%s> with layer %s"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unregister %s map <%s> with layer %s"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unregister %s map <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable open spatial index file for write <%s>"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Attempt to read dead feature %d"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to get features"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to read line %d"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to get feature type"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to rewrite feature, vector map is not opened"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to delete feature %d, vector map <%s> is not opened on topology "
-#~ "level"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to restore feature %d, vector map <%s> is not opened on topology "
-#~ "level"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to restore feature %d, vector map <%s> is not opened in 'write' "
-#~ "mode"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to open cidx file <%s> for write"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Topology not available. Unable to insert new edge."
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "input vector map is not open"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to open signature file <%s> for subgroup <%s> of group <%s@%s>"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to open topo file for write <%s>"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to attach centroids"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unexpected feature type (%s) - should be (%d)"
-#~ msgstr "알려지지 않은 벡터형입니다"
-
-#, fuzzy
-#~ msgid "Unable to read centroid %d: %s"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to export node %d. Exiting."
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to look up account id"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to allocate memory for account name"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to allocate memory for domain name"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to remove space time dataset register table <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to drop table <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to create the space time %s dataset register table for map <%s> "
-#~ "with layer %s"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to find map <%s> with layer %s in temporal database"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to open fidx file for vector map <%s@%s>"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to read read line %d"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to write feature (negative offset)"
-#~ msgstr "자동 MASK파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete feature id %d from vector map <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to open null device"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "The support for OGR vector maps wasn't compiled in"
-#~ msgstr "벡터지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
-
-#, fuzzy
-#~ msgid "End time must be later than start time"
-#~ msgstr "동쪽경계는 서쪽경계보다 값이 커야합니다"
-
-#, fuzzy
-#~ msgid "Unknown"
-#~ msgstr "알려지지 않은 벡터형입니다"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to open driver <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Reading nodes from vector map ..."
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to write raster row %i"
-#~ msgstr "자동 MASK파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to open raster map <%s@%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to find <%s@%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid " It is a reclass of raster map <%s@%s> "
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to realloc buffer"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to open category index file for vector map <%s@%s>"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Can't read %s for [%s in %s]"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to spawn the 'wish' program"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Cannot describe table <%s>"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#~ msgid "with titles"
-#~ msgstr "제목과 함께"
-
-#~ msgid "(no title)"
-#~ msgstr "(제목없음)"
-
-#~ msgid "to cancel request"
-#~ msgstr "취소를 원하시면"
-
-#~ msgid "Enter a new %s file name"
-#~ msgstr "새로운 %s 파일명을 입력하세요"
-
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "%s 파일명을 입력하세요"
-
-#~ msgid "Enter %s file name"
-#~ msgstr "%s 파일명을 입력하세요"
-
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "%s 파일의 열람을 위해서는 'list'를 입력하세요\n"
-
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "을(를) 위해서는 'list -f'를 입력하세요"
-
-#~ msgid "a list %s"
-#~ msgstr "%s 리스트"
-
-#~ msgid "an extended list"
-#~ msgstr "확장리스트"
-
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "%s RETURN을 누르세요\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 찾지 못함 **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s을(를) 덮어쓸까요? "
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 잘못된 요청 **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 이미 존재합니다. 다른 이름을 선택하세요 **\n"
-
-#~ msgid "ask: can't happen"
-#~ msgstr "ask: 내부오류"
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
-
-#~ msgid "G_dump: memory allocated to G__"
-#~ msgstr "G_dump: G__에 메모리가 할당되었습니다"
-
-#, fuzzy
-#~ msgid "Not able to open cellfile for [%s]"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> 잘못된 이름 **\n"
-
-#, fuzzy
-#~ msgid "Unable to open temporary file"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "취소를 원하시면 RETURN을 누르세요\n"
-
-#, fuzzy
-#~ msgid "Problem reading raster map"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "unable to find a temporary null file %s"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#~ msgid "category support for [%s] in mapset [%s] %s"
-#~ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
-
-#~ msgid "category support for vector map [%s] in mapset [%s] %s"
-#~ msgstr "벡터지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
-
-#~ msgid "Cannot open temp file"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#~ msgid "color support for [%s] in mapset [%s] %s"
-#~ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 색상지원: %s"
-
-#, fuzzy
-#~ msgid "Error reading compressed map <%s@%s>, row %d"
-#~ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
-
-#, fuzzy
-#~ msgid "Error reading map <%s@%s>, row %d"
-#~ msgstr "지도 [%s], 지도셑 [%s]을(를) 위한 분류지원: %s"
-
-#, fuzzy
-#~ msgid "Unable to find '%s' in '%s'"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to read header file for raster map <%s@%s>."
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to add database link, map is not opened in WRITE mode"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete layer/category %d/%d line %d"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Attempt to delete dead line"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to rewrite line %d"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to allocate memory for a null buffer"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to open file %s"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to rename directory '%s' to '%s'. Reason: %s"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete prior null-cells file"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to close the null-cells file"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete the temporary null-cells file"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete the empty temporary null-cells file"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete the prior null-cells file"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to close the 'cell' file"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete prior 'fcell' file"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to close file"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete the prior 'cell' file"
-#~ msgstr "임시파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete the temporary 'cell' file"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to write quant file!"
-#~ msgstr "자동 MASK파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to delete the %s file"
-#~ msgstr "Datum %s 표파일을 열 수 없습니다"
-
-#, fuzzy
-#~ msgid "Unable to write f_format file for CELL maps"
-#~ msgstr "'%s' 디버그파일을 열 수 없습니다"

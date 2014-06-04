@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-04 11:35-0400\n"
+"POT-Creation-Date: 2014-06-04 13:14-0400\n"
 "PO-Revision-Date: 2005-08-09 22:53-0500\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -927,7 +927,7 @@ msgstr "출력할 격자지도"
 #: ../imagery/i.ortho.photo/i.ortho.elev/main.c:155
 #: ../imagery/i.pca/main.c:142 ../display/d.what.rast/main.c:119
 #: ../display/d.what.rast/opencell.c:14 ../vector/v.vol.rst/main.c:617
-#: ../vector/v.colors/main.c:313 ../general/g.region/main.c:459
+#: ../vector/v.colors/main.c:312 ../general/g.region/main.c:459
 #: ../general/g.region/main.c:783 ../general/g.region/main.c:791
 #: ../doc/raster/r.example/main.c:105 ../misc/m.nviz.image/surface.c:50
 #: ../misc/m.nviz.image/surface.c:107 ../raster/r.stream.stats/io.c:71
@@ -953,7 +953,7 @@ msgstr "출력할 격자지도"
 #: ../raster/r.walk/main.c:447 ../raster/r.walk/main.c:815
 #: ../raster/r.carve/main.c:165 ../raster/r.kappa/main.c:150
 #: ../raster/r.kappa/stats.c:33 ../raster/r.kappa/stats.c:38
-#: ../raster/r.mapcalc/map.c:505 ../raster/r.colors/edit_colors.c:412
+#: ../raster/r.mapcalc/map.c:505 ../raster/r.colors/edit_colors.c:411
 #: ../raster/r.null/main.c:121 ../raster/r.category/main.c:119
 #: ../raster/r.category/main.c:140 ../raster/r.distance/parse.c:72
 #: ../raster/r.distance/parse.c:81 ../raster/r.stream.order/io.c:71
@@ -1006,7 +1006,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:3
 #: ../locale/scriptstrings/t.list_to_translate.c:3
 #: ../locale/scriptstrings/t.create_to_translate.c:3
-#: ../general/g.mremove/main.c:65 ../general/g.mremove/bak/main.c:67
+#: ../general/g.mremove/main.c:62 ../general/g.mremove/bak/main.c:67
 #: ../general/g.mremove/new/main.c:65 ../general/g.findetc/main.c:29
 #: ../general/g.list/main.c:45 ../general/g.findfile/main.c:39
 #: ../general/g.dirseps/main.c:35 ../general/g.remove/main.c:102
@@ -5183,7 +5183,7 @@ msgid "Removes space time datasets from temporal database."
 msgstr "출력할 격자지도"
 
 #: ../locale/scriptstrings/t.remove_to_translate.c:4
-#: ../general/g.mremove/main.c:66 ../general/g.mremove/bak/main.c:68
+#: ../general/g.mremove/main.c:63 ../general/g.mremove/bak/main.c:68
 #: ../general/g.mremove/new/main.c:66 ../general/g.remove/main.c:103
 msgid "remove"
 msgstr "삭제"
@@ -6035,7 +6035,7 @@ msgstr ""
 #: ../locale/scriptstrings/g.extension_to_translate.c:3
 #: ../locale/scriptstrings/g.extension.all_to_translate.c:3
 #: ../locale/scriptstrings/g.manual_to_translate.c:2
-#: ../general/g.mapsets/main.c:63 ../general/g.mremove/main.c:64
+#: ../general/g.mapsets/main.c:63 ../general/g.mremove/main.c:61
 #: ../general/g.mremove/bak/main.c:66 ../general/g.mremove/new/main.c:64
 #: ../general/g.tempfile/main.c:38 ../general/g.mkfontcap/main.c:71
 #: ../general/g.region/main.c:63 ../general/g.setproj/main.c:78
@@ -7037,7 +7037,7 @@ msgstr "출력할 격자지도"
 
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:4
 #: ../locale/scriptstrings/db.droptable_to_translate.c:4
-#: ../general/g.mremove/main.c:105 ../general/g.mremove/bak/main.c:109
+#: ../general/g.mremove/main.c:80 ../general/g.mremove/bak/main.c:109
 #: ../general/g.mremove/new/main.c:105
 msgid "Force removal (required for actual deletion of files)"
 msgstr "실제로 파일을 지웁니다"
@@ -8346,7 +8346,7 @@ msgstr "출력할 격자지도"
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:5
 #: ../locale/scriptstrings/r.mask_to_translate.c:8
-#: ../general/g.mremove/main.c:110 ../general/g.mremove/bak/main.c:114
+#: ../general/g.mremove/main.c:85 ../general/g.mremove/bak/main.c:114
 #: ../general/g.mremove/new/main.c:110
 msgid "Raster"
 msgstr ""
@@ -9204,11 +9204,11 @@ msgstr ""
 #: ../ps/ps.map/ps_raster.c:102 ../raster/r.stream.stats/io.c:120
 #: ../raster/r.stream.stats/io.c:404 ../raster/r.stream.channel/io.c:120
 #: ../raster/r.stream.channel/io.c:404 ../raster/r.stream.snap/io.c:120
-#: ../raster/r.stream.snap/io.c:404 ../raster/r.series.accumulate/main.c:250
-#: ../raster/r.series.accumulate/main.c:275
-#: ../raster/r.series.accumulate/main.c:286
-#: ../raster/r.series.accumulate/main.c:294
-#: ../raster/r.series.accumulate/main.c:302
+#: ../raster/r.stream.snap/io.c:404 ../raster/r.series.accumulate/main.c:252
+#: ../raster/r.series.accumulate/main.c:277
+#: ../raster/r.series.accumulate/main.c:288
+#: ../raster/r.series.accumulate/main.c:296
+#: ../raster/r.series.accumulate/main.c:304
 #: ../raster/r.stream.distance/io.c:120 ../raster/r.stream.distance/io.c:404
 #: ../raster/r.stream.segment/io.c:120 ../raster/r.stream.segment/io.c:404
 #: ../raster/r.grow.distance/main.c:263 ../raster/r.out.mpeg/main.c:287
@@ -9913,11 +9913,11 @@ msgstr ""
 #: ../display/d.where/main.c:163 ../vector/v.segment/main.c:94
 #: ../vector/v.lrs/v.lrs.segment/main.c:133 ../vector/v.net.path/path.c:49
 #: ../general/g.cairocomp/main.c:46 ../raster3d/r3.support/main.c:166
-#: ../raster/r.series.accumulate/main.c:223 ../raster/r.topmodel/file_io.c:29
+#: ../raster/r.series.accumulate/main.c:225 ../raster/r.topmodel/file_io.c:29
 #: ../raster/r.topmodel/file_io.c:72 ../raster/r.topmodel/file_io.c:181
 #: ../raster/r.in.xyz/main.c:540 ../raster/r.in.arc/main.c:123
 #: ../raster/r.mapcalc/main.c:91 ../raster/r.support/main.c:180
-#: ../raster/r.series/main.c:214 ../raster/r.in.mat/main.c:125
+#: ../raster/r.series/main.c:216 ../raster/r.in.mat/main.c:125
 #, fuzzy, c-format
 msgid "Unable to open input file <%s>"
 msgstr "출력할 격자지도"
@@ -10047,7 +10047,7 @@ msgstr ""
 #: ../vector/v.surf.idw/read_sites.c:29 ../vector/v.to.db/main.c:49
 #: ../vector/v.voronoi/main.c:195 ../vector/v.reclass/main.c:113
 #: ../vector/v.overlay/main.c:178 ../vector/v.net.distance/main.c:176
-#: ../vector/v.select/main.c:107 ../vector/v.colors/main.c:264
+#: ../vector/v.select/main.c:107 ../vector/v.colors/main.c:263
 #: ../general/manage/lister/vector.c:24 ../doc/vector/v.example/main.c:87
 #: ../misc/m.nviz.image/vector.c:282 ../raster/r.stream.snap/points_io.c:19
 #: ../raster/r.le/r.le.setup/sample.c:1037 ../raster/r.drain/main.c:268
@@ -10357,8 +10357,8 @@ msgstr "출력할 격자지도"
 msgid "Error reading category file for <%s>"
 msgstr "출력할 격자지도"
 
-#: ../display/d.colors/get_info.c:25 ../vector/v.colors/main.c:316
-#: ../raster/r.grow.distance/main.c:368 ../raster/r.colors/edit_colors.c:415
+#: ../display/d.colors/get_info.c:25 ../vector/v.colors/main.c:315
+#: ../raster/r.grow.distance/main.c:368 ../raster/r.colors/edit_colors.c:414
 #: ../raster/r.colors.out/raster_main.c:69 ../raster/r.fill.dir/main.c:150
 #, fuzzy, c-format
 msgid "Unable to read color table for raster map <%s>"
@@ -10879,7 +10879,7 @@ msgstr ""
 #: ../vector/v.lrs/v.lrs.create/main.c:260 ../vector/v.outlier/main.c:168
 #: ../vector/v.lidar.growing/main.c:126 ../vector/v.vect.stats/main.c:240
 #: ../vector/v.vect.stats/main.c:248 ../vector/v.convert/old2new.c:26
-#: ../vector/v.convert/att.c:31 ../vector/v.colors/main.c:240
+#: ../vector/v.convert/att.c:31 ../vector/v.colors/main.c:239
 #: ../general/g.region/main.c:508 ../doc/vector/v.example/main.c:75
 #: ../misc/m.nviz.image/vector.c:86 ../raster/r.walk/main.c:417
 #: ../raster/r.carve/main.c:158 ../raster/r.cost/main.c:327
@@ -11335,10 +11335,9 @@ msgid ""
 msgstr ""
 
 #: ../display/d.vect/shape.c:198
-#, c-format
-msgid ""
-"Options <%s> and <%s> are mutually exclusive. Option <%s> will be ignored."
-msgstr ""
+#, fuzzy, c-format
+msgid "%s= and %s= are mutually exclusive. %s= will be ignored."
+msgstr "%s=와 %s=를 같이 지정할 수 없습니다"
 
 #: ../display/d.vect/shape.c:341
 #, fuzzy, c-format
@@ -11932,13 +11931,13 @@ msgid "Invalid grid size <%s>"
 msgstr ""
 
 #: ../display/d.grid/main.c:241 ../raster3d/r3.in.bin/main.c:431
-#: ../raster/r.in.bin/main.c:437
+#: ../raster/r.in.bin/main.c:445
 #, c-format
 msgid "Illegal east coordinate <%s>"
 msgstr ""
 
 #: ../display/d.grid/main.c:247 ../raster3d/r3.in.bin/main.c:427
-#: ../raster/r.in.bin/main.c:433
+#: ../raster/r.in.bin/main.c:441
 #, c-format
 msgid "Illegal north coordinate <%s>"
 msgstr ""
@@ -14998,7 +14997,7 @@ msgstr ""
 msgid "Loading data..."
 msgstr "출력할 격자지도"
 
-#: ../vector/v.to.rast/vect2rast.c:48 ../vector/v.colors/main.c:268
+#: ../vector/v.to.rast/vect2rast.c:48 ../vector/v.colors/main.c:267
 #, fuzzy, c-format
 msgid "Vector map <%s> is not 3D"
 msgstr "출력할 격자지도"
@@ -16578,19 +16577,19 @@ msgstr ""
 msgid "Print current status in shell script style"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.external.out/args.c:88
+#: ../vector/v.external.out/args.c:88 ../raster/r.resamp.filter/main.c:432
 #, fuzzy, c-format
-msgid "Options <%s/%s> and <%s> are mutually exclusive"
-msgstr "옵션 <%s>와 <%s>를 같이 지정할 수 없습니다"
+msgid "%s= and %s=/%s= are mutually exclusive"
+msgstr "-%c/-%c와 %s=%s를 같이 지정할 수 없습니다"
 
-#: ../vector/v.external.out/args.c:96
+#: ../vector/v.external.out/args.c:96 ../raster/r.colors/edit_colors.c:169
 #, fuzzy, c-format
-msgid "One of options <%s> or <%s> must be specified"
-msgstr "옵션 <%s> 또는 <%s>를 지정해야 합니다"
+msgid "%s= or %s= must be specified"
+msgstr "출력할 격자지도"
 
 #: ../vector/v.external.out/args.c:99
 #, fuzzy, c-format
-msgid "Option <%s> must be specified"
+msgid "%s= must be specified"
 msgstr "옵션 <%s> 또는 <%s>를 지정해야 합니다"
 
 #: ../vector/v.external.out/format.c:48 ../raster/r.external.out/main.c:156
@@ -17104,7 +17103,7 @@ msgstr "출력할 격자지도"
 
 #: ../vector/v.surf.rst/main.c:538 ../vector/v.colors.out/scan_cats.c:24
 #: ../vector/v.colors.out/make_colors.c:27 ../vector/v.out.ascii/main.c:104
-#: ../vector/v.colors/main.c:272
+#: ../vector/v.colors/main.c:271
 #, fuzzy, c-format
 msgid "Layer <%s> not found"
 msgstr "출력할 격자지도"
@@ -24412,59 +24411,67 @@ msgstr "출력할 격자지도"
 msgid "Option <%s> given, assuming <use=attr>..."
 msgstr ""
 
-#: ../vector/v.colors/main.c:207 ../raster/r.colors/edit_colors.c:165
-#: ../raster/r.colors/edit_colors.c:173
+#: ../vector/v.colors/main.c:207 ../raster/r.neighbors/main.c:264
+#: ../raster/r.series.accumulate/main.c:210
+#: ../raster/r.series.interp/main.c:116 ../raster/r.series.interp/main.c:120
+#: ../raster/r.series.interp/main.c:132 ../raster/r.series.interp/main.c:136
+#: ../raster/r.external/main.c:147 ../raster/r.mapcalc/main.c:145
+#: ../raster/r.colors/edit_colors.c:165 ../raster/r.colors/edit_colors.c:173
+#: ../raster/r.series/main.c:198
 #, c-format
-msgid "Options <%s> and <%s> are mutually exclusive"
-msgstr "옵션 <%s>와 <%s>를 같이 지정할 수 없습니다"
+msgid "%s= and %s= are mutually exclusive"
+msgstr "%s=와 %s=를 같이 지정할 수 없습니다"
 
 #: ../vector/v.colors/main.c:217
 #, fuzzy, c-format
-msgid "One of -%c, -%c or options <%s>, <%s> or <%s> must be specified"
+msgid "One of -%c, -%c or %s=, %s= or %s= must be specified"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.colors/main.c:222 ../general/g.gisenv/main.c:131
+#: ../vector/v.colors/main.c:222 ../general/g.gisenv/main.c:132
 #: ../raster/r.colors/edit_colors.c:187
-#, c-format
-msgid "Options <%s>, <%s>, and <%s> are mutually exclusive"
-msgstr "옵션 <%s>, <%s>, <%s>를 같이 지정할 수 없습니다"
-
-#: ../vector/v.colors/main.c:227 ../general/g.gisenv/main.c:97
-#: ../raster/r.colors/edit_colors.c:192
-#, c-format
-msgid "Flags -%c and -%c are mutually exclusive"
-msgstr "플래그 -%c와 -%c를 같이 지정할 수 없습니다"
-
-#: ../vector/v.colors/main.c:231
 #, fuzzy, c-format
-msgid "Option <%s> required for flag -%c"
+msgid "%s=, %s= and %s= are mutually exclusive"
+msgstr "%s=와 %s=를 같이 지정할 수 없습니다"
+
+#: ../vector/v.colors/main.c:226 ../general/g.mremove/main.c:99
+#: ../general/g.mremove/bak/main.c:120 ../general/g.mremove/new/main.c:116
+#: ../general/g.gisenv/main.c:97 ../general/g.mlist/main.c:149
+#: ../general/g.mlist/main.c:153 ../raster/r.in.bin/main.c:382
+#: ../raster/r.out.bin/main.c:377 ../raster/r.colors/edit_colors.c:191
+#, c-format
+msgid "-%c and -%c are mutually exclusive"
+msgstr "-%c와 -%c를 같이 지정할 수 없습니다"
+
+#: ../vector/v.colors/main.c:230
+#, fuzzy, c-format
+msgid "%s= required for -%c"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.colors/main.c:246
+#: ../vector/v.colors/main.c:245
 #, fuzzy, c-format
 msgid "Unable to remove color table of vector map <%s>"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.colors/main.c:248
+#: ../vector/v.colors/main.c:247
 #, fuzzy, c-format
 msgid "Color table of vector map <%s> not found"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.colors/main.c:256
+#: ../vector/v.colors/main.c:255
 msgid "Color table exists. Exiting."
 msgstr ""
 
-#: ../vector/v.colors/main.c:278
+#: ../vector/v.colors/main.c:277
 #, c-format
 msgid "Option <%s>: min must be greater or equal to max"
 msgstr ""
 
-#: ../vector/v.colors/main.c:290
+#: ../vector/v.colors/main.c:289
 #, fuzzy, c-format
 msgid "Color table <%s> not found"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.colors/main.c:320 ../general/g.region/main.c:485
+#: ../vector/v.colors/main.c:319 ../general/g.region/main.c:485
 #: ../raster3d/r3.timestamp/r3.timestamp.main.c:70
 #: ../raster3d/r3.out.vtk/main.c:142 ../raster3d/r3.out.bin/main.c:299
 #: ../raster3d/r3.retile/main.c:113 ../raster3d/r3.stats/main.c:95
@@ -24475,22 +24482,22 @@ msgstr "출력할 격자지도"
 #: ../raster3d/r3.cross.rast/main.c:245
 #: ../raster/r.univar/r3.univar_main.c:140
 #: ../raster/r.univar/r3.univar_main.c:178
-#: ../raster/r.colors/edit_colors.c:419
+#: ../raster/r.colors/edit_colors.c:418
 #, c-format
 msgid "3D raster map <%s> not found"
 msgstr ""
 
-#: ../vector/v.colors/main.c:323 ../raster/r.colors/edit_colors.c:422
+#: ../vector/v.colors/main.c:322 ../raster/r.colors/edit_colors.c:421
 #, fuzzy, c-format
 msgid "Unable to read color table for 3D raster map <%s>"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.colors/main.c:348
+#: ../vector/v.colors/main.c:347
 #, fuzzy
 msgid "Writing color rules..."
 msgstr "출력할 격자지도"
 
-#: ../vector/v.colors/main.c:364
+#: ../vector/v.colors/main.c:363
 #, fuzzy, c-format
 msgid "Color table for vector map <%s> set to '%s'"
 msgstr "출력할 격자지도"
@@ -24505,7 +24512,7 @@ msgstr "출력할 격자지도"
 msgid "Color table <%s> not supported"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.colors/make_colors.c:51 ../raster/r.colors/edit_colors.c:405
+#: ../vector/v.colors/make_colors.c:51 ../raster/r.colors/edit_colors.c:404
 #, fuzzy, c-format
 msgid "Unable to load rules file <%s>"
 msgstr "출력할 격자지도"
@@ -24605,7 +24612,7 @@ msgstr "검색경로가 변경되지 않았습니다"
 msgid "Unable to open SEARCH_PATH for write"
 msgstr "SEARCH_PATH를 쓰기를 위해서 열지 못 했습니다"
 
-#: ../general/g.mremove/main.c:68 ../general/g.mremove/bak/main.c:70
+#: ../general/g.mremove/main.c:65 ../general/g.mremove/bak/main.c:70
 #: ../general/g.mremove/new/main.c:68
 msgid ""
 "Removes data base element files from the user's current mapset using the "
@@ -24614,12 +24621,47 @@ msgstr ""
 "검색패턴을 이용해서 사용자의 현재 지도세트로부터 데이타베이스 요소파일을 지웁"
 "니다."
 
-#: ../general/g.mremove/main.c:82 ../general/g.mremove/bak/main.c:85
-#: ../general/g.mremove/new/main.c:82
+#: ../general/g.mremove/main.c:70 ../general/g.mremove/bak/main.c:99
+#: ../general/g.mremove/new/main.c:95 ../general/g.mlist/main.c:108
+msgid "Use basic regular expressions instead of wildcards"
+msgstr "와일드카드 대신 기본 정규표현식을 사용합니다"
+
+#: ../general/g.mremove/main.c:75 ../general/g.mremove/bak/main.c:104
+#: ../general/g.mremove/new/main.c:100 ../general/g.mlist/main.c:114
+msgid "Use extended regular expressions instead of wildcards"
+msgstr "와일드카드 대신 확장 정규표현식을 사용합니다"
+
+#: ../general/g.mremove/main.c:84 ../general/g.mremove/bak/main.c:113
+#: ../general/g.mremove/new/main.c:109
+msgid "Remove base raster maps"
+msgstr "기반 격자지도를 지웁니다"
+
+#: ../general/g.mremove/main.c:92 ../general/g.remove/main.c:115
+msgid "removed"
+msgstr "삭제"
+
+#: ../general/g.mremove/main.c:103 ../general/g.mremove/bak/main.c:124
+#: ../general/g.mremove/new/main.c:163
+msgid "The following data base element files would be deleted:"
+msgstr ""
+
+#: ../general/g.mremove/main.c:127 ../general/g.mremove/bak/filter.c:17
+#: ../general/g.mremove/new/main.c:136 ../general/g.mremove/new/main.c:156
+#: ../general/g.mlist/main.c:174 ../general/g.mlist/main.c:198
+#, fuzzy, c-format
+msgid "Unable to compile pattern <%s>"
+msgstr "출력할 격자지도"
+
+#: ../general/g.mremove/main.c:152 ../general/g.mremove/bak/main.c:190
+#: ../general/g.mremove/new/main.c:216
+#, c-format
+msgid "You must use the force flag (-%c) to actually remove them. Exiting."
+msgstr ""
+
+#: ../general/g.mremove/bak/main.c:85 ../general/g.mremove/new/main.c:82
 msgid "Map name search pattern"
 msgstr "지도이름 검색패턴"
 
-#: ../general/g.mremove/main.c:83 ../general/g.mremove/main.c:90
 #: ../general/g.mremove/bak/main.c:86 ../general/g.mremove/bak/main.c:94
 #: ../general/g.mremove/new/main.c:83 ../general/g.mremove/new/main.c:90
 #: ../general/g.mlist/main.c:83 ../general/g.mlist/main.c:91
@@ -24627,51 +24669,10 @@ msgstr "지도이름 검색패턴"
 msgid "Pattern"
 msgstr "패턴"
 
-#: ../general/g.mremove/main.c:89 ../general/g.mremove/bak/main.c:93
-#: ../general/g.mremove/new/main.c:89 ../general/g.mlist/main.c:90
+#: ../general/g.mremove/bak/main.c:93 ../general/g.mremove/new/main.c:89
+#: ../general/g.mlist/main.c:90
 msgid "Map name exclusion pattern (default: none)"
 msgstr "지도이름 제외패턴 (기본값: 없음)"
-
-#: ../general/g.mremove/main.c:95 ../general/g.mremove/bak/main.c:99
-#: ../general/g.mremove/new/main.c:95 ../general/g.mlist/main.c:108
-msgid "Use basic regular expressions instead of wildcards"
-msgstr "와일드카드 대신 기본 정규표현식을 사용합니다"
-
-#: ../general/g.mremove/main.c:100 ../general/g.mremove/bak/main.c:104
-#: ../general/g.mremove/new/main.c:100 ../general/g.mlist/main.c:114
-msgid "Use extended regular expressions instead of wildcards"
-msgstr "와일드카드 대신 확장 정규표현식을 사용합니다"
-
-#: ../general/g.mremove/main.c:109 ../general/g.mremove/bak/main.c:113
-#: ../general/g.mremove/new/main.c:109
-msgid "Remove base raster maps"
-msgstr "기반 격자지도를 지웁니다"
-
-#: ../general/g.mremove/main.c:116 ../general/g.mremove/bak/main.c:120
-#: ../general/g.mremove/new/main.c:116 ../general/g.mlist/main.c:149
-#: ../general/g.mlist/main.c:153
-#, c-format
-msgid "-%c and -%c are mutually exclusive"
-msgstr ""
-
-#: ../general/g.mremove/main.c:136 ../general/g.mremove/main.c:156
-#: ../general/g.mremove/bak/filter.c:17 ../general/g.mremove/new/main.c:136
-#: ../general/g.mremove/new/main.c:156 ../general/g.mlist/main.c:174
-#: ../general/g.mlist/main.c:198
-#, fuzzy, c-format
-msgid "Unable to compile pattern <%s>"
-msgstr "출력할 격자지도"
-
-#: ../general/g.mremove/main.c:163 ../general/g.mremove/bak/main.c:124
-#: ../general/g.mremove/new/main.c:163
-msgid "The following data base element files would be deleted:"
-msgstr ""
-
-#: ../general/g.mremove/main.c:216 ../general/g.mremove/bak/main.c:190
-#: ../general/g.mremove/new/main.c:216
-#, c-format
-msgid "You must use the force flag (-%c) to actually remove them. Exiting."
-msgstr ""
 
 #: ../general/g.mremove/bak/check_reclass.c:16
 #: ../general/g.mremove/check_reclass.c:16 ../general/g.remove/main.c:38
@@ -25914,16 +25915,16 @@ msgstr ""
 msgid "Don't use shell syntax"
 msgstr ""
 
-#: ../general/g.gisenv/main.c:161
+#: ../general/g.gisenv/main.c:162
 #, c-format
 msgid "Value '%s' ignored when unsetting the GRASS variable"
 msgstr ""
 
-#: ../general/g.gisenv/main.c:198
+#: ../general/g.gisenv/main.c:199
 msgid "GRASS variable not defined"
 msgstr ""
 
-#: ../general/g.gisenv/main.c:204
+#: ../general/g.gisenv/main.c:205
 #, c-format
 msgid "GRASS variable must be uppercase. Using '%s'."
 msgstr ""
@@ -25949,10 +25950,6 @@ msgstr "사용자의 현재 지도세트로부터 데이타베이스 요소파�
 #: ../general/g.remove/main.c:110
 msgid "Force removal for base raster maps"
 msgstr "기반 격자지도를 강제로 지웁니다"
-
-#: ../general/g.remove/main.c:115
-msgid "removed"
-msgstr "삭제"
 
 #: ../general/g.copy/main.c:44
 msgid ""
@@ -26013,19 +26010,19 @@ msgid "Pretty printing in human readable format"
 msgstr "사람이 읽기 쉬운 양식으로 출력합니다"
 
 #: ../general/g.mlist/main.c:141
-#, fuzzy, c-format
+#, c-format
 msgid "-%c/-%c and %s= are mutually exclusive"
-msgstr "-r과 -e를 같이 지정할 수 없습니다"
+msgstr "-%c/-%c와 %s=를 같이 지정할 수 없습니다"
 
 #: ../general/g.mlist/main.c:145
-#, fuzzy, c-format
+#, c-format
 msgid "-%c/-%c and -%c are mutually exclusive"
-msgstr "플래그 -%c와 -%c를 같이 지정할 수 없습니다"
+msgstr "-%c/-%c와 -%c를 같이 지정할 수 없습니다"
 
 #: ../general/g.mlist/main.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "-%c/-%c and %s=%s are mutually exclusive"
-msgstr "-r과 -e를 같이 지정할 수 없습니다"
+msgstr "-%c/-%c와 %s=%s를 같이 지정할 수 없습니다"
 
 #: ../general/g.mlist/main.c:314
 #, c-format
@@ -27503,25 +27500,25 @@ msgstr ""
 msgid "bytes=%d; must be 4 or 8 in case of floating point input"
 msgstr ""
 
-#: ../raster3d/r3.in.bin/main.c:412 ../raster/r.in.bin/main.c:404
+#: ../raster3d/r3.in.bin/main.c:412
 msgid "Integer input doesn't support size=8 in this build"
 msgstr ""
 
-#: ../raster3d/r3.in.bin/main.c:416 ../raster/r.in.bin/main.c:408
+#: ../raster3d/r3.in.bin/main.c:416
 msgid "bytes= must be 1, 2, 4 or 8"
 msgstr ""
 
-#: ../raster3d/r3.in.bin/main.c:429 ../raster/r.in.bin/main.c:435
+#: ../raster3d/r3.in.bin/main.c:429 ../raster/r.in.bin/main.c:443
 #, fuzzy, c-format
 msgid "Illegal south coordinate <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster3d/r3.in.bin/main.c:433 ../raster/r.in.bin/main.c:439
+#: ../raster3d/r3.in.bin/main.c:433 ../raster/r.in.bin/main.c:447
 #, fuzzy, c-format
 msgid "Illegal west coordinate <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster3d/r3.in.bin/main.c:441 ../raster/r.in.bin/main.c:445
+#: ../raster3d/r3.in.bin/main.c:441 ../raster/r.in.bin/main.c:453
 #, fuzzy, c-format
 msgid "Unable to open <%s>"
 msgstr "출력할 격자지도"
@@ -27531,7 +27528,7 @@ msgstr "출력할 격자지도"
 msgid "File Size %lld ... Total Bytes %lld"
 msgstr ""
 
-#: ../raster3d/r3.in.bin/main.c:451 ../raster/r.in.bin/main.c:489
+#: ../raster3d/r3.in.bin/main.c:451 ../raster/r.in.bin/main.c:497
 msgid "Bytes do not match file size"
 msgstr ""
 
@@ -27809,7 +27806,7 @@ msgid "Writing %s from %s..."
 msgstr ""
 
 #: ../raster3d/r3.out.bin/main.c:113 ../raster/r.out.bin/main.c:53
-#: ../raster/r.out.bin/main.c:62 ../raster/r.out.bin/main.c:462
+#: ../raster/r.out.bin/main.c:62 ../raster/r.out.bin/main.c:468
 #: ../raster/r.mapcalc/map3.c:126 ../raster/r.mapcalc/map3.c:140
 #: ../raster/r.mapcalc/map3.c:154
 #, fuzzy
@@ -27840,40 +27837,40 @@ msgstr "출력할 격자지도"
 msgid "Invalid value for null (integers only)"
 msgstr ""
 
-#: ../raster3d/r3.out.bin/main.c:269 ../raster/r.out.bin/main.c:395
+#: ../raster3d/r3.out.bin/main.c:269
 msgid "Floating-point output requires bytes=4 or bytes=8"
 msgstr ""
 
-#: ../raster3d/r3.out.bin/main.c:273 ../raster/r.out.bin/main.c:399
+#: ../raster3d/r3.out.bin/main.c:273
 msgid "Integer output doesn't support bytes=8 in this build"
 msgstr ""
 
 #: ../raster3d/r3.out.bin/main.c:321 ../raster/r.out.bin/main.c:144
-#: ../raster/r.out.bin/main.c:228 ../raster/r.out.bin/main.c:408
+#: ../raster/r.out.bin/main.c:228 ../raster/r.out.bin/main.c:412
 #, fuzzy, c-format
 msgid "Unable to create file <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster3d/r3.out.bin/main.c:323 ../raster/r.out.bin/main.c:446
+#: ../raster3d/r3.out.bin/main.c:323 ../raster/r.out.bin/main.c:452
 msgid "Using the current region settings..."
 msgstr ""
 
-#: ../raster3d/r3.out.bin/main.c:324 ../raster/r.out.bin/main.c:447
+#: ../raster3d/r3.out.bin/main.c:324 ../raster/r.out.bin/main.c:453
 #, c-format
 msgid "north=%f"
 msgstr ""
 
-#: ../raster3d/r3.out.bin/main.c:325 ../raster/r.out.bin/main.c:448
+#: ../raster3d/r3.out.bin/main.c:325 ../raster/r.out.bin/main.c:454
 #, c-format
 msgid "south=%f"
 msgstr ""
 
-#: ../raster3d/r3.out.bin/main.c:326 ../raster/r.out.bin/main.c:449
+#: ../raster3d/r3.out.bin/main.c:326 ../raster/r.out.bin/main.c:455
 #, c-format
 msgid "east=%f"
 msgstr ""
 
-#: ../raster3d/r3.out.bin/main.c:327 ../raster/r.out.bin/main.c:450
+#: ../raster3d/r3.out.bin/main.c:327 ../raster/r.out.bin/main.c:456
 #, c-format
 msgid "west=%f"
 msgstr ""
@@ -30321,30 +30318,32 @@ msgid "Don't create output maps; just print statistics"
 msgstr ""
 
 #: ../raster/r.stats.quantile/main.c:442
-#, fuzzy
-msgid "Either -p or output= must be given"
+#, fuzzy, c-format
+msgid "Either -%c or %s= must be given"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.stats.quantile/main.c:445
-msgid "-p and output= are mutually exclusive"
-msgstr ""
+#: ../raster/r.stats.quantile/main.c:446 ../raster/r.neighbors/main.c:260
+#: ../raster/r.in.bin/main.c:366 ../raster/r.out.bin/main.c:367
+#, fuzzy, c-format
+msgid "-%c and %s= are mutually exclusive"
+msgstr "-%c/-%c와 %s=를 같이 지정할 수 없습니다"
 
-#: ../raster/r.stats.quantile/main.c:469
+#: ../raster/r.stats.quantile/main.c:471
 #, c-format
 msgid "Number of quantiles (%d) does not match number of output maps (%d)"
 msgstr ""
 
-#: ../raster/r.stats.quantile/main.c:478 ../raster/r.stats.zonal/main.c:180
+#: ../raster/r.stats.quantile/main.c:480 ../raster/r.stats.zonal/main.c:180
 #, fuzzy
 msgid "The base map must be an integer (CELL) map"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.stats.quantile/main.c:481 ../raster/r.stats.zonal/main.c:183
+#: ../raster/r.stats.quantile/main.c:483 ../raster/r.stats.zonal/main.c:183
 #, fuzzy, c-format
 msgid "Unable to read range of base map <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.stats.quantile/main.c:486
+#: ../raster/r.stats.quantile/main.c:488
 #, c-format
 msgid "Base map <%s> has too many categories (max: %d)"
 msgstr ""
@@ -31121,32 +31120,25 @@ msgstr ""
 msgid "Neighborhood size must be odd"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:260
-msgid "weight= and -c are mutually exclusive"
+#: ../raster/r.neighbors/main.c:291
+#, c-format
+msgid "%s= and %s= must have the same number of values"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:263
-msgid "weight= and gauss= are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.neighbors/main.c:289 ../raster/r.series/main.c:313
-msgid "output= and method= must have the same number of values"
-msgstr ""
-
-#: ../raster/r.neighbors/main.c:324
+#: ../raster/r.neighbors/main.c:327
 #, c-format
 msgid ""
 "Method %s not compatible with weighing window, using weight mask instead"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:332
+#: ../raster/r.neighbors/main.c:335
 #, c-format
 msgid ""
 "Method %s not compatible with Gaussian filter, using unweighed version "
 "instead"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:381
+#: ../raster/r.neighbors/main.c:384
 #, fuzzy, c-format
 msgid "Opening selection map <%s>"
 msgstr "출력할 격자지도"
@@ -31254,34 +31246,32 @@ msgstr "출력할 격자지도"
 msgid "Create a FCELL map (floating point single precision) as output"
 msgstr ""
 
-#: ../raster/r.series.accumulate/main.c:210 ../raster/r.series/main.c:198
-msgid "input= and file= are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.series.accumulate/main.c:213 ../raster/r.series/main.c:201
-#, fuzzy
-msgid "Please specify input= or file="
+#: ../raster/r.series.accumulate/main.c:214
+#: ../raster/r.series.interp/main.c:124 ../raster/r.series.interp/main.c:140
+#: ../raster/r.series/main.c:202
+#, fuzzy, c-format
+msgid "Please specify %s= or %s="
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.accumulate/main.c:257 ../raster/r.series/main.c:262
+#: ../raster/r.series.accumulate/main.c:259 ../raster/r.series/main.c:264
 #, fuzzy
 msgid "No raster map name found in input file"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.accumulate/main.c:267 ../raster/r.stats/main.c:288
-#: ../raster/r.series/main.c:272
+#: ../raster/r.series.accumulate/main.c:269 ../raster/r.stats/main.c:288
+#: ../raster/r.series/main.c:274
 #, fuzzy
 msgid "Raster map not found"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.accumulate/main.c:320
-#: ../raster/r.series.interp/main.c:329 ../raster/r.shaded.relief/main.c:314
+#: ../raster/r.series.accumulate/main.c:322
+#: ../raster/r.series.interp/main.c:337 ../raster/r.shaded.relief/main.c:314
 #: ../raster/r.slope.aspect/main.c:541 ../raster/r.patch/main.c:119
-#: ../raster/r.series/main.c:341
+#: ../raster/r.series/main.c:343
 msgid "Percent complete..."
 msgstr ""
 
-#: ../raster/r.series.accumulate/main.c:356
+#: ../raster/r.series.accumulate/main.c:358
 #, fuzzy, c-format
 msgid "'%s'=%f must be > '%s'=%f"
 msgstr "출력할 격자지도"
@@ -32233,7 +32223,7 @@ msgid "No rules specified. Raster map <%s> not created"
 msgstr ""
 
 #: ../raster/r.reclass/main.c:142 ../raster/r.recode/main.c:98
-#: ../raster/r.quant/main.c:179
+#: ../raster/r.quant/main.c:183
 msgid "No rules specified"
 msgstr ""
 
@@ -33374,33 +33364,31 @@ msgstr ""
 msgid "Filter radius (vertical)"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:432
-msgid "radius= and x_radius=/y_radius= are mutually exclusive"
-msgstr ""
+#: ../raster/r.resamp.filter/main.c:437
+#, fuzzy, c-format
+msgid "Either %s= or %s=/%s= required"
+msgstr "출력할 격자지도"
 
-#: ../raster/r.resamp.filter/main.c:436
-msgid "Either radius= or x_radius=/y_radius= required"
-msgstr ""
+#: ../raster/r.resamp.filter/main.c:440
+#, fuzzy, c-format
+msgid "Both %s= and %s= required"
+msgstr "출력할 격자지도"
 
-#: ../raster/r.resamp.filter/main.c:438
-msgid "Both x_radius= and y_radius= required"
-msgstr ""
-
-#: ../raster/r.resamp.filter/main.c:460
+#: ../raster/r.resamp.filter/main.c:463
 msgid "Differing number of values for filter= and [xy_]radius="
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:463
+#: ../raster/r.resamp.filter/main.c:466
 #, c-format
 msgid "Too many filters (max: %d)"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:481
+#: ../raster/r.resamp.filter/main.c:484
 #, fuzzy
 msgid "At least one filter must be finite"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.resamp.filter/main.c:553 ../raster/r.resamp.interp/main.c:353
+#: ../raster/r.resamp.filter/main.c:556 ../raster/r.resamp.interp/main.c:353
 #: ../raster/r.tile/main.c:192 ../raster/r.resamp.stats/main.c:370
 #, c-format
 msgid "Unable to read color table for %s"
@@ -33477,7 +33465,7 @@ msgid "Error in reading color file for <%s>"
 msgstr "출력할 격자지도"
 
 #: ../raster/r.in.bin/main.c:50 ../raster/r.in.bin/main.c:59
-#: ../raster/r.in.bin/main.c:510
+#: ../raster/r.in.bin/main.c:518
 msgid "Error reading data"
 msgstr "자료를 읽는 중 오류"
 
@@ -33510,46 +33498,49 @@ msgstr ""
 msgid "Number of bytes per cell"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.in.bin/main.c:366
-msgid "order= and -b are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.in.bin/main.c:381
-msgid "-f and -d are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.in.bin/main.c:385
+#: ../raster/r.in.bin/main.c:387
 #, c-format
-msgid "-f incompatible with bytes=%d; must be 4 or 8"
+msgid "-%c incompatible with %s=%d; must be 4 or 8"
 msgstr ""
 
-#: ../raster/r.in.bin/main.c:393
+#: ../raster/r.in.bin/main.c:396
 #, c-format
-msgid "-d incompatible with bytes=%d; must be 8"
+msgid "-%c incompatible with %s=%d; must be 8"
 msgstr ""
 
-#: ../raster/r.in.bin/main.c:400
-msgid "bytes= required for integer data"
+#: ../raster/r.in.bin/main.c:404
+#, fuzzy, c-format
+msgid "%s= required for integer data"
+msgstr "출력할 격자지도"
+
+#: ../raster/r.in.bin/main.c:408
+#, c-format
+msgid "Integer input doesn't support %s=8 in this build"
 msgstr ""
 
-#: ../raster/r.in.bin/main.c:421
-#, fuzzy
-msgid "Either -h or rows= and cols= must be given"
+#: ../raster/r.in.bin/main.c:413
+#, fuzzy, c-format
+msgid "%s= must be 1, 2, 4 or 8"
 msgstr "출력할 격자지도"
 
 #: ../raster/r.in.bin/main.c:426
-#, fuzzy
-msgid "Either all or none of north=, south=, east= and west= must be given"
+#, fuzzy, c-format
+msgid "Either -%c or %s= and %s= must be given"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.in.bin/main.c:464
+#: ../raster/r.in.bin/main.c:432
+#, fuzzy, c-format
+msgid "Either all or none of %s=, %s=, %s= and %s= must be given"
+msgstr "출력할 격자지도"
+
+#: ../raster/r.in.bin/main.c:472
 #, c-format
 msgid ""
 "East-West (ewres: %f) and North-South (nwres: %f) resolution differ "
-"significantly. Did you assign east= and west= correctly?"
+"significantly. Did you assign %s= and %s= correctly?"
 msgstr ""
 
-#: ../raster/r.in.bin/main.c:487
+#: ../raster/r.in.bin/main.c:495
 msgid "File Size %"
 msgstr ""
 
@@ -33613,56 +33604,53 @@ msgid "Round floating point data"
 msgstr ""
 
 #: ../raster/r.quant/main.c:111
-msgid "-t, -r, rules=, basemap= and fprange= are mutually exclusive"
+#, fuzzy, c-format
+msgid "-%c, -%c, %s=, %s= and %s= are mutually exclusive"
+msgstr "-%c/-%c와 %s=를 같이 지정할 수 없습니다"
+
+#: ../raster/r.quant/main.c:120
+#, c-format
+msgid "%s= and %s= must be used together"
 msgstr ""
 
-#: ../raster/r.quant/main.c:119
-msgid "fprange= and range= must be used together"
-msgstr ""
-
-#: ../raster/r.quant/main.c:129
+#: ../raster/r.quant/main.c:131
 #, c-format
 msgid "%s is integer map, it can't be quantized"
 msgstr ""
 
-#: ../raster/r.quant/main.c:137
+#: ../raster/r.quant/main.c:139
 msgid "Truncating..."
 msgstr ""
 
-#: ../raster/r.quant/main.c:142
+#: ../raster/r.quant/main.c:144
 msgid "Rounding..."
 msgstr ""
 
-#: ../raster/r.quant/main.c:150
+#: ../raster/r.quant/main.c:152
 #, c-format
 msgid "%s is integer map, it can't be used as basemap"
 msgstr ""
 
-#: ../raster/r.quant/main.c:154
+#: ../raster/r.quant/main.c:156
 #, fuzzy, c-format
 msgid "unable to read quant rules for basemap <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.quant/main.c:161
+#: ../raster/r.quant/main.c:163 ../raster/r.quant/main.c:166
 #, fuzzy, c-format
-msgid "invalid value for fprange= <%s>"
+msgid "invalid value for %s= <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.quant/main.c:163
-#, c-format
-msgid "invalid value for range= <%s>"
-msgstr ""
-
-#: ../raster/r.quant/main.c:164
+#: ../raster/r.quant/main.c:168
 #, c-format
 msgid "Setting quant rules for input map(s) to (%f,%f) -> (%d,%d)"
 msgstr ""
 
-#: ../raster/r.quant/main.c:177
+#: ../raster/r.quant/main.c:181
 msgid "No rules specified. Quant table(s) not changed."
 msgstr ""
 
-#: ../raster/r.quant/main.c:185
+#: ../raster/r.quant/main.c:189
 #, c-format
 msgid "New quant table created for %s"
 msgstr ""
@@ -35129,90 +35117,59 @@ msgstr ""
 msgid "Interpolation method, currently only linear interpolation is supported"
 msgstr ""
 
-#: ../raster/r.series.interp/main.c:116
-msgid "output= and outfile= are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.series.interp/main.c:119
-msgid "samplingpos= and outfile= are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.series.interp/main.c:122
-#, fuzzy
-msgid "Please specify output= or outfile="
+#: ../raster/r.series.interp/main.c:128 ../raster/r.series.interp/main.c:144
+#, fuzzy, c-format
+msgid "Please specify %s= and %s="
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.interp/main.c:125
-#, fuzzy
-msgid "Please specify output= and samplingpos="
-msgstr "출력할 격자지도"
-
-#: ../raster/r.series.interp/main.c:128
-msgid "input= and infile= are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.series.interp/main.c:131
-msgid "datapos= and infile= are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.series.interp/main.c:134
-#, fuzzy
-msgid "Please specify input= or infile="
-msgstr "출력할 격자지도"
-
-#: ../raster/r.series.interp/main.c:137
-#, fuzzy
-msgid "Please specify input= and datapos="
-msgstr "출력할 격자지도"
-
-#: ../raster/r.series.interp/main.c:170 ../raster/r.colors/edit_colors.c:205
+#: ../raster/r.series.interp/main.c:178 ../raster/r.colors/edit_colors.c:204
 #, fuzzy, c-format
 msgid "Unable to open %s file <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.interp/main.c:203
+#: ../raster/r.series.interp/main.c:211
 #, c-format
 msgid "Missing point position for %s map <%s> in file <%s> near line %i"
 msgstr ""
 
-#: ../raster/r.series.interp/main.c:218 ../raster/r.series.interp/main.c:252
+#: ../raster/r.series.interp/main.c:226 ../raster/r.series.interp/main.c:260
 #, fuzzy, c-format
 msgid "Preparing %s map <%s> at position %g"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.interp/main.c:222
+#: ../raster/r.series.interp/main.c:230
 #, fuzzy, c-format
 msgid "No raster map name found in %s file <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.interp/main.c:233
+#: ../raster/r.series.interp/main.c:241
 #, fuzzy, c-format
 msgid "No %s raster map not found"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.interp/main.c:240
+#: ../raster/r.series.interp/main.c:248
 #, c-format
 msgid "The number of %s maps and %s point positions must be equal"
 msgstr ""
 
-#: ../raster/r.series.interp/main.c:269
+#: ../raster/r.series.interp/main.c:277
 #, c-format
 msgid "Start interpolation run with %i input maps and %i output maps"
 msgstr ""
 
-#: ../raster/r.series.interp/main.c:289
+#: ../raster/r.series.interp/main.c:297
 #, c-format
 msgid ""
 "map <%s> at position %g was not interpolated. Check the interpolation "
 "interval."
 msgstr ""
 
-#: ../raster/r.series.interp/main.c:309
+#: ../raster/r.series.interp/main.c:317
 #, fuzzy
 msgid "At least 2 input maps are required for linear interpolation"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series.interp/main.c:327
+#: ../raster/r.series.interp/main.c:335
 #, c-format
 msgid "Interpolate map <%s> at position %g in interval (%g;%g)"
 msgstr ""
@@ -35769,13 +35726,8 @@ msgstr ""
 
 #: ../raster/r.external/main.c:143
 #, fuzzy, c-format
-msgid "One of options <%s> or <%s> must be given"
+msgid "%s= or %s= must be given"
 msgstr "출력할 격자지도"
-
-#: ../raster/r.external/main.c:147
-#, c-format
-msgid "Option <%s> and <%s> are mutually exclusive"
-msgstr ""
 
 #: ../raster/r.external/main.c:180
 #, fuzzy, c-format
@@ -37932,46 +37884,48 @@ msgstr ""
 msgid "Byte swap output"
 msgstr ""
 
-#: ../raster/r.out.bin/main.c:367
-msgid "order= and -s are mutually exclusive"
+#: ../raster/r.out.bin/main.c:397
+#, c-format
+msgid "Floating-point output requires %s=4 or %s=8"
 msgstr ""
 
-#: ../raster/r.out.bin/main.c:376
-msgid "-i and -f are mutually exclusive"
+#: ../raster/r.out.bin/main.c:402
+#, c-format
+msgid "Integer output doesn't support %s=8 in this build"
 msgstr ""
 
-#: ../raster/r.out.bin/main.c:413
+#: ../raster/r.out.bin/main.c:417
 msgid "GMT grid doesn't support 64-bit integers"
 msgstr ""
 
-#: ../raster/r.out.bin/main.c:419
+#: ../raster/r.out.bin/main.c:423
 msgid "Creating BIL support files..."
 msgstr ""
 
-#: ../raster/r.out.bin/main.c:436
-#, c-format
-msgid "Exporting raster as floating values (bytes=%d)"
-msgstr ""
+#: ../raster/r.out.bin/main.c:440
+#, fuzzy, c-format
+msgid "Exporting raster as floating values (%s=%d)"
+msgstr "출력할 격자지도"
 
-#: ../raster/r.out.bin/main.c:438
+#: ../raster/r.out.bin/main.c:443
 msgid "Writing GMT float format ID=1"
 msgstr ""
 
-#: ../raster/r.out.bin/main.c:441
-#, c-format
-msgid "Exporting raster as integer values (bytes=%d)"
-msgstr ""
+#: ../raster/r.out.bin/main.c:446
+#, fuzzy, c-format
+msgid "Exporting raster as integer values (%s=%d)"
+msgstr "출력할 격자지도"
 
-#: ../raster/r.out.bin/main.c:443
+#: ../raster/r.out.bin/main.c:449
 msgid "Writing GMT integer format ID=2"
 msgstr ""
 
-#: ../raster/r.out.bin/main.c:451
+#: ../raster/r.out.bin/main.c:457
 #, c-format
 msgid "r=%d"
 msgstr ""
 
-#: ../raster/r.out.bin/main.c:452
+#: ../raster/r.out.bin/main.c:458
 #, c-format
 msgid "c=%d"
 msgstr ""
@@ -38319,19 +38273,15 @@ msgstr "출력할 격자지도"
 msgid "File containing expression(s) to evaluate"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.mapcalc/main.c:145
-msgid "file= and expression= are mutually exclusive"
-msgstr ""
-
-#: ../raster/r.mapcalc/main.c:155
+#: ../raster/r.mapcalc/main.c:156
 msgid "parse error"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:164
+#: ../raster/r.mapcalc/main.c:165
 msgid "Floating point error(s) occurred in the calculation"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:169
+#: ../raster/r.mapcalc/main.c:170
 msgid "Overflow occurred in the calculation"
 msgstr ""
 
@@ -38442,62 +38392,57 @@ msgid ""
 "maps must be specified. This option is mutual exclusive to the map option."
 msgstr ""
 
-#: ../raster/r.colors/edit_colors.c:169
-#, c-format
-msgid "Option <%s> or <%s> must be specified"
-msgstr "옵션 <%s> 또는 <%s>를 지정해야 합니다"
-
 #: ../raster/r.colors/edit_colors.c:182
-#, c-format
-msgid "One of -%c or options <%s>, <%s> or <%s> must be specified"
+#, fuzzy, c-format
+msgid "One of -%c, %s=, %s= or %s= must be specified"
 msgstr "-%c 또는 옵션 <%s>, <%s>, <%s> 중 하나만 지정할 수 있습니다"
 
-#: ../raster/r.colors/edit_colors.c:248 ../raster/r.colors/edit_colors.c:281
+#: ../raster/r.colors/edit_colors.c:247 ../raster/r.colors/edit_colors.c:280
 #, c-format
 msgid "%s map <%s> not found"
 msgstr "%s지도 <%s>를 찾지 못 했습니다"
 
-#: ../raster/r.colors/edit_colors.c:254
+#: ../raster/r.colors/edit_colors.c:253
 #, c-format
 msgid "No %s map name found in input file <%s>"
 msgstr "입력파일 <%s> 안에 지도이름 %s를 찾지 못 했습니다"
 
-#: ../raster/r.colors/edit_colors.c:297
+#: ../raster/r.colors/edit_colors.c:296
 #, fuzzy, c-format
 msgid "Unable to remove color table of %s map <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.colors/edit_colors.c:299
+#: ../raster/r.colors/edit_colors.c:298
 #, c-format
 msgid "Color table of %s map <%s> not found"
 msgstr "%s지도 <%s>의 색상표를 찾지 못 했습니다"
 
-#: ../raster/r.colors/edit_colors.c:321
+#: ../raster/r.colors/edit_colors.c:320
 #, fuzzy, c-format
 msgid "Color table exists for %s map <%s>. Exiting."
 msgstr "출력할 격자지도"
 
-#: ../raster/r.colors/edit_colors.c:377
+#: ../raster/r.colors/edit_colors.c:376
 #, fuzzy, c-format
 msgid "Color table 'random' is not supported for floating point %s map"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.colors/edit_colors.c:381
+#: ../raster/r.colors/edit_colors.c:380
 #, fuzzy, c-format
 msgid "Color table 'grey.eq' is not supported for floating point %s map"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.colors/edit_colors.c:387
+#: ../raster/r.colors/edit_colors.c:386
 #, fuzzy, c-format
 msgid "Color table 'grey.log' is not supported for floating point %s map"
 msgstr "출력할 격자지도"
 
-#: ../raster/r.colors/edit_colors.c:395
+#: ../raster/r.colors/edit_colors.c:394
 #, c-format
 msgid "Unknown color request '%s'"
 msgstr ""
 
-#: ../raster/r.colors/edit_colors.c:466
+#: ../raster/r.colors/edit_colors.c:465
 #, c-format
 msgid "Color table for %s map <%s> set to '%s'"
 msgstr "%s지도 <%s>를 위한 색상표가 '%s'로 설정되었습니다"
@@ -40636,13 +40581,17 @@ msgid ""
 "Weighting factor for each input map, default value is 1.0 for each input map"
 msgstr ""
 
-#: ../raster/r.series/main.c:255 ../raster/r.series/main.c:298
+#: ../raster/r.series/main.c:257 ../raster/r.series/main.c:300
 #, fuzzy, c-format
 msgid "Reading raster map <%s> using weight %f..."
 msgstr "출력할 격자지도"
 
-#: ../raster/r.series/main.c:284
+#: ../raster/r.series/main.c:286
 msgid "input= and weights= must have the same number of values"
+msgstr ""
+
+#: ../raster/r.series/main.c:315
+msgid "output= and method= must have the same number of values"
 msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:216
@@ -41406,669 +41355,3 @@ msgstr ""
 #, c-format
 msgid "File <%s> created"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Unable to list databases"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Print column names"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Select columns to be printed to stdout"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "The mapcalc expression for temporal and spatial analysis of space time "
-#~ "vector datasets."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "The basename of vector maps that are stored within the result space time "
-#~ "vector dataset."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Separator character between the output columns"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "The basename of raster maps that are stored within the result space time "
-#~ "3D raster dataset."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "The basename of raster maps that are stored within the result space time "
-#~ "raster dataset."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable To create table: %s"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to open ASCII file <%s>"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "List of supported formats:"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to create map of unrecognised type"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Raster <%s> is not of type '%s'"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unrecognisabe data type"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Raster map <%s> generated."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Uunrecognisable data type"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable re-open file '%s'"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "add a new category"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Create new projection files (modifies current location)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name for output distance/accumulation raster map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to create index:\n"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Output raster map: res: %f\trows: %d\tcols: %d"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Missing column <%s> in table <%s>"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Interpolating raster map <%s> (%d rows, %d cols)... "
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Loading input maps..."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "dseg_open(): unable to re-open segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "dseg_get(): could not read segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "cseg_open(): unable to create segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "cseg_open(): unable to re-open segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "cseg_get(): could not read segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Could not open input map %s"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Could not load input map(s)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Could not sort elevation map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Could not write output maps"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Write vector attribute table"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Cannot create table: %s"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Writing raster %s"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "seg_open(): unable to create segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "seg_open(): unable to re-open segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "seg_open(): could not read segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "seg_get(): could not read segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "bseg_open(): unable to create segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "bseg_open(): unable to re-open segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "bseg_get(): could not read segment file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of input coordinate file ('-' to read from stdin)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Files & format"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Vertex coordinates"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "\"-\" to write to stdout"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of observed flow file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Cubic interpolation"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "-' for standard input"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of color table (for use with -z flag)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Exporting %i faces..."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Exporting %i kernels..."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "%d features found without category were skipped"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Copying vector features..."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Do not copy table"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of attribute column with values to approximate"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Input vector is not 3D, can not use z coordinates"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Option '%s' with z values or '-%c' flag must be given"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "Base name of the new created raster maps. This name will be extended with "
-#~ "a numerical prefix"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "Base name of the interpolated raster maps. This name will be extended "
-#~ "with a numerical prefix"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "Base name of the new created 3d raster maps. This name will be extended "
-#~ "with a numerical prefix"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to open centroids vector points map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Easting grid coordinates"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Northing grid coordinates"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name for output basin elevation raster map (o/i)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "LiDAR LAS input file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Force to rebuild all extensions"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "No points/centroids found in <%s>"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name for output image file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to open 3d raster map <%s>"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Raster3d map <%s> not found %s"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to close raster map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Raster3d map <%s> not found in current mapset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Open 3D raster map <%s>"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Error opening 3D raster map <%s>"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Elevation value(s)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Subgroup <%s> not found"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Creates a sunshine hours map."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the day of year input map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the latitude input map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the output sunshine hours map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "multi"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "supporting"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Building topology..."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Counting polygons for %d features (OGR layer <%s>)..."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "'-' for standard output"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Feature table <%s> created in database <%s>."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of vector map containing lines"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name for output vector map where points will be written"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Cannot select attributes for area %d"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "cubic convolution interpolation"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Scaling"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of attribute column to query"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Can not open vector <%s> on level %d"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of raster map(s) for Color"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of vector lines/areas overlay map(s)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of vector points overlay file(s)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Loading data failed"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "ASCII raster map to be imported"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Outputting a vector path"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Elevation raster map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "output map with walking costs"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Starting points raster map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "No %s map specified"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name for new TIFF file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the output random surface"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to find file %s"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the input map"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "version"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of mask files"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "unable to allocate PNG structure"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "PostGIS output datasource name"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Database schema"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to load data from database"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Problem loading category values"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Reconnects vectors to a new database."
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Table name to drop"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of an existing space time or map dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "groundwater"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Surface Reflectance"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the Surface temperature map [degree Kelvin]"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Base name for output raster maps"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name(s) of existing mapset(s) to add to search path"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of table containing transformation parameters"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of input OGR layer"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Supported OGR formats for reading:"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Do not build topology for output vector"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Supported Formats:"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to open OGR file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Unable to create OGR file"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Copy attributes"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to open file <%s> for reading.\n"
-#~ "Details: %s"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of a space time vector dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name(s) of existing raster, raster3d or vector map(s)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid ""
-#~ "Type of the space time dataset, default is space time raster dataset "
-#~ "(strds)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "spacetime vector dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name(s) of existing vector map(s) to unregister"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "spacetime raster dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the new space time dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "space time vector dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "space time raster dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "The space time raster dataset to use"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of an existing space time vector dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name(s) of existing vector map(s)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of an existing space time raster3d dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name(s) of existing raster3d map(s)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name(s) of existing raster map(s) to unregister"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of an existing space time raster dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Import"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Mapserver to request data from"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name(s) of existing raster map(s)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "sample"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of input raster map (green: tm2 | qbird_green | spot1)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of input raster map (NIR: tm4 | qbird_nir | spot2"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of input raster map (MIR; tm5 | qbird_red | spot3"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of input raster map (etmpan | qbird_pan | spotpan)"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of a space time raster3d dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the output space time raster3d dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
-#~ msgid "Name of the space time dataset"
-#~ msgstr "출력할 격자지도"
