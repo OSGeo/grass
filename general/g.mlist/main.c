@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     flag.type->key = 't';
     flag.type->description = _("Print data types");
     flag.type->guisection = _("Print");
-    flag.type->exclusive = "type";
+    flag.type->exclusive = "format";
     
     flag.mapset = G_define_flag();
     flag.mapset->key = 'm';
@@ -132,13 +132,13 @@ int main(int argc, char *argv[])
     flag.pretty->key = 'p';
     flag.pretty->description = _("Pretty printing in human readable format");
     flag.pretty->guisection = _("Print");
-    flag.pretty->exclusive = "format,type";
+    flag.pretty->exclusive = "format";
 
     flag.full = G_define_flag();
     flag.full->key = 'f';
     flag.full->description = _("Verbose listing (also list map titles)");
     flag.full->guisection = _("Print");
-    flag.full->exclusive = "format,type";
+    flag.full->exclusive = "format";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
