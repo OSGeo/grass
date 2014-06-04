@@ -55,7 +55,7 @@ def available_mapsets(lock, conn, data):
        @return Names of available mapsets as list of strings
     """
     
-    mapsets = libgis.G_available_mapsets()
+    mapsets = libgis.G_get_available_mapsets()
 
     count = 0
     mapset_list = []
