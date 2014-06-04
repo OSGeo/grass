@@ -659,6 +659,17 @@ def separator(sep):
     """!Returns separator from G_OPT_F_SEP appropriately converted
     to character.
 
+    >>> separator('pipe')
+    '|'
+    >>> separator('comma')
+    ','
+
+    If the string does not match any of the spearator keywords,
+    it is returned as is:
+
+    >>> separator(', ')
+    ', '
+
     @param separator character or separator keyword
 
     @return separator character
@@ -674,7 +685,6 @@ def separator(sep):
     elif sep == "newline" or sep == "\\n":
         return "\n"
     return sep
-    
 
 # interface to g.tempfile
 
@@ -733,11 +743,17 @@ def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
     """!Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep' (default: `=')
 
+    >>> parse_key_val('min=20\\nmax=50') == {'min': '20', 'max': '50'}
+    True
+    >>> parse_key_val('min=20\\nmax=50',
+    ...     val_type=float) == {'min': 20, 'max': 50}
+    True
+
     @param s string to be parsed
     @param sep key/value separator
     @param dflt default value to be used
     @param val_type value type (None for no cast)
-    @param vsep vertical separator (default os.linesep)
+    @param vsep vertical separator (default is Python 'universal newlines' approach)
 
     @return parsed input (dictionary of keys/values)
     """
@@ -1436,20 +1452,23 @@ def basename(path, ext=None):
         name = fs[0]
     return name
 
+
 def find_program(pgm, *args):
     """!Attempt to run a program, with optional arguments.
+
     You must call the program in a way that will return a successful
     exit code. For GRASS modules this means you need to pass it some
     valid CLI option, like "--help". For other programs a common
-    valid do-little option is "--version".
-    
+    valid do-little option is usually "--version".
+
     Example:
 
     @code
-    >>> grass.find_program('r.sun', 'help')
+    >>> find_program('r.sun', '--help')
     True
-    >>> grass.find_program('gdalwarp', '--version')
+    >>> find_program('ls', '--version')
     True
+
     @endcode
 
     @param pgm program name
@@ -1461,6 +1480,7 @@ def find_program(pgm, *args):
     """
     nuldev = file(os.devnull, 'w+')
     try:
+        # TODO: the doc or impl is not correct, any return code is accepted
         call([pgm] + list(args), stdin = nuldev, stdout = nuldev, stderr = nuldev)
         found = True
     except:
@@ -1500,6 +1520,11 @@ def try_rmdir(path):
 
 def float_or_dms(s):
     """!Convert DMS to float.
+
+    >>> round(float_or_dms('26:45:30'), 5)
+    26.75833
+    >>> round(float_or_dms('26:0:0.1'), 5)
+    26.00003
 
     @param s DMS value
 
