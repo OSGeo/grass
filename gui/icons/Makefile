@@ -20,6 +20,8 @@ HTMLDIRS = \
 default: $(ETCICONS) $(HTMLICONS)
 	$(MKDIR) $(ARCH_DISTDIR)/share/applications
 	$(INSTALL_DATA) grass.desktop $(ARCH_DISTDIR)/share/applications
+	$(MKDIR) $(ARCH_DISTDIR)/share/appdata
+	$(INSTALL_DATA) grass.desktop $(ARCH_DISTDIR)/share/appdata
 
 $(GUIDIR)/icons/%: % | $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
