@@ -1159,9 +1159,10 @@ static void check_tied_together_inputs()
 
 static void check_either_or_inputs()
 {
-    int n_keys, len;
+    int n_keys, len, i, n;
     struct Option *opt;
     struct Flag *flag;
+    char *err;
 
     G_debug(1, "check_exclusive(): Either-or options/flags "
 	       "(group names ignored)");
@@ -1188,58 +1189,52 @@ static void check_either_or_inputs()
 	flag = flag->next_flag;
     }
 
-    if (n_keys > 0) {
-	int i;
+    if (n_keys == 0)
+	return;
 
-	for (i = 0; i < st->n_exclusive; i++) {
-	    if (st->exclusive[i].name[0] == '*')
-		break;
-	}
-
-	if (i == st->n_exclusive) {
-	    int n;
-	    char *err;
-
-	    err = G_malloc(len + 100);
-	    sprintf(err, _("One or more of the following options/flags "
-			   "must be used: "));
-	    
-	    n = 0;
-	    len = strlen(err);
-	    opt = &st->first_option;
-	    while (opt) {
-		if (has_either_or(opt->exclusive)) {
-		    n++;
-		    if (n <= n_keys - 2)
-			sprintf(err + len, "%s=, ", opt->key);
-		    else if (n == n_keys - 1)
-			sprintf(err + len, "%s= ", opt->key);
-		    else
-			sprintf(err + len, "or %s=", opt->key);
-		    len = strlen(err);
-		}
-		opt = opt->next_opt;
-	    }
-
-	    flag = &st->first_flag;
-	    while (flag) {
-		if (has_either_or(flag->exclusive)) {
-		    n++;
-		    if (n <= n_keys - 2)
-			sprintf(err + len, "-%c, ", flag->key);
-		    else if (n == n_keys - 1)
-			sprintf(err + len, "-%c ", flag->key);
-		    else
-			sprintf(err + len, "or -%c", flag->key);
-		    len = strlen(err);
-		}
-		flag = flag->next_flag;
-	    }
-	    
-	    append_error(err);
-	    G_free(err);
-	}
+    for (i = 0; i < st->n_exclusive; i++) {
+	if (st->exclusive[i].name[0] == '*')
+	    return;
     }
+
+    err = G_malloc(len + 100);
+    sprintf(err, _("One or more of the following options/flags "
+		   "must be used: "));
+
+    n = 0;
+    len = strlen(err);
+    opt = &st->first_option;
+    while (opt) {
+	if (has_either_or(opt->exclusive)) {
+	    n++;
+	    if (n <= n_keys - 2)
+		sprintf(err + len, "%s=, ", opt->key);
+	    else if (n == n_keys - 1)
+		sprintf(err + len, "%s= ", opt->key);
+	    else
+		sprintf(err + len, "or %s=", opt->key);
+	    len = strlen(err);
+	}
+	opt = opt->next_opt;
+    }
+
+    flag = &st->first_flag;
+    while (flag) {
+	if (has_either_or(flag->exclusive)) {
+	    n++;
+	    if (n <= n_keys - 2)
+		sprintf(err + len, "-%c, ", flag->key);
+	    else if (n == n_keys - 1)
+		sprintf(err + len, "-%c ", flag->key);
+	    else
+		sprintf(err + len, "or -%c", flag->key);
+	    len = strlen(err);
+	}
+	flag = flag->next_flag;
+    }
+
+    append_error(err);
+    G_free(err);
 }
 
 static void set_flag(int f)
