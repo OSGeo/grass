@@ -117,8 +117,13 @@ static void split_gisprompt(const char *, char *, char *, char *);
 static void module_gui_wx(void);
 static void add_exclusive(const char *, int, const char *);
 static struct Exclusive *find_exclusive(char *);
+static int has_exclusive_name(const char *, char *);
 static int has_exclusive_key(int, char **, char *);
-static void check_exclusive(int);
+static int has_either_or(const char *);
+static void check_exclusive();
+static void check_mutually_exclusive_inputs();
+static void check_tied_together_inputs();
+static void check_either_or_inputs();
 static void append_error(const char *);
 
 /*!
@@ -550,7 +555,7 @@ int G_parser(int argc, char **argv)
 
 	}
 
-	check_exclusive(0);
+	check_exclusive();
     }
     
     /* Split options where multiple answers are OK */
@@ -902,6 +907,44 @@ static struct Exclusive *find_exclusive(char *name)
     return NULL;
 }
 
+static int has_exclusive_name(const char *names, char *name)
+{
+    char *ptr1;
+
+    for (ptr1 = (char *)names;;) {
+	int len;
+	char *ptr2;
+
+	for (len = 0, ptr2 = ptr1; *ptr2 != '\0' && *ptr2 != ',';
+	     ptr2++, len++) ;
+
+	if (len > 0) {	/* skip ,, */
+	    char *aname;
+
+	    aname = G_malloc(len + 1);
+	    memcpy(aname, ptr1, len);
+	    aname[len] = 0;
+
+	    if (strcmp(name, aname) == 0) {
+		G_free(aname);
+		return 1;
+	    }
+
+	    G_free(aname);
+	}
+
+	if (*ptr2 == '\0')
+	    break;
+
+	ptr1 = ptr2 + 1;
+
+	if (*ptr1 == '\0')
+	    break;
+    }
+
+    return 0;
+}
+
 static int has_exclusive_key(int n_keys, char **keys, char *key)
 {
     int i;
@@ -914,84 +957,231 @@ static int has_exclusive_key(int n_keys, char **keys, char *key)
     return 0;
 }
 
-static void check_exclusive(int print_group)
+static int has_either_or(const char *names)
 {
-    int i, n, allocated, len;
-    char **keys, *err;
+    return names && (names[0] == '*' || strstr(names, ",*"));
+}
 
-    n = 0;
-    allocated = 0;
-    len = 0;
-    keys = NULL;
+static void check_exclusive()
+{
+    check_mutually_exclusive_inputs();
+    check_tied_together_inputs();
+    check_either_or_inputs();
+}
+
+static void check_mutually_exclusive_inputs()
+{
+    int i;
 
     for (i = 0; i < st->n_exclusive; i++) {
 	struct Exclusive *exclusive;
 
 	exclusive = &st->exclusive[i];
 
-	G_debug(1, "check_exclusive(): Exclusive option/flag group: %s",
-			exclusive->name);
+	if (exclusive->name[0] == '+' || exclusive->name[0] == '*')
+	    continue;
 
-	if (exclusive->n_keys >= 1)
-	    G_debug(1, "check_exclusive():\t%s", exclusive->keys[0]);
+	G_debug(1, "check_exclusive(): Mutually exclusive option/flag group: "
+		   "%s", exclusive->name);
+	G_debug(1, "check_exclusive():\t%s", exclusive->keys[0]);
 
 	if (exclusive->n_keys > 1) {
-	    int j;
-
-	    if (print_group) {
-		len = strlen(exclusive->name);
-		for (j = 0; j < exclusive->n_keys; j++) {
-		    len += strlen(exclusive->keys[j]) + 2; /* 2 for comma adn
-							      space */
-		    if (j > 0)
-			G_debug(1, "check_exclusive():\t%s",
-				exclusive->keys[j]);
-		}
-
-		err = G_malloc(len + 100);
-		sprintf(err, _("Mutually exclusive options/flags "
-			       "in group '%s': "), exclusive->name);
-		
+	    int len, j;
+	    char *err;
+	    
+	    len = 0;
+	    for (j = 0; j < exclusive->n_keys; j++) {
+		len += strlen(exclusive->keys[j]) + 2; /* 2 for comma adn space
+							*/
+		if (j > 0)
+		    G_debug(1, "check_exclusive():\t%s", exclusive->keys[j]);
+	    }
+	    
+	    err = G_malloc(len + 100);
+	    sprintf(err, _("The following options/flags cannot be used "
+			   "together: "));
+	    
+	    len = strlen(err);
+	    for (j = 0; j < exclusive->n_keys - 2; j++) {
+		sprintf(err + len, "%s, ", exclusive->keys[j]);
 		len = strlen(err);
-		for (j = 0; j < exclusive->n_keys - 2; j++) {
-		    sprintf(err + len, "%s, ", exclusive->keys[j]);
-		    len = strlen(err);
-		}
-		
-		sprintf(err + len, _("%s and %s"), exclusive->keys[j],
-			exclusive->keys[j + 1]);
-
-		append_error(err);
 	    }
-	    else {
-		for (j = 0; j < exclusive->n_keys; j++) {
-		    if (!has_exclusive_key(n, keys, exclusive->keys[j])) {
-			if (n >= allocated) {
-			    allocated += 10;
-			    keys = G_realloc(keys, allocated * sizeof(char *));
-			}
-			keys[n] = exclusive->keys[j];
-			len += strlen(keys[n++]) + 2; /* 2 for comma and space
-						       */
-		    }
-		}
-	    }
+	    
+	    sprintf(err + len, _("%s and %s"), exclusive->keys[j],
+		    exclusive->keys[j + 1]);
+	    
+	    append_error(err);
+	    G_free(err);
 	}
     }
+}
 
-    if (!print_group && n) {
-	err = G_malloc(len + 100);
-	sprintf(err, _("Mutually exclusive options/flags: "));
+static void check_tied_together_inputs()
+{
+    int i;
 
-	len = strlen(err);
-	for (i = 0; i < n - 2; i++) {
-	    sprintf(err + len, "%s, ", keys[i]);
-	    len = strlen(err);
+    for (i = 0; i < st->n_exclusive; i++) {
+	struct Exclusive *exclusive;
+	struct Option *opt;
+	struct Flag *flag;
+	int n, n_keys, len;
+	char *err;
+
+	exclusive = &st->exclusive[i];
+
+	if (exclusive->name[0] != '+')
+	    continue;
+
+	G_debug(1, "check_exclusive(): Tied-together option/flag group: %s",
+		exclusive->name);
+	
+	n_keys = 0;
+	len = 0;
+	opt = &st->first_option;
+	while (opt) {
+	    if (has_exclusive_name(opt->exclusive, exclusive->name)) {
+		n_keys++;
+		len += strlen(opt->key) + 3; /* 3 for =, comma and space */
+		G_debug(1, "check_exclusive():\t%s=", opt->key);
+	    }
+	    opt = opt->next_opt;
 	}
 	
-	sprintf(err + len, _("%s and %s"), keys[i], keys[i + 1]);
+	flag = &st->first_flag;
+	while (flag) {
+	    if (has_exclusive_name(flag->exclusive, exclusive->name)) {
+		n_keys++;
+		len += 4; /* 4 for -, flag, comma and space */
+		G_debug(1, "check_exclusive():\t-%c", flag->key);
+	    }
+	    flag = flag->next_flag;
+	}
 
+	if (n_keys == 1 || exclusive->n_keys == n_keys)
+	    continue;
+	
+	err = G_malloc(len + 100);
+	sprintf(err, _("The following options/flags must be used together: "));
+
+	n = 0;
+	len = strlen(err);
+	opt = &st->first_option;
+	while (opt) {
+	    if (has_exclusive_name(opt->exclusive, exclusive->name)) {
+		n++;
+		if (n <= n_keys - 2)
+		    sprintf(err + len, "%s=, ", opt->key);
+		else if (n == n_keys - 1)
+		    sprintf(err + len, "%s= ", opt->key);
+		else
+		    sprintf(err + len, "and %s=", opt->key);
+		len = strlen(err);
+	    }
+	    opt = opt->next_opt;
+	}
+	
+	flag = &st->first_flag;
+	while (flag) {
+	    if (has_exclusive_name(flag->exclusive, exclusive->name)) {
+		n++;
+		if (n <= n_keys - 2)
+		    sprintf(err + len, "-%c, ", flag->key);
+		else if (n == n_keys - 1)
+		    sprintf(err + len, "-%c ", flag->key);
+		else
+		    sprintf(err + len, "and -%c", flag->key);
+		len = strlen(err);
+	    }
+	    flag = flag->next_flag;
+	}
+	
 	append_error(err);
+	G_free(err);
+    }
+}
+
+static void check_either_or_inputs()
+{
+    int n_keys, len;
+    struct Option *opt;
+    struct Flag *flag;
+
+    G_debug(1, "check_exclusive(): Either-or options/flags "
+	       "(group names ignored)");
+
+    n_keys = 0;
+    len = 0;
+    opt = &st->first_option;
+    while (opt) {
+	if (has_either_or(opt->exclusive)) {
+	    n_keys++;
+	    len += strlen(opt->key) + 3; /* 3 for =, comma and space */
+	    G_debug(1, "check_exclusive():\t%s=", opt->key);
+	}
+	opt = opt->next_opt;
+    }
+
+    flag = &st->first_flag;
+    while (flag) {
+	if (has_either_or(flag->exclusive)) {
+	    n_keys++;
+	    len += 4; /* 4 for -, flag, comma and space */
+	    G_debug(1, "check_exclusive():\t-%c", flag->key);
+	}
+	flag = flag->next_flag;
+    }
+
+    if (n_keys > 0) {
+	int i;
+
+	for (i = 0; i < st->n_exclusive; i++) {
+	    if (st->exclusive[i].name[0] == '*')
+		break;
+	}
+
+	if (i == st->n_exclusive) {
+	    int n;
+	    char *err;
+
+	    err = G_malloc(len + 100);
+	    sprintf(err, _("One or more of the following options/flags "
+			   "must be used: "));
+	    
+	    n = 0;
+	    len = strlen(err);
+	    opt = &st->first_option;
+	    while (opt) {
+		if (has_either_or(opt->exclusive)) {
+		    n++;
+		    if (n <= n_keys - 2)
+			sprintf(err + len, "%s=, ", opt->key);
+		    else if (n == n_keys - 1)
+			sprintf(err + len, "%s= ", opt->key);
+		    else
+			sprintf(err + len, "or %s=", opt->key);
+		    len = strlen(err);
+		}
+		opt = opt->next_opt;
+	    }
+
+	    flag = &st->first_flag;
+	    while (flag) {
+		if (has_either_or(flag->exclusive)) {
+		    n++;
+		    if (n <= n_keys - 2)
+			sprintf(err + len, "-%c, ", flag->key);
+		    else if (n == n_keys - 1)
+			sprintf(err + len, "-%c ", flag->key);
+		    else
+			sprintf(err + len, "or -%c", flag->key);
+		    len = strlen(err);
+		}
+		flag = flag->next_flag;
+	    }
+	    
+	    append_error(err);
+	    G_free(err);
+	}
     }
 }
 
