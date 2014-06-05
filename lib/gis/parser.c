@@ -526,6 +526,7 @@ int G_parser(int argc, char **argv)
 		while (*(++ptr))
 		    set_flag(*ptr);
 	    }
+
 	    /* If we see standard option format (option=val) */
 	    else if (is_option(ptr)) {
 		set_option(ptr);
@@ -543,7 +544,7 @@ int G_parser(int argc, char **argv)
 
 	    /* If we see the non valid argument (no "=", just argument) */
 	    else {
-		G_asprintf(&err, _("Sorry <%s> is not a valid option"), ptr);
+		G_asprintf(&err, _("Sorry, <%s> is not a valid option"), ptr);
 		append_error(err);
 	    }
 
