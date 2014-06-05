@@ -75,12 +75,12 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define U_RADIANS	7
 #define U_DEGREES	8
 /* Temporal units from the datetime library */
-#define U_YEARS         DATETIME_YEAR   
-#define U_MONTHS        DATETIME_MONTH  
-#define U_DAYS          DATETIME_DAY    
-#define U_HOURS         DATETIME_HOUR   
-#define U_MINUTES       DATETIME_MINUTE 
-#define U_SECONDS       DATETIME_SECOND 
+#define U_YEARS         DATETIME_YEAR
+#define U_MONTHS        DATETIME_MONTH
+#define U_DAYS          DATETIME_DAY
+#define U_HOURS         DATETIME_HOUR
+#define U_MINUTES       DATETIME_MINUTE
+#define U_SECONDS       DATETIME_SECOND
 
 /*! \brief Projection code - XY coordinate system (unreferenced data) */
 #define PROJECTION_XY     0
@@ -256,7 +256,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_M_MAPSET,             /*!< mapset */
     G_OPT_M_COORDS,             /*!< coordinates */
     G_OPT_M_COLR,               /*!< color rules */
-    G_OPT_M_DIR,                /*!< directory input */    
+    G_OPT_M_DIR,                /*!< directory input */
     G_OPT_M_REGION,             /*!< saved region */
 
     G_OPT_STDS_INPUT,           /*!< old input space time dataset of type strds, str3ds or stvds */
@@ -273,7 +273,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_STVDS_OUTPUT,         /*!< new output space time vector dataset */
     G_OPT_MAP_INPUT,            /*!< old input map of type raster, vector or raster3d  */
     G_OPT_MAP_INPUTS,           /*!< old input maps of type raster, vector or raster3d  */
-    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */ 
+    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */
     G_OPT_MAP_TYPE,             /*!< The type of an input map: raster, vect, rast3d */
     G_OPT_T_TYPE,               /*!< The temporal type of a space time dataset */
     G_OPT_T_WHERE,              /*!< A temporal GIS framework SQL WHERE statement */
@@ -393,15 +393,15 @@ struct Cell_head
     /*! \brief Resolution - east to west cell size for 2D data */
     double ew_res;
     /*! \brief Resolution - east to west cell size for 3D data */
-    double ew_res3;   
+    double ew_res3;
     /*! \brief Resolution - north to south cell size for 2D data */
-    double ns_res;     
+    double ns_res;
     /*! \brief Resolution - north to south cell size for 3D data */
-    double ns_res3;   
+    double ns_res3;
     /*! \brief Resolution - top to bottom cell size for 3D data */
-    double tb_res;    
+    double tb_res;
     /*! \brief Extent coordinates (north) */
-    double north;     
+    double north;
     /*! \brief Extent coordinates (south) */
     double south;
     /*! \brief Extent coordinates (east) */
@@ -455,6 +455,8 @@ struct Key_Value
 /*!
   \brief Structure that stores option information
 
+  Used by the G_parser() system.
+
   The descriptions member contains pairs of option and option
   descriptions separated by semicolon ';'.
   For example, when options member is set using:
@@ -472,7 +474,61 @@ struct Key_Value
   GUI dependency is a list of options (separated by commas) to be updated
   if the value is changed.
 
-  Used by the G_parser() system.
+  The exclusive member of the Option and Flag structures is a comma-separated
+  string. Whitespaces are not ignored. Each name separated by comma can be used
+  to group options/flags together, make them mutually exclusive, or make one of
+  them conditionally required. Names starting with "+" tie together
+  options/flags and names starting with "*" (name ignored) make them
+  conditionally required (not always required, but if some other options/flags
+  are not used, they become required). Other names make options/flags mutually
+  exclusive in the same group. These three different types of grouping can be
+  mixed. G_parser() raises a fatal error if any violations are found.
+
+  Examples
+
+  1. opt1 & opt2 are mutually exclusive and opt2 & opt3 are mutually exclusive.
+
+     \code
+     opt1->exclusive = "1";
+     opt2->exclusive = "1,2";
+     opt3->exclusive = "2";
+     \endcode
+
+  2. opt1 & opt2 must be used together.
+
+     \code
+     opt1->exclusive = "+1";
+     opt2->exclusive = "+1";
+     opt3->exclusive = "";
+     \endcode
+
+  3. opt1 or opt2 must be used. Both can be used together. Naming ignored.
+
+     \code
+     opt1->exclusive = "*ignored";
+     opt2->exclusive = "*";
+     opt3->exclusive = "";
+     \endcode
+
+  4. (opt1 & opt2 together) or (opt3 & opt4 together) must be used. All four
+     can be used together.
+
+     \code
+     opt1->exclusive = "+1,*";
+     opt2->exclusive = "+1";   // * is optional because opt2 is tied with opt1
+     opt3->exclusive = "+2,*";
+     opt4->exclusive = "+2";
+     \endcode
+
+  5. Only one of (opt1 & opt2 together) or (opt3 & opt4 together) must be used.
+     All four cannot be used together.
+
+     \code
+     opt1->exclusive = "+1,*,1";
+     opt2->exclusive = "+1";   // * is optional because opt2 is tied with opt1
+     opt3->exclusive = "+2,*,1";
+     opt4->exclusive = "+2";   // 1 is optional because opt4 is tied with opt3
+     \endcode
 */
 struct Option
 {
