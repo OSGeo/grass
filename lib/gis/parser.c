@@ -851,20 +851,19 @@ static void add_exclusive(const char *option_key, int flag_key,
 	    name[len] = 0;
 
 	    if (!(exclusive = find_exclusive(name))) {
+		if (st->n_exclusive >= st->allocated_exclusive) {
+		    st->allocated_exclusive += 10;
+		    st->exclusive = G_realloc(st->exclusive,
+				    	      st->allocated_exclusive *
+					      sizeof(struct Exclusive));
+		}
+
 		exclusive = &st->exclusive[st->n_exclusive++];
 		exclusive->name = name;
 		exclusive->allocated_keys = 10;
 		exclusive->n_keys = 0;
 		exclusive->keys = G_malloc(exclusive->allocated_keys *
 					   sizeof(char *));
-
-		if (st->n_exclusive >= st->allocated_exclusive) {
-		    st->allocated_exclusive += 10;
-		    st->exclusive = G_realloc(st->exclusive,
-				    	      st->allocated_exclusive *
-					      sizeof(struct Exclusive));
-		    exclusive = find_exclusive(name);
-		}
 	    }
 
 	    if (!has_exclusive_key(exclusive->n_keys, exclusive->keys,
