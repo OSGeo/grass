@@ -6,63 +6,120 @@
  * Parses the command line provided through argc and argv.  Example:
  * Assume the previous calls:
  *
- * \code
- *  opt1 = G_define_option() ;
- *  opt1->key        = "map",
- *  opt1->type       = TYPE_STRING,
- *  opt1->required   = YES,
- *  opt1->checker    = sub,
- *  opt1->description= "Name of an existing raster map" ;
- *
- *  opt2 = G_define_option() ;
- *  opt2->key        = "color",
- *  opt2->type       = TYPE_STRING,
- *  opt2->required   = NO,
- *  opt2->answer     = "white",
- *  opt2->options    = "red,orange,blue,white,black",
- *  opt2->description= "Color used to display the map" ;
- *
- *  opt3 = G_define_option() ;
- *  opt3->key        = "number",
- *  opt3->type       = TYPE_DOUBLE,
- *  opt3->required   = NO,
- *  opt3->answer     = "12345.67",
- *  opt3->options    = "0-99999",
- *  opt3->description= "Number to test parser" ;
- * \endcode
+   \code
+   opt1 = G_define_option() ;
+   opt1->key        = "map",
+   opt1->type       = TYPE_STRING,
+   opt1->required   = YES,
+   opt1->checker    = sub,
+   opt1->description= "Name of an existing raster map" ;
+ 
+   opt2 = G_define_option() ;
+   opt2->key        = "color",
+   opt2->type       = TYPE_STRING,
+   opt2->required   = NO,
+   opt2->answer     = "white",
+   opt2->options    = "red,orange,blue,white,black",
+   opt2->description= "Color used to display the map" ;
+ 
+   opt3 = G_define_option() ;
+   opt3->key        = "number",
+   opt3->type       = TYPE_DOUBLE,
+   opt3->required   = NO,
+   opt3->answer     = "12345.67",
+   opt3->options    = "0-99999",
+   opt3->description= "Number to test parser" ;
+   \endcode
  *
  * G_parser() will respond to the following command lines as described:
  *
- * \verbatim
- * command      (No command line arguments)
- * \endverbatim
+   \verbatim
+   command      (No command line arguments)
+   \endverbatim
  *    Parser enters interactive mode.
  *
- * \verbatim
- * command map=map.name
- * \endverbatim
+   \verbatim
+   command map=map.name
+   \endverbatim
  *    Parser will accept this line.  Map will be set to "map.name", the
  *    'a' and 'b' flags will remain off and the num option will be set
  *    to the default of 5.
  *
- * \verbatim
- * command -ab map=map.name num=9
- * command -a -b map=map.name num=9
- * command -ab map.name num=9
- * command map.name num=9 -ab
- * command num=9 -a map=map.name -b
- * \endverbatim
+   \verbatim
+   command -ab map=map.name num=9
+   command -a -b map=map.name num=9
+   command -ab map.name num=9
+   command map.name num=9 -ab
+   command num=9 -a map=map.name -b
+   \endverbatim
  *    These are all treated as acceptable and identical. Both flags are
  *    set to on, the map option is "map.name" and the num option is "9".
  *    Note that the "map=" may be omitted from the command line if it
  *    is part of the first option (flags do not count).
  *
- * \verbatim
- * command num=12
- * \endverbatim
+   \verbatim
+   command num=12
+   \endverbatim
  *    This command line is in error in two ways.  The user will be told
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
+ * 
+ * The exclusive member of the Option and Flag structures is a comma-separated
+ * string. Whitespaces are not ignored. Each name separated by comma can be
+ * used to group options/flags together, make them mutually exclusive, or make
+ * one of them conditionally required. Names starting with "+" tie together
+ * options/flags and names starting with "*" (name ignored) make them
+ * conditionally required (not always required, but if some other options/flags
+ * are not used, they become required). Other names make options/flags mutually
+ * exclusive in the same group. These three different types of grouping can be
+ * mixed. G_parser() raises a fatal error if any violations are found.
+ *
+ * Examples
+ *
+ * 1. opt1 & opt2 are mutually exclusive and opt2 & opt3 are mutually exclusive.
+ *
+      \code
+      opt1->exclusive = "1";
+      opt2->exclusive = "1,2";
+      opt3->exclusive = "2";
+      \endcode
+ *
+ * 2. opt1 & opt2 must be used together.
+ *
+      \code
+      opt1->exclusive = "+1";
+      opt2->exclusive = "+1";
+      opt3->exclusive = "";
+      \endcode
+ *
+ * 3. opt1 or opt2 must be used. Both can be used together. Naming ignored.
+ *
+      \code
+      opt1->exclusive = "*ignored";
+      opt2->exclusive = "*";
+      opt3->exclusive = "";
+      \endcode
+ *
+ * 4. (opt1 & opt2 together) or (opt3 & opt4 together) must be used. All four
+ *    can be used together.
+ *
+      \code
+      opt1->exclusive = "+1,*";
+      opt2->exclusive = "+1";   // * is optional because opt2 is tied with opt1
+      opt3->exclusive = "+2,*";
+      opt4->exclusive = "+2";
+      \endcode
+ *
+ * 5. Only one of (opt1 & opt2 together) or (opt3 & opt4 together) must be used.
+ *    All four cannot be used together.
+ *
+      \code
+      opt1->exclusive = "+1,*,1";
+      opt2->exclusive = "+1";   // * is optional because opt2 is tied with opt1
+      opt3->exclusive = "+2,*,1";
+      opt4->exclusive = "+2";   // 1 is optional because opt4 is tied with opt3
+      \endcode
+ *
  *
  * (C) 2001-2009, 2011-2014 by the GRASS Development Team
  *
