@@ -455,8 +455,6 @@ struct Key_Value
 /*!
   \brief Structure that stores option information
 
-  Used by the G_parser() system.
-
   The descriptions member contains pairs of option and option
   descriptions separated by semicolon ';'.
   For example, when options member is set using:
@@ -477,58 +475,9 @@ struct Key_Value
   The exclusive member of the Option and Flag structures is a comma-separated
   string. Whitespaces are not ignored. Each name separated by comma can be used
   to group options/flags together, make them mutually exclusive, or make one of
-  them conditionally required. Names starting with "+" tie together
-  options/flags and names starting with "*" (name ignored) make them
-  conditionally required (not always required, but if some other options/flags
-  are not used, they become required). Other names make options/flags mutually
-  exclusive in the same group. These three different types of grouping can be
-  mixed. G_parser() raises a fatal error if any violations are found.
+  them conditionally required. See lib/gis/parser.c for examples.
 
-  Examples
-
-  1. opt1 & opt2 are mutually exclusive and opt2 & opt3 are mutually exclusive.
-
-     \code
-     opt1->exclusive = "1";
-     opt2->exclusive = "1,2";
-     opt3->exclusive = "2";
-     \endcode
-
-  2. opt1 & opt2 must be used together.
-
-     \code
-     opt1->exclusive = "+1";
-     opt2->exclusive = "+1";
-     opt3->exclusive = "";
-     \endcode
-
-  3. opt1 or opt2 must be used. Both can be used together. Naming ignored.
-
-     \code
-     opt1->exclusive = "*ignored";
-     opt2->exclusive = "*";
-     opt3->exclusive = "";
-     \endcode
-
-  4. (opt1 & opt2 together) or (opt3 & opt4 together) must be used. All four
-     can be used together.
-
-     \code
-     opt1->exclusive = "+1,*";
-     opt2->exclusive = "+1";   // * is optional because opt2 is tied with opt1
-     opt3->exclusive = "+2,*";
-     opt4->exclusive = "+2";
-     \endcode
-
-  5. Only one of (opt1 & opt2 together) or (opt3 & opt4 together) must be used.
-     All four cannot be used together.
-
-     \code
-     opt1->exclusive = "+1,*,1";
-     opt2->exclusive = "+1";   // * is optional because opt2 is tied with opt1
-     opt3->exclusive = "+2,*,1";
-     opt4->exclusive = "+2";   // 1 is optional because opt4 is tied with opt3
-     \endcode
+  Used by the G_parser() system.
 */
 struct Option
 {
