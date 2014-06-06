@@ -511,7 +511,7 @@ def init(raise_fatal_error=False):
                 raise
             dbmi = psycopg2
         else:
-            msgr.fatal(_("Unable to initialize the temporal DBMI interface. Use "
+            msgr.fatal(_("Unable to initialize the temporal DBMI interface. Please use "
                          "t.connect to specify the driver and the database string"))
             dbmi = sqlite3
     else:
@@ -551,7 +551,6 @@ def init(raise_fatal_error=False):
             if name and name[0] == "raster_base":
                 db_exists = True
             dbif.close()
-
     elif tgis_backend == "pg":
         # Connect to database
         dbif.connect()
@@ -679,7 +678,13 @@ def create_temporal_database(dbif):
         # We need to create the sqlite3 database path if it does not exists
         tgis_dir = os.path.dirname(tgis_database_string)
         if not os.path.exists(tgis_dir):
-            os.makedirs(tgis_dir)
+            try:
+                os.makedirs(tgis_dir)
+            except Exception as e:
+                msgr.fatal(_("Unable to create sqlite temporal database\n"
+                                     "Exception: %s\nPlease use t.connect to set a "
+                                     "read- and writable temporal database path"%(e)))
+                
         # Set up the trigger that takes care of
         # the correct deletion of entries across the different tables
         delete_trigger_sql = open(os.path.join(template_path,
@@ -802,20 +807,27 @@ class SQLDatabaseInterfaceConnection():
         """
         global tgis_database_string
 
-        if self.dbmi.__name__ == "sqlite3":
-            self.connection = self.dbmi.connect(tgis_database_string,
-                    detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
-            self.connection.row_factory = self.dbmi.Row
-            self.connection.isolation_level = None
-            self.cursor = self.connection.cursor()
-            self.cursor.execute("PRAGMA synchronous = OFF")
-            self.cursor.execute("PRAGMA journal_mode = MEMORY")
-        elif self.dbmi.__name__ == "psycopg2":
-            self.connection = self.dbmi.connect(tgis_database_string)
-            #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
-            self.cursor = self.connection.cursor(
-                cursor_factory = self.dbmi.extras.DictCursor)
-        self.connected = True
+        try:
+            if self.dbmi.__name__ == "sqlite3":
+                self.connection = self.dbmi.connect(tgis_database_string,
+                        detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
+                self.connection.row_factory = self.dbmi.Row
+                self.connection.isolation_level = None
+                self.cursor = self.connection.cursor()
+                self.cursor.execute("PRAGMA synchronous = OFF")
+                self.cursor.execute("PRAGMA journal_mode = MEMORY")
+            elif self.dbmi.__name__ == "psycopg2":
+                self.connection = self.dbmi.connect(tgis_database_string)
+                #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+                self.cursor = self.connection.cursor(
+                    cursor_factory = self.dbmi.extras.DictCursor)
+            self.connected = True
+        except Exception as e:
+            self.msgr.fatal(_("Unable to connect to %(db)s database: "
+                                       "%(string)s\nException: \"%(ex)s\"\nPlease use t.connect to set a "
+                                       "read- and writable temporal database backend")%({"db":self.dbmi.__name__, 
+                                                                                                                      "string":tgis_database_string, 
+                                                                                                                      "ex":e,  }))
 
     def close(self):
         """!Close the DBMI connection"""
