@@ -30,7 +30,7 @@ from open_stds import *
 def register_maps_in_space_time_dataset(
     type, name, maps=None, file=None, start=None,
     end=None, unit=None, increment=None, dbif=None,
-        interval=False, fs="|"):
+        interval=False, fs="|", update_cmd_list=True):
     """!Use this method to register maps in space time datasets.
 
        Additionally a start time string and an increment string can be
@@ -60,6 +60,8 @@ def register_maps_in_space_time_dataset(
        @param interval If True, time intervals are created in case the start
                        time and an increment is provided
        @param fs Field separator used in input file
+       @param update_cmd_list If is True, the command that was invoking this process
+                              will be written to the process history
     """
     start_time_in_file = False
     end_time_in_file = False
@@ -318,7 +320,8 @@ def register_maps_in_space_time_dataset(
     if name and map_object_list:
         msgr.message(_("Update space time raster dataset"))
         sp.update_from_registered_maps(dbif)
-        sp.update_command_string(dbif=dbif)
+        if update_cmd_list is True:
+            sp.update_command_string(dbif=dbif)
 
     # Update affected datasets
     if datatsets_to_modify:
