@@ -101,27 +101,23 @@ int main(int argc, char *argv[])
     opt.output->required = NO;
     opt.output->label = _("Name for output file");
     opt.output->description = _("If not given or '-' then standard output");
-    opt.output->exclusive = "format";
 
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
 	_("Use basic regular expressions instead of wildcards");
     flag.regex->guisection = _("Pattern");
-    flag.regex->exclusive = "regex";
 
     flag.extended = G_define_flag();
     flag.extended->key = 'e';
     flag.extended->description =
 	_("Use extended regular expressions instead of wildcards");
     flag.extended->guisection = _("Pattern");
-    flag.extended->exclusive = "regex";
 
     flag.type = G_define_flag();
     flag.type->key = 't';
     flag.type->description = _("Print data types");
     flag.type->guisection = _("Print");
-    flag.type->exclusive = "format";
     
     flag.mapset = G_define_flag();
     flag.mapset->key = 'm';
@@ -132,16 +128,30 @@ int main(int argc, char *argv[])
     flag.pretty->key = 'p';
     flag.pretty->description = _("Pretty printing in human readable format");
     flag.pretty->guisection = _("Print");
-    flag.pretty->exclusive = "format";
 
     flag.full = G_define_flag();
     flag.full->key = 'f';
     flag.full->description = _("Verbose listing (also list map titles)");
     flag.full->guisection = _("Print");
-    flag.full->exclusive = "format";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if ((flag.pretty->answer || flag.full->answer) && opt.output->answer)
+        G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
+		      flag.pretty->key, flag.full->key, opt.output->key);
+
+    if ((flag.pretty->answer || flag.full->answer) && flag.type->answer)
+	G_fatal_error(_("-%c/-%c and -%c are mutually exclusive"),
+		      flag.pretty->key, flag.full->key, flag.type->key);
+
+    if (flag.pretty->answer && flag.full->answer)
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+		      flag.pretty->key, flag.full->key);
+
+    if (flag.regex->answer && flag.extended->answer)
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+		      flag.regex->key, flag.extended->key);
 
     if (opt.pattern->answer) {
 	if (flag.regex->answer || flag.extended->answer)

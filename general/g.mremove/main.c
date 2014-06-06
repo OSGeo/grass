@@ -68,13 +68,11 @@ int main(int argc, char *argv[])
     flag.regex->key = 'r';
     flag.regex->description =
 	_("Use basic regular expressions instead of wildcards");
-    flag.regex->exclusive = "regex";
 
     flag.extended = G_define_flag();
     flag.extended->key = 'e';
     flag.extended->description =
 	_("Use extended regular expressions instead of wildcards");
-    flag.extended->exclusive = "regex";
 
     flag.force = G_define_flag();
     flag.force->key = 'f';
@@ -96,6 +94,10 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (flag.regex->answer && flag.extended->answer)
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+		      flag.regex->key, flag.extended->key);
 
     if (!flag.force->answer)
 	G_message(_("The following data base element files would be deleted:"));

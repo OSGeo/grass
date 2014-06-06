@@ -126,11 +126,6 @@ void parse_flag(struct context *ctx, const char *cmd, const char *arg)
 	return;
     }
 
-    if (G_strcasecmp(cmd, "exclusive") == 0) {
-	ctx->flag->exclusive = xstrdup(arg);
-	return;
-    }
-
     if (G_strcasecmp(cmd, "end") == 0) {
 	ctx->state = S_TOPLEVEL;
 	return;
@@ -221,11 +216,6 @@ void parse_option(struct context *ctx, const char *cmd, const char *arg)
 
     if (G_strcasecmp(cmd, "guidependency") == 0) {
 	ctx->option->guidependency = translate(xstrdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "exclusive") == 0) {
-	ctx->option->exclusive = xstrdup(arg);
 	return;
     }
 

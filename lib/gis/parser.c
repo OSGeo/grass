@@ -6,122 +6,65 @@
  * Parses the command line provided through argc and argv.  Example:
  * Assume the previous calls:
  *
-   \code
-   opt1 = G_define_option() ;
-   opt1->key        = "map",
-   opt1->type       = TYPE_STRING,
-   opt1->required   = YES,
-   opt1->checker    = sub,
-   opt1->description= "Name of an existing raster map" ;
- 
-   opt2 = G_define_option() ;
-   opt2->key        = "color",
-   opt2->type       = TYPE_STRING,
-   opt2->required   = NO,
-   opt2->answer     = "white",
-   opt2->options    = "red,orange,blue,white,black",
-   opt2->description= "Color used to display the map" ;
- 
-   opt3 = G_define_option() ;
-   opt3->key        = "number",
-   opt3->type       = TYPE_DOUBLE,
-   opt3->required   = NO,
-   opt3->answer     = "12345.67",
-   opt3->options    = "0-99999",
-   opt3->description= "Number to test parser" ;
-   \endcode
+ * \code
+ *  opt1 = G_define_option() ;
+ *  opt1->key        = "map",
+ *  opt1->type       = TYPE_STRING,
+ *  opt1->required   = YES,
+ *  opt1->checker    = sub,
+ *  opt1->description= "Name of an existing raster map" ;
+ *
+ *  opt2 = G_define_option() ;
+ *  opt2->key        = "color",
+ *  opt2->type       = TYPE_STRING,
+ *  opt2->required   = NO,
+ *  opt2->answer     = "white",
+ *  opt2->options    = "red,orange,blue,white,black",
+ *  opt2->description= "Color used to display the map" ;
+ *
+ *  opt3 = G_define_option() ;
+ *  opt3->key        = "number",
+ *  opt3->type       = TYPE_DOUBLE,
+ *  opt3->required   = NO,
+ *  opt3->answer     = "12345.67",
+ *  opt3->options    = "0-99999",
+ *  opt3->description= "Number to test parser" ;
+ * \endcode
  *
  * G_parser() will respond to the following command lines as described:
  *
-   \verbatim
-   command      (No command line arguments)
-   \endverbatim
+ * \verbatim
+ * command      (No command line arguments)
+ * \endverbatim
  *    Parser enters interactive mode.
  *
-   \verbatim
-   command map=map.name
-   \endverbatim
+ * \verbatim
+ * command map=map.name
+ * \endverbatim
  *    Parser will accept this line.  Map will be set to "map.name", the
  *    'a' and 'b' flags will remain off and the num option will be set
  *    to the default of 5.
  *
-   \verbatim
-   command -ab map=map.name num=9
-   command -a -b map=map.name num=9
-   command -ab map.name num=9
-   command map.name num=9 -ab
-   command num=9 -a map=map.name -b
-   \endverbatim
+ * \verbatim
+ * command -ab map=map.name num=9
+ * command -a -b map=map.name num=9
+ * command -ab map.name num=9
+ * command map.name num=9 -ab
+ * command num=9 -a map=map.name -b
+ * \endverbatim
  *    These are all treated as acceptable and identical. Both flags are
  *    set to on, the map option is "map.name" and the num option is "9".
  *    Note that the "map=" may be omitted from the command line if it
  *    is part of the first option (flags do not count).
  *
-   \verbatim
-   command num=12
-   \endverbatim
+ * \verbatim
+ * command num=12
+ * \endverbatim
  *    This command line is in error in two ways.  The user will be told
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
- * 
- * The exclusive member of the Option and Flag structures is a comma-separated
- * string. Whitespaces are not ignored. Each name separated by comma can be
- * used to group options/flags together, make them mutually exclusive, or make
- * one of them conditionally required. Names starting with "+" tie together
- * options/flags and names starting with "*" (name ignored) make them
- * conditionally required (not always required, but if some other options/flags
- * are not used, they become required). Other names make options/flags mutually
- * exclusive in the same group. These three different types of grouping can be
- * mixed. G_parser() raises a fatal error if any violations are found.
  *
- * Examples
- *
- * 1. opt1 & opt2 are mutually exclusive and opt2 & opt3 are mutually exclusive.
- *
-      \code
-      opt1->exclusive = "1";
-      opt2->exclusive = "1,2";
-      opt3->exclusive = "2";
-      \endcode
- *
- * 2. opt1 & opt2 must be used together.
- *
-      \code
-      opt1->exclusive = "+1";
-      opt2->exclusive = "+1";
-      opt3->exclusive = "";
-      \endcode
- *
- * 3. opt1 or opt2 must be used. Both can be used together. Naming ignored.
- *
-      \code
-      opt1->exclusive = "*ignored";
-      opt2->exclusive = "*";
-      opt3->exclusive = "";
-      \endcode
- *
- * 4. (opt1 & opt2 together) or (opt3 & opt4 together) must be used. All four
- *    can be used together.
- *
-      \code
-      opt1->exclusive = "+1,*";
-      opt2->exclusive = "+1";   // * is optional because opt2 is tied with opt1
-      opt3->exclusive = "+2,*";
-      opt4->exclusive = "+2";
-      \endcode
- *
- * 5. Only one of (opt1 & opt2 together) or (opt3 & opt4 together) must be used.
- *    All four cannot be used together.
- *
-      \code
-      opt1->exclusive = "+1,*,1";
-      opt2->exclusive = "+1";   // * is optional because opt2 is tied with opt1
-      opt3->exclusive = "+2,*,1";
-      opt4->exclusive = "+2";   // 1 is optional because opt4 is tied with opt3
-      \endcode
- *
- *
- * (C) 2001-2009, 2011-2014 by the GRASS Development Team
+ * (C) 2001-2009, 2011 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -170,17 +113,8 @@ static void split_opts(void);
 static void check_multiple_opts(void);
 static int check_overwrite(void);
 static void define_keywords(void);
-static void split_gisprompt(const char *, char *, char *, char *);
+static void split_gisprompt(const char *gisprompt, char *age, char *element, char *desc);
 static void module_gui_wx(void);
-static void add_exclusive(const char *, int, const char *);
-static struct Exclusive *find_exclusive(char *);
-static int has_exclusive_name(const char *, char *);
-static int has_exclusive_key(int, char **, char *);
-static int has_either_or(const char *);
-static void check_exclusive();
-static void check_mutually_exclusive_inputs();
-static void check_tied_together_inputs();
-static void check_either_or_inputs();
 static void append_error(const char *);
 
 /*!
@@ -385,11 +319,6 @@ int G_parser(int argc, char **argv)
     G_basename(tmp_name, "exe");
     st->pgm_name = tmp_name;
 
-    st->allocated_exclusive = 10;
-    st->n_exclusive = 0;
-    st->exclusive = G_malloc(st->allocated_exclusive *
-		    	     sizeof(struct Exclusive));
-
     /* Stash default answers */
 
     opt = &st->first_option;
@@ -587,8 +516,8 @@ int G_parser(int argc, char **argv)
 	    else if (*ptr == '-') {
 		while (*(++ptr))
 		    set_flag(*ptr);
-	    }
 
+	    }
 	    /* If we see standard option format (option=val) */
 	    else if (is_option(ptr)) {
 		set_option(ptr);
@@ -600,19 +529,15 @@ int G_parser(int argc, char **argv)
 		st->first_option.answer = G_store(ptr);
 		st->first_option.count++;
 		need_first_opt = 0;
-		add_exclusive(st->first_option.key, 0,
-			      st->first_option.exclusive);
 	    }
 
 	    /* If we see the non valid argument (no "=", just argument) */
 	    else {
-		G_asprintf(&err, _("Sorry, <%s> is not a valid option"), ptr);
+		G_asprintf(&err, _("Sorry <%s> is not a valid option"), ptr);
 		append_error(err);
 	    }
 
 	}
-
-	check_exclusive();
     }
     
     /* Split options where multiple answers are OK */
@@ -885,358 +810,6 @@ static void module_gui_wx(void)
     G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script, G_recreate_command(), NULL);
 }
 
-static void add_exclusive(const char *option_key, int flag_key,
-			  const char *names)
-{
-    char *keyname, *ptr1;
-
-    if (!names || !*names)
-	return;
-
-    if (option_key)
-	G_asprintf(&keyname, "%s=", option_key);
-    else
-	G_asprintf(&keyname, "-%c", flag_key);
-
-    for (ptr1 = (char *)names;;) {
-	int len;
-	char *ptr2;
-
-	for (len = 0, ptr2 = ptr1; *ptr2 != '\0' && *ptr2 != ',';
-	     ptr2++, len++) ;
-
-	if (len > 0) {	/* skip ,, */
-	    char *name;
-	    struct Exclusive *exclusive;
-
-	    name = G_malloc(len + 1);
-	    memcpy(name, ptr1, len);
-	    name[len] = 0;
-
-	    if (!(exclusive = find_exclusive(name))) {
-		if (st->n_exclusive >= st->allocated_exclusive) {
-		    st->allocated_exclusive += 10;
-		    st->exclusive = G_realloc(st->exclusive,
-				    	      st->allocated_exclusive *
-					      sizeof(struct Exclusive));
-		}
-
-		exclusive = &st->exclusive[st->n_exclusive++];
-		exclusive->name = name;
-		exclusive->allocated_keys = 10;
-		exclusive->n_keys = 0;
-		exclusive->keys = G_malloc(exclusive->allocated_keys *
-					   sizeof(char *));
-	    }
-
-	    if (!has_exclusive_key(exclusive->n_keys, exclusive->keys,
-				   keyname)) {
-		exclusive->keys[exclusive->n_keys++] = keyname;
-
-		if (exclusive->n_keys >= exclusive->allocated_keys) {
-		    exclusive->allocated_keys += 10;
-		    exclusive->keys = G_realloc(exclusive->keys,
-				    		exclusive->allocated_keys *
-						sizeof(char *));
-		}
-	    }
-	}
-
-	if (*ptr2 == '\0')
-	    break;
-
-	ptr1 = ptr2 + 1;
-
-	if (*ptr1 == '\0')
-	    break;
-    }
-}
-
-static struct Exclusive *find_exclusive(char *name)
-{
-    int i;
-
-    for (i = 0; i < st->n_exclusive; i++) {
-	if (strcmp(st->exclusive[i].name, name) == 0)
-	    return &st->exclusive[i];
-    }
-
-    return NULL;
-}
-
-static int has_exclusive_name(const char *names, char *name)
-{
-    char *ptr1;
-
-    for (ptr1 = (char *)names;;) {
-	int len;
-	char *ptr2;
-
-	for (len = 0, ptr2 = ptr1; *ptr2 != '\0' && *ptr2 != ',';
-	     ptr2++, len++) ;
-
-	if (len > 0) {	/* skip ,, */
-	    char *aname;
-
-	    aname = G_malloc(len + 1);
-	    memcpy(aname, ptr1, len);
-	    aname[len] = 0;
-
-	    if (strcmp(name, aname) == 0) {
-		G_free(aname);
-		return 1;
-	    }
-
-	    G_free(aname);
-	}
-
-	if (*ptr2 == '\0')
-	    break;
-
-	ptr1 = ptr2 + 1;
-
-	if (*ptr1 == '\0')
-	    break;
-    }
-
-    return 0;
-}
-
-static int has_exclusive_key(int n_keys, char **keys, char *key)
-{
-    int i;
-
-    for (i = 0; i < n_keys; i++) {
-	if (strcmp(keys[i], key) == 0)
-	    return 1;
-    }
-
-    return 0;
-}
-
-static int has_either_or(const char *names)
-{
-    return names && (names[0] == '*' || strstr(names, ",*"));
-}
-
-static void check_exclusive()
-{
-    check_mutually_exclusive_inputs();
-    check_tied_together_inputs();
-    check_either_or_inputs();
-}
-
-static void check_mutually_exclusive_inputs()
-{
-    int i;
-
-    for (i = 0; i < st->n_exclusive; i++) {
-	struct Exclusive *exclusive;
-
-	exclusive = &st->exclusive[i];
-
-	if (exclusive->name[0] == '+' || exclusive->name[0] == '*')
-	    continue;
-
-	G_debug(1, "check_exclusive(): Mutually exclusive option/flag group: "
-		   "%s", exclusive->name);
-	G_debug(1, "check_exclusive():\t%s", exclusive->keys[0]);
-
-	if (exclusive->n_keys > 1) {
-	    int len, j;
-	    char *err;
-	    
-	    len = 0;
-	    for (j = 0; j < exclusive->n_keys; j++) {
-		len += strlen(exclusive->keys[j]) + 2; /* 2 for comma adn space
-							*/
-		if (j > 0)
-		    G_debug(1, "check_exclusive():\t%s", exclusive->keys[j]);
-	    }
-	    
-	    err = G_malloc(len + 100);
-	    sprintf(err, _("The following options/flags cannot be used "
-			   "together: "));
-	    
-	    len = strlen(err);
-	    for (j = 0; j < exclusive->n_keys - 2; j++) {
-		sprintf(err + len, "%s, ", exclusive->keys[j]);
-		len = strlen(err);
-	    }
-	    
-	    sprintf(err + len, _("%s and %s"), exclusive->keys[j],
-		    exclusive->keys[j + 1]);
-	    
-	    append_error(err);
-	    G_free(err);
-	}
-    }
-}
-
-static void check_tied_together_inputs()
-{
-    int i;
-
-    for (i = 0; i < st->n_exclusive; i++) {
-	struct Exclusive *exclusive;
-	struct Option *opt;
-	struct Flag *flag;
-	int n, n_keys, len;
-	char *err;
-
-	exclusive = &st->exclusive[i];
-
-	if (exclusive->name[0] != '+')
-	    continue;
-
-	G_debug(1, "check_exclusive(): Tied-together option/flag group: %s",
-		exclusive->name);
-	
-	n_keys = 0;
-	len = 0;
-	opt = &st->first_option;
-	while (opt) {
-	    if (has_exclusive_name(opt->exclusive, exclusive->name)) {
-		n_keys++;
-		len += strlen(opt->key) + 3; /* 3 for =, comma and space */
-		G_debug(1, "check_exclusive():\t%s=", opt->key);
-	    }
-	    opt = opt->next_opt;
-	}
-	
-	flag = &st->first_flag;
-	while (flag) {
-	    if (has_exclusive_name(flag->exclusive, exclusive->name)) {
-		n_keys++;
-		len += 4; /* 4 for -, flag, comma and space */
-		G_debug(1, "check_exclusive():\t-%c", flag->key);
-	    }
-	    flag = flag->next_flag;
-	}
-
-	if (n_keys == 1 || exclusive->n_keys == n_keys)
-	    continue;
-	
-	err = G_malloc(len + 100);
-	sprintf(err, _("The following options/flags must be used together: "));
-
-	n = 0;
-	len = strlen(err);
-	opt = &st->first_option;
-	while (opt) {
-	    if (has_exclusive_name(opt->exclusive, exclusive->name)) {
-		n++;
-		if (n <= n_keys - 2)
-		    sprintf(err + len, "%s=, ", opt->key);
-		else if (n == n_keys - 1)
-		    sprintf(err + len, "%s= ", opt->key);
-		else
-		    sprintf(err + len, "and %s=", opt->key);
-		len = strlen(err);
-	    }
-	    opt = opt->next_opt;
-	}
-	
-	flag = &st->first_flag;
-	while (flag) {
-	    if (has_exclusive_name(flag->exclusive, exclusive->name)) {
-		n++;
-		if (n <= n_keys - 2)
-		    sprintf(err + len, "-%c, ", flag->key);
-		else if (n == n_keys - 1)
-		    sprintf(err + len, "-%c ", flag->key);
-		else
-		    sprintf(err + len, "and -%c", flag->key);
-		len = strlen(err);
-	    }
-	    flag = flag->next_flag;
-	}
-	
-	append_error(err);
-	G_free(err);
-    }
-}
-
-static void check_either_or_inputs()
-{
-    int n_keys, len, i, n;
-    struct Option *opt;
-    struct Flag *flag;
-    char *err;
-
-    G_debug(1, "check_exclusive(): Either-or options/flags "
-	       "(group names ignored)");
-
-    n_keys = 0;
-    len = 0;
-    opt = &st->first_option;
-    while (opt) {
-	if (has_either_or(opt->exclusive)) {
-	    n_keys++;
-	    len += strlen(opt->key) + 3; /* 3 for =, comma and space */
-	    G_debug(1, "check_exclusive():\t%s=", opt->key);
-	}
-	opt = opt->next_opt;
-    }
-
-    flag = &st->first_flag;
-    while (flag) {
-	if (has_either_or(flag->exclusive)) {
-	    n_keys++;
-	    len += 4; /* 4 for -, flag, comma and space */
-	    G_debug(1, "check_exclusive():\t-%c", flag->key);
-	}
-	flag = flag->next_flag;
-    }
-
-    if (n_keys == 0)
-	return;
-
-    for (i = 0; i < st->n_exclusive; i++) {
-	if (st->exclusive[i].name[0] == '*')
-	    return;
-    }
-
-    err = G_malloc(len + 100);
-    sprintf(err, _("One or more of the following options/flags "
-		   "must be used: "));
-
-    n = 0;
-    len = strlen(err);
-    opt = &st->first_option;
-    while (opt) {
-	if (has_either_or(opt->exclusive)) {
-	    n++;
-	    if (n <= n_keys - 2)
-		sprintf(err + len, "%s=, ", opt->key);
-	    else if (n == n_keys - 1)
-		sprintf(err + len, "%s= ", opt->key);
-	    else
-		sprintf(err + len, "or %s=", opt->key);
-	    len = strlen(err);
-	}
-	opt = opt->next_opt;
-    }
-
-    flag = &st->first_flag;
-    while (flag) {
-	if (has_either_or(flag->exclusive)) {
-	    n++;
-	    if (n <= n_keys - 2)
-		sprintf(err + len, "-%c, ", flag->key);
-	    else if (n == n_keys - 1)
-		sprintf(err + len, "-%c ", flag->key);
-	    else
-		sprintf(err + len, "or -%c", flag->key);
-	    len = strlen(err);
-	}
-	flag = flag->next_flag;
-    }
-
-    append_error(err);
-    G_free(err);
-}
-
 static void set_flag(int f)
 {
     struct Flag *flag;
@@ -1258,7 +831,6 @@ static void set_flag(int f)
 	    flag->answer = 1;
 	    if (flag->suppress_required)
 		st->suppress_required = 1;
-	    add_exclusive(NULL, f, flag->exclusive);
 	    return;
 	}
 	flag = flag->next_flag;
@@ -1389,8 +961,6 @@ static void set_option(const char *string)
     }
     else
 	opt->answer = G_store(string);
-
-    add_exclusive(opt->key, 0, opt->exclusive);
 }
 
 static void check_opts(void)

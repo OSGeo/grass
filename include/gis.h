@@ -75,12 +75,12 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define U_RADIANS	7
 #define U_DEGREES	8
 /* Temporal units from the datetime library */
-#define U_YEARS         DATETIME_YEAR
-#define U_MONTHS        DATETIME_MONTH
-#define U_DAYS          DATETIME_DAY
-#define U_HOURS         DATETIME_HOUR
-#define U_MINUTES       DATETIME_MINUTE
-#define U_SECONDS       DATETIME_SECOND
+#define U_YEARS         DATETIME_YEAR   
+#define U_MONTHS        DATETIME_MONTH  
+#define U_DAYS          DATETIME_DAY    
+#define U_HOURS         DATETIME_HOUR   
+#define U_MINUTES       DATETIME_MINUTE 
+#define U_SECONDS       DATETIME_SECOND 
 
 /*! \brief Projection code - XY coordinate system (unreferenced data) */
 #define PROJECTION_XY     0
@@ -256,7 +256,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_M_MAPSET,             /*!< mapset */
     G_OPT_M_COORDS,             /*!< coordinates */
     G_OPT_M_COLR,               /*!< color rules */
-    G_OPT_M_DIR,                /*!< directory input */
+    G_OPT_M_DIR,                /*!< directory input */    
     G_OPT_M_REGION,             /*!< saved region */
 
     G_OPT_STDS_INPUT,           /*!< old input space time dataset of type strds, str3ds or stvds */
@@ -273,7 +273,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_STVDS_OUTPUT,         /*!< new output space time vector dataset */
     G_OPT_MAP_INPUT,            /*!< old input map of type raster, vector or raster3d  */
     G_OPT_MAP_INPUTS,           /*!< old input maps of type raster, vector or raster3d  */
-    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */
+    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */ 
     G_OPT_MAP_TYPE,             /*!< The type of an input map: raster, vect, rast3d */
     G_OPT_T_TYPE,               /*!< The temporal type of a space time dataset */
     G_OPT_T_WHERE,              /*!< A temporal GIS framework SQL WHERE statement */
@@ -393,15 +393,15 @@ struct Cell_head
     /*! \brief Resolution - east to west cell size for 2D data */
     double ew_res;
     /*! \brief Resolution - east to west cell size for 3D data */
-    double ew_res3;
+    double ew_res3;   
     /*! \brief Resolution - north to south cell size for 2D data */
-    double ns_res;
+    double ns_res;     
     /*! \brief Resolution - north to south cell size for 3D data */
-    double ns_res3;
+    double ns_res3;   
     /*! \brief Resolution - top to bottom cell size for 3D data */
-    double tb_res;
+    double tb_res;    
     /*! \brief Extent coordinates (north) */
-    double north;
+    double north;     
     /*! \brief Extent coordinates (south) */
     double south;
     /*! \brief Extent coordinates (east) */
@@ -472,11 +472,6 @@ struct Key_Value
   GUI dependency is a list of options (separated by commas) to be updated
   if the value is changed.
 
-  The exclusive member of the Option and Flag structures is a comma-separated
-  string. Whitespaces are not ignored. Each name separated by comma can be used
-  to group options/flags together, make them mutually exclusive, or make one of
-  them conditionally required. See lib/gis/parser.c for examples.
-
   Used by the G_parser() system.
 */
 struct Option
@@ -485,7 +480,6 @@ struct Option
     int type;			/*!< Option type */
     int required;		/*!< REQUIRED or OPTIONAL */
     int multiple;		/*!< Multiple entries OK */
-    const char *exclusive;	/*!< Exclusive option/flag groups */
     const char *options;	/*!< Approved values or range or NULL */
     const char **opts;		/*!< NULL or NULL terminated array of parsed options */
     const char *key_desc;	/*!< one word describing the key */
@@ -514,7 +508,6 @@ struct Flag
     char key;			/*!< Key char used on command line */
     char answer;		/*!< Stores flag state: 0/1 */
     char suppress_required;	/*!< Suppresses checking of required options */
-    const char *exclusive;	/*!< Exclusive option/flag groups */
     const char *label;		/*!< Optional short label, used in GUI as item label */
     const char *description;	/*!< String describing flag meaning   */
     const char *guisection;	/*!< GUI Layout guidance: ';' delimited hierarchical tree position */
