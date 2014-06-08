@@ -28,7 +28,7 @@ from core.gcmd import GMessage
 from core.layerlist import LayerList
 from core.settings import UserSettings
 from gui_core.simplelmgr import SimpleLayerManager, SIMPLE_LMGR_RASTER, \
-   SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_TB_LEFT, SIMPLE_LMGR_TB_RIGHT
+   SIMPLE_LMGR_VECTOR, SIMPLE_LMGR_RGB, SIMPLE_LMGR_TB_LEFT, SIMPLE_LMGR_TB_RIGHT
 
 from grass.pydispatch.signal import Signal
 
@@ -137,10 +137,10 @@ class SwipeMapDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
 
         self._firstLmgr = SimpleLayerManager(parent=panel, layerList=self._firstLayerList,
-                                             lmgrStyle=SIMPLE_LMGR_RASTER |
+                                             lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_RGB |
                                              SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_LEFT)
         self._secondLmgr = SimpleLayerManager(parent=panel, layerList=self._secondLayerList,
-                                              lmgrStyle=SIMPLE_LMGR_RASTER |
+                                              lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_RGB |
                                               SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_RIGHT)
         sizer.Add(self._firstLmgr, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         sizer.Add(self._secondLmgr, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
