@@ -18,7 +18,7 @@ This program is free software under the GNU General Public License
 @author Robert Szczepanek (menu customization)
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
-
+import re
 import wx
 
 from core              import globalvar
@@ -90,8 +90,10 @@ class Menu(wx.MenuBar):
             try: 
                 cmd = utils.split(str(command)) 
             except UnicodeError: 
-                cmd = utils.split(EncodeString((command))) 
-            if cmd and cmd[0] not in globalvar.grassCmd: 
+                cmd = utils.split(EncodeString((command)))
+            # disable only grass commands which are not present (e.g. r.in.lidar)
+            if cmd and cmd[0] not in globalvar.grassCmd and \
+               re.match('[rvdipmgt][3bs]?\.([a-z0-9\.])+', cmd[0]):
                 menuItem.Enable(False)
 
         rhandler = eval('self.parent.' + handler)
