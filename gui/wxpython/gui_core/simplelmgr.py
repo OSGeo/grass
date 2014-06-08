@@ -289,6 +289,12 @@ class SimpleLayerManager(wx.Panel):
         items = []
         active = []
         selected = []
+
+        # remove hidden (temporary) layers first
+        for layer in reversed(self._layerList):
+            if layer.hidden:
+                self._layerList.RemoveLayer(layer)
+
         for layer in self._layerList:
             if layer.opacity < 1:
                 items.append("{name} (opacity {opacity}%)".format(name=layer.name,
