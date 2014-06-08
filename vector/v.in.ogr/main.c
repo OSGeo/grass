@@ -102,6 +102,9 @@ int main(int argc, char *argv[])
 
     int OFTIntegerListlength;
 
+    char *dsn;
+    const char *driver_name;
+    const char *datetime_type;
     char *output;
     char **layer_names;		/* names of layers to be imported */
     int *layers;		/* layer indexes */
@@ -335,6 +338,54 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Required parameter <%s> not set"), param.dsn->key);
     }
 
+    driver_name = db_get_default_driver_name();
+
+    if (strcmp(driver_name, "pg") == 0)
+	datetime_type = "timestamp";
+    else if (strcmp(driver_name, "dbf") == 0)
+	datetime_type = "varchar(22)";
+    else
+	datetime_type = "datetime";
+
+    /* dsn is 'PG:', check default connection settings */
+    dsn = NULL;
+    if (strcmp(driver_name, "pg") == 0 &&
+        G_strcasecmp(param.dsn->answer, "PG:") == 0) {
+        const char *dbname;
+        dbConnection conn;
+        
+        dbname = db_get_default_database_name();
+        if (!dbname)
+            G_fatal_error(_("Database not defined, please check default "
+                            " connection settings by db.connect"));
+
+        dsn = (char *) G_malloc(GPATH_MAX);
+        /* -> dbname */
+        sprintf(dsn, "PG:dbname=%s", dbname);
+        
+        /* -> user/passwd */
+        if (DB_OK == db_get_connection(&conn) &&
+            strcmp(conn.driverName, "pg") == 0 &&
+            strcmp(conn.databaseName, dbname) == 0) {
+            if (conn.user) {
+                strcat(dsn, " user=");
+                strcat(dsn, conn.user);
+            }
+            if (conn.password) {
+                strcat(dsn, " passwd=");
+                strcat(dsn, conn.password);
+            }
+            /* TODO: host/port... */
+        }
+        else {
+            G_debug(1, "unable to get connection");
+        }
+        G_debug(1, "Using dsn=%s", dsn);
+    }
+    else if (param.dsn->answer) {
+        dsn = G_store(param.dsn->answer);
+    }
+    
     min_area = atof(param.min_area->answer);
     snap = atof(param.snap->answer);
     type = Vect_option_to_types(param.type);
@@ -371,10 +422,10 @@ int main(int argc, char *argv[])
 
     /* open OGR DSN */
     Ogr_ds = NULL;
-    if (strlen(param.dsn->answer) > 0)
-	Ogr_ds = OGROpen(param.dsn->answer, FALSE, NULL);
+    if (strlen(dsn) > 0)
+	Ogr_ds = OGROpen(dsn, FALSE, NULL);
     if (Ogr_ds == NULL)
-	G_fatal_error(_("Unable to open data source <%s>"), param.dsn->answer);
+	G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
     /* check encoding for given driver */
     if (param.encoding->answer) {
@@ -393,7 +444,7 @@ int main(int argc, char *argv[])
 
     if (flag.list->answer)
 	G_message(_("Data source <%s> (format '%s') contains %d layers:"),
-		  param.dsn->answer,
+		  dsn,
 		  OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)), navailable_layers);
     for (i = 0; i < navailable_layers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
@@ -815,7 +866,10 @@ int main(int argc, char *argv[])
     /* open output vector */
     /* strip any @mapset from vector output name */
     G_find_vector(output, G_mapset());
-    Vect_open_new(&Map, output, with_z);
+
+    if (Vect_open_new(&Map, output, with_z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), output);
+
     Out = &Map;
 
     if (!flag.no_clean->answer) {
@@ -824,7 +878,9 @@ int main(int argc, char *argv[])
 	     * at the end copy alive lines to output vector
 	     * in case of polygons this reduces the coor file size by a factor of 2 to 5
 	     * only needed when cleaning polygons */
-	    Vect_open_tmp_new(&Tmp, NULL, with_z);
+	    if (Vect_open_tmp_new(&Tmp, NULL, with_z) < 0)
+		G_fatal_error(_("Unable to create temporary vector map"));
+
 	    G_verbose_message(_("Using temporary vector <%s>"), Vect_get_name(&Tmp));
 	    Out = &Tmp;
 	}
@@ -965,7 +1021,7 @@ int main(int argc, char *argv[])
 		    sprintf(buf, ", %s time", Ogr_fieldname);
 		}
 		else if (Ogr_ftype == OFTDateTime) {
-		    sprintf(buf, ", %s datetime", Ogr_fieldname);
+		    sprintf(buf, ", %s %s", Ogr_fieldname, datetime_type);
 #endif
 		}
 		else if (Ogr_ftype == OFTString) {
