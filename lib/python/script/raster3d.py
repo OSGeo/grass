@@ -62,6 +62,8 @@ def raster3d_info(map):
         kv[k] = float(kv[k])
     for k in ['nsres', 'ewres', 'tbres']:
         kv[k] = float_or_dms(kv[k])
+    for k in ['rows', 'cols', 'depths']:
+        kv[k] = int(kv[k])
     for k in ['tilenumx', 'tilenumy', 'tilenumz']:
         kv[k] = int(kv[k])
     for k in ['tiledimx', 'tiledimy', 'tiledimz']:
