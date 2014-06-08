@@ -333,9 +333,10 @@ class SwipeMapFrame(DoubleMapFrame):
             layers += self.firstMap.GetListOfLayers()
         if self.rasters['second']:
             layers += self.secondMap.GetListOfLayers()
-        
-        self.GetFirstWindow().ZoomToMap(layers = layers)
-        self.GetSecondWindow().ZoomToMap(layers = layers)
+
+        if layers:
+            self.GetFirstWindow().ZoomToMap(layers=layers)
+            self.GetSecondWindow().ZoomToMap(layers=layers)
 
     def OnZoomToMap(self, event):
         """!Zoom to map"""
