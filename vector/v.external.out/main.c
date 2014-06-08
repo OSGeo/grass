@@ -79,9 +79,16 @@ int main(int argc, char *argv[])
 	make_link(options.dsn->answer, format,
 		  options.opts->answer, options.opts->answers);
     }
+    else if (options.input->answer) {
+	read_status_file(options.input);
+    }
     
     if (flags.p->answer || flags.g->answer) {
 	print_status(flags.g->answer ? TRUE : FALSE);
+    }
+
+    if (options.output->answer) {
+        save_status_file(options.output);
     }
 
     exit(EXIT_SUCCESS);
