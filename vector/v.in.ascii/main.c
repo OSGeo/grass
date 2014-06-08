@@ -203,24 +203,8 @@ int main(int argc, char *argv[])
     if (xcol+1 < 1 || ycol+1 < 1 || zcol+1 < 0 || catcol+1 < 0)
 	G_fatal_error(_("Column numbers must not be negative"));
 
-    if (strcmp(old->answer, "-")) {
-	if ((ascii = fopen(old->answer, "r")) == NULL) {
-	    G_fatal_error(_("Unable to open ASCII file <%s>"), old->answer);
-	}
-    }
-    else {
-	ascii = stdin;
-    }
-    
-    fs = delim_opt->answer;
-    if (strcmp(fs, "\\t") == 0)
-	fs = "\t";
-    if (strcmp(fs, "tab") == 0)
-	fs = "\t";
-    if (strcmp(fs, "space") == 0)
-	fs = " ";
-    if (strcmp(fs, "comma") == 0)
-	fs = ",";
+    ascii = G_open_option_file(old);
+    fs = G_option_to_separator(delim_opt);
 
     /* check dimension */
     if (zcoorf->answer) {
@@ -537,8 +521,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Import failed"));
     }
 
-    if (ascii != stdin)
-	fclose(ascii);
+    G_close_option_file(ascii);
 
     if (notopol_flag->answer) {
 	Vect_close(&Map);
