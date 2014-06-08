@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
     opt.mapset->label =
 	_("Name of mapset to list (default: current search path)");
-    opt.mapset->description = _("'.' for current mapset; '..' for all mapsets in location");
+    opt.mapset->description = _("'.' for current mapset; '*' for all mapsets in location");
     opt.separator = G_define_standard_option(G_OPT_F_SEP);
     opt.separator->answer = "newline";
 
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
 	mapset = "";
     else if (strcmp(mapset, ".") == 0)
 	mapset = G_mapset();   /* current mapset */
-    else if (strcmp(mapset, "..") == 0) {
+    else if (strcmp(mapset, "*") == 0) {
         if (flag.pretty->answer || flag.full->answer)
             G_fatal_error(_("-%c/-%c and %s=%s are mutually exclusive"),
                           flag.pretty->key, flag.full->key, opt.mapset->key,
