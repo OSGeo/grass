@@ -495,7 +495,9 @@ char *G_recreate_command(void);
 void G_add_keyword(const char *);
 void G_set_keywords(const char *);
 int G_get_overwrite();
-char* G_option_to_separator(const struct Option *);
+char *G_option_to_separator(const struct Option *);
+FILE *G_open_option_file(const struct Option *);
+void G_close_option_file(FILE *);
 
 /* paths.c */
 int G_mkdir(const char *);
