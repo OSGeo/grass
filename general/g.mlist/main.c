@@ -218,7 +218,8 @@ int main(int argc, char *argv[])
     else if ((i = G__mapset_permissions(mapset)) == -1)
 	G_fatal_error(_("Mapset <%s> does not exist"), mapset);
     else if (i == 0)
-	G_warning(_("Permission denied for mapset <%s>. Trying to list files..."), mapset);
+	G_warning(_("Permission denied for mapset <%s>. "
+		    "Trying to list files..."), mapset);
 
     for (i = 0; opt.type->answers[i]; i++) {
 	if (strcmp(opt.type->answers[i], "all") == 0)
