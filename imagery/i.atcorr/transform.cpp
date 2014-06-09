@@ -1,5 +1,5 @@
 #include <math.h>
-#include "Transform.h"
+#include "transform.h"
 
 void EtmDN(int iwave, float asol, bool before, float &lmin, float &lmax)
 {

@@ -7,16 +7,16 @@ extern "C" {
 
 #include "6s.h"
 #include "common.h"
-#include "GeomCond.h"
-#include "AtmosModel.h"
-#include "AerosolModel.h"
-#include "AerosolConcentration.h"
-#include "Altitude.h"
-#include "Iwave.h"
-#include "Transform.h"
-#include "Abstra.h"
-#include "Interp.h"
-#include "Output.h"
+#include "geomcond.h"
+#include "atmosmodel.h"
+#include "aerosolmodel.h"
+#include "aerosolconcentration.h"
+#include "altitude.h"
+#include "iwave.h"
+#include "transform.h"
+#include "abstra.h"
+#include "interp.h"
+#include "output.h"
 
 /* Function prototypes */
 extern void discom(const GeomCond &geom, const AtmosModel &atms,

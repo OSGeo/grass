@@ -1,7 +1,7 @@
 #include "common.h"
-#include "Altitude.h"
-#include "AtmosModel.h"
-#include "AerosolConcentration.h"
+#include "altitude.h"
+#include "atmosmodel.h"
+#include "aerosolconcentration.h"
 
 /* Update the atmospheric profile (P(z),T(z),H2O(z),O3(z)) in case the target 
    is not at sea level.

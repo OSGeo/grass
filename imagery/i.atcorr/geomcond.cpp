@@ -3,7 +3,7 @@ extern "C" {
 #include <grass/glocale.h>
 }
 
-#include "GeomCond.h"
+#include "geomcond.h"
 #include "common.h"
 
 /* **********************************************************************c */

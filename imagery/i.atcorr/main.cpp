@@ -46,7 +46,7 @@ extern "C"
 #include <grass/rbtree.h>
 }
 
-#include "Transform.h"
+#include "transform.h"
 #include "6s.h"
 
 /* TICache: create 1 meter bins for altitude in km */
