@@ -1,5 +1,5 @@
 #include "common.h"
-#include "Interp.h"
+#include "interp.h"
 
 void interp (const int iaer, const int idatmp, 
 	     const float wl, const float taer55, 
