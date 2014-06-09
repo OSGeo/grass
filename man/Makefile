@@ -29,18 +29,25 @@ INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
 
+ifneq (@(type sphinx-build2 > /dev/null),)
+SPHINXBUILD   = sphinx-build2
+endif
+ifneq (@(type sphinx-build > /dev/null),)
+SPHINXBUILD   = sphinx-build
+endif
+
 default: $(DSTFILES)
 	@echo "Generating HTML manual pages index (help system)..."
 	$(MAKE) $(INDICES)
 	$(call build,check)
 	$(MAKE) manpages
-	@(type sphinx-build > /dev/null && $(call run_pygrass_html) || (echo "WARNING: pygrass documentation not compiled because 'sphinx-build' software not installed (get from http://www.sphinx.org)") ; exit 0)
+	@(type $(SPHINXBUILD) > /dev/null && $(call run_pygrass_html) || (echo "WARNING: pygrass HTML documentation not compiled because 'sphinx-build' software not installed (get from http://www.sphinx.org)") ; exit 0)
 
 # This must be a separate target so that evaluation of $(MANPAGES)
 # is delayed until the indices have been generated
 manpages:
 	$(MAKE) $(MANPAGES)
-	@(type sphinx-build > /dev/null && $(call run_pygrass_man) || (echo "WARNING: pygrass documentation not compiled because 'sphinx-build' software not installed (get from http://www.sphinx.org)") ; exit 0)
+	@(type $(SPHINXBUILD) > /dev/null && $(call run_pygrass_man) || (echo "WARNING: pygrass MAN documentation not compiled because 'sphinx-build' software not installed (get from http://www.sphinx.org)") ; exit 0)
 
 .PHONY: manpages
 
