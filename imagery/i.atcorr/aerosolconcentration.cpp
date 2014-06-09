@@ -1,5 +1,5 @@
-#include "AerosolConcentration.h"
-#include "AtmosModel.h"
+#include "aerosolconcentration.h"
+#include "atmosmodel.h"
 #include "common.h"
 
 /**********************************************************************c

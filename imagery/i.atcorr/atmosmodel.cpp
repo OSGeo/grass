@@ -4,7 +4,7 @@ extern "C" {
 }
 
 #include "common.h"
-#include "AtmosModel.h"
+#include "atmosmodel.h"
 
 void AtmosModel::tropic()
 {

@@ -2,9 +2,9 @@
 #pragma warning (disable : 4305)
 #endif /* WIN32 */
 #include "common.h"
-#include "Abstra.h"
-#include "AtmosModel.h"
-#include "Altitude.h"
+#include "abstra.h"
+#include "atmosmodel.h"
+#include "altitude.h"
 
 void
 wava6 (float a[8], const long int inu)

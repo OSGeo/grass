@@ -1,6 +1,6 @@
 #include <cmath>
 #include "common.h"
-#include "Gauss.h"
+#include "gauss.h"
 
 const long int mu2	= 48;
 
