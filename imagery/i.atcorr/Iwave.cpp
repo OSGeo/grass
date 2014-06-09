@@ -3169,7 +3169,7 @@ void IWave::parse()
 	else if(iwave <= 100)   vgt2_spot5(iwave - 96);
 	else if(iwave <= 109)   worldview2(iwave - 100);
 	else if(iwave <= 114)   quickbird2(iwave - 109);
-	else if(iwave <= 115)	landsat_8(iwave - 114);
+	else if(iwave <= 123)	landsat_8(iwave - 114);
 	else G_warning(_("Unsupported iwave value: %d"), iwave);
     }
 
