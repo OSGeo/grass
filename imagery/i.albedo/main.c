@@ -25,8 +25,13 @@
 
 double bb_alb_aster(double greenchan, double nirchan, double swirchan2,
 		    double swirchan3, double swirchan5, double swirchan6);
+
 double bb_alb_landsat(double bluechan, double greenchan, double redchan,
 		      double nirchan, double chan5, double chan7);
+
+double bb_alb_landsat8(double bluechan, double greenchan, double redchan,
+		      double nirchan, double chan5, double chan7);
+
 double bb_alb_noaa(double redchan, double nirchan);
 
 double bb_alb_modis(double redchan, double nirchan, double chan3,
@@ -41,11 +46,11 @@ int main(int argc, char *argv[])
     struct Option *input, *output;
     struct Flag *flag1, *flag2, *flag3;
     struct Flag *flag4, *flag5, *flag6;
+    struct Flag *flag7;
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
 
     /************************************/
-    /* FMEO Declarations**************** */
     char *name;			/*input raster name */
     char *result;		/*output raster name */
     /*File Descriptors */
@@ -55,7 +60,8 @@ int main(int argc, char *argv[])
     char **names;
     char **ptr;
     int i = 0;
-    int modis = 0, aster = 0, avhrr = 0, landsat = 0;
+    int modis = 0, aster = 0, avhrr = 0;
+    int landsat = 0, landsat8 = 0;
     void *inrast[MAXFILES];
     unsigned char *outrast;
 
@@ -112,20 +118,24 @@ int main(int argc, char *argv[])
     flag3->description = _("Landsat (6 input bands:1,2,3,4,5,7)");
 
     flag4 = G_define_flag();
-    flag4->key = 'a';
-    flag4->description = _("Aster (6 input bands:1,3,5,6,8,9)");
+    flag4->key = '8';
+    flag4->description = _("Landsat 8 (6 input bands:2,3,4,5,6,7)");
 
     flag5 = G_define_flag();
-    flag5->key = 'c';
-    flag5->label = _("Agressive mode (Landsat)");
-    flag5->description =
+    flag5->key = 'a';
+    flag5->description = _("Aster (6 input bands:1,3,5,6,8,9)");
+
+    flag6 = G_define_flag();
+    flag6->key = 'c';
+    flag6->label = _("Agressive mode (Landsat)");
+    flag6->description =
 	_("Albedo dry run to calculate some water to beach/sand/desert stretching, "
 	  "a kind of simple atmospheric correction");
 
-    flag6 = G_define_flag();
-    flag6->key = 'd';
-    flag6->label = _("Soft mode (Modis)");
-    flag6->description =
+    flag7 = G_define_flag();
+    flag7->key = 'd';
+    flag7->label = _("Soft mode (Modis)");
+    flag7->description =
 	_("Albedo dry run to calculate some water to beach/sand/desert stretching, "
 	  "a kind of simple atmospheric correction");
 
@@ -143,7 +153,8 @@ int main(int argc, char *argv[])
     modis = (flag1->answer);
     avhrr = (flag2->answer);
     landsat = (flag3->answer);
-    aster = (flag4->answer);
+    landsat8 = (flag4->answer);
+    aster = (flag5->answer);
 
     for (; *ptr != NULL; ptr++) {
 	if (nfiles >= MAXFILES)
@@ -177,7 +188,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < 100; i++)
 	histogram[i] = 0;
 
-    if (flag5->answer || flag6->answer) {
+    if (flag6->answer || flag7->answer) {
 	DCELL de;
 	DCELL d[MAXFILES];
 
@@ -204,17 +215,19 @@ int main(int argc, char *argv[])
 		    }
 		}
 		if (modis) {
-		    de = bb_alb_modis(d[1], d[2], d[3], d[4], d[5], d[6],
-				      d[7]);
+		    de = bb_alb_modis(d[1],d[2],d[3],d[4],d[5],d[6],d[7]);
 		}
 		else if (avhrr) {
-		    de = bb_alb_noaa(d[1], d[2]);
+		    de = bb_alb_noaa(d[1],d[2]);
 		}
 		else if (landsat) {
-		    de = bb_alb_landsat(d[1], d[2], d[3], d[4], d[5], d[6]);
+		    de = bb_alb_landsat(d[1],d[2],d[3],d[4],d[5],d[6]);
+		}
+		else if (landsat8) {
+		    de = bb_alb_landsat8(d[1],d[2],d[3],d[4],d[5],d[6]);
 		}
 		else if (aster) {
-		    de = bb_alb_aster(d[1], d[2], d[3], d[4], d[5], d[6]);
+		    de = bb_alb_aster(d[1],d[2],d[3],d[4],d[5],d[6]);
 		}
 		if (Rast_is_d_null_value(&de)) {
 		    /*Do nothing */
@@ -359,18 +372,21 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    if (modis) {
-		de = bb_alb_modis(d[1], d[2], d[3], d[4], d[5], d[6], d[7]);
+		de = bb_alb_modis(d[1],d[2],d[3],d[4],d[5],d[6],d[7]);
 	    }
 	    else if (avhrr) {
-		de = bb_alb_noaa(d[1], d[2]);
+		de = bb_alb_noaa(d[1],d[2]);
 	    }
 	    else if (landsat) {
-		de = bb_alb_landsat(d[1], d[2], d[3], d[4], d[5], d[6]);
+		de = bb_alb_landsat(d[1],d[2],d[3],d[4],d[5],d[6]);
+	    }
+	    else if (landsat8) {
+		de = bb_alb_landsat8(d[1],d[2],d[3],d[4],d[5],d[6]);
 	    }
 	    else if (aster) {
-		de = bb_alb_aster(d[1], d[2], d[3], d[4], d[5], d[6]);
+		de = bb_alb_aster(d[1],d[2],d[3],d[4],d[5],d[6]);
 	    }
-	    if (flag5->answer || flag6->answer) {
+	    if (flag6->answer || flag7->answer) {
 		/* Post-Process Albedo */
 		de = a * de + b;
 	    }
