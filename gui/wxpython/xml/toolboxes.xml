@@ -1578,6 +1578,9 @@
       <module-item name="i.atcorr">
         <label>Atmospheric correction</label>
       </module-item>
+      <module-item name="i.topo.corr">
+        <label>Topographic correction</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="SatelliteImagesProducts">
