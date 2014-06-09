@@ -27,7 +27,7 @@ using std::ends;
 
 using std::numeric_limits;
 
-#include "Output.h"
+#include "output.h"
 
 
 #ifndef M_PI

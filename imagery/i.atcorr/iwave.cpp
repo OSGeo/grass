@@ -4,7 +4,7 @@ extern "C" {
 }
 
 #include "common.h"
-#include "Iwave.h"
+#include "iwave.h"
 
 #ifdef WIN32
 #pragma warning(disable:4305)	/* disable warning about initialization of a float by a double */
