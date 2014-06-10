@@ -77,15 +77,15 @@ int main(int argc, char **argv)
 
     gflag = G_define_flag();
     gflag->key = 'g';
-    gflag->description = _("Print raster array information only");
+    gflag->description = _("Print raster array information in shell script style");
 
     rflag = G_define_flag();
     rflag->key = 'r';
-    rflag->description = _("Print range only");
+    rflag->description = _("Print range in shell script style");
 
     eflag = G_define_flag();
     eflag->key = 'e';
-    eflag->description = _("Print extended metadata information only");
+    eflag->description = _("Print extended metadata information in shell script style");
 
     hflag = G_define_flag();
     hflag->key = 'h';
@@ -94,6 +94,9 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    if (hflag->answer && (gflag->answer || rflag->answer || eflag->answer))
+        G_fatal_error(_("Flags -%c and -%c/%c/%c are mutually exclusive"),
+                      hflag->key, gflag->key, rflag->key, eflag->key);
 
     name = G_store(opt1->answer);
     if ((mapset = G_find_raster2(name, "")) == NULL)
@@ -129,7 +132,7 @@ int main(int argc, char **argv)
 	!eflag->answer && !hflag->answer) {
 	divider('+');
 
-	compose_line(out, "Layer:    %-29.29s  Date: %s", name,
+	compose_line(out, "Map:      %-29.29s  Date: %s", name,
 		     hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
 	compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s",
 		     mapset, hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
@@ -139,7 +142,7 @@ int main(int argc, char **argv)
 		     cats_ok ? cats.title : "??",
 		     hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
 
-	/*This shows the TimeStamp */
+	/* This shows the TimeStamp */
 	if (time_ok && (first_time_ok || second_time_ok)) {
 	    G_format_timestamp(&ts, timebuff);
 	    compose_line(out, "Timestamp: %s", timebuff);
@@ -328,6 +331,10 @@ int main(int argc, char **argv)
 		    (data_type == CELL_TYPE ? "CELL" :
 		     (data_type == DCELL_TYPE ? "DCELL" :
 		      (data_type == FCELL_TYPE ? "FCELL" : "??"))));
+            if (cats_ok)
+                format_double((double)cats.num, tmp1);
+	    fprintf(out, "ncats=%s\n",
+                    cats_ok ? tmp1 : "??");
 	}
 
 	if (rflag->answer) {
@@ -352,15 +359,14 @@ int main(int argc, char **argv)
 	}
 
 	if (eflag->answer) {
+            fprintf(out, "map=%s\n", name);
+            fprintf(out, "mapset=%s\n", mapset);
+            fprintf(out, "location=%s\n", G_location());
+            fprintf(out, "database=%s\n", G_gisdbase());
+            fprintf(out, "date=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
+            fprintf(out, "creator=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
 	    fprintf(out, "title=\"%s (%s)\"\n", cats_ok ? cats.title :
 		    "??", hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
-
-	    fprintf(out, "units=%s\n", units ? units : "\"none\"");
-	    fprintf(out, "vertical_datum=%s\n", vdatum ? vdatum : "\"none\"");
-	    fprintf(out, "source1=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1) : "\"none\"");
-	    fprintf(out, "source2=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2) : "\"none\"");
-	    fprintf(out, "description=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_KEYWRD) : "\"none\"");
-
 	    if (time_ok && (first_time_ok || second_time_ok)) {
 
 		G_format_timestamp(&ts, timebuff);
@@ -371,6 +377,17 @@ int main(int argc, char **argv)
 	    }
 	    else {
 		fprintf(out, "timestamp=\"none\"\n");
+	    }
+	    fprintf(out, "units=%s\n", units ? units : "\"none\"");
+	    fprintf(out, "vertical_datum=%s\n", vdatum ? vdatum : "\"none\"");
+	    fprintf(out, "source1=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1) : "\"none\"");
+	    fprintf(out, "source2=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2) : "\"none\"");
+	    fprintf(out, "description=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_KEYWRD) : "\"none\"");
+	    if (Rast_history_length(&hist)) {
+		fprintf(out, "comments=\"");
+		for (i = 0; i < Rast_history_length(&hist); i++)
+		    fprintf(out, "%s", Rast_history_line(&hist, i));
+                fprintf(out, "\"\n");
 	    }
 	}
 
