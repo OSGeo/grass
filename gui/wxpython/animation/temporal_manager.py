@@ -213,7 +213,7 @@ class TemporalManager(object):
                           if end is not None else None, unit) for (st, end, unit) in timestamps]
         else:
             # ('15', '16', u'years'),
-            timestamps = [(str(st), str(end), unit) for st, end, unit in timestamps]
+            timestamps = [(str(st), end if end is None else str(end), unit) for st, end, unit in timestamps]
         return timestamps, mapDict
 
     def _getLabelsAndMaps(self, timeseries):
