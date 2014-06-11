@@ -76,11 +76,11 @@ void initialize(void)
     misc.delay = (int)misc.tch[0];
 
     /* time of concentration in the subcatchment */
-    misc.tc -= misc.delay;
+    misc.tcsub = misc.tc - misc.delay;
 
     /* cumulative ratio of the contribution area for each time step */
-    misc.Ad = (double *)G_malloc(misc.tc * sizeof(double));
-    for (i = 0; i < misc.tc; i++) {
+    misc.Ad = (double *)G_malloc(misc.tcsub * sizeof(double));
+    for (i = 0; i < misc.tcsub; i++) {
 	t = misc.delay + i + 1;
 	if (t > misc.tch[params.nch - 1])
 	    misc.Ad[i] = 1.0;
@@ -100,7 +100,7 @@ void initialize(void)
     /* difference in the contribution area for each time step */
     A1 = misc.Ad[0];
     misc.Ad[0] *= params.A;
-    for (i = 1; i < misc.tc; i++) {
+    for (i = 1; i < misc.tcsub; i++) {
 	A2 = misc.Ad[i];
 	misc.Ad[i] = (A2 - A1) * params.A;
 	A1 = A2;
@@ -131,7 +131,7 @@ void initialize(void)
     for (i = 0; i < input.ntimesteps; i++) {
 	if (i < misc.delay)
 	    misc.Qt[i] = misc.qs0 * params.A;
-	else if (i < misc.delay + misc.tc) {
+	else if (i < misc.tc) {
 	    A1 += misc.Ad[i - misc.delay];
 	    misc.Qt[i] = misc.qs0 * (params.A - A1);
 	} else
@@ -287,7 +287,7 @@ void calculate_flows(void)
 	    misc.S_mean[i + 1] = misc.S_mean[i];
 
 	/* total flow in m^3/timestep */
-	for (j = 0; j < misc.tc; j++) {
+	for (j = 0; j < misc.tcsub; j++) {
 	    k = i + j + misc.delay;
 	    if (k > input.ntimesteps - 1)
 		break;
@@ -305,9 +305,6 @@ void calculate_flows(void)
 	}
     }
     misc.Qt_mean /= input.ntimesteps;
-
-    /* time of concentration */
-    misc.tc += misc.delay;
 }
 
 void run_topmodel(void)
