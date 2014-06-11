@@ -98,7 +98,6 @@ void read_input(void)
     if (params.qs0 == 0.0) {
 	fclose(fp);
 	G_fatal_error(_("%s cannot be 0"), "parameters.qs0");
-	exit(EXIT_FAILURE);
     }
     for (; !feof(fp);) {
 	get_line(fp, buf);
@@ -249,6 +248,7 @@ void write_output(void)
     fprintf(fp, "# nch:                     Number of channel segments\n");
     fprintf(fp, "# delay [timestep]:        Routing delay in the main channel\n");
     fprintf(fp, "# tc [timestep]:           Time of concentration\n");
+    fprintf(fp, "# tcsub [timestep]:        Time of concentration in the subcatchment\n");
     fprintf(fp, "#\n");
     fprintf(fp, "# tch [timestep]:          Routing time to the catchment outlet\n");
     fprintf(fp, "# Ad [m^2]:                Difference in the contribution area\n");
@@ -289,6 +289,7 @@ void write_output(void)
     fprintf(fp, "nch:            %10d\n", params.nch);
     fprintf(fp, "delay:          %10d\n", misc.delay);
     fprintf(fp, "tc:             %10d\n", misc.tc);
+    fprintf(fp, "tcsub:          %10d\n", misc.tcsub);
     fprintf(fp, "\n");
 
     fprintf(fp, "%10s\n", "tch");
@@ -297,7 +298,7 @@ void write_output(void)
     fprintf(fp, "\n");
 
     fprintf(fp, "%10s\n", "Ad");
-    for (i = 0; i < misc.tc; i++)
+    for (i = 0; i < misc.tcsub; i++)
 	fprintf(fp, "%10.3e\n", misc.Ad[i]);
     fprintf(fp, "\n");
 
