@@ -20,6 +20,7 @@ void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
 	G_fatal_error("r.stats failed");
 }
 
+/* Calculate the areal average of topographic index */
 double calculate_lambda(void)
 {
     int i;
@@ -33,36 +34,55 @@ double calculate_lambda(void)
     return lambda;
 }
 
+/* Initialize the flows */
 void initialize(void)
 {
     int i, j, t;
     double A1, A2;
 
+    /* average topographic index */
     misc.lambda = calculate_lambda();
+
+    /* ln of the average transmissivity at the soil surface */
     misc.lnTe = params.lnTe + log(input.dt);
+
+    /* main channel routing velocity */
     misc.vch = params.vch * input.dt;
+
+    /* internal subcatchment routing velocity */
     misc.vr = params.vr * input.dt;
+
+    /* initial subsurface flow per unit area */
     misc.qs0 = params.qs0 * input.dt;
+
+    /* saturated subsurface flow per unit area */
     misc.qss = exp(misc.lnTe - misc.lambda);
 
     misc.tch = (double *)G_malloc(params.nch * sizeof(double));
+
+    /* routing time in the main channel */
     misc.tch[0] = params.d[0] / misc.vch;
     for (i = 1; i < params.nch; i++)
+	/* routing time in each internal subcatchment channel */
 	misc.tch[i] = misc.tch[0] + (params.d[i] - params.d[0]) / misc.vr;
 
-    misc.nreaches = (int)misc.tch[params.nch - 1];
-    if ((double)misc.nreaches < misc.tch[params.nch - 1])
-	misc.nreaches++;
-    misc.ndelays = (int)misc.tch[0];
+    /* time of concentration */
+    misc.tc = (int)misc.tch[params.nch - 1];
+    if ((double)misc.tc < misc.tch[params.nch - 1])
+	misc.tc++;
 
-    misc.nreaches -= misc.ndelays;
+    /* routing delay in the main channel */
+    misc.delay = (int)misc.tch[0];
 
-    misc.Ad = (double *)G_malloc(misc.nreaches * sizeof(double));
-    for (i = 0; i < misc.nreaches; i++) {
-	t = misc.ndelays + i + 1;
-	if (t > misc.tch[params.nch - 1]) {
+    /* time of concentration in the subcatchment */
+    misc.tc -= misc.delay;
+
+    /* cumulative ratio of the contribution area for each time step */
+    misc.Ad = (double *)G_malloc(misc.tc * sizeof(double));
+    for (i = 0; i < misc.tc; i++) {
+	t = misc.delay + i + 1;
+	if (t > misc.tch[params.nch - 1])
 	    misc.Ad[i] = 1.0;
-	}
 	else {
 	    for (j = 1; j < params.nch; j++) {
 		if (t <= misc.tch[j]) {
@@ -76,14 +96,13 @@ void initialize(void)
 	}
     }
 
-
+    /* difference in the contribution area for each time step */
     A1 = misc.Ad[0];
     misc.Ad[0] *= params.A;
-    for (i = 1; i < misc.nreaches; i++) {
+    for (i = 1; i < misc.tc; i++) {
 	A2 = misc.Ad[i];
-	misc.Ad[i] = A2 - A1;
+	misc.Ad[i] = (A2 - A1) * params.A;
 	A1 = A2;
-	misc.Ad[i] *= params.A;
     }
 
     misc.Srz = (double **)G_malloc(input.ntimesteps * sizeof(double *));
@@ -94,24 +113,28 @@ void initialize(void)
     }
 
     for (i = 0; i < misc.ntopidxclasses; i++) {
+	/* initial root zone storage deficit */
 	misc.Srz[0][i] = params.Sr0;
+	/* initial unsaturated zone storage */
 	misc.Suz[0][i] = 0.0;
     }
 
     misc.S_mean = (double *)G_malloc(input.ntimesteps * sizeof(double));
+    /* initial mean saturation deficit */
     misc.S_mean[0] = -params.m * log(misc.qs0 / misc.qss);
 
     misc.Qt = (double *)G_malloc(input.ntimesteps * sizeof(double));
-    for (i = 0; i < input.ntimesteps; i++)
-	misc.Qt[i] = 0.0;
 
-    for (i = 0; i < misc.ndelays; i++)
-	misc.Qt[i] = misc.qs0 * params.A;
-
+    /* initial total flow */
     A1 = 0.0;
-    for (i = 0; i < misc.nreaches; i++) {
-	A1 += misc.Ad[i];
-	misc.Qt[misc.ndelays + i] = misc.qs0 * (params.A - A1);
+    for (i = 0; i < input.ntimesteps; i++) {
+	if (i < misc.delay)
+	    misc.Qt[i] = misc.qs0 * params.A;
+	else if (i < misc.delay + misc.tc) {
+	    A1 += misc.Ad[i - misc.delay];
+	    misc.Qt[i] = misc.qs0 * (params.A - A1);
+	} else
+	    misc.Qt[i] = 0.0;
     }
 }
 
@@ -119,7 +142,7 @@ void calculate_flows(void)
 {
     int i, j, k;
     double Aatb_r;
-    double R;
+    double f;
     double qo, qv;
 
     misc.S = (double **)G_malloc(input.ntimesteps * sizeof(double *));
@@ -152,15 +175,19 @@ void calculate_flows(void)
 	misc.qs[i] = 0.0;
 
 	if (params.infex) {
+	    /* infiltration */
 	    misc.f[i] = input.dt *
 		    calculate_infiltration(i + 1, input.R[i] / input.dt);
+	    /* infiltration excess runoff */
 	    misc.fex[i] = input.R[i] - misc.f[i];
-	    R = misc.f[i];
+	    f = misc.f[i];
 	}
 	else {
+	    /* no infiltration excess runoff */
 	    misc.f[i] = 0.0;
 	    misc.fex[i] = 0.0;
-	    R = input.R[i];
+	    /* 100% of rainfall infiltrates */
+	    f = input.R[i];
 	}
 
 	if (i) {
@@ -170,31 +197,40 @@ void calculate_flows(void)
 	    }
 	}
 
+	/* subsurface flow */
 	misc.qs[i] = misc.qss * exp(-misc.S_mean[i] / params.m);
 
 	for (j = 0; j < misc.ntopidxclasses; j++) {
+	    /* average area of a topographic index class */
 	    Aatb_r = (topidxstats.Aatb_r[j] +
 		      (j < misc.ntopidxclasses - 1 ? topidxstats.Aatb_r[j + 1]
 		       : 0.0)) / 2.0;
 
+	    /* saturation deficit */
 	    misc.S[i][j] = misc.S_mean[i] +
 		params.m * (misc.lambda - topidxstats.atb[j]);
 	    if (misc.S[i][j] < 0.0)
+		/* fully saturated */
 		misc.S[i][j] = 0.0;
 
-	    misc.Srz[i][j] -= R;
-
+	    /* root zone storage deficit */
+	    misc.Srz[i][j] -= f;
 	    if (misc.Srz[i][j] < 0.0) {
+		/* full storage */
+		/* unsaturated zone storage */
 		misc.Suz[i][j] -= misc.Srz[i][j];
 		misc.Srz[i][j] = 0.0;
 	    }
 
+	    /* if there is enough unsaturated zone storage */
 	    misc.ex[i][j] = 0.0;
 	    if (misc.Suz[i][j] > misc.S[i][j]) {
+		/* saturation excess */
 		misc.ex[i][j] = misc.Suz[i][j] - misc.S[i][j];
 		misc.Suz[i][j] = misc.S[i][j];
 	    }
 
+	    /* drainage from unsaturated zone */
 	    qv = 0.0;
 	    if (misc.S[i][j] > 0.0) {
 		qv = (params.td > 0.0 ?
@@ -212,6 +248,7 @@ void calculate_flows(void)
 	    misc.qv[i][j] = qv;
 	    misc.qv[i][misc.ntopidxclasses] += misc.qv[i][j];
 
+	    /* evapotranspiration from root zone storage deficit */
 	    misc.Ea[i][j] = 0.0;
 	    if (input.Ep[i] > 0.0) {
 		misc.Ea[i][j] = input.Ep[i] *
@@ -221,6 +258,7 @@ void calculate_flows(void)
 	    }
 	    misc.Srz[i][j] += misc.Ea[i][j];
 
+	    /* overland flow from fully saturated area */
 	    qo = 0.0;
 	    if (j > 0) {
 		if (misc.ex[i][j] > 0.0)
@@ -234,25 +272,29 @@ void calculate_flows(void)
 	    misc.qo[i][j] = qo;
 	    misc.qo[i][misc.ntopidxclasses] += misc.qo[i][j];
 
+	    /* total flow */
 	    misc.qt[i][j] = misc.qo[i][j] + misc.qs[i];
 	}
+	/* aggregate flows over topographic index classes */
 	misc.qo[i][misc.ntopidxclasses] += misc.fex[i];
-	misc.qt[i][misc.ntopidxclasses] = misc.qo[i][misc.ntopidxclasses] + misc.qs[i];
+	misc.qt[i][misc.ntopidxclasses] = misc.qo[i][misc.ntopidxclasses] +
+		misc.qs[i];
 
-	misc.S_mean[i] = misc.S_mean[i] +
-	    misc.qs[i] - misc.qv[i][misc.ntopidxclasses];
-
+	/* mean saturation deficit */
+	misc.S_mean[i] += misc.qs[i] - misc.qv[i][misc.ntopidxclasses];
 	if (i + 1 < input.ntimesteps)
 	    misc.S_mean[i + 1] = misc.S_mean[i];
 
-	for (j = 0; j < misc.nreaches; j++) {
-	    k = i + j + misc.ndelays;
+	/* total flow in m^3/timestep */
+	for (j = 0; j < misc.tc; j++) {
+	    k = i + j + misc.delay;
 	    if (k > input.ntimesteps - 1)
 		break;
 	    misc.Qt[k] += misc.qt[i][misc.ntopidxclasses] * misc.Ad[j];
 	}
     }
 
+    /* mean total flow */
     misc.Qt_mean = 0.0;
     for (i = 0; i < input.ntimesteps; i++) {
 	misc.Qt_mean += misc.Qt[i];
@@ -262,6 +304,9 @@ void calculate_flows(void)
 	}
     }
     misc.Qt_mean /= input.ntimesteps;
+
+    /* time of concentration */
+    misc.tc += misc.delay;
 }
 
 void run_topmodel(void)
