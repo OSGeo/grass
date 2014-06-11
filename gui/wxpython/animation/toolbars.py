@@ -41,7 +41,7 @@ ganimIcons = {
                                 desc=_("Export animation"))
 }
 
-SIMPLE_LMGR_STDS = 128
+SIMPLE_LMGR_STDS = 256
 
 
 simpleLmgrIcons = {
