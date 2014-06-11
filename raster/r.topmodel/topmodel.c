@@ -6,19 +6,62 @@
 
 void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
 {
-    char input[GPATH_MAX];
-    char output[GPATH_MAX];
-    char nsteps[32];
+    char input[GPATH_MAX], nsteps[32];
+    const char *args[5];
+    struct Popen child;
+    FILE *fp;
+    double *atb, *Aatb_r;
+    int i;
+    int total_ncells;
 
     sprintf(input, "input=%s", topidx);
-    sprintf(output, "output=%s", outtopidxstats);
-    sprintf(nsteps, "nsteps=%d", ntopidxclasses);
+    sprintf(nsteps, "nsteps=%d", ntopidxclasses - 1);
 
     G_message("Creating topographic index statistics file...");
-    G_verbose_message("r.stats -Anc %s %s %s ...", input, output, nsteps);
+    G_verbose_message("r.stats -nc %s %s ...", input, nsteps);
 
-    if (G_spawn("r.stats", "r.stats", "-Anc", input, output, nsteps, NULL) != 0)
+    args[0] = "r.stats";
+    args[1] = "-nc";
+    args[2] = input;
+    args[3] = nsteps;
+    args[4] = NULL;
+
+    if ((fp = G_popen_read(&child, "r.stats", args)) == NULL)
 	G_fatal_error(_("Unable to run %s"), "r.stats");
+
+    atb = (double *)G_malloc(ntopidxclasses * sizeof(double));
+    Aatb_r = (double *)G_malloc(ntopidxclasses * sizeof(double));
+
+    total_ncells = 0;
+    for (i = 0; i < ntopidxclasses - 1 && !feof(fp);) {
+	double atb1, atb2;
+	int ncells;
+
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf-%lf %d", &atb1, &atb2, &ncells) == 3) {
+	    atb[i] = atb1;
+	    Aatb_r[i] = (double)ncells;
+	    total_ncells += ncells;
+
+	    if (++i == ntopidxclasses - 1) {
+		atb[i] = atb2;
+		Aatb_r[i] = 0.0;
+	    }
+	}
+    }
+
+    G_popen_close(&child);
+
+    if (i < ntopidxclasses - 1)
+	G_fatal_error(_("Invalid %s output"), "r.stats");
+
+    if ((fp = fopen(outtopidxstats, "w")) == NULL)
+	G_fatal_error(_("Unable to create output file <%s>"), outtopidxstats);
+
+    for (i = ntopidxclasses - 1; i >= 0; i--)
+	fprintf(fp, "%10.3e %10.3e\n", atb[i], Aatb_r[i] / total_ncells);
+
+    fclose(fp);
 }
 
 /* Calculate the areal average of topographic index */
@@ -38,7 +81,7 @@ double calculate_lambda(void)
 /* Initialize the flows */
 void initialize(void)
 {
-    int i, j, t;
+    int i;
     double A1, A2;
 
     /* average topographic index */
@@ -81,6 +124,8 @@ void initialize(void)
     /* cumulative ratio of the contribution area for each time step */
     misc.Ad = (double *)G_malloc(misc.tcsub * sizeof(double));
     for (i = 0; i < misc.tcsub; i++) {
+	int j, t;
+
 	t = misc.delay + i + 1;
 	if (t > misc.tch[params.nch - 1])
 	    misc.Ad[i] = 1.0;
@@ -266,9 +311,7 @@ void calculate_flows(void)
 		    qo = topidxstats.Aatb_r[j] *
 			(misc.ex[i][j - 1] + misc.ex[i][j]) / 2.0;
 		else if (misc.ex[i][j - 1] > 0.0)
-		    qo = Aatb_r * misc.ex[i][j - 1] /
-			(misc.ex[i][j - 1] -
-			 misc.ex[i][j]) * misc.ex[i][j - 1] / 2.0;
+		    qo = Aatb_r * misc.ex[i][j - 1] / 2.0;
 	    }
 	    misc.qo[i][j] = qo;
 	    misc.qo[i][misc.ntopidxclasses] += misc.qo[i][j];

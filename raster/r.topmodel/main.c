@@ -145,8 +145,8 @@ int main(int argc, char **argv)
 	ntopidxclasses = atoi(params.ntopidxclasses->answer);
 	outtopidxstats = params.outtopidxstats->answer;
 
-	if (ntopidxclasses <= 0)
-	    G_fatal_error(_("%s must be positive"), "ntopidxclasses");
+	if (ntopidxclasses <= 1)
+	    G_fatal_error(_("%s must be greater than 1"), "ntopidxclasses");
 
 	create_topidxstats(topidx, ntopidxclasses, outtopidxstats);
     } else if (params.topidx->answer) {
