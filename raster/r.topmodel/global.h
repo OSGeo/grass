@@ -91,6 +91,7 @@ struct misc
     int ntopidxclasses;
     int delay;
     int tc;
+    int tcsub;
     double lnTe;
     double vch;
     double vr;
@@ -103,7 +104,7 @@ struct misc
     int tt_peak;
     /* params.nch's */
     double *tch;
-    /* misc.tc's */
+    /* misc.tcsub's */
     double *Ad;
     /* input.ntimestep's */
     double *Qt;
