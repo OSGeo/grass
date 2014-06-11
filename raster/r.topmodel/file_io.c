@@ -21,8 +21,7 @@ void read_input(void)
 {
     char buf[1024];
     FILE *fp;
-    int i, j;
-    double x;
+    int i;
 
     /* Read topographic index statistics file */
     if ((fp = fopen(file.topidxstats, "r")) == NULL)
@@ -30,7 +29,6 @@ void read_input(void)
 
     topidxstats.atb = NULL;
     topidxstats.Aatb_r = NULL;
-    misc.ncells = 0;
 
     for (i = 0; !feof(fp);) {
 	double atb;
@@ -43,29 +41,12 @@ void read_input(void)
 	    topidxstats.Aatb_r = (double *)G_realloc(topidxstats.Aatb_r,
 			    (i + 1) * sizeof(double));
 	    topidxstats.atb[i] = atb;
-	    topidxstats.Aatb_r[i] = Aatb_r;
-	    misc.ncells += (int)topidxstats.Aatb_r[i++];
+	    topidxstats.Aatb_r[i++] = Aatb_r;
 	}
     }
 
     misc.ntopidxclasses = i;
     fclose(fp);
-
-    for (i = 0; i < misc.ntopidxclasses; i++)
-	topidxstats.Aatb_r[i] /= (double)misc.ncells;
-
-    for (i = 0; i < misc.ntopidxclasses; i++) {
-	for (j = i; j < misc.ntopidxclasses; j++) {
-	    if (topidxstats.atb[i] < topidxstats.atb[j]) {
-		x = topidxstats.atb[i];
-		topidxstats.atb[i] = topidxstats.atb[j];
-		topidxstats.atb[j] = x;
-		x = topidxstats.Aatb_r[i];
-		topidxstats.Aatb_r[i] = topidxstats.Aatb_r[j];
-		topidxstats.Aatb_r[j] = x;
-	    }
-	}
-    }
 
     /* Read parameters file */
     if ((fp = fopen(file.params, "r")) == NULL)
@@ -225,7 +206,7 @@ void write_output(void)
     ltime->tm_mon++;
 
     if ((fp = fopen(file.output, "w")) == NULL)
-	G_fatal_error(_("Unable to open output file <%s>"), file.output);
+	G_fatal_error(_("Unable to create output file <%s>"), file.output);
 
     fprintf(fp, "# r.topmodel output file for %s\n", params.name);
     fprintf(fp, "# Run time: %.4d-%.2d-%.2d %.2d:%.2d:%.2d\n",
@@ -241,7 +222,6 @@ void write_output(void)
     fprintf(fp, "# lambda [ln(m^2)]:        Average topographic index\n");
     fprintf(fp, "# qss [m/timestep]:        Saturated subsurface flow per unit area\n");
     fprintf(fp, "# qs0 [m/timestep]:        Initial subsurface flow per unit area\n");
-    fprintf(fp, "# ncells:                  Number of valid cells\n");
     fprintf(fp, "# ntopidxclasses:          Number of topographic index classes\n");
     fprintf(fp, "# dt [h]:                  Time step\n");
     fprintf(fp, "# ntimesteps:              Number of time steps\n");
@@ -282,7 +262,6 @@ void write_output(void)
     fprintf(fp, "lambda:         %10.3e\n", misc.lambda);
     fprintf(fp, "qss:            %10.3e\n", misc.qss);
     fprintf(fp, "qs0:            %10.3e\n", misc.qs0);
-    fprintf(fp, "ncells:         %10d\n", misc.ncells);
     fprintf(fp, "ntopidxclasses: %10d\n", misc.ntopidxclasses);
     fprintf(fp, "dt:             %10.3e\n", input.dt);
     fprintf(fp, "ntimesteps:     %10d\n", input.ntimesteps);
