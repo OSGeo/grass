@@ -146,13 +146,15 @@ int main(int argc, char **argv)
 	outtopidxstats = params.outtopidxstats->answer;
 
 	if (ntopidxclasses <= 0)
-	    G_fatal_error(_("ntopidxclasses must be positive."));
+	    G_fatal_error(_("%s must be positive"), "ntopidxclasses");
 
 	create_topidxstats(topidx, ntopidxclasses, outtopidxstats);
     } else if (params.topidx->answer) {
-	G_warning(_("Ignoring topidx because outtopidxstats is not specified."));
+	G_warning(_("Ignoring %s because %s is not specified"),
+			params.topidx->key, params.outtopidxstats->key);
     } else if (params.outtopidxstats->answer) {
-	G_warning(_("Ignoring outtopidxstats because topidx is not specified."));
+	G_warning(_("Ignoring %s because %s is not specified"),
+			params.outtopidxstats->key, params.topidx->key);
     }
 
     if (flags.preprocess->answer)

@@ -1,6 +1,7 @@
 #include <math.h>
 #include <grass/raster.h>
 #include <grass/spawn.h>
+#include <grass/glocale.h>
 #include "global.h"
 
 void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
@@ -17,7 +18,7 @@ void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
     G_verbose_message("r.stats -Anc %s %s %s ...", input, output, nsteps);
 
     if (G_spawn("r.stats", "r.stats", "-Anc", input, output, nsteps, NULL) != 0)
-	G_fatal_error("r.stats failed");
+	G_fatal_error(_("Unable to run %s"), "r.stats");
 }
 
 /* Calculate the areal average of topographic index */

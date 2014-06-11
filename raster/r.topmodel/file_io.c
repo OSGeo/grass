@@ -97,7 +97,7 @@ void read_input(void)
     }
     if (params.qs0 == 0.0) {
 	fclose(fp);
-	G_fatal_error("parameters.qs0 cannot be 0.0");
+	G_fatal_error(_("%s cannot be 0"), "parameters.qs0");
 	exit(EXIT_FAILURE);
     }
     for (; !feof(fp);) {
