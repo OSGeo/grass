@@ -233,31 +233,31 @@ void write_output(void)
 	    ltime->tm_year, ltime->tm_mon, ltime->tm_mday,
 	    ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
     fprintf(fp, "#\n");
-    fprintf(fp, "# Qt_peak [m^3/timestep]:  Total peak flow\n");
+    fprintf(fp, "# Qt_peak [m^3/timestep]:  Peak total flow\n");
     fprintf(fp, "# tt_peak [timestep]:      Peak time for total flow\n");
     fprintf(fp, "# Qt_mean [m^3/timestep]:  Mean total flow\n");
-    fprintf(fp, "# lnTe [ln(m^2/timestep)]: Areal average of ln(T0)\n");
+    fprintf(fp, "# lnTe [ln(m^2/timestep)]: ln of the average transmissivity at the soil surface\n");
     fprintf(fp, "# vch [m/timestep]:        Main channel routing velocity\n");
     fprintf(fp, "# vr [m/timestep]:         Internal subcatchment routing velocity\n");
-    fprintf(fp, "# lambda [ln(m^2)]:        Areal average of topographic index\n");
-    fprintf(fp, "# qss [m/timestep]:        Subsurface flow per unit area at a soil surface\n");
+    fprintf(fp, "# lambda [ln(m^2)]:        Average topographic index\n");
+    fprintf(fp, "# qss [m/timestep]:        Saturated subsurface flow per unit area\n");
     fprintf(fp, "# qs0 [m/timestep]:        Initial subsurface flow per unit area\n");
-    fprintf(fp, "# ncells:                  Number of non-NULL cells\n");
+    fprintf(fp, "# ncells:                  Number of valid cells\n");
     fprintf(fp, "# ntopidxclasses:          Number of topographic index classes\n");
     fprintf(fp, "# dt [h]:                  Time step\n");
     fprintf(fp, "# ntimesteps:              Number of time steps\n");
-    fprintf(fp, "# nch:                     Number of routing time steps\n");
-    fprintf(fp, "# nreaches:                Number of reach time steps (time of concentration)\n");
-    fprintf(fp, "# ndelays:                 Delay time steps between rainfall and flow response\n");
+    fprintf(fp, "# nch:                     Number of channel segments\n");
+    fprintf(fp, "# delay [timestep]:        Routing delay in the main channel\n");
+    fprintf(fp, "# tc [timestep]:           Time of concentration\n");
     fprintf(fp, "#\n");
-    fprintf(fp, "# tch [timestep]:          Routing time\n");
-    fprintf(fp, "# Ad [m^2]:                Difference in contribution area for reach time steps\n");
+    fprintf(fp, "# tch [timestep]:          Routing time to the catchment outlet\n");
+    fprintf(fp, "# Ad [m^2]:                Difference in the contribution area\n");
     fprintf(fp, "# Qt [m^3/timestep]:       Total flow\n");
     fprintf(fp, "# qt [m/timestep]:         Total flow per unit area\n");
-    fprintf(fp, "# qo [m/timestep]:         Saturation overland flow per unit area\n");
+    fprintf(fp, "# qo [m/timestep]:         Saturated overland flow per unit area\n");
     fprintf(fp, "# qs [m/timestep]:         Subsurface flow per unit area\n");
-    fprintf(fp, "# qv [m/timestep]:         Vertical flux (or drainage flux)\n");
-    fprintf(fp, "# S_mean [m]:              Mean saturation deficit in the watershed\n");
+    fprintf(fp, "# qv [m/timestep]:         Vertical drainage flux from unsaturated zone\n");
+    fprintf(fp, "# S_mean [m]:              Mean saturation deficit\n");
     if (params.infex) {
 	fprintf(fp, "# f [m/timestep]:          Infiltration rate\n");
 	fprintf(fp, "# fex [m/timestep]:        Infiltration excess runoff\n");
@@ -266,10 +266,10 @@ void write_output(void)
     if (misc.timestep || misc.topidxclass) {
 	fprintf(fp, "#\n");
 	fprintf(fp, "# Srz [m]:                 Root zone storage deficit\n");
-	fprintf(fp, "# Suz [m]:                 Unsaturated (gravity drainage) zone storage\n");
+	fprintf(fp, "# Suz [m]:                 Unsaturated zone storage (gravity drainage)\n");
 	fprintf(fp, "# S [m]:                   Local saturated zone deficit due to gravity drainage\n");
 	fprintf(fp, "# Ea [m/timestep]:         Actual evapotranspiration\n");
-	fprintf(fp, "# ex [m/timestep]:         Excess flow from a fully saturated area per unit area\n");
+	fprintf(fp, "# ex [m/timestep]:         Excess flow from fully saturated area per unit area\n");
     }
     fprintf(fp, "\n");
 
@@ -287,8 +287,8 @@ void write_output(void)
     fprintf(fp, "dt:             %10.3e\n", input.dt);
     fprintf(fp, "ntimesteps:     %10d\n", input.ntimesteps);
     fprintf(fp, "nch:            %10d\n", params.nch);
-    fprintf(fp, "nreaches:       %10d\n", misc.nreaches);
-    fprintf(fp, "ndelays:        %10d\n", misc.ndelays);
+    fprintf(fp, "delay:          %10d\n", misc.delay);
+    fprintf(fp, "tc:             %10d\n", misc.tc);
     fprintf(fp, "\n");
 
     fprintf(fp, "%10s\n", "tch");
@@ -297,7 +297,7 @@ void write_output(void)
     fprintf(fp, "\n");
 
     fprintf(fp, "%10s\n", "Ad");
-    for (i = 0; i < misc.nreaches; i++)
+    for (i = 0; i < misc.tc; i++)
 	fprintf(fp, "%10.3e\n", misc.Ad[i]);
     fprintf(fp, "\n");
 
