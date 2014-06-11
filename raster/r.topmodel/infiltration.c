@@ -66,7 +66,7 @@ double calculate_infiltration(int timestep, double R)
 	}
 	if (i == MAXITER)
 	    G_warning(
-		_("Maximum number of iterations exceeded at timestep %d."),
+		_("Maximum number of iterations exceeded at timestep %d"),
 		timestep);
 
 	pt = t - input.dt + (f - cumf) / R;
@@ -105,7 +105,7 @@ double calculate_infiltration(int timestep, double R)
 	    break;
     }
     if (i == MAXITER)
-	G_warning(_("Maximum number of iterations exceeded at timestep %d."),
+	G_warning(_("Maximum number of iterations exceeded at timestep %d"),
 			timestep);
 
     if (f < cumf + R * input.dt) {

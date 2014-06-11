@@ -1,18 +1,21 @@
-/*
- * r.topmodel: simulates TOPMODEL based on TMOD9502.FOR.
+
+/****************************************************************************
  *
- * TMOD9502.FOR Author: Keith Beven <k.beven@lancaster.ac.uk>
- *                      http://www.es.lancs.ac.uk/hfdg/topmodel.html
+ * MODULE:       r.topmodel
  *
- *      Copyright (C) 2000, 2010, 2013 by the GRASS Development Team
- *      Author: Huidae Cho <grass4u@gmail.com>
- *              Hydro Laboratory, Kyungpook National University
- *              South Korea
+ * AUTHOR(S):    Huidae Cho <grass4u gmail.com>, Hydro Laboratory,
+ *               Kyungpook National University
+ *               Based on TMOD9502.FOR by Keith Beven <k.beven lancaster.ac.uk>
  *
- *      This program is free software under the GPL (>=v2)
- *      Read the file COPYING coming with GRASS for details.
+ * PURPOSE:      Simulates TOPMODEL.
  *
- */
+ * COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #define _MAIN_C_
 #include <stdio.h>
@@ -85,7 +88,7 @@ int main(int argc, char **argv)
     params.topidx = G_define_standard_option(G_OPT_R_INPUT);
     params.topidx->key = "topidx";
     params.topidx->label =
-	_("Name of input topographic index ln(a/tanB) raster map");
+	_("Name of input topographic index raster map");
     params.topidx->description =
 	_("Must be clipped to the catchment boundary. Used for generating outtopidxstats.");
     params.topidx->required = NO;
@@ -143,13 +146,15 @@ int main(int argc, char **argv)
 	outtopidxstats = params.outtopidxstats->answer;
 
 	if (ntopidxclasses <= 0)
-	    G_fatal_error(_("ntopidxclasses must be positive."));
+	    G_fatal_error(_("%s must be positive"), "ntopidxclasses");
 
 	create_topidxstats(topidx, ntopidxclasses, outtopidxstats);
     } else if (params.topidx->answer) {
-	G_warning(_("Ignoring topidx because outtopidxstats is not specified."));
+	G_warning(_("Ignoring %s because %s is not specified"),
+			params.topidx->key, params.outtopidxstats->key);
     } else if (params.outtopidxstats->answer) {
-	G_warning(_("Ignoring outtopidxstats because topidx is not specified."));
+	G_warning(_("Ignoring %s because %s is not specified"),
+			params.outtopidxstats->key, params.topidx->key);
     }
 
     if (flags.preprocess->answer)
