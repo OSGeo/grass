@@ -81,7 +81,7 @@ double calculate_lambda(void)
 /* Initialize the flows */
 void initialize(void)
 {
-    int i;
+    int i, j;
     double A1, A2;
 
     /* average topographic index */
@@ -124,7 +124,7 @@ void initialize(void)
     /* cumulative ratio of the contribution area for each time step */
     misc.Ad = (double *)G_malloc(misc.tcsub * sizeof(double));
     for (i = 0; i < misc.tcsub; i++) {
-	int j, t;
+	int t;
 
 	t = misc.delay + i + 1;
 	if (t > misc.tch[params.nch - 1])
@@ -187,9 +187,6 @@ void initialize(void)
 void calculate_flows(void)
 {
     int i, j, k;
-    double Aatb_r;
-    double f;
-    double qo, qv;
 
     misc.S = (double **)G_malloc(input.ntimesteps * sizeof(double *));
     misc.Ea = (double **)G_malloc(input.ntimesteps * sizeof(double *));
@@ -204,6 +201,8 @@ void calculate_flows(void)
     misc.fex = (double *)G_malloc(input.ntimesteps * sizeof(double));
 
     for (i = 0; i < input.ntimesteps; i++) {
+	double f;
+
 	misc.S[i] = (double *)G_malloc(misc.ntopidxclasses * sizeof(double));
 	misc.Ea[i] = (double *)G_malloc(misc.ntopidxclasses * sizeof(double));
 	misc.ex[i] = (double *)G_malloc(misc.ntopidxclasses * sizeof(double));
@@ -247,6 +246,8 @@ void calculate_flows(void)
 	misc.qs[i] = misc.qss * exp(-misc.S_mean[i] / params.m);
 
 	for (j = 0; j < misc.ntopidxclasses; j++) {
+	    double Aatb_r;
+
 	    /* average area of a topographic index class */
 	    Aatb_r = (topidxstats.Aatb_r[j] +
 		      (j < misc.ntopidxclasses - 1 ? topidxstats.Aatb_r[j + 1]
@@ -277,21 +278,20 @@ void calculate_flows(void)
 	    }
 
 	    /* drainage from unsaturated zone */
-	    qv = 0.0;
+	    misc.qv[i][j] = 0.0;
 	    if (misc.S[i][j] > 0.0) {
-		qv = (params.td > 0.0 ?
+		misc.qv[i][j] = (params.td > 0.0 ?
 		       misc.Suz[i][j] /
 		       (misc.S[i][j] * params.td) * input.dt
 		       : -params.td * params.K0 *
 		       exp(-misc.S[i][j] / params.m));
-		if (qv > misc.Suz[i][j])
-		    qv = misc.Suz[i][j];
-		misc.Suz[i][j] -= qv;
+		if (misc.qv[i][j] > misc.Suz[i][j])
+		    misc.qv[i][j] = misc.Suz[i][j];
+		misc.Suz[i][j] -= misc.qv[i][j];
 		if (misc.Suz[i][j] < ZERO)
 		    misc.Suz[i][j] = 0.0;
-		qv *= Aatb_r;
+		misc.qv[i][j] *= Aatb_r;
 	    }
-	    misc.qv[i][j] = qv;
 	    misc.qv[i][misc.ntopidxclasses] += misc.qv[i][j];
 
 	    /* evapotranspiration from root zone storage deficit */
@@ -305,15 +305,14 @@ void calculate_flows(void)
 	    misc.Srz[i][j] += misc.Ea[i][j];
 
 	    /* overland flow from fully saturated area */
-	    qo = 0.0;
+	    misc.qo[i][j] = 0.0;
 	    if (j > 0) {
 		if (misc.ex[i][j] > 0.0)
-		    qo = topidxstats.Aatb_r[j] *
+		    misc.qo[i][j] = topidxstats.Aatb_r[j] *
 			(misc.ex[i][j - 1] + misc.ex[i][j]) / 2.0;
 		else if (misc.ex[i][j - 1] > 0.0)
-		    qo = Aatb_r * misc.ex[i][j - 1] / 2.0;
+		    misc.qo[i][j] = Aatb_r * misc.ex[i][j - 1] / 2.0;
 	    }
-	    misc.qo[i][j] = qo;
 	    misc.qo[i][misc.ntopidxclasses] += misc.qo[i][j];
 
 	    /* total flow */
