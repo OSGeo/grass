@@ -315,7 +315,7 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
     if (count > 0) {
 	if (any)
 	    fprintf(fp, "%s", separator);
-	if (fp == stdout)
+	if (fp == stdout && isatty(STDOUT_FILENO))
 	    G_message(_("%s available in mapset <%s>:"), elem->text, mapset);
     }
 
