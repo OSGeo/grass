@@ -1,4 +1,4 @@
-"""!
+"""
 @package vdigit.dialogs
 
 @brief wxGUI vector digitizer dialogs
@@ -34,13 +34,13 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
     def __init__(self, parent, title,
                  vectorName, query = None, cats = None,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        """!Dialog used to display/modify categories of vector objects
+        """Dialog used to display/modify categories of vector objects
         
-        @param parent
-        @param title dialog title
-        @param query {coordinates, qdist} - used by v.edit/v.what
-        @param cats  directory of lines (layer/categories) - used by vdigit
-        @param style dialog style
+        :param parent:
+        :param title: dialog title
+        :param query: {coordinates, qdist} - used by v.edit/v.what
+        :param cats: directory of lines (layer/categories) - used by vdigit
+        :param style: dialog style
         """
         self.parent = parent  # map window class instance
         self.digit = parent.digit
@@ -198,22 +198,22 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick, self.list)
 
     def GetListCtrl(self):
-        """!Used by ColumnSorterMixin
+        """Used by ColumnSorterMixin
         """
         return self.list
 
     def OnColClick(self, event):
-        """!Click on column header (order by)
+        """Click on column header (order by)
         """
         event.Skip()
         
     def OnBeginEdit(self, event):
-        """!Editing of item started
+        """Editing of item started
         """
         event.Allow()
 
     def OnEndEdit(self, event):
-        """!Finish editing of item
+        """Finish editing of item
         """
         itemIndex = event.GetIndex()
         layerOld = int (self.list.GetItem(itemIndex, 0).GetText())
@@ -246,7 +246,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             return False
 
     def OnRightDown(self, event):
-        """!Mouse right button down
+        """Mouse right button down
         """
         x = event.GetX()
         y = event.GetY()
@@ -259,7 +259,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
 
     def OnRightUp(self, event):
-        """!Mouse right button up
+        """Mouse right button up
         """
         if not hasattr(self, "popupID1"):
             self.popupID1 = wx.NewId()
@@ -283,12 +283,12 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         menu.Destroy()
 
     def OnItemSelected(self, event):
-        """!Item selected
+        """Item selected
         """
         event.Skip()
 
     def OnItemDelete(self, event):
-        """!Delete selected item(s) from the list (layer/category pair)
+        """Delete selected item(s) from the list (layer/category pair)
         """
         item = self.list.GetFirstSelected()
         while item != -1:
@@ -302,7 +302,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
         
     def OnItemDeleteAll(self, event):
-        """!Delete all items from the list
+        """Delete all items from the list
         """
         self.list.DeleteAllItems()
         self.cats[self.fid] = {}
@@ -310,7 +310,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
 
     def OnFeature(self, event):
-        """!Feature id changed (on duplicates)
+        """Feature id changed (on duplicates)
         """
         self.fid = int(event.GetString())
         
@@ -327,10 +327,10 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
         
     def _getCategories(self, coords, qdist):
-        """!Get layer/category pairs for all available
+        """Get layer/category pairs for all available
         layers
 
-        Return True line found or False if not found
+        :return: True line found or False if not found
         """
         ret = RunCommand('v.what',
                          parent = self,
@@ -357,7 +357,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return True
 
     def OnReload(self, event):
-        """!Reload button pressed
+        """Reload button pressed
         """
         # restore original list
         self.cats = copy.deepcopy(self.cats_orig)
@@ -369,7 +369,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         event.Skip()
 
     def OnCancel(self, event):
-        """!Cancel button pressed
+        """Cancel button pressed
         """
         self.parent.parent.dialogs['category'] = None
         if self.digit:
@@ -381,7 +381,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.Close()
 
     def OnApply(self, event):
-        """!Apply button pressed
+        """Apply button pressed
         """
         for fid in self.cats.keys():
             newfid = self.ApplyChanges(fid)
@@ -389,9 +389,9 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                 self.fid = newfid
             
     def ApplyChanges(self, fid):
-        """!Apply changes 
+        """Apply changes 
 
-        @param fid feature id
+        :param fid: feature id
         """
         cats = self.cats[fid]
         cats_orig = self.cats_orig[fid]
@@ -439,13 +439,13 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return newfid
 
     def OnOK(self, event):
-        """!OK button pressed
+        """OK button pressed
         """
         self.OnApply(event)
         self.OnCancel(event)
 
     def OnAddCat(self, event):
-        """!Button 'Add' new category pressed
+        """Button 'Add' new category pressed
         """
         try:
             layer = int(self.layerNew.GetStringSelection())
@@ -478,16 +478,16 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         return True
 
     def GetLine(self):
-        """!Get id of selected line of 'None' if no line is selected
+        """Get id of selected line of 'None' if no line is selected
         """
         return self.cats.keys()
 
     def UpdateDialog(self, query = None, cats = None):
-        """!Update dialog
+        """Update dialog
         
-        @param query {coordinates, distance} - v.what
-        @param cats  directory layer/cats    - vdigit
-        Return True if updated otherwise False
+        :param query: {coordinates, distance} - v.what
+        :param cats:  directory layer/cats    - vdigit
+        :return: True if updated otherwise False
         """
         # line: {layer: [categories]}
         self.cats = {}
@@ -540,7 +540,7 @@ class CategoryListCtrl(wx.ListCtrl,
                        listmix.TextEditMixin):
     def __init__(self, parent, id, pos = wx.DefaultPosition,
                  size = wx.DefaultSize, style = 0):
-        """!List of layers/categories"""
+        """List of layers/categories"""
         self.parent = parent
         
         wx.ListCtrl.__init__(self, parent, id, pos, size, style)
@@ -549,7 +549,7 @@ class CategoryListCtrl(wx.ListCtrl,
         listmix.TextEditMixin.__init__(self)
 
     def Populate(self, cats, update = False):
-        """!Populate the list
+        """Populate the list
         """
         itemData = {} # requested by sorter
 
@@ -580,7 +580,7 @@ class CategoryListCtrl(wx.ListCtrl,
 
 class VDigitZBulkDialog(wx.Dialog):
     def __init__(self, parent, title, nselected, style = wx.DEFAULT_DIALOG_STYLE):
-        """!Dialog used for Z bulk-labeling tool
+        """Dialog used for Z bulk-labeling tool
         """
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title, style = style)
 
@@ -643,7 +643,7 @@ class VDigitDuplicatesDialog(wx.Dialog):
     def __init__(self, parent, data, title = _("List of duplicates"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  pos = wx.DefaultPosition):
-        """!Show duplicated feature ids
+        """Show duplicated feature ids
         """
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title, style = style,
                            pos = pos)
@@ -699,9 +699,9 @@ class VDigitDuplicatesDialog(wx.Dialog):
         self.SetMinSize((250, 180))
 
     def GetUnSelected(self):
-        """!Get unselected items (feature id)
+        """Get unselected items (feature id)
 
-        @return list of ids
+        :return: list of ids
         """
         ids = []
         for id in self.winList:
@@ -716,7 +716,7 @@ class VDigitDuplicatesDialog(wx.Dialog):
 class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
     def __init__(self, parent, data,
                  pos = wx.DefaultPosition, log = None):
-        """!List of mapset/owner/group
+        """List of mapset/owner/group
         """
         self.parent = parent
         self.data = data
@@ -734,7 +734,7 @@ class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Chec
         self.LoadData(self.data)
 
     def LoadData(self, data):
-        """!Load data into list
+        """Load data into list
         """
         self.InsertColumn(0, _('Feature id'))
         self.InsertColumn(1, _('Layer (Categories)'))
@@ -751,6 +751,6 @@ class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Chec
         self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE_USEHEADER)
                 
     def OnCheckItem(self, index, flag):
-        """!Mapset checked/unchecked
+        """Mapset checked/unchecked
         """
         pass

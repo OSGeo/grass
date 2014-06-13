@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.toolboxes
 
 @brief Functions for modifying menu from default/user toolboxes specified in XML files
@@ -55,7 +55,7 @@ if not os.path.exists(userMainMenuFile):
 
 
 def toolboxesOutdated():
-    """!Removes auto-generated menudata.xml
+    """Removes auto-generated menudata.xml
     to let gui regenerate it next time it starts."""
     path = os.path.join(GetSettingsPath(), 'toolboxes', 'menudata.xml')
     if os.path.exists(path):
@@ -63,11 +63,11 @@ def toolboxesOutdated():
 
 
 def getMenudataFile(userRootFile, newFile, fallback):
-    """!Returns path to XML file for building menu or another tree.
+    """Returns path to XML file for building menu or another tree.
 
-    Creates toolbox directory where user defined toolboxes should be located.
-    Checks whether it is needed to create new XML file (user changed toolboxes)
-    or the already generated file could be used.
+    Creates toolbox directory where user defined toolboxes should be
+    located. Checks whether it is needed to create new XML file (user
+    changed toolboxes) or the already generated file could be used.
     If something goes wrong during building or user doesn't modify menu,
     default file (from distribution) is returned.
     """
@@ -146,7 +146,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
 
 
 def _setupToolboxes():
-    """!Create 'toolboxes' directory if doesn't exist."""
+    """Create 'toolboxes' directory if doesn't exist."""
     basePath = GetSettingsPath()
     path = os.path.join(basePath, 'toolboxes')
     if not os.path.exists(basePath):
@@ -158,7 +158,7 @@ def _setupToolboxes():
 
 
 def _createPath(path):
-    """!Creates path (for toolboxes) if it doesn't exist'"""
+    """Creates path (for toolboxes) if it doesn't exist'"""
     if not os.path.exists(path):
         try:
             os.mkdir(path)
@@ -172,15 +172,15 @@ def _createPath(path):
 
 
 def createTree(distributionRootFile, userRootFile, userDefined=True):
-    """!Creates XML file with data for menu.
+    """Creates XML file with data for menu.
 
     Parses toolboxes files from distribution and from users,
     puts them together, adds metadata to modules and convert
     tree to previous format used for loading menu.
 
-    @param userDefined use toolboxes defined by user or not (during compilation)
+    :param userDefined: use toolboxes defined by user or not (during compilation)
 
-    @return ElementTree instance
+    :return: ElementTree instance
     """
     if userDefined and userRootFile:
         mainMenu = etree.parse(userRootFile)
@@ -206,15 +206,15 @@ def createTree(distributionRootFile, userRootFile, userDefined=True):
 
 def toolboxes2menudata(mainMenu, toolboxes, userToolboxes,
                        wxguiItems, moduleItems):
-    """!Creates XML file with data for menu.
+    """Creates XML file with data for menu.
 
     Parses toolboxes files from distribution and from users,
     puts them together, adds metadata to modules and convert
     tree to previous format used for loading menu.
 
-    @param userDefined use toolboxes defined by user or not (during compilation)
+    :param userDefined: use toolboxes defined by user or not (during compilation)
 
-    @return ElementTree instance
+    :return: ElementTree instance
     """
     root = mainMenu.getroot()
 
@@ -248,7 +248,7 @@ def toolboxes2menudata(mainMenu, toolboxes, userToolboxes,
 
 
 def _indent(elem, level=0):
-    """!Helper function to fix indentation of XML files."""
+    """Helper function to fix indentation of XML files."""
     i = "\n" + level * "  "
     if len(elem):
         if not elem.text or not elem.text.strip():
@@ -265,7 +265,7 @@ def _indent(elem, level=0):
 
 
 def expandAddons(tree):
-    """!Expands addons element.
+    """Expands addons element.
     """
     root = tree.getroot()
     _expandAddonsItem(root)
@@ -276,12 +276,12 @@ def expandAddons(tree):
 
 
 def _expandToolboxes(node, toolboxes):
-    """!Expands tree with toolboxes.
+    """Expands tree with toolboxes.
 
     Function is called recursively.
 
-    @param node tree node where to look for subtoolboxes to be expanded
-    @param toolboxes tree of toolboxes to be used for expansion
+    :param node: tree node where to look for subtoolboxes to be expanded
+    :param toolboxes: tree of toolboxes to be used for expansion
 
     >>> menu = etree.fromstring('''
     ... <toolbox name="Raster">
@@ -361,7 +361,7 @@ def _expandToolboxes(node, toolboxes):
 
 
 def _expandUserToolboxesItem(node, toolboxes):
-    """!Expand tag 'user-toolboxes-list'.
+    """Expand tag 'user-toolboxes-list'.
 
     Include all user toolboxes.
 
@@ -387,7 +387,7 @@ def _expandUserToolboxesItem(node, toolboxes):
 
 
 def _removeUserToolboxesItem(root):
-    """!Removes tag 'user-toolboxes-list' if there are no user toolboxes.
+    """Removes tag 'user-toolboxes-list' if there are no user toolboxes.
 
     >>> tree = etree.fromstring('<toolbox><items><user-toolboxes-list/></items></toolbox>')
     >>> _removeUserToolboxesItem(tree)
@@ -417,10 +417,11 @@ def _removeAddonsItem(node, addonsNodes):
 
 
 def _expandAddonsItem(node):
-    """!Expands addons element with currently installed addons.
+    """Expands addons element with currently installed addons.
 
-    Note: there is no mechanism yet to tell the gui to rebuild the menudata.xml
-    file when new addons are added/removed.
+    .. note::
+        there is no mechanism yet to tell the gui to rebuild the
+        menudata.xml file when new addons are added/removed.
     """
     # no addonsTag -> do nothing
     addonsTags = node.findall('.//addons')
@@ -456,7 +457,7 @@ def _expandAddonsItem(node):
 
 
 def _expandItems(node, items, itemTag):
-    """!Expand items from file
+    """Expand items from file
 
     >>> tree = etree.fromstring('<items><module-item name="g.region"></module-item></items>')
     >>> items = etree.fromstring('<module-items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></module-items>')
@@ -486,7 +487,7 @@ def _expandItems(node, items, itemTag):
 
 
 def _expandRuntimeModules(node):
-    """!Add information to modules (desc, keywords)
+    """Add information to modules (desc, keywords)
     by running them with --interface-description.
 
     >>> tree = etree.fromstring('<items>'
@@ -518,7 +519,7 @@ def _expandRuntimeModules(node):
 
 
 def _escapeXML(text):
-    """!Helper function for correct escaping characters for XML.
+    """Helper function for correct escaping characters for XML.
 
     Duplicate function in core/toolboxes and probably also in man compilation
     and some existing Python package.
@@ -530,10 +531,10 @@ def _escapeXML(text):
 
 
 def _loadMetadata(module):
-    """!Load metadata to modules.
+    """Load metadata to modules.
 
-    @param module module name
-    @return (description, keywords as a list)
+    :param module: module name
+    :return: (description, keywords as a list)
     """
     try:
         task = gtask.parse_interface(module)
@@ -545,7 +546,7 @@ def _loadMetadata(module):
 
 
 def _addHandlers(node):
-    """!Add missing handlers to modules"""
+    """Add missing handlers to modules"""
     for n in node.findall('.//module-item'):
         if n.find('handler') is None:
             handlerNode = etree.SubElement(parent=n, tag='handler')
@@ -559,7 +560,7 @@ def _addHandlers(node):
 
 
 def _convertTag(node, old, new):
-    """!Converts tag name.
+    """Converts tag name.
 
     >>> tree = etree.fromstring('<toolboxes><toolbox><items><module-item/></items></toolbox></toolboxes>')
     >>> _convertTag(tree, 'toolbox', 'menu')
@@ -586,7 +587,7 @@ def _convertTagAndRemoveAttrib(node, old, new):
 
 
 def _convertTree(root):
-    """!Converts tree to be the form readable by core/menutree.py.
+    """Converts tree to be the form readable by core/menutree.py.
 
     >>> tree = etree.fromstring('<toolbox name="MainMenu"><label>Main menu</label><items><toolbox><label>Raster</label><items><module-item name="g.region"><module>g.region</module></module-item></items></toolbox></items></toolbox>')
     >>> _convertTree(tree)
@@ -614,12 +615,12 @@ def _convertTree(root):
 
 
 def _getXMLString(root):
-    """!Converts XML tree to string
+    """Converts XML tree to string
 
     Since it is usually requier, this function adds a comment (about
     autogenerated file) to XML file.
 
-    @return XML as string
+    :return: XML as string
     """
     xml = etree.tostring(root, encoding='UTF-8')
     return xml.replace("<?xml version='1.0' encoding='UTF-8'?>\n",
@@ -633,20 +634,21 @@ def do_doctest_gettext_workaround():
     When using gettext with dynamically defined underscore function
     (`_("For translation")`), doctest does not work properly.
 
-    One option is to use `import as` instead of dynamically defined underscore
-    function but this requires change all modules which are used by tested
-    module.
+    One option is to use `import as` instead of dynamically defined
+    underscore function but this requires change all modules which are
+    used by tested module.
 
-    The second option is to define dummy underscore function and one other
-    function which creates the right environment to satisfy all. This is done
-    by this function. Moreover, `sys.displayhook` and also
+    The second option is to define dummy underscore function and one
+    other function which creates the right environment to satisfy all.
+    This is done by this function. Moreover, `sys.displayhook` and also
     `sys.__displayhook__` needs to be redefined too (the later one probably
     should not be newer redefined but some cases just requires that).
 
-    GRASS specific note is that wxGUI switched to use imported underscore
-    function for translation. However, GRASS Python libraries still uses the
-    dynamically defined underscore function, so this workaround function is
-    still needed when you import something from GRASS Python libraries.
+    GRASS specific note is that wxGUI switched to use imported
+    underscore function for translation. However, GRASS Python libraries
+    still uses the dynamically defined underscore function, so this
+    workaround function is still needed when you import something from
+    GRASS Python libraries.
     """
     def new_displayhook(string):
         """A replacement for default `sys.displayhook`"""
@@ -667,7 +669,7 @@ def do_doctest_gettext_workaround():
 def doc_test():
     """Tests the module using doctest
 
-    @return a number of failed tests
+    :return: a number of failed tests
     """
     import doctest
     do_doctest_gettext_workaround()
@@ -675,8 +677,8 @@ def doc_test():
 
 
 def module_test():
-    """Tests the module using test files included in the current directory and
-    in files from distribution.
+    """Tests the module using test files included in the current
+    directory and in files from distribution.
     """
     toolboxesFile   = os.path.join(WXGUIDIR, 'xml', 'toolboxes.xml')
     userToolboxesFile = 'test.toolboxes_user_toolboxes.xml'

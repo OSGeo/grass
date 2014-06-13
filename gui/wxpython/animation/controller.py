@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.controller
 
 @brief Animations management
@@ -254,9 +254,9 @@ class AnimationController(wx.EvtHandler):
         self._setAnimations()
 
     def SetAnimations(self, layerLists):
-        """!Set animation data directly.
+        """Set animation data directly.
 
-        @param layerLists list of layerLists
+        :param layerLists: list of layerLists
         """
         try:
             animationData = []

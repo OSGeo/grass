@@ -1,4 +1,4 @@
-"""!
+"""
 @package iclass.statistics
 
 @brief wxIClass classes for storing statistics about cells in training areas.
@@ -31,8 +31,8 @@ except ImportError as e:
 from grass.pydispatch.signal import Signal
 
 class StatisticsData:
-    """!Stores all statistics.
-    """ 
+    """Stores all statistics.
+    """
     def __init__(self):
         self.statisticsDict = {}
         self.statisticsList = []
@@ -73,7 +73,7 @@ class StatisticsData:
         self.allStatisticsDeleted.emit()
 
 class Statistics:
-    """! Statistis conected to one class (category).
+    """Statistis conected to one class (category).
     
     It is Python counterpart of similar C structure.
     But it adds some attributes or features used in wxIClass.
@@ -99,12 +99,13 @@ class Statistics:
         return self.ready
         
     def SetBaseStatistics(self, cat, name, color):
-        """! Sets basic (non-statistical) values.
+        """Sets basic (non-statistical) values.
         
-        @todo Later self.name is changed but self.rasterName is not.
-        self.rasterName should not be set by user. It can remains the same.
-        But it should be done more explicitly.
-        Currently it looks like unintentional feature or bug.
+        .. todo::
+            Later self.name is changed but self.rasterName is not. 
+            self.rasterName should not be set by user. It can remains
+            the same. But it should be done more explicitly. Currently
+            it looks like unintentional feature or bug.
         """
         self.category = cat
         self.name = name
@@ -115,11 +116,11 @@ class Statistics:
         self.rasterName = name + '_' + os.path.basename(rasterPath)
         
     def SetFromcStatistics(self, cStatistics):
-        """! Sets all statistical values.
+        """Sets all statistical values.
         
         Copies all statistic values from \a cStattistics.
         
-        @param cStatistics pointer to C statistics structure
+        :param cStatistics: pointer to C statistics structure
         """
         cat = c_int()
 
@@ -157,9 +158,9 @@ class Statistics:
         self.SetBandStatistics(cStatistics)
 
     def SetBandStatistics(self, cStatistics):
-        """! Sets all band statistics.
+        """Sets all band statistics.
         
-        @param cStatistics pointer to C statistics structure
+        :param cStatistics: pointer to C statistics structure
         """
         self.bands = []
         for i in range(self.nbands):
@@ -175,9 +176,9 @@ class Statistics:
         self.statisticsSet.emit(stats = stats)
 
 class BandStatistics:
-    """! Statistis conected to one band within class (category).
+    """Statistis conected to one band within class (category).
     
-    @see Statistics
+    :class:`Statistics`
     """
     def __init__(self):
         self.min = self.max = None
@@ -188,10 +189,10 @@ class BandStatistics:
         
         
     def SetFromcStatistics(self, cStatistics, index):
-        """! Sets statistics for one band by given index.
+        """Sets statistics for one band by given index.
         
-        @param cStatistics pointer to C statistics structure
-        @param index index of band in C statistics structure
+        :param cStatistics: pointer to C statistics structure
+        :param index: index of band in C statistics structure
         """
         min, max = c_int(), c_int()
         I_iclass_statistics_get_min(cStatistics, index, byref(min))

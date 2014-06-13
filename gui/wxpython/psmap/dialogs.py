@@ -1,4 +1,4 @@
-"""!
+"""
 @package psmap.dialogs
 
 @brief dialogs for wxPsMap
@@ -67,7 +67,7 @@ PSMAP_COLORS = ['aqua', 'black', 'blue', 'brown', 'cyan', 'gray', 'grey', 'green
 
     
 class TCValidator(wx.PyValidator):
-    """!validates input in textctrls, combobox, taken from wxpython demo"""
+    """validates input in textctrls, combobox, taken from wxpython demo"""
     def __init__(self, flag = None):
         wx.PyValidator.__init__(self)
         self.flag = flag
@@ -109,7 +109,7 @@ class TCValidator(wx.PyValidator):
 
 
 class PenStyleComboBox(wx.combo.OwnerDrawnComboBox):
-    """!Combo for selecting line style, taken from wxpython demo"""
+    """Combo for selecting line style, taken from wxpython demo"""
 
     # Overridden from OwnerDrawnComboBox, called to draw each
     # item in the list
@@ -141,7 +141,7 @@ class PenStyleComboBox(wx.combo.OwnerDrawnComboBox):
 
         
     def OnDrawBackground(self, dc, rect, item, flags):
-        """!Overridden from OwnerDrawnComboBox, called for drawing the
+        """Overridden from OwnerDrawnComboBox, called for drawing the
         background area of each item."""
         # If the item is selected, or its item # iseven, or we are painting the
         # combo control itself, then use the default rendering.
@@ -157,18 +157,18 @@ class PenStyleComboBox(wx.combo.OwnerDrawnComboBox):
         dc.DrawRectangleRect(rect);
 
     def OnMeasureItem(self, item):
-        """!Overridden from OwnerDrawnComboBox, should return the height
+        """Overridden from OwnerDrawnComboBox, should return the height
         needed to display an item in the popup, or -1 for default"""
         return 30
 
     def OnMeasureItemWidth(self, item):
-        """!Overridden from OwnerDrawnComboBox.  Callback for item width, or
+        """Overridden from OwnerDrawnComboBox.  Callback for item width, or
         -1 for default/undetermined"""
         return -1; # default - will be measured from text width  
     
     
 class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
-    """!List control for managing order and labels of vector maps in legend"""
+    """List control for managing order and labels of vector maps in legend"""
     def __init__(self, parent):
         wx.ListCtrl.__init__(self, parent, id = wx.ID_ANY, 
                              style = wx.LC_REPORT|wx.LC_SINGLE_SEL|wx.BORDER_SUNKEN|wx.LC_VRULES|wx.LC_HRULES)
@@ -216,7 +216,7 @@ class PsmapDialog(wx.Dialog):
             parent.position['yCtrl'].SetValue("%5.3f" % y)
         
     def AddExtendedPosition(self, panel, gridBagSizer, dialogDict):
-        """!Add widgets for setting position relative to paper and to map"""
+        """Add widgets for setting position relative to paper and to map"""
         panel.position = dict()
         positionLabel = wx.StaticText(panel, id = wx.ID_ANY, label = _("Position is given:"))
         panel.position['toPaper'] = wx.RadioButton(panel, id = wx.ID_ANY, label = _("relative to paper"), style = wx.RB_GROUP)
@@ -321,17 +321,17 @@ class PsmapDialog(wx.Dialog):
             return False
         
     def OnOK(self, event):
-        """!Apply changes, close dialog"""
+        """Apply changes, close dialog"""
         ok = self.OnApply(event)
         if ok:
             self.Close()
     
     def OnCancel(self, event):
-        """!Close dialog"""
+        """Close dialog"""
         self.Close()
 
     def OnClose(self, event):
-        """!Destroy dialog and delete it from open dialogs"""
+        """Destroy dialog and delete it from open dialogs"""
         if self.objectType:
             for each in  self.objectType:
                 if each in self.parent.openDialogs:
@@ -530,7 +530,7 @@ class PageSetupDialog(PsmapDialog):
         return sizeList
     
 class MapDialog(PsmapDialog):
-    """!Dialog for map frame settings and optionally  raster and vector map selection"""
+    """Dialog for map frame settings and optionally  raster and vector map selection"""
     def __init__(self, parent, id, settings,  rect = None, notebook = False):
         PsmapDialog.__init__(self, parent = parent, id = id, title = "", settings = settings)
  
@@ -564,7 +564,7 @@ class MapDialog(PsmapDialog):
         
         
     def OnApply(self, event):
-        """!Apply changes"""
+        """Apply changes"""
         if self.isNotebook:
             okV = self.vPanel.update()
             okR = self.rPanel.update()
@@ -583,13 +583,13 @@ class MapDialog(PsmapDialog):
         return False
     
     def OnCancel(self, event):
-        """!Close dialog and remove tmp red box"""
+        """Close dialog and remove tmp red box"""
         self.parent.canvas.pdcTmp.RemoveId(self.parent.canvas.idZoomBoxTmp)
         self.parent.canvas.Refresh() 
         self.Close()
         
     def updateDialog(self):
-        """!Update raster and vector information"""
+        """Update raster and vector information"""
         if self.mPanel.scaleChoice.GetSelection() == 0:
             if self.mPanel.rasterTypeRadio.GetValue():
                 if 'raster' in self.parent.openDialogs:
@@ -607,7 +607,7 @@ class MapDialog(PsmapDialog):
                     self.mPanel.drawMap.SetValue(found)    
                         
 class MapFramePanel(wx.Panel):
-    """!wx.Panel with map (scale, region, border) settings"""
+    """wx.Panel with map (scale, region, border) settings"""
     def __init__(self, parent, id, settings, rect, notebook = True):
         wx.Panel.__init__(self, parent, id = wx.ID_ANY, style = wx.TAB_TRAVERSAL)
 
@@ -668,7 +668,7 @@ class MapFramePanel(wx.Panel):
         
         
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         border = wx.BoxSizer(wx.VERTICAL)
         
         box   = wx.StaticBox (parent = self, id = wx.ID_ANY, label = " %s " % _("Map frame"))
@@ -810,7 +810,7 @@ class MapFramePanel(wx.Panel):
         
      
     def OnMap(self, event):
-        """!Selected map or region changing"""
+        """Selected map or region changing"""
         
         if self.select.GetValue():
             self.selected = self.select.GetValue() 
@@ -844,7 +844,7 @@ class MapFramePanel(wx.Panel):
         
             
     def OnScaleChoice(self, event):
-        """!Selected scale type changing"""
+        """Selected scale type changing"""
         
         scaleType = self.scaleChoice.GetSelection()
         if self.scaleType != scaleType:
@@ -913,7 +913,7 @@ class MapFramePanel(wx.Panel):
                 self.northingTextCtrl.SetValue(str(self.center[scaleType][1]))
                 
     def OnElementType(self, event):
-        """!Changes data in map selection tree ctrl popup"""
+        """Changes data in map selection tree ctrl popup"""
         if self.rasterTypeRadio.GetValue():
             mapType = 'raster'
         else:
@@ -925,16 +925,16 @@ class MapFramePanel(wx.Panel):
         self.mapType = mapType    
         
     def OnBorder(self, event):
-        """!Enables/disable the part relating to border of map frame"""
+        """Enables/disable the part relating to border of map frame"""
         for each in (self.borderColorText, self.borderWidthText, self.borderColourPicker, self.borderWidthCtrl):
             each.Enable(self.borderCheck.GetValue())
             
     def getId(self):
-        """!Returns id of raster map"""
+        """Returns id of raster map"""
         return self.id
             
     def update(self):
-        """!Save changes"""
+        """Save changes"""
         mapFrameDict = dict(self.mapFrameDict)
         # resolution
         mapFrameDict['resolution'] = self.resolutionSpin.GetValue()
@@ -1134,7 +1134,7 @@ class MapFramePanel(wx.Panel):
         return True
         
 class RasterPanel(wx.Panel):
-    """!Panel for raster map settings"""
+    """Panel for raster map settings"""
     def __init__(self, parent, id, settings,  notebook = True):
         wx.Panel.__init__(self, parent, id = wx.ID_ANY, style = wx.TAB_TRAVERSAL)
         self.instruction = settings
@@ -1158,7 +1158,7 @@ class RasterPanel(wx.Panel):
         self.OnRaster(None)
             
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         border = wx.BoxSizer(wx.VERTICAL)
         
         # choose raster map
@@ -1201,7 +1201,7 @@ class RasterPanel(wx.Panel):
         self.Fit()
         
     def OnRaster(self, event):
-        """!Enable/disable raster selection"""
+        """Enable/disable raster selection"""
         self.rasterSelect.Enable(self.rasterYesRadio.GetValue())
         
     def update(self):
@@ -1240,7 +1240,7 @@ class RasterPanel(wx.Panel):
         return self.id
   
 class VectorPanel(wx.Panel):
-    """!Panel for vector maps settings"""
+    """Panel for vector maps settings"""
     def __init__(self, parent, id, settings, notebook = True):
         wx.Panel.__init__(self, parent, id = wx.ID_ANY, style = wx.TAB_TRAVERSAL)
         
@@ -1272,7 +1272,7 @@ class VectorPanel(wx.Panel):
             self.parent = self.parent.GetParent()
             
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         border = wx.BoxSizer(wx.VERTICAL)
         
         # choose vector map
@@ -1343,7 +1343,7 @@ class VectorPanel(wx.Panel):
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnProperties, self.listbox)
 
     def OnVector(self, event):
-        """!Gets info about toplogy and enables/disables choices point/line/area"""
+        """Gets info about toplogy and enables/disables choices point/line/area"""
         vmap = self.select.GetValue()   
         try:     
             topoInfo = grass.vector_info_topo(map = vmap)
@@ -1362,7 +1362,7 @@ class VectorPanel(wx.Panel):
             self.AddVector.SetFocus()        
             
     def OnAddVector(self, event):
-        """!Adds vector map to list"""
+        """Adds vector map to list"""
         vmap = self.select.GetValue()
         if vmap:
             mapname = vmap.split('@')[0]
@@ -1391,7 +1391,7 @@ class VectorPanel(wx.Panel):
             self.enableButtons()
             
     def OnDelete(self, event):
-        """!Deletes vector map from the list"""
+        """Deletes vector map from the list"""
         if self.listbox.GetSelections():
             pos = self.listbox.GetSelection()
             id = self.vectorList[pos][2]
@@ -1412,7 +1412,7 @@ class VectorPanel(wx.Panel):
             
             
     def OnUp(self, event):
-        """!Moves selected map to top"""
+        """Moves selected map to top"""
         if self.listbox.GetSelections():
             pos = self.listbox.GetSelection()
             if pos:
@@ -1427,7 +1427,7 @@ class VectorPanel(wx.Panel):
 
             
     def OnDown(self, event):
-        """!Moves selected map to bottom"""
+        """Moves selected map to bottom"""
         if self.listbox.GetSelections():
             pos = self.listbox.GetSelection()
             if pos != len(self.vectorList) - 1:
@@ -1441,7 +1441,7 @@ class VectorPanel(wx.Panel):
 
     
     def OnProperties(self, event):
-        """!Opens vector map properties dialog"""
+        """Opens vector map properties dialog"""
         if self.listbox.GetSelections():
             pos = self.listbox.GetSelection()
             id = self.vectorList[pos][2]
@@ -1453,7 +1453,7 @@ class VectorPanel(wx.Panel):
             self.parent.FindWindowById(wx.ID_OK).SetFocus()
            
     def enableButtons(self, enable = True):
-        """!Enable/disable up, down, properties, delete buttons"""
+        """Enable/disable up, down, properties, delete buttons"""
         self.btnUp.Enable(enable)
         self.btnDown.Enable(enable)
         self.btnProp.Enable(enable)
@@ -1471,7 +1471,7 @@ class VectorPanel(wx.Panel):
                 self.listbox.EnsureVisible(selected)  
               
     def reposition(self):
-        """!Update position in legend, used only if there is no vlegend yet"""
+        """Update position in legend, used only if there is no vlegend yet"""
         for i in range(len(self.vectorList)):
             if self.vectorList[i][3]:
                 self.vectorList[i][3] = i + 1
@@ -1542,7 +1542,7 @@ class RasterDialog(PsmapDialog):
         return True
     
     def updateDialog(self):
-        """!Update information (not used)"""
+        """Update information (not used)"""
         pass
 ##        if 'map' in self.parent.openDialogs:
 ##            if self.parent.openDialogs['map'].mPanel.rasterTypeRadio.GetValue()\
@@ -1572,7 +1572,7 @@ class MainVectorDialog(PsmapDialog):
         return True
         
     def updateDialog(self):
-        """!Update information (not used)"""
+        """Update information (not used)"""
         pass
         
 class VPropertiesDialog(PsmapDialog):
@@ -2190,7 +2190,7 @@ class VPropertiesDialog(PsmapDialog):
         return panel
 
     def OnLayer(self, event):
-        """!Change columns on layer change """
+        """Change columns on layer change """
         if self.layerChoice.GetStringSelection() == self.currLayer:
             return
         self.currLayer = self.layerChoice.GetStringSelection()
@@ -2274,7 +2274,7 @@ class VPropertiesDialog(PsmapDialog):
                 widget.GetWindow().Enable(enable)
                 
     def getColsChoice(self, parent):
-        """!Returns a wx.Choice with table columns"""
+        """Returns a wx.Choice with table columns"""
         if self.connection:
             cols = self.mapDBInfo.GetColumns(self.mapDBInfo.layers[int(self.currLayer)]['table']) 
         else:
@@ -2469,7 +2469,7 @@ class LegendDialog(PsmapDialog):
         self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
         
     def OnPageChanging(self, event):
-        """!Workaround to scroll up to see the checkbox"""
+        """Workaround to scroll up to see the checkbox"""
         wx.CallAfter(self.FindWindowByName('rasterPanel').ScrollChildIntoView,
                                             self.FindWindowByName('showRLegend'))
         wx.CallAfter(self.FindWindowByName('vectorPanel').ScrollChildIntoView,
@@ -2683,7 +2683,7 @@ class LegendDialog(PsmapDialog):
         return panel
     
     def sizePositionFont(self, legendType, parent, mainSizer):
-        """!Insert widgets for size, position and font control"""
+        """Insert widgets for size, position and font control"""
         if legendType == 'raster':
             legendDict = self.rLegendDict  
         else:
@@ -2808,7 +2808,7 @@ class LegendDialog(PsmapDialog):
     #   some enable/disable methods  
         
     def OnIsLegend(self, event):
-        """!Enables and disables controls, it depends if raster or vector legend is checked"""
+        """Enables and disables controls, it depends if raster or vector legend is checked"""
         page = self.notebook.GetSelection()
         if page == 0 or event is None:
             children = self.panelRaster.GetChildren()
@@ -2855,7 +2855,7 @@ class LegendDialog(PsmapDialog):
         self.OnDiscrete(None)
         
     def OnDiscrete(self, event):
-        """! Change control according to the type of legend"""
+        """Change control according to the type of legend"""
         enabledSize = self.panelRaster.heightOrColumnsCtrl.IsEnabled()
         self.panelRaster.heightOrColumnsCtrl.Destroy()
         if self.discrete.GetValue():
@@ -2904,7 +2904,7 @@ class LegendDialog(PsmapDialog):
             self.maxText.Enable()           
      
     def OnUp(self, event):
-        """!Moves selected map up, changes order in vector legend"""
+        """Moves selected map up, changes order in vector legend"""
         if self.vectorListCtrl.GetFirstSelected() != -1:
             pos = self.vectorListCtrl.GetFirstSelected()
             if pos:
@@ -2921,7 +2921,7 @@ class LegendDialog(PsmapDialog):
                 self.vectorListCtrl.Select(selected)
        
     def OnDown(self, event):
-        """!Moves selected map down, changes order in vector legend"""
+        """Moves selected map down, changes order in vector legend"""
         if self.vectorListCtrl.GetFirstSelected() != -1:
             pos = self.vectorListCtrl.GetFirstSelected()
             if pos != self.vectorListCtrl.GetItemCount() - 1:
@@ -2938,7 +2938,7 @@ class LegendDialog(PsmapDialog):
                 self.vectorListCtrl.Select(selected)
                 
     def OnEditLabel(self, event):
-        """!Change legend label of vector map"""
+        """Change legend label of vector map"""
         if self.vectorListCtrl.GetFirstSelected() != -1:
             idx = self.vectorListCtrl.GetFirstSelected()
             default = self.vectorListCtrl.GetItem(idx, 1).GetText()
@@ -2952,7 +2952,7 @@ class LegendDialog(PsmapDialog):
     def OnSpan(self, event):
         self.panelVector.spanTextCtrl.Enable(self.panelVector.spanRadio.GetValue())
     def OnFont(self, event):
-        """!Changes default width according to fontsize, width [inch] = fontsize[pt]/24"""   
+        """Changes default width according to fontsize, width [inch] = fontsize[pt]/24""" 
 ##        fontsize = self.panelVector.font['fontCtrl'].GetSelectedFont().GetPointSize() 
         fontsize = self.panelVector.font['fontSizeCtrl'].GetValue()
         unit = self.unitConv.findUnit(self.panelVector.units['unitsCtrl'].GetStringSelection())
@@ -2961,11 +2961,11 @@ class LegendDialog(PsmapDialog):
         self.panelVector.widthCtrl.SetValue("%3.2f" % width)
         
     def OnBorder(self, event):
-        """!Enables/disables colorPickerCtrl for border"""    
+        """Enables/disables colorPickerCtrl for border"""  
         self.borderColorCtrl.Enable(self.borderCheck.GetValue())
     
     def updateRasterLegend(self):
-        """!Save information from raster legend dialog to dictionary"""
+        """Save information from raster legend dialog to dictionary"""
 
         #is raster legend
         if not self.isRLegend.GetValue():
@@ -3068,7 +3068,7 @@ class LegendDialog(PsmapDialog):
         return True
     
     def updateVectorLegend(self):
-        """!Save information from vector legend dialog to dictionary"""
+        """Save information from vector legend dialog to dictionary"""
 
         vector = self.instruction.FindInstructionByType('vector')
         if vector:
@@ -3164,7 +3164,7 @@ class LegendDialog(PsmapDialog):
         return False
         
     def updateDialog(self):
-        """!Update legend coordinates after moving"""
+        """Update legend coordinates after moving"""
         
         # raster legend    
         if 'rect' in self.rLegendDict:
@@ -3396,7 +3396,7 @@ class MapinfoDialog(PsmapDialog):
         return True
     
     def updateDialog(self):
-        """!Update mapinfo coordinates, after moving"""
+        """Update mapinfo coordinates, after moving"""
         x, y = self.mapinfoDict['where']
         currUnit = self.unitConv.findUnit(self.panel.units['unitsCtrl'].GetStringSelection())
         x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
@@ -3405,7 +3405,7 @@ class MapinfoDialog(PsmapDialog):
         self.panel.position['yCtrl'].SetValue("%5.3f" % y)
              
 class ScalebarDialog(PsmapDialog):
-    """!Dialog for scale bar"""
+    """Dialog for scale bar"""
     def __init__(self, parent, id, settings):
         PsmapDialog.__init__(self, parent = parent, id = id, title = "Scale bar settings", settings = settings)
         self.objectType = ('scalebar',)
@@ -3581,7 +3581,7 @@ class ScalebarDialog(PsmapDialog):
         return panel
                            
     def update(self):
-        """!Save information from dialog"""
+        """Save information from dialog"""
 
         #units
         currUnit = self.unitConv.findUnit(self.panel.units['unitsCtrl'].GetStringSelection())
@@ -3659,7 +3659,7 @@ class ScalebarDialog(PsmapDialog):
         return True
     
     def updateDialog(self):
-        """!Update scalebar coordinates, after moving"""
+        """Update scalebar coordinates, after moving"""
         x, y = self.scalebarDict['rect'][:2]
         currUnit = self.unitConv.findUnit(self.panel.units['unitsCtrl'].GetStringSelection())
         x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
@@ -4040,7 +4040,7 @@ class TextDialog(PsmapDialog):
         return True
     
     def updateDialog(self):
-        """!Update text coordinates, after moving"""
+        """Update text coordinates, after moving"""
         # XY coordinates
         x, y = self.textDict['where'][:2]
         currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
@@ -4054,7 +4054,7 @@ class TextDialog(PsmapDialog):
         self.positionPanel.position['nCtrl'].SetValue(str(self.textDict['north']))
         
 class ImageDialog(PsmapDialog):
-    """!Dialog for setting image properties.
+    """Dialog for setting image properties.
     
     It's base dialog for North Arrow dialog.
     """
@@ -4096,7 +4096,7 @@ class ImageDialog(PsmapDialog):
         
         
     def _newObject(self):
-        """!Create corresponding instruction object"""
+        """Create corresponding instruction object"""
         return Image(self.id, self.instruction)
         
     def _imagePanel(self, notebook):
@@ -4245,7 +4245,7 @@ class ImageDialog(PsmapDialog):
         return panel
         
     def OnDirChanged(self, event):
-        """!Image directory changed"""
+        """Image directory changed"""
         path = self.imagePanel.image['dir'].GetValue()
         try:
             files = os.listdir(path)
@@ -4284,14 +4284,14 @@ class ImageDialog(PsmapDialog):
                 widget.GetWindow().Disable()
                 
     def _getImageDirectory(self):
-        """!Default image directory"""
+        """Default image directory"""
         return os.getcwd()
         
     def _addConvergence(self, panel, gridBagSizer):
         pass
         
     def OnImageSelectionChanged(self, event):
-        """!Image selected, show preview and size"""
+        """Image selected, show preview and size"""
         if not self.imagePanel.image['dir']: # event is emitted when closing dialog an it causes error
             return
             
@@ -4329,7 +4329,7 @@ class ImageDialog(PsmapDialog):
             pass
     
     def ScaleToPreview(self, img):
-        """!Scale image to preview size"""
+        """Scale image to preview size"""
         w = img.GetWidth()
         h = img.GetHeight()
         if w <= self.previewSize[0] and h <= self.previewSize[1]:
@@ -4343,7 +4343,7 @@ class ImageDialog(PsmapDialog):
         return img.Scale(newW, newH, wx.IMAGE_QUALITY_HIGH)
         
     def DrawWarningText(self, warning):
-        """!Draw text on preview window"""
+        """Draw text on preview window"""
         buffer = wx.EmptyBitmap(*self.previewSize)
         dc = wx.MemoryDC()
         dc.SelectObject(buffer)
@@ -4357,7 +4357,7 @@ class ImageDialog(PsmapDialog):
         dc.SelectObject(wx.NullBitmap)
         
     def DrawBitmap(self, bitmap):
-        """!Draw bitmap, center it if smaller than preview size"""
+        """Draw bitmap, center it if smaller than preview size"""
         if bitmap.GetWidth() <= self.previewSize[0] and bitmap.GetHeight() <= self.previewSize[1]:
             buffer = wx.EmptyBitmap(*self.previewSize)
             dc = wx.MemoryDC()
@@ -4374,14 +4374,14 @@ class ImageDialog(PsmapDialog):
         self.imagePanel.Refresh()
             
     def SetSizeInfoLabel(self, image):
-        """!Update image size label"""
+        """Update image size label"""
         self.imagePanel.image['sizeInfo'].SetLabel(_("size: %(width)s x %(height)s pts") % \
                                                        { 'width'  : image.GetWidth(),
                                                          'height' : image.GetHeight() })
         self.imagePanel.image['sizeInfo'].GetContainingSizer().Layout()
         
     def ClearPreview(self):
-        """!Clear preview window"""
+        """Clear preview window"""
         buffer = wx.EmptyBitmap(*self.previewSize)
         dc = wx.MemoryDC()
         dc.SelectObject(buffer)
@@ -4474,7 +4474,7 @@ class ImageDialog(PsmapDialog):
         return True
         
     def updateDialog(self):
-        """!Update text coordinates, after moving"""
+        """Update text coordinates, after moving"""
         # XY coordinates
         x, y = self.imageDict['where'][:2]
         currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
@@ -4522,7 +4522,7 @@ class NorthArrowDialog(ImageDialog):
             
         
 class PointDialog(PsmapDialog):
-    """!Dialog for setting point properties."""
+    """Dialog for setting point properties."""
     def __init__(self, parent, id, settings, coordinates = None, pointPanelName = _("Point")):
         PsmapDialog.__init__(self, parent = parent, id = id, title = "Point settings",
                              settings = settings)
@@ -4798,7 +4798,7 @@ class PointDialog(PsmapDialog):
         return True
         
     def updateDialog(self):
-        """!Update text coordinates, after moving"""
+        """Update text coordinates, after moving"""
         # XY coordinates
         x, y = self.pointDict['where'][:2]
         currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
@@ -4813,9 +4813,9 @@ class PointDialog(PsmapDialog):
         
 class RectangleDialog(PsmapDialog):
     def __init__(self, parent, id, settings, type = 'rectangle', coordinates = None):
-        """!
+        """
 
-        @param coordinates begin and end point coordinate (wx.Point, wx.Point)
+        :param coordinates: begin and end point coordinate (wx.Point, wx.Point)
         """
         if type == 'rectangle':
             title = _("Rectangle settings")
@@ -4968,7 +4968,7 @@ class RectangleDialog(PsmapDialog):
         return True
 
     def updateDialog(self):
-        """!Update text coordinates, after moving"""
+        """Update text coordinates, after moving"""
         pass
 
 

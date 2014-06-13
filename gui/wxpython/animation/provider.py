@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""!
+"""
 @package animation.provider
 
 @brief Animation files and bitmaps management
@@ -38,7 +38,7 @@ from grass.pydispatch.signal import Signal
 
 
 class BitmapProvider:
-    """!Class for management of image files and bitmaps.
+    """Class for management of image files and bitmaps.
 
     There is one instance of this class in the application.
     It handles both 2D and 3D animations.
@@ -78,15 +78,15 @@ class BitmapProvider:
         self._composer.compositionContinues.connect(self.compositionContinues)
 
     def SetCmds(self, cmdsForComposition, opacities, regions=None):
-        """!Sets commands to be rendered with opacity levels.
+        """Sets commands to be rendered with opacity levels.
         Applies to 2D mode.
 
-        @param cmdsForComposition list of lists of command lists
+        :param cmdsForComposition: list of lists of command lists
                 [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
                  [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
                  ...]
-        @param opacities list of opacity values
-        @param regions list of regions
+        :param opacities: list of opacity values
+        :param regions: list of regions
         """
         Debug.msg(2, "BitmapProvider.SetCmds: {n} lists".format(n=len(cmdsForComposition)))
         self._cmdsForComposition.extend(cmdsForComposition)
@@ -96,17 +96,17 @@ class BitmapProvider:
         self._getUniqueCmds()
 
     def SetCmds3D(self, cmds, region):
-        """!Sets commands for 3D rendering.
+        """Sets commands for 3D rendering.
 
-        @param cmds list of commands m.nviz.image (cmd as a list)
-        @param region for 3D rendering
+        :param cmds: list of commands m.nviz.image (cmd as a list)
+        :param region: for 3D rendering
         """
         Debug.msg(2, "BitmapProvider.SetCmds3D: {c} commands".format(c=len(cmds)))
         self._cmds3D = cmds
         self._regionFor3D = region
 
     def _getUniqueCmds(self):
-        """!Returns list of unique commands.
+        """Returns list of unique commands.
         Takes into account the region assigned."""
         unique = list()
         for cmdList, region in zip(self._cmdsForComposition, self._regions):
@@ -121,7 +121,7 @@ class BitmapProvider:
                                            for cmdAndRegion in unique])
 
     def Unload(self):
-        """!Unloads currently loaded data.
+        """Unloads currently loaded data.
         Needs to be called before setting new data.
         """
         Debug.msg(2, "BitmapProvider.Unload")
@@ -141,11 +141,11 @@ class BitmapProvider:
             self._regionFor3D = None
 
     def _dryRender(self, uniqueCmds, regions, force):
-        """!Determines how many files will be rendered.
+        """Determines how many files will be rendered.
 
-        @param uniqueCmds list of commands which are to be rendered
-        @param force if forced rerendering
-        @param regions list of regions assigned to the commands
+        :param uniqueCmds: list of commands which are to be rendered
+        :param force: if forced rerendering
+        :param regions: list of regions assigned to the commands
         """
         count = 0
         for cmd, region in zip(uniqueCmds, regions):
@@ -160,12 +160,12 @@ class BitmapProvider:
         return count
 
     def _dryCompose(self, cmdLists, regions, force):
-        """!Determines how many lists of (commands) files
+        """Determines how many lists of (commands) files
         will be composed (with g.pnmcomp).
 
-        @param cmdLists list of commands lists which are to be composed
-        @param regions list of regions assigned to the commands
-        @param force if forced rerendering
+        :param cmdLists: list of commands lists which are to be composed
+        :param regions: list of regions assigned to the commands
+        :param force: if forced rerendering
         """
         count = 0
         for cmdList, region in zip(cmdLists, regions):
@@ -180,12 +180,12 @@ class BitmapProvider:
         return count
 
     def Load(self, force=False, bgcolor=(255, 255, 255), nprocs=4):
-        """!Loads data, both 2D and 3D. In case of 2D, it creates composites,
+        """Loads data, both 2D and 3D. In case of 2D, it creates composites,
         even when there is only 1 layer to compose (to be changed for speedup)
 
-        @param force if True reload all data, otherwise only missing data
-        @param bgcolor background color as a tuple of 3 values 0 to 255
-        @param nprocs number of procs to be used for rendering
+        :param force: if True reload all data, otherwise only missing data
+        :param bgcolor: background color as a tuple of 3 values 0 to 255
+        :param nprocs: number of procs to be used for rendering
         """
         Debug.msg(2, "BitmapProvider.Load: "
                      "force={f}, bgcolor={b}, nprocs={n}".format(f=force,
@@ -227,16 +227,16 @@ class BitmapProvider:
         self.mapsLoaded.emit()
 
     def RequestStopRendering(self):
-        """!Requests to stop rendering/composition"""
+        """Requests to stop rendering/composition"""
         Debug.msg(2, "BitmapProvider.RequestStopRendering")
         self._renderer.RequestStopRendering()
         self._composer.RequestStopComposing()
 
     def GetBitmap(self, dataId):
-        """!Returns bitmap with given key
+        """Returns bitmap with given key
         or 'no data' bitmap if no such key exists.
 
-        @param dataId name of bitmap
+        :param dataId: name of bitmap
         """
         try:
             bitmap = self._bitmapPool[dataId]
@@ -245,7 +245,7 @@ class BitmapProvider:
         return bitmap
 
     def WindowSizeChanged(self, width, height):
-        """!Sets size when size of related window changes."""
+        """Sets size when size of related window changes."""
         Debug.msg(5, "BitmapProvider.WindowSizeChanged: w={w}, h={h}".format(w=width, h=height))
 
         self.imageWidth, self.imageHeight = width, height
@@ -254,11 +254,11 @@ class BitmapProvider:
         self._composer.imageHeight = self._renderer.imageHeight = height
 
     def LoadOverlay(self, cmd):
-        """!Creates raster legend with d.legend
+        """Creates raster legend with d.legend
 
-        @param cmd d.legend command as a list
+        :param cmd: d.legend command as a list
 
-        @return bitmap with legend
+        :return: bitmap with legend
         """
         Debug.msg(5, "BitmapProvider.LoadOverlay: cmd={c}".format(c=cmd))
 
@@ -280,7 +280,7 @@ class BitmapProvider:
 
 
 class BitmapRenderer:
-    """!Class which renderes 2D and 3D images to files."""
+    """Class which renderes 2D and 3D images to files."""
     def __init__(self, mapFilesPool, tempDir,
                  imageWidth, imageHeight):
         self._mapFilesPool = mapFilesPool
@@ -293,14 +293,14 @@ class BitmapRenderer:
         self._isRendering = False
 
     def Render(self, cmdList, regions, regionFor3D, bgcolor, force, nprocs):
-        """!Renders all maps and stores files.
+        """Renders all maps and stores files.
 
-        @param cmdList list of rendering commands to run
-        @param regions regions for 2D rendering assigned to commands
-        @param regionFor3D region for setting 3D view
-        @param bgcolor background color as a tuple of 3 values 0 to 255
-        @param force if True reload all data, otherwise only missing data
-        @param nprocs number of procs to be used for rendering
+        :param cmdList: list of rendering commands to run
+        :param regions: regions for 2D rendering assigned to commands
+        :param regionFor3D: region for setting 3D view
+        :param bgcolor: background color as a tuple of 3 values 0 to 255
+        :param force: if True reload all data, otherwise only missing data
+        :param nprocs: number of procs to be used for rendering
         """
         Debug.msg(3, "BitmapRenderer.Render")
         count = 0
@@ -369,13 +369,13 @@ class BitmapRenderer:
         return not stopped
 
     def RequestStopRendering(self):
-        """!Requests to stop rendering."""
+        """Requests to stop rendering."""
         if self._isRendering:
             self._stopRendering = True
 
 
 class BitmapComposer:
-    """!Class which handles the composition of image files with g.pnmcomp."""
+    """Class which handles the composition of image files with g.pnmcomp."""
     def __init__(self, tempDir, mapFilesPool, bitmapPool,
                  imageWidth, imageHeight):
         self._mapFilesPool = mapFilesPool
@@ -389,14 +389,14 @@ class BitmapComposer:
         self._isComposing = False
 
     def Compose(self, cmdLists, regions, opacityList, bgcolor, force, nprocs):
-        """!Performs the composition of ppm/pgm files.
+        """Performs the composition of ppm/pgm files.
 
-        @param cmdLisst lists of rendering commands lists to compose
-        @param regions regions for 2D rendering assigned to commands
-        @param opacityList list of lists of opacity values
-        @param bgcolor background color as a tuple of 3 values 0 to 255
-        @param force if True reload all data, otherwise only missing data
-        @param nprocs number of procs to be used for rendering
+        :param cmdLists: lists of rendering commands lists to compose
+        :param regions: regions for 2D rendering assigned to commands
+        :param opacityList: list of lists of opacity values
+        :param bgcolor: background color as a tuple of 3 values 0 to 255
+        :param force: if True reload all data, otherwise only missing data
+        :param nprocs: number of procs to be used for rendering
         """
         Debug.msg(3, "BitmapComposer.Compose")
 
@@ -463,22 +463,22 @@ class BitmapComposer:
         self._isComposing = False
 
     def RequestStopComposing(self):
-        """!Requests to stop the composition."""
+        """Requests to stop the composition."""
         if self._isComposing:
             self._stopComposing = True
 
 
 def RenderProcess2D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, fileQueue):
-    """!Render raster or vector files as ppm image and write the
+    """Render raster or vector files as ppm image and write the
        resulting ppm filename in the provided file queue
 
-    @param imageWidth image width
-    @param imageHeight image height
-    @param tempDir directory for rendering
-    @param cmd d.rast/d.vect command as a list
-    @param region region as a dict or None
-    @param bgcolor background color as a tuple of 3 values 0 to 255
-    @param fileQueue the inter process communication queue
+    :param imageWidth: image width
+    :param imageHeight: image height
+    :param tempDir: directory for rendering
+    :param cmd: d.rast/d.vect command as a list
+    :param region: region as a dict or None
+    :param bgcolor: background color as a tuple of 3 values 0 to 255
+    :param fileQueue: the inter process communication queue
     storing the file name of the image
     """
 
@@ -506,16 +506,16 @@ def RenderProcess2D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
 
 
 def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, fileQueue):
-    """!Renders image with m.nviz.image and writes the
+    """Renders image with m.nviz.image and writes the
        resulting ppm filename in the provided file queue
 
-    @param imageWidth image width
-    @param imageHeight image height
-    @param tempDir directory for rendering
-    @param cmd m.nviz.image command as a list
-    @param region region as a dict
-    @param bgcolor background color as a tuple of 3 values 0 to 255
-    @param fileQueue the inter process communication queue
+    :param imageWidth: image width
+    :param imageHeight: image height
+    :param tempDir: directory for rendering
+    :param cmd: m.nviz.image command as a list
+    :param region: region as a dict
+    :param bgcolor: background color as a tuple of 3 values 0 to 255
+    :param fileQueue: the inter process communication queue
     storing the file name of the image
     """
 
@@ -542,17 +542,17 @@ def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
 
 
 def CompositeProcess(imageWidth, imageHeight, tempDir, cmdList, region, opacities, bgcolor, fileQueue):
-    """!Performs the composition of image ppm files and writes the
+    """Performs the composition of image ppm files and writes the
        resulting ppm filename in the provided file queue
 
-    @param imageWidth image width
-    @param imageHeight image height
-    @param tempDir directory for rendering
-    @param cmdList list of d.rast/d.vect commands
-    @param region region as a dict or None
-    @param opacities list of opacities
-    @param bgcolor background color as a tuple of 3 values 0 to 255
-    @param fileQueue the inter process communication queue
+    :param imageWidth: image width
+    :param imageHeight: image height
+    :param tempDir: directory for rendering
+    :param cmdList: list of d.rast/d.vect commands
+    :param region: region as a dict or None
+    :param opacites: list of opacities
+    :param bgcolor: background color as a tuple of 3 values 0 to 255
+    :param fileQueue: the inter process communication queue
     storing the file name of the image
     """
 
@@ -588,8 +588,9 @@ def CompositeProcess(imageWidth, imageHeight, tempDir, cmdList, region, opacitie
 
 
 class DictRefCounter:
-    """!Base class storing map files/bitmaps (emulates dictionary).
-        Counts the references to know which files/bitmaps to delete."""
+    """Base class storing map files/bitmaps (emulates dictionary).
+    Counts the references to know which files/bitmaps to delete.
+    """
     def __init__(self):
         self.dictionary = {}
         self.referenceCount = {}
@@ -616,7 +617,7 @@ class DictRefCounter:
         return self.dictionary.keys()
 
     def Clear(self):
-        """!Clears items which are not needed any more."""
+        """Clears items which are not needed any more."""
         Debug.msg(4, 'DictRefCounter.Clear')
         for key in self.dictionary.keys():
             if key is not None:
@@ -626,7 +627,7 @@ class DictRefCounter:
 
 
 class MapFilesPool(DictRefCounter):
-    """!Stores rendered images as files."""
+    """Stores rendered images as files."""
     def __init__(self):
         DictRefCounter.__init__(self)
         self.size = {}
@@ -638,7 +639,7 @@ class MapFilesPool(DictRefCounter):
         return self.size[key]
 
     def Clear(self):
-        """!Removes files which are not needed anymore.
+        """Removes files which are not needed anymore.
         Removes both ppm and pgm.
         """
         Debug.msg(4, 'MapFilesPool.Clear')
@@ -655,13 +656,13 @@ class MapFilesPool(DictRefCounter):
 
 
 class BitmapPool(DictRefCounter):
-    """!Class storing bitmaps (emulates dictionary)"""
+    """Class storing bitmaps (emulates dictionary)"""
     def __init__(self):
         DictRefCounter.__init__(self)
 
 
 class CleanUp:
-    """!Responsible for cleaning up the files."""
+    """Responsible for cleaning up the files."""
     def __init__(self, tempDir):
         self._tempDir = tempDir
 
@@ -676,13 +677,13 @@ class CleanUp:
 
 
 def _setEnvironment(width, height, filename, transparent, bgcolor):
-    """!Sets environmental variables for 2D rendering.
+    """Sets environmental variables for 2D rendering.
 
-    @param width rendering width
-    @param height rendering height
-    @param filename file name
-    @param transparent use transparency
-    @param bgcolor background color as a tuple of 3 values 0 to 255
+    :param width: rendering width
+    :param height: rendering height
+    :param filename: file name
+    :param transparent: use transparency
+    :param bgcolor: background color as a tuple of 3 values 0 to 255
     """
     Debug.msg(5, "_setEnvironment: width={w}, height={h}, "
                  "filename={f}, transparent={t}, bgcolor={b}".format(w=width,
@@ -707,13 +708,13 @@ def _setEnvironment(width, height, filename, transparent, bgcolor):
 
 
 def createNoDataBitmap(imageWidth, imageHeight, text="No data"):
-    """!Creates 'no data' bitmap.
+    """Creates 'no data' bitmap.
 
     Used when requested bitmap is not available (loading data was not successful) or
     we want to show 'no data' bitmap.
 
-    @param imageWidth image width
-    @param imageHeight image height
+    :param imageWidth: image width
+    :param imageHeight: image height
     """
     Debug.msg(4, "createNoDataBitmap: w={w}, h={h}, text={t}".format(w=imageWidth,
                                                                      h=imageHeight,

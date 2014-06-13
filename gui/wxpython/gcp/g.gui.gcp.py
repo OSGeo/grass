@@ -44,9 +44,10 @@ from core.utils import GuiModuleMain
 from gcp.manager import GCPWizard
 
 def main():
-    """!Sets the GRASS display driver
+    """Sets the GRASS display driver
 
-    @todo use command line options as an alternative to wizard
+    .. todo::
+        use command line options as an alternative to wizard
     """
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':

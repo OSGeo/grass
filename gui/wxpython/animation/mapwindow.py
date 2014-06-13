@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.mapwindow
 
 @brief Animation window
@@ -115,7 +115,7 @@ class AnimationWindow(BufferedWindow):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouseEvents)
 
     def Draw(self, dc):
-        """!Draws bitmap."""
+        """Draws bitmap."""
         Debug.msg(5, "AnimationWindow.Draw()")
 
         dc.Clear()  # make sure you clear the bitmap!
@@ -131,7 +131,7 @@ class AnimationWindow(BufferedWindow):
             event.Skip()
 
     def DrawBitmap(self, bitmap):
-        """!Draws bitmap.
+        """Draws bitmap.
         Does not draw the bitmap if it is the same one as last time.
         """
         if self.bitmap == bitmap:
@@ -149,11 +149,11 @@ class AnimationWindow(BufferedWindow):
         self._pdc.EndDrawing()
 
     def SetOverlay(self, bitmap, xperc, yperc):
-        """!Sets overlay bitmap (legend)
+        """Sets overlay bitmap (legend)
 
-        @param bitmap instance of wx.Bitmap
-        @param xperc x coordinate of bitmap top left corner in % of screen
-        @param yperc y coordinate of bitmap top left corner in % of screen
+        :param bitmap: instance of wx.Bitmap
+        :param xperc: x coordinate of bitmap top left corner in % of screen
+        :param yperc: y coordinate of bitmap top left corner in % of screen
         """
         Debug.msg(3, "AnimationWindow.SetOverlay()")
         if bitmap:
@@ -170,7 +170,7 @@ class AnimationWindow(BufferedWindow):
         self.UpdateDrawing()
 
     def ClearOverlay(self):
-        """!Clear overlay (legend) """
+        """Clear overlay (legend) """
         Debug.msg(3, "AnimationWindow.ClearOverlay()")
         self._overlay = None
         self._pdc.RemoveAll()
@@ -184,7 +184,7 @@ class AnimationWindow(BufferedWindow):
             self._pdc.DrawToDC(dc)
 
     def OnMouseEvents(self, event):
-        """!Handle mouse events."""
+        """Handle mouse events."""
         # If it grows larger, split it.
         current = event.GetPosition()
         if event.LeftDown():
@@ -209,6 +209,6 @@ class AnimationWindow(BufferedWindow):
             self._tmpMousePos = current
 
     def GetOverlayPos(self):
-        """!Returns x, y position in pixels"""
+        """Returns x, y position in pixels"""
         rect = self._pdc.GetIdBounds(1)
         return rect.GetX(), rect.GetY()

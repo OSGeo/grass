@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.temporal_manager
 
 @brief Management of temporal datasets used in animation
@@ -39,7 +39,7 @@ class GranularityMode:
 
 
 class TemporalManager(object):
-    """!Class for temporal data processing."""
+    """Class for temporal data processing."""
     def __init__(self):
         self.timeseriesList = []
         self.timeseriesInfo = {}
@@ -50,7 +50,9 @@ class TemporalManager(object):
         self.granularityMode = GranularityMode.ORIGINAL
 
     def GetTemporalType(self):
-        """!Get temporal type (TemporalType.ABSOLUTE, TemporalType.RELATIVE)"""
+        """Get temporal type (TemporalType.ABSOLUTE,
+        TemporalType.RELATIVE)
+        """
         return self._temporalType
 
     def SetTemporalType(self, ttype):
@@ -59,18 +61,18 @@ class TemporalManager(object):
     temporalType = property(fget=GetTemporalType, fset=SetTemporalType)
 
     def AddTimeSeries(self, timeseries, etype):
-        """!Add space time dataset
+        """Add space time dataset
         and collect basic information about it.
 
         Raises GException (e.g. with invalid topology).
 
-        @param timeseries name of timeseries (with or without mapset)
-        @param etype element type (strds, stvds)
+        :param timeseries: name of timeseries (with or without mapset)
+        :param etype: element type (strds, stvds)
         """
         self._gatherInformation(timeseries, etype, self.timeseriesList, self.timeseriesInfo)
 
     def EvaluateInputData(self):
-        """!Checks if all timeseries are compatible (raises GException).
+        """Checks if all timeseries are compatible (raises GException).
 
         Sets internal variables.
         """
@@ -133,7 +135,8 @@ class TemporalManager(object):
         return True, None
 
     def GetGranularity(self):
-        """!Returns temporal granularity of currently loaded timeseries."""
+        """Returns temporal granularity of currently loaded timeseries.
+        """
         if self.dataMode == DataMode.SIMPLE:
             gran = self.timeseriesInfo[self.timeseriesList[0]]['granularity']
             if 'unit' in self.timeseriesInfo[self.timeseriesList[0]]:  # relative:
@@ -171,7 +174,7 @@ class TemporalManager(object):
             return (granNum, unit)
 
     def GetLabelsAndMaps(self):
-        """!Returns time labels and map names.
+        """Returns time labels and map names.
         """
         mapLists = []
         labelLists = []
@@ -217,7 +220,7 @@ class TemporalManager(object):
         return timestamps, mapDict
 
     def _getLabelsAndMaps(self, timeseries):
-        """!Returns time labels and map names (done by sampling)
+        """Returns time labels and map names (done by sampling)
         for both interval and point data.
         """
         sp = tgis.dataset_factory(self.timeseriesInfo[timeseries]['etype'], timeseries)
@@ -292,7 +295,7 @@ class TemporalManager(object):
         return timeLabels, listOfMaps
 
     def _pretifyTimeLabels(self, labels):
-        """!Convert absolute time labels to grass time and
+        """Convert absolute time labels to grass time and
         leave only datum when time is 0.
         """
         grassLabels = []
@@ -315,7 +318,7 @@ class TemporalManager(object):
         return grassLabels
 
     def _gatherInformation(self, timeseries, etype, timeseriesList, infoDict):
-        """!Get info about timeseries and check topology (raises GException)"""
+        """Get info about timeseries and check topology (raises GException)"""
         id = validateTimeseriesName(timeseries, etype)
         sp = tgis.dataset_factory(etype, id)
         # Insert content from db

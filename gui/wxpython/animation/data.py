@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""!
+"""
 @package animation.data
 
 @brief animation data structures
@@ -75,7 +75,7 @@ class AnimationData(object):
     windowIndex = property(fget=GetWindowIndex, fset=SetWindowIndex)
 
     def SetLayerList(self, layerList):
-        """!
+        """
         Throws GException if layer list's combination of stds is not valid.
         """
         mapSeriesList = []
@@ -269,7 +269,7 @@ class AnimationData(object):
 
 
 class AnimLayer(Layer):
-    """!Animation layer allows to add either space-time dataset
+    """Animation layer allows to add either space-time dataset
     or series of maps."""
     def __init__(self):
         Layer.__init__(self)

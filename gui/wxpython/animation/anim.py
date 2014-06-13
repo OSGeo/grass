@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.anim
 
 @brief Animation class controls frame order
@@ -20,7 +20,7 @@ from core.utils import _
 
 
 class Animation(wx.EvtHandler):
-    """!Animation class specifies which frame to show at which instance."""
+    """Animation class specifies which frame to show at which instance."""
     def __init__(self):
         wx.EvtHandler.__init__(self)
 
@@ -37,33 +37,33 @@ class Animation(wx.EvtHandler):
         self.isActive = False
 
     def IsActive(self):
-        """!Returns if the animation is active or not"""
+        """Returns if the animation is active or not"""
         return self.isActive
 
     def SetActive(self, active):
         self.isActive = active
 
     def SetFrames(self, frames):
-        """!Sets animation frames.
+        """Sets animation frames.
 
-        @param frames list of strings
+        :param frames: list of strings
         """
         self.frames = frames
 
     def GetFrame(self, index):
-        """!Returns animation frame"""
+        """Returns animation frame"""
         if len(self.frames) <= 1:  # special case handling (only 1 map)
             return self.frames[0]
         return self.frames[index]
 
     def GetCount(self):
-        """!Get frame count."""
+        """Get frame count."""
         return len(self.frames)
 
     count = property(fget=GetCount)
 
     def GetReplayMode(self):
-        """!Returns replay mode (loop)."""
+        """Returns replay mode (loop)."""
         return self._replayMode
 
     def SetReplayMode(self, mode):
@@ -80,15 +80,15 @@ class Animation(wx.EvtHandler):
     orientation = property(fset=SetOrientation, fget=GetOrientation)
 
     def SetCallbackUpdateFrame(self, callback):
-        """!Sets function to be called when updating frame."""
+        """Sets function to be called when updating frame."""
         self.callbackUpdateFrame = callback
 
     def SetCallbackEndAnimation(self, callback):
-        """!Sets function to be called when animation ends."""
+        """Sets function to be called when animation ends."""
         self.callbackEndAnimation = callback
 
     def SetCallbackOrientationChanged(self, callback):
-        """!Sets function to be called when orientation changes."""
+        """Sets function to be called when orientation changes."""
         self.callbackOrientationChanged = callback
 
     def Start(self):
@@ -106,7 +106,7 @@ class Animation(wx.EvtHandler):
         self.callbackEndAnimation(self.currentIndex, self.GetFrame(self.currentIndex))
 
     def _arrivedToEnd(self):
-        """!Decides which action to do after animation end (stop, repeat)."""
+        """Decides which action to do after animation end (stop, repeat)."""
         if not self.IsActive():
             return
         if self.replayMode == ReplayMode.ONESHOT:
@@ -128,7 +128,7 @@ class Animation(wx.EvtHandler):
                 self.callbackOrientationChanged(Orientation.FORWARD)
 
     def Update(self):
-        """!Updates frame."""
+        """Updates frame."""
         if not self.IsActive():
             return
 
@@ -143,7 +143,7 @@ class Animation(wx.EvtHandler):
                 self._arrivedToEnd()
 
     def FrameChangedFromOutside(self, index):
-        """!Let the animation know that frame was changed from outside."""
+        """Let the animation know that frame was changed from outside."""
         if not self.IsActive():
             return
         self.currentIndex = index

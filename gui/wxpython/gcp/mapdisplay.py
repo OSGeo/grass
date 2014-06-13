@@ -1,4 +1,4 @@
-"""!
+"""
 @package gcp.mapdisplay
 
 @brief Display to manage ground control points with two toolbars, one
@@ -41,22 +41,22 @@ import gcp.statusbar as sbgcp
 cmdfilename = None
 
 class MapFrame(SingleMapFrame):
-    """!Main frame for map display window. Drawing takes place in
+    """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
     def __init__(self, parent, giface,
                  title=_("GRASS GIS Manage Ground Control Points"),
                  toolbars=["gcpdisp"], Map=None, auimgr=None,
                  name='GCPMapWindow', **kwargs):
-        """!Main map display window with toolbars, statusbar and
+        """Main map display window with toolbars, statusbar and
         DrawWindow
 
-        @param giface GRASS interface instance
-        @param title window title
-        @param toolbars array of activated toolbars, e.g. ['map', 'digit']
-        @param Map instance of render.Map
-        @param auimgs AUI manager
-        @param kwargs wx.Frame attribures
+        :param giface: GRASS interface instance
+        :param title: window title
+        :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
+        :param map: instance of render.Map
+        :param auimgs: AUI manager
+        :param kwargs: wx.Frame attribures
         """
         
         SingleMapFrame.__init__(self, parent = parent, giface = giface, title = title,
@@ -230,7 +230,7 @@ class MapFrame(SingleMapFrame):
         mapWindow.mouseMoving.connect(self.CoordinatesChanged)
 
     def AddToolbar(self, name):
-        """!Add defined toolbar to the window
+        """Add defined toolbar to the window
         
         Currently known toolbars are:
          - 'map'     - basic map toolbar
@@ -302,12 +302,12 @@ class MapFrame(SingleMapFrame):
         event.Skip()
 
     def OnDraw(self, event):
-        """!Re-display current map composition
+        """Re-display current map composition
         """
         self.MapWindow.UpdateMap(render = False)
         
     def OnRender(self, event):
-        """!Re-render map composition (each map layer)
+        """Re-render map composition (each map layer)
         """
         # FIXME: remove qlayer code or use RemoveQueryLayer() now in mapdisp.frame
         # delete tmp map layers (queries)
@@ -323,8 +323,8 @@ class MapFrame(SingleMapFrame):
         self.StatusbarUpdate()
 
     def OnPointer(self, event):
-        """!Pointer button clicked
-        """        
+        """Pointer button clicked
+        """      
         self.SrcMapWindow.SetModePointer()
         self.TgtMapWindow.SetModePointer()
         # change the default cursor
@@ -360,7 +360,7 @@ class MapFrame(SingleMapFrame):
         win.EraseMap()
 
     def SaveToFile(self, event):
-        """!Save map to image
+        """Save map to image
         """
         img = self.MapWindow.img
         if not img:
@@ -427,30 +427,30 @@ class MapFrame(SingleMapFrame):
         printmenu.Destroy()
 
     def OnZoomToRaster(self, event):
-        """!
+        """
         Set display extents to match selected raster map (ignore NULLs)
         """
         self.MapWindow.ZoomToMap(ignoreNulls = True)
         
     def OnZoomToSaved(self, event):
-        """!Set display geometry to match extents in
+        """Set display geometry to match extents in
         saved region file
         """
         self.MapWindow.SetRegion(zoomOnly=True)
         
     def OnDisplayToWind(self, event):
-        """!Set computational region (WIND file) to match display
+        """Set computational region (WIND file) to match display
         extents
         """
         self.MapWindow.DisplayToWind()
  
     def SaveDisplayRegion(self, event):
-        """!Save display extents to named region file.
+        """Save display extents to named region file.
         """
         self.MapWindow.SaveDisplayRegion()
         
     def OnZoomMenu(self, event):
-        """!Popup Zoom menu
+        """Popup Zoom menu
         """
         point = wx.GetMousePosition()
         zoommenu = wx.Menu()
@@ -483,14 +483,14 @@ class MapFrame(SingleMapFrame):
         
         
     def IsStandalone(self):
-        """!Check if Map display is standalone"""
+        """Check if Map display is standalone"""
         # we do not know and we do not care, so always False
         return True
     
     def GetLayerManager(self):
-        """!Get reference to Layer Manager
+        """Get reference to Layer Manager
 
-        @return always None
+        :return: always None
         """
         return None
 
@@ -504,7 +504,7 @@ class MapFrame(SingleMapFrame):
         return self.show_target
         
     def GetMapToolbar(self):
-        """!Returns toolbar with zooming tools"""
+        """Returns toolbar with zooming tools"""
         return self.toolbars['gcpdisp']
 
     def _setActiveMapWindow(self, mapWindow):

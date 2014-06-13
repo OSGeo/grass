@@ -1,4 +1,4 @@
-"""!
+"""
 @package location_wizard.base
 
 @brief Location wizard - base classes
@@ -19,12 +19,12 @@ This program is free software under the GNU General Public License
 import wx
 
 class BaseClass(wx.Object):
-    """!Base class providing basic methods"""
+    """Base class providing basic methods"""
     def __init__(self):
         pass
 
     def MakeLabel(self, text = "", style = wx.ALIGN_LEFT, parent = None, tooltip = None):
-        """!Make aligned label"""
+        """Make aligned label"""
         if not parent:
             parent = self
         label =  wx.StaticText(parent = parent, id = wx.ID_ANY, label = text,
@@ -34,7 +34,7 @@ class BaseClass(wx.Object):
         return label
 
     def MakeTextCtrl(self, text = '', size = (100,-1), style = 0, parent = None, tooltip = None):
-        """!Generic text control"""
+        """Generic text control"""
         if not parent:
             parent = self
         textCtrl = wx.TextCtrl(parent = parent, id = wx.ID_ANY, value = text,
@@ -44,7 +44,7 @@ class BaseClass(wx.Object):
         return textCtrl
 
     def MakeButton(self, text, id = wx.ID_ANY, size = (-1,-1), parent = None, tooltip = None):
-        """!Generic button"""
+        """Generic button"""
         if not parent:
             parent = self
         button = wx.Button(parent = parent, id = id, label = text,

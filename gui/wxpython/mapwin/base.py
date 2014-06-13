@@ -1,4 +1,4 @@
-"""!
+"""
 @package mapwin.mapwindow
 
 @brief Map display canvas basic functionality - base class and properties.
@@ -94,7 +94,7 @@ class MapWindowProperties(object):
 
 
 class MapWindowBase(object):
-    """!Abstract map display window class
+    """Abstract map display window class
     
     Superclass for BufferedWindow class (2D display mode), and GLWindow
     (3D display mode).
@@ -172,7 +172,7 @@ class MapWindowBase(object):
         self.UnregisterAllHandlers()
 
     def InitBinding(self):
-        """!Binds helper functions, which calls all handlers
+        """Binds helper functions, which calls all handlers
            registered to events with the events
         """
         for ev, handlers in self.handlersContainer.iteritems():
@@ -182,7 +182,7 @@ class MapWindowBase(object):
         return lambda event:self.HandlersCaller(event, evHandlers)  
     
     def HandlersCaller(self, event, handlers):
-        """!Hepler function which calls all handlers registered for
+        """Hepler function which calls all handlers registered for
         event
         """
         for handler in handlers:
@@ -197,7 +197,7 @@ class MapWindowBase(object):
         event.Skip() 
 
     def RegisterMouseEventHandler(self, event, handler, cursor = None):
-        """!Binds event handler
+        """Binds event handler
 
         @depreciated This method is depreciated. Use Signals or drawing API instead.
         Signals do not cover all events but new Signals can be added when needed
@@ -233,12 +233,12 @@ class MapWindowBase(object):
 
         Emits mouseHandlerRegistered signal before handler is registered.        
 
-        @param event one of mouse events
-        @param handler function to handle event
-        @param cursor cursor which temporary overrides current cursor
+        :param event: one of mouse events
+        :param handler: function to handle event
+        :param cursor: cursor which temporary overrides current cursor
         
-        @return True if successful
-        @return False if event cannot be bind
+        :return: True if successful
+        :return: False if event cannot be bind
         """
         self.mouseHandlerRegistered.emit()
         # inserts handler into list
@@ -256,7 +256,7 @@ class MapWindowBase(object):
         return True
 
     def UnregisterAllHandlers(self):
-        """!Unregisters all registered handlers 
+        """Unregisters all registered handlers 
 
         @depreciated This method is depreciated. Use Signals or drawing API instead.
 
@@ -275,7 +275,7 @@ class MapWindowBase(object):
                     handlers.remove(handler)
         
     def UnregisterMouseEventHandler(self, event, handler):
-        """!Unbinds event handler for event
+        """Unbinds event handler for event
 
         @depreciated This method is depreciated. Use Signals or drawing API instead.
 
@@ -284,11 +284,11 @@ class MapWindowBase(object):
 
         Emits mouseHandlerUnregistered signal after handler is unregistered.
 
-        @param handler handler to unbind
-        @param event event from which handler will be unbinded
+        :param handler: handler to unbind
+        :param event: event from which handler will be unbinded
         
-        @return True if successful
-        @return False if event cannot be unbind
+        :return: True if successful
+        :return: False if event cannot be unbind
         """
         # removes handler from list 
         for containerEv, handlers in self.handlersContainer.iteritems():
@@ -324,11 +324,12 @@ class MapWindowBase(object):
         raise NotImplementedError()
 
     def OnMotion(self, event):
-        """!Tracks mouse motion and update statusbar
+        """Tracks mouse motion and update statusbar
 
-        @todo remove this method when lastEN is not used
+        .. todo::
+            remove this method when lastEN is not used
 
-        @see GetLastEN
+        :func:`GetLastEN`
         """
         try:
             self.lastEN = self.Pixel2Cell(event.GetPositionTuple())
@@ -338,34 +339,34 @@ class MapWindowBase(object):
         event.Skip()
 
     def GetLastEN(self):
-        """!Returns last coordinates of mouse cursor.
+        """Returns last coordinates of mouse cursor.
 
         @depreciated This method is depreciated. Use Signal with coordinates as parameters.
 
-        @see OnMotion
+        :func:`OnMotion`
         """
         return self.lastEN
 
     def SetNamedCursor(self, cursorName):
-        """!Sets cursor defined by name."""
+        """Sets cursor defined by name."""
         cursor = self._cursors[cursorName]
         self.SetCursor(cursor)
         self._cursor = cursorName
 
     def GetNamedCursor(self):
-        """!Returns current cursor name."""
+        """Returns current cursor name."""
         return self._cursor
 
     cursor = property(fget=GetNamedCursor, fset=SetNamedCursor)
 
     def SetModePointer(self):
-        """!Sets mouse mode to pointer."""
+        """Sets mouse mode to pointer."""
         self.mouse['use'] = 'pointer'
         self.mouse['box'] = 'point'
         self.SetNamedCursor('default')
 
     def SetModePan(self):
-        """!Sets mouse mode to pan."""
+        """Sets mouse mode to pan."""
         self.mouse['use'] = "pan"
         self.mouse['box'] = "box"
         self.zoomtype = 0
@@ -391,16 +392,16 @@ class MapWindowBase(object):
         self.SetNamedCursor('cross')
 
     def SetModeQuery(self):
-        """!Query mode on"""
+        """Query mode on"""
         self.mouse['use'] = "query"
         self.mouse['box'] = "point"
         self.zoomtype = 0
         self.SetNamedCursor('cross')
 
     def DisactivateWin(self):
-        """!Use when the class instance is hidden in MapFrame."""
+        """Use when the class instance is hidden in MapFrame."""
         raise NotImplementedError()
 
     def ActivateWin(self):
-        """!Used when the class instance is activated in MapFrame."""
+        """Used when the class instance is activated in MapFrame."""
         raise NotImplementedError()

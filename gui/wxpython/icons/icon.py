@@ -1,4 +1,4 @@
-"""!
+"""
 @package icons.icon
 
 @brief Icon metadata
@@ -51,7 +51,7 @@ except StandardError as e:
     sys.exit(_("Unable to load icon theme. Reason: %s. Quiting wxGUI...") % e)
     
 class MetaIcon:
-    """!Handle icon metadata (image path, tooltip, ...)
+    """Handle icon metadata (image path, tooltip, ...)
     """
     def __init__(self, img, label = None, desc = None):
         self.imagepath = iconSet.get(img, wx.ART_MISSING_IMAGE)
@@ -99,12 +99,12 @@ class MetaIcon:
         return os.path.basename(self.imagepath)
 
     def SetLabel(self, label = None, desc = None):
-        """!Set label/description for icon
+        """Set label/description for icon
 
-        @param label icon label (None for no change)
-        @param desc icon description (None for no change)
+        :param label: icon label (None for no change)
+        :param desc: icon description (None for no change)
         
-        @return copy of original object
+        :return: copy of original object
         """
         cobj = copy.copy(self)
         if label:

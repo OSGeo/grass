@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.gcmd
 
 @brief wxGUI command interface
@@ -61,7 +61,7 @@ except IOError:
     _ = null_gettext
 
 def GetRealCmd(cmd):
-    """!Return real command name - only for MS Windows
+    """Return real command name - only for MS Windows
     """
     if sys.platform == 'win32':
         for ext in globalvar.grassScripts.keys():
@@ -71,11 +71,11 @@ def GetRealCmd(cmd):
     return cmd
 
 def DecodeString(string):
-    """!Decode string using system encoding
+    """Decode string using system encoding
     
-    @param string string to be decoded
+    :param string: string to be decoded
     
-    @return decoded string
+    :return: decoded string
     """
     if not string:
         return string
@@ -87,11 +87,11 @@ def DecodeString(string):
     return string
 
 def EncodeString(string):
-    """!Return encoded string using system locales
+    """Return encoded string using system locales
     
-    @param string string to be encoded
+    :param string: string to be encoded
     
-    @return encoded string
+    :return: encoded string
     """
     if not string:
         return string
@@ -104,12 +104,12 @@ def EncodeString(string):
 
 class GError:
     def __init__(self, message, parent = None, caption = None, showTraceback = True):
-        """!Show error message window
+        """Show error message window
 
-        @param message error message
-        @param parent centre window on parent if given
-        @param caption window caption (if not given "Error")
-        @param showTraceback True to show also Python traceback
+        :param message: error message
+        :param parent: centre window on parent if given
+        :param caption: window caption (if not given "Error")
+        :param showTraceback: True to show also Python traceback
         """
         if not caption:
             caption = _('Error')
@@ -164,7 +164,7 @@ class GException(Exception):
         return self.value
 
 class Popen(subprocess.Popen):
-    """!Subclass subprocess.Popen"""
+    """Subclass subprocess.Popen"""
     def __init__(self, args, **kwargs):
         if subprocess.mswindows:
             args = map(EncodeString, args)
@@ -221,7 +221,7 @@ class Popen(subprocess.Popen):
         setattr(self, which, None)
 
     def kill(self):
-        """!Try to kill running process"""
+        """Try to kill running process"""
         if subprocess.mswindows:
             import win32api
             handle = win32api.OpenProcess(1, 0, self.pid)
@@ -346,13 +346,12 @@ def send_all(p, data):
         data = buffer(data, sent)
 
 class Command:
-    """!Run command in separate thread. Used for commands launched
+    """Run command in separate thread. Used for commands launched
     on the background.
 
     If stdout/err is redirected, write() method is required for the
     given classes.
 
-    @code
         cmd = Command(cmd=['d.rast', 'elevation.dem'], verbose=3, wait=True)
 
         if cmd.returncode == None:
@@ -361,21 +360,20 @@ class Command:
             print 'SUCCESS'
         else:
             print 'FAILURE (%d)' % cmd.returncode
-    @endcode
     """
     def __init__ (self, cmd, stdin = None,
                   verbose = None, wait = True, rerr = False,
                   stdout = None, stderr = None):
         """
-        @param cmd     command given as list
-        @param stdin   standard input stream
-        @param verbose verbose level [0, 3] (--q, --v)
-        @param wait    wait for child execution terminated
-        @param rerr    error handling (when GException raised).
-        True for redirection to stderr, False for GUI dialog,
-        None for no operation (quiet mode)
-        @param stdout  redirect standard output or None
-        @param stderr  redirect standard error output or None
+        :param cmd: command given as list
+        :param stdin: standard input stream
+        :param verbose: verbose level [0, 3] (--q, --v)
+        :param wait: wait for child execution terminated
+        :param rerr: error handling (when GException raised).
+                     True for redirection to stderr, False for GUI
+                     dialog, None for no operation (quiet mode)
+        :param stdout:  redirect standard output or None
+        :param stderr:  redirect standard error output or None
         """
         Debug.msg(1, "gcmd.Command(): %s" % ' '.join(cmd))
         self.cmd = cmd
@@ -443,9 +441,9 @@ class Command:
             del os.environ["GRASS_VERBOSE"]
             
     def __ReadOutput(self, stream):
-        """!Read stream and return list of lines
+        """Read stream and return list of lines
 
-        @param stream stream to be read
+        :param stream: stream to be read
         """
         lineList = []
 
@@ -462,14 +460,14 @@ class Command:
         return lineList
                     
     def __ReadErrOutput(self):
-        """!Read standard error output and return list of lines"""
+        """Read standard error output and return list of lines"""
         return self.__ReadOutput(self.cmdThread.module.stderr)
 
     def __ProcessStdErr(self):
         """
         Read messages/warnings/errors from stderr
 
-        @return list of (type, message)
+        :return: list of (type, message)
         """
         if self.stderr is None:
             lines = self.__ReadErrOutput()
@@ -502,7 +500,7 @@ class Command:
         return msg
 
     def __GetError(self):
-        """!Get error message or ''"""
+        """Get error message or ''"""
         if not self.cmdThread.module:
             return _("Unable to exectute command: '%s'") % ' '.join(self.cmd)
         
@@ -515,16 +513,16 @@ class Command:
         return ''
     
 class CommandThread(Thread):
-    """!Create separate thread for command. Used for commands launched
+    """Create separate thread for command. Used for commands launched
     on the background."""
     def __init__ (self, cmd, env = None, stdin = None,
                   stdout = sys.stdout, stderr = sys.stderr):
         """
-        @param cmd command (given as list)
-        @param env environmental variables
-        @param stdin standard input stream 
-        @param stdout redirect standard output or None
-        @param stderr redirect standard error output or None
+        :param cmd: command (given as list)
+        :param env: environmental variables
+        :param stdin: standard input stream 
+        :param stdout: redirect standard output or None
+        :param stderr: redirect standard error output or None
         """
         Thread.__init__(self)
         
@@ -553,7 +551,7 @@ class CommandThread(Thread):
             del os.environ["GRASS_MESSAGE_FORMAT"]
         
     def run(self):
-        """!Run command"""
+        """Run command"""
         if len(self.cmd) == 0:
             return
 
@@ -598,7 +596,7 @@ class CommandThread(Thread):
         self._redirect_stream()
         
     def _redirect_stream(self):
-        """!Redirect stream"""
+        """Redirect stream"""
         if self.stdout:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stdout.fileno()
@@ -639,11 +637,11 @@ class CommandThread(Thread):
                 self.error = line
             
     def abort(self):
-        """!Abort running process, used by main thread to signal an abort"""
+        """Abort running process, used by main thread to signal an abort"""
         self._want_abort = True
     
 def _formatMsg(text):
-    """!Format error messages for dialogs
+    """Format error messages for dialogs
     """
     message = ''
     for line in text.splitlines():
@@ -662,25 +660,26 @@ def _formatMsg(text):
     
     return message
 
-def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = False,
-               parent = None, read = False, parse = None, stdin = None, getErrorMsg = False, **kwargs):
-    """!Run GRASS command
+def RunCommand(prog, flags = "", overwrite = False, quiet = False,
+               verbose = False, parent = None, read = False,
+               parse = None, stdin = None, getErrorMsg = False, **kwargs):
+    """Run GRASS command
 
-    @param prog program to run
-    @param flags flags given as a string
-    @param overwrite, quiet, verbose flags
-    @param parent parent window for error messages
-    @param read fetch stdout
-    @param parse fn to parse stdout (e.g. grass.parse_key_val) or None
-    @param stdin stdin or None
-    @param getErrorMsg get error messages on failure
-    @param kwargs program parameters
+    :param prog: program to run
+    :param flags: flags given as a string
+    :param overwrite, quiet, verbose: flags
+    :param parent: parent window for error messages
+    :param read: fetch stdout
+    :param parse: fn to parse stdout (e.g. grass.parse_key_val) or None
+    :param stdin: stdin or None
+    :param getErrorMsg: get error messages on failure
+    :param kwargs: program parameters
     
-    @return returncode (read == False and getErrorMsg == False)
-    @return returncode, messages (read == False and getErrorMsg == True)
-    @return stdout (read == True and getErrorMsg == False)
-    @return returncode, stdout, messages (read == True and getErrorMsg == True)
-    @return stdout, stderr
+    :return: returncode (read == False and getErrorMsg == False)
+    :return: returncode, messages (read == False and getErrorMsg == True)
+    :return: stdout (read == True and getErrorMsg == False)
+    :return: returncode, stdout, messages (read == True and getErrorMsg == True)
+    :return: stdout, stderr
     """
     cmdString = ' '.join(grass.make_command(prog, flags, overwrite,
                                             quiet, verbose, **kwargs))
@@ -757,11 +756,11 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     return stdout, _formatMsg(stderr)
 
 def GetDefaultEncoding(forceUTF8 = False):
-    """!Get default system encoding
+    """Get default system encoding
     
-    @param forceUTF8 force 'UTF-8' if encoding is not defined
+    :param bool forceUTF8: force 'UTF-8' if encoding is not defined
 
-    @return system encoding (can be None)
+    :return: system encoding (can be None)
     """
     enc = locale.getdefaultlocale()[1]
     if forceUTF8 and (enc is None or enc == 'UTF8'):

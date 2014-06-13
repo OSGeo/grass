@@ -1,4 +1,4 @@
-"""!
+"""
 @package gmodeler.preferences
 
 @brief wxGUI Graphical Modeler - preferences
@@ -24,7 +24,7 @@ from core.settings        import UserSettings
 from core.utils import _
 
 class PreferencesDialog(PreferencesBaseDialog):
-    """!User preferences dialog"""
+    """User preferences dialog"""
     def __init__(self, parent, giface, settings = UserSettings,
                  title = _("Modeler settings")):
         
@@ -42,7 +42,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.SetSize(self.size)
 
     def _createGeneralPage(self, notebook):
-        """!Create notebook page for action settings"""
+        """Create notebook page for action settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("General"))
         
@@ -80,7 +80,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def _createActionPage(self, notebook):
-        """!Create notebook page for action settings"""
+        """Create notebook page for action settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Command"))
         
@@ -199,7 +199,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def _createDataPage(self, notebook):
-        """!Create notebook page for data settings"""
+        """Create notebook page for data settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Data"))
         
@@ -318,7 +318,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def _createLoopPage(self, notebook):
-        """!Create notebook page for loop settings"""
+        """Create notebook page for loop settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Loop"))
         
@@ -403,7 +403,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def _createCommentPage(self, notebook):
-        """!Create notebook page for comment settings"""
+        """Create notebook page for comment settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Comment"))
         
@@ -488,21 +488,21 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def OnApply(self, event):
-        """!Button 'Apply' pressed"""
+        """Button 'Apply' pressed"""
         PreferencesBaseDialog.OnApply(self, event)
         
         self.parent.GetModel().Update()
         self.parent.GetCanvas().Refresh()
 
     def OnSave(self, event):
-        """!Button 'Save' pressed"""
+        """Button 'Save' pressed"""
         PreferencesBaseDialog.OnSave(self, event)
         
         self.parent.GetModel().Update()
         self.parent.GetCanvas().Refresh()
 
 class PropertiesDialog(wx.Dialog):
-    """!Model properties dialog
+    """Model properties dialog
     """
     def __init__(self, parent, id = wx.ID_ANY,
                  title = _('Model properties'),
@@ -600,14 +600,14 @@ class PropertiesDialog(wx.Dialog):
         self.Hide()
         
     def GetValues(self):
-        """!Get values"""
+        """Get values"""
         return { 'name'        : self.name.GetValue(),
                  'description' : self.desc.GetValue(),
                  'author'      : self.author.GetValue(),
                  'overwrite'   : self.overwrite.IsChecked() }
     
     def Init(self, prop):
-        """!Initialize dialog"""
+        """Initialize dialog"""
         self.name.SetValue(prop['name'])
         self.desc.SetValue(prop['description'])
         self.author.SetValue(prop['author'])

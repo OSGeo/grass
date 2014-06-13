@@ -31,7 +31,7 @@ class VectorCleaningFrame(wx.Frame):
     def __init__(self, parent, id=wx.ID_ANY, title=_('Set up vector cleaning tools'),
                  style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
-        """!
+        """
         Dialog for interactively defining vector cleaning tools
         """
         wx.Frame.__init__(self, parent, id, title, style=style, **kwargs)
@@ -304,7 +304,7 @@ class VectorCleaningFrame(wx.Frame):
         return ct_panel
 
     def OnAddTool(self, event):
-        """!Add tool button pressed"""
+        """Add tool button pressed"""
         self.AddTool()
 
     def AddTool(self):
@@ -343,7 +343,7 @@ class VectorCleaningFrame(wx.Frame):
         self.ct_panel.SetupScrolling()
 
     def OnClearTool(self, event):
-        """!Remove tool button pressed"""
+        """Remove tool button pressed"""
         id = self.selected
 
         if id > 0:
@@ -355,7 +355,7 @@ class VectorCleaningFrame(wx.Frame):
             self.SetStatusText(_("Please select a cleaning tool to remove"))
 
     def OnMoveToolUp(self, event):
-        """!Move up tool button pressed"""
+        """Move up tool button pressed"""
         id = self.selected
 
         if id > 1:
@@ -380,7 +380,7 @@ class VectorCleaningFrame(wx.Frame):
             self.SetStatusText(_("Please select a cleaning tool to move up"))
 
     def OnMoveToolDown(self, event):
-        """!Move down tool button pressed"""
+        """Move down tool button pressed"""
         id = self.selected
         snum = len(self.toolslines.keys())
 
@@ -406,7 +406,7 @@ class VectorCleaningFrame(wx.Frame):
             self.SetStatusText(_("Please select a cleaning tool to move down"))
 
     def OnSetTool(self, event):
-        """!Tool was defined"""
+        """Tool was defined"""
         id = event.GetId()
         tool_no = id - 1000
         num = self.FindWindowById(id).GetCurrentSelection()
@@ -417,7 +417,7 @@ class VectorCleaningFrame(wx.Frame):
         self.SetStatusText(str(tool_no) + '. ' + _("cleaning tool: '%s'") % (self.tool_list[num]))
 
     def OnThreshValue(self, event):
-        """!Threshold value was entered"""
+        """Threshold value was entered"""
         id = event.GetId()
         num = id - 2000
         self.toolslines[num]['thresh'] = self.FindWindowById(id).GetValue()
@@ -428,7 +428,7 @@ class VectorCleaningFrame(wx.Frame):
                             'thresh': self.toolslines[num]['thresh']})
 
     def OnSelect(self, event):
-        """!Tool was selected"""
+        """Tool was selected"""
         id = event.GetId()
 
         if self.selected > -1 and self.selected != id:
@@ -441,11 +441,11 @@ class VectorCleaningFrame(wx.Frame):
             self.selected = -1
 
     def OnDone(self, cmd, returncode):
-        """!Command done"""
+        """Command done"""
         self.SetStatusText('')
 
     def OnCleaningRun(self, event):
-        """!Builds options and runs v.clean
+        """Builds options and runs v.clean
         """
         self.GetCmdStrings()
 
@@ -496,14 +496,14 @@ class VectorCleaningFrame(wx.Frame):
         self.Destroy()
 
     def OnHelp(self, event):
-        """!Show GRASS manual page"""
+        """Show GRASS manual page"""
         RunCommand('g.manual',
                    quiet=True,
                    parent=self,
                    entry=self.cmd)
 
     def OnCopy(self, event):
-        """!Copy the command"""
+        """Copy the command"""
         cmddata = wx.TextDataObject()
         # get tool and thresh strings
         self.GetCmdStrings()

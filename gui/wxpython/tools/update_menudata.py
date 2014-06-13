@@ -1,4 +1,4 @@
-"""!
+"""
 @brief Support script for wxGUI - only for developers needs. Updates
 menudata.xml file.
 
@@ -34,7 +34,7 @@ from lmgr.menudata  import LayerManagerMenuData
 from core.globalvar import grassCmd
 
 def parseModules():
-    """!Parse modules' interface"""
+    """Parse modules' interface"""
     modules = dict()
     
     # list of modules to be ignored
@@ -63,7 +63,7 @@ def parseModules():
     return modules
 
 def updateData(data, modules):
-    """!Update menu data tree"""
+    """Update menu data tree"""
     # list of modules to be ignored
     ignore = ['v.type_wrapper.py',
               'vcolors']
@@ -110,7 +110,7 @@ def updateData(data, modules):
             grass.warning("'%s' not available from the menu" % module)
     
 def writeData(data, file = None):
-    """!Write updated menudata.xml"""
+    """Write updated menudata.xml"""
     if file is None:
         file = os.path.join('xml', 'menudata.xml')
     

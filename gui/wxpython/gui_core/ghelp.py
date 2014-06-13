@@ -1,4 +1,4 @@
-"""!
+"""
 @package gui_core.ghelp
 
 @brief Help/about window, menu tree, search module tree
@@ -41,7 +41,7 @@ from core.debug       import Debug
 
 
 class AboutWindow(wx.Frame):
-    """!Create custom About Window
+    """Create custom About Window
     """
     def __init__(self, parent, size = (770, 460), 
                  title = _('About GRASS GIS'), **kwargs):
@@ -93,7 +93,7 @@ class AboutWindow(wx.Frame):
         self.Layout()
         
     def _pageInfo(self):
-        """!Info page"""
+        """Info page"""
         # get version and web site
         vInfo = grass.version()
         if not vInfo:
@@ -566,15 +566,16 @@ class AboutWindow(wx.Frame):
         return self.statswin
     
     def OnCloseWindow(self, event):
-        """!Close window"""
+        """Close window"""
         self.Close()
 
 class HelpFrame(wx.Dialog):
-    """!GRASS Quickstart help window
+    """GRASS Quickstart help window
 
     As a base class wx.Dialog is used, because of not working
     close button with wx.Frame when dialog is called from wizard.
-    If parent is None, application TopLevelWindow is used (wxPython standard behaviour).
+    If parent is None, application TopLevelWindow is used (wxPython
+    standard behaviour).
 
     Currently not used (was in location wizard before)
     due to unsolved problems - window sometimes does not respond.
@@ -596,7 +597,7 @@ class HelpFrame(wx.Dialog):
         self.Layout()
 
 class HelpWindow(HtmlWindow):
-    """!This panel holds the text from GRASS docs.
+    """This panel holds the text from GRASS docs.
     
     GISBASE must be set in the environment to find the html docs dir.
     The SYNOPSIS section is skipped, since this Panel is supposed to
@@ -604,7 +605,7 @@ class HelpWindow(HtmlWindow):
     """
     def __init__(self, parent, command, text, skipDescription,
                  **kwargs):
-        """!If command is given, the corresponding HTML help
+        """If command is given, the corresponding HTML help
         file will be presented, with all links pointing to absolute
         paths of local files.
 
@@ -654,7 +655,7 @@ class HelpWindow(HtmlWindow):
         super(HelpWindow, self).OnLinkClicked(linkinfo)
         
     def fillContentsFromFile(self, htmlFile, skipDescription = True):
-        """!Load content from file.
+        """Load content from file.
         
         Currently not used.        
         """
@@ -709,7 +710,7 @@ class HelpPanel(wx.Panel):
         self._layout()
 
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         
@@ -728,14 +729,14 @@ class HelpPanel(wx.Panel):
         sizer.Fit(self)
 
     def LoadPage(self, path = None):
-        """!Load page"""
+        """Load page"""
         if not path:
             path = self.GetFile()
         self.content.history.append(path)
         self.content.LoadPage(path)
         
     def GetFile(self):
-        """!Get HTML file"""
+        """Get HTML file"""
         fMan = os.path.join(self.content.fspath, self.command + ".html")
         if os.path.isfile(fMan):
             return fMan
@@ -753,7 +754,7 @@ class HelpPanel(wx.Panel):
         return self.content.loaded
 
     def OnHistory(self):
-        """!Update buttons"""
+        """Update buttons"""
         nH = len(self.content.history)
         iH = self.content.historyIdx
         if iH == nH - 1:
@@ -786,10 +787,10 @@ class HelpPanel(wx.Panel):
         event.Skip()
 
 def ShowAboutDialog(prgName, startYear):
-    """!Displays About window.
+    """Displays About window.
 
-    @param prgName name of the program
-    @param startYear the first year of existence of the program
+    :param prgName: name of the program
+    :param startYear: the first year of existence of the program
     """
     info = wx.AboutDialogInfo()
     

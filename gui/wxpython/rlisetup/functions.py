@@ -67,7 +67,7 @@ def retRLiPath():
 
 
 def checkMapExists(name, typ='rast'):
-    """!Check if a map already exist in the working mapset"""
+    """Check if a map already exist in the working mapset"""
     env = grass.gisenv()
     mapset = env['MAPSET']
     mapp = grass.find_file(name, typ, mapset)

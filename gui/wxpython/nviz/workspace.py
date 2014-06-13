@@ -1,4 +1,4 @@
-"""!
+"""
 @package nviz.workspace
 
 @brief wxNviz workspace settings
@@ -145,7 +145,7 @@ class NvizSettings(object):
         return data
     
     def SetIsosurfaceDefaultProp(self):
-        """!Set default isosurface properties"""
+        """Set default isosurface properties"""
         data = dict()
         for attr in ('shine', 'topo', 'transp', 'color', 'inout'):
             data[attr] = {}
@@ -159,7 +159,7 @@ class NvizSettings(object):
         return data
     
     def SetSliceDefaultProp(self):
-        """!Set default slice properties"""
+        """Set default slice properties"""
         data = dict()
         data['position'] = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'volume',
                                                subkey = 'slice_position'))
@@ -263,8 +263,10 @@ class NvizSettings(object):
     def GetDrawMode(self, mode=None, style=None, shade=None, string=False):
         """Get surface draw mode (value) from description/selection
 
-        @param mode,style,shade modes
-        @param string if True input parameters are strings otherwise
+        :param mode:
+        :param style:
+        :param shade:
+        :param string: if True input parameters are strings otherwise
         selections
         """
         if not wxnviz:
@@ -327,7 +329,7 @@ class NvizSettings(object):
         return (value, desc)
     
     def SetDecorDefaultProp(self, type):
-        """!Set default arrow properties
+        """Set default arrow properties
         """
         data = {}
         

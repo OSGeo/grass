@@ -1,4 +1,4 @@
-"""!
+"""
 @package vdigit.wxdigit
 
 @brief wxGUI vector digitizer (base class)
@@ -10,12 +10,13 @@ List of classes:
  - wxdigit::VDigitError
  - wxdigit::IVDigit
 
-@todo Read large amounts of data from Vlib into arrays, which could
-then be processed using NumPy and rendered using glDrawArrays or
-glDrawElements, so no per-line/per-vertex processing in Python. Bulk
-data processing with NumPy is much faster than iterating in Python
-(and NumPy would be an excellent candidate for acceleration via
-e.g. OpenCL or CUDA; I'm surprised it hasn't happened already).
+.. todo::
+    Read large amounts of data from Vlib into arrays, which could
+    then be processed using NumPy and rendered using glDrawArrays or
+    glDrawElements, so no per-line/per-vertex processing in Python. Bulk
+    data processing with NumPy is much faster than iterating in Python
+    (and NumPy would be an excellent candidate for acceleration via
+    e.g. OpenCL or CUDA; I'm surprised it hasn't happened already).
 
 (C) 2007-2011, 2013 by the GRASS Development Team
 
@@ -45,15 +46,15 @@ except ImportError:
 
 class VDigitError:
     def __init__(self, parent):
-        """!Class for managing error messages of vector digitizer
+        """Class for managing error messages of vector digitizer
 
-        @param parent parent window for dialogs
+        :param parent: parent window for dialogs
         """
         self.parent  = parent
         self.caption = _('Digitization Error')
     
     def NoMap(self, name = None):
-        """!No map for editing"""
+        """No map for editing"""
         if name:
             message = _('Unable to open vector map <%s>.') % name
         else:
@@ -63,7 +64,7 @@ class VDigitError:
                caption = self.caption)
 
     def WriteLine(self):
-        """!Writing line failed
+        """Writing line failed
         """
         GError(message = _('Writing new feature failed. '
                            'Operation canceled.\n\n'
@@ -72,7 +73,7 @@ class VDigitError:
                caption = self.caption)
 
     def ReadLine(self, line):
-        """!Reading line failed
+        """Reading line failed
         """
         GError(message = _('Reading feature id %d failed. '
                            'Operation canceled.') % line,
@@ -80,7 +81,7 @@ class VDigitError:
                caption = self.caption)
 
     def DbLink(self, dblink):
-        """!No dblink available
+        """No dblink available
         """
         GError(message = _('Database link %d not available. '
                            'Operation canceled.') % dblink,
@@ -88,7 +89,7 @@ class VDigitError:
                caption = self.caption)
 
     def Driver(self, driver):
-        """!Staring driver failed
+        """Staring driver failed
         """
         GError(message = _('Unable to start database driver <%s>. '
                            'Operation canceled.') % driver,
@@ -96,7 +97,7 @@ class VDigitError:
                caption = self.caption)
 
     def Database(self, driver, database):
-        """!Opening database failed
+        """Opening database failed
         """
         GError(message = _('Unable to open database <%(db)s> by driver <%(driver)s>. '
                            'Operation canceled.') % { 'db' : database, 'driver' : driver},
@@ -104,7 +105,7 @@ class VDigitError:
                caption = self.caption)
 
     def DbExecute(self, sql):
-        """!Sql query failed
+        """Sql query failed
         """
         GError(message = _("Unable to execute SQL query '%s'. "
                            "Operation canceled.") % sql,
@@ -112,7 +113,7 @@ class VDigitError:
                caption = self.caption)
 
     def DeadLine(self, line):
-        """!Dead line
+        """Dead line
         """
         GError(message = _("Feature id %d is marked as dead. "
                            "Operation canceled.") % line,
@@ -120,7 +121,7 @@ class VDigitError:
                caption = self.caption)
 
     def FeatureType(self, ftype):
-        """!Unknown feature type
+        """Unknown feature type
         """
         GError(message = _("Unsupported feature type %d. "
                            "Operation canceled.") % ftype,
@@ -129,9 +130,9 @@ class VDigitError:
         
 class IVDigit:
     def __init__(self, mapwindow, driver = DisplayDriver):
-        """!Base class for vector digitizer (ctypes interface)
+        """Base class for vector digitizer (ctypes interface)
         
-        @param mapwindow reference to a map window
+        :param mapwindow: reference to a map window
         """
         self.poMapInfo   = None      # pointer to Map_info
         self.mapWindow = mapwindow
@@ -225,12 +226,12 @@ class IVDigit:
             del self.bgMapInfo
      
     def EmitSignals(self, emit):
-        """!Activate/deactivate signals which describes features changes during digitization.
+        """Activate/deactivate signals which describes features changes during digitization.
         """
         self.emit_signals = emit
 
     def CloseBackgroundMap(self):
-        """!Close background vector map"""
+        """Close background vector map"""
         if not self.poBgMapInfo:
             return
         
@@ -238,14 +239,16 @@ class IVDigit:
         self.poBgMapInfo = self.popoBgMapInfo = None
         
     def OpenBackgroundMap(self, bgmap):
-        """!Open background vector map
+        """Open background vector map
 
-        @todo support more background maps then only one
+        .. todo::
+            support more background maps then only one
         
-        @param bgmap name of vector map to be opened
+        :param bgmap: name of vector map to be opened
+        :type bgmap: str
 
-        @return pointer to map_info
-        @return None on error
+        :return: pointer to map_info
+        :return: None on error
         """
         name   = create_string_buffer(GNAME_MAX)
         mapset = create_string_buffer(GMAPSET_MAX)
@@ -270,13 +273,13 @@ class IVDigit:
             return
         
     def _getSnapMode(self):
-        """!Get snapping mode
+        """Get snapping mode
 
          - snap to vertex
          - snap to nodes
          - no snapping
         
-        @return snap mode
+        :return: snap mode
         """
         threshold = self._display.GetThreshold()
         if threshold > 0.0:
@@ -288,7 +291,7 @@ class IVDigit:
             return NO_SNAP
     
     def _getNewFeaturesLayer(self):
-        """!Returns layer of new feature (from settings)"""
+        """Returns layer of new feature (from settings)"""
         if UserSettings.Get(group = 'vdigit', key = "categoryMode", subkey = 'selection') == 2:
             layer = -1 # -> no category
         else:
@@ -297,7 +300,7 @@ class IVDigit:
         return layer
         
     def _getNewFeaturesCat(self):
-        """!Returns category of new feature (from settings)"""
+        """Returns category of new feature (from settings)"""
         if UserSettings.Get(group = 'vdigit', key = "categoryMode", subkey = 'selection') == 2:
             cat   = -1
         else:
@@ -306,12 +309,12 @@ class IVDigit:
         return cat
         
     def _breakLineAtIntersection(self, line, pointsLine):
-        """!Break given line at intersection
+        """Break given line at intersection
 
-        \param line line id
-        \param pointsLine line geometry
+        :param line: line id
+        :param pointsLine: line geometry
         
-        \return number of modified lines
+        :return: number of modified lines
         """
         if not self._checkMap():
             return -1
@@ -380,14 +383,15 @@ class IVDigit:
         Vect_reset_updated(self.poMapInfo)
                 
     def _applyChangeset(self, changeset, undo):
-        """!Apply changeset (undo/redo changeset)
+        """Apply changeset (undo/redo changeset)
         
-        @param changeset changeset id
-        @param undo True for undo otherwise redo
+        :param changeset: changeset id
+        :param undo: True for undo otherwise redo
+        :type undo: bool
 
-        @return 1 changeset applied
-        @return 0 changeset not applied
-        @return -1 on error
+        :return: 1 changeset applied
+        :return: 0 changeset not applied
+        :return: -1 on error
         """
         if changeset < 0 or changeset >= len(self.changesets):
             return -1
@@ -427,12 +431,12 @@ class IVDigit:
         return ret
     
     def AddFeature(self, ftype, points):
-        """!Add new feature
+        """Add new feature
         
-        @param ftype feature type (point, line, centroid, boundary)
-        @param points tuple of points ((x, y), (x, y), ...)
+        :param ftype: feature type (point, line, centroid, boundary)
+        :param points: tuple of points ((x, y), (x, y), ...)
         
-        @return tuple (number of added features, feature ids)
+        :return: tuple (number of added features, feature ids)
         """
         layer = self._getNewFeaturesLayer()
         cat = self._getNewFeaturesCat()
@@ -468,9 +472,9 @@ class IVDigit:
         return ret
 
     def DeleteSelectedLines(self):
-        """!Delete selected features
+        """Delete selected features
 
-        @return number of deleted features
+        :return: number of deleted features
         """
         if not self._checkMap():
             return -1
@@ -519,9 +523,9 @@ class IVDigit:
         return nlines
             
     def _deleteRecords(self, cats):
-        """!Delete records from attribute table
+        """Delete records from attribute table
         
-        @param cats directory field/list of cats
+        :param cats: directory field/list of cats
         """
         handle   = dbHandle()
         poHandle = pointer(handle)
@@ -567,9 +571,9 @@ class IVDigit:
             db_close_database_shutdown_driver(poDriver)
         
     def DeleteSelectedAreas(self):
-        """!Delete selected areas (centroid+boundaries)
+        """Delete selected areas (centroid+boundaries)
 
-        @return number of deleted 
+        :return: number of deleted 
         """
         if len(self._display.selected['ids']) < 1:
             return 0
@@ -605,11 +609,11 @@ class IVDigit:
         return nareas
    
     def _getLineAreaBboxCats(self, ln_id):
-        """!Helper function
+        """Helper function
 
-        @param id of feature
-        @return None if the feature does not exists
-        @return list of @see _getaAreaBboxCats
+        :param ln_id: id of feature
+        :return: None if the feature does not exists
+        :return: list of :func:`_getaAreaBboxCats`
         """
         ltype = Vect_read_line(self.poMapInfo, None, None, ln_id)
 
@@ -621,11 +625,11 @@ class IVDigit:
 
 
     def _getCentroidAreaBboxCats(self, centroid):
-        """!Helper function
+        """Helper function
 
-        @param id of an centroid 
-        @return None if area does not exists
-        @return see return of _getaAreaBboxCats
+        :param centroid: id of an centroid 
+        :return: None if area does not exists
+        :return: see return of :func:`_getaAreaBboxCats`
         """
         if not Vect_line_alive(self.poMapInfo, centroid):
             return None
@@ -637,11 +641,12 @@ class IVDigit:
             return None
 
     def _getaAreaBboxCats(self, area):
-        """!Helper function
+        """Helper function
 
-        @param area area id
-        @return list of categories @see _getLineAreasCategories and 
-        list of bboxes @see _getBbox of area boundary features
+        :param area: area id
+        :return: list of categories :func:`_getLineAreasCategories` and 
+                 list of bboxes :func:`_getBbox` of area boundary
+                 features
         """
         po_b_list = Vect_new_list()
         Vect_get_area_boundaries(self.poMapInfo, area, po_b_list);
@@ -663,14 +668,14 @@ class IVDigit:
         return geoms, areas_cats
 
     def _getLineAreasCategories(self, ln_id):
-        """!Helper function
+        """Helper function
 
-        @param line_id id of boundary feature 
-        @return categories of areas on the left, right side of the feature
-        @return format: [[{layer : [cat]}, None]] means:
+        :param line_id: id of boundary feature 
+        :return: categories of areas on the left, right side of the feature
+        :return: format: [[{layer : [cat]}, None]] means:
                 area to the left (list of layers which has cats list as values), 
                 area to the right (no area there in this case (None)) 
-        @return [] the feature is not boundary or does not exists
+        :return: [] the feature is not boundary or does not exists
         """
         if not Vect_line_alive (self.poMapInfo, ln_id):
             return []
@@ -699,11 +704,11 @@ class IVDigit:
         return cats
 
     def _getCategories(self, ln_id):
-        """!Helper function
+        """Helper function
 
-        @param line_id id of feature
-        @return list of the feature categories [{layer : cats}, next layer...]
-        @return None feature does not exist
+        :param line_id: id of feature
+        :return: list of the feature categories [{layer : cats}, next layer...]
+        :return: None feature does not exist
         """
         if not Vect_line_alive (self.poMapInfo, ln_id):
             return none
@@ -726,11 +731,11 @@ class IVDigit:
         return cats
 
     def _getBbox(self, ln_id):
-        """!Helper function
+        """Helper function
 
-        @param line_id id of line feature
-        @return bbox bounding box of the feature
-        @return None feature does not exist
+        :param line_id: id of line feature
+        :return: bbox bounding box of the feature
+        :return: None feature does not exist
         """
         if not Vect_line_alive (self.poMapInfo, ln_id):
             return None
@@ -746,10 +751,10 @@ class IVDigit:
         return bbox
 
     def _createBbox(self, points):
-        """!Helper function
+        """Helper function
 
-        @param points list of points [(x, y), ...] to be bbox created for
-        @return bbox bounding box of points {'maxx':, 'maxy':, 'minx':, 'miny'}
+        :param points: list of points [(x, y), ...] to be bbox created for
+        :return: bbox bounding box of points {'maxx':, 'maxy':, 'minx':, 'miny'}
         """
         bbox = {}
         for pt in points:
@@ -772,10 +777,10 @@ class IVDigit:
         return bbox
 
     def _convertGeom(self, poPoints):
-        """!Helper function
-            convert geom from ctypes line_pts to python list
+        """Helper function convert geom from ctypes line_pts to python
+        list
 
-        @return coords in python list [(x, y),...] 
+        :return: coords in python list [(x, y),...] 
         """
         Points = poPoints.contents
 
@@ -786,9 +791,9 @@ class IVDigit:
         return pts_geom
 
     def MoveSelectedLines(self, move):
-        """!Move selected features
+        """Move selected features
 
-        @param move direction (x, y)
+        :param move: direction (x, y)
         """
         if not self._checkMap():
             return -1
@@ -849,14 +854,14 @@ class IVDigit:
         return nlines
 
     def MoveSelectedVertex(self, point, move):
-        """!Move selected vertex of the line
+        """Move selected vertex of the line
 
-        @param point location point
-        @param move  x,y direction
+        :param point: location point
+        :param move:  x,y direction
         
-        @return id of new feature
-        @return 0 vertex not moved (not found, line is not selected)
-        @return -1 on error
+        :return: id of new feature
+        :return: 0 vertex not moved (not found, line is not selected)
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -913,13 +918,13 @@ class IVDigit:
         return moved
 
     def AddVertex(self, coords):
-        """!Add new vertex to the selected line/boundary on position 'coords'
+        """Add new vertex to the selected line/boundary on position 'coords'
 
-        @param coords coordinates to add vertex
+        :param coords: coordinates to add vertex
 
-        @return id of new feature
-        @return 0 nothing changed
-        @return -1 on failure
+        :return: id of new feature
+        :return: 0 nothing changed
+        :return: -1 on failure
         """
         added = self._ModifyLineVertex(coords, add = True)
         
@@ -929,13 +934,13 @@ class IVDigit:
         return added
 
     def RemoveVertex(self, coords):
-        """!Remove vertex from the selected line/boundary on position 'coords'
+        """Remove vertex from the selected line/boundary on position 'coords'
 
-        @param coords coordinates to remove vertex
+        :param coords: coordinates to remove vertex
 
-        @return id of new feature
-        @return 0 nothing changed
-        @return -1 on failure
+        :return: id of new feature
+        :return: 0 nothing changed
+        :return: -1 on failure
         """
         deleted = self._ModifyLineVertex(coords, add = False)
         
@@ -946,13 +951,13 @@ class IVDigit:
 
 
     def SplitLine(self, point):
-        """!Split/break selected line/boundary on given position
+        """Split/break selected line/boundary on given position
 
-        @param point point where to split line
+        :param point: point where to split line
         
-        @return 1 line modified
-        @return 0 nothing changed
-        @return -1 error
+        :return: 1 line modified
+        :return: 0 nothing changed
+        :return: -1 error
         """
         thresh = self._display.GetThreshold('selectThresh')
         if not self._checkMap():
@@ -973,13 +978,13 @@ class IVDigit:
         return ret
 
     def EditLine(self, line, coords):
-        """!Edit existing line/boundary
+        """Edit existing line/boundary
 
-        @param line feature id to be modified
-        @param coords list of coordinates of modified line
+        :param line: feature id to be modified
+        :param coords: list of coordinates of modified line
 
-        @return feature id of new line
-        @return -1 on error
+        :return: feature id of new line
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1037,10 +1042,10 @@ class IVDigit:
         return newline
 
     def FlipLine(self):
-        """!Flip selected lines/boundaries
+        """Flip selected lines/boundaries
 
-        @return number of modified lines
-        @return -1 on error
+        :return: number of modified lines
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1058,10 +1063,10 @@ class IVDigit:
         return ret
 
     def MergeLine(self):
-        """!Merge selected lines/boundaries
+        """Merge selected lines/boundaries
 
-        @return number of modified lines
-        @return -1 on error
+        :return: number of modified lines
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1077,10 +1082,10 @@ class IVDigit:
         return ret
 
     def BreakLine(self):
-        """!Break selected lines/boundaries
+        """Break selected lines/boundaries
 
-        @return number of modified lines
-        @return -1 on error
+        :return: number of modified lines
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1097,10 +1102,10 @@ class IVDigit:
         return ret
 
     def SnapLine(self):
-        """!Snap selected lines/boundaries
+        """Snap selected lines/boundaries
 
-        @return on success
-        @return -1 on error
+        :return: on success
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1116,11 +1121,11 @@ class IVDigit:
             self.toolbar.EnableUndo()
         
     def ConnectLine(self):
-        """!Connect selected lines/boundaries
+        """Connect selected lines/boundaries
 
-        @return 1 lines connected
-        @return 0 lines not connected
-        @return -1 on error
+        :return: 1 lines connected
+        :return: 0 lines not connected
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1137,12 +1142,12 @@ class IVDigit:
         return ret
         
     def CopyLine(self, ids = []):
-        """!Copy features from (background) vector map
+        """Copy features from (background) vector map
 
-        @param ids list of line ids to be copied
+        :param ids: list of line ids to be copied
 
-        @return number of copied features
-        @return -1 on error
+        :return: number of copied features
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1165,13 +1170,13 @@ class IVDigit:
         return ret
 
     def CopyCats(self, fromId, toId, copyAttrb = False):
-        """!Copy given categories to objects with id listed in ids
+        """Copy given categories to objects with id listed in ids
 
-        @param cats ids of 'from' feature
-        @param ids  ids of 'to' feature(s)
+        :param cats: ids of 'from' feature
+        :param ids: ids of 'to' feature(s)
 
-        @return number of modified features
-        @return -1 on error
+        :return: number of modified features
+        :return: -1 on error
         """
         if len(fromId) < 1 or len(toId) < 1:
             return 0
@@ -1298,7 +1303,7 @@ class IVDigit:
         return nlines
 
     def _selectLinesByQueryThresh(self):
-        """!Generic method used for SelectLinesByQuery() -- to get
+        """Generic method used for SelectLinesByQuery() -- to get
         threshold value"""
         thresh = 0.0
         if UserSettings.Get(group = 'vdigit', key = 'query', subkey = 'selection') == 0:
@@ -1313,11 +1318,12 @@ class IVDigit:
         return thresh
 
     def SelectLinesByQuery(self, bbox):
-        """!Select features by query
+        """Select features by query
         
-        @todo layer / 3D
+        .. todo::
+            layer / 3D
         
-        @param bbox bounding box definition
+        :param bbox: bounding box definition
         """
         if not self._checkMap():
             return -1
@@ -1367,7 +1373,7 @@ class IVDigit:
         return ids
 
     def IsVector3D(self):
-        """!Check if open vector map is 3D
+        """Check if open vector map is 3D
         """
         if not self._checkMap():
             return False
@@ -1375,12 +1381,12 @@ class IVDigit:
         return Vect_is_3d(self.poMapInfo)
     
     def GetLineLength(self, line):
-        """!Get line length
+        """Get line length
 
-        @param line feature id
+        :param line: feature id
 
-        @return line length
-        @return -1 on error
+        :return: line length
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1400,12 +1406,12 @@ class IVDigit:
         return length
 
     def GetAreaSize(self, centroid):
-        """!Get area size
+        """Get area size
 
-        @param centroid centroid id
+        :param centroid: centroid id
 
-        @return area size
-        @return -1 on error
+        :return: area size
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1429,12 +1435,12 @@ class IVDigit:
         return size
         
     def GetAreaPerimeter(self, centroid):
-        """!Get area perimeter
+        """Get area perimeter
         
-        @param centroid centroid id
+        :param centroid: centroid id
         
-        @return area size
-        @return -1 on error
+        :return: area size
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1459,15 +1465,15 @@ class IVDigit:
         return perimeter
     
     def SetLineCats(self, line, layer, cats, add = True):
-        """!Set categories for given line and layer
+        """Set categories for given line and layer
 
-        @param line feature id
-        @param layer layer number (-1 for first selected line)
-        @param cats list of categories
-        @param add if True to add, otherwise do delete categories
+        :param line: feature id
+        :param layer: layer number (-1 for first selected line)
+        :param cats: list of categories
+        :param add: if True to add, otherwise do delete categories
 
-        @return new feature id (feature need to be rewritten)
-        @return -1 on error
+        :return: new feature id (feature need to be rewritten)
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1508,14 +1514,14 @@ class IVDigit:
         return newline
 
     def TypeConvForSelectedLines(self):
-        """!Feature type conversion for selected objects.
+        """Feature type conversion for selected objects.
 
         Supported conversions:
          - point <-> centroid
          - line <-> boundary
 
-        @return number of modified features
-        @return -1 on error
+        :return: number of modified features
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1531,11 +1537,11 @@ class IVDigit:
         return ret
 
     def Undo(self, level = -1):
-        """!Undo action
+        """Undo action
 
-        @param level levels to undo (0 to revert all)
+        :param level: levels to undo (0 to revert all)
 
-        @return id of current changeset
+        :return: id of current changeset
         """
         changesetLast = len(self.changesets) - 1
         
@@ -1582,15 +1588,15 @@ class IVDigit:
             self.toolbar.EnableRedo(False)
         
     def ZBulkLines(self, pos1, pos2, start, step):
-        """!Z-bulk labeling
+        """Z-bulk labeling
 
-        @param pos1 reference line (start point)
-        @param pos1 reference line (end point)
-        @param start starting value
-        @param step step value
+        :param pos1: reference line (start point)
+        :param pos1: reference line (end point)
+        :param start: starting value
+        :param step: step value
 
-        @return number of modified lines
-        @return -1 on error
+        :return: number of modified lines
+        :return: -1 on error
         """
         if not self._checkMap():
             return -1
@@ -1608,14 +1614,15 @@ class IVDigit:
         return ret
     
     def GetDisplay(self):
-        """!Get display driver instance"""
+        """Get display driver instance"""
         return self._display
     
     def OpenMap(self, name, update=True, tmp = False):
-        """!Open vector map for editing
+        """Open vector map for editing
         
-        @param map name of vector map to be set up
-        @param tmp True to open temporary vector map
+        :param map: name of vector map to be set up
+        :type map: str
+        :param tmp: True to open temporary vector map
         """
         Debug.msg (3, "AbstractDigit.SetMapName map=%s" % name)
 
@@ -1632,7 +1639,7 @@ class IVDigit:
         return self.poMapInfo
     
     def CloseMap(self):
-        """!Close currently open vector map
+        """Close currently open vector map
         """
         if not self._checkMap():
             return
@@ -1643,10 +1650,10 @@ class IVDigit:
         self._display.CloseMap()
 
     def InitCats(self):
-        """!Initialize categories information
+        """Initialize categories information
         
-        @return 0 on success
-        @return -1 on error
+        :return: 0 on success
+        :return: -1 on error
         """
         self.cats.clear()
         if not self._checkMap():
@@ -1687,7 +1694,7 @@ class IVDigit:
             Debug.msg(3, "wxDigit.InitCats(): layer=%d, cat=%d", field, self.cats[field])
         
     def _checkMap(self):
-        """!Check if map is open
+        """Check if map is open
         """
         if not self.poMapInfo:
             self._error.NoMap()
@@ -1696,17 +1703,17 @@ class IVDigit:
         return True
 
     def _addFeature(self, ftype, coords, layer, cat, snap, threshold):
-        """!Add new feature(s) to the vector map
+        """Add new feature(s) to the vector map
 
-        @param ftype feature type (GV_POINT, GV_LINE, GV_BOUNDARY, ...)
-        @coords tuple of coordinates ((x, y), (x, y), ...)
-        @param layer layer number (-1 for no cat)
-        @param cat category number
-        @param snap snap to node/vertex
-        @param threshold threshold for snapping
+        :param ftype: feature type (GV_POINT, GV_LINE, GV_BOUNDARY, ...)
+        :param coords: tuple of coordinates ((x, y), (x, y), ...)
+        :param layer: layer number (-1 for no cat)
+        :param cat: category number
+        :param snap: snap to node/vertex
+        :param threshold: threshold for snapping
         
-        @return tuple (number of added features, list of fids)
-        @return number of features -1 on error
+        :return: tuple (number of added features, list of fids)
+        :return: number of features -1 on error
         """
         fids = list()
         if not self._checkMap():
@@ -1829,16 +1836,17 @@ class IVDigit:
         return (len(fids), fids)
     
     def _ModifyLineVertex(self, coords, add = True):
-        """!Add or remove vertex
+        """Add or remove vertex
         
         Shape of line/boundary is not changed when adding new vertex.
         
-        @param coords coordinates of point
-        @param add True to add, False to remove
+        :param coords: coordinates of point
+        :param add: True to add, False to remove
+        :type add: bool
         
-        @return 1 on success
-        @return 0 nothing changed
-        @return -1 error
+        :return: 1 on success
+        :return: 0 nothing changed
+        :return: -1 error
         """
         if not self._checkMap():
             return -1
@@ -1901,11 +1909,11 @@ class IVDigit:
         return 1
     
     def GetLineCats(self, line):
-        """!Get list of layer/category(ies) for selected feature.
+        """Get list of layer/category(ies) for selected feature.
 
-        @param line feature id (-1 for first selected feature)
+        :param line: feature id (-1 for first selected feature)
 
-        @return list of layer/cats
+        :return: list of layer/cats
         """
         ret = dict()
         if not self._checkMap():
@@ -1935,16 +1943,16 @@ class IVDigit:
         return ret
 
     def GetLayers(self):
-        """!Get list of layers
+        """Get list of layers
         
         Requires self.InitCats() to be called.
 
-        @return list of layers
+        :return: list of layers
         """
         return self.cats.keys()
     
     def UpdateSettings(self):
-        """!Update digit (and display) settings
+        """Update digit (and display) settings
         """
         self._display.UpdateSettings()
         
@@ -1954,7 +1962,7 @@ class IVDigit:
                                                                 subkey = 'enabled'))
         
     def SetCategory(self):
-        """!Update self.cats based on settings"""
+        """Update self.cats based on settings"""
         sel = UserSettings.Get(group = 'vdigit', key = 'categoryMode', subkey = 'selection')
         cat = None
         if sel == 0: # next to usep
@@ -1969,10 +1977,10 @@ class IVDigit:
         return cat
     
     def _setCategoryNextToUse(self):
-        """!Find maximum category number for the given layer and
+        """Find maximum category number for the given layer and
         update the settings
 
-        @return category to be used
+        :return: category to be used
         """
         # get max category number for given layer and update the settings
         layer = UserSettings.Get(group = 'vdigit', key = 'layer', subkey = 'value')
@@ -1984,11 +1992,11 @@ class IVDigit:
         return cat
 
     def SelectLinesFromBackgroundMap(self, bbox):
-        """!Select features from background map
+        """Select features from background map
 
-        @param bbox bounding box definition
+        :param bbox: bounding box definition
         
-        @return list of selected feature ids
+        :return: list of selected feature ids
         """
         # try select features by box first
         if self._display.SelectLinesByBox(bbox, poMapInfo = self.poBgMapInfo) < 1:
@@ -1997,17 +2005,17 @@ class IVDigit:
         return self._display.selected['ids']
         
     def GetUndoLevel(self):
-        """!Get undo level (number of active changesets)
+        """Get undo level (number of active changesets)
         
         Note: Changesets starts wiht 0
         """
         return self.changesetCurrent
     
     def GetFeatureType(self):
-        """!Get feature type for OGR layers
+        """Get feature type for OGR layers
 
-        @return feature type as string (point, linestring, polygon)
-        @return None for native format
+        :return: feature type as string (point, linestring, polygon)
+        :return: None for native format
         """
         topoFormat = Vect_get_finfo_topology_info(self.poMapInfo, None, None, None)
         if topoFormat == GV_TOPO_PSEUDO:

@@ -126,6 +126,7 @@ distclean: clean
 include $(MODULE_TOPDIR)/include/Make/Install.make
 include $(MODULE_TOPDIR)/include/Make/Docs.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
+include $(MODULE_TOPDIR)/include/Make/Sphinx.make
 
 DOXNAME=grass
 

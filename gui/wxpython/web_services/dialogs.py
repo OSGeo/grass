@@ -1,4 +1,4 @@
-"""!
+"""
 @package web_services.dialogs
 
 @brief Dialogs for web services.
@@ -39,7 +39,7 @@ from gui_core.gselect import Select
 from web_services.widgets import WSPanel, WSManageSettingsWidget
 
 class WSDialogBase(wx.Dialog):
-    """!Base class for web service dialogs. 
+    """Base class for web service dialogs. 
     """
     def __init__(self, parent, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
@@ -230,7 +230,7 @@ class WSDialogBase(wx.Dialog):
         self.Fit()
 
     def MakeAdvConnPane(self, pane):
-        """!Create advanced connection settings pane
+        """Create advanced connection settings pane
         """
         self.usernameText = wx.StaticText(parent = pane,
                                           id = wx.ID_ANY, label = _("Username:"))
@@ -273,7 +273,7 @@ class WSDialogBase(wx.Dialog):
         adv_conn_sizer.Fit(pane)
 
     def OnSettingsSaving(self, name):
-        """!Check if required data are filled before setting save is performed.
+        """Check if required data are filled before setting save is performed.
         """
         server = self.server.GetValue().strip()
         if not server:
@@ -287,7 +287,7 @@ class WSDialogBase(wx.Dialog):
         self.settsManager.SaveSettings(name)
 
     def OnSettingsChanged(self, data):
-        """!Update widgets according to chosen settings"""
+        """Update widgets according to chosen settings"""
         # data list: [server, username, password]
         if len < 3:
             return
@@ -303,9 +303,9 @@ class WSDialogBase(wx.Dialog):
             self.adv_conn.Collapse(True)
 
     def OnClose(self, event):
-        """!Close the dialog
+        """Close the dialog
         """
-        """!Close dialog"""
+        """Close dialog"""
         if not self.IsModal():
             self.Destroy()
         event.Skip()
@@ -318,7 +318,7 @@ class WSDialogBase(wx.Dialog):
         return ws_cap_files
 
     def OnServer(self, event):
-        """!Server settings edited
+        """Server settings edited
         """
         value = event.GetString()
         if value:
@@ -327,7 +327,7 @@ class WSDialogBase(wx.Dialog):
             self.btn_connect.Enable(False)
         
     def OnOutputLayerName(self, event):
-        """!Update layer name to web service panel
+        """Update layer name to web service panel
         """
         lname = event.GetString()
         lname = lname.encode('ascii', 'replace')
@@ -336,7 +336,7 @@ class WSDialogBase(wx.Dialog):
             v['panel'].SetOutputLayerName(lname.strip())
 
     def OnConnect(self, event):
-        """!Connect to the server
+        """Connect to the server
         """
         server = self.server.GetValue().strip()
 
@@ -362,7 +362,7 @@ class WSDialogBase(wx.Dialog):
             self.ws_panels[ws]['panel'].Hide()
         
     def OnPanelCapParsed(self, error_msg):
-        """!Called when panel has downloaded and parsed capabilities file.
+        """Called when panel has downloaded and parsed capabilities file.
         """
         # how many web service panels are finished
         self.finished_panels_num +=  1
@@ -384,7 +384,7 @@ class WSDialogBase(wx.Dialog):
 
     def _getConnectedWS(self):
         """
-        @return list of found web services on server (identified as keys in self.ws_panels) 
+        :return: list of found web services on server (identified as keys in self.ws_panels) 
         """
         conn_ws = []
         for ws, data in self.ws_panels.iteritems():
@@ -394,7 +394,7 @@ class WSDialogBase(wx.Dialog):
         return conn_ws
 
     def UpdateDialogAfterConnection(self):
-        """!Update dialog after all web service panels downloaded and parsed capabilities data.
+        """Update dialog after all web service panels downloaded and parsed capabilities data.
         """
         avail_ws = {}        
         conn_ws = self._getConnectedWS()
@@ -437,13 +437,13 @@ class WSDialogBase(wx.Dialog):
             self.active_ws_panel = None
 
     def OnChooseWs(self, event):
-        """!Show panel corresponding to selected web service.
+        """Show panel corresponding to selected web service.
         """
         choosen_r = event.GetInt() 
         self._showWsPanel(self.web_service_sel[choosen_r])
 
     def _showWsPanel(self, ws):
-        """!Helper function
+        """Helper function
         """
         if self.active_ws_panel is not None:
             self.active_ws_panel.Hide()
@@ -454,7 +454,7 @@ class WSDialogBase(wx.Dialog):
         self.Layout()
 
     def OnAdvConnPaneChanged(self, event):
-        """!Collapse search module box
+        """Collapse search module box
         """
         if self.adv_conn.IsExpanded():
             self.adv_conn.SetLabel(self.infoCollapseLabelCol)
@@ -467,7 +467,7 @@ class WSDialogBase(wx.Dialog):
         self.Fit()
 
 class AddWSDialog(WSDialogBase):
-    """!Dialog for adding web service layer."""
+    """Dialog for adding web service layer."""
     def __init__(self, parent, giface, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
 
@@ -502,7 +502,7 @@ class AddWSDialog(WSDialogBase):
         self.btn_add.Bind(wx.EVT_BUTTON, self.OnAddLayer)
 
     def UpdateDialogAfterConnection(self):
-        """!Connect to the server
+        """Connect to the server
         """
         WSDialogBase.UpdateDialogAfterConnection(self)
 
@@ -512,7 +512,7 @@ class AddWSDialog(WSDialogBase):
             self.btn_connect.SetDefault()
 
     def OnAddLayer(self, event):
-        """!Add web service layer.
+        """Add web service layer.
         """
         # add layer
         if self.active_ws_panel is None:
@@ -563,16 +563,16 @@ class AddWSDialog(WSDialogBase):
                          params = None, propwin = prop_win)
 
 class WSPropertiesDialog(WSDialogBase):
-    """!Dialog for editing web service properties."""
+    """Dialog for editing web service properties."""
     def __init__(self, parent, giface, layer, ws_cap_files, cmd, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """
-        @param giface grass interface
-        @param layer layer tree item
-        @param ws_cap_files dict web service('WMS_1.1.1', 'WMS_1.3.0', 'WMTS', 'OnEarth') : cap file path
-                            cap files, which will be parsed
-        @param cmd cmd to which dialog widgets will be initialized if it is possible 
-                   (cmp parameters exists in parsed web service cap_file)
+        :param giface: grass interface
+        :param layer: layer tree item
+        :param ws_cap_files: dict web service('WMS_1.1.1', 'WMS_1.3.0',
+        'WMTS', 'OnEarth') : cap file path cap files, which will be parsed
+        :param cmd: cmd to which dialog widgets will be initialized if
+        it is possible (cmp parameters exists in parsed web service cap_file)
         """
 
         WSDialogBase.__init__(self, parent, id = wx.ID_ANY,
@@ -650,7 +650,7 @@ class WSPropertiesDialog(WSDialogBase):
         self.btn_ok.Bind(wx.EVT_BUTTON, self.OnSave)
 
     def LoadCapFiles(self, ws_cap_files, cmd):
-        """!Parse cap files and update dialog.
+        """Parse cap files and update dialog.
 
         For parameters description, see the constructor.
         """
@@ -680,7 +680,7 @@ class WSPropertiesDialog(WSDialogBase):
                                        cap_file = cap_file)
 
     def _getServerConnFromCmd(self, cmd):
-        """!Get url/server/passwod from cmd tuple 
+        """Get url/server/passwod from cmd tuple 
         """
         conn = { 'url' : '', 'username' : '', 'password' : ''}
         
@@ -690,7 +690,7 @@ class WSPropertiesDialog(WSDialogBase):
         return conn
 
     def _apply(self):
-        """!Apply chosen values from widgets to web service layer."""
+        """Apply chosen values from widgets to web service layer."""
         lcmd = self.active_ws_panel.CreateCmd()
         if not lcmd:
             return
@@ -712,7 +712,7 @@ class WSPropertiesDialog(WSDialogBase):
         self.giface.updateMap.emit()
 
     def UpdateDialogAfterConnection(self):
-        """!Connect to the server
+        """Connect to the server
         """
         WSDialogBase.UpdateDialogAfterConnection(self)
         if self._getConnectedWS():
@@ -728,17 +728,17 @@ class WSPropertiesDialog(WSDialogBase):
         self._close()
 
     def OnClose(self, event):
-        """!Close dialog"""
+        """Close dialog"""
         self._close()
 
     def _close(self):
-        """!Hide dialog"""
+        """Hide dialog"""
         self.Hide()
         self.LoadCapFiles(cmd = self.revert_cmd,
                           ws_cap_files = self.revert_ws_cap_files)
 
     def OnPanelCapParsed(self, error_msg):
-        """!Called when panel has downloaded and parsed capabilities file.
+        """Called when panel has downloaded and parsed capabilities file.
         """
         WSDialogBase.OnPanelCapParsed(self, error_msg)
 
@@ -748,7 +748,7 @@ class WSPropertiesDialog(WSDialogBase):
                 self.cmd_to_set = None
 
     def _updateWsPanelWidgetsByCmd(self, cmd):
-        """!Set values of  widgets according to parameters in cmd.
+        """Set values of  widgets according to parameters in cmd.
         """
 
         ws = self._getWSfromCmd(cmd)
@@ -766,9 +766,10 @@ class WSPropertiesDialog(WSDialogBase):
         return ws
 
 class SaveWMSLayerDialog(wx.Dialog):
-    """!Dialog for saving web service layer into GRASS vector/raster layer.
+    """Dialog for saving web service layer into GRASS vector/raster layer.
 
-    @todo Implement saving data in region of map display.
+    .. todo::
+        Implement saving data in region of map display.
     """
     def __init__(self, parent, layer, giface):
         
@@ -886,7 +887,7 @@ class SaveWMSLayerDialog(wx.Dialog):
             self.Bind(wx.EVT_RADIOBUTTON, self.OnRegionType, self.region_types[r_type])
 
     def _addSelectSizer(self, title, sel): 
-        """!Helper layout function.
+        """Helper layout function.
         """
         selSizer = wx.BoxSizer(orient = wx.VERTICAL)
 
@@ -904,7 +905,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         return selSizer
 
     def OnClose(self, event):
-        """!Close dialog
+        """Close dialog
         """
         if not self.IsModal():
             self.Destroy()
@@ -922,7 +923,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.Fit()
 
     def OnSave(self, event):
-        """!Import WMS raster data into GRASS as raster layer.
+        """Import WMS raster data into GRASS as raster layer.
         """
         self.thread.abort(abortall = True)
         currmapset = grass.gisenv()['MAPSET']
@@ -989,7 +990,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.statusbar.SetStatusText(_("Downloading data..."))
 
     def OnCmdDone(self, event):
-        """!When data are fetched.
+        """When data are fetched.
         """
         if event.pid != self.currentPid:
             return
@@ -998,7 +999,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.statusbar.SetStatusText("")
 
     def _addLayer(self):
-        """!Add layer into layer tree.
+        """Add layer into layer tree.
         """
         llist = self._giface.GetLayerList()
         if len(llist.GetLayersByName(self.output)) == 0:
@@ -1009,7 +1010,7 @@ class SaveWMSLayerDialog(wx.Dialog):
                            checked=True)
 
     def OnCmdOutput(self, event):
-        """!Handle cmd output according to debug level.
+        """Handle cmd output according to debug level.
         """
         if Debug.GetLevel() == 0:
             if event.type == 'error':

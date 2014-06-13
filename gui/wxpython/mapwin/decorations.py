@@ -1,4 +1,4 @@
-"""!
+"""
 @package mapwin.decorations
 
 @brief Map display decorations (overlays) - text, barscale and legend
@@ -31,7 +31,7 @@ except ImportError:
 
 class OverlayController(object):
 
-    """!Base class for decorations (barscale, legend) controller."""
+    """Base class for decorations (barscale, legend) controller."""
 
     def __init__(self, renderer, giface):
         self._giface = giface
@@ -117,7 +117,7 @@ class OverlayController(object):
         return False
 
     def Show(self, show=True):
-        """!Activate or deactivate overlay."""
+        """Activate or deactivate overlay."""
         if show:
             if not self._overlay:
                 self._add()
@@ -134,12 +134,12 @@ class OverlayController(object):
         self.overlayChanged.emit()
 
     def GetOptData(self, dcmd, layer, params, propwin):
-        """!Called after options are set through module dialog.
+        """Called after options are set through module dialog.
 
-        @param dcmd resulting command
-        @param layer not used
-        @param params module parameters (not used)
-        @param propwin dialog window
+        :param dcmd: resulting command
+        :param layer: not used
+        :param params: module parameters (not used)
+        :param propwin: dialog window
         """
         if not dcmd:
             return
@@ -160,13 +160,13 @@ class OverlayController(object):
                                      render=False)
 
     def CmdIsValid(self):
-        """!If command is valid"""
+        """If command is valid"""
         return True
 
     def GetPlacement(self, screensize):
-        """!Get coordinates where to place overlay in a reasonable way
+        """Get coordinates where to place overlay in a reasonable way
 
-        @param screensize sreen size
+        :param screensize: screen size
         """
         if not hasPIL:
             self._giface.WriteWarning(_("Please install Python Imaging Library (PIL)\n"
@@ -241,7 +241,7 @@ class LegendController(OverlayController):
         return False
 
     def ResizeLegend(self, begin, end, screenSize):
-        """!Resize legend according to given bbox coordinates."""
+        """Resize legend according to given bbox coordinates."""
         w = abs(begin[0] - end[0])
         h = abs(begin[1] - end[1])
         if begin[0] < end[0]:
@@ -268,7 +268,7 @@ class LegendController(OverlayController):
         self.Show()
 
     def StartResizing(self):
-        """!Tool in toolbar or button itself were pressed"""
+        """Tool in toolbar or button itself were pressed"""
         # prepare for resizing
         window = self._giface.GetMapWindow()
         window.SetNamedCursor('cross')
@@ -409,21 +409,21 @@ class TextLayerDialog(wx.Dialog):
         self.Bind(wx.EVT_SPINCTRL,   self.OnRotation,   self.rotation)
 
     def OnRefit(self, event):
-        """!Resize text entry to match text"""
+        """Resize text entry to match text"""
         self.sizer.Fit(self)
 
     def OnText(self, event):
-        """!Change text string"""
+        """Change text string"""
         self.currText = event.GetString()
 
     def OnRotation(self, event):
-        """!Change rotation"""
+        """Change rotation"""
         self.currRot = event.GetInt()
 
         event.Skip()
 
     def OnSelectFont(self, event):
-        """!Change font"""
+        """Change font"""
         data = wx.FontData()
         data.EnableEffects(True)
         data.SetColour(self.currClr)         # set colour
@@ -444,7 +444,7 @@ class TextLayerDialog(wx.Dialog):
         dlg.Destroy()
 
     def GetValues(self):
-        """!Get text properties"""
+        """Get text properties"""
         return {'text': self.currText,
                 'font': self.currFont,
                 'color': self.currClr,

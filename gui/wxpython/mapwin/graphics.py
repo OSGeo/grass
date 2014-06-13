@@ -1,4 +1,4 @@
-"""!
+"""
 @package mapwin.graphics
 
 @brief Map display canvas - buffered window.
@@ -27,7 +27,7 @@ class GraphicsSet:
 
     def __init__(self, parentMapWin, graphicsType,
                  setStatusFunc=None, drawFunc=None, mapCoords=True):
-        """!Class, which contains instances of GraphicsSetItem and
+        """Class, which contains instances of GraphicsSetItem and
             draws them For description of parameters look at method
             RegisterGraphicsToDraw in BufferedWindow class.
         """
@@ -72,9 +72,9 @@ class GraphicsSet:
             self.drawFunc = self.parentMapWin.DrawPolygon
 
     def Draw(self, pdc):
-        """!Draws all containing items.
+        """Draws all containing items.
 
-        @param pdc - device context, where items are drawn
+        :param pdc: device context, where items are drawn
         """
         itemOrderNum = 0
         for item in self.itemsList:
@@ -154,23 +154,25 @@ class GraphicsSet:
             itemOrderNum += 1
 
     def AddItem(self, coords, penName=None, label=None, hide=False):
-        """!Append item to the list.
+        """Append item to the list.
 
         Added item is put to the last place in drawing order.
         Could be 'point' or 'line' according to graphicsType.
 
-        @param coords - list of east, north coordinates (double) of item
+        :param coords: - list of east, north coordinates (double) of item
                         Example: point: [1023, 122]
                                  line: [[10, 12],[20,40],[23, 2334]]
                                  rectangle: [[10, 12], [33, 45]]
-        @param penName (string) the 'default' pen is used if is not defined
-        @param label (string) label, which will be drawn with point. It is
-        relavant just for 'point' type.
-        @param hide (bool) If it is True, the item is not drawn
-        when self.Draw is called. Hidden items are also counted in drawing
-        order.
-
-        @return (GraphicsSetItem) - added item reference
+        :param penName: the 'default' pen is used if is not defined
+        :type penName: str
+        :param label: label, which will be drawn with point. It is
+                      relavant just for 'point' type.
+        :type label: str
+        :param hide: if it is True, the item is not drawn when self.Draw
+                     is called. Hidden items are also counted in drawing
+                     order.
+        :type hide: bool
+        :return: (GraphicsSetItem) - added item reference
         """
         item = GraphicsSetItem(coords=coords, penName=penName, label=label, hide=hide)
         self.itemsList.append(item)
@@ -178,12 +180,12 @@ class GraphicsSet:
         return item
 
     def DeleteItem(self, item):
-        """!Deletes item
+        """Deletes item
 
-        @param item (GraphicsSetItem) - item to remove
+        :param item: (GraphicsSetItem) - item to remove
 
-        @return True if item was removed
-        @return False if item was not found
+        :return: True if item was removed
+        :return: False if item was not found
         """
         try:
             self.itemsList.remove(item)
@@ -193,8 +195,9 @@ class GraphicsSet:
         return True
 
     def GetAllItems(self):
-        """!Returns list of all containing instances of GraphicsSetItem, in order
-        as they are drawn. If you want to change order of drawing use: SetItemDrawOrder method.
+        """Returns list of all containing instances of GraphicsSetItem,
+        in order as they are drawn. If you want to change order of
+        drawing use: SetItemDrawOrder method.
         """
         # user can edit objects but not order in list, that is reason,
         # why is returned shallow copy of data list it should be used
@@ -202,12 +205,13 @@ class GraphicsSet:
         return copy(self.itemsList)
 
     def GetItem(self, drawNum):
-        """!Get given item from the list.
+        """Get given item from the list.
 
-        @param drawNum (int) - drawing order (index) number of item
+        :param drawNum: drawing order (index) number of item
+        :type drawNum: int
 
-        @return instance of GraphicsSetItem which is drawn in drawNum order
-        @return False if drawNum was out of range
+        :return: instance of GraphicsSetItem which is drawn in drawNum order
+        :return: False if drawNum was out of range
         """
         if drawNum < len(self.itemsList) and drawNum >= 0:
             return self.itemsList[drawNum]
@@ -215,14 +219,15 @@ class GraphicsSet:
             return False
 
     def SetPropertyVal(self, propName, propVal):
-        """!Set property value
+        """Set property value
 
-        @param propName (string) - property name: "size", "text"
-                                 - both properties are relevant for "point" type
-        @param propVal - property value to be set
+        :param propName: - property name: "size", "text"
+                         - both properties are relevant for "point" type
+        :type propName: str
+        :param propVal: property value to be set
 
-        @return True - if value was set
-        @return False - if propName is not "size" or "text" or type is "line"
+        :return: True if value was set
+        :return: False if propName is not "size" or "text" or type is "line"
         """
         if propName in self.properties:
             self.properties[propName] = propVal
@@ -231,15 +236,16 @@ class GraphicsSet:
         return False
 
     def GetPropertyVal(self, propName):
-        """!Get property value
+        """Get property value
 
         Raises KeyError if propName is not "size" or "text" or type is
         "line"
 
-        @param propName (string) property name: "size", "text"
-                                 both properties are relevant for "point" type
+        :param propName: property name: "size", "text" both properties
+               are relevant for "point" type
+        :type propName: str
 
-        @return value of property
+        :return: value of property
         """
         if propName in self.properties:
             return self.properties[propName]
@@ -247,13 +253,15 @@ class GraphicsSet:
         raise KeyError(_("Property does not exist: %s") % (propName))
 
     def AddPen(self, penName, pen):
-        """!Add pen
+        """Add pen
 
-        @param penName (string) - name of added pen
-        @param pen (wx.Pen) - added pen
+        :param penName: name of added pen
+        :type penName: str
+        :param pen: added pen
+        :type pen: Wx.Pen
 
-        @return True - if pen was added
-        @return False - if pen already exists
+        :return: True - if pen was added
+        :return: False - if pen already exists
         """
         if penName in self.pens:
             return False
@@ -262,12 +270,13 @@ class GraphicsSet:
         return True
 
     def GetPen(self, penName):
-        """!Get existing pen
+        """Get existing pen
 
-        @param penName (string) - name of pen
+        :param penName: name of pen
+        :type penName: str
 
-        @return wx.Pen reference if is found
-        @return None if penName was not found
+        :return: wx.Pen reference if is found
+        :return: None if penName was not found
         """
         if penName in self.pens:
             return self.pens[penName]
@@ -275,13 +284,14 @@ class GraphicsSet:
         return None
 
     def SetItemDrawOrder(self, item, drawNum):
-        """!Set draw order for item
+        """Set draw order for item
 
-        @param item (GraphicsSetItem)
-        @param drawNum (int) - drawing order of item to be set
+        :param item: (GraphicsSetItem)
+        :param drawNum: drawing order of item to be set
+        :type drawNum: int
 
-        @return True - if order was changed
-        @return False - if drawNum is out of range or item was not found
+        :return: True if order was changed
+        :return: False if drawNum is out of range or item was not found
         """
         if drawNum < len(self.itemsList) and drawNum >= 0 and \
                 item in self.itemsList:
@@ -291,12 +301,12 @@ class GraphicsSet:
         return False
 
     def GetItemDrawOrder(self, item):
-        """!Get draw order for given item
+        """Get draw order for given item
 
-        @param item (GraphicsSetItem)
+        :param item: (GraphicsSetItem)
 
-        @return (int) - drawing order of item
-        @return None - if item was not found
+        :return: (int) - drawing order of item
+        :return: None - if item was not found
         """
         try:
             return self.itemsList.index(item)
@@ -304,7 +314,7 @@ class GraphicsSet:
             return None
 
     def _clearId(self, pdc, drawid):
-        """!Clears old object before drawing new object."""
+        """Clears old object before drawing new object."""
         try:
             pdc.ClearId(drawid)
         except:
@@ -314,19 +324,21 @@ class GraphicsSet:
 class GraphicsSetItem:
 
     def __init__(self, coords, penName=None, label=None, hide=False):
-        """!Could be point or line according to graphicsType in
+        """Could be point or line according to graphicsType in
         GraphicsSet class
 
-        @param coords - list of coordinates (double) of item
-                        Example: point: [1023, 122]
-                                 line: [[10, 12],[20,40],[23, 2334]]
-                                 rectangle: [[10, 12], [33, 45]]
-        @param penName (string) if it is not defined 'default' pen is used
-        @param label (string) label, which will be drawn with point. It is
-        relevant just for 'point' type
-        @param hide (bool) if it is True, item is not drawn
-                           Hidden items are also counted in drawing order in
-                           GraphicsSet class.
+        :param coords: list of coordinates (double) of item
+                       Example: point: [1023, 122]
+                                line: [[10, 12],[20,40],[23, 2334]]
+                                rectangle: [[10, 12], [33, 45]]
+        :param penName: if it is not defined 'default' pen is used
+        :type penName: str
+        :param label: label, which will be drawn with point. It is
+                      relevant just for 'point' type
+        :type label: str
+        :param hide: if it is True, item is not drawn Hidden items are
+                     also counted in drawing order in GraphicsSet class.
+        :type hide: bool
         """
         self.coords = coords
 
@@ -336,14 +348,15 @@ class GraphicsSetItem:
         self.id = wx.NewId()
 
     def SetPropertyVal(self, propName, propVal):
-        """!Set property value
+        """Set property value
 
-        @param propName (string) - property name: "penName", "hide" or "label"
-                                 - property "label" is relevant just for 'point' type
-        @param propVal - property value to be set
+        :param propName: - property name: "penName", "hide" or "label"
+                         - property "label" is relevant just for 'point' type
+        :type propName: str
+        :param propVal: property value to be set
 
-        @return True - if value was set
-        @return False - if propName is not "penName", "hide" or "label"
+        :return: True if value was set
+        :return: False if propName is not "penName", "hide" or "label"
         """
         if propName in self.properties:
             self.properties[propName] = propVal
@@ -352,15 +365,16 @@ class GraphicsSetItem:
         return False
 
     def GetPropertyVal(self, propName):
-        """!Get property value
+        """Get property value
 
         Raises KeyError if propName is not "penName", "hide" or
         "label".
 
-        @param propName (string) - property name: "penName", "hide" or "label"
-                                 - property "label" is relevant just for 'point' type
+        :param propName: - property name: "penName", "hide" or "label"
+                         - property "label" is relevant just for 'point' type
+        :type propName: str
 
-        @return value of property
+        :return: value of property
         """
         if propName in self.properties:
             return self.properties[propName]
@@ -368,23 +382,23 @@ class GraphicsSetItem:
         raise KeyError(_("Property does not exist: %s") % (propName))
 
     def SetCoords(self, coords):
-        """!Set coordinates of item
+        """Set coordinates of item
 
-        @param coords - list of east, north coordinates (double) of item
-                        Example: point: [1023, 122]
-                                 line: [[10, 12],[20,40],[23, 2334]]
-                                 rectangle: [[10, 12], [33, 45]]
+        :param coords: list of east, north coordinates (double) of item
+                       Example: point: [1023, 122]
+                                line: [[10, 12],[20,40],[23, 2334]]
+                                rectangle: [[10, 12], [33, 45]]
         """
         self.coords = coords
 
     def GetCoords(self):
-        """!Get item coordinates
+        """Get item coordinates
 
-        @returns coordinates
+        :return: coordinates
         """
         return self.coords
 
     def GetId(self):
-        """!Get item id (drawing id).
+        """Get item id (drawing id).
         """
         return self.id

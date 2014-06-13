@@ -1,4 +1,4 @@
-"""!
+"""
 @package gmodeler.model
 
 @brief wxGUI Graphical Modeler (base classes & read/write)
@@ -55,7 +55,7 @@ from grass.script import core as grass
 from grass.script import task as gtask
 
 class Model(object):
-    """!Class representing the model"""
+    """Class representing the model"""
     def __init__(self, canvas = None):
         self.items   = list() # list of ordered items (action/loop/condition)
         
@@ -70,13 +70,13 @@ class Model(object):
         self.canvas  = canvas
         
     def GetCanvas(self):
-        """!Get canvas or None"""
+        """Get canvas or None"""
         return self.canvas
 
     def GetItems(self, objType = None):
-        """!Get list of model items
+        """Get list of model items
 
-        @param objType Object type to filter model objects
+        :param objType: Object type to filter model objects
         """
         if not objType:
             return self.items
@@ -89,12 +89,12 @@ class Model(object):
         return result
     
     def GetItem(self, aId, objType=None):
-        """!Get item of given id
+        """Get item of given id
 
-        @param aId item id
+        :param aId: item id
         
-        @return Model* instance
-        @return None if no item found
+        :return: Model* instance
+        :return: None if no item found
         """
         ilist = self.GetItems(objType)
         for item in ilist:
@@ -104,11 +104,11 @@ class Model(object):
         return None
 
     def GetItemIndex(self, item):
-        """!Return list index of given item"""
+        """Return list index of given item"""
         return self.items.index(item)
     
     def GetNumItems(self, actionOnly = False):
-        """!Get number of items"""
+        """Get number of items"""
         if actionOnly:
             return len(self.GetItems(objType = ModelAction))
         
@@ -157,9 +157,9 @@ class Model(object):
             iId += 1
         
     def GetNextId(self):
-        """!Get next id (data ignored)
+        """Get next id (data ignored)
 
-        @return next id to be used (default: 1)
+        :return: next id to be used (default: 1)
         """
         if len(self.items) < 1:
             return 1
@@ -171,28 +171,28 @@ class Model(object):
         return 1
 
     def GetProperties(self):
-        """!Get model properties"""
+        """Get model properties"""
         return self.properties
 
     def GetVariables(self, params = False):
-        """!Get model variables"""
+        """Get model variables"""
         if params:
             return self.variablesParams
         
         return self.variables
     
     def SetVariables(self, data):
-        """!Set model variables"""
+        """Set model variables"""
         self.variables = data
     
     def Reset(self):
-        """!Reset model"""
+        """Reset model"""
         self.items = list()
 
     def RemoveItem(self, item):
-        """!Remove item from model
+        """Remove item from model
         
-        @return list of related items to remove/update
+        :return: list of related items to remove/update
         """
         relList = list()
         upList = list()
@@ -225,7 +225,7 @@ class Model(object):
         return relList, upList
     
     def FindAction(self, aId):
-        """!Find action by id"""
+        """Find action by id"""
         alist = self.GetItems(objType = ModelAction)
         for action in alist:
             if action.GetId() == aId:
@@ -234,9 +234,9 @@ class Model(object):
         return None
 
     def GetMaps(self, prompt):
-        """!Get list of maps of selected type
+        """Get list of maps of selected type
 
-        @param promt to filter maps"""
+        :param prompt: to filter maps"""
         maps = list()
         for data in self.GetData():
             if prompt == data.GetPrompt():
@@ -248,7 +248,7 @@ class Model(object):
         return maps
 
     def GetData(self):
-        """!Get list of data items"""
+        """Get list of data items"""
         result = list()
         dataItems = self.GetItems(objType = ModelData)
         
@@ -267,13 +267,13 @@ class Model(object):
         return result
 
     def FindData(self, value, prompt):
-        """!Find data item in the model
+        """Find data item in the model
 
-        @param value value
-        @param prompt prompt
+        :param value: value
+        :param prompt: prompt
 
-        @return ModelData instance
-        @return None if not found
+        :return: ModelData instance
+        :return: None if not found
         """
         for data in self.GetData():
             if data.GetValue() == value and \
@@ -283,9 +283,10 @@ class Model(object):
         return None
                 
     def LoadModel(self, filename):
-        """!Load model definition stored in GRASS Model XML file (gxm)
+        """Load model definition stored in GRASS Model XML file (gxm)
         
-        @todo Validate against DTD
+        .. todo::
+             Validate against DTD
         
         Raise exception on error.
         """
@@ -412,7 +413,7 @@ class Model(object):
             self.AddItem(commentItem, pos = commentItem.GetId()-1)
         
     def AddItem(self, newItem, pos = -1):
-        """!Add item to the list"""
+        """Add item to the list"""
         if pos != -1:
             self.items.insert(pos, newItem)
         else:
@@ -430,7 +431,7 @@ class Model(object):
         return True
     
     def Validate(self):
-        """!Validate model, return None if model is valid otherwise
+        """Validate model, return None if model is valid otherwise
         error string"""
         errList = list()
 
@@ -464,11 +465,11 @@ class Model(object):
         return errList
 
     def _substituteFile(self, item, params = None, checkOnly = False):
-        """!Subsitute variables in command file inputs
+        """Subsitute variables in command file inputs
 
-        @param checkOnly tuble - True to check variable, don't touch files
+        :param bool checkOnly: tuble - True to check variable, don't touch files
         
-        @return list of undefined variables
+        :return: list of undefined variables
         """
         errList = list()
         
@@ -537,14 +538,14 @@ class Model(object):
         self._substituteFile(item, params, checkOnly = False)
 
     def RunAction(self, item, params, log, onDone, onPrepare = None, statusbar = None):
-        """!Run given action
+        """Run given action
 
-        @param item action item
-        @param params parameters dict
-        @param log logging window
-        @param onDone on-done method
-        @param onPrepare on-prepare method
-        @param statusbar wx.StatusBar instance or None
+        :param item: action item
+        :param params: parameters dict
+        :param log: logging window
+        :param onDone: on-done method
+        :param onPrepare: on-prepare method
+        :param statusbar: wx.StatusBar instance or None
         """
         name = item.GetLabel()
         if name in params:
@@ -563,11 +564,11 @@ class Model(object):
             item.SetParams(paramsOrig)
 
     def Run(self, log, onDone, parent = None):
-        """!Run model
+        """Run model
 
-        @param log logging window (see gconsole.GConsole)
-        @param onDone on-done method
-        @param parent window for messages or None
+        :param log: logging window (see gconsole.GConsole)
+        :param onDone: on-done method
+        :param parent: window for messages or None
         """
         if self.GetNumItems() < 1:
             GMessage(parent = parent,
@@ -704,7 +705,7 @@ class Model(object):
                     p['value'] = ''
         
     def DeleteIntermediateData(self, log):
-        """!Detele intermediate data"""
+        """Detele intermediate data"""
         rast, vect, rast3d, msg = self.GetIntermediateData()
         
         if rast:
@@ -715,7 +716,7 @@ class Model(object):
             log.RunCmd(['g.remove', 'vect=%s' %','.join(vect)])
         
     def GetIntermediateData(self):
-        """!Get info about intermediate data"""
+        """Get info about intermediate data"""
         rast = list()
         rast3d = list()
         vect = list()
@@ -745,19 +746,19 @@ class Model(object):
         return rast, vect, rast3d, msg
 
     def Update(self):
-        """!Update model"""
+        """Update model"""
         for item in self.items:
             item.Update()
         
     def IsParameterized(self):
-        """!Return True if model is parameterized"""
+        """Return True if model is parameterized"""
         if self.Parameterize():
             return True
         
         return False
     
     def Parameterize(self):
-        """!Return parameterized options"""
+        """Return parameterized options"""
         result = dict()
         idx = 0
         if self.variables:
@@ -840,19 +841,19 @@ class ModelObject(object):
         pass
 
     def GetLabel(self):
-        """!Get label"""
+        """Get label"""
         return self.label
 
     def SetLabel(self, label=''):
-        """!Set label"""
+        """Set label"""
         self.label = label
         
     def GetId(self):
-        """!Get id"""
+        """Get id"""
         return self.id
 
     def SetId(self, newId):
-        """!Set id"""
+        """Set id"""
         if self.inBlock:
             for loop in self.inBlock:
                 # update block item
@@ -862,14 +863,14 @@ class ModelObject(object):
 
 
     def AddRelation(self, rel):
-        """!Record new relation
+        """Record new relation
         """
         self.rels.append(rel)
 
     def GetRelations(self, fdir = None):
-        """!Get list of relations
+        """Get list of relations
         
-        @param fdir True for 'from'
+        :param bool fdir: True for 'from'
         """
         if fdir is None:
             return self.rels
@@ -886,11 +887,11 @@ class ModelObject(object):
         return result
     
     def IsEnabled(self):
-        """!Get True if action is enabled, otherwise False"""
+        """Get True if action is enabled, otherwise False"""
         return self.isEnabled
     
     def Enable(self, enabled = True):
-        """!Enable/disable action"""
+        """Enable/disable action"""
         self.isEnabled = enabled
         self.Update()
 
@@ -898,35 +899,35 @@ class ModelObject(object):
         pass
 
     def SetBlock(self, item):
-        """!Add object to the block (loop/condition)
+        """Add object to the block (loop/condition)
 
-        @param item reference to ModelLoop or ModelCondition which
-        defines loops/condition
+        :param item: reference to ModelLoop or ModelCondition which
+                     defines loops/condition
         """
         if item not in self.inBlock:
             self.inBlock.append(item)
         
     def UnSetBlock(self, item):
-        """!Remove object from the block (loop/consition)
+        """Remove object from the block (loop/consition)
 
-        @param item reference to ModelLoop or ModelCondition which
-        defines loops/codition
+        :param item: reference to ModelLoop or ModelCondition which
+                     defines loops/codition
         """
         if item in self.inBlock:
             self.inBlock.remove(item)
         
     def GetBlock(self):
-        """!Get list of related ModelObject(s) which defines block
+        """Get list of related ModelObject(s) which defines block
         (loop/condition)
 
-        @return list of ModelObjects
+        :return: list of ModelObjects
         """
         return self.inBlock
     
     def GetBlockId(self):
-        """!Get list of related ids which defines block
+        """Get list of related ids which defines block
 
-        @return list of ids
+        :return: list of ids
         """
         ret = list()
         for mo in self.inBlock:
@@ -935,7 +936,7 @@ class ModelObject(object):
         return ret
     
 class ModelAction(ModelObject, ogl.DividedShape):
-    """!Action class (GRASS module)"""
+    """Action class (GRASS module)"""
     def __init__(self, parent, x, y, id = -1, cmd = None, task = None,
                  width = None, height = None, label = None, comment = ''):
         ModelObject.__init__(self, id, label)
@@ -989,7 +990,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
             self.SetValid(self.task.get_options())
         
     def _setBrush(self, running = False):
-        """!Set brush"""
+        """Set brush"""
         if running:
             color = UserSettings.Get(group='modeler', key='action',
                                      subkey=('color', 'running'))
@@ -1007,7 +1008,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         self.SetBrush(wx.Brush(wxColor))
         
     def _setPen(self):
-        """!Set pen"""
+        """Set pen"""
         if self.isParameterized:
             width = int(UserSettings.Get(group='modeler', key='action',
                                          subkey=('width', 'parameterized')))
@@ -1040,9 +1041,9 @@ class ModelAction(ModelObject, ogl.DividedShape):
         self.GetCanvas().Refresh()
 
     def SetLabel(self, label=None):
-        """!Set label
+        """Set label
 
-        @param label if None use command string instead
+        :param label: if None use command string instead
         """
         if label:
             self.label = label 
@@ -1060,7 +1061,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         self.ReformatRegions()
 
     def SetComment(self, comment):
-        """!Set comment"""
+        """Set comment"""
         if self.regionComment is None:
             self.regionComment = ogl.ShapeRegion()
             self.regionComment.SetFormatMode(ogl.FORMAT_CENTRE_HORIZ)
@@ -1076,24 +1077,24 @@ class ModelAction(ModelObject, ogl.DividedShape):
         self.ReformatRegions()
 
     def GetComment(self):
-        """!Get comment"""
+        """Get comment"""
         return self.comment
 
     def SetProperties(self, params, propwin):
-        """!Record properties dialog"""
+        """Record properties dialog"""
         self.task.params = params['params']
         self.task.flags  = params['flags']
         self.propWin = propwin
 
     def GetPropDialog(self):
-        """!Get properties dialog"""
+        """Get properties dialog"""
         return self.propWin
 
     def GetLog(self, string = True, substitute = None):
-        """!Get logging info
+        """Get logging info
 
-        @param string True to get cmd as a string otherwise a list
-        @param substitute dictionary of parameter to substitute or None
+        :param string: True to get cmd as a string otherwise a list
+        :param substitute: dictionary of parameter to substitute or None
         """
         cmd = self.task.get_cmd(ignoreErrors = True, ignoreRequired = True,
                                 ignoreDefault = False)
@@ -1141,7 +1142,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         return cmd
     
     def GetLabel(self):
-        """!Get name"""
+        """Get name"""
         if self.label:
             return self.label
         
@@ -1152,23 +1153,23 @@ class ModelAction(ModelObject, ogl.DividedShape):
         return _('unknown')
 
     def GetParams(self, dcopy = False):
-        """!Get dictionary of parameters"""
+        """Get dictionary of parameters"""
         if dcopy:
             return copy.deepcopy(self.task.get_options())
         
         return self.task.get_options()
 
     def GetTask(self):
-        """!Get grassTask instance"""
+        """Get grassTask instance"""
         return self.task
     
     def SetParams(self, params):
-        """!Set dictionary of parameters"""
+        """Set dictionary of parameters"""
         self.task.params = params['params']
         self.task.flags  = params['flags']
         
     def MergeParams(self, params):
-        """!Merge dictionary of parameters"""
+        """Merge dictionary of parameters"""
         if 'flags' in params:
             for f in params['flags']:
                 self.task.set_flag(f['name'],
@@ -1179,9 +1180,9 @@ class ModelAction(ModelObject, ogl.DividedShape):
                                     p.get('value', ''))
         
     def SetValid(self, options):
-        """!Set validity for action
+        """Set validity for action
         
-        @param options dictionary with flags and params (gtask)
+        :param options: dictionary with flags and params (gtask)
         """
         self.isValid = True
         self.isParameterized = False
@@ -1204,15 +1205,15 @@ class ModelAction(ModelObject, ogl.DividedShape):
             self._setPen()
         
     def IsValid(self):
-        """!Check validity (all required parameters set)"""
+        """Check validity (all required parameters set)"""
         return self.isValid
     
     def IsParameterized(self):
-        """!Check if action is parameterized"""
+        """Check if action is parameterized"""
         return self.isParameterized
     
     def FindData(self, name):
-        """!Find data item by name"""
+        """Find data item by name"""
         for rel in self.GetRelations():
             data = rel.GetData()
             if name == rel.GetLabel() and name in data.GetLabel():
@@ -1221,7 +1222,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         return None
 
     def Update(self, running = False):
-        """!Update action"""
+        """Update action"""
         if running:
             self._setBrush(running = True)
         else:
@@ -1229,7 +1230,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         self._setPen()
 
     def OnDraw(self, dc):
-        """!Draw action in canvas"""
+        """Draw action in canvas"""
         self._setBrush()
         self._setPen()
         ogl.RectangleShape.Recentre(self, dc) # re-center text
@@ -1239,12 +1240,12 @@ class ModelData(ModelObject, ogl.EllipseShape):
     def __init__(self, parent, x, y, value = '', prompt = '', width = None, height = None):
         """Data item class
         
-        @param parent window parent
-        @param x, y   position of the shape
-        @param fname, tname list of parameter names from / to
-        @param value  value
-        @param prompt type of GIS element
-        @param width,height dimension of the shape
+        :param parent: window parent
+        :param x, y: position of the shape
+        :param fname, tname: list of parameter names from / to
+        :param value: value
+        :param prompt: type of GIS element
+        :param width, height: dimension of the shape
         """
         ModelObject.__init__(self)
         
@@ -1269,11 +1270,11 @@ class ModelData(ModelObject, ogl.EllipseShape):
             self.SetLabel()
             
     def IsIntermediate(self):
-        """!Checks if data item is intermediate"""
+        """Checks if data item is intermediate"""
         return self.intermediate
     
     def SetIntermediate(self, im):
-        """!Set intermediate flag"""
+        """Set intermediate flag"""
         self.intermediate = im
   
     def OnDraw(self, dc):
@@ -1282,7 +1283,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         ogl.EllipseShape.OnDraw(self, dc)
         
     def GetLog(self, string = True):
-        """!Get logging info"""
+        """Get logging info"""
         name = list()
         for rel in self.GetRelations():
             name.append(rel.GetLabel())
@@ -1292,7 +1293,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
             return self.value + ' (' + self.prompt + ')'
 
     def GetLabel(self):
-        """!Get list of names"""
+        """Get list of names"""
         name = list()
         for rel in self.GetRelations():
             name.append(rel.GetLabel())
@@ -1300,24 +1301,24 @@ class ModelData(ModelObject, ogl.EllipseShape):
         return name
     
     def GetPrompt(self):
-        """!Get prompt"""
+        """Get prompt"""
         return self.prompt
 
     def SetPrompt(self, prompt):
-        """!Set prompt
+        """Set prompt
         
-        @param prompt
+        :param prompt:
         """
         self.prompt = prompt
         
     def GetValue(self):
-        """!Get value"""
+        """Get value"""
         return self.value
 
     def SetValue(self, value):
-        """!Set value
+        """Set value
 
-        @param value
+        :param value:
         """
         self.value = value
         self.SetLabel()
@@ -1333,15 +1334,15 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 action.SetParams(params = task.get_options())
         
     def GetPropDialog(self):
-        """!Get properties dialog"""
+        """Get properties dialog"""
         return self.propWin
 
     def SetPropDialog(self, win):
-        """!Get properties dialog"""
+        """Get properties dialog"""
         self.propWin = win
 
     def _setBrush(self):
-        """!Set brush"""
+        """Set brush"""
         if self.prompt == 'raster':
             color = UserSettings.Get(group = 'modeler', key = 'data',
                                      subkey = ('color', 'raster'))
@@ -1358,7 +1359,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self.SetBrush(wx.Brush(wxColor))
         
     def _setPen(self):
-        """!Set pen"""
+        """Set pen"""
         isParameterized = False
         for rel in self.GetRelations('from'):
             if rel.GetTo().IsParameterized():
@@ -1385,7 +1386,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         self.SetPen(pen)
         
     def SetLabel(self):
-        """!Update text"""
+        """Update text"""
         self.ClearText()
         name = []
         for rel in self.GetRelations():
@@ -1397,13 +1398,13 @@ class ModelData(ModelObject, ogl.EllipseShape):
             self.AddText(_('<not defined>'))
         
     def Update(self):
-        """!Update action"""
+        """Update action"""
         self._setBrush()
         self._setPen()
         self.SetLabel()
 
 class ModelRelation(ogl.LineShape):
-    """!Data - action relation"""
+    """Data - action relation"""
     def __init__(self, parent, fromShape, toShape, param = ''):
         self.fromShape = fromShape
         self.toShape   = toShape
@@ -1422,18 +1423,18 @@ class ModelRelation(ogl.LineShape):
             self.toShape.rels.remove(self)
 
     def GetFrom(self):
-        """!Get id of 'from' shape"""
+        """Get id of 'from' shape"""
         return self.fromShape
     
     def GetTo(self):
-        """!Get id of 'to' shape"""
+        """Get id of 'to' shape"""
         return self.toShape
     
     def GetData(self):
-        """!Get related ModelData instance
+        """Get related ModelData instance
 
-        @return ModelData instance
-        @return None if not found
+        :return: ModelData instance
+        :return: None if not found
         """
         if isinstance(self.fromShape, ModelData):
             return self.fromShape
@@ -1443,30 +1444,30 @@ class ModelRelation(ogl.LineShape):
         return None
     
     def GetLabel(self):
-        """!Get parameter name"""
+        """Get parameter name"""
         return self.param
     
     def ResetShapes(self):
-        """!Reset related objects"""
+        """Reset related objects"""
         self.fromShape.ResetControlPoints()
         self.toShape.ResetControlPoints()
         self.ResetControlPoints()
         
     def SetControlPoints(self, points):
-        """!Set control points"""
+        """Set control points"""
         self._points = points
         
     def GetControlPoints(self):
-        """!Get list of control points"""
+        """Get list of control points"""
         return self._points
     
     def _setPen(self):
-        """!Set pen"""
+        """Set pen"""
         pen = wx.Pen(wx.BLACK, 1, wx.SOLID)
         self.SetPen(pen)
         
     def OnDraw(self, dc):
-        """!Draw relation"""
+        """Draw relation"""
         self._setPen()
         ogl.LineShape.OnDraw(self, dc)
     
@@ -1475,12 +1476,12 @@ class ModelRelation(ogl.LineShape):
 
 class ModelItem(ModelObject):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, label = '', items = []):
-        """!Abstract class for loops and conditions"""
+        """Abstract class for loops and conditions"""
         ModelObject.__init__(self, id, label)
         self.parent  = parent
 
     def _setPen(self):
-        """!Set pen"""
+        """Set pen"""
         if self.isEnabled:
             style = wx.SOLID
         else:
@@ -1490,34 +1491,34 @@ class ModelItem(ModelObject):
         self.SetPen(pen)
 
     def SetId(self, id):
-        """!Set loop id"""
+        """Set loop id"""
         self.id = id
 
     def SetLabel(self, label=''):
-        """!Set loop text (condition)"""
+        """Set loop text (condition)"""
         if label:
             self.label = label
         self.ClearText()
         self.AddText('(' + str(self.id) + ') ' + self.label)
 
     def GetLog(self):
-        """!Get log info"""
+        """Get log info"""
         if self.label:
             return _("Condition: ") + self.label
         else:
             return _("Condition: not defined")
 
     def AddRelation(self, rel):
-        """!Record relation"""
+        """Record relation"""
         self.rels.append(rel)
         
     def Clear(self):
-        """!Clear object, remove rels"""
+        """Clear object, remove rels"""
         self.rels = list()
    
 class ModelLoop(ModelItem, ogl.RectangleShape):
     def __init__(self, parent, x, y, id=-1, idx=-1, width = None, height = None, label = '', items = []):
-        """!Defines a loop"""
+        """Defines a loop"""
         ModelItem.__init__(self, parent, x, y, id, width, height, label, items)
         self.itemIds = list() # unordered        
 
@@ -1538,7 +1539,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
             self.SetLabel(label)
 
     def _setBrush(self):
-        """!Set brush"""
+        """Set brush"""
         if not self.isEnabled:
             color = UserSettings.Get(group='modeler', key='disabled',
                                      subkey='color')
@@ -1550,7 +1551,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         self.SetBrush(wx.Brush(wxColor))
 
     def Enable(self, enabled = True):
-        """!Enable/disable action"""
+        """Enable/disable action"""
         for idx in self.itemIds:
             item = self.parent.FindAction(idx)
             if item:
@@ -1564,7 +1565,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         self._setBrush()
 
     def GetItems(self, items):
-        """!Get sorted items by id"""
+        """Get sorted items by id"""
         result = list()
         for item in items:
             if item.GetId() in self.itemIds:
@@ -1573,17 +1574,17 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
         return result
 
     def SetItems(self, items):
-        """!Set items (id)"""
+        """Set items (id)"""
         self.itemIds = items
 
     def UpdateItem(self, oldId, newId):
-        """!Update item in the list"""
+        """Update item in the list"""
         idx = self.itemIds.index(oldId)
         if idx != -1:
             self.itemIds[idx] = newId
         
     def OnDraw(self, dc):
-        """!Draw loop in canvas"""
+        """Draw loop in canvas"""
         self._setBrush()
         ogl.RectangleShape.Recentre(self, dc) # re-center text
         ogl.RectangleShape.OnDraw(self, dc)
@@ -1591,7 +1592,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
 class ModelCondition(ModelItem, ogl.PolygonShape):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, label = '',
                  items = { 'if' : [], 'else' : [] }):
-        """!Defines a if-else condition"""
+        """Defines a if-else condition"""
         ModelItem.__init__(self, parent, x, y, id, width, height, label, items)
         self.itemIds = {'if' : [], 'else': []}
         
@@ -1623,19 +1624,19 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
                 self.AddText('(' + str(self.id) + ')')
 
     def GetLabel(self):
-        """!Get name"""
+        """Get name"""
         return _("if-else")
 
     def GetWidth(self):
-        """!Get object width"""
+        """Get object width"""
         return self.width
 
     def GetHeight(self):
-        """!Get object height"""
+        """Get object height"""
         return self.height
 
     def GetItems(self, items):
-        """!Get sorted items by id"""
+        """Get sorted items by id"""
         result = {'if' : [], 'else': []}
         for item in items:
             if item.GetId() in self.itemIds['if']:
@@ -1646,17 +1647,17 @@ class ModelCondition(ModelItem, ogl.PolygonShape):
         return result
 
     def SetItems(self, items, branch = 'if'):
-        """!Set items (id)
+        """Set items (id)
 
-        @param items list of items
-        @param branch 'if' / 'else'
+        :param items: list of items
+        :param branch: 'if' / 'else'
         """
         if branch in ['if', 'else']:
             self.itemIds[branch] = items
 
 class ModelComment(ModelObject, ogl.RectangleShape):
     def __init__(self, parent, x, y, id = -1, width = None, height = None, label = ''):
-        """!Defines a model comment"""
+        """Defines a model comment"""
         ModelObject.__init__(self, id, label)
 
         if not width:
@@ -1677,21 +1678,21 @@ class ModelComment(ModelObject, ogl.RectangleShape):
             self.SetLabel(label)
 
     def _setBrush(self, running = False):
-        """!Set brush"""
+        """Set brush"""
         color = UserSettings.Get(group='modeler', key='comment',
                                      subkey='color')
         wxColor = wx.Colour(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
 
     def _setPen(self):
-        """!Set pen"""
+        """Set pen"""
         pen = wx.Pen(wx.BLACK, 1, wx.DOT)
         self.SetPen(pen)
 
     def SetLabel(self, label=None):
-        """!Set label
+        """Set label
 
-        @param label if None use command string instead
+        :param label: if None use command string instead
         """
         if label:
             self.label = label 
@@ -1712,9 +1713,9 @@ class ModelComment(ModelObject, ogl.RectangleShape):
         self.GetCanvas().Refresh()
 
 class ProcessModelFile:
-    """!Process GRASS model file (gxm)"""
+    """Process GRASS model file (gxm)"""
     def __init__(self, tree):
-        """!A ElementTree handler for the GXM XML file, as defined in
+        """A ElementTree handler for the GXM XML file, as defined in
         grass-gxm.dtd.
         """
         self.tree = tree
@@ -1736,9 +1737,9 @@ class ProcessModelFile:
         self._processData()
         
     def _filterValue(self, value):
-        """!Filter value
+        """Filter value
         
-        @param value
+        :param value:
         """
         value = value.replace('&lt;', '<')
         value = value.replace('&gt;', '>')
@@ -1746,7 +1747,7 @@ class ProcessModelFile:
         return value
         
     def _getNodeText(self, node, tag, default = ''):
-        """!Get node text"""
+        """Get node text"""
         p = node.find(tag)
         if p is not None:
             if p.text:
@@ -1757,7 +1758,7 @@ class ProcessModelFile:
         return default
     
     def _processWindow(self):
-        """!Process window properties"""
+        """Process window properties"""
         node = self.root.find('window')
         if node is None:
             self.pos = self.size = None
@@ -1766,7 +1767,7 @@ class ProcessModelFile:
         self.pos, self.size = self._getDim(node)
         
     def _processProperties(self):
-        """!Process model properties"""
+        """Process model properties"""
         node = self.root.find('properties')
         if node is None:
             return
@@ -1779,7 +1780,7 @@ class ProcessModelFile:
                 self.properties['overwrite'] = True
         
     def _processProperty(self, pnode, name):
-        """!Process given property"""
+        """Process given property"""
         node = pnode.find(name)
         if node is not None:
             self.properties[name] = node.text
@@ -1787,7 +1788,7 @@ class ProcessModelFile:
             self.properties[name] = ''
 
     def _processVariables(self):
-        """!Process model variables"""
+        """Process model variables"""
         vnode = self.root.find('variables')
         if vnode is None:
             return
@@ -1800,21 +1801,21 @@ class ProcessModelFile:
                 self._processVariable(node, name, key)
         
     def _processVariable(self, pnode, name, key):
-        """!Process given variable"""
+        """Process given variable"""
         node = pnode.find(key)
         if node is not None:
             if node.text:
                 self.variables[name][key] = node.text
 
     def _processItems(self):
-        """!Process model items (actions, loops, conditions)"""
+        """Process model items (actions, loops, conditions)"""
         self._processActions()
         self._processLoops()
         self._processConditions()
         self._processComments()
 
     def _processActions(self):
-        """!Process model file"""
+        """Process model file"""
         for action in self.root.findall('action'):
             pos, size = self._getDim(action)
             disabled  = False
@@ -1844,7 +1845,7 @@ class ProcessModelFile:
                                   'comment'  : commentString})
 
     def _getDim(self, node):
-        """!Get position and size of shape"""
+        """Get position and size of shape"""
         pos = size = None
         posAttr = node.get('pos', None)
         if posAttr:
@@ -1865,7 +1866,7 @@ class ProcessModelFile:
         return pos, size        
     
     def _processData(self):
-        """!Process model file"""
+        """Process model file"""
         for data in self.root.findall('data'):
             pos, size = self._getDim(data)
             param = data.find('data-parameter')
@@ -1900,10 +1901,10 @@ class ProcessModelFile:
                                'rels' : rels })
         
     def _processTask(self, node):
-        """!Process task
+        """Process task
 
-        @return grassTask instance
-        @return None on error
+        :return: grassTask instance
+        :return: None on error
         """
         cmd = list()
         parameterized = list()
@@ -1946,7 +1947,7 @@ class ProcessModelFile:
         return task
 
     def _processLoops(self):
-        """!Process model loops"""
+        """Process model loops"""
         for node in self.root.findall('loop'):
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, 'condition')).strip()
@@ -1964,7 +1965,7 @@ class ProcessModelFile:
                                 'items'   : aid })
         
     def _processConditions(self):
-        """!Process model conditions"""
+        """Process model conditions"""
         for node in self.root.findall('if-else'):
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, 'condition')).strip()
@@ -1987,7 +1988,7 @@ class ProcessModelFile:
                                      'items'   : aid })
 
     def _processComments(self):
-        """!Process model comments"""
+        """Process model comments"""
         for node in self.root.findall('comment'):
             pos, size = self._getDim(node)
             text = self._filterValue(node.text)
@@ -1999,7 +2000,7 @@ class ProcessModelFile:
                                    'text'    : text })
         
 class WriteModelFile:
-    """!Generic class for writing model file"""
+    """Generic class for writing model file"""
     def __init__(self, fd, model):
         self.fd         = fd
         self.model      = model
@@ -2027,28 +2028,28 @@ class WriteModelFile:
         self._footer()
 
     def _filterValue(self, value):
-        """!Escapes value to be stored in XML.
+        """Escapes value to be stored in XML.
 
-        @param value string to be escaped as XML
-        @returns a XML-valid string
+        :param value: string to be escaped as XML
+        :return: a XML-valid string
         """
         value = saxutils.escape(value)
         return value
         
     def _header(self):
-        """!Write header"""
+        """Write header"""
         self.fd.write('<?xml version="1.0" encoding="%s"?>\n' % GetDefaultEncoding(forceUTF8 = True))
         self.fd.write('<!DOCTYPE gxm SYSTEM "grass-gxm.dtd">\n')
         self.fd.write('%s<gxm>\n' % (' ' * self.indent))
         self.indent += 4
                 
     def _footer(self):
-        """!Write footer"""
+        """Write footer"""
         self.indent -= 4
         self.fd.write('%s</gxm>\n' % (' ' * self.indent))
 
     def _window(self):
-        """!Write window properties"""
+        """Write window properties"""
         canvas = self.model.GetCanvas()
         if canvas is None:
             return
@@ -2059,7 +2060,7 @@ class WriteModelFile:
                           (' ' * self.indent, pos[0], pos[1], size[0], size[1]))
         
     def _properties(self):
-        """!Write model properties"""
+        """Write model properties"""
         self.fd.write('%s<properties>\n' % (' ' * self.indent))
         self.indent += 4
         if self.properties['name']:
@@ -2078,7 +2079,7 @@ class WriteModelFile:
         self.fd.write('%s</properties>\n' % (' ' * self.indent))
 
     def _variables(self):
-        """!Write model variables"""
+        """Write model variables"""
         if not self.variables:
             return
         self.fd.write('%s<variables>\n' % (' ' * self.indent))
@@ -2099,7 +2100,7 @@ class WriteModelFile:
         self.fd.write('%s</variables>\n' % (' ' * self.indent))
         
     def _items(self):
-        """!Write actions/loops/conditions"""
+        """Write actions/loops/conditions"""
         for item in self.items:
             if isinstance(item, ModelAction):
                 self._action(item)
@@ -2111,7 +2112,7 @@ class WriteModelFile:
                 self._comment(item)
         
     def _action(self, action):
-        """!Write actions"""
+        """Write actions"""
         self.fd.write('%s<action id="%d" name="%s" pos="%d,%d" size="%d,%d">\n' % \
                           (' ' * self.indent, action.GetId(), EncodeString(action.GetLabel()), action.GetX(), action.GetY(),
                            action.GetWidth(), action.GetHeight()))
@@ -2156,7 +2157,7 @@ class WriteModelFile:
         self.fd.write('%s</action>\n' % (' ' * self.indent))
                 
     def _data(self, dataList):
-        """!Write data"""
+        """Write data"""
         for data in dataList:
             self.fd.write('%s<data pos="%d,%d" size="%d,%d">\n' % \
                               (' ' * self.indent, data.GetX(), data.GetY(),
@@ -2198,7 +2199,7 @@ class WriteModelFile:
             self.fd.write('%s</data>\n' % (' ' * self.indent))
 
     def _loop(self, loop):
-        """!Write loops"""
+        """Write loops"""
         self.fd.write('%s<loop id="%d" pos="%d,%d" size="%d,%d">\n' % \
                           (' ' * self.indent, loop.GetId(), loop.GetX(), loop.GetY(),
                            loop.GetWidth(), loop.GetHeight()))
@@ -2214,7 +2215,7 @@ class WriteModelFile:
         self.fd.write('%s</loop>\n' % (' ' * self.indent))
 
     def _condition(self, condition):
-        """!Write conditions"""
+        """Write conditions"""
         bbox = condition.GetBoundingBoxMin()
         self.fd.write('%s<if-else id="%d" pos="%d,%d" size="%d,%d">\n' % \
                           (' ' * self.indent, condition.GetId(), condition.GetX(), condition.GetY(),
@@ -2240,16 +2241,16 @@ class WriteModelFile:
         self.fd.write('%s</if-else>\n' % (' ' * self.indent))
 
     def _comment(self, comment):
-        """!Write comment"""
+        """Write comment"""
         self.fd.write('%s<comment id="%d" pos="%d,%d" size="%d,%d">%s</comment>\n' % \
                           (' ' * self.indent, comment.GetId(), comment.GetX(), comment.GetY(),
                            comment.GetWidth(), comment.GetHeight(), EncodeString(comment.GetLabel())))
         
 class WritePythonFile:
     def __init__(self, fd, model):
-        """!Class for exporting model to Python script
+        """Class for exporting model to Python script
 
-        @param fd file desciptor
+        :param fd: file descriptor
         """
         self.fd     = fd
         self.model  = model
@@ -2272,7 +2273,7 @@ class WritePythonFile:
         return ''
 
     def _writePython(self):
-        """!Write model to file"""
+        """Write model to file"""
         properties = self.model.GetProperties()
         
         # header
@@ -2290,7 +2291,7 @@ r"""#!/usr/bin/env python
 # DATE:         %s
 #
 #%s
-""" % ('#' * 77,
+"""% ('#' * 77,
        EncodeString(properties['name']),
        EncodeString(properties['author']),
        EncodeString('\n# '.join(properties['description'].splitlines())),
@@ -2303,7 +2304,7 @@ r"""
 #%%module
 #%% description: %s
 #%%end
-""" % (EncodeString(' '.join(properties['description'].splitlines()))))
+"""% (EncodeString(' '.join(properties['description'].splitlines()))))
 
         variables = self.model.GetVariables()
         for key, data in variables.iteritems():
@@ -2314,7 +2315,7 @@ r"""
 #%% key: %s
 #%% description: %s
 #%% required: yes
-""" % (otype, key, data['description']))
+"""% (otype, key, data['description']))
             if 'value' in data:
                 self.fd.write("#%% answer: %s\n" % data['value'])
             self.fd.write("#% end\n")
@@ -2337,19 +2338,19 @@ def cleanup():
 """)
         if rast:
             self.fd.write(
-r"""    run_command('g.remove',
+r"""  run_command('g.remove',
                       rast=%s)
-""" % ','.join(map(lambda x: "'" + x + "'", rast)))
+"""% ','.join(map(lambda x: "'" + x + "'", rast)))
         if vect:
             self.fd.write(
-r"""    run_command('g.remove',
+r"""  run_command('g.remove',
                       vect = %s)
-""" % ','.join(map(lambda x: "'" + x + "'", vect)))
+"""% ','.join(map(lambda x: "'" + x + "'", vect)))
         if rast3d:
             self.fd.write(
-r"""    run_command('g.remove',
+r"""  run_command('g.remove',
                       rast3d = %s)
-""" % ','.join(map(lambda x: "'" + x + "'", rast3d)))
+"""% ','.join(map(lambda x: "'" + x + "'", rast3d)))
         if not rast and not vect and not rast3d:
             self.fd.write('    pass\n')
         
@@ -2368,7 +2369,7 @@ if __name__ == "__main__":
 """)
         
     def _writePythonItem(self, item, ignoreBlock = True, variables = {}):
-        """!Write model object to Python file"""
+        """Write model object to Python file"""
         if isinstance(item, ModelAction):
             if ignoreBlock and item.GetBlockId(): # ignore items in loops of conditions
                 return
@@ -2417,7 +2418,7 @@ if __name__ == "__main__":
             self._writePythonComment(item)
         
     def _writePythonAction(self, item, variables = {}):
-        """!Write model action to Python file"""
+        """Write model action to Python file"""
         task = GUI(show = None).ParseCommand(cmd = item.GetLog(string = False))
         strcmd = "%srun_command(" % (' ' * self.indent)
         self.fd.write(strcmd + self._getPythonActionCmd(task, len(strcmd), variables) + '\n')
@@ -2469,18 +2470,18 @@ if __name__ == "__main__":
         return ret
 
     def _writePythonComment(self, item):
-        """!Write model comment to Python file"""
+        """Write model comment to Python file"""
         for line in item.GetLabel().splitlines():
             self.fd.write('#' + line + '\n')
 
     def _substituteVariable(self, string, variable, data):
-        """!Substitute variable in the string
+        """Substitute variable in the string
 
-        @param string string to be modified
-        @param variable variable to be substituted
-        @param data data related to the variable
+        :param string: string to be modified
+        :param variable: variable to be substituted
+        :param data: data related to the variable
         
-        @return modified string
+        :return: modified string
         """
         result = ''
         ss = re.split("\w*(%"+variable+")w*", string)
@@ -2509,7 +2510,7 @@ if __name__ == "__main__":
 class ModelParamDialog(wx.Dialog):
     def __init__(self, parent, params, id = wx.ID_ANY, title = _("Model parameters"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        """!Model parameters dialog
+        """Model parameters dialog
         """
         self.parent = parent
         self.params = params
@@ -2568,7 +2569,7 @@ class ModelParamDialog(wx.Dialog):
         mainSizer.Fit(self)
         
     def _createPages(self):
-        """!Create for each parameterized module its own page"""
+        """Create for each parameterized module its own page"""
         nameOrdered = [''] * len(self.params.keys())
         for name, params in self.params.iteritems():
             nameOrdered[params['idx']] = name
@@ -2582,7 +2583,7 @@ class ModelParamDialog(wx.Dialog):
         return panel
     
     def _createPage(self, name, params):
-        """!Define notebook page"""
+        """Define notebook page"""
         if name in globalvar.grassCmd:
             task = gtask.grassTask(name)
         else:
@@ -2597,7 +2598,7 @@ class ModelParamDialog(wx.Dialog):
         return panel
 
     def GetErrors(self):
-        """!Check for errors, get list of messages"""
+        """Check for errors, get list of messages"""
         errList = list()
         for task in self.tasks:
             errList += task.get_cmd_error()
@@ -2605,7 +2606,7 @@ class ModelParamDialog(wx.Dialog):
         return errList
 
     def DeleteIntermediateData(self):
-        """!Check if to detele intermediate data"""
+        """Check if to detele intermediate data"""
         if self.interData.IsShown() and self.interData.IsChecked():
             return True
         

@@ -29,8 +29,8 @@ Updated to wxPython 2.8 syntax and contrib widgets.  Methods added to
 make it callable by gui.  Method added to automatically re-run with
 pythonw on a Mac.
 
-@todo
- - verify option value types
+.. todo::
+    verify option value types
 
 Copyright(C) 2000-2013 by the GRASS Development Team
 
@@ -97,7 +97,7 @@ from core.giface import Notification
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
 
-"""!Hide some options in the GUI"""
+"""Hide some options in the GUI"""
 #_blackList = { 'enabled' : False,
 #               'items'   : { 'r.buffer' : {'params' : ['input', 'output'],
 #                                           'flags' : ['z', 'overwrite']}}}
@@ -106,7 +106,7 @@ _blackList = { 'enabled' : False,
 
 
 def text_beautify(someString , width = 70):
-    """!Make really long texts shorter, clean up whitespace and remove
+    """Make really long texts shorter, clean up whitespace and remove
     trailing punctuation.
     """
     if width > 0:
@@ -117,11 +117,11 @@ def text_beautify(someString , width = 70):
         return escape_ampersand(string.strip(utils.normalize_whitespace(someString), ".,;:"))
     
 def escape_ampersand(text):
-    """!Escapes ampersands with additional ampersand for GUI"""
+    """Escapes ampersands with additional ampersand for GUI"""
     return string.replace(text, "&", "&&")
 
 class UpdateThread(Thread):
-    """!Update dialog widgets in the thread"""
+    """Update dialog widgets in the thread"""
     def __init__(self, parent, event, eventId, task):
         Thread.__init__(self)
         
@@ -334,7 +334,7 @@ def UpdateDialog(parent, event, eventId, task):
     return UpdateThread(parent, event, eventId, task)
 
 class UpdateQThread(Thread):
-    """!Update dialog widgets in the thread"""
+    """Update dialog widgets in the thread"""
     requestId = 0
     def __init__(self, parent, requestQ, resultQ, **kwds):
         Thread.__init__(self, **kwds)
@@ -368,7 +368,7 @@ class UpdateQThread(Thread):
                 wx.PostEvent(self.parent, event)
 
 class TaskFrame(wx.Frame):
-    """!This is the Frame containing the dialog for options input.
+    """This is the Frame containing the dialog for options input.
 
     The dialog is organized in a notebook according to the guisections
     defined by each GRASS command.
@@ -611,16 +611,16 @@ class TaskFrame(wx.Frame):
             self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
         
     def updateValuesHook(self, event = None):
-        """!Update status bar data"""
+        """Update status bar data"""
         self.SetStatusText(' '.join(self.notebookpanel.createCmd(ignoreErrors = True)))
         if event:
             event.Skip()
 
     def OnDone(self, cmd, returncode):
-        """!This function is launched from OnRun() when command is
+        """This function is launched from OnRun() when command is
         finished
 
-        @param returncode command's return code (0 for success)
+        :param returncode: command's return code (0 for success)
         """
 
         if hasattr(self, "btn_cancel"):
@@ -644,10 +644,10 @@ class TaskFrame(wx.Frame):
             wx.FutureCall(2000, self.Close)
 
     def OnMapCreated(self, name, ltype):
-        """!Map created or changed
+        """Map created or changed
 
-        @param name map name
-        @param ltype layer type (prompt value)
+        :param name: map name
+        :param ltype: layer type (prompt value)
         """
         if hasattr(self, "addbox") and self.addbox.IsChecked():
             add = True
@@ -658,13 +658,13 @@ class TaskFrame(wx.Frame):
             self._giface.mapCreated.emit(name=name, ltype=ltype, add=add)
     
     def OnOK(self, event):
-        """!OK button pressed"""
+        """OK button pressed"""
         cmd = self.OnApply(event)
         if cmd is not None and self.get_dcmd is not None:
             self.OnCancel(event)
 
     def OnApply(self, event):
-        """!Apply the command"""
+        """Apply the command"""
         if self._giface and hasattr(self._giface, "_model"):
             cmd = self.createCmd(ignoreErrors = True, ignoreRequired = True)
         else:
@@ -681,7 +681,7 @@ class TaskFrame(wx.Frame):
         return cmd
 
     def OnRun(self, event):
-        """!Run the command"""
+        """Run the command"""
         cmd = self.createCmd()
         
         if not cmd or len(cmd) < 1:
@@ -716,13 +716,13 @@ class TaskFrame(wx.Frame):
             btn.Enable(False)
         
     def OnAbort(self, event):
-        """!Abort running command"""
+        """Abort running command"""
         from core.gconsole import wxCmdAbort
         event = wxCmdAbort(aborted = True)
         wx.PostEvent(self._gconsole, event)
 
     def OnCopy(self, event):
-        """!Copy the command"""
+        """Copy the command"""
         cmddata = wx.TextDataObject()
         # list -> string
         cmdlist = self.createCmd(ignoreErrors = True)
@@ -741,7 +741,7 @@ class TaskFrame(wx.Frame):
                                     (cmdstring))
 
     def OnCancel(self, event):
-        """!Cancel button pressed"""
+        """Cancel button pressed"""
         self.MakeModal(False)
         self.dialogClosing.emit()
         if self.get_dcmd and \
@@ -762,7 +762,7 @@ class TaskFrame(wx.Frame):
             self.Destroy()
 
     def OnHelp(self, event):
-        """!Show manual page (switch to the 'Manual' notebook page)"""
+        """Show manual page (switch to the 'Manual' notebook page)"""
         if self.notebookpanel.notebook.GetPageIndexByName('manual') > -1:
             self.notebookpanel.notebook.SetSelectionByName('manual')
             self.notebookpanel.OnPageChange(None)
@@ -771,12 +771,12 @@ class TaskFrame(wx.Frame):
             event.Skip()
         
     def createCmd(self, ignoreErrors = False, ignoreRequired = False):
-        """!Create command string (python list)"""
+        """Create command string (python list)"""
         return self.notebookpanel.createCmd(ignoreErrors = ignoreErrors,
                                             ignoreRequired = ignoreRequired)
 
 class CmdPanel(wx.Panel):
-    """!A panel containing a notebook dividing in tabs the different
+    """A panel containing a notebook dividing in tabs the different
     guisections of the GRASS cmd.
     """
     def __init__(self, parent, giface, task, id = wx.ID_ANY, frame = None, *args, **kwargs):
@@ -1812,16 +1812,16 @@ class CmdPanel(wx.Panel):
         self.Bind(EVT_DIALOG_UPDATE, self.OnUpdateDialog)
 
     def _getValue(self, p):
-        """!Get value or default value of given parameter
+        """Get value or default value of given parameter
 
-        @param p parameter directory
+        :param p: parameter directory
         """
         if p.get('value', '') !=  '':
             return p['value']
         return p.get('default', '')
         
     def OnFileLoad(self, event):
-        """!Load file to interactive input"""
+        """Load file to interactive input"""
         me = event.GetId()
         win = dict()
         for p in self.task.params:
@@ -1855,7 +1855,7 @@ class CmdPanel(wx.Panel):
         win['text'].SetValue(data)
         
     def OnFileSave(self, event):
-        """!Save interactive input to the file"""
+        """Save interactive input to the file"""
         wId = event.GetId()
         win = {}
         for p in self.task.params:
@@ -1916,7 +1916,7 @@ class CmdPanel(wx.Panel):
             win.SetValue('')
         
     def OnVectorFormat(self, event):
-        """!Change vector format (native / ogr).
+        """Change vector format (native / ogr).
 
         Currently unused.        
         """
@@ -1982,7 +1982,7 @@ class CmdPanel(wx.Panel):
         self.parent.updateValuesHook()
         
     def OnVerbosity(self, event):
-        """!Verbosity level changed"""
+        """Verbosity level changed"""
         verbose = self.FindWindowById(self.task.get_flag('verbose')['wxId'][0])
         quiet = self.FindWindowById(self.task.get_flag('quiet')['wxId'][0])
         if event.IsChecked():
@@ -2025,7 +2025,7 @@ class CmdPanel(wx.Panel):
         event.Skip()
 
     def _switchPage(self, notification):
-        """!Manages @c 'output' notebook page according to event notification."""
+        """Manages @c 'output' notebook page according to event notification."""
         if notification == Notification.HIGHLIGHT:
             self.notebook.HighlightPageByName('output')
         if notification == Notification.MAKE_VISIBLE:
@@ -2069,7 +2069,7 @@ class CmdPanel(wx.Panel):
         self.OnUpdateValues()
 
     def OnUpdateValues(self, event = None):
-        """!If we were part of a richer interface, report back the
+        """If we were part of a richer interface, report back the
         current command being built.
 
         This method should be set by the parent of this panel if
@@ -2079,7 +2079,7 @@ class CmdPanel(wx.Panel):
         pass
 
     def OnCheckBoxMulti(self, event):
-        """!Fill the values as a ','-separated string according to
+        """Fill the values as a ','-separated string according to
         current status of the checkboxes.
         """
         me = event.GetId()
@@ -2112,7 +2112,7 @@ class CmdPanel(wx.Panel):
         self.OnUpdateValues()
 
     def OnSetValue(self, event):
-        """!Retrieve the widget value and set the task value field
+        """Retrieve the widget value and set the task value field
         accordingly.
 
         Use for widgets that have a proper GetValue() method, i.e. not
@@ -2148,7 +2148,7 @@ class CmdPanel(wx.Panel):
         event.Skip()
         
     def OnSetSymbol(self, event):
-        """!Shows dialog for symbol selection"""
+        """Shows dialog for symbol selection"""
         myId = event.GetId()
         
         for p in self.task.params:
@@ -2171,9 +2171,10 @@ class CmdPanel(wx.Panel):
                 dlg.Destroy()
 
     def OnTimelineTool(self, event):
-        """!Show Timeline Tool with dataset(s) from gselect.
+        """Show Timeline Tool with dataset(s) from gselect.
 
-        TODO: update from gselect automatically        
+        .. todo::
+            update from gselect automatically        
         """
         myId = event.GetId()
 
@@ -2188,7 +2189,7 @@ class CmdPanel(wx.Panel):
                 frame.run(parent=self, datasets=datasets)
 
     def OnUpdateSelection(self, event):
-        """!Update dialog (layers, tables, columns, etc.)
+        """Update dialog (layers, tables, columns, etc.)
         """
         if not hasattr(self.parent, "updateThread"):
             if event:
@@ -2208,11 +2209,11 @@ class CmdPanel(wx.Panel):
                                             self.task)
             
     def createCmd(self, ignoreErrors = False, ignoreRequired = False):
-        """!Produce a command line string (list) or feeding into GRASS.
+        """Produce a command line string (list) or feeding into GRASS.
 
-        @param ignoreErrors True then it will return whatever has been
-        built so far, even though it would not be a correct command
-        for GRASS
+        :param ignoreErrors: True then it will return whatever has been
+                             built so far, even though it would not be
+                             a correct command for GRASS
         """
         try:
             cmd = self.task.get_cmd(ignoreErrors = ignoreErrors,
@@ -2255,7 +2256,7 @@ class CmdPanel(wx.Panel):
 class GUI:
     def __init__(self, parent = None, giface = None, show = True, modal = False,
                  centreOnParent = False, checkError = False):
-        """!Parses GRASS commands when module is imported and used from
+        """Parses GRASS commands when module is imported and used from
         Layer Manager.
         """
         self.parent = parent
@@ -2275,11 +2276,11 @@ class GUI:
             _blackList['enabled'] = False
         
     def GetCmd(self):
-        """!Get validated command"""
+        """Get validated command"""
         return self.cmd
     
     def ParseCommand(self, cmd, completed = None):
-        """!Parse command
+        """Parse command
         
         Note: cmd is given as list
         
@@ -2396,12 +2397,12 @@ class GUI:
             return self.grass_task
     
     def GetCommandInputMapParamKey(self, cmd):
-        """!Get parameter key for input raster/vector map
+        """Get parameter key for input raster/vector map
         
-        @param cmd module name
+        :param cmd: module name
         
-        @return parameter key
-        @return None on failure
+        :return: parameter key
+        :return: None on failure
         """
         # parse the interface decription
         if not self.grass_task:
@@ -2420,7 +2421,7 @@ class GUI:
         return None
 
 class GrassGUIApp(wx.App):
-    """!Stand-alone GRASS command GUI
+    """Stand-alone GRASS command GUI
     """
     def __init__(self, grass_task):
         self.grass_task = grass_task

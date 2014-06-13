@@ -1,4 +1,4 @@
-"""!
+"""
 @package gui_core.query
 
 @brief wxGUI query dialog
@@ -91,7 +91,7 @@ class QueryDialog(wx.Dialog):
         self._copyText(text)
 
     def ShowContextMenu(self, node):
-        """!Show context menu.
+        """Show context menu.
         
         Menu for copying distinguishes single and multiple selection.
         """
@@ -134,9 +134,9 @@ class QueryDialog(wx.Dialog):
             self.Unbind(wx.EVT_MENU, id=id)
 
     def _onRedirect(self, redirect):
-        """!Emits instructions to redirect query results.
+        """Emits instructions to redirect query results.
         
-        @param redirect True to start redirecting, False to stop        
+        :param redirect: True to start redirecting, False to stop        
         """
         if redirect:
             self.redirectOutput.emit(output=_("Query results:"), style='cmd')
@@ -157,7 +157,7 @@ class QueryDialog(wx.Dialog):
         return label
 
     def _copyText(self, text):
-        """!Helper function for copying"""
+        """Helper function for copying"""
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
             do.SetText(text)
@@ -172,12 +172,12 @@ class QueryDialog(wx.Dialog):
 
 
 def QueryTreeBuilder(data, column):
-    """!Builds tree model from query results.
+    """Builds tree model from query results.
     
-    @param data query results as a dictionary
-    @param column column name
+    :param data: query results as a dictionary
+    :param column: column name
     
-    @returns tree model
+    :return: tree model
     """
     def addNode(parent, data, model):
         for k, v in data.iteritems():
@@ -196,10 +196,10 @@ def QueryTreeBuilder(data, column):
 
 
 def printResults(model, valueCol):
-    """!Print all results to string.
+    """Print all results to string.
     
-    @param model results tree model
-    @param valueCol column name with value to be printed
+    :param model: results tree model
+    :param valueCol: column name with value to be printed
     """
     def printTree(node, textList, valueCol, indent=0):
         if node.data.get(valueCol, '') or node.children:
@@ -214,7 +214,7 @@ def printResults(model, valueCol):
 
 
 def PrepareQueryResults(coordinates, result):
-    """!Prepare query results as a Query dialog input.
+    """Prepare query results as a Query dialog input.
 
     Adds coordinates, improves vector results tree structure.
     """

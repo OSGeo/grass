@@ -1,4 +1,4 @@
-"""!
+"""
 @package dbmgr.sqlbuilder
 
 @brief GRASS SQL Select/Update Builder
@@ -39,7 +39,7 @@ from dbmgr.vinfo import CreateDbInfoDesc, VectorDBInfo, GetUnicodeValue
 import grass.script as grass
 
 class SQLBuilder(wx.Frame):
-    """!SQLBuider class
+    """SQLBuider class
     Base class for classes, which builds SQL statements.
     """
     def __init__(self, parent, title, vectmap, modeChoices, id = wx.ID_ANY,
@@ -73,7 +73,7 @@ class SQLBuilder(wx.Frame):
         self._doLayout(modeChoices)
 
     def _doLayout(self, modeChoices):
-        """!Do dialog layout"""
+        """Do dialog layout"""
         
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -281,7 +281,7 @@ class SQLBuilder(wx.Frame):
         self.CenterOnParent()
    
     def OnUniqueValues(self, event, justsample = False):
-        """!Get unique values"""
+        """Get unique values"""
         vals = []
         try:
             idx = self.list_columns.GetSelections()[0]
@@ -313,11 +313,11 @@ class SQLBuilder(wx.Frame):
             i += 1
         
     def OnSampleValues(self, event):
-        """!Get sample values"""
+        """Get sample values"""
         self.OnUniqueValues(None, True)
 
     def OnAddColumn(self, event):
-        """!Add column name to the query"""
+        """Add column name to the query"""
         idx = self.list_columns.GetSelections()
         for i in idx:
             column = self.list_columns.GetString(i)
@@ -328,7 +328,7 @@ class SQLBuilder(wx.Frame):
             self.btn_unique.Enable(True)
         
     def OnAddValue(self, event):
-        """!Add value"""
+        """Add value"""
         selection = self.list_values.GetSelections()
         if not selection:
             event.Skip()
@@ -364,7 +364,7 @@ class SQLBuilder(wx.Frame):
             self.list_values.SetSelection(found)
             
     def OnAddMark(self, event):
-        """!Add mark"""
+        """Add mark"""
         mark = None
         if self.btn_logicpanel and \
            self.btn_logicpanel.IsShown():
@@ -381,7 +381,7 @@ class SQLBuilder(wx.Frame):
         self._add(element = 'mark', value = mark)
 
     def GetSQLStatement(self):
-        """!Return SQL statement"""
+        """Return SQL statement"""
         return self.text_sql.GetValue().strip().replace("\n"," ")
         
     def OnClose(self, event):
@@ -389,7 +389,7 @@ class SQLBuilder(wx.Frame):
         event.Skip()
  
 class SQLBuilderSelect(SQLBuilder):
-    """!Class for building SELECT SQL statement"""
+    """Class for building SELECT SQL statement"""
     def __init__(self, parent, vectmap, id = wx.ID_ANY,
                  layer = 1, evtHandler = None):
 
@@ -407,7 +407,7 @@ class SQLBuilderSelect(SQLBuilder):
 
 
     def _doLayout(self, modeChoices):
-        """!Do dialog layout"""
+        """Do dialog layout"""
 
         SQLBuilder._doLayout(self, modeChoices)
 
@@ -437,11 +437,11 @@ class SQLBuilderSelect(SQLBuilder):
         event.Skip()
 
     def OnClear(self, event):
-        """!Clear button pressed"""
+        """Clear button pressed"""
         self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
 
     def OnMode(self, event):
-        """!Adjusts builder for chosen mode"""
+        """Adjusts builder for chosen mode"""
         if self.mode.GetSelection() == 0:
             self.valuespanel.Hide()
             self.btn_logicpanel.Hide()
@@ -458,7 +458,7 @@ class SQLBuilderSelect(SQLBuilder):
             self.btn_verify.Enable(False)
             
     def OnVerify(self, event):
-        """!Verify button pressed"""
+        """Verify button pressed"""
         ret, msg = RunCommand('db.select',
                               getErrorMsg = True,
                               table = self.tablename,
@@ -475,9 +475,9 @@ class SQLBuilderSelect(SQLBuilder):
             self.statusbar.SetStatusText(_("SQL statement is valid"), 0)
 
     def _add(self, element, value):
-        """!Add element to the query
+        """Add element to the query
 
-        @param element element to add (column, value)
+        :param element: element to add (column, value)
         """
         sqlstr = self.text_sql.GetValue()
         curspos = self.text_sql.GetInsertionPoint()
@@ -521,18 +521,18 @@ class SQLBuilderSelect(SQLBuilder):
         self.text_sql.SetInsertionPoint(curspos)
 
     def CloseOnApply(self):
-        """!Return True if the dialog will be close on apply"""
+        """Return True if the dialog will be close on apply"""
         return self.close_onapply.IsChecked()
 
     def OnClose(self, event):
-        """!Close button pressed"""
+        """Close button pressed"""
         if self.evtHandler:
             self.evtHandler(event = 'close')
     
         SQLBuilder.OnClose(self, event)
 
 class SQLBuilderUpdate(SQLBuilder):
-    """!Class for building UPDATE SQL statement"""
+    """Class for building UPDATE SQL statement"""
     def __init__(self, parent, vectmap, id = wx.ID_ANY,
                  layer = 1, column = None):
 
@@ -554,7 +554,7 @@ class SQLBuilderUpdate(SQLBuilder):
             self.sqlApplied.connect(parent.Update)
 
     def _doLayout(self, modeChoices):
-        """!Do dialog layout"""
+        """Do dialog layout"""
 
         SQLBuilder._doLayout(self, modeChoices)
 
@@ -638,11 +638,11 @@ class SQLBuilderUpdate(SQLBuilder):
         self.sqlApplied.emit()
 
     def OnClear(self, event):
-        """!Clear button pressed"""
+        """Clear button pressed"""
         self.text_sql.SetValue(self.initText)
 
     def OnMode(self, event):
-        """!Adjusts builder for chosen mode"""
+        """Adjusts builder for chosen mode"""
         if self.mode.GetSelection() == 0:
             self.valuespanel.Hide()
             self.btn_logicpanel.Hide()
@@ -662,7 +662,7 @@ class SQLBuilderUpdate(SQLBuilder):
 
 
     def OnAddFunc(self, event):
-        """!Add function to the query"""
+        """Add function to the query"""
 
         if self.driver == 'dbf':
             GMessage(parent = self,
@@ -676,9 +676,9 @@ class SQLBuilderUpdate(SQLBuilder):
         
 
     def _add(self, element, value):
-        """!Add element to the query
+        """Add element to the query
 
-        @param element element to add (column, value)
+        :param element: element to add (column, value)
         """
         sqlstr = self.text_sql.GetValue()
         curspos = self.text_sql.GetInsertionPoint()

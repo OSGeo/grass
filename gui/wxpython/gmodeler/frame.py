@@ -1,4 +1,4 @@
-"""!
+"""
 @package gmodeler.frame
 
 @brief wxGUI Graphical Modeler for creating, editing, and managing models
@@ -60,13 +60,13 @@ from grass.script import core as grass
 class ModelFrame(wx.Frame):
     def __init__(self, parent, giface, id = wx.ID_ANY,
                  title = _("GRASS GIS Graphical Modeler"), **kwargs):
-        """!Graphical modeler main window
+        """Graphical modeler main window
         
-        @param parent parent window
-        @param id window id
-        @param title window title
+        :param parent: parent window
+        :param id: window id
+        :param title: window title
 
-        @param kwargs wx.Frames' arguments
+        :param kwargs: wx.Frames' arguments
         """
         self.parent = parent
         self._giface = giface
@@ -143,7 +143,7 @@ class ModelFrame(wx.Frame):
             self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
         
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         sizer.Add(item = self.notebook, proportion = 1,
@@ -156,7 +156,7 @@ class ModelFrame(wx.Frame):
         self.Layout()
 
     def _addEvent(self, item):
-        """!Add event to item"""
+        """Add event to item"""
         evthandler = ModelEvtHandler(self.statusbar,
                                      self)
         evthandler.SetShape(item)
@@ -164,19 +164,19 @@ class ModelFrame(wx.Frame):
         item.SetEventHandler(evthandler)
 
     def _randomShift(self):
-        """!Returns random value to shift layout"""
+        """Returns random value to shift layout"""
         return random.randint(-self.randomness, self.randomness)
 
     def GetCanvas(self):
-        """!Get canvas"""
+        """Get canvas"""
         return self.canvas
     
     def GetModel(self):
-        """!Get model"""
+        """Get model"""
         return self.model
     
     def ModelChanged(self, changed = True):
-        """!Update window title"""
+        """Update window title"""
         self.modelChanged = changed
         
         if self.modelFile:
@@ -188,7 +188,7 @@ class ModelFrame(wx.Frame):
             self.SetTitle(self.baseTitle)
 
     def OnPageChanged(self, event):
-        """!Page in notebook changed"""
+        """Page in notebook changed"""
         page = event.GetSelection()
         if page == self.notebook.GetPageIndexByName('python'):
             if self.pythonPanel.IsEmpty():
@@ -202,22 +202,22 @@ class ModelFrame(wx.Frame):
         event.Skip()
 
     def OnVariables(self, event):
-        """!Switch to variables page"""
+        """Switch to variables page"""
         self.notebook.SetSelectionByName('variables')
         
     def OnRemoveItem(self, event):
-        """!Remove shape
+        """Remove shape
         """
         self.GetCanvas().RemoveSelected()
         
     def OnCanvasRefresh(self, event):
-        """!Refresh canvas"""
+        """Refresh canvas"""
         self.SetStatusText(_("Redrawing model..."), 0)
         self.GetCanvas().Refresh()
         self.SetStatusText("", 0)
 
     def OnCmdRun(self, event):
-        """!Run command"""
+        """Run command"""
         try:
             action = self.GetModel().GetItems()[event.pid]
             if hasattr(action, "task"):
@@ -226,7 +226,7 @@ class ModelFrame(wx.Frame):
             pass
         
     def OnCmdPrepare(self, event):
-        """!Prepare for running command"""
+        """Prepare for running command"""
         if not event.userData:
             return
         
@@ -234,7 +234,7 @@ class ModelFrame(wx.Frame):
                         params = event.userData['params'])
         
     def OnCmdDone(self, event):
-        """!Command done (or aborted)"""
+        """Command done (or aborted)"""
         self.goutput.GetProgressBar().SetValue(0)
         try:
             action = self.GetModel().GetItems()[event.pid]
@@ -244,7 +244,7 @@ class ModelFrame(wx.Frame):
             pass
 
     def OnCloseWindow(self, event):
-        """!Close window"""
+        """Close window"""
         if self.modelChanged and \
                 UserSettings.Get(group='manager', key='askOnQuit', subkey='enabled'):
             if self.modelFile:
@@ -273,12 +273,12 @@ class ModelFrame(wx.Frame):
         self.Destroy()
 
     def OnSize(self, event):
-        """!Window resized, save to the model"""
+        """Window resized, save to the model"""
         self.ModelChanged()
         event.Skip()
         
     def OnPreferences(self, event):
-        """!Open preferences dialog"""
+        """Open preferences dialog"""
         dlg = PreferencesDialog(parent = self, giface = self._giface)
         dlg.CenterOnParent()
         
@@ -286,11 +286,11 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh()
         
     def OnHelp(self, event):
-        """!Show help"""
+        """Show help"""
         self._giface.Help(entry = 'wxGUI.gmodeler')
 
     def OnModelProperties(self, event):
-        """!Model properties dialog"""
+        """Model properties dialog"""
         dlg = PropertiesDialog(parent = self)
         dlg.CentreOnParent()
         properties = self.model.GetProperties()
@@ -305,7 +305,7 @@ class ModelFrame(wx.Frame):
         dlg.Destroy()
         
     def OnDeleteData(self, event):
-        """!Delete intermediate data"""
+        """Delete intermediate data"""
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
         
         if not rast and not vect and not rast3d:
@@ -336,7 +336,7 @@ class ModelFrame(wx.Frame):
         dlg.Destroy()
                 
     def OnModelNew(self, event):
-        """!Create new model"""
+        """Create new model"""
         Debug.msg(4, "ModelFrame.OnModelNew():")
         
         # ask user to save current model
@@ -372,9 +372,9 @@ class ModelFrame(wx.Frame):
         self.SetTitle(self.baseTitle)
         
     def GetModelFile(self, ext=True):
-        """!Get model file
+        """Get model file
 
-        @param ext False to avoid extension
+        :param bool ext: False to avoid extension
         """
         if not self.modelFile:
             return ''
@@ -383,7 +383,7 @@ class ModelFrame(wx.Frame):
         return os.path.splitext(self.modelFile)[0]
     
     def OnModelOpen(self, event):
-        """!Load model from file"""
+        """Load model from file"""
         filename = ''
         dlg = wx.FileDialog(parent = self, message=_("Choose model file"),
                             defaultDir = os.getcwd(),
@@ -408,7 +408,7 @@ class ModelFrame(wx.Frame):
                                  'actions' : self.model.GetNumItems(actionOnly = True) }, 0)
         
     def OnModelSave(self, event = None):
-        """!Save model to file"""
+        """Save model to file"""
         if self.modelFile and self.modelChanged:
             dlg = wx.MessageDialog(self, message=_("Model file <%s> already exists. "
                                                    "Do you want to overwrite this file?") % \
@@ -426,7 +426,7 @@ class ModelFrame(wx.Frame):
             self.OnModelSaveAs(None)
         
     def OnModelSaveAs(self, event):
-        """!Create model to file as"""
+        """Create model to file as"""
         filename = ''
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose file to save current model"),
@@ -463,7 +463,7 @@ class ModelFrame(wx.Frame):
         self.SetStatusText(_('File <%s> saved') % self.modelFile, 0)
 
     def OnModelClose(self, event = None):
-        """!Close model file"""
+        """Close model file"""
         Debug.msg(4, "ModelFrame.OnModelClose(): file=%s" % self.modelFile)
         # ask user to save current model
         if self.modelFile and self.modelChanged:
@@ -494,13 +494,14 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh()
         
     def OnRunModel(self, event):
-        """!Run entire model"""
+        """Run entire model"""
         self.model.Run(self._gconsole, self.OnDone, parent = self)
         
     def OnDone(self, cmd, returncode):
-        """!Computation finished
+        """Computation finished
 
-        @todo: not called -- must be fixed
+        .. todo::
+            not called -- must be fixed
         """
         self.SetStatusText('', 0)
         # restore original files
@@ -518,7 +519,7 @@ class ModelFrame(wx.Frame):
             del self.model.fileInput
         
     def OnValidateModel(self, event, showMsg = True):
-        """!Validate entire model"""
+        """Validate entire model"""
         if self.model.GetNumItems() < 1:
             GMessage(parent = self, 
                      message = _('Model is empty. Nothing to validate.'))
@@ -537,7 +538,7 @@ class ModelFrame(wx.Frame):
                      message = _('Model is valid.'))
     
     def OnExportImage(self, event):
-        """!Export model to image (default image)
+        """Export model to image (default image)
         """
         xminImg = 0
         xmaxImg = 0
@@ -600,20 +601,21 @@ class ModelFrame(wx.Frame):
         dlg.Destroy()
         
     def OnExportPython(self, event = None, text = None):
-        """!Export model to Python script"""
+        """Export model to Python script"""
         filename = self.pythonPanel.SaveAs(force = True)
         self.SetStatusText(_("Model exported to <%s>") % filename)
 
     def OnDefineRelation(self, event):
-        """!Define relation between data and action items"""
+        """Define relation between data and action items"""
         self.canvas.SetCursor(self.cursors["cross"])
         self.defineRelation = { 'from' : None,
                                 'to'   : None }
         
     def OnDefineLoop(self, event):
-        """!Define new loop in the model
+        """Define new loop in the model
 
-        @todo: move to ModelCanvas?
+        .. todo::
+            move to ModelCanvas?
         """
         self.ModelChanged()
         
@@ -629,9 +631,10 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh()
         
     def OnDefineCondition(self, event):
-        """!Define new condition in the model
+        """Define new condition in the model
 
-        @todo: move to ModelCanvas?
+        .. todo::
+            move to ModelCanvas?
         """
         self.ModelChanged()
         
@@ -647,7 +650,7 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh()
     
     def OnAddAction(self, event):
-        """!Add action to model"""
+        """Add action to model"""
         if self.searchDialog is None:
             self.searchDialog = ModelSearchDialog(self)
             self.searchDialog.CentreOnParent()
@@ -703,7 +706,7 @@ class ModelFrame(wx.Frame):
             win.Raise()
         
     def OnAddData(self, event):
-        """!Add data item to model
+        """Add data item to model
         """
         # add action to canvas
         width, height = self.canvas.GetSize()
@@ -730,7 +733,7 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh()
 
     def OnAddComment(self, event):
-        """!Add comment to the model"""
+        """Add comment to the model"""
         dlg = wx.TextEntryDialog(parent = self, message = _("Comment:"), caption = _("Add comment"),
                                  style = wx.OK | wx.CANCEL | wx.CENTRE | wx.TE_MULTILINE)
         if dlg.ShowModal() == wx.ID_OK:
@@ -756,7 +759,7 @@ class ModelFrame(wx.Frame):
         event.Skip()
 
     def _switchPage(self, notification):
-        """!Manages @c 'output' notebook page according to event notification."""
+        """Manages @c 'output' notebook page according to event notification."""
         if notification == Notification.HIGHLIGHT:
             self.notebook.HighlightPageByName('output')
         if notification == Notification.MAKE_VISIBLE:
@@ -767,11 +770,11 @@ class ModelFrame(wx.Frame):
             self.Raise()
 
     def OnAbout(self, event):
-        """!Display About window"""
+        """Display About window"""
         ShowAboutDialog(prgName=_('wxGUI Graphical Modeler'), startYear='2010')
         
     def GetOptData(self, dcmd, layer, params, propwin):
-        """!Process action data"""
+        """Process action data"""
         if params: # add data items
             width, height = self.canvas.GetSize()
             x = width/2 - 200 + self._randomShift()
@@ -830,9 +833,9 @@ class ModelFrame(wx.Frame):
         self.SetStatusText(layer.GetLog(), 0)
         
     def AddLine(self, rel):
-        """!Add connection between model objects
+        """Add connection between model objects
         
-        @param rel relation
+        :param rel: relation
         """
         fromShape = rel.GetFrom()
         toShape   = rel.GetTo()
@@ -857,7 +860,7 @@ class ModelFrame(wx.Frame):
         rel.Show(True)
         
     def LoadModelFile(self, filename):
-        """!Load model definition stored in GRASS Model XML file (gxm)
+        """Load model definition stored in GRASS Model XML file (gxm)
         """
         try:
             self.model.LoadModel(filename)
@@ -927,10 +930,10 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh(True)
         
     def WriteModelFile(self, filename):
-        """!Save model to model file, recover original file on error.
+        """Save model to model file, recover original file on error.
         
-        @return True on success
-        @return False on failure
+        :return: True on success
+        :return: False on failure
         """
         self.ModelChanged(False)
         tmpfile = tempfile.TemporaryFile(mode='w+b')
@@ -958,7 +961,7 @@ class ModelFrame(wx.Frame):
         return True
     
     def DefineLoop(self, loop):
-        """!Define loop with given list of items"""
+        """Define loop with given list of items"""
         parent = loop
         items = loop.GetItems(self.GetModel().GetItems())
         if not items:
@@ -1002,7 +1005,7 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh()
 
     def DefineCondition(self, condition):
-        """!Define if-else statement with given list of items"""
+        """Define if-else statement with given list of items"""
         items = condition.GetItems(self.model.GetItems(objType=ModelAction))
         if not items['if'] and not items['else']:
             return
@@ -1034,7 +1037,7 @@ class ModelFrame(wx.Frame):
         self.canvas.Refresh()
         
 class ModelCanvas(ogl.ShapeCanvas):
-    """!Canvas where model is drawn"""
+    """Canvas where model is drawn"""
     def __init__(self, parent):
         self.parent = parent
         ogl.OGLInitialize()
@@ -1050,7 +1053,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.Bind(wx.EVT_LEFT_DOWN,  self.OnLeftDown)
 
     def OnKeyUp(self, event):
-        """!Key pressed"""
+        """Key pressed"""
         kc = event.GetKeyCode()
         if kc == wx.WXK_DELETE:
             self.RemoveSelected()
@@ -1060,7 +1063,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         evt.Skip()
 
     def RemoveSelected(self):
-        """!Remove selected shapes"""
+        """Remove selected shapes"""
         self.parent.ModelChanged()
         
         diagram = self.GetDiagram()
@@ -1068,7 +1071,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.RemoveShapes(shapes)
 
     def RemoveShapes(self, shapes):
-        """!Removes shapes"""
+        """Removes shapes"""
         self.parent.ModelChanged()
         diagram = self.GetDiagram()
         for shape in shapes:
@@ -1086,9 +1089,9 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.Refresh()
         
     def GetNewShapePos(self):
-        """!Determine optimal position for newly added object
+        """Determine optimal position for newly added object
 
-        @return x,y
+        :return: x,y
         """
         xNew, yNew = map(lambda x: x / 2, self.GetSize())
         diagram = self.GetDiagram()
@@ -1102,7 +1105,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         return xNew, yNew
 
     def GetShapesSelected(self):
-        """!Get list of selected shapes"""
+        """Get list of selected shapes"""
         selected = list()
         diagram = self.GetDiagram()
         for shape in diagram.GetShapeList():
@@ -1112,7 +1115,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         return selected
 
 class ModelEvtHandler(ogl.ShapeEvtHandler):
-    """!Model event handler class"""
+    """Model event handler class"""
     def __init__(self, log, frame):
         ogl.ShapeEvtHandler.__init__(self)
         self.log = log
@@ -1120,7 +1123,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.x = self.y = None
         
     def OnLeftClick(self, x, y, keys = 0, attachment = 0):
-        """!Left mouse button pressed -> select item & update statusbar"""
+        """Left mouse button pressed -> select item & update statusbar"""
         shape = self.GetShape()
         canvas = shape.GetCanvas()
         dc = wx.ClientDC(canvas)
@@ -1163,11 +1166,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             self.log.SetStatusText('', 0)
         
     def OnLeftDoubleClick(self, x, y, keys = 0, attachment = 0):
-        """!Left mouse button pressed (double-click) -> show properties"""
+        """Left mouse button pressed (double-click) -> show properties"""
         self.OnProperties()
         
     def OnProperties(self, event = None):
-        """!Show properties dialog"""
+        """Show properties dialog"""
         self.frame.ModelChanged()
         shape = self.GetShape()
         if isinstance(shape, ModelAction):
@@ -1230,13 +1233,13 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             dlg.Destroy()
                    
     def OnBeginDragLeft(self, x, y, keys = 0, attachment = 0):
-        """!Drag shape (begining)"""
+        """Drag shape (begining)"""
         self.frame.ModelChanged()
         if self._previousHandler:
             self._previousHandler.OnBeginDragLeft(x, y, keys, attachment)
         
     def OnEndDragLeft(self, x, y, keys = 0, attachment = 0):
-        """!Drag shape (end)"""
+        """Drag shape (end)"""
         if self._previousHandler:
             self._previousHandler.OnEndDragLeft(x, y, keys, attachment)
         
@@ -1257,13 +1260,13 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         canvas.Refresh()
 
     def OnEndSize(self, x, y):
-        """!Resize shape"""
+        """Resize shape"""
         self.frame.ModelChanged()
         if self._previousHandler:
             self._previousHandler.OnEndSize(x, y)
         
     def OnRightClick(self, x, y, keys = 0, attachment = 0):
-        """!Right click -> pop-up menu"""
+        """Right click -> pop-up menu"""
         if not hasattr (self, "popupID"):
             self.popupID = dict()
             for key in ('remove', 'enable', 'addPoint',
@@ -1327,11 +1330,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         popupMenu.Destroy()
 
     def OnDisable(self, event):
-        """!Disable action"""
+        """Disable action"""
         self._onEnable(False)
         
     def OnEnable(self, event):
-        """!Disable action"""
+        """Disable action"""
         self._onEnable(True)
         
     def _onEnable(self, enable):
@@ -1386,7 +1389,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         canvas.Refresh(False)
         
     def OnAddPoint(self, event):
-        """!Add control point"""
+        """Add control point"""
         shape = self.GetShape()
         shape.InsertLineControlPoint(point = wx.RealPoint(self.x, self.y))
         shape.ResetShapes()
@@ -1395,7 +1398,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame.canvas.Refresh()
         
     def OnRemovePoint(self, event):
-        """!Remove control point"""
+        """Remove control point"""
         shape = self.GetShape()
         shape.DeleteLineControlPoint()
         shape.Select(False)
@@ -1404,14 +1407,14 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame.canvas.Refresh()
         
     def OnIntermediate(self, event):
-        """!Mark data as intermediate"""
+        """Mark data as intermediate"""
         self.frame.ModelChanged()
         shape = self.GetShape()
         shape.SetIntermediate(event.IsChecked())
         self.frame.canvas.Refresh()
 
     def OnRemove(self, event):
-        """!Remove shape
+        """Remove shape
         """
         self.frame.GetCanvas().RemoveShapes([self.GetShape()])
         self.frame.itemPanel.Update()
@@ -1419,7 +1422,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 class VariablePanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
                  **kwargs):
-        """!Manage model variables panel
+        """Manage model variables panel
         """
         self.parent = parent
         
@@ -1465,7 +1468,7 @@ class VariablePanel(wx.Panel):
         self._layout()
 
     def _layout(self):
-        """!Layout dialog"""
+        """Layout dialog"""
         listSizer = wx.StaticBoxSizer(self.listBox, wx.VERTICAL)
         listSizer.Add(item = self.list, proportion = 1,
                       flag = wx.EXPAND)
@@ -1516,14 +1519,14 @@ class VariablePanel(wx.Panel):
         mainSizer.Fit(self)
         
     def OnText(self, event):
-        """!Text entered"""
+        """Text entered"""
         if self.name.GetValue():
             self.btnAdd.Enable()
         else:
             self.btnAdd.Enable(False)
     
     def OnAdd(self, event):
-        """!Add new variable to the list"""
+        """Add new variable to the list"""
         msg = self.list.Append(self.name.GetValue(),
                                self.type.GetStringSelection(),
                                self.value.GetValue(),
@@ -1541,7 +1544,7 @@ class VariablePanel(wx.Panel):
             self.UpdateModelVariables()
         
     def UpdateModelVariables(self):
-        """!Update model variables"""
+        """Update model variables"""
         variables = dict()
         for values in self.list.GetData().itervalues():
             name = values[0]
@@ -1555,18 +1558,18 @@ class VariablePanel(wx.Panel):
         self.parent.ModelChanged()
 
     def Update(self):
-        """!Reload list of variables"""
+        """Reload list of variables"""
         self.list.OnReload(None)
         
     def Reset(self):
-        """!Remove all variables"""
+        """Remove all variables"""
         self.list.DeleteAllItems()
         self.parent.GetModel().SetVariables([])
         
 class ItemPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
                  **kwargs):
-        """!Manage model items
+        """Manage model items
         """
         self.parent = parent
         
@@ -1590,7 +1593,7 @@ class ItemPanel(wx.Panel):
         self._layout()
 
     def _layout(self):
-        """!Layout dialog"""
+        """Layout dialog"""
         listSizer = wx.StaticBoxSizer(self.listBox, wx.VERTICAL)
         listSizer.Add(item = self.list, proportion = 1,
                       flag = wx.EXPAND)
@@ -1610,11 +1613,11 @@ class ItemPanel(wx.Panel):
         mainSizer.Fit(self)
         
     def Update(self):
-        """!Reload list of variables"""
+        """Reload list of variables"""
         self.list.OnReload(None)
 
     def _getSelectedItems(self):
-        """!Get list of selected items, indeces start at 0"""
+        """Get list of selected items, indeces start at 0"""
         items = []
         current = -1
         while True:
@@ -1630,7 +1633,7 @@ class ItemPanel(wx.Panel):
         return items
     
     def OnMoveItemsUp(self, event):
-        """!Item moved up, update action ids"""
+        """Item moved up, update action ids"""
         items = self._getSelectedItems()
         if not items:
             return
@@ -1639,7 +1642,7 @@ class ItemPanel(wx.Panel):
         self.parent.ModelChanged()
 
     def OnMoveItemsDown(self, event):
-        """!Item moved up, update action ids"""
+        """Item moved up, update action ids"""
         items = self._getSelectedItems()
         if not items:
             return
@@ -1650,7 +1653,7 @@ class ItemPanel(wx.Panel):
 class PythonPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
                  **kwargs):
-        """!Model as python script
+        """Model as python script
         """
         self.parent = parent
         
@@ -1701,7 +1704,7 @@ class PythonPanel(wx.Panel):
         self.SetSizer(sizer)
 
     def OnRun(self, event):
-        """!Run Python script"""
+        """Run Python script"""
         self.filename = grass.tempfile()
         try:
             fd = open(self.filename, "w")
@@ -1720,14 +1723,14 @@ class PythonPanel(wx.Panel):
         event.Skip()
 
     def OnDone(self, cmd, returncode):
-        """!Python script finished"""
+        """Python script finished"""
         grass.try_remove(self.filename)
         self.filename = None
         
     def SaveAs(self, force = False):
-        """!Save python script to file
+        """Save python script to file
 
-        @return filename
+        :return: filename
         """
         filename = ''
         dlg = wx.FileDialog(parent = self,
@@ -1773,15 +1776,15 @@ class PythonPanel(wx.Panel):
         return filename
     
     def OnSaveAs(self, event):
-        """!Save python script to file"""
+        """Save python script to file"""
         self.SaveAs(force = False)
         event.Skip()
         
     def RefreshScript(self):
-        """!Refresh Python script
+        """Refresh Python script
 
-        @return True on refresh
-        @return False script hasn't been updated
+        :return: True on refresh
+        :return: False script hasn't been updated
         """
         if self.body.modified:
             dlg = wx.MessageDialog(self,
@@ -1807,15 +1810,15 @@ class PythonPanel(wx.Panel):
         return True
     
     def OnRefresh(self, event):
-        """!Refresh Python script"""
+        """Refresh Python script"""
         if self.RefreshScript():
             self.parent.SetStatusText(_('Python script is up-to-date'), 0)
         event.Skip()
         
     def IsModified(self):
-        """!Check if python script has been modified"""
+        """Check if python script has been modified"""
         return self.body.modified
     
     def IsEmpty(self):
-        """!Check if python script is empty"""
+        """Check if python script is empty"""
         return len(self.body.GetText()) == 0

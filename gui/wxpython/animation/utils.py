@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.utils
 
 @brief Miscellaneous functions and enum classes
@@ -56,7 +56,7 @@ class ReplayMode:
 
 
 def validateTimeseriesName(timeseries, etype='strds'):
-    """!Checks if space time dataset exists and completes missing mapset.
+    """Checks if space time dataset exists and completes missing mapset.
 
     Raises GException if dataset doesn't exist.
     """
@@ -78,7 +78,7 @@ def validateTimeseriesName(timeseries, etype='strds'):
 
 
 def validateMapNames(names, etype):
-    """!Checks if maps exist and completes missing mapset.
+    """Checks if maps exist and completes missing mapset.
 
     Input is list of map names.
     Raises GException if map doesn't exist.
@@ -105,7 +105,7 @@ def validateMapNames(names, etype):
 
 
 def getRegisteredMaps(timeseries, etype):
-    """!Returns list of maps registered in dataset.
+    """Returns list of maps registered in dataset.
     Can throw ScriptError if the dataset doesn't exist.
     """
     timeseriesMaps = []
@@ -120,7 +120,7 @@ def getRegisteredMaps(timeseries, etype):
 
 
 def getNameAndLayer(name):
-    """!Checks whether map name contains layer
+    """Checks whether map name contains layer
     and returns map name with mapset (when there was mapset)
     and layer (can be None).
 
@@ -142,12 +142,12 @@ def getNameAndLayer(name):
 
 
 def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
-    """!Checks whether time series (map series and stds) are compatible,
-        which means they have equal number of maps ad times (in case of stds).
-        This is needed within layer list, not within the entire animation tool.
-        Throws GException if these are incompatible.
+    """Checks whether time series (map series and stds) are compatible,
+    which means they have equal number of maps ad times (in case of stds).
+    This is needed within layer list, not within the entire animation tool.
+    Throws GException if these are incompatible.
 
-        @return number of maps for animation
+    :return: number of maps for animation
     """
     timeseriesInfo = {'count': set(), 'temporalType': set(), 'mapType': set(),
                       'mapTimes': set()}
@@ -211,18 +211,16 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
 
 
 def ComputeScaledRect(sourceSize, destSize):
-    """!Fits source rectangle into destination rectangle
+    """Fits source rectangle into destination rectangle
     by scaling and centering.
 
-    @code
 
-    >>> ComputeScaledRect(sourceSize = (10, 40), destSize = (100, 50))
-    {'height': 50, 'scale': 1.25, 'width': 13, 'x': 44, 'y': 0}
+        >>> ComputeScaledRect(sourceSize = (10, 40), destSize = (100, 50))
+        {'height': 50, 'scale': 1.25, 'width': 13, 'x': 44, 'y': 0}
 
-    @endcode
 
-    @param sourceSize size of source rectangle
-    @param destSize size of destination rectangle
+    :param sourceSize: size of source rectangle
+    :param destSize: size of destination rectangle
     """
     ratio1 = destSize[0] / float(sourceSize[0])
     ratio2 = destSize[1] / float(sourceSize[1])
@@ -243,7 +241,7 @@ def ComputeScaledRect(sourceSize, destSize):
 
 
 def RenderText(text, font):
-    """!Renderes text with given font to bitmap."""
+    """Renderes text with given font to bitmap."""
     dc = wx.MemoryDC()
     dc.SetFont(font)
     w, h = dc.GetTextExtent(text)
@@ -260,14 +258,14 @@ def RenderText(text, font):
 
 
 def WxImageToPil(image):
-    """!Converts wx.Image to PIL image"""
+    """Converts wx.Image to PIL image"""
     pilImage = Image.new('RGB', (image.GetWidth(), image.GetHeight()))
     pilImage.fromstring(image.GetData())
     return pilImage
 
 
 def HashCmd(cmd, region):
-    """!Returns a hash from command given as a list and a region as a dict."""
+    """Returns a hash from command given as a list and a region as a dict."""
     name = '_'.join(cmd)
     if region:
         name += str(sorted(region.items()))
@@ -275,7 +273,7 @@ def HashCmd(cmd, region):
 
 
 def HashCmds(cmds, region):
-    """!Returns a hash from list of commands and regions as dicts."""
+    """Returns a hash from list of commands and regions as dicts."""
     name = ';'.join([item for sublist in cmds for item in sublist])
     if region:
         name += str(sorted(region.items()))
@@ -283,20 +281,20 @@ def HashCmds(cmds, region):
 
 
 def GetFileFromCmd(dirname, cmd, region, extension='ppm'):
-    """!Returns file path created as a hash from command and region."""
+    """Returns file path created as a hash from command and region."""
     return os.path.join(dirname, HashCmd(cmd, region) + '.' + extension)
 
 
 def GetFileFromCmds(dirname, cmds, region, extension='ppm'):
-    """!Returns file path created as a hash from list of commands and regions."""
+    """Returns file path created as a hash from list of commands and regions."""
     return os.path.join(dirname, HashCmds(cmds, region) + '.' + extension)
 
 
 def layerListToCmdsMatrix(layerList):
-    """!Goes thru layerList and create matrix of commands
+    """Goes thru layerList and create matrix of commands
     for the composition of map series.:
 
-    @returns matrix of cmds for composition
+    :return: matrix of cmds for composition
     """
     count = 0
     for layer in layerList:
@@ -332,7 +330,7 @@ def layerListToCmdsMatrix(layerList):
 
 
 def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries, regions):
-    """!Applies information from temporal sampling
+    """Applies information from temporal sampling
     to the command matrix."""
     namesList = []
     j = -1
@@ -350,7 +348,7 @@ def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries, regions):
 
 
 def getCpuCount():
-    """!Returns number of available cpus.
+    """Returns number of available cpus.
     If fails, default (4) is returned.
     """
     try:
@@ -360,11 +358,11 @@ def getCpuCount():
 
 
 def interpolate(start, end, count):
-    """!Interpolates values between start and end.
+    """Interpolates values between start and end.
 
-    @param start start value (float)
-    @param end end value (float)
-    @param count total number of values including start and end
+    :param start: start value (float)
+    :param end: end value (float)
+    :param count: total number of values including start and end
 
     >>> interpolate(0, 10, 5)
     [0, 2.5, 5.0, 7.5, 10]

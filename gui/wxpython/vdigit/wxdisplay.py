@@ -1,4 +1,4 @@
-"""!
+"""
 @package vdigit.wxdisplay
 
 @brief wxGUI vector digitizer (display driver)
@@ -37,7 +37,7 @@ progress  = None
 last_error = ''
 
 def print_error(msg, type):
-    """!Redirect stderr"""
+    """Redirect stderr"""
     global log
     if log:
         log.write(msg + os.linesep)
@@ -49,7 +49,7 @@ def print_error(msg, type):
     return 0
 
 def print_progress(value):
-    """!Redirect progress info"""
+    """Redirect progress info"""
     global progress
     if progress:
         progress.SetValue(value)
@@ -78,14 +78,14 @@ except NameError:
     
 class DisplayDriver:
     def __init__(self, device, deviceTmp, mapObj, window, glog, gprogress):
-        """!Display driver used by vector digitizer
+        """Display driver used by vector digitizer
         
-        @param device    wx.PseudoDC device where to draw vector objects
-        @param deviceTmp wx.PseudoDC device where to draw temporary vector objects
-        @param mapOng    Map Object (render.Map)
-        @param windiow   parent window for dialogs
-        @param glog      logging device (None to discard messages)
-        @param gprogress progress bar device (None to discard message)
+        :param device: wx.PseudoDC device where to draw vector objects
+        :param deviceTmp: wx.PseudoDC device where to draw temporary vector objects
+        :param mapOng: Map Object (render.Map)
+        :param windiow: parent window for dialogs
+        :param glog: logging device (None to discard messages)
+        :param gprogress: progress bar device (None to discard message)
         """
         global errfunc, perfunc, log, progress
         log = glog
@@ -166,7 +166,7 @@ class DisplayDriver:
         self.UpdateSettings()
         
     def __del__(self):
-        """!Close currently open vector map"""
+        """Close currently open vector map"""
         G_unset_error_routine()
         G_unset_percent_routine()
         
@@ -177,7 +177,7 @@ class DisplayDriver:
         Vect_destroy_cats_struct(self.poCats)
 
     def _resetTopology(self):
-        """!Reset topology dict
+        """Reset topology dict
         """
         self.topology = {
             'highlight'   : 0,
@@ -195,14 +195,17 @@ class DisplayDriver:
             }
         
     def _cell2Pixel(self, east, north, elev):
-        """!Conversion from geographic coordinates (east, north)
+        """Conversion from geographic coordinates (east, north)
         to screen (x, y)
   
-        @todo 3D stuff...
+        .. todo::
+            3D stuff...
 
-        @param east, north, elev geographical coordinates
+        :param east: east coordinate
+        :param north: north coordinate
+        :param elev: elevation
 
-        @return x, y screen coordinates (integer)
+        :return: x, y screen coordinates (integer)
         """
         map_res = max(self.region['ewres'], self.region['nsres'])
         w = self.region['center_easting']  - (self.mapObj.width  / 2) * map_res
@@ -211,16 +214,16 @@ class DisplayDriver:
         return int((east - w) / map_res), int((n - north) / map_res)
     
     def _drawCross(self, pdc, point, size = 5):
-        """!Draw cross symbol of given size to device content
+        """Draw cross symbol of given size to device content
    
         Used for points, nodes, vertices
 
-        @param[in,out] PseudoDC where to draw
-        @param point coordinates of center
-        @param size size of the cross symbol
+        :param pdc: PseudoDC where to draw
+        :param point: coordinates of center
+        :param size: size of the cross symbol
    
-        @return 0 on success
-        @return -1 on failure
+        :return: 0 on success
+        :return: -1 on failure
         """
         if not pdc or not point:
             return -1
@@ -231,14 +234,14 @@ class DisplayDriver:
         return 0
     
     def _drawObject(self, robj):
-        """!Draw given object to the device
+        """Draw given object to the device
         
         The object is defined as robject() from vedit.h.
         
-        @param robj object to be rendered
+        :param robj: object to be rendered
         
-        @return  1 on success
-        @return -1 on failure (vector feature marked as dead, etc.)
+        :return:  1 on success
+        :return: -1 on failure (vector feature marked as dead, etc.)
         """
         if not self.dc or not self.dcTmp:
             return -1
@@ -327,11 +330,11 @@ class DisplayDriver:
                     pdc.DrawLines(points)
         
     def _definePen(self, rtype):
-        """!Define pen/brush based on rendered object)
+        """Define pen/brush based on rendered object)
         
         Updates also self.topology dict
 
-        @return pen, brush
+        :return: pen, brush
         """
         if rtype == TYPE_POINT:
             key = 'point'
@@ -378,11 +381,11 @@ class DisplayDriver:
         return pen, brush
         
     def _getDrawFlag(self):
-        """!Get draw flag from the settings
+        """Get draw flag from the settings
         
         See vedit.h for list of draw flags.
         
-        @return draw flag (int)
+        :return: draw flag (int)
         """
         ret = 0
         if self.settings['point']['enabled']:
@@ -415,12 +418,12 @@ class DisplayDriver:
         return ret
         
     def _isSelected(self, line, force = False):
-        """!Check if vector object selected?
+        """Check if vector object selected?
    
-        @param line feature id
+        :param line: feature id
 
-        @return True if vector object is selected
-        @return False if vector object is not selected
+        :return: True if vector object is selected
+        :return: False if vector object is not selected
         """
         if line in self.selected['ids']:
             return True
@@ -428,19 +431,19 @@ class DisplayDriver:
         return False
 
     def _isDuplicated(self, line):
-        """!Check for already marked duplicates
+        """Check for already marked duplicates
         
-        @param line feature id
+        :param line: feature id
 
-        @return True line already marked as duplicated
-        @return False not duplicated
+        :return: True line already marked as duplicated
+        :return: False not duplicated
         """
         return line in self.selected['idsDupl']
     
     def _getRegionBox(self):
-        """!Get bound_box() from current region
+        """Get bound_box() from current region
 
-        @return bound_box
+        :return: bound_box
         """
         box = bound_box()
         
@@ -454,11 +457,12 @@ class DisplayDriver:
         return box
 
     def DrawMap(self, force = False):
-        """!Draw content of the vector map to the device
+        """Draw content of the vector map to the device
         
-        @param force force drawing
-        @return number of drawn features
-        @return -1 on error
+        :param force: force drawing
+        :type force: bool
+        :return: number of drawn features
+        :return: -1 on error
         """
         Debug.msg(1, "DisplayDriver.DrawMap(): force=%d", force)
         
@@ -489,7 +493,7 @@ class DisplayDriver:
         self.selected['cats'] = list()
         
     def _getSelectType(self):
-        """!Get type(s) to be selected
+        """Get type(s) to be selected
 
         Used by SelectLinesByBox() and SelectLineByPoint()
         """
@@ -505,12 +509,12 @@ class DisplayDriver:
         return ftype
 
     def _validLine(self, line):
-        """!Check if feature id is valid
+        """Check if feature id is valid
 
-        @param line feature id
+        :param line: feature id
 
-        @return True valid feature id
-        @return False invalid
+        :return: True valid feature id
+        :return: False invalid
         """
         if line > 0 and line <= Vect_get_num_lines(self.poMapInfo):
             return True
@@ -518,18 +522,18 @@ class DisplayDriver:
         return False
     
     def SelectLinesByBox(self, bbox, ltype = None, drawSeg = False, poMapInfo = None):
-        """!Select vector objects by given bounding box
+        """Select vector objects by given bounding box
         
         If line id is already in the list of selected lines, then it will
         be excluded from this list.
         
-        @param bbox bounding box definition
-        @param ltype feature type or None for default
-        @param drawSeg True to draw segments of line
-        @param poMapInfo use external Map_info, None for self.poMapInfo
+        :param bbox: bounding box definition
+        :param ltype: feature type or None for default
+        :param drawSeg: True to draw segments of line
+        :param poMapInfo: use external Map_info, None for self.poMapInfo
 
-        @return number of selected features
-        @return None on error
+        :return: number of selected features
+        :return: None on error
         """
         thisMapInfo = poMapInfo is None
         if not poMapInfo:
@@ -618,17 +622,17 @@ class DisplayDriver:
         return { 'area' : -1, 'centroid': -1 }
             
     def SelectLineByPoint(self, point, ltype = None, poMapInfo = None):
-        """!Select vector feature by given point in given
+        """Select vector feature by given point in given
         threshold
    
         Only one vector object can be selected. Bounding boxes of
         all segments are stores.
         
-        @param point points coordinates (x, y)
-        @param ltype feature type or None for default
-        @param poMapInfo use external Map_info, None for self.poMapInfo
+        :param point: points coordinates (x, y)
+        :param ltype: feature type or None for default
+        :param poMapInfo: use external Map_info, None for self.poMapInfo
 
-        @return dict {'line' : feature id, 'point' : point on line}
+        :return: dict {'line' : feature id, 'point' : point on line}
         """
         thisMapInfo = poMapInfo is None
         if not poMapInfo:
@@ -693,7 +697,7 @@ class DisplayDriver:
                  'point' : (px.value, py.value, pz.value) }
     
     def _listToIList(self, plist):
-        """!Generate from list struct_ilist
+        """Generate from list struct_ilist
         """
         ilist = Vect_new_list()
         for val in plist:
@@ -702,11 +706,11 @@ class DisplayDriver:
         return ilist
         
     def GetSelectedIList(self, ilist = None):
-        """!Get list of selected objects as struct_ilist
+        """Get list of selected objects as struct_ilist
 
         Returned IList must be freed by Vect_destroy_list().
         
-        @return struct_ilist
+        :return: struct_ilist
         """
         if ilist:
             return self._listToIList(ilist)
@@ -714,11 +718,11 @@ class DisplayDriver:
         return self._listToIList(self.selected['ids'])
         
     def GetSelected(self, grassId = True):
-        """!Get ids of selected objects
+        """Get ids of selected objects
         
-        @param grassId True for feature id, False for PseudoDC id
+        :param grassId: True for feature id, False for PseudoDC id
         
-        @return list of ids of selected vector objects
+        :return: list of ids of selected vector objects
         """
         if grassId:
             return self.selected['ids']
@@ -739,10 +743,10 @@ class DisplayDriver:
         return dc_ids
         
     def SetSelected(self, ids, layer = -1):
-        """!Set selected vector objects
+        """Set selected vector objects
 
-        @param list of ids (None to unselect features)
-        @param layer layer number for features selected based on category number
+        :param list: of ids (None to unselect features)
+        :param layer: layer number for features selected based on category number
         """
         if ids:
             self._drawSelected = True
@@ -778,15 +782,15 @@ class DisplayDriver:
             self.selected['cats']  = []
         
     def GetSelectedVertex(self, pos):
-        """!Get PseudoDC vertex id of selected line
+        """Get PseudoDC vertex id of selected line
 
         Set bounding box for vertices of line.
         
-        @param pos position
+        :param pos: position
         
-        @return id of center, left and right vertex
-        @return 0 no line found
-        @return -1 on error
+        :return: id of center, left and right vertex
+        :return: 0 no line found
+        :return: -1 on error
         """
         returnId = list()
         # only one object can be selected
@@ -844,9 +848,9 @@ class DisplayDriver:
         return returnId
 
     def GetRegionSelected(self):
-        """!Get minimal region extent of selected features
+        """Get minimal region extent of selected features
 
-        @return n,s,w,e
+        :return: n,s,w,e
         """
         regionBox = bound_box()
         lineBox = bound_box()
@@ -872,17 +876,18 @@ class DisplayDriver:
         return regionBox.N, regionBox.S, regionBox.W, regionBox.E
 
     def DrawSelected(self, flag):
-        """!Draw selected features
+        """Draw selected features
         
-        @param flag True to draw selected features
+        :param flag: True to draw selected features
+        :type flag: bool
         """
         self._drawSelected = bool(flag)
         
     def CloseMap(self):
-        """!Close vector map
+        """Close vector map
         
-        @return 0 on success
-        @return non-zero on error
+        :return: 0 on success
+        :return: non-zero on error
         """
         if not self.poMapInfo:
             return 0
@@ -900,15 +905,18 @@ class DisplayDriver:
         return ret
     
     def OpenMap(self, name, mapset, update = True, tmp = False):
-        """!Open vector map by the driver
+        """Open vector map by the driver
         
-        @param name name of vector map to be open
-        @param mapset name of mapset where the vector map lives
-        @param update True to open vector map in update mode
-        @param tmp True to open temporary vector map
-        
-        @return map_info
-        @return None on error
+        :param name: name of vector map to be open
+        :type name: str
+        :param mapset: name of mapset where the vector map lives
+        :tryp mapset: str
+        :param update: True to open vector map in update mode
+        :type update: bool
+        :param tmp: True to open temporary vector map
+        :type tp: bool
+        :return: map_info
+        :return: None on error
         """
         Debug.msg("DisplayDriver.OpenMap(): name=%s mapset=%s updated=%d",
                   name, mapset, update)
@@ -958,9 +966,9 @@ class DisplayDriver:
         return self.poMapInfo
 
     def GetMapBoundingBox(self):
-        """!Get bounding box of (opened) vector map layer
+        """Get bounding box of (opened) vector map layer
 
-        @return (w,s,b,e,n,t)
+        :return: (w,s,b,e,n,t)
         """
         if not self.poMapInfo:
             return None
@@ -972,11 +980,12 @@ class DisplayDriver:
             bbox.E, bbox.N, bbox.T
     
     def UpdateSettings(self, alpha = 255):
-        """!Update display driver settings
+        """Update display driver settings
 
-        @todo map units
+        .. todo::
+            map units
         
-        @param alpha color value for aplha channel
+        :param alpha: color value for aplha channel
         """
         color = dict()
         for key in self.settings.keys():
@@ -1007,18 +1016,18 @@ class DisplayDriver:
             self.settings[key]['color'] = color
         
     def UpdateRegion(self):
-        """!Update geographical region used by display driver
+        """Update geographical region used by display driver
         """
         self.region = self.mapObj.GetCurrentRegion()
         
     def GetThreshold(self, type = 'snapping', value = None, units = None):
-        """!Return threshold value in map units
+        """Return threshold value in map units
         
-        @param type snapping mode (node, vertex)
-        @param value threshold to be set up
-        @param units units (map, screen)
+        :param type: snapping mode (node, vertex)
+        :param value: threshold to be set up
+        :param units: units (map, screen)
 
-        @return threshold value
+        :return: threshold value
         """
         if value is None:
             value = UserSettings.Get(group = 'vdigit', key = type, subkey = 'value')
@@ -1037,7 +1046,7 @@ class DisplayDriver:
         return value
     
     def GetDuplicates(self):
-        """!Return ids of (selected) duplicated vector features
+        """Return ids of (selected) duplicated vector features
         """
         if not self.poMapInfo:
             return
@@ -1093,9 +1102,9 @@ class DisplayDriver:
         return catsStr
 
     def UnSelect(self, lines):
-        """!Unselect vector features
+        """Unselect vector features
 
-        @param lines list of feature id(s)
+        :param lines: list of feature id(s)
         """
         checkForDupl = False
 

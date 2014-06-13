@@ -1,4 +1,4 @@
-"""!
+"""
 @package mapswipe.dialogs
 
 @brief Dialogs used in Map Swipe
@@ -34,7 +34,7 @@ from grass.pydispatch.signal import Signal
 
 
 class SwipeMapDialog(wx.Dialog):
-    """!Dialog used to select maps.
+    """Dialog used to select maps.
 
     There are two modes - simple (only two raster maps),
     or two layer lists.
@@ -80,7 +80,7 @@ class SwipeMapDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         self._switchSizer = wx.BoxSizer()
         self._switchSizer.Add(self._firstPanel, proportion=1,
@@ -195,7 +195,7 @@ class SwipeMapDialog(wx.Dialog):
         self.applyChanges.emit()
 
     def GetValues(self):
-        """!Get raster maps"""
+        """Get raster maps"""
         if self.IsSimpleMode():
             return (self._firstRaster.GetValue(), self._secondRaster.GetValue())
         else:
@@ -214,7 +214,7 @@ class SwipeMapDialog(wx.Dialog):
 
 
 class PreferencesDialog(PreferencesBaseDialog):
-    """!Mapswipe preferences dialog"""
+    """Mapswipe preferences dialog"""
     def __init__(self, parent, giface, title=_("Map Swipe settings"),
                  settings=UserSettings):
         PreferencesBaseDialog.__init__(self, parent=parent, giface=giface, title=title,
@@ -227,7 +227,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.SetSize(self.size)
 
     def _createMirrorModePage(self, notebook):
-        """!Create notebook page for general settings"""
+        """Create notebook page for general settings"""
         panel = SP.ScrolledPanel(parent=notebook)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
         notebook.AddPage(page=panel, text=_("Mirror mode"))

@@ -1,4 +1,4 @@
-"""!
+"""
 @package psmap.utils
 
 @brief utilities for wxpsmap (classes, functions)
@@ -31,7 +31,7 @@ from core.gcmd          import RunCommand
 from core.utils import _
 
 class Rect2D(wx.Rect2D):
-    """!Class representing rectangle with floating point values.
+    """Class representing rectangle with floating point values.
 
     Overrides wx.Rect2D to unify Rect access methods, which are
     different (e.g. wx.Rect.GetTopLeft() x wx.Rect2D.GetLeftTop()).
@@ -59,9 +59,9 @@ class Rect2D(wx.Rect2D):
         self.height = height
 
 class Rect2DPP(Rect2D):
-    """!Rectangle specified by 2 points (with floating point values).
+    """Rectangle specified by 2 points (with floating point values).
 
-    @see Rect2D, Rect2DPS
+    :class:`Rect2D`, :class:`Rect2DPS`
     """
     def __init__(self, topLeft = wx.Point2D(), bottomRight = wx.Point2D()):
         Rect2D.__init__(self, x = 0, y = 0, width = 0, height = 0)
@@ -75,15 +75,15 @@ class Rect2DPP(Rect2D):
         self.SetBottom(max(y1, y2))
 
 class Rect2DPS(Rect2D):
-    """!Rectangle specified by point and size (with floating point values).
+    """Rectangle specified by point and size (with floating point values).
 
-    @see Rect2D, Rect2DPP
+    :class:`Rect2D`, :class:`Rect2DPP`
     """
     def __init__(self, pos = wx.Point2D(), size = (0, 0)):
         Rect2D.__init__(self, x = pos[0], y = pos[1], width = size[0], height = size[1])
 
 class UnitConversion:
-    """! Class for converting units"""
+    """ Class for converting units"""
     def __init__(self, parent = None):
         self.parent = parent
         if self.parent:
@@ -118,25 +118,25 @@ class UnitConversion:
         return sorted(self._units.keys())
     
     def findUnit(self, name):
-        """!Returns unit by its tr. string"""
+        """Returns unit by its tr. string"""
         for unit in self._units.keys():
             if self._units[unit]['tr'] == name:
                 return unit
         return None
     
     def findName(self, unit):
-        """!Returns tr. string of a unit"""
+        """Returns tr. string of a unit"""
         try:
             return self._units[unit]['tr']
         except KeyError:
             return None
     
     def convert(self, value, fromUnit = None, toUnit = None):
-        return float(value)/self._units[fromUnit]['val']*self._units[toUnit]['val']
+        return float(value) / self._units[fromUnit]['val'] * self._units[toUnit]['val']
 
 def convertRGB(rgb):
-    """!Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
-            or named color/r:g:b string to wx.Colour, depending on input""" 
+    """Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
+            or named color/r:g:b string to wx.Colour, depending on input"""
     # transform a wx.Colour tuple into an r:g:b string    
     if type(rgb) == wx.Colour:
         for name, color in grass.named_colors.items(): 
@@ -158,11 +158,11 @@ def convertRGB(rgb):
         
         
 def PaperMapCoordinates(mapInstr, x, y, paperToMap = True):
-    """!Converts paper (inch) coordinates <-> map coordinates.
+    """Converts paper (inch) coordinates <-> map coordinates.
 
-    @param mapInstr map frame instruction
-    @param x,y paper coords in inches or mapcoords in map units
-    @param paperToMap specify conversion direction
+    :param mapInstr: map frame instruction
+    :param x,y: paper coords in inches or mapcoords in map units
+    :param paperToMap: specify conversion direction
     """
     region = grass.region()
     mapWidthPaper = mapInstr['rect'].GetWidth()
@@ -194,8 +194,10 @@ def PaperMapCoordinates(mapInstr, x, y, paperToMap = True):
         return xPaper, yPaper
 
 
-def AutoAdjust(self, scaleType,  rect, map = None, mapType = None, region = None):
-    """!Computes map scale, center and map frame rectangle to fit region (scale is not fixed)"""
+def AutoAdjust(self, scaleType, rect, map=None, mapType=None, region=None):
+    """Computes map scale, center and map frame rectangle to fit region
+    (scale is not fixed)
+    """
     currRegionDict = {}
     if scaleType == 0 and map:# automatic, region from raster or vector
         res = ''
@@ -258,11 +260,11 @@ def AutoAdjust(self, scaleType,  rect, map = None, mapType = None, region = None
     return scale, (cE, cN), Rect2D(x, y, rWNew, rHNew) #inch
 
 def SetResolution(dpi, width, height):
-    """!If resolution is too high, lower it
+    """If resolution is too high, lower it
     
-    @param dpi max DPI
-    @param width map frame width
-    @param height map frame height
+    :param dpi: max DPI
+    :param width: map frame width
+    :param height: map frame height
     """
     region = grass.region()
     if region['cols'] > width * dpi or region['rows'] > height * dpi:
@@ -271,7 +273,9 @@ def SetResolution(dpi, width, height):
         RunCommand('g.region', rows = rows, cols = cols)
                
 def ComputeSetRegion(self, mapDict):
-    """!Computes and sets region from current scale, map center coordinates and map rectangle"""
+    """Computes and sets region from current scale, map center
+    coordinates and map rectangle
+    """
 
     if mapDict['scaleType'] == 3: # fixed scale
         scale = mapDict['scale']
@@ -308,8 +312,9 @@ def ComputeSetRegion(self, mapDict):
                        w = floor(centerE - rectHalfMeter[0]))
                     
 def projInfo():
-    """!Return region projection and map units information,
-    taken from render.py"""
+    """Return region projection and map units information,
+    taken from render.py
+    """
     
     projinfo = dict()
     
@@ -330,10 +335,10 @@ def projInfo():
     return projinfo
 
 def GetMapBounds(filename, portrait = True):
-    """!Run ps.map -b to get information about map bounding box
+    """Run ps.map -b to get information about map bounding box
     
-        @param filename psmap input file
-        @param portrait page orientation"""
+    :param filename: psmap input file
+    :param portrait: page orientation"""
     orient = ''
     if not portrait:
         orient = 'r'
@@ -348,7 +353,7 @@ def GetMapBounds(filename, portrait = True):
     return Rect2D(bb[0], bb[3], bb[2] - bb[0], bb[1] - bb[3])
 
 def getRasterType(map):
-    """!Returns type of raster map (CELL, FCELL, DCELL)"""
+    """Returns type of raster map (CELL, FCELL, DCELL)"""
     if map is None:
         map = ''
     file = grass.find_file(name = map, element = 'cell')
@@ -359,7 +364,7 @@ def getRasterType(map):
         return None
    
 def PilImageToWxImage(pilImage, copyAlpha = True):
-    """!Convert PIL image to wx.Image
+    """Convert PIL image to wx.Image
     
     Based on http://wiki.wxpython.org/WorkingWithImages
     """
@@ -382,11 +387,11 @@ def PilImageToWxImage(pilImage, copyAlpha = True):
     return wxImage
 
 def BBoxAfterRotation(w, h, angle):
-    """!Compute bounding box or rotated rectangle
+    """Compute bounding box or rotated rectangle
     
-    @param w rectangle width
-    @param h rectangle height
-    @param angle angle (0, 360) in degrees
+    :param w: rectangle width
+    :param h: rectangle height
+    :param angle: angle (0, 360) in degrees
     """
     angleRad = angle / 180. * pi
     ct = cos(angleRad)

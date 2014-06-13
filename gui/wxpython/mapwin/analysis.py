@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""!
+"""
 @package mapwin.analysis
 
 @brief Map display controllers for analyses (profiling, measuring)
@@ -31,12 +31,12 @@ import grass.script.core as gcore
 
 
 class AnalysisControllerBase:
-    """!Base class for analysis which require drawing line in map display."""
+    """Base class for analysis which require drawing line in map display."""
     def __init__(self, giface, mapWindow):
-        """!
+        """
 
-        @param giface grass interface
-        @param mapWindow instance of BufferedMapWindow
+        :param giface: grass interface
+        :param mapWindow: instance of BufferedMapWindow
         """
         self._giface = giface
         self._mapWindow = mapWindow
@@ -48,14 +48,14 @@ class AnalysisControllerBase:
         self._oldCursor = None
 
     def IsActive(self):
-        """!Returns True if analysis mode is activated."""
+        """Returns True if analysis mode is activated."""
         return bool(self._registeredGraphics)
 
     def _start(self, x, y):
-        """!Handles the actual start of drawing line
+        """Handles the actual start of drawing line
         and adding each new point.
 
-        @param x,y east north coordinates
+        :param x,y: east north coordinates
         """
         if not self._registeredGraphics.GetAllItems():
             item = self._registeredGraphics.AddItem(coords=[[x, y]])
@@ -66,9 +66,9 @@ class AnalysisControllerBase:
             self._mapWindow.mouse['begin'] = self._mapWindow.Cell2Pixel(coords)
 
     def _addPoint(self, x, y):
-        """!New point added.
+        """New point added.
 
-        @param x,y east north coordinates
+        :param x,y: east north coordinates
         """
         # add new point and calculate distance
         item = self._registeredGraphics.GetItem(0)
@@ -83,30 +83,30 @@ class AnalysisControllerBase:
         self._doAnalysis(coords)
 
     def _doAnalysis(self, coords):
-        """!Perform the required analysis
+        """Perform the required analysis
         (compute distnace, update profile)
 
-        @param coords EN coordinates
+        :param coords: EN coordinates
         """
         raise NotImplementedError()
 
     def _disconnectAll(self):
-        """!Disconnect all mouse signals
+        """Disconnect all mouse signals
         to stop drawing."""
         raise NotImplementedError()
 
     def _connectAll(self):
-        """!Connect all mouse signals to draw."""
+        """Connect all mouse signals to draw."""
         raise NotImplementedError()
 
     def _getPen(self):
-        """!Returns wx.Pen instance."""
+        """Returns wx.Pen instance."""
         raise NotImplementedError()
 
     def Stop(self, restore=True):
-        """!Analysis mode is stopped.
+        """Analysis mode is stopped.
 
-        @param restore if restore previous cursor, mouse['use']
+        :param restore: if restore previous cursor, mouse['use']
         """
         self._mapWindow.ClearLines(pdc=self._mapWindow.pdcTmp)
         self._mapWindow.mouse['end'] = self._mapWindow.mouse['begin']
@@ -123,7 +123,7 @@ class AnalysisControllerBase:
             self._mapWindow.mouse['use'] = self._oldMouseUse
 
     def Start(self):
-        """!Init analysis: register graphics to map window,
+        """Init analysis: register graphics to map window,
         connect required mouse signals.
         """
         self._oldMouseUse = self._mapWindow.mouse['use']
@@ -147,7 +147,7 @@ class AnalysisControllerBase:
 
 
 class ProfileController(AnalysisControllerBase):
-    """!Class controls profiling in map display.
+    """Class controls profiling in map display.
     It should be used inside ProfileFrame
     """
     def __init__(self, giface, mapWindow):
@@ -157,9 +157,9 @@ class ProfileController(AnalysisControllerBase):
         self._graphicsType = 'line'
 
     def _doAnalysis(self, coords):
-        """!Informs profile dialog that profile changed.
+        """Informs profile dialog that profile changed.
 
-        @param coords EN coordinates
+        :param coords: EN coordinates
         """
         self.transectChanged.emit(coords=coords)
 
@@ -181,7 +181,7 @@ class ProfileController(AnalysisControllerBase):
 
 
 class MeasureDistanceController(AnalysisControllerBase):
-    """!Class controls measuring distance in map display."""
+    """Class controls measuring distance in map display."""
     def __init__(self, giface, mapWindow):
         AnalysisControllerBase.__init__(self, giface=giface, mapWindow=mapWindow)
 
@@ -191,9 +191,9 @@ class MeasureDistanceController(AnalysisControllerBase):
         self._graphicsType = 'line'
 
     def _doAnalysis(self, coords):
-        """!New point added.
+        """New point added.
 
-        @param x,y east north coordinates
+        :param x,y: east north coordinates
         """
         self.MeasureDist(coords[-2], coords[-1])
 
@@ -218,7 +218,7 @@ class MeasureDistanceController(AnalysisControllerBase):
         self._giface.WriteCmdLog(_('Measuring finished'))
 
     def Start(self):
-        """!Init measurement routine that calculates map distance
+        """Init measurement routine that calculates map distance
         along transect drawn on map display
         """
         if self.IsActive():
@@ -252,9 +252,9 @@ class MeasureDistanceController(AnalysisControllerBase):
                                             'Reason: %s' % e))
 
     def MeasureDist(self, beginpt, endpt):
-        """!Calculate distance and print to output window.
+        """Calculate distance and print to output window.
 
-        @param beginpt,endpt EN coordinates
+        :param beginpt,endpt: EN coordinates
         """
         # move also Distance method?
         dist, (north, east) = self._mapWindow.Distance(beginpt, endpt, screen=False)
@@ -297,15 +297,15 @@ class MeasureDistanceController(AnalysisControllerBase):
 
 
 class MeasureAreaController(AnalysisControllerBase):
-    """!Class controls measuring area in map display."""
+    """Class controls measuring area in map display."""
     def __init__(self, giface, mapWindow):
         AnalysisControllerBase.__init__(self, giface=giface, mapWindow=mapWindow)
         self._graphicsType = 'polygon'
 
     def _doAnalysis(self, coords):
-        """!New point added.
+        """New point added.
 
-        @param coords east north coordinates as a list
+        :param coords: east north coordinates as a list
         """
         self.MeasureArea(coords)
 
@@ -330,7 +330,7 @@ class MeasureAreaController(AnalysisControllerBase):
         self._giface.WriteCmdLog(_('Measuring finished'))
 
     def Start(self):
-        """!Init measurement routine that calculates area of polygon
+        """Init measurement routine that calculates area of polygon
         drawn on map display.
         """
         if self.IsActive():
@@ -344,9 +344,9 @@ class MeasureAreaController(AnalysisControllerBase):
         self._giface.WriteCmdLog(_('Measuring area:'))
 
     def MeasureArea(self, coords):
-        """!Calculate area and print to output window.
+        """Calculate area and print to output window.
 
-        @param coords list of E, N coordinates
+        :param coords: list of E, N coordinates
         """
         # TODO: make sure appending first point is needed for m.measure
         coordinates = coords + [coords[0]]

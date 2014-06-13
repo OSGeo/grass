@@ -1,4 +1,4 @@
-"""!
+"""
 @package modules.extensions
 
 @brief GRASS Addons extensions management classes
@@ -116,7 +116,7 @@ class InstallExtensionWindow(wx.Frame):
         self._layout()
 
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         repoSizer = wx.StaticBoxSizer(self.repoBox, wx.VERTICAL)
         repo1Sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -182,11 +182,11 @@ class InstallExtensionWindow(wx.Frame):
                                           'svnurl=' + self.repo.GetValue().strip()]
 
     def OnFetch(self, event):
-        """!Fetch list of available extensions"""
+        """Fetch list of available extensions"""
         self._fetch()
 
     def _fetch(self):
-        """!Fetch list of available extensions"""
+        """Fetch list of available extensions"""
         wx.BeginBusyCursor()
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
         try:
@@ -222,7 +222,7 @@ class InstallExtensionWindow(wx.Frame):
             self.OnInstall(event=None)
         
     def OnInstall(self, event):
-        """!Install selected extension"""
+        """Install selected extension"""
         log = self.parent.GetLogWindow()
         cmd = self._getCmd()
         if cmd:
@@ -247,7 +247,7 @@ class InstallExtensionWindow(wx.Frame):
         self._giface.Help(entry='g.extension')
 
     def OnItemSelected(self, node):
-        """!Item selected"""
+        """Item selected"""
         data = node.data
         if data is None:
             self.SetStatusText('', 0)
@@ -257,7 +257,7 @@ class InstallExtensionWindow(wx.Frame):
             self.btnInstall.Enable(True)
 
 class ExtensionTreeModelBuilder:
-    """!Tree model of available extensions."""
+    """Tree model of available extensions."""
     def __init__(self):
         self.mainNodes = dict()
         self.model = TreeModel(ModuleNode)
@@ -272,7 +272,7 @@ class ExtensionTreeModelBuilder:
         return self.model
 
     def _emptyTree(self):
-        """!Remove modules from tree keeping the main structure"""
+        """Remove modules from tree keeping the main structure"""
         for node in self.mainNodes.values():
             for child in reversed(node.children):
                 self.model.RemoveNode(child)
@@ -298,7 +298,7 @@ class ExtensionTreeModelBuilder:
         return c
     
     def Load(self, url, full = True):
-        """!Load list of extensions"""
+        """Load list of extensions"""
         self._emptyTree()
         
         if full:
@@ -378,7 +378,7 @@ class ManageExtensionWindow(wx.Frame):
         self._layout()
         
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         extSizer = wx.StaticBoxSizer(self.extBox, wx.HORIZONTAL)
@@ -412,7 +412,7 @@ class ManageExtensionWindow(wx.Frame):
         return eList
 
     def OnUninstall(self, event):
-        """!Uninstall selected extensions"""
+        """Uninstall selected extensions"""
         eList = self._getSelectedExtensions()
         if not eList:
             return
@@ -438,7 +438,7 @@ class ManageExtensionWindow(wx.Frame):
         toolboxesOutdated()
 
     def OnUpdate(self, event):
-        """!Update selected extensions"""
+        """Update selected extensions"""
         eList = self._getSelectedExtensions()
         if not eList:
             return
@@ -450,7 +450,7 @@ class ManageExtensionWindow(wx.Frame):
                         'operation=add'])
         
 class CheckListExtension(GListCtrl):
-    """!List of mapset/owner/group"""
+    """List of mapset/owner/group"""
     def __init__(self, parent):
         GListCtrl.__init__(self, parent)
         
@@ -459,7 +459,7 @@ class CheckListExtension(GListCtrl):
         self.LoadData()
         
     def LoadData(self):
-        """!Load data into list"""
+        """Load data into list"""
         self.DeleteAllItems()
         for ext in RunCommand('g.extension',
                               quiet = True, parent = self, read = True,
@@ -468,7 +468,7 @@ class CheckListExtension(GListCtrl):
                 self.InsertStringItem(sys.maxint, ext)
 
     def GetExtensions(self):
-        """!Get extensions to be un-installed
+        """Get extensions to be un-installed
         """
         extList = list()
         for i in range(self.GetItemCount()):

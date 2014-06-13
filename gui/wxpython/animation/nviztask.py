@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.nviztask
 
 @brief Conversion from workspace file to m.nviz.image command

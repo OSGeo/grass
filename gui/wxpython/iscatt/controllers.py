@@ -1,4 +1,4 @@
-"""!
+"""
 @package iscatt.controllers
 
 @brief Controller layer wx.iscatt.
@@ -43,7 +43,7 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 class ScattsManager:
-    """!Main controller
+    """Main controller
     """
     def __init__(self, guiparent, giface, iclass_mapwin = None):
         self.giface = giface
@@ -113,7 +113,7 @@ class ScattsManager:
         self.plots.clear()
     
     def _initSettings(self):
-        """!Initialization of settings (if not already defined)
+        """Initialization of settings (if not already defined)
         """
         # initializes default settings
         initSettings = [
@@ -448,9 +448,10 @@ class ScattsManager:
         return self.cats_mgr
 
 class PlotsRenderingManager:
-    """!Manages rendering of scatter plot.
+    """Manages rendering of scatter plot.
 
-    @todo still space for optimalization
+    .. todo::
+        still space for optimalization
     """
     def __init__(self, scatt_mgr, cats_mgr, core):
         self.scatt_mgr = scatt_mgr
@@ -589,7 +590,7 @@ class PlotsRenderingManager:
                                 subkey="show_ellips")
 
 class CategoriesManager:
-    """!Manages categories list of scatter plot.
+    """Manages categories list of scatter plot.
     """
     def __init__(self, scatt_mgr, core):
 
@@ -767,7 +768,8 @@ class CategoriesManager:
 
 
 class IMapWinDigitConnection:
-    """!Manage communication of the scatter plot with digitizer in mapwindow (does not work).
+    """Manage communication of the scatter plot with digitizer in
+    mapwindow (does not work).
     """
     def Update(self):
         pass
@@ -776,7 +778,8 @@ class IMapWinDigitConnection:
         pass
 
 class IClassDigitConnection:
-    """!Manages communication of the scatter plot with digitizer in wx.iclass.
+    """Manages communication of the scatter plot with digitizer in
+    wx.iclass.
     """
     def __init__(self, scatt_mgr, mapWin, scatt_rast_updater):
         self.mapWin = mapWin
@@ -877,7 +880,7 @@ class IClassDigitConnection:
         self.scatt_mgr.render_mgr.RenderScattPlts()
 
 class IMapDispConnection:
-    """!Manage comunication of the scatter plot with mapdisplay in mapwindow.
+    """Manage comunication of the scatter plot with mapdisplay in mapwindow.
     """
     def __init__(self, scatt_mgr, cats_mgr, giface):
         self.scatt_mgr = scatt_mgr
@@ -960,7 +963,7 @@ class IMapDispConnection:
             self.giface.updateMap.emit()
 
 class IClassConnection:
-    """!Manage comunication of the scatter plot with mapdisplay in wx.iclass.
+    """Manage comunication of the scatter plot with mapdisplay in wx.iclass.
     """
     def __init__(self, scatt_mgr, iclass_frame, cats_mgr):
         self.iclass_frame = iclass_frame
@@ -1114,7 +1117,7 @@ class IClassConnection:
 
 #TODO it uses also BufferedMapWindow class -> move to core?
 class gThread(threading.Thread, wx.EvtHandler):
-    """!Thread for scatter plot backend"""
+    """Thread for scatter plot backend"""
     requestId = 0
 
     def __init__(self, requestQ=None, resultQ=None, **kwds):
@@ -1139,15 +1142,15 @@ class gThread(threading.Thread, wx.EvtHandler):
         self.start()
 
     def Run(self, *args, **kwds):
-        """!Run command in queue
+        """Run command in queue
 
-        @param args unnamed command arguments
-        @param kwds named command arguments,
-               keyword 'callable' represents function to be run,
-               keyword 'ondone' represents function to be 
-                       called after the callable is done
+        :param args: unnamed command arguments
+        :param kwds: named command arguments, keyword 'callable'
+                     represents function to be run, keyword 'ondone'
+                     represents function to be called after the
+                     callable is done
 
-        @return request id in queue
+        :return: request id in queue
         """
         gThread.requestId += 1
         self.requestQ.put((gThread.requestId, args, kwds))
@@ -1155,11 +1158,11 @@ class gThread(threading.Thread, wx.EvtHandler):
         return gThread.requestId
 
     def GetId(self):
-         """!Get id for next command"""
+         """Get id for next command"""
          return gThread.requestId + 1
 
     def SetId(self, id):
-        """!Set starting id"""
+        """Set starting id"""
         gThread.requestId = id
 
     def run(self):
@@ -1206,5 +1209,5 @@ class gThread(threading.Thread, wx.EvtHandler):
             event.ondone(event)
 
     def Terminate(self):
-        """!Abort command(s)"""
+        """Abort command(s)"""
         self.terminate = True
