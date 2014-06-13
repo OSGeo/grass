@@ -436,7 +436,7 @@ const char *G_get_mapset_name(int);
 void G__get_list_of_mapsets(void);
 void G_create_alt_search_path(void);
 void G_switch_search_path(void);
-void G__reset_mapsets(void);
+void G_reset_mapsets(void);
 char **G_get_available_mapsets(void);
 void G_add_mapset_to_search_path(const char *);
 int G_is_mapset_in_search_path(const char *);
