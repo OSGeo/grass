@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.ws
 
 @brief Fetching and preparation of web service data for rendering.
@@ -41,7 +41,7 @@ from grass.pydispatch.signal import Signal
 
 
 class RenderWMSMgr(wx.EvtHandler):
-    """!Fetch and prepare WMS data for rendering.
+    """Fetch and prepare WMS data for rendering.
     """
     def __init__(self, layer, mapfile, maskfile):
         if not haveGdal:
@@ -77,10 +77,11 @@ class RenderWMSMgr(wx.EvtHandler):
         grass.try_remove(self.tempMap)
 
     def Render(self, cmd, env):
-        """!If it is needed, download missing WMS data.
+        """If it is needed, download missing WMS data.
 
-        @todo lmgr deletes mapfile and maskfile when order of layers
-        was changed (drag and drop) - if deleted, fetch data again
+        .. todo::
+            lmgr deletes mapfile and maskfile when order of layers
+            was changed (drag and drop) - if deleted, fetch data again
         """
         if not haveGdal:
             return
@@ -135,7 +136,7 @@ class RenderWMSMgr(wx.EvtHandler):
             self.thread.RunCmd(cmdList, env=env, stderr=self.cmdStdErr)
 
     def OnCmdOutput(self, event):
-        """!Print cmd output according to debug level.
+        """Print cmd output according to debug level.
         """
         if Debug.GetLevel() == 0:
             if event.type == 'error':
@@ -145,7 +146,7 @@ class RenderWMSMgr(wx.EvtHandler):
             Debug.msg(1, event.text)
 
     def OnDataFetched(self, event):
-        """!Fetch data
+        """Fetch data
         """
         if event.pid != self.currentPid:
             return
@@ -172,7 +173,7 @@ class RenderWMSMgr(wx.EvtHandler):
         self.dataFetched.emit()
 
     def _getRegionDict(self, env):
-        """!Parse string from GRASS_REGION env variable into dict.
+        """Parse string from GRASS_REGION env variable into dict.
         """
         region = {}
         parsedRegion = env["GRASS_REGION"].split(';')
@@ -192,7 +193,7 @@ class RenderWMSMgr(wx.EvtHandler):
         return region
 
     def _createRegionStr(self, region):
-        """!Create string for GRASS_REGION env variable from  dict created by _getRegionDict.
+        """Create string for GRASS_REGION env variable from  dict created by _getRegionDict.
         """
         regionStr = ''
         for k, v in region.iteritems():
@@ -204,12 +205,12 @@ class RenderWMSMgr(wx.EvtHandler):
         return regionStr
 
     def IsDownloading(self):
-        """!Is it downloading any data from WMS server? 
+        """Is it downloading any data from WMS server? 
         """
         return self.downloading
 
     def _fitAspect(self, region, size):
-        """!Compute region parameters to have direction independent resolution.
+        """Compute region parameters to have direction independent resolution.
         """
         if region['n-s resol'] > region['e-w resol']:
             delta = region['n-s resol'] * size['cols'] / 2
@@ -230,18 +231,18 @@ class RenderWMSMgr(wx.EvtHandler):
             region['n-s resol'] = region['e-w resol']
 
     def Abort(self):
-        """!Abort process"""
+        """Abort process"""
         self.updateMap = False
         self.thread.abort(abortall = True)        
 
 
 class GDALRasterMerger:
-    """!Merge rasters.
+    """Merge rasters.
 
         Based on gdal_merge.py utility.
     """
     def __init__(self, targetFile, region, bandsNum, gdalDriver, fillValue = None):
-        """!Create raster for merging.
+        """Create raster for merging.
         """
         self.gdalDrvType = gdalDriver
 
@@ -261,7 +262,7 @@ class GDALRasterMerger:
                 self.tDataset.GetRasterBand(iBand).Fill(fillValue)
 
     def AddRasterBands(self, sourceFile, sTBands):
-        """!Add raster bands from sourceFile into the merging raster.
+        """Add raster bands from sourceFile into the merging raster.
         """
         sDataset = gdal.Open(sourceFile, gdal.GA_ReadOnly) 
         if sDataset is None:
@@ -329,7 +330,7 @@ class GDALRasterMerger:
         return ulx, uly, lrx, lry 
 
     def SetGeorefAndProj(self):
-        """!Set georeference and projection to target file
+        """Set georeference and projection to target file
         """
         projection = grass.read_command('g.proj', 
                                         flags = 'wf')

@@ -1,4 +1,4 @@
-"""!
+"""
 @package gui_core.prompt
 
 @brief wxGUI command prompt
@@ -37,7 +37,7 @@ from core.utils import _
 
 
 class GPrompt(object):
-    """!Abstract class for interactive wxGUI prompt
+    """Abstract class for interactive wxGUI prompt
     
     Signal promptRunCmd - emitted to run command from prompt
                         - attribute 'cmd'
@@ -70,7 +70,7 @@ class GPrompt(object):
         self.commands = list()
         
     def _readHistory(self):
-        """!Get list of commands from history file"""
+        """Get list of commands from history file"""
         hist = list()
         env = grass.gisenv()
         try:
@@ -91,7 +91,7 @@ class GPrompt(object):
         return hist
 
     def _getListOfMaps(self):
-        """!Get list of maps"""
+        """Get list of maps"""
         result = dict()
         result['raster'] = grass.list_strings('rast')
         result['vector'] = grass.list_strings('vect')
@@ -99,9 +99,9 @@ class GPrompt(object):
         return result
     
     def _runCmd(self, cmdString):
-        """!Run command
+        """Run command
         
-        @param cmdString command to run (given as a string)
+        :param str cmdString: command to run
         """
         if not cmdString:
             return
@@ -123,16 +123,16 @@ class GPrompt(object):
         self.ShowStatusText('')
         
     def GetCommands(self):
-        """!Get list of launched commands"""
+        """Get list of launched commands"""
         return self.commands
     
     def ClearCommands(self):
-        """!Clear list of commands"""
+        """Clear list of commands"""
         del self.commands[:]
 
 
 class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
-    """!Styled wxGUI prompt with autocomplete and calltips"""    
+    """Styled wxGUI prompt with autocomplete and calltips"""  
     def __init__(self, parent, menuModel, margin = False):
         GPrompt.__init__(self, parent = parent, menuModel = menuModel)
         wx.stc.StyledTextCtrl.__init__(self, self.panel, id = wx.ID_ANY)
@@ -186,14 +186,14 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.commandSelected = Signal('GPromptSTC.commandSelected')
         
     def OnTextSelectionChanged(self, event):
-        """!Copy selected text to clipboard and skip event.
+        """Copy selected text to clipboard and skip event.
         The same function is in GStc class (goutput.py).
         """
         wx.CallAfter(self.Copy)
         event.Skip()
         
     def OnItemChanged(self, event):
-        """!Change text in statusbar 
+        """Change text in statusbar 
         if the item selection in the auto-completion list is changed"""
         # list of commands
         if self.toComplete['entity'] == 'command':
@@ -234,7 +234,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.ShowStatusText('')
             
     def OnItemSelected(self, event):
-        """!Item selected from the list"""
+        """Item selected from the list"""
         lastWord = self.GetWordLeft()
         # to insert selection correctly if selected word partly matches written text
         match = difflib.SequenceMatcher(None, event.GetText(), lastWord)
@@ -264,7 +264,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.cmdDesc = None
 
     def OnKillFocus(self, event):
-        """!Hides autocomplete"""
+        """Hides autocomplete"""
         # hide autocomplete
         if self.AutoCompActive():
             self.AutoCompCancel()
@@ -279,9 +279,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetFocus()
 
     def UpdateCmdHistory(self, cmd):
-        """!Update command history
+        """Update command history
         
-        @param cmd command given as a string
+        :param cmd: command given as a string
         """
         # add command to history    
         self.cmdbuffer.append(cmd)
@@ -292,7 +292,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.cmdindex = len(self.cmdbuffer)
         
     def EntityToComplete(self):
-        """!Determines which part of command (flags, parameters) should
+        """Determines which part of command (flags, parameters) should
         be completed at current cursor position"""
         entry = self.GetTextLeft()
         toComplete = dict(cmd=None, entity=None)
@@ -347,11 +347,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         return toComplete
     
     def GetWordLeft(self, withDelimiter = False, ignoredDelimiter = None):
-        """!Get word left from current cursor position. The beginning
+        """Get word left from current cursor position. The beginning
         of the word is given by space or chars: .,-= 
         
-        @param withDelimiter returns the word with the initial delimeter
-        @param ignoredDelimiter finds the word ignoring certain delimeter
+        :param withDelimiter: returns the word with the initial delimeter
+        :param ignoredDelimiter: finds the word ignoring certain delimeter
         """
         textLeft = self.GetTextLeft()
         
@@ -368,13 +368,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         return min(parts, key=lambda x: len(x))
          
     def ShowList(self):
-        """!Show sorted auto-completion list if it is not empty"""
+        """Show sorted auto-completion list if it is not empty"""
         if len(self.autoCompList) > 0:
             self.autoCompList.sort()
             self.AutoCompShow(lenEntered = 0, itemList = ' '.join(self.autoCompList))    
 
     def OnKeyPressed(self, event):
-        """!Key pressed capture special treatment for tabulator to show help"""
+        """Key pressed capture special treatment for tabulator to show help"""
         pos = self.GetCurrentPos()
         if event.GetKeyCode() == wx.WXK_TAB:
             # show GRASS command calltips (to hide press 'ESC')
@@ -431,9 +431,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             event.Skip()
 
     def OnChar(self, event):
-        """!Key char capture for autocompletion, calltips, and command history
+        """Key char capture for autocompletion, calltips, and command history
 
-        @todo event.ControlDown() for manual autocomplete
+        .. todo::
+            event.ControlDown() for manual autocomplete
         """
         # keycodes used: "." = 46, "=" = 61, "-" = 45 
         pos = self.GetCurrentPos()
@@ -581,11 +582,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             event.Skip()
 
     def ShowStatusText(self, text):
-        """!Requests showing of notification, e.g. showing in a statusbar."""
+        """Requests showing of notification, e.g. showing in a statusbar."""
         self.showNotification.emit(message=text)
         
     def GetTextLeft(self):
-        """!Returns all text left of the caret"""
+        """Returns all text left of the caret"""
         pos = self.GetCurrentPos()
         self.HomeExtend()
         entry = self.GetSelectedText()
@@ -594,12 +595,12 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         return entry
     
     def OnDestroy(self, event):
-        """!The clipboard contents can be preserved after
+        """The clipboard contents can be preserved after
         the app has exited"""
         wx.TheClipboard.Flush()
         event.Skip()
 
     def OnCmdErase(self, event):
-        """!Erase command prompt"""
+        """Erase command prompt"""
         self.Home()
         self.DelLineRight()

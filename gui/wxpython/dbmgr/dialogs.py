@@ -1,4 +1,4 @@
-"""!
+"""
 @package dbmgr.dialogs
 
 @brief DBM-related dialogs
@@ -37,21 +37,21 @@ class DisplayAttributesDialog(wx.Dialog):
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  pos = wx.DefaultPosition,
                  action = "add", ignoreError = False):
-        """!Standard dialog used to add/update/display attributes linked
+        """Standard dialog used to add/update/display attributes linked
         to the vector map.
         
         Attribute data can be selected based on layer and category number
         or coordinates.
         
-        @param parent
-        @param map vector map
-        @param query query coordinates and distance (used for v.edit)
-        @param cats {layer: cats}
-        @param line feature id (requested for cats)
-        @param style
-        @param pos
-        @param action (add, update, display)
-        @param ignoreError True to ignore errors
+        :param parent:
+        :param map: vector map
+        :param query: query coordinates and distance (used for v.edit)
+        :param cats: {layer: cats}
+        :param line: feature id (requested for cats)
+        :param style:
+        :param pos:
+        :param action: (add, update, display)
+        :param ignoreError: True to ignore errors
         """
         self.parent = parent # mapdisplay.BufferedWindow
         self.map    = map
@@ -175,19 +175,19 @@ class DisplayAttributesDialog(wx.Dialog):
             ### self.mapDBInfo = None
         
     def OnSQLStatement(self, event):
-        """!Update SQL statement"""
+        """Update SQL statement"""
         pass
 
     def IsFound(self):
-        """!Check for status
+        """Check for status
 
-        @return True on attributes found
-        @return False attributes not found
+        :return: True on attributes found
+        :return: False attributes not found
         """
         return bool(self.mapDBInfo and self.notebook.GetPageCount() > 0)
     
     def GetSQLString(self, updateValues = False):
-        """!Create SQL statement string based on self.sqlStatement
+        """Create SQL statement string based on self.sqlStatement
 
         Show error message when invalid values are entered.
         
@@ -279,7 +279,7 @@ class DisplayAttributesDialog(wx.Dialog):
         return sqlCommands
 
     def OnReset(self, event = None):
-        """!Reset form"""
+        """Reset form"""
         for layer in self.mapDBInfo.layers.keys():
             table = self.mapDBInfo.layers[layer]["table"]
             key = self.mapDBInfo.layers[layer]["key"]
@@ -299,7 +299,7 @@ class DisplayAttributesDialog(wx.Dialog):
                         self.FindWindowById(id).SetValue(str(value))
 
     def OnClose(self, event):
-        """!Closes dialog and removes query layer.
+        """Closes dialog and removes query layer.
         """
         frame = self.parent.parent
         frame.dialogs['attributes'] = None
@@ -314,7 +314,7 @@ class DisplayAttributesDialog(wx.Dialog):
         self.Destroy()
 
     def OnSubmit(self, event):
-        """!Submit records"""
+        """Submit records"""
         layer = 1
         close = True
         enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
@@ -348,9 +348,9 @@ class DisplayAttributesDialog(wx.Dialog):
         self.UpdateDialog(cats = self.cats, fid = self.fid)
         
     def GetCats(self):
-        """!Get id of selected vector object or 'None' if nothing selected
+        """Get id of selected vector object or 'None' if nothing selected
 
-        @param id if true return ids otherwise cats
+        :param id: if true return ids otherwise cats
         """
         if self.fid < 0:
             return None
@@ -358,21 +358,21 @@ class DisplayAttributesDialog(wx.Dialog):
         return self.cats[self.fid]
 
     def GetFid(self):
-        """!Get selected feature id"""
+        """Get selected feature id"""
         return self.fid
     
     def UpdateDialog(self, map = None, query = None, cats = None, fid = -1,
                      action = None):
-        """!Update dialog
+        """Update dialog
         
-        @param map name of vector map
-        @param query
-        @param cats
-        @param fid feature id
-        @param action add, update, display or None
+        :param map: name of vector map
+        :param query:
+        :param cats:
+        :param fid: feature id
+        :param action: add, update, display or None
         
-        @return True if updated
-        @return False
+        :return: True if updated
+        :return: False
         """
         if action:
             self.action = action
@@ -555,10 +555,10 @@ class DisplayAttributesDialog(wx.Dialog):
         return True
 
     def SetColumnValue(self, layer, column, value):
-        """!Set attrbute value
+        """Set attrbute value
 
-        @param column column name
-        @param value value
+        :param column: column name
+        :param value: value
         """
         table = self.mapDBInfo.GetTable(layer)
         columns = self.mapDBInfo.GetTableDesc(table)
@@ -571,11 +571,11 @@ class DisplayAttributesDialog(wx.Dialog):
 class ModifyTableRecord(wx.Dialog):
     def __init__(self, parent, title, data, keyEditable = (-1, True),
                  id = wx.ID_ANY, style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-        """!Dialog for inserting/updating table record
+        """Dialog for inserting/updating table record
         
-        @param data a list: [(column, value)]
-        @param KeyEditable (id, editable?) indicates if textarea for key column
-        is editable(True) or not
+        :param data: a list: [(column, value)]
+        :param keyEditable: (id, editable?) indicates if textarea for
+                            key column is editable(True) or not
         """
         # parent -> VDigitWindow
         wx.Dialog.__init__(self, parent, id, title, style = style)
@@ -637,7 +637,7 @@ class ModifyTableRecord(wx.Dialog):
         self._layout()
         
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         # data area
@@ -690,7 +690,7 @@ class ModifyTableRecord(wx.Dialog):
         self.Layout()
         
     def GetValues(self, columns = None):
-        """!Return list of values (casted to string).
+        """Return list of values (casted to string).
         
         If columns is given (list), return only values of given columns.
         """
@@ -710,7 +710,7 @@ class ModifyTableRecord(wx.Dialog):
 class AddColumnDialog(wx.Dialog):
     def __init__(self, parent, title, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE  | wx.RESIZE_BORDER):
-        """!Dialog for adding column into table
+        """Dialog for adding column into table
         """
         wx.Dialog.__init__(self, parent, id, title, style = style)
         
@@ -784,7 +784,7 @@ class AddColumnDialog(wx.Dialog):
         self.Fit()
 
     def GetData(self):
-        """!Get inserted data from dialog's widgets"""
+        """Get inserted data from dialog's widgets"""
         values = {}
         values['name'] = self.data['addColName'].GetValue()
         values['ctype'] = self.data['addColType'].GetStringSelection()
@@ -793,7 +793,7 @@ class AddColumnDialog(wx.Dialog):
         return values
   
     def OnTableChangeType(self, event):
-        """!Data type for new column changed. Enable or disable
+        """Data type for new column changed. Enable or disable
         data length widget"""
         if event.GetString() == "varchar":
             self.data['addColLength'].Enable(True)

@@ -132,7 +132,7 @@ class RLIWizard(object):
             self._cleanup()
 
     def _write_confile(self):
-        """!Write the configuration file"""
+        """Write the configuration file"""
         f = open(os.path.join(self.rlipath, self.startpage.conf_name), 'wb')
         self.rasterinfo = grast.raster_info(self.startpage.rast)
         self._write_region(f)
@@ -150,7 +150,7 @@ class RLIWizard(object):
         self.SF_EWRES = self.gregion['ewres']
 
     def _write_region(self, fil):
-        """!Write the region"""
+        """Write the region"""
         if self.startpage.region == 'whole':
             fil.write("SAMPLINGFRAME 0|0|1|1\n")
             self._temp_region()
@@ -226,7 +226,7 @@ class RLIWizard(object):
         return
 
     def _circle(self, radius, mask):
-        """!Create a circle mask"""
+        """Create a circle mask"""
         self._value_for_circle(radius)
         eastEdge = float(self.SF_W + (self.CIR_RL * self.SF_EWRES))
         southEdge = float(self.SF_N - (self.CIR_CL * self.SF_NSRES))
@@ -243,7 +243,7 @@ class RLIWizard(object):
         grass.run_command('g.region', rast=self.startpage.rast)
 
     def getSamplingType(self):
-        """!Obtain the sampling type"""
+        """Obtain the sampling type"""
         devicetype = self.samplingareapage.regionbox
         samplingtype = self.samplingareapage.samplingtype
         shapetype = self.units.boxtype
@@ -281,7 +281,7 @@ class RLIWizard(object):
         return samtype
 
     def _write_area(self, fil):
-        """!Write the area according the type"""
+        """Write the area according the type"""
         samtype = self.getSamplingType()
 
         #sampling type is whole
@@ -402,7 +402,7 @@ class RLIWizard(object):
             fil.write("VECTORMAP {name}\n".format(name=self.startpage.vect))
 
     def _cleanup(self):
-        """!Clean all the variables to save into configuration file"""
+        """Clean all the variables to save into configuration file"""
         self.startpage.conf_name = ''
         self.startpage.rast = ''
         self.startpage.vect = ''
@@ -492,7 +492,7 @@ class FirstPage(TitledPage):
         wx.CallAfter(wx.FindWindowById(wx.ID_FORWARD).Enable, False)
 
     def OnSampling(self, event):
-        """!Change region type"""
+        """Change region type"""
         if event.GetInt() == 0:
             self.region = 'whole'
             self.SetNext(self.parent.samplingareapage)
@@ -504,7 +504,7 @@ class FirstPage(TitledPage):
             self.SetNext(self.parent.drawsampleframepage)
 
     def OnName(self, event):
-        """!Sets the name of configuration file"""
+        """Sets the name of configuration file"""
         if self.conf_name in self.parent.parent.listfiles:
             GMessage(parent=self, message=_("The configuration file %s "
                      "already exists, please change name") % self.conf_name)
@@ -512,41 +512,41 @@ class FirstPage(TitledPage):
             self.conf_name = ''
 
     def OnNameChanged(self, event):
-        """!Name of configuration file has changed"""
+        """Name of configuration file has changed"""
         self.conf_name = self.newconftxt.GetValue()
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
     def OnRast(self, event):
-        """!Sets raster map"""
+        """Sets raster map"""
         self.rast = event.GetString()
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
     def OnVector(self, event):
-        """!Sets vector map"""
+        """Sets vector map"""
         self.vect = event.GetString()
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
     def OnEnterPage(self, event):
-        """!Sets the default values, for the entire map
+        """Sets the default values, for the entire map
         """
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
         wx.CallAfter(wx.FindWindowById(wx.ID_FORWARD).Enable, self.CheckInput())
 
     def CheckInput(self):
-        """!Check input fields.
+        """Check input fields.
 
-        @return True if configuration file is given and raster xor vector map,
+        :return: True if configuration file is given and raster xor vector map,
         False otherwise
         """
         #R#return bool(self.conf_name and (bool(self.rast) != bool(self.vect)))
         return bool(self.conf_name and bool(self.rast))
 
     def OnExitPage(self, event=None):
-        """!Function during exiting"""
+        """Function during exiting"""
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
         if event.GetDirection():
@@ -637,27 +637,27 @@ class KeyboardPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
     def OnColLeft(self, event):
-        """!Sets the name of configuration file"""
+        """Sets the name of configuration file"""
         self.col_up = self.ColUpLefttxt.GetValue()
         checkValue(self.col_up)
 
     def OnRowLeft(self, event):
-        """!Sets the name of configuration file"""
+        """Sets the name of configuration file"""
         self.row_up = self.RowUpLefttxt.GetValue()
         checkValue(self.row_up)
 
     def OnColLen(self, event):
-        """!Sets the name of configuration file"""
+        """Sets the name of configuration file"""
         self.col_len = self.ColLentxt.GetValue()
         checkValue(self.col_len)
 
     def OnRowLen(self, event):
-        """!Sets the name of configuration file"""
+        """Sets the name of configuration file"""
         self.row_len = self.RowLentxt.GetValue()
         checkValue(self.row_len)
 
     def OnEnterPage(self, event):
-        """!Sets the default values, for the entire map
+        """Sets the default values, for the entire map
         """
         #R# check if raster exists before anything
         if self.col_len == '' and self.row_len == '':
@@ -669,7 +669,7 @@ class KeyboardPage(TitledPage):
         self.RowLentxt.SetValue(self.row_len)
 
     def OnExitPage(self, event=None):
-        """!Function during exiting"""
+        """Function during exiting"""
         if self.row_len == '' or self.col_len == '' or self.row_up == '' or self.col_up == '':
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
@@ -677,7 +677,7 @@ class KeyboardPage(TitledPage):
 
 
 class DrawSampleFramePage(TitledPage):
-    """!Choose the region setting the values drawing a box"""
+    """Choose the region setting the values drawing a box"""
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Draw sampling frame"))
         self.parent = parent
@@ -687,7 +687,7 @@ class DrawSampleFramePage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
     def SampleFrameChanged(self, region):
-        """"!Enables the next dialog when region is set"""
+        """"Enables the next dialog when region is set"""
         if region:
             self.tregion = region
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -695,7 +695,7 @@ class DrawSampleFramePage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
-        """!Function during entering"""
+        """Function during entering"""
         if self.mapPanel is None:
             self.mapPanel = RLiSetupMapPanel(self, samplingType='drawFrame')
             self.mapPanel.sampleFrameChanged.connect(self.SampleFrameChanged)
@@ -716,7 +716,7 @@ class DrawSampleFramePage(TitledPage):
                           name=rast, hidden=False, opacity=1.0, render=True)
 
     def OnExitPage(self, event=None):
-        """!Function during exiting"""
+        """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.parent.samplingareapage)
             self.parent.samplingareapage.SetPrev(self)
@@ -803,7 +803,7 @@ class SamplingAreasPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
     def OnNumRegions(self, event):
-        """!Obtain the number of regions"""
+        """Obtain the number of regions"""
         if event.GetString():
             self.SetNext(self.parent.regions)
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -812,7 +812,7 @@ class SamplingAreasPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
-        """!Insert values into text controls for summary of location
+        """Insert values into text controls for summary of location
         creation options
         """
         self.SetVal(None)
@@ -825,7 +825,7 @@ class SamplingAreasPage(TitledPage):
         wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
     def SetVal(self, event):
-        """!Choose method"""
+        """Choose method"""
         radio = self.radioBox.GetSelection()
         wx.FindWindowById(wx.ID_FORWARD).Enable(True)
         if radio == 0:
@@ -848,7 +848,7 @@ class SamplingAreasPage(TitledPage):
         self.ShowExtraOptions(self.samplingtype)
 
     def ShowExtraOptions(self, samtype):
-        """!Show some extra options for some sampling type"""
+        """Show some extra options for some sampling type"""
         if samtype == SamplingType.REGIONS:
             self.sizer.Hide(self.regionBox)
             self.sizer.Hide(self.areaPanel)
@@ -871,14 +871,14 @@ class SamplingAreasPage(TitledPage):
         return
 
     def OnVectYes(self, event):
-        """!The user choose to select the vector areas, this function set the
+        """The user choose to select the vector areas, this function set the
         next page to VectorAreasPage"""
         self.SetNext(self.parent.vectorareas)
         wx.FindWindowById(wx.ID_FORWARD).Enable(True)
         self.parent.wizard.ShowPage(self.parent.vectorareas)
 
     def OnVectNo(self, event):
-        """!The user choose to use all the vector areas, this function analyses
+        """The user choose to use all the vector areas, this function analyses
         all the vector areas and fill the msAreaList variable"""
         self.sizer.Show(self.calculatingAreas)
         self.sizer.Hide(self.regionNumPanel)
@@ -911,7 +911,7 @@ class SamplingAreasPage(TitledPage):
         self._progressDlg = None
 
     def RegionDraw(self, regtype):
-        """!Set the next page to units or drawunits"""
+        """Set the next page to units or drawunits"""
         if regtype == 0:
             self.regionbox = 'keyboard'
             if self.samplingtype == SamplingType.UNITS:
@@ -960,7 +960,7 @@ class DrawRegionsPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
-        """!Function during entering"""
+        """Function during entering"""
         if self.parent.samplingareapage.samplingtype == SamplingType.WHOLE:
             self.title.SetLabel(_("Draw moving windows region"))
         elif self.parent.samplingareapage.samplingtype == SamplingType.UNITS:
@@ -995,7 +995,7 @@ class DrawRegionsPage(TitledPage):
 
 
 class SampleUnitsKeyPage(TitledPage):
-    """!Set values from keyboard for sample units
+    """Set values from keyboard for sample units
        It is used if you choose keyboard from Sampling Units or Moving windows
        in sampling areas page
     """
@@ -1091,20 +1091,20 @@ class SampleUnitsKeyPage(TitledPage):
         self.OnType(None)
 
     def OnEnterPage(self, event=None):
-        """!Function during entering"""
+        """Function during entering"""
         # This is an hack to force the user to choose Rectangle or Circle
         self.typeBox.SetSelection(2),
         self.typeBox.ShowItem(2, False)
         self.panelSizer.Layout()
 
     def OnExitPage(self, event=None):
-        """!Function during exiting"""
+        """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.parent.summarypage)
             self.SetPrev(self.parent.samplingareapage)
 
     def OnType(self, event):
-        """!Set if rectangle or circle will be used"""
+        """Set if rectangle or circle will be used"""
         chosen = self.typeBox.GetSelection()
         self.widthLabel.SetLabel(self.widthLabels[chosen])
         self.heightLabel.SetLabel(self.heightLabels[chosen])
@@ -1166,7 +1166,7 @@ class SampleUnitsKeyPage(TitledPage):
 
 
 class MovingKeyPage(TitledPage):
-    """!Set values from keyboard for sample units"""
+    """Set values from keyboard for sample units"""
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Set sample units"))
@@ -1240,10 +1240,10 @@ class MovingKeyPage(TitledPage):
             self.boxtype = 'circle'
 
     def CheckInput(self):
-        """!Check input fields.
+        """Check input fields.
 
-        @return True if configuration file is given and raster xor vector map,
-        False otherwise
+        :return: True if configuration file is given and raster xor
+                 vector map, False otherwise
         """
         return bool(self.width and bool(self.height))
 
@@ -1259,7 +1259,7 @@ class MovingKeyPage(TitledPage):
 
 
 class UnitsMousePage(TitledPage):
-    """!Choose the sampling area setting the values using the mouse drawing the
+    """Choose the sampling area setting the values using the mouse drawing the
        areas with rectangle or circle. It is used both from 'Moving windows'
        and 'Sample units'.
     """
@@ -1305,7 +1305,7 @@ class UnitsMousePage(TitledPage):
         self.regionNumTxt.SetValue('')
 
     def OnEnterPage(self, event):
-        """!Function during entering"""
+        """Function during entering"""
         if self.numregions:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
         else:
@@ -1347,7 +1347,7 @@ class UnitsMousePage(TitledPage):
             self.drawtype = 'circle'
 
     def OnNumRegions(self, event):
-        """!Set the number of region"""
+        """Set the number of region"""
         if event.GetString():
             self.SetNext(self.parent.drawsampleunitspage)
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -1356,14 +1356,14 @@ class UnitsMousePage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnExitPage(self, event=None):
-        """!Function during exiting"""
+        """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.drawsampleunitspage)
             self.SetPrev(self.samplingareapage)
 
 
 class DrawSampleUnitsPage(TitledPage):
-    """!Choose the sampling area drawing them"""
+    """Choose the sampling area drawing them"""
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Draw sampling units"))
         self.parent = parent
@@ -1388,7 +1388,7 @@ class DrawSampleUnitsPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
-        """!Function during entering"""
+        """Function during entering"""
 
         if self.parent.samplingareapage.samplingtype in [SamplingType.MVWIN,
                                                          SamplingType.MMVWINC,
@@ -1434,7 +1434,7 @@ class DrawSampleUnitsPage(TitledPage):
 
 
 class VectorAreasPage(TitledPage):
-    """!Choose the sampling area using the vector features"""
+    """Choose the sampling area using the vector features"""
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Select sampling areas"))
         self.parent = parent
@@ -1460,7 +1460,7 @@ class VectorAreasPage(TitledPage):
         self.sizer.Add(self.areaPanel, flag=wx.ALIGN_CENTER, pos=(2, 0))
 
     def afterRegionDrawn(self):
-        """!Function to update the title and the number of selected area"""
+        """Function to update the title and the number of selected area"""
         self.areascount = self.areascount + 1
         if self.areascount == self.areanum:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -1472,19 +1472,19 @@ class VectorAreasPage(TitledPage):
             return False
 
     def OnYes(self, event):
-        """!Function to create the string for the conf file if the area
+        """Function to create the string for the conf file if the area
         is selected"""
         self.parent.msAreaList.append(obtainAreaVector(self.outname))
         if not self.afterRegionDrawn():
             self.newCat()
 
     def OnNo(self, event):
-        """!Function to pass to the next feature if it is not selected"""
+        """Function to pass to the next feature if it is not selected"""
         if not self.afterRegionDrawn():
             self.newCat()
 
     def newCat(self):
-        """!Convert to raster and draw the new feature"""
+        """Convert to raster and draw the new feature"""
         cat = self.vect_cats[self.areascount]
         self.outname = "{name}_{cat}".format(name=self.vect.split('@')[0],
                                              cat=cat)
@@ -1502,7 +1502,7 @@ class VectorAreasPage(TitledPage):
         self.areaText.SetLabel("Is this area (cat={n}) ok?".format(n=cat))
 
     def OnEnterPage(self, event):
-        """!Function during entering: draw the raster map and the first vector
+        """Function during entering: draw the raster map and the first vector
         feature"""
         if self.mapPanel is None:
             self.mapPanel = RLiSetupMapPanel(self, samplingType=self.parent.samplingareapage.samplingtype,
@@ -1535,7 +1535,7 @@ class VectorAreasPage(TitledPage):
         self.newCat()
 
     def OnExitPage(self, event=None):
-        """!Function during exiting"""
+        """Function during exiting"""
         grass.del_temp_region()
 #        if event.GetDirection():
 #            self.SetNext(self.parent.samplingareapage)
@@ -1543,7 +1543,7 @@ class VectorAreasPage(TitledPage):
 
 
 class SummaryPage(TitledPage):
-    """!Shows summary result of choosing data"""
+    """Shows summary result of choosing data"""
     def __init__(self, wizard, parent):
         TitledPage.__init__(self, wizard, _("Summary"))
         global rlisettings
@@ -1653,7 +1653,7 @@ class SummaryPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
     def OnEnterPage(self, event):
-        """!Insert values into text controls for summary of location
+        """Insert values into text controls for summary of location
         creation options
         """
         self.conftxt.SetLabel(self.parent.startpage.conf_name)

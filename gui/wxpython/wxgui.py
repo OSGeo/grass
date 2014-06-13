@@ -1,4 +1,4 @@
-"""!
+""" 
 @package wxgui
 
 @brief Main Python application for GRASS wxPython GUI
@@ -35,9 +35,9 @@ from lmgr.frame import GMFrame
 
 class GMApp(wx.App):
     def __init__(self, workspace = None):
-        """!Main GUI class.
+        """ Main GUI class.
 
-        @param workspace path to the workspace file
+        :param workspace: path to the workspace file
         """
         self.workspaceFile = workspace
         
@@ -47,9 +47,9 @@ class GMApp(wx.App):
         self.locale = wx.Locale(language = wx.LANGUAGE_DEFAULT)
         
     def OnInit(self):
-        """!Initialize all available image handlers
+        """ Initialize all available image handlers
         
-        @return True
+        :return: True
         """
         if not globalvar.CheckWxVersion([2, 9]):
             wx.InitAllImageHandlers()
@@ -88,7 +88,7 @@ class Usage(Exception):
         self.msg = msg
 
 def printHelp():
-    """!Print program help"""
+    """ Print program help"""
     print >> sys.stderr, "Usage:"
     print >> sys.stderr, " python wxgui.py [options]"
     print >> sys.stderr, "%sOptions:" % os.linesep
@@ -96,7 +96,7 @@ def printHelp():
     sys.exit(1)
 
 def process_opt(opts, args):
-    """!Process command-line arguments"""
+    """ Process command-line arguments"""
     workspaceFile = None
     for o, a in opts:
         if o in ("-h", "--help"):

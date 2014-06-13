@@ -1,4 +1,4 @@
-"""!
+"""
 @package gis_set
 
 GRASS start-up screen.
@@ -46,7 +46,7 @@ from gui_core.widgets import GenericValidator
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
 class GRASSStartup(wx.Frame):
-    """!GRASS start-up screen"""
+    """GRASS start-up screen"""
     def __init__(self, parent = None, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE):
 
         #
@@ -203,7 +203,7 @@ class GRASSStartup(wx.Frame):
         self.Bind(wx.EVT_CLOSE,               self.OnCloseWindow)
         
     def _set_properties(self):
-        """!Set frame properties"""
+        """Set frame properties"""
         self.SetTitle(_("Welcome to GRASS GIS"))
         self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"),
                              wx.BITMAP_TYPE_ICO))
@@ -394,7 +394,7 @@ class GRASSStartup(wx.Frame):
         self.Layout()
 
     def _readGisRC(self):
-        """!Read variables from $HOME/.grass7/rc file
+        """Read variables from $HOME/.grass7/rc file
         """
         grassrc = {}
         
@@ -438,7 +438,7 @@ class GRASSStartup(wx.Frame):
         self.lmessage.SetLabel("")
 
     def GetRCValue(self, value):
-        """!Return GRASS variable (read from GISRC)
+        """Return GRASS variable (read from GISRC)
         """
         if self.grassrc.has_key(value):
             return self.grassrc[value]
@@ -446,7 +446,7 @@ class GRASSStartup(wx.Frame):
             return None
         
     def OnWizard(self, event):
-        """!Location wizard started"""
+        """Location wizard started"""
         from location_wizard.wizard import LocationWizard
         gWizard = LocationWizard(parent = self,
                                  grassdatabase = self.tgisdbase.GetValue())
@@ -487,7 +487,7 @@ class GRASSStartup(wx.Frame):
                 self.CreateNewMapset(mapsetName)
 
     def SetDefaultRegion(self, location):
-        """!Asks to set default region."""
+        """Asks to set default region."""
         caption = _("Location <%s> created") % location
         message = _("Do you want to set the default "
                     "region extents and resolution now?")
@@ -507,7 +507,7 @@ class GRASSStartup(wx.Frame):
             dlg.Destroy()
 
     def ImportFile(self, filePath):
-        """!Tries to import file as vector or raster.
+        """Tries to import file as vector or raster.
 
         If successfull sets default region from imported map.
         """
@@ -545,7 +545,7 @@ class GRASSStartup(wx.Frame):
                 RunCommand('g.region', flags = 's', parent = self, **args)
         
     def OnManageLoc(self, event):
-        """!Location management choice control handler
+        """Location management choice control handler
         """
         sel = event.GetSelection()
         if sel ==  0:
@@ -560,7 +560,7 @@ class GRASSStartup(wx.Frame):
         event.Skip()
         
     def RenameMapset(self):
-        """!Rename selected mapset
+        """Rename selected mapset
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset   = self.listOfMapsets[self.lbmapsets.GetSelection()]
@@ -602,7 +602,7 @@ class GRASSStartup(wx.Frame):
         dlg.Destroy()
 
     def RenameLocation(self):
-        """!Rename selected location
+        """Rename selected location
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
 
@@ -639,7 +639,7 @@ class GRASSStartup(wx.Frame):
         dlg.Destroy()
 
     def DeleteMapset(self):
-        """!Delete selected mapset
+        """Delete selected mapset
         """
         location = self.listOfLocations[self.lblocations.GetSelection()]
         mapset   = self.listOfMapsets[self.lbmapsets.GetSelection()]
@@ -694,7 +694,7 @@ class GRASSStartup(wx.Frame):
         dlg.Destroy()
 
     def UpdateLocations(self, dbase):
-        """!Update list of locations"""
+        """Update list of locations"""
         try:
             self.listOfLocations = GetListOfLocations(dbase)
         except UnicodeEncodeError:
@@ -716,7 +716,7 @@ class GRASSStartup(wx.Frame):
         return self.listOfLocations
 
     def UpdateMapsets(self, location):
-        """!Update list of mapsets"""
+        """Update list of mapsets"""
         self.FormerMapsetSelection = wx.NOT_FOUND # for non-selectable item
         
         self.listOfMapsetsSelectable = list()
@@ -761,7 +761,7 @@ class GRASSStartup(wx.Frame):
         return self.listOfMapsets
 
     def OnSelectLocation(self, event):
-        """!Location selected"""
+        """Location selected"""
         if event:
             self.lblocations.SetSelection(event.GetIndex())
             
@@ -803,7 +803,7 @@ class GRASSStartup(wx.Frame):
             self.manageloc.Enable(False)
         
     def OnSelectMapset(self, event):
-        """!Mapset selected"""
+        """Mapset selected"""
         self.lbmapsets.SetSelection(event.GetIndex())
 
         if event.GetText() not in self.listOfMapsetsSelectable:
@@ -813,7 +813,7 @@ class GRASSStartup(wx.Frame):
             event.Skip()
 
     def OnSetDatabase(self, event):
-        """!Database set"""
+        """Database set"""
         gisdbase = self.tgisdbase.GetValue()
         self._hideMessage()
         if not os.path.exists(gisdbase):
@@ -843,7 +843,7 @@ class GRASSStartup(wx.Frame):
         dlg.Destroy()
 
     def OnCreateMapset(self, event):
-        """!Create new mapset"""
+        """Create new mapset"""
         dlg = TextEntryDialog(parent = self,
                               message = _('Enter name for new mapset:'),
                               caption = _('Create new mapset'),
@@ -949,7 +949,7 @@ class GRASSStartup(wx.Frame):
                    set = "MAPSET=%s" % mapset)
 
     def _getDefaultMapsetName(self):
-        """!Returns default name for mapset."""
+        """Returns default name for mapset."""
         try:
             defaultName = getpass.getuser()
             defaultName.encode('ascii') # raise error if not ascii (not valid mapset name)
@@ -974,7 +974,7 @@ class GRASSStartup(wx.Frame):
         RunCommand('g.manual', entry = 'helptext')
 
     def OnCloseWindow(self, event):
-        """!Close window event"""
+        """Close window event"""
         event.Skip()
         sys.exit(2)
 
@@ -986,7 +986,7 @@ class GRASSStartup(wx.Frame):
 
 
 class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
-    """!Use wx.ListCtrl instead of wx.ListBox, different style for
+    """Use wx.ListCtrl instead of wx.ListBox, different style for
     non-selectable items (e.g. mapsets with denied permission)"""
     def __init__(self, parent, id, size,
                  choices, disabled = []):
@@ -1003,10 +1003,10 @@ class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self._LoadData(choices, disabled)
         
     def _LoadData(self, choices, disabled = []):
-        """!Load data into list
+        """Load data into list
         
-        @param choices list of item
-        @param disabled list of indeces of non-selectable items
+        :param choices: list of item
+        :param disabled: list of indeces of non-selectable items
         """
         idx = 0
         for item in choices:
@@ -1035,7 +1035,7 @@ class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         return self.selected
         
 class StartUp(wx.App):
-    """!Start-up application"""
+    """Start-up application"""
 
     def OnInit(self):
         if not globalvar.CheckWxVersion([2, 9]):

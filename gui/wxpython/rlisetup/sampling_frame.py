@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""!
+"""
 @package rlisetup.sampling_frame
 
 @brief r.li.setup - draw sample frame
@@ -64,7 +64,7 @@ class MaskedArea(object):
 
 
 class RLiSetupMapPanel(wx.Panel):
-    """!Panel with mapwindow used in r.li.setup"""
+    """Panel with mapwindow used in r.li.setup"""
     def __init__(self, parent, samplingType, icon=None, map_=None):
         wx.Panel.__init__(self, parent=parent)
 
@@ -127,15 +127,15 @@ class RLiSetupMapPanel(wx.Panel):
         return self.map_
 
     def OnPan(self, event):
-        """!Panning, set mouse to drag."""
+        """Panning, set mouse to drag."""
         self.mapWindow.SetModePan()
 
     def OnZoomIn(self, event):
-        """!Zoom in the map."""
+        """Zoom in the map."""
         self.mapWindow.SetModeZoomIn()
 
     def OnZoomOut(self, event):
-        """!Zoom out the map."""
+        """Zoom out the map."""
         self.mapWindow.SetModeZoomOut()
 
     def OnZoomToMap(self, event):
@@ -143,7 +143,7 @@ class RLiSetupMapPanel(wx.Panel):
         self.mapWindow.ZoomToMap(layers=layers, ignoreNulls=False, render=True)
 
     def OnDrawRadius(self, event):
-        """!Start draw mode"""
+        """Start draw mode"""
         self.mapWindow.mouse['use'] = "None"
         self.mapWindow.mouse['box'] = "line"
         self.mapWindow.pen = wx.Pen(colour=wx.RED, width=1,
@@ -152,7 +152,7 @@ class RLiSetupMapPanel(wx.Panel):
         self.mapWindow.mouseLeftUp.connect(self._radiusDrawn)
 
     def OnDigitizeRegion(self, event):
-        """!Start draw mode"""
+        """Start draw mode"""
         self.mapWindow.mouse['use'] = "None"
         self.mapWindow.mouse['box'] = "line"
         self.mapWindow.pen = wx.Pen(colour=wx.RED, width=1,
@@ -164,7 +164,7 @@ class RLiSetupMapPanel(wx.Panel):
         self._registeredGraphics.GetItem(0).SetCoords([])
 
     def OnDraw(self, event):
-        """!Start draw mode"""
+        """Start draw mode"""
         self.mapWindow.mouse['use'] = "None"
         self.mapWindow.mouse['box'] = "box"
         self.mapWindow.pen = wx.Pen(colour=wx.RED, width=2,
@@ -270,7 +270,7 @@ class RLiSetupMapPanel(wx.Panel):
         return marea
 
     def _onToolChanged(self):
-        """!Helper function to disconnect drawing"""
+        """Helper function to disconnect drawing"""
         try:
             self.mapWindow.mouseLeftUp.disconnect(self._rectangleDrawn)
             self.mapWindow.mouseLeftUp.disconnect(self._radiusDrawn)
@@ -281,7 +281,7 @@ class RLiSetupMapPanel(wx.Panel):
             pass
 
     def _radiusDrawn(self, x, y):
-        """!When drawing finished, get region values"""
+        """When drawing finished, get region values"""
         mouse = self.mapWindow.mouse
         item = self._registeredGraphics.GetItem(0)
         p1 = mouse['begin']
@@ -340,7 +340,7 @@ class RLiSetupMapPanel(wx.Panel):
         return marea
 
     def _rectangleDrawn(self):
-        """!When drawing finished, get region values"""
+        """When drawing finished, get region values"""
         mouse = self.mapWindow.mouse
         item = self._registeredGraphics.GetItem(0)
         p1 = self.mapWindow.Pixel2Cell(mouse['begin'])
@@ -375,7 +375,7 @@ class RLiSetupMapPanel(wx.Panel):
             dlg.Destroy()
 
         elif self.samplingtype != SamplingType.WHOLE:
-            """!When drawing finished, get region values"""
+            """When drawing finished, get region values"""
             self.sampleFrameChanged.emit(region=region)
 
 icons = {'draw': MetaIcon(img='edit',
@@ -393,10 +393,10 @@ icons = {'draw': MetaIcon(img='edit',
 
 
 class RLiSetupToolbar(BaseToolbar):
-    """!IClass toolbar
+    """IClass toolbar
     """
     def __init__(self, parent, toolSwitcher):
-        """!RLiSetup toolbar constructor
+        """RLiSetup toolbar constructor
         """
 
         BaseToolbar.__init__(self, parent, toolSwitcher,
@@ -426,7 +426,7 @@ class RLiSetupToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         if self.parent.samplingtype == SamplingType.REGIONS:
             drawTool = ('digitizeregion', icons['digitizeregion'],
                         self.parent.OnDigitizeRegion, wx.ITEM_CHECK)

@@ -1,4 +1,4 @@
-"""!
+"""
 @package iclass.frame
 
 @brief wxIClass frame with toolbar for digitizing training areas and
@@ -63,7 +63,7 @@ from iclass.plots       import PlotPanel
 from grass.pydispatch.signal import Signal
 
 class IClassMapFrame(DoubleMapFrame):
-    """! wxIClass main frame
+    """wxIClass main frame
     
     It has two map windows one for digitizing training areas and one for
     result preview.
@@ -75,11 +75,11 @@ class IClassMapFrame(DoubleMapFrame):
     def __init__(self, parent = None, giface = None, title = _("GRASS GIS Supervised Classification Tool"),
                  toolbars = ["iClassMisc", "iClassMap", "vdigit", "iClass"],
                  size = (875, 600), name = 'IClassWindow', **kwargs):
-        """!
-        @param parent (no parent is expected)
-        @param title window title
-        @param toolbars dictionary of active toolbars (defalult value represents all toolbars)
-        @param size default size
+        """
+        :param parent: (no parent is expected)
+        :param title: window title
+        :param toolbars: dictionary of active toolbars (defalult value represents all toolbars)
+        :param size: default size
         """
         DoubleMapFrame.__init__(self, parent = parent, title = title,
                                 name = name,
@@ -208,7 +208,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.Destroy()
         
     def __del__(self):
-        """! Frees C structs and removes vector map and all raster maps."""
+        """Frees C structs and removes vector map and all raster maps."""
         I_free_signatures(self.signatures)
         I_free_group_ref(self.refer)
         for st in self.cStatisticsDict.values():
@@ -219,21 +219,21 @@ class IClassMapFrame(DoubleMapFrame):
             self.RemoveTempRaster(self.stats_data.GetStatistics(i).rasterName)
             
     def OnHelp(self, event):
-        """!Show help page"""
+        """Show help page"""
         self._giface.Help(entry = 'wxGUI.iclass')
         
     def _getTempVectorName(self):
-        """!Return new name for temporary vector map (training areas)"""
+        """Return new name for temporary vector map (training areas)"""
         vectorPath = grass.tempfile(create = False)
         
         return 'trAreas' + os.path.basename(vectorPath).replace('.','')
 
     def SetGroup(self, group, subgroup):
-        """!Set group and subgroup manually"""
+        """Set group and subgroup manually"""
         self.g = {'group' : group, 'subgroup' : subgroup}
 
     def CreateTempVector(self):
-        """!Create temporary vector map for training areas"""
+        """Create temporary vector map for training areas"""
         vectorName = self._getTempVectorName()
         
         env = os.environ.copy()
@@ -251,7 +251,7 @@ class IClassMapFrame(DoubleMapFrame):
         return vectorName
     
     def RemoveTempVector(self):
-        """!Removes temporary vector map with training areas"""
+        """Removes temporary vector map with training areas"""
         ret = RunCommand(prog = 'g.remove',
                          parent = self,
                          vect = self.trainingAreaVector)
@@ -260,7 +260,7 @@ class IClassMapFrame(DoubleMapFrame):
         return True
         
     def RemoveTempRaster(self, raster):
-        """!Removes temporary raster maps"""
+        """Removes temporary raster maps"""
         self.GetFirstMap().Clean()
         self.GetSecondMap().Clean()
         ret = RunCommand(prog = 'g.remove',
@@ -271,7 +271,7 @@ class IClassMapFrame(DoubleMapFrame):
         return True
 
     def AddToolbar(self, name):
-        """!Add defined toolbar to the window
+        """Add defined toolbar to the window
         
         Currently known toolbars are:
          - 'iClassMap'          - basic map toolbar
@@ -335,7 +335,7 @@ class IClassMapFrame(DoubleMapFrame):
                               BestSize((self.toolbars[name].GetBestSize())))
                               
     def _addPanes(self):
-        """!Add mapwindows and toolbars to aui manager"""
+        """Add mapwindows and toolbars to aui manager"""
         if sys.platform == 'win32':
             self._addPaneMapWindow(name = 'training')
             self._addPaneToolbar(name = 'iClassTrainingMapManager')
@@ -382,12 +382,13 @@ class IClassMapFrame(DoubleMapFrame):
                           Center().Layer(0))
         
     def IsStandalone(self):
-        """!Check if Map display is standalone"""
+        """Check if Map display is standalone"""
         return True
 
     def OnUpdateActive(self, event):
-        """!
-        @todo move to DoubleMapFrame?
+        """
+        .. todo::
+            move to DoubleMapFrame?
         """
         if self.GetMapToolbar().GetActiveMap() == 0:
             self.MapWindow = self.firstMapWindow
@@ -402,8 +403,9 @@ class IClassMapFrame(DoubleMapFrame):
             self.MapWindow.SetFocus()
 
     def UpdateActive(self, win):
-        """!
-        @todo move to DoubleMapFrame?
+        """
+        .. todo::
+            move to DoubleMapFrame?
         """
         mapTb = self.GetMapToolbar()
         # optionally disable tool zoomback tool
@@ -422,22 +424,22 @@ class IClassMapFrame(DoubleMapFrame):
         self.GetMapToolbar().Enable('zoomBack', enable=(len(self.MapWindow.zoomhistory) > 1))
 
     def GetMapToolbar(self):
-        """!Returns toolbar with zooming tools"""
+        """Returns toolbar with zooming tools"""
         return self.toolbars['iClassMap']
 
     def GetClassColor(self, cat):
-        """!Get class color as string
+        """Get class color as string
 
-        @param cat class category
+        :param cat: class category
         
-        @return 'R:G:B'
+        :return: 'R:G:B'
         """
         if cat in self.stats_data.GetCategories():
             return self.stats_data.GetStatistics(cat).color
         return '0:0:0'
         
     def OnZoomMenu(self, event):
-        """!Popup Zoom menu """
+        """Popup Zoom menu """
         zoommenu = wx.Menu()
         # Add items to the menu
 
@@ -465,7 +467,7 @@ class IClassMapFrame(DoubleMapFrame):
         zoommenu.Destroy()
         
     def OnZoomToTraining(self, event):
-        """!Set preview display to match extents of training display """
+        """Set preview display to match extents of training display """
 
         if not self.MapWindow == self.GetSecondWindow():
             self.MapWindow = self.GetSecondWindow()
@@ -478,7 +480,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.Render(self.GetSecondWindow())
         
     def OnZoomToPreview(self, event):
-        """!Set preview display to match extents of training display """
+        """Set preview display to match extents of training display """
 
         if not self.MapWindow == self.GetFirstWindow():
             self.MapWindow = self.GetFirstWindow()
@@ -491,7 +493,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.Render(self.GetFirstWindow())
         
     def AddBands(self):
-        """!Add imagery group"""
+        """Add imagery group"""
         dlg = IClassGroupDialog(self, group=self.g['group'])
         
         while True:
@@ -511,7 +513,7 @@ class IClassMapFrame(DoubleMapFrame):
         dlg.Destroy()
 
     def OnImportAreas(self, event):
-        """!Import training areas"""
+        """Import training areas"""
         # check if we have any changes
         if self.GetAreasCount() or self.stats_data.GetCategories():
             qdlg = wx.MessageDialog(parent = self,
@@ -532,11 +534,11 @@ class IClassMapFrame(DoubleMapFrame):
         dlg.Destroy()
         
     def _checkImportedTopo(self, vector):
-        """!Check if imported vector map has areas
+        """Check if imported vector map has areas
         
-        @param vector vector map name
+        :param str vector: vector map name
         
-        @return warning message (empty if topology is ok)
+        :return: warning message (empty if topology is ok)
         """
         topo = grass.vector_info_topo(map = vector)
         
@@ -550,11 +552,11 @@ class IClassMapFrame(DoubleMapFrame):
         return warning
             
     def ImportAreas(self, vector):
-        """!Import training areas.
+        """Import training areas.
         
         If table connected, try load certain columns to class manager
         
-        @param vector vector map name
+        :param str vector: vector map name
         """
         warning = self._checkImportedTopo(vector)
         if warning:
@@ -611,7 +613,7 @@ class IClassMapFrame(DoubleMapFrame):
         return True
         
     def ImportClasses(self, vector):
-        """!If imported map has table, try to import certain columns to class manager"""
+        """If imported map has table, try to import certain columns to class manager"""
         # check connection
         dbInfo = VectorDBInfo(vector)
         connected = (len(dbInfo.layers.keys()) > 0)
@@ -674,7 +676,7 @@ class IClassMapFrame(DoubleMapFrame):
                 listCtrl.AddCategory(cat = int(record[0]), name = record[1], color = record[2])
             
     def OnExportAreas(self, event):
-        """!Export training areas"""
+        """Export training areas"""
         if self.GetAreasCount() == 0:
             GMessage(parent = self, message = _("No training areas to export."))
             return
@@ -693,10 +695,10 @@ class IClassMapFrame(DoubleMapFrame):
                               self.exportVector), parent = self)
                     
     def ExportAreas(self, vectorName, withTable):
-        """!Export training areas to new vector map (with attribute table).
+        """Export training areas to new vector map (with attribute table).
         
-        @param vectorName name of exported vector map
-        @param withTable true if attribute table is required
+        :param str vectorName: name of exported vector map
+        :param bool withTable: true if attribute table is required
         """
         wx.BeginBusyCursor()
         wx.Yield()
@@ -770,13 +772,13 @@ class IClassMapFrame(DoubleMapFrame):
         return True
     
     def _runDBUpdate(self, tmpFile, table, column, value, cat):
-        """!Helper function for UPDATE statement
+        """Helper function for UPDATE statement
         
-        @param tmpFile file where to write UPDATE statements
-        @param table table name
-        @param column name of updated column
-        @param value new value
-        @param cat which category to update
+        :param tmpFile: file where to write UPDATE statements
+        :param table: table name
+        :param column: name of updated column
+        :param value: new value
+        :param cat: which category to update
         """
         if type(value) == (types.IntType, types.FloatType):
             tmpFile.write("UPDATE %s SET %s = %d WHERE cat = %d\n" %
@@ -786,7 +788,7 @@ class IClassMapFrame(DoubleMapFrame):
                           (table, column, value, cat))
         
     def OnCategoryManager(self, event):
-        """!Show category management dialog"""
+        """Show category management dialog"""
         if self.dialogs['classManager'] is None:
             dlg = IClassCategoryManagerDialog(self)
             dlg.CenterOnParent()
@@ -797,7 +799,7 @@ class IClassMapFrame(DoubleMapFrame):
                 self.dialogs['classManager'].Show()
         
     def CategoryChanged(self, currentCat):
-        """!Updates everything which depends on current category.
+        """Updates everything which depends on current category.
         
         Updates number of stddev, histograms, layer in preview display. 
         """
@@ -817,20 +819,20 @@ class IClassMapFrame(DoubleMapFrame):
         self.categoryChanged.emit(cat = currentCat)
         
     def DeleteAreas(self, cats):
-        """!Removes all training areas of given categories
+        """Removes all training areas of given categories
         
-        @param cats list of categories to be deleted
+        :param cats: list of categories to be deleted
         """
         self.firstMapWindow.GetDigit().DeleteAreasByCat(cats)
         self.firstMapWindow.UpdateMap(render=False, renderVector=True)
         
     def HighlightCategory(self, cats):
-        """!Highlight araes given by category"""
+        """Highlight araes given by category"""
         self.firstMapWindow.GetDigit().GetDisplay().SetSelected(cats, layer = 1)
         self.firstMapWindow.UpdateMap(render=False, renderVector=True)
         
     def ZoomToAreasByCat(self, cat):
-        """!Zoom to areas given by category"""
+        """Zoom to areas given by category"""
         n, s, w, e = self.GetFirstWindow().GetDigit().GetDisplay().GetRegionSelected()
         self.GetFirstMap().GetRegion(n = n, s = s, w = w, e = e, update = True)
         self.GetFirstMap().AdjustRegion()
@@ -839,12 +841,12 @@ class IClassMapFrame(DoubleMapFrame):
         self.GetFirstWindow().UpdateMap(render = True, renderVector = True)
         
     def UpdateRasterName(self, newName, cat):
-        """!Update alias of raster map when category name is changed"""
+        """Update alias of raster map when category name is changed"""
         origName = self.stats_data.GetStatistics(cat).rasterName
         self.previewMapManager.SetAlias(origName, self._addSuffix(newName))
         
     def StddevChanged(self, cat, nstd):
-        """!Standard deviation multiplier changed, rerender map, histograms"""
+        """Standard deviation multiplier changed, rerender map, histograms"""
         stat = self.stats_data.GetStatistics(cat)
         stat.SetStatistics({"nstd" : nstd})
         
@@ -863,13 +865,13 @@ class IClassMapFrame(DoubleMapFrame):
         self.plotPanel.StddevChanged()
         
     def UpdateChangeState(self, changes):
-        """!Informs if any important changes happened
+        """Informs if any important changes happened
         since last analysis computation.
         """
         self.changes = changes
         
     def AddRasterMap(self, name, firstMap = True, secondMap = True):
-        """!Add raster map to Map"""
+        """Add raster map to Map"""
         cmdlist = ['d.rast', 'map=%s' % name]
         if firstMap:
             self.GetFirstMap().AddLayer(ltype='raster', command=cmdlist, active=True,
@@ -881,7 +883,7 @@ class IClassMapFrame(DoubleMapFrame):
             self.Render(self.GetSecondWindow())
            
     def AddTrainingAreaMap(self):
-        """!Add vector map with training areas to Map (training
+        """Add vector map with training areas to Map (training
         sub-display)"""
         vname = self.CreateTempVector()
         if vname:
@@ -900,14 +902,14 @@ class IClassMapFrame(DoubleMapFrame):
         self.Render(self.GetFirstWindow())
         
     def OnRunAnalysis(self, event):
-        """!Run analysis and update plots"""
+        """Run analysis and update plots"""
         if self.RunAnalysis():
             currentCat = self.GetCurrentCategoryIdx()
             self.plotPanel.UpdatePlots(group = self.g['group'], subgroup = self.g['subgroup'], 
                                        currentCat = currentCat, stats_data = self.stats_data)
         
     def RunAnalysis(self):
-        """!Run analysis
+        """Run analysis
         
         Calls C functions to compute all statistics and creates raster maps.
         Signatures are created but signature file is not.
@@ -977,7 +979,7 @@ class IClassMapFrame(DoubleMapFrame):
         return '_'.join((name, suffix))
 
     def OnSaveSigFile(self, event):
-        """!Asks for signature file name and saves it."""
+        """Asks for signature file name and saves it."""
         if not self.g['group']:
             GMessage(parent = self, message = _("No imagery group selected."))
             return
@@ -1018,7 +1020,7 @@ class IClassMapFrame(DoubleMapFrame):
         dlg.Destroy()
         
     def InitStatistics(self):
-        """!Initialize variables and c structures neccessary for
+        """Initialize variables and c structures neccessary for
         computing statistics.
         """
         self.g = {'group' : None, 'subgroup' : None}
@@ -1037,16 +1039,16 @@ class IClassMapFrame(DoubleMapFrame):
         I_init_group_ref(self.refer) # must be freed on exit
         
     def WriteSignatures(self, signatures, group, subgroup, filename):
-        """!Writes current signatures to signature file
+        """Writes current signatures to signature file
         
-        @param signatures signature (c structure)
-        @param group imagery group
-        @param filename signature file name
+        :param signatures: signature (c structure)
+        :param group: imagery group
+        :param filename: signature file name
         """
         I_iclass_write_signatures(signatures, group, subgroup, filename)
                                         
     def CheckInput(self, group, vector):
-        """!Check if input is valid"""
+        """Check if input is valid"""
         # check if group is ok
         #TODO check subgroup
         if not group:
@@ -1091,7 +1093,7 @@ class IClassMapFrame(DoubleMapFrame):
         return True
         
     def GetAreasCount(self):
-        """!Returns number of not dead areas"""
+        """Returns number of not dead areas"""
         count = 0
         numAreas = Vect_get_num_areas(self.poMapInfo)
         for i in range(numAreas):
@@ -1100,9 +1102,10 @@ class IClassMapFrame(DoubleMapFrame):
         return count
         
     def GetGroupLayers(self, group, subgroup=None):
-        """!Get layers in subgroup (expecting same name for group and subgroup)
+        """Get layers in subgroup (expecting same name for group and subgroup)
     
-        @todo consider moving this function to core module for convenient
+        .. todo::
+            consider moving this function to core module for convenient
         """
         kwargs = {}
         if subgroup:
@@ -1118,61 +1121,62 @@ class IClassMapFrame(DoubleMapFrame):
         return []
     
     def ConvertToNull(self, name):
-        """! Sets value which represents null values for given raster map.
+        """Sets value which represents null values for given raster map.
         
-        @param name raster map name
+        :param name: raster map name
         """
         RunCommand('r.null',
                    map = name,
                    setnull = 0)
                      
     def GetCurrentCategoryIdx(self):
-        """!Returns current category number"""
+        """Returns current category number"""
         return self.toolbars['iClass'].GetSelectedCategoryIdx()
         
     def OnZoomIn(self, event):
-        """!Enable zooming for plots"""
+        """Enable zooming for plots"""
         super(IClassMapFrame, self).OnZoomIn(event)
         self.plotPanel.EnableZoom(type = 1)
         
     def OnZoomOut(self, event):
-        """!Enable zooming for plots"""
+        """Enable zooming for plots"""
         super(IClassMapFrame, self).OnZoomOut(event)
         self.plotPanel.EnableZoom(type = -1)
         
     def OnPan(self, event):
-        """!Enable panning for plots"""
+        """Enable panning for plots"""
         super(IClassMapFrame, self).OnPan(event)
         self.plotPanel.EnablePan()
         
     def OnPointer(self, event):
-        """!Set pointer mode.
+        """Set pointer mode.
 
-        @todo: pointers need refactoring
+        .. todo::
+            pointers need refactoring
         """
         self.GetFirstWindow().SetModePointer()
         self.GetSecondWindow().SetModePointer()
 
     def GetMapManagers(self):
-      """!Get map managers of wxIClass 
+        """Get map managers of wxIClass
 
-      @return trainingMapManager, previewMapManager 
-      """
-      return self.trainingMapManager, self.previewMapManager
+        :return: trainingMapManager, previewMapManager 
+        """
+        return self.trainingMapManager, self.previewMapManager
 
 class MapManager:
-    """! Class for managing map renderer.
+    """Class for managing map renderer.
     
     It is connected with iClassMapManagerToolbar.
     """
     def __init__(self, frame, mapWindow, Map):
-        """!
+        """
         
         It is expected that \a mapWindow is conected with \a Map.
         
-        @param frame application main window
-        @param mapWindow map window instance
-        @param Map map renderer instance
+        :param frame: application main window
+        :param mapWindow: map window instance
+        :param map: map renderer instance
         """
         self.map = Map
         self.frame = frame
@@ -1186,10 +1190,10 @@ class MapManager:
         self.toolbar = toolbar
         
     def AddLayer(self, name, alias = None, resultsLayer = False):
-        """!Adds layer to Map and update toolbar 
+        """Adds layer to Map and update toolbar 
         
-        @param name layer (raster) name
-        @param resultsLayer True if layer is temp. raster showing the results of computation
+        :param str name: layer (raster) name
+        :param str resultsLayer: True if layer is temp. raster showing the results of computation
         """
         if (resultsLayer and
             name in [l.GetName() for l in self.map.GetListOfLayers(name = name)]):
@@ -1211,9 +1215,9 @@ class MapManager:
         self.toolbar.choice.SetSelection(0)
         
     def AddLayerRGB(self, cmd):
-        """!Adds RGB layer and update toolbar.
+        """Adds RGB layer and update toolbar.
 
-        @param cmd d.rgb command as a list
+        :param cmd: d.rgb command as a list
         """
         name = []
         for param in cmd:
@@ -1228,9 +1232,9 @@ class MapManager:
         self.toolbar.choice.SetSelection(0)
 
     def RemoveTemporaryLayer(self, name):
-        """!Removes temporary layer (if exists) from Map and and updates toolbar.
+        """Removes temporary layer (if exists) from Map and and updates toolbar.
         
-        @param name real name of layer
+        :param name: real name of layer
         """
         # check if layer is loaded
         layers = self.map.GetListOfLayers(ltype = 'raster')
@@ -1260,11 +1264,13 @@ class MapManager:
         self.frame.Render(self.mapWindow)
     
     def Render(self):
-        """@todo giface shoud be used instead of this method"""
+        """
+        .. todo::
+            giface shoud be used instead of this method"""
         self.frame.Render(self.mapWindow)
 
     def RemoveLayer(self, name, idx):
-        """!Removes layer from Map and update toolbar"""
+        """Removes layer from Map and update toolbar"""
         name = self.layerName[name]
         self.map.RemoveLayer(name = name)
         del self.layerName[name]
@@ -1275,7 +1281,7 @@ class MapManager:
         self.frame.Render(self.mapWindow)
             
     def SelectLayer(self, name):
-        """!Moves selected layer to top"""
+        """Moves selected layer to top"""
         layers = self.map.GetListOfLayers(ltype = 'rgb') + \
                  self.map.GetListOfLayers(ltype = 'raster')
         idx = None
@@ -1298,7 +1304,7 @@ class MapManager:
             self.frame.Render(self.mapWindow)
         
     def SetOpacity(self, name):
-        """!Sets opacity of layers."""
+        """Sets opacity of layers."""
         name = self.layerName[name]
         layers = self.map.GetListOfLayers(name = name)
         if not layers:
@@ -1320,7 +1326,7 @@ class MapManager:
         self.frame.Render(self.mapWindow)
                 
     def GetAlias(self, name):
-        """!Returns alias for layer"""
+        """Returns alias for layer"""
         name =  [k for k, v in self.layerName.iteritems() if v == name]
         if name:
             return name[0]

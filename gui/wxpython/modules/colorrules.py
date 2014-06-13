@@ -47,12 +47,12 @@ from gui_core.widgets import ColorTablesComboBox
 
 class RulesPanel:
     def __init__(self, parent, mapType, attributeType, properties, panelWidth = 180):
-        """!Create rules panel
+        """Create rules panel
         
-        @param mapType raster/vector
-        @param attributeType color/size for choosing widget type
-        @param properties properties of classes derived from ColorTable
-        @param panelWidth width of scroll panel"""
+        :param mapType: raster/vector
+        :param attributeType: color/size for choosing widget type
+        :param properties: properties of classes derived from ColorTable
+        :param panelWidth: width of scroll panel"""
         
         self.ruleslines = {}
         self.mapType = mapType
@@ -90,12 +90,12 @@ class RulesPanel:
         self.mainPanel.SetupScrolling()    
     
     def Clear(self):
-        """!Clear and widgets and delete information"""
+        """Clear and widgets and delete information"""
         self.ruleslines.clear()
         self.mainSizer.Clear(deleteWindows=True)
     
     def OnCheckAll(self, event):
-        """!(Un)check all rules"""
+        """(Un)check all rules"""
         check = event.GetInt()
         for child in self.mainPanel.GetChildren():
             if child.GetName() == 'enable':
@@ -104,17 +104,19 @@ class RulesPanel:
                 child.Enable(check)
                 
     def OnClearAll(self, event):
-        """!Delete all widgets in panel"""
+        """Delete all widgets in panel"""
         self.Clear()
         
     def OnAddRules(self, event):
-        """!Add rules button pressed"""
+        """Add rules button pressed"""
         nrules = self.numRules.GetValue()
         self.AddRules(nrules)
         
     def AddRules(self, nrules, start = False):
-        """!Add rules 
-        @param start set widgets (not append)"""
+        """Add rules
+         
+        :param start: set widgets (not append)
+        """
        
         snum = len(self.ruleslines.keys())
         if start:
@@ -168,7 +170,7 @@ class RulesPanel:
         self.mainPanel.SetupScrolling(scroll_x = False)
     
     def OnRuleEnable(self, event):
-        """!Rule enabled/disabled"""
+        """Rule enabled/disabled"""
         id = event.GetId()
         
         if event.IsChecked():
@@ -205,7 +207,7 @@ class RulesPanel:
             del self.ruleslines[id]
         
     def OnRuleColor(self, event):
-        """!Rule color changed"""
+        """Rule color changed"""
         num = event.GetId()
         
         rgba_color = event.GetValue()
@@ -217,14 +219,14 @@ class RulesPanel:
         self.ruleslines[num-2000]['color'] = rgb_string
      
     def OnRuleSize(self, event):
-        """!Rule size changed"""
+        """Rule size changed"""
         num = event.GetId()
         size = event.GetInt()
         
         self.ruleslines[num - 2000][self.attributeType] = size
         
     def OnRuleValue(self, event):
-        """!Rule value changed"""
+        """Rule value changed"""
         num = event.GetId()
         val = event.GetString().strip()
         
@@ -244,11 +246,11 @@ class RulesPanel:
             self.SetVectorRule(num, val)
 
     def SetRasterRule(self, num, val): 
-        """!Set raster rule"""       
+        """Set raster rule"""     
         self.ruleslines[num - 1000]['value'] = val
 
     def SetVectorRule(self, num, val):
-        """!Set vector rule"""
+        """Set vector rule"""
         vals = []
         vals.append(val)
         try:
@@ -258,7 +260,7 @@ class RulesPanel:
         self.ruleslines[num - 1000]['value'] = self.SQLConvert(vals)
             
     def Enable(self, enable = True):
-        """!Enable/Disable all widgets"""
+        """Enable/Disable all widgets"""
         for child in self.mainPanel.GetChildren():
             child.Enable(enable)
         sql = True
@@ -302,7 +304,7 @@ class RulesPanel:
         return True
                 
     def SQLConvert(self, vals):
-        """!Prepare value for SQL query"""
+        """Prepare value for SQL query"""
         if vals[0].isdigit():
             sqlrule = '%s=%s' % (self.properties['sourceColumn'], vals[0])
             if vals[1]:
@@ -316,11 +318,11 @@ class ColorTable(wx.Frame):
     def __init__(self, parent, title, layerTree = None, id = wx.ID_ANY,
                  style = wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
-        """!Dialog for interactively entering rules for map management
+        """Dialog for interactively entering rules for map management
         commands
 
-        @param raster True to raster otherwise vector
-        @param nviz True if ColorTable is called from nviz thematic mapping
+        :param raster: True to raster otherwise vector
+        :param nviz: True if ColorTable is called from nviz thematic mapping
         """
         self.parent = parent        # GMFrame ?
         self.layerTree = layerTree  # LayerTree or None
@@ -356,7 +358,7 @@ class ColorTable(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.OnPreview, self.btnPreview)
         
     def _initLayer(self):
-        """!Set initial layer when opening dialog"""
+        """Set initial layer when opening dialog"""
         # set map layer from layer tree, first selected,
         # if not the right type, than select another
         try:
@@ -375,7 +377,7 @@ class ColorTable(wx.Frame):
             self.inmap = name
     
     def _createMapSelection(self, parent):
-        """!Create map selection part of dialog"""
+        """Create map selection part of dialog"""
         # top controls
         if self.mapType == 'raster':
             maplabel = _('Select raster map:')
@@ -395,7 +397,7 @@ class ColorTable(wx.Frame):
         return inputSizer
     
     def _createFileSelection(self, parent):
-        """!Create file (open/save rules) selection part of dialog"""
+        """Create file (open/save rules) selection part of dialog"""
         inputBox = wx.StaticBox(parent, id = wx.ID_ANY,
                                 label = " %s " % _("Import or export color table:"))
         inputSizer = wx.StaticBoxSizer(inputBox, wx.HORIZONTAL)
@@ -448,7 +450,7 @@ class ColorTable(wx.Frame):
         return inputSizer   
          
     def _createPreview(self, parent):
-        """!Create preview"""
+        """Create preview"""
         # initialize preview display
         self.InitDisplay()
         self.preview = BufferedWindow(parent, id = wx.ID_ANY, size = (400, 300),
@@ -456,7 +458,7 @@ class ColorTable(wx.Frame):
         self.preview.EraseMap()
         
     def _createButtons(self, parent):
-        """!Create buttons for leaving dialog"""
+        """Create buttons for leaving dialog"""
         self.btnHelp    = wx.Button(parent, id = wx.ID_HELP)
         self.btnCancel  = wx.Button(parent, id = wx.ID_CANCEL)
         self.btnApply   = wx.Button(parent, id = wx.ID_APPLY) 
@@ -486,7 +488,7 @@ class ColorTable(wx.Frame):
         return btnSizer
     
     def _createBody(self, parent):
-        """!Create dialog body consisting of rules and preview"""
+        """Create dialog body consisting of rules and preview"""
         bodySizer =  wx.GridBagSizer(hgap = 5, vgap = 5)
         bodySizer.AddGrowableRow(1)
         bodySizer.AddGrowableCol(2)
@@ -536,21 +538,21 @@ class ColorTable(wx.Frame):
         return bodySizer    
         
     def InitDisplay(self):
-        """!Initialize preview display, set dimensions and region
+        """Initialize preview display, set dimensions and region
         """
         self.width = self.Map.width = 400
         self.height = self.Map.height = 300
         self.Map.geom = self.width, self.height
 
     def OnCloseWindow(self, event):
-        """!Window closed
+        """Window closed
         """
         self.OnCancel(event)
           
     def OnApply(self, event):
-        """!Apply selected color table
+        """Apply selected color table
         
-        @return True on success otherwise False
+        :return: True on success otherwise False
         """
         ret = self.CreateColorTable()
         if not ret:
@@ -565,18 +567,18 @@ class ColorTable(wx.Frame):
         return ret
 
     def OnOK(self, event):
-        """!Apply selected color table and close the dialog"""
+        """Apply selected color table and close the dialog"""
         if self.OnApply(event):
             self.OnCancel(event)
     
     def OnCancel(self, event):
-        """!Do not apply any changes, remove associated
+        """Do not apply any changes, remove associated
             rendered images and close the dialog"""
         self.Map.Clean()
         self.Destroy()
         
     def OnSetTable(self, event):
-        """!Load pre-defined color table"""
+        """Load pre-defined color table"""
         ct = self.FindWindowByName("colorTableChoice").GetValue()
         # save original color table
         ctOriginal = RunCommand('r.colors.out', read = True, map = self.inmap, rules = '-')
@@ -593,7 +595,7 @@ class ColorTable(wx.Frame):
         self.ReadColorTable(ctable = ctNew)
 
     def OnSaveRulesFile(self, event):
-        """!Save color table to file"""
+        """Save color table to file"""
         path = event.GetString()
         if not os.path.exists(path):
             return
@@ -613,7 +615,7 @@ class ColorTable(wx.Frame):
         fd.close()            
          
     def OnLoadRulesFile(self, event):
-        """!Load color table from file"""
+        """Load color table from file"""
         path = event.GetString()
         if not os.path.exists(path):
             return
@@ -625,9 +627,9 @@ class ColorTable(wx.Frame):
         fd.close()
         
     def ReadColorTable(self, ctable):
-        """!Read color table
+        """Read color table
         
-        @param table color table in format coming from r.colors.out"""
+        :param table: color table in format coming from r.colors.out"""
         
         rulesNumber = len(ctable.splitlines())
         self.rulesPanel.AddRules(rulesNumber)
@@ -666,13 +668,13 @@ class ColorTable(wx.Frame):
         self.OnPreview(tmp = True)  
          
     def OnLoadDefaultTable(self, event):
-        """!Load internal color table"""
+        """Load internal color table"""
         self.LoadTable()
         
     def LoadTable(self, mapType = 'raster'):
-        """!Load current color table (using `r(v).colors.out`)
+        """Load current color table (using `r(v).colors.out`)
         
-        @param mapType map type (raster or vector)"""
+        :param mapType: map type (raster or vector)"""
         self.rulesPanel.Clear()
         
         if mapType == 'raster':
@@ -700,10 +702,10 @@ class ColorTable(wx.Frame):
         self.ReadColorTable(ctable = ctable)     
     
     def CreateColorTable(self, tmp = False):
-        """!Creates color table
+        """Creates color table
 
-        @return True on success
-        @return False on failure
+        :return: True on success
+        :return: False on failure
         """
         rulestxt = ''
         
@@ -744,7 +746,7 @@ class ColorTable(wx.Frame):
         return True
     
     def DoPreview(self, ltype, cmdlist):
-        """!Update preview (based on computational region)"""
+        """Update preview (based on computational region)"""
         
         if not self.layer:
             self.layer = self.Map.AddLayer(ltype = ltype, name = 'preview', command = cmdlist,
@@ -758,18 +760,18 @@ class ColorTable(wx.Frame):
         self.preview.UpdatePreview()
         
     def RunHelp(self, cmd):
-        """!Show GRASS manual page"""
+        """Show GRASS manual page"""
         RunCommand('g.manual',
                    quiet = True,
                    parent = self,
                    entry = cmd)
 
     def SetMap(self, name):
-        """!Set map name and update dialog"""
+        """Set map name and update dialog"""
         self.selectionInput.SetValue(name)
         
     def _IsNumber(self, s):
-        """!Check if 's' is a number"""
+        """Check if 's' is a number"""
         try:
             float(s)
             return True
@@ -778,7 +780,7 @@ class ColorTable(wx.Frame):
         
 class RasterColorTable(ColorTable):
     def __init__(self, parent, **kwargs):
-        """!Dialog for interactively entering color rules for raster maps"""
+        """Dialog for interactively entering color rules for raster maps"""
 
         self.mapType = 'raster'
         self.attributeType = 'color' 
@@ -800,7 +802,7 @@ class RasterColorTable(ColorTable):
         self.SetMinSize((650, 700))
                 
     def _doLayout(self):
-        """!Do main layout"""
+        """Do main layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         #
         # map selection
@@ -837,7 +839,7 @@ class RasterColorTable(ColorTable):
         self.Layout()
     
     def OnSelectionInput(self, event):
-        """!Raster map selected"""
+        """Raster map selected"""
         if event:
             self.inmap = event.GetString()
         
@@ -885,7 +887,7 @@ class RasterColorTable(ColorTable):
             btn.Enable()
         
     def OnPreview(self, tmp = True):
-        """!Update preview (based on computational region)"""
+        """Update preview (based on computational region)"""
         if not self.inmap:
             self.preview.EraseMap()
             return
@@ -926,13 +928,13 @@ class RasterColorTable(ColorTable):
                            map = self.inmap)
         
     def OnHelp(self, event):
-        """!Show GRASS manual page"""
+        """Show GRASS manual page"""
         cmd = 'r.colors'
         ColorTable.RunHelp(self, cmd = cmd)
                      
 class VectorColorTable(ColorTable):
     def __init__(self, parent, attributeType, **kwargs):
-        """!Dialog for interactively entering color rules for vector maps"""
+        """Dialog for interactively entering color rules for vector maps"""
         # dialog attributes
         self.mapType = 'vector'
         self.attributeType = attributeType # color, size, width
@@ -986,7 +988,7 @@ class VectorColorTable(ColorTable):
         self.Show()
     
     def _createVectorAttrb(self, parent):
-        """!Create part of dialog with layer/column selection"""
+        """Create part of dialog with layer/column selection"""
         inputBox = wx.StaticBox(parent = parent, id = wx.ID_ANY,
                                 label = " %s " % _("Select vector columns"))
         cb_vl_label = wx.StaticText(parent, id = wx.ID_ANY,
@@ -1058,7 +1060,7 @@ class VectorColorTable(ColorTable):
         return inputSizer 
        
     def _doLayout(self):
-        """!Do main layout"""
+        """Do main layout"""
         scrollPanel = scrolled.ScrolledPanel(parent = self.panel, id = wx.ID_ANY,
                                              style = wx.TAB_TRAVERSAL)
         scrollPanel.SetupScrolling()
@@ -1125,7 +1127,7 @@ class VectorColorTable(ColorTable):
             self.cp.SetLabel(_("Import or export color table"))
         
     def CheckMapset(self):
-        """!Check if current vector is in current mapset"""
+        """Check if current vector is in current mapset"""
         if grass.find_file(name = self.inmap,
                            element = 'vector')['mapset'] == grass.gisenv()['MAPSET']:
             return True
@@ -1147,7 +1149,7 @@ class VectorColorTable(ColorTable):
             dlg.Destroy()
   
     def OnCheckColumn(self, event):
-        """!Use color column instead of color table"""
+        """Use color column instead of color table"""
         if self.useColumn.GetValue():
             self.properties['loadColumn'] = self.fromColumn.GetValue()
             self.properties['storeColumn'] = self.toColumn.GetValue()
@@ -1168,12 +1170,12 @@ class VectorColorTable(ColorTable):
             self.LoadTable()
             
     def EnableVectorAttributes(self, enable):
-        """!Enable/disable part of dialog connected with db"""
+        """Enable/disable part of dialog connected with db"""
         for child in self.colorColumnSizer.GetChildren():
             child.GetWindow().Enable(enable)
     
     def DisableClearAll(self):
-        """!Enable, disable the whole dialog"""
+        """Enable, disable the whole dialog"""
         self.rulesPanel.Clear()
         self.EnableVectorAttributes(False)
         self.btnPreview.Enable(False)
@@ -1182,7 +1184,7 @@ class VectorColorTable(ColorTable):
         self.preview.EraseMap()
         
     def OnSelectionInput(self, event):
-        """!Vector map selected"""
+        """Vector map selected"""
         if event:
             if self.inmap:
                 # switch to another map -> delete temporary column
@@ -1200,7 +1202,7 @@ class VectorColorTable(ColorTable):
         self.UpdateDialog()
        
     def UpdateDialog(self):
-        """!Update dialog after map selection"""  
+        """Update dialog after map selection"""
         
         if not self.inmap:
             self.DisableClearAll()
@@ -1262,10 +1264,10 @@ class VectorColorTable(ColorTable):
         self.btnApply.Enable(enable)   
     
     def AddTemporaryColumn(self, type):
-        """!Add temporary column to not overwrite the original values,
+        """Add temporary column to not overwrite the original values,
         need to be deleted when closing dialog and unloading map
         
-        @param type type of column (e.g. vachar(11))"""
+        :param type: type of column (e.g. vachar(11))"""
         if not self.CheckMapset():
             return
         # because more than one dialog with the same map can be opened we must test column name and
@@ -1287,7 +1289,7 @@ class VectorColorTable(ColorTable):
                          column = '%s %s' % (self.properties['tmpColumn'], type))
         
     def DeleteTemporaryColumn(self):
-        """!Delete temporary column"""
+        """Delete temporary column"""
         if not self.CheckMapset():
             return
         
@@ -1343,7 +1345,7 @@ class VectorColorTable(ColorTable):
         self.LoadTable()
     
     def OnAddColumn(self, event):
-        """!Add GRASS(RGB,SIZE,WIDTH) column if it doesn't exist"""
+        """Add GRASS(RGB,SIZE,WIDTH) column if it doesn't exist"""
         if self.columnsProp[self.attributeType]['name'] not in self.fromColumn.GetColumns():
             if self.version7:
                 modul = 'v.db.addcolumn'
@@ -1366,7 +1368,7 @@ class VectorColorTable(ColorTable):
                          self.columnsProp[self.attributeType]['name'])
                         
     def CreateAttrTable(self, dcmd, layer, params, propwin):
-        """!Create attribute table"""
+        """Create attribute table"""
         if dcmd:
             cmd = utils.CmdToTuple(dcmd)
             ret = RunCommand(cmd[0], **cmd[1])
@@ -1380,14 +1382,14 @@ class VectorColorTable(ColorTable):
         return False    
     
     def LoadTable(self):
-        """!Load table"""
+        """Load table"""
         if self.colorTable:
             ColorTable.LoadTable(self, mapType = 'vector')
         else:
             self.LoadRulesFromColumn()
             
     def LoadRulesFromColumn(self):
-        """!Load current column (GRASSRGB, size column)"""
+        """Load current column (GRASSRGB, size column)"""
         
         self.rulesPanel.Clear()
         if not self.properties['sourceColumn']:
@@ -1484,7 +1486,7 @@ class VectorColorTable(ColorTable):
         busy.Destroy()
         
     def SetRangeLabel(self):
-        """!Set labels with info about attribute column range"""
+        """Set labels with info about attribute column range"""
         
         if self.properties['sourceColumn']:
             ctype = self.dbInfo.GetTableDesc(self.properties['table'])[self.properties['sourceColumn']]['ctype']
@@ -1511,24 +1513,24 @@ class VectorColorTable(ColorTable):
                 self.cr_label.SetLabel(_("Enter vector attribute values:"))
                 
     def OnFromColSelection(self, event):
-        """!Selection in combobox (for loading values) changed"""
+        """Selection in combobox (for loading values) changed"""
         self.properties['loadColumn'] = event.GetString()
         
         self.LoadTable()
     
     def OnToColSelection(self, event):
-        """!Selection in combobox (for storing values) changed"""
+        """Selection in combobox (for storing values) changed"""
         self.properties['storeColumn'] = event.GetString()
     
     def OnPreview(self, event = None, tmp = True):
-        """!Update preview (based on computational region)"""
+        """Update preview (based on computational region)"""
         if self.colorTable:
             self.OnTablePreview(tmp)
         else:
             self.OnColumnPreview() 
                                  
     def OnTablePreview(self, tmp):
-        """!Update preview (based on computational region)"""
+        """Update preview (based on computational region)"""
         if not self.inmap:
             self.preview.EraseMap()
             return
@@ -1569,7 +1571,7 @@ class VectorColorTable(ColorTable):
                            flags = 'r',
                            map = self.inmap)
     def OnColumnPreview(self):
-        """!Update preview (based on computational region)"""
+        """Update preview (based on computational region)"""
         if not self.inmap or not self.properties['tmpColumn']:
             self.preview.EraseMap()
             return
@@ -1590,12 +1592,12 @@ class VectorColorTable(ColorTable):
         ColorTable.DoPreview(self, ltype, cmdlist)
         
     def OnHelp(self, event):
-        """!Show GRASS manual page"""
+        """Show GRASS manual page"""
         cmd = 'v.colors'
         ColorTable.RunHelp(self, cmd = cmd)
         
     def UseAttrColumn(self, useAttrColumn):
-        """!Find layers and apply the changes in d.vect command"""
+        """Find layers and apply the changes in d.vect command"""
         layers = self.layerTree.FindItemByData(key = 'name', value = self.inmap)
         if not layers:
             return
@@ -1616,7 +1618,7 @@ class VectorColorTable(ColorTable):
             self.layerTree.SetLayerInfo(layer, key = 'cmd', value = cmdlist)
         
     def CreateColorTable(self, tmp = False):
-        """!Create color rules (color table or color column)"""
+        """Create color rules (color table or color column)"""
         if self.colorTable:
             ret = ColorTable.CreateColorTable(self)
         else:
@@ -1628,10 +1630,10 @@ class VectorColorTable(ColorTable):
         return ret
         
     def UpdateColorColumn(self, tmp):
-        """!Creates color table
+        """Creates color table
 
-        @return True on success
-        @return False on failure
+        :return: True on success
+        :return: False on failure
         """
         rulestxt = ''
         
@@ -1667,15 +1669,15 @@ class VectorColorTable(ColorTable):
         return True
     
     def OnCancel(self, event):
-        """!Do not apply any changes and close the dialog"""
+        """Do not apply any changes and close the dialog"""
         self.DeleteTemporaryColumn()
         self.Map.Clean()
         self.Destroy()
 
     def OnApply(self, event):
-        """!Apply selected color table
+        """Apply selected color table
         
-        @return True on success otherwise False
+        :return: True on success otherwise False
         """
         if self.colorTable:
             self.UseAttrColumn(False)
@@ -1691,23 +1693,23 @@ class VectorColorTable(ColorTable):
         
 class ThematicVectorTable(VectorColorTable):
     def __init__(self, parent, vectorType, **kwargs):
-        """!Dialog for interactively entering color/size rules
-            for vector maps for thematic mapping in nviz"""
+        """Dialog for interactively entering color/size rules
+        for vector maps for thematic mapping in nviz"""
         self.vectorType = vectorType
         VectorColorTable.__init__(self, parent = parent, **kwargs)
               
         self.SetTitle(_("Thematic mapping for vector map in 3D view"))       
                     
     def _initLayer(self):
-        """!Set initial layer when opening dialog"""
+        """Set initial layer when opening dialog"""
         self.inmap = self.parent.GetLayerData(nvizType = 'vector', nameOnly = True)
         self.selectionInput.SetValue(self.inmap)
         self.selectionInput.Disable()
         
     def OnApply(self, event):
-        """!Apply selected color table
+        """Apply selected color table
 
-        @return True on success otherwise False
+        :return: True on success otherwise False
         """
         ret = self.CreateColorTable()
         if not ret:
@@ -1745,7 +1747,7 @@ class ThematicVectorTable(VectorColorTable):
         return ret
            
 class BufferedWindow(wx.Window):
-    """!A Buffered window class"""
+    """A Buffered window class"""
     def __init__(self, parent, id,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE,
                  Map = None, **kwargs):
@@ -1784,7 +1786,7 @@ class BufferedWindow(wx.Window):
         self.Map.SetRegion()
 
     def Draw(self, pdc, img = None, pdctype = 'image'):
-        """!Draws preview or clears window"""
+        """Draws preview or clears window"""
         pdc.BeginDrawing()
 
         Debug.msg (3, "BufferedWindow.Draw(): pdctype=%s" % (pdctype))
@@ -1808,7 +1810,7 @@ class BufferedWindow(wx.Window):
         self.Refresh()
 
     def OnPaint(self, event):
-        """!Draw pseudo DC to buffer"""
+        """Draw pseudo DC to buffer"""
         self._Buffer = wx.EmptyBitmap(self.Map.width, self.Map.height)
         dc = wx.BufferedPaintDC(self, self._Buffer)
         
@@ -1830,7 +1832,7 @@ class BufferedWindow(wx.Window):
         self.pdc.DrawToDCClipped(dc, r)
         
     def OnSize(self, event):
-        """!Init image size to match window size"""
+        """Init image size to match window size"""
         # set size of the input image
         self.Map.width, self.Map.height = self.GetClientSize()
 
@@ -1852,7 +1854,7 @@ class BufferedWindow(wx.Window):
         self.resize = True
 
     def OnIdle(self, event):
-        """!Only re-render a preview image from GRASS during
+        """Only re-render a preview image from GRASS during
         idle time instead of multiple times during resizing.
         """
         if self.resize:
@@ -1861,7 +1863,7 @@ class BufferedWindow(wx.Window):
         event.Skip()
 
     def GetImage(self):
-        """!Converts files to wx.Image"""
+        """Converts files to wx.Image"""
         if self.Map.mapfile and os.path.isfile(self.Map.mapfile) and \
                 os.path.getsize(self.Map.mapfile):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
@@ -1871,7 +1873,7 @@ class BufferedWindow(wx.Window):
         return img
     
     def UpdatePreview(self, img = None):
-        """!Update canvas if window changes geometry"""
+        """Update canvas if window changes geometry"""
         Debug.msg (2, "BufferedWindow.UpdatePreview(%s): render=%s" % (img, self.render))
         oldfont = ""
         oldencoding = ""
@@ -1899,6 +1901,6 @@ class BufferedWindow(wx.Window):
         self.resize = False
         
     def EraseMap(self):
-        """!Erase preview"""
+        """Erase preview"""
         self.Draw(self.pdc, pdctype = 'clear')
     

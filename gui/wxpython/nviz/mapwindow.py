@@ -1,4 +1,4 @@
-"""!
+"""
 @package nviz.mapwindow
 
 @brief wxGUI 3D view mode (map canvas)
@@ -67,11 +67,11 @@ class NvizThread(Thread):
         self._display = wxnviz.Nviz(self.log, self.progressbar)
         
     def GetDisplay(self):
-        """!Get display instance"""
+        """Get display instance"""
         return self._display
 
 class GLWindow(MapWindowBase, glcanvas.GLCanvas):
-    """!OpenGL canvas for Map Display Window"""
+    """OpenGL canvas for Map Display Window"""
     def __init__(self, parent, giface, frame, Map, tree, lmgr, id=wx.ID_ANY):
         """All parameters except for id are mandatory. The todo is to remove
         them completely."""
@@ -228,7 +228,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             GMessage(message)
 
     def InitFly(self):
-        """!Initialize fly through dictionary"""
+        """Initialize fly through dictionary"""
         fly = {'interval' : 10,             # interval for timerFly
                'value': [0, 0, 0],          # calculated values for navigation
                'mode' : 0,                  # fly through mode (0, 1)
@@ -246,7 +246,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return fly
         
     def OnTimerFly(self, event):
-        """!Fly event was emitted, move the scene"""
+        """Fly event was emitted, move the scene"""
         if self.mouse['use'] != 'fly':
             return
         
@@ -263,11 +263,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.Refresh(False)
         
     def ComputeMxMy(self, x, y):
-        """!Compute values for flythrough navigation 
+        """Compute values for flythrough navigation 
         (ComputeFlyValues should follow). 
         
         Based on visualization/nviz/src/togl_flythrough.c.
-        @param x,y screen coordinates
+        :param x,y: screen coordinates
         """
         sx, sy = self.GetClientSizeTuple()
         dx = dy = 0.01
@@ -298,9 +298,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return mx, my
         
     def ComputeFlyValues(self, mx, my):
-        """!Compute parameters for fly-through navigation
+        """Compute parameters for fly-through navigation
         
-        @param mx,my results from ComputeMxMy method
+        :param mx,my: results from ComputeMxMy method
         """
         self.fly['value'] = [0, 0, 0]
         
@@ -313,20 +313,20 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.fly['value'][2] = - my * 100.0 * self.fly['interval'] /1000.
     
     def ChangeFlySpeed(self, increase):
-        """!Increase/decrease flight spped"""
+        """Increase/decrease flight spped"""
         if increase:
             self.fly['flySpeed'] += self.fly['flySpeedStep']
         else:
             self.fly['flySpeed'] -= self.fly['flySpeedStep']
         
     def __del__(self):
-        """!Stop timers if running, unload data"""
+        """Stop timers if running, unload data"""
         self.StopTimer(self.timerAnim)
         self.StopTimer(self.timerFly)
         self.UnloadDataLayers(force = True)
     
     def StopTimer(self, timer):
-        """!Stop timer if running"""
+        """Stop timer if running"""
         if timer.IsRunning():
             timer.Stop()
             
@@ -335,18 +335,18 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.Bind(wx.EVT_MOTION,           self.OnMotion)
         
     def InitCPlanes(self):
-        """!Initialize cutting planes list"""
+        """Initialize cutting planes list"""
         for i in range(self._display.GetCPlanesCount()):
             cplane = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'cplane'))
             cplane['on'] = False
             self.cplanes.append(cplane)
         
     def SetToolWin(self, toolWin):
-        """!Sets reference to nviz toolwindow in layer manager"""
+        """Sets reference to nviz toolwindow in layer manager"""
         self.toolWin = toolWin
         
     def GetToolWin(self):
-        """!Returns reference to nviz toolwindow in layer manager"""
+        """Returns reference to nviz toolwindow in layer manager"""
         return self.toolWin
             
     def OnClose(self, event):
@@ -436,13 +436,13 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.UpdateMap()
         
     def DrawImages(self):
-        """!Draw overlay image"""
+        """Draw overlay image"""
         for texture in self.imagelist:
             if texture.IsActive():
                 texture.Draw()
             
     def GetLegendRect(self):
-        """!Estimates legend size for dragging"""
+        """Estimates legend size for dragging"""
         size = None
         if 0 in self.overlays:
             for param in self.overlays[0].cmd[1:]:
@@ -463,7 +463,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return wx.Rect()        
         
     def DrawTextImage(self, textDict, relCoords):
-        """!Draw overlay text"""
+        """Draw overlay text"""
         bmp = wx.EmptyBitmap(textDict['bbox'][2], textDict['bbox'][3])
         memDC = wx.MemoryDC()
         memDC.SelectObject(bmp)
@@ -490,7 +490,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return filename
         
     def UpdateOverlays(self):
-        """!Converts rendered overlay files and text labels to wx.Image
+        """Converts rendered overlay files and text labels to wx.Image
             and then to textures so that they can be rendered by OpenGL.
             Updates self.imagelist"""
         self.Map.ChangeMapSize(self.GetClientSize())
@@ -537,7 +537,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.Refresh()
             
     def CreateTexture(self, overlay = None, textId = None):
-        """!Create texture from overlay image or from textdict"""
+        """Create texture from overlay image or from textdict"""
         if overlay: # legend  
             texture = wxnviz.ImageTexture(filepath = overlay.mapfile, overlayId = overlay.id,
                                           coords = list(self.overlays[overlay.id].coords),
@@ -578,7 +578,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
          return self.animation
          
     def OnKeyDown(self, event):
-        """!Key was pressed.
+        """Key was pressed.
         
         Used for fly-through mode.
         """
@@ -625,7 +625,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         event.Skip()
         
     def ProcessFlyByArrows(self, keyCode):
-        """!Process arrow key during fly-through"""
+        """Process arrow key during fly-through"""
         step = self.fly['arrowStep']
         if keyCode == wx.WXK_UP:
             self.fly['pos']['y'] -= step
@@ -637,7 +637,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.fly['pos']['x'] += step
             
     def OnKeyUp(self, event):
-        """!Key was released.
+        """Key was released.
         
         Used for fly-through mode.
         """
@@ -654,7 +654,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         event.Skip()
         
     def OnMouseAction(self, event):
-        """!Handle mouse events"""
+        """Handle mouse events"""
         # zoom with mouse wheel
         if event.GetWheelRotation() != 0:
             self.OnMouseWheel(event)
@@ -686,7 +686,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         event.Skip()
 
     def OnMouseWheel(self, event):
-        """!Change perspective"""
+        """Change perspective"""
         if UserSettings.Get(group = 'display',
                             key = 'mouseWheelZoom',
                             subkey = 'selection') == 2:
@@ -711,7 +711,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         ### self.parent.StatusbarUpdate()
             
     def OnLeftDown(self, event):
-        """!On left mouse down"""
+        """On left mouse down"""
         self.mouse['begin'] = event.GetPositionTuple()
         self.mouse['tmp'] = event.GetPositionTuple()
         if self.mouse['use'] == "lookHere":
@@ -771,12 +771,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         event.Skip()
             
     def Pixel2Cell(self, xyCoords):
-        """!Convert image coordinates to real word coordinates
+        """Convert image coordinates to real word coordinates
 
-        @param x, y image coordinates
+        :param xyCoords: image coordinates
         
-        @return easting, northing
-        @return None on error
+        :return: easting, northing
+        :return: None on error
         """
         size = self.GetClientSize()
         # UL -> LL
@@ -789,7 +789,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return (x, y)
     
     def DoZoom(self, zoomtype, pos):
-        """!Change perspective and focus"""
+        """Change perspective and focus"""
         
         prev_value = self.view['persp']['value']
         if zoomtype > 0:
@@ -885,14 +885,14 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         event.Skip()
             
     def OnDClick(self, event):
-        """!On mouse double click"""
+        """On mouse double click"""
         if self.mouse['use'] != 'pointer': return
         pos = event.GetPositionTuple()
         self.dragid = self.FindObjects(pos[0], pos[1], self.hitradius)
         self.overlayActivated.emit(overlayId=self.dragid)
     
     def FocusPanning(self, event):
-        """!Simulation of panning using focus"""
+        """Simulation of panning using focus"""
         size = self.GetClientSizeTuple()
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
                       self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1])
@@ -914,7 +914,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.Refresh(False)
             
     def HorizontalPanning(self, event):
-        """!Move all layers in horizontal (x, y) direction.
+        """Move all layers in horizontal (x, y) direction.
         Currently not used.
         """
         size = self.GetClientSizeTuple()
@@ -960,7 +960,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.Refresh(False)
             
     def DragItem(self, id, coords):
-        """!Drag an overlay decoration item
+        """Drag an overlay decoration item
         """
         if id is None:
             return
@@ -979,7 +979,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.mouse['tmp'] = coords
         
     def ZoomBack(self):
-        """!Set previous view in history list
+        """Set previous view in history list
         """
         view = {}
         if len(self.viewhistory) > 1:
@@ -997,12 +997,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.Refresh(False)
 
     def ViewHistory(self, view, iview):
-        """!Manages a list of last 10 views
+        """Manages a list of last 10 views
         
-        @param view view dictionary
-        @param iview view dictionary (internal)
+        :param view: view dictionary
+        :param iview: view dictionary (internal)
         
-        @return removed history item if exists (or None)
+        :return: removed history item if exists (or None)
         """
         removed = None
         hview = copy.deepcopy(view)
@@ -1030,11 +1030,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return removed     
     
     def ResetViewHistory(self):
-        """!Reset view history"""
+        """Reset view history"""
         self.viewhistory = list()
     
     def GoTo(self, e, n):
-        """!Focus on given point"""
+        """Focus on given point"""
         w = self.Map.region['w']
         s = self.Map.region['s']
         e -= w
@@ -1049,7 +1049,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.Refresh(False)
         
     def QuerySurface(self, x, y):
-        """!Query surface on given position"""
+        """Query surface on given position"""
         size = self.GetClientSizeTuple()
         result = self._display.QueryMap(x, size[1] - y)
         if result:
@@ -1091,16 +1091,16 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.log.WriteCmdLog('-' * 80)
     
     def PostViewEvent(self, zExag = False):
-        """!Change view settings"""
+        """Change view settings"""
         event = wxUpdateView(zExag = zExag)
         wx.PostEvent(self, event)
         
     def OnQueryVector(self, event):
-        """!Query vector on given position"""
+        """Query vector on given position"""
         self.parent.QueryVector(*event.GetPosition())
 
     def ChangeInnerView(self):
-        """!Get current viewdir and viewpoint and set view"""
+        """Get current viewdir and viewpoint and set view"""
         view = self.view
         iview = self.iview
         (view['position']['x'], view['position']['y'],
@@ -1111,7 +1111,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         iview['dir']['use'] = True
         
     def OnUpdateView(self, event):
-        """!Change view settings"""
+        """Change view settings"""
         if event:
                 self.UpdateView(zexag = event.zExag)
                 
@@ -1121,7 +1121,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             
             
     def UpdateView(self, zexag = False):
-        """!Change view settings"""
+        """Change view settings"""
         view = self.view
         iview = self.iview
         if zexag and 'value' in view['z-exag']:
@@ -1146,7 +1146,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self._display.ResetRotation()
         
     def UpdateLight(self, event):
-        """!Change light settings"""
+        """Change light settings"""
         data = self.light
         self._display.SetLight(x = data['position']['x'], y = data['position']['y'],
                                z = data['position']['z'] / 100., color = data['color'],
@@ -1157,10 +1157,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.Refresh(False)
         
     def UpdateMap(self, render = True):
-        """!Updates the canvas anytime there is a change to the
+        """Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
         
-        @param render re-render map composition
+        :param render: re-render map composition
+        :type render: bool
         """
         start = time.clock()
         
@@ -1216,13 +1217,13 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                       (self.render['quick'], (stop-start)))
         
     def EraseMap(self):
-        """!Erase the canvas
+        """Erase the canvas
         """
         self._display.EraseMap()
         self.SwapBuffers()
     
     def _getDecorationSize(self):
-        """!Get initial size of north arrow/scalebar"""
+        """Get initial size of north arrow/scalebar"""
         size = self._display.GetLongDim() / 8.
         coef = 0.01
         if size < 1:
@@ -1249,7 +1250,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.lmgr.nviz.SetPage('decoration')
 
     def SetDrawScalebar(self, pos):
-        """!Add scale bar, sets properties and draw"""
+        """Add scale bar, sets properties and draw"""
         if len(self.decoration['scalebar']) == 0:
             self.decoration['scalebar'].append(
                     self.nvizDefault.SetDecorDefaultProp(type = 'scalebar')['scalebar'])
@@ -1270,9 +1271,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.lmgr.nviz.SetPage('decoration')
         
     def IsLoaded(self, item):
-        """!Check if layer (item) is already loaded
+        """Check if layer (item) is already loaded
         
-        @param item layer item
+        :param item: layer item
         """
         layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         data = self.tree.GetLayerInfo(item, key = 'nviz')
@@ -1291,7 +1292,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return 1
 
     def _GetDataLayers(self, item, litems):
-        """!Return get list of enabled map layers"""
+        """Return get list of enabled map layers"""
         # load raster & vector maps
         while item and item.IsOk():
             type = self.tree.GetLayerInfo(item, key = 'type')
@@ -1310,9 +1311,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             item = self.tree.GetNextSibling(item)
         
     def LoadDataLayers(self):
-        """!Load raster/vector from current layer tree
+        """Load raster/vector from current layer tree
         
-        @todo volumes
+        .. todo::
+            volumes
         """
         if not self.tree:
             return
@@ -1357,9 +1359,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Debug.msg(1, "GLWindow.LoadDataLayers(): time = %f" % (stop-start))
                 
     def UnloadDataLayers(self, force = False):
-        """!Unload any layers that have been deleted from layer tree
+        """Unload any layers that have been deleted from layer tree
 
-        @param force True to unload all data layers
+        :param bool force: True to unload all data layers
         """
         if not self.tree:
             return
@@ -1406,7 +1408,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Debug.msg(1, "GLWindow.UnloadDataLayers(): time = %f" % (stop-start))        
         
     def SetVectorSurface(self, data):
-        """!Set reference surfaces of vector"""
+        """Set reference surfaces of vector"""
         data['mode']['surface'] = {}
         data['mode']['surface']['value'] = list()
         data['mode']['surface']['show'] = list()
@@ -1415,10 +1417,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             data['mode']['surface']['show'].append(True)
         
     def SetVectorFromCmd(self, item, data):
-        """!Set 3D view properties from cmd (d.vect)
+        """Set 3D view properties from cmd (d.vect)
 
-        @param item Layer Tree item
-        @param nviz data
+        :param item: Layer Tree item
+        :param nviz: data
         """
         cmd = self.tree.GetLayerInfo(item, key = 'cmd')
         if cmd[0] != 'd.vect':
@@ -1435,14 +1437,14 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 data['points']['color']['value'] = value
 
     def SetMapObjProperties(self, item, id, nvizType):
-        """!Set map object properties
+        """Set map object properties
         
         Properties must be afterwards updated by
         UpdateMapObjProperties().
         
-        @param item layer item
-        @param id nviz layer id (or -1)
-        @param nvizType nviz data type (surface, points, vector)
+        :param item: layer item
+        :param id: nviz layer id (or -1)
+        :param nvizType: nviz data type (surface, points, vector)
         """
         if nvizType != 'constant':
             mapType = self.tree.GetLayerInfo(item, key = 'maplayer').type
@@ -1518,23 +1520,23 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return data
 
     def LoadRaster(self, item):
-        """!Load 2d raster map and set surface attributes
+        """Load 2d raster map and set surface attributes
         
-        @param layer item
+        :param layer: item
         """
         return self._loadRaster(item)
     
     def LoadRaster3d(self, item):
-        """!Load 3d raster map and set surface attributes
+        """Load 3d raster map and set surface attributes
         
-        @param layer item
+        :param layer: item
         """
         return self._loadRaster(item)
         
     def _loadRaster(self, item):
-        """!Load 2d/3d raster map and set its attributes
+        """Load 2d/3d raster map and set its attributes
         
-        @param layer item
+        :param layer: item
         """
         layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         
@@ -1582,7 +1584,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return id
     
     def NewConstant(self):
-        """!Create new constant"""
+        """Create new constant"""
         index = len(self.constants)
         try:
             name = self.constants[-1]['constant']['object']['name'] + 1
@@ -1595,7 +1597,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return name
         
     def AddConstant(self, data, name):
-        """!Add new constant"""
+        """Add new constant"""
         id = self._display.AddConstant(value = data['constant']['value'], color = data['constant']['color'])
         self._display.SetSurfaceRes(id, data['constant']['resolution'], data['constant']['resolution'])
         data['constant']['object'] = { 'id' : id,
@@ -1603,13 +1605,13 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                                        'init' : False }
     
     def DeleteConstant(self, index):
-        """!Delete constant layer"""
+        """Delete constant layer"""
         id = self.constants[index]['constant']['object']['id']
         self._display.UnloadSurface(id)
         del self.constants[index]
     
     def SelectCPlane(self, index):
-        """!Select cutting plane"""
+        """Select cutting plane"""
         for plane in range (self._display.GetCPlanesCount()):
             if plane == index:
                 self._display.SelectCPlane(plane)
@@ -1623,11 +1625,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     pass
                     
     def OnUpdateCPlane(self, event):
-        """!Change cutting plane settings"""
+        """Change cutting plane settings"""
         self.UpdateCPlane(event.current, event.update)
 
     def UpdateCPlane(self, index, changes):
-        """!Change cutting plane settings"""
+        """Change cutting plane settings"""
         for each in changes:
             if each == 'rotation':
                 self._display.SetCPlaneRotation(0, self.cplanes[index]['rotation']['tilt'],
@@ -1640,23 +1642,23 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self._display.SetFenceColor(self.cplanes[index]['shading'])
             
     def UnloadRaster(self, item):
-        """!Unload 2d raster map
+        """Unload 2d raster map
         
-        @param layer item
+        :param layer: item
         """
         return self._unloadRaster(item)
     
     def UnloadRaster3d(self, item):
-        """!Unload 3d raster map
+        """Unload 3d raster map
         
-        @param layer item
+        :param layer: item
         """
         return self._unloadRaster(item)
     
     def _unloadRaster(self, item):
-        """!Unload 2d/3d raster map
+        """Unload 2d/3d raster map
         
-        @param item layer item
+        :param item: layer item
         """
         layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         
@@ -1706,12 +1708,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 win.SetValue('')
         
     def LoadVector(self, item, points = None, append = True):
-        """!Load 2D or 3D vector map overlay
+        """Load 2D or 3D vector map overlay
         
-        @param item layer item
-        @param points True to load points, False to load lines, None
-        to load both
-        @param append append vector to layer list
+        :param item: layer item
+        :param points: True to load points, False to load lines, None
+                       to load both
+        :param bool append: append vector to layer list
         """
         layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         if layer.type !=  'vector':
@@ -1761,11 +1763,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return id
 
     def UnloadVector(self, item, points = None, remove = True):
-        """!Unload vector map overlay
+        """Unload vector map overlay
         
-        @param item layer item
-        @param points,lines True to unload given feature type
-        @param remove remove layer from list
+        :param item: layer item
+        :param points, lines: True to unload given feature type
+        :param remove: remove layer from list
+        :type remove: bool
         """
         layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         data = self.tree.GetLayerInfo(item, key = 'nviz')['vector']
@@ -1807,7 +1810,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.layers.remove(item)
 
     def ResetView(self):
-        """!Reset to default view"""
+        """Reset to default view"""
         zexagOriginal, \
             self.iview['height']['value'], \
             self.iview['height']['min'], \
@@ -1852,7 +1855,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.PostViewEvent()
         
     def UpdateMapObjProperties(self, event):
-        """!Generic method to update data layer properties"""
+        """Generic method to update data layer properties"""
         data = event.data
         
         if 'surface' in data:
@@ -1885,7 +1888,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     data['vector'][type]['object']['init'] = True
     
     def UpdateConstantProperties(self, id, data):
-        """!Update surface map object properties"""
+        """Update surface map object properties"""
         self._display.SetSurfaceColor(id = id, map = False, value = data['color'])
         self._display.SetSurfaceTopo(id = id, map = False, value = data['value'])
         self._display.SetSurfaceRes(id, data['resolution'], data['resolution'])
@@ -1895,7 +1898,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self._display.SetSurfaceTransp(id, map = False, value = data['transp'])
             
     def UpdateSurfaceProperties(self, id, data):
-        """!Update surface map object properties"""
+        """Update surface map object properties"""
         # surface attributes
         for attrb in ('color', 'mask',
                      'transp', 'shine'):
@@ -1975,7 +1978,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         data['draw']['all'] = False
         
     def UpdateVolumeProperties(self, id, data, isosurfId = None):
-        """!Update volume (isosurface/slice) map object properties"""
+        """Update volume (isosurface/slice) map object properties"""
         if 'update' in data['draw']['resolution']:
             if data['draw']['mode']['value'] == 0:
                 self._display.SetIsosurfaceRes(id, data['draw']['resolution']['isosurface']['value'])
@@ -2064,11 +2067,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             data['position'].pop('update')
             
     def UpdateVectorProperties(self, id, data, type):
-        """!Update vector layer properties
+        """Update vector layer properties
         
-        @param id layer id
-        @param data properties
-        @param type lines/points
+        :param id: layer id
+        :param data: properties
+        :param type: lines/points
         """
         if type ==  'points':
             self.UpdateVectorPointsProperties(id, data[type])
@@ -2076,7 +2079,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.UpdateVectorLinesProperties(id, data[type])
         
     def UpdateVectorLinesProperties(self, id, data):
-        """!Update vector line map object properties"""
+        """Update vector line map object properties"""
         # mode
         if 'update' in data['color'] or \
                 'update' in data['width'] or \
@@ -2139,7 +2142,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 data['mode'].pop('update')
         
     def UpdateVectorPointsProperties(self, id, data):
-        """!Update vector point map object properties"""
+        """Update vector point map object properties"""
         if 'update' in data['size'] or \
                 'update' in data['width'] or \
                 'update' in data['marker'] or \
@@ -2206,7 +2209,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             data['mode'].pop('update')
             
     def GetLayerNames(self, type):
-        """!Return list of map layer names of given type"""
+        """Return list of map layer names of given type"""
         layerName = []
         
         if type == 'constant':
@@ -2223,7 +2226,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return layerName
     
     def GetLayerId(self, type, name, vsubtyp = None):
-        """!Get layer object id or -1"""
+        """Get layer object id or -1"""
         if len(name) < 1:
             return -1
         
@@ -2256,7 +2259,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return -1
     
     def ReloadLayersData(self):
-        """!Delete nviz data of all loaded layers and reload them from current settings"""
+        """Delete nviz data of all loaded layers and reload them from current settings"""
         for item in self.layers:
             type = self.tree.GetLayerInfo(item, key = 'type')
             layer = self.tree.GetLayerInfo(item, key = 'maplayer')
@@ -2272,7 +2275,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     self.nvizDefault.SetVectorLinesDefaultProp(data['vector']['lines'])
             
     def NvizCmdCommand(self):
-        """!Generate command for m.nviz.image according to current state"""
+        """Generate command for m.nviz.image according to current state"""
         cmd = 'm.nviz.image '
         
         rasters = []
@@ -2550,18 +2553,19 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return cmd
     
     def OnNvizCmd(self):
-        """!Generate and write command to command output"""
+        """Generate and write command to command output"""
         self.log.WriteLog(self.NvizCmdCommand(), notification=Notification.RAISE_WINDOW)
         
     def SaveToFile(self, FileName, FileType, width, height):
-        """!This draws the DC to a buffer that can be saved to a file.
+        """This draws the DC to a buffer that can be saved to a file.
         
-        @todo fix BufferedPaintDC
+        .. todo::
+            fix BufferedPaintDC
         
-        @param FileName file name
-        @param FileType type of bitmap
-        @param width image width
-        @param height image height
+        :param filename: file name
+        :param FileType: type of bitmap
+        :param width: image width
+        :param height: image height
         """
         self._display.SaveToFile(FileName, width, height, FileType)
                 
@@ -2574,27 +2578,27 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # self.SwapBuffers()
         
     def GetDisplay(self):
-        """!Get display instance"""
+        """Get display instance"""
         return self._display
         
     def ZoomToMap(self, layers):
-        """!Reset view
+        """Reset view
         
-        @param layers so far unused
+        :param layers: so far unused
         """
         self.lmgr.nviz.OnResetView(None)
         
     def TextBounds(self, textinfo):
-        """!Return text boundary data
+        """Return text boundary data
         
-        @param textinfo text metadata (text, font, color, rotation)
+        :param textinfo: text metadata (text, font, color, rotation)
         """
         return self.parent.MapWindow2D.TextBounds(textinfo, relcoords = True)
 
     def DisactivateWin(self):
-        """!Use when the class instance is hidden in MapFrame."""
+        """Use when the class instance is hidden in MapFrame."""
         pass
 
     def ActivateWin(self):
-        """!Used when the class instance is activated in MapFrame."""
+        """Used when the class instance is activated in MapFrame."""
         pass

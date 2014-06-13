@@ -1,4 +1,4 @@
-"""!
+"""
 @package gui_core.pystc
 
 @brief Python styled text control widget
@@ -23,11 +23,11 @@ from core.utils import _
 
 
 class PyStc(stc.StyledTextCtrl):
-    """!Styled Python output (see gmodeler::frame::PythonPanel for
+    """Styled Python output (see gmodeler::frame::PythonPanel for
     usage)
 
     Based on StyledTextCtrl_2 from wxPython demo
-    """    
+    """  
     def __init__(self, parent, id = wx.ID_ANY, statusbar = None):
         stc.StyledTextCtrl.__init__(self, parent, id)
         
@@ -126,9 +126,10 @@ class PyStc(stc.StyledTextCtrl):
         self.SetCaretForeground("BLUE")
         
     def OnKeyPressed(self, event):
-        """!Key pressed
+        """Key pressed
         
-        @todo implement code completion (see wxPython demo)
+        .. todo::
+            implement code completion (see wxPython demo)
         """
         if not self.modified:
             self.modified = True

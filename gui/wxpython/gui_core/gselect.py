@@ -1,4 +1,4 @@
-"""!
+"""
 @package gui_core.gselect
 
 @brief Custom control that selects elements
@@ -75,22 +75,22 @@ class Select(wx.combo.ComboCtrl):
                  mapsets = None, updateOnPopup = True, onPopup = None,
                  fullyQualified = True, extraItems = {}, layerTree = None,
                  validator = wx.DefaultValidator):
-        """!Custom control to create a ComboBox with a tree control to
+        """Custom control to create a ComboBox with a tree control to
         display and select GIS elements within acessible mapsets.
         Elements can be selected with mouse. Can allow multiple
         selections, when argument <em>multiple</em> is True. Multiple
         selections are separated by commas.
 
-        @param type type of GIS elements ('raster, 'vector', ...)
-        @param multiple True for multiple input
-        @param nmaps number of maps to be entered
-        @param mapsets force list of mapsets (otherwise search path)
-        @param updateOnPopup True for updating list of elements on popup
-        @param onPopup function to be called on Popup
-        @param fullyQualified True to provide fully qualified names (map@mapset)
-        @param extraItems extra items to add (given as dictionary) - see gmodeler for usage
-        @param layerTree show only elements from given layer tree if not None
-        @param validator validator for TextCtrl
+        :param type: type of GIS elements ('raster, 'vector', ...)
+        :param multiple: True for multiple input
+        :param nmaps: number of maps to be entered
+        :param mapsets: force list of mapsets (otherwise search path)
+        :param updateOnPopup: True for updating list of elements on popup
+        :param onPopup: function to be called on Popup
+        :param fullyQualified: True to provide fully qualified names (map@mapset)
+        :param extraItems: extra items to add (given as dictionary) - see gmodeler for usage
+        :param layerTree: show only elements from given layer tree if not None
+        :param validator: validator for TextCtrl
         """
         wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size, validator=validator)
         self.GetChildren()[0].SetName("Select")
@@ -107,7 +107,7 @@ class Select(wx.combo.ComboCtrl):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
     def OnKeyDown(self, event):
-        """!Open popup and send key events to the tree."""
+        """Open popup and send key events to the tree."""
         if self.IsPopupShown():
             self.tcp.OnKeyDown(event)
         else:
@@ -116,22 +116,22 @@ class Select(wx.combo.ComboCtrl):
             event.Skip()
 
     def SetElementList(self, type, mapsets = None):
-        """!Set element list
+        """Set element list
 
-        @param type GIS element type
-        @param mapsets list of acceptable mapsets (None for all in search path)
+        :param type: GIS element type
+        :param mapsets: list of acceptable mapsets (None for all in search path)
         """
         self.tcp.SetData(type = type, mapsets = mapsets)
         
     def GetElementList(self):
-        """!Load elements"""
+        """Load elements"""
         self.tcp.GetElementList()
     
     def SetType(self, etype, multiple = False, nmaps = 1,
                 mapsets = None, updateOnPopup = True, onPopup = None):
-        """!Param set element type for widget
+        """Param set element type for widget
 
-        @param etype element type, see gselect.ElementSelect
+        :param etype: element type, see gselect.ElementSelect
         """
         self.tcp.SetData(type = etype, mapsets = mapsets,
                          multiple = multiple, nmaps = nmaps,
@@ -139,11 +139,11 @@ class Select(wx.combo.ComboCtrl):
         
 class VectorSelect(Select):
     def __init__(self, parent, ftype, **kwargs):
-        """!Custom to create a ComboBox with a tree control to display and
+        """Custom to create a ComboBox with a tree control to display and
         select vector maps. You can filter the vector maps. If you
         don't need this feature use Select class instead
         
-        @param ftype filter vector maps based on feature type
+        :param ftype: filter vector maps based on feature type
         """
         Select.__init__(self, parent = parent, id = wx.ID_ANY,
                         type = 'vector', **kwargs)
@@ -154,7 +154,7 @@ class VectorSelect(Select):
         self.tcp.SetFilter(self._isElement)
         
     def _isElement(self, vectorName):
-        """!Check if element should be filtered out"""
+        """Check if element should be filtered out"""
         try:
             if int(grass.vector_info_topo(vectorName)[self.ftype]) < 1:
                 return False
@@ -164,11 +164,12 @@ class VectorSelect(Select):
         return True
 
 class ListCtrlComboPopup(wx.combo.ComboPopup):
-    """!Create a list ComboBox using TreeCtrl with hidden root.
+    """Create a list ComboBox using TreeCtrl with hidden root.
 
-    @todo: use event.EventObject instead of hardcoding (see forms.py)
+    .. todo::
+        use event.EventObject instead of hardcoding (see forms.py)
     https://groups.google.com/forum/#!topic/wxpython-users/pRz6bi0k0XY
-    """    
+    """  
     # overridden ComboPopup methods
     def Init(self):
         self.value = []            # for multiple is False ->
@@ -202,7 +203,7 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         return self.seltree
 
     def GetStringValue(self):
-        """!Get value as a string separated by commas
+        """Get value as a string separated by commas
         """
         return ','.join(self.value)
 
@@ -217,7 +218,7 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
             self.value = winValue.split(',')
 
     def OnPopup(self, force = False):
-        """!Limited only for first selected
+        """Limited only for first selected
         """
         if not force and not self.updateOnPopup:
             return
@@ -231,13 +232,13 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
             self.seltree.SelectItem(match)
 
     def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
-        """!Reads UserSettings to get height (which was 200 in old implementation).
+        """Reads UserSettings to get height (which was 200 in old implementation).
         """
         height = UserSettings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'value')
         return wx.Size(minWidth, min(height, maxHeight))
 
     def FindItem(self, parentItem, text, startLetters = False):
-        """!Finds item with given name or starting with given text
+        """Finds item with given name or starting with given text
         """
         startletters = startLetters
         item, cookie = self.seltree.GetFirstChild(parentItem)
@@ -267,7 +268,7 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
             self.seltree.AppendItem(root, text = item)
         
     def OnKeyUp(self, event):
-        """!Enable to select items using keyboard
+        """Enable to select items using keyboard
         """
         item = self.seltree.GetSelection()
         if event.GetKeyCode() == wx.WXK_DOWN:
@@ -292,7 +293,7 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
             self.Dismiss()
 
     def OnMotion(self, evt):
-        """!Have the selection follow the mouse, like in a real combobox
+        """Have the selection follow the mouse, like in a real combobox
         """
         item, flags = self.seltree.HitTest(evt.GetPosition())
         if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
@@ -301,7 +302,7 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         evt.Skip()
 
     def OnLeftDown(self, evt):
-        """!Do the combobox selection
+        """Do the combobox selection
         """
         if self.curitem is None:
             return
@@ -317,7 +318,7 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         evt.Skip()
 
     def SetData(self, **kargs):
-        """!Set object properties"""
+        """Set object properties"""
         if 'multiple' in kargs:
             self.multiple = kargs['multiple']
         if 'onPopup' in kargs:
@@ -331,11 +332,11 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
                 self.filterItems.append(layer.GetName())
         
     def DeleteAllItems(self):
-        """!Delete all items in popup"""
+        """Delete all items in popup"""
         self.seltree.DeleteAllItems()
 
 class TreeCtrlComboPopup(ListCtrlComboPopup):
-    """!Create a tree ComboBox for selecting maps and other GIS elements
+    """Create a tree ComboBox for selecting maps and other GIS elements
     in accessible mapsets within the current location
     """
     # overridden ComboPopup methods
@@ -353,11 +354,11 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         self.tgis_error = False
     
     def SetFilter(self, filter):
-        """!Set filter for GIS elements, see e.g. VectorSelect"""
+        """Set filter for GIS elements, see e.g. VectorSelect"""
         self.filterElements = filter
     
     def OnPopup(self, force = False):
-        """!Limited only for first selected"""
+        """Limited only for first selected"""
         if not force and not self.updateOnPopup:
             return
         if self.onPopup:
@@ -371,7 +372,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         ListCtrlComboPopup.OnPopup(self, force)
       
     def GetElementList(self, elements = None, exclude = False):
-        """!Get filtered list of GIS elements in accessible mapsets
+        """Get filtered list of GIS elements in accessible mapsets
         and display as tree with all relevant elements displayed
         beneath each mapset branch
         """
@@ -391,13 +392,13 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 pass
                     
     def _getElementList(self, element, mapsets = None, elements = None, exclude = False):
-        """!Get list of GIS elements in accessible mapsets and display as tree
+        """Get list of GIS elements in accessible mapsets and display as tree
         with all relevant elements displayed beneath each mapset branch
 
-        @param element GIS element
-        @param mapsets list of acceptable mapsets (None for all mapsets in search path)
-        @param elements list of forced GIS elements
-        @param exclude True to exclude, False for forcing the list (elements)
+        :param element: GIS element
+        :param mapsets: list of acceptable mapsets (None for all mapsets in search path)
+        :param elements: list of forced GIS elements
+        :param exclude: True to exclude, False for forcing the list (elements)
         """
         # get current mapset
         curr_mapset = grass.gisenv()['MAPSET']
@@ -546,13 +547,13 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
     
     # helpers
     def _addItems(self, elist, elements, mapset, exclude, node):
-        """!Helper function for adding multiple items (maps, stds).
+        """Helper function for adding multiple items (maps, stds).
 
-        @param elist list of map/stds names
-        @param elements list of forced elements
-        @param mapset mapset name
-        @param exclude True to exclude, False for forcing the list
-        @param node parent node
+        :param list elist: list of map/stds names
+        :param list elements: list of forced elements
+        :param str mapset:  mapset name
+        :param exclude: True to exclude, False for forcing the list
+        :param node: parent node
         """
         elist.sort()
         for elem in elist:
@@ -585,7 +586,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         return item
 
     def OnKeyDown(self, event):
-        """!Enables to select items using keyboard"""
+        """Enables to select items using keyboard"""
         
         item = self.seltree.GetSelection()
         if event.GetKeyCode() == wx.WXK_DOWN:
@@ -651,7 +652,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             self.Dismiss()
     
     def OnLeftDown(self, evt):
-        """!Do the combobox selection
+        """Do the combobox selection
         """
         item, flags = self.seltree.HitTest(evt.GetPosition())
         if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
@@ -681,7 +682,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         evt.Skip()
 
     def SetData(self, **kargs):
-        """!Set object properties"""
+        """Set object properties"""
         ListCtrlComboPopup.SetData(self, **kargs)
         if 'type' in kargs:
             self.type = kargs['type']
@@ -706,12 +707,12 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             self.extraItems = kargs['extraItems']
         
     def GetType(self):
-        """!Get element type
+        """Get element type
         """
         return self.type
 
 class VectorDBInfo:
-    """!Class providing information about attribute tables
+    """Class providing information about attribute tables
     linked to a vector map"""
     def __init__(self, map):
         self.map = map
@@ -727,7 +728,7 @@ class VectorDBInfo:
         self._DescribeTables() # -> self.tables
 
     def _CheckDBConnection(self):
-        """!Check DB connection"""
+        """Check DB connection"""
         nuldev = file(os.devnull, 'w+')
         self.layers = grass.vector_db(map = self.map, stderr = nuldev)
         nuldev.close()
@@ -735,7 +736,7 @@ class VectorDBInfo:
         return bool(len(self.layers.keys()) > 0)
         
     def _DescribeTables(self):
-        """!Describe linked tables"""
+        """Describe linked tables"""
         for layer in self.layers.keys():
             # determine column names and types
             table = self.layers[layer]["table"]
@@ -777,7 +778,7 @@ class VectorDBInfo:
         return True
     
     def Reset(self):
-        """!Reset"""
+        """Reset"""
         for layer in self.layers:
             table = self.layers[layer]["table"] # get table desc
             for name in self.tables[table].keys():
@@ -785,36 +786,36 @@ class VectorDBInfo:
                 self.tables[table][name]['ids']    = []
     
     def GetName(self):
-        """!Get vector name"""
+        """Get vector name"""
         return self.map
     
     def GetKeyColumn(self, layer):
-        """!Get key column of given layer
+        """Get key column of given layer
         
-        @param layer vector layer number
+        :param layer: vector layer number
         """
         return str(self.layers[layer]['key'])
     
     def GetTable(self, layer):
-        """!Get table name of given layer
+        """Get table name of given layer
         
-        @param layer vector layer number
+        :param layer: vector layer number
         """
         return self.layers[layer]['table']
     
     def GetDbSettings(self, layer):
-        """!Get database settins
+        """Get database settins
 
-        @param layer layer number
+        :param layer: layer number
         
-        @return (driver, database)
+        :return: (driver, database)
         """
         return self.layers[layer]['driver'], self.layers[layer]['database']
     
     def GetTableDesc(self, table):
-        """!Get table columns
+        """Get table columns
 
-        @param table table name
+        :param table: table name
         """
         return self.tables[table]
 
@@ -822,10 +823,10 @@ class LayerSelect(wx.ComboBox):
     def __init__(self, parent, id = wx.ID_ANY,
                  size = globalvar.DIALOG_COMBOBOX_SIZE,
                  vector = None, dsn = None, choices = [], all = False, default = None):
-        """!Creates combo box for selecting vector map layer names
+        """Creates combo box for selecting vector map layer names
 
-        @param vector vector map name (native or connected via v.external)
-        @param dsn    OGR data source name
+        :param str vector: vector map name (native or connected via v.external)
+        :param str dsn: OGR data source name
         """
         super(LayerSelect, self).__init__(parent, id, size = size, choices = choices)
 
@@ -839,10 +840,10 @@ class LayerSelect(wx.ComboBox):
         self.InsertLayers(vector = vector, dsn = dsn)
         
     def InsertLayers(self, vector = None, dsn = None):
-        """!Insert layers for a vector into the layer combobox
+        """Insert layers for a vector into the layer combobox
 
-        @param vector vector map name (native or connected via v.external)
-        @param dsn    OGR data source name
+        :param str vector: vector map name (native or connected via v.external)
+        :param str dsn: OGR data source name
         """
         layers = list()
 
@@ -877,7 +878,7 @@ class LayerSelect(wx.ComboBox):
             self.SetValue(self.default)
 
 class DriverSelect(wx.ComboBox):
-    """!Creates combo box for selecting database driver.
+    """Creates combo box for selecting database driver.
     """
     def __init__(self, parent, choices, value,
                  id=wx.ID_ANY, pos=wx.DefaultPosition,
@@ -891,7 +892,7 @@ class DriverSelect(wx.ComboBox):
         self.SetStringSelection(value)
 
 class DatabaseSelect(wx.TextCtrl):
-    """!Creates combo box for selecting database driver.
+    """Creates combo box for selecting database driver.
     """
     def __init__(self, parent, value = '', id = wx.ID_ANY, 
                  size = globalvar.DIALOG_TEXTCTRL_SIZE, **kargs):
@@ -899,7 +900,7 @@ class DatabaseSelect(wx.TextCtrl):
         self.SetName("DatabaseSelect")
     
 class TableSelect(wx.ComboBox):
-    """!Creates combo box for selecting attribute tables from the database
+    """Creates combo box for selecting attribute tables from the database
     """
     def __init__(self, parent,
                  id = wx.ID_ANY, value = '', 
@@ -912,7 +913,7 @@ class TableSelect(wx.ComboBox):
             self.InsertTables()
                 
     def InsertTables(self, driver = None, database = None):
-        """!Insert attribute tables into combobox"""
+        """Insert attribute tables into combobox"""
         items = []
 
         if not driver or not database:
@@ -935,18 +936,18 @@ class TableSelect(wx.ComboBox):
         self.SetValue('')
 
 class ColumnSelect(wx.combo.ComboCtrl):
-    """!Creates combo box for selecting columns in the attribute table
+    """Creates combo box for selecting columns in the attribute table
     for a vector map.
 
-    @param parent window parent
-    @param id window id
-    @param value default value
-    @param size window size
-    @param vector vector map name
-    @param layer layer number
-    @param multiple - True if it is possible to add multiple columns
-    @param param parameters list (see menuform.py)
-    @param **kwags wx.ComboBox parameters
+    :param parent: window parent
+    :param id: window id
+    :param value: default value
+    :param size: window size
+    :param str vector: vector map name
+    :param layer: layer number
+    :param multiple: - True if it is possible to add multiple columns
+    :param param: parameters list (see menuform.py)
+    :param **kwags: wx.ComboBox parameters
     """
     def __init__(self, parent, id = wx.ID_ANY, value = '', 
                  size = globalvar.DIALOG_COMBOBOX_SIZE,
@@ -972,7 +973,7 @@ class ColumnSelect(wx.combo.ComboCtrl):
         return self.columns
 
     def OnKeyUp(self, event):
-        """!Shows popupwindow if down arrow key is released"""
+        """Shows popupwindow if down arrow key is released"""
         if event.GetKeyCode() == wx.WXK_DOWN and not self.IsPopupShown():
             self.ShowPopup() 
         else:
@@ -983,13 +984,13 @@ class ColumnSelect(wx.combo.ComboCtrl):
         self.SetValue('')
 
     def InsertColumns(self, vector, layer, excludeKey = False, excludeCols = None, type = None, dbInfo = None):
-        """!Insert columns for a vector attribute table into the columns combobox
+        """Insert columns for a vector attribute table into the columns combobox
 
-        @param vector vector name
-        @param layer vector layer number
-        @param excludeKey exclude key column from the list?
-        @param excludeCols list of columns to be removed from the list
-        @param type only columns of given type (given as list)
+        :param str vector: vector name
+        :param int layer: vector layer number
+        :param excludeKey: exclude key column from the list?
+        :param excludeCols: list of columns to be removed from the list
+        :param type: only columns of given type (given as list)
         """
         if not dbInfo:
             dbInfo = VectorDBInfo(vector)
@@ -1035,11 +1036,11 @@ class ColumnSelect(wx.combo.ComboCtrl):
                 self.SetValue(value)
         
     def InsertTableColumns(self, table, driver=None, database=None):
-        """!Insert table columns
+        """Insert table columns
 
-        @param table table name
-        @param driver driver name
-        @param database database name
+        :param str table: table name
+        :param str driver: driver name
+        :param str database: database name
         """
         self.columns[:] = []
         
@@ -1064,7 +1065,7 @@ class ColumnSelect(wx.combo.ComboCtrl):
                 self.SetValue(value)
 
 class DbaseSelect(wx.lib.filebrowsebutton.DirBrowseButton):
-    """!Widget for selecting GRASS Database"""
+    """Widget for selecting GRASS Database"""
     def __init__(self, parent, **kwargs):
         super(DbaseSelect, self).__init__(parent, id = wx.ID_ANY,
                                           size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
@@ -1074,7 +1075,7 @@ class DbaseSelect(wx.lib.filebrowsebutton.DirBrowseButton):
                                           **kwargs)
         
 class LocationSelect(wx.ComboBox):
-    """!Widget for selecting GRASS location"""
+    """Widget for selecting GRASS location"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
                  gisdbase = None, **kwargs):
         super(LocationSelect, self).__init__(parent, id, size = size, 
@@ -1089,9 +1090,9 @@ class LocationSelect(wx.ComboBox):
         self.SetItems(GetListOfLocations(self.gisdbase))
 
     def UpdateItems(self, dbase):
-        """!Update list of locations
+        """Update list of locations
 
-        @param dbase path to GIS database
+        :param str dbase: path to GIS database
         """
         self.gisdbase = dbase
         if dbase:
@@ -1100,7 +1101,7 @@ class LocationSelect(wx.ComboBox):
             self.SetItems([])
         
 class MapsetSelect(wx.combo.ComboCtrl):
-    """!Widget for selecting GRASS mapset"""
+    """Widget for selecting GRASS mapset"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
                  gisdbase = None, location = None, setItems = True,
                  searchPath = False, new = False, skipCurrent = False, multiple = False, **kwargs):
@@ -1132,10 +1133,11 @@ class MapsetSelect(wx.combo.ComboCtrl):
             self.tcp.SetItems(self._getMapsets())
         
     def UpdateItems(self, location, dbase = None):
-        """!Update list of mapsets for given location
+        """Update list of mapsets for given location
 
-        @param dbase path to GIS database (None to use currently selected)
-        @param location name of location
+        :param str dbase: path to GIS database (None to use currently
+                          selected)
+        :param str location: name of location
         """
         if dbase:
             self.gisdbase = dbase
@@ -1166,32 +1168,32 @@ class MapsetSelect(wx.combo.ComboCtrl):
         return mlist
 
     def GetStringSelection(self):
-        """!For backward compatibility. MapsetSelect changed to allow
+        """For backward compatibility. MapsetSelect changed to allow
         multiple selection, this required to change super-class from
         wx.ComboBox to wx.combo.ComboCtrl"""
         return self.GetValue()
 
     def SetStringSelection(self, text):
-        """!For backward compatibility. MapsetSelect changed to allow
+        """For backward compatibility. MapsetSelect changed to allow
         multiple selection, this required to change super-class from
         wx.ComboBox to wx.combo.ComboCtrl"""
         return self.SetValue(text)
 
     def SetSelection(self, sel=0):
-        """!For backward compatibility. MapsetSelect changed to allow
+        """For backward compatibility. MapsetSelect changed to allow
         multiple selection, this required to change super-class from
         wx.ComboBox to wx.combo.ComboCtrl"""
         self.SetValue('') # TODO: implement SetSelection()
 
     def SetItems(self, items):
-        """!For backward compatibility. MapsetSelect changed to allow
+        """For backward compatibility. MapsetSelect changed to allow
         multiple selection, this required to change super-class from
         wx.ComboBox to wx.combo.ComboCtrl"""
         self.tcp.DeleteAllItems()
         self.tcp.SetItems(items)
 
 class SubGroupSelect(wx.ComboBox):
-    """!Widget for selecting subgroups"""
+    """Widget for selecting subgroups"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
                  **kwargs):
         super(SubGroupSelect, self).__init__(parent, id, size = size, 
@@ -1199,7 +1201,7 @@ class SubGroupSelect(wx.ComboBox):
         self.SetName("SubGroupSelect")
 
     def Insert(self, group):
-        """!Insert subgroups for defined group"""
+        """Insert subgroups for defined group"""
         if not group:
             return
         gisenv = grass.gisenv()
@@ -1220,11 +1222,11 @@ class FormatSelect(wx.Choice):
     def __init__(self, parent, srcType, ogr=False,
                  size=globalvar.DIALOG_SPIN_SIZE, 
                  **kwargs):
-        """!Widget for selecting external (GDAL/OGR) format
+        """Widget for selecting external (GDAL/OGR) format
 
-        @param parent parent window
-        @param srcType source type ('file', 'database', 'protocol')
-        @param ogr True for OGR otherwise GDAL
+        :param parent: parent window
+        :param srcType: source type ('file', 'database', 'protocol')
+        :param ogr: True for OGR otherwise GDAL
         """
         super(FormatSelect, self).__init__(parent, id=wx.ID_ANY, size=size, 
                                            **kwargs)
@@ -1241,7 +1243,7 @@ class FormatSelect(wx.Choice):
         self.SetItems(formats)
         
     def GetExtension(self, name):
-        """!Get file extension by format name"""
+        """Get file extension by format name"""
         formatToExt = dict()
         formatToExt.update(rasterFormatExtension)
         formatToExt.update(vectorFormatExtension)
@@ -1254,16 +1256,17 @@ class FormatSelect(wx.Choice):
 class GdalSelect(wx.Panel):
     def __init__(self, parent, panel, ogr=False, link=False, dest=False, 
                  exclude=None):
-        """!Widget for selecting GDAL/OGR datasource, format
+        """Widget for selecting GDAL/OGR datasource, format
         
-        @todo Split into GdalSelect and OgrSelect and optionally to
-        GdalSelectOutput, OgrSelectOutput
+        .. todo::
+             Split into GdalSelect and OgrSelect and optionally to
+             GdalSelectOutput, OgrSelectOutput
         
-        @param parent parent window
-        @param ogr    use OGR selector instead of GDAL
-        @param dest   True for output (destination)
-        @param default deafult type (ignored when dest == True)
-        @param exclude list of types to be excluded
+        :param parent: parent window
+        :param bool ogr: use OGR selector instead of GDAL
+        :param bool dest: True for output (destination)
+        :param default: default type (ignored when dest == True)
+        :param exclude: list of types to be excluded
         """
         self.parent = parent
         self.ogr = ogr
@@ -1489,7 +1492,7 @@ class GdalSelect(wx.Panel):
             wx.CallAfter(self._postInit, sourceType, current)
 
     def _postInit(self, sourceType, data):
-        """!Fill in default values."""
+        """Fill in default values."""
         format = data.get('format', '')
         pg = 'conninfo' in data.keys()
         if pg:
@@ -1531,7 +1534,7 @@ class GdalSelect(wx.Panel):
                 self.dbWidgets[name].SetValue(dsn)
 
     def _layout(self):
-        """!Layout"""
+        """Layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.changingSizer = wx.StaticBoxSizer(self.inputBox, wx.VERTICAL)
@@ -1703,7 +1706,7 @@ class GdalSelect(wx.Panel):
         mainSizer.Fit(self)
 
     def _getExtension(self, name):
-        """!Get file extension by format name"""
+        """Get file extension by format name"""
         formatToExt = dict()
         formatToExt.update(rasterFormatExtension)
         formatToExt.update(vectorFormatExtension)
@@ -1711,7 +1714,7 @@ class GdalSelect(wx.Panel):
         return formatToExt.get(name, '')        
 
     def SetSourceType(self, sourceType):
-        """!Set source type (db, file, dir, ...).
+        """Set source type (db, file, dir, ...).
         Does not switch radioboxes."""
         self._sourceType = sourceType
         self.changingSizer.Show(item=self.filePanel, show=(sourceType == 'file'))
@@ -1740,7 +1743,7 @@ class GdalSelect(wx.Panel):
             self._reloadLayers()
 
     def OnSettingsChanged(self, data):
-        """!User changed setting"""
+        """User changed setting"""
         # data list: [type, dsn, format, options]
         if len(data) == 3:
             data.append('')
@@ -1780,7 +1783,7 @@ class GdalSelect(wx.Panel):
             self._reloadLayers()
 
     def OnSettingsSaving(self, name):
-        """!Saving data"""
+        """Saving data"""
         if not self.GetDsn():
             GMessage(parent = self,
                      message = _("No data source defined, settings are not saved."))
@@ -1791,20 +1794,20 @@ class GdalSelect(wx.Panel):
         self.settsManager.SaveSettings(name)
 
     def _getExtPatternGlob(self, ext):
-        """!Get pattern for case-insensitive globing"""
+        """Get pattern for case-insensitive globing"""
         pattern = '*.'
         for c in ext:
             pattern += '[%s%s]' % (c.lower(), c.upper())
         return pattern
 
     def _getCurrentDbWidgetName(self):
-        """!Returns active dns database widget name."""
+        """Returns active dns database widget name."""
         for widget in ('browse', 'dirbrowse', 'text', 'choice'):
             if self.dbWidgets[widget].IsShown():
                 return widget
 
     def GetDsn(self):
-        """!Get datasource name
+        """Get datasource name
         """
         if self._sourceType == 'db':
             if self.dbWidgets['format'].GetStringSelection() in ('PostgreSQL',
@@ -1843,7 +1846,7 @@ class GdalSelect(wx.Panel):
         return dsn
 
     def SetDatabase(self, db):
-        """!Update database panel."""
+        """Update database panel."""
         sizer = self.dbPanel.GetSizer()
         showBrowse = db in ('SQLite', 'Rasterlite')
         showDirbrowse = db in ('FileGDB')
@@ -1888,14 +1891,14 @@ class GdalSelect(wx.Panel):
         sizer.Layout()
 
     def OnUpdate(self, event):
-        """!Update required - load layers."""
+        """Update required - load layers."""
         if not self.dest:
             self._reloadLayers()
 
         event.Skip()
 
     def _reloadLayers(self):
-        """!Reload list of layers"""
+        """Reload list of layers"""
         dsn = self.GetDsn()
         if not dsn:
             return
@@ -1952,16 +1955,16 @@ class GdalSelect(wx.Panel):
             self._reloadLayers()
 
     def SetExtension(self, name):
-        """!Extension changed"""
+        """Extension changed"""
         ext = self._getExtension(name)
         self.dirWidgets['extension'].SetValue(ext)
 
     def GetType(self):
-        """!Get source type"""
+        """Get source type"""
         return self._sourceType
 
     def GetFormat(self):
-        """!Get format as string"""
+        """Get format as string"""
         if self._sourceType == 'dir':
             format = self.dirWidgets['format'].GetStringSelection()
         elif self._sourceType == 'pro':
@@ -1974,11 +1977,11 @@ class GdalSelect(wx.Panel):
         return format.replace(' ', '_')
 
     def GetFormatExt(self):
-        """!Get format extension"""
+        """Get format extension"""
         return self._getExtension(self.GetFormat())
 
     def GetOptions(self):
-        """!Get creation options"""
+        """Get creation options"""
         if self._sourceType == 'file':
             options = self.fileWidgets['options'].GetValue()
         elif self._sourceType == 'dir':
@@ -1995,7 +1998,7 @@ class GdalSelect(wx.Panel):
         return options.strip()
 
     def OnHelp(self, event):
-        """!Show related manual page"""
+        """Show related manual page"""
         cmd = ''
         if self.dest:
             if self.ogr:
@@ -2017,7 +2020,7 @@ class GdalSelect(wx.Panel):
         RunCommand('g.manual', entry = cmd)
 
 class ProjSelect(wx.ComboBox):
-    """!Widget for selecting input raster/vector map used by
+    """Widget for selecting input raster/vector map used by
     r.proj/v.proj modules."""
     def __init__(self, parent, isRaster, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE,
                  **kwargs):
@@ -2027,7 +2030,7 @@ class ProjSelect(wx.ComboBox):
         self.isRaster = isRaster
         
     def UpdateItems(self, dbase, location, mapset):
-        """!Update list of maps
+        """Update list of maps
         
         """
         if not dbase:
@@ -2062,9 +2065,9 @@ class ProjSelect(wx.ComboBox):
 class ElementSelect(wx.Choice):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
                  **kwargs):
-        """!Widget for selecting GIS element
+        """Widget for selecting GIS element
         
-        @param parent parent window
+        :param parent: parent window
         """
         super(ElementSelect, self).__init__(parent, id, size = size, 
                                             **kwargs)
@@ -2078,9 +2081,9 @@ class ElementSelect(wx.Choice):
         self.SetItems(self.valuesDesc)
 
     def GetValue(self, name):
-        """!Translate value
+        """Translate value
 
-        @param name element name
+        :param name: element name
         """
         idx = self.valuesDesc.index(name)
         if idx > -1:
@@ -2089,10 +2092,10 @@ class ElementSelect(wx.Choice):
 
 class OgrTypeSelect(wx.Panel):
     def __init__(self, parent, panel, **kwargs):
-        """!Widget to choose OGR feature type
+        """Widget to choose OGR feature type
 
-        @param parent parent window
-        @param panel wx.Panel instance used as parent window
+        :param parent: parent window
+        :param panel: wx.Panel instance used as parent window
         """
         wx.Panel.__init__(self, parent = panel, id = wx.ID_ANY)
         
@@ -2102,7 +2105,7 @@ class OgrTypeSelect(wx.Panel):
         self._layout()
 
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(item = wx.StaticText(parent = self,
                                        id = wx.ID_ANY,
@@ -2118,9 +2121,9 @@ class OgrTypeSelect(wx.Panel):
         sizer.Fit(self)
 
     def GetType(self):
-        """!Get selected type as string
+        """Get selected type as string
 
-        @return feature type as string
+        :return: feature type as string
         """
         sel = self.ftype.GetSelection()
         if sel == 0:
@@ -2132,11 +2135,11 @@ class OgrTypeSelect(wx.Panel):
 
 class CoordinatesSelect(wx.Panel):
     def __init__(self, parent, giface, multiple = False, **kwargs):
-        """!Widget to get coordinates from map window  by mouse click
+        """Widget to get coordinates from map window  by mouse click
         
-        @param parent parent window
-        @param giface GRASS interface
-        @param multiple - True if it is possible to insert more coordinates
+        :param parent: parent window
+        :param giface: GRASS interface
+        :param multiple: - True if it is possible to insert more coordinates
         """
         self._giface = giface
         self.multiple = multiple
@@ -2174,7 +2177,7 @@ class CoordinatesSelect(wx.Panel):
         self.SetSizer(self.dialogSizer)
         
     def _onClick(self, event):
-        """!Button for interacitve inserting of coordinates clicked"""
+        """Button for interacitve inserting of coordinates clicked"""
 
         self.mapWin = self._giface.GetMapWindow()
         if self.buttonInsCoords.GetToggle() and self.mapWin:
@@ -2199,7 +2202,7 @@ class CoordinatesSelect(wx.Panel):
             self.drawMapWin.UnregisterGraphicsToDraw(self.pointsToDraw)
 
     def _draw(self, delay):
-        """!Draws points representing inserted coordinates in mapwindow."""
+        """Draws points representing inserted coordinates in mapwindow."""
         if self.drawMapWin != self.mapWin:
             self.drawCleanUp()
             if self.mapWin:
@@ -2220,9 +2223,9 @@ class CoordinatesSelect(wx.Panel):
                 self._giface.updateMap.emit(render=False, renderVector=False, delay=delay)
 
     def _getCoords(self):
-        """!Get list of coordinates.
+        """Get list of coordinates.
 
-        @return None if values are not valid 
+        :return: None if values are not valid 
         """
         if self.coordsField.GetValidator().Validate():
             return self.coordsField.GetValue().split(',')
@@ -2230,7 +2233,7 @@ class CoordinatesSelect(wx.Panel):
         return None
 
     def _onMapClickHandler(self, event):
-        """!Gets coordinates from mapwindow"""
+        """Gets coordinates from mapwindow"""
         if event == "unregistered":
             return
         
@@ -2248,7 +2251,7 @@ class CoordinatesSelect(wx.Panel):
         self._draw(delay=0)
 
     def OnClose(self):
-        """!Unregistrates _onMapClickHandler from mapWin"""
+        """Unregistrates _onMapClickHandler from mapWin"""
         self.drawCleanUp()
         self._giface.updateMap.emit(render=False, renderVector=False)
  
@@ -2262,11 +2265,11 @@ class CoordinatesSelect(wx.Panel):
                                                     self._onMapClickHandler)
 
     def GetTextWin(self):
-        """!Get TextCtrl widget"""
+        """Get TextCtrl widget"""
         return self.coordsField
 
 class SignatureSelect(wx.ComboBox):
-    """!Widget for selecting signatures"""
+    """Widget for selecting signatures"""
     def __init__(self, parent, element, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
                  **kwargs):
         super(SignatureSelect, self).__init__(parent, id, size = size, 
@@ -2275,10 +2278,10 @@ class SignatureSelect(wx.ComboBox):
         self.SetName("SignatureSelect")
 
     def Insert(self, group, subgroup = None):
-        """!Insert signatures for defined group/subgroup
+        """Insert signatures for defined group/subgroup
 
-        @param group group name (can be fully-qualified)
-        @param subgroup non fully-qualified name of subgroup
+        :param group: group name (can be fully-qualified)
+        :param subgroup: non fully-qualified name of subgroup
         """
         if not group:
             return
@@ -2304,7 +2307,7 @@ class SignatureSelect(wx.ComboBox):
         self.SetValue('')
 
 class SeparatorSelect(wx.ComboBox):
-    """!Widget for selecting seperator"""
+    """Widget for selecting seperator"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
                  **kwargs):
         super(SeparatorSelect, self).__init__(parent, id, size = size, 

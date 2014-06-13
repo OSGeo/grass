@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.treemodel
 
 @brief tree structure model (used for menu, search tree)
@@ -18,7 +18,7 @@ This program is free software under the GNU General Public License
 
 
 class TreeModel(object):
-    """!Class represents a tree structure with hidden root.
+    """Class represents a tree structure with hidden root.
     
     TreeModel is used together with TreeView class to display results in GUI.
     The functionality is not complete, only needed methods are implemented.
@@ -53,9 +53,9 @@ class TreeModel(object):
         * xxx : 1
     """
     def __init__(self, nodeClass):
-        """!Constructor creates root node.
+        """Constructor creates root node.
 
-        @param nodeClass class which is used for creating nodes
+        :param nodeClass: class which is used for creating nodes
         """
         self._root = nodeClass('root')
         self.nodeClass = nodeClass
@@ -65,13 +65,13 @@ class TreeModel(object):
         return self._root
 
     def AppendNode(self, parent, label, data=None):
-        """!Create node and append it to parent node.
+        """Create node and append it to parent node.
         
-        @param parent parent node of the new node
-        @param label node label
-        @param data optional node data
+        :param parent: parent node of the new node
+        :param label: node label
+        :param data: optional node data
         
-        @return new node
+        :return: new node
         """
         node = self.nodeClass(label=label, data=data)
         parent.children.append(node)
@@ -79,30 +79,30 @@ class TreeModel(object):
         return node
 
     def SearchNodes(self, **kwargs):
-        """!Search nodes according to specified attributes."""
+        """Search nodes according to specified attributes."""
         nodes = []
         self._searchNodes(node=self.root, foundNodes=nodes, **kwargs)
         return nodes
         
     def _searchNodes(self, node, foundNodes, **kwargs):
-        """!Helper method for searching nodes."""
+        """Helper method for searching nodes."""
         if node.match(**kwargs):
             foundNodes.append(node)
         for child in node.children:
             self._searchNodes(node=child, foundNodes=foundNodes, **kwargs)
 
     def GetNodeByIndex(self, index):
-        """!Method used for communication between view (VirtualTree) and model.
+        """Method used for communication between view (VirtualTree) and model.
 
-        @param index index of node, as defined in VirtualTree doc
-        (e.g. root ~ [], second node of a first node ~ [0, 1])
+        :param index: index of node, as defined in VirtualTree doc
+                      (e.g. root ~ [], second node of a first node ~ [0, 1])
         """
         if len(index) == 0:
             return self.root
         return self._getNode(self.root, index)
         
     def GetIndexOfNode(self, node):
-        """!Method used for communication between view (VirtualTree) and model."""
+        """Method used for communication between view (VirtualTree) and model."""
         index = []
         return self._getIndex(node, index)
         
@@ -115,7 +115,7 @@ class TreeModel(object):
         
         
     def GetChildrenByIndex(self, index):
-        """!Method used for communication between view (VirtualTree) and model."""
+        """Method used for communication between view (VirtualTree) and model."""
         if len(index) == 0:
             return self.root.children
         node = self._getNode(self.root, index)
@@ -128,12 +128,12 @@ class TreeModel(object):
             return self._getNode(node.children[index[0]], index[1:])
 
     def RemoveNode(self, node):
-        """!Removes node."""
+        """Removes node."""
         if node.parent:
             node.parent.children.remove(node)
 
     def __str__(self):
-        """!Print tree."""
+        """Print tree."""
         text = []
         for child in self.root.children:
             child.nprint(text)
@@ -141,12 +141,12 @@ class TreeModel(object):
 
 
 class DictNode(object):
-    """!Node which has data in a form of dictionary."""
+    """Node which has data in a form of dictionary."""
     def __init__(self, label, data=None):
-        """!Create node.
+        """Create node.
 
-        @param label node label (displayed in GUI)
-        @param data data as dictionary or None
+        :param label: node label (displayed in GUI)
+        :param data: data as dictionary or None
         """
 
         self.label = label
@@ -174,10 +174,10 @@ class DictNode(object):
                 child.nprint(text, indent + 2)
 
     def match(self, key, value):
-        """!Method used for searching according to given parameters.
+        """Method used for searching according to given parameters.
 
-        @param value dictionary value to be matched
-        @param key data dictionary key
+        :param value: dictionary value to be matched
+        :param key: data dictionary key
         """
         if key in self.data and self.data[key] == value:
             return True
@@ -185,12 +185,12 @@ class DictNode(object):
 
 
 class ModuleNode(DictNode):
-    """!Node representing module."""
+    """Node representing module."""
     def __init__(self, label, data=None):
         super(ModuleNode, self).__init__(label=label, data=data)
 
     def match(self, key, value):
-        """!Method used for searching according to command,
+        """Method used for searching according to command,
         keywords or description."""
         if not self.data:
             return False

@@ -1,4 +1,4 @@
-"""!
+"""
 @package lmgr.toolbars
 
 @brief wxGUI Layer Manager - toolbars
@@ -28,7 +28,7 @@ from icons.icon         import MetaIcon
 from core.utils import _
 
 class LMWorkspaceToolbar(BaseToolbar):
-    """!Layer Manager `workspace` toolbar
+    """Layer Manager `workspace` toolbar
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
@@ -39,7 +39,7 @@ class LMWorkspaceToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data
+        """Toolbar data
         """
         icons = {
             'newdisplay'    : MetaIcon(img = 'monitor-create',
@@ -63,7 +63,7 @@ class LMWorkspaceToolbar(BaseToolbar):
                                      ))
 
 class LMDataToolbar(BaseToolbar):
-    """!Layer Manager `data` toolbar
+    """Layer Manager `data` toolbar
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
@@ -74,7 +74,7 @@ class LMDataToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data
+        """Toolbar data
         """
         icons = {
             'addMulti'   : MetaIcon(img = 'layer-open',
@@ -118,7 +118,7 @@ class LMDataToolbar(BaseToolbar):
                                      ))
 
 class LMToolsToolbar(BaseToolbar):
-    """!Layer Manager `tools` toolbar
+    """Layer Manager `tools` toolbar
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
@@ -129,7 +129,7 @@ class LMToolsToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data
+        """Toolbar data
         """
         icons = {
             'import'  : MetaIcon(img = 'layer-import',
@@ -163,7 +163,7 @@ class LMToolsToolbar(BaseToolbar):
                                      ))
 
 class LMMiscToolbar(BaseToolbar):
-    """!Layer Manager `misc` toolbar
+    """Layer Manager `misc` toolbar
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
@@ -174,7 +174,7 @@ class LMMiscToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data
+        """Toolbar data
         """
         icons = {
             'settings'   : BaseIcons['settings'].SetLabel(_('GUI settings')),
@@ -188,7 +188,7 @@ class LMMiscToolbar(BaseToolbar):
                                      ))
 
 class LMVectorToolbar(BaseToolbar):
-    """!Layer Manager `vector` toolbar
+    """Layer Manager `vector` toolbar
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
@@ -199,7 +199,7 @@ class LMVectorToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data
+        """Toolbar data
         """
         icons = {
             'vdigit'     : MetaIcon(img = 'edit',
@@ -215,7 +215,7 @@ class LMVectorToolbar(BaseToolbar):
                                      ))
 
 class LMNvizToolbar(BaseToolbar):
-    """!Nviz toolbar
+    """Nviz toolbar
     """
     def __init__(self, parent):
         self.lmgr = parent
@@ -231,7 +231,7 @@ class LMNvizToolbar(BaseToolbar):
         self.Realize()
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         icons = {
             'cmd'    : MetaIcon(img = 'script-save',
                                 label = _('Generate command for m.nviz.image'),
@@ -253,11 +253,11 @@ class LMNvizToolbar(BaseToolbar):
                                     )
         
     def OnNvizCmd(self, event):
-        """!Show m.nviz.image command"""
+        """Show m.nviz.image command"""
         self.lmgr.GetLayerTree().GetMapDisplay().GetWindow().OnNvizCmd()
         
     def OnHelp(self, event):
-        """!Show 3D view mode help"""
+        """Show 3D view mode help"""
         if not self.lmgr:
             RunCommand('g.manual',
                        entry = 'wxGUI.Nviz')

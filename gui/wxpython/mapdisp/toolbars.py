@@ -1,4 +1,4 @@
-"""!
+"""
 @package mapdisp.toolbars
 
 @brief Map display frame - toolbars
@@ -66,12 +66,12 @@ NvizIcons = {
     }
 
 class MapToolbar(BaseToolbar):
-    """!Map Display toolbar
+    """Map Display toolbar
     """
     def __init__(self, parent, toolSwitcher):
-        """!Map Display constructor
+        """Map Display constructor
 
-        @param parent reference to MapFrame
+        :param parent: reference to MapFrame
         """
         BaseToolbar.__init__(self, parent=parent, toolSwitcher=toolSwitcher) # MapFrame
         
@@ -136,7 +136,7 @@ class MapToolbar(BaseToolbar):
         self.FixSize(width = 90)
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         return self._getToolbarData((('displayMap', BaseIcons['display'],
                                       self.parent.OnDraw),
                                      ('renderMap', BaseIcons['render'],
@@ -181,9 +181,9 @@ class MapToolbar(BaseToolbar):
                                      (None, ))
                                     )
     def InsertTool(self, data):
-        """!Insert tool to toolbar
+        """Insert tool to toolbar
         
-        @param data toolbar data"""
+        :param data: toolbar data"""
         data = self._getToolbarData(data)
         for tool in data:
             self.CreateTool(*tool)
@@ -193,16 +193,16 @@ class MapToolbar(BaseToolbar):
         self.parent._mgr.Update()
         
     def RemoveTool(self, tool):
-        """!Remove tool from toolbar
+        """Remove tool from toolbar
         
-        @param tool tool id"""
+        :param tool: tool id"""
         self.DeleteTool(tool)
         
         self.parent._mgr.GetPane('mapToolbar').BestSize(self.GetBestSize())
         self.parent._mgr.Update()
         
     def ChangeToolsDesc(self, mode2d):
-        """!Change description of zoom tools for 2D/3D view"""
+        """Change description of zoom tools for 2D/3D view"""
         if mode2d:
             icons = BaseIcons
         else:
@@ -215,7 +215,7 @@ class MapToolbar(BaseToolbar):
                     self._data[i] = tuple(tmp)
         
     def OnSelectTool(self, event):
-        """!Select / enable tool available in tools list
+        """Select / enable tool available in tools list
         """
         tool =  event.GetSelection()
         
@@ -236,7 +236,7 @@ class MapToolbar(BaseToolbar):
             self.parent.MapWindow.SetFocus()
 
     def OnAnalyze(self, event):
-        """!Analysis tools menu
+        """Analysis tools menu
         """
         self._onMenu(((MapIcons["measureDistance"], self.parent.OnMeasureDistance),
                       (MapIcons["measureArea"], self.parent.OnMeasureArea),
@@ -247,7 +247,7 @@ class MapToolbar(BaseToolbar):
                       (MapIcons["vnet"],        self.parent.OnVNet)))
         
     def OnDecoration(self, event):
-        """!Decorations overlay menu
+        """Decorations overlay menu
         """
         self._onMenu(((MapIcons["addLegend"], lambda evt: self.parent.AddLegend()),
                       (MapIcons["addBarscale"], lambda evt: self.parent.AddBarscale()),
@@ -263,7 +263,7 @@ class MapToolbar(BaseToolbar):
             self.parent.RemoveNviz()
         
     def Enable2D(self, enabled):
-        """!Enable/Disable 2D display mode specific tools"""
+        """Enable/Disable 2D display mode specific tools"""
         for tool in (self.zoomMenu,
                      self.analyze,
                      self.printMap):

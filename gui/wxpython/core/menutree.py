@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.menutree
 
 @brief Creates tree structure for wxGUI menus (former menudata.py)
@@ -54,7 +54,7 @@ if not os.getenv("GISBASE"):
 
 # TODO: change the system to remove strange derived classes
 class MenuTreeModelBuilder:
-    """!Abstract menu data class"""
+    """Abstract menu data class"""
     def __init__(self, filename, expandAddons=True):
 
         self.menustyle = UserSettings.Get(group = 'appearance',
@@ -150,9 +150,9 @@ class MenuTreeModelBuilder:
             printTree(node=child, fh=fh)
 
     def PrintStrings(self, fh):
-        """!Print menu strings to file (used for localization)
+        """Print menu strings to file (used for localization)
 
-        @param fh file descriptor
+        :param fh: file descriptor
         """
         className = str(self.__class__).split('.', 1)[1]
         fh.write('menustrings_%s = [\n' % className)

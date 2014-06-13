@@ -1,4 +1,4 @@
-"""!
+"""
 @package vnet.toolbars
 
 @brief Vector network analysis dialog - toolbars
@@ -25,9 +25,9 @@ from core.gcmd         import RunCommand
 from core.utils import _
 
 class PointListToolbar(BaseToolbar):
-    """!Toolbar for managing list of points
+    """Toolbar for managing list of points
 
-    @param parent reference to VNETDialog
+    :param parent: reference to VNETDialog
     """
     def __init__(self, parent, toolSwitcher, dialog, vnet_mgr):
         BaseToolbar.__init__(self, parent, toolSwitcher)
@@ -91,7 +91,7 @@ class PointListToolbar(BaseToolbar):
 
 
 class MainToolbar(BaseToolbar):
-    """!Main toolbar
+    """Main toolbar
     """
     def __init__(self, parent, vnet_mgr):
         BaseToolbar.__init__(self, parent)
@@ -165,7 +165,7 @@ class MainToolbar(BaseToolbar):
                        entry = 'wxGUI.vnet')
 
 class AnalysisToolbar(BaseToolbar):
-    """!Main toolbar
+    """Main toolbar
     """
     def __init__(self, parent, vnet_mgr):
         BaseToolbar.__init__(self, parent)

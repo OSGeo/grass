@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.globalvar
 
 @brief Global variables used by wxGUI
@@ -42,7 +42,7 @@ except IOError:
 from grass.script.core import get_commands
 
 def CheckWxVersion(version = [2, 8, 11, 0]):
-    """!Check wx version"""
+    """Check wx version"""
     ver = wx.version().split(' ')[0]
     if map(int, ver.split('.')) < version:
         return False
@@ -50,7 +50,7 @@ def CheckWxVersion(version = [2, 8, 11, 0]):
     return True
 
 def CheckForWx():
-    """!Try to import wx module and check its version"""
+    """Try to import wx module and check its version"""
     if 'wx' in sys.modules.keys():
         return
 
@@ -91,7 +91,7 @@ Deleted automatically on re-render action
 # temporal query layer (removed on re-render action)
 QUERYLAYER = 'qlayer'
 
-"""!Style definition for FlatNotebook pages"""
+"""Style definition for FlatNotebook pages"""
 FNPageStyle = FN.FNB_VC8 | \
     FN.FNB_BACKGROUND_GRADIENT | \
     FN.FNB_NODRAG | \
@@ -104,7 +104,7 @@ FNPageDStyle = FN.FNB_FANCY_TABS | \
 
 FNPageColor = wx.Colour(125,200,175)
 
-"""!Dialog widget dimension"""
+"""Dialog widget dimension"""
 DIALOG_SPIN_SIZE = (150, -1)
 DIALOG_COMBOBOX_SIZE = (300, -1)
 DIALOG_GSELECT_SIZE = (400, -1)
@@ -137,10 +137,10 @@ else:
 
 
 def UpdateGRASSAddOnCommands(eList = None):
-    """!Update list of available GRASS AddOns commands to use when
+    """Update list of available GRASS AddOns commands to use when
     parsing string from the command line
 
-    @param eList list of AddOns commands to remove
+    :param eList: list of AddOns commands to remove
     """
     global grassCmd, grassScripts
 

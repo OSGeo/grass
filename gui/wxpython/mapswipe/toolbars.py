@@ -1,4 +1,4 @@
-"""!
+"""
 @package swipe.toolbars
 
 @brief Map Swipe toolbars and icons.
@@ -33,10 +33,10 @@ swipeIcons = {'tools': MetaIcon(img='tools', label=_("Tools")),
 
 
 class SwipeMapToolbar(BaseToolbar):
-    """!Map toolbar (to control map zoom and rendering)
+    """Map toolbar (to control map zoom and rendering)
     """
     def __init__(self, parent, toolSwitcher):
-        """!Map toolbar constructor
+        """Map toolbar constructor
         """
         BaseToolbar.__init__(self, parent, toolSwitcher)
 
@@ -52,7 +52,7 @@ class SwipeMapToolbar(BaseToolbar):
         self.EnableTool(self.zoomBack, False)
 
     def _toolbarData(self):
-        """!Returns toolbar data (name, icon, handler)"""
+        """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         icons = BaseIcons
@@ -89,17 +89,17 @@ class SwipeMapToolbar(BaseToolbar):
                                      ))
 
     def SetActiveMap(self, index):
-        """!Set currently selected map.
+        """Set currently selected map.
         Unused, needed because of DoubleMapFrame API.
         """
         pass
 
 
 class SwipeMainToolbar(BaseToolbar):
-    """!Toolbar with tools related to application functionality
+    """Toolbar with tools related to application functionality
     """
     def __init__(self, parent):
-        """!Toolbar constructor
+        """Toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
 
@@ -123,7 +123,7 @@ class SwipeMainToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         return self._getToolbarData((("addRaster", swipeIcons['addRast'],
                                       self.parent.OnSelectLayers),
                                      (None, ),
@@ -137,7 +137,7 @@ class SwipeMainToolbar(BaseToolbar):
                 self.toggleMode.SetSelection(i)
 
     def OnToolMenu(self, event):
-        """!Menu for additional tools"""
+        """Menu for additional tools"""
         toolMenu = wx.Menu()
 
         for label, itype, handler, desc in (
@@ -159,10 +159,10 @@ class SwipeMainToolbar(BaseToolbar):
 
 
 class SwipeMiscToolbar(BaseToolbar):
-    """!Toolbar with miscellaneous tools related to app
+    """Toolbar with miscellaneous tools related to app
     """
     def __init__(self, parent):
-        """!Toolbar constructor
+        """Toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
 
@@ -171,7 +171,7 @@ class SwipeMiscToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         return self._getToolbarData((("settings", BaseIcons['settings'],
                                       self.parent.OnPreferences),
                                      ("help", BaseIcons['help'],

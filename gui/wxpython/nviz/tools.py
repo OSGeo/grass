@@ -1,4 +1,4 @@
-"""!
+"""
 @package nviz.tools
 
 @brief Nviz (3D view) tools window
@@ -62,7 +62,7 @@ except ImportError:
     pass
 
 class NvizToolWindow(FN.FlatNotebook):
-    """!Nviz (3D view) tools panel
+    """Nviz (3D view) tools panel
     """
     def __init__(self, parent, display, id = wx.ID_ANY,
                  style = globalvar.FNPageStyle|FN.FNB_NO_X_BUTTON,
@@ -127,7 +127,7 @@ class NvizToolWindow(FN.FlatNotebook):
         wx.CallAfter(self.SetInitialMaps)
         
     def SetInitialMaps(self):
-        """!Set initial raster and vector map"""
+        """Set initial raster and vector map"""
         for ltype in ('raster', 'vector', '3d-raster'):
             selectedLayer = self.parent.GetLayerTree().GetSelectedLayer(multi = False, checkedOnly = True)
             if selectedLayer is None:
@@ -164,7 +164,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.fly['exag'] = kwargs['fly']['exag']
     
     def LoadSettings(self):
-        """!Load Nviz settings and apply to current session"""
+        """Load Nviz settings and apply to current session"""
         view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
         light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
         fly = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'fly')) # copy
@@ -184,30 +184,30 @@ class NvizToolWindow(FN.FlatNotebook):
         # self.ChangeSelection(new)
         
     def PostViewEvent(self, zExag = False):
-        """!Change view settings"""
+        """Change view settings"""
         event = wxUpdateView(zExag = zExag)
         wx.PostEvent(self.mapWindow, event)
         
     def PostLightEvent(self, refresh = False): 
-        """!Change light settings"""   
+        """Change light settings""" 
         event = wxUpdateLight(refresh = refresh)
         wx.PostEvent(self.mapWindow, event)
         
     def OnSize(self, event):
-        """!After window is resized, update scrolling"""
+        """After window is resized, update scrolling"""
         # workaround to resize captionbars of foldpanelbar
         wx.CallAfter(self.UpdateScrolling, (self.foldpanelData, self.foldpanelAppear,
                                             self.foldpanelAnalysis)) 
         event.Skip()
            
     def OnPressCaption(self, event):
-        """!When foldpanel item collapsed/expanded, update scrollbars"""
+        """When foldpanel item collapsed/expanded, update scrollbars"""
         foldpanel = event.GetBar().GetGrandParent().GetParent()
         wx.CallAfter(self.UpdateScrolling, (foldpanel,))
         event.Skip()
         
     def UpdateScrolling(self, foldpanels):
-        """!Update scrollbars in foldpanel"""
+        """Update scrollbars in foldpanel"""
         for foldpanel in foldpanels:
             length = foldpanel.GetPanelsLength(collapsed = 0, expanded = 0)
             # virtual width is set to fixed value to suppress GTK warning
@@ -215,7 +215,7 @@ class NvizToolWindow(FN.FlatNotebook):
             foldpanel.GetParent().Layout()
         
     def _createViewPage(self):
-        """!Create view settings page"""
+        """Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
         self.page['view'] = { 'id' : 0,
@@ -374,7 +374,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
         
     def _createAnimationPage(self):
-        """!Create view settings page"""
+        """Create view settings page"""
         panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
         panel.SetupScrolling(scroll_x = False)
         self.page['animation'] = { 'id' : 0,
@@ -521,7 +521,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
         
     def _createDataPage(self):
-        """!Create data (surface, vector, volume) settings page"""
+        """Create data (surface, vector, volume) settings page"""
 
         self.mainPanelData = ScrolledPanel(parent = self)
         self.mainPanelData.SetupScrolling(scroll_x = False)
@@ -577,7 +577,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         
     def _createAppearancePage(self):
-        """!Create data (surface, vector, volume) settings page"""
+        """Create data (surface, vector, volume) settings page"""
         self.mainPanelAppear = ScrolledPanel(parent = self)
         self.mainPanelAppear.SetupScrolling(scroll_x = False)
         
@@ -620,7 +620,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return self.mainPanelAppear
     
     def _createAnalysisPage(self):
-        """!Create data analysis (cutting planes, ...) page"""
+        """Create data analysis (cutting planes, ...) page"""
         self.mainPanelAnalysis = ScrolledPanel(parent = self)
         self.mainPanelAnalysis.SetupScrolling(scroll_x = False)
         self.foldpanelAnalysis = fpb.FoldPanelBar(parent = self.mainPanelAnalysis, id = wx.ID_ANY,
@@ -639,7 +639,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return self.mainPanelAnalysis
         
     def _createSurfacePage(self, parent):
-        """!Create view settings page"""
+        """Create view settings page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         self.page['surface'] = { 'id' : 0,
                                  'notebook' : self.foldpanelData.GetId() }
@@ -930,7 +930,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         return panel
     def _createCPlanePage(self, parent):
-        """!Create cutting planes page"""  
+        """Create cutting planes page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         self.page['cplane'] = { 'id' : 4, 
                                 'notebook' : self.foldpanelData.GetId() }
@@ -1071,7 +1071,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
         
     def _createConstantPage(self, parent):
-        """!Create constant page"""
+        """Create constant page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         self.page['constant'] = { 'id' : 1, 
                                 'notebook' : self.foldpanelData.GetId() }
@@ -1164,7 +1164,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
         
     def _createVectorPage(self, parent):
-        """!Create view settings page"""
+        """Create view settings page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         self.page['vector'] = { 'id' : 2,
                                 'notebook' : self.foldpanelData.GetId() }
@@ -1516,7 +1516,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return maps, exclude
     
     def _createVolumePage(self, parent):
-        """!Create view settings page"""
+        """Create view settings page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         self.page['volume'] = { 'id' : 3,
                                 'notebook' : self.foldpanelData.GetId() }
@@ -1719,7 +1719,7 @@ class NvizToolWindow(FN.FlatNotebook):
        
         
     def _createLightPage(self, parent):
-        """!Create light page"""
+        """Create light page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         
         self.page['light'] = { 'id' : 0, 
@@ -1845,7 +1845,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
 
     def _createFringePage(self, parent):
-        """!Create fringe page"""
+        """Create fringe page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         
         self.page['fringe'] = { 'id' : 1,
@@ -1931,7 +1931,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
     
     def _createDecorationPage(self, parent):
-        """!Create decoration (north arrow, scalebar, legend) page"""
+        """Create decoration (north arrow, scalebar, legend) page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         
         self.page['decoration'] = { 'id' : 2,
@@ -2039,7 +2039,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
     
     def GetLayerData(self, nvizType, nameOnly = False):
-        """!Get nviz data"""
+        """Get nviz data"""
         name = self.FindWindowById(self.win[nvizType]['map']).GetValue()
         if nameOnly:
             return name
@@ -2054,10 +2054,10 @@ class NvizToolWindow(FN.FlatNotebook):
         return None
 
     def _getMapLayerByName(self, name, mapType):
-        """!Get layer (render.Layer) by name and type.
+        """Get layer (render.Layer) by name and type.
 
-        @param name layer name
-        @param mapType map type (raster, vector, 3d-raster)
+        :param name: layer name
+        :param mapType: map type (raster, vector, 3d-raster)
         """
         layers = self.mapWindow.Map.GetListOfLayers(ltype = mapType, name = name)
         if layers:
@@ -2065,10 +2065,10 @@ class NvizToolWindow(FN.FlatNotebook):
         return None
 
     def _getLayerPropertiesByName(self, name, mapType):
-        """!Get nviz properties stored in layertree items by name and type.
+        """Get nviz properties stored in layertree items by name and type.
 
-        @param name layer name
-        @param mapType map type (raster, vector, 3d-raster)
+        :param name: layer name
+        :param mapType: map type (raster, vector, 3d-raster)
         """
         tree = self.parent.GetLayerTree()
         items = tree.FindItemByData(key = 'name', value = name)
@@ -2080,7 +2080,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return None
 
     def OnRecord(self, event):
-        """!Animation: start recording"""
+        """Animation: start recording"""
         anim = self.mapWindow.GetAnimation()
         if not anim.IsPaused():
             if anim.Exists() and not anim.IsSaved():
@@ -2110,7 +2110,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
         
     def OnPlay(self, event):
-        """!Animation: replay"""
+        """Animation: replay"""
         anim = self.mapWindow.GetAnimation()
         anim.SetPause(False)
         anim.SetMode(mode = 'play')
@@ -2124,7 +2124,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['anim']['frameIndex']['text']).Enable()
         
     def OnStop(self, event):
-        """!Animation: stop recording/replaying"""
+        """Animation: stop recording/replaying"""
         anim = self.mapWindow.GetAnimation()
         anim.SetPause(False)
         if anim.GetMode() == 'save':
@@ -2142,7 +2142,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
         
     def OnPause(self, event):
-        """!Pause animation"""
+        """Pause animation"""
         anim = self.mapWindow.GetAnimation()
         
         anim.SetPause(True)
@@ -2166,22 +2166,22 @@ class NvizToolWindow(FN.FlatNotebook):
 
         
     def OnFrameIndex(self, event):
-        """!Frame index changed (by slider)"""
+        """Frame index changed (by slider)"""
         index = event.GetInt()
         self.UpdateFrameIndex(index = index, sliderWidget = False)
         
     def OnFrameIndexText(self, event):
-        """!Frame index changed by (textCtrl)"""
+        """Frame index changed by (textCtrl)"""
         index = event.GetValue()
         self.UpdateFrameIndex(index = index, textWidget = False)
         
     def OnFPS(self, event):
-        """!Frames per second changed"""
+        """Frames per second changed"""
         anim = self.mapWindow.GetAnimation()
         anim.SetFPS(event.GetInt())
         
     def UpdateFrameIndex(self, index, sliderWidget = True, textWidget = True, goToFrame = True):
-        """!Update frame index"""
+        """Update frame index"""
         anim = self.mapWindow.GetAnimation()
         
         # check index
@@ -2203,13 +2203,13 @@ class NvizToolWindow(FN.FlatNotebook):
             anim.GoToFrame(int(index))
             
     def UpdateFrameCount(self):
-        """!Update frame count label"""
+        """Update frame count label"""
         anim = self.mapWindow.GetAnimation()
         count = anim.GetFrameCount()
         self.FindWindowById(self.win['anim']['info']).SetLabel(str(count))
         
     def OnAnimationFinished(self, mode):
-        """!Animation finished"""
+        """Animation finished"""
         anim = self.mapWindow.GetAnimation()
         self.UpdateFrameIndex(index = 0)
         
@@ -2233,14 +2233,14 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.Refresh(False)
         
     def OnAnimationUpdateIndex(self, index, mode):
-        """!Animation: frame index changed"""
+        """Animation: frame index changed"""
         if mode == 'record':
             self.UpdateFrameCount()
         elif mode == 'play':
             self.UpdateFrameIndex(index = index, goToFrame = False)
         
     def OnSaveAnimation(self, event):
-        """!Save animation as a sequence of images"""
+        """Save animation as a sequence of images"""
         anim = self.mapWindow.GetAnimation()
         
         prefix = self.FindWindowById(self.win['anim']['save']['image']['prefix']).GetValue()
@@ -2268,7 +2268,7 @@ class NvizToolWindow(FN.FlatNotebook):
         anim.SaveAnimationFile(path = dir, prefix = prefix, format = format)
         
     def OnNewConstant(self, event):
-        """!Create new surface with constant value"""
+        """Create new surface with constant value"""
         #TODO settings
         name = self.mapWindow.NewConstant()
         win = self.FindWindowById(self.win['constant']['surface'])
@@ -2289,7 +2289,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 
 
     def OnDeleteConstant(self, event):
-        """!Delete selected constant surface"""
+        """Delete selected constant surface"""
         layerIdx = self.FindWindowById(self.win['constant']['surface']).GetSelection()
         if layerIdx == wx.NOT_FOUND:
             return
@@ -2313,7 +2313,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
     
     def OnConstantSelection(self, event):
-        """!Constant selected"""
+        """Constant selected"""
         layerIdx = self.FindWindowById(self.win['constant']['surface']).GetSelection()
         if layerIdx == wx.NOT_FOUND:
             return
@@ -2328,7 +2328,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['constant'][attr]).SetValue(value)
         
     def OnSetConstantProp(self, event):
-        """!Change properties (color, value, resolution)
+        """Change properties (color, value, resolution)
             of currently selected constant surface"""
         layerIdx = self.FindWindowById(self.win['constant']['surface']).GetSelection()
         if layerIdx == wx.NOT_FOUND:
@@ -2347,7 +2347,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnFringe(self, event):
-        """!Show/hide fringe"""
+        """Show/hide fringe"""
         data = self.GetLayerData('fringe')['surface']
         
         sid = data['object']['id']
@@ -2362,7 +2362,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.Refresh(False)
         
     def OnScroll(self, event, win, data):
-        """!Generic scrolling handler"""
+        """Generic scrolling handler"""
         winName = self.__GetWindowName(win, event.GetId())
         if not winName:
             return
@@ -2593,7 +2593,7 @@ class NvizToolWindow(FN.FlatNotebook):
     
     def _createControl(self, parent, data, name, range, tooltip = None, bind = (None, None, None),
                        sliderHor = True, size = 200, floatSlider = False):
-        """!Add control (Slider + TextCtrl)"""
+        """Add control (Slider + TextCtrl)"""
         data[name] = dict()
         if sliderHor:
             style = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | \
@@ -2636,7 +2636,7 @@ class NvizToolWindow(FN.FlatNotebook):
         data[name]['text'] = text.GetId()
         
     def _createCompass(self, panel, sizer, type):
-        """!Create 'compass' widget for light and view page"""
+        """Create 'compass' widget for light and view page"""
         w = wx.Button(panel, id = wx.ID_ANY, label = _("W"))
         n = wx.Button(panel, id = wx.ID_ANY, label = _("N"))
         s = wx.Button(panel, id = wx.ID_ANY, label = _("S"))
@@ -2678,7 +2678,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return None
 
     def UpdateSettings(self):
-        """!Update view from settings values 
+        """Update view from settings values 
         stored in self.mapWindow.view dictionary"""
         for control in ('height',
                         'persp',
@@ -2711,12 +2711,12 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.Refresh(True)
         
     def OnShowLightModel(self, event):
-        """!Show light model"""
+        """Show light model"""
         self._display.showLight = event.IsChecked()
         self._display.DrawLightingModel()
         
     def OnLightChange(self, event):
-        """!Position of the light changing"""
+        """Position of the light changing"""
         winName = self.__GetWindowName(self.win['light'], event.GetId())
         if not winName:
             return
@@ -2732,11 +2732,11 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
         
     def OnLightChanged(self, event):
-        """!Light changed"""
+        """Light changed"""
         self.PostLightEvent(refresh = True)
         
     def OnLightColor(self, event):
-        """!Color of the light changed"""
+        """Color of the light changed"""
         self.mapWindow.light['color'] = tuple(event.GetValue())
         
         self.PostLightEvent(refresh = True)
@@ -2744,7 +2744,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
         
     def OnLightValue(self, event):
-        """!Light brightness/ambient changing"""
+        """Light brightness/ambient changing"""
         data = self.mapWindow.light
         self.OnScroll(event, self.win['light'], data)
         
@@ -2752,7 +2752,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
         
     def OnBgColor(self, event):
-        """!Background color changed"""
+        """Background color changed"""
         color = event.GetValue()
         self.mapWindow.view['background']['color'] = tuple(color)
         color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
@@ -2762,7 +2762,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnSetSurface(self, event):
-        """!Surface selected, currently used for fringes"""
+        """Surface selected, currently used for fringes"""
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType = 'raster')['surface']
@@ -2774,7 +2774,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.EnablePage('fringe', True)
         
     def OnSetRaster(self, event):
-        """!Raster map selected, update surface page"""
+        """Raster map selected, update surface page"""
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType = 'raster')['surface']
@@ -2787,7 +2787,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.UpdateSurfacePage(layer, data, updateName = False)
         
     def OnSetVector(self, event):
-        """!Vector map selected, update properties page"""
+        """Vector map selected, update properties page"""
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType = 'vector')['vector']
@@ -2799,7 +2799,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.UpdateVectorPage(layer, data, updateName = False)
 
     def OnSetRaster3D(self, event):
-        """!3D Raster map selected, update surface page"""
+        """3D Raster map selected, update surface page"""
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType = '3d-raster')['volume']
@@ -2812,7 +2812,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.UpdateVolumePage(layer, data, updateName = False)
         
     def OnViewChange(self, event):
-        """!Change view, render in quick mode"""
+        """Change view, render in quick mode"""
         # find control
         winName = self.__GetWindowName(self.win['view'], event.GetId())
         if not winName:
@@ -2854,7 +2854,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
         
     def OnViewChanged(self, event):
-        """!View changed, render in full resolution"""
+        """View changed, render in full resolution"""
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
         self.UpdateSettings()
@@ -2864,7 +2864,7 @@ class NvizToolWindow(FN.FlatNotebook):
             pass
             
     def OnViewChangedText(self, event):
-        """!View changed, render in full resolution""" 
+        """View changed, render in full resolution"""
         self.mapWindow.render['quick'] = False
         self.OnViewChange(event)
         self.OnViewChanged(None)
@@ -2873,7 +2873,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
     
     def OnLookAt(self, event):
-        """!Look here/center"""
+        """Look here/center"""
         name = self.FindWindowById(event.GetId()).GetName()
         if name == 'center':
             self._display.LookAtCenter()
@@ -2897,13 +2897,13 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.mapWindow.SetNamedCursor('default')
             
     def OnResetView(self, event):
-        """!Reset to default view (view page)"""
+        """Reset to default view (view page)"""
         self.mapWindow.ResetView()
         self.UpdateSettings()
         self.mapWindow.Refresh(False)
         
     def OnResetSurfacePosition(self, event):
-        """!Reset position of surface"""
+        """Reset position of surface"""
         
         for win in self.win['surface']['position'].itervalues():
             if win == self.win['surface']['position']['axis']:
@@ -2926,7 +2926,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
             
     def OnLookFrom(self, event):
-        """!Position of view/light changed by buttons"""
+        """Position of view/light changed by buttons"""
         name = self.FindWindowById(event.GetId()).GetName()
         buttonName = name.split('_')[1]
         if name.split('_')[0] == 'view':
@@ -2974,7 +2974,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.Refresh(False)
 
     def OnMapObjUse(self, event):
-        """!Set surface attribute -- use -- map/constant"""
+        """Set surface attribute -- use -- map/constant"""
         if not self.mapWindow.init:
             return
         
@@ -3031,7 +3031,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
  
     def EnablePage(self, name, enabled = True):
-        """!Enable/disable all widgets on page"""
+        """Enable/disable all widgets on page"""
         for key, item in self.win[name].iteritems():
             if key in ('map', 'surface', 'new','planes'):
                 continue
@@ -3049,7 +3049,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     self.FindWindowById(item).Enable(enabled)
         
     def SetMapObjUseMap(self, nvizType, attrb, map = None):
-        """!Update dialog widgets when attribute type changed"""
+        """Update dialog widgets when attribute type changed"""
         if attrb in ('topo', 'color', 'shine'):
             incSel = -1 # decrement selection (no 'unset')
         else:
@@ -3076,14 +3076,14 @@ class NvizToolWindow(FN.FlatNotebook):
             
         
     def OnSurfaceMap(self, event):
-        """!Set surface attribute"""
+        """Set surface attribute"""
         if self.vetoGSelectEvt:
             self.vetoGSelectEvt = False
             return
         self.SetMapObjAttrb(nvizType = 'surface', winId = event.GetId())
         
     def SetMapObjAttrb(self, nvizType, winId):
-        """!Set map object (surface/isosurface) attribute (map/constant)"""
+        """Set map object (surface/isosurface) attribute (map/constant)"""
         if not self.mapWindow.init:
             return
         
@@ -3144,7 +3144,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.mapWindow.Refresh(False)
         
     def OnSurfaceResolution(self, event):
-        """!Draw resolution changed"""
+        """Draw resolution changed"""
         self.SetSurfaceResolution()
         
         if self.mapDisplay.IsAutoRendered():
@@ -3152,7 +3152,7 @@ class NvizToolWindow(FN.FlatNotebook):
     
 
     def SetSurfaceResolution(self):
-        """!Set draw resolution"""
+        """Set draw resolution"""
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
         fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
         
@@ -3166,7 +3166,7 @@ class NvizToolWindow(FN.FlatNotebook):
         wx.PostEvent(self.mapWindow, event)
         
     def SetSurfaceMode(self):
-        """!Set draw mode"""
+        """Set draw mode"""
         mode = self.FindWindowById(self.win['surface']['draw']['mode']).GetSelection()
         style = self.FindWindowById(self.win['surface']['draw']['style']).GetSelection()
         if style == 0: # wire
@@ -3181,7 +3181,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return value, desc
 
     def OnSurfaceMode(self, event):
-        """!Set draw mode"""
+        """Set draw mode"""
         value, desc = self.SetSurfaceMode()
         
         data = self.GetLayerData('surface')
@@ -3197,7 +3197,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
 
     def OnSurfaceModeAll(self, event):
-        """!Set draw mode (including wire color) for all loaded surfaces"""
+        """Set draw mode (including wire color) for all loaded surfaces"""
         value, desc = self.SetSurfaceMode()
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
         fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
@@ -3228,26 +3228,26 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def _getColorString(self, color):
-        """!Convert color tuple to R:G:B format
+        """Convert color tuple to R:G:B format
 
-        @param color tuple
+        :param color: tuple
         
-        @return string R:G:B
+        :return: string R:G:B
         """
         return str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
     
     def _getColorFromString(self, color, delim = ':'):
-        """!Convert color string (R:G:B) to wx.Colour
+        """Convert color string (R:G:B) to wx.Colour
 
-        @param color string
-        @param delim delimiter
+        :param color: string
+        :param delim: delimiter
 
-        @return wx.Colour instance
+        :return: wx.Colour instance
         """
         return wx.Colour(*map(int, color.split(delim)))
     
     def _get3dRange(self, name):
-        """!Gelper func for getting range of 3d map"""
+        """Gelper func for getting range of 3d map"""
         ret = RunCommand('r3.info', read = True, flags = 'r', map = name)
         if ret:
             range = []
@@ -3258,7 +3258,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return -1e6, 1e6
     
     def _getPercent(self, value, toPercent = True):
-        """!Convert values 0 - 255 to percents and vice versa"""
+        """Convert values 0 - 255 to percents and vice versa"""
         value = int(value)
         if toPercent:
             value = int(value/255. * 100)
@@ -3267,7 +3267,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return value
     
     def OnSurfaceWireColor(self, event):
-        """!Set wire color"""
+        """Set wire color"""
         data = self.GetLayerData('surface')
         value = self._getColorString(event.GetValue())
         data['surface']['draw']['wire-color'] = { 'value' : value,
@@ -3281,7 +3281,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnSurfaceAxis(self, event):
-        """!Surface position, axis changed"""
+        """Surface position, axis changed"""
         data = self.GetLayerData('surface')
         id = data['surface']['object']['id']
         
@@ -3308,7 +3308,7 @@ class NvizToolWindow(FN.FlatNotebook):
             text.SetValue(z)
         
     def OnSurfacePosition(self, event):
-        """!Surface position"""
+        """Surface position"""
         winName = self.__GetWindowName(self.win['surface'], event.GetId())
         if not winName:
             return
@@ -3351,19 +3351,19 @@ class NvizToolWindow(FN.FlatNotebook):
         #        self.UpdatePage('surface')
         
     def OnSurfacePositionChanged(self, event):
-        """!Surface position changed"""
+        """Surface position changed"""
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
 
     def OnSurfacePositionText(self, event):
-        """!Surface position changed by textctrl"""
+        """Surface position changed by textctrl"""
         self.OnSurfacePosition(event)
         self.OnSurfacePositionChanged(None)
         
     def UpdateVectorShow(self, vecType, enabled):
-        """!Enable/disable lines/points widgets
+        """Enable/disable lines/points widgets
         
-        @param vecType vector type (lines, points)
+        :param vecType: vector type (lines, points)
         """
         if vecType != 'lines' and vecType != 'points':
             return False
@@ -3386,7 +3386,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return True
     
     def OnVectorShow(self, event):
-        """!Show vector lines/points"""
+        """Show vector lines/points"""
         winId = event.GetId()
         if winId == self.win['vector']['lines']['show']:
             vecType = 'lines'
@@ -3429,7 +3429,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
     
     def OnVectorLinesMode(self, event):
-        """!Display vector lines on surface/flat"""
+        """Display vector lines on surface/flat"""
         rasters = self.mapWindow.GetLayerNames('raster')
         if event.GetSelection() == 0: # surface
             if len(rasters) < 1:
@@ -3451,7 +3451,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
 
     def OnVectorLines(self, event):
-        """!Set vector lines mode, apply changes if auto-rendering is enabled"""
+        """Set vector lines mode, apply changes if auto-rendering is enabled"""
         data = self.GetLayerData('vector')
         width = self.FindWindowById(self.win['vector']['lines']['width']).GetValue()
         
@@ -3547,7 +3547,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
     
     def OnVectorHeightFull(self, event):
-        """!Vector height changed, render in full resolution"""
+        """Vector height changed, render in full resolution"""
         self.OnVectorHeight(event)
 ##        self.OnVectorSurface(event)
         id = event.GetId()
@@ -3561,13 +3561,13 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.Refresh(False)
 
     def OnVectorHeightText(self, event):
-        """!Vector height changed, render in full resolution"""
+        """Vector height changed, render in full resolution"""
         
         #        self.OnVectorHeight(event)
         self.OnVectorHeightFull(event)
     
     def OnVectorSurface(self, event):
-        """!Reference surface for vector map (lines/points)"""   
+        """Reference surface for vector map (lines/points)""" 
         id = event.GetId()
         if id == self.win['vector']['lines']['surface']:
             vtype = 'lines'
@@ -3594,7 +3594,7 @@ class NvizToolWindow(FN.FlatNotebook):
             
         
     def OnVectorPoints(self, event):
-        """!Set vector points mode, apply changes if auto-rendering is enabled"""
+        """Set vector points mode, apply changes if auto-rendering is enabled"""
         data = self.GetLayerData('vector')
         
         size  = self.FindWindowById(self.win['vector']['points']['size']).GetValue()
@@ -3623,7 +3623,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
 
     def OnCheckThematic(self, event):
-        """!Switch on/off thematic mapping"""
+        """Switch on/off thematic mapping"""
         # can be called with no event to enable/disable button
         if not event:
             ids = (self.win['vector']['points']['thematic']['checkcolor'],
@@ -3681,7 +3681,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
             
     def HasGRASSRGB(self, name):
-        """!Check if GRASSRGB column exist."""
+        """Check if GRASSRGB column exist."""
         column = False
         
         dbInfo = VectorDBInfo(name)
@@ -3693,7 +3693,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return column
         
     def OnSetThematic(self, event):
-        """!Set options for thematic points"""
+        """Set options for thematic points"""
         if event.GetId() in self.win['vector']['points']['thematic'].values():
             vtype = 'points'
         else:
@@ -3709,7 +3709,7 @@ class NvizToolWindow(FN.FlatNotebook):
         ctable.Show()
         
     def UpdateIsosurfButtons(self, list):
-        """!Enable/disable buttons 'add', 'delete',
+        """Enable/disable buttons 'add', 'delete',
         'move up', 'move down'"""
         nitems = list.GetCount()
         add = self.parent.FindWindowById(self.win['volume']['btnAdd'])
@@ -3741,7 +3741,7 @@ class NvizToolWindow(FN.FlatNotebook):
             moveUp.Enable(True)
             
     def OnVolumeMode(self, event):
-        """!Change mode isosurfaces/slices"""
+        """Change mode isosurfaces/slices"""
         mode = self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection()
         data = self.GetLayerData('volume')['volume']
         
@@ -3770,11 +3770,11 @@ class NvizToolWindow(FN.FlatNotebook):
         listBox.GetParent().Fit()
             
     def OnVolumeDrawMode(self, event):
-        """!Set isosurface/slice draw mode"""
+        """Set isosurface/slice draw mode"""
         self.SetVolumeDrawMode(event.GetSelection())
         
     def OnVolumeDrawBox(self, event):
-        """!Set wire box drawing"""
+        """Set wire box drawing"""
         data = self.GetLayerData('volume')['volume']
         vid = data['object']['id']
         checked = self.FindWindowById(self.win['volume']['draw']['box']).GetValue()
@@ -3785,7 +3785,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
 
     def SetVolumeDrawMode(self, selection):
-        """!Set isosurface draw mode"""
+        """Set isosurface draw mode"""
         data = self.GetLayerData('volume')['volume']
         id = data['object']['id']
         
@@ -3808,11 +3808,11 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnVolumeResolution(self, event):
-        """!Set isosurface/slice draw resolution"""
+        """Set isosurface/slice draw resolution"""
         self.SetVolumeResolution(event.GetInt())
         
     def SetVolumeResolution(self, res):
-        """!Set isosurface draw resolution"""
+        """Set isosurface draw resolution"""
         data = self.GetLayerData('volume')['volume']
         id = data['object']['id']
         
@@ -3827,7 +3827,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
     
     def OnInOutMode(self, event):
-        """!Change isosurfaces mode inout"""
+        """Change isosurfaces mode inout"""
         data = self.GetLayerData('volume')['volume']
         id = data['object']['id']
         isosurfId = self.FindWindowById(self.win['volume']['isosurfs']).GetSelection()
@@ -3841,14 +3841,14 @@ class NvizToolWindow(FN.FlatNotebook):
     
         
     def OnVolumeIsosurfMap(self, event):
-        """!Set surface attribute"""
+        """Set surface attribute"""
         if self.vetoGSelectEvt:
             self.vetoGSelectEvt = False
             return
         self.SetMapObjAttrb(nvizType = 'volume', winId = event.GetId())
         
     def OnVolumeCheck(self, event):
-        """!Isosurface/slice checked (->load) or unchecked (->unload)"""
+        """Isosurface/slice checked (->load) or unchecked (->unload)"""
         if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
             mode = 'isosurf'
         else:
@@ -3889,7 +3889,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnVolumeSelect(self, event):
-        """!Isosurface/Slice item selected"""
+        """Isosurface/Slice item selected"""
         if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
             mode = 'isosurf'
         else:
@@ -3928,7 +3928,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         
     def OnVolumeAdd(self, event):
-        """!Add new isosurface/slice to the list"""
+        """Add new isosurface/slice to the list"""
         if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
             mode = 'isosurf'
         else:
@@ -3996,7 +3996,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
         
     def OnVolumeDelete(self, event):
-        """!Remove isosurface/slice from list"""
+        """Remove isosurface/slice from list"""
         if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
             mode = 'isosurf'
         else:
@@ -4043,7 +4043,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
         
     def OnVolumeMoveUp(self, event):
-        """!Move isosurface/slice up in the list"""
+        """Move isosurface/slice up in the list"""
         if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
             mode = 'isosurf'
         else:
@@ -4084,7 +4084,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
         
     def OnVolumeMoveDown(self, event):
-        """!Move isosurface/slice down in the list"""
+        """Move isosurface/slice down in the list"""
         if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
             mode = 'isosurf'
         else:
@@ -4125,12 +4125,12 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
     
     def OnVolumePositionChanged(self, event):
-        """!Volume position changed"""
+        """Volume position changed"""
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
         
     def OnVolumePosition(self, event):
-        """!Volume position"""
+        """Volume position"""
         winName = self.__GetWindowName(self.win['volume'], event.GetId())
         if not winName:
             return
@@ -4172,7 +4172,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnVolumeAxis(self, event):
-        """!Volume position, axis changed"""
+        """Volume position, axis changed"""
         data = self.GetLayerData('volume')
         id = data['volume']['object']['id']
         
@@ -4198,12 +4198,12 @@ class NvizToolWindow(FN.FlatNotebook):
             text.SetValue(z)
             
     def OnVolumePositionText(self, event):
-        """!Volume position changed by textctrl"""
+        """Volume position changed by textctrl"""
         self.OnVolumePosition(event)
         self.OnVolumePositionChanged(None)
         
     def OnResetVolumePosition(self, event):
-        """!Reset position of volume"""
+        """Reset position of volume"""
         for win in self.win['volume']['position'].itervalues():
             if win == self.win['volume']['position']['axis']:
                 self.FindWindowById(win).SetSelection(2) # Z
@@ -4225,7 +4225,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnVolumeSliceAxes(self, event):
-        """!Slice axis changed"""
+        """Slice axis changed"""
         self.UpdateSliceLabels()
         data = self.GetLayerData('volume')
         list = self.FindWindowById(self.win['volume']['slices'])
@@ -4248,7 +4248,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
     
     def OnSliceTransparency(self, event):
-        """!Slice transparency changed"""
+        """Slice transparency changed"""
         data = self.GetLayerData('volume')
         
         list = self.FindWindowById(self.win['volume']['slices'])
@@ -4268,7 +4268,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnSliceReset(self, event):
-        """!Slice position reset"""
+        """Slice position reset"""
         data = self.GetLayerData('volume')
         
         list = self.FindWindowById(self.win['volume']['slices'])
@@ -4289,7 +4289,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def OnSlicePositionChange(self, event):
-        """!Slice position is changing"""
+        """Slice position is changing"""
         data = self.GetLayerData('volume')
         list = self.FindWindowById(self.win['volume']['slices'])
         sel = list.GetSelection()
@@ -4313,13 +4313,13 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
                
     def OnSlicePositionChanged(self, event):
-        """!Slice position is changed"""
+        """Slice position is changed"""
         self.mapWindow.render['quick'] = False
         if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
                 
     def OnCPlaneSelection(self, event):
-        """!Cutting plane selected"""
+        """Cutting plane selected"""
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
@@ -4336,7 +4336,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.UpdateCPlanePage(planeIndex)
         
     def OnCPlaneChanging(self, event):
-        """!Cutting plane is changing"""
+        """Cutting plane is changing"""
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
@@ -4359,13 +4359,13 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
 
     def OnCPlaneChangeDone(self, event):
-        """!Cutting plane change done"""
+        """Cutting plane change done"""
         self.mapWindow.render['quick'] = False
         if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
             
     def OnCPlaneChangeText(self, event):
-        """!Cutting plane changed by textctrl"""
+        """Cutting plane changed by textctrl"""
         for axis in ('x', 'y', 'z'):
             if event.GetId() == self.win['cplane']['position'][axis]['text']:
                 value = self.FindWindowById(event.GetId()).GetValue()
@@ -4375,7 +4375,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.OnCPlaneChangeDone(None)   
         
     def OnCPlaneShading(self, event):
-        """!Cutting plane shading changed"""
+        """Cutting plane shading changed"""
         shading = self.FindWindowById(self.win['cplane']['shading']).GetSelection()
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
         try:
@@ -4391,7 +4391,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.OnCPlaneChangeDone(None)
         
     def OnCPlaneReset(self, event):
-        """!Reset current cutting plane"""
+        """Reset current cutting plane"""
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
@@ -4407,7 +4407,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.UpdateCPlanePage(planeIndex)
     
     def OnDecorationPlacement(self, event):
-        """!Place an arrow/scalebar by clicking on display"""
+        """Place an arrow/scalebar by clicking on display"""
         if event.GetId() == self.win['decoration']['arrow']['place']:
             type = 'arrow'
         elif event.GetId() == self.win['decoration']['scalebar']['place']:
@@ -4423,14 +4423,14 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.SetNamedCursor('default')
     
     def OnArrowDelete(self, event):
-        """!Delete arrow"""
+        """Delete arrow"""
         self._display.DeleteArrow()
         self.mapWindow.decoration['arrow']['show'] = False
         self.FindWindowById( self.win['decoration']['arrow']['delete']).Disable()
         self.mapWindow.Refresh(False)
     
     def OnScalebarDelete(self, event):
-        """!Delete scalebar"""
+        """Delete scalebar"""
         choice = self.FindWindowById(self.win['decoration']['scalebar']['choice'])
         choiceIndex = choice.GetSelection()
         index = choice.GetClientData(choiceIndex)
@@ -4460,7 +4460,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['decoration']['scalebar']['choice']).Enable(not choice.IsEmpty())
 
     def OnDecorationProp(self, event):
-        """!Set arrow/scalebar properties"""
+        """Set arrow/scalebar properties"""
         if event.GetId() in self.win['decoration']['arrow'].values():
             type = 'arrow'
         elif event.GetId() in self.win['decoration']['scalebar'].values():
@@ -4499,7 +4499,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def UpdatePage(self, pageId):
-        """!Update dialog (selected page)"""
+        """Update dialog (selected page)"""
         self.pageChanging = True
         Debug.msg(1, "NvizToolWindow.UpdatePage(): %s", pageId)
         
@@ -4611,7 +4611,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.pageChanging = False
         
     def UpdateAnimationPage(self):
-        """!Update animation page"""
+        """Update animation page"""
         # wrap help text according to tool window
         help = self.FindWindowById(self.win['anim']['help'])
         width = help.GetGrandParent().GetSizeTuple()[0]
@@ -4632,7 +4632,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
         
     def UpdateCPlanePage(self, index):
-        """!Update widgets according to selected clip plane"""
+        """Update widgets according to selected clip plane"""
         if index == -1:   
             return
         data = self.mapWindow.cplanes[index]
@@ -4644,7 +4644,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['cplane']['shading']).SetSelection(data['shading'])
                 
     def UpdateSurfacePage(self, layer, data, updateName = True):
-        """!Update surface page"""
+        """Update surface page"""
         desc = grass.raster_info(layer.name)['title']
         if updateName:
             self.FindWindowById(self.win['surface']['map']).SetValue(layer.name)
@@ -4739,7 +4739,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.OnSurfaceMode(event = None)
         
     def UpdateVectorPage(self, layer, data, updateName = True):
-        """!Update vector page"""
+        """Update vector page"""
         vInfo = grass.vector_info_topo(layer.GetName())
         if not vInfo:
             return
@@ -4861,7 +4861,7 @@ class NvizToolWindow(FN.FlatNotebook):
             win.SetValue(data['points']['height']['value'])
         
     def UpdateVolumePage(self, layer, data, updateName = True):
-        """!Update volume page"""
+        """Update volume page"""
         if updateName:
             self.FindWindowById(self.win['volume']['map']).SetValue(layer.name)
         
@@ -4938,7 +4938,7 @@ class NvizToolWindow(FN.FlatNotebook):
         desc.SetLabel("%s %.2f - %.2f" % (_("range:"), mapRange[0], mapRange[1]))
         
     def UpdateVolumeIsosurfPage(self, data):
-        """!Update dialog -- isosurface attributes"""
+        """Update dialog -- isosurface attributes"""
         #
         # isosurface attributes
         #
@@ -4976,7 +4976,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win['volume']['inout']).SetValue(data['inout']['value'])
             
     def UpdateVolumeSlicePage(self, data):
-        """!Update dialog -- slice attributes"""
+        """Update dialog -- slice attributes"""
         if data:
             for coord in ('x1', 'x2', 'y1', 'y2', 'z1', 'z2'):
                 win = self.FindWindowById(self.win['volume']['slice']['slider_' + coord])
@@ -5000,7 +5000,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.UpdateSliceLabels()
         
     def UpdateSliceLabels(self):
-        """!Update text labels of slice controls according to axis"""
+        """Update text labels of slice controls according to axis"""
         sel = self.FindWindowById(self.win['volume']['slice']['axes']).GetSelection()
         if sel == 0:
             self.FindWindowByName('label_edge_0').SetLabel(_("North edge:"))
@@ -5031,7 +5031,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowByName('label_coord_2').SetLabel(_("Height (Z):")) 
         
     def SetPage(self, name):
-        """!Get named page"""
+        """Get named page"""
         if name == 'view':
             self.SetSelection(0)
         elif name in ('surface', 'vector', 'volume'):
@@ -5047,7 +5047,7 @@ class NvizToolWindow(FN.FlatNotebook):
             win.SetSelection(self.page[name]['id'])
 
 class PositionWindow(wx.Window):
-    """!Abstract position control window, see subclasses
+    """Abstract position control window, see subclasses
     ViewPostionWindow and LightPositionWindow"""
     def __init__(self, parent, mapwindow, id = wx.ID_ANY,
                  **kwargs):
@@ -5090,7 +5090,7 @@ class PositionWindow(wx.Window):
         self.pdc.DrawToDC(dc)
         
     def UpdatePos(self, xcoord, ycoord):
-        """!Update position coordinates (origin: UL)"""
+        """Update position coordinates (origin: UL)"""
         if xcoord < 0.0:
             xcoord = 0.0
         elif xcoord > 1.0:
@@ -5125,7 +5125,7 @@ class PositionWindow(wx.Window):
         self.Draw(pos = (x,y), scale = True)
 
 class ViewPositionWindow(PositionWindow):
-    """!View position control widget"""
+    """View position control widget"""
     def __init__(self, parent, mapwindow, id = wx.ID_ANY,
                  **kwargs):
         PositionWindow.__init__(self, parent, mapwindow, id, **kwargs)
@@ -5157,7 +5157,7 @@ class ViewPositionWindow(PositionWindow):
         event.Skip()
     
 class LightPositionWindow(PositionWindow):
-    """!Light position control widget"""
+    """Light position control widget"""
     def __init__(self, parent, mapwindow, id = wx.ID_ANY,
                  **kwargs):
         PositionWindow.__init__(self, parent, mapwindow, id, **kwargs)

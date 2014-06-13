@@ -1,4 +1,4 @@
-"""!
+"""
 @package web_services.widgets
 
 @brief Widgets for web services (WMS, WMTS, NasaOnEarh)
@@ -56,13 +56,13 @@ from grass.pydispatch.signal import Signal
 
 class WSPanel(wx.Panel):
     def __init__(self, parent, web_service, **kwargs):
-        """!Show data from capabilities file.
+        """Show data from capabilities file.
 
         Signal: capParsed - this signal is emitted when capabilities file is downloaded 
                             (after ConnectToServer method was called)
 
-        @param parent       - parent widget
-        @param web_service  - web service to be panel generated for
+        :param parent:  parent widget
+        :param web_service:  web service to be panel generated for
         """
         wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY)
 
@@ -144,7 +144,7 @@ class WSPanel(wx.Panel):
         self.SetSizer(sizer)
 
     def _requestPage(self):
-        """!Create request page"""
+        """Create request page"""
         self.req_page_panel = wx.Panel(parent = self, id = wx.ID_ANY)
         self.notebook.AddPage(page = self.req_page_panel, 
                               text=_('Request'), 
@@ -201,13 +201,13 @@ class WSPanel(wx.Panel):
         self.req_page_panel.SetSizer(self.req_page_sizer)
     
     def enableButtons(self, enable = True):
-        """!Enable/disable up, down, buttons
+        """Enable/disable up, down, buttons
         """
         self.btnUp.Enable(enable)
         self.btnDown.Enable(enable)
 
     def _advancedSettsPage(self):
-        """!Create advanced settings page
+        """Create advanced settings page
         """
         #TODO parse maxcol, maxrow, settings from d.wms module?
         #TODO OnEarth driver - add selection of time
@@ -365,7 +365,7 @@ class WSPanel(wx.Panel):
         adv_setts_panel.SetSizer(border)
 
     def OnUp(self, event):
-        """!Move selected layer up
+        """Move selected layer up
         """
         if self.l_odrder_list.GetSelections():
             pos = self.l_odrder_list.GetSelection()
@@ -377,7 +377,7 @@ class WSPanel(wx.Panel):
                 self._updateLayerOrderList(selected = 0)
 
     def OnDown(self, event):
-        """!Move selected to down
+        """Move selected to down
         """
         if self.l_odrder_list.GetSelections():
             pos = self.l_odrder_list.GetSelection()
@@ -389,7 +389,7 @@ class WSPanel(wx.Panel):
                 self._updateLayerOrderList(selected = len(self.sel_layers) -1)
 
     def _updateLayerOrderList(self, selected = None):
-        """!Update order in list.
+        """Update order in list.
         """
         def getlayercaption(layer):
             if l['title']:
@@ -422,11 +422,14 @@ class WSPanel(wx.Panel):
             self.params['bgcolor'].Enable(False)
 
     def ConnectToServer(self, url, username, password):
-        """!Download and parse data from capabilities file.
+        """Download and parse data from capabilities file.
 
-        @param url - server url
-        @param username - username for connection
-        @param password - password for connection
+        :param url: server url
+        :type url: str
+        :param username: username for connection
+        :type username: str
+        :param password: password for connection
+        :type password: str
         """
         self._prepareForNewConn(url, username, password)
         cap_cmd = ['r.in.wms', '-c', ('capfile_output=%s' % self.cap_file), '--overwrite'] + self.ws_cmdl
@@ -435,15 +438,15 @@ class WSPanel(wx.Panel):
         self.cmd_thread.RunCmd(cap_cmd, stderr = self.cmdStdErr)
 
     def OnCmdOutput(self, event):
-        """!Manage cmd output.
+        """Manage cmd output.
         """
         if Debug.GetLevel() != 0:
-          Debug.msg(1, event.text)
+            Debug.msg(1, event.text)
         elif event.type != 'message' and event.type != 'warning':
-          self.cmd_err_str += event.text + os.linesep
+            self.cmd_err_str += event.text + os.linesep
 
     def _prepareForNewConn(self, url, username, password):
-        """!Prepare panel for new connection
+        """Prepare panel for new connection
         """
         self.is_connected = False
 
@@ -465,7 +468,8 @@ class WSPanel(wx.Panel):
         self.ws_cmdl = self.ws_drvs[self.ws]['cmd'] + conn_cmd
 
     def OnCapDownloadDone(self, event):
-        """!Process donwloaded capabilities file and emits capParsed signal (see class constructor).
+        """Process donwloaded capabilities file and emits capParsed
+        signal (see class constructor).
         """
         if event.pid != self.currentPid:
             return
@@ -481,8 +485,9 @@ class WSPanel(wx.Panel):
         self._parseCapFile(self.cap_file)
 
     def _parseCapFile(self, cap_file):
-        """!Parse capabilities data and emits capParsed signal (see class constructor).
-        """ 
+        """Parse capabilities data and emits capParsed signal
+        (see class constructor).
+        """
         try:
             self.cap = self.ws_drvs[self.ws]['cap_parser'](cap_file)
         except (IOError, ParseError) as error:
@@ -509,8 +514,9 @@ class WSPanel(wx.Panel):
         self._postCapParsedEvt(None)
 
     def ParseCapFile(self, url, username, password, cap_file = None,):
-        """!Parse capabilities data and emits capParsed signal (see class constructor).
-        """ 
+        """Parse capabilities data and emits capParsed signal
+        (see class constructor).
+        """
         self._prepareForNewConn(url, username, password)
 
         if cap_file is None or not url:
@@ -522,8 +528,9 @@ class WSPanel(wx.Panel):
         self._parseCapFile(self.cap_file)
 
     def UpdateWidgetsByCmd(self, cmd):
-        """!Update panel widgets accordnig to passed cmd tuple
-        @param cmd - cmd in tuple
+        """Update panel widgets accordnig to passed cmd tuple
+        
+        :param cmd: cmd in tuple
         """
 
         dcmd = cmd[1]
@@ -591,20 +598,20 @@ class WSPanel(wx.Panel):
                 self.params['bgcolor'].SetColour(colour)
 
     def IsConnected(self):
-        """!Was successful in downloading and parsing capabilities data?
+        """Was successful in downloading and parsing capabilities data?
         """
         return self.is_connected
 
     def _postCapParsedEvt(self, error_msg):
-        """!Helper function
+        """Helper function
         """
         self.capParsed.emit(error_msg=error_msg)
 
     def CreateCmd(self):
-        """!Create d.wms cmd from values of panels widgets 
+        """Create d.wms cmd from values of panels widgets 
 
-        @return cmd list
-        @return None if required widgets do not have selected/filled values. 
+        :return: cmd list
+        :return: None if required widgets do not have selected/filled values. 
         """
 
         # check required widgets
@@ -661,7 +668,7 @@ class WSPanel(wx.Panel):
         return lcmd
 
     def OnListSelChanged(self, event):
-        """!Update widgets according to selected layer in list.
+        """Update widgets according to selected layer in list.
         """
         curr_sel_ls = self.list.GetSelectedLayers()
         # update self.sel_layers (selected layer list)
@@ -744,16 +751,16 @@ class WSPanel(wx.Panel):
         self.Layout()
 
     def _setDefaultFormatVal(self):
-        """!Set default format value.
+        """Set default format value.
         """
         try:
-           i = self.formats_list.index('png')
-           self.params['format'].SetSelection(i)
+            i = self.formats_list.index('png')
+            self.params['format'].SetSelection(i)
         except ValueError:
             pass
 
     def _updateFormatRadioBox(self, formats_list):
-        """!Helper function
+        """Helper function
         """
         if self.params['format'] is not None:
             self.req_page_sizer.Detach(self.params['format'])
@@ -767,7 +774,7 @@ class WSPanel(wx.Panel):
                                      flag = wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
         
     def _getFormats(self, layer = None):
-        """!Get formats 
+        """Get formats 
 
         WMS has formats defined generally for whole cap.
         In WMTS and NASA OnEarh formats are defined for layer.
@@ -788,7 +795,7 @@ class WSPanel(wx.Panel):
         return formats_label
 
     def _checkImportValues(self,): 
-        """!Check if required widgets are selected/filled
+        """Check if required widgets are selected/filled
         """
         warning_str = ""
         show_war = False
@@ -818,7 +825,7 @@ class WSPanel(wx.Panel):
         return True
 
     def SetOutputLayerName(self, name):
-        """!Set name of layer to be added to layer tree
+        """Set name of layer to be added to layer tree
         """
         self.o_layer_name = name
 
@@ -826,18 +833,18 @@ class WSPanel(wx.Panel):
         return self.o_layer_name
 
     def GetCapFile(self):
-        """!Get path to file where capabilities are saved
+        """Get path to file where capabilities are saved
         """
         return self.cap_file
 
     def GetWebService(self):
-        """!Get web service
+        """Get web service
         """
         return self.ws
 
 class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, web_service, style, pos=wx.DefaultPosition):
-        """!List of layers and styles available in capabilities file
+        """List of layers and styles available in capabilities file
         """
         self.parent = parent
         self.ws = web_service
@@ -861,7 +868,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.layerSelected = Signal('LayersList.layerSelected')
 
     def LoadData(self, cap = None):
-        """!Load data into list
+        """Load data into list
         """
         # detete first all items
         self.DeleteAllItems()
@@ -870,10 +877,11 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             return
     
         def AddLayerChildrenToTree(parent_layer, parent_item):
-            """!Recursive function which adds all capabilities layers/styles to the LayersList. 
+            """Recursive function which adds all capabilities
+            layers/styles to the LayersList. 
             """
             def gettitle(layer):
-                """!Helper function"""
+                """Helper function"""
                 if layer.GetLayerData('title') is not None:
                     layer_title = layer.GetLayerData('title')
                 elif layer.GetLayerData('name') is not None:
@@ -931,9 +939,9 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         #self.ExpandAll(self.GetRootItem())
 
     def GetSelectedLayers(self):
-        """!Get selected layers/styles in LayersList
+        """Get selected layers/styles in LayersList
 
-        @return dict with these items:
+        :return: dict with these items:
                     'name'  : layer name used for request
                               if it is style, it is name of parent layer
                     'title' : layer title
@@ -956,7 +964,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         return sel_layers_dict
 
     def OnListSelChanging(self, event):
-        """!Do not allow to select items, which cannot be requested from server.
+        """Do not allow to select items, which cannot be requested from server.
         """
         def _emitSelected(layer):
             title = layer.GetLayerData('title')
@@ -1001,20 +1009,20 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             _emitSelected(self.GetPyData(cur_item)['layer'])
           
     def GetItemCount(self):
-        """!Required for listmix.ListCtrlAutoWidthMixin
+        """Required for listmix.ListCtrlAutoWidthMixin
         """
         return 0
 
     def GetCountPerPage(self):
-        """!Required for listmix.ListCtrlAutoWidthMixin
+        """Required for listmix.ListCtrlAutoWidthMixin
         """
         return 0
 
     def SelectLayers(self, l_st_list):
-        """!Select layers/styles in LayersList
+        """Select layers/styles in LayersList
 
-        @param l_st_list - [{style : 'style_name', layer : 'layer_name'}, ...]
-        @return items from l_st_list which were not found
+        :param l_st_list: [{style : 'style_name', layer : 'layer_name'}, ...]
+        :return: items from l_st_list which were not found
         """
         def checknext(item, l_st_list, items_to_sel):
             def compare(item, l_name, st_name):

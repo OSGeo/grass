@@ -1,4 +1,4 @@
-"""!
+"""
 @package gmodeler.menudata
 
 @brief wxGUI Graphical Modeler - menu data

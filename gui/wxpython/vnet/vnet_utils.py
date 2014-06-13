@@ -1,4 +1,4 @@
-"""!
+"""
 @package vnet.vnet_utils
 
 @brief Vector network analysis utilities.
@@ -30,7 +30,7 @@ except ImportError:
     haveCtypes = False
 
 def ParseMapStr(mapStr):
-    """!Create full map name (add current mapset if it is not present in name)"""
+    """Create full map name (add current mapset if it is not present in name)"""
     mapValSpl = mapStr.strip().split("@")
     if len(mapValSpl) > 1:
         mapSet = mapValSpl[1]
@@ -47,7 +47,7 @@ def RadiansToDegrees(radians):
     return radians * 180 / math.pi   
 
 def SnapToNode(e, n, tresh, vectMap):
-    """!Find nearest node to click coordinates (within given threshold)"""
+    """Find nearest node to click coordinates (within given threshold)"""
     if not haveCtypes:
         return None
 

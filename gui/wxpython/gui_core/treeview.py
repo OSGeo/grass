@@ -1,4 +1,4 @@
-"""!
+"""
 @package gui_core.treeview
 
 @brief tree view for dislaying tree model (used for search tree)
@@ -32,7 +32,7 @@ from grass.pydispatch.signal import Signal
 
 
 class AbstractTreeViewMixin(VirtualTree):
-    """!Abstract tree view class for displaying tree model.
+    """Abstract tree view class for displaying tree model.
 
     Concrete implementation must inherit both this mixin class and a wx tree widget.
     More functionality and signals can be added if needed.
@@ -58,18 +58,18 @@ class AbstractTreeViewMixin(VirtualTree):
                                            self._emitSignal(evt.GetItem(), self.contextMenu))
 
     def SetModel(self, model):
-        """!Set tree model and refresh.
+        """Set tree model and refresh.
         
-        @param model tree model        
+        :param model: tree model        
         """
         self._model = model
         self.RefreshItems()
 
     def OnGetItemText(self, index, column=0):
-        """!Overridden method necessary to communicate with tree model.
+        """Overridden method necessary to communicate with tree model.
 
-        @param index index as explained in VirtualTree doc
-        @param column column index if applicable
+        :param index: index as explained in VirtualTree doc
+        :param column: column index if applicable
         """
         node = self._model.GetNodeByIndex(index)
         # remove & because of & needed in menu (&Files)
@@ -77,13 +77,13 @@ class AbstractTreeViewMixin(VirtualTree):
         return label
 
     def OnGetChildrenCount(self, index):
-        """!Overridden method necessary to communicate with tree model."""
+        """Overridden method necessary to communicate with tree model."""
         return len(self._model.GetChildrenByIndex(index))
 
     def GetSelected(self):
-        """!Get currently selected items.
+        """Get currently selected items.
 
-        @return list of nodes representing selected items (can be empty)
+        :return: list of nodes representing selected items (can be empty)
         """
         selected = []
         for sel in self.GetSelections():
@@ -92,10 +92,10 @@ class AbstractTreeViewMixin(VirtualTree):
         return selected
 
     def Select(self, node, select=True):
-        """!Select items.
+        """Select items.
 
-        @param node node representing item
-        @param select True/False to select/deselect
+        :param node: node representing item
+        :param select: True/False to select/deselect
         """
         index = self._model.GetIndexOfNode(node)
         for i in range(len(index))[1:]:
@@ -106,10 +106,10 @@ class AbstractTreeViewMixin(VirtualTree):
         self.SelectItem(item, select)
 
     def _emitSignal(self, item, signal):
-        """!Helper method for emitting signals.
+        """Helper method for emitting signals.
 
-        @param item tree item
-        @param signal signal to be emitted
+        :param item: tree item
+        :param signal: signal to be emitted
         """
         if not item or not item.IsOk():
             return
@@ -119,13 +119,13 @@ class AbstractTreeViewMixin(VirtualTree):
 
 
 class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
-    """!Tree view class inheriting from wx.TreeCtrl"""
+    """Tree view class inheriting from wx.TreeCtrl"""
     def __init__(self, model, parent, *args, **kw):
         super(TreeView, self).__init__(parent=parent, model=model, *args, **kw)
         self.RefreshItems()
 
 class CTreeView(AbstractTreeViewMixin, CT.CustomTreeCtrl):
-    """!Tree view class inheriting from wx.TreeCtrl"""
+    """Tree view class inheriting from wx.TreeCtrl"""
     def __init__(self, model, parent, **kw):
         if hasAgw:
             style = 'agwStyle'
@@ -152,10 +152,10 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnRightClick)
 
     def OnGetItemText(self, index, column=0):
-        """!Overridden method necessary to communicate with tree model.
+        """Overridden method necessary to communicate with tree model.
 
-        @param index index as explained in VirtualTree doc
-        @param column column index if applicable
+        :param index: index as explained in VirtualTree doc
+        :param column: column index if applicable
         """
         node = self._model.GetNodeByIndex(index)
         # remove & because of & needed in menu (&Files)
@@ -166,7 +166,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
             return label
 
     def OnRightClick(self, event):
-        """!Select item on right click.
+        """Select item on right click.
         
         With multiple selection we don't want to deselect all items        
         """
@@ -176,7 +176,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
         event.Skip()
 
 class TreeFrame(wx.Frame):
-    """!Frame for testing purposes only."""
+    """Frame for testing purposes only."""
     def __init__(self, model=None):
         wx.Frame.__init__(self, None, title='Test tree')
 

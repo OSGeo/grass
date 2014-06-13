@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.utils
 
 @brief Misc utilities for wxGUI
@@ -39,24 +39,25 @@ except IOError:
     _ = null_gettext
 
 def normalize_whitespace(text):
-    """!Remove redundant whitespace from a string"""
+    """Remove redundant whitespace from a string"""
     return string.join(string.split(text), ' ')
 
 def split(s):
-    """!Platform spefic shlex.split"""
+    """Platform spefic shlex.split"""
     if sys.platform == "win32":
         return shlex.split(s.replace('\\', r'\\'))
     else:
         return shlex.split(s)
 
 def GetTempfile(pref=None):
-    """!Creates GRASS temporary file using defined prefix.
+    """Creates GRASS temporary file using defined prefix.
 
-    @todo Fix path on MS Windows/MSYS
+    .. todo::
+        Fix path on MS Windows/MSYS
 
-    @param pref prefer the given path
+    :param pref: prefer the given path
 
-    @return Path to file name (string) or None
+    :return: Path to file name (string) or None
     """
     ret = RunCommand('g.tempfile',
                      read = True,
@@ -79,17 +80,18 @@ def GetTempfile(pref=None):
 
 def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                         layerType = None):
-    """!Get map name from GRASS command
+    """Get map name from GRASS command
     
     Parameter dcmd can be modified when first parameter is not
     defined.
     
-    @param dcmd GRASS command (given as list)
-    @param fullyQualified change map name to be fully qualified
-    @param param params directory
-    @param layerType check also layer type ('raster', 'vector', '3d-raster', ...)
+    :param dcmd: GRASS command (given as list)
+    :param fullyQualified: change map name to be fully qualified
+    :param param: params directory
+    :param str layerType: check also layer type ('raster', 'vector',
+                          '3d-raster', ...)
     
-    @return tuple (name, found)
+    :return: tuple (name, found)
     """
     mapname = ''
     found   = True
@@ -185,9 +187,10 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
     return mapname, found
 
 def GetValidLayerName(name):
-    """!Make layer name SQL compliant, based on G_str_to_sql()
+    """Make layer name SQL compliant, based on G_str_to_sql()
     
-    @todo: Better use directly Ctypes to reuse venerable libgis C fns...
+    .. todo::
+        Better use directly Ctypes to reuse venerable libgis C fns...
     """
     retName = str(name).strip()
     
@@ -217,14 +220,14 @@ def GetValidLayerName(name):
     return retName
 
 def ListOfCatsToRange(cats):
-    """!Convert list of category number to range(s)
+    """Convert list of category number to range(s)
 
     Used for example for d.vect cats=[range]
 
-    @param cats category list
+    :param cats: category list
 
-    @return category range string
-    @return '' on error
+    :return: category range string
+    :return: '' on error
     """
 
     catstr = ''
@@ -255,12 +258,12 @@ def ListOfCatsToRange(cats):
     return catstr.strip(',')
 
 def ListOfMapsets(get = 'ordered'):
-    """!Get list of available/accessible mapsets
+    """Get list of available/accessible mapsets
 
-    @param get method ('all', 'accessible', 'ordered')
+    :param str get: method ('all', 'accessible', 'ordered')
     
-    @return list of mapsets
-    @return None on error
+    :return: list of mapsets
+    :return: None on error
     """
     mapsets = []
     
@@ -297,11 +300,11 @@ def ListOfMapsets(get = 'ordered'):
     return mapsets
 
 def ListSortLower(list):
-    """!Sort list items (not case-sensitive)"""
+    """Sort list items (not case-sensitive)"""
     list.sort(cmp=lambda x, y: cmp(x.lower(), y.lower()))
 
 def GetVectorNumberOfLayers(vector):
-    """!Get list of all vector layers"""
+    """Get list of all vector layers"""
     layers = list()
     if not vector:
         return layers
@@ -331,16 +334,16 @@ def GetVectorNumberOfLayers(vector):
     return layers
 
 def Deg2DMS(lon, lat, string = True, hemisphere = True, precision = 3):
-    """!Convert deg value to dms string
+    """Convert deg value to dms string
 
-    @param lon longitude (x)
-    @param lat latitude (y)
-    @param string True to return string otherwise tuple
-    @param hemisphere print hemisphere
-    @param precision seconds precision
+    :param lon: longitude (x)
+    :param lat: latitude (y)
+    :param string: True to return string otherwise tuple
+    :param hemisphere: print hemisphere
+    :param precision: seconds precision
     
-    @return DMS string or tuple of values
-    @return empty string on error
+    :return: DMS string or tuple of values
+    :return: empty string on error
     """
     try:
         flat = float(lat)
@@ -385,13 +388,13 @@ def Deg2DMS(lon, lat, string = True, hemisphere = True, precision = 3):
     return (slon + hlon, slat + hlat)
 
 def DMS2Deg(lon, lat):
-    """!Convert dms value to deg
+    """Convert dms value to deg
 
-    @param lon longitude (x)
-    @param lat latitude (y)
+    :param lon: longitude (x)
+    :param lat: latitude (y)
     
-    @return tuple of converted values
-    @return ValueError on error
+    :return: tuple of converted values
+    :return: ValueError on error
     """
     x = __ll_parts(lon, reverse = True)
     y = __ll_parts(lat, reverse = True)
@@ -399,14 +402,14 @@ def DMS2Deg(lon, lat):
     return (x, y)
 
 def __ll_parts(value, reverse = False, precision = 3):
-    """!Converts deg to d:m:s string
+    """Converts deg to d:m:s string
 
-    @param value value to be converted
-    @param reverse True to convert from d:m:s to deg
-    @param precision seconds precision (ignored if reverse is True)
+    :param value: value to be converted
+    :param reverse: True to convert from d:m:s to deg
+    :param precision: seconds precision (ignored if reverse is True)
     
-    @return converted value (string/float)
-    @return ValueError on error (reverse == True)
+    :return: converted value (string/float)
+    :return: ValueError on error (reverse == True)
     """
     if not reverse:
         if value == 0.0:
@@ -463,20 +466,20 @@ def __ll_parts(value, reverse = False, precision = 3):
         return coef * (float(d) + fm + fs)
     
 def GetCmdString(cmd):
-    """!Get GRASS command as string.
+    """Get GRASS command as string.
     
-    @param cmd GRASS command given as tuple
+    :param cmd: GRASS command given as tuple
     
-    @return command string
+    :return: command string
     """
     return ' '.join(CmdTupleToList(cmd))
 
 def CmdTupleToList(cmd):
-    """!Convert command tuple to list.
+    """Convert command tuple to list.
     
-    @param cmd GRASS command given as tuple
+    :param cmd: GRASS command given as tuple
     
-    @return command in list
+    :return: command in list
     """
     cmdList = []
     if not cmd:
@@ -499,7 +502,7 @@ def CmdTupleToList(cmd):
     return cmdList
 
 def CmdToTuple(cmd):
-    """!Convert command list to tuple for gcmd.RunCommand()"""
+    """Convert command list to tuple for gcmd.RunCommand()"""
     if len(cmd) < 1:
         return None
     
@@ -523,7 +526,7 @@ def CmdToTuple(cmd):
     return (cmd[0], dcmd)
 
 def PathJoin(*args):
-    """!Check path created by os.path.join"""
+    """Check path created by os.path.join"""
     path = os.path.join(*args)
     if platform.system() == 'Windows' and \
             '/' in path:
@@ -532,12 +535,12 @@ def PathJoin(*args):
     return path
 
 def ReadEpsgCodes(path):
-    """!Read EPSG code from the file
+    """Read EPSG code from the file
 
-    @param path full path to the file with EPSG codes
+    :param path: full path to the file with EPSG codes
 
-    @return dictionary of EPSG code
-    @return string on error
+    :return: dictionary of EPSG code
+    :return: string on error
     """
     epsgCodeDict = dict()
     try:
@@ -572,13 +575,13 @@ def ReadEpsgCodes(path):
     return epsgCodeDict
 
 def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
-    """!Reproject coordinates
+    """Reproject coordinates
 
-    @param coord coordinates given as tuple
-    @param projOut output projection
-    @param projIn input projection (use location projection settings)
+    :param coord: coordinates given as tuple
+    :param projOut: output projection
+    :param projIn: input projection (use location projection settings)
 
-    @return reprojected coordinates (returned as tuple)
+    :return: reprojected coordinates (returned as tuple)
     """
     coors = RunCommand('m.proj',
                        flags = flags,
@@ -607,11 +610,11 @@ def ReprojectCoordinates(coord, projOut, projIn = None, flags = ''):
     return (None, None)
 
 def GetListOfLocations(dbase):
-    """!Get list of GRASS locations in given dbase
+    """Get list of GRASS locations in given dbase
 
-    @param dbase GRASS database path
+    :param dbase: GRASS database path
 
-    @return list of locations (sorted)
+    :return: list of locations (sorted)
     """
     listOfLocations = list()
 
@@ -630,13 +633,13 @@ def GetListOfLocations(dbase):
     return listOfLocations
 
 def GetListOfMapsets(dbase, location, selectable = False):
-    """!Get list of mapsets in given GRASS location
+    """Get list of mapsets in given GRASS location
 
-    @param dbase      GRASS database path
-    @param location   GRASS location
-    @param selectable True to get list of selectable mapsets, otherwise all
+    :param dbase: GRASS database path
+    :param location: GRASS location
+    :param selectable: True to get list of selectable mapsets, otherwise all
 
-    @return list of mapsets - sorted (PERMANENT first)
+    :return: list of mapsets - sorted (PERMANENT first)
     """
     listOfMapsets = list()
     
@@ -662,7 +665,7 @@ def GetListOfMapsets(dbase, location, selectable = False):
     return listOfMapsets
 
 def GetColorTables():
-    """!Get list of color tables"""
+    """Get list of color tables"""
     ret = RunCommand('r.colors',
                      read = True,
                      flags = 'l')
@@ -672,7 +675,7 @@ def GetColorTables():
     return ret.splitlines()
 
 def _getGDALFormats():
-    """!Get dictionary of avaialble GDAL drivers"""
+    """Get dictionary of avaialble GDAL drivers"""
     try:
         ret = grass.read_command('r.in.gdal',
                                  quiet = True,
@@ -683,7 +686,7 @@ def _getGDALFormats():
     return _parseFormats(ret), _parseFormats(ret, writableOnly = True)
 
 def _getOGRFormats():
-    """!Get dictionary of avaialble OGR drivers"""
+    """Get dictionary of avaialble OGR drivers"""
     try:
         ret = grass.read_command('v.in.ogr',
                                  quiet = True,
@@ -694,7 +697,7 @@ def _getOGRFormats():
     return _parseFormats(ret), _parseFormats(ret, writableOnly = True)
 
 def _parseFormats(output, writableOnly = False):
-    """!Parse r.in.gdal/v.in.ogr -f output"""
+    """Parse r.in.gdal/v.in.ogr -f output"""
     formats = { 'file'     : list(),
                 'database' : list(),
                 'protocol' : list()
@@ -742,7 +745,7 @@ def _parseFormats(output, writableOnly = False):
 formats = None
 
 def GetFormats(writableOnly = False):
-    """!Get GDAL/OGR formats"""
+    """Get GDAL/OGR formats"""
     global formats
     if not formats:
         gdalAll, gdalWritable = _getGDALFormats()
@@ -833,7 +836,7 @@ vectorFormatExtension = {
 
 
 def GetSettingsPath():
-    """!Get full path to the settings directory
+    """Get full path to the settings directory
     """
     try:
         verFd = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
@@ -850,14 +853,14 @@ def GetSettingsPath():
     return os.path.join(os.getenv('HOME'), '.grass%d' % version)
 
 def StoreEnvVariable(key, value = None, envFile = None):
-    """!Store environmental variable
+    """Store environmental variable
 
     If value is not given (is None) then environmental variable is
     unset.
     
-    @param key env key
-    @param value env value
-    @param envFile path to the environmental file (None for default location)
+    :param key: env key
+    :param value: env value
+    :param envFile: path to the environmental file (None for default location)
     """
     windows = sys.platform == 'win32'
     if not envFile:
@@ -919,10 +922,10 @@ def StoreEnvVariable(key, value = None, envFile = None):
     fd.close()
 
 def SetAddOnPath(addonPath = None, key = 'PATH'):
-    """!Set default AddOn path
+    """Set default AddOn path
 
-    @param addonPath path to addons (None for default)
-    @param key env key - 'PATH' or 'BASE'
+    :param addonPath: path to addons (None for default)
+    :param key: env key - 'PATH' or 'BASE'
     """
     gVersion = grass.version()['version'].split('.', 1)[0]
     # update env file
@@ -1010,14 +1013,14 @@ for (cmd, ltype) in command2ltype.items():
 
 
 def GetGEventAttribsForHandler(method, event):
-    """!Get attributes from event, which can be used by handler method. 
+    """Get attributes from event, which can be used by handler method. 
 
     Be aware of event class attributes.
 
-    @param method - handler method (including self arg)
-    @param event - event
+    :param method: handler method (including self arg)
+    :param event: event
 
-    @return (valid kwargs for method, 
+    :return: (valid kwargs for method, 
              list of method's args without default value 
              which were not found among event attributes)
     """
@@ -1044,13 +1047,14 @@ def GetGEventAttribsForHandler(method, event):
     return kwargs, missing_args
 
 def GuiModuleMain(mainfn):
-    """!Main function for g.gui.* modules
+    """Main function for g.gui.* modules
     
     Note: os.fork() is supported only on Unix platforms
     
-    @todo: Replace os.fork() by multiprocessing (?)
+    .. todo::
+        Replace os.fork() by multiprocessing (?)
     
-    @param module's main function
+    :param mainfn: main function
     """
     if sys.platform != 'win32':
         # launch GUI in the background
@@ -1074,7 +1078,7 @@ def GuiModuleMain(mainfn):
         mainfn()
 
 def PilImageToWxImage(pilImage, copyAlpha = True):
-    """!Convert PIL image to wx.Image
+    """Convert PIL image to wx.Image
     
     Based on http://wiki.wxpython.org/WorkingWithImages
     """
@@ -1099,12 +1103,12 @@ def PilImageToWxImage(pilImage, copyAlpha = True):
 
 
 def autoCropImageFromFile(filename):
-    """!Loads image from file and crops it automatically.
+    """Loads image from file and crops it automatically.
 
     If PIL is not installed, it does not crop it.
 
-    @param filename path to file
-    @return wx.Image instance
+    :param filename: path to file
+    :return: wx.Image instance
     """
     try:
         from PIL import Image
@@ -1118,12 +1122,11 @@ def autoCropImageFromFile(filename):
 
 
 def isInRegion(regionA, regionB):
-    """!Tests if 'regionA' is inside of 'regionB'.
+    """Tests if 'regionA' is inside of 'regionB'.
 
     For example, region A is a display region and region B is some reference
     region, e.g., a computational region.
 
-    @code
     >>> displayRegion = {'n': 223900, 's': 217190, 'w': 630780, 'e': 640690}
     >>> compRegion = {'n': 228500, 's': 215000, 'w': 630000, 'e': 645000}
     >>> isInRegion(displayRegion, compRegion)
@@ -1132,13 +1135,11 @@ def isInRegion(regionA, regionB):
     >>> isInRegion(displayRegion, compRegion)
     False
 
-    @endcode
+    :param regionA: input region A as dictionary
+    :param regionB: input region B as dictionary
 
-    @param regionA input region A as dictionary
-    @param regionB input region B as dictionary
-
-    @return True if region A is inside of region B
-    @return False othewise
+    :return: True if region A is inside of region B
+    :return: False othewise
     """
     if regionA['s'] >= regionB['s'] and \
             regionA['n'] <= regionB['n'] and \
@@ -1178,7 +1179,7 @@ def do_doctest_gettext_workaround():
 def doc_test():
     """Tests the module using doctest
 
-    @return a number of failed tests
+    :return: a number of failed tests
     """
     import doctest
     do_doctest_gettext_workaround()

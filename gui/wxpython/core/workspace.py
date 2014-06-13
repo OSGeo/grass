@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.workspace
 
 @brief Open/save workspace definition file
@@ -30,7 +30,7 @@ from grass.script import core as gcore
 
 class ProcessWorkspaceFile:
     def __init__(self, tree):
-        """!A ElementTree handler for the GXW XML file, as defined in
+        """A ElementTree handler for the GXW XML file, as defined in
         grass-gxw.dtd.
         """
         self.tree = tree
@@ -66,9 +66,9 @@ class ProcessWorkspaceFile:
             self.nvizDefault = None
         
     def __filterValue(self, value):
-        """!Filter value
+        """Filter value
         
-        @param value
+        :param value:
         """
         value = value.replace('&lt;', '<')
         value = value.replace('&gt;', '>')
@@ -76,7 +76,7 @@ class ProcessWorkspaceFile:
         return value
 
     def __getNodeText(self, node, tag, default = ''):
-        """!Get node text"""
+        """Get node text"""
         p = node.find(tag)
         if p is not None:
             # if empty text is inside tag,
@@ -89,7 +89,7 @@ class ProcessWorkspaceFile:
         return default
     
     def __processFile(self):
-        """!Process workspace file"""
+        """Process workspace file"""
         #
         # layer manager
         #
@@ -164,10 +164,10 @@ class ProcessWorkspaceFile:
             self.__processNvizState(display)
 
     def __processLayers(self, node, inGroup = -1):
-        """!Process layers/groups of selected display
+        """Process layers/groups of selected display
         
-        @param node display tree node
-        @param inGroup in group -> index of group item otherwise -1
+        :param node: display tree node
+        :param inGroup: in group -> index of group item otherwise -1
         """
         for item in node.getchildren():
             if item.tag == 'group':
@@ -204,9 +204,9 @@ class ProcessWorkspaceFile:
                         "nviz"     : nviz } )
             
     def __processLayer(self, layer):
-        """!Process layer item
+        """Process layer item
 
-        @param layer tree node
+        :param layer: tree node
         """
         cmd = list()
         
@@ -255,9 +255,9 @@ class ProcessWorkspaceFile:
         return (cmd, selected, vdigit, nviz)
 
     def __processLayerVdigit(self, node_vdigit):
-        """!Process vector digitizer layer settings
+        """Process vector digitizer layer settings
 
-        @param node_vdigit vdigit node
+        :param node_vdigit: vdigit node
         """
         # init nviz layer properties
         vdigit = dict()
@@ -273,9 +273,9 @@ class ProcessWorkspaceFile:
         return vdigit
     
     def __processLayerNviz(self, node_nviz):
-        """!Process 3D layer settings
+        """Process 3D layer settings
 
-        @param node_nviz nviz node
+        :param node_nviz: nviz node
         """
         # init nviz layer properties
         nviz = {}
@@ -302,10 +302,10 @@ class ProcessWorkspaceFile:
         return nviz
 
     def __processLayerNvizSurface(self, nvizData, nodeSurface):
-        """!Process 3D layer settings - surface
+        """Process 3D layer settings - surface
 
-        @param nodeData nviz data dict
-        @param nodeSurface nviz surface node
+        :param nodeData: nviz data dict
+        :param nodeSurface: nviz surface node
         """
         # attributes
         for attrb in nodeSurface.findall('attribute'):
@@ -366,10 +366,10 @@ class ProcessWorkspaceFile:
                 dc[coor] = value
 
     def __processLayerNvizVolume(self, nvizData, nodeVolume):
-        """!Process 3D layer settings - volume
+        """Process 3D layer settings - volume
 
-        @param nodeData nviz data dict
-        @param nodeVolume nviz volume node
+        :param nodeData: nviz data dict
+        :param nodeVolume: nviz volume node
         """
         # attributes
         for attrb in nodeVolume.findall('attribute'):
@@ -468,10 +468,10 @@ class ProcessWorkspaceFile:
                 dc[coor] = value
 
     def __processLayerNvizVectorPoints(self, nvizData, nodePoints):
-        """!Process 3D layer settings - vector points
+        """Process 3D layer settings - vector points
 
-        @param nodeData nviz data dict
-        @param nodeVector nviz vector points node
+        :param nodeData: nviz data dict
+        :param nodeVector: nviz vector points node
         """
         marker = str(nodePoints.get('marker', ''))
         markerId = list(UserSettings.Get(group='nviz', key='vector',
@@ -523,10 +523,10 @@ class ProcessWorkspaceFile:
                 thematic[use] = int(node_thematic.get(use, '0'))
 
     def __processLayerNvizVectorLines(self, nvizData, nodeLines):
-        """!Process 3D layer settings - vector lines
+        """Process 3D layer settings - vector lines
 
-        @param nodeData nviz data dict
-        @param nodeVector nviz vector lines node
+        :param nodeData: nviz data dict
+        :param nodeVector: nviz vector lines node
         """
         node_mode = nodeLines.find('mode')
         if node_mode is not None:
@@ -569,7 +569,7 @@ class ProcessWorkspaceFile:
                 thematic[use] = int(node_thematic.get(use, '0'))
 
     def __processLayerNvizNode(self, node, tag, cast, dc = None):
-        """!Process given tag nviz/vector"""
+        """Process given tag nviz/vector"""
         node_tag = node.find(tag)
         if node_tag is not None:
             if node_tag.find('value') is not None:
@@ -589,7 +589,7 @@ class ProcessWorkspaceFile:
                 return value
     
     def __processNvizState(self, node):
-        """!Process tag nviz_state"""
+        """Process tag nviz_state"""
         node_state = node.find('nviz_state')
         if node_state is None:
             return
@@ -687,7 +687,7 @@ class ProcessWorkspaceFile:
         self.nviz_state['constants'] = constants    
 
 class WriteWorkspaceFile(object):
-    """!Generic class for writing workspace file"""
+    """Generic class for writing workspace file"""
     def __init__(self, lmgr, file):
         self.file =  file
         self.lmgr = lmgr
@@ -791,14 +791,14 @@ class WriteWorkspaceFile(object):
         file.write('%s</gxw>\n' % (' ' * self.indent))
 
     def __filterValue(self, value):
-        """!Make value XML-valid"""
+        """Make value XML-valid"""
         value = value.replace('<', '&lt;')
         value = value.replace('>', '&gt;')
         
         return value
     
     def __writeLayer(self, mapTree, item):
-        """!Write bunch of layers to GRASS Workspace XML file"""
+        """Write bunch of layers to GRASS Workspace XML file"""
         self.indent += 4
         itemSelected = mapTree.GetSelections()
         while item and item.IsOk():
@@ -889,9 +889,9 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
         
     def __writeNvizSurface(self, data):
-        """!Save Nviz raster layer properties to workspace
+        """Save Nviz raster layer properties to workspace
 
-        @param data Nviz layer properties
+        :param data: Nviz layer properties
         """
         if 'object' not in data: # skip disabled
             return
@@ -962,9 +962,9 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
 
     def __writeNvizVolume(self, data):
-        """!Save Nviz volume layer properties to workspace
+        """Save Nviz volume layer properties to workspace
 
-        @param data Nviz layer properties
+        :param data: Nviz layer properties
         """
         if 'object' not in data:  # skip disabled
             return
@@ -1090,9 +1090,9 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
 
     def __writeNvizVector(self, data):
-        """!Save Nviz vector layer properties (lines/points) to workspace
+        """Save Nviz vector layer properties (lines/points) to workspace
 
-        @param data Nviz layer properties
+        :param data: Nviz layer properties
         """
         self.indent += 4
         for attrb in data.iterkeys():
@@ -1156,11 +1156,11 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
 
     def __writeNvizState(self, view, iview, light, constants):
-        """"!Save Nviz properties (view, light) to workspace
+        """"Save Nviz properties (view, light) to workspace
 
-        @param view Nviz view properties
-        @param iview Nviz internal view properties
-        @param light Nviz light properties
+        :param view: Nviz view properties
+        :param iview: Nviz internal view properties
+        :param light: Nviz light properties
         """
         self.indent += 4
         self.file.write('%s<nviz_state>\n' % (' ' * self.indent))
@@ -1268,11 +1268,11 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
     
     def __writeTagWithValue(self, tag, data, format = 'd'):
-        """!Helper function for writing pair tag
+        """Helper function for writing pair tag
         
-        @param tag written tag
-        @param data written data
-        @param format conversion type
+        :param tag: written tag
+        :param data: written data
+        :param format: conversion type
         """
         self.file.write('%s<%s>\n' % (' ' * self.indent, tag))
         self.indent += 4
@@ -1283,7 +1283,7 @@ class WriteWorkspaceFile(object):
         
 class ProcessGrcFile(object):
     def __init__(self, filename):
-        """!Process GRC file"""
+        """Process GRC file"""
         self.filename = filename
 
         # elements
@@ -1299,11 +1299,11 @@ class ProcessGrcFile(object):
         self.num_error = 0
 
     def read(self, parent):
-        """!Read GRC file
+        """Read GRC file
 
-        @param parent parent window
+        :param parent: parent window
 
-        @return list of map layers
+        :return: list of map layers
         """
         try:
             file = open(self.filename, "r")
@@ -1333,7 +1333,7 @@ class ProcessGrcFile(object):
         return self.layers
 
     def process_line(self, line, line_id):
-        """!Process line definition"""
+        """Process line definition"""
         element = self._get_element(line)
         if element == 'Group':
             self.groupName = self._get_value(line)
@@ -1544,24 +1544,24 @@ class ProcessGrcFile(object):
             self.num_error += 1
 
     def _get_value(self, line):
-        """!Get value of element"""
+        """Get value of element"""
         try:
             return line.strip(' ').split(' ')[1].strip(' ')
         except:
             return ''
 
     def _get_element(self, line):
-        """!Get element tag"""
+        """Get element tag"""
         return line.strip(' ').split(' ')[0].strip(' ')
 
     def _get_cmd_param_index(self, cmd, name):
-        """!Get index of parameter in cmd list
+        """Get index of parameter in cmd list
 
-        @param cmd cmd list
-        @param name parameter name
+        :param cmd: cmd list
+        :param name: parameter name
 
-        @return index
-        @return -1 if not found
+        :return: index
+        :return: -1 if not found
         """
         i = 0
         for param in cmd:
@@ -1576,7 +1576,7 @@ class ProcessGrcFile(object):
         return -1
 
     def _color_name_to_rgb(self, value):
-        """!Convert color name (#) to rgb values"""
+        """Convert color name (#) to rgb values"""
         col = wx.NamedColour(value)
         return str(col.Red()) + ':' + \
             str(col.Green()) + ':' + \

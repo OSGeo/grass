@@ -1,4 +1,4 @@
-"""!
+"""
 @package wxplot.base
 
 @brief Base classes for iinteractive plotting using PyPlot
@@ -49,7 +49,7 @@ PlotIcons = {
     }
 
 class BasePlotFrame(wx.Frame):
-    """!Abstract PyPlot display frame class"""
+    """Abstract PyPlot display frame class"""
     def __init__(self, parent=None, size=wx.Size(700, 400),
                  style=wx.DEFAULT_FRAME_STYLE, rasterList=[],  **kwargs):
 
@@ -107,7 +107,7 @@ class BasePlotFrame(wx.Frame):
         self._createColorDict()
 
     def _createColorDict(self):
-        """!Create color dictionary to return wx.Colour tuples
+        """Create color dictionary to return wx.Colour tuples
         for assigning colors to images in imagery groups"""
                 
         self.colorDict = {}
@@ -119,8 +119,8 @@ class BasePlotFrame(wx.Frame):
             self.colorDict[clr] = (r,g,b,255)
 
     def InitPlotOpts(self, plottype):
-        """!Initialize options for entire plot
-        """        
+        """Initialize options for entire plot
+        """       
         self.plottype = plottype                # histogram, profile, or scatter
 
         self.properties = {}                    # plot properties
@@ -173,7 +173,7 @@ class BasePlotFrame(wx.Frame):
             self.client.SetYSpec('auto')
         
     def InitRasterOpts(self, rasterList, plottype):
-        """!Initialize or update raster dictionary for plotting
+        """Initialize or update raster dictionary for plotting
         """
 
         rdict = {} # initialize a dictionary
@@ -232,7 +232,7 @@ class BasePlotFrame(wx.Frame):
         return rdict
             
     def InitRasterPairs(self, rasterList, plottype):
-        """!Initialize or update raster dictionary with raster pairs for
+        """Initialize or update raster dictionary with raster pairs for
             bivariate scatterplots
         """
         
@@ -296,7 +296,7 @@ class BasePlotFrame(wx.Frame):
         return rdict
 
     def SetGraphStyle(self):
-        """!Set plot and text options
+        """Set plot and text options
         """
         self.client.SetFont(self.properties['font']['wxfont'])
         self.client.SetFontSizeTitle(self.properties['font']['prop']['titleSize'])
@@ -359,7 +359,7 @@ class BasePlotFrame(wx.Frame):
         self.client.SetEnableLegend(self.properties['legend']['enabled'])
 
     def DrawPlot(self, plotlist):
-        """!Draw line and point plot from list plot elements.
+        """Draw line and point plot from list plot elements.
         """
         xlabel, ylabel = self._getPlotLabels()
         self.plot = plot.PlotGraphics(plotlist,
@@ -381,7 +381,7 @@ class BasePlotFrame(wx.Frame):
                          self.properties['y-axis']['axis'])
                 
     def DrawPointLabel(self, dc, mDataDict):
-        """!This is the fuction that defines how the pointLabels are
+        """This is the fuction that defines how the pointLabels are
             plotted dc - DC that will be passed mDataDict - Dictionary
             of data that you want to use for the pointLabel
 
@@ -400,10 +400,10 @@ class BasePlotFrame(wx.Frame):
         legend = mDataDict["legend"]
         #make a string to display
         s = "Crv# %i, '%s', Pt. (%.2f,%.2f), PtInd %i" %(cNum, legend, px, py, pntIn)
-        dc.DrawText(s, sx , sy+1)
+        dc.DrawText(s, sx , sy + 1)
 
     def OnZoom(self, event):
-        """!Enable zooming and disable dragging
+        """Enable zooming and disable dragging
         """
         self.zoom = True
         self.drag = False
@@ -411,7 +411,7 @@ class BasePlotFrame(wx.Frame):
         self.client.SetEnableDrag(self.drag)
 
     def OnDrag(self, event):
-        """!Enable dragging and disable zooming
+        """Enable dragging and disable zooming
         """
         self.zoom = False
         self.drag = True
@@ -419,19 +419,19 @@ class BasePlotFrame(wx.Frame):
         self.client.SetEnableZoom(self.zoom)
 
     def OnRedraw(self, event):
-        """!Redraw the plot window. Unzoom to original size
+        """Redraw the plot window. Unzoom to original size
         """
         self.UpdateLabels()
         self.client.Reset()
         self.client.Redraw()
        
     def OnErase(self, event):
-        """!Erase the plot window
+        """Erase the plot window
         """
         self.client.Clear()
 
     def SaveToFile(self, event):
-        """!Save plot to graphics file
+        """Save plot to graphics file
         """
         self.client.SaveFile()
 
@@ -441,9 +441,9 @@ class BasePlotFrame(wx.Frame):
         event.Skip() # allows plotCanvas OnMouseLeftDown to be called
 
     def OnMotion(self, event):
-        """!Indicate when mouse is outside the plot area
+        """Indicate when mouse is outside the plot area
         """
-        if self.client.GetEnablePointLabel() == True:
+        if self.client.GetEnablePointLabel() is True:
             #make up dict with info for the pointLabel
             #I've decided to mark the closest point on the closest curve
             dlst = self.client.GetClosestPoint(self.client._getXY(event), pointScaled=True)
@@ -458,7 +458,7 @@ class BasePlotFrame(wx.Frame):
  
  
     def PlotOptionsMenu(self, event):
-        """!Popup menu for plot and text options
+        """Popup menu for plot and text options
         """
         point = wx.GetMousePosition()
         popt = wx.Menu()
@@ -477,7 +477,7 @@ class BasePlotFrame(wx.Frame):
         popt.Destroy()
 
     def NotFunctional(self):
-        """!Creates a 'not functional' message dialog
+        """Creates a 'not functional' message dialog
         """
         dlg = wx.MessageDialog(parent = self,
                                message = _('This feature is not yet functional'),
@@ -502,7 +502,7 @@ class BasePlotFrame(wx.Frame):
         return x, y
 
     def OnPlotText(self, dlg):
-        """!Custom text settings for histogram plot.
+        """Custom text settings for histogram plot.
         """
         self.ptitle = dlg.ptitle
         self.xlabel = dlg.xlabel
@@ -525,7 +525,7 @@ class BasePlotFrame(wx.Frame):
             self.plot.setYLabel(y)
 
     def PlotText(self, event):
-        """!Set custom text values for profile title and axis labels.
+        """Set custom text values for profile title and axis labels.
         """
         dlg = TextDialog(parent = self, id = wx.ID_ANY, 
                          plottype = self.plottype, 
@@ -536,7 +536,7 @@ class BasePlotFrame(wx.Frame):
             dlg.Destroy()            
         
     def PlotOptions(self, event):
-        """!Set various profile options, including: line width, color,
+        """Set various profile options, including: line width, color,
         style; marker size, color, fill, and style; grid and legend
         options.  Calls OptDialog class.
         """
@@ -551,7 +551,7 @@ class BasePlotFrame(wx.Frame):
         self.Update()
 
     def PrintMenu(self, event):
-        """!Print options and output menu
+        """Print options and output menu
         """
         point = wx.GetMousePosition()
         printmenu = wx.Menu()

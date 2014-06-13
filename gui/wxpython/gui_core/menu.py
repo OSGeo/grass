@@ -1,4 +1,4 @@
-"""!
+"""
 @package gui_core.menu
 
 @brief Menu classes for wxGUI
@@ -33,7 +33,7 @@ from grass.pydispatch.signal import Signal
 
 class Menu(wx.MenuBar):
     def __init__(self, parent, model):
-        """!Creates menubar"""
+        """Creates menubar"""
         wx.MenuBar.__init__(self)
         self.parent = parent
         self.model = model
@@ -44,7 +44,7 @@ class Menu(wx.MenuBar):
             self.Append(self._createMenu(child), child.label)
         
     def _createMenu(self, node):
-        """!Creates menu"""
+        """Creates menu"""
         menu = wx.Menu()
         for child in node.children:
             if child.children:
@@ -63,7 +63,7 @@ class Menu(wx.MenuBar):
 
     def _createMenuItem(self, menu, label, description, handler, command, keywords,
                         shortcut = '', icon = '', wxId = wx.ID_ANY, kind = wx.ITEM_NORMAL):
-        """!Creates menu items
+        """Creates menu items
         There are three menu styles (menu item text styles).
         1 -- label only, 2 -- label and cmd name, 3 -- cmd name only
         """
@@ -100,13 +100,13 @@ class Menu(wx.MenuBar):
         self.parent.Bind(wx.EVT_MENU, rhandler, menuItem)
         
     def GetData(self):
-        """!Get menu data"""
+        """Get menu data"""
         return self.model
     
     def GetCmd(self):
-        """!Get dictionary of commands (key is id)
+        """Get dictionary of commands (key is id)
 
-        @return dictionary of commands
+        :return: dictionary of commands
         """
         return self.menucmd
         
@@ -125,10 +125,10 @@ class Menu(wx.MenuBar):
         event.Skip()
 
 class SearchModuleWindow(wx.Panel):
-    """!Menu tree and search widget for searching modules.
+    """Menu tree and search widget for searching modules.
     
-        Signal:
-            showNotification - attribute 'message'
+    Signal:
+        showNotification - attribute 'message'
     """
     def __init__(self, parent, model, id = wx.ID_ANY, **kwargs):
         self.parent = parent # LayerManager
@@ -170,7 +170,7 @@ class SearchModuleWindow(wx.Panel):
         self._search.SetFocus()
         
     def _layout(self):
-        """!Do dialog layout"""
+        """Do dialog layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         # body
@@ -204,9 +204,9 @@ class SearchModuleWindow(wx.Panel):
         self.Layout()
         
     def Run(self, module=None):
-        """!Run selected command.
+        """Run selected command.
         
-        @param module module (represented by tree node)
+        :param module: module (represented by tree node)
         """
         if module is None:
             if not self._tree.GetSelected():
@@ -225,13 +225,13 @@ class SearchModuleWindow(wx.Panel):
             eval(handler)(event=None)
 
     def OnKeyUp(self, event):
-        """!Key or key combination pressed"""
+        """Key or key combination pressed"""
         if event.ControlDown() and \
                 event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER):
             self.Run()
         
     def OnItemSelected(self, node):
-        """!Item selected"""      
+        """Item selected"""    
         data = node.data
         if not data or 'command' not in data:
             return

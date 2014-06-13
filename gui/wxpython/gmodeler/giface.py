@@ -1,4 +1,4 @@
-"""!
+"""
 @package gmodeler.giface
 
 @brief wxGUI Graphical Modeler GRASS interface
@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 from grass.pydispatch.signal import Signal
 
 class GraphicalModelerGrassInterface():
-    """!@implements core::giface::GrassInterface"""
+    """@implements core::giface::GrassInterface"""
     def __init__(self, model):
         self._model = model
     
@@ -31,5 +31,8 @@ class GraphicalModelerGrassInterface():
         return self._model.GetMaps(prompt)
 
     def GetMapDisplay(self):
-        """@todo: implement connection with mapdisplay"""
+        """
+        ..todo::
+            implement connection with mapdisplay
+        """
         return None

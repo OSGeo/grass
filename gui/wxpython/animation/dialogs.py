@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.dialogs
 
 @brief Dialogs for animation management, changing speed of animation
@@ -87,7 +87,7 @@ class SpeedDialog(wx.Dialog):
     temporalMode = property(fset=SetTemporalMode, fget=GetTemporalMode)
 
     def _layout(self):
-        """!Layout window"""
+        """Layout window"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         #
         # simple mode
@@ -259,7 +259,7 @@ class SpeedDialog(wx.Dialog):
         return delta
 
     def _total_seconds(self, delta):
-        """!timedelta.total_seconds is new in version 2.7.
+        """timedelta.total_seconds is new in version 2.7.
         """
         return delta.seconds + delta.days * 24 * 3600
 
@@ -475,7 +475,7 @@ class InputDialog(wx.Dialog):
         return panel
 
     def _enableRegionWidgets(self):
-        """!Enables/disables region widgets
+        """Enables/disables region widgets
         according to which radiobutton is active."""
         endReg = self.endRegRadio.GetValue()
         self.endRegion.Enable(endReg)
@@ -514,7 +514,7 @@ class InputDialog(wx.Dialog):
                                                   completed=(self.GetOptData, '', ''))
 
     def OnLegendProperties(self, event):
-        """!Set options for legend"""
+        """Set options for legend"""
         if self._tmpLegendCmd:
             cmd = self._tmpLegendCmd
         elif self.animationData.legendCmd:
@@ -526,7 +526,7 @@ class InputDialog(wx.Dialog):
                                                   completed=(self.GetOptData, '', ''))
 
     def GetOptData(self, dcmd, layer, params, propwin):
-        """!Process decoration layer data"""
+        """Process decoration layer data"""
         if dcmd:
             self._tmpLegendCmd = dcmd
 
@@ -1203,7 +1203,7 @@ class ExportDialog(wx.Dialog):
 
 
 class AnimSimpleLayerManager(SimpleLayerManager):
-    """!Simple layer manager for animation tool.
+    """Simple layer manager for animation tool.
     Allows to add space-time dataset or series of maps.
     """
     def __init__(self, parent, layerList,
@@ -1214,7 +1214,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         self._3dActivated = False
 
     def OnAddStds(self, event):
-        """!Opens dialog for specifying temporal dataset.
+        """Opens dialog for specifying temporal dataset.
         Dummy layer is added first."""
         layer = AnimLayer()
         layer.hidden = True
@@ -1242,7 +1242,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         self.anyChange.emit()
 
     def _layerChangeProperties(self, layer):
-        """!Opens new module dialog or recycles it."""
+        """Opens new module dialog or recycles it."""
         if not hasattr(layer, 'maps'):
             GUI(parent=self, giface=None,
                 modal=self._modal).ParseCommand(cmd=layer.cmd,
@@ -1251,14 +1251,14 @@ class AnimSimpleLayerManager(SimpleLayerManager):
             self.SetStdsProperties(layer)
 
     def Activate3D(self, activate=True):
-        """!Activates/deactivates certain tool depending on 2D/3D view."""
+        """Activates/deactivates certain tool depending on 2D/3D view."""
         self._toolbar.EnableTools(['addRaster', 'addVector',
                                    'opacity', 'up', 'down'], not activate)
         self._3dActivated = activate
 
 
 class AddTemporalLayerDialog(wx.Dialog):
-    """!Dialog for adding space-time dataset/ map series."""
+    """Dialog for adding space-time dataset/ map series."""
     def __init__(self, parent, layer, volume=False,
                  title=_("Add space-time dataset layer")):
         wx.Dialog.__init__(self, parent=parent, title=title)
@@ -1452,7 +1452,7 @@ class AddTemporalLayerDialog(wx.Dialog):
 
 
 class PreferencesDialog(PreferencesBaseDialog):
-    """!Animation preferences dialog"""
+    """Animation preferences dialog"""
     def __init__(self, parent, giface, title=_("Animation Tool settings"),
                  settings=UserSettings):
         PreferencesBaseDialog.__init__(self, parent=parent, giface=giface, title=title,
@@ -1478,7 +1478,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.SetSize(self.size)
 
     def _createGeneralPage(self, notebook):
-        """!Create notebook page for general settings"""
+        """Create notebook page for general settings"""
         panel = SP.ScrolledPanel(parent=notebook)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
         notebook.AddPage(page=panel, text=_("General"))
@@ -1508,7 +1508,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def _createTemporalPage(self, notebook):
-        """!Create notebook page for temporal settings"""
+        """Create notebook page for temporal settings"""
         panel = SP.ScrolledPanel(parent=notebook)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
         notebook.AddPage(page=panel, text=_("Time"))

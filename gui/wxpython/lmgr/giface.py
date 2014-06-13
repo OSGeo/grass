@@ -1,4 +1,4 @@
-"""!
+"""
 @package lmgr.giface
 
 @brief Layer Manager GRASS interface
@@ -22,9 +22,9 @@ from core.giface import Notification
 
 
 class Layer(object):
-    """!@implements core::giface::Layer
+    """@implements core::giface::Layer
 
-    @note Currently implemented without specifying the interface.
+    .. note:: Currently implemented without specifying the interface.
     It only provides all attributes of existing layer as used in lmgr.
     """
     def __init__(self, pydata):
@@ -41,21 +41,21 @@ class Layer(object):
 
 
 class LayerList(object):
-    """!@implements core.giface.Layer"""
+    """@implements core.giface.Layer"""
     def __init__(self, tree):
         self._tree = tree
 
     def __iter__(self):
-        """!Iterates over the contents of the list."""
+        """Iterates over the contents of the list."""
         for item in self._tree.GetSelectedLayer(multi=True):
             yield Layer(self._tree.GetPyData(item))
 
     def __getitem__(self, index):
-        """!Select a layer from the LayerList using the index."""
+        """Select a layer from the LayerList using the index."""
         return [l for l in self][index]
 
     def __repr__(self):
-        """!Return a representation of the object."""
+        """Return a representation of the object."""
         return "LayerList(%r)" % [layer for layer in self]
 
     def GetSelectedLayers(self, checkedOnly=True):
@@ -69,7 +69,7 @@ class LayerList(object):
 
     # TODO: it is not clear if default of checkedOnly should be False or True
     def GetSelectedLayer(self, checkedOnly=False):
-        """!Returns selected layer or None when there is no selected layer."""
+        """Returns selected layer or None when there is no selected layer."""
         item = self._tree.GetSelectedLayer(multi=False,
                                            checkedOnly=checkedOnly)
         if item is None:
@@ -79,20 +79,20 @@ class LayerList(object):
             return Layer(data)
 
     def GetLayerInfo(self, layer):
-        """!For compatibility only, will be removed."""
+        """For compatibility only, will be removed."""
         return Layer(self._tree.GetPyData(layer))
 
     def AddLayer(self, ltype, name=None, checked=None,
                  opacity=1.0, cmd=None):
-        """!Adds a new layer to the layer list.
+        """Adds a new layer to the layer list.
 
         Launches property dialog if needed (raster, vector, etc.)
 
-        @param ltype layer type (raster, vector, 3d-raster, ...)
-        @param name layer name
-        @param checked if True layer is checked
-        @param opacity layer opacity level
-        @param cmd command (given as a list)
+        :param ltype: layer type (raster, vector, 3d-raster, ...)
+        :param name: layer name
+        :param checked: if True layer is checked
+        :param opacity: layer opacity level
+        :param cmd: command (given as a list)
         """
         self._tree.AddLayer(ltype=ltype, lname=name, lchecked=checked,
                             lopacity=opacity, lcmd=cmd)
@@ -109,7 +109,7 @@ class LayerList(object):
             return layers
 
     def GetLayerByData(self, key, value):
-        """!Returns layer with specified.
+        """Returns layer with specified.
 
         Returns only one layer.
         Avoid using this method, it might be removed in the future.
@@ -125,9 +125,9 @@ class LayerList(object):
 
 
 class LayerManagerGrassInterface(object):
-    """!@implements core::giface::GrassInterface"""
+    """@implements core::giface::GrassInterface"""
     def __init__(self, lmgr):
-        """!Costructor is specific to the current implementation.
+        """Costructor is specific to the current implementation.
 
         Uses Layer Manager object including its private attributes.
         (It encapsulates existing Layer Manager so access to private members
@@ -191,15 +191,15 @@ class LayerManagerGrassInterface(object):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
 class LayerManagerGrassInterfaceForMapDisplay(object):
-    """!Provides reference only to the given layer list (according to tree),
+    """Provides reference only to the given layer list (according to tree),
         not to the current.
 
         @implements core::giface::GrassInterface
     """
     def __init__(self, giface, tree):
-        """!
-        @param giface original grass interface
-        @param tree tree which will be used instead of the tree from giface
+        """
+        :param giface: original grass interface
+        :param tree: tree which will be used instead of the tree from giface
         """
         self._giface = giface
         self.tree = tree

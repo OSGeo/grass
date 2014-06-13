@@ -1,4 +1,4 @@
-"""!
+"""
 @package iclass.digit
 
 @brief wxIClass digitizer classes
@@ -33,14 +33,14 @@ except ImportError:
 import grass.script as grass
 
 class IClassVDigitWindow(VDigitWindow):
-    """! Class similar to VDigitWindow but specialized for wxIClass."""
+    """Class similar to VDigitWindow but specialized for wxIClass."""
     def __init__(self, parent, giface, map, properties):
-        """!
+        """
         
         @a parent should has toolbar providing current class (category).
         
-        @param parent gui parent
-        @param map map renderer instance
+        :param parent: gui parent
+        :param map: map renderer instance
         """
         VDigitWindow.__init__(self, parent=parent, giface=giface,
                               Map=map, properties=properties)
@@ -89,7 +89,7 @@ class IClassVDigitWindow(VDigitWindow):
         self.parent.UpdateChangeState(changes = True)
         
     def GetCurrentCategory(self):
-        """!Returns current category (class).
+        """Returns current category (class).
         
         Category should be assigned to new features (areas).
         It is taken from parent's toolbar.
@@ -97,12 +97,12 @@ class IClassVDigitWindow(VDigitWindow):
         return self.parent.GetToolbar("iClass").GetSelectedCategoryIdx()
 
     def GetCategoryColor(self, cat):
-        """!Get color associated with given category"""
+        """Get color associated with given category"""
         r, g, b = map(int, self.parent.GetClassColor(cat).split(':'))
         return wx.Colour(r, g, b)
         
 class IClassVDigit(IVDigit):
-    """! Class similar to IVDigit but specialized for wxIClass."""
+    """Class similar to IVDigit but specialized for wxIClass."""
     def __init__(self, mapwindow):
         IVDigit.__init__(self, mapwindow, driver = IClassDisplayDriver)
         self._settings['closeBoundary'] = True # snap to the first node
@@ -115,23 +115,23 @@ class IClassVDigit(IVDigit):
         return cat
         
     def DeleteAreasByCat(self, cats):
-        """!Delete areas (centroid+boundaries) by categories
+        """Delete areas (centroid+boundaries) by categories
 
-        @param cats list of categories
+        :param cats: list of categories
         """
         for cat in cats:
             Vedit_delete_areas_cat(self.poMapInfo, 1, cat)
        
     def CopyMap(self, name, tmp = False):
-        """!Make a copy of open vector map
+        """Make a copy of open vector map
 
         Note: Attributes are not copied
         
-        @param name name for a copy
-        @param tmp True for temporary map
+        :param name: name for a copy
+        :param tmp: True for temporary map
 
-        @return number of copied features
-        @return -1 on error
+        :return: number of copied features
+        :return: -1 on error
         """
         if not self.poMapInfo:
             # nothing to copy
@@ -164,22 +164,23 @@ class IClassVDigit(IVDigit):
         return ret
 
     def GetMapInfo(self):
-        """!Returns Map_info() struct of open vector map"""
+        """Returns Map_info() struct of open vector map"""
         return self.poMapInfo
 
 class IClassDisplayDriver(DisplayDriver):
-    """! Class similar to DisplayDriver but specialized for wxIClass
+    """Class similar to DisplayDriver but specialized for wxIClass
 
-    @todo needs refactoring (glog, gprogress)
+    .. todo::
+        needs refactoring (glog, gprogress)
     """
     def __init__(self, device, deviceTmp, mapObj, window, glog, gprogress):
         DisplayDriver.__init__(self, device, deviceTmp, mapObj, window, glog, gprogress)
         self._cat = -1
         
     def _drawObject(self, robj):
-        """!Draw given object to the device
+        """Draw given object to the device
 
-        @param robj object to draw
+        :param robj: object to draw
         """
         if robj.type == TYPE_AREA:
             self._cat = Vect_get_area_cat(self.poMapInfo, robj.fid, 1)
@@ -188,11 +189,11 @@ class IClassDisplayDriver(DisplayDriver):
         DisplayDriver._drawObject(self, robj)
         
     def _definePen(self, rtype):
-        """!Define pen/brush based on rendered object)
+        """Define pen/brush based on rendered object)
 
-        @param rtype type of the object
+        :param rtype: type of the object
 
-        @return pen, brush
+        :return: pen, brush
         """
         pen, brush = DisplayDriver._definePen(self, rtype)
         if self._cat > 0 and rtype == TYPE_AREA:
@@ -201,7 +202,7 @@ class IClassDisplayDriver(DisplayDriver):
         return pen, brush
 
     def CloseMap(self):
-        """!Close training areas map - be quiet"""
+        """Close training areas map - be quiet"""
         verbosity = G_verbose()
         G_set_verbose(0)
         DisplayDriver.CloseMap(self)

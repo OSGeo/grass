@@ -1,4 +1,4 @@
-"""!
+"""
 @package dbmgr.manager
 
 @brief GRASS Attribute Table Manager
@@ -41,16 +41,16 @@ class AttributeManager(wx.Frame, DbMgrBase):
     def __init__(self, parent, id = wx.ID_ANY,
                  title = None, vectorName = None, item = None, log = None,
                  selection = None, **kwargs):
-        """!GRASS Attribute Table Manager window
+        """GRASS Attribute Table Manager window
 
-        @param parent parent window
-        @param id window id
-        @param title window title or None for default title
-        @param vetorName name of vector map
-        @param item item from Layer Tree
-        @param log log window
-        @param selection name of page to be selected
-        @param kwagrs other wx.Frame's arguments
+        :param parent: parent window
+        :param id: window id
+        :param title: window title or None for default title
+        :param vectorName: name of vector map
+        :param item: item from Layer Tree
+        :param log: log window
+        :param selection: name of page to be selected
+        :param kwagrs: other wx.Frame's arguments
         """
         self.parent = parent
         try:
@@ -136,7 +136,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.SetMinSize(self.GetSize())
     
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         # frame body
         mainSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -156,7 +156,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.Layout()
   
     def OnCloseWindow(self, event):
-        """!Cancel button pressed"""
+        """Cancel button pressed"""
         if self.parent and self.parent.GetName() == 'LayerManager':
             # deregister ATM
             self.parent.dialogs['atm'].remove(self)
@@ -172,7 +172,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
             self.pages['browse'].OnDataReload(event) # TODO replace by signal
         
     def OnPageChanged(self, event):
-        """!On page in ATM is changed"""
+        """On page in ATM is changed"""
         try:
             if self.pages["browse"]:
                 selPage = self.pages["browse"].selLayer
@@ -199,7 +199,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         pass
 
     def UpdateDialog(self, layer):
-        """!Updates dialog layout for given layer"""
+        """Updates dialog layout for given layer"""
         DbMgrBase.UpdateDialog(self, layer = layer)
         # set current page selection
         self.notebook.SetSelectionByName('layers') 

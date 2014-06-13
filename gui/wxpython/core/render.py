@@ -1,12 +1,15 @@
-"""!
+"""
 @package core.render
 
 @brief Rendering map layers and overlays into map composition image.
 
-@todo Implement RenderManager also for other layers (see WMS
-implementation for details)
+.. todo::
+    Implement RenderManager also for other layers (see WMS
+    implementation for details)
 
-@todo Render classes should not care about updating statusbar (change emiting events).
+.. todo::
+    Render classes should not care about updating statusbar (change
+    emiting events).
 
 Classes:
  - render::Layer
@@ -48,7 +51,7 @@ from core.settings import UserSettings
 USE_GPNMCOMP = True
 
 class Layer(object):
-    """!Virtual class which stores information about layers (map layers and
+    """Virtual class which stores information about layers (map layers and
     overlays) of the map composition.
     
     - For map layer use MapLayer class.
@@ -56,18 +59,19 @@ class Layer(object):
     """
     def __init__(self, ltype, cmd, Map, name = None,
                  active = True, hidden = False, opacity = 1.0):
-        """!Create new instance
+        """Create new instance
         
-        @todo pass cmd as tuple instead of list
+        .. todo::
+            pass cmd as tuple instead of list
         
-        @param ltype layer type ('raster', 'vector', 'overlay', 'command', etc.)
-        @param cmd GRASS command to render layer,
-        given as list, e.g. ['d.rast', 'map=elevation@PERMANENT']
-        @param Map render.Map instance
-        @param name layer name, e.g. 'elevation@PERMANENT' (for layer tree)
-        @param active layer is active, will be rendered only if True
-        @param hidden layer is hidden, won't be listed in Layer Manager if True
-        @param opacity layer opacity <0;1>
+        :param ltype: layer type ('raster', 'vector', 'overlay', 'command', etc.)
+        :param cmd: GRASS command to render layer, given as list,
+                    e.g. ['d.rast', 'map=elevation@PERMANENT']
+        :param map: render.Map instance
+        :param name: layer name, e.g. 'elevation@PERMANENT' (for layer tree)
+        :param active: layer is active, will be rendered only if True
+        :param hidden: layer is hidden, won't be listed in Layer Manager if True
+        :param float opacity: layer opacity <0;1>
         """
         
         # generated file for each layer
@@ -114,10 +118,10 @@ class Layer(object):
                    (self.name, self.GetCmd(string = True)))
         
     def Render(self):
-        """!Render layer to image
+        """Render layer to image
         
-        @return rendered image filename
-        @return None on error or if cmdfile is defined
+        :return: rendered image filename
+        :return: None on error or if cmdfile is defined
         """
         if not self.cmd:
             return None
@@ -172,8 +176,8 @@ class Layer(object):
         return self.mapfile
     
     def _runCommand(self, cmd):
-        """!Run command to render data
-        """ 
+        """Run command to render data
+        """
         if self.type == 'wms':
             ret = 0
             msg = ''
@@ -188,11 +192,11 @@ class Layer(object):
         return ret, msg
     
     def GetCmd(self, string = False):
-        """!Get GRASS command as list of string.
+        """Get GRASS command as list of string.
         
-        @param string get command as string if True otherwise as list
+        :param string: get command as string if True otherwise as list
         
-        @return command list/string
+        :return: command list/string
         """
         if string:
             if self.type == 'command':
@@ -207,11 +211,11 @@ class Layer(object):
             return self.cmd
 
     def GetType(self):
-        """!Get map layer type"""
+        """Get map layer type"""
         return self.type
     
     def GetElement(self):
-        """!Get map element type"""
+        """Get map element type"""
         if self.type == 'raster':
             return 'cell'
         return self.type
@@ -220,18 +224,19 @@ class Layer(object):
         """
         Get layer opacity level
         
-        @return opacity level (<0, 1>)
+        :return: opacity level (<0, 1>)
         """
         return self.opacity
 
     def GetName(self, fullyQualified = True):
-        """!Get map layer name
+        """Get map layer name
 
-        @param fullyQualified True to return fully qualified name as a
-        string 'name@mapset' otherwise directory { 'name', 'mapset' }
-        is returned
+        :param bool fullyQualified: True to return fully qualified name
+                                    as a string 'name@mapset' otherwise
+                                    directory { 'name', 'mapset' } is
+                                    returned
 
-        @return string / directory
+        :return: string / directory
         """
         if fullyQualified:
             return self.name
@@ -244,15 +249,15 @@ class Layer(object):
                          'mapset' : '' }
         
     def IsActive(self):
-        """!Check if layer is activated for rendering"""
+        """Check if layer is activated for rendering"""
         return self.active
 
     def IsHidden(self):
-        """!Check if layer is hidden"""
+        """Check if layer is hidden"""
         return self.hidden
     
     def SetType(self, ltype):
-        """!Set layer type"""
+        """Set layer type"""
         if ltype not in utils.command2ltype.values() + ['overlay', 'command']:
             raise GException(_("Unsupported map layer type '%s'") % ltype)
         
@@ -266,19 +271,19 @@ class Layer(object):
         self.type = ltype
 
     def SetName(self, name):
-        """!Set layer name"""
+        """Set layer name"""
         self.name = name
         
     def SetActive(self, enable = True):
-        """!Active or deactive layer"""
+        """Active or deactive layer"""
         self.active = bool(enable)
 
     def SetHidden(self, enable = False):
-        """!Hide or show map layer in Layer Manager"""
+        """Hide or show map layer in Layer Manager"""
         self.hidden = bool(enable)
 
     def SetOpacity(self, value):
-        """!Set opacity value"""
+        """Set opacity value"""
         if value < 0:
             value = 0.
         elif value > 1:
@@ -287,7 +292,7 @@ class Layer(object):
         self.opacity = float(value)
         
     def SetCmd(self, cmd):
-        """!Set new command for layer"""
+        """Set new command for layer"""
         if self.type == 'command':
             self.cmd = []
             for c in cmd:
@@ -300,49 +305,50 @@ class Layer(object):
         self.forceRender = True
 
     def SetEnvironment(self, environ):
-        """!Sets environment for rendering."""
+        """Sets environment for rendering."""
         self.environ = environ
 
     def IsDownloading(self):
-        """!Is data downloading from web server e. g. wms"""
+        """Is data downloading from web server e. g. wms"""
         if self.renderMgr is None:
             return False
         else:
             return self.renderMgr.IsDownloading()
 
     def AbortThread(self):
-        """!Abort running thread e. g. downloading data"""
+        """Abort running thread e. g. downloading data"""
         if self.renderMgr is None:
             return
         else:
             self.renderMgr.Abort()
 
     def GetRenderMgr(self):
-        """!Get render manager """
+        """Get render manager """
         return self.renderMgr
 
 class MapLayer(Layer):
     def __init__(self, ltype, cmd, Map, name = None,
                  active = True, hidden = False, opacity = 1.0): 
-        """!Represents map layer in the map canvas
+        """Represents map layer in the map canvas
         
-        @param ltype layer type ('raster', 'vector', 'command', etc.)
-        @param cmd GRASS command to render layer,
-        given as list, e.g. ['d.rast', 'map=elevation@PERMANENT']
-        @param Map render.Map instance
-        @param name layer name, e.g. 'elevation@PERMANENT' (for layer tree) or None
-        @param active layer is active, will be rendered only if True
-        @param hidden layer is hidden, won't be listed in Layer Manager if True
-        @param opacity layer opacity <0;1>
+        :param ltype: layer type ('raster', 'vector', 'command', etc.)
+        :param cmd: GRASS command to render layer,
+                    given as list, e.g. ['d.rast',
+                    'map=elevation@PERMANENT']
+        :param map: render.Map instance
+        :param name: layer name, e.g. 'elevation@PERMANENT' (for layer tree) or None
+        :param active: layer is active, will be rendered only if True
+        :param hidden: layer is hidden, won't be listed in Layer Manager if True
+        :param opacity: layer opacity <0;1>
         """
         Layer.__init__(self, ltype, cmd, Map, name,
                        active, hidden, opacity)
         
     def GetMapset(self):
-        """!Get mapset of map layer
+        """Get mapset of map layer
         
-        @return mapset name
-        @return '' on error (no name given)
+        :return: mapset name
+        :return: '' on error (no name given)
         """
         if not self.name:
             return ''
@@ -355,16 +361,17 @@ class MapLayer(Layer):
 class Overlay(Layer):
     def __init__(self, id, ltype, cmd, Map,
                  active = True, hidden = True, opacity = 1.0):
-        """!Represents overlay displayed in map canvas
+        """Represents overlay displayed in map canvas
         
-        @param id overlay id (for PseudoDC)
-        @param type overlay type ('barscale', 'legend', etc.)
-        @param cmd GRASS command to render overlay,
-        given as list, e.g. ['d.legend', 'rast=elevation@PERMANENT']
-        @param Map render.Map instance
-        @param active layer is active, will be rendered only if True
-        @param hidden layer is hidden, won't be listed in Layer Manager if True
-        @param opacity layer opacity <0;1>
+        :param id: overlay id (for PseudoDC)
+        :param type: overlay type ('barscale', 'legend', etc.)
+        :param cmd: GRASS command to render overlay,
+                    given as list, e.g. ['d.legend',
+                    'rast=elevation@PERMANENT']
+        :param map: render.Map instance
+        :param active: layer is active, will be rendered only if True
+        :param hidden: layer is hidden, won't be listed in Layer Manager if True
+        :param opacity: layer opacity <0;1>
         """
         Layer.__init__(self, 'overlay', cmd, Map, ltype,
                        active, hidden, opacity)
@@ -372,9 +379,9 @@ class Overlay(Layer):
         
 class Map(object):
     def __init__(self, gisrc = None):
-        """!Map composition (stack of map layers and overlays)
+        """Map composition (stack of map layers and overlays)
         
-        @param gisrc alternative gisrc (used eg. by georectifier)
+        :param gisrc: alternative gisrc (used eg. by georectifier)
         """
         # region/extent settigns
         self.wind      = dict() # WIND settings (wind file)
@@ -419,11 +426,11 @@ class Map(object):
         self.updateProgress = Signal('Map.updateProgress')
 
     def GetProjInfo(self):
-        """!Get projection info"""
+        """Get projection info"""
         return self.projinfo
     
     def _projInfo(self):
-        """!Return region projection and map units information
+        """Return region projection and map units information
         """
         projinfo = dict()
         if not grass.find_program('g.proj', '--help'):
@@ -451,7 +458,7 @@ class Map(object):
         return projinfo
     
     def GetWindow(self):
-        """!Read WIND file and set up self.wind dictionary"""
+        """Read WIND file and set up self.wind dictionary"""
         # FIXME: duplicated region WIND == g.region (at least some values)
         env = grass.gisenv()
         filename = os.path.join (env['GISDBASE'],
@@ -479,7 +486,7 @@ class Map(object):
         return self.wind
         
     def AdjustRegion(self):
-        """!Adjusts display resolution to match monitor size in
+        """Adjusts display resolution to match monitor size in
         pixels. Maintains constant display resolution, not related to
         computational region. Do NOT use the display resolution to set
         computational resolution. Set computational resolution through
@@ -499,7 +506,7 @@ class Map(object):
         return self.region
 
     def AlignResolution(self):
-        """!Sets display extents to even multiple of current
+        """Sets display extents to even multiple of current
         resolution defined in WIND file from SW corner. This must be
         done manually as using the -a flag can produce incorrect
         extents.
@@ -532,7 +539,7 @@ class Map(object):
         return new
 
     def AlignExtentFromDisplay(self):
-        """!Align region extent based on display size from center
+        """Align region extent based on display size from center
         point"""
         # calculate new bounding box based on center of display
         if self.region["ewres"] > self.region["nsres"]:
@@ -558,9 +565,9 @@ class Map(object):
             self.region['s'] = max(self.region['s'], -90.0)
         
     def ChangeMapSize(self, size):
-        """!Change size of rendered map.
+        """Change size of rendered map.
         
-        @param width,height map size given as tuple
+        :param size: map size given as tuple
         """
         try:
             self.width  = int(size[0])
@@ -578,24 +585,24 @@ class Map(object):
     def GetRegion(self, rast=None, zoom=False, vect=None, rast3d=None, regionName=None,
                   n=None, s=None, e=None, w=None, default=False,
                   update=False, add3d=False):
-        """!Get region settings (g.region -upgc)
+        """Get region settings (g.region -upgc)
         
         Optionally extent, raster or vector map layer can be given.
         
-        @param rast list of raster maps
-        @param zoom zoom to raster map (ignore NULLs)
-        @param vect list of vector maps
-        @param rast3d 3d raster map (not list, no support of multiple 3d rasters in g.region)
-        @param regionName  named region or None
-        @param n,s,e,w force extent
-        @param default force default region settings
-        @param update if True update current display region settings
-        @param add3d add 3d region settings
+        :param rast: list of raster maps
+        :param zoom: zoom to raster map (ignore NULLs)
+        :param vect: list of vector maps
+        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in g.region)
+        :param regionName:  named region or None
+        :param n,s,e,w: force extent
+        :param default: force default region settings
+        :param update: if True update current display region settings
+        :param add3d: add 3d region settings
         
-        @return region settings as dictionary, e.g. {
+        :return: region settings as dictionary, e.g. {
         'n':'4928010', 's':'4913700', 'w':'589980',...}
         
-        @see GetCurrentRegion()
+        :func:`GetCurrentRegion()`
         """
         region = {}
 
@@ -675,21 +682,21 @@ class Map(object):
         return region
 
     def GetCurrentRegion(self):
-        """!Get current display region settings
+        """Get current display region settings
         
-        @see GetRegion()
+        :func:`GetRegion()`
         """
         return self.region
 
     def SetRegion(self, windres = False, windres3 = False):
-        """!Render string for GRASS_REGION env. variable, so that the
+        """Render string for GRASS_REGION env. variable, so that the
         images will be rendered from desired zoom level.
         
-        @param windres uses resolution from WIND file rather than
-        display (for modules that require set resolution like
-        d.rast.num)
+        :param windres: uses resolution from WIND file rather than
+                        display (for modules that require set resolution
+                        like d.rast.num)
 
-        @return String usable for GRASS_REGION variable or None
+        :return: String usable for GRASS_REGION variable or None
         """
         grass_region = ""
         
@@ -778,16 +785,16 @@ class Map(object):
     
     def GetListOfLayers(self, ltype = None, mapset = None, name = None,
                         active = None, hidden = None):
-        """!Returns list of layers of selected properties or list of
+        """Returns list of layers of selected properties or list of
         all layers.
 
-        @param ltype layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
-        @param mapset all layers from given mapset (only for maplayers)
-        @param name all layers with given name
-        @param active only layers with 'active' attribute set to True or False
-        @param hidden only layers with 'hidden' attribute set to True or False
+        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
+        :param mapset: all layers from given mapset (only for maplayers)
+        :param name: all layers with given name
+        :param active: only layers with 'active' attribute set to True or False
+        :param hidden: only layers with 'hidden' attribute set to True or False
         
-        @return list of selected layers
+        :return: list of selected layers
         """
         selected = []
         
@@ -845,12 +852,12 @@ class Map(object):
         return selected
 
     def _renderLayers(self, env, force = False, overlaysOnly = False):
-        """!Render all map layers into files
+        """Render all map layers into files
 
-        @param force True to force rendering
-        @param overlaysOnly True to render only overlays
+        :param bool force: True to force rendering
+        :param bool overlaysOnly: True to render only overlays
 
-        @return list of maps, masks and opacities
+        :return: list of maps, masks and opacities
         """
         maps = list()
         masks = list()
@@ -897,23 +904,24 @@ class Map(object):
         return maps, masks, opacities
         
     def GetMapsMasksAndOpacities(self, force, windres, env):
-        """!
+        """
         Used by Render function.
         
-        @return maps, masks, opacities
+        :return: maps, masks, opacities
         """
         return self._renderLayers(force=force, env=env)
     
     def Render(self, force = False, windres = False):
-        """!Creates final image composite
+        """Creates final image composite
         
         This function can conditionaly use high-level tools, which
         should be avaliable in wxPython library
         
-        @param force force rendering
-        @param windres use region resolution (True) otherwise display resolution
+        :param force: force rendering
+        :param windres: use region resolution (True) otherwise display
+                        resolution
         
-        @return name of file with rendered image or None
+        :return: name of file with rendered image or None
         """
         wx.BeginBusyCursor()
         env = os.environ.copy()
@@ -979,19 +987,19 @@ class Map(object):
     def AddLayer(self, ltype, command, name = None,
                  active = True, hidden = False, opacity = 1.0, render = False,
                  pos = -1):
-        """!Adds generic map layer to list of layers
+        """Adds generic map layer to list of layers
         
-        @param ltype layer type ('raster', 'vector', etc.)
-        @param command  GRASS command given as list
-        @param name layer name
-        @param active layer render only if True
-        @param hidden layer not displayed in layer tree if True
-        @param opacity opacity level range from 0(transparent) - 1(not transparent)
-        @param render render an image if True
-        @param pos position in layer list (-1 for append)
+        :param ltype: layer type ('raster', 'vector', etc.)
+        :param command:  GRASS command given as list
+        :param name: layer name
+        :param active: layer render only if True
+        :param hidden: layer not displayed in layer tree if True
+        :param opacity: opacity level range from 0(transparent) - 1(not transparent)
+        :param render: render an image if True
+        :param pos: position in layer list (-1 for append)
         
-        @return new layer on success
-        @return None on failure
+        :return: new layer on success
+        :return: None on failure
         """
         wx.BeginBusyCursor()
         # opacity must be <0;1>
@@ -1023,21 +1031,21 @@ class Map(object):
         return layer
 
     def DeleteAllLayers(self, overlay = False):
-        """!Delete all layers 
+        """Delete all layers 
 
-        @param overlay True to delete also overlayes
+        :param overlay: True to delete also overlayes
         """
         self.layers = []
         if overlay:
             self.overlays = []
         
     def DeleteLayer(self, layer, overlay = False):
-        """!Removes layer from list of layers
+        """Removes layer from list of layers
         
-        @param layer layer instance in layer tree
-        @param overlay delete overlay (use self.DeleteOverlay() instead)
+        :param layer: layer instance in layer tree
+        :param overlay: delete overlay (use self.DeleteOverlay() instead)
 
-        @return removed layer on success or None
+        :return: removed layer on success or None
         """
         Debug.msg (3, "Map.DeleteLayer(): name=%s" % layer.name)
         
@@ -1074,16 +1082,16 @@ class Map(object):
         Debug.msg(5, "Map.SetLayers(): layers=%s" % (layerNameList))
 
     def ChangeLayer(self, layer, render = False, **kargs):
-        """!Change map layer properties
+        """Change map layer properties
 
-        @param layer map layer instance
-        @param ltype layer type ('raster', 'vector', etc.)
-        @param command  GRASS command given as list
-        @param name layer name
-        @param active layer render only if True
-        @param hidden layer not displayed in layer tree if True
-        @param opacity opacity level range from 0(transparent) - 1(not transparent)
-        @param render render an image if True
+        :param layer: map layer instance
+        :param ltype: layer type ('raster', 'vector', etc.)
+        :param command:  GRASS command given as list
+        :param name: layer name
+        :param active: layer render only if True
+        :param hidden: layer not displayed in layer tree if True
+        :param opacity: opacity level range from 0(transparent) - 1(not transparent)
+        :param render: render an image if True
         """
         Debug.msg (3, "Map.ChangeLayer(): layer=%s" % layer.name)
         
@@ -1112,10 +1120,10 @@ class Map(object):
         return layer
 
     def ChangeOpacity(self, layer, opacity):
-        """!Changes opacity value of map layer
+        """Changes opacity value of map layer
 
-        @param layer layer instance in layer tree
-        @param opacity opacity level <0;1>
+        :param layer: layer instance in layer tree
+        :param opacity: opacity level <0;1>
         """
         # opacity must be <0;1>
         if opacity < 0: opacity = 0
@@ -1126,10 +1134,10 @@ class Map(object):
                    (layer.name, layer.opacity))
 
     def ChangeLayerActive(self, layer, active):
-        """!Enable or disable map layer
+        """Enable or disable map layer
         
-        @param layer layer instance in layer tree
-        @param active to be rendered (True)
+        :param layer: layer instance in layer tree
+        :param active: to be rendered (True)
         """
         layer.active = active
         
@@ -1137,25 +1145,27 @@ class Map(object):
                    (layer.name, layer.active))
 
     def ChangeLayerName (self, layer, name):
-        """!Change name of the layer
+        """Change name of the layer
         
-        @param layer layer instance in layer tree
-        @param name  layer name to set up
+        :param layer: layer instance in layer tree
+        :param name:  layer name to set up
         """
         Debug.msg (3, "Map.ChangeLayerName(): from=%s to=%s" % \
                    (layer.name, name))
         layer.name =  name
 
     def RemoveLayer(self, name = None, id = None):
-        """!Removes layer from layer list
+        """Removes layer from layer list
         
         Layer is defined by name@mapset or id.
         
-        @param name layer name (must be unique)
-        @param id layer index in layer list    def __init__(self, targetFile, region, bandsNum, gdalDriver, fillValue = None):
+        :param name: layer name (must be unique)
+        :param id: layer index in layer list def __init__(self,
+                   targetFile, region, bandsNum, gdalDriver,
+                   fillValue = None):
 
-        @return removed layer on success
-        @return None on failure
+        :return: removed layer on success
+        :return: None on failure
         """
         # delete by name
         if name:
@@ -1174,13 +1184,13 @@ class Map(object):
         return None
 
     def GetLayerIndex(self, layer, overlay = False):
-        """!Get index of layer in layer list.
+        """Get index of layer in layer list.
         
-        @param layer layer instace in layer tree
-        @param overlay use list of overlays instead
+        :param layer: layer instace in layer tree
+        :param overlay: use list of overlays instead
         
-        @return layer index
-        @return -1 if layer not found
+        :return: layer index
+        :return: -1 if layer not found
         """
         if overlay:
             list = self.overlays
@@ -1194,18 +1204,18 @@ class Map(object):
 
     def AddOverlay(self, id, ltype, command,
                    active = True, hidden = True, opacity = 1.0, render = False):
-        """!Adds overlay (grid, barscale, legend, etc.) to list of
+        """Adds overlay (grid, barscale, legend, etc.) to list of
         overlays
         
-        @param id overlay id (PseudoDC)
-        @param ltype overlay type (barscale, legend)
-        @param command GRASS command to render overlay
-        @param active overlay activated (True) or disabled (False)
-        @param hidden overlay is not shown in layer tree (if True)
-        @param render render an image (if True)
+        :param id: overlay id (PseudoDC)
+        :param ltype: overlay type (barscale, legend)
+        :param command: GRASS command to render overlay
+        :param active: overlay activated (True) or disabled (False)
+        :param hidden: overlay is not shown in layer tree (if True)
+        :param render: render an image (if True)
         
-        @return new layer on success
-        @return None on failure
+        :return: new layer on success
+        :return: None on failure
         """
         Debug.msg (2, "Map.AddOverlay(): cmd=%s, render=%d" % (command, render))
         overlay = Overlay(id = id, ltype = ltype, cmd = command, Map = self,
@@ -1221,18 +1231,18 @@ class Map(object):
         return self.overlays[-1]
 
     def ChangeOverlay(self, id, render = False, **kargs):
-        """!Change overlay properities
+        """Change overlay properities
         
         Add new overlay if overlay with 'id' doesn't exist.
         
-        @param id overlay id (PseudoDC)
-        @param ltype overlay ltype (barscale, legend)
-        @param command GRASS command to render overlay
-        @param active overlay activated (True) or disabled (False)
-        @param hidden overlay is not shown in layer tree (if True)
-        @param render render an image (if True)
+        :param id: overlay id (PseudoDC)
+        :param ltype: overlay ltype (barscale, legend)
+        :param command: GRASS command to render overlay
+        :param active: overlay activated (True) or disabled (False)
+        :param hidden: overlay is not shown in layer tree (if True)
+        :param render: render an image (if True)
         
-        @return new layer on success
+        :return: new layer on success
         """
         overlay = self.GetOverlay(id, list = False)
         if  overlay is None:
@@ -1260,15 +1270,15 @@ class Map(object):
         return overlay
 
     def GetOverlay(self, id, list = False):
-        """!Return overlay(s) with 'id'
+        """Return overlay(s) with 'id'
         
-        @param id overlay id
-        @param list return list of overlays of True
+        :param id: overlay id
+        :param list: return list of overlays of True
         otherwise suppose 'id' to be unique
         
-        @return list of overlays (list=True)
-        @return overlay (list=False)
-        @return None (list=False) if no overlay or more overlays found
+        :return: list of overlays (list=True)
+        :return: overlay (list=False)
+        :return: None (list=False) if no overlay or more overlays found
         """
         ovl = []
         for overlay in self.overlays:
@@ -1284,11 +1294,11 @@ class Map(object):
         return ovl
 
     def DeleteOverlay(self, overlay):
-        """!Delete overlay
+        """Delete overlay
         
-        @param overlay overlay layer
+        :param overlay: overlay layer
         
-        @return removed overlay on success or None
+        :return: removed overlay on success or None
         """
         return self.DeleteLayer(overlay, overlay = True)
 
@@ -1301,7 +1311,7 @@ class Map(object):
             llist.remove(layer)
         
     def Clean(self):
-        """!Clean layer stack - go trough all layers and remove them
+        """Clean layer stack - go trough all layers and remove them
         from layer list.
 
         Removes also mapfile and maskfile.
@@ -1310,22 +1320,22 @@ class Map(object):
         self._clean(self.overlays)
         
     def ReverseListOfLayers(self):
-        """!Reverse list of layers"""
+        """Reverse list of layers"""
         return self.layers.reverse()
 
     def RenderOverlays(self, force):
-        """!Render overlays only (for nviz)"""
+        """Render overlays only (for nviz)"""
         for layer in self.overlays:
             if force or layer.forceRender:
                 layer.Render()
 
     def AbortAllThreads(self):
-        """!Abort all layers threads e. g. donwloading data"""
+        """Abort all layers threads e. g. donwloading data"""
         for l in self.layers + self.overlays:
             l.AbortThread()
 
     def ReportProgress(self, layer):
-        """!Calculates progress in rendering/downloading
+        """Calculates progress in rendering/downloading
         and emits signal to inform progress bar about progress.
         """
         if self.progressInfo is None or layer is None:

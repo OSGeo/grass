@@ -1,4 +1,4 @@
-"""!
+"""
 @package vnet.vnet_data
 
 @brief Vector network analysis classes for data managment.
@@ -103,7 +103,7 @@ class VNETData:
         return self.an_points.GetSnapping()
     
     def GetLayerStyle(self):
-        """!Returns cmd for d.vect, with set style for analysis result"""
+        """Returns cmd for d.vect, with set style for analysis result"""
         analysis, valid = self.an_params.GetParam("analysis")
 
         resProps = self.an_props[analysis]["resultProps"]
@@ -133,11 +133,11 @@ class VNETData:
         return layerStyleCmd, layerStyleVnetColors
 
     def InputsErrorMsgs(self, msg, analysis, params, flags, inv_params, relevant_params):
-        """!Checks input data in Parameters tab and shows messages if some value is not valid
+        """Checks input data in Parameters tab and shows messages if some value is not valid
 
-            @param msg (str) - message added to start of message string 
-            @return True - if checked inputs are OK
-            @return False - if some of checked inputs is not ok
+            :param str msg: message added to start of message string 
+            :return: True if checked inputs are OK
+            :return: False if some of checked inputs is not ok
         """
 
         if flags["t"] and  "tlayer" not in relevant_params:
@@ -191,7 +191,7 @@ class VNETData:
         return True
 
     def _initSettings(self):
-        """!Initialization of settings (if not already defined)"""
+        """Initialization of settings (if not already defined)"""
         # initializes default settings
         initSettings = [
                         ['res_style', 'line_width', 5],
@@ -321,7 +321,7 @@ class VNETPointsData:
         return len(self.data)
 
     def SetPointStatus(self, item, itemIndex):
-        """!Before point is drawn, decides properties of drawing style"""
+        """Before point is drawn, decides properties of drawing style"""
         analysis, valid = self.an_params.GetParam("analysis")
         cats = self.an_data[analysis]["cmdParams"]["cats"]
 
@@ -350,7 +350,7 @@ class VNETPointsData:
         return self.selected
 
     def SetPointDrawSettings(self):
-        """!Set settings for drawing of points"""
+        """Set settings for drawing of points"""
         ptSize = int(UserSettings.Get(group='vnet', key='point_symbol', subkey = 'point_size'))
         self.pointsToDraw.SetPropertyVal("size", ptSize)
 
@@ -402,7 +402,7 @@ class VNETPointsData:
         return pt_data
 
     def _usePoint(self, pt_id, use):
-        """!Item is checked/unchecked"""
+        """Item is checked/unchecked"""
         analysis, valid = self.an_params.GetParam("analysis")
         cats = self.an_data[analysis]["cmdParams"]["cats"]
         ##TODO move
@@ -443,7 +443,7 @@ class VNETPointsData:
 
 
     def EditPointMode(self, activate):
-        """!Registers/unregisters mouse handler into map window"""
+        """Registers/unregisters mouse handler into map window"""
 
         if activate == self.handlerRegistered:
             return
@@ -464,7 +464,7 @@ class VNETPointsData:
         return self.handlerRegistered
 
     def OnMapClickHandler(self, event):
-        """!Take coordinates from map window"""
+        """Take coordinates from map window"""
         #TODO update snapping after input change
         if event == 'unregistered':
             self.handlerRegistered = False
@@ -603,7 +603,7 @@ class VNETAnalysisParameters:
         return self.params, invParams, self.flags 
 
     def _getInvalidParams(self, params):
-        """!Check of analysis input data for invalid values (Parameters tab)"""
+        """Check of analysis input data for invalid values (Parameters tab)"""
         # dict of invalid values {key from self.itemData (comboboxes from Parameters tab) : invalid value}
         invParams = []
 
@@ -653,7 +653,7 @@ class VNETAnalysisParameters:
 
 class VNETAnalysesProperties:
     def __init__(self):
-        """!Initializes parameters for different v.net.* modules """
+        """Initializes parameters for different v.net.* modules """
         # initialization of v.net.* analysis parameters (data which characterizes particular analysis)
 
         self.attrCols = {
@@ -846,16 +846,16 @@ class VNETAnalysesProperties:
         return relevant_params
 
 class VNETTmpVectMaps:
-    """!Class which creates, stores and destroys all tmp maps created during analysis"""
+    """Class which creates, stores and destroys all tmp maps created during analysis"""
     def __init__(self, parent, mapWin):
         self.tmpMaps = [] # temporary maps 
         self.parent = parent
         self.mapWin = mapWin
 
     def AddTmpVectMap(self, mapName, msg):
-        """!New temporary map
+        """New temporary map
 
-            @return instance of VectMap representing temporary map 
+        :return: instance of VectMap representing temporary map 
         """
         currMapSet = grass.gisenv()['MAPSET']
         tmpMap = grass.find_file(name = mapName, 
@@ -886,11 +886,11 @@ class VNETTmpVectMaps:
         return newVectMap
 
     def HasTmpVectMap(self, vectMapName):
-        """ 
-            @param vectMapName name of vector map
+        """
+        :param: vectMapName name of vector map
 
-            @return True if it contains the map
-            @return False if not 
+        :return: True if it contains the map
+        :return: False if not 
         """
 
         mapValSpl = vectMapName.strip().split("@")
@@ -907,19 +907,19 @@ class VNETTmpVectMaps:
         return False
 
     def GetTmpVectMap(self, vectMapName):
-        """ Get instance of VectMap with name vectMapName"""
+        """Get instance of VectMap with name vectMapName"""
         for vectMap in self.tmpMaps:
             if vectMap.GetVectMapName() == vectMapName.strip():
                 return vectMap
         return None
 
     def RemoveFromTmpMaps(self, vectMap):
-        """!Temporary map is removed from the class instance however it is not deleted
+        """Temporary map is removed from the class instance however it is not deleted
 
-            @param vectMap instance of VectMap class to be removed 
+        :param vectMap: instance of VectMap class to be removed 
 
-            @return True if was removed
-            @return False if does not contain the map
+        :return: True if was removed
+        :return: False if does not contain the map
         """
         try:
             self.tmpMaps.remove(vectMap)
@@ -928,12 +928,12 @@ class VNETTmpVectMaps:
             return False
 
     def DeleteTmpMap(self, vectMap):
-        """!Temporary map is removed from the class and it is deleted
+        """Temporary map is removed from the class and it is deleted
         
-            @param vectMap instance of VectMap class to be deleted 
+        :param vectMap: instance of VectMap class to be deleted 
 
-            @return True if was removed
-            @return False if does not contain the map
+        :return: True if was removed
+        :return: False if does not contain the map
         """
         if vectMap:
             vectMap.DeleteRenderLayer()
@@ -954,7 +954,7 @@ class VNETTmpVectMaps:
         return update
 
 class VectMap:
-    """!Represents map 
+    """Represents map 
         It can check if it was modified or render it
     """
     def __init__(self, mapWin, fullName):
@@ -968,7 +968,7 @@ class VectMap:
         self.DeleteRenderLayer()
    
     def AddRenderLayer(self, cmd = None, colorsCmd = None):
-        """!Add map from map window layers to render """
+        """Add map from map window layers to render """
 
         if not self.mapWin:
             return False
@@ -1004,7 +1004,7 @@ class VectMap:
         return True
 
     def DeleteRenderLayer(self):
-        """!Remove map from map window layers to render"""
+        """Remove map from map window layers to render"""
         if not self.mapWin:
             return False
 
@@ -1021,15 +1021,15 @@ class VectMap:
         return self.fullName
 
     def SaveVectMapState(self):
-        """!Save modification time for vector map"""
+        """Save modification time for vector map"""
         self.modifTime = self.GetLastModified()
 
     def VectMapState(self):
-        """!Checks if map was modified
+        """Checks if map was modified
 
-            @return -1 - if no modification time was saved
-            @return  0 - if map was modified
-            @return  1 - if map was not modified
+        :return: -1 - if no modification time was saved
+        :return:  0 - if map was modified
+        :return:  1 - if map was not modified
         """
         if self.modifTime is None:
             return -1       
@@ -1038,9 +1038,9 @@ class VectMap:
         return 1
 
     def GetLastModified(self):
-        """!Get modification time 
+        """Get modification time 
 
-            @return MAP DATE time string from vector map head file 
+        :return: MAP DATE time string from vector map head file 
         """
 
         mapValSpl = self.fullName.split("@")
@@ -1067,10 +1067,11 @@ class VectMap:
             return ""
 
 class History: 
-    """!Class which reads and saves history data (based on gui.core.settings Settings class file save/load)
+    """Class which reads and saves history data (based on gui.core.settings Settings class file save/load)
 
-    @todo Maybe it could be useful for other GRASS wxGUI tools.
-    """   
+    .. todo::
+        Maybe it could be useful for other GRASS wxGUI tools.
+    """  
     def __init__(self):
 
         # max number of steps in history (zero based)
@@ -1095,7 +1096,7 @@ class History:
         grass.try_remove(self.histFile)
 
     def GetNext(self):
-        """!Go one step forward in history"""
+        """Go one step forward in history"""
         self.currHistStep -= 1
         self.currHistStepData.clear()
         self.currHistStepData = self._getHistStepData(self.currHistStep)
@@ -1103,7 +1104,7 @@ class History:
         return self.currHistStepData
 
     def GetPrev(self):
-        """!Go one step back in history"""
+        """Go one step back in history"""
         self.currHistStep += 1 
         self.currHistStepData.clear()
         self.currHistStepData = self._getHistStepData(self.currHistStep)
@@ -1111,15 +1112,15 @@ class History:
         return self.currHistStepData
 
     def GetStepsNum(self):
-        """!Get number of steps saved in history"""
+        """Get number of steps saved in history"""
         return self.histStepsNum
 
     def GetCurrHistStep(self):
-        """!Get current history step"""
+        """Get current history step"""
         return self.currHistStep
 
     def Add(self, key, subkey, value):
-        """!Add new data into buffer"""
+        """Add new data into buffer"""
         if key not in self.newHistStepData:
             self.newHistStepData[key] = {}
 
@@ -1131,7 +1132,7 @@ class History:
             self.newHistStepData[key][subkey] = value
 
     def SaveHistStep(self):
-        """!Create new history step with data in buffer"""
+        """Create new history step with data in buffer"""
         self.maxHistSteps = UserSettings.Get(group ='vnet',
                                              key = 'other',
                                              subkey = 'max_hist_steps')
@@ -1155,7 +1156,7 @@ class History:
         return removedHistData
 
     def _savePreviousHist(self, newHist, oldHist):          
-        """!Save previous history into new file"""
+        """Save previous history into new file"""
         newHistStep = False
         removedHistData = {}
         newHistStepsNum = self.histStepsNum
@@ -1188,7 +1189,7 @@ class History:
         return removedHistData
             
     def _saveNewHistStep(self, newHist):
-        """!Save buffer (new step) data into file"""
+        """Save buffer (new step) data into file"""
         newHist.write('%s%s%s' % (os.linesep, "history step=0", os.linesep))  
         for key in self.newHistStepData.keys():
             subkeys =  self.newHistStepData[key].keys()
@@ -1219,7 +1220,7 @@ class History:
         self.histStepsNum = 0
 
     def _parseValue(self, value, read = False):
-        """!Parse value"""
+        """Parse value"""
         if read: # -> read data (cast values)
 
             if value:
@@ -1256,7 +1257,7 @@ class History:
         return value
 
     def _castValue(self, value):
-        """!Cast value"""
+        """Cast value"""
         try:
             value = int(value)
         except ValueError:
@@ -1268,7 +1269,7 @@ class History:
         return value
 
     def _getHistStepData(self, histStep):          
-        """!Load data saved in history step"""        
+        """Load data saved in history step"""       
         hist = open(self.histFile)
         histStepData = {}
 
@@ -1294,7 +1295,7 @@ class History:
         return histStepData
 
     def _parseLine(self, line, histStepData):
-        """!Parse line in file with history"""        
+        """Parse line in file with history"""       
         line = line.rstrip('%s' % os.linesep).split(self.sep)
         key = line[0]
         kv = line[1:]
@@ -1323,11 +1324,11 @@ class History:
             idx += 2
 
     def DeleteNewHistStepData(self):
-        """!Delete buffer data for new history step"""        
+        """Delete buffer data for new history step"""       
         self.newHistStepData.clear() 
 
 class VNETGlobalTurnsData:
-    """!Turn Data"""
+    """Turn Data"""
     def __init__(self):
         # Definition of four basic directions
         self.turn_data = [
@@ -1354,7 +1355,7 @@ class VNETGlobalTurnsData:
         self.turn_data[line][col] = value
 
     def SetUTurns(self, value):
-        """!Checked if checeBox is checed"""
+        """Checked if checeBox is checed"""
         useUTurns = value
 
     def AppendRow(self, values):
@@ -1368,7 +1369,7 @@ class VNETGlobalTurnsData:
         self.turn_data.pop(values)
              
     def DataValidator(self, row, col, value):
-        """!Angle recalculation due to value changing"""
+        """Angle recalculation due to value changing"""
 
         if col not in [1,2]:
             return
@@ -1435,7 +1436,7 @@ class VNETGlobalTurnsData:
             self.turn_data[i_row][2] = angle
 
     def RemoveDataValidator(self, row):
-        """!Angle recalculation due to direction remove"""
+        """Angle recalculation due to direction remove"""
         if row == 0:
             prev_row = self.GetLinesCount() - 1
         else:
@@ -1446,7 +1447,7 @@ class VNETGlobalTurnsData:
 
 
     def IsInInterval(self, from_angle, to_angle, angle):
-        """!Test if a direction includes or not includes a value"""  
+        """Test if a direction includes or not includes a value""" 
         if to_angle < from_angle:
             to_angle = math.pi * 2  + to_angle
         if angle < from_angle:

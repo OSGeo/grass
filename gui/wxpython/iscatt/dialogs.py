@@ -1,4 +1,4 @@
-"""!
+"""
 @package iscatt.dialogs
 
 @brief Dialogs widgets.
@@ -138,7 +138,7 @@ class AddScattPlotDialog(wx.Dialog):
         event.Skip()
 
     def _addSelectSizer(self, title, sel): 
-        """!Helper layout function.
+        """Helper layout function.
         """
         selSizer = wx.BoxSizer(orient = wx.VERTICAL)
 
@@ -156,25 +156,25 @@ class AddScattPlotDialog(wx.Dialog):
         return selSizer
 
     def GetBands(self):
-        """!Get layers"""
+        """Get layers"""
         return self.sel_bands_ids
 
     def OnClose(self, event):
-        """!Close dialog
+        """Close dialog
         """
         if not self.IsModal():
             self.Destroy()
         event.Skip()
 
     def OnRemoveLayer(self, event):
-        """!Remove layer from listbox"""
+        """Remove layer from listbox"""
         while self.scattsBox.GetSelections():
             sel = self.scattsBox.GetSelections()[0]
             self.scattsBox.Delete(sel)
             self.sel_bands_ids.pop(sel)
 
     def OnAdd(self, event):
-        """!
+        """
         """
         b_x = self.band_1_ch.GetSelection()
         b_y = self.band_2_ch.GetSelection()
@@ -209,11 +209,11 @@ class ExportCategoryRaster(wx.Dialog):
     def __init__(self, parent, title, rasterName = None, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
-        """!Dialog for export of category raster.
+        """Dialog for export of category raster.
         
-        @param parent window
-        @param rasterName name of vector layer for export
-        @param title window title
+        :param parent: window
+        :param str rasterName name of vector layer for export
+        :param title: window title
         """
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
         
@@ -233,7 +233,7 @@ class ExportCategoryRaster(wx.Dialog):
         wx.CallAfter(self.vectorNameCtrl.SetFocus)
 
     def OnTextChanged(self, event):
-        """!Name of new vector map given.
+        """Name of new vector map given.
         
         Enable/diable OK button.
         """
@@ -244,7 +244,7 @@ class ExportCategoryRaster(wx.Dialog):
             self.btnOK.Enable(False)
         
     def __layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         dataSizer = wx.BoxSizer(wx.VERTICAL)
@@ -279,11 +279,11 @@ class ExportCategoryRaster(wx.Dialog):
         self.SetMinSize(self.GetSize())
         
     def GetRasterName(self):
-        """!Returns vector name"""
+        """Returns vector name"""
         return self.vectorNameCtrl.GetValue()
 
     def OnOK(self, event):
-        """!Checks if map exists and can be overwritten."""
+        """Checks if map exists and can be overwritten."""
         overwrite = UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled')
         rast_name = self.GetRasterName()
         res = grass.find_file(rast_name, element = 'cell')
@@ -302,7 +302,7 @@ class ExportCategoryRaster(wx.Dialog):
 class SettingsDialog(wx.Dialog):
     def __init__(self, parent, id, title, scatt_mgr, pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_DIALOG_STYLE):
-        """!Settings dialog"""
+        """Settings dialog"""
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
         self.scatt_mgr = scatt_mgr
@@ -417,7 +417,7 @@ class SettingsDialog(wx.Dialog):
         sizer.Fit(self)
      
     def OnSave(self, event):
-        """!Button 'Save' pressed"""
+        """Button 'Save' pressed"""
         self.UpdateSettings()
 
         fileSettings = {}
@@ -461,12 +461,12 @@ class SettingsDialog(wx.Dialog):
             self.scatt_mgr.SettingsUpdated(chanaged_setts)
 
     def OnApply(self, event):
-        """!Button 'Apply' pressed"""
+        """Button 'Apply' pressed"""
         self.UpdateSettings()
         #self.Close()
 
     def OnClose(self, event):
-        """!Button 'Cancel' pressed"""
+        """Button 'Cancel' pressed"""
         self.Close()
 
 class ManageBusyCursorMixin:

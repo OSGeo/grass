@@ -1,4 +1,4 @@
-"""!
+"""
 @package web_services.cap_interface
 
 @brief Provides common interface for GUI web_services.widgets to capabilities data of web services.
@@ -34,7 +34,7 @@ from wms_cap_parsers import WMSCapabilitiesTree, \
 
 class CapabilitiesBase:
     def GetLayerByName(self, name):
-        """!Find layer by name
+        """Find layer by name
         """
         for l in self.layers_by_id:
             if name == l.GetLayerData('name'):
@@ -42,7 +42,7 @@ class CapabilitiesBase:
         return None
 
     def GetRootLayer(self):
-        """!Get children layers
+        """Get children layers
         """
         if self.layers_by_id:
             return self.layers_by_id[0]
@@ -51,28 +51,29 @@ class CapabilitiesBase:
 
 class LayerBase:
     def GetId(self):
-        """!Get layer id
+        """Get layer id
         """
         return self.id
 
     def GetChildren(self):
-        """!Get children layers
+        """Get children layers
         """
         return self.child_layers
 
     def GetLayerNode(self):
-        """!Get layer node
+        """Get layer node
         """
         return self.layer_node
 
     def AddChildLayer(self, layer):
-        """!Add child layer
+        """Add child layer
         """
         self.child_layers.append(layer)
 
 class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
     def __init__(self, cap_file, force_version = None):
-        """!Create common interface for web_services.widgets to WMS capabilities data
+        """Create common interface for web_services.widgets to WMS
+        capabilities data
         """
         # checks all elements needed for creation of GetMap requests
         # by r.in.wms/d.wms modules, invalid elements are removed
@@ -85,7 +86,7 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
         self._initializeLayerTree(self.root_layer)
 
     def _initializeLayerTree(self, parent_layer, id = 0):
-        """!Build tree, which represents layers
+        """Build tree, which represents layers
         """
         if id == 0:
             parent_layer = WMSLayer(parent_layer, id, self)
@@ -104,8 +105,8 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
         return id
 
     def GetFormats(self):
-        """!Get supported formats
-        """       
+        """Get supported formats
+        """      
         request_node = self.cap_node.find(self.xml_ns.Ns("Request"))
         get_map_node = request_node.find(self.xml_ns.Ns("GetMap"))
         format_nodes = get_map_node.findall(self.xml_ns.Ns("Format"))
@@ -118,7 +119,8 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
 
 class WMSLayer(LayerBase):
     def __init__(self, layer_node, id, cap):
-        """!Common interface for web_services.widgets to WMS capabilities <Layer> element
+        """Common interface for web_services.widgets to WMS
+        capabilities <Layer> element
         """
         self.id = id
         self.cap = cap
@@ -127,7 +129,7 @@ class WMSLayer(LayerBase):
         self.xml_ns = self.cap.getxmlnshandler()
 
     def GetLayerData(self, param):
-        """!Get layer data"""
+        """Get layer data"""
         title = self.xml_ns.Ns("Title")
         name = self.xml_ns.Ns("Name")
 
@@ -176,7 +178,7 @@ class WMSLayer(LayerBase):
             return projs
 
     def IsRequestable(self):
-        """!Is it possible to use the layer for WMS GetMap request?
+        """Is it possible to use the layer for WMS GetMap request?
         """
         name = self.xml_ns.Ns("Name")
         name_node = self.layer_node.find(name)
@@ -188,7 +190,8 @@ class WMSLayer(LayerBase):
 
 class WMTSCapabilities(CapabilitiesBase, WMTSCapabilitiesTree):
     def __init__(self, cap_file):
-        """!Create common interface for web_services.widgets to WMTS capabilities data
+        """Create common interface for web_services.widgets to WMTS
+        capabilities data
         """
         # checks all elements needed for creation of GetTile requests
         # by r.in.wms/d.wms modules, invalid elements are removed
@@ -210,7 +213,8 @@ class WMTSCapabilities(CapabilitiesBase, WMTSCapabilitiesTree):
     
 class WMTSLayer(LayerBase):
     def __init__(self, layer_node, id, cap):
-        """!Common interface for web_services.widgets to WMTS capabilities <Layer> element
+        """Common interface for web_services.widgets to WMTS
+        capabilities <Layer> element
         """
         self.id = id
         self.cap = cap
@@ -220,8 +224,8 @@ class WMTSLayer(LayerBase):
         self.projs = self._getProjs()
 
     def GetLayerData(self, param):
-        """!Get layer data
-        """ 
+        """Get layer data
+        """
         title = self.xml_ns.NsOws("Title")
         name = self.xml_ns.NsOws("Identifier")
 
@@ -277,8 +281,8 @@ class WMTSLayer(LayerBase):
             return self.projs
 
     def _getProjs(self):
-        """!Get layer projections
-        """ 
+        """Get layer projections
+        """
         layer_projs = []
         if self.layer_node is None:
             return layer_projs
@@ -302,17 +306,18 @@ class WMTSLayer(LayerBase):
         return layer_projs
 
     def IsRequestable(self):
-        """!Is it possible to use the layer for WMTS request?
+        """Is it possible to use the layer for WMTS request?
         """
         if self.layer_node is None:
-           return False
+            return False
         else:
             return True
 
 class OnEarthCapabilities(CapabilitiesBase, OnEarthCapabilitiesTree):
     def __init__(self, cap_file):
-        """!Create Common interface for web_services.widgets to NASA OnEarth 
-            tile service data (equivalent to  WMS, WMTS capabilities data)
+        """Create Common interface for web_services.widgets to
+        NASA OnEarth tile service data (equivalent to  WMS, WMTS
+        capabilities data)
         """
         # checks all elements needed for creation of GetMap requests
         # by r.in.wms/d.wms modules, invalid elements are removed
@@ -322,7 +327,7 @@ class OnEarthCapabilities(CapabilitiesBase, OnEarthCapabilitiesTree):
         self._initializeLayerTree(self.getroot())
         
     def _initializeLayerTree(self, parent_layer, id = 0):
-        """!Build tree, which represents layers
+        """Build tree, which represents layers
         """
         if id == 0:
             tiled_patterns = parent_layer.find('TiledPatterns')
@@ -347,7 +352,7 @@ class OnEarthCapabilities(CapabilitiesBase, OnEarthCapabilitiesTree):
 
 class OnEarthLayer(LayerBase):
     def __init__(self, layer_node, parent_layer, id, cap):
-        """!Common interface for web_services.widgets to NASA Earth
+        """Common interface for web_services.widgets to NASA Earth
             capabilities <TiledGroup>\<TiledGroups> element 
             (equivalent to  WMS, WMTS <Layer> element)
         """
@@ -358,7 +363,7 @@ class OnEarthLayer(LayerBase):
         self.parent_layer = parent_layer
 
     def IsRequestable(self):
-        """!Is it possible to use the layer for NASA OnEarth GetMap request?
+        """Is it possible to use the layer for NASA OnEarth GetMap request?
         """
         if self.layer_node is None or \
            self.layer_node.tag == 'TiledGroups':
@@ -367,7 +372,7 @@ class OnEarthLayer(LayerBase):
             return True
 
     def GetLayerData(self, param):
-        """!Get layer data
+        """Get layer data
         """
         if self.layer_node is None and param in ['title', 'name']:
             return None
