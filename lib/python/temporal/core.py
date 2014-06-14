@@ -511,7 +511,7 @@ def init(raise_fatal_error=False):
                 raise
             dbmi = psycopg2
         else:
-            msgr.fatal(_("Unable to initialize the temporal DBMI interface. Use "
+            msgr.fatal(_("Unable to initialize the temporal DBMI interface. Please use "
                          "t.connect to specify the driver and the database string"))
             dbmi = sqlite3
     else:
@@ -551,7 +551,6 @@ def init(raise_fatal_error=False):
             if name and name[0] == "raster_base":
                 db_exists = True
             dbif.close()
-
     elif tgis_backend == "pg":
         # Connect to database
         dbif.connect()
@@ -561,15 +560,15 @@ def init(raise_fatal_error=False):
         if dbif.cursor.fetchone()[0]:
             db_exists = True
 
-    backup_howto = "Your temporal database format is not supported any more. "\
-                   "Unfortunately you have to restore your previous grass version "\
-                   "to make a backup of your existing temporal database and to avoid the loss of your temporal data. "\
-                   "You can use t.rast.export and t.vect.export to make a backup of your existing space time datasets. "\
-                   "Use t.rast.list, t.vect.list and t.rast3d.list to safe the time "\
-                   "stamps of your existing maps and space time datasets. "\
-                   "You can register the exitsing time stamped maps easily if you write columns=id,start_time,end_time "\
+    backup_howto = "The format of your actual temporal database is not supported any more.\n"\
+                   "Solution: You need to export it by restoring the GRASS GIS version used for creating this DB. "\
+                   "   From there, create a backup of your temporal database to avoid the loss of your temporal data.\n"\
+                   "Notes: Use t.rast.export and t.vect.export to make a backup of your existing space time datasets."\
+                   "To safe the timestamps of your existing maps and space time datasets, use t.rast.list, "\
+                   "t.vect.list and t.rast3d.list. "\
+                   "You can register the existing time stamped maps easily if you export columns=id,start_time,end_time "\
                    "into text files and use t.register to register them again in new created space time datasets (t.create). "\
-                   "After the backup remove the existing temporal database, a new one will be created automatically. "
+                   "After the backup remove the existing temporal database, a new one will be created automatically.\n"
 
 
     if db_exists == True:
@@ -583,13 +582,13 @@ def init(raise_fatal_error=False):
                          "Current temporal database info:%(info)s")%({"info":get_database_info_string()}))
         for entry in metadata:
             if "tgis_version" in entry and entry[1] != str(get_tgis_version()):
-                msgr.fatal(_("Unsupported temporal database. Version mismatch.\n %(backup)s"
+                msgr.fatal(_("Unsupported temporal database: version mismatch.\n %(backup)s"
                              "Supported temporal API version is: %(api)i.\n"
-                             "Please update your GRASS installation to the latest svn version.\n"
+                             "Please update your GRASS GIS installation.\n"
                              "Current temporal database info:%(info)s")%({"backup":backup_howto, "api":get_tgis_version(),
                                                                           "info":get_database_info_string()}))
             if "tgis_db_version" in entry and entry[1] != str(get_tgis_db_version()):
-                msgr.fatal(_("Unsupported temporal database. Version mismatch.\n %(backup)s"
+                msgr.fatal(_("Unsupported temporal database: version mismatch.\n %(backup)s"
                              "Supported temporal database version is: %(tdb)i\n"
                              "Current temporal database info:%(info)s")%({"backup":backup_howto,"tdb":get_tgis_version(),
                                                                           "info":get_database_info_string()}))
@@ -679,7 +678,13 @@ def create_temporal_database(dbif):
         # We need to create the sqlite3 database path if it does not exists
         tgis_dir = os.path.dirname(tgis_database_string)
         if not os.path.exists(tgis_dir):
-            os.makedirs(tgis_dir)
+            try:
+                os.makedirs(tgis_dir)
+            except Exception as e:
+                msgr.fatal(_("Unable to create sqlite temporal database\n"
+                                     "Exception: %s\nPlease use t.connect to set a "
+                                     "read- and writable temporal database path"%(e)))
+                
         # Set up the trigger that takes care of
         # the correct deletion of entries across the different tables
         delete_trigger_sql = open(os.path.join(template_path,
@@ -802,20 +807,27 @@ class SQLDatabaseInterfaceConnection():
         """
         global tgis_database_string
 
-        if self.dbmi.__name__ == "sqlite3":
-            self.connection = self.dbmi.connect(tgis_database_string,
-                    detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
-            self.connection.row_factory = self.dbmi.Row
-            self.connection.isolation_level = None
-            self.cursor = self.connection.cursor()
-            self.cursor.execute("PRAGMA synchronous = OFF")
-            self.cursor.execute("PRAGMA journal_mode = MEMORY")
-        elif self.dbmi.__name__ == "psycopg2":
-            self.connection = self.dbmi.connect(tgis_database_string)
-            #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
-            self.cursor = self.connection.cursor(
-                cursor_factory = self.dbmi.extras.DictCursor)
-        self.connected = True
+        try:
+            if self.dbmi.__name__ == "sqlite3":
+                self.connection = self.dbmi.connect(tgis_database_string,
+                        detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
+                self.connection.row_factory = self.dbmi.Row
+                self.connection.isolation_level = None
+                self.cursor = self.connection.cursor()
+                self.cursor.execute("PRAGMA synchronous = OFF")
+                self.cursor.execute("PRAGMA journal_mode = MEMORY")
+            elif self.dbmi.__name__ == "psycopg2":
+                self.connection = self.dbmi.connect(tgis_database_string)
+                #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+                self.cursor = self.connection.cursor(
+                    cursor_factory = self.dbmi.extras.DictCursor)
+            self.connected = True
+        except Exception as e:
+            self.msgr.fatal(_("Unable to connect to %(db)s database: "
+                                       "%(string)s\nException: \"%(ex)s\"\nPlease use t.connect to set a "
+                                       "read- and writable temporal database backend")%({"db":self.dbmi.__name__, 
+                                                                                                                      "string":tgis_database_string, 
+                                                                                                                      "ex":e,  }))
 
     def close(self):
         """!Close the DBMI connection"""
