@@ -363,7 +363,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
             for row in maplist:
                 filename = row["filename"] + ".tif"
                 if not os.path.exists(filename):
-                    core.fatal(_("Unable to find geotiff raster file "
+                    core.fatal(_("Unable to find GeoTIFF raster file "
                                  "<%s> in archive.") % filename)
         elif format_ == "AAIGrid":
             for row in maplist:

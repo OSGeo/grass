@@ -14,7 +14,7 @@ tgis.register_maps_in_space_time_dataset(type, name, maps)
 ...
 @endcode
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -152,15 +152,15 @@ def open_new_space_time_dataset(name, type, temporaltype, title, descr, semantic
     sp =  check_new_space_time_dataset(name, type, dbif, overwrite)
 
     if sp.is_in_db(dbif):
-        msgr.warning(_("Overwrite space time %(sp)s dataset <%(name)s> and "
-                       "unregister all maps.") % {
+        msgr.warning(_("Overwriting space time %(sp)s dataset <%(name)s> and "
+                       "unregistering all maps") % {
                        'sp': sp.get_new_map_instance(None).get_type(),
                        'name': name})
         id = sp.get_id()
         sp.delete(dbif)
         sp = sp.get_new_instance(id)
 
-    msgr.verbose(_("Create new space time %s dataset.") %
+    msgr.verbose(_("Creating a new space time %s dataset") %
                    sp.get_new_map_instance(None).get_type())
 
     sp.set_initial_values(temporal_type=temporaltype, semantic_type=semantic,
