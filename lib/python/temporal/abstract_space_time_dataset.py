@@ -1775,7 +1775,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         date_list.append((start, end))
 
-        self. _update_map_timestamps(maps, date_list, dbif)
+        self._update_map_timestamps(maps, date_list, dbif)
 
         if connected:
             dbif.close()
