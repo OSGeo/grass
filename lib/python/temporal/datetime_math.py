@@ -734,7 +734,7 @@ def check_datetime_string(time_string):
         
     # BC is not supported
     if time_string.find("bc") > 0:
-        return _("Dates Before Christ are not supported")
+        return _("Dates Before Christ (BC) are not supported")
 
     # BC is not supported
     if time_string.find("+") > 0:

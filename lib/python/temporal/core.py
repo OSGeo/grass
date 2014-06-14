@@ -578,7 +578,7 @@ def init(raise_fatal_error=False):
         metadata = get_tgis_metadata(dbif)
         dbif.close()
         if metadata is None:
-            msgr.fatal(_("Unable to receiving temporal database metadata.\n"
+            msgr.fatal(_("Unable to receive temporal database metadata.\n"
                          "Current temporal database info:%(info)s")%({"info":get_database_info_string()}))
         for entry in metadata:
             if "tgis_version" in entry and entry[1] != str(get_tgis_version()):
@@ -672,7 +672,7 @@ def create_temporal_database(dbif):
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
-    msgr.message(_("Create temporal database: %s" % (tgis_database_string)))
+    msgr.message(_("Creating temporal database: %s" % (tgis_database_string)))
 
     if tgis_backend == "sqlite":
         # We need to create the sqlite3 database path if it does not exists
@@ -681,7 +681,7 @@ def create_temporal_database(dbif):
             try:
                 os.makedirs(tgis_dir)
             except Exception as e:
-                msgr.fatal(_("Unable to create sqlite temporal database\n"
+                msgr.fatal(_("Unable to create SQLite temporal database\n"
                                      "Exception: %s\nPlease use t.connect to set a "
                                      "read- and writable temporal database path"%(e)))
                 

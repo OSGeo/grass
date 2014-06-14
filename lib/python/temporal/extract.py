@@ -116,17 +116,17 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
                 # Add process to the process list
                 if type == "raster":
-                    msgr.verbose(_("Apply r.mapcalc expression: \"%s\"")
+                    msgr.verbose(_("Applying r.mapcalc expression: \"%s\"")
                                  % expr)
                     proc_list.append(Process(target=run_mapcalc2d,
                                              args=(expr,)))
                 elif type == "raster3d":
-                    msgr.verbose(_("Apply r3.mapcalc expression: \"%s\"")
+                    msgr.verbose(_("Applying r3.mapcalc expression: \"%s\"")
                                  % expr)
                     proc_list.append(Process(target=run_mapcalc3d,
                                              args=(expr,)))
                 elif type == "vector":
-                    msgr.verbose(_("Apply v.extract where statement: \"%s\"")
+                    msgr.verbose(_("Applying v.extract where statement: \"%s\"")
                                  % expression)
                     if row["layer"]:
                         proc_list.append(Process(target=run_vector_extraction,
@@ -154,7 +154,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                         exitcodes += proc.exitcode
                     if exitcodes != 0:
                         dbif.close()
-                        msgr.fatal(_("Error while computation"))
+                        msgr.fatal(_("Error in computation process"))
 
                     # Empty process list
                     proc_list = []
