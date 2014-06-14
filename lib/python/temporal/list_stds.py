@@ -175,7 +175,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                 if len(maps[0]) > 0:
                     first_time, dummy = maps[0][0].get_temporal_extent_as_tuple()
                 else:
-                    msgr.warning(_("Empty map list."))
+                    msgr.warning(_("Empty map list"))
                     return
             else:
                 first_time, dummy = maps[0].get_temporal_extent_as_tuple()
@@ -186,7 +186,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                     if len(mymap) > 0:
                         map = mymap[0]
                     else:
-                        msgr.fatal(_("Empty entry in map list, this should not happen."))
+                        msgr.fatal(_("Empty entry in map list, this should not happen"))
                 else:
                     map = mymap
 
