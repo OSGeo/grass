@@ -55,7 +55,8 @@ analysis is based. NULL (nodata) cells are ignored, zero and negative
 values are valid elevation data.  Gaps in the elevation map that are
 located within the area of interest must be filled beforehand,
 e.g. with <em><a href="r.fillnulls.html">r.fillnulls</a></em>, to
-avoid distortions.
+avoid distortions.  The elevation map need not be sink-filled because
+the module uses the least-cost algorithm.
 
 <p>
 Map of actual depressions or sinkholes in the landscape that are large
