@@ -137,7 +137,10 @@ int main(int argc, char *argv[])
 	    Rast_update_cell_stats((CELL *) presult, ncols, &statf[0]);
 	for (i = 1; i < nfiles; i++) {
 	    /* check if raster i overlaps with the current row */
-	    if (south_edge >= cellhd[i].north || north_edge <= cellhd[i].south)
+	    if (south_edge >= cellhd[i].north ||
+		north_edge <= cellhd[i].south ||
+		window.west >= cellhd[i].east ||
+		window.east <= cellhd[i].west)
 		continue;
 
 	    Rast_get_row(infd[i], patch, row, out_type);
