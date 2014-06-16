@@ -21,13 +21,13 @@ int is_zero_value(void *rast, RASTER_MAP_TYPE data_type)
 
 int do_patch(void *result, void *patch,
 	     struct Cell_stats *statf, int ncols,
-	     RASTER_MAP_TYPE out_type, int ZEROFLAG)
+	     RASTER_MAP_TYPE out_type, int use_zero)
 {
     int more;
 
     more = 0;
     while (ncols-- > 0) {
-	if (ZEROFLAG) {		/* use 0 for transparency instead of NULL */
+	if (use_zero) {		/* use 0 for transparency instead of NULL */
 	    if (is_zero_value(result, out_type) ||
 		Rast_is_null_value(result, out_type)) {
 		/* Don't patch hole with a null, just mark as more */
