@@ -2,12 +2,15 @@
 /****************************************************************************
  *
  * MODULE:       r.patch
- * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Hamish Bowman <hamish_b yahoo.com>, Markus Neteler <neteler itc.it>
- *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>,
- *               Jan-Oliver Wagner <jan intevation.de>
+ * AUTHOR(S):    Michael Shapiro, CERL (original contributor),
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
