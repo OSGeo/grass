@@ -172,12 +172,14 @@ REFERENCES below.
 
 <h2>EXAMPLES</h2>
 
-Compute viewshed from the point with coordinates 638728.087167, 220609.261501
-which is 5 meters above ground (using NC dataset):
+Using the North Carolina dataset:  Compute viewshed from a observation 
+point (coordinates: 638728.087167, 220609.261501) which is 5 meters 
+above ground:
 
 <div class="code"><pre>
-g.region rast=elev_lid792_1m
-r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed coordinates=638728.087167,220609.261501 obs_elev=5
+g.region rast=elev_lid792_1m -p
+r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed \
+  coordinates=638728.087167,220609.261501 obs_elev=5.0
 </pre></div>
 
 <div align="center" style="margin: 10px">
@@ -185,22 +187,23 @@ r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed coordinates=63872
 <i>Viewshed</i>
 </div>
 <!--
-image generated using
+# image generated using
 d.mon wx0
 d.rast elev_lid792_1m
 d.rast elev_lid792_1m_viewshed
-save image to files
-crop the background using Gimp or ImageMagic
+# save image to files
+# crop the background using Gimp or ImageMagic
 mogrify -trim *.png
-some bounding box problems noticed when opening mogrify result in Gimp
+# some bounding box problems noticed when opening mogrify result in Gimp
 -->
 
-Using the Spearfish dataset:  calculating the viewpoint from the top
+Using the Spearfish dataset:  calculating the viewpoint from top
 of a mountain:
 
 <div class="code"><pre>
 g.region rast=elevation.10m
-r.viewshed input=elevation.10m output=viewshed coordinate=598869,4916642 mem=800
+r.viewshed input=elevation.10m output=viewshed \
+  coordinates=598869,4916642 mem=800
 </pre></div>
 
 
@@ -208,18 +211,15 @@ r.viewshed input=elevation.10m output=viewshed coordinate=598869,4916642 mem=800
 
 <ul>
 
-   <li>Computing Visibility on Terrains in External Memory. Herman
-	 Haverkort, Laura Toma and Yi Zhuang. In <em>ACM Journal
-	 on Experimental Algorithmics (JEA)</em> 13 (2009).
+<li>Computing Visibility on Terrains in External Memory. Herman 
+Haverkort, Laura Toma and Yi Zhuang. In <em>ACM Journal on Experimental 
+Algorithmics (JEA)</em> 13 (2009).</li>
 	 
-	 <li><a
-	 href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.4282&rep=rep1&type=pdf">
-	 Computing Visibility on Terrains in External Memory</a>. Herman
-	 Haverkort, Laura Toma and Yi Zhuang. In the <em>Proceedings of
-	 the 9th Workshop on Algorithm Engineering and Experiments /
-	 Workshop on Analytic Algorithms and Combinatorics (ALENEX/ANALCO
-	 2007)</em>.</li>
-
+<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.4282&rep=rep1&type=pdf">Computing
+Visibility on Terrains in External Memory</a>. Herman Haverkort, Laura 
+Toma and Yi Zhuang. In the <em>Proceedings of the 9th Workshop on 
+Algorithm Engineering and Experiments / Workshop on Analytic Algorithms 
+and Combinatorics (ALENEX/ANALCO 2007)</em>.</li>
 </ul>
 
 <h2>SEE ALSO</h2>
