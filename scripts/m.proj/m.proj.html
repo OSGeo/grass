@@ -87,8 +87,8 @@ v.out.ascii bugsites | m.proj -o
 To convert a WGS84 long/lat coordinate to the current map projection
 using the <b>-i</b> flag to set projection parameters automatically:
 <div class="code"><pre>
-GRASS> echo "170.510125 -45.868537" | m.proj -i input=-
-2316541.70      5479193.51 1.23
+echo "170.510125 -45.868537" | m.proj -i input=-
+2316541.70|5479193.51|1.23
 </pre></div>
 
 <p>
@@ -96,7 +96,7 @@ The same, but load points from a file named <tt>waypoints.txt</tt> and
 continue on to import the results into a GRASS vector points map in
 the current map projection:
 <div class="code"><pre>
-m.proj -i in=waypoints.txt | cut -f1 -d' ' | v.in.ascii out=test_pt separator=tab
+m.proj -i in=waypoints.txt | cut -f1-2 -d'|' | v.in.ascii out=test_pt
 </pre></div>
 
 Here the standard UNIX <em>cut</em> tool is used to discard
@@ -106,7 +106,7 @@ the <tt>z</tt> residual.
 To convert all coordinates from a vector points map in the current
 projection to WGS84 long/lat, with output in decimal form:
 <div class="code"><pre>
-v.out.ascii bugsites | m.proj -od
+v.out.ascii bugsites | m.proj -od input=-
 </pre></div>
 
 <p>
