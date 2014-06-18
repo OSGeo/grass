@@ -24,7 +24,7 @@ import Queue
 from core.gconsole import EVT_CMD_DONE, wxCmdDone
 
 class gThread(threading.Thread, wx.EvtHandler):
-    """Thread for scatter plot backend"""
+    """Thread for various backends"""
     requestId = 0
 
     def __init__(self, requestQ=None, resultQ=None, **kwds):
