@@ -95,7 +95,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         # into one UpdateMap process 
 
         # thread where timer for measuring delay limit
-        self.renderTimingThr = gThread();
+        self.renderTimingThr = gThread()
         # relevant timer id given by the thread
         self.timerRunId = None
         # time, of last updateMap request
