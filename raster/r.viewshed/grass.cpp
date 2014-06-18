@@ -111,7 +111,7 @@ GridHeader *read_header(char *rastName, Cell_head * region)
     else {
 	G_warning("ERROR: nrows (%d) > maxDimension (%d) AND/OR ncols (%d) > maxDimension (%d)", 
 	           nrows, maxDimension, ncols, maxDimension);
-	G_fatal_error(_("Grid dimension too big for current precision"));
+	G_fatal_error(_("Computational region too large. Use smaller area or lower raster resolution"));
     }
 
 
