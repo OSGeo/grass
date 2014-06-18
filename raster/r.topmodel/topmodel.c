@@ -10,7 +10,7 @@ void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
     const char *args[5];
     struct Popen child;
     FILE *fp;
-    double *atb, *Aatb_r;
+    double *atb, *Aatb_r, delta, prev_atb2;
     int i;
     int total_ncells;
 
@@ -33,15 +33,31 @@ void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
     Aatb_r = (double *)G_malloc(ntopidxclasses * sizeof(double));
 
     total_ncells = 0;
+    delta = -1.0;
+    prev_atb2 = 0.0;
+
     for (i = 0; i < ntopidxclasses - 1 && !feof(fp);) {
 	double atb1, atb2;
 	int ncells;
 
 	get_line(fp, buf);
 	if (sscanf(buf, "%lf-%lf %d", &atb1, &atb2, &ncells) == 3) {
+	    if (delta < 0)
+		delta = atb2 - atb1;
+	    else if (atb1 > prev_atb2 + 0.5 * delta) {
+		/* r.stats doesn't report non-existing ranges at all. Use 0.5 *
+		 * delta to avoid comparing two almost same double numbers. */
+		while (prev_atb2 < atb1 - 0.5 * delta) {
+		    atb[i] = prev_atb2;
+		    Aatb_r[i++] = 0.0;
+		    prev_atb2 += delta;
+		}
+	    }
+
 	    atb[i] = atb1;
 	    Aatb_r[i] = (double)ncells;
 	    total_ncells += ncells;
+	    prev_atb2 = atb2;
 
 	    if (++i == ntopidxclasses - 1) {
 		atb[i] = atb2;
