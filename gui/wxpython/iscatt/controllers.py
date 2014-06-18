@@ -65,7 +65,7 @@ class ScattsManager:
                                                 cats_mgr=self.cats_mgr, 
                                                 core=self.core)
 
-        self.thread = gThread();
+        self.thread = gThread()
         
         self.plots = {}
 
