@@ -11,7 +11,6 @@ Classes:
  - controllers::IClassDigitConnection
  - controllers::IMapDispConnection
  - controllers::IClassConnection
- - controllers::gThread
 
 (C) 2013 by the GRASS Development Team
 
@@ -25,21 +24,18 @@ import sys
 from copy import deepcopy
 import wx
 
-import time
-import threading
-import Queue
-from core.gconsole import EVT_CMD_DONE
+
 
 from core.gcmd import GException, GError, GMessage, RunCommand, GWarning
 from core.settings import UserSettings
-from core.gconsole import wxCmdRun, wxCmdDone, wxCmdPrepare
+from core.gthread import gThread
 from iscatt.iscatt_core import Core, idBandsToidScatt, GetRasterInfo, GetRegion, \
 MAX_SCATT_SIZE, WARN_SCATT_SIZE, MAX_NCELLS, WARN_NCELLS
 from iscatt.dialogs import AddScattPlotDialog, ExportCategoryRaster
-
 from iclass.dialogs import IClassGroupDialog
 
 import grass.script as grass
+
 from grass.pydispatch.signal import Signal
 
 class ScattsManager:
@@ -1113,101 +1109,3 @@ class IClassConnection:
         if res.split('\n')[0]:
             bands = res.split('\n')
             self.scatt_mgr.SetBands(bands)
-
-
-#TODO it uses also BufferedMapWindow class -> move to core?
-class gThread(threading.Thread, wx.EvtHandler):
-    """Thread for scatter plot backend"""
-    requestId = 0
-
-    def __init__(self, requestQ=None, resultQ=None, **kwds):
-        wx.EvtHandler.__init__(self)
-        self.terminate = False
-
-        threading.Thread.__init__(self, **kwds)
-
-        if requestQ is None:
-            self.requestQ = Queue.Queue()
-        else:
-            self.requestQ = requestQ
-
-        if resultQ is None:
-            self.resultQ = Queue.Queue()
-        else:
-            self.resultQ = resultQ
-
-        self.setDaemon(True)
-
-        self.Bind(EVT_CMD_DONE, self.OnDone)
-        self.start()
-
-    def Run(self, *args, **kwds):
-        """Run command in queue
-
-        :param args: unnamed command arguments
-        :param kwds: named command arguments, keyword 'callable'
-                     represents function to be run, keyword 'ondone'
-                     represents function to be called after the
-                     callable is done
-
-        :return: request id in queue
-        """
-        gThread.requestId += 1
-        self.requestQ.put((gThread.requestId, args, kwds))
-
-        return gThread.requestId
-
-    def GetId(self):
-         """Get id for next command"""
-         return gThread.requestId + 1
-
-    def SetId(self, id):
-        """Set starting id"""
-        gThread.requestId = id
-
-    def run(self):
-        while True:
-            requestId, args, kwds = self.requestQ.get()
-            for key in ('callable', 'ondone', 'userdata'):
-                if key in kwds:
-                    vars()[key] = kwds[key]
-                    del kwds[key]
-                else:
-                    vars()[key] = None
-
-            requestTime = time.time()
-
-            ret = None
-            exception = None
-            time.sleep(.01)
-
-            if self.terminate:
-                return
-
-            ret = vars()['callable'](*args, **kwds)
-
-            if self.terminate:
-                return
-            #except Exception as e:
-            #    exception  = e;
-
-            self.resultQ.put((requestId, ret))
-
-            event = wxCmdDone(ondone=vars()['ondone'],
-                              kwds=kwds,
-                              args=args, #TODO expand args to kwds
-                              ret=ret,
-                              exception=exception,
-                              userdata=vars()['userdata'],
-                              pid=requestId)
-
-            # send event
-            wx.PostEvent(self, event)
-
-    def OnDone(self, event):
-        if event.ondone:
-            event.ondone(event)
-
-    def Terminate(self):
-        """Abort command(s)"""
-        self.terminate = True
