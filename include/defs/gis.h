@@ -501,6 +501,12 @@ char *G_option_to_separator(const struct Option *);
 FILE *G_open_option_file(const struct Option *);
 void G_close_option_file(FILE *);
 
+void G_option_exclusive(void *first, ...);
+void G_option_required(void *first, ...);
+void G_option_requires(void *first, ...);
+void G_option_requires_all(void *first, ...);
+void G_option_collective(void *first, ...);
+
 /* paths.c */
 int G_mkdir(const char *);
 int G_is_dirsep(char);
