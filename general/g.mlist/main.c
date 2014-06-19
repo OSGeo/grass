@@ -27,8 +27,8 @@
 
 static int any = 0;
 
-static void make_list(FILE *, const struct list *, const char *, const char *,
-		      int, int, int);
+static void make_list(FILE *, const struct list *, const char *,
+		      const char *, int, int);
 
 int main(int argc, char *argv[])
 {
@@ -51,8 +51,9 @@ int main(int argc, char *argv[])
 	struct Flag *pretty;
 	struct Flag *full;
     } flag;
-    int i, n, all, num_types, nlist;
+    int i, j, n, all, num_types, nlist;
     void *filter, *exclude;
+    struct Popen pager;
     FILE *fp;
     const char *mapset;
     char *separator;
@@ -64,8 +65,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("map management"));
     G_add_keyword(_("list"));
     module->description =
-	_("Lists available GRASS data base files "
-	  "of the user-specified data type optionally using the search pattern.");
+	_("Lists available GRASS data base files of "
+	  "the user-specified data type optionally using the search pattern.");
 
     M_read_list(FALSE, &nlist);
 
@@ -91,6 +92,7 @@ int main(int argc, char *argv[])
     opt.exclude->guisection = _("Pattern");
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
+    opt.mapset->multiple = YES;
     opt.mapset->label =
 	_("Name of mapset to list (default: current search path)");
     opt.mapset->description = _("'.' for current mapset; '*' for all mapsets in location");
@@ -141,9 +143,11 @@ int main(int argc, char *argv[])
         G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
 		      flag.pretty->key, flag.full->key, opt.output->key);
 
-    if ((flag.pretty->answer || flag.full->answer) && flag.type->answer)
-	G_fatal_error(_("-%c/-%c and -%c are mutually exclusive"),
-		      flag.pretty->key, flag.full->key, flag.type->key);
+    if ((flag.pretty->answer || flag.full->answer) &&
+	(flag.mapset->answer || flag.type->answer))
+	G_fatal_error(_("-%c/-%c and -%c/-%c are mutually exclusive"),
+		      flag.pretty->key, flag.full->key,
+		      flag.mapset->key, flag.type->key);
 
     if (flag.pretty->answer && flag.full->answer)
 	G_fatal_error(_("-%c and -%c are mutually exclusive"),
@@ -202,24 +206,6 @@ int main(int argc, char *argv[])
 	exclude = NULL;
 
     separator = G_option_to_separator(opt.separator);
-    fp = G_open_option_file(opt.output);
-
-    if ((mapset = opt.mapset->answer) == NULL)
-	mapset = "";
-    else if (strcmp(mapset, ".") == 0)
-	mapset = G_mapset();   /* current mapset */
-    else if (strcmp(mapset, "*") == 0) {
-        if (flag.pretty->answer || flag.full->answer)
-            G_fatal_error(_("-%c/-%c and %s=%s are mutually exclusive"),
-                          flag.pretty->key, flag.full->key, opt.mapset->key,
-			  mapset);
-        mapset = NULL;         /* all mapsets */
-    }
-    else if ((i = G__mapset_permissions(mapset)) == -1)
-	G_fatal_error(_("Mapset <%s> does not exist"), mapset);
-    else if (i == 0)
-	G_warning(_("Permission denied for mapset <%s>. "
-		    "Trying to list files..."), mapset);
 
     for (i = 0; opt.type->answers[i]; i++) {
 	if (strcmp(opt.type->answers[i], "all") == 0)
@@ -234,11 +220,37 @@ int main(int argc, char *argv[])
 	num_types = i;
     }
 
+    if (opt.mapset->answers && opt.mapset->answers[0]) {
+	G_create_alt_search_path();
+	for (i = 0; (mapset = opt.mapset->answers[i]); i++) {
+	    if (strcmp(mapset, "*") == 0) {
+		/* all mapsets from current location */
+		char **ms;
+
+		ms = G_get_available_mapsets();
+		for (j = 0; (mapset = ms[j]); j++)
+		    G_add_mapset_to_search_path(mapset);
+		continue;
+	    }
+	    else if (strcmp(mapset, ".") == 0)
+		mapset = G_mapset();
+	    else if (G__mapset_permissions(mapset) == -1)
+		G_fatal_error(_("Mapset <%s> does not exist"), mapset);
+	    G_add_mapset_to_search_path(mapset);
+	}
+    }
+
+    if (flag.pretty->answer || flag.full->answer) {
+	fp = G_open_pager(&pager);
+	dup2(fileno(fp), STDOUT_FILENO);
+    }
+    else
+	fp = G_open_option_file(opt.output);
+
     for (i = 0; i < num_types; i++) {
 	const struct list *elem;
 
 	n = all ? i : M_get_element(opt.type->answers[i]);
-
 	elem = M_get_list(n);
 
 	if (flag.full->answer) {
@@ -251,19 +263,26 @@ int main(int argc, char *argv[])
 	    if (access(lister, X_OK) == 0)	/* execute permission? */
 		G_spawn(lister, lister, mapset, NULL);
 	    else
-		M_do_list(n, mapset);
+		M_do_list(n, "");
 	}
 	else if (flag.pretty->answer)
-	    M_do_list(n, mapset);
-	else
-	    make_list(fp, elem, mapset, separator, flag.type->answer,
-		      flag.mapset->answer, mapset && *mapset);
+	    M_do_list(n, "");
+	else {
+	    for (j = 0; (mapset = G_get_mapset_name(j)); j++)
+		make_list(fp, elem, mapset, separator, flag.type->answer,
+			  flag.mapset->answer);
+	}
     }
 
-    if (any)
-	fprintf(fp, "\n");
-
-    G_close_option_file(fp);
+    if (flag.pretty->answer || flag.full->answer) {
+	fclose(stdout);
+	G_close_pager(&pager);
+    }
+    else {
+	if (any)
+	    fprintf(fp, "\n");
+	G_close_option_file(fp);
+    }
 
     if (filter)
 	G_free_ls_filter(filter);
@@ -275,35 +294,15 @@ int main(int argc, char *argv[])
 }
 
 static void make_list(FILE *fp, const struct list *elem, const char *mapset,
-		      const char *separator, int add_type, int add_mapset,
-		      int single_mapset)
+		      const char *separator, int add_type, int add_mapset)
 {
+    static int first_mapset = 1;
     char path[GPATH_MAX];
     const char *element = elem->element[0];
     const char *alias = elem->alias;
     char **list;
     int count;
     int i;
-
-    if (!mapset) {
-        /* all mapsets from current location */
-        int n;
-        char **ms;
-        ms = G_get_available_mapsets();
-        for (n = 0; ms[n]; n++) {
-            make_list(fp, elem, ms[n], separator, add_type, add_mapset,
-		      n == 0);
-        }
-        return;
-    }
-    else if (!*mapset) {
-        /* mapsets from search path only */
-	int n;
-	for (n = 0; mapset = G_get_mapset_name(n), mapset; n++)
-	    make_list(fp, elem, mapset, separator, add_type, add_mapset,
-		      n == 0);
-	return;
-    }
 
     G_file_name(path, element, "", mapset);
     if (access(path, 0) != 0)
@@ -334,7 +333,7 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
 
 	fprintf(fp, "%s", name);
 
-	if (!add_mapset && !single_mapset) {
+	if (!add_mapset && !first_mapset) {
 	    const char *mapset2 = G_find_file2(element, name, "");
             if (mapset2)
                 need_mapset = strcmp(mapset, mapset2) != 0;
@@ -349,7 +348,8 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
 
     G_suppress_warnings(0);
     fflush(fp);
-    
-    G_free(list);
-}
 
+    G_free(list);
+
+    first_mapset = 0;
+}

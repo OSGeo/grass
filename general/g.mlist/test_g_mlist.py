@@ -12,13 +12,13 @@ class GMlistWrongParamertersTest(unittest.TestCase):
         self.maxDiff = None
         p = start_command('g.mlist', flags='pt', type='rast', stderr=subprocess.PIPE)
         stderr = p.communicate()[1]
-        self.assertEqual(stderr, "ERROR: -p/-f and -t are mutually exclusive\n")
+        self.assertEqual(stderr, "ERROR: -p/-f and -m/-t are mutually exclusive\n")
 
     def test_ft_flags(self):
         self.maxDiff = None
         p = start_command('g.mlist', flags='ft', type='rast', stderr=subprocess.PIPE)
         stderr = p.communicate()[1]
-        self.assertEqual(stderr, "ERROR: -p/-f and -t are mutually exclusive\n")
+        self.assertEqual(stderr, "ERROR: -p/-f and -m/-t are mutually exclusive\n")
 
     def test_pf_flags(self):
         self.maxDiff = None
