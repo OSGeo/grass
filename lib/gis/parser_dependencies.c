@@ -216,7 +216,7 @@ static void check_requires(const struct rule *rule)
     if (!is_present(rule->opts[0]))
 	return;
     if (count_present(rule, 1) < 1)
-	G_fatal_error(_("Options %s requires at least one of %s"), describe_rule(rule, 0, 1));
+	G_fatal_error(_("Option %s requires at least one of %s"), get_name(rule->opts[0]), describe_rule(rule, 0, 1));
 }
 
 /* if the first option is present, all the other options must also
@@ -234,7 +234,7 @@ static void check_requires_all(const struct rule *rule)
     if (!is_present(rule->opts[0]))
 	return;
     if (count_present(rule, 1) < rule->count - 1)
-	G_fatal_error(_("Options %s requires all of %s"), describe_rule(rule, 0, 0));
+	G_fatal_error(_("Option %s requires all of %s"), get_name(rule->opts[0]), describe_rule(rule, 0, 0));
 }
 
 /* if any option is present, all the other options must also be present
@@ -297,10 +297,10 @@ void G__describe_option_rules(void)
 	    fprintf(stderr, "Required: %s", describe_rule(rule, 0, 1));
 	    break;
 	case RULE_REQUIRES:
-	    fprintf(stderr, "Requires: %s => %s", rule->opts[0], describe_rule(rule, 1, 1));
+	    fprintf(stderr, "Requires: %s => %s", get_name(rule->opts[0]), describe_rule(rule, 1, 1));
 	    break;
 	case RULE_REQUIRES_ALL:
-	    fprintf(stderr, "Requires: %s => %s", rule->opts[0], describe_rule(rule, 1, 0));
+	    fprintf(stderr, "Requires: %s => %s", get_name(rule->opts[0]), describe_rule(rule, 1, 0));
 	    break;
 	case RULE_COLLECTIVE:
 	    fprintf(stderr, "Collective: %s", describe_rule(rule, 0, 0));
