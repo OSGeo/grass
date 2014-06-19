@@ -644,7 +644,8 @@ def parser():
         else:
             argv[0] = os.path.join(sys.path[0], name)
 
-    p = Popen(['g.parser', '-n'] + argv, stdout=PIPE)
+    prog = "g.parser.exe" if sys.platform == "win32" else "g.parser"
+    p = subprocess.Popen([prog, '-n'] + argv, stdout=subprocess.PIPE)
     s = p.communicate()[0]
     lines = s.split('\0')
 
