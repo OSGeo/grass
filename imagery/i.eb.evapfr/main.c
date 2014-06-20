@@ -55,24 +55,24 @@ int main(int argc, char *argv[])
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
-    input1->key = "rnet";
+    input1->key = "netradiation";
     input1->description = _("Name of Net Radiation raster map [W/m2]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = "g0";
+    input2->key = "soilheatflux";
     input2->description = _("Name of soil heat flux raster map [W/m2]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = "h0";
+    input3->key = "sensibleheatflux";
     input3->description = _("Name of sensible heat flux raster map [W/m2]");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output1->key = "evapfr";
+    output1->key = "evaporativefraction";
     output1->description =
 	_("Name for output evaporative fraction raster map");
 
     output2 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output2->key = "theta";
+    output2->key = "soilmoisture";
     output2->required = NO;
     output2->description =
 	_("Name for output root zone soil moisture raster map");
