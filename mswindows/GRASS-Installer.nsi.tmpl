@@ -44,6 +44,11 @@ SetCompressorDictSize 128
         !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@svn"
 !endif
 
+; Platform
+; TODO: Support 64bit (x86_64)
+; Related problem: hardcoded C:\OSGeo4W (X C:\OSGeo4W64)
+!define PLATFORM "x86"
+
 ;----------------------------------------------------------------------------------------------------------------------------
 
 ;Don't modify the following lines
@@ -965,8 +970,8 @@ Section /O "Important Microsoft Runtime DLLs" SecMSRuntime
 	;Set the size (in KB) of the unpacked archive file
 	AddSize 13500
 	
-	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/release/msvcrt/"
-	StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-10.tar.bz2"
+	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/${PLATFORM}/release/msvcrt/"
+	StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-11.tar.bz2"
 	StrCpy $EXTENDED_ARCHIVE_NAME "Microsoft Visual C++ Redistributable Packages"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "install_msruntime"
 	
