@@ -9,7 +9,7 @@ GRASS_PDFDIR=		$(DOCSDIR)/pdf
 
 htmldocs-single:
 	$(MAKE) -C . htmldox-single
-	for dir in lib rfc gui/wxpython ; do \
+	for dir in lib gui/wxpython ; do \
 	  $(MAKE) -C $$dir htmldox-single ; \
 	done
 
@@ -26,8 +26,7 @@ docs_dirs = \
 	lib/segment \
 	lib/vector \
 	lib/vector/dglib \
-	gui/wxpython \
-	rfc
+	gui/wxpython
 
 htmldocs_dirs := $(patsubst %,%/html,$(docs_dirs))
 latexdocs_dirs := $(patsubst %,%/latex,$(docs_dirs))
