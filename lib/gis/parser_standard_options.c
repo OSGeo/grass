@@ -349,7 +349,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->required = YES;
         Opt->multiple = NO;
         Opt->gisprompt = "new,cell,raster";
-        Opt->description = _("Name of output basename raster map(s)");
+        Opt->description = _("Name for output basename raster map(s)");
         break;
 
 	/*g3d maps */
