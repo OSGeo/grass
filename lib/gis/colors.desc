@@ -19,7 +19,7 @@ grey.eq: histogram-equalized grey scale
 grey.log: histogram logarithmic transformed grey scale
 gyr: green through yellow to red
 haxby: relative colors for bathymetry or topography
-kelvin: blue to red for degree Kelvin temperature
+kelvin: blue to red for temperature in Kelvin scale
 ndvi: Normalized Difference Vegetation Index colors
 ndwi: Normalized Difference Water Index colors
 population: color table covering human population classification breaks
