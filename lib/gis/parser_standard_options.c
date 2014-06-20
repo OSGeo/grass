@@ -61,6 +61,8 @@
    - G_OPT_R_ELEV
    - G_OPT_R_ELEVS
    - G_OPT_R_INTERP_TYPE
+   - G_OPT_R_BASENAME_INPUT
+   - G_OPT_R_BASENAME_OUTPUT
 
   - raster3d:
    - G_OPT_R3_INPUT
@@ -330,6 +332,24 @@ struct Option *G_define_standard_option(int opt)
                    _("Nearest-neighbor interpolation"),
                    _("Bilinear interpolation"),
                    _("Bicubic interpolation"));
+        break;
+    case G_OPT_R_BASENAME_INPUT:
+        Opt->key = "basename";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "input basename";
+        Opt->required = YES;
+        Opt->multiple = NO;
+        Opt->gisprompt = "old,cell,raster";
+        Opt->description = _("Name of input basename raster map(s)");
+        break;
+    case G_OPT_R_BASENAME_OUTPUT:
+        Opt->key = "basename";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "output basename";
+        Opt->required = YES;
+        Opt->multiple = NO;
+        Opt->gisprompt = "new,cell,raster";
+        Opt->description = _("Name of output basename raster map(s)");
         break;
 
 	/*g3d maps */
