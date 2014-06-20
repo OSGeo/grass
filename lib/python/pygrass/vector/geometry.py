@@ -1528,7 +1528,7 @@ def c_read_next_line(c_mapinfo, c_points, c_cats):
 
 
 def read_next_line(c_mapinfo, table=None, writable=False,
-                   c_points=None, c_cats=None):
+                   c_points=None, c_cats=None, is2D=True):
     """Return the next geometry feature of a vector map."""
     c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
     c_cats = c_cats if c_cats else ctypes.pointer(libvect.line_cats())
@@ -1536,7 +1536,7 @@ def read_next_line(c_mapinfo, table=None, writable=False,
                                                      c_cats)
     return GV_TYPE[ftype]['obj'](v_id=v_id, c_mapinfo=c_mapinfo,
                                  c_points=c_points, c_cats=c_cats,
-                                 table=table, writable=writable)
+                                 table=table, writable=writable, is2D=is2D)
 
 
 def c_read_line(feature_id, c_mapinfo, c_points, c_cats):
@@ -1553,7 +1553,7 @@ def c_read_line(feature_id, c_mapinfo, c_points, c_cats):
 
 
 def read_line(feature_id, c_mapinfo, table=None, writable=False,
-              c_points=None, c_cats=None):
+              c_points=None, c_cats=None, is2D=True):
     """Return a geometry object given the feature id and the c_mapinfo.
     """
     c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
@@ -1563,7 +1563,7 @@ def read_line(feature_id, c_mapinfo, table=None, writable=False,
     if GV_TYPE[ftype]['obj'] is not None:
         return GV_TYPE[ftype]['obj'](v_id=feature_id, c_mapinfo=c_mapinfo,
                                      c_points=c_points, c_cats=c_cats,
-                                     table=table, writable=writable)
+                                     table=table, writable=writable, is2D=is2D)
 
 
 

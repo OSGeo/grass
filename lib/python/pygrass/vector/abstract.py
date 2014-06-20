@@ -77,7 +77,7 @@ class Info(object):
         >>> cens.close()
 
     """
-    def __init__(self, name, mapset='', layer=None, mode='r'):
+    def __init__(self, name, mapset='', layer=None, mode='r', with_z=False):
         self._name = ''
         self._mapset = ''
         # Set map name and mapset
@@ -90,6 +90,7 @@ class Info(object):
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
         self.layer = layer
         self.mode = mode
+        self.with_z = with_z
 
     def __enter__(self, *args, **kwargs):
         self.open(*args, **kwargs)
@@ -291,7 +292,7 @@ class Info(object):
         """Return if the Vector is open"""
         return is_open(self.c_mapinfo)
 
-    def open(self, mode=None, layer=1, overwrite=None,
+    def open(self, mode=None, layer=1, overwrite=None, with_z=None,
              # parameters valid only if mode == 'w'
              tab_name='', tab_cols=None, link_name=None, link_key='cat',
              link_db='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
@@ -306,6 +307,10 @@ class Info(object):
         :type layer: int
         :param overwrite: valid only for ``w`` mode
         :type overwrite: bool
+        :param with_z: specify if vector map must be open with third dimension
+                       enabled or not. Valid only for ``w`` mode,
+                       default: False
+        :type with_z: bool
         :param tab_name: define the name of the table that will be generate
         :type tab_name: str
         :param tab_cols: define the name and type of the columns of the
@@ -328,6 +333,8 @@ class Info(object):
         methods
         """
         self.mode = mode if mode else self.mode
+        self.with_z = self.with_z if with_z is None else with_z
+        with_z = libvect.WITH_Z if self.with_z else libvect.WITHOUT_Z
         # check if map exists or not
         if not self.exist() and self.mode != 'w':
             raise OpenError("Map <%s> not found." % self._name)
@@ -355,8 +362,7 @@ class Info(object):
 
         # If it is opened in write mode
         if self.mode == 'w':
-            openvect = libvect.Vect_open_new(self.c_mapinfo, self.name,
-                                             libvect.WITHOUT_Z)
+            openvect = libvect.Vect_open_new(self.c_mapinfo, self.name, with_z)
             self.dblinks = DBlinks(self.c_mapinfo)
             if tab_cols:
                 # create a link

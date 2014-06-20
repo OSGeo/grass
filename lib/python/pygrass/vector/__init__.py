@@ -98,7 +98,8 @@ class Vector(Info):
 
         ..
         """
-        return read_next_line(self.c_mapinfo, self.table, self.writable)
+        return read_next_line(self.c_mapinfo, self.table, self.writable,
+                              is2D=not self.is_3D())
 
     @must_be_open
     def rewind(self):
@@ -112,7 +113,7 @@ class Vector(Info):
 
         :param geo_obj: a geometry grass object define in
                         grass.pygrass.vector.geometry
-        :type geo_obj: geometry GRASS object        
+        :type geo_obj: geometry GRASS object
         :param attrs: a list with the values that will be insert in the
                       attribute table.
         :type attrs: list
@@ -451,13 +452,16 @@ class VectorTopo(Vector):
         libvect.Vect_cidx_find_all(self.c_mapinfo,
                                    layer if layer else self.layer,
                                    Obj.gtype, cat_id, ilist.c_ilist)
+        is2D = not self.is_3D()
         if generator:
             return (read_line(feature_id=v_id, c_mapinfo=self.c_mapinfo,
-                              table=self.table, writable=self.writable)
+                              table=self.table, writable=self.writable,
+                              is2D=is2D)
                     for v_id in ilist)
         else:
             return [read_line(feature_id=v_id, c_mapinfo=self.c_mapinfo,
-                              table=self.table, writable=self.writable)
+                              table=self.table, writable=self.writable,
+                              is2D=is2D)
                     for v_id in ilist]
 
     @must_be_open
@@ -492,7 +496,8 @@ class VectorTopo(Vector):
             >>> mun.close()
 
         """
-        return read_line(feature_id, self.c_mapinfo, self.table, self.writable)
+        return read_line(feature_id, self.c_mapinfo, self.table, self.writable,
+                         is2D=not self.is_3D())
 
     @must_be_open
     def is_empty(self):
@@ -516,7 +521,7 @@ class VectorTopo(Vector):
             self.table.update(key=line, values=attr)
         elif self.table is None and attrs:
             print "Table for vector {name} does not exist, attributes not" \
-                  " loaded".format(name=self.name) 
+                  " loaded".format(name=self.name)
         libvect.Vect_cat_set(geo_obj.c_cats, self.layer, line)
         result = libvect.Vect_rewrite_line(self.c_mapinfo,
                                            line, geo_obj.gtype,
