@@ -15,7 +15,7 @@ from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
 # TODO add documentation
 class Parameter(object):
     """The Parameter object store all information about a parameter of module.
-    
+
     It is possible to set parameter of command using this object.
     """
     def __init__(self, xparameter=None, diz=None):
@@ -83,7 +83,7 @@ class Parameter(object):
         # gisprompt
         #
         if 'gisprompt' in diz:
-            self.typedesc = diz['gisprompt']['prompt']
+            self.typedesc = diz['gisprompt'].get('prompt', '')
             self.input = False if diz['gisprompt']['age'] == 'new' else True
         else:
             self.input = True
