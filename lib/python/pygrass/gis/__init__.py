@@ -9,25 +9,11 @@ import shutil
 import ctypes as ct
 import fnmatch
 
-from grass import script
-#from grass.script import setup
-#
-#
-#GISBASE = "/home/pietro/docdat/src/gis/grass/grass71/dist.x86_64-unknown-linux-gnu"
-#LOCATION = "nc_basic_spm_grass7'"
-#GISDBASE = "/home/pietro/docdat/gis"
-#MAPSET = "sqlite"
-#GUI = "wxpython"
-#
-#setup.init(GISBASE, GISDBASE, LOCATION, MAPSET)
-script.gisenv()
 
 import grass.lib.gis as libgis
 from grass.pygrass.functions import getenv
 from grass.pygrass.errors import GrassError
 
-
-#write dec to check if user have permissions or not
 
 ETYPE = {'rast': libgis.G_ELEMENT_RASTER,
          'rast3d': libgis.G_ELEMENT_RASTER3D,
@@ -56,7 +42,7 @@ def _check(value, path, type):
         return getenv(type)
     else:
         raise GrassError("%s <%s> not found" % (type.title(),
-                                                 join(path, value)))
+                                                join(path, value)))
 
 
 def set_current_mapset(mapset, location=None, gisdbase=None):
@@ -127,7 +113,7 @@ class Gisdbase(object):
         for loc in self.locations():
             yield Location(loc, self.name)
 
-    # TODO remove or complete this function 
+    # TODO remove or complete this function
     def new_location(self):
         if libgis.G__make_location() != 0:
             raise GrassError("Cannot create new location")
@@ -381,7 +367,6 @@ class VisibleMapset(object):
         """Return the mapsets in the search path"""
         with open(self.spath, "a+") as f:
             lines = f.readlines()
-            #lines.remove('')
             if lines:
                 return [l.strip() for l in lines]
         lns = ['PERMANENT', ]
@@ -422,7 +407,7 @@ class VisibleMapset(object):
 
     def extend(self, mapsets):
         """Add more mapsets to the search path
-        
+
         :param mapsets: a list of mapset's names
         :type mapsets: list
         """
