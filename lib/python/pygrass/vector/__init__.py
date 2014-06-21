@@ -5,7 +5,7 @@ Created on Tue Jul 17 08:51:53 2012
 @author: pietro
 """
 import grass.lib.vector as libvect
-from .vector_type import VTYPE
+from grass.pygrass.vector.vector_type import VTYPE
 from os.path import join, exists
 
 #
@@ -14,11 +14,11 @@ from os.path import join, exists
 from grass.pygrass.errors import GrassError, must_be_open
 from grass.pygrass.gis import Location
 
-from .geometry import GEOOBJ as _GEOOBJ
-from .geometry import read_line, read_next_line
-from .geometry import Area as _Area
-from .abstract import Info
-from .basic import Bbox, Cats, Ilist
+from grass.pygrass.vector.geometry import GEOOBJ as _GEOOBJ
+from grass.pygrass.vector.geometry import read_line, read_next_line
+from grass.pygrass.vector.geometry import Area as _Area
+from grass.pygrass.vector.abstract import Info
+from grass.pygrass.vector.basic import Bbox, Cats, Ilist
 
 
 _NUMOF = {"areas": libvect.Vect_get_num_areas,

@@ -7,12 +7,12 @@ Created on Fri Aug 17 17:24:03 2012
 import ctypes
 import datetime
 import grass.lib.vector as libvect
-from .vector_type import MAPTYPE
+from grass.pygrass.vector.vector_type import MAPTYPE
 
 from grass.pygrass import functions
 from grass.pygrass.errors import GrassError, OpenError, must_be_open
-from .table import DBlinks, Link
-from .find import PointFinder, BboxFinder, PolygonFinder
+from grass.pygrass.vector.table import DBlinks, Link
+from grass.pygrass.vector.find import PointFinder, BboxFinder, PolygonFinder
 
 
 def is_open(c_mapinfo):

@@ -4,7 +4,7 @@
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 from os import listdir
-from os.path import join, exists, isdir
+from os.path import join, isdir
 import shutil
 import ctypes as ct
 import fnmatch
@@ -25,7 +25,6 @@ script.gisenv()
 import grass.lib.gis as libgis
 from grass.pygrass.functions import getenv
 from grass.pygrass.errors import GrassError
-from . import region
 
 
 #write dec to check if user have permissions or not

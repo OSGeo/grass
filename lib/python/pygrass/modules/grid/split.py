@@ -36,10 +36,10 @@ def split_region_tiles(region=None, width=100, height=100, overlap=0):
         1500
         >>> reg.rows
         1350
-        >>> split_region_tiles(region=reg, width=1000, height=700, overlap=0)
+        >>> split_region_tiles(region=reg, width=1000, height=700, overlap=0) # doctest: +NORMALIZE_WHITESPACE
         [[Bbox(1350.0, 650.0, 1000.0, 0.0), Bbox(1350.0, 650.0, 1500.0, 1000.0)],
          [Bbox(650.0, 0.0, 1000.0, 0.0), Bbox(650.0, 0.0, 1500.0, 1000.0)]]
-        >>> split_region_tiles(region=reg, width=1000, height=700, overlap=10)
+        >>> split_region_tiles(region=reg, width=1000, height=700, overlap=10) # doctest: +NORMALIZE_WHITESPACE
         [[Bbox(1350.0, 640.0, 1010.0, 0.0), Bbox(1350.0, 640.0, 1500.0, 990.0)],
          [Bbox(660.0, 0.0, 1010.0, 0.0), Bbox(660.0, 0.0, 1500.0, 990.0)]]
     """
@@ -71,10 +71,10 @@ def get_overlap_region_tiles(region=None, width=100, height=100, overlap=0):
         1500
         >>> reg.rows
         1350
-        >>> split_region_tiles(region=reg, width=1000, height=700, overlap=0)
+        >>> split_region_tiles(region=reg, width=1000, height=700, overlap=0) # doctest: +NORMALIZE_WHITESPACE
         [[Bbox(1350.0, 650.0, 1000.0, 0.0), Bbox(1350.0, 650.0, 1500.0, 1000.0)],
          [Bbox(650.0, 0.0, 1000.0, 0.0), Bbox(650.0, 0.0, 1500.0, 1000.0)]]
-        >>> split_region_tiles(region=reg, width=1000, height=700, overlap=10)
+        >>> split_region_tiles(region=reg, width=1000, height=700, overlap=10) # doctest: +NORMALIZE_WHITESPACE
         [[Bbox(1350.0, 640.0, 1010.0, 0.0), Bbox(1350.0, 640.0, 1500.0, 990.0)],
          [Bbox(660.0, 0.0, 1010.0, 0.0), Bbox(660.0, 0.0, 1500.0, 990.0)]]
     """

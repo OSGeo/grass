@@ -154,7 +154,7 @@ def is_clean_name(name):
     True
     >>> is_clean_name('0census')
     True
-    >>> is_clean_name('census&')
+    >>> is_clean_name('census?')
     False
     >>> is_clean_name('cénsus')
     False
@@ -203,6 +203,7 @@ def get_raster_for_points(poi_vector, raster, column=None):
         >>> ele = RasterRow('elevation')
         >>> copy('schools','myschools','vect')
         >>> sch = VectorTopo('myschools')
+        >>> sch.open()
         >>> get_raster_for_points(sch, ele)               # doctest: +ELLIPSIS
         [(1, 633649.2856743174, 221412.94434781274, 145.06602)...
         >>> sch.table.columns.add('elevation','double precision')
@@ -211,7 +212,7 @@ def get_raster_for_points(poi_vector, raster, column=None):
         >>> get_raster_for_points(sch, ele, 'elevation')
         True
         >>> sch.table.filters.select('NAMESHORT','elevation')
-        Filters('SELECT NAMESHORT, elevation FROM myschools;')
+        Filters(u'SELECT NAMESHORT, elevation FROM myschools;')
         >>> cur = sch.table.execute()
         >>> cur.fetchall()                                # doctest: +ELLIPSIS
         [(u'SWIFT CREEK', 145.06602), ... (u'9TH GRADE CTR', None)]
@@ -293,19 +294,19 @@ def split_in_chunk(iterable, lenght=10):
     """Split a list in chunk.
 
     >>> for chunk in split_in_chunk(range(25)): print chunk
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-    [20, 21, 22, 23, 24]
+    (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+    (10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
+    (20, 21, 22, 23, 24)
     >>> for chunk in split_in_chunk(range(25), 3): print chunk
-    [0, 1, 2]
-    [3, 4, 5]
-    [6, 7, 8]
-    [9, 10, 11]
-    [12, 13, 14]
-    [15, 16, 17]
-    [18, 19, 20]
-    [21, 22, 23]
-    [24]
+    (0, 1, 2)
+    (3, 4, 5)
+    (6, 7, 8)
+    (9, 10, 11)
+    (12, 13, 14)
+    (15, 16, 17)
+    (18, 19, 20)
+    (21, 22, 23)
+    (24,)
     """
     it = iter(iterable)
     while True:

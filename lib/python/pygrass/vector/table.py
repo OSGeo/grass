@@ -31,8 +31,7 @@ from grass.pygrass.functions import table_exist
 from grass.script.db import db_table_in_vector
 from grass.script.core import warning
 
-from . import sql
-
+from grass.pygrass.vector import sql
 
 DRIVERS = ('sqlite', 'pg')
 
@@ -65,13 +64,13 @@ class Filters(object):
 
         >>> filter = Filters('table')
         >>> filter.get_sql()
-        'SELECT * FROM table;'
+        u'SELECT * FROM table;'
         >>> filter.where("area<10000").get_sql()
-        'SELECT * FROM table WHERE area<10000;'
+        u'SELECT * FROM table WHERE area<10000;'
         >>> filter.select("cat", "area").get_sql()
-        'SELECT cat, area FROM table WHERE area<10000;'
+        u'SELECT cat, area FROM table WHERE area<10000;'
         >>> filter.order_by("area").limit(10).get_sql()
-        'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
+        u'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
 
     ..
     """
@@ -100,7 +99,7 @@ class Filters(object):
 
     def order_by(self, orderby):
         """Create the order by condition"""
-        if not isinstance(orderby, str):
+        if not isinstance(orderby, unicode):
             orderby = ', '.join(orderby)
         self._orderby = 'ORDER BY {orderby}'.format(orderby=orderby)
         return self
@@ -115,7 +114,7 @@ class Filters(object):
 
     def group_by(self, groupby):
         """Create the group by condition"""
-        if not isinstance(groupby, str):
+        if not isinstance(groupby, unicode):
             groupby = ', '.join(groupby)
         self._groupby = 'GROUP BY {groupby}'.format(groupby=groupby)
         return self
@@ -159,7 +158,7 @@ class Columns(object):
         >>> cols_sqlite = Columns('census',
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.tname
-        'census'
+        u'census'
 
     For a postgreSQL table: ::
 
@@ -265,7 +264,7 @@ class Columns(object):
             >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.sql_descr()                   # doctest: +ELLIPSIS
-            u'cat INTEGER, OBJECTID INTEGER, AREA DOUBLE PRECISION, ...'
+            u'cat integer, OBJECTID integer, AREA double precision, ...'
             >>> import psycopg2 as pg                         # doctest: +SKIP
             >>> cols_pg = Columns('boundary_municp_pg',
             ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
@@ -287,7 +286,7 @@ class Columns(object):
             >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.types()                       # doctest: +ELLIPSIS
-            [u'INTEGER', u'INTEGER', ...]
+            [u'integer', u'integer', ...]
             >>> import psycopg2 as pg                         # doctest: +SKIP
             >>> cols_pg = Columns('boundary_municp_pg',
             ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
@@ -336,7 +335,7 @@ class Columns(object):
             >>> cols_sqlite = Columns('census',
             ...                       sqlite3.connect(get_path(path)))
             >>> cols_sqlite.items()                       # doctest: +ELLIPSIS
-            [(u'cat', u'INTEGER'), ...]
+            [(u'cat', u'integer'), ...]
             >>> import psycopg2 as pg                         # doctest: +SKIP
             >>> cols_pg = Columns('boundary_municp_pg',
             ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
@@ -356,7 +355,7 @@ class Columns(object):
             >>> copy('census','mycensus','vect')
             >>> cols_sqlite = Columns('mycensus',
             ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.add('n_pizza', 'INT')
+            >>> cols_sqlite.add(['n_pizza'], ['INT'])
             >>> 'n_pizza' in cols_sqlite
             True
             >>> import psycopg2 as pg                         # doctest: +SKIP
@@ -376,7 +375,7 @@ class Columns(object):
                 str_err = "Type is not supported, supported types are: %s"
                 raise TypeError(str_err % ", ".join(valid_type))
 
-        if isinstance(col_name, str):
+        if isinstance(col_name, unicode):
             check_col(col_type)
         else:
             if len(col_name) == len(col_type):
@@ -406,7 +405,7 @@ class Columns(object):
             >>> copy('census','mycensus','vect')
             >>> cols_sqlite = Columns('mycensus',
             ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.add('n_pizza', 'INT')
+            >>> cols_sqlite.add(['n_pizza'], ['INT'])
             >>> 'n_pizza' in cols_sqlite
             True
             >>> cols_sqlite.rename('n_pizza', 'n_pizzas')  # doctest: +ELLIPSIS
@@ -456,11 +455,11 @@ class Columns(object):
             >>> copy('census','mycensus','vect')
             >>> cols_sqlite = Columns('mycensus',
             ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.add('n_pizzas', 'INT')
+            >>> cols_sqlite.add(['n_pizzas'], ['INT'])
             >>> cols_sqlite.cast('n_pizzas', 'float8')  # doctest: +ELLIPSIS
             Traceback (most recent call last):
               ...
-            DBError: 'SQLite does not support to cast columns.'
+            DBError: u'SQLite does not support to cast columns.'
             >>> import psycopg2 as pg                         # doctest: +SKIP
             >>> cols_pg = Columns('boundary_municp_pg',
             ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
@@ -705,7 +704,7 @@ class Link(object):
             ...             'sqlite')
             >>> table = link.table()
             >>> table.filters.select('cat', 'TOTAL_POP', 'PERIMETER')
-            Filters('SELECT cat, TOTAL_POP, PERIMETER FROM census;')
+            Filters(u'SELECT cat, TOTAL_POP, PERIMETER FROM census;')
             >>> cur = table.execute()
             >>> cur.fetchone()
             (1, 44, 757.669)
@@ -842,7 +841,7 @@ class DBlinks(object):
             link = self.by_name(key)
             table = link.table()
             table.drop(force=force)
-        if isinstance(key, str):
+        if isinstance(key, unicode):
             key = self.from_name_to_num(key)
         libvect.Vect_map_del_dblink(self.c_mapinfo, key)
 
@@ -861,7 +860,7 @@ class Table(object):
         >>> tab_sqlite = Table(name='census',
         ...                    connection=sqlite3.connect(get_path(path)))
         >>> tab_sqlite.name
-        'census'
+        u'census'
         >>> import psycopg2                                   # doctest: +SKIP
         >>> tab_pg = Table('boundary_municp_pg',
         ...                psycopg2.connect('host=localhost dbname=grassdb',
@@ -903,7 +902,7 @@ class Table(object):
             >>> tab_sqlite = Table(name='census',
             ...                    connection=sqlite3.connect(get_path(path)))
             >>> tab_sqlite
-            Table('census')
+            Table(u'census')
 
         ..
         """
@@ -958,7 +957,7 @@ class Table(object):
             >>> tab_sqlite = Table(name='census',
             ...                    connection=sqlite3.connect(get_path(path)))
             >>> tab_sqlite.filters.select('cat', 'TOTAL_POP').order_by('AREA')
-            Filters('SELECT cat, TOTAL_POP FROM census ORDER BY AREA;')
+            Filters(u'SELECT cat, TOTAL_POP FROM census ORDER BY AREA;')
             >>> cur = tab_sqlite.execute()
             >>> cur.fetchone()
             (1856, 0)
