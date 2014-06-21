@@ -25,6 +25,7 @@ enum rule_type {
     RULE_REQUIRED,
     RULE_REQUIRES,
     RULE_REQUIRES_ALL,
+    RULE_EXCLUDES,
     RULE_COLLECTIVE
 };
 
@@ -145,7 +146,8 @@ static int count_present(const struct rule *rule, int start)
     return count;
 }
 
-static const char *describe_rule(const struct rule *rule, int start, int disjunction)
+static const char *describe_rule(const struct rule *rule, int start,
+				 int disjunction)
 {
     char *s = get_name(rule->opts[start]);
     int i;
@@ -183,7 +185,8 @@ void G_option_exclusive(void *first, ...)
 static void check_exclusive(const struct rule *rule)
 {
     if (count_present(rule, 0) > 1)
-	G_fatal_error(_("Options %s are mutually exclusive"), describe_rule(rule, 0, 0));
+	G_fatal_error(_("Options %s are mutually exclusive"),
+		      describe_rule(rule, 0, 0));
 }
 
 /* at least one option from a set */
@@ -198,7 +201,8 @@ void G_option_required(void *first, ...)
 static void check_required(const struct rule *rule)
 {
     if (count_present(rule, 0) < 1)
-	G_fatal_error(_("At least one of %s is required"), describe_rule(rule, 0, 0));
+	G_fatal_error(_("At least one of %s is required"),
+		      describe_rule(rule, 0, 0));
 }
 
 /* if the first option is present, at least one of the other
@@ -216,7 +220,8 @@ static void check_requires(const struct rule *rule)
     if (!is_present(rule->opts[0]))
 	return;
     if (count_present(rule, 1) < 1)
-	G_fatal_error(_("Option %s requires at least one of %s"), get_name(rule->opts[0]), describe_rule(rule, 0, 1));
+	G_fatal_error(_("Option %s requires at least one of %s"),
+		      get_name(rule->opts[0]), describe_rule(rule, 1, 1));
 }
 
 /* if the first option is present, all the other options must also
@@ -234,7 +239,27 @@ static void check_requires_all(const struct rule *rule)
     if (!is_present(rule->opts[0]))
 	return;
     if (count_present(rule, 1) < rule->count - 1)
-	G_fatal_error(_("Option %s requires all of %s"), get_name(rule->opts[0]), describe_rule(rule, 0, 0));
+	G_fatal_error(_("Option %s requires all of %s"),
+		      get_name(rule->opts[0]), describe_rule(rule, 1, 0));
+}
+
+/* if the first option is present, none of the other options may also
+   be present. */
+void G_option_excludes(void *first, ...)
+{
+    va_list ap;
+    va_start(ap, first);
+    make_rule(RULE_EXCLUDES, first, ap);
+    va_end(ap);
+}
+
+static void check_excludes(const struct rule *rule)
+{
+    if (!is_present(rule->opts[0]))
+	return;
+    if (count_present(rule, 1) > 0)
+	G_fatal_error(_("Option %s is mutually exclusive with all of %s"),
+		      get_name(rule->opts[0]), describe_rule(rule, 1, 0));
 }
 
 /* if any option is present, all the other options must also be present
@@ -251,7 +276,8 @@ static void check_collective(const struct rule *rule)
 {
     int count = count_present(rule, 0);
     if (count > 0 && count < rule->count)
-	G_fatal_error(_("Either all or none of %s must be given"), describe_rule(rule, 0, 0));
+	G_fatal_error(_("Either all or none of %s must be given"),
+		      describe_rule(rule, 0, 0));
 }
 
 void G__check_option_rules(void)
@@ -273,11 +299,15 @@ void G__check_option_rules(void)
 	case RULE_REQUIRES_ALL:
 	    check_requires_all(rule);
 	    break;
+	case RULE_EXCLUDES:
+	    check_excludes(rule);
+	    break;
 	case RULE_COLLECTIVE:
 	    check_collective(rule);
 	    break;
 	default:
-	    G_fatal_error(_("Internal error: invalid rule type: %d"), rule->type);
+	    G_fatal_error(_("Internal error: invalid rule type: %d"),
+			  rule->type);
 	    break;
 	}
     }
@@ -297,16 +327,23 @@ void G__describe_option_rules(void)
 	    fprintf(stderr, "Required: %s", describe_rule(rule, 0, 1));
 	    break;
 	case RULE_REQUIRES:
-	    fprintf(stderr, "Requires: %s => %s", get_name(rule->opts[0]), describe_rule(rule, 1, 1));
+	    fprintf(stderr, "Requires: %s => %s", get_name(rule->opts[0]),
+		    describe_rule(rule, 1, 1));
 	    break;
 	case RULE_REQUIRES_ALL:
-	    fprintf(stderr, "Requires: %s => %s", get_name(rule->opts[0]), describe_rule(rule, 1, 0));
+	    fprintf(stderr, "Requires: %s => %s", get_name(rule->opts[0]),
+		    describe_rule(rule, 1, 0));
+	    break;
+	case RULE_EXCLUDES:
+	    fprintf(stderr, "Excludes: %s => %s", get_name(rule->opts[0]),
+		    describe_rule(rule, 1, 0));
 	    break;
 	case RULE_COLLECTIVE:
 	    fprintf(stderr, "Collective: %s", describe_rule(rule, 0, 0));
 	    break;
 	default:
-	    G_fatal_error(_("Internal error: invalid rule type: %d"), rule->type);
+	    G_fatal_error(_("Internal error: invalid rule type: %d"),
+			  rule->type);
 	    break;
 	}
     }
