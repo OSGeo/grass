@@ -93,19 +93,32 @@ class Filters(object):
         return self
 
     def where(self, condition):
-        """Create the where condition"""
+        """Create the where condition
+
+        :param condition: the condition of where statement, for example
+                          `cat = 1`
+        :type condition: str
+        """
         self._where = 'WHERE {condition}'.format(condition=condition)
         return self
 
     def order_by(self, orderby):
-        """Create the order by condition"""
+        """Create the order by condition
+
+        :param orderby: the name of column/s to order the result
+        :type orderby: str
+        """
         if not isinstance(orderby, unicode):
             orderby = ', '.join(orderby)
         self._orderby = 'ORDER BY {orderby}'.format(orderby=orderby)
         return self
 
     def limit(self, number):
-        """Create the limit condition"""
+        """Create the limit condition
+
+        :param number: the number to limit the result
+        :type number: int
+        """
         if not isinstance(number, int):
             raise ValueError("Must be an integer.")
         else:
@@ -113,7 +126,11 @@ class Filters(object):
         return self
 
     def group_by(self, groupby):
-        """Create the group by condition"""
+        """Create the group by condition
+
+        :param groupby: the name of column/s to group the result
+        :type groupby: str, list
+        """
         if not isinstance(groupby, unicode):
             groupby = ', '.join(groupby)
         self._groupby = 'GROUP BY {groupby}'.format(groupby=groupby)
@@ -347,7 +364,13 @@ class Columns(object):
         return self.odict.items()
 
     def add(self, col_name, col_type):
-        """Add a new column to the table. ::
+        """Add a new column to the table.
+
+        :param col_name: the name of column to add
+        :type col_name: str
+        :param col_type: the tipe of column to add
+        :type col_type: str
+        ::
 
             >>> import sqlite3
             >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
@@ -369,6 +392,11 @@ class Columns(object):
         ..
         """
         def check_col(col_type):
+            """Check the column type if it is supported by GRASS
+
+            :param col_type: the type of column
+            :type col_type: str
+            """
             valid_type = ('DOUBLE PRECISION', 'DOUBLE', 'INT', 'INTEGER',
                           'DATE')
             if 'VARCHAR' in col_type or col_type.upper() not in valid_type:
@@ -397,7 +425,13 @@ class Columns(object):
         self.update_odict()
 
     def rename(self, old_name, new_name):
-        """Rename a column of the table. ::
+        """Rename a column of the table.
+
+        :param old_name: the name of existing column
+        :type old_name: str
+        :param new_name: the name of new column
+        :type new_name: str
+        ::
 
             >>> import sqlite3
             >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
@@ -447,7 +481,13 @@ class Columns(object):
             self.drop(old_name)
 
     def cast(self, col_name, new_type):
-        """Change the column type. ::
+        """Change the column type.
+
+        :param col_name: the name of column
+        :type col_name: str
+        :param new_type: the new type of column
+        :type new_type: str
+        ::
 
             >>> import sqlite3
             >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
@@ -485,7 +525,11 @@ class Columns(object):
             raise DBError('SQLite does not support to cast columns.')
 
     def drop(self, col_name):
-        """Drop a column from the table. ::
+        """Drop a column from the table.
+
+        :param col_name: the name of column to remove
+        :type col_name: str
+        ::
 
             >>> import sqlite3
             >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
@@ -582,7 +626,8 @@ class Link(object):
             raise TypeError("Number must be positive and greater than 0.")
         self.c_fieldinfo.contents.number = number
 
-    layer = property(fget=_get_layer, fset=_set_layer)
+    layer = property(fget=_get_layer, fset=_set_layer,
+                     doc="Set and obtain layer number")
 
     def _get_name(self):
         return self.c_fieldinfo.contents.name
@@ -590,7 +635,8 @@ class Link(object):
     def _set_name(self, name):
         self.c_fieldinfo.contents.name = name
 
-    name = property(fget=_get_name, fset=_set_name)
+    name = property(fget=_get_name, fset=_set_name,
+                    doc="Set and obtain name vale")
 
     def _get_table(self):
         return self.c_fieldinfo.contents.table
@@ -598,7 +644,8 @@ class Link(object):
     def _set_table(self, new_name):
         self.c_fieldinfo.contents.table = new_name
 
-    table_name = property(fget=_get_table, fset=_set_table)
+    table_name = property(fget=_get_table, fset=_set_table,
+                          doc="Set and obtain table name value")
 
     def _get_key(self):
         return self.c_fieldinfo.contents.key
@@ -606,7 +653,8 @@ class Link(object):
     def _set_key(self, key):
         self.c_fieldinfo.contents.key = key
 
-    key = property(fget=_get_key, fset=_set_key)
+    key = property(fget=_get_key, fset=_set_key,
+                   doc="Set and obtain cat value")
 
     def _get_database(self):
         return self.c_fieldinfo.contents.database
@@ -614,7 +662,8 @@ class Link(object):
     def _set_database(self, database):
         self.c_fieldinfo.contents.database = database
 
-    database = property(fget=_get_database, fset=_set_database)
+    database = property(fget=_get_database, fset=_set_database,
+                        doc="Set and obtain database value")
 
     def _get_driver(self):
         return self.c_fieldinfo.contents.driver
@@ -625,7 +674,9 @@ class Link(object):
             raise TypeError(str_err)
         self.c_fieldinfo.contents.driver = driver
 
-    driver = property(fget=_get_driver, fset=_set_driver)
+    driver = property(fget=_get_driver, fset=_set_driver,
+                      doc="Set and obtain driver value. The drivers supported \
+                      by PyGRASS are: SQLite and PostgreSQL")
 
     def __init__(self, layer=1, name=None, table=None, key='cat',
                  database='$GISDBASE/$LOCATION_NAME/'
@@ -777,7 +828,11 @@ class DBlinks(object):
         return "DBlinks(%r)" % [link for link in self.__iter__()]
 
     def by_index(self, indx):
-        """Return a Link object by index"""
+        """Return a Link object by index
+
+        :param indx: the index where add new point
+        :type indx: int
+        """
         nlinks = self.num_dblinks()
         if nlinks == 0:
             raise IndexError
@@ -789,33 +844,45 @@ class DBlinks(object):
         return Link(c_fieldinfo=c_fieldinfo) if c_fieldinfo else None
 
     def by_layer(self, layer):
+        """Return the choosen Link using the layer
+
+        :param layer: the number of layer
+        :type layer: int
+        """
         c_fieldinfo = libvect.Vect_get_field(self.c_mapinfo, layer)
         return Link(c_fieldinfo=c_fieldinfo) if c_fieldinfo else None
 
     def by_name(self, name):
+        """Return the choosen Link using the name
+
+        :param name: the name of Link
+        :type name: str
+        """
         c_fieldinfo = libvect.Vect_get_field_by_name(self.c_mapinfo, name)
         return Link(c_fieldinfo=c_fieldinfo) if c_fieldinfo else None
 
     def num_dblinks(self):
+        """Return the number of DBlinks"""
         return libvect.Vect_get_num_dblinks(self.c_mapinfo)
 
     def add(self, link):
-        """Add a new link.
-           Need to open vector map in write mode::
+        """Add a new link. Need to open vector map in write mode
 
-            >>> from grass.pygrass.vector import VectorTopo
-            >>> municip = VectorTopo('census')
-            >>> municip.open()
-            >>> dblinks = DBlinks(municip.c_mapinfo)
-            >>> dblinks
-            DBlinks([Link(1, census, sqlite)])
-            >>> link = Link(2, 'pg_link', 'boundary_municp_pg', 'cat',
-            ...             'host=localhost dbname=grassdb', 'pg') # doctest: +SKIP
-            >>> dblinks.add(link)                             # doctest: +SKIP
-            >>> dblinks                                       # doctest: +SKIP
-            DBlinks([Link(1, boundary_municp, sqlite)])
+       :param link: the Link to add to the DBlinks
+       :type link: a Link object
 
-        ..
+        >>> from grass.pygrass.vector import VectorTopo
+        >>> municip = VectorTopo('census')
+        >>> municip.open()
+        >>> dblinks = DBlinks(municip.c_mapinfo)
+        >>> dblinks
+        DBlinks([Link(1, census, sqlite)])
+        >>> link = Link(2, 'pg_link', 'boundary_municp_pg', 'cat',
+        ...             'host=localhost dbname=grassdb', 'pg') # doctest: +SKIP
+        >>> dblinks.add(link)                             # doctest: +SKIP
+        >>> dblinks                                       # doctest: +SKIP
+        DBlinks([Link(1, boundary_municp, sqlite)])
+
         """
         #TODO: check if open in write mode or not.
         libvect.Vect_map_add_dblink(self.c_mapinfo,
@@ -823,19 +890,25 @@ class DBlinks(object):
                                     link.key, link.database, link.driver)
 
     def remove(self, key, force=False):
-        """Remove a link. If force set to true remove also the table ::
+        """Remove a link. If force set to true remove also the table
 
-            >>> from grass.pygrass.vector import VectorTopo
-            >>> municip = VectorTopo('census')
-            >>> municip.open()
-            >>> dblinks = DBlinks(municip.c_mapinfo)
-            >>> dblinks
-            DBlinks([Link(1, census, sqlite)])
-            >>> dblinks.remove('pg_link')                     # doctest: +SKIP
-            >>> dblinks  # need to open vector map in write mode
-            DBlinks([Link(1, census, sqlite)])
+        :param key: the key of Link
+        :type key: str
+        :param force: if True remove also the table from database otherwise
+                      only the link between table and vector
+        :type force: boole
 
-        ..
+        >>> from grass.pygrass.vector import VectorTopo
+        >>> municip = VectorTopo('census')
+        >>> municip.open()
+        >>> dblinks = DBlinks(municip.c_mapinfo)
+        >>> dblinks
+        DBlinks([Link(1, census, sqlite)])
+        >>> dblinks.remove('pg_link')                     # doctest: +SKIP
+        >>> dblinks  # need to open vector map in write mode
+        DBlinks([Link(1, census, sqlite)])
+
+
         """
         if force:
             link = self.by_name(key)
@@ -875,7 +948,11 @@ class Table(object):
         return self._name
 
     def _set_name(self, new_name):
-        """Private method to set the name of table"""
+        """Private method to set the name of table
+
+          :param new_name: the new name of table
+          :type new_name: str
+        """
         old_name = self._name
         cur = self.conn.cursor()
         cur.execute(sql.RENAME_TAB.format(old_name=old_name,
@@ -883,7 +960,8 @@ class Table(object):
         self.conn.commit()
         cur.close()
 
-    name = property(fget=_get_name, fset=_set_name)
+    name = property(fget=_get_name, fset=_set_name,
+                    doc="Set and obtain table name")
 
     def __init__(self, name, connection, key='cat'):
         self._name = name
@@ -917,7 +995,15 @@ class Table(object):
         return self.n_rows()
 
     def drop(self, cursor=None, force=False):
-        """Private method to drop table from database"""
+        """Method to drop table from database
+
+          :param cursor: the cursor to connect, if None it use the cursor
+                         of connection table object
+          :type cursor: Cursor object
+          :param force: True to remove the table, by default False to print
+                        advice
+          :type force: bool
+        """
 
         cur = cursor if cursor else self.conn.cursor()
         if self.exist(cursor=cur):
@@ -950,19 +1036,29 @@ class Table(object):
 
     def execute(self, sql_code=None, cursor=None, many=False, values=None):
         """Execute SQL code from a given string or build with filters and
-        return a cursor object. ::
+        return a cursor object.
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-            >>> tab_sqlite = Table(name='census',
-            ...                    connection=sqlite3.connect(get_path(path)))
-            >>> tab_sqlite.filters.select('cat', 'TOTAL_POP').order_by('AREA')
-            Filters(u'SELECT cat, TOTAL_POP FROM census ORDER BY AREA;')
-            >>> cur = tab_sqlite.execute()
-            >>> cur.fetchone()
-            (1856, 0)
+        :param sql_code: the SQL code to execute, if not pass it use filters
+                         variable
+        :type sql_code: str
+        :param cursor: the cursor to connect, if None it use the cursor
+                     of connection table object
+        :type cursor: Cursor object
+        :param many: True to run executemany function
+        :type many: bool
+        :param values: The values to substitute into sql_code string
+        :type values: list of tuple
 
-        ..
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> tab_sqlite = Table(name='census',
+        ...                    connection=sqlite3.connect(get_path(path)))
+        >>> tab_sqlite.filters.select('cat', 'TOTAL_POP').order_by('AREA')
+        Filters(u'SELECT cat, TOTAL_POP FROM census ORDER BY AREA;')
+        >>> cur = tab_sqlite.execute()
+        >>> cur.fetchone()
+        (1856, 0)
+
         """
         try:
             sqlc = sql_code if sql_code else self.filters.get_sql()
@@ -975,26 +1071,62 @@ class Table(object):
             raise ValueError("The SQL is not correct:\n%r" % sqlc)
 
     def exist(self, cursor=None):
-        """Return True if the table already exist in the DB, False otherwise"""
+        """Return True if the table already exist in the DB, False otherwise
+        :param cursor: the cursor to connect, if None it use the cursor
+                     of connection table object
+        :type cursor: Cursor object
+        """
         cur = cursor if cursor else self.conn.cursor()
         return table_exist(cur, self.name)
 
     def insert(self, values, cursor=None, many=False):
-        """Insert a new row"""
+        """Insert a new row
+
+        :param values: a tuple of values to insert, it is possible to insert
+                       more rows using a list of tuple and paramater `many`
+        :type values: tuple
+        :param cursor: the cursor to connect, if None it use the cursor
+                     of connection table object
+        :type cursor: Cursor object
+        :param many: True to run executemany function
+        :type many: bool
+        """
         cur = cursor if cursor else self.conn.cursor()
         if many:
             return cur.executemany(self.columns.insert_str, values)
         return cur.execute(self.columns.insert_str, values)
 
     def update(self, key, values, cursor=None, many=False):
-        """Update a column for each row"""
+        """Update a column for each row
+
+        :param key: the name of column
+        :param values: the values to insert
+        :type values: str
+        :param cursor: the cursor to connect, if None it use the cursor
+                     of connection table object
+        :type cursor: Cursor object
+        :param many: True to run executemany function
+        :type many: bool
+        """
         cur = cursor if cursor else self.conn.cursor()
         vals = list(values)
         vals.append(key)
         return cur.execute(self.columns.update_str, vals)
 
     def create(self, cols, name=None, overwrite=False, cursor=None):
-        """Create a new table"""
+        """Create a new table
+
+        :param cols:
+        :type cols:
+        :param name: the name of table to create, None for the name of Table object
+        :type name: str
+        :param overwrite: overwrite existing table
+        :type overwrite: bool
+        :param cursor: the cursor to connect, if None it use the cursor
+                     of connection table object
+        :type cursor: Cursor object
+
+        """
         cur = cursor if cursor else self.conn.cursor()
         coldef = ',\n'.join(['%s %s' % col for col in cols])
         if name:

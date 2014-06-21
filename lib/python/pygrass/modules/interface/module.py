@@ -68,7 +68,7 @@ from grass.pygrass.modules.interface.read import GETFROMTAG, DOC
 
 
 class ParallelModuleQueue(object):
-    """!This class is designed to run an arbitrary number of pygrass Module
+    """This class is designed to run an arbitrary number of pygrass Module
        processes in parallel.
 
        Objects of type grass.pygrass.modules.Module can be put into the
@@ -81,8 +81,6 @@ class ParallelModuleQueue(object):
        with a return code other than 0.
 
        Usage:
-
-       @code
 
        >>> import copy
        >>> import grass.pygrass.modules as pymod
@@ -106,27 +104,27 @@ class ParallelModuleQueue(object):
        0
        0
 
-       @endcode
-
     """
     def __init__(self, max_num_procs=1):
-        """!Constructor
+        """Constructor
 
-           @param max_num_procs The maximum number of Module processes that
-                                can be run in parallel
+        :param max_num_procs: The maximum number of Module processes that
+                              can be run in parallel
+        :type max_num_procs: int
         """
         self._num_procs = int(max_num_procs)
         self._list = int(max_num_procs) * [None]
         self._proc_count = 0
 
     def put(self, module):
-        """!Put the next Module object in the queue
+        """Put the next Module object in the queue
 
            To run the Module objects in parallel the run_ and finish_ options
            of the Module must be set to False.
 
-           @param module A preconfigured Module object with run_ and finish_
-                         set to False
+           :param module: a preconfigured Module object with run_ and finish_
+                          set to False
+           :type module: Module object
         """
         self._list[self._proc_count] = module
         self._list[self._proc_count].run()
@@ -136,38 +134,43 @@ class ParallelModuleQueue(object):
             self.wait()
 
     def get(self, num):
-        """!Get a Module object from the queue
+        """Get a Module object from the queue
 
-           @param num The number of the object in queue
-           @return The Module object or None if num is not in the queue
+           :param num: the number of the object in queue
+           :type num: int
+           :returns: the Module object or None if num is not in the queue
         """
         if num < self._num_procs:
             return self._list[num]
         return None
 
     def get_num_run_procs(self):
-        """!Get the number of Module processes that are in the queue running
+        """Get the number of Module processes that are in the queue running
            or finished
 
-           @return The maximum number fo Module processes running/finished in
-                   the queue
+           :returns: the maximum number fo Module processes running/finished in
+                     the queue
         """
         return len(self._list)
 
     def get_max_num_procs(self):
-        """!Return the maximum number of parallel Module processes
+        """Return the maximum number of parallel Module processes
         """
         return self._num_procs
 
     def set_max_num_procs(self, max_num_procs):
-        """!Set the maximum number of Module processes that should run
-           in parallel
+        """Set the maximum number of Module processes that should run
+        in parallel
+
+        :param max_num_procs: The maximum number of Module processes that
+                              can be run in parallel
+        :type max_num_procs: int   
         """
         self._num_procs = int(max_num_procs)
         self.wait()
 
     def wait(self):
-        """!Wait for all Module processes that are in the list to finish
+        """Wait for all Module processes that are in the list to finish
            and set the modules stdout and stderr output options
         """
         for proc in self._list:
@@ -185,24 +188,22 @@ class ParallelModuleQueue(object):
 
 class Module(object):
     """
-
     Python allow developers to not specify all the arguments and
     keyword arguments of a method or function.
 
-    ::
 
         def f(*args):
             for arg in args:
                 print arg
 
-    therefore if we call the function like: ::
+    therefore if we call the function like:
 
         >>> f('grass', 'gis', 'modules')
         grass
         gis
         modules
 
-    or we can define a new list: ::
+    or we can define a new list:
 
         >>> words = ['grass', 'gis', 'modules']
         >>> f(*words)
@@ -210,7 +211,7 @@ class Module(object):
         gis
         modules
 
-    we can do the same with keyword arguments, rewrite the above function: ::
+    we can do the same with keyword arguments, rewrite the above function:
 
         def f(*args, **kargs):
             for arg in args:
@@ -218,7 +219,7 @@ class Module(object):
             for key, value in kargs.items():
                 print "%s = %r" % (key, value)
 
-    now we can use the new function, with: ::
+    now we can use the new function, with:
 
         >>> f('grass', 'gis', 'modules', os = 'linux', language = 'python')
         grass
@@ -228,7 +229,7 @@ class Module(object):
         language = 'python'
 
     or, as before we can, define a dictionary and give the dictionary to
-    the function, like: ::
+    the function, like:
 
         >>> keywords = {'os' : 'linux', 'language' : 'python'}
         >>> f(*words, **keywords)
@@ -376,11 +377,12 @@ class Module(object):
                     raise ParameterError(msg % k)
             return self.run()
 
-
     def get_bash(self):
+        """Prova"""
         return ' '.join(self.make_cmd())
 
     def get_python(self):
+        """Prova"""
         prefix = self.name.split('.')[0]
         name = '_'.join(self.name.split('.')[1:])
         params = ', '.join([par.get_python() for par in self.params_list
@@ -403,7 +405,7 @@ class Module(object):
             return "%s.%s(%s)" % (prefix, name, params)
 
     def __str__(self):
-        """!Return the command string that can be executed in a shell
+        """Return the command string that can be executed in a shell
         """
         return ' '.join(self.make_cmd())
 
@@ -415,7 +417,7 @@ class Module(object):
         """{cmd_name}({cmd_params})
         """
         head = DOC['head'].format(cmd_name=self.name,
-             cmd_params=('\n' +  # go to a new line
+            cmd_params=('\n' +  # go to a new line
              # give space under the function name
              (' ' * (len(self.name) + 1))).join([', '.join(
              # transform each parameter in string
@@ -427,8 +429,8 @@ class Module(object):
         return '\n'.join([head, params, DOC['flag_head'], flags, DOC['foot']])
 
     def get_dict(self):
-        """!Return a dictionary that includes the name, all valid
-            inputs, outputs and flags
+        """Return a dictionary that includes the name, all valid
+        inputs, outputs and flags
         """
         dic = {}
         dic['name'] = self.name
@@ -440,9 +442,9 @@ class Module(object):
         return dic
 
     def make_cmd(self):
-        """!Create the command string that can be executed in a shell
+        """Create the command string that can be executed in a shell
 
-           @return The command string
+        :returns: the command string
         """
         skip = ['stdin', 'stdout', 'stderr']
         args = [self.name, ]
@@ -458,15 +460,17 @@ class Module(object):
         return args
 
     def run(self, node=None):
-        """!Run the module
+        """Run the module
 
-           This function will wait for the process to terminate
-           in case finish_==True and sets up stdout and stderr.
-           If finish_==False this function will return after starting
-           the process. Use self.popen.communicate() of self.popen.wait()
-           to wait for the process termination. The handling
-           of stdout and stderr must then be done outside of this
-           function.
+        :param node:
+        :type node:
+
+        This function will wait for the process to terminate in case
+        finish_==True and sets up stdout and stderr. If finish_==False this
+        function will return after starting the process. Use 
+        self.popen.communicate() of self.popen.wait() to wait for the process
+        termination. The handling of stdout and stderr must then be done
+        outside of this function.
         """
         if self.inputs['stdin'].value:
             self.stdin = self.inputs['stdin'].value

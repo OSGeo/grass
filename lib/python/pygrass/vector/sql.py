@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-SQL
-===
-
-It is a collection of strings to avoid to repeat the code. ::
+It is a collection of strings to avoid to repeat the code.
 
     >>> SELECT.format(cols=', '.join(['cat', 'area']), tname='table')
     'SELECT cat, area FROM table;'
     >>> SELECT_WHERE.format(cols=', '.join(['cat', 'area']),
     ...                     tname='table', condition='area>10000')
     'SELECT cat, area FROM table WHERE area>10000;'
-
-
 """
 
 #
