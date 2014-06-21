@@ -8,8 +8,12 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 from grass.pygrass.modules.interface import read
 
-
+# TODO add documentation
 class Flag(object):
+    """The Flag object store all information about a flag of module.
+
+    It is possible to set flags of command using this object.
+    """
     def __init__(self, xflag=None, diz=None):
         self.value = False
         diz = read.element2dict(xflag) if xflag is not None else diz
@@ -21,6 +25,7 @@ class Flag(object):
         self.guisection = diz.get('guisection', None)
 
     def get_bash(self):
+        """Prova"""
         if self.value:
             if self.special:
                 return '--%s' % self.name[0]
@@ -30,6 +35,7 @@ class Flag(object):
             return ''
 
     def get_python(self):
+        """Prova"""
         if self.value:
             if self.special:
                 return '%s=True' % self.name

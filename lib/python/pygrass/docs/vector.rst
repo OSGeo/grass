@@ -1,6 +1,10 @@
+.. _vector-label:
 
-Vector
-========
+Introduction to Vector classes
+==============================
+
+Details about the architecture can be found in the `GRASS GIS 7 Programmer's Manual: GRASS Vector Library <http://grass.osgeo.org/programming7/vectorlib.html>`_
+
 
 Instantiation and basic interaction. ::
 
@@ -114,11 +118,6 @@ Now, find an area with an island inside... ::
     Bbox(199947.296494, 199280.969494, 754920.623987, 754351.812986)
 
 
-VectorTopo
-----------
-
-.. autoclass:: pygrass.vector.VectorTopo
-    :members:
 
 Vector
 ----------
@@ -126,72 +125,8 @@ Vector
 .. autoclass:: pygrass.vector.Vector
     :members:
 
+VectorTopo
+----------
 
-Vector Features
-===============
-
-Point
-------
-
-.. autoclass:: pygrass.vector.geometry.Point
-    :members:
-
-
-Line
------
-
-.. autoclass:: pygrass.vector.geometry.Line
-    :members:
-
-Boundary
---------
-
-.. autoclass:: pygrass.vector.geometry.Boundary
-    :members:
-
-Isle
------
-
-.. autoclass:: pygrass.vector.geometry.Isle
-    :members:
-
-
-Isles
------
-
-.. autoclass:: pygrass.vector.geometry.Isles
-    :members:
-
-Area
---------
-
-.. autoclass:: pygrass.vector.geometry.Boundary
-    :members:
-
-Utils
-=====
-
-Bbox
-----
-
-.. autoclass:: pygrass.vector.basic.Bbox
-    :members:
-
-
-BoxList
---------
-
-.. autoclass:: pygrass.vector.basic.BoxList
-    :members:
-
-Ilist
------
-
-.. autoclass:: pygrass.vector.basic.Ilist
-    :members:
-
-Cats
------
-
-.. autoclass:: pygrass.vector.basic.Cats
+.. autoclass:: pygrass.vector.VectorTopo
     :members:

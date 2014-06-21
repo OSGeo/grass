@@ -9,25 +9,11 @@ import shutil
 import ctypes as ct
 import fnmatch
 
-from grass import script
-#from grass.script import setup
-#
-#
-#GISBASE = "/home/pietro/docdat/src/gis/grass/grass70/dist.x86_64-unknown-linux-gnu"
-#LOCATION = "nc_basic_spm_grass7'"
-#GISDBASE = "/home/pietro/docdat/gis"
-#MAPSET = "sqlite"
-#GUI = "wxpython"
-#
-#setup.init(GISBASE, GISDBASE, LOCATION, MAPSET)
-script.gisenv()
 
 import grass.lib.gis as libgis
 from grass.pygrass.functions import getenv
 from grass.pygrass.errors import GrassError
 
-
-#write dec to check if user have permissions or not
 
 ETYPE = {'rast': libgis.G_ELEMENT_RASTER,
          'rast3d': libgis.G_ELEMENT_RASTER3D,
@@ -56,10 +42,12 @@ def _check(value, path, type):
         return getenv(type)
     else:
         raise GrassError("%s <%s> not found" % (type.title(),
-                                                 join(path, value)))
+                                                join(path, value)))
 
 
 def set_current_mapset(mapset, location=None, gisdbase=None):
+    """Set the current mapset as working area
+    """
     libgis.G_setenv('MAPSET', mapset)
     if location:
         libgis.G_setenv('LOCATION_NAME', location)
@@ -68,6 +56,7 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
 
 
 def make_mapset(mapset, location=None, gisdbase=None):
+    """Create a new mapset"""
     res = libgis.G_make_mapset(gisdbase, location, mapset)
     if res == -1:
         raise GrassError("Cannot create new mapset")
@@ -83,6 +72,7 @@ class Gisdbase(object):
         >>> gisdbase.name == gisenv()['GISDBASE']
         True
 
+    ..
     """
     def __init__(self, gisdbase=''):
         self.name = gisdbase
@@ -93,7 +83,8 @@ class Gisdbase(object):
     def _set_name(self, name):
         self._name = _check(name, '', "GISDBASE")
 
-    name = property(fget=_get_name, fset=_set_name)
+    name = property(fget=_get_name, fset=_set_name,
+                    doc="Set or obtain the name of GISDBASE")
 
     def __str__(self):
         return self.name
@@ -122,6 +113,7 @@ class Gisdbase(object):
         for loc in self.locations():
             yield Location(loc, self.name)
 
+    # TODO remove or complete this function
     def new_location(self):
         if libgis.G__make_location() != 0:
             raise GrassError("Cannot create new location")
@@ -154,6 +146,8 @@ class Location(object):
         True
         >>> location.name == gisenv()['LOCATION_NAME']
         True
+
+    ..
     """
     def __init__(self, location='', gisdbase=''):
         self.gisdbase = gisdbase
@@ -165,7 +159,8 @@ class Location(object):
     def _set_gisdb(self, gisdb):
         self._gisdb = _check(gisdb, '', "GISDBASE")
 
-    gisdbase = property(fget=_get_gisdb, fset=_set_gisdb)
+    gisdbase = property(fget=_get_gisdb, fset=_set_gisdb,
+                        doc="Set or obtain the name of GISDBASE")
 
     def _get_name(self):
         return self._name
@@ -173,7 +168,8 @@ class Location(object):
     def _set_name(self, name):
         self._name = _check(name, self._gisdb, "LOCATION_NAME")
 
-    name = property(fget=_get_name, fset=_set_name)
+    name = property(fget=_get_name, fset=_set_name,
+                    doc="Set or obtain the name of LOCATION")
 
     def __getitem__(self, mapset):
         if mapset in self.mapsets():
@@ -196,11 +192,20 @@ class Location(object):
         return 'Location(%r)' % self.name
 
     def mapsets(self, pattern=None, permissions=True):
-        """Return a list of the available mapsets. ::
+        """Return a list of the available mapsets.
+
+        :param pattern: the pattern to filter the result
+        :type pattern: str
+        :param permissions: check the permission of mapset
+        :type permissions: bool
+        :returns:  a list of mapset's names
+
+        ::
 
             >>> location = Location()
             >>> location.mapsets()
             ['PERMANENT', 'user1']
+        ..
         """
         mapsets = [mapset for mapset in self]
         if permissions:
@@ -226,6 +231,8 @@ class Mapset(object):
         'nc_basic_spm_grass7'
         >>> mapset.name
         'user1'
+
+    ..
     """
     def __init__(self, mapset='', location='', gisdbase=''):
         self.gisdbase = gisdbase
@@ -239,7 +246,8 @@ class Mapset(object):
     def _set_gisdb(self, gisdb):
         self._gisdb = _check(gisdb, '', "GISDBASE")
 
-    gisdbase = property(fget=_get_gisdb, fset=_set_gisdb)
+    gisdbase = property(fget=_get_gisdb, fset=_set_gisdb,
+                        doc="Set or obtain the name of GISDBASE")
 
     def _get_loc(self):
         return self._loc
@@ -247,7 +255,8 @@ class Mapset(object):
     def _set_loc(self, loc):
         self._loc = _check(loc, self._gisdb, "LOCATION_NAME")
 
-    location = property(fget=_get_loc, fset=_set_loc)
+    location = property(fget=_get_loc, fset=_set_loc,
+                        doc="Set or obtain the name of LOCATION")
 
     def _get_name(self):
         return self._name
@@ -255,7 +264,8 @@ class Mapset(object):
     def _set_name(self, name):
         self._name = _check(name, join(self._gisdb, self._loc), "MAPSET")
 
-    name = property(fget=_get_name, fset=_set_name)
+    name = property(fget=_get_name, fset=_set_name,
+                    doc="Set or obtain the name of MAPSET")
 
     def __str__(self):
         return self.name
@@ -279,6 +289,11 @@ class Mapset(object):
             * 'vect',
             * 'view3d'
 
+        :param type: the type of element to query
+        :type type: str
+        :param pattern: the pattern to filter the result
+        :type pattern: str
+
         ::
 
             >>> mapset = Mapset('PERMANENT')
@@ -288,6 +303,8 @@ class Mapset(object):
             ['basins', 'elevation', ...]
             >>> mapset.glist('rast', pattern='el*')
             ['elevation_shade', 'elevation']
+
+        ..
         """
         if type not in ETYPE:
             str_err = "Type %s is not valid, valid types are: %s."
@@ -305,6 +322,7 @@ class Mapset(object):
                 return elist
 
     def is_current(self):
+        """Check if the MAPSET is the working MAPSET"""
         return (self.name == libgis.G_getenv('MAPSET') and
                 self.location == libgis.G_getenv('LOCATION_NAME') and
                 self.gisdbase == libgis.G_getenv('GISDBASE'))
@@ -324,6 +342,14 @@ class Mapset(object):
 
 
 class VisibleMapset(object):
+    """VisibleMapset object::
+
+        >>> mapset = VisibleMapset('user1')
+        >>> mapset
+        ['user1', 'PERMANENT']
+
+    ..
+    """
     def __init__(self, mapset, location='', gisdbase=''):
         self.mapset = mapset
         self.location = Location(location, gisdbase)
@@ -338,21 +364,31 @@ class VisibleMapset(object):
             yield mapset
 
     def read(self):
+        """Return the mapsets in the search path"""
         with open(self.spath, "a+") as f:
             lines = f.readlines()
-            #lines.remove('')
             if lines:
                 return [l.strip() for l in lines]
         lns = ['PERMANENT', ]
         self.write(lns)
         return lns
 
-    def write(self, mapsets):
+    def _write(self, mapsets):
+        """Write to SEARCH_PATH file the changes in the search path
+
+        :param mapsets: a list of mapset's names
+        :type mapsets: list
+        """
         with open(self.spath, "w+") as f:
             ms = self.location.mapsets()
             f.write('%s' % '\n'.join([m for m in mapsets if m in ms]))
 
     def add(self, mapset):
+        """Add a mapset to the search path
+
+        :param mapset: a mapset's name
+        :type mapset: str
+        """
         if mapset not in self.read() and mapset in self.location:
             with open(self.spath, "a+") as f:
                 f.write('\n%s' % mapset)
@@ -360,12 +396,27 @@ class VisibleMapset(object):
             raise TypeError('Mapset not found')
 
     def remove(self, mapset):
+        """Remove mapset to the search path
+
+        :param mapset: a mapset's name
+        :type mapset: str
+        """
         mapsets = self.read()
         mapsets.remove(mapset)
-        self.write(mapsets)
+        self._write(mapsets)
 
     def extend(self, mapsets):
+        """Add more mapsets to the search path
+
+        :param mapsets: a list of mapset's names
+        :type mapsets: list
+        """
         ms = self.location.mapsets()
         final = self.read()
         final.extend([m for m in mapsets if m in ms and m not in final])
-        self.write(final)
+        self._write(final)
+
+    def reset(self):
+        """Reset to the original search path"""
+        final = [self.mapset, 'PERMANENT']
+        self._write(final)

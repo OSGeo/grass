@@ -14,6 +14,10 @@ from grass.pygrass.functions import coor2pixel
 def get_start_end_index(bbox_list):
     """Convert a Bounding Box to a list of the index of
     column start, end, row start and end
+
+    :param bbox_list: a list of BBox object to convert
+    :type bbox_list: list of BBox object
+
     """
     ss_list = []
     reg = Region()
@@ -25,7 +29,15 @@ def get_start_end_index(bbox_list):
 
 
 def rpatch_row(rast, rasts, bboxes):
-    """Patch a row of bound boxes."""
+    """Patch a row of bound boxes.
+
+    :param rast: a Raster object to write
+    :type rast: Raster object
+    :param rasts: a list of Raster object to read
+    :type rasts: list of Raster object
+    :param bboxes: a list of BBox object
+    :type bboxes: list of BBox object
+    """
     sei = get_start_end_index(bboxes)
     # instantiate two buffer
     buff = rasts[0][0]
@@ -41,7 +53,26 @@ def rpatch_row(rast, rasts, bboxes):
 
 def rpatch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
                start_row=0, start_col=0, prefix=''):
-    """Patch raster using a bounding box list to trim the raster."""
+    # TODO is prefix useful??
+    """Patch raster using a bounding box list to trim the raster.
+
+    :param raster: the name of output raster
+    :type raster: str
+    :param mapset: the name of mapset to use
+    :type mapset: str
+    :param mset_str:
+    :type mset_str: str
+    :param bbox_list: a list of BBox object to convert
+    :type bbox_list: list of BBox object
+    :param overwrite: overwrite existing raster
+    :type overwrite: bool
+    :param start_row: the starting row of original raster
+    :type start_row: int
+    :param start_col: the starting column of original raster
+    :type start_col: int
+    :param prefix: the prefix of output raster
+    :type prefix: str
+    """
     # Instantiate the RasterRow input objects
     rast = RasterRow(prefix + raster, mapset)
     rtype = RasterRow(name=raster, mapset=mset_str % (0, 0))

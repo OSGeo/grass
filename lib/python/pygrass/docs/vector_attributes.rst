@@ -1,5 +1,5 @@
-Attributes
-===========
+Vector Attributes
+===================
 
 It is possible to access the vector attributes with: ::
 
@@ -106,33 +106,39 @@ a new cursor object and interact with the database. ::
     >>> conn.close()
 
 
-
-Link
--------
-
-.. autoclass:: pygrass.vector.table.Link
-    :members:
-
 DBlinks
--------
+---------
 
 .. autoclass:: pygrass.vector.table.DBlinks
     :members:
 
-Filters
--------
+Link
+---------
 
-.. autoclass:: pygrass.vector.table.Filters
+.. autoclass:: pygrass.vector.table.Link
+    :members:
+
+Table
+---------
+
+.. autoclass:: pygrass.vector.table.Table
     :members:
 
 Columns
--------
+---------
 
 .. autoclass:: pygrass.vector.table.Columns
     :members:
 
-Table
------
+Filters
+---------
 
-.. autoclass:: pygrass.vector.table.Table
+.. autoclass:: pygrass.vector.table.Filters
     :members:
+
+SQL
+---------
+
+.. automodule:: pygrass.vector.sql
+    :members:
+

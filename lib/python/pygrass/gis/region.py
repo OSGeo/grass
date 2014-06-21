@@ -15,34 +15,37 @@ from grass.pygrass.shell.conversion import dict2html
 
 
 class Region(object):
-    def __init__(self, default=False):
-        """::
+    """
+    ::
 
-            >>> default = Region(default=True)
-            >>> current_good = Region()
-            >>> current = Region()
-            >>> current.align('elevation')
-            >>> default == current
-            True
-            >>> current.cols
-            1500
-            >>> current.ewres
-            10.0
-            >>> current.cols = 3000
-            >>> current.ewres
-            5.0
-            >>> current.ewres = 20.0
-            >>> current.cols
-            750
-            >>> current.set_current()
-            >>> default == current
-            False
-            >>> current.get_default()
-            >>> default = Region(default=True)
-            >>> default == current
-            True
-            >>> current_good.set_current()
-        """
+        >>> default = Region(default=True)
+        >>> current_good = Region()
+        >>> current = Region()
+        >>> current.align('elevation')
+        >>> default == current
+        True
+        >>> current.cols
+        1500
+        >>> current.ewres
+        10.0
+        >>> current.cols = 3000
+        >>> current.ewres
+        5.0
+        >>> current.ewres = 20.0
+        >>> current.cols
+        750
+        >>> current.set_current()
+        >>> default == current
+        False
+        >>> current.get_default()
+        >>> default = Region(default=True)
+        >>> default == current
+        True
+        >>> current_good.set_current()
+
+    ..
+    """
+    def __init__(self, default=False):
         self.c_region = ctypes.pointer(libgis.Cell_head())
         if default:
             self.get_default()
@@ -61,7 +64,8 @@ class Region(object):
         """Private function to set north value"""
         self.c_region.contents.north = value
 
-    north = property(fget=_get_n, fset=_set_n)
+    north = property(fget=_get_n, fset=_set_n,
+                     doc="Set and obtain north coordinate")
 
     def _get_s(self):
         """Private function to obtain south value"""
@@ -71,7 +75,8 @@ class Region(object):
         """Private function to set south value"""
         self.c_region.contents.south = value
 
-    south = property(fget=_get_s, fset=_set_s)
+    south = property(fget=_get_s, fset=_set_s,
+                     doc="Set and obtain south coordinate")
 
     def _get_e(self):
         """Private function to obtain east value"""
@@ -81,7 +86,8 @@ class Region(object):
         """Private function to set east value"""
         self.c_region.contents.east = value
 
-    east = property(fget=_get_e, fset=_set_e)
+    east = property(fget=_get_e, fset=_set_e,
+                    doc="Set and obtain east coordinate")
 
     def _get_w(self):
         """Private function to obtain west value"""
@@ -91,7 +97,8 @@ class Region(object):
         """Private function to set west value"""
         self.c_region.contents.west = value
 
-    west = property(fget=_get_w, fset=_set_w)
+    west = property(fget=_get_w, fset=_set_w,
+                    doc="Set and obtain west coordinate")
 
     def _get_t(self):
         """Private function to obtain top value"""
@@ -101,7 +108,8 @@ class Region(object):
         """Private function to set top value"""
         self.c_region.contents.top = value
 
-    top = property(fget=_get_t, fset=_set_t)
+    top = property(fget=_get_t, fset=_set_t,
+                   doc="Set and obtain top value")
 
     def _get_b(self):
         """Private function to obtain bottom value"""
@@ -111,7 +119,8 @@ class Region(object):
         """Private function to set bottom value"""
         self.c_region.contents.bottom = value
 
-    bottom = property(fget=_get_b, fset=_set_b)
+    bottom = property(fget=_get_b, fset=_set_b,
+                      doc="Set and obtain bottom value")
 
     #----------RESOLUTION----------
     def _get_rows(self):
@@ -123,7 +132,8 @@ class Region(object):
         self.c_region.contents.rows = value
         self.adjust(rows=True)
 
-    rows = property(fget=_get_rows, fset=_set_rows)
+    rows = property(fget=_get_rows, fset=_set_rows,
+                    doc="Set and obtain number of rows")
 
     def _get_cols(self):
         """Private function to obtain columns value"""
@@ -134,7 +144,8 @@ class Region(object):
         self.c_region.contents.cols = value
         self.adjust(cols=True)
 
-    cols = property(fget=_get_cols, fset=_set_cols)
+    cols = property(fget=_get_cols, fset=_set_cols,
+                    doc="Set and obtain number of columns")
 
     def _get_nsres(self):
         """Private function to obtain north-south value"""
@@ -145,7 +156,8 @@ class Region(object):
         self.c_region.contents.ns_res = value
         self.adjust()
 
-    nsres = property(fget=_get_nsres, fset=_set_nsres)
+    nsres = property(fget=_get_nsres, fset=_set_nsres,
+                     doc="Set and obtain north-south resolution value")
 
     def _get_ewres(self):
         """Private function to obtain east-west value"""
@@ -156,7 +168,8 @@ class Region(object):
         self.c_region.contents.ew_res = value
         self.adjust()
 
-    ewres = property(fget=_get_ewres, fset=_set_ewres)
+    ewres = property(fget=_get_ewres, fset=_set_ewres,
+                     doc="Set and obtain east-west resolution value")
 
     def _get_tbres(self):
         """Private function to obtain top-botton 3D value"""
@@ -167,7 +180,8 @@ class Region(object):
         self.c_region.contents.tb_res = value
         self.adjust()
 
-    tbres = property(fget=_get_tbres, fset=_set_tbres)
+    tbres = property(fget=_get_tbres, fset=_set_tbres,
+                     doc="Set and obtain top-bottom 3D value")
 
     @property
     def zone(self):
@@ -228,12 +242,20 @@ class Region(object):
 
     #----------METHODS----------
     def zoom(self, raster_name):
-        """Shrink region until it meets non-NULL data from this raster map:"""
+        """Shrink region until it meets non-NULL data from this raster map
+
+        :param raster_name: the name of raster
+        :type raster_name: str
+        """
         self._set_param('zoom', str(raster_name))
         self.get_current()
 
     def align(self, raster_name):
-        """Adjust region cells to cleanly align with this raster map"""
+        """Adjust region cells to cleanly align with this raster map
+
+        :param raster_name: the name of raster
+        :type raster_name: str
+        """
         self._set_param('align', str(raster_name))
         self.get_current()
 
@@ -245,13 +267,20 @@ class Region(object):
         libgis.G_adjust_Cell_head(self.c_region, bool(rows), bool(cols))
 
     def vect(self, vector_name):
-        """Adjust bounding box of region using a vector ::
+        """Adjust bounding box of region using a vector
+
+        :param vector_name: the name of vector
+        :type vector_name: str
+
+        ::
 
         >>> reg = Region()
         >>> reg.vect('census')
         >>> reg.get_bbox()
         Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
         >>> reg.get_default()
+
+        ..
         """
         from grass.pygrass.vector import VectorTopo
         vect = VectorTopo(vector_name)
@@ -289,6 +318,8 @@ class Region(object):
         >>> reg = Region()
         >>> reg.get_bbox()
         Bbox(228500.0, 215000.0, 645000.0, 630000.0)
+
+        ..
         """
         from grass.pygrass.vector.basic import Bbox
         return Bbox(north=self.north, south=self.south,
@@ -296,16 +327,22 @@ class Region(object):
                     top=self.top, bottom=self.bottom)
 
     def set_bbox(self, bbox):
-        """Set region from Bbox ::
+        """Set region extent from Bbox
+
+        :param bbox: a Bbox object to set the extent
+        :type bbox: Bbox object
+
+        ::
 
         >>> from grass.pygrass.vector.basic import Bbox
-        >>> b = Bbox(230963.640878, 212125.562878,
-        ...          645837.437393, 628769.374393)
+        >>> b = Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
         >>> reg = Region()
         >>> reg.set_bbox(b)
         >>> reg.get_bbox()
         Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
         >>> reg.get_current()
+
+        ..
         """
         self.north = bbox.north
         self.south = bbox.south
