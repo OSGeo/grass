@@ -544,6 +544,7 @@ int Rast__open_null_write(int fd)
 void Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
 			   int cols, int fd)
 {
+    struct fileinfo *fcb = &R__.fileinfo[fd];
     off_t offset;
     size_t size;
 
@@ -551,10 +552,10 @@ void Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
     offset = (off_t) size *row;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0)
-	G_fatal_error(_("Error writing null row %d"), row);
+	G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 
     if (write(null_fd, flags, size) != size)
-	G_fatal_error(_("Error writing null row %d"), row);
+	G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 }
 
 static void convert_and_write_if(int fd, const void *vbuf)
