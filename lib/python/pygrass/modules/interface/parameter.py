@@ -9,7 +9,7 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
 import re
 
 
-from .read import GETTYPE, element2dict, DOC
+from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
 
 
 class Parameter(object):
@@ -116,7 +116,14 @@ class Parameter(object):
                     raise ValueError(values_error % (self.name, self.values))
             else:
                 self._value = value
-        # was: elif self.type is str and isinstance(value, unicode):
+        elif self.type is str and isinstance(value, unicode):
+            if hasattr(self, 'values'):
+                if value in self.values:
+                    self._value = str(value)
+                else:
+                    raise ValueError(values_error % (self.name, self.values))
+            else:
+                self._value = str(value)
         elif self.type is str and isinstance(value, str):
             if hasattr(self, 'values'):
                 if value in self.values:

@@ -105,11 +105,11 @@ def copy_mapset(mapset, path):
         >>> copy_mapset(mset, path)
         Mapset('user1')
         >>> sorted(os.listdir(path))
-        ['PERMANENT', 'user1']
+        [u'PERMANENT', u'user1']
         >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
-        ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
+        [u'DEFAULT_WIND', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
         >>> sorted(os.listdir(os.path.join(path, 'user1')))
-        ['CURGROUP', 'SEARCH_PATH', 'VAR', 'WIND']
+        [u'CURGROUP', u'SEARCH_PATH', u'VAR', u'WIND']
         >>> import shutil
         >>> shutil.rmtree(path)
 
@@ -139,7 +139,7 @@ def read_gisrc(gisrc):
 
         >>> import os
         >>> read_gisrc(os.environ['GISRC'])  # doctest: +ELLIPSIS
-        ('user1', ...)
+        (u'user1', ...)
     """
     with open(gisrc, 'r') as gfile:
         gis = dict([(k.strip(), v.strip())

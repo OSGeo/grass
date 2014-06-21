@@ -4,8 +4,8 @@ Created on Wed Apr  3 10:41:30 2013
 
 @author: pietro
 """
-from . import split
-from . import patch
-from . import grid
-from .grid import GridModule
+from grass.pygrass.modules.grid import split
+from grass.pygrass.modules.grid import patch
+from grass.pygrass.modules.grid import grid
+from grass.pygrass.modules.grid.grid import GridModule
 

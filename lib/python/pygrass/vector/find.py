@@ -8,8 +8,8 @@ import grass.lib.vector as libvect
 
 from grass.pygrass.errors import must_be_open
 
-from .basic import Ilist, BoxList
-from .geometry import read_line, Isle, Area, Point
+from grass.pygrass.vector.basic import Ilist, BoxList
+from grass.pygrass.vector.geometry import read_line, Isle, Area, Point
 
 
 class AbstractFinder(object):
