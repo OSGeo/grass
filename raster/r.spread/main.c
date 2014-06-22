@@ -232,6 +232,7 @@ int main(int argc, char *argv[])
     parm.init_time->key = "init_time";
     parm.init_time->type = TYPE_STRING;
     parm.init_time->key_desc = "int (>= 0)"; /* TODO: move to ->options */
+    parm.init_time->answer = "0";
     parm.init_time->label =
 	_("Initial time for current simulation (0) (min)");
     parm.init_time->description =
@@ -378,17 +379,13 @@ int main(int argc, char *argv[])
 	comp_dens = 0.5;
     }
     /*Check the given initial time and simulation time lag, assign the default if needed */
-    if (parm.init_time->answer) {
-	init_time = atoi(parm.init_time->answer);
-	if (init_time < 0) {
-	    G_warning("Illegal initial time <%s>", parm.init_time->answer);
-	    G_usage();
-	    exit(EXIT_FAILURE);
-	}
+    init_time = atoi(parm.init_time->answer);
+    if (init_time < 0) {
+	G_warning("Illegal initial time <%s>", parm.init_time->answer);
+	G_usage();
+	exit(EXIT_FAILURE);
     }
-    else {
-	time_lag = 0;
-    }
+
     if (parm.time_lag->answer) {
 	time_lag = atoi(parm.time_lag->answer);
 	if (time_lag < 0) {
