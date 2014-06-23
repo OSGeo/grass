@@ -37,10 +37,12 @@ int main(int argc, char *argv[])
     char *rname;
     int i;
     int row, nrows, ncols;
-    int ZEROFLAG;
+    int use_zero;
     char *new_name;
     char **names;
     char **ptr;
+    struct Cell_head window;
+    struct Cell_head *cellhd;
 
     struct GModule *module;
     struct Flag *zeroflag;
@@ -71,12 +73,10 @@ int main(int argc, char *argv[])
     zeroflag->description =
 	_("Use zero (0) for transparency instead of NULL");
 
-    ZEROFLAG = 0;		/* default: use NULL for transparency */
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    ZEROFLAG = (zeroflag->answer);
+    use_zero = (zeroflag->answer);
 
     names = opt1->answers;
 
@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
 
     infd = G_malloc(nfiles * sizeof(int));
     statf = G_malloc(nfiles * sizeof(struct Cell_stats));
+    cellhd = G_malloc(nfiles * sizeof(struct Cell_head));
 
     for (i = 0; i < nfiles; i++) {
 	const char *name = names[i];
@@ -105,6 +106,8 @@ int main(int argc, char *argv[])
 	    out_type = DCELL_TYPE;
 
 	Rast_init_cell_stats(&statf[i]);
+
+	Rast_get_cellhd(name, "", &cellhd[i]);
     }
 
     rname = opt2->answer;
@@ -113,20 +116,33 @@ int main(int argc, char *argv[])
     presult = Rast_allocate_buf(out_type);
     patch = Rast_allocate_buf(out_type);
 
+    Rast_get_window(&window);
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
     G_verbose_message(_("Percent complete..."));
     for (row = 0; row < nrows; row++) {
+	double north_edge, south_edge;
+
 	G_percent(row, nrows, 2);
 	Rast_get_row(infd[0], presult, row, out_type);
+
+	north_edge = Rast_row_to_northing(row, &window);
+	south_edge = north_edge - window.ns_res;
 
 	if (out_type == CELL_TYPE)
 	    Rast_update_cell_stats((CELL *) presult, ncols, &statf[0]);
 	for (i = 1; i < nfiles; i++) {
+	    /* check if raster i overlaps with the current row */
+	    if (south_edge >= cellhd[i].north ||
+		north_edge <= cellhd[i].south ||
+		window.west >= cellhd[i].east ||
+		window.east <= cellhd[i].west)
+		continue;
+
 	    Rast_get_row(infd[i], patch, row, out_type);
 	    if (!do_patch
-		(presult, patch, &statf[i], ncols, out_type, ZEROFLAG))
+		(presult, patch, &statf[i], ncols, out_type, use_zero))
 		break;
 	}
 	Rast_put_row(outfd, presult, out_type);
