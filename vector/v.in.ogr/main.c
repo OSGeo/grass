@@ -1512,7 +1512,7 @@ int main(int argc, char *argv[])
 	    }
 	    else
 		/* assume manual cleaning is required */
-		G_important_message(_("Manual cleaning may be needed."));
+		G_important_message(_("Manual cleaning may be needed"));
 	}
     }
 
