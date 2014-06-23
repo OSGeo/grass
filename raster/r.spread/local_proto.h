@@ -1,7 +1,7 @@
 #include "cell_ptrHa.h"
 #include "costHa.h"
 /* collect_ori.c */
-void collect_ori(int);
+void collect_ori(int, int);
 
 /* deleteHa.c */
 void deleteHa(float, int, int, struct costHa *, long *);

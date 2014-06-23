@@ -40,7 +40,6 @@
 
 #define DATA(map, r, c)		(map)[(r) * ncols + (c)]
 
-CELL range_min, range_max;
 CELL *cell;
 CELL *x_cell;
 CELL *y_cell;
@@ -70,7 +69,6 @@ int nrows, ncols;
 long heap_len;
 
 struct Cell_head window;
-struct Range range;
 
 struct costHa *heap;
 
@@ -78,6 +76,11 @@ struct costHa *heap;
 int main(int argc, char *argv[])
 {
     int col, row;
+
+    /* to menage start (source) raster map */
+    struct Range start_range;
+    CELL start_range_min, start_range_max;
+    int start_is_time;  /* 0 or 1 */
 
     struct
     {
@@ -88,8 +91,8 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-	/* please, remove before GRASS 7 released */
-	struct Flag *display, *spotting;
+	/* please, remove display before GRASS 7 released */
+	struct Flag *display, *spotting, *start_is_time;
     } flag;
     struct GModule *module;
 
@@ -307,7 +310,7 @@ int main(int argc, char *argv[])
 #if 0
     flag.display->label = _("DISPLAY 'live' spread process on screen");
     flag.display->description =
-	_("Display the "live" simulation on screen. A graphics window "
+	_("Display the 'live' simulation on screen. A graphics window "
 	  "must be opened and selected before using this option.");
 #else
     flag.display->description = _("Live display - disabled and depreciated");
@@ -316,6 +319,17 @@ int main(int argc, char *argv[])
     flag.spotting = G_define_flag();
     flag.spotting->key = 's';
     flag.spotting->description = _("Consider spotting effect (for wildfires)");
+
+    flag.start_is_time = G_define_flag();
+    flag.start_is_time->key = 'i';
+    flag.start_is_time->label = _("Use start raster map values in"
+	" output spread time raster map");
+    flag.start_is_time->description = _("Designed to be used with output"
+	" of previous run of r.spread when computing spread iteratively."
+	" The values in start raster map are considered as time."
+	" Allowed values in raster map are from zero"
+	" to the value of init_time option."
+	" If not enabled, init_time is used in the area of start raster map");
 
     /*   Parse command line */
     if (G_parser(argc, argv))
@@ -522,8 +536,19 @@ int main(int argc, char *argv[])
 
     start_fd = Rast_open_old(start_layer, G_find_raster2(start_layer, ""));
 
-    Rast_read_range(start_layer, G_find_file("cell", start_layer, ""), &range);
-    Rast_get_range_min_max(&range, &range_min, &range_max);
+    Rast_read_range(start_layer, G_find_file("cell", start_layer, ""),
+		    &start_range);
+    Rast_get_range_min_max(&start_range, &start_range_min, &start_range_max);
+
+    start_is_time = flag.start_is_time->answer;
+    /* values higher than init_time are unexpected and may cause segfaults */
+    if (start_is_time && start_range_max > init_time)
+	G_fatal_error(_("Maximum of start raster map is grater than init_time"
+			" (%d > %d)"), start_range_max, init_time);
+    /* values lower then zero does not make sense for time */
+    if (start_is_time && start_range_min < 0)
+	G_fatal_error(_("Minimum of start raster map is less than zero"
+			" (%d < 0)"), start_range_min, init_time);
 
     /*  Initialize the heap  */
     heap =
@@ -532,7 +557,7 @@ int main(int argc, char *argv[])
 
     G_message(_("Reading %s..."), start_layer);
     G_debug(1, "Collecting origins...");
-    collect_ori(start_fd);
+    collect_ori(start_fd, start_is_time);
     G_debug(1, "Done");
 
 
