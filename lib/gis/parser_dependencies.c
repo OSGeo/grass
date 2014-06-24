@@ -173,6 +173,12 @@ static const char *describe_rule(const struct rule *rule, int start,
     return s;
 }
 
+static void append_error(const char *msg)
+{
+    st->error = G_realloc(st->error, sizeof(char *) * (st->n_errors + 1));
+    st->error[st->n_errors++] = G_store(msg);
+}
+
 /* at most one option from a set */
 void G_option_exclusive(void *first, ...)
 {
@@ -184,9 +190,12 @@ void G_option_exclusive(void *first, ...)
 
 static void check_exclusive(const struct rule *rule)
 {
-    if (count_present(rule, 0) > 1)
-	G_fatal_error(_("Options %s are mutually exclusive"),
-		      describe_rule(rule, 0, 0));
+    if (count_present(rule, 0) > 1) {
+	char *err;
+	G_asprintf(&err, _("Options %s are mutually exclusive"),
+		   describe_rule(rule, 0, 0));
+	append_error(err);
+    }
 }
 
 /* at least one option from a set */
@@ -200,9 +209,12 @@ void G_option_required(void *first, ...)
 
 static void check_required(const struct rule *rule)
 {
-    if (count_present(rule, 0) < 1)
-	G_fatal_error(_("At least one of %s is required"),
-		      describe_rule(rule, 0, 0));
+    if (count_present(rule, 0) < 1) {
+	char *err;
+	G_asprintf(&err, _("At least one of %s is required"),
+		   describe_rule(rule, 0, 0));
+	append_error(err);
+    }
 }
 
 /* if the first option is present, at least one of the other
@@ -219,9 +231,12 @@ static void check_requires(const struct rule *rule)
 {
     if (!is_present(rule->opts[0]))
 	return;
-    if (count_present(rule, 1) < 1)
-	G_fatal_error(_("Option %s requires at least one of %s"),
-		      get_name(rule->opts[0]), describe_rule(rule, 1, 1));
+    if (count_present(rule, 1) < 1) {
+	char *err;
+	G_asprintf(&err, _("Option %s requires at least one of %s"),
+		   get_name(rule->opts[0]), describe_rule(rule, 1, 1));
+	append_error(err);
+    }
 }
 
 /* if the first option is present, all the other options must also
@@ -238,9 +253,12 @@ static void check_requires_all(const struct rule *rule)
 {
     if (!is_present(rule->opts[0]))
 	return;
-    if (count_present(rule, 1) < rule->count - 1)
-	G_fatal_error(_("Option %s requires all of %s"),
-		      get_name(rule->opts[0]), describe_rule(rule, 1, 0));
+    if (count_present(rule, 1) < rule->count - 1) {
+	char *err;
+	G_asprintf(&err, _("Option %s requires all of %s"),
+		   get_name(rule->opts[0]), describe_rule(rule, 1, 0));
+	append_error(err);
+    }
 }
 
 /* if the first option is present, none of the other options may also
@@ -257,9 +275,12 @@ static void check_excludes(const struct rule *rule)
 {
     if (!is_present(rule->opts[0]))
 	return;
-    if (count_present(rule, 1) > 0)
-	G_fatal_error(_("Option %s is mutually exclusive with all of %s"),
-		      get_name(rule->opts[0]), describe_rule(rule, 1, 0));
+    if (count_present(rule, 1) > 0) {
+	char *err;
+	G_asprintf(&err, _("Option %s is mutually exclusive with all of %s"),
+		   get_name(rule->opts[0]), describe_rule(rule, 1, 0));
+	append_error(err);
+    }
 }
 
 /* if any option is present, all the other options must also be present
@@ -275,9 +296,12 @@ void G_option_collective(void *first, ...)
 static void check_collective(const struct rule *rule)
 {
     int count = count_present(rule, 0);
-    if (count > 0 && count < rule->count)
-	G_fatal_error(_("Either all or none of %s must be given"),
-		      describe_rule(rule, 0, 0));
+    if (count > 0 && count < rule->count) {
+	char *err;
+	G_asprintf(&err, _("Either all or none of %s must be given"),
+		   describe_rule(rule, 0, 0));
+	append_error(err);
+    }
 }
 
 void G__check_option_rules(void)

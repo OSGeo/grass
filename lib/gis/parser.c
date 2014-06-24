@@ -277,15 +277,30 @@ struct GModule *G_define_module(void)
  *  - G_define_module()
  *  - G_define_flag()
  *  - G_define_option()
+ *  - G_define_standard_flag()
  *  - G_define_standard_option()
  *  - G_disable_interactive()
+ *  - G_option_exclusive()
+ *  - G_option_required()
+ *  - G_option_requires()
+ *  - G_option_requires_all()
+ *  - G_option_excludes()
+ *  - G_option_collective()
  *
  * The usual order a module calls functions is:
  *
  *  # G_gisinit()
  *  # G_define_module()
+ *  # G_define_standard_flag()
+ *  # G_define_standard_option()
  *  # G_define_flag()
  *  # G_define_option()
+ *  # G_option_exclusive()
+ *  # G_option_required()
+ *  # G_option_requires()
+ *  # G_option_requires_all()
+ *  # G_option_excludes()
+ *  # G_option_collective()
  *  # G_parser()
  *
  * \param argc number of arguments
@@ -560,6 +575,8 @@ int G_parser(int argc, char **argv)
     if (!st->suppress_required)
 	check_required();
     
+    G__check_option_rules();
+
     if (st->n_errors > 0) {
         if (G_verbose() > -1) {
             if (G_verbose() > G_verbose_min())
