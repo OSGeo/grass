@@ -658,10 +658,15 @@ class GConsole(wx.EvtHandler):
             if prompt in ('raster', 'vector', '3d-raster') and p.get('value', None):
                 if p.get('age', 'old') == 'new' or \
                         name in ('r.colors', 'r3.colors', 'v.colors', 'v.proj', 'r.proj'):
-                    lname = p.get('value')
-                    if '@' not in lname:
-                        lname += '@' + grass.gisenv()['MAPSET']
-                    self.mapCreated.emit(name=lname, ltype=prompt)
+                    # if multiple maps (e.g. r.series.interp), we need add each
+                    if p.get('multiple', False):
+                        lnames = p.get('value').split(',')
+                    else:
+                        lnames = [p.get('value')]
+                    for lname in lnames:
+                        if '@' not in lname:
+                            lname += '@' + grass.gisenv()['MAPSET']
+                        self.mapCreated.emit(name=lname, ltype=prompt)
         if name == 'r.mask':
             self.updateMap.emit()
         
