@@ -1272,7 +1272,7 @@ def list_strings(type):
 # interface to g.mlist
 
 
-def mlist_strings(type, pattern=None, mapset=None, flag=''):
+def mlist_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
     """!List of elements as strings.
 
     Returns the output from running g.mlist, as a list of qualified
@@ -1281,6 +1281,7 @@ def mlist_strings(type, pattern=None, mapset=None, flag=''):
     @param type element type (rast, vect, rast3d, region, ...)
     @param pattern pattern string
     @param mapset mapset name (if not given use search path)
+    @param exclude pattern string to exclude maps from the research
     @param flag pattern type: 'r' (basic regexp), 'e' (extended regexp), or ''
                 (glob pattern)
 
@@ -1295,13 +1296,14 @@ def mlist_strings(type, pattern=None, mapset=None, flag=''):
                              flags='m' + flag,
                              type=type,
                              pattern=pattern,
+                             exclude=exclude,
                              mapset=mapset).splitlines():
         result.append(line.strip())
 
     return result
 
 
-def mlist_pairs(type, pattern=None, mapset=None, flag=''):
+def mlist_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
     """!List of elements as pairs
 
     Returns the output from running g.mlist, as a list of
@@ -1310,16 +1312,19 @@ def mlist_pairs(type, pattern=None, mapset=None, flag=''):
     @param type element type (rast, vect, rast3d, region, ...)
     @param pattern pattern string
     @param mapset mapset name (if not given use search path)
+    @param exclude pattern string to exclude maps from the research
     @param flag pattern type: 'r' (basic regexp), 'e' (extended regexp), or ''
                 (glob pattern)
 
     @return list of elements
     """
     return [tuple(map.split('@', 1)) for map in mlist_strings(type, pattern,
-                                                              mapset, flag)]
+                                                              mapset, exclude,
+                                                              flag)]
 
 
-def mlist_grouped(type, pattern=None, check_search_path=True, flag=''):
+def mlist_grouped(type, pattern=None, check_search_path=True, exclude=None,
+                  flag=''):
     """!List of elements grouped by mapsets.
 
     Returns the output from running g.mlist, as a dictionary where the
@@ -1336,6 +1341,7 @@ def mlist_grouped(type, pattern=None, check_search_path=True, flag=''):
     @param pattern pattern string
     @param check_search_path True to add mapsets for the search path with no
                              found elements
+    @param exclude pattern string to exclude maps from the research
     @param flag pattern type: 'r' (basic regexp), 'e' (extended regexp), or ''
                 (glob pattern)
 
@@ -1351,7 +1357,7 @@ def mlist_grouped(type, pattern=None, check_search_path=True, flag=''):
 
     mapset = None
     for line in read_command("g.mlist", quiet=True, flags="m" + flag,
-                             type=type, pattern=pattern).splitlines():
+                             type=type, pattern=pattern, exclude=exclude).splitlines():
         try:
             name, mapset = line.split('@')
         except ValueError:
