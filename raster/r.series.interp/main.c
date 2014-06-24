@@ -92,6 +92,7 @@ int main(int argc, char *argv[])
     parm.samplingpos->key = "samplingpos";
     parm.samplingpos->type = TYPE_DOUBLE;
     parm.samplingpos->required = NO;
+    parm.samplingpos->multiple = YES;
     parm.samplingpos->description = _("Sampling point position for each output map");
 
     parm.outfile = G_define_standard_option(G_OPT_F_INPUT);
