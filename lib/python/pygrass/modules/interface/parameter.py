@@ -41,23 +41,16 @@ class Parameter(object):
         #
         if 'values' in diz:
             try:
-                # Check for integer ranges: "3-30"
-                isrange = re.match("(?P<min>-*\d+)-(?P<max>\d+)",
+                # Check for integer ranges: "3-30" or float ranges: "0.0-1.0"
+                isrange = re.match("(?P<min>-*\d+.*\d*)-(?P<max>\d+.*\d*)",
                                    diz['values'][0])
                 if isrange:
-                    range_min, range_max = isrange.groups()
-                    self.values = range(int(range_min), int(range_max) + 1)
+                    mn, mx = isrange.groups()
+                    self.min, self.max = float(mn), float(mx)
+                    self.values = None
                     self.isrange = diz['values'][0]
-                # Check for float ranges: "0.0-1.0"
-                if not isrange:
-                    isrange = re.match("(?P<min>-*\d+.\d+)-(?P<max>\d+.\d+)",
-                                       diz['values'][0])
-                    if isrange:
-                        # We are not able to create range values from
-                        # floating point ranges
-                        self.isrange = diz['values'][0]
                 # No range was found
-                if not isrange:
+                else:
                     self.values = [self.type(i) for i in diz['values']]
                     self.isrange = False
             except TypeError:
@@ -82,7 +75,7 @@ class Parameter(object):
         #
         # gisprompt
         #
-        if 'gisprompt' in diz:
+        if 'gisprompt' in diz and diz['gisprompt']:
             self.typedesc = diz['gisprompt'].get('prompt', '')
             self.input = False if diz['gisprompt']['age'] == 'new' else True
         else:
@@ -107,13 +100,13 @@ class Parameter(object):
             self._value = value
         elif isinstance(value, self.type):
             if hasattr(self, 'values'):
-                if self.type is float:
-                    if self.values[0] <= value <= self.values[-1]:
+                if self.type in (float, int):
+                    if self.min <= value <= self.max:
                         self._value = value
                     else:
                         err_str = 'The Parameter <%s>, must be: %g<=value<=%g'
-                        raise ValueError(err_str % (self.name, self.values[0],
-                                                    self.values[-1]))
+                        raise ValueError(err_str % (self.name, self.min,
+                                                    self.max))
                 elif value in self.values:
                     self._value = value
                 else:
