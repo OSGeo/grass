@@ -81,7 +81,10 @@ class Layer(object):
             else:
                 tempfile_sfx = ".ppm"
 
-            self.mapfile = tempfile.mkstemp(suffix = tempfile_sfx)[1]
+            mapfile = tempfile.NamedTemporaryFile(suffix=tempfile_sfx, delete=False)
+            # we don't want it open, we just need the name
+            self.mapfile = mapfile.name
+            mapfile.close()
             self.maskfile = self.mapfile.rsplit(".",1)[0] + ".pgm"
         else:
             self.mapfile = self.maskfile = None
