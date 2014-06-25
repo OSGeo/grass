@@ -7,9 +7,10 @@
  *               Cedric Shock <cedricgrass shockfamily.net>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Markus Neteler <neteler itc.it>, 
- *               Martin Landa <landa.martin gmail.com>
+ *               Martin Landa <landa.martin gmail.com>,
+ *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1994-2007, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1994-2007, 2011-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
 {
     int i, n;
     struct GModule *module;
-    struct Option **parm, *p;
+    struct Option **parm;
     char *old, *new;
     int nrmaps, nlist;
     const char *mapset, *location_path;
@@ -50,7 +51,7 @@ int main(int argc, char *argv[])
     parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
 
     for (n = 0; n < nlist; n++) {
-	p = parm[n] = M_define_option(n, _("renamed"), NO);
+	parm[n] = M_define_option(n, _("renamed"), NO);
     }
 
     if (G_parser(argc, argv))
@@ -64,6 +65,8 @@ int main(int argc, char *argv[])
 	    continue;
 	i = 0;
 	while (parm[n]->answers[i]) {
+	    int renamed;
+
 	    old = parm[n]->answers[i++];
 	    new = parm[n]->answers[i++];
 	    if (!M_find(n, old, mapset)) {
@@ -86,7 +89,12 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 
-	    if (Rast_is_reclassed_to(old, mapset, &nrmaps, &rmaps) > 0) {
+	    if ((renamed = M_do_rename(n, old, new)) == 1) {
+		result = EXIT_FAILURE;
+	    }
+
+	    if (!renamed && strcmp(parm[n]->key, "rast") == 0 &&
+		Rast_is_reclassed_to(old, mapset, &nrmaps, &rmaps) > 0) {
 		int ptr, l;
 		char buf1[256], buf2[256], buf3[256], *str;
 		FILE *fp;
@@ -131,9 +139,6 @@ int main(int argc, char *argv[])
 		    G_free(str);
 		    fclose(fp);
 		}
-	    }
-	    if (M_do_rename(n, old, new) == 1) {
-		result = EXIT_FAILURE;
 	    }
 	}
     }
