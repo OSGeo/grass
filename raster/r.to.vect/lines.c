@@ -497,7 +497,7 @@ static int update_list(int count)
     default:
 	{
 	    double x, y;
-	    x = Rast_col_to_easting((double)(col + .5), &cell_head);
+	    x = Rast_col_to_easting((double)(col - .5), &cell_head);
 	    y = Rast_row_to_northing((double)(row + .5), &cell_head);
 	    G_message(_("Crowded cell at (%f, %f): row %d, col %d, count %d"),
 		      x, y, row, col - 1, count);
