@@ -266,7 +266,7 @@ class Columns(object):
                 odict[name] = ctype
             self.odict = odict
         values = ','.join(['?', ] * self.__len__())
-        kv = ','.join(['%s=?' % k for k in self.odict.keys()])
+        kv = ','.join(['%s=?' % k for k in self.odict.keys() if k != self.key])
         where = "%s=?" % self.key
         self.insert_str = sql.INSERT.format(tname=self.tname, values=values)
         self.update_str = sql.UPDATE_WHERE.format(tname=self.tname,
@@ -1096,22 +1096,23 @@ class Table(object):
             return cur.executemany(self.columns.insert_str, values)
         return cur.execute(self.columns.insert_str, values)
 
-    def update(self, key, values, cursor=None, many=False):
-        """Update a column for each row
+    def update(self, key, values, cursor=None):
+        """Update a table row
 
-        :param key: the name of column
-        :param values: the values to insert
-        :type values: str
+        :param key: the rowid
+        :type key: int
+        :param values: the values to insert without row id.
+                       For example if we have a table with four columns:
+                       cat, c0, c1, c2 the values list should
+                       containing only c0, c1, c2 values.
+        :type values: list
         :param cursor: the cursor to connect, if None it use the cursor
-                     of connection table object
+                       of connection table object
         :type cursor: Cursor object
-        :param many: True to run executemany function
-        :type many: bool
         """
         cur = cursor if cursor else self.conn.cursor()
-        vals = list(values)
-        vals.append(key)
-        return cur.execute(self.columns.update_str, vals)
+        values.append(key)
+        return cur.execute(self.columns.update_str, values)
 
     def create(self, cols, name=None, overwrite=False, cursor=None):
         """Create a new table
