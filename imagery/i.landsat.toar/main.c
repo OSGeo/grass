@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE in_data_type;
 
     struct Option *input_prefix, *output_prefix, *metfn, *sensor, *adate,
-	*pdate, *elev, *bgain, *metho, *perc, *dark, *atmo, *lsatmet;
+	*pdate, *elev, *bgain, *metho, *perc, *dark, *atmo, *lsatmet, *oscale;
     char *inputname, *met, *outputname, *sensorname;
     struct Flag *frad, *print_meta, *named;
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     char band_in[GNAME_MAX], band_out[GNAME_MAX];
     int i, j, q, method, pixel, dn_dark[MAX_BANDS], dn_mode[MAX_BANDS], dn_sat;
     int overwrite;
-    double qcal, rad, ref, percent, ref_mode, rayleigh;
+    double qcal, rad, ref, percent, ref_mode, rayleigh, scale;
     unsigned long hist[QCALMAX], h_max;
 
     struct Colors colors;
@@ -213,6 +213,13 @@ int main(int argc, char *argv[])
     lsatmet->descriptions = desc;
     lsatmet->guisection = _("Settings");
 
+    oscale = G_define_option();
+    oscale->key = "scale";
+    oscale->type = TYPE_DOUBLE;
+    oscale->answer = "1.0";
+    oscale->required = NO;
+    oscale->description = _("Scale factor for output");
+
     /* define the different flags */
     frad = G_define_flag();
     frad->key = 'r';
@@ -269,6 +276,7 @@ int main(int argc, char *argv[])
     percent = atof(perc->answer);
     pixel = atoi(dark->answer);
     rayleigh = atof(atmo->answer);
+    scale = atof(oscale->answer);
 
     /*
      * Data from metadata file
@@ -612,7 +620,7 @@ int main(int argc, char *argv[])
 			    ref = lsat_rad2temp(rad, &lsat.band[i]);
 			}
 			else {
-			    ref = lsat_rad2ref(rad, &lsat.band[i]);
+			    ref = lsat_rad2ref(rad, &lsat.band[i]) * scale;
 			    if (ref < 0. && method > DOS)
 				ref = 0.;
 			}
