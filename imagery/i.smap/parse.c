@@ -37,7 +37,7 @@ int parse(int argc, char *argv[], struct parms *parms)
     blocksize->description = _("Size of submatrix to process at one time");
     blocksize->required = NO;
     blocksize->type = TYPE_INTEGER;
-    blocksize->answer = "128";
+    blocksize->answer = "1024";
 
     ml = G_define_flag();
     ml->key = 'm';
