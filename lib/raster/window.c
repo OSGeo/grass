@@ -223,9 +223,6 @@ double Rast_easting_to_col(double east, const struct Cell_head *window)
  *  - row+0.5 will return the northing for the center of the row.
  *  - row+1.0 will return the northing for the southern edge of the row.
  *
- * <b>Note:</b> The result is a <i>double</i>. Casting it to an
- * <i>int</i> will give the column number.
- *
  * \param row row number
  * \param[in] window pointer to Cell_head
  *
