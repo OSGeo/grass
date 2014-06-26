@@ -1981,6 +1981,9 @@
       <module-item name="g.gui.timeline">
         <label>Plot temporal extents</label>
       </module-item>
+      <module-item name="g.gui.tplot">
+        <label>Plot temporal values</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="GuiTools">
