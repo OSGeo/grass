@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 
 import wx
 
@@ -284,7 +285,9 @@ class HistogramFrame(wx.Frame):
         self.encoding = 'ISO-8859-1' # default encoding for display fonts
         
         self.toolbar = HistogramToolbar(parent = self)
-        self.SetToolBar(self.toolbar)
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform != 'darwin':
+            self.SetToolBar(self.toolbar)
 
         # find selected map
         # might by moved outside this class
@@ -482,7 +485,11 @@ class HistogramToolbar(BaseToolbar):
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
-        
+
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform == 'darwin':
+            parent.SetToolBar(self)
+
         self.InitToolbar(self._toolbarData())
         
         # realize the toolbar
