@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     int infile;
-    size_t xtile_size, cell_size;
+    size_t cell_size;
     int ytile, xtile, y, overlap;
     int *outfiles;
     void *inbuf;
@@ -58,14 +58,14 @@ int main(int argc, char *argv[])
     parm.width->type = TYPE_INTEGER;
     parm.width->required = YES;
     parm.width->multiple = NO;
-    parm.width->description = _("Width of tiles");
+    parm.width->description = _("Width of tiles (columns)");
 
     parm.height = G_define_option();
     parm.height->key = "height";
     parm.height->type = TYPE_INTEGER;
     parm.height->required = YES;
     parm.height->multiple = NO;
-    parm.height->description = _("Height of tiles");
+    parm.height->description = _("Height of tiles (rows)");
 
     parm.overlap = G_define_option();
     parm.overlap->key = "overlap";
@@ -121,8 +121,10 @@ int main(int argc, char *argv[])
     G_debug(1, "X: %d * %d, Y: %d * %d",
 	    xtiles, dst_w.cols, ytiles, dst_w.rows);
 
+    G_message(_("Generating %d x %d = %d tiles..."), xtiles, ytiles, xtiles * ytiles);
     for (ytile = 0; ytile < ytiles; ytile++) {
 	G_debug(1, "reading y tile: %d", ytile);
+	G_percent(ytile, ytiles, 2);
 	for (xtile = 0; xtile < xtiles; xtile++) {
 	    char name[GNAME_MAX];
 	    sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);

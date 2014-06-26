@@ -21,11 +21,12 @@ g.region rast=elevation -p
 # rows:       1350
 # cols:       1500
 
-r.tile input=elevation output=elev_tile width=135 height=150
+# generating 2 x 2 = 4 tiles (width=1500/2, height=rows/2)
+r.tile input=elevation output=elev_tile width=750 height=675
 </pre></div>
 
-creates 108 tiles with the prefix <em>elev_tile</em> (named:
-elev_tile-000-000, elev_tile-000-001, elev_tile-000-002, ...).
+creates 4 tiles with the prefix <em>elev_tile</em> (named:
+elev_tile-000-000, elev_tile-000-001, elev_tile-001-000, ...).
 
 <h2>SEE ALSO</h2>
 
