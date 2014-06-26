@@ -445,13 +445,13 @@ class MapCalcFrame(wx.Frame):
         the raster map name must be then quoted.
         """
         win = self.FindWindowById(event.GetId())
-        item = event.GetString().strip()
+        item = win.GetValue().strip()
         if any((char in item) for char in self.charactersToQuote):
             item = '"' + item + '"'
         self._addSomething(item)
-        
-        win.ChangeValue('') # reset
-        
+
+        win.ChangeValue('')  # reset
+
     def OnUpdateStatusBar(self, event):
         """Update statusbar text"""
         command = self._getCommand()
