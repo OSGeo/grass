@@ -38,8 +38,9 @@ except ImportError:
 from core.utils import _
 
 import grass.temporal as tgis
-from core.gcmd import GError, GException, RunCommand
+from core.gcmd import GMessage, GError, GException, RunCommand
 from gui_core import gselect
+from core import globalvar
 from grass.pygrass.vector.geometry import Point
 from grass.pygrass.raster import RasterRow
 from collections import OrderedDict
@@ -121,35 +122,30 @@ class TplotFrame(wx.Frame):
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.datasetSelect = gselect.Select(parent=self.panel, id=wx.ID_ANY,
-                                            type='strds', multiple=True, size=(150, -1))
+                                            size=globalvar.DIALOG_GSELECT_SIZE,
+                                            type='strds', multiple=True)
         self.drawButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Draw"))
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
         self.helpButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
 
-        self.xcoor = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                   label=_('Insert longitude (x) coordinate'))
+        self.coor = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                  label=_('X and Y coordinates separated by comma:'))
 
-        self.xcoorval = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
-                                    size=(150, -1))
-        self.ycoor = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                   label=_('Insert latitude (y) coordinate'))
-
-        self.ycoorval = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY,
-                                    size=(150, -1))
+        self.coorval = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY)
+        self.coorval.SetToolTipString(_("Coordinates can be obtained for example "
+                                        "by right-clicking on Map Display."))
 
         gridSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
-                                    label=_("Select space time dataset(s):")),
+                                    label=_("Select space time raster dataset(s):")),
                       pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(self.datasetSelect, pos=(1, 0), flag=wx.EXPAND)
 
-        gridSizer.Add(self.xcoor, pos=(2, 0), flag=wx.EXPAND)
-        gridSizer.Add(self.ycoor, pos=(2, 1), flag=wx.EXPAND)
+        gridSizer.Add(self.coor, pos=(2, 0), flag=wx.EXPAND)
 
-        gridSizer.Add(self.xcoorval, pos=(3, 0), flag=wx.EXPAND)
-        gridSizer.Add(self.ycoorval, pos=(3, 1), flag=wx.EXPAND)
-        gridSizer.Add(self.drawButton, pos=(3, 2), flag=wx.EXPAND)
-        gridSizer.Add(self.helpButton, pos=(3, 3), flag=wx.EXPAND)
+        gridSizer.Add(self.coorval, pos=(3, 0), flag=wx.EXPAND)
+        gridSizer.Add(self.drawButton, pos=(3, 1), flag=wx.EXPAND)
+        gridSizer.Add(self.helpButton, pos=(3, 2), flag=wx.EXPAND)
 
         self.vbox.Add(gridSizer, proportion=0, flag=wx.EXPAND | wx.ALL,
                       border=10)
@@ -286,8 +282,12 @@ class TplotFrame(wx.Frame):
             return
 
         self.datasets = datasets
-        coors = [self.xcoorval.GetValue().strip(),
-                 self.ycoorval.GetValue().strip()]
+        try:
+            coordx, coordy = self.coorval.GetValue().split(',')
+            coordx, coordy = float(coordx), float(coordy)
+        except ValueError:
+            GMessage(_("Incorrect format of coordinates, should be: x,y"))
+        coors = [coordx, coordy]
         if coors:
             try:
                 self.poi = Point(float(coors[0]), float(coors[1]))
@@ -394,8 +394,7 @@ class TplotFrame(wx.Frame):
         self.dpi = dpi
         self.datasetSelect.SetValue(','.join(map(lambda x: x[0] + '@' + x[1],
                                                  datasets)))
-        self.xcoorval.SetValue(str(coors[0]))
-        self.ycoorval.SetValue(str(coors[1]))
+        self.coorval.SetValue(','.join(coors))
         self._redraw()
 
 
