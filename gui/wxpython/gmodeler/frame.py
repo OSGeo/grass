@@ -89,7 +89,9 @@ class ModelFrame(wx.Frame):
         self.SetMenuBar(self.menubar)
         
         self.toolbar = ModelerToolbar(parent = self)
-        self.SetToolBar(self.toolbar)
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform != 'darwin':
+            self.SetToolBar(self.toolbar)
         
         self.statusbar = self.CreateStatusBar(number = 1)
         
