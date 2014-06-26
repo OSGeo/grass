@@ -40,7 +40,6 @@ from core.utils import _
 import grass.temporal as tgis
 from core.gcmd import GError, GException, RunCommand
 from gui_core import gselect
-from core import globalvar
 from grass.pygrass.vector.geometry import Point
 from grass.pygrass.raster import RasterRow
 from collections import OrderedDict
@@ -71,6 +70,7 @@ class TplotFrame(wx.Frame):
 
         tgis.init(True)
         self.datasets = []
+        self.output = None
         self.timeData = {}
         self._layout()
         self.temporalType = None
@@ -121,19 +121,11 @@ class TplotFrame(wx.Frame):
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.datasetSelect = gselect.Select(parent=self.panel, id=wx.ID_ANY,
-#                                            size=globalvar.DIALOG_GSELECT_SIZE,
-                                            type='stds', size=(150, -1))
+                                            type='strds', multiple=True, size=(150, -1))
         self.drawButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Draw"))
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
         self.helpButton = wx.Button(self.panel, id=wx.ID_ANY, label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
-#        self.view3dCheck = wx.CheckBox(self.panel, id=wx.ID_ANY,
-#                                       label=_("3D plot of queried data"))
-#        self.view3dCheck.Bind(wx.EVT_CHECKBOX, self.OnRedraw)
-#        if not check_version(1, 0, 0):
-#            self.view3dCheck.SetLabel(_("3D plot of queried data "
-#                                        "(matplotlib >= 1.0.0)"))
-#            self.view3dCheck.Disable()
 
         self.xcoor = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
                                    label=_('Insert longitude (x) coordinate'))
@@ -159,7 +151,6 @@ class TplotFrame(wx.Frame):
         gridSizer.Add(self.drawButton, pos=(3, 2), flag=wx.EXPAND)
         gridSizer.Add(self.helpButton, pos=(3, 3), flag=wx.EXPAND)
 
-#        gridSizer.Add(self.view3dCheck, pos=(4, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         self.vbox.Add(gridSizer, proportion=0, flag=wx.EXPAND | wx.ALL,
                       border=10)
 
@@ -228,60 +219,7 @@ class TplotFrame(wx.Frame):
         self.temporalType = mode
         return
 
-    def _draw3dFigure(self):
-        """Draws 3d view (spatio-temporal extents).
-
-
-        Only for matplotlib versions >= 1.0.0.
-        Earlier versions cannot draw time ticks and alpha
-        and it has a slightly different API.
-        """
-        pass
-#        self.axes3d.clear()
-#        self.axes3d.grid(False)
-#        # self.axes3d.grid(True)
-#        if self.temporalType == 'absolute':
-#            if check_version(1, 1, 0):
-#                self.axes3d.zaxis_date()
-#            convert = mdates.date2num
-#        else:
-#            convert = lambda x: x
-#
-#        colors = cycle(COLORS)
-#        plots = []
-#        for name in self.datasets:
-#            name = name[0] + '@' + name[1]
-#            startZ = convert(self.timeData[name]['start_datetime'])
-#            mapType = self.timeData[name]['temporalMapType']
-#            if mapType == 'interval':
-#                dZ = convert(self.timeData[name]['end_datetime']) - startZ
-#
-#            else:
-#                dZ = [0] * len(startZ)
-#
-#            startX = self.timeData[name]['west']
-#            dX = self.timeData[name]['east'] - np.array(startX)
-#            startY = self.timeData[name]['south']
-#            dY = self.timeData[name]['north'] - np.array(startY)
-#
-#            color = colors.next()
-#            plots.append(self.axes3d.bar3d(startX, startY, startZ, dX, dY, dZ,
-#                                           color=color, alpha=ALPHA))
-
-#        params = grass.read_command('g.proj', flags='g')
-#        params = grass.parse_key_val(params)
-#        if 'unit' in params:
-#            self.axes3d.set_xlabel(_("X [%s]") % params['unit'])
-#            self.axes3d.set_ylabel(_("Y [%s]") % params['unit'])
-#        else:
-#            self.axes3d.set_xlabel(_("X"))
-#            self.axes3d.set_ylabel(_("Y"))
-#
-#        self.axes3d.set_zlabel(_('Time'))
-#        self.axes3d.mouse_init()
-#        self.canvas.draw()
-
-    def _draw2dFigure(self):
+    def _drawFigure(self):
         """Draws or print 2D plot (temporal extents)"""
         self.axes2d.clear()
         self.axes2d.grid(False)
@@ -301,7 +239,6 @@ class TplotFrame(wx.Frame):
         plots = []
         lookUp = LookUp(self.timeData, self.invconvert)
         for i, name in enumerate(self.datasets):
-            fullname = name[0] + '@' + name[1]
             name = name[0]
             yticksNames.append(name)  # just name; with mapset it would be long
             yticksPos.append(i)
@@ -324,10 +261,10 @@ class TplotFrame(wx.Frame):
         else:
             self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         self.axes2d.set_ylabel(', '.join(yticksNames))
-        
+
         #legend
         handles, labels = self.axes2d.get_legend_handles_labels()
-        self.axes2d.legend()
+        self.axes2d.legend(loc=0)
         if self.output:
             self.canvas.print_figure(filename=self.output, dpi=self.dpi)
         else:
@@ -368,29 +305,13 @@ class TplotFrame(wx.Frame):
         # axes3d are physically removed
         if not self.axes2d:
             self.axes2d = self.fig.add_subplot(1, 1, 1)
-        self._draw2dFigure()
-#        if check_version(1, 0, 0):
-#            if self.view3dCheck.IsChecked():
-#                self.axes2d.change_geometry(2, 1, 1)
-#                if not self.axes3d:
-#                    # do not remove this import - unused but it is required for 3D
-#                    from mpl_toolkits.mplot3d import Axes3D  # pylint: disable=W0611
-#                    self.axes3d = self.fig.add_subplot(2, 1, 2, projection='3d')
-#
-#                self.axes3d.set_visible(True)
-#                self._draw3dFigure()
-#            else:
-#                if self.axes3d:
-#                    self.fig.delaxes(self.axes3d)
-#                    self.axes3d = None
-#                self.axes2d.change_geometry(1, 1, 1)
-#                self.canvas.draw()
+        self._drawFigure()
 
     def _checkDatasets(self, datasets):
         """Checks and validates datasets.
 
         Reports also type of dataset (e.g. 'strds').
-        
+
         :param list datasets: list of temporal dataset's name
         :return: (mapName, mapset, type)
         """
@@ -476,11 +397,6 @@ class TplotFrame(wx.Frame):
         self.xcoorval.SetValue(str(coors[0]))
         self.ycoorval.SetValue(str(coors[1]))
         self._redraw()
-
-#    def Show3D(self, show):
-#        """Show also 3D if possible"""
-#        if check_version(1, 0, 0):
-#            self.view3dCheck.SetValue(show)
 
 
 class LookUp:

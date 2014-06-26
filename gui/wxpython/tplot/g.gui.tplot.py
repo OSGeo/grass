@@ -34,19 +34,16 @@
 #%end
 #%option G_OPT_F_OUTPUT
 #% required: no
+#% label: Name for output file
+#% description: Add extension to specify format (.png, .pdf, .svg)
 #%end
 #%option
 #% key: dpi
 #% type: integer
 #% label: The DPI for output image
-#% description: To use only with output parameters
+#% description: To use only with output parameter
 #% required: no
 #%end
-
-## #%flag
-## #% key: 3
-## #% description: Show also 3D plot of spatio-temporal extents
-## #%end
 
 import  wx
 
@@ -65,7 +62,7 @@ def main():
     coords = options['coordinates'].strip().split(',')
     output = options['output']
     dpi = options['dpi']
-#    view3d = flags['3']
+    dpi = int(dpi) if dpi else None
     if dpi and not output:
         grass.warning(_("No output filename set, so DPI option will not used"))
 
@@ -73,8 +70,8 @@ def main():
     frame = TplotFrame(None)
     frame.SetDatasets(datasets, coords, output, dpi)
     if output:
-        return 
-#    frame.Show3D(view3d)
+        return
+
     frame.Show()
     app.MainLoop()
 
