@@ -179,8 +179,9 @@ static void write_support_files(int xtile, int ytile, int overlap)
     Rast_write_cats(name, &cats);
 
     /* record map metadata/history info */
+    G_debug(1, "Tile %d,%d of %s: writing %s", xtile, ytile, parm.rastin->answer, name);
     sprintf(title, "Tile %d,%d of %s", xtile, ytile, parm.rastin->answer);
-    Rast_put_cell_title(parm.rastout->answer, title);
+    Rast_put_cell_title(name, title);
 
     Rast_short_history(name, "raster", &history);
     Rast_set_history(&history, HIST_DATSRC_1, parm.rastin->answer);
