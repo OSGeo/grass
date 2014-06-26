@@ -1,31 +1,3 @@
-menudata.xml is in part maintained by this script:
-  gui/wxpython/tools/update_menudata.py
-
-which updates the description and keywords (based on module's
-module->label or module->description, module->keywords), and is in
-part maintained by editing the file directly.
-
-Other items (menu structure, menu item label descriptions) are
-untouched by the update_menudata.py script and should be edited
-in the menudata.xml file directly.
-
-
-menuitem breakdown:
-
-<command>   The name of the executable.  e.g. "r.info".
-
-<label>     The menu short description. [maintained in this file]
-
-<handler>   The python function that handles the command.
-	     e.g.OnMenuCmd, many others..
-
-<help>      automatically populated by update_menudata.py from
-	     the <command> module's module->description (or if
-	     it exists, module->label).  [do not edit]
-
-<keywords>  automatically populated by update_menudata.py from
-	     the <command> module's module->keywords.  [do not edit]
-	     (G_add_keyword() in GRASS 7+)
-
-<icon>      optional icon to be shown in the menu
+Find more info about how to add item in the menu:
+http://grass.osgeo.org/programming7/wxguitoolboxes.html
 
