@@ -37,7 +37,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --with-mysql            support MySQL functionality (default: no)"
 ac_help="$ac_help
-  --with-sqlite           support SQLite functionality (default: no)"
+  --with-sqlite           support SQLite functionality (default: yes)"
 ac_help="$ac_help
   --with-ffmpeg           support FFMPEG functionality (default: no)"
 ac_help="$ac_help
@@ -1735,7 +1735,7 @@ if test "${with_sqlite+set}" = set; then
   withval="$with_sqlite"
   :
 else
-  with_sqlite=no
+  with_sqlite=yes
 fi
 
 
