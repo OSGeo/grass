@@ -30,7 +30,11 @@ class ModelerToolbar(BaseToolbar):
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
-        
+
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform == 'darwin':
+            parent.SetToolBar(self)
+
         self.InitToolbar(self._toolbarData())
         
         # realize the toolbar

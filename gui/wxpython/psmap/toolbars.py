@@ -30,7 +30,11 @@ class PsMapToolbar(BaseToolbar):
         @param parent parent window
         """
         BaseToolbar.__init__(self, parent, toolSwitcher)
-        
+
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform == 'darwin':
+            parent.SetToolBar(self)
+
         self.InitToolbar(self._toolbarData())
         self._default = self.pointer
         
