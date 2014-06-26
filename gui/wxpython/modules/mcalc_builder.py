@@ -262,7 +262,9 @@ class MapCalcFrame(wx.Frame):
         self._layout()
 
         self.SetMinSize(self.GetBestSize())
-    
+        # workaround for http://trac.wxwidgets.org/ticket/13628
+        self.SetSize(self.GetBestSize())
+
     def _return_funct(self,event):
         i = event.GetString()
         self._addSomething(self.funct_dict[i])
