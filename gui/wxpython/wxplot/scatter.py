@@ -40,7 +40,9 @@ class ScatterFrame(BasePlotFrame):
         BasePlotFrame.__init__(self, parent, size = size, **kwargs)
         
         self.toolbar = ScatterToolbar(parent = self)
-        self.SetToolBar(self.toolbar)
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform != 'darwin':
+            self.SetToolBar(self.toolbar)
         self.SetTitle(_("GRASS Bivariate Scatterplot Tool"))
 
         #
@@ -267,7 +269,11 @@ class ScatterToolbar(BaseToolbar):
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
-        
+
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform == 'darwin':
+            parent.SetToolBar(self)
+
         self.InitToolbar(self._toolbarData())
         
         # realize the toolbar

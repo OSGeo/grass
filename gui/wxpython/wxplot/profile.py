@@ -54,7 +54,9 @@ class ProfileFrame(BasePlotFrame):
         self.controller.transectChanged.connect(self.SetTransect)
         self.transect = []
         self.toolbar = ProfileToolbar(parent = self)
-        self.SetToolBar(self.toolbar)
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform != 'darwin':
+            self.SetToolBar(self.toolbar)
         self.SetTitle(_("GRASS Profile Analysis Tool"))
         self._units = units
 
@@ -422,7 +424,11 @@ class ProfileToolbar(BaseToolbar):
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
-        
+
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform == 'darwin':
+            parent.SetToolBar(self)
+
         self.InitToolbar(self._toolbarData())
         
         # realize the toolbar

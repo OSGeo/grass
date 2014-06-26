@@ -68,7 +68,9 @@ class PsMapFrame(wx.Frame):
 
         self._toolSwitcher = ToolSwitcher()
         self.toolbar = PsMapToolbar(parent=self, toolSwitcher=self._toolSwitcher)
-        self.SetToolBar(self.toolbar)
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform != 'darwin':
+            self.SetToolBar(self.toolbar)
         
         self.iconsize = (16, 16)
         #satusbar
