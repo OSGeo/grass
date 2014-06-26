@@ -166,7 +166,9 @@ class PsMapFrame(wx.Frame):
         
         self._layout()
         self.SetMinSize(wx.Size(775, 600))
-        
+        # workaround for http://trac.wxwidgets.org/ticket/13628
+        self.SetSize(self.GetBestSize())
+
         self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
