@@ -141,6 +141,8 @@ class MapCalcFrame(wx.Frame):
         self.btn_load = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                   label = _("&Load"))
         self.btn_load.SetToolTipString(_('Load expression from file'))
+        self.btn_copy = wx.Button(parent=self.panel, id=wx.ID_COPY)
+        self.btn_copy.SetToolTipString(_("Copy the current command string to the clipboard"))
         
         self.btn = dict()        
         self.btn['pow'] = wx.Button(parent = self.panel, id = wx.ID_ANY, label = "^")
@@ -247,6 +249,7 @@ class MapCalcFrame(wx.Frame):
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         self.btn_save.Bind(wx.EVT_BUTTON, self.OnSaveExpression)
         self.btn_load.Bind(wx.EVT_BUTTON, self.OnLoadExpression)
+        self.btn_copy.Bind(wx.EVT_BUTTON, self.OnCopy)
         
         # self.mapselect.Bind(wx.EVT_TEXT, self.OnSelectTextEvt)
         self.mapselect.Bind(wx.EVT_TEXT, self.OnSelect)
@@ -254,6 +257,7 @@ class MapCalcFrame(wx.Frame):
         self.function.Bind(wx.EVT_TEXT_ENTER, self.OnSelect)
         self.newmaptxt.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
         self.text_mcalc.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
+        self.overwrite.Bind(wx.EVT_CHECKBOX, self.OnUpdateStatusBar)
 
         self._layout()
 
@@ -335,6 +339,8 @@ class MapCalcFrame(wx.Frame):
         buttonSizer4.Add(item = self.btn_load,
                          flag = wx.ALL, border = 5)
         buttonSizer4.Add(item = self.btn_save,
+                         flag = wx.ALL, border = 5)                         
+        buttonSizer4.Add(item = self.btn_copy,
                          flag = wx.ALL, border = 5)                         
         buttonSizer4.AddSpacer(30)
         buttonSizer4.Add(item = self.btn_help,
@@ -439,23 +445,32 @@ class MapCalcFrame(wx.Frame):
         the raster map name must be then quoted.
         """
         win = self.FindWindowById(event.GetId())
-        item = event.GetString().strip()
+        item = win.GetValue().strip()
         if any((char in item) for char in self.charactersToQuote):
             item = '"' + item + '"'
         self._addSomething(item)
-        
-        win.ChangeValue('') # reset
-        
+
+        win.ChangeValue('')  # reset
+
     def OnUpdateStatusBar(self, event):
-        """!Update statusbar text"""
+        """Update statusbar text"""
+        command = self._getCommand()
+        self.SetStatusText(command)
+        event.Skip()
+
+    def _getCommand(self):
+        """Returns entire command as string."""
         expr = self.text_mcalc.GetValue().strip().replace("\n", " ")
         cmd = 'r.mapcalc'
         if self.rast3d:
             cmd = 'r3.mapcalc'
-        self.SetStatusText("{cmd} '{new} = {expr}'".format(cmd=cmd, expr=expr,
-                                                           new=self.newmaptxt.GetValue()))
-        event.Skip()
-        
+        overwrite = ''
+        if self.overwrite.IsChecked():
+            overwrite = ' --overwrite'
+        return '{cmd} "{new} = {expr}"{overwrite}'.format(cmd=cmd, expr=expr,
+                                                          new=self.newmaptxt.GetValue(),
+                                                          overwrite=overwrite)
+
     def _addSomething(self, what):
         """!Inserts operators, map names, and functions into text area
         """
@@ -589,7 +604,16 @@ class MapCalcFrame(wx.Frame):
             self.text_mcalc.SetInsertionPointEnd()
         
         dlg.Destroy()
-                
+
+    def OnCopy(self, event):
+        command = self._getCommand()
+        cmddata = wx.TextDataObject()
+        cmddata.SetText(command)
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(cmddata)
+            wx.TheClipboard.Close()
+            self.SetStatusText(_("'{cmd}' copied to clipboard").format(cmd=command))
+
     def OnClear(self, event):
         """!Clears text area
         """
