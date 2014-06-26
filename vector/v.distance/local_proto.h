@@ -64,4 +64,4 @@ int line2area(const struct Map_info *To,
 	      int geodesic);
 
 /* print.c */
-int print_upload(NEAR *, UPLOAD *, int, dbCatValArray *, dbCatVal *);
+int print_upload(NEAR *, UPLOAD *, int, dbCatValArray *, dbCatVal *, char *);
