@@ -177,7 +177,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPressed)
         self.Bind(wx.stc.EVT_STC_AUTOCOMP_SELECTION, self.OnItemSelected)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemChanged)
-        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+        if sys.platform != 'darwin':  # unstable on Mac with wxPython 3
+            self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
 
         # signal which requests showing of a notification
         self.showNotification = Signal('GPromptSTC.showNotification')
