@@ -179,7 +179,7 @@ from grass.script import core as grass
 
 def cleanup():
     grass.run_command('g.mremove', flags = 'f',
-		      rast = 'tmp.r3xyz.%d.*' % os.getpid(),
+		      type = "rast", pattern = 'tmp.r3xyz.%d.*' % os.getpid(),
 		      quiet = True)
 
 

@@ -300,7 +300,7 @@ def main():
 
         
         # Cleanup
-        grass.run_command('g.mremove', flags='f', quiet=True, rast='tmp%s*,%s' % (pid,panmatch))
+        grass.run_command('g.mremove', flags='f', quiet=True, type="rast", pattern='tmp%s*,%s' % (pid,panmatch))
         
     #Could add other sharpening algorithms here, e.g. wavelet transformation
 
@@ -341,7 +341,7 @@ def main():
         grass.raster_history("%s_%s" % (out, ch))
 
     # Cleanup        
-    grass.run_command('g.mremove', flags="f", rast="tmp%s*" % pid, quiet=True)
+    grass.run_command('g.mremove', flags="f", type="rast", pattern="tmp%s*" % pid, quiet=True)
 
         
 def matchhist(original, target, matched):

@@ -520,11 +520,12 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             for chunk in chunklist:
                 stringlist = ",".join(chunk)
                 if self.debug:
-                    print "g.mremove vect=%s"%(stringlist)
+                    print "g.mremove type=vect pattern=%s"%(stringlist)
 
                 if self.run:
                     m = copy.deepcopy(self.m_mremove)
-                    m.inputs["vect"].value = stringlist
+                    m.inputs["type"].value = "vect"
+                    m.inputs["pattern"].value = stringlist
                     m.flags["f"].value = True
                     m.run()
 
