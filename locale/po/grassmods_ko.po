@@ -524,7 +524,7 @@ msgstr "출력할 격자지도"
 #: ../general/g.mapset/main.c:57 ../general/g.mapset/main.c:67
 #: ../general/g.mapset/main.c:77
 msgid "Settings"
-msgstr ""
+msgstr "설정"
 
 #: ../db/db.login/main.c:66
 #, fuzzy
@@ -4439,7 +4439,7 @@ msgstr "출력할 격자지도"
 #: ../locale/scriptstrings/r.mask_to_translate.c:8
 #: ../general/g.mremove/main.c:85
 msgid "Raster"
-msgstr ""
+msgstr "격자지도"
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:6
 #, fuzzy
@@ -39710,19 +39710,19 @@ msgid "execl() failed"
 msgstr ""
 
 #: ../general/g.remove/main.c:38 ../general/g.mremove/check_reclass.c:16
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s@%s> is a base map for <%s>. Remove forced."
-msgstr "출력할 격자지도"
+msgstr "격자지도 <%s@%s>는 <%s>의 기반지도입니다. 강제로 지웁니다."
 
 #: ../general/g.remove/main.c:41
 #, c-format
-msgid "Raster <%s@%s> is a base map. Remove reclassed map <%s> first."
-msgstr ""
+msgid "Raster map <%s@%s> is a base map. Remove reclassed map <%s> first."
+msgstr "격자지도 <%s@%s>는 기반지도입니다. 재분류된 지도 <%s>를 먼저 삭제하세요."
 
 #: ../general/g.remove/main.c:63 ../general/g.remove/main.c:76
 #, c-format
 msgid "Removing information about reclassed map from <%s@%s> failed"
-msgstr ""
+msgstr "<%s@%s>로부터 재분류된 지도에 대한 정보를 지우는데 실패했습니다"
 
 #: ../general/g.remove/main.c:105
 msgid "Removes data base element files from the user's current mapset."
@@ -39737,85 +39737,81 @@ msgid "removed"
 msgstr "삭제"
 
 #: ../general/g.access/set_perms.c:26
-#, fuzzy
 msgid "Unable to change mapset permissions"
-msgstr "출력할 격자지도"
+msgstr "지도세트의 허가를 바꿀 수 없습니다"
 
 #: ../general/g.access/exp_perms.c:11 ../general/g.access/exp_perms.c:29
 msgid "have"
-msgstr ""
+msgstr "가질 것입니다"
 
 #: ../general/g.access/exp_perms.c:12
 msgid "read "
-msgstr ""
+msgstr "읽기"
 
 #: ../general/g.access/exp_perms.c:15
 msgid "Everyone"
-msgstr ""
+msgstr "모두가"
 
 #: ../general/g.access/exp_perms.c:16
 msgid "has"
-msgstr ""
+msgstr "가지고 있습니다"
 
 #: ../general/g.access/exp_perms.c:19
 msgid "Only users in your group"
-msgstr ""
+msgstr "당신 그룹 내의 사용자만이"
 
 #: ../general/g.access/exp_perms.c:22
 msgid "Only users outside your group"
-msgstr ""
+msgstr "당신 그룹 외의 사용자만이"
 
 #: ../general/g.access/exp_perms.c:25
 msgid "Only you"
-msgstr ""
+msgstr "당신만이"
 
 #: ../general/g.access/exp_perms.c:31
 #, c-format
 msgid "%s %s %s %saccess to mapset %s"
-msgstr ""
+msgstr "%1$s 지도세트 %5$s에 대한 %4$s권한을 %2$s %3$s"
 
 #: ../general/g.access/exp_perms.c:32
 msgid "will"
-msgstr ""
+msgstr "앞으로"
 
 #: ../general/g.access/exp_perms.c:32
 msgid "now"
-msgstr ""
+msgstr "현재"
 
 #: ../general/g.access/main.c:39
-#, fuzzy
 msgid "permission"
-msgstr "출력할 격자지도"
+msgstr "허가"
 
 #: ../general/g.access/main.c:41
 msgid "Controls access to the current mapset for other users on the system."
-msgstr ""
+msgstr "현재 지도세트에 대한 시스템에 있는 다른 사용자의 접근을 설정합니다."
 
 #: ../general/g.access/main.c:42
-#, fuzzy
 msgid "If no option given, prints current status."
-msgstr "출력할 격자지도"
+msgstr "옵션이 주어지지 않으면 현재상태를 출력합니다."
 
 #: ../general/g.access/main.c:49
 msgid "Access for group"
-msgstr ""
+msgstr "그룹의 접근"
 
 #: ../general/g.access/main.c:57
 msgid "Access for others"
-msgstr ""
+msgstr "다른 사용자의 접근"
 
 #: ../general/g.access/main.c:64
 msgid "UNIX filesystem access controls are not supported by MS-Windows"
-msgstr ""
+msgstr "MS 윈도우는 유닉스 파일시스템의 접근제한을 지원하지 않습니다"
 
 #: ../general/g.access/main.c:72
 msgid "Access to the PERMANENT mapset must be open, nothing changed"
-msgstr ""
+msgstr "PERMANENT 지도세트에 대한 접근은 열려 있어야 합니다. 아무것도 바꾸지 않았습니다."
 
 #: ../general/g.access/main.c:76
-#, fuzzy
 msgid "Unable to determine mapset permissions"
-msgstr "출력할 격자지도"
+msgstr "지도세트의 허가를 결정하지 못 했습니다"
 
 #: ../general/g.ppmtopng/main.c:34
 #, fuzzy, c-format
@@ -40228,29 +40224,18 @@ msgstr "기반 격자지도를 지웁니다"
 
 #: ../general/g.mremove/main.c:103
 msgid "The following data base element files would be deleted:"
-msgstr ""
+msgstr "다음의 데이타베이스 요소파일들이 지워질 것입니다:"
 
 #: ../general/g.mremove/main.c:127 ../general/g.mlist/main.c:174
 #: ../general/g.mlist/main.c:198
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to compile pattern <%s>"
-msgstr "출력할 격자지도"
+msgstr "패턴 <%s>를 컴파일하지 못 했습니다"
 
 #: ../general/g.mremove/main.c:152
 #, c-format
 msgid "You must use the force flag (-%c) to actually remove them. Exiting."
-msgstr ""
-
-#: ../general/g.mremove/check_reclass.c:20
-#, fuzzy, c-format
-msgid "Raster map <%s@%s> is a base map. Remove reclassed map first: %s"
-msgstr "출력할 격자지도"
-
-#: ../general/g.mremove/check_reclass.c:43
-#: ../general/g.mremove/check_reclass.c:57
-#, c-format
-msgid "Removing information about reclassed map from [%s@%s] failed"
-msgstr ""
+msgstr "실제로 삭제하기 위해서는 강제 플래그(-%c)를 써야 합니다. 종료합니다."
 
 #: ../general/g.copy/main.c:44
 msgid ""
@@ -40261,7 +40246,7 @@ msgstr ""
 
 #: ../general/g.copy/main.c:51
 msgid "copied"
-msgstr "복사했습니다"
+msgstr "복사"
 
 #: ../general/g.copy/main.c:66
 #, c-format
@@ -40271,12 +40256,12 @@ msgstr "<%s>를 찾지 못 했습니다"
 #: ../general/g.copy/main.c:71
 #, c-format
 msgid "%s=%s,%s: files are the same, no copy required"
-msgstr ""
+msgstr "%s=%s,%s: 파일이 똑같아서 복사할 필요가 없습니다"
 
 #: ../general/g.copy/main.c:76
 #, c-format
 msgid "<%s> already exists"
-msgstr ""
+msgstr "<%s>가 이미 존재합니다"
 
 #: ../general/g.list/main.c:48
 msgid "Lists available GRASS data base files of the user-specified data type."
@@ -41117,7 +41102,7 @@ msgstr "UNITS 출력파일 <%s>로 쓰는데 오류"
 
 #: ../general/g.setproj/main.c:643
 msgid "Unable to write to DEFAULT_WIND region file"
-msgstr "DEFAULT_WIND 지역파일을 쓰지 못 했습니다"
+msgstr "DEFAULT_WIND 지역파일을 쓸 수 없습니다"
 
 #: ../general/g.setproj/main.c:645
 #, c-format
@@ -41203,8 +41188,8 @@ msgid "Name of mapset to list (default: current search path)"
 msgstr "나열할 지도세트의 이름 (기본값: 현재 검색경로)"
 
 #: ../general/g.mlist/main.c:96
-msgid "'.' for current mapset; '..' for all mapsets in location"
-msgstr "현재 지도세트 '.'; 로케이션 안의 모든 지도세트 '..'"
+msgid "'.' for current mapset; '*' for all mapsets in location"
+msgstr "현재 지도세트 '.'; 로케이션 안의 모든 지도세트 '*'"
 
 #: ../general/g.mlist/main.c:119
 msgid "Print data types"
@@ -41349,5 +41334,5 @@ msgstr ""
 #~ msgid "Import a space time vector dataset archive file"
 #~ msgstr "출력할 격자지도"
 
-#~ msgid "Map name search pattern"
-#~ msgstr "지도이름 검색패턴"
+msgid "Map name search pattern"
+msgstr "지도이름 검색패턴"
