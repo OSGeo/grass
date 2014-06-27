@@ -5,16 +5,22 @@ POSIX Extended Regular Expressions. If the <b>-f</b> force flag is not given
 then nothing is removed, instead the list of selected file names is printed to
 <tt>stdout</tt> as a preview of the files to be deleted.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 Delete all raster maps starting with "<tt>tmp_</tt>" in the current mapset:
 
 <div class="code"><pre>
 # show matching raster maps but do not delete yet (as verification)
-g.mremove rast="tmp_*"
+g.mremove type=rast pattern="tmp_*"
 
 # actually delete the matching raster maps
-g.mremove -f rast="tmp_*"
+g.mremove -f type=rast pattern="tmp_*"
+</pre></div>
+
+Delete all raster maps starting with "<tt>stream_</tt>" in the current mapset,
+but exclude those ending with "<tt>_final</tt>":
+<div class="code"><pre>
+g.mremove -f type=rast pattern="stream_*" exclude="*_final"
 </pre></div>
 
 <h2>SEE ALSO</h2>
