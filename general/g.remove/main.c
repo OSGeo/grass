@@ -38,7 +38,7 @@ static int check_reclass(const char *name, const char *mapset, int force)
 		G_warning(_("Raster map <%s@%s> is a base map for <%s>. Remove forced."),
 			  name, mapset, *rmaps);
 	    else
-		G_warning(_("Raster <%s@%s> is a base map. Remove reclassed map <%s> first."),
+		G_warning(_("Raster map <%s@%s> is a base map. Remove reclassed map <%s> first."),
 			  name, mapset, *rmaps);
 	}
 
