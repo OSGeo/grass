@@ -501,6 +501,7 @@ char *G_option_to_separator(const struct Option *);
 FILE *G_open_option_file(const struct Option *);
 void G_close_option_file(FILE *);
 
+/* parser_dependencies.c */
 void G_option_exclusive(void *first, ...);
 void G_option_required(void *first, ...);
 void G_option_requires(void *first, ...);
