@@ -428,11 +428,11 @@ static int region_overlaps(struct Cell_head *window, const char *name,
 {
     int has_region;
     struct Cell_head map_window;
-    RASTER3D_Region wind;
+    RASTER3D_Region region3d;
     struct Map_info Map;
     struct bound_box box;
     int ret;
-    struct G_3dview view;
+    struct G_3dview view3d;
 
     switch (type) {
     case TYPE_RAST:
@@ -440,17 +440,17 @@ static int region_overlaps(struct Cell_head *window, const char *name,
 	has_region = 1;
 	break;
     case TYPE_RAST3D:
-	if (Rast3d_read_region_map(name, mapset, &wind) < 0)
+	if (Rast3d_read_region_map(name, mapset, &region3d) < 0)
 	    G_fatal_error(_("Unable to read header of 3D raster map <%s@%s>"),
 			  name, mapset);
-	Rast3d_region_to_cell_head(&wind, &map_window);
+	Rast3d_region_to_cell_head(&region3d, &map_window);
 	has_region = 1;
 	break;
     case TYPE_VECT:
 	Vect_set_open_level(2);
 	if (Vect_open_old(&Map, name, mapset) < 2)
-	    G_fatal_error(_("Unable to open vector map <%s> on topological level"),
-			  name);
+	    G_fatal_error(_("Unable to open vector map <%s@%s> on topological level"),
+			  name, mapset);
 	Vect_get_map_box(&Map, &box);
 	Vect_close(&Map);
 
@@ -461,18 +461,21 @@ static int region_overlaps(struct Cell_head *window, const char *name,
 	has_region = 1;
 	break;
     case TYPE_3DVIEW:
-	if ((ret = G_get_3dview(name, mapset, &view)) < 0)
-	    G_fatal_error(_("Unable to read 3dview file <%s> in <%s>"),
+	if ((ret = G_get_3dview(name, mapset, &view3d)) < 0)
+	    G_fatal_error(_("Unable to read 3dview file <%s@%s>"),
 			  name, mapset);
-	if (ret == 0)
-	    G_fatal_error(_("Old 3dview file. Region <%s> not found in <%s>"),
+	if (ret == 0) {
+	    G_warning(_("No region in an old 3dview file <%s@%s>. Listing anyway"),
 			  name, mapset);
-
-	map_window.north = view.vwin.north;
-	map_window.south = view.vwin.south;
-	map_window.west = view.vwin.west;
-	map_window.east = view.vwin.east;
-	has_region = 1;
+	    has_region = 0;
+	}
+	else {
+	    map_window.north = view3d.vwin.north;
+	    map_window.south = view3d.vwin.south;
+	    map_window.west = view3d.vwin.west;
+	    map_window.east = view3d.vwin.east;
+	    has_region = 1;
+	}
 	break;
     default:
 	has_region = 0;
