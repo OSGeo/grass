@@ -466,7 +466,7 @@ static int region_overlaps(struct Cell_head *window, const char *name,
 			  name, mapset);
 	if (ret == 0) {
 	    G_warning(_("No region in an old 3dview file <%s@%s>. Listing anyway"),
-			  name, mapset);
+		      name, mapset);
 	    has_region = 0;
 	}
 	else {
