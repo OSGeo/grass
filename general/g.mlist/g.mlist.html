@@ -123,7 +123,7 @@ g.mlist -r type=rast pattern='^soils'
 
 List &quot;tmp&quot; if &quot;tmp&quot; raster map exists:
 <div class="code"><pre>
-g.mlist -r pattern='^tmp$'
+g.mlist -r type=rast pattern='^tmp$'
 </pre></div>
 
 List &quot;tmp0&quot; ...&quot;tmp9&quot; if corresponding vector map exists
@@ -143,6 +143,20 @@ g.mlist -r type=vect separator=comma pattern='^tmp[0-9]$'
 List all precipitation maps for the years 1997-2012, comma separated:
 <div class="code"><pre>
 g.mlist -e type=rast separator=comma pattern="precip_total.(199[7-9]|200[0-9]|201[0-2]).sum"
+</pre></div>
+
+<h3>Maps whose region overlaps with a saved region</h3>
+
+List all raster maps starting with &quot;tmp_&quot; whose region overlaps with
+a saved region &quot;myregion&quot;:
+<div class="code"><pre>
+g.mlist type=rast pattern='tmp_*' region=myregion
+</pre></div>
+
+List &quot;tmp0&quot;...&quot;tmp9&quot; vector maps whose region overlaps with
+the current region:
+<div class="code"><pre>
+g.mlist -r type=vect pattern='^tmp[0-9]$' region=.
 </pre></div>
 
 <h2>SEE ALSO</h2>

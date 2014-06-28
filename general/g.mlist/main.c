@@ -21,14 +21,25 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/raster3d.h>
+#include <grass/vector.h>
 #include <grass/manage.h>
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
+enum {
+    TYPE_RAST = 0,
+    TYPE_RAST3D,
+    TYPE_VECT,
+    TYPE_3DVIEW,
+    TYPE_OTHERS
+};
+
 static int any = 0;
 
 static void make_list(FILE *, const struct list *, const char *,
-		      const char *, int, int);
+		      const char *, int, int, struct Cell_head *);
+static int region_overlaps(struct Cell_head *, const char *, const char *, int);
 
 int main(int argc, char *argv[])
 {
@@ -40,6 +51,7 @@ int main(int argc, char *argv[])
 	struct Option *exclude;
 	struct Option *separator;
 	struct Option *mapset;
+	struct Option *region;
 	struct Option *output;
     } opt;
     struct
@@ -57,6 +69,8 @@ int main(int argc, char *argv[])
     FILE *fp;
     const char *mapset;
     char *separator;
+    int use_region;
+    struct Cell_head window;
 
     G_gisinit(argv[0]);
 
@@ -95,9 +109,16 @@ int main(int argc, char *argv[])
     opt.mapset->multiple = YES;
     opt.mapset->label =
 	_("Name of mapset to list (default: current search path)");
-    opt.mapset->description = _("'.' for current mapset; '*' for all mapsets in location");
+    opt.mapset->description =
+	_("'.' for current mapset; '*' for all mapsets in location");
     opt.separator = G_define_standard_option(G_OPT_F_SEP);
     opt.separator->answer = "newline";
+
+    opt.region = G_define_standard_option(G_OPT_M_REGION);
+    opt.region->label = _("Name of saved region for map search");
+    opt.region->description =
+	_("'*' for default region; '.' for current region "
+	  "(default: not restricted)");
 
     opt.output = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.output->required = NO;
@@ -142,6 +163,10 @@ int main(int argc, char *argv[])
     if ((flag.pretty->answer || flag.full->answer) && opt.output->answer)
         G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
 		      flag.pretty->key, flag.full->key, opt.output->key);
+
+    if ((flag.pretty->answer || flag.full->answer) && opt.region->answer)
+        G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
+		      flag.pretty->key, flag.full->key, opt.region->key);
 
     if ((flag.pretty->answer || flag.full->answer) &&
 	(flag.mapset->answer || flag.type->answer))
@@ -207,6 +232,25 @@ int main(int argc, char *argv[])
 
     separator = G_option_to_separator(opt.separator);
 
+    if (opt.region->answer) {
+	use_region = 1;
+
+	if (strcmp(opt.region->answer, "*") == 0)
+	    G_get_default_window(&window);
+	else if (strcmp(opt.region->answer, ".") == 0)
+	    G_get_window(&window);
+	else {
+	    char name[GNAME_MAX], mapset[GMAPSET_MAX];
+
+	    if (G_name_is_fully_qualified(opt.region->answer, name, mapset))
+		G__get_window(&window, "windows", name, mapset);
+	    else
+		G__get_window(&window, "windows", opt.region->answer, "");
+	}
+    }
+    else
+	use_region = 0;
+
     for (i = 0; opt.type->answers[i]; i++) {
 	if (strcmp(opt.type->answers[i], "all") == 0)
 	    break;
@@ -270,7 +314,7 @@ int main(int argc, char *argv[])
 	else {
 	    for (j = 0; (mapset = G_get_mapset_name(j)); j++)
 		make_list(fp, elem, mapset, separator, flag.type->answer,
-			  flag.mapset->answer);
+			  flag.mapset->answer, use_region ? &window : NULL);
 	}
     }
 
@@ -294,15 +338,18 @@ int main(int argc, char *argv[])
 }
 
 static void make_list(FILE *fp, const struct list *elem, const char *mapset,
-		      const char *separator, int add_type, int add_mapset)
+		      const char *separator, int add_type, int add_mapset,
+		      struct Cell_head *window)
 {
     static int first_mapset = 1;
     char path[GPATH_MAX];
-    const char *element = elem->element[0];
-    const char *alias = elem->alias;
+    const char *element, *alias;
     char **list;
-    int count;
-    int i;
+    int count, first, i;
+    int type;
+
+    element = elem->element[0];
+    alias = elem->alias;
 
     G_file_name(path, element, "", mapset);
     if (access(path, 0) != 0)
@@ -311,19 +358,42 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
     if ((list = G__ls(path, &count)) == NULL)
 	return;
 
-    if (count > 0) {
-	if (any)
-	    fprintf(fp, "%s", separator);
-	if (fp == stdout && isatty(STDOUT_FILENO))
-	    G_message(_("%s available in mapset <%s>:"), elem->text, mapset);
-    }
+    if (strcmp(alias, "rast") == 0)
+	type = TYPE_RAST;
+    else if (strcmp(alias, "rast3d") == 0)
+	type = TYPE_RAST3D;
+    else if (strcmp(alias, "vect") == 0)
+	type = TYPE_VECT;
+    else if (strcmp(alias, "3dview") == 0)
+	type = TYPE_3DVIEW;
+    else
+	type = TYPE_OTHERS;
 
     /* Suppress "... found in more mapsets" warnings from G_find_file2. */
     G_suppress_warnings(1);
 
+    first = 1;
     for (i = 0; i < count; i++) {
 	char *name = list[i];
 	int need_mapset = 0;
+
+	/* If region= is used, read the map region. */
+	if (window) {
+	    /* If the map region doesn't overlap with the input region, don't
+	     * print the map. */
+	    if (!region_overlaps(window, name, mapset, type))
+		continue;
+	}
+
+        if (first) {
+	    first = 0;
+
+	    if (any)
+		fprintf(fp, "%s", separator);
+	    if (fp == stdout && isatty(STDOUT_FILENO))
+		G_message(_("%s available in mapset <%s>:"),
+			  elem->text, mapset);
+	}
 
 	if (any && i != 0)
 	    fprintf(fp, "%s", separator);
@@ -352,4 +422,73 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
     G_free(list);
 
     first_mapset = 0;
+}
+
+static int region_overlaps(struct Cell_head *window, const char *name,
+			   const char *mapset, int type)
+{
+    int has_region;
+    struct Cell_head map_window;
+    RASTER3D_Region wind;
+    struct Map_info Map;
+    struct bound_box box;
+    int ret;
+    struct G_3dview view;
+
+    switch (type) {
+    case TYPE_RAST:
+	Rast_get_cellhd(name, mapset, &map_window);
+	has_region = 1;
+	break;
+    case TYPE_RAST3D:
+	if (Rast3d_read_region_map(name, mapset, &wind) < 0)
+	    G_fatal_error(_("Unable to read header of 3D raster map <%s@%s>"),
+			  name, mapset);
+	Rast3d_region_to_cell_head(&wind, &map_window);
+	has_region = 1;
+	break;
+    case TYPE_VECT:
+	Vect_set_open_level(2);
+	if (Vect_open_old(&Map, name, mapset) < 2)
+	    G_fatal_error(_("Unable to open vector map <%s> on topological level"),
+			  name);
+	Vect_get_map_box(&Map, &box);
+	Vect_close(&Map);
+
+	map_window.north = box.N;
+	map_window.south = box.S;
+	map_window.west = box.W;
+	map_window.east = box.E;
+	has_region = 1;
+	break;
+    case TYPE_3DVIEW:
+	if ((ret = G_get_3dview(name, mapset, &view)) < 0)
+	    G_fatal_error(_("Unable to read 3dview file <%s> in <%s>"),
+			  name, mapset);
+	if (ret == 0)
+	    G_fatal_error(_("Old 3dview file. Region <%s> not found in <%s>"),
+			  name, mapset);
+
+	map_window.north = view.vwin.north;
+	map_window.south = view.vwin.south;
+	map_window.west = view.vwin.west;
+	map_window.east = view.vwin.east;
+	has_region = 1;
+	break;
+    default:
+	has_region = 0;
+	break;
+    }
+
+    /* If an element doesn't have a concept of region at all, return 1 so we
+     * can always print it. */
+    if (!has_region)
+	return 1;
+
+    /* If the map region is outside the input region, return 0. Otherwise
+     * return 1 */
+    return !(window->north <= map_window.south ||
+	     window->south >= map_window.north ||
+	     window->west >= map_window.east ||
+	     window->east <= map_window.west);
 }
