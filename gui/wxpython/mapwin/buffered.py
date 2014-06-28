@@ -41,7 +41,7 @@ from mapwin.base import MapWindowBase
 from core.utils         import GetGEventAttribsForHandler, _
 import core.utils as utils
 from mapwin.graphics import GraphicsSet
-from iscatt.controllers import gThread
+from core.gthread import gThread
 
 try:
     import grass.lib.gis as gislib
