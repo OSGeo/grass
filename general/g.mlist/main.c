@@ -115,10 +115,9 @@ int main(int argc, char *argv[])
     opt.separator->answer = "newline";
 
     opt.region = G_define_standard_option(G_OPT_M_REGION);
-    opt.region->label = _("Name of saved region for map search");
+    opt.region->label = _("Name of saved region for map search (default: not restricted)");
     opt.region->description =
-	_("'*' for default region; '.' for current region "
-	  "(default: not restricted)");
+	_("'.' for current region; '*' for default region");
 
     opt.output = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.output->required = NO;
