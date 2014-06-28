@@ -28,7 +28,7 @@
 #include <grass/spawn.h>
 
 enum {
-    TYPE_RAST = 0,
+    TYPE_RAST,
     TYPE_RAST3D,
     TYPE_VECT,
     TYPE_3DVIEW,
