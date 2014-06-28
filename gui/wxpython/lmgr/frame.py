@@ -70,6 +70,7 @@ from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsTool
 from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell          import PyShellWindow
 from lmgr.giface           import LayerManagerGrassInterface
+from lmgr.datacatalog      import DataCatalog
 from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
 from nviz.main             import haveNviz
@@ -317,6 +318,11 @@ class GMFrame(wx.Frame):
         else:
             self.search = None
         
+        # create 'data catalog' notebook page
+        self.datacatalog = DataCatalog(parent = self, giface = self._giface)
+        self.datacatalog.showNotification.connect(lambda message: self.SetStatusText(message))
+        self.notebook.AddPage(page = self.datacatalog, text = _("Data catalog"), name = 'catalog')
+        
         # create 'python shell' notebook page
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'pyshell'):
             self.pyshell = PyShellWindow(parent = self)
@@ -544,6 +550,8 @@ class GMFrame(wx.Frame):
         page = event.GetSelection()
         if page == self.notebook.GetPageIndexByName('output'):
             wx.CallAfter(self.goutput.ResetFocus)
+        elif page == self.notebook.GetPageIndexByName('catalog'):
+            wx.CallAfter(self.datacatalog.LoadItems)
         self.SetStatusText('', 0)
         
         event.Skip()

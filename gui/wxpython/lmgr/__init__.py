@@ -5,4 +5,5 @@ all = [
     'pyshell',
     'frame',
     'giface',
+    'datacatalog'
     ]
