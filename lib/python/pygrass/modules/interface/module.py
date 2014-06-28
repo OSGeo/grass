@@ -7,7 +7,9 @@ Created on Tue Apr  2 18:41:27 2013
 @code
 
 >>> import grass.pygrass.modules as pymod
+>>> from subprocess import PIPE
 >>> import copy
+
 >>> region = pymod.Module("g.region")
 >>> region.flags["p"].value = True
 >>> region.flags["u"].value = True
@@ -23,12 +25,14 @@ u'g.region res=10 -p -3 -u'
 >>> neighbors.inputs["input"].value = "mapA"
 >>> neighbors.outputs["output"].value = "mapB"
 >>> neighbors.inputs["size"].value = 5
+>>> neighbors.inputs["quantile"].value = 0.5
 >>> neighbors.get_bash()
 u'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
 
 >>> new_neighbors1 = copy.deepcopy(neighbors)
 >>> new_neighbors1.inputs["input"].value = "mapD"
 >>> new_neighbors1.inputs["size"].value = 3
+>>> new_neighbors1.inputs["quantile"].value = 0.5
 >>> new_neighbors1.get_bash()
 u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
@@ -39,12 +43,55 @@ u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
 >>> neighbors = pymod.Module("r.neighbors")
 >>> neighbors.get_bash()
-u'r.neighbors method=average size=3 quantile=0.5'
+u'r.neighbors method=average size=3'
 
 >>> new_neighbors3 = copy.deepcopy(neighbors)
 >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
 >>> new_neighbors3.get_bash()
-u'r.neighbors input=mapA method=average size=3 quantile=0.5 output=mapB'
+u'r.neighbors input=mapA method=average size=3 output=mapB'
+
+>>> mapcalc = pymod.Module("r.mapcalc", expression="test_a = 1",
+...                        overwrite=True, run_=False)
+>>> mapcalc.run()
+Module('r.mapcalc')
+>>> mapcalc.popen.returncode
+0
+
+>>> colors = pymod.Module("r.colors", map="test_a", rules="-",
+...                        run_=False, stdout_=PIPE,
+...                        stderr_=PIPE, stdin_="1 red")
+>>> colors.run()
+Module('r.colors')
+>>> colors.popen.returncode
+0
+>>> colors.inputs["stdin"].value
+u'1 red'
+>>> colors.outputs["stdout"].value
+u''
+>>> colors.outputs["stderr"].value.strip()
+"Color table for raster map <test_a> set to 'rules'"
+
+>>> colors = pymod.Module("r.colors", map="test_a", rules="-",
+...                        run_=False, finish_=False, stdin_=PIPE)
+>>> colors.run()
+Module('r.colors')
+>>> stdout, stderr = colors.popen.communicate(input="1 red")
+>>> colors.popen.returncode
+0
+>>> stdout
+>>> stderr
+
+>>> colors = pymod.Module("r.colors", map="test_a", rules="-",
+...                        run_=False, finish_=False,
+...                        stdin_=PIPE, stderr_=PIPE)
+>>> colors.run()
+Module('r.colors')
+>>> stdout, stderr = colors.popen.communicate(input="1 red")
+>>> colors.popen.returncode
+0
+>>> stdout
+>>> stderr.strip()
+"Color table for raster map <test_a> set to 'rules'"
 
 @endcode
 """
@@ -87,8 +134,7 @@ class ParallelModuleQueue(object):
        >>> mapcalc_list = []
        >>> mapcalc = pymod.Module("r.mapcalc",
        ...                        overwrite=True,
-       ...                        run_=False,
-       ...                        finish_=False)
+       ...                        run_=False)
        >>> queue = pymod.ParallelModuleQueue(max_num_procs=3)
        >>> for i in xrange(5):
        ...     new_mapcalc = copy.deepcopy(mapcalc)
@@ -127,6 +173,9 @@ class ParallelModuleQueue(object):
            :type module: Module object
         """
         self._list[self._proc_count] = module
+        # Force that finish is False, otherwise the execution
+        # will not be parallel
+        self._list[self._proc_count].finish_ = False
         self._list[self._proc_count].run()
         self._proc_count += 1
 
