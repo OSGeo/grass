@@ -148,9 +148,10 @@ g.mlist -e type=rast separator=comma pattern="precip_total.(199[7-9]|200[0-9]|20
 <h3>Maps whose region overlaps with a saved region</h3>
 
 List all raster maps starting with &quot;tmp_&quot; whose region overlaps with
-a saved region &quot;myregion&quot;:
+the region of &quot;test&quot; raster map:
 <div class="code"><pre>
-g.mlist type=rast pattern='tmp_*' region=myregion
+g.region rast=test save=test_region
+g.mlist type=rast pattern='tmp_*' region=test_region
 </pre></div>
 
 List &quot;tmp0&quot;...&quot;tmp9&quot; vector maps whose region overlaps with
@@ -158,6 +159,16 @@ the current region:
 <div class="code"><pre>
 g.mlist -r type=vect pattern='^tmp[0-9]$' region=.
 </pre></div>
+
+List all raster and vector maps whose region overlaps with the default region
+of the PERMANENT mapset in the current location (DEFAULT_WIND):
+<div class="code"><pre>
+g.mlist type=rast,vect region=*
+</pre></div>
+
+Note that, without <tt>region=*</tt>, <tt>g.mlist type=rast,vect</tt> simply
+lists all available raster and vector maps from the current search path
+regardless of their region.
 
 <h2>SEE ALSO</h2>
 
