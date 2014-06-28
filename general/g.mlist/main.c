@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     opt.type->multiple = YES;
     opt.type->options = M_get_options(TRUE);
     opt.type->descriptions = M_get_option_desc(TRUE);
-    
+
     opt.pattern = G_define_option();
     opt.pattern->key = "pattern";
     opt.pattern->type = TYPE_STRING;
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     flag.type->key = 't';
     flag.type->description = _("Print data types");
     flag.type->guisection = _("Print");
-    
+
     flag.mapset = G_define_flag();
     flag.mapset->key = 'm';
     flag.mapset->description = _("Print fully-qualified map names (including mapsets)");
@@ -396,7 +396,7 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
 
 	if (any && i != 0)
 	    fprintf(fp, "%s", separator);
-	
+
 	if (add_type)
 	    fprintf(fp, "%s/", alias);
 
@@ -465,7 +465,7 @@ static int region_overlaps(struct Cell_head *window, const char *name,
 	    G_fatal_error(_("Unable to read 3dview file <%s@%s>"),
 			  name, mapset);
 	if (ret == 0) {
-	    G_warning(_("No region in an old 3dview file <%s@%s>. Listing anyway"),
+	    G_warning(_("No region support in an old 3dview file <%s@%s>. Listing anyway"),
 		      name, mapset);
 	    has_region = 0;
 	}
