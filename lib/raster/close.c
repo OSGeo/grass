@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <errno.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -370,8 +371,8 @@ static int close_new(int fd, int ok)
 	if (fcb->null_cur_row > 0) {
 	    /* if temporary NULL file exists, write it into cell_misc/name/null */
 	    if (rename(fcb->null_temp_name, path)) {
-		G_warning(_("Unable to rename null file '%s' to '%s'"),
-			  fcb->null_temp_name, path);
+		G_warning(_("Unable to rename null file '%s' to '%s': %s"),
+			  fcb->null_temp_name, path, strerror(errno));
 		stat = -1;
 	    }
 	    /* if rename() was successful what is left to remove() ? */
@@ -436,8 +437,8 @@ static int close_new(int fd, int ok)
 	G_file_name(path, CELL_DIR, fcb->name, fcb->mapset);
 	remove(path);
 	if (rename(fcb->temp_name, path)) {
-	    G_warning(_("Unable to rename cell file '%s' to '%s'"),
-		      fcb->temp_name, path);
+	    G_warning(_("Unable to rename cell file '%s' to '%s': %s"),
+		      fcb->temp_name, path, strerror(errno));
 	    stat = -1;
 	}
 	/* if rename() was successful what is left to remove() ? */
