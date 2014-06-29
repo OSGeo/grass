@@ -2466,19 +2466,16 @@ void GS_set_draw(int where)
 
     switch (where) {
     case GSD_BOTH:
-	gsd_frontbuffer(1);
-	gsd_backbuffer(1);
+	gsd_bothbuffers();
 
 	break;
     case GSD_FRONT:
-	gsd_frontbuffer(1);
-	gsd_backbuffer(0);
+	gsd_frontbuffer();
 
 	break;
     case GSD_BACK:
     default:
-	gsd_frontbuffer(0);
-	gsd_backbuffer(1);
+	gsd_backbuffer();
 
 	break;
     }
