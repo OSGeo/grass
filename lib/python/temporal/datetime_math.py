@@ -828,6 +828,32 @@ def datetime_to_grass_datetime_string(dt):
     return string
 
 ###############################################################################
+suffix_units = {"years" : "%Y", 
+                         "year" : "%Y",  
+                         "months" : "%Y_%m", 
+                         "month" : "%Y_%m", 
+                         "weeks" : "%Y_%m_%d",  
+                         "week" : "%Y_%m_%d",  
+                         "days" : "%Y_%m_%d",  
+                         "day" : "%Y_%m_%d",  
+                         "hours" : "%Y_%m_%d_%H",  
+                         "hour" : "%Y_%m_%d_%H",  
+                         "minutes" : "%Y_%m_%d_%H_%M",
+                         "minute" : "%Y_%m_%d_%H_%M",} 
+
+
+def create_suffix_from_datetime(start_time,  granularity):
+    """!Create a datetime string based on a datetime object and a provided
+       granularity that can be used as suffix for map names.
+       
+       dateteime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
+       
+       @param start_time The datetime object
+       @param granularity The granularity for example "1 month" or "100 seconds"
+       @return A string
+    """
+    global suffix_units
+    return start_time.strftime(suffix_units[granularity.split(' ')[1]]) 
 
 if __name__ == "__main__":
     import doctest
