@@ -120,6 +120,11 @@ int main(int argc, char **argv)
     ncol->description = _("Node cost column (number)");
     ncol->guisection = _("Costs");
 
+    turntable_f = G_define_flag();
+    turntable_f->key = 't';
+    turntable_f->description = _("Use turntable");
+    turntable_f->guisection = _("Turntable");
+
     tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     tfield_opt->key = "tlayer";
     tfield_opt->answer = "3";
@@ -140,10 +145,6 @@ int main(int argc, char **argv)
     geo_f->key = 'g';
     geo_f->description =
 	_("Use geodesic calculation for longitude-latitude locations");
-
-    turntable_f = G_define_flag();
-    turntable_f->key = 't';
-    turntable_f->description = _("Use turntable");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
