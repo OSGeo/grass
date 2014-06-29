@@ -20,6 +20,7 @@ import os
 import sys
 
 import wx
+import wx.gizmos as gizmos
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.utils import GetListOfLocations
@@ -75,11 +76,12 @@ class DataCatalog(wx.Panel):
     def LoadItemsDone(self):
         self._loaded = True
 
-class DataCatalogTree(wx.TreeCtrl):
+class LocationMapTree(wx.TreeCtrl):
     def __init__(self, parent):
-        """Tree constructor."""
-        super(DataCatalogTree, self).__init__(parent, id=wx.ID_ANY, style = wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS |
-                                              wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES | wx.TR_SINGLE)
+        """Location Map Tree constructor."""
+        super(LocationMapTree, self).__init__(parent, id=wx.ID_ANY, style = wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS |
+                                              wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES | 
+                                              wx.TR_SINGLE)
         self.showNotification = Signal('Tree.showNotification')
         self.parent = parent
         self.root = self.AddRoot('Catalog') # will not be displayed when we use TR_HIDE_ROOT flag
@@ -88,29 +90,73 @@ class DataCatalogTree(wx.TreeCtrl):
         self.MakeBackup()
 
         wx.EVT_TREE_ITEM_RIGHT_CLICK(self, wx.ID_ANY, self.OnRightClick)
-        wx.EVT_TREE_BEGIN_DRAG(self, wx.ID_ANY, self.OnBeginDrag)
-        wx.EVT_TREE_END_DRAG(self, wx.ID_ANY, self.OnEndDrag)
         
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnDoubleClick)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+
+    def _initTreeItems(self, locations = [], mapsets = []):
+        """Add locations, mapsets and layers to the tree."""
+        if not locations:
+            locations = GetListOfLocations(self.gisdbase)
+        if not mapsets:
+            mapsets = ['*']
         
-        wx.EVT_TREE_END_LABEL_EDIT(self, wx.ID_ANY, self.OnEditLabel)
-        wx.EVT_TREE_BEGIN_LABEL_EDIT(self, wx.ID_ANY, self.OnStartEditLabel)
-    
+        first = True
+        for loc in locations:
+            location = loc
+            if first:
+                self.ChangeEnvironment(location, 'PERMANENT')
+                first = False
+            else:
+                self.ChangeEnvironment(location)
+            varloc = self.AppendItem(self.root, loc)
+            #get list of all maps in location
+            maplist = RunCommand('g.mlist', flags='mt', type='rast,rast3d,vect', mapset=','.join(mapsets),
+                                 quiet=True, read=True)
+            maplist = maplist.splitlines()
+            for ml in maplist:
+                # parse
+                parts1 = ml.split('/')
+                parts2 = parts1[1].split('@')
+                mapset = parts2[1]
+                mlayer = parts2[0]
+                ltype = parts1[0]
+                if self.itemExists(mapset, varloc) == False:
+                    varmapset = self.AppendItem(varloc, mapset)
+                if (self.GetItemText(varmapset) == mapset):
+                    if (self.itemExists(ltype, varmapset) == False):
+                        vartype = self.AppendItem(varmapset, ltype)
+                else:
+                    varmapset = self.getItemByName(mapset, varloc)
+                    if (self.itemExists(ltype, varmapset) == False):
+                        vartype = self.AppendItem(varmapset, ltype)
+                self.AppendItem(vartype, mlayer)
+        self.RestoreBackup()          
+        Debug.msg(1, "Tree filled")    
+
+    def InitTreeItems(self):
+        """Create popup menu for layers"""
+        raise NotImplementedError()
+
+    def _popupMenuLayer(self):
+        """Create popup menu for layers"""
+        raise NotImplementedError()
+
+    def _popupMenuMapset(self):
+        """Create popup menu for mapsets"""
+        raise NotImplementedError()
+
     def _initVariables(self):
         """Init variables."""
         self.selected_layer = None
         self.selected_type = None
         self.selected_mapset = None
         self.selected_location = None
-        self.copy_layer = None
-        self.copy_type = None
-        self.copy_mapset = None
-        self.copy_location = None
+        
         self.gisdbase =  grass.gisenv()['GISDBASE']
         self.ctrldown = False
-        
+
     def GetControl(self):
         """Returns control itself."""
         return self
@@ -136,41 +182,6 @@ class DataCatalogTree(wx.TreeCtrl):
                 if (length > 3):
                     self.selected_layer = items[3]
         
-    def InitTreeItems(self):
-        """Add locations, mapsets and layers to the tree."""
-        locations = GetListOfLocations(self.gisdbase)
-        first = True
-        for loc in locations:
-            location = loc
-            if first:
-                self.ChangeEnvironment(location, 'PERMANENT')
-                first = False
-            else:
-                self.ChangeEnvironment(location)
-            varloc = self.AppendItem(self.root, loc)
-            #get list of all maps in location
-            maplist = RunCommand('g.mlist', flags='mt', type='rast,rast3d,vect', mapset='*', quiet=True, read=True)
-            maplist = maplist.splitlines()
-            for ml in maplist:
-                # parse
-                parts1 = ml.split('/')
-                parts2 = parts1[1].split('@')
-                mapset = parts2[1]
-                mlayer = parts2[0]
-                ltype = parts1[0]
-                if self.itemExists(mapset, varloc) == False:
-                    varmapset = self.AppendItem(varloc, mapset)
-                if (self.GetItemText(varmapset) == mapset):
-                    if (self.itemExists(ltype, varmapset) == False):
-                        vartype = self.AppendItem(varmapset, ltype)
-                else:
-                    varmapset = self.getItemByName(mapset, varloc)
-                    if (self.itemExists(ltype, varmapset) == False):
-                        vartype = self.AppendItem(varmapset, ltype)
-                self.AppendItem(vartype, mlayer)
-        self.RestoreBackup()          
-        Debug.msg(1, "Tree filled")    
-    
     def getItemByName(self, match, root):
         """Return match item from the root."""
         item, cookie = self.GetFirstChild(root)
@@ -209,9 +220,67 @@ class DataCatalogTree(wx.TreeCtrl):
             self._popupMenuMapset() 
     
     def OnDoubleClick(self, event):
-        """Rename layer"""
+        """Double click"""
         Debug.msg(1, "Double CLICK")
-                       
+            
+    def OnKeyDown(self, event):
+        """Set key event and check if control key is down"""
+        keycode = event.GetKeyCode()
+        if keycode == wx.WXK_CONTROL:
+            self.ctrldown = True
+            Debug.msg(1,"CONTROL ON")
+
+    def OnKeyUp(self, event):
+        """Check if control key is up"""
+        keycode = event.GetKeyCode()
+        if keycode == wx.WXK_CONTROL:
+            self.ctrldown = False
+            Debug.msg(1,"CONTROL OFF")
+
+    def MakeBackup(self):
+        """Make backup for case of change"""
+        self.glocation =  grass.gisenv()['LOCATION_NAME']
+        self.gmapset =  grass.gisenv()['MAPSET']
+    
+    def RestoreBackup(self):
+        """Restore backup"""
+        stringl = 'LOCATION_NAME='+self.glocation
+        RunCommand('g.gisenv', set=stringl)
+        stringm = 'MAPSET='+self.gmapset
+        RunCommand('g.gisenv', set=stringm)
+        
+    def ChangeEnvironment(self, location, mapset=None):
+        """Change gisenv variables -> location, mapset"""
+        stringl = 'LOCATION_NAME='+location
+        RunCommand('g.gisenv', set=stringl)
+        if mapset:
+            stringm = 'MAPSET='+mapset
+            RunCommand('g.gisenv', set=stringm)
+
+class DataCatalogTree(LocationMapTree):
+    def __init__(self, parent):
+        """Data Catalog Tree constructor."""
+        super(DataCatalogTree, self).__init__(parent)
+        
+        self._initVariablesCatalog()
+
+        wx.EVT_TREE_BEGIN_DRAG(self, wx.ID_ANY, self.OnBeginDrag)
+        wx.EVT_TREE_END_DRAG(self, wx.ID_ANY, self.OnEndDrag)
+        
+        wx.EVT_TREE_END_LABEL_EDIT(self, wx.ID_ANY, self.OnEditLabel)
+        wx.EVT_TREE_BEGIN_LABEL_EDIT(self, wx.ID_ANY, self.OnStartEditLabel)
+    
+    def _initVariablesCatalog(self):
+        """Init variables."""
+        self.copy_layer = None
+        self.copy_type = None
+        self.copy_mapset = None
+        self.copy_location = None
+
+    def InitTreeItems(self):
+        """Add locations, mapsets and layers to the tree."""
+        self._initTreeItems()
+        
     def OnCopy(self, event): 
         """Copy layer or mapset (just save it temporarily, copying is done by paste)"""
         self.copy_layer = self.selected_layer
@@ -358,7 +427,7 @@ class DataCatalogTree(wx.TreeCtrl):
         else:
             GError(_("Failed to display layer: not in current mapset or invalid layer"),
                    parent = self)
-        
+
     def OnBeginDrag(self, event):
         """Just copy necessary data"""
         if (self.ctrldown):
@@ -387,21 +456,7 @@ class DataCatalogTree(wx.TreeCtrl):
                 Debug.msg(1,"DROP DONE") 
             else:
                 event.Veto()
-            
-    def OnKeyDown(self, event):
-        """Set key event and check if control key is down"""
-        keycode = event.GetKeyCode()
-        if keycode == wx.WXK_CONTROL:
-            self.ctrldown = True
-            Debug.msg(1,"CONTROL ON")
 
-    def OnKeyUp(self, event):
-        """Check if control key is up"""
-        keycode = event.GetKeyCode()
-        if keycode == wx.WXK_CONTROL:
-            self.ctrldown = False
-            Debug.msg(1,"CONTROL OFF")
-                
     def _textDialog(self, message, title, value):
         """Dialog for simple text entry"""
         dlg = TextEntryDialog(self, message, title)
@@ -454,24 +509,51 @@ class DataCatalogTree(wx.TreeCtrl):
         
         self.PopupMenu(menu)
         menu.Destroy()
+
+# testing...
+if __name__ == "__main__":
+    class TestTree(LocationMapTree):
+        def __init__(self, parent):
+            """Test Tree constructor."""
+            super(TestTree, self).__init__(parent)
+            
+        def InitTreeItems(self):
+            """Add locations, mapsets and layers to the tree."""
+            gisenv = grass.gisenv()
+            location = gisenv['LOCATION_NAME']
+            mapset = gisenv['MAPSET']
+            self._initTreeItems(locations=[location],
+                                mapsets=[mapset])
+            
+            self.ExpandAll()
         
-    def MakeBackup(self):
-        """Make backup for case of change"""
-        self.glocation =  grass.gisenv()['LOCATION_NAME']
-        self.gmapset =  grass.gisenv()['MAPSET']
+        def _popupMenuLayer(self):
+            """Create popup menu for layers"""
+            pass
+
+        def _popupMenuMapset(self):
+            """Create popup menu for mapsets"""
+            pass
+
+    class TestFrame(wx.Frame):
+        """Frame for testing purposes only."""
+        def __init__(self, model=None):
+            wx.Frame.__init__(self, None, title='Test tree')
+
+            panel = wx.Panel(self)
+            self.tree = TestTree(parent=self)
+            self.tree.SetMinSize((300, 500))
+            self.tree.InitTreeItems()
+
+            szr = wx.BoxSizer(wx.VERTICAL)
+            szr.Add(self.tree, 1, wx.ALIGN_CENTER)
+            panel.SetSizerAndFit(szr)
+            szr.SetSizeHints(self)
+
+    def main():
+        app = wx.App()
+        frame = TestFrame()
+        frame.Show()
+        app.MainLoop()
     
-    def RestoreBackup(self):
-        """Restore backup"""
-        stringl = 'LOCATION_NAME='+self.glocation
-        RunCommand('g.gisenv', set=stringl)
-        stringm = 'MAPSET='+self.gmapset
-        RunCommand('g.gisenv', set=stringm)
-        
-    def ChangeEnvironment(self, location, mapset=None):
-        """Change gisenv variables -> location, mapset"""
-        stringl = 'LOCATION_NAME='+location
-        RunCommand('g.gisenv', set=stringl)
-        if mapset:
-            stringm = 'MAPSET='+mapset
-            RunCommand('g.gisenv', set=stringm)
-        
+    main()
