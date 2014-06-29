@@ -3,13 +3,16 @@
 #define TOOL_REPORT  2
 #define TOOL_NREPORT 3
 #define TOOL_ARCS    4
+#define TOOL_TURNTABLE    5
+
 
 struct opt {
     struct Option *input, *points;
     struct Option *output;
     struct Option *action;
-    struct Option *afield_opt, *nfield_opt, *thresh_opt;
+    struct Option *afield_opt, *tfield, *tucfield, *nfield_opt, *thresh_opt;
     struct Option *file;
+    struct Option *type;
     struct Flag *cats_flag, *snap_flag;
 };
 
@@ -33,3 +36,5 @@ int nodes(struct Map_info *, struct Map_info *, int,
 /* report.c */
 int report(struct Map_info *, int, int,
 	   int);
+
+void turntable(struct opt *);
