@@ -20,8 +20,22 @@ in order to connect points representing center nodes to the network.
 <p>Points specified by category must be exactly on network nodes, and the 
 input vector map needs to be prepared with <em>v.net operation=connect</em>.
 
+<p>Application of flag <b>-t</b> enables a turntable support. 
+This flag requires additional parameters <b>tlayer</b> and <b>tuclayer</b> 
+that are otherwise ignored.
+ The turntable allows 
+to model e.g. trafic code, where some turns may be prohibited. 
+This means that the input layer is expanded by 
+turntable with costs of every possible turn on any possible node 
+(intersection) in both directions. 
+ Turntable can be created by 
+ the <em><a href="v.net.html">v.net</a></em> module. 
+For more information about turns in the vector network analyses see
+<a href="http://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis">wiki page</a>.
+
 <h2>NOTES</h2>
 Arcs can be closed using cost = -1. 
+Turns support: The costs of turns on visiting nodes are not taken in account.
 
 <h2>EXAMPLE</h2>
 
@@ -143,5 +157,13 @@ Radim Blazek, ITC-Irst, Trento, Italy<br>
 Markus Metz<br>
 Documentation: Markus Neteler, Markus Metz
 
+<h3>TURNS SUPPORT</h3>
+
+The turns support was implemnented as part of GRASS GIS turns cost project at Czech Technical University in Prague, Czech Republic.  
+Eliska Kyzlikova, Stepan Turek, Lukas Bocan and Viera Bejdova participated at the project.
+
+Implementation: Stepan Turek 
+Documentation: Lukas Bocan
+Mentor: Martin Landa
 
 <p><i>Last changed: $Date$</i>
