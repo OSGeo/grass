@@ -30,7 +30,7 @@ from threading import Thread
 import wx
 from   wx.lib.newevent import NewEvent
 from   wx              import glcanvas
-from wx.glcanvas       import WX_GL_DEPTH_SIZE
+from wx.glcanvas       import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
@@ -86,10 +86,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if CheckWxVersion(version=[2, 8, 11]) and \
            sys.platform not in ('win32', 'darwin'):
             depthBuffer = int(UserSettings.Get(group='display', key='nvizDepthBuffer', subkey='value'))
-            attribs=[WX_GL_DEPTH_SIZE, depthBuffer, 0]
-            glcanvas.GLCanvas.__init__(self, parent, id, attribList=attribs)
+            attribs=[WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, depthBuffer, 0]
         else:
-            glcanvas.GLCanvas.__init__(self, parent, id)
+            attribs=[WX_GL_DOUBLEBUFFER, 0]
+
+        glcanvas.GLCanvas.__init__(self, parent, id, attribList=attribs)
 
         MapWindowBase.__init__(self, parent=parent, giface=giface, Map=Map)
         self.Hide()
