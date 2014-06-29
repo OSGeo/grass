@@ -39861,7 +39861,7 @@ msgstr ""
 
 #: ../general/g.rename/main.c:53
 msgid "renamed"
-msgstr "이름이 변경되었습니다"
+msgstr "이름을 변경"
 
 #: ../general/g.rename/main.c:70
 #, c-format
