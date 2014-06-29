@@ -161,20 +161,6 @@ int main(int argc, char **argv)
     nfield_opt->required = YES;
     nfield_opt->label = _("Node layer (used for cities)");
 
-    tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    tfield_opt->key = "tlayer";
-    tfield_opt->answer = "3";
-    tfield_opt->label = _("Layer with turntable");
-    tfield_opt->description = _("Relevant only with -t flag.");
-    tfield_opt->guisection = _("Turntable");
-
-    tucfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    tucfield_opt->key = "tuclayer";
-    tucfield_opt->answer = "4";
-    tucfield_opt->label = _("Layer with unique categories used in turntable");
-    tucfield_opt->description = _("Relevant only with -t flag.");
-    tucfield_opt->guisection = _("Turntable");
-
     afcol = G_define_option();
     afcol->key = "afcolumn";
     afcol->type = TYPE_STRING;
@@ -191,6 +177,25 @@ int main(int argc, char **argv)
 	_("EXPERIMENTAL: Arc backward direction cost column (number)");
     abcol->guisection = _("Costs");
 
+    turntable_f = G_define_flag();
+    turntable_f->key = 't';
+    turntable_f->description = _("Use turntable");
+    turntable_f->guisection = _("Turntable");
+
+    tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    tfield_opt->key = "tlayer";
+    tfield_opt->answer = "3";
+    tfield_opt->label = _("Layer with turntable");
+    tfield_opt->description = _("Relevant only with -t flag.");
+    tfield_opt->guisection = _("Turntable");
+
+    tucfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    tucfield_opt->key = "tuclayer";
+    tucfield_opt->answer = "4";
+    tucfield_opt->label = _("Layer with unique categories used in turntable");
+    tucfield_opt->description = _("Relevant only with -t flag.");
+    tucfield_opt->guisection = _("Turntable");
+
     seq = G_define_standard_option(G_OPT_F_OUTPUT);
     seq->key = "sequence";
     seq->type = TYPE_STRING;
@@ -202,10 +207,6 @@ int main(int argc, char **argv)
     geo_f->key = 'g';
     geo_f->description =
 	_("Use geodesic calculation for longitude-latitude locations");
-
-    turntable_f = G_define_flag();
-    turntable_f->key = 't';
-    turntable_f->description = _("Use turntable");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

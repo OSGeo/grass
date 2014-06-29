@@ -104,6 +104,11 @@ int main(int argc, char **argv)
 			      "and error message is printed. To speed up the process, keep this "
 			      "value as low as possible.");
 
+    turntable_f = G_define_flag();
+    turntable_f->key = 't';
+    turntable_f->description = _("Use turntable");
+    turntable_f->guisection = _("Turntable");
+
     tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     tfield_opt->key = "tlayer";
     tfield_opt->answer = "3";
@@ -129,10 +134,6 @@ int main(int argc, char **argv)
     segments_f->key = 's';
     segments_f->description = _("Write output as original input segments, "
 				"not each path as one line.");
-
-    turntable_f = G_define_flag();
-    turntable_f->key = 't';
-    turntable_f->description = _("Use turntable");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
