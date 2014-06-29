@@ -1123,9 +1123,9 @@ def bash_startup():
 		echo [%s]
 	fi
 }
-PROMPT_COMMAND=grass_prompt\n""" % (_("2d and 3d Raster MASKs present"),
+PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
                                     _("Raster MASK present"),
-                                    _("3d raster MASK present")))
+                                    _("3D raster MASK present")))
 
     # read environmental variables
     path = os.path.join(userhome, ".grass.bashrc") # left for backward compatibility
