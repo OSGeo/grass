@@ -24,7 +24,7 @@ typedef struct
 int cmp(const void *, const void *);
 
 int path(struct Map_info *In, struct Map_info *Out, char *filename,
-	 int nfield, double maxdist, int segments)
+	 int nfield, double maxdist, int segments, int tucfield, int use_ttb)
 {
     FILE *in_file = NULL;
     int i, nlines, line, npoints, type, cat, id, fcat, tcat, fline, tline,
@@ -174,7 +174,9 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    else {
 		fline = Citem->line;
 		type = Vect_read_line(In, Points, NULL, fline);
-		fnode = Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		fnode =
+		    Vect_find_node(In, Points->x[0], Points->y[0],
+				   Points->z[0], 0, 0);
 		/* Vect_get_line_nodes(In, fline, &fnode, NULL); */
 	    }
 	    G_debug(3, "from: cat = %5d point(line) = %5d node = %5d", fcat,
@@ -194,14 +196,23 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    else {
 		tline = Citem->line;
 		type = Vect_read_line(In, Points, NULL, tline);
-		tnode = Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		tnode =
+		    Vect_find_node(In, Points->x[0], Points->y[0],
+				   Points->z[0], 0, 0);
 		/* Vect_get_line_nodes(In, tline, &tnode, NULL); */
 	    }
 	    G_debug(3, "to  : cat = %5d point(line) = %5d node = %5d", tcat,
 		    tline, tnode);
 
 	    if (sp != SP_NOPOINT) {
-		ret = Vect_net_shortest_path(In, fnode, tnode, AList, &cost);
+		if (use_ttb)
+		    ret =
+			Vect_net_ttb_shortest_path(In, fnode, 0, tnode, 0,
+						   tucfield, AList, &cost);
+		else
+		    ret =
+			Vect_net_shortest_path(In, fnode, tnode, AList,
+					       &cost);
 
 		if (ret == -1) {
 		    sp = SP_UNREACHABLE;
@@ -254,11 +265,21 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	}
 	else {			/* INPUT_MODE_COOR */
 	    fcat = tcat = 0;
-	    ret =
-		Vect_net_shortest_path_coor(In, fx, fy, 0.0, tx, ty, 0.0,
-					    maxdist, maxdist, &cost, OPoints,
-					    AList, NULL, FPoints, TPoints, &fdist,
-					    &tdist);
+
+	    if (use_ttb)
+		ret =
+		    Vect_net_ttb_shortest_path_coor(In, fx, fy, 0.0, tx, ty,
+						    0.0, maxdist, maxdist,
+						    tucfield, &cost,
+						    OPoints, AList, NULL,
+						    FPoints, TPoints, &fdist,
+						    &tdist);
+	    else
+		ret =
+		    Vect_net_shortest_path_coor(In, fx, fy, 0.0, tx, ty, 0.0,
+						maxdist, maxdist, &cost,
+						OPoints, AList, NULL, FPoints,
+						TPoints, &fdist, &tdist);
 
 	    if (ret == 0) {
 		sp = SP_UNREACHABLE;
