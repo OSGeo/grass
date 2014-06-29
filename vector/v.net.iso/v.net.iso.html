@@ -15,8 +15,18 @@ Supported are cost assignments for both arcs and nodes,
 and also different costs for both directions of a vector line. 
 For areas, costs will be calculated along boundary lines.
 <p>
-The input vector needs to be prepared with <em>v.net operation=connect</em> 
-in order to connect points representing center nodes to the network.
+Application of flag <b>-t</b> enables a turntable support. 
+This flag requires additional parameters <b>tlayer</b> and <b>tuclayer</b> 
+that are otherwise ignored.
+ The turntable allows 
+to model e.g. trafic code, where some turns may be prohibited. 
+This means that the input layer is expanded by 
+turntable with costs of every possible turn on any possible node 
+(intersection) in both directions. 
+ Turntable can be created by 
+ the <em><a href="v.net.html">v.net</a></em> module. 
+For more information about turns in the vector network analyses see
+<a href="http://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis">wiki page</a>.
 
 <h2>NOTES</h2>
 
@@ -171,5 +181,14 @@ d.vect myroads_net col=red icon=basic/triangle fcol=green size=12 layer=2
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Documentation: Markus Neteler, Markus Metz
+
+<h3>TURNS SUPPORT</h3>
+
+The turns support was implemnented as part of GRASS GIS turns cost project at Czech Technical University in Prague, Czech Republic.  
+Eliska Kyzlikova, Stepan Turek, Lukas Bocan and Viera Bejdova participated at the project.
+
+Implementation: Stepan Turek 
+Documentation: Lukas Bocan
+Mentor: Martin Landa
 
 <p><i>Last changed: $Date$</i>
