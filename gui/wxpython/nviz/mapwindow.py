@@ -30,7 +30,7 @@ from threading import Thread
 import wx
 from   wx.lib.newevent import NewEvent
 from   wx              import glcanvas
-from wx.glcanvas       import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER
+from wx.glcanvas       import WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
