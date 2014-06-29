@@ -38,13 +38,15 @@ t.register -i type=rast input=precip_abs1 \
 # The @test
 
 t.rast.aggregate.ds --v input=precip_abs1 output=precip_abs2 base=prec_sum \
-    type=stvds sample=soil_abs1 method=sum sampling=start,during offset=100
+    type=stvds sample=soil_abs1 method=sum sampling=contains offset=33
+t.info type=strds input=precip_abs2
+t.rast.list input=precip_abs2 method=deltagap
+
+t.rast.aggregate.ds --v input=precip_abs1 output=precip_abs2 base=prec_sum \
+    type=stvds sample=soil_abs1 method=sum sampling=contains -ns
 t.info type=strds input=precip_abs2
 t.rast.list input=precip_abs2 method=deltagap
 
 # @postprocess
-t.unregister type=vect maps=soil_1,soil_2,soil_3
-t.remove type=stvds input=soil_abs1
-
+t.remove -rf type=stvds input=soil_abs1
 t.remove -rf type=strds input=precip_abs1,precip_abs2
-g.remove vect=soil_1,soil_2,soil_3

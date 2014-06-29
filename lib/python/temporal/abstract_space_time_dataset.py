@@ -224,7 +224,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 length += len(token) + 1
 
         command += "\n"
-        return command
+        return str(command)
 
     def get_semantic_type(self):
         """!Return the semantic type of this dataset

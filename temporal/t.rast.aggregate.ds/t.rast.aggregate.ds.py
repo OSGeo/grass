@@ -6,10 +6,10 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011 by the gcore Development Team
 #
 #		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
+#		License (version 2). Read the file COPYING that comes with gcore
 #		for details.
 #
 #############################################################################
@@ -64,7 +64,21 @@
 #% answer: 0
 #%end
 
+#%option
+#% key: nprocs
+#% type: integer
+#% description: Number of r.mapcalc processes to run in parallel
+#% required: no
+#% multiple: no
+#% answer: 1
+#%end
+
 #%option G_OPT_T_SAMPLE
+#% options: equal,overlaps,overlapped,starts,started,finishes,finished,during,contains
+#% answer: contains
+#%end
+
+#%option G_OPT_T_WHERE
 #%end
 
 #%flag
@@ -72,7 +86,12 @@
 #% description: Register Null maps
 #%end
 
-import grass.script as grass
+#%flag
+#% key: s
+#% description: Use start time - truncated accoring to granularity - as suffix. This flag overrides the offset option.
+#%end
+
+import grass.script as gcore
 import grass.temporal as tgis
 
 ############################################################################
@@ -84,16 +103,20 @@ def main():
     input = options["input"]
     output = options["output"]
     sampler = options["sample"]
+    where = options["where"]
     base = options["basename"]
     register_null = flags["n"]
     method = options["method"]
-    type = options["type"]
     sampling = options["sampling"]
     offset = options["offset"]
+    nprocs = options["nprocs"]
+    time_suffix = flags["s"]
+    type = options["type"]
+    
+    topo_list = sampling.split(",")
 
-    # Make sure the temporal database exists
     tgis.init()
-    # We need a database interface
+
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
@@ -102,60 +125,52 @@ def main():
 
     if sampler_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()
-        grass.fatal(_("Input and aggregation dataset must have "
+        gcore.fatal(_("Input and aggregation dataset must have "
                       "the same temporal type"))
 
     # Check if intervals are present
     if sampler_sp.temporal_extent.get_map_time() != "interval":
         dbif.close()
-        grass.fatal(_("All registered maps of the aggregation dataset "
+        gcore.fatal(_("All registered maps of the aggregation dataset "
                       "must have time intervals"))
 
-    temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp = tgis.open_new_stds(output, "strds", temporal_type,
-                                              title, description, semantic_type,
-                                              dbif, grass.overwrite())
+    # We will create the strds later, but need to check here
+    tgis.check_new_stds(output, "strds",   dbif,  gcore.overwrite())
 
-    rows = sampler_sp.get_registered_maps(
-        "id,start_time,end_time", None, "start_time", dbif)
+    map_list = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=dbif)
 
-    if not rows:
-            dbif.close()
-            grass.fatal(_("Aggregation dataset <%s> is empty") % id)
+    if not map_list:
+        dbif.close()
+        gcore.fatal(_("Space time raster dataset <%s> is empty") % input)
 
-    count = 0
-    for row in rows:
-        count += 1
-        start = row["start_time"]
-        end = row["end_time"]
+    granularity_list = sampler_sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=dbif)
 
-        input_map_names = tgis.collect_map_names(
-            sp, dbif, start, end, sampling)
+    if not granularity_list:
+        dbif.close()
+        gcore.fatal(_("Space time raster dataset <%s> is empty") % sampler)
 
-        if input_map_names:
-            new_map = tgis.aggregate_raster_maps(input_map_names, base,
-                                                 start, end, count, method,
-                                                 register_null, dbif,  offset)
+    gran = sampler_sp.get_granularity()
 
-            if new_map:
-                # Set the time stamp and write it to the raster map
-                if sp.is_time_absolute():
-                    new_map.set_absolute_time(start, end)
-                else:
-                    new_map.set_relative_time(start,
-                                              end, sp.get_relative_time_unit())
+    output_list = tgis.aggregate_by_topology(granularity_list=granularity_list,  granularity=gran,  
+                                                                       map_list=map_list,  
+                                                                       topo_list=topo_list,  basename=base, time_suffix=time_suffix,
+                                                                       offset=offset,  method=method,  nprocs=nprocs,  spatial=None, 
+                                                                       overwrite=gcore.overwrite())
 
-                # Insert map in temporal database
-                new_map.insert(dbif)
-                new_sp.register_map(new_map, dbif)
+    if output_list:
+        temporal_type, semantic_type, title, description = sp.get_initial_values()
+        output_strds = tgis.open_new_stds(output, "strds", temporal_type,
+                                                                 title, description, semantic_type,
+                                                                 dbif, gcore.overwrite())
+        tgis.register_map_object_list("rast", output_list,  output_strds,  register_null,  
+                                                       sp.get_relative_time_unit(),  dbif)
 
-    # Update the spatio-temporal extent and the raster metadata table entries
-    new_sp.set_aggregation_type(method)
-    new_sp.metadata.update(dbif)
-    new_sp.update_from_registered_maps(dbif)
+        # Update the raster metadata table entries with aggregation type
+        output_strds.set_aggregation_type(method)
+        output_strds.metadata.update(dbif)
 
     dbif.close()
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gcore.parser()
     main()

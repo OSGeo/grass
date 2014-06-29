@@ -30,7 +30,7 @@
 #% key: basename
 #% type: string
 #% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+#% description: Either a numerical suffix or the start time (s-flag) separated by an underscore will be attached to create a unique identifier
 #% required: yes
 #% multiple: no
 #% gisprompt:
@@ -63,7 +63,18 @@
 #% answer: 0
 #%end
 
+#%option
+#% key: nprocs
+#% type: integer
+#% description: Number of r.mapcalc processes to run in parallel
+#% required: no
+#% multiple: no
+#% answer: 1
+#%end
+
 #%option G_OPT_T_SAMPLE
+#% options: equal,overlaps,overlapped,starts,started,finishes,finished,during,contains
+#% answer: contains
 #%end
 
 #%option G_OPT_T_WHERE
@@ -74,11 +85,15 @@
 #% description: Register Null maps
 #%end
 
-import grass.script as grass
+#%flag
+#% key: s
+#% description: Use start time - truncated accoring to granularity - as suffix. This flag overrides the offset option.
+#%end
+
+import grass.script as gcore
 import grass.temporal as tgis
 
 ############################################################################
-
 
 def main():
 
@@ -92,90 +107,84 @@ def main():
     method = options["method"]
     sampling = options["sampling"]
     offset = options["offset"]
+    nprocs = options["nprocs"]
+    time_suffix = flags["s"]
+    
+    topo_list = sampling.split(",")
 
-    # Make sure the temporal database exists
     tgis.init()
-    # We need a database interface
+    
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
     sp = tgis.open_old_stds(input, "strds", dbif)
-    temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp = tgis.open_new_stds(output, "strds", temporal_type,
-                                              title, description, semantic_type,
-                                              dbif, grass.overwrite())
 
-    rows = sp.get_registered_maps("id,start_time,end_time", where, "start_time", dbif)
+    map_list = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=dbif)
 
-    if not rows:
+    if not map_list:
         dbif.close()
-        grass.fatal(_("Space time raster dataset <%s> is empty") % input)
+        gcore.fatal(_("Space time raster dataset <%s> is empty") % input)
 
-    # Modify the start time to fit the granularity
+    # We will create the strds later, but need to check here
+    tgis.check_new_stds(output, "strds",   dbif,  gcore.overwrite())
+    
+    start_time = map_list[0].temporal_extent.get_start_time()
 
     if sp.is_time_absolute():
-        first_start_time = tgis.adjust_datetime_to_granularity(
-            rows[0]["start_time"], gran)
-    else:
-        first_start_time = rows[0]["start_time"]
+        start_time = tgis.adjust_datetime_to_granularity(start_time,  gran)
 
     # We use the end time first
-    last_start_time = rows[len(rows) - 1]["end_time"]
-    is_end_time = True
+    end_time = map_list[-1].temporal_extent.get_end_time()
+    has_end_time = True
 
-    # In case no end time is available, then we use the start time
-    if last_start_time is None:
-        last_start_time = rows[len(rows) - 1]["start_time"]
-        is_end_time = False
+    # In case no end time is available, then we use the start time of the last map layer
+    if end_time is None:
+        end_time,  tmp_value = map_list[- 1].temporal_extent.get_start_time()
+        has_end_time = False
 
-    next_start_time = first_start_time
+    granularity_list = []
 
-    count = 0
-
+    # Build the granularity list
     while True:
-        if is_end_time is True:
-            if next_start_time >= last_start_time:
+        if has_end_time is True:
+            if start_time >= end_time:
                 break
         else:
-            if next_start_time > last_start_time:
+            if start_time > end_time:
                 break
 
-        start = next_start_time
+        granule = tgis.RasterDataset(None)
+        start = start_time
         if sp.is_time_absolute():
-            end = tgis.increment_datetime_by_string(next_start_time, gran)
+            end = tgis.increment_datetime_by_string(start_time, gran)
+            granule.set_absolute_time(start, end)
         else:
-            end = next_start_time + int(gran)
-        next_start_time = end
+            end = start_time + int(gran)
+            granule.set_relative_time(start, end,  sp.get_relative_time_unit())
+        start_time = end
+        
+        granularity_list.append(granule)
 
-        input_map_names = tgis.collect_map_names(
-            sp, dbif, start, end, sampling)
+    output_list = tgis.aggregate_by_topology(granularity_list=granularity_list,  granularity=gran,  
+                                                                       map_list=map_list,  
+                                                                       topo_list=topo_list,  basename=base, time_suffix=time_suffix,
+                                                                       offset=offset,  method=method,  nprocs=nprocs,  spatial=None, 
+                                                                       overwrite=gcore.overwrite())
 
-        if input_map_names:
-            new_map = tgis.aggregate_raster_maps(
-                input_map_names, base, start, end,
-                count, method, register_null, dbif,  offset)
+    if output_list:
+        temporal_type, semantic_type, title, description = sp.get_initial_values()
+        output_strds = tgis.open_new_stds(output, "strds", temporal_type,
+                                                                 title, description, semantic_type,
+                                                                 dbif, gcore.overwrite())
+        tgis.register_map_object_list("rast", output_list,  output_strds,  register_null,  
+                                                       sp.get_relative_time_unit(),  dbif)
 
-            if new_map:
-                # Set the time stamp and write it to the raster map
-                if sp.is_time_absolute():
-                    new_map.set_absolute_time(start, end)
-                else:
-                    new_map.set_relative_time(start,
-                                              end, sp.get_relative_time_unit())
-
-                # Insert map in temporal database
-                new_map.insert(dbif)
-                new_sp.register_map(new_map, dbif)
-
-                count += 1
-
-    # Update the spatio-temporal extent and the raster metadata table entries
-    new_sp.set_aggregation_type(method)
-    new_sp.metadata.update(dbif)
-    new_sp.update_from_registered_maps(dbif)
+        # Update the raster metadata table entries with aggregation type
+        output_strds.set_aggregation_type(method)
+        output_strds.metadata.update(dbif)
 
     dbif.close()
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gcore.parser()
     main()

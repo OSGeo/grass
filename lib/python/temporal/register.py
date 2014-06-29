@@ -423,13 +423,78 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
                           str(end_time), unit))
         else:
             msgr.debug(1, _("Set relative valid time for map <%s> to %i - %s "
-                           "with unit %s") % (map.get_map_id(), start_time,
-                                              str(end_time), unit))
+                            "with unit %s") % (map.get_map_id(), start_time,
+                            str(end_time), unit))
 
         map.set_relative_time(start_time, end_time, unit)
 
 
-###############################################################################
+##############################################################################
+
+def register_map_object_list(type,  map_list, output_stds,
+                             delete_empty, unit, dbif=None):
+    """Register a list of AbstractMapDataset objects in the temporal database
+       and optional in a space time dataset.
+       
+       @param type The type of the map layer (rast, rast3d, vect)
+       @param map_list List of AbstractMapDataset objects
+       @param output_stds The output stds
+       @param delete_empty Set True to delete empty map layer found in the map_list
+       @param unit The temporal unit of the space time dataset
+       @param dbif The database interface to be used
+       
+    """
+    import grass.script as gcore
+    import grass.pygrass.modules as pymod
+    import copy
+
+    dbif,  connected = init_dbif(dbif)
+
+    filename = gcore.tempfile(True)
+    file = open(filename, 'w')
+
+    empty_maps = []
+    for map_layer in map_list:
+        # Read the raster map data
+        map_layer.load()
+        # In case of a empty map continue, do not register empty maps
+
+        if delete_empty:
+            if map_layer.metadata.get_min() is None and \
+                map_layer.metadata.get_max() is None:
+                empty_maps.append(map_layer)
+                continue
+
+        start,  end = map_layer.get_temporal_extent_as_tuple()
+        id = map_layer.get_id()
+        if not end:
+            end = start
+        string = "%s|%s|%s\n" % (id,  str(start),  str(end))
+        file.write(string)
+    file.close()
+
+    if output_stds:
+        output_stds_id = output_stds.get_id()
+    else:
+        output_stds_id = None
+
+    register_maps_in_space_time_dataset(type, output_stds_id, unit=unit,
+                                        file=filename, dbif=dbif)
+
+    g_remove = pymod.Module("g.remove", quiet=True,
+                            run_=False, finish_=True)
+
+    # Remove empty maps
+    if len(empty_maps) > 0:
+        for map in empty_maps:
+            if  map.is_in_db(dbif):
+                map.delete(dbif)
+            mod = copy.deepcopy(g_remove)
+            mod(rast=map.get_name())
+            mod.run()
+
+    if connected:
+        dbif.close()
 
 if __name__ == "__main__":
     import doctest

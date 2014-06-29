@@ -63,7 +63,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
     def __init__(self, pid=None, run=False, debug=True, spatial = False, nprocs = 1, register_null = False):
         TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs, register_null)
 
-        self.m_mapcalc = pymod.Module('r.mapcalc')
+        self.m_mapcalc = pymod.Module('r.mapcalc', run_=False, finish_=False)
         self.m_mremove = pymod.Module('g.mremove')
 
     def parse(self, expression, basename = None, overwrite=False):
