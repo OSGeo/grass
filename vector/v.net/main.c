@@ -5,10 +5,12 @@
  * 
  * AUTHOR(S):    Radim Blazek
  *               Martin Landa <landa.martin gmail.com> (connect/arcs)
+ *               Stepan Turek <stepan.turek seznam.cz> (turns support)
+ *
  *               
  * PURPOSE:      Network maintenance
  *               
- * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2009,2014 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -37,7 +39,7 @@ int main(int argc, char **argv)
     double thresh;
 
     char message[4096];
-    
+
     /*  initialize the GIS calls */
     G_gisinit(argv[0]);
 
@@ -57,9 +59,9 @@ int main(int argc, char **argv)
     In = Points = Out = NULL;
     file_arcs = NULL;
     message[0] = '\0';
-    
+
     /* open input map */
-    if (act != TOOL_ARCS) {
+    if (act != TOOL_ARCS && act != TOOL_TURNTABLE) {
 	In = (struct Map_info *)G_malloc(sizeof(struct Map_info));
 	Vect_set_open_level(2);
 	if (Vect_open_old(In, opt.input->answer, "") == -1)
@@ -116,7 +118,8 @@ int main(int argc, char **argv)
 	if (Vect_open_new(Out, opt.output->answer, is3d) == -1) {
 	    if (In)
 		Vect_close(In);
-	    G_fatal_error(_("Unable to open vector map <%s> at topology level %d"),
+	    G_fatal_error(_
+			  ("Unable to open vector map <%s> at topology level %d"),
 			  opt.output->answer, 2);
 	}
 
@@ -130,28 +133,31 @@ int main(int argc, char **argv)
 	if (act == TOOL_NODES) {
 	    /* nodes */
 	    int nnodes;
+
 	    nnodes = nodes(In, Out, opt.cats_flag->answer, nfield);
 
-	    sprintf (message, _("%d new points (nodes) written to output."), nnodes);
+	    sprintf(message, _("%d new points (nodes) written to output."),
+		    nnodes);
 	}
 	else {			/* connect or arcs */
 	    int narcs;
 
 	    if (act == TOOL_CONNECT)
 		narcs = connect_arcs(In, Points, Out, afield, nfield,
-		                     thresh, opt.snap_flag->answer);
+				     thresh, opt.snap_flag->answer);
 	    else
 		narcs = create_arcs(file_arcs, Points, Out, afield, nfield);
 
-	    sprintf(message, _("%d lines (network arcs) written to output."), narcs);
+	    sprintf(message, _("%d lines (network arcs) written to output."),
+		    narcs);
 	}
 
 	if (In) {
-	  G_message (_("Copying attributes..."));
-	  if (Vect_copy_tables(In, Out, 0))
-	    G_warning(_("Failed to copy attribute table to output map"));
+	    G_message(_("Copying attributes..."));
+	    if (Vect_copy_tables(In, Out, 0))
+		G_warning(_("Failed to copy attribute table to output map"));
 	}
-	
+
 	/* support */
 	Vect_build_partial(Out, GV_BUILD_NONE);
 	Vect_build(Out);
@@ -160,6 +166,9 @@ int main(int argc, char **argv)
 	    Vect_close(Points);
 	if (Out)
 	    Vect_close(Out);
+    }
+    else if (act == TOOL_TURNTABLE) {
+	turntable(&opt);
     }
     else {			/* report */
 	report(In, afield, nfield, act);

@@ -79,6 +79,29 @@ connect it to layer 2 with <em><a href="v.db.connect.html">v.db.connect</a></em>
 and update the new table with cat values with <em><a href="v.to.db.html">v.to.db</a></em>. 
 
 <p>
+The <em>turntable</em> operation creates a turntable  
+with the costs for every possible 
+turn on every possible node (intersection, crossroad) in given layer (alayer). 
+U-turns are taken in account too.
+Turntable is created in <b>tlayer</b> and <b>tuclayer</b>.
+Building the turntable allows you to model e.g. trafic code, where some turns 
+may be prohibited.
+If features in analyzed network are changed, the turntable must be created again
+(e.g. it includes v.net connect operation).
+Turntable name consists of output vector map name + "_turntable_" + "t" + "_" + tlayer +
+ "_" + "tuc" + "_" + tuclayer + "_" + "a" + "_" + alayer  e. g. roads_turntable_t_3_tuc_4_a_1
+
+<p>These modules are able to work with the turntable: 
+<!--<em><a href="v.net.alloc.html">v.net.alloc</a></em>,-->
+<!--<em><a href="v.net.iso.html">v.net.iso</a></em>,-->
+<em><a href="v.net.path.html">v.net.path</a></em><!--,-->
+<!--<em><a href="v.net.salesman.html">v.net.salesman</a></em>,-->
+<!--<em><a href="v.net.steiner.html">v.net.steiner</a></em>.-->
+
+For more information about turns in the vector network analyses see 
+<a href="http://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis">wiki page</a>.
+
+<p>
 Once a vector network has been created, it can be analyzed in a 
 number of powerful ways using the suite of <em>v.net</em>.* modules. 
 The shortest route between two nodes, following arcs, can be computed
@@ -153,6 +176,11 @@ v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
 > EOF
 </pre></div>
 
+Following example generates a vector map with turntable:
+<div class="code"><pre>
+v.net operation=turntable in=railroads out=railroads_ttb
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -187,5 +215,15 @@ Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy and CTU in
 Prague, Czech Republic (operation 'connect' and 'arcs')<br>
 
 Markus Metz: important fixes and improvements
+
+<h3>TURNS SUPPORT</h3>
+
+The turns support was implemnented as part of GRASS GIS turns cost project at Czech Technical University in Prague, Czech Republic.  
+Eliska Kyzlikova, Stepan Turek, Lukas Bocan and Viera Bejdova participated at the project.
+
+Implementation: Stepan Turek 
+Documentation: Lukas Bocan
+Mentor: Martin Landa
+
 <p>
 <i>Last changed: $Date$</i>
