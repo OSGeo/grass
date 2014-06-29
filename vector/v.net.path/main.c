@@ -4,7 +4,7 @@
  * MODULE:       v.net.path
  * 
  * AUTHOR(S):    Radim Blazek
- *               Stepan Turek <stepan.turek seznam.cz> (turns support)               
+ *               Stepan Turek <stepan.turek seznam.cz> (turns support)
  *
  * PURPOSE:      Shortest path on vector network
  *               
@@ -47,17 +47,17 @@ int main(int argc, char **argv)
     input_opt = G_define_standard_option(G_OPT_V_INPUT);
     output_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "line,boundary";
-    type_opt->answer = "line,boundary";
-    type_opt->required = YES;
-    type_opt->label = _("Arc type");
-
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     afield_opt->key = "alayer";
     afield_opt->answer = "1";
     afield_opt->required = YES;
     afield_opt->label = _("Arc layer");
+
+    type_opt = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt->options = "line,boundary";
+    type_opt->answer = "line,boundary";
+    type_opt->required = YES;
+    type_opt->label = _("Arc type");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     nfield_opt->key = "nlayer";
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     tfield_opt->answer = "3";
     tfield_opt->label = _("Turntable layer");
     tfield_opt->description =
-	_("If the -t flag is given, the parameter is required");
+	_("Relevant only with -t flag.");
     tfield_opt->guisection = _("Turntable");
 
     tucfield_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
     tucfield_opt->answer = "4";
     tucfield_opt->label = _("Layer with unique categories used in turntable");
     tucfield_opt->description =
-	_("If the -t flag is given, the parameter is required");
+	_("Relevant only with -t flag.");
     tucfield_opt->guisection = _("Turntable");
 
     geo_f = G_define_flag();
@@ -132,9 +132,7 @@ int main(int argc, char **argv)
 
     turntable_f = G_define_flag();
     turntable_f->key = 't';
-    turntable_f->description = _("Use turntable"
-				 "(tuclayer and tlayer are required with this flag).");
-
+    turntable_f->description = _("Use turntable");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
