@@ -30,7 +30,7 @@ from threading import Thread
 import wx
 from   wx.lib.newevent import NewEvent
 from   wx              import glcanvas
-from wx.glcanvas       import WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE
+from wx.glcanvas       import WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
@@ -80,15 +80,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.lmgr = lmgr
         self.frame = frame
 
+        attribs=[WX_GL_RGBA, WX_GL_DOUBLEBUFFER]
         # for wxGTK we need to set WX_GL_DEPTH_SIZE to draw vectors correctly
         # but we don't know the right value
         # in wxpython 2.9, there is IsDisplaySupported
         if CheckWxVersion(version=[2, 8, 11]) and \
            sys.platform not in ('win32', 'darwin'):
             depthBuffer = int(UserSettings.Get(group='display', key='nvizDepthBuffer', subkey='value'))
-            attribs=[WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, depthBuffer, 0]
-        else:
-            attribs=[WX_GL_DOUBLEBUFFER, 0]
+            attribs.extend([WX_GL_DEPTH_SIZE, depthBuffer])
+        attribs.append(0)
 
         glcanvas.GLCanvas.__init__(self, parent, id, attribList=attribs)
 
