@@ -1,21 +1,166 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+List time stamped raster map layers that are registered in a space time raster dataset. This module provides
+several options to list map layers and their metadata. Listing of map layer can be ordered by metadata,
+metadata columns can be specified and SQL where conditions can be provided to select a map layer subset
+of the input space time raster dataset. Most of the raster map  specific metadat is available for column selection,
+sorting and SQL where statements.
+
+Using the <b>method</b> option allows the specification of different methods to list map layers.
+Method <i>col</i> is the deafult option and sensitive to the <b>column</b>,<b>order</b>
+and <b>where</b> options. It will simply print user specified metadata columns of one map layer per line.
+The <i>comma</i> method will list the map layer as comma separated list that can be used as input
+for spatial modules.
+To print interval length in days and distance from the begin use method <i>delta</i>. Method
+<i>deltagap</i> will additionally print temporal gaps between map layer. The <i>gran</i>
+method allows the listing of map layer sampled by a user defined <b>granule</b>. As default the granularity
+of the space time raster dataset is used for sampling.
+
+For user defined column separator can be specified with the <b>separator</b> option.
 
 <h2>EXAMPLE</h2>
-
-Example for checking which maps were used in a time series operation
-(e.g. <em>t.rast.series perform</em>):
-
+This example shows several options that are available for map layers listing.
 <div class="code"><pre>
-t.rast.list input=precipitation_1950_2013_monthly_mm \
-       where="start_time = datetime(start_time, 'start of year', '0 month')"
- precipitation_monthly_mm_0 soeren 1950-01-01 00:00:00 1950-02-01 00:00:00
- precipitation_monthly_mm_12 soeren 1951-01-01 00:00:00 1951-02-01 00:00:00
- ...
- precipitation_monthly_mm_732 soeren 2011-01-01 00:00:00 2011-02-01 00:00:00
- precipitation_monthly_mm_744 soeren 2012-01-01 00:00:00 2012-02-01 00:00:00
- precipitation_monthly_mm_756 soeren 2013-01-01 00:00:00 2013-02-01 00:00:00
+g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
+
+r.mapcalc expr="map_1 = rand(0, 550)"
+r.mapcalc expr="map_2 = rand(0, 450)"
+r.mapcalc expr="map_3 = rand(0, 320)"
+r.mapcalc expr="map_4 = rand(0, 510)"
+r.mapcalc expr="map_5 = rand(0, 300)"
+r.mapcalc expr="map_6 = rand(0, 650)"
+
+cat > map_list.txt << EOF
+map_1|2001-01-01|2001-04-01
+map_2|2001-05-01|2001-07-01
+map_3|2001-08-01|2001-10-01
+map_4|2001-11-01|2002-01-01
+map_5|2002-02-01|2002-04-01
+map_6|2002-05-01|2002-07-01
+EOF
+
+t.create type=strds temporaltype=absolute \
+         output=test_strds \
+         title="Test STRDS" \
+         description="Test dataset"
+
+t.register type=rast -i input=test_strds file=map_list.txt
+
+t.rast.list method=comma input=test_strds
+map_1@PERMANENT,map_2@PERMANENT,map_3@PERMANENT,map_4@PERMANENT,map_5@PERMANENT,map_6@PERMANENT
+
+t.rast.list method=col input=test_strds
+map_1|PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00
+map_2|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00
+map_3|PERMANENT|2001-08-01 00:00:00|2001-10-01 00:00:00
+map_4|PERMANENT|2001-11-01 00:00:00|2002-01-01 00:00:00
+map_5|PERMANENT|2002-02-01 00:00:00|2002-04-01 00:00:00
+map_6|PERMANENT|2002-05-01 00:00:00|2002-07-01 00:00:00
+
+t.rast.list  method=col input=test_strds columns=name,start_time,min,max
+name|start_time|min|max
+map_1|2001-01-01 00:00:00|0.0|548.0
+map_2|2001-05-01 00:00:00|0.0|445.0
+map_3|2001-08-01 00:00:00|0.0|318.0
+map_4|2001-11-01 00:00:00|0.0|503.0
+map_5|2002-02-01 00:00:00|0.0|296.0
+map_6|2002-05-01 00:00:00|0.0|648.0
+
+t.rast.list  method=col input=test_strds columns=name,start_time,min,max where="max > 500"
+name|start_time|min|max
+map_1|2001-01-01 00:00:00|0.0|548.0
+map_4|2001-11-01 00:00:00|0.0|503.0
+map_6|2002-05-01 00:00:00|0.0|648.0
+
+t.rast.list  method=delta input=test_strds
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|90.0|0.0
+map_2@PERMANENT|map_2|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00|61.0|120.0
+map_3@PERMANENT|map_3|PERMANENT|2001-08-01 00:00:00|2001-10-01 00:00:00|61.0|212.0
+map_4@PERMANENT|map_4|PERMANENT|2001-11-01 00:00:00|2002-01-01 00:00:00|61.0|304.0
+map_5@PERMANENT|map_5|PERMANENT|2002-02-01 00:00:00|2002-04-01 00:00:00|59.0|396.0
+map_6@PERMANENT|map_6|PERMANENT|2002-05-01 00:00:00|2002-07-01 00:00:00|61.0|485.0
+
+t.rast.list  method=deltagaps input=test_strds
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|90.0|0.0
+None|None|None|2001-04-01 00:00:00|2001-05-01 00:00:00|30.0|90.0
+map_2@PERMANENT|map_2|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00|61.0|120.0
+None|None|None|2001-07-01 00:00:00|2001-08-01 00:00:00|31.0|181.0
+map_3@PERMANENT|map_3|PERMANENT|2001-08-01 00:00:00|2001-10-01 00:00:00|61.0|212.0
+None|None|None|2001-10-01 00:00:00|2001-11-01 00:00:00|31.0|273.0
+map_4@PERMANENT|map_4|PERMANENT|2001-11-01 00:00:00|2002-01-01 00:00:00|61.0|304.0
+None|None|None|2002-01-01 00:00:00|2002-02-01 00:00:00|31.0|365.0
+map_5@PERMANENT|map_5|PERMANENT|2002-02-01 00:00:00|2002-04-01 00:00:00|59.0|396.0
+None|None|None|2002-04-01 00:00:00|2002-05-01 00:00:00|30.0|455.0
+map_6@PERMANENT|map_6|PERMANENT|2002-05-01 00:00:00|2002-07-01 00:00:00|61.0|485.0
+
+t.rast.list  method=gran input=test_strds
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00|31.0|0.0
+map_1@PERMANENT|map_1|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00|28.0|31.0
+map_1@PERMANENT|map_1|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00|31.0|59.0
+None|None|None|2001-04-01 00:00:00|2001-05-01 00:00:00|30.0|90.0
+map_2@PERMANENT|map_2|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00|31.0|120.0
+map_2@PERMANENT|map_2|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00|30.0|151.0
+None|None|None|2001-07-01 00:00:00|2001-08-01 00:00:00|31.0|181.0
+map_3@PERMANENT|map_3|PERMANENT|2001-08-01 00:00:00|2001-09-01 00:00:00|31.0|212.0
+map_3@PERMANENT|map_3|PERMANENT|2001-09-01 00:00:00|2001-10-01 00:00:00|30.0|243.0
+None|None|None|2001-10-01 00:00:00|2001-11-01 00:00:00|31.0|273.0
+map_4@PERMANENT|map_4|PERMANENT|2001-11-01 00:00:00|2001-12-01 00:00:00|30.0|304.0
+map_4@PERMANENT|map_4|PERMANENT|2001-12-01 00:00:00|2002-01-01 00:00:00|31.0|334.0
+None|None|None|2002-01-01 00:00:00|2002-02-01 00:00:00|31.0|365.0
+map_5@PERMANENT|map_5|PERMANENT|2002-02-01 00:00:00|2002-03-01 00:00:00|28.0|396.0
+map_5@PERMANENT|map_5|PERMANENT|2002-03-01 00:00:00|2002-04-01 00:00:00|31.0|424.0
+None|None|None|2002-04-01 00:00:00|2002-05-01 00:00:00|30.0|455.0
+map_6@PERMANENT|map_6|PERMANENT|2002-05-01 00:00:00|2002-06-01 00:00:00|31.0|485.0
+map_6@PERMANENT|map_6|PERMANENT|2002-06-01 00:00:00|2002-07-01 00:00:00|30.0|516.0
+
+t.rast.list  method=gran input=test_strds gran="2 months"
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-03-01 00:00:00|59.0|0.0
+map_1@PERMANENT|map_1|PERMANENT|2001-03-01 00:00:00|2001-05-01 00:00:00|61.0|59.0
+map_2@PERMANENT|map_2|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00|61.0|120.0
+map_3@PERMANENT|map_3|PERMANENT|2001-07-01 00:00:00|2001-09-01 00:00:00|62.0|181.0
+map_3@PERMANENT|map_3|PERMANENT|2001-09-01 00:00:00|2001-11-01 00:00:00|61.0|243.0
+map_4@PERMANENT|map_4|PERMANENT|2001-11-01 00:00:00|2002-01-01 00:00:00|61.0|304.0
+map_5@PERMANENT|map_5|PERMANENT|2002-01-01 00:00:00|2002-03-01 00:00:00|59.0|365.0
+map_5@PERMANENT|map_5|PERMANENT|2002-03-01 00:00:00|2002-05-01 00:00:00|61.0|424.0
+map_6@PERMANENT|map_6|PERMANENT|2002-05-01 00:00:00|2002-07-01 00:00:00|61.0|485.0
+
+t.rast.list  method=gran         input=test_strds gran="18 days"
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-01-19 00:00:00|18.0|0.0
+map_1@PERMANENT|map_1|PERMANENT|2001-01-19 00:00:00|2001-02-06 00:00:00|18.0|18.0
+map_1@PERMANENT|map_1|PERMANENT|2001-02-06 00:00:00|2001-02-24 00:00:00|18.0|36.0
+map_1@PERMANENT|map_1|PERMANENT|2001-02-24 00:00:00|2001-03-14 00:00:00|18.0|54.0
+map_1@PERMANENT|map_1|PERMANENT|2001-03-14 00:00:00|2001-04-01 00:00:00|18.0|72.0
+None|None|None|2001-04-01 00:00:00|2001-04-19 00:00:00|18.0|90.0
+map_2@PERMANENT|map_2|PERMANENT|2001-04-19 00:00:00|2001-05-07 00:00:00|18.0|108.0
+map_2@PERMANENT|map_2|PERMANENT|2001-05-07 00:00:00|2001-05-25 00:00:00|18.0|126.0
+map_2@PERMANENT|map_2|PERMANENT|2001-05-25 00:00:00|2001-06-12 00:00:00|18.0|144.0
+map_2@PERMANENT|map_2|PERMANENT|2001-06-12 00:00:00|2001-06-30 00:00:00|18.0|162.0
+map_2@PERMANENT|map_2|PERMANENT|2001-06-30 00:00:00|2001-07-18 00:00:00|18.0|180.0
+map_3@PERMANENT|map_3|PERMANENT|2001-07-18 00:00:00|2001-08-05 00:00:00|18.0|198.0
+map_3@PERMANENT|map_3|PERMANENT|2001-08-05 00:00:00|2001-08-23 00:00:00|18.0|216.0
+map_3@PERMANENT|map_3|PERMANENT|2001-08-23 00:00:00|2001-09-10 00:00:00|18.0|234.0
+map_3@PERMANENT|map_3|PERMANENT|2001-09-10 00:00:00|2001-09-28 00:00:00|18.0|252.0
+map_3@PERMANENT|map_3|PERMANENT|2001-09-28 00:00:00|2001-10-16 00:00:00|18.0|270.0
+map_4@PERMANENT|map_4|PERMANENT|2001-10-16 00:00:00|2001-11-03 00:00:00|18.0|288.0
+map_4@PERMANENT|map_4|PERMANENT|2001-11-03 00:00:00|2001-11-21 00:00:00|18.0|306.0
+map_4@PERMANENT|map_4|PERMANENT|2001-11-21 00:00:00|2001-12-09 00:00:00|18.0|324.0
+map_4@PERMANENT|map_4|PERMANENT|2001-12-09 00:00:00|2001-12-27 00:00:00|18.0|342.0
+map_4@PERMANENT|map_4|PERMANENT|2001-12-27 00:00:00|2002-01-14 00:00:00|18.0|360.0
+None|None|None|2002-01-14 00:00:00|2002-02-01 00:00:00|18.0|378.0
+map_5@PERMANENT|map_5|PERMANENT|2002-02-01 00:00:00|2002-02-19 00:00:00|18.0|396.0
+map_5@PERMANENT|map_5|PERMANENT|2002-02-19 00:00:00|2002-03-09 00:00:00|18.0|414.0
+map_5@PERMANENT|map_5|PERMANENT|2002-03-09 00:00:00|2002-03-27 00:00:00|18.0|432.0
+map_5@PERMANENT|map_5|PERMANENT|2002-03-27 00:00:00|2002-04-14 00:00:00|18.0|450.0
+map_6@PERMANENT|map_6|PERMANENT|2002-04-14 00:00:00|2002-05-02 00:00:00|18.0|468.0
+map_6@PERMANENT|map_6|PERMANENT|2002-05-02 00:00:00|2002-05-20 00:00:00|18.0|486.0
+map_6@PERMANENT|map_6|PERMANENT|2002-05-20 00:00:00|2002-06-07 00:00:00|18.0|504.0
+map_6@PERMANENT|map_6|PERMANENT|2002-06-07 00:00:00|2002-06-25 00:00:00|18.0|522.0
+map_6@PERMANENT|map_6|PERMANENT|2002-06-25 00:00:00|2002-07-13 00:00:00|18.0|540.0
 </pre></div>
 
 <h2>SEE ALSO</h2>

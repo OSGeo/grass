@@ -66,8 +66,8 @@
 #%end
 
 #%flag
-#% key: h
-#% description: Print the column names as first row
+#% key: s
+#% description: Suppress printing of column names
 #% guisection: Formatting
 #%end
 
@@ -86,7 +86,7 @@ def main():
     where = options["where"]
     separator = grass.separator(options["separator"])
     method = options["method"]
-    header = flags["h"]
+    header = flags["s"]
 
     # Make sure the temporal database exists
     tgis.init()

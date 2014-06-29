@@ -10,7 +10,7 @@ Usage:
 import grass.temporal as tgis
 
 tgis.print_gridded_dataset_univar_statistics(
-    type, input, where, extended, header, fs)
+    type, input, where, extended, no_header, fs)
 
 ...
 @endcode
@@ -29,14 +29,14 @@ from open_stds import *
 
 
 def print_gridded_dataset_univar_statistics(type, input, where, extended,
-                                            header, fs):
+                                            no_header=False, fs="|"):
     """!Print univariate statistics for a space time raster or raster3d dataset
 
        @param type Must be "strds" or "str3ds"
        @param input The name of the space time dataset
        @param where A temporal database where statement
        @param extended If True compute extended statistics
-       @param header   If True print column names as header
+       @param no_header Supress the printing of column names
        @param fs Field separator
     """
 
@@ -54,7 +54,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
         core.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
-    if header == True:
+    if no_header is False:
         string = ""
         string += "id" + fs + "start" + fs + "end" + fs + "mean" + fs
         string += "min" + fs + "max" + fs
@@ -106,7 +106,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
 
 
 def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
-                                           where, extended, header, fs):
+                                           where, extended, no_header=False, fs="|"):
     """!Print univariate statistics for a space time vector dataset
 
        @param input The name of the space time dataset
@@ -117,7 +117,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
        @param column The name of the attribute column
        @param where A temporal database where statement
        @param extended If True compute extended statistics
-       @param header   If True print column names as header
+       @param no_header Supress the printing of column names
        @param fs Field separator
     """
 
@@ -150,7 +150,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     string = ""
-    if header == True:
+    if no_header is False:
         string += "id" + fs + "start" + fs + "end" + fs + "n" + \
             fs + "nmissing" + fs + "nnull" + fs
         string += "min" + fs + "max" + fs + "range"
