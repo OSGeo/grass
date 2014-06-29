@@ -1147,8 +1147,9 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
             if ' ' in val:
                 val = '"%s"' % val
             f.write('export %s=%s\n' % (env, val))
-    #    if os.access(grass_env_file, os.R_OK):
-    #        f.write(readfile(grass_env_file) + '\n')
+    ### Replaced by code above (do not override already set up environment variables)
+    ###    if os.access(grass_env_file, os.R_OK):
+    ###        f.write(readfile(grass_env_file) + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
