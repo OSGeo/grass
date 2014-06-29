@@ -57,8 +57,8 @@
 #%end
 
 #%flag
-#% key: h
-#% description: Print the column names as first row
+#% key: s
+#% description: Suppress printing of column names
 #% guisection: Formatting
 #%end
 
@@ -66,7 +66,6 @@ import grass.script as grass
 import grass.temporal as tgis
 
 ############################################################################
-
 
 def main():
 
@@ -78,7 +77,7 @@ def main():
     column = options["column"]
     where = options["where"]
     extended = flags["e"]
-    header = flags["h"]
+    header = flags["s"]
     separator = grass.separator(options["separator"])
 
     # Make sure the temporal database exists

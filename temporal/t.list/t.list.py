@@ -71,7 +71,7 @@
 #%end
 
 #%flag
-#% key: h
+#% key: c
 #% description: Print the column names as first row
 #% guisection: Formatting
 #%end
@@ -92,7 +92,7 @@ def main():
     order = options["order"]
     where = options["where"]
     separator = grass.separator(options["separator"])
-    colhead = flags['h']
+    colhead = flags['c']
 
     # Make sure the temporal database exists
     tgis.init()

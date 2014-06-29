@@ -10,7 +10,7 @@ export GRASS_OVERWRITE=1
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 r.mapcalc expr="a1 = rand(0, 550)"
-r.mapcalc expr="a2 = rand(0, 450)"
+r.mapcalc expr="a2 = if(col() == 2, null(), rand(0, 450))"
 r.mapcalc expr="a3 = rand(0, 320)"
 r.mapcalc expr="a4 = rand(0, 510)"
 r.mapcalc expr="a5 = rand(0, 300)"
@@ -41,6 +41,9 @@ t.rast.mapcalc2 --v expression="B = if(end_doy() >= 0 && end_dow() >= 0, A1 + A2
 t.info type=strds input=B
 
 t.rast.mapcalc2 --v expression="B = A1[-1] + A2[1] " base=b nprocs=5
+t.info type=strds input=B
+
+t.rast.mapcalc2 --v expression="B = if(isnull(A1), (A1[-1] + A1[1])/2.0, A1)" base=b nprocs=5
 t.info type=strds input=B
 
 # @postprocess
