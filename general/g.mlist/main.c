@@ -448,7 +448,7 @@ static int region_overlaps(struct Cell_head *window, const char *name,
 	break;
     case TYPE_VECT:
 	Vect_set_open_level(2);
-	if (Vect_open_old(&Map, name, mapset) < 2)
+	if (Vect_open_old_head(&Map, name, mapset) < 2)
 	    G_fatal_error(_("Unable to open vector map <%s@%s> on topological level"),
 			  name, mapset);
 	Vect_get_map_box(&Map, &box);
