@@ -510,7 +510,7 @@ int main(int argc, char *argv[])
 	    temp_window = window;
 
 	    Vect_set_open_level(2);
-	    if (2 > Vect_open_old(&Map, vect_name, mapset))
+	    if (2 > Vect_open_old_head(&Map, vect_name, mapset))
 		G_fatal_error(_("Unable to open vector map <%s> on topological level"),
 			      vect_name);
             
