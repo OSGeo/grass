@@ -416,7 +416,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.cmdindex = len(self.cmdbuffer) - 1
 
             try:
-                txt = self.cmdbuffer[self.cmdindex]
+                # without strip causes problem on windows
+                txt = self.cmdbuffer[self.cmdindex].strip()
             except KeyError:
                 txt = ''
 
