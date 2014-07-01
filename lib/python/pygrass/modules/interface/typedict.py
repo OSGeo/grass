@@ -36,9 +36,8 @@ class TypeDict(OrderedDict):
         if isinstance(value, self._type):
             super(TypeDict, self).__setitem__(key, value)
         else:
-            cl = repr(self._type).translate(None, "'<> ").split('.')
-            str_err = 'The value: %r is not a %s object'
-            raise TypeError(str_err % (value, cl[-1].title()))
+            str_err = 'The value: %r is not a %s instance.'
+            raise TypeError(str_err % (value, self._type.__name__))
 
     @property
     def __doc__(self):
