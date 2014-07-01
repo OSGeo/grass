@@ -93,6 +93,37 @@ Module('r.colors')
 >>> stderr.strip()
 "Color table for raster map <test_a> set to 'rules'"
 
+Run a second time
+>>> colors.run()
+Module('r.colors')
+>>> stdout, stderr = colors.popen.communicate(input="1 blue")
+>>> colors.popen.returncode
+0
+>>> stdout
+>>> stderr.strip()
+"Color table for raster map <test_a> set to 'rules'"
+
+Multiple run test
+>>> colors = pymod.Module("r.colors", map="test_a",
+...                                            color="ryb", run_=False)
+>>> colors.run()
+Module('r.colors')
+>>> colors(color="gyr")
+>>> colors.run()
+Module('r.colors')
+>>> colors(color="ryg")
+>>> colors(stderr_=PIPE)
+>>> colors.run()
+Module('r.colors')
+>>> print(colors.outputs["stderr"].value.strip())
+Color table for raster map <test_a> set to 'ryg'
+>>> colors(color="byg")
+>>> colors(stdout_=PIPE)
+>>> colors.run()
+Module('r.colors')
+>>> print(colors.outputs["stderr"].value.strip())
+Color table for raster map <test_a> set to 'byg'
+
 @endcode
 """
 from __future__ import (nested_scopes, generators, division, absolute_import,
@@ -383,10 +414,10 @@ class Module(object):
             self.inputs['stdin'].value = kargs['stdin_']
             del(kargs['stdin_'])
         if 'stdout_' in kargs:
-            self.outputs['stdout'].value = kargs['stdout_']
+            self.stdout_ = kargs['stdout_']
             del(kargs['stdout_'])
         if 'stderr_' in kargs:
-            self.outputs['stderr'].value = kargs['stderr_']
+            self.stderr_ = kargs['stderr_']
             del(kargs['stderr_'])
         if 'env_' in kargs:
             self.env_ = kargs['env_']
@@ -524,10 +555,7 @@ class Module(object):
         if self.inputs['stdin'].value:
             self.stdin = self.inputs['stdin'].value
             self.stdin_ = PIPE
-        if self.outputs['stdout'].value:
-            self.stdout_ = self.outputs['stdout'].value
-        if self.outputs['stderr'].value:
-            self.stderr_ = self.outputs['stderr'].value
+        
         cmd = self.make_cmd()
         start = time.time()
         self.popen = Popen(cmd,
