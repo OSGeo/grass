@@ -45,8 +45,8 @@ with the <a href="r.info.html">r.info</a> command.
 
 <p>
 The solar incidence angle raster map <i>incidout</i> is computed specifying 
-elevation raster map <i>elev_in</i>, aspect raster map <i>asp_in</i>, slope 
-steepness raster map <i>slope_in,</i> given the day <i>day</i> and local time
+elevation raster map <i>elevation</i>, aspect raster map <i>aspect</i>, slope 
+steepness raster map <i>slope,</i> given the day <i>day</i> and local time
 <i>time</i>. There is no need to define latitude for locations with known
 and defined projection/coordinate system (check it with the <a href="g.proj.html">
 g.proj</a>
@@ -70,7 +70,7 @@ of geographical latitude can be set as a constant for the whole computed
 region or, as an option, a grid representing spatially distributed values
 over a large region. The geographical latitude must be also in decimal system
 with positive values for northern hemisphere and negative for southern one.
-In similar principle the Linke turbidity factor (<i>linke_in</i>, <i>lin</i>
+In similar principle the Linke turbidity factor (<i>linke</i>, <i>lin</i>
 ) and ground albedo (<i>albedo</i>, <i>alb</i>) can be set. 
 <p>Besides clear-sky radiations, the user can compute a real-sky radiation (beam,
 diffuse) using <i>coef_bh</i> and <i>coef_dh</i> input raster maps defining
@@ -83,7 +83,7 @@ for beam and diffuse radiation (see Suri and Hofierka, 2004, section 3.2).
 <p>
 The solar irradiation or irradiance raster maps <i>beam_rad</i>, <i>diff_rad</i>,
 <i>refl_rad</i> are computed for a given day <i>day,</i> latitude <i>lat_in</i>,
-elevation <i>elev_in</i>, slope <i>slope_in</i> and aspect <i>asp_in</i> raster maps.
+elevation <i>elevation</i>, slope <i>slope</i> and aspect <i>aspect</i> raster maps.
 For convenience, the output raster given as <i>glob_rad</i>
 will output the sum of the three radiation components. The program uses 
 the Linke atmosphere turbidity factor and ground albedo coefficient. 
@@ -258,15 +258,15 @@ North Carolina example (considering also cast shadows):
 g.region rast=elevation -p
 
 # calculate horizon angles (to speed up the subsequent r.sun calculation)
-r.horizon elev_in=elevation horizon_step=30 bufferzone=200 horizon=horangle \
+r.horizon elevation=elevation step=30 bufferzone=200 basename=horangle \
     maxdistance=5000
 
 # slope + aspect
 r.slope.aspect elevation=elevation aspect=aspect.dem slope=slope.dem
 
 # calculate global radiation for day 180 at 14:00hrs, using r.horizon output
-r.sun elev_in=elevation horizon=horangle horizon_step=30 asp_in=aspect.dem \
-      slope_in=slope.dem glob_rad=global_rad day=180 time=14
+r.sun elevation=elevation horizon_basename=horangle horizon_step=30 \
+      aspect=aspect.dem slope=slope.dem glob_rad=global_rad day=180 time=14
 </pre></div>
 
 <p>
@@ -279,7 +279,7 @@ in non-leap years):
 g.region rast=elev_ned_30m -p
 
 # considering cast shadows
-r.sun elev_in=elev_ned_30m lin=2.5 alb=0.2 day=172 \
+r.sun elevation=elev_ned_30m lin=2.5 alb=0.2 day=172 \
       beam_rad=b172 diff_rad=d172 \
       refl_rad=r172 insol_time=it172
 
