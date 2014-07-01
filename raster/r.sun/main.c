@@ -98,6 +98,10 @@ const char *glob_rad = NULL;
 const char *mapset = NULL;
 const char *per;
 
+size_t decimals;
+char *str_step;
+
+
 struct Cell_head cellhd;
 struct pj_info iproj;
 struct pj_info oproj;
@@ -202,8 +206,6 @@ double distance(double x1, double x2, double y1, double y2)
 }
 
 
-
-
 int main(int argc, char *argv[])
 {
     double singleSlope;
@@ -249,7 +251,7 @@ int main(int argc, char *argv[])
 	 "the topography is optionally incorporated.");
 
     parm.elevin = G_define_option();
-    parm.elevin->key = "elev_in";
+    parm.elevin->key = "elevation";
     parm.elevin->type = TYPE_STRING;
     parm.elevin->required = YES;
     parm.elevin->gisprompt = "old,cell,raster";
@@ -258,7 +260,7 @@ int main(int argc, char *argv[])
     parm.elevin->guisection = _("Input options");
 
     parm.aspin = G_define_option();
-    parm.aspin->key = "asp_in";
+    parm.aspin->key = "aspect";
     parm.aspin->type = TYPE_STRING;
     parm.aspin->required = NO;
     parm.aspin->gisprompt = "old,cell,raster";
@@ -267,7 +269,7 @@ int main(int argc, char *argv[])
     parm.aspin->guisection = _("Input options");
 
     parm.aspect = G_define_option();
-    parm.aspect->key = "aspect";
+    parm.aspect->key = "aspect_value";
     parm.aspect->type = TYPE_DOUBLE;
     parm.aspect->answer = ASPECT;
     parm.aspect->required = NO;
@@ -276,7 +278,7 @@ int main(int argc, char *argv[])
     parm.aspect->guisection = _("Input options");
 
     parm.slopein = G_define_option();
-    parm.slopein->key = "slope_in";
+    parm.slopein->key = "slope";
     parm.slopein->type = TYPE_STRING;
     parm.slopein->required = NO;
     parm.slopein->gisprompt = "old,cell,raster";
@@ -285,7 +287,7 @@ int main(int argc, char *argv[])
     parm.slopein->guisection = _("Input options");
 
     parm.slope = G_define_option();
-    parm.slope->key = "slope";
+    parm.slope->key = "slope_value";
     parm.slope->type = TYPE_DOUBLE;
     parm.slope->answer = SLOPE;
     parm.slope->required = NO;
@@ -293,7 +295,7 @@ int main(int argc, char *argv[])
     parm.slope->guisection = _("Input options");
 
     parm.linkein = G_define_option();
-    parm.linkein->key = "linke_in";
+    parm.linkein->key = "linke";
     parm.linkein->type = TYPE_STRING;
     parm.linkein->required = NO;
     parm.linkein->gisprompt = "old,cell,raster";
@@ -333,7 +335,7 @@ int main(int argc, char *argv[])
     }
 
     parm.latin = G_define_option();
-    parm.latin->key = "lat_in";
+    parm.latin->key = "lat";
     parm.latin->type = TYPE_STRING;
     parm.latin->required = NO;
     parm.latin->gisprompt = "old,cell,raster";
@@ -342,7 +344,7 @@ int main(int argc, char *argv[])
     parm.latin->guisection = _("Input options");
 
     parm.longin = G_define_option();
-    parm.longin->key = "long_in";
+    parm.longin->key = "long";
     parm.longin->type = TYPE_STRING;
     parm.longin->required = NO;
     parm.longin->gisprompt = "old,cell,raster";
@@ -368,12 +370,11 @@ int main(int argc, char *argv[])
 	_("Name of real-sky diffuse radiation coefficient (haze) input raster map [0-1]");
     parm.coefdh->guisection = _("Input options");
 
-    parm.horizon = G_define_option();
-    parm.horizon->key = "horizon";
-    parm.horizon->type = TYPE_STRING;
+    parm.horizon = G_define_standard_option(G_OPT_R_BASENAME_INPUT);
+    parm.horizon->key = "horizon_basename";
     parm.horizon->required = NO;
     parm.horizon->gisprompt = "old,cell,raster";
-    parm.horizon->description = _("The horizon information input map prefix");
+    parm.horizon->description = _("The horizon information input map basename");
     parm.horizon->guisection = _("Input options");
 
     parm.horizonstep = G_define_option();
@@ -599,6 +600,7 @@ int main(int argc, char *argv[])
     if (parm.horizonstep->answer != NULL) {
 	if (sscanf(parm.horizonstep->answer, "%lf", &horizonStep) != 1)
 	    G_fatal_error(_("Error reading horizon step size"));
+        str_step = parm.horizonstep->answer;
 	if (horizonStep > 0.)
 	    setHorizonInterval(deg2rad * horizonStep);
 	else
@@ -784,8 +786,9 @@ int INPUT_part(int offset, double *zmax)
     static int *fd_shad;
     int fr1 = -1, fr2 = -1;
     int l, i, j;
-    char shad_filename[256];
+    char *shad_filename;
     char formatString[10];
+    double angle_deg = 0.;
 
     finalRow = m - offset - m / numPartitions;
     if (finalRow < 0) {
@@ -917,13 +920,24 @@ int INPUT_part(int offset, double *zmax)
 	 * else
 	 * {
 	 */
-	numDigits = (int)(log10(1. * arrayNumInt)) + 1;
+        decimals = G_get_num_decimals(str_step);
+        angle_deg = 0;
+        for (i = 0; i < arrayNumInt; i++) {
+            horizonbuf[i] = Rast_allocate_f_buf();
+            shad_filename = G_generate_basename(horizon, angle_deg, 
+                                                3, decimals);
+            fd_shad[i] = Rast_open_old(shad_filename, "");
+            angle_deg += horizonStep;
+            G_free(shad_filename);
+        }
+        /*
+        numDigits = (int)(log10(1. * arrayNumInt)) + 1;
 	sprintf(formatString, "%%s_%%0%dd", numDigits);
 	for (i = 0; i < arrayNumInt; i++) {
 	    horizonbuf[i] = Rast_allocate_f_buf();
 	    sprintf(shad_filename, formatString, horizon, i);
 	    fd_shad[i] = Rast_open_old(shad_filename, "");
-	}
+	} */
     }
     /*
      * }
