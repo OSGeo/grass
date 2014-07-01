@@ -181,15 +181,15 @@ int main(int argc, char *argv[])
     G_add_keyword(_("solar"));
     G_add_keyword(_("sun position"));
     module->label =
-	_("Horizon angle computation from a digital elevation model.");
+	_("Computes horizon angle height from a digital elevation model.");
     module->description =
-	_("Computes horizon angle height from a digital elevation model. The module has two"
-	 " different modes of operation:  "
-	 "1. Computes the entire horizon around a single point whose coordinates are"
-	 " given with the 'coord' option. The horizon height (in radians). "
-	 "2. Computes one or more raster maps of the horizon height in a single direction. "
-	 " The input for this is the angle (in degrees), which is measured "
-	 " counterclockwise with east=0, north=90 etc. The output is the horizon height in radians.");
+	_("The module has two "
+          "different modes of operation: "
+          "1. Computes the entire horizon around a single point whose coordinates are "
+          "given with the 'coord' option. The horizon height (in radians). "
+          "2. Computes one or more raster maps of the horizon height in a single direction. "
+          "The input for this is the angle (in degrees), which is measured "
+          "counterclockwise with east=0, north=90 etc. The output is the horizon height in radians.");
 
     parm.elevin = G_define_standard_option(G_OPT_R_ELEV);
     parm.elevin->guisection = _("Input options");
