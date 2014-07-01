@@ -69,7 +69,7 @@ const char *elevin;
 const char *horizon = NULL;
 const char *mapset = NULL;
 const char *per;
-char shad_filename[GNAME_MAX];
+char *shad_filename;
 char *outfile;
 
 struct Cell_head cellhd;
@@ -119,14 +119,15 @@ double single_direction;
 double xmin, xmax, ymin, ymax, zmax = 0.;
 int d, day, tien = 0;
 
-double length, maxlength = BIG, zmult = 1.0, step = 0.0, dist;
-double fixedMaxLength = BIG;
+double length, maxlength = BIG, zmult = 1.0, dist;
+double fixedMaxLength = BIG, step = 0.0, start = 0.0, end = 0.0;
 char *tt, *lt;
 double z_orig, zp;
 double h0, tanh0, angle;
 double stepsinangle, stepcosangle, sinangle, cosangle, distsinangle,
     distcosangle;
 double TOLER;
+const char *str_step;
 
 int mode;
 int isMode()
@@ -140,6 +141,7 @@ void setMode(int val)
 
 int ll_correction = FALSE;
 double coslatsq;
+
 
 /* why not use G_distance() here which switches to geodesic/great
   circle distance as needed? */
@@ -155,7 +157,6 @@ double distance(double x1, double x2, double y1, double y2)
 }
 
 
-
 int main(int argc, char *argv[])
 {
     double xcoord, ycoord;
@@ -163,8 +164,9 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *elevin, *dist, *coord, *direction, *horizon, *step,
-	    *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff, *maxdistance, *output;
+	struct Option *elevin, *dist, *coord, *direction, *horizon, 
+                      *step, *start, *end, *bufferzone, *e_buff, *w_buff, 
+                      *n_buff, *s_buff, *maxdistance, *output;
     } parm;
 
     struct
@@ -189,13 +191,7 @@ int main(int argc, char *argv[])
 	 " The input for this is the angle (in degrees), which is measured "
 	 " counterclockwise with east=0, north=90 etc. The output is the horizon height in radians.");
 
-    parm.elevin = G_define_option();
-    parm.elevin->key = "elev_in";
-    parm.elevin->type = TYPE_STRING;
-    parm.elevin->required = YES;
-    parm.elevin->gisprompt = "old,cell,raster";
-    parm.elevin->description =
-	_("Name of the input elevation raster map [meters]");
+    parm.elevin = G_define_standard_option(G_OPT_R_ELEV);
     parm.elevin->guisection = _("Input options");
 
 
@@ -208,12 +204,30 @@ int main(int argc, char *argv[])
     parm.direction->guisection = _("Input options");
 
     parm.step = G_define_option();
-    parm.step->key = "horizon_step";
+    parm.step->key = "step";
     parm.step->type = TYPE_DOUBLE;
     parm.step->required = NO;
     parm.step->description =
 	_("Angle step size for multidirectional horizon [degrees]");
     parm.step->guisection = _("Input options");
+
+    parm.start = G_define_option();
+    parm.start->key = "start";
+    parm.start->type = TYPE_DOUBLE;
+    parm.start->answer = "0.0";
+    parm.start->required = NO;
+    parm.start->description =
+        _("Start angle for multidirectional horizon [degrees]");
+    parm.start->guisection = _("Input options");
+
+    parm.end = G_define_option();
+    parm.end->key = "end";
+    parm.end->type = TYPE_DOUBLE;
+    parm.end->answer = "360.0";
+    parm.end->required = NO;
+    parm.end->description =
+        _("End angle for multidirectional horizon [degrees]");
+    parm.end->guisection = _("Input options");
 
     parm.bufferzone = G_define_option();
     parm.bufferzone->key = "bufferzone";
@@ -264,12 +278,8 @@ int main(int argc, char *argv[])
     parm.maxdistance->guisection = _("Input options");
 
 
-    parm.horizon = G_define_option();
-    parm.horizon->key = "horizon";
-    parm.horizon->type = TYPE_STRING;
+    parm.horizon = G_define_standard_option(G_OPT_R_BASENAME_OUTPUT);
     parm.horizon->required = NO;
-    parm.horizon->gisprompt = "old,cell,raster";
-    parm.horizon->description = _("Prefix of the horizon raster output maps");
     parm.horizon->guisection = _("Output options");
 
 
@@ -341,9 +351,11 @@ int main(int argc, char *argv[])
     elevin = parm.elevin->answer;
 
     if (parm.coord->answer == NULL) {
+        G_debug(1, "Setting mode: WHOLE_RASTER");
 	setMode(WHOLE_RASTER);
     }
     else {
+        G_debug(1, "Setting mode: SINGLE_POINT");
 	setMode(SINGLE_POINT);
 	if (sscanf(parm.coord->answer, "%lf,%lf", &xcoord, &ycoord) != 2) {
 	    G_fatal_error(
@@ -383,7 +395,23 @@ int main(int argc, char *argv[])
 	}
 	horizon = parm.horizon->answer;
 	if (parm.step->answer != NULL)
+            str_step = parm.step->answer;
 	    sscanf(parm.step->answer, "%lf", &step);
+        sscanf(parm.start->answer, "%lf", &start);
+        sscanf(parm.end->answer, "%lf", &end);
+        if (start < 0.0) {
+            G_fatal_error(
+                _("Negative values of start angle are not allowed. Aborting."));
+        }
+        if (end < 0.0 || end > 360.0) {
+            G_fatal_error(
+                _("End angle is not between 0 and 360. Aborting."));
+        }
+        if (start >= end) {
+            G_fatal_error(
+                _("You specify a start grater than the end angle. Aborting."));
+        }
+        G_debug(1, "Angle step: %g, start: %g, end: %g", step, start, end);
     }
     else {
 
@@ -392,8 +420,6 @@ int main(int argc, char *argv[])
 		_("You didn't specify an angle step size. Aborting."));
 	}
 	sscanf(parm.step->answer, "%lf", &step);
-
-
     }
 
     if (step == 0.0) {
@@ -1013,7 +1039,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	       int buffer_s, int buffer_n)
 {
     int i, j, l, k = 0;
-    int numDigits;
+    size_t numDigits = 3;
+    size_t decimals, add;
 
     int xindex, yindex;
     double shadow_angle;
@@ -1026,7 +1053,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
     double delt_east, delt_nor;
     double delt_dist;
 
-    char formatString[10];
+    char *formatString;
     char msg_buff[256];
 
     int hor_row_start = buffer_s;
@@ -1039,7 +1066,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
     int hor_numcols = n - (buffer_e + buffer_w);
 
     int arrayNumInt;
-    double dfr_rad;
+    int start_indx;
+    double dfr_rad, start_rad, angle_deg;
 
     xindex = (int)((xcoord - xmin) / stepx);
     yindex = (int)((ycoord - ymin) / stepy);
@@ -1103,24 +1131,30 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	}
 	else {
 	    dfr_rad = step * deg2rad;
-	    arrayNumInt = (int)(360. / fabs(step));
+            start_rad = start * deg2rad;
+	    arrayNumInt = (int)((end - start) / fabs(step));
+            start_indx = (int)(start / step);
 	}
 
-	numDigits = (int)(log10(1. * arrayNumInt)) + 1;
-	sprintf(formatString, "%%s_%%0%dd", numDigits);
+	/* numDigits = (int)(log10(1. * arrayNumInt)) + 1;
+	sprintf(formatString, "%%s_%%0%dd", numDigits); */
+
+        decimals = G_get_num_decimals(str_step);
 
 	for (k = 0; k < arrayNumInt; k++) {
 	   struct History history; 
 
-	    if (step != 0.0)
-		sprintf(shad_filename, formatString, horizon, k);
+	    angle = (start + single_direction) * deg2rad + (dfr_rad * k);
+            angle_deg = angle * rad2deg + 0.0001;
 
-	    angle = (single_direction * deg2rad) + (dfr_rad * k);
+            if (step != 0.0)
+                 shad_filename = G_generate_basename(horizon, angle_deg, 3, decimals);
+
 	    /*              
 	       com_par(angle);
 	     */
 	    G_message(_("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
-		     (k + 1), arrayNumInt, angle * rad2deg, shad_filename);
+		     (k + 1), arrayNumInt, angle_deg, shad_filename);
 
 	    for (j = hor_row_start; j < hor_row_end; j++) {
 		G_percent(j - hor_row_start, hor_numrows - 1, 2);
@@ -1264,6 +1298,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		angle * rad2deg);
 
 	    Rast_write_history(shad_filename, &history);
+            G_free(shad_filename);
 	}
     }
 }
