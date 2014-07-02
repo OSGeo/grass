@@ -8,7 +8,7 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import re
 
-
+from grass.pygrass.functions import docstring_property
 from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
 
 
@@ -163,9 +163,7 @@ class Parameter(object):
                            'raster', 'vector') else self.typedesc,
                            "yes" if self.multiple else "no")
 
-    # here we use property with a decorator, in this way we mask a method as
-    # a class attribute
-    @property
+    @docstring_property(__doc__)
     def __doc__(self):
         """Return the docstring of the parameter
 

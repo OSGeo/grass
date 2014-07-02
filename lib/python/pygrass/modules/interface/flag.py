@@ -6,6 +6,7 @@ Created on Tue Apr  2 18:39:21 2013
 """
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
+from grass.pygrass.functions import docstring_property
 from grass.pygrass.modules.interface import read
 
 # TODO add documentation
@@ -50,7 +51,7 @@ class Flag(object):
     def __repr__(self):
         return "Flag <%s> (%s)" % (self.name, self.description)
 
-    @property
+    @docstring_property(__doc__)
     def __doc__(self):
         """
         {name}: {default}
