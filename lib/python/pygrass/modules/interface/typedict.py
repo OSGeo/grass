@@ -12,6 +12,8 @@ try:
 except ImportError:
     from grass.pygrass.orderdict import OrderedDict
 
+from grass.pygrass.functions import docstring_property
+
 
 class TypeDict(OrderedDict):
     def __init__(self, dict_type, *args, **kargs):
@@ -39,7 +41,7 @@ class TypeDict(OrderedDict):
             str_err = 'The value: %r is not a %s instance.'
             raise TypeError(str_err % (value, self._type.__name__))
 
-    @property
+    @docstring_property(__doc__)
     def __doc__(self):
         return '\n'.join([self.__getitem__(obj).__doc__
                           for obj in self.__iter__()])

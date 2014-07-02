@@ -139,6 +139,7 @@ import time
 
 from grass.script.core import Popen, PIPE
 from grass.pygrass.errors import GrassError, ParameterError
+from grass.pygrass.functions import docstring_property
 from grass.pygrass.modules.interface.parameter import Parameter
 from grass.pygrass.modules.interface.flag import Flag
 from grass.pygrass.modules.interface.typedict import TypeDict
@@ -244,7 +245,7 @@ class ParallelModuleQueue(object):
 
         :param max_num_procs: The maximum number of Module processes that
                               can be run in parallel
-        :type max_num_procs: int   
+        :type max_num_procs: int
         """
         self._num_procs = int(max_num_procs)
         self.wait()
@@ -492,7 +493,7 @@ class Module(object):
     def __repr__(self):
         return "Module(%r)" % self.name
 
-    @property
+    @docstring_property(__doc__)
     def __doc__(self):
         """{cmd_name}({cmd_params})
         """
@@ -547,7 +548,7 @@ class Module(object):
 
         This function will wait for the process to terminate in case
         finish_==True and sets up stdout and stderr. If finish_==False this
-        function will return after starting the process. Use 
+        function will return after starting the process. Use
         self.popen.communicate() of self.popen.wait() to wait for the process
         termination. The handling of stdout and stderr must then be done
         outside of this function.
@@ -555,7 +556,7 @@ class Module(object):
         if self.inputs['stdin'].value:
             self.stdin = self.inputs['stdin'].value
             self.stdin_ = PIPE
-        
+
         cmd = self.make_cmd()
         start = time.time()
         self.popen = Popen(cmd,
