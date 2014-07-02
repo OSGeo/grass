@@ -746,7 +746,17 @@ def load_env():
             k, v = map(lambda x: x.strip(), line.strip().split(' ', 1)[1].split('=', 1))
         except:
             continue
-        os.environ[k] = v
+        
+        evalue = os.getenv(k)
+        if evalue:
+            if k == 'GRASS_ADDON_PATH':
+                os.environ[k] = evalue + os.pathsep + v
+            else:
+                warning(_("Environmental variable '%s' already set, ignoring value '%s'") % \
+                            (k, v))
+        else:
+            os.environ[k] = v
+    
     # Allow for mixed ISIS-GRASS Environment
     if os.getenv('ISISROOT'):
         isis = os.getenv('ISISROOT')
@@ -1115,8 +1125,15 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
     path = os.path.join(userhome, ".grass.bashrc") # left for backward compatibility
     if os.access(path, os.R_OK):
         f.write(readfile(path) + '\n')
-    if os.access(grass_env_file, os.R_OK):
-        f.write(readfile(grass_env_file) + '\n')
+    for env in os.environ.keys():
+        if env.startswith('GRASS'):
+            val = os.environ[env]
+            if ' ' in val:
+                val = '"%s"' % val
+            f.write('export %s=%s\n' % (env, val))
+    ### Replaced by code above (do not override already set up environment variables)
+    ###    if os.access(grass_env_file, os.R_OK):
+    ###        f.write(readfile(grass_env_file) + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
