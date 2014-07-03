@@ -1,5 +1,5 @@
-set ICON=%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\etc\gui\icons\grass_osgeo.ico
-set ICON_CMD=%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\etc\gui\icons\grass_cmd.ico
+set ICON=%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\gui\icons\grass_osgeo.ico
+set ICON_CMD=%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\gui\icons\grass_cmd.ico
 set BATCH=%OSGEO4W_ROOT%\bin\@GRASS_EXECUTABLE@.bat
 textreplace -std -t "%OSGEO4W_ROOT%"\bin\@GRASS_EXECUTABLE@.bat
 textreplace -std -t "%OSGEO4W_ROOT%"\bin\@GRASS_EXECUTABLE@
