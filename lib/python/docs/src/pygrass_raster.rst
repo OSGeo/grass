@@ -116,8 +116,6 @@ time you are writing a new map, the row is add to the file as the last row. ::
     >>> new.exist()
     False
 
-.. autoclass:: pygrass.raster.RasterRow
-    :members:
 
 .. _RasterRowIO-label:
 
@@ -141,8 +139,6 @@ for reading and use the default row write access as in the RasterRow class. ::
     [ 144.99488831  145.22894287  145.57142639]
     >>> elev.close()
 
-.. autoclass:: pygrass.raster.RasterRowIO
-    :members:
 
 .. _RasterSegment-label:
 
@@ -211,8 +207,6 @@ to write a single value to the map. ::
     >>> elev.close()
     >>> elev.remove()
 
-.. autoclass:: pygrass.raster.RasterSegment
-    :members:
 
 .. _RasterNumpy-label:
 
@@ -251,9 +245,6 @@ to load all the map in memory. ::
     >>> el.exist()
     True
     >>> el.remove()
-
-.. autoclass:: pygrass.raster.RasterNumpy
-    :members:
 
 
 .. _Raster library: http://grass.osgeo.org/programming7/rasterlib.html

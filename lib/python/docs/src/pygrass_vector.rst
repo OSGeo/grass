@@ -116,17 +116,3 @@ Now, find an area with an island inside... ::
     >>> isle = area.isles[0]
     >>> isle.bbox()
     Bbox(199947.296494, 199280.969494, 754920.623987, 754351.812986)
-
-
-
-Vector
-----------
-
-.. autoclass:: pygrass.vector.Vector
-    :members:
-
-VectorTopo
-----------
-
-.. autoclass:: pygrass.vector.VectorTopo
-    :members:

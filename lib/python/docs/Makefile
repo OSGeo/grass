@@ -1,6 +1,6 @@
 # Makefile for Sphinx documentation
 #
-MODULE_TOPDIR=../../../..
+MODULE_TOPDIR=../../..
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 
@@ -14,14 +14,14 @@ SPHINXBUILD   = sphinx-build
 endif
 PAPER         =
 BUILDDIR      = _build
-BUILDDIR_HTML = $(HTMLDIR)/pygrass
+BUILDDIR_HTML = $(HTMLDIR)/libpython
 
 MYGISBASE = $(GISBASE)
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
-ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
+ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) -c . src/
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
@@ -29,60 +29,74 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 .DEFAULT_GOAL := help
 
-help:
+libpythonhelp:
 	@echo "Please use \`make <target>' where <target> is one of"
-	@echo "  html       to make standalone HTML files"
-	@echo "  dirhtml    to make HTML files named index.html in directories"
-	@echo "  singlehtml to make a single large HTML file"
-	@echo "  epub       to make an epub"
-	@echo "  latex      to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
-	@echo "  latexpdf   to make LaTeX files and run them through pdflatex"
-	@echo "  man        to make manual pages"
-	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
+	@echo "  libpythonhtml       to make standalone HTML files"
+	@echo "  libpythondirhtml    to make HTML files named index.html in directories"
+	@echo "  libpythonsinglehtml to make a single large HTML file"
+	@echo "  libpythonepub       to make an epub"
+	@echo "  libpythonlatex      to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
+	@echo "  libpythonlatexpdf   to make LaTeX files and run them through pdflatex"
+	@echo "  libpythonman        to make manual pages"
+	@echo "  libpythondoctest    to run all doctests embedded in the documentation (if enabled)"
 
-clean:
+libpythonclean:
 	-rm -rf $(BUILDDIR)/*
 	-rm -f _templates/layout.html
+	-rm -f src/ctypes*.rst
+	-rm -f src/imaging.rst
+	-rm -f src/pydispatch.rst
+	-rm -f src/pygrass.*rst
+	-rm -f src/script.rst
+	-rm -f src/temporal.rst
 
-html:
+libpythonapidoc:
+#	$(call run_grass, sphinx-apidoc -T -f -o src/ ../ctypes/)
+	$(call run_grass,sphinx-apidoc -T -f -o src/ ../imaging/)
+	$(call run_grass,sphinx-apidoc -T -f -o src/ ../pydispatch/)
+	$(call run_grass,sphinx-apidoc -T -f -o src/ ../pygrass/)
+	$(call run_grass,sphinx-apidoc -T -f -o src/ ../script/)
+	$(call run_grass,sphinx-apidoc -T -f -o src/ ../temporal/)
+	
+libpythonhtml:
 	$(call run_grass,$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR_HTML)"
 
-dirhtml:
+libpythondirhtml:
 	$(call run_grass,$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR_HTML)"
 
-singlehtml:
+libpythonsinglehtml:
 	$(call run_grass,$(SPHINXBUILD) -b singlehtml $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
 	@echo
 	@echo "Build finished. The HTML page is in $(BUILDDIR_HTML)"
 
-epub:
+libpythonepub:
 	$(call run_grass,$(SPHINXBUILD) -b epub $(ALLSPHINXOPTS) $(BUILDDIR)/epub)
 	@echo
 	@echo "Build finished. The epub file is in $(BUILDDIR)/epub/"
 
-latex:
+libpythonlatex:
 	$(call run_grass,$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex)
 	@echo
 	@echo "Build finished; the LaTeX files are in $(BUILDDIR)/latex."
 	@echo "Run \`make' in that directory to run these through (pdf)latex" \
 	      "(use \`make latexpdf' here to do that automatically)."
 
-latexpdf:
+libpythonlatexpdf:
 	$(call run_grass,$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex)
 	@echo "Running LaTeX files through pdflatex..."
 	$(MAKE) -C $(BUILDDIR)/latex all-pdf
 	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex/"
 
-man:
+libpythonman:
 	$(call run_grass,$(SPHINXBUILD) -b man $(ALLSPHINXOPTS) $(MANDIR))
 	@echo
 	@echo "Build finished. The manual pages are in $(MANDIR)/"
 
-doctest:
+libpythondoctest:
 	$(call run_grass,$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest)
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
