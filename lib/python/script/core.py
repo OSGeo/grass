@@ -41,7 +41,27 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 
 class Popen(subprocess.Popen):
-    pass
+    _builtin_exts = set(['.com', '.exe', '.bat', '.cmd'])
+
+    @staticmethod
+    def _escape_for_shell(arg):
+        # TODO: what are cmd.exe's parsing rules?
+        return arg
+
+    def __init__(self, args, **kwargs):
+        if ( sys.platform == 'win32'
+             and isinstance(args, list)
+             and not kwargs.get('shell', False)
+             and kwargs.get('executable') is None ):
+            cmd = shutil_which(args[0])
+            if cmd is None:
+                raise OSError
+            args = [cmd] + args[1:]
+            name, ext = os.path.splitext(cmd)
+            if ext.lower() not in self._builtin_exts:
+                kwargs['shell'] = True
+                args = [self._escape_for_shell(arg) for arg in args]
+        subprocess.Popen.__init__(self, args, **kwargs)
 
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
