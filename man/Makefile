@@ -41,13 +41,11 @@ default: $(DSTFILES)
 	$(MAKE) $(INDICES)
 	$(call build,check)
 	$(MAKE) manpages
-	@(type $(SPHINXBUILD) > /dev/null && $(call run_pygrass_html) || (echo "WARNING: pygrass HTML documentation not compiled because 'sphinx-build' software not installed (get from http://www.sphinx.org)") ; exit 0)
 
 # This must be a separate target so that evaluation of $(MANPAGES)
 # is delayed until the indices have been generated
 manpages:
 	$(MAKE) $(MANPAGES)
-	@(type $(SPHINXBUILD) > /dev/null && $(call run_pygrass_man) || (echo "WARNING: pygrass MAN documentation not compiled because 'sphinx-build' software not installed (get from http://www.sphinx.org)") ; exit 0)
 
 .PHONY: manpages
 
@@ -67,14 +65,6 @@ define build_keywords
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_keywords.py $(HTMLDIR)
-endef
-
-define run_pygrass_html
-$(MAKE) -C ../lib/python/pygrass/docs/ html
-endef
-
-define run_pygrass_man
-$(MAKE) -C ../lib/python/pygrass/docs/ man
 endef
 
 $(HTMLDIR)/topics.html: $(ALL_HTML)

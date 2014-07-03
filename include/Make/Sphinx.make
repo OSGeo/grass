@@ -18,11 +18,17 @@ checksphinx:
 
 cleansphinx:
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguiclean
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs libpythonclean
 
 sphinxdoc: checksphinx cleansphinx
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguiapidoc
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguihtml
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonhtml
 
 sphinxman:checksphinx cleansphinx
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguiapidoc
 	$(MAKE) -C $(MODULE_TOPDIR)/gui/wxpython/docs/wxgui_sphinx/ wxguiman
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonman
+
