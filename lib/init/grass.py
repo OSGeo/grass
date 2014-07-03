@@ -381,11 +381,13 @@ def set_paths():
     if not addon_base:
         addon_base = os.path.join(grass_config_dir, 'addons')
         os.environ['GRASS_ADDON_BASE'] = addon_base
-    path_prepend(os.path.join(addon_base, 'scripts'), 'PATH')
+    if not windows:
+        path_prepend(os.path.join(addon_base, 'scripts'), 'PATH')
     path_prepend(os.path.join(addon_base, 'bin'), 'PATH')
     
     # standard installation
-    path_prepend(gfile('scripts'), 'PATH')
+    if not windows:
+        path_prepend(gfile('scripts'), 'PATH')
     path_prepend(gfile('bin'), 'PATH')
 
     # Set PYTHONPATH to find GRASS Python modules
