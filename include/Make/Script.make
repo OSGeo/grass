@@ -18,8 +18,15 @@ include $(MODULE_TOPDIR)/include/Make/Html.make
 include $(MODULE_TOPDIR)/include/Make/ScriptRules.make
 
 SCRIPT_ACTIONS = $(SCRIPT) $(ETCPYFILES) $(ETCPYCFILES) html scriptstrings
+ifdef MINGW
+SCRIPT_ACTIONS += $(BIN)/$(PGM).bat
+endif
 
 script: $(SCRIPT_ACTIONS)
+
+$(BIN)/$(PGM).bat: $(MODULE_TOPDIR)/scripts/windows_launch.bat
+	sed -e "s#SCRIPT_NAME#$(PGM)#" $(MODULE_TOPDIR)/scripts/windows_launch.bat > $@
+	unix2dos $@
 
 scriptstrings: $(STRINGDIR)/$(PGM)_to_translate.c
 
