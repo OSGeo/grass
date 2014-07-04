@@ -1,131 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Apr  2 18:41:27 2013
-
-@author: pietro
-
-@code
-
->>> import grass.pygrass.modules as pymod
->>> from subprocess import PIPE
->>> import copy
-
->>> region = pymod.Module("g.region")
->>> region.flags["p"].value = True
->>> region.flags["u"].value = True
->>> region.flags["3"].value = True
->>> region.get_bash()
-u'g.region -p -3 -u'
->>> new_region = copy.deepcopy(region)
->>> new_region.inputs["res"].value = "10"
->>> new_region.get_bash()
-u'g.region res=10 -p -3 -u'
-
->>> neighbors = pymod.Module("r.neighbors")
->>> neighbors.inputs["input"].value = "mapA"
->>> neighbors.outputs["output"].value = "mapB"
->>> neighbors.inputs["size"].value = 5
->>> neighbors.inputs["quantile"].value = 0.5
->>> neighbors.get_bash()
-u'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
-
->>> new_neighbors1 = copy.deepcopy(neighbors)
->>> new_neighbors1.inputs["input"].value = "mapD"
->>> new_neighbors1.inputs["size"].value = 3
->>> new_neighbors1.inputs["quantile"].value = 0.5
->>> new_neighbors1.get_bash()
-u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
-
->>> new_neighbors2 = copy.deepcopy(neighbors)
->>> new_neighbors2(input="mapD", size=3, run_=False)
->>> new_neighbors2.get_bash()
-u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
-
->>> neighbors = pymod.Module("r.neighbors")
->>> neighbors.get_bash()
-u'r.neighbors method=average size=3'
-
->>> new_neighbors3 = copy.deepcopy(neighbors)
->>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
->>> new_neighbors3.get_bash()
-u'r.neighbors input=mapA method=average size=3 output=mapB'
-
->>> mapcalc = pymod.Module("r.mapcalc", expression="test_a = 1",
-...                        overwrite=True, run_=False)
->>> mapcalc.run()
-Module('r.mapcalc')
->>> mapcalc.popen.returncode
-0
-
->>> colors = pymod.Module("r.colors", map="test_a", rules="-",
-...                        run_=False, stdout_=PIPE,
-...                        stderr_=PIPE, stdin_="1 red")
->>> colors.run()
-Module('r.colors')
->>> colors.popen.returncode
-0
->>> colors.inputs["stdin"].value
-u'1 red'
->>> colors.outputs["stdout"].value
-u''
->>> colors.outputs["stderr"].value.strip()
-"Color table for raster map <test_a> set to 'rules'"
-
->>> colors = pymod.Module("r.colors", map="test_a", rules="-",
-...                        run_=False, finish_=False, stdin_=PIPE)
->>> colors.run()
-Module('r.colors')
->>> stdout, stderr = colors.popen.communicate(input="1 red")
->>> colors.popen.returncode
-0
->>> stdout
->>> stderr
-
->>> colors = pymod.Module("r.colors", map="test_a", rules="-",
-...                        run_=False, finish_=False,
-...                        stdin_=PIPE, stderr_=PIPE)
->>> colors.run()
-Module('r.colors')
->>> stdout, stderr = colors.popen.communicate(input="1 red")
->>> colors.popen.returncode
-0
->>> stdout
->>> stderr.strip()
-"Color table for raster map <test_a> set to 'rules'"
-
-Run a second time
->>> colors.run()
-Module('r.colors')
->>> stdout, stderr = colors.popen.communicate(input="1 blue")
->>> colors.popen.returncode
-0
->>> stdout
->>> stderr.strip()
-"Color table for raster map <test_a> set to 'rules'"
-
-Multiple run test
->>> colors = pymod.Module("r.colors", map="test_a",
-...                                            color="ryb", run_=False)
->>> colors.run()
-Module('r.colors')
->>> colors(color="gyr")
->>> colors.run()
-Module('r.colors')
->>> colors(color="ryg")
->>> colors(stderr_=PIPE)
->>> colors.run()
-Module('r.colors')
->>> print(colors.outputs["stderr"].value.strip())
-Color table for raster map <test_a> set to 'ryg'
->>> colors(color="byg")
->>> colors(stdout_=PIPE)
->>> colors.run()
-Module('r.colors')
->>> print(colors.outputs["stderr"].value.strip())
-Color table for raster map <test_a> set to 'byg'
-
-@endcode
-"""
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import sys
@@ -162,12 +35,10 @@ class ParallelModuleQueue(object):
        Usage:
 
        >>> import copy
-       >>> import grass.pygrass.modules as pymod
+       >>> from grass.pygrass.modules import Module, ParallelModuleQueue
        >>> mapcalc_list = []
-       >>> mapcalc = pymod.Module("r.mapcalc",
-       ...                        overwrite=True,
-       ...                        run_=False)
-       >>> queue = pymod.ParallelModuleQueue(max_num_procs=3)
+       >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
+       >>> queue = ParallelModuleQueue(max_num_procs=3)
        >>> for i in xrange(5):
        ...     new_mapcalc = copy.deepcopy(mapcalc)
        ...     mapcalc_list.append(new_mapcalc)
@@ -268,31 +139,155 @@ class ParallelModuleQueue(object):
 
 
 class Module(object):
-    """
-    Python allow developers to not specify all the arguments and
-    keyword arguments of a method or function.
+    """This class is design to wrap/run/interact with the GRASS modules.
 
+    The class during the init phase read the XML description generate using
+    the ``--interface-description`` in order to understand which parameters
+    are required which optionals. ::
+
+        >>> from grass.pygrass.modules import Module
+        >>> from subprocess import PIPE
+        >>> import copy
+
+        >>> region = Module("g.region")
+        >>> region.flags.p = True  # set flags
+        >>> region.flags.u = True
+        >>> region.flags["3"].value = True  # set numeric flags
+        >>> region.get_bash()
+        u'g.region -p -3 -u'
+        >>> new_region = copy.deepcopy(region)
+        >>> new_region.inputs.res = "10"
+        >>> new_region.get_bash()
+        u'g.region res=10 -p -3 -u'
+
+        >>> neighbors = Module("r.neighbors")
+        >>> neighbors.inputs.input = "mapA"
+        >>> neighbors.outputs.output = "mapB"
+        >>> neighbors.inputs.size = 5
+        >>> neighbors.inputs.quantile = 0.5
+        >>> neighbors.get_bash()
+        u'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
+
+        >>> new_neighbors1 = copy.deepcopy(neighbors)
+        >>> new_neighbors1.inputs.input = "mapD"
+        >>> new_neighbors1.inputs.size = 3
+        >>> new_neighbors1.inputs.quantile = 0.5
+        >>> new_neighbors1.get_bash()
+        u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+
+        >>> new_neighbors2 = copy.deepcopy(neighbors)
+        >>> new_neighbors2(input="mapD", size=3, run_=False)
+        >>> new_neighbors2.get_bash()
+        u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+
+        >>> neighbors = Module("r.neighbors")
+        >>> neighbors.get_bash()
+        u'r.neighbors method=average size=3'
+
+        >>> new_neighbors3 = copy.deepcopy(neighbors)
+        >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
+        >>> new_neighbors3.get_bash()
+        u'r.neighbors input=mapA method=average size=3 output=mapB'
+
+        >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
+        ...                  overwrite=True, run_=False)
+        >>> mapcalc.run()
+        Module('r.mapcalc')
+        >>> mapcalc.popen.returncode
+        0
+
+        >>> colors = Module("r.colors", map="test_a", rules="-",
+        ...                 run_=False, stdout_=PIPE,
+        ...                 stderr_=PIPE, stdin_="1 red")
+        >>> colors.run()
+        Module('r.colors')
+        >>> colors.popen.returncode
+        0
+        >>> colors.inputs["stdin"].value
+        u'1 red'
+        >>> colors.outputs["stdout"].value
+        u''
+        >>> colors.outputs["stderr"].value.strip()
+        "Color table for raster map <test_a> set to 'rules'"
+
+        >>> colors = Module("r.colors", map="test_a", rules="-",
+        ...                 run_=False, finish_=False, stdin_=PIPE)
+        >>> colors.run()
+        Module('r.colors')
+        >>> stdout, stderr = colors.popen.communicate(input="1 red")
+        >>> colors.popen.returncode
+        0
+        >>> stdout
+        >>> stderr
+
+        >>> colors = Module("r.colors", map="test_a", rules="-",
+        ...                 run_=False, finish_=False,
+        ...                 stdin_=PIPE, stderr_=PIPE)
+        >>> colors.run()
+        Module('r.colors')
+        >>> stdout, stderr = colors.popen.communicate(input="1 red")
+        >>> colors.popen.returncode
+        0
+        >>> stdout
+        >>> stderr.strip()
+        "Color table for raster map <test_a> set to 'rules'"
+
+        Run a second time
+        >>> colors.run()
+        Module('r.colors')
+        >>> stdout, stderr = colors.popen.communicate(input="1 blue")
+        >>> colors.popen.returncode
+        0
+        >>> stdout
+        >>> stderr.strip()
+        "Color table for raster map <test_a> set to 'rules'"
+
+        Multiple run test
+        >>> colors = Module("r.colors", map="test_a",
+        ...                                            color="ryb", run_=False)
+        >>> colors.run()
+        Module('r.colors')
+        >>> colors(color="gyr")
+        >>> colors.run()
+        Module('r.colors')
+        >>> colors(color="ryg")
+        >>> colors(stderr_=PIPE)
+        >>> colors.run()
+        Module('r.colors')
+        >>> print(colors.outputs["stderr"].value.strip())
+        Color table for raster map <test_a> set to 'ryg'
+        >>> colors(color="byg")
+        >>> colors(stdout_=PIPE)
+        >>> colors.run()
+        Module('r.colors')
+        >>> print(colors.outputs["stderr"].value.strip())
+        Color table for raster map <test_a> set to 'byg'
+
+    Often in the Module class you can find ``*args`` and ``kwargs`` annotation
+    in methods, like in the __call__ method.
+    Python allow developers to not specify all the arguments and
+    keyword arguments of a method or function. ::
 
         def f(*args):
             for arg in args:
                 print arg
 
-    therefore if we call the function like:
+    therefore if we call the function like: ::
 
-        >>> f('grass', 'gis', 'modules')
+        >>> f('grass', 'gis', 'modules')                     # doctest: +SKIP
         grass
         gis
         modules
 
-    or we can define a new list:
+    or we can define a new list: ::
 
-        >>> words = ['grass', 'gis', 'modules']
-        >>> f(*words)
+        >>> words = ['grass', 'gis', 'modules']              # doctest: +SKIP
+        >>> f(*words)                                        # doctest: +SKIP
         grass
         gis
         modules
 
-    we can do the same with keyword arguments, rewrite the above function:
+    we can do the same with keyword arguments, rewrite the above function: ::
 
         def f(*args, **kargs):
             for arg in args:
@@ -300,9 +295,10 @@ class Module(object):
             for key, value in kargs.items():
                 print "%s = %r" % (key, value)
 
-    now we can use the new function, with:
+    now we can use the new function, with: ::
 
         >>> f('grass', 'gis', 'modules', os = 'linux', language = 'python')
+        ...                                                  # doctest: +SKIP
         grass
         gis
         modules
@@ -310,10 +306,11 @@ class Module(object):
         language = 'python'
 
     or, as before we can, define a dictionary and give the dictionary to
-    the function, like:
+    the function, like: ::
 
         >>> keywords = {'os' : 'linux', 'language' : 'python'}
-        >>> f(*words, **keywords)
+        ...                                                  # doctest: +SKIP
+        >>> f(*words, **keywords)                            # doctest: +SKIP
         grass
         gis
         modules
@@ -398,6 +395,11 @@ class Module(object):
         self.__call__.__func__.__doc__ = self.__doc__
 
     def __call__(self, *args, **kargs):
+        """Set module paramters to the class and, if run_ is True execute the
+        module, therefore valid parameters are all the module parameters
+        plus some extra parameters that are: run_, stdin_, stdout_, stderr_,
+        env_ and finish_.
+        """
         if not args and not kargs:
             self.run()
             return
@@ -459,11 +461,11 @@ class Module(object):
             return self.run()
 
     def get_bash(self):
-        """Prova"""
+        """Return a BASH rapresentation of the Module."""
         return ' '.join(self.make_cmd())
 
     def get_python(self):
-        """Prova"""
+        """Return a Python rapresentation of the Module."""
         prefix = self.name.split('.')[0]
         name = '_'.join(self.name.split('.')[1:])
         params = ', '.join([par.get_python() for par in self.params_list
@@ -486,8 +488,7 @@ class Module(object):
             return "%s.%s(%s)" % (prefix, name, params)
 
     def __str__(self):
-        """Return the command string that can be executed in a shell
-        """
+        """Return the command string that can be executed in a shell"""
         return ' '.join(self.make_cmd())
 
     def __repr__(self):
