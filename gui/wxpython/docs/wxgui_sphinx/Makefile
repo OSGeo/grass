@@ -6,6 +6,26 @@ include $(MODULE_TOPDIR)/include/Make/Rules.make
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
+APIDOC := $(shell sphinx-apidoc2 --help 2>/dev/null)
+ifdef APIDOC
+SPHINXAPIDOC = sphinx-apidoc2
+else
+    APIDOC := $(shell sphinx-apidoc --help 2>/dev/null)
+    ifdef APIDOC
+	SPHINXAPIDOC = sphinx-apidoc
+    endif
+endif
+
+BUILD := $(shell sphinx-build2 --version 2>/dev/null)
+ifdef BUILD
+    SPHINXBUILD = sphinx-build2
+else
+    BUILD := $(shell sphinx-build --version 2>/dev/null)
+    ifdef BUILD
+	SPHINXBUILD = sphinx-build
+    endif
+endif
+
 
 PAPER         =
 BUILDDIR      = _build
@@ -16,27 +36,13 @@ MYGISBASE = $(GISBASE)
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
-ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
+ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) -c . src/
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 .PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest gettext
 
 .DEFAULT_GOAL := help
-
-ifneq (@(type sphinx-apidoc2 > /dev/null),)
-SPHINXAPIDOC   = sphinx-apidoc2
-endif
-ifneq (@(type sphinx-apidoc > /dev/null),)
-SPHINXAPIDOC   = sphinx-apidoc
-endif
-
-ifneq (@(type sphinx-build2 > /dev/null),)
-SPHINXBUILD   = sphinx-build2
-endif
-ifneq (@(type sphinx-build > /dev/null),)
-SPHINXBUILD   = sphinx-build
-endif
 
 
 wxguihelp:
@@ -52,10 +58,28 @@ wxguihelp:
 
 wxguiclean:
 	-rm -rf $(BUILDDIR)/*
+	-rm -rf src/a*.rst
+	-rm -rf src/c*.rst
+	-rm -rf src/d*.rst
+	-rm -rf src/g*.rst
+	-rm -rf src/ic*.rst
+	-rm -rf src/is*.rst
+	-rm -rf src/l*.rst
+	-rm -rf src/m*.rst
+	-rm -rf src/n*.rst
+	-rm -rf src/p*.rst
+	-rm -rf src/r*.rst
+	-rm -rf src/t*.rst
+	-rm -rf src/v*.rst
+	-rm -rf src/web_services.rst
+	-rm -rf src/wxgui.rst
+	-rm -rf src/wxplot.rst
 	-rm -f _templates/layout.html
 
 wxguiapidoc:
-	$(call run_grass, $(SPHINXAPIDOC) -T -f -o . ../../)
+	@echo $(SPHINXAPIDOC)
+	@echo $(SPHINXBUILD)
+	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../../)
 	
 wxguihtml:
 	$(call run_grass,$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
