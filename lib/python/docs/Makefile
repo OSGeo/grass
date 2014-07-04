@@ -6,12 +6,27 @@ include $(MODULE_TOPDIR)/include/Make/Rules.make
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-ifneq (@(type sphinx-build2 > /dev/null),)
-SPHINXBUILD   = sphinx-build2
+APIDOC := $(shell sphinx-apidoc2 --help 2>/dev/null)
+ifdef APIDOC
+SPHINXAPIDOC = sphinx-apidoc2
+else
+    APIDOC := $(shell sphinx-apidoc --help 2>/dev/null)
+    ifdef APIDOC
+	SPHINXAPIDOC = sphinx-apidoc
+    endif
 endif
-ifneq (@(type sphinx-build > /dev/null),)
-SPHINXBUILD   = sphinx-build
+
+BUILD := $(shell sphinx-build2 --version 2>/dev/null)
+ifdef BUILD
+    SPHINXBUILD = sphinx-build2
+else
+    BUILD := $(shell sphinx-build --version 2>/dev/null)
+    ifdef BUILD
+	SPHINXBUILD = sphinx-build
+    endif
 endif
+
+
 PAPER         =
 BUILDDIR      = _build
 BUILDDIR_HTML = $(HTMLDIR)/libpython
@@ -51,12 +66,12 @@ libpythonclean:
 	-rm -f src/temporal.rst
 
 libpythonapidoc:
-#	$(call run_grass, sphinx-apidoc -T -f -o src/ ../ctypes/)
-	$(call run_grass,sphinx-apidoc -T -f -o src/ ../imaging/)
-	$(call run_grass,sphinx-apidoc -T -f -o src/ ../pydispatch/)
-	$(call run_grass,sphinx-apidoc -T -f -o src/ ../pygrass/)
-	$(call run_grass,sphinx-apidoc -T -f -o src/ ../script/)
-	$(call run_grass,sphinx-apidoc -T -f -o src/ ../temporal/)
+	@echo $(SPHINXAPIDOC)
+	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../imaging/)
+	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../pydispatch/)
+	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../pygrass/)
+	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../script/)
+	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../temporal/)
 	
 libpythonhtml:
 	$(call run_grass,$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
