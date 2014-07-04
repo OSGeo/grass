@@ -75,6 +75,7 @@ class DataCatalog(wx.Panel):
 
     def LoadItemsDone(self):
         self._loaded = True
+        self.tree.ExpandCurrent()
 
 class LocationMapTree(wx.TreeCtrl):
     def __init__(self, parent):
@@ -256,6 +257,17 @@ class LocationMapTree(wx.TreeCtrl):
         if mapset:
             stringm = 'MAPSET='+mapset
             RunCommand('g.gisenv', set=stringm)
+
+    def ExpandCurrent(self):
+        """Expand current location"""
+        location = grass.gisenv()['LOCATION_NAME']
+        item = self.getItemByName(location, self.root)
+        if item is not None:
+            self.SelectItem(item)
+            self.ExpandAllChildren(item)
+            self.EnsureVisible(item)
+        else:
+            Debug.msg(1, "Location <%s> not found" % location)
 
 class DataCatalogTree(LocationMapTree):
     def __init__(self, parent):
@@ -471,7 +483,7 @@ class DataCatalogTree(LocationMapTree):
         res = dlg.ShowModal()
         dlg.Destroy()
         return res
-    
+
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
         menu = wx.Menu()
