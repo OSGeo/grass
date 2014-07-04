@@ -20,6 +20,8 @@ class TestRegisterFunctions(unittest.TestCase):
     def setUpClass(cls):
         """!Initiate the temporal GIS and set the region
         """
+        # Use always the current mapset as temporal database
+        ret = grass.run_command("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
         tgis.init()
         grass.overwrite = True
         grass.use_temp_region()
@@ -67,8 +69,6 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-        self.strds_abs.print_info()
-
     def test_absolute_time_strds_2(self):
         """!Test the registration of maps with absolute time in a
            space time raster dataset.
@@ -99,8 +99,6 @@ class TestRegisterFunctions(unittest.TestCase):
         start, end = self.strds_abs.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
-
-        self.strds_abs.print_info()
 
     def test_absolute_time_1(self):
         """!Test the registration of maps with absolute time
@@ -189,8 +187,6 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(start, 0)
         self.assertEqual(end, 2)
         self.assertEqual(unit, "day")
-        
-        self.strds_rel.print_info()
 
     def test_relative_time_strds_2(self):
         """!Test the registration of maps with relative time in a
@@ -223,8 +219,6 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(start, 1000000)
         self.assertEqual(end, 2000000)
         self.assertEqual(unit, "seconds")
-        
-        self.strds_rel.print_info()
         
     def test_relative_time_1(self):
         """!Test the registration of maps with relative time
