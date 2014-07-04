@@ -11,30 +11,29 @@ for details.
 
 import grass.script as grass
 import grass.temporal as tgis
-import unittest
+from gunittest.case import GrassTestCase
 import datetime
 
-class TestRegisterFunctions(unittest.TestCase):
+class TestRegisterFunctions(GrassTestCase):
 
     @classmethod
     def setUpClass(cls):
         """!Initiate the temporal GIS and set the region
         """
         # Use always the current mapset as temporal database
-        ret = grass.run_command("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
+        cls.assertModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
         tgis.init()
         grass.overwrite = True
         grass.use_temp_region()
-        ret = grass.run_command("g.region", n=80.0, s=0.0, e=120.0, 
+        cls.assertModule("g.region", n=80.0, s=0.0, e=120.0, 
                                 w=0.0, t=1.0, b=0.0, res=10.0)
 
     def setUp(self):
         """!Create the test maps and the space time raster datasets
         """
-        ret = 0
-        ret += grass.run_command("r.mapcalc", overwrite=True, quiet=True, 
+        self.assertModule("r.mapcalc", overwrite=True, quiet=True, 
                           expression="register_map_1 = 1")
-        ret += grass.run_command("r.mapcalc", overwrite=True, quiet=True, 
+        self.assertModule("r.mapcalc", overwrite=True, quiet=True, 
                           expression="register_map_2 = 2")
         self.assertEqual(ret, 0)
         
@@ -290,9 +289,8 @@ class TestRegisterFunctions(unittest.TestCase):
     def tearDown(self):
         """!Remove maps from temporal database
         """
-        ret = grass.run_command("t.unregister", maps="register_map_1,register_map_2", quiet=True)
-        ret = grass.run_command("g.remove", rast="register_map_1,register_map_2", quiet=True)
-        self.assertEqual(ret, 0)
+        self.assertModule("t.unregister", maps="register_map_1,register_map_2", quiet=True)
+        self.assertModule("g.remove", rast="register_map_1,register_map_2", quiet=True)
         self.strds_abs.delete()
         self.strds_rel.delete()
 
@@ -303,6 +301,7 @@ class TestRegisterFunctions(unittest.TestCase):
         grass.del_temp_region()
 
 if __name__ == '__main__':
-    unittest.main()
+    from gunittest.main import test
+    test()
 
 
