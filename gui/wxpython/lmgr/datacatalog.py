@@ -75,7 +75,7 @@ class DataCatalog(wx.Panel):
 
     def LoadItemsDone(self):
         self._loaded = True
-        self.tree.ExpandCurrent()
+        self.tree.ExpandCurrentLocation()
 
 class LocationMapTree(wx.TreeCtrl):
     def __init__(self, parent):
@@ -258,7 +258,7 @@ class LocationMapTree(wx.TreeCtrl):
             stringm = 'MAPSET='+mapset
             RunCommand('g.gisenv', set=stringm)
 
-    def ExpandCurrent(self):
+    def ExpandCurrentLocation(self):
         """Expand current location"""
         location = grass.gisenv()['LOCATION_NAME']
         item = self.getItemByName(location, self.root)
