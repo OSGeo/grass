@@ -36,6 +36,22 @@ CHECK_IS = {"GISBASE": libgis.G_is_gisbase,
 
 
 def _check(value, path, type):
+    """Private function to check the correctness of a value.
+
+    :param value: Name of the directory
+    :type value: str
+
+    :param path: Path where the directory is located
+    :type path: path
+
+    :param type: it is a string defining the type that will e checked,
+                 valid types are: GISBASE, GISDBASE, LOCATION_NAME, MAPSET
+    :type type: str
+
+    :return: the value if verify else None and
+             if value is empty return environmental variable
+    :rtype: str
+    """
     if value and CHECK_IS[type](join(path, value)):
         return value
     elif value is '':
@@ -47,6 +63,15 @@ def _check(value, path, type):
 
 def set_current_mapset(mapset, location=None, gisdbase=None):
     """Set the current mapset as working area
+
+    :param mapset: Name of the mapset
+    :type value: str
+
+    :param location: Name of the location
+    :type location: str
+
+    :param gisdbase: Name of the gisdbase
+    :type gisdbase: str
     """
     libgis.G_setenv('MAPSET', mapset)
     if location:
@@ -56,7 +81,16 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
 
 
 def make_mapset(mapset, location=None, gisdbase=None):
-    """Create a new mapset"""
+    """Create a new mapset
+
+    :param mapset: Name of the mapset
+    :type value: str
+
+    :param location: Name of the location
+    :type location: str
+
+    :param gisdbase: Name of the gisdbase
+    :type gisdbase: str"""
     res = libgis.G_make_mapset(gisdbase, location, mapset)
     if res == -1:
         raise GrassError("Cannot create new mapset")
@@ -127,12 +161,8 @@ class Gisdbase(object):
 
         ..
         """
-        locations = []
-        for loc in listdir(self.name):
-            if libgis.G_is_location(join(self.name, loc)):
-                locations.append(loc)
-        locations.sort()
-        return locations
+        return sorted([loc for loc in listdir(self.name)
+                       if libgis.G_is_location(join(self.name, loc))])
 
 
 class Location(object):
@@ -198,14 +228,15 @@ class Location(object):
         :type pattern: str
         :param permissions: check the permission of mapset
         :type permissions: bool
-        :returns:  a list of mapset's names
+        :return: a list of mapset's names
+        :rtype: list of strings
 
         ::
 
             >>> location = Location()
-            >>> location.mapsets()
+            >>> sorted(location.mapsets())
             ['PERMANENT', 'user1']
-        ..
+
         """
         mapsets = [mapset for mapset in self]
         if permissions:
@@ -216,6 +247,7 @@ class Location(object):
         return mapsets
 
     def path(self):
+        """Return the complete path of the location"""
         return join(self.gisdbase, self.name)
 
 
@@ -301,8 +333,8 @@ class Mapset(object):
             >>> rast.sort()
             >>> rast                                      # doctest: +ELLIPSIS
             ['basins', 'elevation', ...]
-            >>> mapset.glist('rast', pattern='el*')
-            ['elevation_shade', 'elevation']
+            >>> sorted(mapset.glist('rast', pattern='el*'))
+            ['elevation', 'elevation_shade']
 
         ..
         """
@@ -338,6 +370,7 @@ class Mapset(object):
         shutil.rmtree(self.path())
 
     def path(self):
+        """Return the complete path of the mapset"""
         return join(self.gisdbase, self.location, self.name)
 
 
