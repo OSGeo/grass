@@ -11,33 +11,32 @@ for details.
 
 import grass.script as grass
 import grass.temporal as tgis
-from gunittest.case import GrassTestCase
+import gunittest
 import datetime
 
-class TestRegisterFunctions(GrassTestCase):
+
+class TestRegisterFunctions(gunittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         """!Initiate the temporal GIS and set the region
         """
         # Use always the current mapset as temporal database
-        cls.assertModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
+        cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
         tgis.init()
         grass.overwrite = True
         grass.use_temp_region()
-        cls.assertModule("g.region", n=80.0, s=0.0, e=120.0, 
-                                w=0.0, t=1.0, b=0.0, res=10.0)
+        cls.runModule("g.region", n=80.0, s=0.0, e=120.0,
+                      w=0.0, t=1.0, b=0.0, res=10.0)
 
     def setUp(self):
         """!Create the test maps and the space time raster datasets
         """
-        self.assertModule("r.mapcalc", overwrite=True, quiet=True, 
-                          expression="register_map_1 = 1")
-        self.assertModule("r.mapcalc", overwrite=True, quiet=True, 
-                          expression="register_map_2 = 2")
-        self.assertEqual(ret, 0)
-        
-        
+        self.runModule("r.mapcalc", overwrite=True, quiet=True,
+                       expression="register_map_1 = 1")
+        self.runModule("r.mapcalc", overwrite=True, quiet=True,
+                       expression="register_map_2 = 2")
+
         self.strds_abs = tgis.open_new_stds(name="register_test_abs", type="strds", temporaltype="absolute", 
                                             title="Test strds", descr="Test strds", semantic="field")
         self.strds_rel = tgis.open_new_stds(name="register_test_rel", type="strds", temporaltype="relative", 
@@ -301,7 +300,4 @@ class TestRegisterFunctions(GrassTestCase):
         grass.del_temp_region()
 
 if __name__ == '__main__':
-    from gunittest.main import test
-    test()
-
-
+    gunittest.test()
