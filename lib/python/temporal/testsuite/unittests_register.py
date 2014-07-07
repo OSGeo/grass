@@ -22,19 +22,19 @@ class TestRegisterFunctions(gunittest.TestCase):
         """!Initiate the temporal GIS and set the region
         """
         # Use always the current mapset as temporal database
-        cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
+        grass.run_command("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
         tgis.init()
         grass.overwrite = True
         grass.use_temp_region()
-        cls.runModule("g.region", n=80.0, s=0.0, e=120.0,
+        grass.run_command("g.region", n=80.0, s=0.0, e=120.0,
                       w=0.0, t=1.0, b=0.0, res=10.0)
 
     def setUp(self):
         """!Create the test maps and the space time raster datasets
         """
-        self.runModule("r.mapcalc", overwrite=True, quiet=True,
+        self.assertModule("r.mapcalc", overwrite=True, quiet=True,
                        expression="register_map_1 = 1")
-        self.runModule("r.mapcalc", overwrite=True, quiet=True,
+        self.assertModule("r.mapcalc", overwrite=True, quiet=True,
                        expression="register_map_2 = 2")
 
         self.strds_abs = tgis.open_new_stds(name="register_test_abs", type="strds", temporaltype="absolute", 
