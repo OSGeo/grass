@@ -490,7 +490,7 @@ int main(int argc, char *argv[])
 int format_double(double value, char *buf)
 {
 
-    sprintf(buf, "%.8lf", value);
+    sprintf(buf, "%.8f", value);
     G_trim_decimal(buf);
     return 0;
 }
