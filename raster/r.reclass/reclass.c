@@ -2,6 +2,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/manage.h>
 #include <grass/glocale.h>
 #include "rule.h"
 
@@ -224,6 +225,17 @@ int reclass(const char *old_name, const char *old_mapset,
 	new.name = G_store(old_name);
 	new.mapset = G_store(old_mapset);
 	_reclass(rules, cats, &new);
+    }
+
+    if (G_find_file2("cell", new_name, G_mapset())) {
+	G_suppress_warnings(1);
+
+	M_read_list(FALSE, NULL);
+        if (M_do_remove(M_get_element("rast"), new_name) == 1)
+	    G_fatal_error(_("Cannot overwrite existing raster map <%s>"),
+			  new_name);
+
+	G_suppress_warnings(0);
     }
 
     if (Rast_put_reclass(new_name, &new) < 0)
