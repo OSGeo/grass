@@ -63,10 +63,10 @@ except IOError:
 def GetRealCmd(cmd):
     """Return real command name - only for MS Windows
     """
-    if sys.platform == 'win32':
-        for ext in globalvar.grassScripts.keys():
-            if cmd in globalvar.grassScripts[ext]:
-                return cmd + ext
+#    if sys.platform == 'win32':
+#        for ext in globalvar.grassScripts.keys():
+#            if cmd in globalvar.grassScripts[ext]:
+#                return cmd + ext
     
     return cmd
 
