@@ -11,7 +11,6 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
 def read_keydesc(par):
     name = par.text.strip()
     items = [e.text.strip() for e in par.findall('item')]
-    #import ipdb; ipdb.set_trace()
     return name, tuple(items) if len(items) > 1 else None
 
 
@@ -36,6 +35,7 @@ GETFROMTAG = {
     'label': lambda p: p.text.strip(),
     'suppress_required': lambda p: None,
     'keywords': lambda p: p.text.strip(),
+    'guidependency': lambda p: p.text.strip(),
 }
 
 GETTYPE = {
