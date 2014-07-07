@@ -38,11 +38,11 @@ int parse(const char *line, RULE ** rules, RULE ** tail, struct Categories *cats
 	case 0:
 	    save = cur;
 	    if (!strncmp(cur, "help", 4)) {	/* help text */
-		fprintf(stdout, _("Enter a rule in one of these formats:\n"));
-		fprintf(stdout, "1 3 5      = 1   %s\n", _("poor quality"));
-		fprintf(stdout, "1 thru 10  = 1\n");
-		fprintf(stdout, "20 thru 50 = 2   %s\n", _("medium quality"));
-		fprintf(stdout, "*          = NULL\n");
+		fprintf(stderr, _("Enter a rule in one of these formats:\n"));
+		fprintf(stderr, "1 3 5      = 1   %s\n", _("poor quality"));
+		fprintf(stderr, "1 thru 10  = 1\n");
+		fprintf(stderr, "20 thru 50 = 2   %s\n", _("medium quality"));
+		fprintf(stderr, "*          = NULL\n");
 		state = 0;
 		cur += 4;
 		continue;
@@ -193,7 +193,7 @@ static int scan_value(CELL * v)
 	*v = sign * (CELL) fv;
 
 	if (dec && state)
-	    fprintf(stdout, _("%f rounded up to %d\n"), sign * fv, *v);
+	    fprintf(stderr, _("%f rounded up to %d\n"), sign * fv, *v);
     }
 
     switch (*cur) {
