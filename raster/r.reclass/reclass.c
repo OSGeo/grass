@@ -227,15 +227,12 @@ int reclass(const char *old_name, const char *old_mapset,
 	_reclass(rules, cats, &new);
     }
 
-    if (G_find_file2("cell", new_name, G_mapset())) {
-	G_suppress_warnings(1);
-
+    if (G_find_file2("cell", new_name, G_mapset()) &&
+	Rast_map_type(new_name, G_mapset()) != CELL_TYPE) {
 	M_read_list(FALSE, NULL);
         if (M_do_remove(M_get_element("rast"), new_name) == 1)
 	    G_fatal_error(_("Cannot overwrite existing raster map <%s>"),
 			  new_name);
-
-	G_suppress_warnings(0);
     }
 
     if (Rast_put_reclass(new_name, &new) < 0)
