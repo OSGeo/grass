@@ -23,31 +23,6 @@ void read_input(void)
     FILE *fp;
     int i;
 
-    /* Read topographic index statistics file */
-    if ((fp = fopen(file.topidxstats, "r")) == NULL)
-	G_fatal_error(_("Unable to open input file <%s>"), file.topidxstats);
-
-    topidxstats.atb = NULL;
-    topidxstats.Aatb_r = NULL;
-
-    for (i = 0; !feof(fp);) {
-	double atb;
-	double Aatb_r;
-
-	get_line(fp, buf);
-	if (sscanf(buf, "%lf %lf", &atb, &Aatb_r) == 2) {
-	    topidxstats.atb = (double *)G_realloc(topidxstats.atb,
-			    (i + 1) * sizeof(double));
-	    topidxstats.Aatb_r = (double *)G_realloc(topidxstats.Aatb_r,
-			    (i + 1) * sizeof(double));
-	    topidxstats.atb[i] = atb;
-	    topidxstats.Aatb_r[i++] = Aatb_r;
-	}
-    }
-
-    misc.ntopidxclasses = i;
-    fclose(fp);
-
     /* Read parameters file */
     if ((fp = fopen(file.params, "r")) == NULL)
 	G_fatal_error(_("Unable to open input file <%s>"), file.params);
@@ -137,7 +112,7 @@ void read_input(void)
     }
 
     params.d = NULL;
-    params.Ad_r = NULL;
+    params.Ad = NULL;
 
     for (i = 0; !feof(fp);) {
 	double d;
@@ -146,14 +121,39 @@ void read_input(void)
 	get_line(fp, buf);
 	if (sscanf(buf, "%lf %lf", &d, &Ad_r) == 2) {
 	    params.d = (double *)G_realloc(params.d, (i + 1) * sizeof(double));
-	    params.Ad_r = (double *)G_realloc(params.Ad_r,
+	    params.Ad = (double *)G_realloc(params.Ad,
 			    (i + 1) * sizeof(double));
 	    params.d[i] = d;
-	    params.Ad_r[i++] = Ad_r;
+	    params.Ad[i++] = Ad_r * params.A;
 	}
     }
 
     params.nch = i;
+    fclose(fp);
+
+    /* Read topographic index statistics file */
+    if ((fp = fopen(file.topidxstats, "r")) == NULL)
+	G_fatal_error(_("Unable to open input file <%s>"), file.topidxstats);
+
+    topidxstats.atb = NULL;
+    topidxstats.Aatb_r = NULL;
+
+    for (i = 0; !feof(fp);) {
+	double atb;
+	double Aatb_r;
+
+	get_line(fp, buf);
+	if (sscanf(buf, "%lf %lf", &atb, &Aatb_r) == 2) {
+	    topidxstats.atb = (double *)G_realloc(topidxstats.atb,
+			    (i + 1) * sizeof(double));
+	    topidxstats.Aatb_r = (double *)G_realloc(topidxstats.Aatb_r,
+			    (i + 1) * sizeof(double));
+	    topidxstats.atb[i] = atb;
+	    topidxstats.Aatb_r[i++] = Aatb_r;
+	}
+    }
+
+    misc.ntopidxclasses = i;
     fclose(fp);
 
     /* Read input file */

@@ -32,14 +32,6 @@ void run_topmodel(void);
 double calculate_infiltration(int timestep, double R);
 
 
-/* Topographic index statistics file */
-struct topidxstats
-{
-    /* misc.ntopidxclasses */
-    double *atb;
-    double *Aatb_r;
-};
-
 /* Parameters file */
 struct params
 {
@@ -60,7 +52,15 @@ struct params
     int nch;
     /* params.nch's */
     double *d;
-    double *Ad_r;
+    double *Ad;
+};
+
+/* Topographic index statistics file */
+struct topidxstats
+{
+    /* misc.ntopidxclasses */
+    double *atb;
+    double *Aatb_r;
 };
 
 /* Input file */
