@@ -12,14 +12,103 @@ from grass.pygrass.functions import docstring_property
 from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
 
 
+def _check_value(param, value):
+    """Function to check the correctness of a value and
+    return the checked value and the original.
+    """
+    must_val = 'The Parameter <%s>, must be one of the following values: %r'
+    req = 'The Parameter <%s>, require: %s, get: %s instead: %r\n%s'
+    string = (str, unicode)
+
+    def raiseexcpet(exc, param, ptype, value):
+        """Function to modifa the error message"""
+        msg = req % (param.name, param.typedesc, ptype, value, exc.message)
+        if exc is ValueError:
+            raise ValueError(msg)
+        elif exc is TypeError:
+            raise TypeError(msg)
+        else:
+            exc.message = msg
+            raise exc
+
+    def check_string(value):
+        """Function to check that a string parameter is already a string"""
+        if param.type in string and type(value) not in string:
+            msg = ("The Parameter <%s> require a string,"
+                   " %s instead is provided: %r")
+            raise ValueError(msg % (param.name, type(value), value))
+        return value
+
+    # return None if None
+    if value is None:
+        return param.default, param.default
+
+    # find errors with multiple parmaeters
+    if param.multiple or param.keydescvalues:
+        if not isinstance(value, (list, tuple)):
+            msg = ('The Parameter <%s> require multiple inputs,'
+                   ' give: %r instaed')
+            raise TypeError(msg % (param.name, value))
+        # everything looks fine, so check each value
+        try:
+            return [param.type(check_string(val)) for val in value], value
+        except Exception as exc:
+            raiseexcpet(exc, param, param.type, value)
+    elif isinstance(value, (list, tuple)):
+        # this check is needed to avoid a list is converted to string silently
+        msg = 'The Parameter <%s> does not accept multiple inputs'
+        raise TypeError(msg % param.name)
+
+    if param.typedesc == 'all':
+        return value, value
+
+    # check string before trying to convert value to the correct type
+    check_string(value)
+    # the value is a scalar
+    try:
+        newvalue = param.type(value)
+    except Exception as exc:
+        raiseexcpet(exc, param, type(value), value)
+
+    # check values
+    if hasattr(param, 'values'):
+        if param.type in (float, int):
+            # check for value in range
+            if ((param.min is not None and newvalue < param.min) or
+                    (param.max is not None and newvalue > param.max)):
+                err_str = ('The Parameter <%s>, must be between: '
+                           '%g<=value<=%g, %r is outside.')
+                raise ValueError(err_str % (param.name, param.min,
+                                            param.max, newvalue))
+        # check if value is in the list of valid values
+        if param.values is not None and newvalue not in param.values:
+            raise ValueError(must_val % (param.name, param.values))
+    return newvalue, value
+
+
 # TODO add documentation
 class Parameter(object):
-    """The Parameter object store all information about a parameter of module.
+    """The Parameter object store all information about a parameter of a
+    GRASS GIS module. ::
 
-    It is possible to set parameter of command using this object.
+        >>> param = Parameter(diz=dict(name='int_number', required='yes',
+        ...                            multiple='no', type='integer',
+        ...                            values=[2, 4, 6, 8]))
+        >>> param.value = 2
+        >>> param.value
+        2
+        >>> param.value = 3
+        Traceback (most recent call last):
+           ...
+        ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8]
+
+    ...
     """
     def __init__(self, xparameter=None, diz=None):
         self._value = None
+        self._rawvalue = None
+        self.min = None
+        self.max = None
         diz = element2dict(xparameter) if xparameter is not None else diz
         if diz is None:
             raise TypeError('Xparameter or diz are required')
@@ -66,10 +155,9 @@ class Parameter(object):
                                 for v in diz['default'].split(',')]
             else:
                 self.default = self.type(diz['default'])
-            self._value = self.default
         else:
             self.default = None
-
+        self._value, self._rawvalue = self.default, self.default
         self.guisection = diz.get('guisection', None)
 
         #
@@ -85,82 +173,59 @@ class Parameter(object):
         return self._value
 
     def _set_value(self, value):
-        values_error = 'The Parameter <%s>, must be a python list ' \
-                       'containing one or more of the following values: %r'
-        if value is None:
-            self._value = value
-        elif isinstance(value, list) or isinstance(value, tuple):
-            if self.multiple or self.keydescvalues:
-                # check each value
-                self._value = [self.type(val) for val in value]
-            else:
-                str_err = 'The Parameter <%s> does not accept multiple inputs'
-                raise TypeError(str_err % self.name)
-        elif self.typedesc == 'all':
-            self._value = value
-        elif isinstance(value, self.type):
-            if hasattr(self, 'values'):
-                if self.type in (float, int):
-                    if self.min <= value <= self.max:
-                        self._value = value
-                    else:
-                        err_str = 'The Parameter <%s>, must be: %g<=value<=%g'
-                        raise ValueError(err_str % (self.name, self.min,
-                                                    self.max))
-                elif value in self.values:
-                    self._value = value
-                else:
-                    raise ValueError(values_error % (self.name, self.values))
-            else:
-                self._value = value
-        elif self.type is str and isinstance(value, unicode):
-            if hasattr(self, 'values'):
-                if value in self.values:
-                    self._value = str(value)
-                else:
-                    raise ValueError(values_error % (self.name, self.values))
-            else:
-                self._value = str(value)
-        elif self.type is str and isinstance(value, str):
-            if hasattr(self, 'values'):
-                if value in self.values:
-                    self._value = value
-                else:
-                    raise ValueError(values_error % (self.name, self.values))
-            else:
-                self._value = value
-        else:
-            str_err = 'The Parameter <%s>, require: %s, get: %s instead'
-            raise TypeError(str_err % (self.name, self.typedesc, type(value)))
+        self._value, self._rawvalue = _check_value(self, value)
 
     # here the property function is used to transform value in an attribute
     # in this case we define which function must be use to get/set the value
     value = property(fget=_get_value, fset=_set_value,
-                     doc="Set or obtain value")
+                     doc="Parameter value transformed and validated.")
+
+    @property
+    def rawvalue(self):
+        """Parameter value as insert by user without transformation"""
+        return self._rawvalue
 
     def get_bash(self):
-        """Prova"""
-        if isinstance(self._value, list) or isinstance(self._value, tuple):
-            value = ','.join([str(v) for v in self._value])
-        else:
-            value = str(self._value)
-        return """%s=%s""" % (self.name, value)
+        """Return the BASH representation of the parameter. ::
+
+            >>> param = Parameter(diz=dict(name='int_number', required='yes',
+            ...                            multiple='no', type='integer',
+            ...                            values=[2, 4, 6, 8], default=8))
+            >>> param.get_bash()
+            u'int_number=8'
+
+        ..
+        """
+        if self.value is None:
+            return ''
+        return """%s=%s""" % (self.name, self.rawvalue)
 
     def get_python(self):
-        """Prova"""
-        if not self.value:
+        """Return a string with the Python representation of the parameter. ::
+
+            >>> param = Parameter(diz=dict(name='int_number', required='yes',
+            ...                            multiple='no', type='integer',
+            ...                            values=[2, 4, 6, 8], default=8))
+            >>> param.get_python()
+            u'int_number=8'
+
+        ..
+        """
+        if self.value is None:
             return ''
-        return """%s=%r""" % (self.name, self._value)
+        return """%s=%r""" % (self.name, self.value)
 
     def __str__(self):
+        """Return the BASH representation of the GRASS module parameter."""
         return self.get_bash()
 
     def __repr__(self):
+        """Return the python representation of the GRASS module parameter."""
         str_repr = "Parameter <%s> (required:%s, type:%s, multiple:%s)"
+        mtype = ('raster', 'vector')  # map type
         return str_repr % (self.name,
                            "yes" if self.required else "no",
-                           self.type if self.type in (
-                           'raster', 'vector') else self.typedesc,
+                           self.type if self.type in mtype else self.typedesc,
                            "yes" if self.multiple else "no")
 
     @docstring_property(__doc__)
@@ -168,7 +233,21 @@ class Parameter(object):
         """Return the docstring of the parameter
 
         {name}: {default}{required}{multi}{ptype}
-            {description}{values}"","""
+            {description}{values}"",
+
+        ::
+
+            >>> param = Parameter(diz=dict(name='int_number',
+            ...                            description="Set an number",
+            ...                            required='yes',
+            ...                            multiple='no', type='integer',
+            ...                            values=[2, 4, 6, 8], default=8))
+            >>> print(param.__doc__)
+            int_number: 8, required, integer
+                Set an number
+                Values: 2, 4, 6, 8
+        ..
+        """
         if hasattr(self, 'values'):
             if self.isrange:
                 vals = self.isrange
