@@ -144,12 +144,12 @@ void initialize(void)
 
 	t = misc.delay + i + 1;
 	if (t > misc.tch[params.nch - 1])
-	    misc.Ad[i] = 1.0;
+	    misc.Ad[i] = params.A;
 	else {
 	    for (j = 1; j < params.nch; j++) {
 		if (t <= misc.tch[j]) {
-		    misc.Ad[i] = params.Ad_r[j - 1] +
-			(params.Ad_r[j] - params.Ad_r[j - 1]) *
+		    misc.Ad[i] = params.Ad[j - 1] +
+			(params.Ad[j] - params.Ad[j - 1]) *
 			(t - misc.tch[j - 1]) /
 			(misc.tch[j] - misc.tch[j - 1]);
 		    break;
@@ -160,10 +160,9 @@ void initialize(void)
 
     /* difference in the contribution area for each time step */
     A1 = misc.Ad[0];
-    misc.Ad[0] *= params.A;
     for (i = 1; i < misc.tcsub; i++) {
 	A2 = misc.Ad[i];
-	misc.Ad[i] = (A2 - A1) * params.A;
+	misc.Ad[i] = A2 - A1;
 	A1 = A2;
     }
 
