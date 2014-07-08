@@ -272,5 +272,74 @@ class TestCheckValueFunction(unittest.TestCase):
             _check_value(param, "elevation")
 
 
+class TestParameterGetBASH(unittest.TestCase):
+    def test_single_float_double(self):
+        for ptype in ('float', 'double'):
+            param = Parameter(diz=dict(name='number', required='yes',
+                                       multiple='no', type=ptype))
+            # set private attributes to skip the check function
+            param._value = 1.0
+            param._rawvalue = 1.0
+            self.assertEqual("number=1.0", param.get_bash())
+            param._value = 1.0
+            param._rawvalue = "1."
+            self.assertEqual("number=1.", param.get_bash())
+
+    def test_multiple_float_double(self):
+        for ptype in ('float', 'double'):
+            param = Parameter(diz=dict(name='number', required='yes',
+                                       multiple='yes', type=ptype))
+            # set private attributes to skip the check function
+            param._value = [1.0, ]
+            param._rawvalue = 1.0
+            self.assertEqual("number=1.0", param.get_bash())
+            param._value = [1.0, ]
+            param._rawvalue = "1."
+            self.assertEqual("number=1.", param.get_bash())
+            param._value = [1.0, 2.0, 3.0]
+            param._rawvalue = [1.0, 2.0, 3.0]
+            self.assertEqual("number=1.0,2.0,3.0", param.get_bash())
+            param._value = [1.0, 2.0, 3.0]
+            param._rawvalue = ["1.", "2.", "3."]
+            self.assertEqual("number=1.,2.,3.", param.get_bash())
+
+    def test_single_string(self):
+        param = Parameter(diz=dict(name='rast', required='yes',
+                                   multiple='no', type='string'))
+        # set private attributes to skip the check function
+        param._value = 'elev'
+        param._rawvalue = 'elev'
+        self.assertEqual("rast=elev", param.get_bash())
+
+    def test_multiple_strings(self):
+        param = Parameter(diz=dict(name='rast', required='yes',
+                                   multiple='yes', type='string'))
+        # set private attributes to skip the check function
+        param._value = ['elev', 'asp', 'slp']
+        param._rawvalue = ['elev', 'asp', 'slp']
+        self.assertEqual("rast=elev,asp,slp", param.get_bash())
+        param._value = ['elev', ]
+        param._rawvalue = 'elev'
+        self.assertEqual("rast=elev", param.get_bash())
+
+    def test_keydescvalues(self):
+        param = Parameter(diz=dict(name='range', required='yes',
+                                   multiple='yes',
+                                   keydesc=('range', '(min, max)'),
+                                   type='integer'))
+        # set private attributes to skip the check function
+        param._value = [(1., 2.), ]
+        param._rawvalue = (1., 2.)
+        self.assertEqual("range=1.0,2.0", param.get_bash())
+        param._value = [(1., 2.), (3., 4.)]
+        param._rawvalue = [(1., 2.), (3., 4.)]
+        self.assertEqual("range=1.0,2.0,3.0,4.0", param.get_bash())
+        param._value = [(1., 2.), (3., 4.)]
+        param._rawvalue = [('1.0', '2.00'), ('3.000', '4.0000')]
+        self.assertEqual("range=1.0,2.00,3.000,4.0000", param.get_bash())
+
+        with self.assertRaises(TypeError):
+            _check_value(param, 1)
+
 if __name__ == '__main__':
     unittest.main()

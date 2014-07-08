@@ -203,9 +203,14 @@ class Parameter(object):
 
         ..
         """
-        if self.value is None:
-            return ''
-        return """%s=%s""" % (self.name, self.rawvalue)
+        sep = ','
+        if isinstance(self.rawvalue, (list, tuple)):
+            value = sep.join([sep.join([str(v) for v in val])
+                              if isinstance(val, tuple) else str(val)
+                              for val in self.rawvalue])
+        else:
+            value = str(self.rawvalue)
+        return "%s=%s" % (self.name, value)
 
     def get_python(self):
         """Return a string with the Python representation of the parameter. ::
