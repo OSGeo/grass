@@ -396,6 +396,8 @@ from factory import *
 from open_stds import *
 import copy
 
+from grass.exceptions import FatalError
+
 ##############################################################################
 
 class TemporalAlgebraLexer(object):
@@ -650,16 +652,9 @@ class GlobalTemporalVar(object):
     def __str__(self):
         return str(self.tfunc) + str(self.compop) + str(self.value)
 
-###############################################################################
-
-class FatalError(Exception):
-    def __init__(self, msg):
-        self.value = msg
-
-    def __str__(self):
-        return self.value
 
 ###############################################################################
+
 
 class TemporalAlgebraParser(object):
     """The temporal algebra class"""

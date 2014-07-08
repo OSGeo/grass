@@ -14,19 +14,10 @@ for details.
 @author Soeren Gebbert
 """
 import sys
-import grass.lib.gis as libgis
 from multiprocessing import Process, Lock, Pipe
 
-
-class FatalError(Exception):
-    """This error will be raised in case raise_on_error was set True
-       when creating the messenger object.
-    """
-    def __init__(self, msg):
-        self.value = msg
-
-    def __str__(self):
-        return self.value
+import grass.lib.gis as libgis
+from grass.exceptions import FatalError
 
 
 def message_server(lock, conn):

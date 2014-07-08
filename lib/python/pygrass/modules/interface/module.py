@@ -410,24 +410,20 @@ class Module(object):
             for flg in kargs['flags']:
                 self.flags[flg].value = True
             del(kargs['flags'])
-        if 'run_' in kargs:
-            self.run_ = kargs['run_']
-            del(kargs['run_'])
-        if 'stdin_' in kargs:
-            self.inputs['stdin'].value = kargs['stdin_']
-            del(kargs['stdin_'])
-        if 'stdout_' in kargs:
-            self.stdout_ = kargs['stdout_']
-            del(kargs['stdout_'])
-        if 'stderr_' in kargs:
-            self.stderr_ = kargs['stderr_']
-            del(kargs['stderr_'])
-        if 'env_' in kargs:
-            self.env_ = kargs['env_']
-            del(kargs['env_'])
-        if 'finish_' in kargs:
-            self.finish_ = kargs['finish_']
-            del(kargs['finish_'])
+
+        # set attributs
+        for key in ('run_', 'env_', 'finish_'):
+            if key in kargs:
+                setattr(self, key, kargs.pop(key))
+
+        # set inputs
+        for key in ('stdin_', ):
+            if key in kargs:
+                self.inputs[key].value = kargs.pop(key)
+        # set outputs
+        for key in ('stdout_', 'stderr_'):
+            if key in kargs:
+                self.outputs[key].value = kargs.pop(key)
 
         #
         # check args
@@ -570,6 +566,9 @@ class Module(object):
             self.outputs['stdout'].value = stdout if stdout else ''
             self.outputs['stderr'].value = stderr if stderr else ''
             self.time = time.time() - start
+            #if self.popen.poll():
+            #    raise CalledModuleError(self.popen.returncode, self.get_bash(),
+            #                            {}, stderr)
         return self
 
 ###############################################################################
