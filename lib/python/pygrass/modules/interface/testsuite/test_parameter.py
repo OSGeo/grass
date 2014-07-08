@@ -69,12 +69,16 @@ class TestCheckValueFunction(unittest.TestCase):
             value = ("1.4", "2.3")
             self.assertTupleEqual(([float(v) for v in value], value),
                                   _check_value(param, value))
+            value = 1.
+            self.assertTupleEqual(([value, ], value),
+                                  _check_value(param, value))
+            value = 1
+            self.assertTupleEqual(([value, ], value),
+                                  _check_value(param, value))
 
             # test errors
-            with self.assertRaises(TypeError):
-                _check_value(param, 1.)
-            with self.assertRaises(TypeError):
-                _check_value(param, 1)
+            with self.assertRaises(ValueError):
+                _check_value(param, "elev")
             with self.assertRaises(ValueError):
                 _check_value(param, ("elev", "slope", "aspect"))
 
@@ -124,6 +128,7 @@ class TestCheckValueFunction(unittest.TestCase):
         param = Parameter(diz=dict(name='int_number', required='yes',
                                    multiple='yes', type='integer'))
         value = (1, 2)
+        #import ipdb; ipdb.set_trace()
         self.assertTupleEqual((list(value), value), _check_value(param, value))
         value = (1.2, 2.3)
         self.assertTupleEqual(([int(v) for v in value], value),
@@ -131,18 +136,35 @@ class TestCheckValueFunction(unittest.TestCase):
         value = ("1", "2")
         self.assertTupleEqual(([int(v) for v in value], value),
                               _check_value(param, value))
+        value = 1
+        self.assertTupleEqual(([1, ], value), _check_value(param, value))
+        value = 1.2
+        self.assertTupleEqual(([int(value), ], value),
+                              _check_value(param, value))
+        value = "1"
+        self.assertTupleEqual(([int(value), ], value),
+                              _check_value(param, value))
 
         # test errors
-        with self.assertRaises(TypeError):
-            _check_value(param, 1)
-        with self.assertRaises(TypeError):
-            _check_value(param, 1.0)
-        with self.assertRaises(TypeError):
-            _check_value(param, "1.")
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             _check_value(param, "elev")
         with self.assertRaises(ValueError):
             _check_value(param, ("elev", "slope", "aspect"))
+
+    def test_keydescvalues(self):
+        for ptype in ('integer', 'float'):
+            param = Parameter(diz=dict(name='int_number', required='yes',
+                                       multiple='yes',
+                                       keydesc=('range', '(min, max)'),
+                                       type='integer'))
+            value = (1, 2)
+            self.assertTupleEqual(([value, ], value),
+                                  _check_value(param, value))
+            value = [(1, 2), (2, 3)]
+            self.assertTupleEqual((value, value), _check_value(param, value))
+
+            with self.assertRaises(TypeError):
+                _check_value(param, 1)
 
     def test_range_integer(self):
         param = Parameter(diz=dict(name='int_number', required='yes',
@@ -224,6 +246,8 @@ class TestCheckValueFunction(unittest.TestCase):
         value = (1, 2, 3)
         self.assertTupleEqual(([str(v) for v in value], value),
                               _check_value(param, value))
+        value = 'elev'
+        self.assertTupleEqual(([value, ], value), _check_value(param, value))
 
         # test errors
         with self.assertRaises(ValueError):
@@ -234,7 +258,7 @@ class TestCheckValueFunction(unittest.TestCase):
         param = Parameter(diz=dict(name='rastname', required='yes',
                                    multiple='no', type='string',
                                    values=values))
-        value="asp"
+        value = "asp"
         self.assertTupleEqual((value, value), _check_value(param, value))
 
         # test errors
