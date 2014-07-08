@@ -18,7 +18,6 @@ def _check_value(param, value):
     """
     must_val = 'The Parameter <%s>, must be one of the following values: %r'
     req = 'The Parameter <%s>, require: %s, get: %s instead: %r\n%s'
-    string = (str, unicode)
 
     def raiseexcpet(exc, param, ptype, value):
         """Function to modifa the error message"""
@@ -33,10 +32,14 @@ def _check_value(param, value):
 
     def check_string(value):
         """Function to check that a string parameter is already a string"""
-        if param.type in string and type(value) not in string:
-            msg = ("The Parameter <%s> require a string,"
-                   " %s instead is provided: %r")
-            raise ValueError(msg % (param.name, type(value), value))
+        string = (str, unicode)
+        if param.type in string:
+            if type(value) in (int, float):
+                value = str(value)
+            if type(value) not in string:
+                msg = ("The Parameter <%s> require a string,"
+                       " %s instead is provided: %r")
+                raise ValueError(msg % (param.name, type(value), value))
         return value
 
     # return None if None
