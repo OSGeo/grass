@@ -1,10 +1,13 @@
+"""Test of g.mremove module"""
 
-import unittest
-import subprocess
-from grass.script import start_command, read_command, run_command
-import grass.script.core as gcore
+# TODO: rmapcalc probably fatals, replace or add raise on error?
 from grass.script.raster import mapcalc as rmapcalc
 
+import gunittest
+from gunittest.gutils import get_curret_mapset
+from gunittest.gmodules import SimpleModule
+
+# when used user1 must be replaced by current mapset
 REMOVE_RASTERS = """rast/test_map_0@user1
 rast/test_map_1@user1
 rast/test_map_2@user1
@@ -32,64 +35,75 @@ Removing raster <test_two>
 """
 
 
-class GMremoveTest(unittest.TestCase):
+class GMRemoveTest(gunittest.TestCase):
+    """Test removing with g.mremove"""
 
-    def setUp(self):
-        gcore.set_raise_on_error(True)
-        gcore.use_temp_region()
-        ret = run_command("g.region", s=0, n=5, w=0, e=5, res=1)
-        if ret != 0:
-            gcore.fatal("g.region failed")
+    @classmethod
+    def setUpClass(cls):
+        """Set up small region for fast map creation."""
+        cls.use_temp_region()
+        cls.runModule("g.region", s=0, n=5, w=0, e=5, res=1)
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove temporary region"""
+        cls.del_temp_region()
 
     def test_remove_procedure(self):
-        self.maxDiff = None
-
+        """Test that maps are removed only with -f"""
         for i in range(0, 10):
             rmapcalc("test_map_%i = 100" % i)
         rmapcalc("test_two = 2")
-        p = start_command('g.mremove', rast='test_map_*,*two',
-                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout = p.communicate()[0]
-        self.assertMultiLineEqual(stdout, REMOVE_RASTERS)
-        p = start_command('g.mremove', rast='test_map_*,*two', flags='f',
-                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
-        self.assertMultiLineEqual(stdout, '')
-        self.assertMultiLineEqual(stderr, REMOVING_RASTERS_LOG)
 
-    #@unittest.skip("only for the new g.mremove with g.mlist interface")
-    def test_remove_procedure(self):
-        self.maxDiff = None
+        module = SimpleModule('g.mremove',
+                              type='rast', pattern='test_map_*,*two')
+        self.assertModule(module)
+        self.assertMultiLineEqual(module.outputs.stdout,
+                                  REMOVE_RASTERS.replace('user1',
+                                                         get_curret_mapset()))
 
+        module = SimpleModule('g.mremove', type='rast',
+                              pattern='test_map_*,*two', flags='f')
+        self.assertModule(module)
+        self.assertMultiLineEqual(module.outputs.stdout, '')
+        self.assertMultiLineEqual(module.outputs.stderr, REMOVING_RASTERS_LOG)
+
+    def test_remove_procedure_exclude(self):
+        """Test that exclude does not list excluded maps"""
         rmapcalc("test_apples = 100")
         rmapcalc("test_oranges = 200")
         rmapcalc("test_apples_big = 300")
         rmapcalc("test_apples_small = 300")
-        p = start_command('g.mremove', type='rast',
-                          pattern='test_{apples,oranges}*',
-                          exclude="*_small",
-                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout = p.communicate()[0]
-        self.assertMultiLineEqual(stdout,
+        module = SimpleModule('g.mremove', type='rast',
+                              pattern='test_{apples,oranges}*',
+                              exclude="*_small")
+        self.assertModule(module)
+        self.assertMultiLineEqual(module.outputs.stdout,
                                   'rast/test_apples@user1\n'
                                   'rast/test_apples_big@user1\n'
-                                  'rast/test_oranges@user1\n')
-        p = start_command('g.mremove', type='rast',
-                          pattern='test_{apples,oranges}{_small,_big,*}',
-                          flags='f',
-                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
-        self.assertMultiLineEqual(stdout, '')
-        self.assertRegexpMatches(stderr, "(.*<.+>[^\n]*\n){4}", "4 maps should be removed")
+                                  'rast/test_oranges@user1\n'.replace(
+                                      'user1', get_curret_mapset()))
+        module = SimpleModule('g.mremove', type='rast',
+                              pattern='test_{apples,oranges}{_small,_big,*}',
+                              flags='f')
+        self.assertModule(module)
+        self.assertMultiLineEqual(module.outputs.stdout, '')
+        self.assertRegexpMatches(module.outputs.stderr, "(.*<.+>[^\n]*\n){4}",
+                                 msg="4 maps should be removed")
+
+
+class GMRemoveWrongInputTest(gunittest.TestCase):
+    """Test wrong input of parameters for g.mlist module"""
 
     def test_re_flags(self):
-        p = start_command('g.mremove', flags='re', type='rast', pattern='xxxyyyzzz',
-                          stderr=subprocess.PIPE)
-        stderr = p.communicate()[1]
-        self.assertEqual(stderr, "ERROR: -r and -e are mutually exclusive\n")
+        """Test that -r and -e flags are exclusive"""
+        module = SimpleModule('g.mremove', flags='re',
+                              type='rast', pattern='xxxyyyzzz')
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn('-r', stderr)
+        self.assertIn('-e', stderr)
 
-    def tearDown(self):
-        gcore.del_temp_region()
 
 if __name__ == '__main__':
-    unittest.main()
+    gunittest.test()
