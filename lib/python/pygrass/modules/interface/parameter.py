@@ -46,21 +46,24 @@ def _check_value(param, value):
     if value is None:
         return param.default, param.default
 
-    # find errors with multiple parmaeters
-    if param.multiple or param.keydescvalues:
-        if not isinstance(value, (list, tuple)):
-            msg = ('The Parameter <%s> require multiple inputs,'
-                   ' give: %r instaed')
-            raise TypeError(msg % (param.name, value))
-        # everything looks fine, so check each value
-        try:
-            return [param.type(check_string(val)) for val in value], value
-        except Exception as exc:
-            raiseexcpet(exc, param, param.type, value)
-    elif isinstance(value, (list, tuple)):
-        # this check is needed to avoid a list is converted to string silently
-        msg = 'The Parameter <%s> does not accept multiple inputs'
-        raise TypeError(msg % param.name)
+    # find errors with multiple parmeters
+    if isinstance(value, (list, tuple)):
+        if param.keydescvalues:
+            return (([value, ], value) if isinstance(value, tuple)
+                    else (value, value))
+        if param.multiple:
+            # everything looks fine, so check each value
+            try:
+                return [param.type(check_string(val)) for val in value], value
+            except Exception as exc:
+                raiseexcpet(exc, param, param.type, value)
+        else:
+            msg = 'The Parameter <%s> does not accept multiple inputs'
+            raise TypeError(msg % param.name)
+
+    if param.keydescvalues:
+        msg = 'The Parameter <%s> require multiple inputs in the form: %s'
+        raise TypeError(msg % (param.name, param.keydescvalues))
 
     if param.typedesc == 'all':
         return value, value
@@ -86,7 +89,8 @@ def _check_value(param, value):
         # check if value is in the list of valid values
         if param.values is not None and newvalue not in param.values:
             raise ValueError(must_val % (param.name, param.values))
-    return newvalue, value
+    return (([newvalue, ] if (param.multiple or param.keydescvalues)
+             else newvalue), value)
 
 
 # TODO add documentation
