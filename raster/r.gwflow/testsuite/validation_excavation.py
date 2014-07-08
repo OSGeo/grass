@@ -17,26 +17,24 @@ class ValidationExcavation(TestCase):
     def setUpClass(cls):
         """Use temporary region settings"""
         grass.use_temp_region()
+        cls.runModule("g.region", flags="p",  res=50, n=950, s=0, w=0, e=2000)
 
     def setUp(self):
         """Set region and create input data for steady state groundwater flow computation
         """
-
-        self.assertModule("g.region", flags="p",  res=50, n=950, s=0, w=0, e=2000)
-
-        self.assertModule("r.mapcalc", expression="phead= if(row() == 19, 5, 3)")
-        self.assertModule("r.mapcalc", expression="status=if((col() == 1 && row() == 13) ||\
+        self.runModule("r.mapcalc", expression="phead= if(row() == 19, 5, 3)")
+        self.runModule("r.mapcalc", expression="status=if((col() == 1 && row() == 13) ||\
                                       (col() == 1 && row() == 14) ||\
                                       (col() == 2 && row() == 13) ||\
                                       (col() == 2 && row() == 14) ||\
                                       (row() == 19), 2, 1)")
 
-        self.assertModule("r.mapcalc", expression="hydcond=0.001")
-        self.assertModule("r.mapcalc", expression="recharge=0.000000006")
-        self.assertModule("r.mapcalc", expression="top=20")
-        self.assertModule("r.mapcalc", expression="bottom=0")
-        self.assertModule("r.mapcalc", expression="poros=0.1")
-        self.assertModule("r.mapcalc", expression="null=0.0")
+        self.runModule("r.mapcalc", expression="hydcond=0.001")
+        self.runModule("r.mapcalc", expression="recharge=0.000000006")
+        self.runModule("r.mapcalc", expression="top=20")
+        self.runModule("r.mapcalc", expression="bottom=0")
+        self.runModule("r.mapcalc", expression="poros=0.1")
+        self.runModule("r.mapcalc", expression="null=0.0")
 
     def test_steady_state(self):
         #compute a steady state groundwater flow
