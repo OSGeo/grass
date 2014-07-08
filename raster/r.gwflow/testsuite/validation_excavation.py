@@ -19,6 +19,12 @@ class ValidationExcavation(TestCase):
         grass.use_temp_region()
         cls.runModule("g.region", flags="p",  res=50, n=950, s=0, w=0, e=2000)
 
+    @classmethod
+    def tearDownClass(cls):
+        """!Remove the temporary region
+        """
+        grass.del_temp_region()
+
     def setUp(self):
         """Set region and create input data for steady state groundwater flow computation
         """
@@ -74,12 +80,6 @@ class ValidationExcavation(TestCase):
         
         self.assertRasterFitsUnivar(raster="gwresult",  reference=univar_string,  precision=3)
         self.assertRasterFitsInfo(raster="gwresult",  reference=info_string,  precision=3)
-
-    @classmethod
-    def tearDownClass(cls):
-        """!Remove the temporary region
-        """
-        grass.del_temp_region()
 
 if __name__ == '__main__':
     from gunittest.main import test

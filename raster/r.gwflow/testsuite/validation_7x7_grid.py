@@ -18,6 +18,12 @@ class Validation7x7Grid(TestCase):
         grass.use_temp_region()
         cls.runModule("g.region", res=100, n=700, s=0, w=0, e=700)
 
+    @classmethod
+    def tearDownClass(cls):
+        """!Remove the temporary region
+        """
+        grass.del_temp_region()
+
     def setUp(self):
         """Set region and create input data for transient groundwater flow computation
         """
@@ -76,11 +82,6 @@ class Validation7x7Grid(TestCase):
         self.assertRasterFitsUnivar(raster="gwresult_conf",  reference=univar_string,  precision=3)
         self.assertRasterFitsInfo(raster="gwresult_conf",  reference=info_string,  precision=3)
 
-    @classmethod
-    def tearDownClass(cls):
-        """!Remove the temporary region
-        """
-        grass.del_temp_region()
 
 if __name__ == '__main__':
     from gunittest.main import test
