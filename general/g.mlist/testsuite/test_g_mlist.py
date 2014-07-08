@@ -1,39 +1,55 @@
+"""g.mlist tests"""
 
-import unittest
-from grass.script import start_command
-import subprocess
+import gunittest
+from gunittest.gmodules import SimpleModule
 
-class GMlistWrongParamertersTest(unittest.TestCase):
 
-    def setUp(self):
-        pass
+class GMlistWrongParamertersTest(gunittest.TestCase):
+    """Test wrong input of parameters for g.mlist module"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Create maps in a small region."""
+        cls.use_temp_region()
+        cls.runModule("g.region", s=0, n=5, w=0, e=5, res=1)
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove temporary region"""
+        cls.del_temp_region()
 
     def test_pt_flags(self):
-        self.maxDiff = None
-        p = start_command('g.mlist', flags='pt', type='rast', stderr=subprocess.PIPE)
-        stderr = p.communicate()[1]
-        self.assertEqual(stderr, "ERROR: -p/-f and -m/-t are mutually exclusive\n")
+        """Test that -p and -t flags are exclusive"""
+        module = SimpleModule('g.mlist', flags='pt', type='rast')
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn('-p', stderr)
+        self.assertIn('-t', stderr)
 
     def test_ft_flags(self):
-        self.maxDiff = None
-        p = start_command('g.mlist', flags='ft', type='rast', stderr=subprocess.PIPE)
-        stderr = p.communicate()[1]
-        self.assertEqual(stderr, "ERROR: -p/-f and -m/-t are mutually exclusive\n")
+        """Test that -f and -t flags are exclusive"""
+        module = SimpleModule('g.mlist', flags='ft', type='rast')
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn('-f', stderr)
+        self.assertIn('-t', stderr)
 
     def test_pf_flags(self):
-        self.maxDiff = None
-        p = start_command('g.mlist', flags='pf', type='rast', stderr=subprocess.PIPE)
-        stderr = p.communicate()[1]
-        self.assertEqual(stderr, "ERROR: -p and -f are mutually exclusive\n")
+        """Test that -p and -f flags are exclusive"""
+        module = SimpleModule('g.mlist', flags='pf', type='rast')
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn('-p', stderr)
+        self.assertIn('-f', stderr)
 
     def test_re_flags(self):
-        self.maxDiff = None
-        p = start_command('g.mlist', flags='re', type='rast', stderr=subprocess.PIPE)
-        stderr = p.communicate()[1]
-        self.assertEqual(stderr, "ERROR: -r and -e are mutually exclusive\n")
+        """Test that -r and -e flags are exclusive"""
+        module = SimpleModule('g.mlist', flags='re', type='rast')
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn('-r', stderr)
+        self.assertIn('-e', stderr)
 
-    def tearDown(self):
-        pass
 
 if __name__ == '__main__':
-    unittest.main()
+    gunittest.test()

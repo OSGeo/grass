@@ -1,5 +1,5 @@
 
-import unittest
+import gunittest
 from grass.script import read_command
 
 LIST_RASTERS = """----------------------------------------------
@@ -19,11 +19,6 @@ elev_ned_30m              lsat7_2002_40             urban
 elev_srtm_30m             lsat7_2002_50             zipcodes
 elev_state_500m           lsat7_2002_61             zipcodes_dbl
 elevation                 lsat7_2002_62
-
-raster files available in mapset <landsat>:
-lsat5_1987_10   lsat5_1987_40   lsat5_1987_70   lsat7_2000_30   lsat7_2000_61
-lsat5_1987_20   lsat5_1987_50   lsat7_2000_10   lsat7_2000_40   lsat7_2000_70
-lsat5_1987_30   lsat5_1987_60   lsat7_2000_20   lsat7_2000_50   lsat7_2000_80
 
 """
 
@@ -47,12 +42,9 @@ census_wake2000           lakes                     zipcodes_wake
 censusblk_swwake          nc_state
 comm_colleges             overpasses
 
-
 """
 
 LIST_GROUPS = """----------------------------------------------
-
-
 imagery group files available in mapset <landsat>:
 lsat7_2000
 
@@ -111,23 +103,6 @@ urban              South West Wake: Urban areas derived from vector map
 zipcodes           South West Wake: Zipcode areas derived from vector map
 zipcodes_dbl       South West Wake: Zipcode areas from vector map, fp
 
-raster files available in mapset <landsat>:
-lsat5_1987_10      LANDSAT-TM5 Band 1 Visible (0.45-0.52um) 30m
-lsat5_1987_20      LANDSAT-TM5 Band 2 Visible (0.52-0.60um) 30m
-lsat5_1987_30      LANDSAT-TM5 Band 3 Visible (0.63-0.69um) 30m
-lsat5_1987_40      LANDSAT-TM5 Band 4 Near Infrared (NIR) (0.76-0.90um) 30m
-lsat5_1987_50      LANDSAT-TM5 Band 5 Near Infrared (NIR) (1.55-1.75um) 30m
-lsat5_1987_60      LANDSAT-TM5 Band 6 Thermal (10.40-12.50um) 120m
-lsat5_1987_70      LANDSAT-TM5 Band 7 Mid Infrared (MIR) (2.08-2.35um) 30m
-lsat7_2000_10      LANDSAT-TM7 Band 1 Visible (0.45-0.52um) 30m
-lsat7_2000_20      LANDSAT-TM7 Band 2 Visible (0.52-0.60um) 30m
-lsat7_2000_30      LANDSAT-TM7 Band 3 Visible (0.63-0.69um) 30m
-lsat7_2000_40      LANDSAT-TM7 Band 4 Near Infrared (NIR) (0.76-0.90um) 30m
-lsat7_2000_50      LANDSAT-TM7 Band 5 Near Infrared (NIR) (1.55-1.75um) 30m
-lsat7_2000_61      LANDSAT-TM7 Band 6 Thermal (10.40-12.50um) 60m Low Gain
-lsat7_2000_70      LANDSAT-TM7 Band 7 Mid Infrared (MIR) (2.08-2.35um) 30m
-lsat7_2000_80      LANDSAT-TM7 Band 8 Panchromatic (PAN) (0.52-0.90um (15m)
-
 """
 
 LIST_RASTERS_TITLES_MAPSET = """----------------------------------------------
@@ -151,10 +126,7 @@ lsat7_2000_80      LANDSAT-TM7 Band 8 Panchromatic (PAN) (0.52-0.90um (15m)
 """
 
 
-class GListTest(unittest.TestCase):
-
-    def setUp(self):
-        pass
+class GListTest(gunittest.TestCase):
 
     def test_list_rasters(self):
         """Test human readable list of rasters.
@@ -162,7 +134,6 @@ class GListTest(unittest.TestCase):
         Supposing we are in user1 of NC and have access
            to landsat (besides PERMANENT).
         """
-        self.maxDiff = None
         stdout = read_command('g.list', type='rast')
         self.assertMultiLineEqual(stdout, LIST_RASTERS)
 
@@ -172,18 +143,16 @@ class GListTest(unittest.TestCase):
         Supposing we are in user1 of NC and have access
            to landsat (besides PERMANENT).
         """
-        self.maxDiff = None
         stdout = read_command('g.list', type='vect')
         self.assertMultiLineEqual(stdout, LIST_VECTORS)
 
-    def test_list_groups(self):
-        """Test human readable list of imagery groups.
+    def test_list_groups_in_mapset(self):
+        """Test human readable list of imagery groups in a specific mapset.
 
         Supposing we are in user1 of NC and have access
         to landsat (besides PERMANENT).
         """
-        self.maxDiff = None
-        stdout = read_command('g.list', type='group')
+        stdout = read_command('g.list', type='group', mapset='landsat')
         self.assertMultiLineEqual(stdout, LIST_GROUPS)
 
     def test_list_rasters_in_mapset(self):
@@ -192,34 +161,23 @@ class GListTest(unittest.TestCase):
         Supposing we are in user1 of NC and have access
         to landsat (besides PERMANENT).
         """
-        self.maxDiff = None
         stdout = read_command('g.list', type='rast', mapset='landsat')
         self.assertMultiLineEqual(stdout, LIST_RASTERS_MAPSET)
 
     def test_list_rasters_titles(self):
         """Test human readable list of rasters with titles.
-
-        Supposing we are in user1 of NC and have access
-        to landsat (besides PERMANENT).
         """
-        self.maxDiff = None
         stdout = read_command('g.list', flags='f', type='rast')
         self.assertMultiLineEqual(stdout, LIST_RASTERS_TITLES)
 
     def test_list_rasters_titles_in_mapset(self):
         """Test human readable list of rasters with titles
         in a specific mapset.
-
-        Supposing we are in user1 of NC and have access
-        to landsat (besides PERMANENT).
         """
-        self.maxDiff = None
         stdout = read_command('g.list', flags='f', type='rast',
                               mapset='landsat')
         self.assertMultiLineEqual(stdout, LIST_RASTERS_TITLES_MAPSET)
 
-    def tearDown(self):
-        pass
 
 if __name__ == '__main__':
-    unittest.main()
+    gunittest.test()
