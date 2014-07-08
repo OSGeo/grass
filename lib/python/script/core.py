@@ -33,6 +33,8 @@ import shutil
 import locale
 import codecs
 
+from grass.exceptions import ScriptError
+
 # i18N
 import gettext
 gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
@@ -66,13 +68,6 @@ class Popen(subprocess.Popen):
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
 
-
-class ScriptError(Exception):
-    def __init__(self, msg):
-        self.value = msg
-
-    def __str__(self):
-        return self.value
 
 raise_on_error = False  # raise exception instead of calling fatal()
 
@@ -519,7 +514,7 @@ def debug(msg, debug=1):
     if debug_level() >= debug:
         if sys.platform == "win32":
             msg = msg.replace('&', '^&')
-            
+
         run_command("g.message", flags='d', message=msg, debug=debug)
 
 def verbose(msg):
@@ -866,7 +861,7 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=",", checkproj=False,
         @param val_sep The character that separates the values of a single key, default is ","
         @param checkproj True if it has to check some information about projection system
         @param checkproj True if it has to check some information about units
-        
+
         @return The dictionary
 
         A text file with this content:
@@ -985,9 +980,9 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
 def diff_files(filename_a, filename_b):
     """!Diffs two text files and returns difference.
 
-    @param filename_a first file path    
+    @param filename_a first file path
     @param filename_b second file path
-    
+
     @return list of strings
     """
     import difflib
@@ -1619,7 +1614,7 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
         else:
             warning(_("Location <%s> already exists and will be overwritten") % location)
             shutil.rmtree(os.path.join(dbase, location))
-    
+
     kwargs = dict()
     if datum:
         kwargs['datum'] = datum

@@ -5,35 +5,11 @@ Created on Wed Aug 15 17:33:27 2012
 @author: pietro
 """
 from functools import wraps
+
+from grass.exceptions import (FlagError, ParameterError, DBError,
+                              GrassError, OpenError)
+
 from grass.pygrass.messages import get_msgr
-
-
-class AbstractError(Exception):
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return repr(self.value)
-
-
-class ParameterError(Exception):
-    pass
-
-
-class FlagError(Exception):
-    pass
-
-
-class DBError(AbstractError):
-    pass
-
-
-class GrassError(AbstractError):
-    pass
-
-
-class OpenError(AbstractError):
-    pass
 
 
 def must_be_open(method):
