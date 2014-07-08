@@ -22,25 +22,39 @@ class TestRegisterFunctions(gunittest.TestCase):
         """!Initiate the temporal GIS and set the region
         """
         # Use always the current mapset as temporal database
-        grass.run_command("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
+        cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
         tgis.init()
         grass.overwrite = True
         grass.use_temp_region()
-        grass.run_command("g.region", n=80.0, s=0.0, e=120.0,
-                      w=0.0, t=1.0, b=0.0, res=10.0)
+        cls.runModule("g.region", n=80.0, s=0.0, e=120.0,
+                               w=0.0, t=1.0, b=0.0, res=10.0)
+
+    @classmethod
+    def tearDownClass(cls):
+        """!Remove the temporary region
+        """
+        grass.del_temp_region()
 
     def setUp(self):
         """!Create the test maps and the space time raster datasets
         """
-        self.assertModule("r.mapcalc", overwrite=True, quiet=True,
+        self.runModule("r.mapcalc", overwrite=True, quiet=True,
                        expression="register_map_1 = 1")
-        self.assertModule("r.mapcalc", overwrite=True, quiet=True,
+        self.runModule("r.mapcalc", overwrite=True, quiet=True,
                        expression="register_map_2 = 2")
 
         self.strds_abs = tgis.open_new_stds(name="register_test_abs", type="strds", temporaltype="absolute", 
                                             title="Test strds", descr="Test strds", semantic="field")
         self.strds_rel = tgis.open_new_stds(name="register_test_rel", type="strds", temporaltype="relative", 
                                             title="Test strds", descr="Test strds", semantic="field")
+
+    def tearDown(self):
+        """!Remove maps from temporal database
+        """
+        self.runModule("t.unregister", maps="register_map_1,register_map_2", quiet=True)
+        self.runModule("g.remove", rast="register_map_1,register_map_2", quiet=True)
+        self.strds_abs.delete()
+        self.strds_rel.delete()
 
     def test_absolute_time_strds_1(self):
         """!Test the registration of maps with absolute time in a
@@ -284,20 +298,6 @@ class TestRegisterFunctions(gunittest.TestCase):
         self.assertEqual(start, 1500000)
         self.assertEqual(end, 2000000)
         self.assertEqual(unit, "seconds")
-
-    def tearDown(self):
-        """!Remove maps from temporal database
-        """
-        self.assertModule("t.unregister", maps="register_map_1,register_map_2", quiet=True)
-        self.assertModule("g.remove", rast="register_map_1,register_map_2", quiet=True)
-        self.strds_abs.delete()
-        self.strds_rel.delete()
-
-    @classmethod
-    def tearDownClass(cls):
-        """!Remove the temporary region
-        """
-        grass.del_temp_region()
 
 if __name__ == '__main__':
     gunittest.test()
