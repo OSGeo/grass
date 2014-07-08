@@ -412,18 +412,14 @@ class Module(object):
             del(kargs['flags'])
 
         # set attributs
-        for key in ('run_', 'env_', 'finish_'):
+        for key in ('run_', 'env_', 'finish_', 'stdout_', 'stderr_'):
             if key in kargs:
                 setattr(self, key, kargs.pop(key))
 
         # set inputs
         for key in ('stdin_', ):
             if key in kargs:
-                self.inputs[key].value = kargs.pop(key)
-        # set outputs
-        for key in ('stdout_', 'stderr_'):
-            if key in kargs:
-                self.outputs[key].value = kargs.pop(key)
+                self.inputs[key[:-1]].value = kargs.pop(key)
 
         #
         # check args
