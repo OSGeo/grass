@@ -413,7 +413,7 @@ int main(int argc, char **argv)
 
 static void format_double(const double value, char *buf)
 {
-    sprintf(buf, "%.8lf", value);
+    sprintf(buf, "%.8f", value);
     G_trim_decimal(buf);
 }
 
