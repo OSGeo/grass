@@ -16,21 +16,20 @@ class Validation7x7Grid(TestCase):
     def setUpClass(cls):
         """Use temporary region settings"""
         grass.use_temp_region()
+        cls.runModule("g.region", res=100, n=700, s=0, w=0, e=700)
 
     def setUp(self):
         """Set region and create input data for transient groundwater flow computation
         """
-        self.assertModule("g.region", res=100, n=700, s=0, w=0, e=700)
-
-        self.assertModule("r.mapcalc", expression="phead=50")
-        self.assertModule("r.mapcalc", expression="status=if(col() == 1 || col() == 7 , 2, 1)")
-        self.assertModule("r.mapcalc", expression="well=if((row() == 4 && col() == 4), -0.1, 0)")
-        self.assertModule("r.mapcalc", expression="hydcond=0.0005")
-        self.assertModule("r.mapcalc", expression="recharge=0")
-        self.assertModule("r.mapcalc", expression="top_conf=20")
-        self.assertModule("r.mapcalc", expression="bottom=0")
-        self.assertModule("r.mapcalc", expression="s=0.0001")
-        self.assertModule("r.mapcalc", expression="null=0.0")
+        self.runModule("r.mapcalc", expression="phead=50")
+        self.runModule("r.mapcalc", expression="status=if(col() == 1 || col() == 7 , 2, 1)")
+        self.runModule("r.mapcalc", expression="well=if((row() == 4 && col() == 4), -0.1, 0)")
+        self.runModule("r.mapcalc", expression="hydcond=0.0005")
+        self.runModule("r.mapcalc", expression="recharge=0")
+        self.runModule("r.mapcalc", expression="top_conf=20")
+        self.runModule("r.mapcalc", expression="bottom=0")
+        self.runModule("r.mapcalc", expression="s=0.0001")
+        self.runModule("r.mapcalc", expression="null=0.0")
 
     def test_transient(self):
         #First compute the groundwater flow
