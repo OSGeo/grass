@@ -189,7 +189,6 @@ class TestCheckValueFunction(unittest.TestCase):
             _check_value(param, "elev")
         with self.assertRaises(TypeError):
             _check_value(param, (1, 2))
-        #import ipdb; ipdb.set_trace()
         with self.assertRaises(ValueError):
             _check_value(param, 3)
 
@@ -199,12 +198,14 @@ class TestCheckValueFunction(unittest.TestCase):
                                        multiple='no', type=ptype))
             value = u'elev'
             self.assertTupleEqual((value, value), _check_value(param, value))
+            value = 10
+            self.assertTupleEqual((str(value), value),
+                                  _check_value(param, value))
+            value = 12.5
+            self.assertTupleEqual((str(value), value),
+                                  _check_value(param, value))
 
             # test errors
-            with self.assertRaises(ValueError):
-                _check_value(param, 1)
-            with self.assertRaises(ValueError):
-                _check_value(param, 1.0)
             with self.assertRaises(TypeError):
                 _check_value(param, ('abc', 'def'))
 
@@ -217,10 +218,16 @@ class TestCheckValueFunction(unittest.TestCase):
         self.assertTupleEqual((list(value), value), _check_value(param, value))
         value = ['1.3', '2.3', '4.5']
         self.assertTupleEqual((value, value), _check_value(param, value))
+        value = [1.3, 2.3, 4.5]
+        self.assertTupleEqual(([str(v) for v in value], value),
+                              _check_value(param, value))
+        value = (1, 2, 3)
+        self.assertTupleEqual(([str(v) for v in value], value),
+                              _check_value(param, value))
 
         # test errors
         with self.assertRaises(ValueError):
-            _check_value(param, (1, 2, 3))
+            _check_value(param, ({}, {}, {}))
 
     def test_choice_string(self):
         values = ["elev", "asp", "slp"]
