@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import subprocess
+
 
 class DBError(Exception):
     pass
@@ -35,3 +37,29 @@ class ScriptError(Exception):
 
 class Usage(Exception):
     pass
+
+
+# TODO: we inherit from subprocess to be aligned with check_call but it is needed?
+class CalledModuleError(subprocess.CalledProcessError):
+    """Raised when a called module ends with error (non-zero return code)
+
+    :param module: module name
+    :param code: some code snipped which contains parameters
+    :param rc: process returncode
+    :param error: errors provided by the module (stderr)
+    """
+    def __init__(self, module, code, returncode, errors=None):
+        super(CalledModuleError, self).__init__(returncode, module)
+        msg = _("Module run %s %s ended with error") % (module, code)
+        msg += _("\nProcess ended with non-zero return code %s") % returncode
+        if errors:
+            msg += _(". See the following errors:\n%s") % errors
+        else:
+            # here could be written "above" but it wouldn't work in some cases
+            # e.g., for testing framework
+            msg += _(". See errors in the (error) output.")
+        self.msg = msg
+        # TODO: handle other parameters
+
+    def __str__(self):
+        return self.msg
