@@ -27,18 +27,18 @@ POINT fifo_return_del(void)
 }
 
 
-int ram_calculate_downstream(CELL ** dirs, FCELL ** distance,
-			     FCELL ** elevation, OUTLET outlet, int outs)
+int ram_calculate_downstream(CELL ** dirs, DCELL ** distance,
+			     DCELL ** elevation, OUTLET outlet, int outs)
 {
 
     int r, c, i, j;
     int next_r, next_c;
     POINT n_cell;
-    float cur_dist = 0;
-    float tmp_dist = 0;
-    float target_elev;		/* eleavation at stream or outlet */
-    float easting, northing;
-    float cell_easting, cell_northing;
+    double cur_dist = 0;
+    double tmp_dist = 0;
+    double target_elev;		/* eleavation at stream or outlet */
+    double easting, northing;
+    double cell_easting, cell_northing;
     struct Cell_head window;
 
     Rast_get_window(&window);
@@ -134,14 +134,14 @@ int seg_calculate_downstream(SEGMENT *dirs, SEGMENT * distance,
     int r, c, i, j;
     int next_r, next_c;
     POINT n_cell;
-    float cur_dist = 0;
-    float tmp_dist = 0;
-    float target_elev;		/* eleavation at stream or outlet */
-    float easting, northing;
-    float cell_easting, cell_northing;
+    double cur_dist = 0;
+    double tmp_dist = 0;
+    double target_elev;		/* eleavation at stream or outlet */
+    double easting, northing;
+    double cell_easting, cell_northing;
     CELL dirs_cell;
-    FCELL distance_cell, elevation_cell;
-    FCELL zero_cell = 0;
+    DCELL distance_cell, elevation_cell;
+    DCELL zero_cell = 0;
     struct Cell_head window;
 
     Rast_get_window(&window);
@@ -235,12 +235,12 @@ int seg_calculate_downstream(SEGMENT *dirs, SEGMENT * distance,
     return 0;
 }
 
-int ram_fill_basins(OUTLET outlet, FCELL ** distance, CELL ** dirs)
+int ram_fill_basins(OUTLET outlet, DCELL ** distance, CELL ** dirs)
 {
     /* fill empty spaces with zeros but leave -1 as a markers of NULL */
     int r, c, i, j;
     int next_r, next_c;
-    float stop, val;
+    double stop, val;
     POINT n_cell;
 
     tail = 0;
@@ -285,10 +285,10 @@ int seg_fill_basins(OUTLET outlet, SEGMENT * distance, SEGMENT * dirs)
     /* fill empty spaces with zeros but leave -1 as a markers of NULL */
     int r, c, i, j;
     int next_r, next_c;
-    float stop, val;
+    double stop, val;
     POINT n_cell;
     CELL dirs_cell;
-    FCELL distance_cell;
+    DCELL distance_cell;
 
     tail = 0;
     head = -1;
@@ -331,29 +331,29 @@ int seg_fill_basins(OUTLET outlet, SEGMENT * distance, SEGMENT * dirs)
     return 0;
 }
 
-int ram_calculate_upstream(FCELL ** distance, CELL ** dirs,
-			   FCELL ** elevation, FCELL ** tmp_elevation,
+int ram_calculate_upstream(DCELL ** distance, CELL ** dirs,
+			   DCELL ** elevation, DCELL ** tmp_elevation,
 			   int near)
 {
     int r, c;
     int next_r, next_c;
-    float easting, northing;
-    float cell_easting, cell_northing;
+    double easting, northing;
+    double cell_easting, cell_northing;
     int i, j, k, d;
     int done;
     int counter;
     int n_inits = 0;
-    float cur_dist;
+    double cur_dist;
     POINT *d_inits;
-    float tmp_dist = 0;
-    float target_elev = 0;
+    double tmp_dist = 0;
+    double target_elev = 0;
     size_t elevation_data_size;
     struct Cell_head window;
 
     Rast_get_window(&window);
 
     if (elevation) {
-	elevation_data_size = Rast_cell_size(FCELL_TYPE);
+	elevation_data_size = Rast_cell_size(DCELL_TYPE);
 	for (r = 0; r < nrows; ++r)
 	    memcpy(tmp_elevation[r], elevation[r],
 		   ncols * elevation_data_size);
@@ -472,27 +472,27 @@ int seg_calculate_upstream(SEGMENT * distance, SEGMENT * dirs,
 {
     int r, c;
     int next_r, next_c;
-    float easting, northing;
-    float cell_easting, cell_northing;
+    double easting, northing;
+    double cell_easting, cell_northing;
     int i, j, k, d, d_next;
-    FCELL minus_one_cell = -1;
-    FCELL zero_cell = 0;
+    DCELL minus_one_cell = -1;
+    DCELL zero_cell = 0;
     int done;
     int counter;
     int n_inits = 0;
-    float cur_dist;
+    double cur_dist;
     POINT *d_inits;
-    float tmp_dist = 0;
-    float target_elev = 0;
+    double tmp_dist = 0;
+    double target_elev = 0;
     CELL dirs_cell;
-    FCELL distance_cell, elevation_cell, tmp_elevation_cell;
+    DCELL distance_cell, elevation_cell, tmp_elevation_cell;
     /* size_t elevation_data_size; */
     struct Cell_head window;
 
     Rast_get_window(&window);
 
     if (elevation) {
-        /* elevation_data_size = Rast_cell_size(FCELL_TYPE); */
+        /* elevation_data_size = Rast_cell_size(DCELL_TYPE); */
 	for (r = 0; r < nrows; ++r)
 	    for (c = 0; c < ncols; ++c) {
 		segment_get(elevation, &elevation_cell, r, c);
