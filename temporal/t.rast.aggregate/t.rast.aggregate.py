@@ -139,7 +139,7 @@ def main():
 
     # In case no end time is available, then we use the start time of the last map layer
     if end_time is None:
-        end_time,  tmp_value = map_list[- 1].temporal_extent.get_start_time()
+        end_time = map_list[- 1].temporal_extent.get_start_time()
         has_end_time = False
 
     granularity_list = []
