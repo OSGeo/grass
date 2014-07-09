@@ -98,10 +98,10 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
-    if run_command('r.mapcalc', expression = e,
-                   quiet = quiet,
-                   verbose = verbose,
-                   overwrite = overwrite) != 0:
+    if write_command('r.mapcalc', file = '-', stdin = e,
+                     quiet = quiet,
+                     verbose = verbose,
+                     overwrite = overwrite) != 0:
         fatal(_("An error occurred while running r.mapcalc"))
 
 
@@ -131,10 +131,13 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwar
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
-    return start_command('r.mapcalc', expression = e,
-                        quiet = quiet,
-                        verbose = verbose,
-                        overwrite = overwrite)
+    p = feed_command('r.mapcalc', file = '-',
+                     quiet = quiet,
+                     verbose = verbose,
+                     overwrite = overwrite)
+    p.stdin.write(e)
+    p.stdin.close()
+    return p
 
 # interface to r.what
 def raster_what(map, coord):
