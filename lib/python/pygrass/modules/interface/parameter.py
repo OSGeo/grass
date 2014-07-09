@@ -156,7 +156,7 @@ class Parameter(object):
         #
         # default
         #
-        if 'default' in diz:
+        if 'default' in diz and diz['default']:
             if self.multiple or self.keydescvalues:
                 self.default = [self.type(v)
                                 for v in diz['default'].split(',')]
