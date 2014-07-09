@@ -22,8 +22,8 @@ typedef struct {
 
 typedef struct {
 	int r,c;
-  float cur_dist;
-  float target_elev;
+  double cur_dist;
+  double target_elev;
 } POINT;
 
 GLOBAL int nextr[9];

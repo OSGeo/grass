@@ -126,13 +126,13 @@ int seg_find_outlets(SEGMENT * streams, int number_of_streams, SEGMENT * dirs,
     return outlets_num;
 }
 
-int ram_init_distance(CELL ** streams, FCELL ** distance, int outlets_num,
+int ram_init_distance(CELL ** streams, DCELL ** distance, int outlets_num,
 		      int outs)
 {
     int r, c, i;
     /* size_t data_size; 
 
-    data_size = Rast_cell_size(FCELL_TYPE);
+    data_size = Rast_cell_size(DCELL_TYPE);
     */
 
     if (!outs) {		/* stream mode */
@@ -157,9 +157,9 @@ int seg_init_distance(SEGMENT * streams, SEGMENT * distance, int outlets_num,
 {
     int r, c, i;
     CELL streams_cell;
-    FCELL distance_cell;
-    FCELL minus_one_cell = -1;
-    FCELL zero_cell = 0;
+    DCELL distance_cell;
+    DCELL minus_one_cell = -1;
+    DCELL zero_cell = 0;
 
     if (!outs) {		/* stream mode */
 	for (r = 0; r < nrows; ++r)
@@ -180,7 +180,7 @@ int seg_init_distance(SEGMENT * streams, SEGMENT * distance, int outlets_num,
     return 0;
 }
 
-int ram_prep_null_elevation(FCELL ** distance, FCELL ** elevation)
+int ram_prep_null_elevation(DCELL ** distance, DCELL ** elevation)
 {
 
     int r, c;
@@ -198,7 +198,7 @@ int ram_prep_null_elevation(FCELL ** distance, FCELL ** elevation)
 int seg_prep_null_elevation(SEGMENT * distance, SEGMENT * elevation)
 {
     int r, c;
-    FCELL distance_cell;
+    DCELL distance_cell;
 
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {

@@ -147,19 +147,19 @@ int main(int argc, char *argv[])
 	MAP map_dirs, map_streams, map_distance, map_elevation,
 	    map_tmp_elevation;
 	CELL **streams, **dirs;
-	FCELL **distance;
-	FCELL **elevation = NULL;
-	FCELL **tmp_elevation = NULL;
+	DCELL **distance;
+	DCELL **elevation = NULL;
+	DCELL **tmp_elevation = NULL;
 
 	ram_create_map(&map_streams, CELL_TYPE);
 	ram_read_map(&map_streams, in_stm_opt->answer, 1, CELL_TYPE);
 	ram_create_map(&map_dirs, CELL_TYPE);
 	ram_read_map(&map_dirs, in_dir_opt->answer, 1, CELL_TYPE);
-	ram_create_map(&map_distance, FCELL_TYPE);
+	ram_create_map(&map_distance, DCELL_TYPE);
 
 	streams = (CELL **) map_streams.map;
 	dirs = (CELL **) map_dirs.map;
-	distance = (FCELL **) map_distance.map;
+	distance = (DCELL **) map_distance.map;
 	number_of_streams = (int)map_streams.max + 1;
 
 	outlets_num =
@@ -168,9 +168,9 @@ int main(int argc, char *argv[])
 	ram_release_map(&map_streams);
 
 	if (in_elev_opt->answer) {
-	    ram_create_map(&map_elevation, FCELL_TYPE);
+	    ram_create_map(&map_elevation, DCELL_TYPE);
 	    ram_read_map(&map_elevation, in_elev_opt->answer, 0, -1);
-	    elevation = (FCELL **) map_elevation.map;
+	    elevation = (DCELL **) map_elevation.map;
 	}			/* map elevation will be replaced by elevation difference map */
 
 
@@ -187,8 +187,8 @@ int main(int argc, char *argv[])
 	else if (method == UPSTREAM) {
 
 	    if (out_diff_opt->answer) {
-		ram_create_map(&map_tmp_elevation, FCELL_TYPE);
-		tmp_elevation = (FCELL **) map_tmp_elevation.map;
+		ram_create_map(&map_tmp_elevation, DCELL_TYPE);
+		tmp_elevation = (DCELL **) map_tmp_elevation.map;
 	    }
 
 	    for (j = 0; j < outlets_num; ++j)
@@ -203,12 +203,12 @@ int main(int argc, char *argv[])
 
 	if (out_diff_opt->answer) {
 	    ram_prep_null_elevation(distance, elevation);
-	    ram_write_map(&map_elevation, out_diff_opt->answer, FCELL_TYPE, 1,
+	    ram_write_map(&map_elevation, out_diff_opt->answer, DCELL_TYPE, 1,
 			  -1);
 	}
 
 	if (out_dist_opt->answer)
-	    ram_write_map(&map_distance, out_dist_opt->answer, FCELL_TYPE, 1,
+	    ram_write_map(&map_distance, out_dist_opt->answer, DCELL_TYPE, 1,
 			  -1);
 
 	ram_release_map(&map_dirs);
@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 	seg_create_map(&map_dirs, SROWS, SCOLS, number_of_segs, CELL_TYPE);
 	seg_read_map(&map_dirs, in_dir_opt->answer, 1, CELL_TYPE);
 	seg_create_map(&map_distance, SROWS, SCOLS, number_of_segs,
-		       FCELL_TYPE);
+		       DCELL_TYPE);
 
 	streams = &map_streams.seg;
 	dirs = &map_dirs.seg;
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
 
 	if (in_elev_opt->answer) {
 	    seg_create_map(&map_elevation, SROWS, SCOLS, number_of_segs,
-			   FCELL_TYPE);
+			   DCELL_TYPE);
 	    seg_read_map(&map_elevation, in_elev_opt->answer, 0, -1);
 	    elevation = &map_elevation.seg;
 	}			/* map elevation will be replaced by elevation difference map */
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
 
 	    if (out_diff_opt->answer) {
 		seg_create_map(&map_tmp_elevation, SROWS, SCOLS,
-			       number_of_segs, FCELL_TYPE);
+			       number_of_segs, DCELL_TYPE);
 		tmp_elevation = &map_tmp_elevation.seg;
 	    }
 
@@ -288,12 +288,12 @@ int main(int argc, char *argv[])
 	}			/* end methods */
 
 	if (out_dist_opt->answer)
-	    seg_write_map(&map_distance, out_dist_opt->answer, FCELL_TYPE, 1,
+	    seg_write_map(&map_distance, out_dist_opt->answer, DCELL_TYPE, 1,
 			  -1);
 
 	if (out_diff_opt->answer) {
 	    seg_prep_null_elevation(distance, elevation);
-	    seg_write_map(&map_elevation, out_diff_opt->answer, FCELL_TYPE, 1,
+	    seg_write_map(&map_elevation, out_diff_opt->answer, DCELL_TYPE, 1,
 			  -1);
 	}
 
