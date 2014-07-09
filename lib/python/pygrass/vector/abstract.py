@@ -77,23 +77,22 @@ class Info(object):
         >>> cens.close()
 
     """
-    def __init__(self, name, mapset='', layer=None, mode='r', with_z=False):
+    def __init__(self, name, mapset='', *aopen, **kwopen):
         self._name = ''
         self._mapset = ''
         # Set map name and mapset
         self.name = name
         self.mapset = mapset
+        self._aopen = aopen
+        self._kwopen = kwopen
         self.c_mapinfo = ctypes.pointer(libvect.Map_info())
         self._topo_level = 1
         self._class_name = 'Vector'
         self.overwrite = False
         self.date_fmt = '%a %b  %d %H:%M:%S %Y'
-        self.layer = layer
-        self.mode = mode
-        self.with_z = with_z
 
-    def __enter__(self, *args, **kwargs):
-        self.open(*args, **kwargs)
+    def __enter__(self):
+        self.open(*self._aopen, **self._kwopen)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -299,7 +298,7 @@ class Info(object):
              link_driver='sqlite'):
         """Open a Vector map.
 
-         
+
         :param mode: open a vector map in ``r`` in reading, ``w`` in writing
                      and in ``rw`` read and write mode
         :type mode: str
@@ -332,28 +331,26 @@ class Info(object):
         See more examples in the documentation of the ``read`` and ``write``
         methods
         """
-        self.mode = mode if mode else self.mode
-        self.with_z = self.with_z if with_z is None else with_z
-        with_z = libvect.WITH_Z if self.with_z else libvect.WITHOUT_Z
+        with_z = libvect.WITH_Z if with_z else libvect.WITHOUT_Z
         # check if map exists or not
-        if not self.exist() and self.mode != 'w':
+        if not self.exist() and mode != 'w':
             raise OpenError("Map <%s> not found." % self._name)
         if libvect.Vect_set_open_level(self._topo_level) != 0:
             raise OpenError("Invalid access level.")
         # update the overwrite attribute
         self.overwrite = overwrite if overwrite is not None else self.overwrite
         # check if the mode is valid
-        if self.mode not in ('r', 'rw', 'w'):
+        if mode not in ('r', 'rw', 'w'):
             raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
 
         # check if the map exist
-        if self.exist() and self.mode in ('r', 'rw'):
+        if self.exist() and mode in ('r', 'rw'):
             # open in READ mode
-            if self.mode == 'r':
+            if mode == 'r':
                 openvect = libvect.Vect_open_old2(self.c_mapinfo, self.name,
                                                   self.mapset, str(layer))
             # open in READ and WRITE mode
-            elif self.mode == 'rw':
+            elif mode == 'rw':
                 openvect = libvect.Vect_open_update2(self.c_mapinfo, self.name,
                                                      self.mapset, str(layer))
 
@@ -361,7 +358,7 @@ class Info(object):
             self.dblinks = DBlinks(self.c_mapinfo)
 
         # If it is opened in write mode
-        if self.mode == 'w':
+        if mode == 'w':
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name, with_z)
             self.dblinks = DBlinks(self.c_mapinfo)
             if tab_cols:
