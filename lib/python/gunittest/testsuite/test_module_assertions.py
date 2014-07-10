@@ -4,37 +4,77 @@ import copy
 import subprocess
 
 from grass.pygrass.modules import Module
+from grass.gunittest.gmodules import SimpleModule
 
 import grass.gunittest
 from grass.gunittest.gmodules import CalledModuleError
 
 
 class TestModuleAssertions(grass.gunittest.TestCase):
+    """Test assertions using PyGRASS Module"""
     # pylint: disable=R0904
 
     def setUp(self):
+        """Create two Module instances one correct and one with wrong map"""
         self.rinfo = Module('r.info', map='elevation', flags='g',
-                       stdout_=subprocess.PIPE, run_=False)
+                            stdout_=subprocess.PIPE, run_=False, finish_=False)
         self.rinfo_wrong = copy.deepcopy(self.rinfo)
         self.wrong_map = 'does_not_exists'
         self.rinfo_wrong.inputs['map'].value = self.wrong_map
 
     def test_runModule(self):
+        """Module used in runModule()"""
         self.runModule(self.rinfo)
         self.assertTrue(self.rinfo.outputs['stdout'].value)
         self.assertRaises(CalledModuleError, self.runModule, self.rinfo_wrong)
 
     def test_assertModule(self):
+        """Module used in assertModule()"""
         self.assertModule(self.rinfo)
         self.assertTrue(self.rinfo.outputs['stdout'].value)
         self.assertRaises(self.failureException, self.assertModule, self.rinfo_wrong)
 
     def test_assertModuleFail(self):
+        """Module used in assertModuleFail()"""
         self.assertModuleFail(self.rinfo_wrong)
         stderr = self.rinfo_wrong.outputs['stderr'].value
         self.assertTrue(stderr)
         self.assertIn(self.wrong_map, stderr)
         self.assertRaises(self.failureException, self.assertModuleFail, self.rinfo)
+
+
+class TestSimpleModuleAssertions(grass.gunittest.TestCase):
+    """Test assertions using SimpleModule"""
+    # pylint: disable=R0904
+
+    def setUp(self):
+        """Create two SimpleModule instances one correct and one with wrong map
+        """
+        self.rinfo = SimpleModule('r.info', map='elevation', flags='g')
+        self.rinfo_wrong = copy.deepcopy(self.rinfo)
+        self.wrong_map = 'does_not_exists'
+        self.rinfo_wrong.inputs['map'].value = self.wrong_map
+
+    def test_runModule(self):
+        """SimpleModule used in runModule()"""
+        self.runModule(self.rinfo)
+        self.assertTrue(self.rinfo.outputs['stdout'].value)
+        self.assertRaises(CalledModuleError, self.runModule, self.rinfo_wrong)
+
+    def test_assertModule(self):
+        """SimpleModule used in assertModule()"""
+        self.assertModule(self.rinfo)
+        self.assertTrue(self.rinfo.outputs['stdout'].value)
+        self.assertRaises(self.failureException, self.assertModule, self.rinfo_wrong)
+
+    def test_assertModuleFail(self):
+        """SimpleModule used in assertModuleFail()"""
+        self.assertModuleFail(self.rinfo_wrong)
+        stderr = self.rinfo_wrong.outputs['stderr'].value
+        self.assertTrue(stderr)
+        self.assertIn(self.wrong_map, stderr)
+        self.assertRaises(self.failureException, self.assertModuleFail, self.rinfo)
+
 
 
 if __name__ == '__main__':

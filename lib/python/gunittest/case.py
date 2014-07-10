@@ -14,13 +14,14 @@ for details.
 
 import os
 import subprocess
+import time
 import unittest
 from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
 
-from .gmodules import call_module
+from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
                        text_to_keyvalue, keyvalue_equals, diff_keyvalue,
                        file_md5, files_equal_md5)
@@ -444,25 +445,19 @@ class TestCase(unittest.TestCase):
         :raises CalledModuleError: if the module failed
         """
         module = _module_from_parameters(module, **kwargs)
+        _check_module_run_parameters(module)
 
-        if module.run_:
-            raise ValueError('Do not run the module manually, set run_=False')
-        if not module.finish_:
-            raise ValueError('This function will always finish module run,'
-                             ' set finish_=None or finish_=True.')
-        # we expect most of the usages with stdout=PIPE
-        # TODO: in any case capture PIPE always?
-        if module.stdout_ is None:
-            module.stdout_ = subprocess.PIPE
-        elif module.stdout_ != subprocess.PIPE:
-            raise ValueError('stdout_ can be only PIPE or None')
-        if module.stderr_ is None:
-            module.stderr_ = subprocess.PIPE
-        elif module.stderr_ != subprocess.PIPE:
-            raise ValueError('stderr_ can be only PIPE or None')
-            # because we want to capture it
+        # do what module.run() with finish_=True would do
+        start = time.time()
         module.run()
-        if module.popen.returncode:
+        stdout, stderr = module.popen.communicate(input=module.stdin)
+        module.outputs['stdout'].value = stdout if stdout else ''
+        module.outputs['stderr'].value = stderr if stderr else ''
+        module.time = time.time() - start
+        if module.popen.poll():
+            # here exception raised by run() with finish_=True would be
+            # almost enough but we want some additional info to be included
+            # in the test report
             errors = module.outputs['stderr'].value
             # provide diagnostic at least in English locale
             # TODO: standardized error code would be handy here
@@ -507,28 +502,19 @@ class TestCase(unittest.TestCase):
         non-zero return code.
         """
         module = _module_from_parameters(module, **kwargs)
+        _check_module_run_parameters(module)
 
-        # TODO: merge stderr to stdout? if caller gives PIPE, for sure not
-        if module.run_:
-            raise ValueError('Do not run the module manually, set run_=False')
-        if not module.finish_:
-            raise ValueError('This function will always finish module run,'
-                             ' set finish_=None or finish_=True.')
-        if module.stdout_ is None:
-            module.stdout_ = subprocess.PIPE
-        elif module.stdout_ != subprocess.PIPE:
-            raise ValueError('stdout_ can be only PIPE or None')
-            # because we want to capture it
-        if module.stderr_ is None:
-            module.stderr_ = subprocess.PIPE
-        elif module.stderr_ != subprocess.PIPE:
-            raise ValueError('stderr_ can be only PIPE or None')
-            # because we want to capture it
-
+        # do what module.run() with finish_=True would do
+        start = time.time()
         module.run()
+        stdout, stderr = module.popen.communicate(input=module.stdin)
+        module.outputs['stdout'].value = stdout if stdout else ''
+        module.outputs['stderr'].value = stderr if stderr else ''
+        module.time = time.time() - start
+        # TODO: these two lines should go to report in some better way
         print module.outputs['stdout'].value
         print module.outputs['stderr'].value
-        if module.popen.returncode:
+        if module.popen.poll():
             # TODO: message format
             # TODO: stderr?
             stdmsg = ('Running <{m.name}> module ended'
@@ -554,27 +540,19 @@ class TestCase(unittest.TestCase):
         Works like `assertModule()` but expects module to fail.
         """
         module = _module_from_parameters(module, **kwargs)
+        _check_module_run_parameters(module)
 
-        if module.run_:
-            raise ValueError('Do not run the module manually, set run_=False')
-        if not module.finish_:
-            raise ValueError('This function will always finish module run,'
-                             ' set finish_=None or finish_=True.')
-        if module.stdout_ is None:
-            module.stdout_ = subprocess.PIPE
-        elif module.stdout_ != subprocess.PIPE:
-            raise ValueError('stdout_ can be only PIPE or None')
-            # because we want to capture it
-        if module.stderr_ is None:
-            module.stderr_ = subprocess.PIPE
-        elif module.stderr_ != subprocess.PIPE:
-            raise ValueError('stderr_ can be only PIPE or None')
-            # because we want to capture it
-
+        # do what module.run() with finish_=True would do
+        start = time.time()
         module.run()
+        stdout, stderr = module.popen.communicate(input=module.stdin)
+        module.outputs['stdout'].value = stdout if stdout else ''
+        module.outputs['stderr'].value = stderr if stderr else ''
+        module.time = time.time() - start
+        # TODO: these two lines should go to report in some better way
         print module.outputs['stdout'].value
         print module.outputs['stderr'].value
-        if not module.popen.returncode:
+        if not module.popen.poll():
             stdmsg = ('Running <%s> ended with zero (successful) return code'
                       ' when expecting module to fail' % module.get_python())
             self.fail(self._formatMessage(msg, stdmsg))
@@ -592,5 +570,25 @@ def _module_from_parameters(module, **kwargs):
             # allow to pass all parameters in one dictionary called parameters
         if kwargs.keys() == ['parameters']:
             kwargs = kwargs['parameters']
-        module = Module(module, run_=False, **kwargs)
+        module = SimpleModule(module, **kwargs)
     return module
+
+
+def _check_module_run_parameters(module):
+    # in this case module already run and we would start it again
+    if module.run_:
+        raise ValueError('Do not run the module manually, set run_=False')
+    if module.finish_:
+        raise ValueError('This function will always finish module run,'
+                         ' set finish_=None or finish_=False.')
+    # we expect most of the usages with stdout=PIPE
+    # TODO: in any case capture PIPE always?
+    if module.stdout_ is None:
+        module.stdout_ = subprocess.PIPE
+    elif module.stdout_ != subprocess.PIPE:
+        raise ValueError('stdout_ can be only PIPE or None')
+    if module.stderr_ is None:
+        module.stderr_ = subprocess.PIPE
+    elif module.stderr_ != subprocess.PIPE:
+        raise ValueError('stderr_ can be only PIPE or None')
+        # because we want to capture it
