@@ -564,8 +564,9 @@ class Module(object):
             self.outputs['stderr'].value = stderr if stderr else ''
             self.time = time.time() - start
             if self.popen.poll():
-                raise CalledModuleError(self.popen.returncode, self.get_bash(),
-                                        {}, stderr)
+                raise CalledModuleError(returncode=self.popen.returncode,
+                                        code=self.get_bash(),
+                                        module=self.name, errors=stderr)
         return self
 
 ###############################################################################
