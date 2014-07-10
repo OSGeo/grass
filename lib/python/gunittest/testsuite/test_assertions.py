@@ -10,11 +10,11 @@ import os
 import grass.script.core as gcore
 from grass.pygrass.modules import Module
 
-import gunittest
-from gunittest.gmodules import SimpleModule
+import grass.gunittest
+from grass.gunittest.gmodules import SimpleModule
 
 
-class TestTextAssertions(gunittest.TestCase):
+class TestTextAssertions(grass.gunittest.TestCase):
     # pylint: disable=R0904
     def test_assertLooksLike(self):
         self.assertLooksLike("Generated map is <elevation>",
@@ -84,7 +84,7 @@ mean=240.437
 """
 
 
-class TestAssertCommandKeyValue(gunittest.TestCase):
+class TestAssertCommandKeyValue(grass.gunittest.TestCase):
     """Test usage of `.assertCommandKeyValue` method."""
     # pylint: disable=R0904
 
@@ -125,7 +125,7 @@ class TestAssertCommandKeyValue(gunittest.TestCase):
                                    precision=0.01, sep='=')
 
 
-class TestRasterMapAssertations(gunittest.TestCase):
+class TestRasterMapAssertations(grass.gunittest.TestCase):
     # pylint: disable=R0904
 
     @classmethod
@@ -196,7 +196,7 @@ class TestRasterMapAssertations(gunittest.TestCase):
                           msg="The difference of different maps should have huge mean")
 
 
-class TestVectorMapAssertations(gunittest.TestCase):
+class TestVectorMapAssertations(grass.gunittest.TestCase):
     # pylint: disable=R0904
     def test_assertVectorFitsUnivar(self):
         self.assertVectorFitsUnivar(map='bridges', column='WIDTH',
@@ -213,7 +213,7 @@ class TestVectorMapAssertations(gunittest.TestCase):
                           reference=RANDOM_KEYVALUES)
 
 
-class TestFileAssertations(gunittest.TestCase):
+class TestFileAssertations(grass.gunittest.TestCase):
     # pylint: disable=R0904
 
     @classmethod
@@ -277,4 +277,4 @@ class TestFileAssertations(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()

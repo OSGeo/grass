@@ -11,11 +11,11 @@ for details.
 
 import grass.script as grass
 import grass.temporal as tgis
-import gunittest
+import grass.gunittest
 import datetime
 
 
-class TestRegisterFunctions(gunittest.TestCase):
+class TestRegisterFunctions(grass.gunittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -300,4 +300,4 @@ class TestRegisterFunctions(gunittest.TestCase):
         self.assertEqual(unit, "seconds")
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()

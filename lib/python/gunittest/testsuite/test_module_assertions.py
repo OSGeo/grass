@@ -5,11 +5,11 @@ import subprocess
 
 from grass.pygrass.modules import Module
 
-import gunittest
-from gunittest.gmodules import CalledModuleError
+import grass.gunittest
+from grass.gunittest.gmodules import CalledModuleError
 
 
-class TestModuleAssertions(gunittest.TestCase):
+class TestModuleAssertions(grass.gunittest.TestCase):
     # pylint: disable=R0904
 
     def setUp(self):
@@ -38,4 +38,4 @@ class TestModuleAssertions(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()

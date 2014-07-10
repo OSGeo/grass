@@ -3,9 +3,9 @@
 # TODO: rmapcalc probably fatals, replace or add raise on error?
 from grass.script.raster import mapcalc as rmapcalc
 
-import gunittest
-from gunittest.gutils import get_curret_mapset
-from gunittest.gmodules import SimpleModule
+import grass.gunittest
+from grass.gunittest.gutils import get_current_mapset
+from grass.gunittest.gmodules import SimpleModule
 
 # when used user1 must be replaced by current mapset
 REMOVE_RASTERS = """rast/test_map_0@user1
@@ -35,7 +35,7 @@ Removing raster <test_two>
 """
 
 
-class GMRemoveTest(gunittest.TestCase):
+class GMRemoveTest(grass.gunittest.TestCase):
     """Test removing with g.mremove"""
 
     @classmethod
@@ -60,7 +60,7 @@ class GMRemoveTest(gunittest.TestCase):
         self.assertModule(module)
         self.assertMultiLineEqual(module.outputs.stdout,
                                   REMOVE_RASTERS.replace('user1',
-                                                         get_curret_mapset()))
+                                                         get_current_mapset()))
 
         module = SimpleModule('g.mremove', type='rast',
                               pattern='test_map_*,*two', flags='f')
@@ -82,7 +82,7 @@ class GMRemoveTest(gunittest.TestCase):
                                   'rast/test_apples@user1\n'
                                   'rast/test_apples_big@user1\n'
                                   'rast/test_oranges@user1\n'.replace(
-                                      'user1', get_curret_mapset()))
+                                      'user1', get_current_mapset()))
         module = SimpleModule('g.mremove', type='rast',
                               pattern='test_{apples,oranges}{_small,_big,*}',
                               flags='f')
@@ -92,7 +92,7 @@ class GMRemoveTest(gunittest.TestCase):
                                  msg="4 maps should be removed")
 
 
-class GMRemoveWrongInputTest(gunittest.TestCase):
+class GMRemoveWrongInputTest(grass.gunittest.TestCase):
     """Test wrong input of parameters for g.mlist module"""
 
     def test_re_flags(self):
@@ -106,4 +106,4 @@ class GMRemoveWrongInputTest(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()
