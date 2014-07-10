@@ -1,5 +1,8 @@
+Testing GRASS GIS source code and modules
+=========================================
+
 Introduction
-=============
+------------
 
 For the testing we will be using system based on Python `unittest`_ package.
 The system is not finished yet.
@@ -13,8 +16,8 @@ The content of this document may become part of submitting files and
 the documentation of testing framework classes and scripts.
 
 
-Testing with gunittest
-======================
+Testing with gunittest package in general
+-----------------------------------------
 
 The tests should be in files in a ``testsuite`` directory which is a subdirectory
 of the directory with tested files (module, package, library). Each testing file
@@ -24,25 +27,28 @@ All test files names should have pattern ``test*.py``.
 GRASS GIS `gunittest` package and testing framework is similar to the standard
 Python ``unittest`` package, so the ways to build tests are very similar.
 
-    ::
-    import guinttest
+::
 
-    class TestPython(gunittest.TestCase):
+    from grass.guinttest import TestCase
+
+
+    class TestPython(TestCase):
 
         def test_counting(self):
             """Test that Python can count to two"""
             self.assertEqual(1 + 1, 2)
 
+
     if __name__ == '__main__':
-        gunittest.test()
+        from grass.guinttest import test
+        test()
 
 Each test file should be able to run by itself and accept certain set of command
 line parameters. This is ensured using `gunittest.test()`.
 
 To run (invoke) all tests in the source tree run::
 
-    export PYTHONPATH=.../sandbox/wenzeslaus:$PYTHONPATH
-    python python -m gunittest.main [gisdbase] location test_data_category
+    python python -m grass.gunittest.main [gisdbase] location test_data_category
 
 All test files in all ``testsuite`` directories will be executed and
 a report will be created in a newly created ``testreport`` directory.
@@ -56,7 +62,7 @@ this specified.
 Each running test file gets its own mapset and current working directory
 but all run are in one location.
 
-.. warning:
+.. warning::
     The current location is ignored but you should run not invoke tests
     in the location which is precious to you for the case that something fails.
 
@@ -68,7 +74,8 @@ But if you can provide tests which are independent on location it is better.
 
 Read the documentation of Python ``unittest`` package for a list of assert
 methods which you can use to test your results. For test of more complex
-GRASS-specific results refer to `TestCase` class documentation.
+GRASS-specific results refer to :class:`gunittest.case.TestCase` class
+documentation.
 
 
 Tests of GRASS modules
@@ -76,35 +83,43 @@ Tests of GRASS modules
 
 ::
 
-    class TestRInfo(gunittest.TestCase):
+    def test_elevation(self):
+        self.assertModule('r.info', map='elevation', flags='g')
+        ...
 
-        def test_elevation(self):
-            rinfo = Module('r.info', map='elevation', flags='g',
-                           stdout_=subprocess.PIPE, run_=False)
-            self.assertModule(self.rinfo)
-            ...
+Use method ``assertRasterMinMax()`` to test that a result is within
+expected range. This is a very general test which checks the basic
+correctness of the result and can be used with different maps
+in different locations.
 
-.. todo:
+::
+
+    def test_slope_limits(self):
+        slope = 'limits_slope'
+        self.assertModule('r.slope.aspect', elevation='elevation',
+                          slope=slope)
+        self.assertRasterMinMax(map=slope, refmin=0, refmax=90,
+                                msg="Slope in degrees must be between 0 and 90")
+
+.. todo::
     Add example of assertions of key-value results.
 
-.. todo:
+.. todo::
     Add example with module producing a map.
 
 ::
 
-    class TestRInfoInputHandling(gunittest.TestCase):
+    from grass.gunittest import SimpleModule
+
+    class TestRInfoInputHandling(TestCase):
 
         def test_rinfo_wrong_map(self):
             map_name = 'does_not_exist'
-            rinfo = Module('r.info', map=, flags='g',
-                           stdout_=subprocess.PIPE, run_=False)
+            rinfo = SimpleModule('r.info', map=, flags='g')
             self.assertModuleFail(rinfo)
             self.assertTrue(rinfo.outputs.stderr)
             self.assertIn(map_name, stderr)
 
-.. todo:
-    Create ``SimpleModule`` or ``TestModule`` class which will have the right
-    parameters for ``assertModule()`` and ``assertModuleFail()`` functions.
 
 
 Tests of C and C++ code
@@ -233,10 +248,6 @@ with special data.
     can applied to your tests and the more different circumstances can be tried
     with your tests.
 
-
-
-
-
 .. note::
     gunittest is under development but, so some things can change, however
     this should not stop you from writing tests since the actual differences
@@ -254,7 +265,7 @@ with special data.
 
 
 Analyzing quality of source code
-================================
+--------------------------------
 
 Besides testing, you can also use some tools to check the quality of your code
 according to various standards and occurrence of certain code patterns.
@@ -279,6 +290,9 @@ in the source code root directory. A HTML report will be created in
 
     grass_py_static_check.py
 
+.. note::
+    ``grass_py_static_check.py`` is available in `sandbox`_.
+
 Additionally, if you are invoking your Python code manually using python command,
 e.g. when testing, use parameters::
 
@@ -291,8 +305,18 @@ for indentation inconsistently (note that you should not use tabs for
 indentation at all).
 
 
+Further reading
+---------------
+
+.. toctree::
+   :maxdepth: 2
+
+   gunittest
+
+
 .. _unittest: https://docs.python.org/2/library/unittest.html
 .. _doctest: https://docs.python.org/2/library/doctest.html
 .. _Coverity Scan: https://scan.coverity.com/
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
+.. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py
