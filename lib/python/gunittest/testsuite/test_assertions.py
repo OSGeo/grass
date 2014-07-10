@@ -85,7 +85,7 @@ mean=240.437
 
 
 class TestAssertCommandKeyValue(grass.gunittest.TestCase):
-    """Test usage of `.assertCommandKeyValue` method."""
+    """Test usage of `.assertModuleKeyValue` method."""
     # pylint: disable=R0904
 
     @classmethod
@@ -101,29 +101,29 @@ class TestAssertCommandKeyValue(grass.gunittest.TestCase):
         """Test syntax with Module as module"""
         module = Module('r.info', map='elevation', flags='gr',
                         run_=False, finish_=False)
-        self.assertCommandKeyValue(module,
-                                   reference=dict(min=55.58, max=156.33),
-                                   precision=0.01, sep='=')
+        self.assertModuleKeyValue(module,
+                                  reference=dict(min=55.58, max=156.33),
+                                  precision=0.01, sep='=')
 
     def test_pygrass_simple_module(self):
         """Test syntax with SimpleModule as module"""
         module = SimpleModule('r.info', map='elevation', flags='gr')
-        self.assertCommandKeyValue(module,
-                                   reference=dict(min=55.58, max=156.33),
-                                   precision=0.01, sep='=')
+        self.assertModuleKeyValue(module,
+                                  reference=dict(min=55.58, max=156.33),
+                                  precision=0.01, sep='=')
 
     def test_direct_parameters(self):
         """Test syntax with module and its parameters as fnction parameters"""
-        self.assertCommandKeyValue('r.info', map='elevation', flags='gr',
-                                   reference=dict(min=55.58, max=156.33),
-                                   precision=0.01, sep='=')
+        self.assertModuleKeyValue('r.info', map='elevation', flags='gr',
+                                  reference=dict(min=55.58, max=156.33),
+                                  precision=0.01, sep='=')
 
     def test_parameters_parameter(self):
         """Test syntax with module parameters in one parameters dictionary"""
-        self.assertCommandKeyValue(module='r.info',
-                                   parameters=dict(map='elevation', flags='gr'),
-                                   reference=dict(min=55.58, max=156.33),
-                                   precision=0.01, sep='=')
+        self.assertModuleKeyValue(module='r.info',
+                                  parameters=dict(map='elevation', flags='gr'),
+                                  reference=dict(min=55.58, max=156.33),
+                                  precision=0.01, sep='=')
 
 
 class TestRasterMapAssertations(grass.gunittest.TestCase):
