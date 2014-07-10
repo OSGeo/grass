@@ -1,5 +1,5 @@
 
-import gunittest
+import grass.gunittest
 from grass.script import read_command
 
 LIST_RASTERS = """----------------------------------------------
@@ -126,7 +126,7 @@ lsat7_2000_80      LANDSAT-TM7 Band 8 Panchromatic (PAN) (0.52-0.90um (15m)
 """
 
 
-class GListTest(gunittest.TestCase):
+class GListTest(grass.gunittest.TestCase):
 
     def test_list_rasters(self):
         """Test human readable list of rasters.
@@ -180,4 +180,4 @@ class GListTest(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()

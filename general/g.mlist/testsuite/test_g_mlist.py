@@ -1,10 +1,10 @@
 """g.mlist tests"""
 
-import gunittest
-from gunittest.gmodules import SimpleModule
+import grass.gunittest
+from grass.gunittest.gmodules import SimpleModule
 
 
-class GMlistWrongParamertersTest(gunittest.TestCase):
+class GMlistWrongParamertersTest(grass.gunittest.TestCase):
     """Test wrong input of parameters for g.mlist module"""
 
     @classmethod
@@ -52,4 +52,4 @@ class GMlistWrongParamertersTest(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()

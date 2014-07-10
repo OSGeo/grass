@@ -16,13 +16,12 @@ for details.
 
 from grass.script.core import parse_key_val
 
-import gunittest
-from gunittest.checkers import (values_equal, text_to_keyvalue,
-                                keyvalue_equals,
-                                proj_info_equals, proj_units_equals)
+import grass.gunittest
+from grass.gunittest.checkers import (values_equal, text_to_keyvalue,
+    keyvalue_equals, proj_info_equals, proj_units_equals)
 
 
-class TestValuesEqual(gunittest.TestCase):
+class TestValuesEqual(grass.gunittest.TestCase):
 
     def test_floats(self):
         self.assertTrue(values_equal(5.0, 5.0))
@@ -115,7 +114,7 @@ meters: 1
 # what about keys and lower/upper case letters
 
 
-class TestTextToKeyValue(gunittest.TestCase):
+class TestTextToKeyValue(grass.gunittest.TestCase):
     def test_conversion(self):
         keyvals = text_to_keyvalue(KEYVAL_TEXT, sep=':', val_sep=',')
         expected = {'s': 'Hello',
@@ -217,14 +216,14 @@ R_UNIVAR_KEYVAL_INT_DICT = {'n': 2025000,
                             'null_cells': 57995100, 'cells': 60020100}
 
 
-class TestComapreProjections(gunittest.TestCase):
+class TestComapreProjections(grass.gunittest.TestCase):
 
     def test_compare_proj_info(self):
         self.assertTrue(proj_info_equals(PROJ_INFO_TEXT_1, PROJ_INFO_TEXT_2))
         self.assertTrue(proj_units_equals(PROJ_UNITS_TEXT_1, PROJ_UNITS_TEXT_2))
 
 
-class TestParseKeyvalue(gunittest.TestCase):
+class TestParseKeyvalue(grass.gunittest.TestCase):
 
     def test_shell_script_style(self):
 
@@ -276,7 +275,7 @@ max=156.329864501953
 """
 
 
-class TestRasterMapComparisons(gunittest.TestCase):
+class TestRasterMapComparisons(grass.gunittest.TestCase):
 
     def test_compare_univars(self):
         self.assertTrue(keyvalue_equals(text_to_keyvalue(R_UNIVAR_ELEVATION,
@@ -311,4 +310,4 @@ class TestRasterMapComparisons(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()

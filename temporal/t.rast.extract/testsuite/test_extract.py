@@ -11,7 +11,7 @@ for details.
 import grass.script as grass
 import grass.pygrass.modules as pymod
 import subprocess
-from gunittest.case import TestCase
+from grass.gunittest.case import TestCase
 
 class TestRasterExtraction(TestCase):
 
@@ -151,5 +151,5 @@ class TestRasterExtraction(TestCase):
                                                         reference=tinfo_string,  precision=2,  sep="=")
 
 if __name__ == '__main__':
-    from gunittest.main import test
+    from grass.gunittest.main import test
     test()

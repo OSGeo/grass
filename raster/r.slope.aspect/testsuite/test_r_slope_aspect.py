@@ -1,5 +1,5 @@
-import gunittest
-from gunittest.gmodules import call_module
+import grass.gunittest
+from grass.gunittest.gmodules import call_module
 
 SMALL_MAP = """\
 north:   15
@@ -16,7 +16,7 @@ cols:    5
 100.0 150.0 150.0 100.0 100.0
 """
 
-class TestSlopeAspect(gunittest.TestCase):
+class TestSlopeAspect(grass.gunittest.TestCase):
 
     def test_limits(self):
         slope = 'limits_slope'
@@ -39,7 +39,7 @@ class TestSlopeAspect(gunittest.TestCase):
                                 msg="Aspect in degrees must be between 0 and 360")
 
 
-class TestSlopeAspectAgainstReference(gunittest.TestCase):
+class TestSlopeAspectAgainstReference(grass.gunittest.TestCase):
     """
 
     Data created using::
@@ -102,7 +102,7 @@ class TestSlopeAspectAgainstReference(gunittest.TestCase):
                                        precision=self.precision)
 
 
-class TestSlopeAspectAgainstItself(gunittest.TestCase):
+class TestSlopeAspectAgainstItself(grass.gunittest.TestCase):
 
     precision = 0.0000001
 
@@ -136,7 +136,7 @@ class TestSlopeAspectAgainstItself(gunittest.TestCase):
 
 
 # TODO: implement this class
-class TestExtremes(gunittest.TestCase):
+class TestExtremes(grass.gunittest.TestCase):
 
     def setUp(self):
         self.use_temp_region()
@@ -160,4 +160,4 @@ class TestExtremes(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()

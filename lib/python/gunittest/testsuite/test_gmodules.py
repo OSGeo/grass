@@ -2,8 +2,8 @@
 
 import subprocess
 
-import gunittest
-from gunittest.gmodules import (call_module, CalledModuleError)
+import grass.gunittest
+from grass.gunittest.gmodules import (call_module, CalledModuleError)
 
 G_REGION_OUTPUT = """n=...
 s=...
@@ -17,7 +17,7 @@ cells=...
 """
 
 
-class TestCallModuleFunction(gunittest.TestCase):
+class TestCallModuleFunction(grass.gunittest.TestCase):
 
     def test_output(self):
         output = call_module('g.region', flags='pg')
@@ -89,4 +89,4 @@ class TestCallModuleFunction(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()

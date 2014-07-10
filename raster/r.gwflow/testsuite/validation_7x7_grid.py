@@ -8,7 +8,7 @@ year = "1995"
 @author Soeren Gebbert
 """
 import grass.script as grass
-from gunittest.case import TestCase
+from grass.gunittest.case import TestCase
 
 class Validation7x7Grid(TestCase):
 
@@ -84,7 +84,7 @@ class Validation7x7Grid(TestCase):
 
 
 if __name__ == '__main__':
-    from gunittest.main import test
+    from grass.gunittest.main import test
     test()
 
 

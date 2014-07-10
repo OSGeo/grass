@@ -9,7 +9,7 @@ year = "1995"
 """
 
 import grass.script as grass
-from gunittest.case import TestCase
+from grass.gunittest.case import TestCase
 
 class ValidationExcavation(TestCase):
 
@@ -82,7 +82,7 @@ class ValidationExcavation(TestCase):
         self.assertRasterFitsInfo(raster="gwresult",  reference=info_string,  precision=3)
 
 if __name__ == '__main__':
-    from gunittest.main import test
+    from grass.gunittest.main import test
     test()
 
 
