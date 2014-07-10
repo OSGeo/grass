@@ -10,6 +10,7 @@ else:
 from xml.etree.ElementTree import fromstring
 import time
 
+from grass.exceptions import CalledModuleError
 from grass.script.core import Popen, PIPE
 from grass.pygrass.errors import GrassError, ParameterError
 from grass.pygrass.functions import docstring_property
@@ -562,9 +563,9 @@ class Module(object):
             self.outputs['stdout'].value = stdout if stdout else ''
             self.outputs['stderr'].value = stderr if stderr else ''
             self.time = time.time() - start
-            #if self.popen.poll():
-            #    raise CalledModuleError(self.popen.returncode, self.get_bash(),
-            #                            {}, stderr)
+            if self.popen.poll():
+                raise CalledModuleError(self.popen.returncode, self.get_bash(),
+                                        {}, stderr)
         return self
 
 ###############################################################################
