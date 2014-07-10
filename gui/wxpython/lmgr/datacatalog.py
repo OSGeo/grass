@@ -402,7 +402,9 @@ class DataCatalogTree(LocationMapTree):
             string = self.GetItemText(self.selected_layer)
             self.ChangeEnvironment(self.GetItemText(self.selected_location), self.GetItemText(self.selected_mapset))
             removed = 0
-            if (self._confirmDialog(_('Do you really want to delete layer') +string+'?', _('Delete map')) == wx.ID_YES):
+            # TODO: rewrite this that it will tell map type in the dialog
+            if (self._confirmDialog(question=_('Do you really want to delete map <{m}>?').format(m=string),
+                                    title=_('Delete map')) == wx.ID_YES):
                 label = _("Deleting") + " " + string + " ..."
                 self.showNotification.emit(message=label)
                 if (self.GetItemText(self.selected_type)=='vect'):
