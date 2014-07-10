@@ -79,9 +79,9 @@ class TestRasterExtraction(TestCase):
         max_min=300.0
         max_max=600.0"""
 
-        self.assertCommandKeyValue(module="t.info",  
-                                                        parameters=dict(flags="g",  input="precip_abs2"), 
-                                                        reference=tinfo_string,  precision=2,  sep="=")
+        self.assertModuleKeyValue(module="t.info",  
+                                  parameters=dict(flags="g", input="precip_abs2"), 
+                                  reference=tinfo_string, precision=2, sep="=")
 
     def test_selection_and_expression(self):
         """Perform a selection by datetime and a r.mapcalc expression"""
@@ -113,9 +113,9 @@ class TestRasterExtraction(TestCase):
         max_min=500.0
         max_max=600.0"""
 
-        self.assertCommandKeyValue(module="t.info",  
-                                                        parameters=dict(flags="g",  input="precip_abs2"), 
-                                                        reference=tinfo_string,  precision=2,  sep="=")
+        self.assertModuleKeyValue(module="t.info",  
+                                  parameters=dict(flags="g", input="precip_abs2"), 
+                                  reference=tinfo_string, precision=2, sep="=")
 
     def test_expression_with_empty_maps(self):
         """Perform r.mapcalc expression and register empty maps"""
@@ -146,9 +146,9 @@ class TestRasterExtraction(TestCase):
         max_min=500.0
         max_max=600.0"""
 
-        self.assertCommandKeyValue(module="t.info",  
-                                                        parameters=dict(flags="g",  input="precip_abs2"), 
-                                                        reference=tinfo_string,  precision=2,  sep="=")
+        self.assertModuleKeyValue(module="t.info",  
+                                  parameters=dict(flags="g", input="precip_abs2"), 
+                                  reference=tinfo_string, precision=2, sep="=")
 
 if __name__ == '__main__':
     from grass.gunittest.main import test

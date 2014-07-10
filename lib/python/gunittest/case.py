@@ -4,7 +4,7 @@
 
 @brief GRASS Python testing framework test case
 
-(C) 2014 by the GRASS Development Team
+Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -147,22 +147,22 @@ class TestCase(unittest.TestCase):
     # TODO: auto-determine precision based on the map type
     # TODO: we can have also more general function without the subset reference
     # TODO: change name to Module
-    def assertCommandKeyValue(self, module, reference, sep,
-                              precision, msg=None, **parameters):
+    def assertModuleKeyValue(self, module, reference, sep,
+                             precision, msg=None, **parameters):
         """Test that output of a module is the same as provided subset.
 
         ::
 
-            self.assertCommandKeyValue('r.info', map='elevation', flags='gr',
-                                       reference=dict(min=55.58, max=156.33),
-                                       precision=0.01, sep='=')
+            self.assertModuleKeyValue('r.info', map='elevation', flags='gr',
+                                      reference=dict(min=55.58, max=156.33),
+                                      precision=0.01, sep='=')
 
         ::
 
             module = SimpleModule('r.info', map='elevation', flags='gr')
-            self.assertCommandKeyValue(module,
-                                       reference=dict(min=55.58, max=156.33),
-                                       precision=0.01, sep='=')
+            self.assertModuleKeyValue(module,
+                                      reference=dict(min=55.58, max=156.33),
+                                      precision=0.01, sep='=')
 
         The output of the module should be key-value pairs (shell script style)
         which is typically obtained using ``-g`` flag.
@@ -174,7 +174,7 @@ class TestCase(unittest.TestCase):
         raster_univar = text_to_keyvalue(module.outputs.stdout,
                                          sep=sep, skip_empty=True)
         if not keyvalue_equals(dict_a=reference, dict_b=raster_univar,
-                                a_is_subset=True, precision=precision):
+                               a_is_subset=True, precision=precision):
             unused, missing, mismatch = diff_keyvalue(dict_a=reference,
                                                       dict_b=raster_univar,
                                                       a_is_subset=True,
@@ -195,7 +195,7 @@ class TestCase(unittest.TestCase):
                 raise RuntimeError("keyvalue_equals() showed difference but"
                                    " diff_keyvalue() did not. This can be"
                                    " a bug in one of them or in the caller"
-                                   " (assertCommandKeyValue())")
+                                   " (assertModuleKeyValue())")
             self.fail(self._formatMessage(msg, stdMsg))
 
     def assertRasterFitsUnivar(self, raster, reference,
@@ -212,15 +212,15 @@ class TestCase(unittest.TestCase):
 
         Use keyword arguments syntax for all function parameters.
 
-        Does not -e (extended statistics) flag, use `assertCommandKeyValue()`
+        Does not -e (extended statistics) flag, use `assertModuleKeyValue()`
         for the full interface of arbitrary module.
         """
-        self.assertCommandKeyValue(module='r.univar',
-                                   map=raster,
-                                   separator='=',
-                                   flags='g',
-                                   reference=reference, msg=msg, sep='=',
-                                   precision=precision)
+        self.assertModuleKeyValue(module='r.univar',
+                                  map=raster,
+                                  separator='=',
+                                  flags='g',
+                                  reference=reference, msg=msg, sep='=',
+                                  precision=precision)
 
     def assertRasterFitsInfo(self, raster, reference,
                              precision=None, msg=None):
@@ -238,10 +238,10 @@ class TestCase(unittest.TestCase):
         This function supports values obtained -r (range) and
         -e (extended metadata) flags.
         """
-        self.assertCommandKeyValue(module='r.info',
-                                   map=raster, flags='gre',
-                                   reference=reference, msg=msg, sep='=',
-                                   precision=precision)
+        self.assertModuleKeyValue(module='r.info',
+                                  map=raster, flags='gre',
+                                  reference=reference, msg=msg, sep='=',
+                                  precision=precision)
 
     def assertVectorFitsUnivar(self, map, column, reference, msg=None,
                                layer=None, type=None, where=None,
@@ -259,7 +259,7 @@ class TestCase(unittest.TestCase):
         Use keyword arguments syntax for all function parameters.
 
         Does not support -d (geometry distances) flag, -e (extended statistics)
-        flag and few other, use `assertCommandKeyValue` for the full interface
+        flag and few other, use `assertModuleKeyValue` for the full interface
         of arbitrary module.
         """
         parameters = dict(map=map, column=column, flags='g')
@@ -269,10 +269,10 @@ class TestCase(unittest.TestCase):
             parameters.update(type=type)
         if where:
             parameters.update(where=where)
-        self.assertCommandKeyValue(module='v.univar',
-                                   reference=reference, msg=msg, sep='=',
-                                   precision=precision,
-                                   **parameters)
+        self.assertModuleKeyValue(module='v.univar',
+                                  reference=reference, msg=msg, sep='=',
+                                  precision=precision,
+                                  **parameters)
 
     # TODO: use precision?
     # TODO: write a test for this method with r.in.ascii
@@ -402,9 +402,9 @@ class TestCase(unittest.TestCase):
             diff = self._compute_difference_raster(reference, actual,
                                                    'assertRastersNoDifference')
             try:
-                self.assertCommandKeyValue('r.info', map=diff, flags='r',
-                                           sep='=', precision=precision,
-                                           reference=statistics, msg=msg)
+                self.assertModuleKeyValue('r.info', map=diff, flags='r',
+                                          sep='=', precision=precision,
+                                          reference=statistics, msg=msg)
             finally:
                 call_module('g.remove', rast=diff)
         # general case
@@ -559,7 +559,7 @@ class TestCase(unittest.TestCase):
 
 
 # TODO: add tests and documentation to methods which are using this function
-# some test and documentation add to assertCommandKeyValue
+# some test and documentation add to assertModuleKeyValue
 def _module_from_parameters(module, **kwargs):
     if kwargs:
         if not isinstance(module, basestring):
