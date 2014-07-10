@@ -9,6 +9,8 @@ Contents:
    script
    pygrass_index
    temporal
+   exceptions
    imaging
+   gunittest_testing
    pydispatch
 
