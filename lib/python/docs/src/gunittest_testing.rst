@@ -48,7 +48,7 @@ line parameters. This is ensured using `gunittest.test()`.
 
 To run (invoke) all tests in the source tree run::
 
-    python python -m grass.gunittest.main [gisdbase] location test_data_category
+    python -m grass.gunittest.main [gisdbase] location test_data_category
 
 All test files in all ``testsuite`` directories will be executed and
 a report will be created in a newly created ``testreport`` directory.
@@ -81,6 +81,10 @@ documentation.
 Tests of GRASS modules
 ----------------------
 
+This is applicable for both GRASS modules written in C or C++ and
+GRASS modules written in Python since we are testing the whole module
+(which is invoked as a subprocess).
+
 ::
 
     def test_elevation(self):
@@ -104,22 +108,40 @@ in different locations.
 .. todo::
     Add example of assertions of key-value results.
 
-.. todo::
-    Add example with module producing a map.
+Especially if a module module has a lot of different parameters allowed
+in different combinations, you should test the if the wrong ones are really
+disallowed and proper error messages are provided (in addition, you can
+test things such as creation and removal of maps in error states).
 
 ::
 
     from grass.gunittest import SimpleModule
 
-    class TestRInfoInputHandling(TestCase):
+    class TestRInfoParameterHandling(TestCase):
+        """Test r.info handling of wrong input of parameters."""
 
         def test_rinfo_wrong_map(self):
+            """Test input of map which does not exist."""
             map_name = 'does_not_exist'
-            rinfo = SimpleModule('r.info', map=, flags='g')
+            # create a module instance suitable for testing
+            rinfo = SimpleModule('r.info', map=map_name, flags='g')
+            # test that module fails (ends with non-zero return code)
             self.assertModuleFail(rinfo)
+            # test that error output is not empty
             self.assertTrue(rinfo.outputs.stderr)
+            # test that the right map is mentioned in the error message
             self.assertIn(map_name, stderr)
 
+In some cases it might be advantageous to create a module instance
+in `setUp()` method and then modify it in test methods.
+
+.. note:
+    Test should be (natural) language, i.e. locale, independent
+    to allow testing the functionality under different locale settings.
+    So, if you are testing content of messages (which should be usually
+    translated), use `assertIn()` method (regular expression might be
+    applicable in some cases but in most cases `in` is exactly the
+    operation needed).
 
 
 Tests of C and C++ code
@@ -128,13 +150,20 @@ Tests of C and C++ code
 Tests of Python code
 --------------------
 
+Use `gunittest` for this purpose in the same way as `unittest`_ would be used.
+
 
 Testing Python code with doctest
 --------------------------------
 
-In Python, the easiest thing to test are functions which performs some computations
-or string manipulations, i.e. they have sum numbers or strings on the input and
-some others on the output.
+.. note::
+    The primary use of ``doctest`` is to ensure that the documentation
+    for functions and classes is valid. Additionally, it can increase
+    the number of tests when executed together with other tests.
+
+In Python, the easiest thing to test are functions which performs some
+computations or string manipulations, i.e. they have some numbers or strings
+on the input and some other numbers or strings on the output.
 
 At the beginning you can use doctest for this purpose. The syntax is as follows::
 
@@ -155,7 +184,6 @@ this to your script::
             import doctest
             doctest.testmod()
         else:
-           grass.parser()
            main()
 
 No output means that everything was successful. Note that you cannot use all
@@ -163,7 +191,7 @@ the ways of running doctest since doctest will fail don the module file due
 to the dot or dots in the file name. Moreover, it is sometimes required that
 the file is accessible through sys.path which is not true for case of GRASS modules.
 
-Do not use use doctest for tests of edge cases, for tests which require
+However, do not use use doctest for tests of edge cases, for tests which require
 generate complex data first, etc. In these cases use `gunittest`.
 
 

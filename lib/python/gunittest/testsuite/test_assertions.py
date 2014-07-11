@@ -85,7 +85,7 @@ mean=240.437
 
 
 class TestAssertCommandKeyValue(grass.gunittest.TestCase):
-    """Test usage of `.assertModuleKeyValue` method."""
+    """Test usage of `assertModuleKeyValue` method."""
     # pylint: disable=R0904
 
     @classmethod
@@ -98,9 +98,9 @@ class TestAssertCommandKeyValue(grass.gunittest.TestCase):
         cls.del_temp_region()
 
     def test_pygrass_module(self):
-        """Test syntax with Module as module"""
+        """Test syntax with Module and required parameters as module"""
         module = Module('r.info', map='elevation', flags='gr',
-                        run_=False, finish_=False)
+                        run_=False, finish_=True)
         self.assertModuleKeyValue(module,
                                   reference=dict(min=55.58, max=156.33),
                                   precision=0.01, sep='=')

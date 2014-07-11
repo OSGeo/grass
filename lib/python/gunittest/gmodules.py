@@ -50,7 +50,7 @@ class SimpleModule(Module):
                                  ', it would be overriden' % banned)
         kargs['stdout_'] = subprocess.PIPE
         kargs['stderr_'] = subprocess.PIPE
-        kargs['finish_'] = False
+        kargs['finish_'] = True
         kargs['run_'] = False
 
         Module.__init__(self, cmd, *args, **kargs)

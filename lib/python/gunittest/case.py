@@ -408,6 +408,10 @@ class TestCase(unittest.TestCase):
             finally:
                 call_module('g.remove', rast=diff)
         # general case
+        # TODO: we are using r.info min max and r.univar min max interchangably
+        # but they might be different if region is different from map
+        # not considered as an huge issue since we expect the tested maps
+        # to match with region, however a documentation should containe a notice
         self.assertRastersDifference(actual=actual, reference=reference,
                                      statistics=statistics,
                                      precision=precision, msg=msg)
@@ -446,19 +450,13 @@ class TestCase(unittest.TestCase):
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)
-
-        # do what module.run() with finish_=True would do
-        start = time.time()
-        module.run()
-        stdout, stderr = module.popen.communicate(input=module.stdin)
-        module.outputs['stdout'].value = stdout if stdout else ''
-        module.outputs['stderr'].value = stderr if stderr else ''
-        module.time = time.time() - start
-        if module.popen.poll():
+        try:
+            module.run()
+        except CalledModuleError:
             # here exception raised by run() with finish_=True would be
             # almost enough but we want some additional info to be included
             # in the test report
-            errors = module.outputs['stderr'].value
+            errors = module.outputs.stderr
             # provide diagnostic at least in English locale
             # TODO: standardized error code would be handy here
             import re
@@ -503,18 +501,11 @@ class TestCase(unittest.TestCase):
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)
-
-        # do what module.run() with finish_=True would do
-        start = time.time()
-        module.run()
-        stdout, stderr = module.popen.communicate(input=module.stdin)
-        module.outputs['stdout'].value = stdout if stdout else ''
-        module.outputs['stderr'].value = stderr if stderr else ''
-        module.time = time.time() - start
-        # TODO: these two lines should go to report in some better way
-        print module.outputs['stdout'].value
-        print module.outputs['stderr'].value
-        if module.popen.poll():
+        try:
+            module.run()
+        except CalledModuleError:
+            print module.outputs.stdout
+            print module.outputs.stderr
             # TODO: message format
             # TODO: stderr?
             stdmsg = ('Running <{m.name}> module ended'
@@ -523,10 +514,11 @@ class TestCase(unittest.TestCase):
                       'See the folowing errors:\n'
                       '{errors}'.format(
                           m=module, code=module.get_python(),
-                          errors=module.outputs["stderr"].value
+                          errors=module.outputs.stderr
                       ))
             self.fail(self._formatMessage(msg, stdmsg))
-
+        print module.outputs.stdout
+        print module.outputs.stderr
         # log these to final report
         # TODO: always or only if the calling test method failed?
         # in any case, this must be done before self.fail()
@@ -541,18 +533,16 @@ class TestCase(unittest.TestCase):
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)
-
-        # do what module.run() with finish_=True would do
-        start = time.time()
-        module.run()
-        stdout, stderr = module.popen.communicate(input=module.stdin)
-        module.outputs['stdout'].value = stdout if stdout else ''
-        module.outputs['stderr'].value = stderr if stderr else ''
-        module.time = time.time() - start
-        # TODO: these two lines should go to report in some better way
-        print module.outputs['stdout'].value
-        print module.outputs['stderr'].value
-        if not module.popen.poll():
+        # note that we cannot use finally because we do not leave except
+        try:
+            module.run()
+        except CalledModuleError:
+            print module.outputs.stdout
+            print module.outputs.stderr
+            pass
+        else:
+            print module.outputs.stdout
+            print module.outputs.stderr
             stdmsg = ('Running <%s> ended with zero (successful) return code'
                       ' when expecting module to fail' % module.get_python())
             self.fail(self._formatMessage(msg, stdmsg))
@@ -578,9 +568,9 @@ def _check_module_run_parameters(module):
     # in this case module already run and we would start it again
     if module.run_:
         raise ValueError('Do not run the module manually, set run_=False')
-    if module.finish_:
+    if not module.finish_:
         raise ValueError('This function will always finish module run,'
-                         ' set finish_=None or finish_=False.')
+                         ' set finish_=None or finish_=True.')
     # we expect most of the usages with stdout=PIPE
     # TODO: in any case capture PIPE always?
     if module.stdout_ is None:
