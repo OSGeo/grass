@@ -42,13 +42,14 @@ void set_params(void) {
     param.unit->options = "coord,putget,large";
     param.unit->description = "Choose the unit tests to run";
 
+/* No integration test for now
     param.integration = G_define_option();
     param.integration->key = "integration";
     param.integration->type = TYPE_STRING;
     param.integration->required = NO;
     param.integration->options = "";
     param.integration->description = "Choose the integration tests to run";
-
+*/
     param.depths = G_define_option();
     param.depths->key = "depths";
     param.depths->type = TYPE_INTEGER;
@@ -80,14 +81,6 @@ void set_params(void) {
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
     param.testunit->description = "Run all unit tests";
-
-    param.testint = G_define_flag();
-    param.testint->key = 'i';
-    param.testint->description = "Run all integration tests";
-
-    param.full = G_define_flag();
-    param.full->key = 'a';
-    param.full->description = "Run all unit and integration tests";
 
     param.compression = G_define_flag();
     param.compression->key = 'l';
@@ -135,43 +128,26 @@ int main(int argc, char *argv[]) {
     Rast3d_init_defaults();
 
     /*Run the unit tests */
-    if (param.testunit->answer || param.full->answer) {
+    if (param.testunit->answer) {
         returnstat += unit_test_coordinate_transform();
         returnstat += unit_test_put_get_value();
         returnstat += unit_test_put_get_value_large_file(depths, rows, cols, tile_size);
     }
 
-    /*Run the integration tests */
-    if (param.testint->answer || param.full->answer) {
-        ;
-    }
-
     /*Run single tests */
-    if (!param.full->answer) {
-        /*unit tests */
-        if (!param.testunit->answer) {
-            i = 0;
-            if (param.unit->answers)
-                while (param.unit->answers[i]) {
-                    if (strcmp(param.unit->answers[i], "coord") == 0)
-                        returnstat += unit_test_coordinate_transform();
-                    if (strcmp(param.unit->answers[i], "putget") == 0)
-                        returnstat += unit_test_put_get_value();
-                    if (strcmp(param.unit->answers[i], "large") == 0)
-                        returnstat += unit_test_put_get_value_large_file(depths, rows, cols, tile_size);
-                    
-                    i++;
-                }
-        }
-        /*integration tests */
-        if (!param.testint->answer) {
-            i = 0;
-            if (param.integration->answers)
-                while (param.integration->answers[i]) {
-                    ;
-                }
-
-        }
+    if (!param.testunit->answer) {
+        i = 0;
+        if (param.unit->answers)
+            while (param.unit->answers[i]) {
+                if (strcmp(param.unit->answers[i], "coord") == 0)
+                    returnstat += unit_test_coordinate_transform();
+                if (strcmp(param.unit->answers[i], "putget") == 0)
+                    returnstat += unit_test_put_get_value();
+                if (strcmp(param.unit->answers[i], "large") == 0)
+                    returnstat += unit_test_put_get_value_large_file(depths, rows, cols, tile_size);
+                
+                i++;
+            }
     }
     
     if (returnstat != 0)

@@ -31,6 +31,7 @@ SUBDIRS = \
 	rst \
 	lidar \
 	raster3d \
+	raster3d/test \
 	gpde \
 	dspf \
 	symbol \
