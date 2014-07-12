@@ -9,7 +9,7 @@ year = "1995"
 """
 from grass.gunittest.case import TestCase
 
-class Validation7x7Grid(TestCase):
+class InterpolationTest(TestCase):
 
     @classmethod
     def setUpClass(cls):
