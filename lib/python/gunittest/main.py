@@ -75,6 +75,8 @@ def test():
 
     # TODO: enable passing omit to exclude also gunittest or nothing
     program = GrassTestProgram(module='__main__', exit_at_end=False, grass_location='all')
+    # TODO: check if we are in the directory where the test file is
+    # this will ensure that data directory is available when it is requested
 
     if doing_coverage:
         cov.stop()
@@ -137,6 +139,8 @@ if __name__ == '__main__':
     silent_rmtree(results_dir)  # TODO: too brute force?
 
     invoker = GrassTestFilesInvoker(start_dir='.')
+    # we can just iterate over all locations available in database
+    # but the we don't know the right location label/shortcut
     invoker.run_in_location(gisdbase=gisdbase,
                             location=location,
                             location_shortcut=location_shortcut,

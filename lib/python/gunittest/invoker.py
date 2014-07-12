@@ -101,7 +101,9 @@ class GrassTestFilesInvoker(object):
         self.reporter.start_file_test(module)
         # TODO: we might clean the directory here before test if non-empty
         # TODO: use some grass function to run?
-        p = subprocess.Popen([sys.executable, module.abs_file_path],
+        # add also '-Qwarn'?
+        p = subprocess.Popen([sys.executable, '-tt', '-3',
+                              module.abs_file_path],
                              cwd=cwd, env=env,
                              stdout=stdout, stderr=stderr)
         returncode = p.wait()

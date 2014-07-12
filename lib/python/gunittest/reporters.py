@@ -103,14 +103,23 @@ def get_svn_info():
         if not rc:
             root = et.fromstring(stdout)
             # TODO: get also date if this make sense
-            # expecting only one <entry>
+            # expecting only one <entry> element
             entry = root.find('entry')
             info['revision'] = entry.get('revision')
             info['url'] = entry.find('url').text
-            relurl = entry.find('relative-url').text
-            # relative path has ^ at the beginning
-            if relurl.startswith('^'):
-                relurl = relurl[1:]
+            relurl = entry.find('relative-url')
+            # element which is not found is None
+            # empty element would be bool(el) == False
+            if relurl is not None:
+                relurl = relurl.text
+                # relative path has ^ at the beginning in SVN version 1.8.8
+                if relurl.startswith('^'):
+                    relurl = relurl[1:]
+            else:
+                # SVN version 1.8.8 supports relative-url but older do not
+                # so, get relative part from absolute URL
+                const_url_part = 'https://svn.osgeo.org/grass/'
+                relurl = info['url'][len(const_url_part):]
             info['relative-url'] = relurl
             return info
     # TODO: add this to svnversion function

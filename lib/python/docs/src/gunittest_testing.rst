@@ -292,6 +292,19 @@ with special data.
     GRASS module).
 
 
+Data specific to one test
+-------------------------
+
+If the data required by the test are not part of standard location
+and cannot be part of the test file itself, this data should be stored
+in files in ``data`` subdirectory of ``testsuite`` directory.
+The test should access the data using a relative path from its location,
+i.e. all data will be accessed using ``data/...``. This ``data`` directory
+might be used directly when running test file directly in the directory
+in the source code or might be copied to the test current working directory
+when running tests by the main test invoking tool.
+
+
 Analyzing quality of source code
 --------------------------------
 
