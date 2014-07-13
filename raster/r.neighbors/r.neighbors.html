@@ -34,37 +34,37 @@ This may useful to smooth only parts of an elevation map (pits, peaks, ...).
 
 <p><em>Example how to use a selection map with method=average:</em><br>
 input map:
-<pre>
+<div class="code"><pre>
 1 1  1 1 1
 1 1  1 1 1
 1 1 10 1 1
 1 1  1 1 1
 1 1  1 1 1
-</pre>
+</pre></div>
 selection map, NULL values are marked as *:
-<pre>
+<div class="code"><pre>
 * * * * *
 * * 1 * *
 * 1 1 1 *
 * * 1 * *
 * * * * *
-</pre>
+</pre></div>
 The output map:
-<pre>
+<div class="code"><pre>
 1 1 1 1 1
 1 1 2 1 1
 1 2 2 2 1
 1 1 2 1 1
 1 1 1 1 1
-</pre>
+</pre></div>
 Without using the selection map, the output map would look like this:
-<pre>
+<div class="code"><pre>
 1 1 1 1 1
 1 2 2 2 1
 1 2 2 2 1
 1 2 2 2 1
 1 1 1 1 1
-</pre>
+</pre></div>
 
 <p>Optionally, the user can also specify the <b>TITLE</b> to
 be assigned to the raster map layer <b>output</b>, elect
@@ -113,16 +113,16 @@ when these are ranged in numerical order.
 <dt><b>maximum</b> 
 
 <dd>The maximum value within the neighborhood.
-<pre>
+<div class="code"><pre>
        Raw Data     Operation     New Data
-   ----------------          ----------------
-   | 7  | 7  |  5 |          |    |    |    |
-   |----|----|----| average  |----|----|----|
-   | 4  | 7  |  4 |---------&gt;|    |  6 |    |
-   |----|----|----|          |----|----|----|
-   | 7  | 6  |  4 |          |    |    |    |
-   |----|----|----|          |----|----|----|
-</pre>
+   +---+---+---+          +---+---+---+
+   | 7 | 7 | 5 |          |   |   |   |
+   +---+---+---+ average  +---+---+---+
+   | 4 | 7 | 4 |---------&gt;|   | 6 |   |
+   +---+---+---+          +---+---+---+
+   | 7 | 6 | 4 |          |   |   |   |
+   +---+---+---+          +---+---+---+
+</pre></div>
 
 <dt><b>range</b>
 
@@ -169,13 +169,13 @@ The neighborhood <b>size</b> specifies which cells surrounding any given
 cell fall into the neighborhood for that cell.
 The <b>size</b> must be an odd integer.
 For example,
-<pre>
+<div class="code"><pre>
                               _ _ _
                              |_|_|_| 
     3 x 3 neighborhood ---&gt;  |_|_|_|
                              |_|_|_|
 
-</pre>
+</pre></div>
 <p>
 <em>Matrix weights:</em>
 A custom matrix can be used if none of the neighborhood operation
@@ -184,27 +184,27 @@ be used in conjunction with the <b>size</b> option to specify the
 matrix size.  The weights desired are to be entered into a text file.
 For example, to calculate the focal mean with a matrix <b>size</b> of
 3,
-<pre>
+<div class="code"><pre>
 r.neigbors in=input.map out=output.map size=3 weight=weights.txt
-</pre>
+</pre></div>
 
 The contents of the weight.txt file:
-<pre>
+<div class="code"><pre>
 3 3 3
 1 4 8
 9 5 3
-</pre>
+</pre></div>
 
 This corresponds to the following 3x3 matrix:
-<pre>
-    -------
-    |3|3|3|
-    -------
-    |1|4|8|
-    -------
-    |9|5|3|
-    -------
-</pre>
+<div class="code"><pre>
++-+-+-+
+|3|3|3|
++-+-+-+
+|1|4|8|
++-+-+-+
+|9|5|3|
++-+-+-+
+</pre></div>
 
 To calculate an annulus shaped neighborhood the contents of weight.txt file 
 may be e.g. for size=5:
