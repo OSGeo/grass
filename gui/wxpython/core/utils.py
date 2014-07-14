@@ -945,28 +945,36 @@ def SetAddOnPath(addonPath = None, key = 'PATH'):
     # update path
     if addonPath not in os.environ['PATH']:
         os.environ['PATH'] = addonPath + os.pathsep + os.environ['PATH']
-    
-# From lib/gis/col_str.c, except purple which is mentioned
-# there but not given RGB values
+
+
+# predefined colors and their names
+# must be in sync with lib/gis/color_str.c
 str2rgb = {'aqua': (100, 128, 255),
            'black': (0, 0, 0),
            'blue': (0, 0, 255),
            'brown': (180, 77, 25),
            'cyan': (0, 255, 255),
            'gray': (128, 128, 128),
-           'green': (0, 255, 0),
            'grey': (128, 128, 128),
+           'green': (0, 255, 0),
            'indigo': (0, 128, 255),
            'magenta': (255, 0, 255),
            'orange': (255, 128, 0),
-           'purple': (128, 0, 128),
            'red': (255, 0, 0),
            'violet': (128, 0, 255),
+           'purple': (128, 0, 255),
            'white': (255, 255, 255),
            'yellow': (255, 255, 0)}
 rgb2str = {}
-for (s,r) in str2rgb.items():
-    rgb2str[ r ] = s
+for (s, r) in str2rgb.items():
+    rgb2str[r] = s
+# ensure that gray value has 'gray' string and not 'grey'
+rgb2str[str2rgb['gray']] = 'gray'
+# purple is defined as nickname for violet in lib/gis
+# (although Wikipedia says that purple is (128, 0, 128))
+# we will prefer the defined color, not nickname
+rgb2str[str2rgb['violet']] = 'violet'
+
 
 def color_resolve(color):
     if len(color) > 0 and color[0] in "0123456789":
