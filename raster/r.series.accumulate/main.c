@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-        struct Flag *avg, *nulls, *lazy, *float_output;
+        struct Flag *nulls, *lazy, *float_output;
     } flag;
     int i;
     int num_inputs, max_inputs;
@@ -148,15 +148,11 @@ int main(int argc, char *argv[])
     parm.method->label = "This method will be applied to compute the accumulative values from the input maps";
     G_asprintf(&desc,
            "gdd;%s;mean;%s;bedd;%s;huglin;%s",
-           _("Growing Degree Days or Winkler indices: depending on the chosen average computation set with -a flag"),
-           _("Mean: either (min + max) / 2 or sum(input maps)/(number of input maps) set with -a flag"),
+           _("Growing Degree Days or Winkler indices"),
+           _("Mean: sum(input maps)/(number of input maps)"),
            _("Biologically Effective Degree Days"),
            _("Huglin Heliothermal index"));
     parm.method->descriptions = desc;
-    
-    flag.avg = G_define_flag();
-    flag.avg->key = 'a';
-    flag.avg->description = _("Use arithmetical mean instead of (min + max ) / 2");
 
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
@@ -207,10 +203,12 @@ int main(int argc, char *argv[])
         tshift = 0.;
     
     if (parm.input->answer && parm.file->answer)
-        G_fatal_error(_("input= and file= are mutually exclusive"));
+        G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.input->key, parm.file->key);
     
     if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error(_("Please specify input= or file="));
+        G_fatal_error(_("Please specify %s= or %s="),
+			parm.input->key, parm.file->key);
     
     max_inputs = 0;
     
@@ -381,20 +379,15 @@ int main(int argc, char *argv[])
                 }
             }
 
+	    value = dcell_null;
             if (!non_null || (null && flag.nulls->answer)) {
                 if (basemap)
                     value = basemap->buf[col];
-                else
-                    value = dcell_null;
             }
             else {
-                /* Compute mean or average */
-                if (flag.avg->answer) {
-                    avg /= non_null;
-                }
-                else {
-                    avg = (min + max) / 2.;
-                }
+                /* Compute mean or index */
+		avg /= non_null;
+
                 switch(method) {
                     case METHOD_HUGLIN:
                         avg = (avg + max) / 2;
@@ -410,11 +403,12 @@ int main(int argc, char *argv[])
                         /* Winkler or GDD index computation is the default */
                         break;
                 }
-                if(method != METHOD_MEAN)
-                        value = avg - lower;
+                if (method != METHOD_MEAN) {
+		    value = avg - lower;
 
-                if (value < 0.)
-                    value = 0.;
+		    if (value < 0.)
+			value = 0.;
+		}
 
                 if (basemap)
                     value += basemap->buf[col];
