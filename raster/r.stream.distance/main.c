@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (!out_diff_opt->answer && !out_dist_opt->answer)
-	G_fatal_error(_("You must select at least one output raster maps"));
+	G_fatal_error(_("You must select at least one output raster map"));
     if (out_diff_opt->answer && !in_elev_opt->answer)
 	G_fatal_error(_("Output elevation difference raster map requires "
                         "input elevation raster map to be specified"));
