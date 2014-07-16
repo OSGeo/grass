@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     flag_diag->description = _("Clumps are also traced along diagonal neighboring cells");
 
     flag_print = G_define_flag();
-    flag_print->key = 'p';
+    flag_print->key = 'g';
     flag_print->label = _("Print only the number of clumps in shell script style");
 
     G_option_exclusive(flag_print, opt_out, NULL);
