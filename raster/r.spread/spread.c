@@ -68,6 +68,9 @@ void spread(void)
     struct cell_ptrHa *to_cell, *old_to_cell;
     struct costHa *pres_cell;
 
+    /* initialize using arbitrary value, this value is never used except for debug */
+    min_cost = 0;
+
     ncells = nrows * ncols;
     G_message
 	("Finding spread time - number of cells visited in percentage ...  %3d%%",
