@@ -4,6 +4,7 @@
 Tests assertion methods for vectors.
 """
 
+from grass.exceptions import CalledModuleError
 import grass.gunittest as gunittest
 
 
@@ -53,7 +54,7 @@ V_UNIVAR_BRIDGES_EXTENDED = dict(
 )
 
 
-class TestVectorMapAssertions(gunittest.TestCase):
+class TestVectorInfoAssertions(gunittest.TestCase):
     """Test assertions of map meta and statistics"""
     # pylint: disable=R0904
     def test_assertVectorFitsUnivar(self):
@@ -109,6 +110,121 @@ class TestVectorMapAssertions(gunittest.TestCase):
                           self.assertVectorFitsExtendedInfo,
                           'bridges',
                           V_UNIVAR_BRIDGES_TOPO)
+
+    def test_assertVectorInfoEqualsVectorInfo(self):
+        self.assertVectorInfoEqualsVectorInfo('bridges', 'bridges', precision=0.00000001)
+        self.assertRaises(self.failureException,
+                          self.assertVectorInfoEqualsVectorInfo,
+                          'lakes', 'bridges', precision=0.00000001)
+        self.assertRaises(CalledModuleError,
+                          self.assertVectorInfoEqualsVectorInfo,
+                          'bridges', 'does_not_exist', precision=0.00000001)
+
+
+class TestVectorGeometryAssertions(gunittest.TestCase):
+    """Test assertions of map geometry"""
+    # pylint: disable=R0904
+    maps_to_remove = []
+    simple_base_file = 'data/simple_vector_map_ascii_4p_2l_2c_3b_dp14.txt'
+    simple_modified_file = 'data/simple_vector_map_ascii_4p_2l_2c_3b_dp14_modified.txt'
+    simple_diff_header_file = 'data/simple_vector_map_ascii_4p_2l_2c_3b_dp14_diff_header.txt'
+    precision = 0.00001
+    digits = 14
+
+    @classmethod
+    def tearDownClass(cls):
+        # TODO: this should be decided globaly by cleanup variable
+        # perhaps cls.gremove() wheoul be the right option
+        # when invoking separately, no need to delete maps since mapset
+        # is deleted
+        if cls.maps_to_remove:
+            cls.runModule('g.remove', vect=','.join(cls.maps_to_remove))
+
+    def test_assertVectorEqualsVector_basic(self):
+        """Check completely different maps."""
+        self.assertVectorEqualsVector(actual='bridges', reference='bridges',
+                                      precision=0.01, digits=15)
+        self.assertRaises(self.failureException,
+                          self.assertVectorEqualsVector,
+                          actual='bridges', reference='lakes',
+                          precision=0.01, digits=7)
+        self.assertRaises(CalledModuleError,
+                          self.assertVectorEqualsVector,
+                          actual='does_not_exist', reference='lakes',
+                          precision=0.01, digits=7)
+
+    def test_assertVectorEqualsVector_geometry_same_header(self):
+        """Check small slighlty different maps with same header in ASCII."""
+        amap = 'simple_vector_map_base_geom'
+        bmap = 'simple_vector_map_modified_geom'
+        self.runModule('v.in.ascii', format='standard',
+                       input=self.simple_base_file,
+                       output=amap)
+        self.maps_to_remove.append(amap)
+        self.runModule('v.in.ascii', format='standard',
+                       input=self.simple_modified_file,
+                       output=bmap)
+        self.maps_to_remove.append(bmap)
+        self.assertVectorEqualsVector(actual=amap, reference=amap,
+                                      precision=self.precision, digits=self.digits)
+        self.assertRaises(self.failureException,
+                          self.assertVectorEqualsVector,
+                          actual=amap, reference=bmap,
+                          precision=self.precision, digits=self.digits)
+
+    def test_assertVectorEqualsVector_geometry(self):
+        """Check small slighlty different maps with different headers in ASCII."""
+        amap = 'simple_vector_map_base'
+        bmap = 'simple_vector_map_different_header'
+        self.runModule('v.in.ascii', format='standard',
+                       input=self.simple_base_file,
+                       output=amap)
+        self.maps_to_remove.append(amap)
+        self.runModule('v.in.ascii', format='standard',
+                       input=self.simple_diff_header_file,
+                       output=bmap)
+        self.maps_to_remove.append(bmap)
+        self.assertVectorEqualsVector(actual=amap, reference=bmap,
+                                      precision=self.precision, digits=self.digits)
+
+    def test_assertVectorAsciiEqualsVectorAscii_diff_header(self):
+        """Test ASCII files with different header.
+
+        Prove that files were not deleted if not requested.
+        """
+        self.assertVectorAsciiEqualsVectorAscii(actual=self.simple_base_file,
+                                                reference=self.simple_diff_header_file)
+        self.assertFileExists(self.simple_base_file)
+        self.assertFileExists(self.simple_diff_header_file)
+
+    def test_assertVectorAsciiEqualsVectorAscii_diff_content(self):
+        """Test ASCII files with slighlty different content.
+
+        Prove that files were not deleted if not requested.
+        """
+        self.assertRaises(self.failureException,
+                          self.assertVectorAsciiEqualsVectorAscii,
+                          actual=self.simple_base_file,
+                          reference=self.simple_modified_file)
+        self.assertFileExists(self.simple_base_file)
+        self.assertFileExists(self.simple_modified_file)
+
+    def test_assertVectorEqualsAscii_by_import(self):
+        amap = 'simple_vector_map_imported_base'
+        self.runModule('v.in.ascii', format='standard',
+                       input=self.simple_base_file,
+                       output=amap)
+        self.maps_to_remove.append(amap)
+        self.assertVectorEqualsAscii(amap, self.simple_diff_header_file,
+                                     precision=self.precision, digits=self.digits)
+        self.assertRaises(self.failureException,
+                          self.assertVectorEqualsAscii,
+                          amap, self.simple_modified_file,
+                          precision=self.precision, digits=self.digits)
+        self.assertFileExists(self.simple_base_file)
+        self.assertFileExists(self.simple_modified_file)
+        self.assertFileExists(self.simple_diff_header_file)
+
 
 if __name__ == '__main__':
     gunittest.test()
