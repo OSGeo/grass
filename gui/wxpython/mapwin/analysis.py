@@ -268,6 +268,8 @@ class MeasureDistanceController(AnalysisControllerBase):
         self._totaldist += dist
         td, tdunits = units.formatDist(self._totaldist,
                                        mapunits)
+        if dunits == 'units' and mapunits:
+            dunits = tdunits = mapunits
 
         strdist = str(d)
         strtotdist = str(td)
