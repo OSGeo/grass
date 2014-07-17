@@ -43,6 +43,22 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.dialogs    import ProfileRasterDialog, PlotStatsFrame
 from core.gcmd         import RunCommand, GWarning, GError, GMessage
 
+
+def get_unit_conversion():
+    """Get conversion factor to convert output from r.profile to current units.
+    Module r.profile always outputs distance in meters.
+
+    .. todo:: create a wrapper for g.proj in grass.core    
+    """
+    proj = RunCommand(prog='g.proj', read=True, flags='g').strip()
+    if not proj:
+        # TODO put some warning here
+        return 1.
+
+    proj = grass.parse_key_val(proj, sep='=')
+    return 1 / float(proj.get('meters', 1))
+
+
 class ProfileFrame(BasePlotFrame):
     """Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
@@ -59,6 +75,7 @@ class ProfileFrame(BasePlotFrame):
             self.SetToolBar(self.toolbar)
         self.SetTitle(_("GRASS Profile Analysis Tool"))
         self._units = units
+        self._conversion = get_unit_conversion()
 
         #
         # Init variables
@@ -258,7 +275,8 @@ class ProfileFrame(BasePlotFrame):
             if dist == None or dist == '' or dist == 'nan' or \
                 elev == None or elev == '' or elev == 'nan':
                 continue
-            dist = float(dist)
+            # remove conversion if one day r.profile starts to output distance in projection units!
+            dist = self._conversion * float(dist)
             elev = float(elev)
             datalist.append((dist,elev))
 
