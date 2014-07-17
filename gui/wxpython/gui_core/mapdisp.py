@@ -101,7 +101,11 @@ class MapFrameBase(wx.Frame):
         self._toolSwitcher = ToolSwitcher()
         self._toolSwitcher.toggleToolChanged.connect(self._onToggleTool)
 
-        self.Bind(wx.EVT_KEY_UP, self.OnFullScreen)
+        # set accelerator table for fullscreen
+        fullScreenId = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.OnFullScreen, id=fullScreenId)
+        accelTable = wx.AcceleratorTable([(wx.ACCEL_NORMAL, wx.WXK_F11, fullScreenId)])
+        self.SetAcceleratorTable(accelTable)
 
     def _initMap(self, Map):
         """Initialize map display, set dimensions and map region
@@ -127,11 +131,11 @@ class MapFrameBase(wx.Frame):
         self.StatusbarUpdate()
 
     def OnFullScreen(self, event):
-        if event.GetKeyCode() == wx.WXK_F11:
-            for toolbar in self.toolbars.keys():
-                self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
-            self._mgr.Update()
-            self.ShowFullScreen(not self.IsFullScreen())
+        """!Switch fullscreen mode, hides also toolbars"""
+        for toolbar in self.toolbars.keys():
+            self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
+        self._mgr.Update()
+        self.ShowFullScreen(not self.IsFullScreen())
         event.Skip()
 
     def GetToolSwitcher(self):
