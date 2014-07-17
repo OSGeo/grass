@@ -118,6 +118,7 @@ def discovery():
     sys.exit(not program.result.wasSuccessful())
 
 
+# TODO: makefile rule should depend on the whole build
 # TODO: create a full interface (using grass parser or argparse)
 if __name__ == '__main__':
     if len(sys.argv) == 4:

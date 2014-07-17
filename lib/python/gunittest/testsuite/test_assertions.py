@@ -73,18 +73,8 @@ max=156.329864501953
 # values rounded manually to maximal expected perecision
 ELEVATION_MINMAX_DICT = {'min': 55.58, 'max': 156.33}
 
-V_UNIVAR_BRIDGES_WIDTH_SUBSET = """n=10938
-nmissing=0
-nnull=0
-min=0
-max=1451
-range=1451
-sum=2.6299e+06
-mean=240.437
-"""
 
-
-class TestAssertCommandKeyValue(grass.gunittest.TestCase):
+class TestAssertModuleKeyValue(grass.gunittest.TestCase):
     """Test usage of `assertModuleKeyValue` method."""
     # pylint: disable=R0904
 
@@ -113,7 +103,7 @@ class TestAssertCommandKeyValue(grass.gunittest.TestCase):
                                   precision=0.01, sep='=')
 
     def test_direct_parameters(self):
-        """Test syntax with module and its parameters as fnction parameters"""
+        """Test syntax with module and its parameters as function parameters"""
         self.assertModuleKeyValue('r.info', map='elevation', flags='gr',
                                   reference=dict(min=55.58, max=156.33),
                                   precision=0.01, sep='=')
@@ -126,7 +116,7 @@ class TestAssertCommandKeyValue(grass.gunittest.TestCase):
                                   precision=0.01, sep='=')
 
 
-class TestRasterMapAssertations(grass.gunittest.TestCase):
+class TestRasterMapAssertions(grass.gunittest.TestCase):
     # pylint: disable=R0904
 
     @classmethod
@@ -165,7 +155,9 @@ class TestRasterMapAssertations(grass.gunittest.TestCase):
                                   ELEVATION_MINMAX, precision=0.01)
 
     def test_dict_as_parameter(self):
-        # this also tests if we are using r.info -e flag
+        """This also tests if we are using r.info -e flag and that precision is
+        not required for strings.
+        """
         self.assertRasterFitsInfo('elevation', ELEVATION_MAPSET_DICT)
 
     def test_assertRastersNoDifference(self):
@@ -197,24 +189,7 @@ class TestRasterMapAssertations(grass.gunittest.TestCase):
                           msg="The difference of different maps should have huge mean")
 
 
-class TestVectorMapAssertations(grass.gunittest.TestCase):
-    # pylint: disable=R0904
-    def test_assertVectorFitsUnivar(self):
-        self.assertVectorFitsUnivar(map='bridges', column='WIDTH',
-                                    reference=V_UNIVAR_BRIDGES_WIDTH_SUBSET,
-                                    precision=0.01)
-        self.assertRaises(self.failureException,
-                          self.assertVectorFitsUnivar,
-                          map='bridges', column='YEAR_BUILT',
-                          reference=V_UNIVAR_BRIDGES_WIDTH_SUBSET,
-                          precision=0.01)
-        self.assertRaises(ValueError,
-                          self.assertVectorFitsUnivar,
-                          map='bridges', column='WIDTH',
-                          reference=RANDOM_KEYVALUES)
-
-
-class TestFileAssertations(grass.gunittest.TestCase):
+class TestFileAssertions(grass.gunittest.TestCase):
     # pylint: disable=R0904
 
     @classmethod
