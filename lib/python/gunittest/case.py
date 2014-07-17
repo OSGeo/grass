@@ -14,7 +14,6 @@ for details.
 
 import os
 import subprocess
-import time
 import unittest
 from unittest.util import safe_repr
 
@@ -224,9 +223,9 @@ class TestCase(unittest.TestCase):
 
     def assertRasterFitsInfo(self, raster, reference,
                              precision=None, msg=None):
-        r"""Test that raster map has the values obtained by v.univar module.
+        r"""Test that raster map has the values obtained by r.univar module.
 
-        The function does not require all values from v.univar.
+        The function does not require all values from r.univar.
         Only the provided values are tested.
         Typical example is checking minimum, maximum and type of the map::
 
@@ -242,6 +241,103 @@ class TestCase(unittest.TestCase):
                                   map=raster, flags='gre',
                                   reference=reference, msg=msg, sep='=',
                                   precision=precision)
+
+    def assertRaster3dFitsUnivar(self, raster, reference,
+                                 precision=None, msg=None):
+        r"""Test that 3D raster map has the values obtained by r3.univar module.
+
+        The function does not require all values from r3.univar.
+        Only the provided values are tested.
+
+        Use keyword arguments syntax for all function parameters.
+
+        Does not -e (extended statistics) flag, use `assertModuleKeyValue()`
+        for the full interface of arbitrary module.
+        """
+        self.assertModuleKeyValue(module='r3.univar',
+                                  map=raster,
+                                  separator='=',
+                                  flags='g',
+                                  reference=reference, msg=msg, sep='=',
+                                  precision=precision)
+
+    def assertRaster3dFitsInfo(self, raster, reference,
+                               precision=None, msg=None):
+        r"""Test that raster map has the values obtained by r3.info module.
+
+        The function does not require all values from r3.info.
+        Only the provided values are tested.
+
+        Use keyword arguments syntax for all function parameters.
+
+        This function supports values obtained by -g (info) and -r (range).
+        """
+        self.assertModuleKeyValue(module='r3.info',
+                                  map=raster, flags='gr',
+                                  reference=reference, msg=msg, sep='=',
+                                  precision=precision)
+
+    def assertVectorFitsTopoInfo(self, vector, reference, msg=None):
+        r"""Test that raster map has the values obtained by ``v.info`` module.
+
+        This function uses ``-t`` flag of ``v.info`` module to get topology
+        info, so the reference dictionary should contain appropriate set or
+        subset of values (only the provided values are tested).
+
+        A example of checking number of points::
+
+            topology = dict(points=10938, primitives=10938)
+            self.assertVectorFitsTopoInfo(map='bridges', reference=topology)
+
+        Note that here we are checking also the number of primitives to prove
+        that there are no other features besides points.
+
+        No precision is applied (no difference is required). So, this function
+        is not suitable for testing items which are floating point number
+        (no such items are currently in topological information).
+
+        Use keyword arguments syntax for all function parameters.
+        """
+        self.assertModuleKeyValue(module='v.info',
+                                  map=vector, flags='t',
+                                  reference=reference, msg=msg, sep='=',
+                                  precision=0)
+
+    def assertVectorFitsRegionInfo(self, vector, reference,
+                                   precision, msg=None):
+        r"""Test that raster map has the values obtained by ``v.info`` module.
+
+        This function uses ``-g`` flag of ``v.info`` module to get topology
+        info, so the reference dictionary should contain appropriate set or
+        subset of values (only the provided values are tested).
+
+        Use keyword arguments syntax for all function parameters.
+        """
+        self.assertModuleKeyValue(module='v.info',
+                                  map=vector, flags='g',
+                                  reference=reference, msg=msg, sep='=',
+                                  precision=precision)
+
+    def assertVectorFitsExtendedInfo(self, vector, reference, msg=None):
+        r"""Test that raster map has the values obtained by ``v.info`` module.
+
+        This function uses ``-e`` flag of ``v.info`` module to get topology
+        info, so the reference dictionary should contain appropriate set or
+        subset of values (only the provided values are tested).
+
+        The most useful items for testing (considering circumstances of test
+        invocation) are name, title, level and num_dblinks. (When testing
+        storing of ``v.info -e`` metadata, the selection might be different.)
+
+        No precision is applied (no difference is required). So, this function
+        is not suitable for testing items which are floating point number.
+
+        Use keyword arguments syntax for all function parameters.
+        """
+        self.assertModuleKeyValue(module='v.info',
+                                  map=vector, flags='e',
+                                  reference=reference, msg=msg, sep='=',
+                                  precision=0)
 
     def assertVectorFitsUnivar(self, map, column, reference, msg=None,
                                layer=None, type=None, where=None,
@@ -299,6 +395,36 @@ class TestCase(unittest.TestCase):
         if refmax < actual['max']:
             stdmsg = ('The actual maximum ({a}) is greater than the reference'
                       ' one ({r}) for raster map {m}'
+                      ' (with minimum {o})'.format(
+                          a=actual['max'], r=refmax, m=map, o=actual['min']))
+            self.fail(self._formatMessage(msg, stdmsg))
+
+    # TODO: use precision?
+    # TODO: write a test for this method with r.in.ascii
+    # TODO: almost the same as 2D version
+    def assertRaster3dMinMax(self, map, refmin, refmax, msg=None):
+        """Test that 3D raster map minimum and maximum are within limits.
+
+        Map minimum and maximum is tested against expression::
+
+            refmin <= actualmin and refmax >= actualmax
+
+        Use keyword arguments syntax for all function parameters.
+
+        To check that more statistics have certain values use
+        `assertRaster3DFitsUnivar()` or `assertRaster3DFitsInfo()`
+        """
+        stdout = call_module('r3.info', map=map, flags='r')
+        actual = text_to_keyvalue(stdout, sep='=')
+        if refmin > actual['min']:
+            stdmsg = ('The actual minimum ({a}) is smaller than the reference'
+                      ' one ({r}) for 3D raster map {m}'
+                      ' (with maximum {o})'.format(
+                          a=actual['min'], r=refmin, m=map, o=actual['max']))
+            self.fail(self._formatMessage(msg, stdmsg))
+        if refmax < actual['max']:
+            stdmsg = ('The actual maximum ({a}) is greater than the reference'
+                      ' one ({r}) for 3D raster map {m}'
                       ' (with minimum {o})'.format(
                           a=actual['max'], r=refmax, m=map, o=actual['min']))
             self.fail(self._formatMessage(msg, stdmsg))
@@ -387,8 +513,46 @@ class TestCase(unittest.TestCase):
                                                          s=second))
         return diff
 
+    # TODO: name of map generation is repeted three times
+    # TODO: this method is almost the same as the one for 2D
+    def _compute_difference_raster3d(self, first, second, name_part):
+        """Compute difference of two rasters (first - second)
+
+        The name of the new raster is a long name designed to be as unique as
+        possible and contains names of two input rasters.
+
+        :param first: raster to subtract from
+        :param second: raster used as decrement
+        :param name_part: a unique string to be used in the difference name
+
+        :returns: name of a new raster
+        """
+        diff = ('tmp_' + self.id() + '_compute_difference_raster_'
+                + name_part + '_' + first + '_minus_' + second)
+        call_module('r3.mapcalc',
+                    stdin='"{d}" = "{f}" - "{s}"'.format(d=diff,
+                                                         f=first,
+                                                         s=second))
+        return diff
+
+    def _compute_vector_xor(self, ainput, alayer, binput, blayer, name_part):
+        """Compute symmetric difference (xor) of two vectors
+
+        :returns: name of a new vector
+        """
+        diff = ('tmp_' + self.id() + '_compute_difference_vector_'
+                + name_part + '_' + ainput + '_' + alayer
+                + '_minus_' + binput + '_' + blayer)
+        call_module('v.overlay', operator='xor', ainput=ainput, binput=binput,
+                    alayer=alayer, blayer=blayer,
+                    output=diff, atype='area', btype='area', olayer='')
+        # trying to avoid long reports full of categories by olayer=''
+        # olayer   Output layer for new category, ainput and binput
+        #     If 0 or not given, the category is not written
+        return diff
+
     def assertRastersNoDifference(self, actual, reference,
-                                   precision, statistics=None, msg=None):
+                                  precision, statistics=None, msg=None):
         """Test that `actual` raster is not different from `reference` raster
 
         Method behaves in the same way as `assertRasterFitsUnivar()`
@@ -407,14 +571,15 @@ class TestCase(unittest.TestCase):
                                           reference=statistics, msg=msg)
             finally:
                 call_module('g.remove', rast=diff)
-        # general case
-        # TODO: we are using r.info min max and r.univar min max interchangably
-        # but they might be different if region is different from map
-        # not considered as an huge issue since we expect the tested maps
-        # to match with region, however a documentation should containe a notice
-        self.assertRastersDifference(actual=actual, reference=reference,
-                                     statistics=statistics,
-                                     precision=precision, msg=msg)
+        else:
+            # general case
+            # TODO: we are using r.info min max and r.univar min max interchangably
+            # but they might be different if region is different from map
+            # not considered as an huge issue since we expect the tested maps
+            # to match with region, however a documentation should containe a notice
+            self.assertRastersDifference(actual=actual, reference=reference,
+                                         statistics=statistics,
+                                         precision=precision, msg=msg)
 
     def assertRastersDifference(self, actual, reference,
                                 statistics, precision, msg=None):
@@ -432,6 +597,125 @@ class TestCase(unittest.TestCase):
                                         precision=precision, msg=msg)
         finally:
             call_module('g.remove', rast=diff)
+
+    def assertRasters3dNoDifference(self, actual, reference,
+                                    precision, statistics=None, msg=None):
+        """Test that `actual` raster is not different from `reference` raster
+
+        Method behaves in the same way as `assertRasterFitsUnivar()`
+        but works on difference ``reference - actual``.
+        If statistics is not given ``dict(min=-precision, max=precision)``
+        is used.
+        """
+        if statistics is None or sorted(statistics.keys()) == ['max', 'min']:
+            if statistics is None:
+                statistics = dict(min=-precision, max=precision)
+            diff = self._compute_difference_raster3d(reference, actual,
+                                                     'assertRasters3dNoDifference')
+            try:
+                self.assertModuleKeyValue('r3.info', map=diff, flags='r',
+                                          sep='=', precision=precision,
+                                          reference=statistics, msg=msg)
+            finally:
+                call_module('g.remove', rast3d=diff)
+        else:
+            # general case
+            # TODO: we are using r.info min max and r.univar min max interchangably
+            # but they might be different if region is different from map
+            # not considered as an huge issue since we expect the tested maps
+            # to match with region, however a documentation should containe a notice
+            self.assertRasters3dDifference(actual=actual, reference=reference,
+                                           statistics=statistics,
+                                           precision=precision, msg=msg)
+
+    def assertRasters3dDifference(self, actual, reference,
+                                statistics, precision, msg=None):
+        """Test statistical values of difference of reference and actual rasters
+
+        For cases when you are interested in no or minimal difference,
+        use `assertRastersNoDifference()` instead.
+
+        This method should not be used to test r3.mapcalc or r3.univar.
+        """
+        diff = self._compute_difference_raster3d(reference, actual,
+                                                 'assertRasters3dDifference')
+        try:
+            self.assertRaster3dFitsUnivar(raster=diff, reference=statistics,
+                                          precision=precision, msg=msg)
+        finally:
+            call_module('g.remove', rast3d=diff)
+
+    # TODO: this works only in 2D
+    # TODO: write tests
+    def assertVectorIsVectorBuffered(self, actual, reference, precision, msg=None):
+        """
+
+        This method should not be used to test v.buffer, v.overlay or v.select.
+        """
+        # TODO: if msg is None: add info specific to this function
+        layer = '-1'
+        module = SimpleModule('v.info', flags='t', map=reference)
+        self.runModule(module)
+        ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
+        module = SimpleModule('v.info', flags='g', map=reference)
+        self.runModule(module)
+        ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
+        self.assertVectorFitsTopoInfo(vector=actual, reference=ref_topo,
+                                      msg=msg)
+        self.assertVectorFitsRegionInfo(vector=actual, reference=ref_info,
+                                        msg=msg, precision=precision)
+        remove = []
+        buffered = reference + '_buffered'  # TODO: more unique name
+        intersection = reference + '_intersection'  # TODO: more unique name
+        self.runModule('v.buffer', input=reference, layer=layer,
+                       output=buffered, distance=precision)
+        remove.append(buffered)
+        try:
+            self.runModule('v.overlay', operator='and', ainput=actual,
+                           binput=reference,
+                           alayer=layer, blayer=layer,
+                           output=intersection, atype='area', btype='area',
+                           olayer='')
+            remove.append(intersection)
+            self.assertVectorFitsTopoInfo(vector=intersection, reference=ref_topo,
+                                          msg=msg)
+            self.assertVectorFitsRegionInfo(vector=intersection, reference=ref_info,
+                                            msg=msg, precision=precision)
+        finally:
+            call_module('g.remove', vect=remove)
+
+    # TODO: write tests
+    def assertVectorsNoAreaDifference(self, actual, reference, precision,
+                                      layer=1, msg=None):
+        """Test statistical values of difference of reference and actual rasters
+
+        Works only for areas.
+
+        Use keyword arguments syntax for all function parameters.
+
+        This method should not be used to test v.overlay or v.select.
+        """
+        diff = self._compute_xor_vectors(ainput=reference, binput=actual,
+                                         alayer=layer, blayer=layer,
+                                         name_part='assertVectorsNoDifference')
+        try:
+            module = SimpleModule('v.to.db', map=diff,
+                                  flags='pc', separator='=')
+            self.runModule(module)
+            # the output of v.to.db -pc sep== should look like:
+            # ...
+            # 43=98606087.5818323
+            # 44=727592.902311112
+            # total area=2219442027.22035
+            total_area = module.outputs.stdout.splitlines()[-1].split('=')[-1]
+            if total_area > precision:
+                stdmsg = ("Area of difference of vectors <{va}> and <{vr}>"
+                          " should be 0"
+                          " in the given precision ({p}) not {a}").format(
+                    va=actual, vr=reference, p=precision, a=total_area)
+                self.fail(self._formatMessage(msg, stdmsg))
+        finally:
+            call_module('g.remove', vect=diff)
 
     @classmethod
     def runModule(cls, module, **kwargs):
