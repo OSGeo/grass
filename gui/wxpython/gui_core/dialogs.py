@@ -2153,7 +2153,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         for item in data:
             index = self.InsertStringItem(sys.maxint, str(item[0]))
             for i in range(1, len(item)):
-                self.SetStringItem(index, i, "%s" % str(item[i]))
+                self.SetStringItem(index, i, item[i])
         
         # check by default only on one item
         if len(data) == 1:
