@@ -38,6 +38,7 @@ class TestCase(unittest.TestCase):
     longMessage = True  # to get both standard and custom message
     maxDiff = None  # we can afford long diffs
     _temp_region = None  # to control the temporary region
+    html_reports = False  # output additional HTML files with failure details
 
     def __init__(self, methodName):
         super(TestCase, self).__init__(methodName)
@@ -339,6 +340,24 @@ class TestCase(unittest.TestCase):
                                   reference=reference, msg=msg, sep='=',
                                   precision=0)
 
+    def assertVectorInfoEqualsVectorInfo(self, actual, reference, precision,
+                                         msg=None):
+        """Test that two vectors are equal according to ``v.info -tg``.
+
+        This function does not test geometry itself just the region of the
+        vector map and number of features.
+        """
+        module = SimpleModule('v.info', flags='t', map=reference)
+        self.runModule(module)
+        ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
+        module = SimpleModule('v.info', flags='g', map=reference)
+        self.runModule(module)
+        ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
+        self.assertVectorFitsTopoInfo(vector=actual, reference=ref_topo,
+                                      msg=msg)
+        self.assertVectorFitsRegionInfo(vector=actual, reference=ref_info,
+                                        precision=precision, msg=msg)
+
     def assertVectorFitsUnivar(self, map, column, reference, msg=None,
                                layer=None, type=None, where=None,
                                precision=None):
@@ -551,6 +570,38 @@ class TestCase(unittest.TestCase):
         #     If 0 or not given, the category is not written
         return diff
 
+    # TODO: -z and 3D support
+    def _import_ascii_vector(self, filename, name_part):
+        """Import a vector stored in GRASS vector ASCII format.
+
+        :returns: name of a new vector
+        """
+        import hashlib
+        # hash is the easiest way how to get a valied vector name
+        # TODO: introduce some function which will make file valid
+        hasher = hashlib.md5()
+        hasher.update(filename)
+        namehash = hasher.hexdigest()
+        vector = ('tmp_' + self.id().replace('.', '_')
+                  + '_import_ascii_vector_'
+                  + name_part + '_' + namehash)
+        call_module('v.in.ascii', input=filename,
+                    output=vector, format='standard')
+        return vector
+
+    # TODO: -z and 3D support
+    def _export_ascii_vector(self, vector, name_part, digits):
+        """Import a vector stored in GRASS vector ASCII format.
+
+        :returns: name of a new vector
+        """
+        # TODO: perhaps we can afford just simple file name
+        filename = ('tmp_' + self.id() + '_export_ascii_vector_'
+                    + name_part + '_' + vector)
+        call_module('v.out.ascii', input=vector,
+                    output=filename, format='standard', layer='-1', dp=digits)
+        return filename
+
     def assertRastersNoDifference(self, actual, reference,
                                   precision, statistics=None, msg=None):
         """Test that `actual` raster is not different from `reference` raster
@@ -623,7 +674,7 @@ class TestCase(unittest.TestCase):
             # TODO: we are using r.info min max and r.univar min max interchangably
             # but they might be different if region is different from map
             # not considered as an huge issue since we expect the tested maps
-            # to match with region, however a documentation should containe a notice
+            # to match with region, however a documentation should contain a notice
             self.assertRasters3dDifference(actual=actual, reference=reference,
                                            statistics=statistics,
                                            precision=precision, msg=msg)
@@ -654,16 +705,9 @@ class TestCase(unittest.TestCase):
         """
         # TODO: if msg is None: add info specific to this function
         layer = '-1'
-        module = SimpleModule('v.info', flags='t', map=reference)
-        self.runModule(module)
-        ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
-        module = SimpleModule('v.info', flags='g', map=reference)
-        self.runModule(module)
-        ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
-        self.assertVectorFitsTopoInfo(vector=actual, reference=ref_topo,
-                                      msg=msg)
-        self.assertVectorFitsRegionInfo(vector=actual, reference=ref_info,
-                                        msg=msg, precision=precision)
+        self.assertVectorInfoEqualsVectorInfo(actual=actual,
+                                              reference=reference,
+                                              precision=precision, msg=msg)
         remove = []
         buffered = reference + '_buffered'  # TODO: more unique name
         intersection = reference + '_intersection'  # TODO: more unique name
@@ -677,9 +721,20 @@ class TestCase(unittest.TestCase):
                            output=intersection, atype='area', btype='area',
                            olayer='')
             remove.append(intersection)
-            self.assertVectorFitsTopoInfo(vector=intersection, reference=ref_topo,
+            # TODO: this would use some refactoring
+            # perhaps different functions or more low level functions would
+            # be more appropriate
+            module = SimpleModule('v.info', flags='t', map=reference)
+            self.runModule(module)
+            ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
+            self.assertVectorFitsTopoInfo(vector=intersection,
+                                          reference=ref_topo,
                                           msg=msg)
-            self.assertVectorFitsRegionInfo(vector=intersection, reference=ref_info,
+            module = SimpleModule('v.info', flags='g', map=reference)
+            self.runModule(module)
+            ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
+            self.assertVectorFitsRegionInfo(vector=intersection,
+                                            reference=ref_info,
                                             msg=msg, precision=precision)
         finally:
             call_module('g.remove', vect=remove)
@@ -716,6 +771,144 @@ class TestCase(unittest.TestCase):
                 self.fail(self._formatMessage(msg, stdmsg))
         finally:
             call_module('g.remove', vect=diff)
+
+    # TODO: here we have to have significant digits which is not consistent
+    # TODO: documentation for all new asserts
+    # TODO: same can be created for raster and 3D raster
+    def assertVectorEqualsVector(self, actual, reference, digits, precision, msg=None):
+        """Test that two vectors are equal.
+
+        .. note:
+            This test should not be used to test ``v.in.ascii`` and
+            ``v.out.ascii`` modules.
+
+        .. warning:
+            ASCII files for vectors are loaded into memory, so this
+            function works well only for "not too big" vector maps.
+        """
+        # both vectors to ascii
+        # text diff of two ascii files
+        # may also do other comparisons on vectors themselves (asserts)
+        self.assertVectorInfoEqualsVectorInfo(actual=actual, reference=reference, precision=precision, msg=msg)
+        factual = self._export_ascii_vector(vector=actual,
+                                            name_part='assertVectorEqualsVector_actual',
+                                            digits=digits)
+        freference = self._export_ascii_vector(vector=reference,
+                                               name_part='assertVectorEqualsVector_reference',
+                                               digits=digits)
+        self.assertVectorAsciiEqualsVectorAscii(actual=factual,
+                                                reference=freference,
+                                                remove_files=True,
+                                                msg=msg)
+
+    def assertVectorEqualsAscii(self, actual, reference, digits, precision, msg=None):
+        """Test that vector is equal to the vector stored in GRASS ASCII file.
+
+        .. note:
+            This test should not be used to test ``v.in.ascii`` and
+            ``v.out.ascii`` modules.
+
+        .. warning:
+            ASCII files for vectors are loaded into memory, so this
+            function works well only for "not too big" vector maps.
+        """
+        # vector to ascii
+        # text diff of two ascii files
+        # it may actually import the file and do other asserts
+        factual = self._export_ascii_vector(vector=actual,
+                                            name_part='assertVectorEqualsAscii_actual',
+                                            digits=digits)
+        vreference = None
+        try:
+            vreference = self._import_ascii_vector(filename=reference,
+                                               name_part='assertVectorEqualsAscii_reference')
+            self.assertVectorInfoEqualsVectorInfo(actual=actual,
+                                                  reference=vreference,
+                                                  precision=precision, msg=msg)
+            self.assertVectorAsciiEqualsVectorAscii(actual=factual,
+                                                    reference=reference,
+                                                    remove_files=False,
+                                                    msg=msg)
+        finally:
+            # TODO: manage using cleanup settings
+            # we rely on fail method to either raise or return (soon)
+            os.remove(factual)
+            if vreference:
+                self.runModule('g.remove', vect=vreference)
+
+    # TODO: we expect v.out.ascii to give the same order all the time, is that OK?
+    def assertVectorAsciiEqualsVectorAscii(self, actual, reference,
+                                           remove_files=False, msg=None):
+        """Test that two GRASS ASCII vector files are equal.
+
+        .. note:
+            This test should not be used to test ``v.in.ascii`` and
+            ``v.out.ascii`` modules.
+
+        .. warning:
+            ASCII files for vectors are loaded into memory, so this
+            function works well only for "not too big" vector maps.
+        """
+        import difflib
+        # 'U' taken from difflib documentation
+        fromlines = open(actual, 'U').readlines()
+        tolines = open(reference, 'U').readlines()
+        context_lines = 3  # number of context lines
+        # TODO: filenames are set to "actual" and "reference", isn't it too general?
+        # it is even more useful if map names or file names are some generated
+        # with hash or some other unreadable things
+        # other styles of diffs are available too
+        # but unified is a good choice if you are used to svn or git
+        # workaround for missing -h (do not print header) flag in v.out.ascii
+        num_lines_of_header = 10
+        diff = difflib.unified_diff(fromlines[num_lines_of_header:],
+                                    tolines[num_lines_of_header:],
+                                    'reference', 'actual', n=context_lines)
+        # TODO: this should be solved according to cleanup policy
+        # but the parameter should be kept if it is an existing file
+        # or using this method by itself
+        if remove_files:
+            os.remove(actual)
+            os.remove(reference)
+        stdmsg = ("There is a difference between vectors when compared as"
+                  " ASCII files.\n")
+        import StringIO
+
+        output = StringIO.StringIO()
+        # TODO: there is a diff size constant which we can use
+        # we are setting it unlimited but we can just set it large
+        maxlines = 100
+        i = 0
+        for line in diff:
+            if i >= maxlines:
+                break
+            output.write(line)
+            i += 1
+        stdmsg += output.getvalue()
+        output.close()
+        # it seems that there is not better way of asking whether there was
+        # a difference (always a iterator object is returned)
+        if i > 0:
+            # do HTML diff only if there is not too many lines
+            # TODO: this might be tough to do with some more sophisticated way of reports
+            if self.html_reports and i < maxlines:
+                # TODO: this might be here and somehow stored as file or done in reporter again if right information is stored
+                # i.e., files not deleted or the whole strings passed
+                # alternative is make_table() which is the same but creates just a table not a whole document
+                # TODO: all HTML files might be collected by the main reporter
+                # TODO: standardize the format of name of HTML file
+                # for one test id there is only one possible file of this name
+                htmldiff_file_name = self.id() + '_ascii_diff' + '.html'
+                htmldiff = difflib.HtmlDiff().make_file(fromlines, tolines,
+                                                        'reference', 'actual',
+                                                        context=True,
+                                                        numlines=context_lines)
+                htmldiff_file = open(htmldiff_file_name, 'w')
+                for line in htmldiff:
+                    htmldiff_file.write(line)
+                htmldiff_file.close()
+
+            self.fail(self._formatMessage(msg, stdmsg))
 
     @classmethod
     def runModule(cls, module, **kwargs):
