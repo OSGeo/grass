@@ -744,24 +744,11 @@ def load_env():
         return
 
     for line in readfile(grass_env_file).split(os.linesep):
-        if not line.lower().startswith('export'):
-            continue
-        
         try:
             k, v = map(lambda x: x.strip(), line.strip().split(' ', 1)[1].split('=', 1))
         except:
             continue
-        
-        evalue = os.getenv(k)
-        if evalue:
-            if k == 'GRASS_ADDON_PATH':
-                os.environ[k] = evalue + os.pathsep + v
-            else:
-                warning(_("Environmental variable '%s' already set, ignoring value '%s'") % \
-                            (k, v))
-        else:
-            os.environ[k] = v
-    
+        os.environ[k] = v
     # Allow for mixed ISIS-GRASS Environment
     if os.getenv('ISISROOT'):
         isis = os.getenv('ISISROOT')
@@ -1142,30 +1129,12 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
                                     _("Raster MASK present"),
                                     _("3D raster MASK present")))
 
-    # read environmental variables from GRASS 6 (left for backward
-    # compatibility)
-    path = os.path.join(userhome, ".grass.bashrc")
+    # read environmental variables
+    path = os.path.join(userhome, ".grass.bashrc") # left for backward compatibility
     if os.access(path, os.R_OK):
         f.write(readfile(path) + '\n')
-    
-    # write GRASS environmental variables to $LOCATION/.bashrc
-    for env in os.environ.keys():
-        if env.startswith('GRASS'):
-            val = os.environ[env]
-            if ' ' in val:
-                val = '"%s"' % val
-            f.write('export %s=%s\n' % (env, val))
-    
-    # write aliases and custom settings from grass_env_file to
-    # $LOCATION/.bashrc
     if os.access(grass_env_file, os.R_OK):
-        for line in readfile(grass_env_file).split(os.linesep):
-            if line.lower().startswith('export'):
-                continue
-            f.write(line + '\n')
-    ### Replaced by code above (do not override already set up environment variables)
-    ###    if os.access(grass_env_file, os.R_OK):
-    ###        f.write(readfile(grass_env_file) + '\n')
+        f.write(readfile(grass_env_file) + '\n')
 
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
