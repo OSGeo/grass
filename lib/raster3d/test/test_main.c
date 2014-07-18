@@ -103,6 +103,8 @@ int main(int argc, char *argv[]) {
     module = G_define_module();
     module->description
             = "Performs unit and integration tests for the raster3d library";
+    G_add_keyword(_("test"));
+
 
     /* Get parameters from user */
     set_params();
