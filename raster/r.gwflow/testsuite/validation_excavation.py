@@ -8,7 +8,6 @@ year = "1995"
 @author Soeren Gebbert
 """
 
-import grass.script as grass
 from grass.gunittest.case import TestCase
 
 class ValidationExcavation(TestCase):
@@ -16,17 +15,17 @@ class ValidationExcavation(TestCase):
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
-        grass.use_temp_region()
+        cls.use_temp_region()
         cls.runModule("g.region", flags="p",  res=50, n=950, s=0, w=0, e=2000)
 
     @classmethod
     def tearDownClass(cls):
         """!Remove the temporary region
         """
-        grass.del_temp_region()
+        cls.del_temp_region()
 
     def setUp(self):
-        """Set region and create input data for steady state groundwater flow computation
+        """Create input data for steady state groundwater flow computation
         """
         self.runModule("r.mapcalc", expression="phead= if(row() == 19, 5, 3)")
         self.runModule("r.mapcalc", expression="status=if((col() == 1 && row() == 13) ||\
