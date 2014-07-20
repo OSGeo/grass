@@ -3,7 +3,7 @@
      by M. Neteler 5/2004, 8/2005
   -->
 
-<i>TODO: Update for this page for GRASS 7.</i>
+<i>TODO: Update for this page for GRASS 7, most of the function names have been changed from camel case to gnu underscore style.</i>
 
 \tableofcontents
 
@@ -11,9 +11,16 @@
 
 The 3D Raster Volume Library is used for the <tt>r3.*</tt> and vector
 volume tools. The library uses a tile cache based approach to store
-floating point values in abritrary order in a volume. The coordinate
+floating point values in arbitrary order in a volume. The coordinate
 system of a volume is column and row compatible to the raster library
 and counts from the bottom to the top of the cube.
+<P>
+Random reading and writing is supported until are tiles are flushed to the disk.
+In case the tiles are written to the disk, random reading is still supported.
+<P>
+The size of the tile cache in memory can be set in bytes using the environmental variable  RASTER3D_MAX_CACHE_SIZE.
+Default size is 16777216 bytes.The number of tiles hold in memory can be specified with the environmental variable
+RASTER3D_DEFAULT_CACHE_SIZE. Default is 1000.
 
 \image html "r3_volume_layout.png" "The volume coordinate system and tile layout of the 3D Raster Library"
 
@@ -29,7 +36,7 @@ directory for every map. The elements for each map are
         color file (color)
         categories file (cats)
         range file (range)
-        timestamp file /* not yet implemented */
+        timestamp file
         cell file (cell)
         header file (cellhd)
         a directory containing display files (dsp)
@@ -41,7 +48,7 @@ are stored in <EM>grid3/colr2/MAPSET/MAP</EM>.
 
 <P>
 Note: color, categories, and the range can be used in the same way as in <EM>2d</EM> 
-GRASS with the exception of reading and writng. <EM>3d</EM> read and write
+GRASS with the exception of reading and writing. <EM>3d</EM> read and write
 functions have to be used for this purpose.
 
 
@@ -100,6 +107,11 @@ additional bit if the precision is smaller.
 
 \section Tile_Data_Compression Tile Data Compression
 
+NOTE: RLE compression was removed because of error-prone implementation.
+De-compression is still available for backward compatibility.
+
+Default compression is now zip.
+
 <P>
 There are three methods of compression provided. The compression
 methods can either be those defined by default, set by environment
@@ -107,7 +119,7 @@ variables or explicitly set at run-time.
 
 \verbatim 
         Precision
-        RLE
+        zlib
 \endverbatim
 
 <P>
@@ -117,13 +129,7 @@ between 0 and 52 for doubles. Choosing a small precision is the most
 effective way to achieve good compression.
 
 <P>
-RLE takes advantage of possible repetitions of the
-exponents and the NULL-bit structure. Using RLE does not significantly
-increase the running time. If for some tile the non-RLEed version is
-smaller in size, RLE is not used for this tile.
-
-<P>
-The default and suggested setting is to use precision and RLE. 
+The default and suggested setting is to use precision and zlib.
 
 <P>
 Additional compression is achieved by storing the extra NULL-bit in a
@@ -159,13 +165,13 @@ In cache mode the application can access cell-values directly by their
 coordinates. The corresponding functions are
 
 <P>
-int Rast3d_getValue() 
+int Rast3d_get_value()
 
 <P>
 and
 
 <P>
-int Rast3d_putValue() 
+int Rast3d_put_value()
 
 <P>
 and their corresponding typed versions.
@@ -177,7 +183,7 @@ Tiles are written (flushed) to the data-file either at closing time or if
 explicitly requested.
 <BR>
 <P>
-If the map is new <TT>Rast3d_getValue()</TT> can be used even if the tile which
+If the map is new <TT>Rast3d_get_value()</TT> can be used even if the tile which
 contains the cell has already been flushed to the data file. In this case the
 tile is simply read back into the memory-cache from the data file.
 <BR>
@@ -196,7 +202,7 @@ possible problems arising from mixing different precisions.
 <P>
 As an example consider the case where the data is stored in the file with double
 precision and the tiles are stored in memory in single precision.  Then using
-<TT>Rast3d_getValue()</TT> will actually return a double precision number whose precision
+<TT>Rast3d_get_value()</TT> will actually return a double precision number whose precision
 is only 23 bits.  It is therefore a good idea to use the types in the memory
 consistently.
 <BR>
@@ -302,12 +308,12 @@ typedef struct{
     double east, west;
     double top, bottom;
   
-    int rows, cols, depths;/* data dimensions in cells */
+    int rows, cols, depths; // data dimensions in cells
 
     double ns_res, ew_res, tb_res;
 
-    int proj;  /* Projection (see gis.h) */
-    int zone;  /* Projection zone (see gis.h) */
+    int proj;  // Projection (see gis.h)
+    int zone;  // Projection zone (see gis.h)
 
 } RASTER3D_Region;
 \endverbatim
@@ -389,7 +395,7 @@ of disk space and the access time for the mask.
 \section Include_File Include File
 
 <P>
-Exported RASTER3D constants and structures can be found in <EM>G3d.h</EM>.
+Exported RASTER3D constants and structures can be found in <EM>raster3d.h</EM>.
 
 <P>
 
@@ -478,6 +484,9 @@ Section 22.3.2.3 ) and Rast3d_getCompressionMode() (cf. Section 22.3.2.3 ).
 <P>
 
 \subsection Toggling_RLE_compression Toggling RLE compression
+NOTE: RLE compression is not used any longer, the RLE code is still present to assure backward compatibility.
+G_zlib_write() and G_zlib_read() are used for compression now.
+
 
 <P>
 This value specifies whether RLE compression should be used (in addition to
@@ -612,15 +621,15 @@ No environment variable.
 <P>
 \verbatim
 void Rast3d_set_unit (map, unit)
-        RASTER3d_Map; /* the map */
-        char *unit; /* The data unit description */ 
+        RASTER3d_Map; // the map
+        char *unit; // The data unit description
 
 void Rast3d_set_vertical_unit (map, unit)
-        RASTER3d_Map; /* the map */
-        char *unit;  /* Use the standard from units.c in lib/gis */
+        RASTER3d_Map; // the map
+        char *unit;  // Use the standard from units.c in lib/gis
 void Rast3d_set_vertical_unit2 (map, unit)
-        RASTER3d_Map; /* the map */
-        int unit; /* defined in gis.h */
+        RASTER3d_Map; // the map
+        int unit; // defined in gis.h
 \endverbatim
 
 \section Error_Handling Error Handling: Setting the error function
@@ -738,6 +747,24 @@ int Rast3d_closeCell(void *map)Closes g3d-file. If <EM>map</EM> is new
 
 <P>
 Returns 1 ... if successful, 0 ...  otherwise.
+
+<P>
+void *Rast3d_open_new_opt_tile_size(const char *name, int cache, RASTER3D_Region * region, int type, int maxSize)
+
+Opens new g3d-file with <em>name</em> in the current mapset. This method tries to compute
+optimal tile size based on the number of rows, cols and depths and the maximum allowed tile size in KB.
+Tiles are stored in memory using RASTER3D_TILE_SAME_AS_FILE method. <em>cache</em> specifies the
+cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
+RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
+RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
+RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cache_size_encode ()</tt>
+(cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
+specifies the number of tiles buffered in the cache.  <em>region</em> specifies
+the 3d region.
+The map is created using the <em>type</em> which must be of FCELL_TYPE or DCELL_TYPE.
+<P>
+Returns a pointer to the cell structure ... if successful,
+NULL ... otherwise.
 
 <P>
 
@@ -960,7 +987,7 @@ int Rast3d_flushTile(void *map, int tileIndex) Writes the tile with
 
 <P>
 If this tile has already been written before the write request is ignored.
-  If the tile was never referred to before the invokation of Rast3d_flushTile, a
+  If the tile was never referred to before the invocation of Rast3d_flushTile, a
   tile filled with NULL-values is written.
 
 <P>
