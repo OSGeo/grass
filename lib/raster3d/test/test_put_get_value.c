@@ -37,8 +37,8 @@ int unit_test_put_get_value()
 
     G_message("\n++ Running raster3d put/get value unit tests ++");
 
-    //sum += test_put_get_value_dcell();
-    //sum += test_put_get_value_fcell();
+    sum += test_put_get_value_dcell();
+    sum += test_put_get_value_fcell();
     sum += test_put_get_value_resampling();
 
 
@@ -107,6 +107,15 @@ int test_put_get_value_dcell(void)
     for(z = 0; z < region.depths; z++) {
         for(y = 0; y < region.rows; y++) { /* From the north to the south */
             for(x = 0; x < region.cols; x++) {
+                value = -1;
+                Rast3d_put_value(map, x, y, z, &value, DCELL_TYPE);
+            }
+        }
+    }
+
+    for(z = 0; z < region.depths; z++) {
+        for(y = 0; y < region.rows; y++) { /* From the north to the south */
+            for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
                 Rast3d_put_value(map, x, y, z, &value, DCELL_TYPE);
@@ -114,19 +123,14 @@ int test_put_get_value_dcell(void)
         }
     }
 
-    /* Write everything to the disk */
-    Rast3d_flush_all_tiles(map);
-    Rast3d_close(map);
 
-    map = Rast3d_open_cell_old("test_put_get_value_dcell", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
-
-    /* Reread the map and compare the expected results */
+    /* Reread the new open map and compare the expected results */
 
     G_message("Get the value of the upper left corner -> 0");
 
 
     col = row = depth = 0;
-    north = region.north - 0.1; /* north would be out of bounds therefor -0.1 */
+    north = region.north - region.ns_res * row;
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
 
@@ -152,6 +156,13 @@ int test_put_get_value_dcell(void)
     top = region.bottom + region.tb_res * depth;
 
     sum += test_resampling_dcell(map, north, east, top, col, row, depth, 1);
+
+
+    /* Write everything to the disk and reopen the map */
+    Rast3d_flush_all_tiles(map);
+    Rast3d_close(map);
+    map = Rast3d_open_cell_old("test_put_get_value_dcell", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+
 
     G_message("Get the value of x == 9 y == 14 z == 4 -> x + y + z = 27");
 

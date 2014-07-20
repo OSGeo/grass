@@ -42,14 +42,6 @@ void set_params(void) {
     param.unit->options = "coord,putget,large";
     param.unit->description = "Choose the unit tests to run";
 
-/* No integration test for now
-    param.integration = G_define_option();
-    param.integration->key = "integration";
-    param.integration->type = TYPE_STRING;
-    param.integration->required = NO;
-    param.integration->options = "";
-    param.integration->description = "Choose the integration tests to run";
-*/
     param.depths = G_define_option();
     param.depths->key = "depths";
     param.depths->type = TYPE_INTEGER;
@@ -103,6 +95,7 @@ int main(int argc, char *argv[]) {
     module = G_define_module();
     module->description
             = "Performs unit and integration tests for the raster3d library";
+    G_add_keyword(_("raster3d"));
     G_add_keyword(_("test"));
 
 

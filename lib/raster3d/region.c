@@ -1,10 +1,9 @@
 #include <stdio.h>
+#include <math.h>
 
-#include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/raster3d.h>
-
 #include "raster3d_intern.h"
+
 
 /*---------------------------------------------------------------------------*/
 
@@ -254,7 +253,7 @@ Rast3d_read_region_map(const char *name, const char *mapset, RASTER3D_Region * r
  *  Returns 1 if region-coordinates <em>(north, east, top)</em> are
  * inside the region of <em>map</em>. Returns 0 otherwise.
  *
- *  \param REgion
+ *  \param region
  *  \param north
  *  \param east
  *  \param top
@@ -277,7 +276,7 @@ int Rast3d_is_valid_location(RASTER3D_Region *region, double north, double east,
  *  Converts region-coordinates <em>(north, east,
  *  top)</em> into cell-coordinates <em>(x, y, z)</em>.
  *
- *  \param map
+ *  \param region
  *  \param north
  *  \param east
  *  \param top
@@ -292,12 +291,11 @@ Rast3d_location2coord(RASTER3D_Region *region, double north, double east, double
            int *x, int *y, int *z)
 {
     double col, row, depth;
+    LOCATION_TO_COORD(region, north, east, top, &col, &row, &depth);
 
-    Rast3d_location2coord_double(region, north, east, top, &col, &row, &depth);
-
-    *x = (int)col;
-    *y = (int)row;
-    *z = (int)depth;
+    *x = (int)floor(col);
+    *y = (int)floor(row);
+    *z = (int)floor(depth);
 }
 
 /*!
@@ -309,7 +307,7 @@ Rast3d_location2coord(RASTER3D_Region *region, double north, double east, double
  * <b>Note:</b> The results are <i>double</i> numbers. Casting them to
  * <i>int</i> will give the column, row and depth number.
  *
- *  \param map
+ *  \param region
  *  \param north
  *  \param east
  *  \param top
@@ -323,11 +321,7 @@ void
 Rast3d_location2coord_double(RASTER3D_Region *region, double north, double east, double top,
            double *x, double *y, double *z)
 {
-    double row;
-
-    *x = (east - region->west) / (region->ew_res);
-    *y = (region->north - north) / (region->ns_res);
-    *z = (top - region->bottom) / (region->tb_res);
+    LOCATION_TO_COORD(region, north, east, top, x, y, z);
 
     G_debug(4, "Rast3d_location2coord_double x %f y %f z %f\n", *x, *y, *z);
 }
@@ -339,7 +333,7 @@ Rast3d_location2coord_double(RASTER3D_Region *region, double north, double east,
  *  top)</em> into cell-coordinates <em>(x, y, z)</em>.
  *  This function calls Rast3d_fatal_error in case location is not in window.
  *
- *  \param map
+ *  \param region
  *  \param north
  *  \param east
  *  \param top
@@ -356,7 +350,12 @@ Rast3d_location2coord2(RASTER3D_Region *region, double north, double east, doubl
     if (!Rast3d_is_valid_location(region, north, east, top))
     Rast3d_fatal_error("Rast3d_location2coord2: location not in region");
 
-    Rast3d_location2coord(region, north, east, top, x, y, z);
+    double col, row, depth;
+    LOCATION_TO_COORD(region, north, east, top, &col, &row, &depth);
+
+    *x = (int)floor(col);
+    *y = (int)floor(row);
+    *z = (int)floor(depth);
 }
 
 /*!
@@ -379,8 +378,7 @@ Rast3d_location2coord2(RASTER3D_Region *region, double north, double east, doubl
  *  - z+1.0 will return the top for the upper edge of the column.
  *
 *
- *
- *  \param map
+ *  \param region
  *  \param x
  *  \param y
  *  \param z
@@ -393,9 +391,7 @@ Rast3d_location2coord2(RASTER3D_Region *region, double north, double east, doubl
 void
 Rast3d_coord2location(RASTER3D_Region * region, double x, double y, double z, double *north, double *east, double *top)
 {
-    *north = region->north - y * region->ns_res;
-    *east = region->west + x * region->ew_res;
-    *top = region->bottom + z * region->tb_res;
+    COORD_TO_LOCATION(region, x, y, z, north, east, top);
 
     G_debug(4, "Rast3d_coord2location north %g east %g top %g\n", *north, *east, *top);
 }
