@@ -1,3 +1,6 @@
+#ifndef RASTER3D_INTERN_H
+#define RASTER3D_INTERN_H
+
 #include <grass/raster3d.h>
 #include <grass/gis.h>
 
@@ -77,3 +80,43 @@ extern void Rast3d_fatal_error_noargs(const char * /* msg */ );
 #define RASTER3D_REGION_EWRES "e-w resol"
 #define RASTER3D_REGION_NSRES "n-s resol"
 #define RASTER3D_REGION_TBRES "t-b resol"
+
+/* Coordinates to index conversion will return double.
+ * Use floor() and integer casting to receive col,row and depth
+ *
+ * double cold = EASTERN_TO_COL(east, region)
+ * int col = (int)floor(cold)
+ *
+ */
+#define EASTERN_TO_COL(east, region) (east - region->west) / (region->ew_res);
+#define NORTHERN_TO_ROW(north, region) (region->north - north) / (region->ns_res);
+#define TOP_TO_DEPTH(top, region) (top - region->bottom) / (region->tb_res);
+/* Location coordinates to index coordinates
+ * region is a pointer to the RASTER3D_Region structure
+ * north, east and top are double values
+ * x, y, and z are pointer to double values
+ */
+#define LOCATION_TO_COORD(region, north, east, top, x, y, z) \
+    { \
+        *x = EASTERN_TO_COL(east, region) \
+        *y = NORTHERN_TO_ROW(north, region) \
+        *z = TOP_TO_DEPTH(top, region) \
+    }
+
+/* Row to north, col to east and depth to top macros
+ * region is a pointer to the RASTER3D_Region structure
+ * north, east and top are pointer to double values,
+ * x, y and z are double values
+ */
+#define COL_TO_EASTERN(region, x)  region->west + x * region->ew_res;
+#define ROW_TO_NORTHERN(region, y) region->north - y * region->ns_res;
+#define DEPTH_TO_TOP(region, z)    region->bottom + z * region->tb_res;
+#define COORD_TO_LOCATION(region, x, y, z, north, east, top) \
+    { \
+        *east  = COL_TO_EASTERN(region, x) \
+        *north = ROW_TO_NORTHERN(region, y) \
+        *top   = DEPTH_TO_TOP(region, z) \
+    }
+
+
+#endif
