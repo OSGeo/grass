@@ -77,7 +77,7 @@ RASTER3D_Region *Rast3d_window_ptr()
 /*!
  * \brief 
  *
- *  Returns 1 if window-coordinates <em>(north, west, bottom)</em> are
+ *  Returns 1 if window-coordinates <em>(north, east and top)</em> are
  * inside the window of <em>map</em>. Returns 0 otherwise.
  *
  *  \param map
