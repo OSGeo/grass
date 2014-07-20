@@ -1,10 +1,4 @@
-"""Test to verify r.gwflow calculation, this calculation is based on
-the example at page 133 of the following book:
-author = "Kinzelbach, W. and Rausch, R.",
-title = "Grundwassermodellierung",
-publisher = "Gebr{\"u}der Borntraeger (Berlin, Stuttgart)",
-year = "1995"
-
+"""Test of r.series.interp
 @author Soeren Gebbert
 """
 from grass.gunittest.case import TestCase
@@ -44,15 +38,15 @@ class InterpolationTest(TestCase):
         
     def test_infile(self):
         self.assertModule("r.series.interp", input="prec_1,prec_5",  datapos=(0.0,1.0),  
-            outfile="outfile_1.txt",  method="linear")
+            outfile="data/outfile_1.txt",  method="linear")
         
         self.assertRasterMinMax(map="prec_2",  refmin=200,  refmax=200)
         self.assertRasterMinMax(map="prec_3",  refmin=300,  refmax=300)
         self.assertRasterMinMax(map="prec_4",  refmin=400,  refmax=400)
 
     def test_inoutfiles(self):
-        self.assertModule("r.series.interp", infile="infile_2.txt",  
-            outfile="outfile_2.txt",  method="linear")
+        self.assertModule("r.series.interp", infile="data/infile_2.txt",  
+            outfile="data/outfile_2.txt",  method="linear")
 
         self.assertRasterMinMax(map="map_12",  refmin=12,  refmax=12)
         self.assertRasterMinMax(map="map_14",  refmin=14,  refmax=14)
