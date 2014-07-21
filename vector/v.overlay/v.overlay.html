@@ -79,7 +79,35 @@ connect the copied tables to the output map.-->
 
 <h2>EXAMPLES</h2>
 
-<h3>Polygons overlaid with ploygons</h3>
+<h3>Overlay operations: AND, OR, NOT, XOR</h3>
+
+Examples based on North Carolina sample dataset:
+
+<div class="code"><pre>
+# creation of simple dataset
+v.extract input=zipcodes_wake output=poly1 where="cat = 42"
+v.extract input=urbanarea output=poly2 where="cat = 55"
+
+v.overlay ainput=poly1 binput=poly2 operator=and output=poly_1_2_and
+v.overlay ainput=poly1 binput=poly2 operator=or  output=poly_1_2_or
+v.overlay ainput=poly1 binput=poly2 operator=not output=poly_1_2_not
+v.overlay ainput=poly1 binput=poly2 operator=xor output=poly_1_2_xor
+</pre></div>
+
+<center>
+<img src="v_overlay_poly_1_2.png" alt="GRASS v.overlay: input polygons (1 and 2)" border=0>
+<br>
+<i>v.overlay operations: original input polygons</i>
+</center>
+<p>
+<center>
+<img src="v_overlay_poly_1_2_a_o_n_x.png" alt="GRASS v.overlay results: AND, OR, NOT, XOR operations" border=0>
+<br>
+<i>v.overlay results of AND, OR, NOT, XOR operations</i>
+</center>
+
+
+<h3>Polygons overlaid with polygons</h3>
 <div class="code"><pre>
 v.overlay ainput=lake binput=province output=lakeXprovince operator=or
 </pre></div>
