@@ -49,8 +49,8 @@ class RLIWizard(object):
     def __init__(self, parent):
         self.parent = parent
         self.wizard = wiz.Wizard(parent=parent, id=wx.ID_ANY,
-                                 title=_("Create new configuration file for " \
-                                 "r.li modules"))
+                                 title=_("Create new configuration file for "
+                                         "r.li modules"))
         self.rlipath = retRLiPath()
 
         self.msAreaList = []
@@ -113,7 +113,7 @@ class RLIWizard(object):
         #run_wizard
         if self.wizard.RunWizard(self.startpage):
             dlg = wx.MessageDialog(parent=self.parent,
-                                message=_("Do you want to create r.li " \
+                                message=_("Do you want to create r.li "
                                           "configuration file <%s>?") % self.startpage.conf_name,
                                 caption=_("Create new r.li configuration file?"),
                                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
@@ -128,7 +128,7 @@ class RLIWizard(object):
             self.wizard.Destroy()
             GMessage(parent=self.parent,
                      message=_("r.li.setup wizard canceled. "
-                                "Configuration file not created."))
+                               "Configuration file not created."))
             self._cleanup()
 
     def _write_confile(self):
@@ -183,14 +183,14 @@ class RLIWizard(object):
             self.per_rl = float(self.SF_RL) / float(self.rasterinfo['rows'])
             self.per_cl = float(self.SF_CL) / float(self.rasterinfo['cols'])
             fil.write("SAMPLINGFRAME %r|%r|%r|%r\n" % (self.per_x, self.per_y,
-                                                       self.per_rl, self.per_cl))
+                                                       self.per_rl,
+                                                       self.per_cl))
         elif self.startpage.region == 'draw':
             self._temp_region()
             tregion = self.drawsampleframepage.tregion
             # should we call this? with align param?
-            RunCommand('g.region', align=self.startpage.rast,
-                            n=tregion['n'], s=tregion['s'],
-                            w=tregion['w'], e=tregion['e'])
+            RunCommand('g.region', align=self.startpage.rast, n=tregion['n'],
+                       s=tregion['s'], w=tregion['w'], e=tregion['e'])
             newreg = grass.region()
             self.SF_N = newreg['n']  # set env(SF_N) $n
             self.SF_S = newreg['s']  # set env(SF_S) $s
@@ -198,9 +198,9 @@ class RLIWizard(object):
             self.SF_W = newreg['w']  # set env(SF_W) $w
 
             self.SF_Y = abs(round(self.gregion['n'] - newreg['n']) / newreg['nsres'])
-#		 set env(SF_Y) [expr abs(round(($s_n - $n) / $nres)) ] 
+#		 set env(SF_Y) [expr abs(round(($s_n - $n) / $nres)) ]
             self.SF_X = abs(round(self.gregion['w'] - newreg['w']) / newreg['ewres'])
-#		 set env(SF_X) [expr abs(round(($s_w - $w) / $sres)) ] 
+#		 set env(SF_X) [expr abs(round(($s_w - $w) / $sres)) ]
             self.SF_RL = abs(round(newreg['n'] - newreg['s']) / newreg['nsres'])
 #		 set env(SF_RL) [expr abs(round(($n - $s) / $nres)) ]
             self.SF_CL = abs(round(newreg['e'] - newreg['w']) / newreg['ewres'])
@@ -339,7 +339,7 @@ class RLIWizard(object):
                 fil.write("SYSTEMATICCONTIGUOUS\n")
             elif self.units.distrtype == 'stratified_random':
                 fil.write("STRATIFIEDRANDOM %s|%s\n" % (self.units.distr1,
-                                                      self.units.distr2))
+                                                        self.units.distr2))
             elif self.units.distrtype == 'systematic_noncontiguos':
                 fil.write("SYSTEMATICNONCONTIGUOUS %s\n" % self.units.distr1)
             elif self.units.distrtype == 'centered_oversites':
@@ -363,7 +363,7 @@ class RLIWizard(object):
                 if self.samplingareapage.samplingtype == SamplingType.MUNITSC:
                     tregion = tregion.region
                 abs_y = abs(round((float(s_n) - tregion['n']) / tregion['nsres']))
-                abs_x = abs(round((float(s_w) - tregion['w']) / tregion['ewres'])) 
+                abs_x = abs(round((float(s_w) - tregion['w']) / tregion['ewres']))
                 abs_rl = abs(round((tregion['n'] - tregion['s']) / tregion['nsres']))
                 abs_cl = abs(round((tregion['e'] - tregion['w']) / tregion['ewres']))
 
@@ -437,55 +437,56 @@ class FirstPage(TitledPage):
 
         #name of output configuration file
         self.newconflabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                        label=_('Name for new configuration file to create'))
+                                          label=_('Name for new configuration file to create'))
 
         self.newconftxt = wx.TextCtrl(parent=self, id=wx.ID_ANY,
                                       size=(250, -1))
         wx.CallAfter(self.newconftxt.SetFocus)
 
         self.sizer.Add(item=self.newconflabel, border=5, pos=(0, 0),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.newconftxt, border=5, pos=(0, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         #raster
         self.mapsellabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                        label=_('Raster map to use to select areas'))
+                                         label=_('Raster map to use to select areas'))
         self.mapselect = gselect.Select(parent=self, id=wx.ID_ANY,
                                         size=(250, -1), type='cell',
                                         multiple=False)
         self.sizer.Add(item=self.mapsellabel, border=5, pos=(1, 0),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.mapselect, border=5, pos=(1, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         #vector
         self.vectsellabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                        label=_('Vector map to use to select areas'))
+                                          label=_('Vector map to use to select areas'))
         self.vectselect = gselect.Select(parent=self, id=wx.ID_ANY,
                                          size=(250, -1), type='vector',
                                          multiple=False)
         self.sizer.Add(item=self.vectsellabel, border=5, pos=(2, 0),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.vectselect, border=5, pos=(2, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         #define sampling region
         self.sampling_reg = wx.RadioBox(parent=self, id=wx.ID_ANY,
-                                      label=" %s " % _("Define sampling " \
-                                      " region (region for analysis)"),
-                                      choices=[_('Whole map layer'),
-                                               _('Keyboard setting'),
-                                               _('Draw the sampling frame')],
-                                      majorDimension=1,
-                                      style=wx.RA_SPECIFY_ROWS)
+                                        label=" %s " % _("Define sampling "
+                                                         "region (region for analysis)"),
+                                        choices=[_('Whole map layer'),
+                                                 _('Keyboard setting'),
+                                                 _('Draw the sampling frame')],
+                                        majorDimension=1,
+                                        style=wx.RA_SPECIFY_ROWS)
 
         self.sizer.Add(item=self.sampling_reg,
-                        flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
-                        pos=(4, 0), span=(1, 2))
+                       flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
+                       pos=(4, 0), span=(1, 2))
         #bindings
         self.sampling_reg.Bind(wx.EVT_RADIOBOX, self.OnSampling)
         self.newconftxt.Bind(wx.EVT_KILL_FOCUS, self.OnName)
         self.newconftxt.Bind(wx.EVT_TEXT, self.OnNameChanged)
         self.vectselect.Bind(wx.EVT_TEXT, self.OnVector)
         self.mapselect.Bind(wx.EVT_TEXT, self.OnRast)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
         wx.CallAfter(wx.FindWindowById(wx.ID_FORWARD).Enable, False)
@@ -528,6 +529,13 @@ class FirstPage(TitledPage):
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
+    def OnEnterPage(self, event):
+        """!Sets the default values, for the entire map
+        """
+        next = wx.FindWindowById(wx.ID_FORWARD)
+        next.Enable(self.CheckInput())
+        wx.CallAfter(wx.FindWindowById(wx.ID_FORWARD).Enable, self.CheckInput())
+
     def CheckInput(self):
         """!Check input fields.
 
@@ -539,10 +547,8 @@ class FirstPage(TitledPage):
 
     def OnExitPage(self, event=None):
         """!Function during exiting"""
-        if self.conf_name == '' or self.rast == '':
-            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
-        else:
-            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+        next = wx.FindWindowById(wx.ID_FORWARD)
+        next.Enable(self.CheckInput())
         if event.GetDirection():
             if self.region == 'key':
                 self.SetNext(self.parent.keyboardpage)
@@ -572,17 +578,17 @@ class KeyboardPage(TitledPage):
 
         #column up/left
         self.ColUpLeftlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                            label=_("Column of upper left " \
-                                            "corner"))
+                                            label=_("Column of upper left "
+                                                    "corner"))
 
         self.ColUpLefttxt = wx.TextCtrl(parent=self, id=wx.ID_ANY,
                                         size=(250, -1))
         wx.CallAfter(self.ColUpLeftlabel.SetFocus)
 
         self.sizer.Add(item=self.ColUpLeftlabel, border=5, pos=(1, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.ColUpLefttxt, border=5, pos=(1, 2),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         #row up/left
         self.RowUpLeftlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
                                             label=_('Row of upper left corner'))
@@ -604,9 +610,9 @@ class KeyboardPage(TitledPage):
         wx.CallAfter(self.RowLenlabel.SetFocus)
 
         self.sizer.Add(item=self.RowLenlabel, border=5, pos=(3, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.RowLentxt, border=5, pos=(3, 2),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         #column lenght
         self.ColLenlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
@@ -616,9 +622,9 @@ class KeyboardPage(TitledPage):
         wx.CallAfter(self.ColLenlabel.SetFocus)
 
         self.sizer.Add(item=self.ColLenlabel, border=5, pos=(4, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.ColLentxt, border=5, pos=(4, 2),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         self.ColUpLefttxt.SetValue(self.col_up)
         self.RowUpLefttxt.SetValue(self.row_up)
@@ -707,8 +713,7 @@ class DrawSampleFramePage(TitledPage):
             map_.DeleteAllLayers()
             cmdlist = ['d.rast', 'map=%s' % rast]
             map_.AddLayer(ltype='raster', command=cmdlist, active=True,
-                              name=rast, hidden=False, opacity=1.0,
-                              render=True)
+                          name=rast, hidden=False, opacity=1.0, render=True)
 
     def OnExitPage(self, event=None):
         """!Function during exiting"""
@@ -730,25 +735,25 @@ class SamplingAreasPage(TitledPage):
         self.parent = parent
         # toggles
         self.radioBox = wx.RadioBox(parent=self, id=wx.ID_ANY,
-                                      label="",
-                                      choices=[_("Whole map layer"),
-                                               _("Regions"),
-                                               _("Sample units"),
-                                               _("Moving window"),
-                                               _("Select areas from the\n"
-                                                 "overlayed vector map")],
-                                      majorDimension=1,
-                                      style=wx.RA_SPECIFY_COLS | wx.NO_BORDER)
+                                    label="",
+                                    choices=[_("Whole map layer"),
+                                             _("Regions"),
+                                             _("Sample units"),
+                                             _("Moving window"),
+                                             _("Select areas from the\n"
+                                               "overlayed vector map")],
+                                    majorDimension=1,
+                                    style=wx.RA_SPECIFY_COLS | wx.NO_BORDER)
         # layout
         self.sizer.SetVGap(10)
         self.sizer.Add(item=self.radioBox, flag=wx.ALIGN_LEFT, pos=(0, 0))
 
         self.regionBox = wx.RadioBox(parent=self, id=wx.ID_ANY,
-                        label=_("Choose a method"),
-                        choices=[_('Use keyboard to enter sampling area'),
-                        _('Use mouse to draw sampling area')],
-                        majorDimension=1,
-                        style=wx.RA_SPECIFY_ROWS)
+                                     label=_("Choose a method"),
+                                     choices=[_('Use keyboard to enter sampling area'),
+                                              _('Use mouse to draw sampling area')],
+                                     majorDimension=1,
+                                     style=wx.RA_SPECIFY_ROWS)
         #self.regionBox.EnableItem(1, False)
         self.regionBox.SetItemToolTip(1, _("This option is not supported yet"))
         self.sizer.Add(self.regionBox, flag=wx.ALIGN_CENTER, pos=(1, 0))
@@ -776,7 +781,7 @@ class SamplingAreasPage(TitledPage):
         self.areaPanelSizer = wx.GridBagSizer(1, 3)
         self.areaPanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.areaText = wx.StaticText(parent=self.areaPanel, id=wx.ID_ANY,
-                                     label=_('Do you want to check vector areas?'))
+                                      label=_('Do you want to check vector areas?'))
         self.areaOK = wx.Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
         self.areaOK.SetToolTip(wx.ToolTip(_("Select if use area by area")))
         self.areaNO = wx.Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
@@ -784,11 +789,9 @@ class SamplingAreasPage(TitledPage):
         self.areaOK.Bind(wx.EVT_BUTTON, self.OnVectYes)
         self.areaNO.Bind(wx.EVT_BUTTON, self.OnVectNo)
         self.areaPanelSizer.Add(self.areaText, flag=wx.ALIGN_CENTER,
-                                  pos=(0, 0))
-        self.areaPanelSizer.Add(self.areaOK, flag=wx.ALIGN_CENTER,
-                                  pos=(0, 1))
-        self.areaPanelSizer.Add(self.areaNO, flag=wx.ALIGN_CENTER,
-                                  pos=(0, 2))
+                                pos=(0, 0))
+        self.areaPanelSizer.Add(self.areaOK, flag=wx.ALIGN_CENTER, pos=(0, 1))
+        self.areaPanelSizer.Add(self.areaNO, flag=wx.ALIGN_CENTER, pos=(0, 2))
         self.areaPanel.SetSizer(self.areaPanelSizer)
         self.sizer.Add(self.areaPanel, flag=wx.ALIGN_CENTER, pos=(3, 0))
 
@@ -951,8 +954,8 @@ class DrawRegionsPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             self.parent.wizard.ShowPage(self.parent.summarypage)
         else:
-            self.title.SetLabel(_('Draw sample region ' + \
-                                  str(self.regioncount) + ' of ' + \
+            self.title.SetLabel(_('Draw sample region ' +
+                                  str(self.regioncount) + ' of ' +
                                   str(numregions)))
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
@@ -981,8 +984,7 @@ class DrawRegionsPage(TitledPage):
             map_.DeleteAllLayers()
             cmdlist = ['d.rast', 'map=%s' % rast]
             map_.AddLayer(ltype='raster', command=cmdlist, active=True,
-                              name=rast, hidden=False, opacity=1.0,
-                              render=True)
+                          name=rast, hidden=False, opacity=1.0, render=True)
 
     #def OnExitPage(self, event=None):
         #!Function during exiting
@@ -1051,14 +1053,13 @@ class SampleUnitsKeyPage(TitledPage):
                                                     _('Stratified random'),
                                                     _('Systematic non contiguos'),
                                                     _('Centered over sites')]
-                                            )
-        self.distributionBox.EnableItem(5, False)  # disable 'draw' for now
+                                          )
         self.panelSizer.Add(item=self.distributionBox, pos=(3, 0), span=(1, 2),
                     flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         self.distr1Label = wx.StaticText(parent=self.scrollPanel, id=wx.ID_ANY,
-                                         label=_("What number of Sampling " \
-                                         "Units to use?"))
+                                         label=_("What number of Sampling "
+                                                 "Units to use?"))
         self.distr1Txt = wx.TextCtrl(parent=self.scrollPanel, id=wx.ID_ANY,
                                      size=(250, -1))
         self.panelSizer.Add(item=self.distr1Label, pos=(4, 0),
@@ -1174,14 +1175,14 @@ class MovingKeyPage(TitledPage):
         self.sizer.AddGrowableCol(2)
         self.width = ''
         self.height = ''
-        self.boxtype = ''
+        self.boxtype = 'rectangle'
         # type of shape
         self.typeBox = wx.RadioBox(parent=self, id=wx.ID_ANY,
-                                      label=" %s " % _("Select type of shape"),
-                                      choices=[_('Rectangle'), _('Circle'),
-                                               ('None')],
-                                      majorDimension=1,
-                                      style=wx.RA_SPECIFY_COLS)
+                                   label=" %s " % _("Select type of shape"),
+                                   choices=[_('Rectangle'), _('Circle')],
+#                                               ('None')],
+                                   majorDimension=1,
+                                   style=wx.RA_SPECIFY_COLS)
 
         self.sizer.Add(self.typeBox, flag=wx.ALIGN_LEFT, pos=(1, 1))
 
@@ -1192,9 +1193,9 @@ class MovingKeyPage(TitledPage):
                                         label=_('Width size (in cells) ?'))
         self.widthTxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         self.sizer.Add(item=self.widthLabel, border=5, pos=(2, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.widthTxt, border=5, pos=(2, 2),
-                    flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.heightLabel = wx.StaticText(parent=self, id=wx.ID_ANY,
                                          label=_('Height size (in cells) ?'))
         self.heightTxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
@@ -1203,18 +1204,19 @@ class MovingKeyPage(TitledPage):
         self.sizer.Add(item=self.heightTxt, border=5, pos=(3, 2),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
-        self.widthLabels = [_('Width size (in cells)? '),
-                            _('What radius size (in meters)? ')]
-        self.heightLabels = [_('Height size (in cells)? '),
+        self.widthLabels = [_('Width size (in cells) ?'),
+                            _('What radius size (in meters) ?')]
+        self.heightLabels = [_('Height size (in cells) ?'),
                              _('Name of the circle mask')]
 
         self.widthTxt.Bind(wx.EVT_TEXT, self.OnWidth)
         self.heightTxt.Bind(wx.EVT_TEXT, self.OnHeight)
+        wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
         # This is an hack to force the user to choose Rectangle or Circle
-        self.typeBox.SetSelection(2),
-        self.typeBox.ShowItem(2, False)
+#        self.typeBox.SetSelection(2),
+#        self.typeBox.ShowItem(2, False)
         if self.parent.samplingareapage.samplingtype == SamplingType.MVWIN:
             self.title.SetLabel(_("Set moving windows"))
         self.OnType(None)
@@ -1228,20 +1230,32 @@ class MovingKeyPage(TitledPage):
             if self.parent.samplingareapage.samplingtype == SamplingType.MVWIN:
                 self.parent.samplingareapage.samplingtype = SamplingType.KMVWINR
             else:
-                self.parent.samplingareapage.samplingtype = SamplingType.KUNITSR
+                self.parent.samplingareapage.samplingtype = SamplingType.KMVWINC
             self.boxtype = 'rectangle'
-        else:
+        elif chosen == 1:
             if self.parent.samplingareapage.samplingtype == SamplingType.MVWIN:
                 self.parent.samplingareapage.samplingtype = SamplingType.KMVWINC
             else:
-                self.parent.samplingareapage.samplingtype = SamplingType.KUNITSC
+                self.parent.samplingareapage.samplingtype = SamplingType.MMVWINC
             self.boxtype = 'circle'
+
+    def CheckInput(self):
+        """!Check input fields.
+
+        @return True if configuration file is given and raster xor vector map,
+        False otherwise
+        """
+        return bool(self.width and bool(self.height))
 
     def OnWidth(self, event):
         self.width = event.GetString()
+        next = wx.FindWindowById(wx.ID_FORWARD)
+        next.Enable(self.CheckInput())
 
     def OnHeight(self, event):
         self.height = event.GetString()
+        next = wx.FindWindowById(wx.ID_FORWARD)
+        next.Enable(self.CheckInput())
 
 
 class UnitsMousePage(TitledPage):
@@ -1264,7 +1278,7 @@ class UnitsMousePage(TitledPage):
         self.typeBox.SetSelection(2),
         self.typeBox.ShowItem(2, False)
         self.sizer.Add(self.typeBox, flag=wx.ALIGN_LEFT, pos=(0, 0),
-                            span=(1, 2))
+                       span=(1, 2))
 
         self.regionPanelSizer = wx.GridBagSizer(1, 2)
         self.regionNumPanel = wx.Panel(parent=self, id=wx.ID_ANY)
@@ -1281,7 +1295,7 @@ class UnitsMousePage(TitledPage):
         self.regionNumPanel.SetSizer(self.regionPanelSizer)
 
         self.sizer.Add(self.regionNumPanel, flag=wx.ALIGN_LEFT, pos=(1, 0),
-                            span=(1, 2))
+                       span=(1, 2))
 
         self.typeBox.Bind(wx.EVT_RADIOBOX, self.OnType)
         self.regionNumTxt.Bind(wx.EVT_TEXT, self.OnNumRegions)
@@ -1408,8 +1422,7 @@ class DrawSampleUnitsPage(TitledPage):
             map_.DeleteAllLayers()
             cmdlist = ['d.rast', 'map=%s' % rast]
             map_.AddLayer(ltype='raster', command=cmdlist, active=True,
-                              name=rast, hidden=False, opacity=1.0,
-                              render=True)
+                          name=rast, hidden=False, opacity=1.0, render=True)
 
     def OnExitPage(self, event=None):
         #!Function during exiting
@@ -1432,17 +1445,17 @@ class VectorAreasPage(TitledPage):
         self.areaPanelSizer = wx.GridBagSizer(1, 3)
         self.areaPanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.areaText = wx.StaticText(parent=self.areaPanel, id=wx.ID_ANY,
-                                     label=_('Is this area ok?'))
+                                      label=_('Is this area ok?'))
         self.areaOK = wx.Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
         self.areaNO = wx.Button(self.areaPanel, wx.ID_ANY, 'No', (50, 80))
         self.areaOK.Bind(wx.EVT_BUTTON, self.OnYes)
         self.areaNO.Bind(wx.EVT_BUTTON, self.OnNo)
         self.areaPanelSizer.Add(self.areaText, flag=wx.ALIGN_CENTER,
-                                  pos=(0, 0))
+                                pos=(0, 0))
         self.areaPanelSizer.Add(self.areaOK, flag=wx.ALIGN_CENTER,
-                                  pos=(0, 1))
+                                pos=(0, 1))
         self.areaPanelSizer.Add(self.areaNO, flag=wx.ALIGN_CENTER,
-                                  pos=(0, 2))
+                                pos=(0, 2))
         self.areaPanel.SetSizer(self.areaPanelSizer)
         self.sizer.Add(self.areaPanel, flag=wx.ALIGN_CENTER, pos=(2, 0))
 
@@ -1478,8 +1491,8 @@ class VectorAreasPage(TitledPage):
         convertFeature(self.vect, self.outname, cat, self.rast)
         cmdlistcat = ['d.rast', 'map=%s' % self.outname]
         self.map_.AddLayer(ltype='raster', command=cmdlistcat, active=True,
-                      name=self.outname, hidden=False, opacity=1.0,
-                      render=True)
+                           name=self.outname, hidden=False, opacity=1.0,
+                           render=True)
         for l in self.map_.GetListOfLayers():
             if l.name == self.outname:
                 self.mapPanel.mapWindow.ZoomToMap(layers=[l], render=True,
@@ -1517,8 +1530,8 @@ class VectorAreasPage(TitledPage):
             self.map_.DeleteAllLayers()
             cmdlist = ['d.rast', 'map=%s' % self.rast]
             self.map_.AddLayer(ltype='raster', command=cmdlist, active=True,
-                              name=self.rast, hidden=False, opacity=1.0,
-                              render=True)
+                               name=self.rast, hidden=False, opacity=1.0,
+                               render=True)
         self.newCat()
 
     def OnExitPage(self, event=None):
@@ -1544,9 +1557,9 @@ class SummaryPage(TitledPage):
         self.conftxt = wx.StaticText(parent=self, id=wx.ID_ANY,
                                      label="")
         self.sizer.Add(item=self.conflabel, border=5, pos=(0, 0),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.conftxt, border=5, pos=(0, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         #raster name
         self.rastlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
@@ -1560,29 +1573,26 @@ class SummaryPage(TitledPage):
 
         #vector name
         self.vectlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                        label=_('Vector name:'))
-        self.vecttxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                        label="")
+                                       label=_('Vector name:'))
+        self.vecttxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(item=self.vectlabel, border=5, pos=(2, 0),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.vecttxt, border=5, pos=(2, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         #region type name
         self.regionlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                        label=_('Region type:'))
-        self.regiontxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                        label="")
+                                         label=_('Region type:'))
+        self.regiontxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(item=self.regionlabel, border=5, pos=(3, 0),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.regiontxt, border=5, pos=(3, 1),
-                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         #region keyboard
         self.regionkeylabel = wx.StaticText(parent=self, id=wx.ID_ANY,
                                             label="")
-        self.regionkeytxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                          label="")
+        self.regionkeytxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(item=self.regionkeylabel, border=5, pos=(4, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.regionkeytxt, border=5, pos=(4, 1),
@@ -1591,34 +1601,31 @@ class SummaryPage(TitledPage):
         #sampling area
         self.samplinglabel = wx.StaticText(parent=self, id=wx.ID_ANY,
                                            label=_('Sampling area type:'))
-        self.samplingtxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label="")
+        self.samplingtxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(item=self.samplinglabel, border=5, pos=(5, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.samplingtxt, border=5, pos=(5, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         #shapetype
-        self.shapelabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                        label="")
-        self.shapetxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                      label="")
+        self.shapelabel = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
+        self.shapetxt = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(item=self.shapelabel, border=5, pos=(6, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.shapetxt, border=5, pos=(6, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         #shapedim
         self.shapewidthlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                        label="")
+                                             label="")
         self.shapewidthtxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                      label="")
+                                           label="")
         self.sizer.Add(item=self.shapewidthlabel, border=5, pos=(7, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.shapewidthtxt, border=5, pos=(7, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.shapeheightlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                        label="")
+                                              label="")
         self.shapeheighttxt = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                      label="")
+                                            label="")
         self.sizer.Add(item=self.shapeheightlabel, border=5, pos=(8, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.shapeheighttxt, border=5, pos=(8, 1),
@@ -1638,7 +1645,7 @@ class SummaryPage(TitledPage):
         self.sizer.Add(item=self.unitsmoretxt, border=5, pos=(10, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.unitsmorelabel2 = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                            label="")
+                                             label="")
         self.unitsmoretxt2 = wx.StaticText(parent=self, id=wx.ID_ANY, label="")
         self.sizer.Add(item=self.unitsmorelabel2, border=5, pos=(11, 0),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
