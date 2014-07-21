@@ -552,10 +552,10 @@ int main(int argc, char *argv[])
 	    total_output += after;
 	}
 	if (not_modified_boundaries > 0)
-	    G_message(_("%d boundaries were not modified because modification would damage topology"),
+	    G_warning(_("%d boundaries were not modified because modification would damage topology"),
 		      not_modified_boundaries);
 	if (n_oversimplified > 0)
-	    G_message(_("%d lines/boundaries were not modified due to over-simplification"),
+	    G_warning(_("%d lines/boundaries were not modified due to over-simplification"),
 		      n_oversimplified);
 	G_message("-----------------------------------------------------");
 
