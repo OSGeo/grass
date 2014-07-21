@@ -1,6 +1,6 @@
 # translation of grasslibs_es.po to Español
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2004,2010 GRASS Development Team
+# Copyright (C) 2004,2014 GRASS Development Team
 #
 # el bueno <manzano_jm@yahoo.es>, 2005.
 # Luis Izquierdo <luisizq2002@hotmail.com>, 2005.
@@ -9,21 +9,21 @@
 # Roberto Antolin <tolanss@yahoo.es>, 2007.
 # Carlos Davila <carluti@users.sourceforge.net>, 2007, 2008
 # Joana Palahí/SIGTE-UdG <joana@sigte.udg.edu>, 2011.
-# Javier García Prieto <fjgarciaprieto@hotmail.com>, 2009, 2010, 2013.
+# Javier García Prieto <fjgarciaprieto@hotmail.com>, 2009, 2010, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-06-04 21:04+0200\n"
-"PO-Revision-Date: 2013-03-20 00:13-0600\n"
+"PO-Revision-Date: 2014-07-05 22:15-0600\n"
 "Last-Translator: Javier García Prieto <fjgarciaprieto@hotmail.com>\n"
 "Language-Team: Español; Castellano <grass-translations@lists.osgeo.org>\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es_ES\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../lib/gpde/test/test_main.c:88
@@ -102,9 +102,7 @@ msgid "Not enough data points (%d) in cluster"
 msgstr ""
 
 #: ../lib/python/temporal/core.py:514
-msgid ""
-"Unable to initialize the temporal DBMI interface. Use t.connect to specify "
-"the driver and the database string"
+msgid "Unable to initialize the temporal DBMI interface. Use t.connect to specify the driver and the database string"
 msgstr ""
 
 #: ../lib/python/temporal/core.py:582
@@ -112,9 +110,7 @@ msgstr ""
 msgid ""
 "Unable to receiving temporal database metadata.\n"
 "Current temporal database info:%(info)s"
-msgstr ""
-"No se puede abrir el archivo de definición de la base de datos vectorial '%"
-"s'."
+msgstr "No se puede abrir el archivo de definición de la base de datos vectorial '%s'."
 
 #: ../lib/python/temporal/core.py:586
 #, python-format
@@ -186,10 +182,7 @@ msgid "No samples found for map calculation"
 msgstr ""
 
 #: ../lib/python/temporal/mapcalc.py:151
-msgid ""
-"Found more than a single map in a sample granule. Only the first map is used "
-"for computation. Use t.rast.aggregate.ds to create synchronous raster "
-"datasets."
+msgid "Found more than a single map in a sample granule. Only the first map is used for computation. Use t.rast.aggregate.ds to create synchronous raster datasets."
 msgstr ""
 
 #: ../lib/python/temporal/mapcalc.py:169
@@ -203,8 +196,7 @@ msgstr ""
 #: ../lib/python/temporal/mapcalc.py:235 ../lib/python/temporal/extract.py:112
 #: ../lib/python/temporal/open_stds.py:205
 #, fuzzy, python-format
-msgid ""
-"Map <%s> is already in temporal database, use overwrite flag to overwrite"
+msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
 msgstr "El mapa vectorial <%s> ya existía y será rescrito."
 
 #: ../lib/python/temporal/mapcalc.py:255
@@ -249,9 +241,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
 #: ../lib/python/temporal/space_time_datasets.py:253
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for raster map <%s>"
-msgstr ""
-"Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de mapas %s"
 
 #: ../lib/python/temporal/space_time_datasets.py:258
 #: ../lib/python/temporal/space_time_datasets.py:588
@@ -281,9 +271,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
 #: ../lib/python/temporal/space_time_datasets.py:583
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for 3D raster map <%s>"
-msgstr ""
-"Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de mapas %s"
 
 #
 #: ../lib/python/temporal/space_time_datasets.py:844
@@ -300,9 +288,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
 #: ../lib/python/temporal/space_time_datasets.py:872
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for vector map <%s>"
-msgstr ""
-"Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de mapas %s"
 
 #
 #: ../lib/python/temporal/space_time_datasets.py:888
@@ -356,23 +342,17 @@ msgstr "  formato: %s\n"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1574
 #, python-format
-msgid ""
-"Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. "
-"The mapset of the dataset does not match the current mapset"
+msgid "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1741
 #, python-format
-msgid ""
-"Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. "
-"The mapset of the dataset does not match the current mapset"
+msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1841
 #, python-format
-msgid ""
-"Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. "
-"The mapset of the dataset does not match the current mapset"
+msgid "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1848
@@ -387,9 +367,7 @@ msgstr "No se puede encontrar el mapa vectorial <%s> en <%s>."
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1917
 #: ../lib/python/temporal/abstract_map_dataset.py:805
 #, python-format
-msgid ""
-"Unable to delete dataset <%(ds)s> of type %(type)s from the temporal "
-"database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1928
@@ -404,16 +382,11 @@ msgstr "No se pueden recuperar los datos de la tabla. <%s>."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2011
 #, fuzzy, python-format
-msgid ""
-"Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of "
-"the dataset does not match the current mapset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the dataset does not match the current mapset"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2019
-msgid ""
-"Only a map that was inserted in the temporal database can be registered in a "
-"space time dataset"
+msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2039
@@ -428,36 +401,27 @@ msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2060
 #, fuzzy, python-format
-msgid ""
-"Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %"
-"(l)s are different"
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
 msgstr "No se puede encontrar el mapa vectorial <%s> en <%s>."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2065
 #, fuzzy, python-format
-msgid ""
-"Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2079
 #, fuzzy, python-format
 msgid "Set temporal unit for space time %s dataset <%s> to %s"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2088
 #, python-format
-msgid ""
-"Relative time units of space time dataset <%(id)s> and map <%(map)s> with "
-"layer %(l)s are different"
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2094
 #, python-format
-msgid ""
-"Relative time units of space time dataset <%(id)s> and map <%(map)s> are "
-"different"
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> are different"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2100
@@ -467,8 +431,7 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2105
 #, fuzzy, python-format
 msgid "Map <%(map)s> with layer %(l)s is already registered."
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2109
 #, python-format
@@ -477,25 +440,18 @@ msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2156
 #, python-format
-msgid ""
-"Unable to unregister map from dataset <%(ds)s> of type %(type)s in the "
-"temporal database. The mapset of the dataset does not match the current "
-"mapset"
+msgid "Unable to unregister map from dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2167
 #, fuzzy, python-format
-msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset <%"
-"(base)s>"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2172
 #, fuzzy, python-format
 msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2224
 #: ../lib/python/temporal/abstract_map_dataset.py:408
@@ -503,15 +459,12 @@ msgstr ""
 #: ../lib/python/temporal/abstract_dataset.py:428
 #: ../lib/python/temporal/abstract_dataset.py:469
 #, python-format
-msgid ""
-"Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. "
-"The mapset of the dataset does not match the current mapset"
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2228
 #, python-format
-msgid ""
-"Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
 msgstr ""
 
 #: ../lib/python/temporal/datetime_math.py:254
@@ -617,9 +570,7 @@ msgstr "la información histórica para [%s] no puede escribirse"
 #: ../lib/python/temporal/stds_import.py:277
 #, fuzzy, python-format
 msgid "Unable to create default temporal database in new location %s"
-msgstr ""
-"No se puede abrir el archivo de definición de la base de datos vectorial '%"
-"s'."
+msgstr "No se puede abrir el archivo de definición de la base de datos vectorial '%s'."
 
 #: ../lib/python/temporal/stds_import.py:342
 #, python-format
@@ -661,9 +612,7 @@ msgstr "Tipo(s) de objeto espacial."
 
 #: ../lib/python/temporal/stds_import.py:396
 #, fuzzy, python-format
-msgid ""
-"Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
-"overwrite flag."
+msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
 msgstr "El mapa vectorial <%s> ya existía y será rescrito."
 
 #: ../lib/python/temporal/stds_import.py:416
@@ -674,14 +623,12 @@ msgstr "No se puede crear la cabecera para el archivo [%s]"
 #: ../lib/python/temporal/stds_import.py:428
 #, fuzzy, python-format
 msgid "Key word %s not found in init file."
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/python/temporal/stds_import.py:432
 #, fuzzy, python-format
 msgid "Create space time %s dataset."
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/python/temporal/list_stds.py:178
 msgid "Empty map list."
@@ -731,9 +678,7 @@ msgstr ""
 
 #: ../lib/python/temporal/temporal_vector_algebra.py:641
 #, python-format
-msgid ""
-"Error vector maps with basename %s exist. Use --o flag to overwrite existing "
-"file"
+msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_vector_algebra.py:673
@@ -751,25 +696,19 @@ msgid ""
 msgstr "El mapa vectorial <%s> ya existía y será rescrito."
 
 #: ../lib/python/temporal/spatial_extent.py:125
-msgid ""
-"Projections are different. Unable to compute overlapping_2d for spatial "
-"extents"
+msgid "Projections are different. Unable to compute overlapping_2d for spatial extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:536
-msgid ""
-"Projections are different. Unable to compute is_in_2d for spatial extents"
+msgid "Projections are different. Unable to compute is_in_2d for spatial extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:676
-msgid ""
-"Projections are different. Unable to compute equivalent_2d for spatial "
-"extents"
+msgid "Projections are different. Unable to compute equivalent_2d for spatial extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:783
-msgid ""
-"Projections are different. Unable to compute cover_2d for spatial extents"
+msgid "Projections are different. Unable to compute cover_2d for spatial extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:854
@@ -798,14 +737,11 @@ msgstr "No se ha encontrado el mapa raster <%s>."
 #: ../lib/python/temporal/open_stds.py:104
 #, fuzzy
 msgid "Space time datasets can only be created in the current mapset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/python/temporal/open_stds.py:121
 #, fuzzy, python-format
-msgid ""
-"Space time %(sp)s dataset <%(name)s> is already in the database. Use the "
-"overwrite flag."
+msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
 msgstr "El mapa vectorial <%s> ya existía y será rescrito."
 
 #: ../lib/python/temporal/open_stds.py:155
@@ -816,8 +752,7 @@ msgstr "No se puede crear la cabecera para el archivo [%s]"
 #: ../lib/python/temporal/open_stds.py:163
 #, fuzzy, python-format
 msgid "Create new space time %s dataset."
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/python/temporal/temporal_algebra.py:826
 #, fuzzy, python-format
@@ -827,67 +762,44 @@ msgstr "No se ha encontrado el mapa raster <%s>."
 #: ../lib/python/temporal/temporal_algebra.py:844
 #: ../lib/python/temporal/temporal_algebra.py:848
 #, python-format
-msgid ""
-"Wrong temporal type of space time dataset <%"
-"s>                                       <%s> time is required"
+msgid "Wrong temporal type of space time dataset <%s>                                       <%s> time is required"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:339
 #, fuzzy, python-format
-msgid ""
-"Start time must be of type datetime for %(type)s map <%(id)s> with layer: %"
-"(l)s"
-msgstr ""
-"No es posible crear el archivo de marca de tiempo (timestamp) para %s mapa %"
-"s que se encuentra en el directorio de mapas (mapset) %s."
+msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "No es posible crear el archivo de marca de tiempo (timestamp) para %s mapa %s que se encuentra en el directorio de mapas (mapset) %s."
 
 #: ../lib/python/temporal/abstract_map_dataset.py:345
 #, fuzzy, python-format
 msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
-msgstr ""
-"Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de mapas %s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:352
 #, fuzzy, python-format
-msgid ""
-"End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
-msgstr ""
-"Archivo de marca de tiempo no válido para %s mapa %s que se encuentra en el "
-"directorio de mapas (mapset) %s."
+msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "Archivo de marca de tiempo no válido para %s mapa %s que se encuentra en el directorio de mapas (mapset) %s."
 
 #: ../lib/python/temporal/abstract_map_dataset.py:358
 #, fuzzy, python-format
 msgid "End time must be of type datetime for %(type)s map <%(id)s>"
-msgstr ""
-"Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de mapas %s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:366
 #, fuzzy, python-format
-msgid ""
-"End time must be greater than start time for %(type)s map <%(id)s> with "
-"layer: %(l)s"
-msgstr ""
-"El valor de la coordenada Este debe ser mayor que el valor de la coordenada "
-"Oeste."
+msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "El valor de la coordenada Este debe ser mayor que el valor de la coordenada Oeste."
 
 #: ../lib/python/temporal/abstract_map_dataset.py:373
 #: ../lib/python/temporal/abstract_map_dataset.py:462
 #, fuzzy, python-format
 msgid "End time must be greater than start time for %(type)s map <%(id)s>"
-msgstr ""
-"El valor de la coordenada Este debe ser mayor que el valor de la coordenada "
-"Oeste."
+msgstr "El valor de la coordenada Este debe ser mayor que el valor de la coordenada Oeste."
 
 #: ../lib/python/temporal/abstract_map_dataset.py:443
 #, fuzzy, python-format
-msgid ""
-"Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)"
-"s: %(u)s"
-msgstr ""
-"No es posible crear el archivo de marca de tiempo (timestamp) para %s mapa %"
-"s que se encuentra en el directorio de mapas (mapset) %s."
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
+msgstr "No es posible crear el archivo de marca de tiempo (timestamp) para %s mapa %s que se encuentra en el directorio de mapas (mapset) %s."
 
 #
 #: ../lib/python/temporal/abstract_map_dataset.py:448
@@ -897,24 +809,17 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
 
 #: ../lib/python/temporal/abstract_map_dataset.py:457
 #, fuzzy, python-format
-msgid ""
-"End time must be greater than start time for %(type)s map <%(id)s> with "
-"layer %(l)s"
-msgstr ""
-"El valor de la coordenada Este debe ser mayor que el valor de la coordenada "
-"Oeste."
+msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer %(l)s"
+msgstr "El valor de la coordenada Este debe ser mayor que el valor de la coordenada Oeste."
 
 #: ../lib/python/temporal/abstract_map_dataset.py:766
 #, python-format
-msgid ""
-"Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is "
-"greater than end time"
+msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:772
 #, python-format
-msgid ""
-"Map <%s> has incorrect time interval, start time is greater than end time"
+msgid "Map <%s> has incorrect time interval, start time is greater than end time"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:777
@@ -929,9 +834,7 @@ msgstr "No se puede encontrar el mapa vectorial <%s> en <%s>."
 
 #: ../lib/python/temporal/abstract_map_dataset.py:870
 #, python-format
-msgid ""
-"Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal "
-"database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/factory.py:51
@@ -946,9 +849,7 @@ msgstr "Nombre del ráster de entrada"
 
 #: ../lib/python/temporal/abstract_dataset.py:391
 #, python-format
-msgid ""
-"Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. "
-"The mapset of the dataset does not match the current mapset"
+msgid "Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_raster_base_algebra.py:316
@@ -1051,9 +952,7 @@ msgstr ""
 
 #: ../lib/python/temporal/register.py:97
 #, python-format
-msgid ""
-"Space time %(sp)s dataset <%(name)s> with relative time found, but no "
-"relative unit set for %(sp)s maps"
+msgid "Space time %(sp)s dataset <%(name)s> with relative time found, but no relative unit set for %(sp)s maps"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:163
@@ -1067,19 +966,13 @@ msgstr "No se puede encontrar el mapa vectorial <%s> en <%s>."
 
 #: ../lib/python/temporal/register.py:192
 #, fuzzy, python-format
-msgid ""
-"Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has "
-"timestamp and the start time is not set."
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgid "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has timestamp and the start time is not set."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/python/temporal/register.py:198
 #, fuzzy, python-format
-msgid ""
-"Unable to register %(t)s map <%(id)s>. The map has no timestamp and the "
-"start time is not set."
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgid "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the start time is not set."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/python/temporal/register.py:206
 #, python-format
@@ -1093,23 +986,17 @@ msgstr ""
 
 #: ../lib/python/temporal/register.py:220
 #, fuzzy, python-format
-msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map <%"
-"(id)s> with layer %(l)s. Overwrite flag is not set."
+msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr "El mapa vectorial <%s> ya existía y será rescrito."
 
 #: ../lib/python/temporal/register.py:227
 #, fuzzy, python-format
-msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map <%"
-"(id)s>. Overwrite flag is not set."
+msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s>. Overwrite flag is not set."
 msgstr "El mapa vectorial <%s> ya existía y será rescrito."
 
 #: ../lib/python/temporal/register.py:251
 #, fuzzy, python-format
-msgid ""
-"Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are "
-"different."
+msgid "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are different."
 msgstr "No se puede encontrar el mapa vectorial <%s> en <%s>."
 
 #: ../lib/python/temporal/register.py:257
@@ -1125,8 +1012,7 @@ msgstr "No se puede encontrar el mapa vectorial <%s> en <%s>."
 #: ../lib/python/temporal/register.py:310
 #, fuzzy
 msgid "Register maps in the space time raster dataset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/python/temporal/register.py:319
 msgid "Update space time raster dataset"
@@ -1146,9 +1032,7 @@ msgstr "  formato: %s\n"
 
 #: ../lib/python/temporal/register.py:395
 #, fuzzy, python-format
-msgid ""
-"Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
-"%(end)s"
+msgid "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - %(end)s"
 msgstr "No se puede copiar el mapa vectorial <%s> en <%s>."
 
 #: ../lib/python/temporal/register.py:400
@@ -1158,8 +1042,7 @@ msgstr "No se puede copiar el mapa vectorial <%s> en <%s>."
 
 #: ../lib/python/temporal/register.py:417
 #, fuzzy, python-format
-msgid ""
-"Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
+msgid "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
 msgstr "No se puede copiar el mapa vectorial <%s> en <%s>."
 
 #: ../lib/python/temporal/register.py:422
@@ -1174,9 +1057,7 @@ msgstr "Nombre del mapa raster base."
 
 #: ../lib/python/temporal/aggregation.py:139
 #, fuzzy, python-format
-msgid ""
-"Raster map <%s> is already in temporal database, use overwrite flag to "
-"overwrite"
+msgid "Raster map <%s> is already in temporal database, use overwrite flag to overwrite"
 msgstr "El mapa vectorial <%s> ya existía y será rescrito."
 
 #: ../lib/python/temporal/aggregation.py:143
@@ -1226,17 +1107,12 @@ msgstr "El nombre del archivo no está permitido. No puede ser '.' o 'NULL'\n"
 #: ../lib/python/script/core.py:1734
 #, fuzzy, python-format
 msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
-msgstr ""
-"El nombre del archivo no es admitido. El carácter <%c> no está permitido.\n"
+msgstr "El nombre del archivo no es admitido. El carácter <%c> no está permitido.\n"
 
 #: ../lib/python/script/raster.py:47
 #, fuzzy, python-format
-msgid ""
-"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
-"current mapset."
-msgstr ""
-"No es posible restaurar el objeto espacial %d, el mapa vectorial <%s> no "
-"está abierto en modo de \"escritura\"."
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr "No es posible restaurar el objeto espacial %d, el mapa vectorial <%s> no está abierto en modo de \"escritura\"."
 
 #: ../lib/python/script/raster.py:105
 msgid "An error occurred while running r.mapcalc"
@@ -1315,8 +1191,7 @@ msgstr "No se puede describir la tabla <%s>."
 
 #: ../lib/python/script/db.py:142
 #, python-format
-msgid ""
-"Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
 msgstr ""
 
 #: ../lib/python/script/db.py:154
@@ -1568,21 +1443,17 @@ msgstr ""
 #: ../lib/db/dbmi_base/legal_dbname.c:38
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
-msgstr ""
-"Nombre de tabla de mapa <%s> no admitido. No puede contener '.' o 'NULO'.\n"
+msgstr "Nombre de tabla de mapa <%s> no admitido. No puede contener '.' o 'NULO'.\n"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:45
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. Must start with a letter."
-msgstr ""
-"Nombre de tabla de mapa <%s> no admitido. Debe empezar con una letra.\n"
+msgstr "Nombre de tabla de mapa <%s> no admitido. Debe empezar con una letra.\n"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:54
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. Character <%c> not allowed."
-msgstr ""
-"Nombre no admitido de tabla de mapa <%s>. El uso del caractér <%c> no está "
-"permitido.\n"
+msgstr "Nombre no admitido de tabla de mapa <%s>. El uso del caractér <%c> no está permitido.\n"
 
 #: ../lib/db/dbmi_base/login.c:99
 #, fuzzy, c-format
@@ -1645,13 +1516,12 @@ msgstr "No ha sido posible iniciar el controlador <%s>."
 #: ../lib/rst/interp_float/vinput2d.c:88
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr ""
-"No ha sido posible abrir la base de datos <%s> con el controlador <%s>."
+msgstr "No ha sido posible abrir la base de datos <%s> con el controlador <%s>."
 
 #: ../lib/db/dbmi_client/copy_tab.c:151
 #, c-format
 msgid "Unable to get list tables in database <%s>"
-msgstr "No se puede recuperar la lista de tablas de la base de datos <%s>."
+msgstr "No se pueden recuperar las tablas de lista de la base de datos <%s>."
 
 #: ../lib/db/dbmi_client/copy_tab.c:167
 #, fuzzy, c-format
@@ -1668,8 +1538,7 @@ msgstr "La tabla <%s> ya existe en la base de datos <%s>."
 #: ../lib/sites/sites.c:290
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr ""
-"No ha sido posible abrir el cursor resultado de la instrucción select:'%s'."
+msgstr "No ha sido posible abrir el cursor resultado de la instrucción select:'%s'."
 
 #: ../lib/db/dbmi_client/copy_tab.c:250
 #, c-format
@@ -1714,7 +1583,7 @@ msgstr "No se pueden seleccionar los registros de la tabla <%s>."
 
 #: ../lib/db/dbmi_client/select.c:333
 msgid "Key column type is not integer"
-msgstr "El tipo de la columna clave no es un entero."
+msgstr "El tipo de la columna clave no es entero."
 
 #: ../lib/db/dbmi_client/delete_tab.c:40 ../lib/db/dbmi_client/table.c:46
 #, c-format
@@ -1729,9 +1598,7 @@ msgstr "No es posible eliminar la tabla: '%s'."
 #: ../lib/raster3d/history.c:43
 #, c-format
 msgid "can't get history information for [%s] in mapset [%s]"
-msgstr ""
-"No se puede obtener la información del historial para [%s] en el directorio "
-"de mapas de usuario (mapset) [%s]."
+msgstr "No se puede obtener la información del historial para [%s] en el directorio de mapas de usuario (mapset) [%s]."
 
 #: ../lib/raster3d/open.c:20
 #, fuzzy
@@ -1766,9 +1633,7 @@ msgstr "Rast3d_openCellOld: Error en Rast3d_readHeader."
 #: ../lib/raster3d/open.c:119
 #, fuzzy
 msgid "Rast3d_open_cell_old: projection does not match window projection"
-msgstr ""
-"Rast3d_openCellOld: La proyección no coincide con la proyección de la "
-"ventana."
+msgstr "Rast3d_openCellOld: La proyección no coincide con la proyección de la ventana."
 
 #: ../lib/raster3d/open.c:123
 #, fuzzy
@@ -1808,8 +1673,7 @@ msgstr "Rast3d_openCellNew: Error en Rast3d_malloc."
 #: ../lib/raster3d/open.c:233
 #, fuzzy, c-format
 msgid "map <%s> is not in the current mapset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/raster3d/open.c:243
 #, fuzzy
@@ -1910,8 +1774,7 @@ msgstr "La ventana está reemplazando los valores preestablecidos."
 #: ../lib/raster3d/color.c:354
 #, fuzzy, c-format
 msgid "mapset <%s> is not the current mapset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/lidar/zones.c:473 ../lib/lidar/zones.c:510
 #, fuzzy, c-format
@@ -1934,9 +1797,7 @@ msgstr "No ha sido posible crear la tabla <%s>."
 #: ../lib/driver/parse_ftcap.c:84
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr ""
-"No es posible leer el archivo de definición del tipo de letra %s; Se "
-"utilizará la opción predeterminada."
+msgstr "No es posible leer el archivo de definición del tipo de letra %s; Se utilizará la opción predeterminada."
 
 #: ../lib/driver/parse_ftcap.c:90
 #, c-format
@@ -1959,13 +1820,8 @@ msgstr "%s: Error en el agoritmo de clasificacion."
 
 #: ../lib/arraystats/class.c:220
 #, c-format
-msgid ""
-"There are classbreaks outside the range min-max. Number of classes reduced "
-"to %i, but using probabilities for %i classes."
-msgstr ""
-"Existen límites de clase fuera del mínimo o máximo del rango. El número de "
-"clases se reducirá a %i, pero se utilizan probabilidades para el número de "
-"clases %i."
+msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
+msgstr "Existen límites de clase fuera del mínimo o máximo del rango. El número de clases se reducirá a %i, pero se utilizan probabilidades para el número de clases %i."
 
 #: ../lib/pngdriver/Graph_set.c:84
 #, c-format
@@ -2136,12 +1992,8 @@ msgstr "No se ha encontrado el mapa raster <%s>."
 
 #: ../lib/raster/open.c:190
 #, c-format
-msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%"
-"s> which does not exist"
-msgstr ""
-"No se puede abrir el mapa raster <%s@%s> ya que es una reclasificación de un "
-"mapa raster <%s@%s> que no existe."
+msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
+msgstr "No se puede abrir el mapa raster <%s@%s> ya que es una reclasificación de un mapa raster <%s@%s> que no existe."
 
 #: ../lib/raster/open.c:195
 #, fuzzy, c-format
@@ -2156,40 +2008,29 @@ msgstr "Error al abrir el mapa raster 3D <%s>"
 #: ../lib/raster/open.c:214
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
-msgstr ""
-"Mapa raster <%s@%s>: El campo de formato en el archivo de cabecera no es "
-"válido."
+msgstr "Mapa raster <%s@%s>: El campo de formato en el archivo de cabecera no es válido."
 
 #: ../lib/raster/open.c:219
 #, fuzzy, c-format
-msgid ""
-"Raster map <%s> is in different projection than current region. Found <%s>, "
-"should be <%s>."
+msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
 msgstr ""
-"[%s] El mapa raster [%s] se ha realizado en una proyección diferente a la de "
-"la región actual:\n"
+"[%s] El mapa raster [%s] se ha realizado en una proyección diferente a la de la región actual:\n"
 "el mapa hallado [%s] en: <%s>, debería ser: <%s> "
 
 #: ../lib/raster/open.c:226
 #, fuzzy, c-format
 msgid "Raster map <%s> is in different zone (%d) than current region (%d)"
-msgstr ""
-"[%s] El mapa raster [%s] - se encuentra en una zona diferente [%d] de la "
-"región actual. [%d]"
+msgstr "[%s] El mapa raster [%s] - se encuentra en una zona diferente [%d] de la región actual. [%d]"
 
 #: ../lib/raster/open.c:231
 #, fuzzy, c-format
 msgid "Raster map <%s>: bytes per cell (%d) too large"
-msgstr ""
-"Para el mapa raster <%s@%s>: los bytes por celda (%d) son demasiado grandes."
+msgstr "Para el mapa raster <%s@%s>: los bytes por celda (%d) son demasiado grandes."
 
 #: ../lib/raster/open.c:256
 #, fuzzy, c-format
-msgid ""
-"Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-msgstr ""
-"El mapa <%s@%s> es una liga GDAL pero grass ha sido compilado sin soporte "
-"para GDAL"
+msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgstr "El mapa <%s@%s> es una liga GDAL pero grass ha sido compilado sin soporte para GDAL"
 
 #
 #: ../lib/raster/open.c:264
@@ -2215,9 +2056,7 @@ msgstr "El nombre del mapa vectorial <%s> no es válido"
 #: ../lib/raster/open.c:574
 #, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas de usuario "
-"actual (mapset). (%s)."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas de usuario actual (mapset). (%s)."
 
 #: ../lib/raster/open.c:581
 #, c-format
@@ -2227,21 +2066,17 @@ msgstr "<%s> es un nombre de archivo no admitido."
 #: ../lib/raster/open.c:595 ../lib/raster/open.c:667
 #, fuzzy, c-format
 msgid "No temp files available: %s"
-msgstr ""
-"G__open_raster_new():no se encuentran disponibles los archivos temporales"
+msgstr "G__open_raster_new():no se encuentran disponibles los archivos temporales"
 
 #: ../lib/raster/open.c:720
 #, fuzzy
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
-msgstr ""
-"G_set_fp_type(): únicamente puede ser invocado mediante FCELL_TYPE o "
-"DCELL_TYPE"
+msgstr "G_set_fp_type(): únicamente puede ser invocado mediante FCELL_TYPE o DCELL_TYPE"
 
 #: ../lib/raster/open.c:778
 #, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/raster/open.c:839
 #, c-format
@@ -2265,17 +2100,13 @@ msgstr "El mapa raster <%s> no es xdr: orden de bytes: %s."
 
 #: ../lib/raster/open.c:929
 #, fuzzy
-msgid ""
-"Rast_set_quant_rules() can be called only for raster maps opened for reading"
-msgstr ""
-"G_set_quant_rules() puede ser invocado únicamente para mapas raster abiertos "
-"para lectura"
+msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgstr "G_set_quant_rules() puede ser invocado únicamente para mapas raster abiertos para lectura"
 
 #: ../lib/raster/init.c:61
 #, fuzzy
 msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
-msgstr ""
-"El sistema no está inicializado. El programador olvidó llamar a G_gisinit()."
+msgstr "El sistema no está inicializado. El programador olvidó llamar a G_gisinit()."
 
 #: ../lib/raster/close.c:74 ../lib/raster/close.c:107
 #, fuzzy, c-format
@@ -2299,8 +2130,7 @@ msgstr "No es posible escribir el archivo f_format para los mapas de celdas."
 #: ../lib/raster/put_title.c:28
 #, c-format
 msgid "category information for [%s] in [%s] missing or invalid"
-msgstr ""
-"La información de categoría para [%s] en [%s] no se encuentra o no es válida."
+msgstr "La información de categoría para [%s] en [%s] no se encuentra o no es válida."
 
 #: ../lib/raster/put_title.c:37
 msgid "G_put_title - can't create a temp file"
@@ -2426,16 +2256,12 @@ msgstr "la categoría para [%s] en [%s] es inválida"
 #: ../lib/raster/cats.c:145
 #, fuzzy, c-format
 msgid "Category support for vector map <%s@%s> missing"
-msgstr ""
-"soporte de la categoría para el archivo de vectores [%s] en el directorio de "
-"mapas [%s] %s"
+msgstr "soporte de la categoría para el archivo de vectores [%s] en el directorio de mapas [%s] %s"
 
 #: ../lib/raster/cats.c:149
 #, fuzzy, c-format
 msgid "Category support for vector map <%s@%s> invalid"
-msgstr ""
-"soporte de la categoría para el archivo de vectores [%s] en el directorio de "
-"mapas [%s] %s"
+msgstr "soporte de la categoría para el archivo de vectores [%s] en el directorio de mapas [%s] %s"
 
 #
 #: ../lib/raster/cats.c:968
@@ -2445,12 +2271,8 @@ msgstr "No se puede abrir el archivo de cabecera del vectorial <%s>"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
-msgid ""
-"Unable to read header file for raster map <%s@%s>.It is a reclass of raster "
-"map <%s@%s> %s"
-msgstr ""
-"No es posible abrir el mapa  [%s] en [%s] porque es una reclasificación del "
-"mapa raster [%s] en [%s] que no existe."
+msgid "Unable to read header file for raster map <%s@%s>.It is a reclass of raster map <%s@%s> %s"
+msgstr "No es posible abrir el mapa  [%s] en [%s] porque es una reclasificación del mapa raster [%s] en [%s] que no existe."
 
 #: ../lib/raster/get_cellhd.c:70
 msgid "which is missing."
@@ -2464,8 +2286,7 @@ msgstr "Cuyo archivo de cabecera no se puede abrir."
 #: ../lib/raster/get_cellhd.c:76
 #, c-format
 msgid "Unable to open header file for raster map <%s@%s>"
-msgstr ""
-"No ha sido posible abrir el archivo de cabecera del mapa raster <%s@%s>."
+msgstr "No ha sido posible abrir el archivo de cabecera del mapa raster <%s@%s>."
 
 #
 #: ../lib/raster/range.c:102 ../lib/raster/range.c:110
@@ -2495,9 +2316,7 @@ msgstr "No se puede abrir el archivo de cabecera del vectorial <%s>"
 #: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:838
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
-msgstr ""
-"Leyendo el mapa raster <%s@%s> la solicitud para la fila %d está fuera de la "
-"región."
+msgstr "Leyendo el mapa raster <%s@%s> la solicitud para la fila %d está fuera de la región."
 
 #: ../lib/raster/get_row.c:95 ../lib/raster/get_row.c:100
 #: ../lib/raster/get_row.c:133 ../lib/raster/get_row.c:139
@@ -2537,7 +2356,7 @@ msgstr "No es posible localizar el símbolo <%s>."
 #
 #: ../lib/raster/gdal.c:141
 msgid "Unable to load GDAL library"
-msgstr "No ha sido posible cargar la librería GDAL."
+msgstr "No ha sido posible cargar la librería de abstracción de datos geoespaciales GDAL."
 
 #: ../lib/raster/gdal.c:371
 #, fuzzy
@@ -2556,9 +2375,7 @@ msgstr "No se puede crear la tabla <%s>"
 
 #: ../lib/raster/gdal.c:498
 #, c-format
-msgid ""
-"Driver <%s> does not support direct writing. Using MEM driver for "
-"intermediate dataset."
+msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr ""
 
 #: ../lib/raster/gdal.c:504
@@ -2603,21 +2420,15 @@ msgid "Unable to create output file <%s> using driver <%s>"
 msgstr "No se puede abrir el archivo %s en <%s>"
 
 #: ../lib/raster/window.c:18
-msgid ""
-"Internal error: Rast_get_window() called with split window. Use "
-"Rast_get_input_window() or Rast_get_output_window() instead."
+msgid "Internal error: Rast_get_window() called with split window. Use Rast_get_input_window() or Rast_get_output_window() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:77
-msgid ""
-"Internal error: Rast_window_rows() called with split window. Use "
-"Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgid "Internal error: Rast_window_rows() called with split window. Use Rast_input_window_rows() or Rast_output_window_rows() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:112
-msgid ""
-"Internal error: Rast_window_cols() called with split window. Use "
-"Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgid "Internal error: Rast_window_cols() called with split window. Use Rast_input_window_cols() or Rast_output_window_cols() instead."
 msgstr ""
 
 #: ../lib/raster/color_read.c:103
@@ -2653,11 +2464,8 @@ msgstr ""
 
 #: ../lib/raster/set_window.c:131
 #, fuzzy
-msgid ""
-"Rast_set_read_window(): projection/zone differs from that of currently open "
-"raster maps"
-msgstr ""
-"G_set_window(): la proyección/zona difiere en los archivos ráster abiertos"
+msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
+msgstr "G_set_window(): la proyección/zona difiere en los archivos ráster abiertos"
 
 #: ../lib/raster/set_window.c:158
 #, c-format
@@ -2687,9 +2495,7 @@ msgstr "Demasiadas categorías de reclasificación para [%s en %s]"
 #: ../lib/raster/reclass.c:171
 #, fuzzy, c-format
 msgid "Illegal reclass format in header file for <%s@%s>"
-msgstr ""
-"Formato de reclasificación no admitido en la cabecera del archivo para [%s "
-"en %s]"
+msgstr "Formato de reclasificación no admitido en la cabecera del archivo para [%s en %s]"
 
 #: ../lib/raster/reclass.c:273
 msgid "Illegal reclass request"
@@ -2712,8 +2518,7 @@ msgstr "No se puede crear archivo dependiente en [%s en %s]"
 #: ../lib/raster/histogram.c:55
 #, c-format
 msgid "Histogram for [%s in %s] missing (run r.support)"
-msgstr ""
-"El histograma para [%s en %s] no ha sido encontrado (ejecute r.support)."
+msgstr "El histograma para [%s en %s] no ha sido encontrado (ejecute r.support)."
 
 #: ../lib/raster/histogram.c:62
 #, c-format
@@ -2796,9 +2601,7 @@ msgstr ""
 
 #: ../lib/vector/neta/utils.c:239
 msgid "'where' and 'cats' parameters were supplied, cat will be ignored"
-msgstr ""
-"Como se han suministrado los parámetros 'where' y 'cats', las categorías "
-"(cat) serán ignoradas."
+msgstr "Como se han suministrado los parámetros 'where' y 'cats', las categorías (cat) serán ignoradas."
 
 #: ../lib/vector/neta/utils.c:242
 msgid "Unable to load data from database"
@@ -2817,8 +2620,7 @@ msgstr "Error 'GngFlatten'"
 #: ../lib/vector/neta/timetables.c:244 ../lib/vector/neta/timetables.c:286
 #, c-format
 msgid "Unable to open select cursor: %s"
-msgstr ""
-"No ha sido posible abrir el cursor resultado de la instrucción select:%s."
+msgstr "No ha sido posible abrir el cursor resultado de la instrucción select:%s."
 
 #: ../lib/vector/neta/spanningtree.c:104
 msgid "Computing minimum spanning tree..."
@@ -2841,33 +2643,18 @@ msgstr "Error al escribir el archivo de índice espacial."
 
 #: ../lib/vector/diglib/spindex_rw.c:302
 #, fuzzy, c-format
-msgid ""
-"This version of GRASS (%d.%d) is too old to read this spatial index format. "
-"Try to rebuild topology or upgrade GRASS to at least version %d."
-msgstr ""
-"La versión del formato de índice de objetos espaciales %d.%d no está "
-"soportada por esta versión. Intente reconstruir la topología o actualice "
-"GRASS."
+msgid "This version of GRASS (%d.%d) is too old to read this spatial index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr "La versión del formato de índice de objetos espaciales %d.%d no está soportada por esta versión. Intente reconstruir la topología o actualice GRASS."
 
 #: ../lib/vector/diglib/spindex_rw.c:308
 #, fuzzy, c-format
-msgid ""
-"Your GRASS version does not fully support spatial index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
-msgstr ""
-"Su versión de GRASS no soporta completamente el formato de índice de objetos "
-"espaciales %d.%d del vectorial. Considere reconstruir la topología o "
-"actualice GRASS."
+msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr "Su versión de GRASS no soporta completamente el formato de índice de objetos espaciales %d.%d del vectorial. Considere reconstruir la topología o actualice GRASS."
 
 #: ../lib/vector/diglib/spindex_rw.c:317
 #, fuzzy, c-format
-msgid ""
-"Spatial index format version %d.%d is not supported by this release. Please "
-"rebuild topology."
-msgstr ""
-"La versión del formato de índice de objetos espaciales %d.%d no está "
-"soportada por esta versión. Intente reconstruir la topología o actualice "
-"GRASS."
+msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
+msgstr "La versión del formato de índice de objetos espaciales %d.%d no está soportada por esta versión. Intente reconstruir la topología o actualice GRASS."
 
 #: ../lib/vector/diglib/struct_alloc.c:491
 #, fuzzy
@@ -2943,9 +2730,7 @@ msgstr "Intento de eliminar un área muerta."
 #: ../lib/vector/diglib/plus_area.c:412
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
-msgstr ""
-"Centroide (baricentro) inexistente %d, registrado para el área (error en la "
-"biblioteca de vectores)."
+msgstr "Centroide (baricentro) inexistente %d, registrado para el área (error en la biblioteca de vectores)."
 
 #: ../lib/vector/diglib/plus_area.c:437
 #, c-format
@@ -2963,8 +2748,7 @@ msgstr "No está soportada la escritura del archivo cargado en la memoria."
 
 #: ../lib/vector/diglib/file.c:197
 msgid "Unable to load file to memory, file not open"
-msgstr ""
-"No se ha abierto el archivo, pues no ha sido posible cargarlo en la memoria."
+msgstr "No se ha abierto el archivo, pues no ha sido posible cargarlo en la memoria."
 
 #: ../lib/vector/diglib/file.c:212
 msgid "Vector memory mode not supported, using 'AUTO'"
@@ -2977,28 +2761,22 @@ msgstr "No se puede abrir el archivo temporal."
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format
-msgid ""
-"Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
-"%.16e3E"
+msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
-msgid ""
-"Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
-"%.8e3E"
+msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:104
 #, c-format
-msgid ""
-"Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
-msgid ""
-"Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:134
@@ -3008,8 +2786,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:150
 #, c-format
-msgid ""
-"Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:165
@@ -3019,57 +2796,52 @@ msgstr ""
 
 #: ../lib/vector/diglib/cindex_rw.c:156
 #, fuzzy, c-format
-msgid ""
-"This version of GRASS (%d.%d) is too old to read this category index format. "
-"Try to rebuild topology or upgrade GRASS to at least version %d."
-msgstr ""
-"La versión del formato de índice de objetos espaciales %d.%d no está "
-"soportada por esta versión. Intente reconstruir la topología o actualice "
-"GRASS."
+msgid "This version of GRASS (%d.%d) is too old to read this category index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr "La versión del formato de índice de objetos espaciales %d.%d no está soportada por esta versión. Intente reconstruir la topología o actualice GRASS."
 
 #
 #: ../lib/vector/diglib/plus.c:222
 msgid "Unable read topology for nodes"
-msgstr "No se puede leer la topología de los nodos."
+msgstr "No se puede leer la topología para los nodos."
 
 #
 #: ../lib/vector/diglib/plus.c:227
 #, c-format
 msgid "Unable to read topology for node %d"
-msgstr "No se puede leer la topología del nodo %d."
+msgstr "No se puede leer la topología para el nodo %d."
 
 #
 #: ../lib/vector/diglib/plus.c:232
 msgid "Unable read topology for lines"
-msgstr "No se puede leer la topología de las líneas."
+msgstr "No se puede leer la topología para las líneas."
 
 #
 #: ../lib/vector/diglib/plus.c:237
 #, c-format
 msgid "Unable to read topology for line %d"
-msgstr "No se puede leer la topología de la línea %d."
+msgstr "No se puede leer la topología para la línea %d."
 
 #
 #: ../lib/vector/diglib/plus.c:242
 msgid "Unable to read topo for areas"
-msgstr "No se puede leer la topología de las áreas."
+msgstr "No se puede leer la topología para las áreas."
 
 #
 #: ../lib/vector/diglib/plus.c:247
 #, c-format
 msgid "Unable read topology for area %d"
-msgstr "No se puede leer la topología del área %d."
+msgstr "No se puede leer la topología para el área %d."
 
 #
 #: ../lib/vector/diglib/plus.c:252
 msgid "Unable to read topology for isles"
-msgstr "No se puede leer la topología de las islas."
+msgstr "No se puede leer la topología para las islas."
 
 #
 #: ../lib/vector/diglib/plus.c:257
 #, c-format
 msgid "Unable to read topology for isle %d"
-msgstr "No se puede leer la topología de la isla %d."
+msgstr "No se puede leer la topología para la isla %d."
 
 #
 #: ../lib/vector/diglib/plus.c:279 ../lib/vector/diglib/plus.c:305
@@ -3094,42 +2866,23 @@ msgstr "No se pueden escribir las islas en el archivo extra (plus file)."
 
 #: ../lib/vector/diglib/plus_struct.c:523
 #, fuzzy, c-format
-msgid ""
-"This version of GRASS (%d.%d) is too old to read this topology format. Try "
-"to rebuild topology or upgrade GRASS to at least version %d."
-msgstr ""
-"La versión del formato de índice de objetos espaciales %d.%d no está "
-"soportada por esta versión. Intente reconstruir la topología o actualice "
-"GRASS."
+msgid "This version of GRASS (%d.%d) is too old to read this topology format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr "La versión del formato de índice de objetos espaciales %d.%d no está soportada por esta versión. Intente reconstruir la topología o actualice GRASS."
 
 #: ../lib/vector/diglib/plus_struct.c:529
 #, fuzzy, c-format
-msgid ""
-"Your GRASS version does not fully support topology format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
-msgstr ""
-"Su versión de GRASS no soporta completamente el formato de índice de objetos "
-"espaciales %d.%d del vectorial. Considere reconstruir la topología o "
-"actualice GRASS."
+msgid "Your GRASS version does not fully support topology format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr "Su versión de GRASS no soporta completamente el formato de índice de objetos espaciales %d.%d del vectorial. Considere reconstruir la topología o actualice GRASS."
 
 #: ../lib/vector/diglib/plus_struct.c:539
 #, fuzzy, c-format
-msgid ""
-"Old topology format version %d.%d is not supported by this release. Try to "
-"rebuild topology."
-msgstr ""
-"La versión del formato de índice de objetos espaciales %d.%d no está "
-"soportada por esta versión. Intente reconstruir la topología o actualice "
-"GRASS."
+msgid "Old topology format version %d.%d is not supported by this release. Try to rebuild topology."
+msgstr "La versión del formato de índice de objetos espaciales %d.%d no está soportada por esta versión. Intente reconstruir la topología o actualice GRASS."
 
 #: ../lib/vector/diglib/plus_node.c:214
 #, c-format
-msgid ""
-"Attempt to read line angle for the line which is not connected to the node: "
-"node %d, line %d"
-msgstr ""
-"Intento de leer el ángulo de línea para la línea que no está conectada al "
-"nodo: Nodo %d, línea %d."
+msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
+msgstr "Intento de leer el ángulo de línea para la línea que no está conectada al nodo: Nodo %d, línea %d."
 
 #: ../lib/vector/Vlib/build.c:37 ../lib/vector/Vlib/close.c:38
 #: ../lib/vector/Vlib/read.c:32 ../lib/vector/Vlib/write.c:56
@@ -3197,9 +2950,7 @@ msgstr "Número de contornos: %d."
 #: ../lib/vector/Vlib/open.c:863
 #, fuzzy, c-format
 msgid "Unable to open spatial index file for vector map <%s>"
-msgstr ""
-"No se puede abrir el archivo de índice de categorías para el mapa vectorial <"
-"%s>"
+msgstr "No se puede abrir el archivo de índice de categorías para el mapa vectorial <%s>"
 
 #: ../lib/vector/Vlib/build.c:849
 #, c-format
@@ -3305,12 +3056,8 @@ msgstr "Error al escribir el archivo de topología."
 
 #: ../lib/vector/Vlib/build.c:1189
 #, fuzzy
-msgid ""
-"Unable to build spatial index from topology, vector map is not opened at "
-"topology level 2"
-msgstr ""
-"No se puede construir el índice espacial a partir de la topología, el mapa "
-"vectorial no está abierto en el nivel topológico 2."
+msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
+msgstr "No se puede construir el índice espacial a partir de la topología, el mapa vectorial no está abierto en el nivel topológico 2."
 
 #: ../lib/vector/Vlib/build.c:1212
 #, fuzzy, c-format
@@ -3325,9 +3072,7 @@ msgstr ""
 #: ../lib/vector/Vlib/build.c:1248
 #, fuzzy, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
-msgstr ""
-"No se puede abrir el archivo de índice de categorías para el mapa vectorial <"
-"%s>"
+msgstr "No se puede abrir el archivo de índice de categorías para el mapa vectorial <%s>"
 
 #: ../lib/vector/Vlib/build.c:1257
 msgid "Error writing out spatial index file"
@@ -3339,13 +3084,11 @@ msgstr "Visualización 3D no soportada por Vect_segment_intersection()."
 
 #: ../lib/vector/Vlib/intersect.c:313
 msgid "Vect_segment_intersection() ERROR (collinear vertical segments)"
-msgstr ""
-"ERROR en Vect_segment_intersection() (segmentos verticales colineales)."
+msgstr "ERROR en Vect_segment_intersection() (segmentos verticales colineales)."
 
 #: ../lib/vector/Vlib/intersect.c:407
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
-msgstr ""
-"ERROR en Vect_segment_intersection() (segmentos colineales no verticales)."
+msgstr "ERROR en Vect_segment_intersection() (segmentos colineales no verticales)."
 
 #: ../lib/vector/Vlib/intersect.c:1157 ../lib/vector/Vlib/intersect.c:1163
 #: ../lib/vector/Vlib/intersect.c:1165 ../lib/vector/Vlib/intersect.c:1219
@@ -3415,8 +3158,7 @@ msgstr "Intento de borrar un razgo u objeto espacial inexistente."
 
 #: ../lib/vector/Vlib/read_pg.c:365
 #, c-format
-msgid ""
-"Requesting invalid feature from cache (%d). Number of features in cache: %d"
+msgid "Requesting invalid feature from cache (%d). Number of features in cache: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/read_pg.c:368
@@ -3524,9 +3266,9 @@ msgid "GRASS is not compiled with OGR/PostgreSQL support"
 msgstr ""
 
 #: ../lib/vector/Vlib/close.c:91 ../lib/sites/sites.c:394
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create vector map <%s>"
-msgstr "No se puede leer el mapa vectorial <%s>."
+msgstr "No se puede crear el mapa vectorial <%s>."
 
 #: ../lib/vector/Vlib/close.c:108
 #, fuzzy
@@ -3572,37 +3314,27 @@ msgstr "No se puede abrir el mapa vectorial <%s>"
 #: ../lib/vector/Vlib/legal_vname.c:43
 #, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
-msgstr ""
-"El nombre del mapa vectorial  <%s> no es válido. Este no podrá contener '.' "
-"o 'Nulo'."
+msgstr "El nombre del mapa vectorial  <%s> no es válido. Este no podrá contener '.' o 'Nulo'."
 
 #: ../lib/vector/Vlib/legal_vname.c:50
 #, c-format
 msgid "Illegal vector map name <%s>. Must start with a letter."
-msgstr ""
-"El nombre del mapa vectorial <%s> no es válido. Este deberá comenzar con una "
-"letra."
+msgstr "El nombre del mapa vectorial <%s> no es válido. Este deberá comenzar con una letra."
 
 #: ../lib/vector/Vlib/legal_vname.c:58
 #, c-format
 msgid "Illegal vector map name <%s>. Character '%c' not allowed."
-msgstr ""
-"El nombre del mapa vectorial <%s> no es válido. No está permitido utilizar "
-"el caracter '%c'."
+msgstr "El nombre del mapa vectorial <%s> no es válido. No está permitido utilizar el caracter '%c'."
 
 #: ../lib/vector/Vlib/legal_vname.c:65
 #, c-format
-msgid ""
-"Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
-msgstr ""
-"El nombre del mapa vectorial  <%s> no es válido. No se puede utilizar una "
-"palabra reservada de SQL como nombre de un mapa vectorial."
+msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgstr "El nombre del mapa vectorial  <%s> no es válido. No se puede utilizar una palabra reservada de SQL como nombre de un mapa vectorial."
 
 #: ../lib/vector/Vlib/legal_vname.c:97 ../lib/vector/Vlib/legal_vname.c:101
 #, c-format
 msgid "Output vector map name <%s> is not valid map name"
-msgstr ""
-"El nombre del mapa vectorial resultante <%s> no es un nombre válido de mapa."
+msgstr "El nombre del mapa vectorial resultante <%s> no es un nombre válido de mapa."
 
 #: ../lib/vector/Vlib/legal_vname.c:121 ../lib/vector/Vlib/legal_vname.c:124
 #: ../lib/vector/Vlib/open.c:235 ../lib/vector/Vlib/map.c:271
@@ -3666,8 +3398,7 @@ msgstr "%d errores en la cadena de categoría."
 
 #: ../lib/vector/Vlib/array.c:142 ../lib/vector/Vlib/array.c:267
 msgid "Mixed area and other type requested for vector array"
-msgstr ""
-"Se ha solicitado un área mixta y de otro tipo para la matriz de vectores."
+msgstr "Se ha solicitado un área mixta y de otro tipo para la matriz de vectores."
 
 #: ../lib/vector/Vlib/array.c:152 ../lib/vector/Vlib/array.c:175
 #: ../lib/vector/Vlib/array.c:304 ../lib/vector/Vlib/array.c:336
@@ -3689,8 +3420,7 @@ msgstr "No se ha definido la conexión a la base de datos para la capa %d."
 #: ../lib/vector/Vlib/array.c:292
 #, c-format
 msgid "Unable to select record from table <%s> (key %s, where %s)"
-msgstr ""
-"No se puede seleccionar el registro de la tabla <%s> (clave %s, donde %s)."
+msgstr "No se puede seleccionar el registro de la tabla <%s> (clave %s, donde %s)."
 
 #: ../lib/vector/Vlib/break_polygons.c:102
 msgid "Break polygons: Bug in binary tree!"
@@ -3793,8 +3523,7 @@ msgstr "Tipo de vector desconocido."
 #: ../lib/vector/Vlib/ascii.c:645
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
-msgstr ""
-"No se puede seleccionar el registro de la tabla <%s> (clave<%s, donde %s)"
+msgstr "No se puede seleccionar el registro de la tabla <%s> (clave<%s, donde %s)"
 
 #: ../lib/vector/Vlib/ascii.c:675
 #, c-format
@@ -3846,9 +3575,7 @@ msgstr "No es posible establecer la categoría %d para ( id del razgo %d)"
 
 #: ../lib/vector/Vlib/ascii.c:860
 #, c-format
-msgid ""
-"%d features without category skipped. To export also features without "
-"category use '%s=-1'."
+msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr ""
 
 #: ../lib/vector/Vlib/cats.c:45
@@ -3858,16 +3585,12 @@ msgstr "Vect_new_cats_struct(): Sin memoria suficiente."
 #: ../lib/vector/Vlib/cats.c:127
 #, c-format
 msgid "Too many categories (%d), unable to set cat %d (layer %d)"
-msgstr ""
-"Demasiadas categorías (%d), no ha sido posible establecer la categoría %d "
-"(capa %d)."
+msgstr "Demasiadas categorías (%d), no ha sido posible establecer la categoría %d (capa %d)."
 
 #: ../lib/vector/Vlib/cats.c:419
 #, c-format
 msgid "Unable to convert category string '%s' (from '%s') to category range"
-msgstr ""
-"No ha sido posible convertir la cadena de texto de la categoría '%s' (de '%"
-"s') a un rango de categoria."
+msgstr "No ha sido posible convertir la cadena de texto de la categoría '%s' (de '%s') a un rango de categoria."
 
 #: ../lib/vector/Vlib/cats.c:572 ../lib/vector/Vlib/cats.c:668
 #, fuzzy
@@ -3924,20 +3647,13 @@ msgstr "No se puede abrir el archivo histórico para el mapa vectorial <%s>"
 
 #: ../lib/vector/Vlib/open_nat.c:154
 #, fuzzy, c-format
-msgid ""
-"Coor file of vector map <%s@%s> is larger than it should be (%ld bytes "
-"excess)"
-msgstr ""
-"El archivo de coordenadas del mapa vectorial <%s@%s> es mayor de lo que "
-"debiera (%ld bytes de exceso)."
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es mayor de lo que debiera (%ld bytes de exceso)."
 
 #: ../lib/vector/Vlib/open_nat.c:158
 #, fuzzy, c-format
-msgid ""
-"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
-msgstr ""
-"El archivo de coordenadas del mapa vectorial <%s@%s> es menor de lo que "
-"debería ser (faltan %ld bytes)."
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es menor de lo que debería ser (faltan %ld bytes)."
 
 #: ../lib/vector/Vlib/build_ogr.c:69
 msgid "Empty OGR layer, nothing to build"
@@ -3950,11 +3666,8 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:82
 #, fuzzy
-msgid ""
-"Random read is not supported by OGR for this layer. Unable to build topology."
-msgstr ""
-"La lectura aleatoria no está soportada por OGR para esta capa, no se puede "
-"construir el soporte"
+msgid "Random read is not supported by OGR for this layer. Unable to build topology."
+msgstr "La lectura aleatoria no está soportada por OGR para esta capa, no se puede construir el soporte"
 
 #: ../lib/vector/Vlib/build_ogr.c:88 ../lib/vector/Vlib/build_pg.c:101
 #, c-format
@@ -4039,8 +3752,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_analyze.c:292 ../lib/vector/Vlib/net_analyze.c:333
 #, c-format
 msgid ""
-"There exists more than one point on node <%d> with unique category in field  "
-"<%d>.\n"
+"There exists more than one point on node <%d> with unique category in field  <%d>.\n"
 "The unique category layer may not be valid."
 msgstr ""
 
@@ -4051,9 +3763,7 @@ msgstr "Dirección de la línea incorrecta en Vect_net_get_line_cost()."
 #: ../lib/vector/Vlib/copy.c:81
 #, fuzzy, c-format
 msgid "Unable to copy features. Input vector map <%s> is not open"
-msgstr ""
-"No ha sido posible escribir el objeto espacial, el mapa vectorial no ha sido "
-"abierto."
+msgstr "No ha sido posible escribir el objeto espacial, el mapa vectorial no ha sido abierto."
 
 #: ../lib/vector/Vlib/copy.c:104
 #, fuzzy, c-format
@@ -4124,9 +3834,7 @@ msgstr "Se ha ignorado el objeto espacial sin geometría %d."
 #: ../lib/vector/Vlib/copy.c:611 ../lib/vector/Vlib/copy.c:752
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr ""
-"No ha sido posible añadir el enlace del mapa vectorial <%s> a la base de "
-"datos."
+msgstr "No ha sido posible añadir el enlace del mapa vectorial <%s> a la base de datos."
 
 #: ../lib/vector/Vlib/copy.c:620 ../lib/vector/Vlib/copy.c:767
 #: ../lib/vector/Vlib/map.c:197 ../lib/vector/Vlib/map.c:325
@@ -4144,9 +3852,7 @@ msgstr "No ha sido posible crear el índice para la tabla <%s>, llave <%s>."
 #: ../lib/vector/Vlib/close_ogr.c:104 ../lib/vector/Vlib/close_pg.c:140
 #, fuzzy, c-format
 msgid "Unable to save feature index file for vector map <%s>"
-msgstr ""
-"No se puede abrir archivo de índice del mapa vectorial que correspondiente a "
-"la categoría <%s>."
+msgstr "No se puede abrir archivo de índice del mapa vectorial que correspondiente a la categoría <%s>."
 
 #: ../lib/vector/Vlib/overlay.c:72
 msgid "unknown operator"
@@ -4154,15 +3860,11 @@ msgstr "Operador desconocido."
 
 #: ../lib/vector/Vlib/overlay.c:124
 msgid "Overlay: line/boundary types not supported by AND operator"
-msgstr ""
-"Superposición: los tipos de línea / contorno no son compatibles con el "
-"operador AND."
+msgstr "Superposición: los tipos de línea / contorno no son compatibles con el operador AND."
 
 #: ../lib/vector/Vlib/overlay.c:127
 msgid "Overlay: area x area types not supported by AND operator"
-msgstr ""
-"Superposición: Los tipos \"area x area\" no son compatibles con el operador "
-"AND."
+msgstr "Superposición: Los tipos \"area x area\" no son compatibles con el operador AND."
 
 #: ../lib/vector/Vlib/read_ogr.c:215 ../lib/vector/Vlib/read_ogr.c:224
 #, fuzzy, c-format
@@ -4231,9 +3933,7 @@ msgstr "No se puede reescribir el el objeto espacial %d."
 #: ../lib/vector/Vlib/simple_features.c:341
 #, fuzzy, c-format
 msgid "Unable to report simple features for vector map <%s>"
-msgstr ""
-"No se puede abrir archivo de índice del mapa vectorial que correspondiente a "
-"la categoría <%s>."
+msgstr "No se puede abrir archivo de índice del mapa vectorial que correspondiente a la categoría <%s>."
 
 #: ../lib/vector/Vlib/box.c:228
 #, fuzzy, c-format
@@ -4269,22 +3969,18 @@ msgstr "No se puede borrar el mapa vectorial <%s>."
 #: ../lib/vector/Vlib/write.c:250
 #, fuzzy, c-format
 msgid "Unable to rewrite feature %d in vector map <%s>"
-msgstr ""
-"No se puede abrir archivo de índice del mapa vectorial que correspondiente a "
-"la categoría <%s>."
+msgstr "No se puede abrir archivo de índice del mapa vectorial que correspondiente a la categoría <%s>."
 
 #: ../lib/vector/Vlib/write.c:289
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete feature %d from vector map <%s>"
-msgstr "No se puede borrar el mapa vectorial <%s>."
+msgstr "No se puede eliminar el objeto espacial %d del mapa vectorial <%s>."
 
 #
 #: ../lib/vector/Vlib/write.c:330
 #, fuzzy, c-format
 msgid "Unable to restore feature %d in vector map <%s>"
-msgstr ""
-"No se puede abrir archivo de índice del mapa vectorial que correspondiente a "
-"la categoría <%s>."
+msgstr "No se puede abrir archivo de índice del mapa vectorial que correspondiente a la categoría <%s>."
 
 #: ../lib/vector/Vlib/write.c:344
 #, fuzzy, c-format
@@ -4294,8 +3990,7 @@ msgstr "El mapa vectorial <%s> no ha sido abierto en un nivel >= 2"
 #: ../lib/vector/Vlib/write.c:350
 #, fuzzy, c-format
 msgid "Vector map <%s> is not opened in write mode"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/vector/Vlib/geos.c:52
 msgid "vector map is not opened"
@@ -4303,12 +3998,8 @@ msgstr "El mapa vectorial no ha sido abierto."
 
 #: ../lib/vector/Vlib/geos.c:55
 #, c-format
-msgid ""
-"Vect_read_line_geos(): feature id %d is not reasonable (max features in "
-"vector map <%s>: %d)"
-msgstr ""
-"Vect_read_line_geos(): El identificador del razgo id %d no es razonable (El "
-"número máximo de rasgos en el mapa vectorial es <%s>: %d)"
+msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgstr "Vect_read_line_geos(): El identificador del razgo id %d no es razonable (El número máximo de rasgos en el mapa vectorial es <%s>: %d)"
 
 #: ../lib/vector/Vlib/geos.c:60
 msgid "only native format supported"
@@ -4326,15 +4017,13 @@ msgstr "Vect_read_area_geos(): No se puede leer el área id %d"
 #: ../lib/vector/Vlib/geos.c:104
 #, c-format
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
-msgstr ""
-"Vect_read_area_geos(): No se puede leer el id de la isla %d del id del área %"
-"d"
+msgstr "Vect_read_area_geos(): No se puede leer el id de la isla %d del id del área %d"
 
 #
 #: ../lib/vector/Vlib/geos.c:203
 #, c-format
 msgid "Unable to read line offset %ld"
-msgstr "No se puede leer el desplazamiento de línea %ld"
+msgstr "No se puede leer el ajuste de desplazamiento de línea %ld"
 
 #: ../lib/vector/Vlib/geos.c:410
 #, c-format
@@ -4381,21 +4070,16 @@ msgstr "El programador solicitó el nivel abierto %d desconocido"
 #: ../lib/vector/Vlib/open.c:232
 #, fuzzy, c-format
 msgid "Vector map <%s> not found in current mapset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/vector/Vlib/open.c:250
 #, fuzzy
 msgid "Temporary vector maps can be accessed only in the current mapset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/vector/Vlib/open.c:264
-msgid ""
-"Vector map which is not in the current mapset cannot be opened for update"
-msgstr ""
-"No puede ser abierto para su actualización, un mapa vectorial que no esté en "
-"el directorio actual de mapas de usuario (mapset)."
+msgid "Vector map which is not in the current mapset cannot be opened for update"
+msgstr "No puede ser abierto para su actualización, un mapa vectorial que no esté en el directorio actual de mapas de usuario (mapset)."
 
 #
 #: ../lib/vector/Vlib/open.c:298
@@ -4407,24 +4091,18 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s>"
 #: ../lib/vector/Vlib/open.c:339
 #, c-format
 msgid "Unable to open topology file for vector map <%s>"
-msgstr ""
-"No ha sido posible abrir el archivo de topología del mapa vectorial <%s>."
+msgstr "No ha sido posible abrir el archivo de topología del mapa vectorial <%s>."
 
 #
 #: ../lib/vector/Vlib/open.c:380 ../lib/vector/Vlib/cindex.c:542
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
-msgstr ""
-"No se puede abrir archivo de índice de categorías del mapa vectorial <%s>."
+msgstr "No se puede abrir archivo de índice de categorías del mapa vectorial <%s>."
 
 #: ../lib/vector/Vlib/open.c:406 ../lib/vector/Vlib/open.c:428
 #, c-format
-msgid ""
-"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
-"by v.build."
-msgstr ""
-"No se puede abrir el mapa vectorial <%s> en el nivel %d. Intente reconstruir "
-"la topología vectorial mediante v.build."
+msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology by v.build."
+msgstr "No se puede abrir el mapa vectorial <%s> en el nivel %d. Intente reconstruir la topología vectorial mediante v.build."
 
 #: ../lib/vector/Vlib/open.c:437
 #, fuzzy, c-format
@@ -4445,9 +4123,7 @@ msgstr "No se puede abrir el archivo de historial del mapa vectorial <%s>."
 #: ../lib/vector/Vlib/open.c:771
 #, fuzzy, c-format
 msgid "Unable to create new vector map: <%s> is not the current mapset (%s)"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas de usuario "
-"actual (mapset). (%s)."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas de usuario actual (mapset). (%s)."
 
 #: ../lib/vector/Vlib/open.c:780
 #, fuzzy, c-format
@@ -4502,9 +4178,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open.c:1135
 msgid "Size of 'coor' file differs from value saved in topology file"
-msgstr ""
-"El tamaño del archivo de coordenadas difiere del valor guardado en el "
-"archivo de topología."
+msgstr "El tamaño del archivo de coordenadas difiere del valor guardado en el archivo de topología."
 
 #: ../lib/vector/Vlib/open.c:1146 ../lib/vector/Vlib/open.c:1247
 #, c-format
@@ -4514,9 +4188,7 @@ msgstr "Por favor, reconstruya la topología del mapa vectorial <%s@%s>."
 #: ../lib/vector/Vlib/open.c:1236
 #, fuzzy
 msgid "Size of 'coor' file differs from value saved in sidx file"
-msgstr ""
-"El tamaño del archivo 'coor' difiere del valor guardado en el archivo de "
-"topología."
+msgstr "El tamaño del archivo 'coor' difiere del valor guardado en el archivo de topología."
 
 #: ../lib/vector/Vlib/open.c:1316
 #, fuzzy
@@ -4534,9 +4206,7 @@ msgid "Unable to open PG file"
 msgstr "No se puede abrir el archivo %s "
 
 #: ../lib/vector/Vlib/dgraph.c:432
-msgid ""
-"Trying to add more edges to the planar_graph than the initial allocation "
-"size allows"
+msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
 msgstr ""
 
 #: ../lib/vector/Vlib/clean_nodes.c:248
@@ -4561,8 +4231,7 @@ msgstr "El índice de capa se encuentra fuera del rango."
 #: ../lib/vector/Vlib/cindex.c:489
 #, fuzzy, c-format
 msgid "Unable to create category index file for vector map <%s>"
-msgstr ""
-"No se puede abrir archivo de índice de categorías del mapa vectorial <%s>."
+msgstr "No se puede abrir archivo de índice de categorías del mapa vectorial <%s>."
 
 #: ../lib/vector/Vlib/cindex.c:498
 #, fuzzy
@@ -4590,7 +4259,7 @@ msgid "Removed bridges: %d"
 msgstr "Nuevos vértices:%d"
 
 #: ../lib/vector/Vlib/write_pg.c:279
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to rewrite feature %d"
 msgstr "No se puede reescribir el el objeto espacial %d."
 
@@ -4819,19 +4488,13 @@ msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:589
 #, fuzzy
-msgid ""
-"Next edge was visited (right) but it is not the first one !!! breaking loop"
-msgstr ""
-"El siguiente borde ya ha sido recorrido pero no es el primero!!! Rompiendo "
-"el ciclo."
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgstr "El siguiente borde ya ha sido recorrido pero no es el primero!!! Rompiendo el ciclo."
 
 #: ../lib/vector/Vlib/buffer2.c:600
 #, fuzzy
-msgid ""
-"Next edge was visited (left) but it is not the first one !!! breaking loop"
-msgstr ""
-"El siguiente borde ya ha sido recorrido pero no es el primero!!! Rompiendo "
-"el ciclo."
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgstr "El siguiente borde ya ha sido recorrido pero no es el primero!!! Rompiendo el ciclo."
 
 #: ../lib/vector/Vlib/buffer2.c:648
 msgid "side != 0 feature not implemented"
@@ -5019,9 +4682,7 @@ msgstr "No se ha encontrado la columna <%s> en la tabla <%s>."
 #: ../lib/vector/Vlib/net_build.c:985
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
-msgstr ""
-"El tipo de datos para la columna <%s> no está soportado (debe ser de tipo "
-"numérico)."
+msgstr "El tipo de datos para la columna <%s> no está soportado (debe ser de tipo numérico)."
 
 #: ../lib/vector/Vlib/net_build.c:202 ../lib/vector/Vlib/net_build.c:964
 msgid "Setting node costs..."
@@ -5030,9 +4691,7 @@ msgstr "Estableciendo costes de nodos..."
 #: ../lib/vector/Vlib/net_build.c:277 ../lib/vector/Vlib/net_build.c:1029
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
-msgstr ""
-"No se encuentra el registro para el nodo %d (cat = %d). (El coste se "
-"establece como 0)."
+msgstr "No se encuentra el registro para el nodo %d (cat = %d). (El coste se establece como 0)."
 
 #
 #: ../lib/vector/Vlib/net_build.c:332 ../lib/vector/Vlib/net_build.c:352
@@ -5043,39 +4702,30 @@ msgstr "No se ha podido añadir el arco a la red."
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  <%"
-"d>.\n"
-"The unique categories layer is not valid therefore you will probably get "
-"incorrect results."
+"There exists more than one point of node <%d> with unique category field  <%d>.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:393
 #, c-format
 msgid ""
-"Unable to find point representing intersection <%d> in unique categories "
-"field <%d>.\n"
+"Unable to find point representing intersection <%d> in unique categories field <%d>.\n"
 "Cost for the intersection was set to 0.\n"
-"The unique categories layer is not valid therefore you will probably get "
-"incorrect results."
+"The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:407
 #, c-format
 msgid ""
-"Unable to find node for point representing intersection <%d> in unique "
-"categories field <%d>.\n"
+"Unable to find node for point representing intersection <%d> in unique categories field <%d>.\n"
 "Cost for the intersection was set to 0.\n"
-"The unique categories layer is not valid therefore you will probably get "
-"incorrect results."
+"The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:432
 #, fuzzy, c-format
-msgid ""
-"Database record for turn with cat = %d in not found. (The turn was skipped."
-msgstr ""
-"No se encuentra el registro para el nodo %d (cat = %d). (El coste se "
-"establece como 0)."
+msgid "Database record for turn with cat = %d in not found. (The turn was skipped."
+msgstr "No se encuentra el registro para el nodo %d (cat = %d). (El coste se establece como 0)."
 
 #
 #: ../lib/vector/Vlib/net_build.c:465
@@ -5095,28 +4745,18 @@ msgstr "Registrando arcos..."
 #, c-format
 msgid ""
 "Line with id <%d> has more unique categories defined in field <%d>.\n"
-"The unique categories layer is not valid therefore you will probably get "
-"incorrect results."
+"The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
 #: ../lib/vector/Vlib/net_build.c:579
 #, fuzzy, c-format
-msgid ""
-"Database record for line %d (cat = %d, forward/both direction(s)) not found "
-"(cost was set to 0)"
-msgstr ""
-"No se ha encontrado el registro de la base de datos para la línea %d (cat =%"
-"d, hacia adelante / en una o ambas direcciones) (se omite la línea hacia "
-"adelante / en una o ambas direcciones)."
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (cost was set to 0)"
+msgstr "No se ha encontrado el registro de la base de datos para la línea %d (cat =%d, hacia adelante / en una o ambas direcciones) (se omite la línea hacia adelante / en una o ambas direcciones)."
 
 #: ../lib/vector/Vlib/net_build.c:596
 #, fuzzy, c-format
-msgid ""
-"Database record for line %d (cat = %d, backword direction) not found(cost "
-"was set to 0)"
-msgstr ""
-"No se ha encontrado el registro de la línea %d (cat = %d, en la dirección "
-"hacia atrás) en la base de datos , (se omite la dirección de la línea)."
+msgid "Database record for line %d (cat = %d, backword direction) not found(cost was set to 0)"
+msgstr "No se ha encontrado el registro de la línea %d (cat = %d, en la dirección hacia atrás) en la base de datos , (se omite la dirección de la línea)."
 
 #: ../lib/vector/Vlib/net_build.c:658 ../lib/vector/Vlib/net_build.c:1061
 msgid "Flattening the graph..."
@@ -5128,22 +4768,13 @@ msgstr "El grafico fue construido."
 
 #: ../lib/vector/Vlib/net_build.c:866
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, forward/both direction(s)) not found "
-"(forward/both direction(s) of line skipped)"
-msgstr ""
-"No se ha encontrado el registro de la base de datos para la línea %d (cat =%"
-"d, hacia adelante / en una o ambas direcciones) (se omite la línea hacia "
-"adelante / en una o ambas direcciones)."
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
+msgstr "No se ha encontrado el registro de la base de datos para la línea %d (cat =%d, hacia adelante / en una o ambas direcciones) (se omite la línea hacia adelante / en una o ambas direcciones)."
 
 #: ../lib/vector/Vlib/net_build.c:885
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, backword direction) not found"
-"(direction of line skipped)"
-msgstr ""
-"No se ha encontrado el registro de la línea %d (cat = %d, en la dirección "
-"hacia atrás) en la base de datos , (se omite la dirección de la línea)."
+msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
+msgstr "No se ha encontrado el registro de la línea %d (cat = %d, en la dirección hacia atrás) en la base de datos , (se omite la dirección de la línea)."
 
 #
 #: ../lib/vector/Vlib/net_build.c:934
@@ -5177,9 +4808,7 @@ msgstr "No se encuentra el mapa ráster <%s>"
 #: ../lib/vector/Vlib/open_ogr.c:145 ../lib/vector/Vlib/open_pg.c:193
 #, fuzzy, c-format
 msgid "Unable to open feature index file for vector map <%s>"
-msgstr ""
-"No se puede abrir archivo de índice del mapa vectorial que correspondiente a "
-"la categoría <%s>."
+msgstr "No se puede abrir archivo de índice del mapa vectorial que correspondiente a la categoría <%s>."
 
 #: ../lib/vector/Vlib/open_ogr.c:191
 #, fuzzy, c-format
@@ -5208,22 +4837,13 @@ msgstr "La tabla <%s> ya existe en la base de datos<%s>."
 
 #: ../lib/vector/Vlib/open_ogr.c:279
 #, c-format
-msgid ""
-"Feature index format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
-msgstr ""
-"La versión de formato de índice del objeto espacial %d.%d no está soportado "
-"en esta versión. Intente reconstruir la topología o actualice GRASS."
+msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgstr "La versión de formato de índice del objeto espacial %d.%d no está soportado en esta versión. Intente reconstruir la topología o actualice GRASS."
 
 #: ../lib/vector/Vlib/open_ogr.c:284
 #, c-format
-msgid ""
-"Your GRASS version does not fully support feature index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
-msgstr ""
-"Su versión de GRASS no soporta completamente el formato de índice del objeto "
-"espacial %d.%d del vector.Considere reconstruir la topología o actualizar "
-"GRASS."
+msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr "Su versión de GRASS no soporta completamente el formato de índice del objeto espacial %d.%d del vector.Considere reconstruir la topología o actualizar GRASS."
 
 #: ../lib/vector/Vlib/remove_duplicates.c:199
 #, fuzzy, c-format
@@ -5269,8 +4889,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s>."
 #: ../lib/vector/Vlib/map.c:457
 #, c-format
 msgid "Unable to find table <%s> linked to vector map <%s>"
-msgstr ""
-"No se puede encontrar la tabla <%s> enlazada con el mapa vectorial <%s>."
+msgstr "No se puede encontrar la tabla <%s> enlazada con el mapa vectorial <%s>."
 
 #
 #: ../lib/vector/Vlib/map.c:480
@@ -5305,9 +4924,7 @@ msgstr "El número de capa debe ser 1 o mayor."
 #: ../lib/vector/Vlib/field.c:96
 #, fuzzy
 msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
-msgstr ""
-"No se puede añadir el enlace a la dase de datos, el mapa no está abierto en "
-"modo ESCRITURA"
+msgstr "No se puede añadir el enlace a la dase de datos, el mapa no está abierto en modo ESCRITURA"
 
 #: ../lib/vector/Vlib/field.c:103
 #, fuzzy
@@ -5329,9 +4946,7 @@ msgid "Database connection not defined. Skipping."
 msgstr "No se ha definido la conexión a la base de datos para la capa %d."
 
 #: ../lib/vector/Vlib/field.c:185
-msgid ""
-"More DB links defined for input vector map. Using only first DB link for "
-"output."
+msgid "More DB links defined for input vector map. Using only first DB link for output."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:261
@@ -5378,17 +4993,12 @@ msgid "Unable to open OGR DBMI driver"
 msgstr "No se puede abrir el controlador OGR DBMI."
 
 #: ../lib/vector/Vlib/field.c:758
-msgid ""
-"All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
-"available in OGR DB table"
-msgstr ""
-"Todas las pruebas FID han fallado. Ni los \"FID\" ni \"ogc_fid\" ni \"ogr_fid"
-"\" ni \"gid\", están disponibles en la tabla OGR DB."
+msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
+msgstr "Todas las pruebas FID han fallado. Ni los \"FID\" ni \"ogc_fid\" ni \"ogr_fid\" ni \"gid\", están disponibles en la tabla OGR DB."
 
 #: ../lib/vector/Vlib/field.c:825
 #, c-format
-msgid ""
-"Feature table <%s> has no primary key defined. Unable to define DB links."
+msgid "Feature table <%s> has no primary key defined. Unable to define DB links."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:845
@@ -5408,9 +5018,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s>"
 
 #: ../lib/vector/Vlib/field.c:1006
 msgid "Bug: attempt to update map which is not in current mapset"
-msgstr ""
-"Error de programa: Se ha intentado actualizar un mapa el cual no se "
-"encuentra en el directorio de mapas de usuario (mapset) actual."
+msgstr "Error de programa: Se ha intentado actualizar un mapa el cual no se encuentra en el directorio de mapas de usuario (mapset) actual."
 
 #: ../lib/vector/Vlib/build_pg.c:88
 #, fuzzy
@@ -5420,9 +5028,7 @@ msgstr "Existe una mala conexión con el servidor."
 #: ../lib/vector/Vlib/build_pg.c:95
 #, fuzzy
 msgid "Random read is not supported for this layer. Unable to build topology."
-msgstr ""
-"La lectura aleatoria no está soportada por OGR para esta capa, no se puede "
-"construir el soporte"
+msgstr "La lectura aleatoria no está soportada por OGR para esta capa, no se puede construir el soporte"
 
 #: ../lib/vector/Vlib/build_pg.c:105
 #, fuzzy
@@ -5504,8 +5110,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_pg.c:1018
 #, c-format
-msgid ""
-"Unable to build simple features from topogeometry data. Unsupported type %d."
+msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:109 ../lib/vector/Vlib/open_pg.c:267
@@ -5516,8 +5121,7 @@ msgstr "La tabla <%s> ya existe en la base de datos<%s>."
 #: ../lib/vector/Vlib/open_pg.c:133
 #, fuzzy, c-format
 msgid "Feature table <%s> not found in 'geometry_columns'"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/vector/Vlib/open_pg.c:181
 msgid "Topology schema not found."
@@ -5555,9 +5159,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:549
 #, fuzzy
-msgid ""
-"Connection to PostgreSQL database failed. Try to set up username/password by "
-"db.login."
+msgid "Connection to PostgreSQL database failed. Try to set up username/password by db.login."
 msgstr "La conexión ha fallado."
 
 #: ../lib/vector/Vlib/open_pg.c:556
@@ -5647,8 +5249,7 @@ msgstr "El índice está fuera de rango en"
 
 #: ../lib/vector/Vlib/line.c:550
 msgid "Segment outside line, no segment created"
-msgstr ""
-"El segmento se encuentra fuera de la línea, no se ha creado ningún segmento."
+msgstr "El segmento se encuentra fuera de la línea, no se ha creado ningún segmento."
 
 #
 #: ../lib/vector/Vlib/header.c:87
@@ -5744,8 +5345,7 @@ msgstr "Se ha especificado una zona inválida %s."
 
 #: ../lib/proj/get_proj.c:228
 msgid "Unable to initialise PROJ.4 with the following parameter list:"
-msgstr ""
-"No es posible inicializar PROJ 4 con la lista de parámetros siguientes."
+msgstr "No es posible inicializar PROJ 4 con la lista de parámetros siguientes."
 
 #: ../lib/proj/get_proj.c:236
 #, c-format
@@ -5793,53 +5393,36 @@ msgstr "No se puede analizar el archivo PROJ_INFO de GRASS"
 
 #: ../lib/proj/convert.c:125
 msgid "Unable get PROJ.4-style parameter string"
-msgstr ""
-"No es posible obtener la cadena de texto con los parámetros de estilo PROJ 4."
+msgstr "No es posible obtener la cadena de texto con los parámetros de estilo PROJ 4."
 
 #: ../lib/proj/convert.c:139
 #, c-format
-msgid ""
-"OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr ""
-"OGR no puede analizar la cadena de texto con los parámetros de estilo PROJ 4 "
-"%s. (El código de error OGR fue %d)."
+msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgstr "OGR no puede analizar la cadena de texto con los parámetros de estilo PROJ 4 %s. (El código de error OGR fue %d)."
 
 #: ../lib/proj/convert.c:146
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
-msgstr ""
-"OGR no puede obtener la cadena de texto con los parámetros de estilo WKT. "
-"(el código de error OGR fue %d)."
+msgstr "OGR no puede obtener la cadena de texto con los parámetros de estilo WKT. (el código de error OGR fue %d)."
 
 #: ../lib/proj/convert.c:406
 msgid "No projection name! Projection parameters likely to be meaningless."
-msgstr ""
-"¡Sin nombre de proyección! Es probable que los parámetros de la proyección "
-"puedan carecer de significado."
+msgstr "¡Sin nombre de proyección! Es probable que los parámetros de la proyección puedan carecer de significado."
 
 #: ../lib/proj/convert.c:442
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr ""
-"El datum <%s> no es reconocido por GRASS y no se han encontrado parámetros."
+msgstr "El datum <%s> no es reconocido por GRASS y no se han encontrado parámetros."
 
 #: ../lib/proj/convert.c:458
 #, c-format
-msgid ""
-"Datum <%s> apparently recognised by GRASS but no parameters found. You may "
-"want to look into this."
-msgstr ""
-"El datum <%s> aparentemente es reconocido por GRASS pero no se han "
-"encontrado parámetros. Quiza usted quiera revisar esto."
+msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
+msgstr "El datum <%s> aparentemente es reconocido por GRASS pero no se han encontrado parámetros. Quiza usted quiera revisar esto."
 
 #: ../lib/proj/convert.c:462
 #, c-format
-msgid ""
-"Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
-"transform parameters unspecified."
-msgstr ""
-"Número de transformación inválido %d, el rángo válido es desde 1 hasta %d. "
-"Se dejan los parámetros de transformación del datum sin especificar."
+msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
+msgstr "Número de transformación inválido %d, el rángo válido es desde 1 hasta %d. Se dejan los parámetros de transformación del datum sin especificar."
 
 #: ../lib/proj/do_proj.c:106 ../lib/proj/do_proj.c:180
 #, c-format
@@ -5853,8 +5436,7 @@ msgstr "Elipsoide no válido <%s> en el archivo."
 
 #: ../lib/proj/ellipse.c:103
 msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
-msgstr ""
-"No hay un descriptor secundario del elipsoide (rf, es o b) en el archivo."
+msgstr "No hay un descriptor secundario del elipsoide (rf, es o b) en el archivo."
 
 #: ../lib/proj/ellipse.c:107
 msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
@@ -5903,8 +5485,7 @@ msgstr "Campo es no válido:'%s' en el archivo %s en <%s>."
 #: ../lib/gis/get_ellipse.c:383
 #, c-format
 msgid "No ellipsoid info given in file %s in <%s>"
-msgstr ""
-"No se ha proporcionado información del elipsoide en el archivo %s en <%s>."
+msgstr "No se ha proporcionado información del elipsoide en el archivo %s en <%s>."
 
 #: ../lib/gis/parser_html.c:56 ../lib/gis/parser_rest.c:60
 msgid "NAME"
@@ -5974,8 +5555,7 @@ msgstr "El nombre del archivo no está permitido. No puede ser '.' o 'NULL'\n"
 #: ../lib/gis/legal_name.c:46
 #, fuzzy, c-format
 msgid "Illegal filename <%s>. Character <%c> not allowed.\n"
-msgstr ""
-"El nombre del archivo no es admitido. El carácter <%c> no está permitido.\n"
+msgstr "El nombre del archivo no es admitido. El carácter <%c> no está permitido.\n"
 
 #: ../lib/gis/legal_name.c:77 ../lib/gis/legal_name.c:81
 #, c-format
@@ -6057,22 +5637,17 @@ msgstr "Error en el archivo de tabla de datum, línea %d."
 #: ../lib/gis/list.c:83
 #, c-format
 msgid "no %s files available in current mapset\n"
-msgstr ""
-"No hay archivos %s disponibles en el directorio de mapas de usuario actual "
-"(mapset).\n"
+msgstr "No hay archivos %s disponibles en el directorio de mapas de usuario actual (mapset).\n"
 
 #: ../lib/gis/list.c:86
 #, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr ""
-"No hay archivos %s disponibles en el directorio de mapas de usuario (mapset) "
-"<%s>.\n"
+msgstr "No hay archivos %s disponibles en el directorio de mapas de usuario (mapset) <%s>.\n"
 
 #: ../lib/gis/list.c:132
 #, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr ""
-"Archivos %s disponibles en el directorio de mapas de usuario (Mapset)<%s>:\n"
+msgstr "Archivos %s disponibles en el directorio de mapas de usuario (Mapset)<%s>:\n"
 
 #: ../lib/gis/list.c:204
 msgid "G_list: Unknown element type"
@@ -6081,23 +5656,17 @@ msgstr "G_list: tipo de elemento desconocido."
 #: ../lib/gis/distance.c:154
 #, fuzzy, c-format
 msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
-msgstr ""
-"G_distance_point_to_line_segment: Esto no debería ocurrir: codigo=%d P=(%f,%"
-"f) S=(%f,%f)(%f,%f)."
+msgstr "G_distance_point_to_line_segment: Esto no debería ocurrir: codigo=%d P=(%f,%f) S=(%f,%f)(%f,%f)."
 
 #: ../lib/gis/mapset_msc.c:61
 #, c-format
 msgid "Unable to make mapset element %s (%s): %s"
-msgstr ""
-"No se puede generar el elemento del directorio de mapas de usuario (mapset) %"
-"s (%s): %s."
+msgstr "No se puede generar el elemento del directorio de mapas de usuario (mapset) %s (%s): %s."
 
 #: ../lib/gis/mapset_msc.c:65
 #, c-format
 msgid "Unable to access mapset element %s (%s): %s"
-msgstr ""
-"No es posible accesar el elemento del directorio de mapas (mapset) %s (%s): %"
-"s"
+msgstr "No es posible accesar el elemento del directorio de mapas (mapset) %s (%s): %s"
 
 #: ../lib/gis/parser.c:376
 #, c-format
@@ -6106,17 +5675,11 @@ msgstr "Error en las descripciónes, no existe la opción '%s' en <%s>."
 
 #: ../lib/gis/parser.c:491
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
-msgstr ""
-"Utilice cualquier identificador de opción (flag) --quiet (silencioso) o --"
-"verbose (detallado), pero no ambos, de ser este el caso se asume la opción "
-"detallado --verbose."
+msgstr "Utilice cualquier identificador de opción (flag) --quiet (silencioso) o --verbose (detallado), pero no ambos, de ser este el caso se asume la opción detallado --verbose."
 
 #: ../lib/gis/parser.c:505
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
-msgstr ""
-"Utilice cualquier identificador de opción (flag) --quiet (silencioso) o --"
-"verbose (detallado), pero no ambos, de ser este el caso se asume silencioso "
-"--quiet."
+msgstr "Utilice cualquier identificador de opción (flag) --quiet (silencioso) o --verbose (detallado), pero no ambos, de ser este el caso se asume silencioso --quiet."
 
 #: ../lib/gis/parser.c:536
 #, fuzzy, c-format
@@ -6242,9 +5805,7 @@ msgstr "No ha sido posible crear la tabla <%s>."
 #: ../lib/gis/open.c:64
 #, c-format
 msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr ""
-"G__open(read): El directorio de mapas (mapset) <%s> no corresponde a xmapset "
-"<%s>."
+msgstr "G__open(read): El directorio de mapas (mapset) <%s> no corresponde a xmapset <%s>."
 
 #: ../lib/gis/open.c:80
 #, fuzzy, c-format
@@ -6447,9 +6008,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
 #: ../lib/gis/timestamp.c:301
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for %s map <%s@%s>"
-msgstr ""
-"Archivo de marca de tiempo inválido para el %s mapa  %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo inválido para el %s mapa  %s en el directorio de mapas %s"
 
 #
 #: ../lib/gis/timestamp.c:331
@@ -6460,9 +6019,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa ráster <%s@%s>"
 #: ../lib/gis/timestamp.c:340
 #, fuzzy, c-format
 msgid "Invalid timestamp file for %s map <%s@%s>"
-msgstr ""
-"Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de mapas %s"
 
 #
 #: ../lib/gis/timestamp.c:479
@@ -6473,9 +6030,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa ráster <%s@%s>"
 #: ../lib/gis/timestamp.c:488
 #, fuzzy, c-format
 msgid "Invalid timestamp file for vector map <%s@%s>"
-msgstr ""
-"Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de mapas %s"
 
 #
 #: ../lib/gis/timestamp.c:524
@@ -6486,9 +6041,7 @@ msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
 #: ../lib/gis/timestamp.c:533
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for vector map <%s@%s>"
-msgstr ""
-"Archivo de marca de tiempo inválido para el %s mapa  %s en el directorio de "
-"mapas %s"
+msgstr "Archivo de marca de tiempo inválido para el %s mapa  %s en el directorio de mapas %s"
 
 #: ../lib/gis/adj_cellhd.c:42 ../lib/gis/adj_cellhd.c:191
 msgid "Illegal n-s resolution value"
@@ -6509,9 +6062,7 @@ msgstr "Valor de columna no válido."
 #: ../lib/gis/adj_cellhd.c:74 ../lib/gis/adj_cellhd.c:239
 #, c-format
 msgid "Fixing subtle input data rounding error of north boundary (%g>%g)"
-msgstr ""
-"Corrigiendo un error sutil de redondeo en los datos de entrada del límite "
-"norte (%g>%g)."
+msgstr "Corrigiendo un error sutil de redondeo en los datos de entrada del límite norte (%g>%g)."
 
 #: ../lib/gis/adj_cellhd.c:79 ../lib/gis/adj_cellhd.c:244
 msgid "Illegal latitude for North"
@@ -6520,9 +6071,7 @@ msgstr "Latitud Norte no válida."
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:250
 #, c-format
 msgid "Fixing subtle input data rounding error of south boundary (%g>%g)"
-msgstr ""
-"Corrigiendo un error sutil de redondeo en los datos de entrada del límite "
-"sur (%g>%g)."
+msgstr "Corrigiendo un error sutil de redondeo en los datos de entrada del límite sur (%g>%g)."
 
 #: ../lib/gis/adj_cellhd.c:90 ../lib/gis/adj_cellhd.c:255
 msgid "Illegal latitude for South"
@@ -6531,16 +6080,12 @@ msgstr "Latitud Sur no válida."
 #: ../lib/gis/adj_cellhd.c:102 ../lib/gis/adj_cellhd.c:267
 #, c-format
 msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
-msgstr ""
-"Corrigiendo un error sutil de redondeo en los datos de entrada del límite "
-"oeste (%g>%g)."
+msgstr "Corrigiendo un error sutil de redondeo en los datos de entrada del límite oeste (%g>%g)."
 
 #: ../lib/gis/adj_cellhd.c:113 ../lib/gis/adj_cellhd.c:278
 #, c-format
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
-msgstr ""
-"Corrigiendo un error sutil de redondeo en los datos de entrada del límite "
-"este (%g>%g)."
+msgstr "Corrigiendo un error sutil de redondeo en los datos de entrada del límite este (%g>%g)."
 
 #: ../lib/gis/adj_cellhd.c:126 ../lib/gis/adj_cellhd.c:291
 msgid "North must be north of South"
@@ -6548,15 +6093,11 @@ msgstr "La coordenada Norte debe estar al norte de la coordenada Sur."
 
 #: ../lib/gis/adj_cellhd.c:128 ../lib/gis/adj_cellhd.c:293
 msgid "North must be larger than South"
-msgstr ""
-"El valor de la coordenada Norte debe ser mayor que el valor de la coordenada "
-"Sur."
+msgstr "El valor de la coordenada Norte debe ser mayor que el valor de la coordenada Sur."
 
 #: ../lib/gis/adj_cellhd.c:131 ../lib/gis/adj_cellhd.c:296
 msgid "East must be larger than West"
-msgstr ""
-"El valor de la coordenada Este debe ser mayor que el valor de la coordenada "
-"Oeste."
+msgstr "El valor de la coordenada Este debe ser mayor que el valor de la coordenada Oeste."
 
 #: ../lib/gis/adj_cellhd.c:150 ../lib/gis/adj_cellhd.c:340
 msgid "Invalid coordinates"
@@ -6593,9 +6134,7 @@ msgstr "El valor atribuido a la cima debe ser superior que el del fondo."
 #: ../lib/gis/open_misc.c:47
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr ""
-"G__open_misc(read): El directorio de mapas de usuario (mapset) <%s> no "
-"corresponde al xmapset <%s>."
+msgstr "G__open_misc(read): El directorio de mapas de usuario (mapset) <%s> no corresponde al xmapset <%s>."
 
 #: ../lib/gis/open_misc.c:72
 #, c-format
@@ -6755,9 +6294,7 @@ msgstr "G_getenv(): La variable %s no se ha establecido."
 #: ../lib/gis/find_file.c:79
 #, c-format
 msgid "'%s/%s' was found in more mapsets (also found in <%s>)"
-msgstr ""
-"'%s / %s' fue encontrado en mas directorios de mapas (mapsets) (también fue "
-"hallado en <%s>)."
+msgstr "'%s / %s' fue encontrado en mas directorios de mapas (mapsets) (también fue hallado en <%s>)."
 
 #: ../lib/gis/find_file.c:87
 #, c-format
@@ -6776,12 +6313,12 @@ msgstr "Esta ubicación no tiene descripción."
 #: ../lib/gis/spawn.c:386
 #, c-format
 msgid "CreateProcess() failed: error = %d"
-msgstr "Falló CreateProcess(): error = %d"
+msgstr "La instrucción CreateProcess() ha fallado: error = %d"
 
 #: ../lib/gis/spawn.c:421
 #, c-format
 msgid "G_spawn: unable to redirect descriptor %d"
-msgstr "G_spawn: No es posible desviar el descriptor %d "
+msgstr "G_spawn: No ha sido posible redireccionar el descriptor %d "
 
 #: ../lib/gis/spawn.c:429 ../lib/gis/spawn.c:619
 #, c-format
@@ -6871,26 +6408,17 @@ msgstr "Ventana de GRASS cuando la vista se guardó \n"
 #: ../lib/gis/view.c:545
 #, c-format
 msgid " Window saved in \"%s\" is completely outside of current GRASS window."
-msgstr ""
-" La ventana guardada en \"%s\" se encuentra completamente fuera de la "
-"ventana actual de GRASS."
+msgstr " La ventana guardada en \"%s\" se encuentra completamente fuera de la ventana actual de GRASS."
 
 #: ../lib/gis/view.c:549
 #, c-format
-msgid ""
-" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr ""
-" Solamente %d%% de la ventana guardada en \"%s\" se sobrepone con la ventana "
-"actual de GRASS."
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr " Solamente %d%% de la ventana guardada en \"%s\" se sobrepone con la ventana actual de GRASS."
 
 #: ../lib/gis/gisinit.c:51 ../lib/gis/gisinit.c:85
 #, fuzzy, c-format
-msgid ""
-"Module built against version %s but trying to use version %s. You need to "
-"rebuild GRASS GIS or untangle multiple installations."
-msgstr ""
-"Es necesario reconstruir GRASS o desenmarañar varias instalaciones. La "
-"versión de la biblioteca no es compatible con el módulo."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgstr "Es necesario reconstruir GRASS o desenmarañar varias instalaciones. La versión de la biblioteca no es compatible con el módulo."
 
 #: ../lib/gis/gisinit.c:63
 #, c-format
@@ -6898,14 +6426,13 @@ msgid "MAPSET %s - permission denied"
 msgstr "Permiso denegado - Directorio de mapas de usuario (mapset) %s "
 
 #: ../lib/gis/gisinit.c:66
-#, fuzzy, c-format
+#, c-format
 msgid "MAPSET %s not found at %s"
-msgstr "No se ha encontrado el directorio de mapas %s "
+msgstr "No se ha encontrado el directorio de mapas de usuario (mapset) %s  en %s."
 
 #: ../lib/gis/gisinit.c:100
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr ""
-"El sistema no ha sido inicializado. EL programador olvidó llamar G_gisinit()."
+msgstr "El sistema no ha sido inicializado. EL programador olvidó llamar G_gisinit()."
 
 #: ../lib/gis/seek.c:52 ../lib/gis/seek.c:58
 msgid "Unable to seek"
@@ -7016,8 +6543,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:149
 msgid "WHERE conditions of SQL statement without 'where' keyword"
-msgstr ""
-"Condiciones \"WHERE\", de la instrucción SQL sin la palabra clave \"where\"."
+msgstr "Condiciones \"WHERE\", de la instrucción SQL sin la palabra clave \"where\"."
 
 #: ../lib/gis/parser_standard_options.c:150
 msgid "Example: income < 1000 and inhab >= 10000"
@@ -7044,8 +6570,7 @@ msgid "Database schema"
 msgstr "Nombre de base de datos"
 
 #: ../lib/gis/parser_standard_options.c:186
-msgid ""
-"Do not use this option if schemas are not supported by driver/database server"
+msgid "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:195
@@ -7126,8 +6651,7 @@ msgstr "Tipo de interpolación desconocido."
 #: ../lib/gis/parser_standard_options.c:330
 #, fuzzy
 msgid "Nearest-neighbor interpolation"
-msgstr ""
-"Son necesarios al menos 2 fotogramas clave (keyframes) para la interpolación."
+msgstr "Son necesarios al menos 2 fotogramas clave (keyframes) para la interpolación."
 
 #: ../lib/gis/parser_standard_options.c:331
 #, fuzzy
@@ -7170,9 +6694,7 @@ msgid "Data type used in the output raster3d map"
 msgstr "Tipo de datos empleados en el archivo de salida."
 
 #: ../lib/gis/parser_standard_options.c:394
-msgid ""
-"Number of digits used as mantissa in the internal map storage, 0 -23 for "
-"float, 0 - 52 for double, max or default"
+msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:404
@@ -7182,9 +6704,7 @@ msgstr "El método de compresión usado en el archivo de salida."
 
 #: ../lib/gis/parser_standard_options.c:414
 #, fuzzy
-msgid ""
-"The dimensions of the tiles used in the output raster3d map (XxYxZ or "
-"default: 16x16x8)"
+msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
 msgstr "Las dimensiones de los mosaicos usados en el archivo de salida."
 
 #: ../lib/gis/parser_standard_options.c:424
@@ -7232,13 +6752,8 @@ msgstr "Número de capa"
 #
 #: ../lib/gis/parser_standard_options.c:488
 #, fuzzy
-msgid ""
-"Vector features can have category values in different layers. This number "
-"determines which layer to use. When used with direct OGR access this is the "
-"layer name."
-msgstr ""
-"Un solo mapa vectorial puede conectarse a más de una tabla. Este número "
-"determina que tabla usar."
+msgid "Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name."
+msgstr "Un solo mapa vectorial puede conectarse a más de una tabla. Este número determina que tabla usar."
 
 #: ../lib/gis/parser_standard_options.c:498
 #, fuzzy
@@ -7248,13 +6763,8 @@ msgstr "El número de capa %d o el nombre <%s> ya existen"
 #
 #: ../lib/gis/parser_standard_options.c:500
 #, fuzzy
-msgid ""
-"A single vector map can be connected to multiple database tables. This "
-"number determines which table to use. When used with direct OGR access this "
-"is the layer name."
-msgstr ""
-"Un solo mapa vectorial puede conectarse a más de una tabla. Este número "
-"determina que tabla usar."
+msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
+msgstr "Un solo mapa vectorial puede conectarse a más de una tabla. Este número determina que tabla usar."
 
 #: ../lib/gis/parser_standard_options.c:509
 msgid "Category value"
@@ -7302,9 +6812,7 @@ msgstr "Color."
 
 #: ../lib/gis/parser_standard_options.c:571
 msgid "Either a standard color name or R:G:B triplet"
-msgstr ""
-"Puede ser un nombre de color estándar o tres valores que definan un color R: "
-"G: B."
+msgstr "Puede ser un nombre de color estándar o tres valores que definan un color R: G: B."
 
 #: ../lib/gis/parser_standard_options.c:580
 msgid "Background color"
@@ -7313,9 +6821,7 @@ msgstr "Color de fondo."
 #: ../lib/gis/parser_standard_options.c:582
 #, fuzzy
 msgid "Either a standard color name, R:G:B triplet, or \"none\""
-msgstr ""
-"Puede ser un color estándar de GRASS, tres valores que definan un color R:G:"
-"B o \"ninguno\"."
+msgstr "Puede ser un color estándar de GRASS, tres valores que definan un color R:G:B o \"ninguno\"."
 
 #
 #: ../lib/gis/parser_standard_options.c:593
@@ -7362,8 +6868,7 @@ msgstr "Nombre(s) del (los) mapa(s) raster de entrada."
 #: ../lib/gis/parser_standard_options.c:672
 #, fuzzy
 msgid "Name of the input space time datasets"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/gis/parser_standard_options.c:680
 #, fuzzy
@@ -7418,8 +6923,7 @@ msgstr "Nombre del mapa raster 3d de salida."
 #: ../lib/gis/parser_standard_options.c:764
 #, fuzzy
 msgid "Type of the input space time dataset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas actual. (%s)"
 
 #: ../lib/gis/parser_standard_options.c:772
 #, fuzzy
@@ -7439,16 +6943,12 @@ msgstr "No es posible cerrar el mapa de entrada."
 #: ../lib/gis/parser_standard_options.c:799
 #, fuzzy
 msgid "The temporal type of the space time dataset"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/gis/parser_standard_options.c:806
 #, fuzzy
-msgid ""
-"WHERE conditions of SQL statement without 'where' keyword used in the "
-"temporal GIS framework"
-msgstr ""
-"Condiciones \"WHERE\", de la instrucción SQL sin la palabra clave \"where\"."
+msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
+msgstr "Condiciones \"WHERE\", de la instrucción SQL sin la palabra clave \"where\"."
 
 #: ../lib/gis/parser_standard_options.c:807
 msgid "Example: start_time > '2001-01-01 12:30:00'"
@@ -7530,7 +7030,7 @@ msgstr "No se encontraron atributos para la categoría %d."
 
 #: ../lib/sites/sites.c:151
 msgid "Category must be integer"
-msgstr "La categoría debe ser un número entero."
+msgstr "La categoría debe ser de tipo entero."
 
 #: ../lib/sites/sites.c:226
 msgid "Memory error in writing timestamp"
@@ -7541,33 +7041,25 @@ msgid "Illegal TimeStamp string"
 msgstr "Cadena de texto ilegal en la fecha."
 
 #: ../lib/sites/sites.c:255 ../lib/sites/sites.c:387
-msgid ""
-"Dev note: Adapted sites library used for vector points. (module should be "
-"updated to GRASS 6 vector library)"
-msgstr ""
-"Nota del Des: Para los puntos vectoriales, se ha utilizado una librería de "
-"sitios adaptada. (El módulo debería ser actualizado a la librería de "
-"vectores de GRASS 6)."
+msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
+msgstr "Nota del Des: Para los puntos vectoriales, se ha utilizado una librería de sitios adaptada. (El módulo debería ser actualizado a la librería de vectores de GRASS 6)."
 
 #: ../lib/sites/sites.c:306
 msgid "Cannot fetch row"
-msgstr "No se puede buscar la fila."
+msgstr "No se puede recuperar la fila."
 
 #: ../lib/sites/sites.c:443
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: Número no válido de dimensiones o campos."
 
 #: ../lib/sites/sites.c:671
-msgid ""
-"G_oldsite_describe() must be called immediately after G_fopen_sites_old()."
+msgid "G_oldsite_describe() must be called immediately after G_fopen_sites_old()."
 msgstr ""
 
 #: ../lib/manage/read_list.c:73
 #, fuzzy, c-format
 msgid "Unable to open data base element list '%s'"
-msgstr ""
-"No se puede abrir el archivo de definición de la base de datos vectorial '%"
-"s'."
+msgstr "No se puede abrir el archivo de definición de la base de datos vectorial '%s'."
 
 #: ../lib/manage/read_list.c:134
 #, c-format
@@ -7681,19 +7173,13 @@ msgstr ""
 
 #: ../lib/imagery/sigsetfile.c:41
 #, c-format
-msgid ""
-"Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> "
-"is not current mapset"
-msgstr ""
-"No se puede crear el archivo de firma <%s> para el subgrupo <%s> del grupo <%"
-"s> - <%s> No es el directorio de mapas de usuario (Mapset) actual."
+msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> is not current mapset"
+msgstr "No se puede crear el archivo de firma <%s> para el subgrupo <%s> del grupo <%s> - <%s> No es el directorio de mapas de usuario (Mapset) actual."
 
 #: ../lib/imagery/sigsetfile.c:57
 #, c-format
 msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
-msgstr ""
-"No se puede crear el archivo de firma <%s> para el subgrupo <%s> del grupo <%"
-"s>."
+msgstr "No se puede crear el archivo de firma <%s> para el subgrupo <%s> del grupo <%s>."
 
 #: ../lib/imagery/iscatt_core.c:81
 #, fuzzy, c-format
@@ -7708,9 +7194,7 @@ msgstr "la información histórica para [%s] no puede escribirse"
 #: ../lib/imagery/iscatt_core.c:255
 #, fuzzy, c-format
 msgid "Unable to open category raster condtions file <%s>."
-msgstr ""
-"No se puede abrir el archivo de definición de la base de datos vectorial '%"
-"s'."
+msgstr "No se puede abrir el archivo de definición de la base de datos vectorial '%s'."
 
 #: ../lib/imagery/iscatt_core.c:263
 #, fuzzy, c-format
@@ -7743,9 +7227,7 @@ msgid "Invalid size of category raster conditions file."
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:579
-msgid ""
-"Data inconsistent. Value computed for scatter plot is out of initialized "
-"range."
+msgid "Data inconsistent. Value computed for scatter plot is out of initialized range."
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:745
@@ -7761,8 +7243,7 @@ msgstr "No ha sido posible abrir el mapa raster 3D <%s>."
 #: ../lib/imagery/iscatt_core.c:761
 #, fuzzy, c-format
 msgid "Raster <%s> type is not <%s>"
-msgstr ""
-"El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
 
 #: ../lib/imagery/iscatt_core.c:775
 #, fuzzy, c-format
@@ -7772,9 +7253,7 @@ msgstr "No ha sido posible leer el rango del mapa raster <%s>."
 #: ../lib/imagery/iscatt_core.c:803
 #, fuzzy, c-format
 msgid "Unable to open category raster condtition file <%s>"
-msgstr ""
-"No se puede abrir el archivo de definición de la base de datos vectorial '%"
-"s'."
+msgstr "No se puede abrir el archivo de definición de la base de datos vectorial '%s'."
 
 #: ../lib/imagery/iscatt_core.c:817
 msgid "Corrupted category raster conditions file (fseek failed)"
@@ -7817,21 +7296,17 @@ msgstr "No se puede encontrar el archivo [%s] del grupo [%s en %s]."
 #: ../lib/imagery/fopen.c:79
 #, c-format
 msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"No se puede crear el archivo [%s] para el subgrupo [%s] del grupo [%s en %s]."
+msgstr "No se puede crear el archivo [%s] para el subgrupo [%s] del grupo [%s en %s]."
 
 #: ../lib/imagery/fopen.c:101 ../lib/imagery/fopen.c:127
 #, c-format
 msgid "Unable to open file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"No se puede abrir el archivo [%s] para el subgrupo [%s] del grupo [%s en %s]."
+msgstr "No se puede abrir el archivo [%s] para el subgrupo [%s] del grupo [%s en %s]."
 
 #: ../lib/imagery/fopen.c:116
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"No se puede encontrar el archivo [%s] para el subgrupo [%s] del grupo [%s en "
-"%s]."
+msgstr "No se puede encontrar el archivo [%s] para el subgrupo [%s] del grupo [%s en %s]."
 
 #: ../lib/imagery/list_subgp.c:72
 #, c-format
@@ -7841,29 +7316,22 @@ msgstr "El subgrupo <%s> del grupo <%s> está vacío.\n"
 #: ../lib/imagery/list_subgp.c:85
 #, c-format
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
-msgstr ""
-"El subgrupo <%s> perteneciente al grupo <%s> hace referencia a los "
-"siguientes mapas raster:\n"
+msgstr "El subgrupo <%s> perteneciente al grupo <%s> hace referencia a los siguientes mapas raster:\n"
 
 #: ../lib/imagery/points.c:124
 #, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr ""
-"No ha sido posible abrir el archivo de puntos de control del grupo [%s en %"
-"s]."
+msgstr "No ha sido posible abrir el archivo de puntos de control del grupo [%s en %s]."
 
 #: ../lib/imagery/points.c:132
 #, c-format
 msgid "Bad format in control point file for group [%s in %s]"
-msgstr ""
-"Formato incorrecto en el archivo de puntos de control para el grupo [%s en %"
-"s]."
+msgstr "Formato incorrecto en el archivo de puntos de control para el grupo [%s en %s]."
 
 #: ../lib/imagery/points.c:159
 #, c-format
 msgid "Unable to create control point file for group [%s in %s]"
-msgstr ""
-"No se puede crear el archivo de puntos de control del grupo [%s en %s]."
+msgstr "No se puede crear el archivo de puntos de control del grupo [%s en %s]."
 
 #: ../lib/imagery/iclass.c:83
 #, fuzzy, c-format
@@ -7964,9 +7432,7 @@ msgstr "Se ha terminado el espacio en la memoria."
 #: ../lib/ogsf/Gv3.c:262
 #, c-format
 msgid "No features from vector map <%s> fall within current region"
-msgstr ""
-"No existen elementos pertenecientes al mapa vectorial <%s> que se encuentren "
-"dentro de la región actual."
+msgstr "No existen elementos pertenecientes al mapa vectorial <%s> que se encuentren dentro de la región actual."
 
 #: ../lib/ogsf/Gv3.c:267
 #, c-format
@@ -7990,20 +7456,16 @@ msgstr "Coordenadas no válidas."
 
 #: ../lib/ogsf/Gv3.c:407
 #, c-format
-msgid ""
-"%d features without category. Unable to determine color rules for features "
-"without category."
+msgid "%d features without category. Unable to determine color rules for features without category."
 msgstr ""
 
 #: ../lib/ogsf/gk.c:320
 msgid "Need at least 3 keyframes for spline"
-msgstr ""
-"Se necesita un minimo de 3 fotogramas clave (keyframes) para el spline."
+msgstr "Se necesita un minimo de 3 fotogramas clave (keyframes) para el spline."
 
 #: ../lib/ogsf/gk.c:622
 msgid "Need at least 2 keyframes for interpolation"
-msgstr ""
-"Son necesarios al menos 2 fotogramas clave (keyframes) para la interpolación."
+msgstr "Son necesarios al menos 2 fotogramas clave (keyframes) para la interpolación."
 
 #: ../lib/ogsf/GVL2.c:267
 #, c-format
@@ -8041,9 +7503,7 @@ msgstr "Abriendo el flujo MPEG <%s>..."
 
 #: ../lib/ogsf/gsd_img_mpeg.c:340
 msgid "Unable to deduce output format from file extension: using MPEG"
-msgstr ""
-"No ha sido posible deducir el formato de salida a partir de la extensión del "
-"archivo: Utilizando MPEG."
+msgstr "No ha sido posible deducir el formato de salida a partir de la extensión del archivo: Utilizando MPEG."
 
 #
 #: ../lib/ogsf/gsd_img_mpeg.c:348
@@ -8087,7 +7547,7 @@ msgstr "No es posible leer el archivo de color del mapa raster <%s>."
 #: ../lib/ogsf/gsd_legend.c:252
 #, c-format
 msgid "Unable to read category file of raster map <%s>"
-msgstr "No ha sido posible leer el archivo de categoría del mapa raster <%s>."
+msgstr "No ha sido posible leer el archivo de categorías del mapa raster <%s>."
 
 #: ../lib/ogsf/gsd_legend.c:269
 #, c-format
@@ -8104,14 +7564,12 @@ msgid "Range request error for legend"
 msgstr "Error en el rango requerido para la leyenda."
 
 #: ../lib/ogsf/gsd_legend.c:385
-#, fuzzy
 msgid "Unable to show discrete FP range (use list)"
-msgstr "No ha sido posible el mostrar el rango discreto FP (utilice list"
+msgstr "No ha sido posible el mostrar el rango discreto FP (utilice list)"
 
 #: ../lib/ogsf/gsd_legend.c:501
 msgid "Too many categories to show as discrete!"
-msgstr ""
-"¡Hay demasiadas categorías para que sea posible mostrarlas como discretas!"
+msgstr "¡Hay demasiadas categorías para que sea posible mostrarlas como discretas!"
 
 #: ../lib/ogsf/gsd_legend.c:503
 msgid "Try using smaller font!"
@@ -8126,9 +7584,7 @@ msgstr "Cargando el mapa raster <%s>."
 #: ../lib/ogsf/Gs3.c:596
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
-msgstr ""
-"El rango de la tabla de colores no corresponde con los datos (mincol=%d, "
-"maxcol=%d."
+msgstr "El rango de la tabla de colores no corresponde con los datos (mincol=%d, maxcol=%d."
 
 #: ../lib/ogsf/Gs3.c:658 ../lib/ogsf/Gs3.c:730
 #, c-format
@@ -8137,9 +7593,7 @@ msgstr "Traduciendo colores del mapa raster <%s>..."
 
 #: ../lib/ogsf/Gs3.c:967
 msgid "View not saved by this program,there may be some inconsistancies"
-msgstr ""
-"La vista no ha sido guardada por este programa, pueden existir algunas "
-"inconsistencias."
+msgstr "La vista no ha sido guardada por este programa, pueden existir algunas inconsistencias."
 
 #: ../lib/ogsf/gsds.c:109
 msgid "Maximum number of datasets exceeded"
@@ -8152,19 +7606,12 @@ msgstr "Material de color: %d."
 
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
-msgid ""
-"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
-"advise GRASS developers of this error"
-msgstr ""
-"gsd_rot(): %c es una especificación no válida de eje. Se ha ignorado la "
-"rotación, por favor notifique a los desarrolladores de GRASS acerca de este "
-"error."
+msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
+msgstr "gsd_rot(): %c es una especificación no válida de eje. Se ha ignorado la rotación, por favor notifique a los desarrolladores de GRASS acerca de este error."
 
 #: ../lib/ogsf/gsd_surf.c:1742
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
-msgstr ""
-"Error de concordancia de los puntos de corte del plano entre superficies. "
-"Revise la(s) resolucion(es)."
+msgstr "Error de concordancia de los puntos de corte del plano entre superficies. Revise la(s) resolucion(es)."
 
 #: ../lib/ogsf/gsd_label.c:58
 msgid "Max. number of labels reached!"
@@ -8189,8 +7636,7 @@ msgstr "No ha sido posible leer el rango del mapa raster 3D <%s>."
 
 #: ../lib/ogsf/trans.c:180
 msgid "Out of matrix stack space"
-msgstr ""
-"No se dispone de mas espacio de almacenamiento en la pila de la matriz."
+msgstr "No se dispone de mas espacio de almacenamiento en la pila de la matriz."
 
 #: ../lib/ogsf/trans.c:200
 msgid "Tried to pop an empty stack"
@@ -8199,9 +7645,7 @@ msgstr "Intentó hacer desalojar una pila vacía."
 #: ../lib/ogsf/Gp3.c:146
 #, c-format
 msgid "No points from vector map <%s> fall within current region"
-msgstr ""
-"No hay puntos del mapa vectorial <%s> que se encuentren dentro de la región "
-"actual."
+msgstr "No hay puntos del mapa vectorial <%s> que se encuentren dentro de la región actual."
 
 #: ../lib/ogsf/Gp3.c:151
 #, c-format
@@ -8215,9 +7659,7 @@ msgstr "Cargando el mapa raster <%s>."
 
 #: ../lib/ogsf/Gp3.c:286
 #, c-format
-msgid ""
-"%d points without category. Unable to determine color rules for features "
-"without category."
+msgid "%d points without category. Unable to determine color rules for features without category."
 msgstr ""
 
 #: ../lib/ogsf/GS2.c:1211
@@ -8233,16 +7675,13 @@ msgstr "no hay datos"
 #: ../lib/ogsf/GS2.c:1655
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr ""
-"La carga del mapa raster <%s> ha fallado, por que este se encuentra fuera de "
-"la región actual."
+msgstr "La carga del mapa raster <%s> ha fallado, por que este se encuentra fuera de la región actual."
 
 #: ../lib/ogsf/GS2.c:1733 ../lib/ogsf/GS2.c:1739 ../lib/ogsf/GS2.c:1747
 #: ../lib/ogsf/GS2.c:1756 ../lib/ogsf/GS2.c:1764 ../lib/ogsf/GS2.c:1774
 #: ../lib/ogsf/GS2.c:1822
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
-msgstr ""
-"GS_load_att_map(): Sin memoria disponible. No es posible cargar el mapa."
+msgstr "GS_load_att_map(): Sin memoria disponible. No es posible cargar el mapa."
 
 #: ../lib/ogsf/GS2.c:1850
 msgid "Loading failed"
@@ -8466,7 +7905,7 @@ msgid ""
 "++ Running solver unit tests ++"
 msgstr ""
 "\n"
-"++ Ejecutando las pruebas de la unidad solucionadora ++"
+"++ Ejecutando las pruebas de la unidad de resolución ++"
 
 #: ../lib/gmath/test/test_solvers.c:42
 msgid ""
@@ -8618,9 +8057,7 @@ msgstr "Problema en la rutina LA."
 
 #: ../lib/gmath/la.c:538
 msgid "Procedure not yet available for selected matrix type"
-msgstr ""
-"El procedimiento todavía no se encuentra disponible para el tipo "
-"seleccionado de matriz."
+msgstr "El procedimiento todavía no se encuentra disponible para el tipo seleccionado de matriz."
 
 #: ../lib/gmath/la.c:572
 msgid "Matrix is not square. Cannot determine inverse"
@@ -8644,13 +8081,11 @@ msgstr "La matriz (Array) de elementos no ha sido asignada."
 
 #: ../lib/gmath/la.c:692
 msgid "Specified element is outside array bounds"
-msgstr ""
-"El elemento especificado se encuentra fuera de las fronteras del arreglo."
+msgstr "El elemento especificado se encuentra fuera de las fronteras del arreglo."
 
 #: ../lib/gmath/la.c:746
 msgid "Specified matrix column index is outside range"
-msgstr ""
-"El índice de columna de la matriz especificado se encuentra fuera de rango."
+msgstr "El índice de columna de la matriz especificado se encuentra fuera de rango."
 
 #: ../lib/gmath/la.c:751 ../lib/gmath/la.c:792 ../lib/gmath/la.c:1105
 #: ../lib/gmath/la.c:1157 ../lib/gmath/la.c:1232
@@ -8885,8 +8320,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:266
 #, fuzzy, python-format
-msgid ""
-"Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
+msgid "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
 msgstr "No se puede asignar una imagen temporal."
 
 #: ../lib/init/grass.py:350
@@ -8946,9 +8380,7 @@ msgstr "Disculpe pero <%s> no es una opción válida.\n"
 
 #: ../lib/init/grass.py:617
 #, python-format
-msgid ""
-"Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be "
-"created by '-c' switch."
+msgid "Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be created by '-c' switch."
 msgstr ""
 
 #: ../lib/init/grass.py:636
@@ -8968,15 +8400,12 @@ msgstr ""
 
 #: ../lib/init/grass.py:691
 #, python-format
-msgid ""
-"Invalid user interface specified - <%s>. Use the --help option to see valid "
-"interface names."
+msgid "Invalid user interface specified - <%s>. Use the --help option to see valid interface names."
 msgstr ""
 
 #: ../lib/init/grass.py:704
 msgid ""
-"Error in GUI startup. If necessary, please report this error to the GRASS "
-"developers.\n"
+"Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
 "Switching to text mode now.\n"
 "\n"
 "Hit RETURN to continue..."
@@ -8993,8 +8422,7 @@ msgstr ""
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
-msgstr ""
-"Por favor notifique a los desarrolladores de GRASS acerca de este error.\n"
+msgstr "Por favor notifique a los desarrolladores de GRASS acerca de este error.\n"
 
 #: ../lib/init/grass.py:728
 msgid ""
@@ -9013,9 +8441,7 @@ msgstr "%s: el área %d no existe."
 
 #: ../lib/init/grass.py:879
 #, python-format
-msgid ""
-"%(user)s is currently running GRASS in selected mapset (file %(file)s "
-"found). Concurrent use not allowed."
+msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed."
 msgstr ""
 
 #: ../lib/init/grass.py:883
@@ -9043,8 +8469,7 @@ msgstr "GISRC - variable no establecida."
 #: ../lib/init/grass.py:959
 #, python-format
 msgid ""
-"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
-"found. Exiting.\n"
+"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
 "\n"
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
@@ -9154,8 +8579,7 @@ msgid ""
 "Unable to start GRASS. You can:\n"
 " - Launch GRASS with '-gui' switch (`grass71 -gui`)\n"
 " - Create manually GISRC file (%s)\n"
-" - Launch GRASS with path to the location/mapset as an argument (`grass71 /"
-"path/to/location/mapset`)"
+" - Launch GRASS with path to the location/mapset as an argument (`grass71 /path/to/location/mapset`)"
 msgstr ""
 
 #: ../lib/init/grass.py:1395
@@ -9178,9 +8602,7 @@ msgstr "Uso: pid del archivo %s."
 
 #: ../lib/init/lock.c:42
 msgid "Concurrent mapset locking is not supported on Windows"
-msgstr ""
-"El bloqueo concurrente del directorio de mapas de usuario (Mapset) no está "
-"soportado en Windows."
+msgstr "El bloqueo concurrente del directorio de mapas de usuario (Mapset) no está soportado en Windows."
 
 #: ../lib/init/lock.c:60
 #, fuzzy, c-format
@@ -9224,11 +8646,8 @@ msgstr "No se pueden leer las coordenadas de línea del símbolo: %s."
 
 #: ../lib/symbol/read.c:260
 #, c-format
-msgid ""
-"Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
-msgstr ""
-"Nombre de símbolo incorrecto: '%s' (Debería ser: grupo / nombre o grupo / "
-"nombre@mapset)"
+msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgstr "Nombre de símbolo incorrecto: '%s' (Debería ser: grupo / nombre o grupo / nombre@mapset)"
 
 #: ../lib/symbol/read.c:284
 #, c-format
@@ -9242,13 +8661,8 @@ msgid "Incorrect symbol color: '%s', using default."
 msgstr "Color de símbolo incorrecto: '%s', utilizando el predeterminado."
 
 #: ../lib/rst/interp_float/segmen2d.c:118
-msgid ""
-"Taking too long to find points for interpolation - please change the region "
-"to area where your points are. Continuing calculations..."
-msgstr ""
-"Ha tomado demasiado tiempo en encontrar puntos de interpolación - por favor, "
-"cambie la región a la zona donde están los puntos. Continuando con los "
-"cálculos ..."
+msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
+msgstr "Ha tomado demasiado tiempo en encontrar puntos de interpolación - por favor, cambie la región a la zona donde están los puntos. Continuando con los cálculos ..."
 
 #: ../lib/rst/interp_float/resout2d.c:77
 msgid "Temporarily changing the region to desired resolution..."
@@ -9299,7 +8713,7 @@ msgstr "No se ha encontrado el registro de la base de datos de la cat %d."
 # "smooting" is well understood, so I did not translate this word as it is easier to understand the whole meaning in English
 #: ../lib/rst/interp_float/vinput2d.c:171
 msgid "Negative value of smoothing detected: sm must be >= 0"
-msgstr "Se ha detectado un valor de suavizado negativo: sm debe ser  >= 0"
+msgstr "Se ha detectado un valor de suavizado negativo: sm debe ser  >= 0."
 
 #: ../lib/rst/interp_float/vinput2d.c:235
 msgid "Strip exists with insufficient data"
@@ -9308,9 +8722,7 @@ msgstr "La franja existe con datos insuficientes."
 #: ../lib/rst/interp_float/vinput2d.c:249
 #, c-format
 msgid "There are points outside specified 2D/3D region - %d points ignored"
-msgstr ""
-"Existen puntos fuera de la región 2D/3D especificada -Se han ignorado %d "
-"puntos."
+msgstr "Existen puntos fuera de la región 2D/3D especificada -Se han ignorado %d puntos."
 
 #: ../lib/rst/interp_float/vinput2d.c:252
 #, c-format
@@ -9319,12 +8731,8 @@ msgstr "Ignorando %d puntos (demasiado denso)."
 
 #: ../lib/rst/interp_float/vinput2d.c:256
 #, c-format
-msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN=%"
-"d"
-msgstr ""
-"Los %d puntos dados para la interpolación (después de adelgazar) son menos "
-"que el NPMIN dado=%d."
+msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
+msgstr "Los %d puntos dados para la interpolación (después de adelgazar) son menos que el NPMIN dado=%d."
 
 #: ../lib/rst/interp_float/vinput2d.c:261
 msgid "Zero points in the given region"
@@ -9333,23 +8741,13 @@ msgstr "Cero puntos en el área dada."
 # word "smooth" not translated, easier to understand the concept in English
 #: ../lib/rst/interp_float/vinput2d.c:266
 #, c-format
-msgid ""
-"Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
-"smooth connection of segments, npmin > segmax (see manual)"
-msgstr ""
-"Los parámetros de segmentación tienen valores asignados no válidos: npmin= %"
-"d, segmax= %d. Para lograr conexiones suaves de segmentos, npmin > segmax "
-"(Por favor consulte el manual)."
+msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
+msgstr "Se han asignado valores no válidos a los parámetros de segmentación: npmin= %d, segmax= %d. Para lograr conexiones suaves de segmentos, npmin > segmax (Por favor consulte el manual)."
 
 #: ../lib/rst/interp_float/vinput2d.c:272
 #, c-format
-msgid ""
-"There are less than %d points for interpolation. No segmentation is "
-"necessary, to run the program faster set segmax=%d (see manual)"
-msgstr ""
-"Hay menos de %d puntos para la interpolación. No es necesaria la "
-"segmentación, para ejecutar el programa mas rápidamente defina segmax=%d "
-"(Por favor consulte el manual)."
+msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
+msgstr "Hay menos de %d puntos para la interpolación. No es necesaria la segmentación, para ejecutar el programa mas rápidamente defina segmax=%d (Por favor consulte el manual)."
 
 #: ../lib/rst/interp_float/vinput2d.c:276
 #, c-format
@@ -9400,7 +8798,7 @@ msgstr "Se ha creado la máscara del mapa de bits."
 msgid "First change your rows number to nsizr! %d %d"
 msgstr ""
 
-# almost translated, 
+# almost translated,
 # as I am not an advanced user I do not understand the meaning of "nsizc" so this word remains the same in the translation
 #: ../lib/rst/interp_float/output2d.c:113
 #, c-format
@@ -9409,12 +8807,8 @@ msgstr "Primero cambie su número de columnas a nsizc %d %d."
 
 #: ../lib/rst/interp_float/interp2d.c:214
 #, c-format
-msgid ""
-"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
-"cell. Z-value %f, zmin %f, zmax %f."
-msgstr ""
-"Sobrepico o rebasamiento- Se sugiere un aumento en la tensión. El sobrepico "
-"ocurre en las celdas (%d,%d). Valor-Z %f, zmin %f, zmax %f."
+msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
+msgstr "Sobrepico o rebasamiento- Se sugiere un aumento en la tensión. El sobrepico ocurre en las celdas (%d,%d). Valor-Z %f, zmin %f, zmax %f."
 
 #: ../lib/cairodriver/write_xid.c:14
 #, fuzzy, c-format
@@ -9532,565 +8926,557 @@ msgstr "No se puede encontrar el mapa de entrada '%s'"
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
-msgid ""
-"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/cairodriver/Draw_bitmap.c:47
 msgid "Cairo_Bitmap: Failed to create source"
 msgstr ""
 
+msgid "Line%s of ellipsoid table file <%s> is invalid"
+msgstr "No es válida la línea %s del archivo de la tabla de elipsoides <%s>."
+
+msgid "Lines%s of ellipsoid table file <%s> are invalid"
+msgstr "No son válidas las líneas %s del archivo de la tabla de elipsoides <%s>."
+
+#, fuzzy
+msgid "Unable to select space time dataset register table <%s>"
+msgstr "No se pueden recuperar los datos de la tabla. <%s>."
+
+#
+#, fuzzy
+msgid "Unable to create timestamp file for raster3d map <%s>"
+msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
+
+#, fuzzy
+msgid "Invalid datetime in timestamp for raster3d map <%s>"
+msgstr "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio de mapas %s"
+
+#
+#, fuzzy
+msgid "Unable to remove timestamp for raster3d map <%s>"
+msgstr "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
+
+#, fuzzy
+msgid "Raster3d map <%s> not found"
+msgstr "No se ha encontrado el mapa raster <%s>."
+
+#, fuzzy
+msgid "Inconsistency in topology: line %d - unexpected feature type"
+msgstr "Tipo(s) de objeto espacial."
+
+#, fuzzy
+msgid ""
+"Unable to read PostGIS features\n"
+"%s"
+msgstr "No se puede reescribir el el objeto espacial %d."
+
+#, fuzzy
+msgid "%d %s without geometry skipped"
+msgstr "Se ha ignorado el objeto espacial sin geometría %d."
+
+msgid "Invalid layer index (index >= number of layers)"
+msgstr "Indice de capa no válido (índice >= numero de capas)"
+
+msgid "Invalid layer index (index < 0 or index >= number of layers)"
+msgstr "Índice de capa no válido (índice < 0 o índice >= número de capas)"
+
+msgid "Layer or category index out of range"
+msgstr "La capa o el índice de categoría se encuentran fuera del rango."
+
+#, fuzzy
+msgid "Performs unit and integration tests for the g3d library"
+msgstr "Realiza las pruebas de unidad y de integración de la librería gpde."
+
+#, fuzzy
+msgid ""
+"\n"
+"++ Running g3d coordinate transform unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando pruebas de la unidad de gradiente. ++"
+
+#, fuzzy
+msgid ""
+"\n"
+"-- g3d coordinate transform unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad geom_data fallaron --"
+
+#, fuzzy
+msgid ""
+"\n"
+"-- g3d coordinate transform unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad geom_data han finalizado exitosamente. --"
+
+#
+#, fuzzy
+msgid ""
+"\n"
+"++ Running g3d put/get value large file unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando pruebas de la unidad de solucionador ++"
+
+#, fuzzy
+msgid ""
+"\n"
+"-- g3d put/get value large file unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de solucionado fallaron --"
+
+#, fuzzy
+msgid ""
+"\n"
+"-- g3d put/get value large file unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de solucionado han terminado exitosamente --"
+
+#
+#, fuzzy
+msgid ""
+"\n"
+"++ Running g3d put/get value unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando pruebas de la unidad de solucionador ++"
+
+#, fuzzy
+msgid ""
+"\n"
+"-- g3d put/get value unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de solucionado fallaron --"
+
+#, fuzzy
+msgid ""
+"\n"
+"-- g3d put/get value unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de solucionado han terminado exitosamente --"
+
+#, fuzzy
+msgid "Registering maps in the temporal database"
+msgstr "No se puede encontrar el mapa vectorial <%s> en <%s>."
+
+#, fuzzy
+msgid "Space time %(t)s dataset <%(i)s> is already in database, use overwrite flag to overwrite"
+msgstr "El mapa vectorial <%s> ya existía y será rescrito."
+
+#, fuzzy
+msgid "Space time %(type)s dataset <%(id)s> not found"
+msgstr "No se ha encontrado el mapa raster <%s>."
+
+#, fuzzy
+msgid "Please specify base="
+msgstr ""
+"\n"
+"Por favor especifique un nombre de datum.\n"
+
+#, fuzzy
+msgid "Space time %(type)s dataset <%(id)s> is already in database, use overwrite flag to overwrite"
+msgstr "El mapa vectorial <%s> ya existía y será rescrito."
+
+#, fuzzy
+msgid "OGR feature %d without ID skipped"
+msgstr "Objeto espacial OGR sin ID ignorado"
+
+#, fuzzy
+msgid "database"
+msgstr "Nombre de la base de datos."
+
+#, fuzzy
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr "No se ha definido la conexión a la base de datos para la capa %d."
+
+#, fuzzy
+msgid "Temporal GIS database connection not defined. Run t.connect."
+msgstr "No se ha definido la conexión a la base de datos para la capa %d."
+
+#, fuzzy
+msgid ""
+"Default TGIS driver / database set to:\n"
+"driver: %s\n"
+"database: %s"
+msgstr ""
+"El manejador preseleccionado / base de datos establecida en:\n"
+"Controlador: %s\n"
+"Base de datos: %s."
+
+#, fuzzy
+msgid "Default TGIS driver is not set"
+msgstr "El controlador predeterminado no ha sido inicializado."
+
+#, fuzzy
+msgid "Default TGIS database is not set"
+msgstr "La base de datos por predeterminada no ha sido inicializada."
+
+#, fuzzy
+msgid "Unregister %(type)s map <%(map)s> from space time datasets"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+
+#, fuzzy
+msgid "Register %s map <%s> with layer %s in space time %s dataset <%s>"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+
+#, fuzzy
+msgid "Register %s map <%s> in space time %s dataset <%s>"
+msgstr "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%s>."
+
+#, fuzzy
+msgid "Created register table <%s> for %s map <%s> with layer %s"
+msgstr "No es posible escribir las reglas quant para el mapa %s."
+
+#, fuzzy
+msgid "Unregister %s map <%s> with layer %s"
+msgstr "Cargando el mapa raster <%s>."
+
+#, fuzzy
+msgid "Unregister %s map <%s>"
+msgstr "Cargando el mapa raster <%s>."
+
+msgid ""
+"\n"
+"++ Running assembling unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando pruebas de la unidad de ensamblaje ++"
+
+msgid "\t 1. testing 2d assembling"
+msgstr "\t 1. Probando ensamblaje 2D."
+
+msgid "\t 2. testing 3d assembling"
+msgstr "\t 2. Probando ensamblaje 3D."
+
+msgid ""
+"\n"
+"-- Assembling unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de ensamblaje han fallado. --"
+
+msgid ""
+"\n"
+"-- Assembling unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de ensamblaje han finalizado exitosamente. --"
+
+#
+msgid ""
+"\n"
+"++ Running les creation unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando las pruebas de la unidad de creación les. ++"
+
+#
+msgid ""
+"\n"
+"-- les creation unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de creación les han fallado. --"
+
+#
+msgid ""
+"\n"
+"-- les creation unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de creación les han finalizado exitosamente. --"
+
+msgid "\t * testing les creation in parallel\n"
+msgstr "\t * Probando la creación les en paralelo.\n"
+
+msgid "\t * testing les creation in serial\n"
+msgstr "\t * Probando la creación les en serie.\n"
+
+msgid ""
+"\n"
+"++ Running array unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando pruebas en la unidad de matrices. ++"
+
+msgid "\t 1. testing 2d arrays"
+msgstr "\t 1. Probando matrices 2D."
+
+msgid "\t 2. testing 3d arrays"
+msgstr "\t 2. Probando matrices 3D."
+
+msgid ""
+"\n"
+"-- Array unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de matrices han fallado. --"
+
+msgid ""
+"\n"
+"-- Array unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas en la unidad de matrices finalizaron con éxito. --"
+
+msgid ""
+"\n"
+"++ Running geom_data unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando pruebas de la unidad geom_data ++"
+
+msgid ""
+"\n"
+"-- geom_data unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad geom_data han fallado --"
+
+msgid ""
+"\n"
+"-- geom_data unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad geom_data han finalizado exitosamente. --"
+
+#
+msgid ""
+"\n"
+"++ Running gwflow integration tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando las pruebas de integración de gwflow. ++"
+
+msgid "\t 1. testing 2d gwflow"
+msgstr "\t 1. Probando gwflow 2d."
+
+msgid "\t 2. testing 3d gwflow"
+msgstr "\t 2. Probando gwflow 3d."
+
+msgid ""
+"\n"
+"-- gwflow integration tests failure --"
+msgstr ""
+"\n"
+"++ Las pruebas de integración de gwflow han fallado. ++"
+
+#
+msgid ""
+"\n"
+"-- gwflow integration tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de integración de gwflow han finalizado exitosamente. --"
+
+#
+msgid ""
+"\n"
+"++ Running math tool unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando las pruebas en la unidad de herramientas matemáticas. ++"
+
+msgid ""
+"\n"
+"-- math tool unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de herramientas matemáticas han fallado. --"
+
+msgid ""
+"\n"
+"-- math tool unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de herramientas matemáticas han finalizado con exito. --"
+
+msgid ""
+"\n"
+"++ Running solute_transport integration tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando las pruebas de integración de transporte de solutos (solute_transport). ++"
+
+msgid "\t 1. testing 2d solute_transport"
+msgstr "\t 1. Probando transporte de solutos 2D."
+
+msgid "\t 2. testing 3d solute_transport"
+msgstr "\t 2. Probando transporte de solutos 3D."
+
+msgid ""
+"\n"
+"-- solute_transport integration tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de integración de transporte de solutos (solute_transport) han fallado. --"
+
+msgid ""
+"\n"
+"-- solute_transport integration tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de integración de transporte de solutos (solute_transport) han finalizado exitosamente. --"
+
+msgid ""
+"\n"
+"++ Running gradient unit tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando pruebas de la unidad de gradiente. ++"
+
+msgid "\t 1. testing 2d gradient"
+msgstr "\t 1. Probando gradiente 2D."
+
+msgid "\t 2. testing 3d gradient"
+msgstr "\t 2. Probando gradiente 3D."
+
+msgid ""
+"\n"
+"-- Gradient unit tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de gradiente han fallado. --"
+
+msgid ""
+"\n"
+"-- Gradient unit tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de la unidad de gradiente han concluido exitosamente. --"
+
+msgid ""
+"\n"
+"++ Running heat flow integration tests ++"
+msgstr ""
+"\n"
+"++ Ejecutando pruebas de integración de flujo de calor. ++"
+
+msgid "\t 1. testing 2d heat flow"
+msgstr "\t 1. Probando el flujo de calor 2D"
+
+msgid "\t 2. testing 3d heat flow"
+msgstr "\t 2. Probando el flujo de calor 3D"
+
+msgid ""
+"\n"
+"-- heat flow integration tests failure --"
+msgstr ""
+"\n"
+"-- Las pruebas de la integración del flujo de calor han fallado --"
+
+msgid ""
+"\n"
+"-- heat flow integration tests finished successfully --"
+msgstr ""
+"\n"
+"-- Las pruebas de integración de flujo de calor han finalizado exitosamente. --"
+
+msgid "Unable open spatial index file for write <%s>"
+msgstr "No ha sido posible el abrir el archivo de índice espacial para su escritura <%s>."
+
+#, fuzzy
+msgid "Attempt to read dead feature %d"
+msgstr "Intento de borrar un razgo u objeto espacial inexistente."
+
+#, fuzzy
+msgid "Reading failed: %s"
+msgstr "La carga ha fallado."
+
+#, fuzzy
+msgid "Could not find isle box"
+msgstr "No se pudo obtener la fila del raster."
+
+#, fuzzy
+msgid "Requested feature id %d is not reasonable(max features in vector map <%s>: %d)"
+msgstr "Vect_read_line (): el id del objeto espacial %d no es razonable (características máximas en el mapa vectorial <% s>:% d)."
+
+#, fuzzy
+msgid "<%s> is not the current mapset (%s)"
+msgstr "%s no se encuentra en el directorio de mapas del usuario actual (current mapset) (%s)."
+
+#, fuzzy
+msgid "Unable to get feature type"
+msgstr "No se puede reescribir el el objeto espacial %d."
+
+msgid "Unable to rewrite feature, vector map is not opened"
+msgstr "No ha sido posible reescribir el objeto espacial, el mapa vectorial no ha sido abierto."
+
+msgid "Unable to delete feature %d, vector map <%s> is not opened on topology level"
+msgstr "No ha sido posible eliminar el objeto espacial %d, pues el mapa vectorial <%s> no ha sido abierto en ese nivel topológico."
+
+msgid "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr "No ha sido posible eliminar el objeto espacial %d, puesto que, el mapa vectorial <%s> no se ha abierto en modo de escritura."
+
+msgid "Unable to restore feature %d, vector map <%s> is not opened on topology level"
+msgstr "No es posible restaurar el objeto espacial %d, por que el mapa vectorial <%s> no está abierto a nivel de topología."
+
+msgid "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr "No es posible restaurar el objeto espacial %d, el mapa vectorial <%s> no está abierto en modo de \"escritura\"."
+
+msgid "Unable to open cidx file <%s> for write"
+msgstr "No se puede abrir el archivo cidx <%s> para escritura."
+
+#, fuzzy
+msgid "Topology not available. Unable to insert new edge."
+msgstr "No hay ayuda disponible para el comando [%s].\n"
+
+msgid "input vector map is not open"
+msgstr "El mapa vectorial de entrada no ha sido abierto."
+
 #, fuzzy
 #~ msgid "no temp files available"
-#~ msgstr ""
-#~ "G__open_raster_new():no se encuentran disponibles los archivos temporales"
+#~ msgstr "G__open_raster_new():no se encuentran disponibles los archivos temporales"
 
 #, fuzzy
 #~ msgid "Unable to desribe table <%s>"
 #~ msgstr "No se puede describir la tabla <%s>."
 
-#~ msgid "Line%s of ellipsoid table file <%s> is invalid"
-#~ msgstr ""
-#~ "No es válida la línea %s del archivo de la tabla de elipsoides <%s>."
+#~ msgid "Special characters: newline, space, comma, tab"
+#~ msgstr "Caractéres especiales: Linea nueva, espacio, coma y tabulador."
 
-#~ msgid "Lines%s of ellipsoid table file <%s> are invalid"
-#~ msgstr ""
-#~ "No son válidas las líneas %s del archivo de la tabla de elipsoides <%s>."
-
-#, fuzzy
-#~ msgid "Unable to select space time dataset register table <%s>"
-#~ msgstr "No se pueden recuperar los datos de la tabla. <%s>."
+#~ msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
+#~ msgstr "Puede ser un color estándar de GRASS, tres valores que definan un color R:G:B o \"ninguno\"."
 
 #
 #, fuzzy
-#~ msgid "Unable to create timestamp file for raster3d map <%s>"
-#~ msgstr ""
-#~ "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
+#~ msgid "Name to input directory"
+#~ msgstr "Ruta del archivo de entrada."
+
+#~ msgid "Incompatible library version for module. You need to rebuild GRASS or untangle multiple installations."
+#~ msgstr "Es necesario reconstruir GRASS o desenmarañar varias instalaciones. La versión de la biblioteca no es compatible con el módulo."
 
 #, fuzzy
-#~ msgid "Invalid datetime in timestamp for raster3d map <%s>"
-#~ msgstr ""
-#~ "Archivo de marca de tiempo no válido para el %s mapa %s en el directorio "
-#~ "de mapas %s"
-
-#
-#, fuzzy
-#~ msgid "Unable to remove timestamp for raster3d map <%s>"
-#~ msgstr ""
-#~ "No se puede abrir el archivo de cabecera del mapa vectorial <%s@%s>."
+#~ msgid "No separator given"
+#~ msgstr "Separador de campos."
 
 #, fuzzy
-#~ msgid "Raster3d map <%s> not found"
-#~ msgstr "No se ha encontrado el mapa raster <%s>."
-
-#, fuzzy
-#~ msgid "Inconsistency in topology: line %d - unexpected feature type"
-#~ msgstr "Tipo(s) de objeto espacial."
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to read PostGIS features\n"
-#~ "%s"
-#~ msgstr "No se puede reescribir el el objeto espacial %d."
-
-#, fuzzy
-#~ msgid "%d %s without geometry skipped"
-#~ msgstr "Se ha ignorado el objeto espacial sin geometría %d."
-
-#~ msgid "Invalid layer index (index >= number of layers)"
-#~ msgstr "Indice de capa no válido (índice >= numero de capas)"
-
-#~ msgid "Invalid layer index (index < 0 or index >= number of layers)"
-#~ msgstr "Índice de capa no válido (índice < 0 o índice >= número de capas)"
-
-#~ msgid "Layer or category index out of range"
-#~ msgstr "La capa o el índice de categoría se encuentran fuera del rango."
-
-#, fuzzy
-#~ msgid "Performs unit and integration tests for the g3d library"
-#~ msgstr "Realiza las pruebas de unidad y de integración de la librería gpde."
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "++ Running g3d coordinate transform unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando pruebas de la unidad de gradiente. ++"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "-- g3d coordinate transform unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad geom_data fallaron --"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "-- g3d coordinate transform unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad geom_data han finalizado exitosamente. --"
-
-#
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "++ Running g3d put/get value large file unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando pruebas de la unidad de solucionador ++"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "-- g3d put/get value large file unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de solucionado fallaron --"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "-- g3d put/get value large file unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de solucionado han terminado exitosamente --"
-
-#
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "++ Running g3d put/get value unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando pruebas de la unidad de solucionador ++"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "-- g3d put/get value unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de solucionado fallaron --"
-
-#, fuzzy
-#~ msgid ""
-#~ "\n"
-#~ "-- g3d put/get value unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de solucionado han terminado exitosamente --"
-
-#, fuzzy
-#~ msgid "Registering maps in the temporal database"
-#~ msgstr "No se puede encontrar el mapa vectorial <%s> en <%s>."
-
-#, fuzzy
-#~ msgid ""
-#~ "Space time %(t)s dataset <%(i)s> is already in database, use overwrite "
-#~ "flag to overwrite"
-#~ msgstr "El mapa vectorial <%s> ya existía y será rescrito."
-
-#, fuzzy
-#~ msgid "Space time %(type)s dataset <%(id)s> not found"
-#~ msgstr "No se ha encontrado el mapa raster <%s>."
-
-#, fuzzy
-#~ msgid "Please specify base="
+#~ msgid "Please specify %(st)s= and %(e)s="
 #~ msgstr ""
 #~ "\n"
 #~ "Por favor especifique un nombre de datum.\n"
 
 #, fuzzy
-#~ msgid ""
-#~ "Space time %(type)s dataset <%(id)s> is already in database, use "
-#~ "overwrite flag to overwrite"
-#~ msgstr "El mapa vectorial <%s> ya existía y será rescrito."
+#~ msgid "Please specify %(m)s= or %(f)s="
+#~ msgstr ""
+#~ "\n"
+#~ "Por favor, especifique el nombre del elipsoide.\n"
 
 #, fuzzy
-#~ msgid "OGR feature %d without ID skipped"
-#~ msgstr "Objeto espacial OGR sin ID ignorado"
+#~ msgid "Raser type: {0} not supported"
+#~ msgstr "No se soportan objetos espaciales del tipo %d OGR"
 
 #, fuzzy
-#~ msgid "database"
-#~ msgstr "Nombre de la base de datos."
+#~ msgid "No temp files available"
+#~ msgstr "G__open_raster_new():no se encuentran disponibles los archivos temporales"
 
 #, fuzzy
-#~ msgid ""
-#~ "Prints/sets general temporal GIS database connection for current mapset."
-#~ msgstr "No se ha definido la conexión a la base de datos para la capa %d."
-
-#, fuzzy
-#~ msgid "Temporal GIS database connection not defined. Run t.connect."
-#~ msgstr "No se ha definido la conexión a la base de datos para la capa %d."
-
-#, fuzzy
-#~ msgid ""
-#~ "Default TGIS driver / database set to:\n"
-#~ "driver: %s\n"
-#~ "database: %s"
-#~ msgstr ""
-#~ "El manejador preseleccionado / base de datos establecida en:\n"
-#~ "Controlador: %s\n"
-#~ "Base de datos: %s."
-
-#, fuzzy
-#~ msgid "Default TGIS driver is not set"
-#~ msgstr "El controlador predeterminado no ha sido inicializado."
-
-#, fuzzy
-#~ msgid "Default TGIS database is not set"
-#~ msgstr "La base de datos por predeterminada no ha sido inicializada."
-
-#, fuzzy
-#~ msgid "Unregister %(type)s map <%(map)s> from space time datasets"
-#~ msgstr ""
-#~ "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%"
-#~ "s>."
-
-#, fuzzy
-#~ msgid "Register %s map <%s> with layer %s in space time %s dataset <%s>"
-#~ msgstr ""
-#~ "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%"
-#~ "s>."
-
-#, fuzzy
-#~ msgid "Register %s map <%s> in space time %s dataset <%s>"
-#~ msgstr ""
-#~ "El mapa raster <%s> no se encuentra en el directorio de mapas (mapset) <%"
-#~ "s>."
-
-#, fuzzy
-#~ msgid "Created register table <%s> for %s map <%s> with layer %s"
-#~ msgstr "No es posible escribir las reglas quant para el mapa %s."
-
-#, fuzzy
-#~ msgid "Unregister %s map <%s> with layer %s"
-#~ msgstr "Cargando el mapa raster <%s>."
-
-#, fuzzy
-#~ msgid "Unregister %s map <%s>"
-#~ msgstr "Cargando el mapa raster <%s>."
-
-#~ msgid ""
-#~ "\n"
-#~ "++ Running assembling unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando pruebas de la unidad de ensamblaje ++"
-
-#~ msgid "\t 1. testing 2d assembling"
-#~ msgstr "\t 1. Probando ensamblaje 2D."
-
-#~ msgid "\t 2. testing 3d assembling"
-#~ msgstr "\t 2. Probando ensamblaje 3D."
-
-#~ msgid ""
-#~ "\n"
-#~ "-- Assembling unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de ensamblaje han fallado. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- Assembling unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de ensamblaje han finalizado exitosamente. --"
-
-#
-#~ msgid ""
-#~ "\n"
-#~ "++ Running les creation unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando las pruebas de la unidad de creación les. ++"
-
-#
-#~ msgid ""
-#~ "\n"
-#~ "-- les creation unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de creación les han fallado. --"
-
-#
-#~ msgid ""
-#~ "\n"
-#~ "-- les creation unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de creación les han finalizado exitosamente. "
-#~ "--"
-
-#~ msgid "\t * testing les creation in parallel\n"
-#~ msgstr "\t * Probando la creación les en paralelo.\n"
-
-#~ msgid "\t * testing les creation in serial\n"
-#~ msgstr "\t * Probando la creación les en serie.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "++ Running array unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando pruebas en la unidad de matrices. ++"
-
-#~ msgid "\t 1. testing 2d arrays"
-#~ msgstr "\t 1. Probando matrices 2D."
-
-#~ msgid "\t 2. testing 3d arrays"
-#~ msgstr "\t 2. Probando matrices 3D."
-
-#~ msgid ""
-#~ "\n"
-#~ "-- Array unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de matrices han fallado. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- Array unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas en la unidad de matrices finalizaron con éxito. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "++ Running geom_data unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando pruebas de la unidad geom_data ++"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- geom_data unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad geom_data han fallado --"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- geom_data unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad geom_data han finalizado exitosamente. --"
-
-#
-#~ msgid ""
-#~ "\n"
-#~ "++ Running gwflow integration tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando las pruebas de integración de gwflow. ++"
-
-#~ msgid "\t 1. testing 2d gwflow"
-#~ msgstr "\t 1. Probando gwflow 2d."
-
-#~ msgid "\t 2. testing 3d gwflow"
-#~ msgstr "\t 2. Probando gwflow 3d."
-
-#~ msgid ""
-#~ "\n"
-#~ "-- gwflow integration tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Las pruebas de integración de gwflow han fallado. ++"
-
-#
-#~ msgid ""
-#~ "\n"
-#~ "-- gwflow integration tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de integración de gwflow han finalizado exitosamente. --"
-
-#
-#~ msgid ""
-#~ "\n"
-#~ "++ Running math tool unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando las pruebas en la unidad de herramientas matemáticas. ++"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- math tool unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de herramientas matemáticas han fallado. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- math tool unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de herramientas matemáticas han finalizado "
-#~ "con exito. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "++ Running solute_transport integration tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando las pruebas de integración de transporte de solutos "
-#~ "(solute_transport). ++"
-
-#~ msgid "\t 1. testing 2d solute_transport"
-#~ msgstr "\t 1. Probando transporte de solutos 2D."
-
-#~ msgid "\t 2. testing 3d solute_transport"
-#~ msgstr "\t 2. Probando transporte de solutos 3D."
-
-#~ msgid ""
-#~ "\n"
-#~ "-- solute_transport integration tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de integración de transporte de solutos (solute_transport) "
-#~ "han fallado. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- solute_transport integration tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de integración de transporte de solutos (solute_transport) "
-#~ "han finalizado exitosamente. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "++ Running gradient unit tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando pruebas de la unidad de gradiente. ++"
-
-#~ msgid "\t 1. testing 2d gradient"
-#~ msgstr "\t 1. Probando gradiente 2D."
-
-#~ msgid "\t 2. testing 3d gradient"
-#~ msgstr "\t 2. Probando gradiente 3D."
-
-#~ msgid ""
-#~ "\n"
-#~ "-- Gradient unit tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de gradiente han fallado. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- Gradient unit tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la unidad de gradiente han concluido exitosamente. --"
-
-#~ msgid ""
-#~ "\n"
-#~ "++ Running heat flow integration tests ++"
-#~ msgstr ""
-#~ "\n"
-#~ "++ Ejecutando pruebas de integración de flujo de calor. ++"
-
-#~ msgid "\t 1. testing 2d heat flow"
-#~ msgstr "\t 1. Probando el flujo de calor 2D"
-
-#~ msgid "\t 2. testing 3d heat flow"
-#~ msgstr "\t 2. Probando el flujo de calor 3D"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- heat flow integration tests failure --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de la integración del flujo de calor han fallado --"
-
-#~ msgid ""
-#~ "\n"
-#~ "-- heat flow integration tests finished successfully --"
-#~ msgstr ""
-#~ "\n"
-#~ "-- Las pruebas de integración de flujo de calor han finalizado "
-#~ "exitosamente. --"
-
-#~ msgid "Unable open spatial index file for write <%s>"
-#~ msgstr ""
-#~ "No ha sido posible el abrir el archivo de índice espacial para su "
-#~ "escritura <%s>."
-
-#, fuzzy
-#~ msgid "Attempt to read dead feature %d"
-#~ msgstr "Intento de borrar un razgo u objeto espacial inexistente."
-
-#, fuzzy
-#~ msgid "Reading failed: %s"
-#~ msgstr "La carga ha fallado."
-
-#, fuzzy
-#~ msgid "Could not find isle box"
-#~ msgstr "No se pudo obtener la fila del raster."
-
-#, fuzzy
-#~ msgid ""
-#~ "Requested feature id %d is not reasonable(max features in vector map <%"
-#~ "s>: %d)"
-#~ msgstr ""
-#~ "Vect_read_line (): el id del objeto espacial %d no es razonable "
-#~ "(características máximas en el mapa vectorial <% s>:% d)."
-
-#, fuzzy
-#~ msgid "<%s> is not the current mapset (%s)"
-#~ msgstr ""
-#~ "%s no se encuentra en el directorio de mapas del usuario actual (current "
-#~ "mapset) (%s)."
-
-#, fuzzy
-#~ msgid "Unable to get feature type"
-#~ msgstr "No se puede reescribir el el objeto espacial %d."
-
-#~ msgid "Unable to rewrite feature, vector map is not opened"
-#~ msgstr ""
-#~ "No ha sido posible reescribir el objeto espacial, el mapa vectorial no ha "
-#~ "sido abierto."
-
-#~ msgid ""
-#~ "Unable to delete feature %d, vector map <%s> is not opened on topology "
-#~ "level"
-#~ msgstr ""
-#~ "No ha sido posible eliminar el objeto espacial %d, pues el mapa vectorial "
-#~ "<%s> no ha sido abierto en ese nivel topológico."
-
-#~ msgid ""
-#~ "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
-#~ msgstr ""
-#~ "No ha sido posible eliminar el objeto espacial %d, puesto que, el mapa "
-#~ "vectorial <%s> no se ha abierto en modo de escritura."
-
-#~ msgid ""
-#~ "Unable to restore feature %d, vector map <%s> is not opened on topology "
-#~ "level"
-#~ msgstr ""
-#~ "No es posible restaurar el objeto espacial %d, por que el mapa vectorial <"
-#~ "%s> no está abierto a nivel de topología."
-
-#~ msgid ""
-#~ "Unable to restore feature %d, vector map <%s> is not opened in 'write' "
-#~ "mode"
-#~ msgstr ""
-#~ "No es posible restaurar el objeto espacial %d, el mapa vectorial <%s> no "
-#~ "está abierto en modo de \"escritura\"."
-
-#~ msgid "Unable to open cidx file <%s> for write"
-#~ msgstr "No se puede abrir el archivo cidx <%s> para escritura."
-
-#, fuzzy
-#~ msgid "Topology not available. Unable to insert new edge."
-#~ msgstr "No hay ayuda disponible para el comando [%s].\n"
-
-#~ msgid "input vector map is not open"
-#~ msgstr "El mapa vectorial de entrada no ha sido abierto."
+#~ msgid "Connection to PostgreSQL database failed."
+#~ msgstr "La conexión ha fallado."
