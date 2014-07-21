@@ -52,7 +52,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
     if not rows:
         dbif.close()
         core.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
-                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
+                     'sp': sp.get_new_map_instance(None).get_type(), 'i': sp.get_id()})
 
     if no_header is False:
         string = ""
