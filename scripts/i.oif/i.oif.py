@@ -125,7 +125,10 @@ def main():
     correlation = {}
     s = grass.read_command('r.covar', flags='r', map=[band for band in bands],
                            quiet=True)
-    for i, row in zip(bands, s.splitlines()):
+
+    # We need to skip the first line, since r.covar prints the number of values
+    lines = s.splitlines()
+    for i, row in zip(bands, lines[1:]):
         for j, cell in zip(bands, row.split(' ')):
             correlation[i, j] = float(cell)
 
