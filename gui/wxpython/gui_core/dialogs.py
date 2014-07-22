@@ -500,16 +500,16 @@ class SavedRegion(wx.Dialog):
         box.Add(item = label, proportion = 0, flag = wx.ALIGN_CENTRE | wx.ALL, border = 5)
         if loadsave == 'load':
             label.SetLabel(_("Load region:"))
-            selection = Select(parent = self, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
-                               type = 'windows')
+            self._selection = Select(parent=self, size=globalvar.DIALOG_GSELECT_SIZE,
+                                     type='windows')
         elif loadsave == 'save':
             label.SetLabel(_("Save region:"))
-            selection = Select(parent = self, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
-                               type = 'windows', mapsets = [grass.gisenv()['MAPSET']], fullyQualified = False)
+            self._selection = Select(parent=self, size=globalvar.DIALOG_GSELECT_SIZE,
+                                     type='windows', mapsets=[grass.gisenv()['MAPSET']], fullyQualified = False)
         
-        box.Add(item = selection, proportion = 0, flag = wx.ALIGN_CENTRE | wx.ALL, border = 5)
-        selection.SetFocus()
-        selection.Bind(wx.EVT_TEXT, self.OnRegion)
+        box.Add(item=self._selection, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
+        self._selection.SetFocus()
+        self._selection.Bind(wx.EVT_TEXT, self.OnRegion)
         
         sizer.Add(item = box, proportion = 0, flag = wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                   border = 5)
@@ -533,9 +533,17 @@ class SavedRegion(wx.Dialog):
         self.SetSizer(sizer)
         sizer.Fit(self)
         self.Layout()
-        
+
     def OnRegion(self, event):
-        self.wind = event.GetString()
+        value = self._selection.GetValue()
+        if not grass.legal_name(value):
+            GMessage(parent=self,
+                     message=_("Name cannot begin with '.' "
+                               "and must not contain space, quotes, "
+                               "'/', '\'', '@', ',', '=', '*', "
+                               "and all other non-alphanumeric characters."))
+        else:
+            self.wind = value
 
     def GetName(self):
         """Return region name"""
