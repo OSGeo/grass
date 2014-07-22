@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       i.eb.h_SEBAL01
+ * MODULE:       i.eb.hSEBAL01
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Calculates sensible heat flux by SEBAL iteration
  *               Delta T will be reassessed in the iterations !

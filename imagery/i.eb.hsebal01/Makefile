@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = i.eb.h_sebal01
+PGM = i.eb.hsebal01
 
 LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)
