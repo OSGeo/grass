@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     from_opt->key = "from_type";
     from_opt->options = "point,line,boundary,centroid,face,kernel";
     from_opt->required = YES;
+    from_opt->multiple = NO;
     from_opt->description = _("Feature type to convert from");
     from_opt->answer = "line";
 
@@ -57,6 +58,7 @@ int main(int argc, char *argv[])
     to_opt->key = "to_type";
     to_opt->options = "point,line,boundary,centroid,face,kernel";
     to_opt->required = YES;
+    to_opt->multiple = NO;
     to_opt->description = _("Feature type to convert to");
     to_opt->answer = "boundary";
     
