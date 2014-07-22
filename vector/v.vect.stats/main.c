@@ -217,7 +217,9 @@ int main(int argc, char *argv[])
 
     if (print_flag->answer)
 	/* get field separator */
-	fs = G_option_to_separator(fs_opt);
+	    fs = G_option_to_separator(fs_opt);
+    else
+	    fs = NULL;
 
     /* check for stats */
     if (method_opt->answer) {
