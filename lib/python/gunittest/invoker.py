@@ -21,7 +21,9 @@ from unittest.main import TestProgram, USAGE_AS_MAIN
 TestProgram.USAGE = USAGE_AS_MAIN
 
 from .loader import GrassTestLoader, discover_modules
-from .reporters import GrassTestFilesReporter
+from .reporters import (GrassTestFilesMultiReporter,
+                        GrassTestFilesTextReporter,
+                        GrassTestFilesHtmlReporter)
 from .utils import silent_rmtree, ensure_dir
 
 import grass.script.setup as gsetup
@@ -125,7 +127,11 @@ class GrassTestFilesInvoker(object):
         if os.path.abspath(results_dir) == os.path.abspath(self.start_dir):
             raise RuntimeError("Results root directory should not be the same"
                                " as discovery start directory")
-        self.reporter = GrassTestFilesReporter(results_dir=results_dir)
+        self.reporter = GrassTestFilesMultiReporter(
+            reporters=[
+                GrassTestFilesTextReporter(stream=sys.stderr),
+                GrassTestFilesHtmlReporter(),
+            ])
 
         # TODO: move constants out of loader class or even module
         modules = discover_modules(start_dir=self.start_dir,
@@ -137,6 +143,7 @@ class GrassTestFilesInvoker(object):
                                    universal_location_value=GrassTestLoader.universal_tests_value,
                                    import_modules=False)
 
+        self.reporter.start(results_dir)
         for module in modules:
             self._run_test_module(module=module, results_dir=results_dir,
                                   gisdbase=gisdbase, location=location)
