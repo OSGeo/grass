@@ -552,7 +552,7 @@ int main(int argc, char **argv)
     Rast_command_history(&history);
     Rast_write_history(mapname, &history);
 
-    G_done_msg(NULL);
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }
 
