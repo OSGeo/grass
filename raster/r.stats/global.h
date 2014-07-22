@@ -14,7 +14,6 @@ extern int *is_fp;
 extern DCELL *DMAX, *DMIN;
 
 extern CELL NULL_CELL;
-extern int (*get_row) ();
 
 extern char *fs;
 extern struct Categories *labels;

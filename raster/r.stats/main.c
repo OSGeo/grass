@@ -3,14 +3,17 @@
  *
  * MODULE:       r.stats
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, Brad Douglas <rez touchofmadness.com>,
- *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
- *               Jachym Cepicky <jachym les-ejk.cz>, Jan-Oliver Wagner <jan intevation.de>
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
  *               Sort parameter by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Calculates the area present in each of the categories of
  *               user-selected raster map layer(s)
- * COPYRIGHT:    (C) 1999-2006, 2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2013-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -34,7 +37,6 @@ int *is_fp;
 DCELL *DMAX, *DMIN;
 
 CELL NULL_CELL;
-int (*get_row) ();
 
 char *fs;
 struct Categories *labels;
@@ -71,7 +73,6 @@ int main(int argc, char *argv[])
 	struct Flag *c;		/* cell counts */
 	struct Flag *p;		/* percents */
 	struct Flag *l;		/* with labels */
-	struct Flag *q;		/* quiet */
 	struct Flag *n;		/* Suppress reporting of any NULLs */
 	struct Flag *N;		/* Suppress reporting of NULLs when 
 				   all values are NULL */
