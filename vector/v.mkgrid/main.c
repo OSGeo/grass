@@ -163,10 +163,8 @@ int main(int argc, char *argv[])
 	if (box->answer)
 	    G_fatal_error(_("'box' and 'position=region' are exclusive options"));
 
-	if (grid_info.angle != 0.0) {
+	if (grid_info.angle != 0.0)
 	    G_fatal_error(_("'angle' and 'position=region' are exclusive options"));
-	    grid_info.angle = 0.0;
-	}
 
 	grid_info.origin_x = window.west;
 	grid_info.origin_y = window.south;
