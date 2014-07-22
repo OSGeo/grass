@@ -42,7 +42,7 @@ double gain_aster(int band_number, int gain_code);
 #define KEXO8 66.41
 #define KEXO9 59.83
 
-#define PI 3.1415926
+#define PI M_PI
 
 double rad2ref_aster(double radiance, double doy, double sun_elevation,
 		     double k_exo);
