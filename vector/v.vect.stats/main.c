@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
      *stats_column_opt,		/* area column for stats result */
      *fs_opt;			/* field separator for printed output */
     struct Flag *print_flag;
-    char fs[2];
+    char *fs;
     struct Map_info PIn, AIn;
     int point_type, point_field, area_field;
     struct line_pnts *Points;
@@ -215,22 +215,11 @@ int main(int argc, char *argv[])
     point_field = atoi(point_field_opt->answer);
     area_field = atoi(area_field_opt->answer);
 
-    strcpy(fs, " ");
-    if (print_flag->answer) {
+    if (print_flag->answer)
 	/* get field separator */
-	if (fs_opt->answer) {
-	    if (strcmp(fs_opt->answer, "space") == 0)
-		*fs = ' ';
-	    else if (strcmp(fs_opt->answer, "tab") == 0)
-		*fs = '\t';
-	    else if (strcmp(fs_opt->answer, "\\t") == 0)
-		*fs = '\t';
-	    else
-		*fs = *fs_opt->answer;
-	}
-	else
-	    *fs = '|';
-    }
+	    fs = G_option_to_separator(fs_opt);
+    else
+	    fs = NULL;
 
     /* check for stats */
     if (method_opt->answer) {
