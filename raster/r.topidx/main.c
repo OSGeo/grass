@@ -3,14 +3,14 @@
  *
  * MODULE:       r.topidx
  *
- * AUTHOR(S):    Keith Beven <k.beven lancaster.ac.uk>,
- *               Huidae Cho <grass4u gmail.com>, Hydro Laboratory,
+ * AUTHOR(S):    Huidae Cho <grass4u gmail.com>, Hydro Laboratory,
  *               Kyungpook National University
+ *               Based on GRIDATB.FOR by Keith Beven <k.beven lancaster.ac.uk>
  *
- * PURPOSE:      Creates topographic index map from elevation map.
- *               Based on GRIDATB.FOR.
+ * PURPOSE:      Creates a topographic index raster map from an elevation
+ *               raster map.
  *
- * COPYRIGHT:    (C) 2000-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -39,13 +39,13 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     module->description =
-	_("Creates topographic index map from elevation raster map.");
+	_("Creates a topographic index raster map from an elevation raster map.");
 
     params.input = G_define_standard_option(G_OPT_R_ELEV);
     params.input->key = "input";
 
     params.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    params.output->description = _("Name for output topographic index map");
+    params.output->description = _("Name for output topographic index raster map");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
