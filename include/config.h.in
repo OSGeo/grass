@@ -221,9 +221,6 @@
 /* define if glXCreateGLXPixmap exists */
 #undef HAVE_PIXMAPS
 
-/* define if FFMPEG library exists */
-#undef HAVE_FFMPEG
-
 /* define if OpenGL uses X11 */
 #undef OPENGL_X11
 
