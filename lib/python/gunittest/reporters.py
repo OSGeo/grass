@@ -13,7 +13,6 @@ for details.
 
 
 import os
-import sys
 import datetime
 import xml.sax.saxutils as saxutils
 import xml.etree.ElementTree as et
@@ -67,7 +66,8 @@ def color_error_line(line):
 def get_svn_revision():
     """Get SVN revision number
 
-    :returns: SVN revision number as string or None if it is not possible to get
+    :returns: SVN revision number as string or None if it is
+        not possible to get
     """
     # TODO: here should be starting directory
     # but now we are using current as starting
@@ -131,16 +131,118 @@ def get_svn_info():
     return None
 
 
-class GrassTestFilesReporter(object):
+class GrassTestFilesMultiReporter(object):
 
-    def __init__(self, results_dir):
+    def __init__(self, reporters, forgiving=False):
+        self.reporters = reporters
+        self.forgiving = forgiving
+
+    def start(self, results_dir):
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
+        # TODO: perhaps only those whoe need it should do it (even multiple times)
+        # and there is also the delet problem
         ensure_dir(os.path.abspath(results_dir))
+        for reporter in self.reporters:
+            try:
+                reporter.start(results_dir)
+            except AttributeError:
+                if self.forgiving:
+                    pass
+                else:
+                    raise
 
-        # having all variables public although not really part of API
-        self.main_index = open(os.path.join(results_dir, 'index.html'), 'w')
+    def finish(self):
+        for reporter in self.reporters:
+            try:
+                reporter.finish()
+            except AttributeError:
+                if self.forgiving:
+                    pass
+                else:
+                    raise
+
+    def start_file_test(self, module):
+        for reporter in self.reporters:
+            try:
+                reporter.start_file_test(module)
+            except AttributeError:
+                if self.forgiving:
+                    pass
+                else:
+                    raise
+
+    def end_file_test(self, module, cwd, returncode, stdout, stderr):
+        for reporter in self.reporters:
+            try:
+                reporter.end_file_test(module, cwd, returncode, stdout, stderr)
+            except AttributeError:
+                if self.forgiving:
+                    pass
+                else:
+                    raise
+
+
+class GrassTestFilesCountingReporter(object):
+    def __init__(self):
+        self.test_files = None
+        self.files_fail = None
+        self.files_pass = None
+
+        self.file_pass_per = None
+        self.file_fail_per = None
+
+        self.main_start_time = None
+        self.main_end_time = None
+        self.main_time = None
+
+        self.file_start_time = None
+        self.file_end_time = None
+        self.file_time = None
+        self._start_file_test_called = False
+
+    def start(self, results_dir):
+        self.test_files = 0
+        self.files_fail = 0
+        self.files_pass = 0
+
         # this might be moved to some report start method
         self.main_start_time = datetime.datetime.now()
+
+    def finish(self):
+        self.main_end_time = datetime.datetime.now()
+        self.main_time = self.main_end_time - self.main_start_time
+
+        assert self.test_files == self.files_fail + self.files_pass
+        self.file_pass_per = 100 * float(self.files_pass) / self.test_files
+        self.file_fail_per = 100 * float(self.files_fail) / self.test_files
+
+    def start_file_test(self, module):
+        self.file_start_time = datetime.datetime.now()
+        self._start_file_test_called = True
+        self.test_files += 1
+
+    def end_file_test(self, module, cwd, returncode, stdout, stderr):
+        assert self._start_file_test_called
+        self.file_end_time = datetime.datetime.now()
+        self.file_time = self.file_end_time - self.file_start_time
+        if returncode:
+            self.files_fail += 1
+        else:
+            self.files_pass += 1
+        self._start_file_test_called = False
+
+
+class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
+
+    def __init__(self):
+        super(GrassTestFilesHtmlReporter, self).__init__()
+        self.main_index = None
+
+    def start(self, results_dir):
+        super(GrassTestFilesHtmlReporter, self).start(results_dir)
+        # having all variables public although not really part of API
+        self.main_index = open(os.path.join(results_dir, 'index.html'), 'w')
+
         svn_info = get_svn_info()
         if not svn_info:
             svn_text = ('<span style="font-size: 60%">'
@@ -165,19 +267,10 @@ class GrassTestFilesReporter(object):
                               '</tr></thead><tbody>'.format(
                                   time=self.main_start_time,
                                   svn=svn_text))
-        self.file_start_time = None
-        self._start_file_test_called = False
-        self.test_files = 0
-        self.files_failed = 0
-        self.files_succeeded = 0
 
     def finish(self):
-        main_end_time = datetime.datetime.now()
-        main_time = main_end_time - self.main_start_time
-        assert self.test_files == self.files_failed + self.files_succeeded
+        super(GrassTestFilesHtmlReporter, self).finish()
 
-        file_success_per = 100 * float(self.files_succeeded) / self.test_files
-        file_fail_per = 100 * float(self.files_failed) / self.test_files
         tfoot = ('<tfoot>'
                  '<tr>'
                  '<td>Summary</td>'
@@ -185,7 +278,7 @@ class GrassTestFilesReporter(object):
                  '<td>{nsper:.2f}% successful</td>'
                  '</tr>'
                  '</tfoot>'.format(nfiles=self.test_files,
-                                   nsper=file_success_per))
+                                   nsper=self.file_pass_per))
 
         summary_sentence = ('Executed {nfiles} test files in {time:}.'
                             ' From them'
@@ -193,11 +286,11 @@ class GrassTestFilesReporter(object):
                             ' and {nffiles} files ({nfper:.2f}%) failed.'
                             .format(
                                 nfiles=self.test_files,
-                                time=main_time,
-                                nsfiles=self.files_succeeded,
-                                nffiles=self.files_failed,
-                                nsper=file_success_per,
-                                nfper=file_fail_per))
+                                time=self.main_time,
+                                nsfiles=self.files_pass,
+                                nffiles=self.files_fail,
+                                nsper=self.file_pass_per,
+                                nfper=self.file_fail_per))
 
         self.main_index.write('<tbody>{tfoot}</table>'
                               '<p>{summary}</p>'
@@ -208,10 +301,8 @@ class GrassTestFilesReporter(object):
         self.main_index.close()
 
     def start_file_test(self, module):
-        self.file_start_time = datetime.datetime.now()
-        self._start_file_test_called = True
-        self.main_index.flush()  # to get previous ones to the report
-        self.test_files += 1
+        super(GrassTestFilesHtmlReporter, self).start_file_test(module)
+        self.main_index.flush()  # to get previous lines to the report
 
     def wrap_stdstream_to_html(self, infile, outfile, module, stream):
         before = '<html><body><h1>%s</h1><pre>' % (module.name + ' ' + stream)
@@ -232,13 +323,16 @@ class GrassTestFilesReporter(object):
 
     def returncode_to_html_sentence(self, returncode):
         if returncode:
-            return '<span style="color: red">&#x274c;</span> Test failed (return code %d)' % (returncode)
+            return ('<span style="color: red">&#x274c;</span>'
+                    ' Test failed (return code %d)' % (returncode))
         else:
-            return '<span style="color: green">&#x2713;</span> Test succeeded (return code %d)' % (returncode)
+            return ('<span style="color: green">&#x2713;</span>'
+                    ' Test succeeded (return code %d)' % (returncode))
 
     def end_file_test(self, module, cwd, returncode, stdout, stderr):
-        assert self._start_file_test_called
-        file_time = datetime.datetime.now() - self.file_start_time
+        super(GrassTestFilesHtmlReporter, self).end_file_test(
+            module=module, cwd=cwd, returncode=returncode,
+            stdout=stdout, stderr=stderr)
         self.main_index.write(
             '<tr><td>{d}</td>'
             '<td><a href="{d}/{m}/index.html">{m}</a></td><td>{sf}</td>'
@@ -253,27 +347,69 @@ class GrassTestFilesReporter(object):
                                     module=module, stream='stderr')
         file_index_path = os.path.join(cwd, 'index.html')
         file_index = open(file_index_path, 'w')
-        file_index.write('<html><body>'
-                         '<h1>{m.name}</h1>'
-                         '<h2>{m.tested_dir} &ndash; {m.name}</h2>'
-                         '<p>{status}'
-                         '<p>Test duration: {dur}'
-                         '<ul>'
-                         '<li><a href="stdout.html">standard output (stdout)</a>'
-                         '<li><a href="stderr.html">standard error output (stderr)</a>'
-                         '<li><a href="testcodecoverage/index.html">code coverage</a>'
-                         '</ul>'
-                         '</body></html>'.format(
-                             dur=file_time, m=module,
-                             status=self.returncode_to_html_sentence(returncode)))
+        file_index.write(
+            '<html><body>'
+            '<h1>{m.name}</h1>'
+            '<h2>{m.tested_dir} &ndash; {m.name}</h2>'
+            '<p>{status}'
+            '<p>Test duration: {dur}'
+            '<ul>'
+            '<li><a href="stdout.html">standard output (stdout)</a>'
+            '<li><a href="stderr.html">standard error output (stderr)</a>'
+            '<li><a href="testcodecoverage/index.html">code coverage</a>'
+            '</ul>'
+            '</body></html>'
+            .format(
+                dur=self.file_time, m=module,
+                status=self.returncode_to_html_sentence(returncode)))
         file_index.close()
 
         if returncode:
-            sys.stderr.write('{d}/{m} failed (see {f})\n'.format(d=module.tested_dir,
-                                                                 m=module.name,
-                                                                 f=file_index_path))
-            self.files_failed += 1
-        else:
-            self.files_succeeded += 1
+            pass
+            # TODO: here we don't have oportunity to write error file
+            # to stream (stdout/stderr)
+            # a stream can be added and if not none, we could write
 
-        self._start_file_test_called = False
+
+class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
+
+    def __init__(self, stream):
+        super(GrassTestFilesTextReporter, self).__init__()
+        self._stream = stream
+
+    def start(self, results_dir):
+        super(GrassTestFilesTextReporter, self).start(results_dir)
+
+    def finish(self):
+        super(GrassTestFilesTextReporter, self).finish()
+
+        summary_sentence = ('\nExecuted {nfiles} test files in {time:}.'
+                            '\nFrom them'
+                            ' {nsfiles} files ({nsper:.2f}%) were successful'
+                            ' and {nffiles} files ({nfper:.2f}%) failed.\n'
+                            .format(
+                                nfiles=self.test_files,
+                                time=self.main_time,
+                                nsfiles=self.files_pass,
+                                nffiles=self.files_fail,
+                                nsper=self.file_pass_per,
+                                nfper=self.file_fail_per))
+        self._stream.write(summary_sentence)
+
+    def start_file_test(self, module):
+        super(GrassTestFilesTextReporter, self).start_file_test(module)
+        self._stream.flush()  # to get previous lines to the report
+
+    def end_file_test(self, module, cwd, returncode, stdout, stderr):
+        super(GrassTestFilesTextReporter, self).end_file_test(
+            module=module, cwd=cwd, returncode=returncode,
+            stdout=stdout, stderr=stderr)
+
+        if returncode:
+            self._stream.write(
+                '{m} from {d} failed\n'
+                .format(
+                    d=module.tested_dir,
+                    m=module.name))
+            # TODO: here we lost the possibility to include also file name
+            # of the appropriate report
