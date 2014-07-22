@@ -59,15 +59,20 @@
 /*                                                                      c */
 /*         15      vgt2_spot5        * enter month,day,hh.ddd,long.,lat.c */
 /*                                                                      c */
+/*         16      worldview2        * enter month,day,hh.ddd,long.,lat.c */
+/*                                                                      c */
+/*         17      quickbird        * enter month,day,hh.ddd,long.,lat. c */
+/*																		c */
+/*         18      Landsat 8        * enter month,day,hh.ddd,long.,lat. c */
 /*                                                                      c */
 /*     note:       for hrv and tm experiments long. and lat. are the    c */
 /*                 coordinates of the scene center.                     c */
 /*                 lat. must be > 0 for north lat., < 0 for south lat.  c */
-/*                 long. must be > 0 for east long., <0 for west long.  c */
+/*                 long. must be > 0 for east long., < 0 for west long. c */
 /*                                                                      c */
 /*                 solar and viewing positions are computed             c */
 /*                                                                      c */
-/* **********************************************************************c */
+/* *********************************************************************c */
 
 struct GeomCond
 {
