@@ -972,7 +972,7 @@ class IVDigit:
         Vect_destroy_list(poList)
         
         if ret > 0:
-            self.addChangeset()
+            self._addChangeset()
             self.toolbar.EnableUndo()
         
         return ret
