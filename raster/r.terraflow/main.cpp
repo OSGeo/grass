@@ -405,14 +405,14 @@ printMaxSortSize(long nodata_count) {
   maxneed =  2*maxneed; /* need 2*N to sort */
 
   G_message( "total elements=%ld, nodata elements=%ld",
-		(long)nrows*ncols, nodata_count);
+		(long)nrows * ncols, nodata_count);
   G_message( "largest temporary files: ");
-  G_message( "\t\t FILL: %s [%d elements, %dB each]",
+  G_message( "\t\t FILL: %s [%ld elements, %dB each]",
 		  formatNumber(buf, fillmaxsize),
-		  nrows * ncols, sizeof(waterWindowType));
+		  (long)nrows * ncols, sizeof(waterWindowType));
   G_message( "\t\t FLOW: %s [%ld elements, %dB each]",
 		  formatNumber(buf, flowmaxsize),
-		  (long)(nrows * ncols - nodata_count), sizeof(sweepItem));
+		  (long)nrows * ncols - nodata_count, sizeof(sweepItem));
   G_message( "Will need at least %s space available in %s",
 		  formatNumber(buf, maxneed),  	  /* need 2*N to sort */
 		  getenv(STREAM_TMPDIR));
