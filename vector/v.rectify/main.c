@@ -157,21 +157,8 @@ int main(int argc, char *argv[])
 	
     orthorot = ortho->answer;
 
-    if (print_rms->answer) {
-	if (sep->answer) {
-	    rms_sep = sep->answer;
-	    if (strcmp(rms_sep, "\\t") == 0)
-		rms_sep = "\t";
-	    if (strcmp(rms_sep, "tab") == 0)
-		rms_sep = "\t";
-	    if (strcmp(rms_sep, "space") == 0)
-		rms_sep = " ";
-	    if (strcmp(rms_sep, "comma") == 0)
-		rms_sep = ",";
-	}
-	else
-	    rms_sep = "|";
-    }
+    if (print_rms->answer)
+	rms_sep = G_option_to_separator(sep);
     else
 	rms_sep = NULL;
 
