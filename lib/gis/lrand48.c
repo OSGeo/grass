@@ -1,3 +1,15 @@
+/*!
+ * \file lib/gis/lrand48.c
+ *
+ * \brief GIS Library - Pseudo-random number generation
+ *
+ * (C) 2014 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Glynn Clements
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,8 +39,16 @@ static const uint32 a2 = 0x5;
 
 static const uint32 b0 = 0xB;
 
+static int seeded;
+
 #define LO(x) ((x) & 0xFFFFU)
 #define HI(x) ((x) >> 16)
+
+/*!
+ * \brief Seed the pseudo-random number generator
+ *
+ * \param seedval 32-bit integer used to seed the PRNG
+ */
 
 void G_srand48(long seedval)
 {
@@ -36,7 +56,17 @@ void G_srand48(long seedval)
     x2 = (uint16) HI(x);
     x1 = (uint16) LO(x);
     x0 = (uint16) 0x330E;
+    seeded = 1;
 }
+
+/*!
+ * \brief Seed the pseudo-random number generator from the time and PID
+ *
+ * A weak hash of the current time and PID is generated and used to
+ * seed the PRNG
+ *
+ * \return generated seed value passed to G_srand48()
+ */
 
 long G_srand48_auto(void)
 {
@@ -74,12 +104,21 @@ static void G__next(void)
     uint32 y1 = LO(a0x1) + LO(a1x0) + HI(a0x0);
     uint32 y2 = LO(a0x2) + LO(a1x1) + LO(a2x0) + HI(a0x1) + HI(a1x0);
 
+    if (!seeded)
+	G_fatal_error(_("Pseudo-random number generator not seeded"));
+
     x0 = (uint16) LO(y0);
     y1 += HI(y0);
     x1 = (uint16) LO(y1);
     y2 += HI(y1);
     x2 = (uint16) LO(y2);
 }
+
+/*!
+ * \brief Generate an integer in the range [0, 2^31)
+ *
+ * \return the generated value
+ */
 
 long G_lrand48(void)
 {
@@ -89,6 +128,12 @@ long G_lrand48(void)
     return (long) r;
 }
 
+/*!
+ * \brief Generate an integer in the range [-2^31, 2^31)
+ *
+ * \return the generated value
+ */
+
 long G_mrand48(void)
 {
     uint32 r;
@@ -96,6 +141,12 @@ long G_mrand48(void)
     r = ((uint32) x2 << 16) | ((uint32) x1);
     return (long) (int32) r;
 }
+
+/*!
+ * \brief Generate a floating-point value in the range [0,1)
+ *
+ * \return the generated value
+ */
 
 double G_drand48(void)
 {
