@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("evapotranspiration"));
     module->description =
 	_("Computes evapotranspiration calculation "
-	  "Prestley and Taylor formulation, 1972.");
+	  "Priestley and Taylor formulation, 1972.");
     
     /* Define different options */
     input_RNET = G_define_standard_option(G_OPT_R_INPUT);
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     input_PT->key = "priestleytaylorcoef";
     input_PT->type = TYPE_DOUBLE;
     input_PT->required = YES;
-    input_PT->description = _("Prestley-Taylor coefficient");
+    input_PT->description = _("Priestley-Taylor coefficient");
     input_PT->answer = "1.26";
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
