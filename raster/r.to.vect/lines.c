@@ -495,7 +495,10 @@ static int update_list(int count)
 	    v_list[col - 1].right = start_line(1);
 	break;
     default:
-	G_debug(1, "Crowded cell %xH (%d,%d)", count, row, col);
+	G_message(_("Crowded cell at (%f, %f): row %d, col %d, count %d"),
+		  Rast_col_to_easting((double)col - .5, &cell_head),
+		  Rast_row_to_northing((double)row + .5, &cell_head),
+		  row, col - 1, count);
 	G_fatal_error(_("Raster map is not thinned properly.\nPlease run r.thin."));
     }				/* switch count */
 
