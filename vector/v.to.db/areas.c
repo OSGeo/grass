@@ -39,7 +39,6 @@ int read_areas(struct Map_info *Map)
 	}
 	if ((options.option == O_COMPACT) || (options.option == O_FD) ||
 	    (options.option == O_PERIMETER)) {
-	    Vect_get_area_points(Map, area_num, Ppoints);
 	    perimeter = Vect_get_area_perimeter(Map, area_num);
 	}
 
