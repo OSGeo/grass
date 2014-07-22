@@ -167,16 +167,51 @@ class GrassTestFilesReporter(object):
                                   svn=svn_text))
         self.file_start_time = None
         self._start_file_test_called = False
+        self.test_files = 0
+        self.files_failed = 0
+        self.files_succeeded = 0
 
     def finish(self):
-        self.main_index.write('<tbody></table>'
-                              '</body></html>')
+        main_end_time = datetime.datetime.now()
+        main_time = main_end_time - self.main_start_time
+        assert self.test_files == self.files_failed + self.files_succeeded
+
+        file_success_per = 100 * float(self.files_succeeded) / self.test_files
+        file_fail_per = 100 * float(self.files_failed) / self.test_files
+        tfoot = ('<tfoot>'
+                 '<tr>'
+                 '<td>Summary</td>'
+                 '<td>{nfiles} test files</td>'
+                 '<td>{nsper:.2f}% successful</td>'
+                 '</tr>'
+                 '</tfoot>'.format(nfiles=self.test_files,
+                                   nsper=file_success_per))
+
+        summary_sentence = ('Executed {nfiles} test files in {time:}.'
+                            ' From them'
+                            ' {nsfiles} files ({nsper:.2f}%) were successful'
+                            ' and {nffiles} files ({nfper:.2f}%) failed.'
+                            .format(
+                                nfiles=self.test_files,
+                                time=main_time,
+                                nsfiles=self.files_succeeded,
+                                nffiles=self.files_failed,
+                                nsper=file_success_per,
+                                nfper=file_fail_per))
+
+        self.main_index.write('<tbody>{tfoot}</table>'
+                              '<p>{summary}</p>'
+                              '</body></html>'
+                              .format(
+                                  tfoot=tfoot,
+                                  summary=summary_sentence))
         self.main_index.close()
 
     def start_file_test(self, module):
         self.file_start_time = datetime.datetime.now()
         self._start_file_test_called = True
         self.main_index.flush()  # to get previous ones to the report
+        self.test_files += 1
 
     def wrap_stdstream_to_html(self, infile, outfile, module, stream):
         before = '<html><body><h1>%s</h1><pre>' % (module.name + ' ' + stream)
@@ -237,4 +272,8 @@ class GrassTestFilesReporter(object):
             sys.stderr.write('{d}/{m} failed (see {f})\n'.format(d=module.tested_dir,
                                                                  m=module.name,
                                                                  f=file_index_path))
+            self.files_failed += 1
+        else:
+            self.files_succeeded += 1
+
         self._start_file_test_called = False
