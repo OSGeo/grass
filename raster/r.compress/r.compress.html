@@ -1,37 +1,62 @@
 <h2>DESCRIPTION</h2>
 
-The GRASS program <em>r.compress</em> can be used to compress and decompress
+<em>r.compress</em> can be used to compress and decompress
 raster map layers.
 
 <p>
-During compression, this program reformats raster maps
-using a run-length-encoding (RLE) algorithm.  Raster map
+During compression, this program reformats raster maps using a run-length-encoding
+(RLE) or ZLIB's "deflate" (LZ77-based) algorithm. Raster map
 layers which contain very little information (such as
 boundary, geology, soils and land use maps) can be greatly
 reduced in size. Some raster map layers are shrunk to
 roughly 1% of their original sizes.  Raster map layers
 containing complex images such as elevation and photo or
 satellite images may increase slightly in size.
-<!-- The 'new compressed format' probably isn't new anymore as of 2008. - EP 
-GRASS uses a new compressed format, -->
-All new raster maps are now automatically stored in compressed 
-form (see FORMATS below).  GRASS programs can read both compressed 
-and regular (uncompressed) file formats.  This allows the use
-of whichever raster data format consumes less space.
+All newly generated raster maps are automatically stored in compressed 
+form (see FORMATS below).  Other modules can read both compressed 
+and regular (uncompressed) file formats.
 
 <p>
 As an example, the Spearfish data base raster map layer
 <em>owner</em> was originally a size of 26600 bytes.  After
-it was compressed, the raster map became only 1249 bytes
+it was RLE compressed, the raster map became only 1249 bytes
 (25351 bytes smaller).
 
 <p>
-Raster files may be decompressed to return them to their
+Raster files may be decompressed manually to return them to their
 original format, using the <b>-u</b> flag of 
 <em>r.compress</em>. If <em>r.compress</em> is asked to
 compress a raster map which is already compressed (or to
 decompress an already decompressed raster map), it simply informs
-the user the map is already (de)compressed and exits. 
+the user the map is already (de)compressed and exits.
+
+
+<h3>TERMINOLOGY</h3>
+
+<ul>
+<li> INTEGER map (CELL data type): a raster map from INTEGER type (whole
+  numbers only)</li>
+<li> FLOAT map (FCELL data type): a raster map from FLOAT type (4 bytes,
+  7-9 digits precision)</li>
+<li> DOUBLE map (DCELL data type): a raster map from DOUBLE type (8 bytes,
+  15-17 digits precision)</li>
+<li> NULL: represents "no data" in raster maps, to be distinguished from
+  0 (zero) data value</li>
+</ul>
+
+<h3>USED COMPRESSION ALGORITHMS</h3>
+
+Floating point (FCELL, DCELL) raster maps never use RLE compression;
+they are either compressed with ZLIB or uncompressed.
+<p>
+Integer (CELL) raster maps by default RLE compressed or may remain
+uncompressed. If the environment variable <tt>GRASS_INT_ZLIB</tt>
+exists, newly generated compressed integer (CELL type) raster maps will
+be compressed using ZLIB instead of RLE compression. In the internal
+cellhd file, the value for "compressed" is 1 for RLE and 2 for ZLIB.
+<p>
+Obviously, decompression is controlled by the raster map's compression,
+not the environment variable.
 
 <h2>NOTES</h2>
 
@@ -72,24 +97,15 @@ other syncing codes in the raster map.  A cell header file
 is broken up into rows of category values.
 
 <p>
-The <b>compressed</b> format is not so simple, but is quite
+The <b>compressed</b> RLE format is not so simple, but is quite
 elegant in its design. It not only requires less disk space
 to store the raster data, but often can result in faster
 execution of graphic and analysis programs since there is
-less disk I/O. There are two compressed formats: the
+less disk I/O. There are two compressed RLE formats: the
 pre-version 3.0 format (which GRASS programs can read but
 no longer produce), and the version 3.0 format (which is
 automatically used when new raster map layers are
 created).
-
-<p>
-RLE compression versus zlib compression: if the environment variable
-GRASS_INT_ZLIB exists, new raster maps will be compressed using zlib 
-instead of RLE compression. In the cellhd file, the value for
-"compressed" is 1 for RLE and 2 for zlib.
-<br>
-Obviously, decompression is controlled by the raster's "compressed"
-header value, not the environment variable.
 
 <h4>PRE-3.0 FORMAT:</h4> 
 
