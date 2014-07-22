@@ -84,6 +84,7 @@ class GrassTestFilesInvoker(object):
         cwd = os.path.join(results_dir, module.tested_dir, module.name)
         data_dir = os.path.join(module.file_dir, 'data')
         if os.path.exists(data_dir):
+            # TODO: link dir intead of copy tree
             shutil.copytree(data_dir, os.path.join(cwd, 'data'),
                             ignore=shutil.ignore_patterns('*.svn*'))
         ensure_dir(os.path.abspath(cwd))
