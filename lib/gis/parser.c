@@ -419,7 +419,8 @@ int G_parser(int argc, char **argv)
 
     /* If there are NO arguments, go interactive */
 
-    if (argc < 2 && st->has_required && !st->no_interactive && isatty(0)) {
+    if (argc < 2 && (st->has_required || G__has_required_rule())
+        && !st->no_interactive && isatty(0)) {
 	module_gui_wx();
 	return -1;
     }
