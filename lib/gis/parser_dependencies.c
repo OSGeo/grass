@@ -372,3 +372,21 @@ void G__describe_option_rules(void)
 	}
     }
 }
+
+/*!
+   \brief Checks if there is any rule RULE_REQUIRED.
+
+   \return 1 if there is such rule
+   \return 0 if not
+ */
+int G__has_required_rule(void)
+{
+    size_t i;
+
+    for (i = 0; i < rules.count; i++) {
+	const struct rule *rule = &((const struct rule *) rules.data)[i];
+	if (rule->type == RULE_REQUIRED)
+	    return TRUE;
+    }
+    return FALSE;
+}
