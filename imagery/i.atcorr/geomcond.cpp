@@ -369,6 +369,9 @@ void GeomCond::parse()
     case 13: /* rapideye         * enter month,day,hh.ddd,long.,lat. */
     case 14: /* vgt1_spot4       * enter month,day,hh.ddd,long.,lat. */
     case 15: /* vgt2_spot5       * enter month,day,hh.ddd,long.,lat. */
+	case 16: /* worldview2       * enter month,day,hh.ddd,long.,lat. */
+	case 17: /* quickbird2       * enter month,day,hh.ddd,long.,lat. */
+    case 18: /* Landsat 8        * enter month,day,hh.ddd,long.,lat. */
     {
 	cin >> month;
 	cin >> jday;
@@ -414,24 +417,27 @@ void GeomCond::parse()
 /* ---- print geometrical conditions ---- */
 void GeomCond::print()
 {
-    static const string etiq1[16] = {
+    static const string etiq1[] = {
 	string(" user defined conditions     "),
-	string(" meteosat observation        "),
-	string(" goes east observation       "),
-	string(" goes west observation       "),
-	string(" avhrr (AM noaa) observation "),
-	string(" avhrr (PM noaa) observation "),
-	string(" h.r.v.   observation        "),
-	string(" t.m.     observation        "),
-	string(" etm+     observation        "),
-	string(" liss     observation        "),
-	string(" aster    observation        "),
-	string(" avnir    observation        "),
-	string(" ikonos   observation        "),
-	string(" rapideye observation        "),
-	string(" vgt1_spot4 observation      "),
-	string(" vgt2_spot5 observation      ")
-    };
+	string(" Meteosat observation        "),
+	string(" GOES east observation       "),
+	string(" GOES west observation       "),
+	string(" AVHRR (AM noaa) observation "),
+	string(" AVHRR (PM noaa) observation "),
+	string(" H.R.V.   observation        "),
+	string(" T.M.     observation        "),
+	string(" ETM+     observation        "),
+	string(" LISS     observation        "),
+	string(" ASTER    observation        "),
+	string(" AVNIR    observation        "),
+	string(" Ikonos   observation        "),
+	string(" Rapideye observation        "),
+	string(" VGT1-SPOT4 observation      "),
+	string(" VGT2-SPOT5 observation      "),
+	string(" Worldview2 observation      "),
+	string(" Quickbird2 observation      "),
+    string(" Landsat 8 observation       ")
+	};
 
     static const string head(" geometrical conditions identity  ");
     static const string line(" -------------------------------  ");
