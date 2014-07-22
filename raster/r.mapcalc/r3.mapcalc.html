@@ -470,8 +470,20 @@ you don't see data in masked areas even if they are not NULL.
 See <em><a href="r.mask.html">r.mask</a></em> for details.
 
 <h3>Random number generator initialization</h3>
-<p>The environment variable GRASS_RND_SEED is read to initialize the
-random number generator.
+<p>The pseudo-random number generator used by the rand() function can
+be initialised to a specific value using the <em>seed</em> option. 
+This can be used to replicate a previous calculation.
+<p>Alternatively, it can be initialised from the system time and the
+PID using the <em>-r</em> flag. This should result in a different seed
+being used each time.
+<p>In either case, the seed will be written to the map's history, and
+can be seen using <em>r.info</em>.
+<p>If you want other people to be able to verify your results, it's
+preferable to use the <em>seed</em> option to supply a seed which is
+either specified in the script or generated from a determenistic process
+such as a pseudo-random number generator given an explicit seed.
+<p>Note that the rand() function will generate a fatal error if neither
+the <em>seed</em> option nor the <em>-s</em> flag are given.
 
 <h2>EXAMPLES</h2>
 To compute the average of two 3D grids

@@ -254,26 +254,6 @@ static void error_handler(void *p)
     }
 }
 
-static void setup_rand(void)
-{
-    /* Read PRNG seed from environment variable if available */
-    /* GRASS_RND_SEED */
-    const char *random_seed = getenv("GRASS_RND_SEED");
-    long seed_value;
-
-    if (!random_seed)
-	return;
-
-    seed_value = atol(random_seed);
-    G_debug(3, "Read random seed from environment: %ld", seed_value);
-
-#if defined(HAVE_DRAND48)
-    srand48(seed_value);
-#else
-    srand((unsigned int)seed_value);
-#endif
-}
-
 void execute(expr_list * ee)
 {
     int verbose = isatty(2);
@@ -281,7 +261,6 @@ void execute(expr_list * ee)
     int count, n;
 
     setup_region();
-    setup_rand();
 
     exprs = ee;
     G_add_error_handler(error_handler, NULL);

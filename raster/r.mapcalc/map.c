@@ -740,6 +740,12 @@ void create_history(const char *dst, expression * e)
 	len -= n;
     }
 
+    if (seeded) {
+	char buf[RECORD_LEN];
+	sprintf(buf, "random seed = %ld", seed_value);
+	Rast_append_history(&hist, buf);
+    }
+
     Rast_write_history(dst, &hist);
 
     G_free(expr);
