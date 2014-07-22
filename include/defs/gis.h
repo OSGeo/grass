@@ -396,6 +396,13 @@ int G_llres_scan(const char *, double *);
 const char *G_location(void);
 char *G_location_path(void);
 
+/* lrand48.c */
+void G_srand48(long);
+long G_srand48_auto(void);
+long G_lrand48(void);
+long G_mrand48(void);
+double G_drand48(void);
+
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
 void G_set_ls_exclude_filter(int (*)(const char *, void *), void *);
