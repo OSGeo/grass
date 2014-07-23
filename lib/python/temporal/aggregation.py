@@ -213,7 +213,7 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
 
     msgr = get_tgis_message_interface()
 
-    dbif,  connected = init_dbif(dbif)
+    dbif, connected = init_dbif(dbif)
 
     topo_builder = SpatioTemporalTopologyBuilder()
     topo_builder.build(mapsA=granularity_list, mapsB=map_list, spatial=spatial)
@@ -224,15 +224,15 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
     # Dummy process object that will be deep copied
     # and be put into the process queue
     r_series = pymod.Module("r.series", output="spam", method=method,
-                            overwrite=overwrite, quiet=True,  run_=False, 
+                            overwrite=overwrite, quiet=True, run_=False,
                             finish_=False)
-    g_copy = pymod.Module("g.copy", rast="spam,spamspam",
-                          quiet=True,  run_=False, finish_=False)
+    g_copy = pymod.Module("g.copy", rast=['spam', 'spamspam'],
+                          quiet=True, run_=False, finish_=False)
     output_list = []
     count = 0
 
     for granule in granularity_list:
-        msgr.percent(count,  len(granularity_list),  1)
+        msgr.percent(count, len(granularity_list), 1)
         count += 1
 
         aggregation_list = []
@@ -304,7 +304,7 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
                 process_queue.put(mod)
             else:
                 mod = copy.deepcopy(g_copy)
-                mod(rast="%s,%s"%(aggregation_list[0],  output_name))
+                mod(rast=[aggregation_list[0],  output_name])
                 process_queue.put(mod)
 
     if connected:
