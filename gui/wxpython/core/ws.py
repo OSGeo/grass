@@ -16,8 +16,8 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
-import os
 import sys
+import copy
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -76,7 +76,7 @@ class RenderWMSMgr(wx.EvtHandler):
     def __del__(self):
         grass.try_remove(self.tempMap)
 
-    def Render(self, cmd):
+    def Render(self, cmd, env):
         """!If it is needed, download missing WMS data.
 
         @todo lmgr deletes mapfile and maskfile when order of layers
@@ -85,10 +85,11 @@ class RenderWMSMgr(wx.EvtHandler):
         if not haveGdal:
             return
 
-        self.dstSize['cols'] = int(os.environ["GRASS_WIDTH"])
-        self.dstSize['rows'] = int(os.environ["GRASS_HEIGHT"])
+        env = copy.copy(env)
+        self.dstSize['cols'] = int(env["GRASS_WIDTH"])
+        self.dstSize['rows'] = int(env["GRASS_HEIGHT"])
 
-        region = self._getRegionDict()
+        region = self._getRegionDict(env)
         self._fitAspect(region, self.dstSize)
 
         self.updateMap = True
@@ -127,22 +128,11 @@ class RenderWMSMgr(wx.EvtHandler):
 
             if Debug.GetLevel() < 3:
                 cmdList.append('--quiet')
-            
-            tempPngfile = None
-            if "GRASS_PNGFILE" in os.environ:  
-                tempPngfile = os.environ["GRASS_PNGFILE"]
-            os.environ["GRASS_PNGFILE"] = self.tempMap
 
-            tempRegion = os.environ["GRASS_REGION"]
-            os.environ["GRASS_REGION"] = self._createRegionStr(region)
+            env["GRASS_PNGFILE"] = self.tempMap
+            env["GRASS_REGION"] = self._createRegionStr(region)
 
-            self.thread.RunCmd(cmdList, env = os.environ.copy(), stderr = self.cmdStdErr)
-
-            os.environ.pop("GRASS_PNGFILE")
-            if tempPngfile:
-                os.environ["GRASS_PNGFILE"] = tempPngfile
-
-            os.environ["GRASS_REGION"] = tempRegion
+            self.thread.RunCmd(cmdList, env=env, stderr=self.cmdStdErr)
 
     def OnCmdOutput(self, event):
         """!Print cmd output according to debug level.
@@ -181,11 +171,11 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.dataFetched.emit()
 
-    def _getRegionDict(self):
+    def _getRegionDict(self, env):
         """!Parse string from GRASS_REGION env variable into dict.
         """
         region = {}
-        parsedRegion = os.environ["GRASS_REGION"].split(';')
+        parsedRegion = env["GRASS_REGION"].split(';')
         for r in parsedRegion:
             r = r.split(':')
             r[0] = r[0].strip()
