@@ -161,13 +161,24 @@ PERMANENT
     &lt;key&gt;, without the bracketing &lt;string&gt; tags.</dd>
 
   <dt>GRASS_INT_ZLIB</dt>
-  <dd>[libgis]<br> if the environment variable GRASS_INT_ZLIB exists,
+  <dd>[libraster]<br> if the environment variable GRASS_INT_ZLIB exists and has the value 0,
     new compressed <i>integer</i> (CELL type) raster maps will be compressed
-    using zlib instead of RLE compression. Such rasters will have a <tt>compressed</tt>
+    using RLE compression.
+    <br><br>
+    If the variable doesn't exist, or the value is non-zero, zlib compression
+    will be used instead. Such rasters will have a <tt>compressed</tt>
     value of 2 in the cellhd file.
     <br><br>
     Obviously, decompression is controlled by the
     raster's <tt>compressed</tt> value, not the environment variable.</dd>
+
+  <dt>GRASS_ZLIB_LEVEL</dt>
+  <dd>[libgis]<br> if the environment variable GRASS_ZLIB_LEVEL exists and its value can
+    be parsed as an integer, it determines the compression level used when new compressed
+    <i>integer</i> (CELL type) raster maps are compressed using zlib compression.
+    <br><br>
+    If the variable doesn't exist, or the value cannot be parsed as an
+    integer, zlib's default compression level will be used.</dd>
   
   <dt>GRASS_MESSAGE_FORMAT</dt>
   <dd>[various modules, wxGUI]<br>
