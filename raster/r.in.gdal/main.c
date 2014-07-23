@@ -101,6 +101,7 @@ int main(int argc, char *argv[])
     parm.memory->key = "memory";
     parm.memory->type = TYPE_INTEGER;
     parm.memory->required = NO;
+    parm.memory->options = "0-2047";
     parm.memory->description = _("Cache size (MiB)");
 
     parm.target = G_define_option();
@@ -204,12 +205,12 @@ int main(int argc, char *argv[])
     /*      Fire up the engines.                                            */
     /* -------------------------------------------------------------------- */
     GDALAllRegister();
+    /* default GDAL memory cache size appears to be only 40 MiB, slowing down r.in.gdal */
     if (parm.memory->answer && *parm.memory->answer) {
+	   /* TODO: GDALGetCacheMax() overflows at 2GiB, implement use of GDALSetCacheMax64() */
            GDALSetCacheMax(atol(parm.memory->answer) * 1024 * 1024);
-           G_message(_("Using user memory cache size: %.1f MiB"), GDALGetCacheMax()/1024.0/1024.0);
-    } else
-        G_message(_("Using default GDAL memory cache size: %.1f MiB"), GDALGetCacheMax()/1024.0/1024.0);
-
+           G_verbose_message(_("Using memory cache size: %.1f MiB"), GDALGetCacheMax()/1024.0/1024.0);
+    }
 
     /* -------------------------------------------------------------------- */
     /*      List supported formats and exit.                                */
