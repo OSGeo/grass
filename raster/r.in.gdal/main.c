@@ -102,6 +102,7 @@ int main(int argc, char *argv[])
     parm.memory->type = TYPE_INTEGER;
     parm.memory->required = NO;
     parm.memory->options = "0-2047";
+    parm.memory->answer = "300";
     parm.memory->description = _("Cache size (MiB)");
 
     parm.target = G_define_option();
