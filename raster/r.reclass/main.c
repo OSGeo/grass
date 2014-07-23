@@ -99,16 +99,16 @@ int main(int argc, char *argv[])
     any = 0;
 
     if (tty) {
-	fprintf(stdout,
+	fprintf(stderr,
 		_("Enter rule(s), \"end\" when done, \"help\" if you need it\n"));
 	if (map_type == FCELL_TYPE)
-	    fprintf(stdout, _("FCELL: Data range is %.7g to %.7g\n"),
+	    fprintf(stderr, _("FCELL: Data range is %.7g to %.7g\n"),
 		    (double)min, (double)max);
 	else if (map_type == DCELL_TYPE)
-	    fprintf(stdout, _("DCELL: Data range is %.15g to %.15g\n"),
+	    fprintf(stderr, _("DCELL: Data range is %.15g to %.15g\n"),
 		    (double)min, (double)max);
 	else
-	    fprintf(stdout, _("CELL: Data range is %ld to %ld\n"), (long)min,
+	    fprintf(stderr, _("CELL: Data range is %ld to %ld\n"), (long)min,
 		    (long)max);
     }
 
