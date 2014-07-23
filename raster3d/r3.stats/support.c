@@ -246,7 +246,7 @@ void update_stat_table(stat_table *stats, RASTER3D_Region *region)
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
-void print_stat_table(stat_table *stats)
+void print_stat_table(stat_table *stats, int counts_only)
 {
     int i;
 
@@ -269,6 +269,13 @@ void print_stat_table(stat_table *stats)
 	fprintf(stdout, "\nNumber of groups with equal values: %i",
 		stats->nsteps);
     }
+    else if (counts_only) {
+	for (i = 0; i < stats->nsteps; i++) {
+	    fprintf(stdout, "%d %ld\n",
+		    stats->table[i]->num, stats->table[i]->count);
+	}
+	fprintf(stdout, "* %ld\n", stats->null->count);
+    }
     else {
 	/*       1234567   012345678901234567   012345678901234567   0123456789012   0123456   0123456789 */
 	fprintf(stdout,
@@ -288,16 +295,17 @@ void print_stat_table(stat_table *stats)
 		stats->null->count);
     }
 
-    fprintf(stdout,
-	    "\nSum of non Null cells: \n\tVolume = %13.3lf \n\tPercentage = %7.3lf  \n\tCell count = %i\n",
-	    stats->sum_vol, stats->sum_perc, stats->sum_count);
+    if (!counts_only) {
+	fprintf(stdout,
+		"\nSum of non Null cells: \n\tVolume = %13.3lf \n\tPercentage = %7.3lf  \n\tCell count = %i\n",
+		stats->sum_vol, stats->sum_perc, stats->sum_count);
 
-    fprintf(stdout,
-	    "\nSum of all cells: \n\tVolume = %13.3lf \n\tPercentage = %7.3lf  \n\tCell count = %i\n",
-	    stats->sum_vol + stats->null->vol,
-	    stats->sum_perc + stats->null->perc,
-	    stats->sum_count + stats->null->count);
-
+	fprintf(stdout,
+		"\nSum of all cells: \n\tVolume = %13.3lf \n\tPercentage = %7.3lf  \n\tCell count = %i\n",
+		stats->sum_vol + stats->null->vol,
+		stats->sum_perc + stats->null->perc,
+		stats->sum_count + stats->null->count);
+    }
 
     return;
 }
