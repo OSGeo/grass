@@ -10,13 +10,13 @@ and functions.
 <p><b>result =</b><em> expression</em>
 <p>where <em>result</em> is the name of a raster map layer
 to contain the result of the calculation and
-<em>expression</em> is any legal arithmetic expression involving existing
+<b>expression</b> is any legal arithmetic expression involving existing
 raster map layers, integer or floating point constants,
 and functions known to the calculator.
 Parentheses are allowed in the expression and may be nested to any depth.
 <em>result</em> will be created in the user's current mapset.
 <p>
-As <em>expression=</em> is the first option, it is the default. This
+As <b>expression=</b> is the first option, it is the default. This
 means that passing an expression on the command line is possible
 as long as the expression is quoted and a space is included before the
 first <em>=</em> sign.
@@ -430,7 +430,7 @@ If the user adds a backslash to the end of an input line, <em>r3.mapcalc</em> as
 the formula being entered by the user continues on to the next input line.
 There is no limit to the possible number of input lines
 or to the length of a formula.
-<p>If the <em>r333.mapcalc</em> formula entered by the user is very long,
+<p>If the <em>r3.mapcalc</em> formula entered by the user is very long,
 the map title will contain only some of it, but most (if not all) of
 the formula will be placed into the history file for the <em>result</em> map.
 <p>When the user enters input to <em>r3.mapcalc</em> non-interactively on
@@ -471,19 +471,19 @@ See <em><a href="r.mask.html">r.mask</a></em> for details.
 
 <h3>Random number generator initialization</h3>
 <p>The pseudo-random number generator used by the rand() function can
-be initialised to a specific value using the <em>seed</em> option. 
+be initialised to a specific value using the <b>seed</b> option. 
 This can be used to replicate a previous calculation.
 <p>Alternatively, it can be initialised from the system time and the
-PID using the <em>-r</em> flag. This should result in a different seed
+PID using the <b>-r</b> flag. This should result in a different seed
 being used each time.
 <p>In either case, the seed will be written to the map's history, and
 can be seen using <em>r.info</em>.
 <p>If you want other people to be able to verify your results, it's
-preferable to use the <em>seed</em> option to supply a seed which is
+preferable to use the <b>seed</b> option to supply a seed which is
 either specified in the script or generated from a determenistic process
 such as a pseudo-random number generator given an explicit seed.
 <p>Note that the rand() function will generate a fatal error if neither
-the <em>seed</em> option nor the <em>-s</em> flag are given.
+the <b>seed</b> option nor the <b>-s</b> flag are given.
 
 <h2>EXAMPLES</h2>
 To compute the average of two 3D grids
@@ -580,4 +580,5 @@ Tomas Paudits &amp; Jaro Hofierka, funded by GeoModel s.r.o., Slovakia
 <br><a href="mailto:tpaudits@mailbox.sk">tpaudits@mailbox.sk</a>,
 <a href="MAILTO:hofierka@geomodel.sk">hofierka@geomodel.sk</a>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
