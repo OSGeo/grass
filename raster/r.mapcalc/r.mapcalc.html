@@ -11,13 +11,13 @@ and functions.
 <p><b>result =</b><em> expression</em>
 <p>where <em>result</em> is the name of a raster map layer
 to contain the result of the calculation and
-<em>expression</em> is any legal arithmetic expression involving existing
+<b>expression</b> is any legal arithmetic expression involving existing
 raster map layers, integer or floating point constants,
 and functions known to the calculator.
 Parentheses are allowed in the expression and may be nested to any depth.
 <em>result</em> will be created in the user's current mapset.
 <p>
-As <em>expression=</em> is the first option, it is the default. This
+As <b>expression=</b> is the first option, it is the default. This
 means that passing an expression on the command line is possible
 as long as the expression is quoted and a space is included before the
 first <em>=</em> sign.
@@ -610,19 +610,19 @@ If a user want to use the existing map, the name of the temporary variable
 
 <h3>Random number generator initialization</h3>
 <p>The pseudo-random number generator used by the rand() function can
-be initialised to a specific value using the <em>seed</em> option. 
+be initialised to a specific value using the <b>seed</b> option. 
 This can be used to replicate a previous calculation.
 <p>Alternatively, it can be initialised from the system time and the
-PID using the <em>-r</em> flag. This should result in a different seed
+PID using the <b>-r</b> flag. This should result in a different seed
 being used each time.
 <p>In either case, the seed will be written to the map's history, and
 can be seen using <em>r.info</em>.
 <p>If you want other people to be able to verify your results, it's
-preferable to use the <em>seed</em> option to supply a seed which is
+preferable to use the <b>seed</b> option to supply a seed which is
 either specified in the script or generated from a determenistic process
 such as a pseudo-random number generator given an explicit seed.
 <p>Note that the rand() function will generate a fatal error if neither
-the <em>seed</em> option nor the <em>-s</em> flag are given.
+the <b>seed</b> option nor the <b>-s</b> flag are given.
 
 <h2>EXAMPLES</h2>
 To compute the average of two raster map layers
@@ -730,4 +730,5 @@ Michael Shapiro, U.S.Army Construction Engineering
 Research Laboratory
 <p>Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
