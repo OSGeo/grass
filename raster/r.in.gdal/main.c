@@ -204,8 +204,11 @@ int main(int argc, char *argv[])
     /*      Fire up the engines.                                            */
     /* -------------------------------------------------------------------- */
     GDALAllRegister();
-    if (parm.memory->answer && *parm.memory->answer)
+    if (parm.memory->answer && *parm.memory->answer) {
            GDALSetCacheMax(atol(parm.memory->answer) * 1024 * 1024);
+           G_message(_("Using user memory cache size: %.1f MiB"), GDALGetCacheMax()/1024.0/1024.0);
+    } else
+        G_message(_("Using default GDAL memory cache size: %.1f MiB"), GDALGetCacheMax()/1024.0/1024.0);
 
 
     /* -------------------------------------------------------------------- */
