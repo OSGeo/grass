@@ -1090,7 +1090,10 @@ class MapFrame(SingleMapFrame):
                     # replace map
                     for i, legendParam in enumerate(self.legend.cmd[1:]):
                         idx = i + 1
-                        param, val = legendParam.split('=')
+                        param_val = legendParam.split('=')
+                        if len(param_val) != 2:
+                            continue
+                        param, val = param_val
                         if param == 'rast':
                             self.legend.cmd[idx] = 'rast={rast}'.format(rast=layer.maplayer.name)
                             isMap = True
