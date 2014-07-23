@@ -34,8 +34,7 @@ MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 count=1
 for map in ${MAPS} ; do
-    export GRASS_RND_SEED=${count}
-    r.mapcalc --o expr="${map} = rand(0, 550)" 
+    r.mapcalc --o expr="${map} = rand(0, 550)" seed=${count}
     echo ${map} >> map_list.txt 
     count=$((count+1))
 done
