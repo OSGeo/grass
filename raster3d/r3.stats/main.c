@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     unsigned int x, y, z;
 
     struct Option *inputfile, *steps;
-    struct Flag *equal;
+    struct Flag *equal, *counts_only;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -60,11 +60,14 @@ int main(int argc, char *argv[])
     steps->answer = "20";
     steps->description = _("Number of subranges to collect stats from");
 
-
     equal = G_define_flag();
     equal->key = 'e';
     equal->description =
 	_("Calculate statistics based on equal value groups");
+
+    counts_only = G_define_flag();
+    counts_only->key = 'c';
+    counts_only->description = _("Only print cell counts");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -156,7 +159,7 @@ int main(int argc, char *argv[])
     }
     else {
 
-	/*create the statistic table based on value ranges */
+	/* create the statistic table based on value ranges */
 
 	/* get the range of the map */
 	Rast3d_range_load(map);
@@ -193,8 +196,9 @@ int main(int argc, char *argv[])
     if(stats) {
         /* Compute the volume and percentage */
         update_stat_table(stats, &region);
+
         /* Print the statistics to stdout */
-        print_stat_table(stats);
+        print_stat_table(stats, counts_only->answer);
 
         free_stat_table(stats);
     }
