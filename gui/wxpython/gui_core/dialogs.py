@@ -509,7 +509,8 @@ class SavedRegion(wx.Dialog):
         
         box.Add(item=self._selection, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
         self._selection.SetFocus()
-        self._selection.Bind(wx.EVT_TEXT, self.OnRegion)
+        if self.loadsave == 'save':
+            self._selection.Bind(wx.EVT_TEXT, self.OnRegion)
         
         sizer.Add(item = box, proportion = 0, flag = wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                   border = 5)
