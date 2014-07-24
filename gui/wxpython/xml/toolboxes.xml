@@ -1982,9 +1982,7 @@
     <label>GUI tools</label>
     <items>
       <wxgui-item name="AnimationTool"/>
-      <module-item name="g.gui.timeline">
-        <label>Plot temporal extents</label>
-      </module-item>
+      <wxgui-item name="TimelineTool"/>
     </items>
   </toolbox>
   <toolbox name="GuiTools">
