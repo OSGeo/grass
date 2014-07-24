@@ -1094,11 +1094,10 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """
         Debug.msg(4, "BufferedWindow.DrawCross(): pdc=%s, coords=%s, size=%d" % \
                   (pdc, coords, size))
-        coordsCross = ((coords[0] - size, coords[1], coords[0] + size, coords[1]),
-                       (coords[0], coords[1] - size, coords[0], coords[1] + size))
+        coordsCross = ((coords[0], coords[1] - size, coords[0], coords[1] + size),
+                       (coords[0] - size, coords[1], coords[0] + size, coords[1]))
 
-        for lineCoords in coordsCross:
-            self.lineid = self.Draw(pdc, drawid=drawid, pdctype='line', coords=lineCoords, pen=pen)
+        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='lines', coords=coordsCross, pen=pen)
 
         if not text:
             return self.lineid
