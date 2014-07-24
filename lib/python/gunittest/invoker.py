@@ -20,6 +20,8 @@ import subprocess
 from unittest.main import TestProgram, USAGE_AS_MAIN
 TestProgram.USAGE = USAGE_AS_MAIN
 
+from .checkers import text_to_keyvalue
+
 from .loader import GrassTestLoader, discover_modules
 from .reporters import (GrassTestFilesMultiReporter,
                         GrassTestFilesTextReporter,
@@ -27,6 +29,44 @@ from .reporters import (GrassTestFilesMultiReporter,
 from .utils import silent_rmtree, ensure_dir
 
 import grass.script.setup as gsetup
+
+import collections
+import types
+
+
+# TODO: change text_to_keyvalue to same sep as here
+def keyvalue_to_text(keyvalue, sep='=', vsep='\n', isep=',',
+                     last_vertical=None):
+    if not last_vertical:
+        last_vertical = vsep == '\n'
+    items = []
+    for key, value in keyvalue.iteritems():
+        # TODO: use isep for iterables other than strings
+        if (not isinstance(value, types.StringTypes)
+                and isinstance(value, collections.Iterable)):
+            # TODO: this does not work for list of non-strings
+            value = isep.join(value)
+        items.append('{key}{sep}{value}'.format(
+            key=key, sep=sep, value=value))
+    text = vsep.join(items)
+    if last_vertical:
+        text = text + vsep
+    return text
+
+
+def update_keyval_file(filename, module, returncode):
+    if os.path.exists(filename):
+        with open(filename, 'r') as keyval_file:
+            keyval = text_to_keyvalue(keyval_file.read(), sep='=')
+    else:
+        keyval = {}
+
+    # always owerwrite name and ok
+    keyval['name'] = module.name
+    keyval['status'] = 'failed' if returncode else 'passed'
+    with open(filename, 'w') as keyval_file:
+        keyval_file.write(keyvalue_to_text(keyval))
+    return keyval
 
 
 class GrassTestFilesInvoker(object):
@@ -112,9 +152,13 @@ class GrassTestFilesInvoker(object):
         returncode = p.wait()
         stdout.close()
         stderr.close()
+        test_summary = update_keyval_file(
+            os.path.join(cwd, 'test_keyvalue_result.txt'),
+            module=module, returncode=returncode)
         self.reporter.end_file_test(module=module, cwd=cwd,
                                     returncode=returncode,
-                                    stdout=stdout_path, stderr=stderr_path)
+                                    stdout=stdout_path, stderr=stderr_path,
+                                    test_summary=test_summary)
         # TODO: add some try-except or with for better error handling
         os.remove(gisrc)
         # TODO: only if clean up

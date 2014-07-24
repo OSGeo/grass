@@ -18,7 +18,8 @@ from unittest.main import TestProgram, USAGE_AS_MAIN
 TestProgram.USAGE = USAGE_AS_MAIN
 
 from .loader import GrassTestLoader
-from .runner import GrassTestRunner
+from .runner import (GrassTestRunner, MultiTestResult,
+                     TextTestResult, KeyValueTestResult)
 from .invoker import GrassTestFilesInvoker
 from .utils import silent_rmtree
 
@@ -43,9 +44,18 @@ class GrassTestProgram(TestProgram):
         buffer_stdout_stderr = False
 
         grass_loader = GrassTestLoader(grass_location=self.grass_location)
+
+        text_result = TextTestResult(stream=sys.stderr,
+                                     descriptions=True,
+                                     verbosity=verbosity)
+        keyval_file = open('test_keyvalue_result.txt', 'w')
+        keyval_result = KeyValueTestResult(stream=keyval_file)
+        result = MultiTestResult(results=[text_result, keyval_result])
+
         grass_runner = GrassTestRunner(verbosity=verbosity,
                                        failfast=failfast,
-                                       buffer=buffer_stdout_stderr)
+                                       buffer=buffer_stdout_stderr,
+                                       result=result)
 
         super(GrassTestProgram, self).__init__(module=module,
                                                argv=unittest_argv,
@@ -56,6 +66,7 @@ class GrassTestProgram(TestProgram):
                                                failfast=failfast,
                                                catchbreak=catchbreak,
                                                buffer=buffer_stdout_stderr)
+        keyval_file.close()
 
 
 def test():

@@ -171,10 +171,10 @@ class GrassTestFilesMultiReporter(object):
                 else:
                     raise
 
-    def end_file_test(self, module, cwd, returncode, stdout, stderr):
+    def end_file_test(self, **kwargs):
         for reporter in self.reporters:
             try:
-                reporter.end_file_test(module, cwd, returncode, stdout, stderr)
+                reporter.end_file_test(**kwargs)
             except AttributeError:
                 if self.forgiving:
                     pass
@@ -221,7 +221,7 @@ class GrassTestFilesCountingReporter(object):
         self._start_file_test_called = True
         self.test_files += 1
 
-    def end_file_test(self, module, cwd, returncode, stdout, stderr):
+    def end_file_test(self, returncode, **kwargs):
         assert self._start_file_test_called
         self.file_end_time = datetime.datetime.now()
         self.file_time = self.file_end_time - self.file_start_time
@@ -234,6 +234,8 @@ class GrassTestFilesCountingReporter(object):
 
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
+    unknown_number = '<span style="font-size: 60%">unknown</span>'
+
     def __init__(self):
         super(GrassTestFilesHtmlReporter, self).__init__()
         self.main_index = None
@@ -242,6 +244,16 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         super(GrassTestFilesHtmlReporter, self).start(results_dir)
         # having all variables public although not really part of API
         self.main_index = open(os.path.join(results_dir, 'index.html'), 'w')
+
+        # TODO: this can be moved to the counter class
+        self.failures = 0
+        self.errors = 0
+        self.skiped = 0
+        self.successes = 0
+        self.expected_failures = 0
+        self.unexpected_success = 0
+        self.total = 0
+        # TODO: skiped and unexpected success
 
         svn_info = get_svn_info()
         if not svn_info:
@@ -264,6 +276,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                               '<th>Tested directory</th>'
                               '<th>Test file</th>'
                               '<th>Status</th>'
+                              '<th>Tests</th><th>Successful</td>'
+                              '<th>Failed</th><th>Percent successful</th>'
                               '</tr></thead><tbody>'.format(
                                   time=self.main_start_time,
                                   svn=svn_text))
@@ -271,14 +285,23 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
     def finish(self):
         super(GrassTestFilesHtmlReporter, self).finish()
 
+        if self.total:
+            pass_per = 100 * (float(self.successes) / self.total)
+            pass_per = '{:.2f}%'.format(pass_per)
+        else:
+            pass_per = self.unknown_number
         tfoot = ('<tfoot>'
                  '<tr>'
                  '<td>Summary</td>'
                  '<td>{nfiles} test files</td>'
                  '<td>{nsper:.2f}% successful</td>'
+                 '<td>{total}</td><td>{st}</td><td>{ft}</td><td>{pt}</td>'
                  '</tr>'
-                 '</tfoot>'.format(nfiles=self.test_files,
-                                   nsper=self.file_pass_per))
+                 '</tfoot>'.format(
+                     nfiles=self.test_files, nsper=self.file_pass_per,
+                     st=self.successes, ft=self.failures + self.errors,
+                     total=self.total, pt=pass_per
+                     ))
 
         summary_sentence = ('Executed {nfiles} test files in {time:}.'
                             ' From them'
@@ -329,16 +352,50 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             return ('<span style="color: green">&#x2713;</span>'
                     ' Test succeeded (return code %d)' % (returncode))
 
-    def end_file_test(self, module, cwd, returncode, stdout, stderr):
+    def end_file_test(self, module, cwd, returncode, stdout, stderr,
+                      test_summary):
         super(GrassTestFilesHtmlReporter, self).end_file_test(
             module=module, cwd=cwd, returncode=returncode,
             stdout=stdout, stderr=stderr)
+        # TODO: considering others accoring to total, OK?
+        total = test_summary.get('total', None)
+        failures = test_summary.get('failures', 0)
+        errors = test_summary.get('errors', 0)
+        # Python unittest TestResult class is reporting success for no
+        # errors or failures, so skipped, expected failures and unexpected
+        # success are ignored
+        # but successful tests are only total - the others
+        # TODO: add success counter to GrassTestResult base class
+        skipped = test_summary.get('skipped', 0)
+        expected_failures = test_summary.get('expected_failures', 0)
+        unexpected_success = test_summary.get('unexpected_success', 0)
+
+        self.failures += failures
+        self.errors += errors
+        self.skiped += skipped
+        self.expected_failures += expected_failures
+        self.unexpected_success += unexpected_success
+
+        if total is not None:
+            # success are only the clear ones
+            # percentage is influenced by all but putting only failures to table
+            successes = total - failures - errors - skipped - expected_failures - unexpected_success
+            self.successes += successes
+            self.total += total
+
+            pass_per = 100 * (float(successes) / total)
+            pass_per = '{:.2f}%'.format(pass_per)
+        else:
+            total = successes = pass_per = self.unknown_number
+        bad_ones = failures + errors
         self.main_index.write(
             '<tr><td>{d}</td>'
             '<td><a href="{d}/{m}/index.html">{m}</a></td><td>{sf}</td>'
+            '<td>{total}</td><td>{st}</td><td>{ft}</td><td>{pt}</td>'
             '<tr>'.format(
                 d=module.tested_dir, m=module.name,
-                sf=self.returncode_to_html_text(returncode)))
+                sf=self.returncode_to_html_text(returncode),
+                st=successes, ft=bad_ones, total=total, pt=pass_per))
         self.wrap_stdstream_to_html(infile=stdout,
                                     outfile=os.path.join(cwd, 'stdout.html'),
                                     module=module, stream='stdout')
@@ -400,16 +457,25 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         super(GrassTestFilesTextReporter, self).start_file_test(module)
         self._stream.flush()  # to get previous lines to the report
 
-    def end_file_test(self, module, cwd, returncode, stdout, stderr):
+    def end_file_test(self, module, cwd, returncode, stdout, stderr,
+                      test_summary):
         super(GrassTestFilesTextReporter, self).end_file_test(
             module=module, cwd=cwd, returncode=returncode,
             stdout=stdout, stderr=stderr)
 
         if returncode:
             self._stream.write(
-                '{m} from {d} failed\n'
+                '{m} from {d} failed'
                 .format(
                     d=module.tested_dir,
                     m=module.name))
+            num_failed = test_summary.get('failures', None)
+            if num_failed:
+                if num_failed > 1:
+                    text = ' ({f} tests failed)'
+                else:
+                    text = ' ({f} test failed)'
+                self._stream.write(text.format(f=num_failed))
+            self._stream.write('\n')
             # TODO: here we lost the possibility to include also file name
             # of the appropriate report

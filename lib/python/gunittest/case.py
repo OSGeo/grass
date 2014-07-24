@@ -42,6 +42,7 @@ class TestCase(unittest.TestCase):
 
     def __init__(self, methodName):
         super(TestCase, self).__init__(methodName)
+        self.grass_modules = []
 
     def _formatMessage(self, msg, standardMsg):
         """Honor the longMessage attribute when generating failure messages.
@@ -980,6 +981,7 @@ class TestCase(unittest.TestCase):
         _check_module_run_parameters(module)
         try:
             module.run()
+            self.grass_modules.append(module.name)
         except CalledModuleError:
             print module.outputs.stdout
             print module.outputs.stderr
@@ -1013,10 +1015,10 @@ class TestCase(unittest.TestCase):
         # note that we cannot use finally because we do not leave except
         try:
             module.run()
+            self.grass_modules.append(module.name)
         except CalledModuleError:
             print module.outputs.stdout
             print module.outputs.stderr
-            pass
         else:
             print module.outputs.stdout
             print module.outputs.stderr
