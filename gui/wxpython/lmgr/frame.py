@@ -1560,6 +1560,16 @@ class GMFrame(wx.Frame):
                 layerList.AddLayer(layer)
                 frame.SetAnimations([layerList, None, None, None])
 
+    def OnTimelineTool(self, event=None, cmd=None):
+        """Launch Timeline Tool"""
+        try:
+            from timeline.frame import TimelineFrame
+        except ImportError:
+            GError(parent=self, message=_("Unable to start Timeline Tool."))
+            return
+        frame = TimelineFrame(None)
+        frame.Show()
+
     def OnHistogram(self, event):
         """Init histogram display canvas and tools
         """
