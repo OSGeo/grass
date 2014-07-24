@@ -25,6 +25,7 @@ for details.
 import os
 import string
 import types
+import time
 
 from core import *
 
@@ -86,26 +87,33 @@ def raster_info(map):
 
 # interface to r.mapcalc
 
-def mapcalc(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
+def mapcalc(exp, quiet = False, verbose = False, overwrite = False, seed = None, **kwargs):
     """!Interface to r.mapcalc.
 
     @param exp expression
     @param quiet True to run quietly (<tt>--q</tt>)
     @param verbose True to run verbosely (<tt>--v</tt>)
     @param overwrite True to enable overwriting the output (<tt>--o</tt>)
+    @param seed an integer used to seed the random-number generator for the rand() function,
+    or 'auto' to generate a random seed
     @param kwargs
     """
+
+    if seed == 'auto':
+        seed = hash((os.getpid(), time.time())) % (2**32)
+
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
     if write_command('r.mapcalc', file = '-', stdin = e,
+                     seed = seed,
                      quiet = quiet,
                      verbose = verbose,
                      overwrite = overwrite) != 0:
         fatal(_("An error occurred while running r.mapcalc"))
 
 
-def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
+def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, seed = None, **kwargs):
     """!Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
 
     \code
@@ -124,14 +132,21 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, **kwar
     @param quiet True to run quietly (<tt>--q</tt>)
     @param verbose True to run verbosely (<tt>--v</tt>)
     @param overwrite True to enable overwriting the output (<tt>--o</tt>)
+    @param seed an integer used to seed the random-number generator for the rand() function,
+    or 'auto' to generate a random seed
     @param kwargs
     
     @return Popen object
     """
+
+    if seed == 'auto':
+        seed = hash((os.getpid(), time.time())) % (2**32)
+
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
     p = feed_command('r.mapcalc', file = '-',
+                     seed = seed,
                      quiet = quiet,
                      verbose = verbose,
                      overwrite = overwrite)
