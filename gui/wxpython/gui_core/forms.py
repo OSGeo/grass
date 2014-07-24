@@ -974,7 +974,7 @@ class CmdPanel(wx.Panel):
                 if p.get('multiple', False) and \
                         p.get('gisprompt',False) == False and \
                         p.get('type', '') == 'string':
-                    title_txt.SetLabel(" %s: (%s, %s) " % (title, p['name'], p['type']))
+                    title_txt.SetLabel(" %s: (%s=%s) " % (title, p['name'], p['type']))
                     stSizer = wx.StaticBoxSizer(box = title_txt, orient = wx.VERTICAL)
                     if valuelist_desc:
                         hSizer = wx.FlexGridSizer(cols = 1, vgap = 1)
