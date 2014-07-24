@@ -324,33 +324,44 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                 pdc.SetPen(pen)
                 pdc.DrawLinePoint(wx.Point(coords[0], coords[1]),wx.Point(coords[2], coords[3]))
                 pdc.SetIdBounds(drawid, wx.Rect(coords[0], coords[1], coords[2], coords[3]))
-        
-        elif pdctype == 'polyline': # draw a polyline on top of the map
+
+        # polyline is a series of connected lines defined as sequence of points
+        # lines are individual, not connected lines which must be drawn as 1 object (e.g. cross)
+        elif pdctype in ('polyline', 'lines'):
             if pen:
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(pen)
                 if (len(coords) < 2):
                     return
-                i = 1
-                while i < len(coords):
-                    pdc.DrawLinePoint(wx.Point(coords[i-1][0], coords[i-1][1]),
-                                      wx.Point(coords[i][0], coords[i][1]))
-                    i += 1
-                
-                # get bounding rectangle for polyline
+                if pdctype == 'polyline':
+                    i = 1
+                    while i < len(coords):
+                        pdc.DrawLinePoint(wx.Point(coords[i - 1][0], coords[i - 1][1]),
+                                          wx.Point(coords[i][0], coords[i][1]))
+                        i += 1
+                else:
+                    for line in coords:
+                        pdc.DrawLine(line[0], line[1], line[2], line[3])
+
+                # get bounding rectangle for polyline/lines
                 xlist = []
                 ylist = []
                 if len(coords) > 0:
-                    for point in coords:
-                        x,y = point
-                        xlist.append(x)
-                        ylist.append(y)
+                    if pdctype == 'polyline':
+                        for point in coords:
+                            x, y = point
+                            xlist.append(x)
+                            ylist.append(y)
+                    else:
+                        for line in coords:
+                            x1, y1, x2, y2 = line
+                            xlist.extend([x1, x2])
+                            ylist.extend([y1, y2])
                     x1 = min(xlist)
                     x2 = max(xlist)
                     y1 = min(ylist)
                     y2 = max(ylist)
-                    pdc.SetIdBounds(drawid, wx.Rect(x1,y1,x2,y2))
-                    # self.ovlcoords[drawid] = [x1,y1,x2,y2]
+                    pdc.SetIdBounds(drawid, wx.Rect(x1, y1, x2, y2))
 
         elif pdctype == 'polygon':
             if pen:
@@ -1091,11 +1102,10 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """
         Debug.msg(4, "BufferedWindow.DrawCross(): pdc=%s, coords=%s, size=%d" % \
                   (pdc, coords, size))
-        coordsCross = ((coords[0] - size, coords[1], coords[0] + size, coords[1]),
-                       (coords[0], coords[1] - size, coords[0], coords[1] + size))
+        coordsCross = ((coords[0], coords[1] - size, coords[0], coords[1] + size),
+                       (coords[0] - size, coords[1], coords[0] + size, coords[1]))
 
-        for lineCoords in coordsCross:
-            self.lineid = self.Draw(pdc, drawid=drawid, pdctype='line', coords=lineCoords, pen=pen)
+        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='lines', coords=coordsCross, pen=pen)
 
         if not text:
             return self.lineid
