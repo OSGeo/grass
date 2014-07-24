@@ -28,6 +28,13 @@
     <description>Launch animation tool.</description>
     <keywords>general,gui,display</keywords>
   </wxgui-item>
+  <wxgui-item name="TimelineTool">
+    <label>Timeline tool</label>
+    <handler>OnTimelineTool</handler>
+    <related-module>g.gui.timeline</related-module>
+    <description>Plot temporal extents.</description>
+    <keywords>general,gui,temporal</keywords>
+  </wxgui-item>
   <wxgui-item name="CartographicComposer">
     <label>Cartographic Composer</label>
     <handler>OnPsMap</handler>
