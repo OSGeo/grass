@@ -5,14 +5,13 @@ Created on Wed Jun 25 11:08:22 2014
 @author: pietro
 """
 import os
-import unittest
 import sqlite3
 import tempfile as tmp
 from string import ascii_letters, digits
 from random import choice
-
-
 import numpy as np
+
+from grass.gunittest import TestCase, test
 
 from grass.pygrass.vector.table import Table, get_path
 
@@ -147,7 +146,7 @@ class DBconnection(object):
         self.cols = None
 
 
-class ColumnsTestCase(DBconnection, unittest.TestCase):
+class ColumnsTestCase(DBconnection, TestCase):
 
     def test_check_insert_update_str(self):
         """Check insert_str and update_str attribute of Columns are correct"""
@@ -157,7 +156,7 @@ class ColumnsTestCase(DBconnection, unittest.TestCase):
         self.assertEqual(self.cols.update_str, update % self.tname)
 
 
-class TableInsertTestCase(DBconnection, unittest.TestCase):
+class TableInsertTestCase(DBconnection, TestCase):
 
     def setUp(self):
         """Create a not empty table instance"""
@@ -192,7 +191,7 @@ class TableInsertTestCase(DBconnection, unittest.TestCase):
         self.assertListEqual(vals, cur.fetchall())
 
 
-class TableUpdateTestCase(DBconnection, unittest.TestCase):
+class TableUpdateTestCase(DBconnection, TestCase):
 
     def test_update(self):
         """Test Table.update method"""
@@ -206,4 +205,4 @@ class TableUpdateTestCase(DBconnection, unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    test()

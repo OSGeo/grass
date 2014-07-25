@@ -5,7 +5,7 @@ Created on Fri Jul  4 16:32:54 2014
 @author: pietro
 """
 from __future__ import print_function
-import unittest
+from grass.gunittest import TestCase, test
 
 from grass.pygrass.modules.interface.parameter import Parameter, _check_value
 
@@ -18,7 +18,7 @@ GETTYPE = {
     'all': lambda x: x,
 }
 
-class TestCheckValueFunction(unittest.TestCase):
+class TestCheckValueFunction(TestCase):
 
     def test_single_all(self):
         param = Parameter(diz=dict(name='int_number', required='yes',
@@ -272,7 +272,7 @@ class TestCheckValueFunction(unittest.TestCase):
             _check_value(param, "elevation")
 
 
-class TestParameterGetBASH(unittest.TestCase):
+class TestParameterGetBash(TestCase):
     def test_single_float_double(self):
         for ptype in ('float', 'double'):
             param = Parameter(diz=dict(name='number', required='yes',
@@ -342,4 +342,4 @@ class TestParameterGetBASH(unittest.TestCase):
             _check_value(param, 1)
 
 if __name__ == '__main__':
-    unittest.main()
+    test()

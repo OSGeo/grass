@@ -4,7 +4,7 @@ Created on Tue Jun 24 09:43:53 2014
 
 @author: pietro
 """
-import unittest
+from grass.gunittest import TestCase, test
 
 from grass.script.core import get_commands
 from grass.pygrass.modules.interface import Module
@@ -28,9 +28,9 @@ class TestModulesMeta(type):
         return type.__new__(mcs, name, bases, dict)
 
 
-class TestModules(unittest.TestCase):
+class TestModules(TestCase):
     __metaclass__ = TestModulesMeta
 
 
 if __name__ == '__main__':
-    unittest.main()
+    test()

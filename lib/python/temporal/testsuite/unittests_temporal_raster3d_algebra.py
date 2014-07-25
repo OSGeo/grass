@@ -11,11 +11,11 @@ for details.
 
 import grass.script
 import grass.temporal as tgis
-import unittest
+import grass.gunittest as gunittest
 import datetime
-import os
 
-class TestRegisterFunctions(unittest.TestCase):
+
+class TestRegisterFunctions(gunittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -79,6 +79,4 @@ class TestRegisterFunctions(unittest.TestCase):
         grass.script.del_temp_region()
 
 if __name__ == '__main__':
-    unittest.main()
-
-
+    gunittest.test()

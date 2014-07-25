@@ -8,12 +8,14 @@ import sys
 import unittest
 import numpy as np
 
+from grass.gunittest import TestCase, test
+
 import grass.lib.vector as libvect
 
 from grass.pygrass.vector.geometry import Point, Line
 
 
-class PointTestCase(unittest.TestCase):
+class PointTestCase(TestCase):
 
     def test_empty_init(self):
         """Test Point()"""
@@ -83,7 +85,7 @@ class PointTestCase(unittest.TestCase):
         pass
 
 
-class LineTestCase(unittest.TestCase):
+class LineTestCase(TestCase):
 
     def test_len(self):
         """Test __len__ magic method"""
@@ -127,4 +129,4 @@ class LineTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    test()
