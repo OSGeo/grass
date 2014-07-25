@@ -232,6 +232,19 @@ class GrassTestFilesCountingReporter(object):
         self._start_file_test_called = False
 
 
+def percent_to_html(percent):
+    if percent > 100 or percent < 0:
+        return "? {:.2f}% ?".format(percent)
+    elif percent < 40:
+        color = 'red'
+    elif percent < 70:
+        color = 'orange'
+    else:
+        color = 'green'
+    return '<span style="color: {color}">{percent:.0f}%</span>'.format(
+        percent=percent, color=color)
+
+
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
     unknown_number = '<span style="font-size: 60%">unknown</span>'
@@ -287,26 +300,27 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
         if self.total:
             pass_per = 100 * (float(self.successes) / self.total)
-            pass_per = '{:.2f}%'.format(pass_per)
+            pass_per = percent_to_html(pass_per)
         else:
             pass_per = self.unknown_number
         tfoot = ('<tfoot>'
                  '<tr>'
                  '<td>Summary</td>'
                  '<td>{nfiles} test files</td>'
-                 '<td>{nsper:.2f}% successful</td>'
+                 '<td>{nsper}</td>'
                  '<td>{total}</td><td>{st}</td><td>{ft}</td><td>{pt}</td>'
                  '</tr>'
                  '</tfoot>'.format(
-                     nfiles=self.test_files, nsper=self.file_pass_per,
+                     nfiles=self.test_files,
+                     nsper=percent_to_html(self.file_pass_per),
                      st=self.successes, ft=self.failures + self.errors,
                      total=self.total, pt=pass_per
                      ))
 
         summary_sentence = ('Executed {nfiles} test files in {time:}.'
                             ' From them'
-                            ' {nsfiles} files ({nsper:.2f}%) were successful'
-                            ' and {nffiles} files ({nfper:.2f}%) failed.'
+                            ' {nsfiles} files ({nsper:.0f}%) were successful'
+                            ' and {nffiles} files ({nfper:.0f}%) failed.'
                             .format(
                                 nfiles=self.test_files,
                                 time=self.main_time,
@@ -385,7 +399,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             self.total += total
 
             pass_per = 100 * (float(successes) / total)
-            pass_per = '{:.2f}%'.format(pass_per)
+            pass_per = percent_to_html(pass_per)
         else:
             total = successes = pass_per = self.unknown_number
         bad_ones = failures + errors
@@ -443,8 +457,8 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 
         summary_sentence = ('\nExecuted {nfiles} test files in {time:}.'
                             '\nFrom them'
-                            ' {nsfiles} files ({nsper:.2f}%) were successful'
-                            ' and {nffiles} files ({nfper:.2f}%) failed.\n'
+                            ' {nsfiles} files ({nsper:.0f}%) were successful'
+                            ' and {nffiles} files ({nfper:.0f}%) failed.\n'
                             .format(
                                 nfiles=self.test_files,
                                 time=self.main_time,
