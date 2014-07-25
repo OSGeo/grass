@@ -63,7 +63,10 @@ def update_keyval_file(filename, module, returncode):
 
     # always owerwrite name and ok
     keyval['name'] = module.name
-    keyval['status'] = 'failed' if returncode else 'passed'
+    keyval['tested_dir'] = module.tested_dir
+    if 'status' not in keyval.keys():
+        keyval['status'] = 'failed' if returncode else 'passed'
+    keyval['returncode'] = returncode
     with open(filename, 'w') as keyval_file:
         keyval_file.write(keyvalue_to_text(keyval))
     return keyval
