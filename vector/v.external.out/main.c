@@ -92,7 +92,8 @@ int main(int argc, char *argv[])
         save_status_file(options.output);
     }
 
-    G_message(_("Current output format for vectors: %s"), format);
+    if (options.dsn->answer || options.input->answer)
+        G_message(_("Current output format for vectors: %s"), format);
     
     exit(EXIT_SUCCESS);
 }
