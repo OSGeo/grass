@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# TODO: change to GrassTestCase
-from unittest import TestCase
+from grass.gunittest import TestCase, test
 
 
 class TestError(TestCase):
@@ -55,5 +54,4 @@ class TestErrorClassTearDown(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
-    unittest.main()
+    test()

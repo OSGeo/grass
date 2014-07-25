@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# TODO: change to GrassTestCase
-from unittest import TestCase
+from grass.gunittest import TestCase, test
 
 
 class TestFail(TestCase):
@@ -12,5 +11,4 @@ class TestFail(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
-    unittest.main()
+    test()
