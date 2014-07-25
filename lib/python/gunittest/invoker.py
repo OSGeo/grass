@@ -25,7 +25,7 @@ from .checkers import text_to_keyvalue
 from .loader import GrassTestLoader, discover_modules
 from .reporters import (GrassTestFilesMultiReporter,
                         GrassTestFilesTextReporter,
-                        GrassTestFilesHtmlReporter)
+                        GrassTestFilesHtmlReporter, get_svn_path_authors)
 from .utils import silent_rmtree, ensure_dir
 
 import grass.script.setup as gsetup
@@ -54,6 +54,7 @@ def keyvalue_to_text(keyvalue, sep='=', vsep='\n', isep=',',
     return text
 
 
+# TODO: this might be more extend then update
 def update_keyval_file(filename, module, returncode):
     if os.path.exists(filename):
         with open(filename, 'r') as keyval_file:
@@ -61,12 +62,17 @@ def update_keyval_file(filename, module, returncode):
     else:
         keyval = {}
 
+    # this is for one file
+    # TODO: testing authors are more appropriate stat for testsuite dir index
+    test_file_authors = get_svn_path_authors(module.abs_file_path)
+
     # always owerwrite name and ok
     keyval['name'] = module.name
     keyval['tested_dir'] = module.tested_dir
     if 'status' not in keyval.keys():
         keyval['status'] = 'failed' if returncode else 'passed'
     keyval['returncode'] = returncode
+    keyval['test_file_authors'] = test_file_authors
     with open(filename, 'w') as keyval_file:
         keyval_file.write(keyvalue_to_text(keyval))
     return keyval
