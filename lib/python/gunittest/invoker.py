@@ -24,8 +24,8 @@ from .checkers import text_to_keyvalue
 
 from .loader import GrassTestLoader, discover_modules
 from .reporters import (GrassTestFilesMultiReporter,
-                        GrassTestFilesTextReporter,
-                        GrassTestFilesHtmlReporter, get_svn_path_authors)
+                        GrassTestFilesTextReporter, GrassTestFilesHtmlReporter,
+                        TestsuiteDirReporter, get_svn_path_authors)
 from .utils import silent_rmtree, ensure_dir
 
 import grass.script.setup as gsetup
@@ -101,9 +101,11 @@ class GrassTestFilesInvoker(object):
         self.clean_mapsets = clean_mapsets
         self.clean_outputs = clean_outputs
         self.clean_before = clean_before
-        self.testsuite_dir = testsuite_dir
+        self.testsuite_dir = testsuite_dir  # TODO: solve distribution of this constant
         # reporter is created for each call of run_in_location()
         self.reporter = None
+
+        self.testsuite_dirs = None
 
     def _create_mapset(self, gisdbase, location, module):
         """Create mapset according to informations in module.
@@ -132,6 +134,7 @@ class GrassTestFilesInvoker(object):
 
     def _run_test_module(self, module, results_dir, gisdbase, location):
         """Run one test file."""
+        self.testsuite_dirs[module.tested_dir].append(module.name)
         cwd = os.path.join(results_dir, module.tested_dir, module.name)
         data_dir = os.path.join(module.file_dir, 'data')
         if os.path.exists(data_dir):
@@ -185,7 +188,7 @@ class GrassTestFilesInvoker(object):
                 GrassTestFilesTextReporter(stream=sys.stderr),
                 GrassTestFilesHtmlReporter(),
             ])
-
+        self.testsuite_dirs = collections.defaultdict(list)  # reset list of dirs each time
         # TODO: move constants out of loader class or even module
         modules = discover_modules(start_dir=self.start_dir,
                                    grass_location=location_shortcut,
@@ -201,4 +204,8 @@ class GrassTestFilesInvoker(object):
             self._run_test_module(module=module, results_dir=results_dir,
                                   gisdbase=gisdbase, location=location)
 
+        testsuite_dir_reporter = TestsuiteDirReporter(
+            main_page_name='testsuites.html')
+        testsuite_dir_reporter.report_for_dirs(root=results_dir,
+                                               directories=self.testsuite_dirs)
         self.reporter.finish()

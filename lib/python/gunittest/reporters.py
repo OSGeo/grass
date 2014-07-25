@@ -19,6 +19,7 @@ import xml.etree.ElementTree as et
 import subprocess
 
 from .utils import ensure_dir
+from .checkers import text_to_keyvalue
 
 
 def get_source_url(path, revision, line=None):
@@ -170,6 +171,36 @@ def get_svn_path_authors(path, from_date=None):
     return None
 
 
+def get_html_test_authors_table(directory, tests_authors):
+    # SVN gives us authors of code together with authors of tests
+    # so test code authors list also contains authors of tests only
+    # TODO: don't do this for the top level directories?
+    tests_authors = set(tests_authors)
+    from_date = years_ago(datetime.date.today(), years=1)
+    tested_dir_authors = get_svn_path_authors(directory, from_date)
+    not_testing_authors = tested_dir_authors - tests_authors
+    if not not_testing_authors:
+        not_testing_authors = ['all recent authors contributed tests']
+
+    test_authors = (
+        '<h3>Code and test authors</h3>'
+        '<p style="font-size: 60%"><em>'
+        'Note that determination of authors is approximate and only'
+        ' recent code authors are considered.'
+        '</em></p>'
+        '<table><tbody>'
+        '<tr><td>Test authors:</td><td>{file_authors}</td></tr>'
+        '<tr><td>Authors of tested code:</td><td>{code_authors}</td></tr>'
+        '<tr><td>Authors owing tests:</td><td>{not_testing}</td></tr>'
+        '</tbody></table>'
+        .format(
+            file_authors=', '.join(sorted(tests_authors)),
+            code_authors=', '.join(sorted(tested_dir_authors)),
+            not_testing=', '.join(sorted(not_testing_authors))
+        ))
+    return test_authors
+
+
 class GrassTestFilesMultiReporter(object):
 
     def __init__(self, reporters, forgiving=False):
@@ -284,9 +315,61 @@ def percent_to_html(percent):
         percent=percent, color=color)
 
 
+def wrap_stdstream_to_html(infile, outfile, module, stream):
+    before = '<html><body><h1>%s</h1><pre>' % (module.name + ' ' + stream)
+    after = '</pre></body></html>'
+    html = open(outfile, 'w')
+    html.write(before)
+    with open(infile) as text:
+        for line in text:
+            html.write(color_error_line(html_escape(line)))
+    html.write(after)
+    html.close()
+
+
+def returncode_to_html_text(returncode):
+    if returncode:
+        return '<span style="color: red">FAILED</span>'
+    else:
+        # alternatives: SUCCEEDED, passed, OK
+        return '<span style="color: green">succeeded</span>'
+
+
+def returncode_to_html_sentence(returncode):
+    if returncode:
+        return ('<span style="color: red">&#x274c;</span>'
+                ' Test failed (return code %d)' % (returncode))
+    else:
+        return ('<span style="color: green">&#x2713;</span>'
+                ' Test succeeded (return code %d)' % (returncode))
+
+
+def success_to_html_text(total, successes):
+    if successes < total:
+        return '<span style="color: red">FAILED</span>'
+    elif successes == total:
+        # alternatives: SUCCEEDED, passed, OK
+        return '<span style="color: green">succeeded</span>'
+    else:
+        return ('<span style="color: red; font-size: 60%">'
+                '? more successes than total ?</span>')
+
+
+UNKNOWN_NUMBER_HTML = '<span style="font-size: 60%">unknown</span>'
+
+
+def success_to_html_percent(total, successes):
+    if total:
+        pass_per = 100 * (float(successes) / total)
+        pass_per = percent_to_html(pass_per)
+    else:
+        pass_per = UNKNOWN_NUMBER_HTML
+    return pass_per
+
+
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
-    unknown_number = '<span style="font-size: 60%">unknown</span>'
+    unknown_number = UNKNOWN_NUMBER_HTML
 
     def __init__(self):
         super(GrassTestFilesHtmlReporter, self).__init__()
@@ -300,12 +383,11 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         # TODO: this can be moved to the counter class
         self.failures = 0
         self.errors = 0
-        self.skiped = 0
+        self.skipped = 0
         self.successes = 0
         self.expected_failures = 0
         self.unexpected_success = 0
         self.total = 0
-        # TODO: skiped and unexpected success
 
         svn_info = get_svn_info()
         if not svn_info:
@@ -380,32 +462,6 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         super(GrassTestFilesHtmlReporter, self).start_file_test(module)
         self.main_index.flush()  # to get previous lines to the report
 
-    def wrap_stdstream_to_html(self, infile, outfile, module, stream):
-        before = '<html><body><h1>%s</h1><pre>' % (module.name + ' ' + stream)
-        after = '</pre></body></html>'
-        html = open(outfile, 'w')
-        html.write(before)
-        with open(infile) as text:
-            for line in text:
-                html.write(color_error_line(html_escape(line)))
-        html.write(after)
-        html.close()
-
-    def returncode_to_html_text(self, returncode):
-        if returncode:
-            return '<span style="color: red">FAILED</span>'
-        else:
-            # alternatives: SUCCEEDED, passed, OK
-            return '<span style="color: green">succeeded</span>'
-
-    def returncode_to_html_sentence(self, returncode):
-        if returncode:
-            return ('<span style="color: red">&#x274c;</span>'
-                    ' Test failed (return code %d)' % (returncode))
-        else:
-            return ('<span style="color: green">&#x2713;</span>'
-                    ' Test succeeded (return code %d)' % (returncode))
-
     def end_file_test(self, module, cwd, returncode, stdout, stderr,
                       test_summary):
         super(GrassTestFilesHtmlReporter, self).end_file_test(
@@ -427,10 +483,11 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
         self.failures += failures
         self.errors += errors
-        self.skiped += skipped
+        self.skipped += skipped
         self.expected_failures += expected_failures
         self.unexpected_success += unexpected_successes
 
+        # TODO: should we test for zero?
         if total is not None:
             # success are only the clear ones
             # percentage is influenced by all but putting only failures to table
@@ -448,14 +505,14 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             '<td>{total}</td><td>{st}</td><td>{ft}</td><td>{pt}</td>'
             '<tr>'.format(
                 d=module.tested_dir, m=module.name,
-                sf=self.returncode_to_html_text(returncode),
+                sf=returncode_to_html_text(returncode),
                 st=successes, ft=bad_ones, total=total, pt=pass_per))
-        self.wrap_stdstream_to_html(infile=stdout,
-                                    outfile=os.path.join(cwd, 'stdout.html'),
-                                    module=module, stream='stdout')
-        self.wrap_stdstream_to_html(infile=stderr,
-                                    outfile=os.path.join(cwd, 'stderr.html'),
-                                    module=module, stream='stderr')
+        wrap_stdstream_to_html(infile=stdout,
+                               outfile=os.path.join(cwd, 'stdout.html'),
+                               module=module, stream='stdout')
+        wrap_stdstream_to_html(infile=stderr,
+                               outfile=os.path.join(cwd, 'stderr.html'),
+                               module=module, stream='stderr')
 
         file_index_path = os.path.join(cwd, 'index.html')
         file_index = open(file_index_path, 'w')
@@ -473,7 +530,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             '</body></html>'
             .format(
                 dur=self.file_time, m=module,
-                status=self.returncode_to_html_sentence(returncode),
+                status=returncode_to_html_sentence(returncode),
                 ))
         file_index.close()
 
@@ -536,3 +593,213 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             self._stream.write('\n')
             # TODO: here we lost the possibility to include also file name
             # of the appropriate report
+
+
+# TODO: there is a quite a lot duplication between this class and html reporter
+# TODO: document: do not use it for two reports, it accumulates the results
+# TODO: add also keyvalue summary generation?
+# wouldn't this conflict with collecting data from report afterwards?
+class TestsuiteDirReporter(object):
+    def __init__(self, main_page_name, testsuite_page_name='index.html'):
+        self.main_page_name = main_page_name
+        self.testsuite_page_name = testsuite_page_name
+
+        # TODO: this might be even a object which could add and validate
+        self.failures = 0
+        self.errors = 0
+        self.skipped = 0
+        self.successes = 0
+        self.expected_failures = 0
+        self.unexpected_successes = 0
+        self.total = 0
+
+        self.testsuites = 0
+        self.testsuites_successes = 0
+        self.files = 0
+        self.files_successes = 0
+
+    def report_for_dir(self, root, directory, test_files):
+        # TODO: create object from this, so that it can be passed from
+        # one function to another
+        # TODO: put the inside of for loop to another fucntion
+        dir_failures = 0
+        dir_errors = 0
+        dir_skipped = 0
+        dir_successes = 0
+        dir_expected_failures = 0
+        dir_unexpected_success = 0
+        dir_total = 0
+        test_files_authors = []
+
+        file_total = 0
+        file_successes = 0
+
+        page_name = os.path.join(root, directory, self.testsuite_page_name)
+        page = open(page_name, 'w')
+        head = (
+            '<html><body>'
+            '<h1>{name} testsuite results</h1>'
+            .format(name=directory))
+        tests_table_head = (
+            '<h3>Test files results</h3>'
+            '<table>'
+            '<thead><tr>'
+            '<th>Test file</th><th>Status</th>'
+            '<th>Tests</th><th>Successful</td>'
+            '<th>Failed</th><th>Percent successful</th>'
+            '</tr></thead><tbody>'
+            )
+        page.write(head)
+        page.write(tests_table_head)
+        for test_file_name in test_files:
+            # TODO: put keyvalue fine name to constant
+            summary_filename = os.path.join(root, directory, test_file_name,
+                                            'test_keyvalue_result.txt')
+            #if os.path.exists(summary_filename):
+            with open(summary_filename, 'r') as keyval_file:
+                summary = text_to_keyvalue(keyval_file.read(), sep='=')
+            #else:
+                # TODO: write else here
+            #    summary = None
+
+            if 'total' not in summary:
+                bad_ones = successes = UNKNOWN_NUMBER_HTML
+                total = None
+            else:
+                bad_ones = summary['failures'] + summary['errors']
+                successes = summary['successes']
+                total = summary['total']
+
+                self.failures += summary['failures']
+                self.errors += summary['errors']
+                self.skipped += summary['skipped']
+                self.successes += summary['successes']
+                self.expected_failures += summary['expected_failures']
+                self.unexpected_successes += summary['unexpected_successes']
+                self.total += summary['total']
+
+                dir_failures += summary['failures']
+                dir_errors += summary['failures']
+                dir_skipped += summary['skipped']
+                dir_successes += summary['successes']
+                dir_expected_failures += summary['expected_failures']
+                dir_unexpected_success += summary['unexpected_successes']
+                dir_total += summary['total']
+
+            # TODO: keyvalue method should have types for keys function
+            # perhaps just the current post processing function is enough
+            test_file_authors = summary['test_file_authors']
+            if type(test_file_authors) is not list:
+                test_file_authors = [test_file_authors]
+            test_files_authors += test_file_authors
+
+            file_total += 1
+            file_successes += 0 if summary['returncode'] else 1
+
+            pass_per = success_to_html_percent(total=total,
+                                               successes=successes)
+            row = (
+                '<tr>'
+                '<td><a href="{f}/index.html">{f}</a></td>'
+                '<td>{status}</td>'
+                '<td>{ntests}</td><td>{stests}</td>'
+                '<td>{ftests}</td><td>{ptests}</td>'
+                '<tr>'
+                .format(
+                    f=test_file_name,
+                    status=returncode_to_html_text(summary['returncode']),
+                    stests=successes, ftests=bad_ones, ntests=total,
+                    ptests=pass_per))
+            page.write(row)
+
+        self.testsuites += 1
+        self.testsuites_successes += 1 if file_successes == file_total else 0
+        self.files += file_total
+        self.files_successes += file_successes
+
+        dir_pass_per = success_to_html_percent(total=dir_total,
+                                               successes=dir_successes)
+        file_pass_per = success_to_html_percent(total=file_total,
+                                                successes=file_successes)
+        tests_table_foot = (
+            '</tbody><tfoot><tr>'
+            '<td>Summary</td>'
+            '<td>{status}</td>'
+            '<td>{ntests}</td><td>{stests}</td>'
+            '<td>{ftests}</td><td>{ptests}</td>'
+            '</tr></tfoot></table>'
+            .format(
+                status=file_pass_per,
+                stests=dir_successes, ftests=dir_failures + dir_errors,
+                ntests=dir_total, ptests=dir_pass_per))
+        page.write(tests_table_foot)
+        test_authors = get_html_test_authors_table(
+            directory=directory, tests_authors=test_files_authors)
+        page.write(test_authors)
+        page.write('</body></html>')
+
+        status = success_to_html_text(total=file_total, successes=file_successes)
+        row = (
+            '<tr>'
+            '<td><a href="{d}/{page}">{d}</a></td><td>{status}</td>'
+            '<td>{nfiles}</td><td>{sfiles}</td><td>{pfiles}</td>'
+            '<td>{ntests}</td><td>{stests}</td>'
+            '<td>{ftests}</td><td>{ptests}</td>'
+            '<tr>'
+            .format(
+                d=directory, page=self.testsuite_page_name, status=status,
+                nfiles=file_total, sfiles=file_successes, pfiles=file_pass_per,
+                stests=dir_successes, ftests=dir_failures + dir_errors,
+                ntests=dir_total, ptests=dir_pass_per))
+        return row
+
+    def report_for_dirs(self, root, directories):
+        # TODO: this will need chanages accoring to potential chnages in absolute/relative paths
+
+        page_name = os.path.join(root, self.main_page_name)
+        page = open(page_name, 'w')
+        head = (
+            '<html><body>'
+            '<h1>Testsuites results</h1>'
+            )
+        tests_table_head = (
+            '<table>'
+            '<thead><tr>'
+            '<th>Testsuite</th>'
+            '<th>Status</th>'
+            '<th>Test files</th><th>Successful</td>'
+            '<th>Percent successful</th>'
+            '<th>Tests</th><th>Successful</td>'
+            '<th>Failed</th><th>Percent successful</th>'
+            '</tr></thead><tbody>'
+            )
+        page.write(head)
+        page.write(tests_table_head)
+
+        for directory, test_files in directories.iteritems():
+            row = self.report_for_dir(root=root, directory=directory,
+                                      test_files=test_files)
+            page.write(row)
+
+        pass_per = success_to_html_percent(total=self.total,
+                                           successes=self.successes)
+        file_pass_per = success_to_html_percent(total=self.files,
+                                                successes=self.files_successes)
+        testsuites_pass_per = success_to_html_percent(
+            total=self.testsuites, successes=self.testsuites_successes)
+        tests_table_foot = (
+            '<tfoot>'
+            '<tr>'
+            '<td>Summary</td><td>{status}</td>'
+            '<td>{nfiles}</td><td>{sfiles}</td><td>{pfiles}</td>'
+            '<td>{ntests}</td><td>{stests}</td>'
+            '<td>{ftests}</td><td>{ptests}</td>'
+            '</tr>'
+            '</tfoot>'
+            .format(
+                status=testsuites_pass_per, nfiles=self.files,
+                sfiles=self.files_successes, pfiles=file_pass_per,
+                stests=self.successes, ftests=self.failures + self.errors,
+                ntests=self.total, ptests=pass_per))
+        page.write(tests_table_foot)
+        page.write('</body></html>')
