@@ -366,7 +366,7 @@ class MultiTestResult(TestResult):
         super(MultiTestResult, self).addSkip(test, reason)
         for result in self._results:
             try:
-                result.addSuccess(test, reason)
+                result.addSkip(test, reason)
             except AttributeError:
                 if self._forgiving:
                     pass
