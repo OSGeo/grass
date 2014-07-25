@@ -891,7 +891,8 @@ Section "GRASS" SecGRASS
 	Push 'config_projshare = "/c/OSGeo4W/share/proj"' ; string that a line must begin with *WS Sensitive*
 	Push 'config_projshare = "$INSTDIR\share\proj"' ; string to replace whole line with
 	Call ReplaceLineStr
-                 
+
+        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(BU)" "Execute"                 
 SectionEnd
 
 ;--------------------------------------------------------------------------
