@@ -18,7 +18,7 @@ a template. It is not expected that something will left.
 import sys
 import time
 
-from unittest.result import TestResult
+import unittest.result
 from unittest.signals import registerResult
 
 __unittest = True
@@ -38,6 +38,29 @@ class _WritelnDecorator(object):
         if arg:
             self.write(arg)
         self.write('\n') # text-mode streams translate to \r\n if needed
+
+
+class TestResult(unittest.result.TestResult):
+    # descriptions and verbosity unused
+    # included for compatibility with unittest's TestResult
+    # where are also unused, so perhaps we can remove them
+    # stream set to None and not included in interface, it would not make sense
+    def __init__(self, stream=None, descriptions=None, verbosity=None):
+        super(TestResult, self).__init__(
+            stream=stream, descriptions=descriptions, verbosity=verbosity)
+        self.successes = []
+
+    def addSuccess(self, test):
+        super(TestResult, self).addSuccess(test)
+        self.successes.append(test)
+
+    # TODO: better would be to pass start at the beginning
+    # alternative is to leave counting time on class
+    # TODO: document: we expect all grass classes to have setTimes
+    # TODO: alternatively, be more forgiving for non-unittest methods
+    def setTimes(self, start_time, end_time, time_taken):
+        pass
+        # TODO: implement this
 
 
 class TextTestResult(TestResult):
@@ -231,17 +254,20 @@ class KeyValueTestResult(TestResult):
 #            'date={start_datetime}\n'
 #            'date={end_datetime}\n'
 
+        failed, errored = map(len, (self.failures, self.errors))
+        succeeded = len(self.successes)
         results = map(len, (self.expectedFailures,
                             self.unexpectedSuccesses,
                             self.skipped))
         expectedFails, unexpectedSuccesses, skipped = results
 
-        infos.append("status=%s" % ('failed' if self.wasSuccessful() else 'passed'))
-
+        status = 'succeeded' if self.wasSuccessful() else 'failed'
+        infos.append("status=%s" % status)
         infos.append("total=%d" % (run))
-        failed, errored = map(len, (self.failures, self.errors))
+
         infos.append("failures=%d" % failed)
         infos.append("errors=%d" % errored)
+        infos.append("successes=%d" % succeeded)
         infos.append("skipped=%d" % skipped)
 
         # TODO: document this: if not supported by view,
@@ -314,7 +340,7 @@ class MultiTestResult(TestResult):
         super(MultiTestResult, self).addError(test, err)
         for result in self._results:
             try:
-                result.addSuccess(test)
+                result.addError(test, err)
             except AttributeError:
                 if self._forgiving:
                     pass
@@ -325,7 +351,7 @@ class MultiTestResult(TestResult):
         super(MultiTestResult, self).addFailure(test, err)
         for result in self._results:
             try:
-                result.addSuccess(test)
+                result.addFailure(test, err)
             except AttributeError:
                 if self._forgiving:
                     pass
@@ -336,7 +362,7 @@ class MultiTestResult(TestResult):
         super(MultiTestResult, self).addSkip(test, reason)
         for result in self._results:
             try:
-                result.addSuccess(test)
+                result.addSuccess(test, reason)
             except AttributeError:
                 if self._forgiving:
                     pass
@@ -347,7 +373,7 @@ class MultiTestResult(TestResult):
         super(MultiTestResult, self).addExpectedFailure(test, err)
         for result in self._results:
             try:
-                result.addSuccess(test)
+                result.addExpectedFailure(test, err)
             except AttributeError:
                 if self._forgiving:
                     pass
@@ -358,7 +384,7 @@ class MultiTestResult(TestResult):
         super(MultiTestResult, self).addUnexpectedSuccess(test)
         for result in self._results:
             try:
-                result.addSuccess(test)
+                result.addUnexpectedSuccess(test)
             except AttributeError:
                 if self._forgiving:
                     pass

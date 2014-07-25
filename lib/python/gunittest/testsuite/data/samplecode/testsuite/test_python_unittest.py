@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from grass.gunittest import TestCase, test
+from unittest import TestCase, main
 
 
-class TestSuccessVerboseSetUp(TestCase):
+class TestUnittestSuccessVerboseSetUp(TestCase):
     # pylint: disable=R0904
 
     def setUp(self):
@@ -13,10 +13,13 @@ class TestSuccessVerboseSetUp(TestCase):
         print "print from tearDown"
 
     def test_something(self):
-        self.assertTrue(True)
+        self.assertTrue(True, msg="This should not fail")
+
+    def test_something_failing(self):
+        self.assertTrue(False, msg="This should fail")
 
 
-class TestSuccessVerboseClassSetUp(TestCase):
+class TestUnittestSuccessVerboseClassSetUp(TestCase):
     # pylint: disable=R0904
 
     @classmethod
@@ -28,7 +31,10 @@ class TestSuccessVerboseClassSetUp(TestCase):
         print "print from tearDownClass"
 
     def test_something(self):
-        self.assertTrue(True)
+        self.assertTrue(True, msg="This should not fail")
+
+    def test_something_failing(self):
+        self.assertTrue(False, msg="This should fail")
 
 if __name__ == '__main__':
-    test()
+    main()

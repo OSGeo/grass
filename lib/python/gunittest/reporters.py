@@ -342,7 +342,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         if returncode:
             return '<span style="color: red">FAILED</span>'
         else:
-            return '<span style="color: green">succeeded</span>'  # SUCCEEDED
+            # alternatives: SUCCEEDED, passed, OK
+            return '<span style="color: green">succeeded</span>'
 
     def returncode_to_html_sentence(self, returncode):
         if returncode:
@@ -368,18 +369,18 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         # TODO: add success counter to GrassTestResult base class
         skipped = test_summary.get('skipped', 0)
         expected_failures = test_summary.get('expected_failures', 0)
-        unexpected_success = test_summary.get('unexpected_success', 0)
+        unexpected_successes = test_summary.get('unexpected_successes', 0)
+        successes = test_summary.get('successes', 0)
 
         self.failures += failures
         self.errors += errors
         self.skiped += skipped
         self.expected_failures += expected_failures
-        self.unexpected_success += unexpected_success
+        self.unexpected_success += unexpected_successes
 
         if total is not None:
             # success are only the clear ones
             # percentage is influenced by all but putting only failures to table
-            successes = total - failures - errors - skipped - expected_failures - unexpected_success
             self.successes += successes
             self.total += total
 

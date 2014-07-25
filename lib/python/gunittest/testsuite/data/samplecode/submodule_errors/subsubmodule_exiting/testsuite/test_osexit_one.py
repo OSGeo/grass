@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-
-# TODO: change to GrassTestCase
-from unittest import TestCase
+from grass.gunittest import TestCase, test
 
 
 class TestOsExit(TestCase):
@@ -14,5 +12,4 @@ class TestOsExit(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
-    unittest.main()
+    test()
