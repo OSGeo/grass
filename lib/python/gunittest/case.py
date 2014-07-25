@@ -14,6 +14,8 @@ for details.
 
 import os
 import subprocess
+import StringIO
+
 import unittest
 from unittest.util import safe_repr
 
@@ -43,6 +45,7 @@ class TestCase(unittest.TestCase):
     def __init__(self, methodName):
         super(TestCase, self).__init__(methodName)
         self.grass_modules = []
+        self.supplementary_files = []
 
     def _formatMessage(self, msg, standardMsg):
         """Honor the longMessage attribute when generating failure messages.
@@ -873,7 +876,6 @@ class TestCase(unittest.TestCase):
             os.remove(reference)
         stdmsg = ("There is a difference between vectors when compared as"
                   " ASCII files.\n")
-        import StringIO
 
         output = StringIO.StringIO()
         # TODO: there is a diff size constant which we can use
@@ -900,6 +902,7 @@ class TestCase(unittest.TestCase):
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
                 htmldiff_file_name = self.id() + '_ascii_diff' + '.html'
+                self.supplementary_files.append(htmldiff_file_name)
                 htmldiff = difflib.HtmlDiff().make_file(fromlines, tolines,
                                                         'reference', 'actual',
                                                         context=True,
