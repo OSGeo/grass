@@ -601,12 +601,13 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                     ', '.join(modules)))
         file_index.write('<tbody><table>')
 
+        # here we would have also links to coverage, profiling, ...
+        #'<li><a href="testcodecoverage/index.html">code coverage</a></li>'
         files_section = (
             '<h3>Supplementary files</h3>'
             '<ul>'
             '<li><a href="stdout.html">standard output (stdout)</a></li>'
             '<li><a href="stderr.html">standard error output (stderr)</a></li>'
-            '<li><a href="testcodecoverage/index.html">code coverage</a></li>'
             )
         file_index.write(files_section)
 
