@@ -17,6 +17,8 @@ import datetime
 import xml.sax.saxutils as saxutils
 import xml.etree.ElementTree as et
 import subprocess
+import StringIO
+import collections
 
 from .utils import ensure_dir
 from .checkers import text_to_keyvalue
@@ -327,6 +329,33 @@ def wrap_stdstream_to_html(infile, outfile, module, stream):
     html.close()
 
 
+def html_file_preview(filename):
+    before = '<pre>'
+    after = '</pre>'
+    if not os.path.isfile(filename):
+        return '<p style="color: red>File %s does not exist<p>' % filename
+    size = os.path.getsize(filename)
+    if not size:
+        return '<p style="color: red>File %s is empty<p>' % filename
+    max_size = 10000
+    html = StringIO.StringIO()
+    html.write(before)
+    if size < max_size:
+        with open(filename) as text:
+            for line in text:
+                html.write(color_error_line(html_escape(line)))
+    elif size < 10 * max_size:
+        def tail(filename, n):
+            return collections.deque(open(filename), n)
+        html.write('... (lines omitted)\n')
+        for line in tail(filename, 50):
+            html.write(color_error_line(html_escape(line)))
+    else:
+        return '<p style="color: red>File %s is too large to show<p>' % filename
+    html.write(after)
+    return html.getvalue()
+
+
 def returncode_to_html_text(returncode):
     if returncode:
         return '<span style="color: red">FAILED</span>'
@@ -335,6 +364,7 @@ def returncode_to_html_text(returncode):
         return '<span style="color: green">succeeded</span>'
 
 
+# not used
 def returncode_to_html_sentence(returncode):
     if returncode:
         return ('<span style="color: red">&#x274c;</span>'
@@ -342,6 +372,15 @@ def returncode_to_html_sentence(returncode):
     else:
         return ('<span style="color: green">&#x2713;</span>'
                 ' Test succeeded (return code %d)' % (returncode))
+
+
+def returncode_to_success_html_par(returncode):
+    if returncode:
+        return ('<p> <span style="color: red">&#x274c;</span>'
+                ' Test failed</p>')
+    else:
+        return ('<p> <span style="color: green">&#x2713;</span>'
+                ' Test succeeded</p>')
 
 
 def success_to_html_text(total, successes):
@@ -490,7 +529,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         # TODO: should we test for zero?
         if total is not None:
             # success are only the clear ones
-            # percentage is influenced by all but putting only failures to table
+            # percentage is influenced by all
+            # but putting only failures to table
             self.successes += successes
             self.total += total
 
@@ -501,12 +541,15 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         bad_ones = failures + errors
         self.main_index.write(
             '<tr><td>{d}</td>'
-            '<td><a href="{d}/{m}/index.html">{m}</a></td><td>{sf}</td>'
-            '<td>{total}</td><td>{st}</td><td>{ft}</td><td>{pt}</td>'
+            '<td><a href="{d}/{m}/index.html">{m}</a></td>'
+            '<td>{status}</td>'
+            '<td>{ntests}</td><td>{stests}</td>'
+            '<td>{ftests}</td><td>{ptests}</td>'
             '<tr>'.format(
                 d=module.tested_dir, m=module.name,
-                sf=returncode_to_html_text(returncode),
-                st=successes, ft=bad_ones, total=total, pt=pass_per))
+                status=returncode_to_html_text(returncode),
+                stests=successes, ftests=bad_ones, ntests=total,
+                ptests=pass_per))
         wrap_stdstream_to_html(infile=stdout,
                                outfile=os.path.join(cwd, 'stdout.html'),
                                module=module, stream='stdout')
@@ -520,18 +563,65 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             '<html><body>'
             '<h1>{m.name}</h1>'
             '<h2>{m.tested_dir} &ndash; {m.name}</h2>'
-            '<p>{status}'
-            '<p>Test duration: {dur}'
-            '<ul>'
-            '<li><a href="stdout.html">standard output (stdout)</a>'
-            '<li><a href="stderr.html">standard error output (stderr)</a>'
-            '<li><a href="testcodecoverage/index.html">code coverage</a>'
-            '</ul>'
-            '</body></html>'
+            '{status}'
             .format(
-                dur=self.file_time, m=module,
-                status=returncode_to_html_sentence(returncode),
+                m=module,
+                status=returncode_to_success_html_par(returncode),
                 ))
+
+        # TODO: include optionaly link to test suite
+        summary_section = (
+            '<table><tbody>'
+            '<tr><td>Test file</td><td>{m}</td></tr>'
+            '<tr><td>Testsuite</td><td>{d}</td></tr>'
+            '<tr><td>Status</td><td>{status}</td></tr>'
+            '<tr><td>Return code</td><td>{rc}</td></tr>'
+            '<tr><td>Number of tests</td><td>{ntests}</td></tr>'
+            '<tr><td>Successful tests</td><td>{stests}</td></tr>'
+            '<tr><td>Failed tests</td><td>{ftests}</td></tr>'
+            '<tr><td>Percent successful</td><td>{ptests}</td></tr>'
+            '<tr><td>Test duration</td><td>{dur}</td></tr>'
+            .format(
+                d=module.tested_dir, m=module.name,
+                status=returncode_to_html_text(returncode),
+                stests=successes, ftests=bad_ones, ntests=total,
+                ptests=pass_per, rc=returncode,
+                dur=self.file_time))
+        file_index.write(summary_section)
+
+        modules = test_summary.get('tested_modules', None)
+        if modules:
+            # TODO: replace by better handling of potential lists when parsing
+            # TODO: create link to module if running in grass or in addons
+            # alternatively a link to module test summary
+            if type(modules) is not list:
+                modules = [modules]
+            file_index.write(
+                '<tr><td>Tested modules</td><td>{}</td></tr>'.format(
+                    ', '.join(modules)))
+        file_index.write('<tbody><table>')
+
+        files_section = (
+            '<h3>Supplementary files</h3>'
+            '<ul>'
+            '<li><a href="stdout.html">standard output (stdout)</a></li>'
+            '<li><a href="stderr.html">standard error output (stderr)</a></li>'
+            '<li><a href="testcodecoverage/index.html">code coverage</a></li>'
+            )
+        file_index.write(files_section)
+
+        supplementary_files = test_summary.get('supplementary_files', None)
+        if supplementary_files:
+            for f in supplementary_files:
+                file_index.write('<li><a href="{f}">{f}</a></li>'.format(f=f))
+
+        file_index.write('</ul>')
+
+        if returncode:
+            file_index.write('<h3>Standard error output (stderr)</h3>')
+            file_index.write(html_file_preview(stderr))
+
+        file_index.write('</body></html>')
         file_index.close()
 
         if returncode:

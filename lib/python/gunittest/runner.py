@@ -225,6 +225,7 @@ class KeyValueTestResult(TestResult):
             self.test_type = 'not-specified'
 
         self._grass_modules = []
+        self._supplementary_files = []
 
     def setTimes(self, start_time, end_time, time_taken):
         self.start_time = start_time
@@ -235,6 +236,8 @@ class KeyValueTestResult(TestResult):
         super(KeyValueTestResult, self).stopTest(test)
         if hasattr(test, 'grass_modules'):
             self._grass_modules.extend(test.grass_modules)
+        if hasattr(test, 'supplementary_files'):
+            self._supplementary_files.extend(test.supplementary_files)
 
     def stopTestRun(self):
         super(KeyValueTestResult, self).stopTestRun()
@@ -278,7 +281,8 @@ class KeyValueTestResult(TestResult):
 
         # TODO: include each module just once? list good and bad modules?
         infos.append("modules=%s" % ','.join(self._grass_modules))
-        
+        infos.append("supplementary_files=%s" % ','.join(self._supplementary_files))
+
         # module, modules?, c, c++?, python
         # TODO: include also type modules?
         # TODO: include also C++ code?
