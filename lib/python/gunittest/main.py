@@ -77,14 +77,16 @@ def test():
     # TODO: we probably need to have different test  functions for C, Python modules, and Python code
     # TODO: combine the results using python -m coverage --help | grep combine
     # TODO: function to anonymize/beautify file names (in content and actual filenames)
-    doing_coverage = False
-    try:
-        import coverage
-        doing_coverage = True
-        cov = coverage.coverage(omit="*testsuite*")
-        cov.start()
-    except ImportError:
-        pass
+    # TODO: implement coverage but only when requested by invoker and only if
+    # it makes sense for tests (need to know what is tested)
+    # doing_coverage = False
+    #try:
+    #    import coverage
+    #    doing_coverage = True
+    #    cov = coverage.coverage(omit="*testsuite*")
+    #    cov.start()
+    #except ImportError:
+    #    pass
         # TODO: add some message somewhere
 
     # TODO: enable passing omit to exclude also gunittest or nothing
@@ -92,9 +94,9 @@ def test():
     # TODO: check if we are in the directory where the test file is
     # this will ensure that data directory is available when it is requested
 
-    if doing_coverage:
-        cov.stop()
-        cov.html_report(directory='testcodecoverage')
+    #if doing_coverage:
+    #    cov.stop()
+    #    cov.html_report(directory='testcodecoverage')
 
     # TODO: is sys.exit the right thing here
     sys.exit(not program.result.wasSuccessful())
@@ -113,21 +115,8 @@ def discovery():
     Runs using::
         python main.py discovery [start_directory]
     """
-    doing_coverage = False
-    try:
-        import coverage
-        doing_coverage = True
-        cov = coverage.coverage(omit="*testsuite*")
-        cov.start()
-    except ImportError:
-        pass
-        # TODO: add some message somewhere
 
     program = GrassTestProgram(grass_location='nc', exit_at_end=False)
-
-    if doing_coverage:
-        cov.stop()
-        cov.html_report(directory='testcodecoverage')
 
     sys.exit(not program.result.wasSuccessful())
 
