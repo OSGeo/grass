@@ -131,6 +131,45 @@ def get_svn_info():
     return None
 
 
+def years_ago(date, years):
+    # dateutil relative delte would be better but this is more portable
+    return date - datetime.timedelta(weeks=years * 52)
+
+
+# TODO: these functions should be called only if we know that svn is installed
+# this will simplify the functions, caller must handle it anyway
+def get_svn_path_authors(path, from_date=None):
+    """
+
+    :returns: a set of authors
+    """
+    if from_date is None:
+        # this is the SVN default for local copies
+        revision_range = 'BASE:1'
+    else:
+        revision_range = 'BASE:{%s}' % from_date
+    try:
+        # TODO: allow also usage of --limit
+        p = subprocess.Popen(['svn', 'log', '--xml',
+                              '--revision', revision_range, path],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+        rc = p.poll()
+        if not rc:
+            root = et.fromstring(stdout)
+            # TODO: get also date if this make sense
+            # expecting only one <entry> element
+            author_nodes = root.iterfind('*/author')
+            authors = [n.text for n in author_nodes]
+            return set(authors)
+    except OSError as e:
+        import errno
+        # ignore No such file or directory
+        if e.errno != errno.ENOENT:
+            raise
+    return None
+
+
 class GrassTestFilesMultiReporter(object):
 
     def __init__(self, reporters, forgiving=False):
@@ -417,6 +456,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         self.wrap_stdstream_to_html(infile=stderr,
                                     outfile=os.path.join(cwd, 'stderr.html'),
                                     module=module, stream='stderr')
+
         file_index_path = os.path.join(cwd, 'index.html')
         file_index = open(file_index_path, 'w')
         file_index.write(
@@ -433,7 +473,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             '</body></html>'
             .format(
                 dur=self.file_time, m=module,
-                status=self.returncode_to_html_sentence(returncode)))
+                status=self.returncode_to_html_sentence(returncode),
+                ))
         file_index.close()
 
         if returncode:
@@ -484,7 +525,8 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
                 .format(
                     d=module.tested_dir,
                     m=module.name))
-            num_failed = test_summary.get('failures', None)
+            num_failed = test_summary.get('failures', 0)
+            num_failed += test_summary.get('errors', 0)
             if num_failed:
                 if num_failed > 1:
                     text = ' ({f} tests failed)'
