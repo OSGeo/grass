@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
             if (G_remove("", "PG") == 1)
                 G_verbose_message(_("Switched from PostGIS to native format"));
         }
+        G_message(_("Current output format for vectors: %s"), "GRASS");
         exit(EXIT_SUCCESS);
     }
 
@@ -91,5 +92,7 @@ int main(int argc, char *argv[])
         save_status_file(options.output);
     }
 
+    G_message(_("Current output format for vectors: %s"), format);
+    
     exit(EXIT_SUCCESS);
 }
