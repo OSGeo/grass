@@ -26,8 +26,6 @@
  **  Update MN: commented line 387
  */
 
-#include <stdlib.h>		/* for the random number generation */
-#include <time.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -320,7 +318,8 @@ static void calculate(void)
 
     ystep = region.ns_res * (double)loopstep;
 
-    srand(time(0));
+    /* FIXME - allow seed to be specified for repeatability */
+    G_srand48_auto();
 
     for (row = 0, y = (double)region.north - (region.ns_res * .5);
 	 row < region.rows; row += loopstep, y -= ystep) {
@@ -337,9 +336,9 @@ static void calculate(void)
 #ifdef OFFSET
 		/* disabled by helena June 2005 */
 		roffset = parm.offset * (double)region.ew_res
-		    * ((2. * (double)rand() / (double)RAND_MAX) - 1.);
+		    * ((2. * G_drand48()) - 1.);
 		coffset = parm.offset * (double)region.ns_res
-		    * ((2. * (double)rand() / (double)RAND_MAX) - 1.);
+		    * ((2. * G_drand48()) - 1.);
 #endif
 		pts.x = x;
 		pts.y = y;

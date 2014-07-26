@@ -15,7 +15,6 @@
  * \include
  * 
  */
-#include <grass/config.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <fcntl.h>
@@ -35,11 +34,6 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "daemon.h"
-
-#ifdef __MINGW32__
-#define srandom srand
-#define random rand
-#endif
 
 int calculateIndex(char *file, rli_func *f,
 		   char **parameters, char *raster, char *output)
@@ -524,11 +518,11 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
 	    G_fatal_error(_("Too many units to place"));
 	assigned = G_malloc(units * sizeof(int));
 	i = 0;
-	srandom(0);
+	G_srand48(0);
 	while (i < units) {
 	    int j, position, found = FALSE;
 
-	    position = random() % max_units;
+	    position = G_lrand48() % max_units;
 	    for (j = 0; j < i; j++) {
 		if (assigned[j] == position)
 		    found = TRUE;
@@ -592,7 +586,7 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
 	if (r_strat_len < g->rl || c_strat_len < g->cl)
 	    G_fatal_error(_("Too many stratified random sample for raster map"));
 	loop = r_strat * c_strat;
-	srandom(0);
+	G_srand48(0);
 	for (i = 0; i < loop; i++) {
 	    msg m;
 
@@ -600,9 +594,9 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
 		m.type = AREA;
 		m.f.f_a.aid = i;
 		m.f.f_a.x = (int)g->sf_x + ((i % c_strat) * c_strat_len) +
-		    (random() % (c_strat_len - g->cl));
+		    (G_lrand48() % (c_strat_len - g->cl));
 		m.f.f_a.y = (int)g->sf_y + (rint(i / c_strat) * r_strat_len) +
-		    (random() % (r_strat_len - g->rl));
+		    (G_lrand48() % (r_strat_len - g->rl));
 		m.f.f_a.rl = g->rl;
 		m.f.f_a.cl = g->cl;
 		insertNode(l, m);
@@ -611,10 +605,10 @@ int disposeAreas(struct list *l, struct g_area *g, char *def)
 		m.type = MASKEDAREA;
 		m.f.f_ma.aid = i;
 		m.f.f_ma.x = (int)g->sf_x + ((i % c_strat) * c_strat_len) +
-		    (random() % (c_strat_len - g->cl));
+		    (G_lrand48() % (c_strat_len - g->cl));
 		m.f.f_ma.y =
 		    (int)g->sf_y + (rint(i / c_strat) * r_strat_len) +
-		    (random() % (r_strat_len - g->rl));
+		    (G_lrand48() % (r_strat_len - g->rl));
 		m.f.f_ma.rl = g->rl;
 		m.f.f_ma.cl = g->cl;
 		strcpy(m.f.f_ma.mask, g->maskname);

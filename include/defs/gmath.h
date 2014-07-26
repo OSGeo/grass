@@ -22,14 +22,16 @@ extern int fft(int, double *[2], int, int, int);
 extern int fft2(int, double (*)[2], int, int, int);
 
 /* gauss.c */
-extern double G_math_rand_gauss(int, double);
+extern double G_math_rand_gauss(double);
 
 /* max_pow2.c */
 extern long G_math_max_pow2 (long n);
 extern long G_math_min_pow2 (long n);
 
 /* rand1.c */
-extern float G_math_rand(int);
+extern void G_math_srand(int);
+extern int G_math_srand_auto(void);
+extern float G_math_rand(void);
 
 /* del2g.c */
 extern int del2g(double *[2], int, double);

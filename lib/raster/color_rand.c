@@ -33,16 +33,17 @@ void Rast_make_random_colors(struct Colors *colors, CELL min, CELL max)
 	G_fatal_error(_("Rast_make_random_colors: min (%d) > max (%d)"),
 		      min, max);
 
-    srand(time(NULL));
+    /* FIXME - allow seed to be specified for repeatability */
+    G_srand48_auto();
 
-    count = MAX_COLORS - DEVIATION + rand() % DEVIATION;
+    count = MAX_COLORS - DEVIATION + G_lrand48() % DEVIATION;
     if (count > max - min + 1)
 	count = max - min + 1;
 
     for (n = 1; n <= count; n++) {
-	red = rand() & 0377;
-	grn = rand() & 0377;
-	blu = rand() & 0377;
+	red = G_lrand48() & 0xff;
+	grn = G_lrand48() & 0xff;
+	blu = G_lrand48() & 0xff;
 	Rast_add_modular_c_color_rule(&n, red, grn, blu,
 				      &n, red, grn, blu, colors);
     }

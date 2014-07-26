@@ -13,6 +13,7 @@
  ******************************************************************************/
 #include <stdlib.h>
 #include <limits.h>
+#include <grass/gis.h>
 #include "local_proto.h"
 
 int p[18] = { 100, 100, 100, 90, 80, 70, 60, 50, 40,	/*adapt the "average" */
@@ -21,5 +22,5 @@ int p[18] = { 100, 100, 100, 90, 80, 70, 60, 50, 40,	/*adapt the "average" */
 
 int pick_ignite(int i)
 {
-    return ((100.0 * rand() / INT_MAX) <= p[i]);
+    return ((100.0 * G_drand48()) <= p[i]);
 }

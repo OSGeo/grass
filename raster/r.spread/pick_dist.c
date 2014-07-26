@@ -18,13 +18,14 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <math.h>
+#include <grass/gis.h>
 #include "local_proto.h"
 
 int pick_dist(int u)
 {
     int v;
 
-    v = (int)((u + 0.99999999999) * rand() / INT_MAX);
-    u = (int)((v + 0.99999999999) * rand() / INT_MAX);
-    return ((int)((u + 0.99999999999) * rand() / INT_MAX));	/*4th for a test */
+    v = (int)((u + 0.99999999999) * G_drand48());
+    u = (int)((v + 0.99999999999) * G_drand48());
+    return ((int)((u + 0.99999999999) * G_drand48()));	/*4th for a test */
 }
