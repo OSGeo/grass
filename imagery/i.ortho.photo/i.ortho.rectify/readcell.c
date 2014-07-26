@@ -29,6 +29,8 @@ struct cache *readcell(int fdi, int size, int target_env)
     else
 	select_current_env();
 
+    G_srand48(0);
+
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
@@ -119,7 +121,7 @@ struct cache *readcell(int fdi, int size, int target_env)
 
 block *get_block(struct cache * c, int idx)
 {
-    int replace = rand() % c->nblocks;
+    int replace = G_lrand48() % c->nblocks;
     block *p = &c->blocks[replace];
     int ref = c->refs[replace];
     off_t offset = (off_t) idx * sizeof(DCELL) << L2BSIZE;
