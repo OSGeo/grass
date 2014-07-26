@@ -336,7 +336,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
 
-    srand(getpid());
+    /* FIXME - allow seed to be specified for repeatability */
+    G_srand48_auto();
 
     display = flag.display->answer;
 #if 1
