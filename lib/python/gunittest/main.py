@@ -22,6 +22,7 @@ from .runner import (GrassTestRunner, MultiTestResult,
                      TextTestResult, KeyValueTestResult)
 from .invoker import GrassTestFilesInvoker
 from .utils import silent_rmtree
+from .reporters import FileAnonymizer
 
 import grass.script.core as gcore
 
@@ -142,7 +143,12 @@ if __name__ == '__main__':
     results_dir = 'testreport'
     silent_rmtree(results_dir)  # TODO: too brute force?
 
-    invoker = GrassTestFilesInvoker(start_dir='.')
+    start_dir = '.'
+    abs_start_dir = os.path.abspath(start_dir)
+    invoker = GrassTestFilesInvoker(
+        start_dir=start_dir,
+        file_anonymizer=FileAnonymizer(paths_to_remove=[abs_start_dir]))
+    # TODO: remove also results dir from files
     # we can just iterate over all locations available in database
     # but the we don't know the right location label/shortcut
     invoker.run_in_location(gisdbase=gisdbase,

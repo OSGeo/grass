@@ -25,7 +25,8 @@ from .checkers import text_to_keyvalue
 from .loader import GrassTestLoader, discover_modules
 from .reporters import (GrassTestFilesMultiReporter,
                         GrassTestFilesTextReporter, GrassTestFilesHtmlReporter,
-                        TestsuiteDirReporter, get_svn_path_authors)
+                        TestsuiteDirReporter, get_svn_path_authors,
+                        NoopFileAnonymizer)
 from .utils import silent_rmtree, ensure_dir
 
 import grass.script.setup as gsetup
@@ -87,7 +88,7 @@ class GrassTestFilesInvoker(object):
     # we can also save only failed tests, or generate only if assert fails
     def __init__(self, start_dir,
                  clean_mapsets=True, clean_outputs=True, clean_before=True,
-                 testsuite_dir='testsuite'):
+                 testsuite_dir='testsuite', file_anonymizer=None):
         """
 
         :param bool clean_mapsets: if the mapsets should be removed
@@ -106,6 +107,10 @@ class GrassTestFilesInvoker(object):
         self.reporter = None
 
         self.testsuite_dirs = None
+        if file_anonymizer is None:
+            self._file_anonymizer = NoopFileAnonymizer()
+        else:
+            self._file_anonymizer = file_anonymizer
 
     def _create_mapset(self, gisdbase, location, module):
         """Create mapset according to informations in module.
@@ -164,6 +169,8 @@ class GrassTestFilesInvoker(object):
         returncode = p.wait()
         stdout.close()
         stderr.close()
+        self._file_anonymizer.anonymize([stdout_path, stderr_path])
+
         test_summary = update_keyval_file(
             os.path.join(cwd, 'test_keyvalue_result.txt'),
             module=module, returncode=returncode)
@@ -186,7 +193,8 @@ class GrassTestFilesInvoker(object):
         self.reporter = GrassTestFilesMultiReporter(
             reporters=[
                 GrassTestFilesTextReporter(stream=sys.stderr),
-                GrassTestFilesHtmlReporter(),
+                GrassTestFilesHtmlReporter(
+                    file_anonymizer=self._file_anonymizer),
             ])
         self.testsuite_dirs = collections.defaultdict(list)  # reset list of dirs each time
         # TODO: move constants out of loader class or even module
