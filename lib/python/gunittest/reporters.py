@@ -19,9 +19,61 @@ import xml.etree.ElementTree as et
 import subprocess
 import StringIO
 import collections
+import re
+
+import grass.script as gscript
 
 from .utils import ensure_dir
 from .checkers import text_to_keyvalue
+
+
+def replace_in_file(file_path, pattern, repl):
+    """
+
+    :param repl: a repl paramter of ``re.sub()`` function
+    """
+    # using tmp file to store the replaced content
+    tmp_file_path = file_path + '.tmp'
+    old_file = open(file_path, 'r')
+    new_file = open(tmp_file_path, 'w')
+    for line in old_file:
+        new_file.write(re.sub(pattern=pattern, string=line, repl=repl))
+    new_file.close()
+    old_file.close()
+    # remove old file since it must not exist for rename/move
+    os.remove(file_path)
+    # replace old file by new file
+    os.rename(tmp_file_path, file_path)
+
+
+class NoopFileAnonymizer(object):
+    def anonymize(self, filenames):
+        pass
+
+
+class FileAnonymizer(object):
+    def __init__(self, paths_to_remove, remove_gisbase=True,
+                 remove_gisdbase=False):
+        self._paths_to_remove = []
+        if remove_gisbase:
+            gisbase = os.environ['GISBASE']
+            self._paths_to_remove.append(gisbase)
+        if remove_gisdbase:
+            gisdbase = gscript.gis.get['GISDBASE']
+            self._paths_to_remove.append(gisdbase)
+        if paths_to_remove:
+            self._paths_to_remove.extend(paths_to_remove)
+
+    def anonymize(self, filenames):
+        # besides GISBASE and test recursion start directory (which is
+        # supposed to be source root directory or similar) we can also try
+        # to remove user home directory and GISDBASE
+        # we suppuse that we run in standard grass session
+        # TODO: provide more effective implementation
+        for path in self._paths_to_remove:
+            for filename in filenames:
+                path_end = r'[\\/]?'
+                replace_in_file(filename, path + path_end, '')
 
 
 def get_source_url(path, revision, line=None):
@@ -410,9 +462,10 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
     unknown_number = UNKNOWN_NUMBER_HTML
 
-    def __init__(self):
+    def __init__(self, file_anonymizer):
         super(GrassTestFilesHtmlReporter, self).__init__()
         self.main_index = None
+        self._file_anonymizer = file_anonymizer
 
     def start(self, results_dir):
         super(GrassTestFilesHtmlReporter, self).start(results_dir)
@@ -613,6 +666,14 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
         supplementary_files = test_summary.get('supplementary_files', None)
         if supplementary_files:
+            # this is something we might want to do once for all and not
+            # risk that it will be done twice or rely that somebody else
+            # will do it for use
+            # the solution is perhaps do the multi reporter more grass-specific
+            # and do all common things, so that other can rely on it and
+            # moreover something can be shared with other explicity
+            # using constructors as seems advantageous for counting
+            self._file_anonymizer.anonymize(supplementary_files)
             for f in supplementary_files:
                 file_index.write('<li><a href="{f}">{f}</a></li>'.format(f=f))
 
