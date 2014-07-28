@@ -8,10 +8,10 @@ for details.
 @author Soeren Gebbert
 """
 
-import grass.script as grass
 import grass.pygrass.modules as pymod
 import subprocess
 from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule
 
 class TestRasterExtraction(TestCase):
 
@@ -19,7 +19,7 @@ class TestRasterExtraction(TestCase):
     def setUpClass(cls):
         """!Initiate the temporal GIS and set the region
         """
-        grass.use_temp_region()
+        cls.use_temp_region()
         cls.runModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
         cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=10,  res3=10)
 
@@ -27,7 +27,7 @@ class TestRasterExtraction(TestCase):
     def tearDownClass(cls):
         """!Remove the temporary region
         """
-        grass.del_temp_region()
+        cls.del_temp_region()
 
     def setUp(self):
         """Create input data for transient groundwater flow computation
@@ -79,9 +79,8 @@ class TestRasterExtraction(TestCase):
         max_min=300.0
         max_max=600.0"""
 
-        self.assertModuleKeyValue(module="t.info",  
-                                  parameters=dict(flags="g", input="precip_abs2"), 
-                                  reference=tinfo_string, precision=2, sep="=")
+        info = SimpleModule("t.info", flags="g", input="precip_abs2")
+        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
     def test_selection_and_expression(self):
         """Perform a selection by datetime and a r.mapcalc expression"""
@@ -113,9 +112,8 @@ class TestRasterExtraction(TestCase):
         max_min=500.0
         max_max=600.0"""
 
-        self.assertModuleKeyValue(module="t.info",  
-                                  parameters=dict(flags="g", input="precip_abs2"), 
-                                  reference=tinfo_string, precision=2, sep="=")
+        info = SimpleModule("t.info", flags="g", input="precip_abs2")
+        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
     def test_expression_with_empty_maps(self):
         """Perform r.mapcalc expression and register empty maps"""
@@ -146,9 +144,34 @@ class TestRasterExtraction(TestCase):
         max_min=500.0
         max_max=600.0"""
 
-        self.assertModuleKeyValue(module="t.info",  
-                                  parameters=dict(flags="g", input="precip_abs2"), 
-                                  reference=tinfo_string, precision=2, sep="=")
+        info = SimpleModule("t.info", flags="g", input="precip_abs2")
+        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
+
+class TestRasterExtractionFails(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        """!Initiate the temporal GIS and set the region
+        """
+        cls.use_temp_region()
+        cls.runModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
+        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=10,  res3=10)
+
+    @classmethod
+    def tearDownClass(cls):
+        """!Remove the temporary region
+        """
+        cls.del_temp_region()
+
+    def test_error_handling(self):
+        """Perform r.mapcalc expression and register empty maps"""
+        # No input
+        self.assertModuleFail("t.rast.extract",  output="precip_abs2", basename="new_prec")
+        # No output
+        self.assertModuleFail("t.rast.extract",  input="precip_abs1",  basename="new_prec")
+        # No basename
+        self.assertModuleFail("t.rast.extract",  input="precip_abs1",  output="precip_abs2", 
+                          expression=" if(precip_abs1 > 400, precip_abs1, null())")
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
