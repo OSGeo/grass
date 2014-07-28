@@ -175,7 +175,8 @@ PERMANENT
   <dt>GRASS_ZLIB_LEVEL</dt>
   <dd>[libgis]<br> if the environment variable GRASS_ZLIB_LEVEL exists and its value can
     be parsed as an integer, it determines the compression level used when new compressed
-    <i>integer</i> (CELL type) raster maps are compressed using zlib compression.
+    raster maps are compressed using zlib compression. This applies to all 
+    raster map types (CELL, FCELL, DCELL).
     <br><br>
     If the variable doesn't exist, or the value cannot be parsed as an
     integer, zlib's default compression level will be used.</dd>
