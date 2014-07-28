@@ -684,8 +684,8 @@ class CLibrariesInterface(object):
        # Check mapsets
        >>> ciface = tgis.CLibrariesInterface()
        >>> mapsets = ciface.available_mapsets()
-       >>> print mapsets[0]
-       PERMANENT
+       >>> mapsets[0] == tgis.get_current_mapset()
+       True
        
        # Raster map
        >>> ciface = tgis.CLibrariesInterface()
