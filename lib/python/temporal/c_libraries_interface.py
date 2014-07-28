@@ -661,24 +661,24 @@ class CLibrariesInterface(object):
        Usage:
 
        @code
-       >>> import grass.script as grass
+       >>> import grass.script as gscript
        >>> import grass.temporal as tgis
-       >>> grass.use_temp_region()
-       >>> grass.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
+       >>> gscript.use_temp_region()
+       >>> gscript.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
        ... t=1.0, b=0.0, res=10.0, res3=10.0)
        0
        >>> tgis.init()
-       >>> grass.run_command("r.mapcalc", expression="test = 1", overwrite=True, quiet=True)
+       >>> gscript.run_command("r.mapcalc", expression="test = 1", overwrite=True, quiet=True)
        0
-       >>> grass.run_command("r3.mapcalc", expression="test = 1", overwrite=True, quiet=True)
+       >>> gscript.run_command("r3.mapcalc", expression="test = 1", overwrite=True, quiet=True)
        0
-       >>> grass.run_command("v.random", output="test", n=10, overwrite=True, quiet=True)
+       >>> gscript.run_command("v.random", output="test", n=10, overwrite=True, quiet=True)
        0
-       >>> grass.run_command("r.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+       >>> gscript.run_command("r.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
        0
-       >>> grass.run_command("r3.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+       >>> gscript.run_command("r3.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
        0
-       >>> grass.run_command("v.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+       >>> gscript.run_command("v.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
        0
 
        # Check mapsets
@@ -760,7 +760,7 @@ class CLibrariesInterface(object):
        >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
        True
 
-       >>> grass.del_temp_region()
+       >>> gscript.del_temp_region()
 
        @endcode
     """
