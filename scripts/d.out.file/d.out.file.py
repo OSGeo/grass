@@ -44,7 +44,7 @@ def main():
     options, flags = gcore.parser()
     gisenv = gcore.gisenv()
     if 'MONITOR' in gisenv:
-        cmd_file = gisenv['MONITOR_{monitor}_CMDFILE'.format(monitor=gisenv['MONITOR'])]
+        cmd_file = gisenv['MONITOR_{monitor}_CMDFILE'.format(monitor=gisenv['MONITOR'].upper())]
         dout_cmd = 'd.out.file'
         for param, val in options.iteritems():
             if val:
