@@ -365,6 +365,7 @@ G_zlib_compress(const unsigned char *src, int src_sz, unsigned char *dst,
     nbytes = buf_sz - c_stream.avail_out;
     if (nbytes > dst_sz) {	/* Not enough room to copy output */
 	G_free(buf);
+	deflateEnd(&c_stream);
 	return -2;
     }
     /* Copy the data from buf to dst */
