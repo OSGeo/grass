@@ -100,6 +100,54 @@ char *G_store(const char *s)
 }
 
 /*!
+  \brief Copy string to allocated memory and convert copied string
+  to upper case
+  
+  This routine allocates enough memory to hold the string <b>s</b>,
+  copies <em>s</em> to the allocated memory, and returns a pointer
+  to the allocated memory.
+  
+  If <em>s</em> is NULL then empty string is returned.
+  
+  \param s string
+ 
+  \return pointer to newly allocated upper case string
+*/
+char *G_store_upper(const char *s)
+{
+    char *u_s;
+
+    u_s = G_store(s);
+    G_str_to_upper(u_s);
+
+    return u_s;
+}
+
+/*!
+  \brief Copy string to allocated memory and convert copied string
+  to lower case
+  
+  This routine allocates enough memory to hold the string <b>s</b>,
+  copies <em>s</em> to the allocated memory, and returns a pointer
+  to the allocated memory.
+  
+  If <em>s</em> is NULL then empty string is returned.
+  
+  \param s string
+ 
+  \return pointer to newly allocated lower case string
+*/
+char *G_store_lower(const char *s)
+{
+    char *l_s;
+
+    l_s = G_store(s);
+    G_str_to_lower(l_s);
+
+    return l_s;
+}
+
+/*!
   \brief Replace all occurencies of character in string bug with new
   
   \param[in,out] bug base string

@@ -39,7 +39,7 @@ def main():
     if not mon:
         grass.fatal(_("No monitor selected. Run `d.mon` to select monitor."))
     
-    monCmd = env.get('MONITOR_%s_CMDFILE' % mon)
+    monCmd = env.get('MONITOR_%s_CMDFILE' % mon.upper())
     if not monCmd:
         grass.fatal(_("No cmd file found for monitor <%s>") % mon)
 

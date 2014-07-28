@@ -25,7 +25,9 @@ void list_mon(char ***list, int *n)
 		strcmp(tokens[2], "ENVFILE") != 0)
 		continue;
 	    *list = G_realloc(*list, (*n + 1) * sizeof(char *));
-	    (*list)[*n] = G_store(tokens[1]);
+	    /* GRASS variable names are upper case, but monitor names are lower
+	     * case. */
+	    (*list)[*n] = G_store_lower(tokens[1]);
 	    (*n)++;
 	    G_free_tokens(tokens);
 	    tokens = NULL;
@@ -59,7 +61,7 @@ int check_mon(const char *name)
     const char *str;
     
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", name);
+    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", G_store_upper(name));
     str = G__getenv(env_name);
     if (!str)
 	return FALSE;
@@ -76,7 +78,7 @@ void list_cmd(const char *name, FILE *fd_out)
     FILE *fd;
 
     cmd_name = NULL;
-    G_asprintf(&cmd_name, "MONITOR_%s_CMDFILE", name);
+    G_asprintf(&cmd_name, "MONITOR_%s_CMDFILE", G_store_upper(name));
     cmd_value = G__getenv(cmd_name);
     if (!cmd_value)
 	G_fatal_error(_("Command file not found"));

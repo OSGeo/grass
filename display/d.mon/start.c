@@ -13,13 +13,16 @@ static void start_wx(const char *, const char *, const char *,
 /* start file-based monitor */
 void start(const char *name, const char *output)
 {
+    char *u_name;
     char *env_name;
 
     if (!output)
 	return;
-    
+
+    u_name = G_store_upper(name);
+
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", name);
+    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", u_name);
     G_setenv(env_name, output);
 }
 
@@ -28,11 +31,14 @@ void start_wx(const char *name, const char *tempfile,
 	      const char *env_value, const char *cmd_value,
 	      int width, int height)
 {
+    char *u_name;
     char progname[GPATH_MAX];
     char *env_name, *map_value, str_width[1024], str_height[1024];
 
+    u_name = G_store_upper(name);
+
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", name);
+    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", u_name);
     G_asprintf(&map_value, "%s.ppm", tempfile);
     G_setenv(env_name, map_value);
     /* close(creat(map_value, 0666)); */
@@ -59,6 +65,7 @@ int start_mon(const char *name, const char *output, int select,
 	      int truecolor)
 {
     const char *curr_mon;
+    char *u_name;
     char *env_name, *env_value, *cmd_value;
     char *tempfile, buf[1024];
     int env_fd;
@@ -69,8 +76,10 @@ int start_mon(const char *name, const char *output, int select,
     
     tempfile = G_tempfile();
 
+    u_name = G_store_upper(name);
+
     env_name = env_value = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", name);
+    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", u_name);
     G_asprintf(&env_value, "%s.env", tempfile);
     G_setenv(env_name, env_value);
     env_fd = creat(env_value, 0666);
@@ -101,7 +110,7 @@ int start_mon(const char *name, const char *output, int select,
     close(env_fd);
 
     cmd_value = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_CMDFILE", name);
+    G_asprintf(&env_name, "MONITOR_%s_CMDFILE", u_name);
     G_asprintf(&cmd_value, "%s.cmd", tempfile);
     G_setenv(env_name, cmd_value);
     close(creat(cmd_value, 0666));
