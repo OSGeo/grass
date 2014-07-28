@@ -326,8 +326,11 @@ G_zlib_compress(const unsigned char *src, int src_sz, unsigned char *dst,
     c_stream.avail_out = buf_sz;
     c_stream.next_out = buf;
 
-    /* Initialize using default compression (usually 6) */
-    err = deflateInit(&c_stream, Z_DEFAULT_COMPRESSION);
+    /* Initialize */
+    /* Compression levels 0 - 9 */
+    /* zlib default: Z_DEFAULT_COMPRESSION (-1), equivalent to 6 
+     * as used here, 1 gives the best compromise between speed and compression */
+    err = deflateInit(&c_stream, 1);
 
     /* If there was an error initializing, return -1 */
     if (err != Z_OK) {
@@ -358,6 +361,7 @@ G_zlib_compress(const unsigned char *src, int src_sz, unsigned char *dst,
     nbytes = buf_sz - c_stream.avail_out;
     if (nbytes > dst_sz) {	/* Not enough room to copy output */
 	G_free(buf);
+	deflateEnd(&c_stream);
 	return -2;
     }
     /* Copy the data from buf to dst */
