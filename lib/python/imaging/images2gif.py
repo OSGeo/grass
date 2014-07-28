@@ -70,6 +70,11 @@ import os, time
 try:
     import PIL
     from PIL import Image
+    pillow = True
+    try:
+        from PIL import PILLOW_VERSION  # test if user has Pillow or PIL
+    except ImportError:
+        pillow = False
     from PIL.GifImagePlugin import getheader, getdata
 except ImportError:
     PIL = None
@@ -404,13 +409,22 @@ class GifWriter:
         """ writeGifToFile(fp, images, durations, loops, xys, disposes)
         
         Given a set of images writes the bytes to the specified stream.
+        Requires different handling of palette for PIL and Pillow:
+        based on https://github.com/rec/echomesh/blob/master/
+        code/python/external/images2gif.py
         
         """
         
         # Obtain palette for all images and count each occurance
         palettes, occur = [], []
         for im in images:
-            palettes.append( getheader(im)[1] )
+            if not pillow:
+                palette = getheader(im)[1]
+            else:
+                palette = getheader(im)[0][-1]
+                if not palette:
+                    palette = im.palette.tobytes()
+            palettes.append(palette)
         for palette in palettes:
             occur.append( palettes.count( palette ) )
         
