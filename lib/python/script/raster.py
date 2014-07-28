@@ -87,7 +87,8 @@ def raster_info(map):
 
 # interface to r.mapcalc
 
-def mapcalc(exp, quiet = False, verbose = False, overwrite = False, seed = None, **kwargs):
+def mapcalc(exp, quiet = False, verbose = False, overwrite = False,
+            seed = None, env = None, **kwargs):
     """!Interface to r.mapcalc.
 
     @param exp expression
@@ -96,6 +97,7 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False, seed = None,
     @param overwrite True to enable overwriting the output (<tt>--o</tt>)
     @param seed an integer used to seed the random-number generator for the rand() function,
     or 'auto' to generate a random seed
+    @param env dictionary of environment variables for child process
     @param kwargs
     """
 
@@ -106,6 +108,7 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False, seed = None,
     e = t.substitute(**kwargs)
 
     if write_command('r.mapcalc', file = '-', stdin = e,
+                     env = env,
                      seed = seed,
                      quiet = quiet,
                      verbose = verbose,
@@ -113,7 +116,8 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False, seed = None,
         fatal(_("An error occurred while running r.mapcalc"))
 
 
-def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, seed = None, **kwargs):
+def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False,
+                  seed = None, env = None, **kwargs):
     """!Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
 
     \code
@@ -134,6 +138,7 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, seed =
     @param overwrite True to enable overwriting the output (<tt>--o</tt>)
     @param seed an integer used to seed the random-number generator for the rand() function,
     or 'auto' to generate a random seed
+    @param env dictionary of environment variables for child process
     @param kwargs
     
     @return Popen object
@@ -146,6 +151,7 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, seed =
     e = t.substitute(**kwargs)
 
     p = feed_command('r.mapcalc', file = '-',
+                     env = env,
                      seed = seed,
                      quiet = quiet,
                      verbose = verbose,
@@ -155,7 +161,7 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False, seed =
     return p
 
 # interface to r.what
-def raster_what(map, coord):
+def raster_what(map, coord, env = None):
     """!TODO"""
     if type(map) in (types.StringType, types.UnicodeType):
         map_list = [map]
@@ -173,14 +179,13 @@ def raster_what(map, coord):
     # separator '|' not included in command
     # because | is causing problems on Windows
     # change separator?
-    cmdParams = dict(quiet = True,
-                     flags = 'rf',
-                     map = ','.join(map_list),
-                     coordinates = ','.join(coord_list),
-                     null = _("No data"))
-    
     ret = read_command('r.what',
-                       **cmdParams)
+                       flags = 'rf',
+                       map = ','.join(map_list),
+                       coordinates = ','.join(coord_list),
+                       null = _("No data"),
+                       quiet = True,
+                       env = env)
     data = list()
     if not ret:
         return data
