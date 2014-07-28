@@ -328,10 +328,13 @@ G_zlib_compress(const unsigned char *src, int src_sz, unsigned char *dst,
     c_stream.avail_out = buf_sz;
     c_stream.next_out = buf;
 
-    /* Initialize using default compression (usually 6) */
-    err = deflateInit(&c_stream, G__.compression_level < 0
-		      ? Z_DEFAULT_COMPRESSION
-		      : G__.compression_level);
+    /* Initialize */
+    /* Valid zlib compression levels -1 - 9 */
+    /* zlib default: Z_DEFAULT_COMPRESSION = -1, equivalent to 6 
+     * as used here, 1 gives the best compromise between speed and compression */
+    err = deflateInit(&c_stream,
+                      (G__.compression_level < -1 || G__.compression_level > 9) 
+		      ? 1 : G__.compression_level);
 
     /* If there was an error initializing, return -1 */
     if (err != Z_OK) {
