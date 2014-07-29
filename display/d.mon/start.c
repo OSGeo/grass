@@ -13,16 +13,13 @@ static void start_wx(const char *, const char *, const char *,
 /* start file-based monitor */
 void start(const char *name, const char *output)
 {
-    char *u_name;
     char *env_name;
 
     if (!output)
 	return;
 
-    u_name = G_store_upper(name);
-
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", u_name);
+    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", G_store_upper(name));
     G_setenv(env_name, output);
 }
 
@@ -31,14 +28,11 @@ void start_wx(const char *name, const char *tempfile,
 	      const char *env_value, const char *cmd_value,
 	      int width, int height)
 {
-    char *u_name;
     char progname[GPATH_MAX];
     char *env_name, *map_value, str_width[1024], str_height[1024];
 
-    u_name = G_store_upper(name);
-
     env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", u_name);
+    G_asprintf(&env_name, "MONITOR_%s_MAPFILE", G_store_upper(name));
     G_asprintf(&map_value, "%s.ppm", tempfile);
     G_setenv(env_name, map_value);
     /* close(creat(map_value, 0666)); */
@@ -64,16 +58,21 @@ int start_mon(const char *name, const char *output, int select,
 	      int width, int height, const char *bgcolor,
 	      int truecolor)
 {
-    const char *curr_mon;
     char *u_name;
     char *env_name, *env_value, *cmd_value;
     char *tempfile, buf[1024];
     int env_fd;
-    
-    curr_mon = G__getenv("MONITOR");
-    if (curr_mon && strcmp(curr_mon, name) == 0 && check_mon(curr_mon))
-	G_fatal_error(_("Monitor <%s> already running"), name);
-    
+
+    if (check_mon(name)) {
+        const char *curr_mon;
+
+        curr_mon = G__getenv("MONITOR");
+	if (select && (!curr_mon || strcmp(curr_mon, name) != 0))
+	    G_setenv("MONITOR", name);
+
+        G_fatal_error(_("Monitor <%s> already running"), name);
+    }
+
     tempfile = G_tempfile();
 
     u_name = G_store_upper(name);
@@ -115,7 +114,7 @@ int start_mon(const char *name, const char *output, int select,
     G_setenv(env_name, cmd_value);
     close(creat(cmd_value, 0666));
 
-    G_verbose_message(_("Staring monitor <%s> with env file '%s'"), name, env_value);
+    G_verbose_message(_("Starting monitor <%s> with env file '%s'"), name, env_value);
     if (G_verbose() > G_verbose_std()) {
         FILE *fd;
         
