@@ -88,12 +88,6 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
      <p>
       <ul>
        <li class="box"><a href="projectionintro.html">Intro: projections and spatial transformations</a></li>
-       <li class="box"><a href="rasterintro.html">Intro: 2D raster map processing</a></li>
-       <li class="box"><a href="raster3dintro.html">Intro: 3D raster map (voxel) processing</a></li>
-       <li class="box"><a href="imageryintro.html">Intro: image processing</a></li>
-       <li class="box"><a href="vectorintro.html">Intro: vector map processing and network analysis</a></li>
-       <li class="box"><a href="databaseintro.html">Intro: database management</a></li>
-       <li class="box"><a href="temporalintro.html">Intro: temporal data processing</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
@@ -111,52 +105,70 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
         <li class="box"><a href="displaydrivers.html">Display drivers</a></li>
        </ul>
       </td>
+      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;General</h3>
+	<ul>
+	<li class="box"><a href="grass7.html">GRASS GIS startup manual page</a></li>
+	<li class="box"><a href="general.html">General commands manual</a></li>
+	</ul>
+      </td>
     </tr>
     <tr>
-      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Raster and 3D raster processing</h3>
+      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Raster processing</h3>
        <ul>
+        <li class="box"><a href="rasterintro.html">Intro: 2D raster map processing</a></li>
         <li class="box"><a href="raster.html">Raster commands manual</a></li>
+       </ul>
+      </td>
+      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;3D raster processing</h3>
+       <ul>
+        <li class="box"><a href="raster3dintro.html">Intro: 3D raster map (voxel) processing</a></li>
         <li class="box"><a href="raster3D.html">3D raster (voxel) commands manual</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Image processing</h3>
        <ul>
+        <li class="box"><a href="imageryintro.html">Intro: image processing</a></li>
         <li class="box"><a href="imagery.html">Imagery commands manual</a></li>
       </ul></td>
     </tr>
     <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Vector processing</h3>
        <ul>
+        <li class="box"><a href="vectorintro.html">Intro: vector map processing and network analysis</a></li>
         <li class="box"><a href="vector.html">Vector commands manual</a></li>
         <li class="box"><a href="vectorascii.html">GRASS ASCII vector format specification</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Database</h3>
        <ul>
-       <li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
-       <li class="box"><a href="database.html">Database commands manual</a></li>
-       </ul></td>
-    </tr>
-    <tr>
-      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;General</h3>
-      <ul>
-      <li class="box"><a href="grass7.html">GRASS GIS startup manual page</a></li>
-      <li class="box"><a href="general.html">General commands manual</a></li>
-      </ul></td>
-      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Miscellaneous&nbsp;&amp;&nbsp;Variables</h3>
-       <ul>
-        <li class="box"><a href="misc.html">Miscellaneous commands manual</a></li>
-        <li class="box"><a href="variables.html">GRASS variables and environment variables</a></li>
-       </ul></td>
-    </tr>
-    <tr>
+	<li class="box"><a href="databaseintro.html">Intro: database management</a></li>
+	<li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
+	<li class="box"><a href="database.html">Database commands manual</a></li>
+       </ul>
+      </td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Temporal processing</h3>
        <ul>
+        <li class="box"><a href="temporalintro.html">Intro: temporal data processing</a></li>
         <li class="box"><a href="temporal.html">Temporal commands manual</a></li>
-       </ul></td>
+       </ul>
+      </td>
+    </tr>
+    <tr>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Cartography</h3>
        <ul>
         <li class="box"><a href="postscript.html">Postscript commands manual</a></li>
         <li class="box"><a href="g.gui.psmap.html">wxGUI Cartographic Composer</a></li>
-       </ul></td>
+       </ul>
+      </td>
+      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Miscellaneous&nbsp;&amp;&nbsp;Variables</h3>
+       <ul>
+        <li class="box"><a href="misc.html">Miscellaneous commands manual</a></li>
+        <li class="box"><a href="variables.html">GRASS variables and environment variables</a></li>
+       </ul>
+      </td>
+      <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;GRASS GIS Wiki</h3>
+       <ul>
+        <li class="box"><a href="http://grasswiki.osgeo.org/wiki/Faq">FAQ - Frequently Asked Questions</a></li>
+       </ul>
+      </td>
     </tr>
   </tbody>
 </table>
