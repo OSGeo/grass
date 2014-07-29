@@ -19,12 +19,34 @@ import xml.etree.ElementTree as et
 import subprocess
 import StringIO
 import collections
+import types
 import re
 
 import grass.script as gscript
 
 from .utils import ensure_dir
 from .checkers import text_to_keyvalue
+
+
+# TODO: change text_to_keyvalue to same sep as here
+# TODO: create keyvalue file and move it there together with things from checkers
+def keyvalue_to_text(keyvalue, sep='=', vsep='\n', isep=',',
+                     last_vertical=None):
+    if not last_vertical:
+        last_vertical = vsep == '\n'
+    items = []
+    for key, value in keyvalue.iteritems():
+        # TODO: use isep for iterables other than strings
+        if (not isinstance(value, types.StringTypes)
+                and isinstance(value, collections.Iterable)):
+            # TODO: this does not work for list of non-strings
+            value = isep.join(value)
+        items.append('{key}{sep}{value}'.format(
+            key=key, sep=sep, value=value))
+    text = vsep.join(items)
+    if last_vertical:
+        text = text + vsep
+    return text
 
 
 def replace_in_file(file_path, pattern, repl):
@@ -230,9 +252,21 @@ def get_html_test_authors_table(directory, tests_authors):
     # so test code authors list also contains authors of tests only
     # TODO: don't do this for the top level directories?
     tests_authors = set(tests_authors)
+    no_svn_text = ('<span style="font-size: 60%">'
+                   'Test file authors were not obtained.'
+                   '</span>')
+    if (not tests_authors
+            or (len(tests_authors) == 1 and list(tests_authors)[0] == '')):
+        return '<h3>Code and test authors</h3>' + no_svn_text
     from_date = years_ago(datetime.date.today(), years=1)
     tested_dir_authors = get_svn_path_authors(directory, from_date)
-    not_testing_authors = tested_dir_authors - tests_authors
+    if tested_dir_authors is not None:
+        not_testing_authors = tested_dir_authors - tests_authors
+    else:
+        no_svn_text = ('<span style="font-size: 60%">'
+                       'Authors cannot be obtained using SVN.'
+                       '</span>')
+        not_testing_authors = tested_dir_authors = [no_svn_text]
     if not not_testing_authors:
         not_testing_authors = ['all recent authors contributed tests']
 
@@ -484,7 +518,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         svn_info = get_svn_info()
         if not svn_info:
             svn_text = ('<span style="font-size: 60%">'
-                        'SVN revision cannot be be obtained'
+                        'SVN revision cannot be obtained'
                         '</span>')
         else:
             url = get_source_url(path=svn_info['relative-url'],
@@ -693,6 +727,139 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # a stream can be added and if not none, we could write
 
 
+class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
+
+    def __init__(self):
+        super(GrassTestFilesKeyValueReporter, self).__init__()
+        self.result_dir = None
+
+    def start(self, results_dir):
+        super(GrassTestFilesKeyValueReporter, self).start(results_dir)
+        # having all variables public although not really part of API
+        self.result_dir = results_dir
+
+        # TODO: this can be moved to the counter class
+        self.failures = 0
+        self.errors = 0
+        self.skipped = 0
+        self.successes = 0
+        self.expected_failures = 0
+        self.unexpected_success = 0
+        self.total = 0
+
+        # TODO: document: tested_dirs is a list and it should fit with names
+        self.names = []
+        self.tested_dirs = []
+        self.files_returncodes = []
+
+        # sets (no size specified)
+        self.modules = set()
+        self.test_files_authors = set()
+
+    def finish(self):
+        super(GrassTestFilesKeyValueReporter, self).finish()
+
+        # this shoul be moved to some additional meta passed in constructor
+        svn_info = get_svn_info()
+        if not svn_info:
+            svn_revision = ''
+        else:
+            svn_revision = svn_info['revision']
+
+        summary = {}
+        summary['files_total'] = self.test_files
+        summary['files_successes'] = self.files_pass
+        summary['files_failures'] = self.files_fail
+
+        summary['names'] = self.names
+        summary['tested_dirs'] = self.tested_dirs
+        # TODO: we don't have a general mechanism for storing any type in text
+        summary['files_returncodes'] = [str(item)
+                                        for item in self.files_returncodes]
+
+        # let's use seconds as a universal time delta format
+        # (there is no standard way how to store time delta as string)
+        summary['time'] = self.main_time.total_seconds()
+
+        status = 'failed' if self.files_fail else 'succeeded'
+        summary['status'] = status
+
+        summary['total'] = self.total
+        summary['successes'] = self.successes
+        summary['failures'] = self.failures
+        summary['errors'] = self.errors
+        summary['skipped'] = self.skipped
+        summary['expected_failures'] = self.expected_failures
+        summary['unexpected_successes'] = self.unexpected_success
+
+        summary['test_files_authors'] = self.test_files_authors
+        summary['tested_modules'] = self.modules
+        summary['svn_revision'] = svn_revision
+        # ignoring issues with time zones
+        summary['timestamp'] = self.main_start_time.strftime('%Y-%m-%d %H:%M:%S')
+        # TODO: add some general metadata here (passed in constructor)
+
+        summary_filename = os.path.join(self.result_dir,
+                                        'test_keyvalue_result.txt')
+        with open(summary_filename, 'w') as summary_file:
+            text = keyvalue_to_text(summary, sep='=', vsep='\n', isep=',')
+            summary_file.write(text)
+
+    def end_file_test(self, module, cwd, returncode, stdout, stderr,
+                      test_summary):
+        super(GrassTestFilesKeyValueReporter, self).end_file_test(
+            module=module, cwd=cwd, returncode=returncode,
+            stdout=stdout, stderr=stderr)
+        # TODO: considering others accoring to total, OK?
+        # here we are using 0 for total but HTML reporter is using None
+        total = test_summary.get('total', 0)
+        failures = test_summary.get('failures', 0)
+        errors = test_summary.get('errors', 0)
+        # Python unittest TestResult class is reporting success for no
+        # errors or failures, so skipped, expected failures and unexpected
+        # success are ignored
+        # but successful tests are only total - the others
+        skipped = test_summary.get('skipped', 0)
+        expected_failures = test_summary.get('expected_failures', 0)
+        unexpected_successes = test_summary.get('unexpected_successes', 0)
+        successes = test_summary.get('successes', 0)
+
+        # TODO: move this to counter class and perhaps use aggregation
+        # rather then inheritance
+        self.failures += failures
+        self.errors += errors
+        self.skipped += skipped
+        self.expected_failures += expected_failures
+        self.unexpected_success += unexpected_successes
+
+        # TODO: should we test for zero?
+        if total is not None:
+            # success are only the clear ones
+            # percentage is influenced by all
+            # but putting only failures to table
+            self.successes += successes
+            self.total += total
+
+        self.files_returncodes.append(returncode)
+
+        self.tested_dirs.append(module.tested_dir)
+        self.names.append(module.name)
+
+        modules = test_summary.get('tested_modules', None)
+        if modules:
+            # TODO: replace by better handling of potential lists when parsing
+            # TODO: create link to module if running in grass or in addons
+            # alternatively a link to module test summary
+            if type(modules) not in [list, set]:
+                modules = [modules]
+            self.modules.update(modules)
+
+        test_file_authors = test_summary['test_file_authors']
+        if type(test_file_authors) not in [list, set]:
+            test_file_authors = [test_file_authors]
+        self.test_files_authors.update(test_file_authors)
+
+
 class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 
     def __init__(self, stream):
@@ -843,7 +1010,7 @@ class TestsuiteDirReporter(object):
             test_file_authors = summary['test_file_authors']
             if type(test_file_authors) is not list:
                 test_file_authors = [test_file_authors]
-            test_files_authors += test_file_authors
+            test_files_authors.extend(test_file_authors)
 
             file_total += 1
             file_successes += 0 if summary['returncode'] else 1

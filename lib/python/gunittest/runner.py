@@ -280,7 +280,7 @@ class KeyValueTestResult(TestResult):
         infos.append("unexpected_successes=%d" % unexpectedSuccesses)
 
         # TODO: include each module just once? list good and bad modules?
-        infos.append("modules=%s" % ','.join(self._grass_modules))
+        infos.append("tested_modules=%s" % ','.join(self._grass_modules))
         infos.append("supplementary_files=%s" % ','.join(self._supplementary_files))
 
         # module, modules?, c, c++?, python

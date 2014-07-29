@@ -25,34 +25,14 @@ from .checkers import text_to_keyvalue
 from .loader import GrassTestLoader, discover_modules
 from .reporters import (GrassTestFilesMultiReporter,
                         GrassTestFilesTextReporter, GrassTestFilesHtmlReporter,
-                        TestsuiteDirReporter, get_svn_path_authors,
-                        NoopFileAnonymizer)
+                        TestsuiteDirReporter, GrassTestFilesKeyValueReporter,
+                        get_svn_path_authors,
+                        NoopFileAnonymizer, keyvalue_to_text)
 from .utils import silent_rmtree, ensure_dir
 
 import grass.script.setup as gsetup
 
 import collections
-import types
-
-
-# TODO: change text_to_keyvalue to same sep as here
-def keyvalue_to_text(keyvalue, sep='=', vsep='\n', isep=',',
-                     last_vertical=None):
-    if not last_vertical:
-        last_vertical = vsep == '\n'
-    items = []
-    for key, value in keyvalue.iteritems():
-        # TODO: use isep for iterables other than strings
-        if (not isinstance(value, types.StringTypes)
-                and isinstance(value, collections.Iterable)):
-            # TODO: this does not work for list of non-strings
-            value = isep.join(value)
-        items.append('{key}{sep}{value}'.format(
-            key=key, sep=sep, value=value))
-    text = vsep.join(items)
-    if last_vertical:
-        text = text + vsep
-    return text
 
 
 # TODO: this might be more extend then update
@@ -64,10 +44,12 @@ def update_keyval_file(filename, module, returncode):
         keyval = {}
 
     # this is for one file
-    # TODO: testing authors are more appropriate stat for testsuite dir index
     test_file_authors = get_svn_path_authors(module.abs_file_path)
+    # in case that SVN is not available use empty authors
+    if test_file_authors is None:
+        test_file_authors = ''
 
-    # always owerwrite name and ok
+    # always owerwrite name and status
     keyval['name'] = module.name
     keyval['tested_dir'] = module.tested_dir
     if 'status' not in keyval.keys():
@@ -143,7 +125,9 @@ class GrassTestFilesInvoker(object):
         cwd = os.path.join(results_dir, module.tested_dir, module.name)
         data_dir = os.path.join(module.file_dir, 'data')
         if os.path.exists(data_dir):
-            # TODO: link dir intead of copy tree
+            # TODO: link dir instead of copy tree and remove link afterwads
+            # (removing is good because of testsuite dir in samplecode)
+            # TODO: use different dir name in samplecode and test if it works
             shutil.copytree(data_dir, os.path.join(cwd, 'data'),
                             ignore=shutil.ignore_patterns('*.svn*'))
         ensure_dir(os.path.abspath(cwd))
@@ -195,6 +179,7 @@ class GrassTestFilesInvoker(object):
                 GrassTestFilesTextReporter(stream=sys.stderr),
                 GrassTestFilesHtmlReporter(
                     file_anonymizer=self._file_anonymizer),
+                GrassTestFilesKeyValueReporter()
             ])
         self.testsuite_dirs = collections.defaultdict(list)  # reset list of dirs each time
         # TODO: move constants out of loader class or even module
