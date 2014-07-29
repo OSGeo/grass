@@ -85,10 +85,15 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
        <li class="box"><a href="helptext.html">How to start with GRASS</a></li>
        <li class="box"><span>Index of <a href="topics.html">topics</a> and <a href="keywords.html">keywords</a></span></li>
       </ul>
-     <p>
+      <p>
       <ul>
        <li class="box"><a href="projectionintro.html">Intro: projections and spatial transformations</a></li>
-      </ul></td>
+      </ul>
+      <p>
+      <ul>
+       <li class="box"><span><a href="http://grasswiki.osgeo.org/wiki/Faq">FAQ - Frequently Asked Questions</a> (Wiki)</span></li>
+      </ul>
+      </td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
         <li class="box"><span><a href="wxGUI.html">wxGUI</a> Graphical User Interface</span></li>
