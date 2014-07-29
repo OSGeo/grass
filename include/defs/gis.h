@@ -60,6 +60,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <setjmp.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -217,6 +218,7 @@ void G_create_alt_env(void);
 void G_switch_env(void);
 
 /* error.c */
+jmp_buf *G_fatal_longjmp(int);
 int G_info_format(void);
 void G_message(const char *, ...) __attribute__ ((format(printf, 1, 2)));
 void G_verbose_message(const char *, ...)

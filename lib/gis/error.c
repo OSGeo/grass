@@ -14,6 +14,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <setjmp.h>
 #include <unistd.h>
 #include <time.h>
 #include <stdarg.h>
@@ -57,6 +58,15 @@ static void print_error(const char *, const int);
 static void mail_msg(const char *, int);
 static int write_error(const char *, int, time_t, const char *);
 static void log_error(const char *, int);
+
+static int fatal_longjmp;
+static jmp_buf fatal_jmp_buf;
+
+jmp_buf *G_fatal_longjmp(int enable)
+{
+    fatal_longjmp = enable;
+    return &fatal_jmp_buf;
+}
 
 static void vfprint_error(int type, const char *template, va_list ap)
 {
@@ -157,6 +167,11 @@ void G_fatal_error(const char *msg, ...)
         va_start(ap, msg);
         vfprint_error(ERR, msg, ap);
         va_end(ap);
+    }
+
+    if (fatal_longjmp) {
+	busy = 0;
+	longjmp(fatal_jmp_buf, 1);
     }
 
     G__call_error_handlers();
