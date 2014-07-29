@@ -264,7 +264,10 @@ def main():
                           region = options['region'])
     dest_bbox = grass.region()
     grass.debug('Getting destination region')
-    
+
+    # output field separator
+    fs = grass.separator(options['separator'])
+
     # project the destination region into the source:
     grass.verbose('Projecting destination region into source...')
     dest_bbox_points = bboxToPoints(dest_bbox)
@@ -372,7 +375,6 @@ def main():
                           (tile_bbox['w'], tile_bbox['s'], tile_bbox['e'], tile_bbox['n'],
                            tile_size_overlap[0], tile_size_overlap[1])
                 else:
-                    fs = options['separator']
                     print "%s%s%s%s%s%s%s%s%s%s%s" % \
                           (tile_bbox['w'], fs, tile_bbox['s'], fs, tile_bbox['e'], fs, tile_bbox['n'], fs,
                            tile_size_overlap[0], fs, tile_size_overlap[1])
