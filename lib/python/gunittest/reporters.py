@@ -919,9 +919,11 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 # TODO: add also keyvalue summary generation?
 # wouldn't this conflict with collecting data from report afterwards?
 class TestsuiteDirReporter(object):
-    def __init__(self, main_page_name, testsuite_page_name='index.html'):
+    def __init__(self, main_page_name, testsuite_page_name='index.html',
+                 top_level_testsuite_page_name=None):
         self.main_page_name = main_page_name
         self.testsuite_page_name = testsuite_page_name
+        self.top_level_testsuite_page_name = top_level_testsuite_page_name
 
         # TODO: this might be even a object which could add and validate
         self.failures = 0
@@ -954,6 +956,10 @@ class TestsuiteDirReporter(object):
         file_successes = 0
 
         page_name = os.path.join(root, directory, self.testsuite_page_name)
+        if (self.top_level_testsuite_page_name and
+                os.path.abspath(os.path.join(root, directory))
+                == os.path.abspath(root)):
+            page_name = os.path.join(root, self.top_level_testsuite_page_name)
         page = open(page_name, 'w')
         head = (
             '<html><body>'
@@ -1056,6 +1062,7 @@ class TestsuiteDirReporter(object):
             directory=directory, tests_authors=test_files_authors)
         page.write(test_authors)
         page.write('</body></html>')
+        page.close()
 
         status = success_to_html_text(total=file_total, successes=file_successes)
         row = (

@@ -196,9 +196,10 @@ class GrassTestFilesInvoker(object):
         for module in modules:
             self._run_test_module(module=module, results_dir=results_dir,
                                   gisdbase=gisdbase, location=location)
+        self.reporter.finish()
 
         testsuite_dir_reporter = TestsuiteDirReporter(
-            main_page_name='testsuites.html')
+            main_page_name='testsuites.html', testsuite_page_name='index.html',
+            top_level_testsuite_page_name='testsuite_index.html')
         testsuite_dir_reporter.report_for_dirs(root=results_dir,
                                                directories=self.testsuite_dirs)
-        self.reporter.finish()
