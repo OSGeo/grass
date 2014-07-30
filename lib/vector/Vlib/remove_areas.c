@@ -43,11 +43,14 @@ int
 Vect_remove_small_areas(struct Map_info *Map, double thresh,
 			struct Map_info *Err, double *removed_area)
 {
+    return Vect_remove_small_areas_ext(Map, thresh, Err, removed_area);
 
+#if 0
     if (Map->format == GV_FORMAT_NATIVE)
 	return Vect_remove_small_areas_nat(Map, thresh, Err, removed_area);
     else
 	return Vect_remove_small_areas_ext(Map, thresh, Err, removed_area);
+#endif
 }
 
 int
