@@ -68,6 +68,8 @@ class TestSTRDSToRast3(TestCase):
         """Remove generated data"""
         self.runModule("t.remove",  flags="rf",  type="strds",  
                                    inputs="precip_i,precip_f,precip_d")
+        self.runModule('g.mremove', type='rast', pattern='prec_*', flags='f')
+        self.runModule('g.mremove', type='rast3d', pattern='precip_*', flags='f')
         self.del_temp_region()
 
     def test_3m(self):
@@ -257,6 +259,8 @@ class TestSTRDSToRast3MultiGran(TestCase):
     def tearDown(self):
         """Remove generated data"""
         self.runModule("t.remove",  flags="rf",  type="strds", inputs="precip_d")
+        self.runModule('g.mremove', type='rast', pattern='prec_*', flags='f')
+        self.runModule('g.mremove', type='rast3d', pattern='precip_*', flags='f')
         self.del_temp_region()
 
     def test_years(self):
