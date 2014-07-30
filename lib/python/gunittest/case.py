@@ -174,7 +174,7 @@ class TestCase(unittest.TestCase):
         if isinstance(reference, basestring):
             reference = text_to_keyvalue(reference, sep=sep, skip_empty=True)
         module = _module_from_parameters(module, **parameters)
-        self.runModule(module)
+        self.runModule(module, expecting_stdout=True)
         raster_univar = text_to_keyvalue(module.outputs.stdout,
                                          sep=sep, skip_empty=True)
         if not keyvalue_equals(dict_a=reference, dict_b=raster_univar,
@@ -183,6 +183,7 @@ class TestCase(unittest.TestCase):
                                                       dict_b=raster_univar,
                                                       a_is_subset=True,
                                                       precision=precision)
+            # TODO: add region vs map extent and res check in case of error
             if missing:
                 raise ValueError("%s output does not contain"
                                  " the following keys"
@@ -256,8 +257,9 @@ class TestCase(unittest.TestCase):
 
         Use keyword arguments syntax for all function parameters.
 
-        Does not -e (extended statistics) flag, use `assertModuleKeyValue()`
-        for the full interface of arbitrary module.
+        Function does not use -e (extended statistics) flag,
+        use `assertModuleKeyValue()` for the full interface of arbitrary
+        module.
         """
         self.assertModuleKeyValue(module='r3.univar',
                                   map=raster,
@@ -915,7 +917,7 @@ class TestCase(unittest.TestCase):
             self.fail(self._formatMessage(msg, stdmsg))
 
     @classmethod
-    def runModule(cls, module, **kwargs):
+    def runModule(cls, module, expecting_stdout=False, **kwargs):
         """Run PyGRASS module.
 
         Runs the module and raises an exception if the module ends with
@@ -951,7 +953,22 @@ class TestCase(unittest.TestCase):
             raise CalledModuleError(module.popen.returncode, module.name,
                                     module.get_python(),
                                     errors=errors)
-
+        # TODO: use this also in assert and apply when appropriate
+        if expecting_stdout and not module.outputs.stdout.strip():
+            
+            if module.outputs.stderr:
+                errors = " The errors are:\n" + module.outputs.stderr
+            else:
+                errors = " There were no error messages."
+            if module.outputs.stdout:
+                # this is not appropriate for translation but we don't want
+                # and don't need testing to be translated
+                got = "only whitespace."
+            else:
+                got = "nothing."
+            raise RuntimeError("Module call " + module.get_python() +
+                               " ended successfully but we were expecting"
+                               " output and got " + got + errors)
     # TODO: we can also comapre time to some expected but that's tricky
     # maybe we should measure time but the real benchmarks with stdin/stdout
     # should be done by some other function
