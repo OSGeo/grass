@@ -52,6 +52,12 @@ def main():
 
     maps = sp.get_registered_maps_as_objects_by_granularity()
     num_maps = len(maps)
+    # get datatype of the first map
+    if maps:
+        maps[0][0].select()
+        datatype = maps[0][0].metadata.get_datatype()
+    else:
+        datatype = None
 
     # Get the granularity and set bottom, top and top-bottom resolution
     granularity = sp.get_granularity()
@@ -112,7 +118,12 @@ def main():
 
     # Create a NULL map to fill the gaps
     null_map = "temporary_null_map_%i" % os.getpid()
-    grass.mapcalc("%s = null()" % (null_map))
+    if datatype == 'DCELL':
+        grass.mapcalc("%s = double(null())" % (null_map))
+    elif datatype == 'FCELL':
+        grass.mapcalc("%s = float(null())" % (null_map))
+    else:
+        grass.mapcalc("%s = null()" % (null_map))
 
     if maps:
         count = 0
