@@ -5,12 +5,12 @@
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=1 res=10 res3=10 -p3
 
-r.mapcalc --o expr="prec_1 = 100"
-r.mapcalc --o expr="prec_2 = 200"
-r.mapcalc --o expr="prec_3 = 300"
-r.mapcalc --o expr="prec_4 = 400"
-r.mapcalc --o expr="prec_5 = 500"
-r.mapcalc --o expr="prec_6 = 600"
+r.mapcalc --o expr="prec_1 = 100.0"
+r.mapcalc --o expr="prec_2 = 200.0"
+r.mapcalc --o expr="prec_3 = 300.0"
+r.mapcalc --o expr="prec_4 = 400.0"
+r.mapcalc --o expr="prec_5 = 500.0"
+r.mapcalc --o expr="prec_6 = 600.0"
 
 n1=`g.tempfile pid=1 -d`
 
