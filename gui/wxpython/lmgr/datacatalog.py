@@ -82,14 +82,9 @@ class DataCatalog(wx.Panel):
         self.tree.ExpandCurrentLocation()
 
 class LocationMapTree(wx.TreeCtrl):
-    def __init__(self, parent, multiple=False):
+    def __init__(self, parent, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | 
+                 wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES | wx.TR_SINGLE):
         """Location Map Tree constructor."""
-        style = wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | \
-            wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES
-        if multiple:
-            style |= wx.TR_MULTIPLE
-        else:
-            style |= wx.TR_SINGLE
         super(LocationMapTree, self).__init__(parent, id=wx.ID_ANY, style=style)
         self.showNotification = Signal('Tree.showNotification')
         self.parent = parent
@@ -537,7 +532,9 @@ if __name__ == "__main__":
     class TestTree(LocationMapTree):
         def __init__(self, parent):
             """Test Tree constructor."""
-            super(TestTree, self).__init__(parent, multiple=True)
+            super(TestTree, self).__init__(parent, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | 
+                                           wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES |
+                                           wx.TR_MULTIPLE)
             
         def InitTreeItems(self):
             """Add locations, mapsets and layers to the tree."""
