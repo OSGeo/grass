@@ -1,13 +1,14 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.landsat.rgb</em> auto-balances and enhances the color channels of a
-LANDSAT RGB image to provide a more natural color mixture. Only the color
-table of each image band is modified, the base data remains untouched.
+<em>i.colors.enhance</em> auto-balances and enhances the color channels of a
+RGB image (e.g. from Landsat) to provide a more natural color mixture. Only
+the color table of each image band is modified, the base data remains untouched.
 <p>
 The module works by calculating a histogram for each color channel and 
 removing an adjustable amount of outliers from either end before recalibrating
 the color scale with <em>r.colors</em>.
 <p>
+<!-- limitation still true ? -->
 It will work with any 8-bit RGB imagery set and the script is easily modified
 to work with other datasets of greater band-depth.
 
@@ -30,23 +31,23 @@ afterwards.
 
 <h2>EXAMPLE</h2>
 
-North Carolina sample dataset example:
+North Carolina sample dataset example with Landsat data:
 
 <div class="code"><pre>
 g.region rast=lsat7_2002_10 -p
 d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
 d.barscale at=55.3125,93.125 bcolor=white text_pos=over
 
-i.landsat.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30 strength=95
+i.colors.enhance blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30 strength=95
 d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
 d.barscale at=55.3125,93.125 bcolor=white text_pos=over
 </pre></div>
 
 <center>
-<img src="i_landsat_rgb_uncorrected.jpg" alt="Uncorrected RGB composite of Landsat ETM channels B/G/R"><br>
+<img src="i_col_enh_uncorr.jpg" alt="Uncorrected RGB composite of Landsat ETM channels B/G/R"><br>
 Uncorrected RGB composite of Landsat ETM channels B/G/R
 <p>
-<img src="i_landsat_rgb_corrected.jpg" alt="Color corrected RGB composite of Landsat ETM channels B/G/R"><br>
+<img src="i_col_enh_corr.jpg" alt="Color corrected RGB composite of Landsat ETM channels B/G/R"><br>
 Color corrected RGB composite of Landsat ETM channels B/G/R
 </center>
 

@@ -74,7 +74,7 @@ up to 3 cores simultaneously. The -s flag will disable parallel processing,
 but does use an optimized r.mapcalc expression to reduce disk I/O.
 <br><br>
 The three pan-sharpened output channels may be combined with <em>d.rgb</em> or 
-<em>r.composite</em>. Colors may be optionally optimized with <em>i.landsat.rgb</em>.
+<em>r.composite</em>. Colors may be optionally optimized with <em>i.colors.enhance</em>.
 While the resulting color image will be at the higher resolution in all cases, 
 the 3 pan sharpening algorithms differ in terms of spectral response.  
 
@@ -163,7 +163,7 @@ d.rgb r=lsat7_2002_ihs_red g=lsat7_2002_ihs_green b=lsat7_2002_ihs_blue
 g.gui.mapswipe
 
 # optionally color balancing:
-i.landsat.rgb r=lsat7_2002_ihs_red g=lsat7_2002_ihs_green b=lsat7_2002_ihs_blue
+i.colors.enhance r=lsat7_2002_ihs_red g=lsat7_2002_ihs_green b=lsat7_2002_ihs_blue
 </pre></div>
 
 <h2>SEE ALSO</h2>
