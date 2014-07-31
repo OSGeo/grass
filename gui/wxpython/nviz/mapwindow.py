@@ -80,17 +80,16 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.lmgr = lmgr
         self.frame = frame
 
-        attribs=[WX_GL_RGBA, WX_GL_DOUBLEBUFFER]
         # for wxGTK we need to set WX_GL_DEPTH_SIZE to draw vectors correctly
         # but we don't know the right value
         # in wxpython 2.9, there is IsDisplaySupported
         if CheckWxVersion(version=[2, 8, 11]) and \
            sys.platform not in ('win32', 'darwin'):
             depthBuffer = int(UserSettings.Get(group='display', key='nvizDepthBuffer', subkey='value'))
-            attribs.extend([WX_GL_DEPTH_SIZE, depthBuffer])
-        attribs.append(0)
-
-        glcanvas.GLCanvas.__init__(self, parent, id, attribList=attribs)
+            attribs = [WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, depthBuffer, 0]
+            glcanvas.GLCanvas.__init__(self, parent, id, attribList=attribs)
+        else:
+            glcanvas.GLCanvas.__init__(self, parent, id)
 
         MapWindowBase.__init__(self, parent=parent, giface=giface, Map=Map)
         self.Hide()
