@@ -451,7 +451,7 @@ class WSDialogBase(wx.Dialog):
         self.active_ws_panel = self.ws_panels[ws]['panel']
         self.active_ws_panel.Show()
         self.SetMaxSize((-1, -1))
-        self.Layout()
+        self.active_ws_panel.GetContainingSizer().Layout()
 
     def OnAdvConnPaneChanged(self, event):
         """!Collapse search module box
@@ -795,13 +795,21 @@ class SaveWMSLayerDialog(wx.Dialog):
                                        size = globalvar.DIALOG_GSELECT_SIZE)
 
         self.regionStBoxLabel = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                             label = _("Region"))
+                                             label = " %s " % _("Export region"))
 
-        self.region_types_order = ['comp', 'named']
+        self.region_types_order = ['display', 'comp', 'named']
         self.region_types =  {}
-        #self.region_types['map_display'] = wx.RadioButton(parent = self, id = wx.ID_ANY, label = 'Map display', style = wx.RB_GROUP )
-        self.region_types['comp'] = wx.RadioButton(parent = self, id = wx.ID_ANY, label = 'Computational region')
-        self.region_types['named'] = wx.RadioButton(parent = self, id = wx.ID_ANY, label = 'Named region')
+        self.region_types['display'] = wx.RadioButton(parent=self, label=_("Map display"),
+                                                      style=wx.RB_GROUP)
+        self.region_types['comp'] = wx.RadioButton(parent=self, label=_("Computational region"))
+        self.region_types['named'] = wx.RadioButton(parent=self, label=_("Named region"))
+        self.region_types['display'].SetToolTipString(_("Extent and resolution"
+                                                        " are based on Map Display geometry."))
+        self.region_types['comp'].SetToolTipString(_("Extent and resolution"
+                                                     " are based on computational region."))
+        self.region_types['named'].SetToolTipString(_("Extent and resolution"
+                                                      " are based on named region."))
+        self.region_types['display'].SetValue(True)  # set default as map display
 
         self.overwrite  = wx.CheckBox(parent = self, id = wx.ID_ANY,
                                       label = _("Overwrite existing raster map"))
@@ -816,9 +824,9 @@ class SaveWMSLayerDialog(wx.Dialog):
         # buttons
         self.btn_close = wx.Button(parent = self, id = wx.ID_CLOSE)
         self.btn_close.SetToolTipString(_("Close dialog"))
-        
-        self.btn_ok = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Save layer"))
-        self.btn_ok.SetToolTipString(_("Save web service layer as raster map"))     
+
+        self.btn_ok = wx.Button(parent=self, id=wx.ID_OK, label=_("&Save layer"))
+        self.btn_ok.SetToolTipString(_("Save web service layer as raster map"))
 
         # statusbar
         self.statusbar = wx.StatusBar(parent = self, id = wx.ID_ANY)
@@ -827,7 +835,7 @@ class SaveWMSLayerDialog(wx.Dialog):
 
     def _layout(self):
 
-        border = wx.BoxSizer(wx.VERTICAL) 
+        self._border = wx.BoxSizer(wx.VERTICAL)
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
         regionSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -835,13 +843,11 @@ class SaveWMSLayerDialog(wx.Dialog):
         dialogSizer.Add(item = self._addSelectSizer(title = self.labels['output'], 
                                                     sel = self.params['output']))
 
-        dialogSizer.Add(item = self.overwrite)
-
         regionSizer = wx.StaticBoxSizer(self.regionStBoxLabel, wx.VERTICAL)
 
         regionTypeSizer = wx.BoxSizer(wx.HORIZONTAL)
         for r_type in self.region_types_order:
-            regionTypeSizer.Add(item = self.region_types[r_type])
+            regionTypeSizer.Add(item=self.region_types[r_type], flag=wx.RIGHT, border=8)
 
         regionSizer.Add(item = regionTypeSizer)
 
@@ -851,6 +857,8 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.named_reg_panel.Hide()
 
         dialogSizer.Add(item = regionSizer, flag = wx.EXPAND)
+
+        dialogSizer.Add(item=self.overwrite, flag=wx.TOP, border=10)
 
         # buttons
         self.btnsizer = wx.BoxSizer(orient = wx.HORIZONTAL)
@@ -866,12 +874,12 @@ class SaveWMSLayerDialog(wx.Dialog):
         dialogSizer.Add(item = self.btnsizer, proportion = 0,
                         flag = wx.ALIGN_CENTER)
 
-        border.Add(item = dialogSizer, proportion = 0,
-                   flag = wx.ALL, border = 5)
+        self._border.Add(item=dialogSizer, proportion=0,
+                         flag=wx.ALL, border=5)
 
-        border.Add(item = self.statusbar, proportion = 0)
+        self._border.Add(item=self.statusbar, proportion=0)
 
-        self.SetSizer(border)
+        self.SetSizer(self._border)
         self.Layout()
         self.Fit()
 
@@ -911,14 +919,13 @@ class SaveWMSLayerDialog(wx.Dialog):
         event.Skip()
 
     def OnRegionType(self, event):
-        
         selected = event.GetEventObject()
         if selected == self.region_types['named']:
             self.named_reg_panel.Show()
         else:
             self.named_reg_panel.Hide()
 
-        self.Layout()
+        self._border.Layout()
         self.Fit()
 
     def OnSave(self, event):
@@ -959,13 +966,12 @@ class SaveWMSLayerDialog(wx.Dialog):
         if len(reg_spl) > 1:
             reg_mapset = reg_spl[1]
 
-        if self.region_types['comp'].GetValue() == 1: 
-            pass
-        elif grass.find_file(reg_spl[0], 'region', reg_mapset)['fullname']:
-            msg = _('Region <%s> does not exists.' % self.params['region'].GetValue())
-            GWarning(parent = self,
-                     message = msg)
-            return
+        if self.region_types['named'].GetValue():
+            if not grass.find_file(reg_spl[0], 'windows', reg_mapset)['fullname']:
+                msg = _('Region <%s> does not exist.' % self.params['region'].GetValue())
+                GWarning(parent=self,
+                         message=msg)
+                return
 
         # create r.in.wms command
         cmd = ('r.in.wms', deepcopy(self.cmd[1]))
@@ -978,13 +984,17 @@ class SaveWMSLayerDialog(wx.Dialog):
         if self.overwrite.IsChecked():
             cmd[1]['overwrite'] = True
 
-        if self.region_types['named'].GetValue() == 1:
+        env = os.environ.copy()
+        if self.region_types['named'].GetValue():
             cmd[1]['region'] = region
+        elif self.region_types['display'].GetValue():
+            region = self._giface.GetMapWindow().GetMap().SetRegion()
+            env['GRASS_REGION'] = region
 
         cmdList = CmdTupleToList(cmd)
         self.currentPid = self.thread.GetId()
 
-        self.thread.RunCmd(cmdList, stderr = self.cmdStdErr)
+        self.thread.RunCmd(cmdList, env=env, stderr=self.cmdStdErr)
 
         self.statusbar.SetStatusText(_("Downloading data..."))
 
