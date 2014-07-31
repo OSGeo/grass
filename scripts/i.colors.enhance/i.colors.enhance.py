@@ -2,16 +2,16 @@
 
 ############################################################################
 #
-# MODULE:	i.landsat.rgb
+# MODULE:	i.colors.enhance (former i.landsat.rgb)
 #
-# AUTHOR(S):	Markus Neteler. <neteler itc it>
+# AUTHOR(S):	Markus Neteler, original author
 #		Hamish Bowman, scripting enhancements
 #               Converted to Python by Glynn Clements
 #
-# PURPOSE:      create pretty LANDSAT RGBs: the trick is to remove outliers 
+# PURPOSE:      create pretty RGBs: the trick is to remove outliers 
 #               using percentiles (area under the histogram curve)
 #
-# COPYRIGHT:	(C) 2006, 2008, 2012 by the GRASS Development Team
+# COPYRIGHT:	(C) 2006, 2008, 2012-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,22 +21,23 @@
 #############################################################################
 
 #%module
-#% description: Performs auto-balancing of colors for LANDSAT images.
+#% description: Performs auto-balancing of colors for RGB images.
 #% keywords: imagery
-#% keywords: landsat
+#% keywords: RGB
+#% keywords: satellite
 #% keywords: colors
 #%end
 #%option G_OPT_R_INPUT
 #% key: red
-#% description: Name of LANDSAT red channel
+#% description: Name of red channel
 #%end
 #%option G_OPT_R_INPUT
 #% key: green
-#% description: Name of LANDSAT green channel
+#% description: Name of green channel
 #%end
 #%option G_OPT_R_INPUT
 #% key: blue
-#% description: Name of LANDSAT blue channel
+#% description: Name of blue channel
 #%end
 #%option
 #% key: strength
