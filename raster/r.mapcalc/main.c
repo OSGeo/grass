@@ -31,6 +31,9 @@ int overwrite_flag;
 volatile int floating_point_exception;
 volatile int floating_point_exception_occurred;
 
+long seed_value;
+long seeded;
+
 /****************************************************************************/
 
 static expr_list *result;
@@ -102,7 +105,8 @@ static expr_list *parse_file(const char *filename)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *expr, *file;
+    struct Option *expr, *file, *seed;
+    struct Flag *random;
     int all_ok;
 
     G_gisinit(argv[0]);
@@ -126,6 +130,16 @@ int main(int argc, char **argv)
     file->description = _("File containing expression(s) to evaluate");
     file->guisection = _("Expression");
 
+    seed = G_define_option();
+    seed->key = "seed";
+    seed->type = TYPE_INTEGER;
+    seed->required = NO;
+    seed->description = _("Seed for rand() function");
+
+    random = G_define_flag();
+    random->key = 's';
+    random->description = _("Generate random seed (result is non-deterministic)");
+
     if (argc == 1)
     {
 	char **p = G_malloc(3 * sizeof(char *));
@@ -144,6 +158,10 @@ int main(int argc, char **argv)
     if (expr->answer && file->answer)
 	G_fatal_error(_("file= and expression= are mutually exclusive"));
 
+    if (seed->answer && random->answer)
+	G_fatal_error(_("%s= and -%c are mutually exclusive"),
+		      seed->key, random->key);
+
     if (expr->answer)
 	result = parse_string(expr->answer);
     else if (file->answer)
@@ -153,6 +171,19 @@ int main(int argc, char **argv)
 
     if (!result)
 	G_fatal_error(_("parse error"));
+
+    if (seed->answer) {
+	seed_value = atol(seed->answer);
+	G_srand48(seed_value);
+	seeded = 1;
+	G_debug(3, "Read random seed from seed=: %ld", seed_value);
+    }
+
+    if (random->answer) {
+	seed_value = G_srand48_auto();
+	seeded = 1;
+	G_debug(3, "Generated random seed (-s): %ld", seed_value);
+    }
 
     pre_exec();
     execute(result);
