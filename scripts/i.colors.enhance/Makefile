@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = i.landsat.rgb
+PGM = i.colors.enhance
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 

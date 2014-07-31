@@ -1491,7 +1491,7 @@
   <toolbox name="ManageImageColors">
     <label>Manage image colors</label>
     <items>
-      <module-item name="i.landsat.rgb">
+      <module-item name="i.colors.enhance">
         <label>Color balance for RGB</label>
       </module-item>
       <module-item name="i.his.rgb">
