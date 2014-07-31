@@ -455,7 +455,7 @@ class Settings:
                     },
                 # break lines on intersection
                 'breakLines' : {
-                    'enabled' : False,
+                    'enabled' : True,
                     },
                 # close boundary (snap to the first node)
                 'closeBoundary' : {
