@@ -6,26 +6,13 @@
  * Read the file GPL.TXT coming with GRASS for details.
  */
 
-#include <sys/types.h>		/* for getpid() */
-#include <unistd.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include "quaddefs.h"
 
-#ifndef RAND_MAX
-#define RAND_MAX (pow(2.0,31.0)-1)
-#endif
-
-#define R_INIT srand
-#define RANDOM(lo,hi) ((double) rand() / (double)RAND_MAX * (hi-lo) + lo)
-
-/*
-   #define R_MAX 1.0
-   #define R_INIT srand48
-   #define RANDOM(lo,hi) (drand48()/R_MAX*(hi-lo)+lo)
- */
+#define RANDOM(lo,hi) (G_drand48() * (hi-lo) + lo)
 
 /*
  * returns Z struct filled with centers of n non-overlapping circles of
@@ -42,8 +29,8 @@ COOR *find_quadrats(int n, double r, struct Cell_head window)
     if (quads == NULL)
 	G_fatal_error("cannot allocate memory for quadrats");
 
-    srand((unsigned int)getpid());
-    /* R_INIT (1); */
+    /* FIXME - allow seed to be specified for repeatability */
+    G_srand48_auto();
 
     e_max = window.east - r;
     e_min = window.west + r;

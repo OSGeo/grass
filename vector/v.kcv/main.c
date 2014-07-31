@@ -19,17 +19,11 @@
 
 
 #include <stdlib.h>
-#include <unistd.h>
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-
-static double myrand(void)
-{
-    return rand() / (1.0 + RAND_MAX);
-}
 
 struct Cell_head window;
 
@@ -37,7 +31,7 @@ int main(int argc, char *argv[])
 {
     int i, line, nlines, nlinks;
     int idx, *line_idx, lines_left;
-    double (*rng) ();
+    double (*rng)(void) = G_drand48;
     int nsites, p, np, min_count, spill;
     struct partition {
 	int id, count, max;
@@ -48,7 +42,6 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     struct GModule *module;
     struct Option *map_opt, *col_opt, *npart_opt, *field_opt;
-    struct Flag *drand48_flag;
  
     /* Attributes */
     struct field_info *Fi;
@@ -81,15 +74,6 @@ int main(int argc, char *argv[])
     col_opt->description =
 	_("Name for new column to which partition number is written");
 
-    drand48_flag = G_define_flag();
-    drand48_flag->key = 'd';
-#ifdef HAVE_DRAND48
-    drand48_flag->description = _("Use drand48()");
-#else
-    drand48_flag->description = _("Use drand48() (ignored)");
-#endif
-
-
     G_gisinit(argv[0]);
 
     if (G_parser(argc, argv))
@@ -99,17 +83,8 @@ int main(int argc, char *argv[])
     if (np < 2)
 	G_fatal_error(_("'%s' must be > 1"), npart_opt->key);
 
-#ifdef HAVE_DRAND48
-    if (drand48_flag->answer) {
-	rng = drand48;
-	srand48((long)getpid());
-    }
-    else
-#endif
-    {
-	rng = myrand;
-	srand(getpid());
-    }
+    /* FIXME - allow seed to be specified for repeatability */
+    G_srand48_auto();
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();

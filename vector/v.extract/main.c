@@ -315,19 +315,15 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Random category count is larger or equal to "
 			    "uniq <%s> feature category count %d"),
 			  opt.type->answer, ucat_count);
-
-	if (ucat_count >= RAND_MAX)
-	    G_fatal_error(_("There are more categories than random number "
-			    "generator can reach. Report this as a GRASS bug."));
 	
-	seed = getpid();
 	/* Initialise random number generator */
-	G_math_rand(-1 * seed);
+	/* FIXME - allow seed to be specified for repeatability */
+	G_math_srand_auto();
 
 	/* Fill cat_array with list of valid random numbers */
 	while (cat_count < nrandom) {
 	    /* Random number in range from 0 to largest CAT value */
-	    prnd = (int) floor(G_math_rand(seed) *
+	    prnd = (int) floor(G_math_rand() *
 			       (ucat_array[ucat_count - 1] + 1));
 	    qsort(cat_array, cat_count, sizeof(int), cmp);
 	    /* Check if generated number isn't already in 

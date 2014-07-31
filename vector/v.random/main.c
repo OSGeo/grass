@@ -32,28 +32,12 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <string.h>
 
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
-
-#ifndef RAND_MAX
-#define RAND_MAX (pow(2.0,31.0)-1)
-#endif
-double myrand(void);
-
-#if defined(__CYGWIN__) || defined(__APPLE__) || defined(__MINGW32__)
-double drand48()
-{
-    return (rand() / (1.0 * RAND_MAX));
-}
-
-#define srand48(sv) (srand((unsigned)(sv)))
-#endif
 
 /* for qsort */
 
@@ -77,10 +61,10 @@ static int sort_by_size(const void *a, const void *b)
 int main(int argc, char *argv[])
 {
     char *output, buf[DB_SQL_MAX];
-    double (*rng) ();
-    double max, zmin, zmax;
+    double (*rng)(void) = G_drand48;
+    double zmin, zmax;
     int seed;
-    int i, j, k, n, b, type, usefloat;
+    int i, j, k, n, type, usefloat;
     int area, nareas, field;
     struct boxlist *List = NULL;
     BOX_SIZE *size_list = NULL;
@@ -99,7 +83,7 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-	struct Flag *rand, *drand48, *z, *notopo, *a;
+	struct Flag *z, *notopo, *a;
     } flag;
     struct field_info *Fi;
     dbDriver *driver;
@@ -187,10 +171,6 @@ int main(int argc, char *argv[])
     flag.a->key = 'a';
     flag.a->description = _("Generate n points for each individual area");
 
-    flag.drand48 = G_define_flag();
-    flag.drand48->key = 'd';
-    flag.drand48->description = _("Use drand48() function instead of rand()");
-
     flag.notopo = G_define_standard_flag(G_FLG_V_TOPO);
 
     if (G_parser(argc, argv))
@@ -198,7 +178,6 @@ int main(int argc, char *argv[])
 
     output = parm.output->answer;
     n = atoi(parm.nsites->answer);
-    b = flag.drand48->answer ? TRUE : FALSE;
     
     if(parm.seed->answer)
         seed = atoi(parm.seed->answer);
@@ -304,24 +283,11 @@ int main(int argc, char *argv[])
 
     Vect_hist_command(&Out);
 
-    if (b) {
-	rng = drand48;
-	max = 1.0;
-	/* Init the random seed */
-	if(parm.seed->answer)
-	    srand48((long)seed);
-	else
-	    srand48((long)getpid());
-    }
-    else {  	/* default is rand() */
-	rng = myrand;
-	max = RAND_MAX;
-	/* Init the random seed */
-	if(parm.seed->answer)
-	    srand(seed);
-	else
-	    srand(getpid());
-    }
+    /* Init the random seed */
+    if(parm.seed->answer)
+	G_srand48(seed);
+    else
+	G_srand48_auto();
 
     G_get_window(&window);
 
@@ -462,9 +428,9 @@ int main(int argc, char *argv[])
 		Vect_reset_cats(Cats);
 
 		while (outside) {
-		    x = rng() / max * (bbox.W - bbox.E) + bbox.E;
-		    y = rng() / max * (bbox.N - bbox.S) + bbox.S;
-		    z = rng() / max * (zmax - zmin) + zmin;
+		    x = rng() * (bbox.W - bbox.E) + bbox.E;
+		    y = rng() * (bbox.N - bbox.S) + bbox.S;
+		    z = rng() * (zmax - zmin) + zmin;
 
 		    ret = Vect_point_in_area(x, y, &In, area, &abox);
 
@@ -512,9 +478,9 @@ int main(int argc, char *argv[])
 	    Vect_reset_line(Points);
 	    Vect_reset_cats(Cats);
 
-	    x = rng() / max * (window.west - window.east) + window.east;
-	    y = rng() / max * (window.north - window.south) + window.south;
-	    z = rng() / max * (zmax - zmin) + zmin;
+	    x = rng() * (window.west - window.east) + window.east;
+	    y = rng() * (window.north - window.south) + window.south;
+	    z = rng() * (zmax - zmin) + zmin;
 	    
 	    if (nareas) {
 		int outside = 1;
@@ -588,9 +554,9 @@ int main(int argc, char *argv[])
 			}
 		    }
 		    if (outside) {
-			x = rng() / max * (window.west - window.east) + window.east;
-			y = rng() / max * (window.north - window.south) + window.south;
-			z = rng() / max * (zmax - zmin) + zmin;
+			x = rng() * (window.west - window.east) + window.east;
+			y = rng() * (window.north - window.south) + window.south;
+			z = rng() * (zmax - zmin) + zmin;
 		    }
 		} while (outside);
 	    }
@@ -634,9 +600,4 @@ int main(int argc, char *argv[])
     Vect_close(&Out);
 
     exit(EXIT_SUCCESS);
-}
-
-double myrand()
-{
-    return (double)rand();
 }
