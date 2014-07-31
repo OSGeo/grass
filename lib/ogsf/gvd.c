@@ -214,7 +214,6 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 		G_debug(5, "gvd_vect(): 3D vector line");
 		points = (Point3 *) malloc(sizeof(Point3));
 
-		gsd_color_func(gv->style->color);
 		gsd_bgnline();
 		for (k = 0; k < gln->npts; k++) {
 		    points[0][X] =
