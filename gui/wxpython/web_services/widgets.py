@@ -118,6 +118,8 @@ class WSPanel(wx.Panel):
         self.cmd_thread = CmdThread(self)
         self.cap_file = grass.tempfile()
 
+        reqDataBox = wx.StaticBox(parent=self, label=_(" Requested data settings "))
+        self._nb_sizer = wx.StaticBoxSizer(reqDataBox, wx.VERTICAL)
         self.notebook = GNotebook(parent = self,
                                   style = FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
 
@@ -136,12 +138,8 @@ class WSPanel(wx.Panel):
         grass.try_remove(self.cap_file)
 
     def _layout(self):
-        reqDataBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                  label = _(" Requested data settings "))
-        sizer = wx.StaticBoxSizer(reqDataBox, wx.VERTICAL)
-        sizer.Add(item = self.notebook, proportion = 1,
-                  flag = wx.EXPAND)
-        self.SetSizer(sizer)
+        self._nb_sizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND)
+        self.SetSizer(self._nb_sizer)
 
     def _requestPage(self):
         """!Create request page"""
