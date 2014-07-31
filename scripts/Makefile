@@ -18,9 +18,9 @@ SUBDIRS = \
 	g.extension \
 	g.extension.all \
 	g.manual \
+	i.colors.enhance \
 	i.image.mosaic \
 	i.in.spotvgt \
-	i.landsat.rgb \
 	i.oif \
 	i.pansharpen \
 	i.spectral \
