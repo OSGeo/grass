@@ -392,7 +392,7 @@ class Settings:
                     'units' : 'screen pixels'
                     },
                 'snapToVertex' : {
-                    'enabled' : False
+                    'enabled' : True
                     },
                 # digitize new record
                 'addRecord' : {
