@@ -5,7 +5,11 @@
 
 Classes:
  - datacatalog::DataCatalog
+ - datacatalog::LocationMapTree
  - datacatalog::DataCatalogTree
+
+@todo:
+ - use gui_core/treeview.py
 
 (C) 2014 by Tereza Fiedlerova, and the GRASS Development Team
 
