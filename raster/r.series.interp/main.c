@@ -64,8 +64,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("series"));
     G_add_keyword(_("interpolation"));
+    /* TODO: re-phrase the description */
     module->description =
-	_("Interpolate raster maps located (temporal or spatial) "
+	_("Interpolates raster maps located (temporal or spatial) "
           "in between input raster maps at specific sampling positions.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUTS);
