@@ -13,6 +13,7 @@ for details.
 
 import os
 import sys
+import argparse
 
 from unittest.main import TestProgram, USAGE_AS_MAIN
 TestProgram.USAGE = USAGE_AS_MAIN
@@ -103,11 +104,6 @@ def test():
     sys.exit(not program.result.wasSuccessful())
 
 
-# TODO: test or main? test looks more general
-# unittest has main() but doctest has testmod()
-main = test
-
-
 def discovery():
     """Recursively find all tests in testsuite directories and run them
 
@@ -124,23 +120,41 @@ def discovery():
 
 # TODO: makefile rule should depend on the whole build
 # TODO: create a full interface (using grass parser or argparse)
-if __name__ == '__main__':
-    if len(sys.argv) == 4:
-        gisdbase = sys.argv[1]
-        location = sys.argv[2]
-        location_shortcut = sys.argv[3]
-    elif len(sys.argv) == 3:
-        location = sys.argv[1]
-        location_shortcut = sys.argv[2]
+def main():
+    parser = argparse.ArgumentParser(
+    description='Run test files in all testsuite directories starting'
+                ' from the current one'
+                ' (runs on active GRASS session)')
+    parser.add_argument('--location', dest='location', action='store',
+                        help='Name of location where to perform test', required=True)
+    parser.add_argument('--location-type', dest='location_type', action='store',
+                        default='nc',
+                        help='Type of tests which should be run'
+                             ' (tag corresponding to location)')
+    parser.add_argument('--grassdata', dest='gisdbase', action='store',
+                        default=None,
+                        help='GRASS data(base) (GISDBASE) directory'
+                        ' (current GISDBASE by default)')
+    parser.add_argument('--output', dest='output', action='store',
+                        default='testreport',
+                        help='Output directory')
+    args = parser.parse_args()
+    gisdbase = args.gisdbase
+    if gisdbase is None:
+        # here we already rely on being in GRASS session
         gisdbase = gcore.gisenv()['GISDBASE']
-    else:
-        sys.stderr.write("Usage: %s [gisdbase] location location_shortcut\n" % sys.argv[0])
+    location = args.location
+    location_type = args.location_type
+
+    if not gisdbase:
+        sys.stderr.write("GISDBASE (grassdata directory)"
+                         " cannot be empty string\n" % gisdbase)
         sys.exit(1)
-    assert gisdbase
     if not os.path.exists(gisdbase):
-        sys.stderr.write("GISDBASE <%s> does not exist\n" % gisdbase)
+        sys.stderr.write("GISDBASE (grassdata directory) <%s>"
+                         " does not exist\n" % gisdbase)
         sys.exit(1)
-    results_dir = 'testreport'
+    results_dir = args.output
     silent_rmtree(results_dir)  # TODO: too brute force?
 
     start_dir = '.'
@@ -149,9 +163,14 @@ if __name__ == '__main__':
         start_dir=start_dir,
         file_anonymizer=FileAnonymizer(paths_to_remove=[abs_start_dir]))
     # TODO: remove also results dir from files
+    # as an enhancemnt
     # we can just iterate over all locations available in database
-    # but the we don't know the right location label/shortcut
+    # but the we don't know the right location type (category, label, shortcut)
     invoker.run_in_location(gisdbase=gisdbase,
                             location=location,
-                            location_shortcut=location_shortcut,
+                            location_type=location_type,
                             results_dir=results_dir)
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())

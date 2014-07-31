@@ -31,7 +31,7 @@ GrassTestPythonModule = collections.namedtuple('GrassTestPythonModule',
 def discover_modules(start_dir, file_pattern, skip_dirs, testsuite_dir,
                      grass_location,
                      all_locations_value, universal_location_value,
-                     import_modules):
+                     import_modules, add_failed_imports=True):
     """Find all test files (modules) in a directory tree.
 
     The function is designed specifically for GRASS testing framework
@@ -46,7 +46,7 @@ def discover_modules(start_dir, file_pattern, skip_dirs, testsuite_dir,
     :param skip_dirs: directories not to recurse to (e.g. ``.svn``)
     :param testsuite_dir: name of directory where the test files are found,
         the function will not recurse to this directory
-    :param grass_location: string with an accepted location (shortcut)
+    :param grass_location: string with an accepted location type (category, shortcut)
     :param all_locations_value: string used to say that all locations
         should be loaded (grass_location can be set to this value)
     :param universal_location_value: string marking a test as
@@ -86,9 +86,10 @@ def discover_modules(start_dir, file_pattern, skip_dirs, testsuite_dir,
                 # everything was loaded into Python
                 abspath = os.path.abspath(full)
                 sys.path.insert(0, abspath)
+                add = False
                 try:
                     m = importlib.import_module(name)
-                    add = False
+                    # TODO: now we are always importing but also always setting module to None
                     if grass_location == all_locations_value:
                         add = True
                     else:
@@ -101,17 +102,20 @@ def discover_modules(start_dir, file_pattern, skip_dirs, testsuite_dir,
                                 add = True  # cases when it is explicit
                             if grass_location in locations:
                                 add = True  # standard case with given location
-                    if add:
-                        modules.append(GrassTestPythonModule(name=name,
-                                                             module=m,
-                                                             tested_dir=root,
-                                                             file_dir=full,
-                                                             abs_file_path=os.path.join(abspath, name + '.py')))
-                    # in else with some verbose we could tell about skiped test
                 except ImportError as e:
-                    raise ImportError('Cannot import module named %s in %s (%s)' % (name, full, e.message))
-                    # alternative is to create TestClass which will raise
-                    # see unittest.loader
+                    if add_failed_imports:
+                        add = True
+                    else:
+                        raise ImportError('Cannot import module named'
+                                          ' %s in %s (%s)'
+                                          % (name, full, e.message))
+                        # alternative is to create TestClass which will raise
+                        # see unittest.loader
+                if add:
+                    modules.append(GrassTestPythonModule(
+                        name=name, module=None, tested_dir=root, file_dir=full,
+                        abs_file_path=os.path.join(abspath, name + '.py')))
+                # in else with some verbose we could tell about skiped test
     return modules
 
 
