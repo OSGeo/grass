@@ -32,7 +32,8 @@ int gaussurf(char *out,		/* Name of raster maps to be opened.    */
 
 	/****** INITIALISE RANDOM NUMBER GENERATOR ******/
 
-    G_math_rand(-1 * getpid());
+    /* FIXME - allow seed to be specified for repeatability */
+    G_math_srand_auto();
 
 	/****** OPEN CELL FILES AND GET CELL DETAILS ******/
 
@@ -50,7 +51,7 @@ int gaussurf(char *out,		/* Name of raster maps to be opened.    */
 	G_percent(row_count, nrows, 5);
 	for (col_count = 0; col_count < ncols; col_count++)
 	    *(row_out + col_count) =
-		(DCELL) (G_math_rand_gauss(2742, sigma) + mean);
+		(DCELL) (G_math_rand_gauss(sigma) + mean);
 
 	/* Write contents row by row */
 	Rast_put_d_row(fd_out, (DCELL *) row_out);

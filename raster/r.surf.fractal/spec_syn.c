@@ -38,14 +38,13 @@ int specsyn(double *data[2],	/* Array holding complex data to transform. */
 
     int row, col,		/* Counts through half the data array.  */
       row0, col0,		/* 'other half' of the array.           */
-      coeff,			/* No. of Fourier coeffficents to calc. */
-      seed;			/* Random number seed.                  */
+      coeff;			/* No. of Fourier coeffficents to calc. */
 
     double phase, rad,		/* polar coordinates of Fourier coeff.  */
      *temp[2];
 
-    seed = -1 * getpid();
-    G_math_rand(seed);		/* Reset random number generator.       */
+    /* FIXME - allow seed to be specified for repeatability */
+    G_math_srand_auto();	/* Reset random number generator.       */
 
     temp[0] = (double *)G_malloc(nn * nn * sizeof(double));
     temp[1] = (double *)G_malloc(nn * nn * sizeof(double));
@@ -65,12 +64,12 @@ int specsyn(double *data[2],	/* Array holding complex data to transform. */
 	for (col = 0; col <= nn / 2; col++) {
 	    /* Generate random Fourier coefficients. */
 
-	    phase = TWOPI * G_math_rand(0);
+	    phase = TWOPI * G_math_rand();
 
 	    if ((row != 0) || (col != 0))
 		rad =
 		    pow(row * row + col * col,
-			-(H + 1) / 2.0) * G_math_rand_gauss(0, 1.);
+			-(H + 1) / 2.0) * G_math_rand_gauss(1.);
 	    else
 		rad = 0.0;
 
@@ -101,10 +100,10 @@ int specsyn(double *data[2],	/* Array holding complex data to transform. */
 
     for (row = 1; row < nn / 2; row++)
 	for (col = 1; col < nn / 2; col++) {
-	    phase = TWOPI * G_math_rand(0);
+	    phase = TWOPI * G_math_rand();
 	    rad =
 		pow(row * row + col * col,
-		    -(H + 1) / 2.0) * G_math_rand_gauss(0, 1.);
+		    -(H + 1) / 2.0) * G_math_rand_gauss(1.);
 
 	    *(data[0] + row * nn + nn - col) = rad * cos(phase);
 	    *(data[1] + row * nn + nn - col) = rad * sin(phase);
