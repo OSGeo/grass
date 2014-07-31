@@ -8,6 +8,8 @@ import datetime
 import operator
 from collections import defaultdict
 
+
+# TODO: we should be able to work without matplotlib
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -22,6 +24,8 @@ class TestResultSummary(object):
     def __init__(self):
         self.timestamp = None
         self.svn_revision = None
+        self.location = None
+        self.location_type = None
 
         self.total = None
         self.successes = None
@@ -142,7 +146,17 @@ def main_page(results, filename, images, captions, title='Test reports',
             )
         for result in results:
             # TODO: include name to summary file
-            name = os.path.basename(result.report)
+            # now using location or test report directory as name
+            if result.location != 'unknown':
+                name = result.location
+            else:
+                name = os.path.basename(result.report)
+                if not name:
+                    # Python basename returns '' for 'abc/'
+                    for d in reversed(os.path.split(result.report)):
+                        if d:
+                            name = d
+                            break
             per_test = success_to_html_percent(
                 total=result.total, successes=result.successes)
             per_file = success_to_html_percent(
@@ -152,7 +166,7 @@ def main_page(results, filename, images, captions, title='Test reports',
                 '<tr>'
                 '<td><a href={report_path}/index.html>{result.timestamp}</a></td>'
                 '<td>{result.svn_revision}</td>'
-                '<td><a href={result.report}/index.html>{name}</a></td>'
+                '<td><a href={report_path}/index.html>{name}</a></td>'
                 '<td>{pfiles}</td><td>{ptests}</td>'
                 '</tr>'
                 .format(result=result, name=name, report_path=report_path,
@@ -216,8 +230,15 @@ def main():
             result.report = report
 
             # let's consider no location as valid state and use 'unknown'
-            location = summary.get('location', 'unknown')
-            results_in_locations[location].append(result)
+            result.location = summary.get('location', 'unknown')
+            result.location_type = summary.get('location_type', 'unknown')
+            # grouping accoring to location types
+            # this can cause that two actual locations tested at the same time
+            # will end up together, this is not ideal but testing with
+            # one location type and different actual locations is not standard
+            # and although it will not break anything it will not give a nice
+            # report
+            results_in_locations[result.location_type].append(result)
 
             all_results.append(result)
             del result
@@ -236,11 +257,16 @@ def main():
         '<tbody>'
         )
 
-    for location, results in results_in_locations.iteritems():
+    for location_type, results in results_in_locations.iteritems():
         results = sorted(results, key=operator.attrgetter('timestamp'))
-        # TODO: document: location shortcut must be a valid dir name
-        directory = os.path.join(output, location)
+        # TODO: document: location type must be a valid dir name
+        directory = os.path.join(output, location_type)
         ensure_dir(directory)
+
+        if location_type == 'unknown':
+            title = 'Test reports'
+        else:
+            title = 'Test reports for ' + location_type + ' location'
 
         x = [date2num(result.timestamp) for result in results]
         xlabels = [result.timestamp.strftime("%Y-%m-%d") + ' (r' + result.svn_revision + ')' for result in results]
@@ -255,7 +281,8 @@ def main():
                   images=['tests_plot.png', 'files_plot.png', 'info_plot.png'],
                   captions=['Success of individual tests', 'Success of test files',
                             'Additional information'],
-                  directory=directory)
+                  directory=directory,
+                  title=title)
 
         files_successes = sum(result.files_successes for result in results)
         files_total = sum(result.files_total for result in results)
@@ -270,7 +297,7 @@ def main():
             '<td><a href={location}/index.html>{location}</a></td>'
             '<td>{pfiles}</td><td>{ptests}</td>'
             '</tr>'
-            .format(location=location,
+            .format(location=location_type,
                     pfiles=per_file, ptests=per_test))
     locations_main_page.write('</tbody></table>')
     locations_main_page.write('</body></html>')

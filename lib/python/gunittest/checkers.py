@@ -16,7 +16,18 @@ for details.
 import sys
 import re
 import doctest
-import grass.script.core as gcore
+
+try:
+    from grass.script.core import KeyValue
+except (ImportError, AttributeError):
+    # TODO: we are silent about the error and use a object with different
+    # interface, should be replaced by central keyvalue module
+    # this can happen when translations are not available
+    # TODO: grass should survive are give better error when tranlsations are not available
+    # even the lazy loading after firts _ call would be interesting
+    # File "...grass/script/core.py", line 40, in <module>
+    # AttributeError: 'NoneType' object has no attribute 'endswith'
+    KeyValue = dict
 
 # alternative term to check(er(s)) would be compare
 
@@ -153,7 +164,7 @@ def text_to_keyvalue(text, sep=":", val_sep=",", functions=None,
         use ``lambda x: x`` for no conversion
 
     :return: a dictionary representation of text
-    :return type: grass.script.core.KeyValue
+    :return type: grass.script.core.KeyValue or dict
 
     And example of converting text with text, floats, integers and list
     to a dictionary::
@@ -172,7 +183,7 @@ def text_to_keyvalue(text, sep=":", val_sep=",", functions=None,
     # splitting according to universal newlines approach
     # TODO: add also general split with vsep
     text = text.splitlines()
-    kvdict = gcore.KeyValue()
+    kvdict = KeyValue()
     functions = [] if functions is None else functions
 
     for line in text:

@@ -30,6 +30,10 @@ from .reporters import (GrassTestFilesMultiReporter,
                         NoopFileAnonymizer, keyvalue_to_text)
 from .utils import silent_rmtree, ensure_dir
 
+# needed for write_gisrc
+# TODO: it would be good to find some way of writing rc without the need to
+# have GRASS proprly set (anything from grass.script requires translations to
+# be set, i.e. the GRASS environment properly set)
 import grass.script.setup as gsetup
 
 import collections
@@ -56,6 +60,7 @@ def update_keyval_file(filename, module, returncode):
         keyval['status'] = 'failed' if returncode else 'passed'
     keyval['returncode'] = returncode
     keyval['test_file_authors'] = test_file_authors
+
     with open(filename, 'w') as keyval_file:
         keyval_file.write(keyvalue_to_text(keyval))
     return keyval
@@ -168,7 +173,7 @@ class GrassTestFilesInvoker(object):
         if self.clean_mapsets:
             shutil.rmtree(mapset_dir)
 
-    def run_in_location(self, gisdbase, location, location_shortcut,
+    def run_in_location(self, gisdbase, location, location_type,
                         results_dir):
         """Run tests in a given location"""
         if os.path.abspath(results_dir) == os.path.abspath(self.start_dir):
@@ -179,12 +184,13 @@ class GrassTestFilesInvoker(object):
                 GrassTestFilesTextReporter(stream=sys.stderr),
                 GrassTestFilesHtmlReporter(
                     file_anonymizer=self._file_anonymizer),
-                GrassTestFilesKeyValueReporter()
+                GrassTestFilesKeyValueReporter(
+                    info=dict(location=location, location_type=location_type))
             ])
         self.testsuite_dirs = collections.defaultdict(list)  # reset list of dirs each time
         # TODO: move constants out of loader class or even module
         modules = discover_modules(start_dir=self.start_dir,
-                                   grass_location=location_shortcut,
+                                   grass_location=location_type,
                                    file_pattern=GrassTestLoader.files_in_testsuite,
                                    skip_dirs=GrassTestLoader.skip_dirs,
                                    testsuite_dir=GrassTestLoader.testsuite_dir,

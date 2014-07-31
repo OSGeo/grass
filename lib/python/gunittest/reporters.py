@@ -22,8 +22,6 @@ import collections
 import types
 import re
 
-import grass.script as gscript
-
 from .utils import ensure_dir
 from .checkers import text_to_keyvalue
 
@@ -73,6 +71,7 @@ class NoopFileAnonymizer(object):
         pass
 
 
+# TODO: why not remove GISDBASE by default?
 class FileAnonymizer(object):
     def __init__(self, paths_to_remove, remove_gisbase=True,
                  remove_gisdbase=False):
@@ -81,7 +80,10 @@ class FileAnonymizer(object):
             gisbase = os.environ['GISBASE']
             self._paths_to_remove.append(gisbase)
         if remove_gisdbase:
-            gisdbase = gscript.gis.get['GISDBASE']
+            # import only when really needed to avoid problems with
+            # translations when environment is not set properly
+            import grass.script as gscript
+            gisdbase = gscript.gisenv()['GISDBASE']
             self._paths_to_remove.append(gisdbase)
         if paths_to_remove:
             self._paths_to_remove.extend(paths_to_remove)
@@ -685,7 +687,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                 modules = [modules]
             file_index.write(
                 '<tr><td>Tested modules</td><td>{}</td></tr>'.format(
-                    ', '.join(modules)))
+                    ', '.join(sorted(set(modules)))))
         file_index.write('<tbody><table>')
 
         # here we would have also links to coverage, profiling, ...
@@ -727,11 +729,14 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # a stream can be added and if not none, we could write
 
 
+# TODO: document info: additional information to be stored type: dict
+# allows to overwrite what was collected
 class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
-    def __init__(self):
+    def __init__(self, info=None):
         super(GrassTestFilesKeyValueReporter, self).__init__()
         self.result_dir = None
+        self._info = info
 
     def start(self, results_dir):
         super(GrassTestFilesKeyValueReporter, self).start(results_dir)
@@ -798,6 +803,10 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         # ignoring issues with time zones
         summary['timestamp'] = self.main_start_time.strftime('%Y-%m-%d %H:%M:%S')
         # TODO: add some general metadata here (passed in constructor)
+
+        # add additional information
+        for key, value in self._info.iteritems():
+            summary[key] = value
 
         summary_filename = os.path.join(self.result_dir,
                                         'test_keyvalue_result.txt')
