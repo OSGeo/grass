@@ -82,11 +82,15 @@ class DataCatalog(wx.Panel):
         self.tree.ExpandCurrentLocation()
 
 class LocationMapTree(wx.TreeCtrl):
-    def __init__(self, parent):
+    def __init__(self, parent, multiple=False):
         """Location Map Tree constructor."""
-        super(LocationMapTree, self).__init__(parent, id=wx.ID_ANY, style = wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS |
-                                              wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES | 
-                                              wx.TR_SINGLE)
+        style = wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | \
+            wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES
+        if multiple:
+            style |= wx.TR_MULTIPLE
+        else:
+            style |= wx.TR_SINGLE
+        super(LocationMapTree, self).__init__(parent, id=wx.ID_ANY, style=style)
         self.showNotification = Signal('Tree.showNotification')
         self.parent = parent
         self.root = self.AddRoot('Catalog') # will not be displayed when we use TR_HIDE_ROOT flag
@@ -533,7 +537,7 @@ if __name__ == "__main__":
     class TestTree(LocationMapTree):
         def __init__(self, parent):
             """Test Tree constructor."""
-            super(TestTree, self).__init__(parent)
+            super(TestTree, self).__init__(parent, multiple=True)
             
         def InitTreeItems(self):
             """Add locations, mapsets and layers to the tree."""
