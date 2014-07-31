@@ -10,14 +10,12 @@
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author Radim Blazek
+   \author Radim Blazek, Markus Metz
  */
 
 #include <stdlib.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-
-#define DEGUG_RMAREA
 
 int Vect_remove_small_areas_nat(struct Map_info *, double,
                                 struct Map_info *, double *);
@@ -210,9 +208,7 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
     struct ilist *List;
     struct ilist *AList;
     struct ilist *BList;
-#ifdef DEGUG_RMAREA
     struct ilist *NList;
-#endif
     struct ilist *IList;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -224,9 +220,7 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
     List = Vect_new_list();
     AList = Vect_new_list();
     BList = Vect_new_list();
-#ifdef DEGUG_RMAREA
     NList = Vect_new_list();
-#endif
     IList = Vect_new_list();
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -415,10 +409,10 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 		    Vect_list_append(IList, Vect_get_area_isle(Map, dissolve_neighbour, i));
 		}
 	    }
-#ifdef DEGUG_RMAREA
+
 	    /* get neighbour boundaries */
 	    Vect_get_area_boundaries(Map, dissolve_neighbour, NList);
-#endif
+
 	    /* delete area from topo */
 	    dig_del_area(&(Map->plus), area);
 	    /* delete neighbour area from topo */
@@ -433,17 +427,19 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 		Node = Map->plus.Node[topo->N1];
 		dig_del_line(&(Map->plus), line, Node->x, Node->y, Node->z);
 	    }
-	    /* rebuild neighbour area from leftover boundaries */
+	    /* build new area from leftover boundaries of deleted area */
 	    for (i = 0; i < BList->n_values; i++) {
 		struct P_topo_b *topo;
+		int new_isle;
 
 		line = BList->value[i];
 		topo = Map->plus.Line[abs(line)]->topo;
-		if (topo->left == 0 || topo->right == 0) {
-		    int new_isle;
 
+		if (topo->left == 0 || topo->right == 0) {
 		    new_isle = Vect_build_line_area(Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
 		    if (new_isle > 0) {
+			if (outer_area > 0)
+			    G_fatal_error("dissolve_neighbour > 0, new area has already been created");
 			outer_area = new_isle;
 			/* reattach centroid */
 			Map->plus.Area[outer_area]->centroid = centroid;
@@ -453,16 +449,20 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 			    ctopo->area = outer_area;
 			}
 		    }
+		    else if (new_isle < 0) {
+			/* leftover boundary creates a new isle */
+			Vect_list_append(IList, -new_isle);
+		    }
 		    else {
-			/* should not happen */
-			G_warning(_("Failed to build new area"));
+			/* neither area nor isle, should not happen */
+			G_fatal_error(_("dissolve_neighbour > 0, failed to build new area"));
 		    }
 		}
 		/* check */
 		if (topo->left == 0 || topo->right == 0)
-		    G_warning(_("Dissolve with neighbour area: corrupt topology"));
+		    G_fatal_error(_("Dissolve with neighbour area: corrupt topology"));
 	    }
-#ifdef DEGUG_RMAREA
+	    /* build new area from neighbour's boundaries */
 	    for (i = 0; i < NList->n_values; i++) {
 		struct P_topo_b *topo;
 
@@ -471,13 +471,14 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 		    continue;
 
 		topo = Map->plus.Line[abs(line)]->topo;
+
 		if (topo->left == 0 || topo->right == 0) {
 		    int new_isle;
 
-		    G_warning(_("Neighbor boundaries should be complete"));
-
 		    new_isle = Vect_build_line_area(Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
 		    if (new_isle > 0) {
+			if (outer_area > 0)
+			    G_fatal_error("dissolve_neighbour > 0, new area has already been created");
 			outer_area = new_isle;
 			/* reattach centroid */
 			Map->plus.Area[outer_area]->centroid = centroid;
@@ -487,15 +488,18 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 			    ctopo->area = outer_area;
 			}
 		    }
+		    else if (new_isle < 0) {
+			/* Neigbour's boundary creates a new isle */
+			Vect_list_append(IList, -new_isle);
+		    }
 		    else {
-			/* should not happen */
-			G_warning(_("Failed to build new area"));
+			/* neither area nor isle, should not happen */
+			G_fatal_error(_("Failed to build new area"));
 		    }
 		}
 		if (topo->left == 0 || topo->right == 0)
-		    G_warning(_("Dissolve with neighbour area: corrupt topology"));
+		    G_fatal_error(_("Dissolve with neighbour area: corrupt topology"));
 	    }
-#endif
 	}
 	/* dissolve with outer isle */
 	else if (dissolve_neighbour < 0) {
@@ -504,10 +508,9 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 
 	    outer_area = Vect_get_isle_area(Map, -dissolve_neighbour);
 
-#ifdef DEGUG_RMAREA
 	    /* get isle boundaries */
 	    Vect_get_isle_boundaries(Map, -dissolve_neighbour, NList);
-#endif
+
 	    /* delete area from topo */
 	    dig_del_area(&(Map->plus), area);
 	    /* delete isle from topo */
@@ -522,7 +525,7 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 		Node = Map->plus.Node[topo->N1];
 		dig_del_line(&(Map->plus), line, Node->x, Node->y, Node->z);
 	    }
-	    /* rebuild isles from leftover boundaries */
+	    /* build new isle(s) from leftover boundaries */
 	    for (i = 0; i < BList->n_values; i++) {
 		struct P_topo_b *topo;
 
@@ -537,15 +540,16 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 			Vect_list_append(IList, -new_isle);
 		    }
 		    else {
-			/* should not happen */
-			G_warning(_("Failed to build new isle"));
+			/* area or nothing should not happen */
+			G_fatal_error(_("Failed to build new isle"));
 		    }
 		}
 		/* check */
 		if (topo->left == 0 || topo->right == 0)
-		    G_warning(_("Dissolve with outer isle: corrupt topology"));
+		    G_fatal_error(_("Dissolve with outer isle: corrupt topology"));
 	    }
-#ifdef DEGUG_RMAREA
+
+	    /* build new isle(s) from old isle's boundaries */
 	    for (i = 0; i < NList->n_values; i++) {
 		struct P_topo_b *topo;
 
@@ -554,25 +558,23 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 		    continue;
 
 		topo = Map->plus.Line[abs(line)]->topo;
+
 		if (topo->left == 0 || topo->right == 0) {
 		    int new_isle;
-
-		    G_warning(_("Neighbor boundaries should be complete"));
 
 		    new_isle = Vect_build_line_area(Map, abs(line), (line > 0 ? GV_RIGHT : GV_LEFT));
 		    if (new_isle < 0) {
 			Vect_list_append(IList, -new_isle);
 		    }
 		    else {
-			/* should not happen */
-			G_warning(_("Failed to build new isle"));
+			/* area or nothing should not happen */
+			G_fatal_error(_("Failed to build new isle"));
 		    }
 		}
 		/* check */
 		if (topo->left == 0 || topo->right == 0)
-		    G_warning(_("Dissolve with outer isle: corrupt topology"));
+		    G_fatal_error(_("Dissolve with outer isle: corrupt topology"));
 	    }
-#endif
 	}
 
 	if (dissolve_neighbour > 0 && outer_area <= 0) {
@@ -582,6 +584,8 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 	/* attach all isles to outer or new area */
 	if (outer_area >= 0) {
 	    for (i = 0; i < IList->n_values; i++) {
+		if (!Map->plus.Isle[IList->value[i]])
+		    continue;
 		Map->plus.Isle[IList->value[i]]->area = outer_area;
 		if (outer_area > 0)
 		    dig_area_add_isle(&(Map->plus), outer_area, IList->value[i]);
@@ -601,9 +605,7 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
     Vect_destroy_list(List);
     Vect_destroy_list(AList);
     Vect_destroy_list(BList);
-#ifdef DEGUG_RMAREA
     Vect_destroy_list(NList);
-#endif
     Vect_destroy_list(IList);
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
