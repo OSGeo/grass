@@ -46,16 +46,17 @@ Python ``unittest`` package, so the ways to build tests are very similar.
 Each test file should be able to run by itself and accept certain set of command
 line parameters. This is ensured using `gunittest.test()`.
 
-To run (invoke) all tests in the source tree run::
+To run (invoke) all tests in the source tree, you have to be in the source code
+directory, inside GRASS session and use command similar to this one::
 
-    python -m grass.gunittest.main [gisdbase] location test_data_category
+    python -m grass.gunittest.main --location nc_spm_grass7 --location-type nc
 
 All test files in all ``testsuite`` directories will be executed and
 a report will be created in a newly created ``testreport`` directory.
 Open the file ``testreport/index.html`` to browse though the results.
-You need to be in GRASS session to run the tests.
+Note that you need to be in GRASS session to run the tests in this way.
 
-The test_data_category parameter serves to filter tests accoring to data
+The ``--location-type`` parameter serves to filter tests according to data
 they can run successfully with. It is ignored for tests which does not have
 this specified.
 
@@ -353,6 +354,7 @@ Further reading
    :maxdepth: 2
 
    gunittest
+   gunittest_running_tests
 
 
 .. _unittest: https://docs.python.org/2/library/unittest.html
