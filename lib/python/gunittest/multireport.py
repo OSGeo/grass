@@ -206,6 +206,12 @@ def main():
     for report in reports:
         try:
             summary_file = os.path.join(report, 'test_keyvalue_result.txt')
+            if not os.path.exists(summary_file):
+                sys.stderr.write('WARNING: Key-value summary not available in'
+                                 ' report <%s>, skipping.\n')
+                # skipping incomplete reports
+                # use only results list for further processing
+                continue
             summary = text_to_keyvalue(open(summary_file).read(), sep='=')
             if use_timestamps:
                 test_timestamp = datetime.datetime.fromtimestamp(os.path.getmtime(summary_file))
