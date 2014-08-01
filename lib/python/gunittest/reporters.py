@@ -498,15 +498,17 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
     unknown_number = UNKNOWN_NUMBER_HTML
 
-    def __init__(self, file_anonymizer):
+    def __init__(self, file_anonymizer, main_page_name='index.html'):
         super(GrassTestFilesHtmlReporter, self).__init__()
         self.main_index = None
         self._file_anonymizer = file_anonymizer
+        self._main_page_name = main_page_name
 
     def start(self, results_dir):
         super(GrassTestFilesHtmlReporter, self).start(results_dir)
         # having all variables public although not really part of API
-        self.main_index = open(os.path.join(results_dir, 'index.html'), 'w')
+        main_page_name = os.path.join(results_dir, self._main_page_name)
+        self.main_index = open(main_page_name, 'w')
 
         # TODO: this can be moved to the counter class
         self.failures = 0
@@ -649,7 +651,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         file_index_path = os.path.join(cwd, 'index.html')
         file_index = open(file_index_path, 'w')
         file_index.write(
-            '<html><body>'
+            '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>'
             '<h1>{m.name}</h1>'
             '<h2>{m.tested_dir} &ndash; {m.name}</h2>'
             '{status}'

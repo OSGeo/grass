@@ -183,7 +183,8 @@ class GrassTestFilesInvoker(object):
             reporters=[
                 GrassTestFilesTextReporter(stream=sys.stderr),
                 GrassTestFilesHtmlReporter(
-                    file_anonymizer=self._file_anonymizer),
+                    file_anonymizer=self._file_anonymizer,
+                    main_page_name='testfiles.html'),
                 GrassTestFilesKeyValueReporter(
                     info=dict(location=location, location_type=location_type))
             ])
@@ -203,6 +204,21 @@ class GrassTestFilesInvoker(object):
             self._run_test_module(module=module, results_dir=results_dir,
                                   gisdbase=gisdbase, location=location)
         self.reporter.finish()
+
+        # TODO: move this to some (new?) reporter
+        # TODO: add basic summary of linked files so that the page is not empty
+        with open(os.path.join(results_dir, 'index.html'), 'w') as main_index:
+            main_index.write(
+                '<html><body>'
+                '<h1>Tests for &lt;{location}&gt;'
+                ' using &lt;{type}&gt; type tests</h1>'
+                '<ul>'
+                '<li><a href="testsuites.html">Results by testsuites</a>'
+                ' (testsuite directories)</li>'
+                '<li><a href="testfiles.html">Results by test files</a></li>'
+                '<ul>'
+                '</body></html>'
+                .format(location=location, type=location_type))
 
         testsuite_dir_reporter = TestsuiteDirReporter(
             main_page_name='testsuites.html', testsuite_page_name='index.html',
