@@ -56,6 +56,13 @@ spatial distribution of walkers at different simulation times (note that
 the resulting water depth is based on the density of these walkers). 
 <!--Number of the output walkers is controled by the <i>density</i> parameter, which controls
 how many walkers used in simulation should be written into the output. -->
+<!-- from
+http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Mitasova_Helena_2.pdf
+-->
+The spatial distribution of numerical error associated with path sampling solution can be
+analysed using the output error raster file [m]. This error is a function of the number
+of particles used in the simulation and can be reduced by increasing the number of walkers
+given by parameter <i>nwalk</i>.
 <!--(<font color="#ff0000"> toto treba upresnit/zmenit, lebo nwalk ide prec</font>). -->
 Duration of simulation is controled by the <i>niter</i> parameter. The default value 
 is 10 minutes, reaching the steady-state may require much longer time, 
@@ -212,6 +219,11 @@ for effective erosion prevention. Water Resources Research, 34(3), 505-516.
 Multiscale soil erosion simulations for land use management,</a>
 In: Landscape erosion and landscape evolution modeling, Harmon R. and Doe W. eds., 
 Kluwer Academic/Plenum Publishers, pp. 321-347.
+
+<li> Hofierka, J, Mitasova, H., Mitas, L., 2002. GRASS and modeling landscape processes
+using duality between particles and fields. Proceedings of the Open source GIS - 
+GRASS users conference 2002 - Trento, Italy, 11-13 September 2002.
+<a href="http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Mitasova_Helena_2.pdf">PDF</a>
 
 <li> Neteler, M. and Mitasova, H., 2008,
 <a href="http://www.grassbook.org">Open Source GIS: A GRASS GIS Approach. Third Edition.</a>
