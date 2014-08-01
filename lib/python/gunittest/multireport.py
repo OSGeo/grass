@@ -238,7 +238,7 @@ def main():
             # let's consider no location as valid state and use 'unknown'
             result.location = summary.get('location', 'unknown')
             result.location_type = summary.get('location_type', 'unknown')
-            # grouping accoring to location types
+            # grouping according to location types
             # this can cause that two actual locations tested at the same time
             # will end up together, this is not ideal but testing with
             # one location type and different actual locations is not standard
@@ -254,7 +254,7 @@ def main():
     locations_main_page = open(os.path.join(output, 'index.html'), 'w')
     locations_main_page.write(
         '<html><body>'
-        '<h1>Test reports accoring to locations</h1>'
+        '<h1>Test reports grouped by location type</h1>'
         '<table>'
         '<thead><tr>'
         '<th>Location</th>'
@@ -272,7 +272,8 @@ def main():
         if location_type == 'unknown':
             title = 'Test reports'
         else:
-            title = 'Test reports for ' + location_type + ' location'
+            title = ('Test reports for &lt;{type}&gt; location type'
+                     .format(type=location_type))
 
         x = [date2num(result.timestamp) for result in results]
         xlabels = [result.timestamp.strftime("%Y-%m-%d") + ' (r' + result.svn_revision + ')' for result in results]
