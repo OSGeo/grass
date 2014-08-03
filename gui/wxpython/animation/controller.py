@@ -189,6 +189,11 @@ class AnimationController(wx.EvtHandler):
 
         return None
 
+    def UpdateAnimations(self):
+        """Used sofar for updating slider time labels
+        after change of format"""'
+        self._setAnimations()
+
     def EditAnimations(self):
         # running = False
         # if self.timer.IsRunning():
