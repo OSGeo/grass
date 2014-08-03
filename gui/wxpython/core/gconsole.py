@@ -661,6 +661,10 @@ class GConsole(wx.EvtHandler):
                     # if multiple maps (e.g. r.series.interp), we need add each
                     if p.get('multiple', False):
                         lnames = p.get('value').split(',')
+                        # in case multiple input (old) maps in r.colors
+                        # we don't want to rerender it multiple times! just once
+                        if p.get('age', 'old') == 'old':
+                            lnames = lnames[0:1]
                     else:
                         lnames = [p.get('value')]
                     for lname in lnames:
