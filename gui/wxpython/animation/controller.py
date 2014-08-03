@@ -191,7 +191,7 @@ class AnimationController(wx.EvtHandler):
 
     def UpdateAnimations(self):
         """Used sofar for updating slider time labels
-        after change of format"""'
+        after change of format"""
         self._setAnimations()
 
     def EditAnimations(self):
