@@ -1457,6 +1457,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                  settings=UserSettings):
         PreferencesBaseDialog.__init__(self, parent=parent, giface=giface, title=title,
                                        settings=settings, size=(-1, 270))
+        self.formatChanged = Signal('PreferencesDialog.formatChanged')
 
         self._timeFormats = ['%Y-%m-%d %H:%M:%S',  # 2013-12-29 11:16:26
                              '%Y-%m-%d',  # 2013-12-29
@@ -1470,6 +1471,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                              '%I %p',  # 11 AM
                              ]
         self._format = None
+        self._initFormat = self.settings.Get(group='animation', key='temporal',
+                                             subkey='format')
         # create notebook pages
         self._createGeneralPage(self.notebook)
         self._createTemporalPage(self.notebook)
@@ -1523,8 +1526,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         self.tempFormat = wx.ComboBox(parent=panel, name='GetValue')
         self.tempFormat.SetItems(self._timeFormats)
-        self.tempFormat.SetValue(self.settings.Get(group='animation', key='temporal',
-                                                   subkey='format'))
+        self.tempFormat.SetValue(self._initFormat)
         self.winId['animation:temporal:format'] = self.tempFormat.GetId()
         gridSizer.Add(item=self.tempFormat, pos=(row, 1), flag=wx.ALIGN_RIGHT)
         self.infoTimeLabel = wx.StaticText(parent=panel)
@@ -1577,7 +1579,10 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def _updateSettings(self):
         self.tempFormat.SetValue(self._format)
-        return PreferencesBaseDialog._updateSettings(self)
+        PreferencesBaseDialog._updateSettings(self)
+        if self._format != self._initFormat:
+            self.formatChanged.emit()
+        return True
 
 
 def test():
