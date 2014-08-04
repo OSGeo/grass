@@ -34,5 +34,15 @@ class TestModules(TestCase):
     __metaclass__ = TestModulesMeta
 
 
+class TestModulesPickability(TestCase):
+    def test_rsun(self):
+        """Test if a Module instance is pickable"""
+        import pickle
+        from StringIO import StringIO
+        out = StringIO()
+        pickle.dump(Module('r.sun'), out)
+        out.close()
+
+
 if __name__ == '__main__':
     test()
