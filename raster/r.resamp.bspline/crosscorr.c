@@ -195,7 +195,7 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 
 	if (nparam_spl > 22900)
 	    G_fatal_error(_("Too many splines (%d x %d). "
-			    "Consider changing spline steps \"sn=\" \"se=\"."),
+			    "Consider changing spline steps \"ew_step=\" \"ns_step=\"."),
 			  nsplx, nsply);
 
 	BW = P_get_BandWidth(bilin, nsply);

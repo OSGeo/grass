@@ -1,35 +1,39 @@
 <h2>DESCRIPTION</h2>
+
 <em>r.resamp.bspline</em> performs a bilinear/bicubic spline interpolation with
 Tykhonov regularization. The input is a raster surface map, e.g. elevation,
 temperature, precipitation etc. Output is a raster map. Optionally, only
 input NULL cells are interpolated, useful to fill NULL cells, an alternative
 to <em><a href="r.fillnulls.html">r.fillnulls</a></em>. Using the <b>-n</b> flag to only
 interpolate NULL cells will considerably speed up the module.
-<p>The input raster map is read at its native resolution, the output raster
+<p>
+The input raster map is read at its native resolution, the output raster
 map will be produced for the current computational region set with
 <em><a href="g.region.html">g.region</a></em>. Any MASK will be respected, masked
 values will be treated as NULL cells in both the input and the output map.
-<p>Spline step values <b>se</b> for the east-west direction and
-<b>sn</b> for the north-south direction should not be smaller than
+<p>Spline step values <b>ew_step</b> for the east-west direction and
+<b>ns_step</b> for the north-south direction should not be smaller than
 the east-west and north-south resolutions of the input map. For a raster
 map without NULL cells, 1 * resolution can be used, but check for
 undershoots and overshoots. For very large areas with missing values
 (NULL cells), larger spline step values may be required, but most of the
 time the defaults (1.5 x resolution) should be fine.
-<p>The Tykhonov regularization parameter (<b>lambda</b>) acts to
+<p>
+The Tykhonov regularization parameter (<b>lambda</b>) acts to
 smooth the interpolation. With a small <b>lambda</b>, the
 interpolated surface closely follows observation points; a larger value
 will produce a smoother interpolation. Reasonable values are 0.0001,
 0.001, 0.005, 0.01, 0.02, 0.05, 0.1 (needs more testing). For seamless
 NULL cell interpolation, a small value is required and default is set to 0.005.
-<p>From a theoretical perspective, the interpolating procedure takes place in two
+<p>
+From a theoretical perspective, the interpolating procedure takes place in two
 parts: the first is an estimate of the linear coefficients of a spline function;
 these are derived from the observation points using a least squares regression; the
 second is the computation of the interpolated surface (or interpolated vector
 points). As used here, the splines are 2D piece-wise non-zero polynomial
 functions calculated within a limited 2D area. The length of each spline step
-is defined by <b>se</b> for the east-west direction and
-<b>sn</b> for the north-south direction. For optimal performance, the
+is defined by <b>ew_step</b> for the east-west direction and
+<b>ns_step</b> for the north-south direction. For optimal performance, the
 spline step values should be no less than the east-west and north-south
 resolutions of the input map. Each non-NULL cell observation is modeled as a
 linear function of the non-zero splines in the area around the observation.
@@ -61,6 +65,7 @@ A bicubic spline interpolation will be done and a raster map with estimated
 
 <h3>Interpolation of NULL cells and patching</h3>
 
+General procedure:
 <div class="code"><pre>
 # set region to area with NULL cells, align region to input map
 g.region n=north s=south e=east w=west align=input -p
@@ -70,6 +75,36 @@ r.resamp.bspline -n input=input_raster output=interpolated_nulls method=bicubic
 g.region rast=input -p
 # patch original map and interpolated NULLs
 r.patch input=input_raster,interpolated_nulls output=input_raster_gapfilled
+</pre></div>
+
+<h3>Interpolation of NULL cells and patching (NC data)</h3>
+
+In this example, the SRTM elevation map in the
+North Carolina sample dataset location is filtered for outlier
+elevation values; missing pixels are then re-interpolated to obtain
+a complete elevation map:
+
+<div class="code"><pre>
+g.region rast=elev_srtm_30m -p
+d.mon wx0
+d.histogram elev_srtm_30m
+
+r.univar -e elev_srtm_30m
+
+# remove too low elevations (esp. lakes)
+# Threshold: thresh = Q1 - 1.5 * (Q3 - Q1)
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m &lt; 50.0, null(), elev_srtm_30m)"
+
+# verify
+d.histogram elev_srtm_30m_filt
+d.erase
+d.rast elev_srtm_30m_filt
+
+r.resamp.bspline -n input=elev_srtm_30m_filt output=elev_srtm_30m_complete \
+  method=bicubic
+
+d.histogram elev_srtm_30m_complete
+d.rast elev_srtm_30m_complete
 </pre></div>
 
 <h3>Estimation of <b>lambda</b> parameter with a cross validation proccess</h3>

@@ -18,14 +18,14 @@ points using a least squares regression; the second is the computation
 of the interpolated surface (or interpolated vector points). As used
 here, the splines are 2D piece-wise non-zero polynomial functions
 calculated within a limited, 2D area. The length of each spline step
-is defined by <b>sie</b> for the east-west direction and
-<b>sin</b> for the north-south direction. For optimum performance, the
+is defined by <b>ew_step</b> for the east-west direction and
+<b>ns_step</b> for the north-south direction. For optimal performance, the
 length of spline step should be no less than the distance between observation
 points. Each vector point observation is modeled as a linear function of the
 non-zero splines in the area around the observation. The least squares
 regression predicts the the coefficients of these linear functions.
-Regularization, avoids the need to have one one observation and one coefficient
-for each spline (in order to avoid instability). 
+Regularization, avoids the need to have one observation and one
+coefficient for each spline (in order to avoid instability). 
 
 <p>With regularly distributed data points, a spline step corresponding
 to the maximum distance between two points in both the east and north
@@ -40,7 +40,7 @@ and north-south spline step length arguments allows the user to
 account for some degree of anisotropy in the distribution of
 observation points. Short spline step lengths - especially spline step
 lengths that are less than the distance between observation points -
-can greatly increase processing time.
+can greatly increase the processing time.
 
 <p>Moreover, the maximum number of splines for each direction at each
 time is fixed, regardless of the spline step length. As the total
@@ -102,7 +102,7 @@ with estimated (i.e., interpolated) values will be created.
 <h3>Basic interpolation and raster output with a longer spline step</h3>
 
 <div class="code"><pre>
-v.surf.bspline input=point_vector raster=interpolate_surface sie=25 sin=25
+v.surf.bspline input=point_vector raster=interpolate_surface ew_step=25 ns_step=25
 </pre></div>
 
 A bilinear spline interpolation will be done with a spline step length
@@ -127,7 +127,8 @@ sparse vector map, with interpolated values.
 <h3>Using attribute values instead z-coordinates</h3>
 
 <div class="code"><pre>
-v.surf.bspline input=point_vector raster=interpolate_surface layer=1 column=attrib_column
+v.surf.bspline input=point_vector raster=interpolate_surface layer=1 \
+  column=attrib_column
 </pre></div>
 
 The interpolation will be done using the values
@@ -136,7 +137,9 @@ in <i>attrib_column</i>, in the table associated with layer 1.
 <h3>North carolina location example using z-coordinates for interpolation</h3>
 
 <div class="code"><pre>
-v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast sie=5 sin=5 method=bicubic lambda_i=0.1
+g.region region=rural_1m res=2 -p
+v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast \
+  ew_step=5 ns_step=5 method=bicubic lambda_i=0.1
 </pre></div>
 
 

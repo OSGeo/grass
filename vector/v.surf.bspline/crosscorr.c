@@ -149,7 +149,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 
 	if (nparam_spl > 22900)
 	    G_fatal_error(_("Too many splines (%d x %d). "
-			    "Consider changing spline steps \"sie=\" \"sin=\"."),
+			    "Consider changing spline steps \"ew_step=\" \"ns_step=\"."),
 			  nsplx, nsply);
 
 	BW = P_get_BandWidth(bilin, nsply);

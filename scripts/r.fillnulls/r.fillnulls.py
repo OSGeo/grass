@@ -8,13 +8,13 @@
 #               Updated to GRASS 6.0 by Markus Neteler
 #               Ring and zoom improvements by Hamish Bowman
 #               Converted to Python by Glynn Clements
-#               Add support to v.surf.bspline by Luca Delucchi
+#               Added support for r.resamp.bspline by Luca Delucchi
 #               Per hole filling with RST by Maris Nartiss
 #               Speedup for per hole filling with RST by Stefan Blumentrath
 # PURPOSE:      fills NULL (no data areas) in raster maps
 #               The script respects a user mask (MASK) if present.
 #
-# COPYRIGHT:    (C) 2001-2012 by the GRASS Development Team
+# COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -349,12 +349,12 @@ def main():
         if usermask:
             grass.run_command('r.resamp.bspline', input = input, mask = usermask,
                 output = prefix + 'filled', method = method, 
-                se = 3 * reg['ewres'], sn = 3 * reg['nsres'], 
+                ew_step = 3 * reg['ewres'], ns_step = 3 * reg['nsres'], 
                 _lambda = 0.01, flags = 'n')
         else:
             grass.run_command('r.resamp.bspline', input = input,
                 output = prefix + 'filled', method = method, 
-                se = 3 * reg['ewres'], sn = 3 * reg['nsres'], 
+                ew_step = 3 * reg['ewres'], ns_step = 3 * reg['nsres'], 
                 _lambda = 0.01, flags = 'n')
 
     # restoring user's mask, if present:
