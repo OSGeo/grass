@@ -85,7 +85,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 		      ndata);
 
     if (ndata > 50)
-	G_warning(_("Maybe, it takes too long. "
+	G_warning(_("Maybe it takes too long. "
 		    "It will depend on how many points you are considering."));
     else
 	G_debug(5, "CrossCorrelation: It shouldn't take too long.");
@@ -154,8 +154,8 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 
 	BW = P_get_BandWidth(bilin, nsply);
 	/**/
-	    /*Least Squares system */
-	    N = G_alloc_matrix(nparam_spl, BW);	/* Normal matrix */
+	/*Least Squares system */
+	N = G_alloc_matrix(nparam_spl, BW);	/* Normal matrix */
 	TN = G_alloc_vector(nparam_spl);	/* vector */
 	parVect = G_alloc_vector(nparam_spl);	/* Parameters vector */
 	obsVect = G_alloc_matrix(ndata, 3);	/* Observation vector */
@@ -280,7 +280,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 		G_debug(1, "CrossCorrelation: stat_vect.error[%d]  =  %lf", j,
 			stat_vect.error[j]);
 
-		/* Once the last value is left out, it is swaped with j-value */
+		/* Once the last value is left out, it is swapped with j-value */
 		observ = swap(observ, j, ndata - 1);
 
 		G_percent(j, ndata, 2);
