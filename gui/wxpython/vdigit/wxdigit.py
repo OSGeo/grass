@@ -17,7 +17,7 @@ data processing with NumPy is much faster than iterating in Python
 (and NumPy would be an excellent candidate for acceleration via
 e.g. OpenCL or CUDA; I'm surprised it hasn't happened already).
 
-(C) 2007-2011, 2013 by the GRASS Development Team
+(C) 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1762,9 +1762,13 @@ class IVDigit:
         else:
             fids.append(newline)
         
-        left = right = -1
+        # break at intersection
+        if self._settings['breakLines']:
+            self._breakLineAtIntersection(newline, self.poPoints)
+            
+        # add centroids for left/right area
         if ftype & GV_AREA:
-            # add centroids for left/right area
+            left = right = -1
             bpoints = Vect_new_line_struct()
             cleft = c_int()
             cright = c_int()
@@ -1816,10 +1820,6 @@ class IVDigit:
                     
             Vect_destroy_line_struct(bpoints)
         
-        # break at intersection
-        if self._settings['breakLines']:
-            self._breakLineAtIntersection(newline, self.poPoints)
-
         self._addChangeset()
         
         if ftype & GV_AREA:
