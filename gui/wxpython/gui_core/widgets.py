@@ -14,6 +14,8 @@ Classes:
  - widgets::CoordinatesValidator
  - widgets::IntegerValidator
  - widgets::FloatValidator
+ - widgets::EmailValidator
+ - widgets::TimeISOValidator
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget
@@ -21,6 +23,9 @@ Classes:
  - widgets::ColorTablesComboBox
  - widgets::BarscalesComboBox
  - widgets::NArrowsComboBox
+
+@todo:
+ - move validators to a separate file gui_core/validators.py
 
 (C) 2008-2014 by the GRASS Development Team
 
@@ -31,6 +36,7 @@ This program is free software under the GNU General Public License
 @author Enhancements by Michael Barton <michael.barton asu.edu>
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 @author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
+@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator, TimeISOValidator)
 """
 
 import os
@@ -585,6 +591,50 @@ class FloatValidator(BaseValidator):
     def Clone(self):
         """Clone validator"""
         return FloatValidator()
+
+class EmailValidator(BaseValidator):
+    """Validator for email input"""
+    def __init__(self):
+        BaseValidator.__init__(self)
+ 
+    def Validate(self):
+        """Validate input"""
+        textCtrl = self.GetWindow()
+        text = textCtrl.GetValue()
+        if text:
+            if re.match(r'\b[\w.-]+@[\w.-]+.\w{2,4}\b', text) is None:
+                self._notvalid()
+                return False
+        
+        self._valid()
+        return True
+ 
+    def Clone(self):
+        """Clone validator"""
+        return EmailValidator()
+ 
+class TimeISOValidator(BaseValidator):
+    """Validator for time ISO format (YYYY-MM-DD) input"""
+    def __init__(self):
+        BaseValidator.__init__(self)
+    
+    def Validate(self):
+        """Validate input"""
+        textCtrl = self.GetWindow()
+        text = textCtrl.GetValue()
+        if text:
+            try:
+                datetime.strptime(text, '%Y-%m-%d')
+            except:
+                self._notvalid()
+                return False
+        
+        self._valid()
+        return True
+        
+    def Clone(self):
+        """Clone validator"""
+        return TimeISOValidator()
 
 class NTCValidator(wx.PyValidator):
     """validates input in textctrls, taken from wxpython demo"""
