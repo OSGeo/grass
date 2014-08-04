@@ -29,7 +29,7 @@
 struct Param
 {
     struct Option *in, *in_ext, *out, *out_map, *dbdriver,
-	*dbdatabase, *passoE, *passoN, *lambda_f, *type;
+	*dbdatabase, *stepE, *stepN, *lambda_f, *type;
     struct Flag *cross_corr;
 };
 

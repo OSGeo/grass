@@ -171,8 +171,8 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 		      ndata);
 
     if (ndata > 50)
-	G_warning(_("Maybe it takes too long."
-		    "Consider reducing the region extends."));
+	G_warning(_("Maybe it takes too long. "
+		    "Consider reducing the region extents."));
     else
 	G_debug(5, "CrossCorrelation: It shouldn't take too long.");
 
@@ -180,10 +180,13 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 	int i, j, lbd;		/* lbd: lambda index */
 	int BW;	
 	double mean_reg, *obs_mean;
+	int verbosity;
 
 	mean = G_alloc_vector(PARAM_LAMBDA);	/* Alloc as much mean, rms and stdev values as the total */
 	rms = G_alloc_vector(PARAM_LAMBDA);	/* number of parameter used used for cross validation */
 	stdev = G_alloc_vector(PARAM_LAMBDA);
+
+	verbosity = G_verbose(); /* store for later reset */
 
 	/* Setting number of splines as a function of WE and SN spline steps */
 	nsplx = ceil((region.east - region.west) / passWE);
@@ -192,7 +195,7 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 
 	if (nparam_spl > 22900)
 	    G_fatal_error(_("Too many splines (%d x %d). "
-			    "Consider changing spline steps \"sie=\" \"sin=\"."),
+			    "Consider changing spline steps \"sn=\" \"se=\"."),
 			  nsplx, nsply);
 
 	BW = P_get_BandWidth(bilin, nsply);
@@ -202,27 +205,28 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 	TN = G_alloc_vector(nparam_spl);	/* vector */
 	parVect = G_alloc_vector(nparam_spl);	/* Parameters vector */
 	obsVect = G_alloc_matrix(ndata, 3);	/* Observation vector */
-	Q = G_alloc_vector(ndata);	/* "a priori" var-cov matrix */
+	Q = G_alloc_vector(ndata);		/* "a priori" var-cov matrix */
 
 	obs_mean = G_alloc_vector(ndata);
 	stat_vect = alloc_Stats(ndata);
 
 	for (lbd = 0; lbd < PARAM_LAMBDA; lbd++) {	/* For each lambda value */
 
-	    G_message(_("Begining cross validation with "
-			"lambda_i=%.4f..."), lambda[lbd]);
-	    
+	    G_message(_("Beginning cross validation with "
+		        "lambda_i=%.4f ... (%d of %d)"), lambda[lbd],
+		      lbd+1, PARAM_LAMBDA);
+
 	    /*
-	       How cross correlation algorithm is done:
-	       For each cicle, only the first ndata-1 "observ" elements are considered for the 
+	       How the cross correlation algorithm is done:
+	       For each cycle, only the first ndata-1 "observ" elements are considered for the 
 	       interpolation. Within every interpolation mean is calculated to lowering border 
-	       errors. The point let out will be used for an estimation. The error between the 
+	       errors. The point left out will be used for an estimation. The error between the 
 	       estimation and the observation is recorded for further statistics.
-	       At the end of the cicle, the last point, that is, the ndata-1 index, and the point 
+	       At the end of the cycle, the last point, that is, the ndata-1 index, and the point 
 	       with j index are swapped.
 	     */
 	    for (j = 0; j < ndata; j++) {	/* Cross Correlation will use all ndata points */
-		double out_x, out_y, out_z;	/* This point is let out */
+		double out_x, out_y, out_z;	/* This point is left out */
 
 		for (i = 0; i < ndata; i++) {	/* Each time, only the first ndata-1 points */
 
@@ -241,7 +245,7 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 		for (i = 0; i < ndata; i++)
 		    obsVect[i][2] -= mean_reg;
 
-		/* This is let out */
+		/* This is left out */
 		out_x = observ[ndata - 1].coordX;
 		out_y = observ[ndata - 1].coordY;
 		out_z = obsVect[ndata - 1][2];
@@ -265,7 +269,9 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 		   if (bilin) interpolation (&interp, P_BILINEAR);
 		   else interpolation (&interp, P_BICUBIC);
 		 */
+		G_set_verbose(G_verbose_min());
 		G_math_solver_cholesky_sband(N, parVect, TN, nparam_spl, BW);
+		G_set_verbose(verbosity);
 
 		/* Estimation of j-point */
 		if (bilin)
@@ -280,12 +286,15 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 					     nsplx, nsply, region.west,
 					     region.south, parVect);
 
-		/*Difference between estimated and observated i-point */
+		/* Difference between estimated and observated i-point */
 		stat_vect.error[j] = out_z - stat_vect.estima[j];
 		G_debug(1, "CrossCorrelation: stat_vect.error[%d]  =  %lf", j,
 			stat_vect.error[j]);
 
-		observ = swap(observ, j, ndata - 1);	/* Once the last value is let out, it is swap with j-value */
+		/* Once the last value is left out, it is swapped with j-value */
+		observ = swap(observ, j, ndata - 1);
+
+		G_percent(j, ndata, 2);
 	    }
 
 	    mean[lbd] = calc_mean(stat_vect.error, stat_vect.n_points);
@@ -295,8 +304,9 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 		calc_standard_deviation(stat_vect.error, stat_vect.n_points);
 
 	    G_message(_("Mean = %.5lf"), mean[lbd]);
-	    G_message(_("Root Means Square (RMS) = %.5lf"),
+	    G_message(_("Root Mean Square (RMS) = %.5lf"),
 		      rms[lbd]);
+	    G_message("---");
 	}			/* ENDFOR each lambda value */
 
 	G_free_matrix(N);
@@ -306,7 +316,7 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 	G_free_vector(parVect);
 #ifdef nodef
 	/*TODO: if the minimum lambda is wanted, the function declaration must be changed */
-	/*At this moment, consider rms only */
+	/* At this moment, consider rms only */
 	rms_min = find_minimum(rms, &lbd_min);
 	stdev_min = find_minimum(stdev, &lbd_min);
 
@@ -321,11 +331,11 @@ int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE,
 	*lambda_min = lambda[lbd_min];
 #endif
 
-	G_message(_("Results into a table:"));
-	G_message(_(" lambda    | mean        | rms         |"));
+	G_message(_("Table of results:"));
+	fprintf(stdout, _("    lambda |       mean |        rms |\n"));
 	for (lbd = 0; lbd < PARAM_LAMBDA; lbd++) {
-	    G_message(_(" %-10.5f| %-12.4f| %-12.4f|"), lambda[lbd],
-		      mean[lbd], rms[lbd]);
+	    fprintf(stdout, " %9.5f | %10.4f | %10.4f |\n", lambda[lbd],
+		    mean[lbd], rms[lbd]);
 	}
 	
 	G_free_vector(mean);
@@ -343,23 +353,23 @@ void interpolation(struct ParamInterp *interp, boolean bilin)
 {
     if (bilin == P_BILINEAR) {	/* Bilinear interpolation */
 	normalDefBilin(interp->N, interp->TN, interp->Q, interp->obsVect,
-		       interp->passoE, interp->passoN, interp->nsplx,
+		       interp->stepE, interp->stepN, interp->nsplx,
 		       interp->nsply, interp->region.west,
 		       interp->region.south, interp->ndata,
 		       interp->nparam_spl, interp->BW);
 
 	nCorrectGrad(interp->N, interp->lambda[lbd], interp->nsplx,
-		     interp->nsply, interp->passoE, interp->passoN);
+		     interp->nsply, interp->stepE, interp->stepN);
     }
     else {			/* Bicubic interpolation */
 	normalDefBicubic(interp->N, interp->TN, interp->Q, interp->obsVect,
-			 interp->passoE, interp->passoN, interp->nsplx,
+			 interp->stepE, interp->stepN, interp->nsplx,
 			 interp->nsply, interp->region.west,
 			 interp->region.south, interp->ndata,
 			 interp->nparam_spl, interp->BW);
 
 	nCorrectGrad(interp->N, interp->lambda[lbd], interp->nsplx,
-		     interp->nsply, interp->passoE, interp->passoN);
+		     interp->nsply, interp->stepE, interp->stepN);
     }
     return TRUE;
 }
