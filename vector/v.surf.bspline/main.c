@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     mask_opt->required = NO;
 
     stepE_opt = G_define_option();
-    stepE_opt->key = "sie";
+    stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
     stepE_opt->answer = "4";
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
-    stepN_opt->key = "sin";
+    stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
     stepN_opt->answer = "4";
@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
 
 	    Vect_close(&In);
 
-	    G_done_msg(_("Cross validation finished for sie = %f and sin = %f"), stepE, stepN);
+	    G_done_msg(_("Cross validation finished for ew_step = %f and ns_step = %f"), stepE, stepN);
 	    exit(EXIT_SUCCESS);
 	}
     }
