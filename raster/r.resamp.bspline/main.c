@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     mask_opt->required = NO;
 
     stepE_opt = G_define_option();
-    stepE_opt->key = "se";
+    stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
     stepE_opt->description =
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
-    stepN_opt->key = "sn";
+    stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
     stepN_opt->description =
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
     if (stepE_opt->answer) {
 	stepE = atof(stepE_opt->answer);
 	if (stepE <= .0)
-	    G_fatal_error(_("se must be positive"));
+	    G_fatal_error(_("ew_step must be positive"));
     }
     else
         stepE = src_reg.ew_res * 1.5;
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
     if (stepN_opt->answer) {
 	stepN = atof(stepN_opt->answer);
 	if (stepN <= .0)
-	    G_fatal_error(_("sn must be positive"));
+	    G_fatal_error(_("ns_step must be positive"));
     }
     else
         stepN = src_reg.ns_res * 1.5;
@@ -363,7 +363,7 @@ int main(int argc, char *argv[])
 	else {
 	    G_debug(1, "Cross validation finished correctly");
 
-	    G_done_msg(_("Cross validation finished for se = %f and sn = %f"), stepE, stepN);
+	    G_done_msg(_("Cross validation finished for ew_step = %f and ns_step = %f"), stepE, stepN);
 
 	    segment_release(&in_seg);	/* release memory  */
 	    close(in_fd);
