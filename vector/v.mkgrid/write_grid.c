@@ -5,7 +5,7 @@
 #include "grid_structs.h"
 #include "local_proto.h"
 
-int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbreaks)
+int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbreaks, int out_type)
 {
 
     int i, k, j;
@@ -65,7 +65,7 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 		       angle);
 		rotate(&next_x, &dum, grid_info->origin_x,
 		       grid_info->origin_y, angle);
-		write_vect(x, y, next_x, dum, Map, Points);
+		write_vect(x, y, next_x, dum, Map, Points, out_type);
 
 		y = sy;
 		x = next_x = snext_x;
@@ -95,7 +95,7 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 	    rotate(&dum, &next_y, grid_info->origin_x, grid_info->origin_y,
 		   angle);
 
-	    write_vect(x, y, dum, next_y, Map, Points);
+	    write_vect(x, y, dum, next_y, Map, Points, out_type);
 
 	    x = sx;
 	    y = next_y = snext_y;
@@ -117,7 +117,7 @@ static double yarray[10];
 #define  NUM_POINTS  2
 
 int write_vect(double x1, double y1, double x2, double y2,
-	       struct Map_info *Map, struct line_pnts *Points) /* new with Vlib */
+	       struct Map_info *Map, struct line_pnts *Points, int out_type)
 {
     static struct line_cats *Cats = NULL;
 
@@ -132,8 +132,7 @@ int write_vect(double x1, double y1, double x2, double y2,
 
     if (0 > Vect_copy_xyz_to_pnts(Points, xarray, yarray, NULL, NUM_POINTS))
 	G_fatal_error(_("Out of memory"));
-
-    Vect_write_line(Map, GV_BOUNDARY, Points, Cats);
+    Vect_write_line(Map, out_type, Points, Cats);
 
     return 0;
 }
