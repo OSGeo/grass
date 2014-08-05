@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
 	    *from_field, *to_field;
 	struct Option *out, *max, *min, *table;
 	struct Option *upload, *column, *to_column;
+	struct Option *sep;
     } opt;
     struct {
 	struct Flag *print, *all;
@@ -76,6 +77,7 @@ int main(int argc, char *argv[])
     struct bound_box fbox, box;
     dbCatValArray cvarr;
     dbColumn *column;
+    char *sep;
 
     do_all = FALSE;
     print_as_matrix = FALSE;
@@ -198,6 +200,9 @@ int main(int argc, char *argv[])
     opt.table->description =
 	_("Name of table created when the 'distance to all' flag is used");
 
+    opt.sep = G_define_standard_option(G_OPT_F_SEP);
+    opt.sep->label = _("Field separator for printing output to stdout");
+
     flag.print = G_define_flag();
     flag.print->key = 'p';
     flag.print->label =
@@ -285,6 +290,8 @@ int main(int argc, char *argv[])
     }
     if (Upload[i].upload != END)
 	G_fatal_error(_("Not enough column names"));
+
+    sep = G_option_to_separator(opt.sep);
 
     /* Open 'from' vector */
     Vect_set_open_level(2);
@@ -1244,10 +1251,10 @@ int main(int argc, char *argv[])
     if (flag.print->answer) {	/* print header */
 	fprintf(stdout, "from_cat");
 	if (do_all)
-	    fprintf(stdout, "|to_cat");
+	    fprintf(stdout, "%sto_cat", sep);
 	i = 0;
 	while (Upload[i].upload != END) {
-	    fprintf(stdout, "|%s", Upload[i].column);
+	    fprintf(stdout, "%s%s", sep, Upload[i].column);
 	    i++;
 	}
 	fprintf(stdout, "\n");
@@ -1357,14 +1364,14 @@ int main(int argc, char *argv[])
 		    for (j = 0; j < nfrom; j++) {
 			if (j == 0)
 			    fprintf(stdout, " ");
-			fprintf(stdout, "|%d", Near[j].to_cat);
+			fprintf(stdout, "%s%d", sep, Near[j].to_cat);
 		    }
 		    fprintf(stdout, "\n");
 		}
 		if (i % nfrom == 0) {
 		    fprintf(stdout, "%d", Near[i].from_cat);
 		    for (j = 0; j < nfrom; j++) {
-			print_upload(Near, Upload, i + j, &cvarr, catval);
+			print_upload(Near, Upload, i + j, &cvarr, catval, sep);
 		    }
 		    fprintf(stdout, "\n");
 		}
@@ -1372,8 +1379,8 @@ int main(int argc, char *argv[])
 	    else {
 		fprintf(stdout, "%d", Near[i].from_cat);
 		if (do_all)
-		    fprintf(stdout, "|%d", Near[i].to_cat);
-		print_upload(Near, Upload, i, &cvarr, catval);
+		    fprintf(stdout, "%s%d", sep, Near[i].to_cat);
+		print_upload(Near, Upload, i, &cvarr, catval, sep);
 		fprintf(stdout, "\n");
 	    }
 	}
