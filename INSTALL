@@ -98,6 +98,9 @@ Next step is the compilation itself:
 
     make       
 
+Detailed Wiki notes for various operating systems:
+http://grasswiki.osgeo.org/wiki/Compile_and_Install
+
 
 Note for Solaris users:
 
@@ -164,10 +167,11 @@ or run
 See the ReadMe.rtf in the ./macosx/ folder.
 
 
-(F) RUNNING GRASS
+(F) RUNNING GRASS GIS
 
 Download a sample data package from the GRASS web site, see
-http://grass.osgeo.org/download/data.php
+http://grass.osgeo.org/download/sample-data/
+
 Extract the data set and point "database" in the
 GRASS startup menu to the directory.
 
@@ -260,8 +264,8 @@ The -g and -Wall compiler flags are often useful for assisting debugging:
 
   CFLAGS="-g -Wall" ./configure
 
-See also the file
-./doc/debugging.txt
+See also the file ./doc/debugging.txt and the Wiki page
+http://grasswiki.osgeo.org/wiki/GRASS_Debugging
 
 
 (K) LARGE FILE SUPPORT (for raster maps)
@@ -271,17 +275,18 @@ GRASS >= 7.0 includes improved support for reading and writing large files
   configure [...] --enable-largefile
 you should be able to have raster and vector maps which are larger than 2GB.
 
-Individual programs may or may not work with large files - please report.
+While most code has been updated, individual programs may not yet work with
+large files - please report.
 
 
 (L) SUPPORT
 
 Note that this code is still actively being developed and errors inevitably
 turn up. If you find a bug, please report it to the GRASS bug tracking system
-so we can fix it. See http://grass.osgeo.org/bugtracking/index.php
+so we can fix it. See http://grass.osgeo.org/development/bug-tracking/
 
 If you are interested in helping to develop GRASS, please join the GRASS
-developers mailing list. See http://grass.osgeo.org/devel/index.php
+developers mailing list. See http://grass.osgeo.org/development/
 
 
 (M) GRASS PROGRAMMER'S MANUAL
@@ -292,14 +297,15 @@ http://grass.osgeo.org/programming7/
 
 (N) CONTRIBUTING CODE AND PATCHES
 
-Please see ./SUBMITTING, ./SUBMITTING_DOCS, ./SUBMITTING_PYTHON,
-and ./SUBMITTING_SCRIPTS in this directory.
+Please see ./SUBMITTING in this directory, or better,
+http://trac.osgeo.org/grass/wiki/Submitting
 
 
 (O) DRAFT TUTORIAL
 
-http://grass.osgeo.org/wiki/GRASS_6_Tutorial
+http://grass.osgeo.org/documentation/first-time-users/
 
 ------------------
-(C) 1999-2010 by The GRASS Development Team
-$Date$
+(C) 1999-2014 by The GRASS Development Team
+
+Last changed: $Date$
