@@ -1,36 +1,36 @@
 
-/************************************************************************
- *									*
- * MODULE:       v.outlier						*
- * 									*
- * AUTHOR(S):    Roberto Antolin					*
- *               							*
- * PURPOSE:      Removal of data outliers				*
- *               							*
- * COPYRIGHT:    (C) 2006 by Politecnico di Milano - 			*
- *			     Polo Regionale di Como			*
- *									*
- *               This program is free software under the 		*
- *               GNU General Public License (>=v2). 			*
- *               Read the file COPYING that comes with GRASS		*
- *               for details.						*
- *									*
- ************************************************************************/
+/**********************************************************************
+ *
+ * MODULE:       v.outlier
+ *
+ * AUTHOR(S):    Roberto Antolin
+ *               
+ * PURPOSE:      Removal of data outliers
+ *
+ * COPYRIGHT:    (C) 2006 by Politecnico di Milano -
+ *			     Polo Regionale di Como
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **********************************************************************/
 
- /*INCLUDES*/
+/* INCLUDES */
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include "outlier.h"
 
-    /* GLOBAL VARIABLES DEFINITIONS */
+/* GLOBAL VARIABLES */
 int nsply, nsplx;
 double stepN, stepE, Thres_Outlier;
 
-/*--------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
-    /* Variables' declarations */
+    /* Variables declarations */
     int nsplx_adj, nsply_adj;
     int nsubregion_col, nsubregion_row;
     int subregion = 0, nsubregions = 0;
@@ -48,23 +48,23 @@ int main(int argc, char *argv[])
     double *TN, *Q, *parVect;	/* Interpolating and least-square vectors */
     double **N, **obsVect;	/* Interpolation and least-square matrix */
 
-    /* Structs' declarations */
+    /* Structs declarations */
     struct Map_info In, Out, Outlier, Qgis;
     struct Option *in_opt, *out_opt, *outlier_opt, *qgis_opt, *stepE_opt,
 	*stepN_opt, *lambda_f_opt, *Thres_O_opt, *filter_opt;
     struct Flag *spline_step_flag;
     struct GModule *module;
 
-    struct Cell_head elaboration_reg, original_reg;
     struct Reg_dimens dims;
+    struct Cell_head elaboration_reg, original_reg;
     struct bound_box general_box, overlap_box;
 
     struct Point *observ;
 
     dbDriver *driver;
 
-    /*------------------------------------------------------------------------------------------*/
-    /* Options' declaration */
+    /*----------------------------------------------------------------*/
+    /* Options declaration */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
@@ -97,20 +97,22 @@ int main(int argc, char *argv[])
     qgis_opt->description = _("Name of vector map for visualization in QGIS");
 
     stepE_opt = G_define_option();
-    stepE_opt->key = "soe";
+    stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
     stepE_opt->answer = "10";
     stepE_opt->description =
-	_("Interpolation spline step value in east direction");
+	_("Length of each spline step in the east-west direction");
+    stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
-    stepN_opt->key = "son";
+    stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
     stepN_opt->answer = "10";
     stepN_opt->description =
-	_("Interpolation spline step value in north direction");
+	_("Length of each spline step in the north-south direction");
+    stepN_opt->guisection = _("Settings");
 
     lambda_f_opt = G_define_option();
     lambda_f_opt->key = "lambda_i";
@@ -118,6 +120,7 @@ int main(int argc, char *argv[])
     lambda_f_opt->required = NO;
     lambda_f_opt->description = _("Tykhonov regularization weight");
     lambda_f_opt->answer = "0.1";
+    lambda_f_opt->guisection = _("Settings");
 
     Thres_O_opt = G_define_option();
     Thres_O_opt->key = "thres_o";
@@ -136,7 +139,6 @@ int main(int argc, char *argv[])
 
     /* Parsing */
     G_gisinit(argv[0]);
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -187,8 +189,8 @@ int main(int argc, char *argv[])
 	db_close_database_shutdown_driver(driver);
     }
 
-    Vect_set_open_level(1);
     /* Open input vector */
+    Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
 	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
@@ -243,7 +245,7 @@ int main(int argc, char *argv[])
 	Vect_hist_command(&Qgis);
     }
 
-    /* Start driver and open db */
+    /* Open driver and database */
     driver = db_start_driver_open_database(dvr, db);
     if (driver == NULL)
 	G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
@@ -274,7 +276,7 @@ int main(int argc, char *argv[])
       ----------------------------------------------------------------*/
 
     /* Fixing parameters of the elaboration region */
-    P_zero_dim(&dims);
+    P_zero_dim(&dims);		/* Set dim struct to zero */
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
@@ -285,8 +287,8 @@ int main(int argc, char *argv[])
     P_get_edge(P_BILINEAR, &dims, stepE, stepN);
     P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
-    G_verbose_message(_("adjusted EW splines %d"), nsplx_adj);
-    G_verbose_message(_("adjusted NS splines %d"), nsply_adj);
+    G_verbose_message(_("Adjusted EW splines %d"), nsplx_adj);
+    G_verbose_message(_("Adjusted NS splines %d"), nsply_adj);
 
     /* calculate number of subregions */
     edgeE = dims.ew_size - dims.overlap - 2 * dims.edge_v;
@@ -314,23 +316,24 @@ int main(int argc, char *argv[])
 		      GENERAL_ROW);
 
 	if (elaboration_reg.north > original_reg.north) {	/* First row */
+
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  FIRST_ROW);
 	}
 
 	if (elaboration_reg.south <= original_reg.south) {	/* Last row */
+
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  LAST_ROW);
 	    last_row = TRUE;
 	}
 
 	nsply =
-	    ceil((elaboration_reg.north - elaboration_reg.south) / stepN) +
-	    0.5;
+	    ceil((elaboration_reg.north -
+		  elaboration_reg.south) / stepN) + 0.5;
 	/*
-	if (nsply > NSPLY_MAX) {
+	if (nsply > NSPLY_MAX)
 	    nsply = NSPLY_MAX;
-	}
 	*/
 	G_debug(1, "nsply = %d", nsply);
 
@@ -341,31 +344,31 @@ int main(int argc, char *argv[])
 
 	    subregion++;
 	    if (nsubregions > 1)
-		G_message(_("subregion %d of %d"), subregion, nsubregions);
+		G_message(_("Processing subregion %d of %d..."), subregion, nsubregions);
 	    else /* v.outlier -e will report mean point distance: */
-		G_warning(_("No subregions found! Check values for 'soe' and 'son' parameters"));
+		G_warning(_("No subregions found! Check values for 'ew_step' and 'ns_step' parameters"));
 
 	    P_set_regions(&elaboration_reg, &general_box, &overlap_box, dims,
 			  GENERAL_COLUMN);
 
 	    if (elaboration_reg.west < original_reg.west) {	/* First column */
+
 		P_set_regions(&elaboration_reg, &general_box, &overlap_box,
 			      dims, FIRST_COLUMN);
 	    }
 
 	    if (elaboration_reg.east >= original_reg.east) {	/* Last column */
+
 		P_set_regions(&elaboration_reg, &general_box, &overlap_box,
 			      dims, LAST_COLUMN);
 		last_column = TRUE;
 	    }
-
 	    nsplx =
-		ceil((elaboration_reg.east - elaboration_reg.west) / stepE) +
-		0.5;
+		ceil((elaboration_reg.east -
+		      elaboration_reg.west) / stepE) + 0.5;
 	    /*
-	    if (nsplx > NSPLX_MAX) {
+	    if (nsplx > NSPLX_MAX)
 		nsplx = NSPLX_MAX;
-	    }
 	    */
 	    G_debug(1, "nsplx = %d", nsplx);
 
@@ -380,7 +383,7 @@ int main(int argc, char *argv[])
 
 		nparameters = nsplx * nsply;
 
-		/* Mean's calculation */
+		/* Mean calculation */
 		mean = P_Mean_Calc(&elaboration_reg, observ, npoints);
 
 		/* Least Squares system */
@@ -437,16 +440,16 @@ int main(int argc, char *argv[])
 	    else {
 		G_free(observ);
 		G_warning(_("No data within this subregion. "
-			    "Consider changing the spline step."));
+			    "Consider increasing spline step values."));
 	    }
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 
-    /* Dropping auxiliar table */
+    /* Drop auxiliar table */
     if (npoints > 0) {
-	G_debug(1, "Dropping <%s>", table_name);
+	G_debug(1, "%s: Dropping <%s>", argv[0], table_name);
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
-	    G_fatal_error(_("Auxiliar table could not be dropped"));
+	    G_fatal_error(_("Auxiliary table could not be dropped"));
     }
 
     db_close_database_shutdown_driver(driver);
@@ -462,4 +465,4 @@ int main(int argc, char *argv[])
     G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
-}				/*!END MAIN */
+}				/*END MAIN */
