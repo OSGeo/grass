@@ -1,5 +1,9 @@
-GRASS Debugging:
+GRASS GIS Debugging:
 
+See also
+http://grasswiki.osgeo.org/wiki/GRASS_Debugging
+
+----------------------------------------------------
 At user level:
 
  Print debugging message if variable DEBUG
@@ -140,3 +144,4 @@ the GCC tool 'gprof'.
 
 Note that when 'make distclean' is run, the manual changes to 
 include/Make/Platform.make are also removed.
+
