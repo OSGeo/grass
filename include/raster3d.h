@@ -255,6 +255,18 @@ typedef int write_fn(int, const void *, void *);
 typedef int read_fn(int, void *, void *);
 
 /*---------------------------------------------------------------------------*/
+/* for storing values of 3D raster block in a flat array */
+typedef struct
+{
+    DCELL *array;
+    int sx;
+    int sy;
+    int sz;
+
+} RASTER3D_Array_double;
+
+#define RASTER3D_ARRAY_ACCESS(arr, x, y, z) \
+    ((arr)->array[(arr)->sx * (arr)->sy * (z) + (arr)->sx * (y) + (x)])
 
 /*============================== Prototypes ================================*/
 
