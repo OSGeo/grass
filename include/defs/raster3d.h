@@ -112,6 +112,11 @@ int Rast3d_copy_to_xdr(const void *, int);
 int Rast3d_init_copy_from_xdr(RASTER3D_Map *, int);
 int Rast3d_copy_from_xdr(int, void *);
 
+/* gradient.c */
+void Rast3d_gradient_double(RASTER3D_Array_double *, double *,
+			    RASTER3D_Array_double *, RASTER3D_Array_double *,
+			    RASTER3D_Array_double *);
+
 /* history.c */
 int Rast3d_write_history(const char *, struct History *);
 int Rast3d_read_history(const char *, const char *, struct History *);
