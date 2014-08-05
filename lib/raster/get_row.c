@@ -92,12 +92,14 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading raster data"));
+	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
+		      row, fcb->name);
 
     *nbytes = fcb->nbytes;
 
     if ((size_t) G_zlib_read(fcb->data_fd, readamount, data_buf, bufsize) != bufsize)
-	G_fatal_error(_("Error reading raster data"));
+	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
+		      row, fcb->name);
 }
 
 static void rle_decompress(unsigned char *dst, const unsigned char *src,
@@ -130,13 +132,15 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     int n;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading raster data"));
+	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
+		      row, fcb->name);
 
     cmp = G__alloca(readamount);
 
     if (read(fcb->data_fd, cmp, readamount) != readamount) {
 	G__freea(cmp);
-	G_fatal_error(_("Error reading raster data"));
+	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
+		      row, fcb->name);
     }
 
     /* Now decompress the row */
@@ -170,10 +174,12 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
     *nbytes = fcb->nbytes;
 
     if (lseek(fcb->data_fd, (off_t) row * bufsize, SEEK_SET) == -1)
-	G_fatal_error(_("Error reading raster data"));
+	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
+		      row, fcb->name);
 
     if (read(fcb->data_fd, data_buf, bufsize) != bufsize)
-	G_fatal_error(_("Error reading raster data"));
+	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
+		      row, fcb->name);
 }
 
 #ifdef HAVE_GDAL
@@ -208,7 +214,8 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
     }
 
     if (err != CE_None)
-	G_fatal_error(_("Error reading raster data via GDAL"));
+	G_fatal_error(_("Error reading raster data via GDAL for row %d of <%s>"),
+		      row, fcb->name);
 }
 #endif
 
@@ -819,10 +826,10 @@ static int read_null_bits(int fd, int row)
     offset = (off_t) size * R;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0)
-	G_fatal_error(_("Error reading null row %d"), R);
+	G_fatal_error(_("Error reading null row %d for <%s>"), R, fcb->name);
 
     if (read(null_fd, flags, size) != size)
-	G_fatal_error(_("Error reading null row %d"), R);
+	G_fatal_error(_("Error reading null row %d for <%s>"), R, fcb->name);
 
     return 1;
 }
