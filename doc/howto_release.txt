@@ -159,6 +159,22 @@ Contents
  o stable release: update cronjob 'cron_grass_HEAD_src_snapshot.sh' to next but one
                    release tag for the differences
 
+ o WinGRASS notes:
+
+   Update grass_packager_release.bat, eg.
+
+     set MAJOR=7
+     set MINOR=0
+     set PATCH=0beta3
+
+   Update addons (grass_addons.sh) rules, eg.
+
+     compile $SVN_PATH/grass7 $GISBASE_PATH/grass700beta3   $ADDON_PATH/grass700beta3/addons
+
+   Modify grass_copy_wwwroot.sh accordingly, eg.
+
+     copy_addon 700beta3 7.0.0beta3
+
 2. Tell others about it:
 
  * If release candidate:
