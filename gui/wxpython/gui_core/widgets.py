@@ -898,6 +898,7 @@ class SearchModuleWidget(wx.Panel):
         self._results = [] # list of found nodes
         self._resultIndex = -1
         self._searchKeys = ['description', 'keywords', 'command']
+        self._oldValue = ''
         
         self.moduleSelected = Signal('SearchModuleWidget.moduleSelected')
         self.showSearchResult = Signal('SearchModuleWidget.showSearchResult')
@@ -968,6 +969,11 @@ class SearchModuleWidget(wx.Panel):
     def OnSearchModule(self, event):
         """Search module by keywords or description"""
         value = self._search.GetValue()
+        if value == self._oldValue:
+            event.Skip()
+            return
+        self._oldValue = value
+
         if len(value) <= 2:
             if len(value) == 0: # reset
                 commands = self._searchModule(keys=['command'], value='')
