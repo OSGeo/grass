@@ -1,19 +1,28 @@
 Testing GRASS GIS source code and modules
 =========================================
 
+If you are already familiar with the basic concepts
+of GRASS testing framework, you might want to skip to one of:
+
+* :ref:`test-module` section
+* :ref:`test-c` section
+* :ref:`test-python` section
+* :ref:`test-doctest` section
+* :class:`~gunittest.case.TestCase` class
+
+
 Introduction
 ------------
 
-For the testing we will be using system based on Python `unittest`_ package.
-The system is not finished yet.
+For the testing in GRASS GIS, we are using a `gunittest` package and
+we usually refer to the system of writing and running tests
+as to a *GRASS testing framework*.
 
-For now, the best way is to use just Python unittest package as is.
-Additionally, it is possible to use Python `doctest`_ package
-which is compatible with unittest at certain level.
-Both packages are part of the standard  Python distribution.
-
-The content of this document may become part of submitting files and
-the documentation of testing framework classes and scripts.
+The framework is based on Python `unittest`_ package with a large number
+of GRASS-specific improvements, extensions and changes. These include
+things such as creation of GRASS-aware HTML test reports,
+or running of test in the way that process terminations potentially
+caused by C library functions does not influence the main testing process.
 
 
 Basic example
@@ -105,7 +114,7 @@ Building blocks and terminology
 test function and test method
     A *test function* is a test of one particular feature or a test of
     one particular result.
-    A *test function* is referred as *test method*, *individual test*
+    A *test function* is referred to as *test method*, *individual test*
     or just *test*.
 
 assert function and assert method
@@ -115,18 +124,24 @@ assert function and assert method
     other or that module run ends with successfully.
 
 test case
+    The test methods testing one particular topic or feature are in one
+    test case class.
+
+    From another point of view, one test case class contains all tests
+    which require the same preparation and cleanup steps. 
     In other words, a *test case* class contains all tests which are
     using the same *test fixture*.
-    
-    The is also a general :class:`~gunittest.case.TestCase` class which
+
+    There is also a general :class:`~gunittest.case.TestCase` class which
     all concrete test case classes should inherit from to get all
     GRASS-specific testing functionality and also to be found
     by the testing framework.
 
 test suite
     A *test suite*, or also *testsuite*, is a set of tests focused on one
-    topic, functionality or unit. In GRASS GIS, it is a set of files in
-    one ``testsuite`` directory. The test files in one ``testsuite``
+    topic, functionality or unit (similarly to test case).
+    In GRASS GIS, it is a set of files in one ``testsuite`` directory.
+    The test files in one ``testsuite``
     directory are expected to test what is in the parent directory
     of a given ``testsuite`` directory. This is used to organize
     tests in the source code and also to generate test reports.
@@ -134,6 +149,9 @@ test suite
     The term *test suite* may also refer to ``TestSuite`` class
     which is part of Python `unittest`_ test invocation mechanism
     used by `gunittest` internally.
+    
+    More generally, a *test suite* is a group of test cases or any tests
+    (test methods, test cases and other test suites) in one or more files.
 
 test file
     A *test file* is a Python script executable as a standalone process.
@@ -145,7 +163,12 @@ test file
     difference from Python `unittest`_. Test file name should be unique
     but does not have to contain all parent directory names, for example
     it can consist from a simplified name of a module plus a word or two
-    describing which functionality is tested.
+    describing which functionality is tested. The name should not contain
+    dots (except for the ``.py`` suffix).
+    
+    Alternatively, a test file could be called *test script* or
+    *test module* (both in Python and GRASS sense) but note that
+    none of these is used.
 
 test runner and test invoker
     Both *test runner* and *test invoker* refer to classes, functions or
@@ -171,6 +194,13 @@ test fixture (test set up and tear down)
     of maps, using temporary region, setting computational region,
     or generating random maps. The cleanup step should remove temporary
     region as well as remove all created maps and files.
+
+test report
+    A *test report* is a document or set of documents.
+
+    Note that also *test result* is used also used in similar context
+    because the class responsible for representing or creating the report
+    in Python `unittest`_ package is called ``TestResult``.
 
 
 Testing with gunittest package in general
@@ -235,6 +265,8 @@ methods which you can use to test your results. For test of more complex
 GRASS-specific results refer to :class:`gunittest.case.TestCase` class
 documentation.
 
+
+.. _test-module:
 
 Tests of GRASS modules
 ----------------------
@@ -301,15 +333,36 @@ in `setUp()` method and then modify it in test methods.
     applicable in some cases but in most cases `in` is exactly the
     operation needed).
 
+.. _test-c:
 
 Tests of C and C++ code
 -----------------------
 
+There are basically two possibilities how to test C and C++ code.
+If you are testing GRASS library code the functions which are part of API
+these functions are exposed through Python ``ctypes`` and thus can be tested
+in Python. See section :ref:`test-python` for reference.
+
+However, more advantageous and more preferable (although sometimes
+more complicated) solution is to write a special program, possibly
+GRASS module (i.e., using ``G_parser``).
+
+
+.. _test-python:
+
 Tests of Python code
 --------------------
 
-Use `gunittest` for this purpose in the same way as `unittest`_ would be used.
+For testing of Python code contained in some package, use
+`gunittest` in the same way as `unittest`_ would be used.
+This basically means that if you will write tests of Python functions
+and C functions exposed to Python
+through ``ctypes`` API, you might want to focus more on `unittest`_
+documentation since you will perhaps need the more standard
+assert functions rather then the GRASS-specific ones.
 
+
+.. _test-doctest:
 
 Testing Python code with doctest
 --------------------------------
@@ -433,21 +486,6 @@ with special data.
     The more general category you choose for your tests the more testing data
     can applied to your tests and the more different circumstances can be tried
     with your tests.
-
-.. note::
-    gunittest is under development but, so some things can change, however
-    this should not stop you from writing tests since the actual differences
-    in your code will be only subtle.
-
-.. note::
-    gunittest is not part of GRASS GIS source code yet, it is available
-    separately. If you don't want to deal with some other code now,
-    just write tests based only on Python ``unittest``. This will limit
-    your possibilities of convenient testing but should not stop you
-    from writing tests, especially if you will write tests of Python functions,
-    and C functions exposed to Python through ctypes API. (Note that it might
-    be a good idea to write tests for library function you rely on in your
-    GRASS module).
 
 
 Data specific to one test
