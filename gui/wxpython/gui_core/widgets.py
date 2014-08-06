@@ -42,6 +42,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import string
+import re
 
 import wx
 import wx.lib.mixins.listctrl as listmix
