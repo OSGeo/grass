@@ -16,6 +16,163 @@ The content of this document may become part of submitting files and
 the documentation of testing framework classes and scripts.
 
 
+Basic example
+-------------
+
+If you are writing a test of a GRASS module, 
+create a Python script with the content derived from the example bellow.
+When using existing existing maps, suppose you are in North Carolina SPM
+GRASS sample location.
+
+The file can contain one or more test case classes. Each class
+can contain one or more test methods (functions).
+Here we create one test case class with one test method.
+The other two methods are class methods ensuring the right environment
+for all test methods inside a test case class.
+When a test file becomes part of source code (which is the usual case)
+it must be placed into a directory named ``testsuite``.
+
+.. code-block:: python
+
+    from grass.gunittest import TestCase, test
+
+
+    # test case class must be derived from grass.gunittest.TestCase
+    class TestSlopeAspect(TestCase):
+
+        @classmethod
+        def setUpClass(cls):
+            """Ensures expected computational region"""
+            # to not override mapset's region (which might be used by other tests)
+            cls.use_temp_region()
+            # cls.runModule or self.runModule is used for general module calls
+            cls.runModule('g.region', rast='elevation')
+            # note that the region set by default for NC location is the same as
+            # the elevation raster map, this is an example shows what to do
+            # in the general case
+
+        @classmethod
+        def tearDownClass(cls):
+            cls.del_temp_region()
+
+        # test method must start with test_
+        def test_limits(self):
+            """Test that slope and aspect are in expected limits"""
+            # we don't have to delete (g.remove) the maps
+            # but we need to use unique names within one test file
+            slope = 'limits_slope'
+            aspect = 'limits_aspect'
+            # self.assertModule is used to call module which we test
+            # we expect module to finish successfully
+            self.assertModule('r.slope.aspect', elevation='elevation',
+                              slope=slope, aspect=aspect)
+            # function tests if map's min and max are within expected interval
+            self.assertRasterMinMax(map=slope, refmin=0, refmax=90,
+                                    msg="Slope in degrees must be between 0 and 90")
+            self.assertRasterMinMax(map=aspect, refmin=0, refmax=360,
+                                    msg="Aspect in degrees must be between 0 and 360")
+
+
+    if __name__ == '__main__':
+        test()
+
+In the example we have used only two assert methods, one to check that
+module runs and end successfully and the other to test that map values are
+within an expect interval. There is a much larger selection of assert methods
+in :class:`~gunittest.case.TestCase` class documentation
+and also in Python `unittest`_ package documentation.
+
+To run the test, run GRASS GIS, use NC SPM sample location and create
+a separate mapset (name it ``test`` for example). Then go to the directory
+with the test file and run it:
+
+.. code-block:: sh
+
+    python some_test_file.py
+
+The output goes to the terminal in this case. Read further to see
+also more advanced ways of invoking the tests.
+
+We have shown a test of a GRASS module using NC sample location.
+However, tests can be written also for C and Python library and also
+for internal functions in modules. See the rests of this document
+for a complete guide.
+
+
+Building blocks and terminology
+-------------------------------
+
+test function and test method
+    A *test function* is a test of one particular feature or a test of
+    one particular result.
+    A *test function* is referred as *test method*, *individual test*
+    or just *test*.
+
+assert function and assert method
+    An *assert function* (or *assert method*) refers to a function
+    which checks that some predicate is fulfilled. For example,
+    predicate can be that two raster maps does not differ from each
+    other or that module run ends with successfully.
+
+test case
+    In other words, a *test case* class contains all tests which are
+    using the same *test fixture*.
+    
+    The is also a general :class:`~gunittest.case.TestCase` class which
+    all concrete test case classes should inherit from to get all
+    GRASS-specific testing functionality and also to be found
+    by the testing framework.
+
+test suite
+    A *test suite*, or also *testsuite*, is a set of tests focused on one
+    topic, functionality or unit. In GRASS GIS, it is a set of files in
+    one ``testsuite`` directory. The test files in one ``testsuite``
+    directory are expected to test what is in the parent directory
+    of a given ``testsuite`` directory. This is used to organize
+    tests in the source code and also to generate test reports.
+
+    The term *test suite* may also refer to ``TestSuite`` class
+    which is part of Python `unittest`_ test invocation mechanism
+    used by `gunittest` internally.
+
+test file
+    A *test file* is a Python script executable as a standalone process.
+    It does not set up any special environment and runs where it was invoked.
+    The testing framework does not rely on the file to end in a standard
+    way which means that if one file ends with segmentation fault
+    the testing framework can continue in testing of other test files. 
+    Test files are central part `gunittest` system and are also the biggest
+    difference from Python `unittest`_. Test file name should be unique
+    but does not have to contain all parent directory names, for example
+    it can consist from a simplified name of a module plus a word or two
+    describing which functionality is tested.
+
+test runner and test invoker
+    Both *test runner* and *test invoker* refer to classes, functions or
+    scripts used to run (invoke) tests or test files. One of the terms may
+    fade of in the future (probably *invoke* because it is not used by
+    Python `unittest`_).
+
+test fixture (test set up and tear down)
+    The preparation of the test is called *setup* or *set up* and the cleaning
+    after the test is called *teardown* or *tear down*. A *test fixture* refers
+    to these two steps and also to the environment where the test or tests
+    are executed.
+
+    Each test case class can define ``setUp``, ``setUpClass``, ``tearDown``
+    and ``tearDownClass`` methods to implement preparation and cleanup
+    steps for tests it contains. The methods ending with ``Class`` are
+    class methods (in Python terminology) and should be defined using
+    ``@classmethod`` decorator and with ``cls`` as first argument. These
+    methods are executed once for the whole class while the methods
+    without ``Class`` are executed for each test method. 
+
+    In GRASS GIS, the preparation may, but does not have to, contain imports
+    of maps, using temporary region, setting computational region,
+    or generating random maps. The cleanup step should remove temporary
+    region as well as remove all created maps and files.
+
+
 Testing with gunittest package in general
 -----------------------------------------
 
