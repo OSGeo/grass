@@ -44,6 +44,8 @@ import sys
 import string
 import re
 
+from datetime import datetime
+
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
