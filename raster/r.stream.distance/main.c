@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
     G_begin_distance_calculations();
 
-    fifo_max = 4 * nrows * ncols;
+    fifo_max = 4 * (nrows + ncols);
     fifo_points = (POINT *) G_malloc((fifo_max + 1) * sizeof(POINT));
 
     if (!segmentation) {
