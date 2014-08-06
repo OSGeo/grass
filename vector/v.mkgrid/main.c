@@ -6,9 +6,9 @@
  *               Upgrade to 5.7 Radim Blazek 10/2004
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>
- *               Ivan Shevlakov: points support -p                
- *               Luca Delucchi: lines support -l
- * PURPOSE:      
+ *               Ivan Shevlakov: points support -p
+ *               Luca Delucchi: lines support -l, vertical breaks
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     breaks->type = TYPE_INTEGER;
     breaks->required = NO;
     breaks->description =
-	_("Number of horizontal vertex points per grid cell");
+	_("Number of vertex points per grid cell");
     breaks->options = "0-60";
     breaks->answer = "3";
 
