@@ -196,27 +196,39 @@ test fixture (test set up and tear down)
     region as well as remove all created maps and files.
 
 test report
-    A *test report* is a document or set of documents.
+    A *test report* is a document or set of documents with results of
+    all executed tests together with additional information such as output
+    of test.
 
     Note that also *test result* is used also used in similar context
     because the class responsible for representing or creating the report
     in Python `unittest`_ package is called ``TestResult``.
+
+test failure and test error
+    A *test failure* occurs when a assert fails, e.g. value of
+    a parameter given to ``assertTrue()`` function is ``False``.
+    A *test error* occurs when something what is not tested fails,
+    i.e. when exception is risen for example preparation code or
+    a test method itself.
 
 
 Testing with gunittest package in general
 -----------------------------------------
 
 The tests should be in files in a ``testsuite`` directory which is a subdirectory
-of the directory with tested files (module, package, library). Each testing file
-(test file) can have can have several testing classes (test cases).
-All test files names should have pattern ``test*.py``.
+of the directory with tested files (module, package, library). Each test file
+(testing file) can have can have several test cases (testing classes).
+All test file names should have pattern ``test*.py`` or ``*.py``
+if another naming convention seems more appropriate.
 
 GRASS GIS `gunittest` package and testing framework is similar to the standard
 Python ``unittest`` package, so the ways to build tests are very similar.
+Test methods are in a test test case class and each test method tests one
+think using one or more assert methods.
 
 ::
 
-    from grass.guinttest import TestCase
+    from grass.guinttest import TestCase, test
 
 
     class TestPython(TestCase):
@@ -227,43 +239,109 @@ Python ``unittest`` package, so the ways to build tests are very similar.
 
 
     if __name__ == '__main__':
-        from grass.guinttest import test
         test()
 
-Each test file should be able to run by itself and accept certain set of command
-line parameters. This is ensured using `gunittest.test()`.
+Each test file should be able to run by itself accept certain set of command
+line parameters (currently none). This is done using
+``if __name__ == '__main__'`` and  ``gunittest.test()`` function.
 
-To run (invoke) all tests in the source tree, you have to be in the source code
-directory, inside GRASS session and use command similar to this one::
+To run a test file, start GRASS session in the location and mapset suitable for
+testing (typically, NC sample location) and go to the test file's directory
+(it will be usually some ``testsuite`` directory in the source code)
+and run it as a Python script::
+
+    python test_something.py
+
+When running individual test files, it is advisable to be in a separate
+mapset, so for example when using NC sample location, you should use
+a new mapset of arbitrary name but not one of the predefined mapsets).
+
+To run all tests in the source tree, you have to be in the source code
+directory where you want to find tests, also you need to be inside
+a GRASS session and use command similar to this one::
 
     python -m grass.gunittest.main --location nc_spm_grass7 --location-type nc
 
 All test files in all ``testsuite`` directories will be executed and
 a report will be created in a newly created ``testreport`` directory.
 Open the file ``testreport/index.html`` to browse though the results.
-Note that you need to be in GRASS session to run the tests in this way.
+Note that again you need to be in GRASS session to run the tests in this way.
 
 The ``--location-type`` parameter serves to filter tests according to data
 they can run successfully with. It is ignored for tests which does not have
 this specified.
 
-Each running test file gets its own mapset and current working directory
-but all run are in one location.
+In this case each running test file gets its own mapset and
+current working directory but all run are in one location.
 
 .. warning::
-    The current location is ignored but you should run not invoke tests
-    in the location which is precious to you for the case that something fails.
+    The current location is ignored but you should not run tests
+    in the location which is precious to you for the case that something fails
+    and current location is used for tests.
 
-To run individual tests file you should be in GRASS session in GRASS NC sample
-location in a mapset of arbitrary name (except for the predefined mapsets).
+When your are writing tests you can rely on having maps which are present
+in the NC sample location, or you can generate random maps. You can also
+import your data which you store inside ``data`` directory inside the
+given ``testsuite`` directory (for maps, ASCII formats are usually used).
+If you can create tests independent on location projection and location data
+it is much better then relying on given data but it is not at all required
+and all approaches are encouraged.
 
-Your tests can rely on maps which are present in the GRASS NC sample location.
-But if you can provide tests which are independent on location it is better.
+Whenever possible it is advantageous to use available assert methods.
+GRASS-specific assert methods are in :class:`gunittest.case.TestCase` class.
+For general assert methods refer to Python `unittest`_ package documentation.
+Both are used in the same way; they are methods of a given test case class.
+In cases (which should be rare) when no assert methods fits the purpose,
+you can use your own checking finalized with a call of ``assertTrue()``
+or ``assertFalse()`` method with the ``msg`` parameter parameter set
+to an informative message.
 
-Read the documentation of Python ``unittest`` package for a list of assert
-methods which you can use to test your results. For test of more complex
-GRASS-specific results refer to :class:`gunittest.case.TestCase` class
-documentation.
+When you are using multiple assert methods in one test method, you must
+carefully consider what assert methods are testing and in which order
+you should put them. Consider the following example::
+
+    # incorrect order
+    def test_map_in_list_wrong(self):
+        maps = get_list_of_maps()
+        self.assertIn('elevation', maps)
+        # there is no point in testing that
+        # if list (or string) was empty or None execution of test ended
+        # at the line with assertIn
+        self.assertTrue(maps)
+
+    # correct order
+    def test_map_in_list_correct(self):
+        maps = get_list_of_maps()
+        # see if list (or string) is not empty (or None)
+        self.assertTrue(maps)
+        # and then see if the list fulfills more advanced conditions
+        self.assertIn('elevation', maps)
+
+If you are not sure when you would use multiple asserts consider the case
+when using only ``assertIn()`` function::
+
+    def test_map_in_list_short(self):
+        maps = get_list_of_maps()
+        self.assertIn('elevation', maps)
+
+If the list (or string) is empty, the test fails and the message says
+something about ``elevation''`` not being in the ``maps`` but
+it might be much more useful if it would tell us that the list ``maps``
+does not contain any items. In case of ``maps`` being ``None``, the situation
+is more complicated since we using ``assertIn`` with ``None`` will
+cause test error (not only failure). We must consider what is
+expected behavior of ``get_list_of_maps()`` function and what
+we are actually testing. For example, if we would be testing function
+interface, we probably should test separately different possibilities
+using ``assertIsNotNone()`` and then ``assertTrue()`` and then anything else.
+
+Another reason for using multiple assert methods is that we may want to
+test different qualities of a result. Following the previous example,
+we can test that a list contains some map and does not contain some other.
+If you are testing a lot of things and they don't have any clear order
+or dependencies, it might be more advantageous to split
+testing into several testing methods and do the preparation (creating a list
+in our example) in ``setUpClass()`` or ``setUp()`` method.
 
 
 .. _test-module:
