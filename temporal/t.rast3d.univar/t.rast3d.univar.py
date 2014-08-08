@@ -39,8 +39,8 @@
 #%end
 
 #%flag
-#% key: h
-#% description: Print the column names as first row
+#% key: s
+#% description: Suppress printing of column names
 #% guisection: Formatting
 #%end
 
@@ -56,14 +56,14 @@ def main():
     input = options["input"]
     where = options["where"]
     extended = flags["e"]
-    header = flags["h"]
+    no_header = flags["s"]
     separator = grass.separator(options["separator"])
 
     # Make sure the temporal database exists
     tgis.init()
 
     tgis.print_gridded_dataset_univar_statistics(
-        "str3ds", input, where, extended, header, separator)
+        "str3ds", input, where, extended, no_header, separator)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
