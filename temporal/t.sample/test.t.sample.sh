@@ -6,22 +6,24 @@
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
-r.mapcalc --o expr="prec_1 = rand(0, 550)"
-r.mapcalc --o expr="prec_2 = rand(0, 450)"
-r.mapcalc --o expr="prec_3 = rand(0, 320)"
-r.mapcalc --o expr="prec_4 = rand(0, 510)"
-r.mapcalc --o expr="prec_5 = rand(0, 300)"
-r.mapcalc --o expr="prec_6 = rand(0, 650)"
+export GRASS_OVERWRITE=1
 
-v.random --o -z output=pnts1 n=20 zmin=0 zmax=100 column=height
-v.random --o -z output=pnts2 n=20 zmin=0 zmax=100 column=height
+r.mapcalc expr="prec_1 = rand(0, 550)"
+r.mapcalc expr="prec_2 = rand(0, 450)"
+r.mapcalc expr="prec_3 = rand(0, 320)"
+r.mapcalc expr="prec_4 = rand(0, 510)"
+r.mapcalc expr="prec_5 = rand(0, 300)"
+r.mapcalc expr="prec_6 = rand(0, 650)"
 
-v.random --o -z output=pnts3 n=20 zmin=0 zmax=100 column=height
-v.random --o -z output=pnts4 n=20 zmin=0 zmax=100 column=height
-v.random --o -z output=pnts5 n=20 zmin=0 zmax=100 column=height
-v.random --o -z output=pnts6 n=20 zmin=0 zmax=100 column=height
-v.random --o -z output=pnts7 n=20 zmin=0 zmax=100 column=height
-v.random --o -z output=pnts8 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts1 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts2 n=20 zmin=0 zmax=100 column=height
+
+v.random -z output=pnts3 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts4 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts5 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts6 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts7 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts8 n=20 zmin=0 zmax=100 column=height
 
 n1=`g.tempfile pid=1 -d` 
 n2=`g.tempfile pid=2 -d`
@@ -51,19 +53,19 @@ pnts8|2001-01-25|2001-01-30
 EOF
 
 
-t.create --o type=strds temporaltype=absolute output=precip_abs0 \
+t.create type=strds temporaltype=absolute output=precip_abs0 \
 	title="A test with raster input files" descr="A test with raster input files"
-t.create --o type=stvds temporaltype=absolute output=pnts_abs0 \
+t.create type=stvds temporaltype=absolute output=pnts_abs0 \
 	title="A test with vector input files" descr="A test with vector input files"
-t.create --o type=stvds temporaltype=absolute output=pnts_abs1 \
+t.create type=stvds temporaltype=absolute output=pnts_abs1 \
 	title="A test with vector input files" descr="A test with vector input files"
 
-t.register --o type=rast -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
-t.rast.list precip_abs0 -h
-t.register --o type=vect    input=pnts_abs0 file="${n2}"
-t.vect.list pnts_abs0 -h
-t.register --o type=vect    input=pnts_abs1 file="${n3}"
-t.vect.list pnts_abs1 -h
+t.register type=rast -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
+t.rast.list precip_abs0
+t.register type=vect    input=pnts_abs0 file="${n2}"
+t.vect.list pnts_abs0
+t.register type=vect    input=pnts_abs1 file="${n3}"
+t.vect.list pnts_abs1
 
 # The @test
 t.sample method=start    input=precip_abs0,precip_abs0,precip_abs0,precip_abs0 samtype=stvds sample=pnts_abs0 
@@ -78,14 +80,10 @@ t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -cs
 
 
 # Test with temporal point data
-t.register --o type=rast input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
-t.rast.list precip_abs0 -h
+t.register type=rast input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
+t.rast.list precip_abs0 
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs0 -cs
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs1 -cs
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-t.unregister type=vect maps=pnts1,pnts2,pnts3,pnts4,pnts5,pnts6,pnts7,pnts8
-t.remove type=strds input=precip_abs0
-t.remove type=stvds input=pnts_abs0,pnts_abs1
-g.remove rast=prec_1,prec_2,prec_3,,prec_4,prec_5,prec_6
-g.remove vect=pnts1,pnts2,pnts3,pnts4,pnts5,pnts6,pnts7,pnts8
+t.remove -rf type=strds input=precip_abs0
+t.remove -rf type=stvds input=pnts_abs0,pnts_abs1
