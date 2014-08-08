@@ -50,7 +50,7 @@
 #%end
 
 #%flag
-#% key: h
+#% key: c
 #% description: Print the column names as first row
 #%end
 
@@ -74,7 +74,7 @@ def main():
     intype = options["intype"]
     separator = grass.separator(options["separator"])
     method = options["method"]
-    header = flags["h"]
+    header = flags["c"]
     spatial = flags["s"]
 
     # Make sure the temporal database exists
