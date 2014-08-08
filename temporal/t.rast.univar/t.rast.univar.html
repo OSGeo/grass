@@ -27,41 +27,43 @@ t.create type=strds temporaltype=absolute \
          description="Test dataset with daily precipitation"
 
 t.register -i type=rast input=precipitation_daily \
-           file=map_list.txt start="2012-08-20" increment="1 days"
+           file=map_list.txt start="2012-08-20" increment="1 day"
 
 t.info type=strds input=precipitation_daily
  +-------------------- Space Time Raster Dataset -----------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+
- | Id: ........................ precipitation_daily@ecad90_sample_tmodules
+ | Id: ........................ precipitation_daily@PERMANENT
  | Name: ...................... precipitation_daily
- | Mapset: .................... ecad90_sample_tmodules
- | Creator: ................... lucadelu
- | Creation time: ............. 2013-11-08 10:38:18.782948
+ | Mapset: .................... PERMANENT
+ | Creator: ................... soeren
  | Temporal type: ............. absolute
+ | Creation time: ............. 2014-06-29 23:08:48.165581
+ | Modification time:.......... 2014-06-29 23:08:52.729316
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2012-08-27 00:00:00
- | End time:................... 2012-09-03 00:00:00
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-27 00:00:00
  | Granularity:................ 1 day
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 75.5
- | South:...................... 25.25
- | East:.. .................... 75.5
- | West:....................... -40.5
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... precipitation_daily_ecad90_sample_tmodules_raster_register
- | North-South resolution min:. 0.25
- | North-South resolution max:. 0.25
- | East-west resolution min:... 0.25
- | East-west resolution max:... 0.25
+ | Raster register table:...... raster_map_register_3446b4c32e4f4f9fbcc3d0757995b9ec
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
  | Minimum value min:.......... 0.0
  | Minimum value max:.......... 0.0
  | Maximum value min:.......... 9.0
  | Maximum value max:.......... 69.0
+ | Aggregation type:........... None
  | Number of registered maps:.. 7
  |
  | Title:
@@ -69,27 +71,26 @@ t.info type=strds input=precipitation_daily
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2013-11-08 10:38:18 
+ | # 2014-06-29 23:08:48 
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2013-11-08 10:38:26 
+ | # 2014-06-29 23:08:52 
  | t.register -i type="rast" input="precipitation_daily"
- |     file="map_list.txt" start="2012-08-20" increment="1 days"
- |
+ |     file="map_list.txt" start="2012-08-20" increment="1 day"
+ | 
  +----------------------------------------------------------------------------+
 
  
-t.rast.univar -eh precipitation_daily
+t.rast.univar -e precipitation_daily
 id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|first_quartile|median|third_quartile|percentile_90
-map_1@ecad90_sample_tmodules|2012-08-27 00:00:00|2012-08-28 00:00:00|4.50559701492537|0|9|4.50559701492537|2.87457821791815|8.2631999309295|63.8001625177694|420210|0|93264|2|5|7|9
-map_2@ecad90_sample_tmodules|2012-08-28 00:00:00|2012-08-29 00:00:00|9.48865585863784|0|19|9.48865585863784|5.7779859624471|33.3851217822358|60.8936191651129|884950|0|93264|4|9|15|18
-map_3@ecad90_sample_tmodules|2012-08-29 00:00:00|2012-08-30 00:00:00|14.47868416538|0|29|14.47868416538|8.63325210721546|74.5330419467402|59.6273253052818|1350340|0|93264|7|14|22|26
-map_4@ecad90_sample_tmodules|2012-08-30 00:00:00|2012-08-31 00:00:00|19.4582046663236|0|39|19.4582046663236|11.5783111835479|134.05728986307|59.5034916226703|1814750|0|93264|9|19|29|36
-map_5@ecad90_sample_tmodules|2012-08-31 00:00:00|2012-09-01 00:00:00|24.4868330759993|0|49|24.4868330759993|14.3850752287166|206.930389335835|58.7461644552805|2283740|0|93264|12|24|37|44
-map_6@ecad90_sample_tmodules|2012-09-01 00:00:00|2012-09-02 00:00:00|29.4854391833934|0|59|29.4854391833934|17.2796032004376|298.584686764572|58.6038522029873|2749930|0|93264|15|30|44|53
-map_7@ecad90_sample_tmodules|2012-09-02 00:00:00|2012-09-03 00:00:00|34.4274318064848|0|69|34.4274318064848|20.2238928524934|409.005842109134|58.7435419701681|3210840|0|93264|17|34|52|63
-
+map_1@PERMANENT|2012-08-27 00:00:00|2012-08-28 00:00:00|4.16666666666667|0|9|4.16666666666667|3.01270458042087|9.07638888888889|72.3049099301009|400|0|96|2|3|7|9
+map_2@PERMANENT|2012-08-28 00:00:00|2012-08-29 00:00:00|9.58333333333333|0|19|9.58333333333333|6.0736223860962|36.8888888888889|63.3769292462212|920|0|96|3|11|14|18
+map_3@PERMANENT|2012-08-29 00:00:00|2012-08-30 00:00:00|14.4791666666667|0|29|14.4791666666667|8.78680256438914|77.2078993055555|60.6858306605293|1390|0|96|8|13|22|26
+map_4@PERMANENT|2012-08-30 00:00:00|2012-08-31 00:00:00|19.1666666666667|0|39|19.1666666666667|11.7132996584604|137.201388888889|61.1128677832717|1840|0|96|9|19|30|35
+map_5@PERMANENT|2012-08-31 00:00:00|2012-09-01 00:00:00|24.7916666666667|0|48|24.7916666666667|14.2937316292454|204.310763888889|57.655388084351|2380|0|96|13|22.5|39|44
+map_6@PERMANENT|2012-09-01 00:00:00|2012-09-02 00:00:00|31.0416666666667|0|59|31.0416666666667|17.2885539367011|298.894097222222|55.6946704001108|2980|0|96|17|33|44|54
+map_7@PERMANENT|2012-09-02 00:00:00|2012-09-03 00:00:00|34.7916666666667|0|69|34.7916666666667|20.8401238933191|434.310763888889|59.8997572981626|3340|0|96|14|36|52|62
 </pre></div>
 
 <h2>SEE ALSO</h2>

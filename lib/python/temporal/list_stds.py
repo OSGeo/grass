@@ -105,7 +105,7 @@ def get_dataset_list(type,  temporal_type,  columns=None,  where=None,  order=No
         
 ###############################################################################
 
-def list_maps_of_stds(type, input, columns, order, where, separator, method, header, gran=None):
+def list_maps_of_stds(type, input, columns, order, where, separator, method, no_header=False, gran=None):
     """! List the maps of a space time dataset using diffetent methods
 
         @param type The type of the maps raster, raster3d or vector
@@ -127,7 +127,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                            Gaps can be simply identified as the id is "None"
             - "gran" List map using the granularity of the space time dataset,
                       columns are identical to deltagaps
-        @param header Set True to print column names
+       @param no_header Supress the printing of column names
         @param gran The user defined granule to be used if method=gran is set, in case gran=None the
             granule of the space time dataset is used
     """
@@ -156,7 +156,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
             else:
                 maps = sp.get_registered_maps_as_objects_by_granularity(dbif=dbif)
 
-        if header:
+        if no_header is False:
             string = ""
             string += "%s%s" % ("id", separator)
             string += "%s%s" % ("name", separator)
@@ -235,7 +235,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
 
             elif method == "cols":
                 # Print the column names if requested
-                if header:
+                if no_header is False:
                     output = ""
                     count = 0
 
