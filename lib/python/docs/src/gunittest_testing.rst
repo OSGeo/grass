@@ -422,8 +422,19 @@ these functions are exposed through Python ``ctypes`` and thus can be tested
 in Python. See section :ref:`test-python` for reference.
 
 However, more advantageous and more preferable (although sometimes
-more complicated) solution is to write a special program, possibly
-GRASS module (i.e., using ``G_parser``).
+more complicated) solution is to write a special program, preferably
+GRASS module (i.e., using ``G_parser``). The dedicated program can
+provide more direct interface to C and C++ functions used by
+a GRASS module then the module and can also serve for doing benchmarks
+which are not part of the testing.
+This can approach can be applied to both 
+
+See the example in ``lib/raster3d`` GRASS source code directory
+to create a proper Makefiles. A ``main()`` function should be written
+in the same way as for a standard module.
+
+Having a GRASS module for the purpose of testing you can write test
+as if it would be standard GRASS module.
 
 
 .. _test-python:
