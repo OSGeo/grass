@@ -1326,6 +1326,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.GetPyData(item) is not None:
             # nviz - load/unload data layer
             mapLayer = self.GetLayerInfo(item, key = 'maplayer')
+            if mapLayer is None:
+                return
 
             self.mapdisplay.SetStatusText(_("Please wait, updating data..."), 0)
 
@@ -1401,6 +1403,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             event.GetItem() is a valid layer;
             self.layer_selected is a valid layer
         """
+        # when no layer selected, nothing to do here
+        if self.layer_selected is None:
+            event.Skip()
+            return
+
         layer = event.GetItem()
         digitToolbar = self.mapdisplay.GetToolbar('vdigit')
         if digitToolbar:
@@ -1630,8 +1637,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # set region if auto-zooming is enabled or layer tree contains
         # only one map layer
         if dcmd:
-            if self.first or \
-                    UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
+            if not self.mapdisplay.IsPaneShown('3d') and (self.first or
+                    UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled')):
                 mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
                 if mapLayer.GetType() in ('raster', 'vector'):
                     self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
