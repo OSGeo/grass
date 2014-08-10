@@ -310,6 +310,10 @@ int main(int argc, char *argv[])
 
     G_begin_polygon_area_calculations();	/* Used in geom() */
 
+    /* TODO: threshold might be recalculated with optional geodesic support to meters */
+    if (G_projection() == PROJECTION_LL)
+        G_important_message(_("Note: In latitude-longitude coordinate system threshold in degree units"));
+
     OGRRegisterAll();
 
     /* list supported formats */

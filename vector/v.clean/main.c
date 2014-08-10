@@ -196,6 +196,10 @@ int main(int argc, char *argv[])
     G_debug(1, "ntools = %d", ntools);
     threshs = (double *)G_malloc(ntools * sizeof(double));
 
+    /* TODO: threshold might be recalculated with optional geodesic support to meters */
+    if (G_projection() == PROJECTION_LL)
+        G_important_message(_("Note: In latitude-longitude coordinate system threshold in degree units"));
+
     /* Read thresholds */
     for (i = 0; i < ntools; i++)
 	threshs[i] = 0.0;
