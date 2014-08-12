@@ -309,7 +309,7 @@ class TestParameterGetBash(TestCase):
         # set private attributes to skip the check function
         param._value = 'elev'
         param._rawvalue = 'elev'
-        self.assertEqual("rast=elev", param.get_bash())
+        self.assertEqual("rast='elev'", param.get_bash())
 
     def test_multiple_strings(self):
         param = Parameter(diz=dict(name='rast', required='yes',
@@ -320,7 +320,7 @@ class TestParameterGetBash(TestCase):
         self.assertEqual("rast=elev,asp,slp", param.get_bash())
         param._value = ['elev', ]
         param._rawvalue = 'elev'
-        self.assertEqual("rast=elev", param.get_bash())
+        self.assertEqual("rast='elev'", param.get_bash())
 
     def test_keydescvalues(self):
         param = Parameter(diz=dict(name='range', required='yes',
