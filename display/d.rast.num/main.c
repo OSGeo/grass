@@ -60,7 +60,8 @@ int main(int argc, char **argv)
     struct Colors colors;
     struct GModule *module;
     struct _opt {
-	struct Option *map, *grid_color, *text_color, *prec;
+	struct Option *map, *grid_color, *text_color, *prec,
+	    *font, *path, *charset;
     } opt;
     struct _flg {
 	struct Flag *text_color, *align;
@@ -113,7 +114,29 @@ int main(int argc, char **argv)
     flg.text_color->key = 'f';
     flg.text_color->description = _("Get text color from cell color value");
     flg.text_color->guisection = _("Colors");
-    
+
+    opt.font = G_define_option();
+    opt.font->key = "font";
+    opt.font->type = TYPE_STRING;
+    opt.font->required = NO;
+    opt.font->description = _("Font name");
+    opt.font->guisection = _("Font settings");
+
+    opt.path = G_define_standard_option(G_OPT_F_INPUT);
+    opt.path->key = "path";
+    opt.path->required = NO;
+    opt.path->description = _("Path to font file");
+    opt.path->gisprompt = "old_file,font,file";
+    opt.path->guisection = _("Font settings");
+
+    opt.charset = G_define_option();
+    opt.charset->key = "charset";
+    opt.charset->type = TYPE_STRING;
+    opt.charset->required = NO;
+    opt.charset->description =
+	_("Text encoding (only applicable to TrueType fonts)");
+    opt.charset->guisection = _("Font settings");
+
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -197,6 +220,14 @@ int main(int argc, char **argv)
     if (D_open_driver() != 0)
       	G_fatal_error(_("No graphics device selected. "
 			"Use d.mon to select graphics device."));
+    
+    if (opt.font->answer)
+	D_font(opt.font->answer);
+    else if (opt.path->answer)
+	D_font(opt.path->answer);
+
+    if (opt.charset->answer)
+	D_encoding(opt.charset->answer);
     
     D_setup2(0, 0, t, b, l, r);
 
