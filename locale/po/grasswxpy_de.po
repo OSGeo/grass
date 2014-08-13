@@ -18471,3 +18471,133 @@ msgstr "GRASS GIS Ebenen-Manager"
 
 msgid "GRASS GIS Map Display: %(name)s  - Location: %(loc)s"
 msgstr "GRASS GIS Kartenfenster: %(name)s  - Location: %(loc)s"
+
+#, fuzzy
+#~ msgid "Stream channel characteristics"
+#~ msgstr "Bericht und Statistiken"
+
+#, fuzzy
+#~ msgid "Stream distance and elevation characteristics"
+#~ msgstr "Bericht und Statistiken"
+
+#, fuzzy
+#~ msgid "Stream segment characteristics"
+#~ msgstr "Bericht und Statistiken"
+
+#, fuzzy
+#~ msgid "Stream elevation change"
+#~ msgstr "Vorherige Änderungen rückgängig machen"
+
+#, fuzzy
+#~ msgid "Horton's statistics"
+#~ msgstr "Grafik Statistiken"
+
+#, fuzzy
+#~ msgid "Plot temporal values"
+#~ msgstr "Zeige den Arbeitsbereich"
+
+#, fuzzy
+#~ msgid "GRASS GIS Temporal Plot Tool"
+#~ msgstr "GRASS GIS Histogramm Werkzeug (d.histogram)"
+
+#, fuzzy
+#~ msgid "Select space time raster dataset(s):"
+#~ msgstr "Wählen Sie die Quell-Mapset:"
+
+#, fuzzy
+#~ msgid "Temporal resolution: %s"
+#~ msgstr ""
+#~ "\n"
+#~ "++ Lasse gwflow Integrations-Tests laufen++"
+
+#, fuzzy
+#~ msgid "Invalid input coordinates"
+#~ msgstr "Ungültige Eingabe"
+
+#, fuzzy
+#~ msgid "Invalid input temporal dataset"
+#~ msgstr "Ungültige Eingabe"
+
+#, fuzzy
+#~ msgid "Data catalog"
+#~ msgstr "Datenauswahl"
+
+#, fuzzy
+#~ msgid "New name"
+#~ msgstr "Umbenennen"
+
+#, fuzzy
+#~ msgid "Rename map"
+#~ msgstr "Mapset umbenennen"
+
+#, fuzzy
+#~ msgid "Editing"
+#~ msgstr "Überprüfe Modell..."
+
+#, fuzzy
+#~ msgid "Renaming"
+#~ msgstr "Umbenennen"
+
+#, fuzzy
+#~ msgid "Failed to copy layer: invalid type."
+#~ msgstr "Kann Datei %s nicht lesen."
+
+#, fuzzy
+#~ msgid "Copy map"
+#~ msgstr "Tabelle kopieren"
+
+#, fuzzy
+#~ msgid "Copying"
+#~ msgstr "Copyright"
+
+#, fuzzy
+#~ msgid "Do you really want to delete map <{m}>?"
+#~ msgstr "Möchten Sie ein neues Mapset anlegen?"
+
+#, fuzzy
+#~ msgid "Delete map"
+#~ msgstr "Mapset löschen"
+
+#, fuzzy
+#~ msgid "Deleting"
+#~ msgstr "Löschen"
+
+#, fuzzy
+#~ msgid "Displaying"
+#~ msgstr "Fenster"
+
+#, fuzzy
+#~ msgid "&Copy"
+#~ msgstr "Kopieren"
+
+#, fuzzy
+#~ msgid "&Paste"
+#~ msgstr "&Raster"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "Löschen"
+
+#, fuzzy
+#~ msgid "&Display layer"
+#~ msgstr "Karte anzeigen"
+
+#, fuzzy
+#~ msgid "Export region"
+#~ msgstr "Region definieren"
+
+#, fuzzy
+#~ msgid "Named region"
+#~ msgstr "Lade Region:"
+
+#, fuzzy
+#~ msgid "Extent and resolution are based on computational region."
+#~ msgstr "Beschränke die Auflösung des Kartenfensters auf die Einstellungen des Arbeitsbereichs."
+
+#, fuzzy
+#~ msgid "Extent and resolution are based on named region."
+#~ msgstr "Arbeitsbereich auf Grundlage des Kartenfensters setzen"
+
+#, fuzzy
+#~ msgid "Region <%s> does not exist."
+#~ msgstr "Verzeichnis %s existiert nicht."
