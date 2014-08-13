@@ -782,7 +782,7 @@ def install_extension_other(name):
                        stdout = outdev):
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
 
-    if flags['i'] or classchar == 'wx':
+    if flags['i']:
         return 0
 
     grass.message(_("Installing..."))
