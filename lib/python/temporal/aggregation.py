@@ -223,7 +223,7 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
 
     # Dummy process object that will be deep copied
     # and be put into the process queue
-    r_series = pymod.Module("r.series", output="spam", method=method,
+    r_series = pymod.Module("r.series", output="spam", method=[method],
                             overwrite=overwrite, quiet=True, run_=False,
                             finish_=False)
     g_copy = pymod.Module("g.copy", rast=['spam', 'spamspam'],
