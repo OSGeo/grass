@@ -1651,9 +1651,15 @@ class DefaultFontDialog(wx.Dialog):
         for the listbox
         """
         fontlist = []
-        ret = RunCommand('d.font',
-                         read = True,
-                         flags = 'l')
+        env = os.environ.copy()
+        driver = UserSettings.Get(group='display', key='driver', subkey='type')
+        if driver == 'png':
+            env['GRASS_RENDER_IMMEDIATE'] = 'png'
+        else:
+            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        ret = RunCommand('d.fontlist',
+                         read=True,
+                         env=env)
         if not ret:
             return fontlist
 
