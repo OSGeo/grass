@@ -750,22 +750,17 @@ def install_extension_other(name):
              'etc'     : os.path.join(TMPDIR, name, 'etc'),
              }
 
-    if classchar != 'wx':
-        makeCmd = ['make',
-                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
-                   'RUN_GISRC=%s' % os.environ['GISRC'],
-                   'BIN=%s' % dirs['bin'],
-                   'HTMLDIR=%s' % dirs['html'],
-                   'RESTDIR=%s' % dirs['rest'],
-                   'MANDIR=%s' % dirs['man'],
-                   'SCRIPTDIR=%s' % dirs['scripts'],
-                   'ETC=%s' % os.path.join(dirs['etc'], name)
-                   ]
-    else:
-        makeCmd = ['make',
-                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ ')
-                   ]
-
+    makeCmd = ['make',
+               'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
+               'RUN_GISRC=%s' % os.environ['GISRC'],
+               'BIN=%s' % dirs['bin'],
+               'HTMLDIR=%s' % dirs['html'],
+               'RESTDIR=%s' % dirs['rest'],
+               'MANDIR=%s' % dirs['man'],
+               'SCRIPTDIR=%s' % dirs['scripts'],
+               'ETC=%s' % os.path.join(dirs['etc'], name)
+    ]
+    
     installCmd = ['make',
                   'MODULE_TOPDIR=%s' % gisbase,
                   'ARCH_DISTDIR=%s' % os.path.join(TMPDIR, name),
