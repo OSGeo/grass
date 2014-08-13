@@ -728,9 +728,7 @@ def install_extension_other(name):
     classchar = name.split('.', 1)[0]
     moduleclass = expand_module_class_name(classchar)
     url = options['svnurl'] + '/' + moduleclass + '/' + name
-    if classchar == 'wx' and not flags['s']:
-        grass.fatal(_("Installation of wxGUI extension requires -%s flag.") % 's')
-
+    
     grass.message(_("Fetching <%s> from GRASS-Addons SVN (be patient)...") % name)
 
     os.chdir(TMPDIR)
