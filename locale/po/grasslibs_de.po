@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-31 19:31+0200\n"
-"PO-Revision-Date: 2014-08-10 13:37+0200\n"
-"Last-Translator: Robert Nuske <robert.nuske@nw-fva.de>\n"
+"PO-Revision-Date: 2014-08-13 11:57+0200\n"
+"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
 "Language-Team: German <grass-translations@lists.osgeo.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -58,16 +58,12 @@ msgid "Unable to load color rules <%s>"
 msgstr "Kann Farbregeln <%s> nicht laden."
 
 #: ../lib/raster/color_read.c:103
-#, fuzzy
 msgid "missing"
-msgstr "welche fehlt"
+msgstr "fehlt"
 
 #: ../lib/raster/color_read.c:106
-#, fuzzy
 msgid "invalid"
-msgstr ""
-"ist ungültig\n"
-"%s"
+msgstr "ungültig"
 
 #: ../lib/raster/color_read.c:112
 #, fuzzy, c-format
@@ -1680,9 +1676,9 @@ msgstr "Kann <%s> nicht öffnen."
 #: ../lib/manage/do_rename.c:87 ../lib/manage/do_rename.c:107
 #: ../lib/manage/do_copy.c:63 ../lib/manage/do_remove.c:89
 #: ../lib/manage/do_remove.c:109
-#, fuzzy, c-format
+#, c-format
 msgid "%s is missing"
-msgstr "welche fehlt"
+msgstr "%s fehlt"
 
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
@@ -1710,9 +1706,9 @@ msgid "%s copied"
 msgstr ""
 
 #: ../lib/manage/do_remove.c:42
-#, fuzzy, c-format
+#, c-format
 msgid "Removing %s <%s>"
-msgstr "Kann [%s] nicht finden."
+msgstr "Lösche %s <%s>"
 
 #: ../lib/manage/do_remove.c:65
 #, fuzzy
@@ -1896,26 +1892,20 @@ msgid "png: image size %dx%d"
 msgstr ""
 
 #: ../lib/init/grass.py:74
-#, fuzzy
 msgid "WARNING"
-msgstr "WARNUNG: "
+msgstr "WARNUNG:"
 
 #: ../lib/init/grass.py:129 ../lib/gis/parser.c:569
 msgid "ERROR"
 msgstr "FEHLER"
 
 #: ../lib/init/grass.py:130
-#, fuzzy
 msgid "Exiting..."
-msgstr "Setze Kosten der Knoten..."
+msgstr "Beende..."
 
 #: ../lib/init/grass.py:203
-#, fuzzy
 msgid "Usage"
-msgstr ""
-"\n"
-"Benutzung:\n"
-" "
+msgstr "Benutzung"
 
 #: ../lib/init/grass.py:204 ../lib/gis/parser_html.c:144
 #: ../lib/gis/parser_rest.c:146
@@ -2262,9 +2252,8 @@ msgid "Goodbye from GRASS GIS"
 msgstr ""
 
 #: ../lib/init/grass.py:1170
-#, fuzzy
 msgid "Done."
-msgstr "nichts"
+msgstr "Erledigt."
 
 #: ../lib/init/grass.py:1177
 #, fuzzy
@@ -2342,9 +2331,9 @@ msgid "Using display driver <%s>..."
 msgstr "Kann den Treiber <%s> nicht starten."
 
 #: ../lib/display/r_raster.c:227
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file '%s'"
-msgstr "Kann Datei %s nicht öffnen."
+msgstr "Kann Datei '%s' nicht öffnen"
 
 #: ../lib/symbol/read.c:211
 #, c-format
@@ -2444,9 +2433,8 @@ msgid "Unable to create 3D raster map <%s>"
 msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
 
 #: ../lib/raster3d/close.c:169
-#, fuzzy
 msgid "Error in cache"
-msgstr "Fehler beim Bestimmen des Wertebereichs."
+msgstr "Fehler im Cache"
 
 #: ../lib/raster3d/param.c:84
 #, fuzzy
@@ -3101,11 +3089,8 @@ msgid "Default"
 msgstr "Standardwert"
 
 #: ../lib/gis/color_rules.c:88
-#, fuzzy
 msgid "no description"
-msgstr ""
-"\n"
-"Beschreibung:\n"
+msgstr "keine Beschreibung"
 
 #: ../lib/gis/seek.c:52 ../lib/gis/seek.c:58
 msgid "Unable to seek"
@@ -3319,24 +3304,20 @@ msgid "Example: income < 1000 and inhab >= 10000"
 msgstr "Beispiel: Einkommen < 1000 AND Einwohner >= 10000"
 
 #: ../lib/gis/parser_standard_options.c:158
-#, fuzzy
 msgid "Name of attribute table"
-msgstr "Name der Attributspalte"
+msgstr "Name der Attributtabelle"
 
 #: ../lib/gis/parser_standard_options.c:167
-#, fuzzy
 msgid "Name of database driver"
-msgstr "Name der Basis-Rasterkarte"
+msgstr "Name des Datenbank-Treibers"
 
 #: ../lib/gis/parser_standard_options.c:176
-#, fuzzy
 msgid "Name of database"
-msgstr "Name der Eingabe-Vektorkarte"
+msgstr "Name der Datenbank"
 
 #: ../lib/gis/parser_standard_options.c:185
-#, fuzzy
 msgid "Database schema"
-msgstr "Datenbank"
+msgstr "Datenbank Schema"
 
 #: ../lib/gis/parser_standard_options.c:186
 msgid "Do not use this option if schemas are not supported by driver/database server"
@@ -3351,9 +3332,8 @@ msgid "Name of attribute column(s)"
 msgstr "Name der Attributspalte(n)"
 
 #: ../lib/gis/parser_standard_options.c:213
-#, fuzzy
 msgid "Name of key column"
-msgstr "Name der Attributspalte"
+msgstr "Name der Schlüsselspalte"
 
 #: ../lib/gis/parser_standard_options.c:214
 msgid "Must refer to an integer column"
@@ -3380,14 +3360,12 @@ msgid "Name for output raster map"
 msgstr "Name der Ausgabe-Rasterkarte"
 
 #: ../lib/gis/parser_standard_options.c:269
-#, fuzzy
 msgid "Name of raster map"
-msgstr "Name der Basis-Rasterkarte"
+msgstr "Name der Rasterkarte"
 
 #: ../lib/gis/parser_standard_options.c:278
-#, fuzzy
 msgid "Name of raster map(s)"
-msgstr "Name der Eingaberasterkarte(n)"
+msgstr "Name der Rasterkarte(n)"
 
 #: ../lib/gis/parser_standard_options.c:286
 msgid "Name of base raster map"
@@ -3493,14 +3471,12 @@ msgid "Name for output vector map"
 msgstr "Name der Ausgabe-Vektorkarte"
 
 #: ../lib/gis/parser_standard_options.c:442
-#, fuzzy
 msgid "Name of vector map"
-msgstr "Name der Eingabe-Vektorkarte"
+msgstr "Name der Vektorkarte"
 
 #: ../lib/gis/parser_standard_options.c:452
-#, fuzzy
 msgid "Name of vector map(s)"
-msgstr "Name der Eingabe-Vektorkarte(n)"
+msgstr "Name der Vektorkarte(n)"
 
 #: ../lib/gis/parser_standard_options.c:461
 #: ../lib/gis/parser_standard_options.c:470
@@ -3604,9 +3580,8 @@ msgid "'.' for current mapset"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:624
-#, fuzzy
 msgid "Coordinates"
-msgstr "Ungültige Koordinaten."
+msgstr "Koordinaten"
 
 #: ../lib/gis/parser_standard_options.c:633
 #, fuzzy
@@ -3812,24 +3787,20 @@ msgid "square unit"
 msgstr ""
 
 #: ../lib/gis/units.c:202
-#, fuzzy
 msgid "square meters"
-msgstr "Parameter"
+msgstr "Quadratmeter"
 
 #: ../lib/gis/units.c:202
-#, fuzzy
 msgid "square meter"
-msgstr "Parameter"
+msgstr "Quadratmeter"
 
 #: ../lib/gis/units.c:204
-#, fuzzy
 msgid "meters"
-msgstr "Parameter"
+msgstr "Meter"
 
 #: ../lib/gis/units.c:204
-#, fuzzy
 msgid "meter"
-msgstr "Parameter"
+msgstr "Meter"
 
 #: ../lib/gis/units.c:209
 msgid "square kilometers"
@@ -3840,9 +3811,8 @@ msgid "square kilometer"
 msgstr ""
 
 #: ../lib/gis/units.c:211
-#, fuzzy
 msgid "kilometers"
-msgstr "Parameter"
+msgstr "Kilometer"
 
 #: ../lib/gis/units.c:211
 msgid "kilometer"
@@ -3961,9 +3931,9 @@ msgid "second"
 msgstr ""
 
 #: ../lib/gis/lrand48.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "gettimeofday failed: %s"
-msgstr "Verbindung fehlgeschlagen."
+msgstr "gettimeofday fehlgeschlagen: %s"
 
 #: ../lib/gis/lrand48.c:108
 msgid "Pseudo-random number generator not seeded"
@@ -4439,26 +4409,16 @@ msgid "This location has no description."
 msgstr "Diese Location hat keine Beschreibung."
 
 #: ../lib/gis/parser_help.c:79
-#, fuzzy
 msgid "Description:"
-msgstr ""
-"\n"
-"Beschreibung:\n"
+msgstr "Beschreibung:"
 
 #: ../lib/gis/parser_help.c:89
-#, fuzzy
 msgid "Keywords:"
-msgstr ""
-"\n"
-"Schlüsselwörter:\n"
+msgstr "Schlüsselwörter:"
 
 #: ../lib/gis/parser_help.c:97
-#, fuzzy
 msgid "Usage:"
-msgstr ""
-"\n"
-"Benutzung:\n"
-" "
+msgstr "Benutzung:"
 
 #: ../lib/gis/parser_help.c:127
 #, fuzzy
@@ -4466,14 +4426,12 @@ msgid "ERROR: Option key not defined"
 msgstr "OGR feature ohne ID ignoriert."
 
 #: ../lib/gis/parser_help.c:174
-#, fuzzy
 msgid "Flags:"
-msgstr "Flags"
+msgstr "Schalter:"
 
 #: ../lib/gis/parser_help.c:209
-#, fuzzy
 msgid "Parameters:"
-msgstr "Parameter"
+msgstr "Parameter:"
 
 #: ../lib/gis/parser_help.c:232
 #, c-format
@@ -4575,9 +4533,8 @@ msgstr "Ungültige Zeitstempel-Datei für %s Karte %s in Mapset %s."
 
 #: ../lib/python/temporal/space_time_datasets.py:258
 #: ../lib/python/temporal/space_time_datasets.py:588
-#, fuzzy
 msgid "Internal error"
-msgstr "Syntaxfehler"
+msgstr "Interner Fehler"
 
 #: ../lib/python/temporal/space_time_datasets.py:275
 #: ../lib/python/temporal/space_time_datasets.py:602
@@ -5577,9 +5534,8 @@ msgid "Fetching data failed"
 msgstr "Kann keine Daten aus der Tabelle <%s> holen."
 
 #: ../lib/python/script/task.py:52
-#, fuzzy
 msgid "unknown"
-msgstr "nicht bekannt"
+msgstr "unbekannt"
 
 #: ../lib/python/script/task.py:166
 #, python-format
@@ -5587,9 +5543,9 @@ msgid "Parameter element '%(element)s' not found: '%(value)s'"
 msgstr ""
 
 #: ../lib/python/script/task.py:181
-#, fuzzy, python-format
+#, python-format
 msgid "Flag not found: %s"
-msgstr "%s nicht gefunden"
+msgstr "Schalter nicht gefunden: %s"
 
 #: ../lib/python/script/task.py:200
 #, python-format
@@ -5597,9 +5553,8 @@ msgid "Parameter '%(name)s' (%(desc)s) is missing."
 msgstr ""
 
 #: ../lib/python/script/task.py:231
-#, fuzzy
 msgid "<required>"
-msgstr "benötigt werden: %s\n"
+msgstr "<benötigt>"
 
 #: ../lib/python/script/task.py:486 ../lib/python/script/task.py:490
 #, python-format
@@ -5632,9 +5587,8 @@ msgid "label"
 msgstr ""
 
 #: ../lib/python/script/raster.py:193
-#, fuzzy
 msgid "color"
-msgstr "Farben"
+msgstr "Farbe"
 
 #: ../lib/python/pygrass/raster/abstract.py:240
 #, fuzzy, python-brace-format
@@ -6398,9 +6352,8 @@ msgid "Attempt to delete isle %d info from dead area %d"
 msgstr "Versuche Insel %d von toter Fläche %d zu löschen."
 
 #: ../lib/vector/diglib/struct_alloc.c:491
-#, fuzzy
 msgid "Out of memmory"
-msgstr "Nicht genügend Arbeitsspeicher."
+msgstr "Nicht genügend Arbeitsspeicher"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:40
 #, fuzzy
@@ -7293,16 +7246,16 @@ msgstr "Kann Vektorkarte nicht lesen."
 #, fuzzy, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
-msgstr[0] "%d Primitive registriert"
+msgstr[0] "Ein Primitive registriert"
 msgstr[1] "%d Primitive registriert"
 
 #: ../lib/vector/Vlib/build_nat.c:118 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:662
-#, fuzzy, c-format
+#, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "%d Vertices registriert "
-msgstr[1] "%d Vertices registriert "
+msgstr[0] "Ein Vertex registriert"
+msgstr[1] "%d Vertices registriert"
 
 #: ../lib/vector/Vlib/build_nat.c:129
 msgid "Building areas..."
@@ -7312,14 +7265,14 @@ msgstr "Erzeuge Flächen..."
 #, fuzzy, c-format
 msgid "One area built"
 msgid_plural "%d areas built"
-msgstr[0] "%d Flächen angelegt"
+msgstr[0] "Eine Fläche angelegt"
 msgstr[1] "%d Flächen angelegt"
 
 #: ../lib/vector/Vlib/build_nat.c:153
 #, fuzzy, c-format
 msgid "One isle built"
 msgid_plural "%d isles built"
-msgstr[0] "%d Inseln angelegt"
+msgstr[0] "Eine Inseln angelegt"
 msgstr[1] "%d Inseln angelegt"
 
 #: ../lib/vector/Vlib/build_nat.c:162
@@ -7395,11 +7348,11 @@ msgid "Loading categories from table <%s>..."
 msgstr "Lade Rasterkarte <%s>..."
 
 #: ../lib/vector/Vlib/cats.c:605
-#, fuzzy, c-format
+#, c-format
 msgid "One category loaded"
 msgid_plural "%d categories loaded"
-msgstr[0] "Keine Information über Kategorie"
-msgstr[1] "Keine Information über Kategorie"
+msgstr[0] "Eine Kategorie geladen"
+msgstr[1] "%d Kategorien geladen"
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -8081,9 +8034,8 @@ msgid "Vector map <%s> not open on topological level. Areas will be skipped!"
 msgstr "Vektorkarte <%s> ist nicht auf Level >= 2 geöffnet."
 
 #: ../lib/vector/Vlib/copy.c:229 ../lib/vector/Vlib/copy.c:234
-#, fuzzy
 msgid "Copying features..."
-msgstr "Erzeuge Flächen..."
+msgstr "Kopiere Objekte..."
 
 #: ../lib/vector/Vlib/copy.c:231
 #, c-format
@@ -8110,9 +8062,8 @@ msgid "Writing node %d failed"
 msgstr "Kann keine Daten aus der Tabelle <%s> holen."
 
 #: ../lib/vector/Vlib/copy.c:478
-#, fuzzy
 msgid "Exporting areas..."
-msgstr "Erzeuge Flächen..."
+msgstr "Exportiere Flächen..."
 
 #: ../lib/vector/Vlib/copy.c:505
 #, fuzzy, c-format
@@ -8120,9 +8071,9 @@ msgid "No centroid defined for area %d. Area not exported."
 msgstr "Die Datenbankverbindung für den Layer <%d> nicht definiert."
 
 #: ../lib/vector/Vlib/copy.c:534 ../lib/vector/Vlib/copy.c:542
-#, fuzzy, c-format
+#, c-format
 msgid "Writing area %d failed"
-msgstr "Kann keine Daten aus der Tabelle <%s> holen."
+msgstr "Schreiben der Fläche %d fehlgeschlagen"
 
 #: ../lib/vector/Vlib/copy.c:550
 #, fuzzy, c-format
@@ -8144,9 +8095,8 @@ msgid "Unable to delete item %d from spatial index"
 msgstr "Kann Eintrag %d nicht aus dem räumlichen Index löschen."
 
 #: ../lib/vector/Vlib/build_pg.c:88
-#, fuzzy
 msgid "No DB connection"
-msgstr "Schlechte Serveranbindung."
+msgstr "Keine DB Verbindung"
 
 #: ../lib/vector/Vlib/build_pg.c:95
 #, fuzzy
@@ -8169,14 +8119,12 @@ msgid "Cleaning-up topology schema..."
 msgstr "Erstelle Topologie für die Vektorkarte <%s>..."
 
 #: ../lib/vector/Vlib/build_pg.c:282
-#, fuzzy
 msgid "Updating faces..."
-msgstr "Erzeuge Flächen..."
+msgstr "Aktualisiere Oberflächen..."
 
 #: ../lib/vector/Vlib/build_pg.c:314
-#, fuzzy
 msgid "Updating edges..."
-msgstr "Setze Kosten der Knoten..."
+msgstr "Aktualisiere Kanten..."
 
 #: ../lib/vector/Vlib/build_pg.c:323
 msgid "Inconsistency in topology detected. Dead line found."
@@ -8365,9 +8313,9 @@ msgid "Selected"
 msgstr ""
 
 #: ../lib/vector/Vlib/dangles.c:262
-#, fuzzy, c-format
+#, c-format
 msgid "%s lines: %d"
-msgstr "Anzahl der Linien: %d"
+msgstr "%s Linien: %d"
 
 #: ../lib/vector/Vlib/dangles.c:263
 #, c-format
@@ -8756,3 +8704,107 @@ msgstr "%d neue Flächengrenzen"
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Unbekanntes Abfragewerkzeug"
+
+#, fuzzy
+#~ msgid "Error reading raster data for row %d of <%s>"
+#~ msgstr "Fehler Karte"
+
+#, fuzzy
+#~ msgid "Error reading raster data via GDAL for row %d of <%s>"
+#~ msgstr "Fehler"
+
+#, fuzzy
+#~ msgid "Error reading null row %d for <%s>"
+#~ msgstr "Fehler beim Lesen der NULL-Zeile %d."
+
+#, fuzzy
+#~ msgid "Error writing null row %d of <%s>"
+#~ msgstr "Fehler beim Schreiben der Null-Reihe %d."
+
+#, fuzzy
+#~ msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
+#~ msgstr "Raster Karte Raster Karte"
+
+#, fuzzy
+#~ msgid "Name for output raster map(s)"
+#~ msgstr "Name der Ausgabe-Rasterkarte"
+
+#, fuzzy
+#~ msgid "Name of input basename raster map(s)"
+#~ msgstr "Name der Eingabe-Rasterkarte(n)"
+
+#, fuzzy
+#~ msgid "Name for output basename raster map(s)"
+#~ msgstr "Name der Ausgabe-Rasterkarte"
+
+#, fuzzy
+#~ msgid "Either a standard color name, R:G:B triplet, or \"none\""
+#~ msgstr "Entweder eine Standard GRASS-Farbe, ein R:G:B-Tripel oder \"none\"."
+
+#, fuzzy
+#~ msgid "Name of input directory"
+#~ msgstr "Name der  Eingabedatei"
+
+#, fuzzy
+#~ msgid "%s= is not a separator option"
+#~ msgstr "Tut mir leid, <%s> ist keine gültige Option"
+
+#, fuzzy
+#~ msgid "No separator given for %s="
+#~ msgstr "Feld-Trennzeichen"
+
+#, fuzzy
+#~ msgid "%s= is not a file option"
+#~ msgstr "Tut mir leid, <%s> ist keine gültige Option"
+
+#, fuzzy
+#~ msgid ""
+#~ ". See the following errors:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "FLAG: Soll das folgende Flag gesetzt werden?\n"
+
+#, fuzzy
+#~ msgid "Please specify %s= and %s="
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte geben Sie ein Datum an.\n"
+
+#, fuzzy
+#~ msgid "Please specify %s= or %s="
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte geben Sie ein Ellipsoid an.\n"
+
+#, fuzzy
+#~ msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
+#~ msgstr "Vektorkarte <%s> existiert bereits und wird überschrieben."
+
+#, fuzzy
+#~ msgid "Turntable field < 1"
+#~ msgstr "Arc Feld < 1"
+
+#, fuzzy
+#~ msgid "Turntable column <%s> not found in table <%s>"
+#~ msgstr "Spalte <%s> nicht in Tabelle <%s> gefunden."
+
+#, fuzzy
+#~ msgid "Cannot add network arc for virtual node connection."
+#~ msgstr "Kann Netzwerk arc nicht hinzufügen."
+
+#, fuzzy
+#~ msgid "Database record for turn with cat = %d in not found. (The turn was skipped."
+#~ msgstr "Datenbankeintrag für Knoten %d (cat = %d) nicht gefunden (Kosten auf 0 gesetzt)."
+
+#, fuzzy
+#~ msgid "Cannot add network arc representing turn."
+#~ msgstr "Kann Netzwerk arc nicht hinzufügen."
+
+#, fuzzy
+#~ msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (cost was set to 0)"
+#~ msgstr "Datenbankeintrag für Linie %d (cat = %d, vorwärts/beide Richtung(en)) nicht gefunden (vorwärts/beide Richtung(en) der Linie übersprungen)."
+
+#, fuzzy
+#~ msgid "Database record for line %d (cat = %d, backword direction) not found(cost was set to 0)"
+#~ msgstr "Datenbankeintrag für Linie %d (cat = %d, rückwärts Richtung) nicht gefunden (Richtung der Linie übersprungen)."
