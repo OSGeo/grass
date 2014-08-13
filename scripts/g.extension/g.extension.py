@@ -330,7 +330,7 @@ def list_available_modules(url, mlist = None):
 
 # list extensions (scan SVN repo)
 def list_available_extensions_svn():
-    grass.message(_('Fetching list of extensions from GRASS-Addons SVN (be patient)...'))
+    grass.message(_('Fetching list of extensions from GRASS-Addons SVN repository (be patient)...'))
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
 
     if flags['c']:
