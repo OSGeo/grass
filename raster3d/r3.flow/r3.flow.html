@@ -1,0 +1,96 @@
+<h2>DESCRIPTION</h2>
+
+Module <em>r3.flow</em> computes 3D flow lines and 3D flow accumulation.
+It accepts either three 3D raster maps representing the vector field or one 3D raster map.
+In case of one map, it computes on-the-fly gradient field.
+
+<h3>Flow lines</h3>
+
+Flow lines are computed either from points (seeds) provided in <b>seed_points</b> vector map,
+or if there are no seeds, it creates seeds in a regular grid in the center of voxels (3D raster cells).
+Parameter <b>skip</b> then controls the step between the regularly distributed seeds.
+If skip is not provided, r3.flow decides optimal skip for each dimension based on current 3D region
+as one tenth of the number of columns, rows, and depths.
+Flow lines can be computed in upstream direction (in the direction of gradient or vector field),
+in downstream direction or in both directions.
+
+<h3>Flow accumulation</h3>
+Flow accumulation is computed as the number of flow lines traversing each voxel.
+Since the flow lines are computed for each voxel, the flow accumulation computation
+can be more demanding.
+Parameter skip does not influence the flow accumulation computation, parameter direction does.
+
+<h3>Flow line integration</h3>
+Flow line integration can be influenced by several parameters.
+Option <b>step</b> controls the integration step and influences the precision and computational time.
+The unit of step can be defined either in terms of the size of the voxel (3D raster cell),
+length in map units, or as elapsed time. 
+Option <b>limit</b> specifies the maximum number of steps of each flow line.
+
+<h3>Attributes</h3>
+Without using flag <b>a</b>, no attribute table is created and each flow line
+is represented by one vector line with one category. With <b>a</b> flag, an attribute table is created
+and each category (record) represents one segment of a flowline, so that attributes
+specific for segments can be written. In case of <b>vector_field</b> input, only velocity is written,
+in case of <b>input</b> option, also values of the input 3D raster are written.
+Note that using <b>a</b> flag results in longer computation time, so consider increasing
+<b>step</b> and <b>max_error</b> parameter.
+
+<h2>NOTES</h2>
+r3.flow uses Runge-Kutta with adaptive step size
+(<a href="http://en.wikipedia.org/wiki/Cash-Karp_method">Cash-Karp method</a>).
+
+<h2>EXAMPLES</h2>
+First we create input data using
+<a href="http://grass.osgeo.org/grass71/manuals/r3.gwflow.html#example-1">example 1</a> from
+<a href="http://grass.osgeo.org/grass71/manuals/r3.gwflow.html">r3.gwflow manual page</a>:
+
+<div class="code"><pre>
+# set the region accordingly
+g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p3
+
+# now create the input raster maps for a confined aquifer
+r3.mapcalc expression="phead = if(row() == 1 && depth() == 4, 50, 40)"
+r3.mapcalc expression="status = if(row() == 1 && depth() == 4, 2, 1)"
+r3.mapcalc expression="well = if(row() == 20 && col() == 20 && depth() == 2, -0.25, 0)"
+r3.mapcalc expression="hydcond = 0.00025"
+r3.mapcalc expression="syield = 0.0001"
+r.mapcalc  expression="recharge = 0.0"
+
+r3.gwflow solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
+   hc_z=hydcond q=well s=syield r=recharge output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
+</pre></div>
+
+Then we compute flow lines in both directions and downstream flowaccumulation.
+
+<div class="code"><pre>
+r3.flow vector_field=vx,vy,vz flowline=gw_flowlines skip=5,5,2 direction=both
+r3.flow vector_field=vx,vy,vz flowaccumulation=gw_flowacc
+</pre></div>
+
+We can visualize the result in 3D view:
+<p>
+<img src="r3flow_flowlines.png">
+
+<p>
+We can store velocity values (and values of the input 3D raster map if we use option <b>input</b>) for each segment of flow line
+in an attribute table.
+<div class="code"><pre>
+r3.flow -a vector_field=vx,vy,vz flowline=gw_flowlines skip=5,5,2 direction=both
+v.colors map=flowlines_color@user1 use=attr column=velocity color=bcyr
+</pre></div>
+
+Again, we visualize the result in 3D view and we check 'use color for thematic rendering' on 3D view vector page.
+<p>
+<img src="r3flow_flowlines_color.png">
+
+<h2>AUTHORS</h2>
+Anna Petrasova,  <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU OSGeoREL</a>, developed during GSoC 2014.
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="http://grass.osgeo.org/grass71/manuals/r.flow.html">r.flow</a>,
+<a href="http://grass.osgeo.org/grass71/manuals/r3.gwflow.html">r3.gwflow</a>
+</em>
+
+<p><i>Last changed: $Date$</i>
