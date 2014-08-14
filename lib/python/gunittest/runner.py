@@ -273,7 +273,7 @@ class KeyValueTestResult(TestResult):
         # alternative is to behave as failed file, i.e. do not
         # write test details and just write status=failed
         if not run:
-            run = errors + failed + succeeded
+            run = errored + failed + succeeded
         infos.append("total=%d" % (run))
 
         infos.append("failures=%d" % failed)
