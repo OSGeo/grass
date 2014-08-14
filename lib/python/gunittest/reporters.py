@@ -549,11 +549,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
     def finish(self):
         super(GrassTestFilesHtmlReporter, self).finish()
 
-        if self.total:
-            pass_per = 100 * (float(self.successes) / self.total)
-            pass_per = percent_to_html(pass_per)
-        else:
-            pass_per = self.unknown_number
+        pass_per = success_to_html_percent(total=self.total,
+                                           successes=self.successes)
         tfoot = ('<tfoot>'
                  '<tr>'
                  '<td>Summary</td>'
@@ -597,7 +594,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         super(GrassTestFilesHtmlReporter, self).end_file_test(
             module=module, cwd=cwd, returncode=returncode,
             stdout=stdout, stderr=stderr)
-        # TODO: considering others accoring to total, OK?
+        # considering others accoring to total is OK when we more or less
+        # know that input data make sense (total >= errors + failures)
         total = test_summary.get('total', None)
         failures = test_summary.get('failures', 0)
         errors = test_summary.get('errors', 0)
@@ -617,16 +615,16 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         self.expected_failures += expected_failures
         self.unexpected_success += unexpected_successes
 
-        # TODO: should we test for zero?
+        # zero would be valid here
         if total is not None:
             # success are only the clear ones
             # percentage is influenced by all
             # but putting only failures to table
             self.successes += successes
             self.total += total
-
-            pass_per = 100 * (float(successes) / total)
-            pass_per = percent_to_html(pass_per)
+            # this will handle zero
+            pass_per = success_to_html_percent(total=total,
+                                               successes=successes)
         else:
             total = successes = pass_per = self.unknown_number
         bad_ones = failures + errors
