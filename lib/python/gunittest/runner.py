@@ -266,6 +266,14 @@ class KeyValueTestResult(TestResult):
 
         status = 'succeeded' if self.wasSuccessful() else 'failed'
         infos.append("status=%s" % status)
+
+        # if only errors occur, tests are not counted properly
+        # in unittest, so reconstruct their count here
+        # (using general equation, although now errors would be enough)
+        # alternative is to behave as failed file, i.e. do not
+        # write test details and just write status=failed
+        if not run:
+            run = errors + failed + succeeded
         infos.append("total=%d" % (run))
 
         infos.append("failures=%d" % failed)
