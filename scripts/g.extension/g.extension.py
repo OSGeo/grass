@@ -304,7 +304,7 @@ def list_available_modules(url, mlist = None):
         try:
             tree = etree.fromstring(f.read())
         except:
-            grass.warning(_("Unable to parse '%s'. Trying to scan SVN (may take some time)...") % url)
+            grass.warning(_("Unable to parse '%s'. Trying to scan SVN repository (may take some time)...") % url)
             list_available_extensions_svn()
             return
 
@@ -366,7 +366,7 @@ def list_available_extensions_svn():
 # list wxGUI extensions
 def get_wxgui_extensions():
     mlist = list()
-    grass.debug('Fetching list of wxGUI extensions from GRASS-Addons SVN (be patient)...')
+    grass.debug('Fetching list of wxGUI extensions from GRASS-Addons SVN repository (be patient)...')
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
     grass.verbose(_("Checking for '%s' modules...") % 'gui/wxpython')
 
@@ -729,7 +729,7 @@ def install_extension_other(name):
     moduleclass = expand_module_class_name(classchar)
     url = options['svnurl'] + '/' + moduleclass + '/' + name
     
-    grass.message(_("Fetching <%s> from GRASS-Addons SVN (be patient)...") % name)
+    grass.message(_("Fetching <%s> from GRASS-Addons SVN repository (be patient)...") % name)
 
     os.chdir(TMPDIR)
     if grass.verbosity() <= 2:
