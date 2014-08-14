@@ -746,7 +746,10 @@ def install_extension_other(name):
              'html'    : os.path.join(TMPDIR, name, 'docs', 'html'),
              'rest'    : os.path.join(TMPDIR, name, 'docs', 'rest'),
              'man'     : os.path.join(TMPDIR, name, 'docs', 'man', 'man1'),
-             'scripts' : os.path.join(TMPDIR, name, 'scripts'),
+             'script'  : os.path.join(TMPDIR, name, 'scripts'),
+### TODO: handle locales also for addons
+#             'string'  : os.path.join(TMPDIR, name, 'locale'),
+             'string'  : os.path.join(TMPDIR, name),
              'etc'     : os.path.join(TMPDIR, name, 'etc'),
              }
 
@@ -757,7 +760,8 @@ def install_extension_other(name):
                'HTMLDIR=%s' % dirs['html'],
                'RESTDIR=%s' % dirs['rest'],
                'MANDIR=%s' % dirs['man'],
-               'SCRIPTDIR=%s' % dirs['scripts'],
+               'SCRIPTDIR=%s' % dirs['script'],
+               'STRINGDIR=%s' % dirs['string'],
                'ETC=%s' % os.path.join(dirs['etc'], name)
     ]
     
