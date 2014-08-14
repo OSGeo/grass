@@ -393,7 +393,7 @@ def cleanup():
     if REMOVE_TMPDIR:
         grass.try_rmdir(TMPDIR)
     else:
-        grass.message(_("Path to the source code:"))
+        grass.message("\n%s\n" % _("Path to the source code:"))
         sys.stderr.write('%s\n' % os.path.join(TMPDIR, options['extension']))
 
 # write out meta-file
@@ -769,9 +769,9 @@ def install_extension_other(name):
                   ]
 
     if flags['d']:
-        grass.message(_("To compile run:"))
+        grass.message("\n%s\n" % _("To compile run:"))
         sys.stderr.write(' '.join(makeCmd) + '\n')
-        grass.message(_("To install run:"))
+        grass.message("\n%s\n" % _("To install run:"))
         sys.stderr.write(' '.join(installCmd) + '\n')
         return 0
 
