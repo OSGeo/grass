@@ -151,9 +151,27 @@ class GrassTestFilesInvoker(object):
         # TODO: we might clean the directory here before test if non-empty
 
         if module.file_type == 'py':
+            # ignoring shebang line to use current Python
+            # and also pass parameters to it
             # add also '-Qwarn'?
             p = subprocess.Popen([sys.executable, '-tt', '-3',
                                   module.abs_file_path],
+                                 cwd=cwd, env=env,
+                                 stdout=stdout, stderr=stderr)
+        elif module.file_type == 'sh':
+            # ignoring shebang line to pass parameters to shell
+            # expecting system to have sh or something compatible
+            # TODO: add some special checks for MS Windows
+            # using -x to see commands in stderr
+            # using -e to terminate fast
+            # from dash manual:
+            # -e errexit     If not interactive, exit immediately if any
+            #                untested command fails.  The exit status of a com‐
+            #                mand is considered to be explicitly tested if the
+            #                command is used to control an if, elif, while, or
+            #                until; or if the command is the left hand operand
+            #                of an '&&' or '||' operator.
+            p = subprocess.Popen(['sh', '-e', '-x', module.abs_file_path],
                                  cwd=cwd, env=env,
                                  stdout=stdout, stderr=stderr)
         else:
