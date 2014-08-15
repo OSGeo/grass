@@ -9,11 +9,13 @@ BIN_DIST_FILES = $(FILES) \
 	driver \
 	etc \
 	fonts \
+	gui \
 	include \
 	lib \
+	locale \
 	scripts \
 	tools \
-	locale
+	share
 
 # Shell commands
 MAKE_DIR_CMD	= $(MKDIR) -m 755
