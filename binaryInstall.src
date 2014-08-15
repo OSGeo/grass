@@ -319,21 +319,21 @@ echo""
 
 echo "Creating datum transformation gridshift files..."
 
-if test -x "${DESTDIR}/etc/nad2bin" ; then
-    NAD2BIN="${DESTDIR}/etc/nad2bin"
+if test -x "${DESTDIR}/etc/proj/nad2bin" ; then
+    NAD2BIN="${DESTDIR}/etc/proj/nad2bin"
 else
     # Use version installed with PROJ.4 (should be in path)
     NAD2BIN=nad2bin
 fi
 
-for i in "${DESTDIR}"/etc/nad/src/*.lla
+for i in "${DESTDIR}"/etc/proj/nad/src/*.lla
 do 
     "${NAD2BIN}" < $i \
-    "${DESTDIR}"/etc/nad/`echo \`basename "$i"\` | sed 's/.lla//'` && rm -f "$i"
+    "${DESTDIR}"/etc/proj/nad/`echo \`basename "$i"\` | sed 's/.lla//'` && rm -f "$i"
 done
 
-if test -z "`ls \"${DESTDIR}/etc/nad/src\"`" ; then
-    rmdir "${DESTDIR}/etc/nad/src"
+if test -z "`ls \"${DESTDIR}/etc/proj/nad/src\"`" ; then
+    rmdir "${DESTDIR}/etc/proj/nad/src"
 fi
 
 echo""
@@ -357,7 +357,7 @@ cat ${DESTDIR}/include/Make/Platform.make.orig | \
 
 # Print out some messages
 echo "Installation finished. Start GRASS $NAME_VER with"
-echo "    $BINDIR/$GRASSPRG"
+echo "    $BINDIR/grass-$NAME_VER"
 echo ""
 #echo "The graphical user interface can be started within GRASS GIS."
 #echo ""
